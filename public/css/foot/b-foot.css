@@ -1,0 +1,53 @@
+.b-foot {
+    font-size: 90%;
+
+    position: relative;
+    overflow: hidden;
+    zoom: 1;
+
+    width: 960px;
+    min-height: 200px;
+
+    margin: 0 auto;
+    padding: 15px 0;
+
+    background: #fff url(/img/logos/logos-iata-visa.gif) no-repeat 720px 15px;
+    
+    border-top: #ddd 1px solid;
+}
+
+.b-foot dl {
+    float:  left;
+    width: 225px;
+    margin: 0 0 0 15px;
+}
+
+.b-foot dt {
+    font-weight: bold;
+
+    margin: 0 0 0.4em 0;
+
+    color: #7b7b7b;
+}
+
+.b-foot dd {
+    font-size: 90%;
+
+    margin: 0 0 0.4em 0;
+}
+
+.b-foot dd a {
+    color: #3a6c9a;
+}
+
+/* Копирайт (BEGIN) */
+    .b-foot i {
+        font-size: 90%;
+
+        position: absolute;
+        left: 720px;
+        top: 60px;
+
+        color: #454545;
+    }
+/* Копирайт (END) */

@@ -1,0 +1,154 @@
+.panel
+{
+    position: relative;
+
+    color: #c8c8c8;
+    background: #343434;
+}
+
+/* Панели куда-когда */
+
+.b-search-where
+{
+    width: 318px;
+    margin: 0 24px 0 0;
+
+    position: relative;
+}
+
+.b-search-when
+{
+    width: 588px;
+    margin: 0 15px 0 0;
+
+    position: relative;
+}
+
+.panel ul
+{
+    height: 100%;
+    overflow: hidden;
+    zoom: 1;
+    padding: 10px 0 6px 15px;
+}
+
+.panel ul ul
+{
+    margin: 0;
+    padding: 0;
+}
+
+
+.panel li
+{
+    float: left;
+}
+
+.panel li h2
+{
+    font-size: 100%;
+    font-weight: normal;
+    margin: 0 0 0.2em 0;
+    color: #c9c8c8;
+}
+
+.panel li h2 .b-pseudo
+{
+    color: #c9c8c8;
+}
+
+.panel li h2 .b-pseudo:hover
+{
+    color: #fff;
+}
+
+.panel li h2 i
+{
+    color: #fff;
+}
+
+.panel li h2 b
+{
+    color: #6b6b6b;
+}
+
+
+/* Кнопка сворачивания (begin) */
+    .panel a.switch
+    {
+        font-size: 75%;
+        line-height: 22px;
+        height: 22px;
+        display: block;
+        position: absolute;
+        bottom: -24px;
+        right: 1.5em;
+
+        padding: 0 22px 2px 8px;
+     
+
+        background: #343434;
+
+        text-decoration: none;
+        color: #a6a6a6;
+    }
+
+    .panel a.switch i
+    {
+        top: -0.14em;
+        border-bottom: 1px dotted;
+        position: relative;
+    }
+
+    .panel a.switch i u
+    {
+        position: relative;
+        top: 0.14em;
+    }
+
+    .panel a.switch:hover
+    {
+        color: #fff;
+    }
+
+    .panel a.switch i i
+    {
+        width: 11px;
+        height: 6px;
+        position: absolute;
+        right: -16px;
+        top: 40%;
+        border: 0;
+        background: url(/img/arr-up-down.gif) no-repeat right top;
+    }
+
+    .panel-collapsed a.switch i i
+    {
+        background-position: right bottom;
+    }
+
+    /* подсветка стрелки голубым цветом (BEGIN) */
+        .panel a.switch:hover i i
+        {
+            background-position: 0 top;
+        }
+
+        .panel-collapsed a.switch:hover i i
+        {
+            background-position: 0 bottom;
+        }
+    /* подсветка стрелки голубым цветом (END) */
+/* Кнопка сворачивания (end) */
+
+
+.panel-collapsed
+{
+   height: 0;
+}
+
+.panel-collapsed ul
+{
+   padding-top: 0;
+   padding-bottom: 0;
+   visibility: hidden;
+}

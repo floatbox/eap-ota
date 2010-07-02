@@ -1,0 +1,21 @@
+.l-head {
+
+}
+
+.l-body {
+    position: relative;
+    zoom: 1;
+
+    width: 960px;
+    min-height: 600px;
+    margin: 0 auto;
+    padding: 0 0 40px 0;
+
+    background: #f0f1f3;
+}
+
+.l-foot {
+    clear: both;
+    min-height: 200px;
+}
+

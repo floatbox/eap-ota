@@ -1,0 +1,581 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+
+    <title>Eviterra / Евитерра</title>
+    <link rel="favicon icon" type="image/x-icon" href="/favicon.ico">
+
+
+    <!-- [production] Все стили, импортируемые этими файлами, нужно объединить с сохранением порядка, а затем упаковать -->
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+
+    <!-- [production] подключать jQuery и jQueryUI с google.com или с jquery.com -->
+    <script type="text/javascript" src="js/lib/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery-ui-1.8.min.js"></script>
+
+    <!-- API Я.Карт -->
+    <script src="http://api-maps.yandex.ru/1.1/index.xml?key=ALbfWUsBAAAA12OmfQIAfAJwdvj4ieWN5B6zaN0ZvfteY90AAAAAAAAAAACH_1UX_hn04Wtmar7a930xij45OA==" type="text/javascript"></script>
+    
+    <!-- [production] Все нижеследующие скрипты объединить в таком же порядке -->
+    <!-- [production] перед сборкой упаковать -->
+    <script type='text/javascript' src='js/main.js'></script>
+    <script type='text/javascript' src='js/onready.js'></script>
+    <script type='text/javascript' src='js/utils.js'></script>
+    <script type='text/javascript' src='js/multifield.js'></script>
+    <script type='text/javascript' src='js/autocomplete.js'></script>
+    <script type='text/javascript' src='js/radio.js'></script>
+    <script type='text/javascript' src='js/button.js'></script>
+    <script type='text/javascript' src='js/define.js'></script>
+    <script type='text/javascript' src='js/loader.js'></script>
+    <script type='text/javascript' src='js/map.js'></script>
+</head>
+
+<body>
+    <div class="l-head">
+        <div class="b-head">
+            <s class="b-logo"></s>
+            <ul id="search.mode" class="tabs head-tabs">
+                <li><a href="#" onclick="return {v: 'avia'}" title="Простая покупка авиабилетов" class="active">Авиа</a>
+                <li><a href="#" onclick="return {v: 'train'}" title="Обычные и электронные билеты на поезда">Поезда</a>
+                <li><a href="#" onclick="return {v: 'hotel'}" title="Бронирование номеров в гостинице или хостеле">Отели</a>
+                <li><a href="#" onclick="return {v: 'rent'}" title="Прокат бензиновых вонючек: автомобилей, мотоциклов и тук-туков">Авто</a>
+            </ul>
+        </div>
+    </div>
+
+    <div class="l-body">
+
+        <!-- Форма поиска -->
+
+        <form id="search.form" method="get" action=""><input type="hidden" id="search.form.value"></form>
+        
+        <div class="form">
+            <table>
+                <tr class="labels">
+                    <td>
+                        <label for="search.from" accesskey="1"><i class="label-from">Откуда</i><s id="search.from.loader"></s></label>
+                    </td>
+                    
+                    <td>
+                    </td>
+                    
+                    <td>
+                        <label for="search.to" accesskey="2"><i class="label-to">Куда</i>, <i class="label-when">когда</i> и <i class="label-total">с кем</i><s id="search.to.loader"></s></label>
+                    </td>
+
+                    <td>
+                        <ul id="search.ret.tabs" class="tabs return-tabs">
+                            <li><a href="#" onclick="return {v: 'rt'}" title="Билет до пункта назначения и обратно. Самый популярный вариант путешествия." class="active">туда и обратно</a>
+                            <li><a href="#" onclick="return {v: 'ow'}" title="Билет только до пункта назначения, без обратного. Не всегда выгоднее &laquo;двустороннего&raquo;">только туда</a>
+                            <li><a href="#" onclick="return {v: 'mw'}" title="Транзит через несколько городов. Остановки на желаемый срок. Впишите в поле ввода города и даты. ">сложный маршрут</a>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <!-- Откуда -->
+
+                        <!-- 
+                           при генерации страницы в onclick втыкать json-представление геотаргетированного города пользователя
+                           
+                           если скрипт не найдёт onclick, то возьмёт строку location.city из Яндекс.Карт (если есть)
+                           и попытается превратить его в json-объект с помощью автокомплита
+
+                           еслю облом, будет подставлена статика - "Москва"
+
+                           TODO ЛЁХЕ: по-хорошему, надо сделать отдельный сервис, который принимает объект YMaps.location,
+                           и по геокоординатам заменяет его на ближайший город, где есть аэропорт
+                        -->
+                        
+                        <div class="autocomplete-box">
+                            <input type="text" 
+                             id="search.from"
+                             class="autocomplete from"
+                             tabindex="1"
+                             value="Москва"
+                            _onclick="return {'insert':'\u041c\u043e\u0441\u043a\u0432\u0430','hl':'\u043c\u043e\u0441\u043a','start':0,'end':4,'entity':{'type':'city','name':'\u041c\u043e\u0441\u043a\u0432\u0430'},'name':'\u041c\u043e\u0441\u043a\u0432\u0430'}"
+                             title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом"
+                            >
+                        </div>
+                    </td>
+
+                    <td>
+                        <!-- Замкнутость маршрута -->
+                        <a 
+                            id="search.ret.button"
+                            class="button button-rt" 
+                            title="Искать билеты &laquo;туда и обратно&raquo;. Нажмите, чтобы изменить"
+                            onclick="return [{v: 'rt', cls: 'rt', t: 'Искать билеты &laquo;туда и обратно&raquo;. Нажмите, чтобы изменить'},{v: 'ow', cls: 'ow', t: 'Билеты только &laquo;туда&raquo;'},{v: 'mw', cls: 'mw', t: 'Сложный маршрут'}]"
+                        ></a>
+                    </td>
+
+                    <td colspan="2">
+                        <!-- Куда, когда и с кем -->
+                        <div class="autocomplete-box">
+                            <input type="text" 
+                             id="search.to"
+                             class="autocomplete to"
+                             tabindex="2"
+                             value=""
+                             title="Страна, город или аэропорт. Когда улететь и когда вернуться. Сколько человек полетит.&#10; Пишите, как вам удобно &mdash; мы поймём."
+                            >
+                        </div>
+                    </td>
+                </tr>
+                <tr class="subs">
+                    <td>
+                        <a href="#" id="search.from.reset" class="b-pseudo" title="Отредактировать это поле"><u>изменить</u></a>
+                    </td>
+                    
+                    <td>
+                    </td>
+                    
+                    <td colspan="2">
+                        <i>например,&nbsp;</i>
+                        <a href="#" id="search.to.example" class="b-pseudo pseudo-example"><s title="Показать другой пример"></s><u title="Нажмите, чтобы попробовать" onclick="return ['завтра в Париж', 'Питер на выходные', 'Болгария июль или август на десять дней', 'Прага 21 28 июня вдвоём', 'к морю в августе', 'бросить всё и уехать в Чертобердяевск']">завтра в Париж</u></a>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+
+        <!-- Панель поиска -->
+
+        <div id="search.panel" class="panel panel-collapsed">
+            <ul>
+                <li>
+                    <h2>Нужны идеи? Есть карта и <a href="#" class="b-pseudo"><u>список</u></a></h2>
+
+                    <div id="where" class="b-search-where wt0">
+<!--
+                        <ul id="where.tabs" class="map-tabs">
+                            <li><a class="wt0" onclick="return {i: 0, v: 'map'}" href="#">карта</a>
+                            <li><a class="wt1" onclick="return {i: 1, v: 'presets'}" href="#">идеи</a>
+                        </ul>
+-->
+
+                        <div id="where.map" class="map wp0"></div>
+
+                        <dl id="where.presets" class="presets wp1">
+                            <dt>Идеи</dt>
+                            <dd class="b-pseudo">
+                                <a href=# onclick='return {id: "novisa", tip: "Безвизовые страны"}' title="Безвизовые страны"><u>Безвизовые страны</u></a>,
+                                <a href=# onclick='return {id: "ocean", tip: "искупаться в океане"}' title="Безвизовые страны"><u>искупаться в&nbsp;океане</u></a>,
+                                <a href=# onclick='return {id: "beer", tip: "попить пива"}' title="попить пива"><u>попить пива</u></a>,
+                                <a href=# onclick='return {id: "museums", tip: "музеи и галереи"}' title="музеи и галереи"><u>музеи и&nbsp;галереи</u></a>,
+                                <a href=# onclick='return {id: "romance", tip: "романтическое путешествие"}' title="романтическое путешествие"><u>романтическое путешествие</u></a>
+                                <a href=# class="more"><u>и еще 500 идей</u></a>
+                                <b>
+                                    <a href=# onclick='return {id: "gastronome", tip: "вкусно поесть"}' title="вкусно поесть"><u>вкусно поесть</u></a>,
+                                    <a href=# onclick='return {id: "waterfalls", tip: "водопады"}' title="водопады"><u>водопады</u></a>,
+                                    <a href=# onclick='return {id: "holy", tip: "по святым местам"}' title="по святым местам"><u>по святым местам</u></a>,
+                                    <a href=# onclick='return {id: "diving", tip: "дайвинг"}' title="дайвинг"><u>дайвинг</u></a>
+                                </b>
+                            </dd>
+
+                            <dt>Интересные места</dt>
+                            <dd class="b-pseudo">
+                                <a href=# onclick='return {id: "australia", tip: "Австралия"}' title="Австралия"><u>Килиманджаро</u></a>,
+                                <a href=# onclick='return {id: "serengeti", tip: "Национальный парк Серенгети"}' title="Национальный парк Серенгети"><u>Национальный парк Серенгети</u></a>,
+                                <a href=# onclick='return {id: "venice", tip: "каналы Венеции"}' title="каналы Венеции"><u>каналы Венеции</u></a>,
+                                <a href=# onclick='return {id: "usa", tip: "остров Пасхи"}' title="остров Пасхи"><u>остров Пасхи</u></a>,
+                                <a href=# onclick='return {id: "las-vegas", tip: "Лас-Вегас"}' title="Лас-Вегас"><u>Лас-Вегас</u></a>,
+                                <a href=# onclick='return {id: "acropolis", tip: "Акрополь и Парфенон"}' title="Акрополь и Парфенон"><u>Акрополь и Парфенон</u></a>,
+                                <a href=# onclick='return {id: "stonehange", tip: "Стоунхендж"}' title="Стоунхендж"><u>Стоунхендж</u></a>
+                                <a href=# class="more"><u>и еще 80 интересных мест</u></a>
+                                <b>
+                                    <a href=# onclick='return {id: "giza", tip: "пирамиды в Гизе"}' title="пирамиды в Гизе"><u>пирамиды в Гизе</u></a>,
+                                    <a href=# onclick='return {id: "afon", tip: "гора Афон"}' title="гора Афон"><u>гора Афон</u></a>,
+                                    <a href=# onclick='return {id: "st-michel", tip: "Мон-Сен-Мишель"}' title="Мон-Сен-Мишель"><u>Мон-Сен-Мишель</u></a>,
+                                    <a href=# onclick='return {id: "fiords", tip: "Фьорды Норвегии"}' title="Фьорды Норвегии"><u>Фьорды Норвегии</u></a>,
+                                    <a href=# onclick='return {id: "bigbarrier", tip: "Большой барьерный риф"}' title="Большой барьерный риф"><u>Большой барьерный риф</u></a>,
+                                    <a href=# onclick='return {id: "pisa", tip: "Пизанская башня"}' title="Пизанская башня"><u>Пизанская башня</u></a>,
+                                    <a href=# onclick='return {id: "spitzbergen", tip: "Шпицберген"}' title="Шпицберген"><u>Шпицберген</u></a>
+                                </b>
+                            </dd>
+
+                            <dt>Страны и города</dt>
+                            <dd class="b-pseudo">
+                                <a href=# onclick='return {id: "au", tip: "Австралия"}' title="Австралия"><u>Австралия</u></a>,
+                                <a href=# onclick='return {id: "us", tip: "Америка"}' title="Америка"><u>Америка</u></a>,
+                                <a href=# onclick='return {id: "bb", tip: "Барбадос"}' title="Барбадос"><u>Барбадос</u></a>,
+                                <a href=# onclick='return {id: "de", tip: "Германия"}' title="Германия"><u>Германия</u></a>,
+                                <a href=# onclick='return {id: "ie", tip: "Ирландия"}' title="Ирландия"><u>Ирландия</u></a>,
+                                <a href=# onclick='return {id: "cn", tip: "Китай"}' title="Китай"><u>Китай</u></a>,
+                                <a href=# onclick='return {id: "lu", tip: "Люксембург"}' title="Люксембург"><u>Люксембург</u></a>,
+                                <a href=# onclick='return {id: "my", tip: "Малайзия"}' title="Малайзия"><u>Малайзия</u></a>,
+                                <a href=# onclick='return {id: "pe", tip: "Перу"}' title="Перу"><u>Перу</u></a>,
+                                <a href=# onclick='return {id: "hr", tip: "Хорватия"}' title="Хорватия"><u>Хорватия</u></a>,
+                                <a href=# onclick='return {id: "fr", tip: "Франция"}' title="Франция"><u>Франция</u></a>,
+                                <a href=# onclick='return {id: "cz", tip: "Чехия"}' title="Чехия"><u>Чехия</u></a>
+                                <a href=# class="more"><u>и еще 50 стран, куда стоит поехать</u></a>
+                                <b>
+                                    <a href=# onclick='return {id: "gb", tip: "Англия"}' title="Англия"><u>Англия</u></a>,
+                                    <a href=# onclick='return {id: "br", tip: "Бразилия"}' title="Бразилия"><u>Бразилия</u></a>,
+                                    <a href=# onclick='return {id: "ve", tip: "Венесуэла"}' title="Венесуэла"><u>Венесуэла</u></a>,
+                                    <a href=# onclick='return {id: "hk", tip: "Гонконг"}' title="Гонконг"><u>Гонконг</u></a>,
+                                    <a href=# onclick='return {id: "do", tip: "Доминикана"}' title="Доминикана"><u>Доминикана</u></a>,
+                                    <a href=# onclick='return {id: "eg", tip: "Египет"}' title="Египет"><u>Египет</u></a>,
+                                    <a href=# onclick='return {id: "il", tip: "Израиль"}' title="Израиль"><u>Израиль</u></a>,
+                                    <a href=# onclick='return {id: "ke", tip: "Кения"}' title="Кения"><u>Кения</u></a>,
+                                    <a href=# onclick='return {id: "lb", tip: "Ливан"}' title="Ливан"><u>Ливан</u></a>,
+                                    <a href=# onclick='return {id: "mu", tip: "Маврикий"}' title="Маврикий"><u>Маврикий</u></a>,
+                                    <a href=# onclick='return {id: "no", tip: "Норвегия"}' title="Норвегия"><u>Норвегия</u></a>,
+                                    <a href=# onclick='return {id: "om", tip: "Оман"}' title="Оман"><u>Оман</u></a>,
+                                    <a href=# onclick='return {id: "pt", tip: "Португалия"}' title="Португалия"><u>Португалия</u></a>,
+                                    <a href=# onclick='return {id: "ro", tip: "Румыния"}' title="Румыния"><u>Румыния</u></a>,
+                                    <a href=# onclick='return {id: "sy", tip: "Сирия"}' title="Сирия"><u>Сирия</u></a>,
+                                    <a href=# onclick='return {id: "tz", tip: "Танзания"}' title="Танзания"><u>Танзания</u></a>,
+                                    <a href=# onclick='return {id: "uz", tip: "Узбекистан"}' title="Узбекистан"><u>Узбекистан</u></a>,
+                                    <a href=# onclick='return {id: "fj", tip: "Фиджи"}' title="Фиджи"><u>Фиджи</u></a>,
+                                    <a href=# onclick='return {id: "cl", tip: "Чили"}' title="Чили"><u>Чили</u></a>,
+                                    <a href=# onclick='return {id: "se", tip: "Швеция"}' title="Швеция"><u>Швеция</u></a>,
+                                    <a href=# onclick='return {id: "ee", tip: "Эстония"}' title="Эстония"><u>Эстония</u></a>,
+                                    <a href=# onclick='return {id: "jp", tip: "Япония"}' title="Япония"><u>Япония</u></a>
+                                </b>
+                            </dd>
+
+                            <!--dt>События</dt>
+                            <dd class="b-pseudo">
+                              <a href=#><u>ближайший уикенд</u></a>,
+                              <a href=#><u>Окторберфест</u></a>,
+                              <a href=#><u>ЧМ-2010</u></a>,
+                              <a href=#><u>Tiesto</u></a>,
+                              <a href=#><u>шоу &#171;Кошки&#187;</u></a>,
+                              <a href=#><u>Beaujolais Nouveau</u></a>,
+                              <a href=#><u>фестиваль цветов</u></a>
+                            </dd-->
+                        
+                        </dl>
+
+                        <a id="where.map.reset" class="b-pseudo panel-reset" href=#><i></i><u>сбросить</u></a><a id="where.map.large" class="b-pseudo panel-reset" href=#><u>большая карта</u></a>
+
+                    </div>
+                </li>
+
+                <li>
+                    <h2>Выберите даты:&nbsp;&nbsp;&nbsp;<a class="b-pseudo" href=#><u>июнь</u></a>&mdash;<i>июль</i>&mdash;<i>август</i>&mdash;<a class="b-pseudo" href=#><u>сентябрь</u></a>&nbsp;<a class="b-pseudo" href=#><u>&hellip;</u></a>  &nbsp;&nbsp;&nbsp;<a class="b-pseudo" target="uc" href="docs/uc/cal.htm" title="Сценарий"><u>&Delta;</u></a></h2>
+
+                    <div class="b-search-when">
+                        <!--ul class=tabs>
+                            <li class="current"><a href="#">туда</a></li>
+                            <li><a href="#">обратно</a></li>
+                        </ul-->
+
+                        <div class="calendar">
+                            <div id="when.cal" class="viewport">
+                                <ul>
+                                    <li class="dis">17<li class="dis">18<li class="dis">19<li class="dis">20<li>21<li class="holyday">22<li class="holyday san">23
+                                    <li>24<li>25<li>26<li>27<li>28<li class="holyday">29<li class="holyday san">30
+                                    <li>31<li>1<li class="sel start">2<li class="sel">3<li class="sel weather7">4<li class="holyday sel weather7">5<li class="holyday sel san  weather6">6
+                                    <li class="sel">7<li class="sel">8<li class="sel adj">9<li class="sel adj end">10<li class="holyday">11<li class="holyday">12<li class="holyday san">13
+                                    <li>14<li>15<li class="hl">16<li class="hl">17<li class="hl">18<li class="holyday">19<li class="holyday san">20
+                                    <li>21<li>22<li>23<li>24<li>25<li class="holyday">26<li class="holyday san">27
+                                    <li>28<li>29<li>30<li>1<li>2<li class="holyday">3<li class="holyday san">4
+                                </ul>
+                            </div>
+
+                            <a id="when.cal.reset" class="b-pseudo panel-reset" href=#><i></i><u>сбросить</u></a>
+
+                            <a id="when.cal.bw" class="calendar-pager calendar-pager-up calendar-pager-disabled" href=#><i></i></a>
+                            <a id="when.cal.fw" class="calendar-pager calendar-pager-down" href=#><i></i></a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <a href="#" id="search.panel.switch" class="switch" title="Скрыть карту и календарь"><i><u>свернуть</u><i></i></i></a>
+        </div>
+
+        <!-- Панель уточнений -->
+
+        <table id="search.define" class="define b-pseudo">
+            <thead>
+                <tr>
+                    <th>
+                        Выбрать
+                    <td>
+                        количество
+
+                        <p onclick="return {name: 'persons', title: 'пассажиров', accusative: 'количество пассажиров', anyone: 'один', radio: true}"><a href=#><u>пассажиров</u></a><b></b>&nbsp;и
+                        
+                        <p onclick="return {name: 'changes', title: 'пересадки', accusative: 'допустимое количество пересадок', anyone: 'всё равно', radio: true}"><a href=#><u>пересадок</u></a><b></b></p>,
+                        
+                        <p onclick="return {name: 'cls', title: 'класс', accusative: 'класс обслуживания', anyone: 'любой', radio: true}"><b class="left"></b><a href=#><u>класс</u></a>
+            <tbody>
+                <tr>
+                    <th>
+                        Уточнить
+                    <td>
+                        
+                        <p onclick="return {name: 'timeDept', title: 'время вылета', accusative: 'допустимое время вылета', anyone: 'любое'}"><a href=#><u>время&nbsp;вылета</u></a><b></b>
+                        и
+                        <p onclick="return {name: 'airportDept', title: 'аэропорт вылета', accusative: 'подходящие аэропорты вылета', anyone: 'а похрен'}"><a href=#><u>аэропорт&nbsp;вылета</u></a><b></b>,
+
+                        <p onclick="return {name: 'timeArrv', title: 'время прибытия', accusative: 'допустимое время прибытия', anyone: 'любое'}"><a href=#><u>время&nbsp;прибытия</u></a><b></b>
+                        и
+                        <p onclick="return {name: 'airportArrv', title: 'аэропорт прибытия', accusative: 'подходящие аэропорты прибытия', anyone: 'да насрать'}"><a href=#><u>аэропорт&nbsp;прибытия</u></a><b></b>,
+
+                        <p onclick="return {name: 'aircraft', title: 'самолёт', accusative: 'приемлемые типы самолётов', anyone: 'ниипёт'}"><a href=#><u>самолёт</u></a><b></b>,
+
+                        <p onclick="return {name: 'aircompany', title: 'авиакомпанию', accusative: 'подходящие авиакомпании'}"><a href=#><u>авиакомпанию</u></a><b></b>
+        </table>
+
+
+        <!-- Правая панель -->
+
+        <ul id="media" class="media">
+            <li>
+                <dl class="media-tip">
+                    <dt>Вы знаете?&hellip;
+                    <dd>
+                        <p>&hellip;что в <a href="#" class="b-pseudo"><u>некоторых странах</u></a> можно прямо в аэропорту получить транзитную визу, если у вас шесть и более часов между рейсами
+                </dl>
+
+            <li>
+                <dl class="media-promo">
+                    <dt>Город дня &mdash; Прага
+                    <dd>
+                        <h3>Чё там ваще</h3>
+                        <p>Прага является столицей и крупнейшим городом Чешской республики. Она расположена на реке Влтаве в центральной Богемии. В ней проживает примерно <s>до хуя чехов</s> 1.2 миллиона человек. Её называли «городом ста шпилей» и «золотым градом». Билеты в Прагу стоят у нас от 12000 рублей.
+                        <h3>Чё дают</h3>
+                        <p>Пива и пиздюлей
+                </dl>
+
+        </ul>
+
+
+
+        <!-- Человекочитаемая строка запроса -->
+        <h1 id="offers.transcript" class="b-transcript g-none">
+            <p>
+                <s>В пампасы!</s><i><i></i></i>
+            </p>
+        </h1>
+
+        <!-- Заголовок списка результатов (статистика, сортировка) -->
+
+        <div id="offers.header" class="b-offers-header g-none">
+            <dl>
+                <dt>86 предложений
+                <dd>35 городов, 18 стран, 19 авиакомпаний
+            </dl>
+
+            <ul id="search.sort" class="b-pseudo c0">
+                <li><a class="c0" onclick="return {i: 0, v: 'price'}" href="#">цена<b>&darr;</b></a>
+                <li><a class="c1" onclick="return {i: 1, v: 'departure'}" href="#">время вылета<b>&darr;</b></a>
+                <li><a class="c2" onclick="return {i: 2, v: 'country'}" href="#">страна<b>&darr;</b></a>
+            </ul>
+
+            <br class="g-clear">
+
+            <dl class="filters g-hidden">
+                <dt>Применены фильтры 
+                <dd>
+            </dl>
+
+        </div>
+
+        <!-- Список результатов -->
+
+        <ul id="offers.list" class="b-offers g-none">
+
+
+            <li id="offer.template" class="b-offer g-hidden-">
+
+                <h2>
+                    <p class="b-price">
+                        <b>8500</b>
+                    </p>
+
+                    <p class="note"><!--&mdash;&nbsp;--><b>это цена за&nbsp;всех и&nbsp;за&nbsp;всё,<br>включая перелёт, отель и налоги</b></i></p>
+
+                    <p class="action">
+                        <a class="remember" href=# onclick="Ext.get(this.parentNode.parentNode).highlight(); return false">Запомнить</a>
+                        <a class="select" href=# onclick="Ext.get(this.parentNode.parentNode).highlight(); return false">Купить</a>
+                    </p>
+                </h2>
+
+                <div class="flights">
+                    <p class="l-row0 b-company">S7 Airlines</p>
+
+                    <dl class="l-row1">
+                        <dt><u>Туда</u><b>25 ноября</b>,<i>в среду</i>
+                        <dd><b>19:00</b><u>из Шереметьево, Москва</u>
+                        <dd class="change">1 пересадка
+                        <dd><b>21:40</b><u>в Большое Савино, Пермь</u>
+                    </dl>
+
+                    <dl class="l-row2">
+                        <dt><u class="return">Обратно</u><b>30 ноября</b>,<i>в понедельник</i>
+                        <dd><b>21:40</b><u>из Большое Савино, Пермь</u>
+                        <dd class="change">1 пересадка
+                        <dd><b>19:00</b><u>в Шереметьево, Москва</u>
+                    </dl>
+
+                    <br>
+                    <div class="details">
+                        <dl class="l-row1">
+                            <dd>Рейс S7 35
+                                <br><i>Airbus 319</i>&nbsp;&nbsp;|&nbsp;&nbsp;<i>Эконом-класс</i>
+                                <br>2 часа 45 минут в воздухе
+                        </dl>
+
+                        <dl class="l-row2">
+                            <dd>Рейс S7 35
+                                <br>Airbus 319 | Эконом-класс
+                                <br>2 часа 45 минут в воздухе
+                        </dl>
+                    </div>
+
+                    <p class="b-pseudo">
+                        <a class="details" href="#"><u>подробно о перелете</u></a>
+                        &nbsp;
+                    </p>
+                </div>
+
+
+                <!--div class="hotel">
+                    <h3><s>Постоялый двор</s><s class="b-stars b-stars-2"></s></h3>
+
+                    <div class="l-row0 b-photo b-photo-collapsed">
+                        <ul></ul>
+    
+                        <a href=# class="scroll scroll-t" onclick="return -1" title="предыдущее фото"><i onclick="return -1"></i></a>
+                        <a href=# class="scroll scroll-b" onclick="return +1" title="следующее фото"><i onclick="return +1"></i></a>
+
+                        <p class="more">
+                            <a href="#" class="b-pseudo"><u>большие фото</u></a>&nbsp;&nbsp;<s><b>5</b>&nbsp;&rarr;</s>
+                        </p>
+
+                        <img class="photo" src="img/temp/hotel-b-01.jpg"/>
+
+                        <a href=# class="close" title="Закрыть фотогалерею">&#215;</a>
+                    </div>
+
+                    <p class="l-row1 desc">
+                        <s>Метафора имеет деструктивный классический реализм, таким образом, все перечисленные признаки архетипа и мифа подтверждают, что действие механизмов мифотворчества сродни механизмам художественно-продуктивного мышления &hellip;</s>
+                        <br><br>
+                        <b>Наша оценка</b>: <s>приемлемо для ночевок</s>
+                    </p>
+
+                    <dl class="l-row2 b-room c0">
+
+                        <dt>Выберите номер на <b>троих</b> на <b>две ночи</b>
+
+                        <dd>
+                            <a class="c0" href="#">беспонтовый<i></i></a>
+                            <small>7800&nbsp;<s class="rur">р<s>уб.</s></s></small>
+                        <dd>
+                            <a class="c1" href="#">клёвый<i></i></a>
+                            <small>+3250&nbsp;<s class="rur">р<s>уб.</s></s></small>
+                        <dd>
+                            <a class="c2" href="#">с наворотами<i></i></a>
+                            <small>+5600&nbsp;<s class="rur">р<s>уб.</s></s></small>
+                    </dl>
+
+                    <br>
+                    <div class="details">
+                        <dl class="l-row1">
+                            <dt>Расположение:
+                            <dd><i></i>
+                            <dd><i>3,2</i>&nbsp;км от центра, <i>2,200</i>&nbsp;км от аэропорта
+                            <dd><img src=""/>
+
+                        </dl>
+
+                        <dl class="l-row2">
+                            <dt>В отеле есть:
+                            <dd>бар, ресторан, wi-fi, патио, лобио, фолио, хороводы, хороводоводы, хороводоводоведы, хороводоводоведофилы
+                        </dl>
+                    </div>
+
+                    <p class="b-pseudo">
+                        <a class="details" href="#"><u>подробно об отеле</u></a>
+                        &nbsp;&nbsp;
+                        <a class="details" href="#"><u>другой отель</u></a>
+                    </p>
+                </div-->
+
+                <h2 class="invoice">
+                    <span class="none">
+                        <i class="none">
+                            Нужен билет?&nbsp;<a href=# class="b-pseudo"><u>Посмотрите</u></a>
+                        </i>
+                        <i>
+                            Перелёт:&nbsp;
+                        </i>
+                        <i>
+                            <b ext:qtip="Стоимость перелёта на одного человека">4500&nbsp;<s class="rur">р<s>уб.</s></s></b>
+                            &nbsp;&times;&nbsp;
+                            <b ext:qtip="Количество персон">1</b>
+                        </i>
+                    </span>
+
+                    &nbsp;|&nbsp;
+                    
+                    <span>
+                        <i class="none">
+                            Негде остановиться?&nbsp;<a href=# class="b-pseudo"><u>Посмотрите</u></a>&nbsp;отель
+                        </i>
+                        <i>
+                            Отель:&nbsp;
+                        </i>
+                        <i>
+                           <b ext:qtip="Стоимость номера за сутки">7250&nbsp;<s class="rur">р<s>уб.</s></s></b>
+                           &nbsp;&times;&nbsp;
+                           <b ext:qtip="Количество ночей">3&nbsp;ночи</b>
+                        </i>
+                    </span>
+
+                    <span class="rules">
+                        <a href=# class="b-pseudo"><u>Правила тарифа LGPXR</u></a>
+                    </span>
+                </h2>
+                <br>
+            </li>
+        </ul>
+
+    <!-- Ктулху -->
+    <div id="staple" class="b-staple g-none"></div>
+
+    <!-- И тут пошли титры -->
+    <div class="l-foot">
+        <div id="foot" class="b-foot">
+            <dl>
+                <dt>Всё для путешествий
+                <dd><a href=#>Лучшие предложения</a>
+                <dd><a href=#>Безвизовые страны</a>
+                <dd><a href=#>Города России</a>
+                <dd><a href=#>События в Европе</a>
+            </dl>
+
+            <dl>
+                <dt>Сервисы
+                <dd><a href=#>Авиабилеты</a>
+                <dd><a href=#>Отели</a>
+                <dd><a href=#>Карта цен</a>
+                <dd><a href=#>Статус рейса</a>
+            </dl>
+
+            <dl>
+                <dt>О проекте
+                <dd><a href=#>Как заказывать</a>
+                <dd><a href=#>Как платить</a>
+                <dd><a href=#>Обмен и возврат</a>
+                <dd><a href=#>Блог разработчиков</a>
+                <dd><a href=#>О нас</a>
+            </dl>
+            <i>&copy;&nbsp;eviterra, 2010</i>
+        </div>
+    </div>
+
+
+
+</body>
+ 
+</html>
+
+
+

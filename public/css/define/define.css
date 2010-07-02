@@ -1,0 +1,91 @@
+/* ================ */
+
+/* панель уточнений */
+
+/* ================ */
+
+.define {
+    width: 100%;
+
+    letter-spacing: -.02em;
+    
+    color: #4b4b4b;
+    border-collapse: collapsed;
+    border-bottom: 1px solid #a5a5a5;
+    background: #d6d6d6;
+}
+
+.define tr {
+    border-top: 1px solid #bababa;
+}
+
+.define th {
+    font-weight: bold;
+
+    width: 1%;
+    padding: .5em 0 .5em 15px;
+
+    text-align: right;
+
+    color: #cb388f;
+}
+
+.define td {
+    padding: .6em .2em .4em 10px;
+}
+
+.define thead tr {
+    font-size: 22px;
+
+    border-top: none;
+}
+
+.define thead td {
+    padding-right: 6em;
+}
+
+.define thead th {
+    text-align: left;
+}
+
+.define p {
+    display: inline;
+    position: relative;
+
+    line-height: 140%;
+}
+
+.define a {
+    color: #4b4b4b;
+}
+
+.define a:hover {
+    color: #000;
+}
+
+.define b {
+
+}
+
+.define b a
+{
+    margin-left: .3em;
+
+    color: #cb388f;
+    border: none;
+}
+
+.define b.left a
+{
+    margin-left: 0;
+}
+
+.define b a u
+{
+    color: #cb388f;
+}
+
+.define b a:hover u
+{
+    text-decoration: line-through;
+}

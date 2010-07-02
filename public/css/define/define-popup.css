@@ -1,0 +1,144 @@
+/* ================== */
+
+/* всплывающий список */
+
+/* ================== */
+
+.define-popup {
+    display: none;
+
+    position: absolute;
+    z-index: 2;
+
+    top: 0;
+    left: 0;
+
+    padding: 2px 0 4px 0;
+    
+    letter-spacing: -.02em;
+
+    background: #3b3b3b;
+
+    background-image: -moz-linear-gradient(top, #484848, #2d2d2d);
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#484848), to(#2D2D2D), color-stop(.5,#3B3B3B));
+
+    /*
+    попробовать сделать закругления в IE через VML:
+    behavior: url(/js/behavior/border-radius.htc);
+    */
+
+    border-radius: .4em;
+    border-radius: 10px;
+
+    -moz-border-radius: .4em;
+    -webkit-border-radius: .4em;
+
+    box-shadow: 0 20px 20px rgba(0, 0, 0, 0.45);
+    -moz-box-shadow: 0 20px 20px rgba(0, 0, 0, 0.45);
+    -webkit-box-shadow: 0 20px 20px rgba(0, 0, 0, 0.45);
+}
+
+.define-popup dt {
+    padding: 4px 16px;
+
+    white-space: nowrap;
+    cursor: default;
+
+    color: #f2cd1f;
+}
+
+.define-popup dd {
+    font-size: 75%;
+
+    color: #36d4f1;
+    border-top: 1px solid #484848;
+}
+    
+.define-popup a {
+    display: block;
+    position: relative;
+
+    padding: 4px 16px;
+
+    color: #36d4f1;
+}
+
+.define-popup a { /* убраем ненужное наследование от .b-pseudo */
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+/* галочка */
+
+.define-popup a i {
+    display: block;
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    margin-top: -3px;
+
+    width: 7px;
+    height: 7px;
+
+    background: transparent url(/img/ico/check2.png) no-repeat 0 -7px;
+}
+
+/* выбранное значение */
+
+.define-popup a.checked {
+}
+
+.define-popup a.checked i {
+    background-position: 0 0;
+}
+
+/* ховер */
+
+.define-popup a:hover {
+    color: #ddd;
+    background-color: #dc3f8a;
+}
+
+.define-popup a:hover i {
+    background-position: 0 -14px;
+}
+
+/* ховер над отмеченным */
+
+.define-popup a.checked:hover {
+    color: #fff;
+}
+
+.define-popup a.checked:hover i {
+    background-position: 0 0;
+}
+
+/* значение по умолчанию */
+
+.define-popup a.anyone {
+    font-weight: bold;
+
+    color: #fff;
+}
+
+.define-popup a.anyone:hover {
+}
+
+/* радио-режим: только одно отмеченное значение; галочки не нужны */
+
+.define-popup-radio {
+
+}
+
+.define-popup-radio a i {
+    display: none;
+}
+
+.define-popup-radio  a.checked i {
+    display: block;
+}
+    
+.define-popup a.checked {
+    olor: #fff;
+}
+

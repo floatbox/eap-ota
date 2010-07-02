@@ -1,0 +1,64 @@
+.map
+{
+    width: 318px;
+    height: 306px;
+    overflow: hidden;
+}
+
+.map .YMaps-slider-btn i,
+.map .YMaps-slider-grab i,
+.map .YMaps-slider-marks i
+{
+    background: transparent url(/img/map/slider.png) no-repeat scroll 0 0!important;
+}
+
+/* переопределяем переключатель Схема/Спутник */
+/* вообще-то, для надёжности надо нарисовать свои кнопки */
+/* или убрать их совсем? */
+
+.map .YMaps-buttons {
+    z-index: 1002!important; // хотим быть поверх копирайта
+}
+
+.map .YMaps-button
+{
+    margin-left: -5px;
+}
+
+.map .YMaps-button .YMaps-button-caption
+{
+    font-size: 85%;
+    padding: 2px 6px;
+
+    color: #fff;
+
+    background: rgba(230, 72, 147, 0.8);
+}
+
+.map .YMaps-button .YMaps-button-m i,
+.map .YMaps-button .YMaps-button-c i
+{
+    background: transparent;
+}
+
+.map .YMaps-button_active .YMaps-button-caption
+{
+    color: #eee!important;
+    border-bottom: 1px dotted transparent!important;
+    background: rgba(105, 144, 181, 1.0)!important;
+}
+
+.map .YMaps-button_hover .YMaps-button-caption
+{
+    background: rgba(105, 144, 181, 1.0);
+}
+
+
+/* переопределяем балуны */
+
+.map .YMaps-b-balloon_small .YMaps-b-balloon-content
+{
+    font: 11px/100% Arial,a;
+    padding: 1px 3px 0 3px;
+    color: #333;
+}

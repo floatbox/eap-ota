@@ -1,0 +1,27 @@
+/* Стоимость предложения (begin) */
+
+    .b-offer:first-child .b-price b:before
+    {
+        content: "Всего ";
+    }
+
+    .b-price
+    {
+        font: bold 180% Arial,s;
+
+        padding: 0.1em 0.4em 0 15px;
+    }
+
+    .b-price b
+    {
+        font-weight: bold;
+        letter-spacing: -1px;
+        color: #9ce5eb;
+    }
+
+    .b-price s
+    {
+        font-weight: bold;
+        color: #a9a9a9;
+    }
+/* Стоимость предложения (end) */

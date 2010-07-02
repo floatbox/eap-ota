@@ -1,0 +1,36 @@
+/* Ссылка "сбросить, очистить" (begin) */
+    a.panel-reset
+    {
+        font-size: 70%;
+
+        display: block;
+        float: left;
+        
+        margin: 2px 0 0 10px;
+
+        color: #a0a0a0;
+    }
+
+    a.panel-reset:hover
+    {
+        color: #fff;
+    }
+
+    a.panel-reset i
+    {
+        left: -10px;
+
+        top: 50%;
+        width: 6px;
+        height: 6px;
+        background: url(/img/close.gif) no-repeat;
+    }
+
+    a.panel-reset-inactive,
+    a.panel-reset-inactive:hover
+    {
+        color: #7b7b7b;
+        cursor: default;
+    }
+
+/* Ссылка "сбросить, очистить" (end) */

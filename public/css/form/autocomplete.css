@@ -1,0 +1,250 @@
+
+/* поле с автокомплитом */
+
+.autocomplete,
+.autocomplete-gray {
+    font-size: 22px;
+
+    padding: 6px;
+    /*
+    height: auto;
+    */
+    height: 1%;
+
+    letter-spacing: -.02em;
+
+    color: #4b4b4b;
+    border: 1px solid #424445;
+    background: #fff;
+}
+
+.autocomplete-gray {
+    color: #cfcfcf;
+    background: #373737;
+}
+
+.autocomplete-hover {
+    border-color: #db3f89;
+}
+
+.autocomplete-focus {
+    color: #333;
+    border: 1px solid #db3f89;
+    background: #fff;
+}
+
+/* контейнер для инпута */
+
+.autocomplete-box {
+    position: relative;
+    overflow: hidden;
+    zoom: 1;
+}
+
+.autocomplete-box div.ruler {
+    font-size: 22px;
+
+    position: absolute;
+    display: none;
+   
+    white-space: pre;
+}
+
+/* IATA-код */
+
+.autocomplete-box .iata {
+    font-size: 11px;
+
+    display: none;
+
+    position: absolute;
+    top: 50%;
+    right: 1px;
+    margin-top: -14px;
+
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+.autocomplete-box .iata i,
+.autocomplete-box .iata u {
+    display: inline-block;
+
+    height: 23px;
+    line-height: 23px;
+    vertical-align: bottom;
+    
+    padding: 3px 0;
+}
+
+.autocomplete-box .iata i {
+    width: 20px;
+
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+}
+
+.autocomplete-box .iata u {
+    color: #656565;
+    padding: 3px 10px 3px 15px;
+    cursor: pointer;
+}
+
+.autocomplete-box .iata:hover u {
+    
+}
+
+/* выпадающий список */
+
+.autocomplete-list {
+    overflow: hidden;
+    z-index: 99999;
+
+    letter-spacing: -.02em;
+
+    border: 1px solid;
+    border-width: 0 1px 1px 1px;
+    border-color: #dedede #db3f89 #db3f89;
+
+    box-shadow: 0 20px 20px rgba(0, 0, 0, 0.45);
+    -moz-box-shadow: 0 20px 20px rgba(0, 0, 0, 0.45);
+    -webkit-box-shadow: 0 20px 20px rgba(0, 0, 0, 0.45);
+}
+
+.autocomplete-list ul {
+    width: 100%;
+    background: #fff url(data:image/gif;base64,R0lGODlhAQCcANUAAOzs7Pv7++bm5uTk5OLi4+rq6u/v7vDw8OHh4Nvb2/7//9ra2/7+/v39/fn5+fj4+Ojo6N3d3fX19fPy8/38/PT09Onp6fLy8urq6d/f4PDv8OHi4fv7+97d3v7//trb2tzd3fb39/f29/X09fPz8/Tz9ODg39zc2+Xm5ePj5OHh4ufo5+Hi4tvc293d3vHx8d7e3vz8/Pz7+/j399zc3Nzd3Pv8+/n6+t3c3Pj4+fn5+vb29v7+/d/f39ra2v///yH5BAAAAAAALAAAAAABAJwAAAZowJ9wSCz+FEgPY8lrOCmUmIxj41g5N50j53g8ZiFRKLSTSEaVSok0mVwur/hBY6jXAfg8voCx+CEQKysChCgoA4gpKQSMLCobCJEmGT2VPTAdES4RIDg1NC0nCaMLCx8LPqmqq6ytq0EAOw==) repeat-x bottom;
+}
+
+.autocomplete-list li {
+    font-size: 22px;
+
+    position: relative;
+    display: block;
+    padding: 8px 50px 8px 6px;
+
+    line-height: 24px; /* it is very important, if line-height not setted or setted in relative units scroll will be broken in firefox */
+    overflow: hidden;
+
+    color: #333;
+    border: none;
+    border-top: 1px solid #dedede;
+    cursor: pointer;
+}
+
+/* 
+коррекция левого паддинга в инпуте, который отличается на пиксел в (msie & opera) и (firefox & chrome)
+для оперы хака нет, так что там будет лишний пиксел
+*/
+
+.autocomplete-list li {
+    *padding-left: 6px;
+} 
+
+.autocomplete-list li u {
+    margin: 0 .5em 0 0;
+}
+
+.autocomplete-list li u u {
+    margin: 0;
+
+    color: #db3f89;
+}
+
+.autocomplete-list li s {
+    font-size: 14px;
+
+    vertical-align: 2px;
+
+    color: #9e9e9e;
+}
+
+.autocomplete-list li b {
+    font-size: 12px;
+
+    position: absolute;
+    right: 10px;
+    top: .6em;
+
+    color: #9e9e9e;
+}
+
+.autocomplete-list li i {
+    width: 16px;
+    height: 16px;
+
+    position: absolute;
+    right: 10px;
+    top: .5em;
+
+    background: transparent url(data:image/gif;base64,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) no-repeat 0 0;
+}
+
+.autocomplete-list  li.date i {
+    background-position-y: 0 0;
+}
+
+.autocomplete-list li.pivo i {
+    background-position: 0 -16px;
+}
+
+.autocomplete-list li.fun i {
+    background-position: 0 -32px;
+}
+
+.autocomplete-list li.persons i {
+    background-position: 0 -48px;
+}
+
+.autocomplete-list li.country i {
+    width: 14px;
+    height: 9px;
+
+    top: .7em;
+
+    background: url(/img/system/countries.png) no-repeat 0 -9px;
+}
+
+.autocomplete-list li.hover {
+    color: #fff;
+    border-top: 1px solid #db3f89;
+    background: #db3f89 url(/img/grad/combo-selected.gif) repeat-x;
+}
+
+.autocomplete-list li.hover u u,
+.autocomplete-list li.hover s,
+.autocomplete-list li.hover b {
+    color: #fff;
+}
+
+/* вид списка на время подгрузки данных */
+
+.autocomplete-list-dim {
+}
+
+.autocomplete-list-dim ul {
+    background: #ccc;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+}
+
+.autocomplete-list-dim li {
+    color: gray;
+}
+
+/* статусная строка */
+
+.autocomplete-list p {
+    font-size: 11px;
+
+    padding: 4px 16px 4px 7px;
+    line-height: 14px;
+
+    color: #4b4b4b;
+    background: #ffffdb;
+}
+
+.autocomplete-list p b {
+    font: bold 11px/1.3em Arial,a;
+    vertical-align: 0;
+}

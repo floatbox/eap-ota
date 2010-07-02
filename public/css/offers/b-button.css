@@ -1,0 +1,17 @@
+
+.b-offer input.button
+{
+    padding: 0.3em 0.2em;
+    font: bold 70% arial,s;
+
+    border: 1px solid;
+    border-color: #f2a4c9 #95476c #95476c #f2a4c9;
+    -moz-border-radius: 3px;
+    background: #e54892;
+    color: #fff;
+}
+
+.b-offer input.button:active
+{
+    border-color: #95476c #f2a4c9 #f2a4c9 #95476c;
+}

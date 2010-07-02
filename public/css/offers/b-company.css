@@ -1,0 +1,17 @@
+
+.b-company
+{
+    font-size: 70%;
+
+    left: 10px;
+
+    min-height: 42px;
+    height: auto!important;
+    height: 44px;
+
+    width: 95px!important;
+    padding: 30px 0 0 50px;
+
+    color: #787878;
+    background: #fff url(/system/airlines/icons/default.gif) no-repeat 10px 25px;
+}

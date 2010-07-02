@@ -1,0 +1,49 @@
+
+.b-transcript
+{
+    width: 945px;
+    padding: 1em 0 0.4em 15px;
+    clear: both;
+    position: relative;
+}
+
+.b-transcript p
+{
+    width: 710px;
+}
+
+.b-transcript s
+{
+    font: bold 190%/100% Arial,a;
+    letter-spacing: -1px;
+
+    color: #333;
+}
+
+.b-transcript p:first-letter
+{
+    text-transform: uppercase;
+}
+
+.b-transcript i
+{
+    position: relative;
+    display: none;
+}
+
+.b-transcript i i
+{
+    position: absolute;
+    right: -50px;
+    bottom: 0;
+
+    width: 43px;
+    height: 11px;
+
+    background: url(/img/progress/loader-bar.gif) no-repeat;
+}
+
+.b-transcript-wait i
+{
+    display: inline-block;
+}

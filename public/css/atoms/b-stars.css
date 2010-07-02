@@ -1,0 +1,35 @@
+    .b-stars,
+    .b-stars-1
+     {
+        display: -moz-inline-box;
+        display: inline-block;
+        overflow: hidden;
+
+        height: 15px;
+        width: 75px;
+
+        cursor: default;
+
+        background-image: url(/img/stars.png);
+        background-position: left 0;
+    }
+
+    .b-stars-2
+    {
+        background-position: left -15px;
+    }
+
+    .b-stars-3
+    {
+        background-position: left -30px;
+    }
+
+    .b-stars-4
+    {
+        background-position: left -45px;
+    }
+
+    .b-stars-5
+    {
+        background-position: left -60px;
+    }

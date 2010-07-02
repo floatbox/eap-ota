@@ -1,0 +1,279 @@
+.form
+{
+    padding: 6px 15px 10px;
+
+    color: #c8c8c8;
+    background: #2c2c2c;
+}
+
+.form table
+{
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.form table td
+{
+    padding: 0;
+    vertical-align: top;
+}
+
+/* верхние подписи к полям ввода */
+
+.form tr.labels td
+{
+    vertical-align: bottom;
+}
+
+.form label
+{
+    font: 115% Arial,a;
+    
+    position: relative;
+
+    line-height: 1.5em;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+}
+
+.form .label-from
+{
+    color: #cc8000;
+}
+
+.form .label-to
+{
+    color: #9ab300;
+}
+
+.form label s
+{
+    position: absolute;
+    right: -24px;
+    top: 50%;
+    margin-top: -8px;
+}
+
+/* вкладки-переключалки */
+
+.return-tabs
+{
+    font-size: 75%;
+
+    position: relative;
+    z-index: 2;
+    top: 1px;
+
+    overflow: hidden;
+
+    float: right;
+    zoom: 1;
+}
+
+.return-tabs li
+{
+    float: left;
+}
+
+.return-tabs a
+{
+    display: inline-block;
+    
+    padding: 0 .45em;
+    height: 23px;
+    line-height: 23px;
+    
+    outline: none;
+    white-space: nowrap;
+    text-decoration: none;
+
+    color: #c8c8c8;
+    border: 1px solid transparent;
+
+    /*
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-top-right-radius: 3px;
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-topright: 3px;
+    */
+}
+
+.return-tabs a:hover
+{
+    color: #fff;
+}
+
+.return-tabs a.active
+{
+    cursor: default;
+
+    text-decoration: none;
+
+    color: #4b4b4b;
+    background: #fff;
+    border-color: #424445 #424445 #fff #424445;
+}
+
+.return-tabs-focus a:hover,
+.return-tabs-hover a:hover
+{
+    border-color: transparent transparent #db3f89 transparent;
+}
+
+.return-tabs-focus a.active,
+.return-tabs-hover a.active
+{
+    color: #4b4b4b;
+    background: #fff;
+
+    border-color: #db3f89 #db3f89 #fff #db3f89;
+}
+
+
+
+/* нижние подписи к полям ввода */
+
+.form table tr.subs td
+{
+    font-size: 75%;
+
+    padding: 0.25em 0 0 8px;
+    color: #6b6b6b;
+}
+
+.form table tr.subs *
+{
+    /*
+    font-style: italic;
+    */
+}
+
+/* Поля ввода (begin) */
+
+    .form input
+    {
+        float: left; /* иначе в IE появляется вертикальный отступ в 1px */
+    }
+    
+    .form .from
+    {
+        width: 304px;
+    }
+
+    .form .to
+    {
+        width: 574px;
+    }
+/* Поля ввода (end) */
+
+
+/* Кнопка туда-сюда-обратно (begin) */
+    .form .button
+    {
+        display: block;
+        width: 18px;
+        height: 38px;
+
+        margin: 0 2px;
+
+        cursor: pointer;
+        border: 1px solid transparent;
+    }
+    
+    .form .button:hover
+    {
+        background-color: #373737;
+    }
+
+    .form .button:active
+    {
+        border: 1px solid #db3f89;
+        background-color: #373737;
+    }
+
+    .form .button-rt
+    {
+        background: url(/img/arrow-both.gif) no-repeat 50%;
+    }
+
+    .form .button-ow
+    {
+        background: url(/img/arrow-dpt.gif) no-repeat 50%;
+    }
+
+    .form .button-mw
+    {
+        background: url(/img/arrow-complex.gif) no-repeat 50%;
+    }
+
+    .form .button-none
+    {
+        background: none;
+    }
+/* Кнопка туда-обратно (end) */
+
+
+/* Псевдоссылка с примером (begin) */
+    .form table tr.subs .pseudo-example
+    {
+       margin: 0 0 0 10px;
+    }
+    .form table tr.subs .b-pseudo
+    {
+        color: #6b6b6b;
+    }
+
+    .form table tr.subs .b-pseudo s
+    {
+        position: absolute;
+        display: block;
+
+        width: 7px;
+        height: 12px;
+        padding: 2px 3px;
+
+        left: -15px;
+        bottom: -3px;
+
+        background: url(/img/ico/refresh.gif) no-repeat center center;
+    }
+
+    .form table tr.subs .b-pseudo s:hover
+    {
+        /*
+        background-color: #555;
+        */
+        cursor: default;
+    }
+
+    .form table tr.subs .b-pseudo s:active
+    {
+        /*
+        background-color: #dc3f8a;
+        */
+    }
+
+    .form table tr.subs .b-pseudo s.animate
+    {
+        -moz-transform: rotate(90deg);
+        -moz-transition: -moz-transform .3s ease-out;
+
+        -webkit-transform: rotate(180deg);
+        -webkit-transition: -webkit-transform .5s ease-out;
+
+        transform: rotate(180deg);
+        transition: transform .5s ease-out;
+
+        filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+    }
+
+    .form table tr.subs .b-pseudo:hover,
+    .form table tr.subs .b-pseudo:hover u
+    {
+        color: #fff;
+    }
+/* Псевдоссылка с примером (end) */
+
+

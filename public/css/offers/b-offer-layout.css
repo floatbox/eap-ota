@@ -1,0 +1,35 @@
+/* Предложение по перелёту и отелю (begin) */
+    /* Расположение столбцов (begin) */
+        .l-row0
+        {
+            position: absolute;
+
+            left: 5px;
+
+            width: 150px;
+            overflow: hidden;
+        }
+
+        .l-row1
+        {
+            float: left;
+            width: 240px;
+            overflow: hidden;
+            margin: 0 5px 0 0;
+        }
+
+        .l-row2
+        {
+            float: left;
+            width: 240px;
+        }
+
+        .b-offer br
+        {
+            clear: both;
+
+            font-size: 0;
+            line-height: 0;
+        }
+    /* Расположение столбцов (end) */
+/* Предложение по перелёту и отелю (end) */
