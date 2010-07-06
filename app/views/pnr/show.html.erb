@@ -1,0 +1,56 @@
+<p>
+Номер: <%= @pnr.number %>
+</p>
+Перелеты:
+<table>
+<% for flight in @pnr.flights %>
+<tr>
+      <td><span style="color:red"> <%= flight.warning %></span></td>
+      <td><%= fmt_departure(flight) %> &rarr; <%= fmt_arrival(flight) %></td>
+      <td><%= fmt_time( flight.departure_time ) %> <%= fmt_date( flight.departure_date ) %> &rarr; <%= fmt_time( flight.arrival_time ) %> <%= fmt_date( flight.arrival_date ) %> <%= fmt_duration(flight.duration) %></td>
+      <td><%= flight.operating_carrier_name %> <%= flight.flight_number %></td>
+      <td><%= flight.equipment_type_name %></td>
+    </tr>
+<% end %>
+</table>
+
+Пассажир:
+<% for p in @pnr.passengers %>
+<p>
+<%= p.first_name %> <%= p.surname %><br />
+телефон: <%= p.phone %><br />
+email: <%= p.email %>
+</p>
+<% end %>
+<br />
+<h3>Lowest fare</h3>
+
+
+Цены:
+<table>
+<tr>
+<th>Тип</th>
+<th>Цена</th>
+<th>Валюта</th>
+</tr>
+<% for p in @pnr.prices %>
+<tr>
+<td><%= p.fareDataQualifier %> </td>
+<td><%= p.fareAmount %></td>
+<td><%= p.fareCurrency %></td>
+</tr>
+<% end %>
+</table>
+
+Налоги:
+<table>
+<tr><th>isoCountry</th><th>taxNature</th><th>fareAmount</th><th>fareCurrency</th></tr>
+<% for t in @pnr.taxes %>
+<tr>
+<td><%= t.isoCountry %></td>
+<td><%= t.taxNature %></td>
+<td><%= t.fareAmount %></td>
+<td><%= t.fareCurrency %></td>
+</tr>
+<% end %>
+</table>

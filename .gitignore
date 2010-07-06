@@ -1,0 +1,15 @@
+config/database.yml
+doc
+log/*
+log/**/*
+!log/xmls/.gitkeep
+tmp
+db/*.sqlite3
+public/ext
+public/system
+.rake_tasks
+*.swp
+.com.*
+config/*.sphinx.conf
+db/sphinx
+.DS_Store

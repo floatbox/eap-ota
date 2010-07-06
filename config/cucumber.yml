@@ -1,0 +1,10 @@
+<%
+rerun = File.file?('rerun.txt') ? IO.read('rerun.txt') : ""
+rerun_opts = rerun.to_s.strip.empty? ? "--format progress features" : "--format #{ENV['CUCUMBER_FORMAT'] || 'pretty'} #{rerun}"
+std_opts = "#{rerun_opts} --format rerun --out rerun.txt --strict --tags ~@wip"
+drb_opts = "--drb --port 18989"
+%>
+default: <%= std_opts %>
+wip: --tags @wip:3 --wip features
+autotest: --color --format pretty
+autotest-all: --color --format progress

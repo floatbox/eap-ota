@@ -1,0 +1,113 @@
+# Typus Models Configuration File
+#
+# Use the README file as a reference to customize settings.
+
+Airline:
+  fields:
+    default: iata, ru_shortname, ru_longname, en_shortname, en_longname, long_name, country
+    list: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
+    form: ru_shortname, ru_longname, en_shortname, en_longname, iata, country
+  order_by: en_shortname, ru_shortname
+  relationships: country
+  filters: country
+  search: ru_shortname, ru_longname, en_shortname, en_longname, iata
+  application: Eviterra
+  export: csv
+
+Airplane:
+  fields:
+    default: iata, name_ru, name_en, engine_type
+    list: iata, name_ru, name_en, engine_type
+    form: iata, icao, name_ru, name_en, engine_type
+    options:
+      selectors: engine_type
+
+  order_by: name_ru
+  relationships: 
+  filters: engine_type
+  search: iata, name_ru, name_en
+  application: Eviterra
+  export: csv
+
+Airport:
+  fields:
+    default: iata, name_ru, name_en, importance, city
+    list: iata, name_ru, name_en, importance, city
+    form: iata, name_en, name_ru, synonym_list, proper_to, proper_from, proper_in, domestic, icao, federal, international, runway_length, lat, lng, importance, city
+  order_by: name_ru
+  relationships: city, country, geo_tags
+  filters: 
+  search: name_ru, name_en, iata, synonym_list
+  application: Eviterra
+  export: csv
+
+City:
+  fields:
+    default: iata, name_ru, name_en, synonym_list, importance, country, region
+    list: iata, name_ru, name_en, synonym_list, importance, country, region
+    form: iata, name_ru, name_en, synonym_list, proper_to, proper_from, proper_in, lat, lng, importance, country, region, timezone
+    options:
+      selectors: timezone
+
+  order_by: name_ru
+  relationships: airports, country, geo_tags, region
+  filters: country
+  search: name_ru, name_en, iata, synonym_list
+  application: Eviterra
+  export: csv
+
+Order:
+  fields:
+    defaul: pnr_number, first_name, surname, email, phone, updated_at
+    list: pnr_number, first_name, surname, email, phone, updated_at
+    show: pnr_number, first_name, surname, email, phone, updated_at, get_from_amadeus
+  order_by: -updated_at
+  search: pnr_number, first_name, surname, email, phone
+  application: Eviterra
+
+Region:
+  fields:
+    default: name_ru, name_en, country
+    list: name_ru, name_en, country
+    form: name_ru, name_en, country
+  order_by: name_ru
+  relationships: cities, country
+  filters: country
+  search: name_ru, name_en, synonym_list
+  application: Eviterra
+  export: csv
+
+Country:
+  fields:
+    default: alpha2, name_ru, name_en, full_name_ru, continent_ru, importance, synonym_list
+    list: alpha2, name_ru, name_en, full_name_ru, continent_ru, importance, synonym_list
+    form: name_ru, name_en, full_name_ru, alpha2, alpha3, iso, continent_ru, continent_part_ru, importance, synonym_list, lat, lng, proper_to, proper_from, proper_in
+  order_by: name_ru
+  relationships: airlines, airports, cities, geo_tags, regions
+  filters: 
+  search:  name_en, name_ru, full_name_ru, continent_ru, synonym_list
+  application: Eviterra
+  export: csv
+
+GeoTag:
+  fields:
+    default: name, desc, importance, synonym_list, proper_to, proper_from, proper_in
+    list: name, desc, importance, synonym_list, proper_to, proper_from, proper_in
+    form: name, desc, importance, synonym_list, proper_to, proper_from, proper_in, lat, lng
+  order_by: 
+  # relationships: geo_taggings
+  filters: 
+  search: name, synonym_list
+  application: Eviterra
+
+Preset:
+  fields:
+    default: name
+    list: name
+    form: name, query
+  order_by: 
+  relationships: 
+  filters: 
+  search: name
+  application: Eviterra
+

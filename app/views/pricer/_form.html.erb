@@ -1,0 +1,111 @@
+<% form_for :search, @search, :url => pricer_path, :html => {:method => :get} do |f| %>
+<div style="margin: 30px 0 0 0;">
+  <table style="width: 600px; padding: 0; margin: 0;" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+      <td> <%= f.select :search_type, %W(travel calendar) %>
+        <%= f.check_box :debug %> <%= f.label :debug %></td>
+    </tr>
+    <tr>
+    <td style="padding: 0 20px 0 0;">Откуда<br>
+    <%= f.text_field :from, :style => 'width: 100%; font-size: 160%;' %></td>
+    <td>Куда<br>
+    <%= f.text_field :to, :style => 'width: 100%; font-size: 160%;' %></td>
+    <td style="white-space: nowrap; padding: 0 0 8px 15px" valign="bottom">
+      <%= f.check_box :rt %><%= f.label :rt, 'и обратно' %>
+    </td>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap; padding: ">
+        ddmmyy: <%= f.text_field :date1 %>
+        <!--
+        <select name="search[day1]">
+          <% for day in 1..31 %>
+            <option value="<%= "%02d" % day %>"><%= day %></option>
+          <% end %>
+        </select>
+        &nbsp;
+        <select name="search[month1]">
+          <option value="01">января</option>
+          <option value="02">февраля</option>
+          <option value="03">марта</option>
+          <option value="04">апреля</option>
+          <option value="05">мая</option>
+          <option value="06" selected>июня</option>
+          <option value="07">июля</option>
+          <option value="08">августа</option>
+          <option value="09">сентября</option>
+          <option value="10">октября</option>
+          <option value="11">ноября</option>
+          <option value="12">декабря</option>
+        </select>
+        &nbsp;
+        <select name="search[year1]">
+          <option value="10">2010</option>
+          <option value="11">2011</option>
+          <option value="12">2012</option>
+          <option value="13">2013</option>
+          <option value="14">2014</option>
+          <option value="15">2015</option>
+        </select>
+        -->
+        </td>
+      <td style="white-space: nowrap; padding: ">
+        <%= f.text_field :date2 %>
+        <!--
+        <select name="search[day2]">
+          <% for day in 1..31 %>
+            <option value="<%= "%02d" % day %>"><%= day %></option>
+          <% end %>
+        </select>
+        &nbsp;
+        <select name="search[month2]">
+          <option value="01">января</option>
+          <option value="02">февраля</option>
+          <option value="03">марта</option>
+          <option value="04">апреля</option>
+          <option value="05">мая</option>
+          <option value="06" selected>июня</option>
+          <option value="07">июля</option>
+          <option value="08">августа</option>
+          <option value="09">сентября</option>
+          <option value="10">октября</option>
+          <option value="11">ноября</option>
+          <option value="12">декабря</option>
+        </select>
+        &nbsp;
+        <select name="search[year2]">
+          <option value="10">2010</option>
+          <option value="11">2011</option>
+          <option value="12">2012</option>
+          <option value="13">2013</option>
+          <option value="14">2014</option>
+          <option value="15">2015</option>
+        </select>
+        -->
+        </td>
+
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+  <div style="margin: 20px 0 20px 0;">
+  <%= f.select :adults, [['один взрослый', 1], ['два взрослых', 2], ['три взрослых', 3], ['четверо взрослых', 4], ['пятеро взрослых', 5], ['шестеро взрослых', 6]]  %>
+  &nbsp;
+  <%= f.select :children, [['без детей', 0], ['один ребенок', 1], ['двое детей', 2], ['трое детей', 3], ['четверо детей', 4]]  %>
+  &nbsp;
+  <!--
+  <select name="class">
+    <option>любой класс</option>
+    <option value="1">эконом-класс</option>
+    <option value="2">бизнес-класс</option>
+    <option value="3">первый класс</option>
+  </select>
+  &nbsp;
+  -->
+  <%= f.check_box :nonstop %> <%= f.label :nonstop, 'без пересадок' %>
+  &nbsp;
+  +/-
+  <%= f.select :day_interval, [['1 день', 1], ['2 дня', 2], ['3 дня',3]] %>
+  </div>
+</div>
+<input type="submit" value="Найти" style="font-size: 160%;">
+<% end %>

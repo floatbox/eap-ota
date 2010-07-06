@@ -1,0 +1,7 @@
+<h2><%= recommendation_counter + 1 %>:
+  <b><%= recommendation.price_total.to_i %> руб.</b> (<%= recommendation.prices.map{|p| p.to_i.to_s }.join(' + ') %>)</h2>
+<div style='font-size:10px'>
+<%= simple_format recommendation.additional_info %>
+</div>
+<%= render :partial => 'variant', :collection => recommendation.variants %>
+

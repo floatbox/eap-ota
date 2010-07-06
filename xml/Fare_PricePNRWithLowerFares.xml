@@ -1,0 +1,11 @@
+  <pnrLocatorData>
+    <reservationInformation>
+       <controlNumber> </controlNumber>
+    </reservationInformation>
+  </pnrLocatorData>
+  <overrideInformation>
+    <attributeDetails>
+      <attributeType>RLA</attributeType>
+    </attributeDetails>
+  </overrideInformation>
+

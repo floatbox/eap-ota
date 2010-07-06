@@ -1,0 +1,61 @@
+-# https://webservices.amadeus.com/extranet/structures/viewMessageStructure.do?id=1850&serviceVersionId=2028
+%numberOfUnit
+  %unitNumberDetail
+    %numberOfUnits= adults + children
+    %typeOfUnit PX
+  %unitNumberDetail
+    %numberOfUnits 200
+    %typeOfUnit RC
+- 1.upto(adults) do |n|
+  %paxReference
+    %ptc ADT
+    %traveller
+      %ref=n
+- 1.upto(children) do |n|
+  %paxReference
+    %ptc CH
+    %traveller
+      %ref= n+adults
+
+%fareOptions
+  %pricingTickInfo
+    %pricingTicketing
+      %priceType CUC
+  %feeIdDescription
+    %feeId
+      %feeType SORT
+      %feeIdNumber FEE
+  %conversionRate
+    %conversionRateDetail
+      %currency RUB
+
+- if nonstop
+  %travelFlightInfo
+    %flightDetail
+      %flightType N
+
+%itinerary
+  %requestedSegmentRef
+    %segRef 1
+  %departureLocalization
+    %departurePoint
+      %locationId= from
+  %arrivalLocalization
+    %arrivalPointDetails
+      %locationId= to
+  %timeDetails
+    %firstDateTimeDetail
+      %date= date1
+- if rt
+  %itinerary
+    %requestedSegmentRef
+      %segRef 2
+    %departureLocalization
+      %departurePoint
+        %locationId= to
+    %arrivalLocalization
+      %arrivalPointDetails
+        %locationId= from
+    %timeDetails
+      %firstDateTimeDetail
+        %date= date2

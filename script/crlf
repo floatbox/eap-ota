@@ -1,0 +1,25 @@
+#!/usr/bin/env watchr
+# vim: ft=ruby
+
+#require 'tempfile'
+require 'logger'
+LOGGER = Logger.new('log/crlf.log') unless defined? LOGGER
+LOGGER.level = Logger::INFO
+def convert file
+
+  LOGGER.debug "checking #{file}"
+  content = File.read(file)
+  if content =~ /\r/ || content !~ /\n\Z/
+    LOGGER.info "converting #{file}"
+    content.gsub! "\r", ''
+    content.sub! /\n?\Z/, "\n"
+    open(file, 'w') do |f|
+      f << content
+    end
+  end
+
+end
+
+watch '^public/.*\.(html?|css|js)$' do |md|
+  convert md[0]
+end

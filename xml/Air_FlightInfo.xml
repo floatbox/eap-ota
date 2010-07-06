@@ -1,0 +1,14 @@
+<generalFlightInfo>
+<flightDate>
+<departureDate>010610</departureDate>
+</flightDate>
+<boardPointDetails>
+<trueLocationId>FCO</trueLocationId>
+</boardPointDetails>
+<companyDetails>
+<marketingCompany>BA</marketingCompany>
+</companyDetails>
+<flightIdentification>
+<flightNumber>555</flightNumber>
+</flightIdentification>
+</generalFlightInfo>

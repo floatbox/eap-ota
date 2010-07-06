@@ -1,0 +1,17 @@
+<travelProductIdent>
+		<productDetails>
+			<departureDate>010610</departureDate>
+		</productDetails>
+		<boardpointDetail>
+			<departureCityCode>FCO</departureCityCode>
+		</boardpointDetail>
+		<offPointDetail>
+			<arrivalCityCode>LHR</arrivalCityCode>
+		</offPointDetail>
+		<companyIdentification>
+			<marketingAirlineCode>BA</marketingAirlineCode>
+		</companyIdentification>
+		<flightIdentification>
+			<flightNumber>559</flightNumber>
+		</flightIdentification>
+	</travelProductIdent>

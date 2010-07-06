@@ -1,0 +1,14 @@
+# Typus Roles Configuration File
+#
+# Use the README file as a reference to customize settings.
+
+admin:
+  Airline: create, read, update, delete
+  Airplane: create, read, update, delete
+  Airport: create, read, update, delete
+  City: create, read, update, delete
+  Order: create, read, delete, get_from_amadeus
+  Country: create, read, update, delete
+  GeoTag: create, read, update, delete
+  Region: create, read, update, delete
+  Preset: create, read, update, delete

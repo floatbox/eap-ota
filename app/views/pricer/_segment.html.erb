@@ -1,0 +1,27 @@
+<td>
+<div class="offer">
+<h2><%= segment.marketing_carrier_name %></h2>
+<% if segment_counter == 0 %>
+  <b>Туда <%= fmt_duration(segment.total_duration) %></b>
+<% else %>
+  <b>Обратно <%= fmt_duration(segment.total_duration) %></b>
+<% end %>
+<table style="xborder: 1px solid #000;">
+  <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
+    <tr>
+      <td></td>
+      <td><%= fmt_departure(flight) %> &rarr; <%= fmt_arrival(flight) %></td>
+      <td><%= fmt_time( flight.departure_time ) %> <%= fmt_date( flight.departure_date ) %> &rarr; <%= fmt_time( flight.arrival_time ) %> <%= fmt_date( flight.arrival_date ) %> <%= fmt_duration(flight.duration) %></td>
+      <td><%= flight.operating_carrier_name %> <%= flight.flight_number %></td>
+      <td><%= flight.equipment_type_name %></td>
+    </tr>
+    <% if layover %>
+    <tr>
+      <td></td>
+      <td> пересадка <%= fmt_duration layover %></td>
+    </tr>
+    <% end %>
+  <% end %>
+</table>
+</div>
+</td>

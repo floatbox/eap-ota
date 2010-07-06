@@ -1,0 +1,31 @@
+		<messageActionDetails>		
+				<functionDetails>			
+						<actionCode>44</actionCode>		
+</functionDetails>	
+</messageActionDetails>	
+		<requestSection>		
+				<availabilityProductInfo>			
+						<availabilityDetails>				
+								<departureDate>150610</departureDate>			
+</availabilityDetails>			
+						<departureLocationInfo>				
+								<cityAirport>NCE</cityAirport>			
+</departureLocationInfo>			
+						<arrivalLocationInfo>				
+								<cityAirport>NYC</cityAirport>			
+</arrivalLocationInfo>		
+</availabilityProductInfo>		
+				<airlineOrFlightOption>			
+						<flightIdentification>				
+								<airlineCode>AF</airlineCode>			
+</flightIdentification>			
+						<flightIdentification>				
+								<airlineCode>DL</airlineCode>			
+</flightIdentification>		
+</airlineOrFlightOption>		
+				<availabilityOptions>			
+						<productTypeDetails>				
+								<typeOfRequest>TN</typeOfRequest>			
+</productTypeDetails>		
+</availabilityOptions>	
+</requestSection>

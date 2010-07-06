@@ -1,0 +1,2374 @@
+# Logfile created on Tue Jul 06 15:52:46 +0400 2010  [4;36;1mSQL (0.3ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing PricerController#index (for 127.0.0.1 at 2010-07-06 15:53:14) [GET]
+Rendering template within layouts/application
+Rendering pricer/index
+Rendered pricer/_form (10.0ms)
+Completed in 143ms (View: 131, DB: 1) | 200 OK [http://localhost/pricer]
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-07-06 15:53:14) [GET]
+
+ActionController::RoutingError (No route matches "/stylesheets/application.css" with {:method=>:get}):
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/recognition_optimisation.rb:66:in `recognize_path'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:441:in `recognize'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:436:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+  /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+Rendering rescues/layout (not_found)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing PricerController#index (for 127.0.0.1 at 2010-07-06 15:53:31) [GET]
+  Parameters: {"search"=>{"day_interval"=>"1", "rt"=>"0", "from"=>"MOW", "adults"=>"1", "date1"=>"160710", "to"=>"VVO", "date2"=>"210710", "search_type"=>"travel", "nonstop"=>"0", "debug"=>"0", "children"=>"0"}}
+Rendering template within layouts/application
+Rendering pricer/index
+Rendered pricer/_form (14.8ms)
+  [4;36;1mAirline Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `airlines`[0m
+  [4;35;1mAirline Load (319.2ms)[0m   [0mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'SU') LIMIT 1[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mAirport Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `airports`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mAirport Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `airports`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mAirport Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `airports`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mAirport Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `airports`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mAirport Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `airports`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mAirport Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `airports`[0m
+
+ActionView::TemplateError (undefined method `define_index' for #<Class:0x7f2d08dfefa8>) on line #13 of app/views/pricer/_segment.html.erb:
+10:   <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
+11:     <tr>
+12:       <td></td>
+13:       <td><%= fmt_departure(flight) %> &rarr; <%= fmt_arrival(flight) %></td>
+14:       <td><%= fmt_time( flight.departure_time ) %> <%= fmt_date( flight.departure_date ) %> &rarr; <%= fmt_time( flight.arrival_time ) %> <%= fmt_date( flight.arrival_date ) %> <%= fmt_duration(flight.duration) %></td>
+15:       <td><%= flight.operating_carrier_name %> <%= flight.flight_number %></td>
+16:       <td><%= flight.equipment_type_name %></td>
+
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/base.rb:1959:in `method_missing'
+    app/models/airport.rb:40
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:380:in `load_without_new_constant_marking'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:380:in `load_file'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:521:in `new_constants_in'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:379:in `load_file'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:259:in `require_or_load'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:425:in `load_missing_constant'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:80:in `const_missing'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:92:in `const_missing'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:98:in `send'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:98:in `const_missing'
+    app/models/flight.rb:8:in `departure'
+    app/models/flight.rb:30:in `departure_name'
+    app/helpers/pricer_helper.rb:11:in `fmt_departure'
+    app/views/pricer/_segment.html.erb:13
+    app/views/pricer/_segment.html.erb:10:in `each'
+    app/views/pricer/_segment.html.erb:10
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:306:in `with_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:30:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:20:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:26:in `benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:26:in `benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:19:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/template.rb:205:in `render_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:44:in `render_partial'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:221:in `render_partial_collection'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:216:in `map'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:216:in `render_partial_collection'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:182:in `render_partial'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:267:in `render_without_parent'
+    app/views/pricer/_variant.html.erb:14
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:306:in `with_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:30:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:20:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:26:in `benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:26:in `benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:19:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/template.rb:205:in `render_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:44:in `render_partial'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:221:in `render_partial_collection'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:216:in `map'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:216:in `render_partial_collection'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:182:in `render_partial'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:267:in `render_without_parent'
+    app/views/pricer/_recommendation.html.erb:6
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:306:in `with_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:30:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:20:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:26:in `benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:26:in `benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:19:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/template.rb:205:in `render_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:44:in `render_partial'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:221:in `render_partial_collection'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:216:in `map'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:216:in `render_partial_collection'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:182:in `render_partial'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:267:in `render_without_parent'
+    app/views/pricer/index.html.erb:13
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:306:in `with_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:30:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/template.rb:205:in `render_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:265:in `render_without_parent'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:348:in `_render_with_layout'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:262:in `render_without_parent'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1250:in `render_for_file'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:951:in `render_without_benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:51:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:51:in `render'
+    app/controllers/pricer_controller.rb:8:in `index'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1331:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1331:in `perform_action_without_filters'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:617:in `call_filters'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:610:in `perform_action_without_benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/rescue.rb:160:in `perform_action_without_flash'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/flash.rb:146:in `perform_action'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `process_without_filters'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:606:in `process'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:391:in `process'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:386:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:437:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+    /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+Rendered rescues/_trace (62.7ms)
+Rendered rescues/_request_and_response (1.2ms)
+Rendering rescues/layout (internal_server_error)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing PricerController#index (for 127.0.0.1 at 2010-07-06 15:55:01) [GET]
+  Parameters: {"search"=>{"day_interval"=>"1", "rt"=>"0", "from"=>"MOW", "adults"=>"1", "date1"=>"160710", "to"=>"VVO", "date2"=>"210710", "search_type"=>"travel", "nonstop"=>"0", "debug"=>"0", "children"=>"0"}}
+Rendering template within layouts/application
+Rendering pricer/index
+Rendered pricer/_form (15.9ms)
+  [4;36;1mAirline Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `airlines`[0m
+  [4;35;1mAirline Load (0.1ms)[0m   [0mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'SU') LIMIT 1[0m
+  [4;36;1mAirport Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `airports`[0m
+  [4;35;1mAirport Load (154.5ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (1.0ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.7ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mAirport Load (24.3ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'SVO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.6ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (1.0ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'SU') LIMIT 1[0m
+  [4;36;1mAirplane Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `airplanes`[0m
+  [4;35;1mAirplane Load (63.8ms)[0m   [0mSELECT * FROM `airplanes` WHERE (`airplanes`.`iata` = '333') LIMIT 1[0m
+Rendered pricer/_segment (894.5ms)
+Rendered pricer/_variant (899.7ms)
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'SU') LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (1.6ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (1.2ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'SVO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (1.6ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.6ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'SU') LIMIT 1[0m
+  [4;36;1mAirplane Load (12.0ms)[0m   [0;1mSELECT * FROM `airplanes` WHERE (`airplanes`.`iata` = '763') LIMIT 1[0m
+Rendered pricer/_segment (1054.7ms)
+Rendered pricer/_variant (1057.5ms)
+Rendered pricer/_recommendation (1957.9ms)
+  [4;35;1mAirline Load (38.6ms)[0m   [0mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'UN') LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (13.3ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (14.1ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mAirport Load (11.4ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'DME') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.9ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (1.1ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'UN') LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airplanes` WHERE (`airplanes`.`iata` = '763') LIMIT 1[0m
+Rendered pricer/_segment (1883.9ms)
+Rendered pricer/_variant (1886.6ms)
+Rendered pricer/_recommendation (1887.2ms)
+  [4;36;1mAirline Load (1.0ms)[0m   [0;1mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'XF') LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (1.0ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.9ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (1.0ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mAirport Load (27.5ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VKO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mSQL (96.7ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (1.0ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (115.1ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (46.3ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (49.1ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'XF') LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airplanes` WHERE (`airplanes`.`iata` = '333') LIMIT 1[0m
+Rendered pricer/_segment (3478.3ms)
+Rendered pricer/_variant (3481.1ms)
+Rendered pricer/_recommendation (3481.7ms)
+  [4;35;1mAirline Load (30.9ms)[0m   [0mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'S7') LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mAirport Load (59.1ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'LED') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (214.9ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.9ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+
+ActionView::TemplateError (undefined method `define_index' for #<Class:0x7f2d03d7c670>) on line #10 of app/views/pricer/_segment.html.erb:
+7:   <b>Обратно <%= fmt_duration(segment.total_duration) %></b>
+8: <% end %>
+9: <table style="xborder: 1px solid #000;">
+10:   <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
+11:     <tr>
+12:       <td></td>
+13:       <td><%= fmt_departure(flight) %> &rarr; <%= fmt_arrival(flight) %></td>
+
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/base.rb:1959:in `method_missing'
+    app/models/city.rb:41
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:380:in `load_without_new_constant_marking'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:380:in `load_file'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:521:in `new_constants_in'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:379:in `load_file'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:259:in `require_or_load'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:425:in `load_missing_constant'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:80:in `const_missing'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:92:in `const_missing'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:98:in `send'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:98:in `const_missing'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/base.rb:2199:in `compute_type'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/core_ext/kernel/reporting.rb:11:in `silence_warnings'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/base.rb:2195:in `compute_type'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/reflection.rb:156:in `send'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/reflection.rb:156:in `klass'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/associations.rb:1250:in `city'
+    app/models/airport.rb:16:in `tz'
+    app/models/flight.rb:40:in `departure_datetime_utc'
+    app/models/segment.rb:10:in `layover_durations'
+    app/models/segment.rb:10:in `map'
+    app/models/segment.rb:9:in `each'
+    app/models/segment.rb:9:in `map'
+    app/models/segment.rb:9:in `layover_durations'
+    app/views/pricer/_segment.html.erb:10
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:306:in `with_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:30:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:20:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:26:in `benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:26:in `benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:19:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/template.rb:205:in `render_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:44:in `render_partial'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:221:in `render_partial_collection'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:216:in `map'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:216:in `render_partial_collection'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:182:in `render_partial'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:267:in `render_without_parent'
+    app/views/pricer/_variant.html.erb:14
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:306:in `with_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:30:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:20:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:26:in `benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:26:in `benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:19:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/template.rb:205:in `render_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:44:in `render_partial'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:221:in `render_partial_collection'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:216:in `map'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:216:in `render_partial_collection'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:182:in `render_partial'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:267:in `render_without_parent'
+    app/views/pricer/_recommendation.html.erb:6
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:306:in `with_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:30:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:20:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:26:in `benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:26:in `benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:19:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/template.rb:205:in `render_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:44:in `render_partial'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:221:in `render_partial_collection'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:216:in `map'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:216:in `render_partial_collection'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:182:in `render_partial'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:267:in `render_without_parent'
+    app/views/pricer/index.html.erb:13
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:306:in `with_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:30:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/template.rb:205:in `render_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:265:in `render_without_parent'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:348:in `_render_with_layout'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:262:in `render_without_parent'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1250:in `render_for_file'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:951:in `render_without_benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:51:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:51:in `render'
+    app/controllers/pricer_controller.rb:8:in `index'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1331:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1331:in `perform_action_without_filters'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:617:in `call_filters'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:610:in `perform_action_without_benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/rescue.rb:160:in `perform_action_without_flash'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/flash.rb:146:in `perform_action'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `process_without_filters'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:606:in `process'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:391:in `process'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:386:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:437:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+    /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+Rendered rescues/_trace (338.1ms)
+Rendered rescues/_request_and_response (83.5ms)
+Rendering rescues/layout (internal_server_error)
+  [4;36;1mSQL (15.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (27.8ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing PricerController#index (for 127.0.0.1 at 2010-07-06 15:55:44) [GET]
+  Parameters: {"search"=>{"day_interval"=>"1", "rt"=>"0", "from"=>"MOW", "adults"=>"1", "date1"=>"160710", "to"=>"VVO", "date2"=>"210710", "search_type"=>"travel", "nonstop"=>"0", "debug"=>"1", "children"=>"0"}}
+Rendering template within layouts/application
+Rendering pricer/index
+Rendered pricer/_form (257.8ms)
+  [4;36;1mAirline Columns (65.7ms)[0m   [0;1mSHOW FIELDS FROM `airlines`[0m
+  [4;35;1mAirline Load (19.8ms)[0m   [0mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'SU') LIMIT 1[0m
+  [4;36;1mAirport Columns (1.1ms)[0m   [0;1mSHOW FIELDS FROM `airports`[0m
+  [4;35;1mAirport Load (0.1ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mSQL (71.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (15.7ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (1.2ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.7ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.7ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mAirport Load (0.1ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'SVO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (1.1ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'SU') LIMIT 1[0m
+  [4;36;1mAirplane Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `airplanes`[0m
+  [4;35;1mAirplane Load (0.1ms)[0m   [0mSELECT * FROM `airplanes` WHERE (`airplanes`.`iata` = '333') LIMIT 1[0m
+Rendered pricer/_segment (925.4ms)
+Rendered pricer/_variant (990.5ms)
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'SU') LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (2.1ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (1.1ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (1.0ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'SVO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mSQL (1.2ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.6ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'SU') LIMIT 1[0m
+  [4;36;1mAirplane Load (0.1ms)[0m   [0;1mSELECT * FROM `airplanes` WHERE (`airplanes`.`iata` = '763') LIMIT 1[0m
+Rendered pricer/_segment (1234.2ms)
+Rendered pricer/_variant (1236.9ms)
+Rendered pricer/_recommendation (2228.3ms)
+  [4;35;1mAirline Load (0.1ms)[0m   [0mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'UN') LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (1.5ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (4.8ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (16.6ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (67.8ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (1.1ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mAirport Load (0.1ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'DME') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (1.0ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (5.0ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.9ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'UN') LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airplanes` WHERE (`airplanes`.`iata` = '763') LIMIT 1[0m
+Rendered pricer/_segment (2969.8ms)
+Rendered pricer/_variant (2972.5ms)
+Rendered pricer/_recommendation (2973.0ms)
+  [4;36;1mAirline Load (0.1ms)[0m   [0;1mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'XF') LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.9ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.9ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mAirport Load (0.1ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VKO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'XF') LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airplanes` WHERE (`airplanes`.`iata` = '333') LIMIT 1[0m
+Rendered pricer/_segment (3644.9ms)
+Rendered pricer/_variant (3646.6ms)
+Rendered pricer/_recommendation (3647.1ms)
+  [4;35;1mAirline Load (0.2ms)[0m   [0mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'S7') LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'VVO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mAirport Load (0.1ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'LED') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+
+ActionView::TemplateError (undefined method `define_index' for #<Class:0x7f2d03d3e938>) on line #10 of app/views/pricer/_segment.html.erb:
+7:   <b>Обратно <%= fmt_duration(segment.total_duration) %></b>
+8: <% end %>
+9: <table style="xborder: 1px solid #000;">
+10:   <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
+11:     <tr>
+12:       <td></td>
+13:       <td><%= fmt_departure(flight) %> &rarr; <%= fmt_arrival(flight) %></td>
+
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/base.rb:1959:in `method_missing'
+    app/models/city.rb:41
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:380:in `load_without_new_constant_marking'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:380:in `load_file'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:521:in `new_constants_in'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:379:in `load_file'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:259:in `require_or_load'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:425:in `load_missing_constant'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:80:in `const_missing'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:92:in `const_missing'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:98:in `send'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:98:in `const_missing'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/base.rb:2199:in `compute_type'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/core_ext/kernel/reporting.rb:11:in `silence_warnings'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/base.rb:2195:in `compute_type'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/reflection.rb:156:in `send'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/reflection.rb:156:in `klass'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/associations.rb:1250:in `city'
+    app/models/airport.rb:16:in `tz'
+    app/models/flight.rb:40:in `departure_datetime_utc'
+    app/models/segment.rb:10:in `layover_durations'
+    app/models/segment.rb:10:in `map'
+    app/models/segment.rb:9:in `each'
+    app/models/segment.rb:9:in `map'
+    app/models/segment.rb:9:in `layover_durations'
+    app/views/pricer/_segment.html.erb:10
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:306:in `with_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:30:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:20:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:26:in `benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:26:in `benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:19:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/template.rb:205:in `render_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:44:in `render_partial'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:221:in `render_partial_collection'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:216:in `map'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:216:in `render_partial_collection'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:182:in `render_partial'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:267:in `render_without_parent'
+    app/views/pricer/_variant.html.erb:14
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:306:in `with_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:30:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:20:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:26:in `benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:26:in `benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:19:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/template.rb:205:in `render_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:44:in `render_partial'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:221:in `render_partial_collection'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:216:in `map'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:216:in `render_partial_collection'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:182:in `render_partial'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:267:in `render_without_parent'
+    app/views/pricer/_recommendation.html.erb:6
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:306:in `with_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:30:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:20:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:26:in `benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:26:in `benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:19:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/template.rb:205:in `render_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable_partial.rb:44:in `render_partial'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:221:in `render_partial_collection'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:216:in `map'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:216:in `render_partial_collection'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/partials.rb:182:in `render_partial'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:267:in `render_without_parent'
+    app/views/pricer/index.html.erb:13
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:306:in `with_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:30:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/template.rb:205:in `render_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:265:in `render_without_parent'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:348:in `_render_with_layout'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:262:in `render_without_parent'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1250:in `render_for_file'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:951:in `render_without_benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:51:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:51:in `render'
+    app/controllers/pricer_controller.rb:8:in `index'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1331:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1331:in `perform_action_without_filters'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:617:in `call_filters'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:610:in `perform_action_without_benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/rescue.rb:160:in `perform_action_without_flash'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/flash.rb:146:in `perform_action'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `process_without_filters'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:606:in `process'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:391:in `process'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:386:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:437:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+    /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+Rendered rescues/_trace (1210.1ms)
+Rendered rescues/_request_and_response (4701.2ms)
+Rendering rescues/layout (internal_server_error)
+  [4;36;1mSQL (87.9ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (9.6ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing TypusController#dashboard (for 127.0.0.1 at 2010-07-06 16:09:54) [GET]
+  Parameters: {"action"=>"dashboard", "controller"=>"typus"}
+  [4;36;1mTypusUser Columns (336.4ms)[0m   [0;1mSHOW FIELDS FROM `typus_users`[0m
+Redirected to http://localhost:3000/admin/sign_in
+Filter chain halted as [:require_login] rendered_or_redirected.
+Completed in 348ms (DB: 434) | 302 Found [http://localhost/admin]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing TypusController#sign_in (for 127.0.0.1 at 2010-07-06 16:09:54) [GET]
+  Parameters: {"action"=>"sign_in", "controller"=>"typus"}
+  [4;35;1mSQL (54.7ms)[0m   [0mSELECT count(*) AS count_all FROM `typus_users` [0m
+Rendering template within layouts/typus
+Rendering typus/sign_in
+Rendered admin/shared/_footer (1.7ms)
+Completed in 333ms (View: 273, DB: 55) | 200 OK [http://localhost/admin/sign_in]
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-07-06 16:09:55) [GET]
+
+ActionController::RoutingError (No route matches "/stylesheets/admin/reset.css" with {:method=>:get}):
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/recognition_optimisation.rb:66:in `recognize_path'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:441:in `recognize'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:436:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+  /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+Rendering rescues/layout (not_found)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-07-06 16:09:56) [GET]
+
+ActionController::RoutingError (No route matches "/stylesheets/admin/screen.css" with {:method=>:get}):
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/recognition_optimisation.rb:66:in `recognize_path'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:441:in `recognize'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:436:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+  /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+Rendering rescues/layout (not_found)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing TypusController#sign_in (for 127.0.0.1 at 2010-07-06 16:10:01) [POST]
+  Parameters: {"typus_user"=>{"password"=>"[FILTERED]", "email"=>"a.bragin@eviterra.com"}, "commit"=>"Войт\320\270", "action"=>"sign_in", "authenticity_token"=>"oyVCaSq9ZJsG86UKYd9n0jm2n/jVcYxHpiGnhQI6JSY=", "controller"=>"typus"}
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT count(*) AS count_all FROM `typus_users` [0m
+  [4;35;1mTypusUser Load (0.3ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`status` = 1 AND `typus_users`.`email` = 'a.bragin@eviterra.com') LIMIT 1[0m
+Redirected to http://localhost:3000/admin
+Completed in 49ms (DB: 1) | 302 Found [http://localhost/admin/sign_in]
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing TypusController#dashboard (for 127.0.0.1 at 2010-07-06 16:10:01) [GET]
+  Parameters: {"action"=>"dashboard", "controller"=>"typus"}
+  [4;36;1mTypusUser Load (19.6ms)[0m   [0;1mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+Rendering template within layouts/admin
+Rendering typus/dashboard
+Rendered admin/dashboard/_sidebar (6.7ms)
+  [4;35;1mSQL (80.0ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mCity Columns (29.4ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+
+ActionView::TemplateError (undefined method `define_index' for #<Class:0x7f4f28e6be68>) on line #9 of vendor/plugins/typus/app/views/typus/dashboard.html.erb:
+6: 
+7: <%= resources %>
+8: 
+9: <%= applications %>
+
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/base.rb:1959:in `method_missing'
+    app/models/city.rb:41
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:380:in `load_without_new_constant_marking'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:380:in `load_file'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:521:in `new_constants_in'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:379:in `load_file'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:259:in `require_or_load'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:425:in `load_missing_constant'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:80:in `const_missing'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:92:in `const_missing'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/inflector.rb:361:in `constantize'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/inflector.rb:360:in `each'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/inflector.rb:360:in `constantize'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/core_ext/string/inflections.rb:162:in `constantize'
+    vendor/plugins/typus/app/helpers/typus_helper.rb:15:in `applications'
+    /var/lib/gems/1.8/gems/i18n-0.4.1/lib/i18n/backend/base.rb:221:in `sort_by'
+    vendor/plugins/typus/app/helpers/typus_helper.rb:15:in `each'
+    vendor/plugins/typus/app/helpers/typus_helper.rb:15:in `sort_by'
+    vendor/plugins/typus/app/helpers/typus_helper.rb:15:in `applications'
+    vendor/plugins/typus/app/helpers/typus_helper.rb:7:in `each'
+    vendor/plugins/typus/app/helpers/typus_helper.rb:7:in `applications'
+    vendor/plugins/typus/app/views/typus/dashboard.html.erb:9
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:306:in `with_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:30:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/template.rb:205:in `render_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:265:in `render_without_parent'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:348:in `_render_with_layout'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:262:in `render_without_parent'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1250:in `render_for_file'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:945:in `render_without_benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:51:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:51:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1326:in `default_render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1332:in `perform_action_without_filters'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:617:in `call_filters'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:610:in `perform_action_without_benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/rescue.rb:160:in `perform_action_without_flash'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/flash.rb:146:in `perform_action'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `process_without_filters'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:606:in `process'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:391:in `process'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:386:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:437:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+    /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+Rendered rescues/_trace (47.8ms)
+Rendered rescues/_request_and_response (1.0ms)
+Rendering rescues/layout (internal_server_error)
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing TypusController#dashboard (for 127.0.0.1 at 2010-07-06 16:15:46) [GET]
+  Parameters: {"action"=>"dashboard", "controller"=>"typus"}
+  [4;35;1mTypusUser Load (0.1ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+Rendering template within layouts/admin
+Rendering typus/dashboard
+Rendered admin/dashboard/_sidebar (0.2ms)
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mGeoTag Columns (27.0ms)[0m   [0mSHOW FIELDS FROM `geo_tags`[0m
+
+ActionView::TemplateError (undefined method `define_index' for #<Class:0x7f4f28529878>) on line #9 of vendor/plugins/typus/app/views/typus/dashboard.html.erb:
+6: 
+7: <%= resources %>
+8: 
+9: <%= applications %>
+
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/base.rb:1959:in `method_missing'
+    app/models/geo_tag.rb:7
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:380:in `load_without_new_constant_marking'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:380:in `load_file'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:521:in `new_constants_in'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:379:in `load_file'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:259:in `require_or_load'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:425:in `load_missing_constant'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:80:in `const_missing'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:92:in `const_missing'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/inflector.rb:361:in `constantize'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/inflector.rb:360:in `each'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/inflector.rb:360:in `constantize'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/core_ext/string/inflections.rb:162:in `constantize'
+    vendor/plugins/typus/app/helpers/typus_helper.rb:15:in `applications'
+    /var/lib/gems/1.8/gems/i18n-0.4.1/lib/i18n/backend/base.rb:221:in `sort_by'
+    vendor/plugins/typus/app/helpers/typus_helper.rb:15:in `each'
+    vendor/plugins/typus/app/helpers/typus_helper.rb:15:in `sort_by'
+    vendor/plugins/typus/app/helpers/typus_helper.rb:15:in `applications'
+    vendor/plugins/typus/app/helpers/typus_helper.rb:7:in `each'
+    vendor/plugins/typus/app/helpers/typus_helper.rb:7:in `applications'
+    vendor/plugins/typus/app/views/typus/dashboard.html.erb:9
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:306:in `with_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:30:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/template.rb:205:in `render_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:265:in `render_without_parent'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:348:in `_render_with_layout'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:262:in `render_without_parent'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1250:in `render_for_file'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:945:in `render_without_benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:51:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:51:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1326:in `default_render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1332:in `perform_action_without_filters'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:617:in `call_filters'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:610:in `perform_action_without_benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/rescue.rb:160:in `perform_action_without_flash'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/flash.rb:146:in `perform_action'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `process_without_filters'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:606:in `process'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:391:in `process'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:386:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:437:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+    /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+Rendered rescues/_trace (39.5ms)
+Rendered rescues/_request_and_response (0.3ms)
+Rendering rescues/layout (internal_server_error)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing TypusController#dashboard (for 127.0.0.1 at 2010-07-06 16:15:54) [GET]
+  Parameters: {"action"=>"dashboard", "controller"=>"typus"}
+  [4;36;1mTypusUser Load (0.1ms)[0m   [0;1mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+Rendering template within layouts/admin
+Rendering typus/dashboard
+Rendered admin/dashboard/_sidebar (0.1ms)
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mGeoTag Columns (0.6ms)[0m   [0;1mSHOW FIELDS FROM `geo_tags`[0m
+
+ActionView::TemplateError (undefined method `define_index' for #<Class:0x7f4f28e8d928>) on line #9 of vendor/plugins/typus/app/views/typus/dashboard.html.erb:
+6: 
+7: <%= resources %>
+8: 
+9: <%= applications %>
+
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/base.rb:1959:in `method_missing'
+    app/models/geo_tag.rb:7
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:380:in `load_without_new_constant_marking'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:380:in `load_file'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:521:in `new_constants_in'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:379:in `load_file'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:259:in `require_or_load'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:425:in `load_missing_constant'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:80:in `const_missing'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/dependencies.rb:92:in `const_missing'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/inflector.rb:361:in `constantize'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/inflector.rb:360:in `each'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/inflector.rb:360:in `constantize'
+    /var/lib/gems/1.8/gems/activesupport-2.3.5/lib/active_support/core_ext/string/inflections.rb:162:in `constantize'
+    vendor/plugins/typus/app/helpers/typus_helper.rb:15:in `applications'
+    /var/lib/gems/1.8/gems/i18n-0.4.1/lib/i18n/backend/base.rb:221:in `sort_by'
+    vendor/plugins/typus/app/helpers/typus_helper.rb:15:in `each'
+    vendor/plugins/typus/app/helpers/typus_helper.rb:15:in `sort_by'
+    vendor/plugins/typus/app/helpers/typus_helper.rb:15:in `applications'
+    vendor/plugins/typus/app/helpers/typus_helper.rb:7:in `each'
+    vendor/plugins/typus/app/helpers/typus_helper.rb:7:in `applications'
+    vendor/plugins/typus/app/views/typus/dashboard.html.erb:9
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:34:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:306:in `with_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/renderable.rb:30:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/template.rb:205:in `render_template'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:265:in `render_without_parent'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:348:in `_render_with_layout'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_view/base.rb:262:in `render_without_parent'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1250:in `render_for_file'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:945:in `render_without_benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:51:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:51:in `render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1326:in `default_render'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1332:in `perform_action_without_filters'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:617:in `call_filters'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:610:in `perform_action_without_benchmark'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/rescue.rb:160:in `perform_action_without_flash'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/flash.rb:146:in `perform_action'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `send'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `process_without_filters'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:606:in `process'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:391:in `process'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:386:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:437:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+    /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+    /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+    /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+Rendered rescues/_trace (41.6ms)
+Rendered rescues/_request_and_response (0.3ms)
+Rendering rescues/layout (internal_server_error)
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing TypusController#dashboard (for 127.0.0.1 at 2010-07-06 16:16:15) [GET]
+  Parameters: {"action"=>"dashboard", "controller"=>"typus"}
+  [4;35;1mTypusUser Load (0.1ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+Rendering template within layouts/admin
+Rendering typus/dashboard
+Rendered admin/dashboard/_sidebar (0.1ms)
+Rendered admin/helpers/_applications (27.7ms)
+Rendered admin/helpers/_header (1.6ms)
+Rendered admin/helpers/_login_info (1.3ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 116ms (View: 110, DB: 0) | 200 OK [http://localhost/admin]
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-07-06 16:16:15) [GET]
+
+ActionController::RoutingError (No route matches "/stylesheets/admin/reset.css" with {:method=>:get}):
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/recognition_optimisation.rb:66:in `recognize_path'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:441:in `recognize'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:436:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+  /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+Rendering rescues/layout (not_found)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-07-06 16:16:15) [GET]
+
+ActionController::RoutingError (No route matches "/stylesheets/admin/screen.css" with {:method=>:get}):
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/recognition_optimisation.rb:66:in `recognize_path'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:441:in `recognize'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:436:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+  /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+Rendering rescues/layout (not_found)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-07-06 16:16:15) [GET]
+
+ActionController::RoutingError (No route matches "/stylesheets/admin/jquery.fancybox-1.3.0" with {:method=>:get}):
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/recognition_optimisation.rb:66:in `recognize_path'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:441:in `recognize'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:436:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+  /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+Rendering rescues/layout (not_found)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-07-06 16:16:15) [GET]
+
+ActionController::RoutingError (No route matches "/javascripts/admin/jquery-1.4.1.min" with {:method=>:get}):
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/recognition_optimisation.rb:66:in `recognize_path'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:441:in `recognize'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:436:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+  /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+Rendering rescues/layout (not_found)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-07-06 16:16:15) [GET]
+
+ActionController::RoutingError (No route matches "/javascripts/admin/jquery.fancybox-1.3.0.pack" with {:method=>:get}):
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/recognition_optimisation.rb:66:in `recognize_path'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:441:in `recognize'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:436:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+  /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+Rendering rescues/layout (not_found)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (1.5ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-07-06 16:16:15) [GET]
+
+ActionController::RoutingError (No route matches "/javascripts/admin/application.js" with {:method=>:get}):
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/recognition_optimisation.rb:66:in `recognize_path'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:441:in `recognize'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:436:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+  /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+Rendering rescues/layout (not_found)
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing TypusController#dashboard (for 127.0.0.1 at 2010-07-06 16:18:00) [GET]
+  Parameters: {"action"=>"dashboard", "controller"=>"typus"}
+  [4;36;1mTypusUser Load (0.1ms)[0m   [0;1mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+Rendering template within layouts/admin
+Rendering typus/dashboard
+Rendered admin/dashboard/_sidebar (0.1ms)
+Rendered admin/helpers/_applications (14.6ms)
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.5ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 81ms (View: 74, DB: 1) | 200 OK [http://localhost/admin]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing Admin::GeoTagsController#index (for 127.0.0.1 at 2010-07-06 16:18:05) [GET]
+  Parameters: {"action"=>"index", "controller"=>"admin/geo_tags"}
+  [4;35;1mTypusUser Load (0.1ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+  [4;36;1mGeoTag Columns (1.0ms)[0m   [0;1mSHOW FIELDS FROM `geo_tags`[0m
+  [4;35;1mSQL (200.6ms)[0m   [0mSELECT count(*) AS count_all FROM `geo_tags` [0m
+Rendering template within layouts/admin
+Rendering admin/resources/index
+Rendered admin/helpers/_list (1.4ms)
+Rendered admin/helpers/_search (1.7ms)
+  [4;36;1mGeoTag Load (73.7ms)[0m   [0;1mSELECT `geo_tags`.* FROM `geo_tags` ORDER BY geo_tags.id ASC LIMIT 0, 20[0m
+Rendered admin/helpers/_table_header (14.4ms)
+Rendered admin/helpers/_pagination (2.4ms)
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.5ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 461ms (View: 149, DB: 276) | 200 OK [http://localhost/admin/geo_tags]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing Admin::AirlinesController#index (for 127.0.0.1 at 2010-07-06 16:18:09) [GET]
+  Parameters: {"action"=>"index", "controller"=>"admin/airlines"}
+  [4;35;1mTypusUser Load (0.1ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+  [4;36;1mAirline Columns (15.5ms)[0m   [0;1mSHOW FIELDS FROM `airlines`[0m
+  [4;35;1mSQL (39.3ms)[0m   [0mSELECT count(*) AS count_all FROM `airlines` [0m
+Rendering template within layouts/admin
+Rendering admin/resources/index
+Rendered admin/helpers/_list (0.2ms)
+Rendered admin/helpers/_list (0.2ms)
+Rendered admin/helpers/_search (1.2ms)
+  [4;36;1mCountry Load (134.9ms)[0m   [0;1mSELECT * FROM `countries` ORDER BY countries.name_ru ASC, importance desc[0m
+  [4;35;1mCountry Columns (0.9ms)[0m   [0mSHOW FIELDS FROM `countries`[0m
+Rendered admin/helpers/_list (0.1ms)
+  [4;36;1mAirline Load (19.6ms)[0m   [0;1mSELECT `airlines`.* FROM `airlines` ORDER BY airlines.en_shortname ASC, airlines.ru_shortname ASC LIMIT 0, 20[0m
+Rendered admin/helpers/_table_header (0.2ms)
+Rendered admin/helpers/_pagination (1.1ms)
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.5ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 582ms (View: 217, DB: 210) | 200 OK [http://localhost/admin/airlines]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing Admin::AirplanesController#index (for 127.0.0.1 at 2010-07-06 16:18:12) [GET]
+  Parameters: {"action"=>"index", "controller"=>"admin/airplanes"}
+  [4;35;1mTypusUser Load (0.1ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+  [4;36;1mAirplane Columns (31.9ms)[0m   [0;1mSHOW FIELDS FROM `airplanes`[0m
+  [4;35;1mSQL (11.3ms)[0m   [0mSELECT count(*) AS count_all FROM `airplanes` [0m
+Rendering template within layouts/admin
+Rendering admin/resources/index
+Rendered admin/helpers/_list (0.1ms)
+Rendered admin/helpers/_list (0.1ms)
+Rendered admin/helpers/_search (0.8ms)
+Rendered admin/helpers/_list (0.3ms)
+  [4;36;1mAirplane Load (19.2ms)[0m   [0;1mSELECT `airplanes`.* FROM `airplanes` ORDER BY airplanes.name_ru ASC LIMIT 0, 20[0m
+Rendered admin/helpers/_table_header (0.1ms)
+Rendered admin/helpers/_pagination (2.9ms)
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.5ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 322ms (View: 226, DB: 63) | 200 OK [http://localhost/admin/airplanes]
+  [4;35;1mSQL (0.2ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing Admin::AirportsController#index (for 127.0.0.1 at 2010-07-06 16:18:16) [GET]
+  Parameters: {"action"=>"index", "controller"=>"admin/airports"}
+  [4;35;1mTypusUser Load (0.1ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+  [4;36;1mAirport Columns (23.0ms)[0m   [0;1mSHOW FIELDS FROM `airports`[0m
+  [4;35;1mSQL (129.2ms)[0m   [0mSELECT count(*) AS count_all FROM `airports` [0m
+Rendering template within layouts/admin
+Rendering admin/resources/index
+Rendered admin/helpers/_list (0.1ms)
+Rendered admin/helpers/_list (0.1ms)
+Rendered admin/helpers/_search (1.2ms)
+  [4;36;1mAirport Load (24.0ms)[0m   [0;1mSELECT `airports`.* FROM `airports` ORDER BY airports.name_ru ASC, importance desc LIMIT 0, 20[0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mCity Load (107.7ms)[0m   [0;1mSELECT * FROM `cities` WHERE (`cities`.`id` IN (2013,1860,2093,3047,2874,3554,1565,779,1994,1078,2348,881,2603,2263,2009,97,3043,3562,1308)) [0m
+Rendered admin/helpers/_table_header (0.2ms)
+Rendered admin/helpers/_pagination (1.2ms)
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.5ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 425ms (View: 103, DB: 285) | 200 OK [http://localhost/admin/airports]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing Admin::CitiesController#index (for 127.0.0.1 at 2010-07-06 16:18:20) [GET]
+  Parameters: {"action"=>"index", "controller"=>"admin/cities"}
+  [4;35;1mTypusUser Load (0.1ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+  [4;36;1mCity Columns (1.0ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (21.1ms)[0m   [0mSELECT count(*) AS count_all FROM `cities` [0m
+Rendering template within layouts/admin
+Rendering admin/resources/index
+Rendered admin/helpers/_list (0.2ms)
+Rendered admin/helpers/_list (0.1ms)
+Rendered admin/helpers/_search (0.7ms)
+  [4;36;1mCountry Load (0.3ms)[0m   [0;1mSELECT * FROM `countries` ORDER BY countries.name_ru ASC, importance desc[0m
+  [4;35;1mCountry Columns (0.7ms)[0m   [0mSHOW FIELDS FROM `countries`[0m
+Rendered admin/helpers/_list (0.1ms)
+  [4;36;1mCity Load (12.7ms)[0m   [0;1mSELECT `cities`.* FROM `cities` ORDER BY cities.name_ru ASC, importance desc LIMIT 0, 20[0m
+  [4;35;1mRegion Columns (5.3ms)[0m   [0mSHOW FIELDS FROM `regions`[0m
+  [4;36;1mRegion Load (27.9ms)[0m   [0;1mSELECT * FROM `regions` WHERE (`regions`.`id` IN (12,16,17)) [0m
+  [4;35;1mCountry Load (0.6ms)[0m   [0mSELECT * FROM `countries` WHERE (`countries`.`id` IN (193,194,56,70,60,121,176,50,144,74,124,223,136,65,98,170)) [0m
+Rendered admin/helpers/_table_header (0.3ms)
+Rendered admin/helpers/_pagination (1.1ms)
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.5ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 460ms (View: 352, DB: 70) | 200 OK [http://localhost/admin/cities]
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing Admin::GeoTagsController#index (for 127.0.0.1 at 2010-07-06 16:18:24) [GET]
+  Parameters: {"action"=>"index", "controller"=>"admin/geo_tags"}
+  [4;36;1mTypusUser Load (0.3ms)[0m   [0;1mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+  [4;35;1mGeoTag Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `geo_tags`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT count(*) AS count_all FROM `geo_tags` [0m
+Rendering template within layouts/admin
+Rendering admin/resources/index
+Rendered admin/helpers/_list (0.1ms)
+Rendered admin/helpers/_search (1.9ms)
+  [4;35;1mGeoTag Load (0.1ms)[0m   [0mSELECT `geo_tags`.* FROM `geo_tags` ORDER BY geo_tags.id ASC LIMIT 0, 20[0m
+Rendered admin/helpers/_table_header (0.1ms)
+Rendered admin/helpers/_pagination (0.6ms)
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.5ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 122ms (View: 93, DB: 1) | 200 OK [http://localhost/admin/geo_tags]
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing Admin::RegionsController#index (for 127.0.0.1 at 2010-07-06 16:18:27) [GET]
+  Parameters: {"action"=>"index", "controller"=>"admin/regions"}
+  [4;36;1mTypusUser Load (0.3ms)[0m   [0;1mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+  [4;35;1mRegion Columns (0.7ms)[0m   [0mSHOW FIELDS FROM `regions`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM `regions` [0m
+Rendering template within layouts/admin
+Rendering admin/resources/index
+Rendered admin/helpers/_list (0.1ms)
+Rendered admin/helpers/_list (0.1ms)
+Rendered admin/helpers/_search (0.9ms)
+  [4;35;1mCountry Load (0.6ms)[0m   [0mSELECT * FROM `countries` ORDER BY countries.name_ru ASC, importance desc[0m
+  [4;36;1mCountry Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `countries`[0m
+Rendered admin/helpers/_list (0.2ms)
+  [4;35;1mRegion Load (0.3ms)[0m   [0mSELECT `regions`.* FROM `regions` ORDER BY regions.name_ru ASC LIMIT 0, 20[0m
+  [4;36;1mCountry Load (18.6ms)[0m   [0;1mSELECT * FROM `countries` WHERE (`countries`.`id` = 194) [0m
+Rendered admin/helpers/_table_header (0.2ms)
+Rendered admin/helpers/_pagination (1.1ms)
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.5ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 283ms (View: 226, DB: 22) | 200 OK [http://localhost/admin/regions]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing Admin::OrdersController#index (for 127.0.0.1 at 2010-07-06 16:18:31) [GET]
+  Parameters: {"action"=>"index", "controller"=>"admin/orders"}
+  [4;35;1mTypusUser Load (0.1ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+  [4;36;1mOrder Columns (17.5ms)[0m   [0;1mSHOW FIELDS FROM `orders`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT count(*) AS count_all FROM `orders` [0m
+Rendering template within layouts/admin
+Rendering admin/resources/index
+Rendered admin/helpers/_list (0.1ms)
+Rendered admin/helpers/_search (1.8ms)
+  [4;36;1mOrder Load (0.1ms)[0m   [0;1mSELECT `orders`.* FROM `orders` ORDER BY orders.updated_at DESC LIMIT 0, 20[0m
+Rendered admin/helpers/_table_header (0.1ms)
+Rendered admin/helpers/_pagination (1.2ms)
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.8ms)
+Rendered admin/shared/_footer (0.6ms)
+Completed in 390ms (View: 213, DB: 18) | 200 OK [http://localhost/admin/orders]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing Admin::CountriesController#index (for 127.0.0.1 at 2010-07-06 16:21:50) [GET]
+  Parameters: {"action"=>"index", "controller"=>"admin/countries"}
+  [4;35;1mTypusUser Load (0.1ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+  [4;36;1mCountry Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `countries`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSELECT count(*) AS count_all FROM `countries` [0m
+Rendering template within layouts/admin
+Rendering admin/resources/index
+Rendered admin/helpers/_list (0.1ms)
+Rendered admin/helpers/_list (0.1ms)
+Rendered admin/helpers/_search (0.8ms)
+  [4;36;1mCountry Load (1.1ms)[0m   [0;1mSELECT `countries`.* FROM `countries` ORDER BY countries.name_ru ASC, importance desc LIMIT 0, 20[0m
+Rendered admin/helpers/_table_header (0.1ms)
+Rendered admin/helpers/_pagination (1.2ms)
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.6ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 109ms (View: 76, DB: 3) | 200 OK [http://localhost/admin/countries]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing Admin::GeoTagsController#index (for 127.0.0.1 at 2010-07-06 16:23:47) [GET]
+  Parameters: {"action"=>"index", "controller"=>"admin/geo_tags"}
+  [4;35;1mTypusUser Load (0.2ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+  [4;36;1mGeoTag Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `geo_tags`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT count(*) AS count_all FROM `geo_tags` [0m
+Rendering template within layouts/admin
+Rendering admin/resources/index
+Rendered admin/helpers/_list (0.3ms)
+Rendered admin/helpers/_search (0.9ms)
+  [4;36;1mGeoTag Load (0.1ms)[0m   [0;1mSELECT `geo_tags`.* FROM `geo_tags` ORDER BY geo_tags.id ASC LIMIT 0, 20[0m
+Rendered admin/helpers/_table_header (0.1ms)
+Rendered admin/helpers/_pagination (0.8ms)
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.6ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 245ms (View: 215, DB: 1) | 200 OK [http://localhost/admin/geo_tags]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing Admin::GeoTagsController#edit (for 127.0.0.1 at 2010-07-06 16:23:50) [GET]
+  Parameters: {"action"=>"edit", "id"=>"4", "controller"=>"admin/geo_tags"}
+  [4;35;1mTypusUser Load (0.1ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+  [4;36;1mGeoTag Columns (0.6ms)[0m   [0;1mSHOW FIELDS FROM `geo_tags`[0m
+  [4;35;1mGeoTag Load (0.3ms)[0m   [0mSELECT * FROM `geo_tags` WHERE (`geo_tags`.`id` = 4) [0m
+Rendering template within layouts/admin
+Rendering admin/resources/edit
+Rendered admin/helpers/_list (0.2ms)
+Rendered admin/helpers/_search (0.8ms)
+Rendered admin/templates/_string (4.5ms)
+Rendered admin/templates/_string (0.8ms)
+Rendered admin/templates/_string (0.8ms)
+Rendered admin/templates/_string (0.9ms)
+Rendered admin/templates/_string (0.9ms)
+Rendered admin/templates/_string (1.1ms)
+Rendered admin/templates/_string (1.0ms)
+Rendered admin/templates/_string (0.8ms)
+Rendered admin/templates/_string (1.5ms)
+Rendered admin/resources/_form (25.4ms)
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.5ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 125ms (View: 88, DB: 1) | 200 OK [http://localhost/admin/geo_tags/edit/4]
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing Admin::CitiesController#index (for 127.0.0.1 at 2010-07-06 16:23:56) [GET]
+  Parameters: {"action"=>"index", "controller"=>"admin/cities"}
+  [4;36;1mTypusUser Load (0.1ms)[0m   [0;1mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+  [4;35;1mCity Columns (1.0ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT count(*) AS count_all FROM `cities` [0m
+Rendering template within layouts/admin
+Rendering admin/resources/index
+Rendered admin/helpers/_list (0.1ms)
+Rendered admin/helpers/_list (0.1ms)
+Rendered admin/helpers/_search (0.7ms)
+  [4;35;1mCountry Load (0.3ms)[0m   [0mSELECT * FROM `countries` ORDER BY countries.name_ru ASC, importance desc[0m
+  [4;36;1mCountry Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `countries`[0m
+Rendered admin/helpers/_list (0.2ms)
+  [4;35;1mCity Load (0.1ms)[0m   [0mSELECT `cities`.* FROM `cities` ORDER BY cities.name_ru ASC, importance desc LIMIT 0, 20[0m
+  [4;36;1mRegion Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `regions`[0m
+  [4;35;1mRegion Load (0.1ms)[0m   [0mSELECT * FROM `regions` WHERE (`regions`.`id` IN (12,16,17)) [0m
+  [4;36;1mCountry Load (0.1ms)[0m   [0;1mSELECT * FROM `countries` WHERE (`countries`.`id` IN (193,194,56,70,60,121,176,50,144,74,124,223,136,65,98,170)) [0m
+Rendered admin/helpers/_table_header (0.1ms)
+Rendered admin/helpers/_pagination (0.6ms)
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.5ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 365ms (View: 325, DB: 3) | 200 OK [http://localhost/admin/cities]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing Admin::CitiesController#edit (for 127.0.0.1 at 2010-07-06 16:24:00) [GET]
+  Parameters: {"action"=>"edit", "id"=>"1", "controller"=>"admin/cities"}
+  [4;35;1mTypusUser Load (0.3ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+  [4;36;1mCity Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mCity Load (0.3ms)[0m   [0mSELECT * FROM `cities` WHERE (`cities`.`id` = 1) ORDER BY importance desc[0m
+Rendering template within layouts/admin
+Rendering admin/resources/edit
+Rendered admin/helpers/_list (0.1ms)
+Rendered admin/helpers/_search (0.7ms)
+Rendered admin/templates/_string (2.9ms)
+Rendered admin/templates/_string (0.8ms)
+Rendered admin/templates/_string (0.9ms)
+Rendered admin/templates/_string (0.8ms)
+Rendered admin/templates/_string (0.9ms)
+Rendered admin/templates/_string (0.8ms)
+Rendered admin/templates/_string (0.8ms)
+Rendered admin/templates/_string (0.9ms)
+Rendered admin/templates/_string (1.0ms)
+Rendered admin/templates/_string (1.5ms)
+  [4;36;1mCountry Load (0.3ms)[0m   [0;1mSELECT * FROM `countries` ORDER BY countries.name_ru ASC, importance desc[0m
+  [4;35;1mCountry Columns (0.9ms)[0m   [0mSHOW FIELDS FROM `countries`[0m
+  [4;36;1mRegion Load (0.4ms)[0m   [0;1mSELECT * FROM `regions` ORDER BY regions.name_ru ASC[0m
+  [4;35;1mRegion Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `regions`[0m
+Rendered admin/templates/_selector (7.7ms)
+Rendered admin/resources/_form (186.4ms)
+  [4;36;1mAirport Load (3.9ms)[0m   [0;1mSELECT * FROM `airports` WHERE (city_id is NULL) ORDER BY importance desc[0m
+  [4;35;1mAirport Columns (1.1ms)[0m   [0mSHOW FIELDS FROM `airports`[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `cities` WHERE (`cities`.`id` = 1) ORDER BY importance desc[0m
+  [4;35;1mSQL (4.3ms)[0m   [0mSELECT count(*) AS count_all FROM `airports` WHERE (`airports`.city_id = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `cities` WHERE (`cities`.`id` = 1) ORDER BY importance desc[0m
+  [4;35;1mAirport Load (4.1ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.city_id = 1) ORDER BY airports.name_ru ASC, importance desc LIMIT 0, 20[0m
+Rendered admin/helpers/_table_header (0.1ms)
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `cities` WHERE (`cities`.`id` = 1) ORDER BY importance desc[0m
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.5ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 320ms (View: 268, DB: 17) | 200 OK [http://localhost/admin/cities/edit/1]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing Admin::CitiesController#edit (for 127.0.0.1 at 2010-07-06 16:24:04) [GET]
+  Parameters: {"action"=>"edit", "id"=>"11", "controller"=>"admin/cities"}
+  [4;35;1mTypusUser Load (0.3ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+  [4;36;1mCity Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mCity Load (0.2ms)[0m   [0mSELECT * FROM `cities` WHERE (`cities`.`id` = 11) ORDER BY importance desc[0m
+Rendering template within layouts/admin
+Rendering admin/resources/edit
+Rendered admin/helpers/_list (0.1ms)
+Rendered admin/helpers/_search (0.7ms)
+Rendered admin/templates/_string (3.5ms)
+Rendered admin/templates/_string (0.8ms)
+Rendered admin/templates/_string (0.8ms)
+Rendered admin/templates/_string (0.8ms)
+Rendered admin/templates/_string (0.8ms)
+Rendered admin/templates/_string (0.8ms)
+Rendered admin/templates/_string (0.8ms)
+Rendered admin/templates/_string (1.4ms)
+Rendered admin/templates/_string (1.4ms)
+Rendered admin/templates/_string (0.9ms)
+  [4;36;1mCountry Load (0.2ms)[0m   [0;1mSELECT * FROM `countries` ORDER BY countries.name_ru ASC, importance desc[0m
+  [4;35;1mCountry Columns (1.2ms)[0m   [0mSHOW FIELDS FROM `countries`[0m
+  [4;36;1mRegion Load (0.2ms)[0m   [0;1mSELECT * FROM `regions` ORDER BY regions.name_ru ASC[0m
+  [4;35;1mRegion Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `regions`[0m
+Rendered admin/templates/_selector (5.5ms)
+Rendered admin/resources/_form (63.7ms)
+  [4;36;1mAirport Load (0.1ms)[0m   [0;1mSELECT * FROM `airports` WHERE (city_id is NULL) ORDER BY importance desc[0m
+  [4;35;1mAirport Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `airports`[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `cities` WHERE (`cities`.`id` = 11) ORDER BY importance desc[0m
+  [4;35;1mSQL (4.2ms)[0m   [0mSELECT count(*) AS count_all FROM `airports` WHERE (`airports`.city_id = 11) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `cities` WHERE (`cities`.`id` = 11) ORDER BY importance desc[0m
+  [4;35;1mAirport Load (4.1ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.city_id = 11) ORDER BY airports.name_ru ASC, importance desc LIMIT 0, 20[0m
+Rendered admin/helpers/_table_header (0.1ms)
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `cities` WHERE (`cities`.`id` = 11) ORDER BY importance desc[0m
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.5ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 167ms (View: 115, DB: 13) | 200 OK [http://localhost/admin/cities/edit/11]
+  [4;35;1mSQL (59.2ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (50.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing Admin::CountriesController#edit (for 127.0.0.1 at 2010-07-06 16:48:24) [GET]
+  Parameters: {"action"=>"edit", "id"=>"56", "controller"=>"admin/countries"}
+  [4;35;1mTypusUser Load (41.9ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+  [4;36;1mCountry Columns (111.2ms)[0m   [0;1mSHOW FIELDS FROM `countries`[0m
+  [4;35;1mCountry Load (130.9ms)[0m   [0mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+Rendering template within layouts/admin
+Rendering admin/resources/edit
+Rendered admin/helpers/_list (0.2ms)
+Rendered admin/helpers/_search (1.2ms)
+Rendered admin/templates/_string (15.1ms)
+Rendered admin/templates/_string (1.5ms)
+Rendered admin/templates/_string (1.4ms)
+Rendered admin/templates/_string (1.3ms)
+Rendered admin/templates/_string (1.0ms)
+Rendered admin/templates/_string (0.9ms)
+Rendered admin/templates/_string (0.9ms)
+Rendered admin/templates/_string (1.0ms)
+Rendered admin/templates/_string (0.9ms)
+Rendered admin/templates/_string (0.9ms)
+Rendered admin/templates/_string (0.8ms)
+Rendered admin/templates/_string (0.8ms)
+Rendered admin/templates/_string (1.1ms)
+Rendered admin/templates/_string (1.7ms)
+Rendered admin/templates/_string (0.9ms)
+Rendered admin/resources/_form (55.9ms)
+  [4;36;1mAirline Load (48.1ms)[0m   [0;1mSELECT * FROM `airlines` WHERE (country_id is NULL) [0m
+  [4;35;1mAirline Columns (0.7ms)[0m   [0mSHOW FIELDS FROM `airlines`[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSELECT count(*) AS count_all FROM `airlines` WHERE (`airlines`.country_id = 56) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+  [4;35;1mAirline Load (0.8ms)[0m   [0mSELECT * FROM `airlines` WHERE (`airlines`.country_id = 56) ORDER BY airlines.en_shortname ASC, airlines.ru_shortname ASC LIMIT 0, 20[0m
+  [4;36;1mCity Load (33.5ms)[0m   [0;1mSELECT * FROM `cities` WHERE (country_id is NULL) ORDER BY importance desc[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+  [4;36;1mCity Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mSQL (4.9ms)[0m   [0mSELECT count(*) AS count_all FROM `cities` WHERE (`cities`.country_id = 56) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+  [4;35;1mCity Load (16.4ms)[0m   [0mSELECT * FROM `cities` WHERE (`cities`.country_id = 56) ORDER BY cities.name_ru ASC, cities.name_ru, importance desc LIMIT 0, 20[0m
+Rendered admin/helpers/_table_header (0.2ms)
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+  [4;36;1mRegion Load (12.8ms)[0m   [0;1mSELECT * FROM `regions` WHERE (country_id is NULL) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+  [4;36;1mRegion Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `regions`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSELECT count(*) AS count_all FROM `regions` WHERE (`regions`.country_id = 56) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `countries` WHERE (`countries`.`id` = 56) ORDER BY importance desc[0m
+  [4;35;1mRegion Load (0.7ms)[0m   [0mSELECT * FROM `regions` WHERE (`regions`.country_id = 56) ORDER BY regions.name_ru ASC LIMIT 0, 20[0m
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.8ms)
+Rendered admin/shared/_footer (0.5ms)
+Completed in 2079ms (View: 416, DB: 514) | 200 OK [http://localhost/admin/countries/edit/56]
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing PNRController#show (for 127.0.0.1 at 2010-07-06 17:00:35) [GET]
+  Parameters: {"id"=>"X5C8GS"}
+Rendering template within layouts/application
+Rendering pnr/show
+  [4;36;1mAirport Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `airports`[0m
+  [4;35;1mAirport Load (0.1ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'FCO') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mAirport Load (0.1ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'LHR') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'LHR') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mCity Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mCity Load (0.1ms)[0m   [0mSELECT * FROM `cities` WHERE (`cities`.`id` = 1578) ORDER BY importance desc[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'FCO') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mCity Load (0.1ms)[0m   [0mSELECT * FROM `cities` WHERE (`cities`.`id` = 2470) ORDER BY importance desc[0m
+  [4;36;1mAirline Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `airlines`[0m
+  [4;35;1mAirline Load (0.1ms)[0m   [0mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'BA') LIMIT 1[0m
+  [4;36;1mAirplane Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `airplanes`[0m
+  [4;35;1mAirplane Load (0.1ms)[0m   [0mSELECT * FROM `airplanes` WHERE (`airplanes`.`iata` = '321') LIMIT 1[0m
+Completed in 1758ms (View: 266, DB: 4) | 200 OK [http://localhost/pnr_form/X5C8GS]
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing Admin::OrdersController#index (for 127.0.0.1 at 2010-07-06 17:06:12) [GET]
+  Parameters: {"action"=>"index", "controller"=>"admin/orders"}
+  [4;36;1mTypusUser Columns (0.6ms)[0m   [0;1mSHOW FIELDS FROM `typus_users`[0m
+  [4;35;1mTypusUser Load (0.2ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+  [4;36;1mOrder Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `orders`[0m
+  [4;35;1mSQL (1.9ms)[0m   [0mSELECT count(*) AS count_all FROM `orders` [0m
+Rendering template within layouts/admin
+Rendering admin/resources/index
+Rendered admin/helpers/_list (1.0ms)
+Rendered admin/helpers/_search (3.2ms)
+  [4;36;1mOrder Load (0.1ms)[0m   [0;1mSELECT `orders`.* FROM `orders` ORDER BY orders.updated_at DESC LIMIT 0, 20[0m
+Rendered admin/helpers/_table_header (0.8ms)
+Rendered admin/helpers/_pagination (2.2ms)
+Rendered admin/helpers/_header (1.1ms)
+Rendered admin/helpers/_login_info (1.3ms)
+Rendered admin/shared/_footer (1.2ms)
+Completed in 190ms (View: 143, DB: 4) | 200 OK [http://localhost/admin/orders]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing TypusController#dashboard (for 127.0.0.1 at 2010-07-06 17:06:28) [GET]
+  Parameters: {"action"=>"dashboard", "controller"=>"typus"}
+  [4;35;1mTypusUser Load (0.2ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+Rendering template within layouts/admin
+Rendering typus/dashboard
+Rendered admin/dashboard/_sidebar (3.4ms)
+Rendered admin/helpers/_applications (137.9ms)
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.5ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 219ms (View: 210, DB: 0) | 200 OK [http://localhost/admin]
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing Admin::CitiesController#index (for 127.0.0.1 at 2010-07-06 17:06:30) [GET]
+  Parameters: {"action"=>"index", "controller"=>"admin/cities"}
+  [4;36;1mTypusUser Load (0.1ms)[0m   [0;1mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+  [4;35;1mCity Columns (0.7ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT count(*) AS count_all FROM `cities` [0m
+Rendering template within layouts/admin
+Rendering admin/resources/index
+Rendered admin/helpers/_list (0.1ms)
+Rendered admin/helpers/_list (0.1ms)
+Rendered admin/helpers/_search (0.7ms)
+  [4;35;1mCountry Load (0.3ms)[0m   [0mSELECT * FROM `countries` ORDER BY countries.name_ru ASC, importance desc[0m
+  [4;36;1mCountry Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `countries`[0m
+Rendered admin/helpers/_list (0.1ms)
+  [4;35;1mCity Load (0.1ms)[0m   [0mSELECT `cities`.* FROM `cities` ORDER BY cities.name_ru ASC, importance desc LIMIT 0, 20[0m
+  [4;36;1mRegion Columns (0.6ms)[0m   [0;1mSHOW FIELDS FROM `regions`[0m
+  [4;35;1mRegion Load (0.1ms)[0m   [0mSELECT * FROM `regions` WHERE (`regions`.`id` IN (12,16,17)) [0m
+  [4;36;1mCountry Load (0.1ms)[0m   [0;1mSELECT * FROM `countries` WHERE (`countries`.`id` IN (193,194,56,70,60,121,176,50,144,74,124,223,136,65,98,170)) [0m
+Rendered admin/helpers/_table_header (0.1ms)
+Rendered admin/helpers/_pagination (1.0ms)
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.5ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 249ms (View: 214, DB: 3) | 200 OK [http://localhost/admin/cities]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing Admin::CitiesController#edit (for 127.0.0.1 at 2010-07-06 17:06:32) [GET]
+  Parameters: {"action"=>"edit", "id"=>"4", "controller"=>"admin/cities"}
+  [4;35;1mTypusUser Load (0.1ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+  [4;36;1mCity Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mCity Load (0.2ms)[0m   [0mSELECT * FROM `cities` WHERE (`cities`.`id` = 4) ORDER BY importance desc[0m
+Rendering template within layouts/admin
+Rendering admin/resources/edit
+Rendered admin/helpers/_list (0.3ms)
+Rendered admin/helpers/_search (1.1ms)
+Rendered admin/templates/_string (5.1ms)
+Rendered admin/templates/_string (1.1ms)
+Rendered admin/templates/_string (1.1ms)
+Rendered admin/templates/_string (1.1ms)
+Rendered admin/templates/_string (1.6ms)
+Rendered admin/templates/_string (2.5ms)
+Rendered admin/templates/_string (1.0ms)
+Rendered admin/templates/_string (0.9ms)
+Rendered admin/templates/_string (0.8ms)
+Rendered admin/templates/_string (0.8ms)
+  [4;36;1mCountry Load (0.3ms)[0m   [0;1mSELECT * FROM `countries` ORDER BY countries.name_ru ASC, importance desc[0m
+  [4;35;1mCountry Columns (0.7ms)[0m   [0mSHOW FIELDS FROM `countries`[0m
+  [4;36;1mRegion Load (0.1ms)[0m   [0;1mSELECT * FROM `regions` ORDER BY regions.name_ru ASC[0m
+  [4;35;1mRegion Columns (0.4ms)[0m   [0mSHOW FIELDS FROM `regions`[0m
+Rendered admin/templates/_selector (46.2ms)
+Rendered admin/resources/_form (123.5ms)
+  [4;36;1mAirport Load (0.1ms)[0m   [0;1mSELECT * FROM `airports` WHERE (city_id is NULL) ORDER BY importance desc[0m
+  [4;35;1mAirport Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `airports`[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `cities` WHERE (`cities`.`id` = 4) ORDER BY importance desc[0m
+  [4;35;1mSQL (14.1ms)[0m   [0mSELECT count(*) AS count_all FROM `airports` WHERE (`airports`.city_id = 4) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `cities` WHERE (`cities`.`id` = 4) ORDER BY importance desc[0m
+  [4;35;1mAirport Load (6.1ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.city_id = 4) ORDER BY airports.name_ru ASC, importance desc LIMIT 0, 20[0m
+Rendered admin/helpers/_table_header (0.2ms)
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `cities` WHERE (`cities`.`id` = 4) ORDER BY importance desc[0m
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.5ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 276ms (View: 211, DB: 24) | 200 OK [http://localhost/admin/cities/edit/4]
+  [4;35;1mSQL (10.0ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing CompleteController#complete (for 127.0.0.1 at 2010-07-06 17:10:44) [GET]
+  Parameters: {"val"=>"\320\274", "callback"=>"jsonp1278421839687", "pos"=>"1", "limit"=>"30", "input"=>"to"}
+  [4;35;1mCountry Load (46.6ms)[0m   [0mSELECT * FROM `countries` ORDER BY importance desc[0m
+  [4;36;1mCountry Columns (8.5ms)[0m   [0;1mSHOW FIELDS FROM `countries`[0m
+  [4;35;1mCity Load (60.8ms)[0m   [0mSELECT * FROM `cities` ORDER BY importance desc[0m
+  [4;36;1mCity Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mAirline Load (0.9ms)[0m   [0mSELECT * FROM `airlines` [0m
+  [4;36;1mAirline Columns (0.6ms)[0m   [0;1mSHOW FIELDS FROM `airlines`[0m
+
+NoMethodError (undefined method `short_name' for #<Airline:0x7ff925d25480>):
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/attribute_methods.rb:260:in `method_missing'
+  lib/completer.rb:146:in `read_from_models'
+  lib/completer.rb:144:in `each'
+  lib/completer.rb:144:in `read_from_models'
+  lib/completer.rb:36:in `initialize'
+  lib/completer.rb:20:in `new'
+  lib/completer.rb:20:in `new_or_cached'
+  app/controllers/complete_controller.rb:7:in `completer'
+  app/controllers/complete_controller.rb:17:in `complete'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1331:in `send'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1331:in `perform_action_without_filters'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:617:in `call_filters'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:610:in `perform_action_without_benchmark'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/rescue.rb:160:in `perform_action_without_flash'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/flash.rb:146:in `perform_action'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `send'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `process_without_filters'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:606:in `process'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:391:in `process'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:386:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:437:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+  /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing CompleteController#complete (for 127.0.0.1 at 2010-07-06 17:10:46) [GET]
+  Parameters: {"val"=>"м\320\276", "callback"=>"jsonp1278421839688", "pos"=>"2", "limit"=>"30", "input"=>"to"}
+  [4;35;1mCountry Load (0.4ms)[0m   [0mSELECT * FROM `countries` ORDER BY importance desc[0m
+  [4;36;1mCountry Columns (1.0ms)[0m   [0;1mSHOW FIELDS FROM `countries`[0m
+  [4;35;1mCity Load (1.8ms)[0m   [0mSELECT * FROM `cities` ORDER BY importance desc[0m
+  [4;36;1mCity Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mAirline Load (0.2ms)[0m   [0mSELECT * FROM `airlines` [0m
+  [4;36;1mAirline Columns (0.6ms)[0m   [0;1mSHOW FIELDS FROM `airlines`[0m
+
+NoMethodError (undefined method `short_name' for #<Airline:0x7ff925da27a0>):
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/attribute_methods.rb:260:in `method_missing'
+  lib/completer.rb:146:in `read_from_models'
+  lib/completer.rb:144:in `each'
+  lib/completer.rb:144:in `read_from_models'
+  lib/completer.rb:36:in `initialize'
+  lib/completer.rb:20:in `new'
+  lib/completer.rb:20:in `new_or_cached'
+  app/controllers/complete_controller.rb:7:in `completer'
+  app/controllers/complete_controller.rb:17:in `complete'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1331:in `send'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1331:in `perform_action_without_filters'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:617:in `call_filters'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:610:in `perform_action_without_benchmark'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/rescue.rb:160:in `perform_action_without_flash'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/flash.rb:146:in `perform_action'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `send'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `process_without_filters'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:606:in `process'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:391:in `process'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:386:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:437:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+  /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing CompleteController#complete (for 127.0.0.1 at 2010-07-06 17:10:48) [GET]
+  Parameters: {"val"=>"мо\321\201", "callback"=>"jsonp1278421839689", "pos"=>"3", "limit"=>"30", "input"=>"to"}
+  [4;35;1mCountry Load (0.3ms)[0m   [0mSELECT * FROM `countries` ORDER BY importance desc[0m
+  [4;36;1mCountry Columns (1.2ms)[0m   [0;1mSHOW FIELDS FROM `countries`[0m
+  [4;35;1mCity Load (2.3ms)[0m   [0mSELECT * FROM `cities` ORDER BY importance desc[0m
+  [4;36;1mCity Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mAirline Load (0.2ms)[0m   [0mSELECT * FROM `airlines` [0m
+  [4;36;1mAirline Columns (0.6ms)[0m   [0;1mSHOW FIELDS FROM `airlines`[0m
+
+NoMethodError (undefined method `short_name' for #<Airline:0x7ff925e33980>):
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/attribute_methods.rb:260:in `method_missing'
+  lib/completer.rb:146:in `read_from_models'
+  lib/completer.rb:144:in `each'
+  lib/completer.rb:144:in `read_from_models'
+  lib/completer.rb:36:in `initialize'
+  lib/completer.rb:20:in `new'
+  lib/completer.rb:20:in `new_or_cached'
+  app/controllers/complete_controller.rb:7:in `completer'
+  app/controllers/complete_controller.rb:17:in `complete'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1331:in `send'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1331:in `perform_action_without_filters'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:617:in `call_filters'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:610:in `perform_action_without_benchmark'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/rescue.rb:160:in `perform_action_without_flash'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/flash.rb:146:in `perform_action'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `send'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `process_without_filters'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:606:in `process'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:391:in `process'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:386:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:437:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+  /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing CompleteController#complete (for 127.0.0.1 at 2010-07-06 17:10:57) [GET]
+  Parameters: {"val"=>"мос\320\272", "callback"=>"jsonp1278421839690", "pos"=>"4", "limit"=>"30", "input"=>"to"}
+  [4;35;1mCountry Load (0.3ms)[0m   [0mSELECT * FROM `countries` ORDER BY importance desc[0m
+  [4;36;1mCountry Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `countries`[0m
+  [4;35;1mCity Load (2.5ms)[0m   [0mSELECT * FROM `cities` ORDER BY importance desc[0m
+  [4;36;1mCity Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mAirline Load (0.2ms)[0m   [0mSELECT * FROM `airlines` [0m
+  [4;36;1mAirline Columns (0.6ms)[0m   [0;1mSHOW FIELDS FROM `airlines`[0m
+
+NoMethodError (undefined method `short_name' for #<Airline:0x7ff925ec0b00>):
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/attribute_methods.rb:260:in `method_missing'
+  lib/completer.rb:146:in `read_from_models'
+  lib/completer.rb:144:in `each'
+  lib/completer.rb:144:in `read_from_models'
+  lib/completer.rb:36:in `initialize'
+  lib/completer.rb:20:in `new'
+  lib/completer.rb:20:in `new_or_cached'
+  app/controllers/complete_controller.rb:7:in `completer'
+  app/controllers/complete_controller.rb:17:in `complete'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1331:in `send'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1331:in `perform_action_without_filters'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:617:in `call_filters'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:610:in `perform_action_without_benchmark'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/rescue.rb:160:in `perform_action_without_flash'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/flash.rb:146:in `perform_action'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `send'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `process_without_filters'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:606:in `process'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:391:in `process'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:386:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:437:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+  /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing CompleteController#complete (for 127.0.0.1 at 2010-07-06 17:11:00) [GET]
+  Parameters: {"val"=>"моск\320\262", "callback"=>"jsonp1278421839691", "pos"=>"5", "limit"=>"30", "input"=>"to"}
+  [4;35;1mCountry Load (0.9ms)[0m   [0mSELECT * FROM `countries` ORDER BY importance desc[0m
+  [4;36;1mCountry Columns (0.6ms)[0m   [0;1mSHOW FIELDS FROM `countries`[0m
+  [4;35;1mCity Load (2.2ms)[0m   [0mSELECT * FROM `cities` ORDER BY importance desc[0m
+  [4;36;1mCity Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mAirline Load (0.2ms)[0m   [0mSELECT * FROM `airlines` [0m
+  [4;36;1mAirline Columns (0.6ms)[0m   [0;1mSHOW FIELDS FROM `airlines`[0m
+
+NoMethodError (undefined method `short_name' for #<Airline:0x7ff9254b4350>):
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/attribute_methods.rb:260:in `method_missing'
+  lib/completer.rb:146:in `read_from_models'
+  lib/completer.rb:144:in `each'
+  lib/completer.rb:144:in `read_from_models'
+  lib/completer.rb:36:in `initialize'
+  lib/completer.rb:20:in `new'
+  lib/completer.rb:20:in `new_or_cached'
+  app/controllers/complete_controller.rb:7:in `completer'
+  app/controllers/complete_controller.rb:17:in `complete'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1331:in `send'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:1331:in `perform_action_without_filters'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:617:in `call_filters'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:610:in `perform_action_without_benchmark'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/rescue.rb:160:in `perform_action_without_flash'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/flash.rb:146:in `perform_action'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `send'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:532:in `process_without_filters'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/filters.rb:606:in `process'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:391:in `process'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/base.rb:386:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/routing/route_set.rb:437:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:87:in `dispatch'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:121:in `_call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:130
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:29:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:9:in `cache'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/query_cache.rb:28:in `call'
+  /var/lib/gems/1.8/gems/activerecord-2.3.5/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/params_parser.rb:15:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/session/cookie_store.rb:93:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/failsafe.rb:26:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:114:in `call'
+  /var/lib/gems/1.8/gems/actionpack-2.3.5/lib/action_controller/dispatcher.rb:108:in `call'
+  /var/lib/gems/1.8/gems/rails-2.3.5/lib/commands/server.rb:111
+
+  [4;35;1mSQL (29.3ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing CompleteController#complete (for 127.0.0.1 at 2010-07-06 17:13:39) [GET]
+  Parameters: {"val"=>"мос\320\272", "callback"=>"jsonp1278421839692", "pos"=>"4", "limit"=>"30", "input"=>"to"}
+  [4;35;1mCountry Load (0.3ms)[0m   [0mSELECT * FROM `countries` ORDER BY importance desc[0m
+  [4;36;1mCountry Columns (38.7ms)[0m   [0;1mSHOW FIELDS FROM `countries`[0m
+  [4;35;1mCity Load (51.3ms)[0m   [0mSELECT * FROM `cities` ORDER BY importance desc[0m
+  [4;36;1mCity Columns (38.2ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mAirline Load (0.2ms)[0m   [0mSELECT * FROM `airlines` [0m
+  [4;36;1mAirline Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `airlines`[0m
+  [4;35;1mAirplane Load (23.9ms)[0m   [0mSELECT * FROM `airplanes` [0m
+  [4;36;1mAirplane Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `airplanes`[0m
+  [4;35;1mAirport Load (135.4ms)[0m   [0mSELECT * FROM `airports` ORDER BY importance desc[0m
+  [4;36;1mAirport Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `airports`[0m
+  [4;35;1mGeoTag Load (22.1ms)[0m   [0mSELECT * FROM `geo_tags` [0m
+  [4;36;1mGeoTag Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `geo_tags`[0m
+Completed in 3457ms (View: 1, DB: 342) | 200 OK [http://localhost/complete.json?callback=jsonp1278421839692&val=%D0%BC%D0%BE%D1%81%D0%BA&pos=4&input=to&limit=30]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing CompleteController#complete (for 127.0.0.1 at 2010-07-06 17:13:42) [GET]
+  Parameters: {"val"=>"мо\321\201", "callback"=>"jsonp1278421839693", "pos"=>"3", "limit"=>"30", "input"=>"to"}
+  [4;35;1mAirline Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `airlines`[0m
+  [4;36;1mSQL (78.3ms)[0m   [0;1mSELECT max(`airlines`.updated_at) AS max_updated_at FROM `airlines` [0m
+  [4;35;1mAirplane Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `airplanes`[0m
+  [4;36;1mSQL (15.5ms)[0m   [0;1mSELECT max(`airplanes`.updated_at) AS max_updated_at FROM `airplanes` [0m
+  [4;35;1mAirport Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `airports`[0m
+  [4;36;1mSQL (5.5ms)[0m   [0;1mSELECT max(`airports`.updated_at) AS max_updated_at FROM `airports` [0m
+  [4;35;1mCity Columns (0.9ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (4.9ms)[0m   [0;1mSELECT max(`cities`.updated_at) AS max_updated_at FROM `cities` [0m
+  [4;35;1mCountry Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `countries`[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mSELECT max(`countries`.updated_at) AS max_updated_at FROM `countries` [0m
+  [4;35;1mGeoTag Columns (0.7ms)[0m   [0mSHOW FIELDS FROM `geo_tags`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT max(`geo_tags`.updated_at) AS max_updated_at FROM `geo_tags` [0m
+Completed in 421ms (View: 1, DB: 110) | 200 OK [http://localhost/complete.json?callback=jsonp1278421839693&val=%D0%BC%D0%BE%D1%81&pos=3&input=to&limit=30]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing CompleteController#complete (for 127.0.0.1 at 2010-07-06 17:13:42) [GET]
+  Parameters: {"val"=>"\320\234", "callback"=>"jsonp1278421839694", "pos"=>"1", "limit"=>"30", "input"=>"to"}
+  [4;35;1mAirline Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `airlines`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`airlines`.updated_at) AS max_updated_at FROM `airlines` [0m
+  [4;35;1mAirplane Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `airplanes`[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mSELECT max(`airplanes`.updated_at) AS max_updated_at FROM `airplanes` [0m
+  [4;35;1mAirport Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `airports`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`airports`.updated_at) AS max_updated_at FROM `airports` [0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mSELECT max(`cities`.updated_at) AS max_updated_at FROM `cities` [0m
+  [4;35;1mCountry Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `countries`[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mSELECT max(`countries`.updated_at) AS max_updated_at FROM `countries` [0m
+  [4;35;1mGeoTag Columns (0.4ms)[0m   [0mSHOW FIELDS FROM `geo_tags`[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mSELECT max(`geo_tags`.updated_at) AS max_updated_at FROM `geo_tags` [0m
+Completed in 340ms (View: 1, DB: 3) | 200 OK [http://localhost/complete.json?callback=jsonp1278421839694&val=%D0%9C&pos=1&input=to&limit=30]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing CompleteController#complete (for 127.0.0.1 at 2010-07-06 17:13:43) [GET]
+  Parameters: {"val"=>"М\320\276", "callback"=>"jsonp1278421839695", "pos"=>"2", "limit"=>"30", "input"=>"to"}
+  [4;35;1mAirline Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `airlines`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`airlines`.updated_at) AS max_updated_at FROM `airlines` [0m
+  [4;35;1mAirplane Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `airplanes`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`airplanes`.updated_at) AS max_updated_at FROM `airplanes` [0m
+  [4;35;1mAirport Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `airports`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`airports`.updated_at) AS max_updated_at FROM `airports` [0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`cities`.updated_at) AS max_updated_at FROM `cities` [0m
+  [4;35;1mCountry Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `countries`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`countries`.updated_at) AS max_updated_at FROM `countries` [0m
+  [4;35;1mGeoTag Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `geo_tags`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`geo_tags`.updated_at) AS max_updated_at FROM `geo_tags` [0m
+Completed in 96ms (View: 1, DB: 4) | 200 OK [http://localhost/complete.json?callback=jsonp1278421839695&val=%D0%9C%D0%BE&pos=2&input=to&limit=30]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (16.3ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing CompleteController#complete (for 127.0.0.1 at 2010-07-06 17:15:46) [GET]
+  Parameters: {"val"=>"Мо\321\201", "callback"=>"jsonp1278421839696", "pos"=>"3", "limit"=>"30", "input"=>"to"}
+  [4;35;1mAirline Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `airlines`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`airlines`.updated_at) AS max_updated_at FROM `airlines` [0m
+  [4;35;1mAirplane Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `airplanes`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`airplanes`.updated_at) AS max_updated_at FROM `airplanes` [0m
+  [4;35;1mAirport Columns (0.9ms)[0m   [0mSHOW FIELDS FROM `airports`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`airports`.updated_at) AS max_updated_at FROM `airports` [0m
+  [4;35;1mCity Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`cities`.updated_at) AS max_updated_at FROM `cities` [0m
+  [4;35;1mCountry Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `countries`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`countries`.updated_at) AS max_updated_at FROM `countries` [0m
+  [4;35;1mGeoTag Columns (0.7ms)[0m   [0mSHOW FIELDS FROM `geo_tags`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`geo_tags`.updated_at) AS max_updated_at FROM `geo_tags` [0m
+Completed in 460ms (View: 1, DB: 22) | 200 OK [http://localhost/complete.json?callback=jsonp1278421839696&val=%D0%9C%D0%BE%D1%81&pos=3&input=to&limit=30]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing CompleteController#complete (for 127.0.0.1 at 2010-07-06 17:15:47) [GET]
+  Parameters: {"val"=>"Мос\320\272", "callback"=>"jsonp1278421839697", "pos"=>"4", "limit"=>"30", "input"=>"to"}
+  [4;35;1mAirline Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `airlines`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`airlines`.updated_at) AS max_updated_at FROM `airlines` [0m
+  [4;35;1mAirplane Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `airplanes`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`airplanes`.updated_at) AS max_updated_at FROM `airplanes` [0m
+  [4;35;1mAirport Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `airports`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`airports`.updated_at) AS max_updated_at FROM `airports` [0m
+  [4;35;1mCity Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `cities`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`cities`.updated_at) AS max_updated_at FROM `cities` [0m
+  [4;35;1mCountry Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `countries`[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mSELECT max(`countries`.updated_at) AS max_updated_at FROM `countries` [0m
+  [4;35;1mGeoTag Columns (0.4ms)[0m   [0mSHOW FIELDS FROM `geo_tags`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT max(`geo_tags`.updated_at) AS max_updated_at FROM `geo_tags` [0m
+Completed in 689ms (View: 1, DB: 4) | 200 OK [http://localhost/complete.json?callback=jsonp1278421839697&val=%D0%9C%D0%BE%D1%81%D0%BA&pos=4&input=to&limit=30]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing TypusController#dashboard (for 127.0.0.1 at 2010-07-06 19:20:48) [GET]
+  Parameters: {"action"=>"dashboard", "controller"=>"typus"}
+  [4;35;1mTypusUser Load (26.8ms)[0m   [0mSELECT * FROM `typus_users` WHERE (`typus_users`.`id` = 3) [0m
+Rendering template within layouts/admin
+Rendering typus/dashboard
+Rendered admin/dashboard/_sidebar (0.1ms)
+Rendered admin/helpers/_applications (14.5ms)
+Rendered admin/helpers/_header (0.1ms)
+Rendered admin/helpers/_login_info (0.5ms)
+Rendered admin/shared/_footer (0.4ms)
+Completed in 417ms (View: 323, DB: 27) | 200 OK [http://localhost/admin]
+  [4;36;1mSQL (93.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (27.8ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing PNRController#show (for 127.0.0.1 at 2010-07-06 20:10:43) [GET]
+  Parameters: {"id"=>"X5K8OC"}
+Rendering template within layouts/application
+Rendering pnr/show
+  [4;36;1mAirport Columns (581.3ms)[0m   [0;1mSHOW FIELDS FROM `airports`[0m
+  [4;35;1mAirport Load (143.6ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'ARN') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mAirport Load (0.5ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'NCE') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'NCE') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mCity Columns (47.5ms)[0m   [0;1mSHOW FIELDS FROM `cities`[0m
+  [4;35;1mCity Load (27.7ms)[0m   [0mSELECT * FROM `cities` WHERE (`cities`.`id` = 2010) ORDER BY importance desc[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'ARN') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mCity Load (0.3ms)[0m   [0mSELECT * FROM `cities` WHERE (`cities`.`id` = 2851) ORDER BY importance desc[0m
+  [4;36;1mAirline Columns (130.4ms)[0m   [0;1mSHOW FIELDS FROM `airlines`[0m
+  [4;35;1mAirline Load (19.2ms)[0m   [0mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'DY') LIMIT 1[0m
+  [4;36;1mAirplane Columns (1.0ms)[0m   [0;1mSHOW FIELDS FROM `airplanes`[0m
+  [4;35;1mAirplane Load (0.3ms)[0m   [0mSELECT * FROM `airplanes` WHERE (`airplanes`.`iata` = '733') LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'NCE') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'ARN') ORDER BY importance desc LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'ARN') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `cities` WHERE (`cities`.`id` = 2851) ORDER BY importance desc[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airports` WHERE (`airports`.`iata` = 'NCE') ORDER BY importance desc LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `cities` WHERE (`cities`.`id` = 2010) ORDER BY importance desc[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `airlines` WHERE (`airlines`.`iata` = 'DY') LIMIT 1[0m
+  [4;35;1mAirplane Load (0.5ms)[0m   [0mSELECT * FROM `airplanes` WHERE (`airplanes`.`iata` = '73H') LIMIT 1[0m
+Completed in 23191ms (View: 536, DB: 1073) | 200 OK [http://localhost/pnr_form/X5K8OC]
