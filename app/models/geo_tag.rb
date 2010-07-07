@@ -11,8 +11,6 @@ class GeoTag < ActiveRecord::Base
   end
 
 
-  has_cases_for :name
-
   def latitude; lat end
   def longitude; lng end
 

@@ -16,8 +16,6 @@ class Country < ActiveRecord::Base
     alpha2
   end
 
-  has_cases_for :name
-
   def name
     name_ru
   end

@@ -22,8 +22,6 @@ class Airport < ActiveRecord::Base
 
   default_scope :order => "importance desc"
 
-  has_cases_for :name
-
   def name
     [name_ru, name_en, iata].find(&:present?)
   end
