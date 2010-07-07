@@ -1,4 +1,4 @@
-set :application, "eviterra"
+set :application, "gamma"
 
 
 # If you aren't using Subversion to manage your source code, specify
@@ -16,7 +16,7 @@ set :srv, "team.eviterra.ru"
 #set :deploy_via, :copy
 #set :repository,  "."
 
-set :repository,  "git@#{srv}:traviata.git"
+set :repository,  "git@git.eviterra.ru:eviterra.git"
 
 role :app, srv
 role :web, srv
