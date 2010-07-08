@@ -12,6 +12,7 @@ group :development do
   gem 'mongrel'
 end
 
+gem 'cucumber'
 gem 'handsoap'
 gem 'curb'
 gem 'nokogiri'

@@ -58,14 +58,14 @@ class Completer
       postfix = string[position..-1]
 
       end_poses = []
-      for word_ending_pattern in [ /^\w*/, /^\w*\W+\w+/, /^\w*\W+\w+\W+\w+/]
+      for word_ending_pattern in [ /^\S*/, /^\S*\s+\S+/, /^\S*\s+\S+\s+\S+/]
         if m = postfix.match(word_ending_pattern)
           end_poses << (position + m[0].mb_chars.length)
         end
       end
 
       leftmost_start_pos = nil
-      for word_beginning_pattern in [ /\w+\W+\w+\W+\w+\W*$/, /\w+\W+\w+\W*$/, /\w+\W*$/ ]
+      for word_beginning_pattern in [ /\S+\s+\S+\s+\S+\s*$/, /\S+\s+\S+\s*$/, /\S+\s*$/ ]
         if m = prefix.match(word_beginning_pattern)
           word_part = m[0].mb_chars
 
