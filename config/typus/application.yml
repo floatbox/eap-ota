@@ -4,7 +4,7 @@
 
 Airline:
   fields:
-    default: iata, ru_shortname, ru_longname, en_shortname, en_longname, long_name, country
+    default: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
     list: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
     form: ru_shortname, ru_longname, en_shortname, en_longname, iata, country
   order_by: en_shortname, ru_shortname

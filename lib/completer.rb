@@ -135,15 +135,15 @@ class Completer
   def create_base_records
     days_on = ['в воскресенье', 'в понедельник', 'во вторник', 'в среду', 'в четверг', 'в пятницу', 'в субботу']
     for day in Date.today+1.day.. Date.today+7.days
-      @records << Record.new(:name => Russian.strftime(day, '%A').mb_chars.downcase.to_s, :type => 'date', :code => nil, :aliases => nil, :hint => Russian.strftime(day, '%e %b'), :info => day)
-      @records << Record.new(:name => days_on[day.wday], :type => 'date', :code => nil, :aliases => nil, :hint => Russian.strftime(day, '%e %b'), :info => day)
+      #@records << Record.new(:name => Russian.strftime(day, '%A').mb_chars.downcase.to_s, :type => 'date', :code => nil, :aliases => nil, :hint => Russian.strftime(day, '%e %b'), :info => day)
+      @records << Record.new(:name => days_on[day.wday], :type => 'date', :code => nil, :aliases => nil, :hint => Russian.strftime(day, '%e %b'), :info => Russian.strftime(day, '%A, %e %b %Y года'))
     end
-     @records << Record.new(:name => 'завтра', :type => 'date', :code => nil, :aliases => nil, :hint => Russian.strftime(Date.today+1.day, '%e %b'), :info => Date.today+1.day)
-     @records << Record.new(:name => 'послезавтра', :type => 'date', :code => nil, :aliases => nil, :hint => Russian.strftime(Date.today+2.days, '%e %b'), :info => Date.today+2.days)
+     @records << Record.new(:name => 'завтра', :type => 'date', :code => nil, :aliases => nil, :hint => Russian.strftime(Date.today+1.day, '%e %b'), :info => Russian.strftime(Date.today+1.day, '%завтра, %e %b %Y года'))
+     @records << Record.new(:name => 'послезавтра', :type => 'date', :code => nil, :aliases => nil, :hint => Russian.strftime(Date.today+2.days, '%e %b'), :info => Russian.strftime(Date.today+2.days, 'послезавтра, %e %b %Y года'))
   end
   
   def read_from_models
-    @records = [] unless @records 
+    @records = [] unless @records
     for model in [Country, City] do
       model.all.each do |c|
         synonyms = []
