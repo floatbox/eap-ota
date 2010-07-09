@@ -35,6 +35,7 @@ class Completer
     if load_models
       read_from_models
     end
+    create_base_records
   end
   
   def iata_from_name(name)
@@ -86,7 +87,7 @@ class Completer
               :end => end_pos,
               :name => record.name,
               :hl => hl,
-              :entity => { :iata => record.code, :type => record.type, :name => record.name }
+              :entity => { :iata => record.code, :type => record.type, :name => record.name, :info => record.info, :hint => record.hint }
             }
             return data if data.size == limit
           end
@@ -131,6 +132,16 @@ class Completer
     @records = names.map {|name| Record.new(name)}
   end
   
+  def create_base_records
+    days_on = ['в воскресенье', 'в понедельник', 'во вторник', 'в среду', 'в четверг', 'в пятницу', 'в субботу']
+    for day in Date.today+1.day.. Date.today+7.days
+      @records << Record.new(:name => Russian.strftime(day, '%A').mb_chars.downcase.to_s, :type => 'date', :code => nil, :aliases => nil, :hint => Russian.strftime(day, '%e %b'), :info => day)
+      @records << Record.new(:name => days_on[day.wday], :type => 'date', :code => nil, :aliases => nil, :hint => Russian.strftime(day, '%e %b'), :info => day)
+    end
+     @records << Record.new(:name => 'завтра', :type => 'date', :code => nil, :aliases => nil, :hint => Russian.strftime(Date.today+1.day, '%e %b'), :info => Date.today+1.day)
+     @records << Record.new(:name => 'послезавтра', :type => 'date', :code => nil, :aliases => nil, :hint => Russian.strftime(Date.today+2.days, '%e %b'), :info => Date.today+2.days)
+  end
+  
   def read_from_models
     @records = [] unless @records 
     for model in [Country, City] do
@@ -165,7 +176,7 @@ class Completer
   end
   
   def outdated?
-    @updated_at && (@updated_at < [Airline, Airplane, Airport, City, Country, GeoTag].map{ |c| c.maximum(:updated_at) }.max)
+    @updated_at && (@updated_at < [Airline, Airplane, Airport, City, Country, GeoTag].map{ |c| c.maximum(:updated_at) }.max) && (@updated_at.to_date < Date.today)
   end
   
   class Record
@@ -179,13 +190,15 @@ class Completer
       @name = attrs[:name]
       @word = attrs[:word] || @name
       @code = attrs[:code]
+      @info = attrs[:info] 
+      @hint = attrs[:hint]
       @code = nil if @code == ''
       @aliases = attrs[:aliases] ? attrs[:aliases].split(':').every.strip : []
       @type = attrs[:type] || 'city'
       update_to_match
     end
 
-    attr_accessor :word, :type, :name, :code, :aliases, :to_match
+    attr_accessor :word, :type, :name, :code, :aliases, :to_match, :info, :hint
 
     def update_to_match
       @to_match = ([word] + aliases).compact.map {|word| normalize(word)}
