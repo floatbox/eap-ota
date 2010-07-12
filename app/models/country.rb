@@ -15,7 +15,7 @@ class Country < ActiveRecord::Base
   def iata
     alpha2
   end
-
+  has_cases_for :name
   def name
     name_ru
   end
