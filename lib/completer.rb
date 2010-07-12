@@ -144,14 +144,19 @@ class Completer
   
   def read_from_models
     @records = [] unless @records
-    for model in [Country, City] do
-      model.all.each do |c|
-        synonyms = []
-        synonyms << c.name_en unless c.name_en == c.name
-        synonyms += c.synonym_list.split(/, /) unless c.synonym_list.blank?
-        @records << Record.new(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms.join(':'))
-      end
+    Country.all.each do |c|
+      synonyms = []
+      synonyms << c.name_en unless c.name_en == c.name
+      synonyms += c.synonym_list.split(/, /) unless c.synonym_list.blank?
+      @records << Record.new(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms.join(':'))
     end
+    City.all(:include => :country).each do |c|
+      synonyms = []
+      synonyms << c.name_en unless c.name_en == c.name
+      synonyms += c.synonym_list.split(/, /) unless c.synonym_list.blank?
+      @records << Record.new(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms.join(':'), :hint => c.country.name)
+    end
+    
     Airline.all.each do |c|
       synonyms = []
       synonyms << c.short_name unless c.short_name == c.name
