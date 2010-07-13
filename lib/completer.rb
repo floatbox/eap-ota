@@ -2,6 +2,7 @@
 require 'active_support'
 require 'active_support/core_ext/string/multibyte'
 require 'every'
+require 'russian'
 $KCODE = 'u'
 
 class Completer
