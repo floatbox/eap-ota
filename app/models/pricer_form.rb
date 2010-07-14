@@ -14,8 +14,20 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   
   validates_presence_of :from, :to, :date1
   validates_presence_of :date2, :if => :rt
+  
+  attr_reader :to_iata, :from_iata
 
-
+  def to= name
+    @to_iata =  Completer.new_or_cached.iata_from_name(name)
+    super
+  end
+  
+  def from= name
+    @from_iata = Completer.new_or_cached.iata_from_name(name)
+    super
+  end
+  
+  
   def to_key
     []
   end
