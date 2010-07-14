@@ -30,6 +30,10 @@ gem 'haml'
 
 group :test do
   gem 'rspec'
+  gem 'capybara'
+  gem 'cucumber'
+  gem 'cucumber-rails'
+  gem 'database_cleaner'
 end
 
 group :console do
