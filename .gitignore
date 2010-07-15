@@ -10,6 +10,7 @@ public/ext
 public/system
 .rake_tasks
 .bundle
+rerun.txt
 *.swp
 .com.*
 config/*.sphinx.conf
