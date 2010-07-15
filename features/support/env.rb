@@ -6,7 +6,7 @@
 
 require 'rubygems'
 require 'spork'
- 
+
 Spork.prefork do
   ENV["RAILS_ENV"] ||= "cucumber"
   require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
@@ -26,7 +26,6 @@ Spork.prefork do
   # prefer to use XPath just remove this line and adjust any selectors in your
   # steps to use the XPath syntax.
   Capybara.default_selector = :css
-
 end
  
 Spork.each_run do
@@ -59,7 +58,7 @@ Spork.each_run do
   if defined?(ActiveRecord::Base)
     begin
       require 'database_cleaner'
-      DatabaseCleaner.strategy = :truncation
+      DatabaseCleaner.strategy = :truncation, {:only => []}
     rescue LoadError => ignore_if_database_cleaner_not_present
     end
   end

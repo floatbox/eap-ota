@@ -1,8 +1,15 @@
 # -*- coding: utf-8 -*-
+require 'uri'
+require 'cgi'
 require File.expand_path(File.join(File.dirname(__FILE__), "..", "support", "paths"))
 
-# Commonly used webrat steps
-# http://github.com/brynary/webrat
+
+module WithinHelpers
+  def with_scope(locator)
+    locator ? within(locator) { yield } : yield
+  end
+end
+World(WithinHelpers)
 
 Допустим /^(?:|я )нахожусь на (.+)$/ do |page_name|
   visit path_to(page_name)
@@ -61,6 +68,12 @@ end
   end
 end
 
+Если /^(?:|я |затем )убираю галочку "([^\"]*)"(?: внутри "([^\"]*)")?$/ do |field, selector|
+  with_scope(selector) do
+    uncheck(field)
+  end
+end
+
 
 Если /^(?:|я |затем )выбираю "([^\"]*)"(?: внутри "([^\"]*)")?$/ do |field, selector|
   with_scope(selector) do
@@ -70,7 +83,7 @@ end
 
 То /^(?:|я |затем )должен увидеть "([^\"]*)"(?: внутри "([^\"]*)")?$/ do |text, selector|
   with_scope(selector) do
-    if defined?(Spec::Rails::Matchers)
+    if page.respond_to? :should
       page.should have_content(text)
     else
       assert page.has_content?(text)
@@ -78,12 +91,19 @@ end
   end
 end
 
+То /^(?:|я |затем )должен получить JSON :$/ do |expected_json|
+  require 'json'
+  expected = JSON.pretty_generate(JSON.parse(expected_json))
+  actual   = JSON.pretty_generate(JSON.parse(response.body))
+  expected.should == actual
+end
+
 То /^(?:|я |затем я )не должен увидеть "([^\"]*)"(?: внутри "([^\"]*)")?$/ do |text, selector|
   with_scope(selector) do
-    if defined?(Spec::Rails::Matchers)
-      page.should_not have_content(text)
+    if page.respond_to? :should
+      page.should have_no_content(text)
     else
-      assert_not page.has_content?(text)
+      assert page.has_no_content?(text)
     end
   end
 end
