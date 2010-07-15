@@ -9,6 +9,7 @@ db/*.sqlite3
 public/ext
 public/system
 .rake_tasks
+.bundle
 *.swp
 .com.*
 config/*.sphinx.conf

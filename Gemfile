@@ -1,5 +1,5 @@
 source :gemcutter
-gem 'rails', '2.3.5'
+gem 'rails', '2.3.8'
 
 
 
@@ -12,6 +12,7 @@ group :development do
   gem 'mongrel'
 end
 
+gem 'i18n'
 gem 'cucumber'
 gem 'handsoap'
 gem 'curb'
