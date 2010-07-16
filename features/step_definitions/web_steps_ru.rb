@@ -20,19 +20,19 @@ end
 end
 
 Если /^(?:|я |затем )нажимаю на кнопку "([^\"]*)"(?: внутри "([^\"]*)")?$/ do |button,selector|
-  with_scope(selector) do 
+  with_scope(selector) do
     click_button(button)
   end
 end
 
 Если /^(?:|я |затем )перехожу по линку "([^\"]*)"(?: внутри "([^\"]*)")?$/ do |link,selector|
-  with_scope(selector) do 
+  with_scope(selector) do
     click_link(link)
   end
 end
 
 Если /^(?:|я |затем )ввожу "([^\"]*)" в поле "([^\"]*)"(?: внутри "([^\"]*)")?$/ do |value, field, selector|
-  with_scope(selector) do 
+  with_scope(selector) do
     fill_in(field, :with => value)
   end
 end
@@ -91,6 +91,8 @@ end
   end
 end
 
+
+
 То /^(?:|я |затем )должен получить JSON :$/ do |expected_json|
   require 'json'
   expected = JSON.pretty_generate(JSON.parse(expected_json))
@@ -115,3 +117,12 @@ end
 То /^открой мне браузер$/ do
   save_and_open_page
 end
+
+То  /^в поле "([^\"]*)" написано "([^\"]*)"/  do |selector, text|
+  find_field(selector).value.should == text
+end
+
+Если /^я в комплитере кликаю по варианту "([^"]*)" "([^"]*)"$/ do |red_text, gray_text|
+  page.find("u[text()='#{gray_text}']/u[text()='#{red_text}']").click
+end
+
