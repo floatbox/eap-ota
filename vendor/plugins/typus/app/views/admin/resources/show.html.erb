@@ -4,7 +4,7 @@
   <%= search %>
 <% end %>
 
-<h2><%= link_to @resource[:pluralized], :action => 'index' %> &rsaquo; 
+<h2><%= link_to @resource[:pluralized], :action => 'index' %> &rsaquo;
     <%= _("Show") %></h2>
 
 <%= typus_block :location => @resource[:self], :partial => 'show' %>
@@ -34,8 +34,9 @@
              h(raw_data)
            end
   -%>
-  <dd><%= !data.blank? ? data : ('&#151;').html_safe! %></dd>
+  <dd><%= !data.blank? ? data : ('&#151;').html_safe %></dd>
 <%- end -%>
 </dl>
 
 <%= typus_relationships %>
+

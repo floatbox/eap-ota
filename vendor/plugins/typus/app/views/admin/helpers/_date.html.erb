@@ -19,8 +19,9 @@
     <%= text_field_tag "#{filter}[to]", date_to, :size => 10, :class => :date_input, :date_format => date_format %>
   </li>
   <li>
-    <%= hidden_params.sort.join("\n").html_safe! %>
+    <%= hidden_params.sort.join("\n").html_safe %>
     <%= submit_tag _("Filter") %>
   </li>
 <% end %>
 </ul>
+
