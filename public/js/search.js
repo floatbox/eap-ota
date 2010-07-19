@@ -1,3 +1,7 @@
+jQuery.ajaxSetup({  
+	'beforeSend': function (xhr) {xhr.setRequestHeader("Accept", "text/javascript")}  
+});
+
 app.search.change = function() {
 	var data = {
 		"search_type": "travel",
@@ -15,11 +19,13 @@ app.search.change = function() {
 		data[key] = value;
 	}
 	app.offers.showLoader(data);
+	data.from = "MOW";
+	data.to = "LED";
 	$.get("/pricer/", {
 		search: data
 	}, function(s) {
 		$("#offers\\.loader").addClass("g-none");
-		if (typeof s == "String") {
+		if (typeof s == "string") {
 			app.offers.update(s);
 		} else {
 			alert(s && s.exception && s.exception.message);
