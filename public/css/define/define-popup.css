@@ -198,45 +198,14 @@
 
 /* Кнопка [Закрыть] */
 
-.define-popup a.btn {
+.define-popup .a-button {
     font: bold 65% Arial,a;
 
     display: block;
+
     clear: both;
 
     margin: .6em .5em;
-    padding: .4em;
-
-    text-align: center;
-    text-decoration: none;
-    letter-spacing: -.02em;
-
-    -moz-user-select: none;
-    -khtml-user-select: none;
-    user-select: none;
-
-    color: #eee;
-    background-color: #8bb617;
-
-    border-radius: 3px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-
-    background-image: linear-gradient(top, #9ed01a, #739615);
-    background-image: -moz-linear-gradient(top, #9ed01a, #739615);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#9ed01a), to(#739615));
-}
-
-.define-popup a.btn:hover {
-    color: #eee;
-    background-color: #dc3f8a;
-    background-image: -moz-linear-gradient(top, #f062a5, #d92c7e);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#f062a5), to(#d92c7e));
-}
-
-.define-popup a.btn:active {
-    color: #fff;
-    background-image: none;
 }
 
 /* Кнопка [Закрыть], второй вариант */

@@ -1,0 +1,94 @@
+/* Заголовок списка результатов (статистика, сортировка) (BEGIN) */
+
+.offers-header
+{
+    width: 640px;
+
+    font-size: 80%;
+
+    float: left;
+    overflow: hidden;
+    zoom: 1;
+
+    padding: 0.4em 0;
+    margin: 0 0 0 15px;
+}
+
+.offers-header dl
+{
+    float: left;
+    color: #333;
+}
+
+.offers-header dl dt
+{
+    font-weight: bold;
+}
+
+.offers-header dl dd i
+{
+    cursor: help;
+}
+
+
+.offers-header dl.filters
+{
+    margin: 0.6em 0;
+}
+
+.offers-header dl.filters dt,
+.offers-header dl.filters dd
+{
+    float: left;
+}
+
+.offers-header ul
+{
+    float: right;
+}
+
+.offers-header ul li
+{
+    float: left;
+    margin: 0 0 0 1em;
+}
+
+.offers-header ul li a
+{
+    color: #6990b5;
+    position: relative;
+}
+
+.offers-header ul li a b
+{
+    position: absolute;
+    bottom: -1.2em;
+    left: 40%;
+
+    border: none;
+    font: 100% tahoma,s;
+    display: none;
+}
+
+.offers-header ul li a:hover
+{
+    color: #000;
+}
+
+.offers-header ul li a:active
+{
+    color: red;
+}
+
+.offers-header .c0 .c0, .offers-header .c0 .c0 b,
+.offers-header .c1 .c1, .offers-header .c1 .c1 b,
+.offers-header .c2 .c2, .offers-header .c2 .c2 b,
+.offers-header .c3 .c3, .offers-header .c3 .c3 b,
+.offers-header .c4 .c4, .offers-header .c4 .c4 b
+{
+    cursor: default;
+    border: none;
+    color: #555;
+    display: inherit;
+}
+
