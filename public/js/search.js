@@ -1,5 +1,5 @@
-jQuery.ajaxSetup({  
-	'beforeSend': function (xhr) {xhr.setRequestHeader("Accept", "text/javascript")}  
+jQuery.ajaxSetup({
+	'beforeSend': function (xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
 });
 
 app.search.change = function() {
@@ -19,8 +19,8 @@ app.search.change = function() {
 		data[key] = value;
 	}
 	app.offers.showLoader(data);
-	data.from = "MOW";
-	data.to = "LED";
+	//data.from = "MOW";
+	//data.to = "LED";
 	$.get("/pricer/", {
 		search: data
 	}, function(s) {
@@ -51,7 +51,7 @@ app.offers.showLoader = function(data) {
 	var offset = $("#media").offset().top;
 	if (offset - cst > w.height() / 2) {
 		$({st: cst}).animate({
-			st: offset - 112 
+			st: offset - 112
 		}, {
 			duration: 500,
 			step: function() {
@@ -64,3 +64,4 @@ app.offers.showLoader = function(data) {
 app.offers.update = function(s) {
 	$("#offers\\.list").html(s).removeClass("g-none");
 };
+
