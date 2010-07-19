@@ -407,7 +407,7 @@ $.Autocompleter = function(input, options) {
         // если автоподстановка, то список не прячем
         params.autoFill || hideResultsNow();
 
-        $el.trigger('change', data);
+        // ============================ $el.trigger('change', $el.val());
         return true;
     };
 

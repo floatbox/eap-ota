@@ -1,6 +1,6 @@
 ﻿$(function() {
 
-    var url = 'http://com.team.eviterra.ru/complete.json';
+    var url = '/complete.json';
 
     // поле "Откуда"
 

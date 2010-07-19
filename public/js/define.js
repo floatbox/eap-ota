@@ -200,7 +200,7 @@ app.Define.Popup = function(define) {
         // исходный вид - список детей свёрнут
         $dl2.data('collapsed', true);
 
-        $el.data('btn', $('> a.btn', $el));
+        $el.data('btn', $('> a.a-button', $el));
         $el.data('btn').click(function(e) {
             hide(300);
             return false;

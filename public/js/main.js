@@ -5,10 +5,8 @@ $('HTML').addClass('JS');
 // шоткат для консоли
 window.l = window.console && console.log || alert;
 
-// нэмспейс приложения
-window.app = {};
-app.form = {};
-
+// нэймспейс приложения
+window.app = {form: {}, offers: {}};
 
 // 
 // отсюда: http://sreznikov.blogspot.com/2010/01/supplant.html

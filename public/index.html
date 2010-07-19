@@ -379,124 +379,53 @@
 
         <!-- Список результатов -->
 
-        <ul id="offers.list" class="b-offers g-none">
+        <div id="offers-list" class="offers">
+            <table>
+                <colgroup>
+                    <col width="118" style="-background: #faf;">
+                    <col width="142" style="-background: #aff;">
+                    <col width="155" style="-background: #fff;">
+                    <col width="142" style="-background: #aff;">
+                    <col width="118" style="-background: #faf;">
+                <thead>
+                    <tr>
+                        <th>
+                            16&nbsp;346&nbsp;<s class="rur">р<s>уб.</s></s>
+                        <td colspan="3">
+                            <a href=# class="b-pseudo" title="Развернуть это предложение"><u>Подробнее о&nbsp;перелёте</u></a>
+                        <td>
+                            <a href=# class="a-button">Купить</a>
+                <tbody>
+                    <tr>
+                        <td>
+                        <td>
+                        <td>
+                        <td>
+                        <td>
+                <tfoot>
+                    <tr>
+                        <td>
+                        <td colspan="4">
+            </table>
 
-
-            <li id="offer.template" class="b-offer g-hidden-">
-
+            <!--li>
                 <h2>
-                    <p class="b-price">
-                        <b>8500</b>
-                    </p>
+                    <p class="l l-row0">
+                        <b class="price">16&nbsp;346&nbsp;<s class="rur">р<s>уб.</s></s></b>
 
-                    <p class="note"><!--&mdash;&nbsp;--><b>это цена за&nbsp;всех и&nbsp;за&nbsp;всё,<br>включая перелёт, отель и налоги</b></i></p>
+                    <p class="l l-row1">
+                        <a href=# class="b-pseudo" title="Показать подробности"><u>Подробнее о&nbsp;перелёте</u></a>
 
-                    <p class="action">
-                        <a class="remember" href=# onclick="Ext.get(this.parentNode.parentNode).highlight(); return false">Запомнить</a>
-                        <a class="select" href=# onclick="Ext.get(this.parentNode.parentNode).highlight(); return false">Купить</a>
-                    </p>
+                    <p class="action l l-row2">
+                        &nbsp;
+
+                    <p class="action l l-row3">
+                        &nbsp;
+
+                    <p class="action l l-row4">
+                        <a class="a-button" href=#>Купить</a>
                 </h2>
 
-                <div class="flights">
-                    <p class="l-row0 b-company">S7 Airlines</p>
-
-                    <dl class="l-row1">
-                        <dt><u>Туда</u><b>25 ноября</b>,<i>в среду</i>
-                        <dd><b>19:00</b><u>из Шереметьево, Москва</u>
-                        <dd class="change">1 пересадка
-                        <dd><b>21:40</b><u>в Большое Савино, Пермь</u>
-                    </dl>
-
-                    <dl class="l-row2">
-                        <dt><u class="return">Обратно</u><b>30 ноября</b>,<i>в понедельник</i>
-                        <dd><b>21:40</b><u>из Большое Савино, Пермь</u>
-                        <dd class="change">1 пересадка
-                        <dd><b>19:00</b><u>в Шереметьево, Москва</u>
-                    </dl>
-
-                    <br>
-                    <div class="details">
-                        <dl class="l-row1">
-                            <dd>Рейс S7 35
-                                <br><i>Airbus 319</i>&nbsp;&nbsp;|&nbsp;&nbsp;<i>Эконом-класс</i>
-                                <br>2 часа 45 минут в воздухе
-                        </dl>
-
-                        <dl class="l-row2">
-                            <dd>Рейс S7 35
-                                <br>Airbus 319 | Эконом-класс
-                                <br>2 часа 45 минут в воздухе
-                        </dl>
-                    </div>
-
-                    <p class="b-pseudo">
-                        <a class="details" href="#"><u>подробно о перелете</u></a>
-                        &nbsp;
-                    </p>
-                </div>
-
-
-                <!--div class="hotel">
-                    <h3><s>Постоялый двор</s><s class="b-stars b-stars-2"></s></h3>
-
-                    <div class="l-row0 b-photo b-photo-collapsed">
-                        <ul></ul>
-    
-                        <a href=# class="scroll scroll-t" onclick="return -1" title="предыдущее фото"><i onclick="return -1"></i></a>
-                        <a href=# class="scroll scroll-b" onclick="return +1" title="следующее фото"><i onclick="return +1"></i></a>
-
-                        <p class="more">
-                            <a href="#" class="b-pseudo"><u>большие фото</u></a>&nbsp;&nbsp;<s><b>5</b>&nbsp;&rarr;</s>
-                        </p>
-
-                        <img class="photo" src="img/temp/hotel-b-01.jpg"/>
-
-                        <a href=# class="close" title="Закрыть фотогалерею">&#215;</a>
-                    </div>
-
-                    <p class="l-row1 desc">
-                        <s>Метафора имеет деструктивный классический реализм, таким образом, все перечисленные признаки архетипа и мифа подтверждают, что действие механизмов мифотворчества сродни механизмам художественно-продуктивного мышления &hellip;</s>
-                        <br><br>
-                        <b>Наша оценка</b>: <s>приемлемо для ночевок</s>
-                    </p>
-
-                    <dl class="l-row2 b-room c0">
-
-                        <dt>Выберите номер на <b>троих</b> на <b>две ночи</b>
-
-                        <dd>
-                            <a class="c0" href="#">беспонтовый<i></i></a>
-                            <small>7800&nbsp;<s class="rur">р<s>уб.</s></s></small>
-                        <dd>
-                            <a class="c1" href="#">клёвый<i></i></a>
-                            <small>+3250&nbsp;<s class="rur">р<s>уб.</s></s></small>
-                        <dd>
-                            <a class="c2" href="#">с наворотами<i></i></a>
-                            <small>+5600&nbsp;<s class="rur">р<s>уб.</s></s></small>
-                    </dl>
-
-                    <br>
-                    <div class="details">
-                        <dl class="l-row1">
-                            <dt>Расположение:
-                            <dd><i></i>
-                            <dd><i>3,2</i>&nbsp;км от центра, <i>2,200</i>&nbsp;км от аэропорта
-                            <dd><img src=""/>
-
-                        </dl>
-
-                        <dl class="l-row2">
-                            <dt>В отеле есть:
-                            <dd>бар, ресторан, wi-fi, патио, лобио, фолио, хороводы, хороводоводы, хороводоводоведы, хороводоводоведофилы
-                        </dl>
-                    </div>
-
-                    <p class="b-pseudo">
-                        <a class="details" href="#"><u>подробно об отеле</u></a>
-                        &nbsp;&nbsp;
-                        <a class="details" href="#"><u>другой отель</u></a>
-                    </p>
-                </div-->
 
                 <h2 class="invoice">
                     <span class="none">
@@ -534,8 +463,9 @@
                     </span>
                 </h2>
                 <br>
-            </li>
-        </ul>
+            </li-->
+
+        </div>
 
     </div>
 
@@ -592,7 +522,7 @@
             <dd><a href="#" onclick="return {v: 12, tx: ' и двое детей'}"><i></i>двое</a>
         </dl>
 
-        <a href="#" class="btn g-none" title="Подтвердить выбор и закрыть">Готово</a>
+        <a href="#" class="a-button g-none" title="Подтвердить выбор и закрыть">Готово</a>
     </div>
 
     <!-- Ктулху -->

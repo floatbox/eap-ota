@@ -1,5 +1,5 @@
 
-.b-transcript
+.transcript
 {
     width: 945px;
     padding: 1em 0 0.4em 15px;
@@ -7,12 +7,12 @@
     position: relative;
 }
 
-.b-transcript p
+.transcript p
 {
     width: 710px;
 }
 
-.b-transcript s
+.transcript s
 {
     font: bold 190%/100% Arial,a;
     letter-spacing: -1px;
@@ -20,18 +20,18 @@
     color: #333;
 }
 
-.b-transcript p:first-letter
+.transcript p:first-letter
 {
     text-transform: uppercase;
 }
 
-.b-transcript i
+.transcript i
 {
     position: relative;
     display: none;
 }
 
-.b-transcript i i
+.transcript i i
 {
     position: absolute;
     right: -50px;
@@ -43,7 +43,7 @@
     background: url(/img/progress/loader-bar.gif) no-repeat;
 }
 
-.b-transcript-wait i
+.transcript-wait i
 {
     display: inline-block;
 }
