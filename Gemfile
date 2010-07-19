@@ -1,5 +1,5 @@
 source :gemcutter
-gem 'rails', '2.3.5'
+gem 'rails', '2.3.8'
 
 
 
@@ -8,10 +8,7 @@ group :deployment do
   gem 'capistrano'
 end
 
-group :development do
-  gem 'mongrel'
-end
-
+gem 'i18n'
 gem 'cucumber'
 gem 'handsoap'
 gem 'curb'
@@ -28,8 +25,19 @@ gem 'fastercsv'
 
 gem 'haml'
 
+group :development do
+  gem 'mongrel'
+  gem 'cucumber-rails'
+end
+
 group :test do
   gem 'rspec'
+  gem 'rspec-rails'
+  gem 'capybara'
+  gem 'cucumber'
+  gem 'cucumber-rails'
+  gem 'spork'
+  gem 'database_cleaner'
 end
 
 group :console do

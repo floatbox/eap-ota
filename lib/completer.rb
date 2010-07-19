@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 require 'active_support'
 require 'active_support/core_ext/string/multibyte'
+require 'traviata/active_record_ext'#почему то из инициалайзера не подключается, вылезает undefined method `has_cases_for'
 require 'every'
+require 'russian'
 $KCODE = 'u'
 
 class Completer

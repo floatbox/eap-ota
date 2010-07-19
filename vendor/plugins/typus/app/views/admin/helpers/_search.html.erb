@@ -2,7 +2,8 @@
 
 <% form_tag url_for(:controller => params[:controller]), :method => :get do %>
   <p><input id="search" name="search" type="text" value="<%= params[:search] %>"/></p>
-  <%= hidden_params.sort.join("\n").html_safe! %>
+  <%= hidden_params.sort.join("\n").html_safe %>
 <% end %>
 
 <p class="tip"><%= _("Search by") %> <%= search_by.downcase %>.</p>
+

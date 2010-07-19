@@ -1,6 +1,6 @@
 ﻿$(function() {
 
-	var fields = app.search.fields;
+    var fields = app.search.fields;
     var url = '/complete.json';
 	
     // поле "Откуда"
@@ -124,31 +124,7 @@
     // панель уточнений (фильтров)
 
     var data = {
-
-        persons: {
-            driving: {
-                title: 
-                [
-                    {v: 2, t: 'двое'},
-                    {v: 3, t: 'трое'},
-                    {v: 4, t: 'четверо'},
-                    {v: 5, t: 'пятеро'},
-                    {v: 6, t: 'шестеро'}
-                ]
-            },
-            driven: [
-                {v: 11, t: 'один'},
-                {v: 12, t: 'двое'}
-            ]
-        },
-
-        persons: [
-            {v: 2, t: 'двое'},
-            {v: 3, t: 'трое'},
-            {v: 4, t: 'четверо'},
-            {v: 5, t: 'пятеро'},
-            {v: 6, t: 'шестеро'}
-        ],
+        persons: [],
 
         aircompany: [
             {v: 4, t: 'Херофлот, СССР'},

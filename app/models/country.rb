@@ -11,11 +11,12 @@ class Country < ActiveRecord::Base
   include GeoTaggable
 
   default_scope :order => "importance desc"
-
+  has_cases_for :name
+  
   def iata
     alpha2
   end
-
+  
   def name
     name_ru
   end

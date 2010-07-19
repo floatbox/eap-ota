@@ -421,7 +421,7 @@
                     <td>
                         количество
 
-                        <p onclick="return {name: 'persons', title: 'пассажиров', accusative: 'количество пассажиров', anyone: 'один', radio: true}"><a href=#><u>пассажиров</u></a><b></b>&nbsp;и
+                        <p onclick="return {name: 'persons', title: 'пассажиры', accusative: 'количество пассажиров', radio: true, popup: '#search\\.define\\.persons'}"><a href=#><u>пассажиров</u></a><b></b>&nbsp;и
                         
                         <p onclick="return {name: 'changes', title: 'пересадки', accusative: 'допустимое количество пересадок', anyone: 'всё равно', radio: true}"><a href=#><u>пересадок</u></a><b></b></p>,
                         
@@ -511,8 +511,7 @@
         <div id="offers.list" class="b-offers g-none"></div>
         
 
-    <!-- Ктулху -->
-    <div id="staple" class="b-staple g-none"></div>
+    </div>
 
     <!-- И тут пошли титры -->
     <div class="l-foot">
@@ -545,6 +544,33 @@
         </div>
     </div>
 
+
+    <!-- Попап-окошки -->
+
+    <!-- Выбор количества пассажиров -->
+    <div id="search.define.persons" class="define-popup">
+        <dl class="separated">
+            <dt>взрослых
+            <dd><a href="#" onclick="return {v: 1, t: 'один', tx: 'один взрослый'}" class="anyone checked"><i></i>один</a>
+            <dd><a href="#" onclick="return {v: 2, t: 'двое', tx: 'двое взрослых'}"><i></i>двое</a>
+            <dd><a href="#" onclick="return {v: 3, t: 'трое', tx: 'трое взрослых'}"><i></i>трое</a>
+            <dd><a href="#" onclick="return {v: 4, t: 'четверо', tx: 'четверо взрослых'}"><i></i>четверо</a>
+            <dd><a href="#" onclick="return {v: 5, t: 'пятеро', tx: 'пятеро взрослых'}"><i></i>пятеро</a>
+            <dd><a href="#" onclick="return {v: 6, t: 'шестеро', tx: 'шестеро взрослых'}"><i></i>шестеро</a>
+        </dl>
+
+        <dl class="collapsed">
+            <dt><a href="#" class="b-pseudo collapse" title="Добавить детей к списку пассажиров"><u>детей</u><s></s></a>
+            <dd><a href="#" onclick="return {v: 10, tx: ' и ни одного ребёнка'}" class="anyone checked"><i></i>нет</a>
+            <dd><a href="#" onclick="return {v: 11, tx: ' и один ребёнок'}"><i></i>один</a>
+            <dd><a href="#" onclick="return {v: 12, tx: ' и двое детей'}"><i></i>двое</a>
+        </dl>
+
+        <a href="#" class="btn g-none" title="Подтвердить выбор и закрыть">Готово</a>
+    </div>
+
+    <!-- Ктулху -->
+    <div id="staple" class="b-staple g-none"></div>
 
 
 </body>

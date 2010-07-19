@@ -6,9 +6,9 @@
         <%= f.check_box :debug %> <%= f.label :debug %></td>
     </tr>
     <tr>
-    <td style="padding: 0 20px 0 0;">Откуда<br>
+    <td style="padding: 0 20px 0 0;"><%= f.label :from, 'Откуда'  %><br>
     <%= f.text_field :from, :style => 'width: 100%; font-size: 160%;' %></td>
-    <td>Куда<br>
+    <td><%= f.label :to, 'Куда, сколько и зачем'  %><br>
     <%= f.text_field :to, :style => 'width: 100%; font-size: 160%;' %></td>
     <td style="white-space: nowrap; padding: 0 0 8px 15px" valign="bottom">
       <%= f.check_box :rt %><%= f.label :rt, 'и обратно' %>
@@ -16,7 +16,8 @@
     </tr>
     <tr>
       <td style="white-space: nowrap; padding: ">
-        ddmmyy: <%= f.text_field :date1 %>
+        ddmmyy:<%= f.label :date1, 'дата отправления' %><br>
+         <%= f.text_field :date1 %>
         <!--
         <select name="search[day1]">
           <% for day in 1..31 %>
@@ -50,6 +51,7 @@
         -->
         </td>
       <td style="white-space: nowrap; padding: ">
+        <%= f.label :date2, 'дата возвращения' %><br>
         <%= f.text_field :date2 %>
         <!--
         <select name="search[day2]">
