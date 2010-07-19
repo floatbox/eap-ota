@@ -7,8 +7,8 @@ window.l = window.console && console.log || alert;
 
 // нэмспейс приложения
 window.app = {};
-app.form = {};
-
+app.search = {};
+app.offers = {};
 
 // 
 // отсюда: http://sreznikov.blogspot.com/2010/01/supplant.html

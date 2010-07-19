@@ -1,10 +1,12 @@
 ﻿$(function() {
 
+	var fields = app.search.fields;
     var url = '/complete.json';
-
+	
     // поле "Откуда"
+    
+    fields.from = $('#search-from').autocomplete({
 
-    app.form.$from = $('#search\\.from').autocomplete({
         // внешний вид
         cls: 'autocomplete-gray',
 
@@ -16,28 +18,27 @@
         },
         root: 'data',
         loader: new app.Loader({
-            parent: $('#search\\.from\\.loader')
+            parent: $('#search-from-loader')
         }),
 
         // размеры
         height: 374
+    }).focus(function() {
+        fields.from.reset.fadeOut(200);
+    }).change(function() {
+    	app.search.change();
     });
+    fields.from.required = true;
 
     // "подпольная" ссылка для сброса поля "Откуда"
-    var f = app.form.$from;
-
-    f.reset = $('#search\\.from\\.reset').click(function(e) {
-        app.form.$from.focus().trigger('set', '');
+    
+    fields.from.reset = $('#search-from-reset').click(function(e) {
+        fields.from.focus().trigger('set', '');
     });
-
-    f.focus(function() {
-        app.form.$from.reset.fadeOut(200);
-    });
-
 
     // поле "Куда"
-
-    app.form.$to = $('#search\\.to').autocomplete({
+    
+    fields.to = $('#search-to').autocomplete({
         // внешний вид
         cls: 'autocomplete',
 
@@ -49,17 +50,20 @@
         },
         root: 'data',
         loader: new app.Loader({
-            parent: $('#search\\.to\\.loader')
+            parent: $('#search-to-loader')
         }),
 
         // размеры
         width: 340,
         height: 378
+    }).change(function() {
+    	app.search.change();
     });
+    fields.to.required = true;
 
     // образец содержимого поля "Куда"
-
-    var e = app.form.$to.example = $('#search\\.to\\.example');
+    
+    var e = fields.to.example = $('#search-to-example');
     e.label = $('u', e);
     e.data  = e.label[0].onclick();
     e.data.current = 0;
@@ -68,7 +72,7 @@
         e.preventDefault();
         e = e.target;
 
-        if (e.tagName == 'S') with (app.form.$to.example) {
+        if (e.tagName == 'S') with (fields.to.example) {
             data.current = ++data.current % data.length;
             e.className = 'animate';
             window.setTimeout(function(){e.className = ''}, 300);
@@ -81,13 +85,14 @@
         };
 
         if (e.tagName == 'U') {
-            app.form.$to.focus();
-            app.form.$to.trigger('set', e.innerHTML);
+            fields.to.focus();
+            fields.to.trigger('set', e.innerHTML);
         };
     });
 
     // карта
 
+    /* Отключена на время работы с календарем
     if (YMaps) {
         var loc = YMaps.location || {},
             lat = loc.latitude || 45,
@@ -106,8 +111,16 @@
             app.map.setPoint('from', {name: 'Вы&nbsp;&mdash;&nbsp;здесь', lat: lat, lon: lon});
             // app.form.$from.trigger('keydown.autocomplete');
         };
-    }
-
+    }*/
+    
+    // Календарь
+    
+    var calendar = new app.Calendar("#search-calendar");
+    fields.date1 = calendar.dpt;
+    fields.date2 = calendar.ret;
+	fields.date1.required = true;
+	fields.date2.required = true;
+	
     // панель уточнений (фильтров)
 
     var data = {
@@ -222,25 +235,25 @@
     var $retButton = $('#search\\.ret\\.button').button();
 
     // синхронизируем кнопку и табы
-    app.form.ret = new app.MultiField({'value': 'rt'});
-    $retButton.trigger('subscribe', app.form.ret);
-    $retTabs.trigger('subscribe', app.form.ret);
+    app.search.ret = new app.MultiField({'value': 'rt'});
+    $retButton.trigger('subscribe', app.search.ret);
+    $retTabs.trigger('subscribe', app.search.ret);
 
 
     // вся эта хрень только для того, чтобы синхронизировать розовую рамку при ховере/фокусе
     // над табами "туда-обратно" и над полем "Куда"
         $retTabs.hover(
             function() {
-                app.form.$to.trigger('mouseenter');
+                fields.to.trigger('mouseenter');
             }, 
             function() {
-                app.form.$to.trigger('mouseleave');
+                fields.to.trigger('mouseleave');
             }
         ).click(function() {
-            app.form.$to.focus();
+            fields.to.focus();
         });
 
-        app.form.$to.hover(
+        fields.to.hover(
             function() {
                 $retTabs.addClass('return-tabs-hover');
             }, 
@@ -268,7 +281,7 @@
 
 
     // фокус на поле ввода "Куда"
-    app.form.$to.focus();
+    fields.to.focus();
 });
 
 

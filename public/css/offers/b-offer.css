@@ -1,4 +1,10 @@
 /* Предложение по перелёту и отелю (BEGIN) */
+
+#offers {
+	margin: 0 270px 0 0;
+}
+
+
     .b-offers
     {
         float: left;
