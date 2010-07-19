@@ -8,8 +8,10 @@ module NavigationHelpers
   def path_to(page_name)
     case page_name
 
-    when /the home\s?page/
+    when /the home\s?page/, /главной/
       '/'
+    when /pricer/
+      '/pricer'
 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
@@ -31,3 +33,4 @@ module NavigationHelpers
 end
 
 World(NavigationHelpers)
+

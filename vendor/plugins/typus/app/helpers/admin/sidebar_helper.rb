@@ -12,9 +12,9 @@ module Admin::SidebarHelper
                @resource[:class].human_attribute_name(options[:attribute])
              end
 
-    render "admin/helpers/list", 
-           :header => header, 
-           :items => items, 
+    render "admin/helpers/list",
+           :header => header,
+           :items => items,
            :options => options
 
   end
@@ -75,8 +75,8 @@ module Admin::SidebarHelper
 
     hidden_params = search_params.map { |k, v| hidden_field_tag(k, v) }
 
-    render "admin/helpers/search", 
-           :hidden_params => hidden_params, 
+    render "admin/helpers/search",
+           :hidden_params => hidden_params,
            :search_by => search_by
 
   end
@@ -103,7 +103,7 @@ module Admin::SidebarHelper
           html << string_filter(current_request, key)
         end
       end
-    end.html_safe!
+    end.html_safe
 
   end
 
@@ -235,3 +235,4 @@ function surfto_#{model_pluralized}(form) {
   end
 
 end
+

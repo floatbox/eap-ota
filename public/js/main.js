@@ -6,7 +6,9 @@ $('HTML').addClass('JS');
 window.l = window.console && console.log || alert;
 
 // нэймспейс приложения
-window.app = {form: {}, offers: {}};
+window.app = {};
+app.search = {};
+app.offers = {};
 
 // 
 // отсюда: http://sreznikov.blogspot.com/2010/01/supplant.html

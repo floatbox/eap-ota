@@ -26,7 +26,7 @@ module Admin::FormHelper
                 end
       end
 
-    end.html_safe!
+    end.html_safe
 
   end
 
@@ -47,20 +47,20 @@ module Admin::FormHelper
     related_fk = @resource[:class].reflect_on_association(attribute.to_sym).primary_key_name
 
     confirm = [ _("Are you sure you want to leave this page?"),
-                _("If you have made any changes to the fields without clicking the Save/Update entry button, your changes will be lost."), 
+                _("If you have made any changes to the fields without clicking the Save/Update entry button, your changes will be lost."),
                 _("Click OK to continue, or click Cancel to stay on this page.") ]
 
     returning(String.new) do |html|
 
-      message = link_to _("Add"), { :controller => "admin/#{related.class_name.tableize}", 
-                                    :action => 'new', 
-                                    :back_to => back_to, 
-                                    :selected => related_fk }, 
+      message = link_to _("Add"), { :controller => "admin/#{related.class_name.tableize}",
+                                    :action => 'new',
+                                    :back_to => back_to,
+                                    :selected => related_fk },
                                     :confirm => confirm.join("\n\n") if @current_user.can?('create', related)
 
       if related.respond_to?(:roots)
-        html << typus_tree_field(related_fk, :items => related.roots, 
-                                             :attribute_virtual => related_fk, 
+        html << typus_tree_field(related_fk, :items => related.roots,
+                                             :attribute_virtual => related_fk,
                                              :form => form)
       else
         values = related.find(:all, :order => related.typus_order_by).collect { |p| [p.to_label, p.id] }
@@ -127,7 +127,7 @@ module Admin::FormHelper
         end
 
       end
-    end.html_safe!
+    end.html_safe
 
   end
 
@@ -142,11 +142,11 @@ module Admin::FormHelper
       association = reflection.macro
       foreign_key = reflection.through_reflection ? reflection.primary_key_name.pluralize : reflection.primary_key_name
 
-      link_options = { :controller => "admin/#{model_to_relate_as_resource.pluralize}", 
-                       :action => 'new', 
-                       :back_to => "#{@back_to}##{field}", 
-                       :resource => @resource[:self].singularize, 
-                       :resource_id => @item.id, 
+      link_options = { :controller => "admin/#{model_to_relate_as_resource.pluralize}",
+                       :action => 'new',
+                       :back_to => "#{@back_to}##{field}",
+                       :resource => @resource[:self].singularize,
+                       :resource_id => @item.id,
                        foreign_key => @item.id }
 
       condition = if @resource[:class].typus_user_id? && @current_user.is_not_root?
@@ -201,15 +201,15 @@ module Admin::FormHelper
 
       unless @items.empty?
         options = { :back_to => "#{@back_to}##{field}", :resource => @resource[:self], :resource_id => @item.id }
-        html << build_list(model_to_relate, 
-                           model_to_relate.typus_fields_for(:relationship), 
-                           @items, 
-                           model_to_relate_as_resource, 
-                           options, 
+        html << build_list(model_to_relate,
+                           model_to_relate.typus_fields_for(:relationship),
+                           @items,
+                           model_to_relate_as_resource,
+                           options,
                            association)
         html << pagination(:anchor => model_to_relate.name.tableize) unless pagination.nil?
       else
-        message = _("There are no {{records}}.", 
+        message = _("There are no {{records}}.",
                     :records => model_to_relate.typus_human_name.pluralize.downcase)
         html << <<-HTML
   <div id="flash" class="notice"><p>#{message}</p></div>
@@ -283,15 +283,15 @@ module Admin::FormHelper
       @items = @pager.page(params[:page])
 
       unless @items.empty?
-        html << build_list(model_to_relate, 
-                           model_to_relate.typus_fields_for(:relationship), 
-                           @items, 
-                           model_to_relate_as_resource, 
-                           {}, 
+        html << build_list(model_to_relate,
+                           model_to_relate.typus_fields_for(:relationship),
+                           @items,
+                           model_to_relate_as_resource,
+                           {},
                            association)
         html << pagination(:anchor => model_to_relate.name.tableize) unless pagination.nil?
       else
-        message = _("There are no {{records}}.", 
+        message = _("There are no {{records}}.",
                     :records => model_to_relate.typus_human_name.pluralize.downcase)
         html << <<-HTML
   <div id="flash" class="notice"><p>#{message}</p></div>
@@ -324,14 +324,14 @@ module Admin::FormHelper
       items << @resource[:class].find(params[:id]).send(field) unless @resource[:class].find(params[:id]).send(field).nil?
       unless items.empty?
         options = { :back_to => @back_to, :resource => @resource[:self], :resource_id => @item.id }
-        html << build_list(model_to_relate, 
-                           model_to_relate.typus_fields_for(:relationship), 
-                           items, 
-                           model_to_relate_as_resource, 
-                           options, 
+        html << build_list(model_to_relate,
+                           model_to_relate.typus_fields_for(:relationship),
+                           items,
+                           model_to_relate_as_resource,
+                           options,
                            association)
       else
-        message = _("There is no {{records}}.", 
+        message = _("There is no {{records}}.",
                     :records => model_to_relate.typus_human_name.downcase)
         html << <<-HTML
   <div id="flash" class="notice"><p>#{message}</p></div>
@@ -348,17 +348,17 @@ module Admin::FormHelper
 
     template_name = "admin/templates/#{template}"
 
-    custom_options = { :start_year => @resource[:class].typus_options_for(:start_year), 
-                       :end_year => @resource[:class].typus_options_for(:end_year), 
-                       :minute_step => @resource[:class].typus_options_for(:minute_step), 
-                       :disabled => attribute_disabled?(attribute), 
+    custom_options = { :start_year => @resource[:class].typus_options_for(:start_year),
+                       :end_year => @resource[:class].typus_options_for(:end_year),
+                       :minute_step => @resource[:class].typus_options_for(:minute_step),
+                       :disabled => attribute_disabled?(attribute),
                        :include_blank => true }
 
-    render template_name, :resource => @resource, 
-                          :attribute => attribute, 
-                          :options => custom_options, 
-                          :html_options => {}, 
-                          :form => options[:form], 
+    render template_name, :resource => @resource,
+                          :attribute => attribute,
+                          :options => custom_options,
+                          :html_options => {},
+                          :form => options[:form],
                           :label_text => @resource[:class].human_attribute_name(attribute)
 
   end
@@ -397,11 +397,11 @@ module Admin::FormHelper
                 _("View {{attribute}}", :attribute => @item.class.human_attribute_name(attribute).downcase)
               end
 
-    render "admin/helpers/preview", 
-           :attribute => attribute, 
-           :content => content, 
-           :has_file_preview => has_file_preview, 
-           :href => href, 
+    render "admin/helpers/preview",
+           :attribute => attribute,
+           :content => content,
+           :has_file_preview => has_file_preview,
+           :href => href,
            :item => item
 
   end
@@ -419,3 +419,4 @@ module Admin::FormHelper
   end
 
 end
+

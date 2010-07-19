@@ -1,212 +1,145 @@
+/* Calendar */
+.calendar {
+	position: relative;
+	width: 589px;
+}
+.calendar .viewport {
+	width: 588px; height: 332px;
+	overflow: hidden;
+	background: #b1bbc9;
+}
+.calendar .dates {
+	width: 620px; height: 306px;
+	overflow: auto;
+}
 
-/* Календарь (begin) */
-    .calendar
-    {
-        position: relative;
+/* Calendar controls */
+.calendar .scroller {
+	position: absolute;
+	left: 150px; top: 1px;
+	font-size: 11px;
+}
+.calendar .scroller li {
+	float: left;
+	padding: 2px 0;
+	background: #666;
+	text-align: center;
+	color: #FFF;
+	margin-left: 1px;
+}
+.calendar .scrollfw,
+.calendar .scrollbw {
+	position: absolute;
+	left: 568px;
+	width: 11px; height: 6px;
+	border: 5px solid #343434;
+	background: url(/img/arr-up-down.gif) no-repeat;
+	cursor: pointer;
+}
+.calendar .scrollbw {
+	top: 7px;
+	background-position: -11px 0;
+}
+.calendar .scrollfw {
+	top: 355px;
+	background-position: -11px 100%;
+}
+.calendar .scrollbar {
+	position: absolute;
+	top: 0; left: 10px;
+	width: 30px; height: 15px;
+	border: 1px solid #FFF;
+	display: none;
+}
 
-        width: 588px;
-        height: 306px;
-    }
+/* Days of the week */
+.calendar ul.week {
+	width: 588px; height: 25px;
+	border-bottom: 1px solid #c7ced6;
+	background: #99a1ac;
+	color: #4b4b4b;
+	font-size: 13px;
+}
+.calendar .week li {
+	float: left;
+	width: 24px;
+	padding: 5px 55px 5px 5px;
+	text-align: center;
+}
 
-    .calendar .viewport
-    {
-        position: relative;
+/* Calendar dates */
+.calendar ul.month {
+	width: 588px; height: auto;
+	overflow: visible; 
+}
+.calendar .dates li {
+	float: left;
+	position: relative;
+	width: 34px; height: 40px;
+	border-bottom: 1px solid #c7ced6;
+	padding: 5px 50px 5px 0;
+	color: #4b4b4b;
+	font: bold 95% Arial, sans-serif;
+	text-align: center;
+	cursor: pointer;
+}
+.calendar .dates li.hl {
+	background: #b6a1be;
+	border-color: #cfb9cc;
+}
+.calendar .dates li.hover,
+.calendar .dates li:hover {
+	background: #bd7dae;
+	border-color: #da9cbe;
+}
+.calendar .dates li.past {
+	color: #a3abb7;
+	cursor: default;
+	border-color: #c7ced6;
+	background: none;
+}
+.calendar .dayoff {
+	color: #ce001a;
+}
+.calendar .past .dayoff {
+	color: #a08590;
+}
+.calendar .dates .there {
+	background: #bb87b2;
+	border-color: #d7a4c2;
+}
+.calendar .dates li.dpt,
+.calendar .dates li.ret {
+	border-color: #e67bae;
+	background-color: #c5539c;
+	background-repeat: no-repeat;
+	background-position: 64px 14px;
+	color: #fff;
+	cursor: default;
+}
+.calendar .dates li.dpt {
+	background-image: url(/img/arrow-dpt.gif);
+}
+.calendar .dates li.ret {
+	background-image: url(/img/arrow-ret.gif);
+}
+.calendar .dpt .dayoff,
+.calendar .ret .dayoff {
+	color: #fff;
+}
 
-        width: 588px;
-        height: 306px;
-
-        overflow: hidden;
-        background: #abb3c2;
-    }
-
-    .calendar ul
-    {
-        width: 588px;
-        height: auto;
-
-        position: absolute;
-        top: 0;
-        left: 0;
-        margin: 0;
-    }
-
-    .calendar ul li
-    {
-        font: bold 95% Arial,s;
-        float: left;
-        overflow: hidden;
-        text-align: left;
-
-        width: 74px;
-        height: 45px;
-
-        margin: 0;
-        padding: 2px 4px;
-
-        color: #4b4b4b;
-        border: 1px solid transparent;
-        border-color: #cdd1db #cdd1db transparent transparent;
-
-        text-align: right;
-        letter-spacing: -1px;
-
-        background-repeat: no-repeat;
-        background-position: 40px 6px;
-        cursor: pointer;
-    }
-
-    .calendar ul li u
-    {
-        font: bold 100% Arial,s;
-
-        color: #333;
-        letter-spacing: -1px;
-    }
-
-    .calendar ul li p
-    {
-        font: normal 10px Arial,s;
-        position: relative;
-        height: 18px;
-        margin: 0 0 0 12px;
-
-        text-align: left;
-        letter-spacing: 0;
-        color: gray;
-    }
-
-    .calendar ul li p i
-    {
-        position: absolute;
-        left: -12px;
-        top: 2px;
-        display: block;
-        width: 8px;
-        height: 8px;
-        overflow: hidden;
-        background: url(/img/ico/ico-planes.png) no-repeat 0 0;
-    }
-
-    .calendar ul li p.r i
-    {
-        background: url(/img/ico/ico-planes.png) no-repeat -8px 0;
-    }
-
-    .calendar ul li.hl p
-    {
-        font-weight: bold;
-        color: #db3f89;
-    }
-
-    .calendar ul li.holyday
-    {
-        color: #9c1b1b!important;
-    }
-
-    .calendar ul li.san
-    {
-        border-right-color: transparent;
-    }
-
-    .calendar ul li.weather6
-    {
-        background: #c5539c url(/img/temp/6.png) no-repeat 26px 14px;
-    }
-
-    .calendar ul li.weather7
-    {
-        background: #c5539c url(/img/temp/7.png) no-repeat 26px 14px;
-    }
-
-    .calendar ul li.month-odd
-    {
-        background-color: #ffffc2;
-    }
-
-    .calendar ul li.sel
-    {
-        color: #fff;
-        background-color: #c5539c;
-        border-color: #e67bae #c9589f transparent transparent;
-        cursor: default;
-    }
-
-    .calendar ul li.adj
-    {
-        border-top-color: #c9589f;
-    }
-
-    .calendar ul li.bound
-    {
-        background-color: #db3f89;
-        cursor: pointer;
-    }
-
-    .calendar ul li.bound p,
-    .calendar ul li.bound u
-    {
-        color: #fff;
-    }
-
-    .calendar ul li.bound p i
-    {
-        background: url(/img/ico/ico-planes.png) no-repeat -16px 0;
-    }
-
-    .calendar ul li.bound p.r i
-    {
-        background: url(/img/ico/ico-planes.png) no-repeat -24px 0;
-    }
-
-    .calendar ul li.start
-    {
-        background: #c5539c url(/img/arrow-dpt.gif) no-repeat 64px 14px;
-    }
-
-    .calendar ul li.end
-    {
-        background: #c5539c url(/img/arrow-ret.gif) no-repeat 64px 14px;
-    }
-
-    .calendar ul li.start-end
-    {
-        background-image: url(/img/arrow-both.gif);
-
-        border-top-color: #db3f89;
-        border-right-color: #db3f89;
-    }
-
-    .calendar ul li.hover,
-    .calendar ul li:hover
-    {
-        border-color: #e67bae;
-    }
-
-    .calendar ul li.reset
-    {
-        border-color: #cdd1db #cdd1db transparent transparent;
-        cursor: default;
-    }
-
-    .calendar ul li sup
-    {
-        font: small-caps 70% Arial,s;
-        color: #666;
-        letter-spacing: 0px;
-        margin: 0 0.4em 0 0;
-    }
-
-    .calendar ul li.bound sup
-    {
-        color: #fff;
-    }
-
-    .calendar ul li.dis,
-    .calendar ul li.dis sup,
-    .calendar ul li.dis u
-    {
-        color: #a6acba;
-        cursor: default;
-    }
-/* Календарь (end) */
-
+/* Reset */
+.calendar .reset {
+	color: #A0A0A0;
+	font-size: 70%;
+	cursor: pointer;
+}
+.calendar .reset:hover {
+	color: #FFF;
+}
+.calendar .reset .label {
+	border-bottom: 1px dotted #A0A0A0;
+}
+.calendar .reset:hover .label {
+	border-color: #FFF;
+}

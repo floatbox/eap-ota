@@ -3,7 +3,6 @@
 {
     width: 945px;
     padding: 1em 0 0.4em 15px;
-    clear: both;
     position: relative;
 }
 
@@ -40,10 +39,23 @@
     width: 43px;
     height: 11px;
 
-    background: url(/img/progress/loader-bar.gif) no-repeat;
 }
 
 .transcript-wait i
 {
     display: inline-block;
+}
+
+
+.b-loader {
+	position: relative;
+	margin: 25px 16px 25px 160px;
+}
+.b-loader .offers-loader {
+	position: absolute;
+	left: -144px; top: 3px;
+}
+.b-loader h3 {
+	margin: 0 0 15px;
+	font: bold 130%/100% Arial;
 }
