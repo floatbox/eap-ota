@@ -30,6 +30,10 @@ class Segment
     }
   end
 
+  def common_carrier
+    (flights.every.marketing_carrier_name.uniq.length == 1) && marketing_carrier
+  end
+
   def initialize keys={}
     self.id = object_id
     keys.each do |attr, value|
@@ -45,3 +49,4 @@ class Segment
     flights.size - 1
   end
 end
+
