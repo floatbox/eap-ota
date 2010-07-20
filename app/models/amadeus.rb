@@ -10,10 +10,11 @@ class Amadeus < Handsoap::Service
 
   end
 
-  mattr_accessor :debug
+  #cattr_accessor :fake
+  def self.fake=(value); $amadeus_fake=value; end
+  def self.fake; $amadeus_fake; end
   #Handsoap.http_driver = :http_client
   Handsoap.timeout = 500
-  Amadeus.logger = open(Rails.root + 'log/amadeus.log', 'a')
 
   include AmadeusSessions
 
@@ -31,7 +32,7 @@ class Amadeus < Handsoap::Service
 
     args = opts[:args]
 
-    if Amadeus.debug || opts[:debug] || args.try(:debug)
+    if Amadeus.fake || opts[:debug] || args.try(:debug)
       xml_string = FileLogger.read_latest(action)
       response = parse_string(xml_string)
     else
