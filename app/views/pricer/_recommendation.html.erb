@@ -1,7 +1,10 @@
 <h2><%= recommendation_counter + 1 %>:
   <b><%= recommendation.price_total.to_i %> руб.</b> (<%= recommendation.prices.map{|p| p.to_i.to_s }.join(' + ') %>)</h2>
-<div style='font-size:10px'>
+<!--<div style='font-size:10px'>
 <%= simple_format recommendation.additional_info %>
-</div>
-<%= render :partial => 'variant', :collection => recommendation.variants %>
+</div>-->
+<% recommendation.variants.each_with_index do |variant, variant_counter| %>
+<% if recommendation.variants.length > 1 %> <h3>Variant <%= variant_counter+1 %>: <% end %>
+<%= render :partial => 'variant', :locals => {:variant => variant} %>
+<% end %>
 

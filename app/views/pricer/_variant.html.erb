@@ -1,4 +1,3 @@
-<h3>Variant <%= variant_counter+1 %>: 
 
 <% form_for PNRForm.new(:flight_codes => variant.flight_codes), :url => '/pnr_form/', :html => {:method => :post} do |fr| %>
 
@@ -15,3 +14,4 @@
   </tr>
 </table>
 <hr>
+
