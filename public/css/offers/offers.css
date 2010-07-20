@@ -23,13 +23,14 @@
     .offers thead
     {
         color: 2b2b2b;
-        border-bottom: 1px solid #d6d6d6;
     }
 
     .offers thead th,
     .offers thead td
     {
-        padding: .2em 0;
+        overflow: hidden;
+
+        padding: .2em 4px .3em 6px;
 
         vertical-align: middle;
     }
@@ -57,7 +58,7 @@
     }
 
     .offers thead td .b-pseudo u {
-        font: bold 85% Arial,a;
+        font: bold 80% Arial,a;
     }
 
     .offers thead .a-button
@@ -66,450 +67,123 @@
 
         float: right;
 
-        padding: .2em .4em;
+        padding: 3px 6px;
     }
 
     .offers thead .a-button:active
     {
-        padding: .25em .35em .15em .45em;
+        padding: 4px 5px 2px 7px;
     }
 
-    /* Футер предложения (BEGIN) */
-        .offers li .invoice
-        {
-            font: normal 70% Arial,a;
-            
-            margin: 1.2em 0 0 0;
-            padding: 0.5em 15px;
+    /* Тело предложения */
 
-            color: #7e7d78;
-            background: #e4e0cf;
-            border-top: #dfcc7d 1px solid;
-        }
-
-        .offers li .invoice span
-        {
-            color: #515151;
-        }
-
-        .offers li .invoice span b
-        {
-            cursor: help;
-        }
-
-        .offers li .invoice span.none
-        {
-            color: #7e7d78;
-        }
-
-        .offers li .invoice span .none,
-        .offers li .invoice span.none i
-        {
-            display: none;
-        }
-
-        .offers li .invoice span.none .none
-        {
-            display: inherit;
-        }
-
-        .offers li .invoice span.rules
-        {
-            float: right;
-        }
-
-        .offers li .invoice a
-        {
-            color: #7e7d78;
-        }
-    /* Футер предложения (END) */
-
-    .offers li div
+    .offers tbody td
     {
-        clear: both;
-        position: relative;
+        overflow: hidden;
 
-        padding: 0 0 0 165px;
-        width: 500px;
+        padding: .4em 2px .2em 6px;
+
+        border-top: 1px solid #d6d6d6;
     }
 
-    .offers li dl
-    {
+    .offers .extra {
+        font-size: 70%;
+
+        vertical-align: middle;
+
+        color: #787878;
     }
 
-    .offers li dt
-    {
-        font-size: 85%;
-        margin: 0 0 0.4em 0;
-        color: #333;
+    .offers .extra p {
+        margin: -30px 0 0 0;
+        padding: 27px 0 0 0;
+
+        background: url(/img/system/airlines/default.gif) no-repeat;
     }
 
-    .offers li dt u
-    {
-        font-weight: bold;
-        margin: 0 0.5em 0 0;
+    .offers .extra-info {
+        padding: .4em 2px .2em 12px;
+    }
+
+
+    .offers tbody h3 {
+        font: bold 100% Arial,a;
+    }
+
+    .offers tbody tr.ow h3 {
         color: #6f7c26;
     }
 
-    .offers li dt b
-    {
-        font-weight: bold;
-
-        color: #515151;
+    .offers tbody tr.rt h3 {
+        color: #c46f26;
     }
 
-    .offers li dt i
-    {
-        margin: 0 0 0 0.2em;
+    .offers tbody h4 {
+        font: normal 80% Arial,a;
+
+        color: #2b2b2b;
     }
 
-    .offers li dd
-    {
-        font-size: 75%;
+    .offers tbody h5 {
+        font: normal 70% Arial,a;
 
-        margin: 0 0 0.2em 0;
-        padding: 0 0 0 3em;
-        text-indent: -3em;
+        display: inline-block;
+
+        color: #2b2b2b;
     }
 
-    .offers li dd b
-    {
-        font-weight: bold;
-        margin: 0 0.4em 0 0;
+    .offers tbody h5.light {
+        color: #777;
     }
 
-    /* Блок перелётов (BEGIN) */
-        .offers li .flights
-        {
-            margin: 10px 0 0 0;
-            min-height: 78px;
-            height: auto!important;
-            height: 78px;
-        }
 
-        .offers li .flights dt u.return
-        {
-            color: #c46f26;
-        }
+    .offers tbody .waiting {
+        margin: .2em 0 0 0;
 
-        .offers li .flights dd.change
-        {
-            text-indent: 0;
-            line-height: 130%;
-            color: #333;
-
-            cursor: pointer;
-
-            background: url(/img/ico/man.gif) no-repeat 1.8em 0.2em;
-        }
-    /* Блок перелётов (END) */
-
-    /* Блок отеля (BEGIN) */
-        .offers li .hotel
-        {
-            margin: 10px 0 0 0;
-            min-height: 100px;
-            height: auto!important;
-            height: 100px;
-        }
-
-        /* Заголовок отеля (BEGIN) */
-            .offers li .hotel h3
-            {
-                font-weight: bold;
-                font-size: 85%;
-
-                margin: 0 0 0.4em 0;
-
-                color: #d83c86;
-            }
-
-            .offers li .hotel h3 i
-            {
-                font-weight: bold;
-
-                color: #515151;
-            }
-
-            .offers li .hotel h3 s
-            {
-                font-weight: bold;
-
-                color: #d83c86;
-            }
-
-            .offers li .hotel h3 s.b-stars {
-                margin: 0 0 1px 0.4em;
-
-                vertical-align: bottom;
-            }
-        /* Заголовок отеля (END) */
-
-        .offers li .hotel p.desc
-        {
-            font-size: 75%;
-
-            width: 235px;
-            margin: 0 15px 0 0;
-        }
-
-        .offers li .hotel p br
-        {
-            font-size: inherit;
-
-            line-height: 20%;
-        }
-
-        .offers li .hotel p.desc b
-        {
-            font-weight: bold;
-
-            color: #515151;
-        }
-
-        .offers li .hotel dl
-        {
-        }
-
-        .offers li .hotel dt
-        {
-            font: bold 75% Arial, s;
-
-            margin: 0;
-
-            color: #333;
-        }
-
-
-        /* Выбор номера (BEGIN) */
-            .b-room
-            {
-            }
-
-            .b-room dt
-            {
-                margin: 0 0 0.4em 0;
-            }
-
-            .b-room dt b
-            {
-                color: #515151;
-            }
-
-            .b-room dd
-            {
-                margin: 0;
-                padding: 0 20px 0 0;
-
-                text-indent: 0;
-            }
-
-            .b-room dd a
-            {
-                position: relative;
-                left: -5px;
-
-                display: -moz-inline-box;
-                display: inline-block;
-
-                width: 150px;
-                height: 21px;
-                line-height: 21px;
-                padding: 0 0 0 5px;
-
-                text-decoration: none;
-
-                color: #515151;
-            }
-
-            .b-room dd a b
-            {
-                font-size: 140%;
-
-                position: absolute;
-                left: -8px;
-
-                margin: 0;
-
-                color: #333;
-            }
-
-            .offers li dd a i
-            {
-                display: none;
-
-                position: absolute;
-                top: 0;
-                right: -8px;
-
-                border-style: solid;
-                border-color: transparent transparent transparent #aec4d6;
-                border-width: 11px 0 10px 8px;
-            }
-
-
-            .b-room dd a:hover
-            {
-            }
-
-            .b-room dd a:active
-            {
-            }
-
-            .b-room dd a:hover
-            {
-                background: #e4e0cf;
-            }
-
-            .b-room dd a:hover i
-            {
-                display: block;
-                border-color: transparent transparent transparent #e4e0cf;
-            }
-
-            .offers li .c0 .c0:hover i,
-            .offers li .c1 .c1:hover i,
-            .offers li .c2 .c2:hover i,
-            .offers li .c3 .c3:hover i,
-            .offers li .c4 .c4:hover i
-            {
-                border-color: transparent transparent transparent #aec4d6;
-            }
-
-            .offers li .c0 .c0,
-            .offers li .c1 .c1,
-            .offers li .c2 .c2,
-            .offers li .c3 .c3,
-            .offers li .c4 .c4
-            {
-                color: #515151!important;
-                cursor: default;
-
-                background: #aec4d6;
-            }
-
-            .offers li .c0 .c0 i,
-            .offers li .c1 .c1 i,
-            .offers li .c2 .c2 i,
-            .offers li .c3 .c3 i,
-            .offers li .c4 .c4 i
-            {
-                display: block;
-            }
-
-            .b-room dd small
-            {
-                font-size: 85%;
-                float: right;
-
-                padding: 5px 0 0 0;
-                height: 15px;
-
-                color: #909090;
-            }
-
-            .offers li .b-room dt
-            {
-                font-weight: normal;
-                margin: 0 0 0.4em 0;
-            }
-        /* Выбор номера (END) */
-    /* Блок отеля (END) */
-
-    /* Доп. информация (BEGIN) */
-        .offers li a.details
-        {
-            font-size: 75%;
-            color: #6990b5;
-        }
-
-        .offers li a.details:hover
-        {
-        }
-
-        .offers li a.details:active
-        {
-            color: red;
-        }
-
-        .offers li div.details
-        {
-            clear: both;
-            display: none;
-            overflow: hidden;
-            zoom: 1;
-            padding: 0;
-            margin: 0.6em 0 0 0;
-        }
-
-        .offers li div.details dd
-        {
-            padding: 0;
-            text-indent: 0;
-        }
-    /* Доп. информация (BEGIN) */
-
-    /* Доп. информация о рейсах (BEGIN) */
-        .offers li .flights div.details dt
-        {
-            font-size: 75%;
-            margin: 0.6em 0 0.6em 0;
-        }
-
-        .offers li .flights div.details dt s
-        {
-            background: #ffffdb;
-            margin: 0 0 2px 0;
-        }
-
-        .offers li .flights div.details dt a
-        {
-            font-size: 90%;
-            color: #909090;
-        }
-
-        .offers li .flights div.details dt a u
-        {
-            font-weight: normal;
-            margin: 0;
-            color: #909090;
-        }
-
-    /* Доп. информация о рейсах (END) */
-
-    /* Кнопка покупки (BEGIN) */
-        .offers li a.buy
-        {
-            font: bold 70% arial,s;
-            color: #e54892;
-
-            margin: 0.4em 0 0 0;
-            display: -moz-inline-box;
-            display: inline-block;
-        }
-
-        .offers li a.buy:hover
-        {
-        }
-
-        .offers li a.buy:active
-        {
-            color: red;
-        }
-    /* Кнопка покупки (END) */
-
-    /* Показываем страну для поиска по метке (BEGIN) */
-    .offers li i.country
-    {
-        display: none;
+        text-align: center;
+        white-space: nowrap;
     }
-    .offers li-geo_tag i.country,
-    .offers li-geo_tag i.country *
-    {
-        display: inherit;
-        color: #909090;
+
+    .offers tbody .waiting a {
+        display: inline-block;
+
+        width: 15px;
+        height: 15px;
+        margin: 0 4px;
+
+        background: url(/img/offers/planes.png) no-repeat 0 0;
+        border: 1px solid transparent;
     }
-    /* Показываем страну для поиска по метке (END) */
+
+    .offers tbody .waiting a:hover,
+    .offers tbody .waiting a.change:hover {
+        border: 1px solid #dc3f8a;
+    }
+
+    .offers tbody .waiting a.change {
+        width: 16px;
+        height: 16px;
+
+        background: url(/img/offers/i-waiting.png) no-repeat;
+    }
+
+    .offers .ow .waiting a {
+        background: url(/img/offers/planes.png) no-repeat 0 0;
+    }
+
+    .offers .rt .waiting a {
+        background: url(/img/offers/planes.png) no-repeat 0 -15px;
+    }
 
 
-/* Предложение по перелёту и отелю (END) */
+
+
+    /* Футер предложения */
+
+    .offers tfoot td
+    {
+    }
+
+
+
+
