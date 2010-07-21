@@ -15,7 +15,7 @@
             <td colspan="3">
                 <a href=# class="b-pseudo" title="Развернуть это предложение" onclick="return false"><u>Подробнее о&nbsp;перелёте</u></a>
             <td>
-                <a href='/pnr_form/new/?flight_codes=<%= variant.flight_codes.join("_")%>' class="a-button">Купить</a>
+                <a href='/pnr_form/new/?flight_codes=<%= variant.flight_codes.join("_")%>' class="a-button" target="_blank">Купить</a>
     <tbody>
 
         <% variant.segments.each_with_index do |segment, segment_counter| %>

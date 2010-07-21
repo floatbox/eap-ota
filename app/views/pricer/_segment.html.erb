@@ -1,29 +1,44 @@
 <tr class="<%= segment_counter == 0 ? 'ow' : 'rt' %>">
     
     <% if variant.common_carrier %>
-    <% if segment_counter == 0 %>
-    <td rowspan=<%= variant.segments.length %> class="extra">
-        <p><%= segment.marketing_carrier_name %>
-    <% end %>
+        <% if segment_counter == 0 %>
+            <td rowspan=<%= variant.segments.length %> class="extra">
+                <p><%= segment.marketing_carrier_name %>
+        <% end %>
+    <% else %>    
+        <td class="extra">
+            <p><%= segment.marketing_carrier_name %>
     <% end %>
 
     <td>
-        <h3><%= fmt_time( segment.departure_time ) %> <%= fmt_date( segment.departure_date ) %></h3>
-        <h4><%= segment.departure_name %> <%= segment.departure_iata %></h4>
-        <h5 class="light"><%= segment.departure_term %></h5>
+        <h3><%= fmt_time( segment.departure_time ) %><!--<%= fmt_date( segment.departure_date ) %>--></h3>
+        <h4><%= segment.departure_name %></h4>
+        <% if segment.departure_term %>
+            <h5 class="light">Терминал <%= segment.departure_term %></h5>
+        <% end %>
     <td>
         <h5><%= human_duration(segment.total_duration) %> в пути</h5>
-        <h5 class="light">2 часа 5 минут между рейсами</h5>
+        <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
+            <% if layover %>
+                <h5 class="light"><%= human_duration(layover) %> между рейсами</h5>
+            <% end %>
+        <% end %>
 
         <div class="waiting">
-            <a href=# title="Перелёт Москва-Амстердам"></a>
-            <a href=# title="Пересадка в Амстердаме" class="change"></a>
-            <a href=# title="Перелёт Амстердам-Париж"></a>
+        <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
+            <a href=# title="Рейс <%= flight.operating_carrier_iata %>&nbsp;<%= flight.flight_number %> <%= flight.departure.city.name %> &mdash; <%= flight.arrival.city.name %>, <%= human_duration(flight.duration) %> в воздухе на <%= flight.equipment_type_name %>"></a>
+            <% if layover %>
+                <a href=# title="Пересадка в <%= flight.arrival.city.name %> длиной <%= human_duration(layover) %>" class="change"></a>
+            <% end %>
+        <% end %>
         </div>
+
     <td>
-        <h3><%= fmt_time( segment.arrival_time ) %> <%= fmt_date( segment.arrival_date ) %></h3>
-        <h4><%= segment.arrival_name %> <%= segment.arrival_iata %></h4>
-        <h5 class="light"><%= segment.arrival_term %></h5>
+        <h3><%= fmt_time( segment.arrival_time ) %><!--<%= fmt_date( segment.arrival_date ) %>--></h3>
+        <h4><%= segment.arrival_name %></h4>
+        <% if segment.arrival_term %>
+            <h5 class="light">Терминал <%= segment.arrival_term %></h5>
+        <% end %>
 
 <!--
     <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
@@ -44,7 +59,28 @@
     <% end %>
 -->
 
-    <% if variant.common_carrier && segment_counter == 0 %>
-    <td rowspan=<%= variant.segments.length %> class="extra extra-info">
-        С пересадкой в Амстердаме
+    <% if variant.common_carrier %>
+        <% if segment_counter == 0 %>
+            <td rowspan=<%= variant.segments.length %> class="extra extra-info">
+                <% if segment.flights.length > 1 %>
+                    <%= segment.flights.length - 1%>&nbsp;<%= Russian.pluralize(segment.flights.length - 1, 'пересадка', 'пересадки', 'пересадок') %> в
+                    <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
+                        <% if layover %>
+                            <br/>
+                            <%= flight.arrival.city.name %>
+                        <% end %>
+                    <% end %>
+                <% end %>
+        <% end %>
+    <% else %>    
+        <td class="extra">
+            <% if segment.flights.length > 1 %>
+                <%= segment.flights.length - 1%>&nbsp;<%= Russian.pluralize(segment.flights.length - 1, 'пересадка', 'пересадки', 'пересадок') %> в
+                <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
+                    <% if layover %>
+                        <br/>
+                        <%= flight.arrival.city.name %>
+                    <% end %>
+                <% end %>
+            <% end %>
     <% end %>
