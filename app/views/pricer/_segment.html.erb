@@ -1,27 +1,50 @@
-<td>
-<div class="offer">
-<h2><%= segment.marketing_carrier_name %></h2>
-<% if segment_counter == 0 %>
-  <b>Туда <%= fmt_duration(segment.total_duration) %></b>
-<% else %>
-  <b>Обратно <%= fmt_duration(segment.total_duration) %></b>
-<% end %>
-<table style="xborder: 1px solid #000;">
-  <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
-    <tr>
-      <td></td>
-      <td><%= fmt_departure(flight) %> &rarr; <%= fmt_arrival(flight) %></td>
-      <td><%= fmt_time( flight.departure_time ) %> <%= fmt_date( flight.departure_date ) %> &rarr; <%= fmt_time( flight.arrival_time ) %> <%= fmt_date( flight.arrival_date ) %> <%= fmt_duration(flight.duration) %></td>
-      <td><%= flight.operating_carrier_name %> <%= flight.flight_number %></td>
-      <td><%= flight.equipment_type_name %></td>
-    </tr>
-    <% if layover %>
-    <tr>
-      <td></td>
-      <td> пересадка <%= fmt_duration layover %></td>
-    </tr>
+<tr class="<%= segment_counter == 0 ? 'ow' : 'rt' %>">
+    
+    <% if variant.common_carrier %>
+    <% if segment_counter == 0 %>
+    <td rowspan=<%= variant.segments.length %> class="extra">
+        <p><%= segment.marketing_carrier_name %>
     <% end %>
-  <% end %>
-</table>
-</div>
-</td>
+    <% end %>
+
+    <td>
+        <h3><%= fmt_time( segment.departure_time ) %> <%= fmt_date( segment.departure_date ) %></h3>
+        <h4><%= segment.departure_name %> <%= segment.departure_iata %></h4>
+        <h5 class="light"><%= segment.departure_term %></h5>
+    <td>
+        <h5><%= human_duration(segment.total_duration) %> в пути</h5>
+        <h5 class="light">2 часа 5 минут между рейсами</h5>
+
+        <div class="waiting">
+            <a href=# title="Перелёт Москва-Амстердам"></a>
+            <a href=# title="Пересадка в Амстердаме" class="change"></a>
+            <a href=# title="Перелёт Амстердам-Париж"></a>
+        </div>
+    <td>
+        <h3><%= fmt_time( segment.arrival_time ) %> <%= fmt_date( segment.arrival_date ) %></h3>
+        <h4><%= segment.arrival_name %> <%= segment.arrival_iata %></h4>
+        <h5 class="light"><%= segment.arrival_term %></h5>
+
+<!--
+    <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
+        <%= flight.departure_name %><%= flight.departure_iata %><%= flight.departure_term %> &rarr; <%= fmt_arrival(flight) %>
+        <br/><br/>
+        <%= fmt_time( flight.departure_time ) %> <%= fmt_date( flight.departure_date ) %> &rarr; <%= fmt_time( flight.arrival_time ) %> <%= fmt_date( flight.arrival_date ) %> <%= fmt_duration(flight.duration) %>
+        <br/><br/>
+        <%= flight.operating_carrier_name %> <%= flight.flight_number %>
+        <br/><br/>
+        <%= flight.equipment_type_name %>
+
+      <% if layover %>
+        <br/>
+        <a class="b-pseudo">
+            пересадка <%= fmt_duration layover %>
+        </a>
+      <% end %>
+    <% end %>
+-->
+
+    <% if variant.common_carrier && segment_counter == 0 %>
+    <td rowspan=<%= variant.segments.length %> class="extra extra-info">
+        С пересадкой в Амстердаме
+    <% end %>

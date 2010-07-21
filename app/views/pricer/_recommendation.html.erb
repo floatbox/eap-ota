@@ -1,10 +1,21 @@
+<!--
 <h2><%= recommendation_counter + 1 %>:
-  <b><%= recommendation.price_total.to_i %> руб.</b> (<%= recommendation.prices.map{|p| p.to_i.to_s }.join(' + ') %>)</h2>
-<!--<div style='font-size:10px'>
 <%= simple_format recommendation.additional_info %>
-</div>-->
-<% recommendation.variants.each_with_index do |variant, variant_counter| %>
-<% if recommendation.variants.length > 1 %> <h3>Variant <%= variant_counter+1 %>: <% end %>
-<%= render :partial => 'variant', :locals => {:variant => variant} %>
+-->
+
+<% if recommendation.variants.length > 1 %>
+    <h3>Есть <%= recommendation.variants.length %> <%= Russian.pluralize(recommendation.variants.length, 'вариант', 'варианта', 'вариантов') %> вылета по&nbsp;одной цене</h3>
 <% end %>
+
+<% recommendation.variants.each_with_index do |variant, variant_counter| %>
+
+    <% if recommendation.variants.length > 1 %>
+        <h3>Вариант <%= variant_counter+1 %>
+    <% end %>
+
+    <%= render :partial => 'variant', :locals => {:variant => variant, :recommendation => recommendation} %>
+
+<% end %>
+
+
 
