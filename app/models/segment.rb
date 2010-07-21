@@ -12,6 +12,12 @@ class Segment
     end
   end
 
+  def layovers
+    (0...flights.size-1).map do |i|
+      flights[i].arrival
+    end
+  end
+
   attr_accessor :flights
   attr_accessor :id
 

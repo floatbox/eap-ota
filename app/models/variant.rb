@@ -17,5 +17,9 @@ class Variant
   def common_carrier
     (segments.every.marketing_carrier_name.uniq.length == 1) && segments.first.marketing_carrier
   end
+
+  def common_layovers
+    segments.map{|s| s.layovers.every.iata.sort}.uniq.length == 1
+  end
 end
 
