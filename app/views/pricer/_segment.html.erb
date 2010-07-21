@@ -40,25 +40,6 @@
             <h5 class="light">Терминал <%= segment.arrival_term %></h5>
         <% end %>
 
-<!--
-    <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
-        <%= flight.departure_name %><%= flight.departure_iata %><%= flight.departure_term %> &rarr; <%= fmt_arrival(flight) %>
-        <br/><br/>
-        <%= fmt_time( flight.departure_time ) %> <%= fmt_date( flight.departure_date ) %> &rarr; <%= fmt_time( flight.arrival_time ) %> <%= fmt_date( flight.arrival_date ) %> <%= fmt_duration(flight.duration) %>
-        <br/><br/>
-        <%= flight.operating_carrier_name %> <%= flight.flight_number %>
-        <br/><br/>
-        <%= flight.equipment_type_name %>
-
-      <% if layover %>
-        <br/>
-        <a class="b-pseudo">
-            пересадка <%= fmt_duration layover %>
-        </a>
-      <% end %>
-    <% end %>
--->
-
     <% if variant.common_carrier %>
         <% if segment_counter == 0 %>
             <td rowspan=<%= variant.segments.length %> class="extra extra-info">
