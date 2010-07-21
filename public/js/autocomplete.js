@@ -508,7 +508,7 @@ $.Autocompleter.List = function(input, insert) {
     }
 
     function setStatus(li) {
-        var h = li && (Math.random() > .5 ? 'город <b>' + li.data('data').name + '</b> ' + 'в <b>Португалии</b>' : 'аэропорт <b>' + li.data('data').name + '</b> города <b>' + ' Милан</b> в <b>Италии</b>');
+        var h = li && (li.data('data').entity.info || li.data('data').name.bold() + ' - а я знаю, нах, где это?');
         status.html(li ? h : status.data('default'));
     }
 
@@ -678,34 +678,34 @@ $.Autocompleter.List.Item = function(data) {
 
     var render = {
         airport: function(e) {
-            return {spec: 'аэропорт', code: e.iata, cls: null}
+            return {hint: 'аэропорт мля', code: e.iata, cls: null}
         },
         city: function(e) {
-            return {spec: 'город', code: e.iata, cls: null}
+            return {hint: e.hint, code: e.iata, cls: null}
         },
         country: function(e) {
             var i = app.constant.countries.length - 1;
             while (i && app.constant.countries[i] != data.entity.iata.toLowerCase()) i--;
             // i хранит номер флага в панорамной картинке countries.png
-            return {spec: 'страна', code: i, cls: 'country'}
+            return {hint: 'страна мля', code: i, cls: 'country'}
         },
         date: function(e) {
-            return {spec: 'день вылета', code: null, cls: 'date'}
+            return {hint: e.hint, code: null, cls: 'date'}
         },
         persons: function(e) {
-            return {spec: '', code: null, cls: 'persons'}
+            return {hint: '', code: null, cls: 'persons'}
         },
         comfort: function(e) {
-            return {spec: 'комфорт', code: null, cls: null}
+            return {hint: 'комфорт', code: null, cls: null}
         },
         aircraft: function(e) {
-            return {spec: 'пепелац', code: null, cls: null}
+            return {hint: 'пепелац', code: null, cls: null}
         },
         pivo: function(e) {
-            return {spec: 'в зюзю!', code: null, cls: 'pivo'}
+            return {hint: 'в зюзю!', code: null, cls: 'pivo'}
         },
         fun: function(e) {
-            return {spec: 'кайфово', code: null, cls: 'fun'}
+            return {hint: 'кайфово', code: null, cls: 'fun'}
         }
     }
 
@@ -717,7 +717,7 @@ $.Autocompleter.List.Item = function(data) {
     var r = render[data.entity.type];
 
     if (r) with (r(data.entity)) {
-        spec && $('<s/>').html(spec).appendTo($li.append('<wbr/>'));
+        hint && $('<s/>').html(hint).appendTo($li.append('<wbr/>'));
         
         cls && $li.addClass(cls).append($('<i/>'));
 
