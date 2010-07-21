@@ -1,10 +1,3 @@
-// "Accept", "text/javascript"
-// - странно, ведь нам же html нужен?
-/*
-jQuery.ajaxSetup({
-    'beforeSend': function (xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
-});
-*/
 
 app.search.change = function() {
     var data = {
@@ -16,12 +9,14 @@ app.search.change = function() {
         "nonstop": 0,
         "day_interval": 1
     }
+
     for (var key in this.fields) {
         var field = this.fields[key];
         var value = field.val();
         if (field.required && !value) return;
         data[key] = value;
     }
+
     app.offers.showLoader(data);
     //data.from = "MOW";
     //data.to = "LED";
@@ -47,7 +42,7 @@ app.offers.showLoader = function(data) {
     var monthes = app.constant.MNg;
     var words = [d1.getDate(), monthes[d1.getMonth()], d2.getDate(), monthes[d2.getMonth()]];
     if (words[1] == words[3]) words[1] = "по"; else words[1] += " по";
-    $("#offers\\.transcript s").text(data.from + " → " + data.to + ", c " + words.join(" "));
+    $("#offers\\.transcript s").html(data.from + " &rarr; " + data.to + " и&nbsp;обратно c " + words.join(" "));
 
     $("#offers\\.transcript").removeClass("g-none");
     $("#offers\\.loader").removeClass("g-none");

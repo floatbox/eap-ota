@@ -112,7 +112,12 @@ body * {
 
 .g-fixed
 {
-    position: fixed;
+    position: fixed!important;
+}
+
+.g-middle
+{
+    vertical-align: middle!important;
 }
 
 /* утилиты */
