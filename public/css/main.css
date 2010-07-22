@@ -2,6 +2,8 @@
 @import 'global.css';
 @import 'layout.css';
 
+
+@import 'atoms/a-button.css';
 @import 'atoms/b-pseudo.css';
 @import 'atoms/b-loader.css';
 @import 'atoms/b-rur.css';
@@ -29,13 +31,9 @@
 @import 'media/media.css';
 @import 'promo/promo.css';
 
-@import 'offers/b-transcript.css';
-@import 'offers/b-offers-header.css';
-@import 'offers/b-offer.css';
-@import 'offers/b-offer-layout.css';
-@import 'offers/b-company.css';
-@import 'offers/b-price.css';
-@import 'offers/b-photo.css';
+@import 'offers/transcript.css';
+@import 'offers/offers-header.css';
+@import 'offers/offers.css';
 
 @import 'foot/b-foot.css';
 

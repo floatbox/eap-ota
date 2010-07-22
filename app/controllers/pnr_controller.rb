@@ -14,8 +14,14 @@ class PNRController < ApplicationController
       render :edit
     end
   end
-  
+
+  def new
+    @pnr_form = PNRForm.new(:flight_codes => params[:flight_codes].split('_'))
+    render :edit
+  end
+
   def show
     @pnr = Pnr.get_by_number params[:id]
   end
 end
+

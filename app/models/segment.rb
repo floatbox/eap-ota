@@ -1,7 +1,7 @@
 class Segment
-  delegate :departure, :departure_iata, :dept_date, :dept_time, :departure_datetime_utc,
+  delegate :departure, :departure_name, :departure_term, :departure_iata, :dept_date, :departure_date, :dept_time, :departure_time, :departure_datetime_utc,
     :to => 'flights.first', :allow_nil => true
-  delegate :arrival, :arrival_iata, :arrv_date, :arrv_time, :arrival_datetime_utc,
+  delegate :arrival, :arrival_name, :arrival_term, :arrival_iata, :arrv_date, :arrival_date, :arrv_time, :arrival_time, :arrival_datetime_utc,
     :to => 'flights.last', :allow_nil => true
   delegate :marketing_carrier, :marketing_carrier_name, :to => 'flights.first', :allow_nil => true
 
@@ -9,6 +9,12 @@ class Segment
     (0...flights.size-1).map do |i|
       (flights[i+1].departure_datetime_utc.to_i -
        flights[i].arrival_datetime_utc.to_i) / 60
+    end
+  end
+
+  def layovers
+    (0...flights.size-1).map do |i|
+      flights[i].arrival
     end
   end
 
@@ -45,3 +51,4 @@ class Segment
     flights.size - 1
   end
 end
+

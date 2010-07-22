@@ -1,4 +1,17 @@
 module PricerHelper
+  def human_duration(duration)
+    hours, minutes = duration.divmod(60)
+    unless hours.zero?
+      human_hours =
+        "#{ hours }&nbsp;#{ Russian.pluralize(hours, 'час', 'часа', 'часов') }"
+    end
+    unless minutes.zero?
+      human_minutes =
+        "#{ minutes }&nbsp;#{ Russian.pluralize(minutes, 'минута', 'минуты', 'минут') }"
+    end
+    [human_hours, human_minutes].compact.join(' ')
+  end
+
   def fmt_time time
     time[0,2] + ':' + time[2,2] if time
   end

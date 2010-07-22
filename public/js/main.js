@@ -5,7 +5,7 @@ $('HTML').addClass('JS');
 // шоткат для консоли
 window.l = window.console && console.log || alert;
 
-// нэмспейс приложения
+// нэймспейс приложения
 window.app = {};
 app.search = {};
 app.offers = {};

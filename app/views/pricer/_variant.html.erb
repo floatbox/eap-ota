@@ -1,17 +1,32 @@
-<h3>Variant <%= variant_counter+1 %>: 
 
-<% form_for PNRForm.new(:flight_codes => variant.flight_codes), :url => '/pnr_form/', :html => {:method => :post} do |fr| %>
+<table>
 
-<% for f in variant.flight_codes %>
-<%= hidden_field_tag 'pnr_form[flight_codes][]', f %>
-<% end %>
+    <colgroup>
+        <col width="118">
+        <col width="142">
+        <col width="155">
+        <col width="142">
+        <col width="118">
 
-<input type="submit" value="Купить">
-<% end %>
-</h3>
-<table style="width:100%" valign="top" border="0">
-  <tr>
-  <%= render :partial => 'segment', :collection => variant.segments %>
-  </tr>
+    <thead>
+        <tr>
+            <th title="Из них тариф <%= recommendation.prices.map{|p| p.to_i.to_s }.join(' руб. и сборы ');%> руб.">
+                <%= recommendation.price_total.to_i %>&nbsp;<s class="rur">р<s>уб.</s></s>
+            <td colspan="3">
+                <a href=# class="b-pseudo" title="Развернуть это предложение" onclick="return false"><u>Подробнее о&nbsp;перелёте</u></a>
+            <td>
+                <a href='/pnr_form/new/?flight_codes=<%= variant.flight_codes.join("_")%>' class="a-button" target="_blank" title="Мы готовы забронировать для вас этот перелёт">Купить</a>
+    <tbody>
+
+        <% variant.segments.each_with_index do |segment, segment_counter| %>
+            <%= render :partial => 'segment', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter} %>
+        <% end %>
+
+
+    <tfoot>
+        <tr>
+            <td>
+            <td colspan="4">
+
 </table>
-<hr>
+

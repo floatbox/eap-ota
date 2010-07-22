@@ -1,0 +1,5 @@
+﻿<% if @recommendations.present? %>
+    <%= render :partial => 'recommendation', :collection => @recommendations %>
+<% else %>
+    <h2>Таких рейсов нет, попробуйте другие даты.</h2>
+<% end %>

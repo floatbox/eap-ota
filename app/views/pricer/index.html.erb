@@ -8,8 +8,5 @@
   <%= @error_message %>
   </div>
 <% end %>
-<% if @recommendations.present? %>
-  <table border="0" style='width: 100%'><tr valign="top">
-      <%= render :partial => 'recommendation', :collection => @recommendations %>
-  </tr></table>
-<% end %>
+<%= render :partial => "recommendations" %>
+

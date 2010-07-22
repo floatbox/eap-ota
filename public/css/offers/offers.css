@@ -1,0 +1,189 @@
+/* Предложение по перелёту и отелю (BEGIN) */
+    .offers
+    {
+        width: 675px;
+        margin: 15px;
+
+        overflow: hidden;
+    }
+
+    .offers table
+    {
+        font: normal 100% Arial,a;
+
+        width: 100%;
+        margin-bottom: 1.4em;
+
+        color: #333;
+        background: #fff;
+    }
+
+    /* Заголовок предложения */
+
+    .offers thead
+    {
+        color: 2b2b2b;
+    }
+
+    .offers thead th,
+    .offers thead td
+    {
+        overflow: hidden;
+
+        padding: .2em 4px .3em 6px;
+
+        vertical-align: middle;
+    }
+
+    .offers thead th
+    {
+        font: bold 22px Arial,s;
+
+        letter-spacing: -1px;
+
+        color: #cb388f;
+    }
+
+    .offers thead th s
+    {
+        font-weight: bold;
+
+        color: #4a4a4a;
+    }
+
+    .offers thead td .b-pseudo {
+        letter-spacing: -.02em;
+
+        color: #1f64be;
+    }
+
+    .offers thead td .b-pseudo u {
+        font: bold 80% Arial,a;
+    }
+
+    .offers thead .a-button
+    {
+        font: bold 100% Arial,a;
+
+        float: right;
+
+        padding: 3px 6px;
+    }
+
+    .offers thead .a-button:active
+    {
+        padding: 4px 5px 2px 7px;
+    }
+
+    /* Тело предложения */
+
+    .offers tbody td
+    {
+        overflow: hidden;
+
+        padding: 8px 2px 2px 6px;
+
+        vertical-align: top;
+
+        border-top: 1px solid #d6d6d6;
+    }
+
+    .offers .extra {
+        font-size: 70%;
+
+        color: #2b2b2b;
+    }
+
+    .offers .extra p {
+        margin: 4px 0 0 0;
+        padding: 27px 0 0 0;
+
+        background: url(/img/system/airlines/default.gif) no-repeat;
+    }
+
+    .offers .extra-info {
+        padding: 4px 6px 2px 12px;
+    }
+
+
+    .offers tbody h3 {
+        font: bold 100% Arial,a;
+    }
+
+    .offers tbody tr.ow h3 {
+        color: #6f7c26;
+    }
+
+    .offers tbody tr.rt h3 {
+        color: #c46f26;
+    }
+
+    .offers tbody h4 {
+        font: normal 80% Arial,a;
+
+        color: #2b2b2b;
+    }
+
+    .offers tbody h5 {
+        font: normal 70% Arial,a;
+
+        display: inline-block;
+
+        color: #2b2b2b;
+    }
+
+    .offers tbody h5.light {
+        color: #777;
+    }
+
+
+    .offers tbody .waiting {
+        margin: .2em 0 0 0;
+
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .offers tbody .waiting a {
+        display: inline-block;
+
+        width: 15px;
+        height: 15px;
+        margin: 0 4px;
+
+        background: url(/img/offers/planes.png) no-repeat 0 0;
+    }
+
+    .offers tbody .waiting a:hover,
+    .offers tbody .waiting a.change:hover {
+        background: yellow;
+        cursor: help;
+    }
+
+    .offers tbody .waiting a.change {
+        width: 16px;
+        height: 16px;
+
+        background: url(/img/offers/i-waiting.png) no-repeat;
+    }
+
+    .offers .ow .waiting a {
+        background: url(/img/offers/planes.png) no-repeat 0 0;
+    }
+
+    .offers .rt .waiting a {
+        background: url(/img/offers/planes.png) no-repeat 0 -15px;
+    }
+
+
+
+
+    /* Футер предложения */
+
+    .offers tfoot td
+    {
+    }
+
+
+
+

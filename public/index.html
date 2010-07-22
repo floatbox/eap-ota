@@ -255,28 +255,6 @@
 							<li class="dayoff">вс</li>
 						</ul>
 						<div class="dates">
-						<ul class="month" data-month="0710">
-							<li class="past">12</li>
-							<li class="past">13</li>
-							<li>14</li>
-							<li>15</li>
-							<li>16</li>
-							<li><span class="dayoff">17</span></li>
-							<li><span class="dayoff">18</span></li>
-							<li>19</li>
-							<li>20</li>
-							<li>21</li>
-							<li>22</li>
-							<li>23</li>
-							<li><span class="dayoff">24</span></li>
-							<li><span class="dayoff">25</span></li>
-							<li>26</li>
-							<li>27</li>
-							<li>28</li>
-							<li>29</li>
-							<li>30</li>
-							<li><span class="dayoff">31</span></li>
-						</ul>
 						</div>
 					</div>
 				</div>
@@ -347,7 +325,7 @@
 
 
         <!-- Человекочитаемая строка запроса -->
-        <h1 id="offers.transcript" class="b-transcript g-none">
+        <h1 id="offers.transcript" class="transcript g-none">
             <p>
                 <s>В пампасы!</s><i><i></i></i>
             </p>
@@ -356,13 +334,13 @@
 
         <!-- Заглушка на время поиска -->
         <div id="offers.loader" class="b-loader g-none">
-        	<img class="offers-loader" src="/img/ajax-loader.gif" alt="Поиск…">
-			<h3>Ищем для вас лучшие предложения</h3>
-			<p>Вы всегда можете позвонить нам — вас проконсультируют и помогут по всем вопросам</p>
+            <img class="offers-loader" src="/img/ajax-loader.gif" alt="Поиск…">
+            <h3>Ищем для вас лучшие предложения</h3>
+            <p>Вы всегда можете позвонить нам — вас проконсультируют и помогут по всем вопросам</p>
         </div>
 
         <!-- Заголовок списка результатов (статистика, сортировка) -->
-        <div id="offers.header" class="b-offers-header g-none">
+        <div id="offers.header" class="offers-header g-none">
             <dl>
                 <dt>86 предложений
                 <dd>35 городов, 18 стран, 19 авиакомпаний
@@ -384,11 +362,72 @@
         </div>
 
         <!-- Список результатов -->
+<<<<<<< HEAD:public/index.html
         <div id="offers.list" class="b-offers g-none"></div>
         
 
     <!-- Ктулху -->
     <div id="staple" class="b-staple g-none"></div>
+=======
+        <div id="offers" class="offers g-none">
+            <table>
+                <colgroup>
+                    <col width="118">
+                    <col width="142">
+                    <col width="155">
+                    <col width="142">
+                    <col width="118">
+                <thead>
+                    <tr>
+                        <th>
+                            16&nbsp;346&nbsp;<s class="rur">р<s>уб.</s></s>
+                        <td colspan="3">
+                            <a href=# class="b-pseudo" title="Развернуть это предложение"><u>Подробнее о&nbsp;перелёте</u></a>
+                        <td>
+                            <a href=# class="a-button">Купить</a>
+                <tbody>
+                    <tr class="ow">
+                        <td rowspan=2 class="extra">
+                            <p>KLM Royal Dutch
+                        <td>
+                            <h3>12:00</h3>
+                            <h4>Шереметьево</h4>
+                            <h5 class="light">Терминал F</h5>
+                        <td>
+                            <h5>11 часов 20 минут в пути</h5>
+                            <h5 class="light">2 часа 5 минут между рейсами</h5>
+
+                            <div class="waiting">
+                                <a href=# title="Перелёт Москва-Амстердам"></a>
+                                <a href=# title="Пересадка в Амстердаме" class="change"></a>
+                                <a href=# title="Перелёт Амстердам-Париж"></a>
+                            </div>
+                        <td>
+                            <h3>16:00</h3>
+                            <h4>Шарль де Голль Интернэшнл</h4>
+                        <td rowspan=2 class="extra extra-info">
+                            С пересадкой в Амстердаме
+                    <tr class="rt">
+                        <td>
+                            <h3>19:40</h3>
+                            <h4>Шарль де Голль Интернэшнл</h4>
+                        <td>
+                            <h5>15 часов 20 минут в пути</h5>
+                            <div class="waiting">
+                                <a href=# title="Перелёт Париж-Москва"></a>
+                            </div>
+                        <td>
+                            <h3>23:15</h3>
+                            <h4>Шереметьево</h4>
+                            <h5>Терминал D</h5>
+                <tfoot>
+                    <tr>
+                        <td>
+                        <td colspan="4">
+            </table>
+        </div>
+    </div>
+>>>>>>> 92c15d37a4f3ae6e67d4a35676c86ac4b405b1eb:public/index.html
 
     <!-- И тут пошли титры -->
     <div class="l-foot">
@@ -422,6 +461,36 @@
     </div>
 
 
+<<<<<<< HEAD:public/index.html
+=======
+    <!-- Попап-окошки -->
+
+    <!-- Выбор количества пассажиров -->
+    <div id="search.define.persons" class="define-popup">
+        <dl class="separated">
+            <dt>взрослых
+            <dd><a href="#" onclick="return {v: 1, t: 'один', tx: 'один взрослый'}" class="anyone checked"><i></i>один</a>
+            <dd><a href="#" onclick="return {v: 2, t: 'двое', tx: 'двое взрослых'}"><i></i>двое</a>
+            <dd><a href="#" onclick="return {v: 3, t: 'трое', tx: 'трое взрослых'}"><i></i>трое</a>
+            <dd><a href="#" onclick="return {v: 4, t: 'четверо', tx: 'четверо взрослых'}"><i></i>четверо</a>
+            <dd><a href="#" onclick="return {v: 5, t: 'пятеро', tx: 'пятеро взрослых'}"><i></i>пятеро</a>
+            <dd><a href="#" onclick="return {v: 6, t: 'шестеро', tx: 'шестеро взрослых'}"><i></i>шестеро</a>
+        </dl>
+
+        <dl class="collapsed">
+            <dt><a href="#" class="b-pseudo collapse" title="Добавить детей к списку пассажиров"><u>детей</u><s></s></a>
+            <dd><a href="#" onclick="return {v: 10, tx: ' и ни одного ребёнка'}" class="anyone checked"><i></i>нет</a>
+            <dd><a href="#" onclick="return {v: 11, tx: ' и один ребёнок'}"><i></i>один</a>
+            <dd><a href="#" onclick="return {v: 12, tx: ' и двое детей'}"><i></i>двое</a>
+        </dl>
+
+        <a href="#" class="a-button g-none" title="Подтвердить выбор и закрыть">Готово</a>
+    </div>
+
+    <!-- Ктулху -->
+    <div id="staple" class="b-staple g-none"></div>
+
+>>>>>>> 92c15d37a4f3ae6e67d4a35676c86ac4b405b1eb:public/index.html
 
 </body>
  

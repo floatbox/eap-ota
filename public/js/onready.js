@@ -2,7 +2,7 @@
 
     var fields = app.search.fields;
     var url = '/complete.json';
-	
+    
     // поле "Откуда"
     
     fields.from = $('#search-from').autocomplete({
@@ -26,7 +26,7 @@
     }).focus(function() {
         fields.from.reset.fadeOut(200);
     }).change(function() {
-    	app.search.change();
+        app.search.change();
     });
     fields.from.required = true;
 
@@ -57,7 +57,7 @@
         width: 340,
         height: 378
     }).change(function() {
-    	app.search.change();
+        app.search.change();
     });
     fields.to.required = true;
 
@@ -118,9 +118,9 @@
     var calendar = new app.Calendar("#search-calendar");
     fields.date1 = calendar.dpt;
     fields.date2 = calendar.ret;
-	fields.date1.required = true;
-	fields.date2.required = true;
-	
+    fields.date1.required = true;
+    fields.date2.required = true;
+    
     // панель уточнений (фильтров)
 
     var data = {

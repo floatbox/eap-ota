@@ -25,9 +25,9 @@ Date.daysInMonth = function(m, y) {
 
 /* Calendar date */
 app.CalendarDate = function(type, parent) {
-	this.parent = parent;
-	this.type = type;
-	this.date = null;
+    this.parent = parent;
+    this.type = type;
+    this.date = null;
 }
 app.CalendarDate.prototype = {
 val: function(date) {
@@ -43,18 +43,18 @@ val: function(date) {
 	}
 },
 select: function(el, stealth) {
-	if (this.el) this.el.removeClass(this.type);
-	this.el = el && $(el).addClass(this.type);
-	this.index = el ? this.el.data("index") : undefined;
-	if (!stealth) this.parent.update();
+    if (this.el) this.el.removeClass(this.type);
+    this.el = el && $(el).addClass(this.type);
+    this.index = el ? this.el.data("index") : undefined;
+    if (!stealth) this.parent.update();
 }
 };
 
 /* Calendar */
 app.Calendar = function(selector) {
-	this.el = $(selector);
-	this.init();
-	return this;
+    this.el = $(selector);
+    this.init();
+    return this;
 };
 app.Calendar.prototype = {
 init: function() {
@@ -201,35 +201,35 @@ nearest: function(el) {
 	}
 },
 update: function() {
-	this.fill();
-	this.highlight();
-	app.search.change();
+    this.fill();
+    this.highlight();
+    app.search.change();
 },
 fill: function() {
-	$(".there", this.el).removeClass("there");
-	if (this.dpt.el && this.ret.el) {
-		var min = this.dpt.index + 1;
-		var max = this.ret.index;
-		for (var i = min; i < max; i++) {
-			$(this.days[i]).addClass("there");
-		}
-	}
+    $(".there", this.el).removeClass("there");
+    if (this.dpt.el && this.ret.el) {
+        var min = this.dpt.index + 1;
+        var max = this.ret.index;
+        for (var i = min; i < max; i++) {
+            $(this.days[i]).addClass("there");
+        }
+    }
 },
 highlight: function(el) {
-	$(".hl", this.el).removeClass("hl");
-	if (el) {
-		var n1 = this.nearest(el).index;
-		var n2 = $(el).data("index");
-		for (var i = Math.min(n1, n2), lim = Math.max(n1, n2); i < lim; i++) {
-			$(this.days[i]).addClass("hl");
-		}	
-	}
+    $(".hl", this.el).removeClass("hl");
+    if (el) {
+        var n1 = this.nearest(el).index;
+        var n2 = $(el).data("index");
+        for (var i = Math.min(n1, n2), lim = Math.max(n1, n2); i < lim; i++) {
+            $(this.days[i]).addClass("hl");
+        }   
+    }
 },
 bring: function() {
-	var curst = this.dates.scrollTop();
-	var extst = curst + 15 * (curst - this.lastst).constrain(-1, 1);
-	var newst = Math.round(extst / this.rowHeight) * this.rowHeight;
-	this.scroll(newst);
+    var curst = this.dates.scrollTop();
+    var extst = curst + 15 * (curst - this.lastst).constrain(-1, 1);
+    var newst = Math.round(extst / this.rowHeight) * this.rowHeight;
+    this.scroll(newst);
 },
 scroll: function(newst) {
 	var self = this, el = this.dates, curst = el.scrollTop();
@@ -248,10 +248,10 @@ scroll: function(newst) {
 		}
 	});
 }
-}
+};
 
 /* Constrain */
 Number.prototype.constrain = function(min, max) {
 	var n = this.valueOf();
 	return (n < min) ? min : ((n > max) ? max : n);
-}
+};
