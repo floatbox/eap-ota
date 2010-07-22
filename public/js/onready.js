@@ -245,16 +245,11 @@
 
 
     // затычка для сворачивания панели
-    var $spanel = $('#search\\.panel');
-    var $switch = $('#search\\.panel\\.switch');
-
-    $switch.click(function() {
-        var cl = 'panel-collapsed';
-        var st = $spanel.hasClass('panel-collapsed');
-
-        $spanel.switchClass(st?cl:'', st?'':cl, 300);
+    var $spanel = $('#search-panel');
+    $('.panel-switch', $spanel).click(function() {
+        var cl = 'collapsed', st = $spanel.hasClass(cl);
+        $spanel.switchClass(st ? cl : '', st ? '' :cl, 300);
     });
-
 
     // фокус на поле ввода "Куда"
     fields.to.focus();

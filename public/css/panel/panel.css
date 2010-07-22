@@ -1,80 +1,61 @@
-.panel
+#search-panel
 {
     position: relative;
-
+    padding: 10px 0 6px;
     color: #c8c8c8;
     background: #343434;
 }
 
+.search-blocks {
+	overflow: hidden;
+	zoom: 1;
+}
+
 /* Панели куда-когда */
 
-.b-search-where
+#search-where
 {
+    position: relative;
+	float: left;
+	display: inline;
     width: 318px;
-    margin: 0 24px 0 0;
-
-    position: relative;
+    margin: 0 24px 0 15px;
 }
 
-.b-search-when
+#search-when
 {
+    position: relative;
+	float: left;
     width: 588px;
-    margin: 0 15px 0 0;
-
-    position: relative;
 }
 
-.panel ul
-{
-    height: 100%;
-    overflow: hidden;
-    zoom: 1;
-    padding: 10px 0 6px 15px;
-}
-
-.panel ul ul
-{
-    margin: 0;
-    padding: 0;
-}
-
-
-.panel li
-{
-    float: left;
-}
-
-.panel li h2
+#search-panel h2
 {
     font-size: 100%;
     font-weight: normal;
-    margin: 0 0 0.2em 0;
+    height: 23px;
     color: #c9c8c8;
+    line-height: 1.2;
 }
 
-.panel li h2 .b-pseudo
+#search-panel h2 .b-pseudo
 {
     color: #c9c8c8;
 }
 
-.panel li h2 .b-pseudo:hover
+#search-panel h2 .b-pseudo:hover
 {
     color: #fff;
 }
 
-.panel li h2 i
-{
-    color: #fff;
-}
-
-.panel li h2 b
+#search-panel h2 b
 {
     color: #6b6b6b;
 }
 
 
 /* Кнопка сворачивания (begin) */
-    .panel a.switch
+    a.panel-switch
     {
         font-size: 75%;
         line-height: 22px;
@@ -93,25 +74,25 @@
         color: #a6a6a6;
     }
 
-    .panel a.switch i
+    a.panel-switch i
     {
         top: -0.14em;
         border-bottom: 1px dotted;
         position: relative;
     }
 
-    .panel a.switch i u
+    a.panel-switch i u
     {
         position: relative;
         top: 0.14em;
     }
 
-    .panel a.switch:hover
+    a.panel-switch:hover
     {
         color: #fff;
     }
 
-    .panel a.switch i i
+    a.panel-switch i i
     {
         width: 11px;
         height: 6px;
@@ -122,31 +103,34 @@
         background: url(/img/arr-up-down.gif) no-repeat right top;
     }
 
-    .panel-collapsed a.switch i i
+    #search-panel.collapsed a.panel-switch i i
     {
         background-position: right bottom;
     }
 
     /* подсветка стрелки голубым цветом (BEGIN) */
-        .panel a.switch:hover i i
+
+        a.panel-switch:hover i i
         {
             background-position: 0 top;
         }
 
-        .panel-collapsed a.switch:hover i i
+        #search-panel.collapsed .panel-switch:hover i i
         {
             background-position: 0 bottom;
         }
+
     /* подсветка стрелки голубым цветом (END) */
+
 /* Кнопка сворачивания (end) */
 
 
-.panel-collapsed
+#search-panel.collapsed
 {
    height: 0;
 }
 
-.panel-collapsed ul
+#search-panel.collapsed .search-blocks
 {
    padding-top: 0;
    padding-bottom: 0;

@@ -24,8 +24,8 @@ app.search.change = function() {
 	$.get("/pricer/", {
 		search: data
 	}, function(s) {
-		$("#offers\\.loader").addClass("g-none");
-		if (typeof s == "string") {
+		$("#offers\\.loader").addClass('g-none');
+		if (typeof s == 'string') {
 			app.offers.update(s);
 		} else {
 			alert(s && s.exception && s.exception.message);
