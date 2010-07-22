@@ -78,7 +78,7 @@ initDates: function() {
 	ld.setMonth(ld.getMonth() + 6);
 	var tt = today.getTime();
 	var ct = cd.getTime();
-	var lt = ld.getTime();
+	var lt = ld.getTime() - 1;
 	var et = ld.shift(15 - (ld.getDay() || 7)).getTime();
 	var month = undefined, counter = 0, days = [];
 	while (ct < et) {
