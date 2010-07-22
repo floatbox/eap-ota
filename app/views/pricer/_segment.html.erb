@@ -2,11 +2,11 @@
     <% if variant.common_carrier && variant.segments.length > 1 %>
         <% if segment_counter == 0 %>
             <td rowspan=<%= variant.segments.length %> class="extra g-middle">
-                <p><%= segment.marketing_carrier_name %>
+                <p style="background:url(/img/system/airlines/<%= segment.marketing_carrier.iata %>.gif) no-repeat"><%= segment.marketing_carrier_name %>
         <% end %>
     <% else %>
         <td class="extra">
-            <p><%= segment.marketing_carrier_name %>
+            <p style="background:url(/img/system/airlines/<%= segment.marketing_carrier.iata %>.gif) no-repeat"><%= segment.marketing_carrier_name %>
     <% end %>
 
     <td>
