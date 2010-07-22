@@ -145,271 +145,125 @@
 
         <!-- Панель поиска -->
 
-        <div id="search.panel" class="panel">
-            <ul>
-                <li>
-                    <h2>Нужны идеи? Есть карта и <a href="#" class="b-pseudo"><u>список</u></a></h2>
+        <div id="search-panel">
+        <div class="search-blocks">
 
-                    <div id="where" class="b-search-where wt0">
-<!--
-                        <ul id="where.tabs" class="map-tabs">
-                            <li><a class="wt0" onclick="return {i: 0, v: 'map'}" href="#">карта</a>
-                            <li><a class="wt1" onclick="return {i: 1, v: 'presets'}" href="#">идеи</a>
-                        </ul>
--->
-
-                        <div id="where.map" class="map wp0"></div>
-
-                        <dl id="where.presets" class="presets wp1">
-                            <dt>Идеи</dt>
-                            <dd class="b-pseudo">
-                                <a href=# onclick='return {id: "novisa", tip: "Безвизовые страны"}' title="Безвизовые страны"><u>Безвизовые страны</u></a>,
-                                <a href=# onclick='return {id: "ocean", tip: "искупаться в океане"}' title="Безвизовые страны"><u>искупаться в&nbsp;океане</u></a>,
-                                <a href=# onclick='return {id: "beer", tip: "попить пива"}' title="попить пива"><u>попить пива</u></a>,
-                                <a href=# onclick='return {id: "museums", tip: "музеи и галереи"}' title="музеи и галереи"><u>музеи и&nbsp;галереи</u></a>,
-                                <a href=# onclick='return {id: "romance", tip: "романтическое путешествие"}' title="романтическое путешествие"><u>романтическое путешествие</u></a>
-                                <a href=# class="more"><u>и еще 500 идей</u></a>
-                                <b>
-                                    <a href=# onclick='return {id: "gastronome", tip: "вкусно поесть"}' title="вкусно поесть"><u>вкусно поесть</u></a>,
-                                    <a href=# onclick='return {id: "waterfalls", tip: "водопады"}' title="водопады"><u>водопады</u></a>,
-                                    <a href=# onclick='return {id: "holy", tip: "по святым местам"}' title="по святым местам"><u>по святым местам</u></a>,
-                                    <a href=# onclick='return {id: "diving", tip: "дайвинг"}' title="дайвинг"><u>дайвинг</u></a>
-                                </b>
-                            </dd>
-
-                            <dt>Интересные места</dt>
-                            <dd class="b-pseudo">
-                                <a href=# onclick='return {id: "australia", tip: "Австралия"}' title="Австралия"><u>Килиманджаро</u></a>,
-                                <a href=# onclick='return {id: "serengeti", tip: "Национальный парк Серенгети"}' title="Национальный парк Серенгети"><u>Национальный парк Серенгети</u></a>,
-                                <a href=# onclick='return {id: "venice", tip: "каналы Венеции"}' title="каналы Венеции"><u>каналы Венеции</u></a>,
-                                <a href=# onclick='return {id: "usa", tip: "остров Пасхи"}' title="остров Пасхи"><u>остров Пасхи</u></a>,
-                                <a href=# onclick='return {id: "las-vegas", tip: "Лас-Вегас"}' title="Лас-Вегас"><u>Лас-Вегас</u></a>,
-                                <a href=# onclick='return {id: "acropolis", tip: "Акрополь и Парфенон"}' title="Акрополь и Парфенон"><u>Акрополь и Парфенон</u></a>,
-                                <a href=# onclick='return {id: "stonehange", tip: "Стоунхендж"}' title="Стоунхендж"><u>Стоунхендж</u></a>
-                                <a href=# class="more"><u>и еще 80 интересных мест</u></a>
-                                <b>
-                                    <a href=# onclick='return {id: "giza", tip: "пирамиды в Гизе"}' title="пирамиды в Гизе"><u>пирамиды в Гизе</u></a>,
-                                    <a href=# onclick='return {id: "afon", tip: "гора Афон"}' title="гора Афон"><u>гора Афон</u></a>,
-                                    <a href=# onclick='return {id: "st-michel", tip: "Мон-Сен-Мишель"}' title="Мон-Сен-Мишель"><u>Мон-Сен-Мишель</u></a>,
-                                    <a href=# onclick='return {id: "fiords", tip: "Фьорды Норвегии"}' title="Фьорды Норвегии"><u>Фьорды Норвегии</u></a>,
-                                    <a href=# onclick='return {id: "bigbarrier", tip: "Большой барьерный риф"}' title="Большой барьерный риф"><u>Большой барьерный риф</u></a>,
-                                    <a href=# onclick='return {id: "pisa", tip: "Пизанская башня"}' title="Пизанская башня"><u>Пизанская башня</u></a>,
-                                    <a href=# onclick='return {id: "spitzbergen", tip: "Шпицберген"}' title="Шпицберген"><u>Шпицберген</u></a>
-                                </b>
-                            </dd>
-
-                            <dt>Страны и города</dt>
-                            <dd class="b-pseudo">
-                                <a href=# onclick='return {id: "au", tip: "Австралия"}' title="Австралия"><u>Австралия</u></a>,
-                                <a href=# onclick='return {id: "us", tip: "Америка"}' title="Америка"><u>Америка</u></a>,
-                                <a href=# onclick='return {id: "bb", tip: "Барбадос"}' title="Барбадос"><u>Барбадос</u></a>,
-                                <a href=# onclick='return {id: "de", tip: "Германия"}' title="Германия"><u>Германия</u></a>,
-                                <a href=# onclick='return {id: "ie", tip: "Ирландия"}' title="Ирландия"><u>Ирландия</u></a>,
-                                <a href=# onclick='return {id: "cn", tip: "Китай"}' title="Китай"><u>Китай</u></a>,
-                                <a href=# onclick='return {id: "lu", tip: "Люксембург"}' title="Люксембург"><u>Люксембург</u></a>,
-                                <a href=# onclick='return {id: "my", tip: "Малайзия"}' title="Малайзия"><u>Малайзия</u></a>,
-                                <a href=# onclick='return {id: "pe", tip: "Перу"}' title="Перу"><u>Перу</u></a>,
-                                <a href=# onclick='return {id: "hr", tip: "Хорватия"}' title="Хорватия"><u>Хорватия</u></a>,
-                                <a href=# onclick='return {id: "fr", tip: "Франция"}' title="Франция"><u>Франция</u></a>,
-                                <a href=# onclick='return {id: "cz", tip: "Чехия"}' title="Чехия"><u>Чехия</u></a>
-                                <a href=# class="more"><u>и еще 50 стран, куда стоит поехать</u></a>
-                                <b>
-                                    <a href=# onclick='return {id: "gb", tip: "Англия"}' title="Англия"><u>Англия</u></a>,
-                                    <a href=# onclick='return {id: "br", tip: "Бразилия"}' title="Бразилия"><u>Бразилия</u></a>,
-                                    <a href=# onclick='return {id: "ve", tip: "Венесуэла"}' title="Венесуэла"><u>Венесуэла</u></a>,
-                                    <a href=# onclick='return {id: "hk", tip: "Гонконг"}' title="Гонконг"><u>Гонконг</u></a>,
-                                    <a href=# onclick='return {id: "do", tip: "Доминикана"}' title="Доминикана"><u>Доминикана</u></a>,
-                                    <a href=# onclick='return {id: "eg", tip: "Египет"}' title="Египет"><u>Египет</u></a>,
-                                    <a href=# onclick='return {id: "il", tip: "Израиль"}' title="Израиль"><u>Израиль</u></a>,
-                                    <a href=# onclick='return {id: "ke", tip: "Кения"}' title="Кения"><u>Кения</u></a>,
-                                    <a href=# onclick='return {id: "lb", tip: "Ливан"}' title="Ливан"><u>Ливан</u></a>,
-                                    <a href=# onclick='return {id: "mu", tip: "Маврикий"}' title="Маврикий"><u>Маврикий</u></a>,
-                                    <a href=# onclick='return {id: "no", tip: "Норвегия"}' title="Норвегия"><u>Норвегия</u></a>,
-                                    <a href=# onclick='return {id: "om", tip: "Оман"}' title="Оман"><u>Оман</u></a>,
-                                    <a href=# onclick='return {id: "pt", tip: "Португалия"}' title="Португалия"><u>Португалия</u></a>,
-                                    <a href=# onclick='return {id: "ro", tip: "Румыния"}' title="Румыния"><u>Румыния</u></a>,
-                                    <a href=# onclick='return {id: "sy", tip: "Сирия"}' title="Сирия"><u>Сирия</u></a>,
-                                    <a href=# onclick='return {id: "tz", tip: "Танзания"}' title="Танзания"><u>Танзания</u></a>,
-                                    <a href=# onclick='return {id: "uz", tip: "Узбекистан"}' title="Узбекистан"><u>Узбекистан</u></a>,
-                                    <a href=# onclick='return {id: "fj", tip: "Фиджи"}' title="Фиджи"><u>Фиджи</u></a>,
-                                    <a href=# onclick='return {id: "cl", tip: "Чили"}' title="Чили"><u>Чили</u></a>,
-                                    <a href=# onclick='return {id: "se", tip: "Швеция"}' title="Швеция"><u>Швеция</u></a>,
-                                    <a href=# onclick='return {id: "ee", tip: "Эстония"}' title="Эстония"><u>Эстония</u></a>,
-                                    <a href=# onclick='return {id: "jp", tip: "Япония"}' title="Япония"><u>Япония</u></a>
-                                </b>
-                            </dd>
-
-                            <!--dt>События</dt>
-                            <dd class="b-pseudo">
-                              <a href=#><u>ближайший уикенд</u></a>,
-                              <a href=#><u>Окторберфест</u></a>,
-                              <a href=#><u>ЧМ-2010</u></a>,
-                              <a href=#><u>Tiesto</u></a>,
-                              <a href=#><u>шоу &#171;Кошки&#187;</u></a>,
-                              <a href=#><u>Beaujolais Nouveau</u></a>,
-                              <a href=#><u>фестиваль цветов</u></a>
-                            </dd-->
-                        
-                        </dl>
-
-                        <a id="where.map.reset" class="b-pseudo panel-reset" href=#><i></i><u>сбросить</u></a><a id="where.map.large" class="b-pseudo panel-reset" href=#><u>большая карта</u></a>
-
-                    </div>
-                </li>
-
-                <li>
-                    <div class="calendar" id="search-calendar">
-                    <h2>Выберите даты:</h2>
-                    <div class="scroller">
-                        <ul class="monthes">
-                            <li style="width: 60px;">июль</li>
-                            <li style="width: 62px;">август</li>
-                            <li style="width: 60px;">сентябрь</li>
-                            <li style="width: 62px;">октябрь</li>
-                        </ul>
-                        <div class="scrollbar"></div>
-                    </div>
-                    <div class="scrollfw"></div>
-                    <div class="scrollbw"></div>
-                    <div class="viewport">
-                        <ul class="week">
-                            <li>пн</li>
-                            <li>вт</li>
-                            <li>ср</li>
-                            <li>чт</li>
-                            <li>пт</li>
-                            <li class="dayoff">сб</li>
-                            <li class="dayoff">вс</li>
-                        </ul>
-                        <div class="dates">
-                        <ul class="month" data-month="0710">
-                            <li class="past">12</li>
-                            <li class="past">13</li>
-                            <li>14</li>
-                            <li>15</li>
-                            <li>16</li>
-                            <li><span class="dayoff">17</span></li>
-                            <li><span class="dayoff">18</span></li>
-                            <li>19</li>
-                            <li>20</li>
-                            <li>21</li>
-                            <li>22</li>
-                            <li>23</li>
-                            <li><span class="dayoff">24</span></li>
-                            <li><span class="dayoff">25</span></li>
-                            <li>26</li>
-                            <li>27</li>
-                            <li>28</li>
-                            <li>29</li>
-                            <li>30</li>
-                            <li><span class="dayoff">31</span></li>
-                        </ul>
-                        <ul class="month" data-month="0810">
-                            <li><span class="dayoff">1</span></li>
-                            <li>2</li>
-                            <li>3</li>
-                            <li>4</li>
-                            <li>5</li>
-                            <li>6</li>
-                            <li><span class="dayoff">7</span></li>
-                            <li><span class="dayoff">8</span></li>
-                            <li>9</li>
-                            <li>10</li>
-                            <li>11</li>
-                            <li>12</li>
-                            <li>13</li>
-                            <li><span class="dayoff">14</span></li>
-                            <li><span class="dayoff">15</span></li>
-                            <li>16</li>
-                            <li>17</li>
-                            <li>18</li>
-                            <li>19</li>
-                            <li>20</li>
-                            <li><span class="dayoff">21</span></li>
-                            <li><span class="dayoff">22</span></li>
-                            <li>23</li>
-                            <li>24</li>
-                            <li>25</li>
-                            <li>26</li>
-                            <li>27</li>
-                            <li><span class="dayoff">28</span></li>
-                            <li><span class="dayoff">29</span></li>
-                            <li>30</li>
-                            <li>31</li>
-                        </ul>
-                        <ul class="month" data-month="0910">
-                            <li>1</li>
-                            <li>2</li>
-                            <li>3</li>
-                            <li><span class="dayoff">4</span></li>
-                            <li><span class="dayoff">5</span></li>
-                            <li>6</li>
-                            <li>7</li>
-                            <li>8</li>
-                            <li>9</li>
-                            <li>10</li>
-                            <li><span class="dayoff">11</span></li>
-                            <li><span class="dayoff">12</span></li>
-                            <li>13</li>
-                            <li>14</li>
-                            <li>15</li>
-                            <li>16</li>
-                            <li>17</li>
-                            <li><span class="dayoff">18</span></li>
-                            <li><span class="dayoff">19</span></li>
-                            <li>20</li>
-                            <li>21</li>
-                            <li>22</li>
-                            <li>23</li>
-                            <li>24</li>
-                            <li><span class="dayoff">25</span></li>
-                            <li><span class="dayoff">26</span></li>
-                            <li>27</li>
-                            <li>28</li>
-                            <li>29</li>
-                            <li>30</li>
-                        </ul>
-                        <ul class="month" data-month="1010">
-                            <li>1</li>
-                            <li><span class="dayoff">2</span></li>
-                            <li><span class="dayoff">3</span></li>
-                            <li>4</li>
-                            <li>5</li>
-                            <li>6</li>
-                            <li>7</li>
-                            <li>8</li>
-                            <li><span class="dayoff">9</span></li>
-                            <li><span class="dayoff">10</span></li>
-                            <li>11</li>
-                            <li>12</li>
-                            <li>13</li>
-                            <li>14</li>
-                            <li>15</li>
-                            <li><span class="dayoff">16</span></li>
-                            <li><span class="dayoff">17</span></li>
-                            <li>18</li>
-                            <li>19</li>
-                            <li>20</li>
-                            <li>21</li>
-                            <li>22</li>
-                            <li><span class="dayoff">23</span></li>
-                            <li><span class="dayoff">24</span></li>
-                            <li>25</li>
-                            <li>26</li>
-                            <li>27</li>
-                            <li>28</li>
-                            <li>29</li>
-                            <li><span class="dayoff">30</span></li>
-                            <li><span class="dayoff">31</span></li>                             
-                        </ul>                            
-                        </div>
-                    </div>
-                    <a href="#" class="b-pseudo panel-reset"><i></i><u>сбросить</u></a>
-                    </div>
-                </li>
-            </ul>
-            <a href="#" id="search.panel.switch" class="switch" title="Скрыть карту и календарь"><i><u>свернуть</u><i></i></i></a>
-        </div>
+			<div id="search-where" class="wt0">
+				<h2>Нужны идеи? Есть карта и <a href="#" class="b-pseudo"><u>список</u></a></h2>
+				<div id="where-map" class="map wp0"></div>
+				<dl id="where-presets" class="presets wp1">
+	
+	                <dt>Идеи</dt>
+	                <dd class="b-pseudo">
+	                    <a href=# onclick='return {id: "novisa", tip: "Безвизовые страны"}' title="Безвизовые страны"><u>Безвизовые страны</u></a>,
+	                    <a href=# onclick='return {id: "ocean", tip: "искупаться в океане"}' title="Безвизовые страны"><u>искупаться в&nbsp;океане</u></a>,
+	                    <a href=# onclick='return {id: "beer", tip: "попить пива"}' title="попить пива"><u>попить пива</u></a>,
+	                    <a href=# onclick='return {id: "museums", tip: "музеи и галереи"}' title="музеи и галереи"><u>музеи и&nbsp;галереи</u></a>,
+	                    <a href=# onclick='return {id: "romance", tip: "романтическое путешествие"}' title="романтическое путешествие"><u>романтическое путешествие</u></a>
+	                    <a href=# class="more"><u>и еще 500 идей</u></a>
+	                    <b>
+	                        <a href=# onclick='return {id: "gastronome", tip: "вкусно поесть"}' title="вкусно поесть"><u>вкусно поесть</u></a>,
+	                        <a href=# onclick='return {id: "waterfalls", tip: "водопады"}' title="водопады"><u>водопады</u></a>,
+	                        <a href=# onclick='return {id: "holy", tip: "по святым местам"}' title="по святым местам"><u>по святым местам</u></a>,
+	                        <a href=# onclick='return {id: "diving", tip: "дайвинг"}' title="дайвинг"><u>дайвинг</u></a>
+	                    </b>
+	                </dd>
+	
+	                <dt>Интересные места</dt>
+	                <dd class="b-pseudo">
+	                    <a href=# onclick='return {id: "australia", tip: "Австралия"}' title="Австралия"><u>Килиманджаро</u></a>,
+	                    <a href=# onclick='return {id: "serengeti", tip: "Национальный парк Серенгети"}' title="Национальный парк Серенгети"><u>Национальный парк Серенгети</u></a>,
+	                    <a href=# onclick='return {id: "venice", tip: "каналы Венеции"}' title="каналы Венеции"><u>каналы Венеции</u></a>,
+	                    <a href=# onclick='return {id: "usa", tip: "остров Пасхи"}' title="остров Пасхи"><u>остров Пасхи</u></a>,
+	                    <a href=# onclick='return {id: "las-vegas", tip: "Лас-Вегас"}' title="Лас-Вегас"><u>Лас-Вегас</u></a>,
+	                    <a href=# onclick='return {id: "acropolis", tip: "Акрополь и Парфенон"}' title="Акрополь и Парфенон"><u>Акрополь и Парфенон</u></a>,
+	                    <a href=# onclick='return {id: "stonehange", tip: "Стоунхендж"}' title="Стоунхендж"><u>Стоунхендж</u></a>
+	                    <a href=# class="more"><u>и еще 80 интересных мест</u></a>
+	                    <b>
+	                        <a href=# onclick='return {id: "giza", tip: "пирамиды в Гизе"}' title="пирамиды в Гизе"><u>пирамиды в Гизе</u></a>,
+	                        <a href=# onclick='return {id: "afon", tip: "гора Афон"}' title="гора Афон"><u>гора Афон</u></a>,
+	                        <a href=# onclick='return {id: "st-michel", tip: "Мон-Сен-Мишель"}' title="Мон-Сен-Мишель"><u>Мон-Сен-Мишель</u></a>,
+	                        <a href=# onclick='return {id: "fiords", tip: "Фьорды Норвегии"}' title="Фьорды Норвегии"><u>Фьорды Норвегии</u></a>,
+	                        <a href=# onclick='return {id: "bigbarrier", tip: "Большой барьерный риф"}' title="Большой барьерный риф"><u>Большой барьерный риф</u></a>,
+	                        <a href=# onclick='return {id: "pisa", tip: "Пизанская башня"}' title="Пизанская башня"><u>Пизанская башня</u></a>,
+	                        <a href=# onclick='return {id: "spitzbergen", tip: "Шпицберген"}' title="Шпицберген"><u>Шпицберген</u></a>
+	                    </b>
+	                </dd>
+	
+	                <dt>Страны и города</dt>
+	                <dd class="b-pseudo">
+	                    <a href=# onclick='return {id: "au", tip: "Австралия"}' title="Австралия"><u>Австралия</u></a>,
+	                    <a href=# onclick='return {id: "us", tip: "Америка"}' title="Америка"><u>Америка</u></a>,
+	                    <a href=# onclick='return {id: "bb", tip: "Барбадос"}' title="Барбадос"><u>Барбадос</u></a>,
+	                    <a href=# onclick='return {id: "de", tip: "Германия"}' title="Германия"><u>Германия</u></a>,
+	                    <a href=# onclick='return {id: "ie", tip: "Ирландия"}' title="Ирландия"><u>Ирландия</u></a>,
+	                    <a href=# onclick='return {id: "cn", tip: "Китай"}' title="Китай"><u>Китай</u></a>,
+	                    <a href=# onclick='return {id: "lu", tip: "Люксембург"}' title="Люксембург"><u>Люксембург</u></a>,
+	                    <a href=# onclick='return {id: "my", tip: "Малайзия"}' title="Малайзия"><u>Малайзия</u></a>,
+	                    <a href=# onclick='return {id: "pe", tip: "Перу"}' title="Перу"><u>Перу</u></a>,
+	                    <a href=# onclick='return {id: "hr", tip: "Хорватия"}' title="Хорватия"><u>Хорватия</u></a>,
+	                    <a href=# onclick='return {id: "fr", tip: "Франция"}' title="Франция"><u>Франция</u></a>,
+	                    <a href=# onclick='return {id: "cz", tip: "Чехия"}' title="Чехия"><u>Чехия</u></a>
+	                    <a href=# class="more"><u>и еще 50 стран, куда стоит поехать</u></a>
+	                    <b>
+	                        <a href=# onclick='return {id: "gb", tip: "Англия"}' title="Англия"><u>Англия</u></a>,
+	                        <a href=# onclick='return {id: "br", tip: "Бразилия"}' title="Бразилия"><u>Бразилия</u></a>,
+	                        <a href=# onclick='return {id: "ve", tip: "Венесуэла"}' title="Венесуэла"><u>Венесуэла</u></a>,
+	                        <a href=# onclick='return {id: "hk", tip: "Гонконг"}' title="Гонконг"><u>Гонконг</u></a>,
+	                        <a href=# onclick='return {id: "do", tip: "Доминикана"}' title="Доминикана"><u>Доминикана</u></a>,
+	                        <a href=# onclick='return {id: "eg", tip: "Египет"}' title="Египет"><u>Египет</u></a>,
+	                        <a href=# onclick='return {id: "il", tip: "Израиль"}' title="Израиль"><u>Израиль</u></a>,
+	                        <a href=# onclick='return {id: "ke", tip: "Кения"}' title="Кения"><u>Кения</u></a>,
+	                        <a href=# onclick='return {id: "lb", tip: "Ливан"}' title="Ливан"><u>Ливан</u></a>,
+	                        <a href=# onclick='return {id: "mu", tip: "Маврикий"}' title="Маврикий"><u>Маврикий</u></a>,
+	                        <a href=# onclick='return {id: "no", tip: "Норвегия"}' title="Норвегия"><u>Норвегия</u></a>,
+	                        <a href=# onclick='return {id: "om", tip: "Оман"}' title="Оман"><u>Оман</u></a>,
+	                        <a href=# onclick='return {id: "pt", tip: "Португалия"}' title="Португалия"><u>Португалия</u></a>,
+	                        <a href=# onclick='return {id: "ro", tip: "Румыния"}' title="Румыния"><u>Румыния</u></a>,
+	                        <a href=# onclick='return {id: "sy", tip: "Сирия"}' title="Сирия"><u>Сирия</u></a>,
+	                        <a href=# onclick='return {id: "tz", tip: "Танзания"}' title="Танзания"><u>Танзания</u></a>,
+	                        <a href=# onclick='return {id: "uz", tip: "Узбекистан"}' title="Узбекистан"><u>Узбекистан</u></a>,
+	                        <a href=# onclick='return {id: "fj", tip: "Фиджи"}' title="Фиджи"><u>Фиджи</u></a>,
+	                        <a href=# onclick='return {id: "cl", tip: "Чили"}' title="Чили"><u>Чили</u></a>,
+	                        <a href=# onclick='return {id: "se", tip: "Швеция"}' title="Швеция"><u>Швеция</u></a>,
+	                        <a href=# onclick='return {id: "ee", tip: "Эстония"}' title="Эстония"><u>Эстония</u></a>,
+	                        <a href=# onclick='return {id: "jp", tip: "Япония"}' title="Япония"><u>Япония</u></a>
+	                    </b>
+	                </dd>
+	            
+				</dl>
+				<a id="where.map.reset" class="b-pseudo panel-reset" href=#><i></i><u>сбросить</u></a><a id="where.map.large" class="b-pseudo panel-reset" href=#><u>большая карта</u></a>
+			</div>
+	
+		    <div id="search-when">
+				<div class="calendar" id="search-calendar">
+					<h2>Выберите даты:</h2>
+					<div class="scroller">
+						<div class="scrollbar"></div>
+						<dl class="timeline"></dl>
+					</div>
+					<div class="scrollfw"></div>
+					<div class="scrollbw"></div>
+					<div class="viewport">
+						<ul class="week">
+							<li>пн</li>
+							<li>вт</li>
+							<li>ср</li>
+							<li>чт</li>
+							<li>пт</li>
+							<li class="dayoff">сб</li>
+							<li class="dayoff">вс</li>
+						</ul>
+						<div class="dates">
+						</div>
+					</div>
+				</div>
+				<a href="#" class="b-pseudo panel-reset"><i></i><u>сбросить</u></a>
+			</div>
+		
+		</div>
+		<a href="#" class="panel-switch" title="Скрыть карту и календарь"><i><u>свернуть</u><i></i></i></a>
+		</div>
 
         <!-- Панель уточнений -->
 
@@ -421,7 +275,7 @@
                     <td>
                         количество
 
-                        <p onclick="return {name: 'persons', title: 'пассажиры', accusative: 'количество пассажиров', radio: true, popup: '#search\\.define\\.persons'}"><a href=#><u>пассажиров</u></a><b></b>&nbsp;и
+                        <p onclick="return {name: 'persons', title: 'пассажиров', accusative: 'количество пассажиров', anyone: 'один', radio: true}"><a href=#><u>пассажиров</u></a><b></b>&nbsp;и
                         
                         <p onclick="return {name: 'changes', title: 'пересадки', accusative: 'допустимое количество пересадок', anyone: 'всё равно', radio: true}"><a href=#><u>пересадок</u></a><b></b></p>,
                         
@@ -569,6 +423,7 @@
                             </dl>
             </table>
         </div>
+        
     </div>
 
     <!-- И тут пошли титры -->
@@ -602,7 +457,6 @@
         </div>
     </div>
 
-
     <!-- Попап-окошки -->
 
     <!-- Выбор количества пассажиров -->
@@ -630,10 +484,5 @@
     <!-- Ктулху -->
     <div id="staple" class="b-staple g-none"></div>
 
-
 </body>
- 
 </html>
-
-
-

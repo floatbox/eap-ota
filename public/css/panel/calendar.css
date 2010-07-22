@@ -1,66 +1,122 @@
 /* Calendar */
-.calendar {
+.calendar 
+{
 	position: relative;
 	width: 589px;
 }
-.calendar .viewport {
-	width: 588px; height: 332px;
+
+.calendar .viewport 
+{
+	position: relative;
+	width: 588px;
+	height: 332px;
 	overflow: hidden;
-	background: #b1bbc9;
+	background: #acb6c3;
 }
-.calendar .dates {
-	width: 620px; height: 306px;
+
+.calendar .dates 
+{
+	position: relative;
+	width: 620px;
+	height: 306px;
 	overflow: auto;
 }
 
-/* Calendar controls */
-.calendar .scroller {
+/* Scroller */
+
+.calendar .scroller 
+{
 	position: absolute;
-	left: 150px; top: 1px;
-	font-size: 11px;
-}
-.calendar .scroller li {
-	float: left;
-	padding: 2px 0;
-	background: #666;
-	text-align: center;
-	color: #FFF;
-	margin-left: 1px;
-}
-.calendar .scrollfw,
-.calendar .scrollbw {
-	position: absolute;
-	left: 568px;
-	width: 11px; height: 6px;
-	border: 5px solid #343434;
-	background: url(/img/arr-up-down.gif) no-repeat;
-	cursor: pointer;
-}
-.calendar .scrollbw {
-	top: 7px;
-	background-position: -11px 0;
-}
-.calendar .scrollfw {
-	top: 355px;
-	background-position: -11px 100%;
-}
-.calendar .scrollbar {
-	position: absolute;
-	top: 0; left: 10px;
-	width: 30px; height: 15px;
-	border: 1px solid #FFF;
-	display: none;
+	top: 0;
+	left: 180px;
+	height: 20px;
+	background: #555;
 }
 
+	/* Scroller monthes */
+
+	.calendar .scroller dl.timeline {
+		font-size: 13px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 380px;
+		overflow: visible;
+		cursor: default;
+	}
+
+	.calendar .scroller dt,
+	.calendar .scroller dd {
+		position: relative;
+		z-index: 1;
+		float: left;
+		padding: 2px 0;
+		text-align: center;
+	}
+	
+	.calendar .scroller dt
+	{
+		color: #E8E8E8;
+		cursor: pointer;
+	}
+
+	.calendar .scroller dd
+	{
+		padding-left: 8px;
+		color: #808080;
+	}
+
+	/* Scrollbar */
+	
+	.calendar .scrollbar 
+	{
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 23px;
+		background: #99a1ac;
+	}
+
+	/* Scroll buttons */
+	
+	.calendar .scrollfw,
+	.calendar .scrollbw 
+	{
+		position: absolute;
+		left: 568px;
+		width: 11px;
+		height: 6px;
+		border: 5px solid #343434;
+		background: url(/img/arr-up-down.gif) no-repeat;
+		cursor: pointer;
+	}
+	
+	.calendar .scrollbw 
+	{
+		top: 7px;
+		background-position: -11px 0;
+	}
+	
+	.calendar .scrollfw 
+	{
+		top: 355px;
+		background-position: -11px 100%;
+	}
+
 /* Days of the week */
-.calendar ul.week {
-	width: 588px; height: 25px;
+
+.calendar ul.week 
+{
+	width: 588px;
+	height: 25px;
 	border-bottom: 1px solid #c7ced6;
 	background: #99a1ac;
 	color: #4b4b4b;
 	font-size: 13px;
 }
-.calendar .week li {
+
+.calendar .week li 
+{
 	float: left;
 	width: 24px;
 	padding: 5px 55px 5px 5px;
@@ -68,14 +124,20 @@
 }
 
 /* Calendar dates */
-.calendar ul.month {
-	width: 588px; height: auto;
-	overflow: visible; 
+.calendar ul.month 
+{
+	display: inline;
+	width: 588px;
+	height: auto;
+	overflow: visible;
 }
-.calendar .dates li {
+
+.calendar .dates li 
+{
 	float: left;
 	position: relative;
-	width: 34px; height: 40px;
+	width: 34px;
+	height: 40px;
 	border-bottom: 1px solid #c7ced6;
 	padding: 5px 50px 5px 0;
 	color: #4b4b4b;
@@ -83,33 +145,50 @@
 	text-align: center;
 	cursor: pointer;
 }
-.calendar .dates li.hl {
+
+.calendar .odd li {
+	background: #b6bec9;
+}
+
+.calendar .dates li.hl 
+{
 	background: #b6a1be;
 	border-color: #cfb9cc;
 }
+
 .calendar .dates li.hover,
-.calendar .dates li:hover {
+.calendar .dates li:hover 
+{
 	background: #bd7dae;
 	border-color: #da9cbe;
 }
-.calendar .dates li.past {
-	color: #a3abb7;
+
+.calendar .dates li.inactive {
+	color: #9da5b0;
 	cursor: default;
 	border-color: #c7ced6;
 	background: none;
 }
-.calendar .dayoff {
+
+.calendar .dayoff 
+{
 	color: #ce001a;
 }
-.calendar .past .dayoff {
-	color: #a08590;
+
+.calendar .inactive .dayoff 
+{
+	color: #b796a6;
 }
-.calendar .dates .there {
+
+.calendar .dates .there 
+{
 	background: #bb87b2;
 	border-color: #d7a4c2;
 }
+
 .calendar .dates li.dpt,
-.calendar .dates li.ret {
+.calendar .dates li.ret 
+{
 	border-color: #e67bae;
 	background-color: #c5539c;
 	background-repeat: no-repeat;
@@ -117,29 +196,42 @@
 	color: #fff;
 	cursor: default;
 }
-.calendar .dates li.dpt {
+
+.calendar .dates li.dpt 
+{
 	background-image: url(/img/arrow-dpt.gif);
 }
-.calendar .dates li.ret {
+
+.calendar .dates li.ret 
+{
 	background-image: url(/img/arrow-ret.gif);
 }
+
 .calendar .dpt .dayoff,
-.calendar .ret .dayoff {
+.calendar .ret .dayoff 
+{
 	color: #fff;
 }
 
 /* Reset */
-.calendar .reset {
+.calendar .reset 
+{
 	color: #A0A0A0;
 	font-size: 70%;
 	cursor: pointer;
 }
-.calendar .reset:hover {
+
+.calendar .reset:hover 
+{
 	color: #FFF;
 }
-.calendar .reset .label {
+
+.calendar .reset .label 
+{
 	border-bottom: 1px dotted #A0A0A0;
 }
-.calendar .reset:hover .label {
+
+.calendar .reset:hover .label 
+{
 	border-color: #FFF;
 }

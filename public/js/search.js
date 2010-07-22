@@ -1,5 +1,6 @@
 
 app.search.change = function() {
+
     var data = {
         "search_type": "travel",
         "debug": 0,
