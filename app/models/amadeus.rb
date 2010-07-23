@@ -10,6 +10,7 @@ class Amadeus < Handsoap::Service
 
   end
 
+  include FileLogger
   #cattr_accessor :fake
   def self.fake=(value); $amadeus_fake=value; end
   def self.fake; $amadeus_fake; end
@@ -33,7 +34,7 @@ class Amadeus < Handsoap::Service
     args = opts[:args]
 
     if Amadeus.fake || opts[:debug] || args.try(:debug)
-      xml_string = FileLogger.read_latest(action)
+      xml_string = read_xml(action)
       response = parse_string(xml_string)
     else
       soap_body = render(action, args)
@@ -43,7 +44,7 @@ class Amadeus < Handsoap::Service
           body.set_value soap_body, :raw => true
         end
       end
-      FileLogger.save(action, response.to_xml)
+      save_xml(action, response.to_xml)
     end
 
     #if opts[:r]
@@ -123,11 +124,11 @@ class Amadeus < Handsoap::Service
       :r => "http://xml.amadeus.com/FMPTBR_09_1_1A",
       :args => args
   end
-  
+
   def pnr_add_multi_elements(args)
     soap_action 'PNR_AddMultiElements', args
   end
-  
+
   def pnr_retrieve(args, session=nil)
     soap_action 'PNR_Retrieve', args, session
   end
