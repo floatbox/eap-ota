@@ -46,7 +46,8 @@ module PricerHelper
         result[i][:times] += [s.dept_time]
       }
     }
-    result.map{|r|"#{r[:departure].city.case_from} в #{r[:times].uniq.join(', ')}" }.join(' ')
+    result.map{|r|"#{r[:departure].city.case_from} &mdash; в #{r[:times].uniq.sort.map{|t| "<a href=#><u>#{t}</u></a>" }.join(', ')}" }.join(', ')
+
   end
 
 end

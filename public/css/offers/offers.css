@@ -30,7 +30,7 @@
     {
         overflow: hidden;
 
-        padding: .2em 4px .3em 6px;
+        padding: 6px 4px 4px 6px;
 
         vertical-align: middle;
     }
@@ -83,11 +83,21 @@
     {
         overflow: hidden;
 
-        padding: 8px 2px 2px 6px;
+        padding: 8px 2px 4px 6px;
 
         vertical-align: top;
 
         border-top: 1px solid #d6d6d6;
+    }
+
+    .offers tbody td.dpt {
+    }
+
+    .offers tbody td.arv {
+    }
+
+    .offers tbody td.dpt * {
+        text-align: right;
     }
 
     .offers .extra {
@@ -106,7 +116,7 @@
     }
 
     .offers .extra-info {
-        padding: 4px 6px 2px 12px;
+        padding: 8px 6px 2px 12px;
     }
 
 
@@ -131,8 +141,6 @@
     .offers tbody h5 {
         font: normal 70% Arial,a;
 
-        display: inline-block;
-
         color: #2b2b2b;
     }
 
@@ -140,15 +148,19 @@
         color: #777;
     }
 
+    /* Перелёты и пересадки */
 
-    .offers tbody .waiting {
-        margin: .2em 0 0 0;
+    .offers tbody td.fly {
+        padding-top: 10px;
 
         text-align: center;
-        white-space: nowrap;
     }
 
-    .offers tbody .waiting a {
+    .offers tbody td.fly * {
+        text-align: center;
+    }
+
+    .offers tbody td.fly a {
         display: inline-block;
 
         width: 15px;
@@ -158,24 +170,24 @@
         background: url(/img/offers/planes.png) no-repeat 0 0;
     }
 
-    .offers tbody .waiting a:hover,
-    .offers tbody .waiting a.change:hover {
+    .offers tbody td.fly a:hover,
+    .offers tbody td.fly a.change:hover {
         background-color: yellow;
         cursor: help;
     }
 
-    .offers tbody .waiting a.change {
+    .offers tbody td.fly a.change {
         width: 16px;
         height: 16px;
 
         background: url(/img/offers/i-waiting.png) no-repeat;
     }
 
-    .offers .ow .waiting a {
+    .offers .ow td.fly a {
         background: url(/img/offers/planes.png) no-repeat 0 0;
     }
 
-    .offers .rt .waiting a {
+    .offers .rt td.fly a {
         background: url(/img/offers/planes.png) no-repeat 0 -15px;
     }
 
@@ -183,15 +195,28 @@
     /* Футер предложения */
 
     .offers tfoot td {
+        font-size: 80%;
+
         padding: 6px;
     }
 
     .offers tfoot tr.info {
         background: #cae4bc;
+        border-bottom: 1px solid #b5cda9;
     }
 
-    .offers tfoot tr.info td {
-        background: #
+    .offers tfoot .info th {
+        background: url(/img/offers/i-bulb.png) no-repeat right center;
+    }
+
+    .offers tfoot .info td {
+    }
+
+    .offers tfoot .info dl {
+    }
+
+    .offers tfoot .info dl dt {
+        font-weight: bold;
     }
 
 
