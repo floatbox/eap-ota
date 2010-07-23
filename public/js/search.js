@@ -3,7 +3,7 @@ app.search.change = function() {
 
     var data = {
         "search_type": "travel",
-        "debug": 1,
+        "debug": 0,
         "rt": 1,
         "adults": 1,
         "children": 0,
