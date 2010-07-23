@@ -15,7 +15,7 @@ module PricerHelper
   def fmt_time time
     time[0,2] + ':' + time[2,2] if time
   end
-  
+
   def fmt_date date
     [date[0,2],date[2,2],date[4,2]].join('.') if date
   end
@@ -36,4 +36,18 @@ module PricerHelper
     "(%d:%02d)" % duration.divmod(60)
   end
 
+  def variant_summary recommendation
+    result = []
+    recommendation.variants.map { |v|
+      v.segments.each_with_index{ |s, i|
+        result[i] ||= {}
+        result[i][:departure] = s.departure
+        result[i][:times] ||= []
+        result[i][:times] += [s.dept_time]
+      }
+    }
+    result.map{|r|"#{r[:departure].city.case_from} в #{r[:times].uniq.join(', ')}" }.join(' ')
+  end
+
 end
+
