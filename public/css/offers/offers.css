@@ -39,6 +39,8 @@
     {
         font: bold 22px Arial,s;
 
+        padding-left: 12px;
+
         letter-spacing: -1px;
 
         color: #cb388f;
@@ -90,6 +92,8 @@
 
     .offers .extra {
         font-size: 70%;
+
+        padding-left: 12px;
 
         color: #2b2b2b;
     }
@@ -156,7 +160,7 @@
 
     .offers tbody .waiting a:hover,
     .offers tbody .waiting a.change:hover {
-        background: yellow;
+        background-color: yellow;
         cursor: help;
     }
 
@@ -176,12 +180,18 @@
     }
 
 
-
-
     /* Футер предложения */
 
-    .offers tfoot td
-    {
+    .offers tfoot td {
+        padding: 6px;
+    }
+
+    .offers tfoot tr.info {
+        background: #cae4bc;
+    }
+
+    .offers tfoot tr.info td {
+        background: #
     }
 
 
