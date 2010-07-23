@@ -16,7 +16,7 @@ set :srv, "team.eviterra.ru"
 #set :deploy_via, :copy
 #set :repository,  "."
 
-set :repository,  "git@git.eviterra.ru:eviterra.git"
+set :repository,  "git@team.eviterra.ru:eviterra.git"
 
 role :app, srv
 role :web, srv
