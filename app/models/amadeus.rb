@@ -24,8 +24,9 @@ class Amadeus < Handsoap::Service
   def on_response_document(doc)
     doc.add_namespace 'header', 'http://webservices.amadeus.com/definitions'
     doc.add_namespace 'soap', envelope_namespace
-    # hack. works on :nokogiri driver only
-    result_namespace = (doc / '//soap:Body/*').first.instance_eval {@element.namespace.href}
+    # works on :nokogiri driver only
+    # TODO replace with .first.namespace on never handsoap
+    result_namespace = (doc / '//soap:Body/*').first.native_element.namespace.href
     doc.add_namespace 'r', result_namespace
   end
 
