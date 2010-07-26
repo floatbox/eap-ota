@@ -23,7 +23,7 @@ class Airport < ActiveRecord::Base
   default_scope :order => "importance desc"
 
   def name
-    [name_ru, name_en, iata].find(&:present?)
+    name_ru.presence || name_en.presence || iata
   end
 
   def airports

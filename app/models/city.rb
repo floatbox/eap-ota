@@ -16,7 +16,7 @@ class City < ActiveRecord::Base
   has_cases_for :name
   
   def name
-    [name_ru, name_en, iata].find(&:present?)
+    name_ru.presence ||  name_en.presence || iata
   end
   
   def typus_name
