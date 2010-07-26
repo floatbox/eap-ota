@@ -1,11 +1,11 @@
 ﻿$(function() {
 
-    var fields = app.search.fields;
+    var tools = app.search.tools;
     var url = '/complete.json';
     
     // поле "Откуда"
     
-    fields.from = $('#search-from').autocomplete({
+    tools.from = $('#search-from').autocomplete({
 
         // внешний вид
         cls: 'autocomplete-gray',
@@ -24,21 +24,22 @@
         // размеры
         height: 374
     }).focus(function() {
-        fields.from.reset.fadeOut(200);
+        tools.from.reset.fadeOut(200);
     }).change(function() {
-        app.search.change();
+        app.search.update({from: $(this).val()}, this);
     });
-    fields.from.required = true;
+    app.search.addField('from', true);
+	app.search.update({'from': tools.from.val()}, tools.from);
 
     // "подпольная" ссылка для сброса поля "Откуда"
     
-    fields.from.reset = $('#search-from-reset').click(function(e) {
-        fields.from.focus().trigger('set', '');
+    tools.from.reset = $('#search-from-reset').click(function(e) {
+        tools.from.focus().trigger('set', '');
     });
 
     // поле "Куда"
     
-    fields.to = $('#search-to').autocomplete({
+    tools.to = $('#search-to').autocomplete({
         // внешний вид
         cls: 'autocomplete',
 
@@ -57,13 +58,13 @@
         width: 340,
         height: 378
     }).change(function() {
-        app.search.change();
+        app.search.update({to: $(this).val()}, this);
     });
-    fields.to.required = true;
+    app.search.addField('to', true);    
 
     // образец содержимого поля "Куда"
     
-    var e = fields.to.example = $('#search-to-example');
+    var e = tools.to.example = $('#search-to-example');
     e.label = $('u', e);
     e.data  = e.label[0].onclick();
     e.data.current = 0;
@@ -72,7 +73,7 @@
         e.preventDefault();
         e = e.target;
 
-        if (e.tagName == 'S') with (fields.to.example) {
+        if (e.tagName == 'S') with (tools.to.example) {
             data.current = ++data.current % data.length;
             e.className = 'animate';
             window.setTimeout(function(){e.className = ''}, 300);
@@ -85,21 +86,20 @@
         };
 
         if (e.tagName == 'U') {
-            fields.to.focus();
-            fields.to.trigger('set', e.innerHTML);
+            tools.to.focus();
+            tools.to.trigger('set', e.innerHTML);
         };
     });
 
     // карта
 
-    /* Отключена на время работы с календарем
     if (YMaps) {
         var loc = YMaps.location || {},
             lat = loc.latitude || 45,
             lon = loc.longitude || 22;
 
         app.map = new app.Map({
-            el: $('#where\\.map')[0],
+            el: $('#where-map')[0],
             map: {
                 lat: lat,
                 lon: lon
@@ -107,20 +107,21 @@
         });
 
         if (loc) {
-            app.form.$from.trigger('set', loc.city);
+            app.search.tools.from.trigger('set', loc.city);
             app.map.setPoint('from', {name: 'Вы&nbsp;&mdash;&nbsp;здесь', lat: lat, lon: lon});
             // app.form.$from.trigger('keydown.autocomplete');
         };
-    }*/
+    }
     
     // Календарь
     
     var calendar = new app.Calendar("#search-calendar");
-    fields.date1 = calendar.dpt;
-    fields.date2 = calendar.ret;
-    fields.date1.required = true;
-    fields.date2.required = true;
-    
+    app.search.addField('date1', true);
+    app.search.addField('date2', function(value) {
+    	var rt = app.search.fields['rt'];
+		return value || !(rt && rt.value);
+    });
+   
     // панель уточнений (фильтров)
 
     var data = {
@@ -211,25 +212,33 @@
     var $retButton = $('#search\\.ret\\.button').button();
 
     // синхронизируем кнопку и табы
-    app.search.ret = new app.MultiField({'value': 'rt'});
-    $retButton.trigger('subscribe', app.search.ret);
-    $retTabs.trigger('subscribe', app.search.ret);
-
+    tools.rt = new app.MultiField({'value': 'rt'});
+    $retButton.trigger('subscribe', tools.rt);
+    $retTabs.trigger('subscribe', tools.rt);
+    tools.rt.subscribers.push({
+    	trigger: function(mode, v) {
+    		if (mode == 'set') {
+    			app.search.update({'rt': v == 'rt' ? 1 : 0}, tools.rt);
+    		}
+    	}
+    });
+	app.search.addField('rt');
+	app.search.update({'rt': tools.rt.value == 'rt' ? 1 : 0}, tools.rt);
 
     // вся эта хрень только для того, чтобы синхронизировать розовую рамку при ховере/фокусе
     // над табами "туда-обратно" и над полем "Куда"
         $retTabs.hover(
             function() {
-                fields.to.trigger('mouseenter');
+                tools.to.trigger('mouseenter');
             }, 
             function() {
-                fields.to.trigger('mouseleave');
+                tools.to.trigger('mouseleave');
             }
         ).click(function() {
-            fields.to.focus();
+            tools.to.focus();
         });
 
-        fields.to.hover(
+        tools.to.hover(
             function() {
                 $retTabs.addClass('return-tabs-hover');
             }, 
@@ -251,8 +260,14 @@
         $spanel.switchClass(st ? cl : '', st ? '' :cl, 300);
     });
 
+	// Сброс даты
+    app.search.subscribe(calendar, 'rt', function(v) {
+	    calendar.toggleOneway(v == 0);
+    });
+
     // фокус на поле ввода "Куда"
-    fields.to.focus();
+    tools.to.focus();
+    
 });
 
 

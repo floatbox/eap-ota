@@ -32,5 +32,6 @@ app.MultiField.prototype = {
 
     get: function() {
         return this.value;
-    }
+    },
+  
 }

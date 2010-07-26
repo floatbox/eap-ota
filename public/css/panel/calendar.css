@@ -28,8 +28,8 @@
 {
 	position: absolute;
 	top: 0;
-	left: 180px;
-	height: 20px;
+	left: 175px;
+	height: 23px;
 	background: #555;
 }
 
@@ -40,7 +40,7 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-		width: 380px;
+		width: 420px;
 		overflow: visible;
 		cursor: default;
 	}
@@ -50,7 +50,7 @@
 		position: relative;
 		z-index: 1;
 		float: left;
-		padding: 2px 0;
+		padding: 3px 0;
 		text-align: center;
 	}
 	
@@ -63,7 +63,28 @@
 	.calendar .scroller dd
 	{
 		padding-left: 8px;
-		color: #808080;
+		color: #E8E8E8;
+	}
+	
+	.calendar .scroller .overlay
+	{
+		position: absolute;
+		top: 0;
+		z-index: 1;
+		height: 20px;
+		background: #343434;
+		opacity: 0.5;
+		filter: alpha(opacity=50);
+		cursor: default;
+	}
+
+	.calendar .scroller .before {
+		left: -50px;
+		width: 50px;
+	}
+	.calendar .scroller .after {
+		left: 100%;
+		width: 90px;
 	}
 
 	/* Scrollbar */
