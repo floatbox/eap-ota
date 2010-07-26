@@ -47,7 +47,7 @@ app.search.send = function(data) {
     }
     for (var key in this.fields) {
 		var field = this.fields[key];
-        if (field.required && !(field.check ? field.check() : field.value)) return;
+        if (field.required && !(field.check ? field.check(field.value) : field.value)) return;
         data[key] = field.value;
     }
     app.offers.showLoader(data);
