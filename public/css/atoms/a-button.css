@@ -14,9 +14,9 @@ a.a-button {
     background-color: #8bb617;
 
     border: 1px solid #7ea613;
-    border-radius: .4em;
-    -moz-border-radius: .4em;
-    -webkit-border-radius: .4em;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
 
     background-image: linear-gradient(top, #9ed01a, #739615);
     background-image: -moz-linear-gradient(top, #9ed01a, #739615);
