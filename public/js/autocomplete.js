@@ -203,11 +203,13 @@ $.Autocompleter = function(input, options) {
                
             case KEY.TAB: 
             case KEY.ENTER:
+                // stop default to prevent a form submit, Opera needs special handling
+                event.preventDefault();
+                blockSubmit = true;
                 if( insert() ) {
-                    // stop default to prevent a form submit, Opera needs special handling
-                    event.preventDefault();
-                    blockSubmit = true;
                     return false;
+                } else {
+			        $el.trigger('enter');
                 }
                 break;
                 
@@ -407,7 +409,7 @@ $.Autocompleter = function(input, options) {
         // если автоподстановка, то список не прячем
         params.autoFill || hideResultsNow();
 
-        // ============================ $el.trigger('change', $el.val());
+        $el.trigger('enter');
         return true;
     };
 

@@ -25,7 +25,7 @@
         height: 374
     }).focus(function() {
         tools.from.reset.fadeOut(200);
-    }).change(function() {
+    }).bind('enter', function() {
         app.search.update({from: $(this).val()}, this);
     });
     app.search.addField('from', true);
@@ -57,7 +57,7 @@
         // размеры
         width: 340,
         height: 378
-    }).change(function() {
+    }).bind('enter', function() {
         app.search.update({to: $(this).val()}, this);
     });
     app.search.addField('to', true);    

@@ -173,14 +173,18 @@
 
 .calendar .dates li.hl 
 {
-	background: #b6a1be;
+	background: #b898b5;
 	border-color: #cfb9cc;
+}
+.calendar .odd li.hl 
+{
+	background: #c09eb9;
 }
 
 .calendar .dates li.hover,
 .calendar .dates li:hover 
 {
-	background: #bd7dae;
+	background: #cb70a2;
 	border-color: #da9cbe;
 }
 
@@ -203,8 +207,12 @@
 
 .calendar .dates .there 
 {
-	background: #bb87b2;
+	background: #c280a9;
 	border-color: #d7a4c2;
+}
+.calendar .odd .there 
+{
+	background: #c785ad;
 }
 
 .calendar .dates li.dpt,
