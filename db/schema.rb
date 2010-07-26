@@ -9,18 +9,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100706140705) do
+ActiveRecord::Schema.define(:version => 20100726141010) do
 
   create_table "airlines", :force => true do |t|
     t.string   "en_shortname"
+    t.string   "en_longname"
     t.string   "iata"
+    t.string   "icao"
     t.string   "country_ru"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "country_id"
-    t.string   "en_longname"
     t.string   "ru_shortname"
     t.string   "ru_longname"
+    t.boolean  "aviacentr",    :default => false, :null => false
   end
 
   create_table "airplanes", :force => true do |t|
