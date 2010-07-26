@@ -1,0 +1,98 @@
+.book {
+    clear: both;
+    overflow: hidden;
+    zoom: 1;
+}
+
+.book dt {
+    font: bold 22px Arial,s;
+
+    padding: 1em 0 .2em;
+    margin: 0 15px .5em 15px;
+
+    color: #333;
+    border-bottom: 2px solid;
+}
+
+.book dt b {
+    padding: 6px;
+    margin: 0 .4em 0 0;
+
+    color: #fff;
+    background: #333;
+    border-radius-topleft: 10px;
+    -moz-border-radius-topleft: 10px;
+    -webkit-border-radius-topleft: 10px;
+}
+
+.book dd {
+}
+
+/* Подсказка */
+
+.book dd.info {
+    font: 70% Arial,s;
+
+    float: left;
+    overflow: hidden;
+
+    width: 210px;
+    padding: 0 15px;
+
+    color: #777;
+}
+
+/* Содержимое блока */
+
+.book dd.body {
+    float: right;
+    overflow: hidden;
+
+    width: 689px;
+    padding: 0 15px;
+
+    border-left: 1px solid #777;
+}
+
+/* Кнопка(и) действия */
+
+.book dd.action {
+    float: right;
+}
+
+/* Элементы содержимого */
+
+.book dd.body h1 {
+    font: bold 100% Arial,s;
+
+    color: #333;
+}
+
+.book dd.body .tarif {
+    font: bold 100% Arial,s;
+
+    color: #333;
+}
+
+
+/* Модификация предложения */
+
+.book dd.body .offers {
+    margin-left: 0;
+}
+
+.book .offers thead th i {
+    font-weight: normal;
+
+    color: #4a4a4a;
+}
+
+.book .offers thead th p {
+    font: normal 18px Arial,s;
+
+    margin: .5em 0 0 5.6em;
+}
+
+.book .offers thead th p * {
+    font-weight: normal;
+}

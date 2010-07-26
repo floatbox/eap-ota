@@ -2,39 +2,39 @@
     <% if variant.common_carrier && variant.segments.length > 1 %>
         <% if segment_counter == 0 %>
             <td rowspan=<%= variant.segments.length %> class="extra g-middle">
-                <p><%= segment.marketing_carrier_name %>
+                <p style="background:url(/img/system/airlines/<%= segment.marketing_carrier.iata %>.gif) no-repeat"><%= segment.marketing_carrier_name %>
         <% end %>
     <% else %>
         <td class="extra">
-            <p><%= segment.marketing_carrier_name %>
+            <p style="background:url(/img/system/airlines/<%= segment.marketing_carrier.iata %>.gif) no-repeat"><%= segment.marketing_carrier_name %>
     <% end %>
 
-    <td>
+    <td class="dpt">
         <h3><%= fmt_time( segment.departure_time ) %><!--<%= fmt_date( segment.departure_date ) %>--></h3>
-        <h4><%= segment.departure_name %></h4>
+        <h4><%= segment.departure.city.name %>, <%= segment.departure_name %></h4>
         <% if segment.departure_term %>
             <h5 class="light">Терминал <%= segment.departure_term %></h5>
         <% end %>
-    <td>
-        <h5><%= human_duration(segment.total_duration) %> в пути</h5>
-        <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
-            <% if layover %>
-                <h5 class="light"><%= human_duration(layover) %> между рейсами</h5>
-            <% end %>
-        <% end %>
 
-        <div class="waiting">
+    <td class="fly">
         <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
-            <a href=# title="Рейс <%= flight.operating_carrier_iata %>&nbsp;<%= flight.flight_number %> <%= flight.departure.city.name %> &mdash; <%= flight.arrival.city.name %>, <%= human_duration(flight.duration) %> в воздухе на <%= flight.equipment_type_name %>"></a>
+            <a href=# title="Рейс <%= flight.operating_carrier_iata %>&nbsp;<%= flight.flight_number %> <%= flight.departure.city.name %> &mdash; <%= flight.arrival.city.name %>, <%= human_duration(flight.duration) %> в пути на <%= flight.equipment_type_name %>"></a>
             <% if layover %>
                 <a href=# title="Пересадка в <%= flight.arrival.city.name %> длиной <%= human_duration(layover) %>" class="change"></a>
             <% end %>
         <% end %>
-        </div>
 
-    <td>
+        <h5><%= human_duration(segment.total_duration) %> в пути</h5>
+
+        <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
+            <% if layover %>
+                <h5 class="light">пересадка <%= human_duration(layover) %></h5>
+            <% end %>
+        <% end %>
+
+    <td class="arv">
         <h3><%= fmt_time( segment.arrival_time ) %><!--<%= fmt_date( segment.arrival_date ) %>--></h3>
-        <h4><%= segment.arrival_name %></h4>
+        <h4><%= segment.arrival.city.name %>, <%= segment.arrival_name %></h4>
         <% if segment.arrival_term %>
             <h5 class="light">Терминал <%= segment.arrival_term %></h5>
         <% end %>

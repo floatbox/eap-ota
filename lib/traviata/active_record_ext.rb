@@ -86,15 +86,15 @@ module Traviata
       end
 
       def case_to
-        proper_to.present? ? proper_to : guessed_to
+        proper_to.presence || guessed_to
       end
 
       def case_from
-        proper_from.present? ? proper_from : guessed_from
+        proper_from.presence || guessed_from
       end
 
       def case_in
-        proper_in.present? ? proper_in : guessed_in
+        proper_in.presence || guessed_in
       end
 
       def case_to=(str)

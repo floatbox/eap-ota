@@ -5,6 +5,6 @@ class Airplane < ActiveRecord::Base
 
 
   def name
-    [name_ru, name_en, iata].find(&:present?)
+    name_ru.presence || name_en.presence || iata
   end
 end

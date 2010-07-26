@@ -11,7 +11,11 @@ class Airline < ActiveRecord::Base
   belongs_to :country
 
   def name
-    [ru_longname, ru_shortname,  en_longname, en_shortname, iata].find(&:present?)
+    ru_longname.presence ||
+      ru_shortname.presence ||
+      en_longname.presence ||
+      en_shortname.presence ||
+      iata
   end
 
   def icon_url
@@ -19,7 +23,7 @@ class Airline < ActiveRecord::Base
   end
   
   def short_name
-    [ru_shortname, en_shortname].find(&:present?)
+    ru_shortname.presence || en_shortname
   end
 
 end
