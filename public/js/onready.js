@@ -117,8 +117,8 @@
     var calendar = new app.Calendar("#search-calendar");
     app.search.addField('date1', true);
     app.search.addField('date2', function(value) {
-    	var rt = app.search.fields['rt'];
-		return value || !(rt && rt.value);
+        var rt = app.search.fields['rt'];
+        return value || !(rt && rt.value);
     });
     app.search.subscribe(calendar, 'rt', function(v) {
 	    calendar.toggleOneway(v == 0);
@@ -204,7 +204,6 @@
 
 
     // верхние табы
-
     $('#search\\.mode').radio();
 
     
@@ -218,14 +217,13 @@
     $retButton.trigger('subscribe', tools.rt);
     $retTabs.trigger('subscribe', tools.rt);
     tools.rt.subscribers.push({
-    	trigger: function(mode, v) {
-    		if (mode == 'set') {
-    			app.search.update({'rt': v == 'rt' ? 1 : 0}, tools.rt);
-    		}
-    	}
+        trigger: function(mode, v) {
+            if (mode == 'set') {
+                app.search.update({'rt': v == 'rt' ? 1 : 0}, tools.rt);
+            }
+        }
     });
-	app.search.addField('rt');
-	app.search.update({'rt': tools.rt.value == 'rt' ? 1 : 0}, tools.rt);
+    app.search.addField('rt', false, tools.rt.value == 'rt' ? 1 : 0);
 
     // вся эта хрень только для того, чтобы синхронизировать розовую рамку при ховере/фокусе
     // над табами "туда-обратно" и над полем "Куда"

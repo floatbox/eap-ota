@@ -28,11 +28,11 @@ app.search.update = function(data, source) {
     	}
     }
     if (updated) {
-	    var self = this;
-	    this.sendTimer = setTimeout(function() {
-    		self.send();
-	    }, 250);
-	}
+        var self = this;
+        this.sendTimer = setTimeout(function() {
+            self.send();
+        }, 250);
+    }
 };
 app.search.callbacks = {};
 app.search.subscribe = function(source, key, handler) {
@@ -45,14 +45,14 @@ app.search.subscribe = function(source, key, handler) {
 app.search.send = function(data) {
     var data = {
         "search_type": "travel",
-        "debug": 0,
+        "debug": 1,
         "adults": 1,
         "children": 0,
         "nonstop": 0,
         "day_interval": 1
     }
     for (var key in this.fields) {
-		var field = this.fields[key];
+        var field = this.fields[key];
         if (field.required && !(field.check ? field.check(field.value) : field.value)) return;
         data[key] = field.value;
     }
@@ -73,15 +73,15 @@ app.offers.showLoader = function(data) {
     // Заполнение заголовка, пока не сделаем аяксовое
     var monthes = app.constant.MNg;
     if (data.rt) {
-	    var d1 = Date.parseAmadeus(data.date1);
-	    var d2 = Date.parseAmadeus(data.date2);
-	    var words = [d1.getDate(), monthes[d1.getMonth()], d2.getDate(), monthes[d2.getMonth()]];
-	    if (words[1] == words[3]) words[1] = "по"; else words[1] += " по";
-	    $("#offers\\.transcript s").html(data.from + " &rarr; " + data.to + " и&nbsp;обратно c " + words.join(" "));
-	} else {
-	    var d1 = Date.parseAmadeus(data.date1);	
-	    $("#offers\\.transcript s").html(data.from + " &rarr; " + data.to + " " + d1.getDate() + ' ' + monthes[d1.getMonth()]);
-	}
+        var d1 = Date.parseAmadeus(data.date1);
+        var d2 = Date.parseAmadeus(data.date2);
+        var words = [d1.getDate(), monthes[d1.getMonth()], d2.getDate(), monthes[d2.getMonth()]];
+        if (words[1] == words[3]) words[1] = "по"; else words[1] += " по";
+        $("#offers\\.transcript s").html(data.from + " &rarr; " + data.to + " и&nbsp;обратно c " + words.join(" "));
+    } else {
+        var d1 = Date.parseAmadeus(data.date1); 
+        $("#offers\\.transcript s").html(data.from + " &rarr; " + data.to + " " + d1.getDate() + ' ' + monthes[d1.getMonth()]);
+    }
 
     $("#offers\\.transcript").removeClass("g-none");
     $("#offers\\.loader").removeClass("g-none");
@@ -101,6 +101,6 @@ app.offers.showLoader = function(data) {
 };
 
 app.offers.update = function(s) {
-	$("#offers").html(s).removeClass("g-none");
+    $("#offers").html(s).removeClass("g-none");
 };
 

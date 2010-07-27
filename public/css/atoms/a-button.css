@@ -10,13 +10,24 @@ a.a-button {
     -khtml-user-select: none;
     user-select: none;
 
-    color: #eee;
+    color: #333;
     background-color: #8bb617;
 
-    border: 1px solid #7ea613;
+    border: 1px solid #ccc;
     border-radius: 4px;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
+
+    background-image: linear-gradient(top, #fff, #ccc);
+    background-image: -moz-linear-gradient(top, #fff, #ccc);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));
+}
+
+.hover a.a-button {
+    color: #eee;
+    background-color: #8bb617;
+
+    border: 1px solid #ccc;
 
     background-image: linear-gradient(top, #9ed01a, #739615);
     background-image: -moz-linear-gradient(top, #9ed01a, #739615);
@@ -37,3 +48,5 @@ a.a-button:active {
 
     padding: .45em .35em .35em .45em;
 }
+
+
