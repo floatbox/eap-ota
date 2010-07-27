@@ -6,7 +6,7 @@ app.search.getField = function(key) {
 app.search.addField = function(key, check, value) {
 	return this.fields[key] = {
 		value: value,
-		required: check != undefined,
+		required: Boolean(check),
 		check: typeof check == 'function' && check,
 	};
 }
@@ -53,7 +53,9 @@ app.search.send = function(data) {
     }
     for (var key in this.fields) {
         var field = this.fields[key];
-        if (field.required && !(field.check ? field.check(field.value) : field.value)) return;
+        if (field.required && !(field.check ? field.check(field.value) : field.value)) {
+        	return;
+        }
         data[key] = field.value;
     }
     app.offers.showLoader(data);
