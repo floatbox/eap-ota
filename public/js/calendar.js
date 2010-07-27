@@ -28,6 +28,7 @@ app.CalendarDate = function(type, parent) {
     this.parent = parent;
     this.type = type;
     this.date = null;
+   	return this;
 }
 app.CalendarDate.prototype = {
 val: function(date) {
@@ -50,6 +51,125 @@ select: function(el, stealth) {
 }
 };
 
+/* Calendar scroll */
+app.CalendarScroller = function(parent) {
+    this.parent = parent;
+    this.init();
+	return this;
+}
+app.CalendarScroller.prototype = {
+init: function() {
+	this.el = this.parent.dates;
+    this.rheight = $(this.parent.days[0]).outerHeight();
+	this.active = true;
+    this.factor = 1.5
+	this.initNative();
+	this.initTimeline();
+	this.initScrollbar();
+	this.initArrows();
+},
+snap: function(y) {
+    return Math.round(y / this.rheight) * this.rheight;
+},
+scrollTo: function(nst) {
+	var self = this, el = this.el, cst = el.scrollTop();
+	if (cst == nst) return;
+	$({st: cst}).animate({st: nst}, {
+		duration: 100 + Math.round(Math.abs(cst - nst) / 3),
+		step: function() {
+			el.scrollTop(this.st);
+		},
+		complete: function() {
+			el.scrollTop(nst);
+		}
+	});
+},
+initNative: function() {
+	var self = this, atimer, pst;
+	var cst = this.el.scrollTop();
+	var align = function() {
+		self.scrollTo(self.snap(cst + 15 * (cst - pst).constrain(-1, 1)));
+	};
+	this.el.scroll(function() {
+		clearTimeout(atimer);
+		pst = cst;
+		cst = $(this).scrollTop();
+		if (self.active) {
+			self.display(cst);
+			atimer = setTimeout(align, 500);
+		}
+	});
+},
+initArrows: function() {
+	var self = this, stimer, cst, dir, vel;
+	$('.scrollfw, .scrollbw', this.parent.el).mousedown(function(event) {
+		event.preventDefault();
+		dir = $(this).is(".scrollfw") ? 1 : -1;
+		cst = self.el.scrollTop();
+		vel = 0;
+		stimer = setInterval(function() {
+			if (vel < 15) vel++;
+			self.el.scrollTop(cst + dir * vel);
+			cst = self.el.scrollTop();
+			self.display(cst);
+		}, 30);
+	}).bind("mouseout mouseup", function() {
+		clearInterval(stimer);
+		if (dir) {
+			self.scrollTo(self.snap(cst + (30 - vel) * dir));		
+			dir = 0;
+		}
+	});
+},
+initTimeline: function() {
+	var self = this, year, days = this.parent.days;
+	this.scroller = $('.scroller', this.parent.el).width(Math.round(days.length * self.factor));
+	this.timeline = $('.timeline', this.scroller).hide().html('');
+	$('.month', this.el).each(function() {
+		year = $(this).data('year');
+		var mn = $(this).data('month');
+		var mw = Math.round(Date.daysInMonth(mn, year) * self.factor);
+		var mtitle = $('<dt>').addClass('month').width(mw).text(app.constant.SMN[mn]);
+		self.timeline.append(mtitle);
+	});
+	var offset = 1 - parseInt(days[0].children('span').text(), 10);
+	this.timeline.append($('<dd>').text(year));
+	this.timeline.css('left', Math.round(offset * self.factor)).show();
+},
+initScrollbar: function() {
+	var self = this;
+	var sbw = 42 * this.factor;
+	var sbf = 7 * this.factor / this.rheight;
+	var sbm = this.scroller.width() - sbw;
+	var scrollbar = $('.scrollbar', this.scroller).width(sbw);
+	this.display = function(st) {
+		scrollbar.css("left", Math.round(st * sbf));
+	}
+	this.scroller.mousedown(function(event) {
+		event.preventDefault();
+		var dragfrom = event.pageX;
+		var sboffset = dragfrom - scrollbar.offset().left;
+		if (sboffset > 0 && sboffset < sbw) {
+			self.active = false;
+			var sborigin = scrollbar.position().left;
+			var drag = function(event) {
+				var sbl =  (sborigin + event.pageX - dragfrom).constrain(0, sbm);
+				scrollbar.css('left', sbl);
+				self.el.scrollTop(sbl / sbf);
+			};
+			$(window).mousemove(drag).one('mouseup', function() {
+				$(window).unbind('mousemove', drag);
+				self.active = true;
+				self.scrollTo(self.snap(self.el.scrollTop()));
+			});
+		}
+	}).click(function(event) {
+		var x = event.pageX - $(this).offset().left - sbw / 2;
+		self.scrollTo(self.snap(x.constrain(0, sbm) / sbf));
+	});		
+}
+};
+
 /* Calendar */
 app.Calendar = function(selector) {
     this.el = $(selector);
@@ -61,16 +181,19 @@ init: function() {
 	var self = this;
 	this.dpt = new app.CalendarDate("dpt", this);
 	this.ret = new app.CalendarDate("ret", this);
-	var counter = 0, days = [];
+	this.oneway = false;
+	this.hlable = false;
+	this.makeDates();
 	this.initDates();
-	this.initScroller();
-	$('.panel-reset', this.el).click(function() {
+	this.scroller = new app.CalendarScroller(this);
+	$('.panel-reset', this.el.parent()).click(function(event) {
+		event.preventDefault();
 		self.dpt.select(undefined, true);
 		self.ret.select(undefined, true);
 		self.update();
 	});
 },
-initDates: function() {
+makeDates: function() {
 	this.dates = $('.dates', this.el).hide().html('');
 	var today = new Date();
 	var cd = today.clone().shift(1 - (today.getDay() || 7));
@@ -100,12 +223,16 @@ initDates: function() {
 		ct = cd.shift(1).getTime();
 	}
 	$('.month:odd', this.dates).addClass('odd');
-	var self = this;
 	this.days = days;
+},
+initDates: function() {
+	var self = this;
 	this.dates.show().delegate('li:not(.inactive)', 'click', function() {
 		if (self.dpt.el && self.ret.el) {
 			self.nearest(this).select(this);
-		} else if (self.dpt.el) {
+		} else if (self.oneway || !self.dpt.el) {
+			self.dpt.select(this);
+		} else {
 			var n = $(this).data("index");
 			if (n < self.dpt.index) {
 				self.ret.select(self.days[self.dpt.index], true);
@@ -113,78 +240,12 @@ initDates: function() {
 			} else {
 				self.ret.select(this);
 			}
-		} else {
-			self.dpt.select(this);
 		}
 	}).delegate('li:not(.inactive)', 'mouseover', function() {
-		if (self.dpt.el || self.ret.el) self.highlight(this);
+		if (self.hlable) self.highlight(this);
 	}).mouseout(function() {
-		self.highlight();
+		if (self.hlable) self.highlight();
 	});
-},
-initScroller: function() {
-	var factor = 1.5;
-	var scroller = $('.scroller', this.el).width(Math.round(this.days.length * factor));
-	var list = $('.timeline', scroller).hide().html(''), year;
-	$('.month', this.dates).each(function() {
-		var m = $(this).data('month');
-		var y = $(this).data('year');
-		var w = Math.round(Date.daysInMonth(m, y) * factor);
-		var month = $('<dt>').addClass('month').width(w);
-		month.text(app.constant.SMN[m]).appendTo(list);
-		year = y;
-	});
-	$('<dd>').text(year).appendTo(list);
-	var offset = 1 - parseInt(this.days[0].children('span').text(), 10);
-	list.css('left', Math.round(offset * factor)).show();
-	var self = this, cancel = function(event) {
-		event.preventDefault();
-	};
-	this.rowHeight = $(this.days[0]).outerHeight();
-	this.lastst = this.dates.scrollTop();
-	$('.scrollfw').click(function() {
-		self.scroll(self.lastst + self.rowHeight);
-	}).mousedown(cancel);
-	$('.scrollbw').click(function(event) {
-		self.scroll(self.lastst - self.rowHeight);
-	}).mousedown(cancel);
-	var btimer, self_bring = function() {
-		self.bring();
-	};
-	var scrollbar = $('.scrollbar', this.el).width(42 * factor);
-	var sbfactor = 7 * factor / self.rowHeight;
-	var sblmax = scroller.width() - scrollbar.width();
-	this.dates.scroll(function() {
-		clearTimeout(btimer);
-		if (self.dragfrom === undefined) {
-			scrollbar.css('left', Math.round($(this).scrollTop() * sbfactor));
-			btimer = setTimeout(self_bring, 500);
-		}
-	});
-	scroller.click(function(event) {
-		this.dragfrom = undefined;
-		var w = scrollbar.width();
-		var x = event.pageX - $(this).offset().left - w / 2;
-		self.scroll(Math.round(x.constrain(0, sblmax) / (factor * 7)) * self.rowHeight);
-	}).mousedown(function(event) {
-		event.preventDefault();
-		var sborigin = scrollbar.position().left;
-		var x = event.pageX - $(this).offset().left - sborigin;
-		if (x > 0 && x < scrollbar.width()) {
-			self.dragfrom = event.pageX;
-			var drag = function(event) {
-				var dx = event.pageX - self.dragfrom;
-				var sbl =  (sborigin + dx).constrain(0, sblmax);
-				scrollbar.css('left', sbl);
-				self.dates.scrollTop(sbl / sbfactor);
-			};
-			$(window).mousemove(drag).one('mouseup', function() {
-				$(window).unbind('mousemove', drag);
-				self.dragfrom = undefined;
-				self.bring();
-			});
-		}
-	});	
 },
 nearest: function(el) {
 	if (this.dpt.el && this.ret.el) {
@@ -203,7 +264,11 @@ nearest: function(el) {
 update: function() {
     this.fill();
     this.highlight();
-    app.search.change();
+    this.hlable = !this.oneway && (this.dpt.el || this.ret.el);
+    app.search.update({
+    	date1: this.dpt.val(),
+    	date2: this.ret.val()
+    }, this);
 },
 fill: function() {
     $(".there", this.el).removeClass("there");
@@ -225,28 +290,16 @@ highlight: function(el) {
         }   
     }
 },
-bring: function() {
-    var curst = this.dates.scrollTop();
-    var extst = curst + 15 * (curst - this.lastst).constrain(-1, 1);
-    var newst = Math.round(extst / this.rowHeight) * this.rowHeight;
-    this.scroll(newst);
-},
-scroll: function(newst) {
-	var self = this, el = this.dates, curst = el.scrollTop();
-	if (curst == newst) {
-		self.lastst = curst;
-		return;
+toggleOneway: function(mode) {
+	this.oneway = mode;
+	if (mode && this.ret.el) {
+		this.savedRet = this.ret.el;
+		this.ret.select();
 	}
-	$({st: curst}).animate({st : newst}, {
-		duration: 150 + Math.round(Math.abs(curst - newst) / 3),
-		step: function() {
-			el.scrollTop(this.st);
-		},
-		complete: function() {
-			el.scrollTop(newst);
-			self.lastst = el.scrollTop();
-		}
-	});
+	if (!mode && this.savedRet) {
+		this.ret.select(this.savedRet);
+		this.savedRet = undefined;
+	}
 }
 };
 
