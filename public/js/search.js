@@ -1,11 +1,13 @@
 app.search.tools = {};
 app.search.fields = {};
-app.search.addField = function(key, check) {
-	this.fields[key] = {
-		value: undefined,
+app.search.getField = function(key) {
+	return this.fields[key] || this.addField(key);
+};
+app.search.addField = function(key, check, value) {
+	return this.fields[key] = {
+		value: value,
 		required: check != undefined,
 		check: typeof check == 'function' && check,
-		callbacks: []
 	};
 }
 app.search.update = function(data, source) {
@@ -13,11 +15,14 @@ app.search.update = function(data, source) {
     var updated = false;
     for (var key in data) {
     	var value = data[key];
-		var field = this.fields[key];
-    	if (field && value != field.value) {
+		var field = this.getField(key);
+    	if (value != field.value) {
     		field.value = value;
-    		for (var i = 0; cb = field.callbacks[i]; i++) {
-    			if (cb.source != source) cb.handler(value);
+    		var callbacks = this.callbacks[key];
+    		if (callbacks) {
+	    		for (var i = 0; cb = callbacks[i]; i++) {
+	    			if (cb.source != source) cb.handler(value);
+	    		}
     		}
     		updated = true;
     	}
@@ -29,9 +34,10 @@ app.search.update = function(data, source) {
 	    }, 250);
 	}
 };
+app.search.callbacks = {};
 app.search.subscribe = function(source, key, handler) {
-	var field = this.fields[key];
-	if (field) field.callbacks.push({
+	var callbacks = this.callbacks[key] || (this.callbacks[key] = []);
+	callbacks.push({
 		source: source,
 		handler: handler
 	});

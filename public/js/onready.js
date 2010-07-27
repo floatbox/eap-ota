@@ -28,8 +28,7 @@
     }).bind('enter', function() {
         app.search.update({from: $(this).val()}, this);
     });
-    app.search.addField('from', true);
-	app.search.update({'from': tools.from.val()}, tools.from);
+    app.search.addField('from', true, tools.from.val());
 
     // "подпольная" ссылка для сброса поля "Откуда"
     
@@ -120,6 +119,9 @@
     app.search.addField('date2', function(value) {
     	var rt = app.search.fields['rt'];
 		return value || !(rt && rt.value);
+    });
+    app.search.subscribe(calendar, 'rt', function(v) {
+	    calendar.toggleOneway(v == 0);
     });
    
     // панель уточнений (фильтров)
@@ -258,11 +260,6 @@
     $('.panel-switch', $spanel).click(function() {
         var cl = 'collapsed', st = $spanel.hasClass(cl);
         $spanel.switchClass(st ? cl : '', st ? '' :cl, 300);
-    });
-
-	// Сброс даты
-    app.search.subscribe(calendar, 'rt', function(v) {
-	    calendar.toggleOneway(v == 0);
     });
 
     // фокус на поле ввода "Куда"
