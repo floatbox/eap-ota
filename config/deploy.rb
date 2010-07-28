@@ -40,7 +40,7 @@ end
 
 namespace :bundle do
   task :install do
-    run "cd #{release_path} && bundle install --without test"
+    run "cd #{release_path} && bundle install --without=test --without=console --without=development --without=debug --without=profile"
   end
 end
 

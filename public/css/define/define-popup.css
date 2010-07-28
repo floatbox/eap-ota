@@ -60,51 +60,11 @@
     border-right: 1px solid #555;
 }
 
-/* разворачивающая ссылка в заголовке */
+/* пригашенное состояния */
 
-.define-popup dt a.collapse {
-    color: #f2cd1f;
-    border-bottom: 2px dotted;
-    top: -.08em;
-
-    margin: 0 18px 0 0;
-}
-
-.define-popup dt a.collapse u {
-    top: .08em;
-}
-
-.define-popup dt a.collapse:hover {
-    color: #f5db61;
-}
-
-.define-popup dt a.collapse s
-{
-    position: absolute;
-    right: -18px;
-    top: 50%;
-
-    width: 11px;
-    height: 6px;
-
-    border: 0;
-    background: url(/img/arr-up-down.gif) no-repeat right top;
-}
-
-.define-popup dl.collapsed dt a.collapse s
-{
-    background-position: right bottom;
-}
-
-/* свёрнутое-развёрнутое состояния */
-
-.define-popup dl.collapsed dd {
-    display: none;
-}
-
-.define-popup dl.collapsed:hover dd {
+.define-popup dl.fade {
     display: block;
-    opacity: 0.1;
+    opacity: 0.3;
     filter: alpha(opacity=10);
 }
 

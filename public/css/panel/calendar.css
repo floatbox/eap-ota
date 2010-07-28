@@ -181,13 +181,6 @@
 	background: #c09eb9;
 }
 
-.calendar .dates li.hover,
-.calendar .dates li:hover 
-{
-	background: #cb70a2;
-	border-color: #da9cbe;
-}
-
 .calendar .dates li.inactive {
 	color: #9da5b0;
 	cursor: default;
@@ -216,25 +209,59 @@
 }
 
 .calendar .dates li.dpt,
+.calendar .dates li.ret,
+.calendar .dates li.dpthover,
+.calendar .dates li.rethover {
+	background: url(/img/date-arrows.png) no-repeat;
+}
+
+.calendar .dates li.dpthover,
+.calendar .dates li.rethover 
+{
+	background-color: #cb70a2;
+	border-color: #da9cbe;
+}
+
+.calendar .dates li.dpthover
+{
+	background-position: 64px 14px;
+}
+
+.calendar .dates li.rethover
+{
+	background-position: 64px -106px;
+}
+
+.calendar .dates li.dpt,
 .calendar .dates li.ret 
 {
 	border-color: #e67bae;
 	background-color: #DC3F8A;
 	background-repeat: no-repeat;
-	background-position: 64px 14px;
 	color: #fff;
 	cursor: default;
 }
 
 .calendar .dates li.dpt 
 {
-	background-image: url(/img/arrow-dpt.gif);
+	background-position: 64px -46px;
 }
 
 .calendar .dates li.ret 
 {
-	background-image: url(/img/arrow-ret.gif);
+	background-position: 64px -166px;
 }
+
+.calendar .dates li.dpt.rethover
+{
+	background-position: 64px -226px;
+}
+
+.calendar .dates li.dpt.ret
+{
+	background-position: 64px -286px;
+}
+
 
 .calendar .dpt .dayoff,
 .calendar .ret .dayoff 

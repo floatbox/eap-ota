@@ -58,9 +58,12 @@
 
 .book dd.action {
     float: right;
+
+    padding: 25px 15px 15px 0;
 }
 
 /* Элементы содержимого */
+/* Заголовок */
 
 .book dd.body h1 {
     font: bold 100% Arial,s;
@@ -68,17 +71,94 @@
     color: #333;
 }
 
+/* Сведения о тарифе */
 .book dd.body .tarif {
-    font: bold 100% Arial,s;
-
     color: #333;
 }
 
+.book dd.body .tarif ul {
+    font-size: 80%;
+
+    margin: .2em 0 0 15px;
+
+    list-style: circle;
+}
+
+.book dd.body .tarif pre {
+    font: normal 80% Courier,monospace;
+
+    height: 18em;
+    margin: .5em 0;
+    padding: 5px;
+    overflow: scroll;
+
+    color: #333;
+    background: #fff;
+    border: 1px solid #777; 
+}
+
+.book dd.body .more {
+    display: inline-block;
+    margin: .5em 0 0 0;
+
+    color: #1f64be;
+}
+
+.book dd.body .more u {
+    font: bold 80% Arial,s;
+}
+
+.book dd.body .more s
+{
+    width: 11px;
+    height: 6px;
+    position: absolute;
+    right: -16px;
+    top: 55%;
+    border: 0;
+    background: url(/img/arr-up-down.gif) no-repeat -58px bottom;
+}
+
+.book dd.body .more:hover s
+{
+    background-position: 0 bottom;
+}
+
+.book dd.body .more-collapsed s
+{
+    background-position: -58px top;
+}
+
+.book dd.body .more-collapsed:hover s
+{
+    background-position: left top;
+}
+
+/* Песочные часы */
+.book dd.sand {
+    padding-bottom: 130px;
+
+    background: url(/img/sand.gif) no-repeat center bottom;    
+}
+
+.book dd.sand p.sand {
+    font-weight: bold;
+
+    margin: 1em 0 0 0;
+    
+    text-align: center;
+
+    color: #000;
+}
 
 /* Модификация предложения */
 
 .book dd.body .offers {
     margin-left: 0;
+}
+
+.book dd.body .offers table {
+    margin: 0;
 }
 
 .book .offers thead th i {
@@ -88,9 +168,9 @@
 }
 
 .book .offers thead th p {
-    font: normal 18px Arial,s;
+    font: normal 16px Arial,s;
 
-    margin: .5em 0 0 5.6em;
+    margin: .5em 0 0 5.5em;
 }
 
 .book .offers thead th p * {

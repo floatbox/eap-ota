@@ -47,6 +47,7 @@ select: function(el, stealth) {
     if (this.el) this.el.removeClass(this.type);
     this.el = el && $(el).addClass(this.type);
     this.index = el ? this.el.data("index") : undefined;
+    if (el && this.parent.savedRet) this.parent.savedRet = null;
     if (!stealth) this.parent.update();
 }
 };
@@ -242,7 +243,12 @@ initDates: function() {
 			}
 		}
 	}).delegate('li:not(.inactive)', 'mouseover', function() {
+		var both = self.dpt.el && self.ret.el;
+		var type = both ? self.nearest(this).type : (self.oneway || !self.dpt.el ? 'dpt' : 'ret');
+		$(this).addClass(type + 'hover');
 		if (self.hlable) self.highlight(this);
+	}).delegate('li:not(.inactive)', 'mouseout', function() {
+		$(this).removeClass('dpthover rethover');
 	}).mouseout(function() {
 		if (self.hlable) self.highlight();
 	});
@@ -252,7 +258,7 @@ nearest: function(el) {
 		var index = $(el).data('index');
 		var dd = Math.abs(this.dpt.index - index);
 		var dr = Math.abs(this.ret.index - index);
-		return (dd < dr) ? this.dpt : this.ret;	
+		return (index < this.dpt.index || dd < dr) ? this.dpt : this.ret;	
 	} else if (this.dpt.el) {
 		return this.dpt;
 	} else if (this.ret.el) {
