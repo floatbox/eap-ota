@@ -1,16 +1,17 @@
-app.search.tools = {};
-app.search.fields = {};
-app.search.getField = function(key) {
+$.extend(app.search, {
+tools: {},
+fields: {},
+getField: function(key) {
 	return this.fields[key] || this.addField(key);
-};
-app.search.addField = function(key, check, value) {
+},
+addField: function(key, check, value) {
 	return this.fields[key] = {
 		value: value,
 		required: Boolean(check),
 		check: typeof check == 'function' && check,
 	};
-}
-app.search.update = function(data, source) {
+},
+update: function(data, source) {
     clearTimeout(this.sendTimer);
     var updated = false;
     for (var key in data) {
@@ -33,16 +34,16 @@ app.search.update = function(data, source) {
             self.send();
         }, 250);
     }
-};
-app.search.callbacks = {};
-app.search.subscribe = function(source, key, handler) {
+},
+callbacks: {},
+subscribe: function(source, key, handler) {
 	var callbacks = this.callbacks[key] || (this.callbacks[key] = []);
 	callbacks.push({
 		source: source,
 		handler: handler
 	});
-};
-app.search.send = function(data) {
+},
+send: function(data) {
     var data = {
         "search_type": "travel",
         "debug": 1,
@@ -58,6 +59,9 @@ app.search.send = function(data) {
         }
         data[key] = field.value;
     }
+    this.apply(data);
+},
+apply: function(data) {
     app.offers.showLoader(data);
     $.get("/pricer/", {
         search: data
@@ -69,7 +73,8 @@ app.search.send = function(data) {
             alert(s && s.exception && s.exception.message);
         }
     });
-};
+}
+});
 
 app.offers.showLoader = function(data) {
     // Заполнение заголовка, пока не сделаем аяксовое
