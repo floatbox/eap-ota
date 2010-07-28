@@ -8,7 +8,7 @@ $KCODE = 'u'
 
 class Completer
   attr_reader :updated_at
-  
+
   module Normalizer
     def normalize(word)
       word.mb_chars.downcase.gsub(/\W+/, ' ').strip
@@ -16,14 +16,14 @@ class Completer
   end
 
   include Normalizer
-  
+
   def self.new_or_cached
     if !@completer || @completer.outdated?
       @completer = Completer.new('config/words_short.csv', true)
     end
     @completer
   end
-  
+
   def initialize(filename_or_words, load_models = false)
     if filename_or_words.is_a? String
       if filename_or_words =~ /\.csv$/
@@ -39,7 +39,7 @@ class Completer
     end
     create_base_records
   end
-  
+
   def iata_from_name(name)
     result = nil
     scan(name) do |record|
@@ -47,7 +47,7 @@ class Completer
     end
     result
   end
-  
+
   def complete(string, position=nil, opts={})
     string = string.mb_chars
     position = (position || string.size).to_i
@@ -89,7 +89,7 @@ class Completer
               :end => end_pos,
               :name => record.name,
               :hl => hl,
-              :entity => { :iata => record.code, :type => record.type, :name => record.name, :info => record.info, :hint => record.hint }
+              :entity => { :iata => record.code, :type => record.type, :name => record.name, :info => record.info, :hint => record.hint}
             }
             return data if data.size == limit
           end
@@ -133,32 +133,32 @@ class Completer
   def read_array(names)
     @records = names.map {|name| Record.new(name)}
   end
-  
+
   def create_base_records
     days_on = ['в воскресенье', 'в понедельник', 'во вторник', 'в среду', 'в четверг', 'в пятницу', 'в субботу']
     for day in Date.today+1.day.. Date.today+7.days
       #@records << Record.new(:name => Russian.strftime(day, '%A').mb_chars.downcase.to_s, :type => 'date', :code => nil, :aliases => nil, :hint => Russian.strftime(day, '%e %b'), :info => day)
       @records << Record.new(:name => days_on[day.wday], :type => 'date', :code => nil, :aliases => nil, :hint => Russian.strftime(day, '%e %b'), :info => Russian.strftime(day, '%A, %e %b %Y года'))
     end
-     @records << Record.new(:name => 'завтра', :type => 'date', :code => nil, :aliases => nil, :hint => Russian.strftime(Date.today+1.day, '%e %b'), :info => Russian.strftime(Date.today+1.day, '%завтра, %e %b %Y года'))
+     @records << Record.new(:name => 'завтра', :type => 'date', :code => nil, :aliases => nil, :hint => Russian.strftime(Date.today+1.day, '%e %b'), :info => Russian.strftime(Date.today+1.day, 'завтра, %e %b %Y года'))
      @records << Record.new(:name => 'послезавтра', :type => 'date', :code => nil, :aliases => nil, :hint => Russian.strftime(Date.today+2.days, '%e %b'), :info => Russian.strftime(Date.today+2.days, 'послезавтра, %e %b %Y года'))
   end
-  
+
   def read_from_models
     @records = [] unless @records
     Country.all.each do |c|
       synonyms = []
       synonyms << c.name_en unless c.name_en == c.name
       synonyms += c.synonym_list.split(/, /) unless c.synonym_list.blank?
-      @records << Record.new(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms.join(':'))
+      @records << Record.new(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms.join(':'), :hint => c.continent_part_ru)
     end
     City.all(:include => :country).each do |c|
       synonyms = []
       synonyms << c.name_en unless c.name_en == c.name
       synonyms += c.synonym_list.split(/, /) unless c.synonym_list.blank?
-      @records << Record.new(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms.join(':'), :hint => c.country.name)
+      @records << Record.new(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms.join(':'), :hint => c.country.name, :info => "Город #{c.name} #{c.country.proper_in}")
     end
-    
+
     Airline.all.each do |c|
       synonyms = []
       synonyms << c.short_name unless c.short_name == c.name
@@ -169,10 +169,10 @@ class Completer
       synonyms << c.name_ru unless c.name_ru == c.name || c.name_ru.blank?
       @records << Record.new(:name => c.name, :type => :aircraft, :code => c.iata, :aliases => synonyms.join(':'))
     end
-    Airport.all.each do |c|
+    Airport.all(:include => {:city => :country}).each do |c|
       synonyms = []
       synonyms << c.name_en unless c.name_en == c.name || c.name_en.blank?
-      @records << Record.new(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms.join(':'))
+      @records << Record.new(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms.join(':'), :hint => c.city.name,  :info => "Аэропорт #{c.name} #{c.city.proper_in}, #{c.city.country.name}")
     end
     GeoTag.all.each do |c|
       synonyms = []
@@ -181,11 +181,11 @@ class Completer
     end
     @updated_at = Time.now
   end
-  
+
   def outdated?
     @updated_at && (@updated_at < [Airline, Airplane, Airport, City, Country, GeoTag].map{ |c| c.maximum(:updated_at) }.max) && (@updated_at.to_date < Date.today)
   end
-  
+
   class Record
 
     include Normalizer
@@ -197,7 +197,7 @@ class Completer
       @name = attrs[:name]
       @word = attrs[:word] || @name
       @code = attrs[:code]
-      @info = attrs[:info] 
+      @info = attrs[:info]
       @hint = attrs[:hint]
       @code = nil if @code == ''
       @aliases = attrs[:aliases] ? attrs[:aliases].split(':').every.strip : []
@@ -254,3 +254,4 @@ class Completer
   end
 
 end
+

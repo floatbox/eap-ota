@@ -31,3 +31,4 @@ class Airport < ActiveRecord::Base
   end
 
 end
+
