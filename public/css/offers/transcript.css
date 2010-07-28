@@ -45,17 +45,3 @@
 {
     display: inline-block;
 }
-
-
-.b-loader {
-	position: relative;
-	margin: 25px 16px 25px 160px;
-}
-.b-loader .offers-loader {
-	position: absolute;
-	left: -144px; top: 3px;
-}
-.b-loader h3 {
-	margin: 0 0 15px;
-	font: bold 130%/100% Arial;
-}

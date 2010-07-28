@@ -28,7 +28,7 @@ update: function(data, source) {
     		updated = true;
     	}
     }
-    if (updated) {
+    if (source && updated) {
         var self = this;
         this.sendTimer = setTimeout(function() {
             self.send();
@@ -59,6 +59,11 @@ send: function(data) {
         }
         data[key] = field.value;
     }
+	/*$.get("/pricer/", {
+		search: data
+	}, function(s) {
+	    app.offers.showLoader(data);		
+	});*/
     this.apply(data);
 },
 apply: function(data) {

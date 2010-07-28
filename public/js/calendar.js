@@ -10,6 +10,12 @@ Date.prototype.dayoff = function() {
 	var dow = this.getDay();
 	return (dow == 0 || dow == 6);
 };
+Date.prototype.toAmadeus = function() {
+	var d = this.getDate();
+	var m = this.getMonth() + 1;
+	var y = this.getFullYear() % 100;
+	return [d < 10 ? '0' : '', d, m < 10 ? '0' : '', m, y].join('');
+};
 Date.parseAmadeus = function(str) {
 	var d = parseInt(str.substring(0,2), 10);
 	var m = parseInt(str.substring(2,4), 10) - 1;
@@ -33,12 +39,11 @@ app.CalendarDate = function(type, parent) {
 app.CalendarDate.prototype = {
 val: function(date) {
 	if (arguments.length) {
+		var dn = date && this.parent.index[date];
+		console.log(date, dn);
+		this.select(dn !== undefined && this.parent.days[dn]);
 	} else if (this.el) {
-		var parent = this.el.parent("ul");
-		var d = this.el.children("span").text();
-		var m = parent.data("month") + 1;
-		var y = parent.data("year") % 100;
-		return [d.length == 1 ? '0' : '', d, m > 10 ? '0' : '0', m, y].join('');
+		return this.el.attr("data-dmy");
 	} else {
 		return undefined;
 	}
@@ -123,18 +128,17 @@ initArrows: function() {
 	});
 },
 initTimeline: function() {
-	var self = this, year, days = this.parent.days;
+	var self = this, mdate, days = this.parent.days;
 	this.scroller = $('.scroller', this.parent.el).width(Math.round(days.length * self.factor));
 	this.timeline = $('.timeline', this.scroller).hide().html('');
 	$('.month', this.el).each(function() {
-		year = $(this).data('year');
-		var mn = $(this).data('month');
-		var mw = Math.round(Date.daysInMonth(mn, year) * self.factor);
-		var mtitle = $('<dt>').addClass('month').width(mw).text(app.constant.SMN[mn]);
+		mdate = $(this).data('monthyear');
+		var mw = Math.round(Date.daysInMonth(mdate.month, mdate.year) * self.factor);
+		var mtitle = $('<dt>').addClass('month').width(mw).text(app.constant.SMN[mdate.month]);
 		self.timeline.append(mtitle);
 	});
 	var offset = 1 - parseInt(days[0].children('span').text(), 10);
-	this.timeline.append($('<dd>').text(year));
+	this.timeline.append($('<dd>').text(mdate.year));
 	this.timeline.css('left', Math.round(offset * self.factor)).show();
 },
 initScrollbar: function() {
@@ -205,13 +209,17 @@ makeDates: function() {
 	var lt = ld.getTime() - 1;
 	var et = ld.shift(15 - (ld.getDay() || 7)).getTime();
 	var month = undefined, counter = 0, days = [];
+	var index = {};
 	while (ct < et) {
 		var date = cd.getDate();
 		if (!month || date == 1) {
-			month = $('<ul>').addClass('month').appendTo(this.dates);
-			month.data('month', cd.getMonth()).data('year', cd.getFullYear());
+			month = $('<ul>').addClass('month').data('monthyear', {
+				month: cd.getMonth(),
+				year: cd.getFullYear()
+			}).appendTo(this.dates);
 		}
-		var day = $("<li>").data('index', counter);
+		var dmy = cd.toAmadeus();
+		var day = $("<li>").data('index', counter).attr('data-dmy', dmy);
 		if (ct < tt || ct > lt) {
 			day.addClass('inactive');
 		}
@@ -220,10 +228,12 @@ makeDates: function() {
 			label.addClass('dayoff');
 		}
 		month.append(day.append(label));
-		days[counter++] = day;
+		days[counter] = day;
+		index[dmy] = counter++;
 		ct = cd.shift(1).getTime();
 	}
 	$('.month:odd', this.dates).addClass('odd');
+	this.index = index;
 	this.days = days;
 },
 initDates: function() {

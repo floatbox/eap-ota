@@ -123,6 +123,12 @@
     app.search.subscribe(calendar, 'rt', function(v) {
 	    calendar.toggleOneway(v == 0);
     });
+	app.search.subscribe(calendar, 'date1', function(v) {
+		calendar.dpt.val(v);
+	});
+	app.search.subscribe(calendar, 'date2', function(v) {
+		calendar.ret.val(v);
+	});
    
     // панель уточнений (фильтров)
 
