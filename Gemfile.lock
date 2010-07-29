@@ -1,10 +1,10 @@
 --- 
 dependencies: 
-  tzinfo: 
+  fastercsv: 
     group: 
     - :default
     version: ">= 0"
-  fastercsv: 
+  tzinfo: 
     group: 
     - :default
     version: ">= 0"
@@ -28,11 +28,11 @@ dependencies:
     group: 
     - :default
     version: = 2.3.8
-  curb: 
+  mysql: 
     group: 
     - :default
     version: ">= 0"
-  mysql: 
+  curb: 
     group: 
     - :default
     version: ">= 0"
@@ -52,7 +52,7 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
-  graticule: 
+  memoize: 
     group: 
     - :default
     version: ">= 0"
@@ -60,7 +60,7 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  memoize: 
+  graticule: 
     group: 
     - :default
     version: ">= 0"
@@ -88,15 +88,11 @@ dependencies:
     group: 
     - :console
     version: ">= 0"
-  bundler: 
-    group: 
-    - :default
-    version: ">= 0"
   every: 
     group: 
     - :default
     version: ">= 0"
-  i18n: 
+  russian: 
     group: 
     - :default
     version: ">= 0"
@@ -104,7 +100,7 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
-  russian: 
+  i18n: 
     group: 
     - :default
     version: ">= 0"
@@ -116,13 +112,13 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
-  nokogiri: 
-    group: 
-    - :default
-    version: ">= 0"
   capistrano: 
     group: 
     - :deployment
+    version: ">= 0"
+  nokogiri: 
+    group: 
+    - :default
     version: ">= 0"
 specs: 
 - rake: 
@@ -143,8 +139,6 @@ specs:
     version: 0.2.1
 - builder: 
     version: 2.1.2
-- bundler: 
-    version: 0.9.26
 - highline: 
     version: 1.6.1
 - net-ssh: 
@@ -253,7 +247,7 @@ specs:
     version: 0.3.22
 - wirble: 
     version: 0.1.3
-hash: 8c5f21de4493ebba06cb364fbee3c8da25d07241
+hash: c05f31018e6ad44ba7d20a5df49490e5332dc699
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org

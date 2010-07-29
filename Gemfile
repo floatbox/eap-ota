@@ -22,7 +22,7 @@ gem 'graticule'
 gem 'mysql'
 gem 'tzinfo'
 gem 'fastercsv'
-gem 'bundler'
+#gem 'bundler'
 
 gem 'haml'
 
