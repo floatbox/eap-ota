@@ -209,7 +209,7 @@ $.Autocompleter = function(input, options) {
                 if( insert() ) {
                     return false;
                 } else {
-			        $el.trigger('enter');
+                    $el.trigger('enter');
                 }
                 break;
                 
@@ -680,7 +680,7 @@ $.Autocompleter.List.Item = function(data) {
 
     var render = {
         airport: function(e) {
-            return {hint: 'аэропорт мля', code: e.iata, cls: null}
+            return {hint: e.hint || '', code: e.iata, cls: null}
         },
         city: function(e) {
             return {hint: e.hint, code: e.iata, cls: null}
@@ -689,25 +689,25 @@ $.Autocompleter.List.Item = function(data) {
             var i = app.constant.countries.length - 1;
             while (i && app.constant.countries[i] != data.entity.iata.toLowerCase()) i--;
             // i хранит номер флага в панорамной картинке countries.png
-            return {hint: 'страна мля', code: i, cls: 'country'}
+            return {hint: e.hint || '', code: i, cls: 'country'}
         },
         date: function(e) {
-            return {hint: e.hint, code: null, cls: 'date'}
+            return {hint: e.hint || '', code: null, cls: 'date'}
         },
         persons: function(e) {
-            return {hint: '', code: null, cls: 'persons'}
+            return {hint: e.hint || '', code: null, cls: 'persons'}
         },
         comfort: function(e) {
-            return {hint: 'комфорт', code: null, cls: null}
+            return {hint: 'комфорт, мля', code: null, cls: null}
         },
         aircraft: function(e) {
-            return {hint: 'пепелац', code: null, cls: null}
+            return {hint: 'пепелац, мля', code: null, cls: null}
         },
         pivo: function(e) {
-            return {hint: 'в зюзю!', code: null, cls: 'pivo'}
+            return {hint: 'в зюзю, мля!', code: null, cls: 'pivo'}
         },
         fun: function(e) {
-            return {hint: 'кайфово', code: null, cls: 'fun'}
+            return {hint: 'кайфово, мля', code: null, cls: 'fun'}
         }
     }
 
