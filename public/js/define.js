@@ -96,6 +96,7 @@ app.Define.prototype = {
     set: function(data) {
         data = data || [];
         data = $.isArray(data) ? data : [data];
+
         this.update(data);
     },
 
@@ -191,14 +192,9 @@ app.Define.Popup = function(define) {
     if (define.options.popup) {
         var $el = $(define.options.popup);
         var $dl = $('dl', $el).click(onClickStatic);
-        var $dl1 = $dl.slice(0,1);
-        var $dl2 = $dl.slice(1,2);
 
         // исходное значение - один взрослый
-        $el.data('value', [1, 0]);
-
-        // исходный вид - список детей свёрнут
-        $dl2.data('collapsed', true);
+        $el.data('value', [1, 0, 0]);
 
         $el.data('btn', $('> a.a-button', $el));
         $el.data('btn').click(function(e) {
@@ -206,18 +202,20 @@ app.Define.Popup = function(define) {
             return false;
         });
 
-        $el.data('collapse', $('dt a.collapse', $el));
-        $el.data('collapse').click(function(e) {
-            $dl2.toggleClass('collapsed');
-            $el.data('btn').toggleClass('g-none');
-            $dl2.data('collapsed', !$dl2.data('collapsed'));
-            return false;
-        });
+        $dl.slice(1,3).hover(
+            function(e) {
+                var $this = $(this);
+                $el.data('value')[$dl.index($this)] || $this.removeClass('fade');
+            },
+            function(e) {
+                var $this = $(this);
+                $el.data('value')[$dl.index($this)] || $this.addClass('fade');
+            }        
+        );
     }
     else {
         // создаём окошко-контейнер
         var $el = $('<div/>').appendTo(document.body);
-
         // ..и список
         var $dl = $('<dl/>').appendTo($el).click(onClick);
     }
@@ -292,33 +290,43 @@ return;
         if (e.tagName != 'A') return;
         var $a  = $(e);
 
-        $('dd a', $(this)).removeClass('checked');
-
-        var item = $a[0].onclick();
-        var v = item.v;
-
-        if (v < 10 && $dl2.data('collapsed')) hide(500);
-        if (v >= 10 && $dl2.data('collapsed')) $el.data('collapse').click();
-        if ($a.hasClass('checked')) return;
-
+        // кликнутое значение
+        var v = parseInt($a[0].onclick());
+        // массив текущих значений
         var value  = $el.data('value');
 
-        if (v < 10)
-            value[0] = v;
-        else
-            value[1] = v % 10;
+        // клик по взрослым, но дети при этом не выбраны - можно закрыть окно
+        if (v < 10 && !(value[1] + value[2])) hide(500);
 
+        // это клик по уже отмеченному элементу - ничего не делаем
+        if ($a.hasClass('checked')) return;
+        // снимаем выделение со всех ранее выделенных пунктов
+        $('dd a', $(this)).removeClass('checked');
+        // и выделяем тот, по которому кликнули
+        $a.addClass('checked');
+
+
+        // запоминаем новое значение
+        if (v < 10) value[0] = v;
+        if (v >= 10 && v < 100) value[1] = v % 10;
+        if (v >= 100) value[2] = v % 100;
         $el.data('value', value);
 
-        l(value);
+        // прячем или показываем кнопку закрывания окна
+        $el.data('btn').toggleClass('g-none', !(value[1] + value[2]));
 
         // выбор действия
-        var action = value[0] == 1 && value[1] == 0 ? 'reset' : 'set';
+        var action = value[0] == 1 && value[1] == 0 && value[2] == 0  ? 'reset' : 'set';
 
-        item = {v: '' + value[0] + value[1], t: value[0] + ' бол. стакан и ' + value[1] + ' мал.'};
+        // формируем значения и их текст для отображения в заголовке фильтра
+        var i = -1, data = [];
+        while (++i < $dl.length) value[i] && data.push({
+                v: value[i] * Math.pow(10, i),
+                t: app.constant.numbers.collective[value[i]] + '&nbsp;' + app.utils.plural(value[i], $dl[i].onclick())
+            }
+        );
 
-        $a.addClass('checked');
-        define[action](item);
+        define[action](data);
     };
 
     // создаёт DOM-элемент отдельного значения
