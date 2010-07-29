@@ -277,7 +277,7 @@
                     <td>
                         количество
 
-                        <p onclick="return {name: 'persons', title: 'пассажиры', accusative: 'количество пассажиров', radio: true, popup: '#search\\.define\\.persons'}"><a href=#><u>пассажиров</u></a><b></b>&nbsp;и
+                        <p onclick="return {name: 'persons', title: 'пассажиры', accusative: 'количество пассажиров', radio: false, popup: '#search\\.define\\.persons'}"><a href=#><u>пассажиров</u></a><b></b>&nbsp;и
                         
                         <p onclick="return {name: 'changes', title: 'пересадки', accusative: 'допустимое количество пересадок', anyone: 'всё равно', radio: true}"><a href=#><u>пересадок</u></a><b></b></p>,
                         
@@ -340,8 +340,8 @@
             <h3>Ищем для вас лучшие предложения</h3>
             <p>Вы всегда можете позвонить нам — вас проконсультируют и помогут по всем вопросам</p>
             <dl class="phones">
-            	<dt>8 (495) <strong>123-45-67</strong></dt><dd>Москва</dd>
-            	<dt>8 (800) <strong>123-45-67</strong></dt><dd>Другие города (звонок бесплатный)</dd>
+                <dt>8 (495) <strong>123-45-67</strong></dt><dd>Москва</dd>
+                <dt>8 (800) <strong>123-45-67</strong></dt><dd>Другие города (звонок бесплатный)</dd>
             </dl>
         </div>
 
@@ -455,40 +455,40 @@
 
     <!-- Выбор количества пассажиров -->
     <div id="search.define.persons" class="define-popup">
-        <dl class="separated">
+        <dl class="separated" onclick="return ['взрослый', 'взрослых', 'взрослых']">
             <dt>взрослых
-            <dd><a href="#" onclick="return {v: 1, t: 'один', tx: 'один взрослый'}" class="anyone checked"><i></i>один</a>
-            <dd><a href="#" onclick="return {v: 2, t: 'двое', tx: 'двое взрослых'}"><i></i>двое</a>
-            <dd><a href="#" onclick="return {v: 3, t: 'трое', tx: 'трое взрослых'}"><i></i>трое</a>
-            <dd><a href="#" onclick="return {v: 4, t: 'четверо', tx: 'четверо взрослых'}"><i></i>четверо</a>
-            <dd><a href="#" onclick="return {v: 5, t: 'пятеро', tx: 'пятеро взрослых'}"><i></i>пятеро</a>
-            <dd><a href="#" onclick="return {v: 6, t: 'шестеро', tx: 'шестеро взрослых'}"><i></i>шестеро</a>
-            <dd><a href="#" onclick="return {v: 7, t: 'семеро', tx: 'семеро взрослых'}"><i></i>семеро</a>
-            <dd><a href="#" onclick="return {v: 8, t: 'восьмеро', tx: 'восьмеро взрослых'}"><i></i>восьмеро</a>
+            <dd><a href="#" onclick="return 1" class="anyone checked"><i></i>один</a>
+            <dd><a href="#" onclick="return 2"><i></i>двое</a>
+            <dd><a href="#" onclick="return 3"><i></i>трое</a>
+            <dd><a href="#" onclick="return 4"><i></i>четверо</a>
+            <dd><a href="#" onclick="return 5"><i></i>пятеро</a>
+            <dd><a href="#" onclick="return 6"><i></i>шестеро</a>
+            <dd><a href="#" onclick="return 7"><i></i>семеро</a>
+            <dd><a href="#" onclick="return 8"><i></i>восьмеро</a>
         </dl>
 
-        <dl class="separated fade">
-            <dt title="Добавить к списку пассажиров детей от 2 до 12 лет">детей&nbsp;2&#150;12
-            <dd><a href="#" onclick="return {v: 10, tx: ' и ни одного ребёнка'}" class="anyone checked"><i></i>нет</a>
-            <dd><a href="#" onclick="return {v: 11, tx: ' и один ребёнок'}"><i></i>один</a>
-            <dd><a href="#" onclick="return {v: 12, tx: ' и двое детей'}"><i></i>двое</a>
-            <dd><a href="#" onclick="return {v: 13, tx: ' и трое детей'}"><i></i>трое</a>
-            <dd><a href="#" onclick="return {v: 14, tx: ' и четверо детей'}"><i></i>четверо</a>
-            <dd><a href="#" onclick="return {v: 15, tx: ' и пятеро детей'}"><i></i>пятеро</a>
-            <dd><a href="#" onclick="return {v: 16, tx: ' и шестеро детей'}"><i></i>шестеро</a>
-            <dd><a href="#" onclick="return {v: 17, tx: ' и семеро детей'}"><i></i>семеро</a>
+        <dl class="separated fade" onclick="return ['ребёнок', 'детей', 'детей']">
+            <dt title="Добавить к списку пассажиров детей от 2 до 12 лет">детей&nbsp;2&#150;12&nbsp;лет
+            <dd><a href="#" onclick="return 10" class="anyone checked"><i></i>нет</a>
+            <dd><a href="#" onclick="return 11"><i></i>один</a>
+            <dd><a href="#" onclick="return 12"><i></i>двое</a>
+            <dd><a href="#" onclick="return 13"><i></i>трое</a>
+            <dd><a href="#" onclick="return 14"><i></i>четверо</a>
+            <dd><a href="#" onclick="return 15"><i></i>пятеро</a>
+            <dd><a href="#" onclick="return 16"><i></i>шестеро</a>
+            <dd><a href="#" onclick="return 17"><i></i>семеро</a>
         </dl>
 
-        <dl class="fade">
-            <dt title="Добавить младенцев младше двух лет к списку пассажиров">малышей&nbsp;&lt;&nbsp;2 
-            <dd><a href="#" onclick="return {v: 100, tx: ' и ни одного младенца'}" class="anyone checked"><i></i>нет</a>
-            <dd><a href="#" onclick="return {v: 101, tx: ' и один младенец'}"><i></i>один</a>
-            <dd><a href="#" onclick="return {v: 102, tx: ' и двое младенцев'}"><i></i>двое</a>
-            <dd><a href="#" onclick="return {v: 103, tx: ' и трое младенцев'}"><i></i>трое</a>
-            <dd><a href="#" onclick="return {v: 104, tx: ' и четверо младенцев'}"><i></i>четверо</a>
-            <dd><a href="#" onclick="return {v: 105, tx: ' и пятеро младенцев'}"><i></i>пятеро</a>
-            <dd><a href="#" onclick="return {v: 106, tx: ' и шестеро младенцев'}"><i></i>шестеро</a>
-            <dd><a href="#" onclick="return {v: 107, tx: ' и семеро младенцев'}"><i></i>семеро</a>
+        <dl class="fade" onclick="return ['младенец', 'младенцев', 'младенцев']">
+            <dt title="Добавить младенцев младше двух лет к списку пассажиров">малышей
+            <dd><a href="#" onclick="return 100" class="anyone checked"><i></i>нет</a>
+            <dd><a href="#" onclick="return 101"><i></i>один</a>
+            <dd><a href="#" onclick="return 102"><i></i>двое</a>
+            <dd><a href="#" onclick="return 103"><i></i>трое</a>
+            <dd><a href="#" onclick="return 104"><i></i>четверо</a>
+            <dd><a href="#" onclick="return 105"><i></i>пятеро</a>
+            <dd><a href="#" onclick="return 106"><i></i>шестеро</a>
+            <dd><a href="#" onclick="return 107"><i></i>семеро</a>
         </dl>
 
         <a href="#" class="a-button g-none" title="Подтвердить выбор и закрыть">Готово</a>
