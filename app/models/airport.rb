@@ -11,7 +11,7 @@ class Airport < ActiveRecord::Base
   def longitude; lng end
 
   delegate :tz, :to => :city
-
+  has_cases_for :name
   named_scope :near, lambda {|other|
     radius = 10
     { :conditions => {
