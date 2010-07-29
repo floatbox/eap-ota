@@ -169,7 +169,7 @@ class Completer
       synonyms << c.name_ru unless c.name_ru == c.name || c.name_ru.blank?
       @records << Record.new(:name => c.name, :type => :aircraft, :code => c.iata, :aliases => synonyms.join(':'))
     end
-    Airport.all(:include => {:city => :country}).each do |c|
+    Airport.all(:include => {:city => :country}, :conditions => 'city_id is not null').each do |c|
       synonyms = []
       synonyms << c.name_en unless c.name_en == c.name || c.name_en.blank?
       @records << Record.new(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms.join(':'), :hint => c.city.name,  :info => "Аэропорт #{c.name} #{c.city.proper_in}, #{c.city.country.name}")
