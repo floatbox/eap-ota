@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100726141010) do
+ActiveRecord::Schema.define(:version => 20100729143506) do
 
   create_table "airlines", :force => true do |t|
     t.string   "en_shortname"
@@ -54,6 +54,9 @@ ActiveRecord::Schema.define(:version => 20100726141010) do
     t.string   "proper_to"
     t.string   "proper_from"
     t.string   "proper_in"
+    t.string   "morpher_to"
+    t.string   "morpher_from"
+    t.string   "morpher_in"
   end
 
   add_index "airports", ["iata"], :name => "index_airports_on_iata"
@@ -76,6 +79,9 @@ ActiveRecord::Schema.define(:version => 20100726141010) do
     t.string   "proper_in"
     t.integer  "region_id"
     t.string   "timezone",     :default => ""
+    t.string   "morpher_to"
+    t.string   "morpher_from"
+    t.string   "morpher_in"
   end
 
   add_index "cities", ["iata"], :name => "index_cities_on_iata"
@@ -100,6 +106,9 @@ ActiveRecord::Schema.define(:version => 20100726141010) do
     t.string   "proper_to"
     t.string   "proper_from"
     t.string   "proper_in"
+    t.string   "morpher_to"
+    t.string   "morpher_from"
+    t.string   "morpher_in"
   end
 
   add_index "countries", ["alpha2"], :name => "index_countries_on_alpha2"

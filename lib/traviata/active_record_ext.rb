@@ -73,28 +73,31 @@ module Traviata
         inflections
       end
 
-      def guessed_to
-        "в #{cases[3] || nominative}"
+      def save_guessed
+        inflections = cases
+        pr = in_preposition(self.name)
+        update_attributes(:morpher_to => "#{pr} #{(cases[3] || nominative).chomp}", :morpher_from => "из #{(cases[1] || nominative).chomp}", :morpher_in => "#{pr} #{(cases[5] || nominative).chomp}" )
       end
 
-      def guessed_from
-        "из #{cases[1] || nominative}"
+      def in_preposition word
+        if word.mb_chars.split('')[0..1].every.to_s - "бвгджзйклмнпрстфхцчшщБВГДЖЗЙКЛМНПРСТФХЦЧШЩ".mb_chars.split('').every.to_s == []
+          'во'
+        else
+          'в'
+        end
       end
 
-      def guessed_in
-        "в #{cases[5] || nominative}"
-      end
 
       def case_to
-        proper_to.presence || guessed_to
+        proper_to.presence || morpher_to.to_s
       end
 
       def case_from
-        proper_from.presence || guessed_from
+        proper_from.presence || morpher_from.to_s
       end
 
       def case_in
-        proper_in.presence || guessed_in
+        proper_in.presence || morpher_in.to_s
       end
 
       def case_to=(str)
@@ -120,7 +123,7 @@ module Traviata
           self.proper_in = nil
         end
       end
-      
+
       def splitted_case_in
         a = case_in.split ' '
         [a[0], a[1..-1].join(' ')]
@@ -143,3 +146,4 @@ module Traviata
 end
 
 ActiveRecord::Base.send :extend, Traviata::ActiveRecordExt::ClassMethods
+

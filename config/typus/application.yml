@@ -23,7 +23,7 @@ Airplane:
       selectors: engine_type
 
   order_by: name_ru
-  relationships: 
+  relationships:
   filters: engine_type
   search: iata, name_ru, name_en
   application: Eviterra
@@ -33,10 +33,12 @@ Airport:
   fields:
     default: iata, name_ru, name_en, importance, city
     list: iata, name_ru, name_en, importance, city
-    form: iata, name_en, name_ru, synonym_list, proper_to, proper_from, proper_in, domestic, icao, federal, international, runway_length, lat, lng, importance, city
+    form: iata, name_en, name_ru, synonym_list, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in, domestic, icao, federal, international, runway_length, lat, lng, importance, city
+    options:
+      read_only: morpher_to, morpher_from, morpher_in
   order_by: name_ru
   relationships: city, country, geo_tags
-  filters: 
+  filters:
   search: name_ru, name_en, iata, synonym_list
   application: Eviterra
   export: csv
@@ -45,9 +47,10 @@ City:
   fields:
     default: iata, name_ru, name_en, synonym_list, importance, country, region
     list: iata, name_ru, name_en, synonym_list, importance, country, region
-    form: iata, name_ru, name_en, synonym_list, proper_to, proper_from, proper_in, lat, lng, importance, country, region, timezone
+    form: iata, name_ru, name_en, synonym_list, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in, lat, lng, importance, country, region, timezone
     options:
       selectors: timezone
+      read_only: morpher_to, morpher_from, morpher_in
 
   order_by: name_ru
   relationships: airports, country, geo_tags, region
@@ -81,10 +84,12 @@ Country:
   fields:
     default: alpha2, name_ru, name_en, full_name_ru, continent_ru, importance, synonym_list
     list: alpha2, name_ru, name_en, full_name_ru, continent_ru, importance, synonym_list
-    form: name_ru, name_en, full_name_ru, alpha2, alpha3, iso, continent_ru, continent_part_ru, importance, synonym_list, lat, lng, proper_to, proper_from, proper_in
+    form: name_ru, name_en, full_name_ru, alpha2, alpha3, iso, continent_ru, continent_part_ru, importance, synonym_list, lat, lng, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in
+    options:
+      read_only: morpher_to, morpher_from, morpher_in
   order_by: name_ru
   relationships: airlines, airports, cities, geo_tags, regions
-  filters: 
+  filters:
   search:  name_en, name_ru, full_name_ru, continent_ru, synonym_list
   application: Eviterra
   export: csv
@@ -94,9 +99,9 @@ GeoTag:
     default: name, desc, importance, synonym_list, proper_to, proper_from, proper_in
     list: name, desc, importance, synonym_list, proper_to, proper_from, proper_in
     form: name, desc, importance, synonym_list, proper_to, proper_from, proper_in, lat, lng
-  order_by: 
+  order_by:
   # relationships: geo_taggings
-  filters: 
+  filters:
   search: name, synonym_list
   application: Eviterra
 
@@ -105,9 +110,9 @@ Preset:
     default: name
     list: name
     form: name, query
-  order_by: 
-  relationships: 
-  filters: 
+  order_by:
+  relationships:
+  filters:
   search: name
   application: Eviterra
 
