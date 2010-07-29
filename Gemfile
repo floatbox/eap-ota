@@ -48,7 +48,7 @@ group :console do
   gem 'interactive_editor'
 end
 
-group :debugger do
+group :debug do
   gem 'ruby-debug'
 end
 
