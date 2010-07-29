@@ -266,6 +266,11 @@
         $spanel.switchClass(st ? cl : '', st ? '' :cl, 300);
     });
 
+	// Табы в результатах поиска
+    $('#offers-tabs').radio({
+    	toggleClosest: 'li'
+    });
+
     // фокус на поле ввода "Куда"
     tools.to.focus();
     

@@ -21,21 +21,25 @@
     <!-- [production] Все нижеследующие скрипты объединить в таком же порядке -->
     <!-- [production] перед сборкой упаковать -->
     <script type='text/javascript' src='js/main.js'></script>
-    <script type='text/javascript' src='js/onready.js'></script>
     <script type='text/javascript' src='js/utils.js'></script>
     <script type='text/javascript' src='js/multifield.js'></script>
     <script type='text/javascript' src='js/autocomplete.js'></script>
     <script type='text/javascript' src='js/radio.js'></script>
     <script type='text/javascript' src='js/button.js'></script>
-    <script type='text/javascript' src='js/define.js'></script>
     <script type='text/javascript' src='js/loader.js'></script>
-    <script type='text/javascript' src='js/map.js'></script>
     <script type='text/javascript' src='js/search.js'></script>
+    <script type='text/javascript' src='js/map.js'></script>
     <script type='text/javascript' src='js/calendar.js'></script>
+    <script type='text/javascript' src='js/define.js'></script>
+    <script type='text/javascript' src='js/offers.js'></script>
+    <script type='text/javascript' src='js/onready.js'></script>
 </head>
 
 <body>
-    <div class="l-head">
+<div id="page">
+	
+	<!-- Шапка -->
+    <div id="header">
         <div class="b-head">
             <s class="b-logo"></s>
             <ul id="search.mode" class="tabs head-tabs">
@@ -47,10 +51,9 @@
         </div>
     </div>
 
-    <div class="l-body">
+	<div id="canvas">
 
         <!-- Форма поиска -->
-
         <form id="search.form" method="get" action=""><input type="hidden" id="search.form.value"></form>
         
         <div class="form">
@@ -148,6 +151,7 @@
         <div id="search-panel" class="collapsed">
         <div class="search-blocks">
 
+			<!-- Куда -->
             <div id="search-where" class="wt0">
                 <h2>Нужны идеи? Есть карта и <a href="#" class="b-pseudo"><u>список</u></a></h2>
                 <div id="where-map" class="map wp0"></div>
@@ -234,7 +238,8 @@
                 </dl>
                 <a id="where.map.reset" class="b-pseudo panel-reset" href=#><i></i><u>сбросить</u></a><a id="where.map.large" class="b-pseudo panel-reset" href=#><u>большая карта</u></a>
             </div>
-    
+			
+			<!-- Когда -->
             <div id="search-when">
                 <div class="calendar" id="search-calendar">
                     <h2>Выберите даты:</h2>
@@ -302,123 +307,130 @@
         </table>
 
 
-        <!-- Правая панель -->
-
-        <ul id="media" class="media">
-            <li>
-                <dl class="media-tip">
-                    <dt>Вы знаете?&hellip;
-                    <dd>
-                        <p>&hellip;что в <a href="#" class="b-pseudo"><u>некоторых странах</u></a> можно прямо в аэропорту получить транзитную визу, если у вас шесть и более часов между рейсами
-                </dl>
-
-            <li>
-                <dl class="media-promo">
-                    <dt>Город дня &mdash; Прага
-                    <dd>
-                        <h3>Чё там ваще</h3>
-                        <p>Прага является столицей и крупнейшим городом Чешской республики. Она расположена на реке Влтаве в центральной Богемии. В ней проживает примерно <s>до хуя чехов</s> 1.2 миллиона человек. Её называли «городом ста шпилей» и «золотым градом». Билеты в Прагу стоят у нас от 12000 рублей.
-                        <h3>Чё дают</h3>
-                        <p>Пива и пиздюлей
-                </dl>
-
-        </ul>
-
-
-
-        <!-- Человекочитаемая строка запроса -->
-        <h1 id="offers.transcript" class="transcript g-none">
-            <p>
-                <s>В пампасы!</s><i><i></i></i>
-            </p>
-        </h1>
-
-
-        <!-- Заглушка на время поиска -->
-        <div id="offers.loader" class="b-loader g-none">
-            <img class="progress" src="/img/ajax-loader.gif" alt="Поиск…">
-            <h3>Ищем для вас лучшие предложения</h3>
-            <p>Вы всегда можете позвонить нам — вас проконсультируют и помогут по всем вопросам</p>
-            <dl class="phones">
-            	<dt>8 (495) <strong>123-45-67</strong></dt><dd>Москва</dd>
-            	<dt>8 (800) <strong>123-45-67</strong></dt><dd>Другие города (звонок бесплатный)</dd>
-            </dl>
-        </div>
-
-        <!-- Заголовок списка результатов (статистика, сортировка) -->
-        <div id="offers.header" class="offers-header g-none">
-            <dl>
-                <dt>86 предложений
-                <dd>35 городов, 18 стран, 19 авиакомпаний
-            </dl>
-
-            <ul id="search.sort" class="b-pseudo c0">
-                <li><a class="c0" onclick="return {i: 0, v: 'price'}" href="#">цена<b>&darr;</b></a>
-                <li><a class="c1" onclick="return {i: 1, v: 'departure'}" href="#">время вылета<b>&darr;</b></a>
-                <li><a class="c2" onclick="return {i: 2, v: 'country'}" href="#">страна<b>&darr;</b></a>
-            </ul>
-        </div>
-
-        <!-- Список результатов -->
-        <div id="offers" class="offers g-none">
-            <table>
-                <colgroup>
-                    <col width="118">
-                    <col width="142">
-                    <col width="155">
-                    <col width="142">
-                    <col width="118">
-                <thead>
-                    <tr>
-                        <th>
-                            16&nbsp;346&nbsp;<s class="rur">р<s>уб.</s></s>
-                        <td colspan="3">
-                            <a href=# class="b-pseudo" title="Развернуть это предложение"><u>Подробнее о&nbsp;перелёте</u></a>
-                        <td>
-                            <a href=# class="a-button" target="booking" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Полететь</a>
-                <tbody>
-                    <tr class="ow">
-                        <td rowspan=2 class="extra">
-                            <p>KLM Royal Dutch
-                        <td class="dpt">
-                            <h3>12:00</h3>
-                            <h4>Шереметьево</h4>
-                            <h5 class="light">Терминал F</h5>
-                        <td class="fly">
-                            <h5>11 часов 20 минут в пути</h5>
-                            <h5 class="light">пересадка 2 часа 5 минут</h5>
-
-                            <a href=# title="Перелёт Москва-Амстердам"></a>
-                            <a href=# title="Пересадка в Амстердаме" class="change"></a>
-                            <a href=# title="Перелёт Амстердам-Париж"></a>
-                        <td class="arv">
-                            <h3>16:00</h3>
-                            <h4>Шарль де Голль Интернэшнл</h4>
-                        <td rowspan=2 class="extra extra-info">
-                            С пересадкой в Амстердаме
-                    <tr class="rt">
-                        <td class="dpt">
-                            <h3>19:40</h3>
-                            <h4>Шарль де Голль Интернэшнл</h4>
-                        <td class="fly">
-                            <h5>15 часов 20 минут в пути</h5>
-                            <a href=# title="Перелёт Париж-Москва"></a>
-                        <td class="arv">
-                            <h3>23:15</h3>
-                            <h4>Шереметьево</h4>
-                            <h5>Терминал D</h5>
-                <tfoot>
-                    <tr class="info">
-                        <th>
-                        <td colspan="4">
-                            <dl>
-                                <dt>Кстати! Можно выбрать другое время вылета по той же цене.
-                                <dd class="b-pseudo">Из Москвы &mdash; в <a href=#><u>14:00</u></a>, <a href=#><u>15:30</u></a>, <a href=#><u>16:20</u></a>. Из Парижа &mdash; в <a href=#><u>11:00</u></a> и в <a href=#><u>17:30</u></a>.
-                            </dl>
-            </table>
+		<!-- Человекочитаемая строка запроса -->
+        <div id="search-transcript" class="g-none">
+            <h1>Из Москвы в Париж вдвоём с 15 по 18 мая</h1>
         </div>
         
-    </div>
+        <div id="offers" class="clear g-none">
+        
+	        <!-- Заглушка во время поиска -->
+	        <div id="offers-progress" class="g-none">
+	            <img class="loading" src="/img/ajax-loader.gif" alt="Поиск…">
+	            <h3>Ищем для вас лучшие предложения</h3>
+	            <p>Вы всегда можете позвонить нам — вас проконсультируют и помогут по всем вопросам</p>
+	            <dl class="phones">
+	            	<dt>8 (495) <strong>123-45-67</strong></dt><dd>Москва</dd>
+	            	<dt>8 (800) <strong>123-45-67</strong></dt><dd>Другие города (звонок бесплатный)</dd>
+	            </dl>
+	        </div>
+	        
+	        <!-- Результаты поиска -->
+	        <div id="offers-results" class="g-none">
+        
+		        <!-- Заголовок списка результатов (статистика, сортировка) -->
+		        <div id="offers-tabs">
+		        <div class="wrap">
+		            <ul>
+		                <li class="active"><a href="#" onclick="return {v: 'top'}">Наши предложения</a></li>
+		                <li><a href="#" onclick="return {v: 'prices'}">Матрица цен</a></li>
+		                <li><a href="#" onclick="return {v: 'all'}">Все 250 вариантов</a></li>
+		            </ul>
+		            <ul class="secondary">
+		                <li><a href="#" onclick="return {v: 'nearest'}">Соседние города</a></li>
+		                <li><a href="#" onclick="return {v: 'train'}">На поезде</a></li>
+		            </ul>
+				</div>
+		        </div>
+
+		        <!-- Правая панель -->
+		        <ul id="offers-media" class="media">
+		            <li>
+		                <dl class="media-tip">
+		                    <dt>Вы знаете?&hellip;
+		                    <dd>
+		                        <p>&hellip;что в <a href="#" class="b-pseudo"><u>некоторых странах</u></a> можно прямо в аэропорту получить транзитную визу, если у вас шесть и более часов между рейсами
+		                </dl>
+		
+		            <li>
+		                <dl class="media-promo">
+		                    <dt>Город дня &mdash; Прага
+		                    <dd>
+		                        <h3>Чё там ваще</h3>
+		                        <p>Прага является столицей и крупнейшим городом Чешской республики. Она расположена на реке Влтаве в центральной Богемии. В ней проживает примерно <s>до хуя чехов</s> 1.2 миллиона человек. Её называли «городом ста шпилей» и «золотым градом». Билеты в Прагу стоят у нас от 12000 рублей.
+		                        <h3>Чё дают</h3>
+		                        <p>Пива и пиздюлей
+		                </dl>
+		        </ul>
+		        
+				<!-- Список результатов -->
+				<div id="offers-list" class="offers">
+				    <table>
+				        <colgroup>
+				            <col width="118">
+				            <col width="142">
+				            <col width="155">
+				            <col width="142">
+				            <col width="118">
+				        <thead>
+				            <tr>
+				                <th>
+				                    16&nbsp;346&nbsp;<s class="rur">р<s>уб.</s></s>
+				                <td colspan="3">
+				                    <a href=# class="b-pseudo" title="Развернуть это предложение"><u>Подробнее о&nbsp;перелёте</u></a>
+				                <td>
+				                    <a href=# class="a-button" target="booking" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Полететь</a>
+				        <tbody>
+				            <tr class="ow">
+				                <td rowspan=2 class="extra">
+				                    <p>KLM Royal Dutch
+				                <td class="dpt">
+				                    <h3>12:00</h3>
+				                    <h4>Шереметьево</h4>
+				                    <h5 class="light">Терминал F</h5>
+				                <td class="fly">
+				                    <h5>11 часов 20 минут в пути</h5>
+				                    <h5 class="light">пересадка 2 часа 5 минут</h5>
+				
+				                    <a href=# title="Перелёт Москва-Амстердам"></a>
+				                    <a href=# title="Пересадка в Амстердаме" class="change"></a>
+				                    <a href=# title="Перелёт Амстердам-Париж"></a>
+				                <td class="arv">
+				                    <h3>16:00</h3>
+				                    <h4>Шарль де Голль Интернэшнл</h4>
+				                <td rowspan=2 class="extra extra-info">
+				                    С пересадкой в Амстердаме
+				            <tr class="rt">
+				                <td class="dpt">
+				                    <h3>19:40</h3>
+				                    <h4>Шарль де Голль Интернэшнл</h4>
+				                <td class="fly">
+				                    <h5>15 часов 20 минут в пути</h5>
+				                    <a href=# title="Перелёт Париж-Москва"></a>
+				                <td class="arv">
+				                    <h3>23:15</h3>
+				                    <h4>Шереметьево</h4>
+				                    <h5>Терминал D</h5>
+				        <tfoot>
+				            <tr class="info">
+				                <th>
+				                <td colspan="4">
+				                    <dl>
+				                        <dt>Кстати! Можно выбрать другое время вылета по той же цене.
+				                        <dd class="b-pseudo">Из Москвы &mdash; в <a href=#><u>14:00</u></a>, <a href=#><u>15:30</u></a>, <a href=#><u>16:20</u></a>. Из Парижа &mdash; в <a href=#><u>11:00</u></a> и в <a href=#><u>17:30</u></a>.
+				                    </dl>
+				    </table>
+				</div>
+	        
+	        </div>
+
+        </div>
+
+	</div>
+	<div id="canvas-bottom"></div>
+    
+</div>
+<div id="footer">
 
     <!-- И тут пошли титры -->
     <div class="l-foot">
@@ -450,6 +462,8 @@
             <i>&copy;&nbsp;eviterra, 2010</i>
         </div>
     </div>
+
+</div>
 
     <!-- Попап-окошки -->
 

@@ -1,29 +1,29 @@
-.b-loader 
+#offers-progress
 {
 	font-size: 87.5%;
 	position: relative;
 	margin: 25px 320px 25px 160px;
 }
 
-.b-loader .progress 
+#offers-progress .loading
 {
 	position: absolute;
 	top: 3px; left: -144px;
 }
 
-.b-loader h3 
+#offers-progress h3 
 {
 	font: bold 150%/100% Arial;
 	margin: 0 0 15px;
 }
 
-.b-loader .phones
+#offers-progress .phones
 {
 	overflow: hidden;
 	margin: 15px 0 0;
 }
 
-	.b-loader .phones dt
+	#offers-progress .phones dt
 	{
 		font-size: 22px;
 		line-height: 24px;
@@ -34,12 +34,12 @@
 		margin: 0 0 6px;
 	}
 
-	.b-loader .phones strong
+	#offers-progress .phones strong
 	{
 		color: #d5398b;
 	}
 	
-	.b-loader .phones dd
+	#offers-progress .phones dd
 	{
 		float: left;
 		margin-top: 5px;

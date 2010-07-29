@@ -1,4 +1,4 @@
-;(function($) {
+(function($) {
     
 $.fn.extend({
     radio: function(options) {
@@ -14,7 +14,7 @@ $.fn.extend({
     }
 });
 
-app.Radio = function($el) {
+app.Radio = function($el, options) {
 
     var $items = $el.find('*[onclick]');
     var value = null;
@@ -36,7 +36,9 @@ app.Radio = function($el) {
 
     function set(v) {
         $items.each(function() {
-            this.onclick().v == v ? $(this).addClass('active') : $(this).removeClass('active');
+        	var item = $(this), tc = options && options.toggleClosest;
+        	if (tc) item = $(this).closest(tc);
+			item.toggleClass('active', this.onclick().v == v);
         });
         value = v;
     };

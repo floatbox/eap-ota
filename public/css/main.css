@@ -15,8 +15,9 @@
 @import 'head/b-logo.css';
 @import 'head/b-tabs.css';
 
-@import 'form/form.css';
-@import 'form/autocomplete.css';
+@import 'search/form.css';
+@import 'search/autocomplete.css';
+@import 'search/transcript.css';
 
 @import 'panel/panel.css';
 @import 'panel/panel-reset.css';
@@ -31,10 +32,9 @@
 @import 'media/media.css';
 @import 'promo/promo.css';
 
-@import 'offers/transcript.css';
-@import 'offers/offers-header.css';
-@import 'offers/offers.css';
-@import 'offers/loader.css';
+@import 'offers/progress.css';
+@import 'offers/tabs.css';
+@import 'offers/list.css';
 
 @import 'foot/b-foot.css';
 
