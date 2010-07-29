@@ -57,10 +57,9 @@ module Tmp
 
   def self.fill_in_morpher_fields
     [Country, City, Airport].each do |m|
-      m.all(:conditions => '((proper_to == "") or (proper_to is NULL)) and (morpher_to is NULL) and (name_ru != "") and (name_ru is not NULL)').each do {|c|
+      m.all(:conditions => '((proper_to = "") or (proper_to is NULL)) and (morpher_to is NULL) and (name_ru != "") and (name_ru is not NULL)', :limit => 300).each do |c|
         c.save_guessed
-        sleep(90)
-      }
+      end
     end
   end
 end
