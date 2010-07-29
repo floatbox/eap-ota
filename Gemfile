@@ -22,6 +22,7 @@ gem 'graticule'
 gem 'mysql'
 gem 'tzinfo'
 gem 'fastercsv'
+gem 'bundler'
 
 gem 'haml'
 
@@ -54,3 +55,4 @@ end
 group :profiling do
   gem 'ruby-prof'
 end
+
