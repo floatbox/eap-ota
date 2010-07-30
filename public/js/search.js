@@ -59,6 +59,7 @@ send: function(data) {
         }
         data[key] = field.value;
     }
+
     /*$.get("/pricer/", {
         search: data
     }, function(s) {
@@ -66,42 +67,25 @@ send: function(data) {
     });*/
     this.apply(data);
 },
-apply: function(data) {
-    app.offers.showLoader(data);
-    $.get("/pricer/", {
-        search: data
-    }, function(s) {
-        $("#offers\\.loader").addClass("g-none");
-        if (typeof s == "string") {
-            app.offers.update(s);
-        } else {
-            alert(s && s.exception && s.exception.message);
-        }
-    });
-}
-});
-
-app.offers.showLoader = function(data) {
+transcript: function(data) {
     // Заполнение заголовка, пока не сделаем аяксовое
+    var $transcript = $("#search-transcript");
     var monthes = app.constant.MNg;
     if (data.rt) {
         var d1 = Date.parseAmadeus(data.date1);
         var d2 = Date.parseAmadeus(data.date2);
         var words = [d1.getDate(), monthes[d1.getMonth()], d2.getDate(), monthes[d2.getMonth()]];
         if (words[1] == words[3]) words[1] = "по"; else words[1] += " по";
-        $("#offers\\.transcript s").html(data.from + " &rarr; " + data.to + " и&nbsp;обратно c " + words.join(" "));
+        $("h1", $transcript).html(data.from + " &rarr; " + data.to + " и&nbsp;обратно c " + words.join(" "));
     } else {
         var d1 = Date.parseAmadeus(data.date1); 
-        $("#offers\\.transcript s").html(data.from + " &rarr; " + data.to + " " + d1.getDate() + ' ' + monthes[d1.getMonth()]);
+        $("h1", $transcript).html(data.from + " &rarr; " + data.to + " " + d1.getDate() + ' ' + monthes[d1.getMonth()]);
     }
-
-    $("#offers\\.transcript").removeClass("g-none");
-    $("#offers\\.loader").removeClass("g-none");
-    var w = $(window);
-    var cst = w.scrollTop();
-    var offset = $("#media").offset().top;
-    if (offset - cst > w.height() / 2) {
-        $({st: cst}).animate({
+    $transcript.removeClass("g-none");
+    var w = $(window), wst = w.scrollTop();
+    var offset = $transcript.offset().top;
+    if (offset - wst > w.height() / 2) {
+        $({st: wst}).animate({
             st: offset - 112
         }, {
             duration: 500,
@@ -110,9 +94,5 @@ app.offers.showLoader = function(data) {
             }
         });
     }
-};
-
-app.offers.update = function(s) {
-    $("#offers").html(s).removeClass("g-none");
-};
-
+}
+});

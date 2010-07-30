@@ -20,9 +20,9 @@ module Tmp
       airport = Airport.find_by_iata(code)
       airport.update_attributes(:name_en => name_en, :name_ru => name_ru) if airport
     end
-    
+
   end
-  
+
   def self.fill_in_regions_and_clean_cities
     usa = Country.find_by_name_en("United States")
     City.all.each do |c|
@@ -40,17 +40,27 @@ module Tmp
       end
     end
   end
-  
+
   def self.get_tz_from_lat_and_lng(lat, lng)
     xml = Net::HTTP.get URI.parse("http://ws.geonames.org/timezone?lat=#{lat}&lng=#{lng}&style=full")
     doc = REXML::Document.new xml
     doc.root.elements["timezone/timezoneId"].get_text.to_s
   end
-  
+
   def self.fill_in_timezones_for_cities
     City.find(:all, :conditions => 'timezone = "" and lat is not null and lng is not null and lat and lng').each do |c|
       c.update_attribute :timezone, get_tz_from_lat_and_lng(c.lat, c.lng)
       sleep 0.5
     end
   end
+
+
+  def self.fill_in_morpher_fields
+    [Country, City, Airport].each do |m|
+      m.all(:conditions => '((proper_to = "") or (proper_to is NULL)) and (morpher_to is NULL) and (name_ru != "") and (name_ru is not NULL)').each do |c|
+        c.save_guessed
+      end
+    end
+  end
 end
+
