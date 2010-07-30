@@ -679,6 +679,9 @@ $.Autocompleter.List.Item = function(data) {
     }
 
     var render = {
+        'default': function(e) {
+            return {hint: e.hint || 'Лёхина хуйня, мля', code: null, cls: null}
+        },
         airport: function(e) {
             return {hint: e.hint || '', code: e.iata, cls: null}
         },
@@ -698,16 +701,16 @@ $.Autocompleter.List.Item = function(data) {
             return {hint: e.hint || '', code: null, cls: 'persons'}
         },
         comfort: function(e) {
-            return {hint: 'комфорт, мля', code: null, cls: null}
+            return {hint: e.hint || 'комфорт, мля', code: null, cls: null}
         },
         aircraft: function(e) {
-            return {hint: 'пепелац, мля', code: null, cls: null}
+            return {hint: e.hint || 'пепелац, мля', code: null, cls: null}
         },
         pivo: function(e) {
-            return {hint: 'в зюзю, мля!', code: null, cls: 'pivo'}
+            return {hint: e.hint || 'в зюзю, мля!', code: null, cls: 'pivo'}
         },
         fun: function(e) {
-            return {hint: 'кайфово, мля', code: null, cls: 'fun'}
+            return {hint: e.hint || 'кайфово, мля', code: null, cls: 'fun'}
         }
     }
 
@@ -716,9 +719,9 @@ $.Autocompleter.List.Item = function(data) {
     var s  = hl(data.name, data.hl);
     $('<u/>').html(s).appendTo($li);
 
-    var r = render[data.entity.type];
+    var r = render[data.entity.type] || render['default'];
 
-    if (r) with (r(data.entity)) {
+    with (r(data.entity)) {
         hint && $('<s/>').html(hint).appendTo($li.append('<wbr/>'));
         
         cls && $li.addClass(cls).append($('<i/>'));

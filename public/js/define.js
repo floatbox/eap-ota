@@ -158,7 +158,8 @@ app.Define.prototype = {
             );
 
             // разделитель между значениями
-            index + 1 < value.length && me.$value.append($('<u/>').text(' или'));
+            var sep = index + 2 == value.length ? ' и' : ',';
+            index + 1 < value.length && me.$value.append($('<u/>').text(sep));
         });
 
         var title;
@@ -280,7 +281,7 @@ return;
         hide(500);
     };
 
-    // клик по элементу статического списка
+    // клик по элементу статического списка (пассажиры)
     function onClickStatic(e) {
         clearTimeout(timeout);
         e.preventDefault();
@@ -322,7 +323,9 @@ return;
         var i = -1, data = [];
         while (++i < $dl.length) value[i] && data.push({
                 v: value[i] * Math.pow(10, i),
-                t: app.constant.numbers.collective[value[i]] + '&nbsp;' + app.utils.plural(value[i], $dl[i].onclick())
+                // строчка для взрослых формируется хитрожопо:
+                // если детей нет, то пишем "двое", иначе добавляем - "двое взрослых"
+                t: app.constant.numbers.collective[value[i]] + ((i > 0 || (value[1] + value[2])) ? (' ' + app.utils.plural(value[i], $dl[i].onclick())) : '')
             }
         );
 

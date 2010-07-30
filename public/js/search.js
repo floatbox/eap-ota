@@ -2,31 +2,31 @@ $.extend(app.search, {
 tools: {},
 fields: {},
 getField: function(key) {
-	return this.fields[key] || this.addField(key);
+    return this.fields[key] || this.addField(key);
 },
 addField: function(key, check, value) {
-	return this.fields[key] = {
-		value: value,
-		required: Boolean(check),
-		check: typeof check == 'function' && check,
-	};
+    return this.fields[key] = {
+        value: value,
+        required: Boolean(check),
+        check: typeof check == 'function' && check,
+    };
 },
 update: function(data, source) {
     clearTimeout(this.sendTimer);
     var updated = false;
     for (var key in data) {
-    	var value = data[key];
-		var field = this.getField(key);
-    	if (value != field.value) {
-    		field.value = value;
-    		var callbacks = this.callbacks[key];
-    		if (callbacks) {
-	    		for (var i = 0; cb = callbacks[i]; i++) {
-	    			if (cb.source != source) cb.handler(value);
-	    		}
-    		}
-    		updated = true;
-    	}
+        var value = data[key];
+        var field = this.getField(key);
+        if (value != field.value) {
+            field.value = value;
+            var callbacks = this.callbacks[key];
+            if (callbacks) {
+                for (var i = 0; cb = callbacks[i]; i++) {
+                    if (cb.source != source) cb.handler(value);
+                }
+            }
+            updated = true;
+        }
     }
     if (source && updated) {
         var self = this;
@@ -37,16 +37,16 @@ update: function(data, source) {
 },
 callbacks: {},
 subscribe: function(source, key, handler) {
-	var callbacks = this.callbacks[key] || (this.callbacks[key] = []);
-	callbacks.push({
-		source: source,
-		handler: handler
-	});
+    var callbacks = this.callbacks[key] || (this.callbacks[key] = []);
+    callbacks.push({
+        source: source,
+        handler: handler
+    });
 },
 send: function(data) {
     var data = {
         "search_type": "travel",
-        "debug": 1,
+        "debug": 0,
         "adults": 1,
         "children": 0,
         "nonstop": 0,
@@ -55,15 +55,15 @@ send: function(data) {
     for (var key in this.fields) {
         var field = this.fields[key];
         if (field.required && !(field.check ? field.check(field.value) : field.value)) {
-        	return;
+            return;
         }
         data[key] = field.value;
     }
-	/*$.get("/pricer/", {
-		search: data
-	}, function(s) {
-	    app.offers.showLoader(data);		
-	});*/
+    /*$.get("/pricer/", {
+        search: data
+    }, function(s) {
+        app.offers.showLoader(data);        
+    });*/
     this.apply(data);
 },
 apply: function(data) {
