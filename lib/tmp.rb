@@ -62,5 +62,15 @@ module Tmp
       end
     end
   end
+
+  def self.correct_morpher_fields
+    Country.all(:conditions => 'morpher_to is not NULL').each do |c|
+      if (c.name.mb_chars.split('')[0..1].every.to_s - "бвгджзйклмнпрстфхцчшщБВГДЖЗЙКЛМНПРСТФХЦЧШЩ".mb_chars.split('').every.to_s == []) && ("БВГДЖЗЙКЛМНПРСТФХЦЧШЩ".mb_chars.split('').every.to_s.include? c.name.mb_chars[1].to_s)
+        c.morpher_to = c.morpher_to.sub('во', 'в')
+        c.morpher_in = c.morpher_in.sub('во', 'в')
+        c.save
+      end
+    end
+  end
 end
 
