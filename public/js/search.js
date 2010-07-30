@@ -59,13 +59,8 @@ send: function(data) {
         }
         data[key] = field.value;
     }
-
-    /*$.get("/pricer/", {
-        search: data
-    }, function(s) {
-        app.offers.showLoader(data);        
-    });*/
-    this.apply(data);
+    this.transcript(data);
+    app.offers.load(data); 
 },
 transcript: function(data) {
     // Заполнение заголовка, пока не сделаем аяксовое
