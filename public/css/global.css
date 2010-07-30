@@ -74,12 +74,6 @@ body
 	height: 100%;
 }
 
-* html,
-* html body 
-{
-	height: 100%;
-}
-
 body {
     font: 100% Arial,Helvetica,sans-serif;
 

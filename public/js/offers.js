@@ -16,7 +16,7 @@ load: function(data) {
     });
 
 },
-update: function() {
+update: function(s) {
 	$("#offers-list").html(s);
 	$("#offers-results").removeClass("g-none");
 }
