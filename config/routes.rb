@@ -2,6 +2,7 @@ ActionController::Routing::Routes.draw do |map|
   Typus::Routes.draw(map)
 
   map.pricer 'pricer', :controller => 'pricer', :action => 'index'
+  map.pricer 'pricer/validate', :controller => 'pricer', :action => 'validate'
 
   map.resources :locations, :collection => {:random => :get, :current => :get}
 

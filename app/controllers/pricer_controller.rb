@@ -12,5 +12,13 @@ class PricerController < ApplicationController
     @error_message = e.message
     render :text => @errorMessage
   end
+
+  def validate
+    @search = PricerForm.new(params[:search])
+    render :json => {
+      :valid => @search.valid?,
+      :human => "#{params[:search][:from]} &rarr; #{params[:search][:to]}"
+    }
+  end
 end
 
