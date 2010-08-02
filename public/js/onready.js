@@ -87,6 +87,7 @@
         if (e.tagName == 'U') {
             tools.to.focus();
             tools.to.trigger('set', e.innerHTML);
+            tools.to.trigger('enter');
         };
     });
 
