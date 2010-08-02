@@ -1,5 +1,6 @@
 class City < ActiveRecord::Base
   include ExtResource
+  extend IataStash
 
   TIMEZONE = TZInfo::Timezone.all_identifiers
 

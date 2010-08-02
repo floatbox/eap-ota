@@ -1,5 +1,6 @@
 class Airline < ActiveRecord::Base
   include ExtResource
+  extend IataStash
   
   has_many :interline_agreements,
     :foreign_key => 'company_id',  :class_name => 'InterlineAgreement'

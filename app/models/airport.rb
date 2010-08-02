@@ -1,5 +1,6 @@
 class Airport < ActiveRecord::Base
   include ExtResource
+  extend IataStash
 
   belongs_to :city
   has_one :country, :through => :city

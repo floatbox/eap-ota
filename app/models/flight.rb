@@ -5,23 +5,23 @@ class Flight
    :arrival_time, :departure_date, :departure_time, :equipment_type_iata, :class_of_service, :seat_count, :warning
 
   def departure
-    departure_iata && Airport.find_or_create_by_iata(departure_iata)
+    departure_iata && Airport[departure_iata]
   end
 
   def arrival
-    arrival_iata && Airport.find_or_create_by_iata(arrival_iata)
+    arrival_iata && Airport[arrival_iata]
   end
 
   def operating_carrier
-    operating_carrier_iata && Airline.find_or_create_by_iata(operating_carrier_iata)
+    operating_carrier_iata && Airline[operating_carrier_iata]
   end
 
   def marketing_carrier
-    marketing_carrier_iata && Airline.find_or_create_by_iata(marketing_carrier_iata)
+    marketing_carrier_iata && Airline[marketing_carrier_iata]
   end
 
   def equipment_type
-    equipment_type_iata && Airplane.find_or_create_by_iata(equipment_type_iata)
+    equipment_type_iata && Airplane[equipment_type_iata]
   end
 
   delegate :name, :prefix => true, :allow_nil => true, :to => :departure
