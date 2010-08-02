@@ -20,7 +20,7 @@ class Airline < ActiveRecord::Base
   end
 
   def icon_url
-    "url(/system/airlines/icons/#{iata}.gif)"
+    "/img/system/airlines/#{iata}.gif"
   end
   
   def short_name
