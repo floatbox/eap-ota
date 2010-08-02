@@ -8,8 +8,3 @@ require 'rake/testtask'
 require 'rake/rdoctask'
 
 require 'tasks/rails'
-
-begin # необязательные гемы
-  require 'thinking_sphinx/tasks'
-rescue LoadError
-end
