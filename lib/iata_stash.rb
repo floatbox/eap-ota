@@ -1,11 +1,11 @@
 module IataStash
   # добавляет метод SomeClass[iata], который кэширует записи в текущем thread/request
   # ActiveRecord's query cache нааамного медленнее
-  def [](code)
-    stash[code] ||= find_by_iata(code)
-  end
+  delegate :[], :to => :stash
 
   def stash
-    Thread.current["#{name}_stash"] ||= Hash.new  # {|iata| new(:iata => iata)}
+    Thread.current["#{name}_stash"] ||= Hash.new do |hash, iata|
+      hash[iata] = find_or_initialize_by_iata(iata)
+    end
   end
 end
