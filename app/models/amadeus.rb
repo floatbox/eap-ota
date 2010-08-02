@@ -105,11 +105,7 @@ class Amadeus < Handsoap::Service
       :soap_action => "http://webservices.amadeus.com/1ASIWPOC1A/VLSSOQ_04_1_1A",
       :r => "http://xml.amadeus.com/VLSSOR_04_1_1A"
 
-    if (response / '//r:statusCode').to_s == 'P'
-      true
-    else
-      false
-    end
+    (response / '//r:statusCode').to_s == 'P'
   end
 
   def fare_master_pricer_calendar(args)
