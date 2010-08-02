@@ -65,7 +65,7 @@
 .define-popup dl.fade {
     display: block;
     opacity: 0.2;
-    filter: alpha(opacity=10);
+    filter: alpha(opacity=20);
 }
 
 /* ссылка в списке */

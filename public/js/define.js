@@ -88,6 +88,10 @@ app.Define = function($el) {
         me.reset();
     });
 
+    $el.bind('add', function(e, item) {
+        me.add(item);
+    });
+
     return this;
 };
 
@@ -206,11 +210,11 @@ app.Define.Popup = function(define) {
         $dl.slice(1,3).hover(
             function(e) {
                 var $this = $(this);
-                $el.data('value')[$dl.index($this)] || $this.removeClass('fade');
+                $el.data('value')[$dl.index($this)] || $this.fadeTo(200, 1); // $this.removeClass('fade')
             },
             function(e) {
                 var $this = $(this);
-                $el.data('value')[$dl.index($this)] || $this.addClass('fade');
+                $el.data('value')[$dl.index($this)] || $this.fadeTo(200, 0.2); // $this.addClass('fade')
             }        
         );
     }
@@ -297,7 +301,7 @@ return;
         var value  = $el.data('value');
 
         // клик по взрослым, но дети при этом не выбраны - можно закрыть окно
-        if (v < 10 && !(value[1] + value[2])) hide(500);
+        if (v <= 100 && !(value[1] + value[2])) hide(500);
 
         // это клик по уже отмеченному элементу - ничего не делаем
         if ($a.hasClass('checked')) return;
@@ -308,21 +312,23 @@ return;
 
 
         // запоминаем новое значение
-        if (v < 10) value[0] = v;
-        if (v >= 10 && v < 100) value[1] = v % 10;
-        if (v >= 100) value[2] = v % 100;
+        if (v < 100) value[0] = v % 10;
+        if (v >= 100 && v < 1000) value[1] = v % 100;
+        if (v >= 1000) value[2] = v % 1000;
         $el.data('value', value);
 
         // прячем или показываем кнопку закрывания окна
         $el.data('btn').toggleClass('g-none', !(value[1] + value[2]));
 
         // выбор действия
-        var action = value[0] == 1 && value[1] == 0 && value[2] == 0  ? 'reset' : 'set';
+            // дефолтное значение - один взрослый без детей
+            // var action = (value[0] == 1 && !value[1] && !value[2]) ? 'reset' : 'set';
+        var action = (!value[0] && !value[1] && !value[2]) ? 'reset' : 'set';
 
         // формируем значения и их текст для отображения в заголовке фильтра
         var i = -1, data = [];
         while (++i < $dl.length) value[i] && data.push({
-                v: value[i] * Math.pow(10, i),
+                v: value[i] + Math.pow(10, i + 1),
                 // строчка для взрослых формируется хитрожопо:
                 // если детей нет, то пишем "двое", иначе добавляем - "двое взрослых"
                 t: app.constant.numbers.collective[value[i]] + ((i > 0 || (value[1] + value[2])) ? (' ' + app.utils.plural(value[i], $dl[i].onclick())) : '')
@@ -358,9 +364,23 @@ return;
         });
     };
 
+    // снимает ненужные галочки в списке пассажиров
+    function fillListStatic() {
+        var i = -1, data = [];
+        //while (++i < $dl.length) l( $('dd', $dl[i]) );
+
+        $('dl a', $el).each(function(index, el) {
+            var hasValue = define.has({v: parseInt(el.onclick())});
+            $(el).toggleClass('checked', hasValue);
+
+// todo: надо выставлять галочки также на элементы "нет"
+
+        });
+    };
+
     // обновляет динамический список; позиционирует окно
     function show(values, offset) {
-        define.options.popup || fillList(values);
+        define.options.popup ? fillListStatic() : fillList(values);
 
         $el.css({left: offset.left - _const.offsetLeft, top: offset.top - _const.offsetTop});
         $el.fadeIn(200, function(){

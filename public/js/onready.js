@@ -123,14 +123,14 @@
         return value || !(rt && rt.value);
     });
     app.search.subscribe(calendar, 'rt', function(v) {
-	    calendar.toggleOneway(v == 0);
+        calendar.toggleOneway(v == 0);
     });
-	app.search.subscribe(calendar, 'date1', function(v) {
-		calendar.dpt.val(v);
-	});
-	app.search.subscribe(calendar, 'date2', function(v) {
-		calendar.ret.val(v);
-	});
+    app.search.subscribe(calendar, 'date1', function(v) {
+        calendar.dpt.val(v);
+    });
+    app.search.subscribe(calendar, 'date2', function(v) {
+        calendar.ret.val(v);
+    });
    
     // панель уточнений (фильтров)
 
@@ -206,9 +206,12 @@
         ]
     };
 
-    var define = $('#search\\.define');
-    var defines = $('p', define).define();
-    defines.trigger('update', data);
+    var $define = $('#search\\.define');
+    var $defines = $('p', $define).define();
+    $defines.trigger('update', data);
+
+    // рисуем "один взрослый"
+    $defines.slice(0, 1).trigger('add', {v: 11, t: 'один'});
 
 
     // верхние табы
@@ -268,9 +271,9 @@
         $spanel.switchClass(st ? cl : '', st ? '' :cl, 300);
     });
 
-	// Табы в результатах поиска
+    // Табы в результатах поиска
     $('#offers-tabs').radio({
-    	toggleClosest: 'li'
+        toggleClosest: 'li'
     });
 
     // фокус на поле ввода "Куда"
