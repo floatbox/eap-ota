@@ -24,4 +24,21 @@ class ApplicationController < ActionController::Base
     }
   end
 
+  # TODO перенести в модуль какой-нибудь, что ли.
+  def reset_amadeus_time
+    PricerForm.reset_parse_time
+    Amadeus.reset_request_time
+  end
+
+  def log_amadeus_time
+    parse_time = PricerForm.parse_time || 0
+    request_time = Amadeus.request_time || 0
+    if !parse_time.zero?
+      logger.debug "Last Amadeus pricer result (Request: %.2f, Parse: %.2f)" % [request_time, parse_time]
+    end
+  end
+
+  before_filter :reset_amadeus_time
+  after_filter :log_amadeus_time
+
 end

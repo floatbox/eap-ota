@@ -39,10 +39,14 @@ class Amadeus < Handsoap::Service
       response = parse_string(xml_string)
     else
       soap_body = render(action, args)
-      response = Session.with_session(opts[:session]) do |session|
-        invoke action, :soap_action => opts[:soap_action],
-          :soap_header => {'SessionId' => session.session_id} do |body|
-          body.set_value soap_body, :raw => true
+      response = nil
+      Session.with_session(opts[:session]) do |session|
+        @@request_time = Benchmark.ms do
+          response = invoke(action,
+            :soap_action => opts[:soap_action],
+            :soap_header => {'SessionId' => session.session_id} ) do |body|
+            body.set_value soap_body, :raw => true
+          end
         end
       end
       save_xml(action, response.to_xml)
@@ -59,6 +63,11 @@ class Amadeus < Handsoap::Service
     end
 
     response_body
+  end
+
+  cattr_reader :request_time
+  def self.reset_request_time
+    @@request_time = 0
   end
 
   def xml_template(action); "xml/#{action}.xml" end
