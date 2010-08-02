@@ -17,6 +17,11 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   
   attr_reader :to_iata, :from_iata
 
+  cattr_reader :parse_time
+  def self.reset_parse_time
+    @@parse_time = 0
+  end
+
   def to= name
     @to_iata =  Completer.new_or_cached.iata_from_name(name) rescue nil
     super
@@ -50,42 +55,46 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   end
 
   def parse(xml=travel_xml)
-    flight_indexes = xml.xpath('//r:flightIndex').map do |flight_index|
-      flight_index.xpath('r:groupOfFlights').map do |group|
-        Segment.new(
-          :flights => group.xpath("r:flightDetails/r:flightInformation").map { |fi| parse_flight(fi) }
+    recommendations = []
+    # TODO сделать инкрементирующийся счетчик
+    @@parse_time = Benchmark.ms do
+      flight_indexes = xml.xpath('//r:flightIndex').map do |flight_index|
+        flight_index.xpath('r:groupOfFlights').map do |group|
+          Segment.new(
+            :flights => group.xpath("r:flightDetails/r:flightInformation").map { |fi| parse_flight(fi) }
+          )
+        end
+      end
+
+      recommendations = xml.xpath("//r:recommendation").map do |rec|
+        prices = rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").collect {|x| x.to_f }
+        price_total = prices.sum
+
+        variants = rec.xpath("r:segmentFlightRef").map {|sf|
+          segments = sf.xpath("r:referencingDetail").each_with_index.collect { |rd, i|
+            # TODO проверить что:
+            # rd["refQualifier"] == "S"
+            flight_indexes[i][ rd.xpath("r:refNumber").to_i - 1 ]
+          }
+          Variant.new( :segments => segments )
+        }
+        
+        additional_info =
+          rec.xpath('.//r:fare').map {|f|
+            f.xpath('.//r:description|.//r:textSubjectQualifier').every.to_s.join("\n")
+          }.join("\n\n") +
+          "\n\nfareBasis: " +
+          rec.xpath('.//r:fareBasis').to_s
+
+        Recommendation.new(
+          :prices => prices,
+          :price_total => price_total,
+          :variants => variants,
+          :additional_info => additional_info
         )
       end
     end
-
-    recommendations = xml.xpath("//r:recommendation").map do |rec|
-      prices = rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").collect {|x| x.to_f }
-      price_total = prices.sum
-
-      variants = rec.xpath("r:segmentFlightRef").map {|sf|
-        segments = sf.xpath("r:referencingDetail").each_with_index.collect { |rd, i|
-          # TODO проверить что:
-          # rd["refQualifier"] == "S"
-          flight_indexes[i][ rd.xpath("r:refNumber").to_i - 1 ]
-        }
-        Variant.new( :segments => segments )
-      }
-      
-      additional_info =
-        rec.xpath('.//r:fare').map {|f|
-          f.xpath('.//r:description|.//r:textSubjectQualifier').every.to_s.join("\n")
-        }.join("\n\n") +
-        "\n\nfareBasis: " +
-        rec.xpath('.//r:fareBasis').to_s
-
-      Recommendation.new(
-        :prices => prices,
-        :price_total => price_total,
-        :variants => variants,
-        :additional_info => additional_info
-      )
-    end
-
+    recommendations
   end
 
   # fi: flightInformation node

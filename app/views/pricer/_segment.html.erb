@@ -2,11 +2,11 @@
     <% if variant.common_carrier && variant.segments.length > 1 %>
         <% if segment_counter == 0 %>
             <td rowspan=<%= variant.segments.length %> class="extra g-middle">
-                <p style="background:url(/img/system/airlines/<%= segment.marketing_carrier.iata %>.gif) no-repeat"><%= segment.marketing_carrier_name %>
+                <p style="background:url(<%= segment.marketing_carrier.icon_url %>) no-repeat"><%= segment.marketing_carrier_name %>
         <% end %>
     <% else %>
         <td class="extra">
-            <p style="background:url(/img/system/airlines/<%= segment.marketing_carrier.iata %>.gif) no-repeat"><%= segment.marketing_carrier_name %>
+            <p style="background:url(<%= segment.marketing_carrier.icon_url %>) no-repeat"><%= segment.marketing_carrier_name %>
     <% end %>
 
     <td class="dpt">
@@ -20,7 +20,7 @@
         <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
             <a href=# title="Рейс <%= flight.operating_carrier_iata %>&nbsp;<%= flight.flight_number %> <%= flight.departure.city.name %> &mdash; <%= flight.arrival.city.name %>, <%= human_duration(flight.duration) %> в пути на <%= flight.equipment_type_name %>"></a>
             <% if layover %>
-                <a href=# title="Пересадка в <%= flight.arrival.city.name %> длиной <%= human_duration(layover) %>" class="change"></a>
+                <a href=# title="Пересадка <%= flight.arrival.city.case_in.split(' ', 2)[0] %> <%= flight.arrival.city.case_in.split(' ', 2)[1] %> длиной <%= human_duration(layover) %>" class="change"></a>
             <% end %>
         <% end %>
 
@@ -43,11 +43,11 @@
         <% if segment_counter == 0 %>
             <td rowspan=<%= variant.segments.length %> class="extra extra-info g-middle">
                 <% if segment.flights.length > 1 %>
-                    <%= segment.flights.length - 1%>&nbsp;<%= Russian.pluralize(segment.flights.length - 1, 'пересадка', 'пересадки', 'пересадок') %> в
+                    <%= segment.flights.length - 1%>&nbsp;<%= Russian.pluralize(segment.flights.length - 1, 'пересадка', 'пересадки', 'пересадок') %>
                     <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
                         <% if layover %>
                             <br/>
-                            <%= flight.arrival.city.name %>
+                            <%= flight.arrival.city.case_in %>
                         <% end %>
                     <% end %>
                 <% end %>
@@ -55,11 +55,11 @@
     <% else %>
         <td class="extra extra-info">
             <% if segment.flights.length > 1 %>
-                <%= segment.flights.length - 1%>&nbsp;<%= Russian.pluralize(segment.flights.length - 1, 'пересадка', 'пересадки', 'пересадок') %> в
+                <%= segment.flights.length - 1%>&nbsp;<%= Russian.pluralize(segment.flights.length - 1, 'пересадка', 'пересадки', 'пересадок') %>
                 <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
                     <% if layover %>
                         <br/>
-                        <%= flight.arrival.city.name %>
+                        <%= flight.arrival.city.case_in %>
                     <% end %>
                 <% end %>
             <% end %>
