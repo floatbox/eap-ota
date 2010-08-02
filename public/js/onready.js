@@ -92,7 +92,8 @@
 
     // карта
 
-    if (YMaps) {
+    // какой там аналог у defined?()
+    if (window['YMaps']) {
         var loc = YMaps.location || {},
             lat = loc.latitude || 45,
             lon = loc.longitude || 22;
