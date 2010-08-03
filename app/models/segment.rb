@@ -47,8 +47,12 @@ class Segment
     (arrival_datetime_utc.to_i - departure_datetime_utc.to_i) / 60 rescue 0
   end
 
-  def layovers_count
+  def layover_count
     flights.size - 1
+  end
+
+  def layovers?
+    flights.size > 1
   end
 end
 
