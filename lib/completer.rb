@@ -44,6 +44,7 @@ class Completer
     result = nil
     scan(name) do |record|
       result ||= record.code if record.type == 'city' || record.type == 'airport'
+      break if result
     end
     result
   end
