@@ -36,8 +36,8 @@ class Completer
   end
 
   def iata_from_name(name)
-    # FIXME срабатывает и при частичном совпадении.
-    scan(name) do |record|
+    # FIXME перенести отсюда в фильтр например
+    scan_eq(name) do |record|
       return record.code if record.type == 'city' || record.type == 'airport'
     end
     nil
@@ -98,6 +98,13 @@ class Completer
     normalized_prefix = normalize(prefix)
     @records.each do |record|
       yield(record) if record.prenormalized_matches?(normalized_prefix)
+    end
+  end
+
+  def scan_eq(word)
+    normalized_word = normalize(word)
+    @records.each do |record|
+      yield(record) if record.prenormalized_eq?(normalized_word)
     end
   end
 
@@ -291,6 +298,11 @@ class Completer
       end || possible_code && possible_code == code
     end
 
+    def prenormalized_eq?(normalized_word)
+      to_match.any? do |str|
+        str == normalized_word
+      end || (code && code.downcase == normalized_word)
+    end
   end
 
   require 'memoize'
