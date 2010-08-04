@@ -328,11 +328,11 @@
             <!-- Результаты поиска -->
             <div id="offers-results" class="g-none">
         
-                <!-- Заголовок списка результатов (статистика, сортировка) -->
+                <!-- Вкладки списка результатов -->
                 <div id="offers-tabs">
                 <div class="wrap">
                     <ul>
-                        <li class="active"><a href="#" onclick="return {v: 'top'}">Наши предложения</a></li>
+                        <li class="active"><a href="#" onclick="return {v: 'best'}">Наши предложения</a></li>
                         <li><a href="#" onclick="return {v: 'prices'}">Матрица цен</a></li>
                         <li><a href="#" onclick="return {v: 'all'}">Все 250 вариантов</a></li>
                     </ul>
@@ -364,7 +364,8 @@
                 </ul>
                 
                 <!-- Список результатов -->
-                <div id="offers-list" class="offers">
+                <div id="offers-list">
+                <div id="offers-best" class="offers">
                     <table>
                         <colgroup>
                             <col width="118">
@@ -420,6 +421,10 @@
                                         <dd class="b-pseudo">Из Москвы &mdash; в <a href=#><u>14:00</u></a>, <a href=#><u>15:30</u></a>, <a href=#><u>16:20</u></a>. Из Парижа &mdash; в <a href=#><u>11:00</u></a> и в <a href=#><u>17:30</u></a>.
                                     </dl>
                     </table>
+                </div>
+                <div id="offers-all" class="offers g-none">
+
+                </div>
                 </div>
             
             </div>

@@ -1,293 +1,293 @@
 /* Calendar */
 .calendar 
 {
-	position: relative;
-	width: 589px;
+    position: relative;
+    width: 589px;
 }
 
 .calendar .viewport 
 {
-	position: relative;
-	width: 588px;
-	height: 332px;
-	overflow: hidden;
-	background: #acb6c3;
+    position: relative;
+    width: 588px;
+    height: 332px;
+    overflow: hidden;
+    background: #acb6c3;
 }
 
 .calendar .dates 
 {
-	position: relative;
-	width: 620px;
-	height: 306px;
-	overflow: auto;
+    position: relative;
+    width: 620px;
+    height: 306px;
+    overflow: auto;
 }
 
 /* Scroller */
 
 .calendar .scroller 
 {
-	position: absolute;
-	top: 0;
-	left: 175px;
-	height: 23px;
-	background: #555;
+    position: absolute;
+    top: 0;
+    left: 175px;
+    height: 23px;
+    background: #555;
 }
 
-	/* Scroller monthes */
+    /* Scroller monthes */
 
-	.calendar .scroller dl.timeline {
-		font-size: 13px;
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 420px;
-		overflow: visible;
-		cursor: default;
-	}
+    .calendar .scroller dl.timeline {
+        font-size: 13px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 420px;
+        overflow: visible;
+        cursor: default;
+    }
 
-	.calendar .scroller dt,
-	.calendar .scroller dd {
-		position: relative;
-		z-index: 1;
-		float: left;
-		padding: 3px 0;
-		text-align: center;
-	}
-	
-	.calendar .scroller dt
-	{
-		color: #E8E8E8;
-		cursor: pointer;
-	}
+    .calendar .scroller dt,
+    .calendar .scroller dd {
+        position: relative;
+        z-index: 1;
+        float: left;
+        padding: 3px 0;
+        text-align: center;
+    }
+    
+    .calendar .scroller dt
+    {
+        color: #E8E8E8;
+        cursor: pointer;
+    }
 
-	.calendar .scroller dd
-	{
-		padding-left: 8px;
-		color: #E8E8E8;
-	}
-	
-	.calendar .scroller .overlay
-	{
-		position: absolute;
-		top: 0;
-		z-index: 1;
-		height: 20px;
-		background: #343434;
-		opacity: 0.5;
-		filter: alpha(opacity=50);
-		cursor: default;
-	}
+    .calendar .scroller dd
+    {
+        padding-left: 8px;
+        color: #E8E8E8;
+    }
+    
+    .calendar .scroller .overlay
+    {
+        position: absolute;
+        top: 0;
+        z-index: 1;
+        height: 20px;
+        background: #343434;
+        opacity: 0.5;
+        filter: alpha(opacity=50);
+        cursor: default;
+    }
 
-	.calendar .scroller .before {
-		left: -50px;
-		width: 50px;
-	}
-	.calendar .scroller .after {
-		left: 100%;
-		width: 90px;
-	}
+    .calendar .scroller .before {
+        left: -50px;
+        width: 50px;
+    }
+    .calendar .scroller .after {
+        left: 100%;
+        width: 90px;
+    }
 
-	/* Scrollbar */
-	
-	.calendar .scrollbar 
-	{
-		position: absolute;
-		top: 0;
-		left: 0;
-		height: 23px;
-		background: #99a1ac;
-	}
+    /* Scrollbar */
+    
+    .calendar .scrollbar 
+    {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 23px;
+        background: #99a1ac;
+    }
 
-	/* Scroll buttons */
-	
-	.calendar .scrollfw,
-	.calendar .scrollbw 
-	{
-		position: absolute;
-		left: 568px;
-		width: 11px;
-		height: 6px;
-		border: 5px solid #343434;
-		background: url(/img/arr-up-down.gif) no-repeat;
-		cursor: pointer;
-	}
-	
-	.calendar .scrollbw 
-	{
-		top: 7px;
-		background-position: -11px 0;
-	}
-	
-	.calendar .scrollfw 
-	{
-		top: 355px;
-		background-position: -11px 100%;
-	}
+    /* Scroll buttons */
+    
+    .calendar .scrollfw,
+    .calendar .scrollbw 
+    {
+        position: absolute;
+        left: 568px;
+        width: 11px;
+        height: 6px;
+        border: 5px solid #343434;
+        background: url(/img/arr-up-down.gif) no-repeat;
+        cursor: pointer;
+    }
+    
+    .calendar .scrollbw 
+    {
+        top: 7px;
+        background-position: -11px 0;
+    }
+    
+    .calendar .scrollfw 
+    {
+        top: 355px;
+        background-position: -11px 100%;
+    }
 
 /* Days of the week */
 
 .calendar ul.week 
 {
-	width: 588px;
-	height: 25px;
-	border-bottom: 1px solid #c7ced6;
-	background: #99a1ac;
-	color: #4b4b4b;
-	font-size: 13px;
+    width: 588px;
+    height: 25px;
+    border-bottom: 1px solid #c7ced6;
+    background: #99a1ac;
+    color: #4b4b4b;
+    font-size: 13px;
 }
 
 .calendar .week li 
 {
-	float: left;
-	width: 24px;
-	padding: 5px 55px 5px 5px;
-	text-align: center;
+    float: left;
+    width: 24px;
+    padding: 5px 55px 5px 5px;
+    text-align: center;
 }
 
 /* Calendar dates */
 .calendar ul.month 
 {
-	display: inline;
-	width: 588px;
-	height: auto;
-	overflow: visible;
+    display: inline;
+    width: 588px;
+    height: auto;
+    overflow: visible;
 }
 
 .calendar .dates li 
 {
-	float: left;
-	position: relative;
-	width: 34px;
-	height: 40px;
-	border-bottom: 1px solid #c7ced6;
-	padding: 5px 50px 5px 0;
-	color: #4b4b4b;
-	font: bold 95% Arial, sans-serif;
-	text-align: center;
-	cursor: pointer;
+    float: left;
+    position: relative;
+    width: 34px;
+    height: 40px;
+    border-bottom: 1px solid #c7ced6;
+    padding: 5px 50px 5px 0;
+    color: #4b4b4b;
+    font: bold 95% Arial, sans-serif;
+    text-align: center;
+    cursor: pointer;
 }
 
 .calendar .odd li {
-	background: #b6bec9;
+    background: #b6bec9;
 }
 
 .calendar .dates li.hl 
 {
-	background: #b898b5;
-	border-color: #cfb9cc;
+    background: #b898b5;
+    border-color: #cfb9cc;
 }
 .calendar .odd li.hl 
 {
-	background: #c09eb9;
+    background: #c09eb9;
 }
 
 .calendar .dates li.inactive {
-	color: #9da5b0;
-	cursor: default;
-	border-color: #c7ced6;
-	background: none;
+    color: #9da5b0;
+    cursor: default;
+    border-color: #c7ced6;
+    background: none;
 }
 
 .calendar .dayoff 
 {
-	color: #ce001a;
+    color: #ce001a;
 }
 
 .calendar .inactive .dayoff 
 {
-	color: #b796a6;
+    color: #b796a6;
 }
 
 .calendar .dates .there 
 {
-	background: #c280a9;
-	border-color: #d7a4c2;
+    background: #c280a9;
+    border-color: #d7a4c2;
 }
 .calendar .odd .there 
 {
-	background: #c785ad;
+    background: #c785ad;
 }
 
 .calendar .dates li.dpt,
 .calendar .dates li.ret,
 .calendar .dates li.dpthover,
 .calendar .dates li.rethover {
-	background: url(/img/date-arrows.png) no-repeat;
+    background: url(/img/date-arrows.png) no-repeat;
 }
 
 .calendar .dates li.dpthover,
 .calendar .dates li.rethover 
 {
-	background-color: #cb70a2;
-	border-color: #da9cbe;
+    background-color: #cb70a2;
+    border-color: #da9cbe;
 }
 
 .calendar .dates li.dpthover
 {
-	background-position: 64px 14px;
+    background-position: 64px 14px;
 }
 
 .calendar .dates li.rethover
 {
-	background-position: 64px -106px;
+    background-position: 64px -106px;
 }
 
 .calendar .dates li.dpt,
 .calendar .dates li.ret 
 {
-	border-color: #e67bae;
-	background-color: #DC3F8A;
-	background-repeat: no-repeat;
-	color: #fff;
-	cursor: default;
+    border-color: #e67bae;
+    background-color: #DC3F8A;
+    background-repeat: no-repeat;
+    color: #fff;
+    cursor: default;
 }
 
 .calendar .dates li.dpt 
 {
-	background-position: 64px -46px;
+    background-position: 64px -46px;
 }
 
 .calendar .dates li.ret 
 {
-	background-position: 64px -166px;
+    background-position: 64px -166px;
 }
 
 .calendar .dates li.dpt.rethover
 {
-	background-position: 64px -226px;
+    background-position: 64px -226px;
 }
 
 .calendar .dates li.dpt.ret
 {
-	background-position: 64px -286px;
+    background-position: 64px -286px;
 }
 
 
 .calendar .dpt .dayoff,
 .calendar .ret .dayoff 
 {
-	color: #fff;
+    color: #fff;
 }
 
 /* Reset */
 .calendar .reset 
 {
-	color: #A0A0A0;
-	font-size: 70%;
-	cursor: pointer;
+    color: #A0A0A0;
+    font-size: 70%;
+    cursor: pointer;
 }
 
 .calendar .reset:hover 
 {
-	color: #FFF;
+    color: #FFF;
 }
 
 .calendar .reset .label 
 {
-	border-bottom: 1px dotted #A0A0A0;
+    border-bottom: 1px dotted #A0A0A0;
 }
 
 .calendar .reset:hover .label 
 {
-	border-color: #FFF;
+    border-color: #FFF;
 }

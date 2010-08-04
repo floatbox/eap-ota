@@ -7,8 +7,8 @@
 }
 
 .search-blocks {
-	overflow: hidden;
-	zoom: 1;
+    overflow: hidden;
+    zoom: 1;
 }
 
 /* Панели куда-когда */
@@ -16,8 +16,8 @@
 #search-where
 {
     position: relative;
-	float: left;
-	display: inline;
+    float: left;
+    display: inline;
     width: 318px;
     margin: 0 24px 0 15px;
 }
@@ -25,7 +25,7 @@
 #search-when
 {
     position: relative;
-	float: left;
+    float: left;
     width: 588px;
 }
 

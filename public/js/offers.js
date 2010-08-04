@@ -1,6 +1,6 @@
 $.extend(app.offers, {
 load: function(data) {
-	var self = this;
+    var self = this;
     $("#offers-results").addClass("g-none");
     $("#offers-progress").removeClass("g-none");
     $("#offers").removeClass("g-none");
@@ -17,7 +17,7 @@ load: function(data) {
 
 },
 update: function(s) {
-	$("#offers-list").html(s);
-	$("#offers-results").removeClass("g-none");
+    $("#offers-list").html(s);
+    $("#offers-results").removeClass("g-none");
 }
 });

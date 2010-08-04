@@ -36,11 +36,12 @@ app.Radio = function($el, options) {
 
     function set(v) {
         $items.each(function() {
-        	var item = $(this), tc = options && options.toggleClosest;
-        	if (tc) item = $(this).closest(tc);
-			item.toggleClass('active', this.onclick().v == v);
+            var item = $(this), tc = options && options.toggleClosest;
+            if (tc) item = $(this).closest(tc);
+            item.toggleClass('active', this.onclick().v == v);
         });
         value = v;
+        $el.trigger('select', v);
     };
 
     $el.bind('set', function(e, v) {

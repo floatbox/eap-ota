@@ -272,13 +272,18 @@
     });
 
     // Табы в результатах поиска
-    $('#offers-tabs').radio({
+    $('#offers-tabs').bind('select', function(e, v) {
+        var activeId = 'offers-' + v;
+        $('#offers-list').children().each(function() {
+            $(this).toggleClass('g-none', $(this).attr('id') != activeId);
+        });
+    }).radio({
         toggleClosest: 'li'
     });
 
     // фокус на поле ввода "Куда"
     tools.to.focus();
-    
+
 });
 
 

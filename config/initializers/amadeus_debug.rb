@@ -1,5 +1,5 @@
 # выключить запросы к Amadeus
-# Amadeus.fake = true
+Amadeus.fake = true
 
 fh = open(Rails.root + 'log/amadeus.log', 'a')
 fh.sync=true

@@ -2,72 +2,72 @@
 
 #offers-tabs
 {
-	border-bottom: 12px solid #FFF;
+    border-bottom: 12px solid #FFF;
 }
 
 #offers-tabs .wrap 
 {
-	position: relative;
-	top: 7px;
+    position: relative;
+    top: 7px;
 
-	overflow: hidden;
+    overflow: hidden;
 
-	margin-top: -7px;
-	zoom: 1;
+    margin-top: -7px;
+    zoom: 1;
 }
 
 #offers-tabs ul
 {
-	display: inline;
-	float: left;
+    display: inline;
+    float: left;
 }
 
 #offers-tabs ul.secondary
 {
-	margin-left: 30px;
+    margin-left: 30px;
 }
 
 #offers-tabs li 
 {
-	font-size: 18px;
-	font-weight: bold;
+    font-size: 18px;
+    font-weight: bold;
 
-	float: left;
-	
-	padding: 6px 15px 14px;
-	
-	line-height: 19px;
-	
-	background: url(/img/offers/tab-arrow.png) no-repeat 0 -10px;
+    float: left;
+    
+    padding: 6px 15px 14px;
+    
+    line-height: 19px;
+    
+    background: url(/img/offers/tab-arrow.png) no-repeat 0 -10px;
 }
 
-	#offers-tabs li a
-	{
-		text-decoration: underline;
+    #offers-tabs li a
+    {
+        text-decoration: underline;
 
-		color: #dc3f8a;
-	}
+        color: #dc3f8a;
+    }
 
-	#offers-tabs ul.secondary a
-	{
-		color: #4b4b4b;
-	}
+    #offers-tabs ul.secondary a
+    {
+        color: #4b4b4b;
+    }
 
 #offers-tabs li.active 
 {
-	padding: 0 0 7px;
-	
-	background-position: 50% 100%;
+    padding: 0 0 7px;
+    
+    background-position: 50% 100%;
 }
 
-	#offers-tabs li.active a
-	{
-		display: block;
+    #offers-tabs li.active a
+    {
+        display: block;
 
-		padding: 6px 15px 7px;
+        padding: 6px 15px 7px;
 
-		text-decoration: none;
+        text-decoration: none;
 
-		color: #FFF;
-		background: #dc3f8a;
-	}
+        color: #FFF;
+        background: #dc3f8a;
+    }
