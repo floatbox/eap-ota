@@ -9,4 +9,11 @@ class Recommendation
     end
   end
 
+  def sellable?
+    variants.every.segments.flatten.every.marketing_carrier.all? &:aviacentr
+  end
+
+  def bullshit?
+    variants.every.segments.flatten.every.flights.flatten.any? {|f| f.equipment_type.engine_type == 'train' }
+  end
 end

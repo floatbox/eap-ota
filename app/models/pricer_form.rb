@@ -109,7 +109,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       parse(travel_xml)
     when 'calendar'
       parse(calendar_xml)
-    end
+    end #.select(&:sellable?)
   end
 
   def parse(xml=travel_xml)

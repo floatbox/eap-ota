@@ -13,7 +13,7 @@
             <th title="Из них тариф <%= recommendation.prices.map{|p| p.to_i.to_s }.join(' руб. и сборы ');%> руб.">
                 <%= recommendation.price_total.to_i %>&nbsp;<s class="rur">р<s>уб.</s></s>
             <td colspan="3">
-                <a href=# class="b-pseudo" title="Развернуть это предложение" onclick="return false"><u>Подробнее о&nbsp;перелёте</u></a>
+              <a href=# class="b-pseudo" title="Развернуть это предложение " onclick="return false"><u>Подробнее о&nbsp;перелёте <%= 'который мы не можем продать потому что авиацентр!' unless recommendation.sellable? %> <%= 'который к тому же поезд!' if recommendation.bullshit? %></u></a>
             <td>
                 <a href='/pnr_form/new/?flight_codes=<%= variant.flight_codes.join("_")%>' class="a-button" target="booking" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Полететь</a>
     <tbody>
