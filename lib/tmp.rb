@@ -57,19 +57,15 @@ module Tmp
 
   def self.fill_in_morpher_fields
     [Country, City, Airport].each do |m|
-      m.all(:conditions => '((proper_to = "") or (proper_to is NULL)) and (morpher_to is NULL) and (name_ru != "") and (name_ru is not NULL)').each do |c|
+      m.all(:conditions => '((proper_to = "") or (proper_to is NULL)) and (morpher_to is NULL or morpher_to = "") and (name_ru != "") and (name_ru is not NULL)').each do |c|
         c.save_guessed
       end
     end
   end
 
-  def self.correct_morpher_fields
-    Country.all(:conditions => 'morpher_to is not NULL').each do |c|
-      if (c.name.mb_chars.split('')[0..1].every.to_s - "бвгджзйклмнпрстфхцчшщБВГДЖЗЙКЛМНПРСТФХЦЧШЩ".mb_chars.split('').every.to_s == []) && ("БВГДЖЗЙКЛМНПРСТФХЦЧШЩ".mb_chars.split('').every.to_s.include? c.name.mb_chars[1].to_s)
-        c.morpher_to = c.morpher_to.sub('во', 'в')
-        c.morpher_in = c.morpher_in.sub('во', 'в')
-        c.save
-      end
+  def clear_morpher_fields
+    [Country, City, Airport].each do |m|
+      m.update_all("morpher_from = NULL, morpher_in = NULL, morpher_to = NULL")
     end
   end
 end
