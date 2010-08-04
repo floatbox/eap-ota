@@ -1,9 +1,13 @@
 /* Предложение по перелёту и отелю (BEGIN) */
-    .offers
+    
+    #offers-list 
     {
         width: 675px;
-        margin: 15px;
-
+        margin: 15px;    
+    }
+    
+    .offers
+    {
         overflow: hidden;
     }
 

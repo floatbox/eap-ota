@@ -1,5 +1,10 @@
 ﻿<% if @recommendations.present? %>
-    <%= render :partial => 'recommendation', :collection => @recommendations %>
+<div id="offers-best" class="offers">
+
+</div>
+<div id="offers-best" class="offers">
+	<%= render :partial => 'recommendation', :collection => @recommendations %>
+</div>
 <% else %>
     <h2>Таких рейсов нет, попробуйте другие даты.</h2>
 <% end %>

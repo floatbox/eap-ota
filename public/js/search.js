@@ -47,8 +47,6 @@ send: function(data) {
     var self = this, data = {
         "search_type": "travel",
         "debug": 0,
-        "adults": 1,
-        "children": 0,
         "nonstop": 0,
         "day_interval": 1
     }
@@ -70,22 +68,7 @@ send: function(data) {
 },
 transcript: function(str, data) {
     var $transcript = $('#search-transcript');
-    var monthes = app.constant.MNg;
-    if (str.search(/\d/) != -1) {
-        $("h1", $transcript).html(str);
-    } else {
-        // Даты из календаря, пока их нет в строке
-        if (data.rt) {
-            var d1 = Date.parseAmadeus(data.date1);
-            var d2 = Date.parseAmadeus(data.date2);
-            var words = [d1.getDate(), monthes[d1.getMonth()], d2.getDate(), monthes[d2.getMonth()]];
-            if (words[1] == words[3]) words[1] = 'по'; else words[1] += ' по';
-            $("h1", $transcript).html(str + ' и&nbsp;обратно c ' + words.join(' '));
-        } else {
-            var d1 = Date.parseAmadeus(data.date1); 
-            $("h1", $transcript).html(str + ' ' + d1.getDate() + ' ' + monthes[d1.getMonth()]);
-        }
-    }
+    $transcript.children('h1').html(str);
     $transcript.removeClass('g-none');
     var w = $(window), wst = w.scrollTop();
     var offset = $transcript.offset().top;

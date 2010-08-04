@@ -92,6 +92,8 @@ app.Define = function($el) {
         me.add(item);
     });
 
+	$el.data('name', this.options.name);
+
     return this;
 };
 
@@ -183,6 +185,7 @@ app.Define.prototype = {
         }
 
         me.$label[0].title = title;
+        me.$el.data('value', me.value).trigger('change');
     }
 
 }

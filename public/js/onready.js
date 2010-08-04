@@ -206,12 +206,30 @@
         ]
     };
 
-    var $define = $('#search\\.define');
-    var $defines = $('p', $define).define();
-    $defines.trigger('update', data);
+	tools.defines = {};
+    $('#search-define p').each(function() {
+    	var $define = $(this).define().trigger('update', data);
+    	var dname = $define.data('name');
+    	tools.defines[dname] = $define;
+    });
+
+    // передача количества пассажиров в форму
+    tools.defines['persons'].bind('change', function() {
+    	var adults = 0, children = 0;
+    	var values = $(this).trigger('get').data('value');
+		for (var i = 0; v = values[i]; i++) {
+			var orig = values[i].v;
+			var real = orig % (Math.floor(orig / 10) * 10);
+			if (orig < 100) adults = real; else children += real;
+		}
+    	app.search.update({
+    		'adults': adults,
+    		'children': children
+    	}, this);
+    });
 
     // рисуем "один взрослый"
-    $defines.slice(0, 1).trigger('add', {v: 11, t: 'один'});
+    tools.defines['persons'].trigger('add', {v: 11, t: 'один'});
 
 
     // верхние табы
