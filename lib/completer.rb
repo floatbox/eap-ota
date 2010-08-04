@@ -86,34 +86,42 @@ class Completer
               :hl => hl,
               :entity => record.entity
             }
-            return data if data.size == limit
+            break if data.size == limit
           end
         end
       end
     end
-    return data
+
+    if data.blank? && (opts.delete(:jcuken) != false)
+      complete(Qwerty.jcuken(string), position, opts.merge(:jcuken => false))
+    else
+      data
+    end
   end
 
   def scan(prefix)
     normalized_prefix = normalize(prefix)
-    @records.each do |record|
+    @index[normalized_prefix[0].to_s].each do |record|
       yield(record) if record.prenormalized_matches?(normalized_prefix)
     end
   end
 
   def scan_eq(word)
     normalized_word = normalize(word)
-    @records.each do |record|
+    @index[normalized_word[0].to_s].each do |record|
       yield(record) if record.prenormalized_eq?(normalized_word)
     end
   end
 
   def clear
     @records = []
+    @index = Hash.new {|hash, key| hash[key] = [] }
   end
 
   def add(args)
-    @records << (args.is_a?(Record) ? args : Record.new(args))
+    rec = (args.is_a?(Record) ? args : Record.new(args))
+    @records << rec
+    rec.to_match_index_letters.each {|letter| @index[letter] << rec }
   end
 
   def read_csv(filename)
@@ -271,11 +279,16 @@ class Completer
     attr_accessor :word, :type, :name, :code, :aliases, :to_match, :info, :hint
 
     def entity
-      { :iata => code, :type => type, :name => name, :info => info, :hint => hint }
+      { :iata => code, :type => type, :name => name, :info => info, :hint => hint }.delete_if {|key, value| value.nil? }
     end
 
     def update_to_match
       @to_match = ([word] + aliases).compact.map {|word| normalize(word)}
+    end
+
+    # normalized first letters (for now)
+    def to_match_index_letters
+      (@to_match + Array(code.presence && normalize(code))).map{ |word| word[0].to_s }.uniq
     end
 
     def matches?(prefix)
@@ -283,18 +296,13 @@ class Completer
     end
 
     def prenormalized_matches?(normalized_prefix)
-      if normalized_prefix.length > 3
-        layout_fixed_prefix = Qwerty.jcuken(normalized_prefix)
-      end
-
       if normalized_prefix.length == 3
         # full match of IATA for countries
         possible_code = normalized_prefix.upcase
       end
 
       to_match.any? do |str|
-        str.start_with?(normalized_prefix) ||
-        layout_fixed_prefix && str.start_with?(layout_fixed_prefix)
+        str.start_with?(normalized_prefix)
       end || possible_code && possible_code == code
     end
 
@@ -305,24 +313,22 @@ class Completer
     end
   end
 
-  require 'memoize'
-  class Qwerty
-    QWERTY = ('qwertyuiop[]' + '{}' +
-      'asdfghjkl;\'' + ':"' +
-      'zxcvbnm,.' + '<>')
-    JCUKEN = ('йцукенгшщзхъ' + 'хъ' +
-      'фывапролджэ' + 'жэ' +
-      'ячсмитьбю' + 'бю').mb_chars
+  module Qwerty
+    QWERTY = ('qwertyuiop[]' + 'QWERTYUIOP{}' +
+      'asdfghjkl;\'' + 'ASDFGHJKL:"' +
+      'zxcvbnm,./' + 'ZXCVBNM<>?')
+    JCUKEN = ('йцукенгшщзхъ' + 'ЙЦУКЕНГШЩЗХЪ' +
+      'фывапролджэ' + 'ФЫВАПРОЛДЖЭ' +
+      'ячсмитьбю.' + 'ЯЧСМИТЬБЮ,').mb_chars
     QJ_MAP = Hash[*QWERTY.chars.zip(JCUKEN.chars).flatten]
 
 
-    class << self
-      def jcuken(s)
-        s.mb_chars.chars.map {|c| QJ_MAP[c] || c }.join.mb_chars
-      end
-      Object.send :include, Memoize
-      memoize :jcuken
+    module_function
+
+    def jcuken(s)
+      s.mb_chars.chars.map {|c| QJ_MAP[c] || c }.join.mb_chars
     end
+
   end
 
 end
