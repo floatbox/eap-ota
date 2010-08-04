@@ -76,7 +76,7 @@ module Traviata
       def save_guessed
         inflections = cases
         pr = in_preposition(self.name)
-        update_attributes(:morpher_to => "#{pr} #{(cases[3]).chomp}", :morpher_from => "из #{(cases[1]).chomp}", :morpher_in => "#{pr} #{(cases[5]).chomp}" ) if cases[3].present
+        update_attributes(:morpher_to => "#{pr} #{(cases[3]).chomp}", :morpher_from => "из #{(cases[1]).chomp}", :morpher_in => "#{pr} #{(cases[5]).chomp}" ) if cases[3].presence
       end
 
       def in_preposition word
