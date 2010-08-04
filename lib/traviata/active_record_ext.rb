@@ -76,11 +76,11 @@ module Traviata
       def save_guessed
         inflections = cases
         pr = in_preposition(self.name)
-        update_attributes(:morpher_to => "#{pr} #{(cases[3] || nominative).chomp}", :morpher_from => "из #{(cases[1] || nominative).chomp}", :morpher_in => "#{pr} #{(cases[5] || nominative).chomp}" )
+        update_attributes(:morpher_to => "#{pr} #{(cases[3]).chomp}", :morpher_from => "из #{(cases[1]).chomp}", :morpher_in => "#{pr} #{(cases[5]).chomp}" ) if cases[3].present
       end
 
       def in_preposition word
-        if word.mb_chars.split('')[0..1].every.to_s - "бвгджзйклмнпрстфхцчшщБВГДЖЗЙКЛМНПРСТФХЦЧШЩ".mb_chars.split('').every.to_s == []
+        if (word.mb_chars.split('')[0..1].every.to_s - "бвгджзйклмнпрстфхцчшщБВГДЖЗЙКЛМНПРСТФХЦЧШЩ".mb_chars.split('').every.to_s == []) && ("ВФвф".mb_chars.split('').every.to_s.include? word.mb_chars[0].to_s) && !(("БВГДЖЗЙКЛМНПРСТФХЦЧШЩ".mb_chars.split('').every.to_s.include? word.mb_chars[1].to_s))
           'во'
         else
           'в'
