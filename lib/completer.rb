@@ -8,6 +8,7 @@ $KCODE = 'u'
 
 class Completer
   attr_reader :updated_at
+  attr_reader :records, :index
 
   module Normalizer
     def normalize(word)
@@ -22,6 +23,10 @@ class Completer
       @completer = Completer.new
     end
     @completer
+  end
+
+  def self.complete(*args)
+    new_or_cached.complete(*args)
   end
 
   def initialize(filename_or_words=nil)
@@ -78,6 +83,7 @@ class Completer
             } || end_poses[0]
 
             hl = normalize(word_part).to_s
+            debugger
             data << {
               :insert => record.word,
               :start => leftmost_start_pos,
@@ -101,6 +107,7 @@ class Completer
 
   def scan(prefix)
     normalized_prefix = normalize(prefix)
+    return if normalized_prefix.blank?
     @index[normalized_prefix[0].to_s].each do |record|
       yield(record) if record.prenormalized_matches?(normalized_prefix)
     end
@@ -108,6 +115,7 @@ class Completer
 
   def scan_eq(word)
     normalized_word = normalize(word)
+    return if normalized_word.blank?
     @index[normalized_word[0].to_s].each do |record|
       yield(record) if record.prenormalized_eq?(normalized_word)
     end
@@ -206,6 +214,7 @@ class Completer
       synonyms = []
       synonyms << c.name_en unless c.name_en == c.name
       synonyms += c.synonyms
+      synonyms.delete_if &:blank?
       add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms, :hint => c.continent_part_ru)
     end
   end
@@ -215,6 +224,7 @@ class Completer
       synonyms = []
       synonyms << c.name_en unless c.name_en == c.name
       synonyms += c.synonyms
+      synonyms.delete_if &:blank?
       add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms, :hint => c.country.name, :info => "Город #{c.name} #{c.country.proper_in}")
     end
   end
@@ -223,6 +233,7 @@ class Completer
     Airline.all.each do |c|
       synonyms = []
       synonyms << c.short_name unless c.short_name == c.name
+      synonyms.delete_if &:blank?
       add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms)
     end
   end
@@ -230,7 +241,8 @@ class Completer
   def read_airplanes
     Airplane.all.each do |c|
       synonyms = []
-      synonyms << c.name_ru unless c.name_ru == c.name || c.name_ru.blank?
+      synonyms << c.name_ru unless c.name_ru == c.name
+      synonyms.delete_if &:blank?
       add(:name => c.name, :type => :aircraft, :code => c.iata, :aliases => synonyms)
     end
   end
@@ -238,7 +250,8 @@ class Completer
   def read_airports
     Airport.all(:include => {:city => :country}, :conditions => 'city_id is not null').each do |c|
       synonyms = []
-      synonyms << c.name_en unless c.name_en == c.name || c.name_en.blank?
+      synonyms << c.name_en unless c.name_en == c.name
+      synonyms.delete_if &:blank?
       add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms, :hint => c.city.name,  :info => "Аэропорт #{c.name} #{c.city.proper_in}, #{c.city.country.name}")
     end
   end
@@ -288,7 +301,7 @@ class Completer
 
     # normalized first letters (for now)
     def to_match_index_letters
-      (@to_match + Array(code.presence && normalize(code))).map{ |word| word[0].to_s }.uniq
+      (@to_match + Array(code.presence && normalize(code))).delete_if(&:blank?).map{ |word| word[0].to_s }.uniq
     end
 
     def matches?(prefix)
