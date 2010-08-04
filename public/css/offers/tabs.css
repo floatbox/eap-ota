@@ -1,18 +1,9 @@
-/* Заголовок списка результатов (BEGIN) */
+/* Вкладки списка результатов (BEGIN) */
 
 #offers-tabs
 {
-    border-bottom: 12px solid #FFF;
-}
-
-#offers-tabs .wrap 
-{
-    position: relative;
-    top: 7px;
-
     overflow: hidden;
 
-    margin-top: -7px;
     zoom: 1;
 }
 
