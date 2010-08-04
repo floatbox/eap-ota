@@ -46,7 +46,7 @@ subscribe: function(source, key, handler) {
 send: function(data) {
     var self = this, data = {
         "search_type": "travel",
-        "debug": 1,
+        "debug": 0,
         "adults": 1,
         "children": 0,
         "nonstop": 0,
@@ -64,9 +64,9 @@ send: function(data) {
     }, function(result) {
         if (result.valid) {
 			self.transcript(result.human, data);
-		    app.offers.load(data);	
+		    app.offers.load(data);
         }
-    });    
+    });
 },
 transcript: function(str, data) {
 	var $transcript = $('#search-transcript');
@@ -82,7 +82,7 @@ transcript: function(str, data) {
 	        if (words[1] == words[3]) words[1] = 'по'; else words[1] += ' по';
 	        $("h1", $transcript).html(str + ' и&nbsp;обратно c ' + words.join(' '));
 	    } else {
-	        var d1 = Date.parseAmadeus(data.date1); 
+	        var d1 = Date.parseAmadeus(data.date1);
 	        $("h1", $transcript).html(str + ' ' + d1.getDate() + ' ' + monthes[d1.getMonth()]);
 	    }
     }
@@ -101,3 +101,4 @@ transcript: function(str, data) {
     }
 }
 });
+
