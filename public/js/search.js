@@ -45,10 +45,10 @@ subscribe: function(source, key, handler) {
 },
 send: function(data) {
     var self = this, data = {
-        "search_type": "travel",
-        "debug": 0,
-        "nonstop": 0,
-        "day_interval": 1
+        'search_type': 'travel',
+        'nonstop': 0,
+        'day_interval': 1,
+        'debug': $('#sdmode').val() ? 1 : 0
     }
     for (var key in this.fields) {
         var field = this.fields[key];

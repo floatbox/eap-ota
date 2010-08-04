@@ -136,3 +136,24 @@
    padding-bottom: 0;
    visibility: hidden;
 }
+
+/* Чекбокс для режима отладки */
+#search-debug
+{
+	font-size: 11px;
+
+	position: absolute;
+	right: 0; top: 40px;
+	
+	visibility: hidden;
+}
+
+#header:hover #search-debug 
+{
+	visibility: visible;
+}
+
+#search-debug input
+{
+	margin: 0 3px 0 0;
+}
