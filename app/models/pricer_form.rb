@@ -12,7 +12,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   column :day_interval, :integer, 1
   column :debug, :boolean, false
   
-  validates_presence_of :from, :to, :date1
+  validates_presence_of :from_iata, :to_iata, :date1
   validates_presence_of :date2, :if => :rt
   
   attr_reader :to_iata, :from_iata
@@ -35,6 +35,64 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   
   def to_key
     []
+  end
+
+  def human
+    return "запрос не полон" unless valid?
+    r = []
+    if from_iata && (from_location = City[from_iata] || Airport[from_iata])
+      r << from_location.case_from
+    end
+    if to_iata && (to_location = City[to_iata] || Airport[to_iata])
+      r << to_location.case_to
+    end
+
+    r << 'и обратно' if rt
+
+    if adults > 1
+      r << ['вдвоем', 'втроем', 'вчетвером', 'впятером', 'вшестером', 'всемером', '8 взрослых'][adults-2]
+    end
+    if children > 0
+      r << ['с ребенком', 'с двумя детьми', 'с тремя детьми', '4 детских', '5 детских', '6 детских', '7 детских'][children-1]
+    end
+
+    if rt
+      r << human_dates(Date.strptime(date1, '%d%m%y'), Date.strptime(date2, '%d%m%y'))
+    else
+      r << human_dates(Date.strptime(date1, '%d%m%y'))
+    end
+
+    r.join(' ')
+  end
+
+  def human_dates(d1, d2=nil)
+    if d2.blank?
+      if d1.year == Date.today.year
+        return I18n.l(d1, :format => '%e %B')
+      else
+        return I18n.l(d1, :format => '%e %B %Y')
+      end
+
+    else
+      if d1.year == d2.year
+        if d1.month == d2.month
+          f1, f2 = '%e', '%e %B'
+        else
+          f1, f2 = '%e %B', '%e %B'
+        end
+
+        if d1.year != Date.today.year
+          f2 += ' %Y'
+        end
+      else
+        f1, f2 = '%e %B %Y', '%e %B %Y'
+      end
+
+      return "с %s по %s" % [
+        I18n.l(d1, :format => f1),
+        I18n.l(d2, :format => f2)
+      ]
+    end
   end
 
   def travel_xml
