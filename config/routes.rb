@@ -20,8 +20,6 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :pnr_form, :controller => 'PNR'
 
-  map.resources :offers, :collection => {:filter => :post, :grok => :post}
-
   map.geo_flight_query 'flight_queries/geo/:location', :controller => :flight_queries, :action => :geo, :method => :get
 
   map.resources :flight_queries, :collection => {:default => :get, :presets => :get}

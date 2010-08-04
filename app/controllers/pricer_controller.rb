@@ -17,7 +17,7 @@ class PricerController < ApplicationController
     @search = PricerForm.new(params[:search])
     render :json => {
       :valid => @search.valid?,
-      :human => "#{params[:search][:from]} &rarr; #{params[:search][:to]}"
+      :human => @search.human
     }
   end
 end

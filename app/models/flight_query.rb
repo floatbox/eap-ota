@@ -61,31 +61,8 @@ class FlightQuery
       args[:date1] = date.date1.first.strftime( '%d%m%y' )
       args[:date2] = date.date2.first.strftime( '%d%m%y' )
     rescue
-      
     end
-    # args[:nonstop] = ?  
-    args[:rt] = ( ret && ret.roundtrip?)
-    # args[:search_type] || 'travel'
-    args[:debug] = true if mode.try(:ticket?)
     @search = PricerForm.new(args)
-    return [] unless @search.valid?
-    @results = @search.search_offers
-  end
-
-  # чертовски рандомный календарег
-  def calendar
-    if from
-      startdate = date && date.date1.first || Date.today
-      (startdate..(startdate+30.days)).inject({}) do |hash,d|
-        p = Price.new((5000..10000).random)
-        # ааа!! стрелочки!!!
-        p.mode = ['back','forth'].random
-        hash[d.strftime('%m/%d/%Y')] = p
-        hash
-      end
-    else
-      {}
-    end
   end
 
   def stats
@@ -94,14 +71,6 @@ class FlightQuery
       {:id => l, :name => name}
     end
 
-    hotels = results.map(&:hotel).compact
-    hotel_stars = hotels.map(&:stars).uniq.sort.map do |s|
-      name = {2 => 'две звезды', 3 => 'три звезды', 4 => 'четыре звезды', 5 => 'пять звезд'}[s]
-      {:id => s, :name => name}
-    end
-    hotel_features = hotels.map(&:features).flatten.uniq.sort.map do |f|
-      {:id => f, :name => f}
-    end
     {
       :companies => results.every.company.compact.uniq.sort_by(&:name),
       :cities => results.map {|o| o.city}.uniq.sort_by(&:name),
@@ -139,40 +108,13 @@ class FlightQuery
   end
 
   def filled_attributes
-    attributes.delete_if {|k,v| v.blank?}
-  end
-
-  def attributes=(attrs)
-    attrs.each do |k, v|
-      send "#{k}=", v
-    end
+    attributes.reject {|k,v| v.blank?}
   end
 
   def update(other)
     self.attributes = other.filled_attributes
   end
 
-  def self.random
-    query = new(
-      :from => City.random,
-      :to => City.random
-    )
-    random_date = Date.today + rand(10).days
-    query.date = {
-      :date1 => [random_date],
-      :date2 => [random_date + rand(10).days]
-    }
-    query
-  end
-
-  def humanized
-    result = {}
-    attributes.each do |method, value|
-      next if value.blank?
-      result[method] = value.to_s
-    end
-    result
-  end
 
   def to_s
     #"#{from} #{to} #{date} #{adults} #{children}"

@@ -114,28 +114,5 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       :equipment_type_iata =>    fi.xpath("r:productDetail/r:equipmentType").to_s
     )
   end
-  
-  def search_offers
-    recommendations = search
-    offers = []
-    recommendations.each do |rec|
-      rec.variants.each do |variant|
-        #if date2
-        #  duration = (date2 - date1).to_i + 1
-        #else
-          duration = 1
-        #end
 
-        offers << Offer.new(
-          :segments => variant.segments,
-          :persons => children + adults,
-          :flight_price => rec.price_total,
-          # :company => company,
-          :duration => duration
-          # :hotel => hotel
-        )
-      end
-    end
-    offers
-  end
 end
