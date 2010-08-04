@@ -83,7 +83,6 @@ class Completer
             } || end_poses[0]
 
             hl = normalize(word_part).to_s
-            debugger
             data << {
               :insert => record.word,
               :start => leftmost_start_pos,
