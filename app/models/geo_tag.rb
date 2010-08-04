@@ -1,5 +1,6 @@
 class GeoTag < ActiveRecord::Base
   include ExtResource
+  include HasSynonyms
   has_many :geo_taggings, :dependent => :destroy
 
   def locations

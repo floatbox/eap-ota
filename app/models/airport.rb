@@ -1,5 +1,6 @@
 class Airport < ActiveRecord::Base
   include ExtResource
+  include HasSynonyms
   extend IataStash
 
   belongs_to :city

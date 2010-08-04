@@ -66,7 +66,7 @@ send: function(data) {
             self.transcript(result.human, data);
             app.offers.load(data);  
         }
-    });    
+    });
 },
 transcript: function(str, data) {
     var $transcript = $('#search-transcript');
@@ -101,3 +101,4 @@ transcript: function(str, data) {
     }
 }
 });
+

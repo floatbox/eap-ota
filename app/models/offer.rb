@@ -47,7 +47,7 @@ class Offer
   end
 
   def layovers
-    segments.map(&:layovers_count).max
+    segments.map(&:layover_count).max
   end
 
   def initialize keys={}
