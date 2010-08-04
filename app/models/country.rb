@@ -1,5 +1,6 @@
 class Country < ActiveRecord::Base
   include ExtResource
+  include HasSynonyms
 
   has_many :cities, :order => 'cities.name_ru'
 
