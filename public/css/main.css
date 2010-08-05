@@ -17,6 +17,7 @@
 
 @import 'search/form.css';
 @import 'search/autocomplete.css';
+@import 'search/submit.css';
 @import 'search/transcript.css';
 
 @import 'panel/panel.css';

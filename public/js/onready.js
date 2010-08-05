@@ -288,7 +288,13 @@
         var cl = 'collapsed', st = $spanel.hasClass(cl);
         $spanel.switchClass(st ? cl : '', st ? '' :cl, 300);
     });
-
+    
+    // кнопка отправки запроса
+    $('#search-submit .button').click(function(event) {
+        event.preventDefault();
+        if (!$(this).parent().hasClass('disabled')) app.search.submit();
+    });    
+    
     // Табы в результатах поиска
     $('#offers-tabs').bind('select', function(e, v) {
         var activeId = 'offers-' + v;
@@ -297,6 +303,13 @@
         });
     }).radio({
         toggleClosest: 'li'
+    });
+
+    // Hover в списке предложений
+    $('#offers-list').delegate('table', 'mouseover', function() {
+        $(this).addClass('hover');
+    }).delegate('table', 'mouseout', function() {
+        $(this).removeClass('hover');
     });
 
     // фокус на поле ввода "Куда"

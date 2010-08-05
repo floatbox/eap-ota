@@ -60,16 +60,18 @@ send: function(data) {
     $.get("/pricer/validate/", {
         search: data
     }, function(result) {
+        $('#search-submit').toggleClass('disabled', !result.valid);
         if (result.valid) {
-            self.transcript(result.human, data);
+            var $transcript = $('#search-transcript');
+            $transcript.children('h1').html(result.human);
+            $transcript.removeClass('g-none');
             app.offers.load(data);  
         }
     });
 },
-transcript: function(str, data) {
-    var $transcript = $('#search-transcript');
-    $transcript.children('h1').html(str);
-    $transcript.removeClass('g-none');
+submit: function() {
+    $("#offers").removeClass("latent");
+    var $transcript = $('#search-transcript').removeClass('latent');
     var w = $(window), wst = w.scrollTop();
     var offset = $transcript.offset().top;
     if (offset - wst > w.height() / 2) {

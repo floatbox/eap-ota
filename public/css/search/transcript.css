@@ -3,6 +3,11 @@
     margin: 15px 0;
 }
 
+#search-transcript.latent 
+{
+    display: none;
+}
+
 #search-transcript h1 {
     font: bold 190%/100% Arial, sans-serif;
    

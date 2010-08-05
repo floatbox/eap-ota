@@ -23,7 +23,7 @@
     font-weight: bold;
 
     width: 1%;
-    padding: .5em 0 .5em 15px;
+    padding: 12px 0 10px 15px;
 
     text-align: right;
 
@@ -31,7 +31,13 @@
 }
 
 .define td {
-    padding: .6em .2em .4em 10px;
+    padding: 12px .2em 10px 10px;
+}
+
+.define thead
+{
+    color: #CCC;
+    background: #3e3e3e;
 }
 
 .define thead tr {
@@ -41,11 +47,18 @@
 }
 
 .define thead td {
-    padding-right: 6em;
+    padding-right: 0;
+    /*padding: 10px 0 12px 10px;
+
+    vertical-align: top;*/
 }
 
 .define thead th {
+    /*padding-top: 10px;
+    padding-bottom: 12px;*/
+
     text-align: left;
+    /*vertical-align: top;*/
 }
 
 .define p {
@@ -61,6 +74,14 @@
 
 .define a:hover {
     color: #000;
+}
+
+.define thead a {
+    color: #CCC;
+    border-color: #CCC;
+}
+.define thead a:hover {
+    color: #FFF;
 }
 
 .define b {
