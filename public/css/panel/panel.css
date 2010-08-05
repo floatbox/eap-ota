@@ -60,7 +60,7 @@
         font-size: 75%;
         line-height: 22px;
         height: 22px;
-        display: block;
+        display: none;
         position: absolute;
         bottom: -24px;
         right: 1.5em;

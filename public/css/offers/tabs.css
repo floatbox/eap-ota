@@ -28,6 +28,7 @@
     padding: 6px 15px 14px;
     
     line-height: 19px;
+    letter-spacing: -0.03em;
     
     background: url(/img/offers/tab-arrow.png) no-repeat 0 -10px;
 }

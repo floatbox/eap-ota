@@ -53,6 +53,7 @@ send: function(data) {
     for (var key in this.fields) {
         var field = this.fields[key];
         if (field.required && !(field.check ? field.check(field.value) : field.value)) {
+            self.toggle(false);
             return;
         }
         data[key] = field.value;
@@ -60,16 +61,25 @@ send: function(data) {
     $.get("/pricer/validate/", {
         search: data
     }, function(result) {
+        self.toggle(result.valid);
         if (result.valid) {
-            self.transcript(result.human, data);
+            var $transcript = $('#search-transcript');
+            $transcript.children('h1').html(result.human);
+            $transcript.removeClass('g-none');
             app.offers.load(data);  
         }
     });
 },
-transcript: function(str, data) {
-    var $transcript = $('#search-transcript');
-    $transcript.children('h1').html(str);
-    $transcript.removeClass('g-none');
+toggle: function(mode) {
+    $('#search-submit').toggleClass('disabled', !mode);
+    if (!mode) {
+        $("#offers").addClass("latent");
+        $('#search-transcript').addClass('latent');           
+    }
+},
+submit: function() {
+    $("#offers").removeClass("latent");
+    var $transcript = $('#search-transcript').removeClass('latent');
     var w = $(window), wst = w.scrollTop();
     var offset = $transcript.offset().top;
     if (offset - wst > w.height() / 2) {

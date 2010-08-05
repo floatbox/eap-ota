@@ -1,52 +1,60 @@
-a.a-button {
-    display: inline-block;
+.define thead #search-submit
+{
+    width: 100px;
+    padding: 10px 15px 10px 80px;
+    
+    background: url(/img/search-glow.png) no-repeat 100% 0;
+}
 
-    padding: .4em;
+#search-submit a.button
+{
+    font-weight: bold;
+    
+    top: 0;
+
+    display: block;
+
+    padding: 6px 22px;
 
     text-align: center;
+    line-height: 21px;
     text-decoration: none;
 
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;
 
-    color: #333;
-    background-color: #8bb617;
+    color: #FFF;
+    background-color: #8a9f13;
 
-    border: 1px solid #ccc;
+    border: 1px solid #d0dc8a;
     border-radius: 4px;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
-
-    background-image: linear-gradient(top, #fff, #ccc);
-    background-image: -moz-linear-gradient(top, #fff, #ccc);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));
-}
-
-.hover a.a-button {
-    color: #eee;
-    background-color: #8a9f13;
-
-    border: 1px solid #7b8e12;
 
     background-image: linear-gradient(top, #a0b914, #7b8e12);
     background-image: -moz-linear-gradient(top, #a0b914, #7b8e12);
     background-image: -webkit-gradient(linear, left top, left bottom, from(#a0b914), to(#7b8e12));
 }
 
-a.a-button:hover {
-    color: #eee;
-    border: 1px solid #c52471;
+#search-submit a.button:hover 
+{
+    border-color: #c52471;
     background-color: #dc3f8a;
     background-image: -moz-linear-gradient(top, #f062a5, #d92c7e);
     background-image: -webkit-gradient(linear, left top, left bottom, from(#f062a5), to(#d92c7e));
 }
 
-a.a-button:active {
-    color: #fff;
-    background-image: none;
-
-    padding: .45em .35em .35em .45em;
+.define thead #search-submit.disabled
+{
+    background-position: 0 -100px;
 }
 
+#search-submit.disabled a.button
+{
+    cursor: default;
 
+    color: #AAA;
+    border-color: #999;
+    background: #666;
+}
