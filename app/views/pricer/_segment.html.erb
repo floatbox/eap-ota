@@ -11,7 +11,7 @@
 
     <td class="dpt">
         <h3><%= fmt_time( segment.departure_time ) %><!--<%= fmt_date( segment.departure_date ) %>--></h3>
-        <h4><%= segment.departure.city.name %> <% unless segment.departure.equal_to_city %>, <%= segment.departure_name %><% end %></h4>
+        <h4><%= segment.departure.city.name %><% unless segment.departure.equal_to_city %>, <%= segment.departure_name %><% end %></h4>
         <% if segment.departure_term %>
             <h5 class="light">Терминал <%= segment.departure_term %></h5>
         <% end %>
