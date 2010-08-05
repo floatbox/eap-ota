@@ -53,6 +53,7 @@ send: function(data) {
     for (var key in this.fields) {
         var field = this.fields[key];
         if (field.required && !(field.check ? field.check(field.value) : field.value)) {
+            self.toggle(false);
             return;
         }
         data[key] = field.value;
@@ -60,7 +61,7 @@ send: function(data) {
     $.get("/pricer/validate/", {
         search: data
     }, function(result) {
-        $('#search-submit').toggleClass('disabled', !result.valid);
+        self.toggle(result.valid);
         if (result.valid) {
             var $transcript = $('#search-transcript');
             $transcript.children('h1').html(result.human);
@@ -68,6 +69,13 @@ send: function(data) {
             app.offers.load(data);  
         }
     });
+},
+toggle: function(mode) {
+    $('#search-submit').toggleClass('disabled', !mode);
+    if (!mode) {
+        $("#offers").addClass("latent");
+        $('#search-transcript').addClass('latent');           
+    }
 },
 submit: function() {
     $("#offers").removeClass("latent");

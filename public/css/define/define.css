@@ -47,18 +47,18 @@
 }
 
 .define thead td {
-    padding-right: 0;
-    /*padding: 10px 0 12px 10px;
+    padding: 10px 0 10px 10px;
 
-    vertical-align: top;*/
+    vertical-align: top;
 }
 
 .define thead th {
-    /*padding-top: 10px;
-    padding-bottom: 12px;*/
+    padding-top: 10px;
+    padding-bottom: 10px;
 
     text-align: left;
-    /*vertical-align: top;*/
+    vertical-align: top;
+    line-height: 140%;    
 }
 
 .define p {
