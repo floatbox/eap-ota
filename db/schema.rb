@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100729143506) do
+ActiveRecord::Schema.define(:version => 20100805132311) do
 
   create_table "airlines", :force => true do |t|
     t.string   "en_shortname"
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(:version => 20100729143506) do
     t.string   "morpher_to"
     t.string   "morpher_from"
     t.string   "morpher_in"
+    t.boolean  "equal_to_city"
   end
 
   add_index "airports", ["iata"], :name => "index_airports_on_iata"

@@ -67,5 +67,14 @@ module Tmp
       #City.update_all("morpher_from = NULL, morpher_in = NULL, morpher_to = NULL" , 'id < 1000 and id > 972')
     end
   end
+
+  def self.fill_in_equal_to_city_field
+    Airport.all(:include => :city).each do |a|
+      if a.city && a.city.name_ru == a.name_ru && a.city.iata == a.iata
+        a.update_attribute(:equal_to_city, true)
+      end
+    end
+  end
+
 end
 
