@@ -80,8 +80,8 @@ body {
     text-align: center;
 
     color: #000;
-    background: #e6e6e6 url("/img/bg/bg1.jpg") no-repeat fixed 60% 0%;
-    background: #e6e6e6;
+    /*background: url("/img/bg/bg1.jpg") no-repeat 50% 0% #004472;*/
+    background: #0366a3;
 }
 
 body * {
