@@ -76,7 +76,7 @@ module Traviata
       def save_guessed
         inflections = cases
         pr = in_preposition(self.name)
-        update_attributes(:morpher_to => "#{pr} #{(cases[3]).chomp}", :morpher_from => "из #{(cases[1]).chomp}", :morpher_in => "#{pr} #{(cases[5]).chomp}" ) if cases[3].presence && cases[5].presence && cases[1].presence
+        update_attributes(:morpher_to => "#{pr} #{(cases[3]).chomp}", :morpher_from => "из #{(cases[1]).chomp}", :morpher_in => "#{pr} #{(cases[5]).chomp}" ) if cases[3].presence && cases[5].presence && cases[1].presence && cases.uniq.length > 1
       end
 
       def in_preposition word
@@ -89,15 +89,15 @@ module Traviata
 
 
       def case_to
-        proper_to.presence || morpher_to.to_s
+        proper_to.presence || morpher_to.presence || 'в ' + nominative
       end
 
       def case_from
-        proper_from.presence || morpher_from.to_s
+        proper_from.presence || morpher_from.presence || 'из ' + nominative
       end
 
       def case_in
-        proper_in.presence || morpher_in.to_s
+        proper_in.presence || morpher_in.presence || 'в ' + nominative
       end
 
       def case_to=(str)

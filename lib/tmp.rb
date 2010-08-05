@@ -55,17 +55,16 @@ module Tmp
   end
 
 
-  def self.fill_in_morpher_fields
-    [Country, City, Airport].each do |m|
-      m.all(:conditions => '((proper_to = "") or (proper_to is NULL)) and (morpher_to is NULL or morpher_to = "") and (name_ru != "") and (name_ru is not NULL)').each do |c|
-        c.save_guessed
-      end
+  def self.fill_in_morpher_fields(klass, first_id = 0)
+    klass.all(:conditions => ['((proper_to = "") or (proper_to is NULL)) and (morpher_to is NULL or morpher_to = "") and (name_ru != "") and (name_ru is not NULL) and (id >= ?)', first_id]).each do |c|
+      c.save_guessed
     end
   end
 
   def clear_morpher_fields
     [Country, City, Airport].each do |m|
       m.update_all("morpher_from = NULL, morpher_in = NULL, morpher_to = NULL")
+      #City.update_all("morpher_from = NULL, morpher_in = NULL, morpher_to = NULL" , 'id < 1000 and id > 972')
     end
   end
 end
