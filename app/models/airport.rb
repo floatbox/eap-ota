@@ -26,6 +26,12 @@ class Airport < ActiveRecord::Base
 
   def name
     name_ru.presence || name_en.presence || iata
+
+  end
+
+
+  def equal_to_city
+    city && city.name_ru == name_ru && city.iata == iata
   end
 
   def airports

@@ -247,11 +247,11 @@ class Completer
   end
 
   def read_airports
-    Airport.all(:include => {:city => :country}, :conditions => 'city_id is not null and (equal_to_city is null or equal_to_city = 0)').each do |c|
+    Airport.all(:include => {:city => :country}, :conditions => 'city_id is not null').each do |c|
       synonyms = []
       synonyms << c.name_en unless c.name_en == c.name
       synonyms.delete_if &:blank?
-      add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms, :hint => c.city.name,  :info => "Аэропорт #{c.name} #{c.city.case_in}, #{c.city.country.name}")
+      add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms, :hint => c.city.name,  :info => "Аэропорт #{c.name} #{c.city.case_in}, #{c.city.country.name}") unless c.equal_to_city
     end
   end
 

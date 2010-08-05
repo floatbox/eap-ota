@@ -56,7 +56,7 @@ module Tmp
 
 
   def self.fill_in_morpher_fields(klass, first_id = 0)
-    klass.all(:conditions => ['((proper_to = "") or (proper_to is NULL)) and (morpher_to is NULL or morpher_to = "") and (name_ru != "") and (name_ru is not NULL) and (id >= ?)', first_id]).each do |c|
+    klass.all(:conditions => ['((proper_to = "") or (proper_to is NULL)) and (morpher_to is NULL or morpher_to = "") and (name_ru != "") and (name_ru is not NULL) and (id >= ?)', first_id], :order_by => :id).each do |c|
       c.save_guessed
     end
   end
@@ -65,14 +65,6 @@ module Tmp
     [Country, City, Airport].each do |m|
       m.update_all("morpher_from = NULL, morpher_in = NULL, morpher_to = NULL")
       #City.update_all("morpher_from = NULL, morpher_in = NULL, morpher_to = NULL" , 'id < 1000 and id > 972')
-    end
-  end
-
-  def self.fill_in_equal_to_city_field
-    Airport.all(:include => :city).each do |a|
-      if a.city && a.city.name_ru == a.name_ru && a.city.iata == a.iata
-        a.update_attribute(:equal_to_city, true)
-      end
     end
   end
 
