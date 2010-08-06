@@ -13,7 +13,7 @@
         <%= render :partial => 'recommendation', :locals => {:recommendation => @optimal_recommendation} %>
     <% end %>
     </div>
-    <div id="offers-all" class="offers" data-variants-count="<%= @recommendations.size %>">
+    <div id="offers-all" class="offers" data-amount="<%= @recommendations.size %> <%= Russian.p(@recommendations.size, 'вариант', 'варианта', 'вариантов') %>">
         <%= render :partial => 'recommendation', :collection => @recommendations %>
     </div>
 <% else %>

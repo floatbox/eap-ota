@@ -17,7 +17,8 @@ load: function(data) {
 
 },
 update: function(s) {
-    $("#offers-list").html(s);
+    $('#offers-list').html(s);
+    $('#offers-tab-all > a').text('Все ' + $('#offers-all').attr('data-amount'));
     this.showTab();
     $("#offers-results").removeClass("g-none");
 },
