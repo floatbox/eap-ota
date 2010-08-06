@@ -18,6 +18,14 @@ load: function(data) {
 },
 update: function(s) {
     $("#offers-list").html(s);
+    this.showTab();
     $("#offers-results").removeClass("g-none");
+},
+showTab: function(v) {
+    if (v) this.tab = v;
+    var activeId = 'offers-' + this.tab;
+    $('#offers-list').children().each(function() {
+        $(this).toggleClass('g-none', $(this).attr('id') != activeId);
+    });
 }
 });

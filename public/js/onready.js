@@ -297,13 +297,11 @@
     
     // Табы в результатах поиска
     $('#offers-tabs').bind('select', function(e, v) {
-        var activeId = 'offers-' + v;
-        $('#offers-list').children().each(function() {
-            $(this).toggleClass('g-none', $(this).attr('id') != activeId);
-        });
+        app.offers.showTab(v);
     }).radio({
         toggleClosest: 'li'
     });
+    app.offers.tab = 'best';
 
     // Hover в списке предложений
     $('#offers-list').delegate('table', 'mouseover', function() {

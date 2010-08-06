@@ -1,10 +1,24 @@
 ﻿<% if @recommendations.present? %>
-<div id="offers-best" class="offers">
-
-</div>
-<div id="offers-best" class="offers">
-	<%= render :partial => 'recommendation', :collection => @recommendations %>
-</div>
+    <% @cheap_recommendation = @recommendations.first %>
+    <% @fast_recommendation = @recommendations.first %>
+    <% @optimal_recommendation = @recommendations.first %>
+    <div id="offers-best" class="offers">
+    <% unless @cheap_recommendation.blank? %>
+        <h3 class="recomendation">Самый выгодный вариант</h3>
+        <%= render :partial => 'recommendation', :locals => {:recommendation => @cheap_recommendation} %>
+    <% end %>
+    <% unless @fast_recommendation.blank? %>
+        <h3 class="recomendation">Самый быстрый вариант</h3>
+        <%= render :partial => 'recommendation', :locals => {:recommendation => @fast_recommendation} %>
+    <% end %>
+    <% unless @optimal_recommendation.blank? %>
+        <h3 class="recomendation">Оптимальный вариант — разумная цена и время в пути</h3>
+        <%= render :partial => 'recommendation', :locals => {:recommendation => @optimal_recommendation} %>
+    <% end %>
+    </div>
+    <div id="offers-all" class="offers">
+        <%= render :partial => 'recommendation', :collection => @recommendations %>
+    </div>
 <% else %>
     <h2>Таких рейсов нет, попробуйте другие даты.</h2>
 <% end %>
