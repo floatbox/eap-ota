@@ -175,7 +175,7 @@ class Completer
     days << ['послезавтра', 2.days.from_now.to_date]
 
     for name, date in days
-      add(:name => name, :type => 'date', :hint => Russian.strftime(date, '%e %b'), :info => Russian.strftime(date, '%A, %e %b %Y года'))
+      add(:name => name, :type => 'date', :hint => Russian.strftime(date, '%e %B'), :info => Russian.strftime(date, '%A, %e %B %Y года'))
     end
   end
 

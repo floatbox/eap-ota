@@ -11,10 +11,10 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   column :nonstop, :boolean
   column :day_interval, :integer, 1
   column :debug, :boolean, false
-  
+
   validates_presence_of :from_iata, :to_iata, :date1
   validates_presence_of :date2, :if => :rt
-  
+
   attr_reader :to_iata, :from_iata
 
   cattr_reader :parse_time
@@ -26,13 +26,13 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     @to_iata =  Completer.new_or_cached.iata_from_name(name) rescue nil
     super
   end
-  
+
   def from= name
     @from_iata = Completer.new_or_cached.iata_from_name(name) rescue nil
     super
   end
-  
-  
+
+
   def to_key
     []
   end
@@ -62,7 +62,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       r << human_dates(Date.strptime(date1, '%d%m%y'))
     end
 
-    r.join(' ')
+    r.join(' ') + " pid: #{Process.pid.to_s} locale #{I18n.locale}"
   end
 
   def human_dates(d1, d2=nil)
@@ -136,7 +136,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
           }
           Variant.new( :segments => segments )
         }
-        
+
         additional_info =
           rec.xpath('.//r:fare').map {|f|
             f.xpath('.//r:description|.//r:textSubjectQualifier').every.to_s.join("\n")
@@ -174,3 +174,4 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   end
 
 end
+
