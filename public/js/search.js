@@ -46,7 +46,6 @@ subscribe: function(source, key, handler) {
 send: function(data) {
     var self = this, data = {
         'search_type': 'travel',
-        'nonstop': 0,
         'day_interval': 1,
         'debug': $('#sdmode').get(0).checked ? 1 : 0
     }
