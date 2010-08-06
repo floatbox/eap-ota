@@ -213,7 +213,7 @@
     	tools.defines[dname] = $define;
     });
 
-    // передача количества пассажиров в форму
+    // обработка количества пассажиров
     tools.defines['persons'].bind('change', function() {
     	var adults = 0, children = 0;
     	var values = $(this).trigger('get').data('value');
@@ -227,7 +227,15 @@
     		'children': children
     	}, this);
     });
-
+    
+    // обработка пересадок
+    tools.defines['changes'].bind('change', function() {
+        var value = $(this).trigger('get').data('value')[0];
+        app.search.update({
+            'nonstop': value && value.v == 1 ? 1 : 0
+        }, this);
+    });
+    
     // рисуем "один взрослый"
     tools.defines['persons'].trigger('add', {v: 11, t: 'один'});
 
