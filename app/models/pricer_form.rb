@@ -40,10 +40,10 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   def human
     return "запрос не полон" unless valid?
     r = []
-    if from_iata && (from_location = City[from_iata] || Airport[from_iata])
+    if from_iata && (from_location = [City[from_iata], Airport[from_iata]].find(&:id))
       r << from_location.case_from
     end
-    if to_iata && (to_location = City[to_iata] || Airport[to_iata])
+    if to_iata && (to_location = [City[to_iata], Airport[to_iata]].find(&:id))
       r << to_location.case_to
     end
 
