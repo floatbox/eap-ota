@@ -92,7 +92,7 @@ app.Define = function($el) {
         me.add(item);
     });
 
-	$el.data('name', this.options.name);
+    $el.data('name', this.options.name);
 
     return this;
 };
@@ -247,6 +247,9 @@ return;
     .mouseenter(function() {
         clearTimeout(timeout);
     })
+    .click(function() {
+        preserve = true;
+    })
     .bind('mousewheel DOMMouseScroll', function(e) {
         e.preventDefault();
 
@@ -390,11 +393,21 @@ return;
             $el.data('offset', offset);
             $el.data('height', $el.height());
         });
+        preserve = true;
+        $(window).bind('click keydown', callhide);
     };
 
     function hide(t) {
+        $(window).unbind('click keydown', callhide);
         t ? $el.fadeOut(t) : $el.hide();
     };
+    
+    function callhide(event) {
+        if (!preserve && (event.type == 'click' || event.which == 27)) hide(300);
+        preserve = false;
+    }
+   
+    var preserve = false;
 
     // высота первого элемента списка
     function wheelStep(item, checked, anyone) {

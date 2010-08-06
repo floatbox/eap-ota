@@ -47,13 +47,13 @@
 }
 
 .define thead td {
-    padding: 10px 0 10px 10px;
+    padding: 11px 0 10px 10px;
 
     vertical-align: top;
 }
 
 .define thead th {
-    padding-top: 10px;
+    padding-top: 11px;
     padding-bottom: 10px;
 
     text-align: left;
