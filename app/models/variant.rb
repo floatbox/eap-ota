@@ -21,5 +21,9 @@ class Variant
   def common_layovers
     segments.map{|s| s.layovers.every.iata.sort}.uniq.length == 1
   end
+
+  def total_duration
+    segments.sum(&:total_duration)
+  end
 end
 

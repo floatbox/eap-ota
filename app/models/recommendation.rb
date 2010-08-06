@@ -16,4 +16,16 @@ class Recommendation
   def bullshit?
     variants.every.segments.flatten.every.flights.flatten.any? {|f| f.equipment_type.engine_type == 'train' }
   end
+
+  def minimal_duration
+    variants.map(&:total_duration).min
+  end
+
+  def self.cheap recs
+    recs.select(&:sellable?).min_by(&:price_total)
+  end
+
+  def self.fast recs
+    recs.select(&:sellable?).min_by(&:minimal_duration)
+  end
 end

@@ -5,6 +5,10 @@ class PricerController < ApplicationController
     @search = PricerForm.new(params[:search])
     if @search.valid?
       @recommendations = @search.search.sort_by(&:price_total)
+      # все - временное
+      @cheap_recommendation = Recommendation.cheap(@recommendations)
+      @fast_recommendation = Recommendation.fast(@recommendations)
+      @optimal_recommendation = @fast_recommendation
     end
 
   render :partial => 'recommendations'
