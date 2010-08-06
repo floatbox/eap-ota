@@ -20,7 +20,11 @@ class Airline < ActiveRecord::Base
   end
 
   def icon_url
-    "/img/system/airlines/#{iata}.gif"
+    url = "/img/system/airlines/#{iata}.gif"
+    unless File.exist?("#{Rails.root}/public#{url}")
+      url = "/img/system/airlines/default.gif"
+    end
+    url
   end
   
   def short_name
