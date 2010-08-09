@@ -36,17 +36,22 @@ module PricerHelper
     "(%d:%02d)" % duration.divmod(60)
   end
 
-  def variant_summary recommendation
-    result = []
-    recommendation.variants.map { |v|
-      v.segments.each_with_index{ |s, i|
-        result[i] ||= {}
-        result[i][:departure] = s.departure
-        result[i][:times] ||= []
-        result[i][:times] += [s.dept_time]
-      }
-    }
-    result.map{|r|"#{r[:departure].city.case_from} &mdash; в #{r[:times].uniq.sort.map{|t| "<a href=#><u>#{t}</u></a>" }.join(', ')}" }.join(', ')
+  def variant_summary recommendation, excluded_variant=nil
+    dept_times = Hash.new {[]}
+    # FIXME вынести в Variant#dept_times ?
+    recommendation.variants.every.segments.flatten.each do |segment|
+      dept_times[segment.departure] |= [segment.dept_time]
+    end
+
+    excluded_variant.segments.each do |segment|
+      dept_times[segment.departure] -= [segment.dept_time]
+    end if excluded_variant
+
+    dept_times.delete_if {|k,v| v.blank?}
+
+    dept_times.map do |departure, times|
+      "#{departure.city.case_from} &mdash; в #{times.sort.map{|t| "<a href=#><u>#{t}</u></a>" }.join(', ')}"
+    end.join(', ')
 
   end
 
