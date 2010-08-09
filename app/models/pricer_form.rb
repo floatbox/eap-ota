@@ -23,12 +23,12 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   end
 
   def to= name
-    @to_iata =  Completer.new_or_cached.iata_from_name(name) rescue nil
+    @to_iata =  Completer.iata_from_name(name) rescue nil
     super
   end
 
   def from= name
-    @from_iata = Completer.new_or_cached.iata_from_name(name) rescue nil
+    @from_iata = Completer.iata_from_name(name) rescue nil
     super
   end
 

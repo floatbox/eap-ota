@@ -25,10 +25,6 @@ class Completer
     @completer
   end
 
-  def self.complete(*args)
-    new_or_cached.complete(*args)
-  end
-
   def initialize(filename_or_words=nil)
     clear
     if filename_or_words.is_a? String
@@ -39,6 +35,23 @@ class Completer
       read_all
     end
   end
+
+  MARSHAL_FILE = 'tmp/completer.dat'
+  def dump
+    open(MARSHAL_FILE, 'w') do |f|
+      Marshal.dump(self, f)
+    end
+  end
+
+  def self.load
+    @completer = Marshal.load(open(MARSHAL_FILE))
+    @completer
+  end
+
+  class << self
+    delegate :complete, :dump, :iata_from_name, :to => :new_or_cached
+  end
+
 
   def iata_from_name(name)
     # FIXME перенести отсюда в фильтр например
@@ -115,20 +128,22 @@ class Completer
   def scan_eq(word)
     normalized_word = normalize(word)
     return if normalized_word.blank?
-    @index[normalized_word[0].to_s].each do |record|
+    (@index[normalized_word[0].to_s] || []).each do |record|
       yield(record) if record.prenormalized_eq?(normalized_word)
     end
   end
 
   def clear
     @records = []
-    @index = Hash.new {|hash, key| hash[key] = [] }
+    # так было бы вернее, но default_proc нельзя Marshal.dump
+    # @index = Hash.new {|hash, key| hash[key] = [] }
+    @index = {}
   end
 
   def add(args)
     rec = (args.is_a?(Record) ? args : Record.new(args))
     @records << rec
-    rec.to_match_index_letters.each {|letter| @index[letter] << rec }
+    rec.to_match_index_letters.each {|letter| @index[letter] ||= []; @index[letter] << rec }
   end
 
   def read_csv(filename)

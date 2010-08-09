@@ -1,10 +1,8 @@
 class CompleteController < ApplicationController
 # -*- coding: utf-8 -*-
 
-  # FIXME caching doesn't work in development mode
-  @@completer = nil
   def completer
-    Completer.new_or_cached
+    Completer
   end
   helper_method :completer
 
