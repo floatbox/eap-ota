@@ -126,3 +126,24 @@ end
   page.find("u[text()='#{gray_text}']/u[text()='#{red_text}']").click
 end
 
+
+Если /^(?:|я |затем я )в календаре кликаю по дню через (\d+) дней$/ do |d|
+  page.find("li[data-dmy='#{(Date.today + d.to_i.days).strftime('%d%m%y')}']").click
+end
+
+То /^в заголовке выдачи содержится "([^"]*)" c интервалом через (\d+) дней \- через (\d+) дней$/ do |arg1, arg2, arg3|
+  sleep 10
+  pending # express the regexp above with the code you wish you had
+end
+
+Если /^нажимаю на "Искать"$/ do
+  sleep(0.5)
+  with_scope '#search-submit' do
+    click_link('Искать')
+  end
+end
+
+Если /^я жду (\d+) секунд$/ do |sec|
+  sleep sec.to_i
+end
+
