@@ -11,7 +11,11 @@ module NavigationHelpers
     when /the home\s?page/, /главной/
       '/'
     when /pricer/
-      '/pricer'
+      '/pricer/'
+    when /pnr_form/
+      '/pnr_form/new/'
+    when /pnr/
+      '/pnr/'
 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:

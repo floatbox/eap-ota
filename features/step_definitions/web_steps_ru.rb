@@ -132,12 +132,11 @@ end
 end
 
 То /^в заголовке выдачи содержится "([^"]*)" c интервалом через (\d+) дней \- через (\d+) дней$/ do |arg1, arg2, arg3|
-  sleep 10
   pending # express the regexp above with the code you wish you had
 end
 
 Если /^нажимаю на "Искать"$/ do
-  sleep(0.5)
+  sleep(2)
   with_scope '#search-submit' do
     click_link('Искать')
   end
@@ -145,5 +144,33 @@ end
 
 Если /^я жду (\d+) секунд$/ do |sec|
   sleep sec.to_i
+end
+
+Если /^я переключаюсь на другое окно$/ do
+  page.driver.browser.window_handles.each do |h|
+    if h != page.driver.browser.window_handle
+      page.driver.browser.switch_to.window(h)
+      break
+    end
+  end
+end
+
+
+То /^я должен оказаться на странице (.+)$/ do |page_name|
+  #page.driver.browser.switch_to.window('/pnr_form')
+  #print page.driver.browser.bridge.getWindowHandles #methods.sort.join(', ')#.bridge.getWindowHandlers
+  current_path.should == path_to(page_name)
+end
+
+
+То /^должно быть отправлено письмо на адрес "([^"]*)"$/ do |email_address|
+  email = ActionMailer::Base.deliveries.first
+  email.to[0].should == email_address
+end
+
+
+То /^дата через (\d+) дней подсвечивается$/ do |d|
+  page.should have_xpath("//li[data-dmy='#{(Date.today + d.to_i.days).strftime('%d%m%y')}'][background-color='#DC3F8A']")
+  #page.find("li[data-dmy='#{(Date.today + d.to_i.days).strftime('%d%m%y')}']").background-color.should == 'DC3F8A'
 end
 
