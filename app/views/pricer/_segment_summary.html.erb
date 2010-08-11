@@ -1,0 +1,64 @@
+<tr<%= ' class="ret"' if segment_counter > 0 %>>
+
+    <% if variant.common_carrier && variant.segments.length > 1 %>
+    <% if segment_counter == 0 %>
+    <td class="carrier common" rowspan="<%= variant.segments.length %>">
+        <p><img src="<%= segment.marketing_carrier.icon_url %>" alt=""></p>
+        <p><%= segment.marketing_carrier_name %></p>
+    </td>
+    <% end %>
+    <% else %>
+    <td class="carrier">
+        <p><img src="<%= segment.marketing_carrier.icon_url %>" alt=""></p>
+        <p><%= segment.marketing_carrier_name %></p>
+    </td>
+    <% end %>
+
+    <td class="dpt">
+        <h5><%= fmt_time( segment.departure_time ) %><span class="direction"> — <%= segment_counter == 0 ? 'туда' : 'обратно' %></span></h5>
+        <p><%= segment.departure.city.name %><% unless segment.departure.equal_to_city %>, <%= segment.departure_name %><% end %></p>
+        <% if segment.departure_term %>
+        <p class="note">Терминал&nbsp;<%= segment.departure_term %></p>
+        <% end %>
+    </td>
+    <td class="fly">
+        <div class="parts">
+        <% layover_human_durations = [] %>
+        <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
+            <div class="flight" title="Перелёт <%= flight.departure.city.name %> — <%= flight.arrival.city.name %>"></div>
+            <% if layover %>
+            <% layover_human_durations << human_duration(layover) %>
+            <div class="change" title="Пересадка <%= flight.arrival.city.case_in %>, <%= human_duration(layover) %>"></div>
+            <% end %>
+        <% end %>
+        </div>
+        <h6><%= human_duration(segment.total_duration) %></h6>
+        <% if layover_human_durations %>
+        <p class="note">пересадка <%= layover_human_durations.join(', ') %></p>
+        <% end %>
+    </td>
+    <td class="arv">
+        <h5><%= fmt_time( segment.arrival_time ) %></h5>
+        <p><%= segment.arrival.city.name %><% unless segment.arrival.equal_to_city %>, <%= segment.arrival_name %><% end %><p>
+        <% if segment.arrival_term %>
+        <p class="note">Терминал&nbsp;<%= segment.arrival_term %></p>
+        <% end %>
+    </td>
+    
+    <% if variant.common_layovers && variant.segments.length > 1 %>
+    <% if segment_counter == 0 %>
+    <td class="changes common" rowspan="<%= variant.segments.length %>">
+        <% if segment.layovers? %>
+        <p><%= segment.layover_count %>&nbsp;<%= Russian.pluralize(segment.layover_count, 'пересадка', 'пересадки', 'пересадок') %></p>
+        <% end %>
+    </td>
+    <% end %>
+    <% else %>
+    <td class="changes">
+        <% if segment.layovers? %>
+        <p><%= segment.layover_count %>&nbsp;<%= Russian.pluralize(segment.layover_count, 'пересадка', 'пересадки', 'пересадок') %></p>
+        <% end %>
+    </td>    
+    <% end %>
+    
+</tr>

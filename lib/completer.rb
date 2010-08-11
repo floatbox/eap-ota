@@ -20,7 +20,7 @@ class Completer
 
   def self.new_or_cached
     if !@completer || @completer.outdated?
-      @completer = Completer.new
+      @completer = (['cucumber', 'test'].include? RAILS_ENV) ? Completer.load : Completer.new
     end
     @completer
   end
