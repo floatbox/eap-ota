@@ -194,7 +194,7 @@ app.Define.prototype = {
 
 app.Define.Popup = function(define) {
     var me = this;
-    var _const = {offsetTop: 6, offsetLeft: 18};
+    var _const = {offsetTop: 6, offsetLeft: 16};
     var timeout;
 
     if (define.options.popup) {

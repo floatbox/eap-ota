@@ -303,21 +303,9 @@
         if (!$(this).parent().hasClass('disabled')) app.search.submit();
     });    
     
-    // Табы в результатах поиска
-    $('#offers-tabs').bind('select', function(e, v) {
-        app.offers.showTab(v);
-    }).radio({
-        toggleClosest: 'li'
-    });
-    app.offers.tab = 'best';
-
-    // Hover в списке предложений
-    $('#offers-list').delegate('table', 'mouseover', function() {
-        $(this).addClass('hover');
-    }).delegate('table', 'mouseout', function() {
-        $(this).removeClass('hover');
-    });
-
+    // Список предложений
+    app.offers.init();
+    
     // фокус на поле ввода "Куда"
     tools.to.focus();
 

@@ -35,6 +35,10 @@ module PricerHelper
   def fmt_duration duration
     "(%d:%02d)" % duration.divmod(60)
   end
+  
+  def human_price price
+    "#{ price }&nbsp;#{ Russian.pluralize(price, 'рубль', 'рубля', 'рублей') }"
+  end  
 
   def variant_summary recommendation, excluded_variant=nil
     dept_times = Hash.new {[]}
