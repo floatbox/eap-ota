@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
+
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
 
@@ -38,7 +39,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  before_filter :reset_amadeus_time
+  def set_locale
+    I18n.locale = :ru
+  end
+
+  before_filter :reset_amadeus_time, :set_locale
   after_filter :log_amadeus_time
 
 end
+
