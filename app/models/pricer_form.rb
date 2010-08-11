@@ -125,7 +125,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       end
 
       recommendations = xml.xpath("//r:recommendation").map do |rec|
-        prices = rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").collect {|x| x.to_f }
+        prices = rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").collect {|x| x.to_i }
         price_total = prices.sum
 
         variants = rec.xpath("r:segmentFlightRef").map {|sf|
