@@ -202,12 +202,14 @@ $.Autocompleter = function(input, options) {
                 }
                 break;
                
-            case KEY.TAB: 
             case KEY.ENTER:
-                // stop default to prevent a form submit, Opera needs special handling
                 event.preventDefault();
+            
+            case KEY.TAB:
+                // stop default to prevent a form submit, Opera needs special handling
                 blockSubmit = true;
                 if( insert() ) {
+                    event.preventDefault();
                     return false;
                 } else {
                     $el.trigger('enter');

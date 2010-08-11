@@ -130,6 +130,10 @@ body * {
     clear: both;
     visibility: hidden;
 }
+.wrap {
+    overflow: hidden;
+}
+.wrap,
 .clear {
     zoom: 1;
 }

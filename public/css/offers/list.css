@@ -1,279 +1,522 @@
-/* Предложение по перелёту и отелю (BEGIN) */
+/* Список предложений */
+
+#offers.latent
+{
+    display: none;
+}
+
+#offers-list 
+{
+    width: 675px;
+    margin: 15px;    
+}
+
+#offers-list h3.recomendation 
+{
+    font-size: 112.5%;
+    font-weight: bold;
     
-    #offers.latent
-    {
-        display: none;
-    }
+    margin: 0 0 8px;
+
+    line-height: 100%;
+}
+
+/* Предложение */
+.offer
+{
+    font-size: 81.25%;
     
-    #offers-list 
+    margin: 0 0 10px;
+
+    line-height: 1.23;
+
+    color: #333;
+    border-bottom: 1px solid #d0d0d0;
+    background: #fff;
+}
+
+.offer td
+{
+    vertical-align: top;
+}
+
+/* Заголовок предложения */
+
+.offer-head
+{
+    width: 100%;
+    
+    border-bottom: 1px solid #e5e5e5;
+}
+
+    /* Стоимость */
+
+    .offer-head .cost 
     {
-        width: 675px;
-        margin: 15px;    
+        width: 5px;
+        padding: 8px 10px 7px;
     }
 
-    .offers
+    .offer-head .cost dl
     {
-        overflow: hidden;
-    }
-
-    .offers h3.recomendation 
-    {
-        font-size: 112.5%;
         font-weight: bold;
         
-        margin: 0 0 8px;
-
-        line-height: 100%;
-    }
-
-    .offers table
+        width: 98px;
+    }    
+    
+    .offer-head .cost dt
     {
-        font: normal 100% Arial,a;
-
-        width: 100%;
-        margin-bottom: 1.4em;
-
-        color: #333;
-        border-bottom: 1px solid #d0d0d0;
-        background: #fff;
-    }
-
-    /* Заголовок предложения */
-
-    .offers thead
-    {
-        color: 2b2b2b;
-    }
-
-    .offers thead th,
-    .offers thead td
-    {
-        overflow: hidden;
-
-        padding: 6px 4px 4px 6px;
-
-        vertical-align: middle;
-    }
-
-    .offers thead th
-    {
-        font: bold 22px Arial,s;
-
-        padding-left: 12px;
-
+        font-size: 30px;
+    
+        line-height: 28px;
         letter-spacing: -1px;
-
+    
         color: #cb388f;
     }
 
-    .offers thead th s
+    .offer-head .cost dd
     {
-        font-weight: bold;
-
-        color: #4a4a4a;
-    }
-
-    .offers thead td .b-pseudo {
-        letter-spacing: -.02em;
-
-        color: #1f64be;
-    }
-
-    .offers thead td .b-pseudo u {
-        font: bold 80% Arial,a;
-    }
-
-    .offers thead .a-button
-    {
-        font: bold 100% Arial,a;
-
-        float: right;
-
-        padding: 3px 6px;
-    }
-
-    .offers thead .a-button:active
-    {
-        padding: 4px 5px 2px 7px;
-    }
-
-    .offers table.hover thead .a-button
-    {
-        float: right;
-
-        padding: 3px 6px;
-    }
-
-    /* Тело предложения */
-
-    .offers tbody td
-    {
-        overflow: hidden;
-
-        padding: 8px 2px 4px 6px;
-
-        vertical-align: top;
-
-        border-top: 1px solid #d6d6d6;
-    }
-
-    .offers tbody td.dpt {
-    }
-
-    .offers tbody td.arv {
-    }
-
-    .offers tbody td.dpt * {
-        text-align: right;
-    }
-
-    .offers .extra {
-        font-size: 70%;
-
-        padding-left: 12px;
-
-        color: #2b2b2b;
-    }
-
-    .offers .extra p {
-        margin: 4px 0 0 0;
-        padding: 27px 0 0 0;
-
-        background: url(/img/system/airlines/default.gif) no-repeat;
-    }
-
-    .offers .extra-info {
-        padding: 8px 6px 2px 12px;
-    }
-
-    .offers tbody td.dpt .direction {
-        font: 12px Arial, sans-serif;
-        
-        visibility: hidden;
-        float: left;
-        
-        width: 60px;
-        margin: 1px 0 0 -6px;
-        padding: 1px 0;
-        
-        text-align: center;
-        
-        color: #FFF;
+        font-size: 14px;
+    
+        line-height: 14px;
+    
+        color: #828282;
     }
     
-    .offers table.hover tbody td.dpt .direction {
-        visibility: visible;
+    .offer-head .cost .digit 
+    {
+        margin-left: 0.2em;
     }
 
-    .offers tbody .ow .direction {
-        background: #717c09;
+    /* Кнопка */
+
+    .offer-head td.booking
+    {
+        padding: 7px 14px 7px 0;
     }
 
-    .offers tbody .rt .direction {
-        background: #c27006;
+    .offer .a-button
+    {
+        font-size: 16px;
+        font-weight: bold;
+    
+        float: left;
+    
+        padding: 3px 6px;
     }
 
-    .offers tbody h3 {
-        font: bold 100% Arial,a;
+    /* Варианты */
+
+    .offer-head .variants
+    {
+        width: 75%;
+        padding: 12px 10px 11px 28px;
+    
+        color: #2C2C2C;
+        border-bottom: 1px solid #dbe1d9;
+        border-left: 1px solid #dbe1d9;
+        background: #f4faf2;
     }
 
-    .offers tbody tr.ow h3 {
-        color: #6f7c26;
+    .offer-head .variants h6
+    {
+        font-size: 107.7%;
+        
+        position: relative;
+        left: -20px;
+        
+        margin-bottom: 3px;
+        padding-left: 20px;
+        
+        background: url(/img/offers/i-variants.png) no-repeat 0 1px;
+    }
+    
+    .offer-head strong
+    {
+        font-weight: bold;
     }
 
-    .offers tbody tr.rt h3 {
-        color: #c46f26;
+
+/* Обзор предложения */
+.offer-summary
+{
+    width: 100%;
+    margin: 5px 0 0;
+}
+
+.offer-summary td
+{
+    padding: 8px 10px 8px 0;
+}
+
+.offer-summary p.note
+{
+    font-size: 84.62%;
+    
+    color: #777777;
+}
+
+.offer-summary .ret td
+{
+    border-top: 1px solid #D6D6D6;
+}
+
+.offer-summary td.common
+{
+    vertical-align: middle;
+}
+
+    /* Авиакомпания */
+
+    .offer-summary .carrier 
+    {
+        font-size: 84.62%;
+        
+        width: 98px;
+        padding-left: 10px;
+        
+        line-height: 109%;
     }
 
-    .offers tbody h4 {
-        font: normal 80% Arial,a;
-
-        color: #2b2b2b;
+    .offer-summary .ret .carrier
+    {
+        border-top-color: #FFF;
+    }
+    
+    .offer-summary .carrier p
+    {    
+        margin: 0 0 3px;
+        
+        text-align: center;
     }
 
-    .offers tbody h5 {
-        font: normal 70% Arial,a;
+    /* Вылет и прилет */
 
-        color: #2b2b2b;
+    .offer-summary .dpt,
+    .offer-summary .arv
+    {
+        width: 130px;
     }
-
-    .offers tbody h5.light {
+    
+    .offer-summary h5
+    {
+        font-size: 123%;
+        font-weight: bold;
+        
+        margin: 0 0 2px;
+    
+        line-height: 1;
+    
+        color: #6F7C26;
+    }
+    
+    .offer-summary .direction
+    {
+        font-size: 81.25%;
+        font-weight: normal;
+        
+        position: relative;
+        top: -2px;
+        
+        visibility: hidden;
+        
         color: #777;
     }
+    
+    .hover .offer-summary .direction
+    {
+        visibility: inherit;    
+    }
+    
+    .offer-summary .ret h5
+    {
+        color: #C46F26;
+    }
+    
+    .offer-summary .dpt p,
+    .offer-summary .arv p
+    {
+        margin: 0 0 2px;
+    
+        line-height: 107.7%;
+    }    
 
-    /* Перелёты и пересадки */
+    /* Полет */
+    
+    .offer-summary .fly
+    {
+        width: 25%;
+        padding-right: 20px;
+    }
 
-    .offers tbody td.fly {
-        padding-top: 10px;
-
+    .offer-summary .fly h6,
+    .offer-summary .fly p
+    {
+        text-align: center;
+    }
+    
+    .offer-summary .fly h6
+    {
+        font-size: 84.62%;
+    }
+    
+    .offer-summary .fly .parts
+    {
+        height: 20px;
+        
         text-align: center;
         
         cursor: default;
     }
-
-    .offers tbody td.fly * {
-        text-align: center;
-    }
-
-    .offers tbody td.fly a {
+    
+    .offer-summary .fly .flight,
+    .offer-summary .fly .change 
+    {
         display: inline-block;
 
-        width: 15px;
-        height: 15px;
         margin: 0 4px;
-
-        background: url(/img/offers/planes.png) no-repeat 0 0;
-    }
-
-    .offers tbody td.fly a:hover,
-    .offers tbody td.fly a.change:hover {
-        background-color: yellow;
+     
         cursor: help;
     }
 
-    .offers tbody td.fly a.change {
+    .offer-summary .fly .flight
+    {
+        width: 15px;
+        height: 15px;
+
+        background: url(/img/offers/planes.png) no-repeat;
+    }
+
+    .offer-summary .ret .flight 
+    {
+        background-position: 0 -15px;
+    }
+
+    .offer-summary .fly .change 
+    {
         width: 16px;
         height: 16px;
 
         background: url(/img/offers/i-waiting.png) no-repeat;
     }
 
-    .offers .ow td.fly a {
-        background: url(/img/offers/planes.png) no-repeat 0 0;
+    /* Пересадки */
+
+    .offer-summary .changes
+    {
+        font-size: 84.62%;
+    
+        width: 90px;
+        padding-left: 10px;
     }
 
-    .offers .rt td.fly a {
-        background: url(/img/offers/planes.png) no-repeat 0 -15px;
+/* Правила тарифа */
+
+.offer-rules
+{
+    font-size: 84.62%;
+
+    float: right;
+    
+    margin-top: 1px;
+    padding-right: 10px;
+    
+    color: #777;
+}
+
+.offer-rules a
+{
+    font-weight: bold;
+    
+    color: #1F64BE;
+}
+
+/* Показать подробности */
+
+.offer-toggle
+{
+    margin: 0 200px 10px 118px;
+}
+
+.offer-toggle .collapse
+{
+    display: none;
+}
+
+.offer-toggle .b-pseudo
+{
+    color: #1F64BE;
+}
+
+.offer-toggle .b-pseudo u
+{
+    font-weight: bold;
+}
+
+/* Подробности */
+
+.offer-details
+{
+    display: none;
+
+    border-top: 1px solid #d0d0d0;
+}
+
+.detailed .offer-details
+{
+    display: block;
+}
+
+.offer-details h4
+{
+    font-size: 16px;
+    font-weight: bold;
+    
+    margin: 6px 0 8px 118px;
+    padding: 4px 0 0;
+
+    color: #777;
+}
+
+.offer-details .direction
+{
+    color: #6F7C26;
+}
+
+.offer-details .ret .direction
+{
+    color: #C46F26;
+}
+
+    /* Рейс */
+
+    .offer-details .flight
+    {
+        margin: 0 0 8px 32px;
+    }
+    
+    .offer-details .point
+    {
+        float: left;
+        
+        width: 50%;
     }
 
+        /* Время */
+        
+        .offer-details .point .time
+        {
+            font-size: 11px;
+            
+            float: left;
+            
+            width: 70px;
+            padding-left: 14px;
+            
+            line-height: 13px;
+        }
+        
+        .offer-details .point .time h5
+        {
+            font-size: 22px;
+            font-weight: bold;
+            
+            margin: 0 0 2px;
+            
+            line-height: 22px;
+            
+            color: #777;
+        }
+        
+        .offer-details .arv .time h5,
+        .offer-details .dpt .time h5
+        {
+            color: #6F7C26;
+        }
+        
+        .offer-details .ret .arv .time h5,
+        .offer-details .ret .dpt .time h5
+        {
+            color: #C46F26;
+        }
+    
+        /* Информация */
 
-    /* Футер предложения */
+        .offer-details .point .info
+        {
+            font-size: 92.3%;
+            line-height: 133.33%;
+            
+            margin: 0 10px 0 86px;
+        }
+        
+        .offer-details .point .info h6
+        {
+            font-size: 116.667%;
+            font-weight: bold;
+            
+            margin: 0 0 3px;
+        }
+        
+        .offer-details .warnings,
+        .offer-details .timezone
+        {
+            margin: 4px 0 0 -22px;
+            padding: 2px 0 0 22px;
+            
+            color: #777;       
+            
+            line-height: 108.33%;
+        }
 
-    .offers tfoot td {
-        font-size: 80%;
+        .offer-details .warnings
+        {
+            background: url(/img/i-warning.png) no-repeat;
+        }
 
-        padding: 6px;
+        .offer-details .timezone
+        {
+
+        }
+        
+    /* Сумма и кнопка */
+    
+    .offer-details .booking
+    {
+        margin: 12px 0 0;
+        padding: 12px 0;
+
+        border-top: 1px solid #d0d0d0;
     }
 
-    .offers tfoot tr.info {
-        background: #cae4bc;
-        border-bottom: 1px solid #b5cda9;
+    .offer-details .booking .a-button
+    {
+        margin: 0 12px 0 118px;
+    }
+    
+    .offer-details .booking .sum
+    {
+        float: left;
     }
 
-    .offers tfoot .info th {
-        background: url(/img/offers/i-bulb.png) no-repeat right center;
+    .offer-details .booking .sum dt
+    {
+        font-size: 107.7%;
+        line-height: 107.14%;
+        
+        margin: 0 0 2px;
+        
+        color: #000;
     }
 
-    .offers tfoot .info td {
-    }
-
-    .offers tfoot .info dl {
-    }
-
-    .offers tfoot .info dl dt {
+    .offer-details .booking .sum strong
+    {
         font-weight: bold;
     }
 
-
-
-
+    .offer-details .booking .sum dd
+    {
+        font-size: 92.3%;
+    
+        color: #777;
+    }
