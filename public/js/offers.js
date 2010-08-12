@@ -17,21 +17,21 @@ init: function() {
     });
     
     // Подробности
-    $('#offers-list').delegate('.offer-summary, .offer', 'click', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        var offer = $(this).closest('.offer');
-        var details = offer.children('.offer-details');
+    $('#offers-list').delegate('.offer-variant', 'click', function(event) {
+        var variant = $(this).closest('.offer-variant');
+        var details = variant.children('.offer-details');
         if (details.is(':hidden')) {
-            offer.find('.offer-toggle a').toggle();
+            variant.find('.offer-toggle .b-pseudo').toggle();
             details.slideDown(300);
         }
     });
     $('#offers-list').delegate('.collapse', 'click', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        $(this).closest('.offer').children('.offer-details').slideUp(150);
+        $(this).closest('.offer-variant').children('.offer-details').slideUp(150);
         $(this).hide().siblings().show();
+        event.stopPropagation();
+    });
+    $('#offers-list').delegate('.a-button', 'click', function(event) {
+        event.stopPropagation();
     });
 },
 load: function(data) {
@@ -53,7 +53,7 @@ load: function(data) {
 },
 update: function(s) {
     $('#offers-list').html(s);
-    $('#offers-tab-all > a').text('Все ' + $('#offers-all').attr('data-amount'));
+    $('#offers-tab-all > a').text('Всего ' + $('#offers-all').attr('data-amount'));
     this.showTab();
     $("#offers-results").removeClass("g-none");
 },

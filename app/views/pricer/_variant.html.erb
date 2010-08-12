@@ -1,46 +1,44 @@
-<div class="offer">
-    <table class="offer-head">
-        <tr>
-            <td class="cost">
-                <dl>
-                    <dt><%= recommendation.price_total.to_i.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') %></dt>
-                    <dd><%= Russian.pluralize(recommendation.price_total.to_i, 'рубль', 'рубля', 'рублей') %></dd>
-                </dl>                        
-            </td>
-            <td class="booking">
-                <a href='/pnr_form/new/?flight_codes=<%= variant.flight_codes.join("_")%>' class="a-button" target="booking" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
-            </td>
-            <% if recommendation.variants.length > 1 %>
-            <td class="variants">
-                <h6>Другие варианты вылета по такой же цене:</h6>
-                <p class="b-pseudo"><%= variant_summary(recommendation, variant) %></p>
-            </td>
-            <% end %>
-        </tr>
-    </table>
-    <table class="offer-summary">
+<table class="offer-head">
+    <tr>
+        <td class="cost">
+            <dl>
+                <dt><%= recommendation.price_total.to_i.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') %></dt>
+                <dd><%= Russian.pluralize(recommendation.price_total.to_i, 'рубль', 'рубля', 'рублей') %></dd>
+            </dl>                        
+        </td>
+        <td class="booking">
+            <a href="/pnr_form/new/?flight_codes=<%= variant.flight_codes.join('_') %>" class="a-button" target="booking" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
+        </td>
+        <% if recommendation.variants.length > 1 %>
+        <td class="variants">
+            <h6>Другие варианты вылета по такой же цене:</h6>
+            <p class="b-pseudo"><%= variant_summary(recommendation, variant) %></p>
+        </td>
+        <% end %>
+    </tr>
+</table>
+<table class="offer-summary">
+<% variant.segments.each_with_index do |segment, segment_counter| %>
+    <%= render :partial => 'segment_summary', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter} %>
+<% end %>
+</table>
+<div class="offer-rules">
+    <%= 'Не можем продать' unless recommendation.sellable? %>    
+    <a href="#">Правила тарифа</a> (VRUAFL)
+</div>
+<div class="offer-toggle">
+    <span class="b-pseudo expand"><u>Подробнее о перелёте</u></span>
+    <span class="b-pseudo collapse"><u>Скрыть подробности</u></span>
+</div>
+<div class="offer-details">
     <% variant.segments.each_with_index do |segment, segment_counter| %>
-        <%= render :partial => 'segment_summary', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter} %>
-    <% end %>
-    </table>
-    <div class="offer-rules">
-        <%= 'Не можем продать' unless recommendation.sellable? %>    
-        <a href="#">Правила тарифа</a> (VRUAFL)
-    </div>
-    <div class="offer-toggle">
-        <a href="#" class="b-pseudo expand"><u>Подробнее о перелёте</u></a>
-        <a href="#" class="b-pseudo collapse"><u>Скрыть подробности</u></a>
-    </div>
-    <div class="offer-details">
-        <% variant.segments.each_with_index do |segment, segment_counter| %>
-            <%= render :partial => 'segment_details', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter} %>
-        <% end %>    
-        <div class="booking wrap">
-            <a href=# class="a-button" target="booking" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
-            <dl class="sum">
-                <dt>Итого <strong><%= recommendation.price_total.to_i %> рублей</strong> за всех со всеми налогами и сборами</dt>
-                <dd>Тариф — <%= human_price(recommendation.prices[0].to_i) %>, налоги и сборы — <%= human_price(recommendation.prices[1].to_i) %></dd>
-            </dl>
-        </div>
+        <%= render :partial => 'segment_details', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter} %>
+    <% end %>    
+    <div class="booking wrap">
+        <a href="/pnr_form/new/?flight_codes=<%= variant.flight_codes.join('_') %>" class="a-button" target="booking" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
+        <dl class="sum">
+            <dt>Итого <strong><%= recommendation.price_total.to_i %> рублей</strong> за всех со всеми налогами и сборами</dt>
+            <dd>Тариф — <%= human_price(recommendation.prices[0].to_i) %>, налоги и сборы — <%= human_price(recommendation.prices[1].to_i) %></dd>
+        </dl>
     </div>
 </div>

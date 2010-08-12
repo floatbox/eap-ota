@@ -1,8 +1,7 @@
-
-<%= render :partial => 'variant', :locals => {:variant => recommendation.variants[0], :recommendation => recommendation} %>
-
-
-<%# recommendation.variants.each_with_index do |variant, variant_counter| %>
-    <%#= render :partial => 'variant', :locals => {:variant => variant, :recommendation => recommendation} %>
-<%# end %>
-
+<div class="offer">
+<% recommendation.variants.each_with_index do |variant, variant_index| %>
+<div class="offer-variant<%= ' g-none' if variant_index > 0 %>">
+    <%= render :partial => 'variant', :locals => {:variant => variant, :recommendation => recommendation} %>
+</div>
+<% end %>
+</div>

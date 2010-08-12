@@ -95,13 +95,18 @@
         padding: 7px 14px 7px 0;
     }
 
-    .offer .a-button
+    .offer a.a-button
     {
         font-size: 16px;
         font-weight: bold;
     
         float: left;
     
+        padding: 3px 6px;
+    }
+    
+    .offer a.a-button:active 
+    {
         padding: 3px 6px;
     }
 
@@ -154,6 +159,8 @@
     font-size: 84.62%;
     
     color: #777777;
+    
+    line-height: 118.18%;
 }
 
 .offer-summary .ret td
@@ -175,7 +182,7 @@
         width: 98px;
         padding-left: 10px;
         
-        line-height: 109%;
+        line-height: 118.18%;
     }
 
     .offer-summary .ret .carrier
@@ -258,6 +265,8 @@
     .offer-summary .fly h6
     {
         font-size: 84.62%;
+        
+        line-height: 118.18%;
     }
     
     .offer-summary .fly .parts
@@ -308,6 +317,8 @@
     
         width: 90px;
         padding-left: 10px;
+        
+        line-height: 118.18%;
     }
 
 /* Правила тарифа */
@@ -462,7 +473,7 @@
         .offer-details .timezone
         {
             margin: 4px 0 0 -22px;
-            padding: 2px 0 0 22px;
+            padding-left: 22px;
             
             color: #777;       
             
@@ -476,9 +487,15 @@
 
         .offer-details .timezone
         {
-
+            padding-top: 2px;
         }
         
+        .offer-details .warnings li
+        {
+            padding-top: 2px;
+            padding-bottom: 1px;
+        }
+
     /* Сумма и кнопка */
     
     .offer-details .booking

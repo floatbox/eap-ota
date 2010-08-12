@@ -38,7 +38,29 @@ module PricerHelper
   
   def human_price price
     "#{ price }&nbsp;#{ Russian.pluralize(price, 'рубль', 'рубля', 'рублей') }"
-  end  
+  end
+
+  def human_date date
+    I18n.l(Date.strptime(date, '%d%m%y'), :format => '%e %B')
+  end
+  
+  def human_enumeration items
+    items.length == 1 ? items.first : (items[0..-2].join(', ') + ' и ' + items.last)
+  end
+  
+  def human_layovers_count count
+    numbers = ['одной', 'двумя', 'тремя', 'четыремя', 'пятью']
+    count == 1 ? 'пересадкой' : (numbers[count - 1] + ' пересадками —')
+  end
+  
+  def layovers_in flights
+    cities = []
+    flights.each_with_index do |flight, i|
+      city = flight.arrival.city.case_in
+      cities << (i == 0 ? city.sub(/ /, '&nbsp;') : city.split(' ')[1])
+    end
+    human_enumeration(cities)
+  end
 
   def variant_summary recommendation, excluded_variant=nil
     dept_times = Hash.new {[]}
@@ -54,7 +76,8 @@ module PricerHelper
     dept_times.delete_if {|k,v| v.blank?}
 
     dept_times.map do |departure, times|
-      "#{departure.city.case_from} &mdash; в #{times.sort.map{|t| "<a href=#><u>#{t}</u></a>" }.join(', ')}"
+      time_links = times.sort.map{|t| "<a href=\"#\" data-variant=\"\"><u>#{t}</u></a>" }
+      "<strong>#{departure.city.case_from}</strong> &mdash; в #{human_enumeration(time_links)}"
     end.join(', ')
 
   end

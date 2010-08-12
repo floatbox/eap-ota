@@ -32,9 +32,9 @@
             <% end %>
         <% end %>
         </div>
-        <h6><%= human_duration(segment.total_duration) %></h6>
-        <% if layover_human_durations %>
-        <p class="note">пересадка <%= layover_human_durations.join(', ') %></p>
+        <h6><%= human_duration(segment.total_duration) %> в пути</h6>
+        <% unless layover_human_durations.empty? %>
+        <p class="note"><%= human_enumeration(layover_human_durations) %> между рейсами</p>
         <% end %>
     </td>
     <td class="arv">
@@ -49,14 +49,14 @@
     <% if segment_counter == 0 %>
     <td class="changes common" rowspan="<%= variant.segments.length %>">
         <% if segment.layovers? %>
-        <p><%= segment.layover_count %>&nbsp;<%= Russian.pluralize(segment.layover_count, 'пересадка', 'пересадки', 'пересадок') %></p>
+        <p>С <%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %></p>
         <% end %>
     </td>
     <% end %>
     <% else %>
     <td class="changes">
         <% if segment.layovers? %>
-        <p><%= segment.layover_count %>&nbsp;<%= Russian.pluralize(segment.layover_count, 'пересадка', 'пересадки', 'пересадок') %></p>
+        <p>С <%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %></p>
         <% end %>
     </td>    
     <% end %>

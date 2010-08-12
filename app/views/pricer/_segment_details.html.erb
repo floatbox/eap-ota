@@ -1,10 +1,10 @@
-<h4<%= ' class="ret"' if segment_counter > 0 %>><strong class="direction"><%= segment_counter == 0 ? 'Перелёт туда' : 'Обратный перелёт' %></strong><% if segment.layovers? %> с <%= segment.layover_count == 1 ? 'пересадкой' : "#{segment.layover_count} пересадками" %> <%= segment.flights[0].arrival.city.case_in %><% end %></h4>
+<h4<%= ' class="ret"' if segment_counter > 0 %>><strong class="direction"><%= segment_counter == 0 ? 'Перелёт туда' : 'Обратный перелёт' %></strong><% if segment.layovers? %> с <%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %><% end %></h4>
 <% segment.flights.each_with_index do |flight, flight_index| %>
 <div class="flight<%= ' ret' if segment_counter > 0 %> wrap">
     <div class="point<%= ' arv' if flight_index == 0 %>">
         <div class="time">
             <h5><%= fmt_time( flight.departure_time ) %></h5>
-            <p><%= fmt_date( flight.departure_date ) %></p>
+            <p><%= human_date( flight.departure_date ) %></p>
             <!--<p>МСК</p>-->
         </div>
         <div class="info">
@@ -19,7 +19,7 @@
     <div class="point<%= ' dpt' if flight_index == segment.flights.length - 1 %>">
         <div class="time">
             <h5><%= fmt_time( flight.arrival_time ) %></h5>
-            <p><%= fmt_date( flight.arrival_date ) %></p>
+            <p><%= human_date( flight.arrival_date ) %></p>
             <!--<p>CEST</p>-->
         </div>
         <div class="info">
@@ -29,10 +29,24 @@
             <% if layover %>
             <p><%= human_duration(layover) %> между рейсами</p>
             <% end %>
-            <!--<ul class="warnings">
-                <li>Разные терминалы прилёта и вылета</li>
+            <ul class="warnings">
+            <% if layover %>
+                <% if layover < 90 %>
+                    <li>Короткая стыковка</li>
+                <% elsif layover > 240 %>
+                    <li>Длинная стыковка</li>
+                <% end %>
+            <% end %>
+            <% if flight_index < segment.flights.length - 1 %>
+                <% next_flight = segment.flights[flight_index + 1] %>
+                <% if next_flight.departure_name != flight.arrival_name %>
+                    <li>Разные аэропорты прилёта и вылета</li>
+                <% elsif next_flight.departure_term != flight.arrival_term %>
+                    <li>Разные терминалы прилёта и вылета</li>
+                <% end %>
+            <% end %>
             </ul>
-            <p class="timezone">Разница во времени с Москвой — минус 2 часа</p>-->
+            <!--<p class="timezone">Разница во времени с Москвой — минус 2 часа</p>-->
         </div>
     </div>
 </div>
