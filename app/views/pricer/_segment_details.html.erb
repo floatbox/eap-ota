@@ -36,21 +36,21 @@
             <% end %>
             <ul class="warnings">
             <% if next_date_arrival %>
-                <li>Прилёт на следующий день</li>
+                <li class="ndarv">Прилёт на следующий день</li>
             <% end %>            
             <% if layover %>
                 <% if layover < 90 %>
-                    <li>Короткая стыковка</li>
+                    <li class="schange">Короткая стыковка</li>
                 <% elsif layover > 240 %>
-                    <li>Длинная стыковка</li>
+                    <li class="lchange">Длинная стыковка</li>
                 <% end %>
             <% end %>
             <% if flight_index < segment.flights.length - 1 %>
                 <% next_flight = segment.flights[flight_index + 1] %>
                 <% if next_flight.departure_name != flight.arrival_name %>
-                    <li>Разные аэропорты прилёта и вылета</li>
+                    <li class="diffad">Разные аэропорты прилёта и вылета</li>
                 <% elsif next_flight.departure_term != flight.arrival_term %>
-                    <li>Разные терминалы прилёта и вылета</li>
+                    <li class="diffad">Разные терминалы прилёта и вылета</li>
                 <% end %>
             <% end %>
             </ul>

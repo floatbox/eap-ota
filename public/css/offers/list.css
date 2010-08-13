@@ -423,6 +423,7 @@
             float: left;
             
             width: 70px;
+            padding-bottom: 8px;
             padding-left: 14px;
             
             line-height: 13px;
@@ -470,31 +471,42 @@
             margin: 0 0 3px;
         }
         
-        .offer-details .warnings,
-        .offer-details .timezone
+        .offer-details .warnings
         {
-            margin: 4px 0 0 -22px;
-            padding-left: 22px;
+            clear: left;
             
-            color: #777;       
+            margin: 4px 0 0 -22px;
+            
+            color: #777;    
             
             line-height: 108.33%;
         }
 
-        .offer-details .warnings
-        {
-            background: url(/img/i-warning.png) no-repeat;
-        }
-
-        .offer-details .timezone
-        {
-            padding-top: 2px;
-        }
-        
         .offer-details .warnings li
         {
-            padding-top: 2px;
-            padding-bottom: 1px;
+            padding: 2px 0 2px 22px;
+
+            background: url(/img/flight-warnings.png) no-repeat -20px 0;
+        }
+
+        .offer-details li.diffad
+        {
+            background-position: 0 -50px;
+        }
+
+        .offer-details li.schange
+        {
+            background-position: 0 -100px;
+        }
+
+        .offer-details li.lchange
+        {
+            background-position: 0 -150px;
+        }
+
+        .offer-details li.ndarv
+        {
+            background-position: 0 -200px;
         }
 
     /* Сумма и кнопка */
