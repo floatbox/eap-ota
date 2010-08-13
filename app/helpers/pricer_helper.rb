@@ -67,25 +67,25 @@ module PricerHelper
   end
 
   def variant_summary recommendation, excluded_variant=nil
-    dept_times = Hash.new {[]}
-    # FIXME вынести в Variant#dept_times ?
-    recommendation.variants.every.segments.flatten.each do |segment|
-      dept_times[segment.departure] |= [segment.dept_time]
+    dept_segments = []
+    recommendation.variants.each do |variant|
+      variant.segments.each_with_index do |segment, i|
+        if dept_segments[i].blank?
+          dept_segments[i] = {'times' => [], 'city' => segment.departure.city}
+        end
+        dept_segments[i]['times'] << segment.dept_time
+      end
     end
-
-    excluded_variant.segments.each do |segment|
-      dept_times[segment.departure] -= [segment.dept_time]
-    end if excluded_variant
-
-    dept_times.delete_if {|k,v| v.blank?}
-    
-    segment_index = -1
-    dept_times.map do |departure, times|
-      segment_index += 1
-      time_links = times.sort.map{|t| "<a href=\"#\" data-segment=\"#{segment_index}\"><u>#{t}</u></a>" }
-      "<strong>#{departure.city.case_from}</strong> — в #{human_enumeration(time_links)}"
-    end.join(', ')
-
+    result = []
+    dept_segments.each_with_index do |segment, i|
+      stimes = segment['times']
+      stimes.delete(excluded_variant.segments[i].dept_time) if excluded_variant
+      if stimes.length > 0
+        time_links = stimes.uniq.sort.map {|t| "<a href=\"#\" data-segment=\"#{i}\"><u>#{t}</u></a>" }
+        result << "<strong>#{segment['city'].case_from}</strong> — в #{human_enumeration(time_links)}"
+      end
+    end
+    result.join(', ')
   end
 
 end

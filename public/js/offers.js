@@ -28,16 +28,11 @@ init: function() {
     $('#offers-list').delegate('.collapse', 'click', function(event) {
         $(this).closest('.offer-variant').children('.offer-details').slideUp(150);
         $(this).hide().siblings().show();
-        event.stopPropagation();
-    });
-    $('#offers-list').delegate('.a-button', 'click', function(event) {
-        event.stopPropagation();
     });
     
     // Выбор времени вылета
     $('#offers-list').delegate('td.variants a', 'click', function(event) {
         event.preventDefault();
-        event.stopPropagation();
         var current = $(this).closest('.offer-variant')
         var departures = current.attr('data-departures').split(' ');
         var sindex = parseInt($(this).attr('data-segment'), 10);
@@ -56,14 +51,14 @@ init: function() {
             }
         });
         var variant = match || half_match;
-        /*if (variant) {
+        if (variant) {
             var detailed = current.children('.offer-details').is(':visible');
             current.addClass('g-none');
             variant.children('.offer-details').toggle(detailed);
             variant.find('.collapse').toggle(detailed);
             variant.find('.expand').toggle(!detailed);
             variant.removeClass('g-none');
-        }*/
+        }
     });
     
 },
