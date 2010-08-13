@@ -10,10 +10,13 @@
             <a href="/pnr_form/new/?flight_codes=<%= variant.flight_codes.join('_') %>" class="a-button" target="booking" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
         </td>
         <% if recommendation.variants.length > 1 %>
+        <% other_variants = variant_summary(recommendation, variant) %>
+        <% unless other_variants.blank? %>
         <td class="variants">
             <h6>Другие варианты вылета по такой же цене:</h6>
-            <p class="b-pseudo"><%= variant_summary(recommendation, variant) %></p>
+            <p class="b-pseudo"><%= other_variants %></p>
         </td>
+        <% end %>
         <% end %>
     </tr>
 </table>
@@ -37,7 +40,7 @@
     <div class="booking wrap">
         <a href="/pnr_form/new/?flight_codes=<%= variant.flight_codes.join('_') %>" class="a-button" target="booking" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
         <dl class="sum">
-            <dt>Итого <strong><%= recommendation.price_total.to_i %> рублей</strong> за всех со всеми налогами и сборами</dt>
+            <dt>Итого <strong><%= human_price(recommendation.price_total.to_i) %></strong> за всех со всеми налогами и сборами</dt>
             <dd>Тариф — <%= human_price(recommendation.prices[0].to_i) %>, налоги и сборы — <%= human_price(recommendation.prices[1].to_i) %></dd>
         </dl>
     </div>

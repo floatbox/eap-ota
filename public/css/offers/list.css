@@ -13,12 +13,13 @@
 
 #offers-list h3.recomendation 
 {
-    font-size: 112.5%;
+    font-size: 125%;
     font-weight: bold;
     
     margin: 0 0 8px;
 
     line-height: 100%;
+    letter-spacing: -0.035em;
 }
 
 /* Предложение */

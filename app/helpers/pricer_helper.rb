@@ -61,6 +61,10 @@ module PricerHelper
     end
     human_enumeration(cities)
   end
+  
+  def segments_departure variant
+    variant.segments.map {|segment| segment.departure_time }.join(' ')
+  end
 
   def variant_summary recommendation, excluded_variant=nil
     dept_times = Hash.new {[]}
@@ -74,10 +78,12 @@ module PricerHelper
     end if excluded_variant
 
     dept_times.delete_if {|k,v| v.blank?}
-
+    
+    segment_index = -1
     dept_times.map do |departure, times|
-      time_links = times.sort.map{|t| "<a href=\"#\" data-variant=\"\"><u>#{t}</u></a>" }
-      "<strong>#{departure.city.case_from}</strong> &mdash; в #{human_enumeration(time_links)}"
+      segment_index += 1
+      time_links = times.sort.map{|t| "<a href=\"#\" data-segment=\"#{segment_index}\"><u>#{t}</u></a>" }
+      "<strong>#{departure.city.case_from}</strong> — в #{human_enumeration(time_links)}"
     end.join(', ')
 
   end

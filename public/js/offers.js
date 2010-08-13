@@ -17,7 +17,7 @@ init: function() {
     });
     
     // Подробности
-    $('#offers-list').delegate('.offer-variant', 'click', function(event) {
+    $('#offers-list').delegate('.expand', 'click', function(event) {
         var variant = $(this).closest('.offer-variant');
         var details = variant.children('.offer-details');
         if (details.is(':hidden')) {
@@ -33,6 +33,39 @@ init: function() {
     $('#offers-list').delegate('.a-button', 'click', function(event) {
         event.stopPropagation();
     });
+    
+    // Выбор времени вылета
+    $('#offers-list').delegate('td.variants a', 'click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        var current = $(this).closest('.offer-variant')
+        var departures = current.attr('data-departures').split(' ');
+        var sindex = parseInt($(this).attr('data-segment'), 10);
+        var svalue = $(this).text().replace(':', '');
+        departures[sindex] = svalue;
+        var query = departures.join(' ');
+        var match = null, half_match = null;
+        current.siblings().each(function() {
+            var variant = $(this);
+            var vd = variant.attr('data-departures');
+            if (vd == query) {
+                match = variant;
+                return false;
+            } else if (vd.split(' ')[sindex] == svalue) {
+                half_match = variant;
+            }
+        });
+        var variant = match || half_match;
+        /*if (variant) {
+            var detailed = current.children('.offer-details').is(':visible');
+            current.addClass('g-none');
+            variant.children('.offer-details').toggle(detailed);
+            variant.find('.collapse').toggle(detailed);
+            variant.find('.expand').toggle(!detailed);
+            variant.removeClass('g-none');
+        }*/
+    });
+    
 },
 load: function(data) {
     var self = this;

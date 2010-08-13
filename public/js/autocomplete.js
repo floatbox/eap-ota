@@ -754,10 +754,7 @@ $.Autocompleter.IATA = function($input) {
     .addClass(o.iataCls)
     .appendTo($input.parent());
 
-    var $text = $('u', $el)
-    .click(function(e) {
-        alert('Зачем ты тревожишь меня, ирод?!!');
-    });
+    var $text = $('u', $el);
     
     function update() {
         $('*', $el).css('backgroundColor', $input.css('backgroundColor'));
