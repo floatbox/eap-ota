@@ -148,12 +148,12 @@
 	visibility: hidden;
 }
 
-#header:hover #search-debug 
-{
-	visibility: visible;
-}
-
 #search-debug input
 {
 	margin: 0 3px 0 0;
+}
+
+.l-header:hover #search-debug 
+{
+	visibility: visible;
 }
