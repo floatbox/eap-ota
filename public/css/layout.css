@@ -1,4 +1,4 @@
-#page 
+.l-page 
 {
     position: relative;
     width: 960px;
@@ -6,7 +6,7 @@
     margin: 0 auto -230px;
 }
 
-#canvas 
+.l-canvas 
 {
     position: relative;
     z-index: 1;
@@ -14,7 +14,7 @@
     background: #e5e5e5;
 }
 
-#canvas-bottom 
+.l-canvas-bottom 
 {
     position: absolute;
     top: 50%;
@@ -24,7 +24,7 @@
     background: #e5e5e5;    
 }
 
-#footer {
+.l-footer {
     position: relative;
     z-index: 1;
     clear: both;
