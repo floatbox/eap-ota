@@ -1,46 +1,48 @@
 #offers-progress
 {
     font-size: 87.5%;
+
     position: relative;
-    margin: 25px 320px 25px 160px;
+
+    width: 400px;
+    margin: 15px;
+    padding: 10px 15px 14px 260px;
+    
+    background: url(/img/offers/progress-photo.jpg) no-repeat 0 40% #FFF;
 }
 
 #offers-progress .loading
 {
-    position: absolute;
-    top: 3px; left: -144px;
+
 }
 
 #offers-progress h3 
 {
-    font: bold 150%/100% Arial;
-    margin: 0 0 15px;
+    font-size: 171.429%;
+    font-weight: bold;
+
+    margin: 0 0 10px;
+    
+    line-height: 108.333%;
 }
 
 #offers-progress .phones
 {
-    overflow: hidden;
-    margin: 15px 0 0;
+    font-size: 85.714%;
+    
+    margin: 10px 0 15px;
 }
 
-    #offers-progress .phones dt
+    #offers-progress .phones li
     {
-        font-size: 22px;
-        line-height: 24px;
-        font-weight: bold;
-        float: left;
-        clear: left;
-        width: 190px;
-        margin: 0 0 6px;
+        margin: 0 0 3px;
     }
 
     #offers-progress .phones strong
     {
-        color: #d5398b;
+        font-size: 125%;
+        font-weight: bold;
+        
+        color: #c63c93;
     }
-    
-    #offers-progress .phones dd
-    {
-        float: left;
-        margin-top: 5px;
-    }   
+ 

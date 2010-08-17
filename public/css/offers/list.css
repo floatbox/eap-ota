@@ -372,11 +372,7 @@
     display: none;
 
     border-top: 1px solid #d0d0d0;
-}
-
-.detailed .offer-details
-{
-    display: block;
+    background: #f7f7f7;
 }
 
 .offer-details h4
@@ -486,7 +482,7 @@
         {
             padding: 2px 0 2px 22px;
 
-            background: url(/img/flight-warnings.png) no-repeat -20px 0;
+            background: url(/img/offers/warnings.png) no-repeat -20px 0;
         }
 
         .offer-details li.diffad
@@ -517,6 +513,7 @@
         padding: 12px 0;
 
         border-top: 1px solid #d0d0d0;
+        background: #fff;
     }
 
     .offer-details .booking .a-button

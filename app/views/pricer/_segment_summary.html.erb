@@ -34,7 +34,7 @@
         </div>
         <h6><%= human_duration(segment.total_duration) %> в пути</h6>
         <% unless layover_human_durations.empty? %>
-        <p class="note"><%= human_enumeration(layover_human_durations) %> между рейсами</p>
+        <p class="note"><%= layover_human_durations.to_sentence %> между рейсами</p>
         <% end %>
     </td>
     <td class="arv">
