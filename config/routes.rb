@@ -29,5 +29,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.connect 'complete.json', :controller => :complete, :action => :complete
 
+  map.about 'about/:action', :controller => :about
+
   map.root :controller => "home"
 end
