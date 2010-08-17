@@ -2,25 +2,15 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+    <% @title = 'Выбор направления' %>
+    <%= render 'head_common' %>
 
-    <title>Eviterra / Евитерра</title>
-    <link rel="favicon icon" type="image/x-icon" href="/favicon.ico">
-
-
-    <!-- [production] Все стили, импортируемые этими файлами, нужно объединить с сохранением порядка, а затем упаковать -->
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-
-    <!-- [production] подключать jQuery и jQueryUI с google.com или с jquery.com -->
-    <script type="text/javascript" src="js/lib/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="js/lib/jquery-ui-1.8.min.js"></script>
 
     <!-- API Я.Карт -->
     <script src="http://api-maps.yandex.ru/1.1/index.xml?key=ALbfWUsBAAAA12OmfQIAfAJwdvj4ieWN5B6zaN0ZvfteY90AAAAAAAAAAACH_1UX_hn04Wtmar7a930xij45OA==" type="text/javascript"></script>
     
-    <!-- [production] Все нижеследующие скрипты объединить в таком же порядке -->
-    <!-- [production] перед сборкой упаковать -->
+    <!-- [production] Все нижеследующие скрипты объединить в таком же порядке и упаковать -->
     <script type='text/javascript' src='js/main.js'></script>
     <script type='text/javascript' src='js/utils.js'></script>
     <script type='text/javascript' src='js/multifield.js'></script>
