@@ -1,14 +1,13 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <% @title = 'Купить билет' %>
-    <%= render 'head_common' %>
+    <%= render 'shared/head_common', {:title => 'Купить билет'} %>
 
     <!-- [production] Все нижеследующие скрипты объединить в таком же порядке и упаковать -->
-    <script type="text/javascript" src="js/main.js"></script>
-    <script type="text/javascript" src="js/utils.js"></script>
-    <script type="text/javascript" src="js/autocomplete.js"></script>
-    <script type="text/javascript" src="js/booking/onready.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
+    <script type="text/javascript" src="/js/utils.js"></script>
+    <script type="text/javascript" src="/js/autocomplete.js"></script>
+    <script type="text/javascript" src="/js/booking/onready.js"></script>
 </head>
 
 <body>
