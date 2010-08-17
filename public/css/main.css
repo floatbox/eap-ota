@@ -11,9 +11,9 @@
 @import 'atoms/location.css';
 @import 'atoms/location-tip.css';
 
-@import 'head/b-head.css';
-@import 'head/b-logo.css';
-@import 'head/b-tabs.css';
+@import 'head/header.css';
+@import 'head/header-tabs.css';
+@import 'head/logo.css';
 
 @import 'search/form.css';
 @import 'search/autocomplete.css';

@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
@@ -36,83 +37,26 @@
 </head>
 
 <body>
-<div class="l-page">
-    
-    <!-- Шапка -->
-    <div class="l-header">
-        <div class="b-head">
-            <s class="b-logo"></s>
-            <ul id="search.mode" class="tabs head-tabs">
-                <li><a href="#" onclick="return {v: 'avia'}" title="Простая покупка авиабилетов" class="active">Авиа</a>
-                <li><a href="#" onclick="return {v: 'train'}" title="Обычные и электронные билеты на поезда">Поезда</a>
-                <li><a href="#" onclick="return {v: 'hotel'}" title="Бронирование номеров в гостинице или хостеле">Отели</a>
-                <li><a href="#" onclick="return {v: 'rent'}" title="Прокат бензиновых вонючек: автомобилей, мотоциклов и тук-туков">Авто</a>
-            </ul>
-        </div>
-        <div id="search-debug">
-            <input type="checkbox" id="sdmode"> <label for="sdmode">Режим отладки</label>
-        </div>
-    </div>
 
-    <div class="l-canvas">
+    <div class="l-page">
+        <div class="l-header">
+            <%= render 'header' %>
+        </div>
 
-        <%= render 'search' %>
-        <%= render 'offers' %>
+        <div class="l-canvas">
+            <%= render 'search' %>
+            <%= render 'offers' %>
+        </div>
         
-    </div>
-    <div class="l-canvas-bottom"></div>
-    
-</div>
-
-<div class="l-footer">
-    <%= render 'footer' %>
-</div>
-
-    <!-- Попап-окошки -->
-
-    <!-- Выбор количества пассажиров -->
-    <div id="search.define.persons" class="define-popup">
-        <dl class="separated" onclick="return ['взрослый', 'взрослых', 'взрослых']">
-            <dt>взрослых
-            <dd><a href="#" onclick="return 11" class="checked"><i></i>один</a>
-            <dd><a href="#" onclick="return 12"><i></i>двое</a>
-            <dd><a href="#" onclick="return 13"><i></i>трое</a>
-            <dd><a href="#" onclick="return 14"><i></i>четверо</a>
-            <dd><a href="#" onclick="return 15"><i></i>пятеро</a>
-            <dd><a href="#" onclick="return 16"><i></i>шестеро</a>
-            <dd><a href="#" onclick="return 17"><i></i>семеро</a>
-            <dd><a href="#" onclick="return 18"><i></i>восьмеро</a>
-        </dl>
-
-        <dl class="separated fade" onclick="return ['ребёнок', 'детей', 'детей']">
-            <dt title="Добавить к списку пассажиров детей от 2 до 12 лет">детей&nbsp;2&#150;12&nbsp;лет
-            <dd><a href="#" onclick="return 100" class="anyone checked"><i></i>нет</a>
-            <dd><a href="#" onclick="return 101"><i></i>один</a>
-            <dd><a href="#" onclick="return 102"><i></i>двое</a>
-            <dd><a href="#" onclick="return 103"><i></i>трое</a>
-            <dd><a href="#" onclick="return 104"><i></i>четверо</a>
-            <dd><a href="#" onclick="return 105"><i></i>пятеро</a>
-            <dd><a href="#" onclick="return 106"><i></i>шестеро</a>
-            <dd><a href="#" onclick="return 107"><i></i>семеро</a>
-        </dl>
-
-        <dl class="fade" onclick="return ['младенец', 'младенцев', 'младенцев']">
-            <dt title="Добавить младенцев младше двух лет к списку пассажиров">малышей
-            <dd><a href="#" onclick="return 1000" class="anyone checked"><i></i>нет</a>
-            <dd><a href="#" onclick="return 1001"><i></i>один</a>
-            <dd><a href="#" onclick="return 1002"><i></i>двое</a>
-            <dd><a href="#" onclick="return 1003"><i></i>трое</a>
-            <dd><a href="#" onclick="return 1004"><i></i>четверо</a>
-            <dd><a href="#" onclick="return 1005"><i></i>пятеро</a>
-            <dd><a href="#" onclick="return 1006"><i></i>шестеро</a>
-            <dd><a href="#" onclick="return 1007"><i></i>семеро</a>
-        </dl>
-
-        <a href="#" class="a-button g-none" title="Подтвердить выбор и закрыть">Готово</a>
+        <div class="l-canvas-bottom"></div>
     </div>
 
-    <!-- Ктулху -->
-    <div id="staple" class="b-staple g-none"></div>
+    <div class="l-footer">
+        <%= render 'footer' %>
+    </div>
+
+    <%= render 'popups' %>
 
 </body>
+
 </html>
