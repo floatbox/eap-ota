@@ -72,8 +72,8 @@ module PricerHelper
       stimes = segment['times']
       stimes.delete(excluded_variant.segments[i].dept_time) if excluded_variant
       if stimes.length > 0
-        time_links = stimes.uniq.sort.map {|t| "<a href=\"#\" data-segment=\"#{i}\"><u>#{t}</u></a>" }
-        result << "<strong>#{segment['city'].case_from}</strong> — в #{time_links.to_sentence(:last_word_connector => ' и в ')}"
+        time_links = stimes.uniq.sort.map {|t| "в <a href=\"#\" data-segment=\"#{i}\"><u>#{t}</u></a>" }
+        result << "<strong>#{segment['city'].case_from}</strong> — #{time_links.to_sentence}"
       end
     end
     result.join(', ')
