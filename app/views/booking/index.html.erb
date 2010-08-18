@@ -1,25 +1,13 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+    <%= render 'shared/head_common', {:title => 'Купить билет'} %>
 
-    <title>Eviterra / Выписать билет</title>
-    <link rel="favicon icon" type="image/x-icon" href="/favicon.ico">
-
-    <!-- [production] Все стили, импортируемые этими файлами, нужно объединить с сохранением порядка, а затем упаковать -->
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-
-    <!-- [production] подключать jQuery и jQueryUI с google.com или с jquery.com -->
-    <!-- [production] (!) возможно, стоит вставить сюда inline -->
-    <script type="text/javascript" src="js/lib/jquery-1.4.2.min.js"></script>
-
-    <!-- [production] Все нижеследующие скрипты объединить в таком же порядке -->
-    <!-- [production] перед сборкой упаковать -->
-    <script type='text/javascript' src='js/main.js'></script>
-    <script type='text/javascript' src='js/utils.js'></script>
-    <script type='text/javascript' src='js/autocomplete.js'></script>
-    <script type='text/javascript' src='js/booking/onready.js'></script>
+    <!-- [production] Все нижеследующие скрипты объединить в таком же порядке и упаковать -->
+    <script type="text/javascript" src="/js/main.js"></script>
+    <script type="text/javascript" src="/js/utils.js"></script>
+    <script type="text/javascript" src="/js/autocomplete.js"></script>
+    <script type="text/javascript" src="/js/booking/onready.js"></script>
 </head>
 
 <body>

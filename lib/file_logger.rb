@@ -9,8 +9,10 @@ module  FileLogger
   end
 
   def save_xml(prefix, xml)
-    path = Rails.root + "log/xmls/#{prefix}_#{Time.now.strftime('%y%m%d-%H%M%S')}.xml"
+    base_name = Time.now.strftime('%y%m%d-%H%M%S') + '.xml'
+    path = Rails.root + "log/xmls/#{prefix}_#{base_name}"
     File.open(path, 'w') {|f| f.write(xml) }
+    base_name
   end
 
   def read_xml(prefix)

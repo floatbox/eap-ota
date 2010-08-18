@@ -3,6 +3,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.pricer 'pricer', :controller => 'pricer', :action => 'index'
   map.pricer 'pricer/validate', :controller => 'pricer', :action => 'validate'
+  map.booking 'booking', :controller => 'booking', :action => 'index'
 
   map.resources :locations, :collection => {:random => :get, :current => :get}
 
@@ -27,6 +28,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :presets, :except => [:new, :create]
 
   map.connect 'complete.json', :controller => :complete, :action => :complete
+
+  map.about 'about/:action', :controller => :about
 
   map.root :controller => "home"
 end
