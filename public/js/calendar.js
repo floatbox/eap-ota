@@ -29,34 +29,6 @@ Date.daysInMonth = function(m, y) {
     return date.getDate();
 };
 
-/* Calendar date */
-app.CalendarDate = function(type, parent) {
-    this.parent = parent;
-    this.type = type;
-    this.date = null;
-    return this;
-}
-app.CalendarDate.prototype = {
-val: function(date) {
-    if (arguments.length) {
-        var dn = date && this.parent.index[date];
-        console.log(date, dn);
-        this.select(dn !== undefined && this.parent.days[dn]);
-    } else if (this.el) {
-        return this.el.attr("data-dmy");
-    } else {
-        return undefined;
-    }
-},
-select: function(el, stealth) {
-    if (this.el) this.el.removeClass(this.type);
-    this.el = el && $(el).addClass(this.type);
-    this.index = el ? this.el.data("index") : undefined;
-    if (el && this.parent.savedRet) this.parent.savedRet = null;
-    if (!stealth) this.parent.update();
-}
-};
-
 /* Calendar scroll */
 app.CalendarScroller = function(parent) {
     this.parent = parent;
@@ -65,8 +37,8 @@ app.CalendarScroller = function(parent) {
 }
 app.CalendarScroller.prototype = {
 init: function() {
-    this.el = this.parent.dates;
-    this.rheight = $(this.parent.days[0]).outerHeight();
+    this.el = this.parent.container;
+    this.rheight = $(this.parent.dates.eq(0)).outerHeight();
     this.active = true;
     this.factor = 1.5
     this.initNative();
@@ -128,8 +100,8 @@ initArrows: function() {
     });
 },
 initTimeline: function() {
-    var self = this, mdate, days = this.parent.days, mw, sw = 0;
-    this.scroller = $('.scroller', this.parent.el).width(Math.round(days.length * self.factor));
+    var self = this, mdate, mw, sw = 0;
+    this.scroller = $('.scroller', this.parent.el).width(Math.round(this.parent.dates.length * self.factor));
     this.timeline = $('.timeline', this.scroller).hide().html('');
     $('.month', this.el).each(function() {
         mdate = $(this).data('monthyear');
@@ -139,7 +111,7 @@ initTimeline: function() {
         sw += mw + 1;
     });
     var monthes = $('dt', this.timeline);
-    var offset = Math.round((1 - parseInt(days[0].children('span').text(), 10)) * self.factor);
+    var offset = Math.round((1 - parseInt(this.parent.dates.first().attr('data-dmy').substring(0,2), 10)) * self.factor);
     $('<div>').addClass('overlay').css('left', -offset - 51).appendTo(monthes.first());
     $('<div>').addClass('overlay').css('left', this.scroller.width() - offset - sw + mw).appendTo(monthes.last());
     this.timeline.append($('<dd>').text(mdate.year));
@@ -179,6 +151,33 @@ initScrollbar: function() {
 }
 };
 
+/* Calendar date */
+app.CalendarDate = function(type, parent) {
+    this.parent = parent;
+    this.type = type;
+    this.date = null;
+    return this;
+}
+app.CalendarDate.prototype = {
+val: function(date) {
+    if (arguments.length) {
+        var dn = date && this.parent.index[date];
+        console.log(date, dn);
+        this.select(dn !== undefined && this.parent.days[dn]);
+    } else if (this.el) {
+        return this.el.attr("data-dmy");
+    } else {
+        return undefined;
+    }
+},
+select: function(el, stealth) {
+    this.el = el && $(el);
+    this.index = el ? parseInt(this.el.attr('data-index'), 10) : undefined;
+    if (el && this.parent.savedRet) this.parent.savedRet = null;
+    if (!stealth) this.parent.update();
+}
+};
+
 /* Calendar */
 app.Calendar = function(selector) {
     this.el = $(selector);
@@ -203,7 +202,7 @@ init: function() {
     });
 },
 makeDates: function() {
-    this.dates = $('.dates', this.el).hide().html('');
+    this.container = $('.dates', this.el).hide().html('');
     var today = new Date();
     var cd = today.clone().shift(1 - (today.getDay() || 7));
     var ld = today.clone();
@@ -220,10 +219,10 @@ makeDates: function() {
             month = $('<ul>').addClass('month').data('monthyear', {
                 month: cd.getMonth(),
                 year: cd.getFullYear()
-            }).appendTo(this.dates);
+            }).appendTo(this.container);
         }
         var dmy = cd.toAmadeus();
-        var day = $("<li>").data('index', counter).attr('data-dmy', dmy);
+        var day = $('<li>').attr('data-index', counter).attr('data-dmy', dmy);
         if (ct < tt || ct > lt) {
             day.addClass('inactive');
         }
@@ -232,44 +231,90 @@ makeDates: function() {
             label.addClass('dayoff');
         }
         month.append(day.append(label));
-        days[counter] = day;
         index[dmy] = counter++;
         ct = cd.shift(1).getTime();
     }
     $('.month:odd', this.dates).addClass('odd');
-    this.index = index;
-    this.days = days;
+    this.dates = $('li', this.container);
+    var active = $('li:not(.inactive)', this.container);
+    this.min = parseInt(active.first().attr('data-index'), 10);
+    this.max = parseInt(active.last().attr('data-index'), 10);
 },
 initDates: function() {
     var self = this;
-    this.dates.show().delegate('li:not(.inactive)', 'click', function() {
+    this.container.show().delegate('li:not(.inactive)', 'click', function() {
         if (self.dpt.el && self.ret.el) {
             self.nearest(this).select(this);
         } else if (self.oneway || !self.dpt.el) {
             self.dpt.select(this);
         } else {
-            var n = $(this).data("index");
+            var n = parseInt($(this).attr('data-index'), 10);
             if (n < self.dpt.index) {
-                self.ret.select(self.days[self.dpt.index], true);
+                self.ret.select(self.dates.eq(self.dpt.index), true);
                 self.dpt.select(this);
             } else {
                 self.ret.select(this);
             }
         }
+    }).delegate('li:not(.inactive)', 'mousedown', function(event) {
+        event.preventDefault();
+        var el = $(this), mode;
+        if (el.hasClass('dpt')) mode = 'dpt';
+        if (el.hasClass('ret')) mode = 'ret';
+        if (!mode && el.hasClass('there')) mode = 'both';
+        var dragselection = (!self.dpt.el && !self.ret.el && !self.oneway);
+        var index = parseInt(el.attr('data-index'), 10);
+        if (!mode && dragselection) mode = 'ret';
+        if (mode) {
+            self.dragging = {
+                mode: mode,
+                from: index,
+                dpt: self.dpt.el ? self.dpt.index : (dragselection ? index : undefined),
+                ret: self.ret.el ? self.ret.index : (dragselection ? index : undefined)
+            };
+            $(window).one('mouseup', function() {
+                self.dragging = null;
+            });
+        }
+    }).delegate('li:not(.inactive)', 'mouseup', function() {
+        var sdc = self.dragging && self.dragging.current;
+        if (sdc) {
+            self.dpt.select(sdc.dpt, true);
+            self.ret.select(sdc.ret, true);
+            self.update();
+        }
+        self.dragging = null;
     }).delegate('li:not(.inactive)', 'mouseover', function() {
-        var both = self.dpt.el && self.ret.el;
-        var type = both ? self.nearest(this).type : (self.oneway || !self.dpt.el ? 'dpt' : 'ret');
-        $(this).addClass(type + 'hover');
-        if (self.hlable) self.highlight(this);
+        if (self.dragging) {
+            var d = self.dragging, offset = $(this).attr('data-index') - d.from, dptel, retel;
+            var dpt = d.dpt != undefined && ((d.mode == 'dpt' || d.mode == 'both') ? (d.dpt + offset).constrain(self.min, self.max) : d.dpt);
+            var ret = d.ret != undefined && ((d.mode == 'ret' || d.mode == 'both') ? (d.ret + offset).constrain(self.min, self.max) : d.ret);
+            if (dpt != undefined && ret != undefined && ret < dpt) {
+                dptel = self.dates.eq(ret);
+                retel = self.dates.eq(dpt);
+            } else {
+                dptel = dpt != undefined && self.dates.eq(dpt);
+                retel = ret != undefined && self.dates.eq(ret);
+            }
+            d.current = {dpt: dptel, ret: retel};
+            self.fill(dptel, retel);
+        } else {
+            var both = self.dpt.el && self.ret.el;
+            var type = both ? self.nearest(this).type : (self.oneway || !self.dpt.el ? 'dpt' : 'ret');
+            if (self.hlable) self.highlight(this);
+            $(this).addClass(type + 'hover');
+        }
     }).delegate('li:not(.inactive)', 'mouseout', function() {
         $(this).removeClass('dpthover rethover');
+    }).mousemove(function() {
+        if (self.dragging) self.highlight();
     }).mouseout(function() {
         if (self.hlable) self.highlight();
     });
 },
 nearest: function(el) {
     if (this.dpt.el && this.ret.el) {
-        var index = $(el).data('index');
+        var index = $(el).attr('data-index');
         var dd = Math.abs(this.dpt.index - index);
         var dr = Math.abs(this.ret.index - index);
         return (index < this.dpt.index || dd < dr) ? this.dpt : this.ret;   
@@ -282,7 +327,7 @@ nearest: function(el) {
     }
 },
 update: function() {
-    this.fill();
+    this.fill(this.dpt.el, this.ret.el);
     this.highlight();
     this.hlable = !this.oneway && (this.dpt.el || this.ret.el);
     app.search.update({
@@ -290,24 +335,24 @@ update: function() {
         date2: this.ret.val()
     }, this);
 },
-fill: function() {
-    $(".there", this.el).removeClass("there");
-    if (this.dpt.el && this.ret.el) {
-        var min = this.dpt.index + 1;
-        var max = this.ret.index;
-        for (var i = min; i < max; i++) {
-            $(this.days[i]).addClass("there");
-        }
+fill: function(dpt, ret) {
+    if (this.filled) this.filled.removeClass('dpt ret there');
+    this.filled = null;
+    if (dpt) this.filled = dpt.addClass('dpt');
+    if (ret) this.filled = ret.addClass('ret');
+    if (dpt && ret) {
+        var dptindex = parseInt(dpt.attr('data-index'), 10);
+        var retindex = parseInt(ret.attr('data-index'), 10);
+        this.filled = this.dates.slice(dptindex, retindex + 1).addClass("there");
     }
 },
 highlight: function(el) {
-    $(".hl", this.el).removeClass("hl");
+    if (this.highlighted) this.highlighted.removeClass("hl");
+    this.highlighted = null;
     if (el) {
         var n1 = this.nearest(el).index;
-        var n2 = $(el).data("index");
-        for (var i = Math.min(n1, n2), lim = Math.max(n1, n2); i < lim; i++) {
-            $(this.days[i]).addClass("hl");
-        }   
+        var n2 = parseInt($(el).attr('data-index'), 10);
+        this.highlighted = this.dates.slice(Math.min(n1, n2), Math.max(n1, n2)).addClass('hl');
     }
 },
 toggleOneway: function(mode) {

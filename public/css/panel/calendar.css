@@ -59,7 +59,7 @@
         padding: 3px 0;
 
         color: #E8E8E8;
-        border: 1px solid #777;
+        border: 1px solid #707070;
         border-bottom: none;
         
         cursor: pointer;
@@ -95,8 +95,8 @@
         height: 22px;
 
         background: #343434;
-        opacity: 0.5;
-        filter: alpha(opacity=50);
+        opacity: 0.4;
+        filter: alpha(opacity=40);
         cursor: default;
     }
 
@@ -189,13 +189,24 @@
 
 .calendar .dates li.hl 
 {
-    background: #b898b5;
-    border-color: #cfb9cc;
+    background: #b2a4bb;
+    border-color: #cbc2d0;
 }
 .calendar .odd li.hl 
 {
-    background: #c09eb9;
+    background: #bbabc0;
 }
+
+.calendar li.there.hl 
+{
+    background-color: #bf86ac;
+    border-color: #d3adc6;
+}
+.calendar .odd li.there.hl 
+{
+    background-color: #c58bb0;
+}
+
 
 .calendar .dates li.inactive {
     color: #9da5b0;
@@ -216,12 +227,12 @@
 
 .calendar .dates .there 
 {
-    background: #c280a9;
-    border-color: #d7a4c2;
+    background: #c675a4;
+    border-color: #d8a0c0;
 }
 .calendar .odd .there 
 {
-    background: #c785ad;
+    background: #ca79a7;
 }
 
 .calendar .dates li.dpt,
@@ -234,8 +245,15 @@
 .calendar .dates li.dpthover,
 .calendar .dates li.rethover 
 {
-    background-color: #cb70a2;
-    border-color: #da9cbe;
+    background-color: #ba92b2;
+    border-color: #d0b5ca;
+}
+
+.calendar .dates li.there.dpthover,
+.calendar .dates li.there.rethover 
+{
+    background-color: #cb699e;
+    border-color: #db98bc;
 }
 
 .calendar .dates li.dpthover
@@ -248,8 +266,8 @@
     background-position: 64px -106px;
 }
 
-.calendar .dates li.dpt,
-.calendar .dates li.ret 
+.calendar .dates .month li.dpt,
+.calendar .dates .month li.ret 
 {
     border-color: #e67bae;
     background-color: #DC3F8A;

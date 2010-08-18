@@ -122,6 +122,43 @@ body * {
     vertical-align: middle!important;
 }
 
+/* Шрифты */
+.g-xxxl
+{
+    font-size: 214.286%;
+}
+
+.g-xxl
+{
+    font-size: 150%;
+}
+
+.g-xl
+{
+    font-size: 128.571%;
+}
+
+.g-l
+{
+    font-size: 114.286%;
+}
+
+.g-s
+{
+    font-size: 92.857%;
+}
+
+.g-xs
+{
+    font-size: 85.714%;
+}
+
+.g-xxs
+{
+    font-size: 78.571%;
+}
+
+
 /* утилиты */
 .clear:after {
     content: '.';
