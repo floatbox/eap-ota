@@ -20,9 +20,61 @@
 
             <div id="search-transcript">
                 <h1>из Москвы в Париж и обратно с 8 по 15 сентября вдвоём с ребёнком</h1>
-                <a href=#>Вернуться к&nbsp;результатам поиска</a> или <a href=#>поискать что-нибудь заново</a>
+                <h5>
+                    <a href=#>Вернуться к&nbsp;результатам поиска</a>
+                    или
+                    <a href=#>поискать что-нибудь заново</a>
+                </h5>
             </div>
 
+            <dl class="booking">
+
+                <dt><b>1</b>Проверьте, что вы бронируете
+                <dd class="booking-variant">
+                    <br/><br/>Здесь должны быть подробности перелёта - такие же, как в списке предложений<br/><br/>
+
+                <dt><b>2</b>Введите данные пассажира(ов)
+                
+                <dd class="booking-persons">
+                    <form id="booking-person-form-1">
+                        <input type="text" 
+                         name="fname"
+                         class="text name"
+                         tabindex="1"
+                         value="Имя"
+                         onclick="return {defaultValue: 'Имя'}"
+                         title=""
+                        >
+
+                        <input type="text" 
+                         name="lname"
+                         class="text name"
+                         tabindex="2"
+                         value="Фамилия"
+                         onclick="return {defaultValue: 'Фамилия'}"
+                         title=""
+                        >
+
+                        <ul>
+                            <li><input type=radio id="booking-person-sex-m-1" name="sex" class="sex" tabindex="3"><label for="booking-person-sex-m-1">мужской</label>
+                            <li><input type=radio id="booking-person-sex-f-1" name="sex" class="sex" tabindex="4"><label for="booking-person-sex-f-1">женский</label>
+                        </ul>
+
+                    </form>
+
+                <dt><b>3</b>Введите платёжные данные
+                <dd class="booking-payment">
+                    <br/><br/><br/>форма<br/><br/><br/>
+
+                <dt><b>4</b>Введите данные покупателя
+                <dd class="booking-contacts">
+                    <br/><br/><br/>форма<br/><br/><br/>
+
+                <dt><b>5</b>Всё правильно? Нажмите [Забронировать]
+                <dd class="booking-book">
+                    <br/><br/><br/>тут показать результаты бронирования?<br/><br/><br/>
+
+            </dl>
         
         </div>
         
