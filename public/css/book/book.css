@@ -1,3 +1,23 @@
+
+/* модификация .l-canvas*/
+
+.booking {
+    padding-top: 15px;
+}
+
+
+.booking #search-transcript {
+    margin-top: 0;
+}
+
+
+
+
+
+
+
+
+
 .book {
     clear: both;
     overflow: hidden;
@@ -28,22 +48,6 @@
 .book dd {
 }
 
-/* Подсказка */
-
-.book dd.info {
-    font: 70% Arial,s;
-
-    float: left;
-    overflow: hidden;
-
-    width: 210px;
-    padding: 0 15px;
-
-    color: #777;
-}
-
-/* Содержимое блока */
-
 .book dd.body {
     float: right;
     overflow: hidden;
@@ -54,24 +58,12 @@
     border-left: 1px solid #777;
 }
 
-/* Кнопка(и) действия */
-
-.book dd.action {
-    float: right;
-
-    padding: 25px 15px 15px 0;
-}
-
-/* Элементы содержимого */
-/* Заголовок */
-
 .book dd.body h1 {
     font: bold 100% Arial,s;
 
     color: #333;
 }
 
-/* Сведения о тарифе */
 .book dd.body .tarif {
     color: #333;
 }
@@ -134,45 +126,3 @@
     background-position: left top;
 }
 
-/* Песочные часы */
-.book dd.sand {
-    padding-bottom: 130px;
-
-    background: url(/img/sand.gif) no-repeat center bottom;    
-}
-
-.book dd.sand p.sand {
-    font-weight: bold;
-
-    margin: 1em 0 0 0;
-    
-    text-align: center;
-
-    color: #000;
-}
-
-/* Модификация предложения */
-
-.book dd.body .offers {
-    margin-left: 0;
-}
-
-.book dd.body .offers table {
-    margin: 0;
-}
-
-.book .offers thead th i {
-    font-weight: normal;
-
-    color: #4a4a4a;
-}
-
-.book .offers thead th p {
-    font: normal 16px Arial,s;
-
-    margin: .5em 0 0 5.5em;
-}
-
-.book .offers thead th p * {
-    font-weight: normal;
-}
