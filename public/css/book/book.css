@@ -1,80 +1,153 @@
-.book {
-    clear: both;
-    overflow: hidden;
-    zoom: 1;
+
+/* модификация .l-canvas*/
+
+.booking {
+    padding-top: 15px;
+
+    letter-spacing: -0.03em;
 }
 
-.book dt {
-    font: bold 22px Arial,s;
 
-    padding: 1em 0 .2em;
-    margin: 0 15px .5em 15px;
-
-    color: #333;
-    border-bottom: 2px solid;
+.booking #search-transcript {
+    margin: 0 15px 0;
 }
 
-.book dt b {
-    padding: 6px;
-    margin: 0 .4em 0 0;
+.booking #search-transcript h5 {
+    font-size: 81.25%;
 
-    color: #fff;
-    background: #333;
-    border-radius-topleft: 10px;
-    -moz-border-radius-topleft: 10px;
-    -webkit-border-radius-topleft: 10px;
-}
+    margin: .3em 0 0 0;
 
-.book dd {
-}
-
-/* Подсказка */
-
-.book dd.info {
-    font: 70% Arial,s;
-
-    float: left;
-    overflow: hidden;
-
-    width: 210px;
-    padding: 0 15px;
+    letter-spacing: -0.01em;
 
     color: #777;
 }
 
-/* Содержимое блока */
+.booking #search-transcript h5 a {
+    color: #777;
+}
 
-.book dd.body {
-    float: right;
+.booking #search-transcript h5 a:hover {
+    color: #000;
+}
+
+/* Разметка страницы бронирования на шаги */
+
+dl.booking {
+    width: 675px;
+    margin: 0 15px;
+    padding: 0;
+
     overflow: hidden;
-
-    width: 689px;
-    padding: 0 15px;
-
-    border-left: 1px solid #777;
+    zoom: 1;
 }
 
-/* Кнопка(и) действия */
+dl.booking dt {
+    font: bold 18px Arial,s;
 
-.book dd.action {
-    float: right;
-
-    padding: 25px 15px 15px 0;
-}
-
-/* Элементы содержимого */
-/* Заголовок */
-
-.book dd.body h1 {
-    font: bold 100% Arial,s;
+    margin: 1em 0 0 0;
 
     color: #333;
 }
 
-/* Сведения о тарифе */
-.book dd.body .tarif {
-    color: #333;
+dl.booking dt b {
+    font: bold 22px/34px Arial,s;
+
+    display: inline-block;
+
+    padding: 0 .5em;
+    margin: 0 .4em 0 0;
+
+    color: #fff;
+    background: #cb388f;
 }
+
+
+dl.booking dd {
+    padding: 10px;
+}
+
+    .booking-variant {
+        background: #fff;
+    }
+
+    .booking-persons {
+        background: #e5ffd2;
+    }
+
+    .booking-payment {
+        background: #fff8d2;
+    }
+
+    .booking-contacts {
+        background: #fff8d2;
+    }
+
+    .booking-book {
+        background: #fff;
+    }
+
+/* Данные пассажиров */
+
+.booking-persons form {
+    
+}
+
+.booking-persons form input.text {
+    font-size: 22px;
+
+    padding: 6px;
+    height: 1%;
+
+    letter-spacing: -.02em;
+
+    color: #4b4b4b;
+    color: #aaa;
+    border: 1px solid #909090;
+    background: #fff;
+}
+
+.booking-persons form input.name {
+    width: 200px;
+}
+
+.booking-persons form ul {
+    font-size: 81.25%;
+
+    display: inline-block;
+
+    vertical-align: middle;
+
+    width: 200px;
+}
+
+.booking-persons form ul li {
+}
+
+.booking-persons form ul .sex {
+    adding: 0;
+}
+
+
+/*
+
+.autocomplete-hover {
+    border-color: #db3f89;
+}
+
+.autocomplete-focus {
+    color: #333;
+    border: 1px solid #db3f89;
+    background: #fff;
+}
+
+/*
+
+
+
+
+
+
+/* тариф 
 
 .book dd.body .tarif ul {
     font-size: 80%;
@@ -134,45 +207,4 @@
     background-position: left top;
 }
 
-/* Песочные часы */
-.book dd.sand {
-    padding-bottom: 130px;
-
-    background: url(/img/sand.gif) no-repeat center bottom;    
-}
-
-.book dd.sand p.sand {
-    font-weight: bold;
-
-    margin: 1em 0 0 0;
-    
-    text-align: center;
-
-    color: #000;
-}
-
-/* Модификация предложения */
-
-.book dd.body .offers {
-    margin-left: 0;
-}
-
-.book dd.body .offers table {
-    margin: 0;
-}
-
-.book .offers thead th i {
-    font-weight: normal;
-
-    color: #4a4a4a;
-}
-
-.book .offers thead th p {
-    font: normal 16px Arial,s;
-
-    margin: .5em 0 0 5.5em;
-}
-
-.book .offers thead th p * {
-    font-weight: normal;
-}
+тариф */

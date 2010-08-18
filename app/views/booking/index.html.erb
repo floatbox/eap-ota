@@ -1,16 +1,91 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <%= render 'shared/head_common', {:title => 'Купить билет'} %>
+    <%= render 'shared/head_common', {:title => 'Покупка билета'} %>
 
     <!-- [production] Все нижеследующие скрипты объединить в таком же порядке и упаковать -->
     <script type="text/javascript" src="/js/main.js"></script>
     <script type="text/javascript" src="/js/utils.js"></script>
-    <script type="text/javascript" src="/js/autocomplete.js"></script>
     <script type="text/javascript" src="/js/booking/onready.js"></script>
 </head>
 
 <body>
+
+    <div class="l-page">
+        <div class="l-header">
+            <%= render 'shared/header' %>
+        </div>
+
+        <div class="l-canvas booking">
+
+            <div id="search-transcript">
+                <h1>из Москвы в Париж и обратно с 8 по 15 сентября вдвоём с ребёнком</h1>
+                <h5>
+                    <a href=#>Вернуться к&nbsp;результатам поиска</a>
+                    или
+                    <a href=#>поискать что-нибудь заново</a>
+                </h5>
+            </div>
+
+            <dl class="booking">
+
+                <dt><b>1</b>Проверьте, что вы бронируете
+                <dd class="booking-variant">
+                    <br/><br/>Здесь должны быть подробности перелёта - такие же, как в списке предложений<br/><br/>
+
+                <dt><b>2</b>Введите данные пассажира(ов)
+                
+                <dd class="booking-persons">
+                    <form id="booking-person-form-1">
+                        <input type="text" 
+                         name="fname"
+                         class="text name"
+                         tabindex="1"
+                         value="Имя"
+                         onclick="return {defaultValue: 'Имя'}"
+                         title=""
+                        >
+
+                        <input type="text" 
+                         name="lname"
+                         class="text name"
+                         tabindex="2"
+                         value="Фамилия"
+                         onclick="return {defaultValue: 'Фамилия'}"
+                         title=""
+                        >
+
+                        <ul>
+                            <li><input type=radio id="booking-person-sex-m-1" name="sex" class="sex" tabindex="3"><label for="booking-person-sex-m-1">мужской</label>
+                            <li><input type=radio id="booking-person-sex-f-1" name="sex" class="sex" tabindex="4"><label for="booking-person-sex-f-1">женский</label>
+                        </ul>
+
+                    </form>
+
+                <dt><b>3</b>Введите платёжные данные
+                <dd class="booking-payment">
+                    <br/><br/><br/>форма<br/><br/><br/>
+
+                <dt><b>4</b>Введите данные покупателя
+                <dd class="booking-contacts">
+                    <br/><br/><br/>форма<br/><br/><br/>
+
+                <dt><b>5</b>Всё правильно? Нажмите [Забронировать]
+                <dd class="booking-book">
+                    <br/><br/><br/>тут показать результаты бронирования?<br/><br/><br/>
+
+            </dl>
+        
+        </div>
+        
+        <div class="l-canvas-bottom"></div>
+    </div>
+
+    <div class="l-footer">
+        <%= render 'shared/footer' %>
+    </div>
+
+<!--
     <div class="l-head">
         <div class="b-head">
             <s class="b-logo"></s>
@@ -183,7 +258,7 @@ FOR TOWP FARES
                         <label for="lname_1">латинскими буквами, как в загранпаспорте</label>
 
                         <br/>
-                        <!--label for="nationality_1">гражданство</label-->
+                        <label for="nationality_1">гражданство</label>
                         <select id="nationality_1">
                             <option>гражданство
                             <option>Россия
@@ -229,37 +304,7 @@ FOR TOWP FARES
 
 
     </div>
-
-    <!-- И титры -->
-    <div class="l-foot">
-        <div id="foot" class="b-foot">
-            <dl>
-                <dt>Всё для путешествий
-                <dd><a href=#>Лучшие предложения</a>
-                <dd><a href=#>Безвизовые страны</a>
-                <dd><a href=#>Города России</a>
-                <dd><a href=#>События в Европе</a>
-            </dl>
-
-            <dl>
-                <dt>Сервисы
-                <dd><a href=#>Авиабилеты</a>
-                <dd><a href=#>Отели</a>
-                <dd><a href=#>Карта цен</a>
-                <dd><a href=#>Статус рейса</a>
-            </dl>
-
-            <dl>
-                <dt>О проекте
-                <dd><a href=#>Как заказывать</a>
-                <dd><a href=#>Как платить</a>
-                <dd><a href=#>Обмен и возврат</a>
-                <dd><a href=#>Блог разработчиков</a>
-                <dd><a href=#>О нас</a>
-            </dl>
-            <i>&copy;&nbsp;eviterra, 2010</i>
-        </div>
-    </div>
+-->
 
 </body>
 </html>
