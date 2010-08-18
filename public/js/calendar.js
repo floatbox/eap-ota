@@ -128,18 +128,22 @@ initArrows: function() {
     });
 },
 initTimeline: function() {
-    var self = this, mdate, days = this.parent.days;
+    var self = this, mdate, days = this.parent.days, mw, sw = 0;
     this.scroller = $('.scroller', this.parent.el).width(Math.round(days.length * self.factor));
     this.timeline = $('.timeline', this.scroller).hide().html('');
     $('.month', this.el).each(function() {
         mdate = $(this).data('monthyear');
-        var mw = Math.round(Date.daysInMonth(mdate.month, mdate.year) * self.factor);
-        var mtitle = $('<dt>').addClass('month').width(mw).text(app.constant.SMN[mdate.month]);
-        self.timeline.append(mtitle);
+        mw = Math.round(Date.daysInMonth(mdate.month, mdate.year) * self.factor) - 1;
+        var label = $('<span>').addClass('label').width(mw).text(app.constant.SMN[mdate.month]);
+        $('<dt>').width(mw).append(label).appendTo(self.timeline);
+        sw += mw + 1;
     });
-    var offset = 1 - parseInt(days[0].children('span').text(), 10);
+    var monthes = $('dt', this.timeline);
+    var offset = Math.round((1 - parseInt(days[0].children('span').text(), 10)) * self.factor);
+    $('<div>').addClass('overlay').css('left', -offset - 51).appendTo(monthes.first());
+    $('<div>').addClass('overlay').css('left', this.scroller.width() - offset - sw + mw).appendTo(monthes.last());
     this.timeline.append($('<dd>').text(mdate.year));
-    this.timeline.css('left', Math.round(offset * self.factor)).show();
+    this.timeline.css('left', offset).show();
 },
 initScrollbar: function() {
     var self = this;

@@ -8,7 +8,7 @@ addField: function(key, check, value) {
     return this.fields[key] = {
         value: value,
         required: Boolean(check),
-        check: typeof check == 'function' && check,
+        check: typeof check == 'function' && check
     };
 },
 update: function(data, source) {

@@ -7,6 +7,8 @@
 .define {
     width: 100%;
 
+    position: relative;
+ 
     letter-spacing: -.02em;
     
     color: #4b4b4b;

@@ -29,7 +29,9 @@
     position: absolute;
     top: 0;
     left: 175px;
+    
     height: 23px;
+    
     background: #555;
 }
 
@@ -45,25 +47,42 @@
         cursor: default;
     }
 
-    .calendar .scroller dt,
-    .calendar .scroller dd {
-        position: relative;
-        z-index: 1;
-        float: left;
-        padding: 3px 0;
-        text-align: center;
-    }
-    
     .calendar .scroller dt
     {
+		position: relative;
+
+        float: left;
+        overflow: hidden;
+        
+        height: 16px;
+        margin-right: -1px;
+        padding: 3px 0;
+
         color: #E8E8E8;
+        border: 1px solid #777;
+        border-bottom: none;
+        
         cursor: pointer;
+    }
+
+    .calendar .scroller dt .label
+    {
+        position: absolute;
+        z-index: 1;
+        
+        text-align: center;
     }
 
     .calendar .scroller dd
     {
-        padding-left: 8px;
-        color: #E8E8E8;
+        font-weight: bold;
+
+        float: left;
+        
+        padding-top: 4px;
+        padding-left: 10px;
+        
+        color: #777;
     }
     
     .calendar .scroller .overlay
@@ -71,20 +90,14 @@
         position: absolute;
         top: 0;
         z-index: 1;
-        height: 20px;
+
+        width: 50px;
+        height: 22px;
+
         background: #343434;
         opacity: 0.5;
         filter: alpha(opacity=50);
         cursor: default;
-    }
-
-    .calendar .scroller .before {
-        left: -50px;
-        width: 50px;
-    }
-    .calendar .scroller .after {
-        left: 100%;
-        width: 90px;
     }
 
     /* Scrollbar */
@@ -94,7 +107,10 @@
         position: absolute;
         top: 0;
         left: 0;
+        z-index: 1;
+        
         height: 23px;
+        
         background: #99a1ac;
     }
 
