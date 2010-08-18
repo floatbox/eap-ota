@@ -3,7 +3,7 @@
     width: 100px;
     padding: 10px 15px 10px 80px;
     
-    background: url(/img/search-glow.png) no-repeat 100% 0;
+    background: url(/img/search-glow.png) no-repeat 100% 0 #3e3e3e;
 }
 
 #search-submit a.button
