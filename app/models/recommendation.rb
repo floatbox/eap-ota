@@ -56,6 +56,7 @@ class Recommendation
       }
     }
     { :airlines => airlines.uniq.map{|a| {a => Airline[a].name}},
+      :airplanes => planes.uniq.map{|a| {a=> Airplane[a].name}},
       :arrival_airport_groups => arrival_airport_groups.map{|g| g.uniq.map{|airport| {airport => Airport[airport].name}}},
       :departure_airport_groups => departure_airport_groups.map{|g| g.uniq.map{|airport| {airport => Airport[airport].name}}}
     }

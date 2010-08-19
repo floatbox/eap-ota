@@ -11,13 +11,16 @@ class Variant
   end
 
   def summary
-    {:airlines => segments.map{|s| s.flights.every.operating_carrier_iata}.flatten.uniq,
+    result = {:airlines => segments.map{|s| s.flights.every.operating_carrier_iata}.flatten.uniq,
      :planes => segments.map{|s| s.flights.every.equipment_type_iata}.flatten.uniq,
      :arrival_day_parts => segments.every.arrival_day_part,
      :departure_day_parts => segments.every.departure_day_part,
      :arrival_airports => segments.every.arrival_iata,
      :departure_airports => segments.every.departure_iata
     }
+    result[:arrival_day_parts].each_with_index{|part, i| result['arrival_day_part_' + i.to_s] = part}
+    result[:departure_day_parts].each_with_index{|part, i| result['departure_day_part_' + i.to_s] = part}
+    result
   end
 
   def flight_codes
