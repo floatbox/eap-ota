@@ -21,6 +21,27 @@ class Segment
   attr_accessor :flights
   attr_accessor :id
 
+  def time_to_day_part(time) #в данном случае time - строка
+    case time
+    when ('0000'...'0500')
+      'night'
+    when ('0500'...'1200')
+      'morning'
+    when ('1200'...'1700')
+      'day'
+    when ('1700'...'2400')
+      'evening'
+    end
+  end
+  
+  def arrival_day_part
+    time_to_day_part(arrival_time)
+  end
+  
+  def departure_day_part
+    time_to_day_part(departure_time)
+  end
+
   def as_json( options={} )
     {
       :departure => departure,

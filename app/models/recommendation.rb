@@ -28,4 +28,36 @@ class Recommendation
   def self.fast recs
     recs.select(&:sellable?).min_by(&:minimal_duration)
   end
+
+  def variants_by_duration
+    variants.sort(&:total_duration)
+  end
+  
+  def self.summary recs
+    airlines = []
+    planes = []
+    departure_airport_groups = []
+    arrival_airport_groups = []
+    recs.each {|r|
+      r.variants.each{|v|
+        summary = v.summary
+        airlines += summary[:airlines]
+        planes += summary[:planes]
+        if departure_airport_groups == []
+          departure_airport_groups = summary[:departure_airports].map{|a| [a]}
+        else
+          summary[:departure_airports].each_with_index{|airport, i| departure_airport_groups[i] << airport }
+        end
+        if arrival_airport_groups == []
+          arrival_airport_groups = summary[:arrival_airports].map{|a| [a]}
+        else
+          summary[:arrival_airports].each_with_index{|airport, i| arrival_airport_groups[i] << airport }
+        end
+      }
+    }
+    { :airlines => airlines.uniq.map{|a| {a => Airline[a].name}},
+      :arrival_airport_groups => arrival_airport_groups.map{|g| g.uniq.map{|airport| {airport => Airport[airport].name}}},
+      :departure_airport_groups => departure_airport_groups.map{|g| g.uniq.map{|airport| {airport => Airport[airport].name}}}
+    }
+  end
 end
