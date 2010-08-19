@@ -162,7 +162,6 @@ app.CalendarDate.prototype = {
 val: function(date) {
     if (arguments.length) {
         var dn = date && this.parent.index[date];
-        console.log(date, dn);
         this.select(dn !== undefined && this.parent.days[dn]);
     } else if (this.el) {
         return this.el.attr("data-dmy");

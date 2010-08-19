@@ -140,7 +140,7 @@
         aircompany: [
             {v: 4, t: 'Херофлот, СССР'},
             {v: 1, t: 'Air Berlin, Германия'},
-            {v: 2, t: 'Alitalia, Италия'},
+            {v: 'Белавиа', t: 'Белавиа, Белоруссия'},
             {v: 3, t: 'CCM Airlines, Франция'}
         ],
 
@@ -187,6 +187,34 @@
             {v: 9, t: 'Благовещенск'},
             {v: 10, t: 'Бордо'},
             {v: 11, t: 'Неаполь'}
+        ],
+
+        timeDeptRet: [
+            {v: 1, t: '"рабочее" время (9..21 h)'},
+            {v: 4, t: 'утро'},
+            {v: 2, t: 'день'},
+            {v: 5, t: 'вечер'},
+            {v: 3, t: 'ночь'}
+        ],
+
+        airportDeptRet: [
+            {v: 2, t: 'Внуково'},
+            {v: 3, t: 'Шереметьево'},
+            {v: 4, t: 'Домоседово'},
+        ],
+
+        timeArrvRet: [
+            {v: 1, t: '"светлое" время (9..21 h)'},
+            {v: 4, t: 'утро'},
+            {v: 2, t: 'день'},
+            {v: 5, t: 'вечер'},
+            {v: 3, t: 'ночь'}
+        ],
+
+        airportArrvRet: [
+            {v: 1, t: 'Альборг'},
+            {v: 2, t: 'Альтенрейн'},
+            {v: 3, t: 'Бирмингем'},
         ],
 
         aircraft: [
@@ -239,6 +267,17 @@
     // рисуем "один взрослый"
     tools.defines['persons'].trigger('add', {v: 11, t: 'один'});
 
+    // Обработка уточнений
+    $('#search-define tbody p').each(function() {
+        $(this).bind('change', function() {
+            var values = $(this).trigger('get').data('value'), options = [];
+            var name = $(this).data('name');
+            for (var i = values.length; i--;) options.push(values[i].v);
+            setTimeout(function() {
+                app.offers.filter(name, options);
+            }, 500);
+        });
+    });
 
     // верхние табы
     $('#search\\.mode').radio();

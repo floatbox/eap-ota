@@ -11,6 +11,11 @@
     margin: 15px;    
 }
 
+#offers-list .improper
+{
+    display: none;
+}
+
 #offers-list h3.recomendation 
 {
     font-size: 125%;

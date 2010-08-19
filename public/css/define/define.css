@@ -63,6 +63,11 @@
     line-height: 140%;    
 }
 
+.define .group
+{
+    display: inline;
+}
+
 .define p {
     display: inline;
     position: relative;

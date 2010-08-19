@@ -1,4 +1,5 @@
 $.extend(app.offers, {
+options: {},
 init: function() {
     
     // Табы
@@ -90,6 +91,36 @@ showTab: function(v) {
     var activeId = 'offers-' + this.tab;
     $('#offers-list').children().each(function() {
         $(this).toggleClass('g-none', $(this).attr('id') != activeId);
+    });
+},
+filter: function(name, values) {
+    if (name) {
+        if (values.length) this.options[name] = values; else delete(this.options[name]);
+    }
+    var query = this.options;
+    $('#offers-list .offer-variant').each(function() {
+        var options = $.parseJSON($(this).attr('data-options'));
+        var denied = false;
+        for (var key in query) {
+            var qvalues = query[key];
+            var ovalues = options[key];
+            if (!ovalues) continue;
+            var values = {};
+            for (var i = ovalues.length; i--;) {
+                values[ovalues[i]] = true;
+            }
+            for (var i = qvalues.length; i--;) {
+                if (!values[qvalues[i]]) {
+                    denied = true;
+                    break;
+                }
+            }
+            if (denied) break;
+        }
+        $(this).toggleClass('improper', denied);
+    });
+    $('#offers-list .offer').each(function() {
+        $(this).toggleClass('improper', $(this).children(':not(.improper)').length == 0);
     });
 }
 });
