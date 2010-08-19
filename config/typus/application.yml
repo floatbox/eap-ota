@@ -8,7 +8,7 @@ Airline:
     list: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
     form: ru_shortname, ru_longname, en_shortname, en_longname, aviacentr, iata, country
   order_by: en_shortname, ru_shortname
-  relationships: country
+  relationships: country, amadeus_commissions
   filters: country
   search: ru_shortname, ru_longname, en_shortname, en_longname, iata
   application: Eviterra
@@ -116,3 +116,13 @@ Preset:
   search: name
   application: Eviterra
 
+AmadeusCommission:
+  fields:
+    default: human
+    list: airline, human
+    form: airline, value, percentage
+  order_by: airline_id
+  #relationships: airline
+  filters: airline
+  #search: name
+  application: Eviterra

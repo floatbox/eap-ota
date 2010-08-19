@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100805180047) do
+ActiveRecord::Schema.define(:version => 20100819141740) do
 
   create_table "airlines", :force => true do |t|
     t.string   "en_shortname"
@@ -62,6 +62,14 @@ ActiveRecord::Schema.define(:version => 20100805180047) do
   add_index "airports", ["iata"], :name => "index_airports_on_iata"
   add_index "airports", ["icao"], :name => "index_airports_on_icao"
   add_index "airports", ["name_en"], :name => "index_airports_on_name"
+
+  create_table "amadeus_commissions", :force => true do |t|
+    t.integer  "airline_id"
+    t.float    "value",      :default => 0.0,   :null => false
+    t.boolean  "percentage", :default => false, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "cities", :force => true do |t|
     t.string   "iata"
