@@ -12,3 +12,4 @@ admin:
   GeoTag: create, read, update, delete
   Region: create, read, update, delete
   Preset: create, read, update, delete
+  AmadeusCommission: create, read, update, delete

@@ -8,6 +8,7 @@ class Airline < ActiveRecord::Base
   has_many :interline_partners,
     :through => :interline_agreements, :source => :partner
 
+  has_many :amadeus_commissions
   
   belongs_to :country
 
