@@ -16,6 +16,9 @@
     <div id="offers-all" class="offers" data-amount="<%= @recommendations.size %> <%= Russian.p(@recommendations.size, 'вариант', 'варианта', 'вариантов') %>">
         <%= render :partial => 'recommendation', :collection => @recommendations %>
     </div>
+    <script type="text/javascript">
+    app.search.updateDefines('<%= Recommendation.summary(@recommendations).to_json %>');
+    </script>
 <% else %>
     <h2>Таких рейсов нет, попробуйте другие даты.</h2>
 <% end %>

@@ -219,12 +219,6 @@
 
         aircraft: [
             {v: 1, t: 'Boeing 737-800'}
-            /*
-            ,{v: 2, t: 'Ан-2'},
-            {v: 3, t: 'Concorde'},
-            {v: 4, t: 'Airbus A300'},
-            {v: 5, t: 'Embraer ERJ-145'}
-            */
         ],
 
         cls: [
@@ -233,7 +227,12 @@
             {v: 3, t: 'первый '}
         ]
     };
-
+    
+    app.search.updateDefines = function(s) {
+        var data = $.parseJSON(s);
+        //tools.defines['aircompany'].trigger('update', data.)
+    };
+    
 	tools.defines = {};
     $('#search-define p').each(function() {
     	var $define = $(this).define().trigger('update', data);
@@ -273,9 +272,11 @@
             var values = $(this).trigger('get').data('value'), options = [];
             var name = $(this).data('name');
             for (var i = values.length; i--;) options.push(values[i].v);
-            setTimeout(function() {
-                app.offers.filter(name, options);
-            }, 500);
+            if (!$('#offers').hasClass('latent')) {
+                setTimeout(function() {
+                    app.offers.filter(name, options);
+                }, 500);
+            }
         });
     });
 

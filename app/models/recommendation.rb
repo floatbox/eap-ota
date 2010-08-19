@@ -55,9 +55,9 @@ class Recommendation
         end
       }
     }
-    { :airlines => airlines.uniq.map{|a| {a => Airline[a].name}},
-      :arrival_airport_groups => arrival_airport_groups.map{|g| g.uniq.map{|airport| {airport => Airport[airport].name}}},
-      :departure_airport_groups => departure_airport_groups.map{|g| g.uniq.map{|airport| {airport => Airport[airport].name}}}
+    { :airlines => airlines.uniq.map{|a| {'v' => a, 't' => Airline[a].name}},
+      :arrival_airport_groups => arrival_airport_groups.map{|g| g.uniq.map{|airport| {'v' => airport, 't' => Airport[airport].name}}},
+      :departure_airport_groups => departure_airport_groups.map{|g| g.uniq.map{|airport| {'v' => airport, 't' => Airport[airport].name}}}
     }
   end
 end
