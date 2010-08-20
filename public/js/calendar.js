@@ -286,14 +286,14 @@ initDates: function() {
     }).delegate('li:not(.inactive)', 'mouseover', function() {
         if (self.dragging) {
             var d = self.dragging, offset = $(this).attr('data-index') - d.from, dptel, retel;
-            var dpt = d.dpt != undefined && ((d.mode == 'dpt' || d.mode == 'both') ? (d.dpt + offset).constrain(self.min, self.max) : d.dpt);
-            var ret = d.ret != undefined && ((d.mode == 'ret' || d.mode == 'both') ? (d.ret + offset).constrain(self.min, self.max) : d.ret);
-            if (dpt != undefined && ret != undefined && ret < dpt) {
+            var dpt = d.dpt !== undefined ? ((d.mode == 'dpt' || d.mode == 'both') ? (d.dpt + offset).constrain(self.min, self.max) : d.dpt) : undefined;
+            var ret = d.ret !== undefined ? ((d.mode == 'ret' || d.mode == 'both') ? (d.ret + offset).constrain(self.min, self.max) : d.ret) : undefined;
+            if (dpt !== undefined && ret !== undefined && ret < dpt) {
                 dptel = self.dates.eq(ret);
                 retel = self.dates.eq(dpt);
             } else {
-                dptel = dpt != undefined && self.dates.eq(dpt);
-                retel = ret != undefined && self.dates.eq(ret);
+                dptel = dpt !== undefined && self.dates.eq(dpt);
+                retel = ret !== undefined && self.dates.eq(ret);
             }
             d.current = {dpt: dptel, ret: retel};
             self.fill(dptel, retel);
