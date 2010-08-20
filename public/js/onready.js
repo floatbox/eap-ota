@@ -137,100 +137,54 @@
     var data = {
         persons: [],
 
-        aircompany: [
-            {v: 4, t: 'Херофлот, СССР'},
-            {v: 1, t: 'Air Berlin, Германия'},
-            {v: 'Белавиа', t: 'Белавиа, Белоруссия'},
-            {v: 3, t: 'CCM Airlines, Франция'}
-        ],
-
         changes: [
             {v: 1, t: 'ни одной'},
             {v: 2, t: 'можно с одной короткой'},
             {v: 3, t: 'можно с одной'}
         ],
-
-        timeDept: [
-            {v: 1, t: '"рабочее" время (9..21 h)'},
-            {v: 4, t: 'утро'},
-            {v: 2, t: 'день'},
-            {v: 5, t: 'вечер'},
-            {v: 3, t: 'ночь'}
-        ],
-
-        airportDept: [
-            {v: 2, t: 'Внуково'},
-            {v: 3, t: 'Шереметьево'},
-            {v: 4, t: 'Домоседово'},
-            {v: 1, t: 'Быково'},
-            {v: 6, t: 'Коровино'},
-            {v: 5, t: 'Нижнее Задолгое'}
-        ],
-
-        timeArrv: [
-            {v: 1, t: '"светлое" время (9..21 h)'},
-            {v: 4, t: 'утро'},
-            {v: 2, t: 'день'},
-            {v: 5, t: 'вечер'},
-            {v: 3, t: 'ночь'}
-        ],
-
-        airportArrv: [
-            {v: 1, t: 'Альборг'},
-            {v: 2, t: 'Альтенрейн'},
-            {v: 3, t: 'Бирмингем'},
-            {v: 4, t: 'Благовещенск'},
-            {v: 5, t: 'Бордо'},
-            {v: 6, t: 'Дюнкерк'},
-            {v: 7, t: 'Клайпеда'},
-            {v: 8, t: 'Бирмингем'},
-            {v: 9, t: 'Благовещенск'},
-            {v: 10, t: 'Бордо'},
-            {v: 11, t: 'Неаполь'}
-        ],
-
-        timeDeptRet: [
-            {v: 1, t: '"рабочее" время (9..21 h)'},
-            {v: 4, t: 'утро'},
-            {v: 2, t: 'день'},
-            {v: 5, t: 'вечер'},
-            {v: 3, t: 'ночь'}
-        ],
-
-        airportDeptRet: [
-            {v: 2, t: 'Внуково'},
-            {v: 3, t: 'Шереметьево'},
-            {v: 4, t: 'Домоседово'},
-        ],
-
-        timeArrvRet: [
-            {v: 1, t: '"светлое" время (9..21 h)'},
-            {v: 4, t: 'утро'},
-            {v: 2, t: 'день'},
-            {v: 5, t: 'вечер'},
-            {v: 3, t: 'ночь'}
-        ],
-
-        airportArrvRet: [
-            {v: 1, t: 'Альборг'},
-            {v: 2, t: 'Альтенрейн'},
-            {v: 3, t: 'Бирмингем'},
-        ],
-
-        aircraft: [
-            {v: 1, t: 'Boeing 737-800'}
-        ],
-
+        
         cls: [
             {v: 1, t: 'эконом-'},
             {v: 2, t: 'бизнес-'},
             {v: 3, t: 'первый '}
-        ]
-    };
-    
-    app.search.updateDefines = function(s) {
-        var data = $.parseJSON(s);
-        //tools.defines['aircompany'].trigger('update', data.)
+        ],
+
+        dpt_time_0: [
+            {v: 4, t: 'утро'},
+            {v: 2, t: 'день'},
+            {v: 5, t: 'вечер'},
+            {v: 3, t: 'ночь'}
+        ],
+
+        arv_time_0: [
+            {v: 4, t: 'утро'},
+            {v: 2, t: 'день'},
+            {v: 5, t: 'вечер'},
+            {v: 3, t: 'ночь'}
+        ],
+
+        dpt_time_1: [
+            {v: 4, t: 'утро'},
+            {v: 2, t: 'день'},
+            {v: 5, t: 'вечер'},
+            {v: 3, t: 'ночь'}
+        ],
+
+        arv_time_1: [
+            {v: 4, t: 'утро'},
+            {v: 2, t: 'день'},
+            {v: 5, t: 'вечер'},
+            {v: 3, t: 'ночь'}
+        ],
+
+        dpt_airport_0: [],
+        arv_airport_0: [],
+        dpt_airport_1: [],
+        arv_airport_1: [],
+
+        airlines: [],        
+        planes: []
+
     };
     
 	tools.defines = {};
@@ -272,13 +226,23 @@
             var values = $(this).trigger('get').data('value'), options = [];
             var name = $(this).data('name');
             for (var i = values.length; i--;) options.push(values[i].v);
-            if (!$('#offers').hasClass('latent')) {
-                setTimeout(function() {
-                    app.offers.filter(name, options);
-                }, 500);
-            }
+            if (app.offers.filterable) app.offers.filter(name, options);
         });
     });
+    
+    // Обновление фильтров
+    app.search.updateDefines = function(s) {
+        var data = $.parseJSON(s);
+        tools.defines['airlines'].trigger('update', data);
+        tools.defines['planes'].trigger('update', data);
+        for (var i = data.segments; i--;) {
+            tools.defines['arv_airport_' + i].trigger('update', data);
+            tools.defines['dpt_airport_' + i].trigger('update', data);
+            tools.defines['arv_time_' + i].trigger('update', data);
+            tools.defines['dpt_time_' + i].trigger('update', data);
+        }
+    };
+    
 
     // верхние табы
     $('#search\\.mode').radio();

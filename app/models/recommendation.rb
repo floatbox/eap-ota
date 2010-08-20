@@ -30,34 +30,54 @@ class Recommendation
   end
 
   def variants_by_duration
-    variants.sort(&:total_duration)
+    variants.sort_by(&:total_duration)
   end
   
   def self.summary recs
     airlines = []
     planes = []
-    departure_airport_groups = []
-    arrival_airport_groups = []
+    departure_airports = []
+    arrival_airports = []
+    departure_times = []
+    arrival_times = []
+    segments_amount = recs[0].variants[0].segments.length
+    segments_amount.times {|i|
+      departure_airports[i] = []
+      arrival_airports[i] = []
+      departure_times[i] = []
+      arrival_times[i] = []
+    }
     recs.each {|r|
       r.variants.each{|v|
         summary = v.summary
         airlines += summary[:airlines]
         planes += summary[:planes]
-        if departure_airport_groups == []
-          departure_airport_groups = summary[:departure_airports].map{|a| [a]}
-        else
-          summary[:departure_airports].each_with_index{|airport, i| departure_airport_groups[i] << airport }
-        end
-        if arrival_airport_groups == []
-          arrival_airport_groups = summary[:arrival_airports].map{|a| [a]}
-        else
-          summary[:arrival_airports].each_with_index{|airport, i| arrival_airport_groups[i] << airport }
-        end
+        v.segments.length.times {|i|
+          departure_airports[i] << summary['dpt_airport_' + i.to_s]
+          arrival_airports[i] << summary['arv_airport_' + i.to_s]
+          departure_times[i] << summary['dpt_time_' + i.to_s]
+          arrival_times[i] << summary['arv_time_' + i.to_s]
+        }
       }
     }
-    { :airlines => airlines.uniq.map{|a| {'v' => a, 't' => Airline[a].name}},
-      :arrival_airport_groups => arrival_airport_groups.map{|g| g.uniq.map{|airport| {'v' => airport, 't' => Airport[airport].name}}},
-      :departure_airport_groups => departure_airport_groups.map{|g| g.uniq.map{|airport| {'v' => airport, 't' => Airport[airport].name}}}
+    result = {
+      :airlines => airlines.uniq.map{|a| {:v => a, :t => Airline[a].name}}.sort_by{|a| a[:t] },
+      :planes => planes.uniq.map{|a| {:v => a, :t => Airplane[a].name}}.sort_by{|a| a[:t] },
+      :segments => segments_amount
     }
+    departure_airports.each_with_index {|airports, i|
+      result['dpt_airport_' + i.to_s] = airports.uniq.map{|airport| {:v => airport, :t => Airport[airport].name} }.sort_by{|a| a[:t] }
+    }
+    arrival_airports.each_with_index {|airports, i|
+      result['arv_airport_' + i.to_s] = airports.uniq.map{|airport| {:v => airport, :t => Airport[airport].name} }.sort_by{|a| a[:t] }
+    }
+    time_titles = ['ночь', 'утро', 'день', 'вечер']
+    departure_times.each_with_index {|dpt_times, i|
+      result['dpt_time_' + i.to_s] = dpt_times.uniq.sort.map{|dt| {:v => dt, :t => time_titles[dt]} }
+    }
+    arrival_times.each_with_index {|arv_times, i|
+      result['arv_time_' + i.to_s] = arv_times.uniq.sort.map{|at| {:v => at, :t => time_titles[at]} }
+    }
+    result
   end
 end

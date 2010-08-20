@@ -24,13 +24,13 @@ class Segment
   def time_to_day_part(time) #в данном случае time - строка
     case time
     when ('0000'...'0500')
-      'night'
+      0 #'night'
     when ('0500'...'1200')
-      'morning'
+      1 #'morning'
     when ('1200'...'1700')
-      'day'
+      2 #'day'
     when ('1700'...'2400')
-      'evening'
+      3 #'evening'
     end
   end
   

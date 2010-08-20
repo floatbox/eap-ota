@@ -71,10 +71,8 @@ send: function(data) {
 },
 toggle: function(mode) {
     $('#search-submit').toggleClass('disabled', !mode);
-    if (!mode) {
-        $("#offers").addClass("latent");
-        $('#search-transcript').addClass('latent');           
-    }
+    $("#offers").addClass("latent");
+    $('#search-transcript').addClass('latent');           
 },
 submit: function() {
     $("#offers").removeClass("latent");

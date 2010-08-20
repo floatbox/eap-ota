@@ -54,6 +54,10 @@ init: function() {
         var variant = match || half_match;
         if (variant) {
             var detailed = current.children('.offer-details').is(':visible');
+            if (variant.hasClass('improper')) {
+                alert('Выбранный вариант вылета не соответствует текущим фильтрам');
+                variant.removeClass('improper');
+            }
             current.addClass('g-none');
             variant.children('.offer-details').toggle(detailed);
             variant.find('.collapse').toggle(detailed);
@@ -81,10 +85,13 @@ load: function(data) {
 
 },
 update: function(s) {
+    this.filterable = false;
     $('#offers-list').html(s);
-    $('#offers-tab-all > a').text('Всего ' + $('#offers-all').attr('data-amount'));
+    this.showAmount();
     this.showTab();
-    $("#offers-results").removeClass("g-none");
+    $("#offers-results").removeClass('g-none');
+    this.options = {};
+    this.filterable = true;
 },
 showTab: function(v) {
     if (v) this.tab = v;
@@ -94,10 +101,14 @@ showTab: function(v) {
     });
 },
 filter: function(name, values) {
-    if (name) {
-        if (values.length) this.options[name] = values; else delete(this.options[name]);
-    }
     var query = this.options;
+    if (name) {
+        if (values.length) {
+            query[name] = values;
+        } else {
+            delete(query[name]);
+        }
+    }
     $('#offers-list .offer-variant').each(function() {
         var options = $.parseJSON($(this).attr('data-options'));
         var denied = false;
@@ -106,21 +117,36 @@ filter: function(name, values) {
             var ovalues = options[key];
             if (!ovalues) continue;
             var values = {};
-            for (var i = ovalues.length; i--;) {
-                values[ovalues[i]] = true;
-            }
             for (var i = qvalues.length; i--;) {
-                if (!values[qvalues[i]]) {
-                    denied = true;
-                    break;
+                values[qvalues[i]] = true;
+            }
+            if (ovalues instanceof Array) {
+                denied = true;
+                for (var i = ovalues.length; i--;) {
+                    if (values[ovalues[i]]) {
+                        denied = false;
+                        break;
+                    }
                 }
+            } else {
+                if (!values[ovalues]) denied = true;
             }
             if (denied) break;
         }
+        if (denied) $(this).addClass('g-none');
         $(this).toggleClass('improper', denied);
     });
     $('#offers-list .offer').each(function() {
-        $(this).toggleClass('improper', $(this).children(':not(.improper)').length == 0);
+        var proper = $(this).children(':not(.improper)');
+        $(this).toggleClass('improper', proper.length == 0);
+        if (proper.length && proper.filter(':not(.g-none)').length == 0) proper.eq(0).removeClass('g-none');
     });
+    this.showAmount($('#offers-all .offer:not(.improper)').length);
+},
+showAmount: function(amount) {
+    var total = $('#offers-all').attr('data-amount');
+    if (amount == undefined) amount = total;
+    var str = amount + ' ' + app.utils.plural(amount, ['вариант', 'варианта', 'вариантов']);
+    $('#offers-tab-all > a').text(amount == total ? ('Всего ' + str) : (str + ' из ' + total))
 }
 });
