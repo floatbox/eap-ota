@@ -1,9 +1,9 @@
     <userIdentifier>
     <originIdentification>
-    <sourceOffice>NCEP02001</sourceOffice>
+    <sourceOffice>MOWR228FA</sourceOffice>
     </originIdentification>
     <originatorTypeCode>U</originatorTypeCode>
-    <originator>WS1APOC</originator>
+    <originator>WSEVIOAB</originator>
     </userIdentifier>
     <dutyCode>
     <dutyCodeDetails>
@@ -13,11 +13,11 @@
     </dutyCode>
     <systemDetails>
     <organizationDetails>
-    <organizationId>1A</organizationId>
+    <organizationId>NMC-RUSSIA</organizationId>
     </organizationDetails>
     </systemDetails>
     <passwordInfo>
-    <dataLength>12</dataLength>
+    <dataLength>7</dataLength>
     <dataType>E</dataType>
-    <binaryData>MnJPRWJyaSZXb1V0</binaryData>
+    <binaryData>QU1BREVVUw==</binaryData>
     </passwordInfo>
