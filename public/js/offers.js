@@ -2,6 +2,11 @@ $.extend(app.offers, {
 options: {},
 init: function() {
     
+    this.container = $('#offers');
+    this.loading = $('#offers-loading');
+    this.results = $('#offers-results');
+    this.update = {};
+    
     // Табы
     $('#offers-tabs').bind('select', function(e, v) {
         app.offers.showTab(v);
@@ -65,31 +70,66 @@ init: function() {
     });
     
 },
-load: function(data) {
+load: function(data, title) {
     var self = this;
-    $("#offers-results").addClass("g-none");
-    $("#offers-progress").removeClass("g-none");
-    $("#offers").removeClass("g-none");
+    this.update = {
+    	title: title,
+    	loading: true,
+    	content: ''
+    };
     $.get("/pricer/", {
         search: data
     }, function(s) {
-        $("#offers-progress").addClass("g-none");
+        var visible = self.loading.is(':visible');
+        self.update.loading = false;
+        self.loading.addClass('g-none');
         if (typeof s == "string") {
-            self.update(s);
+            self.update.content = s;
+            if (visible) self.process();
         } else {
             alert(s && s.exception && s.exception.message);
         }
     });
-
 },
-update: function(s) {
+show: function() {
+	var self = this;
+    app.search.toggle(false);
+    $('#offers-title h1').text(this.update.title);
+	if (!this.update.loading && this.update.content) {
+		this.toggleLoading(true);
+		setTimeout(function() {
+			self.process();
+		}, 100);
+	} else {
+		this.toggleLoading(this.update.loading);
+	}
+	this.container.removeClass('g-none');
+    var w = $(window), wst = w.scrollTop();
+    var offset = this.container.offset().top;
+    if (offset - wst > w.height() / 2) {
+        $({st: wst}).animate({
+            st: offset - 112
+        }, {
+            duration: 500,
+            step: function() {
+                w.scrollTop(this.st);
+            }
+        });
+    }
+},
+toggleLoading: function(mode) {
+	this.loading.toggleClass('g-none', !mode);
+	this.results.toggleClass('g-none', mode);
+},
+process: function() {
     this.filterable = false;
-    $('#offers-list').html(s);
+    $('#offers-list').html(this.update.content);
     this.showAmount();
     this.showTab();
-    $("#offers-results").removeClass('g-none');
-    this.options = {};
+    this.toggleLoading(false);
+    this.update.content = null;
     this.filterable = true;
+    this.options = {};
 },
 showTab: function(v) {
     if (v) this.tab = v;

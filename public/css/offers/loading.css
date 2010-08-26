@@ -1,4 +1,4 @@
-#offers-progress
+#offers-loading
 {
     font-size: 87.5%;
 
@@ -11,12 +11,7 @@
     background: url(/img/offers/progress-photo.jpg) no-repeat 0 40% #FFF;
 }
 
-#offers-progress .loading
-{
-
-}
-
-#offers-progress h3 
+#offers-loading h3 
 {
     font-size: 171.429%;
     font-weight: bold;
@@ -26,19 +21,19 @@
     line-height: 108.333%;
 }
 
-#offers-progress .phones
+#offers-loading .phones
 {
     font-size: 85.714%;
     
     margin: 10px 0 15px;
 }
 
-    #offers-progress .phones li
+    #offers-loading .phones li
     {
         margin: 0 0 3px;
     }
 
-    #offers-progress .phones strong
+    #offers-loading .phones strong
     {
         font-size: 125%;
         font-weight: bold;

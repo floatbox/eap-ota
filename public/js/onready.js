@@ -165,7 +165,7 @@
     };
     
 	tools.defines = {};
-    $('#search-define p').each(function() {
+    $('#search-define p, #offers-filter p').each(function() {
     	var $define = $(this).define().trigger('update', data);
     	var dname = $define.data('name');
     	tools.defines[dname] = $define;
@@ -198,7 +198,7 @@
     tools.defines['persons'].trigger('add', {v: 11, t: 'один'});
 
     // Обработка уточнений
-    $('#search-define tbody p').each(function() {
+    $('#offers-filter p').each(function() {
         $(this).bind('change', function() {
             var values = $(this).trigger('get').data('value'), options = [];
             var name = $(this).data('name');
@@ -281,7 +281,9 @@
     // кнопка отправки запроса
     $('#search-submit .button').click(function(event) {
         event.preventDefault();
-        if (!$(this).parent().hasClass('disabled')) app.search.submit();
+        if (!$(this).parent().hasClass('disabled')) {
+        	app.offers.show();
+        }
     });    
     
     // Список предложений

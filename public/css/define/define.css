@@ -13,19 +13,13 @@
     
     color: #4b4b4b;
     border-collapse: collapsed;
-    border-bottom: 1px solid #a5a5a5;
-    background: #d6d6d6;
-}
-
-.define tr {
-    border-top: 1px solid #bababa;
 }
 
 .define th {
     font-weight: bold;
 
     width: 1%;
-    padding: 12px 0 10px 15px;
+    padding: 0 0 15px 15px;
 
     text-align: right;
 
@@ -33,7 +27,7 @@
 }
 
 .define td {
-    padding: 12px .2em 10px 10px;
+    padding: 0 15px 15px 10px;
 }
 
 .define thead

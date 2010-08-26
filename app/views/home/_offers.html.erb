@@ -1,18 +1,55 @@
-<div id="offers" class="clear g-none latent">
+<div id="offers" class="clear g-none">
+
+    <!-- Человекочитаемая строка запроса -->
+    <div id="offers-title">
+        <h1>Из Москвы в Париж вдвоём с 15 по 18 мая</h1>
+    </div>
 
     <!-- Заглушка во время поиска -->
-    <div id="offers-progress" class="g-none">
+    <div id="offers-loading" class="g-none">
         <h3>Минуточку, мы ищем для вас лучшие предложения</h3>
         <p>Всегда можем помочь, проконсультировать и заказать по&nbsp;телефону</p>
         <ul class="phones">
             <li><strong>+7 (495) 123-45-67</strong> — в Москве</li>
             <li><strong><span class="g-hidden">+</span>8 (800) 123-45-67</strong> — в других городах (звонок бесплатный)</li>
         </ul>
-        <img class="loading" src="/img/ajax-loader.gif" alt="Поиск…">
+        <img class="progress" src="/img/offers/progress.gif" alt="Поиск…">
     </div>
     
     <!-- Результаты поиска -->
     <div id="offers-results" class="g-none">
+    
+		<!-- Фильтр результатов -->
+        <table id="offers-filter" class="define b-pseudo">
+            <tr>
+                <th>Уточнить</th>
+                <td>
+                    
+                    <p onclick="return {name: 'dpt_time_0', title: 'время вылета', accusative: 'допустимое время вылета', anyone: 'любое'}"><a href=#><u>время</u></a><b></b></p>
+                    и
+                    <p onclick="return {name: 'dpt_airport_0', title: 'аэропорт вылета', accusative: 'подходящие аэропорты вылета', anyone: 'любой'}"><a href=#><u>аэропорт</u></a><b></b></p>
+                    вылета туда,
+                    <p onclick="return {name: 'arv_time_0', title: 'время прилёта', accusative: 'допустимое время прибытия', anyone: 'любое'}"><a href=#><u>время</u></a><b></b></p>
+                    и
+                    <p onclick="return {name: 'arv_airport_0', title: 'аэропорт прилёта', accusative: 'подходящие аэропорты прибытия', anyone: 'любой'}"><a href=#><u>аэропорт</u></a><b></b></p>
+                    прилёта туда,
+                    
+                    <p onclick="return {name: 'dpt_time_1', title: 'время вылета', accusative: 'допустимое время вылета', anyone: 'любое'}"><a href=#><u>время</u></a><b></b></p>
+                    и
+                    <p onclick="return {name: 'dpt_airport_1', title: 'аэропорт вылета', accusative: 'подходящие аэропорты вылета', anyone: 'любой'}"><a href=#><u>аэропорт</u></a><b></b></p>
+                    вылета обратно,
+                    <p onclick="return {name: 'arv_time_1', title: 'время прилёта', accusative: 'допустимое время прибытия', anyone: 'любое'}"><a href=#><u>время</u></a><b></b></p>
+                    и
+                    <p onclick="return {name: 'arv_airport_1', title: 'аэропорт прилёта', accusative: 'подходящие аэропорты прибытия', anyone: 'любой'}"><a href=#><u>аэропорт</u></a><b></b></p>
+                    прилёта обратно,
+                    
+                    <p onclick="return {name: 'planes', title: 'самолёт', accusative: 'приемлемые типы самолётов', anyone: 'любой'}"><a href=#><u>самолёт</u></a><b></b></p>,
+    
+                    <p onclick="return {name: 'airlines', title: 'авиакомпанию', accusative: 'подходящие авиакомпании'}"><a href=#><u>авиакомпанию</u></a><b></b></p>
+                    
+                </td>
+            </tr>
+        </table>
 
         <!-- Вкладки списка результатов -->
         <div id="offers-tabs">
@@ -119,13 +156,13 @@
                     </tr>
                     <tr>
                         <td></td>
-                    	<td class="toggle" colspan="4">
+                        <td class="toggle" colspan="4">
                             <span class="b-pseudo expand"><u>Подробнее о перелёте</u></span>
                             <span class="b-pseudo collapse"><u>Скрыть подробности</u></span>
-                    	</td>
-                    	<td class="rules" colspan="2">
-                            <a href="#">Правила тарифа</a> (VRUAFL)	
-                    	</td>
+                        </td>
+                        <td class="rules" colspan="2">
+                            <a href="#">Правила тарифа</a> (VRUAFL) 
+                        </td>
                     </tr>
                 </tbody>
                 <tbody class="details g-none">
