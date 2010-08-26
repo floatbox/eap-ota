@@ -1,8 +1,15 @@
-<h4<%= ' class="ret"' if segment_counter > 0 %>><strong class="direction"><%= segment_counter == 0 ? 'Перелёт туда' : 'Обратный перелёт' %></strong><% if segment.layovers? %> с <%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %><% end %></h4>
+<tr<%= ' class="ret"' if segment_counter > 0 %>>
+    <td></td>
+    <th colspan="6"><strong class="direction"><%= segment_counter == 0 ? 'Перелёт туда' : 'Обратный перелёт' %></strong><% if segment.layovers? %> с <%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %><% end %></th>
+</tr>
 <% segment.flights.each_with_index do |flight, flight_index| %>
 <% next_date_arrival = (flight_index == segment.flights.length - 1 && flight.arrival_date != segment.flights[0].departure_date) %>
-<div class="flight<%= ' ret' if segment_counter > 0 %> wrap">
-    <div class="point<%= ' arv' if flight_index == 0 %>">
+<% row_classnames = [] %>
+<% row_classnames << 'ret' if segment_counter > 0 %>
+<% row_classnames << 'last' if flight_index == segment.flights.length - 1 %>
+<tr<%= " class=\"#{row_classnames.join(' ')}\"" unless row_classnames.empty? %>>
+    <td></td>
+    <td class="point<%= ' arv' if flight_index == 0 %>" colspan="3">
         <div class="time">
             <h5><%= fmt_time( flight.departure_time ) %></h5>
             <% if flight_index == 0 %>
@@ -18,8 +25,9 @@
             <p>Самолёт <%= flight.equipment_type_name %></p>
             <p><%= human_duration(flight.duration) %> в пути</p>
         </div>
-    </div>
-    <div class="point<%= ' dpt' if flight_index == segment.flights.length - 1 %>">
+    </td>
+    <td></td>
+    <td class="point<%= ' dpt' if flight_index == segment.flights.length - 1 %>" colspan="2">
         <div class="time">
             <h5><%= fmt_time( flight.arrival_time ) %></h5>
             <% if next_date_arrival %>
@@ -56,6 +64,6 @@
             </ul>
             <!--<p class="timezone">Разница во времени с Москвой — минус 2 часа</p>-->
         </div>
-    </div>
-</div>
+    </td>
+</tr>
 <% end %>

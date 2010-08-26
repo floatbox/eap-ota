@@ -14,14 +14,14 @@
     </td>
     <% end %>
 
-    <td class="dpt">
+    <td class="dpt" colspan="2">
         <h5><%= fmt_time( segment.departure_time ) %><span class="direction"> — <%= segment_counter == 0 ? 'туда' : 'обратно' %></span></h5>
         <p><%= segment.departure.city.name %><% unless segment.departure.equal_to_city %>, <%= segment.departure_name %><% end %></p>
         <% if segment.departure_term %>
         <p class="note">Терминал&nbsp;<%= segment.departure_term %></p>
         <% end %>
     </td>
-    <td class="fly">
+    <td class="fly" colspan="2">
         <div class="parts">
         <% layover_human_durations = [] %>
         <% for flight, layover in segment.flights.zip(segment.layover_durations) %>

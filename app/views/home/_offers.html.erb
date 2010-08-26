@@ -17,46 +17,37 @@
         <!-- Вкладки списка результатов -->
         <div id="offers-tabs">
             <ul>
-                <li class="active"><a href="#" onclick="return {v: 'best'}">Наши предложения</a></li>
-                <li><a href="#" onclick="return {v: 'prices'}">Матрица цен</a></li>
-                <li id="offers-tab-all"><a href="#" onclick="return {v: 'all'}">Всего 250 вариантов</a></li>
+                <li class="active"><a href="#" onclick="return {v: 'best'}">Наши предложения</a><span class="arrow"></span></li>
+                <li><a href="#" onclick="return {v: 'prices'}">Матрица цен</a><span class="arrow"></span></li>
+                <li id="offers-tab-all"><a href="#" onclick="return {v: 'all'}">Всего 250 вариантов</a><span class="arrow"></span></li>
             </ul>
             <ul class="secondary">
-                <li><a href="#" onclick="return {v: 'nearest'}">Соседние города</a></li>
-                <li><a href="#" onclick="return {v: 'train'}">На поезде</a></li>
+                <li><a href="#" onclick="return {v: 'nearest'}">Соседние города</a><span class="arrow"></span></li>
+                <li><a href="#" onclick="return {v: 'train'}">На поезде</a><span class="arrow"></span></li>
             </ul>
         </div>
 
         <!-- Правая панель -->
         <div class="media" style="background: #D6D6D6; height: 400px;"></div>
-        <!--
-        <ul id="offers-media" class="media">
-            <li>
-                <dl class="media-tip">
-                    <dt>Вы знаете?&hellip;
-                    <dd>
-                        <p>&hellip;что в <a href="#" class="b-pseudo"><u>некоторых странах</u></a> можно прямо в аэропорту получить транзитную визу, если у вас шесть и более часов между рейсами
-                </dl>
-
-            <li>
-                <dl class="media-promo">
-                    <dt>Город дня &mdash; Прага
-                    <dd>
-                        <h3>Чё там ваще</h3>
-                        <p>Прага является столицей и крупнейшим городом Чешской республики. Она расположена на реке Влтаве в центральной Богемии. В ней проживает примерно <s>до хуя чехов</s> 1.2 миллиона человек. Её называли «городом ста шпилей» и «золотым градом». Билеты в Прагу стоят у нас от 12000 рублей.
-                        <h3>Чё дают</h3>
-                        <p>Пива и пиздюлей
-                </dl>
-        </ul>-->
         
         <!-- Список результатов -->
         <div id="offers-list">
         <div id="offers-best">
             
             <h3 class="recomendation">Самый выгодный вариант</h3>
-
+            
             <div class="offer">
-                <table class="offer-head">
+            <table class="offer-variant">
+                <colgroup>
+                    <col width="118">
+                    <col width="85">
+                    <col width="55">
+                    <col width="83">
+                    <col width="83">
+                    <col width="140">
+                    <col width="111">
+                </colgroup>
+                <thead>
                     <tr>
                         <td class="cost">
                             <dl><dt>16<span class="digit">346</span></dt><dd>рублей</dd></dl>                        
@@ -64,24 +55,24 @@
                         <td class="booking">
                             <a href=# class="a-button" target="booking" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
                         </td>
-                        <td class="variants">
+                        <td class="variants" colspan="5">
                             <h6>Другие варианты вылета по такой же цене:</h6>
                             <p class="b-pseudo"><strong>Из Москвы</strong> — в <a href=#><u>16:40</u></a> и в <a href=#><u>18:35</u></a>, <strong>из Ниццы</strong> — в <a href=#><u>10:45</u></a> и в <a href=#><u>12:38</u></a></p>
                         </td>
                     </tr>
-                </table>
-                <table class="offer-summary">
+                </thead>
+                <tbody class="summary">
                     <tr>
                         <td class="carrier">
                             <p><img src="/img/system/airlines/default.gif" alt=""></p>
                             <p>LOT Polish Airlines</p>
                         </td>
-                        <td class="dpt">
+                        <td class="dpt" colspan="2">
                             <h5>09:55<span class="direction"> — туда</span></h5>
                             <p>Москва, Шереметьево</p>
                             <p class="note">Терминал F</p>
                         </td>
-                        <td class="fly">
+                        <td class="fly" colspan="2">
                             <div class="parts">
                                 <div class="flight" title="Перелёт Москва — Варшава"></div>
                                 <div class="change" title="Пересадка в Варшаве"></div>
@@ -104,12 +95,12 @@
                             <p><img src="/img/system/airlines/default.gif" alt=""></p>
                             <p>Swiss</p>
                         </td>
-                        <td class="dpt">
+                        <td class="dpt" colspan="2">
                             <h5>07:00<span class="direction"> — обратно</span></h5>
                             <p>Ницца, Кот Д'Азур<p>
                             <p class="note">Терминал 1</p>
                         </td>
-                        <td class="fly">
+                        <td class="fly" colspan="2">
                             <div class="parts">
                                 <div class="flight" title="Перелёт Ницца — Цюрих"></div>
                                 <div class="change" title="Пересадка в Цюрихе"></div>
@@ -126,110 +117,89 @@
                             <p>1 пересадка в Цюрихе</p>
                         </td>
                     </tr>
-                </table>
-                <div class="offer-rules">
-                    <a href="#">Правила тарифа</a> (VRUAFL)
-                </div>
-                <div class="offer-toggle">
-                    <a href="#" class="b-pseudo expand"><u>Подробнее о перелёте</u></a>
-                    <a href="#" class="b-pseudo collapse"><u>Скрыть подробности</u></a>
-                </div>
-                <div class="offer-details">
-                    <h4><strong class="direction">Перелёт туда</strong> с одной пересадкой в Варшаве</h4>
-                    <div class="flight wrap">
-                        <div class="point arv">
+                    <tr>
+                        <td></td>
+                    	<td class="toggle" colspan="4">
+                            <span class="b-pseudo expand"><u>Подробнее о перелёте</u></span>
+                            <span class="b-pseudo collapse"><u>Скрыть подробности</u></span>
+                    	</td>
+                    	<td class="rules" colspan="2">
+                            <a href="#">Правила тарифа</a> (VRUAFL)	
+                    	</td>
+                    </tr>
+                </tbody>
+                <tbody class="details g-none">
+                    <tr>
+                        <td></td>
+                        <th colspan="6"><strong class="direction">Перелёт туда</strong> с одной пересадкой в Варшаве</th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td class="point arv" colspan="3">
                             <div class="time">
                                 <h5>09:55</h5>
                                 <p>23 августа<br>понедельник</p>
                                 <p>МСК</p>
                             </div>
-                            <div class="info">
-                                <h6>Вылет из Москвы</h6>
-                                <p>Аэропорт Шереметьево, терминал F</p>
-                                <p>Рейс LO 1323 Москва — Варшава</p>
-                                <p>Выполняется LOT Polish Airlines</p>
-                                <p>Самолёт Airbus A320</p>
-                                <p>2 часа в пути</p>
-                            </div>
-                        </div>
-                        <div class="point">
+                            <h6>Вылет из Москвы</h6>
+                            <p>Аэропорт Шереметьево, терминал F</p>
+                            <p>Рейс LO 1323 Москва — Варшава</p>
+                            <p>Выполняется LOT Polish Airlines</p>
+                            <p>Самолёт Airbus A320</p>
+                            <p>2 часа в пути</p>
+                        </td>
+                        <td></td>
+                        <td class="point" colspan="2">
                             <div class="time">
                                 <h5>12:55</h5>
                                 <p>CEST</p>
                             </div>
-                            <div class="info">
-                                <h6>Прилёт в Варшаву</h6>
-                                <p>Аэропорт Рузине, терминал 1</p>
-                                <p>2 часа 5 минут между рейсами</p>
-                                <ul class="warnings">
-                                    <li>Разные терминалы прилёта и вылета</li>
-                                </ul>
-                                <p class="timezone">Разница во времени с Москвой — минус 2 часа</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flight wrap">
-                        <div class="point">
+                            <h6>Прилёт в Варшаву</h6>
+                            <p>Аэропорт Рузине, терминал 1</p>
+                            <p>2 часа 5 минут между рейсами</p>
+                            <ul class="warnings">
+                                <li>Разные терминалы прилёта и вылета</li>
+                                <li>Разница во времени с Москвой — минус 2 часа</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td class="point" colspan="3">
                             <div class="time">
                                 <h5>14:00</h5>
                                 <p>МСК</p>
                             </div>
-                            <div class="info">
-                                <h6>Вылет из Варшавы</h6>
-                                <p>Аэропорт Рузине, терминал 2</p>
-                                <p>Рейс AF 145 Прага — Ницца</p>
-                                <p>Выполняется Air France</p>
-                                <p>Самолёт Airbus A320</p>
-                                <p>2 часа 30 минут в пути</p>
-                            </div>
-                        </div>
-                        <div class="point dpt">
+                            <h6>Вылет из Варшавы</h6>
+                            <p>Аэропорт Рузине, терминал 2</p>
+                            <p>Рейс AF 145 Прага — Ницца</p>
+                            <p>Выполняется Air France</p>
+                            <p>Самолёт Airbus A320</p>
+                            <p>2 часа 30 минут в пути</p>
+                        </td>
+                        <td></td>
+                        <td class="point dpt" colspan="2">
                             <div class="time">
                                 <h5>14:30</h5>
                                 <p>CET</p>
                             </div>
-                            <div class="info">
-                                <h6>Прилёт в Ниццу</h6>
-                                <p>Аэропорт Кот Д'Азур, терминал 1</p>
-                                <p class="timezone">Разница во времени с Москвой — минус 2 часа</p>
-                            </div>
-                        </div>
-                    </div>
-                    <h4 class="ret"><strong class="direction">Обратный перелёт</strong> с одной пересадкой в Цюрихе</h4>
-                    <div class="flight ret wrap">
-                        <div class="point">
-                            <div class="time">
-                                <h5>14:00</h5>
-                                <p>МСК</p>
-                            </div>
-                            <div class="info">
-                                <h6>Вылет из Варшавы</h6>
-                                <p>Аэропорт Рузине, терминал 2</p>
-                                <p>Рейс AF 145 Прага — Ницца</p>
-                                <p>Выполняется Air France</p>
-                                <p>Самолёт Airbus A320</p>
-                                <p>2 часа 30 минут в пути</p>
-                            </div>
-                        </div>
-                        <div class="point dpt">
-                            <div class="time">
-                                <h5>14:30</h5>
-                                <p>CET</p>
-                            </div>
-                            <div class="info">
-                                <h6>Прилёт в Ниццу</h6>
-                                <p>Аэропорт Кот Д'Азур, терминал 1</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="booking wrap">
-                        <a href=# class="a-button" target="booking" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
-                        <dl class="sum">
-                            <dt>Итого <strong>16346 рублей</strong> за всех со всеми налогами и сборами</dt>
-                            <dd>Тариф — 13080 рублей, налоги и сборы — 3266 рублей</dd>
-                        </dl>
-                    </div>
-                </div>
+                            <h6>Прилёт в Ниццу</h6>
+                            <p>Аэропорт Кот Д'Азур, терминал 1</p>
+                            <p class="timezone">Разница во времени с Москвой — минус 2 часа</p>
+                        </td>
+                    </tr>
+                    <tr class="booking">
+                        <td></td>
+                        <td colspan="6">
+                            <a href=# class="a-button" target="booking" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
+                            <dl class="sum">
+                                <dt>Итого <strong>16346 рублей</strong> за всех со всеми налогами и сборами</dt>
+                                <dd>Тариф — 13080 рублей, налоги и сборы — 3266 рублей</dd>
+                            </dl>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
             </div>
 
         </div>

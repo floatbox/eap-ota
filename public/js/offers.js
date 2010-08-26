@@ -20,15 +20,17 @@ init: function() {
     // Подробности
     $('#offers-list').delegate('.expand', 'click', function(event) {
         var variant = $(this).closest('.offer-variant');
-        var details = variant.children('.offer-details');
-        if (details.is(':hidden')) {
-            variant.find('.offer-toggle .b-pseudo').toggle();
-            details.slideDown(300);
+        var offer = variant.parent();
+        if (offer.hasClass('collapsed')) {
+            offer.height(offer.height()).removeClass('collapsed').animate({
+            	height: variant.height()
+            }, 300, function() {
+            	offer.height('auto').addClass('expanded');
+            });
         }
     });
     $('#offers-list').delegate('.collapse', 'click', function(event) {
-        $(this).closest('.offer-variant').children('.offer-details').slideUp(150);
-        $(this).hide().siblings().show();
+        $(this).closest('.offer').removeClass('expanded').addClass('collapsed');
     });
     
     // Выбор времени вылета
@@ -53,15 +55,11 @@ init: function() {
         });
         var variant = match || half_match;
         if (variant) {
-            var detailed = current.children('.offer-details').is(':visible');
             if (variant.hasClass('improper')) {
                 alert('Выбранный вариант вылета не соответствует текущим фильтрам');
                 variant.removeClass('improper');
             }
             current.addClass('g-none');
-            variant.children('.offer-details').toggle(detailed);
-            variant.find('.collapse').toggle(detailed);
-            variant.find('.expand').toggle(!detailed);
             variant.removeClass('g-none');
         }
     });

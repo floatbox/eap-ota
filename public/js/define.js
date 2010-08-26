@@ -362,12 +362,15 @@ return;
         $dl.empty();
 
         $dl.append($('<dt/>').text(define.options.title));
-
-        $dl.append(makeItem(define.anyone, define.has(), true));
-
-        $.each(values, function(index, item) { 
-            $dl.append(makeItem(item, define.has(item), false));
-        });
+        
+        if (values.length == 1) {
+	        $dl.append(makeItem(values[0], define.has(), true));
+        } else {
+	        $dl.append(makeItem(define.anyone, define.has(), true));
+	        $.each(values, function(index, item) { 
+	            $dl.append(makeItem(item, define.has(item), false));
+	        });
+	    }
     };
 
     // снимает ненужные галочки в списке пассажиров
