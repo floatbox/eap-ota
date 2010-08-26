@@ -96,7 +96,7 @@ class Amadeus < Handsoap::Service
     template = File.read('xml/Security_Authenticate.xml')
 
     response = invoke 'Security_Authenticate',
-      :soap_action => 'http://webservices.amadeus.com/1ASIWPOC1A/VLSSLQ_06_1_1A' do |body|
+      :soap_action => 'http://webservices.amadeus.com/1ASIWOABEVI/VLSSLQ_06_1_1A' do |body|
       body.set_value template, :raw => true
     end
 
@@ -111,7 +111,7 @@ class Amadeus < Handsoap::Service
   # TODO сделать по образцу security_authenticate
   def security_sign_out
     response = invoke_rendered 'Security_SignOut',
-      :soap_action => "http://webservices.amadeus.com/1ASIWPOC1A/VLSSOQ_04_1_1A",
+      :soap_action => "http://webservices.amadeus.com/1ASIWOABEVI/VLSSOQ_04_1_1A",
       :r => "http://xml.amadeus.com/VLSSOR_04_1_1A"
 
     (response / '//r:statusCode').to_s == 'P'
@@ -119,14 +119,14 @@ class Amadeus < Handsoap::Service
 
   def fare_master_pricer_calendar(args)
     response = invoke_rendered 'Fare_MasterPricerCalendar',
-      :soap_action => 'http://webservices.amadeus.com/1ASIWPOC1A/FMPCAQ_10_2_1A',
+      :soap_action => 'http://webservices.amadeus.com/1ASIWOABEVI/FMPCAQ_10_2_1A',
       :r => "http://xml.amadeus.com/FMPCAR_10_2_1A",
       :args => args
   end
 
   def fare_master_pricer_travel_board_search(args)
     response = invoke_rendered 'Fare_MasterPricerTravelBoardSearch',
-      :soap_action => "http://webservices.amadeus.com/1ASIWPOC1A/FMPTBQ_09_1_1A",
+      :soap_action => "http://webservices.amadeus.com/1ASIWOABEVI/FMPTBQ_09_1_1A",
       :r => "http://xml.amadeus.com/FMPTBR_09_1_1A",
       :args => args
   end
