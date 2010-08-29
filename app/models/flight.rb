@@ -44,7 +44,7 @@ class Flight
     (arrival_datetime_utc.to_i - departure_datetime_utc.to_i) / 60 rescue 0
   end
 
-  attr_accessor :classes, :id, :distance, :comfort
+  attr_accessor :classes, :distance, :comfort
 
   def as_json options={}
     {
@@ -57,7 +57,6 @@ class Flight
       :dept_time => dept_time,
       :airplane => equipment_type,
       :classes => classes,
-      :id => id,
       :duration => duration,
       :distance => distance,
       :comfort => comfort,
@@ -86,7 +85,6 @@ class Flight
   end
 
   def initialize attrs={}
-    self.id = object_id
     attrs.each do |attr, value|
       send "#{attr}=", value
     end

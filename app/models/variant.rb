@@ -1,10 +1,8 @@
 class Variant
 
-  attr_accessor :id,
-    :segments
+  attr_accessor :segments
 
   def initialize keys={}
-    self.id = object_id
     keys.each do |attr, value|
       send "#{attr}=", value
     end
