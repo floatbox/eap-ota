@@ -17,7 +17,7 @@
         <%= render :partial => 'recommendation', :collection => @recommendations %>
     </div>
     <script type="text/javascript">
-    app.search.updateDefines('<%= Recommendation.summary(@recommendations).to_json %>');
+    app.offers.filtersData = '<%= Recommendation.summary(@recommendations).to_json %>';
     </script>
 <% else %>
     <h2>Таких рейсов нет, попробуйте другие даты.</h2>
