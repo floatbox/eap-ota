@@ -164,26 +164,26 @@
 
     };
     
-	tools.defines = {};
-    $('#search-define p, #offers-filter p').each(function() {
-    	var $define = $(this).define().trigger('update', data);
-    	var dname = $define.data('name');
-    	tools.defines[dname] = $define;
+    tools.defines = {};
+    $('#search-define p').each(function() {
+        var $define = $(this).define().trigger('update', data);
+        var dname = $define.data('name');
+        tools.defines[dname] = $define;
     });
 
     // обработка количества пассажиров
     tools.defines['persons'].bind('change', function() {
-    	var adults = 0, children = 0;
-    	var values = $(this).trigger('get').data('value');
-		for (var i = 0; v = values[i]; i++) {
-			var orig = values[i].v;
-			var real = orig % (Math.floor(orig / 10) * 10);
-			if (orig < 100) adults = real; else children += real;
-		}
-    	app.search.update({
-    		'adults': adults,
-    		'children': children
-    	}, this);
+        var adults = 0, children = 0;
+        var values = $(this).trigger('get').data('value');
+        for (var i = 0; v = values[i]; i++) {
+            var orig = values[i].v;
+            var real = orig % (Math.floor(orig / 10) * 10);
+            if (orig < 100) adults = real; else children += real;
+        }
+        app.search.update({
+            'adults': adults,
+            'children': children
+        }, this);
     });
     
     // обработка пересадок
@@ -197,36 +197,24 @@
     // рисуем "один взрослый"
     tools.defines['persons'].trigger('add', {v: 11, t: 'один'});
 
-    // Обработка уточнений
+    // Фильтры предложений
+    app.offers.filters = {};
     $('#offers-filter p').each(function() {
-        $(this).bind('change', function() {
+        var $filter = $(this).define().trigger('update', data);
+        $filter.bind('change', function() {
             var values = $(this).trigger('get').data('value'), options = [];
             var name = $(this).data('name');
             for (var i = values.length; i--;) options.push(values[i].v);
-            if (app.offers.filterable) app.offers.filter(name, options);
+            if (app.offers.filterable) app.offers.applyFilter(name, options);
         });
+        app.offers.filters[$filter.data('name')] = $filter; 
     });
     
-    // Обновление фильтров
-    app.search.updateDefines = function(s) {
-        var data = $.parseJSON(s);
-        tools.defines['airlines'].trigger('update', data);
-        tools.defines['planes'].trigger('update', data);
-        for (var i = data.segments; i--;) {
-            tools.defines['arv_airport_' + i].trigger('update', data);
-            tools.defines['dpt_airport_' + i].trigger('update', data);
-            tools.defines['arv_time_' + i].trigger('update', data);
-            tools.defines['dpt_time_' + i].trigger('update', data);
-        }
-    };
     
-
     // верхние табы
     $('#search\\.mode').radio();
 
-    
     // составное поле "туда-обратно"
-
     var $retTabs = $('#search\\.ret\\.tabs').radio();
     var $retButton = $('#search\\.ret\\.button').button();
 
@@ -282,7 +270,7 @@
     $('#search-submit .button').click(function(event) {
         event.preventDefault();
         if (!$(this).parent().hasClass('disabled')) {
-        	app.offers.show();
+            app.offers.show();
         }
     });    
     

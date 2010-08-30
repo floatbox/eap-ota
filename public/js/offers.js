@@ -28,9 +28,9 @@ init: function() {
         var offer = variant.parent();
         if (offer.hasClass('collapsed')) {
             offer.height(offer.height()).removeClass('collapsed').animate({
-            	height: variant.height()
-            }, 300, function() {
-            	offer.height('auto').addClass('expanded');
+                height: variant.height()
+            }, 500, function() {
+                offer.height('auto').addClass('expanded');
             });
         }
     });
@@ -73,9 +73,9 @@ init: function() {
 load: function(data, title) {
     var self = this;
     this.update = {
-    	title: title,
-    	loading: true,
-    	content: ''
+        title: title,
+        loading: true,
+        content: ''
     };
     $.get("/pricer/", {
         search: data
@@ -92,18 +92,18 @@ load: function(data, title) {
     });
 },
 show: function() {
-	var self = this;
+    var self = this;
     app.search.toggle(false);
     $('#offers-title h1').text(this.update.title);
-	if (!this.update.loading && this.update.content) {
-		this.toggleLoading(true);
-		setTimeout(function() {
-			self.process();
-		}, 100);
-	} else {
-		this.toggleLoading(this.update.loading);
-	}
-	this.container.removeClass('g-none');
+    if (!this.update.loading && this.update.content) {
+        this.toggleLoading(true);
+        setTimeout(function() {
+            self.process();
+        }, 300);
+    } else {
+        this.toggleLoading(this.update.loading);
+    }
+    this.container.removeClass('g-none');
     var w = $(window), wst = w.scrollTop();
     var offset = this.container.offset().top;
     if (offset - wst > w.height() / 2) {
@@ -118,18 +118,16 @@ show: function() {
     }
 },
 toggleLoading: function(mode) {
-	this.loading.toggleClass('g-none', !mode);
-	this.results.toggleClass('g-none', mode);
+    this.loading.toggleClass('g-none', !mode);
+    this.results.toggleClass('g-none', mode);
 },
 process: function() {
-    this.filterable = false;
     $('#offers-list').html(this.update.content);
     this.showAmount();
     this.showTab();
     this.toggleLoading(false);
     this.update.content = null;
-    this.filterable = true;
-    this.options = {};
+    this.updateFilters();
 },
 showTab: function(v) {
     if (v) this.tab = v;
@@ -138,25 +136,39 @@ showTab: function(v) {
         $(this).toggleClass('g-none', $(this).attr('id') != activeId);
     });
 },
-filter: function(name, values) {
-    var query = this.options;
+updateFilters: function() {
+    var data = $.parseJSON(this.filtersData);
+    this.filterable = false;
+    this.filters['airlines'].trigger('update', data);
+    this.filters['planes'].trigger('update', data);
+    for (var i = data.segments; i--;) {
+        this.filters['arv_airport_' + i].trigger('update', data);
+        this.filters['dpt_airport_' + i].trigger('update', data);
+        this.filters['arv_time_' + i].trigger('update', data);
+        this.filters['dpt_time_' + i].trigger('update', data);
+    }
+    this.activeFilters = {};
+    this.filterable = true;
+},
+applyFilter: function(name, values) {
+    var filters = this.activeFilters;
     if (name) {
         if (values.length) {
-            query[name] = values;
+            filters[name] = values;
         } else {
-            delete(query[name]);
+            delete(filters[name]);
         }
     }
     $('#offers-list .offer-variant').each(function() {
         var options = $.parseJSON($(this).attr('data-options'));
         var denied = false;
-        for (var key in query) {
-            var qvalues = query[key];
+        for (var key in filters) {
+            var fvalues = filters[key];
             var ovalues = options[key];
             if (!ovalues) continue;
             var values = {};
-            for (var i = qvalues.length; i--;) {
-                values[qvalues[i]] = true;
+            for (var i = fvalues.length; i--;) {
+                values[fvalues[i]] = true;
             }
             if (ovalues instanceof Array) {
                 denied = true;
