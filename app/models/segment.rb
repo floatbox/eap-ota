@@ -73,5 +73,18 @@ class Segment
   def layovers?
     flights.size > 1
   end
+
+  # comparison, uniquiness, etc.
+  def signature
+    flights
+  end
+
+  def hash
+    signature.hash
+  end
+
+  def eql?(b)
+    signature.eql?(b.signature)
+  end
 end
 

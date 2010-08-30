@@ -31,7 +31,20 @@ class Recommendation
   def variants_by_duration
     variants.sort_by(&:total_duration)
   end
-  
+
+  # comparison, uniquiness, etc.
+  def signature
+    [price_total, variants]
+  end
+
+  def hash
+    signature.hash
+  end
+
+  def eql?(b)
+    signature.eql?(b.signature)
+  end
+
   # FIXME порнография какая-то. чего так сложно?
   def self.summary recs
     airlines = []

@@ -119,4 +119,17 @@ class Flight
   def self.calculate_distance from, to
     Graticule::Distance::Vincenty.distance(from, to, :kilometers)
   end
+
+  # comparison, uniquiness, etc.
+  def signature
+    flight_code
+  end
+
+  def hash
+    signature.hash
+  end
+
+  def eql?(b)
+    signature.eql?(b.signature)
+  end
 end
