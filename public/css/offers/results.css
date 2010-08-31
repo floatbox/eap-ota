@@ -57,6 +57,17 @@
     background: #fff;
 }
 
+.offer .aux
+{
+	font-size: 11px;
+	
+	padding: 0 10px;
+	
+	text-align: right;
+	
+	color: #999;
+}
+
 .offer th,
 .offer td
 {
