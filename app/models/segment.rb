@@ -19,7 +19,6 @@ class Segment
   end
 
   attr_accessor :flights
-  attr_accessor :id
 
   def time_to_day_part(time) #в данном случае time - строка
     case time
@@ -58,7 +57,6 @@ class Segment
   end
 
   def initialize keys={}
-    self.id = object_id
     keys.each do |attr, value|
       send "#{attr}=", value
     end
@@ -74,6 +72,19 @@ class Segment
 
   def layovers?
     flights.size > 1
+  end
+
+  # comparison, uniquiness, etc.
+  def signature
+    flights
+  end
+
+  def hash
+    signature.hash
+  end
+
+  def eql?(b)
+    signature.eql?(b.signature)
   end
 end
 

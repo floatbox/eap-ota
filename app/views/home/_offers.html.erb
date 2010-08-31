@@ -1,8 +1,12 @@
+<div id="offers" class="clear g-none">
 
-<div id="offers" class="clear g-none latent">
+    <!-- Человекочитаемая строка запроса -->
+    <div id="offers-title">
+        <h1>Из Москвы в Париж вдвоём с 15 по 18 мая</h1>
+    </div>
 
-    <!-- Заглушка во время поиска -->
-    <div id="offers-progress" class="g-none">
+    <!-- Панель ожидания результатов -->
+    <div id="offers-loading" class="g-none">
         <h3 class="g-xxl">Минуточку, мы&nbsp;ищем для&nbsp;вас лучшие предложения</h3>
         <h4 title="Идёт поиск…"><i class="-l" title="Время поиска"></i></h4>
 
@@ -17,6 +21,38 @@
 
     <!-- Результаты поиска -->
     <div id="offers-results" class="g-none">
+    
+        <!-- Фильтр результатов -->
+        <table id="offers-filter" class="define b-pseudo">
+            <tr>
+                <th>Уточнить</th>
+                <td>
+                    
+                    <p onclick="return {name: 'dpt_time_0', title: 'время вылета', accusative: 'допустимое время вылета', anyone: 'любое'}"><a href=#><u>время</u></a><b></b></p>
+                    и
+                    <p onclick="return {name: 'dpt_airport_0', title: 'аэропорт вылета', accusative: 'подходящие аэропорты вылета', anyone: 'любой'}"><a href=#><u>аэропорт</u></a><b></b></p>
+                    вылета туда,
+                    <p onclick="return {name: 'arv_time_0', title: 'время прилёта', accusative: 'допустимое время прибытия', anyone: 'любое'}"><a href=#><u>время</u></a><b></b></p>
+                    и
+                    <p onclick="return {name: 'arv_airport_0', title: 'аэропорт прилёта', accusative: 'подходящие аэропорты прибытия', anyone: 'любой'}"><a href=#><u>аэропорт</u></a><b></b></p>
+                    прилёта туда,
+                    
+                    <p onclick="return {name: 'dpt_time_1', title: 'время вылета', accusative: 'допустимое время вылета', anyone: 'любое'}"><a href=#><u>время</u></a><b></b></p>
+                    и
+                    <p onclick="return {name: 'dpt_airport_1', title: 'аэропорт вылета', accusative: 'подходящие аэропорты вылета', anyone: 'любой'}"><a href=#><u>аэропорт</u></a><b></b></p>
+                    вылета обратно,
+                    <p onclick="return {name: 'arv_time_1', title: 'время прилёта', accusative: 'допустимое время прибытия', anyone: 'любое'}"><a href=#><u>время</u></a><b></b></p>
+                    и
+                    <p onclick="return {name: 'arv_airport_1', title: 'аэропорт прилёта', accusative: 'подходящие аэропорты прибытия', anyone: 'любой'}"><a href=#><u>аэропорт</u></a><b></b></p>
+                    прилёта обратно,
+                    
+                    <p onclick="return {name: 'planes', title: 'самолёт', accusative: 'приемлемые типы самолётов', anyone: 'любой'}"><a href=#><u>самолёт</u></a><b></b></p>,
+    
+                    <p onclick="return {name: 'airlines', title: 'авиакомпанию', accusative: 'подходящие авиакомпании'}"><a href=#><u>авиакомпанию</u></a><b></b></p>
+                    
+                </td>
+            </tr>
+        </table>
 
         <!-- Вкладки списка результатов -->
         <div id="offers-tabs">

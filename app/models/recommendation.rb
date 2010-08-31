@@ -1,9 +1,8 @@
 class Recommendation
 
-  attr_accessor :id, :prices, :variants, :price_total, :additional_info
+  attr_accessor :prices, :variants, :price_total, :additional_info
 
   def initialize keys={}
-    self.id = object_id
     keys.each do |attr, value|
       send "#{attr}=", value
     end
@@ -32,7 +31,21 @@ class Recommendation
   def variants_by_duration
     variants.sort_by(&:total_duration)
   end
-  
+
+  # comparison, uniquiness, etc.
+  def signature
+    [price_total, variants]
+  end
+
+  def hash
+    signature.hash
+  end
+
+  def eql?(b)
+    signature.eql?(b.signature)
+  end
+
+  # FIXME порнография какая-то. чего так сложно?
   def self.summary recs
     airlines = []
     planes = []

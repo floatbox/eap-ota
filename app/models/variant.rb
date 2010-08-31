@@ -1,10 +1,8 @@
 class Variant
 
-  attr_accessor :id,
-    :segments
+  attr_accessor :segments
 
   def initialize keys={}
-    self.id = object_id
     keys.each do |attr, value|
       send "#{attr}=", value
     end
@@ -39,5 +37,19 @@ class Variant
   def total_duration
     segments.sum(&:total_duration)
   end
+
+  # comparison, uniquiness, etc.
+  def signature
+    segments
+  end
+
+  def hash
+    signature.hash
+  end
+
+  def eql?(b)
+    signature.eql?(b.signature)
+  end
+
 end
 

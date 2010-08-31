@@ -2,6 +2,11 @@ $.extend(app.offers, {
 options: {},
 init: function() {
     
+    this.container = $('#offers');
+    this.loading = $('#offers-loading');
+    this.results = $('#offers-results');
+    this.update = {};
+    
     // Табы
     $('#offers-tabs').bind('select', function(e, v) {
         app.offers.showTab(v);
@@ -24,7 +29,7 @@ init: function() {
         if (offer.hasClass('collapsed')) {
             offer.height(offer.height()).removeClass('collapsed').animate({
                 height: variant.height()
-            }, 300, function() {
+            }, 500, function() {
                 offer.height('auto').addClass('expanded');
             });
         }
@@ -65,32 +70,64 @@ init: function() {
     });
     
 },
-load: function(data) {
+load: function(data, title) {
     var self = this;
-    $("#offers-results").addClass("g-none");
-    $("#offers-progress").removeClass("g-none");
-
-    $("#offers").removeClass("g-none");
+    this.update = {
+        title: title,
+        loading: true,
+        content: ''
+    };
     $.get("/pricer/", {
         search: data
     }, function(s) {
-        $("#offers-progress").addClass("g-none");
+        var visible = self.loading.is(':visible');
+        self.update.loading = false;
+        self.loading.addClass('g-none');
         if (typeof s == "string") {
-            self.update(s);
+            self.update.content = s;
+            if (visible) self.process();
         } else {
             alert(s && s.exception && s.exception.message);
         }
     });
-
 },
-update: function(s) {
-    this.filterable = false;
-    $('#offers-list').html(s);
+show: function() {
+    var self = this;
+    app.search.toggle(false);
+    $('#offers-title h1').text(this.update.title);
+    if (!this.update.loading && this.update.content) {
+        this.toggleLoading(true);
+        setTimeout(function() {
+            self.process();
+        }, 300);
+    } else {
+        this.toggleLoading(this.update.loading);
+    }
+    this.container.removeClass('g-none');
+    var w = $(window), wst = w.scrollTop();
+    var offset = this.container.offset().top;
+    if (offset - wst > w.height() / 2) {
+        $({st: wst}).animate({
+            st: offset - 112
+        }, {
+            duration: 500,
+            step: function() {
+                w.scrollTop(this.st);
+            }
+        });
+    }
+},
+toggleLoading: function(mode) {
+    this.loading.toggleClass('g-none', !mode);
+    this.results.toggleClass('g-none', mode);
+},
+process: function() {
+    $('#offers-list').html(this.update.content);
     this.showAmount();
     this.showTab();
-    $("#offers-results").removeClass('g-none');
-    this.options = {};
-    this.filterable = true;
+    this.toggleLoading(false);
+    this.update.content = null;
+    this.updateFilters();
 },
 showTab: function(v) {
     if (v) this.tab = v;
@@ -99,25 +136,39 @@ showTab: function(v) {
         $(this).toggleClass('g-none', $(this).attr('id') != activeId);
     });
 },
-filter: function(name, values) {
-    var query = this.options;
+updateFilters: function() {
+    var data = $.parseJSON(this.filtersData);
+    this.filterable = false;
+    this.filters['airlines'].trigger('update', data);
+    this.filters['planes'].trigger('update', data);
+    for (var i = data.segments; i--;) {
+        this.filters['arv_airport_' + i].trigger('update', data);
+        this.filters['dpt_airport_' + i].trigger('update', data);
+        this.filters['arv_time_' + i].trigger('update', data);
+        this.filters['dpt_time_' + i].trigger('update', data);
+    }
+    this.activeFilters = {};
+    this.filterable = true;
+},
+applyFilter: function(name, values) {
+    var filters = this.activeFilters;
     if (name) {
         if (values.length) {
-            query[name] = values;
+            filters[name] = values;
         } else {
-            delete(query[name]);
+            delete(filters[name]);
         }
     }
     $('#offers-list .offer-variant').each(function() {
         var options = $.parseJSON($(this).attr('data-options'));
         var denied = false;
-        for (var key in query) {
-            var qvalues = query[key];
+        for (var key in filters) {
+            var fvalues = filters[key];
             var ovalues = options[key];
             if (!ovalues) continue;
             var values = {};
-            for (var i = qvalues.length; i--;) {
-                values[qvalues[i]] = true;
+            for (var i = fvalues.length; i--;) {
+                values[fvalues[i]] = true;
             }
             if (ovalues instanceof Array) {
                 denied = true;

@@ -1,14 +1,9 @@
-#search-transcript
+#offers-title
 {
     margin: 15px;
 }
 
-#search-transcript.latent 
-{
-    display: none;
-}
-
-#search-transcript h1 {
+#offers-title h1 {
     font: bold 190%/100% Arial, sans-serif;
    
     letter-spacing: -1px;
@@ -16,7 +11,7 @@
     color: #333;
 }
 
-#search-transcript h1:first-letter
+#offers-title h1:first-letter
 {
     text-transform: uppercase;
 }

@@ -1,4 +1,4 @@
-#offers-progress
+#offers-loading
 {
     position: relative;
 
@@ -9,7 +9,7 @@
     background: #fff url(/img/offers/progress-photo.jpg) no-repeat 0 40%;
 }
 
-#offers-progress h3 
+#offers-loading h3 
 {
     font-weight: bold;
 
@@ -20,36 +20,36 @@
     color: #333;
 }
 
-#offers-progress p
+#offers-loading p
 {
     margin: 0 0 10px 0;
 }
 
-#offers-progress ul
+#offers-loading ul
 {
     margin: 0 0 10px 0;
 }
 
-    #offers-progress ul li
+    #offers-loading ul li
     {
         margin: 0 0 3px;
 
         text-indent: -.6em;
     }
 
-#offers-progress strong
+#offers-loading strong
 {
     font-weight: bold;
     
     color: #ed1192;
 }
 
-#offers-progress a u
+#offers-loading a u
 {
     font-weight: bold;
 }
 
-#offers-progress h4 {
+#offers-loading h4 {
     background: url(/img/ajax-loader.gif) no-repeat;
 
     height: 15px;
@@ -59,7 +59,7 @@
     padding: 0 0 0 140px;
 }
 
-#offers-progress h4 i {
+#offers-loading h4 i {
     font-weight: bold;
     
     line-height: 15px;

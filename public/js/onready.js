@@ -239,13 +239,23 @@
     // рисуем "один взрослый"
     tools.defines['persons'].trigger('add', {v: 11, t: 'один'});
 
-
+    // Фильтры предложений
+    app.offers.filters = {};
+    $('#offers-filter p').each(function() {
+        var $filter = $(this).define().trigger('update', data);
+        $filter.bind('change', function() {
+            var values = $(this).trigger('get').data('value'), options = [];
+            var name = $(this).data('name');
+            for (var i = values.length; i--;) options.push(values[i].v);
+            if (app.offers.filterable) app.offers.applyFilter(name, options);
+        });
+        app.offers.filters[$filter.data('name')] = $filter; 
+    });
+    
     // верхние табы
     $('#search\\.mode').radio();
 
-    
     // составное поле "туда-обратно"
-
     var $retTabs = $('#search\\.ret\\.tabs').radio();
     var $retButton = $('#search\\.ret\\.button').button();
 
@@ -300,7 +310,9 @@
     // кнопка отправки запроса
     $('#search-submit .button').click(function(event) {
         event.preventDefault();
-        if (!$(this).parent().hasClass('disabled')) app.search.submit();
+        if (!$(this).parent().hasClass('disabled')) {
+            app.offers.show();
+        }
     });    
     
     // Список предложений

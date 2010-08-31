@@ -31,7 +31,7 @@ update: function(data, source) {
         clearTimeout(this.sendTimer);
         var self = this;
         this.sendTimer = setTimeout(function() {
-            self.send();
+            self.validate();
         }, 350);
     }
 },
@@ -43,7 +43,7 @@ subscribe: function(source, key, handler) {
         handler: handler
     });
 },
-send: function(data) {
+validate: function(data) {
     var self = this, data = {
         'search_type': 'travel',
         'day_interval': 1,
@@ -61,34 +61,11 @@ send: function(data) {
         search: data
     }, function(result) {
         self.toggle(result.valid);
-        if (result.valid) {
-            var $transcript = $('#search-transcript');
-            $transcript.children('h1').html(result.human);
-            $transcript.removeClass('g-none');
-            app.offers.load(data);  
-        }
+        if (result.valid) app.offers.load(data, result.human);  
     });
 },
 toggle: function(mode) {
     $('#search-submit').toggleClass('disabled', !mode);
-    $("#offers").addClass("latent");
-    $('#search-transcript').addClass('latent');           
-},
-submit: function() {
-    $("#offers").removeClass("latent");
-    var $transcript = $('#search-transcript').removeClass('latent');
-    var w = $(window), wst = w.scrollTop();
-    var offset = $transcript.offset().top;
-    if (offset - wst > w.height() / 2) {
-        $({st: wst}).animate({
-            st: offset - 112
-        }, {
-            duration: 500,
-            step: function() {
-                w.scrollTop(this.st);
-            }
-        });
-    }
 }
 });
 

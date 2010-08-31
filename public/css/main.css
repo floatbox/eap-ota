@@ -18,7 +18,6 @@
 @import 'search/form.css';
 @import 'search/autocomplete.css';
 @import 'search/submit.css';
-@import 'search/transcript.css';
 
 @import 'panel/panel.css';
 @import 'panel/panel-reset.css';
@@ -33,9 +32,10 @@
 @import 'media/media.css';
 @import 'promo/promo.css';
 
-@import 'offers/progress.css';
+@import 'offers/title.css';
 @import 'offers/tabs.css';
-@import 'offers/list.css';
+@import 'offers/loading.css';
+@import 'offers/results.css';
 
 @import 'foot/footer.css';
 
