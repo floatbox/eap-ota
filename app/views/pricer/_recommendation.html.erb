@@ -2,4 +2,5 @@
 <% recommendation.variants.each_with_index do |variant, variant_index| %>
 <%= render :partial => 'variant', :locals => {:variant => variant, :recommendation => recommendation, :variant_index => variant_index} %>
 <% end %>
+<div class="aux"><!-- Вывод служебной информации --></div>
 </div>

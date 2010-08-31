@@ -1,19 +1,23 @@
-﻿<% if @recommendations.present? %>
+<% if @recommendations.present? %>
     <div id="offers-best" class="offers">
     <% if @cheap_recommendation %>
-        <h3 class="recomendation">Самый выгодный вариант</h3>
+        <h3 class="offers-title">Самый выгодный вариант</h3>
         <%= render :partial => 'recommendation', :locals => {:recommendation => @cheap_recommendation} %>
     <% end %>
     <% if @fast_recommendation %>
-        <h3 class="recomendation">Самый быстрый вариант</h3>
+        <h3 class="offers-title">Самый быстрый вариант</h3>
         <%= render :partial => 'recommendation', :locals => {:recommendation => @fast_recommendation} %>
     <% end %>
     <% if @optimal_recommendation %>
-        <h3 class="recomendation">Оптимальный вариант — разумная цена и время в пути</h3>
+        <h3 class="offers-title">Оптимальный вариант — разумная цена и время в пути</h3>
         <%= render :partial => 'recommendation', :locals => {:recommendation => @optimal_recommendation} %>
     <% end %>
     </div>
     <div id="offers-all" class="offers" data-amount="<%= @recommendations.size %>">
+        <div class="offers-sort">
+            <h3 class="offers-title">Все варианты, отсортированные <span id="offers-sortedby">по цене</span></h3>
+            <p>можно <span class="sortby g-none" data-key="price">по цене</span><span class="spacer g-none">, </span><span class="sortby" data-key="duration">по времени в пути</span><span class="spacer">, </span><span class="link">по времени вылета</span><span class="spacer"> или <span><span class="link">по авиакомпании</span></p>
+        </div>
         <%= render :partial => 'recommendation', :collection => @recommendations %>
     </div>
     <script type="text/javascript">

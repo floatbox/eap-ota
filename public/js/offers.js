@@ -41,8 +41,9 @@ init: function() {
     // Выбор времени вылета
     $('#offers-list').delegate('td.variants a', 'click', function(event) {
         event.preventDefault();
+        var getSummary = app.offers.getSummary;
         var current = $(this).closest('.offer-variant')
-        var departures = current.attr('data-departures').split(' ');
+        var departures = $.makeArray(getSummary(current).departures);
         var sindex = parseInt($(this).attr('data-segment'), 10);
         var svalue = $(this).text().replace(':', '');
         departures[sindex] = svalue;
@@ -50,11 +51,11 @@ init: function() {
         var match = null, half_match = null;
         current.siblings().each(function() {
             var variant = $(this);
-            var vd = variant.attr('data-departures');
-            if (vd == query) {
+            var vd = getSummary(variant).departures;
+            if (vd.join(' ') == query) {
                 match = variant;
                 return false;
-            } else if (vd.split(' ')[sindex] == svalue) {
+            } else if (vd[sindex] == svalue) {
                 half_match = variant;
             }
         });
@@ -85,7 +86,7 @@ load: function(data, title) {
         self.loading.addClass('g-none');
         if (typeof s == "string") {
             self.update.content = s;
-            if (visible) self.process();
+            if (visible) self.processUpdate();
         } else {
             alert(s && s.exception && s.exception.message);
         }
@@ -98,7 +99,7 @@ show: function() {
     if (!this.update.loading && this.update.content) {
         this.toggleLoading(true);
         setTimeout(function() {
-            self.process();
+            self.processUpdate();
         }, 300);
     } else {
         this.toggleLoading(this.update.loading);
@@ -121,7 +122,7 @@ toggleLoading: function(mode) {
     this.loading.toggleClass('g-none', !mode);
     this.results.toggleClass('g-none', mode);
 },
-process: function() {
+processUpdate: function() {
     $('#offers-list').html(this.update.content);
     this.showAmount();
     this.showTab();
@@ -135,6 +136,12 @@ showTab: function(v) {
     $('#offers-list').children().each(function() {
         $(this).toggleClass('g-none', $(this).attr('id') != activeId);
     });
+},
+showAmount: function(amount) {
+    var total = $('#offers-all').attr('data-amount');
+    if (amount == undefined) amount = total;
+    var str = amount + ' ' + app.utils.plural(amount, ['вариант', 'варианта', 'вариантов']);
+    $('#offers-tab-all > a').text(amount == total ? ('Всего ' + str) : (str + ' из ' + total))
 },
 updateFilters: function() {
     var data = $.parseJSON(this.filtersData);
@@ -150,17 +157,25 @@ updateFilters: function() {
     this.activeFilters = {};
     this.filterable = true;
 },
-applyFilter: function(name, values) {
-    var filters = this.activeFilters;
-    if (name) {
-        if (values.length) {
-            filters[name] = values;
-        } else {
-            delete(filters[name]);
-        }
+getSummary: function(el) {
+    var summary = el.data('summary');
+    if (!summary) {
+        summary = $.parseJSON(el.attr('data-summary'));
+        el.data('summary', summary);
     }
-    $('#offers-list .offer-variant').each(function() {
-        var options = $.parseJSON($(this).attr('data-options'));
+    return summary;
+},
+applyFilter: function(name, values) {
+    var self = this, filters = this.activeFilters;
+    if (values.length) {
+        filters[name] = values;
+    } else {
+        delete(filters[name]);
+    }
+    var fast, cheap, optimal;
+    var list = $('#offers-all').hide();
+    $('.offer-variant', list).each(function() {
+        var options = self.getSummary($(this));
         var denied = false;
         for (var key in filters) {
             var fvalues = filters[key];
@@ -183,20 +198,51 @@ applyFilter: function(name, values) {
             }
             if (denied) break;
         }
-        if (denied) $(this).addClass('g-none');
+        if (denied) {
+            $(this).addClass('g-none');
+        } else {
+            if (!fast || options.duration < fast.duration) fast = {el: $(this), duration: options.duration};
+            if (!cheap || options.price < cheap.price) cheap = {el: $(this), price: options.price};
+        }
         $(this).toggleClass('improper', denied);
     });
-    $('#offers-list .offer').each(function() {
-        var proper = $(this).children(':not(.improper)');
+    var proper_amount = 0;
+    $('.offer', list).each(function() {
+        var proper = $(this).children('.offer-variant:not(.improper)');
         $(this).toggleClass('improper', proper.length == 0);
-        if (proper.length && proper.filter(':not(.g-none)').length == 0) proper.eq(0).removeClass('g-none');
+        if (proper.length) {
+            self.showVariant(proper.eq(0));
+            proper_amount++;
+        }
     });
-    this.showAmount($('#offers-all .offer:not(.improper)').length);
+    list.show();
+    this.showAmount(proper_amount);
 },
-showAmount: function(amount) {
-    var total = $('#offers-all').attr('data-amount');
-    if (amount == undefined) amount = total;
-    var str = amount + ' ' + app.utils.plural(amount, ['вариант', 'варианта', 'вариантов']);
-    $('#offers-tab-all > a').text(amount == total ? ('Всего ' + str) : (str + ' из ' + total))
+showVariant: function(el) {
+    $(el).removeClass('g-none').siblings().addClass('g-none');
+},
+sortBy: function(key) {
+    var self = this. items = [], list = $('#offers-all');
+    list.hide().children('.offer').each(function() {
+        var offer = $(this), item = {offer: offer}, variant;
+        offer.children('.offer-variant').each(function() {
+            var value = self.getSummary($(this))[key];
+            if (item.value === undefined || value < item.value) {
+                item.value = value;
+                variant = $(this);
+            }
+        });
+        self.showVariant(variant);
+        items.push(item);
+    });
+    items.sort(function(a, b) {
+        if (a.value > b.value) return 1;
+        if (a.value < b.value) return -1;
+        return 0;
+    });
+    for (var i = 0, lim = items.length; i < lim; i++) {
+        list.append(items[i].offer);
+    }
+    list.show();
 }
 });

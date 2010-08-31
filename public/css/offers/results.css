@@ -1,7 +1,7 @@
 /* Фильтры */
 #offers-filter 
 {
-	top: -3px;
+    top: -3px;
 }
 
 /* Список предложений */
@@ -22,7 +22,7 @@
     display: none;
 }
 
-#offers-list h3.recomendation 
+.offers-title
 {
     font-size: 125%;
     font-weight: bold;
@@ -31,6 +31,16 @@
 
     line-height: 100%;
     letter-spacing: -0.035em;
+}
+
+.offers-sort
+{
+    margin: 0 0 14px;
+}
+
+.offers-sort .offers-title
+{
+    margin: 0 0 4px;
 }
 
 /* Предложение */
@@ -122,16 +132,16 @@
         padding: 3px 6px;
     }
     
-	.offer.expanded a.a-button {
-	    color: #eee;
-	    background-color: #8a9f13;
-	
-	    border-color: #7b8e12;
-	
-	    background-image: linear-gradient(top, #a0b914, #7b8e12);
-	    background-image: -moz-linear-gradient(top, #a0b914, #7b8e12);
-	    background-image: -webkit-gradient(linear, left top, left bottom, from(#a0b914), to(#7b8e12));
-	}    
+    .offer.expanded a.a-button {
+        color: #eee;
+        background-color: #8a9f13;
+    
+        border-color: #7b8e12;
+    
+        background-image: linear-gradient(top, #a0b914, #7b8e12);
+        background-image: -moz-linear-gradient(top, #a0b914, #7b8e12);
+        background-image: -webkit-gradient(linear, left top, left bottom, from(#a0b914), to(#7b8e12));
+    }    
 
     /* Варианты */
 
@@ -359,7 +369,7 @@
 
 .offer.collapsed .expand
 {
-	display: inline;
+    display: inline;
 }
 
 .offer .toggle .b-pseudo
@@ -382,7 +392,7 @@
 
 .offer.collapsed .details
 {
-	display: none;
+    display: none;
 }
 
 .offer .details th
@@ -463,7 +473,7 @@
     }
     .offer .details .last .point
     {
-    	padding-bottom: 12px;
+        padding-bottom: 12px;
     }
     
     .offer .details .point h6

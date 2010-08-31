@@ -13,7 +13,9 @@ class Variant
   def summary
     result = {
      :airlines => segments.map{|s| s.flights.every.operating_carrier_iata}.flatten.uniq,
-     :planes => segments.map{|s| s.flights.every.equipment_type_iata}.flatten.uniq
+     :planes => segments.map{|s| s.flights.every.equipment_type_iata}.flatten.uniq,
+     :departures => segments.map {|segment| segment.departure_time },
+     :duration => segments.sum(&:total_duration)
     }
     segments.each_with_index do |segment, i|
       result['dpt_time_' + i.to_s] = segment.departure_day_part
