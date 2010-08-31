@@ -1,3 +1,6 @@
+// счётчик секунд (с десятыми долями); отображает неформатированный текст внутри элемента
+// кушает события start и stop
+
 (function($) {
     
 $.fn.extend({
@@ -21,7 +24,7 @@ app.Timer = function($el) {
 
     $el.bind('start', function() {
         t1 = new Date();
-        interval = window.setInterval(update, 50);
+        interval = window.setInterval(update, 100);
     });
 
     $el.bind('stop', function() {
