@@ -6,6 +6,9 @@ init: function() {
     this.loading = $('#offers-loading');
     this.results = $('#offers-results');
     this.update = {};
+
+    // счётчик секунд на панели ожидания
+    this.loading.timer = $('h4 i' , this.loading).timer();
     
     // Табы
     $('#offers-tabs').bind('select', function(e, v) {
@@ -121,6 +124,9 @@ show: function() {
 toggleLoading: function(mode) {
     this.loading.toggleClass('g-none', !mode);
     this.results.toggleClass('g-none', mode);
+
+    // запускаем/останавливаем таймер счётчика
+    this.loading.timer.trigger(mode ? 'start' : 'stop');
 },
 processUpdate: function() {
     $('#offers-list').html(this.update.content);

@@ -4,7 +4,14 @@ class PricerController < ApplicationController
   def index
     @search = PricerForm.new(params[:search])
     if @search.valid?
-      @recommendations = @search.search.sort_by(&:price_total)
+      @recommendations = @search.search
+      # TODO перенести в модель
+      unless @search.nonstop?
+        recommendations_nonstop = PricerForm.new( params[:search].merge(:nonstop => true)).search
+        # только новые
+        @recommendations |= recommendations_nonstop
+      end
+      @recommendations = @recommendations.sort_by(&:price_total)
       # все - временное
       @cheap_recommendation = Recommendation.cheap(@recommendations)
       @fast_recommendation = Recommendation.fast(@recommendations)

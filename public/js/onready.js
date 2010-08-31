@@ -163,7 +163,7 @@
         planes: []
 
     };
-    
+
     tools.defines = {};
     $('#search-define p').each(function() {
         var $define = $(this).define().trigger('update', data);
@@ -209,7 +209,6 @@
         });
         app.offers.filters[$filter.data('name')] = $filter; 
     });
-    
     
     // верхние табы
     $('#search\\.mode').radio();
@@ -280,6 +279,10 @@
     // фокус на поле ввода "Куда"
     tools.to.focus();
 
+// счётчик секунд; отладка
+//app.timer = $('#offers-progress h4 i').timer();
+//app.timer.trigger('start');
+
 });
 
 
@@ -317,3 +320,4 @@ app.obs = function(cfg) {
     })
 
 */
+
