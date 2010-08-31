@@ -137,53 +137,95 @@
     var data = {
         persons: [],
 
+        aircompany: [
+            {v: 4, t: 'Херофлот, СССР'},
+            {v: 1, t: 'Air Berlin, Германия'},
+            {v: 2, t: 'Alitalia, Италия'},
+            {v: 3, t: 'CCM Airlines, Франция'}
+        ],
+
         changes: [
             {v: 1, t: 'ни одной'},
             {v: 2, t: 'можно с одной короткой'},
             {v: 3, t: 'можно с одной'}
         ],
-        
+
+        timeDept: [
+            {v: 1, t: '"рабочее" время (9..21 h)'},
+            {v: 4, t: 'утро'},
+            {v: 2, t: 'день'},
+            {v: 5, t: 'вечер'},
+            {v: 3, t: 'ночь'}
+        ],
+
+        airportDept: [
+            {v: 2, t: 'Внуково'},
+            {v: 3, t: 'Шереметьево'},
+            {v: 4, t: 'Домоседово'},
+            {v: 1, t: 'Быково'},
+            {v: 6, t: 'Коровино'},
+            {v: 5, t: 'Нижнее Задолгое'}
+        ],
+
+        timeArrv: [
+            {v: 1, t: '"светлое" время (9..21 h)'},
+            {v: 4, t: 'утро'},
+            {v: 2, t: 'день'},
+            {v: 5, t: 'вечер'},
+            {v: 3, t: 'ночь'}
+        ],
+
+        airportArrv: [
+            {v: 1, t: 'Альборг'},
+            {v: 2, t: 'Альтенрейн'},
+            {v: 3, t: 'Бирмингем'},
+            {v: 4, t: 'Благовещенск'},
+            {v: 5, t: 'Бордо'},
+            {v: 6, t: 'Дюнкерк'},
+            {v: 7, t: 'Клайпеда'},
+            {v: 8, t: 'Бирмингем'},
+            {v: 9, t: 'Благовещенск'},
+            {v: 10, t: 'Бордо'},
+            {v: 11, t: 'Неаполь'}
+        ],
+
+        aircraft: [
+            {v: 1, t: 'Boeing 737-800'}
+            /*
+            ,{v: 2, t: 'Ан-2'},
+            {v: 3, t: 'Concorde'},
+            {v: 4, t: 'Airbus A300'},
+            {v: 5, t: 'Embraer ERJ-145'}
+            */
+        ],
+
         cls: [
             {v: 1, t: 'эконом-'},
             {v: 2, t: 'бизнес-'},
             {v: 3, t: 'первый '}
-        ],
-
-        dpt_time_0: [],
-        arv_time_0: [],
-        dpt_time_1: [],
-        arv_time_1: [],
-
-        dpt_airport_0: [],
-        arv_airport_0: [],
-        dpt_airport_1: [],
-        arv_airport_1: [],
-
-        airlines: [],        
-        planes: []
-
+        ]
     };
-    
-	tools.defines = {};
+
+    tools.defines = {};
     $('#search-define p').each(function() {
-    	var $define = $(this).define().trigger('update', data);
-    	var dname = $define.data('name');
-    	tools.defines[dname] = $define;
+        var $define = $(this).define().trigger('update', data);
+        var dname = $define.data('name');
+        tools.defines[dname] = $define;
     });
 
     // обработка количества пассажиров
     tools.defines['persons'].bind('change', function() {
-    	var adults = 0, children = 0;
-    	var values = $(this).trigger('get').data('value');
-		for (var i = 0; v = values[i]; i++) {
-			var orig = values[i].v;
-			var real = orig % (Math.floor(orig / 10) * 10);
-			if (orig < 100) adults = real; else children += real;
-		}
-    	app.search.update({
-    		'adults': adults,
-    		'children': children
-    	}, this);
+        var adults = 0, children = 0;
+        var values = $(this).trigger('get').data('value');
+        for (var i = 0; v = values[i]; i++) {
+            var orig = values[i].v;
+            var real = orig % (Math.floor(orig / 10) * 10);
+            if (orig < 100) adults = real; else children += real;
+        }
+        app.search.update({
+            'adults': adults,
+            'children': children
+        }, this);
     });
     
     // обработка пересадок
@@ -197,29 +239,6 @@
     // рисуем "один взрослый"
     tools.defines['persons'].trigger('add', {v: 11, t: 'один'});
 
-    // Обработка уточнений
-    $('#search-define tbody p').each(function() {
-        $(this).bind('change', function() {
-            var values = $(this).trigger('get').data('value'), options = [];
-            var name = $(this).data('name');
-            for (var i = values.length; i--;) options.push(values[i].v);
-            if (app.offers.filterable) app.offers.filter(name, options);
-        });
-    });
-    
-    // Обновление фильтров
-    app.search.updateDefines = function(s) {
-        var data = $.parseJSON(s);
-        tools.defines['airlines'].trigger('update', data);
-        tools.defines['planes'].trigger('update', data);
-        for (var i = data.segments; i--;) {
-            tools.defines['arv_airport_' + i].trigger('update', data);
-            tools.defines['dpt_airport_' + i].trigger('update', data);
-            tools.defines['arv_time_' + i].trigger('update', data);
-            tools.defines['dpt_time_' + i].trigger('update', data);
-        }
-    };
-    
 
     // верхние табы
     $('#search\\.mode').radio();
@@ -290,6 +309,10 @@
     // фокус на поле ввода "Куда"
     tools.to.focus();
 
+// счётчик секунд; отладка
+//app.timer = $('#offers-progress h4 i').timer();
+//app.timer.trigger('start');
+
 });
 
 
@@ -327,3 +350,4 @@ app.obs = function(cfg) {
     })
 
 */
+

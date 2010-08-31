@@ -23,9 +23,9 @@ init: function() {
         var offer = variant.parent();
         if (offer.hasClass('collapsed')) {
             offer.height(offer.height()).removeClass('collapsed').animate({
-            	height: variant.height()
+                height: variant.height()
             }, 300, function() {
-            	offer.height('auto').addClass('expanded');
+                offer.height('auto').addClass('expanded');
             });
         }
     });
@@ -69,6 +69,7 @@ load: function(data) {
     var self = this;
     $("#offers-results").addClass("g-none");
     $("#offers-progress").removeClass("g-none");
+
     $("#offers").removeClass("g-none");
     $.get("/pricer/", {
         search: data
