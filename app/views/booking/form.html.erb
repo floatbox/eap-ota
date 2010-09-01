@@ -8,18 +8,22 @@ body		{font-family: Arial, sans-serif;}
 </style>
 </head>
 <body>
+
+  <%= link_to 'new payment', booking_form_path %>
+  <p style="color: red">
+    <%= h @message %>
+  </p>
+
   <% form_for :card, @card, :url => booking_pay_path do |f| %>
 
-<% fields_for "payment" do |p| %>
   <p>Сумма:<br>
-  <%= p.text_field :amount, :maxlength => 6, :style => "width: 6em;" %>
+  <%= text_field_tag :amount, @amount, :maxlength => 6, :style => "width: 6em;" %>
   коп.</p> 
 
   <p>Идентификатор платежа:<br>
-  <%= p.text_field :order_id, :maxlength => 8, :style => "width: 8em;" %>
+  <%= text_field_tag :order_id, @order_id, :maxlength => 8, :style => "width: 8em;" %>
   </p>
   <hr>
-<% end %>
 
 <p>Номер карты:<br>
 <%= f.text_field :number, :style => "width: 16em;" %>
@@ -36,7 +40,6 @@ body		{font-family: Arial, sans-serif;}
   <%= f.text_field :last_name %>
   <%= f.error_message_on :last_name, :maxlength => 100, :style => "width: 18em;" %>
   <br>
-  <!-- <input type="text" maxlength="100" style="width: 18em;"></p> -->
 
 <p>Срок действия:<br>
   <%= f.select(:month, ("01".."12").map{|x| [x,x.to_i]}, {:include_blank => "месяц"}) %>
@@ -47,7 +50,6 @@ body		{font-family: Arial, sans-serif;}
 </p>
 
 <p>CVV/CVC:<br>
-<!-- <input type="text" maxlength="3" style="width: 3em;"></p> -->
 <%= f.text_field :verification_value, :maxlength => 3, :style => "width: 3em;" %>
 <%= f.error_message_on :verification_value %>
 

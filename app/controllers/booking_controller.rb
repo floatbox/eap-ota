@@ -8,14 +8,25 @@ class BookingController < ApplicationController
     @variant = Marshal.load(File.read(Rails.root + 'db/variant.marshal'))
   end
 
+  # FIXME temporary bullshit
   def form
     @card = Billing::CreditCard.new(valid_card)
   end
 
   def pay
     @card = Billing::CreditCard.new(params[:card])
+
+    @order_id = params[:order_id]
+    @amount = params[:amount]
+
     if @card.valid?
-      render :text => 'card is valid'
+      result = Payture.new.pay(@amount, @card, :order_id => @order_id)
+      if result["Success"] == "True"
+        @message = "Success"
+      else
+        @message = result["ErrCode"]
+      end
+      render :form
     else
       render :form
     end
