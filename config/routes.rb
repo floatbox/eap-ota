@@ -5,6 +5,9 @@ ActionController::Routing::Routes.draw do |map|
   map.pricer 'pricer/validate', :controller => 'pricer', :action => 'validate'
   map.booking 'booking', :controller => 'booking', :action => 'index'
 
+  map.booking_form 'booking/form', :controller => 'booking', :action => 'form'
+  map.booking_pay 'booking/pay', :controller => 'booking', :action => 'pay'
+
   map.resources :locations, :collection => {:random => :get, :current => :get}
 
   map.resources :countries, :collection => {:random => :get}
