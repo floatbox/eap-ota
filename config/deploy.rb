@@ -40,7 +40,7 @@ end
 
 namespace :bundle do
   task :install do
-    run "cd #{release_path} && bundle install --without test console development deployment debug profiling"
+    run "cd #{release_path} && bundle install --deployment --without test console development deployment debug profiling"
   end
 end
 
