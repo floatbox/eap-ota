@@ -8,12 +8,20 @@ class Recommendation
     end
   end
 
+  def segments
+    variants.sum(&:segments)
+  end
+
+  def flights
+    segments.sum(&:flights)
+  end
+
   def sellable?
-    variants.every.segments.flatten.every.marketing_carrier.all? &:aviacentr
+    segments.map(&:marketing_carrier).all? &:aviacentr
   end
 
   def bullshit?
-    variants.every.segments.flatten.every.flights.flatten.any? {|f| f.equipment_type.engine_type == 'train' }
+    flights.any? {|f| f.equipment_type.engine_type == 'train' }
   end
 
   def minimal_duration

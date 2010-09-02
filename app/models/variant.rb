@@ -8,11 +8,15 @@ class Variant
     end
   end
 
+  def flights
+    segments.sum(&:flights)
+  end
+
   def summary
     result = {
-     :airlines => segments.map{|s| s.flights.every.operating_carrier_iata}.flatten.uniq,
-     :planes => segments.map{|s| s.flights.every.equipment_type_iata}.flatten.uniq,
-     :departures => segments.map {|segment| segment.departure_time },
+     :airlines => flights.every.operating_carrier_iata.uniq,
+     :planes => flights.every.equipment_type_iata.uniq,
+     :departures => segments.every.departure_time,
      :duration => segments.sum(&:total_duration)
     }
     segments.each_with_index do |segment, i|
@@ -29,11 +33,11 @@ class Variant
   end
 
   def common_carrier
-    (segments.every.marketing_carrier_name.uniq.length == 1) && segments.first.marketing_carrier
+    segments.every.marketing_carrier_name.uniq.one? && segments.first.marketing_carrier
   end
 
   def common_layovers
-    segments.map{|s| s.layovers.every.iata.sort}.uniq.length == 1
+    segments.map{|s| s.layovers.every.iata.sort}.uniq.one?
   end
 
   def total_duration
