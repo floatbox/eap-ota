@@ -128,6 +128,11 @@ class PricerForm < ActiveRecord::BaseWithoutTable
         prices = rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").collect {|x| x.to_i }
         price_total = prices.sum
 
+        # компаний может быть несколько, нас интересует та, где
+        # r:transportStageQualifier[text()="V"]. но она обычно первая.
+        validating_carrier_iata =
+          rec.xpath("r:paxFareProduct/r:paxFareDetail/r:codeShareDetails/r:company[../r:transportStageQualifier='V']").to_s
+
         variants = rec.xpath("r:segmentFlightRef").map {|sf|
           segments = sf.xpath("r:referencingDetail").each_with_index.collect { |rd, i|
             # TODO проверить что:
@@ -148,6 +153,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
           :prices => prices,
           :price_total => price_total,
           :variants => variants,
+          :validating_carrier_iata => validating_carrier_iata,
           :additional_info => additional_info
         )
       end

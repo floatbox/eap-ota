@@ -1,11 +1,15 @@
 class Recommendation
 
-  attr_accessor :prices, :variants, :price_total, :additional_info
+  attr_accessor :prices, :variants, :price_total, :additional_info, :validating_carrier_iata
 
   def initialize keys={}
     keys.each do |attr, value|
       send "#{attr}=", value
     end
+  end
+
+  def validating_carrier
+    validating_carrier_iata && Airline[validating_carrier_iata]
   end
 
   def segments
