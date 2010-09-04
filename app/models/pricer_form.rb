@@ -119,6 +119,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       flight_indexes = xml.xpath('//r:flightIndex').map do |flight_index|
         flight_index.xpath('r:groupOfFlights').map do |group|
           Segment.new(
+            :eft => group.xpath("r:propFlightGrDetail/r:flightProposal[r:unitQualifier='EFT']/r:ref").to_s,
             :flights => group.xpath("r:flightDetails/r:flightInformation").map { |fi| parse_flight(fi) }
           )
         end
