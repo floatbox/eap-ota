@@ -12,6 +12,7 @@ public/system
 .bundle
 rerun.txt
 *.swp
+.idea
 .com.*
 config/*.sphinx.conf
 db/sphinx
