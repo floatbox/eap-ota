@@ -1,18 +1,18 @@
 
 /* модификация .l-canvas*/
 
-.booking {
+.l-canvas-booking {
     padding-top: 15px;
 
     letter-spacing: -0.03em;
 }
 
 
-.booking #search-transcript {
+.l-canvas-booking #search-transcript {
     margin: 0 15px 0;
 }
 
-.booking #search-transcript h5 {
+.l-canvas-booking #search-transcript h5 {
     font-size: 81.25%;
 
     margin: .3em 0 0 0;
@@ -22,34 +22,32 @@
     color: #777;
 }
 
-.booking #search-transcript h5 a {
+.l-canvas-booking #search-transcript h5 a {
     color: #777;
 }
 
-.booking #search-transcript h5 a:hover {
+.l-canvas-booking #search-transcript h5 a:hover {
     color: #000;
 }
 
 /* Разметка страницы бронирования на шаги */
 
-dl.booking {
+.booking {
     width: 675px;
     margin: 0 15px;
     padding: 0;
-
-    overflow: hidden;
-    zoom: 1;
 }
 
-dl.booking dt {
+.booking dt {
     font: bold 18px Arial,s;
 
     margin: 1em 0 0 0;
+    padding: 0 0 0 10px;
 
     color: #333;
 }
 
-dl.booking dt b {
+.booking dt b {
     font: bold 22px/34px Arial,s;
 
     display: inline-block;
@@ -61,87 +59,425 @@ dl.booking dt b {
     background: #cb388f;
 }
 
-
-dl.booking dd {
+.booking dd {
     padding: 10px;
+    margin: 0 0 10px 0;
+
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -o-border-radius: 10px;
+    background: #ccc;
 }
 
-    .booking-variant {
-        background: #fff;
+/* Состояние блока: отключён / готов к заполнению / заполнен и валиден */
+
+    .booking dd.state-validating {
+        background: #fff8d2;
     }
 
-    .booking-persons {
+    .booking dd.state-valid {
         background: #e5ffd2;
     }
 
-    .booking-payment {
-        background: #fff8d2;
+    .booking dd.state-validating,
+    .booking dd.state-valid {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
 
-    .booking-contacts {
-        background: #fff8d2;
+/* Текстовые поля - общие свойства */
+
+    .booking .text {
+        padding: 6px 4px;
+
+        color: #aaa;
+        border: 1px solid #909090;
+        background: #f8f8f8;
     }
 
-    .booking-book {
+    .booking .text:hover {
+        z-index: 2;
+        -webkit-transition: border-color linear .2s;
+
+        border-color: #db3f89;
         background: #fff;
     }
 
-/* Данные пассажиров */
+    .booking .text:focus {
+        z-index: 3;
 
-.booking-persons form {
+        color: #333;
+        border-color: #db3f89;
+        background: #fff;
+        outline: none;
+
+        -moz-box-shadow: 0 0 6px rgba(0, 0, 0, .15);
+        -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, .15);
+        -o-box-shadow: 0 0 6px rgba(0, 0, 0, .15);
+
+        -moz-transition: color linear .2s;
+        -moz-transition: -moz-box-shadow linear .2s;
+        
+        -webkit-transition: color linear .2s;
+        -webkit-transition: -webkit-box-shadow linear .2s;
+
+        -o-transition: color linear .2s;
+        -o-transition: -o-box-shadow linear .2s;
+    }
+
+    .booking .text-noempty {
+        color: #333;
+    }
+
+/* Метки - общие свойства */
+
+    .booking label.sub {
+        display: block;
+
+        margin: 2px 0;
+
+        color: #777;
+    }
+
+/* Прочее - общие свойства */
+    .booking .b-pseudo {
+        ont-size: 90%;
+
+        color: inherit;
+    }
+
+/* БЛОК 1: Вариант перелёта */
+
+
+
+
+/* БЛОК 2: Данные пассажиров */
+
+.booking dd.booking-persons {
+    padding: 12px 10px 4px 0;
+}
+
+    /* таблица */
+
+    .booking-persons table td {
+        padding: 0 0 0 10px;
+
+        vertical-align: middle;
+    }
+
+    .booking-persons td.noexp {
+        padding-left: 32px;
+
+        text-indent: -22px;
+        vertical-align: top;
+    }
+
+    /* метки */
+
+    .booking-persons label.bold {
+        font-weight: bold;
+
+        display: inline-block;
+
+        margin: 6px 0 0 0;
+
+        line-height: 160%;
+        cursor:help;
+
+        color: #333;
+    }
+
+    .booking-persons td.noexp label {
+        cursor: pointer;
+
+        margin-left: 2px;
+    }
+
+    /* радиокнопки с подписями */
+
+    .booking-persons ul.radio {
+        white-space: nowrap;
+    }
+
+    .booking-persons ul.radio li {
+        height: 19px;
+        line-height: 19px;
+    }
+
+    .booking-persons ul.radio label {
+        vertical-align: middle;
+        cursor: pointer;
+        line-height: inherit;
+
+        color: #333;
+    }
+
+    .booking-persons ul.radio input {
+        vertical-align: middle;
+    }
+
+    .booking-persons ul.radio li:hover label {
+        color: #000;
+    }
+
+    /* списки выбора */
+
+    .booking-persons select {
+        width: 214px;
+    }
+
+    /* конкретные поля */
+
+    .booking-persons input.text {
+        width: 204px;
+    }
+
+    .booking-persons input.text-dd {
+        position: relative;
+
+        width: 62px;
+
+        border-right-color: #ccc;
+    }
+
+    .booking-persons input.text-mm {
+        position: relative;
+
+        width: 62px;
+        margin-left: -1px;
+
+        border-left-color: #ccc;
+        border-right-color: #ccc;
+    }
+
+    .booking-persons input.text-yyyy {
+        position: relative;
+
+        width: 62px;
+        margin-left: -1px;
+
+        border-left-color: #ccc;
+    }
+
+    .booking-persons input.text-bonus {
+        width: 197px;
+    }
+
+    /* вспомогательные элементы */
+
+
+/* БЛОК 3: банковская карточка */
+
+.booking dd.booking-payment {
+    padding: 10px 0;
+}
+
+ul.bankcard {
+    overflow: hidden;
+    zoom: 1;
+}
+
+.bankcard li {
+    float: left;
+    position: relative;
+
+    width: 314px;
+    height: 192px;
+    margin: 0 5px 0 13px;
+
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -o-border-radius: 10px;
+
+    background: #bbb;
     
+    background-image: -moz-linear-gradient(top, #f3f3f3, #999);
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f3f3f3), to(#aaa));
 }
 
-.booking-persons form input.text {
-    font-size: 22px;
+    /* Логотипы Виза и МастерКард */
 
-    padding: 6px;
-    height: 1%;
+    .bankcard .logos {
+        padding: 0;
+        margin: 10px 0 30px 6px;
 
-    letter-spacing: -.02em;
+        height: 24px;
+        line-height: 24px;
 
-    color: #4b4b4b;
-    color: #aaa;
-    border: 1px solid #909090;
-    background: #fff;
-}
+        color: #777;
+    }
 
-.booking-persons form input.name {
-    width: 200px;
-}
+    .bankcard .logos i {
+        display: inline-block;
 
-.booking-persons form ul {
-    font-size: 81.25%;
+        height: 24px;
 
-    display: inline-block;
+        padding: 0;
+        margin: 0;
+        
+        vertical-align: top;
+    }
 
-    vertical-align: middle;
+    .bankcard .logos i.visa {
+        width: 80px;
 
-    width: 200px;
-}
+        background: url(/img/temp/logo-visa.png);
+    }
 
-.booking-persons form ul li {
-}
+    .bankcard .logos i.master {
+        width: 41px;
 
-.booking-persons form ul .sex {
-    adding: 0;
-}
+        background: url(/img/temp/logo-master.png);
+    }
+
+    .bankcard .logos i.inactive {
+        opacity: .3;
+    }
 
 
-/*
+.bankcard label {
+    font-weight: bold;
 
-.autocomplete-hover {
-    border-color: #db3f89;
-}
+    display: block;
 
-.autocomplete-focus {
+    margin: 0 0 2px 0;
+
+    letter-spacing: -.03em;
+    cursor: help;
+
     color: #333;
-    border: 1px solid #db3f89;
-    background: #fff;
 }
 
-/*
+.bankcard .text {
+    width: 52px;
+    padding: 1px 4px;
 
+    background: #e8e8e8;
+}
+
+    /* Лицевая сторона */
+
+    .bankcard .bankcardno {
+        position: absolute;
+
+        top: 35%;
+        left: 10px;
+
+        white-space: nowrap;
+    }
+
+    .bankcard .bankcardno .text {
+        font: bold 140% Courier,monospace;
+
+        margin: 0 10px 0 0;
+
+        letter-spacing: -.1em;
+    }
+
+    .bankcard .bankcardname {
+        position: absolute;
+
+        bottom: 10px;
+        left: 10px;
+    }
+
+    .bankcard .bankcardname .text {
+        width: 160px;
+
+        padding: 2px 4px;
+
+        letter-spacing: -.03em;
+    }
+
+    .bankcard .bankcardexpires {
+        position: absolute;
+
+        bottom: 10px;
+        right: 10px;
+    }
+
+    .bankcard .bankcardexpires i {
+        font: normal 140% Courier,monospace;
+    }
+
+    .bankcard .bankcardexpires .text
+    {
+        width: 30px;
+
+        padding: 2px 4px;
+    }
+
+    /* Оборотная сторона */
+
+    .bankcard .magneticstrip
+    {
+        height: 42px;
+        margin: 15px 0 0 0;
+
+        background: #2b2b2b;
+    }
+
+    .bankcard .bankcardcvv {
+        position: absolute;
+
+        top: 35%;
+        right: 10px;
+
+        white-space: nowrap;
+    }
+
+    .bankcard .bankcardcvv label {
+        text-align: right;
+    }
+
+    .bankcard .bankcardcvv b {
+        font: bold 140% Courier,monospace;
+
+        margin: 0 8px 0 0;
+
+        letter-spacing: -.1em;
+    }
+
+    .bankcard .bankcardcvv b.novalue {
+        color: #777;
+    }
+
+    .bankcard .bankcardcvv .text {
+        font: bold 140% Courier,monospace;
+
+        width: 2em;
+
+        letter-spacing: -.1em;
+    }
+
+    .bankcard .bankcardbankname {
+        position: absolute;
+
+        bottom: 10px;
+        left: 10px;
+    }
+
+    .bankcard .bankcardbankname .text {
+        width: 284px;
+
+        padding: 2px 4px;
+    }
+
+
+/* БЛОК 4: контакты */
+
+.booking dd.booking-contacts {
+
+}
+
+.booking dd.booking-contacts .text {
+    width: 310px;
+    margin: 0 10px 0 0;
+}
 
 
 
