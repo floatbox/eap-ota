@@ -1,8 +1,7 @@
+require 'bundler/capistrano'
+
 set :application, "gamma"
 
-
-# If you aren't using Subversion to manage your source code, specify
-# your SCM below:
 set :scm, :git
 
 set :rails_env, 'production'
@@ -12,7 +11,7 @@ set :use_sudo, false
 set :deploy_to, "/home/#{user}/#{application}"
 set :srv, "team.eviterra.ru"
 
-# если репозиторий лежит на той же машине, что и сам редмайн
+# если репозиторий лежит на той же машине
 #set :deploy_via, :copy
 #set :repository,  "."
 
@@ -36,15 +35,4 @@ namespace :deploy do
     run "ln -sf #{shared_path}/config/* #{latest_release}/config/; true"
     run "ln -sf #{shared_path}/initializers/* #{latest_release}/config/initializers/; true"
   end
-end
-
-namespace :bundle do
-  task :install do
-    run "cd #{release_path} && bundle install --deployment --without test console development deployment debug profiling"
-  end
-end
-
-
-after "deploy:update_code" do
-  bundle.install
 end
