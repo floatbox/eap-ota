@@ -119,40 +119,50 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       flight_indexes = xml.xpath('//r:flightIndex').map do |flight_index|
         flight_index.xpath('r:groupOfFlights').map do |group|
           Segment.new(
+            :eft => group.xpath("r:propFlightGrDetail/r:flightProposal[r:unitQualifier='EFT']/r:ref").to_s,
             :flights => group.xpath("r:flightDetails/r:flightInformation").map { |fi| parse_flight(fi) }
           )
         end
       end
-
-      recommendations = xml.xpath("//r:recommendation").map do |rec|
-        prices = rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").collect {|x| x.to_i }
-        price_total = prices.sum
-
-        variants = rec.xpath("r:segmentFlightRef").map {|sf|
-          segments = sf.xpath("r:referencingDetail").each_with_index.collect { |rd, i|
-            # TODO проверить что:
-            # rd["refQualifier"] == "S"
-            flight_indexes[i][ rd.xpath("r:refNumber").to_i - 1 ]
-          }
-          Variant.new( :segments => segments )
-        }
-
-        additional_info =
-          rec.xpath('.//r:fare').map {|f|
-            f.xpath('.//r:description|.//r:textSubjectQualifier').every.to_s.join("\n")
-          }.join("\n\n") +
-          "\n\nfareBasis: " +
-          rec.xpath('.//r:fareBasis').to_s
-
-        Recommendation.new(
-          :prices => prices,
-          :price_total => price_total,
-          :variants => variants,
-          :additional_info => additional_info
-        )
-      end
+      recommendations = parse_recommendations(xml, flight_indexes)
     end
     recommendations
+  end
+
+  def parse_recommendations(xml, flight_indexes)
+    xml.xpath("//r:recommendation").map do |rec|
+      prices = rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").collect {|x| x.to_i }
+      price_total = prices.sum
+
+      # компаний может быть несколько, нас интересует та, где
+      # r:transportStageQualifier[text()="V"]. но она обычно первая.
+      validating_carrier_iata =
+        rec.xpath("r:paxFareProduct/r:paxFareDetail/r:codeShareDetails/r:company[../r:transportStageQualifier='V']").to_s
+
+      variants = rec.xpath("r:segmentFlightRef").map {|sf|
+        segments = sf.xpath("r:referencingDetail").each_with_index.collect { |rd, i|
+          # TODO проверить что:
+          # rd["refQualifier"] == "S"
+          flight_indexes[i][ rd.xpath("r:refNumber").to_i - 1 ]
+        }
+        Variant.new( :segments => segments )
+      }
+
+      additional_info =
+        rec.xpath('.//r:fare').map {|f|
+          f.xpath('.//r:description|.//r:textSubjectQualifier').every.to_s.join("\n")
+        }.join("\n\n") +
+        "\n\nfareBasis: " +
+        rec.xpath('.//r:fareBasis').to_s
+
+      Recommendation.new(
+        :prices => prices,
+        :price_total => price_total,
+        :variants => variants,
+        :validating_carrier_iata => validating_carrier_iata,
+        :additional_info => additional_info
+      )
+    end
   end
 
   # fi: flightInformation node
@@ -171,6 +181,35 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       :departure_time =>         fi.xpath("r:productDateTime/r:timeOfDeparture").to_s,
       :equipment_type_iata =>    fi.xpath("r:productDetail/r:equipmentType").to_s
     )
+  end
+
+  # куда б приткнуть эту строчку?
+  ActiveSupport::XmlMini.backend = :Nokogiri
+
+  # xslt пока что работает только с travel_board_search
+  def faster_parse(xml=travel_xml)
+    xslt = Nokogiri::XSLT(File.read('xml/xsl/pricer_flights.xslt'))
+    flight_doc = xslt.transform(xml.native_element.document)
+    recommendations = []
+
+    # TODO сделать инкрементирующийся счетчик
+    @@parse_time = Benchmark.ms do
+
+      flight_indexes = flight_doc.children.collect do |requested_segment|
+        requested_segment.children.collect do |proposed_segment|
+          Segment.new(
+            :flights => proposed_segment.children.collect { |flight|
+              Flight.new(flight.to_hash.values.first)
+              #  Hash[*flight.attribute_nodes.map {|node| [node.name, node.value]}.flatten]
+              #)
+            }
+          )
+        end
+      end
+
+      recommendations = parse_recommendations(xml, flight_indexes)
+    end
+    recommendations
   end
 
 end
