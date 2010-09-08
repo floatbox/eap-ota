@@ -96,6 +96,11 @@
         color: #aaa;
         border: 1px solid #909090;
         background: #f8f8f8;
+
+        border-radius: 3px;
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -o-border-radius: 3px;
     }
 
     .booking .text:hover {
@@ -258,6 +263,11 @@
         width: 62px;
 
         border-right-color: #ccc;
+
+        border-radius: 3px 0 0 3px;
+        -moz-border-radius: 3px 0 0 3px;
+        -webkit-border-radius: 3px 0 0 3px;
+        -o-border-radius: 3px 0 0 3px;
     }
 
     .booking-persons input.text-mm {
@@ -268,6 +278,11 @@
 
         border-left-color: #ccc;
         border-right-color: #ccc;
+
+        border-radius: 0;
+        -moz-border-radius: 0;
+        -webkit-border-radius: 0;
+        -o-border-radius: 0;
     }
 
     .booking-persons input.text-yyyy {
@@ -277,6 +292,11 @@
         margin-left: -1px;
 
         border-left-color: #ccc;
+
+        border-radius: 0 3px 3px 0;
+        -moz-border-radius: 0 3px 3px 0;
+        -webkit-border-radius: 0 3px 3px 0;
+        -o-border-radius: 0 3px 3px 0;
     }
 
     .booking-persons input.text-bonus {
@@ -450,6 +470,7 @@ ul.bankcard {
 
     .bankcard .bankcardcvv label {
         text-align: right;
+        letter-spacing: 0;
     }
 
     .bankcard .bankcardcvv b {
