@@ -70,7 +70,7 @@
     background: #ccc;
 }
 
-/* Состояние блока: отключён / готов к заполнению / заполнен и валиден */
+    /* Состояние блока: отключён / готов к заполнению / заполнен и валиден */
 
     .booking dd.state-validating {
         background: #fff8d2;
@@ -143,9 +143,27 @@
     }
 
 /* Прочее - общие свойства */
+    .booking h2 {
+        font: bold 18px Arial,s;
+
+        margin: .5em 0 .2em 0;
+        padding: 0 0 0 10px;
+
+        color: #333;
+    }
+
     .booking .b-pseudo {
 
         color: inherit;
+    }
+
+    .booking a.b-submit {
+        font: bold 18px Arial,s;
+
+        display: inline-block;
+
+        margin: 0 0 0 .2em;
+        padding: 6px 10px;
     }
 
 /* БЛОК 1: Вариант перелёта */
@@ -271,7 +289,7 @@
 /* БЛОК 3: банковская карточка */
 
 .booking dd.booking-payment {
-    padding: 10px 0;
+    padding: 15px 0 10px 0;
 }
 
 ul.bankcard {
@@ -283,9 +301,9 @@ ul.bankcard {
     float: left;
     position: relative;
 
-    width: 314px;
+    width: 316px;
     height: 192px;
-    margin: 0 5px 0 13px;
+    margin: 0 0 0 14px;
 
     border-radius: 10px;
     -moz-border-radius: 10px;
@@ -461,30 +479,59 @@ ul.bankcard {
     }
 
     .bankcard .bankcardbankname .text {
-        width: 284px;
+        width: 286px;
 
         padding: 2px 4px;
     }
 
 
-.booking-payment table.bill {
-    margin: 10px;
+.booking-payment table.bc-bill {
+    margin: 1em 0 4px 10px;
 }
 
-    .booking-payment .bill th {
-        font: bold 92.857% Arial,a;
+    .booking-payment .bc-bill td, .booking-payment .bc-bill th {
+    }
+
+    .booking-payment .bc-bill th {
+        font: bold 100% Arial,a;
 
         vertical-align: middle;
-
-        letter-spacing: 0;
+        white-space: nowrap;
 
         color: #333;
     }
 
-    .booking-payment .bill th i {
-        font: bold 80px Arial,a;
+    .booking-payment .bc-bill th i {
+        font: bold 70px/40px Arial,a;
 
-        display: block;
+        display: inline-block;
+        overflow: hidden;
+
+        margin: 0 12px;
+
+        color: #6e6e6e;
+    }
+
+    .booking-payment .bc-bill td {
+        white-space: nowrap;
+    }
+
+    .booking-payment .bc-bill td u,
+    .booking-payment .bc-bill td b {
+        font: bold 157.143%/85% Arial,a;
+
+        margin: 0 .1em 0 0;
+
+        color: #cb388f;
+    }
+
+    .booking-payment .bc-bill td b {
+        color: #3d7c00;
+    }
+
+    .booking-payment .bc-bill td i {
+        font-size: 85.714%;
+        font-size: 78.571%;
 
         color: #6e6e6e;
     }
@@ -506,43 +553,30 @@ ul.bankcard {
 
 .booking dd.booking-book {
     padding: 10px;
-}
 
-.booking-book a.b-submit {
-    font: bold 18px Arial,s;
-
-    display: inline-block;
-
-    margin: 0 0 0 .2em;
-    padding: 6px 10px;
-}
-
-.booking-book b {
-    font: bold 18px Arial,s;
-
-    color: #333;    
+    background: none;
 }
 
 .booking-book .blocker {
     position: relative;
     float: left;
 
-    margin: 30px 0 10px 0;
-    padding: 10px;
+    margin: 25px 0 10px 100px;
+    padding: 10px 25px;
 
     color: #333;
     background: #fff8d2;
 
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -o-border-radius: 15px;
 }
 
     .booking-book .blocker s {
         display: block;
         position: absolute;
-        left: 80px;
+        left: 180px;
         top: -25px;
 
         width: 0;
@@ -562,13 +596,12 @@ ul.bankcard {
     }
 
     .booking-book .blocker ul {
-        margin: 0 0 0 .5em;
     }
 
     .booking-book .blocker li {
         list-style: disc;
 
-        margin: 0 0 .2em 1em;
+        margin: 0 0 .2em 0;
     }
 
 .booking-book .notice {
@@ -601,7 +634,7 @@ ul.bankcard {
 
     color: #333;
     background: #fff;
-    border: 1px solid #777; 
+    border: 1px solid #777;
 }
 
 .book dd.body .more {

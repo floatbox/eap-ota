@@ -1,5 +1,6 @@
-<% if @people.count > 1 %>
-<%= person_form_counter+1 %>
+
+<% if person_form_counter > 0 %>
+    <h2><%= person_form_counter + 1 %>-й пассажир</h2>
 <% end  %>
 
 <dd class="booking-persons state-validating">
@@ -10,7 +11,6 @@
                  id="booking-person-1-fname"
                  name="fname"
                  class="text g-xl"
-                 tabindex="1"
                  value="Имя"
                  onclick="return {defaultValue: 'Имя'}"
                  title=""
@@ -21,7 +21,6 @@
                  id="booking-person-1-lname"
                  name="lname"
                  class="text g-xl"
-                 tabindex="2"
                  value="Фамилия"
                  onclick="return {defaultValue: 'Фамилия'}"
                  title=""
@@ -29,8 +28,8 @@
 
             <td>
                 <ul class="radio g-xxs">
-                    <li><input type=radio id="booking-person-1-sex-m" name="sex" tabindex="3"><label for="booking-person-1-sex-m">мужской</label>
-                    <li><input type=radio id="booking-person-1-sex-f" name="sex" tabindex="3"><label for="booking-person-1-sex-f">женский</label>
+                    <li><input type=radio id="booking-person-1-sex-m" name="sex"><label for="booking-person-1-sex-m">мужской</label>
+                    <li><input type=radio id="booking-person-1-sex-f" name="sex"><label for="booking-person-1-sex-f">женский</label>
                 </ul>
 
         <tr>
@@ -59,7 +58,6 @@
                  id="booking-person-1-nationality"
                  class="text text-noempty g-xl"
                  name=""
-                 tabindex="4"
                 >
                     <option value="RU">Россия
 
@@ -90,7 +88,6 @@
                  id="booking-person-1-birth-d"
                  name="birth"
                  class="text text-dd g-xl"
-                 tabindex="5"
                  value="день"
                  maxlength="2"
                  onclick="return {defaultValue: 'день'}"
@@ -98,7 +95,6 @@
                  id="booking-person-1-birth-m"
                  name="birth"
                  class="text text-mm g-xl"
-                 tabindex="6"
                  value="месяц"
                  maxlength="10"
                  onclick="return {defaultValue: 'месяц'}"
@@ -106,7 +102,6 @@
                  id="booking-person-1-birth-y"
                  name="birth"
                  class="text text-yyyy g-xl"
-                 tabindex="7"
                  value="год"
                  maxlength="4"
                  onclick="return {defaultValue: 'год'}"
@@ -130,7 +125,6 @@
                  id="booking-person-1-passport"
                  name="passport"
                  class="text g-xl"
-                 tabindex="8"
                  value="Номер документа"
                  maxlength="20"
                  onclick="return {defaultValue: 'Номер документа'}"
@@ -140,7 +134,6 @@
                  id="booking-person-1-expires-d"
                  name="birth"
                  class="text text-dd g-xl"
-                 tabindex="9"
                  value="день"
                  maxlength="2"
                  onclick="return {defaultValue: 'день'}"
@@ -148,7 +141,6 @@
                  id="booking-person-1-expires-m"
                  name="birth"
                  class="text text-mm g-xl"
-                 tabindex="10"
                  value="месяц"
                  maxlength="10"
                  onclick="return {defaultValue: 'месяц'}"
@@ -156,7 +148,6 @@
                  id="booking-person-1-expires-y"
                  name="birth"
                  class="text text-yyyy g-xl"
-                 tabindex="11"
                  value="год"
                  maxlength="4"
                  onclick="return {defaultValue: 'год'}"
@@ -166,7 +157,6 @@
                  id="booking-person-1-noexpiration"
                  name="noexpiration"
                  class="g-middle"
-                 tabindex="12"
                 ><label 
                  for="booking-person-1-noexpiration"
                  class="g-xxs"
@@ -185,7 +175,6 @@
                  id="booking-person-1-bonus"
                  name="bonus"
                  class="g-middle"
-                 tabindex="13"
                 ><label 
                  for="booking-person-1-bonus"
                  class="g-xxs"
@@ -199,7 +188,6 @@
                  id="booking-person-1-bonuscard"
                  class="text text-noempty g-xl g-hidden"
                  name="bonuscard"
-                 tabindex="14"
                 >
                     <option value="">Аэрофлот Бонус
                     <option value="">Бонусявый Бонус
@@ -211,7 +199,6 @@
                  id="booking-person-1-bonuscardnumber"
                  name="passport"
                  class="text text-bonus g-xl g-hidden"
-                 tabindex="15"
                  value="Номер карты"
                  maxlength="20"
                  onclick="return {defaultValue: 'Номер карты'}"
