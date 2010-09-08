@@ -6,6 +6,8 @@ class BookingController < ApplicationController
     require 'segment'
     require 'flight'
     @variant = Marshal.load(File.read(Rails.root + 'db/variant.marshal'))
+    @people = [1,2, 3]
+    @card = Billing::CreditCard.new(valid_card)
   end
 
   # FIXME temporary bullshit

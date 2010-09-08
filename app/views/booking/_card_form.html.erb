@@ -1,0 +1,114 @@
+<dt><b>3</b>Введите данные банковской карты
+<dd class="booking-payment">
+<% form_for :card, @card, :url => booking_pay_path do |f| %>
+    <ul class="bankcard">
+        <li>
+            <p class="logos g-xxs" title="Вы можете использовать карточки платёжных систем Visa или MasterCard">
+                <i class="visa"></i>&nbsp;или&nbsp;<i class="master inactive"></i>
+
+            <fieldset class="bankcardno">
+                <label
+                 for="payment-bankcardno"
+                 class="g-xs"
+                 title="Шестнадцатизначный номер карты"
+                >Номер карты</label>
+
+                <%= f.text_field :number1,
+                 :id => "payment-bankcardno",
+                 :class => "text g-xl",
+                 :tabindex => "16",
+                 :maxlength => "4"
+                %>
+                <%= f.text_field :number2,
+                 :class => "text g-xl",
+                 :tabindex => "16",
+                 :maxlength => "4"
+                %>
+                <%= f.text_field :number3,
+                 :class => "text g-xl",
+                 :tabindex => "16",
+                 :maxlength => "4"
+                %>
+                <%= f.text_field :number4,
+                 :class => "text g-xl",
+                 :tabindex => "16",
+                 :maxlength => "4"
+                %>
+                <%= f.error_message_on :number %>
+            </fieldset>
+
+            <fieldset class="bankcardname">
+                <label 
+                 for="payment-bankcardname"
+                 class="g-xs"
+                 title="Имя и фамилию нужно вписать латинскими буквами &mdash; точно, как на карте"
+                >Имя на&nbsp;карте</label>
+                <%= f.text_field :name, :id => 'payment-bankcardname', :class => "text g-l", :tabindex => '17'  %>
+                <%= f.error_message_on :name, :maxlength => 100, :style => "width: 18em;" %>
+                <!--input type="text"  
+                 id="payment-bankcardname"
+                 name="payment-bankcardname"
+                 class="text g-l"
+                 tabindex="17"
+                -->
+            </fieldset>
+
+            <fieldset class="bankcardexpires">
+                <label for="payment-bankcardexpires-m" class="g-xs" title="На карте обозначено как &laquo;VALID THRU&raquo;">Срок действия</label>
+
+
+                <%= f.text_field :month, :id => "payment-bankcardexpires-m", :class => "text g-l", :tabindex => "18", :maxlength => "2", :value => "мм", :title => "На карте обозначено как &laquo;MONTH&raquo;" %>
+                <%= f.error_message_on :month %>
+                <i>/</i>
+                <%= f.text_field :year,
+                 :id => "payment-bankcardexpires-y",
+                 :name => "bankcardexpires-y",
+                 :class => "text g-l",
+                 :tabindex => "19",
+                 :maxlength => "2",
+                 :value => "гг",
+                 :title => "На карте обозначено как &laquo;YEAR&raquo;"
+                %>
+                <%= f.error_message_on :year %>
+            </fieldset>
+
+        <li>
+            <p class="magneticstrip">&nbsp;
+
+            <fieldset class="bankcardcvv">
+                <label 
+                 for="payment-bankcardcvv" 
+                 class="g-xs" 
+                 title="Трёхзначный CVV (CVC) код карты. Карта без этого кода непригодна для оплаты услуг через интернет."
+                >CVV/CVC</label>
+
+                <b class="g-xs novalue" title="Последние четыре цифры номера карты">XXXX</b>
+
+                <%= f.text_field :verification_value, 
+                 :id => "payment-bankcardcvv",
+                 :class => "text g-xl",
+                 :tabindex => "20",
+                 :maxlength => "3"
+                %>
+                <%= f.error_message_on :verification_value %>
+            </fieldset>
+
+
+            <fieldset class="bankcardbankname">
+                <label
+                 for="payment-bankcardbankname"
+                 class="g-xs"
+                 title="Банк-эмитент, обозначенный на карте. Можно писать кириллицей или латиницей"
+                >Название банка, выпустившего карту</label>
+
+                <input type="text"  
+                 id="payment-bankcardbankname"
+                 name="payment-bankcardbankname"
+                 class="text g-l"
+                 tabindex="21"
+                >
+            </fieldset>
+
+    </ul>
+<% end %>
+</dd>

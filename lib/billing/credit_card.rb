@@ -48,6 +48,7 @@ module Billing #:nodoc:
 
     # Required for Switch / Solo cards
     attr_accessor :start_month, :start_year, :issue_number
+    attr_accessor :number1, :number2, :number3, :number4
 
     # Optional verification_value (CVV, CVV2 etc). Gateways will try their best to
     # run validation on the passed in value if it is supplied
