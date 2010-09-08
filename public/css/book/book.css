@@ -41,7 +41,7 @@
 .booking dt {
     font: bold 18px Arial,s;
 
-    margin: 1em 0 0 0;
+    margin: 1.5em 0 0 0;
     padding: 0 0 0 10px;
 
     color: #333;
@@ -144,7 +144,6 @@
 
 /* Прочее - общие свойства */
     .booking .b-pseudo {
-        ont-size: 90%;
 
         color: inherit;
     }
@@ -468,6 +467,30 @@ ul.bankcard {
     }
 
 
+.booking-payment table.bill {
+    margin: 10px;
+}
+
+    .booking-payment .bill th {
+        font: bold 92.857% Arial,a;
+
+        vertical-align: middle;
+
+        letter-spacing: 0;
+
+        color: #333;
+    }
+
+    .booking-payment .bill th i {
+        font: bold 80px Arial,a;
+
+        display: block;
+
+        color: #6e6e6e;
+    }
+
+
+
 /* БЛОК 4: контакты */
 
 .booking dd.booking-contacts {
@@ -477,6 +500,81 @@ ul.bankcard {
 .booking dd.booking-contacts .text {
     width: 310px;
     margin: 0 10px 0 0;
+}
+
+/* БЛОК 5: сабмит */
+
+.booking dd.booking-book {
+    padding: 10px;
+}
+
+.booking-book a.b-submit {
+    font: bold 18px Arial,s;
+
+    display: inline-block;
+
+    margin: 0 0 0 .2em;
+    padding: 6px 10px;
+}
+
+.booking-book b {
+    font: bold 18px Arial,s;
+
+    color: #333;    
+}
+
+.booking-book .blocker {
+    position: relative;
+    float: left;
+
+    margin: 30px 0 10px 0;
+    padding: 10px;
+
+    color: #333;
+    background: #fff8d2;
+
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+
+    .booking-book .blocker s {
+        display: block;
+        position: absolute;
+        left: 80px;
+        top: -25px;
+
+        width: 0;
+        height: 0;
+
+
+        border-style: solid;
+        border-color: transparent #fff8d2 transparent transparent;
+        border-width: 25px 20px 0 0 ;
+
+
+        ackground: #fff8d2;
+    }
+
+    .booking-book .blocker p {
+        margin: 0 0 .4em 0;
+    }
+
+    .booking-book .blocker ul {
+        margin: 0 0 0 .5em;
+    }
+
+    .booking-book .blocker li {
+        list-style: disc;
+
+        margin: 0 0 .2em 1em;
+    }
+
+.booking-book .notice {
+    clear: both;
+
+    color: #333;    
 }
 
 

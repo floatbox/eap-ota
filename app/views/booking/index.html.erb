@@ -36,7 +36,6 @@
 
                     <dt><b>1</b>Проверьте, что вы бронируете
                     <dd class="booking-variant state-valid">
-                        <br/><br/>Здесь должны быть подробности перелёта - такие же, как в списке предложений<br/><br/>
                         <table class='offer-variant'>
                         <tbody class="details">
                             <% @variant.segments.each_with_index do |segment, segment_counter| %>
@@ -49,55 +48,73 @@
                     <!-- Данные пассажира -->
                     
                     <dt><b>2</b>Введите данные пассажира(ов)
-                    <%= render :partial => 'person_form', :collection => @people %>
+                        <%= render :partial => 'person_form', :collection => @people %>
 
                     <!-- Банковская карточка -->
 
-                    <%= render 'card_form' %>
-                    
+                    <dt><b>3</b>Введите данные банковской карты
+                        <%= render 'card_form' %>
 
                     <dt><b>4</b>Введите данные покупателя
-                    <dd class="booking-contacts">
-                        <table>
-                            <tr>
-                                <td>
-                                    <input type="text" 
-                                     id="booking-contacts-email"
-                                     name="contacts[email]"
-                                     class="text g-xl"
-                                     tabindex="22"
-                                     value="Адрес электронной почты"
-                                     onclick="return {defaultValue: 'Адрес электронной почты'}"
-                                     title=""
-                                    >
-                                <td>
-                                    <input type="text" 
-                                     id="booking-contacts-phone"
-                                     name="contacts[phone]"
-                                     class="text g-xl"
-                                     tabindex="23"
-                                     value="Номер телефона"
-                                     onclick="return {defaultValue: 'Номер телефона'}"
-                                     title=""
-                                    >
-                            <tr>
-                                <td>
-                                    <label
-                                     for="booking-contacts-email"
-                                     class="g-xxs sub"
-                                    >На&nbsp;этот адрес будет выслан электронный билет&nbsp;<a href=# class="more"></a></label></label>
-                                <td>
-                                    <label
-                                     for="booking-contacts-phone"
-                                     class="g-xxs sub"
-                                     >Для чего он нужен?&nbsp;<a href=# class="more"></a></label>
-                        </table>
-                    
-                    </dd>
+                        <dd class="booking-contacts">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <input type="text" 
+                                         id="booking-contacts-email"
+                                         name="contacts[email]"
+                                         class="text g-xl"
+                                         tabindex="22"
+                                         value="Адрес электронной почты"
+                                         onclick="return {defaultValue: 'Адрес электронной почты'}"
+                                         title=""
+                                        >
+                                    <td>
+                                        <input type="text" 
+                                         id="booking-contacts-phone"
+                                         name="contacts[phone]"
+                                         class="text g-xl"
+                                         tabindex="23"
+                                         value="Номер телефона"
+                                         onclick="return {defaultValue: 'Номер телефона'}"
+                                         title=""
+                                        >
+                                <tr>
+                                    <td>
+                                        <label
+                                         for="booking-contacts-email"
+                                         class="g-xxs sub"
+                                        >На&nbsp;этот адрес будет выслан электронный билет&nbsp;<a href=# class="more"></a></label></label>
+                                    <td>
+                                        <label
+                                         for="booking-contacts-phone"
+                                         class="g-xxs sub"
+                                         >Для чего он нужен?&nbsp;<a href=# class="more"></a></label>
+                            </table>
+                        </dd>
 
-                    <dt><b>5</b>Всё правильно? Нажмите [Забронировать]
-                    <dd class="booking-book">
-                        <br/><br/><br/>тут показать результаты бронирования?<br/><br/><br/>
+                    <dt><b>5</b>Всё правильно?
+                    <dd class="booking-book disabled">
+                        <b>Нажмите</b><a href="#" class="b-submit">забронировать</a>
+                        <br>
+                        <div class="blocker g-xs">
+                            <s></s>
+                            <p>Пока невозможно. Вот по каким причинам:
+                            <ul class="b-pseudo">
+                                <li>
+                                    хуёвый какой-то <a href=# title="Отредактировать номер"><u>номер карточки</u></a>
+                                <li>
+                                    <a href=# title="Отредактировать имя"><u>имя</u></a> у тебя уёбищное
+                                <li>
+                                    да и вообще ты мудак
+                            </ul>
+                        </div>
+
+                        <p class="notice">
+                            Браток, если меньжанулся &mdash; кашляни предъяву Коляну на трубу (916) 933-хххх.
+                            Авторитетный пацан для тёрок.
+                        </p>
+
                     </dd>
 
                 </dl>
