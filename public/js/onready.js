@@ -266,7 +266,7 @@
     });
     
     // кнопка отправки запроса
-    $('#search-submit .button').click(function(event) {
+    $('#search-submit .b-submit').click(function(event) {
         event.preventDefault();
         if (!$(this).parent().hasClass('disabled')) {
             app.offers.show();
