@@ -7,6 +7,7 @@ class BookingController < ApplicationController
     require 'flight'
     @variant = Marshal.load(File.read(Rails.root + 'db/variant.marshal'))
     @people = [1,2, 3]
+    @people_count = {:adults => 1, :children => 1, :infants => 1}
     @card = Billing::CreditCard.new(valid_card)
   end
 
