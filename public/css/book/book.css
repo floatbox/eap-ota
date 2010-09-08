@@ -374,6 +374,7 @@ ul.bankcard {
     padding: 1px 4px;
 
     background: #e8e8e8;
+    text-shadow: 2px 1px 0 rgba(200, 200, 200, 1);
 }
 
     /* Лицевая сторона */
@@ -469,6 +470,7 @@ ul.bankcard {
         width: 2em;
 
         letter-spacing: -.1em;
+        text-shadow: none;
     }
 
     .bankcard .bankcardbankname {
@@ -482,6 +484,8 @@ ul.bankcard {
         width: 286px;
 
         padding: 2px 4px;
+
+        text-shadow: none;
     }
 
 
@@ -565,12 +569,18 @@ ul.bankcard {
     padding: 10px 25px;
 
     color: #333;
-    background: #fff8d2;
+    background: #fff;
 
     border-radius: 15px;
     -moz-border-radius: 15px;
     -webkit-border-radius: 15px;
     -o-border-radius: 15px;
+
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+
 }
 
     .booking-book .blocker s {
@@ -584,11 +594,8 @@ ul.bankcard {
 
 
         border-style: solid;
-        border-color: transparent #fff8d2 transparent transparent;
+        border-color: transparent #fff transparent transparent;
         border-width: 25px 20px 0 0 ;
-
-
-        ackground: #fff8d2;
     }
 
     .booking-book .blocker p {
@@ -609,6 +616,7 @@ ul.bankcard {
 
     color: #333;    
 }
+
 
 
 

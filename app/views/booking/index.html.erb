@@ -20,7 +20,6 @@
 
             <div id="offers-title">
                 <h1>из Москвы в Париж и обратно с 8 по 15 сентября вдвоём с ребёнком</h1>
-                Взрослых: <%= @people_count[:adults] %>, детей: <%= @people_count[:children] %>, младенцев: <%= @people_count[:infants] %>
                 <h5 class="g-xxs">
                     <a href=#>Вернуться к&nbsp;результатам поиска</a>
                     или
@@ -29,7 +28,6 @@
             </div>
 
             <form method="post">
-
                 <dl class="booking">
 
                     <!-- Вариант перелёта -->
@@ -45,11 +43,13 @@
                         </table>
                     </dd>
 
-                    <!-- Данные пассажира -->
+                    <!-- Данные пассажиров -->
                     
                     <dt><b>2</b>Введите данные <%= @people.count == 1 ? 'пассажира' : 'пассажиров' %>
 
                         <%= render :partial => 'person_form', :collection => @people %>
+
+                        Взрослых: <%= @people_count[:adults] %>, детей: <%= @people_count[:children] %>, младенцев: <%= @people_count[:infants] %>
 
                     <!-- Банковская карточка -->
 
@@ -57,41 +57,12 @@
 
                         <%= render 'card_form' %>
 
+
+                    <!-- Контакты -->
+
                     <dt><b>4</b>Введите данные покупателя
-                        <dd class="booking-contacts">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <input type="text" 
-                                         id="booking-contacts-email"
-                                         name="contacts[email]"
-                                         class="text g-xl"
-                                         value="Адрес электронной почты"
-                                         onclick="return {defaultValue: 'Адрес электронной почты'}"
-                                         title=""
-                                        >
-                                    <td>
-                                        <input type="text" 
-                                         id="booking-contacts-phone"
-                                         name="contacts[phone]"
-                                         class="text g-xl"
-                                         value="Номер телефона"
-                                         onclick="return {defaultValue: 'Номер телефона'}"
-                                         title=""
-                                        >
-                                <tr>
-                                    <td>
-                                        <label
-                                         for="booking-contacts-email"
-                                         class="g-xxs sub"
-                                        >На&nbsp;этот адрес будет выслан электронный билет&nbsp;<a href=# class="more"></a></label></label>
-                                    <td>
-                                        <label
-                                         for="booking-contacts-phone"
-                                         class="g-xxs sub"
-                                         >Для чего он нужен?&nbsp;<a href=# class="more"></a></label>
-                            </table>
-                        </dd>
+
+                        <%= render 'contacts_form' %>
 
                     <dt class="disabled"><b>5</b>Всё правильно? Нажмите <a href="#" class="b-submit">забронировать</a>
                     <dd class="booking-book">
@@ -100,12 +71,9 @@
                             <s></s>
                             <p>Пока невозможно. А хули?
                             <ul class="b-pseudo">
-                                <li>
-                                    херовый у тебя <a href=# title="Отредактировать номер"><u>номер карточки</u></a>
-                                <li>
-                                    <a href=# title="Отредактировать имя"><u>имя</u></a> у тебя уёбищное
-                                <li>
-                                    да и вообще ты мудак
+                                <li>херовый у тебя <a href=# title="Отредактировать номер"><u>номер карточки</u></a>
+                                <li><a href=# title="Отредактировать имя"><u>имя</u></a> у тебя уёбищное
+                                <li>да и вообще ты мудак
                             </ul>
                         </div>
 
@@ -119,8 +87,8 @@
                     </dd>
 
                 </dl>
-
             </form>
+
         </div>
         
         <div class="l-canvas-bottom"></div>

@@ -112,6 +112,11 @@ body * {
     visibility: hidden!important;
 }
 
+.g-block
+{
+    display: block!important;
+}
+
 .g-fixed
 {
     position: fixed!important;
