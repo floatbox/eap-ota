@@ -33,6 +33,7 @@
                     <!-- Вариант перелёта -->
 
                     <dt><b>1</b>Проверьте, что вы бронируете
+
                     <dd class="booking-variant state-valid">
                         <table class='offer-variant'>
                         <tbody class="details">
@@ -41,6 +42,38 @@
                             <% end %>  
                         </tbody>
                         </table>
+                    
+                        <div class="tarif">
+                            <h3 class="g-xs">Важно</h3>
+                            <ul class="g-xxs">
+                                <li>Эти билеты невозвратные.
+                                <li>Максимальный вес бесплатного багажа - 20 Кг.
+                                <li>Перенести дату вылета можно за сутки до вылета или ранее.
+                                <li>Стоимость переноса - 20% от стоимости тарифа (5&nbsp;150&nbsp;<s class="rur">р<s>уб.</s></s>).
+                            </ul>
+                            <span class="g-xxs">Прочитать <a href=# class="b-pseudo"><u>текст тарифа целиком</u></a></span>
+                            <!-- 
+                                &nbsp;<u class="b-expand" title="Посмотреть полное описание тарифа"></u><u class="g-none">&hellip;</u>
+                            -->
+                            <pre class="g-none">
+0.  APPLICATION AND OTHER CONDITIONS
+RULE - 021/0921
+UNLESS OTHERWISE SPECIFIED
+ECONOMY NORMAL FARE WITHIN EUROPE VIA MSQ
+ APPLICATION
+   AREA
+     THESE FARES APPLY
+     WITHIN EUROPE
+     VIA MSQ.
+   CLASS OF SERVICE
+     THESE FARES APPLY FOR ECONOMY CLASS SERVICE.
+   TYPES OF TRANSPORTATION
+     FARES GOVERNED BY THIS RULE CAN BE USED TO CREATE
+     ONE-WAY/ROUND-TRIP JOURNEYS.
+   FARES ONLY APPLY IF PURCHASED BEFORE DEPARTURE
+                            </pre>
+                        </div>
+                    
                     </dd>
 
                     <!-- Данные пассажиров -->
@@ -97,38 +130,6 @@
     <div class="l-footer">
         <%= render 'shared/footer' %>
     </div>
-
-<!--
-<div class="tarif">
-    <h1>Важно</h1>
-    <ul>
-        <li>Эти билеты невозвратные.
-        <li>Максимальный вес бесплатного багажа - 20 Кг.
-        <li>Перенести дату вылета можно за сутки до вылета или ранее.
-        <li>Стоимость переноса - 20% от стоимости тарифа (5&nbsp;150&nbsp;<s class="rur">р<s>уб.</s></s>).
-    </ul>
-    
-    <a href="#" class="b-pseudo more more-collapsed-" title="Посмотреть полное описание тарифа"><u>текст тарифа полностью</u><s></s></a>
-
-    <pre class="g-none-">
-        0.  APPLICATION AND OTHER CONDITIONS
-        RULE - 021/0921
-        UNLESS OTHERWISE SPECIFIED
-        ECONOMY NORMAL FARE WITHIN EUROPE VIA MSQ
-         APPLICATION
-           AREA
-             THESE FARES APPLY
-             WITHIN EUROPE
-             VIA MSQ.
-           CLASS OF SERVICE
-             THESE FARES APPLY FOR ECONOMY CLASS SERVICE.
-           TYPES OF TRANSPORTATION
-             FARES GOVERNED BY THIS RULE CAN BE USED TO CREATE
-             ONE-WAY/ROUND-TRIP JOURNEYS.
-           FARES ONLY APPLY IF PURCHASED BEFORE DEPARTURE
-    </pre>
-</div>
--->
 
 </body>
 </html>
