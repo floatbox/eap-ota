@@ -44,11 +44,11 @@ module Billing #:nodoc:
     self.require_verification_value = true
 
     # Essential attributes for a valid, non-bogus creditcards
-    attr_accessor :number, :month, :year, :type, :first_name, :last_name
+    attr_accessor :month, :year, :type, :first_name, :last_name
+    attr_writer :number, :number1, :number2, :number3, :number4
 
     # Required for Switch / Solo cards
     attr_accessor :start_month, :start_year, :issue_number
-    attr_accessor :number1, :number2, :number3, :number4
 
     # Optional verification_value (CVV, CVV2 etc). Gateways will try their best to
     # run validation on the passed in value if it is supplied
@@ -57,6 +57,28 @@ module Billing #:nodoc:
     # Provides proxy access to an expiry date object
     def expiry_date
       ExpiryDate.new(@month, @year)
+    end
+    
+    def number
+      numbers = [@number1, @number2, @number3, @number4]
+      (numbers.all? && numbers.every.to_s.join) || @number
+    end
+    
+    #для сохранения обратной совместимости остался и старый attr_writer :number
+    def number1
+      @number1 || (@number && @number.length == 16 && @number[0..3])
+    end
+    
+    def number2
+      @number2 || (@number && @number.length == 16 && @number[4..7])
+    end
+    
+    def number3
+      @number3 || (@number && @number.length == 16 && @number[8..11])
+    end
+    
+    def number4
+      @number4 || (@number && @number.length == 16 && @number[12..15])
     end
 
     def expired?
