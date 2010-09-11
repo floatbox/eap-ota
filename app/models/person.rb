@@ -5,7 +5,7 @@ class Person < ActiveRecord::BaseWithoutTable
   column :nationality_id, :integer
   belongs_to :nationality, :class_name => 'Country'
   column :birthday, :date
-  column :document_expiretion_date, :date
+  column :document_expiration_date, :date
   column :passport, :string, "Номер документа"
   column :document_noexpiration, :boolean
   column :bonus_present, :boolean

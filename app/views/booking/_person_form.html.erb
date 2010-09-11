@@ -85,23 +85,23 @@
             <td>
                 <input type="text" 
                  id="booking-person-<%=person_form_counter+1%>-expires-d"
-                 name="data[person_attributes][][document_expiretion_date(3i)]"
+                 name="data[person_attributes][][document_expiration_date(3i)]"
                  class="text text-dd g-xl"
-                 value=<%= (person_form.document_expiretion_date &&  person_form.document_expiretion_date.day) ||"день"%>
+                 value=<%= (person_form.document_expiration_date &&  person_form.document_expiration_date.day) ||"день"%>
                  maxlength="2"
                  onclick="return {defaultValue: 'день'}"
                 ><input type="text" 
                  id="booking-person-<%=person_form_counter+1%>-expires-m"
-                 name="data[person_attributes][][document_expiretion_date(2i)]"
+                 name="data[person_attributes][][document_expiration_date(2i)]"
                  class="text text-mm g-xl"
-                 value=<%= (person_form.document_expiretion_date &&  person_form.document_expiretion_date.month) ||"месяц"%>
+                 value=<%= (person_form.document_expiration_date &&  person_form.document_expiration_date.month) ||"месяц"%>
                  maxlength="10"
                  onclick="return {defaultValue: 'месяц'}"
                 ><input type="text" 
                  id="booking-person-<%=person_form_counter+1%>-expires-y"
-                 name="data[person_attributes][][document_expiretion_date(1i)]"
+                 name="data[person_attributes][][document_expiration_date(1i)]"
                  class="text text-yyyy g-xl"
-                 value=<%= (person_form.document_expiretion_date &&  person_form.document_expiretion_date.year) ||"год"%>
+                 value=<%= (person_form.document_expiration_date &&  person_form.document_expiration_date.year) ||"год"%>
                  maxlength="4"
                  onclick="return {defaultValue: 'год'}"
                 >
