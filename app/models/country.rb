@@ -31,5 +31,30 @@ class Country < ActiveRecord::Base
     end
     url
   end
-
+ 
+  def self.options_for_nationality_select
+    [ ['', [['Россия', 170]]],
+      [ '&mdash;&mdash;&mdash;&mdash;',
+        [['Азербайджан', 3],
+        ['Армения', 13],
+        ['Белорусь', 20],
+        ['Грузия', 58],
+        ['Казахстан', 81],
+        ['Киргизия', 88],
+        ['Латвия', 102],
+        ['Литва', 108],
+        ['Молдова', 127],
+        ['Таджикистан', 200],
+        ['Туркмения', 211],
+        ['Узбекистан', 214],
+        ['Украина', 215],
+        ['Эстония', 242]
+      ]],
+      ['&mdash;&mdash;&mdash;&mdash;',
+        Country.all(:order => :name_ru).map{ |c|
+          ([c.name_ru.to_s + (c.full_name_ru ?  ' - ' + c.full_name_ru : ''), c.id])
+        } 
+      ]
+    ]
+  end
 end
