@@ -54,22 +54,22 @@ a.a-button:active {
 
 /* Кнопка сворачивания */
 
-    .b-expand {
-        display: inline-block;
+.b-expand {
+    display: inline-block;
 
-        position: relative;
-        left: 0;
-        top: 0;
-        
-        width: 11px;
-        height: 6px;
-        margin: 0 0 0 .2em;
+    position: relative;
+    left: 0;
+    top: 0;
+    
+    width: 11px;
+    height: 6px;
+    margin: 0 0 0 .2em;
 
-        cursor: pointer;
-        vertical-align: 1px;
+    cursor: pointer;
+    vertical-align: 1px;
 
-        background: url(/img/arr-up-down.gif) no-repeat left bottom;
-    }
+    background: url(/img/arr-up-down.gif) no-repeat left bottom;
+}
 
     .b-expand:hover {
         background-position: -11px bottom;

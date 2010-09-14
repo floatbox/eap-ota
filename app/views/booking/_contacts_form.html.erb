@@ -21,14 +21,33 @@
                 >
         <tr>
             <td>
-                <label
-                 for="booking-contacts-email"
-                 class="g-xxs sub"
-                >на&nbsp;этот адрес будет выслан электронный билет&nbsp;<u class="b-expand" title="и чтобы узнать вас в следующий раз&hellip;"></u><u class="g-none">&hellip;</u></label>
+                <div class="sub g-xxs">
+                    <label 
+                     for="booking-contacts-email"
+                     title=""
+                    >
+                        На&nbsp;этот адрес мы вышлем <%= @people.count == 1 ? 'ваш билет' : 'ваши билеты' %>
+                    </label>&nbsp;<u class="b-expand" title="Для чего ещё нужен E-mail?"></u>
+                    <p>
+                        Адрес должен быть реально существующим, чтобы вы смогли получить электронный билет и полезные инструкции.
+                        <br/>
+                        Кроме того, по этому адресу мы узнаем вас при следующем визите и сделаем вашу работу с сайтом ещё удобнее.
+                    </p>
+                </div>
+
             <td>
-                <label
-                 for="booking-contacts-phone"
-                 class="g-xxs sub"
-                 >для чего он нужен?&nbsp;<u class="b-expand" title="для связи в экстренных случаях, а именно&hellip;"></u><u class="g-none">&hellip;</u></label>
+                <div class="sub g-xxs">
+                    <label 
+                     for="booking-contacts-phone"
+                     title=""
+                    >Для чего он нужен?</label>&nbsp;<u class="b-expand" title="Подробнее об обратной связи"></u>
+                    <p>
+                        Телефон иногда полезен для связи в экстренных случаях, например, чтобы:
+                            <br/>- уладить затруднения с оплатой;
+                            <br/>- сообщить об изменении расписания;
+                            <br/>- ?
+                    </p>
+                </div>
+
     </table>
 </dd>
