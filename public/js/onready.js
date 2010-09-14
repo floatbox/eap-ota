@@ -144,9 +144,9 @@
         ],
         
         cls: [
-            {v: 1, t: 'эконом-'},
-            {v: 2, t: 'бизнес-'},
-            {v: 3, t: 'первый '}
+            {v: 'Y', t: 'эконом-'},
+            {v: 'C', t: 'бизнес-'},
+            {v: 'F', t: 'первый '}
         ],
 
         dpt_time_0: [],
@@ -191,6 +191,14 @@
         var value = $(this).trigger('get').data('value')[0];
         app.search.update({
             'nonstop': value && value.v == 1 ? 1 : 0
+        }, this);
+    });
+
+    // обработка класса
+    tools.defines['cls'].bind('change', function() {
+        var value = $(this).trigger('get').data('value')[0];
+        app.search.update({
+            'cabin': value && value.v
         }, this);
     });
     
