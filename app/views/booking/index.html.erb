@@ -27,7 +27,7 @@
                 </h5>
             </div>
 
-            <form method="post">
+            <% form_for :card, @card, :url => booking_pay_path do |f| %>
                 <dl class="booking">
 
                     <!-- Вариант перелёта -->
@@ -85,7 +85,7 @@ ECONOMY NORMAL FARE WITHIN EUROPE VIA MSQ
 
                     <dt><b>3</b>Введите данные банковской карты
 
-                        <%= render 'card_form' %>
+                        <%= render 'card_form' , :f => f%>
 
 
                     <!-- Контакты -->
@@ -117,7 +117,9 @@ ECONOMY NORMAL FARE WITHIN EUROPE VIA MSQ
                     </dd>
 
                 </dl>
-            </form>
+            
+
+                <% end %>
 
         </div>
         

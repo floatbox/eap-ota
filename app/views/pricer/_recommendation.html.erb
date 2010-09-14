@@ -1,4 +1,4 @@
-<div class="offer collapsed">
+<div class="offer collapsed<%= ' multiple' if recommendation.variants.length > 1 %>" data-summary='{"price": <%= recommendation.price_total %>}'>
 <% recommendation.variants.each_with_index do |variant, variant_index| %>
 <%= render :partial => 'variant', :locals => {:variant => variant, :recommendation => recommendation, :variant_index => variant_index} %>
 <% end %>

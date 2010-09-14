@@ -43,6 +43,22 @@
     margin: 0 0 4px;
 }
 
+.offers-sort p 
+{
+	color: #4B4B4B;
+}
+
+.offers-sort a 
+{
+	color: #4B4B4B;
+}
+
+.offers-sort a:hover 
+{
+	color: #000;
+}
+
+
 /* Предложение */
 .offer
 {
@@ -59,13 +75,13 @@
 
 .offer .aux
 {
-	font-size: 11px;
-	
-	padding: 0 10px;
-	
-	text-align: right;
-	
-	color: #999;
+    font-size: 11px;
+    
+    padding: 0 10px;
+    
+    text-align: right;
+    
+    color: #999;
 }
 
 .offer th,

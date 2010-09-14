@@ -41,6 +41,12 @@ init: function() {
         $(this).closest('.offer').removeClass('expanded').addClass('collapsed');
     });
     
+    // Сортировка
+    $('#offers-list').delegate('.offers-sort a', 'click', function(event) {
+        event.preventDefault();
+        app.offers.sortBy($(this).attr('data-key'));
+    });
+    
     // Выбор времени вылета
     $('#offers-list').delegate('td.variants a', 'click', function(event) {
         event.preventDefault();
@@ -171,6 +177,9 @@ getSummary: function(el) {
     }
     return summary;
 },
+showVariant: function(el) {
+    $(el).removeClass('g-none').siblings().addClass('g-none');
+},
 applyFilter: function(name, values) {
     var self = this, filters = this.activeFilters;
     if (values.length) {
@@ -224,31 +233,48 @@ applyFilter: function(name, values) {
     list.show();
     this.showAmount(proper_amount);
 },
-showVariant: function(el) {
-    $(el).removeClass('g-none').siblings().addClass('g-none');
-},
 sortBy: function(key) {
-    var self = this. items = [], list = $('#offers-all');
+    var self = this, items = [], list = $('#offers-all');
     list.hide().children('.offer').each(function() {
-        var offer = $(this), item = {offer: offer}, variant;
-        offer.children('.offer-variant').each(function() {
-            var value = self.getSummary($(this))[key];
-            if (item.value === undefined || value < item.value) {
-                item.value = value;
-                variant = $(this);
-            }
-        });
-        self.showVariant(variant);
+        var offer = $(this), summary = self.getSummary(offer);
+        var ovalue = summary[key], item = {offer: offer, price: summary.price};
+        if (ovalue) {
+            item.value = ovalue;
+        } else if (offer.hasClass('multiple')) {
+            var variant;
+            offer.children('.offer-variant').each(function() {
+                var value = self.getSummary($(this))[key];
+                if (value instanceof Array) value = value[0];
+                if (item.value === undefined || value < item.value) {
+                    item.value = value;
+                    variant = $(this);
+                }
+            });
+            self.showVariant(variant);
+        } else {
+            var value = self.getSummary(offer.children().first())[key];
+            if (value instanceof Array) value = value[0];
+            item.value = value;
+        }
         items.push(item);
     });
     items.sort(function(a, b) {
         if (a.value > b.value) return 1;
         if (a.value < b.value) return -1;
+        if (a.price > b.price) return 1;
+        if (a.price < b.price) return -1;
         return 0;
     });
     for (var i = 0, lim = items.length; i < lim; i++) {
         list.append(items[i].offer);
     }
+    var context = $('.offers-sort', list);
+    $('.b-pseudo', context).each(function() {
+        var hidden = ($(this).attr('data-key') == key);
+        $(this).toggleClass('g-none', hidden).next('.spacer').text(', ').toggleClass('g-none', hidden);
+        if (hidden) $('#offers-sortedby').text($(this).text());
+    });
+    $('.offers-sort .spacer:not(.g-none)', list).last().text(' или ');
     list.show();
 }
 });

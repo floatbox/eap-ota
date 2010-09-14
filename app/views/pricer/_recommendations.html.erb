@@ -16,7 +16,7 @@
     <div id="offers-all" class="offers" data-amount="<%= @recommendations.size %>">
         <div class="offers-sort">
             <h3 class="offers-title">Все варианты, отсортированные <span id="offers-sortedby">по цене</span></h3>
-            <p>можно <span class="sortby g-none" data-key="price">по цене</span><span class="spacer g-none">, </span><span class="sortby" data-key="duration">по времени в пути</span><span class="spacer">, </span><span class="link">по времени вылета</span><span class="spacer"> или <span><span class="link">по авиакомпании</span></p>
+            <p>можно <a href="#" class="b-pseudo g-none" data-key="price"><u>по цене</u></a><span class="spacer g-none">, </span><a href="#" class="b-pseudo" data-key="duration"><u>по времени в пути</u></a><span class="spacer">, </span><a href="#" class="b-pseudo" data-key="departures"><u>по времени вылета</u></a><span class="spacer"> или </span><span class="link">по авиакомпании</span></p>
         </div>
         <%= render :partial => 'recommendation', :collection => @recommendations %>
     </div>
