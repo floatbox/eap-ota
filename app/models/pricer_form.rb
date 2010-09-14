@@ -11,6 +11,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   column :nonstop, :boolean
   column :day_interval, :integer, 1
   column :debug, :boolean, false
+  column :cabin, :string
 
   validates_presence_of :from_iata, :to_iata, :date1
   validates_presence_of :date2, :if => :rt
@@ -133,7 +134,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     xml.xpath("//r:recommendation").map do |rec|
       prices = rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").collect {|x| x.to_i }
       price_total = prices.sum
-
+      cabins = rec.xpath("r:paxFareProduct/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:cabin").every.to_s
       # компаний может быть несколько, нас интересует та, где
       # r:transportStageQualifier[text()="V"]. но она обычно первая.
       validating_carrier_iata =
@@ -154,13 +155,14 @@ class PricerForm < ActiveRecord::BaseWithoutTable
         }.join("\n\n") +
         "\n\nfareBasis: " +
         rec.xpath('.//r:fareBasis').to_s
-
+      #cabins остаются только у recommendation и не назначаются flight-ам, тк на один и тот же flight продаются билеты разных классов
       Recommendation.new(
         :prices => prices,
         :price_total => price_total,
         :variants => variants,
         :validating_carrier_iata => validating_carrier_iata,
-        :additional_info => additional_info
+        :additional_info => additional_info,
+        :cabins => cabins
       )
     end
   end

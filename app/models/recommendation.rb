@@ -1,6 +1,6 @@
 class Recommendation
 
-  attr_accessor :prices, :variants, :price_total, :additional_info, :validating_carrier_iata
+  attr_accessor :prices, :variants, :price_total, :additional_info, :validating_carrier_iata, :cabins
 
   def initialize keys={}
     keys.each do |attr, value|
