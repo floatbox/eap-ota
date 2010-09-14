@@ -8,14 +8,7 @@ $(function() {
         var d = e.onclick().defaultValue;
         var v = $.trim(e.value);
 
-        //if (v == d) e.value = '';
-
-        var f = function() {
-            e.value = e.value.slice(1);
-            e.value && window.setTimeout(f, 1);
-        };
-
-        v == d && f();
+        if (v == d) e.value = '';
     })
     .blur(function(e) {
         e = e.target;
@@ -28,13 +21,10 @@ $(function() {
     // раскрывающаяся подсказка
 
     $('.b-expand')
-    .click(function(e) {
+    .mousedown(function(e) {
         var $u = $(this);
         $u.toggleClass('b-expand-up');
-        
-        $u = $u.next();
-
-        $u.show();
+        $u.next('p').slideToggle(200);
     });
 
 

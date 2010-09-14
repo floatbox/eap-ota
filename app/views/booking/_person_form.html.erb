@@ -6,11 +6,11 @@
 <dd class="booking-persons state-validating">
     <table>
         <tr>
-            <td>
+            <td class="g-middle">
                 <%= person.text_field :first_name, :id =>"booking-person-#{person_form_counter+1}-fname", :class => "text g-xl", :onclick => "return {defaultValue: 'Имя'}"%>
-            <td>
+            <td class="g-middle">
                 <%= person.text_field :last_name, :id =>"booking-person-#{person_form_counter+1}-lname", :class => "text g-xl", :onclick => "return {defaultValue: 'Фамилия'}"%>
-            <td>
+            <td rowspan="2">
                 <ul class="radio g-xxs">
                     <li>
                       <%= person.radio_button :sex, 'm', :id =>  "booking-person-#{person_form_counter+1}-sex-m"%><label for="booking-person-<%=person_form_counter+1%>-sex-m" value='m'>мужской</label>
@@ -19,19 +19,17 @@
                 </ul>
 
         <tr>
-            <td colspan="3">
-                <label 
-                 for="for="booking-person-<%=person_form_counter+1%>-fname""
-                 class="g-xxs sub">
-                    латинскими буквами, как в загранпаспорте или банковской карточке&nbsp;<u class="b-expand" title="Как написать имя&hellip;"></u>
-                    <u class="b-expand-body">
+            <td colspan="2">
+                <div class="g-xxs sub">
+                    Латинскими буквами, как в загранпаспорте или банковской карточке&nbsp;<u class="b-expand" title="Как правильно написать имя&hellip;"></u>
+                    <p>
                         Имя и&nbsp;фамилия в авиабилете пишутся латинскими буквами.
                         <br/>
-                        Написание должно быть точно таким, как в&nbsp;документе, по&nbsp;которому будет выполняться полёт.
+                        Написание должно быть точно как в&nbsp;документе, по&nbsp;которому будет выполняться полёт.
                         <br/>
                         Дефисы и&nbsp;другие знаки нужно пропустить&nbsp;&mdash;&nbsp;разрешены только буквы.
-                    </u>
-                </label>
+                    </p>
+                </div>
 
         <tr>
             <td>
@@ -93,6 +91,18 @@
         <tr>
             <td>
                 <%= person.text_field :passport, :id => "booking-person-#{person_form_counter+1}-passport", :class => "text g-xl", :maxlength => '20', :onclick => "return {defaultValue: 'Номер документа'}" %>
+                <div class="sub g-xxs">
+                    Например, загранпаспорта&nbsp;<u class="b-expand" title="Подробнее о документах&hellip;"></u>
+                    <p>
+                        Вы должны быть уверены, что документ пригоден для посещения выбранной страны.
+                        <br/>
+                        Россиянам для полётов внутри страны и в нек страны СНГ обычно подходит общегр пасп, но можно и загран; а за бугор - только загран. Детям - загран или свидетельство.
+                        <br/>
+                        Подробнее см. &laquo;<a href="http://ru.wikipedia.org/wiki/Визовые_требования_для_граждан_России" target="_blank">визовые требования</a>&raquo; на Википедии,
+                        а также нашу справочну систему.
+                    </p>
+                </div>
+
             <td>
                 <input type="text" 
                  id="booking-person-<%=person_form_counter+1%>-expires-d"
@@ -116,36 +126,38 @@
                  maxlength="4"
                  onclick="return {defaultValue: 'год'}"
                 >
-            <td class="noexp">
-                <%= person.check_box :document_noexpiration, {:id => "booking-person-#{person_form_counter+1}-noexpiration", :class => "g-middle"} %>
-                <label 
-                 for="booking-person-<%=person_form_counter+1%>-noexpiration"
-                 class="g-xxs"
-                 title="Срока действия нет, например, у российского гражданского паспорта и свидетельства о рождении. Однако, у загранпаспорта срок действия есть, и его надо указать."
-                 >у&nbsp;этого документа нет срока действия</label>
 
+                <div class="sub g-xxs">
+                    <%= person.check_box :document_noexpiration, {:id => "booking-person-#{person_form_counter+1}-noexpiration", :class => "g-middle", :style => "margin:0"} %>
+                    <label 
+                     for="booking-person-<%=person_form_counter+1%>-noexpiration"
+                     title=""
+                     >нет срока действия</label>&nbsp;<u class="b-expand" title="О сроке действия&hellip;"></u>
 
-        <tr>
-            <td colspan="2">
-                <label for="booking-person-<%=person_form_counter+1%>-passport" class="sub g-xxs">например, загранпаспорта&nbsp;<u class="b-expand" title="Подробнее о документах&hellip;"></u><u class="g-none">&hellip;</u></label>
+                     <p>
+                         Срока действия нет, например, у российского гражданского паспорта и свидетельства о рождении. Однако, у загранпаспорта срок действия есть, и его надо указать.
+                     </p>
+                </div>
             <td>
-        <tr>
-            <td>
-                <%= person.check_box :bonus_present, {:id => "booking-person-#{person_form_counter+1}-bonus",
-                :class => 'g-middle'} %>
-                <label 
-                 for="booking-person-<%=person_form_counter+1%>-bonus"
-                 class="g-xxs"
-                 title="Карта участника программы премирования пассажиров (мильной программы или программы для&nbsp;часто летающих пассажиров, англ. frequent flyer program)"
-                 >у&nbsp;пассажира есть бонусная карта</label>
 
-                 <!-- http://ru.wikipedia.org/wiki/Бонусные_программы_авиакомпаний -->
+        <tfoot>
+            <tr>
+                <td>
+                    <%= person.check_box :bonus_present, {:id => "booking-person-#{person_form_counter+1}-bonus",
+                    :class => 'g-middle'} %>
+                    <label 
+                     for="booking-person-<%=person_form_counter+1%>-bonus"
+                     class="g-xxs"
+                     title="Карта участника программы премирования пассажиров (мильной программы или программы для&nbsp;часто летающих пассажиров, англ. frequent flyer program)"
+                     >у&nbsp;пассажира есть бонусная карта</label>
 
-            <td>
-                <%= person.select :bonuscard_type, ['Аэрофлот Бонус', 'Бонусявый Бонус', 'Бонюсючий Бонус'],
-                {}, :id => "booking-person-#{person_form_counter+1}-bonuscard", :class => 'text text-noempty g-xl g-hidden'  %>
-            <td>
-                <%=person.text_field :bonuscard_number, :class => 'text text-bonus g-xl g-hidden', :id => "booking-person-#{person_form_counter+1}-bonuscardnumber", :maxlength => '20', :onclick => "return {defaultValue: 'Номер карты'}" %>
+                     <!-- http://ru.wikipedia.org/wiki/Бонусные_программы_авиакомпаний -->
+
+                <td>
+                    <%= person.select :bonuscard_type, ['Аэрофлот Бонус', 'Бонусявый Бонус', 'Бонюсючий Бонус'],
+                    {}, :id => "booking-person-#{person_form_counter+1}-bonuscard", :class => 'text text-noempty g-xl g-hidden'  %>
+                <td>
+                    <%=person.text_field :bonuscard_number, :class => 'text text-bonus g-xl g-hidden', :id => "booking-person-#{person_form_counter+1}-bonuscardnumber", :maxlength => '20', :onclick => "return {defaultValue: 'Номер карты'}" %>
     </table>
 </dd>
 <% end  %>

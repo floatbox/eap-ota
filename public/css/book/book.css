@@ -136,14 +136,18 @@ dl.booking dd {
         color: #333;
     }
 
-/* Метки - общие свойства */
+/* Подписи к полям */
 
-    dl.booking label.sub {
-        display: block;
-
-        margin: 2px 0;
+    dl.booking div.sub {
+        margin: 4px 0;
 
         color: #777;
+    }
+
+    dl.booking div.sub p {
+        display: none;
+
+        margin: 2px 0 0 0;
     }
 
 /* Прочее - общие свойства */
@@ -223,14 +227,11 @@ dl.booking dd.booking-persons {
 .booking-persons table td {
     padding: 0 0 0 10px;
 
-    vertical-align: middle;
+    vertical-align: top;
 }
 
-.booking-persons td.noexp {
-    padding-left: 32px;
-
-    text-indent: -22px;
-    vertical-align: top;
+.booking-persons table tfoot td {
+    vertical-align: middle;
 }
 
 /* метки */
@@ -248,10 +249,14 @@ dl.booking dd.booking-persons {
     color: #333;
 }
 
-.booking-persons td.noexp label {
+.booking-persons label {
     cursor: pointer;
 
-    margin-left: 2px;
+    color: #333;
+}
+
+.booking-persons label:hover {
+    color: #000;
 }
 
 /* радиокнопки с подписями */
