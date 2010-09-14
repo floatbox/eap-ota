@@ -19,9 +19,13 @@ init: function() {
     this.tab = 'best';
 
     // Подсветка
-    $('#offers-list').delegate('.offer', 'mouseover', function() {
-        $(this).addClass('hover');
-    }).delegate('.offer', 'mouseout', function() {
+    $('#offers-list').delegate('.offer', 'mouseenter', function() {
+        var self = $(this);
+        $(this).data('timer', setTimeout(function() {
+            self.addClass('hover');
+        }, 400));
+    }).delegate('.offer', 'mouseleave', function() {
+        clearTimeout($(this).data('timer'));
         $(this).removeClass('hover');
     });
     
@@ -44,7 +48,8 @@ init: function() {
     // Сортировка
     $('#offers-list').delegate('.offers-sort a', 'click', function(event) {
         event.preventDefault();
-        app.offers.sortBy($(this).attr('data-key'));
+        app.offers.sortby = $(this).attr('data-key');
+        app.offers.sortOffers();
     });
     
     // Выбор времени вылета
@@ -140,6 +145,7 @@ processUpdate: function() {
     this.showTab();
     this.toggleLoading(false);
     this.update.content = null;
+    this.sortby = 'price';
     this.updateFilters();
 },
 showTab: function(v) {
@@ -225,32 +231,35 @@ applyFilter: function(name, values) {
     $('.offer', list).each(function() {
         var proper = $(this).children('.offer-variant:not(.improper)');
         $(this).toggleClass('improper', proper.length == 0);
-        if (proper.length) {
-            self.showVariant(proper.eq(0));
-            proper_amount++;
-        }
     });
-    list.show();
+    this.sortOffers();
     this.showAmount(proper_amount);
 },
-sortBy: function(key) {
-    var self = this, items = [], list = $('#offers-all');
+sortOffers: function() {
+    var key = this.sortby, self = this, items = [], list = $('#offers-all');
     list.hide().children('.offer').each(function() {
         var offer = $(this), summary = self.getSummary(offer);
         var ovalue = summary[key], item = {offer: offer, price: summary.price};
         if (ovalue) {
             item.value = ovalue;
+            if (offer.hasClass('multiple')) {
+                self.showVariant(offer.children('.offer-variant:not(.improper)').eq(0));
+            }
         } else if (offer.hasClass('multiple')) {
             var variant;
-            offer.children('.offer-variant').each(function() {
-                var value = self.getSummary($(this))[key];
+            offer.children('.offer-variant:not(.improper)').each(function() {
+                var el = $(this), value = self.getSummary(el)[key];
                 if (value instanceof Array) value = value[0];
                 if (item.value === undefined || value < item.value) {
                     item.value = value;
-                    variant = $(this);
+                    variant = el;
                 }
-            });
-            self.showVariant(variant);
+            });            
+            if (variant) {
+                self.showVariant(variant);
+            } else {
+                item.value = 0;
+            }
         } else {
             var value = self.getSummary(offer.children().first())[key];
             if (value instanceof Array) value = value[0];
