@@ -10,7 +10,7 @@ class BookingController < ApplicationController
                 Person.new
               }
     @people_count = {:adults => 1, :children => 1, :infants => 1}
-    @card = Billing::CreditCard.new(valid_card)
+    @card = Billing::CreditCard.new()
     @numbers = %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}
   end
 
