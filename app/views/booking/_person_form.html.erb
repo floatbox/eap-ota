@@ -3,7 +3,7 @@
     <h2><%= @numbers[person_form_counter]%> пассажир</h2>
 <% end  %>
 <% fields_for "data[person_attributes][]", person_form do |person| %>
-<dd class="booking-persons state-validating">
+<dd class="book-p" onclick="return 'Person'">
     <table>
         <tr>
             <td class="g-middle">
@@ -155,9 +155,9 @@
 
                 <td>
                     <%= person.select :bonuscard_type, ['Аэрофлот Бонус', 'Бонусявый Бонус', 'Бонюсючий Бонус'],
-                    {}, :id => "booking-person-#{person_form_counter+1}-bonuscard", :class => 'text text-noempty g-xl g-hidden'  %>
+                    {}, :id => "booking-person-#{person_form_counter+1}-bonuscard", :class => 'text text-noempty g-xl -hidden'  %>
                 <td>
-                    <%=person.text_field :bonuscard_number, :class => 'text text-bonus g-xl g-hidden', :id => "booking-person-#{person_form_counter+1}-bonuscardnumber", :maxlength => '20', :onclick => "return {defaultValue: 'Номер карты'}" %>
+                    <%=person.text_field :bonuscard_number, :class => 'text text-bonus g-xl -hidden', :id => "booking-person-#{person_form_counter+1}-bonuscardnumber", :maxlength => '20', :onclick => "return {defaultValue: 'Номер карты'}" %>
     </table>
 </dd>
 <% end  %>

@@ -33,3 +33,14 @@ app.utils = {
         return fs[2];
     }
 }
+
+
+//////////////////////////////////////
+
+Function.prototype.extend = function(p) {
+    var f = function(){};
+    f.prototype = p.prototype;
+    this.prototype = new f();
+    this.prototype.constructor = this;
+    this.superclass = p.prototype;
+}
