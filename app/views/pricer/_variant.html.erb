@@ -44,7 +44,7 @@
         </td>
         <td class="rules" colspan="3">
             <%= 'Не можем продать' unless recommendation.sellable? %>
-            <a href="#">Правила тарифа</a> (VRUAFL) 
+            <a href="#">Правила тарифа</a> (<%= recommendation.cabins.join(', ') %>) 
         </td>
     </tr>
 </tbody>
