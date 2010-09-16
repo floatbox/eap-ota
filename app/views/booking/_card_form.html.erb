@@ -14,21 +14,28 @@
                 <%= f.text_field :number1,
                  :id => "payment-bankcardno",
                  :class => "text g-xl",
-                 :maxlength => "4"
+                 :maxlength => "4",
+                 :title => "первые четыре цифры номера карты",
+                 :onclick => "return {req: true, num: true, minl: 4, maxl: 4}"
                 %>
                 <%= f.text_field :number2,
                  :class => "text g-xl",
-                 :maxlength => "4"
+                 :maxlength => "4",
+                 :title => "вторые четыре цифры номера карты",
+                 :onclick => "return {req: true, num: true, minl: 4, maxl: 4}"
                 %>
                 <%= f.text_field :number3,
                  :class => "text g-xl",
-                 :maxlength => "4"
+                 :maxlength => "4",
+                 :title => "предпоследние четыре цифры номера карты",
+                 :onclick => "return {req: true, num: true, minl: 4, maxl: 4}"
                 %>
                 <%= f.text_field :number4,
                  :class => "text g-xl",
-                 :maxlength => "4"
+                 :maxlength => "4",
+                 :title => "последние четыре цифры номера карты",
+                 :onclick => "return {req: true, num: true, minl: 4, maxl: 4}"
                 %>
-                <%= f.error_message_on :number %>
             </fieldset>
 
             <fieldset class="bankcardname">
@@ -37,16 +44,26 @@
                  class="g-xs"
                  title="Имя и фамилию нужно вписать латинскими буквами &mdash; точно, как на карте"
                 >Имя на&nbsp;карте</label>
-                <%= f.text_field :name, :id => 'payment-bankcardname', :class => "text g-l" %>
-                <%= f.error_message_on :name, :maxlength => 100, :style => "width: 18em;" %>
+                <%= f.text_field :name,
+                 :id => 'payment-bankcardname',
+                 :class => "text g-l",
+                 :title => "имя на карте",
+                 :onclick => "return {req: true, latin: true, minl: 3}"
+                 %>
             </fieldset>
 
             <fieldset class="bankcardexpires">
                 <label for="payment-bankcardexpires-m" class="g-xs" title="На карте обозначено как &laquo;VALID THRU&raquo;">Срок действия</label>
 
+                <%= f.text_field :month,
+                 :id => "payment-bankcardexpires-m",
+                 :class => "text g-l",
+                 :maxlength => "2",
+                 :value => "мм",
+                 :title => "последний месяц действия карты &laquo;MONTH&raquo;",
+                 :onclick => "return {def: 'мм', req: true, num: true, minl: 1, maxl: 2, min: 1, max: 12}"
+                 %>
 
-                <%= f.text_field :month, :id => "payment-bankcardexpires-m", :class => "text g-l", :maxlength => "2", :value => "мм", :title => "На карте обозначено как &laquo;MONTH&raquo;" %>
-                <%= f.error_message_on :month %>
                 <i>/</i>
                 <%= f.text_field :year,
                  :id => "payment-bankcardexpires-y",
@@ -54,9 +71,9 @@
                  :class => "text g-l",
                  :maxlength => "2",
                  :value => "гг",
-                 :title => "На карте обозначено как &laquo;YEAR&raquo;"
+                 :title => "последний год действия карты &laquo;YEAR&raquo;",
+                 :onclick => "return {def: 'гг', req: true, num: true, minl: 2, maxl: 2, min: 10, max: 20}"
                 %>
-                <%= f.error_message_on :year %>
             </fieldset>
 
         <li>
@@ -74,9 +91,10 @@
                 <%= f.text_field :verification_value, 
                  :id => "payment-bankcardcvv",
                  :class => "text g-xl",
-                 :maxlength => "3"
+                 :maxlength => "3",
+                 :title => "CVV код банковской карты",
+                 :onclick => "return {req: true, num: true, minl: 3, maxl: 3}"
                 %>
-                <%= f.error_message_on :verification_value %>
             </fieldset>
 
             <fieldset class="bankcardbankname">
@@ -90,6 +108,8 @@
                  id="payment-bankcardbankname"
                  name="payment-bankcardbankname"
                  class="text g-l"
+                 title="банк, выпустивший карту"
+                 onclick="return {req: false}"
                 >
             </fieldset>
     </ul>

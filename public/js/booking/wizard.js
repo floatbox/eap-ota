@@ -16,10 +16,24 @@ app.Wizard = function(el, i) {
 var ptp = app.Wizard.prototype;
 
 ptp.init = function() {
-    this.$fields = this.$el.find(':input[type!="hidden"]');
+    this.$fields = this.$el.find(':input[type="text"][onclick]');
 
-    l(this.$fields.length);
+    this.$fields.validate(this);
 
+//    this.$fields.trigger('validate');
+//    this.$fields.trigger('mark', true);
+
+    this.$fields.each(function(i, el){
+//        l($(el).data('valid'));
+    });
+
+
+    return this;
+}
+
+// форма заполнена корректно?
+
+ptp.validate = function() {
     return this;
 }
 

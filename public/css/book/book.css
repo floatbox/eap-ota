@@ -98,7 +98,7 @@ dl.booking dd.ready {
         z-index: 2;
         -webkit-transition: border-color linear .2s;
 
-        border-color: #db3f89;
+        border-color: #606060;
         background: #fff;
     }
 
@@ -106,10 +106,11 @@ dl.booking dd.ready {
         z-index: 3;
 
         color: #333;
-        border-color: #db3f89;
+        border-color: #606060;
         background: #fff;
         outline: none;
 
+        box-shadow: 0 0 6px rgba(0, 0, 0, .15);
         -moz-box-shadow: 0 0 6px rgba(0, 0, 0, .15);
         -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, .15);
         -o-box-shadow: 0 0 6px rgba(0, 0, 0, .15);
@@ -124,8 +125,20 @@ dl.booking dd.ready {
         -o-transition: -o-box-shadow linear .2s;
     }
 
-    dl.booking .text-noempty {
+    dl.booking .text-value {
         color: #333;
+        border: 1px solid #4eb700;
+    }
+
+    dl.booking .text-invalid {
+        border: 1px solid #db3f89;
+
+        /*
+        box-shadow: 0 0 6px rgba(255, 0, 0, .3);
+        -moz-box-shadow: 0 0 6px rgba(255, 0, 0, .3);
+        -webkit-box-shadow: 0 0 6px rgba(255, 0, 0, .3);
+        -o-box-shadow: 0 0 6px rgba(255, 0, 0, .3);
+        */
     }
 
 /* Подписи к полям */
@@ -281,8 +294,10 @@ dl.booking dd.book-p {
 }
 
 .book-p ul.radio li {
+    /*
     height: 19px;
     line-height: 19px;
+    */
 }
 
 .book-p ul.radio label {
@@ -479,9 +494,9 @@ dl.booking dd.book-bc {
     }
 
     .bankcard .bankcardname .text {
-        width: 160px;
+        width: 164px;
 
-        padding: 2px 4px;
+        padding: 2px 2px;
 
         letter-spacing: -.03em;
     }
