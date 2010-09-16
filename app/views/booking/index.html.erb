@@ -6,6 +6,7 @@
     <!-- [production] Все нижеследующие скрипты объединить в таком же порядке и упаковать -->
     <script type="text/javascript" src="/js/main.js"></script>
     <script type="text/javascript" src="/js/utils.js"></script>
+    <script type="text/javascript" src="/js/booking/wizard.js"></script>
     <script type="text/javascript" src="/js/booking/onready.js"></script>
 </head>
 
@@ -34,15 +35,20 @@
 
                     <dt><b>1</b>Проверьте, что вы бронируете
 
-                    <dd class="booking-variant state-valid">
-                        <table class='offer-variant'>
-                        <tbody class="details">
-                            <% @variant.segments.each_with_index do |segment, segment_counter| %>
-                                <%= render :partial => 'pricer/segment_details', :locals => {:segment => segment, :variant => @variant, :segment_counter => segment_counter} %>
-                            <% end %>  
-                        </tbody>
-                        </table>
+                    <dd class="book-v ready" onclick="return 'Variant'">
+
+                        <!-- подробности перелёта -->
+                        <div class="offer">
+                            <table class='offer-variant'>
+                            <tbody class="details">
+                                <% @variant.segments.each_with_index do |segment, segment_counter| %>
+                                    <%= render :partial => 'pricer/segment_details', :locals => {:segment => segment, :variant => @variant, :segment_counter => segment_counter} %>
+                                <% end %>  
+                            </tbody>
+                            </table>
+                        </div>
                     
+                        <!-- описание тарифа -->
                         <div class="tarif">
                             <h3 class="g-xs">Важно</h3>
                             <ul class="g-xxs">
@@ -51,11 +57,8 @@
                                 <li>Перенести дату вылета можно за сутки до вылета или ранее.
                                 <li>Стоимость переноса - 20% от стоимости тарифа (5&nbsp;150&nbsp;<s class="rur">р<s>уб.</s></s>).
                             </ul>
-                            <span class="g-xxs">Прочитать <a href=# class="b-pseudo"><u>текст тарифа целиком</u></a></span>
-                            <!-- 
-                                &nbsp;<u class="b-expand" title="Посмотреть полное описание тарифа"></u><u class="g-none">&hellip;</u>
-                            -->
-                            <pre class="g-none">
+                            <span class="g-xxs">Прочитать <a href=# id="tarif-expand" class="b-pseudo" onclick="return 'tarif-text'"><u>текст тарифа целиком</u></a></span>
+                            <pre id="tarif-text">
 0.  APPLICATION AND OTHER CONDITIONS
 RULE - 021/0921
 UNLESS OTHERWISE SPECIFIED
@@ -73,7 +76,7 @@ ECONOMY NORMAL FARE WITHIN EUROPE VIA MSQ
    FARES ONLY APPLY IF PURCHASED BEFORE DEPARTURE
                             </pre>
                         </div>
-                    
+
                     </dd>
 
                     <!-- Данные пассажиров -->
@@ -97,8 +100,10 @@ ECONOMY NORMAL FARE WITHIN EUROPE VIA MSQ
 
                         <%= render 'contacts_form' %>
 
+                    <!-- Отправка -->
+
                     <dt class="disabled"><b>5</b>Всё правильно? Нажмите <a href="#" class="b-submit">забронировать</a>
-                    <dd class="booking-book">
+                    <dd class="book-s" onclick="return 'Submit'">
 
                         <div class="blocker g-xs">
                             <s></s>

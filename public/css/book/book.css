@@ -66,26 +66,18 @@ dl.booking dd {
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     -o-border-radius: 10px;
-    background: #ccc;
+
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+    background: #fff8d2;
 }
 
-    /* Состояние блока: отключён / готов к заполнению / заполнен и валиден */
-
-    dl.booking dd.state-validating {
-        background: #fff8d2;
-    }
-
-    dl.booking dd.state-valid {
-        background: #e5ffd2;
-    }
-
-    dl.booking dd.state-validating,
-    dl.booking dd.state-valid {
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    }
+dl.booking dd.ready {
+    background: #e5ffd2;
+}
 
 /* Текстовые поля - общие свойства */
 
@@ -136,14 +128,18 @@ dl.booking dd {
         color: #333;
     }
 
-/* Метки - общие свойства */
+/* Подписи к полям */
 
-    dl.booking label.sub {
-        display: block;
-
-        margin: 2px 0;
+    dl.booking div.sub {
+        margin: 4px 0;
 
         color: #777;
+    }
+
+    dl.booking div.sub p {
+        display: none;
+
+        margin: 2px 0 0 0;
     }
 
 /* Прочее - общие свойства */
@@ -172,70 +168,90 @@ dl.booking dd {
 
 /* БЛОК 1: ВАРИАНТ ПЕРЕЛЁТА */
 
-dl.booking dd.booking-variant {
-}
-
-.booking-variant {
-
+dl.booking dd.book-v {
 }
 
 /* тариф */
 
-.booking-variant .tarif h3 {
+    .book-v .tarif h3 {
+        font-weight: bold;
+
+        color: #333;
+    }
+
+    .book-v .tarif ul {
+        margin: .2em 0 .6em 15px;
+
+        list-style: disc;
+    }
+
+    .book-v .tarif pre {
+        font: normal 65% Courier,monospace;
+
+        display: none;
+
+        height: 18em;
+        margin: .5em 0;
+        padding: 5px;
+        overflow: scroll;
+
+        color: #333;
+        background: #fff;
+        border: 1px solid #777;
+    }
+
+    .book-v .tarif a:hover {
+        color: red;
+    }
+
+
+.book-v .agree {
+    color: #333;
+
+    margin: .6em 0 .4em 0;
+
+    text-align: right;
+}
+
+.book-v .agree input {
+    margin: 0 .3em 0 0;
+}
+
+.book-v .agree label {
     font-weight: bold;
 
-    color: #333;
+    cursor: pointer;
 }
 
-.booking-variant .tarif ul {
-    margin: .2em 0 .3em 15px;
-
-    list-style: disc;
+.book-v .agree label:hover {
+    color: #000;
 }
 
-.booking-variant .tarif pre {
-    font: normal 65% Courier,monospace;
 
-    height: 18em;
-    margin: .5em 0;
-    padding: 5px;
-    overflow: scroll;
-
-    color: #333;
-    background: #fff;
-    border: 1px solid #777;
-}
-
-.booking-variant .tarif a:hover {
-    color: red;
-}
 
 
 /******* БЛОК 2: ДАННЫЕ ПАССАЖИРОВ *******/
 
 
-dl.booking dd.booking-persons {
+dl.booking dd.book-p {
     padding: 8px 10px 4px 0;
 }
 
 /* таблица */
 
-.booking-persons table td {
+.book-p table td {
     padding: 0 0 0 10px;
 
-    vertical-align: middle;
+    vertical-align: top;
 }
 
-.booking-persons td.noexp {
-    padding-left: 32px;
-
-    text-indent: -22px;
-    vertical-align: top;
+.book-p table tfoot td {
+    vertical-align: middle;
 }
 
 /* метки */
 
-.booking-persons label.bold {
+.book-p label.bold {
     font-weight: bold;
 
     display: inline-block;
@@ -248,24 +264,28 @@ dl.booking dd.booking-persons {
     color: #333;
 }
 
-.booking-persons td.noexp label {
+.book-p label {
     cursor: pointer;
 
-    margin-left: 2px;
+    color: #333;
+}
+
+.book-p label:hover {
+    color: #000;
 }
 
 /* радиокнопки с подписями */
 
-.booking-persons ul.radio {
+.book-p ul.radio {
     white-space: nowrap;
 }
 
-.booking-persons ul.radio li {
+.book-p ul.radio li {
     height: 19px;
     line-height: 19px;
 }
 
-.booking-persons ul.radio label {
+.book-p ul.radio label {
     vertical-align: middle;
     cursor: pointer;
     line-height: inherit;
@@ -273,27 +293,27 @@ dl.booking dd.booking-persons {
     color: #333;
 }
 
-.booking-persons ul.radio input {
+.book-p ul.radio input {
     vertical-align: middle;
 }
 
-.booking-persons ul.radio li:hover label {
+.book-p ul.radio li:hover label {
     color: #000;
 }
 
 /* списки выбора */
 
-.booking-persons select {
+.book-p select {
     width: 214px;
 }
 
 /* конкретные поля */
 
-.booking-persons input.text {
+.book-p input.text {
     width: 204px;
 }
 
-.booking-persons input.text-dd {
+.book-p input.text-dd {
     position: relative;
 
     width: 62px;
@@ -306,7 +326,7 @@ dl.booking dd.booking-persons {
     -o-border-radius: 3px 0 0 3px;
 }
 
-.booking-persons input.text-mm {
+.book-p input.text-mm {
     position: relative;
 
     width: 62px;
@@ -321,7 +341,7 @@ dl.booking dd.booking-persons {
     -o-border-radius: 0;
 }
 
-.booking-persons input.text-yyyy {
+.book-p input.text-yyyy {
     position: relative;
 
     width: 62px;
@@ -335,7 +355,7 @@ dl.booking dd.booking-persons {
     -o-border-radius: 0 3px 3px 0;
 }
 
-.booking-persons input.text-bonus {
+.book-p input.text-bonus {
     width: 197px;
 }
 
@@ -343,7 +363,7 @@ dl.booking dd.booking-persons {
 /******* БЛОК 3: БАНКОВСКАЯ КАРТОЧКА *******/
 
 
-dl.booking dd.booking-payment {
+dl.booking dd.book-bc {
     padding: 12px 0 10px 0;
 }
 
@@ -546,15 +566,15 @@ dl.booking dd.booking-payment {
 
 /* раскладка цены */
 
-.booking-payment table.bc-bill {
+.book-bc table.bc-bill {
     width: 655px;
     margin: 1em 0 4px 10px;
 }
 
-    .booking-payment .bc-bill td, .booking-payment .bc-bill th {
+    .book-bc .bc-bill td, .book-bc .bc-bill th {
     }
 
-    .booking-payment .bc-bill th {
+    .book-bc .bc-bill th {
         font: bold 100% Arial,a;
 
         vertical-align: middle;
@@ -563,7 +583,7 @@ dl.booking dd.booking-payment {
         color: #333;
     }
 
-    .booking-payment .bc-bill th i {
+    .book-bc .bc-bill th i {
         font: bold 70px/40px Arial,a;
 
         display: inline-block;
@@ -574,12 +594,12 @@ dl.booking dd.booking-payment {
         color: #6e6e6e;
     }
 
-    .booking-payment .bc-bill td {
+    .book-bc .bc-bill td {
         white-space: nowrap;
     }
 
-    .booking-payment .bc-bill td u,
-    .booking-payment .bc-bill td b {
+    .book-bc .bc-bill td u,
+    .book-bc .bc-bill td b {
         font: bold 157.143%/85% Arial,a;
 
         margin: 0 .1em 0 0;
@@ -587,18 +607,18 @@ dl.booking dd.booking-payment {
         color: #cb388f;
     }
 
-    .booking-payment .bc-bill td b {
+    .book-bc .bc-bill td b {
         color: #3d7c00;
     }
 
-    .booking-payment .bc-bill td i {
+    .book-bc .bc-bill td i {
         font-size: 85.714%;
         font-size: 78.571%;
 
         color: #6e6e6e;
     }
 
-    .booking-payment .bc-bill tfoot td {
+    .book-bc .bc-bill tfoot td {
         padding: .5em 0 0 0;
 
         white-space: normal;
@@ -610,11 +630,11 @@ dl.booking dd.booking-payment {
 /******* БЛОК 4: КОНТАКТЫ *******/
 
 
-dl.booking dd.booking-contacts {
+dl.booking dd.book-c {
 
 }
 
-dl.booking dd.booking-contacts .text {
+dl.booking dd.book-c .text {
     width: 310px;
     margin: 0 10px 0 0;
 }
@@ -623,15 +643,23 @@ dl.booking dd.booking-contacts .text {
 /******* БЛОК 5: САБМИТ *******/
 
 
-dl.booking dd.booking-book {
+dl.booking dd.book-s {
+    overflow: hidden;
+    zoom: 1;
+
     padding: 10px;
 
     background: none;
+
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    -o-box-shadow: none;
 }
 
 /* список причин */
 
-.booking-book .blocker {
+.book-s .blocker {
     position: relative;
     float: left;
 
@@ -652,7 +680,7 @@ dl.booking dd.booking-book {
     -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
 
-    .booking-book .blocker s {
+    .book-s .blocker s {
         display: block;
         position: absolute;
         left: 180px;
@@ -666,20 +694,20 @@ dl.booking dd.booking-book {
         border-width: 25px 20px 0 0 ;
     }
 
-    .booking-book .blocker p {
+    .book-s .blocker p {
         margin: 0 0 .4em 0;
     }
 
-    .booking-book .blocker ul {
+    .book-s .blocker ul {
     }
 
-    .booking-book .blocker li {
+    .book-s .blocker li {
         list-style: disc;
 
         margin: 0 0 .2em 0;
     }
 
-.booking-book .notice {
+.book-s .notice {
     clear: both;
 
     color: #333;    
