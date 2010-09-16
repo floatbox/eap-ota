@@ -61,9 +61,8 @@ init: function() {
     // Выбор времени вылета
     $('#offers-list').delegate('td.variants a', 'click', function(event) {
         event.preventDefault();
-        var getSummary = app.offers.getSummary;
-        var current = $(this).closest('.offer-variant')
-        var departures = $.makeArray(getSummary(current).departures);
+        var current = $(this).closest('.offer-variant');
+        var departures = $.parseJSON(current.attr('data-summary')).departures;
         var sindex = parseInt($(this).attr('data-segment'), 10);
         var svalue = $(this).text().replace(':', '');
         departures[sindex] = svalue;
@@ -71,7 +70,7 @@ init: function() {
         var match = null, half_match = null;
         current.siblings().each(function() {
             var variant = $(this);
-            var vd = getSummary(variant).departures;
+            var vd = $.parseJSON(variant.attr('data-summary')).departures;
             if (vd.join(' ') == query) {
                 match = variant;
                 return false;
