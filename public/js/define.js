@@ -164,9 +164,18 @@ app.Define.prototype = {
             );
 
             // разделитель между значениями
-            var sep = index + 2 == value.length ? ' и' : ',';
+            var sep = index + 2 == value.length ? (me.options.either ? ' или ' : ' и ') : ', ';
             index + 1 < value.length && me.$value.append($('<u/>').text(sep));
         });
+        
+        if (me.value.length) {
+            if (me.options.brackets) {
+                me.$value.prepend(' (');
+                me.$value.append(')');
+            } else {
+                me.$value.prepend(' ');
+            }
+        }
 
         var title;
         if (me.options.radio) {
@@ -364,13 +373,13 @@ return;
         $dl.append($('<dt/>').text(define.options.title));
         
         if (values.length == 1) {
-	        $dl.append(makeItem(values[0], define.has(), true));
+            $dl.append(makeItem(values[0], define.has(), true));
         } else {
-	        $dl.append(makeItem(define.anyone, define.has(), true));
-	        $.each(values, function(index, item) { 
-	            $dl.append(makeItem(item, define.has(item), false));
-	        });
-	    }
+            $dl.append(makeItem(define.anyone, define.has(), true));
+            $.each(values, function(index, item) { 
+                $dl.append(makeItem(item, define.has(item), false));
+            });
+        }
     };
 
     // снимает ненужные галочки в списке пассажиров
