@@ -28,27 +28,27 @@
                 <th>Уточнить</th>
                 <td>
                     
-                    <p onclick="return {name: 'dpt_time_0', title: 'время вылета', accusative: 'допустимое время вылета', anyone: 'любое'}"><a href=#><u>время</u></a><b></b></p>
+                    <p onclick="return {name: 'dpt_time_0', title: 'время вылета', accusative: 'допустимое время вылета', anyone: 'любое', either: true, brackets: true}"><a href=#><u>время</u></a><b></b></p>
                     и
-                    <p onclick="return {name: 'dpt_airport_0', title: 'аэропорт вылета', accusative: 'подходящие аэропорты вылета', anyone: 'любой'}"><a href=#><u>аэропорт</u></a><b></b></p>
+                    <p onclick="return {name: 'dpt_airport_0', title: 'аэропорт вылета', accusative: 'подходящие аэропорты вылета', anyone: 'любой', either: true, brackets: true}"><a href=#><u>аэропорт</u></a><b></b></p>
                     вылета туда,
-                    <p onclick="return {name: 'arv_time_0', title: 'время прилёта', accusative: 'допустимое время прибытия', anyone: 'любое'}"><a href=#><u>время</u></a><b></b></p>
+                    <p onclick="return {name: 'arv_time_0', title: 'время прилёта', accusative: 'допустимое время прибытия', anyone: 'любое', either: true, brackets: true}"><a href=#><u>время</u></a><b></b></p>
                     и
-                    <p onclick="return {name: 'arv_airport_0', title: 'аэропорт прилёта', accusative: 'подходящие аэропорты прибытия', anyone: 'любой'}"><a href=#><u>аэропорт</u></a><b></b></p>
+                    <p onclick="return {name: 'arv_airport_0', title: 'аэропорт прилёта', accusative: 'подходящие аэропорты прибытия', anyone: 'любой', either: true, brackets: true}"><a href=#><u>аэропорт</u></a><b></b></p>
                     прилёта туда,
                     
-                    <p onclick="return {name: 'dpt_time_1', title: 'время вылета', accusative: 'допустимое время вылета', anyone: 'любое'}"><a href=#><u>время</u></a><b></b></p>
+                    <p onclick="return {name: 'dpt_time_1', title: 'время вылета', accusative: 'допустимое время вылета', anyone: 'любое', either: true, brackets: true}"><a href=#><u>время</u></a><b></b></p>
                     и
-                    <p onclick="return {name: 'dpt_airport_1', title: 'аэропорт вылета', accusative: 'подходящие аэропорты вылета', anyone: 'любой'}"><a href=#><u>аэропорт</u></a><b></b></p>
+                    <p onclick="return {name: 'dpt_airport_1', title: 'аэропорт вылета', accusative: 'подходящие аэропорты вылета', anyone: 'любой', either: true, brackets: true}"><a href=#><u>аэропорт</u></a><b></b></p>
                     вылета обратно,
-                    <p onclick="return {name: 'arv_time_1', title: 'время прилёта', accusative: 'допустимое время прибытия', anyone: 'любое'}"><a href=#><u>время</u></a><b></b></p>
+                    <p onclick="return {name: 'arv_time_1', title: 'время прилёта', accusative: 'допустимое время прибытия', anyone: 'любое', either: true, brackets: true}"><a href=#><u>время</u></a><b></b></p>
                     и
-                    <p onclick="return {name: 'arv_airport_1', title: 'аэропорт прилёта', accusative: 'подходящие аэропорты прибытия', anyone: 'любой'}"><a href=#><u>аэропорт</u></a><b></b></p>
+                    <p onclick="return {name: 'arv_airport_1', title: 'аэропорт прилёта', accusative: 'подходящие аэропорты прибытия', anyone: 'любой', either: true, brackets: true}"><a href=#><u>аэропорт</u></a><b></b></p>
                     прилёта обратно,
                     
-                    <p onclick="return {name: 'planes', title: 'самолёт', accusative: 'приемлемые типы самолётов', anyone: 'любой'}"><a href=#><u>самолёт</u></a><b></b></p>,
+                    <p onclick="return {name: 'planes', title: 'самолёт', accusative: 'приемлемые типы самолётов', anyone: 'любой', either: true, brackets: true}"><a href=#><u>самолёт</u></a><b></b></p>,
     
-                    <p onclick="return {name: 'airlines', title: 'авиакомпанию', accusative: 'подходящие авиакомпании'}"><a href=#><u>авиакомпанию</u></a><b></b></p>
+                    <p onclick="return {name: 'airlines', title: 'авиакомпанию', accusative: 'подходящие авиакомпании', either: true, brackets: true}"><a href=#><u>авиакомпанию</u></a><b></b></p>
                     
                 </td>
             </tr>
@@ -168,7 +168,7 @@
                         </td>
                     </tr>
                 </tbody>
-                <tbody class="details g-none">
+                <tbody class="details">
                     <tr>
                         <td></td>
                         <th colspan="6"><strong class="direction">Перелёт туда</strong> с одной пересадкой в Варшаве</th>
@@ -244,7 +244,11 @@
 
         </div>
         <div id="offers-all" class="offers g-none">
-
+            <div class="offers-sort">
+                <h3 class="offers-title">Все варианты, отсортированные <span id="offers-sortedby">по цене</span></h3>
+                <p>можно <a href="#" class="sortedby" data-key="price"><u>по цене</u></a>, <a href="#" class="b-pseudo" data-key="duration"><u>по времени в пути</u></a>, <a href="#" class="b-pseudo" data-key="departures"><u>по времени вылета</u></a> или <a href="#" class="b-pseudo" data-key="airline"><u>по авиакомпании</u></a></p>
+            </div>
+            <div id="offers-collection"></div>
         </div>
         </div>
     

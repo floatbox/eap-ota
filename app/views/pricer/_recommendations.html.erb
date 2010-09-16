@@ -1,28 +1,7 @@
 <% if @recommendations.present? %>
-    <div id="offers-best" class="offers">
-    <% if @cheap_recommendation %>
-        <h3 class="offers-title">Самый выгодный вариант</h3>
-        <%= render :partial => 'recommendation', :locals => {:recommendation => @cheap_recommendation} %>
-    <% end %>
-    <% if @fast_recommendation %>
-        <h3 class="offers-title">Самый быстрый вариант</h3>
-        <%= render :partial => 'recommendation', :locals => {:recommendation => @fast_recommendation} %>
-    <% end %>
-    <% if @optimal_recommendation %>
-        <h3 class="offers-title">Оптимальный вариант — разумная цена и время в пути</h3>
-        <%= render :partial => 'recommendation', :locals => {:recommendation => @optimal_recommendation} %>
-    <% end %>
-    </div>
-    <div id="offers-all" class="offers" data-amount="<%= @recommendations.size %>">
-        <div class="offers-sort">
-            <h3 class="offers-title">Все варианты, отсортированные <span id="offers-sortedby">по цене</span></h3>
-            <p>можно <a href="#" class="b-pseudo g-none" data-key="price"><u>по цене</u></a><span class="spacer g-none">, </span><a href="#" class="b-pseudo" data-key="duration"><u>по времени в пути</u></a><span class="spacer">, </span><a href="#" class="b-pseudo" data-key="departures"><u>по времени вылета</u></a><span class="spacer"> или </span><span class="link">по авиакомпании</span></p>
-        </div>
+    <div id="offers-collection" data-filters='<%= Recommendation.summary(@recommendations).to_json %>'>
         <%= render :partial => 'recommendation', :collection => @recommendations %>
     </div>
-    <script type="text/javascript">
-    app.offers.filtersData = '<%= Recommendation.summary(@recommendations).to_json %>';
-    </script>
 <% else %>
     <h2>Таких рейсов нет, попробуйте другие даты.</h2>
 <% end %>

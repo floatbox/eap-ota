@@ -6,11 +6,6 @@
 
 /* Список предложений */
 
-#offers.latent
-{
-    display: none;
-}
-
 #offers-list 
 {
     width: 675px;
@@ -45,19 +40,27 @@
 
 .offers-sort p 
 {
-	color: #4B4B4B;
+    color: #4B4B4B;
 }
 
-.offers-sort a 
+.offers-sort a
 {
-	color: #4B4B4B;
+    color: #4B4B4B;
 }
 
 .offers-sort a:hover 
 {
-	color: #000;
+    color: #000;
 }
 
+.offers-sort a.sortedby,
+.offers-sort a.sortedby u
+{
+    text-decoration: none;
+
+    color: #4B4B4B;
+    cursor: text;
+}
 
 /* Предложение */
 .offer
@@ -69,8 +72,17 @@
     line-height: 1.23;
 
     color: #333;
-    border-bottom: 1px solid #d0d0d0;
+    /*border-bottom: 1px solid #d0d0d0;*/
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -o-border-radius: 10px;
     background: #fff;
+    
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);    
 }
 
 .offer .aux
@@ -179,6 +191,10 @@
         color: #2C2C2C;
         border-bottom: 1px solid #dbe1d9;
         border-left: 1px solid #dbe1d9;
+        border-radius: 0 10px 0 0;
+        -moz-border-radius: 0 10px 0 0;
+        -webkit-border-radius: 0 10px 0 0;
+        -o-border-radius: 0 10px 0 0;
         background: #f4faf2;
     }
 
@@ -414,6 +430,10 @@
 .offer .details
 {
     border-top: 1px solid #d0d0d0;
+}
+
+.offer .details tr
+{
     background: #f7f7f7;
 }
 
@@ -551,12 +571,16 @@
 
     /* Сумма и кнопка */
     
+    .offer .details .booking
+    {
+        background: none;
+    }
+    
     .offer .details .booking td
     {
         padding: 12px 10px 12px 0;
 
         border-top: 1px solid #d0d0d0;
-        background: #fff;
     }
 
     .offer .details .booking .a-button
