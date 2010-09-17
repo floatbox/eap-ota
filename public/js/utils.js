@@ -35,7 +35,9 @@ app.utils = {
 }
 
 
-//////////////////////////////////////
+//////// Расширения /////////////
+
+//////// Function /////////////
 
 Function.prototype.extend = function(p) {
     var f = function(){};
@@ -44,3 +46,17 @@ Function.prototype.extend = function(p) {
     this.prototype.constructor = this;
     this.superclass = p.prototype;
 }
+
+
+//////// String /////////////
+
+// http://sreznikov.blogspot.com/2010/01/supplant.html
+
+String.prototype.supplant = function(o) {
+    return this.replace(/{([^{}]*)}/g,
+        function(a, b) {
+            var r = o[b];
+            return typeof r === 'string' || typeof r === 'number' ? r : a;
+        }
+    );
+};

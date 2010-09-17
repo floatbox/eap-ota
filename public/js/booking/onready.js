@@ -1,28 +1,12 @@
 $(function() {
 
-    app.wizard = $.map($('dl.booking > dd'), function(el, i){
+    app.wizard = $('dl.booking > dd');
+
+    app.wizard = $.map(app.wizard, function(el, i) {
         return new (app[el.onclick()])(el, i);
     });
 
 
-
-    // текстовые поля с подсказкой в value
-
-    $('input.text[onclick]')
-    .focus(function(e) {
-        e = e.target;
-        var d = e.onclick().defaultValue;
-        var v = $.trim(e.value);
-
-        if (v == d) e.value = '';
-    })
-    .blur(function(e) {
-        e = e.target;
-        var d = e.onclick().defaultValue;
-        var v = $.trim(e.value);
-
-        if (!v) e.value = d;
-    });
 
     // раскрывающаяся подсказка
 
