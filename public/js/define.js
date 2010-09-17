@@ -87,6 +87,10 @@ app.Define = function($el) {
         me.values = filters[me.options.name];
         me.reset();
     });
+    
+    $el.bind('reset', function(e, item) {
+        me.reset();
+    });
 
     $el.bind('add', function(e, item) {
         me.add(item);

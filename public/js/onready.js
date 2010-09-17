@@ -218,6 +218,19 @@
         app.offers.filters[$filter.data('name')] = $filter; 
     });
     
+    // Сброс фильтров
+    $('#offers-reset-filters').click(function(event) {
+        event.preventDefault();
+        var ao = app.offers;
+        ao.filterable = false;
+        for (var key in ao.activeFilters) {
+            ao.filters[key].trigger('reset');
+            delete(ao.activeFilters[key]);
+        }
+        ao.filterable = true;
+        ao.applyFilter();
+    });
+    
     // верхние табы
     $('#search\\.mode').radio();
 

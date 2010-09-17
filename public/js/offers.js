@@ -188,10 +188,12 @@ showVariant: function(el) {
 },
 applyFilter: function(name, values) {
     var self = this, filters = this.activeFilters;
-    if (values.length) {
-        filters[name] = values;
-    } else {
-        delete(filters[name]);
+    if (name) {
+        if (values.length) {
+            filters[name] = values;
+        } else {
+            delete(filters[name]);
+        }
     }
     var list = $('#offers-list').css('opacity', 0.7);
     setTimeout(function() {
@@ -203,12 +205,13 @@ applyFilter: function(name, values) {
     }, 300);
 },
 filterOffers: function() {
-    var filters = this.activeFilters;
+    var filters = this.activeFilters, empty = true;
     var items = this.items, variants = this.variants;
     for (var i = items.length; i--;) items[i].improper = true;
     for (var i = 0, im = variants.length; i < im; i++) {
         var v = variants[i], improper = false;
         for (var key in filters) {
+            empty = false;
             var fvalues = filters[key];
             var svalues = v.summary[key];
             if (!svalues) continue;
@@ -240,6 +243,7 @@ filterOffers: function() {
         if (!offer.improper) amount++;
     }
     this.showAmount(amount);
+    $('#offers-reset-filters').toggleClass('g-none', empty);
 },
 applySort: function(key) {
     $('#offers-all .offers-sort a').each(function() {
@@ -320,8 +324,8 @@ showRecommendations: function() {
         if (!fast || d < fast.duration || (d == fast.duration && p < fast.price)) fast = {variant: v, duration: d, price: p};
         if (!optimal || s < optimal.segments || (s == optimal.segments && p < optimal.price)) optimal = {variant: v, segments: s, price: p}
     }
-    if (cheap.variant == optimal.variant) cheap = undefined;
-    if (fast.variant == optimal.variant) fast = undefined;
+    if (cheap && optimal && cheap.variant == optimal.variant) cheap = undefined;
+    if (fast && optimal && fast.variant == optimal.variant) fast = undefined;
     var container = $('#offers-best').html('');
     if (cheap) container.append(this.makeRecommendation(cheap, 'Самый выгодный вариант'));
     if (optimal) container.append(this.makeRecommendation(optimal, 'Оптимальный вариант — разумная цена и время в пути'));

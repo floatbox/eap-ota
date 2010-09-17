@@ -4,6 +4,13 @@
     top: -3px;
 }
 
+#offers-reset-filters
+{
+    margin-left: 0.3em;
+    
+    color: #ED1192;
+}
+
 /* Список предложений */
 
 #offers-list 
@@ -27,6 +34,8 @@
     line-height: 100%;
     letter-spacing: -0.035em;
 }
+
+/* Сортировка */
 
 .offers-sort
 {
@@ -63,6 +72,7 @@
 }
 
 /* Предложение */
+
 .offer
 {
     font-size: 81.25%;

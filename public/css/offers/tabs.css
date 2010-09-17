@@ -76,6 +76,8 @@
 
         color: #FFF;
         background: #ed1192;
+        
+        cursor: default;
     }
     
     #offers-tabs li.active span.arrow
