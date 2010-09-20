@@ -10,14 +10,14 @@
                 <%= person.text_field :first_name,
                  :class => "text g-xl",
                  :title => "имя пассажира",
-                 :onclick => "return {def: 'Имя', req: true, minl: 2, latin: true, symbols: /[a-z]/g}"
+                 :onclick => "return {def: 'Имя', req: true, minl: 2, latin: true, mask: /[a-z]/i}"
                  %>
 
             <td class="g-middle">
                 <%= person.text_field :last_name,
                  :class => "text g-xl",
                  :title => "фамилия пассажира",
-                 :onclick => "return {def: 'Фамилия', req: true, minl: 2, latin: true, symbols: /[a-z]/g}"
+                 :onclick => "return {def: 'Фамилия', req: true, minl: 2, latin: true, mask: /[a-z]/i}"
                  %>
             <td rowspan="2">
                 <ul class="radio g-xxs">

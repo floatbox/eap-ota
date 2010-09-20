@@ -199,8 +199,8 @@ applyFilter: function(name, values) {
     setTimeout(function() {
         list.hide();
         self.filterOffers();
-        self.showRecommendations();
         self.sortOffers();
+        self.showRecommendations();
         list.css('opacity', 1).show();
     }, 300);
 },
@@ -260,7 +260,7 @@ sortOffers: function() {
         if (offer.improper) continue;
         var sitem = {offer: offer, price: offer.summary.price};
         var commonvalue = key in offer.summary;
-        var bestvariant, bestvalue;
+        var bestvariant = undefined, bestvalue = undefined;
         for (var k = 0, km = variants.length; k < km; k++) {
             var variant = variants[k];
             if (variant.improper) continue;
@@ -319,20 +319,30 @@ showRecommendations: function() {
     for (var i = 0, im = variants.length; i < im; i++) {
         var v = variants[i];
         if (v.improper) continue;
-        var d = v.summary.duration, p = v.offer.summary.price, s = v.summary.departures.length;
+        var d = v.summary.duration, p = v.offer.summary.price, pfd = p * (5 + v.summary.flights) + d * 2;
         if (!cheap || p < cheap.price || (p == cheap.price && d < cheap.duration)) cheap = {variant: v, duration: d, price: p};
         if (!fast || d < fast.duration || (d == fast.duration && p < fast.price)) fast = {variant: v, duration: d, price: p};
-        if (!optimal || s < optimal.segments || (s == optimal.segments && p < optimal.price)) optimal = {variant: v, segments: s, price: p}
+        if (!optimal || pfd < optimal.pfd) optimal = {variant: v, pfd: pfd};
     }
-    if (cheap && optimal && cheap.variant == optimal.variant) cheap = undefined;
-    if (fast && optimal && fast.variant == optimal.variant) fast = undefined;
+    if (cheap && fast && cheap.variant == fast.variant) {
+        optimal = {variant: cheap.variant};
+        cheap = undefined;
+        fast = undefined;
+    }
+    if (cheap && optimal && cheap.variant == optimal.variant) {
+        cheap = undefined;
+    }
+    if (fast && optimal && fast.variant == optimal.variant) {
+        fast = undefined;
+    }
     var container = $('#offers-best').html('');
     if (cheap) container.append(this.makeRecommendation(cheap, 'Самый выгодный вариант'));
     if (optimal) container.append(this.makeRecommendation(optimal, 'Оптимальный вариант — разумная цена и время в пути'));
     if (fast) container.append(this.makeRecommendation(fast, 'Самый быстрый вариант'));
 },
 makeRecommendation: function(obj, title) {
-    var offer = obj.variant.el.parent().clone();
+    var el = obj.variant.el, offer = el.parent().clone();
+    this.showVariant(offer.children().eq(el.prevAll().length));
     return $('<div><h3 class="offers-title">' + title + '</h3></div>').append(offer);
 }
 });

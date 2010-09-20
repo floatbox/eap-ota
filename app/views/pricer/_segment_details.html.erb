@@ -36,16 +36,12 @@
             <!--<p>CEST</p>-->
         </div>
         <div class="info">
-            <h6>Прилёт <%= flight.arrival.city.case_to %></h6>
+            <h6>Прилёт <%= flight.arrival.city.case_to %><%= ' на следующий день' if next_date_arrival %></h6>
             <p>Аэропорт <%= flight.arrival_name %><% if flight.arrival_term %>, терминал&nbsp;<%= flight.arrival_term %><% end %></p>
             <% layover = segment.layover_durations[flight_index] %>
             <% if layover %>
             <p><%= human_duration(layover) %> между рейсами</p>
             <% end %>
-            <ul class="warnings">
-            <% if next_date_arrival %>
-                <li class="ndarv">Прилёт на следующий день</li>
-            <% end %>            
             <% if layover %>
                 <% if layover < 90 %>
                     <li class="schange">Короткая стыковка</li>

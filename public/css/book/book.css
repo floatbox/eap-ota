@@ -325,6 +325,9 @@ dl.booking dd.book-p {
 /* конкретные поля */
 
 .book-p input.text {
+    /*
+    text-transform: uppercase;
+    */
     width: 204px;
 }
 
