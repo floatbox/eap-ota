@@ -18,14 +18,13 @@ var ptp = app.Wizard.prototype;
 ptp.init = function() {
     this.$fields = this.$el.find(':input[type="text"][onclick]');
 
-    this.$fields.validate(this);
+    this.$fields.input();
 
-//    this.$fields.trigger('validate');
+
 //    this.$fields.trigger('mark', true);
 
-    this.$fields.each(function(i, el){
-//        l($(el).data('valid'));
-    });
+//    this.$fields.each(function(i, el){
+//    });
 
 
     return this;
