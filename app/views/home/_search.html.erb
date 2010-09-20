@@ -18,8 +18,10 @@
             <td>
                 <ul id="search.ret.tabs" class="tabs return-tabs">
                     <li><a href="#" onclick="return {v: 'rt'}" title="Билет до пункта назначения и обратно. Самый популярный вариант путешествия." class="active">туда и обратно</a>
-                    <li><a href="#" onclick="return {v: 'ow'}" title="Билет только до пункта назначения, без обратного. Не всегда выгоднее &laquo;двустороннего&raquo;">только туда</a>
+                    <li><a href="#" onclick="return {v: 'ow'}" title="Билет только до пункта назначения, в одну сторону.">только туда</a>
+                    <!--
                     <li><a href="#" onclick="return {v: 'mw'}" title="Транзит через несколько городов. Остановки на желаемый срок. Впишите в поле ввода города и даты. ">сложный маршрут</a>
+                    -->
                 </ul>
             </td>
         </tr>
@@ -57,7 +59,7 @@
                     id="search.ret.button"
                     class="button button-rt" 
                     title="Искать билеты &laquo;туда и обратно&raquo;. Нажмите, чтобы изменить"
-                    onclick="return [{v: 'rt', cls: 'rt', t: 'Искать билеты &laquo;туда и обратно&raquo;. Нажмите, чтобы изменить'},{v: 'ow', cls: 'ow', t: 'Билеты только &laquo;туда&raquo;'},{v: 'mw', cls: 'mw', t: 'Сложный маршрут'}]"
+                    onclick="return [{v: 'rt', cls: 'rt', t: 'Искать билеты &laquo;туда и обратно&raquo;. Нажмите, чтобы изменить'},{v: 'ow', cls: 'ow', t: 'Билеты только &laquo;туда&raquo;'}/*,{v: 'mw', cls: 'mw', t: 'Сложный маршрут'}*/]"
                 ></a>
             </td>
 
@@ -69,7 +71,7 @@
                      class="autocomplete to"
                      tabindex="2"
                      value=""
-                     title="Страна, город или аэропорт. Когда улететь и когда вернуться. Сколько человек полетит.&#10; Пишите, как вам удобно &mdash; мы поймём."
+                     title="Город или страна.<!--Когда улететь и когда вернуться. Сколько человек полетит.&#10; Пишите, как вам удобно &mdash; мы поймём.-->"
                     >
                 </div>
             </td>
@@ -84,7 +86,7 @@
             
             <td colspan="2">
                 <i>например,&nbsp;</i>
-                <a href="#" id="search-to-example" class="b-pseudo pseudo-example"><s title="Показать другой пример"></s><u title="Нажмите, чтобы попробовать" onclick="return ['завтра в Париж', 'Питер на выходные', 'Болгария июль или август на десять дней', 'Прага 21 28 июня вдвоём', 'к морю в августе', 'бросить всё и уехать в Чертобердяевск']">завтра в Париж</u></a>
+                <a href="#" id="search-to-example" class="b-pseudo pseudo-example"><s title="Показать другой пример"></s><u title="Нажмите, чтобы подставить" onclick="return ['Стамбул', 'Франция']">Стамбул</u></a>
             </td>
         </tr>
 
@@ -99,8 +101,12 @@
 
     <!-- Куда -->
     <div id="search-where" class="wt0">
-        <h2>Нужны идеи? Есть карта и <a href="#" class="b-pseudo"><u>список</u></a></h2>
+        <h2>
+            Нужны идеи? Есть карта:
+            <!-- и <a href="#" class="b-pseudo"><u>список</u></a>-->
+        </h2>
         <div id="where-map" class="map wp0"></div>
+<!--
         <dl id="where-presets" class="presets wp1">
 
             <dt>Идеи</dt>
@@ -180,8 +186,8 @@
                     <a href=# onclick='return {id: "jp", tip: "Япония"}' title="Япония"><u>Япония</u></a>
                 </b>
             </dd>
-        
         </dl>
+-->
         <a id="where.map.reset" class="b-pseudo panel-reset" href=#><i></i><u>сбросить</u></a><a id="where.map.large" class="b-pseudo panel-reset" href=#><u>большая карта</u></a>
     </div>
     

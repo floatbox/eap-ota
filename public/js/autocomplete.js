@@ -1,7 +1,6 @@
 /*
     TODO 
 
-    БЛЯ
     чтобы фигачить дальше, т.к. нету
         - сервиса геолокации
         - разбора строки
@@ -680,7 +679,7 @@ $.Autocompleter.List.Item = function(data) {
 
     var render = {
         'default': function(e) {
-            return {hint: e.hint || 'Лёхина хуйня, мля', code: null, cls: null}
+            return {hint: e.hint || '', code: null, cls: null}
         },
         airport: function(e) {
             return {hint: e.hint || '', code: e.iata, cls: null}
@@ -701,16 +700,16 @@ $.Autocompleter.List.Item = function(data) {
             return {hint: e.hint || '', code: null, cls: 'persons'}
         },
         comfort: function(e) {
-            return {hint: e.hint || 'комфорт, мля', code: null, cls: null}
+            return {hint: e.hint || 'комфорт', code: null, cls: null}
         },
         aircraft: function(e) {
-            return {hint: e.hint || 'пепелац, мля', code: null, cls: null}
+            return {hint: e.hint || 'тип самолёта', code: null, cls: null}
         },
         pivo: function(e) {
-            return {hint: e.hint || 'в зюзю, мля!', code: null, cls: 'pivo'}
+            return {hint: e.hint || 'развлечения', code: null, cls: 'pivo'}
         },
         fun: function(e) {
-            return {hint: e.hint || 'кайфово, мля', code: null, cls: 'fun'}
+            return {hint: e.hint || 'развлечения', code: null, cls: 'fun'}
         }
     }
 
@@ -742,7 +741,7 @@ $.Autocompleter.List.Item = function(data) {
 /* ================================================ */
 
 $.Autocompleter.IATA = function($input) {
-    var title = 'Нажмите, чтобы почитать про IATA-коды, принятые в авиации';
+    var title = 'IATA-код, принятый в авиации';
     var o = $input.data('options');
 
     var $el = $('<s/>')
