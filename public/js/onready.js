@@ -139,8 +139,7 @@
 
         changes: [
             {v: 1, t: 'ни одной'},
-            {v: 2, t: 'можно с одной короткой'},
-            {v: 3, t: 'можно с одной'}
+            {v: 2, t: 'можно с одной'}
         ],
         
         cls: [
@@ -189,9 +188,24 @@
     // обработка пересадок
     tools.defines['changes'].bind('change', function() {
         var value = $(this).trigger('get').data('value')[0];
-        app.search.update({
+        if (app.offers.results.is(':visible')) {
+            app.search.toggle(true);
+            app.offers.update = {
+                loading: true,
+                action: function() {
+                    var ao = app.offers;
+                    ao.maxLayovers = value && value.v;
+                    ao.resetFilters();
+                    ao.applyFilter();
+                    $('#offers-tabs').trigger('set', 'best');
+                }
+            };
+        } else {
+            app.offers.maxLayovers = value && value.v;
+        }
+        /*app.search.update({
             'nonstop': value && value.v == 1 ? 1 : 0
-        }, this);
+        }, this);*/
     });
 
     // обработка класса
@@ -222,12 +236,7 @@
     $('#offers-reset-filters').click(function(event) {
         event.preventDefault();
         var ao = app.offers;
-        ao.filterable = false;
-        for (var key in ao.activeFilters) {
-            ao.filters[key].trigger('reset');
-            delete(ao.activeFilters[key]);
-        }
-        ao.filterable = true;
+        ao.resetFilters();
         ao.applyFilter();
     });
     

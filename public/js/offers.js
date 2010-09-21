@@ -12,11 +12,10 @@ init: function() {
     
     // Табы
     $('#offers-tabs').bind('select', function(e, v) {
-        app.offers.showTab(v);
+        $('#offers-' + v).removeClass('g-none').siblings().addClass('g-none');
     }).radio({
         toggleClosest: 'li'
     });
-    this.tab = 'best';
 
     // Подсветка
     $('#offers-list').delegate('.offer', 'mouseenter', function() {
@@ -112,16 +111,24 @@ load: function(data, title) {
     });
 },
 show: function() {
-    var self = this;
+    var self = this, u = this.update;
     app.search.toggle(false);
-    $('#offers-title h1').text(this.update.title);
-    if (!this.update.loading && this.update.content) {
+    if (u.title) {
+        $('#offers-title h1').text(u.title);
+    }
+    if (!u.loading && u.content) {
         this.toggleLoading(true);
         setTimeout(function() {
             self.processUpdate();
         }, 300);
     } else {
-        this.toggleLoading(this.update.loading);
+        this.toggleLoading(u.loading);
+    }
+    if (u.action) {
+        u.action();
+        setTimeout(function() {
+            self.toggleLoading(false);
+        }, 1200);
     }
     this.container.removeClass('g-none');
     var w = $(window), wst = w.scrollTop();
@@ -147,26 +154,45 @@ toggleLoading: function(mode) {
 processUpdate: function() {
     $('#offers-collection').replaceWith(this.update.content);
     this.update.content = null;
-    this.toggleLoading(false);
     this.updateFilters();
     this.parseResults();
+    this.applySort('price');
+    if (this.maxLayovers) this.filterOffers();
     this.showAmount();
     this.showRecommendations();
-    this.applySort('price')
-    this.showTab('best');
+    this.toggleLoading(false);
+    $('#offers-tabs').trigger('set', 'best');
 },
-showTab: function(v) {
-    if (v) this.tab = v;
-    var activeId = 'offers-' + this.tab;
-    $('#offers-list').children().each(function() {
-        $(this).toggleClass('g-none', $(this).attr('id') != activeId);
+parseResults: function() {
+    var items = [], variants = [];
+    $('#offers-collection .offer').each(function() {
+        var el = $(this), offer = {
+            el: el,
+            summary: $.parseJSON(el.attr('data-summary')),
+            variants: []
+        };
+        var children = el.children('.offer-variant').each(function() {
+            var vel = $(this), variant = {
+                el: vel,
+                offer: offer,
+                summary: $.parseJSON(vel.attr('data-summary'))
+            };
+            offer.variants.push(variant);
+            variants.push(variant);
+        });
+        items.push(offer);
     });
+    this.items = items;
+    this.variants = variants;
 },
-showAmount: function(amount) {
-    var total = this.items.length;
-    if (amount == undefined) amount = total;
+showAmount: function(amount, total) {
+    if (total === undefined) total = this.items.length;
+    if (amount === undefined) amount = total;
     var str = amount + ' ' + app.utils.plural(amount, ['вариант', 'варианта', 'вариантов']);
     $('#offers-tab-all > a').text(amount == total ? ('Всего ' + str) : (str + ' из ' + total))
+},
+showVariant: function(el) {
+    el.removeClass('g-none').siblings().addClass('g-none');
 },
 updateFilters: function() {
     var collection = $('#offers-collection');
@@ -183,8 +209,13 @@ updateFilters: function() {
     this.activeFilters = {};
     this.filterable = true;
 },
-showVariant: function(el) {
-    el.removeClass('g-none').siblings().addClass('g-none');
+resetFilters: function() {
+    this.filterable = false;
+    for (var key in this.activeFilters) {
+        this.filters[key].trigger('reset');
+        delete(this.activeFilters[key]);
+    }
+    this.filterable = true;
 },
 applyFilter: function(name, values) {
     var self = this, filters = this.activeFilters;
@@ -207,9 +238,19 @@ applyFilter: function(name, values) {
 filterOffers: function() {
     var filters = this.activeFilters, empty = true;
     var items = this.items, variants = this.variants;
-    for (var i = items.length; i--;) items[i].improper = true;
+    var ml = this.maxLayovers, total = items.length;
+    for (var i = items.length; i--;) {
+        var offer = items[i];
+        if (offer.longer = ml && offer.summary.layovers > ml) total--;
+        offer.improper = true;
+    }
     for (var i = 0, im = variants.length; i < im; i++) {
         var v = variants[i], improper = false;
+        if (v.offer.longer) {
+            v.improper = true;
+            v.el.addClass('improper');
+            continue;
+        }
         for (var key in filters) {
             empty = false;
             var fvalues = filters[key];
@@ -239,10 +280,10 @@ filterOffers: function() {
     var amount = 0;
     for (var i = items.length; i--;) {
         var offer = items[i];
-        offer.el.toggleClass('improper', offer.improper);
         if (!offer.improper) amount++;
+        offer.el.toggleClass('improper', offer.improper);
     }
-    this.showAmount(amount);
+    this.showAmount(amount, total);
     $('#offers-reset-filters').toggleClass('g-none', empty);
 },
 applySort: function(key) {
@@ -275,10 +316,12 @@ sortOffers: function() {
                 bestvalue = value;
             }
         }
-        if (bestvariant.el.hasClass('g-none')) this.showVariant(bestvariant.el);
-        var svalue = commonvalue ? offer.summary[key] : bestvariant.summary[key];
-        sitem.value = (svalue instanceof Array) ? svalue[0] : svalue;
-        sitems.push(sitem);
+        if (bestvariant) {
+            if (bestvariant.el.hasClass('g-none')) this.showVariant(bestvariant.el);
+            var svalue = commonvalue ? offer.summary[key] : bestvariant.summary[key];
+            sitem.value = (svalue instanceof Array) ? svalue[0] : svalue;
+            sitems.push(sitem);
+        }
     }
     sitems.sort(function(a, b) {
         if (a.value > b.value) return 1;
@@ -291,28 +334,6 @@ sortOffers: function() {
     for (var i = 0, lim = sitems.length; i < lim; i++) {
         list.append(sitems[i].offer.el);
     }
-},
-parseResults: function() {
-    var items = [], variants = [];
-    $('#offers-collection .offer').each(function() {
-        var el = $(this), offer = {
-            el: el,
-            summary: $.parseJSON(el.attr('data-summary')),
-            variants: []
-        };
-        var children = el.children('.offer-variant').each(function() {
-            var vel = $(this), variant = {
-                el: vel,
-                offer: offer,
-                summary: $.parseJSON(vel.attr('data-summary'))
-            };
-            offer.variants.push(variant);
-            variants.push(variant);
-        });
-        items.push(offer);
-    });
-    this.items = items;
-    this.variants = variants;
 },
 showRecommendations: function() {
     var variants = this.variants, cheap, fast, optimal;

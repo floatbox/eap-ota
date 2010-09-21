@@ -42,6 +42,7 @@
             <% if layover %>
             <p><%= human_duration(layover) %> между рейсами</p>
             <% end %>
+            <ul class="warnings">
             <% if layover %>
                 <% if layover < 90 %>
                     <li class="schange">Короткая стыковка</li>

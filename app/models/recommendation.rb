@@ -43,6 +43,14 @@ class Recommendation
   def variants_by_duration
     variants.sort_by(&:total_duration)
   end
+  
+  def summary
+    {
+      :price => price_total,
+      :airline => segments.first.marketing_carrier_name,
+      :layovers => segments.map{|s| s.flights.size}.max
+    }
+  end
 
   # comparison, uniquiness, etc.
   def signature
