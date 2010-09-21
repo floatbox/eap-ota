@@ -157,8 +157,11 @@ processUpdate: function() {
     this.updateFilters();
     this.parseResults();
     this.applySort('price');
-    if (this.maxLayovers) this.filterOffers();
-    this.showAmount();
+    if (this.maxLayovers) {
+        this.filterOffers();
+    } else {
+        this.showAmount();
+    }
     this.showRecommendations();
     this.toggleLoading(false);
     $('#offers-tabs').trigger('set', 'best');
