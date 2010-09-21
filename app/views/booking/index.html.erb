@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
 <html>
 <head>
     <%= render 'shared/head_common', {:title => 'Покупка билета'} %>
@@ -23,13 +24,18 @@
             <div id="offers-title">
                 <h1>из Москвы в Париж и обратно с 8 по 15 сентября вдвоём с ребёнком</h1>
                 <h5 class="g-xxs">
-                    <a href=#>Вернуться к&nbsp;результатам поиска</a>
+                    <a href="#">Вернуться к&nbsp;результатам поиска</a>
                     или
-                    <a href=#>поискать что-нибудь заново</a>
+                    <a href="#">поискать что-нибудь заново</a>
                 </h5>
             </div>
 
-            <% form_for :card, @card, :url => booking_pay_path do |f| %>
+            <% form_for :card,
+             @card,
+             :url => booking_pay_path,
+             :html => { :autocomplete => "off" } do |f|
+             %>
+
                 <dl class="booking">
 
                     <!-- Вариант перелёта -->
@@ -58,7 +64,7 @@
                                 <li>Перенести дату вылета можно за сутки до вылета или ранее.
                                 <li>Стоимость переноса - 20% от стоимости тарифа (5&nbsp;150&nbsp;<s class="rur">р<s>уб.</s></s>).
                             </ul>
-                            <span class="g-xxs">Прочитать <a href=# id="tarif-expand" class="b-pseudo" onclick="return 'tarif-text'"><u>текст тарифа целиком</u></a></span>
+                            <span class="g-xxs">Прочитать <a href="#" id="tarif-expand" class="b-pseudo" onclick="return 'tarif-text'"><u>текст тарифа целиком</u></a></span>
                             <pre id="tarif-text">
 0.  APPLICATION AND OTHER CONDITIONS
 RULE - 021/0921
@@ -85,8 +91,9 @@ ECONOMY NORMAL FARE WITHIN EUROPE VIA MSQ
                     <dt><b>2</b>Введите данные <%= @people.count == 1 ? 'пассажира' : 'пассажиров' %>
 
                         <%= render :partial => 'person_form', :collection => @people %>
-
-                        Взрослых: <%= @people_count[:adults] %>, детей: <%= @people_count[:children] %>, младенцев: <%= @people_count[:infants] %>
+<!--
+    Взрослых: <%= @people_count[:adults] %>, детей: <%= @people_count[:children] %>, младенцев: <%= @people_count[:infants] %>
+-->
 
                     <!-- Банковская карточка -->
 
@@ -110,8 +117,8 @@ ECONOMY NORMAL FARE WITHIN EUROPE VIA MSQ
                             <s></s>
                             <p>Пока невозможно. А хули?
                             <ul class="b-pseudo">
-                                <li>херовый у тебя <a href=# title="Отредактировать номер"><u>номер карточки</u></a>
-                                <li><a href=# title="Отредактировать имя"><u>имя</u></a> у тебя уёбищное
+                                <li>херовый у тебя <a href="#" title="Отредактировать номер"><u>номер карточки</u></a>
+                                <li><a href="#" title="Отредактировать имя"><u>имя</u></a> у тебя уёбищное
                                 <li>да и вообще ты мудак
                             </ul>
                         </div>

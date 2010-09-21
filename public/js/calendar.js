@@ -1,33 +1,7 @@
 /* Dates */
-Date.prototype.clone = function() {
-    return new Date(this.getTime());
-};
-Date.prototype.shift = function(days) {
-    this.setDate(this.getDate() + days);
-    return this;
-};
-Date.prototype.dayoff = function() {
-    var dow = this.getDay();
-    return (dow == 0 || dow == 6);
-};
-Date.prototype.toAmadeus = function() {
-    var d = this.getDate();
-    var m = this.getMonth() + 1;
-    var y = this.getFullYear() % 100;
-    return [d < 10 ? '0' : '', d, m < 10 ? '0' : '', m, y].join('');
-};
-Date.parseAmadeus = function(str) {
-    var d = parseInt(str.substring(0,2), 10);
-    var m = parseInt(str.substring(2,4), 10) - 1;
-    var y = parseInt(str.substring(4,6), 10) + 2000;
-    return new Date(y, m, d);
-};
-Date.daysInMonth = function(m, y) {
-    var date = new Date(y, m, 1);
-    date.setMonth(m + 1);
-    date.setDate(0);
-    return date.getDate();
-};
+
+// Date.prototype.clone, Date.prototype.shift и т.д. перенёс в utils.js
+// все стандартные объекты портим в одном месте
 
 /* Calendar scroll */
 app.CalendarScroller = function(parent) {

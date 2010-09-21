@@ -1,6 +1,6 @@
 $(function() {
 
-    app.wizard = $('dl.booking > dd');
+    app.wizard = $('dl.booking > dd[onclick]');
 
     app.wizard = $.map(app.wizard, function(el, i) {
         return new (app[el.onclick()])(el, i);

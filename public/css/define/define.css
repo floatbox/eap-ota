@@ -30,25 +30,28 @@
     padding: 0 15px 15px 10px;
 }
 
-.define thead
+/* "Уточнить" */
+
+.define#search-define
 {
-    color: #CCC;
     background: #3e3e3e;
 }
 
-.define thead tr {
+.define#search-define tr {
     font-size: 22px;
 
     border-top: none;
 }
 
-.define thead td {
+.define#search-define td {
     padding: 11px 0 10px 10px;
 
     vertical-align: top;
+
+    color: #ccc;
 }
 
-.define thead th {
+.define#search-define th {
     padding-top: 11px;
     padding-bottom: 10px;
 
@@ -56,6 +59,19 @@
     vertical-align: top;
     line-height: 140%;    
 }
+
+.define#search-define td a {
+    color: #ccc;
+}
+
+.define#search-define #search-submit
+{
+    padding: 10px 15px 10px 80px;
+
+    color: #fff;
+    background-color: #3e3e3e;
+}
+
 
 .define .group
 {

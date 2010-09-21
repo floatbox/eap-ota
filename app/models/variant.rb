@@ -17,7 +17,8 @@ class Variant
      :airlines => flights.every.operating_carrier_iata.uniq,
      :planes => flights.every.equipment_type_iata.uniq,
      :departures => segments.every.departure_time,
-     :duration => segments.sum(&:total_duration)
+     :duration => segments.sum(&:total_duration),
+     :flights => flights.size
     }
     segments.each_with_index do |segment, i|
       result['dpt_time_' + i.to_s] = segment.departure_day_part
