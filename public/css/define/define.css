@@ -64,6 +64,15 @@
     color: #ccc;
 }
 
+.define#search-define #search-submit
+{
+    padding: 10px 15px 10px 80px;
+
+    color: #fff;
+    background-color: #3e3e3e;
+}
+
+
 .define .group
 {
     display: inline;

@@ -302,7 +302,13 @@
         <div id="offers-all" class="offers g-none">
             <div class="offers-sort">
                 <h3 class="offers-title">Все варианты, отсортированные <span id="offers-sortedby">по цене</span></h3>
-                <p>можно <a href="#" class="sortedby" data-key="price"><u>по цене</u></a>, <a href="#" class="b-pseudo" data-key="duration"><u>по времени в пути</u></a>, <a href="#" class="b-pseudo" data-key="departures"><u>по времени вылета</u></a> или <a href="#" class="b-pseudo" data-key="airline"><u>по авиакомпании</u></a></p>
+                <p>
+                    можно 
+                    <a href="#" class="sortedby" onclick="return 'price'"><u>по цене</u></a>,
+                    <a href="#" class="b-pseudo" onclick="return 'duration'"><u>по времени в пути</u></a>,
+                    <a href="#" class="b-pseudo" onclick="return 'departures'"><u>по времени вылета</u></a>
+                    или&nbsp;<a href="#" class="b-pseudo" onclick="return 'airline'"><u>по авиакомпании</u></a>
+
             </div>
             <div id="offers-collection"></div>
         </div>
