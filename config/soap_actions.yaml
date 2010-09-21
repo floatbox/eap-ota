@@ -1,70 +1,73 @@
 --- 
 PNR_Retrieve: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/PNRRET_08_3_1A
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/PNRRET_08_3_1A
   r: http://xml.amadeus.com/PNRACC_08_2_1A
 Security_Authenticate: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/VLSSLQ_06_1_1A
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/VLSSLQ_06_1_1A
   r: http://xml.amadeus.com/VLSSLR_06_1_1A
 Air_MultiAvailability: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/SATRQT_07_1_1A
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/SATRQT_07_1_1A
   r: http://xml.amadeus.com/SATRSP_07_1_1A
 Fare_CheckRules: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/FARQNQ_07_1_1A
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/FARQNQ_07_1_1A
   r: http://xml.amadeus.com/FARQNR_07_1_1A
 Ticket_DeleteTST: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/TTSTDQ_04_1_1A
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/TTSTDQ_04_1_1A
   r: http://xml.amadeus.com/TTSTDR_04_1_1A
 Air_SellFromRecommendation: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/ITAREQ_05_2_IA
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/ITAREQ_05_2_IA
   r: http://xml.amadeus.com/ITARES_05_2_IA
 Air_SellFromAvailability: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/ITAREQ_05_1_IA
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/ITAREQ_05_1_IA
   r: http://xml.amadeus.com/ITARES_05_1_IA
 Queue_PlaceMessage: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/QUQMCQ_03_1_1A
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/QUQMCQ_03_1_1A
   r: http://xml.amadeus.com/QUQMCR_03_1_1A
 Queue_MoveItem: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/QUQMUQ_03_1_1A
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/QUQMUQ_03_1_1A
   r: http://xml.amadeus.com/QUQMUR_03_1_1A
 PNR_Cancel: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/PNRXCL_08_3_1A
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/PNRXCL_08_3_1A
   r: http://xml.amadeus.com/PNRACC_08_2_1A
 DocIssuance_IssueTicket: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/TTKTIQ_09_1_1A
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/TTKTIQ_09_1_1A
   r: http://xml.amadeus.com/TTKTIR_09_1_1A
 Fare_MasterPricerTravelBoardSearch: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/FMPTBQ_09_1_1A
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/FMPTBQ_09_1_1A
   r: http://xml.amadeus.com/FMPTBR_09_1_1A
 PNR_AddMultiElements: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/PNRADD_08_2_1A
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/PNRADD_08_2_1A
   r: http://xml.amadeus.com/PNRACC_08_2_1A
 Air_RetrieveSeatMap: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/SMPREQ_97_1_IA
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/SMPREQ_97_1_IA
   r: http://xml.amadeus.com/SMPRES_97_1_IA
 Security_SignOut: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/VLSSOQ_04_1_1A
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/VLSSOQ_04_1_1A
   r: http://xml.amadeus.com/VLSSOR_04_1_1A
 Queue_CountTotal: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/QCSDRQ_03_1_1A
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/QCSDRQ_03_1_1A
   r: http://xml.amadeus.com/QCSDRR_03_1_1A
 Queue_PlacePNR: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/QUQPCQ_03_1_1A
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/QUQPCQ_03_1_1A
   r: http://xml.amadeus.com/QUQPCR_03_1_1A
 Queue_RemoveItem: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/QUQMDQ_03_1_1A
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/QUQMDQ_03_1_1A
   r: http://xml.amadeus.com/QUQMDR_03_1_1A
 Fare_MasterPricerCalendar: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/FMPCAQ_10_2_1A
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/FMPCAQ_10_2_1A
   r: http://xml.amadeus.com/FMPCAR_10_2_1A
 Air_FlightInfo: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/FLIREQ_05_1_1A
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/FLIREQ_05_1_1A
   r: http://xml.amadeus.com/FLIRES_05_1_1A
 PNR_AddSSR: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/SSRREQ_02_2_IA
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/SSRREQ_02_2_IA
   r: http://xml.amadeus.com/SSRRES_02_2_IA
 Fare_PricePNRWithLowerFares: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/TPLFRQ_07_3_1A
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/TPLFRQ_07_3_1A
   r: http://xml.amadeus.com/TPLFRR_07_3_1A
 Ticket_ProcessETicket: 
-  soap_action: http://webservices.amadeus.com/1ASIWPOC1A/TKTREQ_04_1_IA
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/TKTREQ_04_1_IA
   r: http://xml.amadeus.com/TKTRES_04_1_IA
+Fare_InformativePricingWithoutPNR:
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/TIPNRQ_08_1_1A
+  r: http://xml.amadeus.com/TIPNRQ_08_1_1A
