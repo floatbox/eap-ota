@@ -47,7 +47,7 @@ init: function() {
     // Сортировка
     $('#offers-list').delegate('.offers-sort a', 'click', function(event) {
         event.preventDefault();
-        var self = app.offers, key = $(this).attr('data-key');
+        var self = app.offers, key = this.onclick();
         var list = $('#offers-collection').css('opacity', 0.7);
         setTimeout(function() {
             list.hide();
@@ -288,7 +288,7 @@ filterOffers: function() {
 },
 applySort: function(key) {
     $('#offers-all .offers-sort a').each(function() {
-        var el = $(this), hidden = (el.attr('data-key') == key);
+        var el = $(this), hidden = (this.onclick() == key);
         el.toggleClass('sortedby', hidden).toggleClass('b-pseudo', !hidden);
         if (hidden) $('#offers-sortedby').text(el.text());
     });

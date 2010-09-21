@@ -156,13 +156,8 @@ dl.booking dd.ready {
     }
 
 /* Прочее - общие свойства */
-    dl.booking h2 {
-        font: bold 18px Arial,s;
-
-        margin: .5em 0 .2em 0;
-        padding: 0 0 0 10px;
-
-        color: #333;
+    dl.booking fieldset legend {
+        display: none;
     }
 
     dl.booking .b-pseudo {
@@ -375,6 +370,19 @@ dl.booking dd.book-p {
 
 .book-p input.text-bonus {
     width: 197px;
+}
+
+/* номер пассажира */
+dl.booking dd.book-p-num {
+    font: bold 18px Arial,s;
+
+    margin: .5em 0 .2em 0;
+    padding: 0 0 0 10px;
+
+    color: #333;
+    background: none;
+    border: none;
+
 }
 
 

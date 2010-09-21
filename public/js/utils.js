@@ -35,7 +35,7 @@ app.utils = {
 }
 
 
-//////// Расширения /////////////
+//////// Расширения встроенных объектов /////////////
 
 //////// Function /////////////
 
@@ -45,18 +45,53 @@ Function.prototype.extend = function(p) {
     this.prototype = new f();
     this.prototype.constructor = this;
     this.superclass = p.prototype;
-}
+};
 
 
 //////// String /////////////
 
-// http://sreznikov.blogspot.com/2010/01/supplant.html
-
-String.prototype.supplant = function(o) {
+String.prototype.supplant = function(o) { // см. http://sreznikov.blogspot.com/2010/01/supplant.html
     return this.replace(/{([^{}]*)}/g,
         function(a, b) {
             var r = o[b];
             return typeof r === 'string' || typeof r === 'number' ? r : a;
         }
     );
+};
+
+//////// Date /////////////
+
+Date.prototype.clone = function() {
+    return new Date(this.getTime());
+};
+
+Date.prototype.shift = function(days) {
+    this.setDate(this.getDate() + days);
+    return this;
+};
+
+Date.prototype.dayoff = function() {
+    var dow = this.getDay();
+    return (dow == 0 || dow == 6);
+};
+
+Date.prototype.toAmadeus = function() {
+    var d = this.getDate();
+    var m = this.getMonth() + 1;
+    var y = this.getFullYear() % 100;
+    return [d < 10 ? '0' : '', d, m < 10 ? '0' : '', m, y].join('');
+};
+
+Date.parseAmadeus = function(str) {
+    var d = parseInt(str.substring(0,2), 10);
+    var m = parseInt(str.substring(2,4), 10) - 1;
+    var y = parseInt(str.substring(4,6), 10) + 2000;
+    return new Date(y, m, d);
+};
+
+Date.daysInMonth = function(m, y) {
+    var date = new Date(y, m, 1);
+    date.setMonth(m + 1);
+    date.setDate(0);
+    return date.getDate();
 };

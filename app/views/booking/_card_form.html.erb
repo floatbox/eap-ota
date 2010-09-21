@@ -5,6 +5,7 @@
                 <i class="visa"></i>&nbsp;или&nbsp;<i class="master inactive"></i>
 
             <fieldset class="bankcardno">
+                <legend></legend>
                 <label
                  for="payment-bankcardno"
                  class="g-xs"
@@ -39,6 +40,7 @@
             </fieldset>
 
             <fieldset class="bankcardname">
+                <legend></legend>
                 <label 
                  for="payment-bankcardname"
                  class="g-xs"
@@ -53,6 +55,7 @@
             </fieldset>
 
             <fieldset class="bankcardexpires">
+                <legend></legend>
                 <label for="payment-bankcardexpires-m" class="g-xs" title="На карте обозначено как &laquo;VALID THRU&raquo;">Срок действия</label>
 
                 <%= f.text_field :month,
@@ -80,6 +83,7 @@
             <p class="magneticstrip">&nbsp;
 
             <fieldset class="bankcardcvv">
+                <legend></legend>
                 <label 
                  for="payment-bankcardcvv" 
                  class="g-xs" 
@@ -98,6 +102,7 @@
             </fieldset>
 
             <fieldset class="bankcardbankname">
+                <legend></legend>
                 <label
                  for="payment-bankcardbankname"
                  class="g-xs"
@@ -115,16 +120,6 @@
     </ul>
 
     <table class="bc-bill">
-        <tr>
-            <th>Стоимость <%= @people.count == 1 ? 'билета' : 'билетов' %>
-            <th rowspan="2"><i>+</i>
-            <th>Комиссия за&nbsp;транзакцию
-            <th rowspan="2"><i>=</i>
-            <th>С&nbsp;карты будет списано
-        <tr>
-            <td><u>25&nbsp;678</u><i>рублей</i>
-            <td><u>1&nbsp;265</u><i>рублей</i>
-            <td><b>27&nbsp;654</b><i>рубля</i>
         <tfoot>
             <tr class="g-xxs">
                 <td>&mdash;&nbsp;стоимость всех билетов с&nbsp;налогами и&nbsp;сборами
@@ -132,4 +127,15 @@
                 <td>&mdash;&nbsp;комиссия платёжной системы за&nbsp;перевод&hellip;ну и&nbsp;нам на&nbsp;сигареты
                 <td>
                 <td>
+        <tbody>
+            <tr>
+                <th>Стоимость <%= @people.count == 1 ? 'билета' : 'билетов' %>
+                <th rowspan="2"><i>+</i>
+                <th>Комиссия за&nbsp;транзакцию
+                <th rowspan="2"><i>=</i>
+                <th>С&nbsp;карты будет списано
+            <tr>
+                <td><u>25&nbsp;678</u><i>рублей</i>
+                <td><u>1&nbsp;265</u><i>рублей</i>
+                <td><b>27&nbsp;654</b><i>рубля</i>
     </table>
