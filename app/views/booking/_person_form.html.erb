@@ -2,7 +2,7 @@
 <% if person_form_counter > 0 %>
     <h2><%= @numbers[person_form_counter]%> пассажир</h2>
 <% end  %>
-<% fields_for "data[person_attributes][]", person_form do |person| %>
+<% fields_for "data[person_attributes][]", person_form, :index => person_form_counter do |person| %>
 <dd class="book-p" onclick="return 'Person'">
     <table>
         <tr>
