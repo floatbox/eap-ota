@@ -37,7 +37,9 @@ class Amadeus < Handsoap::Service
     else
       soap_body = render(action, args)
       response = nil
-      AmadeusSession.with_session(opts[:session]) do |session|
+      # WTF по каким-то неясным причинам без :: ломается development mode
+      # 'Amadeus module is not active or removed'
+      ::AmadeusSession.with_session(opts[:session]) do |session|
         @@request_time = Benchmark.ms do
           response = invoke(action,
             :soap_action => opts[:soap_action],
