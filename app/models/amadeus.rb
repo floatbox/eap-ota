@@ -1,7 +1,6 @@
 # -*- encoding: utf-8 -*-
 
 #require 'handsoap'
-#require 'amadeus_sessions'
 #require 'haml'
 #require 'yaml'
 class Amadeus < Handsoap::Service
@@ -16,8 +15,6 @@ class Amadeus < Handsoap::Service
   def self.fake; $amadeus_fake; end
   #Handsoap.http_driver = :http_client
   Handsoap.timeout = 500
-
-  include AmadeusSessions
 
   endpoint :uri => "https://test.webservices.amadeus.com", :version => 1
 
@@ -40,7 +37,9 @@ class Amadeus < Handsoap::Service
     else
       soap_body = render(action, args)
       response = nil
-      Session.with_session(opts[:session]) do |session|
+      # WTF по каким-то неясным причинам без :: ломается development mode
+      # 'Amadeus module is not active or removed'
+      ::AmadeusSession.with_session(opts[:session]) do |session|
         @@request_time = Benchmark.ms do
           response = invoke(action,
             :soap_action => opts[:soap_action],
