@@ -18,7 +18,7 @@ class AmadeusSession < ActiveRecord::Base
 
   # для продолжения использования сессии между реквестами
   def self.from_booking(booking)
-    busy.find_by_booking(booking) || raise "Amadeus session not found or expired"
+    busy.find_by_booking(booking) or raise("Amadeus session not found or expired")
   end
 
   def increment
