@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100819141740) do
+ActiveRecord::Schema.define(:version => 20100920162811) do
 
   create_table "airlines", :force => true do |t|
     t.string   "en_shortname"
@@ -67,6 +67,14 @@ ActiveRecord::Schema.define(:version => 20100819141740) do
     t.integer  "airline_id"
     t.float    "value",      :default => 0.0,   :null => false
     t.boolean  "percentage", :default => false, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "amadeus_sessions", :force => true do |t|
+    t.string   "token",      :null => false
+    t.integer  "seq",        :null => false
+    t.integer  "booking"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

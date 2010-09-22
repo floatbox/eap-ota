@@ -2,7 +2,7 @@ class Pnr
   attr_accessor :number, :flights, :passengers, :phone, :prices, :taxes
   
   def self.get_by_number number
-    a_session = AmadeusSessions::Session.book
+    a_session = AmadeusSession.book
     xml = Amadeus.pnr_retrieve(OpenStruct.new(:number => number, :debug => false), a_session)
     xml1 = Amadeus.fare_price_pnr_with_lower_fares(OpenStruct.new({:number => number}), a_session)
     a_session.release
