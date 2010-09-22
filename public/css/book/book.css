@@ -128,6 +128,7 @@ dl.booking dd.ready {
     dl.booking .text-value {
         color: #333;
         border: 1px solid #4eb700;
+        background: #fff;
     }
 
     dl.booking .text-invalid {
