@@ -3,7 +3,7 @@
     <dd class="book-p-num"><%= @numbers[person_form_counter]%> пассажир
 <% end  %>
 
-<% fields_for "data[person_attributes][]", person_form do |person| %>
+<% fields_for "data[person_attributes][]", person_form, :index => person_form_counter do |person| %>
 <dd class="book-p" onclick="return 'Person'">
     <table>
         <tfoot>
