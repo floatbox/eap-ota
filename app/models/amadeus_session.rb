@@ -1,17 +1,27 @@
+# простой, но надежный как rand(2**31) != rand(2**31) аллокатор сессий
+# обошелся без блокировки таблиц
 class AmadeusSession < ActiveRecord::Base
 
-  TIMEOUT = 180
+  INACTIVITY_TIMEOUT = 25*60
+  MAX_SESSIONS = 10
+
+  named_scope :stale, lambda { {:conditions => ["updated_at < ?", INACTIVITY_TIMEOUT.seconds.ago]}}
+  named_scope :busy, :conditions => "booking is not null"
+  named_scope :free, lambda { {:conditions => ["updated_at >= ? AND booking is null", INACTIVITY_TIMEOUT.seconds.ago]}}
 
   def self.from_token(auth_token)
     session = new
     session.token, session.seq = auth_token.split('|')
     session.seq += 1
-    #self.last_used = Time.now
     session
   end
 
+  # для продолжения использования сессии между реквестами
+  def self.from_booking(booking)
+    busy.find_by_booking(booking) || raise "Amadeus session not found or expired"
+  end
+
   def increment
-    #self.last_used = Time.now
     self.seq += 1
   end
 
@@ -19,21 +29,9 @@ class AmadeusSession < ActiveRecord::Base
     "#{token}|#{seq}"
   end
 
-  def busy?
-    !booking.nil?
-  end
-
   def release
     self.booking = nil
     save
-  end
-
-  def ready?
-    !busy? && !timeout?
-  end
-
-  def timeout?
-    Time.now - last_used > TIMEOUT
   end
 
   def self.with_session(previous_session=nil)
@@ -51,20 +49,23 @@ class AmadeusSession < ActiveRecord::Base
   end
 
   def self.book
+    logger.debug { "Free sessions count: #{free.count}" }
     booking = rand(2**31)
-    logger.debug { "Free sessions count: #{count}" }
-    update_all({:booking => booking}, {:booking => nil}, {:limit => 1})
+    free.update_all({:booking => booking}, nil, {:limit => 1})
     session = find_by_booking(booking)
     unless session
       unless session = increase_pool(booking)
         raise "somehow can't get new session"
       end
+    else
+      logger.debug "Reusing session #{session.token}"
     end
     session
   end
 
   # без параметра создает незарезервированную сессию
   def self.increase_pool(booking=nil)
+    logger.debug "Allocating new amadeus session"
     token = Amadeus.security_authenticate
     session = from_token(token)
     session.booking = booking if booking
@@ -72,15 +73,11 @@ class AmadeusSession < ActiveRecord::Base
     session
   end
 
+  # для кронтасков, скоростью не блещет
+  # TODO сделать logout для старых сессий
   def self.housekeep
-    delete_all ["updated_at < ?", TIMEOUT.seconds.ago]
-    # allocate more sessions
-    #if (count = free_sessions_count) < SAFE_FREE_SESSIONS_COUNT
-    #  (SAFE_FREE_SESSIONS_COUNT - count).times { increase_pool }
-    #end
+    stale.delete_all
+    (MAX_SESSIONS-count).times { increase_pool }
   end
 
-  def self.free_sessions_count
-    count ["updated_at >= ?", TIMOUT.seconds.ago]
-  end
 end
