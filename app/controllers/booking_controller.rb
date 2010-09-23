@@ -1,5 +1,7 @@
 class BookingController < ApplicationController
-  
+
+  filter_parameter_logging :card
+
   def index
     #@pnr_form = PNRForm.new(:flight_codes => params[:flight_codes].split('_'))
     require 'variant'
