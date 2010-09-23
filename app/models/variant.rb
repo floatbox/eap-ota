@@ -29,8 +29,12 @@ class Variant
     result
   end
 
-  def flight_codes
-    segments.every.flights.flatten.every.flight_code
+  def flight_codes(booking_classes)
+    result = []
+    flights.each_with_index {|f,i|
+      result << f.flight_code(booking_classes[i])
+      }
+    result
   end
 
   def common_carrier
