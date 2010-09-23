@@ -9,5 +9,4 @@ app.offers = {};
 
 // шоткат для консоли
 
-window.app._debug = (document.location.host).indexOf('team') > -1;
-window.l = window.app._debug ? (window.console && console.log || alert) : $.noop;
+window.l = (document.location.host).indexOf('team') > -1 ? (window.console && console.log || alert) : $.noop;

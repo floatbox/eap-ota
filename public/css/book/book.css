@@ -98,7 +98,6 @@ dl.booking dd.ready {
         z-index: 2;
         -webkit-transition: border-color linear .2s;
 
-        border-color: #606060;
         background: #fff;
     }
 
@@ -106,7 +105,6 @@ dl.booking dd.ready {
         z-index: 3;
 
         color: #333;
-        border-color: #606060;
         background: #fff;
         outline: none;
 
@@ -132,7 +130,7 @@ dl.booking dd.ready {
     }
 
     dl.booking .text-invalid {
-        border: 1px solid #db3f89;
+        border: 1px dashed red;
 
         /*
         box-shadow: 0 0 6px rgba(255, 0, 0, .3);
