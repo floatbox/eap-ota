@@ -7,5 +7,11 @@ module ActionView
         "<#{name}#{tag_options(options, escape) if options}#{open ? ">" : " />"}".html_safe
       end
     end
+
+    module TagHelper
+      def tag(name, options = nil, open = true, escape = true)
+        "<#{name}#{tag_options(options, escape) if options}#{open ? ">" : " />"}".html_safe
+      end
+    end
   end
 end
