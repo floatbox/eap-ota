@@ -1,7 +1,9 @@
-<% if @recommendations.present? %>
-    <div id="offers-collection" data-filters='<%= Recommendation.summary(@recommendations).to_json %>'>
-        <%= render :partial => 'recommendation', :collection => @recommendations %>
-    </div>
-<% else %>
-    <h2>Таких рейсов нет, попробуйте другие даты.</h2>
+<% cache(:action => "index", :action_suffix => @code) do %>
+  <% if @recommendations.present? %>
+      <div id = "offers-collection" data-filters='<%= Recommendation.summary(@recommendations).to_json %>' code='<%= @code %>'>
+          <%= render :partial => 'recommendation', :collection => @recommendations %>
+      </div>
+  <% else %>
+      <h2>Таких рейсов нет, попробуйте другие даты.</h2>
+  <% end %>
 <% end %>

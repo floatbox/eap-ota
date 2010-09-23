@@ -16,6 +16,7 @@ class PricerController < ApplicationController
       @cheap_recommendation = Recommendation.cheap(@recommendations)
       @fast_recommendation = Recommendation.fast(@recommendations)
       @optimal_recommendation = @fast_recommendation
+      @code = ShortUrl.generate_url(@recommendations.hash)
     end
 
   render :partial => 'recommendations'
