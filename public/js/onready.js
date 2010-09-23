@@ -309,10 +309,14 @@
     // фокус на поле ввода "Куда"
     tools.to.focus();
 
-// счётчик секунд; отладка
-//app.timer = $('#offers-progress h4 i').timer();
-//app.timer.trigger('start');
 
+    var h = window.location.hash;
+    if (h) try {
+        h = JSON.parse(decodeURIComponent(h).slice(1));
+        app.offers.load(h, 'Загружаем сохранённые результаты');
+        app.offers.show();
+    }
+    catch(e){};
 });
 
 

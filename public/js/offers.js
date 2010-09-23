@@ -94,8 +94,10 @@ load: function(data, title) {
     this.update = {
         title: title,
         loading: true,
+        data: data,
         content: ''
     };
+
     $.get("/pricer/", {
         search: data
     }, function(s) {
@@ -151,6 +153,9 @@ toggleLoading: function(mode) {
     // запускаем/останавливаем таймер счётчика
     this.loading.timer.trigger(mode ? 'start' : 'stop');
 },
+updateHash: function(hash) {
+    window.location.hash = encodeURIComponent(JSON.stringify(hash));
+},
 processUpdate: function() {
     $('#offers-collection').replaceWith(this.update.content);
     this.update.content = null;
@@ -164,6 +169,7 @@ processUpdate: function() {
     }
     this.showRecommendations();
     this.toggleLoading(false);
+    this.updateHash(this.update.data);
     $('#offers-tabs').trigger('set', 'best');
 },
 parseResults: function() {
@@ -389,7 +395,7 @@ sortOffers: function() {
     for (var i = 0, lim = sitems.length; i < lim; i++) {
 
 //        list.append($('<h1><b style="font-weight:bold">{weight}</b> &nbsp;&nbsp; время = {value}</h1>'.supplant({price: sitems[i].price, value: sitems[i].value, weight: (sitems[i].weight / sitems.weightMax).toFixed(3)})));
-        list.append($('<h1><b style="font-weight:bold">{weight}</b> &nbsp;&nbsp; время = {value}</h1>'.supplant({price: sitems[i].price, value: sitems[i].value, weight: parseInt(sitems[i].weight)})));
+        list.append($('<h1><b style="font-weight:bold">{weightNorm} / {weight}</b> &nbsp;&nbsp; время = {value}</h1>'.supplant({price: sitems[i].price, value: sitems[i].value, weight: parseInt(sitems[i].weight), weightNorm: (sitems[i].weight / sitems.weightMax).toFixed(3)})));
 
         var red = sitems[i].price > sitems.priceM1 + sitems.priceM2;
         red = red || sitems[i].value > sitems.valueM1 + sitems.valueM2;
