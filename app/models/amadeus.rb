@@ -146,6 +146,10 @@ class Amadeus < Handsoap::Service
     soap_action 'Fare_PricePNRWithLowerFares', args, session
   end
 
+  def fare_informative_pricing_without_pnr(args, session = nil )
+    soap_action 'Fare_InformativePricingWithoutPNR', args, session
+  end
+
   def soap_action(action, args = nil, session = nil)
     yml = YAML::load(File.open(RAILS_ROOT+'/config/soap_actions.yaml'))
     response = invoke_rendered action,
