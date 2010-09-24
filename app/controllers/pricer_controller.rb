@@ -2,12 +2,12 @@ class PricerController < ApplicationController
   layout false
 
   def index
-    if params[:code]
-      unless fragment_exist?({ :action_suffix => params[:code]})
-        render :nothing => true unless fragment_exist?({ :action_suffix => params[:code]})
+    if params[:query_key]
+      unless fragment_exist?({ :action_suffix => params[:query_key]})
+        render :nothing => true unless fragment_exist?({ :action_suffix => params[:query_key]})
         return
       end
-      @code = params[:code]
+      @query_key = params[:query_key]
     else
       @search = PricerForm.new(params[:search])
       if @search.valid?
@@ -23,7 +23,7 @@ class PricerController < ApplicationController
         @cheap_recommendation = Recommendation.cheap(@recommendations)
         @fast_recommendation = Recommendation.fast(@recommendations)
         @optimal_recommendation = @fast_recommendation
-        @code = ShortUrl.generate_url(@recommendations.hash)
+        @query_key = ShortUrl.generate_url(@recommendations.hash)
       end
     end
     
