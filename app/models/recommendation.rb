@@ -48,7 +48,8 @@ class Recommendation
     {
       :price => price_total,
       :airline => segments.first.marketing_carrier_name,
-      :layovers => segments.map{|s| s.flights.size}.max
+      :layovers => segments.map{|s| s.flights.size}.max,
+      :depcities => variants.first.segments.map{|s| s.flights.first.departure.city.case_from}
     }
   end
 

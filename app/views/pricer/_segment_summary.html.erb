@@ -1,24 +1,29 @@
-<tr<%= ' class="ret"' if segment_counter > 0 %>>
+<tr class="segment<%= segment_counter %>">
 
     <% if variant.common_carrier && variant.segments.length > 1 %>
+    <td class="carrier common" rowspan="2">
     <% if segment_counter == 0 %>
-    <td class="carrier common" rowspan="<%= variant.segments.length %>">
+    <table class="shift"><tr><td>
         <p><img src="<%= segment.marketing_carrier.icon_url %>" alt=""></p>
         <p><%= segment.marketing_carrier_name %></p>
-    </td>
+    </td></tr></table>
     <% end %>
+    </td>
     <% else %>
-    <td class="carrier">
+    <td class="carrier" rowspan="2">
         <p><img src="<%= segment.marketing_carrier.icon_url %>" alt=""></p>
         <p><%= segment.marketing_carrier_name %></p>
     </td>
     <% end %>
 
-    <td class="dpt" colspan="2">
+    <td class="dpt">
         <h5><%= fmt_time( segment.departure_time ) %><span class="direction"> — <%= segment_counter == 0 ? 'туда' : 'обратно' %></span></h5>
-        <p><%= segment.departure.city.name %><% unless segment.departure.equal_to_city %>, <%= segment.departure_name %><% end %></p>
+        <h6><%= segment.departure.city.name %></h6>
+        <% unless segment.departure.equal_to_city %>
+            <p><%= segment.departure_name %></p>
+        <% end %>
         <% if segment.departure_term %>
-        <p class="note">Терминал&nbsp;<%= segment.departure_term %></p>
+            <p class="note">Терминал&nbsp;<%= segment.departure_term %></p>
         <% end %>
     </td>
     <td class="fly" colspan="2">
@@ -27,38 +32,44 @@
         <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
             <div class="flight" title="Перелёт <%= flight.departure.city.name %> — <%= flight.arrival.city.name %>"></div>
             <% if layover %>
-            <% layover_human_durations << human_duration(layover) %>
-            <div class="change" title="Пересадка <%= flight.arrival.city.case_in %>, <%= human_duration(layover) %>"></div>
+                <% layover_human_durations << human_duration(layover) %>
+                <div class="change" title="Пересадка <%= flight.arrival.city.case_in %>, <%= human_duration(layover) %>"></div>
             <% end %>
         <% end %>
         </div>
         <h6><%= human_duration(segment.total_duration) %> в пути</h6>
         <% unless layover_human_durations.empty? %>
-        <p class="note"><%= layover_human_durations.to_sentence %> между рейсами</p>
+            <p class="note"><%= layover_human_durations.to_sentence %> между рейсами</p>
         <% end %>
     </td>
     <td class="arv">
         <h5><%= fmt_time( segment.arrival_time ) %></h5>
-        <p><%= segment.arrival.city.name %><% unless segment.arrival.equal_to_city %>, <%= segment.arrival_name %><% end %><p>
+        <h6><%= segment.arrival.city.name %></h6>
+        <% unless segment.arrival.equal_to_city %>
+            <p><%= segment.arrival_name %></p>
+        <% end %>
         <% if segment.arrival_term %>
-        <p class="note">Терминал&nbsp;<%= segment.arrival_term %></p>
+            <p class="note">Терминал&nbsp;<%= segment.arrival_term %></p>
         <% end %>
     </td>
     
     <% if variant.common_layovers && variant.segments.length > 1 %>
-    <% if segment_counter == 0 %>
-    <td class="changes common" rowspan="<%= variant.segments.length %>">
-        <% if segment.layovers? %>
+    <td class="changes common" rowspan="2">
+    <% if segment_counter == 0 && segment.layovers? %>
+    <table class="shift"><tr><td>
         <p>С <%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %></p>
-        <% end %>
-    </td>
+    </td></tr></table>
     <% end %>
+    </td>
     <% else %>
-    <td class="changes">
+    <td class="changes" rowspan="2">
         <% if segment.layovers? %>
         <p>С <%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %></p>
         <% end %>
     </td>    
     <% end %>
     
+</tr>
+<tr class="segment<%= segment_counter %>">
+    <td colspan="4" class="variants"></td>
 </tr>
