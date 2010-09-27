@@ -134,10 +134,13 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     xml.xpath("//r:recommendation").map do |rec|
       prices = rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").collect {|x| x.to_i }
       price_total = prices.sum
-      cabins = rec.xpath("r:paxFareProduct/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:cabin").every.to_s
+      cabins =
+        rec.xpath("r:paxFareProduct/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:cabin").every.to_s
+      booking_classes = 
+        rec.xpath("r:paxFareProduct/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:rbd").every.to_s
       # компаний может быть несколько, нас интересует та, где
       # r:transportStageQualifier[text()="V"]. но она обычно первая.
-      validating_carrier_iata =
+      validating_carrier_iata = 
         rec.xpath("r:paxFareProduct/r:paxFareDetail/r:codeShareDetails/r:company[../r:transportStageQualifier='V']").to_s
 
       variants = rec.xpath("r:segmentFlightRef").map {|sf|
@@ -162,7 +165,8 @@ class PricerForm < ActiveRecord::BaseWithoutTable
         :variants => variants,
         :validating_carrier_iata => validating_carrier_iata,
         :additional_info => additional_info,
-        :cabins => cabins
+        :cabins => cabins,
+        :booking_classes => booking_classes
       )
     end
   end

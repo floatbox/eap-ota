@@ -94,9 +94,9 @@ class Flight
     self.class.calculate_distance(departure, arrival) rescue 5000
   end
   
-  def flight_code
+  def flight_code(booking_class = nil)
     #SS LH3240 B 10SEP FRAMOW 1
-    full_flight_number + (class_of_service || 'Y') + departure_date + departure_iata + arrival_iata + (seat_count || 1).to_s
+    full_flight_number + (class_of_service || booking_class ||'Y') + departure_date + departure_iata + arrival_iata + (seat_count || 1).to_s
   end
   
   def self.from_flight_code code

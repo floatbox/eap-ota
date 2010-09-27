@@ -11,6 +11,8 @@ config.action_view.cache_template_loading            = true
 
 config.action_mailer.delivery_method = :sendmail
 config.action_mailer.default_content_type = "text/html"
+config.action_controller.perform_caching = true
+config.cache_store = :file_store, Rails.root + "tmp/cache/"
 
 # See everything in the log (default is :info)
 # config.log_level = :debug

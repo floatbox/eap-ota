@@ -73,8 +73,9 @@ app.Validate = function() {
         var re = /^[a-z\s]+$/i;
         if (!re.test(val)) return msg.latin.supplant({name: qname});
     }
+
     if (rules.num) {
-        var re = /^\d+$/i;
+        var re = /^\d+$/;
         if (!re.test(val)) return msg.num.supplant({name: qname});
     }
     if (rules.email) {

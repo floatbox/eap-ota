@@ -61,7 +61,7 @@ validate: function(data) {
         search: data
     }, function(result) {
         self.toggle(result.valid);
-        if (result.valid) app.offers.load(data, result.human);  
+        if (result.valid) app.offers.load(data, result.human);
     });
 },
 toggle: function(mode) {

@@ -1,7 +1,9 @@
+<% cache(:action => "index", :action_suffix => @query_key) do %>
 <% if @recommendations.present? %>
-    <div id="offers-collection" data-filters='<%= Recommendation.summary(@recommendations).to_json %>'>
+    <div id="offers-collection" data-filters='<%= Recommendation.summary(@recommendations).to_json %>' data-query_key='<%= @query_key %>'>
         <%= render :partial => 'recommendation', :collection => @recommendations %>
     </div>
 <% else %>
     <div id="offers-collection">Таких рейсов нет, попробуйте другие даты.</div>
+<% end %>
 <% end %>
