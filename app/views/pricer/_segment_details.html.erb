@@ -24,6 +24,9 @@
             <p>Рейс <%= flight.operating_carrier_iata %>&nbsp;<%= flight.flight_number %> <%= flight.departure.city.name %> — <%= flight.arrival.city.name %></p>
             <p>Самолёт <%= flight.equipment_type_name %></p>
             <p><%= human_duration(flight.duration) %> в пути</p>
+            <% if segment_cabins && segment_cabins[flight_index] == 'C' %>
+            <p>Бизнес-класс</p>
+            <% end %>
         </div>
     </td>
     <td></td>

@@ -157,7 +157,8 @@
         arv_airport_0: [],
         dpt_airport_1: [],
         arv_airport_1: [],
-
+        
+        cities: [],
         airlines: [],        
         planes: []
 

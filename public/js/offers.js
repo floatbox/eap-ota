@@ -220,6 +220,7 @@ updateFilters: function() {
     this.filterable = false;
     this.filters['airlines'].trigger('update', data);
     this.filters['planes'].trigger('update', data);
+    this.filters['cities'].trigger('update', data);
     for (var i = data.segments; i--;) {
         this.filters['arv_airport_' + i].trigger('update', data);
         this.filters['dpt_airport_' + i].trigger('update', data);
