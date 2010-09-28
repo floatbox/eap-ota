@@ -5,6 +5,7 @@ init: function() {
     this.container = $('#offers');
     this.loading = $('#offers-loading');
     this.results = $('#offers-results');
+    this.empty = $('#offers-empty');
     this.update = {};
 
     // счётчик секунд на панели ожидания
@@ -13,6 +14,7 @@ init: function() {
     // Табы
     $('#offers-tabs').bind('select', function(e, v) {
         $('#offers-' + v).removeClass('g-none').siblings().addClass('g-none');
+        app.offers.selectedTab = v;
     }).radio({
         toggleClosest: 'li'
     });
@@ -24,8 +26,9 @@ init: function() {
             self.addClass('hover');
         }, 400));
     }).delegate('.offer', 'mouseleave', function() {
-        clearTimeout($(this).data('timer'));
-        $(this).removeClass('hover');
+        var el = $(this);
+        clearTimeout(el.data('timer'));
+        if (el.hasClass('collapsed')) el.removeClass('hover');
     });
     
     // Подробности
@@ -36,7 +39,7 @@ init: function() {
             offer.height(offer.height()).removeClass('collapsed').animate({
                 height: variant.height()
             }, 400, function() {
-                offer.height('auto').addClass('expanded');
+                offer.height('auto').addClass('expanded hover');
             });
         }
     });
@@ -60,31 +63,25 @@ init: function() {
     // Выбор времени вылета
     $('#offers-list').delegate('td.variants a', 'click', function(event) {
         event.preventDefault();
-        var current = $(this).closest('.offer-variant');
-        var departures = $.parseJSON(current.attr('data-summary')).departures;
-        var sindex = parseInt($(this).attr('data-segment'), 10);
-        var svalue = $(this).text().replace(':', '');
-        departures[sindex] = svalue;
-        var query = departures.join(' ');
-        var match = null, half_match = null;
-        current.siblings().each(function() {
-            var variant = $(this);
-            var vd = $.parseJSON(variant.attr('data-summary')).departures;
-            if (vd.join(' ') == query) {
-                match = variant;
-                return false;
-            } else if (vd[sindex] == svalue) {
-                half_match = variant;
+        var el = $(this), dtime = el.text().replace(':', '');
+        var segment = parseInt(el.parent().attr('data-segment'), 10);
+        var current = app.offers.variants[parseInt(el.closest('.offer-variant').attr('data-index'), 10)];
+        var variants = current.offer.variants, departures = current.summary.departures.concat();
+        departures[segment] = dtime;
+        var query = departures.join(' '), match = undefined, half_match = undefined;
+        for (var i = variants.length; i--;) {
+            var variant = variants[i], dtimes = variant.summary.departures;
+            if (variant.improper) continue;
+            if (dtimes.join(' ') == query) {
+                match = i;
+            } else if (dtimes[segment] == dtime) {
+                half_match = i;
             }
-        });
-        var variant = match || half_match;
-        if (variant) {
-            if (variant.hasClass('improper')) {
-                alert('Выбранный вариант вылета не соответствует текущим фильтрам');
-                variant.removeClass('improper');
-            }
-            current.addClass('g-none');
-            variant.removeClass('g-none');
+        }
+        var result = match !== undefined ? match : half_match;
+        if (result !== undefined) {
+            var offer = el.closest('.offer-variant').addClass('g-none').closest('.offer');
+            $('.offer-variant', offer).eq(parseInt(result, 10)).removeClass('g-none');
         }
     });
     
@@ -92,10 +89,9 @@ init: function() {
 load: function(data, title) {
     var self = this;
     this.update = {
-        title: title,
-        loading: true,
         data: data,
-        content: ''
+        title: title,
+        loading: true
     };
 
     $.get("/pricer/", {
@@ -103,11 +99,11 @@ load: function(data, title) {
     }, function(s) {
         var visible = self.loading.is(':visible');
         self.update.loading = false;
-        self.loading.addClass('g-none');
         if (typeof s == "string") {
             self.update.content = s;
             if (visible) self.processUpdate();
         } else {
+            self.toggle('empty');
             alert(s && s.exception && s.exception.message);
         }
     });
@@ -118,18 +114,18 @@ show: function() {
     if (u.title) {
         $('#offers-title h1').text(u.title);
     }
-    if (!u.loading && u.content) {
-        this.toggleLoading(true);
+    if (u.loading) {
+        this.toggle('loading');
+    } else if (u.content != undefined) {
+        this.toggle('loading');
         setTimeout(function() {
             self.processUpdate();
         }, 300);
-    } else {
-        this.toggleLoading(u.loading);
     }
     if (u.action) {
         u.action();
         setTimeout(function() {
-            self.toggleLoading(false);
+            self.toggle('results');
         }, 1200);
     }
     this.container.removeClass('g-none');
@@ -146,31 +142,44 @@ show: function() {
         });
     }
 },
-toggleLoading: function(mode) {
-    this.loading.toggleClass('g-none', !mode);
-    this.results.toggleClass('g-none', mode);
-
+toggle: function(mode) {
+    this.loading.toggleClass('g-none', mode != 'loading');
+    this.results.toggleClass('g-none', mode != 'results');
+    this.empty.toggleClass('g-none', mode != 'empty');
     // запускаем/останавливаем таймер счётчика
-    this.loading.timer.trigger(mode ? 'start' : 'stop');
+    this.loading.timer.trigger(mode == 'loading' ? 'start' : 'stop');
 },
 updateHash: function(hash) {
     window.location.hash = encodeURIComponent(JSON.stringify(hash));
 },
 processUpdate: function() {
-    $('#offers-collection').replaceWith(this.update.content);
-    this.update.content = null;
-    this.updateFilters();
-    this.parseResults();
-    this.applySort('price');
-    if (this.maxLayovers) {
-        this.filterOffers();
+    var self = this, u = this.update;
+    $('#offers-collection').remove();
+    $('#offers-all').append(u.content || '');
+    if ($('#offers-all .offer').length) {
+        u.content = undefined;
+        this.updateFilters();
+        this.parseResults();        
     } else {
-        this.showAmount();
+        this.toggle('empty');
+        this.variants = [];
+        this.items = [];
     }
-    this.showRecommendations();
-    this.toggleLoading(false);
-    this.updateHash(this.update.data);
-    $('#offers-tabs').trigger('set', 'best');
+    if (this.items.length) {
+        this.applySort('price');    
+        if (this.maxLayovers) {
+            this.filterOffers();
+        } else {
+            this.showAmount();
+        }
+        this.showDepartures();
+        this.showRecommendations();
+        $('#offers-tabs').trigger('set', this.selectedTab || 'best');
+        setTimeout(function() {
+            self.toggle('results');
+        }, 1000);
+    }
+    this.updateHash(u.data);
 },
 parseResults: function() {
     var items = [], variants = [];
@@ -186,9 +195,11 @@ parseResults: function() {
                 offer: offer,
                 summary: $.parseJSON(vel.attr('data-summary'))
             };
+            vel.attr('data-index', variants.length);
             offer.variants.push(variant);
             variants.push(variant);
         });
+        offer.multiple = offer.variants.length > 1;
         items.push(offer);
     });
     this.items = items;
@@ -240,6 +251,7 @@ applyFilter: function(name, values) {
         list.hide();
         self.filterOffers();
         self.sortOffers();
+        self.showDepartures();
         self.showRecommendations();
         list.css('opacity', 1).show();
     }, 300);
@@ -445,5 +457,60 @@ makeRecommendation: function(obj, title) {
     var el = obj.variant.el, offer = el.parent().clone();
     this.showVariant(offer.children().eq(el.prevAll().length));
     return $('<div><h3 class="offers-title">' + title + '</h3></div>').append(offer);
+},
+getDepartures: function(offer) {
+    var od = [], variants = offer.variants;
+    for (var i = variants[0].summary.departures.length; i--;) {
+        od[i] = {};
+    }
+    for (var i = variants.length; i--;) {
+        var v = variants[i];
+        if (v.improper) continue;
+        var vd = v.summary.departures;
+        for (var k = vd.length; k--;) {
+            od[k][vd[k]] = true;
+        }
+    }
+    var various = false;
+    for (var i = od.length; i--;) {
+        var d = [];
+        for (var time in od[i]) d.push(time);
+        if (od[i] = (d.length > 1) && d.sort()) various = true; 
+    }
+    return various && od;
+},
+showDepartures: function() {    
+    var self = this, offers = this.items;
+    for (var i = 0, im = offers.length; i < im; i++) {
+        var offer = offers[i];
+        if (offer.improper || !offer.multiple) continue;
+        var dtimes = this.getDepartures(offer), dcities = offer.summary.depcities;
+        var variants = offer.variants;
+        for (var k = variants.length; k--;) {
+            var v = variants[k], empty = true;
+            if (v.improper) continue;
+            $('.variants', v.el).each(function(index) {
+                var dt = dtimes[index];
+                if (dt) {
+                    var str = dcities[index] + '<br>в ' + self.joinDepartures(dt, v.summary.departures[index]);
+                    $(this).html('<p class="b-pseudo" data-segment="' + index + '">Ещё по такой же цене можно улететь ' + str + '</p>');
+                } else {
+                    $(this).html('');
+                }
+            });
+        }
+    } 
+},
+joinDepartures: function(dtimes, current) {
+    var parts = [];
+    for (var i = 0, im = dtimes.length; i < im; i++) {
+        var time = dtimes[i];
+        if (time == current) continue;
+        if (parts.length) parts.push(', ');
+        parts.push('<a href="#"><u>' + time.substring(0,2) + ':' + time.substring(2,4) + '</u></a>');
+    }
+    var pl = parts.length;
+    if (pl > 2) parts[pl - 2] = ' и в ';
+    return pl ? parts.join('') : '';
 }
 });

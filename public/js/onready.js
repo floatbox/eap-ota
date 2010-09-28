@@ -197,15 +197,11 @@
                     ao.maxLayovers = value && value.v;
                     ao.resetFilters();
                     ao.applyFilter();
-                    $('#offers-tabs').trigger('set', 'best');
                 }
             };
         } else {
             app.offers.maxLayovers = value && value.v;
         }
-        /*app.search.update({
-            'nonstop': value && value.v == 1 ? 1 : 0
-        }, this);*/
     });
 
     // обработка класса
