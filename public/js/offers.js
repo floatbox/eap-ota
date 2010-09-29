@@ -93,7 +93,6 @@ load: function(data, title) {
         title: title,
         loading: true
     };
-
     $.get("/pricer/", {
         search: data
     }, function(s) {
@@ -215,18 +214,27 @@ showVariant: function(el) {
     el.removeClass('g-none').siblings().addClass('g-none');
 },
 updateFilters: function() {
-    var collection = $('#offers-collection');
-    var data = $.parseJSON(collection.attr('data-filters'));
     this.filterable = false;
-    this.filters['airlines'].trigger('update', data);
-    this.filters['planes'].trigger('update', data);
-    this.filters['cities'].trigger('update', data);
-    for (var i = data.segments; i--;) {
-        this.filters['arv_airport_' + i].trigger('update', data);
-        this.filters['dpt_airport_' + i].trigger('update', data);
-        this.filters['arv_time_' + i].trigger('update', data);
-        this.filters['dpt_time_' + i].trigger('update', data);
-    }
+    var data = $.parseJSON($('#offers-collection').attr('data-filters'));
+    $('#offers-filter .flight').each(function() {
+        var items = $('p', this).trigger('update', data);
+        var active = items.trigger('toggle').filter(':not(.g-none)');
+        if (active.length > 0) {
+            var city = $('.city', this);
+            city.text(data[city.attr('data-key')]);
+            $('.conjunction', this).toggle(active.length > 1);
+            $(this).removeClass('g-none');
+        } else {
+            $(this).addClass('g-none');
+        }
+    });
+    var items = $('#offers-filter td > p').each(function() {
+        var el = $(this);
+        el.trigger('update', data).trigger('toggle');
+        el.next('.comma').toggle(!el.hasClass('g-none'));
+    });
+    items.filter(':not(.g-none)').last().next('.comma').hide();
+    this.currentData = data;
     this.activeFilters = {};
     this.filterable = true;
 },
@@ -481,11 +489,14 @@ getDepartures: function(offer) {
     return various && od;
 },
 showDepartures: function() {    
-    var self = this, offers = this.items;
+    var self = this, offers = this.items, dcities = [];
+    for (var i = this.currentData.segments; i--;) {
+        dcities[i] = this.currentData['dpt_city_' + i];
+    }
     for (var i = 0, im = offers.length; i < im; i++) {
         var offer = offers[i];
         if (offer.improper || !offer.multiple) continue;
-        var dtimes = this.getDepartures(offer), dcities = offer.summary.depcities;
+        var dtimes = this.getDepartures(offer);
         var variants = offer.variants;
         for (var k = variants.length; k--;) {
             var v = variants[k], empty = true;

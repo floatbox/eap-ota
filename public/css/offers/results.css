@@ -1,16 +1,3 @@
-/* Фильтры */
-#offers-filter 
-{
-    top: -3px;
-}
-
-#offers-reset-filters
-{
-    margin-left: 0.3em;
-    
-    color: #ED1192;
-}
-
 /* Список предложений */
 
 #offers-list 
@@ -494,6 +481,34 @@
 {
     color: #C46F26;
 }
+
+    /* Бизнес-класс */
+    
+    .offer .details .business
+    {
+        background: #fff8d2;
+        
+        border-radius: 3px;
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -o-border-radius: 3px;
+    }
+    
+    .offer .details th .business
+    {
+        margin: 0 -2px;
+        padding: 0 3px;
+        
+        border: 1px solid #ede7c3;
+    }
+    
+    .offer .details .info .business
+    {
+        margin: 0 -4px;
+        padding: 1px 3px;
+        
+        border: 1px solid #b8b396;
+    }
 
     /* Время рейса */
     

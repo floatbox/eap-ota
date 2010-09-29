@@ -174,7 +174,7 @@
     // обработка количества пассажиров
     tools.defines['persons'].bind('change', function() {
         var adults = 0, children = 0;
-        var values = $(this).trigger('get').data('value');
+        var values = $(this).data('value');
         for (var i = 0; v = values[i]; i++) {
             var orig = values[i].v;
             var real = orig % (Math.floor(orig / 10) * 10);
@@ -188,7 +188,7 @@
     
     // обработка пересадок
     tools.defines['changes'].bind('change', function() {
-        var value = $(this).trigger('get').data('value')[0];
+        var value = $(this).data('value')[0];
         if (app.offers.results.is(':visible')) {
             app.search.toggle(true);
             app.offers.update = {
@@ -207,7 +207,7 @@
 
     // обработка класса
     tools.defines['cls'].bind('change', function() {
-        var value = $(this).trigger('get').data('value')[0];
+        var value = $(this).data('value')[0];
         app.search.update({
             'cabin': value && value.v
         }, this);
@@ -221,12 +221,12 @@
     $('#offers-filter p').each(function() {
         var $filter = $(this).define().trigger('update', data);
         $filter.bind('change', function() {
-            var values = $(this).trigger('get').data('value'), options = [];
+            var values = $(this).data('value'), options = [];
             var name = $(this).data('name');
             for (var i = values.length; i--;) options.push(values[i].v);
             if (app.offers.filterable) app.offers.applyFilter(name, options);
         });
-        app.offers.filters[$filter.data('name')] = $filter; 
+        app.offers.filters[$filter.data('name')] = $filter;
     });
     
     // Сброс фильтров

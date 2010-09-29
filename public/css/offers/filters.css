@@ -1,0 +1,18 @@
+/* Фильтры предложений */
+
+#offers-filter
+{
+    top: -3px;
+}
+
+#offers-reset-filters
+{
+    margin-left: 0.3em;
+    
+    color: #ED1192;
+}
+
+#offers-filter .flight
+{
+    display: inline;
+}

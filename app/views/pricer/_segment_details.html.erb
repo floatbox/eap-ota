@@ -1,6 +1,7 @@
+<% common_business = segment_cabins && segment_cabins.join('').index(/[^C]/).nil? %>
 <tr<%= ' class="ret"' if segment_counter > 0 %>>
     <td></td>
-    <th colspan="6"><strong class="direction"><%= segment_counter == 0 ? 'Перелёт туда' : 'Обратный перелёт' %></strong><% if segment.layovers? %> с <%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %><% end %></th>
+    <th colspan="6"><strong class="direction"><%= segment_counter == 0 ? 'Перелёт туда' : 'Обратный перелёт' %><%= ' <span class="business">бизнес-классом</span>' if common_business %></strong><% if segment.layovers? %> с <%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %><% end %></th>
 </tr>
 <% segment.flights.each_with_index do |flight, flight_index| %>
 <% next_date_arrival = (flight_index == segment.flights.length - 1 && flight.arrival_date != segment.flights[0].departure_date) %>
@@ -24,8 +25,8 @@
             <p>Рейс <%= flight.operating_carrier_iata %>&nbsp;<%= flight.flight_number %> <%= flight.departure.city.name %> — <%= flight.arrival.city.name %></p>
             <p>Самолёт <%= flight.equipment_type_name %></p>
             <p><%= human_duration(flight.duration) %> в пути</p>
-            <% if segment_cabins && segment_cabins[flight_index] == 'C' %>
-            <p>Бизнес-класс</p>
+            <% if segment_cabins && !common_business && segment_cabins[flight_index] == 'C' %>
+            <p><span class="business">Бизнес-класс</span></p>
             <% end %>
         </div>
     </td>

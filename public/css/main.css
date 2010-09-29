@@ -33,6 +33,7 @@
 @import 'promo/promo.css';
 
 @import 'offers/title.css';
+@import 'offers/filters.css';
 @import 'offers/tabs.css';
 @import 'offers/loading.css';
 @import 'offers/results.css';

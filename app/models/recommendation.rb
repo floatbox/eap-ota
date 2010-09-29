@@ -45,12 +45,10 @@ class Recommendation
   end
   
   def summary
-    fvsegments = variants.first.segments
     {
       :price => price_total,
       :airline => segments.first.marketing_carrier_name,
-      :layovers => fvsegments.map{|s| s.flights.size}.max,
-      :depcities => fvsegments.map{|s| s.flights.first.departure.city.case_from}
+      :layovers => variants.first.segments.map{|s| s.flights.size}.max,
     }
   end
 
@@ -115,6 +113,10 @@ class Recommendation
     }
     arrival_times.each_with_index {|arv_times, i|
       result['arv_time_' + i.to_s] = arv_times.uniq.sort.map{|at| {:v => at, :t => time_titles[at]} }
+    }
+    recs[0].variants[0].segments.each_with_index {|segment, i|
+      result['dpt_city_' + i.to_s] = segment.departure.city.case_from
+      result['arv_city_' + i.to_s] = segment.arrival.city.case_to
     }
     result
   end
