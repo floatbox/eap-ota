@@ -30,8 +30,8 @@ app.Validate = function() {
 app.Validate.Radio = function(el) {
     var $el = $(el);
     var els = el.form.elements[el.name];
-    for (e in els) if (els[e].checked) {l(41);return null};
-l(42);
+    for (e in els) if (els[e].checked) return null;
+
     return 'Не выбран пол пассажира';
 }
 

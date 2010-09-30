@@ -86,16 +86,15 @@ init: function() {
     });
     
 },
-load: function(data, title) {
+load: function(params, title) {
     var self = this;
+
     this.update = {
-        data: data,
         title: title,
         loading: true
     };
-    $.get("/pricer/", {
-        search: data
-    }, function(s) {
+
+    $.get("/pricer/", params, function(s) {
         var visible = self.loading.is(':visible');
         self.update.loading = false;
         if (typeof s == "string") {
@@ -149,21 +148,28 @@ toggle: function(mode) {
     this.loading.timer.trigger(mode == 'loading' ? 'start' : 'stop');
 },
 updateHash: function(hash) {
-    window.location.hash = encodeURIComponent(JSON.stringify(hash));
+//    window.location.hash = encodeURIComponent(JSON.stringify(hash));
+    window.location.hash = hash;
 },
 processUpdate: function() {
     var self = this, u = this.update;
     $('#offers-collection').remove();
     $('#offers-all').append(u.content || '');
+
     if ($('#offers-all .offer').length) {
         u.content = undefined;
         this.updateFilters();
-        this.parseResults();        
+        this.parseResults();
+
+        var qkey = $('#offers-collection').attr('data-query_key');
+        this.updateHash(qkey);
+
     } else {
         this.toggle('empty');
         this.variants = [];
         this.items = [];
     }
+
     if (this.items.length) {
         this.applySort('price');    
         if (this.maxLayovers) {
@@ -178,7 +184,6 @@ processUpdate: function() {
             self.toggle('results');
         }, 1000);
     };
-    this.updateHash(u.data);
 },
 parseResults: function() {
     var items = [], variants = [];

@@ -161,7 +161,6 @@
         cities: [],
         airlines: [],        
         planes: []
-
     };
 
     tools.defines = {};
@@ -308,13 +307,23 @@
 
 
     // эксперимент: пробуем распарсить запрос из # и отослать его на сервер
+    /*
     var h = window.location.hash;
     if (h) try {
         h = JSON.parse(decodeURIComponent(h).slice(1));
-        app.offers.load(h, 'Загружаем сохранённые результаты');
+        app.offers.load(h, 'Строим список результов');
         app.offers.show();
     }
     catch(e){};
+    */
+
+    var h = (window.location.hash).slice(1);
+    if (h) try {
+        app.offers.load({query_key: h}, 'Загружаем сохранённые результаты');
+        app.offers.show();
+    }
+    catch(e){};
+
 });
 
 
