@@ -48,7 +48,7 @@ class Recommendation
     {
       :price => price_total,
       :airline => segments.first.marketing_carrier_name,
-      :layovers => segments.map{|s| s.flights.size}.max
+      :layovers => variants.first.segments.map{|s| s.flights.size}.max,
     }
   end
 
@@ -69,6 +69,7 @@ class Recommendation
   def self.summary recs
     airlines = []
     planes = []
+    cities = []
     departure_airports = []
     arrival_airports = []
     departure_times = []
@@ -85,6 +86,7 @@ class Recommendation
         summary = v.summary
         airlines += summary[:airlines]
         planes += summary[:planes]
+        cities += summary[:cities]
         v.segments.length.times {|i|
           departure_airports[i] << summary['dpt_airport_' + i.to_s]
           arrival_airports[i] << summary['arv_airport_' + i.to_s]
@@ -96,6 +98,7 @@ class Recommendation
     result = {
       :airlines => airlines.uniq.map{|a| {:v => a, :t => Airline[a].name}}.sort_by{|a| a[:t] },
       :planes => planes.uniq.map{|a| {:v => a, :t => Airplane[a].name}}.sort_by{|a| a[:t] },
+      :cities => cities.uniq.map{|c| {:v => c, :t => City[c].name}}.sort_by{|a| a[:t] },
       :segments => segments_amount
     }
     departure_airports.each_with_index {|airports, i|
@@ -110,6 +113,10 @@ class Recommendation
     }
     arrival_times.each_with_index {|arv_times, i|
       result['arv_time_' + i.to_s] = arv_times.uniq.sort.map{|at| {:v => at, :t => time_titles[at]} }
+    }
+    recs[0].variants[0].segments.each_with_index {|segment, i|
+      result['dpt_city_' + i.to_s] = segment.departure.city.case_from
+      result['arv_city_' + i.to_s] = segment.arrival.city.case_to
     }
     result
   end

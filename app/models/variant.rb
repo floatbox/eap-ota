@@ -18,6 +18,7 @@ class Variant
      :planes => flights.every.equipment_type_iata.uniq,
      :departures => segments.every.departure_time,
      :duration => segments.sum(&:total_duration),
+     :cities => segments.map{|s| s.flights[1..-1].map{|f| f.departure.city.iata}}.flatten.uniq,     
      :flights => flights.size
     }
     segments.each_with_index do |segment, i|
