@@ -22,55 +22,28 @@
         <valueQualifier>ADT</valueQualifier>      
       </discountPtc>    
     </ptcGroup>  
-  </passengersGroup>  
-  <pricingOptionsGroup>    
-    <pricingDetails>      
-      <priceTicketDetails>        
-        <indicators>L</indicators>      
-      </priceTicketDetails>    
-    </pricingDetails>  
-  </pricingOptionsGroup>  
+  </passengersGroup>    
   <tripsGroup>
     <originDestination>
     </originDestination>
     <segmentGroup>      
       <segmentInformation>        
         <flightDate>          
-          <departureDate>141010</departureDate>        
+          <departureDate>261010</departureDate>        
         </flightDate>        
         <boardPointDetails>          
           <trueLocationId>SVO</trueLocationId>        
         </boardPointDetails>        
         <offpointDetails>          
-          <trueLocationId>RIX</trueLocationId>        
+          <trueLocationId>LHR</trueLocationId>        
         </offpointDetails>        
         <companyDetails>          
           <marketingCompany>SU</marketingCompany>        
         </companyDetails>        
         <flightIdentification>          
-          <flightNumber>7425</flightNumber>          
-          <bookingClass>K</bookingClass>        
+          <flightNumber>247</flightNumber>          
+          <bookingClass>S</bookingClass>        
         </flightIdentification>      
       </segmentInformation>    
-    </segmentGroup>    
-    <segmentGroup>      
-      <segmentInformation>        
-        <flightDate>          
-          <departureDate>141010</departureDate>        
-        </flightDate>        
-        <boardPointDetails>          
-          <trueLocationId>RIX</trueLocationId>        
-        </boardPointDetails>        
-        <offpointDetails>          
-          <trueLocationId>LGW</trueLocationId>        
-        </offpointDetails>        
-        <companyDetails>          
-          <marketingCompany>BT</marketingCompany>        
-        </companyDetails>        
-        <flightIdentification>          
-          <flightNumber>651</flightNumber>          
-          <bookingClass>K</bookingClass>        
-        </flightIdentification>      
-      </segmentInformation>    
-    </segmentGroup>  
+    </segmentGroup>
   </tripsGroup>
