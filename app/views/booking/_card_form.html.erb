@@ -17,29 +17,29 @@
                  :class => "text g-xl",
                  :maxlength => "4",
                  :title => "первые четыре цифры номера карты",
-                 :onclick => "return {req: true, num: true, minl: 4, maxl: 4}"
+                 :onclick => "return {req: true, num: true, minl: 4, maxl: 4, mask: /\\d/}"
                 %>
                 <%= f.text_field :number2,
                  :class => "text g-xl",
                  :maxlength => "4",
                  :title => "вторые четыре цифры номера карты",
-                 :onclick => "return {req: true, num: true, minl: 4, maxl: 4}"
+                 :onclick => "return {req: true, num: true, minl: 4, maxl: 4, mask: /\\d/}"
                 %>
                 <%= f.text_field :number3,
                  :class => "text g-xl",
                  :maxlength => "4",
                  :title => "предпоследние четыре цифры номера карты",
-                 :onclick => "return {req: true, num: true, minl: 4, maxl: 4}"
+                 :onclick => "return {req: true, num: true, minl: 4, maxl: 4, mask: /\\d/}"
                 %>
                 <%= f.text_field :number4,
                  :class => "text g-xl",
                  :maxlength => "4",
                  :title => "последние четыре цифры номера карты",
-                 :onclick => "return {req: true, num: true, minl: 4, maxl: 4}"
+                 :onclick => "return {req: true, num: true, minl: 4, maxl: 4, mask: /\\d/}"
                 %>
             </fieldset>
 
-            <fieldset class="bankcardname">
+            <fieldset class="bankcardname text-upper">
                 <legend></legend>
                 <label 
                  for="payment-bankcardname"
@@ -50,7 +50,7 @@
                  :id => 'payment-bankcardname',
                  :class => "text g-l",
                  :title => "имя на карте",
-                 :onclick => "return {req: true, latin: true, minl: 3}"
+                 :onclick => "return {req: true, latin: true, minl: 3, mask: /[a-z\\s]/i}"
                  %>
             </fieldset>
 
@@ -64,7 +64,7 @@
                  :maxlength => "2",
                  :value => "мм",
                  :title => "последний месяц действия карты &laquo;MONTH&raquo;",
-                 :onclick => "return {def: 'мм', req: true, num: true, minl: 1, maxl: 2, min: 1, max: 12}"
+                 :onclick => "return {def: 'мм', req: true, num: true, minl: 1, maxl: 2, min: 1, max: 12, mask: /\\d/}"
                  %>
 
                 <i>/</i>
@@ -75,7 +75,7 @@
                  :maxlength => "2",
                  :value => "гг",
                  :title => "последний год действия карты &laquo;YEAR&raquo;",
-                 :onclick => "return {def: 'гг', req: true, num: true, minl: 2, maxl: 2, min: 10, max: 20}"
+                 :onclick => "return {def: 'гг', req: true, num: true, minl: 2, maxl: 2, min: 10, max: 20, mask: /\\d/}"
                 %>
             </fieldset>
 
@@ -97,7 +97,7 @@
                  :class => "text g-xl",
                  :maxlength => "3",
                  :title => "CVV код банковской карты",
-                 :onclick => "return {req: true, num: true, minl: 3, maxl: 3}"
+                 :onclick => "return {req: true, num: true, minl: 3, maxl: 3, mask: /\\d/}"
                 %>
             </fieldset>
 

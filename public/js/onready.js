@@ -157,10 +157,10 @@
         arv_airport_0: [],
         dpt_airport_1: [],
         arv_airport_1: [],
-
+        
+        cities: [],
         airlines: [],        
         planes: []
-
     };
 
     tools.defines = {};
@@ -173,7 +173,7 @@
     // обработка количества пассажиров
     tools.defines['persons'].bind('change', function() {
         var adults = 0, children = 0;
-        var values = $(this).trigger('get').data('value');
+        var values = $(this).data('value');
         for (var i = 0; v = values[i]; i++) {
             var orig = values[i].v;
             var real = orig % (Math.floor(orig / 10) * 10);
@@ -187,7 +187,7 @@
     
     // обработка пересадок
     tools.defines['changes'].bind('change', function() {
-        var value = $(this).trigger('get').data('value')[0];
+        var value = $(this).data('value')[0];
         if (app.offers.results.is(':visible')) {
             app.search.toggle(true);
             app.offers.update = {
@@ -197,20 +197,16 @@
                     ao.maxLayovers = value && value.v;
                     ao.resetFilters();
                     ao.applyFilter();
-                    $('#offers-tabs').trigger('set', 'best');
                 }
             };
         } else {
             app.offers.maxLayovers = value && value.v;
         }
-        /*app.search.update({
-            'nonstop': value && value.v == 1 ? 1 : 0
-        }, this);*/
     });
 
     // обработка класса
     tools.defines['cls'].bind('change', function() {
-        var value = $(this).trigger('get').data('value')[0];
+        var value = $(this).data('value')[0];
         app.search.update({
             'cabin': value && value.v
         }, this);
@@ -224,12 +220,12 @@
     $('#offers-filter p').each(function() {
         var $filter = $(this).define().trigger('update', data);
         $filter.bind('change', function() {
-            var values = $(this).trigger('get').data('value'), options = [];
+            var values = $(this).data('value'), options = [];
             var name = $(this).data('name');
             for (var i = values.length; i--;) options.push(values[i].v);
             if (app.offers.filterable) app.offers.applyFilter(name, options);
         });
-        app.offers.filters[$filter.data('name')] = $filter; 
+        app.offers.filters[$filter.data('name')] = $filter;
     });
     
     // Сброс фильтров
@@ -310,13 +306,24 @@
     tools.to.focus();
 
 
+    // эксперимент: пробуем распарсить запрос из # и отослать его на сервер
+    /*
     var h = window.location.hash;
     if (h) try {
         h = JSON.parse(decodeURIComponent(h).slice(1));
-        app.offers.load(h, 'Загружаем сохранённые результаты');
+        app.offers.load(h, 'Строим список результов');
         app.offers.show();
     }
     catch(e){};
+    */
+
+    var h = (window.location.hash).slice(1);
+    if (h) try {
+        app.offers.load({query_key: h}, 'Загружаем сохранённые результаты');
+        app.offers.show();
+    }
+    catch(e){};
+
 });
 
 

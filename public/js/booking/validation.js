@@ -2,7 +2,7 @@
 
 $.fn.extend({
     validate: function() {
-        return this.map(app.Validate);
+        return this.map(app.Validate).get();
     },
 
     input: function(form) {
@@ -15,46 +15,45 @@ $.fn.extend({
 // валидация
 
 app.Validate = function() {
-    var el  = this;
+    switch ($(this).attr('type')) {
+        case 'text':
+            return app.Validate.Text(this);
+            break;
+        case 'radio':
+            return app.Validate.Radio(this);
+            break;
+        default: 
+            return null;
+    }
+}
+
+app.Validate.Radio = function(el) {
+    var $el = $(el);
+    var els = el.form.elements[el.name];
+    for (e in els) if (els[e].checked) return null;
+
+    return 'Не выбран пол пассажира';
+}
+
+app.Validate.Text = function(el) {
     var $el = $(el);
     var val = $.trim(el.value);
 
     // вытаскиваем правила валидации и кладём их в data('rules')
-
-    var rules = $el.data('rules') || (function() {
-        var rules = $.extend({}, {
-            def: '', // фоновая подсказка в текстовом поле
-            req: false, // обязательное поле
-
-            latin: null, // тип поля, шаблон
-            num: null,
-            email: null,
-
-            minl: 0, // длина значения в строковом представлении
-            maxl: Number.POSITIVE_INFINITY,
-
-            min: Number.NEGATIVE_INFINITY, // эти параметры только для 'num': true
-            max: Number.POSITIVE_INFINITY,
-
-            mask: null // разрешённые символы (regexp)
-        }, (el.onclick && el.onclick()) || {});
-
-        $el.data('rules', rules);
-        return rules;
-    })();
+    var rules = rules || $el.data('rules') || {};
 
     var msg = {
         req: 'Поле {name} обязательно для заполнения',
 
         latin: 'В поле {name} разрешены только латинские буквы',
-        num: 'Поле {name} должно быть числом',
-        email: 'Поле {name} не является E-mail адресом',
+        num: 'В поле {name} могут быть только цифры',
+        email: 'E-mail адрес не может быть таким, как в поле {name}',
 
-        minl: 'Длина поля {name} слишком короткая, чтобы быть правильной',
-        maxl: 'Длина поля {name} слишком велика',
+        minl: 'Поле {name} не может быть таким коротким',
+        maxl: 'Поле {name} не может быть таким длинным',
 
-        min: 'Правильное значение поля {name} не может быть меньше "{val}"',
-        max: 'Правильное значение поля {name} не может быть больше "{val}"',
+        min: 'В поле {name} не может быть число меньше "{val}"',
+        max: 'В поле {name} не может быть число больше "{val}"',
 
         symbols: 'Поле {name} содержит недопустимые символы'
     };
@@ -62,6 +61,8 @@ app.Validate = function() {
     var isDefault = val == '' || val == rules.def;
     var qname = '"' + (el.title) + '"';
 
+    // если поле неактивно, то все проверки неактуальны
+    if ($el.attr('disabled')) return null;
 
     // проверка на обязательность поля
     if (rules.req && isDefault) 
@@ -101,13 +102,34 @@ app.Validate = function() {
 
 app.Input = function(el, form) {
     var $el = $(el);
-    var rules = el.onclick && el.onclick() || {};
-    var def  = rules.def;
-    var mask = rules.mask;
+
+    // вытаскиваем правила валидации и кладём их в data('rules')
+    var rules = $el.data('rules') || (function() {
+        var rules = $.extend({}, {
+            def: '', // фоновая подсказка в текстовом поле
+            req: false, // обязательное поле
+
+            latin: null, // тип поля, шаблон
+            num: null,
+            email: null,
+
+            minl: 0, // длина значения в строковом представлении
+            maxl: Number.POSITIVE_INFINITY,
+
+            min: Number.NEGATIVE_INFINITY, // эти параметры только для 'num': true
+            max: Number.POSITIVE_INFINITY,
+
+            mask: null // разрешённые символы (regexp)
+        }, (el.onclick && el.onclick()) || {});
+
+        $el.data('rules', rules);
+        return rules;
+    })();
+
 
     // Инициализация
 
-    (function(){
+    (function() {
         // если поле не пусто и недефолтно, то убираем серый цвет
         $el.toggleClass('text-value', !isDefault());
     })();
@@ -125,93 +147,43 @@ app.Input = function(el, form) {
     // при получении фокуса сбрасываем визуальный признак невалидности
     $el.focus(function() {
         // если есть фоновая подсказка, то прячем её
-        if (def && isDefault()) el.value = '';
+        if (rules.def && isDefault()) el.value = '';
         $el.trigger('mark', false);
     })
     .blur(function(){
         // если есть фоновая подсказка, то восстанавливаем её
-        if (def && isDefault()) el.value = def;
+        if (rules.def && isDefault()) el.value = rules.def;
         $el.toggleClass('text-value', !isDefault());
     });
 
     // проверяем валидность автоматически при след событиях:
     // - при потере фокуса
     $el.blur(function() {
+        form.change();
+
         var v = $el.validate()[0];
         $el.trigger('mark', Boolean(v));
     });
 
+    // фильтруем нажатия клавиш
     $el.keypress(function(e) {
-        //var key = e.charCode || e.keyCode;
-        //if (e.ctrlKey || e.altKey || key < 32 || (key > 34 && key < 41) || key == 46) return true;
-        //abcdefghijklmnopqrstuvwxyz
-        // t.re = (i < 6) ? /\d/ : /[a-fA-F0-9]/;
+        var passed = (e.which < 32) || !rules.mask || rules.mask.test(String.fromCharCode(e.which));
 
-        return (e.which < 32) || !mask || mask.test(String.fromCharCode(e.which));
+        var n = 7; // количество морганий; нечётное
+        !passed && (function() {
+            if (!--n) return;
+            $el.toggleClass('text-invalid');
+            setTimeout(arguments.callee, 50);
+        })();
+
+        return passed;
     });
 
     // пусто или в нём значение по умолчанию?
     function isDefault() {
         var v = $.trim(el.value);
-        return v == '' || v == def;
+        return v == '' || v == rules.def;
     };
-
-/*
-    t.onkeypress = test;
-    t.onkeyup = t.oncut = t.onpaste = validate;
-    t.onfocus = focus;
-    t.onblur = blur;
-
-    function test(e) {
-        e = e || event;
-        this.className = '';
-
-        var key = e.charCode || e.keyCode;
-        if (e.ctrlKey || e.altKey || key < 32 || (key > 34 && key < 41) || key == 46) return true;
-        if (key == 32) return false;
-
-        var char = String.fromCharCode(key);
-
-        // t.re = (i < 6) ? /\d/ : /[a-fA-F0-9]/;
-        return this.re.test(char);
-    }
-
-    function validate(e) {
-        e = e || event;
-        var key = e.charCode || e.keyCode;
-        var f = this;
-
-        if (_this.timerId) {
-            window.clearTimeout(_this.timerId);
-            _this.timerId = null;
-        }
-
-        _this.timerId = window.setTimeout(function() {
-            _this.validate(f, key);
-        }, 300);
-
-        _this.counter && _this.counter() || (_this.counter = null);
-    }
-
-    function focus() {
-        this.hasFocus = 1;
-    }
-
-    function blur(e) {
-        this.hasFocus = 0;
-        this.className = '';
-
-        var n = parseInt(this.value, this.radix);
-
-        window.setTimeout(function() {
-            _this.set(true);
-        }, 10);
-    }
-
-*/
-
-
-
 
 };
 

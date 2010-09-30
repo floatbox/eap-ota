@@ -96,6 +96,10 @@ app.Define = function($el) {
         me.add(item);
     });
 
+    $el.bind('toggle', function(e, item) {
+        me.$el.toggleClass('g-none', me.values.length < 2);
+    });
+
     $el.data('name', this.options.name);
 
     return this;
