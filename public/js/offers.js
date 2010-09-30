@@ -148,6 +148,9 @@ toggle: function(mode) {
     // запускаем/останавливаем таймер счётчика
     this.loading.timer.trigger(mode == 'loading' ? 'start' : 'stop');
 },
+updateHash: function(hash) {
+    window.location.hash = encodeURIComponent(JSON.stringify(hash));
+},
 processUpdate: function() {
     var self = this, u = this.update;
     $('#offers-collection').remove();
@@ -174,10 +177,8 @@ processUpdate: function() {
         setTimeout(function() {
             self.toggle('results');
         }, 1000);
-    }
-    this.showRecommendations();
-    this.toggleLoading(false);
-    $('#offers-tabs').trigger('set', 'best');
+    };
+    this.updateHash(u.data);
 },
 parseResults: function() {
     var items = [], variants = [];
