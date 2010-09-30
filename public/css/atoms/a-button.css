@@ -1,6 +1,6 @@
 /* Кнопка сабмита */
 
-a.a-button {
+.a-button {
     display: inline-block;
 
     padding: .4em;
@@ -8,35 +8,44 @@ a.a-button {
     text-align: center;
     text-decoration: none;
 
+    outline: none;
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;
 
     color: #333;
-    background-color: #8bb617;
+    background-color: #d5d5d5;
 
     border: 1px solid #ccc;
     border-radius: 4px;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
 
-    background-image: linear-gradient(top, #fff, #ccc);
-    background-image: -moz-linear-gradient(top, #fff, #ccc);
+    background-image: linear-gradient(top, #fff, #ededed, #c8c8c8, #ccc);
+    background-image: -moz-linear-gradient(top, #fff, #ededed, #c8c8c8, #ccc);
     background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));
 }
 
-.hover a.a-button {
+.a-button-pressed {
+    background-color: #c9c9c9;
+
+    background-image: linear-gradient(top, #b8b8b8, #c8c8c8, #ededed, #fff);
+    background-image: -moz-linear-gradient(top, #b8b8b8, #c8c8c8, #ededed, #fff);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));
+}
+
+.a-button-ready,
+.hover .a-button {
+    cursor: pointer;
+
     color: #eee;
-    background-color: #8a9f13;
-
     border: 1px solid #7b8e12;
-
     background-image: linear-gradient(top, #a0b914, #7b8e12);
     background-image: -moz-linear-gradient(top, #a0b914, #7b8e12);
     background-image: -webkit-gradient(linear, left top, left bottom, from(#a0b914), to(#7b8e12));
 }
 
-a.a-button:hover {
+.a-button-ready:hover {
     color: #eee;
     border: 1px solid #c52471;
     background-color: #dc3f8a;
@@ -44,11 +53,13 @@ a.a-button:hover {
     background-image: -webkit-gradient(linear, left top, left bottom, from(#f062a5), to(#d92c7e));
 }
 
-a.a-button:active {
-    color: #fff;
-    background-image: none;
-
+.a-button-ready:active {
     padding: .45em .35em .35em .45em;
+
+    background-image: -moz-linear-gradient(top, #d92c7e, #f062a5);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#d92c7e), to(#f062a5));
+
+    color: #fff;
 }
 
 

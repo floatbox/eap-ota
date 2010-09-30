@@ -310,6 +310,7 @@
     tools.to.focus();
 
 
+    // эксперимент: пробуем распарсить запрос из # и отослать его на сервер
     var h = window.location.hash;
     if (h) try {
         h = JSON.parse(decodeURIComponent(h).slice(1));
