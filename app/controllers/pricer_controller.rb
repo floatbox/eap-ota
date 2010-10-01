@@ -3,6 +3,7 @@ class PricerController < ApplicationController
 
   def index
     if params[:query_key]
+      debugger
       unless fragment_exist?({ :action_suffix => params[:query_key]})
         render :nothing => true unless fragment_exist?({ :action_suffix => params[:query_key]})
         return
@@ -24,6 +25,7 @@ class PricerController < ApplicationController
         @fast_recommendation = Recommendation.fast(@recommendations)
         @optimal_recommendation = @fast_recommendation
         @query_key = ShortUrl.generate_url(@recommendations.hash)
+        Rails.cache.write('pricer_form' + @query_key, @search)
       end
     end
     
@@ -34,11 +36,21 @@ class PricerController < ApplicationController
   end
 
   def validate
-    @search = PricerForm.new(params[:search])
-    render :json => {
-      :valid => @search.valid?,
-      :human => @search.human
-    }
+    if params[:query_key]
+      @search = Rails.cache.read('pricer_form' + params[:query_key])
+      render :json => {
+        :search => @search,
+        :valid => @search.present? && @search.valid?,
+        :human => @search && @search.human,
+        :fragment_exist => fragment_exist?({:action => 'index', :action_suffix => params[:query_key]})
+      }
+    else
+      @search = PricerForm.new(params[:search])
+      render :json => {
+        :valid => @search.valid?,
+        :human => @search.human
+      }
+    end
   end
 end
 
