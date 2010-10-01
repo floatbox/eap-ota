@@ -115,8 +115,8 @@ class Recommendation
       result['arv_time_' + i.to_s] = arv_times.uniq.sort.map{|at| {:v => at, :t => time_titles[at]} }
     }
     recs[0].variants[0].segments.each_with_index {|segment, i|
-      result['dpt_city_' + i.to_s] = segment.departure.city.case_from
-      result['arv_city_' + i.to_s] = segment.arrival.city.case_to
+      result['dpt_city_' + i.to_s] = segment.departure.city.case_from.gsub(/ /, '&nbsp;')
+      result['arv_city_' + i.to_s] = segment.arrival.city.case_to.gsub(/ /, '&nbsp;')
     }
     result
   end
