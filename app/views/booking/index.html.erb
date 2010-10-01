@@ -48,7 +48,7 @@
                             <table class='offer-variant'>
                             <tbody class="details">
                                 <% @variant.segments.each_with_index do |segment, segment_counter| %>
-                                    <%= render :partial => 'pricer/segment_details', :locals => {:segment => segment, :variant => @variant, :segment_counter => segment_counter} %>
+                                    <%#= render :partial => 'pricer/segment_details', :locals => {:segment => segment, :variant => @variant, :segment_counter => segment_counter} %>
                                 <% end %>  
                             </tbody>
                             </table>
