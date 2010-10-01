@@ -482,9 +482,9 @@
     color: #C46F26;
 }
 
-    /* Бизнес-класс */
+    /* Класс */
     
-    .offer .details .business
+    .offer .details .cabin
     {
         background: #fff8d2;
         
@@ -494,7 +494,7 @@
         -o-border-radius: 3px;
     }
     
-    .offer .details th .business
+    .offer .details th .cabin
     {
         margin: 0 -2px;
         padding: 0 3px;
@@ -502,7 +502,7 @@
         border: 1px solid #ede7c3;
     }
     
-    .offer .details .info .business
+    .offer .details .info .cabin
     {
         margin: 0 -4px;
         padding: 1px 3px;

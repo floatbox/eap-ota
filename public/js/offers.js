@@ -88,13 +88,12 @@ init: function() {
 },
 load: function(params, title) {
     var self = this;
-
     this.update = {
         title: title,
         loading: true
     };
-
-    $.get("/pricer/", params, function(s) {
+    this.update.request = $.get("/pricer/", params, function(s) {
+        if (self.update.aborted) return;
         var visible = self.loading.is(':visible');
         self.update.loading = false;
         if (typeof s == "string") {
@@ -155,21 +154,17 @@ processUpdate: function() {
     var self = this, u = this.update;
     $('#offers-collection').remove();
     $('#offers-all').append(u.content || '');
-
     if ($('#offers-all .offer').length) {
-        u.content = undefined;
         this.updateFilters();
         this.parseResults();
-
         var qkey = $('#offers-collection').attr('data-query_key');
         this.updateHash(qkey);
-
     } else {
         this.toggle('empty');
         this.variants = [];
         this.items = [];
     }
-
+    this.update = {};
     if (this.items.length) {
         this.applySort('price');    
         if (this.maxLayovers) {
