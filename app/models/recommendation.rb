@@ -90,7 +90,7 @@ class Recommendation
     # FIXME сломается, когда появятся инфанты
     air_sfr_xml = Amadeus.soap_action('Air_SellFromRecommendation', OpenStruct.new(:segments => segments, :people_count => (people_counts.values.sum)))
     #FIXME нужно разобраться со statusCode - когда все хорошо, а когда - нет
-    #return nil if air_sfr_xml.xpath('//r:segmentInformation/r:actionDetails/r:statusCode').every.to_s.uniq != ['OK']
+    return nil if air_sfr_xml.xpath('//r:segmentInformation/r:actionDetails/r:statusCode').every.to_s.uniq != ['OK']
     air_sfr_xml.xpath('//r:itineraryDetails').each_with_index {|s, i|
       parse_flights(s, segments[i])
     }
