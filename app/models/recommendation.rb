@@ -89,7 +89,8 @@ class Recommendation
     return nil if recommendation.price_total == 0
     # FIXME сломается, когда появятся инфанты
     air_sfr_xml = Amadeus.soap_action('Air_SellFromRecommendation', OpenStruct.new(:segments => segments, :people_count => (people_counts.values.sum)))
-    return nil if air_sfr_xml.xpath('//r:segmentInformation/r:actionDetails/r:statusCode').every.to_s.uniq != ['OK']
+    #FIXME нужно разобраться со statusCode - когда все хорошо, а когда - нет
+    #return nil if air_sfr_xml.xpath('//r:segmentInformation/r:actionDetails/r:statusCode').every.to_s.uniq != ['OK']
     air_sfr_xml.xpath('//r:itineraryDetails').each_with_index {|s, i|
       parse_flights(s, segments[i])
     }
@@ -105,7 +106,7 @@ class Recommendation
       if fl.xpath("r:flightDetails/r:flightDate/r:arrivalDate").present?
         flight.arrival_date = fl.xpath("r:flightDetails/r:flightDate/r:arrivalDate").to_s
       elsif fl.xpath("r:flightDetails/r:flightDate/r:dateVariation").present?
-        flight.arrival_date = (DateTime.strptime( departure_date, '%d%m%y' ) + 1.day).strftime('%d%m%y')
+        flight.arrival_date = (DateTime.strptime( flight.departure_date, '%d%m%y' ) + 1.day).strftime('%d%m%y')
       else
         flight.arrival_date = flight.departure_date
       end
