@@ -32,8 +32,12 @@ class Variant
 
   def flight_codes(booking_classes)
     result = []
-    flights.each_with_index {|f,i|
-      result << f.flight_code(booking_classes[i])
+    i = 0
+    segments.each_with_index {|s, s_i|
+      s.flights.each{|f|
+        result << f.flight_code(booking_classes[i], s_i)
+        i += 1
+        }
       }
     result
   end

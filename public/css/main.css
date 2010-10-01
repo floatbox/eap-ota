@@ -2,18 +2,14 @@
 @import 'global.css';
 @import 'layout.css';
 
+@import 'head/header.css';
+@import 'foot/footer.css';
 
 @import 'atoms/a-button.css';
 @import 'atoms/b-pseudo.css';
+@import 'atoms/b-tips.css';
 @import 'atoms/b-loader.css';
 @import 'atoms/b-rur.css';
-@import 'atoms/b-stars.css';
-@import 'atoms/location.css';
-@import 'atoms/location-tip.css';
-
-@import 'head/header.css';
-@import 'head/header-tabs.css';
-@import 'head/logo.css';
 
 @import 'search/form.css';
 @import 'search/autocomplete.css';
@@ -39,6 +35,4 @@
 @import 'offers/results.css';
 @import 'offers/matrix.css';
 
-@import 'foot/footer.css';
-
-@import 'book/book.css';
+@import 'booking/booking.css';

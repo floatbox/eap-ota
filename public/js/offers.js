@@ -86,16 +86,15 @@ init: function() {
     });
     
 },
-load: function(data, title) {
+load: function(params, title) {
     var self = this;
+
     this.update = {
-        data: data,
         title: title,
         loading: true
     };
-    $.get("/pricer/", {
-        search: data
-    }, function(s) {
+
+    $.get("/pricer/", params, function(s) {
         var visible = self.loading.is(':visible');
         self.update.loading = false;
         if (typeof s == "string") {
@@ -149,21 +148,28 @@ toggle: function(mode) {
     this.loading.timer.trigger(mode == 'loading' ? 'start' : 'stop');
 },
 updateHash: function(hash) {
-    window.location.hash = encodeURIComponent(JSON.stringify(hash));
+//    window.location.hash = encodeURIComponent(JSON.stringify(hash));
+    window.location.hash = hash;
 },
 processUpdate: function() {
     var self = this, u = this.update;
     $('#offers-collection').remove();
     $('#offers-all').append(u.content || '');
+
     if ($('#offers-all .offer').length) {
         u.content = undefined;
         this.updateFilters();
-        this.parseResults();        
+        this.parseResults();
+
+        var qkey = $('#offers-collection').attr('data-query_key');
+        this.updateHash(qkey);
+
     } else {
         this.toggle('empty');
         this.variants = [];
         this.items = [];
     }
+
     if (this.items.length) {
         this.applySort('price');    
         if (this.maxLayovers) {
@@ -177,8 +183,7 @@ processUpdate: function() {
         setTimeout(function() {
             self.toggle('results');
         }, 1000);
-    }
-    this.updateHash(u.data);
+    };
 },
 parseResults: function() {
     var items = [], variants = [];
@@ -361,80 +366,9 @@ sortOffers: function() {
         return 0;
     });
 
-// отладка
-    sitems.priceM1 = 0;
-    sitems.valueM1 = 0;
-    sitems.priceM2 = 0;
-    sitems.valueM2 = 0;
-
-    // min и M1
-    $.each(sitems, function(i, el) {
-        sitems.priceMin = Math.min(sitems.priceMin || Number.POSITIVE_INFINITY, el.price);
-        sitems.valueMin = Math.min(sitems.valueMin || Number.POSITIVE_INFINITY, el.value);
-
-        sitems.priceM1 += el.price / sitems.length;
-        sitems.valueM1 += el.value / sitems.length;
-    });
-
-    // M2 и вес
-    $.each(sitems, function(i, el) {
-        sitems.priceM2 += Math.pow(el.price - sitems.priceM1, 2) / sitems.length;
-        sitems.valueM2 += Math.pow(el.value - sitems.valueM1, 2) / sitems.length;
-
-        el.weight = (sitems.priceMin + el.price) * (sitems.valueMin + el.value);
-        sitems.weightMax = Math.max(sitems.weightMax || 0, el.weight);
-        sitems.weightMin = Math.min(sitems.weightMin || Number.POSITIVE_INFINITY, el.weight);
-    });
-
-    // отрезаем выблядков
-    $.each(sitems, function(i, el) {
-
-    
-    });
-
-    // округление
-    sitems.priceM1 = sitems.priceM1;
-    sitems.valueM1 = sitems.valueM1;
-    sitems.priceM2 = Math.sqrt(sitems.priceM2);
-    sitems.valueM2 = Math.sqrt(sitems.valueM2);
-
-    sitems.sort(function(a, b) {
-        if (a.weight > b.weight) return 1;
-        if (a.weight < b.weight) return -1;
-        if (a.price > b.price) return 1;
-        if (a.price < b.price) return -1;
-        return 0;
-    });
     var list = $('#offers-collection');
-    list.append(
-        $('<h1>M[цена] = <b style="font-weight:bold">{priceM1}</b>, &sigma; = <b style="font-weight:bold">{priceM2}</b></h1> \
-           <h1>M[время] = <b style="font-weight:bold">{valueM1}</b>, &sigma; = <b style="font-weight:bold">{valueM2}</b></h1><h1>&nbsp;</h1>'
-        .supplant({priceM1: parseInt(sitems.priceM1), priceM2: parseInt(sitems.priceM2), valueM1: parseInt(sitems.valueM1), valueM2: parseInt(sitems.valueM2)}))
-    );
-
-    var list = $('#offers-collection');
-    for (var i = 0, lim = sitems.length; i < lim; i++) {
-
-//        list.append($('<h1><b style="font-weight:bold">{weight}</b> &nbsp;&nbsp; время = {value}</h1>'.supplant({price: sitems[i].price, value: sitems[i].value, weight: (sitems[i].weight / sitems.weightMax).toFixed(3)})));
-        list.append($('<h1><b style="font-weight:bold">{weightNorm} / {weight}</b> &nbsp;&nbsp; время = {value}</h1>'.supplant({price: sitems[i].price, value: sitems[i].value, weight: parseInt(sitems[i].weight), weightNorm: (sitems[i].weight / sitems.weightMax).toFixed(3)})));
-
-        var red = sitems[i].price > sitems.priceM1 + sitems.priceM2;
-        red = red || sitems[i].value > sitems.valueM1 + sitems.valueM2;
-
-        red && sitems[i].offer.el.css('backgroundColor', '#fdd');
-
-        var green = sitems[i].weight < sitems.weightMin + (sitems.priceMin + 500) * (sitems.valueMin + 30);
-        green && sitems[i].offer.el.css('backgroundColor', '#dfd');
-
+    for (var i = 0, lim = sitems.length; i < lim; i++) 
         list.append(sitems[i].offer.el);
-    }
-// отладка - конец
-
-
-// восстановить!
-//    for (var i = 0, lim = sitems.length; i < lim; i++) 
-//        list.append(sitems[i].offer.el);
-
 },
 showRecommendations: function() {
     var variants = this.variants, cheap, fast, optimal;

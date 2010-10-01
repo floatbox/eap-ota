@@ -122,9 +122,19 @@ body * {
     position: fixed!important;
 }
 
+.g-right
+{
+    text-align: right!important;
+}
+
 .g-middle
 {
     vertical-align: middle!important;
+}
+
+.g-upper
+{
+    text-transform: uppercase!important;
 }
 
 /* Шрифты */
@@ -178,4 +188,9 @@ body * {
 .wrap,
 .clear {
     zoom: 1;
+}
+
+.g-external {
+    background: url('/img/ico/external-link.png') no-repeat scroll right center transparent;
+    padding-right: 13px;
 }
