@@ -5,7 +5,7 @@ module ShortUrl
   def self.generate_url idNumber
     localCount = idNumber.abs
     result = '';
-    while localCount != 0
+    while (localCount != 0) && (result.length < 6)
       rem = localCount % URL_BASE
       localCount = (localCount - rem) / URL_BASE
       result = URL_CHARS[rem] + result
