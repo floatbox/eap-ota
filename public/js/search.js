@@ -57,10 +57,22 @@ validate: function(data) {
         }
         data[key] = field.value;
     }
-    $.get("/pricer/validate/", {
+    if (this.request && this.request.abort) {
+        this.request.abort();
+        this.request = undefined;
+    }
+    var ao = app.offers, u = ao.update;
+    if (u.request) {
+        u.aborted = true;
+        if (u.request.abort) u.request.abort();
+        ao.container.addClass('g-none');
+        ao.toggle('empty');
+    }
+    this.request = $.get("/pricer/validate/", {
         search: data
     }, function(result) {
         self.toggle(result.valid);
+        self.request = undefined;
         if (result.valid) app.offers.load({search: data}, result.human);
     });
 },
