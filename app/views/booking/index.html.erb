@@ -46,10 +46,18 @@
 
                         <!-- подробности перелёта -->
                         <div class="offer">
-                            <table class='offer-variant'>
+                            <table class="offer-variant">
+                            <colgroup>
+                                <col width="110">
+                                <col width="140">
+                                <col width="83">
+                                <col width="83">
+                                <col width="140">
+                                <col width="97">
+                            </colgroup>                            
                             <tbody class="details">
                                 <% @variant.segments.each_with_index do |segment, segment_counter| %>
-                                    <%= render :partial => 'pricer/segment_details', :locals => {:segment => segment, :variant => @variant, :segment_counter => segment_counter} %>
+                                    <%= render :partial => 'pricer/segment_details', :locals => {:segment => segment, :variant => @variant, :segment_counter => segment_counter, :segment_cabins => nil} %>
                                 <% end %>  
                             </tbody>
                             </table>
