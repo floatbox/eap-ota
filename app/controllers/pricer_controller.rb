@@ -3,10 +3,6 @@ class PricerController < ApplicationController
 
   def index
     if params[:query_key]
-      unless fragment_exist?({ :action_suffix => params[:query_key]})
-        render :nothing => true unless fragment_exist?({ :action_suffix => params[:query_key]})
-        return
-      end
       @query_key = params[:query_key]
     else
       @search = PricerForm.new(params[:search])
