@@ -43,7 +43,17 @@ class Recommendation
   def variants_by_duration
     variants.sort_by(&:total_duration)
   end
-  
+
+  def commission
+    @commission ||= Commission.find_for(self)
+  end
+
+  # FIXME на самом деле, не price_total, а очень даже price without tax
+  # FIXME обязательно починить!
+  def markup
+    commission.markup(price_total) if commission
+  end
+
   def summary
     {
       :price => price_total,
