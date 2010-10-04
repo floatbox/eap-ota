@@ -35,4 +35,5 @@ ActionController::Routing::Routes.draw do |map|
   map.about 'about/:action', :controller => :about
 
   map.root :controller => "home"
+  map.geo "geo", :controller => "home", :action => "geo"
 end
