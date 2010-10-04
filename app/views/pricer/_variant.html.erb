@@ -31,6 +31,7 @@
             <span class="b-pseudo collapse"><u>Скрыть подробности</u></span>
         </td>
         <td class="rules" colspan="2">
+            <%= 'Поезд' if recommendation.bullshit? %>
             <%= 'Не можем продать' unless recommendation.sellable? %>
             <a href="#">Правила тарифа</a> (<%= recommendation.booking_classes.join(', ') %>) 
         </td>
