@@ -48,6 +48,7 @@ GEM
     ffi (0.6.3)
       rake (>= 0.8.7)
     gem_plugin (0.2.3)
+    geo_ip (0.2.0)
     gherkin (2.1.5)
       trollop (~> 1.16.2)
     graticule (0.2.12)
@@ -129,6 +130,7 @@ DEPENDENCIES
   database_cleaner
   every
   fastercsv
+  geo_ip
   graticule
   haml
   handsoap

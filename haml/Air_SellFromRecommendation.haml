@@ -1,0 +1,29 @@
+%messageActionDetails
+  %messageFunctionDetails
+    %messageFunction 183
+    %additionalMessageFunction M1
+- segments.each do |segment|
+  %itineraryDetails
+    %originDestinationDetails
+      %origin= segment.departure_iata
+      %destination= segment.arrival_iata
+    %message
+      %messageFunctionDetails
+        %messageFunction 183
+    - segment.flights.each do |flight|
+      %segmentInformation
+        %travelProductInformation
+          %flightDate
+            %departureDate= flight.departure_date
+          %boardPointDetails
+            %trueLocationId= flight.departure_iata
+          %offpointDetails
+            %trueLocationId= flight.arrival_iata
+          %companyDetails
+            %marketingCompany= flight.marketing_carrier_iata
+          %flightIdentification
+            %flightNumber= flight.flight_number
+            %bookingClass= flight.class_of_service
+        %relatedproductInformation
+          %quantity= people_count
+          %statusCode NN

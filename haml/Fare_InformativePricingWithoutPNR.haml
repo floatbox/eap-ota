@@ -1,0 +1,49 @@
+%messageDetails
+  %messageFunctionDetails
+    %businessFunction 1
+    %messageFunction 741
+    %responsibleAgency 1A
+%currencyOverride
+  %conversionRateDetails
+    %currency RUB
+%passengersGroup
+  %segmentRepetitionControl
+    %segmentControlDetails
+      %quantity= 1
+      %numberOfUnits= people_counts[:adults]
+  %travellersID
+    - 1.upto(people_counts[:adults]) do |n|
+      %travellerDetails
+        %measurementValue= n
+  %ptcGroup
+    %discountPtc
+      %valueQualifier ADT
+- if people_counts[:children] > 0
+  %passengersGroup
+    %segmentRepetitionControl
+      %segmentControlDetails
+        %quantity= 2
+        %numberOfUnits= people_counts[:children]
+    %travellersID
+      - 1.upto(people_counts[:children]) do |n|
+        %travellerDetails
+          %measurementValue= n + people_counts[:adults]
+    %ptcGroup
+      %discountPtc
+        %valueQualifier CH
+%tripsGroup
+  %originDestination
+  -flights.each do |fl|
+    %segmentGroup
+      %segmentInformation
+        %flightDate
+          %departureDate= fl.departure_date
+        %boardPointDetails
+          %trueLocationId= fl.departure_iata
+        %offpointDetails
+          %trueLocationId= fl.arrival_iata
+        %companyDetails
+          %marketingCompany= fl.marketing_carrier_iata
+        %flightIdentification
+          %flightNumber= fl.flight_number
+          %bookingClass= fl.class_of_service
