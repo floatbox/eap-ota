@@ -133,7 +133,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   def parse_recommendations(xml, flight_indexes)
     xml.xpath("//r:recommendation").map do |rec|
       prices = rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").collect {|x| x.to_i }
-      price_total = prices.sum
+      price_total = prices[0]
       cabins =
         rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:cabin").every.to_s
       booking_classes = 

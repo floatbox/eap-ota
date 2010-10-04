@@ -22,6 +22,7 @@ gem 'graticule'
 gem 'mysql'
 gem 'tzinfo'
 gem 'fastercsv'
+gem 'geo_ip'
 
 gem 'haml'
 
