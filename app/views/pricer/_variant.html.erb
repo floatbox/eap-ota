@@ -32,6 +32,14 @@
         </td>
         <td class="rules" colspan="2">
             <%= 'Не можем продать' unless recommendation.sellable? %>
+            <% if recommendation.commission %>
+              <%= recommendation.commission.carrier %>
+              <%= recommendation.commission.agent %>
+              <%= recommendation.commission.subagent %>
+              <%= recommendation.markup %>р.
+            <% else %>
+              <%= recommendation.validating_carrier_iata %><span style="color:red">???</span>
+            <% end %>
             <a href="#">Правила тарифа</a> (<%= recommendation.booking_classes.join(', ') %>) 
         </td>
     </tr>
