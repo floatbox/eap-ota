@@ -4,14 +4,16 @@ class BookingController < ApplicationController
 
   def index
     #@pnr_form = PNRForm.new(:flight_codes => params[:flight_codes].split('_'))
-    require 'variant'
-    require 'segment'
-    require 'flight'
-    @variant = Marshal.load(File.read(Rails.root + 'db/variant.marshal'))
-    @people = [1,2,3].map {|n|
+    @recommendation = Recommendation.check_price_and_avaliability(params[:flight_codes].split('_'), {:children => params[:children].to_i, :adults => params[:adults].to_i})
+    unless @recommendation
+      render :text => 'Не удалось сделать предварительное бронирование'
+      return
+    end
+    @variant = @recommendation.variants[0]
+    @people = (1..(params[:adults].to_i + params[:children].to_i)).map {|n|
                 Person.new
               }
-    @people_count = {:adults => 1, :children => 1, :infants => 1}
+    @people_count = {:adults => params[:adults].to_i, :children => params[:children].to_i}
     @card = Billing::CreditCard.new()
     @numbers = %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}
   end

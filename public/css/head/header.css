@@ -5,3 +5,57 @@
     width: 960px;
     margin: 0 auto;
 }
+
+.logo
+{
+    display: block;
+    float: left;
+    width: 150px;
+    height: 70px;
+
+    background: #fff url(/img/logos/logo.png) no-repeat center center;
+}
+
+.head-tabs
+{
+    font: bold 130% arial,s;
+
+    overflow: hidden;
+    float: left;
+    margin: 28px 0 0 0;
+}
+
+.head-tabs li
+{
+    float: left;
+}
+
+.head-tabs li a
+{
+    display: block;
+    
+    padding: 0 0.8em;
+    height: 42px;
+    line-height: 42px;
+    
+    outline: none;
+    white-space: nowrap;
+    text-decoration: none;
+
+    letter-spacing: -0.03em;
+    color: #fff;
+    background: #ed1192;
+}
+
+.head-tabs li a.active,
+.head-tabs li a.active:hover
+{
+    cursor: default;
+
+    background: #2c2c2c;
+}
+
+.head-tabs li a:hover
+{
+    background: #373737;
+}

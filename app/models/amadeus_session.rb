@@ -2,7 +2,7 @@
 # обошелся без блокировки таблиц
 class AmadeusSession < ActiveRecord::Base
 
-  INACTIVITY_TIMEOUT = 25*60
+  INACTIVITY_TIMEOUT = 10*60
   MAX_SESSIONS = 10
 
   named_scope :stale, lambda { {:conditions => ["updated_at < ?", INACTIVITY_TIMEOUT.seconds.ago]}}

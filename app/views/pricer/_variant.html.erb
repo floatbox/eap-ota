@@ -16,7 +16,7 @@
             </dl>
         </td>
         <td class="booking" colspan="5">
-            <a href="/booking/?flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>" class="a-button" target="booking" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
+            <a href="/booking/?flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>&adults=<%= @search.adults %>&children=<%=@search.children %>" class="a-button" target="booking" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
         </td>
     </tr>
 </thead>
@@ -37,16 +37,19 @@
     </tr>
 </tbody>
 <tbody class="details">
+    <% flights_counter = 0 %>
     <% variant.segments.each_with_index do |segment, segment_counter| %>
-        <%= render :partial => 'segment_details', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter} %>
+        <% scabins = recommendation.cabins.empty? ? nil : different_cabins(recommendation.cabins[flights_counter, segment.flights.length], params[:search]['cabin']) %>
+        <% flights_counter += segment.flights.length %>
+        <%= render :partial => 'segment_details', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter, :segment_cabins => scabins} %>
     <% end %>
     <tr class="booking">
         <td></td>
         <td colspan="6">
-        <a href="/pnr_form/new/?flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>" class="a-button" target="booking" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
+        <a href="/booking/?flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>&adults=<%= @search.adults %>&children=<%=@search.children %>" class="a-button" target="booking" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
             <dl class="sum">
                 <dt>Итого <strong><%= human_price(recommendation.price_total.to_i) %></strong> за всех со всеми сборами</dt>
-                <dd>Тариф — <%= human_price(recommendation.prices[0].to_i) %>, налоги и сборы — <%= human_price(recommendation.prices[1].to_i) %></dd>
+                <dd>Тариф — <%= human_price(recommendation.prices[1].to_i) %>, налоги и сборы — <%= human_price((recommendation.prices[0]-recommendation.prices[1]).to_i) %></dd>
             </dl>
         </td>
     </tr>    

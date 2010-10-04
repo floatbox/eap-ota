@@ -50,7 +50,7 @@ module PricerHelper
   end
   
   def layovers_in flights
-    flights.map {|flight| flight.arrival.city.case_in }.to_sentence
+    flights.map {|flight| flight.arrival.city.case_in.gsub(/ /, '&nbsp;') }.to_sentence
   end
   
   def segments_departure variant
@@ -77,6 +77,33 @@ module PricerHelper
       end
     end
     result.join(', ')
+  end
+  
+  def different_cabins cabins, selected
+    selected = 'Y' if selected.nil?
+    separate = []
+    common = true
+    fcabin = nil
+    cabins.each_with_index {|c, i|
+      cabin = (c == 'F' || c == 'C') ? c : 'Y'
+      separate << (cabin == selected ? nil : cabin)
+      if i == 0
+        fcabin = separate[0]
+      elsif common && cabin != fcabin
+        common = false
+      end 
+    }
+    common ? [fcabin] : separate
+  end
+  
+  def human_cabin_nom cabin
+    titles = {'Y' => 'Эконом-класс', 'C' => 'Бизнес-класс', 'F' => 'Первый класс'}
+    titles[cabin]
+  end
+
+  def human_cabin_ins cabin
+    titles = {'Y' => 'эконом-классом', 'C' => 'бизнес-классом', 'F' => 'первым классом'}
+    titles[cabin]  
   end
 
 end

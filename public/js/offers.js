@@ -86,17 +86,14 @@ init: function() {
     });
     
 },
-load: function(data, title) {
+load: function(params, title) {
     var self = this;
     this.update = {
-        data: data,
         title: title,
         loading: true
     };
-
-    $.get("/pricer/", {
-        search: data
-    }, function(s) {
+    this.update.request = $.get("/pricer/", params, function(s) {
+        if (self.update.aborted) return;
         var visible = self.loading.is(':visible');
         self.update.loading = false;
         if (typeof s == "string") {
@@ -150,21 +147,24 @@ toggle: function(mode) {
     this.loading.timer.trigger(mode == 'loading' ? 'start' : 'stop');
 },
 updateHash: function(hash) {
-    window.location.hash = encodeURIComponent(JSON.stringify(hash));
+//    window.location.hash = encodeURIComponent(JSON.stringify(hash));
+    window.location.hash = hash;
 },
 processUpdate: function() {
     var self = this, u = this.update;
     $('#offers-collection').remove();
     $('#offers-all').append(u.content || '');
     if ($('#offers-all .offer').length) {
-        u.content = undefined;
         this.updateFilters();
-        this.parseResults();        
+        this.parseResults();
+        var qkey = $('#offers-collection').attr('data-query_key');
+        this.updateHash(qkey);
     } else {
         this.toggle('empty');
         this.variants = [];
         this.items = [];
     }
+    this.update = {};
     if (this.items.length) {
         this.applySort('price');    
         if (this.maxLayovers) {
@@ -178,8 +178,7 @@ processUpdate: function() {
         setTimeout(function() {
             self.toggle('results');
         }, 1000);
-    }
-    this.updateHash(u.data);
+    };
 },
 parseResults: function() {
     var items = [], variants = [];
@@ -215,17 +214,27 @@ showVariant: function(el) {
     el.removeClass('g-none').siblings().addClass('g-none');
 },
 updateFilters: function() {
-    var collection = $('#offers-collection');
-    var data = $.parseJSON(collection.attr('data-filters'));
     this.filterable = false;
-    this.filters['airlines'].trigger('update', data);
-    this.filters['planes'].trigger('update', data);
-    for (var i = data.segments; i--;) {
-        this.filters['arv_airport_' + i].trigger('update', data);
-        this.filters['dpt_airport_' + i].trigger('update', data);
-        this.filters['arv_time_' + i].trigger('update', data);
-        this.filters['dpt_time_' + i].trigger('update', data);
-    }
+    var data = $.parseJSON($('#offers-collection').attr('data-filters'));
+    $('#offers-filter .flight').each(function() {
+        var items = $('p', this).trigger('update', data);
+        var active = items.trigger('toggle').filter(':not(.g-none)');
+        if (active.length > 0) {
+            var city = $('.city', this);
+            city.text(data[city.attr('data-key')]);
+            $('.conjunction', this).toggle(active.length > 1);
+            $(this).removeClass('g-none');
+        } else {
+            $(this).addClass('g-none');
+        }
+    });
+    var items = $('#offers-filter td > p').each(function() {
+        var el = $(this);
+        el.trigger('update', data).trigger('toggle');
+        el.next('.comma').toggle(!el.hasClass('g-none'));
+    });
+    items.filter(':not(.g-none)').last().next('.comma').hide();
+    this.currentData = data;
     this.activeFilters = {};
     this.filterable = true;
 },
@@ -352,80 +361,9 @@ sortOffers: function() {
         return 0;
     });
 
-// отладка
-    sitems.priceM1 = 0;
-    sitems.valueM1 = 0;
-    sitems.priceM2 = 0;
-    sitems.valueM2 = 0;
-
-    // min и M1
-    $.each(sitems, function(i, el) {
-        sitems.priceMin = Math.min(sitems.priceMin || Number.POSITIVE_INFINITY, el.price);
-        sitems.valueMin = Math.min(sitems.valueMin || Number.POSITIVE_INFINITY, el.value);
-
-        sitems.priceM1 += el.price / sitems.length;
-        sitems.valueM1 += el.value / sitems.length;
-    });
-
-    // M2 и вес
-    $.each(sitems, function(i, el) {
-        sitems.priceM2 += Math.pow(el.price - sitems.priceM1, 2) / sitems.length;
-        sitems.valueM2 += Math.pow(el.value - sitems.valueM1, 2) / sitems.length;
-
-        el.weight = (sitems.priceMin + el.price) * (sitems.valueMin + el.value);
-        sitems.weightMax = Math.max(sitems.weightMax || 0, el.weight);
-        sitems.weightMin = Math.min(sitems.weightMin || Number.POSITIVE_INFINITY, el.weight);
-    });
-
-    // отрезаем выблядков
-    $.each(sitems, function(i, el) {
-
-    
-    });
-
-    // округление
-    sitems.priceM1 = sitems.priceM1;
-    sitems.valueM1 = sitems.valueM1;
-    sitems.priceM2 = Math.sqrt(sitems.priceM2);
-    sitems.valueM2 = Math.sqrt(sitems.valueM2);
-
-    sitems.sort(function(a, b) {
-        if (a.weight > b.weight) return 1;
-        if (a.weight < b.weight) return -1;
-        if (a.price > b.price) return 1;
-        if (a.price < b.price) return -1;
-        return 0;
-    });
     var list = $('#offers-collection');
-    list.append(
-        $('<h1>M[цена] = <b style="font-weight:bold">{priceM1}</b>, &sigma; = <b style="font-weight:bold">{priceM2}</b></h1> \
-           <h1>M[время] = <b style="font-weight:bold">{valueM1}</b>, &sigma; = <b style="font-weight:bold">{valueM2}</b></h1><h1>&nbsp;</h1>'
-        .supplant({priceM1: parseInt(sitems.priceM1), priceM2: parseInt(sitems.priceM2), valueM1: parseInt(sitems.valueM1), valueM2: parseInt(sitems.valueM2)}))
-    );
-
-    var list = $('#offers-collection');
-    for (var i = 0, lim = sitems.length; i < lim; i++) {
-
-//        list.append($('<h1><b style="font-weight:bold">{weight}</b> &nbsp;&nbsp; время = {value}</h1>'.supplant({price: sitems[i].price, value: sitems[i].value, weight: (sitems[i].weight / sitems.weightMax).toFixed(3)})));
-        list.append($('<h1><b style="font-weight:bold">{weightNorm} / {weight}</b> &nbsp;&nbsp; время = {value}</h1>'.supplant({price: sitems[i].price, value: sitems[i].value, weight: parseInt(sitems[i].weight), weightNorm: (sitems[i].weight / sitems.weightMax).toFixed(3)})));
-
-        var red = sitems[i].price > sitems.priceM1 + sitems.priceM2;
-        red = red || sitems[i].value > sitems.valueM1 + sitems.valueM2;
-
-        red && sitems[i].offer.el.css('backgroundColor', '#fdd');
-
-        var green = sitems[i].weight < sitems.weightMin + (sitems.priceMin + 500) * (sitems.valueMin + 30);
-        green && sitems[i].offer.el.css('backgroundColor', '#dfd');
-
+    for (var i = 0, lim = sitems.length; i < lim; i++) 
         list.append(sitems[i].offer.el);
-    }
-// отладка - конец
-
-
-// восстановить!
-//    for (var i = 0, lim = sitems.length; i < lim; i++) 
-//        list.append(sitems[i].offer.el);
-
 },
 showRecommendations: function() {
     var variants = this.variants, cheap, fast, optimal;
@@ -480,11 +418,14 @@ getDepartures: function(offer) {
     return various && od;
 },
 showDepartures: function() {    
-    var self = this, offers = this.items;
+    var self = this, offers = this.items, dcities = [];
+    for (var i = this.currentData.segments; i--;) {
+        dcities[i] = this.currentData['dpt_city_' + i];
+    }
     for (var i = 0, im = offers.length; i < im; i++) {
         var offer = offers[i];
         if (offer.improper || !offer.multiple) continue;
-        var dtimes = this.getDepartures(offer), dcities = offer.summary.depcities;
+        var dtimes = this.getDepartures(offer);
         var variants = offer.variants;
         for (var k = variants.length; k--;) {
             var v = variants[k], empty = true;

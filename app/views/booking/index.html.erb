@@ -39,17 +39,24 @@
                 <dl class="booking">
 
                     <!-- Вариант перелёта -->
-
                     <dt><b>1</b>Проверьте, что вы бронируете
 
-                    <dd class="book-v ready" onclick="return 'Variant'">
+                    <dd class="book-v ready">
 
                         <!-- подробности перелёта -->
                         <div class="offer">
-                            <table class='offer-variant'>
+                            <table class="offer-variant">
+                            <colgroup>
+                                <col width="110">
+                                <col width="140">
+                                <col width="83">
+                                <col width="83">
+                                <col width="140">
+                                <col width="97">
+                            </colgroup>                            
                             <tbody class="details">
                                 <% @variant.segments.each_with_index do |segment, segment_counter| %>
-                                    <%= render :partial => 'pricer/segment_details', :locals => {:segment => segment, :variant => @variant, :segment_counter => segment_counter} %>
+                                    <%= render :partial => 'pricer/segment_details', :locals => {:segment => segment, :variant => @variant, :segment_counter => segment_counter, :segment_cabins => nil} %>
                                 <% end %>  
                             </tbody>
                             </table>
@@ -88,7 +95,8 @@ ECONOMY NORMAL FARE WITHIN EUROPE VIA MSQ
 
                     <!-- Данные пассажиров -->
                     
-                    <dt><b>2</b>Введите данные <%= @people.count == 1 ? 'пассажира' : 'пассажиров' %>
+                    <dt>
+                        <b>2</b>Введите данные <%= @people.count == 1 ? 'пассажира' : 'пассажиров' %>
 
                         <%= render :partial => 'person_form', :collection => @people %>
 <!--
@@ -110,8 +118,9 @@ ECONOMY NORMAL FARE WITHIN EUROPE VIA MSQ
 
                     <!-- Отправка -->
 
-                    <dt class="disabled"><b>5</b>Всё правильно? Нажмите <a href="#" class="b-submit">забронировать</a>
-                    <dd class="book-s" onclick="return 'Submit'">
+                    <dt><b>5</b>Всё правильно? Нажмите <input type="submit" class="a-button a-button-ready g-l" value="Забронировать">
+
+                    <dd class="book-s">
 
                         <div class="blocker g-xs">
                             <s></s>
@@ -132,7 +141,7 @@ ECONOMY NORMAL FARE WITHIN EUROPE VIA MSQ
                 </dl>
             
 
-                <% end %>
+            <% end %> <%# - form %>
 
         </div>
         

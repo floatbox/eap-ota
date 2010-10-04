@@ -2,9 +2,8 @@ ActionController::Routing::Routes.draw do |map|
   Typus::Routes.draw(map)
 
   map.pricer 'pricer', :controller => 'pricer', :action => 'index'
-  map.pricer 'pricer/validate', :controller => 'pricer', :action => 'validate'
+  map.pricer_validate 'pricer/validate', :controller => 'pricer', :action => 'validate'
   map.booking 'booking', :controller => 'booking', :action => 'index'
-
   map.booking_form 'booking/form', :controller => 'booking', :action => 'form'
   map.booking_pay 'booking/pay', :controller => 'booking', :action => 'pay'
 
