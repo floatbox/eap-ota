@@ -41,6 +41,10 @@
         <% unless layover_human_durations.empty? %>
             <p class="note"><%= layover_human_durations.to_sentence %> между рейсами</p>
         <% end %>
+        <% visible_cabins = segment_cabins.compact %>
+        <% unless visible_cabins.empty? %>
+            <p class="cnote"><span class="cabin"><%= human_cabin_nom(visible_cabins.first) %></span></p>
+        <% end %>
     </td>
     <td class="arv">
         <h5><%= fmt_time( segment.arrival_time ) %></h5>

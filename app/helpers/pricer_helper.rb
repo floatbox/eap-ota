@@ -78,24 +78,7 @@ module PricerHelper
     end
     result.join(', ')
   end
-  
-  def different_cabins cabins, selected
-    selected = 'Y' if selected.nil?
-    separate = []
-    common = true
-    fcabin = nil
-    cabins.each_with_index {|c, i|
-      cabin = (c == 'F' || c == 'C') ? c : 'Y'
-      separate << (cabin == selected ? nil : cabin)
-      if i == 0
-        fcabin = separate[0]
-      elsif common && cabin != fcabin
-        common = false
-      end 
-    }
-    common ? [fcabin] : separate
-  end
-  
+
   def human_cabin_nom cabin
     titles = {'Y' => 'Эконом-класс', 'C' => 'Бизнес-класс', 'F' => 'Первый класс'}
     titles[cabin]

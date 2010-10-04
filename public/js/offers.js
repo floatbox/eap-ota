@@ -314,6 +314,9 @@ filterOffers: function() {
         offer.el.toggleClass('improper', offer.improper);
     }
     this.showAmount(amount, total);
+    var context = $('#offers-all');
+    $('.offers-sort', context).toggleClass('g-none', amount == 0);
+    $('.offers-improper', context).toggleClass('g-none', amount > 0);
     $('#offers-reset-filters').toggleClass('g-none', empty);
 },
 applySort: function(key) {
@@ -375,6 +378,11 @@ showRecommendations: function() {
         if (!fast || d < fast.duration || (d == fast.duration && p < fast.price)) fast = {variant: v, duration: d, price: p};
         if (!optimal || pfd < optimal.pfd) optimal = {variant: v, pfd: pfd};
     }
+    var container = $('#offers-best').html('');
+    if (!cheap && !fast && !optimal) {
+        container.append($('#offers-collection').prev().clone());
+        return;
+    }
     if (cheap && fast && cheap.variant == fast.variant) {
         optimal = {variant: cheap.variant};
         cheap = undefined;
@@ -386,7 +394,6 @@ showRecommendations: function() {
     if (fast && optimal && fast.variant == optimal.variant) {
         fast = undefined;
     }
-    var container = $('#offers-best').html('');
     if (cheap) container.append(this.makeRecommendation(cheap, 'Самый выгодный вариант'));
     if (optimal) container.append(this.makeRecommendation(optimal, 'Оптимальный вариант — разумная цена и время в пути'));
     if (fast) container.append(this.makeRecommendation(fast, 'Самый быстрый вариант'));

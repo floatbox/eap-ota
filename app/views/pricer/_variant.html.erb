@@ -22,7 +22,7 @@
 </thead>
 <tbody class="summary">
     <% variant.segments.each_with_index do |segment, segment_counter| %>
-        <%= render :partial => 'segment_summary', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter} %>
+        <%= render :partial => 'segment_summary', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter, :segment_cabins => variant_cabins[segment_counter]} %>
     <% end %>
     <tr class="controls">
         <td></td>
@@ -37,11 +37,8 @@
     </tr>
 </tbody>
 <tbody class="details">
-    <% flights_counter = 0 %>
     <% variant.segments.each_with_index do |segment, segment_counter| %>
-        <% scabins = recommendation.cabins.empty? ? nil : different_cabins(recommendation.cabins[flights_counter, segment.flights.length], params[:search]['cabin']) %>
-        <% flights_counter += segment.flights.length %>
-        <%= render :partial => 'segment_details', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter, :segment_cabins => scabins} %>
+        <%= render :partial => 'segment_details', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter, :segment_cabins => variant_cabins[segment_counter]} %>
     <% end %>
     <tr class="booking">
         <td></td>

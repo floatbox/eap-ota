@@ -117,7 +117,21 @@ class Recommendation
       flight.equipment_type_iata = fl.xpath("r:apdSegment/r:legDetails/r:equipment").to_s
     }
   end
-  
+
+  def cabins_except selected_cabin
+    selected_cabin = 'Y' if selected_cabin.nil?
+    dcabins = cabins.map {|c|
+      cabin = (c == 'F' || c == 'C') ? c : 'Y'
+      cabin == selected_cabin ? nil : cabin
+    }
+    fcounter = 0
+    variants.first.segments.map {|s|
+        fcabins = dcabins[fcounter, s.flights.length]
+        fcounter += s.flights.length
+        common = fcabins.uniq
+        common.length == 1 ? common : fcabins
+    }
+  end
 
   # FIXME порнография какая-то. чего так сложно?
   def self.summary recs
