@@ -103,7 +103,7 @@ class Completer
               :name => record.name,
               :hl => hl,
               :entity => record.entity
-            }
+            } unless record.entity[:type] == 'airport' && record.entity[:iata].downcase == word_part.to_s.downcase && data.find{|d| d[:entity][:type] == 'city' && d[:entity][:iata] == record.entity[:iata]} #fixes #249
             break if data.size == limit
           end
         end
