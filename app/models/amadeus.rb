@@ -135,8 +135,8 @@ class Amadeus < Handsoap::Service
       :args => args
   end
 
-  def pnr_add_multi_elements(args)
-    soap_action 'PNR_AddMultiElements', args
+  def pnr_add_multi_elements(args, session=nil)
+    soap_action 'PNR_AddMultiElements', args, session
   end
 
   def pnr_retrieve(args, session=nil)
