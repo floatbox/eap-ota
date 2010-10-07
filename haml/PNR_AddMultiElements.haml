@@ -1,96 +1,118 @@
 -# https://webservices.amadeus.com/extranet/structures/viewMessageStructure.do?id=1325&serviceVersionId=1497
-%pnrActions
-  %optionCode 11
-%travellerInfo
-  %elementManagementPassenger
-    %reference
-      %qualifier PR
-      %number 1
-    %segmentName NM
-  %passengerData
-    %travellerInformation
-      %traveller
-        %surname= surname
-        %quantity 1
-      %passenger
-        %firstName= first_name
-%originDestinationDetails
-  %originDestination
-    -# %origin LGW
-    -# %destination FCO
-  - flights.each_with_index do |flight, index|
-    %itineraryInfo
-      %elementManagementItinerary
-        %reference
-          %qualifier SR
-          %number= index + 1
-        %segmentName AIR
-      %airAuxItinerary
-        %travelProduct
-          %product
-            %depDate= flight.departure_date
-          %boardpointDetail
-            %cityCode= flight.departure_iata
-          %offpointDetail
-            %cityCode= flight.arrival_iata
-          %company
-            %identification= flight.operating_carrier_iata
-          %productDetails
-            %identification= flight.flight_number
-            %classOfService= flight.class_of_service
-        %messageAction
-          %business
-            %function 1
-        %relatedProduct
+-if end_transact
+  %pnrActions
+    %optionCode 10
+-else
+  %pnrActions
+    %optionCode 11
+  %travellerInfo
+    %elementManagementPassenger
+      %reference
+        %qualifier PR
+        %number 1
+      %segmentName NM
+    %passengerData
+      %travellerInformation
+        %traveller
+          %surname= surname
           %quantity 1
-          %status NN
-        %selectionDetailsAir
-          %selection
-            %option P10
-%dataElementsMaster
-  %marker1
-  %dataElementsIndiv
-    %elementManagementData
-      %reference
-        %qualifier OT
-        %number 2
-      %segmentName RF
-    %freetextData
-      %freetextDetail
-        %subjectQualifier 3
-        %type P22
-      %longFreetext LAH44
-  %dataElementsIndiv
-    %elementManagementData
-      %reference
-        %qualifier OT
-        %number 3
-      %segmentName TK
-    %ticketElement
-      %passengerType PAX
-      %ticket
-        %indicator TL
-        %date 270710
-  %dataElementsIndiv
-    %elementManagementData
-      %reference
-        %qualifier OT
-        %number 4
-      %segmentName AP
-    %freetextData
-      %freetextDetail
-        %subjectQualifier 3
-        %type 3
-      %longFreetext= phone
-  - if email.present?
+        %passenger
+          %firstName= first_name
+  %originDestinationDetails
+    %originDestination
+      -# %origin LGW
+      -# %destination FCO
+    - flights.each_with_index do |flight, index|
+      %itineraryInfo
+        %elementManagementItinerary
+          %reference
+            %qualifier SR
+            %number= index + 1
+          %segmentName AIR
+        %airAuxItinerary
+          %travelProduct
+            %product
+              %depDate= flight.departure_date
+            %boardpointDetail
+              %cityCode= flight.departure_iata
+            %offpointDetail
+              %cityCode= flight.arrival_iata
+            %company
+              %identification= flight.operating_carrier_iata
+            %productDetails
+              %identification= flight.flight_number
+              %classOfService= flight.class_of_service
+          %messageAction
+            %business
+              %function 1
+          %relatedProduct
+            %quantity 1
+            %status NN
+          %selectionDetailsAir
+            %selection
+              %option P10
+  %dataElementsMaster
+    %marker1
+    %dataElementsIndiv
+      %elementManagementData
+        %reference
+          %qualifier OT
+          %number 2
+        %segmentName RF
+      %freetextData
+        %freetextDetail
+          %subjectQualifier 3
+          %type P22
+        %longFreetext LAH44
+    %dataElementsIndiv
+      %elementManagementData
+        %reference
+          %qualifier OT
+          %number 3
+        %segmentName TK
+      %ticketElement
+        %passengerType PAX
+        %ticket
+          %indicator TL
+          %date 271010
+    %dataElementsIndiv
+      %elementManagementData
+        %reference
+          %qualifier OT
+          %number 4
+        %segmentName FP
+      %formOfPayment
+        %fop
+          %identification CA
     %dataElementsIndiv
       %elementManagementData
         %reference
           %qualifier OT
           %number 5
+        %segmentName FV
+      %ticketingCarrier
+        %carrier
+          %airlineCode SU
+    %dataElementsIndiv
+      %elementManagementData
+        %reference
+          %qualifier OT
+          %number 4
         %segmentName AP
       %freetextData
         %freetextDetail
           %subjectQualifier 3
-          %type P02
-        %longFreetext= email
+          %type 3
+        %longFreetext= phone
+    - if email.present?
+      %dataElementsIndiv
+        %elementManagementData
+          %reference
+            %qualifier OT
+            %number 5
+          %segmentName AP
+        %freetextData
+          %freetextDetail
+            %subjectQualifier 3
+            %type P02
+          %longFreetext= email
