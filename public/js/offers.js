@@ -51,13 +51,15 @@ init: function() {
     $('#offers-list').delegate('.offers-sort a', 'click', function(event) {
         event.preventDefault();
         var self = app.offers, key = this.onclick();
-        var list = $('#offers-collection').css('opacity', 0.7);
-        setTimeout(function() {
-            list.hide();
-            self.applySort(key);
-            self.sortOffers();
-            list.css('opacity', 1).show();
-        }, 250);
+        if (key != self.sortby) {
+            var list = $('#offers-collection').css('opacity', 0.7);
+            setTimeout(function() {
+                list.hide();
+                self.applySort(key);
+                self.sortOffers();
+                list.css('opacity', 1).show();
+            }, 250);
+        }
     });
     
     // Выбор времени вылета
@@ -146,6 +148,11 @@ toggle: function(mode) {
     // запускаем/останавливаем таймер счётчика
     this.loading.timer.trigger(mode == 'loading' ? 'start' : 'stop');
 },
+toggleCollection: function(mode) {
+    var context = $('#offers-all');
+    $('.offers-sort', context).toggleClass('g-none', !mode);
+    $('.offers-improper', context).toggleClass('g-none', mode);
+},
 updateHash: function(hash) {
 //    window.location.hash = encodeURIComponent(JSON.stringify(hash));
     window.location.hash = hash;
@@ -157,8 +164,8 @@ processUpdate: function() {
     if ($('#offers-all .offer').length) {
         this.updateFilters();
         this.parseResults();
-        var qkey = $('#offers-collection').attr('data-query_key');
-        this.updateHash(qkey);
+        this.toggleCollection(true);
+        this.updateHash($('#offers-collection').attr('data-query_key'));
     } else {
         this.toggle('empty');
         this.variants = [];
@@ -314,9 +321,7 @@ filterOffers: function() {
         offer.el.toggleClass('improper', offer.improper);
     }
     this.showAmount(amount, total);
-    var context = $('#offers-all');
-    $('.offers-sort', context).toggleClass('g-none', amount == 0);
-    $('.offers-improper', context).toggleClass('g-none', amount > 0);
+    this.toggleCollection(amount > 0);
     $('#offers-reset-filters').toggleClass('g-none', empty);
 },
 applySort: function(key) {

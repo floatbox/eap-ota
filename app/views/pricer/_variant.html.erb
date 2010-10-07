@@ -26,11 +26,11 @@
     <% end %>
     <tr class="controls">
         <td></td>
-        <td class="toggle" colspan="3">
+        <td class="toggle" colspan="2">
             <span class="b-pseudo expand"><u>Подробнее о перелёте</u></span>
             <span class="b-pseudo collapse"><u>Скрыть подробности</u></span>
         </td>
-        <td class="rules" colspan="2">
+        <td class="rules" colspan="3">
             <%= 'Поезд' if recommendation.bullshit? %>
             <%= 'Не можем продать' unless recommendation.sellable? %>
             <% if recommendation.commission %>
