@@ -1,6 +1,7 @@
 ﻿$(function() {
 
     var tools = app.search.tools;
+    var fields = app.search.fields; 
     var url = '/complete.json';
     
     // поле "Откуда"
@@ -25,10 +26,10 @@
         height: 374
     }).focus(function() {
         tools.from.reset.fadeOut(200);
-    }).bind('enter', function() {
+    }).change(function() {
         app.search.update({from: $(this).val()}, this);
     });
-    app.search.addField('from', true, tools.from.val());
+    fields['from'] = tools.from.val();
 
     // "подпольная" ссылка для сброса поля "Откуда"
     
@@ -56,10 +57,10 @@
         // размеры
         width: 340,
         height: 378
-    }).bind('enter', function() {
+    }).change(function() {
         app.search.update({to: $(this).val()}, this);
     });
-    app.search.addField('to', true);    
+    fields['to'] = tools.to.val();
 
     // образец содержимого поля "Куда"
     
@@ -87,7 +88,6 @@
         if (e.tagName == 'U') {
             tools.to.focus();
             tools.to.trigger('set', e.innerHTML);
-            tools.to.trigger('enter');
         };
     });
 
@@ -117,11 +117,8 @@
     // Календарь
     
     var calendar = new app.Calendar("#search-calendar");
-    app.search.addField('date1', true);
-    app.search.addField('date2', function(value) {
-        var rt = app.search.fields['rt'];
-        return value || !(rt && rt.value);
-    });
+    fields['date1'] = undefined;
+    fields['date2'] = undefined;
     app.search.subscribe(calendar, 'rt', function(v) {
         calendar.toggleOneway(v == 0);
     });
@@ -254,7 +251,7 @@
             }
         }
     });
-    app.search.addField('rt', false, tools.rt.value == 'rt' ? 1 : 0);
+    fields['rt'] = tools.rt.value == 'rt' ? 1 : 0;
 
     // вся эта хрень только для того, чтобы синхронизировать розовую рамку при ховере/фокусе
     // над табами "туда-обратно" и над полем "Куда"
