@@ -16,6 +16,11 @@ class Amadeus < Handsoap::Service
   #Handsoap.http_driver = :http_client
   Handsoap.timeout = 500
 
+  # handsoap logger
+  fh = open(Rails.root + 'log/amadeus.log', 'a')
+  fh.sync=true
+  self.logger = fh
+
   endpoint :uri => "https://test.webservices.amadeus.com", :version => 1
 
   def on_response_document(doc)
