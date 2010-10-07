@@ -84,20 +84,21 @@
       %formOfPayment
         %fop
           %identification CA
+    - if validating_carrier
+      %dataElementsIndiv
+        %elementManagementData
+          %reference
+            %qualifier OT
+            %number 5
+          %segmentName FV
+        %ticketingCarrier
+          %carrier
+            %airlineCode= validating_carrier
     %dataElementsIndiv
       %elementManagementData
         %reference
           %qualifier OT
-          %number 5
-        %segmentName FV
-      %ticketingCarrier
-        %carrier
-          %airlineCode SU
-    %dataElementsIndiv
-      %elementManagementData
-        %reference
-          %qualifier OT
-          %number 4
+          %number 6
         %segmentName AP
       %freetextData
         %freetextDetail
@@ -109,7 +110,7 @@
         %elementManagementData
           %reference
             %qualifier OT
-            %number 5
+            %number 7
           %segmentName AP
         %freetextData
           %freetextDetail

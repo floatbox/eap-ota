@@ -7,6 +7,7 @@ class PNRForm < ActiveRecord::BaseWithoutTable
   column :debug, :string
   column :number, :string
   column :end_transact, :boolean, false
+  column :validating_carrier, :string
   
   validates_presence_of :first_name, :surname
   

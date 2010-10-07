@@ -107,7 +107,7 @@ class Recommendation
   end
   
   #временная херня
-  def self.create_booking(flight_codes = ['SUSU837L221010SVOLED10'], people_counts = {:adults => 1, :children => 0})
+  def self.create_booking(flight_codes = ['SUSU837L251010SVOLED10'], people_counts = {:adults => 1, :children => 0})
     a_session = AmadeusSession.book
     flights = flight_codes.map do |flight_code|
       Flight.from_flight_code flight_code
@@ -122,14 +122,6 @@ class Recommendation
       }
     variant = Variant.new(:segments => segments)
     recommendation = Recommendation.new(:variants => [variant])
-    xml = Amadeus.fare_informative_pricing_without_pnr(OpenStruct.new(:flights => flights, :debug => false, :people_counts => people_counts))
-    recommendation.price_total = 0
-    # FIXME почему то амадеус возвращает цену для одного человека, даже если указано несколько
-    xml.xpath('//r:pricingGroupLevelGroup').each {|pg|
-      recommendation.price_total += pg.xpath('r:fareInfoGroup/r:fareAmount/r:otherMonetaryDetails[r:typeQualifier="712"][r:currency="RUB"]/r:amount').to_s.to_i * pg.xpath('r:numberOfPax/r:segmentControlDetails/r:numberOfUnits').to_s.to_i
-      }
-    return nil if recommendation.price_total == 0
-    # FIXME сломается, когда появятся инфанты
     air_sfr_xml = Amadeus.soap_action('Air_SellFromRecommendation', OpenStruct.new(:segments => segments, :people_count => (people_counts.values.sum)), a_session)
     #FIXME нужно разобраться со statusCode - когда все хорошо, а когда - нет
     return nil if air_sfr_xml.xpath('//r:segmentInformation/r:actionDetails/r:statusCode').every.to_s.uniq != ['OK']
@@ -139,9 +131,10 @@ class Recommendation
     doc = Amadeus.pnr_add_multi_elements(PNRForm.new(
     :flights => [],
     :first_name => 'Vasya',
-    :surname => 'Sidorov',
+    :surname => 'Ua',
     :phone => '454555',
-    :email => 'email@example.com'
+    :email => 'email@example.com',
+    :validating_carrier => 'SU'
     ), a_session)
     pnr_number = doc.xpath('//r:controlNumber').to_s
     Amadeus.soap_action('Fare_PricePNRWithBookingClass', nil, a_session)

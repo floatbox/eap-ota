@@ -16,7 +16,7 @@
             </dl>
         </td>
         <td class="booking" colspan="5">
-            <a href="/booking/?flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>&adults=<%= @search.adults %>&children=<%=@search.children %>" class="a-button" target="booking" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
+            <a href="/booking/?flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>&adults=<%= @search.adults %>&children=<%=@search.children %>&validating_carrier=<%= recommendation.validating_carrier.iata%>" class="a-button" target="booking" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
         </td>
     </tr>
 </thead>
