@@ -35,6 +35,7 @@
              :url => booking_pay_path,
              :html => { :autocomplete => "off" } do |f|
              %>
+             <%= hidden_field_tag :recommendation_number, @recommendation_number %>
 
                 <dl class="booking">
 

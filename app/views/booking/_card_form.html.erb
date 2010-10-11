@@ -37,6 +37,7 @@
                  :title => "последние четыре цифры номера карты",
                  :onclick => "return {req: true, num: true, minl: 4, maxl: 4, mask: /\\d/}"
                 %>
+               <%= f.error_message_on :number, :id => 'error_card_number' %>
             </fieldset>
 
             <fieldset class="bankcardname text-upper">
@@ -52,6 +53,7 @@
                  :title => "имя на карте",
                  :onclick => "return {req: true, latin: true, minl: 3, mask: /[a-z\\s]/i}"
                  %>
+                 <%= f.error_message_on :name, :id => 'error_card_name' %>
             </fieldset>
 
             <fieldset class="bankcardexpires">
@@ -62,21 +64,21 @@
                  :id => "payment-bankcardexpires-m",
                  :class => "text g-l",
                  :maxlength => "2",
-                 :value => "мм",
+                 :value => @card.month  || "мм",
                  :title => "последний месяц действия карты &laquo;MONTH&raquo;",
                  :onclick => "return {def: 'мм', req: true, num: true, minl: 1, maxl: 2, min: 1, max: 12, mask: /\\d/}"
                  %>
-
+                <%= f.error_message_on :month, :id => 'error_card_month' %>
                 <i>/</i>
                 <%= f.text_field :year,
                  :id => "payment-bankcardexpires-y",
-                 :name => "bankcardexpires-y",
                  :class => "text g-l",
                  :maxlength => "2",
-                 :value => "гг",
+                 :value =>  @card.year  ||"гг",
                  :title => "последний год действия карты &laquo;YEAR&raquo;",
                  :onclick => "return {def: 'гг', req: true, num: true, minl: 2, maxl: 2, min: 10, max: 20, mask: /\\d/}"
                 %>
+                <%= f.error_message_on :year, :id => 'error_card_year'  %>
             </fieldset>
 
         <li>
@@ -99,6 +101,7 @@
                  :title => "CVV код банковской карты",
                  :onclick => "return {req: true, num: true, minl: 3, maxl: 3, mask: /\\d/}"
                 %>
+                <%= f.error_message_on :verification_value, :id => 'error_card_verification_value' %>
             </fieldset>
 
             <fieldset class="bankcardbankname">

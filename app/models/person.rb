@@ -11,6 +11,15 @@ class Person < ActiveRecord::BaseWithoutTable
   column :bonus_present, :boolean
   column :bonuscard_type, :string
   column :bonuscard_number, :string, 'Номер карты'
+  validates_multiparameter_assignments
+  validates_presence_of :first_name, :last_name, :sex, :nationality_id, :birthday, :passport
+  validates_presence_of :document_expiration_date, :unless => :document_noexpiration
   
+  
+  def validate
+    errors.add :first_name,       "Некорректное имя"    if first_name && !(first_name =~ /^[a-zA-Z]*$/)
+    errors.add :last_name,       "Некорректная фамилия"    if first_name && !(last_name =~ /^[a-zA-Z]*$/)
+    
+  end
   
 end
