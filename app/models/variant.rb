@@ -1,12 +1,8 @@
 class Variant
 
-  attr_accessor :segments
+  include KeyValueInit
 
-  def initialize keys={}
-    keys.each do |attr, value|
-      send "#{attr}=", value
-    end
-  end
+  attr_accessor :segments
 
   def flights
     segments.sum(&:flights)
