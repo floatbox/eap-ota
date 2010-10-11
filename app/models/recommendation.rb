@@ -1,12 +1,8 @@
 class Recommendation
 
-  attr_accessor :prices, :variants, :price_total, :additional_info, :validating_carrier_iata, :cabins, :booking_classes
+  include KeyValueInit
 
-  def initialize keys={}
-    keys.each do |attr, value|
-      send "#{attr}=", value
-    end
-  end
+  attr_accessor :prices, :variants, :price_total, :additional_info, :validating_carrier_iata, :cabins, :booking_classes
 
   def validating_carrier
     validating_carrier_iata && Airline[validating_carrier_iata]

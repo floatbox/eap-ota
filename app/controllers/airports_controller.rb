@@ -24,8 +24,4 @@ class AirportsController < ApplicationController
     end
   end
 
-  def random
-    @airport = Airport.random
-    render :json => @airport
-  end
 end

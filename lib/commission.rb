@@ -1,4 +1,7 @@
 class Commission
+
+  include KeyValueInit
+
   @commissions = []
 
   def self.carrier carrier
@@ -34,12 +37,6 @@ class Commission
 
 
   attr_accessor :carrier, :agent, :subagent
-
-  def initialize(attrs={})
-    attrs.each do |k, v|
-      send "#{k}=", v
-    end
-  end
 
   def applicable? recommendation
     carrier == recommendation.validating_carrier_iata

@@ -15,8 +15,4 @@ class CountriesController < ApplicationController
     @country = Country.find(params[:id])
   end
 
-  def random
-    @country = Country.random
-    render :json => @country
-  end
 end

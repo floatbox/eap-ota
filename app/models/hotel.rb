@@ -1,5 +1,7 @@
 class Hotel
 
+  include KeyValueInit
+
   def self.random opts
     stars = (3..5).random
     price = (500..1000).random * stars
@@ -34,17 +36,6 @@ class Hotel
 
   def price= price
     @price = Price.new(price)
-  end
-
-  def initialize attrs={}
-    self.id = object_id
-    self.attributes = attrs
-  end
-
-  def attributes= attrs
-    attrs.each do |attr, value|
-      send "#{attr}=", value
-    end
   end
 
   def self.calculate_distance from, to
