@@ -19,8 +19,4 @@ class GeoTagsController < ApplicationController
     end
   end
 
-  def random
-    @geo_tag = GeoTag.random
-    render :json => @geo_tag
-  end
 end

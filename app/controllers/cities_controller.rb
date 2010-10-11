@@ -23,8 +23,4 @@ class CitiesController < ApplicationController
     end
   end
 
-  def random
-    @city = City.random
-    render :json => @city
-  end
 end
