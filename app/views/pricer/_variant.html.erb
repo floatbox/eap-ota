@@ -16,41 +16,46 @@
             </dl>
         </td>
         <td class="booking" colspan="5">
-            <a href="/booking/?flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>" class="a-button" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
+            <a href="/booking/?flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>&adults=<%= @search.adults %>&children=<%=@search.children %>&validating_carrier=<%= recommendation.validating_carrier.iata%>" class="a-button" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
         </td>
     </tr>
 </thead>
 <tbody class="summary">
     <% variant.segments.each_with_index do |segment, segment_counter| %>
-        <%= render :partial => 'segment_summary', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter} %>
+        <%= render :partial => 'segment_summary', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter, :segment_cabins => variant_cabins[segment_counter]} %>
     <% end %>
     <tr class="controls">
         <td></td>
-        <td class="toggle" colspan="3">
+        <td class="toggle" colspan="2">
             <span class="b-pseudo expand"><u>Подробнее о перелёте</u></span>
             <span class="b-pseudo collapse"><u>Скрыть подробности</u></span>
         </td>
-        <td class="rules" colspan="2">
+        <td class="rules" colspan="3">
+            <%= 'Поезд' if recommendation.bullshit? %>
             <%= 'Не можем продать' unless recommendation.sellable? %>
+            <% if recommendation.commission %>
+              <%= recommendation.commission.carrier %>
+              <%= recommendation.commission.agent %>
+              <%= recommendation.commission.subagent %>
+              <%= recommendation.markup %>р.
+            <% else %>
+              <%= recommendation.validating_carrier_iata %><span style="color:red">???</span>
+            <% end %>
             <a href="#">Правила тарифа</a> (<%= recommendation.booking_classes.join(', ') %>) 
         </td>
     </tr>
 </tbody>
 <tbody class="details">
-    <% show_busines = !recommendation.cabins.join('').index(params[:search]['cabin'] == 'C' ? /[^C]/ : 'C').nil? %>
-    <% flights_counter = 0 %>
     <% variant.segments.each_with_index do |segment, segment_counter| %>
-        <% segment_cabins = show_busines ? recommendation.cabins[flights_counter, flights_counter + segment.flights.length] : nil %>
-        <% flights_counter += segment.flights.length %>
-        <%= render :partial => 'segment_details', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter, :segment_cabins => segment_cabins} %>
+        <%= render :partial => 'segment_details', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter, :segment_cabins => variant_cabins[segment_counter]} %>
     <% end %>
     <tr class="booking">
         <td></td>
         <td colspan="6">
-        <a href="/pnr_form/new/?flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>" class="a-button" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
+        <a href="/booking/?flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>&adults=<%= @search.adults %>&children=<%=@search.children %>" class="a-button" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
             <dl class="sum">
                 <dt>Итого <strong><%= human_price(recommendation.price_total.to_i) %></strong> за всех со всеми сборами</dt>
-                <dd>Тариф — <%= human_price(recommendation.prices[0].to_i) %>, налоги и сборы — <%= human_price(recommendation.prices[1].to_i) %></dd>
+                <dd>Тариф — <%= human_price((recommendation.prices[0]-recommendation.prices[1]).to_i) %>, налоги и сборы — <%= human_price(recommendation.prices[1].to_i) %></dd>
             </dl>
         </td>
     </tr>    

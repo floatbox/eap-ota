@@ -2,23 +2,22 @@ ActionController::Routing::Routes.draw do |map|
   Typus::Routes.draw(map)
 
   map.pricer 'pricer', :controller => 'pricer', :action => 'index'
-  map.pricer 'pricer/validate', :controller => 'pricer', :action => 'validate'
+  map.pricer_validate 'pricer/validate', :controller => 'pricer', :action => 'validate'
   map.booking 'booking', :controller => 'booking', :action => 'index'
-
   map.booking_form 'booking/form', :controller => 'booking', :action => 'form'
   map.booking_pay 'booking/pay', :controller => 'booking', :action => 'pay'
 
-  map.resources :locations, :collection => {:random => :get, :current => :get}
+  map.resources :locations, :collection => {:current => :get}
 
-  map.resources :countries, :collection => {:random => :get}
+  map.resources :countries
 
   map.resources :airplanes
 
   map.resources :airlines
 
-  map.resources :airports, :collection => {:random => :get}
+  map.resources :airports
 
-  map.resources :cities, :collection => {:random => :get}
+  map.resources :cities
 
   map.resources :geo_tags
   
@@ -35,4 +34,5 @@ ActionController::Routing::Routes.draw do |map|
   map.about 'about/:action', :controller => :about
 
   map.root :controller => "home"
+  map.geo "geo", :controller => "home", :action => "geo"
 end

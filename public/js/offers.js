@@ -50,13 +50,15 @@ init: function() {
     $('#offers-list').delegate('.offers-sort a', 'click', function(event) {
         event.preventDefault();
         var self = app.offers, key = this.onclick();
-        var list = $('#offers-collection').css('opacity', 0.7);
-        setTimeout(function() {
-            list.hide();
-            self.applySort(key);
-            self.sortOffers();
-            list.css('opacity', 1).show();
-        }, 250);
+        if (key != self.sortby) {
+            var list = $('#offers-collection').css('opacity', 0.7);
+            setTimeout(function() {
+                list.hide();
+                self.applySort(key);
+                self.sortOffers();
+                list.css('opacity', 1).show();
+            }, 250);
+        }
     });
     
     // Выбор времени вылета
@@ -87,12 +89,12 @@ init: function() {
 },
 load: function(params, title) {
     var self = this;
-
     this.update = {
         title: title,
         loading: true
     };
-    $.get("/pricer/", params, function(s) {
+    this.update.request = $.get("/pricer/", params, function(s) {
+        if (self.update.aborted) return;
         var visible = self.loading.is(':visible');
         self.update.loading = false;
         if (typeof s == "string") {
@@ -145,6 +147,11 @@ toggle: function(mode) {
     // запускаем/останавливаем таймер счётчика
     this.loading.timer.trigger(mode == 'loading' ? 'start' : 'stop');
 },
+toggleCollection: function(mode) {
+    var context = $('#offers-all');
+    $('.offers-sort', context).toggleClass('g-none', !mode);
+    $('.offers-improper', context).toggleClass('g-none', mode);
+},
 updateHash: function(hash) {
 //    window.location.hash = encodeURIComponent(JSON.stringify(hash));
     window.location.hash = hash;
@@ -153,21 +160,17 @@ processUpdate: function() {
     var self = this, u = this.update;
     $('#offers-collection').remove();
     $('#offers-all').append(u.content || '');
-
     if ($('#offers-all .offer').length) {
-        u.content = undefined;
         this.updateFilters();
         this.parseResults();
-
-        var qkey = $('#offers-collection').attr('data-query_key');
-        this.updateHash(qkey);
-
+        this.toggleCollection(true);
+        this.updateHash($('#offers-collection').attr('data-query_key'));
     } else {
         this.toggle('empty');
         this.variants = [];
         this.items = [];
     }
-
+    this.update = {};
     if (this.items.length) {
         this.applySort('price');    
         if (this.maxLayovers) {
@@ -317,6 +320,7 @@ filterOffers: function() {
         offer.el.toggleClass('improper', offer.improper);
     }
     this.showAmount(amount, total);
+    this.toggleCollection(amount > 0);
     $('#offers-reset-filters').toggleClass('g-none', empty);
 },
 applySort: function(key) {
@@ -378,6 +382,11 @@ showRecommendations: function() {
         if (!fast || d < fast.duration || (d == fast.duration && p < fast.price)) fast = {variant: v, duration: d, price: p};
         if (!optimal || pfd < optimal.pfd) optimal = {variant: v, pfd: pfd};
     }
+    var container = $('#offers-best').html('');
+    if (!cheap && !fast && !optimal) {
+        container.append($('#offers-collection').prev().clone());
+        return;
+    }
     if (cheap && fast && cheap.variant == fast.variant) {
         optimal = {variant: cheap.variant};
         cheap = undefined;
@@ -389,7 +398,6 @@ showRecommendations: function() {
     if (fast && optimal && fast.variant == optimal.variant) {
         fast = undefined;
     }
-    var container = $('#offers-best').html('');
     if (cheap) container.append(this.makeRecommendation(cheap, 'Самый выгодный вариант'));
     if (optimal) container.append(this.makeRecommendation(optimal, 'Оптимальный вариант — разумная цена и время в пути'));
     if (fast) container.append(this.makeRecommendation(fast, 'Самый быстрый вариант'));

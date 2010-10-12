@@ -1,8 +1,10 @@
 class Flight
 
+  include KeyValueInit
+
   attr_accessor :operating_carrier_iata, :marketing_carrier_iata, :departure_iata,
    :departure_term, :arrival_iata, :arrival_term, :flight_number, :arrival_date,
-   :arrival_time, :departure_date, :departure_time, :equipment_type_iata, :class_of_service, :seat_count, :warning, :cabin
+   :arrival_time, :departure_date, :departure_time, :equipment_type_iata, :class_of_service, :seat_count, :warning, :cabin, :segment_number
 
   def departure
     departure_iata && Airport[departure_iata]
@@ -81,33 +83,29 @@ class Flight
   end
 
   def full_flight_number
-    "#{operating_carrier_iata}#{flight_number}"
-  end
-
-  def initialize attrs={}
-    attrs.each do |attr, value|
-      send "#{attr}=", value
-    end
+    "#{operating_carrier_iata}#{marketing_carrier_iata}#{flight_number}"
   end
 
   def distance
     self.class.calculate_distance(departure, arrival) rescue 5000
   end
   
-  def flight_code(booking_class = nil)
+  def flight_code(booking_class = nil, s_number = 0)
     #SS LH3240 B 10SEP FRAMOW 1
-    full_flight_number + (class_of_service || booking_class ||'Y') + departure_date + departure_iata + arrival_iata + (seat_count || 1).to_s
+    full_flight_number + (class_of_service || booking_class ||'Y') + departure_date + departure_iata + arrival_iata + (seat_count || 1).to_s + (segment_number || s_number || 0).to_s
   end
   
   def self.from_flight_code code
     fl = Flight.new
     fl.operating_carrier_iata,
+    fl.marketing_carrier_iata,
     fl.flight_number,
     fl.class_of_service,
     fl.departure_date,
     fl.departure_iata,
     fl.arrival_iata,
-    fl.seat_count = /^(\w\w)(\d+)(\w)(\d{6})(\w{3})(\w{3})(\d)$/.match(code).captures
+    fl.seat_count,
+    fl.segment_number = /^(\w\w)(\w\w)(\d+)(\w)(\d{6})(\w{3})(\w{3})(\d)(\d)$/.match(code).captures
     fl
   end
   

@@ -1,38 +1,27 @@
 $.extend(app.search, {
 tools: {},
 fields: {},
-getField: function(key) {
-    return this.fields[key] || this.addField(key);
-},
-addField: function(key, check, value) {
-    return this.fields[key] = {
-        value: value,
-        required: Boolean(check),
-        check: typeof check == 'function' && check
-    };
-},
 update: function(data, source) {
     var updated = false;
     for (var key in data) {
-        var value = data[key];
-        var field = this.getField(key);
-        if (value != field.value) {
-            field.value = value;
+        var dv = data[key], fv = this.fields[key];
+        if (dv != fv) {
+            this.fields[key] = dv;
             var callbacks = this.callbacks[key];
             if (callbacks) {
                 for (var i = 0; cb = callbacks[i]; i++) {
-                    if (cb.source != source) cb.handler(value);
+                    if (cb.source != source) cb.handler(dv);
                 }
             }
             updated = true;
         }
     }
     if (source && updated) {
-        clearTimeout(this.sendTimer);
         var self = this;
-        this.sendTimer = setTimeout(function() {
+        clearTimeout(this.vtimer);
+        this.vtimer = setTimeout(function() {
             self.validate();
-        }, 350);
+        }, 750);
     }
 },
 callbacks: {},
@@ -44,23 +33,34 @@ subscribe: function(source, key, handler) {
     });
 },
 validate: function(data) {
-    var self = this, data = {
+    var self = this, data = $.extend({
         'search_type': 'travel',
         'day_interval': 1,
         'debug': $('#sdmode').get(0).checked ? 1 : 0
+    }, this.fields);
+
+    // Временная проверка, пока нет распознавания дат
+    if (!(data.to && data.from && data.date1)) {
+        self.toggle(false);
+        return;
     }
-    for (var key in this.fields) {
-        var field = this.fields[key];
-        if (field.required && !(field.check ? field.check(field.value) : field.value)) {
-            self.toggle(false);
-            return;
-        }
-        data[key] = field.value;
+    
+    if (this.request && this.request.abort) {
+        this.request.abort();
+        this.request = undefined;
     }
-    $.get("/pricer/validate/", {
+    var ao = app.offers, u = ao.update;
+    if (u.request) {
+        u.aborted = true;
+        if (u.request.abort) u.request.abort();
+        ao.container.addClass('g-none');
+        ao.toggle('empty');
+    }
+    this.request = $.get("/pricer/validate/", {
         search: data
     }, function(result) {
         self.toggle(result.valid);
+        self.request = undefined;
         if (result.valid) app.offers.load({search: data}, result.human);
     });
 },

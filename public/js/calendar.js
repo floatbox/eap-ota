@@ -79,16 +79,13 @@ initTimeline: function() {
     this.timeline = $('.timeline', this.scroller).hide().html('');
     $('.month', this.el).each(function() {
         mdate = $(this).data('monthyear');
-        mw = Math.round(Date.daysInMonth(mdate.month, mdate.year) * self.factor) - 1;
+        mw = Math.round(Date.daysInMonth(mdate.month, mdate.year) * self.factor);
         var label = $('<span>').addClass('label').width(mw).text(app.constant.SMN[mdate.month]);
-        $('<dt>').width(mw).append(label).appendTo(self.timeline);
-        sw += mw + 1;
+        $('<li>').width(mw).append(label).appendTo(self.timeline);
+        sw += mw;
     });
-    var monthes = $('dt', this.timeline);
+    var monthes = $('li', this.timeline);
     var offset = Math.round((1 - parseInt(this.parent.dates.first().attr('data-dmy').substring(0,2), 10)) * self.factor);
-    $('<div>').addClass('overlay').css('left', -offset - 51).appendTo(monthes.first());
-    $('<div>').addClass('overlay').css('left', this.scroller.width() - offset - sw + mw).appendTo(monthes.last());
-    this.timeline.append($('<dd>').text(mdate.year));
     this.timeline.css('left', offset).show();
 },
 initScrollbar: function() {

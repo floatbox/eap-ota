@@ -209,6 +209,28 @@ dl.booking .tip-popup i {
 dl.booking dd.book-v {
 }
 
+dl.booking .offer
+{
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -o-border-radius: 6px;
+
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    -o-box-shadow: none;      
+}
+
+dl.booking .offer .details {
+    border-top: none;
+}
+
+dl.booking .offer .details tr {
+    background: transparent;
+}
+
 /* тариф */
 
     .book-v .tarif h3 {

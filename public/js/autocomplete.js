@@ -155,6 +155,21 @@ $.Autocompleter = function(input, options) {
             return false;
         }
     });
+    
+    var storedValue;
+    var compareTimer;
+    var compare = function() {
+        var value = $el.val();
+        if (value != storedValue) {
+            storedValue = value;
+            $el.trigger('change');
+        }
+    };
+    var setCompareTimer = function(ms) {
+        clearInterval(compareTimer);
+        compareTimer = setInterval(compare, ms);
+    };
+    setCompareTimer(4500);
 
     // only opera doesn't trigger keydown multiple times while pressed, others don't work with keypress at all
     $el.bind(($.browser.opera ? "keypress" : "keydown") + ".autocomplete", function(event) {
@@ -204,11 +219,9 @@ $.Autocompleter = function(input, options) {
             case KEY.TAB:
                 // stop default to prevent a form submit, Opera needs special handling
                 blockSubmit = true;
-                if( insert() ) {
+                if (insert()) {
                     event.preventDefault();
                     return false;
-                } else {
-                    $el.trigger('enter');
                 }
                 break;
                 
@@ -232,15 +245,18 @@ $.Autocompleter = function(input, options) {
         hasFocus++;
         $el.addClass(options.focusCls);
         $iata.update(); // надо поменять цвет подложки
+        setCompareTimer(300);
     }).blur(function() {
         hasFocus = 0;
         hideResults();
         $el.removeClass(options.focusCls);
         $iata.update();
+        setCompareTimer(4500);
     }).click(function() {
         if (hasFocus++ > 1 && !select.visible()) keypress();
     }).bind('set', function(e, s) {
         $el.val(s);
+        $el.trigger('change');
         // здесь запускать разбор строки, обновлять $iata и, возможно, запускать поиск
         $iata.hide();
     });

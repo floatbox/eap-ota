@@ -44,7 +44,7 @@ module Billing #:nodoc:
     self.require_verification_value = true
 
     # Essential attributes for a valid, non-bogus creditcards
-    attr_accessor :month, :year, :type, :first_name, :last_name
+    attr_accessor :month, :year, :type, :first_name, :last_name, :name
     attr_writer :number, :number1, :number2, :number3, :number4
 
     # Required for Switch / Solo cards
@@ -96,11 +96,11 @@ module Billing #:nodoc:
     def last_name?
       !@last_name.blank?
     end
-
+=begin
     def name
       "#{@first_name} #{@last_name}"
     end
-
+=end
     def verification_value?
       !@verification_value.blank?
     end
@@ -155,8 +155,7 @@ module Billing #:nodoc:
     end
 
     def validate_essential_attributes #:nodoc:
-      errors.add :first_name, "cannot be empty"      if @first_name.blank?
-      errors.add :last_name,  "cannot be empty"      if @last_name.blank?
+      errors.add :name,       "cannot be empty"      if name.blank?
       errors.add :month,      "is not a valid month" unless valid_month?(@month)
       errors.add :year,       "expired"              if expired?
       errors.add :year,       "is not a valid year"  unless valid_expiry_year?(@year)

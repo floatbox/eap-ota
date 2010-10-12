@@ -84,7 +84,7 @@ app.Define = function($el) {
     });
 
     $el.bind('update', function(e, filters) {
-        me.values = filters && filters[me.options.name];
+        me.values = filters && filters[me.options.name] || [];
         me.reset();
     });
     

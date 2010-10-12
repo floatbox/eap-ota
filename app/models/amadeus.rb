@@ -16,6 +16,11 @@ class Amadeus < Handsoap::Service
   #Handsoap.http_driver = :http_client
   Handsoap.timeout = 500
 
+  # handsoap logger
+  fh = open(Rails.root + 'log/amadeus.log', 'a')
+  fh.sync=true
+  self.logger = fh
+
   endpoint :uri => "https://test.webservices.amadeus.com", :version => 1
 
   def on_response_document(doc)
@@ -130,8 +135,8 @@ class Amadeus < Handsoap::Service
       :args => args
   end
 
-  def pnr_add_multi_elements(args)
-    soap_action 'PNR_AddMultiElements', args
+  def pnr_add_multi_elements(args, session=nil)
+    soap_action 'PNR_AddMultiElements', args, session
   end
 
   def pnr_retrieve(args, session=nil)
@@ -144,6 +149,10 @@ class Amadeus < Handsoap::Service
 
   def fare_price_pnr_with_lower_fares(args, session = nil )
     soap_action 'Fare_PricePNRWithLowerFares', args, session
+  end
+  
+  def fare_informative_pricing_without_pnr(args, session = nil)
+    soap_action 'Fare_InformativePricingWithoutPNR', args, session
   end
 
   def fare_informative_pricing_without_pnr(args, session = nil )

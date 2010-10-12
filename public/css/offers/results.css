@@ -168,6 +168,18 @@
         padding: 3px 6px;
     }
     
+/* Класс */
+
+.offer .cabin
+{
+    background: #fff8d2;
+    
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -o-border-radius: 3px;
+}    
+    
 /* Обзор предложения */
 
 .offer .summary p.note
@@ -340,6 +352,24 @@
 
         background: url(/img/offers/i-waiting.png) no-repeat;
     }
+    
+    /* Класс */
+    
+    .offer .summary p.cnote
+    {
+        font-size: 84.62%;
+        
+        margin-top: 5px;
+        
+        line-height: 118.18%;
+    }    
+    
+    .offer .summary .cabin
+    {
+        padding: 1px 3px;
+        
+        border: 1px solid #b8b396;
+    }    
 
     /* Варианты */
 
@@ -482,19 +512,9 @@
     color: #C46F26;
 }
 
-    /* Бизнес-класс */
+    /* Класс */
     
-    .offer .details .business
-    {
-        background: #fff8d2;
-        
-        border-radius: 3px;
-        -moz-border-radius: 3px;
-        -webkit-border-radius: 3px;
-        -o-border-radius: 3px;
-    }
-    
-    .offer .details th .business
+    .offer .details th .cabin
     {
         margin: 0 -2px;
         padding: 0 3px;
@@ -502,7 +522,7 @@
         border: 1px solid #ede7c3;
     }
     
-    .offer .details .info .business
+    .offer .details .info .cabin
     {
         margin: 0 -4px;
         padding: 1px 3px;

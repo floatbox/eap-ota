@@ -45,8 +45,8 @@
                      id="search-from"
                      class="autocomplete from"
                      tabindex="1"
-                     value="Москва"
-                     onclick="return null//{'insert':'\u041c\u043e\u0441\u043a\u0432\u0430','hl':'\u043c\u043e\u0441\u043a','start':0,'end':4,'entity':{'type':'city','name':'\u041c\u043e\u0441\u043a\u0432\u0430'},'name':'\u041c\u043e\u0441\u043a\u0432\u0430'}"
+                     value="<%= nearest_city.try(:name) || 'Москва' %>"
+                     onclick="return <%=h nearest_city.to_json %>"
                      title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом"
                     >
                 </div>
@@ -197,8 +197,10 @@
             <div class="calendar" id="search-calendar">
                 <h2>Выберите даты:</h2>
                 <div class="scroller">
-                    <div class="scrollbar"></div>
-                    <dl class="timeline"><dt></dl>
+                    <div class="scrollbar"><div class="overlay"></div></div>
+                    <ul class="timeline"></ul>
+                    <div class="before"></div>
+                    <div class="after"></div>
                 </div>
                 <div class="scrollfw"></div>
                 <div class="scrollbw"></div>

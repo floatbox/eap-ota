@@ -1,6 +1,7 @@
 /* Блок с тенью */
 #offers-loading,
-#offers-empty 
+#offers-empty,
+.offers-improper
 {
     border-radius: 10px;
     -moz-border-radius: 10px;
@@ -20,6 +21,10 @@
 {
     width: 645px;
     margin: 15px;
+    padding: 10px 15px;
+}
+.offers-improper 
+{
     padding: 10px 15px;
 }
 
