@@ -1,120 +1,124 @@
 <dd class="book-bc" onclick="return 'BankCard'">
     <ul class="bankcard">
         <li>
-            <p class="logos g-xxs" title="Вы можете использовать карточки платёжных систем Visa или MasterCard">
-                <i class="visa"></i>&nbsp;или&nbsp;<i class="master inactive"></i>
+            <p id="bc-type" class="bc-type g-xxs" title="Вы можете использовать карточки платёжных систем Visa или MasterCard">
+                <i class="bc-visa"></i><b>&nbsp;или&nbsp;</b><i class="bc-master"></i>
 
-            <fieldset class="bankcardno">
+            <fieldset class="bc-num">
                 <legend></legend>
                 <label
-                 for="payment-bankcardno"
+                 for="bc-num1"
                  class="g-xs"
                  title="Шестнадцатизначный номер карты"
                 >Номер карты</label>
 
                 <%= f.text_field :number1,
-                 :id => "payment-bankcardno",
+                 :id => "bc-num1",
                  :class => "text g-xl",
                  :maxlength => "4",
                  :title => "первые четыре цифры номера карты",
-                 :onclick => "return {req: true, num: true, minl: 4, maxl: 4, mask: /\\d/}"
+                 :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 4, maxl: 4, min: 4000, max: 5999}}"
                 %>
                 <%= f.text_field :number2,
+                 :id => "bc-num2",
                  :class => "text g-xl",
                  :maxlength => "4",
                  :title => "вторые четыре цифры номера карты",
-                 :onclick => "return {req: true, num: true, minl: 4, maxl: 4, mask: /\\d/}"
+                 :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 4, maxl: 4}}"
                 %>
                 <%= f.text_field :number3,
+                 :id => "bc-num3",
                  :class => "text g-xl",
                  :maxlength => "4",
                  :title => "предпоследние четыре цифры номера карты",
-                 :onclick => "return {req: true, num: true, minl: 4, maxl: 4, mask: /\\d/}"
+                 :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 4, maxl: 4}}"
                 %>
                 <%= f.text_field :number4,
+                 :id => "bc-num4",
                  :class => "text g-xl",
                  :maxlength => "4",
                  :title => "последние четыре цифры номера карты",
-                 :onclick => "return {req: true, num: true, minl: 4, maxl: 4, mask: /\\d/}"
+                 :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 4, maxl: 4}}"
                 %>
             </fieldset>
 
             <fieldset class="bankcardname text-upper">
                 <legend></legend>
                 <label 
-                 for="payment-bankcardname"
+                 for="bc-name"
                  class="g-xs"
                  title="Имя и фамилию нужно вписать латинскими буквами &mdash; точно, как на карте"
                 >Имя на&nbsp;карте</label>
                 <%= f.text_field :name,
-                 :id => 'payment-bankcardname',
+                 :id => 'bc-name',
                  :class => "text g-l",
                  :title => "имя на карте",
-                 :onclick => "return {req: true, latin: true, minl: 3, mask: /[a-z\\s]/i}"
+                 :onclick => "return {mask: /[a-z\\s]/i, rules: {req: true, latin: true, minl: 3}}"
                  %>
             </fieldset>
 
-            <fieldset class="bankcardexpires">
+            <fieldset class="bc-exp">
                 <legend></legend>
-                <label for="payment-bankcardexpires-m" class="g-xs" title="На карте обозначено как &laquo;VALID THRU&raquo;">Срок действия</label>
+                <label for="bc-exp-mm" class="g-xs" title="На карте обозначено как &laquo;VALID THRU&raquo;">Срок действия</label>
 
                 <%= f.text_field :month,
-                 :id => "payment-bankcardexpires-m",
+                 :id => "bc-exp-mm",
                  :class => "text g-l",
                  :maxlength => "2",
                  :value => "мм",
                  :title => "последний месяц действия карты &laquo;MONTH&raquo;",
-                 :onclick => "return {def: 'мм', req: true, num: true, minl: 1, maxl: 2, min: 1, max: 12, mask: /\\d/}"
+                 :onclick => "return {def: 'мм', mask: /\\d/, rules: {req: true, num: true, minl: 1, maxl: 2, min: 1, max: 12}}"
                  %>
 
                 <i>/</i>
                 <%= f.text_field :year,
-                 :id => "payment-bankcardexpires-y",
+                 :id => "bc-exp-yy",
                  :name => "bankcardexpires-y",
                  :class => "text g-l",
                  :maxlength => "2",
                  :value => "гг",
                  :title => "последний год действия карты &laquo;YEAR&raquo;",
-                 :onclick => "return {def: 'гг', req: true, num: true, minl: 2, maxl: 2, min: 10, max: 20, mask: /\\d/}"
+                 :onclick => "return {def: 'гг', mask: /\\d/, rules: {req: true, num: true, minl: 2, maxl: 2, min: 10, max: 50}}"
                 %>
             </fieldset>
 
         <li>
             <p class="magneticstrip">&nbsp;
 
-            <fieldset class="bankcardcvv">
+            <fieldset class="bccvv">
                 <legend></legend>
                 <label 
-                 for="payment-bankcardcvv" 
-                 class="g-xs" 
+                 for="bc-cvv"
+                 class="cvv g-xs" 
                  title="Трёхзначный CVV (CVC) код карты. Карта без этого кода непригодна для оплаты услуг через интернет."
                 >CVV/CVC</label>
 
-                <b class="g-xs novalue" title="Последние четыре цифры номера карты">XXXX</b>
+                <!--b id="bc-cvv-num" class="g-xs novalue" title="Последние четыре цифры номера карты">XXXX</b-->
+                <label id="bc-cvv-num" for="bc-num4" class="num4 g-xs novalue" title="Последние четыре цифры номера карты">XXXX</label>
 
                 <%= f.text_field :verification_value, 
-                 :id => "payment-bankcardcvv",
+                 :id => "bc-cvv",
                  :class => "text g-xl",
                  :maxlength => "3",
                  :title => "CVV код банковской карты",
-                 :onclick => "return {req: true, num: true, minl: 3, maxl: 3, mask: /\\d/}"
+                 :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 3, maxl: 3}}"
                 %>
             </fieldset>
 
             <fieldset class="bankcardbankname">
                 <legend></legend>
                 <label
-                 for="payment-bankcardbankname"
+                 for="bc-bankname"
                  class="g-xs"
                  title="Банк-эмитент, обозначенный на карте. Можно писать кириллицей или латиницей"
                 >Название банка, выпустившего карту</label>
 
                 <input type="text"  
-                 id="payment-bankcardbankname"
+                 id="bc-bankname"
                  name="payment-bankcardbankname"
                  class="text g-l"
                  title="банк, выпустивший карту"
-                 onclick="return {req: false}"
+                 onclick="return {rules: {req: false}}"
                 >
             </fieldset>
     </ul>
@@ -122,7 +126,7 @@
     <table class="bc-bill">
         <tfoot>
             <tr class="g-xxs">
-                <td>&mdash;&nbsp;стоимость всех билетов с&nbsp;налогами и&nbsp;сборами
+                <td>&mdash;&nbsp;стоимость <%= @people.count > 1 ? 'всех' : '' %> билетов с&nbsp;налогами и&nbsp;сборами
                 <td>
                 <td>&mdash;&nbsp;комиссия платёжной системы за&nbsp;перевод&hellip;ну и&nbsp;нам на&nbsp;сигареты
                 <td>

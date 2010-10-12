@@ -5,9 +5,9 @@ $.fn.extend({
         return this.map(app.Validate).get();
     },
 
-    input: function(form) {
+    inputtext: function(form) {
         return this.each(function() {
-            new app.Input(this, form);
+            new app.InputText(this, form);
         });
     }
 });
@@ -27,20 +27,48 @@ app.Validate = function() {
     }
 }
 
+// валидация радиобаттона - хоть один из одноимённых рб должен быть отмечен
+
 app.Validate.Radio = function(el) {
     var $el = $(el);
     var els = el.form.elements[el.name];
     for (e in els) if (els[e].checked) return null;
 
-    return 'Не выбран пол пассажира';
+    var qname = '"' + (el.title) + '"';
+    return 'Не выбран {name}'.supplant({name: qname});
 }
+
+// валидация текстового поля в согласии с наложенными правилами
 
 app.Validate.Text = function(el) {
     var $el = $(el);
     var val = $.trim(el.value);
 
-    // вытаскиваем правила валидации и кладём их в data('rules')
-    var rules = rules || $el.data('rules') || {};
+    // вытаскиваем правила валидации и кладём их в data('params').rules
+    var params = $el.data('params') || (function() {
+        var params = $.extend({}, {
+            def: '', // фоновая подсказка в текстовом поле
+            mask: null,
+            rules: {
+                req: false, // обязательное поле
+
+                latin: null, // тип поля, шаблон
+                num: null,
+                email: null,
+
+                minl: 0, // длина значения в строковом представлении
+                maxl: Number.POSITIVE_INFINITY,
+
+                min: Number.NEGATIVE_INFINITY, // эти параметры только для 'num': true
+                max: Number.POSITIVE_INFINITY
+            }
+        }, (el.onclick && el.onclick()) || {});
+
+        $el.data('params', params);
+        return params;
+    })();
+
+    var rules = params.rules;
 
     var msg = {
         req: 'Поле {name} обязательно для заполнения',
@@ -54,11 +82,9 @@ app.Validate.Text = function(el) {
 
         min: 'В поле {name} не может быть число меньше "{val}"',
         max: 'В поле {name} не может быть число больше "{val}"',
-
-        symbols: 'Поле {name} содержит недопустимые символы'
     };
 
-    var isDefault = val == '' || val == rules.def;
+    var isDefault = val == '' || val == params.def;
     var qname = '"' + (el.title) + '"';
 
     // если поле неактивно, то все проверки неактуальны
@@ -98,37 +124,18 @@ app.Validate.Text = function(el) {
     return null;
 };
 
-// текстовое поле
+// текстовое поле - общее поведение
 
-app.Input = function(el, form) {
+app.InputText = function(el, form) {
     var $el = $(el);
+    
+    // могут быть: mask - разрешённые символы (regexp)
+    // могут быть: def  - дефолтный текст (строка)
+    var params = el.onclick && el.onclick() || {};
 
-    // вытаскиваем правила валидации и кладём их в data('rules')
-    var rules = $el.data('rules') || (function() {
-        var rules = $.extend({}, {
-            def: '', // фоновая подсказка в текстовом поле
-            req: false, // обязательное поле
-
-            latin: null, // тип поля, шаблон
-            num: null,
-            email: null,
-
-            minl: 0, // длина значения в строковом представлении
-            maxl: Number.POSITIVE_INFINITY,
-
-            min: Number.NEGATIVE_INFINITY, // эти параметры только для 'num': true
-            max: Number.POSITIVE_INFINITY,
-
-            mask: null // разрешённые символы (regexp)
-        }, (el.onclick && el.onclick()) || {});
-
-        $el.data('rules', rules);
-        return rules;
-    })();
 
 
     // Инициализация
-
     (function() {
         // если поле не пусто и недефолтно, то убираем серый цвет
         $el.toggleClass('text-value', !isDefault());
@@ -147,12 +154,12 @@ app.Input = function(el, form) {
     // при получении фокуса сбрасываем визуальный признак невалидности
     $el.focus(function() {
         // если есть фоновая подсказка, то прячем её
-        if (rules.def && isDefault()) el.value = '';
+        if (params.def && isDefault()) el.value = '';
         $el.trigger('mark', false);
     })
     .blur(function(){
         // если есть фоновая подсказка, то восстанавливаем её
-        if (rules.def && isDefault()) el.value = rules.def;
+        if (params.def && isDefault()) el.value = params.def;
         $el.toggleClass('text-value', !isDefault());
     });
 
@@ -167,7 +174,7 @@ app.Input = function(el, form) {
 
     // фильтруем нажатия клавиш
     $el.keypress(function(e) {
-        var passed = (e.which < 32) || !rules.mask || rules.mask.test(String.fromCharCode(e.which));
+        var passed = (e.which < 32) || !params.mask || params.mask.test(String.fromCharCode(e.which));
 
         var n = 7; // количество морганий; нечётное
         !passed && (function() {
@@ -182,7 +189,7 @@ app.Input = function(el, form) {
     // пусто или в нём значение по умолчанию?
     function isDefault() {
         var v = $.trim(el.value);
-        return v == '' || v == rules.def;
+        return v == '' || v == params.def;
     };
 
 };

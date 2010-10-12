@@ -1,7 +1,6 @@
 $.extend(app.offers, {
 options: {},
 init: function() {
-    
     this.container = $('#offers');
     this.loading = $('#offers-loading');
     this.results = $('#offers-results');
@@ -93,7 +92,6 @@ load: function(params, title) {
         title: title,
         loading: true
     };
-
     $.get("/pricer/", params, function(s) {
         var visible = self.loading.is(':visible');
         self.update.loading = false;

@@ -24,13 +24,13 @@
                 <%= person.text_field :first_name,
                  :class => "text g-xl",
                  :title => "имя пассажира",
-                 :onclick => "return {def: 'Имя', req: true, minl: 2, latin: true, mask: /[a-z]/i}"
+                 :onclick => "return {def: 'Имя', mask: /[a-z]/i, rules: {req: true, minl: 2, latin: true}}"
                  %>
             <td class="g-middle text-upper">
                 <%= person.text_field :last_name,
                  :class => "text g-xl",
                  :title => "фамилия пассажира",
-                 :onclick => "return {def: 'Фамилия', req: true, minl: 2, latin: true, mask: /[a-z]/i}"
+                 :onclick => "return {def: 'Фамилия', mask: /[a-z]/i, rules: {req: true, minl: 2, latin: true}}"
                  %>
             <td class="g-middle">
                 <label
@@ -41,13 +41,15 @@
                 <label class="bp-sex bp-sex-m g-xl" title="Мужской">
                 <%= person.radio_button :sex,
                  'm',
-                 :id => "book-p-#{person_form_counter+1}-sex-m"
+                 :id => "book-p-#{person_form_counter+1}-sex-m",
+                 :title => "пол пассажира"
                  %>м
                 </label>
                 <label class="bp-sex bp-sex-f g-xl" title="Женский">
                 <%= person.radio_button :sex,
                  'f',
-                 :id => "book-p-#{person_form_counter+1}-sex-f"
+                 :id => "book-p-#{person_form_counter+1}-sex-f",
+                 :title => "пол пассажира"
                  %>ж
                 </label>
 
@@ -100,21 +102,21 @@
                  value="<%= (person_form.birthday &&  person_form.birthday.day) ||"день"%>"
                  title="день рождения"
                  maxlength="2"
-                 onclick="return {def: 'день', req: true, num: true, min: 1, max: 31, mask: /\d/}"
+                 onclick="return {def: 'день', mask: /\d/, rules: {req: true, num: true, min: 1, max: 31}}"
                 ><input type="text" 
                  name="data[person_attributes][][birthday(2i)]"
                  class="text text-mm g-xl"
                  value="<%= (person_form.birthday &&  person_form.birthday.month) ||"месяц"%>"
                  title="месяц рождения"
                  maxlength="2"
-                 onclick="return {def: 'месяц', req: true, num: true, min: 1, max: 12, mask: /\d/}"
+                 onclick="return {def: 'месяц', mask: /\d/, rules: {req: true, num: true, min: 1, max: 12}}"
                 ><input type="text" 
                  name="data[person_attributes][][birthday(1i)]"
                  class="text text-yyyy g-xl"
                  value="<%= (person_form.birthday &&  person_form.birthday.year) ||"год"%>"
                  title="год рождения"
                  maxlength="4"
-                 onclick="return {def: 'год', req: true, num: true, min: 0, max: 2100, mask: /\d/}"
+                 onclick="return {def: 'год', mask: /\d/, rules: {req: true, num: true, min: 1900, max: 2020}}"
                 >
             <td>
                 <%= person.select :bonuscard_type,
@@ -143,7 +145,7 @@
                  :class => "text g-xl",
                  :maxlength => '100',
                  :title => 'номер документа',
-                 :onclick => "return {def: 'Номер документа', req: true, minl: 1}"
+                 :onclick => "return {def: 'Номер документа', rules: {req: true, minl: 1}}"
                  %>
             <td>
                 <input type="text" 
@@ -153,7 +155,7 @@
                  value="<%= (person_form.document_expiration_date &&  person_form.document_expiration_date.day) ||"день"%>"
                  title="день окончания действия документа"
                  maxlength="2"
-                 onclick="return {def: 'день', req: true, num: true, min: 1, max: 31, mask: /\d/}"
+                 onclick="return {def: 'день', mask: /\d/, rules: {req: true, num: true, min: 1, max: 31}}"
                 ><input type="text" 
                  id="bp-<%=person_form_counter+1%>-expires-m"
                  class="text text-mm g-xl"
@@ -161,7 +163,7 @@
                  value="<%= (person_form.document_expiration_date &&  person_form.document_expiration_date.month) ||"месяц"%>"
                  title="месяц окончания действия документа"
                  maxlength="10"
-                 onclick="return {def: 'месяц', req: true, num: true, min: 1, max: 12, mask: /\d/}"
+                 onclick="return {def: 'месяц', mask: /\d/, rules: {req: true, num: true, min: 1, max: 12}}"
                 ><input type="text" 
                  id="bp-<%=person_form_counter+1%>-expires-y"
                  class="text text-yyyy g-xl"
@@ -169,7 +171,7 @@
                  value="<%= (person_form.document_expiration_date &&  person_form.document_expiration_date.year) ||"год"%>"
                  title="год окончания действия документа"
                  maxlength="4"
-                 onclick="return {def: 'год', req: true, num: true, min: 0, max: 2100, mask: /\d/}"
+                 onclick="return {def: 'год', mask: /\d/, rules: {req: true, num: true, min: 2010, max: 2050}}"
                 >
             <td>
                 <%=person.text_field :bonuscard_number,
@@ -177,7 +179,7 @@
                  :class => 'text input-bonus g-xl g-none',
                  :maxlength => '50',
                  :disabled => 'disabled',
-                 :onclick => "return {def: 'Номер карты', req: true, minl: 2}"
+                 :onclick => "return {def: 'Номер карты', rules: {req: true, minl: 2}}"
                  %>
 
         <tr>

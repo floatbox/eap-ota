@@ -509,7 +509,7 @@ dl.booking dd.book-bc {
 
 /* логотипы Виза и МастерКард */
 
-.bankcard .logos {
+.bankcard .bc-type {
     padding: 0;
     margin: 10px 0 30px 6px;
 
@@ -519,7 +519,7 @@ dl.booking dd.book-bc {
     color: #777;
 }
 
-    .bankcard .logos i {
+    .bankcard .bc-type i {
         display: inline-block;
 
         height: 24px;
@@ -530,21 +530,32 @@ dl.booking dd.book-bc {
         vertical-align: top;
     }
 
-    .bankcard .logos i.visa {
+    .bankcard .bc-type i.bc-visa {
         width: 80px;
 
         background: url(/img/temp/logo-visa.png);
     }
 
-    .bankcard .logos i.master {
+    .bankcard .bc-type i.bc-master {
         width: 41px;
 
         background: url(/img/temp/logo-master.png);
     }
 
-    .bankcard .logos i.inactive {
-        opacity: .3;
+    .bankcard .bc-type-visa i.bc-master,
+    .bankcard .bc-type-master i.bc-visa,
+    .bankcard .bc-type-visa b,
+    .bankcard .bc-type-master b
+    {
+        display: none;
     }
+
+    .bankcard .bc-type-none
+    {
+        opacity: 0.4;
+    }
+
+
 
 
 .bankcard label {
@@ -555,7 +566,6 @@ dl.booking dd.book-bc {
     margin: 0 0 2px 0;
 
     letter-spacing: -.03em;
-    cursor: help;
 
     color: #333;
 }
@@ -565,12 +575,15 @@ dl.booking dd.book-bc {
     padding: 1px 4px;
 
     background: #e8e8e8;
-    text-shadow: 2px 1px 0 rgba(200, 200, 200, 1);
+}
+
+.bankcard .text-value {
+    text-shadow: -1px 1px 0 rgba(180, 180, 180, 1);
 }
 
     /* Лицевая сторона */
 
-    .bankcard .bankcardno {
+    .bankcard .bc-num {
         position: absolute;
 
         top: 35%;
@@ -579,7 +592,7 @@ dl.booking dd.book-bc {
         white-space: nowrap;
     }
 
-    .bankcard .bankcardno .text {
+    .bankcard .bc-num .text {
         font: bold 140% Courier,monospace;
 
         margin: 0 10px 0 0;
@@ -602,18 +615,18 @@ dl.booking dd.book-bc {
         letter-spacing: -.03em;
     }
 
-    .bankcard .bankcardexpires {
+    .bankcard .bc-exp {
         position: absolute;
 
         bottom: 10px;
         right: 10px;
     }
 
-    .bankcard .bankcardexpires i {
+    .bankcard .bc-exp i {
         font: normal 140% Courier,monospace;
     }
 
-    .bankcard .bankcardexpires .text
+    .bankcard .bc-exp .text
     {
         width: 30px;
 
@@ -630,7 +643,7 @@ dl.booking dd.book-bc {
         background: #2b2b2b;
     }
 
-    .bankcard .bankcardcvv {
+    .bankcard .bccvv {
         position: absolute;
 
         top: 35%;
@@ -639,24 +652,26 @@ dl.booking dd.book-bc {
         white-space: nowrap;
     }
 
-    .bankcard .bankcardcvv label {
+    .bankcard .bccvv label.cvv {
         text-align: right;
         letter-spacing: 0;
     }
 
-    .bankcard .bankcardcvv b {
+    .bankcard .bccvv label.num4 {
         font: bold 140% Courier,monospace;
+
+        display: inline;
 
         margin: 0 8px 0 0;
 
         letter-spacing: -.1em;
     }
 
-    .bankcard .bankcardcvv b.novalue {
+    .bankcard .bccvv label.novalue {
         color: #777;
     }
 
-    .bankcard .bankcardcvv .text {
+    .bankcard .bccvv .text {
         font: bold 140% Courier,monospace;
 
         width: 2em;
