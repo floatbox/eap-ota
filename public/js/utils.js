@@ -47,6 +47,24 @@ Function.prototype.extend = function(p) {
     this.superclass = p.prototype;
 };
 
+//////// Array //////////////
+
+Array.compareInt = function(a, b) {
+    return (a - b);
+};
+
+Array.prototype.sortInt = function() {
+    this.sort(Array.compareInt);
+    return this;
+};
+
+Array.prototype.compact = function() {
+    var result = [];
+    for (var i = 0, im = this.length; i < im; i++) {
+        if (this[i] !== undefined) result.push(this[i]);
+    }
+    return result;
+};
 
 //////// String /////////////
 
@@ -65,8 +83,13 @@ Date.prototype.clone = function() {
     return new Date(this.getTime());
 };
 
-Date.prototype.shift = function(days) {
-    this.setDate(this.getDate() + days);
+Date.prototype.shiftDays = function(d) {
+    this.setDate(this.getDate() + d);
+    return this;
+};
+
+Date.prototype.shiftMonthes = function(m) {
+    this.setMonth(this.getMonth() + m);
     return this;
 };
 
