@@ -46,9 +46,9 @@ class Recommendation
 
   def self.load_from_cache(recommendation_number)
     # shouldn be neccessary, no?
-    #require 'segment'
-    #require 'variant'
-    #require 'flight'
+    require 'segment'
+    require 'variant'
+    require 'flight'
     Marshal.load(Rails.cache.read('recommendation'+ recommendation_number))
   end
 
