@@ -5,19 +5,20 @@
 -else
   %pnrActions
     %optionCode 11
-  %travellerInfo
-    %elementManagementPassenger
-      %reference
-        %qualifier PR
-        %number 1
-      %segmentName NM
-    %passengerData
-      %travellerInformation
-        %traveller
-          %surname= surname
-          %quantity 1
-        %passenger
-          %firstName= first_name
+  - people.each_with_index do |person, index|
+    %travellerInfo
+      %elementManagementPassenger
+        %reference
+          %qualifier PR
+          %number= index + 1
+        %segmentName NM
+      %passengerData
+        %travellerInformation
+          %traveller
+            %surname= person.last_name
+            %quantity 1
+          %passenger
+            %firstName= person.first_name
   %originDestinationDetails
     %originDestination
       -# %origin LGW
@@ -94,17 +95,18 @@
         %ticketingCarrier
           %carrier
             %airlineCode= validating_carrier
-    %dataElementsIndiv
-      %elementManagementData
-        %reference
-          %qualifier OT
-          %number 6
-        %segmentName AP
-      %freetextData
-        %freetextDetail
-          %subjectQualifier 3
-          %type 3
-        %longFreetext= phone
+    -if phone.present?
+      %dataElementsIndiv
+        %elementManagementData
+          %reference
+            %qualifier OT
+            %number 6
+          %segmentName AP
+        %freetextData
+          %freetextDetail
+            %subjectQualifier 3
+            %type 3
+          %longFreetext= phone
     - if email.present?
       %dataElementsIndiv
         %elementManagementData

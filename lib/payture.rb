@@ -37,10 +37,17 @@ class Payture
   end
 
   # блокировка средств на карте пользователя
-  #def block amount, card, opts={}
-  #  args = {:Key => @key, :PayInfo => encode_pay_info(opts), :OrderId => opts[:OrderId], :Amount => opts[:Amount]}
-  #  response = post 'Block', args
-  #end
+  def block amount, card, opts={}
+    post = {}
+    add_order(post, opts)
+    add_money(post, amount)
+    add_merchant(post)
+    add_creditcard(post, card)
+    encrypt_payinfo(post)
+    
+    response = post_request 'Block', post
+    
+  end
 
   # завершение платежа со списанием средств с карты пользователя
   #def charge opts={}
