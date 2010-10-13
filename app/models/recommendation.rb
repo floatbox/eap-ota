@@ -49,11 +49,11 @@ class Recommendation
     require 'segment'
     require 'variant'
     require 'flight'
-    Marshal.load(Rails.cache.read('recommendation'+ recommendation_number))
+    Rails.cache.read('recommendation'+ recommendation_number)
   end
 
   def self.store_to_cache(recommendation_number, recommendation)
-    Rails.cache.write("recommendation#{recommendation_number}", Marshal.dump(recommendation))
+    Rails.cache.write("recommendation#{recommendation_number}", recommendation)
   end
 
 
