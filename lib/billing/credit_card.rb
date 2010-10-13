@@ -49,6 +49,7 @@ module Billing #:nodoc:
 
     # Required for Switch / Solo cards
     attr_accessor :start_month, :start_year, :issue_number
+    attr_reader :year_short
 
     # Optional verification_value (CVV, CVV2 etc). Gateways will try their best to
     # run validation on the passed in value if it is supplied
@@ -57,6 +58,11 @@ module Billing #:nodoc:
     # Provides proxy access to an expiry date object
     def expiry_date
       ExpiryDate.new(@month, @year)
+    end
+    
+    def year_short= (y)
+      @year_short = y
+      @year = '20' + y
     end
     
     def number

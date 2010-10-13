@@ -73,11 +73,11 @@
                  %>
                 <%= f.error_message_on :month, :id => 'error_card_month' %>
                 <i>/</i>
-                <%= f.text_field :year,
+                <%= f.text_field :year_short,
                  :id => "bc-exp-yy",
                  :class => "text g-l",
                  :maxlength => "2",
-                 :value =>  @card.year  ||"гг",
+                 :value =>  @card.year_short  ||"гг",
                  :title => "последний год действия карты &laquo;YEAR&raquo;",
                  :onclick => "return {def: 'гг', mask: /\\d/, rules: {req: true, num: true, minl: 2, maxl: 2, min: 10, max: 50}}"
                 %>
@@ -143,6 +143,6 @@
                 <th>С&nbsp;карты будет списано
             <tr>
                 <td><u><%= @recommendation.price_total  %></u><i>рублей</i>
-                <td><u>1&nbsp;265</u><i>рублей</i>
-                <td><b>27&nbsp;654</b><i>рубля</i>
+                <td><u><%= @recommendation.payment_commission  %></u><i>рублей</i>
+                <td><b><%= @recommendation.price_with_payment_commission %></b><i>рубля</i>
     </table>

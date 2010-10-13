@@ -7,6 +7,14 @@ class Recommendation
   def validating_carrier
     validating_carrier_iata && Airline[validating_carrier_iata]
   end
+  
+  def price_with_payment_commission
+    price_total + payment_commission
+  end
+  
+  def payment_commission
+    (price_total * 0.028).ceil
+  end
 
   def segments
     variants.sum(&:segments)

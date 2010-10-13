@@ -38,12 +38,20 @@ class BookingController < ApplicationController
     @people = params['person_attributes'].to_a.sort_by{|a| a[0]}.map{|k, v| Person.new(v)}
     @card = Billing::CreditCard.new(params[:card])
     @order = Order.new(params[:order])
-    @card.valid?
-    @people.every.valid?
-    @order.valid?
-    @people_count = {:adults => params[:adults].to_i, :children => params[:children].to_i}
-    @numbers = %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}
-    render :action => :index
+    @order_id = 'rh' + @recommendation_number.to_s + Time.now.sec.to_s
+    if ([@card] + @people).all?(&:valid?)
+      result = Payture.new.pay(@recommendation.price_with_payment_commission, @card, :order_id => @order_id)
+      if result["Success"] == "True"
+        @message = "Success"
+      else
+        @message = result["ErrCode"]
+      end
+      render :text => @message
+    else
+      @people_count = {:adults => params[:adults].to_i, :children => params[:children].to_i}
+      @numbers = %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}
+      render :action => :index
+    end
 =begin
     @order_id = params[:order_id]
     @amount = params[:amount]
