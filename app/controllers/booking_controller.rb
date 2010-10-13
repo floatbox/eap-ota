@@ -9,6 +9,7 @@ class BookingController < ApplicationController
       render :text => 'Не удалось сделать предварительное бронирование'
       return
     end
+    @order = Order.new
     @variant = @recommendation.variants[0]
     @people = (1..(params[:adults].to_i + params[:children].to_i)).map {|n|
                 Person.new
@@ -36,8 +37,10 @@ class BookingController < ApplicationController
     @recommendation_number = params[:recommendation_number]
     @people = params['person_attributes'].to_a.sort_by{|a| a[0]}.map{|k, v| Person.new(v)}
     @card = Billing::CreditCard.new(params[:card])
+    @order = Order.new(params[:order])
     @card.valid?
     @people.every.valid?
+    @order.valid?
     @people_count = {:adults => params[:adults].to_i, :children => params[:children].to_i}
     @numbers = %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}
     render :action => :index

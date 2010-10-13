@@ -1,24 +1,27 @@
 ﻿<dd class="book-c" onclick="return 'Contacts'">
+  <% fields_for :order do |o| %>
     <table>
         <tr>
             <td>
-                <input type="text" 
-                 id="booking-contacts-email"
-                 name="contacts[email]"
-                 class="text g-xl"
-                 value="Адрес электронной почты"
-                 onclick="return {def: 'Адрес электронной почты', mask: /[^а-яё]/i, rules: {req: true, email: true}}"
-                 title="электронная почта"
-                >
+                <%= o.text_field :email,
+                  :id => "booking-contacts-email",
+                  :class => "text g-xl",
+                  :value => @order.email || "Адрес электронной почты",
+                  :onclick => "return {def: 'Адрес электронной почты', mask: /[^а-яё]/i, rules: {req: true, email: true}}",
+                  :title => "электронная почта"
+                 %>
+                 <%= o.error_message_on :email, 
+                   :id => "error_order_email" %>
             <td>
-                <input type="text" 
-                 id="booking-contacts-phone"
-                 name="contacts[phone]"
-                 class="text g-xl"
-                 value="Номер телефона"
-                 onclick="return {def: 'Номер телефона', mask: /[a-z]/i}"
-                 title="номер телефона"
-                >
+                <%= o.text_field :phone,
+                  :id => "booking-contacts-phone",
+                  :class => "text g-xl",
+                  :value => @order.phone || "Номер телефона",
+                  :onclick => "return {def: 'Номер телефона', mask: /[a-z]/i}",
+                  :title => "номер телефона"
+                 %>
+                 <%= o.error_message_on :phone, 
+                  :id => "error_order_phone" %>
         <tr>
             <td class="sub g-xxs">
                 <label 
@@ -45,4 +48,5 @@
                 </p>
 
     </table>
+  <% end  %>
 </dd>
