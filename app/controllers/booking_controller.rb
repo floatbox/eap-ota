@@ -40,28 +40,32 @@ class BookingController < ApplicationController
       result = Payture.new.block(@recommendation.price_with_payment_commission, @card, :order_id => @order_id)
       if result["Success"] == "True"
         @message = "Success"
+        a_session = AmadeusSession.book
+        air_sfr_xml = Amadeus.soap_action('Air_SellFromRecommendation', OpenStruct.new(:segments => @variant.segments, :people_count => @people.count), a_session)
+        doc = Amadeus.pnr_add_multi_elements(PNRForm.new(
+        :flights => [],
+        :people => @people,
+        :phone => '1236767',
+        :email => @order.email,
+        :validating_carrier => @recommendation.validating_carrier.iata
+        ), a_session)
+        @order.pnr_number = doc.xpath('//r:controlNumber').to_s
+        if @order.pnr_number
+          Amadeus.soap_action('Fare_PricePNRWithBookingClass', nil, a_session)
+          Amadeus.soap_action('Ticket_CreateTSTFromPricing', nil, a_session)
+          Amadeus.pnr_add_multi_elements(PNRForm.new(:end_transact => true), a_session)
+          Amadeus.soap_action('Queue_PlacePNR', OpenStruct.new(:debug => false, :number => @order.pnr_number), a_session)
+          @order.save
+          PnrMailer.deliver_pnr_notification(@order.email, @order.pnr_number) if @order.email
+          redirect_to pnr_form_path(@order.pnr_number)
+        else
+          render :text => 'Ошибка при создании PNR'
+        end
       else
         @message = result["ErrCode"]
-      end
-      a_session = AmadeusSession.book
-      air_sfr_xml = Amadeus.soap_action('Air_SellFromRecommendation', OpenStruct.new(:segments => @variant.segments, :people_count => @people.count), a_session)
-      doc = Amadeus.pnr_add_multi_elements(PNRForm.new(
-      :flights => [],
-      :people => @people,
-      :phone => '1236767',
-      :email => @order.email,
-      :validating_carrier => @recommendation.validating_carrier.iata
-      ), a_session)
-      @order.pnr_number = doc.xpath('//r:controlNumber').to_s
-      if @order.pnr_number
-        Amadeus.soap_action('Fare_PricePNRWithBookingClass', nil, a_session)
-        Amadeus.soap_action('Ticket_CreateTSTFromPricing', nil, a_session)
-        Amadeus.pnr_add_multi_elements(PNRForm.new(:end_transact => true), a_session)
-        Amadeus.soap_action('Queue_PlacePNR', OpenStruct.new(:debug => false, :number => @order.pnr_number), a_session)
-        @pnr = Pnr.get_by_number(@order.pnr_number)
+        render :text => 'Ошибка при оплате ' + @message
       end
       
-      render :text => @message
     else
       @people_count = {:adults => params[:adults].to_i, :children => params[:children].to_i}
       @numbers = %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}

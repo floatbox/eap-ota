@@ -161,7 +161,6 @@ class Amadeus < Handsoap::Service
 
   def soap_action(action, args = nil, session = nil)
     yml = YAML::load(File.open(RAILS_ROOT+'/config/soap_actions.yaml'))
-    debugger
     response = invoke_rendered action,
       :soap_action => yml[action]['soap_action'],
       :r => yml[action]['soap_action'],
