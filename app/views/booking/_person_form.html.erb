@@ -1,9 +1,10 @@
 
-<% if person_form_counter > 0 %>
+<% if p
+erson_form_counter > 0 %>
     <dd class="book-p-num"><%= @numbers[person_form_counter]%> пассажир
 <% end  %>
 
-<% fields_for "data[person_attributes][]", person_form, :index => person_form_counter do |person| %>
+<% fields_for "person_attributes", person_form, :index => person_form_counter do |person| %>
 <dd class="book-p" onclick="return 'Person'">
     <table>
         <colgroup>
@@ -24,14 +25,18 @@
                 <%= person.text_field :first_name,
                  :class => "text g-xl",
                  :title => "имя пассажира",
-                 :onclick => "return {def: 'Имя', req: true, minl: 2, latin: true, mask: /[a-z]/i}"
+                 :onclick => "return {def: 'Имя', mask: /[a-z]/i, rules: {req: true, minl: 2, latin: true}}"
                  %>
+                 <%= person.error_message_on :first_name, 
+                 :id => "error_person_#{person_form_counter}_first_name" %>
             <td class="g-middle text-upper">
                 <%= person.text_field :last_name,
                  :class => "text g-xl",
                  :title => "фамилия пассажира",
-                 :onclick => "return {def: 'Фамилия', req: true, minl: 2, latin: true, mask: /[a-z]/i}"
+                 :onclick => "return {def: 'Фамилия', mask: /[a-z]/i, rules: {req: true, minl: 2, latin: true}}"
                  %>
+                 <%= person.error_message_on :last_name, 
+                  :id => "error_person_#{person_form_counter}_last_name" %>
             <td class="g-middle">
                 <label
                  class="bold bp-sex-label g-s"
@@ -41,15 +46,19 @@
                 <label class="bp-sex bp-sex-m g-xl" title="Мужской">
                 <%= person.radio_button :sex,
                  'm',
-                 :id => "book-p-#{person_form_counter+1}-sex-m"
+                 :id => "book-p-#{person_form_counter}-sex-m",
+                 :title => "пол пассажира"
                  %>м
                 </label>
                 <label class="bp-sex bp-sex-f g-xl" title="Женский">
                 <%= person.radio_button :sex,
                  'f',
-                 :id => "book-p-#{person_form_counter+1}-sex-f"
+                 :id => "book-p-#{person_form_counter}-sex-f",
+                 :title => "пол пассажира"
                  %>ж
                 </label>
+                <%= person.error_message_on :sex, 
+                 :id => "error_person_#{person_form_counter}_sex" %>
 
         <tr>
             <td class="g-xxs sub" colspan="2">
@@ -65,71 +74,77 @@
         <tr class="label">
             <td>
                 <label 
-                 for="book-p-<%=person_form_counter+1%>-nationality"
+                 for="book-p-<%=person_form_counter%>-nationality"
                  class="bold g-s"
                  title="Гражданство пассажира"
                 >Гражданство</label>
 
             <td>
                 <label
-                 for="book-p-<%=person_form_counter+1%>-birth"
+                 for="book-p-<%=person_form_counter%>-birth"
                  class="bold g-s"
                  title="Дата рождения пассажира в формате дд/мм/гггг"
                 >Дата рождения</label>
             <td>
                 <label
-                 for="bonus-type-<%=person_form_counter+1%>"
-                 id="bonus-type-<%=person_form_counter+1%>-label"
+                 for="bonus-type-<%=person_form_counter%>"
+                 id="bonus-type-<%=person_form_counter%>-label"
                  class="bold g-s g-none"
                  title="Название бонусной программы"
                 >Бонусная программа</label>
 
         <tr>
             <td>
-                <%= person.select :nationality,
-                 grouped_options_for_select(Country.options_for_nationality_select),
+                <%= person.select :nationality_id,
+                 grouped_options_for_select(Country.options_for_nationality_select, person_form.nationality_id),
                  {},
                  :id => "book-p-#{person_form_counter+1}-nationality",
                  :class => "text text-value g-xl"
                 %>
+                <%= person.error_message_on :nationality, 
+                 :id => "error_person_#{person_form_counter}_nationality" %>
             <td>
                 <input type="text" 
-                 id="book-p-<%=person_form_counter+1%>-birth"
-                 name="data[person_attributes][][birthday(3i)]"
+                 id="book-p-<%=person_form_counter%>-birth"
+                 name="person_attributes[<%= person_form_counter %>][birthday(3i)]"
                  class="text text-dd g-xl"
                  value="<%= (person_form.birthday &&  person_form.birthday.day) ||"день"%>"
                  title="день рождения"
                  maxlength="2"
-                 onclick="return {def: 'день', req: true, num: true, min: 1, max: 31, mask: /\d/}"
+                 onclick="return {def: 'день', mask: /\d/, rules: {req: true, num: true, min: 1, max: 31}}"
                 ><input type="text" 
-                 name="data[person_attributes][][birthday(2i)]"
+                 name="person_attributes[<%= person_form_counter %>][birthday(2i)]"
                  class="text text-mm g-xl"
                  value="<%= (person_form.birthday &&  person_form.birthday.month) ||"месяц"%>"
                  title="месяц рождения"
                  maxlength="2"
-                 onclick="return {def: 'месяц', req: true, num: true, min: 1, max: 12, mask: /\d/}"
+                 onclick="return {def: 'месяц', mask: /\d/, rules: {req: true, num: true, min: 1, max: 12}}"
                 ><input type="text" 
-                 name="data[person_attributes][][birthday(1i)]"
+                 name="person_attributes[<%= person_form_counter %>][birthday(1i)]"
                  class="text text-yyyy g-xl"
                  value="<%= (person_form.birthday &&  person_form.birthday.year) ||"год"%>"
                  title="год рождения"
                  maxlength="4"
-                 onclick="return {def: 'год', req: true, num: true, min: 0, max: 2100, mask: /\d/}"
+                 onclick="return {def: 'год', mask: /\d/, rules: {req: true, num: true, min: 1900, max: 2020}}"
                 >
+                <%= person.error_message_on :birthday, 
+                 :id => "error_person_#{person_form_counter}_birthday" %>
             <td>
                 <%= person.select :bonuscard_type,
                  ['Аэрофлот Бонус', 'Бонусявый Бонус', 'Бонюсючий Бонус'],
                  {},
-                 :id => "bonus-type-#{person_form_counter+1}",
+                 :id => "bonus-type-#{person_form_counter}",
                  :class => 'text select-bonus text-value g-xl g-none'
                  %>
+                 <%= person.error_message_on :bonuscard_type, 
+                  :id => "error_person_#{person_form_counter}_bonuscard_type" %>
 
         <tr class="label">
             <td>
             <td>
                 <label
-                 id="bp-<%=person_form_counter+1%>-expires-label"
-                 for="bp-<%=person_form_counter+1%>-expires-d"
+                 id="bp-<%=person_form_counter%>-expires-label"
+                 for="bp-<%=person_form_counter%>-expires-d"
                  class="bold g-s"
                  title="Срок действия документа, который будет предъявлен при посадке. Если у документа срока действия нет, то поставьте отметку справа от поля."
                 >Срок действия документа</label>
@@ -139,46 +154,53 @@
         <tr>
             <td>
                 <%= person.text_field :passport,
-                 :id => "booking-person-#{person_form_counter+1}-passport",
+                 :id => "booking-person-#{person_form_counter}-passport",
                  :class => "text g-xl",
                  :maxlength => '100',
                  :title => 'номер документа',
-                 :onclick => "return {def: 'Номер документа', req: true, minl: 1}"
+                 :onclick => "return {def: 'Номер документа', rules: {req: true, minl: 1}}"
                  %>
+                 <%= person.error_message_on :passport, 
+                  :id => "error_person_#{person_form_counter}_passport" %>
             <td>
                 <input type="text" 
-                 id="bp-<%=person_form_counter+1%>-expires-d"
+                 id="bp-<%=person_form_counter%>-expires-d"
                  class="text text-dd g-xl"
-                 name="data[person_attributes][][document_expiration_date(3i)]"
+                 name="person_attributes[<%= person_form_counter %>][document_expiration_date(3i)]"
                  value="<%= (person_form.document_expiration_date &&  person_form.document_expiration_date.day) ||"день"%>"
                  title="день окончания действия документа"
                  maxlength="2"
-                 onclick="return {def: 'день', req: true, num: true, min: 1, max: 31, mask: /\d/}"
+                 onclick="return {def: 'день', mask: /\d/, rules: {req: true, num: true, min: 1, max: 31}}"
                 ><input type="text" 
-                 id="bp-<%=person_form_counter+1%>-expires-m"
+                 id="bp-<%=person_form_counter%>-expires-m"
                  class="text text-mm g-xl"
-                 name="data[person_attributes][][document_expiration_date(2i)]"
+                 name="person_attributes[<%= person_form_counter %>][document_expiration_date(2i)]"
                  value="<%= (person_form.document_expiration_date &&  person_form.document_expiration_date.month) ||"месяц"%>"
                  title="месяц окончания действия документа"
                  maxlength="10"
-                 onclick="return {def: 'месяц', req: true, num: true, min: 1, max: 12, mask: /\d/}"
+                 onclick="return {def: 'месяц', mask: /\d/, rules: {req: true, num: true, min: 1, max: 12}}"
                 ><input type="text" 
-                 id="bp-<%=person_form_counter+1%>-expires-y"
+                 id="bp-<%=person_form_counter%>-expires-y"
                  class="text text-yyyy g-xl"
-                 name="data[person_attributes][][document_expiration_date(1i)]"
+                 name="person_attributes[<%= person_form_counter %>][document_expiration_date(1i)]"
                  value="<%= (person_form.document_expiration_date &&  person_form.document_expiration_date.year) ||"год"%>"
                  title="год окончания действия документа"
                  maxlength="4"
-                 onclick="return {def: 'год', req: true, num: true, min: 0, max: 2100, mask: /\d/}"
+                 onclick="return {def: 'год', mask: /\d/, rules: {req: true, num: true, min: 2010, max: 2050}}"
                 >
+                
+                <%= person.error_message_on :document_expiration_date, 
+                 :id => "error_person_#{person_form_counter}_document_expiration_date" %>
             <td>
                 <%=person.text_field :bonuscard_number,
-                 :id => "bonus-num-#{person_form_counter+1}",
+                 :id => "bonus-num-#{person_form_counter}",
                  :class => 'text input-bonus g-xl g-none',
                  :maxlength => '50',
                  :disabled => 'disabled',
-                 :onclick => "return {def: 'Номер карты', req: true, minl: 2}"
+                 :onclick => "return {def: 'Номер карты', rules: {req: true, minl: 2}}"
                  %>
+                 <%= person.error_message_on :bonuscard_number, 
+                  :id => "error_person_#{person_form_counter}_bonuscard_number" %>
 
         <tr>
             <td class="sub g-xxs">
@@ -194,13 +216,13 @@
             <td class="sub g-xxs">
                 <%= person.check_box :document_noexpiration,
                 {
-                 :id => "bp-#{person_form_counter+1}-noexpiration",
+                 :id => "bp-#{person_form_counter}-noexpiration",
                  :class => "noexpiration g-middle",
                  :onclick => "return {ctrls: '#bp-#{person_form_counter+1}-expires-d, #bp-#{person_form_counter+1}-expires-m, #bp-#{person_form_counter+1}-expires-y', label: '#bp-#{person_form_counter+1}-expires-label'}"
                 }%>
 
                 <label 
-                 for="bp-<%=person_form_counter+1%>-noexpiration"
+                 for="bp-<%=person_form_counter%>-noexpiration"
                  title=""
                  >нет срока действия</label>&nbsp;<u class="b-expand" title="О сроке действия&hellip;"></u>
                  <p>
@@ -210,13 +232,13 @@
             <td class="sub g-xxs">
                 <%= person.check_box :bonus_present,
                 {
-                :id => "bonus-#{person_form_counter+1}",
+                :id => "bonus-#{person_form_counter}",
                 :class => 'bonus',
                 :onclick => "return {ctrls: '#bonus-type-#{person_form_counter+1}, #bonus-num-#{person_form_counter+1}', label: '#bonus-type-#{person_form_counter+1}-label'}"
                 }%>
 
                 <label 
-                 for="bonus-<%= person_form_counter+1 %>"
+                 for="bonus-<%= person_form_counter %>"
                  title="Карта участника программы премирования пассажиров (мильной программы или программы для&nbsp;часто летающих пассажиров, англ. frequent flyer program)"
                 >есть бонусная карта</label>
                 <a class="g-external" href="http://ru.wikipedia.org/wiki/Бонусные_программы_авиакомпаний" target="_blank" title="Что такое бонусная программа? (ссылка откроется в новом окне)"> </a>

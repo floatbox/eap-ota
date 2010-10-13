@@ -1,5 +1,7 @@
 class Flight
 
+  include KeyValueInit
+
   attr_accessor :operating_carrier_iata, :marketing_carrier_iata, :departure_iata,
    :departure_term, :arrival_iata, :arrival_term, :flight_number, :arrival_date,
    :arrival_time, :departure_date, :departure_time, :equipment_type_iata, :class_of_service, :seat_count, :warning, :cabin, :segment_number
@@ -82,12 +84,6 @@ class Flight
 
   def full_flight_number
     "#{operating_carrier_iata}#{marketing_carrier_iata}#{flight_number}"
-  end
-
-  def initialize attrs={}
-    attrs.each do |attr, value|
-      send "#{attr}=", value
-    end
   end
 
   def distance

@@ -7,17 +7,17 @@ ActionController::Routing::Routes.draw do |map|
   map.booking_form 'booking/form', :controller => 'booking', :action => 'form'
   map.booking_pay 'booking/pay', :controller => 'booking', :action => 'pay'
 
-  map.resources :locations, :collection => {:random => :get, :current => :get}
+  map.resources :locations, :collection => {:current => :get}
 
-  map.resources :countries, :collection => {:random => :get}
+  map.resources :countries
 
   map.resources :airplanes
 
   map.resources :airlines
 
-  map.resources :airports, :collection => {:random => :get}
+  map.resources :airports
 
-  map.resources :cities, :collection => {:random => :get}
+  map.resources :cities
 
   map.resources :geo_tags
   

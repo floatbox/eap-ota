@@ -1,7 +1,6 @@
 $.extend(app.offers, {
 options: {},
 init: function() {
-    
     this.container = $('#offers');
     this.loading = $('#offers-loading');
     this.results = $('#offers-results');

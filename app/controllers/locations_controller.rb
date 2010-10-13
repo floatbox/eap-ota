@@ -9,11 +9,6 @@ class LocationsController < ApplicationController
     }
   end
 
-  def random
-    @location = City.random
-    render :json => @location
-  end
-
   def current
     @location = City.find_by_iata('MOW') || City.first
     render :json => @location

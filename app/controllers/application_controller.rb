@@ -25,6 +25,8 @@ class ApplicationController < ActionController::Base
     }
   end
 
+  protected
+
   # TODO перенести в модуль какой-нибудь, что ли.
   def reset_amadeus_time
     PricerForm.reset_parse_time
@@ -45,7 +47,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :reset_amadeus_time, :set_locale
   after_filter :log_amadeus_time
-  
+
   ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
     html_tag
   end

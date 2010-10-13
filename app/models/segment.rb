@@ -1,4 +1,7 @@
 class Segment
+
+  include KeyValueInit
+
   delegate :departure, :departure_name, :departure_term, :departure_iata, :dept_date, :departure_date, :dept_time, :departure_time, :departure_datetime_utc,
     :to => 'flights.first', :allow_nil => true
   delegate :arrival, :arrival_name, :arrival_term, :arrival_iata, :arrv_date, :arrival_date, :arrv_time, :arrival_time, :arrival_datetime_utc,
@@ -54,12 +57,6 @@ class Segment
       #:duration => duration,
       :total_duration => total_duration
     }
-  end
-
-  def initialize keys={}
-    keys.each do |attr, value|
-      send "#{attr}=", value
-    end
   end
 
   def total_duration

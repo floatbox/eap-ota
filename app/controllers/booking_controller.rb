@@ -16,7 +16,10 @@ class BookingController < ApplicationController
     @people_count = {:adults => params[:adults].to_i, :children => params[:children].to_i}
     @card = Billing::CreditCard.new()
     @numbers = %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}
+    @recommendation_number = @recommendation.hash
+    Rails.cache.write('recommendation' + @recommendation_number.to_s, Marshal.dump(@recommendation))
   end
+  
 
   # FIXME temporary bullshit
   def form
@@ -24,8 +27,21 @@ class BookingController < ApplicationController
   end
 
   def pay
+    require 'recommendation'
+    require 'segment'
+    require 'variant'
+    require 'flight'
+    @recommendation = Marshal.load(Rails.cache.read('recommendation'+ params[:recommendation_number]))
+    @variant = @recommendation.variants[0]
+    @recommendation_number = params[:recommendation_number]
+    @people = params['person_attributes'].to_a.sort_by{|a| a[0]}.map{|k, v| Person.new(v)}
     @card = Billing::CreditCard.new(params[:card])
-
+    @card.valid?
+    @people.every.valid?
+    @people_count = {:adults => params[:adults].to_i, :children => params[:children].to_i}
+    @numbers = %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}
+    render :action => :index
+=begin
     @order_id = params[:order_id]
     @amount = params[:amount]
 
@@ -40,6 +56,7 @@ class BookingController < ApplicationController
     else
       render :form
     end
+=end
   end
 
   def valid_card
