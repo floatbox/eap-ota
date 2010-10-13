@@ -44,6 +44,19 @@ class Recommendation
     recs.select(&:sellable?).min_by(&:minimal_duration)
   end
 
+  def self.load_from_cache(recommendation_number)
+    # shouldn be neccessary, no?
+    #require 'segment'
+    #require 'variant'
+    #require 'flight'
+    Marshal.load(Rails.cache.read('recommendation'+ recommendation_number))
+  end
+
+  def self.store_to_cache(recommendation_number, recommendation)
+    Rails.cache.write("recommendation#{recommendation_number}", Marshal.dump(recommendation))
+  end
+
+
   def variants_by_duration
     variants.sort_by(&:total_duration)
   end

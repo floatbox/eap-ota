@@ -18,7 +18,7 @@ class BookingController < ApplicationController
     @card = Billing::CreditCard.new()
     @numbers = %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}
     @recommendation_number = @recommendation.hash
-    Rails.cache.write('recommendation' + @recommendation_number.to_s, Marshal.dump(@recommendation))
+    Recommendation.store_to_cache(@recommendation_number, @recommendation)
   end
   
 
@@ -28,13 +28,9 @@ class BookingController < ApplicationController
   end
 
   def pay
-    require 'recommendation'
-    require 'segment'
-    require 'variant'
-    require 'flight'
-    @recommendation = Marshal.load(Rails.cache.read('recommendation'+ params[:recommendation_number]))
-    @variant = @recommendation.variants[0]
     @recommendation_number = params[:recommendation_number]
+    @recommendation = Recommendation.load_from_cache(@recommendation_number)
+    @variant = @recommendation.variants[0]
     @people = params['person_attributes'].to_a.sort_by{|a| a[0]}.map{|k, v| Person.new(v)}
     @card = Billing::CreditCard.new(params[:card])
     @order = Order.new(params[:order])
