@@ -20,7 +20,9 @@
 @import 'panel/map.css';
 @import 'panel/map-tabs.css';
 @import 'panel/presets.css';
-@import 'panel/calendar.css';
+
+@import 'calendar/scroller.css';
+@import 'calendar/viewport.css';
 
 @import 'define/define.css';
 @import 'define/define-popup.css';

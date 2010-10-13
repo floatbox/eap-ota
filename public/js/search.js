@@ -40,7 +40,7 @@ validate: function(data) {
     }, this.fields);
 
     // Временная проверка, пока нет распознавания дат
-    if (!(data.to && data.from && data.date1)) {
+    if (!(data.to && data.from && data.date1 && (data.date2 || !data.rt))) {
         self.toggle(false);
         return;
     }
