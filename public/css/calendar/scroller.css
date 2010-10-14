@@ -80,6 +80,38 @@
     left: 100%;
 }
 
+/* Selected preview */
+
+.calendar .preview
+{
+    position: absolute;
+    top: 3px;
+    left: 0;
+}
+
+.calendar .preview .date,
+.calendar .preview .period
+{
+    position: absolute;
+    top: 0;
+    
+    overflow: hidden;
+
+    height: 18px;
+
+    background: #DC3F8A;
+}
+
+.calendar .preview .date
+{
+    width: 2px;
+}
+
+.calendar .preview .period
+{
+    opacity: 0.25;
+}
+
 /* Scrollbar */
 
 .calendar .scrollbar 

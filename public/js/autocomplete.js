@@ -259,8 +259,10 @@ $.Autocompleter = function(input, options) {
         $el.trigger('change');
         // здесь запускать разбор строки, обновлять $iata и, возможно, запускать поиск
         $iata.hide();
+    }).bind('iata', function(e, v) {
+        $iata.show(v);
     });
-
+    
     options.hoverCls && $el.hover(
         function() {
             $el.addClass(options.hoverCls);
