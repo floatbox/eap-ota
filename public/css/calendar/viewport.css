@@ -148,7 +148,9 @@
     background-color: #DC3F8A;
     background-repeat: no-repeat;
     color: #fff;
-    cursor: default;
+
+    cursor: move;
+    cursor: col-resize;
 }
 
 .calendar .dates li.segment0 
@@ -206,6 +208,26 @@ background-position:64px -286px;
     border-color: #FFF;
 }
 
+.calendar .drag-origin
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    
+    display: none;
+    
+    width: 84px;
+    height: 50px;
+    
+    background: url(/img/calendar/drag-origin.png) no-repeat;
+}
+
+.calendar .dates li.drag
+{
+    background-color: #c675a4;
+    border-color: #d8a0c0;
+}
+
 /* Dragging overlay */
 #calendar-drag-overlay 
 {
@@ -214,9 +236,10 @@ background-position:64px -286px;
     left: 0;
     z-index: 1;
     
-    width: 84px;
-    height: 50px;
+    display: none;
     
-    background: #FFF;
-    opacity: 0.2;
+    width: 92px;
+    height: 58px;
+    
+    background: url(/img/calendar/drag-overlay.png) no-repeat;
 }

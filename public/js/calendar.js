@@ -110,6 +110,7 @@ initDates: function() {
             }
             self.dragging = {
                 el: el,
+                index: dragall ? parseInt(el.attr('data-index'), 10) : undefined,
                 selected: self.selected.concat(),
                 segments: dsegments,
                 ox: e.pageX,
@@ -126,6 +127,10 @@ initDates: function() {
             $(window).mousemove(dragHandler).one('mouseup', function() {
                 $(window).unbind('mousemove', dragHandler);
                 self.dragOverlay.hide();
+                self.dragOrigin.hide();
+                if (self.dragging.marked) {
+                    self.dragging.marked.removeClass('drag');
+                }
                 delete(self.dragging);
                 self.update();
             });
@@ -144,16 +149,26 @@ dragSelected: function(e) {
     var d = this.dragging;
     var x = e.pageX.constrain(d.minx, d.maxx);
     var y = e.pageY.constrain(d.miny, d.maxy);
-    this.dragOverlay.css('left', x - d.dx).css('top', y - d.dy);
+    this.dragOverlay.css('left', x - d.dx - 4).css('top', y - d.dy - 2);
     if (!d.active) {
         d.active = true;
+        var orpos = d.el.position();
         this.dragOverlay.show();
-        this.dragOrigin.show();
+        this.dragOrigin.css('left', orpos.left).css('top', orpos.top + this.container.scrollTop()).show();
+        if (d.index != undefined) {
+            d.marked = this.dates.eq(d.index).addClass('drag');
+        }
     }
-    var offset = Math.round((x - d.ox) / 84) + Math.round((y - d.oy) / 50) * 7;
+    var offset = Math.round((x - d.ox) / 84) + Math.round((y - d.oy) / 51) * 7;
     if (offset != d.offset) {
         d.offset = offset;
         var md = this.dates.length - 1;
+        if (d.marked) {
+            d.marked.removeClass('drag');
+        }
+        if (d.index != undefined) {
+            d.marked = this.dates.eq((d.index + offset).constrain(0, md)).addClass('drag');
+        }
         for (var i = this.selected.length; i--;) {
             this.selected[i] = (d.selected[i] + offset * d.segments[i]).constrain(0, md);
         }
@@ -165,6 +180,7 @@ dragSelected: function(e) {
 update: function() {
     this.fillSelected();
     this.highlight();
+    this.scroller.updatePreview(this.selected);
     var dates = {};
     for (var i = this.selected.length; i--;) {
         var d = this.selected[i];
@@ -289,8 +305,10 @@ initTimeline: function() {
         var label = $('<span>').addClass('label').width(mw).text(app.constant.SMN[mdate.month]);
         $('<li>').width(mw).append(label).appendTo(self.timeline);
     });
-    var offset = Math.round((1 - parseInt(this.parent.dates.first().attr('data-dmy').substring(0,2), 10)) * self.factor);
+    var fdate = this.parent.dates.first();
+    var offset = Math.round((1 - parseInt(fdate.attr('data-dmy').substring(0,2), 10)) * self.factor);
     this.timeline.css('left', offset).show();
+    this.preview = $('.preview', this.scroller).css('left', Math.round(fdate.prevAll('li').length * self.factor));
 },
 initScrollbar: function() {
     var self = this;
@@ -323,6 +341,18 @@ initScrollbar: function() {
         var x = event.pageX - $(this).offset().left - sbw / 2;
         self.scrollTo(self.snap(x.constrain(0, sbm) / sbf));
     });     
+},
+updatePreview: function(selected) {
+    this.preview.html('');
+    var items = selected.compact();
+    for (var i = items.length; i--;) {
+        $('<div class="date"></div>').css('left', Math.round(items[i] * this.factor)).appendTo(this.preview);
+    }
+    if (items.length > 1) {
+        var pl = Math.round(items[0] * this.factor);
+        var pw = Math.round((items[items.length - 1] - items[0]) * this.factor);
+        $('<div class="period"></div>').css('left', pl).width(pw).prependTo(this.preview);
+    }
 }
 };
 

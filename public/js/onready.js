@@ -24,13 +24,19 @@
 
         // размеры
         height: 374
+        
     }).focus(function() {
         tools.from.reset.fadeOut(200);
     }).change(function() {
         app.search.update({from: $(this).val()}, this);
     });
     fields['from'] = tools.from.val();
-
+    
+    var fdata = tools.from.get(0).onclick();
+    if (fdata && fdata.iata) {
+        tools.from.trigger('iata', fdata.iata);
+    }
+    
     // "подпольная" ссылка для сброса поля "Откуда"
     
     tools.from.reset = $('#search-from-reset').click(function(e) {
@@ -61,7 +67,7 @@
         app.search.update({to: $(this).val()}, this);
     });
     fields['to'] = tools.to.val();
-
+    
     // образец содержимого поля "Куда"
     
     var e = tools.to.example = $('#search-to-example');
@@ -108,9 +114,7 @@
         });
 
         if (loc) {
-            app.search.tools.from.trigger('set', loc.city);
             app.map.setPoint('from', {name: 'Вы&nbsp;&mdash;&nbsp;здесь', lat: lat, lon: lon});
-            // app.form.$from.trigger('keydown.autocomplete');
         };
     }
     
