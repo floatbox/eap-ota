@@ -1,5 +1,5 @@
 class Pnr
-  attr_accessor :number, :flights, :passengers, :phone
+  attr_accessor :number, :flights, :passengers, :phone, :email
   
   def self.get_by_number number
     xml = Amadeus.pnr_retrieve(OpenStruct.new(:number => number, :debug => false))
@@ -27,10 +27,8 @@ class Pnr
         :warning =>                fi.xpath("r:errorInfo/r:errorfreeFormText/r:text").to_s
       )
     }
-    self.passengers = [OpenStruct.new(:first_name => (xml / '//r:passenger/r:firstName').to_s,
-                                 :surname  => (xml / '//r:traveller/r:surname').to_s, 
-                                 :phone => xml.xpath('//r:freetextDetail[r:type=3]/../r:longFreetext').to_s, 
-                                 :email => xml.xpath('//r:freetextDetail[r:type="P02"]/../r:longFreetext').to_s)]
+    self.passengers = xml.xpath('//r:travellerInformation').map{|ti| Person.new(:first_name => (ti / './r:passenger/r:firstName').to_s, :last_name => (ti / './r:traveller/r:surname').to_s)}
+    self.email = xml.xpath('//r:freetextDetail[r:type="P02"]/../r:longFreetext').to_s
     self.phone = xml.xpath('//r:freetextDetail[r:type=3]/../r:longFreetext').to_s
   end
   

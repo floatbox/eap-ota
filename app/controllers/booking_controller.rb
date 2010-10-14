@@ -57,6 +57,7 @@ class BookingController < ApplicationController
           Amadeus.soap_action('Queue_PlacePNR', OpenStruct.new(:debug => false, :number => @order.pnr_number), a_session)
           @order.save
           PnrMailer.deliver_pnr_notification(@order.email, @order.pnr_number) if @order.email
+          a_session.destroy
           redirect_to pnr_form_path(@order.pnr_number)
         else
           render :text => 'Ошибка при создании PNR'
