@@ -17,12 +17,12 @@
 Пассажиры:
 <% for p in @pnr.passengers %>
 <p>
-<%= p.first_name %> <%= p.surname %><br />
-телефон: <%= p.phone %><br />
-email: <%= p.email %>
+<%= p.first_name %> <%= p.last_name %>
 </p>
 <% end %>
 <br />
+телефон: <%= @pnr.phone %><br />
+email: <%= @pnr.email %>
 <%
 =begin
 %>
