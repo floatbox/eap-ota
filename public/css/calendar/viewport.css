@@ -105,12 +105,6 @@
     color: #b796a6;
 }
 
-.calendar .dates .period 
-{
-    background-color: #ba92b2;
-    border-color: #d0b5ca;
-}
-
 .calendar .dates li.selected,
 .calendar .dates li.hover {
     background: url(/img/date-arrows.png) no-repeat;
@@ -118,10 +112,14 @@
 
 /* Highlighted date */
 
-.calendar .dates li.phover
+.calendar .dates .phover
 {
-    background-color: #ba92b2;
-    border-color: #d0b5ca;
+    background-color: #b3a6bb;
+    border-color: #ccc2d0;
+}
+
+.calendar .odd .phover {
+    background-color: #bdacbf;
 }
 
 .calendar .dates li.hover 
@@ -142,6 +140,12 @@
 
 /* Selected date */
 
+.calendar .dates .period 
+{
+    background-color: #ba92b2;
+    border-color: #d0b5ca;
+}
+
 .calendar .dates li.selected
 {
     border-color: #e67bae;
@@ -150,7 +154,6 @@
     color: #fff;
 
     cursor: move;
-    cursor: col-resize;
 }
 
 .calendar .dates li.segment0 
@@ -186,6 +189,7 @@ background-position:64px -286px;
 }
 
 /* Reset */
+
 .calendar .reset 
 {
     color: #A0A0A0;
@@ -208,6 +212,24 @@ background-position:64px -286px;
     border-color: #FFF;
 }
 
+.calendar .reset-button
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    
+    display: none;
+
+    width: 24px;
+    height: 24px;
+    
+    background: url(/img/calendar/reset.png) no-repeat;
+    
+    cursor: pointer;
+}
+
+/* Drag */
+
 .calendar .drag-origin
 {
     position: absolute;
@@ -229,6 +251,7 @@ background-position:64px -286px;
 }
 
 /* Dragging overlay */
+
 #calendar-drag-overlay 
 {
     position: absolute;

@@ -86,6 +86,9 @@ init: function() {
         }
     });
     
+    // Активация матрицы цен в статике, перенести в обработку аякса, когда будет настоящая
+    this.initMatrix($('#offers-matrix .offer-prices'));
+    
 },
 load: function(params, title) {
     var self = this;
@@ -464,5 +467,41 @@ joinDepartures: function(dtimes, current) {
     var pl = parts.length;
     if (pl > 2) parts[pl - 2] = ' и в ';
     return pl ? parts.join('') : '';
+}
+});
+
+// Матрица цен
+$.extend(app.offers, {
+initMatrix: function(table) {
+    var cells = $('td', table);
+    var frow = table.get(0).rows[0];
+    var comparePrices = function() {
+        var sp = parseInt(selected.attr('data-price'), 10);
+        cells.each(function() {
+            var c = $(this), cp = parseInt(c.attr('data-price'), 10);
+            c.toggleClass('less', cp < sp);
+        });
+    };
+    var selected = $('td.selected', table); 
+    var highlight = function(td) {
+        hlcurrent.removeClass('current');
+        hlcurrent = $(frow.cells[parseInt(td.attr('data-col'), 10)]).add(td.parent()).addClass('current');
+    };
+    var hlcurrent = $('.current', table);
+    $(table).delegate('td', 'mouseover', function() {
+        highlight($(this));
+    }).delegate('td', 'mouseout', function() {
+        highlight(selected);
+    }).delegate('td', 'click', function() {
+        selected.removeClass('selected');
+        selected = $(this).addClass('selected');
+        comparePrices();
+    });
+    cells.each(function() {
+        var c = $(this);
+        c.attr('data-price', c.text());
+        c.attr('data-col', c.prevAll().length);
+    });    
+    comparePrices();
 }
 });

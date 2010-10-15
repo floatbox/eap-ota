@@ -71,7 +71,14 @@
     color: #fff;
     background-color: #3e3e3e;
 }
-
+.define#search-define #search-submit a
+{
+    color: #FFF;
+}
+.define#search-define #search-submit.disabled a
+{
+    color: #CCC;
+}
 
 .define .group
 {

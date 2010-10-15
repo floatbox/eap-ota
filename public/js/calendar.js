@@ -17,6 +17,10 @@ init: function() {
         self.selected.length = 0;
         self.update();
     });
+    this.resetButton = $('<div class="reset-button"></div>').appendTo(this.container).click(function() {
+        self.selected.length = 0;
+        self.update();
+    });
 },
 makeDates: function() {
     this.container = $('.dates', this.el).hide().html('');
@@ -54,10 +58,18 @@ makeDates: function() {
         month.append(day.append(label));
         curt = curd.shiftDays(1).getTime();
     }
+    $('.month:odd', this.container).addClass('odd');
     this.dates = $('li:not(.inactive)', this.container);
     this.dates.eq(0).addClass('withmonth');
-    $('.month:odd', this.dates).addClass('odd');
     this.container.show();
+    this.csize = {
+        w: this.container.parent().width(),
+        h: this.container.height()
+    };
+    this.dsize = {
+        w: 84,
+        h: 51
+    };     
 },
 selectiveSegment: function(index) {
     var nearest, unselected, items = this.selected;
@@ -101,13 +113,15 @@ initDates: function() {
                 self.dragOverlay = $('<div id="calendar-drag-overlay"></div>').appendTo('body');
                 self.dragOrigin = $('<div class="drag-origin"></div>').appendTo(self.container);
             };
-            var cel = self.container.parent(), coffset = cel.offset();
             var doffset = el.offset();
             var dsegments = [], index = parseInt(el.attr('data-index'), 10);
             var dragall = !el.hasClass('selected');
             for (var i = self.selected.length; i--;) {
                 dsegments[i] = (dragall || self.selected[i] == index) ? 1 : 0;
             }
+            var dx = e.pageX - doffset.left;
+            var dy = e.pageY - doffset.top;  
+            var coffset = self.container.offset();
             self.dragging = {
                 el: el,
                 index: dragall ? parseInt(el.attr('data-index'), 10) : undefined,
@@ -115,12 +129,12 @@ initDates: function() {
                 segments: dsegments,
                 ox: e.pageX,
                 oy: e.pageY,
-                dx: e.pageX - doffset.left,
-                dy: e.pageY - doffset.top,
-                minx: coffset.left,
-                maxx: coffset.left + cel.width(),
-                miny: coffset.top,
-                maxy: coffset.top + cel.height(),
+                dx: dx,
+                dy: dy,
+                minx: coffset.left + dx - 15,
+                maxx: coffset.left + dx + self.container.parent().width() - 69,
+                miny: coffset.top + dy - 15,
+                maxy: coffset.top + dy + self.container.height() - 36,
                 offset: 0
             };
             e.preventDefault();
@@ -158,6 +172,7 @@ dragSelected: function(e) {
         if (d.index != undefined) {
             d.marked = this.dates.eq(d.index).addClass('drag');
         }
+        this.resetButton.hide();
     }
     var offset = Math.round((x - d.ox) / 84) + Math.round((y - d.oy) / 51) * 7;
     if (offset != d.offset) {
@@ -181,12 +196,38 @@ update: function() {
     this.fillSelected();
     this.highlight();
     this.scroller.updatePreview(this.selected);
-    var dates = {};
-    for (var i = this.selected.length; i--;) {
+    var dates = {}, last;
+    for (var i = 0, im = this.selected.length; i < im; i++) {
         var d = this.selected[i];
-        if (d !== undefined) dates['date' + (i + 1)] = this.dates.eq(d).attr('data-dmy');
+        if (d !== undefined) {
+            last = this.dates.eq(d);
+            dates['date' + (i + 1)] = last.attr('data-dmy');
+        }
     }
+    this.showResetButton();
     app.search.update(dates, this);
+},
+showResetButton: function() {
+    var last, items = this.selected;
+    for (var i = items.length; i--;) {
+        if (items[i]) {
+            last = this.dates.eq(items[i]);
+            break;
+        }
+    }
+    if (last) {
+        var offset = last.position();
+        if (offset.top > this.csize.h - 1) offset = {
+            left: this.csize.w - this.dsize.w,
+            top: this.csize.h - this.dsize.h
+        };
+        this.resetButton.css({
+            'left': offset.left + this.dsize.w - 15,
+            'top': offset.top + this.container.scrollTop() - 7
+        }).show();
+    } else {
+        this.resetButton.hide();
+    }
 },
 fillSelected: function() {
     if (this.filled) this.filled.removeClass(function() {

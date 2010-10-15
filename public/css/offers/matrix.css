@@ -112,6 +112,10 @@
 
 .offer-prices td
 {
+    font-size: 84.615%;
+
+    padding: 2px 0 0;
+
     color: #ED1192;
 
     text-align: center;
@@ -131,4 +135,12 @@
     background: #ED1192;
     
     cursor: default;
+}
+
+.offer-prices td.selected,
+.offer-prices td.less
+{
+    font-size: 107.692%;
+    
+    padding: 1px 0 0;    
 }
