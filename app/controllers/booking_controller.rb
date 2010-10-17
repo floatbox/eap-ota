@@ -35,6 +35,7 @@ class BookingController < ApplicationController
     @people = params['person_attributes'].to_a.sort_by{|a| a[0]}.map{|k, v| Person.new(v)}
     @card = Billing::CreditCard.new(params[:card])
     @order = Order.new(params[:order])
+    @order.recommendation = @recommendation
     @order_id = 'rh' + @recommendation_number.to_s + Time.now.sec.to_s
     if ([@card, @order] + @people).all?(&:valid?)
       result = Payture.new.block(@recommendation.price_with_payment_commission, @card, :order_id => @order_id)

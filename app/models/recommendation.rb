@@ -8,6 +8,10 @@ class Recommendation
     validating_carrier_iata && Airline[validating_carrier_iata]
   end
   
+  def price_base
+    prices[0]
+  end
+  
   def price_with_payment_commission
     price_total + payment_commission
   end
@@ -65,10 +69,8 @@ class Recommendation
     @commission ||= Commission.find_for(self)
   end
 
-  # FIXME на самом деле, не price_total, а очень даже price without tax
-  # FIXME обязательно починить!
   def markup
-    commission.markup(price_total) if commission
+    commission.markup(price_base) if commission
   end
 
   def summary
@@ -108,9 +110,12 @@ class Recommendation
     recommendation = Recommendation.new(:variants => [variant])
     xml = Amadeus.fare_informative_pricing_without_pnr(OpenStruct.new(:flights => flights, :debug => false, :people_counts => people_counts))
     recommendation.price_total = 0
+    recommendation.prices = [0]
     # FIXME почему то амадеус возвращает цену для одного человека, даже если указано несколько
     xml.xpath('//r:pricingGroupLevelGroup').each {|pg|
       recommendation.price_total += pg.xpath('r:fareInfoGroup/r:fareAmount/r:otherMonetaryDetails[r:typeQualifier="712"][r:currency="RUB"]/r:amount').to_s.to_i * pg.xpath('r:numberOfPax/r:segmentControlDetails/r:numberOfUnits').to_s.to_i
+      recommendation.prices[0] +=
+pg.xpath('r:fareInfoGroup/r:fareAmount/r:otherMonetaryDetails[r:typeQualifier="E"][r:currency="RUB"]/r:amount').to_s.to_i * pg.xpath('r:numberOfPax/r:segmentControlDetails/r:numberOfUnits').to_s.to_i
       }
     return nil if recommendation.price_total == 0
     # FIXME сломается, когда появятся инфанты
