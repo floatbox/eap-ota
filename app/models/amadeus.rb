@@ -97,12 +97,11 @@ class Amadeus < Handsoap::Service
   end
 
   def security_authenticate
-    template = File.read('xml/Security_Authenticate.xml')
-
-    response = invoke 'Security_Authenticate',
-      :soap_action => 'http://webservices.amadeus.com/1ASIWOABEVI/VLSSLQ_06_1_1A' do |body|
-      body.set_value template, :raw => true
-    end
+    payload = render('Security_Authenticate')
+    response = invoke(
+      'Security_Authenticate',
+      :soap_action => 'http://webservices.amadeus.com/1ASIWOABEVI/VLSSLQ_06_1_1A'
+    ) { |body| body.set_value( payload, :raw => true) }
 
     response.add_namespace 'r', 'http://xml.amadeus.com/VLSSLR_06_1_1A'
 
@@ -111,13 +110,17 @@ class Amadeus < Handsoap::Service
     end
   end
 
-  # разлогинит какую-то случайную сессию, не деактивировав ее, притом. глупо.
-  # TODO сделать по образцу security_authenticate
-  def security_sign_out
-    response = invoke_rendered 'Security_SignOut',
-      :soap_action => "http://webservices.amadeus.com/1ASIWOABEVI/VLSSOQ_04_1_1A",
-      :r => "http://xml.amadeus.com/VLSSOR_04_1_1A"
+  def security_sign_out(session)
+    # у запроса пустое тело
+    response = invoke(
+      'Security_SignOut',
+      :soap_action => 'http://webservices.amadeus.com/1ASIWOABEVI/VLSSOQ_04_1_1A',
+      :soap_header => {'SessionId' => session.session_id}
+    )
 
+    response.add_namespace 'r', "http://xml.amadeus.com/VLSSOR_04_1_1A"
+
+    # нужно ли ловить тип ошибки?
     (response / '//r:statusCode').to_s == 'P'
   end
 

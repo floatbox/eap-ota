@@ -29,10 +29,9 @@ set :shared_children, %w(log pids system config initializers)
 ssh_options[:forward_agent] = true
 
 namespace :deploy do
-  # нужен еще один симлинк - на каталог с файлами.
-  task :after_finalize_update do
-    run "ln -sf #{shared_path}/ext #{latest_release}/public/ext; true"
-    run "ln -sf #{shared_path}/config/* #{latest_release}/config/; true"
-    run "ln -sf #{shared_path}/initializers/* #{latest_release}/config/initializers/; true"
+  task :symlink_shared_configs do
+      run "ln -sf #{shared_path}/config/* #{latest_release}/config/; true"
+      run "ln -sf #{shared_path}/initializers/* #{latest_release}/config/initializers/; true"
   end
+  after "deploy:finalize_update", "deploy:symlink_shared_configs"
 end
