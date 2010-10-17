@@ -24,6 +24,10 @@ class Recommendation
     segments.sum(&:flights)
   end
 
+  def layovers?
+    segments.any?(&:layovers?)
+  end
+
   def sellable?
     segments.map(&:marketing_carrier).all? &:aviacentr
   end
