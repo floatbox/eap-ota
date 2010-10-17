@@ -2,7 +2,7 @@ class Recommendation
 
   include KeyValueInit
 
-  attr_accessor :prices, :variants, :price_total, :additional_info, :validating_carrier_iata, :cabins, :booking_classes
+  attr_accessor :prices, :variants, :price_total, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source
 
   def validating_carrier
     validating_carrier_iata && Airline[validating_carrier_iata]
@@ -44,6 +44,14 @@ class Recommendation
     recs.select(&:sellable?).min_by(&:minimal_duration)
   end
 
+  def self.merge left, right
+    # работает только пока signature не учитывает sources
+    merged = left | right
+    (merged - left).each {|r| r.source = 'right' }
+    (merged - right).each {|r| r.source = 'left' }
+    merged
+  end
+
   def self.load_from_cache(recommendation_number)
     # shouldn be neccessary, no?
     require 'segment'
@@ -81,7 +89,7 @@ class Recommendation
 
   # comparison, uniquiness, etc.
   def signature
-    [price_total, variants]
+    [validating_carrier_iata, price_total, variants]
   end
 
   def hash

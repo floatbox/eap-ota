@@ -12,7 +12,7 @@ class PricerController < ApplicationController
         unless @search.nonstop?
           recommendations_nonstop = PricerForm.new( params[:search].merge(:nonstop => true)).search
           # только новые
-          @recommendations |= recommendations_nonstop
+          @recommendations = Recommendation.merge(@recommendations, recommendations_nonstop)
         end
         @recommendations = @recommendations.sort_by(&:price_total)
         # все - временное
