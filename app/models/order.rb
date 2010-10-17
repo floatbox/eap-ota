@@ -2,7 +2,6 @@ class Order < ActiveRecord::Base
   validates_presence_of :email#, :phone
   
   def recommendation= recommendation
-    debugger
     self.price_total = recommendation.price_total
     self.price_base = recommendation.price_base
     if c = recommendation.commission

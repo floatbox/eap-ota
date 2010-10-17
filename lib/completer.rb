@@ -56,7 +56,7 @@ class Completer
   def iata_from_name(name)
     # FIXME перенести отсюда в фильтр например
     scan_eq(name) do |record|
-      return record.code if record.type == 'city' || record.type == 'airport'
+      return record.code if record.type == 'city' || record.type == 'airport' || record.type == 'country'
     end
     nil
   end

@@ -42,11 +42,21 @@
   %requestedSegmentRef
     %segRef 1
   %departureLocalization
-    %departurePoint
-      %locationId= from_iata
+    -if from_iata.length == 3
+      %departurePoint
+        %locationId= from_iata
+    -else
+      - Country.main_city_iatas(from_iata).each do |code|
+        %depMultiCity
+          %locationId= code
   %arrivalLocalization
-    %arrivalPointDetails
-      %locationId= to_iata
+    -if to_iata.length == 3
+      %arrivalPointDetails
+        %locationId= to_iata
+    -else
+      - Country.main_city_iatas(to_iata).each do |code|
+        %arrivalMultiCity
+          %locationId= code
   %timeDetails
     %firstDateTimeDetail
       %date= date1
@@ -55,11 +65,21 @@
     %requestedSegmentRef
       %segRef 2
     %departureLocalization
-      %departurePoint
-        %locationId= to_iata
+      -if to_iata.length == 3
+        %departurePoint
+          %locationId= to_iata
+      -else
+        - Country.main_city_iatas(to_iata).each do |code|
+          %depMultiCity
+            %locationId= code
     %arrivalLocalization
-      %arrivalPointDetails
-        %locationId= from_iata
+      -if from_iata.length == 3
+        %arrivalPointDetails
+          %locationId= from_iata
+      -else
+        - Country.main_city_iatas(from_iata).each do |code|
+          %arrivalMultiCity
+            %locationId= code
     %timeDetails
       %firstDateTimeDetail
         %date= date2

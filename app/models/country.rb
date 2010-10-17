@@ -31,7 +31,12 @@ class Country < ActiveRecord::Base
     end
     url
   end
- 
+  
+  def self.main_city_iatas (code)
+    country = Country.find_by_alpha2(code)
+    country.cities.all(:order => 'importance DESC', :limit => 5).every.iata
+  end
+  
   def self.options_for_nationality_select
     [ ['', [['Россия', 170]]],
       [ '&mdash;&mdash;&mdash;&mdash;',
