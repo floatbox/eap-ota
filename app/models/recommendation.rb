@@ -28,8 +28,8 @@ class Recommendation
     segments.map(&:marketing_carrier).all? &:aviacentr
   end
 
-  def bullshit?
-    flights.any? {|f| f.equipment_type.engine_type == 'train' }
+  def ground?
+    flights.any? {|f| %W(train bus).include?(f.equipment_type.engine_type) }
   end
 
   def minimal_duration

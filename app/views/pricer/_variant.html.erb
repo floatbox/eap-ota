@@ -31,7 +31,9 @@
             <span class="b-pseudo collapse"><u>Скрыть подробности</u></span>
         </td>
         <td class="rules" colspan="3">
-            <%= 'Поезд' if recommendation.bullshit? %>
+            <% if recommendation.ground? %>
+              <span style="color:red">наземный участок.</span>
+            <% end %>
             <%= 'Не можем продать' unless recommendation.sellable? %>
             <% if recommendation.commission %>
               <%= recommendation.commission.carrier %>
