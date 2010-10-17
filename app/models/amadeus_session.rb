@@ -76,8 +76,16 @@ class AmadeusSession < ActiveRecord::Base
   # для кронтасков, скоростью не блещет
   # TODO сделать logout для старых сессий
   def self.housekeep
-    stale.delete_all
+    stale.destroy_all
     (MAX_SESSIONS-count).times { increase_pool }
+  end
+
+  def destroy
+    logger.debug "Signing out amadeus session #{token}"
+    super
+    Amadeus.security_sign_out(self)
+  rescue Handsoap::Fault
+    # it's ok
   end
 
 end
