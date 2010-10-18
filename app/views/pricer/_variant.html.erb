@@ -39,7 +39,10 @@
               <%= recommendation.commission.carrier %>
               <%= recommendation.commission.agent %>
               <%= recommendation.commission.subagent %>
-              <%= recommendation.markup %>р.
+              (<%= recommendation.markup %>р.
+              <% unless recommendation.extra == 0 %>
+               + <%= recommendation.extra %>р.
+             <% end %>)
             <% else %>
               <%= recommendation.validating_carrier_iata %><span style="color:red">???</span>
             <% end %>

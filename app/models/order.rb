@@ -8,7 +8,8 @@ class Order < ActiveRecord::Base
       self.commission_carrier = c.carrier
       self.commission_agent = c.agent
       self.commission_subagent = c.subagent
-      self.markup = c.markup(recommendation.price_base)
+      self.markup = recommendation.markup
+      self.extra = recommendation.extra
     end
   end
   

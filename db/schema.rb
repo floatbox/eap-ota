@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101017172354) do
+ActiveRecord::Schema.define(:version => 20101018085347) do
 
   create_table "airlines", :force => true do |t|
     t.string   "en_shortname"
@@ -65,21 +65,10 @@ ActiveRecord::Schema.define(:version => 20101017172354) do
 
   create_table "amadeus_commissions", :force => true do |t|
     t.integer  "airline_id"
-    t.float    "value",                     :default => 0.0,   :null => false
-    t.boolean  "percentage",                :default => false, :null => false
+    t.float    "value",      :default => 0.0,   :null => false
+    t.boolean  "percentage", :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "mvl"
-    t.boolean  "vvl"
-    t.boolean  "interline_with_company"
-    t.boolean  "interline_without_company"
-    t.string   "booking_class"
-    t.integer  "to_city_id"
-    t.integer  "from_city_id"
-    t.integer  "include_city_id"
-    t.integer  "to_country_id"
-    t.integer  "from_country_id"
-    t.integer  "include_country_id"
   end
 
   create_table "amadeus_sessions", :force => true do |t|
@@ -183,6 +172,7 @@ ActiveRecord::Schema.define(:version => 20101017172354) do
     t.string   "commission_agent"
     t.string   "commission_subagent"
     t.integer  "markup"
+    t.integer  "extra"
   end
 
   create_table "presets", :force => true do |t|

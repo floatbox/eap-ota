@@ -13,11 +13,11 @@ class Recommendation
   end
   
   def price_with_payment_commission
-    price_total + payment_commission
+    (price_total + extra) + payment_commission
   end
   
   def payment_commission
-    (price_total * 0.028).ceil
+    ((price_total + extra) * 0.028).ceil
   end
 
   def segments
@@ -83,6 +83,21 @@ class Recommendation
 
   def markup
     commission.markup(price_base) if commission
+  end
+
+  # надеюсь, никто его не дернет до выставления всех остальных параметров
+  def extra
+    ajust_extra! if @extra.nil?
+    @extra
+  end
+
+  def ajust_extra!
+    # если меньше 350 рублей, то три процента сверху
+    if (markup||0) < 350
+      @extra = price_base * 0.03
+    else
+      @extra = 0
+    end
   end
 
   def summary
