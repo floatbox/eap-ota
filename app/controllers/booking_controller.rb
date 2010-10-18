@@ -41,14 +41,14 @@ class BookingController < ApplicationController
       result = Payture.new.block(@recommendation.price_with_payment_commission, @card, :order_id => @order_id)
       if result["Success"] == "True"
         @message = "Success"
-        a_session = AmadeusSession.increase_pool(true)
+        a_session = AmadeusSession.increase_pool
         air_sfr_xml = Amadeus.soap_action('Air_SellFromRecommendation', OpenStruct.new(:segments => @variant.segments, :people_count => @people.count), a_session)
         doc = Amadeus.pnr_add_multi_elements(PNRForm.new(
-        :flights => [],
-        :people => @people,
-        :phone => '1236767',
-        :email => @order.email,
-        :validating_carrier => @recommendation.validating_carrier.iata
+          :flights => [],
+          :people => @people,
+          :phone => '1236767',
+          :email => @order.email,
+          :validating_carrier => @recommendation.validating_carrier.iata
         ), a_session)
         @order.pnr_number = doc.xpath('//r:controlNumber').to_s
         if @order.pnr_number

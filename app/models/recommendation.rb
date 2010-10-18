@@ -146,7 +146,12 @@ pg.xpath('r:fareInfoGroup/r:fareAmount/r:otherMonetaryDetails[r:typeQualifier="E
       }
     return nil if recommendation.price_total == 0
     # FIXME сломается, когда появятся инфанты
-    air_sfr_xml = Amadeus.soap_action('Air_SellFromRecommendation', OpenStruct.new(:segments => segments, :people_count => (people_counts.values.sum)))
+    a_session = AmadeusSession.book
+    air_sfr_xml = Amadeus.soap_action('Air_SellFromRecommendation', 
+      OpenStruct.new(:segments => segments, :people_count => (people_counts.values.sum)),
+      a_session
+    )
+    a_session.destroy
     #FIXME нужно разобраться со statusCode - когда все хорошо, а когда - нет
     return nil if air_sfr_xml.xpath('//r:segmentInformation/r:actionDetails/r:statusCode').every.to_s.uniq != ['OK']
     air_sfr_xml.xpath('//r:itineraryDetails').each_with_index {|s, i|
