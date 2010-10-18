@@ -14,6 +14,8 @@ class PricerController < ApplicationController
           # только новые
           @recommendations = Recommendation.merge(@recommendations, recommendations_nonstop)
         end
+        # автобусы и поезда
+        @recommendations.delete_if(&:ground?)
         @recommendations = @recommendations.sort_by(&:price_total)
         # все - временное
         @cheap_recommendation = Recommendation.cheap(@recommendations)
