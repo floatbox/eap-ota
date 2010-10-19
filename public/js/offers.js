@@ -96,8 +96,8 @@ load: function(params, title) {
         title: title,
         loading: true
     };
-    this.update.request = $.get("/pricer/", params, function(s) {
-        if (self.update.aborted) return;
+    this.update.request = $.get("/pricer/", params, function(s, status, request) {
+        if (self.update.request != request) return;
         var visible = self.loading.is(':visible');
         self.update.loading = false;
         if (typeof s == "string") {
@@ -163,6 +163,7 @@ processUpdate: function() {
     var self = this, u = this.update;
     $('#offers-collection').remove();
     $('#offers-all').append(u.content || '');
+    delete(u.content);
     if ($('#offers-all .offer').length) {
         this.updateFilters();
         this.parseResults();
@@ -173,7 +174,6 @@ processUpdate: function() {
         this.variants = [];
         this.items = [];
     }
-    this.update = {};
     if (this.items.length) {
         this.applySort('price');    
         if (this.maxLayovers) {
@@ -225,6 +225,7 @@ showVariant: function(el) {
 updateFilters: function() {
     this.filterable = false;
     var data = $.parseJSON($('#offers-collection').attr('data-filters'));
+    $('#offers-reset-filters').addClass('g-none');
     $('#offers-filter .flight').each(function() {
         var items = $('p', this).trigger('update', data);
         var active = items.trigger('toggle').filter(':not(.g-none)');
