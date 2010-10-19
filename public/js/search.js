@@ -33,16 +33,19 @@ subscribe: function(source, key, handler) {
     });
 },
 validate: function(data) {
-    var self = this, data = $.extend({
-        'search_type': 'travel',
-        'day_interval': 1,
-        'debug': $('#sdmode').get(0).checked ? 1 : 0
-    }, this.fields);
-
-    // Временная проверка, пока нет распознавания дат
-    if (!(data.to && data.from && data.date1 && (data.date2 || !data.rt))) {
-        self.toggle(false);
-        return;
+    var self = this;
+    if (!data) {
+        var data = $.extend({
+            'search_type': 'travel',
+            'day_interval': 1,
+            'debug': $('#sdmode').get(0).checked ? 1 : 0
+        }, this.fields);
+    
+        // Временная проверка, пока нет распознавания дат
+        if (!(data.to && data.from && data.date1 && (data.date2 || !data.rt))) {
+            self.toggle(false);
+            return;
+        }
     }
     
     if (this.request && this.request.abort) {
@@ -61,7 +64,11 @@ validate: function(data) {
     }, function(result) {
         self.toggle(result.valid);
         self.request = undefined;
-        if (result.valid) app.offers.load({search: data}, result.human);
+        if (result.query_key) {
+            app.offers.load({query_key: query_key}, result.human);
+        } else if (result.valid) {
+            app.offers.load({search: data}, result.human);
+        }
     });
 },
 toggle: function(mode) {

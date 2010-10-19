@@ -9,6 +9,7 @@ init: function() {
     var self = this;
     this.selected = [];
     this.selectedLimit = 2;
+    this.title = $('h2', this.el);
     this.makeDates();
     this.initDates();
     this.scroller = new app.CalendarScroller(this);
@@ -17,7 +18,9 @@ init: function() {
         self.selected.length = 0;
         self.update();
     });
-    this.resetButton = $('<div class="reset-button"></div>').appendTo(this.container).click(function() {
+    this.resetButton = $('<div class="reset-button"></div>').appendTo(this.el);
+    this.resetButton.css('margin-top', this.container.offset().top - this.el.offset().top);
+    this.resetButton.click(function() {
         self.selected.length = 0;
         self.update();
     });
@@ -30,7 +33,7 @@ makeDates: function() {
     var actend = today.clone().shiftMonthes(6);
     var abt = today.getTime();
     var aet = actend.getTime() - 1;
-    var end = actend.shiftDays(15 - (actend.getDay() || 7)).getTime();
+    var end = actend.shiftDays((actend.getDay() == 1 ? 8 : 15) - (actend.getDay() || 7)).getTime();
     var month = undefined, dcounter = 0;
     while (curt < end) {
         var date = curd.getDate();
@@ -195,38 +198,53 @@ dragSelected: function(e) {
 update: function() {
     this.fillSelected();
     this.highlight();
-    this.scroller.updatePreview(this.selected);
     var dates = {}, last;
-    for (var i = 0, im = this.selected.length; i < im; i++) {
+    for (var i = this.selected.length; i--;) {
         var d = this.selected[i];
         if (d !== undefined) {
             last = this.dates.eq(d);
             dates['date' + (i + 1)] = last.attr('data-dmy');
         }
     }
+    var items = this.selected.compact();
+    var title = 'Выберите даты:';
+    if (items.length > 1) {
+        var damount = items.last() - items[0] + 1;
+        title = app.utils.plural(damount, ['Выбран ', 'Выбрано ', 'Выбрано ']) + damount + app.utils.plural(damount, [' день', ' дня', ' дней']) + ':';
+    } else if (items.length) {
+        title = 'Выбрано ' + this.dates.eq(items[0]).text() + ':';
+    }
+    this.title.text(title);
+    this.scroller.updatePreview(items);
     this.showResetButton();
     app.search.update(dates, this);
 },
 showResetButton: function() {
-    var last, items = this.selected;
-    for (var i = items.length; i--;) {
-        if (items[i]) {
-            last = this.dates.eq(items[i]);
-            break;
+    var offset, items = this.selected.compact();
+    if (items.length) {
+        var loffset = this.dates.eq(items.last()).position();
+        if (loffset.top > -1) {
+            if (loffset.top < this.csize.h) {
+                offset = loffset;
+            } else if (items.length > 1) {
+                var foffset = this.dates.eq(items[0]).position();
+                if (foffset.top < this.csize.h) offset = {
+                    left: this.csize.w - this.dsize.w,
+                    top: this.csize.h - this.dsize.h
+                };
+            }
         }
     }
-    if (last) {
-        var offset = last.position();
-        if (offset.top > this.csize.h - 1) offset = {
-            left: this.csize.w - this.dsize.w,
-            top: this.csize.h - this.dsize.h
-        };
-        this.resetButton.css({
+    var rb = this.resetButton;
+    if (offset) {
+        rb.css({
             'left': offset.left + this.dsize.w - 15,
-            'top': offset.top + this.container.scrollTop() - 7
+            'top': offset.top - 7
         }).show();
+        rb.visible = true;
     } else {
-        this.resetButton.hide();
+        rb.visible = false;
+        rb.hide();
     }
 },
 fillSelected: function() {
@@ -288,16 +306,20 @@ snap: function(y) {
 },
 scrollTo: function(nst) {
     var self = this, el = this.el, cst = el.scrollTop();
-    if (cst == nst) return;
-    $({st: cst}).animate({st: nst}, {
-        duration: 100 + Math.round(Math.abs(cst - nst) / 3),
-        step: function() {
-            el.scrollTop(this.st);
-        },
-        complete: function() {
-            el.scrollTop(nst);
-        }
-    });
+    if (cst == nst) {
+        self.parent.showResetButton();
+    } else {
+        $({st: cst}).animate({st: nst}, {
+            duration: 100 + Math.round(Math.abs(cst - nst) / 3),
+            step: function() {
+                el.scrollTop(this.st);
+            },
+            complete: function() {
+                el.scrollTop(nst);
+                self.parent.showResetButton();
+            }
+        });
+    }
 },
 initNative: function() {
     var self = this, atimer, pst;
@@ -312,6 +334,11 @@ initNative: function() {
         if (self.active) {
             self.display(cst);
             atimer = setTimeout(align, 500);
+        }
+        var rb = self.parent.resetButton;
+        if (rb.visible) {
+            rb.visible = false;
+            rb.hide();        
         }
     });
 },
@@ -383,15 +410,14 @@ initScrollbar: function() {
         self.scrollTo(self.snap(x.constrain(0, sbm) / sbf));
     });     
 },
-updatePreview: function(selected) {
+updatePreview: function(items) {
     this.preview.html('');
-    var items = selected.compact();
     for (var i = items.length; i--;) {
         $('<div class="date"></div>').css('left', Math.round(items[i] * this.factor)).appendTo(this.preview);
     }
     if (items.length > 1) {
         var pl = Math.round(items[0] * this.factor);
-        var pw = Math.round((items[items.length - 1] - items[0]) * this.factor);
+        var pw = Math.round((items.last() - items[0]) * this.factor);
         $('<div class="period"></div>').css('left', pl).width(pw).prependTo(this.preview);
     }
 }
