@@ -198,13 +198,10 @@ dragSelected: function(e) {
 update: function() {
     this.fillSelected();
     this.highlight();
-    var dates = {}, last;
-    for (var i = this.selected.length; i--;) {
+    var dates = {};
+    for (var i = Math.max(this.selected.length, 2); i--;) {
         var d = this.selected[i];
-        if (d !== undefined) {
-            last = this.dates.eq(d);
-            dates['date' + (i + 1)] = last.attr('data-dmy');
-        }
+        dates['date' + (i + 1)] = d !== undefined ? this.dates.eq(d).attr('data-dmy') : '';
     }
     var items = this.selected.compact();
     var title = 'Выберите даты:';
@@ -306,6 +303,7 @@ snap: function(y) {
 },
 scrollTo: function(nst) {
     var self = this, el = this.el, cst = el.scrollTop();
+    self.toggleArrows();
     if (cst == nst) {
         self.parent.showResetButton();
     } else {
@@ -317,6 +315,7 @@ scrollTo: function(nst) {
             complete: function() {
                 el.scrollTop(nst);
                 self.parent.showResetButton();
+                self.toggleArrows();                
             }
         });
     }
@@ -344,24 +343,40 @@ initNative: function() {
 },
 initArrows: function() {
     var self = this, stimer, cst, dir, vel;
-    $('.scrollfw, .scrollbw', this.parent.el).mousedown(function(event) {
-        event.preventDefault();
-        dir = $(this).is(".scrollfw") ? 1 : -1;
+    var scollStep = function() {
+        if (vel < 15) vel++;
+        self.el.scrollTop(cst + dir * vel);
+        cst = self.el.scrollTop();
+        self.display(cst);
+    };
+    var startScroll = function(d) {
         cst = self.el.scrollTop();
         vel = 0;
-        stimer = setInterval(function() {
-            if (vel < 15) vel++;
-            self.el.scrollTop(cst + dir * vel);
-            cst = self.el.scrollTop();
-            self.display(cst);
-        }, 30);
-    }).bind("mouseout mouseup", function() {
+        dir = d;
+        stimer = setInterval(scollStep, 30);
+    };
+    var stopScroll = function() {
         clearInterval(stimer);
-        if (dir) {
-            self.scrollTo(self.snap(cst + (30 - vel) * dir));       
-            dir = 0;
-        }
+        if (dir) self.scrollTo(self.snap(cst + (30 - vel) * dir));       
+        dir = 0;
+    };
+    this.scrollbw = $('.scrollbw', this.parent.el).mousedown(function(event) {
+        event.preventDefault();
+        startScroll(-1);
     });
+    this.scrollfw = $('.scrollfw', this.parent.el).mousedown(function(event) {
+        event.preventDefault();
+        startScroll(1);
+    });
+    this.scrollbw.bind("mouseout mouseup", stopScroll);
+    this.scrollfw.bind("mouseout mouseup", stopScroll);
+    this.stmax = this.el.get(0).scrollHeight - this.el.height();
+    this.toggleArrows();
+},
+toggleArrows: function() {
+    var st = this.el.scrollTop();
+    this.scrollbw.toggleClass('enabled', st > 0);
+    this.scrollfw.toggleClass('enabled', st < this.stmax);
 },
 initTimeline: function() {
     var self = this, dates = $('ul.month li', this.parent.container);

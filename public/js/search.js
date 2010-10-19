@@ -19,6 +19,7 @@ update: function(data, source) {
     if (source && updated) {
         var self = this;
         clearTimeout(this.vtimer);
+        this.toggle(false);
         this.vtimer = setTimeout(function() {
             self.validate();
         }, 750);
@@ -34,6 +35,7 @@ subscribe: function(source, key, handler) {
 },
 validate: function(data) {
     var self = this;
+    this.toggle(false);
     if (!data) {
         var data = $.extend({
             'search_type': 'travel',
@@ -43,32 +45,32 @@ validate: function(data) {
     
         // Временная проверка, пока нет распознавания дат
         if (!(data.to && data.from && data.date1 && (data.date2 || !data.rt))) {
-            self.toggle(false);
             return;
         }
     }
-    
+        
     if (this.request && this.request.abort) {
         this.request.abort();
-        this.request = undefined;
     }
-    var ao = app.offers, u = ao.update;
-    if (u.request) {
-        u.aborted = true;
-        if (u.request.abort) u.request.abort();
-        ao.container.addClass('g-none');
-        ao.toggle('empty');
+    if (app.offers.loading.is(':visible')) {
+        app.offers.container.addClass('g-none');
+    }
+    var au = app.offers.update;
+    if (au && au.request && au.request.abort) {
+        au.request.abort();
+        delete(au.request);
     }
     this.request = $.get("/pricer/validate/", {
         search: data
-    }, function(result) {
-        self.toggle(result.valid);
-        self.request = undefined;
+    }, function(result, status, request) {
+        if (request != self.request) return;
         if (result.query_key) {
             app.offers.load({query_key: query_key}, result.human);
         } else if (result.valid) {
             app.offers.load({search: data}, result.human);
         }
+        self.toggle(result.valid);
+        delete(self.request);
     });
 },
 toggle: function(mode) {
