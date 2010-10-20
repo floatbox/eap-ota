@@ -1,5 +1,5 @@
 class Pnr
-  attr_accessor :number, :flights, :passengers, :phone, :email
+  attr_accessor :number, :flights, :passengers, :phone, :email, :details
   
   def self.get_by_number number
     xml = Amadeus.pnr_retrieve(OpenStruct.new(:number => number, :debug => false))
@@ -30,6 +30,21 @@ class Pnr
     self.passengers = xml.xpath('//r:travellerInformation').map{|ti| Person.new(:first_name => (ti / './r:passenger/r:firstName').to_s, :last_name => (ti / './r:traveller/r:surname').to_s)}
     self.email = xml.xpath('//r:freetextDetail[r:type="P02"]/../r:longFreetext').to_s
     self.phone = xml.xpath('//r:freetextDetail[r:type=3]/../r:longFreetext').to_s
+    self.details = parse_details(xml)
+  end
+
+  def parse_details(xml)
+    res = []
+    xml.xpath('//r:dataElementsIndiv').each do |elem|
+      res << [elem.xpath('./r:elementManagementData/r:segmentName').to_s,
+        'type: ' + elem.xpath('./r:otherDataFreetext/r:freetextDetail/r:type').to_s.to_s,#иначе .to_s иногда возвращает nil
+        elem.xpath('./r:otherDataFreetext/r:longFreetext').to_s
+      ].join(' ')
+      unless  elem.xpath('./r:otherDataFreetext/r:longFreetext').to_s
+        res[-1] += (elem.children.every.to_xml.map{|x| Hash.from_xml(x)}).to_json
+      end 
+    end
+    res.join('<br />')
   end
   
   def parse_prices(xml)

@@ -49,6 +49,10 @@ Function.prototype.extend = function(p) {
 
 //////// Array //////////////
 
+Array.prototype.last = function() {
+    return this[this.length - 1];
+};
+
 Array.compareInt = function(a, b) {
     return (a - b);
 };
