@@ -143,9 +143,10 @@ class Amadeus < Handsoap::Service
   end
 
   def pnr_retrieve(args, session=nil)
-    AmadeusSession.with_session(session) do
-      soap_action 'PNR_Retrieve', args
+    ::AmadeusSession.with_session(session) do
+      r = soap_action 'PNR_Retrieve', args
       soap_action 'PNR_AddMultiElements', OpenStruct.new(:ignore => true)
+      r
     end
   end
 
