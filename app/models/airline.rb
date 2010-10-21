@@ -32,4 +32,27 @@ class Airline < ActiveRecord::Base
     ru_shortname.presence || en_shortname
   end
 
+  # TODO перенести в amadeus.rb или куда-то в более нейтральное место
+  # TODO выкачать/закэшировать пакетно
+  def fetch_interline_iatas
+    AmadeusSession.with_session do |s|
+      res = Amadeus.cmd("TGAD-#{iata}", s)
+      res.sub!(/^(.*)\n/, '');
+      if $1 == '/'
+        # нет такого перевозчика или интерлайна
+        # FIXME сделать класс для эксепшнов
+        raise res.strip
+      end
+      # добываем следующие страницы, если есть
+      while res.sub! /\)\s*\Z/, ''
+        res << Amadeus.cmd('MD', s)[2..-1]
+      end
+      res
+    end \
+      .split(/\s+-\s+/) \
+      .collect {|s| s.split(' ', 2) } \
+      .select {|airline, agreement| agreement['E']} \
+      .collect {|airline,_| airline}
+  end
+
 end
