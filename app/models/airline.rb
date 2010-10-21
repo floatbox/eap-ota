@@ -49,9 +49,9 @@ class Airline < ActiveRecord::Base
       end
       res
     end \
-      .split(/\s+-\s+/) \
+      .split(/\s*-\s+/) \
       .collect {|s| s.split(' ', 2) } \
-      .select {|airline, agreement| agreement['E']} \
+      .select {|airline, agreement| agreement['E'] && !agreement['*']} \
       .collect {|airline,_| airline}
   end
 
