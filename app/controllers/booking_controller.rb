@@ -38,6 +38,18 @@ class BookingController < ApplicationController
     @order.recommendation = @recommendation
     @order_id = 'rh' + @recommendation_number.to_s + Time.now.sec.to_s
     if ([@card, @order] + @people).all?(&:valid?)
+      pnr_number = @order.create_booking(@recommendation, @card, @order_id, @people)
+      if pnr_number
+        redirect_to pnr_form_path(pnr_number)
+        return
+      elsif @order.errors[:pnr_number]
+        render :text => 'Ошибка при создании PNR'
+        return
+      end
+    end
+    @numbers = %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}
+    render :action => :index
+=begin
       result = Payture.new.block(@recommendation.price_with_payment_commission, @card, :order_id => @order_id)
       if result["Success"] == "True"
         @message = "Success"
@@ -67,13 +79,10 @@ class BookingController < ApplicationController
         @message = result["ErrCode"]
         render :text => 'Ошибка при оплате ' + @message
       end
-      
-    else
-      @people_count = {:adults => params[:adults].to_i, :children => params[:children].to_i}
-      @numbers = %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}
-      render :action => :index
-    end
-=begin
+
+
+
+
     @order_id = params[:order_id]
     @amount = params[:amount]
 
