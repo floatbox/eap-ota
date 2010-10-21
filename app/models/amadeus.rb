@@ -166,6 +166,15 @@ class Amadeus < Handsoap::Service
     soap_action 'Fare_InformativePricingWithoutPNR', args, session
   end
 
+  def command_cryptic(args, session = nil )
+    soap_action 'Command_Cryptic', args, session
+  end
+
+  def cmd(command, session = nil)
+    response = soap_action('Command_Cryptic', OpenStruct.new(:command => command, :debug => false), session)
+    response.xpath('//r:textStringDetails').to_s
+  end
+
   def soap_action(action, args = nil, session = nil)
     yml = YAML::load(File.open(RAILS_ROOT+'/config/soap_actions.yaml'))
     response = invoke_rendered action,

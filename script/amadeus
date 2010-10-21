@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+require File.expand_path('../../config/environment',  __FILE__)
+
+require 'readline'
+prompt = 'amadeus > '
+session = AmadeusSession.book
+while !(command_line = Readline.readline(prompt, true)).nil?
+  command_line.chomp!
+  break if command_line == 'q'
+  puts Amadeus.cmd(command_line, session)
+end
+session.destroy
