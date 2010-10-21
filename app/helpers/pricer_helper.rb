@@ -50,7 +50,7 @@ module PricerHelper
   end
   
   def layovers_in flights
-    flights.map {|flight| flight.arrival.city.case_in.gsub(/ /, '&nbsp;') }.to_sentence
+    flights.map {|flight| flight.arrival.city.case_in.gsub(/ /, '&nbsp;') }.to_sentence(:last_word_connector => ' и&nbsp;')
   end
   
   def segments_departure variant
