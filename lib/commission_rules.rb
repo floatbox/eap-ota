@@ -8,11 +8,30 @@ module CommissionRules
 
   attr_accessor :carrier, :agent, :subagent, :disabled, :interline,
     :domestic, :international, :klass, :departure, :departure_country,
-    :check
+    :check, :examples
+
+  KLASSES = {
+    :first => %W(P F A),
+    :business => %W(D I Z J C),
+    :economy => %W(B H K L M N Q T V X W S Y)
+  }
 
   def applicable? recommendation
-    return unless carrier == recommendation.validating_carrier_iata
+    #return unless carrier == recommendation.validating_carrier_iata
+    return unless applicable_classes?(recommendation)
+    return if disabled
     true
+  end
+
+  def applicable_classes?(recommendation)
+    return true unless klass
+    # symbol(s)?
+    if Array(klass)[0].is_a? Symbol
+      letters = Array(klass).map {|k| KLASSES[k]}.flatten
+    else
+      letters = klass.split('')
+    end
+    (recommendation.booking_classes - letters).blank?
   end
 
   def markup(tariff)
@@ -34,7 +53,7 @@ module CommissionRules
   module ClassMethods
 
     mattr_accessor :commissions
-    self.commissions = []
+    self.commissions = {}
 
     def carrier carrier
       if carrier =~ /\A..\Z/
@@ -49,7 +68,11 @@ module CommissionRules
     # один аргумент, разделенный пробелами или /; или два аргумента
     def commission *args, &block
       if args.size == 1
-        vals = args[0].split(/[ \/]+/)
+        if args == [0]
+          vals = [0, 0]
+        else
+          vals = args[0].split(/[ \/]+/)
+        end
       else
         vals = args
       end
@@ -64,7 +87,8 @@ module CommissionRules
         Definition.new(commission).instance_eval(&block)
       end
 
-      commissions << commission
+      commissions[@carrier] ||= []
+      commissions[@carrier] << commission
       commission
     end
 
@@ -77,7 +101,7 @@ module CommissionRules
     end
 
     def find_for(recommendation)
-      commissions.find {|c| c.applicable?(recommendation) }
+      (commissions[recommendation.validating_carrier_iata] || []).find {|c| c.applicable?(recommendation) }
     end
   end
 
@@ -92,6 +116,8 @@ module CommissionRules
         @commission.send :"#{sym}=", block
       elsif args.empty?
         @commission.send :"#{sym}=", true
+      elsif args.size > 1
+        @commission.send :"#{sym}=", args
       else
         @commission.send :"#{sym}=", *args
       end
