@@ -1,7 +1,7 @@
 <% common_cabin = segment_cabins && segment_cabins.length == 1 && segment_cabins[0] %>
 <tr<%= ' class="ret"' if segment_counter > 0 %>>
     <td></td>
-    <th colspan="5"><strong class="direction"><%= segment_counter == 0 ? 'Перелёт туда' : 'Обратный перелёт' %><% if common_cabin %> <span class="cabin"><%= human_cabin_ins(common_cabin) %></span><% end %></strong><% if segment.layovers? %> с <%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %><% end %></th>
+    <th colspan="5"><strong class="direction"><%= segment_counter == 0 ? 'Перелёт туда' : 'Обратный перелёт' %><% if common_cabin %> <span class="cabin"><%= human_cabin_ins(common_cabin) %></span><% end %></strong><% if segment.layovers? %> с&nbsp;<%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %><% end %></th>
 </tr>
 <% segment.flights.each_with_index do |flight, flight_index| %>
 <% next_date_arrival = (flight_index == segment.flights.length - 1 && flight.arrival_date != segment.flights[0].departure_date) %>
@@ -40,7 +40,7 @@
             <!--<p>CEST</p>-->
         </div>
         <div class="info">
-            <h6>Прилёт <%= flight.arrival.city.case_to %><%= ' на следующий день' if next_date_arrival %></h6>
+            <h6>Прилёт <%= flight.arrival.city.case_to %><%= ' на&nbsp;следующий день' if next_date_arrival %></h6>
             <p>Аэропорт <%= flight.arrival_name %><% if flight.arrival_term %>, терминал&nbsp;<%= flight.arrival_term %><% end %></p>
             <% layover = segment.layover_durations[flight_index] %>
             <% if layover %>

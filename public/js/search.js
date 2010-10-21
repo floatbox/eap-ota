@@ -1,6 +1,7 @@
 $.extend(app.search, {
 tools: {},
 fields: {},
+active: true,
 update: function(data, source) {
     var updated = false;
     for (var key in data) {
@@ -16,7 +17,7 @@ update: function(data, source) {
             updated = true;
         }
     }
-    if (source && updated) {
+    if (updated && this.active) {
         var self = this;
         clearTimeout(this.vtimer);
         this.toggle(false);
@@ -33,22 +34,52 @@ subscribe: function(source, key, handler) {
         handler: handler
     });
 },
-validate: function(data) {
+validate: function(qkey) {
     var self = this;
+    var data = qkey ? {query_key: qkey} : this.getValues();
     this.toggle(false);
-    if (!data) {
-        var data = $.extend({
-            'search_type': 'travel',
-            'day_interval': 1,
-            'debug': $('#sdmode').get(0).checked ? 1 : 0
-        }, this.fields);
-    
-        // Временная проверка, пока нет распознавания дат
-        if (!(data.to && data.from && data.date1 && (data.date2 || !data.rt))) {
-            return;
+    if (!data) return;
+    this.abortRequests();
+    this.request = $.get("/pricer/validate/", data, function(result, status, request) {
+        if (request != self.request) return;
+        if (result.valid) {
+            if (result.search) self.setValues(result.search);
+            app.offers.load(data, result.human);
+            if (data.query_key) {
+                app.offers.show();
+            } else {
+                self.toggle(true);
+            }
         }
+        delete(self.request);
+    });
+},
+getValues: function() {
+    var data = $.extend({
+        'search_type': 'travel',
+        'day_interval': 1,
+        'debug': $('#sdmode').get(0).checked ? 1 : 0
+    }, this.fields);
+    
+    // Временная проверка, пока нет распознавания дат
+    if (!(data.to && data.from && data.date1 && (data.date2 || !data.rt))) {
+        return false;
+    } else {
+        return {search: data};
     }
-        
+},
+setValues: function(data) {
+    var self = this, fields = this.fields, update = {};
+    for (var key in fields) {
+        if (data[key] !== undefined) update[key] = data[key];
+    }
+    this.active = false;
+    this.update(update);
+    setTimeout(function() {
+        self.active = true;
+    }, 100);
+},
+abortRequests: function() {
     if (this.request && this.request.abort) {
         this.request.abort();
     }
@@ -60,18 +91,6 @@ validate: function(data) {
         au.request.abort();
         delete(au.request);
     }
-    this.request = $.get("/pricer/validate/", {
-        search: data
-    }, function(result, status, request) {
-        if (request != self.request) return;
-        if (result.query_key) {
-            app.offers.load({query_key: query_key}, result.human);
-        } else if (result.valid) {
-            app.offers.load({search: data}, result.human);
-        }
-        self.toggle(result.valid);
-        delete(self.request);
-    });
 },
 toggle: function(mode) {
     $('#search-submit').toggleClass('disabled', !mode);
