@@ -173,7 +173,7 @@ module InheritViews
 
     # set the view_paths, and afterwards pass it my controller's inherit_view_paths
     def view_paths_with_inherit_views=(value)
-      returning self.view_paths_without_inherit_views=(value) do
+      (self.view_paths_without_inherit_views=(value)).tap do
         @view_paths.inherit_view_paths = controller.inherit_view_paths if (controller.inherit_views? rescue false)
       end
     end
