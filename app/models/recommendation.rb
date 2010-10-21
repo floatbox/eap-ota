@@ -135,6 +135,7 @@ class Recommendation
       }
     variant = Variant.new(:segments => segments)
     recommendation = Recommendation.new(:variants => [variant])
+    recommendation.booking_classes = variant.flights.every.class_of_service
     xml = Amadeus.fare_informative_pricing_without_pnr(OpenStruct.new(:flights => flights, :debug => false, :people_counts => people_counts))
     recommendation.price_total = 0
     recommendation.prices = [0]

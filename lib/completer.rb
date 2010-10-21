@@ -163,10 +163,10 @@ class Completer
     read_important_objects
     read_countries
     read_cities
-    read_airlines
+    #read_airlines
     #read_airplanes
     read_airports
-    read_geotags
+    #read_geotags
 
     #read_dates
     #read_months
