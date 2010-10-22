@@ -214,13 +214,20 @@
             app.offers.maxLayovers = value && value.v;
         }
     });
+    app.search.subscribe(tools.defines['changes'], 'changes', function(v) {
+        tools.defines['changes'].trigger('select', v);
+    });    
 
     // обработка класса
+    fields['cabin'] = undefined;
     tools.defines['cls'].bind('change', function() {
         var value = $(this).data('value')[0];
         app.search.update({
             'cabin': value && value.v
         }, this);
+    });
+    app.search.subscribe(tools.defines['cls'], 'cabin', function(v) {
+        tools.defines['cls'].trigger('select', v);
     });
     
     // рисуем "один взрослый"
@@ -322,6 +329,9 @@
         app.search.validate(h);
     }
     catch(e){};
+    
+    // Включение запросов валидации
+    app.search.active = true;
 
 });
 

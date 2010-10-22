@@ -156,7 +156,6 @@ toggleCollection: function(mode) {
     $('.offers-improper', context).toggleClass('g-none', mode);
 },
 updateHash: function(hash) {
-//    window.location.hash = encodeURIComponent(JSON.stringify(hash));
     window.location.hash = hash;
 },
 processUpdate: function() {
@@ -174,6 +173,7 @@ processUpdate: function() {
         this.variants = [];
         this.items = [];
     }
+
     if (this.items.length) {
         this.applySort('price');    
         if (this.maxLayovers) {
@@ -224,7 +224,7 @@ showVariant: function(el) {
 },
 updateFilters: function() {
     this.filterable = false;
-    var data = $.parseJSON($('#offers-collection').attr('data-filters'));
+    var data = $.parseJSON($('#offers-collection').attr('data-filters').replace('&amp;', '&'));
     $('#offers-reset-filters').addClass('g-none');
     $('#offers-filter .flight').each(function() {
         var items = $('p', this).trigger('update', data);

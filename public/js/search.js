@@ -1,7 +1,6 @@
 $.extend(app.search, {
 tools: {},
 fields: {},
-active: true,
 update: function(data, source) {
     var updated = false;
     for (var key in data) {
@@ -77,7 +76,7 @@ setValues: function(data) {
     this.update(update);
     setTimeout(function() {
         self.active = true;
-    }, 100);
+    }, 500);
 },
 abortRequests: function() {
     if (this.request && this.request.abort) {

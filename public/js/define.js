@@ -96,6 +96,24 @@ app.Define = function($el) {
         me.add(item);
     });
 
+    $el.bind('select', function(e, v) {
+        if (v !== undefined) {
+            var selected = [], values = {};
+            if (v instanceof Array) {
+                for (var i = v.length; i--;) values[v[i]] = true;
+            } else {
+                values[v] = true;
+            }
+            for (var i = 0, im = me.values.length; i < im; i++) {
+                var value = me.values[i];
+                if (values[value.v]) selected.push(value);
+            }
+            me.update(selected);
+        } else {
+            me.reset();
+        }
+    });
+
     $el.bind('toggle', function(e, item) {
         me.$el.toggleClass('g-none', me.values.length < 2);
     });
