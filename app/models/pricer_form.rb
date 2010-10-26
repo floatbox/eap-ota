@@ -41,11 +41,13 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   def human
     return "запрос не полон" unless valid?
     r = []
-    if from_iata && (from_location = [City[from_iata], Airport[from_iata], Country.find_by_alpha2(from_iata)].find(&:id))
-      r << from_location.case_from
+
+    locations = human_locations
+    if locations[:dpt_0]
+      r << locations[:dpt_0] 
     end
-    if to_iata && (to_location = [City[to_iata], Airport[to_iata], Country.find_by_alpha2(to_iata)].find(&:id))
-      r << to_location.case_to
+    if locations[:arv_0]
+      r << locations[:arv_0]
     end
 
     r << 'и обратно' if rt
@@ -64,6 +66,20 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     end
 
     r.join(' ')
+  end
+  
+  def human_locations
+    fl = from_iata && [City[from_iata], Airport[from_iata], Country.find_by_alpha2(from_iata)].find(&:id)
+    tl = to_iata && [City[to_iata], Airport[to_iata], Country.find_by_alpha2(to_iata)].find(&:id)
+    result = {
+      :dpt_0 => fl && fl.case_from,
+      :arv_0 => tl && tl.case_to
+    }
+    if rt
+      result[:dpt_1] = tl && tl.case_from
+      result[:arv_1] = fl && fl.case_to
+    end
+    result
   end
 
   def human_dates(d1, d2=nil)

@@ -20,6 +20,8 @@ class BookingController < ApplicationController
     @numbers = %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}
     @recommendation_number = @recommendation.hash
     Recommendation.store_to_cache(@recommendation_number, @recommendation)
+
+    render :partial => 'embedded'
   end
   
 

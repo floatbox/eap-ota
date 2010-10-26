@@ -1,6 +1,6 @@
 <% cache(:action => "index", :action_suffix => @query_key) do %>
 <% if @recommendations.present? %>
-<div id="offers-collection" data-filters="<%= html_escape(Recommendation.summary(@recommendations).to_json).gsub('&amp;', '&') %>" data-query_key="<%= @query_key %>">
+<div id="offers-collection" data-filters='<%= Recommendation.summary(@recommendations, @locations).to_json.gsub("'", '&rsquo;') %>' data-query_key="<%= @query_key %>">
     <% @recommendations.each do |recommendation| %>
     <div class="offer collapsed<%= ' multiple' if recommendation.variants.length > 1 %>" data-summary='<%= recommendation.summary.to_json %>'>
         <% different_cabins = recommendation.cabins_except(params[:search]['cabin']) %>

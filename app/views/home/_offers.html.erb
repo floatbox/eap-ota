@@ -36,25 +36,25 @@
                     <p onclick="return {name: 'dpt_time_0', title: 'время вылета', accusative: 'допустимое время вылета', anyone: 'любое', either: true, brackets: true}"><a href="#"><u>время</u></a><b></b></p>
                     <span class="conjunction">и</span>
                     <p onclick="return {name: 'dpt_airport_0', title: 'аэропорт вылета', accusative: 'подходящие аэропорты вылета', anyone: 'любой', either: true, brackets: true}"><a href="#"><u>аэропорт</u></a><b></b></p>
-                    вылета <span class="city" data-key="dpt_city_0">туда</span>,
+                    вылета <span class="city" data-location="dpt_0">туда</span>,
                 </div>
                 <div class="flight">
                     <p onclick="return {name: 'arv_time_0', title: 'время прилёта', accusative: 'допустимое время прибытия', anyone: 'любое', either: true, brackets: true}"><a href="#"><u>время</u></a><b></b></p>
                     <span class="conjunction">и</span>
                     <p onclick="return {name: 'arv_airport_0', title: 'аэропорт прилёта', accusative: 'подходящие аэропорты прибытия', anyone: 'любой', either: true, brackets: true}"><a href="#"><u>аэропорт</u></a><b></b></p>
-                    прилёта <span class="city" data-key="arv_city_0">туда</span>,
+                    прилёта <span class="city" data-location="arv_0">туда</span>,
                 </div>
                 <div class="flight">
                     <p onclick="return {name: 'dpt_time_1', title: 'время вылета', accusative: 'допустимое время вылета', anyone: 'любое', either: true, brackets: true}"><a href="#"><u>время</u></a><b></b></p>
                     <span class="conjunction">и</span>
                     <p onclick="return {name: 'dpt_airport_1', title: 'аэропорт вылета', accusative: 'подходящие аэропорты вылета', anyone: 'любой', either: true, brackets: true}"><a href="#"><u>аэропорт</u></a><b></b></p>
-                    вылета <span class="city" data-key="dpt_city_1">обратно</span>,
+                    вылета <span class="city" data-location="dpt_1">обратно</span>,
                 </div>
                 <div class="flight">
                     <p onclick="return {name: 'arv_time_1', title: 'время прилёта', accusative: 'допустимое время прибытия', anyone: 'любое', either: true, brackets: true}"><a href="#"><u>время</u></a><b></b></p>
                     <span class="conjunction">и</span>
                     <p onclick="return {name: 'arv_airport_1', title: 'аэропорт прилёта', accusative: 'подходящие аэропорты прибытия', anyone: 'любой', either: true, brackets: true}"><a href="#"><u>аэропорт</u></a><b></b></p>
-                    прилёта <span class="city" data-key="arv_city_1">обратно</span>,
+                    прилёта <span class="city" data-location="arv_1">обратно</span>,
                 </div>
                 <p onclick="return {name: 'cities', title: 'город пересадки', accusative: 'города, подходящие для пересадки', anyone: 'любой', either: true, brackets: true}"><a href="#"><u>город пересадки</u></a><b></b></p><span class="comma">,</span>
                 <p onclick="return {name: 'planes', title: 'самолёт', accusative: 'приемлемые типы самолётов', anyone: 'любой', either: true, brackets: true}"><a href="#"><u>самолёт</u></a><b></b></p><span class="comma">,</span>
@@ -86,7 +86,7 @@
         <div id="offers-best" class="g-none">
         </div>
         
-        <div id="offers-matrix">
+        <div id="offers-matrix" class="g-none">
             <h3 class="offers-title">По датам перелёта</h3>
             <div class="offer">
                 <table class="offer-prices">
@@ -150,7 +150,7 @@
                     или&nbsp;<a href="#" class="b-pseudo" onclick="return 'airline'"><u>по авиакомпании</u></a>
 
             </div>
-            <div class="offers-improper" class="g-none">
+            <div class="offers-improper g-none">
                 <h3 class="g-xl">Таких рейсов нет, попробуйте другие варианты уточнения.</h3>
             </div>
             <div id="offers-collection"></div>

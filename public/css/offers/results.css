@@ -62,14 +62,9 @@
 
 .offer
 {
-    font-size: 81.25%;
-    
     margin: 0 0 10px;
 
-    line-height: 1.23;
-
     color: #333;
-    /*border-bottom: 1px solid #d0d0d0;*/
     border-radius: 10px;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
@@ -80,6 +75,13 @@
     -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);    
+}
+
+.offer-variant 
+{
+    font-size: 81.25%;
+
+    line-height: 1.23;
 }
 
 .offer .aux
@@ -93,8 +95,8 @@
     color: #999;
 }
 
-.offer th,
-.offer td
+.offer-variant th,
+.offer-variant td
 {
     padding: 8px 10px 8px 0;
     vertical-align: top;
@@ -102,7 +104,7 @@
 
 /* Заголовок предложения */
 
-.offer thead
+.offer-variant thead
 {
     border-bottom: 1px solid #e5e5e5;
 }
@@ -148,7 +150,7 @@
 
     /* Кнопка */
 
-    .offer thead td.booking
+    .offer thead td.book
     {
         padding: 7px 14px 7px 0;
     }
@@ -634,29 +636,29 @@
 
     /* Сумма и кнопка */
     
-    .offer .details .booking
+    .offer .details .book
     {
         background: none;
     }
     
-    .offer .details .booking td
+    .offer .details .book td
     {
         padding: 12px 10px 12px 0;
 
         border-top: 1px solid #d0d0d0;
     }
 
-    .offer .details .booking .a-button
+    .offer .details .book .a-button
     {
         margin-right: 12px;
     }
     
-    .offer .details .booking .sum
+    .offer .details .book .sum
     {
         float: left;
     }
 
-    .offer .details .booking .sum dt
+    .offer .details .book .sum dt
     {
         font-size: 107.7%;
         line-height: 107.14%;
@@ -666,12 +668,12 @@
         color: #000;
     }
 
-    .offer-details .booking .sum strong
+    .offer-details .book .sum strong
     {
         font-weight: bold;
     }
 
-    .offer-details .booking .sum dd
+    .offer-details .book .sum dd
     {
         font-size: 92.3%;
     

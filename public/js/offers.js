@@ -86,6 +86,17 @@ init: function() {
         }
     });
     
+    // Бронирование
+    $('#offers-list').delegate('.book .a-button', 'click', function(event) {
+        event.preventDefault();
+        $('#booking').remove();
+        var variant = $(this).closest('.offer-variant');
+        variant.parent().append('<div id="booking"><div style="padding: 10px 15px;">Предварительное бронирование…</div></div>');
+        $.get("/booking/?" + variant.attr('data-booking'), function(s, status, request) {
+            $('#booking').replaceWith(s);
+        });
+    });
+    
     // Активация матрицы цен в статике, перенести в обработку аякса, когда будет настоящая
     this.initMatrix($('#offers-matrix .offer-prices'));
     
@@ -173,7 +184,6 @@ processUpdate: function() {
         this.variants = [];
         this.items = [];
     }
-
     if (this.items.length) {
         this.applySort('price');    
         if (this.maxLayovers) {
@@ -224,14 +234,14 @@ showVariant: function(el) {
 },
 updateFilters: function() {
     this.filterable = false;
-    var data = $.parseJSON($('#offers-collection').attr('data-filters').replace('&amp;', '&'));
+    var data = $.parseJSON($('#offers-collection').attr('data-filters'));
     $('#offers-reset-filters').addClass('g-none');
     $('#offers-filter .flight').each(function() {
         var items = $('p', this).trigger('update', data);
         var active = items.trigger('toggle').filter(':not(.g-none)');
         if (active.length > 0) {
             var city = $('.city', this);
-            city.text(data[city.attr('data-key')]);
+            city.text(data.locations[city.attr('data-location')] || '');
             $('.conjunction', this).toggle(active.length > 1);
             $(this).removeClass('g-none');
         } else {
@@ -433,10 +443,7 @@ getDepartures: function(offer) {
     return various && od;
 },
 showDepartures: function() {    
-    var self = this, offers = this.items, dcities = [];
-    for (var i = this.currentData.segments; i--;) {
-        dcities[i] = this.currentData['dpt_city_' + i];
-    }
+    var self = this, offers = this.items;
     for (var i = 0, im = offers.length; i < im; i++) {
         var offer = offers[i];
         if (offer.improper || !offer.multiple) continue;
@@ -448,7 +455,7 @@ showDepartures: function() {
             $('.variants', v.el).each(function(index) {
                 var dt = dtimes[index];
                 if (dt) {
-                    var str = dcities[index] + '<br>в ' + self.joinDepartures(dt, v.summary.departures[index]);
+                    var str = offer.summary['dpt_city_' + index] + '<br>в ' + self.joinDepartures(dt, v.summary.departures[index]);
                     $(this).html('<p class="b-pseudo" data-segment="' + index + '">Ещё по такой же цене можно улететь ' + str + '</p>');
                 } else {
                     $(this).html('');

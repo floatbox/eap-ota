@@ -101,11 +101,16 @@ class Recommendation
   end
 
   def summary
-    {
+    result = {
       :price => price_total,
       :airline => segments.first.marketing_carrier_name,
       :layovers => variants.first.segments.map{|s| s.flights.size}.max,
     }
+    variants.first.segments.each_with_index do |segment, i|
+      result['dpt_city_' + i.to_s] = segment.departure.city.case_from.gsub(/ /, '&nbsp;')
+      result['arv_city_' + i.to_s] = segment.arrival.city.case_to.gsub(/ /, '&nbsp;')
+    end
+    result 
   end
 
   # comparison, uniquiness, etc.
@@ -236,7 +241,7 @@ pg.xpath('r:fareInfoGroup/r:fareAmount/r:otherMonetaryDetails[r:typeQualifier="E
   end
 
   # FIXME порнография какая-то. чего так сложно?
-  def self.summary recs
+  def self.summary recs, locations
     airlines = []
     planes = []
     cities = []
@@ -269,7 +274,8 @@ pg.xpath('r:fareInfoGroup/r:fareAmount/r:otherMonetaryDetails[r:typeQualifier="E
       :airlines => airlines.uniq.map{|a| {:v => a, :t => Airline[a].name}}.sort_by{|a| a[:t] },
       :planes => planes.uniq.map{|a| {:v => a, :t => Airplane[a].name}}.sort_by{|a| a[:t] },
       :cities => cities.uniq.map{|c| {:v => c, :t => City[c].name}}.sort_by{|a| a[:t] },
-      :segments => segments_amount
+      :segments => segments_amount,
+      :locations => locations
     }
     departure_airports.each_with_index {|airports, i|
       result['dpt_airport_' + i.to_s] = airports.uniq.map{|airport| {:v => airport, :t => Airport[airport].name} }.sort_by{|a| a[:t] }
@@ -283,10 +289,6 @@ pg.xpath('r:fareInfoGroup/r:fareAmount/r:otherMonetaryDetails[r:typeQualifier="E
     }
     arrival_times.each_with_index {|arv_times, i|
       result['arv_time_' + i.to_s] = arv_times.uniq.sort.map{|at| {:v => at, :t => time_titles[at]} }
-    }
-    recs[0].variants[0].segments.each_with_index {|segment, i|
-      result['dpt_city_' + i.to_s] = segment.departure.city.case_from.gsub(/ /, '&nbsp;')
-      result['arv_city_' + i.to_s] = segment.arrival.city.case_to.gsub(/ /, '&nbsp;')
     }
     result
   end

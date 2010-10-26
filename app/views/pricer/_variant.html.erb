@@ -1,4 +1,4 @@
-<table class="offer-variant<%= ' g-none' if variant_index > 0 %>" data-summary='<%= variant.summary.to_json %>'>
+<table class="offer-variant<%= ' g-none' if variant_index > 0 %>" data-summary='<%= variant.summary.to_json %>' data-booking="flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>&adults=<%= @search.adults %>&children=<%=@search.children %>&validating_carrier=<%= recommendation.validating_carrier.iata%>">
 <colgroup>
     <col width="118">
     <col width="140">
@@ -13,8 +13,8 @@
         <dt><%= recommendation.price_total.to_i.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') %></dt>
         <dd><%= Russian.pluralize(recommendation.price_total.to_i, 'рубль', 'рубля', 'рублей') %></dd>
     </dl></td>
-    <td class="booking" colspan="5">
-        <a href="/booking/?flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>&adults=<%= @search.adults %>&children=<%=@search.children %>&validating_carrier=<%= recommendation.validating_carrier.iata%>" class="a-button" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
+    <td class="book" colspan="5">
+        <a href="#" class="a-button" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
     </td>
 </tr>
 </thead>
@@ -131,10 +131,10 @@
 <% variant.segments.each_with_index do |segment, segment_counter| %>
     <%= render :partial => 'segment_details', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter, :segment_cabins => variant_cabins[segment_counter]} %>
 <% end %>
-<tr class="booking">
+<tr class="book">
     <td></td>
     <td colspan="6">
-    <a href="/booking/?flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>&adults=<%= @search.adults %>&children=<%=@search.children %>" class="a-button" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
+    <a href="#" class="a-button" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
     <dl class="sum">
         <dt>Итого <strong><%= human_price(recommendation.price_total.to_i) %></strong> за всех со всеми сборами</dt>
         <dd>Тариф — <%= human_price((recommendation.prices[0]-recommendation.prices[1]).to_i) %>, налоги и сборы — <%= human_price(recommendation.prices[1].to_i) %></dd>

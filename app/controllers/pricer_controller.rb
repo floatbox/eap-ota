@@ -22,6 +22,7 @@ class PricerController < ApplicationController
         @fast_recommendation = Recommendation.fast(@recommendations)
         @optimal_recommendation = @fast_recommendation
         @query_key = ShortUrl.generate_url(@recommendations.hash)
+        @locations = @search.human_locations
         Rails.cache.write('pricer_form' + @query_key, @search)
       end
     end

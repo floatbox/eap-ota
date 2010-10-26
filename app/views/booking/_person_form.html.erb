@@ -1,10 +1,5 @@
-
-<% if person_form_counter > 0 %>
-    <dd class="book-p-num"><%= @numbers[person_form_counter]%> пассажир
-<% end  %>
-
 <% fields_for "person_attributes", person_form, :index => person_form_counter do |person| %>
-<dd class="book-p" onclick="return 'Person'">
+<div class="section book-p" onclick="return 'Person'">
     <table>
         <colgroup>
            <col width="224">
@@ -243,5 +238,5 @@
                 <a class="g-external" href="http://ru.wikipedia.org/wiki/Бонусные_программы_авиакомпаний" target="_blank" title="Что такое бонусная программа? (ссылка откроется в новом окне)"> </a>
 
     </table>
-</dd>
+</div>
 <% end  %>

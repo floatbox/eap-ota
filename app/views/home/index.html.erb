@@ -31,25 +31,21 @@
 </head>
 
 <body>
-    <div class="l-page">
-        <div class="l-header">
-            <%= render 'shared/header' %>
-        </div>
-
-        <div class="l-canvas">
-            <%= render 'search' %>
-            <%= render 'offers' %>
-        </div>
-
-        <div class="l-canvas-bottom"></div>
+<div class="l-wrapper">
+<div class="l-canvas">
+    <div class="l-header">
+        <%= render 'shared/header' %>
     </div>
-
+    <div class="l-content">
+        <%= render 'search' %>
+        <%= render 'offers' %>
+    </div>
     <div class="l-footer">
         <%= render 'shared/footer' %>
     </div>
-
-    <%= render 'shared/popups' %>
-
+    <div class="l-overlay"></div>
+</div>
+</div>
+<%= render 'shared/popups' %>
 </body>
-
 </html>

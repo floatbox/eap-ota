@@ -29,61 +29,46 @@
     color: #000;
 }
 
-/* Разметка страницы бронирования на шаги */
+/* Выделение формы бронирования */
 
-dl.booking {
-    width: 675px;
-    margin: 0 15px;
-    padding: 0;
+.active-booking {
+    position: relative;
+    z-index: 3;
 }
 
-dl.booking dt {
-    font: bold 18px Arial,s;
+/* Разметка страницы бронирования на шаги */
 
-    margin: 1.5em 0 0 0;
-    padding: 0 0 0 10px;
+.booking {
+    border-top:1px solid #D0D0D0;
+}
+
+.booking h3 {
+    font: bold 22px Arial, sans-serif;
+
+    margin: 15px 15px 8px;
 
     color: #333;
 }
 
-dl.booking dt b {
-    font: bold 22px/34px Arial,s;
+.booking .section {
+    margin: 3px;
+    padding: 12px 0;
 
-    display: inline-block;
-
-    padding: 0 .5em;
-    margin: 0 .4em 0 0;
-
-    color: #fff;
-    background: #cb388f;
+    background: #fff8ce;
+    
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -o-border-radius: 3px;    
 }
 
-dl.booking dd {
-    clear: both;
-
-    padding: 10px;
-    margin: 0 0 10px 0;
-
-    border-radius: 10px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -o-border-radius: 10px;
-
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-
-    background: #fff8d2;
-}
-
-dl.booking dd.ready {
+.booking .ready {
     background: #e5ffd2;
 }
 
 /* Текстовые поля - общие свойства */
 
-    dl.booking .text {
+    .booking .text {
         padding: 3px 4px;
 
         color: #aaa;
@@ -96,14 +81,14 @@ dl.booking dd.ready {
         -o-border-radius: 3px;
     }
 
-    dl.booking .text:hover {
+    .booking .text:hover {
         z-index: 2;
         -webkit-transition: border-color linear .2s;
 
         background: #fff;
     }
 
-    dl.booking .text:focus {
+    .booking .text:focus {
         z-index: 3;
 
         color: #333;
@@ -125,27 +110,27 @@ dl.booking dd.ready {
         -o-transition: -o-box-shadow linear .2s;
     }
 
-    dl.booking .text-value {
+    .booking .text-value {
         color: #333;
         border: 1px solid #4eb700;
         background: #fff;
     }
 
-    dl.booking .text-value:focus {
+    .booking .text-value:focus {
         border: 1px solid #909090;
     }
 
-    dl.booking .text-invalid {
+    .booking .text-invalid {
         border: 1px dashed red;
     }
 
-    dl.booking .text-upper .text-value {
+    .booking .text-upper .text-value {
         text-transform: uppercase;
     }
 
-    dl.booking .text-disabled,
-    dl.booking .text-disabled:hover,
-    dl.booking .text-disabled:focus {
+    .booking .text-disabled,
+    .booking .text-disabled:hover,
+    .booking .text-disabled:focus {
         cursor: not-allowed;
         
         color: transparent;
@@ -156,19 +141,19 @@ dl.booking dd.ready {
 
 /* Подписи к полям */
 
-    dl.booking td.sub {
+    .booking td.sub {
         padding-top: 4px;
 
         color: #777;
     }
 
-    dl.booking td.sub p {
+    .booking td.sub p {
         display: none;
 
         margin: 2px 0 0 0;
     }
 
-    dl.booking label.label-disabled {
+    .booking label.label-disabled {
         cursor: not-allowed;
         
         color: #aaa;
@@ -176,93 +161,72 @@ dl.booking dd.ready {
 
 
 /* Прочее - общие свойства */
-    dl.booking fieldset legend {
+    .booking fieldset legend {
         display: none;
     }
 
-    dl.booking .b-pseudo {
+    .booking .b-pseudo {
 
         color: inherit;
     }
 
-    dl.booking .a-button {
+    .booking .a-button {
         font-weight: bold;
 
-        margin: 0 0 0 .2em;
+        margin: 0 0 0 .25em;
         padding: 4px 10px;
+        
+        color: #FFF;
     }
 
 
-dl.booking .tip-popup {
+.booking .tip-popup {
     margin: 4px 0 0 -10px;
     background: rgba(204, 15, 22, .3);
 }
 
-dl.booking .tip-popup i {
+.booking .tip-popup i {
     color: red;
 }
 
+/* Тариф */
 
-
-/* БЛОК 1: ВАРИАНТ ПЕРЕЛЁТА */
-
-dl.booking dd.book-v {
+.book-v {
+    margin: 0 15px 15px;
 }
 
-dl.booking .offer
-{
-    border: 1px solid #d0d0d0;
-    border-radius: 6px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-    -o-border-radius: 6px;
-
-    box-shadow: none;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-    -o-box-shadow: none;      
+.book-v .tarif h3 {
+    font-weight: bold;
+    
+    margin-left: 0;
+    
+    color: #333;
 }
 
-dl.booking .offer .details {
-    border-top: none;
+.book-v .tarif ul {
+    margin: .2em 0 .6em 15px;
+
+    list-style: disc;
 }
 
-dl.booking .offer .details tr {
-    background: transparent;
+.book-v .tarif pre {
+    font: normal 65% Courier, monospace;
+
+    display: none;
+
+    height: 18em;
+    margin: .5em 0;
+    padding: 5px;
+    overflow: auto;
+
+    color: #333;
+    background: #fff;
+    border: 1px solid #777;
 }
 
-/* тариф */
-
-    .book-v .tarif h3 {
-        font-weight: bold;
-
-        color: #333;
-    }
-
-    .book-v .tarif ul {
-        margin: .2em 0 .6em 15px;
-
-        list-style: disc;
-    }
-
-    .book-v .tarif pre {
-        font: normal 65% Courier,monospace;
-
-        display: none;
-
-        height: 18em;
-        margin: .5em 0;
-        padding: 5px;
-        overflow: scroll;
-
-        color: #333;
-        background: #fff;
-        border: 1px solid #777;
-    }
-
-    .book-v .tarif a:hover {
-        color: red;
-    }
+.book-v .tarif a:hover {
+    color: red;
+}
 
 
 .book-v .agree {
@@ -289,18 +253,17 @@ dl.booking .offer .details tr {
 
 
 
-
 /******* БЛОК 2: ДАННЫЕ ПАССАЖИРОВ *******/
 
 
-dl.booking dd.book-p {
-    padding: 12px 10px 10px 0;
+.booking .book-p {
+    padding-right:  12px;
 }
 
 /* таблица */
 
 .book-p table td {
-    padding: 0 0 0 10px;
+    padding: 0 0 0 12px;
 
     vertical-align: top;
 }
@@ -476,7 +439,7 @@ dl.booking dd.book-p {
 }
 
 /* номер пассажира */
-dl.booking dd.book-p-num {
+.booking dd.book-p-num {
     font: normal 18px Arial,s;
 
     float: left;
@@ -500,23 +463,19 @@ dl.booking dd.book-p-num {
 
 /******* БЛОК 3: БАНКОВСКАЯ КАРТОЧКА *******/
 
-
-dl.booking dd.book-bc {
-    padding: 12px 0 10px 0;
-}
-
 .bankcard {
     overflow: hidden;
+    
+    margin: 0 12px;
+
     zoom: 1;
 }
 
 .bankcard li {
-    float: left;
     position: relative;
 
     width: 316px;
     height: 192px;
-    margin: 0 0 0 14px;
 
     border-radius: 10px;
     -moz-border-radius: 10px;
@@ -529,14 +488,23 @@ dl.booking dd.book-bc {
     background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f3f3f3), to(#aaa));
 }
 
+.bankcard li.bc-front {
+    float: left;
+}
+
+.bankcard li.bc-back {
+    float: right;
+}
+
 /* логотипы Виза и МастерКард */
 
 .bankcard .bc-type {
     padding: 0;
-    margin: 10px 0 30px 6px;
+    margin: 9px 0 0;
 
-    height: 24px;
-    line-height: 24px;
+    height: 54px;
+    line-height: 54px;
+    text-align: center;
 
     color: #777;
 }
@@ -544,7 +512,7 @@ dl.booking dd.book-bc {
     .bankcard .bc-type i {
         display: inline-block;
 
-        height: 24px;
+        height: 54px;
 
         padding: 0;
         margin: 0;
@@ -553,15 +521,21 @@ dl.booking dd.book-bc {
     }
 
     .bankcard .bc-type i.bc-visa {
-        width: 80px;
+        width: 92px;
 
-        background: url(/img/temp/logo-visa.png);
+        background: url(/img/offers/booking-visa.png);
     }
 
     .bankcard .bc-type i.bc-master {
-        width: 41px;
+        width: 89px;
 
-        background: url(/img/temp/logo-master.png);
+        background: url(/img/offers/booking-master.png);
+    }
+    
+    .bankcard .bc-type b {
+        font-size: 14px;
+        
+        padding: 0 10px;
     }
 
     .bankcard .bc-type-visa i.bc-master,
@@ -574,11 +548,8 @@ dl.booking dd.book-bc {
 
     .bankcard .bc-type-none
     {
-        opacity: 0.4;
+        opacity: 0.5;
     }
-
-
-
 
 .bankcard label {
     font-weight: bold;
@@ -720,8 +691,8 @@ dl.booking dd.book-bc {
 /* раскладка цены */
 
 .book-bc table.bc-bill {
-    width: 655px;
-    margin: 1em 0 4px 10px;
+    width: 645px;
+    margin: 1em 0 0 12px;
 }
 
     .book-bc .bc-bill td, .book-bc .bc-bill th {
@@ -782,32 +753,38 @@ dl.booking dd.book-bc {
 
 /******* БЛОК 4: КОНТАКТЫ *******/
 
-
-dl.booking dd.book-c {
-
+.booking .book-c table td {
+    padding: 0 0 0 12px;
+    vertical-align: top;
 }
 
-dl.booking dd.book-c .text {
-    width: 310px;
-    margin: 0 10px 0 0;
+.booking .book-c .text {
+    width: 306px;
+}
+
+#booking-contacts-email {
+    width: 307px;
 }
 
 
 /******* БЛОК 5: САБМИТ *******/
 
 
-dl.booking dd.book-s {
+.booking .book-s {
     overflow: hidden;
     zoom: 1;
 
-    padding: 10px;
+    padding: 30px 15px;
+}
 
-    background: none;
+.book-s .control {
+    text-align: center;
+}
 
-    box-shadow: none;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-    -o-box-shadow: none;
+.book-s .control strong {
+    font-weight: bold;
+
+    padding-right: 0.25em;
 }
 
 /* список причин */
@@ -816,7 +793,7 @@ dl.booking dd.book-s {
     position: relative;
     float: left;
 
-    margin: 25px 0 10px 100px;
+    margin: 25px 0 10px 125px;
     padding: 10px 25px;
 
     color: #333;
@@ -836,7 +813,7 @@ dl.booking dd.book-s {
     .book-s .blocker s {
         display: block;
         position: absolute;
-        left: 180px;
+        left: 265px;
         top: -25px;
 
         width: 0;

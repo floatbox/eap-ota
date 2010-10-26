@@ -295,6 +295,14 @@ ptp.num = function(s) {
         me.$type.removeClass('bc-type-none bc-type-visa bc-type-master');
         me.$type.addClass(me.ctype);
     });
+    
+    // наверняка кто-нибудь попытается кликнуть в логотип карты
+    me.$type.find('i').click(function() {
+        me.ctype = $(this).attr('class').replace('-', '-type-');
+        me.$type.removeClass('bc-type-none bc-type-visa bc-type-master');
+        me.$type.addClass(me.ctype);
+        $el.first().focus();
+    });
 
     // если посл 4 цифры валидны, выводим их перед CVV, на оборотной стороне карты
     $el.last().change(function() {

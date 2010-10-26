@@ -1,6 +1,6 @@
-<dd class="book-bc" onclick="return 'BankCard'">
+<div class="section book-bc" onclick="return 'BankCard'">
     <ul class="bankcard">
-        <li>
+        <li class="bc-front">
             <p id="bc-type" class="bc-type g-xxs" title="Вы можете использовать карточки платёжных систем Visa или MasterCard">
                 <i class="bc-visa"></i><b>&nbsp;или&nbsp;</b><i class="bc-master"></i>
 
@@ -84,7 +84,7 @@
                 <%= f.error_message_on :year, :id => 'error_card_year'  %>
             </fieldset>
 
-        <li>
+        <li class="bc-back">
             <p class="magneticstrip">&nbsp;
 
             <fieldset class="bccvv">
@@ -146,3 +146,4 @@
                 <td><u><%= @recommendation.payment_commission  %></u><i>рублей</i>
                 <td><b><%= @recommendation.price_with_payment_commission %></b><i>рубля</i>
     </table>
+</div>
