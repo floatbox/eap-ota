@@ -28,13 +28,14 @@
     %conversionRateDetail
       %currency RUB
 
-%travelFlightInfo
-  - if cabin
-    %cabinId
-      %cabin= cabin
-  - if nonstop
-    %flightDetail
-      %flightType N
+-if nonstop or cabin
+  %travelFlightInfo
+    - if cabin
+      %cabinId
+        %cabin= cabin
+    - if nonstop
+      %flightDetail
+        %flightType N
 
 
 %itinerary
