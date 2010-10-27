@@ -2,6 +2,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
 
   column :from, :string
   column :to, :string
+  column :complex_to, :string
   column :date1, :string,  (Date.today + 10.days).strftime('%d%m%y')
   column :date2, :string,  (Date.today + 15.days).strftime('%d%m%y')
   column :rt, :boolean
@@ -9,7 +10,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   column :children, :integer, 0
   column :search_type, :string, 'travel'
   column :nonstop, :boolean
-  column :day_interval, :integer, 1
+  column :day_interval, :integer, 3
   column :debug, :boolean, false
   column :cabin, :string
 

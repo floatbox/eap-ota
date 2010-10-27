@@ -79,7 +79,6 @@ class Completer
           end_poses << (position + m[0].mb_chars.length)
         end
       end
-
       leftmost_start_pos = nil
       for word_beginning_pattern in [ /\S+\s+\S+\s+\S+\s*$/, /\S+\s+\S+\s*$/, /\S+\s*$/ ]
         if m = prefix.match(word_beginning_pattern)

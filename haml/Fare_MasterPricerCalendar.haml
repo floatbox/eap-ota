@@ -28,59 +28,63 @@
     %conversionRateDetail
       %currency RUB
 
-- if nonstop
-  %travelFlightInfo
+%travelFlightInfo
+  - if cabin
+    %cabinId
+      %cabin= cabin
+  - if nonstop
     %flightDetail
       %flightType N
 
-      %itinerary
-        %requestedSegmentRef
-          %segRef 1
-        %departureLocalization
-          -if from_iata.length == 3
-            %departurePoint
-              %locationId= from_iata
-          -else
-            - Country.main_city_iatas(from_iata).each do |code|
-              %depMultiCity
-                %locationId= code
-        %arrivalLocalization
-          -if to_iata.length == 3
-            %arrivalPointDetails
-              %locationId= to_iata
-          -else
-            - Country.main_city_iatas(to_iata).each do |code|
-              %arrivalMultiCity
-                %locationId= code
-        %timeDetails
-          %firstDateTimeDetail
-            %date= date1
-          %rangeOfDate
-            %rangeQualifier C
-            %dayInterval= day_interval
-      - if rt
-        %itinerary
-          %requestedSegmentRef
-            %segRef 2
-          %departureLocalization
-            -if to_iata.length == 3
-              %departurePoint
-                %locationId= to_iata
-            -else
-              - Country.main_city_iatas(to_iata).each do |code|
-                %depMultiCity
-                  %locationId= code
-          %arrivalLocalization
-            -if from_iata.length == 3
-              %arrivalPointDetails
-                %locationId= from_iata
-            -else
-              - Country.main_city_iatas(from_iata).each do |code|
-                %arrivalMultiCity
-                  %locationId= code
-          %timeDetails
-            %firstDateTimeDetail
-              %date= date2
-            %rangeOfDate
-              %rangeQualifier C
-              %dayInterval= day_interval
+
+%itinerary
+  %requestedSegmentRef
+    %segRef 1
+  %departureLocalization
+    -if from_iata.length == 3
+      %departurePoint
+        %locationId= from_iata
+    -else
+      - Country.main_city_iatas(from_iata).each do |code|
+        %depMultiCity
+          %locationId= code
+  %arrivalLocalization
+    -if to_iata.length == 3
+      %arrivalPointDetails
+        %locationId= to_iata
+    -else
+      - Country.main_city_iatas(to_iata).each do |code|
+        %arrivalMultiCity
+          %locationId= code
+  %timeDetails
+    %firstDateTimeDetail
+      %date= date1
+    %rangeOfDate
+      %rangeQualifier C
+      %dayInterval= day_interval
+- if rt
+  %itinerary
+    %requestedSegmentRef
+      %segRef 2
+    %departureLocalization
+      -if to_iata.length == 3
+        %departurePoint
+          %locationId= to_iata
+      -else
+        - Country.main_city_iatas(to_iata).each do |code|
+          %depMultiCity
+            %locationId= code
+    %arrivalLocalization
+      -if from_iata.length == 3
+        %arrivalPointDetails
+          %locationId= from_iata
+      -else
+        - Country.main_city_iatas(from_iata).each do |code|
+          %arrivalMultiCity
+            %locationId= code
+    %timeDetails
+      %firstDateTimeDetail
+        %date= date2
+      %rangeOfDate
+        %rangeQualifier C
+        %dayInterval= day_interval
