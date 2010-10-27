@@ -23,6 +23,57 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   def self.reset_parse_time
     @@parse_time = 0
   end
+  
+  def parse_complex_to
+    self.complex_to ||= to
+    str = self.complex_to.mb_chars
+    not_finished = true
+    while !str.blank? && not_finished
+      day = 0
+      month_record = nil
+      word_part = ''
+      not_finished = false
+      if m = str.match(/(\S+)\s+(\d)+\s*$/)
+        word_part = m[0].mb_chars
+        month_record = Completer.record_from_string(m[1].mb_chars, ['date'])
+        day = m[2].to_i
+      elsif m = str.match(/(\d+)\s+(\S+)\s*$/)
+        word_part = m[0].mb_chars
+        month_record = Completer.record_from_string(m[2].mb_chars, ['date'])
+        day = m[1].to_i
+      end
+      
+      if month_record && (day > 0) && (month_record.hidden_info.class == Fixnum)
+        set_date1_from_month_and_day(month_record.hidden_info, day)
+        str = str[0...(str.length - word_part.length)]
+        not_finished = true
+      end
+      
+      for word_beginning_pattern in [ /\S+\s+\S+\s+\S+\s*$/, /\S+\s+\S+\s*$/, /\S+\s*$/ ]
+        if m = str.match(word_beginning_pattern)
+          word_part = m[0].mb_chars
+
+          if r = Completer.record_from_string(word_part, ['date', 'airport', 'city', 'country'])
+            if r && r.type == 'date' && r.hidden_info.class == String
+              self.date1 = r.hidden_info
+              str = str[0...(str.length - word_part.length)]
+              not_finished = true
+            elsif r && (['airport', 'city', 'country'].include? r.type)
+              @to_iata = r.code rescue nil
+              str = str[0...(str.length - word_part.length)]
+              not_finished = true
+            end
+          end
+        end
+      end
+    end
+  end
+  
+  def set_date1_from_month_and_day(month, day)
+    self.date1 = (Date.today > Date.new(Date.today.year, month, day)) ?
+      Date.new(Date.today.year+1, month, day).strftime('%d%m%y') : 
+      Date.new(Date.today.year, month, day).strftime('%d%m%y')
+  end 
 
   def to= name
     @to_iata =  Completer.iata_from_name(name) rescue nil
