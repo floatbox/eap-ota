@@ -118,8 +118,8 @@ app.Validate.Text = function(el) {
     if (val.length > parseInt(rules.maxl)) return msg.maxl.supplant({name: qname});
 
     // числовая проверка на мин/макс
-    if (rules.num && parseInt(val) < parseInt(rules.min)) return msg.min.supplant({name: qname, val: rules.min});
-    if (rules.num && parseInt(val) > parseInt(rules.max)) return msg.max.supplant({name: qname, val: rules.max});
+    if (rules.num && parseInt(val, 10) < parseInt(rules.min)) return msg.min.supplant({name: qname, val: rules.min});
+    if (rules.num && parseInt(val, 10) > parseInt(rules.max)) return msg.max.supplant({name: qname, val: rules.max});
 
     return null;
 };

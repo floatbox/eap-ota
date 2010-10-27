@@ -35,7 +35,7 @@
 }
 
 .a-button-ready,
-.hover .a-button {
+.hover .book .a-button {
     cursor: pointer;
 
     color: #eee;
@@ -45,7 +45,9 @@
     background-image: -webkit-gradient(linear, left top, left bottom, from(#a0b914), to(#7b8e12));
 }
 
-.a-button-ready:hover {
+.a-button-ready:hover,
+.offer .stop-booking:hover,
+.offer .book .a-button:hover {
     color: #eee;
     border: 1px solid #c52471;
     background-color: #dc3f8a;

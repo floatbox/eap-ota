@@ -65,6 +65,9 @@ init: function() {
     $('#offers-list').delegate('td.variants a', 'click', function(event) {
         event.preventDefault();
         var el = $(this), dtime = el.text().replace(':', '');
+        if (el.closest('.offer').hasClass('active-booking')) {
+            return; // Во время бронирования нельзя переключать варианты
+        }
         var segment = parseInt(el.parent().attr('data-segment'), 10);
         var current = app.offers.variants[parseInt(el.closest('.offer-variant').attr('data-index'), 10)];
         var variants = current.offer.variants, departures = current.summary.departures.concat();
@@ -89,12 +92,7 @@ init: function() {
     // Бронирование
     $('#offers-list').delegate('.book .a-button', 'click', function(event) {
         event.preventDefault();
-        $('#booking').remove();
-        var variant = $(this).closest('.offer-variant');
-        variant.parent().append('<div id="booking"><div style="padding: 10px 15px;">Предварительное бронирование…</div></div>');
-        $.get("/booking/?" + variant.attr('data-booking'), function(s, status, request) {
-            $('#booking').replaceWith(s);
-        });
+        app.booking.load($(this).closest('.offer-variant'));
     });
     
     // Активация матрицы цен в статике, перенести в обработку аякса, когда будет настоящая

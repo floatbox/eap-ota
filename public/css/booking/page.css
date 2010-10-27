@@ -1,0 +1,29 @@
+/* модификация .l-canvas*/
+
+.l-canvas-booking {
+    padding-top: 15px;
+
+    letter-spacing: -0.03em;
+}
+
+.l-canvas-booking #search-transcript {
+    margin: 0 15px 0;
+}
+
+.l-canvas-booking #search-transcript h5 {
+    font-size: 81.25%;
+
+    margin: .3em 0 0 0;
+
+    letter-spacing: -0.01em;
+
+    color: #777;
+}
+
+.l-canvas-booking #search-transcript h5 a {
+    color: #777;
+}
+
+.l-canvas-booking #search-transcript h5 a:hover {
+    color: #000;
+}

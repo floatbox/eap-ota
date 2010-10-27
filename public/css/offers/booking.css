@@ -1,34 +1,3 @@
-
-/* модификация .l-canvas*/
-
-.l-canvas-booking {
-    padding-top: 15px;
-
-    letter-spacing: -0.03em;
-}
-
-.l-canvas-booking #search-transcript {
-    margin: 0 15px 0;
-}
-
-.l-canvas-booking #search-transcript h5 {
-    font-size: 81.25%;
-
-    margin: .3em 0 0 0;
-
-    letter-spacing: -0.01em;
-
-    color: #777;
-}
-
-.l-canvas-booking #search-transcript h5 a {
-    color: #777;
-}
-
-.l-canvas-booking #search-transcript h5 a:hover {
-    color: #000;
-}
-
 /* Выделение формы бронирования */
 
 .active-booking {
@@ -36,10 +5,37 @@
     z-index: 3;
 }
 
+.active-booking .offer-variant tr.book,
+.active-booking .offer-variant td.book .a-button {
+    display: none;
+}
+
+.active-booking .offer-variant .variants .b-pseudo,
+.active-booking .offer-variant .variants .b-pseudo a {
+    color: #CCC;
+    cursor: default;
+}
+
+/* Кнопки прекращения бронирования */
+
+.offer a.stop-booking {
+    font-size: 14px;
+    font-weight: normal;
+
+    position: absolute;
+    right: 15px;
+
+    margin-top: 15px;
+}
+
 /* Разметка страницы бронирования на шаги */
 
 .booking {
-    border-top:1px solid #D0D0D0;
+    border-top: 1px solid #D0D0D0;
+}
+
+.booking .empty {
+    padding: 17px 15px;
 }
 
 .booking h3 {
@@ -56,10 +52,10 @@
 
     background: #fff8ce;
     
-    border-radius: 3px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -o-border-radius: 3px;    
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -o-border-radius: 4px;    
 }
 
 .booking .ready {
@@ -586,7 +582,7 @@
     }
 
     .bankcard .bc-num .text {
-        font: bold 140% Courier,monospace;
+        font: bold 140% Courier, monospace;
 
         margin: 0 10px 0 0;
 
@@ -699,7 +695,9 @@
     }
 
     .book-bc .bc-bill th {
-        font: bold 100% Arial,a;
+        font: bold 87.5% Arial,a;
+        
+        padding-bottom: 3px;
 
         vertical-align: middle;
         white-space: nowrap;

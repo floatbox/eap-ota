@@ -6,7 +6,7 @@ class BookingController < ApplicationController
     #@pnr_form = PNRForm.new(:flight_codes => params[:flight_codes].split('_'))
     @recommendation = Recommendation.check_price_and_avaliability(params[:flight_codes].split('_'), {:children => params[:children].to_i, :adults => params[:adults].to_i})
     unless @recommendation
-      render :text => 'Не удалось сделать предварительное бронирование'
+      render :text => '<div class="booking"><div class="empty">Не удалось сделать предварительное бронирование</div></div>'
       return
     end
     @recommendation.validating_carrier_iata = params[:validating_carrier]

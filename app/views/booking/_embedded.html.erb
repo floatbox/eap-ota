@@ -1,4 +1,4 @@
-<div class="booking" id="booking">
+<div class="booking">
 <% form_for :card, @card, :url => booking_pay_path, :html => { :autocomplete => "off" } do |f| %>
 
     <%= hidden_field_tag :recommendation_number, @recommendation_number %>
@@ -49,7 +49,7 @@ FARES ONLY APPLY IF PURCHASED BEFORE DEPARTURE
     <!-- Отправка -->
     <div class="book-s">
 
-        <div class="control"><strong class="g-xl">Всё правильно?</strong> <input type="submit" class="a-button a-button-ready g-xl" value="Забронировать"></div>
+        <div class="control"><strong class="g-xl">Всё правильно?</strong> <input type="submit" class="a-button a-button-ready g-xl" value="Купить"></div>
         
         <div class="blocker g-xs">
             <s></s>

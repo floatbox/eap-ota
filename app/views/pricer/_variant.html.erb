@@ -1,12 +1,9 @@
 <table class="offer-variant<%= ' g-none' if variant_index > 0 %>" data-summary='<%= variant.summary.to_json %>' data-booking="flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>&adults=<%= @search.adults %>&children=<%=@search.children %>&validating_carrier=<%= recommendation.validating_carrier.iata%>">
-<colgroup>
-    <col width="118">
-    <col width="140">
-    <col width="83">
-    <col width="83">
-    <col width="140">
-    <col width="111">
-</colgroup>
+<col width="118">
+<col width="140">
+<col width="83" span="2">
+<col width="140">
+<col width="111">
 <thead>
 <tr>
     <td class="cost"><dl>
@@ -14,7 +11,7 @@
         <dd><%= Russian.pluralize(recommendation.price_total.to_i, 'рубль', 'рубля', 'рублей') %></dd>
     </dl></td>
     <td class="book" colspan="5">
-        <a href="#" class="a-button" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
+        <a href="#" class="a-button">Выбрать</a>
     </td>
 </tr>
 </thead>
@@ -134,7 +131,7 @@
 <tr class="book">
     <td></td>
     <td colspan="6">
-    <a href="#" class="a-button" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
+    <a href="#" class="a-button">Выбрать</a>
     <dl class="sum">
         <dt>Итого <strong><%= human_price(recommendation.price_total.to_i) %></strong> за всех со всеми сборами</dt>
         <dd>Тариф — <%= human_price((recommendation.prices[0]-recommendation.prices[1]).to_i) %>, налоги и сборы — <%= human_price(recommendation.prices[1].to_i) %></dd>
