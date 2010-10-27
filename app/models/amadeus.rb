@@ -35,12 +35,12 @@ class Amadeus < Handsoap::Service
   def invoke_rendered action, opts={}
 
     args = opts[:args]
-
     if Amadeus.fake || opts[:debug] || args.try(:debug)
       xml_string = read_xml(action)
       response = parse_string(xml_string)
     else
       soap_body = render(action, args)
+      #save_xml('request_'+ action, soap_body)
       response = nil
       # WTF по каким-то неясным причинам без :: ломается development mode
       # 'Amadeus module is not active or removed'
@@ -124,18 +124,12 @@ class Amadeus < Handsoap::Service
     (response / '//r:statusCode').to_s == 'P'
   end
 
-  def fare_master_pricer_calendar(args)
-    response = invoke_rendered 'Fare_MasterPricerCalendar',
-      :soap_action => 'http://webservices.amadeus.com/1ASIWOABEVI/FMPCAQ_10_2_1A',
-      :r => "http://xml.amadeus.com/FMPCAR_10_2_1A",
-      :args => args
+  def fare_master_pricer_calendar(args, session=nil)
+    soap_action 'Fare_MasterPricerCalendar', args, session
   end
 
-  def fare_master_pricer_travel_board_search(args)
-    response = invoke_rendered 'Fare_MasterPricerTravelBoardSearch',
-      :soap_action => "http://webservices.amadeus.com/1ASIWOABEVI/FMPTBQ_09_1_1A",
-      :r => "http://xml.amadeus.com/FMPTBR_09_1_1A",
-      :args => args
+  def fare_master_pricer_travel_board_search(args, session=nil)
+    soap_action 'Fare_MasterPricerTravelBoardSearch', args, session
   end
 
   def pnr_add_multi_elements(args, session=nil)

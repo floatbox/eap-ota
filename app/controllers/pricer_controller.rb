@@ -6,6 +6,7 @@ class PricerController < ApplicationController
       @query_key = params[:query_key]
     else
       #params[:search][:search_type] = 'calendar'
+      #params[:search][:day_interval] = 3
       @search = PricerForm.new(params[:search])
       if @search.valid?
         @recommendations = @search.search
