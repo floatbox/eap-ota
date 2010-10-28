@@ -113,9 +113,9 @@
         <%= recommendation.commission.carrier %>
         <%= recommendation.commission.agent %>
         <%= recommendation.commission.subagent %>
-        (<%= recommendation.markup %>р.
-        <% unless recommendation.extra == 0 %>
-        + <%= recommendation.extra %>р.
+        (<%= recommendation.price_share %>р.
+        <% unless recommendation.price_markup == 0 %>
+        + <%= recommendation.price_markup %>р.
         <% end %>)
     <% else %>
         <%= recommendation.validating_carrier_iata %><span style="color:red">???</span>
@@ -134,7 +134,7 @@
     <a href="#" class="a-button">Выбрать</a>
     <dl class="sum">
         <dt>Итого <strong><%= human_price(recommendation.price_total.to_i) %></strong> за всех со всеми сборами</dt>
-        <dd>Тариф — <%= human_price((recommendation.prices[0]-recommendation.prices[1]).to_i) %>, налоги и сборы — <%= human_price(recommendation.prices[1].to_i) %></dd>
+        <dd>Тариф — <%= human_price((recommendation.price_fare).to_i) %>, налоги и сборы — <%= human_price(recommendation.price_tax_and_markup.to_i) %></dd>
     </dl>
     </td>
 </tr>    

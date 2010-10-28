@@ -3,13 +3,12 @@ class Order < ActiveRecord::Base
   
   def recommendation= recommendation
     self.price_total = recommendation.price_total
-    self.price_base = recommendation.price_base
     if c = recommendation.commission
       self.commission_carrier = c.carrier
       self.commission_agent = c.agent
       self.commission_subagent = c.subagent
-      self.markup = recommendation.markup
-      self.extra = recommendation.extra
+      self.price_share = recommendation.price_share
+      self.price_markup = recommendation.price_markup
     end
   end
   

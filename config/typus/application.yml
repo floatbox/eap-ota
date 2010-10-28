@@ -62,8 +62,8 @@ City:
 Order:
   fields:
     defaul: pnr_number, first_name, surname, email, phone, updated_at
-    list: pnr_number, email, updated_at, price_total, price_base, markup, extra
-    show: pnr_number, first_name, surname, email, phone, updated_at, get_from_amadeus, extra
+    list: pnr_number, email, updated_at, price_total, price_share, price_markup
+    show: pnr_number, first_name, surname, email, phone, updated_at, get_from_amadeus
   order_by: -updated_at
   search: pnr_number, first_name, surname, email, phone
   application: Eviterra

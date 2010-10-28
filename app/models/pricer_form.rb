@@ -2,6 +2,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
 
   column :from, :string
   column :to, :string
+  column :complex_to, :string
   column :date1, :string,  (Date.today + 10.days).strftime('%d%m%y')
   column :date2, :string,  (Date.today + 15.days).strftime('%d%m%y')
   column :rt, :boolean
@@ -9,7 +10,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   column :children, :integer, 0
   column :search_type, :string, 'travel'
   column :nonstop, :boolean
-  column :day_interval, :integer, 1
+  column :day_interval, :integer, 3
   column :debug, :boolean, false
   column :cabin, :string
 
@@ -22,6 +23,57 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   def self.reset_parse_time
     @@parse_time = 0
   end
+  
+  def parse_complex_to
+    self.complex_to ||= to
+    str = self.complex_to.mb_chars
+    not_finished = true
+    while !str.blank? && not_finished
+      day = 0
+      month_record = nil
+      word_part = ''
+      not_finished = false
+      if m = str.match(/(\S+)\s+(\d)+\s*$/)
+        word_part = m[0].mb_chars
+        month_record = Completer.record_from_string(m[1].mb_chars, ['date'])
+        day = m[2].to_i
+      elsif m = str.match(/(\d+)\s+(\S+)\s*$/)
+        word_part = m[0].mb_chars
+        month_record = Completer.record_from_string(m[2].mb_chars, ['date'])
+        day = m[1].to_i
+      end
+      
+      if month_record && (day > 0) && (month_record.hidden_info.class == Fixnum)
+        set_date1_from_month_and_day(month_record.hidden_info, day)
+        str = str[0...(str.length - word_part.length)]
+        not_finished = true
+      end
+      
+      for word_beginning_pattern in [ /\S+\s+\S+\s+\S+\s*$/, /\S+\s+\S+\s*$/, /\S+\s*$/ ]
+        if m = str.match(word_beginning_pattern)
+          word_part = m[0].mb_chars
+
+          if r = Completer.record_from_string(word_part, ['date', 'airport', 'city', 'country'])
+            if r && r.type == 'date' && r.hidden_info.class == String
+              self.date1 = r.hidden_info
+              str = str[0...(str.length - word_part.length)]
+              not_finished = true
+            elsif r && (['airport', 'city', 'country'].include? r.type)
+              @to_iata = r.code rescue nil
+              str = str[0...(str.length - word_part.length)]
+              not_finished = true
+            end
+          end
+        end
+      end
+    end
+  end
+  
+  def set_date1_from_month_and_day(month, day)
+    self.date1 = (Date.today > Date.new(Date.today.year, month, day)) ?
+      Date.new(Date.today.year+1, month, day).strftime('%d%m%y') : 
+      Date.new(Date.today.year, month, day).strftime('%d%m%y')
+  end 
 
   def to= name
     @to_iata =  Completer.iata_from_name(name) rescue nil
@@ -148,8 +200,9 @@ class PricerForm < ActiveRecord::BaseWithoutTable
 
   def parse_recommendations(xml, flight_indexes)
     xml.xpath("//r:recommendation").map do |rec|
-      prices = rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").collect {|x| x.to_i }
-      price_total = prices[0]
+      price_total, price_tax =
+        rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").every.to_i
+      price_fare = price_total - price_tax
       cabins =
         rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:cabin").every.to_s
       booking_classes = 
@@ -177,8 +230,8 @@ class PricerForm < ActiveRecord::BaseWithoutTable
         rec.xpath('.//r:fareBasis').to_s
       #cabins остаются только у recommendation и не назначаются flight-ам, тк на один и тот же flight продаются билеты разных классов
       Recommendation.new(
-        :prices => prices,
-        :price_total => price_total,
+        :price_fare => price_fare,
+        :price_tax => price_tax,
         :variants => variants,
         :validating_carrier_iata => validating_carrier_iata,
         :additional_info => additional_info,

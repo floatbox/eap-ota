@@ -5,12 +5,17 @@ class PricerController < ApplicationController
     if params[:query_key]
       @query_key = params[:query_key]
     else
+      #params[:search][:search_type] = 'calendar'
+      #params[:search][:day_interval] = 3
       @search = PricerForm.new(params[:search])
+      @search.parse_complex_to #нужно делать после new, чтобы params не затерли то, что распарсилось
       if @search.valid?
         @recommendations = @search.search
         # TODO перенести в модель
         unless @search.nonstop?
-          recommendations_nonstop = PricerForm.new( params[:search].merge(:nonstop => true)).search
+          p_f = PricerForm.new( params[:search].merge(:nonstop => true))
+          p_f.parse_complex_to
+          recommendations_nonstop = p_f.search
           # только новые
           @recommendations = Recommendation.merge(@recommendations, recommendations_nonstop)
         end
@@ -44,9 +49,11 @@ class PricerController < ApplicationController
       }
     else
       @search = PricerForm.new(params[:search])
+      @search.parse_complex_to
       render :json => {
         :valid => @search.valid?,
-        :human => @search.human
+        :human => @search.human,
+        :search => @search
       }
     end
   end

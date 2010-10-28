@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101018085347) do
+ActiveRecord::Schema.define(:version => 20101028174426) do
 
   create_table "airlines", :force => true do |t|
     t.string   "en_shortname"
@@ -167,12 +167,11 @@ ActiveRecord::Schema.define(:version => 20101018085347) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "price_total"
-    t.integer  "price_base"
     t.string   "commission_carrier"
     t.string   "commission_agent"
     t.string   "commission_subagent"
-    t.integer  "markup"
-    t.integer  "extra"
+    t.integer  "price_share"
+    t.integer  "price_markup"
   end
 
   create_table "presets", :force => true do |t|

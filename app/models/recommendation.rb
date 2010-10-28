@@ -2,22 +2,26 @@ class Recommendation
 
   include KeyValueInit
 
-  attr_accessor :prices, :variants, :price_total, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source
+  attr_accessor :variants, :price_fare, :price_tax, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source
 
   def validating_carrier
     validating_carrier_iata && Airline[validating_carrier_iata]
   end
-  
-  def price_base
-    prices[0]
+
+  def price_total
+    price_fare + price_tax + price_markup
   end
-  
+
   def price_with_payment_commission
-    (price_total + extra) + payment_commission
+    price_total + price_payment
   end
-  
-  def payment_commission
-    ((price_total + extra) * 0.028).ceil
+
+  def price_payment
+    (price_total * 0.028).ceil
+  end
+
+  def price_tax_and_markup
+    price_tax + price_markup
   end
 
   def segments
@@ -81,22 +85,26 @@ class Recommendation
     @commission ||= Commission.find_for(self)
   end
 
-  def markup
-    commission.markup(price_base) if commission
+  def price_share
+    if commission
+      commission.share(price_fare)
+    else
+      0
+    end
   end
 
   # надеюсь, никто его не дернет до выставления всех остальных параметров
-  def extra
-    ajust_extra! if @extra.nil?
-    @extra
+  def price_markup
+    ajust_markup! if @price_markup.nil?
+    @price_markup
   end
 
-  def ajust_extra!
+  def ajust_markup!
     # если меньше 350 рублей, то три процента сверху
-    if (markup||0) < 350
-      @extra = price_base * 0.03
+    if (price_share) < 350
+      @price_markup = ((price_fare + price_tax) * 0.03).to_i
     else
-      @extra = 0
+      @price_markup = 0
     end
   end
 
@@ -115,7 +123,7 @@ class Recommendation
 
   # comparison, uniquiness, etc.
   def signature
-    [validating_carrier_iata, price_total, variants]
+    [validating_carrier_iata, price_fare, price_tax, variants]
   end
 
   def hash
@@ -131,29 +139,33 @@ class Recommendation
       Flight.from_flight_code flight_code
     end
     segments = []
-    flights.each {|fl|
+    flights.each do |fl|
       if segments.blank? || segments.length <= fl.segment_number.to_i
         segments << Segment.new(:flights => [fl])
       else
         segments.last.flights << fl
       end
-      }
+    end
     variant = Variant.new(:segments => segments)
     recommendation = Recommendation.new(:variants => [variant])
     recommendation.booking_classes = variant.flights.every.class_of_service
     xml = Amadeus.fare_informative_pricing_without_pnr(OpenStruct.new(:flights => flights, :debug => false, :people_counts => people_counts))
-    recommendation.price_total = 0
-    recommendation.prices = [0]
+    price_total = 0
+    price_fare = 0
     # FIXME почему то амадеус возвращает цену для одного человека, даже если указано несколько
-    xml.xpath('//r:pricingGroupLevelGroup').each {|pg|
-      recommendation.price_total += pg.xpath('r:fareInfoGroup/r:fareAmount/r:otherMonetaryDetails[r:typeQualifier="712"][r:currency="RUB"]/r:amount').to_s.to_i * pg.xpath('r:numberOfPax/r:segmentControlDetails/r:numberOfUnits').to_s.to_i
-      recommendation.prices[0] +=
-pg.xpath('r:fareInfoGroup/r:fareAmount/r:otherMonetaryDetails[r:typeQualifier="E"][r:currency="RUB"]/r:amount').to_s.to_i * pg.xpath('r:numberOfPax/r:segmentControlDetails/r:numberOfUnits').to_s.to_i
-      }
-    return nil if recommendation.price_total == 0
+    xml.xpath('//r:pricingGroupLevelGroup').each do |pg|
+      passengers_in_group = pg.xpath('r:numberOfPax/r:segmentControlDetails/r:numberOfUnits').to_i
+      price_total += pg.xpath('r:fareInfoGroup/r:fareAmount/r:otherMonetaryDetails[r:typeQualifier="712"][r:currency="RUB"]/r:amount').to_s.to_i * passengers_in_group
+      price_fare += pg.xpath('r:fareInfoGroup/r:fareAmount/r:otherMonetaryDetails[r:typeQualifier="E"][r:currency="RUB"]/r:amount').to_s.to_i * passengers_in_group
+    end
+    # FIXME не очень надежный признак
+    return nil if price_total == 0
+    recommendation.price_fare = price_fare
+    recommendation.price_tax = price_total - price_fare
+
     # FIXME сломается, когда появятся инфанты
     a_session = AmadeusSession.book
-    air_sfr_xml = Amadeus.soap_action('Air_SellFromRecommendation', 
+    air_sfr_xml = Amadeus.air_sell_from_recommendation(
       OpenStruct.new(:segments => segments, :people_count => (people_counts.values.sum)),
       a_session
     )
@@ -163,44 +175,6 @@ pg.xpath('r:fareInfoGroup/r:fareAmount/r:otherMonetaryDetails[r:typeQualifier="E
     air_sfr_xml.xpath('//r:itineraryDetails').each_with_index {|s, i|
       parse_flights(s, segments[i])
     }
-    recommendation
-  end
-  
-  #временная херня
-  def self.create_booking(flight_codes = ['SUSU837L251010SVOLED10'], people_counts = {:adults => 1, :children => 0})
-    a_session = AmadeusSession.book
-    flights = flight_codes.map do |flight_code|
-      Flight.from_flight_code flight_code
-    end
-    segments = []
-    flights.each {|fl|
-      if segments.blank? || segments.length <= fl.segment_number.to_i
-        segments << Segment.new(:flights => [fl])
-      else
-        segments.last.flights << fl
-      end
-      }
-    variant = Variant.new(:segments => segments)
-    recommendation = Recommendation.new(:variants => [variant])
-    air_sfr_xml = Amadeus.soap_action('Air_SellFromRecommendation', OpenStruct.new(:segments => segments, :people_count => (people_counts.values.sum)), a_session)
-    #FIXME нужно разобраться со statusCode - когда все хорошо, а когда - нет
-    return nil if air_sfr_xml.xpath('//r:segmentInformation/r:actionDetails/r:statusCode').every.to_s.uniq != ['OK']
-    air_sfr_xml.xpath('//r:itineraryDetails').each_with_index {|s, i|
-      parse_flights(s, segments[i])
-    }
-    doc = Amadeus.pnr_add_multi_elements(PNRForm.new(
-    :flights => [],
-    :first_name => 'Vasya',
-    :surname => 'Ua',
-    :phone => '454555',
-    :email => 'email@example.com',
-    :validating_carrier => 'SU'
-    ), a_session)
-    pnr_number = doc.xpath('//r:controlNumber').to_s
-    Amadeus.soap_action('Fare_PricePNRWithBookingClass', nil, a_session)
-    Amadeus.soap_action('Ticket_CreateTSTFromPricing', nil, a_session)
-    Amadeus.pnr_add_multi_elements(PNRForm.new(:end_transact => true), a_session)
-    Amadeus.soap_action('Queue_PlacePNR', OpenStruct.new(:debug => false, :number => pnr_number), a_session)    
     recommendation
   end
   

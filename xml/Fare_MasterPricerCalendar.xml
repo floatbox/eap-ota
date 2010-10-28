@@ -1,40 +1,47 @@
-<numberOfUnit>
+  <numberOfUnit>
     <unitNumberDetail>
-        <numberOfUnits>1</numberOfUnits>
-        <typeOfUnit>PX</typeOfUnit>
+      <numberOfUnits>1</numberOfUnits>
+      <typeOfUnit>PX</typeOfUnit>
     </unitNumberDetail>
     <unitNumberDetail>
-        <numberOfUnits>200</numberOfUnits>
-        <typeOfUnit>RC</typeOfUnit>
+      <numberOfUnits>200</numberOfUnits>
+      <typeOfUnit>RC</typeOfUnit>
     </unitNumberDetail>
-</numberOfUnit>
-<paxReference>
+  </numberOfUnit>
+  <paxReference>
     <ptc>ADT</ptc>
     <traveller>
-        <ref>1</ref>
+      <ref>1</ref>
     </traveller>
-</paxReference>
-<itinerary>
+  </paxReference>
+  <itinerary>
     <requestedSegmentRef>
-        <segRef>1</segRef>
+      <segRef>1</segRef>
     </requestedSegmentRef>
     <departureLocalization>
-        <departurePoint>
-            <locationId>NCE</locationId>
-        </departurePoint>
+      <depMultiCity>
+        <locationId>PAR</locationId>
+      </depMultiCity>
+      <depMultiCity>
+        <locationId>LIL</locationId>
+      </depMultiCity>
     </departureLocalization>
     <arrivalLocalization>
-        <arrivalPointDetails>
-            <locationId>LHR</locationId>
-        </arrivalPointDetails>
+      <arrivalMultiCity>
+        <locationId>MIA</locationId>
+      </arrivalMultiCity>
+      <arrivalMultiCity>
+        <locationId>FLL</locationId>
+      </arrivalMultiCity>
     </arrivalLocalization>
     <timeDetails>
-        <firstDateTimeDetail>
-            <date>030510</date>
-        </firstDateTimeDetail>
-        <rangeOfDate>
-            <rangeQualifier>C</rangeQualifier>
-            <dayInterval>3</dayInterval>
-        </rangeOfDate>
+      <firstDateTimeDetail>
+        <date>201210</date>
+      </firstDateTimeDetail>
+      <rangeOfDate>
+        <rangeQualifier>C</rangeQualifier>
+        <dayInterval>3</dayInterval>
+      </rangeOfDate>
     </timeDetails>
-</itinerary>
+  </itinerary>
+

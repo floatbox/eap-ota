@@ -49,7 +49,7 @@ class Completer
   end
 
   class << self
-    delegate :complete, :dump, :iata_from_name, :to => :new_or_cached
+    delegate :complete, :dump, :iata_from_name, :record_from_string, :to => :new_or_cached
   end
 
 
@@ -57,6 +57,13 @@ class Completer
     # FIXME перенести отсюда в фильтр например
     scan_eq(name) do |record|
       return record.code if record.type == 'city' || record.type == 'airport' || record.type == 'country'
+    end
+    nil
+  end
+  
+  def record_from_string(name, types=['city', 'airport', 'country'])
+    scan_eq(name) do |record|
+      return record if types.include? record.type
     end
     nil
   end
@@ -79,7 +86,6 @@ class Completer
           end_poses << (position + m[0].mb_chars.length)
         end
       end
-
       leftmost_start_pos = nil
       for word_beginning_pattern in [ /\S+\s+\S+\s+\S+\s*$/, /\S+\s+\S+\s*$/, /\S+\s*$/ ]
         if m = prefix.match(word_beginning_pattern)
@@ -119,7 +125,7 @@ class Completer
 
   def scan(prefix)
     normalized_prefix = normalize(prefix)
-    return if normalized_prefix.blank?
+    return if normalized_prefix.blank? || !@index[normalized_prefix[0].to_s]
     @index[normalized_prefix[0].to_s].each do |record|
       yield(record) if record.prenormalized_matches?(normalized_prefix)
     end
@@ -168,8 +174,8 @@ class Completer
     read_airports
     #read_geotags
 
-    #read_dates
-    #read_months
+    read_dates
+    read_months
     #read_passengers
     #read_comforts
     #read_airplane_families
@@ -187,19 +193,31 @@ class Completer
   def read_dates
     days = (1..7).collect {|cnt| date = cnt.days.since(Date.today); [ WEEKDAY_NAMES[date.wday], date] }
     days << ['сегодня', Date.today]
-    days << ['завтра', 1.day.from_now.to_date]
-    days << ['послезавтра', 2.days.from_now.to_date]
+    days << ['завтра', Date.today + 1.day]
+    days << ['послезавтра', Date.today + 2.days]
 
     for name, date in days
-      add(:name => name, :type => 'date', :hint => Russian.strftime(date, '%e %B'), :info => Russian.strftime(date, '%A, %e %B %Y года'))
+      add(:name => name, :type => 'date', :hint => Russian.strftime(date, '%e %B'), :info => Russian.strftime(date, '%A, %e %B %Y года'), :hidden_info => date.strftime('%d%m%y'))
     end
   end
 
   # FIXME пока не возвращает числа
-  MONTHS = %W(январь февраль март апрель май июнь июль август сентябрь октябрь ноябрь декабрь)
+  MONTHS = [['январь', ['января']], 
+             ['февраль', ['февраля']],
+             ['март', ['марта']],
+             ['апрель', ['апреля']],
+             ['май', ['мая']],
+             ['июнь', ['июня']],
+             ['июль', ['июля']],
+             ['август', ['августа']],
+             ['сентябрь', ['сентября']],
+             ['октябрь', ['октября']],
+             ['ноябрь', ['ноября']],
+             ['декабрь', ['декабря']]
+           ]
   def read_months
-    MONTHS.each do |month|
-      add(:name => month, :type => 'date')
+    MONTHS.each_with_index do |month, i|
+      add(:name => month[0], :type => 'date', :aliases => month[1], :hidden_info => (i+1) )
     end
   end
 
@@ -242,6 +260,7 @@ class Completer
     synonyms = []
     synonyms << c.name_en unless c.name_en == c.name
     synonyms += c.synonyms
+    synonyms += [c.case_in, c.case_to, c.case_from]
     synonyms.delete_if &:blank?
     add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms, :hint => c.continent_part_ru)
   end
@@ -257,6 +276,7 @@ class Completer
     synonyms = []
     synonyms << c.name_en unless c.name_en == c.name
     synonyms += c.synonyms
+    synonyms += [c.case_in, c.case_to, c.case_from]
     synonyms.delete_if &:blank?
     add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms, :hint => c.country.name, :info => "Город #{c.name} #{c.country.proper_in}")
   end
@@ -325,6 +345,7 @@ class Completer
       @code = attrs[:code]
       @info = attrs[:info]
       @hint = attrs[:hint]
+      @hidden_info = attrs[:hidden_info]
       @code = nil if @code == ''
       @aliases = attrs[:aliases].presence || []
       @aliases = @aliases.split(':').every.strip if @aliases.is_a?(String)
@@ -332,10 +353,10 @@ class Completer
       update_to_match
     end
 
-    attr_accessor :word, :type, :name, :code, :aliases, :to_match, :info, :hint
+    attr_accessor :word, :type, :name, :code, :aliases, :to_match, :info, :hint, :hidden_info
 
     def entity
-      { :iata => code, :type => type, :name => name, :info => info, :hint => hint }.delete_if {|key, value| value.nil? }
+      { :iata => code, :type => type, :name => name, :info => info, :hint => hint, :hidden_info => hidden_info }.delete_if {|key, value| value.nil? }
     end
 
     def update_to_match
