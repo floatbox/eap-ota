@@ -132,8 +132,9 @@ class PricerForm < ActiveRecord::BaseWithoutTable
 
   def parse_recommendations(xml, flight_indexes)
     xml.xpath("//r:recommendation").map do |rec|
-      prices = rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").collect {|x| x.to_i }
-      price_total = prices[0]
+      price_total, price_tax =
+        rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").every.to_i
+      price_fare = price_total - price_tax
       cabins =
         rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:cabin").every.to_s
       booking_classes = 
@@ -161,8 +162,8 @@ class PricerForm < ActiveRecord::BaseWithoutTable
         rec.xpath('.//r:fareBasis').to_s
       #cabins остаются только у recommendation и не назначаются flight-ам, тк на один и тот же flight продаются билеты разных классов
       Recommendation.new(
-        :prices => prices,
-        :price_total => price_total,
+        :price_fare => price_fare,
+        :price_tax => price_tax,
         :variants => variants,
         :validating_carrier_iata => validating_carrier_iata,
         :additional_info => additional_info,

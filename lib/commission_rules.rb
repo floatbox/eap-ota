@@ -34,9 +34,10 @@ module CommissionRules
     (recommendation.booking_classes - letters).blank?
   end
 
-  def markup(tariff)
+  def share(fare)
+    # FIXME сделать поддержу EUR
     if subagent['%']
-      fround(tariff * subagent.to_f / 100)
+      fround(fare * subagent.to_f / 100)
     else
       fround(subagent.to_f)
     end

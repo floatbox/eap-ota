@@ -157,13 +157,13 @@ class Amadeus < Handsoap::Service
   def fare_price_pnr_with_lower_fares(args, session = nil )
     soap_action 'Fare_PricePNRWithLowerFares', args, session
   end
-  
+
   def fare_informative_pricing_without_pnr(args, session = nil)
     soap_action 'Fare_InformativePricingWithoutPNR', args, session
   end
 
-  def fare_informative_pricing_without_pnr(args, session = nil )
-    soap_action 'Fare_InformativePricingWithoutPNR', args, session
+  def air_sell_from_recommendation(args, session = nil )
+    soap_action 'Air_SellFromRecommendation', args, session
   end
 
   def command_cryptic(args, session = nil )

@@ -142,7 +142,7 @@
                 <th rowspan="2"><i>=</i>
                 <th>С&nbsp;карты будет списано
             <tr>
-                <td><u><%= @recommendation.price_total  %></u><i>рублей</i>
-                <td><u><%= @recommendation.payment_commission  %></u><i>рублей</i>
-                <td><b><%= @recommendation.price_with_payment_commission %></b><i>рубля</i>
+                <td><u><%= @recommendation.price_total.to_i  %></u><i>рублей</i>
+                <td><u><%= @recommendation.price_payment.to_i  %></u><i>рублей</i>
+                <td><b><%= @recommendation.price_with_payment_commission.to_i %></b><i>рубля</i>
     </table>

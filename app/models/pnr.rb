@@ -47,6 +47,7 @@ class Pnr
     res.join('<br />')
   end
   
+  # зачем оно?
   def parse_prices(xml)
     code_to_text = {'712' => 'Total fare amount', 'B' => 'Base fare', 'E' => 'Equivalent fare'}
     self.prices = xml.xpath('//r:fareDataSupInformation').map{|price|
