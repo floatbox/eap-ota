@@ -37,6 +37,10 @@
         tools.from.trigger('iata', fdata.iata);
     }
     
+    app.search.subscribe(tools.from, 'from', function(v) {
+        tools.from.trigger('set', v);
+    });
+    
     // "подпольная" ссылка для сброса поля "Откуда"
     
     tools.from.reset = $('#search-from-reset').click(function(e) {
@@ -67,6 +71,10 @@
         app.search.update({to: $(this).val()}, this);
     });
     fields['to'] = tools.to.val();
+
+    app.search.subscribe(tools.to, 'to', function(v) {
+        tools.to.trigger('set', v);
+    });
     
     // образец содержимого поля "Куда"
     
@@ -127,10 +135,12 @@
         calendar.toggleOneway(v == 0);
     });
     app.search.subscribe(calendar, 'date1', function(v) {
-        calendar.dpt.val(v);
+        calendar.selected[0] = calendar.dmyindex[v];
+        calendar.update();
     });
     app.search.subscribe(calendar, 'date2', function(v) {
-        calendar.ret.val(v);
+        calendar.selected[1] = calendar.dmyindex[v];
+        calendar.update();
     });
    
     // панель уточнений (фильтров)
@@ -204,13 +214,20 @@
             app.offers.maxLayovers = value && value.v;
         }
     });
+    app.search.subscribe(tools.defines['changes'], 'changes', function(v) {
+        tools.defines['changes'].trigger('select', v);
+    });    
 
     // обработка класса
+    fields['cabin'] = undefined;
     tools.defines['cls'].bind('change', function() {
         var value = $(this).data('value')[0];
         app.search.update({
             'cabin': value && value.v
         }, this);
+    });
+    app.search.subscribe(tools.defines['cls'], 'cabin', function(v) {
+        tools.defines['cls'].trigger('select', v);
     });
     
     // рисуем "один взрослый"
@@ -309,11 +326,12 @@
     // Сохраненные результаты
     var h = (window.location.hash).slice(1);
     if (h) try {
-        // app.search.validate({query_key: h});
-        app.offers.load({query_key: h}, 'Загружаем сохранённые результаты');
-        app.offers.show();
+        app.search.validate(h);
     }
     catch(e){};
+    
+    // Включение запросов валидации
+    app.search.active = true;
 
 });
 

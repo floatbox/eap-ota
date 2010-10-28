@@ -143,6 +143,7 @@ class Recommendation
     end
     variant = Variant.new(:segments => segments)
     recommendation = Recommendation.new(:variants => [variant])
+    recommendation.booking_classes = variant.flights.every.class_of_service
     xml = Amadeus.fare_informative_pricing_without_pnr(OpenStruct.new(:flights => flights, :debug => false, :people_counts => people_counts))
     price_total = 0
     price_fare = 0
@@ -169,44 +170,6 @@ class Recommendation
     air_sfr_xml.xpath('//r:itineraryDetails').each_with_index {|s, i|
       parse_flights(s, segments[i])
     }
-    recommendation
-  end
-  
-  #временная херня
-  def self.create_booking(flight_codes = ['SUSU837L251010SVOLED10'], people_counts = {:adults => 1, :children => 0})
-    a_session = AmadeusSession.book
-    flights = flight_codes.map do |flight_code|
-      Flight.from_flight_code flight_code
-    end
-    segments = []
-    flights.each {|fl|
-      if segments.blank? || segments.length <= fl.segment_number.to_i
-        segments << Segment.new(:flights => [fl])
-      else
-        segments.last.flights << fl
-      end
-      }
-    variant = Variant.new(:segments => segments)
-    recommendation = Recommendation.new(:variants => [variant])
-    air_sfr_xml = Amadeus.soap_action('Air_SellFromRecommendation', OpenStruct.new(:segments => segments, :people_count => (people_counts.values.sum)), a_session)
-    #FIXME нужно разобраться со statusCode - когда все хорошо, а когда - нет
-    return nil if air_sfr_xml.xpath('//r:segmentInformation/r:actionDetails/r:statusCode').every.to_s.uniq != ['OK']
-    air_sfr_xml.xpath('//r:itineraryDetails').each_with_index {|s, i|
-      parse_flights(s, segments[i])
-    }
-    doc = Amadeus.pnr_add_multi_elements(PNRForm.new(
-    :flights => [],
-    :first_name => 'Vasya',
-    :surname => 'Ua',
-    :phone => '454555',
-    :email => 'email@example.com',
-    :validating_carrier => 'SU'
-    ), a_session)
-    pnr_number = doc.xpath('//r:controlNumber').to_s
-    Amadeus.soap_action('Fare_PricePNRWithBookingClass', nil, a_session)
-    Amadeus.soap_action('Ticket_CreateTSTFromPricing', nil, a_session)
-    Amadeus.pnr_add_multi_elements(PNRForm.new(:end_transact => true), a_session)
-    Amadeus.soap_action('Queue_PlacePNR', OpenStruct.new(:debug => false, :number => pnr_number), a_session)    
     recommendation
   end
   

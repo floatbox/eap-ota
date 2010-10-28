@@ -1,9 +1,23 @@
 <% cache(:action => "index", :action_suffix => @query_key) do %>
 <% if @recommendations.present? %>
-    <div id="offers-collection" data-filters='<%= Recommendation.summary(@recommendations).to_json %>' data-query_key='<%= @query_key %>'>
-        <%= render :partial => 'recommendation', :collection => @recommendations %>
-    </div>
+<div id="offers-collection" data-filters="<%= html_escape(Recommendation.summary(@recommendations).to_json).gsub('&amp;', '&') %>" data-query_key="<%= @query_key %>">
+    <% @recommendations.each do |recommendation| %>
+    <div class="offer collapsed<%= ' multiple' if recommendation.variants.length > 1 %>" data-summary='<%= recommendation.summary.to_json %>'>
+        <% different_cabins = recommendation.cabins_except(params[:search]['cabin']) %>
+        <% recommendation.variants.each_with_index do |variant, variant_index| %>
+            <%= render :partial => 'variant', :locals => {:variant => variant, :recommendation => recommendation, :variant_index => variant_index, :variant_cabins => different_cabins} %>
+        <% end %>    
+        <div class="aux">
+            <span style="color:green">
+            <%= 'только в беспосадочном запросе.' if recommendation.source == 'right' %>
+            <%#= 'в обоих запросах' if recommendation.source.nil? %>
+            <%= 'не было в беспосадочном запросе!' if recommendation.source == 'left' && !recommendation.layovers? %>
+            </span>
+        </div>
+    </div>    
+    <% end %>
+</div>
 <% else %>
-    <div id="offers-collection">Таких рейсов нет, попробуйте другие даты.</div>
+<div id="offers-collection">Таких рейсов нет, попробуйте другие даты.</div>
 <% end %>
 <% end %>

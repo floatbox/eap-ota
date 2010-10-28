@@ -8,61 +8,138 @@
     <col width="111">
 </colgroup>
 <thead>
-    <tr>
-        <td class="cost">
-            <dl>
-                <dt><%= recommendation.price_total.to_i.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') %></dt>
-                <dd><%= Russian.pluralize(recommendation.price_total.to_i, 'рубль', 'рубля', 'рублей') %></dd>
-            </dl>
-        </td>
-        <td class="booking" colspan="5">
-            <a href="/booking/?flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>&adults=<%= @search.adults %>&children=<%=@search.children %>&validating_carrier=<%= recommendation.validating_carrier.iata%>" class="a-button" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
-        </td>
-    </tr>
+<tr>
+    <td class="cost"><dl>
+        <dt><%= recommendation.price_total.to_i.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') %></dt>
+        <dd><%= Russian.pluralize(recommendation.price_total.to_i, 'рубль', 'рубля', 'рублей') %></dd>
+    </dl></td>
+    <td class="booking" colspan="5">
+        <a href="/booking/?flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>&adults=<%= @search.adults %>&children=<%=@search.children %>&validating_carrier=<%= recommendation.validating_carrier.iata%>" class="a-button" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
+    </td>
+</tr>
 </thead>
+
 <tbody class="summary">
-    <% variant.segments.each_with_index do |segment, segment_counter| %>
-        <%= render :partial => 'segment_summary', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter, :segment_cabins => variant_cabins[segment_counter]} %>
+<% variant.segments.each_with_index do |segment, segment_counter| %>
+<tr class="segment<%= segment_counter %>">
+
+    <% if variant.common_carrier && variant.segments.length > 1 %>
+    <td class="carrier common" rowspan="2">
+    <% if segment_counter == 0 %>
+    <table class="shift"><tr><td>
+        <p><img src="<%= segment.marketing_carrier.icon_url %>" alt=""></p>
+        <p><%= segment.marketing_carrier_name %></p>
+    </td></tr></table>
     <% end %>
-    <tr class="controls">
-        <td></td>
-        <td class="toggle" colspan="2">
-            <span class="b-pseudo expand"><u>Подробнее о перелёте</u></span>
-            <span class="b-pseudo collapse"><u>Скрыть подробности</u></span>
-        </td>
-        <td class="rules" colspan="3">
-            <% if recommendation.ground? %>
-              <span style="color:red">наземный участок.</span>
+    </td>
+    <% else %>
+    <td class="carrier" rowspan="2">
+        <p><img src="<%= segment.marketing_carrier.icon_url %>" alt=""></p>
+        <p><%= segment.marketing_carrier_name %></p>
+    </td>
+    <% end %>
+
+    <td class="dpt">
+        <h5><%= fmt_time( segment.departure_time ) %><span class="direction"> — <%= segment_counter == 0 ? 'туда' : 'обратно' %></span></h5>
+        <h6><%= segment.departure.city.name %></h6>
+        <% unless segment.departure.equal_to_city %>
+            <p><%= segment.departure_name %></p>
+        <% end %>
+        <% if segment.departure_term %>
+            <p class="note">Терминал&nbsp;<%= segment.departure_term %></p>
+        <% end %>
+    </td>
+    <td class="fly" colspan="2">
+        <div class="parts">
+        <% layover_human_durations = [] %>
+        <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
+            <div class="flight" title="Перелёт <%= flight.departure.city.name %> — <%= flight.arrival.city.name %>"></div>
+            <% if layover %>
+                <% layover_human_durations << human_duration(layover) %>
+                <div class="change" title="Пересадка <%= flight.arrival.city.case_in %>, <%= human_duration(layover) %>"></div>
             <% end %>
-            <%= 'Не можем продать' unless recommendation.sellable? %>
-            <% if recommendation.commission %>
-              <%= recommendation.commission.carrier %>
-              <%= recommendation.commission.agent %>
-              <%= recommendation.commission.subagent %>
-              (<%= recommendation.price_share %>р.
-              <% unless recommendation.price_markup == 0 %>
-               + <%= recommendation.price_markup %>р.
-             <% end %>)
-            <% else %>
-              <%= recommendation.validating_carrier_iata %><span style="color:red">???</span>
-            <% end %>
-            <a href="#">Правила тарифа</a> (<%= recommendation.booking_classes.join(', ') %>) 
-        </td>
-    </tr>
+        <% end %>
+        </div>
+        <h6><%= human_duration(segment.total_duration) %> в&nbsp;пути</h6>
+        <% unless layover_human_durations.empty? %>
+            <p class="note"><%= layover_human_durations.to_sentence %> между рейсами</p>
+        <% end %>
+        <% visible_cabins = variant_cabins[segment_counter].compact %>
+        <% unless visible_cabins.empty? %>
+            <p class="cnote"><span class="cabin"><%= human_cabin_nom(visible_cabins.first) %></span></p>
+        <% end %>
+    </td>
+    <td class="arv">
+        <h5><%= fmt_time( segment.arrival_time ) %></h5>
+        <h6><%= segment.arrival.city.name %></h6>
+        <% unless segment.arrival.equal_to_city %>
+            <p><%= segment.arrival_name %></p>
+        <% end %>
+        <% if segment.arrival_term %>
+            <p class="note">Терминал&nbsp;<%= segment.arrival_term %></p>
+        <% end %>
+    </td>
+    
+    <% if variant.common_layovers && variant.segments.length > 1 %>
+    <td class="changes common" rowspan="2">
+    <% if segment_counter == 0 && segment.layovers? %>
+    <table class="shift"><tr><td>
+        <p>С <%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %></p>
+    </td></tr></table>
+    <% end %>
+    </td>
+    <% else %>
+    <td class="changes" rowspan="2">
+        <% if segment.layovers? %>
+        <p>С <%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %></p>
+        <% end %>
+    </td>    
+    <% end %>
+   
+</tr>
+<tr class="segment<%= segment_counter %>">
+    <td colspan="4" class="variants"></td>
+</tr>
+<% end %>
+<tr class="controls">
+    <td></td>
+    <td class="toggle" colspan="2">
+        <span class="b-pseudo expand"><u>Подробнее о перелёте</u></span>
+        <span class="b-pseudo collapse"><u>Скрыть подробности</u></span>
+    </td>
+    <td class="rules" colspan="3">
+    <% if recommendation.ground? %>
+        <span style="color:red">наземный участок.</span>
+    <% end %>
+    <%= 'Не можем продать' unless recommendation.sellable? %>
+    <% if recommendation.commission %>
+        <%= recommendation.commission.carrier %>
+        <%= recommendation.commission.agent %>
+        <%= recommendation.commission.subagent %>
+        (<%= recommendation.price_share %>р.
+        <% unless recommendation.price_markup == 0 %>
+        + <%= recommendation.price_markup %>р.
+        <% end %>)
+    <% else %>
+        <%= recommendation.validating_carrier_iata %><span style="color:red">???</span>
+    <% end %>
+    <a href="#">Правила тарифа</a> (<%= recommendation.booking_classes.join(', ') %>) 
+    </td>
+</tr>
 </tbody>
 <tbody class="details">
-    <% variant.segments.each_with_index do |segment, segment_counter| %>
-        <%= render :partial => 'segment_details', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter, :segment_cabins => variant_cabins[segment_counter]} %>
-    <% end %>
-    <tr class="booking">
-        <td></td>
-        <td colspan="6">
-        <a href="/booking/?flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>&adults=<%= @search.adults %>&children=<%=@search.children %>" class="a-button" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
-            <dl class="sum">
-                <dt>Итого <strong><%= human_price(recommendation.price_total.to_i) %></strong> за всех со всеми сборами</dt>
-                <dd>Тариф — <%= human_price((recommendation.price_fare).to_i) %>, налоги и сборы — <%= human_price(recommendation.price_tax_and_markup.to_i) %></dd>
-            </dl>
-        </td>
-    </tr>    
+<% variant.segments.each_with_index do |segment, segment_counter| %>
+    <%= render :partial => 'segment_details', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter, :segment_cabins => variant_cabins[segment_counter]} %>
+<% end %>
+<tr class="booking">
+    <td></td>
+    <td colspan="6">
+    <a href="/booking/?flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>&adults=<%= @search.adults %>&children=<%=@search.children %>" class="a-button" title="Мы предложим вам самостоятельно выписать себе билеты. Приготовьте, пожалуйста, (загран)паспорт или иные подходящие документы, по которым вы полетите.">Купить</a>
+    <dl class="sum">
+        <dt>Итого <strong><%= human_price(recommendation.price_total.to_i) %></strong> за всех со всеми сборами</dt>
+        <dd>Тариф — <%= human_price((recommendation.price_fare).to_i) %>, налоги и сборы — <%= human_price(recommendation.price_tax_and_markup.to_i) %></dd>
+    </dl>
+    </td>
+</tr>    
 </tbody>
 </table>

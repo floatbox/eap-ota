@@ -35,6 +35,7 @@ makeDates: function() {
     var aet = actend.getTime() - 1;
     var end = actend.shiftDays((actend.getDay() == 1 ? 8 : 15) - (actend.getDay() || 7)).getTime();
     var month = undefined, dcounter = 0;
+    this.dmyindex = {};
     while (curt < end) {
         var date = curd.getDate();
         if (!month || date == 1) {
@@ -56,6 +57,7 @@ makeDates: function() {
         if (curt < abt || curt > aet) {
             day.addClass('inactive');
         } else {
+            this.dmyindex[dmy] = dcounter;
             day.attr('data-index', dcounter++);
         }
         month.append(day.append(label));
