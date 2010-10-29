@@ -149,7 +149,7 @@ class Recommendation
     variant = Variant.new(:segments => segments)
     recommendation = Recommendation.new(:variants => [variant])
     recommendation.booking_classes = variant.flights.every.class_of_service
-    xml = Amadeus.fare_informative_pricing_without_pnr(OpenStruct.new(:flights => flights, :debug => false, :people_counts => people_counts))
+    xml = Amadeus.fare_informative_pricing_without_pnr(:flights => flights, :people_counts => people_counts)
     price_total = 0
     price_fare = 0
     # FIXME почему то амадеус возвращает цену для одного человека, даже если указано несколько
@@ -164,12 +164,9 @@ class Recommendation
     recommendation.price_tax = price_total - price_fare
 
     # FIXME сломается, когда появятся инфанты
-    a_session = AmadeusSession.book
-    air_sfr_xml = Amadeus.air_sell_from_recommendation(
-      OpenStruct.new(:segments => segments, :people_count => (people_counts.values.sum)),
-      a_session
-    )
-    a_session.destroy
+    amadeus = Amadeus.new(:book => true)
+    air_sfr_xml = amadeus.air_sell_from_recommendation(:segments => segments, :people_count => people_counts.values.sum)
+    amadeus.session.destroy
     #FIXME нужно разобраться со statusCode - когда все хорошо, а когда - нет
     return nil if air_sfr_xml.xpath('//r:segmentInformation/r:actionDetails/r:statusCode').every.to_s.uniq != ['OK']
     air_sfr_xml.xpath('//r:itineraryDetails').each_with_index {|s, i|

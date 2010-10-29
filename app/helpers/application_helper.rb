@@ -9,4 +9,9 @@ module ApplicationHelper
   def cases_for location
     "лечу #{location.case_from} #{location.case_to} c пересадкой #{location.case_in}"
   end
+
+  def ordinal number
+    return "#{number}й" unless (1..9) === number.to_i
+    %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}[number - 1]
+  end
 end

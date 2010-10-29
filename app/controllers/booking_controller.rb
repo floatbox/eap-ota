@@ -17,7 +17,6 @@ class BookingController < ApplicationController
               }
     @people_count = {:adults => params[:adults].to_i, :children => params[:children].to_i}
     @card = Billing::CreditCard.new()
-    @numbers = %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}
     @recommendation_number = @recommendation.hash
     Recommendation.store_to_cache(@recommendation_number, @recommendation)
 
@@ -49,7 +48,6 @@ class BookingController < ApplicationController
         return
       end
     end
-    @numbers = %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}
     render :partial => 'embedded'
   end
 

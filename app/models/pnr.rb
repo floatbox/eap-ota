@@ -1,11 +1,14 @@
 class Pnr
-  attr_accessor :number, :flights, :passengers, :phone, :email, :details
+  attr_accessor :number, :flights, :passengers, :phone, :email, :details, :raw
   
   def self.get_by_number number
-    xml = Amadeus.pnr_retrieve(OpenStruct.new(:number => number, :debug => false))
     res = self.new
     res.number = number
+    amadeus = Amadeus.new(:book => true)
+    xml = amadeus.pnr_retrieve(:number => number)
     res.parse_pnr(xml)
+    res.raw = amadeus.cmd("RT #{number}")
+    amadeus.cmd('IG')
     res
   end
   
