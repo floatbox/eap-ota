@@ -152,6 +152,9 @@ show: function() {
         });
     }
 },
+hide: function() {
+    this.container.addClass('g-none');
+},
 toggle: function(mode) {
     this.loading.toggleClass('g-none', mode != 'loading');
     this.results.toggleClass('g-none', mode != 'results');

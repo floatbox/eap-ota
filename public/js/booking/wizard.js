@@ -16,7 +16,9 @@ app.Wizard = function(el, i) {
 var ptp = app.Wizard.prototype;
 
 ptp.init = function() {
-    this.$fields = this.$el.find(':input[type="text"][onclick]').inputtext(this);
+
+    this.$fields = this.$el.find(':input[type="text"][onclick]');
+    this.$fields.inputtext(this);
 
     return this;
 }
@@ -24,17 +26,16 @@ ptp.init = function() {
 // форма заполнена корректно?
 
 ptp.isValid = function() {
-    var state = this.$fields.validate();
-    return state.length == 0;
+    this.state = this.$fields.validate();
+    return this.state.length == 0;
 }
-
 
 // сделать блок жёлтым или зелёным
 
 ptp.setReady = function(ready) {
     this.ready = ready;
     this.$el.toggleClass('ready', ready);
-
+    this.$el.trigger('setready');
     return this;
 }
 
@@ -42,12 +43,8 @@ ptp.isReady = function() {
     return this.ready;
 }
 
-
-// 
-
 ptp.change = function() {
     this.setReady(this.isValid());
-
     return this;
 }
 
@@ -56,7 +53,6 @@ ptp.nextField = function($f) {
     var $ff = this.$fields;
     return $ff.get($ff.index($f) + 1) || $ff.filter(':visible').last()[0];
 }
-
 
 
 // ======  Данные пассажиров ============
@@ -111,16 +107,12 @@ ptp.expir = function($el) {
     $el.click(function() {
         var cb = this;
         var data = this.onclick();
-        data.ctrls = $(data.ctrls);
-        data.label = $(data.label);
-
-        data.ctrls.each(function() {
+        $(data.ctrls).each(function() {
             $(this)
             .attr('disabled', cb.checked)
             .toggleClass('text-disabled', cb.checked);
         });
-        data.label.toggleClass('label-disabled', cb.checked);
-
+        $(data.label).toggleClass('label-disabled', cb.checked);
         me.change();
     });
 }
@@ -365,7 +357,6 @@ ptp.cvv = function(s) {
 }
 
 
-
 // ======  Данные покупателя  ============
 
 app.Contacts = function() {
@@ -374,22 +365,3 @@ app.Contacts = function() {
     return this;
 };
 app.Contacts.extend(app.Wizard);
-
-
-/*
-app.Variant = function(el, i) {
-    app.Variant.superclass.constructor.apply(this, arguments)
-
-    return this;
-};
-app.Variant.extend(app.Wizard);
-
-
-app.Submit = function() {
-    app.Submit.superclass.constructor.apply(this, arguments)
-
-    return this;
-};
-app.Submit.extend(app.Wizard);
-*/
-

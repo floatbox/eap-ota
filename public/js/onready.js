@@ -322,6 +322,17 @@
     
     // Фокус на поле ввода "Куда"
     tools.to.focus();
+    
+    // Запоминаем данные формы для сброса
+    app.search.defvalues = $.extend({}, fields);
+    
+    /* Сброс по клику на логотипе */
+    $('.header .logo').click(function() {
+        var data = $.extend({}, fields);
+        for (var key in data) data[key] = app.search.defvalues[key];
+        app.search.update(data);
+        app.offers.hide();
+    });
 
     // Сохраненные результаты
     var h = (window.location.hash).slice(1);

@@ -1,9 +1,22 @@
 /* Booking form */
 app.booking = {
 init: function() {
+    var self = this;
     var sections = $('.section[onclick]', this.el);
     this.steps = $.map(sections, function(el, i) {
         return new (app[el.onclick()])(el, i);
+    });
+    $('form', this.el).submit(function(event) {
+        event.preventDefault();
+        if (self.submit.hasClass('a-button-ready')) {
+            var data = $(this).serialize();
+            $.post($(this).attr('action'), data, function(s) {
+                self.el = $(s).replaceAll(self.el);
+                if (self.el.children('form').length) {
+                    self.init();
+                }
+            });
+        }
     });
     // раскрывающаяся подсказка
     $('.b-expand').mousedown(function(e) {
@@ -16,6 +29,28 @@ init: function() {
         e.preventDefault();
         $('#tarif-text').slideToggle(200);
     });
+    this.submit = $('.book-s .a-button', this.el);
+    for (var i = this.steps.length; i--;) {
+        this.steps[i].change();
+    }
+    sections.bind('setready', function() {
+        var ready = true, errors = [];
+        for (var i = 0, im = self.steps.length; i < im; i++) {
+            var step = self.steps[i];
+            if (!step.ready) {
+                ready = false;
+                if (step.state) {
+                    errors = errors.concat(step.state);
+                }
+            }
+        }
+        self.submit.toggleClass('a-button-ready', ready);
+        var blocker = $('.blocker', self.el).toggle(!ready);
+        if (!ready && errors.length) {
+            $('.b-pseudo', blocker).html('<li>' + errors.slice(0, 3).join('</li><li>') + '</li>');
+        }
+    });
+    sections.eq(0).trigger('setready');
 },
 load: function(variant) {
     var self = this;

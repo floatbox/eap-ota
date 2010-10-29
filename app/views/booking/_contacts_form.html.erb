@@ -1,8 +1,8 @@
 <div class="section book-c" onclick="return 'Contacts'">
 <% fields_for :order do |o| %>
 <table>
-<col width="317">
-<col width="316">
+<col width="314">
+<col width="313">
 <tr>
     <td>
         <%= o.text_field :email,
@@ -19,35 +19,28 @@
           :id => "booking-contacts-phone",
           :class => "text g-xl",
           :value => @order.phone || "Номер телефона",
-          :onclick => "return {def: 'Номер телефона', mask: /[a-z]/i}",
+          :onclick => "return {def: 'Номер телефона', mask: /[\\d \\(\\)\\+-]/i}",
           :title => "номер телефона"
          %>
-         <%= o.error_message_on :phone, 
-          :id => "error_order_phone" %>
+        <%= o.error_message_on :phone, :id => "error_order_phone" %>
+</tr>
 <tr>
     <td class="sub g-xxs">
-        <label 
-         for="booking-contacts-email"
-         title=""
-        >На&nbsp;этот адрес мы вышлем <%= @people.count == 1 ? 'ваш билет' : 'ваши билеты' %>
+        <label for="booking-contacts-email" title="">На&nbsp;этот адрес мы вышлем <%= @people.count == 1 ? 'ваш билет' : 'ваши билеты' %>
         </label>&nbsp;<u class="b-expand" title="Для чего ещё нужен E-mail?"></u>
         <p>
-            Адрес должен быть реально существующим, чтобы вы смогли получить электронный билет и полезные инструкции.
-            <br>
+            Адрес должен быть реально существующим, чтобы вы смогли получить электронный билет и полезные инструкции.<br>
             Кроме того, по этому адресу мы узнаем вас при следующем визите и сделаем вашу работу с сайтом ещё удобнее.
         </p>
     <td class="sub g-xxs">
-        <label 
-         for="booking-contacts-phone"
-         title=""
-        >Для чего он нужен?</label>&nbsp;<u class="b-expand" title="Подробнее об обратной связи"></u>
+        <label for="booking-contacts-phone" title="">Для чего он нужен?</label>&nbsp;<u class="b-expand" title="Подробнее об обратной связи"></u>
         <p>
             Телефон иногда полезен для связи в экстренных случаях, например, чтобы:
-                <br>- уладить затруднения с оплатой;
-                <br>- сообщить об изменении расписания;
-                <br>- ?
+            <br>- уладить затруднения с оплатой;
+            <br>- сообщить об изменении расписания;
+            <br>- ?
         </p>
-
+</tr>
 </table>
 <% end  %>
 </div>

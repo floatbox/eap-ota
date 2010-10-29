@@ -47,15 +47,10 @@
 }
 
 .booking .section {
-    margin: 3px;
-    padding: 12px 0;
+    margin: 0 0 2px;
+    padding: 15px 0;
 
     background: #fff8ce;
-    
-    border-radius: 4px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    -o-border-radius: 4px;    
 }
 
 .booking .ready {
@@ -259,7 +254,7 @@
 /* таблица */
 
 .book-p table td {
-    padding: 0 0 0 12px;
+    padding: 0 0 0 15px;
 
     vertical-align: top;
 }
@@ -462,7 +457,7 @@
 .bankcard {
     overflow: hidden;
     
-    margin: 0 12px;
+    margin: 0 15px;
 
     zoom: 1;
 }
@@ -564,6 +559,10 @@
     padding: 1px 4px;
 
     background: #e8e8e8;
+}
+
+.bankcard .text-value {
+    background: #FFF;
 }
 
 .bankcard .text-value {
@@ -752,16 +751,16 @@
 /******* БЛОК 4: КОНТАКТЫ *******/
 
 .booking .book-c table td {
-    padding: 0 0 0 12px;
+    padding: 0 0 0 15px;
     vertical-align: top;
 }
 
 .booking .book-c .text {
-    width: 306px;
+    width: 303px;
 }
 
 #booking-contacts-email {
-    width: 307px;
+    width: 304px;
 }
 
 
@@ -839,5 +838,10 @@
     clear: both;
 
     color: #333;    
+}
+
+/* Ошибки заполнения */
+.booking .formError {
+    display: none;
 }
 

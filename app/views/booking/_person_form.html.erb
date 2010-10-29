@@ -9,13 +9,6 @@
 
         <tr>
             <td class="g-middle text-upper">
-                <!--
-                <a class="tip-popup"><i>!</i>
-                    <span>Здесь могут быть только латинские буквы</span>
-                    Напишите имя так, как оно указано в загранпаспорте
-                </a>
-                -->
-
                 <%= person.text_field :first_name,
                  :class => "text g-xl",
                  :title => "имя пассажира",
@@ -212,7 +205,7 @@
                 {
                  :id => "bp-#{person_form_counter}-noexpiration",
                  :class => "noexpiration g-middle",
-                 :onclick => "return {ctrls: '#bp-#{person_form_counter+1}-expires-d, #bp-#{person_form_counter+1}-expires-m, #bp-#{person_form_counter+1}-expires-y', label: '#bp-#{person_form_counter+1}-expires-label'}"
+                 :onclick => "return {ctrls: '#bp-#{person_form_counter}-expires-d, #bp-#{person_form_counter}-expires-m, #bp-#{person_form_counter}-expires-y', label: '#bp-#{person_form_counter}-expires-label'}"
                 }%>
 
                 <label 

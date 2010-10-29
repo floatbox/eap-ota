@@ -50,7 +50,7 @@ class BookingController < ApplicationController
       end
     end
     @numbers = %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}
-    render :action => :index
+    render :partial => 'embedded'
   end
 
   def valid_card

@@ -94,20 +94,16 @@ app.Validate.Text = function(el) {
     if (rules.req && isDefault) 
         return msg.req.supplant({name: qname});
 
-    // проверки типа
-    // возможны 'latin', 'num' или 'email'
+    // проверки типа (возможны 'latin', 'num' или 'email')
     if (rules.latin) {
         var re = /^[a-z\s]+$/i;
         if (!re.test(val)) return msg.latin.supplant({name: qname});
     }
-
     if (rules.num) {
         var re = /^\d+$/;
         if (!re.test(val)) return msg.num.supplant({name: qname});
     }
     if (rules.email) {
-        //var re = /^[0-9a-z\._-]+@.{2,}\.[a-z]{2,6}$/i;
-        
         // contributed by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
         var re = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i;
         if (!re.test(val)) return msg.email.supplant({name: qname});
@@ -133,21 +129,17 @@ app.InputText = function(el, form) {
     // могут быть: def  - дефолтный текст (строка)
     var params = el.onclick && el.onclick() || {};
 
-
-
     // Инициализация
     (function() {
         // если поле не пусто и недефолтно, то убираем серый цвет
         $el.toggleClass('text-value', !isDefault());
     })();
 
-
     // Обработчики для внешних вызовов
 
     $el.bind('mark', function(e, mark) {
         $el.toggleClass('text-invalid', mark);
     });
-
 
     // Обработчики событий
     
@@ -195,6 +187,3 @@ app.InputText = function(el, form) {
 };
 
 })(jQuery);
-
-
-
