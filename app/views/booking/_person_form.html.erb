@@ -1,6 +1,6 @@
 
 <% if person_form_counter > 0 %>
-    <dd class="book-p-num"><%= @numbers[person_form_counter]%> пассажир
+    <dd class="book-p-num"><%= ordinal(person_form_counter + 1)%> пассажир
 <% end  %>
 
 <% fields_for "person_attributes", person_form, :index => person_form_counter do |person| %>
