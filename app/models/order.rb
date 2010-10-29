@@ -19,8 +19,8 @@ class Order < ActiveRecord::Base
       return nil
     else
       a_session = AmadeusSession.increase_pool
-      air_sfr_xml = Amadeus.soap_action('Air_SellFromRecommendation', 
-        OpenStruct.new(:segments => recommendation.variants[0].segments, :people_count => people.count), 
+      air_sfr_xml = Amadeus.soap_action('Air_SellFromRecommendation',
+        {:segments => recommendation.variants[0].segments, :people_count => people.count},
         a_session
       )
       
@@ -38,7 +38,7 @@ class Order < ActiveRecord::Base
         Amadeus.soap_action('Ticket_CreateTSTFromPricing', nil, a_session)
         Amadeus.pnr_add_multi_elements(PNRForm.new(:end_transact => true), a_session)
         Amadeus.soap_action('Queue_PlacePNR',
-          OpenStruct.new(:debug => false, :number => pnr_number),
+          {:number => pnr_number},
           a_session
         )
         save

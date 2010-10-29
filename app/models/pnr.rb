@@ -2,7 +2,7 @@ class Pnr
   attr_accessor :number, :flights, :passengers, :phone, :email, :details
   
   def self.get_by_number number
-    xml = Amadeus.pnr_retrieve(OpenStruct.new(:number => number, :debug => false))
+    xml = Amadeus.pnr_retrieve(:number => number)
     res = self.new
     res.number = number
     res.parse_pnr(xml)

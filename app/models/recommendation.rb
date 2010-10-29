@@ -144,7 +144,7 @@ class Recommendation
     variant = Variant.new(:segments => segments)
     recommendation = Recommendation.new(:variants => [variant])
     recommendation.booking_classes = variant.flights.every.class_of_service
-    xml = Amadeus.fare_informative_pricing_without_pnr(OpenStruct.new(:flights => flights, :debug => false, :people_counts => people_counts))
+    xml = Amadeus.fare_informative_pricing_without_pnr(:flights => flights, :people_counts => people_counts)
     price_total = 0
     price_fare = 0
     # FIXME почему то амадеус возвращает цену для одного человека, даже если указано несколько
@@ -161,7 +161,7 @@ class Recommendation
     # FIXME сломается, когда появятся инфанты
     a_session = AmadeusSession.book
     air_sfr_xml = Amadeus.air_sell_from_recommendation(
-      OpenStruct.new(:segments => segments, :people_count => (people_counts.values.sum)),
+      {:segments => segments, :people_count => people_counts.values.sum},
       a_session
     )
     a_session.destroy

@@ -35,6 +35,10 @@ class Amadeus < Handsoap::Service
   def invoke_rendered action, opts={}
 
     args = opts[:args]
+    if args.is_a? Hash
+      args = OpenStruct.new({:debug => false}.merge(args))
+    end
+
     if Amadeus.fake || opts[:debug] || args.try(:debug)
       xml_string = read_xml(action)
       response = parse_string(xml_string)
@@ -138,8 +142,10 @@ class Amadeus < Handsoap::Service
 
   def pnr_retrieve(args, session=nil)
     ::AmadeusSession.with_session(session) do
+      # FIXME почему сессия не используется?
       r = soap_action 'PNR_Retrieve', args
-      soap_action 'PNR_AddMultiElements', OpenStruct.new(:ignore => true)
+      # cmd('IG')
+      soap_action 'PNR_AddMultiElements', :ignore => true
       r
     end
   end
@@ -165,7 +171,7 @@ class Amadeus < Handsoap::Service
   end
 
   def cmd(command, session = nil)
-    response = soap_action('Command_Cryptic', OpenStruct.new(:command => command, :debug => false), session)
+    response = soap_action('Command_Cryptic', {:command => command}, session)
     response.xpath('//r:textStringDetails').to_s
   end
 
