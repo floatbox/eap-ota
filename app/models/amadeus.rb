@@ -23,6 +23,18 @@ class Amadeus < Handsoap::Service
 
   endpoint :uri => "https://test.webservices.amadeus.com", :version => 1
 
+  attr_accessor :session
+
+  # дефолтный инстанс, который используется для Amadeus.method, вызывает
+  # new без аргументов.
+  def initialize(args = {})
+    if args[:book]
+      self.session = AmadeusSession.book
+    elsif args[:session]
+      self.session = args[:session]
+    end
+  end
+
   def on_response_document(doc)
     doc.add_namespace 'header', 'http://webservices.amadeus.com/definitions'
     doc.add_namespace 'soap', envelope_namespace
@@ -48,11 +60,11 @@ class Amadeus < Handsoap::Service
       response = nil
       # WTF по каким-то неясным причинам без :: ломается development mode
       # 'Amadeus module is not active or removed'
-      ::AmadeusSession.with_session(opts[:session]) do |session|
+      ::AmadeusSession.with_session(session) do |booked_session|
         @@request_time = Benchmark.ms do
           response = invoke(action,
             :soap_action => opts[:soap_action],
-            :soap_header => {'SessionId' => session.session_id} ) do |body|
+            :soap_header => {'SessionId' => booked_session.session_id} ) do |body|
             body.set_value soap_body, :raw => true
           end
         end
@@ -128,19 +140,19 @@ class Amadeus < Handsoap::Service
     (response / '//r:statusCode').to_s == 'P'
   end
 
-  def fare_master_pricer_calendar(args, session=nil)
-    soap_action 'Fare_MasterPricerCalendar', args, session
+  def fare_master_pricer_calendar(args)
+    soap_action 'Fare_MasterPricerCalendar', args
   end
 
-  def fare_master_pricer_travel_board_search(args, session=nil)
-    soap_action 'Fare_MasterPricerTravelBoardSearch', args, session
+  def fare_master_pricer_travel_board_search(args)
+    soap_action 'Fare_MasterPricerTravelBoardSearch', args
   end
 
-  def pnr_add_multi_elements(args, session=nil)
-    soap_action 'PNR_AddMultiElements', args, session
+  def pnr_add_multi_elements(args)
+    soap_action 'PNR_AddMultiElements', args
   end
 
-  def pnr_retrieve(args, session=nil)
+  def pnr_retrieve(args)
     ::AmadeusSession.with_session(session) do
       # FIXME почему сессия не используется?
       r = soap_action 'PNR_Retrieve', args
@@ -150,38 +162,37 @@ class Amadeus < Handsoap::Service
     end
   end
 
-  def doc_issuance_issue_ticket(args, session=nil)
-    soap_action 'DocIssuance_IssueTicket', args, session
+  def doc_issuance_issue_ticket(args)
+    soap_action 'DocIssuance_IssueTicket', args
   end
 
-  def fare_price_pnr_with_lower_fares(args, session = nil )
-    soap_action 'Fare_PricePNRWithLowerFares', args, session
+  def fare_price_pnr_with_lower_fares(args)
+    soap_action 'Fare_PricePNRWithLowerFares', args
   end
 
-  def fare_informative_pricing_without_pnr(args, session = nil)
-    soap_action 'Fare_InformativePricingWithoutPNR', args, session
+  def fare_informative_pricing_without_pnr(args)
+    soap_action 'Fare_InformativePricingWithoutPNR', args
   end
 
-  def air_sell_from_recommendation(args, session = nil )
-    soap_action 'Air_SellFromRecommendation', args, session
+  def air_sell_from_recommendation(args)
+    soap_action 'Air_SellFromRecommendation', args
   end
 
-  def command_cryptic(args, session = nil )
-    soap_action 'Command_Cryptic', args, session
+  def command_cryptic(args)
+    soap_action 'Command_Cryptic', args
   end
 
-  def cmd(command, session = nil)
-    response = soap_action('Command_Cryptic', {:command => command}, session)
+  def cmd(command)
+    response = soap_action('Command_Cryptic', :command => command)
     response.xpath('//r:textStringDetails').to_s
   end
 
-  def soap_action(action, args = nil, session = nil)
+  def soap_action(action, args = nil)
     yml = YAML::load(File.open(RAILS_ROOT+'/config/soap_actions.yaml'))
     response = invoke_rendered action,
       :soap_action => yml[action]['soap_action'],
       :r => yml[action]['soap_action'],
-      :args => args,
-      :session => session
+      :args => args
   end
 
   # for debugging of handsoap parser

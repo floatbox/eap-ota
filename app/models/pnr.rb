@@ -4,11 +4,11 @@ class Pnr
   def self.get_by_number number
     res = self.new
     res.number = number
-    a_session = AmadeusSession.book
-    xml = Amadeus.pnr_retrieve({:number => number}, a_session)
+    amadeus = Amadeus.new(:book => true)
+    xml = amadeus.pnr_retrieve(:number => number)
     res.parse_pnr(xml)
-    res.raw = Amadeus.cmd("RT #{number}", a_session)
-    Amadeus.cmd('IG', a_session)
+    res.raw = amadeus.cmd("RT #{number}")
+    amadeus.cmd('IG')
     res
   end
   

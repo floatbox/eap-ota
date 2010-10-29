@@ -159,12 +159,9 @@ class Recommendation
     recommendation.price_tax = price_total - price_fare
 
     # FIXME сломается, когда появятся инфанты
-    a_session = AmadeusSession.book
-    air_sfr_xml = Amadeus.air_sell_from_recommendation(
-      {:segments => segments, :people_count => people_counts.values.sum},
-      a_session
-    )
-    a_session.destroy
+    amadeus = Amadeus.new(:book => true)
+    air_sfr_xml = amadeus.air_sell_from_recommendation(:segments => segments, :people_count => people_counts.values.sum)
+    amadeus.session.destroy
     #FIXME нужно разобраться со statusCode - когда все хорошо, а когда - нет
     return nil if air_sfr_xml.xpath('//r:segmentInformation/r:actionDetails/r:statusCode').every.to_s.uniq != ['OK']
     air_sfr_xml.xpath('//r:itineraryDetails').each_with_index {|s, i|
