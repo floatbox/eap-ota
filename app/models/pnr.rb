@@ -1,11 +1,14 @@
 class Pnr
-  attr_accessor :number, :flights, :passengers, :phone, :email, :details
+  attr_accessor :number, :flights, :passengers, :phone, :email, :details, :raw
   
   def self.get_by_number number
-    xml = Amadeus.pnr_retrieve(:number => number)
     res = self.new
     res.number = number
+    a_session = AmadeusSession.book
+    xml = Amadeus.pnr_retrieve({:number => number}, a_session)
     res.parse_pnr(xml)
+    res.raw = Amadeus.cmd("RT #{number}", a_session)
+    Amadeus.cmd('IG', a_session)
     res
   end
   
