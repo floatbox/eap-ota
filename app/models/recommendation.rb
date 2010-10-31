@@ -156,10 +156,14 @@ class Recommendation
     xml.xpath('//r:pricingGroupLevelGroup').each do |pg|
       passengers_in_group = pg.xpath('r:numberOfPax/r:segmentControlDetails/r:numberOfUnits').to_i
       price_total += pg.xpath('r:fareInfoGroup/r:fareAmount/r:otherMonetaryDetails[r:typeQualifier="712"][r:currency="RUB"]/r:amount').to_s.to_i * passengers_in_group
-      price_fare += pg.xpath('r:fareInfoGroup/r:fareAmount/r:otherMonetaryDetails[r:typeQualifier="E"][r:currency="RUB"]/r:amount').to_s.to_i * passengers_in_group
+      # FIXME сделать один xpath
+      price_fare += (
+        pg.xpath('r:fareInfoGroup/r:fareAmount/r:otherMonetaryDetails[r:typeQualifier="E"][r:currency="RUB"]/r:amount').presence ||
+        pg.xpath('r:fareInfoGroup/r:fareAmount/r:monetaryDetails[r:typeQualifier="B"][r:currency="RUB"]/r:amount')
+      ).to_s.to_i * passengers_in_group
     end
     # FIXME не очень надежный признак
-    return nil if price_total == 0
+    return nil if price_total == 0 || price_fare == 0
     recommendation.price_fare = price_fare
     recommendation.price_tax = price_total - price_fare
 
