@@ -82,8 +82,9 @@
       %ticketElement
         %passengerType PAX
         %ticket
-          %indicator TL
-          %date= (Date.today + 5.day).strftime("%d%m%y")
+          -# подозреваю, что TKXL даты не просит
+          %indicator XL
+          -# %date= (Date.today + 5.day).strftime("%d%m%y")
     %dataElementsIndiv
       %elementManagementData
         %reference
