@@ -1,7 +1,5 @@
 <div class="booking">
-<% form_for :card, @card, :url => booking_pay_path, :html => { :autocomplete => "off" } do |f| %>
-
-    <%= hidden_field_tag :recommendation_number, @recommendation_number %>
+<% form_for :card, @order.card, :url => booking_pay_path, :html => { :autocomplete => "off" } do |f| %>
     
     <!-- описание тарифа -->
     <div class="book-v">
@@ -35,8 +33,8 @@ FARES ONLY APPLY IF PURCHASED BEFORE DEPARTURE
     </div>
     
     <!-- Данные пассажиров -->
-    <h3>Введите данные <%= @people.count == 1 ? 'пассажира' : 'пассажиров' %></h3>
-    <%= render :partial => 'person_form', :collection => @people %>
+    <h3>Введите данные <%= @order.people.size == 1 ? 'пассажира' : 'пассажиров' %></h3>
+    <%= render :partial => 'person_form', :collection => @order.people %>
 
     <!-- Банковская карточка -->
     <h3>Введите данные банковской карты</h3>

@@ -3,8 +3,8 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   column :from, :string
   column :to, :string
   column :complex_to, :string
-  column :date1, :string,  (Date.today + 10.days).strftime('%d%m%y')
-  column :date2, :string,  (Date.today + 15.days).strftime('%d%m%y')
+  column :date1, :string
+  column :date2, :string
   column :rt, :boolean
   column :adults, :integer, 1
   column :children, :integer, 0

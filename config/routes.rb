@@ -6,6 +6,7 @@ ActionController::Routing::Routes.draw do |map|
   map.booking 'booking', :controller => 'booking', :action => 'index'
   map.booking_form 'booking/form', :controller => 'booking', :action => 'form'
   map.booking_pay 'booking/pay', :controller => 'booking', :action => 'pay'
+  map.preliminary_booking 'booking/preliminary_booking', :controller => 'booking', :action => 'preliminary_booking'
 
   map.resources :locations, :collection => {:current => :get}
 

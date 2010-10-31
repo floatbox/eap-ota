@@ -1,7 +1,10 @@
 class Order < ActiveRecord::Base
   validates_presence_of :email#, :phone
+  validates_format_of :email, :with => 
+  /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email"
   
-  def recommendation= recommendation
+  def order_data= order_data
+    recommendation = order_data.recommendation
     self.price_total = recommendation.price_total
     if c = recommendation.commission
       self.commission_carrier = c.carrier
@@ -9,7 +12,7 @@ class Order < ActiveRecord::Base
       self.commission_subagent = c.subagent
       self.price_share = recommendation.price_share
       self.price_markup = recommendation.price_markup
-    end
+    endo
   end
   
   def create_booking(recommendation, card, order_id, people)
@@ -50,9 +53,14 @@ class Order < ActiveRecord::Base
   
   
   def validate
-    errors.add :email,           "Некорректный email"    if email && !(email =~ /^[a-zA-Z@\.]*$/)
     #errors.add :phone,       "Некорректный телефон"  if phone && !(phone =~ /^[0-9]*$/)
+=begin
+    if self.people && self.people.every.valid?.all?(|e| e == true)
+      self.people.map
+    end
+=end 
   end
+
 end
 
 =begin
