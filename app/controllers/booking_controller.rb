@@ -37,21 +37,15 @@ class BookingController < ApplicationController
     @order.people = params['person_attributes'].to_a.sort_by{|a| a[0]}.map{|k, v| Person.new(v)}
     @order.card = Billing::CreditCard.new(params[:card])
     @order.update_attributes(params[:order])
-    order_id = 'rh' + @recommendation_number.to_s + Time.now.sec.to_s
-    if @order.valid?
-      pnr_number = @order.create_booking(@recommendation, @card, @order_id, @people)
-      if pnr_number
-        redirect_to pnr_form_path(pnr_number)
-        return
-      elsif @order.errors[:pnr_number]
-        render :text => 'Ошибка при создании PNR'
-        return
-      end
+    if @order.valid? && (pnr_number = @order.create_booking)
+      render :json => {:number => pnr_number}
+      return
     end
     render :json => {
       :order => @order.errors,
       :card => @order.card.errors,
-      :people => @order.people.every.errors}
+      :people => @order.people.every.errors
+    }
   end
 
   def valid_card
