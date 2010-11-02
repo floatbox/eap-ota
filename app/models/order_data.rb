@@ -49,6 +49,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     require 'variant'
     require 'flight'
     require 'recommendation'
+    require 'person'
     Rails.cache.read('order_data'+ cache_number)
   end
   

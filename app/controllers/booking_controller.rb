@@ -18,8 +18,6 @@ class BookingController < ApplicationController
   end
   
   def index
-    #@pnr_form = PNRForm.new(:flight_codes => params[:flight_codes].split('_'))
-
     @order = OrderData.get_from_cache(params[:number])
     @order.init_people
     render :partial => 'embedded'
