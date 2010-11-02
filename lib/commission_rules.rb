@@ -42,6 +42,16 @@ module CommissionRules
       fround(subagent.to_f)
     end
   end
+  
+  #FIXME нужно починить для работы с валютой
+  def agent_percentage?
+    agent['%']
+  end
+  
+  def agent_value
+    raise if agent['eur']
+    agent.to_i
+  end
 
   private
 

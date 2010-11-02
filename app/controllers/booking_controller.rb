@@ -38,8 +38,8 @@ class BookingController < ApplicationController
     @order.card = Billing::CreditCard.new(params[:card])
     @order.update_attributes(params[:order])
     if @order.valid? 
-      if (pnr_number = @order.create_booking)
-        render :json => {:number => pnr_number}
+      if (@order.block_money && @order.create_booking)
+        render :json => {:number => @order.pnr_number}
       elsif @order.errors[:pnr_number]
         render :json => {:global_error => 'Не удалось забронировать'}
       else

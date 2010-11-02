@@ -62,7 +62,7 @@ module Billing #:nodoc:
     
     def year_short= (y)
       @year_short = y
-      @year = '20' + y
+      @year = '20' + y if y.present?
     end
     
     def number
