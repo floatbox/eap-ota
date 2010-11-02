@@ -4,7 +4,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   has_many :people
   attr_writer :card
   attr_accessor :recommendation
-  #attr_accessor :people
+  attr_accessor :pnr_number
   attr_accessor :people_count
   attr_accessor :number
   validates_format_of :email, :with => 
@@ -13,6 +13,26 @@ class OrderData < ActiveRecord::BaseWithoutTable
   def card
     @card || Billing::CreditCard.new()
   end
+  
+  def errors_hash
+    res = {}
+    res['order[email]'] = errors[:email] if errors[:email]
+    res['order[phone]'] = errors[:phone] if errors[:phone]
+    people.each_with_index{|p, i|
+      unless p.valid?
+        p.errors.each{|e,v|
+          res["person[#{i}][#{e}]"] = v
+        }
+      end
+    }
+    unless card.valid?
+      card.errors.each{|e,v|
+        res["card[#{e}]"] = v
+      }
+    end
+    res 
+  end
+  
   
   def hash
     [recommendation, people_count].hash
@@ -44,5 +64,44 @@ class OrderData < ActiveRecord::BaseWithoutTable
   def validate
     errors.add :card, 'Отсутствуют данные карты' unless card
     errors.add :card, 'Некорректные данные карты' if card && !card.valid?
+  end
+  
+  
+  def create_booking()
+    order_id = 'rh' + hash.to_s + Time.now.sec.to_s
+    result = Payture.new.block(recommendation.price_with_payment_commission, card, :order_id => order_id)
+    if result["Success"] != "True"
+      card.errors.add :number, ("не удалось провести платеж (#{result["ErrCode"]})" )
+      self.errors.add :card, 'Платеж не прошел'
+      return nil
+    else
+      amadeus = Amadeus.new(:book => true)
+      air_sfr_xml = amadeus.soap_action('Air_SellFromRecommendation',
+        :segments => recommendation.variants[0].segments, :people_count => people.size
+      )
+      
+      doc = amadeus.pnr_add_multi_elements(PNRForm.new(
+        :flights => [],
+        :people => people,
+        :phone => '1236767',
+        :email => email,
+        :validating_carrier => recommendation.validating_carrier.iata
+      ))
+      self.pnr_number = doc.xpath('//r:controlNumber').to_s
+      
+      if self.pnr_number
+        amadeus.soap_action('Fare_PricePNRWithBookingClass')
+        amadeus.soap_action('Ticket_CreateTSTFromPricing')
+        amadeus.pnr_add_multi_elements(PNRForm.new(:end_transact => true))
+        amadeus.soap_action('Queue_PlacePNR', :number => pnr_number)
+        Order.create(:order_data => self)
+        PnrMailer.deliver_pnr_notification(email, self.pnr_number) if email
+        amadeus.session.destroy
+        return pnr_number
+      else
+        errors.add :pnr_number, 'Ошибка при создании PNR' 
+        return nil
+      end
+    end
   end
 end
