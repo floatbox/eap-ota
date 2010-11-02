@@ -10,9 +10,8 @@ class BookingController < ApplicationController
     end
     recommendation.validating_carrier_iata = params[:validating_carrier]
     order_data = OrderData.new(
-        :recommendation => recommendation,
-        :people_count => {:children => params[:children].to_i, :adults => params[:adults].to_i, :infants => params[:infants].to_i}
-    
+      :recommendation => recommendation,
+      :people_count => {:children => params[:children].to_i, :adults => params[:adults].to_i, :infants => params[:infants].to_i}
     )
     order_data.store_to_cache
     render :json => {:success => true, :number => order_data.number}
@@ -41,15 +40,12 @@ class BookingController < ApplicationController
     if @order.valid?
       pnr_number = @order.create_booking(@recommendation, @card, @order_id, @people)
       if pnr_number
-        redirect_to pnr_form_path(pnr_number)
-        return
-      elsif @order.errors[:pnr_number]
-        render :text => 'Ошибка при создании PNR'
+        render :partial => 'success', :locals => {:pnr_path => pnr_form_path(pnr_number)}
         return
       end
     end
     render :json => {
-      :order => @order.errors,
+      :errors => @order.errors,
       :card => @order.card.errors,
       :people => @order.people.every.errors}
   end

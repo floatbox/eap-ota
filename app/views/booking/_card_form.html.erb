@@ -131,7 +131,7 @@
             <tr class="g-xxs">
                 <td>&mdash;&nbsp;стоимость <%= @order.people.size > 1 ? 'всех' : '' %> билетов с&nbsp;налогами и&nbsp;сборами
                 <td>
-                <td>&mdash;&nbsp;комиссия платёжной системы за&nbsp;перевод&hellip;ну и&nbsp;нам на&nbsp;сигареты
+                <td>&mdash;&nbsp;комиссия платёжной системы за&nbsp;перевод
                 <td>
                 <td>
         <tbody>
@@ -142,8 +142,8 @@
                 <th rowspan="2"><i>=</i>
                 <th>С&nbsp;карты будет списано
             <tr>
-                <td><u><%= @order.recommendation.price_total.to_i  %></u><i>рублей</i>
-                <td><u><%= @order.recommendation.price_payment.to_i  %></u><i>рублей</i>
-                <td><b><%= @order.recommendation.price_with_payment_commission.to_i %></b><i>рубля</i>
+                <td><u><%= @order.recommendation.price_total.to_i %></u><i><%= Russian.pluralize(@order.recommendation.price_total.to_i, 'рубль', 'рубля', 'рублей') %></i>
+                <td><u><%= @order.recommendation.price_payment.to_i %></u><i><%= Russian.pluralize(@order.recommendation.price_payment.to_i, 'рубль', 'рубля', 'рублей') %></i>
+                <td><b><%= @order.recommendation.price_with_payment_commission.to_i %></b><i><%= Russian.pluralize(@order.recommendation.price_with_payment_commission.to_i, 'рубль', 'рубля', 'рублей') %></i>
     </table>
 </div>

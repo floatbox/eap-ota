@@ -87,16 +87,12 @@ ptp.bonus = function($el) {
     $el.click(function() {
         var cb = this;
         var data = this.onclick();
-        data.ctrls = $(data.ctrls);
-        data.label = $(data.label);
-
-        data.ctrls.each(function() {
+        $(data.ctrls).each(function() {
             $(this)
             .toggleClass('g-none', !cb.checked)
             .attr('disabled', !cb.checked);
         });
-        data.label.toggleClass('g-none', !cb.checked);
-
+        $(data.label).toggleClass('g-none', !cb.checked);
         me.change();
     });
 }
@@ -134,7 +130,7 @@ ptp.sex = function($el) {
 ptp.dates = function($dd, $mm, $yyyy) {
     var me  = this;
     var $ddmm = $dd.add($mm);
-
+    
     // день и месяц - добавляем ведущий ноль
     $ddmm.change(function() {
         var v = parseInt(this.value);
@@ -143,10 +139,14 @@ ptp.dates = function($dd, $mm, $yyyy) {
         if (!v) this.value = ''; // это был нуль
         if (v && v < 10) this.value = '0' + v;
     });
-
+    
+    var isDigit = function(code) {
+        return (code > 47 && code < 58) || (code > 95 && code < 106);
+    };
+    
     // перескакивание в след поле после ввода валидного двухразрядного числа
     $ddmm.keyup(function(e) {
-        if (e.which < 48 || e.which > 57) return;
+        if (!isDigit(e.which)) return;
         if (this.value.length < 2) return;
 
         var $el = $(this);
@@ -154,20 +154,20 @@ ptp.dates = function($dd, $mm, $yyyy) {
         var valid = !$el.validate().length;
         valid && me.nextField($el).focus();
     });
-
+    
     // перескакивание после ввода одного числа
     $dd.keyup(function(e) {
-        if (e.which < 48 || e.which > 57) return;
+        if (!isDigit(e.which)) return;
         var n = parseInt(this.value);
         (n > 3 && n < 10) && me.nextField($(this)).focus();
     });
     $mm.keyup(function(e) {
-        if (e.which < 48 || e.which > 57) return;
+        if (!isDigit(e.which)) return;
         var n = parseInt(this.value);
         (n > 1 && n < 10) && me.nextField($(this)).focus();
     });
     $yyyy.keyup(function(e) {
-        if (e.which < 48 || e.which > 57) return;
+        if (!isDigit(e.which)) return;
         var n = parseInt(this.value);
         (n > 1900 && n < 2100) && me.nextField($(this)).focus();
     });
@@ -224,10 +224,14 @@ ptp.num = function(s) {
     var me  = this;
     var $el = $(s, this.$el);
 
+    var isDigit = function(code) {
+        return (code > 47 && code < 58) || (code > 95 && code < 106);
+    };
+
     // перескакивание в след поле после ввода
     $el.keyup(function(e) {
         if (this.value.length < 4) return;
-        if (e.which < 48 || e.which > 57) return;
+        if (!isDigit(e.which)) return;
         me.nextField($(this)).focus();
     });
 

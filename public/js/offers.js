@@ -92,7 +92,9 @@ init: function() {
     // Бронирование
     $('#offers-list').delegate('.book .a-button', 'click', function(event) {
         event.preventDefault();
-        app.booking.load($(this).closest('.offer-variant'));
+        var variant = $(this).closest('.offer-variant');
+        app.booking.show(variant);
+        app.booking.book(variant);
     });
     
     // Активация матрицы цен в статике, перенести в обработку аякса, когда будет настоящая
@@ -168,7 +170,10 @@ toggleCollection: function(mode) {
     $('.offers-improper', context).toggleClass('g-none', mode);
 },
 updateHash: function(hash) {
-    window.location.hash = hash;
+    var hash = window.location.hash.substring(1);
+    if (hash.split(':')[0] != hash) {
+        window.location.hash = hash;
+    }
 },
 processUpdate: function() {
     var self = this, u = this.update;

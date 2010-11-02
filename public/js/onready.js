@@ -332,14 +332,15 @@
         for (var key in data) data[key] = app.search.defvalues[key];
         app.search.update(data);
         app.offers.hide();
+        window.location.hash = '';
     });
 
     // Сохраненные результаты
-    var h = (window.location.hash).slice(1);
-    if (h) try {
-        app.search.validate(h);
+    var hash = window.location.hash.substring(1);
+    if (hash) {
+        var hashparts = hash.split(':');
+        app.search.validate(hashparts[0]);
     }
-    catch(e){};
     
     // Включение запросов валидации
     app.search.active = true;
