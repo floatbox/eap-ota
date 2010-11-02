@@ -82,8 +82,9 @@
       %ticketElement
         %passengerType PAX
         %ticket
-          %indicator TL
-          %date= (Date.today + 5.day).strftime("%d%m%y")
+          -# подозреваю, что TKXL даты не просит
+          %indicator XL
+          -# %date= (Date.today + 5.day).strftime("%d%m%y")
     %dataElementsIndiv
       %elementManagementData
         %reference
@@ -108,13 +109,24 @@
         %elementManagementData
           %reference
             %qualifier OT
-            %number 6
+            %number 5
           %segmentName AP
         %freetextData
           %freetextDetail
             %subjectQualifier 3
             %type 3
           %longFreetext= phone
+    %dataElementsIndiv
+      %elementManagementData
+        %reference
+          %qualifier OT
+          %number 6
+        %segmentName AP
+      %freetextData
+        %freetextDetail
+          %subjectQualifier 3
+          %type 6
+        %longFreetext= 6666666#наш телефон
     - if email.present?
       %dataElementsIndiv
         %elementManagementData
@@ -127,3 +139,17 @@
             %subjectQualifier 3
             %type P02
           %longFreetext= email
+    %dataElementsIndiv
+      %elementManagementData
+        %reference
+          %qualifier OT
+          %number 8
+        %segmentName FM
+      %commission
+        %commissionInfo
+          -if commission.agent_percentage?
+            %percentage= commission.agent_value
+          -else
+            %amount= commission.agent_value
+          
+        
