@@ -206,12 +206,12 @@ update: function() {
         dates['date' + (i + 1)] = d !== undefined ? this.dates.eq(d).attr('data-dmy') : '';
     }
     var items = this.selected.compact();
-    var title = 'Выберите даты:';
+    var title = 'Выберите даты';
     if (items.length > 1) {
         var damount = items.last() - items[0] + 1;
-        title = app.utils.plural(damount, ['Выбран ', 'Выбрано ', 'Выбрано ']) + damount + app.utils.plural(damount, [' день', ' дня', ' дней']) + ':';
+        title = app.utils.plural(damount, ['Выбран ', 'Выбрано ', 'Выбрано ']) + damount + app.utils.plural(damount, [' день', ' дня', ' дней']);
     } else if (items.length) {
-        title = 'Выбрано ' + this.dates.eq(items[0]).text() + ':';
+        title = 'Выбрано ' + this.dates.eq(items[0]).text();
     }
     this.title.text(title);
     this.scroller.updatePreview(items);
@@ -222,7 +222,7 @@ showResetButton: function() {
     var offset, items = this.selected.compact();
     if (items.length) {
         var loffset = this.dates.eq(items.last()).position();
-        if (loffset.top > -1) {
+        if (loffset && loffset.top > -1) {
             if (loffset.top < this.csize.h) {
                 offset = loffset;
             } else if (items.length > 1) {

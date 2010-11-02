@@ -143,7 +143,8 @@
     font-size: 11px;
 
     position: absolute;
-    right: 0; top: 40px;
+    left: 50%; top: 15px;
+    margin-left: 190px;
     
     visibility: hidden;
 }
@@ -153,7 +154,7 @@
     margin: 0 3px 0 0;
 }
 
-.l-header:hover #search-debug 
+#header:hover #search-debug 
 {
     visibility: visible;
 }

@@ -1,61 +1,88 @@
-.header {
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    width: 100%;
+    height: 42px;
+    background: #FFF;
+}
+.hcontent {
     position: relative;
-    overflow: hidden;
-
     width: 960px;
     margin: 0 auto;
+    font: 20px/22px bold Arial, sans-serif;
+    letter-spacing: -0.025em;
+    color: #777;
+}
+#header .shadow {
+    position: absolute;
+    top: 42px; left: 0;
+    z-index: -1;
+    width: 100%; height: 6px;
+    background: url(/img/header/shadow.png) repeat-x;
 }
 
-.logo
-{
-    display: block;
+#logo {
+    position: absolute;
+    top: 0; left: -10px;
+    padding: 7px 10px 12px;
+}
+
+#header .tabs {
     float: left;
-    width: 150px;
-    height: 70px;
-
-    background: #fff url(/img/logos/logo.png) no-repeat center center;
+    margin: 0 58px 0 150px;
 }
-
-.head-tabs
-{
-    font: bold 130% arial,s;
-
-    overflow: hidden;
-    float: left;
-    margin: 28px 0 0 0;
-}
-
-.head-tabs li
-{
+#header .tabs li {
+    position: relative;
     float: left;
 }
-
-.head-tabs li a
-{
-    display: block;
-    
-    padding: 0 0.8em;
-    height: 42px;
-    line-height: 42px;
-    
-    outline: none;
+#header .tabs li.active {
+    background: #ED1192;
+}
+#header .tabs a {
+    float: left;
+    height: 22px;
+    padding: 10px 20px;
     white-space: nowrap;
     text-decoration: none;
-
-    letter-spacing: -0.03em;
-    color: #fff;
-    background: #ed1192;
+    color: #ED1192;
+    outline: none;
+   
 }
-
-.head-tabs li a.active,
-.head-tabs li a.active:hover
-{
+#header .active a {
+    color: #FFF;
     cursor: default;
-
-    background: #2c2c2c;
+}
+#header .tabs .arrow {
+    display: none;
+    position: absolute;
+    left: 50%; top: 42px;
+    margin-left: -7px;
+    width: 15px; height: 8px;
+    background: url(/img/header/tab.png) no-repeat;
+}
+#header .tabs .arrow {
+    display: block;
 }
 
-.head-tabs li a:hover
-{
-    background: #373737;
+#header .phone,
+#header .soon {
+    margin-top: 10px;
+}
+
+#header .phone {
+    float: right;
+}
+#header .phone strong {
+    font-weight: normal;
+    color: #2c2c2c;
+}
+
+#header .soon {
+    float: left;
+}
+#header .soon strong {
+    font-weight: normal;
+    color: #ED1192;
 }

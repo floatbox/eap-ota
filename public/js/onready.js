@@ -7,11 +7,7 @@
     // поле "Откуда"
     
     tools.from = $('#search-from').autocomplete({
-
-        // внешний вид
         cls: 'autocomplete-gray',
-
-        // ajax
         url: url,
         params: {
             input: 'from',
@@ -21,8 +17,6 @@
         loader: new app.Loader({
             parent: $('#search-from-loader')
         }),
-
-        // размеры
         height: 374
         
     }).focus(function() {
@@ -41,7 +35,7 @@
         tools.from.trigger('set', v);
     });
     
-    // "подпольная" ссылка для сброса поля "Откуда"
+    // Ссылка для сброса поля "Откуда"
     
     tools.from.reset = $('#search-from-reset').click(function(e) {
         tools.from.focus().trigger('set', '');
@@ -75,6 +69,17 @@
     app.search.subscribe(tools.to, 'to', function(v) {
         tools.to.trigger('set', v);
     });
+    app.search.subscribe('ajax', 'date1', function(v) {
+        var s = tools.to.val();
+        var d = calendar.dates.eq(calendar.dmyindex[v]).text();
+        var pattern = new RegExp('(\\s*)(?:сегодня|завтра|послезавтра|' + d + ')(\\s*)', 'i');
+        var result = s.replace(pattern, function(s, p1, p2) {
+            console.log(p1, p2, p1 && p2);
+            return (p1 && p2) ? ' ' : '';
+        });
+        if (result != s) tools.to.trigger('set', result);
+    });    
+    
     
     // образец содержимого поля "Куда"
     
@@ -253,9 +258,6 @@
         ao.resetFilters();
         ao.applyFilter();
     });
-    
-    // верхние табы
-    $('#search\\.mode').radio();
 
     // составное поле "туда-обратно"
     var $retTabs = $('#search\\.ret\\.tabs').radio();
@@ -327,7 +329,7 @@
     app.search.defvalues = $.extend({}, fields);
     
     /* Сброс по клику на логотипе */
-    $('.header .logo').click(function() {
+    $('#logo').click(function() {
         var data = $.extend({}, fields);
         for (var key in data) data[key] = app.search.defvalues[key];
         app.search.update(data);
@@ -346,38 +348,3 @@
     app.search.active = true;
 
 });
-
-
-/*
-app.obs = function(cfg) {
-    $.extend(app.obs.prototype, {
-        constructor: $.noop
-    }, cfg || {});
-
-    this.constructor();
-    return this.constructor;
-}
-
-    // игрушка для градиента
-
-    var wmap = $('#where\\.map');
-    wmap.height = wmap.height();
-    wmap.width = wmap.width();
-    wmap.top = wmap.offset().top;
-    wmap.left = wmap.offset().left;
-
-    $.browser.mozilla && wmap.mousemove(function(e) {
-        var y =  100 * (e.pageY - wmap.top) / wmap.height;
-        var x =  100 * (e.pageX - wmap.left) / wmap.width;
-        this.style.backgroundImage = '-moz-linear-gradient(top ' + (5 + x/y) + 'rad, #4b4b4b 10%, #d93c86 ' + (y-20) + '%, green ' + (y-10) + '%, blue ' + y + '%, yellow ' + (y+20) + '%, red, black)';
-    })
-
-    $.browser.mozilla && wmap.click(function(e) {
-        l(this.style.backgroundImage);
-        var y =  100 * (e.pageY - wmap.top) / wmap.height;
-        var x =  100 * (e.pageX - wmap.left) / wmap.width;
-        this.style.backgroundImage = '-moz-radial-gradient(' + x + '% ' + y + '%, circle farthest-side, #d93c86 0%, blue 100%)';
-    })
-
-*/
-

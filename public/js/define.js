@@ -77,10 +77,13 @@ app.Define = function($el) {
         e.preventDefault();
 
         var $val = $(this);
-
-        $val.fadeTo(300, 0.6, function() {
-            me.remove($val.data('data'));
-        });
+        if (me.options.preserve && me.value.length < 2) {
+            me.$label.click();
+        } else {
+            $val.fadeTo(300, 0.6, function() {
+                me.remove($val.data('data'));
+            });
+        }
     });
 
     $el.bind('update', function(e, filters) {

@@ -102,8 +102,6 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       r << locations[:arv_0]
     end
 
-    r << 'и обратно' if rt
-
     if adults > 1
       r << ['вдвоем', 'втроем', 'вчетвером', 'впятером', 'вшестером', 'всемером', '8 взрослых'][adults-2]
     end
@@ -111,10 +109,11 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       r << ['с ребенком', 'с двумя детьми', 'с тремя детьми', '4 детских', '5 детских', '6 детских', '7 детских'][children-1]
     end
 
+    r << human_dates(Date.strptime(date1, '%d%m%y'))
+
     if rt
-      r << human_dates(Date.strptime(date1, '%d%m%y'), Date.strptime(date2, '%d%m%y'))
-    else
-      r << human_dates(Date.strptime(date1, '%d%m%y'))
+      r << 'и обратно'
+      r << human_dates(Date.strptime(date2, '%d%m%y'))
     end
 
     r.join(' ')

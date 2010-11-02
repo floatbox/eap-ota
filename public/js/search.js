@@ -41,8 +41,8 @@ validate: function(qkey) {
     this.abortRequests();
     this.request = $.get("/pricer/validate/", data, function(result, status, request) {
         if (request != self.request) return;
+        if (result.search) self.setValues(result.search);
         if (result.valid) {
-            if (result.search) self.setValues(result.search);
             app.offers.load(data, result.human);
             if (data.query_key) {
                 app.offers.show();
@@ -59,13 +59,7 @@ getValues: function() {
         'day_interval': 1,
         'debug': $('#sdmode').get(0).checked ? 1 : 0
     }, this.fields);
-    
-    // Временная проверка, пока нет распознавания дат
-    if (!(data.to && data.from && data.date1 && (data.date2 || !data.rt))) {
-        return false;
-    } else {
-        return {search: data};
-    }
+    return (data.from && data.to) ? {search: data} : false;
 },
 setValues: function(data) {
     var self = this, fields = this.fields, update = {};
@@ -73,7 +67,7 @@ setValues: function(data) {
         if (data[key] !== undefined) update[key] = data[key];
     }
     this.active = false;
-    this.update(update);
+    this.update(update, 'ajax');
     setTimeout(function() {
         self.active = true;
     }, 500);

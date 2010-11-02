@@ -1,23 +1,19 @@
+/* Wrapper */
+
 .l-wrapper {
     position: relative;
     min-height: 100%;
     width: 960px;
     margin: 0 auto;
-}
-
-.l-content {
-    padding-bottom: 230px;
     background: #e5e5e5;
 }
 
-.l-footer {
-    position: absolute;
-    bottom: 0;
-    width: 960px;
-    height: 210px;
-    margin: 0 auto;
-    background: #FFF;
+.l-content {
+    padding-top: 42px;
+    padding-bottom: 230px;
 }
+
+/* Crop */
 
 .l-crop {
     overflow: hidden;
@@ -42,4 +38,15 @@
 
     background: #e5e5e5;
     opacity: 0.4;
+}
+
+/* Footer */
+
+.l-footer {
+    position: absolute;
+    bottom: 0;
+    width: 960px;
+    height: 210px;
+    margin: 0 auto;
+    background: #FFF;
 }

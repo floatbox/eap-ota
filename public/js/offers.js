@@ -170,8 +170,8 @@ toggleCollection: function(mode) {
     $('.offers-improper', context).toggleClass('g-none', mode);
 },
 updateHash: function(hash) {
-    var hash = window.location.hash.substring(1);
-    if (hash.split(':')[0] != hash) {
+    var current = window.location.hash.substring(1);
+    if (current.split(':')[0] != hash) {
         window.location.hash = hash;
     }
 },

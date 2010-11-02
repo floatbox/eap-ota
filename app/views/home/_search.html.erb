@@ -11,7 +11,7 @@
             </td>
             
             <td>
-                <label for="search-to" accesskey="2"><i class="label-to">Куда</i>, <i class="label-when">когда</i> и <i class="label-total">с кем</i><s id="search-to-loader"></s></label>
+                <label for="search-to" accesskey="2"><i class="label-to">Куда</i>, <i class="label-when">когда</i>, <i class="label-total">сколько человек</i><s id="search-to-loader"></s></label>
             </td>
 
             <td>
@@ -195,7 +195,7 @@
         <!-- Когда -->
         <div id="search-when">
             <div class="calendar" id="search-calendar">
-                <h2>Выберите даты:</h2>
+                <h2>Выберите даты</h2>
                 <div class="scroller">
                     <div class="scrollbar"><div class="overlay"></div></div>
                     <div class="preview"></div>
@@ -233,17 +233,15 @@
 
 <!-- Панель уточнений -->
 <table id="search-define" class="define b-pseudo">
-    <tr>
-        <th>
-            Выбрать
-        <td>
-            количество
-
-            <p onclick="return {name: 'persons', title: 'пассажиры', accusative: 'количество пассажиров', anyone: 'один', radio: true, popup: '#search\\.define\\.persons'}"><a href="#"><u>пассажиров</u></a>:<b></b>&nbsp;и
-            
-            <p onclick="return {name: 'changes', title: 'пересадки', accusative: 'допустимое количество пересадок', anyone: 'всё равно', radio: true}"><a href="#"><u>пересадок</u></a><b></b></p>,
-            
-            <p onclick="return {name: 'cls', title: 'класс', accusative: 'класс обслуживания', anyone: 'любой', radio: true}"><b class="left"></b><a href="#"><u>класс</u></a>
-        <td id="search-submit" class="disabled">
-            <a href="#" class="b-submit">Искать</a>
+<tr>
+    <th>Выбрать</th>
+    <td>количество
+        <p onclick="return {name: 'persons', title: 'пассажиры', accusative: 'количество пассажиров', anyone: 'один', radio: true, popup: '#search\\.define\\.persons', preserve: true}"><a href="#"><u>пассажиров</u></a>:<b></b>&nbsp;и
+        <p onclick="return {name: 'changes', title: 'пересадки', accusative: 'допустимое количество пересадок', anyone: 'всё равно', radio: true, preserve: true}"><a href="#"><u>пересадок</u></a><b></b></p>,
+        <p onclick="return {name: 'cls', title: 'класс', accusative: 'класс обслуживания', anyone: 'любой', radio: true, preserve: true}"><b class="left"></b><a href="#"><u>класс</u></a>
+    </td>
+    <td id="search-submit" class="disabled">
+        <a href="#" class="b-submit">Искать</a>
+    </td>
+</tr>
 </table>
