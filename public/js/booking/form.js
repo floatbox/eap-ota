@@ -12,8 +12,9 @@ init: function() {
         if (!self.submit.hasClass('a-button-ready')) return;
         var data = $(this).serialize();
         $.post($(this).attr('action'), data, function(s) {
-            if (typeof s == 'String') {
+            if (typeof s == 'string') {
                 self.el.append(s);
+                $('.book-s', self.el).addClass('g-none');
             } else {
                 var blocker = $('.blocker', self.el);
                 $('.b-pseudo', blocker).html(s);
@@ -92,7 +93,7 @@ hide: function() {
 },
 book: function(variant) {
     var self = this;
-    this.el.html('<div class="empty">Предварительное бронирование…</div>');
+    this.el.html('<div class="empty"><span class="loading">Предварительное бронирование</span></div>');
     $.get("/booking/preliminary_booking?" + variant.attr('data-booking'), function(s) {
         if (s && s.success) {
             self.hash(s.number);
@@ -109,7 +110,7 @@ hash: function(h) {
 },
 load: function(number) {
     var self = this;
-    $.get("/booking/?", {number: number}, function(s) {
+    $.get("/booking/", {number: number}, function(s) {
         self.el = $(s).replaceAll(self.el);
         if (self.el.children('form').length) {
             self.fasten(self.offer);
