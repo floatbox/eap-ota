@@ -4,7 +4,7 @@ class Pnr
   def self.get_by_number number
     res = self.new
     res.number = number
-    amadeus = Amadeus.new(:book => true)
+    amadeus = Amadeus::Service.new(:book => true)
     xml = amadeus.pnr_retrieve(:number => number)
     res.parse_pnr(xml)
     res.raw = amadeus.cmd("RT #{number}")

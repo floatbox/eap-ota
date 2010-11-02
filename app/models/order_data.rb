@@ -82,7 +82,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   
   
   def create_booking
-    amadeus = Amadeus.new(:book => true)
+    amadeus = Amadeus::Service.new(:book => true)
     air_sfr_xml = amadeus.soap_action('Air_SellFromRecommendation',
       :segments => recommendation.variants[0].segments, :people_count => people.size
     )
