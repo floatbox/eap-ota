@@ -270,22 +270,23 @@ class Recommendation
 
   # фабрика для тестовых целей
   # Recommendation.example 'mowaer aermow/s7/c'
+  # TODO сделать даты и пересадки и фальшивое время вылета
   def self.example itinerary, opts={}
     default_carrier = (opts[:carrier] || 'SU').upcase
     segments = []
     classes = []
     itinerary.split.each do |fragment|
       flight = Flight.new
+      # defaults
       carrier, klass = default_carrier, 'Y'
       fragment.upcase.split('/').each do |code|
-        # defaults
         case code.length
         when 6
-          flight.departure_iata, flight.arrival_iata = code[0,3].upcase, code[3,3].upcase
+          flight.departure_iata, flight.arrival_iata = code[0,3], code[3,3]
         when 2
-          carrier = code.upcase
+          carrier = code
         when 1
-          klass = code.upcase
+          klass = code
         end
       end
       flight.operating_carrier_iata = carrier
