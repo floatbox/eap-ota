@@ -74,7 +74,6 @@
         var d = calendar.dates.eq(calendar.dmyindex[v]).text();
         var pattern = new RegExp('(\\s*)(?:сегодня|завтра|послезавтра|' + d + ')(\\s*)', 'i');
         var result = s.replace(pattern, function(s, p1, p2) {
-            console.log(p1, p2, p1 && p2);
             return (p1 && p2) ? ' ' : '';
         });
         if (result != s) tools.to.trigger('set', result);
