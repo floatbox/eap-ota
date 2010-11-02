@@ -14,6 +14,26 @@ class OrderData < ActiveRecord::BaseWithoutTable
     @card || Billing::CreditCard.new()
   end
   
+  def errors_hash
+    res = {}
+    res['order[email]'] = errors[:email] if errors[:email]
+    res['order[phone]'] = errors[:phone] if errors[:phone]
+    people.each_with_index{|p, i|
+      unless p.valid?
+        p.errors.each{|e,v|
+          res["person[#{i}][#{e}]"] = v
+        }
+      end
+    }
+    unless card.valid?
+      card.errors.each{|e,v|
+        res["card[#{e}]"] = v
+      }
+    end
+    res 
+  end
+  
+  
   def hash
     [recommendation, people_count].hash
   end
@@ -52,6 +72,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     result = Payture.new.block(recommendation.price_with_payment_commission, card, :order_id => order_id)
     if result["Success"] != "True"
       card.errors.add :number, ("не удалось провести платеж (#{result["ErrCode"]})" )
+      self.errors.add :card, 'Платеж не прошел'
       return nil
     else
       amadeus = Amadeus.new(:book => true)
