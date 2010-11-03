@@ -28,6 +28,9 @@ module Amadeus
 
 # generic helpers
 
+  # вынесены во внешний модуль, чтобы методы можно было оверрайдить
+  include Amadeus::SOAPActions
+
   def on_response_document(doc)
     doc.add_namespace 'header', 'http://webservices.amadeus.com/definitions'
     doc.add_namespace 'soap', envelope_namespace
@@ -74,15 +77,6 @@ module Amadeus
     response_body
   end
 
-  def soap_action(action, args = nil)
-    yml = YAML::load(File.open(RAILS_ROOT+'/config/soap_actions.yaml'))
-    # FIXME они действительно совпадают?
-    response = invoke_rendered action,
-      :soap_action => yml[action]['soap_action'],
-      :r => yml[action]['r'],
-      :args => args
-  end
-
 
 # request template rendering
 
@@ -108,56 +102,6 @@ module Amadeus
     File.read(template)
   end
 
-# sign in and sign out sessions
-
-  def security_authenticate
-    payload = render('Security_Authenticate')
-    response = invoke(
-      'Security_Authenticate',
-      :soap_action => 'http://webservices.amadeus.com/1ASIWOABEVI/VLSSLQ_06_1_1A'
-    ) { |body| body.set_value( payload, :raw => true) }
-
-    response.add_namespace 'r', 'http://xml.amadeus.com/VLSSLR_06_1_1A'
-
-    if (response / '//r:statusCode').to_s == 'P'
-       (response / '//header:SessionId').to_s
-    end
-  end
-
-  def security_sign_out(session)
-    # у запроса пустое тело
-    response = invoke(
-      'Security_SignOut',
-      :soap_action => 'http://webservices.amadeus.com/1ASIWOABEVI/VLSSOQ_04_1_1A',
-      :soap_header => {'SessionId' => session.session_id}
-    )
-
-    response.add_namespace 'r', "http://xml.amadeus.com/VLSSOR_04_1_1A"
-
-    # нужно ли ловить тип ошибки?
-    (response / '//r:statusCode').to_s == 'P'
-  end
-
-# generic service methods
-
-  # Amadeus::Service.pnr_add_multi_elements etc.
-  %W[
-    PNR_AddMultiElements
-    Fare_MasterPricerCalendar
-    Fare_MasterPricerTravelBoardSearch
-    Fare_PricePNRWithBookingClass
-    Fare_PricePNRWithLowerFares
-    Fare_InformativePricingWithoutPNR
-    Ticket_CreateTSTFromPricing
-    DocIssuance_IssueTicket
-    Air_SellFromRecommendation
-    Queue_PlacePNR
-    Command_Cryptic
-  ].each do |action|
-    define_method action.underscore do |args|
-      soap_action action, args
-    end
-  end
 
   # shouldn't really be something different from above
   def pnr_retrieve(args)
@@ -174,6 +118,38 @@ module Amadeus
     response = command_cryptic :command => command
     response.xpath('//r:textStringDetails').to_s
   end
+
+# sign in and sign out sessions
+
+  # оверрайд методов из SOAPACTions
+  def security_authenticate
+    payload = render('Security_Authenticate')
+    response = invoke(
+      'Security_Authenticate',
+      :soap_action => 'http://webservices.amadeus.com/1ASIWOABEVI/VLSSLQ_06_1_1A'
+    ) { |body| body.set_value( payload, :raw => true) }
+
+    response.add_namespace 'r', 'http://xml.amadeus.com/VLSSLR_06_1_1A'
+
+    if (response / '//r:statusCode').to_s == 'P'
+       (response / '//header:SessionId').to_s
+    end
+  end
+
+  def security_sign_out(session)
+    # у запроса пустое тело, поэтому оверрайдим SOAPActions
+    response = invoke(
+      'Security_SignOut',
+      :soap_action => 'http://webservices.amadeus.com/1ASIWOABEVI/VLSSOQ_04_1_1A',
+      :soap_header => {'SessionId' => session.session_id}
+    )
+
+    response.add_namespace 'r', "http://xml.amadeus.com/VLSSOR_04_1_1A"
+
+    # нужно ли ловить тип ошибки?
+    (response / '//r:statusCode').to_s == 'P'
+  end
+
 
 # debugging
 
