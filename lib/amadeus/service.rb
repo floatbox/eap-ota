@@ -3,17 +3,16 @@ module Amadeus
 
   class Service < Handsoap::Service
 
-  include FileLogger
-
+  endpoint :uri => "https://test.webservices.amadeus.com", :version => 1
   #Handsoap.http_driver = :http_client
   Handsoap.timeout = 500
 
+  # response logger
+  include FileLogger
   # handsoap logger
   fh = open(Rails.root + 'log/amadeus.log', 'a')
   fh.sync=true
   self.logger = fh
-
-  endpoint :uri => "https://test.webservices.amadeus.com", :version => 1
 
   attr_accessor :session
 
@@ -26,6 +25,8 @@ module Amadeus
       self.session = args[:session]
     end
   end
+
+# generic helpers
 
   def on_response_document(doc)
     doc.add_namespace 'header', 'http://webservices.amadeus.com/definitions'
@@ -73,10 +74,22 @@ module Amadeus
     response_body
   end
 
+  def soap_action(action, args = nil)
+    yml = YAML::load(File.open(RAILS_ROOT+'/config/soap_actions.yaml'))
+    # FIXME они действительно совпадают?
+    response = invoke_rendered action,
+      :soap_action => yml[action]['soap_action'],
+      :r => yml[action]['r'],
+      :args => args
+  end
+
+
+# request template rendering
+
   def xml_template(action);  File.expand_path("../templates/#{action}.xml",  __FILE__) end
   def haml_template(action); File.expand_path("../templates/#{action}.haml", __FILE__) end
 
-  def render(action, locals={})
+  def render(action, locals=nil)
     if File.file?(haml_template(action))
       render_haml( haml_template(action), locals)
     elsif File.file?(xml_template(action))
@@ -86,7 +99,7 @@ module Amadeus
     end
   end
 
-  def render_haml(template, locals={})
+  def render_haml(template, locals=nil)
     Haml::Engine.new(File.read(template)).render(locals)
   end
 
@@ -94,6 +107,8 @@ module Amadeus
     # locals ignored
     File.read(template)
   end
+
+# sign in and sign out sessions
 
   def security_authenticate
     payload = render('Security_Authenticate')
@@ -123,60 +138,44 @@ module Amadeus
     (response / '//r:statusCode').to_s == 'P'
   end
 
-  def fare_master_pricer_calendar(args)
-    soap_action 'Fare_MasterPricerCalendar', args
+# generic service methods
+
+  # Amadeus::Service.pnr_add_multi_elements etc.
+  %W[
+    PNR_AddMultiElements
+    Fare_MasterPricerCalendar
+    Fare_MasterPricerTravelBoardSearch
+    Fare_PricePNRWithBookingClass
+    Fare_PricePNRWithLowerFares
+    Fare_InformativePricingWithoutPNR
+    Ticket_CreateTSTFromPricing
+    DocIssuance_IssueTicket
+    Air_SellFromRecommendation
+    Queue_PlacePNR
+    Command_Cryptic
+  ].each do |action|
+    define_method action.underscore do |args|
+      soap_action action, args
+    end
   end
 
-  def fare_master_pricer_travel_board_search(args)
-    soap_action 'Fare_MasterPricerTravelBoardSearch', args
-  end
-
-  def pnr_add_multi_elements(args)
-    soap_action 'PNR_AddMultiElements', args
-  end
-
+  # shouldn't really be something different from above
   def pnr_retrieve(args)
     Amadeus::Session.with_session(session) do
       # FIXME почему сессия не используется?
       r = soap_action 'PNR_Retrieve', args
       # cmd('IG')
-      soap_action 'PNR_AddMultiElements', :ignore => true
+      pnr_add_multi_elements :ignore => true
       r
     end
   end
 
-  def doc_issuance_issue_ticket(args)
-    soap_action 'DocIssuance_IssueTicket', args
-  end
-
-  def fare_price_pnr_with_lower_fares(args)
-    soap_action 'Fare_PricePNRWithLowerFares', args
-  end
-
-  def fare_informative_pricing_without_pnr(args)
-    soap_action 'Fare_InformativePricingWithoutPNR', args
-  end
-
-  def air_sell_from_recommendation(args)
-    soap_action 'Air_SellFromRecommendation', args
-  end
-
-  def command_cryptic(args)
-    soap_action 'Command_Cryptic', args
-  end
-
   def cmd(command)
-    response = soap_action('Command_Cryptic', :command => command)
+    response = command_cryptic :command => command
     response.xpath('//r:textStringDetails').to_s
   end
 
-  def soap_action(action, args = nil)
-    yml = YAML::load(File.open(RAILS_ROOT+'/config/soap_actions.yaml'))
-    response = invoke_rendered action,
-      :soap_action => yml[action]['soap_action'],
-      :r => yml[action]['soap_action'],
-      :args => args
-  end
+# debugging
 
   # for debugging of handsoap parser
   def parse_string(xml_string)

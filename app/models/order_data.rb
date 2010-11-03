@@ -83,7 +83,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   
   def create_booking
     amadeus = Amadeus::Service.new(:book => true)
-    air_sfr_xml = amadeus.soap_action('Air_SellFromRecommendation',
+    air_sfr_xml = amadeus.air_sell_from_recommendation(
       :segments => recommendation.variants[0].segments, :people_count => people.size
     )
     
@@ -98,18 +98,19 @@ class OrderData < ActiveRecord::BaseWithoutTable
     self.pnr_number = doc.xpath('//r:controlNumber').to_s
     
     if self.pnr_number
-      amadeus.soap_action('Fare_PricePNRWithBookingClass')
-      amadeus.soap_action('Ticket_CreateTSTFromPricing')
+      amadeus.fare_price_pnr_with_booking_class
+      amadeus.ticket_create_tst_from_pricing
       amadeus.pnr_add_multi_elements(PNRForm.new(:end_transact => true))
-      amadeus.soap_action('Queue_PlacePNR', :number => pnr_number)
+      amadeus.queue_place_pnr(:number => pnr_number)
       Order.create(:order_data => self)
       PnrMailer.deliver_pnr_notification(email, self.pnr_number) if email
-      amadeus.session.destroy
       return pnr_number
     else
       errors.add :pnr_number, 'Ошибка при создании PNR' 
       return nil
     end
+  ensure
+    amadeus.session.destroy
   end
   
   
