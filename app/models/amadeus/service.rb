@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 module Amadeus
 
-class Service < Handsoap::Service
+  class Service < Handsoap::Service
 
   include FileLogger
 
@@ -50,15 +50,11 @@ class Service < Handsoap::Service
       soap_body = render(action, args)
       #save_xml('request_'+ action, soap_body)
       response = nil
-      # WTF по каким-то неясным причинам без :: ломается development mode
-      # 'Amadeus module is not active or removed'
       Amadeus::Session.with_session(session) do |booked_session|
-        @@request_time = Benchmark.ms do
-          response = invoke(action,
-            :soap_action => opts[:soap_action],
-            :soap_header => {'SessionId' => booked_session.session_id} ) do |body|
-            body.set_value soap_body, :raw => true
-          end
+        response = invoke(action,
+          :soap_action => opts[:soap_action],
+          :soap_header => {'SessionId' => booked_session.session_id} ) do |body|
+          body.set_value soap_body, :raw => true
         end
       end
       save_xml(action, response.to_xml)
@@ -77,8 +73,8 @@ class Service < Handsoap::Service
     response_body
   end
 
-  def xml_template(action); "xml/#{action}.xml" end
-  def haml_template(action); "haml/#{action}.haml" end
+  def xml_template(action);  File.expand_path("../templates/#{action}.xml",  __FILE__) end
+  def haml_template(action); File.expand_path("../templates/#{action}.haml", __FILE__) end
 
   def render(action, locals={})
     if File.file?(haml_template(action))
@@ -189,6 +185,6 @@ class Service < Handsoap::Service
     doc
   end
 
-end
+  end
 
 end
