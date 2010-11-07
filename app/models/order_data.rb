@@ -115,7 +115,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   
   
   def self.create_sample_booking
-    order = OrderData.get_from_cache('14gLl7')
+    order = OrderData.get_from_cache('xglG7R')
     order.email = 'email@example.com'
     order.phone = '12345678'
     order.people = [Person.new(

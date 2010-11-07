@@ -83,8 +83,9 @@
         %passengerType PAX
         %ticket
           -# подозреваю, что TKXL даты не просит
+          -# - еще как просит
           %indicator XL
-          -# %date= (Date.today + 5.day).strftime("%d%m%y")
+          %date= (Date.today + 5.day).strftime("%d%m%y")
     %dataElementsIndiv
       %elementManagementData
         %reference
@@ -151,5 +152,3 @@
             %percentage= commission.agent_value
           -else
             %amount= commission.agent_value
-          
-        
