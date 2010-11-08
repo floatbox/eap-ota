@@ -1,68 +1,73 @@
-#search-submit
-{
+#search-define #search-submit {
+    padding: 10px 15px 10px 80px;
+    color: #fff;
+    background-color: #3e3e3e;
+}
+
+#search-submit {
     width: 100px;
     padding: 10px 15px 10px 80px;
-    
     background: url(/img/search-glow.png) no-repeat 100% 0 #3e3e3e;
 }
 
-#search-submit.disabled
-{
+#search-submit.disabled {
     background-position: 0 -100px;
 }
 
-#search-submit a.b-submit
-{
-    top: 0;
-
+#search-submit a.b-submit {
     display: block;
-
+    top: 0;
     color: #fff;
 }
 
-/* Кнопка сабмита */
-    a.b-submit
-    {
-        font: bold 22px Arial,a;
-        
-        padding: 6px 22px;
+#search-submit a {
+    color: #FFF;
+}
 
-        text-align: center;
-        line-height: 21px;
-        text-decoration: none;
+#search-submit.disabled a {
+    color: #CCC;
+}
 
-        -moz-user-select: none;
-        -khtml-user-select: none;
-        user-select: none;
+a.b-submit
+{
+    font: bold 22px Arial,a;
+    
+    padding: 6px 22px;
 
-        color: #fff;
-        background: #8a9f13;
+    text-align: center;
+    line-height: 21px;
+    text-decoration: none;
 
-        border: 1px solid #d0dc8a;
-        border-radius: 4px;
-        -moz-border-radius: 4px;
-        -webkit-border-radius: 4px;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
 
-        background-image: linear-gradient(top, #a0b914, #7b8e12);
-        background-image: -moz-linear-gradient(top, #a0b914, #7b8e12);
-        background-image: -webkit-gradient(linear, left top, left bottom, from(#a0b914), to(#7b8e12));
-    }
+    color: #fff;
+    background: #8a9f13;
 
-    a.b-submit:hover
-    {
-        border: 1px solid #c52471;
-        background: #dc3f8a;
-        background-image: -moz-linear-gradient(top, #f062a5, #d92c7e);
-        background-image: -webkit-gradient(linear, left top, left bottom, from(#f062a5), to(#d92c7e));
-    }
+    border: 1px solid #d0dc8a;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
 
-    .disabled a.b-submit,
-    .disabled a.b-submit:hover
-    {
-        cursor: default;
+    background-image: linear-gradient(top, #a0b914, #7b8e12);
+    background-image: -moz-linear-gradient(top, #a0b914, #7b8e12);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#a0b914), to(#7b8e12));
+}
 
-        border-color: #999;
-        background: #666;
-    }
+a.b-submit:hover
+{
+    border: 1px solid #c52471;
+    background: #dc3f8a;
+    background-image: -moz-linear-gradient(top, #f062a5, #d92c7e);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f062a5), to(#d92c7e));
+}
 
-/* Кнопка сабмита [END] */
+.disabled a.b-submit,
+.disabled a.b-submit:hover
+{
+    cursor: default;
+
+    border-color: #999;
+    background: #666;
+}

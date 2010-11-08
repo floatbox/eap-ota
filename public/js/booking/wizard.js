@@ -166,11 +166,12 @@ ptp.dates = function($dd, $mm, $yyyy) {
         var n = parseInt(this.value);
         (n > 1 && n < 10) && me.nextField($(this)).focus();
     });
-    $yyyy.keyup(function(e) {
-        if (!isDigit(e.which)) return;
-        var n = parseInt(this.value);
-        (n > 1900 && n < 2100) && me.nextField($(this)).focus();
+    
+    // Из пустого поля не нужно переходить по табу
+    $ddmm.add($yyyy).keydown(function(e) {
+        if (e.which == 9 && !this.value) return false;
     });
+
 
     var year = (new Date()).getFullYear();
 
@@ -228,11 +229,14 @@ ptp.num = function(s) {
         return (code > 47 && code < 58) || (code > 95 && code < 106);
     };
 
-    // перескакивание в след поле после ввода
-    $el.keyup(function(e) {
+    // перескакивание в следующее поле после ввода, в последнем это делать не нужно
+    $el.slice(0, -1).keyup(function(e) {
         if (this.value.length < 4) return;
         if (!isDigit(e.which)) return;
         me.nextField($(this)).focus();
+    });
+    $el.keydown(function(e) {
+        if (e.which == 9 && !this.value) return false;
     });
 
     // перескакивание в след поле после вставки
@@ -327,37 +331,11 @@ ptp.expir = function($mm, $yy) {
         this.value = v ? v : ''; // тут был нуль
         if (v && v < 10) this.value = '0' + v;
     });
-
-    // перескакивание после ввода одного числа (только для месяцев)
-    $mm.keyup(function(e) {
-        if (e.which < 48 || e.which > 57) return;
-        var n = parseInt(this.value);
-        (n > 1 && n < 10) && me.nextField($(this)).focus();
-    });
-
-    // перескакивание в след поле после ввода валидного двухразрядного числа
-    $mmyy.keyup(function(e) {
-        if (e.which < 48 || e.which > 57) return;
-        if (this.value.length < 2) return;
-
-        var $el = $(this);
-
-        var valid = !$el.validate().length;
-        valid && me.nextField($el).focus();
-    });
-
 }
 
 ptp.cvv = function(s) {
     var me  = this;
     var $el = $(s, this.$el);
-
-    // перескакивание в след поле после ввода
-    $el.keyup(function(e) {
-        if (this.value.length < 3) return;
-        if (e.which < 48 || e.which > 57) return;
-        me.nextField($(this)).focus();
-    });
 }
 
 

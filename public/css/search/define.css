@@ -1,0 +1,24 @@
+#search-define {
+    width: 100%;
+    background: #3e3e3e;
+    font-size: 22px;
+}
+
+#search-define th {
+    width: 90px;
+    padding: 13px 0 14px 15px;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: top;
+    color: #ed1192;
+}
+
+#search-define td {
+    padding: 13px 0 14px 10px;
+    vertical-align: top;
+    color: #ccc;
+}
+
+#search-define td a {
+    color: #ccc;
+}

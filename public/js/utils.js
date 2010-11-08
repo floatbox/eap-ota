@@ -53,12 +53,10 @@ Array.prototype.last = function() {
     return this[this.length - 1];
 };
 
-Array.compareInt = function(a, b) {
-    return (a - b);
-};
-
 Array.prototype.sortInt = function() {
-    this.sort(Array.compareInt);
+    this.sort(function(a, b) {
+        return (a - b);
+    });
     return this;
 };
 
@@ -68,6 +66,13 @@ Array.prototype.compact = function() {
         if (this[i] !== undefined) result.push(this[i]);
     }
     return result;
+};
+
+Array.prototype.enumeration = function(cnj) {
+    var str = this.slice(0, this.length - 1).join(', ');
+    if (str) str += cnj || ' и ';
+    str += this.last();
+    return str;
 };
 
 //////// String /////////////

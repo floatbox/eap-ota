@@ -11,8 +11,11 @@
 @import 'atoms/b-loader.css';
 @import 'atoms/b-rur.css';
 
+@import 'define/filters.css';
+
 @import 'search/form.css';
 @import 'search/autocomplete.css';
+@import 'search/define.css';
 @import 'search/submit.css';
 
 @import 'panel/panel.css';
@@ -23,9 +26,6 @@
 
 @import 'calendar/scroller.css';
 @import 'calendar/viewport.css';
-
-@import 'define/define.css';
-@import 'define/define-popup.css';
 
 @import 'media/media.css';
 @import 'promo/promo.css';

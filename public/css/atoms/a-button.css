@@ -46,7 +46,6 @@
 }
 
 .a-button-ready:hover,
-.offer .stop-booking:hover,
 .offer .book .a-button:hover {
     color: #eee;
     border: 1px solid #c52471;

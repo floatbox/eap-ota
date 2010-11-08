@@ -16,6 +16,12 @@
     cursor: default;
 }
 
+.l-crop .offer-variant td.book .a-button,
+.l-crop .offer-variant tr.book .a-button,
+.l-crop .offer-variant tr.book .sum {
+    visibility: hidden;
+}
+
 /* Состояния формы */
 
 .booking {
@@ -56,17 +62,24 @@
 }
 
 
-
 /* Кнопки прекращения бронирования */
 
 .offer a.stop-booking {
-    font-size: 14px;
-    font-weight: normal;
-
     position: absolute;
     right: 15px;
-
-    margin-top: 15px;
+    margin-top: 20px;
+    font-size: 12px;
+    font-weight: normal;
+    color: #333;
+}
+.offer a.stop-booking:hover {
+    color: #ED1192;
+}
+.book-s a.stop-booking {
+    position: static;
+    right: 0;
+    margin: 0;
+    font-size: 100%;
 }
 
 /* Разметка страницы бронирования на шаги */
@@ -103,6 +116,10 @@
         -moz-border-radius: 3px;
         -webkit-border-radius: 3px;
         -o-border-radius: 3px;
+    }
+
+    .booking select.text {
+        padding: 2px 3px;
     }
 
     .booking .text:hover {
@@ -455,11 +472,11 @@
 }
 
 .book-p input.input-bonus {
-    width: 197px;
+    width: 177px;
 }
 
 .book-p select.select-bonus {
-    width: 207px;
+    width: 187px;
 }
 
 /* номер пассажира */
@@ -486,6 +503,25 @@
 
 
 /******* БЛОК 3: БАНКОВСКАЯ КАРТОЧКА *******/
+
+.payments {
+    position: relative;
+    margin: 0 175px 15px 15px;
+    font-size: 75%;
+    line-height: 133.333%;
+    color: #777;
+}
+.payments a {
+    color: #777;
+}
+.payments .alfa {
+    position: absolute;
+    top: 0; left: 504px;
+}
+.payments .thawte {
+    position: absolute;
+    top: 1px; left: 539px;
+}
 
 .bankcard {
     overflow: hidden;
@@ -547,13 +583,13 @@
     .bankcard .bc-type i.bc-visa {
         width: 92px;
 
-        background: url(/img/offers/booking-visa.png);
+        background: url(/img/booking/visa.png);
     }
 
     .bankcard .bc-type i.bc-master {
         width: 89px;
 
-        background: url(/img/offers/booking-master.png);
+        background: url(/img/booking/mastercard.png);
     }
     
     .bankcard .bc-type b {
@@ -723,13 +759,10 @@
     margin: 1em 0 0 12px;
 }
 
-    .book-bc .bc-bill td, .book-bc .bc-bill th {
-    }
-
     .book-bc .bc-bill th {
         font: bold 87.5% Arial,a;
         
-        padding-bottom: 3px;
+        padding-bottom: 1px;
 
         vertical-align: middle;
         white-space: nowrap;
@@ -752,16 +785,15 @@
         white-space: nowrap;
     }
 
-    .book-bc .bc-bill td u,
-    .book-bc .bc-bill td b {
-        font: bold 157.143%/85% Arial,a;
-
-        margin: 0 .1em 0 0;
-
+    .book-bc .bc-bill td u {
+        font: bold 162.5%/100% Arial, sans-serif;
+        margin: 0 0.1em 0 0;
         color: #ed1192;
     }
 
     .book-bc .bc-bill td b {
+        font: bold 200%/100% Arial, sans-serif;
+        margin: 0 0.1em 0 0;
         color: #6F7C26;
     }
 
@@ -784,7 +816,7 @@
 /******* БЛОК 4: КОНТАКТЫ *******/
 
 .booking .book-c table td {
-    padding: 0 0 0 15px;
+    padding-left: 15px;
     vertical-align: top;
 }
 
@@ -810,11 +842,27 @@
 .book-s .control {
     text-align: center;
 }
-
-.book-s .control strong {
+.book-s .control table {
+    margin: 0 auto;
+}
+.book-s .control td {
+    width: 250px;
+    vertical-align: middle;
+}
+.book-s .control td.g-xl {
     font-weight: bold;
-
-    padding-right: 0.25em;
+    text-align: right;
+}
+.book-s .control td.g-xxs {
+    padding-top: 2px;
+    color: #777;
+}
+.book-s .control th {
+    padding: 0 15px 2px;
+    vertical-align: middle;
+}
+.book-s .control .a-button {
+    margin: 0;
 }
 
 /* список причин */
@@ -824,30 +872,30 @@
 
     width: 380px;
     
-    margin: 25px auto 0;
+    margin: 22px auto 0;
     padding: 14px 20px 12px;
 
     color: #333;
     background: #ffc4c4;
 
-    border-radius: 15px;
-    -moz-border-radius: 15px;
-    -webkit-border-radius: 15px;
-    -o-border-radius: 15px;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -o-border-radius: 10px;
 }
 
     .book-s .blocker s {
         display: block;
         position: absolute;
-        left: 280px;
-        top: -20px;
+        left: 194px;
+        top: -15px;
 
         width: 0;
         height: 0;
 
         border-style: solid;
-        border-color: transparent #ffc4c4 transparent transparent;
-        border-width: 20px 20px 0 0 ;
+        border-color: transparent transparent #ffc4c4;
+        border-width: 0 16px 16px;
     }
 
     .book-s .blocker h6 {

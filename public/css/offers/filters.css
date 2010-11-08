@@ -1,18 +1,40 @@
 /* Фильтры предложений */
 
-#offers-filter
-{
+#offers-filter {
+    position: relative;
     top: -3px;
+    line-height: 137.5%;
 }
 
-#offers-reset-filters
-{
+#offers-filter th {
+    width: 70px;
+    padding: 0 0 15px 15px;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: top;
+    color: #ed1192;
+}
+
+#offers-filter td {
+    padding: 0 15px 15px 10px;
+    vertical-align: top;
+    color: #4B4B4B;
+}
+
+#offers-reset-filters {
     margin-left: 0.3em;
-    
     color: #ED1192;
 }
 
-#offers-filter .flight
-{
+#offers-filter .flight {
     display: inline;
+}
+
+#offers-filter .pseudo:hover {
+    color: #000;
+}
+
+#offers-filter .dropdown {
+    margin-top: -6px;
+    line-height: 118.75%;
 }

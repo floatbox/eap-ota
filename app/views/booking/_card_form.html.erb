@@ -1,8 +1,14 @@
 <div class="section book-bc" onclick="return 'BankCard'">
+    <div class="payments">
+        <p>Данные вашей банковской карты обрабатываются платежным центром <a href="http://www.alfabank.ru/">Альфа-Банка</a> и защищены ключом шифрования, выданным компанией <a href="http://www.thawte.com/">Thawte</a></p>
+        <a class="alfa" href="http://www.alfabank.ru/"><img src="/img/booking/alfabank.png" alt="Альфа-Банк"></a>
+        <a class="thawte" href="http://www.thawte.com/"><img src="/img/booking/thawte.png" alt="Thawte"></a>
+    </div>
     <ul class="bankcard">
         <li class="bc-front">
             <p id="bc-type" class="bc-type g-xxs" title="Вы можете использовать карточки платёжных систем Visa или MasterCard">
                 <i class="bc-visa"></i><b>&nbsp;или&nbsp;</b><i class="bc-master"></i>
+            </p>
 
             <fieldset class="bc-num">
                 <legend></legend>
@@ -129,9 +135,9 @@
     <table class="bc-bill">
         <tfoot>
             <tr class="g-xxs">
-                <td>&mdash;&nbsp;стоимость <%= @order.people.size > 1 ? 'всех' : '' %> билетов с&nbsp;налогами и&nbsp;сборами
+                <td>стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами
                 <td>
-                <td>&mdash;&nbsp;комиссия платёжной системы за&nbsp;перевод
+                <td>комиссия банка за&nbsp;проведение платежа
                 <td>
                 <td>
         <tbody>
