@@ -31,7 +31,7 @@ class PNRForm < ActiveRecord::BaseWithoutTable
   end
   
   def get_pnr
-    doc = Amadeus.pnr_add_multi_elements(self)
+    doc = Amadeus::Service.pnr_add_multi_elements(self)
     pnr = doc.xpath('//r:controlNumber').to_s
     if pnr.blank?
       pnr = doc.xpath('//r:messageErrorText/r:text').every.to_s.join(', ')

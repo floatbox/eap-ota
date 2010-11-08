@@ -1,13 +1,20 @@
-# простой, но надежный как rand(2**31) != rand(2**31) аллокатор сессий
-# обошелся без блокировки таблиц
-class AmadeusSession < ActiveRecord::Base
+module Amadeus
+  # простой, но надежный как rand(2**31) != rand(2**31) аллокатор сессий
+  # обошелся без блокировки таблиц
+  class Session < ActiveRecord::Base
+
+  set_table_name 'amadeus_sessions'
 
   INACTIVITY_TIMEOUT = 10*60
   MAX_SESSIONS = 10
 
-  named_scope :stale, lambda { {:conditions => ["updated_at < ?", INACTIVITY_TIMEOUT.seconds.ago]}}
+  named_scope :stale,
+    lambda { {:conditions => ["updated_at < ?", INACTIVITY_TIMEOUT.seconds.ago]}}
   named_scope :busy, :conditions => "booking is not null"
-  named_scope :free, lambda { {:conditions => ["updated_at >= ? AND booking is null", INACTIVITY_TIMEOUT.seconds.ago]}}
+  named_scope :free,
+    lambda { {:conditions => [
+      "updated_at >= ? AND booking is null", INACTIVITY_TIMEOUT.seconds.ago
+    ]}}
 
   def self.from_token(auth_token)
     session = new
@@ -39,7 +46,7 @@ class AmadeusSession < ActiveRecord::Base
     result = yield session
     session.increment
     result
-  rescue Amadeus::AmadeusError
+  rescue Amadeus::Error
     # TODO проверить что нужно увеличивать счетчик в случае разных 91ых ошибок
     session.increment
     raise
@@ -66,7 +73,7 @@ class AmadeusSession < ActiveRecord::Base
   # без параметра создает незарезервированную сессию
   def self.increase_pool(booking=nil)
     logger.debug "Allocating new amadeus session"
-    token = Amadeus.security_authenticate
+    token = Amadeus::Service.security_authenticate
     session = from_token(token)
     session.booking = booking if booking
     session.save
@@ -83,9 +90,10 @@ class AmadeusSession < ActiveRecord::Base
   def destroy
     logger.debug "Signing out amadeus session #{token}"
     super
-    Amadeus.security_sign_out(self)
+    Amadeus::Service.security_sign_out(self)
   rescue Handsoap::Fault
     # it's ok
   end
 
+  end
 end

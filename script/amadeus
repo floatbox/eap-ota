@@ -3,10 +3,14 @@ require File.expand_path('../../config/environment',  __FILE__)
 
 require 'readline'
 prompt = 'amadeus > '
-amadeus = Amadeus.new(:book => true)
-while !(command_line = Readline.readline(prompt, true)).nil?
-  command_line.chomp!
-  break if command_line == 'q'
-  puts amadeus.cmd(command_line)
+begin
+  amadeus = Amadeus::Service.new(:book => true)
+  while !(command_line = Readline.readline(prompt, true)).nil?
+    command_line.chomp!
+    break if command_line == 'q'
+    puts amadeus.cmd(command_line)
+  end
+ensure
+  puts "logging out amadeus session ..."
+  amadeus.session.destroy
 end
-amadeus.session.destroy

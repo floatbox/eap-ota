@@ -1,4 +1,5 @@
 # maybe move to lib/
+# пригодится
 class QueryParser
 
   mattr_accessor :handlers

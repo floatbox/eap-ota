@@ -1,27 +1,18 @@
 # -*- encoding: utf-8 -*-
+module Amadeus
 
-#require 'handsoap'
-#require 'haml'
-#require 'yaml'
-class Amadeus < Handsoap::Service
+  class Service < Handsoap::Service
 
-  class AmadeusError < StandardError
-
-  end
-
-  include FileLogger
-  #cattr_accessor :fake
-  def self.fake=(value); $amadeus_fake=value; end
-  def self.fake; $amadeus_fake; end
+  endpoint :uri => "https://test.webservices.amadeus.com", :version => 1
   #Handsoap.http_driver = :http_client
   Handsoap.timeout = 500
 
+  # response logger
+  include FileLogger
   # handsoap logger
   fh = open(Rails.root + 'log/amadeus.log', 'a')
   fh.sync=true
   self.logger = fh
-
-  endpoint :uri => "https://test.webservices.amadeus.com", :version => 1
 
   attr_accessor :session
 
@@ -29,11 +20,16 @@ class Amadeus < Handsoap::Service
   # new без аргументов.
   def initialize(args = {})
     if args[:book]
-      self.session = AmadeusSession.book
+      self.session = Amadeus::Session.book
     elsif args[:session]
       self.session = args[:session]
     end
   end
+
+# generic helpers
+
+  # вынесены во внешний модуль, чтобы методы можно было оверрайдить
+  include Amadeus::SOAPActions
 
   def on_response_document(doc)
     doc.add_namespace 'header', 'http://webservices.amadeus.com/definitions'
@@ -58,15 +54,11 @@ class Amadeus < Handsoap::Service
       soap_body = render(action, args)
       #save_xml('request_'+ action, soap_body)
       response = nil
-      # WTF по каким-то неясным причинам без :: ломается development mode
-      # 'Amadeus module is not active or removed'
-      ::AmadeusSession.with_session(session) do |booked_session|
-        @@request_time = Benchmark.ms do
-          response = invoke(action,
-            :soap_action => opts[:soap_action],
-            :soap_header => {'SessionId' => booked_session.session_id} ) do |body|
-            body.set_value soap_body, :raw => true
-          end
+      Amadeus::Session.with_session(session) do |booked_session|
+        response = invoke(action,
+          :soap_action => opts[:soap_action],
+          :soap_header => {'SessionId' => booked_session.session_id} ) do |body|
+          body.set_value soap_body, :raw => true
         end
       end
       save_xml(action, response.to_xml)
@@ -79,21 +71,19 @@ class Amadeus < Handsoap::Service
     response_body = response.xpath('soap:Envelope/soap:Body/*').first
 
     if (response_body / 'r:errorMessage').present?
-      raise AmadeusError, "#{ response_body / '//r:error' }: #{response_body / '//r:description'}"
+      raise Amadeus::Error, "#{ response_body / '//r:error' }: #{response_body / '//r:description'}"
     end
 
     response_body
   end
 
-  cattr_reader :request_time
-  def self.reset_request_time
-    @@request_time = 0
-  end
 
-  def xml_template(action); "xml/#{action}.xml" end
-  def haml_template(action); "haml/#{action}.haml" end
+# request template rendering
 
-  def render(action, locals={})
+  def xml_template(action);  File.expand_path("../templates/#{action}.xml",  __FILE__) end
+  def haml_template(action); File.expand_path("../templates/#{action}.haml", __FILE__) end
+
+  def render(action, locals=nil)
     if File.file?(haml_template(action))
       render_haml( haml_template(action), locals)
     elsif File.file?(xml_template(action))
@@ -103,7 +93,7 @@ class Amadeus < Handsoap::Service
     end
   end
 
-  def render_haml(template, locals={})
+  def render_haml(template, locals=nil)
     Haml::Engine.new(File.read(template)).render(locals)
   end
 
@@ -112,6 +102,26 @@ class Amadeus < Handsoap::Service
     File.read(template)
   end
 
+
+  # shouldn't really be something different from above
+  def pnr_retrieve(args)
+    Amadeus::Session.with_session(session) do
+      # FIXME почему сессия не используется?
+      r = soap_action 'PNR_Retrieve', args
+      # cmd('IG')
+      pnr_add_multi_elements :ignore => true
+      r
+    end
+  end
+
+  def cmd(command)
+    response = command_cryptic :command => command
+    response.xpath('//r:textStringDetails').to_s
+  end
+
+# sign in and sign out sessions
+
+  # оверрайд методов из SOAPACTions
   def security_authenticate
     payload = render('Security_Authenticate')
     response = invoke(
@@ -127,7 +137,7 @@ class Amadeus < Handsoap::Service
   end
 
   def security_sign_out(session)
-    # у запроса пустое тело
+    # у запроса пустое тело, поэтому оверрайдим SOAPActions
     response = invoke(
       'Security_SignOut',
       :soap_action => 'http://webservices.amadeus.com/1ASIWOABEVI/VLSSOQ_04_1_1A',
@@ -140,60 +150,8 @@ class Amadeus < Handsoap::Service
     (response / '//r:statusCode').to_s == 'P'
   end
 
-  def fare_master_pricer_calendar(args)
-    soap_action 'Fare_MasterPricerCalendar', args
-  end
 
-  def fare_master_pricer_travel_board_search(args)
-    soap_action 'Fare_MasterPricerTravelBoardSearch', args
-  end
-
-  def pnr_add_multi_elements(args)
-    soap_action 'PNR_AddMultiElements', args
-  end
-
-  def pnr_retrieve(args)
-    ::AmadeusSession.with_session(session) do
-      # FIXME почему сессия не используется?
-      r = soap_action 'PNR_Retrieve', args
-      # cmd('IG')
-      soap_action 'PNR_AddMultiElements', :ignore => true
-      r
-    end
-  end
-
-  def doc_issuance_issue_ticket(args)
-    soap_action 'DocIssuance_IssueTicket', args
-  end
-
-  def fare_price_pnr_with_lower_fares(args)
-    soap_action 'Fare_PricePNRWithLowerFares', args
-  end
-
-  def fare_informative_pricing_without_pnr(args)
-    soap_action 'Fare_InformativePricingWithoutPNR', args
-  end
-
-  def air_sell_from_recommendation(args)
-    soap_action 'Air_SellFromRecommendation', args
-  end
-
-  def command_cryptic(args)
-    soap_action 'Command_Cryptic', args
-  end
-
-  def cmd(command)
-    response = soap_action('Command_Cryptic', :command => command)
-    response.xpath('//r:textStringDetails').to_s
-  end
-
-  def soap_action(action, args = nil)
-    yml = YAML::load(File.open(RAILS_ROOT+'/config/soap_actions.yaml'))
-    response = invoke_rendered action,
-      :soap_action => yml[action]['soap_action'],
-      :r => yml[action]['soap_action'],
-      :args => args
-  end
+# debugging
 
   # for debugging of handsoap parser
   def parse_string(xml_string)
@@ -202,5 +160,6 @@ class Amadeus < Handsoap::Service
     doc
   end
 
-end
+  end
 
+end

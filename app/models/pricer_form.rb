@@ -164,11 +164,11 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   end
 
   def travel_xml
-    Amadeus.fare_master_pricer_travel_board_search(self)
+    Amadeus::Service.fare_master_pricer_travel_board_search(self)
   end
 
   def calendar_xml
-    Amadeus.fare_master_pricer_calendar(self)
+    Amadeus::Service.fare_master_pricer_calendar(self)
   end
 
   def search
@@ -267,19 +267,15 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     flight_doc = xslt.transform(xml.native_element.document)
     recommendations = []
 
-    # TODO сделать инкрементирующийся счетчик
-    @@parse_time = Benchmark.ms do
-
-      flight_indexes = flight_doc.children.collect do |requested_segment|
-        requested_segment.children.collect do |proposed_segment|
-          Segment.new(
-            :flights => proposed_segment.children.collect { |flight|
-              Flight.new(flight.to_hash.values.first)
-              #  Hash[*flight.attribute_nodes.map {|node| [node.name, node.value]}.flatten]
-              #)
-            }
-          )
-        end
+    flight_indexes = flight_doc.children.collect do |requested_segment|
+      requested_segment.children.collect do |proposed_segment|
+        Segment.new(
+          :flights => proposed_segment.children.collect { |flight|
+            Flight.new(flight.to_hash.values.first)
+            #  Hash[*flight.attribute_nodes.map {|node| [node.name, node.value]}.flatten]
+            #)
+          }
+        )
       end
 
       recommendations = parse_recommendations(xml, flight_indexes)

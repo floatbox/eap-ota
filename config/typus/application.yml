@@ -115,14 +115,3 @@ Preset:
   filters:
   search: name
   application: Eviterra
-
-AmadeusCommission:
-  fields:
-    default: human
-    list: airline, human
-    form: airline, value, percentage
-  order_by: airline_id
-  #relationships: airline
-  filters: airline
-  #search: name
-  application: Eviterra

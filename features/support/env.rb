@@ -63,5 +63,5 @@ Spork.each_run do
     end
   end
 end
-Amadeus.debug_dir = 'xml/reply'
+Amadeus::Service.debug_dir = 'xml/reply'
 

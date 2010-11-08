@@ -33,7 +33,7 @@ class PricerController < ApplicationController
     end
     
     render :partial => 'recommendations'
-  rescue Amadeus::AmadeusError, Handsoap::Fault => e
+  rescue Amadeus::Error, Handsoap::Fault => e
     @error_message = e.message
     render :text => @errorMessage
   end
