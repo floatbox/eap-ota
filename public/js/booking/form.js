@@ -73,7 +73,7 @@ show: function(variant) {
     if (this.offer.hasClass('collapsed')) {
         $('.expand', variant).click();
     }
-    var button = '<a class="a-button stop-booking" href="#">Вернуться к выбору вариантов</a>';
+    var button = '<a class="stop-booking" href="#">Вернуться к выбору вариантов</a>';
     var hide = function(event) {
         event.preventDefault();
         self.hide();

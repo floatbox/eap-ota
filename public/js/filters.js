@@ -41,9 +41,8 @@ fill: function(items) {
     var template = '<dd data-value="{v}">{t}</dd>';
     var list = $('dl', this.dropdown);
     this.items && this.items.remove();
-    for (var i = 0, im = items.length; i < im; i++) {
-        var item = items[i];
-        list.append(template.supplant(item));
+    if (items) for (var i = 0, im = items.length; i < im; i++) {
+        list.append(template.supplant(items[i]));
     }
     this.items = $('dd:not(.empty)', list);
     this.reset();

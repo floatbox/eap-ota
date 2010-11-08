@@ -259,7 +259,7 @@ updateFilters: function() {
             $(this).addClass('g-none');
         }
     });
-    var items = $('#offers-filter td > .filter').each(function() {
+    var items = $('#offers-filter .filters > .filter').each(function() {
         var name = $(this).attr('data-name');
         var filter = self.filters[name];
         filter.fill(data[name]);
