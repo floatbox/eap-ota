@@ -8,6 +8,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   column :rt, :boolean
   column :adults, :integer, 1
   column :children, :integer, 0
+  column :infants, :integer, 0
   column :search_type, :string, 'travel'
   column :nonstop, :boolean
   column :day_interval, :integer, 3
@@ -17,15 +18,36 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   validates_presence_of :from_iata, :to_iata, :date1
   validates_presence_of :date2, :if => :rt
 
-  attr_reader :to_iata, :from_iata
+  attr_reader :to_iata, :from_iata, :complex_to_parse_results
 
   cattr_reader :parse_time
   def self.reset_parse_time
     @@parse_time = 0
   end
-  
+
+
+  #временная херня
+  def dates
+    return [date1, date2] if date1 && date2
+    return [date1] if date1
+  end
+
+  def dates= dates
+    self.date1 = dates[0] if dates.length > 0
+    self.date2 = dates[1] if dates.length > 1
+  end
+
+  def people_count
+    {:adults => adults || 1, :children => children || 0, :infants => infants || 0}
+  end
+
+  def people_count= count
+    self.adults, self.children, self.infants = count[:adults] || 1, count[:children] || 0, count[:infants] || 0
+  end
+
   def parse_complex_to
     self.complex_to ||= to
+    res = {}
     str = self.complex_to.mb_chars
     not_finished = true
     while !str.blank? && not_finished
@@ -42,24 +64,37 @@ class PricerForm < ActiveRecord::BaseWithoutTable
         month_record = Completer.record_from_string(m[2].mb_chars, ['date'])
         day = m[1].to_i
       end
-      
+
       if month_record && (day > 0) && (month_record.hidden_info.class == Fixnum)
-        set_date1_from_month_and_day(month_record.hidden_info, day)
+        res[:dates] =[{
+            :value => date_from_month_and_day(month_record.hidden_info, day),
+            :start => str.length - word_part.length,
+            :end => str.length-1}
+          ]
         str = str[0...(str.length - word_part.length)]
         not_finished = true
       end
       
       for word_beginning_pattern in [ /\S+\s+\S+\s+\S+\s*$/, /\S+\s+\S+\s*$/, /\S+\s*$/ ]
-        if m = str.match(word_beginning_pattern)
+        if (m = str.match(word_beginning_pattern)) && !not_finished
           word_part = m[0].mb_chars
 
           if r = Completer.record_from_string(word_part, ['date', 'airport', 'city', 'country'])
             if r && r.type == 'date' && r.hidden_info.class == String
-              self.date1 = r.hidden_info
+              res[:dates] = [{
+                  :value => r.hidden_info,
+                  :start => str.length - word_part.length,
+                  :end => str.length-1}
+                ]
               str = str[0...(str.length - word_part.length)]
               not_finished = true
             elsif r && (['airport', 'city', 'country'].include? r.type)
               @to_iata = r.code rescue nil
+              res[:to] = {
+                :value => @to_iata,
+                :start => str.length - word_part.length,
+                :end => str.length-1
+              }
               str = str[0...(str.length - word_part.length)]
               not_finished = true
             end
@@ -67,9 +102,10 @@ class PricerForm < ActiveRecord::BaseWithoutTable
         end
       end
     end
+    @complex_to_parse_results = res
   end
   
-  def set_date1_from_month_and_day(month, day)
+  def date_from_month_and_day(month, day)
     self.date1 = (Date.today > Date.new(Date.today.year, month, day)) ?
       Date.new(Date.today.year+1, month, day).strftime('%d%m%y') : 
       Date.new(Date.today.year, month, day).strftime('%d%m%y')

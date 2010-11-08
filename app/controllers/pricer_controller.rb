@@ -31,7 +31,7 @@ class PricerController < ApplicationController
         Rails.cache.write('pricer_form' + @query_key, @search)
       end
     end
-    
+
     render :partial => 'recommendations'
   rescue Amadeus::Error, Handsoap::Fault => e
     @error_message = e.message
@@ -49,11 +49,13 @@ class PricerController < ApplicationController
       }
     else
       @search = PricerForm.new(params[:search])
+      debugger
       @search.parse_complex_to
       render :json => {
         :valid => @search.valid?,
         :human => @search.human,
-        :search => @search
+        :search => @search,
+        :complex_to_parse_results => @search.complex_to_parse_results
       }
     end
   end
