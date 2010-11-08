@@ -86,7 +86,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
     air_sfr_xml = amadeus.air_sell_from_recommendation(
       :segments => recommendation.variants[0].segments, :people_count => people.size
     )
-    
     doc = amadeus.pnr_add_multi_elements(PNRForm.new(
       :flights => [],
       :people => people,
