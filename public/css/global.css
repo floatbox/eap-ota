@@ -194,3 +194,17 @@ body * {
     background: url('/img/ico/external-link.png') no-repeat scroll right center transparent;
     padding-right: 13px;
 }
+
+
+/* Links */
+.pseudo {
+    position: relative;
+    top: -0.14em;
+    border-bottom: 1px dotted;
+    text-decoration: none;
+    cursor: pointer;
+}
+.pseudo em {
+    position: relative;
+    top: 0.14em;
+}

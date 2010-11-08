@@ -240,11 +240,16 @@ showVariant: function(el) {
 },
 updateFilters: function() {
     this.filterable = false;
+    var self = this;
     var data = $.parseJSON($('#offers-collection').attr('data-filters'));
     $('#offers-reset-filters').addClass('g-none');
     $('#offers-filter .flight').each(function() {
-        var items = $('p', this).trigger('update', data);
-        var active = items.trigger('toggle').filter(':not(.g-none)');
+        var active = $('.filter', this).each(function() {
+            var name = $(this).attr('data-name');
+            var filter = self.filters[name];
+            filter.fill(data[name]);
+            filter.el.toggleClass('g-none', filter.items.length < 2);
+        }).filter(':not(.g-none)');
         if (active.length > 0) {
             var city = $('.city', this);
             city.text(data.locations[city.attr('data-location')] || '');
@@ -254,10 +259,12 @@ updateFilters: function() {
             $(this).addClass('g-none');
         }
     });
-    var items = $('#offers-filter td > p').each(function() {
-        var el = $(this);
-        el.trigger('update', data).trigger('toggle');
-        el.next('.comma').toggle(!el.hasClass('g-none'));
+    var items = $('#offers-filter td > .filter').each(function() {
+        var name = $(this).attr('data-name');
+        var filter = self.filters[name];
+        filter.fill(data[name]);
+        filter.el.toggleClass('g-none', filter.items.length < 2);
+        $(this).next('.comma').toggle(!filter.el.hasClass('g-none'));
     });
     items.filter(':not(.g-none)').last().next('.comma').hide();
     this.currentData = data;
@@ -267,7 +274,7 @@ updateFilters: function() {
 resetFilters: function() {
     this.filterable = false;
     for (var key in this.activeFilters) {
-        this.filters[key].trigger('reset');
+        this.filters[key].reset();
         delete(this.activeFilters[key]);
     }
     this.filterable = true;
@@ -275,7 +282,7 @@ resetFilters: function() {
 applyFilter: function(name, values) {
     var self = this, filters = this.activeFilters;
     if (name) {
-        if (values.length) {
+        if (values && values.length) {
             filters[name] = values;
         } else {
             delete(filters[name]);

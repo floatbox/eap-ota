@@ -112,7 +112,7 @@
     // карта
 
     // какой там аналог у defined?()
-    if (window['YMaps']) {
+    if (false && window['YMaps']) {
         var loc = YMaps.location || {},
             lat = loc.latitude || 45,
             lon = loc.longitude || 22;
@@ -149,105 +149,122 @@
    
     // панель уточнений (фильтров)
 
-    var data = {
-        persons: [],
-
-        changes: [
-            {v: 1, t: 'ни одной'},
-            {v: 2, t: 'можно с одной'}
-        ],
-        
-        cls: [
-            {v: 'Y', t: 'эконом-'},
-            {v: 'C', t: 'бизнес-'},
-            {v: 'F', t: 'первый '}
-        ],
-
-        dpt_time_0: [],
-        arv_time_0: [],
-        dpt_time_1: [],
-        arv_time_1: [],
-
-        dpt_airport_0: [],
-        arv_airport_0: [],
-        dpt_airport_1: [],
-        arv_airport_1: [],
-        
-        cities: [],
-        airlines: [],        
-        planes: []
-    };
-
     tools.defines = {};
-    $('#search-define p').each(function() {
-        var $define = $(this).define().trigger('update', data);
-        var dname = $define.data('name');
-        tools.defines[dname] = $define;
+
+    $('#search-define .filter').each(function() {
+        var filter = $(this);
+        tools.defines[filter.attr('data-name')] = new controls.Filter(filter, {radio: true, preserve: true});
     });
 
     // обработка количества пассажиров
-    tools.defines['persons'].bind('change', function() {
-        var adults = 0, children = 0;
-        var values = $(this).data('value');
-        for (var i = 0; v = values[i]; i++) {
-            var orig = values[i].v;
-            var real = orig % (Math.floor(orig / 10) * 10);
-            if (orig < 100) adults = real; else children += real;
-        }
+    tools.defines['persons'].el.bind('change', function(e, values) {
         app.search.update({
-            'adults': adults,
-            'children': children
-        }, this);
+            'adults': values.a,
+            'children': values.c + values.i
+        }, this);  
     });
+    $('.a-button', tools.defines['persons'].dropdown).click(function() {
+        tools.defines['persons'].hide();
+    });
+    tools.defines['persons'].click = function(el) {
+        var group = el.parent().attr('data-group'), gvalue;
+        for (var value in this.selected) {
+            if (value.charAt(0) == group) gvalue = value;
+        }
+        delete(this.selected[gvalue]);
+        if (!el.hasClass('empty')) {
+            var value = el.attr('data-value');
+            if (value != gvalue) {
+                this.selected[value] = true;
+            } else if (group == 'a') {
+                this.selected['a1'] = true;
+            }
+        }
+        this.update();
+    };
+    tools.defines['persons'].process = function(result, values) {    
+        var groups = {a: 0, c: 0, i: 0};
+        for (var i = values.length; i--;) {
+            var value = values[i];
+            groups[value.charAt(0)] = parseInt(value.substring(1), 10);
+        }        
+        $('.group-c .empty', this.dropdown).toggleClass('selected', !groups.c);
+        $('.group-i .empty', this.dropdown).toggleClass('selected', !groups.i);
+        $('.group-c dd:not(.empty)').each(function(i) {
+            $(this).toggleClass('disabled', i > 7 - groups.a);
+        });
+        $('.group-i dd:not(.empty)').each(function(i) {
+            $(this).toggleClass('disabled', i > 7 - groups.a - groups.c);
+        });
+        if (result.length > 1) {
+            var gtitles = {
+                'a': ['взрослый', 'взрослых', 'взрослых'],
+                'c': ['ребёнок', 'детей', 'детей'],
+                'i': ['младенец', 'младенцев', 'младенцев']
+            };
+            for (var i = result.length; i--;) {
+                var key = values[i].charAt(0);
+                var str = app.utils.plural(groups[key], gtitles[key]);
+                result[i] = result[i].replace('</', ' ' + str + '</');
+            }
+        }
+        var correct = groups.a + groups.c + groups.i < 9;
+        $('.excess', this.dropdown).toggle(!correct);
+        $('.a-button', this.dropdown).toggle(correct);
+        if (correct) {
+            this.lastCorrect = $.extend({}, this.selected);
+            this.values.html(' (' + result.enumeration() + ')').show();
+            this.groups = groups;
+        }
+    };
+    tools.defines['persons'].hide = function() {
+        if ($('.excess', this.dropdown).is(':visible')) {
+            this.selected = $.extend({}, this.lastCorrect);
+        }
+        $(window).unbind('click keydown', this.selfhide);
+        this.dropdown.fadeOut(150);
+        this.el.trigger('change', this.groups);
+    };
+    tools.defines['persons'].select(['a1']);
     
     // обработка пересадок
-    tools.defines['changes'].bind('change', function() {
-        var value = $(this).data('value')[0];
+    tools.defines['changes'].el.bind('change', function(e, values) {
         if (app.offers.results.is(':visible')) {
             app.search.toggle(true);
             app.offers.update = {
                 loading: true,
                 action: function() {
                     var ao = app.offers;
-                    ao.maxLayovers = value && value.v;
+                    ao.maxLayovers = values[0];
                     ao.resetFilters();
                     ao.applyFilter();
                 }
             };
         } else {
-            app.offers.maxLayovers = value && value.v;
+            app.offers.maxLayovers = values[0];
         }
     });
     app.search.subscribe(tools.defines['changes'], 'changes', function(v) {
-        tools.defines['changes'].trigger('select', v);
+        tools.changes.select(v);
     });    
 
     // обработка класса
     fields['cabin'] = undefined;
-    tools.defines['cls'].bind('change', function() {
-        var value = $(this).data('value')[0];
+    tools.defines['cabin'].el.bind('change', function(e, values) {
         app.search.update({
-            'cabin': value && value.v
+            'cabin': values[0]
         }, this);
     });
-    app.search.subscribe(tools.defines['cls'], 'cabin', function(v) {
-        tools.defines['cls'].trigger('select', v);
-    });
     
-    // рисуем "один взрослый"
-    tools.defines['persons'].trigger('add', {v: 11, t: 'один'});
-
     // Фильтры предложений
     app.offers.filters = {};
-    $('#offers-filter p').each(function() {
-        var $filter = $(this).define().trigger('update', data);
-        $filter.bind('change', function() {
-            var values = $(this).data('value'), options = [];
-            var name = $(this).data('name');
-            for (var i = values.length; i--;) options.push(values[i].v);
-            if (app.offers.filterable) app.offers.applyFilter(name, options);
+    $('#offers-filter .filter').each(function() {
+        var f = new controls.Filter($(this));
+        f.el.bind('change', function(e, values) {
+            var name = $(this).attr('data-name');
+            if (app.offers.filterable) app.offers.applyFilter(name, values);
         });
-        app.offers.filters[$filter.data('name')] = $filter;
+        app.offers.filters[$(this).attr('data-name')] = f;
     });
     
     // Сброс фильтров
@@ -329,6 +346,7 @@
     
     /* Сброс по клику на логотипе */
     $('#logo').click(function() {
+        app.booking.unfasten();
         var data = $.extend({}, fields);
         for (var key in data) data[key] = app.search.defvalues[key];
         app.search.update(data);

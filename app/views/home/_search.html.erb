@@ -232,13 +232,82 @@
 
 
 <!-- Панель уточнений -->
-<table id="search-define" class="define b-pseudo">
+<table id="search-define">
 <tr>
     <th>Выбрать</th>
-    <td>количество
-        <p onclick="return {name: 'persons', title: 'пассажиры', accusative: 'количество пассажиров', anyone: 'один', radio: true, popup: '#search\\.define\\.persons', preserve: true}"><a href="#"><u>пассажиров</u></a>:<b></b>&nbsp;и
-        <p onclick="return {name: 'changes', title: 'пересадки', accusative: 'допустимое количество пересадок', anyone: 'всё равно', radio: true, preserve: true}"><a href="#"><u>пересадок</u></a><b></b></p>,
-        <p onclick="return {name: 'cls', title: 'класс', accusative: 'класс обслуживания', anyone: 'любой', radio: true, preserve: true}"><b class="left"></b><a href="#"><u>класс</u></a>
+    <td>
+    	<div class="filters">
+    	количество
+
+        <div class="filter persons" data-name="persons">
+            <span class="control pseudo"><em>пассажиров</em></span><span class="values"></span> и
+            <div class="dropdown">
+                <div class="wrap">
+                <dl class="group-a" data-group="a">
+                    <dt>взрослые</dt>
+                    <dd data-value="a1">один</dd>
+                    <dd data-value="a2">двое</dd>
+                    <dd data-value="a3">трое</dd>
+                    <dd data-value="a4">четверо</dd>
+                    <dd data-value="a5">пятеро</dd>
+                    <dd data-value="a6">шестеро</dd>
+                    <dd data-value="a7">семеро</dd>
+                    <dd data-value="a8">восьмеро</dd>
+                </dl>
+                <dl class="group-c" data-group="c">
+                    <dt>дети <em class="age">от 2 до 12 лет</em></dt>
+                    <dd class="empty selected">нет</dd>
+                    <dd data-value="c1">один</dd>
+                    <dd data-value="c2">двое</dd>
+                    <dd data-value="c3">трое</dd>
+                    <dd data-value="c4">четверо</dd>
+                    <dd data-value="c5">пятеро</dd>
+                    <dd data-value="c6">шестеро</dd>
+                    <dd data-value="c7">семеро</dd>
+                </dl>
+                <dl class="group-i" data-group="i">
+                    <dt>младенцы</dt>
+                    <dd class="empty selected">нет</dd>
+                    <dd data-value="i1">один</dd>
+                    <dd data-value="i2">двое</dd>
+                    <dd data-value="i3">трое</dd>
+                    <dd data-value="i4">четверо</dd>
+                    <dd data-value="i5">пятеро</dd>
+                    <dd data-value="i6">шестеро</dd>
+                    <dd data-value="i7">семеро</dd>
+                </dl>
+                </div>
+                <div class="excess">Общее количество пассажиров не может быть больше 8</div>
+                <div class="a-button a-button-ready">Готово</div>
+            </div>
+        </div>
+
+        <div class="filter" data-name="changes">
+            <span class="control pseudo"><em>пересадок</em></span><span class="values"></span>,
+            <div class="dropdown">
+            <dl>
+                <dt>пересадки</dt>
+                <dd class="empty selected">всё равно</dd>
+                <dd data-value="1">ни одной</dd>
+                <dd data-value="2">можно с одной</dd>
+            </dl>
+            </div>
+        </div>
+        
+        <div class="filter" data-name="cabin">
+            <span class="control pseudo"><em>класс</em></span><span class="values"></span>
+            <div class="dropdown">
+            <dl>
+                <dt>класс</dt>
+                <dd class="empty selected">любой</dd>
+                <dd data-value="Y">эконом</dd>
+                <dd data-value="C">бизнес</dd>
+                <dd data-value="F">первый</dd>
+            </dl>
+            </div>
+        </div>
+        
+        </div>
     </td>
     <td id="search-submit" class="disabled">
         <a href="#" class="b-submit">Искать</a>
