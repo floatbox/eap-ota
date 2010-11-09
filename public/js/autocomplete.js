@@ -527,7 +527,7 @@ $.Autocompleter.List = function(input, insert) {
     }
 
     function setStatus(li) {
-        var h = li && (li.data('data').entity.info || li.data('data').name.bold() + ' - а я знаю, нах, где это?');
+        var h = li && (li.data('data').entity.info || li.data('data').name.bold());
         status.html(li ? h : status.data('default'));
     }
 

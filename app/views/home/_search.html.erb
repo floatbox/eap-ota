@@ -11,7 +11,7 @@
             </td>
             
             <td>
-                <label for="search-to" accesskey="2"><i class="label-to">Куда</i>, <i class="label-when">когда</i>, <i class="label-total">сколько человек</i><s id="search-to-loader"></s></label>
+                <label for="search-to" accesskey="2" id="search-to-label"><i data-key="to">Куда</i>, <i data-key="dates">когда</i>, <i>сколько человек</i><s id="search-to-loader"></s></label>
             </td>
 
             <td>
@@ -27,19 +27,6 @@
         <tr>
             <td>
                 <!-- Откуда -->
-
-                <!-- 
-                   при генерации страницы в onclick втыкать json-представление геотаргетированного города пользователя
-                   
-                   если скрипт не найдёт onclick, то возьмёт строку location.city из Яндекс.Карт (если есть)
-                   и попытается превратить его в json-объект с помощью автокомплита
-
-                   еслю облом, будет подставлена статика - "Москва"
-
-                   TODO ЛЁХЕ: по-хорошему, надо сделать отдельный сервис, который принимает объект YMaps.location,
-                   и по геокоординатам заменяет его на ближайший город, где есть аэропорт
-                -->
-                
                 <div class="autocomplete-box">
                     <input type="text" 
                      id="search-from"
@@ -106,89 +93,6 @@
             </h2>
             <div id="where-map" class="map wp0"></div>
 
-            <%#
-            <dl id="where-presets" class="presets wp1">
-
-                <dt>Идеи</dt>
-                <dd class="b-pseudo">
-                    <a href="#" onclick='return {id: "novisa", tip: "Безвизовые страны"}' title="Безвизовые страны"><u>Безвизовые страны</u></a>,
-                    <a href="#" onclick='return {id: "ocean", tip: "искупаться в океане"}' title="Безвизовые страны"><u>искупаться в&nbsp;океане</u></a>,
-                    <a href="#" onclick='return {id: "beer", tip: "попить пива"}' title="попить пива"><u>попить пива</u></a>,
-                    <a href="#" onclick='return {id: "museums", tip: "музеи и галереи"}' title="музеи и галереи"><u>музеи и&nbsp;галереи</u></a>,
-                    <a href="#" onclick='return {id: "romance", tip: "романтическое путешествие"}' title="романтическое путешествие"><u>романтическое путешествие</u></a>
-                    <a href="#" class="more"><u>и еще 500 идей</u></a>
-                    <b>
-                        <a href="#" onclick='return {id: "gastronome", tip: "вкусно поесть"}' title="вкусно поесть"><u>вкусно поесть</u></a>,
-                        <a href="#" onclick='return {id: "waterfalls", tip: "водопады"}' title="водопады"><u>водопады</u></a>,
-                        <a href="#" onclick='return {id: "holy", tip: "по святым местам"}' title="по святым местам"><u>по святым местам</u></a>,
-                        <a href="#" onclick='return {id: "diving", tip: "дайвинг"}' title="дайвинг"><u>дайвинг</u></a>
-                    </b>
-                </dd>
-
-                <dt>Интересные места</dt>
-                <dd class="b-pseudo">
-                    <a href="#" onclick='return {id: "australia", tip: "Австралия"}' title="Австралия"><u>Килиманджаро</u></a>,
-                    <a href="#" onclick='return {id: "serengeti", tip: "Национальный парк Серенгети"}' title="Национальный парк Серенгети"><u>Национальный парк Серенгети</u></a>,
-                    <a href="#" onclick='return {id: "venice", tip: "каналы Венеции"}' title="каналы Венеции"><u>каналы Венеции</u></a>,
-                    <a href="#" onclick='return {id: "usa", tip: "остров Пасхи"}' title="остров Пасхи"><u>остров Пасхи</u></a>,
-                    <a href="#" onclick='return {id: "las-vegas", tip: "Лас-Вегас"}' title="Лас-Вегас"><u>Лас-Вегас</u></a>,
-                    <a href="#" onclick='return {id: "acropolis", tip: "Акрополь и Парфенон"}' title="Акрополь и Парфенон"><u>Акрополь и Парфенон</u></a>,
-                    <a href="#" onclick='return {id: "stonehange", tip: "Стоунхендж"}' title="Стоунхендж"><u>Стоунхендж</u></a>
-                    <a href="#" class="more"><u>и еще 80 интересных мест</u></a>
-                    <b>
-                        <a href="#" onclick='return {id: "giza", tip: "пирамиды в Гизе"}' title="пирамиды в Гизе"><u>пирамиды в Гизе</u></a>,
-                        <a href="#" onclick='return {id: "afon", tip: "гора Афон"}' title="гора Афон"><u>гора Афон</u></a>,
-                        <a href="#" onclick='return {id: "st-michel", tip: "Мон-Сен-Мишель"}' title="Мон-Сен-Мишель"><u>Мон-Сен-Мишель</u></a>,
-                        <a href="#" onclick='return {id: "fiords", tip: "Фьорды Норвегии"}' title="Фьорды Норвегии"><u>Фьорды Норвегии</u></a>,
-                        <a href="#" onclick='return {id: "bigbarrier", tip: "Большой барьерный риф"}' title="Большой барьерный риф"><u>Большой барьерный риф</u></a>,
-                        <a href="#" onclick='return {id: "pisa", tip: "Пизанская башня"}' title="Пизанская башня"><u>Пизанская башня</u></a>,
-                        <a href="#" onclick='return {id: "spitzbergen", tip: "Шпицберген"}' title="Шпицберген"><u>Шпицберген</u></a>
-                    </b>
-                </dd>
-
-                <dt>Страны и города</dt>
-                <dd class="b-pseudo">
-                    <a href="#" onclick='return {id: "au", tip: "Австралия"}' title="Австралия"><u>Австралия</u></a>,
-                    <a href="#" onclick='return {id: "us", tip: "Америка"}' title="Америка"><u>Америка</u></a>,
-                    <a href="#" onclick='return {id: "bb", tip: "Барбадос"}' title="Барбадос"><u>Барбадос</u></a>,
-                    <a href="#" onclick='return {id: "de", tip: "Германия"}' title="Германия"><u>Германия</u></a>,
-                    <a href="#" onclick='return {id: "ie", tip: "Ирландия"}' title="Ирландия"><u>Ирландия</u></a>,
-                    <a href="#" onclick='return {id: "cn", tip: "Китай"}' title="Китай"><u>Китай</u></a>,
-                    <a href="#" onclick='return {id: "lu", tip: "Люксембург"}' title="Люксембург"><u>Люксембург</u></a>,
-                    <a href="#" onclick='return {id: "my", tip: "Малайзия"}' title="Малайзия"><u>Малайзия</u></a>,
-                    <a href="#" onclick='return {id: "pe", tip: "Перу"}' title="Перу"><u>Перу</u></a>,
-                    <a href="#" onclick='return {id: "hr", tip: "Хорватия"}' title="Хорватия"><u>Хорватия</u></a>,
-                    <a href="#" onclick='return {id: "fr", tip: "Франция"}' title="Франция"><u>Франция</u></a>,
-                    <a href="#" onclick='return {id: "cz", tip: "Чехия"}' title="Чехия"><u>Чехия</u></a>
-                    <a href="#" class="more"><u>и еще 50 стран, куда стоит поехать</u></a>
-                    <b>
-                        <a href="#" onclick='return {id: "gb", tip: "Англия"}' title="Англия"><u>Англия</u></a>,
-                        <a href="#" onclick='return {id: "br", tip: "Бразилия"}' title="Бразилия"><u>Бразилия</u></a>,
-                        <a href="#" onclick='return {id: "ve", tip: "Венесуэла"}' title="Венесуэла"><u>Венесуэла</u></a>,
-                        <a href="#" onclick='return {id: "hk", tip: "Гонконг"}' title="Гонконг"><u>Гонконг</u></a>,
-                        <a href="#" onclick='return {id: "do", tip: "Доминикана"}' title="Доминикана"><u>Доминикана</u></a>,
-                        <a href="#" onclick='return {id: "eg", tip: "Египет"}' title="Египет"><u>Египет</u></a>,
-                        <a href="#" onclick='return {id: "il", tip: "Израиль"}' title="Израиль"><u>Израиль</u></a>,
-                        <a href="#" onclick='return {id: "ke", tip: "Кения"}' title="Кения"><u>Кения</u></a>,
-                        <a href="#" onclick='return {id: "lb", tip: "Ливан"}' title="Ливан"><u>Ливан</u></a>,
-                        <a href="#" onclick='return {id: "mu", tip: "Маврикий"}' title="Маврикий"><u>Маврикий</u></a>,
-                        <a href="#" onclick='return {id: "no", tip: "Норвегия"}' title="Норвегия"><u>Норвегия</u></a>,
-                        <a href="#" onclick='return {id: "om", tip: "Оман"}' title="Оман"><u>Оман</u></a>,
-                        <a href="#" onclick='return {id: "pt", tip: "Португалия"}' title="Португалия"><u>Португалия</u></a>,
-                        <a href="#" onclick='return {id: "ro", tip: "Румыния"}' title="Румыния"><u>Румыния</u></a>,
-                        <a href="#" onclick='return {id: "sy", tip: "Сирия"}' title="Сирия"><u>Сирия</u></a>,
-                        <a href="#" onclick='return {id: "tz", tip: "Танзания"}' title="Танзания"><u>Танзания</u></a>,
-                        <a href="#" onclick='return {id: "uz", tip: "Узбекистан"}' title="Узбекистан"><u>Узбекистан</u></a>,
-                        <a href="#" onclick='return {id: "fj", tip: "Фиджи"}' title="Фиджи"><u>Фиджи</u></a>,
-                        <a href="#" onclick='return {id: "cl", tip: "Чили"}' title="Чили"><u>Чили</u></a>,
-                        <a href="#" onclick='return {id: "se", tip: "Швеция"}' title="Швеция"><u>Швеция</u></a>,
-                        <a href="#" onclick='return {id: "ee", tip: "Эстония"}' title="Эстония"><u>Эстония</u></a>,
-                        <a href="#" onclick='return {id: "jp", tip: "Япония"}' title="Япония"><u>Япония</u></a>
-                    </b>
-                </dd>
-            </dl>
-            %>
-
             <a id="where.map.reset" class="b-pseudo panel-reset" href="#"><i></i><u>сбросить</u></a><a id="where.map.large" class="b-pseudo panel-reset" href="#"><u>большая карта</u></a>
         </div>
         
@@ -243,38 +147,38 @@
             <span class="control pseudo"><em>пассажиров</em></span><span class="values"></span> и
             <div class="dropdown">
                 <div class="wrap">
-                <dl class="group-a" data-group="a">
+                <dl class="pg-adults" data-group="adults">
                     <dt>взрослые</dt>
-                    <dd data-value="a1">один</dd>
-                    <dd data-value="a2">двое</dd>
-                    <dd data-value="a3">трое</dd>
-                    <dd data-value="a4">четверо</dd>
-                    <dd data-value="a5">пятеро</dd>
-                    <dd data-value="a6">шестеро</dd>
-                    <dd data-value="a7">семеро</dd>
-                    <dd data-value="a8">восьмеро</dd>
+                    <dd data-value="1">один</dd>
+                    <dd data-value="2">двое</dd>
+                    <dd data-value="3">трое</dd>
+                    <dd data-value="4">четверо</dd>
+                    <dd data-value="5">пятеро</dd>
+                    <dd data-value="6">шестеро</dd>
+                    <dd data-value="7">семеро</dd>
+                    <dd data-value="8">восьмеро</dd>
                 </dl>
-                <dl class="group-c" data-group="c">
+                <dl class="pg-children" data-group="children">
                     <dt>дети <em class="age">от 2 до 12 лет</em></dt>
                     <dd class="empty selected">нет</dd>
-                    <dd data-value="c1">один</dd>
-                    <dd data-value="c2">двое</dd>
-                    <dd data-value="c3">трое</dd>
-                    <dd data-value="c4">четверо</dd>
-                    <dd data-value="c5">пятеро</dd>
-                    <dd data-value="c6">шестеро</dd>
-                    <dd data-value="c7">семеро</dd>
+                    <dd data-value="1">один</dd>
+                    <dd data-value="2">двое</dd>
+                    <dd data-value="3">трое</dd>
+                    <dd data-value="4">четверо</dd>
+                    <dd data-value="5">пятеро</dd>
+                    <dd data-value="6">шестеро</dd>
+                    <dd data-value="7">семеро</dd>
                 </dl>
-                <dl class="group-i" data-group="i">
+                <dl class="pg-infants" data-group="infants">
                     <dt>младенцы</dt>
                     <dd class="empty selected">нет</dd>
-                    <dd data-value="i1">один</dd>
-                    <dd data-value="i2">двое</dd>
-                    <dd data-value="i3">трое</dd>
-                    <dd data-value="i4">четверо</dd>
-                    <dd data-value="i5">пятеро</dd>
-                    <dd data-value="i6">шестеро</dd>
-                    <dd data-value="i7">семеро</dd>
+                    <dd data-value="1">один</dd>
+                    <dd data-value="2">двое</dd>
+                    <dd data-value="3">трое</dd>
+                    <dd data-value="4">четверо</dd>
+                    <dd data-value="5">пятеро</dd>
+                    <dd data-value="6">шестеро</dd>
+                    <dd data-value="7">семеро</dd>
                 </dl>
                 </div>
                 <div class="excess">Общее количество пассажиров не может быть больше 8</div>

@@ -89,9 +89,6 @@ update: function() {
             item.removeClass('selected');
         }
     });
-    this.process(result, values);
-},
-process: function(result, values) {
     this.empty.toggleClass('selected', result.length == 0);    
     if (result.length == this.items.length) {
         values = result = [];

@@ -24,6 +24,7 @@ init: function() {
         self.selected.length = 0;
         self.update();
     });
+    this.values = [];
 },
 makeDates: function() {
     this.container = $('.dates', this.el).hide().html('');
@@ -200,10 +201,10 @@ dragSelected: function(e) {
 update: function() {
     this.fillSelected();
     this.highlight();
-    var dates = {};
+    this.values = [];
     for (var i = Math.max(this.selected.length, 2); i--;) {
         var d = this.selected[i];
-        dates['date' + (i + 1)] = d !== undefined ? this.dates.eq(d).attr('data-dmy') : '';
+        this.values[i] = d !== undefined ? this.dates.eq(d).attr('data-dmy') : '';
     }
     var items = this.selected.compact();
     var title = 'Выберите даты';
@@ -216,7 +217,18 @@ update: function() {
     this.title.text(title);
     this.scroller.updatePreview(items);
     this.showResetButton();
-    app.search.update(dates, this);
+    search.update(this);
+},
+select: function(dates) {
+    var updated = false;
+    for (var i = dates.length; i--;) {
+        var n = this.dmyindex[dates[i].value];
+        if (n != this.selected[i]) {
+            this.selected[i] = n;
+            updated = true;
+        }
+    }
+    if (updated) this.update();    
 },
 showResetButton: function() {
     var offset, items = this.selected.compact();

@@ -122,7 +122,7 @@ load: function(params, title) {
 },
 show: function() {
     var self = this, u = this.update;
-    app.search.toggle(false);
+    search.toggle(false);
     if (u.title) {
         $('#offers-title h1').text(u.title);
     }

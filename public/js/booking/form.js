@@ -6,7 +6,7 @@ init: function() {
     this.steps = $.map(sections, function(el, i) {
         return new (app[el.onclick()])(el, i);
     });
-    
+
     $('form', this.el).submit(function(event) {
         event.preventDefault();
         if (!self.submit.hasClass('a-button-ready')) return;
@@ -22,14 +22,14 @@ init: function() {
             }
         });
     });
-    
+
     // раскрывающаяся подсказка
     $('.b-expand').mousedown(function(e) {
         var $u = $(this);
         $u.toggleClass('b-expand-up');
         $u.next('p').slideToggle(200);
     });
-    
+
     // текст тарифа
     $('#tarif-expand').click(function(e) {
         e.preventDefault();
@@ -39,7 +39,7 @@ init: function() {
     for (var i = this.steps.length; i--;) {
         this.steps[i].change();
     }
-    
+
     // Список неправильно заполненных полей
     $('.blocker', this.el).delegate('a', 'click', function(event) {
         event.preventDefault();
@@ -65,6 +65,13 @@ init: function() {
         }
     });
     sections.eq(0).trigger('setready');
+
+    // Прекращение бронирования
+    this.selfhide = function(event) {
+        event.preventDefault();
+        self.hide();
+    };
+    $('.stop-booking', this.el).click(this.selfhide);
 },
 show: function(variant) {
     var self = this;
@@ -74,12 +81,8 @@ show: function(variant) {
         $('.expand', variant).click();
     }
     var button = '<a class="stop-booking" href="#">Вернуться к выбору вариантов</a>';
-    var hide = function(event) {
-        event.preventDefault();
-        self.hide();
-    };
-    $(button).click(hide).prependTo(this.offer);
-    $(button).click(hide).appendTo(this.offer);
+    $(button).click(this.selfhide).prependTo(this.offer);
+    $(button).click(this.selfhide).appendTo(this.offer);
     this.el = $('<div class="booking"></div>').appendTo(this.offer);
     this.offer.addClass('active-booking');
 },
@@ -116,7 +119,7 @@ load: function(number) {
             self.fasten(self.offer);
             self.init();
         }
-    });    
+    });
 },
 fasten: function(offer) {
     var wrapper = $('#page-wrapper');

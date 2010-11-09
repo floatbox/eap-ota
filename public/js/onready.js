@@ -1,260 +1,89 @@
 ﻿$(function() {
 
-    var tools = app.search.tools;
-    var fields = app.search.fields; 
-    var url = '/complete.json';
-    
-    // поле "Откуда"
-    
-    tools.from = $('#search-from').autocomplete({
-        cls: 'autocomplete-gray',
-        url: url,
-        params: {
-            input: 'from',
-            limit: 30
-        },
-        root: 'data',
-        loader: new app.Loader({
-            parent: $('#search-from-loader')
-        }),
-        height: 374
-        
-    }).focus(function() {
-        tools.from.reset.fadeOut(200);
-    }).change(function() {
-        app.search.update({from: $(this).val()}, this);
-    });
-    fields['from'] = tools.from.val();
-    
-    var fdata = tools.from.get(0).onclick();
-    if (fdata && fdata.iata) {
-        tools.from.trigger('iata', fdata.iata);
-    }
-    
-    app.search.subscribe(tools.from, 'from', function(v) {
-        tools.from.trigger('set', v);
-    });
-    
-    // Ссылка для сброса поля "Откуда"
-    
-    tools.from.reset = $('#search-from-reset').click(function(e) {
-        tools.from.focus().trigger('set', '');
-    });
-
-    // поле "Куда"
-    
-    tools.to = $('#search-to').autocomplete({
-        // внешний вид
-        cls: 'autocomplete',
-
-        // ajax
-        url: url,
-        params: {
-            input: 'to',
-            limit: 30
-        },
-        root: 'data',
-        loader: new app.Loader({
-            parent: $('#search-to-loader')
-        }),
-
-        // размеры
-        width: 340,
-        height: 378
-    }).change(function() {
-        app.search.update({to: $(this).val()}, this);
-    });
-    fields['to'] = tools.to.val();
-
-    app.search.subscribe(tools.to, 'to', function(v) {
-        tools.to.trigger('set', v);
-    });
-    app.search.subscribe('ajax', 'date1', function(v) {
-        var s = tools.to.val();
-        var d = calendar.dates.eq(calendar.dmyindex[v]).text();
-        var pattern = new RegExp('(\\s*)(?:сегодня|завтра|послезавтра|' + d + ')(\\s*)', 'i');
-        var result = s.replace(pattern, function(s, p1, p2) {
-            return (p1 && p2) ? ' ' : '';
-        });
-        if (result != s) tools.to.trigger('set', result);
-    });    
-    
+    search.init();
     
     // образец содержимого поля "Куда"
-    
-    var e = tools.to.example = $('#search-to-example');
+    var e = search.to.example = $('#search-to-example');
     e.label = $('u', e);
     e.data  = e.label[0].onclick();
     e.data.current = 0;
-
     e.click(function(e) {
         e.preventDefault();
         e = e.target;
-
-        if (e.tagName == 'S') with (tools.to.example) {
+        if (e.tagName == 'S') with (search.to.example) {
             data.current = ++data.current % data.length;
             e.className = 'animate';
             window.setTimeout(function(){e.className = ''}, 300);
-
             label.fadeTo(150, 0.4, function() {
                 label.text(data[data.current]);
             }).fadeTo(150, 1);
-
             return;
-        };
-
+        }
         if (e.tagName == 'U') {
-            tools.to.focus();
-            tools.to.trigger('set', e.innerHTML);
-        };
-    });
-
-    // карта
-
-    // какой там аналог у defined?()
-    if (false && window['YMaps']) {
-        var loc = YMaps.location || {},
-            lat = loc.latitude || 45,
-            lon = loc.longitude || 22;
-
-        app.map = new app.Map({
-            el: $('#where-map')[0],
-            map: {
-                lat: lat,
-                lon: lon
-            }
-        });
-
-        if (loc) {
-            app.map.setPoint('from', {name: 'Вы&nbsp;&mdash;&nbsp;здесь', lat: lat, lon: lon});
-        };
-    }
-    
-    // Календарь
-    
-    var calendar = new app.Calendar("#search-calendar");
-    fields['date1'] = undefined;
-    fields['date2'] = undefined;
-    app.search.subscribe(calendar, 'rt', function(v) {
-        calendar.toggleOneway(v == 0);
-    });
-    app.search.subscribe(calendar, 'date1', function(v) {
-        calendar.selected[0] = calendar.dmyindex[v];
-        calendar.update();
-    });
-    app.search.subscribe(calendar, 'date2', function(v) {
-        calendar.selected[1] = calendar.dmyindex[v];
-        calendar.update();
-    });
-   
-    // панель уточнений (фильтров)
-
-    tools.defines = {};
-
-    $('#search-define .filter').each(function() {
-        var filter = $(this);
-        tools.defines[filter.attr('data-name')] = new controls.Filter(filter, {radio: true, preserve: true});
-    });
-
-    // обработка количества пассажиров
-    tools.defines['persons'].el.bind('change', function(e, values) {
-        app.search.update({
-            'adults': values.a,
-            'children': values.c + values.i
-        }, this);  
-    });
-    $('.a-button', tools.defines['persons'].dropdown).click(function() {
-        tools.defines['persons'].hide();
-    });
-    tools.defines['persons'].click = function(el) {
-        var group = el.parent().attr('data-group'), gvalue;
-        for (var value in this.selected) {
-            if (value.charAt(0) == group) gvalue = value;
+            search.to.focus();
+            search.to.trigger('set', e.innerHTML);
         }
-        delete(this.selected[gvalue]);
-        if (!el.hasClass('empty')) {
-            var value = el.attr('data-value');
-            if (value != gvalue) {
-                this.selected[value] = true;
-            } else if (group == 'a') {
-                this.selected['a1'] = true;
+    });      
+
+    // затычка для сворачивания панели
+    var $spanel = $('#search-panel');
+    $('.panel-switch', $spanel).click(function() {
+        var cl = 'collapsed', st = $spanel.hasClass(cl);
+        $spanel.switchClass(st ? cl : '', st ? '' :cl, 300);
+    });
+    
+    // кнопка отправки запроса
+    $('#search-submit .b-submit').click(function(event) {
+        event.preventDefault();
+        if (!$(this).parent().hasClass('disabled')) {
+            app.offers.show();
+        }
+    });
+    
+    // составное поле "туда-обратно"
+    var $retTabs = $('#search\\.ret\\.tabs').radio();
+    var $retButton = $('#search\\.ret\\.button').button();
+
+    // Синхронизация кнопки и табов
+    search.rt = new app.MultiField({'value': 'rt'});
+    $retButton.trigger('subscribe', search.rt);
+    $retTabs.trigger('subscribe', search.rt);
+    search.rt.subscribers.push({
+        trigger: function(mode, v) {
+            if (mode == 'set') {
+                search.calendar.toggleOneway(v != 'rt');
+                search.update();
             }
         }
-        this.update();
-    };
-    tools.defines['persons'].process = function(result, values) {    
-        var groups = {a: 0, c: 0, i: 0};
-        for (var i = values.length; i--;) {
-            var value = values[i];
-            groups[value.charAt(0)] = parseInt(value.substring(1), 10);
-        }        
-        $('.group-c .empty', this.dropdown).toggleClass('selected', !groups.c);
-        $('.group-i .empty', this.dropdown).toggleClass('selected', !groups.i);
-        $('.group-c dd:not(.empty)').each(function(i) {
-            $(this).toggleClass('disabled', i > 7 - groups.a);
-        });
-        $('.group-i dd:not(.empty)').each(function(i) {
-            $(this).toggleClass('disabled', i > 7 - groups.a - groups.c);
-        });
-        if (result.length > 1) {
-            var gtitles = {
-                'a': ['взрослый', 'взрослых', 'взрослых'],
-                'c': ['ребёнок', 'детей', 'детей'],
-                'i': ['младенец', 'младенцев', 'младенцев']
-            };
-            for (var i = result.length; i--;) {
-                var key = values[i].charAt(0);
-                var str = app.utils.plural(groups[key], gtitles[key]);
-                result[i] = result[i].replace('</', ' ' + str + '</');
-            }
-        }
-        var correct = groups.a + groups.c + groups.i < 9;
-        $('.excess', this.dropdown).toggle(!correct);
-        $('.a-button', this.dropdown).toggle(correct);
-        if (correct) {
-            this.lastCorrect = $.extend({}, this.selected);
-            this.values.html(' (' + result.enumeration() + ')').show();
-            this.groups = groups;
-        }
-    };
-    tools.defines['persons'].hide = function() {
-        if ($('.excess', this.dropdown).is(':visible')) {
-            this.selected = $.extend({}, this.lastCorrect);
-        }
-        $(window).unbind('click keydown', this.selfhide);
-        this.dropdown.fadeOut(150);
-        this.el.trigger('change', this.groups);
-    };
-    tools.defines['persons'].select(['a1']);
-    
-    // обработка пересадок
-    tools.defines['changes'].el.bind('change', function(e, values) {
-        if (app.offers.results.is(':visible')) {
-            app.search.toggle(true);
-            app.offers.update = {
-                loading: true,
-                action: function() {
-                    var ao = app.offers;
-                    ao.maxLayovers = values[0];
-                    ao.resetFilters();
-                    ao.applyFilter();
-                }
-            };
-        } else {
-            app.offers.maxLayovers = values[0];
-        }
     });
-    app.search.subscribe(tools.defines['changes'], 'changes', function(v) {
-        tools.changes.select(v);
-    });    
 
-    // обработка класса
-    fields['cabin'] = undefined;
-    tools.defines['cabin'].el.bind('change', function(e, values) {
-        app.search.update({
-            'cabin': values[0]
-        }, this);
+    // Синхронизация розовой рамки при ховере/фокусе
+    $retTabs.hover(
+        function() {
+            search.to.trigger('mouseenter');
+        }, 
+        function() {
+            search.to.trigger('mouseleave');
+        }
+    ).click(function() {
+        search.to.focus();
     });
+
+    search.to.hover(
+        function() {
+            $retTabs.addClass('return-tabs-hover');
+        }, 
+        function() {
+            $retTabs.removeClass('return-tabs-hover');
+        }
+    ).bind('focus', function() {
+        $retTabs.addClass('return-tabs-focus');
+    }).bind('blur', function() {
+        $retTabs.removeClass('return-tabs-focus');
+    });
+    
+    // Список предложений
+    app.offers.init();
     
     // Фильтры предложений
     app.offers.filters = {};
@@ -273,86 +102,10 @@
         var ao = app.offers;
         ao.resetFilters();
         ao.applyFilter();
-    });
-
-    // составное поле "туда-обратно"
-    var $retTabs = $('#search\\.ret\\.tabs').radio();
-    var $retButton = $('#search\\.ret\\.button').button();
-
-    // синхронизируем кнопку и табы
-    tools.rt = new app.MultiField({'value': 'rt'});
-    $retButton.trigger('subscribe', tools.rt);
-    $retTabs.trigger('subscribe', tools.rt);
-    tools.rt.subscribers.push({
-        trigger: function(mode, v) {
-            if (mode == 'set') {
-                app.search.update({'rt': v == 'rt' ? 1 : 0}, tools.rt);
-            }
-        }
-    });
-    fields['rt'] = tools.rt.value == 'rt' ? 1 : 0;
-
-    // вся эта хрень только для того, чтобы синхронизировать розовую рамку при ховере/фокусе
-    // над табами "туда-обратно" и над полем "Куда"
-        $retTabs.hover(
-            function() {
-                tools.to.trigger('mouseenter');
-            }, 
-            function() {
-                tools.to.trigger('mouseleave');
-            }
-        ).click(function() {
-            tools.to.focus();
-        });
-
-        tools.to.hover(
-            function() {
-                $retTabs.addClass('return-tabs-hover');
-            }, 
-            function() {
-                $retTabs.removeClass('return-tabs-hover');
-            }
-        ).bind('focus', function() {
-            $retTabs.addClass('return-tabs-focus');
-        }).bind('blur', function() {
-            $retTabs.removeClass('return-tabs-focus');
-        });
-    // - хрень закончилась ;)
-
-
-    // затычка для сворачивания панели
-    var $spanel = $('#search-panel');
-    $('.panel-switch', $spanel).click(function() {
-        var cl = 'collapsed', st = $spanel.hasClass(cl);
-        $spanel.switchClass(st ? cl : '', st ? '' :cl, 300);
-    });
-    
-    // кнопка отправки запроса
-    $('#search-submit .b-submit').click(function(event) {
-        event.preventDefault();
-        if (!$(this).parent().hasClass('disabled')) {
-            app.offers.show();
-        }
     });    
     
-    // Список предложений
-    app.offers.init();
-    
     // Фокус на поле ввода "Куда"
-    tools.to.focus();
-    
-    // Запоминаем данные формы для сброса
-    app.search.defvalues = $.extend({}, fields);
-    
-    /* Сброс по клику на логотипе */
-    $('#logo').click(function() {
-        app.booking.unfasten();
-        var data = $.extend({}, fields);
-        for (var key in data) data[key] = app.search.defvalues[key];
-        app.search.update(data);
-        app.offers.hide();
-        window.location.hash = '';
-    });
+    search.to.focus();
 
     // Сохраненные результаты
     var hash = window.location.hash.substring(1);
@@ -360,6 +113,13 @@
         var hashparts = hash.split(':');
         app.search.validate(hashparts[0]);
     }
+
+    // Сброс по клику на логотипе
+    $('#logo').click(function() {
+        app.booking.unfasten();
+        app.offers.hide();
+        window.location.hash = '';
+    });    
     
     // Включение запросов валидации
     app.search.active = true;
