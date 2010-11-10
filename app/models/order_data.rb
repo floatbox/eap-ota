@@ -97,6 +97,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     self.pnr_number = doc.xpath('//r:controlNumber').to_s
     
     if self.pnr_number
+      add_passport_data(amadeus, people, recommendation.validating_carrier.iata)
       amadeus.fare_price_pnr_with_booking_class
       amadeus.ticket_create_tst_from_pricing
       amadeus.pnr_add_multi_elements(PNRForm.new(:end_transact => true))
@@ -110,6 +111,15 @@ class OrderData < ActiveRecord::BaseWithoutTable
     end
   ensure
     amadeus.session.destroy
+  end
+
+  def add_passport_data(amadeus, people, validating_carrier_code)
+    #пока для одного человека
+    people.each_with_index do |person, i|
+      amadeus.cmd("SRDOCS#{validating_carrier_code}HK1-P-#{person.nationality.alpha3}-#{person.passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}-#{person.document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{i+1}")
+      amadeus.cmd("SR FOID #{validating_carrier_code} HK1-PP#{person.passport}/P#{i+1}")
+      amadeus.cmd("FE #{validating_carrier_code} ONLY PSPT #{person.passport}/P#{i+1}")
+    end
   end
   
   
@@ -125,6 +135,15 @@ class OrderData < ActiveRecord::BaseWithoutTable
       :passport => '123232323',
       :nationality_id => 1,
       :sex => 'm'
+    ),
+    Person.new(
+      :first_name => 'Masha',
+      :last_name => 'Ivanova',
+      :birthday => Date.today - 18.years,
+      :document_expiration_date => Date.today + 1.year,
+      :passport => '5556565',
+      :nationality_id => 1,
+      :sex => 'f'
     )]
     order.create_booking
   end
