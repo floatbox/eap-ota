@@ -39,6 +39,7 @@ class PricerController < ApplicationController
   end
 
   def validate
+    require 'pricer_form'
     if params[:query_key]
       @search = Rails.cache.read('pricer_form' + params[:query_key])
       render :json => {
@@ -49,7 +50,7 @@ class PricerController < ApplicationController
       }
     else
       @search = PricerForm.new(params[:search])
-      @search.parse_complex_to
+      #@search.parse_complex_to
       render :json => {
         :valid => @search.valid?,
         :human => @search.human,
