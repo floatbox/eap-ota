@@ -25,6 +25,11 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     @@parse_time = 0
   end
 
+  def to_json(args={})
+    args[:methods] = (args[:methods].to_a + [:dates, :people_count]).uniq
+    super(args)
+  end
+
 
   #временная херня
   def dates
