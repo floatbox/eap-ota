@@ -255,9 +255,9 @@ $.Autocompleter = function(input, options) {
     }).click(function() {
         if (hasFocus++ > 1 && !select.visible()) keypress();
     }).bind('set', function(e, s) {
+        storedValue = s;
         $el.val(s);
         $el.trigger('change');
-        // здесь запускать разбор строки, обновлять $iata и, возможно, запускать поиск
         if (!s) $iata.hide();
     }).bind('iata', function(e, v) {
         if (v) $iata.show(v);

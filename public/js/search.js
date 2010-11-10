@@ -149,8 +149,9 @@ values: function() {
         from: this.from.val(),
         to: this.to.val(),
         rt: this.rt.value == 'rt' ? 1 : 0,
-        people_count: this.persons.selected,
         dates: this.calendar.values,
+        people_count: this.persons.selected,
+        changes: this.changes.value[0],
         cabin: this.cabin.value[0],
         search_type: 'travel',
         day_interval: 1,
@@ -194,11 +195,8 @@ update: function(source) {
 },
 validate: function(qkey) {
     clearTimeout(this.timer);
+    if (this.preventValidation) return;
     this.toggle(false);
-    if (this.preventValidation) {
-        delete(this.preventValidation);
-        return;
-    }
     this.abort();
     var self = this, data = qkey ? {query_key: qkey} : {search: this.values()};
     if (data.search && !data.search.to) {
@@ -210,6 +208,9 @@ validate: function(qkey) {
         if (data.query_key && result.search) {
             self.preventValidation = true;
             self.restore(result.search);
+            setTimeout(function() {
+                delete(self.preventValidation);
+            }, 1000);
         }
         if (result.valid) {
             app.offers.load(data, result.human);
