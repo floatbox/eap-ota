@@ -111,7 +111,7 @@
     var hash = window.location.hash.substring(1);
     if (hash) {
         var hashparts = hash.split(':');
-        app.search.validate(hashparts[0]);
+        search.validate(hashparts[0]);
     }
 
     // Сброс по клику на логотипе

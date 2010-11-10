@@ -204,7 +204,7 @@ update: function() {
     this.values = [];
     for (var i = Math.max(this.selected.length, 2); i--;) {
         var d = this.selected[i];
-        this.values[i] = d !== undefined ? this.dates.eq(d).attr('data-dmy') : '';
+        if (d !== undefined) this.values[i] = this.dates.eq(d).attr('data-dmy');
     }
     var items = this.selected.compact();
     var title = 'Выберите даты';

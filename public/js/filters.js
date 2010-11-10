@@ -36,6 +36,7 @@ init: function(options) {
     this.empty = $('dd.empty', this.dropdown);
     this.items = $('dd:not(.empty)', this.dropdown);    
     this.options = options || {};
+    this.value = [];
 },
 fill: function(items) {
     var template = '<dd data-value="{v}">{t}</dd>';
@@ -98,6 +99,7 @@ update: function() {
     } else {
         this.values.html('').hide();
     }
+    this.value = values;
     this.el.trigger('change', [values]);
 },
 show: function() {

@@ -149,10 +149,9 @@ values: function() {
         from: this.from.val(),
         to: this.to.val(),
         rt: this.rt.value == 'rt' ? 1 : 0,
-        date1: this.calendar.values[0],
-        date2: this.calendar.values[1],
-        adults: this.persons.selected.adults,
-        cabin: this.cabin.selected,
+        people_count: this.persons.selected,
+        dates: this.calendar.values,
+        cabin: this.cabin.value[0],
         search_type: 'travel',
         day_interval: 1,
         debug: $('#sdmode').get(0).checked ? 1 : 0
@@ -178,7 +177,10 @@ validate: function(qkey) {
     var self = this, data = qkey ? {query_key: qkey} : {search: this.values()};
     this.toggle(false);
     this.abort();
-    if (data.search && !data.search.to) return;
+    if (data.search && !data.search.to) {
+        this.apply({});
+        return;
+    }
     this.request = $.get("/pricer/validate/", data, function(result, status, request) {
         if (request != self.request) return;
         if (result.valid) {

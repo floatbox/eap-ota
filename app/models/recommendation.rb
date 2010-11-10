@@ -116,8 +116,8 @@ class Recommendation
       :layovers => variants.first.segments.map{|s| s.flights.size}.max,
     }
     variants.first.segments.each_with_index do |segment, i|
-      result['dpt_city_' + i.to_s] = segment.departure.city.case_from.gsub(/ /, '&nbsp;')
-      result['arv_city_' + i.to_s] = segment.arrival.city.case_to.gsub(/ /, '&nbsp;')
+      result['dpt_location_' + i.to_s] = segment.departure.city.case_from.gsub(/ /, '&nbsp;')
+      result['arv_location_' + i.to_s] = segment.arrival.city.case_to.gsub(/ /, '&nbsp;')
     end
     result 
   end
@@ -266,10 +266,14 @@ class Recommendation
       result['arv_city_' + i.to_s] = cities.uniq.map{|city| {:v => city, :t => City[city].name} }.sort_by{|a| a[:t] }
     }
     departure_airports.each_with_index {|airports, i|
-      result['dpt_airport_' + i.to_s] = airports.uniq.map{|airport| {:v => airport, :t => Airport[airport].name} }.sort_by{|a| a[:t] }
+      if result['dpt_city_' + i.to_s].size < 2
+        result['dpt_airport_' + i.to_s] = airports.uniq.map{|airport| {:v => airport, :t => Airport[airport].name} }.sort_by{|a| a[:t] }
+      end
     }
     arrival_airports.each_with_index {|airports, i|
-      result['arv_airport_' + i.to_s] = airports.uniq.map{|airport| {:v => airport, :t => Airport[airport].name} }.sort_by{|a| a[:t] }
+      if result['arv_city_' + i.to_s].size < 2
+        result['arv_airport_' + i.to_s] = airports.uniq.map{|airport| {:v => airport, :t => Airport[airport].name} }.sort_by{|a| a[:t] }
+      end
     }
     time_titles = ['ночь', 'утро', 'день', 'вечер']
     departure_times.each_with_index {|dpt_times, i|

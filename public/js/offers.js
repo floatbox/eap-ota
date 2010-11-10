@@ -468,7 +468,7 @@ showDepartures: function() {
             $('.variants', v.el).each(function(index) {
                 var dt = dtimes[index];
                 if (dt) {
-                    var str = offer.summary['dpt_city_' + index] + '<br>в ' + self.joinDepartures(dt, v.summary.departures[index]);
+                    var str = offer.summary['dpt_location_' + index] + '<br>в ' + self.joinDepartures(dt, v.summary.departures[index]);
                     $(this).html('<p class="b-pseudo" data-segment="' + index + '">Ещё по такой же цене можно улететь ' + str + '</p>');
                 } else {
                     $(this).html('');
