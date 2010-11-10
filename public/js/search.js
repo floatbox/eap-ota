@@ -211,12 +211,14 @@ validate: function(qkey) {
             setTimeout(function() {
                 delete(self.preventValidation);
             }, 1000);
+            self.apply(result.search.complex_to_parse_results || {});
+        } else {
+            self.apply(result.complex_to_parse_results || {});
         }
         if (result.valid) {
             app.offers.load(data, result.human);
             data.query_key ? app.offers.show() : self.toggle(true);
         }
-        self.apply(result.complex_to_parse_results || {});
         delete(self.request);
     });
 },
