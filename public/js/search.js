@@ -139,7 +139,7 @@ init: function() {
     });    
     
     // Один пассажир по умолчанию
-    search.persons.select({adults: 1, children: 0, infants: 0});    
+    search.persons.select({adults: 1, children: 0, infants: 0});
     
     // Кнопка
     this.submit = $('#search-submit');
@@ -158,14 +158,34 @@ values: function() {
     };
     return data;
 },
+restore: function(data) {
+    var df = this.defvalues;
+    this.from.trigger('set', data.from || df.from || '');
+    this.to.trigger('set', data.to || '');    
+    this.calendar.selected = [];
+    if (data.dates) {
+        this.calendar.select(data.dates);
+    } else {
+        this.calendar.update();
+    }
+    this.persons.select($.extend({}, data.people_count || df.people_count));
+    this.changes.select(data.changes || []);
+    this.cabin.select(data.cabin || []);
+},
 update: function(source) {
     var self = this;
     clearTimeout(this.timer);
-    if (source == this.calendar && this.dateparts && this.calendar.values[0] != this.dateparts[0].value) {
-        var s = this.to.val();
-        var pattern = new RegExp('(\\s*)' + this.dateparts[0].text + '(\\s*)', 'i');
-        var result = s.replace(pattern, function(s, p1, p2) {return (p1 && p2) ? ' ' : '';});
-        if (result != s) this.to.trigger('set', result);
+    if (source == this.calendar && this.parsed && this.parsed.dates) {
+        var pd =  this.parsed.dates, improper = [];
+        for (var i = pd.length; i--;) {
+            if (pd[i].value != this.calendar.values[i]) improper.push(pd[i].str);
+        }
+        if (improper.length) {
+            var current = this.to.val(); 
+            var pattern = new RegExp('(\\s*)(?:' + improper.join('|') + ')(\\s*)', 'i');        
+            var result = current.replace(pattern, function(s, p1, p2) {return (p1 && p2) ? ' ' : '';});
+            if (result != current) this.to.trigger('set', result);
+        }
     }
     this.timer = setTimeout(function() {
         self.validate();
@@ -174,15 +194,23 @@ update: function(source) {
 },
 validate: function(qkey) {
     clearTimeout(this.timer);
-    var self = this, data = qkey ? {query_key: qkey} : {search: this.values()};
     this.toggle(false);
+    if (this.preventValidation) {
+        delete(this.preventValidation);
+        return;
+    }
     this.abort();
+    var self = this, data = qkey ? {query_key: qkey} : {search: this.values()};
     if (data.search && !data.search.to) {
         this.apply({});
         return;
     }
     this.request = $.get("/pricer/validate/", data, function(result, status, request) {
         if (request != self.request) return;
+        if (data.query_key && result.search) {
+            self.preventValidation = true;
+            self.restore(result.search);
+        }
         if (result.valid) {
             app.offers.load(data, result.human);
             data.query_key ? app.offers.show() : self.toggle(true);
@@ -204,21 +232,18 @@ abort: function() {
         delete(au.request);
     }
 },
-apply: function(data, str) {
+apply: function(data) {
+    this.parsed = data;
     $('#search-to-label i').each(function() {
         var label = $(this);
         label.toggleClass('label-to', data[label.attr('data-key')] !== undefined);
     });
     if (data.dates) {
-        this.dateparts = [];
-        var str = this.to.val();
+        var dates = [];
         for (var i = data.dates.length; i--;) {
-            var dp = data.dates[i];
-            this.dateparts[i] = {value: dp.value, text: str.substring(dp.start, dp.end + 1)};
+            dates[i] = data.dates[i].value;
         }
-        this.calendar.select(data.dates);
-    } else {
-        delete(this.dateparts);
+        this.calendar.select(dates);
     }
 },
 toggle: function(mode) {

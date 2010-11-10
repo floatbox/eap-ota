@@ -222,7 +222,7 @@ update: function() {
 select: function(dates) {
     var updated = false;
     for (var i = dates.length; i--;) {
-        var n = this.dmyindex[dates[i].value];
+        var n = this.dmyindex[dates[i]];
         if (n != this.selected[i]) {
             this.selected[i] = n;
             updated = true;

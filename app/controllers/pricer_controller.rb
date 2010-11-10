@@ -50,7 +50,7 @@ class PricerController < ApplicationController
       }
     else
       @search = PricerForm.new(params[:search])
-      #@search.parse_complex_to
+      @search.parse_complex_to
       render :json => {
         :valid => @search.valid?,
         :human => @search.human,

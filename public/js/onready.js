@@ -68,7 +68,6 @@
     ).click(function() {
         search.to.focus();
     });
-
     search.to.hover(
         function() {
             $retTabs.addClass('return-tabs-hover');
@@ -80,6 +79,16 @@
         $retTabs.addClass('return-tabs-focus');
     }).bind('blur', function() {
         $retTabs.removeClass('return-tabs-focus');
+    });
+    
+    // Карта
+    var fromData = search.from.get(0).onclick();
+    search.map = new google.maps.Map($('#where-map').get(0), {
+        mapTypeControl: false,
+        streetViewControl: false,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        center: new google.maps.LatLng(fromData.lat, fromData.lng),
+        zoom: 4
     });
     
     // Список предложений
@@ -118,10 +127,14 @@
     $('#logo').click(function() {
         app.booking.unfasten();
         app.offers.hide();
+        search.restore({});
         window.location.hash = '';
-    });    
+    });
     
-    // Включение запросов валидации
-    app.search.active = true;
+    // Данные по умолчанию для сброса
+    search.defvalues = {
+        from: search.from.val(),
+        people_count: $.extend({}, search.persons.selected)
+    };
 
 });
