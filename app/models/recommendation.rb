@@ -221,12 +221,16 @@ class Recommendation
     airlines = []
     planes = []
     cities = []
+    departure_cities = []
+    arrival_cities = []
     departure_airports = []
     arrival_airports = []
     departure_times = []
     arrival_times = []
     segments_amount = recs[0].variants[0].segments.length
     segments_amount.times {|i|
+      departure_cities[i] = []
+      arrival_cities[i] = []
       departure_airports[i] = []
       arrival_airports[i] = []
       departure_times[i] = []
@@ -239,6 +243,8 @@ class Recommendation
         planes += summary[:planes]
         cities += summary[:cities]
         v.segments.length.times {|i|
+          departure_cities[i] << summary['dpt_city_' + i.to_s]
+          arrival_cities[i] << summary['arv_city_' + i.to_s]
           departure_airports[i] << summary['dpt_airport_' + i.to_s]
           arrival_airports[i] << summary['arv_airport_' + i.to_s]
           departure_times[i] << summary['dpt_time_' + i.to_s]
@@ -252,6 +258,12 @@ class Recommendation
       :cities => cities.uniq.map{|c| {:v => c, :t => City[c].name}}.sort_by{|a| a[:t] },
       :segments => segments_amount,
       :locations => locations
+    }
+    departure_cities.each_with_index {|cities, i|
+      result['dpt_city_' + i.to_s] = cities.uniq.map{|city| {:v => city, :t => City[city].name} }.sort_by{|a| a[:t] }
+    }
+    arrival_cities.each_with_index {|cities, i|
+      result['arv_city_' + i.to_s] = cities.uniq.map{|city| {:v => city, :t => City[city].name} }.sort_by{|a| a[:t] }
     }
     departure_airports.each_with_index {|airports, i|
       result['dpt_airport_' + i.to_s] = airports.uniq.map{|airport| {:v => airport, :t => Airport[airport].name} }.sort_by{|a| a[:t] }

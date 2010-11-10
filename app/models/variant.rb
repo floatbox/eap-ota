@@ -14,10 +14,12 @@ class Variant
      :planes => flights.every.equipment_type_iata.uniq,
      :departures => segments.every.departure_time,
      :duration => segments.sum(&:total_duration),
-     :cities => segments.map{|s| s.flights[1..-1].map{|f| f.departure.city.iata}}.flatten.uniq,     
+     :cities => segments.map{|s| s.flights[1..-1].map{|f| f.departure.city.iata}}.flatten.uniq,
      :flights => flights.size
     }
     segments.each_with_index do |segment, i|
+      result['dpt_city_' + i.to_s] = segment.departure.city.iata
+      result['arv_city_' + i.to_s] = segment.arrival.city.iata
       result['dpt_time_' + i.to_s] = segment.departure_day_part
       result['arv_time_' + i.to_s] = segment.arrival_day_part
       result['dpt_airport_' + i.to_s] = segment.departure_iata
