@@ -68,6 +68,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       if month_record && (day > 0) && (month_record.hidden_info.class == Fixnum)
         res[:dates] =[{
             :value => date_from_month_and_day(month_record.hidden_info, day),
+            :str => word_part.to_s,
             :start => str.length - word_part.length,
             :end => str.length-1}
           ]
@@ -83,6 +84,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
             if r && r.type == 'date' && r.hidden_info.class == String
               res[:dates] = [{
                   :value => r.hidden_info,
+                  :str => word_part.to_s,
                   :start => str.length - word_part.length,
                   :end => str.length-1}
                 ]
@@ -92,6 +94,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
               @to_iata = r.code rescue nil
               res[:to] = {
                 :value => @to_iata,
+                :str => word_part.to_s,
                 :start => str.length - word_part.length,
                 :end => str.length-1
               }
