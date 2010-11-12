@@ -116,8 +116,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   def add_passport_data(amadeus, people, validating_carrier_code)
     #пока для одного человека
     people.each_with_index do |person, i|
-      debugger
-      amadeus.cmd("SRDOCS#{validating_carrier_code}HK1-P-#{person.nationality.alpha3}-#{person.passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}-#{person.document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{i+1}")
+      amadeus.cmd( "SRDOCS#{validating_carrier_code}HK1-P-#{person.nationality.alpha3}-#{person.passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}-#{person.document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{i+1}")
       amadeus.cmd("SR FOID #{validating_carrier_code} HK1-PP#{person.passport}/P#{i+1}")
       amadeus.cmd("FE #{validating_carrier_code} ONLY PSPT #{person.passport}/P#{i+1}")
     end
