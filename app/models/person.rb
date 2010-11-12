@@ -3,7 +3,6 @@ class Person < ActiveRecord::BaseWithoutTable
   column :last_name, :string, "Фамилия"
   column :sex, :string
   column :nationality_id, :integer
-  belongs_to :nationality, :class_name => 'Country'
   column :birthday, :date
   column :document_expiration_date, :date
   column :passport, :string, "Номер документа"
@@ -22,4 +21,8 @@ class Person < ActiveRecord::BaseWithoutTable
     
   end
   
+  def nationality
+    Country.find_by_id(nationality_id) if nationality_id
+  end
+
 end

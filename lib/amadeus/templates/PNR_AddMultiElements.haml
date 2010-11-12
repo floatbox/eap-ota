@@ -140,15 +140,16 @@
             %subjectQualifier 3
             %type P02
           %longFreetext= email
-    %dataElementsIndiv
-      %elementManagementData
-        %reference
-          %qualifier OT
-          %number 8
-        %segmentName FM
-      %commission
-        %commissionInfo
-          -if commission.agent_percentage?
-            %percentage= commission.agent_value
-          -else
-            %amount= commission.agent_value
+    - if commission
+      %dataElementsIndiv
+        %elementManagementData
+          %reference
+            %qualifier OT
+            %number 8
+          %segmentName FM
+        %commission
+          %commissionInfo
+            -if commission.agent_percentage?
+              %percentage= commission.agent_value
+            -else
+              %amount= commission.agent_value
