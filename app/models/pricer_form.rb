@@ -160,9 +160,22 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       r << human_dates(Date.strptime(date2, '%d%m%y'))
     end
 
+    r << human_cabin if cabin
+
     r.join(' ')
   end
-  
+
+  def human_cabin
+    case cabin
+    when 'Y'
+      return 'в эконом-классе'
+    when 'C'
+      return 'в бизнес-классе'
+    when 'F'
+      return 'в первом классе'
+    end
+  end
+
   def human_locations
     fl = from_iata && [City[from_iata], Airport[from_iata], Country.find_by_alpha2(from_iata)].find(&:id)
     tl = to_iata && [City[to_iata], Airport[to_iata], Country.find_by_alpha2(to_iata)].find(&:id)
