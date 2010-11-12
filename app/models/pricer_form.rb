@@ -150,13 +150,13 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       r << ['вдвоем', 'втроем', 'вчетвером', 'впятером', 'вшестером', 'всемером', '8 взрослых'][adults-2]
     end
     if children > 0
-      r << ['с ребенком', 'с двумя детьми', 'с тремя детьми', '4 детских', '5 детских', '6 детских', '7 детских'][children-1]
+      r << ['с&nbsp;ребенком', 'с&nbsp;двумя детьми', 'с&nbsp;тремя детьми', '4 детских', '5 детских', '6 детских', '7 детских'][children-1]
     end
 
     r << human_dates(Date.strptime(date1, '%d%m%y'))
 
     if rt
-      r << 'и обратно'
+      r << 'и&nbsp;обратно'
       r << human_dates(Date.strptime(date2, '%d%m%y'))
     end
 
@@ -180,9 +180,9 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   def human_dates(d1, d2=nil)
     if d2.blank?
       if d1.year == Date.today.year
-        return I18n.l(d1, :format => '%e %B')
+        return I18n.l(d1, :format => '%e&nbsp;%B')
       else
-        return I18n.l(d1, :format => '%e %B %Y')
+        return I18n.l(d1, :format => '%e&nbsp;%B %Y')
       end
 
     else

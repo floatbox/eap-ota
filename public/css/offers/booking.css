@@ -42,9 +42,10 @@
     padding: 15px;
 }
 
-.booking .success {
-    font-size: 112.5%;
-    line-height: 122.222%;
+.booking .success,
+.booking .fail {
+    font-size: 125%;
+    line-height: 120%;
 }
 
 .booking .success strong {
@@ -52,13 +53,19 @@
     color: #447b00;
 }
 
-.booking .success a {
+.booking .fail strong {
+    font-weight: bold;
+    color: #ea2535;
+}
+
+.booking .result a {
     color: #3081d1;
 }
 
 .booking .result .tip {
-    margin: 8px 0 0;
+    margin: 10px 0 0;
     font-size: 75%;
+    line-height: 125%;
 }
 
 
@@ -75,11 +82,15 @@
 .offer a.stop-booking:hover {
     color: #ED1192;
 }
-.book-s a.stop-booking {
+.book-s a.stop-booking,
+.booking .result a.stop-booking {
     position: static;
     right: 0;
     margin: 0;
     font-size: 100%;
+}
+.booking .result a.stop-booking {
+    float: right;
 }
 
 /* Разметка страницы бронирования на шаги */
@@ -864,6 +875,15 @@
 .book-s .control .a-button {
     margin: 0;
 }
+.book-s .sending .cancel,
+.book-s .control .loading {
+    display: none;
+}
+.book-s .sending .loading {
+    display: block;
+    height: 16px;
+    background-position: 0 0;
+}
 
 /* список причин */
 
@@ -901,7 +921,6 @@
     .book-s .blocker h6 {
         font-weight: bold;
         font-size: 100%;
-        
         margin: 0 0 .4em;
     }
 
@@ -911,8 +930,7 @@
 
     .book-s .blocker li {
         list-style: disc;
-
-        margin: 0 0 .2em 0;
+        margin: 0 0 0.2em 0;
     }
     
     .book-s .blocker li:first-letter {
@@ -921,7 +939,6 @@
 
 .book-s .notice {
     clear: both;
-
     color: #333;    
 }
 

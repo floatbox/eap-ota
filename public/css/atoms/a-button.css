@@ -25,6 +25,9 @@
     background-image: -moz-linear-gradient(top, #fff, #ededed, #c8c8c8, #ccc);
     background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));
 }
+input.a-button::-moz-focus-inner {
+    border: none;
+}
 
 .a-button-pressed {
     background-color: #c9c9c9;

@@ -7,6 +7,7 @@ init: function() {
         return new (app[el.onclick()])(el, i);
     });
 
+    // Отправка формы
     $('form', this.el).submit(function(event) {
         event.preventDefault();
         if (!self.submit.hasClass('a-button-ready')) return;
@@ -16,29 +17,36 @@ init: function() {
                 self.el.append(s);
                 $('.book-s', self.el).addClass('g-none');
             } else {
-                var blocker = $('.blocker', self.el);
-                $('.b-pseudo', blocker).html(s);
-                blocker.toggle(true);
+                $('.blocker', self.el).find('.b-pseudo').html(s).end().show();
             }
+            self.submit.addClass('a-button-ready').closest('.control').removeClass('sending');
         });
+        self.submit.removeClass('a-button-ready').closest('.control').addClass('sending');
+    });
+    this.submit = $('.book-s .a-button', this.el);
+    for (var i = this.steps.length; i--;) {
+        this.steps[i].change();
+    }
+    
+    // Повторная попытка
+    this.el.delegate('a.retry', 'click', function(event) {
+        event.preventDefault();
+        $(this).closest('.result').remove();
+        $('.book-s', self.el).removeClass('g-none');
     });
 
-    // раскрывающаяся подсказка
+    // Раскрывающаяся подсказка
     $('.b-expand').mousedown(function(e) {
         var $u = $(this);
         $u.toggleClass('b-expand-up');
         $u.next('p').slideToggle(200);
     });
 
-    // текст тарифа
+    // Текст тарифа
     $('#tarif-expand').click(function(e) {
         e.preventDefault();
         $('#tarif-text').slideToggle(200);
     });
-    this.submit = $('.book-s .a-button', this.el);
-    for (var i = this.steps.length; i--;) {
-        this.steps[i].change();
-    }
 
     // Список неправильно заполненных полей
     $('.blocker', this.el).delegate('a', 'click', function(event) {
@@ -67,7 +75,7 @@ init: function() {
     sections.eq(0).trigger('setready');
 
     // Прекращение бронирования
-    $('.stop-booking', this.el).click(this.selfhide);
+    this.el.delegate('a.stop-booking', 'click', this.selfhide);
 },
 show: function(variant) {
     var self = this;
@@ -80,8 +88,7 @@ show: function(variant) {
         event.preventDefault();
         self.hide();
     };    
-    var button = '<a class="stop-booking" href="#">Вернуться к выбору вариантов</a>';
-    $(button).click(this.selfhide).prependTo(this.offer);
+    $('<a class="stop-booking" href="#">Вернуться к выбору вариантов</a>').click(this.selfhide).prependTo(this.offer);
     this.el = $('<div class="booking"></div>').appendTo(this.offer);
     this.offer.addClass('active-booking');
 },
@@ -137,8 +144,8 @@ fasten: function(offer) {
     var ob = wrapper.height() - ot - offer.height();
     var cst = $(window).scrollTop();
     wrapper.addClass('l-crop');
-    wrapper.children('.l-canvas').css('margin-top', 220 - ot - ob).css('top', ob - 110);
-    this.dst = ot - 110;
+    wrapper.children('.l-canvas').css('margin-top', 200 - ot - ob).css('top', ob - 100);
+    this.dst = ot - 100;
     $(window).scrollTop(cst - this.dst);
 },
 unfasten: function() {

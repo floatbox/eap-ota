@@ -124,7 +124,7 @@ show: function() {
     var self = this, u = this.update;
     search.toggle(false);
     if (u.title) {
-        $('#offers-title h1').text(u.title);
+        $('#offers-title h1').html(u.title);
     }
     if (u.loading) {
         this.toggle('loading');
