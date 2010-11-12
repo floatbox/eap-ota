@@ -141,10 +141,9 @@ show: function() {
         }, 1200);
     }
     this.container.removeClass('g-none');
-    var w = $(window), wst = w.scrollTop();
-    var offset = this.container.offset().top;
-    if (offset - wst > w.height() / 2) {
-        $({st: wst}).animate({
+    var w = $(window), offset = this.container.offset().top;
+    if (offset - w.scrollTop() > w.height() / 2) {
+        $({st: w.scrollTop()}).animate({
             st: offset - 112
         }, {
             duration: 500,
@@ -161,7 +160,6 @@ toggle: function(mode) {
     this.loading.toggleClass('g-none', mode != 'loading');
     this.results.toggleClass('g-none', mode != 'results');
     this.empty.toggleClass('g-none', mode != 'empty');
-    // запускаем/останавливаем таймер счётчика
     this.loading.timer.trigger(mode == 'loading' ? 'start' : 'stop');
 },
 toggleCollection: function(mode) {

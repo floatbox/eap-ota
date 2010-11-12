@@ -331,6 +331,20 @@ ptp.expir = function($mm, $yy) {
         this.value = v ? v : ''; // тут был нуль
         if (v && v < 10) this.value = '0' + v;
     });
+
+    var isDigit = function(code) {
+        return (code > 47 && code < 58) || (code > 95 && code < 106);
+    };    
+    
+    $mm.keyup(function(e) {
+        if (!isDigit(e.which)) return;
+        var n = parseInt(this.value);
+        if (n > 1 && $(this).validate().length == 0) me.nextField($(this)).focus();
+    });
+    $yy.keydown(function(e) {
+        if (e.which == 9 && !this.value) return false;
+    });
+    
 }
 
 ptp.cvv = function(s) {

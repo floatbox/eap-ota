@@ -67,10 +67,6 @@ init: function() {
     sections.eq(0).trigger('setready');
 
     // Прекращение бронирования
-    this.selfhide = function(event) {
-        event.preventDefault();
-        self.hide();
-    };
     $('.stop-booking', this.el).click(this.selfhide);
 },
 show: function(variant) {
@@ -80,9 +76,12 @@ show: function(variant) {
     if (this.offer.hasClass('collapsed')) {
         $('.expand', variant).click();
     }
+    this.selfhide = function(event) {
+        event.preventDefault();
+        self.hide();
+    };    
     var button = '<a class="stop-booking" href="#">Вернуться к выбору вариантов</a>';
     $(button).click(this.selfhide).prependTo(this.offer);
-    $(button).click(this.selfhide).appendTo(this.offer);
     this.el = $('<div class="booking"></div>').appendTo(this.offer);
     this.offer.addClass('active-booking');
 },
@@ -105,6 +104,17 @@ book: function(variant) {
             self.el.html('<div class="empty">Не удалось забронировать.</div>');
         }
     });
+    var w = $(window), offset = this.el.offset().top;
+    if (offset > w.scrollTop() + w.height()) {
+        $({st: w.scrollTop()}).animate({
+            st: offset - w.height() + 250 
+        }, {
+            duration: 800,
+            step: function() {
+                w.scrollTop(this.st);
+            }
+        });
+    }
 },
 hash: function(h) {
     var hparts = window.location.hash.substring(1).split(':');
@@ -127,8 +137,8 @@ fasten: function(offer) {
     var ob = wrapper.height() - ot - offer.height();
     var cst = $(window).scrollTop();
     wrapper.addClass('l-crop');
-    wrapper.children('.l-canvas').css('margin-top', 200 - ot - ob).css('top', ob - 100);
-    this.dst = ot - 100;
+    wrapper.children('.l-canvas').css('margin-top', 220 - ot - ob).css('top', ob - 110);
+    this.dst = ot - 110;
     $(window).scrollTop(cst - this.dst);
 },
 unfasten: function() {
