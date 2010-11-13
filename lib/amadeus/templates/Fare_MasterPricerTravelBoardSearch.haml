@@ -16,6 +16,12 @@
     %ptc CH
     %traveller
       %ref= n+adults
+- 1.upto(infants) do |n|
+  %paxReference
+    %ptc INF
+    %traveller
+      %ref= n
+      %infantIndicator 1
 
 %fareOptions
   %pricingTickInfo
