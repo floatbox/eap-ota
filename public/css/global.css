@@ -45,15 +45,6 @@ caption, th, td {
     font-weight: normal;
 }
 
-a:link, a:visited {
-    outline: none;
-    color: #333;
-}
-
-a:hover {
-    color: #DC3F8A;
-}
-
 img {
     border: 0;
 }
@@ -197,6 +188,23 @@ body * {
 
 
 /* Links */
+a:link,
+a:visited {
+    outline: none;
+    color: #333;
+}
+a:hover {
+    color: #ED1192;
+}
+
+.link {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.link:hover {
+    color: #ED1192;
+}
+
 .pseudo {
     position: relative;
     top: -0.14em;

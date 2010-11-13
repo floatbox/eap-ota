@@ -1,0 +1,18 @@
+#promo {
+    padding: 18px 15px 18px 295px;
+    background: url(/img/promo/photo.jpg) no-repeat 0 50%;
+    font-weight: bold;
+    font-size: 112.5%;
+    line-height: 122.222%;
+}
+#promo h3 {
+    margin: 0 0 10px;
+    font-size: 144.444%;
+    line-height: 107.692%;
+}
+#promo .airlines {
+    color: #ED1192;
+}
+#promo .prices {
+    color: #587a00;
+}

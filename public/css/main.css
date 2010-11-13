@@ -2,8 +2,9 @@
 @import 'global.css';
 @import 'layout.css';
 
-@import 'head/header.css';
-@import 'foot/footer.css';
+@import 'header.css';
+@import 'footer.css';
+@import 'promo.css';
 
 @import 'atoms/a-button.css';
 @import 'atoms/b-pseudo.css';
@@ -11,7 +12,7 @@
 @import 'atoms/b-loader.css';
 @import 'atoms/b-rur.css';
 
-@import 'define/filters.css';
+@import 'controls/filter.css';
 
 @import 'search/form.css';
 @import 'search/autocomplete.css';
