@@ -1,34 +1,157 @@
-<p>
-Номер: <%= @pnr.number %>
-</p>
-Перелеты:
-<table>
+<div style="width: 940px; margin: 0 auto;">
+
+<div style="color: #444; font-size: 16px; line-height: 1.25; font-family: Arial, sans-serif; letter-spacing: -0.02em;">
+<table cellspacing="0" cellpadding="0" width="100%">
+<col width="38%">
+<col width="25%">
+<col width="15%">
+<col width="22%">
+<tbody valign="bottom">
+<tr>
+    <td class="pad_null"></td>
+    <td class="pad_null">
+        <div>Электронный билет<br>E-ticket</div>
+    </td>
+    <td class="pad_null">
+        <div>Номер брони</div>
+        <div><font size="5" family="Arial" color="#ED1192" style="font-size: 30px; color: #ED1192;"><strong><%= @pnr.number %></strong></font></div>
+    </td>
+    <td class="pad_null">
+        <div>Номер билета</div>
+        <div><font size="5" family="Arial" color="#ED1192" style="font-size: 30px; color: #ED1192;"><strong style="white-space: nowrap;"><nobr>123 456789123</nobr></strong></font></div>    
+    </td>
+</tr>
+</tbody>
+<tbody valign="top">
+<tr>
+    <td colspan="4"><br></td>
+</tr>
+<tr>
+    <td colspan="3" class="pad_null">
+        <table>
+        <tr>
+            <td colspan="2" class="pad_null">
+                <font size="4" family="Arial" color="#444444" style="font-size: 20px;"><strong>Сведения о пассажирах<br>Passenger Information</strong></font><br><br>
+            </td>
+        </tr>
+        <% for p in @pnr.passengers %>
+        <tr>
+            <td class="pad_null"><%= p.first_name %> <%= p.last_name %></td>
+            <td class="pad_null">123456</td>
+        </tr>
+        <% end %>
+        </table>
+    </td>
+    <td class="pad_null">
+        <div><font size="4" family="Arial" color="#444444" style="font-size: 20px;"><strong>Сведения об агенте<br>Agent Information</strong></font></div>
+        <font size="1" style="font-size: 8px;"><br></font>
+        <div>Eviterra Travel JSC<br>+7 (495) 660-35-20<br>www.eviterra.com<br>ticket@eviterra.com</div>
+    </td>
+</tr>
+</tbody>
+</table>
+<br>
+<br>
+<table cellspacing="0" cellpadding="0" width="100%">
+<col width="29%">
+<col width="26%">
+<col width="4%">
+<col width="26%">
+<col width="4%">
+<col width="11%">
+<thead valign="bottom">
+<tr>
+    <td class="pad_null"><font family="Arial" size="4" color="#444444" style="font-size: 20px;"><strong>Сведения о маршруте<br>Itinerary Information</strong></font><br><br></td>
+    <td class="pad_null" colspan="2"><font family="Arial" size="3" color="#444444"><strong>Отправление<br>Departure</strong></font><br><br></td>
+    <td class="pad_null" colspan="2"><font family="Arial" size="3" color="#444444"><strong>Прибытие<br>Arrival</strong></font><br><br></td>
+    <td class="pad_null"><br></td>
+</tr>
+</thead>
+<tbody valign="top">
 <% for flight in @pnr.flights %>
 <tr>
-      <td><span style="color:red"> <%= flight.warning %></span></td>
-      <td><%= fmt_departure(flight) %> &rarr; <%= fmt_arrival(flight) %></td>
-      <td><%= fmt_time( flight.departure_time ) %> <%= fmt_date( flight.departure_date ) %> &rarr; <%= fmt_time( flight.arrival_time ) %> <%= fmt_date( flight.arrival_date ) %> <%= fmt_duration(flight.duration) %></td>
-      <td><%= flight.operating_carrier_name %> <%= flight.flight_number %></td>
-      <td><%= flight.equipment_type_name %></td>
-    </tr>
+    <td colspan="6" style="border-top: 1px solid #e5e5e5;"><br></td>
+</tr>
+<tr>
+    <td class="pad_null"><%= fmt_date( flight.departure_date ) %></td>
+    <td class="pad_null">
+        <font size="3" family="Arial" color="#444444">
+        <strong><%= fmt_time( flight.departure_time ) %></strong><br>
+        <font size="1" style="font-size: 8px;"><br></font>
+        <%= flight.departure.city.name %>, <%= flight.departure_name %><% if flight.departure_term %>, терминал&nbsp;<%= flight.departure_term %><% end %><br>
+        <%= flight.flight_number %><br>
+        <%= flight.operating_carrier_name %><br>
+        <%= flight.equipment_type_name %>
+        <%= flight.warning %><br>
+        </font>
+        <br>
+    </td>
+    <td class="pad_null"><br></td>
+    <td class="pad_null">
+        <font size="3" family="Arial" color="#444444">
+        <%= fmt_date( flight.arrival_date ) %> <%= fmt_time( flight.arrival_time ) %><br>
+        <font size="1" style="font-size: 8px;"><br></font>
+        <%= fmt_arrival(flight) %>
+        </font>
+    </td>
+    <td class="pad_null"><br></td>
+    <td class="pad_null">
+        <font size="3" family="Arial" color="#444444">Тариф: V</font>
+    </td>
+</tr>
 <% end %>
+</tbody>
+<tr>
+    <td colspan="6" style="border-top: 1px solid #e5e5e5;"><font size="1" style="font-size: 8px;"><br></font></td>
+</tr>
+<tr>
+    <td></td>
+    <td colspan="5">
+        <div style="padding: 0 0 3px;"><font size="2" family="Arial" color="#444444" style="font-size: 12px;"><font color="#ed1192"><strong style="color: #ed1192">Внимание!</strong></font> Указано местное время. Регистрация на рейс заканчивается как правило за 40 минут до вылета</font></div>
+        <div style="padding: 0 0 3px;"><font size="2" family="Arial" color="#444444" style="font-size: 12px;"><font color="#ed1192"><strong style="color: #ed1192">Attention!</strong></font> Local time is indicated. Check-in ends mostly 40 minutes before departure time</font></div>
+    </td>
+</tr>
 </table>
+<br>
+<table>
+<tr>
+    <td colspan="2" class="pad_null">
+        <font size="4" family="Arial" color="#444444" style="font-size: 20px;"><strong>Сведения об оплате<br>Payment Information</strong></font><br><br>
+    </td>
+</tr>
+<tr>
+    <td class="pad_null">Тариф / Fare</td>
+    <td class="pad_null"></td>
+</tr>
+<tr>
+    <td class="pad_null">Налоги и сборы / Taxes</td>
+    <td class="pad_null"></td>
+</tr>
+<tr>
+    <td class="pad_null">Итоговая стоимость / Total</td>
+    <td class="pad_null"></td>
+</tr>
+<tr>
+    <td class="pad_null">Форма оплаты / Paid by</td>
+    <td class="pad_null"></td>
+</tr>
+<tr>
+    <td class="pad_null">Адрес покупателя / E-mail</td>
+    <td class="pad_null"><%= @pnr.email %></td>
+</tr>
+</table>
+</div>
 
-Пассажиры:
-<% for p in @pnr.passengers %>
-<p>
-<%= p.first_name %> <%= p.last_name %>
-</p>
-<% end %>
-<br />
-телефон: <%= @pnr.phone %><br />
-email: <%= @pnr.email %>
-<br />
-<br />
-Терминал:
-<pre>
-<%=h @pnr.raw %>
-</pre>
+
+</div>
+
+<br><br><br>
+Терминал: <pre><%=h @pnr.raw %></pre>
+
+
+
+
+
 <%
 =begin
 %>
