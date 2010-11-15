@@ -1,24 +1,23 @@
 <div style="width: 940px; margin: 0 auto;">
 
-<div style="color: #444; font-size: 16px; line-height: 1.25; font-family: Arial, sans-serif; letter-spacing: -0.02em;">
-<table cellspacing="0" cellpadding="0" width="100%">
-<col width="38%">
-<col width="25%">
-<col width="15%">
-<col width="22%">
+<table cellspacing="0" cellpadding="0" width="100%" style="color: #444; font-size: 16px; line-height: 1.25; font-family: Arial, sans-serif; letter-spacing: -0.02em;">
+<col width="355">
+<col width="*">
+<col width="140">
+<col width="200">
 <tbody valign="bottom">
 <tr>
-    <td class="pad_null"></td>
+    <td class="pad_null"><img src="/img/booking/eviterra.png" alt="eviterra" width="350" height="78"></td>
     <td class="pad_null">
-        <div>Электронный билет<br>E-ticket</div>
+        <div style="margin: 0 0 2px;"><font size="4" family="Arial" color="#444444" style="font-size: 20px;"><strong>Электронный билет<br>E-ticket</strong></font></div>
     </td>
     <td class="pad_null">
-        <div>Номер брони</div>
-        <div><font size="5" family="Arial" color="#ED1192" style="font-size: 30px; color: #ED1192;"><strong><%= @pnr.number %></strong></font></div>
+        <div><font family="Arial" size="3" color="#444444" style="font-size: 14px; line-height: 14px;"><strong>Номер брони</strong></font></div>
+        <div><font size="5" family="Arial" color="#ED1192" style="font-size: 30px; line-height: 32px; color: #ED1192;"><strong><%= @pnr.number %></strong></font></div>
     </td>
     <td class="pad_null">
-        <div>Номер билета</div>
-        <div><font size="5" family="Arial" color="#ED1192" style="font-size: 30px; color: #ED1192;"><strong style="white-space: nowrap;"><nobr>123 456789123</nobr></strong></font></div>    
+        <div><font family="Arial" size="3" color="#444444" style="font-size: 14px; line-height: 14px;"><strong>Номер билета</strong></font></div>
+        <div><font size="5" family="Arial" color="#ED1192" style="font-size: 30px; line-height: 32px; color: #ED1192;"><strong style="white-space: nowrap;"><nobr>123 456789123</nobr></strong></font></div>    
     </td>
 </tr>
 </tbody>
@@ -28,18 +27,26 @@
 </tr>
 <tr>
     <td colspan="3" class="pad_null">
-        <table>
+        <table cellspacing="0" cellpadding="0">
+        <col width="270">
+        <col width="270">
         <tr>
             <td colspan="2" class="pad_null">
-                <font size="4" family="Arial" color="#444444" style="font-size: 20px;"><strong>Сведения о пассажирах<br>Passenger Information</strong></font><br><br>
+                <font size="4" family="Arial" color="#444444" style="font-size: 20px;"><strong>Сведения о пассажирах<br>Passenger Information</strong></font><br>
+                <font size="2" style="font-size: 10px;"><br></font>
             </td>
         </tr>
         <% for p in @pnr.passengers %>
+        <tr><td colspan="2" style="border-top: 1px solid #e5e5e5;"><font size="1" style="font-size: 6px;"><br></font></td></tr>
         <tr>
-            <td class="pad_null"><%= p.first_name %> <%= p.last_name %></td>
-            <td class="pad_null">123456</td>
+            <td class="pad_null"><font family="Arial" size="3" color="#444444"><%= p.first_name %> <%= p.last_name %></font></td>
+            <td class="pad_null"><font family="Arial" size="3" color="#444444">123456</font></td>
         </tr>
+        <tr><td colspan="2"><font size="1" style="font-size: 6px;"><br></font></td></tr>
         <% end %>
+        <tr>
+            <td colspan="2" style="border-top: 1px solid #e5e5e5;"><font size="1" style="font-size: 6px;"><br></font></td>
+        </tr>
         </table>
     </td>
     <td class="pad_null">
@@ -52,13 +59,13 @@
 </table>
 <br>
 <br>
-<table cellspacing="0" cellpadding="0" width="100%">
-<col width="29%">
-<col width="26%">
-<col width="4%">
-<col width="26%">
-<col width="4%">
-<col width="11%">
+<table cellspacing="0" cellpadding="0" width="100%" style="color: #444; font-size: 16px; line-height: 1.25; font-family: Arial, sans-serif; letter-spacing: -0.02em;">
+<col width="270">
+<col width="*">
+<col width="35">
+<col width="*">
+<col width="35">
+<col width="110">
 <thead valign="bottom">
 <tr>
     <td class="pad_null"><font family="Arial" size="4" color="#444444" style="font-size: 20px;"><strong>Сведения о маршруте<br>Itinerary Information</strong></font><br><br></td>
@@ -76,22 +83,24 @@
     <td class="pad_null"><%= fmt_date( flight.departure_date ) %></td>
     <td class="pad_null">
         <font size="3" family="Arial" color="#444444">
-        <strong><%= fmt_time( flight.departure_time ) %></strong><br>
+        <strong><%= fmt_time(flight.departure_time) %></strong><br>
         <font size="1" style="font-size: 8px;"><br></font>
         <%= flight.departure.city.name %>, <%= flight.departure_name %><% if flight.departure_term %>, терминал&nbsp;<%= flight.departure_term %><% end %><br>
+        <%= flight.departure_iata %><% if flight.departure_term %>(<%= flight.departure_term %>)<% end %><br>
+        <%= flight.operating_carrier_name %><br>        
         <%= flight.flight_number %><br>
-        <%= flight.operating_carrier_name %><br>
-        <%= flight.equipment_type_name %>
-        <%= flight.warning %><br>
+        <%= flight.equipment_type_name %><br>
+        <% if flight.warning %><%= flight.warning %><br><% end %>
         </font>
         <br>
     </td>
     <td class="pad_null"><br></td>
     <td class="pad_null">
         <font size="3" family="Arial" color="#444444">
-        <%= fmt_date( flight.arrival_date ) %> <%= fmt_time( flight.arrival_time ) %><br>
+        <% if flight.arrival_date != flight.departure_date %><%= fmt_date(flight.arrival_date) %> <% end %><%= fmt_time( flight.arrival_time ) %><br>
         <font size="1" style="font-size: 8px;"><br></font>
-        <%= fmt_arrival(flight) %>
+        <%= flight.arrival.city.name %>, <%= flight.arrival_name %><% if flight.arrival_term %>, терминал&nbsp;<%= flight.arrival_term %><% end %><br>
+        <%= flight.arrival_iata %><% if flight.arrival_term %>(<%= flight.arrival_term %>)<% end %><br>
         </font>
     </td>
     <td class="pad_null"><br></td>
@@ -113,43 +122,56 @@
 </tr>
 </table>
 <br>
-<table>
+<table cellspacing="0" cellpadding="0" style="color: #444; font-size: 16px; line-height: 1.25; font-family: Arial, sans-serif; letter-spacing: -0.02em;">
+<col width="270">
+<col width="270">
 <tr>
     <td colspan="2" class="pad_null">
-        <font size="4" family="Arial" color="#444444" style="font-size: 20px;"><strong>Сведения об оплате<br>Payment Information</strong></font><br><br>
+        <font size="4" family="Arial" color="#444444" style="font-size: 20px;"><strong>Сведения об оплате<br>Payment Information</strong></font><br>
+        <font size="2" style="font-size: 10px;"><br></font>
     </td>
 </tr>
+<tr><td colspan="2" style="border-top: 1px solid #e5e5e5;"><font size="1" style="font-size: 6px;"><br></font></td></tr>
 <tr>
-    <td class="pad_null">Тариф / Fare</td>
+    <td class="pad_null"><font family="Arial" size="3" color="#444444">Тариф / Fare</font></td>
     <td class="pad_null"></td>
 </tr>
+<tr><td colspan="2"><font size="1" style="font-size: 6px;"><br></font></td></tr>
+<tr><td colspan="2" style="border-top: 1px solid #e5e5e5;"><font size="1" style="font-size: 6px;"><br></font></td></tr>
 <tr>
-    <td class="pad_null">Налоги и сборы / Taxes</td>
+    <td class="pad_null"><font family="Arial" size="3" color="#444444">Налоги и сборы / Taxes</font></td>
     <td class="pad_null"></td>
 </tr>
+<tr><td colspan="2"><font size="1" style="font-size: 6px;"><br></font></td></tr>
+<tr><td colspan="2" style="border-top: 1px solid #e5e5e5;"><font size="1" style="font-size: 6px;"><br></font></td></tr>
 <tr>
-    <td class="pad_null">Итоговая стоимость / Total</td>
+    <td class="pad_null"><font family="Arial" size="3" color="#444444">Итоговая стоимость / Total</font></td>
     <td class="pad_null"></td>
 </tr>
+<tr><td colspan="2"><font size="1" style="font-size: 6px;"><br></font></td></tr>
+<tr><td colspan="2" style="border-top: 1px solid #e5e5e5;"><font size="1" style="font-size: 6px;"><br></font></td></tr>
 <tr>
-    <td class="pad_null">Форма оплаты / Paid by</td>
+    <td class="pad_null"><font family="Arial" size="3" color="#444444">Форма оплаты / Paid by</font></td>
     <td class="pad_null"></td>
 </tr>
+<tr><td colspan="2"><font size="1" style="font-size: 6px;"><br></font></td></tr>
+<tr><td colspan="2" style="border-top: 1px solid #e5e5e5;"><font size="1" style="font-size: 6px;"><br></font></td></tr>
 <tr>
-    <td class="pad_null">Адрес покупателя / E-mail</td>
-    <td class="pad_null"><%= @pnr.email %></td>
+    <td class="pad_null"><font family="Arial" size="3" color="#444444">Адрес покупателя / E-mail</font></td>
+    <td class="pad_null"><font family="Arial" size="3" color="#444444"><%= @pnr.email %></font></td>
 </tr>
+<tr><td colspan="2" style="border-bottom: 1px solid #e5e5e5;"><font size="2" style="font-size: 6px;"><br></font></td></tr>
 </table>
+<div style="text-align: center; color: #444; font-size: 24px; line-height: 1.25; font-family: Arial, sans-serif; letter-spacing: -0.02em;">
+<font size="5"><br></font>
+<center>
+    <font family="Arial" size="5" color="#444444"><strong>Спасибо за то, что забронировали на <span style="color: #ED1192;"><font color="#ED1192">eviterra.com</font></span>!</strong></font><br>
+    <font family="Arial" size="5" color="#444444"><strong>Thank you for booking at <span style="color: #ED1192;"><font color="#ED1192">eviterra.com</font></span>!</strong></font><br>
+</center>
 </div>
 
-
+<div style="margin: 50px 0">Терминал: <pre><%=h @pnr.raw %></pre></div>
 </div>
-
-<br><br><br>
-Терминал: <pre><%=h @pnr.raw %></pre>
-
-
-
 
 
 <%
