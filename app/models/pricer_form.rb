@@ -147,16 +147,18 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     end
 
     if adults > 1
-      r << ['вдвоем', 'втроем', 'вчетвером', 'впятером', 'вшестером', 'всемером', '8 взрослых'][adults-2]
+      r << ['вдвоем', 'втроем', 'вчетвером', 'впятером', 'вшестером', 'всемером', 'ввосьмером'][adults-2]
     end
     if children > 0
-      r << ['с&nbsp;ребенком', 'с&nbsp;двумя детьми', 'с&nbsp;тремя детьми', '4 детских', '5 детских', '6 детских', '7 детских'][children-1]
+      r << ['с&nbsp;ребенком', 'с&nbsp;двумя детьми', 'с&nbsp;тремя детьми', 'с&nbsp;четыремя детьми', 'с&nbsp;пятью детьми', 'с&nbsp;шестью детьми', 'с&nbsp;семью детьми'][children-1]
     end
 =begin
     if infants > 0
       r << ['с&nbsp;младенцем', 'с&nbsp;двумя младенцами', 'с&nbsp;тремя младенцами', '4 младенцев', '5 младенцев', '6 младенцев', '7 младенцев'][children-1]
     end
 =end
+
+    r << human_cabin if cabin
 
     r << human_dates(Date.strptime(date1, '%d%m%y'))
 
@@ -165,19 +167,17 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       r << human_dates(Date.strptime(date2, '%d%m%y'))
     end
 
-    r << human_cabin if cabin
-
     r.join(' ')
   end
 
   def human_cabin
     case cabin
     when 'Y'
-      return 'в эконом-классе'
+      return 'эконом-классом'
     when 'C'
-      return 'в бизнес-классе'
+      return 'бизнес-классом'
     when 'F'
-      return 'в первом классе'
+      return 'первым классом'
     end
   end
 

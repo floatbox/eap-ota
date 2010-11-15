@@ -82,12 +82,12 @@
     });
     
     // Карта
-    var fromData = search.from.get(0).onclick();
+    var fdata = search.from.get(0).onclick() || {lat: 55.751463, lng: 37.621651};
     search.map = new google.maps.Map($('#where-map').get(0), {
         mapTypeControl: false,
         streetViewControl: false,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
-        center: new google.maps.LatLng(fromData.lat, fromData.lng),
+        center: new google.maps.LatLng(fdata.lat, fdata.lng),
         zoom: 4
     });
     
