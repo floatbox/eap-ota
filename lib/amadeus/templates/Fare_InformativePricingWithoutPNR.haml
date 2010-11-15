@@ -31,6 +31,19 @@
     %ptcGroup
       %discountPtc
         %valueQualifier CH
+- if people_counts[:infants] > 0
+  %passengersGroup
+    %segmentRepetitionControl
+      %segmentControlDetails
+        %quantity= 3
+        %numberOfUnits= people_counts[:infants]
+    %travellersID
+      - 1.upto(people_counts[:infants]) do |n|
+        %travellerDetails
+          %measurementValue= n + people_counts[:adults] + people_counts[:children]
+    %ptcGroup
+      %discountPtc
+        %valueQualifier INF
 %tripsGroup
   %originDestination
   -flights.each do |fl|

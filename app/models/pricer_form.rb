@@ -152,6 +152,11 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     if children > 0
       r << ['с&nbsp;ребенком', 'с&nbsp;двумя детьми', 'с&nbsp;тремя детьми', '4 детских', '5 детских', '6 детских', '7 детских'][children-1]
     end
+=begin
+    if infants > 0
+      r << ['с&nbsp;младенцем', 'с&nbsp;двумя младенцами', 'с&nbsp;тремя младенцами', '4 младенцев', '5 младенцев', '6 младенцев', '7 младенцев'][children-1]
+    end
+=end
 
     r << human_dates(Date.strptime(date1, '%d%m%y'))
 

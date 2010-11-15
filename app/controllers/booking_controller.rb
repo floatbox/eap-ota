@@ -3,15 +3,16 @@ class BookingController < ApplicationController
   filter_parameter_logging :card
   
   def preliminary_booking
-    recommendation = Recommendation.check_price_and_avaliability(params[:flight_codes].split('_'), {:children => params[:children].to_i, :adults => params[:adults].to_i})
-    unless recommendation
+    pricer_form = Rails.cache.read('pricer_form' + params[:query_key])
+    recommendation = Recommendation.check_price_and_avaliability(params[:flight_codes].split('_'), pricer_form.people_count)
+    if !recommendation || (recommendation.price_total != params[:total_price].to_i)
       render :json => {:success => false}
       return
     end
     recommendation.validating_carrier_iata = params[:validating_carrier]
     order_data = OrderData.new(
       :recommendation => recommendation,
-      :people_count => {:children => params[:children].to_i, :adults => params[:adults].to_i, :infants => params[:infants].to_i}
+      :people_count => pricer_form.people_count
     )
     order_data.store_to_cache
     render :json => {:success => true, :number => order_data.number}

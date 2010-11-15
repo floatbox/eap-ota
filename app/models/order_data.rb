@@ -10,11 +10,27 @@ class OrderData < ActiveRecord::BaseWithoutTable
   attr_accessor :order_id
   validates_format_of :email, :with => 
   /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email"
-  
+
   def card
     @card || Billing::CreditCard.new()
   end
-  
+
+
+  def adults
+    people && (people.sort_by(&:birthday)[0..(people_count[:adults]-1)])
+  end
+
+  def children
+    s_pos = people_count[:adults]
+    e_pos = people_count[:adults] + people_count[:children]-1
+    (people && (people_count[:children] > 0) && (people.sort_by(&:birthday)[s_pos..e_pos])) || []
+  end
+
+  def infants
+    s_pos = people_count[:adults] + people_count[:children]
+    (people && (people_count[:infants] > 0) && (people.sort_by(&:birthday)[s_pos..-1])) || []
+  end
+
   def errors_hash
     res = {}
     res['order[email]'] = errors[:email] if errors[:email]
@@ -31,7 +47,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
         res["card[#{e}]"] = v
       }
     end
-    res 
+    res
   end
   
   
@@ -66,6 +82,19 @@ class OrderData < ActiveRecord::BaseWithoutTable
   def validate
     errors.add :card, 'Отсутствуют данные карты' unless card
     errors.add :card, 'Некорректные данные карты' if card && !card.valid?
+    errors.add :people, 'Возраст некоторых людей не соответствует завявленным' unless people_ages_valid?
+  end
+
+  def people_ages_valid?
+    res = true
+    last_date = recommendation.flights.last.dept_date
+    children.each{|c|
+      res &&= c.check_child_age(last_date)
+    }
+    infants.each{|i|
+      res &&= i.check_infant_age(last_date)
+    }
+    res
   end
   
   def block_money
