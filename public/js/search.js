@@ -172,6 +172,7 @@ restore: function(data) {
     this.persons.select($.extend({}, data.people_count || df.people_count));
     this.changes.select(data.changes || []);
     this.cabin.select(data.cabin || []);
+    this.rt.set(data.rt !== undefined && data.rt == 0 ? 'ow' : 'rt');
 },
 update: function(source) {
     var self = this;
