@@ -14,6 +14,7 @@ init: function() {
     $('#offers-tabs').bind('select', function(e, v) {
         $('#offers-' + v).removeClass('g-none').siblings().addClass('g-none');
         app.offers.selectedTab = v;
+        pageurl.update('tab', v);
     }).radio({
         toggleClosest: 'li'
     });
@@ -111,7 +112,7 @@ load: function(params, title) {
         if (self.update.request != request) return;
         var visible = self.loading.is(':visible');
         self.update.loading = false;
-        if (typeof s == "string") {
+        if (typeof s == 'string') {
             self.update.content = s;
             if (visible) self.processUpdate();
         } else {
@@ -167,12 +168,6 @@ toggleCollection: function(mode) {
     $('.offers-sort', context).toggleClass('g-none', !mode);
     $('.offers-improper', context).toggleClass('g-none', mode);
 },
-updateHash: function(hash) {
-    var current = window.location.hash.substring(1);
-    if (current.split(':')[0] != hash) {
-        window.location.hash = hash;
-    }
-},
 processUpdate: function() {
     var self = this, u = this.update;
     $('#offers-collection').remove();
@@ -182,7 +177,7 @@ processUpdate: function() {
         this.updateFilters();
         this.parseResults();
         this.toggleCollection(true);
-        this.updateHash($('#offers-collection').attr('data-query_key'));
+        pageurl.update('search', $('#offers-collection').attr('data-query_key'));
     } else {
         this.toggle('empty');
         this.variants = [];
@@ -197,7 +192,7 @@ processUpdate: function() {
         }
         this.showDepartures();
         this.showRecommendations();
-        $('#offers-tabs').trigger('set', this.selectedTab || 'best');
+        $('#offers-tabs').trigger('set', this.selectedTab || pageurl.tab || 'featured');
         setTimeout(function() {
             self.toggle('results');
         }, 1000);
@@ -407,7 +402,7 @@ showRecommendations: function() {
         if (!fast || d < fast.duration || (d == fast.duration && p < fast.price)) fast = {variant: v, duration: d, price: p};
         if (!optimal || pfd < optimal.pfd) optimal = {variant: v, pfd: pfd};
     }
-    var container = $('#offers-best').html('');
+    var container = $('#offers-featured').html('');
     if (!cheap && !fast && !optimal) {
         container.append($('#offers-collection').prev().clone());
         return;
