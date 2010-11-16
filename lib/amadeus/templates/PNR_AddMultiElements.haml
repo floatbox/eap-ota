@@ -8,7 +8,7 @@
 -else
   %pnrActions
     %optionCode 11
-  - people.each_with_index do |person, index|
+  - adults.each_with_index do |person, index|
     %travellerInfo
       %elementManagementPassenger
         %reference
@@ -19,12 +19,42 @@
         %travellerInformation
           %traveller
             %surname= person.last_name
+            %quantity= (index < people_count[:infants]) ? 2 : 1
+          %passenger
+            %firstName= person.first_name
+            - if index < people_count[:infants]
+              %type ADT
+              %infantIndicator 3
+      -if index < people_count[:infants]
+        %passengerData
+          %travellerInformation
+            %traveller
+              %surname= infants[index].last_name
+            %passenger
+              %firstName= infants[index].first_name
+              %type INF
+          %dateOfBirth
+            %dateAndTimeDetails
+              %date= infants[index].birthday.strftime('%d%b%y').upcase
+  - children.each_with_index do |person, index|
+    %travellerInfo
+      %elementManagementPassenger
+        %reference
+          %qualifier PR
+          %number= index + 1 + people_count[:adults]
+        %segmentName NM
+      %passengerData
+        %travellerInformation
+          %traveller
+            %surname= person.last_name
             %quantity 1
           %passenger
             %firstName= person.first_name
+            %type CHD
         %dateOfBirth
           %dateAndTimeDetails
             %date= person.birthday.strftime('%d%b%y').upcase
+
   -if flights.present?
     %originDestinationDetails
       %originDestination
@@ -59,7 +89,6 @@
             %selectionDetailsAir
               %selection
                 %option P10
-  
   %dataElementsMaster
     %marker1
     %dataElementsIndiv

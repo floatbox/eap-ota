@@ -1,6 +1,6 @@
 class PNRForm < ActiveRecord::BaseWithoutTable
   attr_accessor :flights
-  attr_accessor :people
+  attr_accessor :people, :adults, :children, :infants, :people_count
   attr_accessor :commission
   column :phone, :string
   column :email, :string

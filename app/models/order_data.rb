@@ -82,19 +82,18 @@ class OrderData < ActiveRecord::BaseWithoutTable
   def validate
     errors.add :card, 'Отсутствуют данные карты' unless card
     errors.add :card, 'Некорректные данные карты' if card && !card.valid?
-    errors.add :people, 'Возраст некоторых людей не соответствует завявленным' unless people_ages_valid?
   end
 
-  def people_ages_valid?
-    res = true
+  def set_flight_date_for_childen_and_infants
     last_date = recommendation.flights.last.dept_date
     children.each{|c|
-      res &&= c.check_child_age(last_date)
+      c.flight_date = last_date
+      c.infant_or_child = 'c'
     }
     infants.each{|i|
-      res &&= i.check_infant_age(last_date)
+      i.flight_date = last_date
+      i.infant_or_child = 'i'
     }
-    res
   end
   
   def block_money
@@ -108,21 +107,38 @@ class OrderData < ActiveRecord::BaseWithoutTable
       return true
     end
   end
+
+  def commission
+    recommendation.commission
+  end
   
+  def validating_carrier
+    recommendation.validating_carrier.iata
+  end
   
+  #4 следующих метода нужно для нормального pnr_add_multi_elements
+  def flights
+    []
+  end
+
+  def debug
+    false
+  end
+
+  def end_transact
+    false
+  end
+
+  def ignore
+    false
+  end
+
   def create_booking
     amadeus = Amadeus::Service.new(:book => true)
     air_sfr_xml = amadeus.air_sell_from_recommendation(
       :segments => recommendation.variants[0].segments, :people_count => people.size
     )
-    doc = amadeus.pnr_add_multi_elements(PNRForm.new(
-      :flights => [],
-      :people => people,
-      :phone => '1236767',
-      :email => email,
-      :validating_carrier => recommendation.validating_carrier.iata,
-      :commission => recommendation.commission
-    ))
+    doc = amadeus.pnr_add_multi_elements(self)
     self.pnr_number = doc.xpath('//r:controlNumber').to_s
     
     if self.pnr_number
@@ -135,6 +151,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
       PnrMailer.deliver_pnr_notification(email, self.pnr_number) if email
       return pnr_number
     else
+      amadeus.pnr_add_multi_elements(PNRForm.new(:end_transact => true))
       errors.add :pnr_number, 'Ошибка при создании PNR' 
       return nil
     end
@@ -144,18 +161,18 @@ class OrderData < ActiveRecord::BaseWithoutTable
 
   def add_passport_data(amadeus, people, validating_carrier_code)
     #пока для одного человека
-    people.each_with_index do |person, i|
+    (adults + children).each_with_index do |person, i|
       amadeus.cmd( "SRDOCS#{validating_carrier_code}HK1-P-#{person.nationality.alpha3}-#{person.passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}-#{person.document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{i+1}")
       amadeus.cmd("SR FOID #{validating_carrier_code} HK1-PP#{person.passport}/P#{i+1}")
       amadeus.cmd("FE #{validating_carrier_code} ONLY PSPT #{person.passport}/P#{i+1}")
     end
   end
   
-  
   def self.create_sample_booking
     order = OrderData.get_from_cache('xglG7R')
     order.email = 'email@example.com'
     order.phone = '12345678'
+    order.people_count = {:infants => 0, :children => 0, :adults => 2}
     order.people = [Person.new(
       :first_name => 'Ivan',
       :last_name => 'Ivanov',
@@ -168,7 +185,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     Person.new(
       :first_name => 'Masha',
       :last_name => 'Ivanova',
-      :birthday => Date.today - 18.years,
+      :birthday => Date.today - 15.year,
       :document_expiration_date => Date.today + 1.year,
       :passport => '5556565',
       :nationality_id => 1,
