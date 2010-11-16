@@ -32,7 +32,7 @@ app.Validate = function() {
 app.Validate.Radio = function(el) {
     var $el = $(el);
     var els = el.form.elements[el.name];
-    for (e in els) if (els[e].checked) return null;
+    for (var i = els.length; i--;) if (els[i].checked) return null;
 
     var qname = '<a href="#" data-id="' + $el.attr('id') + '"><u>' + (el.title) + '</u></a>';
     return 'не выбран {name}'.supplant({name: qname});

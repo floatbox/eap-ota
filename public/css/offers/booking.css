@@ -337,12 +337,15 @@
 .book-p label.bp-sex {
     font-weight: normal;
 
+    position: relative;
+    
     float: left;
     display: inline-block;
 
     width: 30px;
     margin: 0;
     padding: 3px 4px;
+    overflow: hidden;
 
     text-align: center;
     white-space: nowrap;
@@ -392,7 +395,8 @@
 }
 
 .book-p label.bp-sex input {
-    display: none;
+    position: absolute;
+    top: -30px;
 }
 
 .book-p label.bp-sex-invalid {
@@ -533,8 +537,7 @@
 
     background: #bbb;
     
-    background-image: -moz-linear-gradient(top, #f3f3f3, #999);
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f3f3f3), to(#aaa));
+    background: url(/img/booking/cardbgr.png) repeat-x #999;
 }
 
 .bankcard li.bc-front {

@@ -31,14 +31,14 @@
                  title="Пол пассажира"
                 >Пол</label>
 
-                <label class="bp-sex bp-sex-m g-xl" title="Мужской">
+                <label class="bp-sex bp-sex-m g-xl" title="Мужской" for="book-p-<%= person_form_counter %>-sex-m">
                 <%= person.radio_button :sex,
                  'm',
                  :id => "book-p-#{person_form_counter}-sex-m",
                  :title => "пол пассажира"
                  %>м
                 </label>
-                <label class="bp-sex bp-sex-f g-xl" title="Женский">
+                <label class="bp-sex bp-sex-f g-xl" title="Женский" for="book-p-<%= person_form_counter %>-sex-f">
                 <%= person.radio_button :sex,
                  'f',
                  :id => "book-p-#{person_form_counter}-sex-f",

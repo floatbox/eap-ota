@@ -1,21 +1,17 @@
-.form
-{
+.form {
+    position: relative;
     padding: 6px 15px 10px;
-
     color: #c8c8c8;
     background: #2c2c2c;
-    
     zoom: 1;
 }
 
-.form table
-{
+.form table {
     border-collapse: collapse;
     border-spacing: 0;
 }
 
-.form table td
-{
+.form table td {
     padding: 0;
     vertical-align: top;
 }

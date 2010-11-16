@@ -43,6 +43,7 @@ input.a-button::-moz-focus-inner {
 
     color: #eee;
     border: 1px solid #7b8e12;
+    background-color: #a0b914;
     background-image: linear-gradient(top, #a0b914, #7b8e12);
     background-image: -moz-linear-gradient(top, #a0b914, #7b8e12);
     background-image: -webkit-gradient(linear, left top, left bottom, from(#a0b914), to(#7b8e12));

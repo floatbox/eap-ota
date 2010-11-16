@@ -113,12 +113,12 @@ show: function() {
         'visibility': 'inherit'
     });
     setTimeout(function() {
-        $(window).bind('click keydown', self.selfhide);
-    }, 30);
+        $('body').bind('click keydown', self.selfhide);
+    }, 70);
     this.dropdown.fadeIn(200);
 },
 hide: function() {
-    $(window).unbind('click keydown', this.selfhide);
+    $('body').unbind('click keydown', this.selfhide);
     this.dropdown.fadeOut(150);
 }
 };
