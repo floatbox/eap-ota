@@ -144,7 +144,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     self.pnr_number = doc.xpath('//r:controlNumber').to_s
     
     if self.pnr_number
-      add_passport_data(amadeus, people, recommendation.validating_carrier.iata)
+      add_passport_data(amadeus)
       amadeus.fare_price_pnr_with_booking_class
       amadeus.ticket_create_tst_from_pricing
       amadeus.pnr_add_multi_elements(PNRForm.new(:end_transact => true))
@@ -161,8 +161,8 @@ class OrderData < ActiveRecord::BaseWithoutTable
     amadeus.session.destroy
   end
 
-  def add_passport_data(amadeus, people, validating_carrier_code)
-    #пока для одного человека
+  def add_passport_data(amadeus)
+    validating_carrier_code = recommendation.validating_carrier.iata
     (adults + children).each_with_index do |person, i|
       amadeus.cmd( "SRDOCS#{validating_carrier_code}HK1-P-#{person.nationality.alpha3}-#{person.passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}-#{person.document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{i+1}")
       amadeus.cmd("SR FOID #{validating_carrier_code} HK1-PP#{person.passport}/P#{i+1}")
@@ -174,7 +174,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     order = OrderData.get_from_cache('xglG7R')
     order.email = 'email@example.com'
     order.phone = '12345678'
-    order.people_count = {:infants => 0, :children => 0, :adults => 2}
+    order.people_count = {:infants => 0, :children => 1, :adults => 1}
     order.people = [Person.new(
       :first_name => 'Ivan',
       :last_name => 'Ivanov',
@@ -187,7 +187,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     Person.new(
       :first_name => 'Masha',
       :last_name => 'Ivanova',
-      :birthday => Date.today - 15.year,
+      :birthday => Date.today - 10.years,
       :document_expiration_date => Date.today + 1.year,
       :passport => '5556565',
       :nationality_id => 1,
