@@ -117,10 +117,9 @@
     search.to.focus();
 
     // Сохраненные результаты
-    var hash = window.location.hash.substring(1);
-    if (hash) {
-        var hashparts = hash.split(':');
-        search.validate(hashparts[0]);
+    pageurl.parse();
+    if (pageurl.search) {
+        search.validate(pageurl.search);
     }
 
     // Сброс по клику на логотипе
@@ -128,7 +127,7 @@
         app.booking.unfasten();
         app.offers.hide();
         search.restore({});
-        window.location.hash = '';
+        pageurl.reset();
     });
     
     // Данные по умолчанию для сброса
