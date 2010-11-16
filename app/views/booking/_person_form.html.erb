@@ -10,15 +10,16 @@
         <tr>
             <td class="g-middle text-upper">
                 <%= person.text_field :first_name,
-                 :class => "text g-xl",
+                 :class => "text text-name g-xl",
                  :title => "имя пассажира",
                  :onclick => "return {def: 'Имя', mask: /[a-z]/i, rules: {req: true, minl: 2, latin: true, gender: 'N'}}"
                  %>
                  <%= person.error_message_on :first_name, 
                  :id => "error_person_#{person_form_counter}_first_name" %>
+                 <div class="language-warning">Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры. Имя&nbsp;и&nbsp;фамилию нужно вводить латинскими буквами</div>
             <td class="g-middle text-upper">
                 <%= person.text_field :last_name,
-                 :class => "text g-xl",
+                 :class => "text text-name g-xl",
                  :title => "фамилия пассажира",
                  :onclick => "return {def: 'Фамилия', mask: /[a-z]/i, rules: {req: true, minl: 2, latin: true, gender: 'F'}}"
                  %>

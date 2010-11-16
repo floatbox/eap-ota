@@ -62,6 +62,9 @@ app.Person = function() {
     app.Person.superclass.constructor.apply(this, arguments)
 
     var $cbx = $(':checkbox', this.$el);
+    
+    // Имя и фамилия с проверкой раскладки
+    this.names($('.text-name', this.$el));
 
     // чекбокс "бонусная карта"
     this.bonus($cbx.filter('.bonus'));
@@ -75,11 +78,35 @@ app.Person = function() {
     // ввод дат, два набора полей, всего шесть
     this.dates($('.text-dd', this.$el), $('.text-mm', this.$el), $('.text-yyyy', this.$el));
 
-
     return this;
 };
 app.Person.extend(app.Wizard);
 var ptp = app.Person.prototype;
+
+ptp.names = function($names) {
+    var warning = $names.eq(0).closest('tr').find('.language-warning');
+    var mask = /[а-я]/i;
+    var active = false;
+    var hwtimer, hideWarning = function() {
+        clearTimeout(hwtimer);
+        warning.fadeOut(150);
+        active = false;
+    }
+    $names.keypress(function(e) {
+        if (mask.test(String.fromCharCode(e.which))) {
+            if (!active) {
+                warning.fadeIn(150);
+                active = true;
+            }
+            clearTimeout(hwtimer);
+            hwtimer = setTimeout(hideWarning, 5000);
+        } else if (active) {
+            hideWarning();
+        }
+    }).blur(function() {
+        if (active) hideWarning();
+    });
+};
 
 ptp.bonus = function($el) {
     var me  = this;
