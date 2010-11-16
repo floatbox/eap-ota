@@ -1,86 +1,63 @@
 /* Вкладки списка результатов (BEGIN) */
 
-#offers-tabs
-{
+#offers-tabs {
     overflow: hidden;
-
     zoom: 1;
 }
 
-#offers-tabs ul
-{
+#offers-tabs ul {
     display: inline;
     float: left;
 }
 
-#offers-tabs ul.secondary
-{
+#offers-tabs ul.secondary {
     margin-left: 30px;
 }
 
-#offers-tabs li 
-{
+#offers-tabs li {
     font-size: 18px;
     font-weight: bold;
-
     float: left;
-    
     padding: 6px 15px 14px;
-    
     line-height: 19px;
     letter-spacing: -0.03em;
-    
 }
 
-    #offers-tabs li a
-    {
-        text-decoration: underline;
+#offers-tabs li a {
+    text-decoration: underline;
+    color: #ed1192;
+}
 
-        color: #ed1192;
-    }
+#offers-tabs ul.secondary a {
+    color: #4b4b4b;
+}
 
-    #offers-tabs ul.secondary a
-    {
-        color: #4b4b4b;
-    }
-    
-    #offers-tabs li span.arrow
-    {
-        display: none;
-        overflow: hidden;
+#offers-tabs li span.arrow {
+    display: none;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    margin: 0 auto;
+    border-top: 7px solid #ed1192;
+    border-right: 7px solid #E5E5E5;
+    border-left: 7px solid #E5E5E5;
+    background: #ed1192;
+}
 
-        width: 0;
-        height: 0;
-        margin: 0 auto;
-        
-        border-top: 7px solid #ed1192;
-        border-right: 7px solid #E5E5E5;
-        border-left: 7px solid #E5E5E5;
-        background: #ed1192;
-    }
-
-#offers-tabs li.active 
-{
+#offers-tabs li.active {
     padding: 0;
-    
     background-position: 50% 100%;
 }
 
-    #offers-tabs li.active a
-    {
-        display: block;
+#offers-tabs li.active a {
+    display: block;
+    padding: 6px 15px 7px;
+    text-decoration: none;
+    color: #FFF;
+    background: #ed1192;
+    cursor: default;
+}
 
-        padding: 6px 15px 7px;
-
-        text-decoration: none;
-
-        color: #FFF;
-        background: #ed1192;
-        
-        cursor: default;
-    }
-    
-    #offers-tabs li.active span.arrow
-    {
-        display: block;
-    }
+#offers-tabs li.active span.arrow {
+    display: block;
+}

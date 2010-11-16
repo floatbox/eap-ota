@@ -1,3 +1,9 @@
+/* Блок с результатами */
+#offers-results {
+    position: relative;
+    zoom: 1;
+}
+
 /* Список предложений */
 #offers-list {
     width: 675px;

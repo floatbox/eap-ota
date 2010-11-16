@@ -144,8 +144,8 @@ initDates: function() {
                 offset: 0
             };
             e.preventDefault();
-            $(window).mousemove(dragHandler).one('mouseup', function() {
-                $(window).unbind('mousemove', dragHandler);
+            $('body').mousemove(dragHandler).one('mouseup', function() {
+                $('body').unbind('mousemove', dragHandler).unbind('selectstart');
                 self.dragOverlay.hide();
                 self.dragOrigin.hide();
                 if (self.dragging.marked) {
@@ -153,6 +153,8 @@ initDates: function() {
                 }
                 delete(self.dragging);
                 self.update();
+            }).bind('selectstart', function() {
+                return false;
             });
         }
     }).delegate(selector, 'mouseup', function(e) {
@@ -428,8 +430,8 @@ initScrollbar: function() {
                 scrollbar.css('left', sbl);
                 self.el.scrollTop(sbl / sbf);
             };
-            $(window).mousemove(drag).one('mouseup', function() {
-                $(window).unbind('mousemove', drag);
+            $('body').mousemove(drag).one('mouseup', function() {
+                $('body').unbind('mousemove', drag);
                 self.active = true;
                 self.scrollTo(self.snap(self.el.scrollTop()));
             });

@@ -130,7 +130,7 @@ init: function() {
         if ($('.excess', this.dropdown).is(':visible')) {
             this.selected = $.extend({}, this.lastCorrect);
         }
-        $(window).unbind('click keydown', this.selfhide);
+        $('body').unbind('click keydown', this.selfhide);
         this.dropdown.fadeOut(150);
         this.el.trigger('change', this.selected);
     };

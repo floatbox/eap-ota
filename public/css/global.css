@@ -215,4 +215,5 @@ a:hover {
 .pseudo em {
     position: relative;
     top: 0.14em;
+    font-style: normal;
 }
