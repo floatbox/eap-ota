@@ -83,13 +83,23 @@
     
     // Карта
     var fdata = search.from.get(0).onclick() || {lat: 55.751463, lng: 37.621651};
-    search.map = new google.maps.Map($('#where-map').get(0), {
+    search.map = new VEMap('bingmap');
+    search.map.SetCredentials('AtNWTyXWDDDWemqtCdOBchagXymI0P5Sh14O7GSlQpl2BJxBm_xn6YRUR7TPhJD0');
+    search.map.SetDashboardSize(VEDashboardSize.Tiny);
+    search.map.LoadMap(new VELatLong(fdata.lat, fdata.lng), 4);
+    search.map.SetScaleBarDistanceUnit(VEDistanceUnit.Kilometers);
+
+    var pinFrom = new VEShape(VEShapeType.Pushpin, new VELatLong(fdata.lat, fdata.lng));
+    pinFrom.SetTitle(search.from.val());
+    search.map.AddShape(pinFrom);
+
+    /*search.map = new google.maps.Map($('#where-map').get(0), {
         mapTypeControl: false,
         streetViewControl: false,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         center: new google.maps.LatLng(fdata.lat, fdata.lng),
         zoom: 4
-    });
+    });*/
     
     // Список предложений
     app.offers.init();
