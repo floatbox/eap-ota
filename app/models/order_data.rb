@@ -138,7 +138,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   def create_booking
     amadeus = Amadeus::Service.new(:book => true)
     air_sfr_xml = amadeus.air_sell_from_recommendation(
-      :segments => recommendation.variants[0].segments, :people_count => people.size
+      :segments => recommendation.variants[0].segments, :people_count => (people_counts[:adults] + people_counts[:children])
     )
     doc = amadeus.pnr_add_multi_elements(self)
     self.pnr_number = doc.xpath('//r:controlNumber').to_s
@@ -174,7 +174,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     order = OrderData.get_from_cache('xglG7R')
     order.email = 'email@example.com'
     order.phone = '12345678'
-    order.people_count = {:infants => 0, :children => 1, :adults => 1}
+    order.people_count = {:infants => 1, :children => 0, :adults => 1}
     order.people = [Person.new(
       :first_name => 'Ivan',
       :last_name => 'Ivanov',
@@ -187,7 +187,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     Person.new(
       :first_name => 'Masha',
       :last_name => 'Ivanova',
-      :birthday => Date.today - 10.years,
+      :birthday => Date.today - 1.years,
       :document_expiration_date => Date.today + 1.year,
       :passport => '5556565',
       :nationality_id => 1,

@@ -170,7 +170,7 @@ class Recommendation
 
     # FIXME сломается, когда появятся инфанты
     amadeus = Amadeus::Service.new(:book => true)
-    air_sfr_xml = amadeus.air_sell_from_recommendation(:segments => segments, :people_count => people_counts.values.sum)
+    air_sfr_xml = amadeus.air_sell_from_recommendation(:segments => segments, :people_count => (people_counts[:adults] + people_counts[:children]))
     amadeus.session.destroy
     #FIXME нужно разобраться со statusCode - когда все хорошо, а когда - нет
     return nil if air_sfr_xml.xpath('//r:segmentInformation/r:actionDetails/r:statusCode').every.to_s.uniq != ['OK']
