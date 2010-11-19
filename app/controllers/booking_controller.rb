@@ -40,14 +40,13 @@ class BookingController < ApplicationController
       if (@order.block_money && @order.create_booking)
         render :partial => 'success', :locals => {:pnr_path => pnr_form_path(@order.pnr_number), :pnr_number => @order.pnr_number}
       elsif @order.errors[:pnr_number]
-        render :partial => 'fail'
+        render :partial => 'fail', :locals => {:errors => @order.errors[:pnr_number]}
       else
-        render :partial => 'fail'
-        #render :json => {:payment_error => @order.card.errors[:number]}
+        render :partial => 'fail', :locals => {:errors => @order.card.errors[:number]}
       end
       return
     end
-    render :json => { :errors => @order.errors_hash}
+    render :json => {:errors => @order.errors_hash}
   end
 
   def valid_card

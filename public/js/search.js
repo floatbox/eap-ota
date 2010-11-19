@@ -217,8 +217,18 @@ validate: function(qkey) {
             self.apply(result.complex_to_parse_results || {});
         }
         if (result.valid) {
-            app.offers.load(data, result.human);
-            data.query_key ? app.offers.show() : self.toggle(true);
+            if (data.query_key) {
+                app.offers.load(data, result.human);
+                app.offers.show();
+            } else {
+                self.loadOptions = {data: data, title: result.human};
+                self.toggle(true);
+                self.loadTimer = setTimeout(function() {
+                    clearTimeout(self.loadTimer);
+                    app.offers.load(self.loadOptions.data, self.loadOptions.title);
+                    delete(self.loadOptions);
+                }, 5000);
+            }
         }
         delete(self.request);
     });

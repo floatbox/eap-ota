@@ -36,6 +36,11 @@
     $('#search-submit .b-submit').click(function(event) {
         event.preventDefault();
         if (!$(this).parent().hasClass('disabled')) {
+            clearTimeout(search.loadTimer);
+            if (search.loadOptions) {
+                app.offers.load(search.loadOptions.data, search.loadOptions.title);
+                delete(search.loadOptions);            
+            }
             app.offers.show();
         }
     });
@@ -90,7 +95,6 @@
     search.map.SetScaleBarDistanceUnit(VEDistanceUnit.Kilometers);
 
     var pinFrom = new VEShape(VEShapeType.Pushpin, new VELatLong(fdata.lat, fdata.lng));
-    pinFrom.SetTitle(search.from.val());
     search.map.AddShape(pinFrom);
 
     /*search.map = new google.maps.Map($('#where-map').get(0), {
