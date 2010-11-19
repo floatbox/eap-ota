@@ -135,7 +135,7 @@ class Recommendation
     signature.eql?(b.signature)
   end
   
-  def self.check_price_and_avaliability(flight_codes, people_counts)
+  def self.check_price_and_avaliability(flight_codes, pricer_form)
     flights = flight_codes.map do |flight_code|
       Flight.from_flight_code flight_code
     end
@@ -150,7 +150,7 @@ class Recommendation
     variant = Variant.new(:segments => segments)
     recommendation = Recommendation.new(:variants => [variant])
     recommendation.booking_classes = variant.flights.every.class_of_service
-    xml = Amadeus::Service.fare_informative_pricing_without_pnr(:flights => flights, :people_counts => people_counts)
+    xml = Amadeus::Service.fare_informative_pricing_without_pnr(:flights => flights, :people_count => pricer_form.real_people_count)
     price_total = 0
     price_fare = 0
     # FIXME почему то амадеус возвращает цену для одного человека, даже если указано несколько
@@ -170,7 +170,7 @@ class Recommendation
 
     # FIXME сломается, когда появятся инфанты
     amadeus = Amadeus::Service.new(:book => true)
-    air_sfr_xml = amadeus.air_sell_from_recommendation(:segments => segments, :people_count => (people_counts[:adults] + people_counts[:children]))
+    air_sfr_xml = amadeus.air_sell_from_recommendation(:segments => segments, :people_count => (pricer_form.real_people_count[:adults] + pricer_form.real_people_count[:children]))
     amadeus.session.destroy
     #FIXME нужно разобраться со statusCode - когда все хорошо, а когда - нет
     return nil if air_sfr_xml.xpath('//r:segmentInformation/r:actionDetails/r:statusCode').every.to_s.uniq != ['OK']

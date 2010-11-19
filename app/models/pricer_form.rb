@@ -30,6 +30,15 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     super(args)
   end
 
+  def real_people_count
+    #младенцы с местом считаются детьми
+    {
+      :adults => adults,
+      :children => children + ((adults < infants) ? (infants - adults) : 0 ),
+      :infants => (adults >= infants) ? infants : adults
+    }
+  end
+
 
   #временная херня
   def dates

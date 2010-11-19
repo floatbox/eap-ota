@@ -1,7 +1,7 @@
 -# https://webservices.amadeus.com/extranet/structures/viewMessageStructure.do?id=1850&serviceVersionId=2028
 %numberOfUnit
   %unitNumberDetail
-    %numberOfUnits= adults + children
+    %numberOfUnits= adults + real_people_count[:children]
     %typeOfUnit PX
   %unitNumberDetail
     %numberOfUnits 200
@@ -11,12 +11,12 @@
     %ptc ADT
     %traveller
       %ref=n
-- 1.upto(children) do |n|
+- 1.upto(real_people_count[:children]) do |n|
   %paxReference
     %ptc CH
     %traveller
       %ref= n+adults
-- 1.upto(infants) do |n|
+- 1.upto(real_people_count[:infants]) do |n|
   %paxReference
     %ptc INF
     %traveller

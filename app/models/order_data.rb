@@ -138,7 +138,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   def create_booking
     amadeus = Amadeus::Service.new(:book => true)
     air_sfr_xml = amadeus.air_sell_from_recommendation(
-      :segments => recommendation.variants[0].segments, :people_count => (people_counts[:adults] + people_counts[:children])
+      :segments => recommendation.variants[0].segments, :people_count => (people_count[:adults] + people_count[:children])
     )
     doc = amadeus.pnr_add_multi_elements(self)
     self.pnr_number = doc.xpath('//r:controlNumber').to_s

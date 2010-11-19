@@ -4,7 +4,7 @@ class BookingController < ApplicationController
   
   def preliminary_booking
     pricer_form = Rails.cache.read('pricer_form' + params[:query_key])
-    recommendation = Recommendation.check_price_and_avaliability(params[:flight_codes].split('_'), pricer_form.people_count)
+    recommendation = Recommendation.check_price_and_avaliability(params[:flight_codes].split('_'), pricer_form)
     if !recommendation || (recommendation.price_total != params[:total_price].to_i)
       render :json => {:success => false}
       return
@@ -12,7 +12,7 @@ class BookingController < ApplicationController
     recommendation.validating_carrier_iata = params[:validating_carrier]
     order_data = OrderData.new(
       :recommendation => recommendation,
-      :people_count => pricer_form.people_count
+      :people_count => pricer_form.real_people_count
     )
     order_data.store_to_cache
     render :json => {:success => true, :number => order_data.number}
