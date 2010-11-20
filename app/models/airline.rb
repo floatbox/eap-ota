@@ -28,6 +28,7 @@ class Airline < ActiveRecord::Base
     if alliance
       return alliance.airlines.find(:all, :conditions => 'bonus_program_name IS NOT NULL AND bonus_program_name != ""', :order => 'bonus_program_name')
     end
+    return []
   end
 
   def icon_url

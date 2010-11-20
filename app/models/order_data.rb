@@ -182,7 +182,10 @@ class OrderData < ActiveRecord::BaseWithoutTable
       :document_expiration_date => Date.today + 1.year,
       :passport => '123232323',
       :nationality_id => 1,
-      :sex => 'm'
+      :sex => 'm',
+      :bonus_present => true,
+      :bonuscard_type => 'SU',
+      :bonuscard_number => '345643'
     ),
     Person.new(
       :first_name => 'Masha',

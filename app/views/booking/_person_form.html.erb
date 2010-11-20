@@ -119,7 +119,7 @@
                  :id => "error_person_#{person_form_counter}_birthday" %>
             <td>
                 <%= person.select :bonuscard_type,
-                 ['Аэрофлот Бонус', 'Бонусявый Бонус', 'Бонюсючий Бонус'],
+                 @order.recommendation.validating_carrier.avaliable_bonus_programms.map {|a| [ a.bonus_program_name, a.iata ] },
                  {},
                  :id => "bonus-type-#{person_form_counter}",
                  :class => 'text select-bonus text-value g-xl g-none'

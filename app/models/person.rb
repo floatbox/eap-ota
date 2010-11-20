@@ -7,7 +7,7 @@ class Person < ActiveRecord::BaseWithoutTable
   column :document_expiration_date, :date
   column :passport, :string, "Номер документа"
   column :document_noexpiration, :boolean
-  column :bonus_present, :boolean
+  column :bonus_present, :boolean, false
   column :bonuscard_type, :string
   column :bonuscard_number, :string, 'Номер карты'
   validates_multiparameter_assignments

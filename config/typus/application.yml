@@ -9,6 +9,7 @@ AirlineAlliance:
     list: name, bonus_program_name
     form: name, bonus_program_name
   relationships: airlines
+  application: Eviterra
 
 Airline:
   fields:
