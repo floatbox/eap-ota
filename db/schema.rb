@@ -9,7 +9,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101102213055) do
+ActiveRecord::Schema.define(:version => 20101119204348) do
+
+  create_table "airline_alliances", :force => true do |t|
+    t.string "name",               :null => false
+    t.string "bonus_program_name"
+  end
 
   create_table "airlines", :force => true do |t|
     t.string   "en_shortname"
@@ -22,7 +27,9 @@ ActiveRecord::Schema.define(:version => 20101102213055) do
     t.integer  "country_id"
     t.string   "ru_shortname"
     t.string   "ru_longname"
-    t.boolean  "aviacentr",    :default => false, :null => false
+    t.boolean  "aviacentr",           :default => false, :null => false
+    t.integer  "airline_alliance_id"
+    t.string   "bonus_program_name"
   end
 
   create_table "airplanes", :force => true do |t|

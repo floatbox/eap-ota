@@ -2,13 +2,21 @@
 #
 # Use the README file as a reference to customize settings.
 
+
+AirlineAlliance:
+  fields:
+    default: name, bonus_program_name
+    list: name, bonus_program_name
+    form: name, bonus_program_name
+  relationships: airlines
+
 Airline:
   fields:
     default: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
     list: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
-    form: ru_shortname, ru_longname, en_shortname, en_longname, aviacentr, iata, country
+    form: ru_shortname, ru_longname, en_shortname, en_longname, aviacentr, iata, country, bonus_program_name, alliance
   order_by: en_shortname, ru_shortname
-  relationships: country, amadeus_commissions
+  relationships: country, alliance 
   filters: country
   search: ru_shortname, ru_longname, en_shortname, en_longname, iata
   application: Eviterra
