@@ -17,8 +17,12 @@ init: function() {
                 $('.book-s', self.el).addClass('g-none');
                 var result = $(s).appendTo(self.el);
                 pageurl.update('payment', result.attr('data-type'));
-            } else {
-                $('.blocker', self.el).find('.b-pseudo').html(s).end().show();
+            } else if (s.errors) {
+                var items = [];
+                for (var eid in s.errors) items.push('<li>' + eid + ' ' + s.errors[eid] + '</li>');
+                $('.blocker', self.el).find('.b-pseudo').html(items.join('')).end().show();
+            } else if (s.exception) {
+                alert(s.exception.message);
             }
             self.submit.addClass('a-button-ready').closest('.control').removeClass('sending');
         });

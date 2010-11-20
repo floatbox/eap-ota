@@ -20,7 +20,7 @@
           :id => "booking-contacts-phone",
           :class => "text g-xl",
           :value => @order.phone || "Номер телефона",
-          :onclick => "return {def: 'Номер телефона', mask: /[\\d \\(\\)\\+-]/i}",
+          :onclick => "return {def: 'Номер телефона', mask: /[\\d \\(\\)\\+-]/i, rules: {req: true}}",
           :title => "номер телефона"
          %>
         <%= o.error_message_on :phone, :id => "error_order_phone" %>
@@ -36,10 +36,7 @@
     <td class="sub g-xxs">
         <label for="booking-contacts-phone" title="">Для чего он нужен?</label>&nbsp;<u class="b-expand" title="Подробнее об обратной связи"></u>
         <p>
-            Телефон иногда полезен для связи в экстренных случаях, например, чтобы:
-            <br>- уладить затруднения с оплатой;
-            <br>- сообщить об изменении расписания;
-            <br>- ?
+            Телефон нужен для связи в экстренных случаях, например, чтобы уладить затруднения с оплатой или сообщить об изменении расписания.
         </p>
 </tr>
 </table>
