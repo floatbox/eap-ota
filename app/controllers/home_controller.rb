@@ -13,7 +13,7 @@ class HomeController < ApplicationController
   def nearest_city
     @nearest_city ||= begin
       loc = GeoIp.geolocation(request.remote_ip)
-      if loc[:country_name] == 'Reserved'
+      if loc[:latitude] == "0" && loc[:longitude] == "0"
         return Location.default
       end
       City.nearest_to loc[:latitude], loc[:longitude]
