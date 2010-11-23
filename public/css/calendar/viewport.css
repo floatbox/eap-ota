@@ -1,32 +1,35 @@
 /* Calendar */
-.calendar 
-{
+.calendar {
     position: relative;
     width: 589px;
 }
 
-.calendar .viewport 
-{
+.calendar .viewport {
     position: relative;
     width: 588px;
-    height: 332px;
+    height: 316px;
     overflow: hidden;
     background: #acb6c3;
 }
 
-.calendar .dates 
-{
+.calendar .dates {
     position: relative;
     width: 620px;
     height: 306px;
     overflow: auto;
 }
 
+.calendar .shadow {
+    position: absolute;
+    top: 305px; left: 0;
+    width: 620px; height: 11px;
+    background: url(/img/calendar/shadow.png) repeat-x;
+}
+
 
 /* Days of the week */
 
-.calendar ul.week 
-{
+.calendar ul.week {
     width: 588px;
     height: 25px;
     border-bottom: 1px solid #c7ced6;
@@ -35,8 +38,7 @@
     font-size: 13px;
 }
 
-.calendar .week li 
-{
+.calendar .week li {
     float: left;
     width: 24px;
     padding: 5px 55px 5px 5px;
@@ -44,16 +46,14 @@
 }
 
 /* Calendar dates */
-.calendar ul.month 
-{
+.calendar ul.month {
     display: inline;
     width: 588px;
     height: auto;
     overflow: visible;
 }
 
-.calendar .dates li 
-{
+.calendar .dates li {
     float: left;
     position: relative;
     width: 34px;
@@ -66,21 +66,16 @@
     cursor: pointer;
 }
 
-.calendar .dates .mtitle
-{
+.calendar .dates .mtitle {
+    position: absolute;
+    visibility: hidden;
+    margin: -1px 0 0 2px;
     font-size: 11px;
     font-weight: normal;
-    
-    position: absolute;
-    
-    visibility: hidden;
-    
-    margin: -1px 0 0 2px;
 }
 
 .calendar .dates .withmonth .mtitle,
-.calendar .dates .selected .mtitle
-{
+.calendar .dates .selected .mtitle {
     visibility: inherit;
 }
 
