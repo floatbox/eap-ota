@@ -102,13 +102,12 @@
 
 .calendar .dates li.selected,
 .calendar .dates li.hover {
-    background: url(/img/date-arrows.png) no-repeat;
+    background: url(/img/calendar/planes.png) no-repeat;
 }
 
 /* Highlighted date */
 
-.calendar .dates .phover
-{
+.calendar .dates .phover {
     background-color: #b3a6bb;
     border-color: #ccc2d0;
 }
@@ -117,67 +116,56 @@
     background-color: #bdacbf;
 }
 
-.calendar .dates li.hover 
-{
+.calendar .dates li.hover {
     background-color: #c675a4;
     border-color: #d8a0c0;
 }
 
-.calendar .dates li.s0hover
-{
-    background-position: 64px 14px;
+.calendar .dates li.s0hover {
+    background-position: 0 0;
 }
 
-.calendar .dates li.s1hover
-{
-    background-position: 64px -106px;
+.calendar .dates li.s1hover {
+    background-position: 0 -100px;
 }
 
 /* Selected date */
 
-.calendar .dates .period 
-{
+.calendar .dates .period {
     background-color: #ba92b2;
     border-color: #d0b5ca;
 }
 
-.calendar .dates li.selected
-{
+.calendar .dates li.selected {
     border-color: #e67bae;
     background-color: #DC3F8A;
     background-repeat: no-repeat;
     color: #fff;
-
     cursor: move;
 }
 
-.calendar .dates li.segment0 
-{
-    background-position: 64px -46px;
+.calendar .dates li.segment0 {
+    background-position: 0 -50px;
 }
 
-.calendar .dates li.segment1 
-{
-    background-position: 64px -166px;
+.calendar .dates li.segment1 {
+    background-position: 0 -150px;
 }
 
-.calendar .dates li.segment0.segment1 
-{
-    background-position: 64px -286px;
+.calendar .dates li.segment0.s1hover {
+    background-position: 0 -200px;
 }
 
-.calendar .dates li.segment1.s0hover
-{
-    background-position: 64px -226px;
+.calendar .dates li.segment1.s0hover {
+    background-position: 0 -250px;
 }
 
-.calendar .dates li.segment0.s1hover
-{
-    background-position: 64px -286px;
+.calendar .dates li.segment0.segment1 {
+    background-position: 0 -250px;
 }
 
-.calendar .selected .dayoff
-{
+
+.calendar .selected .dayoff {
     color: #fff;
 }
 
