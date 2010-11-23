@@ -6,7 +6,7 @@ class Person < ActiveRecord::BaseWithoutTable
   column :birthday, :date
   column :document_expiration_date, :date
   column :passport, :string, "Номер документа"
-  column :document_noexpiration, :boolean
+  column :document_noexpiration, :boolean, false
   column :bonus_present, :boolean, false
   column :bonuscard_type, :string
   column :bonuscard_number, :string, 'Номер карты'
@@ -14,6 +14,10 @@ class Person < ActiveRecord::BaseWithoutTable
   validates_presence_of :first_name, :last_name, :sex, :nationality_id, :birthday, :passport
   validates_presence_of :document_expiration_date, :unless => :document_noexpiration
   attr_accessor :flight_date, :infant_or_child
+
+  def smart_document_expiration_date
+    document_noexpiration ? (Date.today + 18.months) : document_expiration_date
+  end
 
   def validate
     errors.add :first_name,       "Некорректное имя"    if first_name && !(first_name =~ /^[a-zA-Z]*$/)
