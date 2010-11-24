@@ -145,11 +145,8 @@
     }
     
 /* Класс */
-
-.offer .cabin
-{
+.offer .cabin {
     background: #fff8d2;
-    
     border-radius: 3px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
@@ -157,195 +154,123 @@
 }    
     
 /* Обзор предложения */
-
-.offer .summary p.note
-{
+.offer .summary p.note {
     font-size: 84.62%;
-    
+    line-height: 118.18%;    
     color: #777777;
-    
-    line-height: 118.18%;
 }
-
-.offer .summary td
-{
-    border-top: 1px solid #D6D6D6;
-}
-
-.offer .controls td
-{
+.offer .controls td {
     border-top: none;
 }
 
-    /* Авиакомпания и пересадки */
+/* Авиакомпания и пересадки */
+.offer .summary .carrier,
+.offer .summary .changes {
+    font-size: 84.62%;
+    line-height: 118.18%;        
+    padding-left: 10px;
+}
+.offer .summary .common {
+    padding-bottom: 0;
+    vertical-align: bottom;
+}
+.offer .shift {
+    position: relative;
+    top: 35px;
+    width: 100%;
+    height: 70px;
+}
+.offer .shift td {
+    padding: 0;
+    border-top: none;
+    vertical-align: middle;
+}
+.offer .summary .carrier p {    
+    margin: 0 0 3px;
+    text-align: center;
+}
 
-    .offer .summary .carrier,
-    .offer .summary .changes
-    {
-        font-size: 84.62%;
-        
-        padding-left: 10px;
-        
-        line-height: 118.18%;
-    }
+/* Вылет и прилет */
+.offer .summary h5 {
+    margin: 0 0 1px;
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 1;        
+}
+.offer .summary .direction {
+    position: relative;
+    top: -3px;
+    padding-left: 2px;
+    visibility: hidden;
+    font-size: 50%;
+    font-weight: normal;
+    color: #777;
+}
+.hover .summary .direction {
+    visibility: inherit;    
+}
+.offer .summary .dpt p,
+.offer .summary .arv p {
+    line-height: 115.385%;
+    color: #777;
+}    
 
-    .offer .summary .carrier,
-    .offer .summary .common
-    {
-        border-top: none;
-    }
+/* Перелёт */
+.offer .summary .trip {
+    padding-top: 8px;
+    padding-right: 10px;
+}
+.offer .trip .box {
+    position: relative;
+    margin-right: 21px;
+    padding: 5px 0 5px 8px;
+    background: #F0F0F0;
+}
+.offer .trip .triangle {
+    position: absolute;
+    top: 0; left: 100%;
+    width: 21px; height: 100%;
+}
+.offer .trip h6 {
+    font-size: 84.62%;
+    line-height: 118.18%;
+}
+.offer .trip .parts {
+    height: 20px;
+    margin: 0 0 2px;
+    text-align: center;
+    cursor: default;
+}
+.offer .trip .parts li {
+    float: left;
+    width: 23px; height: 22px;
+    margin-right: 7px;
+    background: url(/img/offers/trip.png) no-repeat;
+    cursor: help;
+}
+.offer .segment1 .trip li.flight {
+    background-position: 0 -25px;
+}
+.offer .trip .parts li.layover {
+    background-position: 0 -50px;
+}
+.offer .trip .parts li.lovs {
+    background-position: 0 -75px;
+}
+.offer .trip .parts li.lovl {
+    background-position: 0 -100px;
+}
     
-    .offer .summary .common
-    {
-        padding-bottom: 0;
-        
-        vertical-align: bottom;
-    }
-    
-    .offer .shift
-    {
-        position: relative;
-        top: 35px;
-        
-        width: 100%;
-        height: 70px;
-    }
-    
-    .offer .shift td
-    {
-        padding: 0;
-        
-        border-top: none;
-        
-        vertical-align: middle;
-    }
-
-    .offer .summary .carrier p
-    {    
-        margin: 0 0 3px;
-        
-        text-align: center;
-    }
-
-    /* Вылет и прилет */
-
-    .offer .summary h5
-    {
-        font-size: 22px;
-        font-weight: bold;
-        
-        margin: 0 0 1px;
-    
-        line-height: 1;
-    }
-    
-    .offer .summary .direction
-    {
-        font-size: 50%;
-        font-weight: normal;
-        
-        position: relative;
-        top: -3px;
-        
-        padding-left: 2px;
-        
-        visibility: hidden;
-        
-        color: #777;
-    }
-    
-    .hover .summary .direction
-    {
-        visibility: inherit;    
-    }
-    
-    .offer .summary .dpt p,
-    .offer .summary .arv p
-    {
-        line-height: 115.385%;
-        
-        color: #777;
-    }    
-
-    /* Полет */
-    
-    .offer .summary .fly
-    {
-        padding-top: 11px;
-        padding-right: 20px;
-    }
-
-    .offer .summary .fly h6,
-    .offer .summary .fly p
-    {
-        text-align: center;
-    }
-    
-    .offer .summary .fly h6
-    {
-        font-size: 84.62%;
-        
-        line-height: 118.18%;
-    }
-    
-    .offer .summary .fly .parts
-    {
-        height: 20px;
-        margin: 0 0 2px;
-        
-        text-align: center;
-        
-        cursor: default;
-    }
-    
-    .offer .summary .fly .flight,
-    .offer .summary .fly .change 
-    {
-        display: inline-block;
-
-        margin: 0 4px;
-     
-        cursor: help;
-    }
-
-    .offer .summary .fly .flight
-    {
-        width: 15px;
-        height: 15px;
-
-        background: url(/img/offers/planes.png) no-repeat;
-    }
-
-    .offer .summary .segment1 .flight 
-    {
-        background-position: 0 -15px;
-    }
-
-    .offer .summary .fly .change 
-    {
-        width: 16px;
-        height: 16px;
-
-        background: url(/img/offers/i-waiting.png) no-repeat;
-    }
-    
-    /* Класс */
-    
-    .offer .summary p.cnote
-    {
-        font-size: 84.62%;
-        
-        margin-top: 5px;
-        
-        line-height: 118.18%;
-    }    
-    
-    .offer .summary .cabin
-    {
-        padding: 1px 3px;
-        
-        border: 1px solid #b8b396;
-    }    
+/* Класс */
+.offer .summary p.cnote {
+    font-size: 84.62%;
+    margin-top: 5px;
+    line-height: 118.18%;
+}
+.offer .summary .cabin {
+    padding: 1px 3px;
+    border: 1px solid #b8b396;
+}
 
     /* Варианты */
 
