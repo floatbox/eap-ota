@@ -135,15 +135,14 @@ class OrderData < ActiveRecord::BaseWithoutTable
     false
   end
 
+  # по идее, как-то должно быть перенесено прямо в lib/amadeus
   def create_booking
     amadeus = Amadeus::Service.new(:book => true)
     air_sfr_xml = amadeus.air_sell_from_recommendation(
       :segments => recommendation.variants[0].segments, :people_count => (people_count[:adults] + people_count[:children])
     )
-    doc = amadeus.pnr_add_multi_elements(self)
-    self.pnr_number = doc.xpath('//r:controlNumber').to_s
-    
-    if self.pnr_number
+
+    if self.pnr_number = amadeus.pnr_add_multi_elements(self).pnr_number
       add_passport_data(amadeus)
       amadeus.fare_price_pnr_with_booking_class
       amadeus.ticket_create_tst_from_pricing

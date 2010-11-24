@@ -5,10 +5,11 @@ module Amadeus
     SOAP_ACTIONS = YAML.load_file(File.expand_path("../soap_actions.yml",  __FILE__))
 
     def soap_action(action, args = nil)
-      response = invoke_rendered action,
+      xmldoc = invoke_rendered action,
         :soap_action => SOAP_ACTIONS[action]['soap_action'],
         :r => SOAP_ACTIONS[action]['r'],
         :args => args
+      Amadeus::Response.for(action).new(xmldoc)
     end
 
 
