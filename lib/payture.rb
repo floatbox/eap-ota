@@ -48,6 +48,24 @@ class Payture
     response = post_request 'Block', post
     
   end
+  
+  def charge opts={}
+    post = {}
+    add_order(post, opts)
+    add_merchant(post)
+    encrypt_payinfo_wo_validation(post)
+
+    response = post_request 'Charge', post
+  end
+
+  def unblock opts={}
+    post = {}
+    add_order(post, opts)
+    add_merchant(post)
+    encrypt_payinfo_wo_validation(post)
+
+    response = post_request 'Unblock', post
+  end
 
   # завершение платежа со списанием средств с карты пользователя
   #def charge opts={}
@@ -113,6 +131,13 @@ class Payture
     pay_info_string = keys.collect {|k| "#{k}=#{post[k]}" }.join(';')
     post[:PayInfo] = Base64::encode64( encrypt(pay_info_string) ).rstrip
     [:PAN, :EMonth, :EYear, :CardHolder, :SecureCode].each {|key| post.delete(key) }
+  end
+
+  def encrypt_payinfo_wo_validation(post)
+    keys = post.keys
+    keys.delete(:Key)
+    pay_info_string = keys.collect {|k| "#{k}=#{post[k]}" }.join(';')
+    post[:PayInfo] = Base64::encode64( encrypt(pay_info_string) ).rstrip
   end
 
   def encrypt(string)
