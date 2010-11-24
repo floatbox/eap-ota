@@ -136,6 +136,7 @@ class Recommendation
   end
   
   def self.check_price_and_avaliability(flight_codes, pricer_form)
+    # FIXME вынести в Recommendation.from_flight_codes?
     flights = flight_codes.map do |flight_code|
       Flight.from_flight_code flight_code
     end
@@ -150,23 +151,14 @@ class Recommendation
     variant = Variant.new(:segments => segments)
     recommendation = Recommendation.new(:variants => [variant])
     recommendation.booking_classes = variant.flights.every.class_of_service
-    xml = Amadeus::Service.fare_informative_pricing_without_pnr(:flights => flights, :people_count => pricer_form.real_people_count)
-    price_total = 0
-    price_fare = 0
-    # FIXME почему то амадеус возвращает цену для одного человека, даже если указано несколько
-    xml.xpath('//r:pricingGroupLevelGroup').each do |pg|
-      passengers_in_group = pg.xpath('r:numberOfPax/r:segmentControlDetails/r:numberOfUnits').to_i
-      price_total += pg.xpath('r:fareInfoGroup/r:fareAmount/r:otherMonetaryDetails[r:typeQualifier="712"][r:currency="RUB"]/r:amount').to_s.to_i * passengers_in_group
-      # FIXME сделать один xpath
-      price_fare += (
-        pg.xpath('r:fareInfoGroup/r:fareAmount/r:otherMonetaryDetails[r:typeQualifier="E"][r:currency="RUB"]/r:amount').presence ||
-        pg.xpath('r:fareInfoGroup/r:fareAmount/r:monetaryDetails[r:typeQualifier="B"][r:currency="RUB"]/r:amount')
-      ).to_s.to_i * passengers_in_group
-    end
+
+    recommendation.price_fare, recommendation.price_tax =
+      Amadeus::Service.fare_informative_pricing_without_pnr(
+        :flights => flights, :people_count => pricer_form.real_people_count
+      ).prices
+
     # FIXME не очень надежный признак
-    return nil if price_total == 0 || price_fare == 0
-    recommendation.price_fare = price_fare
-    recommendation.price_tax = price_total - price_fare
+    return nil if recommendation.price_fare == 0
 
     # FIXME сломается, когда появятся инфанты
     amadeus = Amadeus::Service.new(:book => true)
