@@ -99,7 +99,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
   
   def block_money
-    self.order_id = 'rh' + hash.to_s + Time.now.sec.to_s
+    self.order_id = 'rh' + hash.to_s + rand(10000).to_s
     result = Payture.new.block(recommendation.price_with_payment_commission, card, :order_id => order_id)
     if result["Success"] != "True"
       card.errors.add :number, ("не удалось провести платеж (#{result["ErrCode"]})" )
@@ -135,15 +135,14 @@ class OrderData < ActiveRecord::BaseWithoutTable
     false
   end
 
+  # по идее, как-то должно быть перенесено прямо в lib/amadeus
   def create_booking
     amadeus = Amadeus::Service.new(:book => true)
     air_sfr_xml = amadeus.air_sell_from_recommendation(
       :segments => recommendation.variants[0].segments, :people_count => (people_count[:adults] + people_count[:children])
     )
-    doc = amadeus.pnr_add_multi_elements(self)
-    self.pnr_number = doc.xpath('//r:controlNumber').to_s
-    
-    if self.pnr_number
+
+    if self.pnr_number = amadeus.pnr_add_multi_elements(self).pnr_number
       add_passport_data(amadeus)
       amadeus.fare_price_pnr_with_booking_class
       amadeus.ticket_create_tst_from_pricing
@@ -201,6 +200,8 @@ class OrderData < ActiveRecord::BaseWithoutTable
       :nationality_id => 1,
       :sex => 'f'
     )]
+    order.card = Billing::CreditCard.new :number => '4111111111111118', :verification_value => '123', :month => 10, :year => 2012, :name => 'doesnt matter'
+    order.block_money
     order.create_booking
   end
 end

@@ -31,12 +31,9 @@ class PNRForm < ActiveRecord::BaseWithoutTable
   end
   
   def get_pnr
-    doc = Amadeus::Service.pnr_add_multi_elements(self)
-    pnr = doc.xpath('//r:controlNumber').to_s
-    if pnr.blank?
-      pnr = doc.xpath('//r:messageErrorText/r:text').every.to_s.join(', ')
-    end
-    pnr
+    # FIXME возвращает "грязную" сессию!1
+    response = Amadeus::Service.pnr_add_multi_elements(self)
+    repsonse.pnr_number.presence || response.error_text
   end
   
   def create_order pnr_number
