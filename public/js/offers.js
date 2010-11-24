@@ -194,7 +194,7 @@ processUpdate: function() {
         }];
         var qstep = 0, processQueue = function() {
             queue[qstep++]();
-            if (queue[qstep]) setTimeout(processQueue, 150);
+            if (queue[qstep]) setTimeout(processQueue, 50);
         };
         processQueue();
     } else {
@@ -305,9 +305,9 @@ applyFilter: function(name, values) {
     }];
     var qstep = 0, processQueue = function() {
         queue[qstep++]();
-        if (queue[qstep]) setTimeout(processQueue, 100);
+        if (queue[qstep]) setTimeout(processQueue, 50);
     };
-    processQueue();    
+    setTimeout(processQueue, 400);
 },
 filterOffers: function() {
     var filters = this.activeFilters, empty = true;
