@@ -1,3 +1,4 @@
+var pageTracker = _gat._getTracker('UA-19832395-2');
 var pageurl = {
 parse: function() {
     var hash = window.location.hash.substring(1);
@@ -29,7 +30,9 @@ show: function() {
             parts.push(this.booking);
             this.payment && parts.push(this.payment);
         }
-        window.location.hash = parts.join(':');
+        var url = parts.join(':');
+        window.location.hash = url;
+        if (window._gaq) _gaq.push(['_trackPageview', '/#' + url]);
     } else {
         window.location.hash = '';
     }
