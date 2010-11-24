@@ -174,6 +174,7 @@ ActiveRecord::Schema.define(:version => 20101123163931) do
     t.integer  "price_with_payment_commission"
     t.string   "order_id"
     t.string   "full_info"
+    t.string   "payment_status"
   end
 
   create_table "presets", :force => true do |t|
