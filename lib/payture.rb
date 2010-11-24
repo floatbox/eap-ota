@@ -58,10 +58,11 @@ class Payture
     response = post_request 'Charge', post
   end
 
-  def unblock opts={}
+  def unblock amount, opts={}
     post = {}
     add_order(post, opts)
     add_merchant(post)
+    add_money(post, amount)
     encrypt_payinfo_wo_validation(post)
 
     response = post_request 'Unblock', post
