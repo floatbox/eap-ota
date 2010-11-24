@@ -204,6 +204,9 @@ validate: function(qkey) {
         this.apply({});
         return;
     }
+    if (window._gaq && data.search) {
+        _gaq.push(['_trackEvent', 'Search', 'To', data.search.to]);
+    }
     this.request = $.get("/pricer/validate/", data, function(result, status, request) {
         if (request != self.request) return;
         if (data.query_key && result.search) {

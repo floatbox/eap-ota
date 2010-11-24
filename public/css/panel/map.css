@@ -1,7 +1,8 @@
-#where-map
-{
+#where-map {
+    position: relative;
+    z-index: 1;
     width: 317px;
-    height: 332px;
+    height: 316px;
     overflow: hidden;
 }
 
