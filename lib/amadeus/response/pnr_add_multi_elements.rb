@@ -1,6 +1,6 @@
 module Amadeus
   module Response
-    class PNRAddMultiElement < Amadeus::Response::Base
+    class PNRAddMultiElements < Amadeus::Response::Base
       def pnr_number
         xpath('//r:controlNumber').to_s
       end

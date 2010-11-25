@@ -15,8 +15,8 @@ module Amadeus
 
     SOAP_ACTIONS.keys.each do |action|
       # Amadeus::Service.PNR_AddMultiElements etc.
-      define_method action do |args|
-        soap_action action, args
+      define_method action do |*args|
+        soap_action action, *args
       end
 
       # Amadeus::Service.pnr_add_multi_elements etc.
