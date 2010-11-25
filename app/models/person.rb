@@ -10,13 +10,21 @@ class Person < ActiveRecord::BaseWithoutTable
   column :bonus_present, :boolean, false
   column :bonuscard_type, :string
   column :bonuscard_number, :string, 'Номер карты'
-  validates_multiparameter_assignments
   validates_presence_of :first_name, :last_name, :sex, :nationality_id, :birthday, :passport
   validates_presence_of :document_expiration_date, :unless => :document_noexpiration
   attr_accessor :flight_date, :infant_or_child
 
   def smart_document_expiration_date
     document_noexpiration ? (Date.today + 18.months) : document_expiration_date
+  end
+  
+  def coded
+    res = "#{first_name}/#{last_name}/#{sex}/#{nationality.alpha3}/#{birthday.strftime('%d%b%y').upcase}/#{passport}/"
+    res += "expires:#{document_expiration_date.strftime('%d%b%y').upcase}/" unless document_noexpiration
+    res += "bonus: #{bonuscard_type}#{bonuscard_number}/" if bonus_present
+    res += "child" if infant_or_child == 'c'
+    res += "infant" if infant_or_child == 'i'
+    res
   end
 
   def validate

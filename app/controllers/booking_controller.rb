@@ -37,7 +37,7 @@ class BookingController < ApplicationController
     @order.card = Billing::CreditCard.new(params[:card])
     @order.update_attributes(params[:order])
     if @order.valid?
-      if (@order.block_money && @order.create_booking)
+      if @order.create_booking
         render :partial => 'success', :locals => {:pnr_path => pnr_form_path(@order.pnr_number), :pnr_number => @order.pnr_number}
       elsif @order.errors[:pnr_number]
         render :partial => 'fail', :locals => {:errors => @order.errors[:pnr_number]}
