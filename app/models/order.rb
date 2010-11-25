@@ -11,6 +11,7 @@ class Order < ActiveRecord::Base
     self.pnr_number = order_data.pnr_number
     self.price_total = recommendation.price_total
     self.price_with_payment_commission = recommendation.price_with_payment_commission
+    self.full_info = order_data.full_info
     if c = recommendation.commission
       self.commission_carrier = c.carrier
       self.commission_agent = c.agent
@@ -18,22 +19,27 @@ class Order < ActiveRecord::Base
       self.price_share = recommendation.price_share
       self.price_markup = recommendation.price_markup
     end
+    self.payment_status = 'blocked'
+  end
+
+  def raw
+    amadeus = Amadeus::Service.new(:book => true)
+    res = amadeus.cmd("RT #{self.pnr_number}")
+    amadeus.cmd('IG')
+    res
   end
 
 
   def charge
-    Payture.new.charge(:order_id => self.order_id)
+    res = Payture.new.charge(:order_id => self.order_id)
+    update_attribute(:payment_status, 'charged') if res["Success"] == "True"
+    res
   end
 
   def unblock
-    Payture.new.unblock(:order_id => self.order_id, :amount => self.price_with_payment_commission)
+    res = Payture.new.unblock(self.price_with_payment_commission, :order_id => self.order_id)
+    update_attribute(:payment_status, 'unblocked') if res["Success"] == "True"
+    res
   end
-  
-end
 
-=begin
-имя пассажира
-телефон
-email пассажира
-номер pnr
-=end
+end

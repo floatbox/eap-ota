@@ -18,6 +18,15 @@ class Person < ActiveRecord::BaseWithoutTable
   def smart_document_expiration_date
     document_noexpiration ? (Date.today + 18.months) : document_expiration_date
   end
+  
+  def coded
+    res = "#{first_name}/#{last_name}/#{sex}/#{nationality.alpha3}/#{birthday.strftime('%d%b%y').upcase}/#{passport}/"
+    res += "expires:#{document_expiration_date.strftime('%d%b%y').upcase}/" unless document_noexpiration
+    res += "bonus: #{bonuscard_type}#{bonuscard_number}/" if bonus_present
+    res += "child" if infant_or_child == 'c'
+    res += "infant" if infant_or_child == 'i'
+    res
+  end
 
   def validate
     errors.add :first_name,       "Некорректное имя"    if first_name && !(first_name =~ /^[a-zA-Z]*$/)
