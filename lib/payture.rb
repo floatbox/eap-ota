@@ -53,7 +53,7 @@ class Payture
     post = {}
     add_order(post, opts)
     add_merchant(post)
-    encrypt_payinfo_wo_validation(post)
+    encrypt_payinfo(post)
 
     response = post_request 'Charge', post
   end
@@ -63,22 +63,10 @@ class Payture
     add_order(post, opts)
     add_merchant(post)
     add_money(post, amount)
-    encrypt_payinfo_wo_validation(post)
+    encrypt_payinfo(post)
 
     response = post_request 'Unblock', post
   end
-
-  # завершение платежа со списанием средств с карты пользователя
-  #def charge opts={}
-  #  args = {:Key => @key, :OrderId => opts[:OrderId]}
-  #  response = post 'Charge', args
-  #end
-
-  ## изменить сумму средств, заблокированных на карте пользователя
-  #def unblock amount, opts={}
-  #  args = {:Key => @key, :OrderId => opts[:OrderId], :Amount => opts[:Amount]}
-  #  response = post 'Unblock', args
-  #end
 
   ## возврат средств (полный или частичный) на карту пользователя
   #def refund amount, opts={}
@@ -128,8 +116,7 @@ class Payture
 
   def encrypt_payinfo(post)
     keys = [:PAN, :EMonth, :EYear, :CardHolder, :SecureCode, :OrderId, :Amount]
-    validate! post, *keys
-    pay_info_string = keys.collect {|k| "#{k}=#{post[k]}" }.join(';')
+    pay_info_string = keys.find_all{|k| post[k]}.collect {|k| "#{k}=#{post[k]}" }.join(';')
     post[:PayInfo] = Base64::encode64( encrypt(pay_info_string) ).rstrip
     [:PAN, :EMonth, :EYear, :CardHolder, :SecureCode].each {|key| post.delete(key) }
   end

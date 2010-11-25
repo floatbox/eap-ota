@@ -14,7 +14,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   validates_format_of :phone, :with => /^[\d -\(\)]+$/
 
   def card
-    @card || Billing::CreditCard.new()
+    @card || Billing::CreditCard.new
   end
 
 
@@ -104,7 +104,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     if result["Success"] != "True"
       card.errors.add :number, ("не удалось провести платеж (#{result["ErrCode"]})" )
       self.errors.add :card, 'Платеж не прошел'
-      return nil
+      return
     else
       return true
     end
@@ -159,7 +159,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     else
       amadeus.pnr_commit
       errors.add :pnr_number, 'Ошибка при создании PNR' 
-      return nil
+      return
     end
   ensure
     amadeus.session.destroy
