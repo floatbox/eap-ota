@@ -1,9 +1,9 @@
 <table class="offer-variant<%= ' g-none' if variant_index > 0 %>" data-summary='<%= variant.summary.to_json %>' data-booking="query_key=<%= @query_key %>&total_price=<%= recommendation.price_total  %>&flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>&adults=<%= @search.adults %>&children=<%=@search.children %>&validating_carrier=<%= recommendation.validating_carrier.iata%>">
 <col width="118">
 <col width="140">
-<col width="83" span="2">
+<col width="85" span="2">
 <col width="140">
-<col width="111">
+<col width="109">
 <thead>
 <tr>
     <td class="cost"><dl>
@@ -46,25 +46,24 @@
             <p class="note">Терминал&nbsp;<%= segment.departure_term %></p>
         <% end %>
     </td>
-    <td class="fly" colspan="2">
-        <div class="parts">
-        <% layover_human_durations = [] %>
-        <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
-            <div class="flight" title="Перелёт <%= flight.departure.city.name %> — <%= flight.arrival.city.name %>"></div>
-            <% if layover %>
-                <% layover_human_durations << human_duration(layover) %>
-                <div class="change" title="Пересадка <%= flight.arrival.city.case_in %>, <%= human_duration(layover) %>"></div>
+    <td class="trip" colspan="2">
+        <div class="box">
+            <ul class="parts wrap">
+            <% layover_human_durations = [] %>
+            <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
+                <li class="flight" title="Перелёт <%= flight.departure.city.name %> — <%= flight.arrival.city.name %>"></li>
+                <% if layover %>
+                    <% layover_human_durations << human_duration(layover) %>
+                    <li class="layover<% if layover < 90 %> lovs<% elsif layover > 240 %> lovl<% end %>" title="Пересадка <%= flight.arrival.city.case_in %>, <%= human_duration(layover) %>"></li>
+                <% end %>
             <% end %>
-        <% end %>
+            </ul>
+            <h6><%= human_duration(segment.total_duration) %> в&nbsp;пути</h6>
+            <% unless layover_human_durations.empty? %>
+                <p class="note"><%= layover_human_durations.to_sentence %> между рейсами</p>
+            <% end %>
+            <img class="triangle" src="/img/offers/triangle.png" alt="">
         </div>
-        <h6><%= human_duration(segment.total_duration) %> в&nbsp;пути</h6>
-        <% unless layover_human_durations.empty? %>
-            <p class="note"><%= layover_human_durations.to_sentence %> между рейсами</p>
-        <% end %>
-        <% visible_cabins = variant_cabins[segment_counter].compact %>
-        <% unless visible_cabins.empty? %>
-            <p class="cnote"><span class="cabin"><%= human_cabin_nom(visible_cabins.first) %></span></p>
-        <% end %>
     </td>
     <td class="arv">
         <h5><%= fmt_time( segment.arrival_time ) %></h5>
@@ -90,6 +89,10 @@
         <% if segment.layovers? %>
         <p>С <%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %></p>
         <% end %>
+        <% visible_cabins = variant_cabins[segment_counter].compact %>
+        <% unless visible_cabins.empty? %>
+            <p class="cnote"><span class="cabin"><%= human_cabin_nom(visible_cabins.first) %></span></p>
+        <% end %>        
     </td>    
     <% end %>
    

@@ -103,15 +103,25 @@ module Amadeus
   end
 
 
-  # shouldn't really be something different from above
-  def pnr_retrieve(args)
-    Amadeus::Session.with_session(session) do
-      # FIXME почему сессия не используется?
-      r = soap_action 'PNR_Retrieve', args
-      # cmd('IG')
-      pnr_add_multi_elements :ignore => true
-      r
-    end
+  def pnr_retrieve_and_ignore(args)
+    pnr_retrieve(args)
+  ensure
+    pnr_ignore
+  end
+
+  # PNR, как он виден в системе
+  def pnr_raw(pnr_number)
+    cmd("RT#{pnr_number}")
+  ensure
+    pnr_ignore
+  end
+
+  def pnr_ignore
+    pnr_add_multi_elements :ignore => true
+  end
+
+  def pnr_commit
+    pnr_add_multi_elements :end_transact => true
   end
 
   def cmd(command)

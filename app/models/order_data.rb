@@ -138,7 +138,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   # по идее, как-то должно быть перенесено прямо в lib/amadeus
   def create_booking
     amadeus = Amadeus::Service.new(:book => true)
-    air_sfr_xml = amadeus.air_sell_from_recommendation(
+    amadeus.air_sell_from_recommendation(
       :segments => recommendation.variants[0].segments, :people_count => (people_count[:adults] + people_count[:children])
     )
 
@@ -146,13 +146,13 @@ class OrderData < ActiveRecord::BaseWithoutTable
       add_passport_data(amadeus)
       amadeus.fare_price_pnr_with_booking_class
       amadeus.ticket_create_tst_from_pricing
-      amadeus.pnr_add_multi_elements(PNRForm.new(:end_transact => true))
+      amadeus.pnr_commit
       amadeus.queue_place_pnr(:number => pnr_number)
       Order.create(:order_data => self)
       PnrMailer.deliver_pnr_notification(email, self.pnr_number) if email
       return pnr_number
     else
-      amadeus.pnr_add_multi_elements(PNRForm.new(:end_transact => true))
+      amadeus.pnr_commit
       errors.add :pnr_number, 'Ошибка при создании PNR' 
       return nil
     end

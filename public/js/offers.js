@@ -174,29 +174,34 @@ processUpdate: function() {
     $('#offers-all').append(u.content || '');
     delete(u.content);
     if ($('#offers-all .offer').length) {
-        this.updateFilters();
-        this.parseResults();
-        this.toggleCollection(true);
-        pageurl.update('search', $('#offers-collection').attr('data-query_key'));
+        var self = this;
+        var queue = [function() {
+            self.updateFilters();
+        }, function() {
+            self.parseResults()
+            self.applySort('price');
+        }, function() {
+            self.maxLayovers ? self.filterOffers() : self.showAmount();
+        }, function() {
+            self.showDepartures();
+        }, function() {
+            self.showRecommendations();
+        }, function() {
+            $('#offers-tabs').trigger('set', self.selectedTab || pageurl.tab || 'featured');
+            pageurl.update('search', $('#offers-collection').attr('data-query_key'));
+            self.toggleCollection(true);
+            self.toggle('results');
+        }];
+        var qstep = 0, processQueue = function() {
+            queue[qstep++]();
+            if (queue[qstep]) setTimeout(processQueue, 50);
+        };
+        processQueue();
     } else {
         this.toggle('empty');
         this.variants = [];
         this.items = [];
     }
-    if (this.items.length) {
-        this.applySort('price');    
-        if (this.maxLayovers) {
-            this.filterOffers();
-        } else {
-            this.showAmount();
-        }
-        this.showDepartures();
-        this.showRecommendations();
-        $('#offers-tabs').trigger('set', this.selectedTab || pageurl.tab || 'featured');
-        setTimeout(function() {
-            self.toggle('results');
-        }, 1000);
-    };
 },
 parseResults: function() {
     var items = [], variants = [];
@@ -282,14 +287,27 @@ applyFilter: function(name, values) {
         }
     }
     var list = $('#offers-list').css('opacity', 0.7);
-    setTimeout(function() {
+    var queue = [function() {
         list.hide();
         self.filterOffers();
+        list.show();
+    }, function() {
+        list.hide();
         self.sortOffers();
+        list.show();        
+    }, function() {
+        list.hide();
         self.showDepartures();
+        list.show();
+    }, function() {
         self.showRecommendations();
-        list.css('opacity', 1).show();
-    }, 300);
+        list.css('opacity', 1);
+    }];
+    var qstep = 0, processQueue = function() {
+        queue[qstep++]();
+        if (queue[qstep]) setTimeout(processQueue, 50);
+    };
+    setTimeout(processQueue, 400);
 },
 filterOffers: function() {
     var filters = this.activeFilters, empty = true;
@@ -387,10 +405,10 @@ sortOffers: function() {
         if (a.price < b.price) return -1;
         return 0;
     });
-
     var list = $('#offers-collection');
-    for (var i = 0, lim = sitems.length; i < lim; i++) 
+    for (var i = 0, lim = sitems.length; i < lim; i++) {
         list.append(sitems[i].offer.el);
+    }
 },
 showRecommendations: function() {
     var variants = this.variants, cheap, fast, optimal;

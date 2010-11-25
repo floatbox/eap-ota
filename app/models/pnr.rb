@@ -6,14 +6,13 @@ class Pnr
     pnr.number = number
     amadeus = Amadeus::Service.new(:book => true)
 
-    resp = amadeus.pnr_retrieve(:number => number)
+    resp = amadeus.pnr_retrieve_and_ignore(:number => number)
     pnr.flights = resp.flights
     pnr.passengers = resp.passengers
     pnr.email = resp.email
     pnr.phone = resp.phone
 
-    pnr.raw = amadeus.cmd("RT #{number}")
-    amadeus.cmd('IG')
+    pnr.raw = amadeus.pnr_raw number
     # FIXME может, надо?
     # amadeus.session.destroy
     pnr
