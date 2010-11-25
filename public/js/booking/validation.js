@@ -104,9 +104,9 @@ app.Validate.Text = function(el) {
     // если поле неактивно, то все проверки неактуальны
     if ($el.attr('disabled')) return null;
 
-    // проверка на обязательность поля
-    if (rules.req && isDefault) 
-        return processMessage('req', rules.gender, {name: qname});
+    // проверка на обязательность поля и прекращение проверки для необязательных
+    if (isDefault) 
+        return rules.req ? processMessage('req', rules.gender, {name: qname}) : null;
 
     // проверки типа (возможны 'latin', 'num' или 'email')
     if (rules.latin) {
