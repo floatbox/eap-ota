@@ -10,7 +10,6 @@ class Person < ActiveRecord::BaseWithoutTable
   column :bonus_present, :boolean, false
   column :bonuscard_type, :string
   column :bonuscard_number, :string, 'Номер карты'
-  validates_multiparameter_assignments
   validates_presence_of :first_name, :last_name, :sex, :nationality_id, :birthday, :passport
   validates_presence_of :document_expiration_date, :unless => :document_noexpiration
   attr_accessor :flight_date, :infant_or_child
