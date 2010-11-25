@@ -22,7 +22,7 @@ class Admin::OrdersController < Admin::MasterController
   
   def charge
     @order = Order.find(params[:id])
-    res = @order.unblock
+    res = @order.charge
     if res["Success"] == "True"
       flash[:message] = 'Успешно'
     else
