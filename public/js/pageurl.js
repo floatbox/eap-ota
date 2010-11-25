@@ -1,4 +1,3 @@
-var pageTracker = _gat._getTracker('UA-19832395-2');
 var pageurl = {
 parse: function() {
     var hash = window.location.hash.substring(1);
