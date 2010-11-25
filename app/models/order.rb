@@ -37,7 +37,7 @@ class Order < ActiveRecord::Base
   end
 
   def unblock
-    res = Payture.new.unblock(self.price_with_payment_commission, :order_id => self.order_id)
+    res = Payture.new.unblock(self.price_with_payment_commission * 100, :order_id => self.order_id)
     update_attribute(:payment_status, 'unblocked') if res["Success"] == "True"
     res
   end

@@ -99,8 +99,8 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
   
   def block_money
-    self.order_id = 'rh' + hash.to_s + rand(10000).to_s
-    result = Payture.new.block(recommendation.price_with_payment_commission, card, :order_id => order_id)
+    self.order_id = 'am' + self.pnr_number
+    result = Payture.new.block(recommendation.price_with_payment_commission*100, card, :order_id => order_id)
     if result["Success"] != "True"
       card.errors.add :number, ("не удалось провести платеж (#{result["ErrCode"]})" )
       self.errors.add :card, 'Платеж не прошел'
@@ -143,14 +143,19 @@ class OrderData < ActiveRecord::BaseWithoutTable
     )
 
     if self.pnr_number = amadeus.pnr_add_multi_elements(self).pnr_number
-      add_passport_data(amadeus)
-      amadeus.fare_price_pnr_with_booking_class
-      amadeus.ticket_create_tst_from_pricing
-      amadeus.pnr_commit
-      amadeus.queue_place_pnr(:number => pnr_number)
-      Order.create(:order_data => self)
-      PnrMailer.deliver_pnr_notification(email, self.pnr_number) if email
-      return pnr_number
+      if self.block_money
+        add_passport_data(amadeus)
+        amadeus.pnr_commit
+        amadeus.fare_price_pnr_with_booking_class
+        amadeus.ticket_create_tst_from_pricing
+        amadeus.pnr_commit
+        amadeus.queue_place_pnr(:number => pnr_number)
+        Order.create(:order_data => self)
+        PnrMailer.deliver_pnr_notification(email, self.pnr_number) if email
+        return pnr_number
+      else
+        amadeus.cmd('XI')
+      end
     else
       amadeus.pnr_commit
       errors.add :pnr_number, 'Ошибка при создании PNR' 
@@ -206,8 +211,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
       :nationality_id => 1,
       :sex => 'f'
     )]
-    order.card = Billing::CreditCard.new :number => '4111111111111118', :verification_value => '123', :month => 10, :year => 2012, :name => 'doesnt matter'
-    order.block_money
+    order.card = Billing::CreditCard.new :number => '4111111111111112', :verification_value => '123', :month => 10, :year => 2012, :name => 'doesnt matter'
     order.create_booking
   end
 end
