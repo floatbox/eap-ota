@@ -143,11 +143,10 @@ class OrderData < ActiveRecord::BaseWithoutTable
     )
 
     if self.pnr_number = amadeus.pnr_add_multi_elements(self).pnr_number
-      if self.block_money
-        add_passport_data(amadeus)
-        amadeus.pnr_commit
-        amadeus.fare_price_pnr_with_booking_class
+      if block_money
+        #amadeus.fare_price_pnr_with_booking_class
         amadeus.ticket_create_tst_from_pricing
+        add_passport_data(amadeus)
         amadeus.pnr_commit
         amadeus.queue_place_pnr(:number => pnr_number)
         Order.create(:order_data => self)
@@ -166,6 +165,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
 
   def add_passport_data(amadeus)
+    amadeus.cmd('IR')
     validating_carrier_code = recommendation.validating_carrier.iata
     (adults + children).each_with_index do |person, i|
       amadeus.cmd( "SRDOCS#{validating_carrier_code}HK1-P-#{person.nationality.alpha3}-#{person.passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{i+1}")
@@ -177,6 +177,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
       amadeus.cmd( "SRDOCS#{validating_carrier_code}HK1-P-#{person.nationality.alpha3}-#{person.passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}I-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{i+1}")
       amadeus.cmd("FE INF #{validating_carrier_code} ONLY PSPT #{person.passport}/P#{i+1}")
     end
+    amadeus.cmd('ER')
   end
   
   
@@ -186,13 +187,13 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
   
   def self.create_sample_booking
-    order = OrderData.get_from_cache('xglG7R')
+    order = OrderData.get_from_cache('7qY6PW')
     order.email = 'email@example.com'
     order.phone = '12345678'
-    order.people_count = {:infants => 1, :children => 0, :adults => 1}
+    order.people_count = {:infants => 1, :children => 1, :adults => 1}
     order.people = [Person.new(
       :first_name => 'Ivan',
-      :last_name => 'Ivanov',
+      :last_name => 'Adult',
       :birthday => Date.today - 20.years,
       :document_expiration_date => Date.today + 1.year,
       :passport => '123232323',
@@ -204,8 +205,17 @@ class OrderData < ActiveRecord::BaseWithoutTable
     ),
     Person.new(
       :first_name => 'Masha',
-      :last_name => 'Ivanova',
+      :last_name => 'Infant',
       :birthday => Date.today - 1.years,
+      :document_expiration_date => Date.today + 1.year,
+      :passport => '5556565',
+      :nationality_id => 1,
+      :sex => 'f'
+    ),
+    Person.new(
+      :first_name => 'Masha',
+      :last_name => 'Child',
+      :birthday => Date.today - 10.years,
       :document_expiration_date => Date.today + 1.year,
       :passport => '5556565',
       :nationality_id => 1,
