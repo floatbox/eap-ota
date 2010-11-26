@@ -307,7 +307,7 @@ applyFilter: function(name, values) {
         queue[qstep++]();
         if (queue[qstep]) setTimeout(processQueue, 50);
     };
-    setTimeout(processQueue, 400);
+    setTimeout(processQueue, 200);
 },
 filterOffers: function() {
     var filters = this.activeFilters, empty = true;
