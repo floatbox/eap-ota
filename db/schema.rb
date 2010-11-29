@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101123163931) do
+ActiveRecord::Schema.define(:version => 20101126172047) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -71,11 +71,12 @@ ActiveRecord::Schema.define(:version => 20101123163931) do
   add_index "airports", ["name_en"], :name => "index_airports_on_name"
 
   create_table "amadeus_sessions", :force => true do |t|
-    t.string   "token",      :null => false
-    t.integer  "seq",        :null => false
+    t.string   "token",                      :null => false
+    t.integer  "seq",                        :null => false
     t.integer  "booking"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "office",     :default => "", :null => false
   end
 
   create_table "cities", :force => true do |t|

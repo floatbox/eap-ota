@@ -20,7 +20,7 @@ module Amadeus
   # new без аргументов.
   def initialize(args = {})
     if args[:book]
-      self.session = Amadeus::Session.book
+      self.session = Amadeus::Session.book(args[:office])
     elsif args[:session]
       self.session = args[:session]
     end
@@ -132,8 +132,8 @@ module Amadeus
 # sign in and sign out sessions
 
   # оверрайд методов из SOAPACTions
-  def security_authenticate
-    payload = render('Security_Authenticate')
+  def security_authenticate(office)
+    payload = render('Security_Authenticate', OpenStruct.new(:office => office))
     response = invoke(
       'Security_Authenticate',
       :soap_action => 'http://webservices.amadeus.com/1ASIWOABEVI/VLSSLQ_06_1_1A'
