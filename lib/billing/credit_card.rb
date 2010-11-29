@@ -161,7 +161,6 @@ module Billing #:nodoc:
     end
 
     def validate_essential_attributes #:nodoc:
-      errors.add :name,       "cannot be empty"      if name.blank?
       errors.add :month,      "is not a valid month" unless valid_month?(@month)
       errors.add :year,       "expired"              if expired?
       errors.add :year,       "is not a valid year"  unless valid_expiry_year?(@year)

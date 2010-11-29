@@ -59,6 +59,7 @@
 }
 
 .offer-variant  {
+    width: 100%;
     font-size: 81.25%;
     line-height: 1.23;
 }
@@ -222,6 +223,7 @@
 }
 .offer .trip .box {
     position: relative;
+    width: 130px;
     margin-right: 21px;
     padding: 5px 0 5px 8px;
     background: #F0F0F0;
@@ -431,107 +433,69 @@
         border: 1px solid #b8b396;
     }
 
-    /* Время рейса */
+/* Время рейса */
+.offer .details .time {
+    position: relative;
+    left: -72px;
+    float: left;
+    width: 70px;
+    margin-right: -70px;
+    font-size: 11px;        
+    line-height: 13px;
+}
+.offer .details .time h5 {
+    margin: 0 0 2px;
+    font-size: 22px;
+    font-weight: bold;        
+    line-height: 22px;
+    color: #777;
+}
+.offer .details .arv .time h5,
+.offer .details .dpt .time h5 {
+    color: #6F7C26;
+}
+.offer .details .ret .arv .time h5,
+.offer .details .ret .dpt .time h5 {
+    color: #C46F26;
+}
     
-    .offer .details .time
-    {
-        font-size: 11px;
-        
-        position: relative;
-        left: -72px;
-        
-        float: left;
-
-        width: 70px;
-        margin-right: -70px;
-        
-        line-height: 13px;
-    }
-    
-    .offer .details .time h5
-    {
-        font-size: 22px;
-        font-weight: bold;
-        
-        margin: 0 0 2px;
-        
-        line-height: 22px;
-        
-        color: #777;
-    }
-    
-    .offer .details .arv .time h5,
-    .offer .details .dpt .time h5
-    {
-        color: #6F7C26;
-    }
-    
-    .offer .details .ret .arv .time h5,
-    .offer .details .ret .dpt .time h5
-    {
-        color: #C46F26;
-    }
-    
-    /* Описание рейса */
-
-    .offer .details .point
-    {
-        font-size: 92.3%;
-        line-height: 133.33%;
-        
-        padding-top: 0;
-        padding-bottom: 10px;
-    }
-    .offer .details .last .point
-    {
-        padding-bottom: 12px;
-    }
-    
-    .offer .details .point h6
-    {
-        font-size: 116.667%;
-        font-weight: bold;
-        
-        margin: 0 0 3px;
-    }
-    
-    .offer .details .warnings
-    {
-        clear: left;
-        
-        margin: 4px 0 0 -22px;
-        
-        color: #777;    
-        
-        line-height: 108.33%;
-    }
-
-    .offer .details .warnings li
-    {
-        padding: 2px 0 2px 22px;
-
-        background: url(/img/offers/warnings.png) no-repeat -20px 0;
-    }
-
-    .offer .details li.diffad
-    {
-        background-position: 0 -50px;
-    }
-
-    .offer .details li.schange
-    {
-        background-position: 0 -100px;
-    }
-
-    .offer .details li.lchange
-    {
-        background-position: 0 -150px;
-    }
-
-    .offer .details li.ndarv
-    {
-        background-position: 0 -200px;
-    }
+/* Описание рейса */
+.offer .details .point {
+    padding-top: 0;
+    padding-bottom: 10px;
+    font-size: 92.3%;
+    line-height: 133.33%;
+}
+.offer .details .last .point {
+    padding-bottom: 12px;
+}
+.offer .details .point h6 {
+    margin: 0 0 3px;
+    font-size: 116.667%;
+    font-weight: bold;
+}
+.offer .details .warnings {
+    clear: left;
+    margin: 4px 0 0 -22px;
+    line-height: 108.33%;        
+    color: #777;    
+}
+.offer .details .warnings li {
+    padding: 2px 0 2px 22px;
+    background: url(/img/offers/warnings.png) no-repeat -20px 0;
+}
+.offer .details li.diffad {
+    background-position: 0 -50px;
+}
+.offer .details li.schange {
+    background-position: 0 -100px;
+}
+.offer .details li.lchange {
+    background-position: 0 -150px;
+}
+.offer .details li.ndarv {
+    background-position: 0 -200px;
+}
 
     /* Сумма и кнопка */
     

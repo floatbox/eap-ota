@@ -60,7 +60,7 @@
                  :id => 'bc-name',
                  :class => "text g-l",
                  :title => "имя на карте",
-                 :onclick => "return {mask: /[a-z\\s]/i, rules: {req: true, latin: true, minl: 3}}"
+                 :onclick => "return {mask: /[a-z\\s]/i, rules: {latin: true, minl: 3}}"
                  %>
                  <%= f.error_message_on :name, :id => 'error_card_name' %>
             </fieldset>
@@ -114,7 +114,7 @@
                 <%= f.error_message_on :verification_value, :id => 'error_card_verification_value' %>
             </fieldset>
 
-            <fieldset class="bankcardbankname">
+            <fieldset class="bankcardbankname g-none">
                 <legend></legend>
                 <label
                  for="bc-bankname"

@@ -119,6 +119,6 @@ show: function() {
 },
 hide: function() {
     $('body').unbind('click keydown', this.selfhide);
-    this.dropdown.fadeOut(150);
+    this.dropdown.fadeOut(100);
 }
 };

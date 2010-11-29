@@ -42,7 +42,7 @@ class Country < ActiveRecord::Base
       [ '&mdash;&mdash;&mdash;&mdash;',
         [['Азербайджан', 3],
         ['Армения', 13],
-        ['Белорусь', 20],
+        ['Беларусь', 20],
         ['Грузия', 58],
         ['Казахстан', 81],
         ['Киргизия', 88],
@@ -57,7 +57,7 @@ class Country < ActiveRecord::Base
       ]],
       ['&mdash;&mdash;&mdash;&mdash;',
         Country.all(:order => :name_ru).map{ |c|
-          ([c.name_ru.to_s + (c.full_name_ru ?  ' - ' + c.full_name_ru : ''), c.id])
+          ([c.name_ru.to_s, c.id])
         } 
       ]
     ]
