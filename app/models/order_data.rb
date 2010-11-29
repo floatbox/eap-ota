@@ -147,13 +147,18 @@ class OrderData < ActiveRecord::BaseWithoutTable
         #amadeus.fare_price_pnr_with_booking_class
         amadeus.ticket_create_tst_from_pricing
         add_passport_data(amadeus)
+        amadeus.give_permission_to_booking_office
         amadeus.pnr_commit
         amadeus.queue_place_pnr(:number => pnr_number)
         Order.create(:order_data => self)
+
+        # обилечивание
+        Amadeus::Service.issue_ticket(pnr_number)
+
         PnrMailer.deliver_pnr_notification(email, self.pnr_number) if email
         return pnr_number
       else
-        amadeus.cmd('XI')
+        amadeus.pnr_cancel
       end
     else
       amadeus.pnr_commit
