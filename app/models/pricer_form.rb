@@ -21,7 +21,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   attr_reader :to_iata, :from_iata, :complex_to_parse_results
 
   def to_json(args={})
-    args[:methods] = (args[:methods].to_a + [:dates, :people_count, :complex_to_parse_results]).uniq
+    args[:methods] = (args[:methods].to_a + [:dates, :people_count, :complex_to_parse_results, :to_as_object, :from_as_object]).uniq
     super(args)
   end
 
@@ -185,12 +185,20 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     end
   end
 
+  def to_as_object
+    to_iata && [City[to_iata], Airport[to_iata], Country.find_by_alpha2(to_iata)].find(&:id)
+  end
+
+  def from_as_object
+    from_iata && [City[from_iata], Airport[from_iata], Country.find_by_alpha2(from_iata)].find(&:id)
+  end
+
   def human_locations
-    fl = from_iata && [City[from_iata], Airport[from_iata], Country.find_by_alpha2(from_iata)].find(&:id)
-    tl = to_iata && [City[to_iata], Airport[to_iata], Country.find_by_alpha2(to_iata)].find(&:id)
+    fl = from_as_object
+    tl = to_as_object
     result = {
       :dpt_0 => fl && fl.case_from,
-      :arv_0 => tl && tl.case_to
+      :arv_0 => tl && tl.case_to,
     }
     if rt
       result[:dpt_1] = tl && tl.case_from
