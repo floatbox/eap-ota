@@ -57,7 +57,7 @@ class Country < ActiveRecord::Base
       ]],
       ['&mdash;&mdash;&mdash;&mdash;',
         Country.all(:order => :name_ru).map{ |c|
-          ([c.name_ru.to_s + (c.full_name_ru ?  ' - ' + c.full_name_ru : ''), c.id])
+          ([c.name_ru.to_s, c.id])
         } 
       ]
     ]
