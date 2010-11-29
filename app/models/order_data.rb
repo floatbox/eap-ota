@@ -11,7 +11,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   validates_format_of :email, :with => 
   /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email"
   validates_presence_of :email, :phone
-  validates_format_of :phone, :with => /^[\d \-\(\)]+$/
+  validates_format_of :phone, :with => /^[\d \+\-\(\)]+$/
 
   def card
     @card || Billing::CreditCard.new
