@@ -12,7 +12,7 @@ class PricerController < ApplicationController
       if @search.valid?
         @recommendations = @search.search
         # TODO перенести в модель
-        unless @search.nonstop?
+        if @search.search_type == 'travel' && !@search.nonstop?
           p_f = PricerForm.new( params[:search].merge(:nonstop => true))
           p_f.parse_complex_to
           recommendations_nonstop = p_f.search

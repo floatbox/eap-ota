@@ -1,4 +1,7 @@
 <div class="booking">
+<div class='hidden'>
+  <%= @order.variant_id %>
+</div>
 <% form_for :card, @order.card, :url => booking_pay_path, :html => { :autocomplete => "off" } do |f| %>
     
     <% if false %>
