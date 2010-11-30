@@ -20,7 +20,7 @@ module Amadeus
   # new без аргументов.
   def initialize(args = {})
     if args[:book]
-      self.session = Amadeus::Session.book
+      self.session = Amadeus::Session.book(args[:office])
     elsif args[:session]
       self.session = args[:session]
     end
@@ -124,16 +124,33 @@ module Amadeus
     pnr_add_multi_elements :end_transact => true
   end
 
+  def pnr_cancel
+    cmd('XI')
+  end
+
   def cmd(command)
     response = command_cryptic :command => command
     response.xpath('//r:textStringDetails').to_s
   end
 
+  # временное название для метода
+  def self.issue_ticket(pnr_number)
+    amadeus = Amadeus::Service.new(:book => true, :office => Amadeus::Session::TICKETING)
+    amadeus.pnr_retrieve(:number => pnr_number)
+    amadeus.doc_issuance_issue_ticket
+
+    amadeus.session.destroy
+  end
+
+  def give_permission_to_booking_office
+    cmd("ES#{Amadeus::Session::BOOKING}")
+  end
+
 # sign in and sign out sessions
 
   # оверрайд методов из SOAPACTions
-  def security_authenticate
-    payload = render('Security_Authenticate')
+  def security_authenticate(office)
+    payload = render('Security_Authenticate', OpenStruct.new(:office => office))
     response = invoke(
       'Security_Authenticate',
       :soap_action => 'http://webservices.amadeus.com/1ASIWOABEVI/VLSSLQ_06_1_1A'

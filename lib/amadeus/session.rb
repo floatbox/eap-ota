@@ -3,6 +3,9 @@ module Amadeus
   # обошелся без блокировки таблиц
   class Session < ActiveRecord::Base
 
+  BOOKING = 'MOWR228FA'
+  TICKETING = 'MOWR2290Q'
+
   set_table_name 'amadeus_sessions'
 
   INACTIVITY_TIMEOUT = 10*60
@@ -55,13 +58,14 @@ module Amadeus
     session.release if session && !previous_session
   end
 
-  def self.book
+  def self.book(office=nil)
+    office ||= Amadeus::Session::BOOKING
     logger.debug { "Free sessions count: #{free.count}" }
     booking = rand(2**31)
     free.update_all({:booking => booking}, nil, {:limit => 1})
     session = find_by_booking(booking)
     unless session
-      unless session = increase_pool(booking)
+      unless session = increase_pool(booking, office)
         raise "somehow can't get new session"
       end
     else
@@ -71,11 +75,12 @@ module Amadeus
   end
 
   # без параметра создает незарезервированную сессию
-  def self.increase_pool(booking=nil)
+  def self.increase_pool(booking=nil, office=nil)
     logger.debug "Allocating new amadeus session"
-    token = Amadeus::Service.security_authenticate
+    token = Amadeus::Service.security_authenticate(office)
     session = from_token(token)
     session.booking = booking if booking
+    session.office = office
     session.save
     session
   end
