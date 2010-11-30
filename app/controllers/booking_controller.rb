@@ -12,7 +12,8 @@ class BookingController < ApplicationController
     recommendation.validating_carrier_iata = params[:validating_carrier]
     order_data = OrderData.new(
       :recommendation => recommendation,
-      :people_count => pricer_form.real_people_count
+      :people_count => pricer_form.real_people_count,
+      :variant_id => params[:variant_id]
     )
     order_data.store_to_cache
     render :json => {:success => true, :number => order_data.number}

@@ -8,6 +8,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   attr_accessor :people_count
   attr_accessor :number
   attr_accessor :order_id
+  attr_accessor :variant_id #нужен при восстановлении формы по урлу
   validates_format_of :email, :with => 
   /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email"
   validates_presence_of :email, :phone
