@@ -41,7 +41,7 @@ input.a-button::-moz-focus-inner {
 .hover .book .a-button {
     cursor: pointer;
 
-    color: #eee;
+    color: #FFF;
     border: 1px solid #7b8e12;
     background-color: #a0b914;
     background-image: linear-gradient(top, #a0b914, #7b8e12);
@@ -51,18 +51,18 @@ input.a-button::-moz-focus-inner {
 
 .a-button-ready:hover,
 .offer .book .a-button:hover {
-    color: #eee;
+    color: #FFF;
     border: 1px solid #c52471;
-    background-color: #dc3f8a;
-    background-image: -moz-linear-gradient(top, #f062a5, #d92c7e);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#f062a5), to(#d92c7e));
+    background-color: #ed1192;
+    background-image: -moz-linear-gradient(top, #f21194, #e5108d);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f21194), to(#e5108d));
 }
 
 .a-button-ready:active {
     padding: .45em .35em .35em .45em;
 
-    background-image: -moz-linear-gradient(top, #d92c7e, #f062a5);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#d92c7e), to(#f062a5));
+    background-image: -moz-linear-gradient(top, #f21194, #e5108d);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f21194), to(#e5108d));
 
     color: #fff;
 }

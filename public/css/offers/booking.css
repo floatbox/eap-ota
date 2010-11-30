@@ -133,6 +133,10 @@
         padding: 2px 3px;
     }
 
+    .mac-chrome .booking select.text {
+        padding: 3px 3px;
+    }
+
     .booking .text:hover {
         z-index: 2;
         -webkit-transition: border-color linear .2s;
@@ -213,24 +217,21 @@
 
 
 /* Прочее - общие свойства */
-    .booking fieldset legend {
-        display: none;
-    }
-
-    .booking .b-pseudo {
-
-        color: inherit;
-    }
-
-    .booking .a-button {
-        font-weight: bold;
-
-        margin: 0 0 0 .25em;
-        padding: 4px 10px;
-        
-        color: #FFF;
-    }
-
+.booking fieldset legend {
+    display: none;
+}
+.booking .b-pseudo {
+    color: inherit;
+}
+.booking .a-button {
+    margin: 0 0 0 .25em;
+    padding: 4px 10px;
+    font-weight: bold;
+    color: #777;
+}
+.booking .a-button-ready {
+    color: #FFF;
+}
 
 .booking .tip-popup {
     margin: 4px 0 0 -10px;

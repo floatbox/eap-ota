@@ -1,12 +1,12 @@
 /* Calendar */
 .calendar {
     position: relative;
-    width: 589px;
+    width: 595px;
 }
 
 .calendar .viewport {
     position: relative;
-    width: 588px;
+    width: 595px;
     height: 316px;
     overflow: hidden;
     background: #acb6c3;
@@ -14,7 +14,7 @@
 
 .calendar .dates {
     position: relative;
-    width: 620px;
+    width: 625px;
     height: 306px;
     overflow: auto;
 }
@@ -22,7 +22,7 @@
 .calendar .shadow {
     position: absolute;
     top: 305px; left: 0;
-    width: 620px; height: 11px;
+    width: 595px; height: 11px;
     background: url(/img/calendar/shadow.png) repeat-x;
 }
 
@@ -30,7 +30,7 @@
 /* Days of the week */
 
 .calendar ul.week {
-    width: 588px;
+    width: 595px;
     height: 25px;
     border-bottom: 1px solid #c7ced6;
     background: #99a1ac;
@@ -41,14 +41,14 @@
 .calendar .week li {
     float: left;
     width: 24px;
-    padding: 5px 55px 5px 5px;
+    padding: 5px 56px 5px 5px;
     text-align: center;
 }
 
 /* Calendar dates */
 .calendar ul.month {
     display: inline;
-    width: 588px;
+    width: 595px;
     height: auto;
     overflow: visible;
 }
@@ -59,7 +59,7 @@
     width: 34px;
     height: 40px;
     border-bottom: 1px solid #c7ced6;
-    padding: 5px 50px 5px 0;
+    padding: 5px 51px 5px 0;
     color: #4b4b4b;
     font: bold 95% Arial, sans-serif;
     text-align: center;
@@ -115,16 +115,16 @@
 /* Highlighted date */
 
 .calendar .dates .phover {
-    background-color: #b3a6bb;
+    background-color: #b992b8;
     border-color: #ccc2d0;
 }
 
 .calendar .odd .phover {
-    background-color: #bdacbf;
+    background-color: #c198bd;
 }
 
 .calendar .dates li.hover {
-    background-color: #c675a4;
+    background-color: #d167ad;
     border-color: #d8a0c0;
 }
 
@@ -139,13 +139,13 @@
 /* Selected date */
 
 .calendar .dates .period {
-    background-color: #ba92b2;
+    background-color: #c17cb2;
     border-color: #d0b5ca;
 }
 
 .calendar .dates li.selected {
     border-color: #e67bae;
-    background-color: #DC3F8A;
+    background-color: #ED1192;
     background-repeat: no-repeat;
     color: #fff;
     cursor: move;
@@ -217,7 +217,7 @@
     
     display: none;
     
-    width: 84px;
+    width: 85px;
     height: 50px;
     
     background: url(/img/calendar/drag-origin.png) no-repeat;
@@ -240,7 +240,7 @@
     
     display: none;
     
-    width: 92px;
+    width: 93px;
     height: 58px;
     
     background: url(/img/calendar/drag-overlay.png) no-repeat;

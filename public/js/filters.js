@@ -21,9 +21,8 @@ init: function(options) {
     if (options && options.preserve) {
         this.values.addClass('preserved');
     }
-    this.dropdown = $('.dropdown', this.el).click(function(event) {
+    this.dropdown = $('.dropdown', this.el).delegate('dd', 'click', function(event) {
         event.stopPropagation();
-    }).delegate('dd', 'click', function() {
         self.click($(this));
     });
     $('.control', this.el).click(function() {
@@ -106,7 +105,7 @@ show: function() {
     var d = this.dropdown, w = $(window), self = this;
     d.css('visibility', 'hidden').show();
     var coffset = this.el.closest('.filters').offset();
-    var foffset = this.el.find('.control em').offset();
+    var foffset = this.el.find('.control').offset();
     d.hide().css({
         'top': Math.min(foffset.top, w.height() + w.scrollTop() - d.height() - 5) - coffset.top,
         'left': foffset.left - coffset.left,

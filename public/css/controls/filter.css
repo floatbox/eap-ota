@@ -9,6 +9,8 @@
 }
 .filter .control {
     white-space: nowrap;
+    text-decoration: underline;
+    cursor: pointer;
 }
 .filter .value {
     color: #ed1192;
@@ -54,11 +56,17 @@
 }
 .dropdown dd {
     color: #36d4f1;
-    background: url(/img/controls/checked.png) no-repeat -10px 0;
 }
-.dropdown dd:hover {
-    color: #ddd;
+.dropdown dd:hover,
+.dropdown dd.selected:hover {
+    color: #eee;
     background-color: #ed1192;
+    background-color: rgba(237, 17, 146, 0.5);
+    cursor: pointer;
+}
+.dropdown dd.selected {
+    background-color: #ed1192;
+    color: #FFF;
 }
 .dropdown dd.empty {
     font-weight: bold;
@@ -70,16 +78,10 @@
     font-size: 72.727%;
     line-height: 118.75%;
 }
-#search-define .dropdown dd.selected {
-    background-position: 5px 11px;
-}
-
 #offers-filter .dropdown dd {
     font-size: 75%;
     line-height: 125%;
-}
-#offers-filter .dropdown dd.selected {
-    background-position: 5px 9px;
+    padding: 4px 16px 3px;    
 }
 
 /* Persons dropdown */
@@ -90,10 +92,12 @@
 }
 .persons .wrap {
     width: 467px;
+    padding: 2px 0;
 }
 .persons dl {
-    width: 155px;
+    width: 156px;
     margin-left: -1px;
+    padding: 0;
 }
 .persons dl.pg-children,
 .persons dl.pg-infants {

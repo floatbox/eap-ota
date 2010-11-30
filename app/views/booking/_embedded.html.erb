@@ -1,7 +1,8 @@
 <div class="booking">
 <% form_for :card, @order.card, :url => booking_pay_path, :html => { :autocomplete => "off" } do |f| %>
     
-    <!-- описание тарифа -->
+    <% if false %>
+    <!-- описание тарифа (убираем, пока не начнем выводить настоящее) -->
     <div class="book-v">
     <div class="tarif">
         <h3 class="g-xs">Важно</h3>
@@ -31,6 +32,7 @@ FARES ONLY APPLY IF PURCHASED BEFORE DEPARTURE
         </pre>
     </div>
     </div>
+    <% end %>
     
     <!-- Данные пассажиров -->
     <h3>Введите данные <%= @order.people.size == 1 ? 'пассажира' : 'пассажиров' %></h3>

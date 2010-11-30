@@ -23,6 +23,7 @@ reset: function() {
     this.show();
 },
 show: function() {
+    var cst = $(window).scrollTop();
     if (this.search) {
         var parts = [this.search, this.tab];
         if (this.booking) {
@@ -35,5 +36,6 @@ show: function() {
     } else {
         window.location.hash = '';
     }
+    $(window).scrollTop(cst);
 }
 };

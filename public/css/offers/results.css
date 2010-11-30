@@ -130,18 +130,15 @@
         padding: 7px 14px 7px 0;
     }
 
-    .offer a.a-button
-    {
+    .offer a.a-button {
+        float: left;
+        border-color: #7b8e12;
+        padding: 3px 6px;
         font-size: 16px;
         font-weight: bold;
-    
-        float: left;
-    
-        padding: 3px 6px;
     }
     
-    .offer a.a-button:active 
-    {
+    .offer a.a-button:active {
         padding: 3px 6px;
     }
     
@@ -246,7 +243,7 @@
 .offer .trip .parts li {
     float: left;
     width: 23px; height: 22px;
-    margin-right: 7px;
+    margin-right: 3px;
     background: url(/img/offers/trip.png) no-repeat;
     cursor: help;
 }
@@ -326,52 +323,33 @@
     }
 
 /* Правила тарифа */
-
-.offer .rules
-{
-    font-size: 84.62%;
-
+.offer .rules {
     padding-top: 9px;
-
+    font-size: 84.62%;
     text-align: right;
-    
     color: #777;
 }
-
-.offer .rules a
-{
+.offer .rules a {
     font-weight: bold;
-    
     color: #1F64BE;
 }
 
 /* Показать подробности */
-
-.offer .toggle
-{
+.offer .toggle {
     padding-bottom: 10px;
 }
-
 .offer .expand,
-.offer.collapsed .collapse
-{
+.offer.collapsed .collapse {
     display: none;
 }
-
-.offer.collapsed .expand
-{
+.offer.collapsed .expand {
     display: inline;
 }
-
-.offer .toggle .b-pseudo
-{
+.offer .toggle .link {
+    font-weight: bold;
     color: #1F64BE;
 }
 
-.offer .toggle .b-pseudo u
-{
-    font-weight: bold;
-}
 
 /* Подробности */
 
@@ -436,12 +414,16 @@
 /* Время рейса */
 .offer .details .time {
     position: relative;
-    left: -72px;
+    left: -90px;
     float: left;
-    width: 70px;
-    margin-right: -70px;
+    width: 80px;
+    margin-right: -80px;
     font-size: 11px;        
     line-height: 13px;
+}
+.offer .details .time h5,
+.offer .details .time p {
+    text-align: right;
 }
 .offer .details .time h5 {
     margin: 0 0 2px;
@@ -511,34 +493,26 @@
         border-top: 1px solid #d0d0d0;
     }
 
-    .offer .details .book .a-button
-    {
+    .offer .details .book .a-button {
         margin-right: 12px;
     }
     
-    .offer .details .book .sum
-    {
+    .offer .details .book .sum {
         float: left;
     }
 
-    .offer .details .book .sum dt
-    {
+    .offer .details .book .sum dt {
+        margin: 0 0 2px;
         font-size: 107.7%;
         line-height: 107.14%;
-        
-        margin: 0 0 2px;
-        
         color: #000;
     }
 
-    .offer-details .book .sum strong
-    {
+    .offer .details .book .sum strong {
         font-weight: bold;
     }
 
-    .offer-details .book .sum dd
-    {
+    .offer .details .book .sum dd {
         font-size: 92.3%;
-    
         color: #777;
     }

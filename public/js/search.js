@@ -228,8 +228,10 @@ validate: function(qkey) {
                 self.toggle(true);
                 self.loadTimer = setTimeout(function() {
                     clearTimeout(self.loadTimer);
-                    app.offers.load(self.loadOptions.data, self.loadOptions.title);
-                    delete(self.loadOptions);
+                    if (self.loadOptions) {
+                        app.offers.load(self.loadOptions.data, self.loadOptions.title);
+                        delete(self.loadOptions);
+                    }
                 }, 5000);
             }
         }

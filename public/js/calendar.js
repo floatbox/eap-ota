@@ -73,7 +73,7 @@ makeDates: function() {
         h: this.container.height()
     };
     this.dsize = {
-        w: 84,
+        w: 85,
         h: 51
     };     
 },
@@ -210,13 +210,16 @@ update: function() {
     }
     var items = this.selected.compact();
     var title = 'Выберите даты';
-    if (items.length > 1) {
-        var damount = items.last() - items[0] + 1;
-        title = app.utils.plural(damount, ['Выбран ', 'Выбрано ', 'Выбрано ']) + damount + app.utils.plural(damount, [' день', ' дня', ' дней']);
-    } else if (items.length) {
-        title = 'Выбрано ' + this.dates.eq(items[0]).text();
+    if (items.length) {
+        title = this.dates.eq(items[0]).text();
+        if (items.length > 1) {
+            var d1 = title.split(' ');
+            var d2 = this.dates.eq(items.last()).text().split(' ');
+            if (d1[1] == d2[1]) d1.length = 1;
+            title = d1.concat('—', d2).join(' ');
+        }
     }
-    this.title.text(title);
+    this.title.html(title);
     this.scroller.updatePreview(items);
     this.showResetButton();
     search.update(this);
