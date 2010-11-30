@@ -24,12 +24,12 @@
 }
 
 .autocomplete-hover {
-    border-color: #db3f89;
+    border-color: #ed1192;
 }
 
 .autocomplete-focus {
     color: #333;
-    border: 1px solid #db3f89;
+    border: 1px solid #ed1192;
     background: #fff;
 }
 
@@ -98,13 +98,13 @@
 
 .autocomplete-list {
     overflow: hidden;
-    z-index: 99999;
+    z-index: 5;
 
     letter-spacing: -.02em;
 
     border: 1px solid;
     border-width: 0 1px 1px 1px;
-    border-color: #dedede #db3f89 #db3f89;
+    border-color: #dedede #ed1192 #ed1192;
 
     box-shadow: 0 20px 20px rgba(0, 0, 0, 0.45);
     -moz-box-shadow: 0 20px 20px rgba(0, 0, 0, 0.45);
@@ -147,8 +147,7 @@
 
 .autocomplete-list li u u {
     margin: 0;
-
-    color: #db3f89;
+    color: #ed1192;
 }
 
 .autocomplete-list li s {
@@ -207,8 +206,8 @@
 
 .autocomplete-list li.hover {
     color: #fff;
-    border-top: 1px solid #db3f89;
-    background: #db3f89 url(/img/grad/combo-selected.gif) repeat-x;
+    border-top: 1px solid #ed1192;
+    background: #ed1192;
 }
 
 .autocomplete-list li.hover u u,

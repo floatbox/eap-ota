@@ -108,13 +108,13 @@ hide: function() {
 },
 book: function(variant) {
     var self = this;
-    this.el.html('<div class="empty"><span class="loading">Предварительное бронирование</span></div>');
+    this.el.html('<div class="empty"><span class="loading">Делаем предварительное бронирование и уточняем цену</span></div>');
     $.get("/booking/preliminary_booking?" + variant.attr('data-booking'), function(s) {
         if (s && s.success) {
             self.load(s.number);
             pageurl.update('booking', s.number);
         } else {
-            self.el.html('<div class="empty">Не удалось забронировать.</div>');
+            self.el.html('<div class="empty">В данный момент невозможно выбрать этот вариант. <a href="#">Почему?</a></div>');
         }
     });
     var w = $(window), offset = this.el.offset().top;

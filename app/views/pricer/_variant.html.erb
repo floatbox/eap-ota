@@ -18,22 +18,24 @@
 </thead>
 
 <tbody class="summary">
+<% variant_carriers = primary_operating_carriers(variant) %>
+<% common_carrier = variant.segments.length > 1 && variant_carriers.map{|vc| vc['name'] }.uniq.length == 1 %>
 <% variant.segments.each_with_index do |segment, segment_counter| %>
 <tr class="segment<%= segment_counter %>">
 
-    <% if variant.common_carrier && variant.segments.length > 1 %>
+    <% if common_carrier %>
     <td class="carrier common" rowspan="2">
     <% if segment_counter == 0 %>
     <table class="shift"><tr><td>
-        <p><img src="<%= segment.marketing_carrier.icon_url %>" alt=""></p>
-        <p><%= segment.marketing_carrier_name %></p>
+        <p><img src="<%= variant_carriers[segment_counter]['icon_url'] %>" alt=""></p>
+        <p><%= variant_carriers[segment_counter]['name'] %></p>
     </td></tr></table>
     <% end %>
     </td>
     <% else %>
     <td class="carrier" rowspan="2">
-        <p><img src="<%= segment.marketing_carrier.icon_url %>" alt=""></p>
-        <p><%= segment.marketing_carrier_name %></p>
+        <p><img src="<%= variant_carriers[segment_counter]['icon_url'] %>" alt=""></p>
+        <p><%= variant_carriers[segment_counter]['name'] %></p>
     </td>
     <% end %>
 
@@ -61,7 +63,7 @@
             </ul>
             <h6><%= human_duration(segment.total_duration) %> в&nbsp;пути</h6>
             <% unless layover_human_durations.empty? %>
-                <p class="note"><%= layover_human_durations.to_sentence %> между рейсами</p>
+                <p class="note"><%= layover_human_durations.to_sentence %> между&nbsp;рейсами</p>
             <% end %>
             <img class="triangle" src="/img/offers/triangle.png" alt="">
         </div>
@@ -77,7 +79,8 @@
         <% end %>
     </td>
     
-    <% if variant.common_layovers && variant.segments.length > 1 %>
+    <% if false && variant.common_layovers && variant.segments.length > 1 %>
+    <!-- Временно отказываемся от объединения пересадок -->
     <td class="changes common" rowspan="2">
     <% if segment_counter == 0 && segment.layovers? %>
     <table class="shift"><tr><td>
@@ -105,8 +108,8 @@
 <tr class="controls">
     <td></td>
     <td class="toggle" colspan="2">
-        <span class="b-pseudo expand"><u>Подробнее о перелёте</u></span>
-        <span class="b-pseudo collapse"><u>Скрыть подробности</u></span>
+        <span class="link expand">Подробнее о перелёте</span>
+        <span class="link collapse">Скрыть подробности</span>
     </td>
     <td class="rules" colspan="3">
     <% if recommendation.ground? %>

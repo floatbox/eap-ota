@@ -151,12 +151,12 @@
         from: search.from.val(),
         people_count: $.extend({}, search.persons.selected)
     };
-
+    
 });
 
 /* Detect browser */
 var browser = (function() {
-	var os = navigator.platform.toLowerCase().match(/mac|win|linux|ipad/);
+	var os = navigator.platform.toLowerCase().match(/mac|win|linux|ipad|iphone/);
 	var agent = navigator.userAgent.toLowerCase().match(/safari|opera|msie \d|firefox|chrome/);
 	agent = agent && agent[0].replace(/\s/, '');
 	var browser = os && agent ? os + "-" + agent : undefined;

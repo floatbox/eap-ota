@@ -50,7 +50,7 @@ module PricerHelper
   end
   
   def layovers_in flights
-    flights.map {|flight| flight.arrival.city.case_in.gsub(/ /, '&nbsp;') }.to_sentence(:last_word_connector => ' и&nbsp;')
+    flights.map {|flight| flight.arrival.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;')
   end
   
   def segments_departure variant
@@ -87,6 +87,23 @@ module PricerHelper
   def human_cabin_ins cabin
     titles = {'Y' => 'эконом-классом', 'C' => 'бизнес-классом', 'F' => 'первым классом'}
     titles[cabin]  
+  end
+  
+  def primary_operating_carriers variant
+    primary_carriers = []
+    variant.segments.each_with_index do |segment, sindex|    
+      carriers = {}
+      primary_carriers[sindex] = {'duration' => 0}
+      segment.flights.each do |f|
+        cname = f.operating_carrier_name
+        carriers[cname] = {'duration' => 0, 'name' => cname, 'icon_url' => f.operating_carrier.icon_url} unless carriers[cname]
+        carriers[cname]['duration'] += f.duration
+        if carriers[cname]['duration'] > primary_carriers[sindex]['duration']
+          primary_carriers[sindex] = carriers[cname]
+        end
+      end
+    end
+    primary_carriers
   end
 
 end

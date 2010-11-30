@@ -363,8 +363,8 @@ filterOffers: function() {
 },
 applySort: function(key) {
     $('#offers-all .offers-sort a').each(function() {
-        var el = $(this), hidden = (this.onclick() == key);
-        el.toggleClass('sortedby', hidden).toggleClass('b-pseudo', !hidden);
+        var hidden = (this.onclick() == key);
+        var el = $(this).toggleClass('sortedby', hidden);
         if (hidden) $('#offers-sortedby').text(el.text());
     });
     this.sortby = key;
@@ -436,8 +436,16 @@ showRecommendations: function() {
     if (fast && optimal && fast.variant == optimal.variant) {
         fast = undefined;
     }
+    var otitle = 'Самый выгодный и быстрый вариант';
+    if (cheap && fast) {
+        otitle = 'Оптимальный вариант — разумная цена и время в пути';
+    } else if (cheap) {
+        otitle = 'Самый быстрый и оптимальный вариант';
+    } else if (fast) {
+        otitle = 'Самый выгодный и оптимальный вариант';
+    }
     if (cheap) container.append(this.makeRecommendation(cheap, 'Самый выгодный вариант'));
-    if (optimal) container.append(this.makeRecommendation(optimal, 'Оптимальный вариант — разумная цена и время в пути'));
+    if (optimal) container.append(this.makeRecommendation(optimal, otitle));
     if (fast) container.append(this.makeRecommendation(fast, 'Самый быстрый вариант'));
 },
 makeRecommendation: function(obj, title) {

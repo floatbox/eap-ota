@@ -1,7 +1,6 @@
-#search-panel
-{
+#search-panel {
     position: relative;
-    padding: 10px 0 6px;
+    padding: 10px 0 15px;
     color: #c8c8c8;
     background: #343434;
 }
@@ -18,15 +17,15 @@
     position: relative;
     float: left;
     display: inline;
-    width: 318px;
-    margin: 0 24px 0 15px;
+    width: 320px;
+    margin: 0 15px 0 15px;
 }
 
 #search-when
 {
     position: relative;
     float: left;
-    width: 588px;
+    width: 595px;
 }
 
 #search-panel h2
