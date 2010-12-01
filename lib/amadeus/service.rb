@@ -111,7 +111,7 @@ module Amadeus
 
   # PNR, как он виден в системе
   def pnr_raw(pnr_number)
-    cmd("RT#{pnr_number}")
+    cmd_full("RT#{pnr_number}") rescue $!.message
   ensure
     pnr_ignore
   end
@@ -133,6 +133,24 @@ module Amadeus
     response.xpath('//r:textStringDetails').to_s
   end
 
+  # работает только для очень некоторых команд
+  def cmd_full(command)
+    result = cmd(command)
+    # заголовок
+    result.sub!(/^(.*)\n/, '');
+    if $1 == '/'
+      # FIXME сделать класс для эксепшнов
+      raise "Command_Cryptic: #{result.strip}"
+    end
+    # добываем следующие страницы, если есть
+    while result.sub! /^\)\s*\Z/, ''
+      # не обрезает заголовок второй и последующих страниц.
+      # но разные команды выводят или не выводят в нем муру, эх
+      result << cmd('MD')[2..-1]
+    end
+    result
+  end
+
   # временное название для метода
   def self.issue_ticket(pnr_number)
     amadeus = Amadeus::Service.new(:book => true, :office => Amadeus::Session::TICKETING)
@@ -144,6 +162,12 @@ module Amadeus
 
   def give_permission_to_booking_office
     cmd("ES#{Amadeus::Session::BOOKING}")
+  end
+
+  def conversion_rate(currency_code)
+    # BSR USED 1 USD = 30.50 RUB
+    cmd("FQC 1 #{currency_code}") =~ /^BSR USED 1 ...? = ([\d.]+) RUB/
+    $1.to_f if $1
   end
 
 # sign in and sign out sessions
