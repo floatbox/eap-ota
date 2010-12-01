@@ -257,7 +257,7 @@ updateMap: function(lf, lt) {
         this.map.AddShape(route);
         this.map.SetMapView([pf, pt]);
     } else {
-        this.map.SetCenterAndZoom(pf || pt);
+        this.map.SetCenterAndZoom(pf || pt, 4);
     }
 },
 abort: function() {
