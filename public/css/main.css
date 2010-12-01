@@ -20,10 +20,7 @@
 @import 'search/submit.css';
 
 @import 'panel/panel.css';
-@import 'panel/panel-reset.css';
 @import 'panel/map.css';
-@import 'panel/map-tabs.css';
-@import 'panel/presets.css';
 
 @import 'calendar/scroller.css';
 @import 'calendar/viewport.css';

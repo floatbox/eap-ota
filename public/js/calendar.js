@@ -213,10 +213,13 @@ update: function() {
     if (items.length) {
         title = this.dates.eq(items[0]).text();
         if (items.length > 1) {
-            var d1 = title.split(' ');
-            var d2 = this.dates.eq(items.last()).text().split(' ');
-            if (d1[1] == d2[1]) d1.length = 1;
-            title = d1.concat('—', d2).join(' ');
+            var d1 = title.split(' '), d2 = this.dates.eq(items.last()).text().split(' ');
+            var spacer = ' — ';
+            if (d1[1] == d2[1]) {
+                d1.length = 1;
+                spacer = '<span class="spacer">—</span>';
+            }
+            title = d1.join(' ') + spacer + d2.join(' ');
         }
     }
     this.title.html(title);
@@ -407,10 +410,8 @@ initTimeline: function() {
         var label = $('<span>').addClass('label').width(mw).text(app.constant.SMN[mdate.month]);
         $('<li>').width(mw).append(label).appendTo(self.timeline);
     });
-    var fdate = this.parent.dates.first();
-    var offset = Math.round((1 - parseInt(fdate.attr('data-dmy').substring(0,2), 10)) * self.factor);
-    this.timeline.css('left', offset).show();
-    this.preview = $('.preview', this.scroller).css('left', Math.round(fdate.prevAll('li').length * self.factor));
+    this.timeline.css('left', Math.round((1 - parseInt(dates.eq(0).attr('data-dmy').substring(0,2), 10)) * self.factor)).show();
+    this.preview = $('.preview', this.scroller).css('left', Math.round(dates.eq(0).prevAll('li').length * self.factor));
 },
 initScrollbar: function() {
     var self = this;
