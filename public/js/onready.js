@@ -1,6 +1,7 @@
 ﻿$(function() {
 
     search.init();
+    app.offers.init();
 
     // образец содержимого поля "Куда"
     var e = search.to.example = $('#search-to-example');
@@ -94,8 +95,7 @@
         search.map.SetDashboardSize(VEDashboardSize.Tiny);
         search.map.LoadMap(new VELatLong(fdata.lat, fdata.lng), 4);
         search.map.SetScaleBarDistanceUnit(VEDistanceUnit.Kilometers);
-        var pinFrom = new VEShape(VEShapeType.Pushpin, new VELatLong(fdata.lat, fdata.lng));
-        search.map.AddShape(pinFrom);
+        search.updateMap(fdata);
     }
 
     /*search.map = new google.maps.Map($('#where-map').get(0), {
@@ -105,9 +105,6 @@
         center: new google.maps.LatLng(fdata.lat, fdata.lng),
         zoom: 4
     });*/
-    
-    // Список предложений
-    app.offers.init();
     
     // Фильтры предложений
     app.offers.filters = {};

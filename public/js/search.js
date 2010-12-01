@@ -235,8 +235,30 @@ validate: function(qkey) {
                 }, 5000);
             }
         }
+        if (result.search) {
+            var sf = result.search.from_as_object;
+            var st = result.search.to_as_object;
+            self.updateMap(sf && {lat: sf.lat, lng: sf.lng}, st && {lat: st.lat, lng: st.lng});
+        }        
         delete(self.request);
     });
+},
+updateMap: function(lf, lt) {
+    this.map.Clear();
+    var pf = lf && new VELatLong(lf.lat, lf.lng);
+    var pt = lt && new VELatLong(lt.lat, lt.lng);    
+    if (pf) this.map.AddShape(new VEShape(VEShapeType.Pushpin, pf));
+    if (pt) this.map.AddShape(new VEShape(VEShapeType.Pushpin, pt));
+    if (pf && pt) {
+        var route = new VEShape(VEShapeType.Polyline, [pf, pt]);
+        route.SetLineWidth(3);
+        route.SetLineColor(new VEColor(237, 17, 146, 0.75));
+        route.HideIcon();
+        this.map.AddShape(route);
+        this.map.SetMapView([pf, pt]);
+    } else {
+        this.map.SetCenterAndZoom(pf || pt);
+    }
 },
 abort: function() {
     if (this.request && this.request.abort) {
