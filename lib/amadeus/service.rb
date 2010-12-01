@@ -146,6 +146,12 @@ module Amadeus
     cmd("ES#{Amadeus::Session::BOOKING}")
   end
 
+  def conversion_rate(currency_code)
+    # BSR USED 1 USD = 30.50 RUB
+    cmd("FQC 1 #{currency_code}") =~ /^BSR USED 1 ...? = ([\d.]+) RUB/
+    $1.to_f if $1
+  end
+
 # sign in and sign out sessions
 
   # оверрайд методов из SOAPACTions
