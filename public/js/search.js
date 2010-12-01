@@ -200,10 +200,6 @@ validate: function(qkey) {
     this.toggle(false);
     this.abort();
     var self = this, data = qkey ? {query_key: qkey} : {search: this.values()};
-    if (data.search && !data.search.to) {
-        this.apply({});
-        return;
-    }
     if (window._gaq && data.search) {
         _gaq.push(['_trackEvent', 'Search', 'To', data.search.to]);
     }
@@ -236,17 +232,15 @@ validate: function(qkey) {
             }
         }
         if (result.search) {
-            var sf = result.search.from_as_object;
-            var st = result.search.to_as_object;
-            self.updateMap(sf && {lat: sf.lat, lng: sf.lng}, st && {lat: st.lat, lng: st.lng});
+            self.updateMap(result.search.from_as_object, result.search.to_as_object);
         }        
         delete(self.request);
     });
 },
 updateMap: function(lf, lt) {
     this.map.Clear();
-    var pf = lf && new VELatLong(lf.lat, lf.lng);
-    var pt = lt && new VELatLong(lt.lat, lt.lng);    
+    var pf = lf && lf.lat && lf.lng ? new VELatLong(lf.lat, lf.lng) : undefined;
+    var pt = lt && lt.lat && lt.lng ? new VELatLong(lt.lat, lt.lng) : undefined;    
     if (pf) this.map.AddShape(new VEShape(VEShapeType.Pushpin, pf));
     if (pt) this.map.AddShape(new VEShape(VEShapeType.Pushpin, pt));
     if (pf && pt) {
@@ -257,7 +251,8 @@ updateMap: function(lf, lt) {
         this.map.AddShape(route);
         this.map.SetMapView([pf, pt]);
     } else {
-        this.map.SetCenterAndZoom(pf || pt, 4);
+        var ft = pf || pt;
+        if (ft) this.map.SetCenterAndZoom(ft, 4);
     }
 },
 abort: function() {
