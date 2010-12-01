@@ -121,7 +121,7 @@ load: function(params, title) {
         }
     });
 },
-show: function() {
+show: function(fixed) {
     var self = this, u = this.update;
     search.toggle(false);
     if (u.title) {
@@ -143,15 +143,25 @@ show: function() {
     }
     this.container.removeClass('g-none');
     var w = $(window), offset = this.container.offset().top;
-    if (offset - w.scrollTop() > w.height() / 2) {
+    if (fixed !== false && offset - w.scrollTop() > w.height() / 2) {
         $({st: w.scrollTop()}).animate({
             st: offset - 112
         }, {
             duration: 500,
             step: function() {
                 w.scrollTop(this.st);
+            },
+            complete: function() {
+                var promo = $('#promo');
+                if (promo.is(':visible')) {
+                    var st = this.st - promo.outerHeight();
+                    promo.hide();
+                    w.scrollTop(st);
+                }
             }
         });
+    } else {
+        $('#promo').slideUp(200);
     }
 },
 hide: function() {

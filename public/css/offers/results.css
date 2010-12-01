@@ -187,6 +187,9 @@
     margin: 0 0 3px;
     text-align: center;
 }
+.offer .summary .changes p {
+    margin: 0 0 3px;
+}
 
 /* Вылет и прилет */
 .offer .summary h5 {
@@ -262,65 +265,44 @@
     
 /* Класс */
 .offer .summary p.cnote {
-    font-size: 84.62%;
-    margin-top: 5px;
-    line-height: 118.18%;
+    padding-top: 2px;
 }
 .offer .summary .cabin {
     padding: 1px 3px;
     border: 1px solid #b8b396;
 }
 
-    /* Варианты */
-
-    .offer .summary td.variants
-    {
-        padding: 0;
-
-        border-top: none;
-        
-        color: #777;
-    }
-    
-    .offer .variants p.b-pseudo
-    {
-        margin: 0 0 10px;
-    }
-
-    .offer .variants h6
-    {
-        font-size: 107.7%;
-        
-        position: relative;
-        left: -20px;
-        
-        margin-bottom: 3px;
-        padding-left: 20px;
-        
-        background: url(/img/offers/i-variants.png) no-repeat 0 1px;
-    }
-    
-    .offer .variants strong
-    {
-        font-weight: bold;
-    }
-
-    .offer .summary .segment0 h5,
-    .offer .summary .segment0 .b-pseudo a
-    {
-        color: #6F7C26;
-    }
-    
-    .offer .summary .segment1 h5,
-    .offer .summary .segment1 .b-pseudo a
-    {
-        color: #C46F26;
-    }
-    
-    .offer .summary .b-pseudo a:hover
-    {
-        color: #ED1192;
-    }
+/* Варианты */
+.offer .summary td.variants {
+    padding: 0;
+    border-top: none;
+    color: #777;
+}
+.offer .variants p.b-pseudo {
+    margin: 0 0 10px;
+}
+.offer .variants h6 {
+    position: relative;
+    left: -20px;
+    margin-bottom: 3px;
+    padding-left: 20px;
+    background: url(/img/offers/i-variants.png) no-repeat 0 1px;
+    font-size: 107.7%;
+}
+.offer .variants strong {
+    font-weight: bold;
+}
+.offer .summary .segment0 h5,
+.offer .summary .segment0 .b-pseudo a {
+    color: #6F7C26;
+}
+.offer .summary .segment1 h5,
+.offer .summary .segment1 .b-pseudo a {
+    color: #C46F26;
+}
+.offer .summary .b-pseudo a:hover {
+    color: #ED1192;
+}
 
 /* Правила тарифа */
 .offer .rules {
@@ -458,61 +440,49 @@
 }
 .offer .details .warnings {
     clear: left;
-    margin: 4px 0 0 -22px;
+    margin: 7px 0 0 -30px;
     line-height: 108.33%;        
     color: #777;    
 }
 .offer .details .warnings li {
-    padding: 2px 0 2px 22px;
-    background: url(/img/offers/warnings.png) no-repeat -20px 0;
-}
-.offer .details li.diffad {
-    background-position: 0 -50px;
+    margin: 0 0 2px;
+    padding: 5px 0 5px 30px;
+    background: url(/img/offers/trip.png) no-repeat -25px 0;
 }
 .offer .details li.schange {
-    background-position: 0 -100px;
+    background-position: 0 -75px;
 }
 .offer .details li.lchange {
-    background-position: 0 -150px;
+    background-position: 0 -100px;
 }
-.offer .details li.ndarv {
-    background-position: 0 -200px;
+.offer .details li.diffad {
+    background-position: 0 -125px;
 }
 
-    /* Сумма и кнопка */
-    
-    .offer .details .book
-    {
-        background: none;
-    }
-    
-    .offer .details .book td
-    {
-        padding: 12px 10px 12px 0;
-
-        border-top: 1px solid #d0d0d0;
-    }
-
-    .offer .details .book .a-button {
-        margin-right: 12px;
-    }
-    
-    .offer .details .book .sum {
-        float: left;
-    }
-
-    .offer .details .book .sum dt {
-        margin: 0 0 2px;
-        font-size: 107.7%;
-        line-height: 107.14%;
-        color: #000;
-    }
-
-    .offer .details .book .sum strong {
-        font-weight: bold;
-    }
-
-    .offer .details .book .sum dd {
-        font-size: 92.3%;
-        color: #777;
-    }
+/* Сумма и кнопка */
+.offer .details .book {
+    background: none;
+}
+.offer .details .book td {
+    padding: 12px 10px 12px 0;
+    border-top: 1px solid #d0d0d0;
+}
+.offer .details .book .a-button {
+    margin-right: 12px;
+}
+.offer .details .book .sum {
+    float: left;
+}
+.offer .details .book .sum dt {
+    margin: 0 0 2px;
+    font-size: 107.7%;
+    line-height: 107.14%;
+    color: #000;
+}
+.offer .details .book .sum strong {
+    font-weight: bold;
+}
+.offer .details .book .sum dd {
+    font-size: 92.3%;
+    color: #777;
+}

@@ -64,7 +64,8 @@
     background-color: rgba(237, 17, 146, 0.5);
     cursor: pointer;
 }
-.dropdown dd.selected {
+.dropdown dd.selected,
+.dropdown dd.selected.empty:hover {
     background-color: #ed1192;
     color: #FFF;
 }

@@ -11,25 +11,20 @@
 }
 
 /* Панели куда-когда */
-
-#search-where
-{
+#search-where {
     position: relative;
     float: left;
     display: inline;
     width: 320px;
     margin: 0 15px 0 15px;
 }
-
-#search-when
-{
+#search-when {
     position: relative;
     float: left;
     width: 595px;
 }
 
-#search-panel h2
-{
+#search-panel h2 {
     font-size: 100%;
     font-weight: normal;
     height: 23px;
@@ -37,19 +32,12 @@
     line-height: 1.2;
 }
 
-#search-panel h2 .b-pseudo
-{
-    color: #c9c8c8;
-}
-
-#search-panel h2 .b-pseudo:hover
-{
-    color: #fff;
-}
-
-#search-panel h2 b
-{
+#search-panel h2 b {
     color: #6b6b6b;
+}
+
+#search-panel h2 .spacer {
+	margin: 0 3px;
 }
 
 

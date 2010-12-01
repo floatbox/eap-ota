@@ -103,114 +103,60 @@
     color: #fff;
 }
 
-.return-tabs a.active
-{
+.return-tabs a.active {
     cursor: default;
-
     text-decoration: none;
-
     color: #4b4b4b;
     background: #fff;
     border-color: #424445 #424445 #fff #424445;
 }
 
 .return-tabs-focus a:hover,
-.return-tabs-hover a:hover
-{
+.return-tabs-hover a:hover {
     border-color: transparent transparent #db3f89 transparent;
 }
 
 .return-tabs-focus a.active,
-.return-tabs-hover a.active
-{
+.return-tabs-hover a.active {
     color: #4b4b4b;
     background: #fff;
-
     border-color: #db3f89 #db3f89 #fff #db3f89;
 }
 
-
-
 /* нижние подписи к полям ввода */
-
-.form table tr.subs td
-{
+.form table tr.subs td {
     font-size: 75%;
-
     padding: 0.25em 0 0 8px;
     color: #6b6b6b;
 }
 
-.form table tr.subs *
-{
-    /*
-    font-style: italic;
-    */
+/* Поля ввода (begin) */
+.form input {
+    float: left; /* иначе в IE появляется вертикальный отступ в 1px */
+}
+.form .from {
+    width: 354px;
+}
+.form .to {
+    width: 506px;
 }
 
-/* Поля ввода (begin) */
-
-    .form input
-    {
-        float: left; /* иначе в IE появляется вертикальный отступ в 1px */
-    }
-    
-    .form .from
-    {
-        width: 354px;
-    }
-
-    .form .to
-    {
-        width: 524px;
-    }
-/* Поля ввода (end) */
-
-
 /* Кнопка туда-сюда-обратно (begin) */
-    .form .button
-    {
-        display: block;
-        width: 18px;
-        height: 38px;
+.form .button {
+    display: block;
+    width: 26px;
+    height: 26px;
+    margin: 8px;
+    background: url(/img/search/retmode.png) no-repeat;
+    cursor: pointer;
+}
+.form .button-ow {
+    background-position: 0 -30px;
+}
+.form .button-none {
+    background-position: 0 30px;
+}
 
-        margin: 0 2px;
-
-        cursor: pointer;
-        border: 1px solid transparent;
-    }
-    
-    .form .button:hover
-    {
-        background-color: #373737;
-    }
-
-    .form .button:active
-    {
-        border: 1px solid #db3f89;
-        background-color: #373737;
-    }
-
-    .form .button-rt
-    {
-        background: url(/img/arrow-both.gif) no-repeat 50%;
-    }
-
-    .form .button-ow
-    {
-        background: url(/img/arrow-dpt.gif) no-repeat 50%;
-    }
-
-    .form .button-mw
-    {
-        background: url(/img/arrow-complex.gif) no-repeat 50%;
-    }
-
-    .form .button-none
-    {
-        background: none;
-    }
-/* Кнопка туда-обратно (end) */
 
 
 /* Псевдоссылка с примером (begin) */

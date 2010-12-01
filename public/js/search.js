@@ -222,7 +222,7 @@ validate: function(qkey) {
         if (result.valid) {
             if (data.query_key) {
                 app.offers.load(data, result.human);
-                app.offers.show();
+                app.offers.show(false);
             } else {
                 self.loadOptions = {data: data, title: result.human};
                 self.toggle(true);
