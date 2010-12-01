@@ -29,7 +29,6 @@ class PricerController < ApplicationController
         @query_key = ShortUrl.generate_url(@recommendations.hash)
         @locations = @search.human_locations
         Rails.cache.write('pricer_form' + @query_key, @search)
-        @calendar_variants = @recommendations.every.variants.flatten if @search.search_type == 'calendar'
       end
     end
 
