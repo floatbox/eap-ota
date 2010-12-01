@@ -111,7 +111,7 @@ module Amadeus
 
   # PNR, как он виден в системе
   def pnr_raw(pnr_number)
-    cmd("RT#{pnr_number}")
+    cmd_full("RT#{pnr_number}") rescue $!.message
   ensure
     pnr_ignore
   end
@@ -131,6 +131,24 @@ module Amadeus
   def cmd(command)
     response = command_cryptic :command => command
     response.xpath('//r:textStringDetails').to_s
+  end
+
+  # работает только для очень некоторых команд
+  def cmd_full(command)
+    result = cmd(command)
+    # заголовок
+    result.sub!(/^(.*)\n/, '');
+    if $1 == '/'
+      # FIXME сделать класс для эксепшнов
+      raise "Command_Cryptic: #{result.strip}"
+    end
+    # добываем следующие страницы, если есть
+    while result.sub! /^\)\s*\Z/, ''
+      # не обрезает заголовок второй и последующих страниц.
+      # но разные команды выводят или не выводят в нем муру, эх
+      result << cmd('MD')[2..-1]
+    end
+    result
   end
 
   # временное название для метода

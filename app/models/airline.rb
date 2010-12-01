@@ -46,20 +46,7 @@ class Airline < ActiveRecord::Base
   # TODO перенести в amadeus.rb или куда-то в более нейтральное место
   # TODO выкачать/закэшировать пакетно
   def fetch_interline_iatas
-    Amadeus::Session.with_session do |s|
-      res = Amadeus::Service.cmd("TGAD-#{iata}", s)
-      res.sub!(/^(.*)\n/, '');
-      if $1 == '/'
-        # нет такого перевозчика или интерлайна
-        # FIXME сделать класс для эксепшнов
-        raise res.strip
-      end
-      # добываем следующие страницы, если есть
-      while res.sub! /\)\s*\Z/, ''
-        res << Amadeus::Service.cmd('MD', s)[2..-1]
-      end
-      res
-    end \
+    Amadeus::Service.cmd_full("TGAD-#{iata}") \
       .split(/\s*-\s+/) \
       .collect {|s| s.split(' ', 2) } \
       .select {|airline, agreement| agreement['E'] && !agreement['*']} \
