@@ -4,7 +4,7 @@ class BookingController < ApplicationController
   
   def preliminary_booking
     pricer_form = Rails.cache.read('pricer_form' + params[:query_key])
-    recommendation = Recommendation.check_price_and_avaliability(params[:flight_codes].split('_'), pricer_form)
+    recommendation = Recommendation.check_price_and_avaliability(params[:flight_codes].split('_'), pricer_form, params[:validating_carrier])
     if !recommendation || (recommendation.price_total != params[:total_price].to_i)
       render :json => {:success => false}
       return

@@ -135,7 +135,7 @@ class Recommendation
     signature.eql?(b.signature)
   end
   
-  def self.check_price_and_avaliability(flight_codes, pricer_form)
+  def self.check_price_and_avaliability(flight_codes, pricer_form, validating_carrier_code)
     # FIXME вынести в Recommendation.from_flight_codes?
     flights = flight_codes.map do |flight_code|
       Flight.from_flight_code flight_code
@@ -154,7 +154,7 @@ class Recommendation
 
     recommendation.price_fare, recommendation.price_tax =
       Amadeus::Service.fare_informative_pricing_without_pnr(
-        :flights => flights, :people_count => pricer_form.real_people_count
+        :flights => flights, :people_count => pricer_form.real_people_count, :validating_carrier => validating_carrier_code
       ).prices
 
     # FIXME не очень надежный признак
