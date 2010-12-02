@@ -31,8 +31,11 @@ class PricerController < ApplicationController
         Rails.cache.write('pricer_form' + @query_key, @search)
       end
     end
-
-    render :partial => 'recommendations'
+    if @search && @search.search_type == 'calendar'
+      render :partial => 'matrix'
+    else
+      render :partial => 'recommendations'
+    end
   rescue Amadeus::Error, Handsoap::Fault => e
     @error_message = e.message
     render :text => @errorMessage

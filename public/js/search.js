@@ -256,17 +256,9 @@ updateMap: function(lf, lt) {
     }
 },
 abort: function() {
-    if (this.request && this.request.abort) {
-        this.request.abort();
-    }
-    if (app.offers.loading.is(':visible')) {
-        app.offers.container.addClass('g-none');
-    }
-    var au = app.offers.update;
-    if (au && au.request && au.request.abort) {
-        au.request.abort();
-        delete(au.request);
-    }
+    var r = this.request;
+    if (r && r.abort) r.abort();
+    app.offers.abort();
 },
 apply: function(data) {
     this.parsed = data;

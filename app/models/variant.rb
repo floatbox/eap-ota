@@ -27,7 +27,7 @@ class Variant
     end
     result
   end
-
+  
   def flight_codes(booking_classes)
     result = []
     i = 0
