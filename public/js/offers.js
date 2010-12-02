@@ -52,7 +52,7 @@ init: function() {
         event.preventDefault();
         var self = app.offers, key = this.onclick();
         if (key != self.sortby) {
-            var list = $('#offers-collection').css('opacity', 0.7);
+            var list = $('#offers-pcollection').css('opacity', 0.7);
             setTimeout(function() {
                 list.hide();
                 self.applySort(key);
@@ -98,8 +98,8 @@ init: function() {
         app.booking.book(variant);
     });
     
-    // Активация матрицы цен в статике, перенести в обработку аякса, когда будет настоящая
-    this.initMatrix($('#offers-matrix .offer-prices'));
+    // Матрица цен
+    this.initMatrix();
     
 },
 load: function(params, title) {
@@ -108,18 +108,42 @@ load: function(params, title) {
         title: title,
         loading: true
     };
-    this.update.request = $.get("/pricer/", params, function(s, status, request) {
-        if (self.update.request != request) return;
-        var visible = self.loading.is(':visible');
-        self.update.loading = false;
-        if (typeof s == 'string') {
-            self.update.content = s;
-            if (visible) self.processUpdate();
-        } else {
-            self.toggle('empty');
-            alert(s && s.exception && s.exception.message);
-        }
+    this.update.prequest = $.get("/pricer/", params, function(s, status, request) {
+        if (self.update.prequest != request) return;
+        self.setUpdate('pcontent', s);
     });
+    this.mrtimer = setTimeout(function() {
+        params.search_type = 'calendar';
+        self.update.mrequest = $.get("/pricer/", params, function(s, status, request) {
+            if (self.update.mrequest != request) return;
+            self.setUpdate('mcontent', s);
+        });
+    }, 10000);
+},
+setUpdate: function(type, s) {
+    this.update[type] = typeof s == 'string' ? s : '';
+    var pc = this.update.pcontent;
+    var mc = this.update.mcontent;
+    if (pc !== undefined && mc !== undefined) {
+        this.update.loading = false;
+        if (this.loading.is(':visible')) {
+            pc ? this.processUpdate() : this.toggle('empty');
+        }
+    }
+},
+abort: function() {
+    clearTimeout(this.mrtimer);
+    if (this.loading.is(':visible')) {
+        this.container.addClass('g-none');
+    }
+    if (this.update) {
+        var pr = this.update.prequest;
+        var mr = this.update.mrequest;
+        if (pr && pr.abort) pr.abort();
+        if (mr && mr.abort) mr.abort();
+        delete(this.update.pr);
+        delete(this.update.mr);
+    }
 },
 show: function(fixed) {
     var self = this, u = this.update;
@@ -129,7 +153,7 @@ show: function(fixed) {
     }
     if (u.loading) {
         this.toggle('loading');
-    } else if (u.content != undefined) {
+    } else if (u.pcontent) {
         this.toggle('loading');
         setTimeout(function() {
             self.processUpdate();
@@ -180,10 +204,9 @@ toggleCollection: function(mode) {
 },
 processUpdate: function() {
     var self = this, u = this.update;
-    $('#offers-collection').remove();
-    $('#offers-all').append(u.content || '');
-    delete(u.content);
-    if ($('#offers-all .offer').length) {
+    $('#offers-pcollection').html(u.pcontent || '');
+    $('#offers-mcollection').html(u.mcontent || '');
+    if ($('#offers-options').length) {
         var self = this;
         var queue = [function() {
             self.updateFilters();
@@ -198,9 +221,11 @@ processUpdate: function() {
             self.showRecommendations();
         }, function() {
             $('#offers-tabs').trigger('set', self.selectedTab || pageurl.tab || 'featured');
-            pageurl.update('search', $('#offers-collection').attr('data-query_key'));
+            pageurl.update('search', $('#offers-options').attr('data-query_key'));
             self.toggleCollection(true);
             self.toggle('results');
+        }, function() {
+            self.processMatrix();
         }];
         var qstep = 0, processQueue = function() {
             queue[qstep++]();
@@ -212,16 +237,18 @@ processUpdate: function() {
         this.variants = [];
         this.items = [];
     }
+    delete(u.pcontent);
+    delete(u.mcontent);        
 },
 parseResults: function() {
     var items = [], variants = [];
-    $('#offers-collection .offer').each(function() {
+    $('#offers-pcollection .offer').each(function() {
         var el = $(this), offer = {
             el: el,
             summary: $.parseJSON(el.attr('data-summary')),
             variants: []
         };
-        var children = el.children('.offer-variant').each(function() {
+        el.children('.offer-variant').each(function() {
             var vel = $(this), variant = {
                 el: vel,
                 offer: offer,
@@ -230,7 +257,7 @@ parseResults: function() {
             vel.attr('data-index', variants.length);
             offer.variants.push(variant);
             variants.push(variant);
-        });
+        }).eq(0).removeClass('g-none');
         offer.multiple = offer.variants.length > 1;
         items.push(offer);
     });
@@ -249,7 +276,7 @@ showVariant: function(el) {
 updateFilters: function() {
     this.filterable = false;
     var self = this;
-    var data = $.parseJSON($('#offers-collection').attr('data-filters'));
+    var data = $.parseJSON($('#offers-options').attr('data-filters'));
     $('#offers-reset-filters').addClass('g-none');
     $('#offers-filter .flight').each(function() {
         var active = $('.filter', this).each(function() {
@@ -415,7 +442,7 @@ sortOffers: function() {
         if (a.price < b.price) return -1;
         return 0;
     });
-    var list = $('#offers-collection');
+    var list = $('#offers-pcollection');
     for (var i = 0, lim = sitems.length; i < lim; i++) {
         list.append(sitems[i].offer.el);
     }
@@ -432,7 +459,7 @@ showRecommendations: function() {
     }
     var container = $('#offers-featured').html('');
     if (!cheap && !fast && !optimal) {
-        container.append($('#offers-collection').prev().clone());
+        container.append($('#offers-pcollection').prev().clone());
         return;
     }
     if (cheap && fast && cheap.variant == fast.variant) {
@@ -523,15 +550,9 @@ joinDepartures: function(dtimes, current) {
 // Матрица цен
 $.extend(app.offers, {
 initMatrix: function(table) {
+    var table = $('#offers-matrix .offer-prices');
     var cells = $('td', table);
     var frow = table.get(0).rows[0];
-    var comparePrices = function() {
-        var sp = parseInt(selected.attr('data-price'), 10);
-        cells.each(function() {
-            var c = $(this), cp = parseInt(c.attr('data-price'), 10);
-            c.toggleClass('less', cp < sp);
-        });
-    };
     var selected = $('td.selected', table); 
     var highlight = function(td) {
         hlcurrent.removeClass('current');
@@ -545,13 +566,38 @@ initMatrix: function(table) {
     }).delegate('td', 'click', function() {
         selected.removeClass('selected');
         selected = $(this).addClass('selected');
-        comparePrices();
     });
     cells.each(function() {
         var c = $(this);
-        c.attr('data-price', c.text());
         c.attr('data-col', c.prevAll().length);
     });    
-    comparePrices();
+},
+processMatrix: function() {
+    var context = $('#offers-matrix'), table = context.find('.offer-prices').get(0);
+    var origin = context.find('.matrix-origin').attr('data-dates').split(' ');
+    var findex = [], fdate = Date.parseAmadeus(origin[0]).shiftDays(-3);
+    for (var i = 0; i < 7; i++) {
+        $(table.rows[0].cells[i + 1]).html(this.matrixDate(fdate));
+        findex[fdate.toAmadeus()] = i + 1;
+        fdate.shiftDays(1);
+    }
+    var tindex = [];
+    if (origin[1]) {
+        var tdate = Date.parseAmadeus(origin[1]).shiftDays(-3);
+        for (var i = 0; i < 7; i++) {
+            $(table.rows[i + 1].cells[0]).html(this.matrixDate(tdate));
+            tindex[tdate.toAmadeus()] = i + 1;
+            tdate.shiftDays(1);
+        }
+    }
+    context.find('.offer-variant').each(function() {
+        var el = $(this);
+        var summary = $.parseJSON(el.attr('data-summary'));
+    });
+},
+matrixDate: function(date) {
+    var dm = date.getDate() + '&nbsp;' + app.constant.MNg[date.getMonth()];
+    var wd = app.constant.DN[(date.getDay() || 7) - 1];
+    return '<h6>' + dm + '</h6><p>' + wd + '</p>';
 }
 });

@@ -1,117 +1,94 @@
 /* Матрица цен */
-.offer-prices
-{
+.offer-prices {
     width: 100%;
 }
 
 .offer-prices th,
-.offer-prices td
-{
+.offer-prices td {
     padding: 5px;
-
     border-bottom: 1px solid #ededed;
     border-right: 1px solid #ededed;
 }
 
-.offer-prices th
-{
+.offer-prices th {
     padding-bottom: 4px;
 }
 
 .offer-prices th.last,
-.offer-prices td.last
-{
+.offer-prices td.last {
     border-right: none;
 }
 
-.offer-prices th
-{
+.offer-prices th {
     background: #f3f7ef;
     border-color: #e2e6de;
+    font-size: 13px;
 }
 
-.offer-prices th.current
-{
+.offer-prices th.current {
     background: #e1ebd2;
 }
 
-.offer-prices th.ret
-{
+.offer-prices th.ret {
     background: #faf4ed;
     border-color: #e8e3dc;
     border-width: 1px 1px 1px 0;
 }
 
-.offer-prices tr.current th.ret
-{
+.offer-prices tr.current th.ret {
     background: #f2e4d3;
 }
 
-.offer-prices th.direction
-{
+.offer-prices th.direction {
     background: transparent;
     border-bottom: 1px solid #e8e3dc;
 }
 
-.offer-prices th.last
-{
+.offer-prices th.last {
     border-radius: 0 10px 0 0;
     -moz-border-radius: 0 10px 0 0;
     -webkit-border-radius: 0 10px 0 0;
     -o-border-radius: 0 10px 0 0;
 }
 
-.offer-prices th h6
-{
-    font-size: 92.308%;
-    
+.offer-prices th h6 {
     color: #629100;
-    
     letter-spacing: -0.015em;
 }
 
-.offer-prices th.current h6
-{
+.offer-prices th.current h6 {
     color: #578000;
 }
 
 .offer-prices th.ret h6,
-.offer-prices th h6.ret
-{
+.offer-prices th h6.ret {
     color: #b36100;
 }
 
-.offer-prices tr.current th.ret h6
-{
+.offer-prices tr.current th.ret h6 {
     color: #a65b00;
 }
 
-.offer-prices th p
-{
-    font-size: 84.615%;
-    
+.offer-prices th p {
+    font-size: 11px;
     color: #ADADAD;
 }
 
-.offer-prices .current p
-{
+.offer-prices .current p {
     color: #999;
 }
 
 .offer-prices th.direction h6,
 .offer-prices th.ret h6,
-.offer-prices th.ret p
-{
+.offer-prices th.ret p {
     text-align: right;
 }
 
-.offer-prices th.direction h6
-{
+.offer-prices th.direction h6 {
     font-weight: bold;
 }
 
-.offer-prices td
-{
+.offer-prices td {
     font-size: 84.615%;
 
     padding: 2px 0 0;

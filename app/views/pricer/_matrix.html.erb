@@ -1,0 +1,10 @@
+<% if @recommendations.present? %>
+<div class="matrix-origin" data-dates="<%= @search.dates.join(' ') %>"></div>
+<% @recommendations.each do |recommendation| %>
+    <% different_cabins = recommendation.cabins_except(@search.cabin) %>
+    <% recommendation.variants.each_with_index do |variant, variant_index| %>
+        <% variant_summary = {:price => recommendation.price_total.to_i, :dates => variant.segments.map{|s| s.flights[0].departure_date }} %>
+        <%= render :partial => 'variant', :locals => {:variant => variant, :recommendation => recommendation, :variant_cabins => different_cabins, :variant_summary => variant_summary.to_json} %>
+    <% end %>    
+<% end %>
+<% end %>
