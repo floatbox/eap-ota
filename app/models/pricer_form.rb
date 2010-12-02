@@ -89,7 +89,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
         if (m = str.match(word_beginning_pattern)) && !not_finished
           word_part = m[0].mb_chars
 
-          if r = Completer.record_from_string(word_part, ['date', 'airport', 'city', 'country'])
+          if r = Completer.record_from_string(word_part, ['date', 'airport', 'city', 'country', 'people'])
             if r && r.type == 'date' && r.hidden_info.class == String
               res[:dates] = [{
                   :value => r.hidden_info,
@@ -103,6 +103,15 @@ class PricerForm < ActiveRecord::BaseWithoutTable
               @to_iata = r.code rescue nil
               res[:to] = {
                 :value => @to_iata,
+                :str => word_part.to_s,
+                :start => str.length - word_part.length,
+                :end => str.length-1
+              }
+              str = str[0...(str.length - word_part.length)]
+              not_finished = true
+            elsif r && r.type == 'people'
+              res[:people_count] = {
+                :value => r.hidden_info,
                 :str => word_part.to_s,
                 :start => str.length - word_part.length,
                 :end => str.length-1
