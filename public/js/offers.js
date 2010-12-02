@@ -113,7 +113,7 @@ load: function(params, title) {
         self.setUpdate('pcontent', s);
     });
     this.mrtimer = setTimeout(function() {
-        if (params.search) params.search.search_type = 'calendar';
+        params.search_type = 'calendar';
         self.update.mrequest = $.get("/pricer/", params, function(s, status, request) {
             if (self.update.mrequest != request) return;
             self.setUpdate('mcontent', s);
@@ -581,14 +581,19 @@ processMatrix: function() {
         findex[fdate.toAmadeus()] = i + 1;
         fdate.shiftDays(1);
     }
+    var tindex = [];
     if (origin[1]) {
-        var tindex = [], tdate = Date.parseAmadeus(origin[1]).shiftDays(-3);
+        var tdate = Date.parseAmadeus(origin[1]).shiftDays(-3);
         for (var i = 0; i < 7; i++) {
             $(table.rows[i + 1].cells[0]).html(this.matrixDate(tdate));
             tindex[tdate.toAmadeus()] = i + 1;
             tdate.shiftDays(1);
         }
     }
+    context.find('.offer-variant').each(function() {
+        var el = $(this);
+        var summary = $.parseJSON(el.attr('data-summary'));
+    });
 },
 matrixDate: function(date) {
     var dm = date.getDate() + '&nbsp;' + app.constant.MNg[date.getMonth()];

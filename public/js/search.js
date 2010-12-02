@@ -216,16 +216,21 @@ validate: function(qkey) {
             self.apply(result.complex_to_parse_results || {});
         }
         if (result.valid) {
+            var options = {
+                query_key: result.query_key,
+                search_type: 'travel'
+            };
             if (data.query_key) {
-                app.offers.load(data, result.human);
+                options.restore_results = true;
+                app.offers.load(options, result.human);
                 app.offers.show(false);
             } else {
-                self.loadOptions = {data: data, title: result.human};
+                self.loadOptions = {options: options, title: result.human};
                 self.toggle(true);
                 self.loadTimer = setTimeout(function() {
                     clearTimeout(self.loadTimer);
                     if (self.loadOptions) {
-                        app.offers.load(self.loadOptions.data, self.loadOptions.title);
+                        app.offers.load(self.loadOptions.options, self.loadOptions.title);
                         delete(self.loadOptions);
                     }
                 }, 5000);

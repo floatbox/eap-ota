@@ -2,6 +2,7 @@ class PricerController < ApplicationController
   layout false
 
   def index
+    require "pricer_form"
     if params[:query_key]
       @query_key = params[:query_key]
       @search = Rails.cache.read('pricer_form' + params[:query_key])
@@ -16,9 +17,8 @@ class PricerController < ApplicationController
         @recommendations = @search.search
         # TODO перенести в модель
         if @search.search_type == 'travel' && !@search.nonstop?
-          p_f = PricerForm.new( params[:search].merge(:nonstop => true))
-          p_f.parse_complex_to
-          recommendations_nonstop = p_f.search
+          @search.nonstop = true
+          recommendations_nonstop = @search.search
           # только новые
           @recommendations = Recommendation.merge(@recommendations, recommendations_nonstop)
         end

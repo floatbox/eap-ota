@@ -39,7 +39,7 @@
         if (!$(this).parent().hasClass('disabled')) {
             clearTimeout(search.loadTimer);
             if (search.loadOptions) {
-                app.offers.load(search.loadOptions.data, search.loadOptions.title);
+                app.offers.load(search.loadOptions.options, search.loadOptions.title);
                 delete(search.loadOptions);            
             }
             app.offers.show();

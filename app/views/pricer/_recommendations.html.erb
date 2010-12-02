@@ -4,7 +4,7 @@
 
 <% @recommendations.each do |recommendation| %>
 <div class="offer collapsed<%= ' multiple' if recommendation.variants.length > 1 %>" data-summary='<%= recommendation.summary.to_json %>'>
-    <% different_cabins = recommendation.cabins_except(params[:search]['cabin']) %>
+    <% different_cabins = recommendation.cabins_except(@search.cabin) %>
     <% recommendation.variants.each_with_index do |variant, variant_index| %>
         <%= render :partial => 'variant', :locals => {:variant => variant, :recommendation => recommendation, :variant_cabins => different_cabins, :variant_summary => nil} %>
     <% end %>    
