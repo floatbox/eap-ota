@@ -162,6 +162,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
         amadeus.pnr_cancel
       end
     else
+      amadeus.cmd('IG')
       amadeus.pnr_commit
       errors.add :pnr_number, 'Ошибка при создании PNR' 
       return

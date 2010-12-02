@@ -163,6 +163,7 @@ class Recommendation
     # FIXME сломается, когда появятся инфанты
     amadeus = Amadeus::Service.new(:book => true)
     air_sfr = amadeus.air_sell_from_recommendation(:segments => segments, :people_count => (pricer_form.real_people_count[:adults] + pricer_form.real_people_count[:children]))
+    amadeus.cmd('IG')
     amadeus.session.destroy
     return unless air_sfr.segments_confirmed?
     air_sfr.fill_itinerary!(segments)
