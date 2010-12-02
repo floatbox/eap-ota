@@ -200,10 +200,6 @@ validate: function(qkey) {
     this.toggle(false);
     this.abort();
     var self = this, data = qkey ? {query_key: qkey} : {search: this.values()};
-    if (data.search && !data.search.to) {
-        this.apply({});
-        return;
-    }
     if (window._gaq && data.search) {
         _gaq.push(['_trackEvent', 'Search', 'To', data.search.to]);
     }
@@ -235,8 +231,29 @@ validate: function(qkey) {
                 }, 5000);
             }
         }
+        if (result.search) {
+            self.updateMap(result.search.from_as_object, result.search.to_as_object);
+        }        
         delete(self.request);
     });
+},
+updateMap: function(lf, lt) {
+    this.map.Clear();
+    var pf = lf && lf.lat && lf.lng ? new VELatLong(lf.lat, lf.lng) : undefined;
+    var pt = lt && lt.lat && lt.lng ? new VELatLong(lt.lat, lt.lng) : undefined;    
+    if (pf) this.map.AddShape(new VEShape(VEShapeType.Pushpin, pf));
+    if (pt) this.map.AddShape(new VEShape(VEShapeType.Pushpin, pt));
+    if (pf && pt) {
+        var route = new VEShape(VEShapeType.Polyline, [pf, pt]);
+        route.SetLineWidth(3);
+        route.SetLineColor(new VEColor(237, 17, 146, 0.75));
+        route.HideIcon();
+        this.map.AddShape(route);
+        this.map.SetMapView([pf, pt]);
+    } else {
+        var ft = pf || pt;
+        if (ft) this.map.SetCenterAndZoom(ft, 4);
+    }
 },
 abort: function() {
     if (this.request && this.request.abort) {
