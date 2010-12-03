@@ -1,13 +1,38 @@
 /* Блок с результатами */
+#offers {
+    padding-top: 15px;
+    background: #f7f7f7;
+}
 #offers-results {
     position: relative;
     zoom: 1;
 }
 
+/* Заголовок */
+#offers-title {
+    margin: 0 15px 15px;
+}
+#offers-title h1 {
+    font: bold 190%/100% Arial, sans-serif;
+    letter-spacing: -1px;
+    color: #333;
+}
+#offers-title h1:first-letter {
+    text-transform: uppercase;
+}
+
 /* Список предложений */
 #offers-list {
+    background: #e5e5e5;
+    border-top: 1px solid #d0d0d0;
+    padding: 15px 0;
+    color: #333;
+}
+#offers-all,
+#offers-matrix,
+#offers-featured {
     width: 675px;
-    margin: 15px;    
+    margin: 0 15px;
 }
 #offers-list .improper {
     display: none;
@@ -78,69 +103,45 @@
 }
 
 /* Заголовок предложения */
-
-.offer-variant thead
-{
-    border-bottom: 1px solid #d6d6d6;
+.offer thead .cost {
+    width: 98px;
+    padding: 8px 10px 0;
+}
+.offer thead .cost dl {
+    font-weight: bold;
+    width: 98px;
+}    
+.offer thead .cost dt {
+    font-size: 30px;
+    line-height: 28px;
+    letter-spacing: -1px;
+    text-align: center;
+    color: #ed1192;
+}
+.offer thead .cost dd {
+    font-size: 14px;
+    line-height: 14px;
+    text-align: center;    
+    color: #828282;
+}
+.offer .digit {
+    margin-left: 0.2em;
 }
 
-    /* Стоимость */
-
-    .offer thead .cost 
-    {
-        width: 5px;
-        padding: 8px 10px 7px;
-    }
-
-    .offer thead .cost dl
-    {
-        font-weight: bold;
-        
-        width: 98px;
-    }    
-    
-    .offer thead .cost dt
-    {
-        font-size: 30px;
-    
-        line-height: 28px;
-        letter-spacing: -1px;
-    
-        color: #ed1192;
-    }
-
-    .offer thead .cost dd
-    {
-        font-size: 14px;
-    
-        line-height: 14px;
-    
-        color: #828282;
-    }
-    
-    .offer .digit 
-    {
-        margin-left: 0.2em;
-    }
-
-    /* Кнопка */
-
-    .offer thead td.book
-    {
-        padding: 7px 14px 7px 0;
-    }
-
-    .offer a.a-button {
-        float: left;
-        border-color: #7b8e12;
-        padding: 3px 6px;
-        font-size: 16px;
-        font-weight: bold;
-    }
-    
-    .offer a.a-button:active {
-        padding: 3px 6px;
-    }
+/* Кнопка */
+.offer thead td.book {
+    padding: 8px 14px 7px 0;
+}
+.offer a.a-button {
+    float: left;
+    border-color: #7b8e12;
+    padding: 3px 6px;
+    font-size: 16px;
+    font-weight: bold;
+}
+.offer a.a-button:active {
+    padding: 3px 6px;
+}
     
 /* Класс */
 .offer .cabin {
@@ -165,8 +166,11 @@
 .offer .summary .carrier,
 .offer .summary .changes {
     font-size: 84.62%;
-    line-height: 118.18%;        
+    line-height: 109.09%;        
     padding-left: 10px;
+}
+.offer .summary .carrier {
+    vertical-align: middle;
 }
 .offer .summary .common {
     padding-bottom: 0;
@@ -184,11 +188,11 @@
     vertical-align: middle;
 }
 .offer .summary .carrier p {    
-    margin: 0 0 3px;
+    margin: 0 0 4px;
     text-align: center;
 }
 .offer .summary .changes p {
-    margin: 0 0 3px;
+    margin: 0 0 4px;
 }
 
 /* Вылет и прилет */
@@ -332,66 +336,43 @@
     color: #1F64BE;
 }
 
-
 /* Подробности */
-
-.offer .details
-{
+.offer .details {
     border-top: 1px solid #d0d0d0;
 }
-
-.offer .details tr
-{
+.offer .details tr {
     background: #f7f7f7;
 }
-
-.offer.collapsed .details
-{
+.offer.collapsed .details {
     display: none;
 }
-
-.offer .details th
-{
+.offer .details th {
     font-size: 16px;
     font-weight: bold;
-    
     padding: 12px 0 10px;
-
     color: #777;
 }
-
-.offer .details .ret th
-{
+.offer .details .ret th {
     padding-top: 0;
 }
-
-.offer .details .direction
-{
+.offer .details .direction {
     color: #6F7C26;
 }
-
-.offer .details .ret .direction
-{
+.offer .details .ret .direction {
     color: #C46F26;
 }
 
-    /* Класс */
-    
-    .offer .details th .cabin
-    {
-        margin: 0 -2px;
-        padding: 0 3px;
-        
-        border: 1px solid #ede7c3;
-    }
-    
-    .offer .details .info .cabin
-    {
-        margin: 0 -4px;
-        padding: 1px 3px;
-        
-        border: 1px solid #b8b396;
-    }
+/* Класс */
+.offer .details th .cabin {
+    margin: 0 -2px;
+    padding: 0 3px;
+    border: 1px solid #ede7c3;
+}
+.offer .details .info .cabin {
+    margin: 0 -4px;
+    padding: 1px 3px;
+    border: 1px solid #b8b396;
+}
 
 /* Время рейса */
 .offer .details .time {

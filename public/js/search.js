@@ -4,7 +4,7 @@ init: function() {
     
     // Откуда
     this.from = $('#search-from').autocomplete({
-        cls: 'autocomplete-gray',
+        cls: 'autocomplete',
         url: '/complete.json',
         root: 'data',
         height: 374,
@@ -62,19 +62,19 @@ init: function() {
         self.update();
     });
     this.changes.el.bind('change', function(e, values) {
-        if (app.offers.results.is(':visible')) {
+        if (offersList.results.is(':visible')) {
             self.toggle(true);
-            app.offers.update = {
+            offersList.update = {
                 loading: true,
                 action: function() {
-                    var ao = app.offers;
+                    var ao = offersList;
                     ao.maxLayovers = values[0];
                     ao.resetFilters();
                     ao.applyFilter();
                 }
             };
         } else {
-            app.offers.maxLayovers = values[0];
+            offersList.maxLayovers = values[0];
         }
     });    
     
@@ -217,20 +217,20 @@ validate: function(qkey) {
         }
         if (result.valid) {
             var options = {
-                query_key: result.query_key,
+                query_key: result.query_key || data.query_key,
                 search_type: 'travel'
             };
             if (data.query_key) {
                 options.restore_results = true;
-                app.offers.load(options, result.human);
-                app.offers.show(false);
+                offersList.load(options, result.human);
+                offersList.show(false);
             } else {
                 self.loadOptions = {options: options, title: result.human};
                 self.toggle(true);
                 self.loadTimer = setTimeout(function() {
                     clearTimeout(self.loadTimer);
                     if (self.loadOptions) {
-                        app.offers.load(self.loadOptions.options, self.loadOptions.title);
+                        offersList.load(self.loadOptions.options, self.loadOptions.title);
                         delete(self.loadOptions);
                     }
                 }, 5000);
@@ -263,7 +263,7 @@ updateMap: function(lf, lt) {
 abort: function() {
     var r = this.request;
     if (r && r.abort) r.abort();
-    app.offers.abort();
+    offersList.abort();
 },
 apply: function(data) {
     this.parsed = data;

@@ -6,15 +6,25 @@
     </div>
 
     <!-- Панель ожидания результатов -->
-    <div id="offers-loading" class="g-none">
-        <h3 class="g-xxl">Минуточку, мы&nbsp;ищем для&nbsp;вас лучшие предложения</h3>
-        <h4 title="Идёт поиск…"><i class="g-l" title="Время поиска"></i></h4>
-        <p class="g-xxs">Вы всегда можете посоветоваться и&nbsp;сделать заказ по&nbsp;телефону <b>+7&nbsp;(495)&nbsp;660-35-20</b> или&nbsp;по&nbsp;почте <a href="mailto:ticket@eviterra.ru">ticket@eviterra.ru</a>
+    <div id="offers-loading" class="offers-message g-none">
+        <div class="om-photo">
+            <p>Вы всегда можете проконсультироваться по&nbsp;всем вопросам или&nbsp;сделать заказ по&nbsp;телефону <strong>+7 (495) 660-35-20</strong> или&nbsp;по&nbsp;почте <a href="mailto:ticket@eviterra.ru">ticket@eviterra.ru</a></p>
+        </div>
+        <div class="om-text">
+            <div class="progress"><span class="timer">1.2</span></div>
+            <h3>Ищем для вас лучшие предложения</h3>
+        </div>
     </div>
 
     <!-- Ничего не найдено -->
-    <div id="offers-empty" class="g-none">
-        <h3 class="g-xl">Таких рейсов нет, попробуйте другие даты.</h3>
+    <div id="offers-empty" class="offers-message g-none">
+        <div class="om-photo">
+            <p>Вы всегда можете проконсультироваться по&nbsp;всем вопросам или&nbsp;сделать заказ по&nbsp;телефону <strong>+7 (495) 660-35-20</strong> или&nbsp;по&nbsp;почте <a href="mailto:ticket@eviterra.ru">ticket@eviterra.ru</a></p>
+        </div>
+        <div class="om-text">
+            <h3>Мы не смогли ничего найти :(</h3>
+            <p>Попробуйте упростить маршрут или поискать другие даты</p>
+        </div>
     </div>    
 
     <!-- Результаты поиска -->
@@ -58,26 +68,19 @@
         <!-- Вкладки списка результатов -->
         <div id="offers-tabs">
             <ul>
-                <li class="active"><a href="#" onclick="return {v: 'featured'}">Наши предложения</a><span class="arrow"></span></li>
-                <li><a href="#" onclick="return {v: 'matrix'}">&plusmn; 3 дня</a><span class="arrow"></span></li>
-                <li id="offers-tab-all"><a href="#" onclick="return {v: 'all'}">Всего 250 вариантов</a><span class="arrow"></span></li>
-            </ul>
-            <ul class="secondary">
-                <li><a href="#" onclick="return {v: 'nearest'}">Соседние города</a><span class="arrow"></span></li>
-                <li><a href="#" onclick="return {v: 'train'}">На поезде</a><span class="arrow"></span></li>
+                <li class="active"><a href="#" onclick="return {v: 'featured'}">Наши предложения</a></li>
+                <li><a href="#" onclick="return {v: 'matrix'}">&plusmn; 3 дня</a></li>
+                <li id="offers-tab-all"><a href="#" onclick="return {v: 'all'}">Всего 250 вариантов</a></li>
             </ul>
         </div>
 
         <!-- Правая панель -->
-        <div class="media" style="background: #D6D6D6; height: 400px;"></div>
+        <!-- <div class="media" style="background: #D6D6D6; height: 400px;"></div> -->
         
         <!-- Список результатов -->
         <div id="offers-list">
-
         <div id="offers-featured" class="g-none"></div>
-        
         <div id="offers-matrix" class="g-none">
-            <h3 class="offers-title">По датам перелёта</h3>
             <div class="offer">
                 <table class="offer-prices">
                 <colgroup>
@@ -99,24 +102,21 @@
                 <div id="offers-mcollection"></div>
             </div>
         </div>
-        
         <div id="offers-all" class="offers g-none">
             <div class="offers-sort">
                 <h3 class="offers-title">Все варианты, отсортированные <span id="offers-sortedby">по цене</span></h3>
-                <p>
-                    можно 
+                <p>можно 
                     <a href="#" class="sortedby" onclick="return 'price'">по цене</a>,
                     <a href="#" onclick="return 'duration'">по времени в пути</a>,
                     <a href="#" onclick="return 'departures'">по времени вылета</a>
                     или&nbsp;<a href="#" onclick="return 'airline'">по авиакомпании</a>
-
+                </p>
             </div>
             <div class="offers-improper g-none">
                 <h3 class="g-xl">Таких рейсов нет, попробуйте другие варианты уточнения.</h3>
             </div>
             <div id="offers-pcollection"></div>
         </div>
-        
         </div>
         <!-- /Список результатов -->
     
