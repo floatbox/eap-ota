@@ -6,7 +6,7 @@ module Amadeus
       end
 
       def message
-        xpath('r:errorGroup/r:errorWarningDescription/r:freeText').to_s.strip
+        xpath('r:errorGroup/r:errorWarningDescription/r:freeText').to_s.try(:strip)
       end
     end
   end
