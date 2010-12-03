@@ -196,8 +196,8 @@ class OrderData < ActiveRecord::BaseWithoutTable
     people.every.coded.join("\n")
   end
   
-  def self.create_sample_booking
-    order = OrderData.get_from_cache('mCKsnk')
+  def self.create_sample_booking(cache_key)
+    order = OrderData.get_from_cache(cache_key)
     order.email = 'email@example.com'
     order.phone = '12345678'
     order.people_count = {:infants => 1, :children => 1, :adults => 1}
