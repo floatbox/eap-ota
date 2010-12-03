@@ -112,6 +112,8 @@ load: function(params, title) {
         if (self.update.prequest != request) return;
         self.setUpdate('pcontent', s);
     });
+    //this.update.mcontent = 'test';
+    //return
     this.mrtimer = setTimeout(function() {
         params.search_type = 'calendar';
         self.update.mrequest = $.get("/pricer/", params, function(s, status, request) {
