@@ -156,7 +156,8 @@ $.Autocompleter = function(input, options) {
         }
     });
     
-    var storedValue;
+    // отслеживание изменений
+    var storedValue = $el.val();
     var compareTimer;
     var compare = function() {
         var value = $el.val();

@@ -1,4 +1,4 @@
-$.extend(app.offers, {
+var offersList = {
 options: {},
 init: function() {
     this.container = $('#offers');
@@ -8,12 +8,12 @@ init: function() {
     this.update = {};
 
     // счётчик секунд на панели ожидания
-    this.loading.timer = $('h4 i' , this.loading).timer();
+    this.loading.timer = this.loading.find('.timer').timer();
     
     // Табы
     $('#offers-tabs').bind('select', function(e, v) {
         $('#offers-' + v).removeClass('g-none').siblings().addClass('g-none');
-        app.offers.selectedTab = v;
+        offersList.selectedTab = v;
         pageurl.update('tab', v);
     }).radio({
         toggleClosest: 'li'
@@ -34,7 +34,7 @@ init: function() {
     // Подробности
     $('#offers-list').delegate('.expand', 'click', function(event) {
         var variant = $(this).closest('.offer-variant');
-        var offer = variant.parent();
+        var offer = variant.closest('.offer');
         if (offer.hasClass('collapsed')) {
             offer.height(offer.height()).removeClass('collapsed').animate({
                 height: variant.height()
@@ -50,7 +50,7 @@ init: function() {
     // Сортировка
     $('#offers-list').delegate('.offers-sort a', 'click', function(event) {
         event.preventDefault();
-        var self = app.offers, key = this.onclick();
+        var self = offersList, key = this.onclick();
         if (key != self.sortby) {
             var list = $('#offers-pcollection').css('opacity', 0.7);
             setTimeout(function() {
@@ -70,7 +70,7 @@ init: function() {
             return; // Во время бронирования нельзя переключать варианты
         }
         var segment = parseInt(el.parent().attr('data-segment'), 10);
-        var current = app.offers.variants[parseInt(el.closest('.offer-variant').attr('data-index'), 10)];
+        var current = offersList.variants[parseInt(el.closest('.offer-variant').attr('data-index'), 10)];
         var variants = current.offer.variants, departures = current.summary.departures.concat();
         departures[segment] = dtime;
         var query = departures.join(' '), match = undefined, half_match = undefined;
@@ -120,7 +120,7 @@ load: function(params, title) {
             if (self.update.mrequest != request) return;
             self.setUpdate('mcontent', s);
         });
-    }, 10000);
+    }, params.restore_results ? 1000 : 8000);
 },
 setUpdate: function(type, s) {
     this.update[type] = typeof s == 'string' ? s : '';
@@ -204,13 +204,19 @@ toggleCollection: function(mode) {
     $('.offers-sort', context).toggleClass('g-none', !mode);
     $('.offers-improper', context).toggleClass('g-none', mode);
 },
+processLoading: function() {
+
+},
 processUpdate: function() {
     var self = this, u = this.update;
-    $('#offers-pcollection').html(u.pcontent || '');
-    $('#offers-mcollection').html(u.mcontent || '');
-    if ($('#offers-options').length) {
+    if (u.pcontent.length) {
+        this.loading.timer.trigger('stop').text('');
+        this.loading.find('h3').html('Еще чуть-чуть&hellip;');
         var self = this;
         var queue = [function() {
+            $('#offers-pcollection').html(u.pcontent || '');
+            $('#offers-mcollection').html(u.mcontent || '');        
+        }, function() {
             self.updateFilters();
         }, function() {
             self.parseResults()
@@ -225,13 +231,15 @@ processUpdate: function() {
             $('#offers-tabs').trigger('set', self.selectedTab || pageurl.tab || 'featured');
             pageurl.update('search', $('#offers-options').attr('data-query_key'));
             self.toggleCollection(true);
-            self.toggle('results');
         }, function() {
             self.processMatrix();
+        }, function() {
+            self.toggle('results');
+            self.loading.find('h3').html('Ищем для вас лучшие предложения');            
         }];
         var qstep = 0, processQueue = function() {
             queue[qstep++]();
-            if (queue[qstep]) setTimeout(processQueue, 50);
+            if (queue[qstep]) setTimeout(processQueue, 150);
         };
         processQueue();
     } else {
@@ -547,10 +555,10 @@ joinDepartures: function(dtimes, current) {
     if (pl > 2) parts[pl - 2] = ' и в ';
     return pl ? parts.join('') : '';
 }
-});
+};
 
 // Матрица цен
-$.extend(app.offers, {
+$.extend(offersList, {
 initMatrix: function(table) {
     var table = $('#offers-matrix .offer-prices');
     var cells = $('td', table);
@@ -560,14 +568,16 @@ initMatrix: function(table) {
         hlcurrent.removeClass('current');
         hlcurrent = $(frow.cells[parseInt(td.attr('data-col'), 10)]).add(td.parent()).addClass('current');
     };
+    var self = this;
     var hlcurrent = $('.current', table);
     $(table).delegate('td', 'mouseover', function() {
         highlight($(this));
     }).delegate('td', 'mouseout', function() {
         highlight(selected);
-    }).delegate('td', 'click', function() {
-        selected.removeClass('selected');
-        selected = $(this).addClass('selected');
+    }).delegate('td.active', 'click', function() {
+        selected.removeClass('selected').addClass('active');
+        selected = $(this).addClass('selected').removeClass('active');
+        self.showVariant($('#mv-' + $(this).attr('data-vid')));
     });
     cells.each(function() {
         var c = $(this);
@@ -575,27 +585,52 @@ initMatrix: function(table) {
     });    
 },
 processMatrix: function() {
-    var context = $('#offers-matrix'), table = context.find('.offer-prices').get(0);
-    var origin = context.find('.matrix-origin').attr('data-dates').split(' ');
-    var findex = [], fdate = Date.parseAmadeus(origin[0]).shiftDays(-3);
+    var context = $('#offers-matrix');
+    context.find('.offer').removeClass('expanded').addClass('collapsed');
+    var table = context.find('.offer-prices').hide();
+    table.find('td').html('').removeClass('active');
+    var ordates, origin = context.find('.matrix-origin');
+    if (origin.length) {
+        orDates = origin.attr('data-dates').split(' ');
+    } else {
+        return;
+    }
+    var rows = table.get(0).rows;
+    var findex = {}, fdate = Date.parseAmadeus(orDates[0]).shiftDays(-3);
     for (var i = 0; i < 7; i++) {
-        $(table.rows[0].cells[i + 1]).html(this.matrixDate(fdate));
+        $(rows[0].cells[i + 1]).html(this.matrixDate(fdate));
         findex[fdate.toAmadeus()] = i + 1;
         fdate.shiftDays(1);
     }
-    var tindex = [];
-    if (origin[1]) {
-        var tdate = Date.parseAmadeus(origin[1]).shiftDays(-3);
+    if (orDates[1]) {
+        var tindex = {};
+        var tdate = Date.parseAmadeus(orDates[1]).shiftDays(-3);
         for (var i = 0; i < 7; i++) {
-            $(table.rows[i + 1].cells[0]).html(this.matrixDate(tdate));
+            $(rows[i + 1].cells[0]).html(this.matrixDate(tdate));
             tindex[tdate.toAmadeus()] = i + 1;
             tdate.shiftDays(1);
         }
+    } else {
+        var tindex = undefined;
     }
+    var cheap = undefined;
     context.find('.offer-variant').each(function() {
         var el = $(this);
         var summary = $.parseJSON(el.attr('data-summary'));
+        var cn = findex[summary.dates[0]];
+        var rn = (tindex && summary.dates[1]) ? tindex[summary.dates[1]] : 4;
+        var vid = summary.dates.join('-');
+        var cell = $(rows[rn].cells[cn]).html(summary.price).addClass('active').attr('data-vid', vid);
+        el.attr('id', 'mv-' + vid);
+        if (cheap && summary.price == cheap.price) {
+            cheap.cells.add(cell);
+        } else if (!cheap || summary.price < cheap.price) {
+            cheap = {price: summary.price, cells: cell};
+        }
     });
+    cheap.cells.addClass('cheap');
+    $(rows[4].cells[4]).click();
+    table.show();
 },
 matrixDate: function(date) {
     var dm = date.getDate() + '&nbsp;' + app.constant.MNg[date.getMonth()];

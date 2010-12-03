@@ -1,7 +1,7 @@
 ﻿$(function() {
 
     search.init();
-    app.offers.init();
+    offersList.init();
 
     // образец содержимого поля "Куда"
     var e = search.to.example = $('#search-to-example');
@@ -39,10 +39,10 @@
         if (!$(this).parent().hasClass('disabled')) {
             clearTimeout(search.loadTimer);
             if (search.loadOptions) {
-                app.offers.load(search.loadOptions.options, search.loadOptions.title);
+                offersList.load(search.loadOptions.options, search.loadOptions.title);
                 delete(search.loadOptions);            
             }
-            app.offers.show();
+            offersList.show();
         }
     });
     
@@ -107,21 +107,21 @@
     });*/
     
     // Фильтры предложений
-    app.offers.filters = {};
+    offersList.filters = {};
     $('#offers-filter .filter').each(function() {
         var f = new controls.Filter($(this));
         f.el.bind('change', function(e, values) {
             var name = $(this).attr('data-name');
-            if (app.offers.filterable) app.offers.applyFilter(name, values);
+            if (offersList.filterable) offersList.applyFilter(name, values);
         });
-        app.offers.filters[$(this).attr('data-name')] = f;
+        offersList.filters[$(this).attr('data-name')] = f;
     });
     
     // Сброс фильтров
     $('#offers-reset-filters').click(function(event) {
         event.preventDefault();
         $(this).addClass('g-none');
-        var ao = app.offers;
+        var ao = offersList;
         ao.resetFilters();
         ao.applyFilter();
     });    
@@ -138,7 +138,7 @@
     // Сброс по клику на логотипе
     $('#logo').click(function() {
         app.booking.unfasten();
-        app.offers.hide();
+        offersList.hide();
         search.restore({});
         pageurl.reset();
     });

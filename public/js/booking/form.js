@@ -86,7 +86,7 @@ init: function() {
 show: function(variant) {
     var self = this;
     if (this.el) this.hide();
-    this.offer = variant.parent();
+    this.offer = variant.closest('.offer');
     if (this.offer.hasClass('collapsed')) {
         $('.expand', variant).click();
     }

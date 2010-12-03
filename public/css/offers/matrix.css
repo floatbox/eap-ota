@@ -1,6 +1,7 @@
 /* Матрица цен */
 .offer-prices {
     width: 100%;
+    margin-bottom: -1px;
 }
 
 .offer-prices th,
@@ -89,35 +90,31 @@
 }
 
 .offer-prices td {
-    font-size: 84.615%;
-
     padding: 2px 0 0;
-
-    color: #ED1192;
-
+    font-size: 14px;
     text-align: center;
     vertical-align: middle;
-    
-    cursor: pointer;
+    color: #ED1192;
 }
 
-.offer-prices td:hover
-{
+.offer-prices td.active {
+    cursor: pointer;
+}
+.offer-prices td.active:hover {
     background: #fef3f9;
 }
 
-.offer-prices td.selected
-{
-    color: #FFF;
+.offer-prices td.selected {
     background: #ED1192;
-    
+    color: #FFF;    
     cursor: default;
 }
 
-.offer-prices td.selected,
-.offer-prices td.less
-{
-    font-size: 107.692%;
-    
-    padding: 1px 0 0;    
+.offer-prices td.cheap {
+    font-weight: bold;
+}
+
+#offers-mcollection {
+    border-top: 1px solid #D0D0D0;
+    padding-top: 5px;
 }
