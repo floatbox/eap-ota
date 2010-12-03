@@ -22,7 +22,7 @@ role :web, srv
 role :db, srv, :primary => true
 
 
-set :shared_children, %w(log pids system config initializers)
+set :shared_children, %w(log pids system config initializers cache)
 
 # нужен для нормального форвардинга ключей, соответствующая настройка
 # в пользовательском .ssh/config почему-то не читается
@@ -33,5 +33,11 @@ namespace :deploy do
       run "ln -sf #{shared_path}/config/* #{latest_release}/config/; true"
       run "ln -sf #{shared_path}/initializers/* #{latest_release}/config/initializers/; true"
   end
+
+  task :symlink_persistent_cache do
+    run "ln -s #{shared_path}/cache #{latest_release}/tmp/cache"
+  end
+
   after "deploy:finalize_update", "deploy:symlink_shared_configs"
+  after "deploy:finalize_update", "deploy:symlink_persistent_cache"
 end
