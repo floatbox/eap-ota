@@ -138,6 +138,12 @@ module Amadeus
     cmd('XI')
   end
 
+  def pnr_archive(places)
+    monthplus11 =
+      %W(JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC)[(Time.now.month - 1 + 11) % 12]
+    cmd("RU1AHK#{places}MOW01#{monthplus11}")
+  end
+
   def cmd(command)
     response = command_cryptic :command => command
     response.xpath('//r:textStringDetails').to_s

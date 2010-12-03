@@ -153,6 +153,8 @@ class OrderData < ActiveRecord::BaseWithoutTable
         # FIXME среагировать на различие в цене
         add_passport_data(amadeus)
         amadeus.give_permission_to_ticketing_office
+        # FIXME
+        #amadeus.pnr_archive( как-то добыть текущее количество мест )
         amadeus.pnr_commit
         #amadeus.queue_place_pnr(:number => pnr_number)
         Order.create(:order_data => self)
