@@ -145,8 +145,12 @@ class OrderData < ActiveRecord::BaseWithoutTable
 
     if self.pnr_number = amadeus.pnr_add_multi_elements(self).pnr_number
       if block_money
-        #amadeus.fare_price_pnr_with_booking_class
+        amadeus.fare_price_pnr_with_booking_class
+        # FIXME среагировать на отсутствие маски
         amadeus.ticket_create_tst_from_pricing
+        # надо ли? - проверить что создание маски НЕ сохраняет PNR
+        amadeus.cmd('ER')
+        # FIXME среагировать на различие в цене
         add_passport_data(amadeus)
         amadeus.give_permission_to_ticketing_office
         amadeus.pnr_commit
@@ -162,8 +166,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
         amadeus.pnr_cancel
       end
     else
-      amadeus.cmd('IG')
-      amadeus.pnr_commit
+      amadeus.pnr_ignore
       errors.add :pnr_number, 'Ошибка при создании PNR' 
       return
     end
@@ -193,8 +196,8 @@ class OrderData < ActiveRecord::BaseWithoutTable
     people.every.coded.join("\n")
   end
   
-  def self.create_sample_booking
-    order = OrderData.get_from_cache('mCKsnk')
+  def self.create_sample_booking(cache_key)
+    order = OrderData.get_from_cache(cache_key)
     order.email = 'email@example.com'
     order.phone = '12345678'
     order.people_count = {:infants => 1, :children => 1, :adults => 1}
