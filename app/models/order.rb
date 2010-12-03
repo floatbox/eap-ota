@@ -23,10 +23,7 @@ class Order < ActiveRecord::Base
   end
 
   def raw
-    amadeus = Amadeus::Service.new(:book => true)
-    res = amadeus.cmd("RT #{self.pnr_number}")
-    amadeus.cmd('IG')
-    res
+    Amadeus::Service.pnr_raw(pnr_number)
   end
 
 
