@@ -18,6 +18,8 @@ class Order < ActiveRecord::Base
       self.commission_subagent = c.subagent
       self.price_share = recommendation.price_share
       self.price_markup = recommendation.price_markup
+      self.price_fare = recommendation.price_fare.to_i
+      self.price_tax = recommendation.price_tax_and_markup.to_i
     end
     self.payment_status = 'blocked'
   end

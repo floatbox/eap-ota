@@ -141,19 +141,19 @@
 <tr><td colspan="2" style="border-top: 1px solid #e5e5e5;"><font size="1" style="font-size: 6px;"><br></font></td></tr>
 <tr>
     <td class="pad_null"><font family="Arial" size="3" color="#444444">Тариф / Fare</font></td>
-    <td class="pad_null"></td>
+    <td class="pad_null"><%= @pnr.order && @pnr.order.price_fare %></td>
 </tr>
 <tr><td colspan="2"><font size="1" style="font-size: 6px;"><br></font></td></tr>
 <tr><td colspan="2" style="border-top: 1px solid #e5e5e5;"><font size="1" style="font-size: 6px;"><br></font></td></tr>
 <tr>
     <td class="pad_null"><font family="Arial" size="3" color="#444444">Налоги и сборы / Taxes</font></td>
-    <td class="pad_null"></td>
+    <td class="pad_null"><%= @pnr.order && @pnr.order.price_tax %></td>
 </tr>
 <tr><td colspan="2"><font size="1" style="font-size: 6px;"><br></font></td></tr>
 <tr><td colspan="2" style="border-top: 1px solid #e5e5e5;"><font size="1" style="font-size: 6px;"><br></font></td></tr>
 <tr>
     <td class="pad_null"><font family="Arial" size="3" color="#444444">Итоговая стоимость / Total</font></td>
-    <td class="pad_null"></td>
+    <td class="pad_null"><%= @pnr.order && (@pnr.order.price_fare + @pnr.order.price_tax) %></td>
 </tr>
 <tr><td colspan="2"><font size="1" style="font-size: 6px;"><br></font></td></tr>
 <tr><td colspan="2" style="border-top: 1px solid #e5e5e5;"><font size="1" style="font-size: 6px;"><br></font></td></tr>

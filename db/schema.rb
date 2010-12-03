@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101126172047) do
+ActiveRecord::Schema.define(:version => 20101203172112) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -160,8 +160,6 @@ ActiveRecord::Schema.define(:version => 20101126172047) do
 
   create_table "orders", :force => true do |t|
     t.string   "email"
-    t.string   "first_name"
-    t.string   "surname"
     t.string   "phone"
     t.string   "pnr_number"
     t.datetime "created_at"
@@ -176,6 +174,8 @@ ActiveRecord::Schema.define(:version => 20101126172047) do
     t.string   "order_id"
     t.string   "full_info"
     t.string   "payment_status"
+    t.integer  "price_fare"
+    t.integer  "price_tax"
   end
 
   create_table "presets", :force => true do |t|

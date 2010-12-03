@@ -19,5 +19,9 @@ class Pnr
     pnr
   end
 
+  def order
+    @order || @order = Order.find_by_pnr_number(number)
+  end
+
 
 end

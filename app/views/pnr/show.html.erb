@@ -21,44 +21,6 @@
 
 <div id="term">Терминал: <pre><%=h @pnr.raw %></pre></div>
 </div>
-
-<%
-=begin
-%>
-<h3>Lowest fare</h3>
-
-
-Цены:
-<table>
-<tr>
-<th>Тип</th>
-<th>Цена</th>
-<th>Валюта</th>
-</tr>
-<% for p in @pnr.prices %>
-<tr>
-<td><%= p.fareDataQualifier %> </td>
-<td><%= p.fareAmount %></td>
-<td><%= p.fareCurrency %></td>
-</tr>
-<% end %>
-</table>
-
-Налоги:
-<table>
-<tr><th>isoCountry</th><th>taxNature</th><th>fareAmount</th><th>fareCurrency</th></tr>
-<% for t in @pnr.taxes %>
-<tr>
-<td><%= t.isoCountry %></td>
-<td><%= t.taxNature %></td>
-<td><%= t.fareAmount %></td>
-<td><%= t.fareCurrency %></td>
-</tr>
-<% end %>
-</table>
-<%
-=end
-%>
 <script type="text/javascript">
 //document.print();
 </script>
