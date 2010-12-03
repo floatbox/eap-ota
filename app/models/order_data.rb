@@ -194,7 +194,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
   
   def self.create_sample_booking
-    order = OrderData.get_from_cache('7qY6PW')
+    order = OrderData.get_from_cache('mCKsnk')
     order.email = 'email@example.com'
     order.phone = '12345678'
     order.people_count = {:infants => 1, :children => 1, :adults => 1}

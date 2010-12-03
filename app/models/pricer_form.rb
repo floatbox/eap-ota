@@ -14,6 +14,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   column :day_interval, :integer, 3
   column :debug, :boolean, false
   column :cabin, :string
+  column :changes, :string
 
   validates_presence_of :from_iata, :to_iata, :date1
   validates_presence_of :date2, :if => :rt
