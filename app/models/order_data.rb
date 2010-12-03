@@ -149,7 +149,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
         # FIXME среагировать на отсутствие маски
         amadeus.ticket_create_tst_from_pricing
         # надо ли? - проверить что создание маски НЕ сохраняет PNR
-        amadeus.cmd('ER')
+        amadeus.commit_and_retrieve
         # FIXME среагировать на различие в цене
         add_passport_data(amadeus)
         amadeus.give_permission_to_ticketing_office
@@ -163,7 +163,9 @@ class OrderData < ActiveRecord::BaseWithoutTable
         PnrMailer.deliver_pnr_notification(email, self.pnr_number) if email
         return pnr_number
       else
+        # FIXME добавить какой-то индикатор ошибки блокировки денег
         amadeus.pnr_cancel
+        return
       end
     else
       amadeus.pnr_ignore
@@ -175,7 +177,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
 
   def add_passport_data(amadeus)
-    amadeus.cmd('IR')
+    amadeus.pnr_ignore_and_retrieve
     validating_carrier_code = recommendation.validating_carrier.iata
     (adults + children).each_with_index do |person, i|
       amadeus.cmd( "SRDOCS#{validating_carrier_code}HK1-P-#{person.nationality.alpha3}-#{person.passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{i+1}")
@@ -187,7 +189,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
       amadeus.cmd( "SRDOCS#{validating_carrier_code}HK1-P-#{person.nationality.alpha3}-#{person.passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}I-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{i+1}")
       amadeus.cmd("FE INF #{validating_carrier_code} ONLY PSPT #{person.passport}/P#{i+1}")
     end
-    amadeus.cmd('ER')
+    amadeus.pnr_commit_and_retrieve
   end
   
   

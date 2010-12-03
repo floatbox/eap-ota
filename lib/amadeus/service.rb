@@ -120,8 +120,18 @@ module Amadeus
     pnr_add_multi_elements :ignore => true
   end
 
+  def pnr_ignore_and_retrieve
+    # сделать опцию для pnr_add_multi_elements
+    cmd("IR")
+  end
+
   def pnr_commit
     pnr_add_multi_elements :end_transact => true
+  end
+
+  def pnr_commit_and_retrieve
+    # сделать опцию для pnr_add_multi_elements
+    cmd("ER")
   end
 
   def pnr_cancel
