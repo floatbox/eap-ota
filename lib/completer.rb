@@ -176,7 +176,7 @@ class Completer
 
     read_dates
     read_months
-    #read_passengers
+    read_passengers
     #read_comforts
     #read_airplane_families
 
@@ -222,9 +222,10 @@ class Completer
   end
 
   PAX = 'вдвоем', 'втроем', 'вчетвером', 'впятером', 'с ребенком', 'c подругой'
+  PEOPLE = [['вдвоем', {:adults => 2}], ['втроем', {:adults => 3}], ['вчетвером', {:adults => 4}], ['впятером', {:adults => 4}], ['с ребенком', {:children => 1}], ['с подругой', {:adults => 2}]]
   def read_passengers
-    PAX.each do |pax|
-      add(:name => pax, :type => 'people')
+    PEOPLE.each do |pax, hidden_info|
+      add(:name => pax, :type => 'people', :hidden_info => hidden_info)
     end
   end
 

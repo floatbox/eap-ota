@@ -156,12 +156,12 @@ module Amadeus
     amadeus = Amadeus::Service.new(:book => true, :office => Amadeus::Session::TICKETING)
     amadeus.pnr_retrieve(:number => pnr_number)
     amadeus.doc_issuance_issue_ticket
-
+  ensure
     amadeus.session.destroy
   end
 
-  def give_permission_to_booking_office
-    cmd("ES#{Amadeus::Session::BOOKING}")
+  def give_permission_to_ticketing_office
+    cmd("ES #{Amadeus::Session::TICKETING}-B")
   end
 
   def conversion_rate(currency_code)

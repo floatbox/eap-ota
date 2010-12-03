@@ -6,22 +6,25 @@
   %unitNumberDetail
     %numberOfUnits 200
     %typeOfUnit RC
-- 1.upto(adults) do |n|
-  %paxReference
-    %ptc ADT
+
+%paxReference
+  %ptc ADT
+  - 1.upto(adults) do |n|
     %traveller
       %ref=n
-- 1.upto(real_people_count[:children]) do |n|
+- if real_people_count[:children] > 0
   %paxReference
     %ptc CH
-    %traveller
-      %ref= n+adults
-- 1.upto(real_people_count[:infants]) do |n|
+    - 1.upto(real_people_count[:children]) do |n|
+      %traveller
+        %ref= n+adults
+- if real_people_count[:infants] > 0
   %paxReference
     %ptc INF
-    %traveller
-      %ref= n
-      %infantIndicator 1
+    - 1.upto(real_people_count[:infants]) do |n|
+      %traveller
+        %ref= n
+        %infantIndicator 1
 
 %fareOptions
   %pricingTickInfo
