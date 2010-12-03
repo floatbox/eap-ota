@@ -124,7 +124,23 @@ class Recommendation
 
   # comparison, uniquiness, etc.
   def signature
-    [validating_carrier_iata, price_fare, price_tax, variants]
+    [validating_carrier_iata, price_fare, price_tax, variants, booking_classes]
+  end
+
+  def self.corrected recs
+    #объединяем эквивалентные варианты
+    recs.each_with_object([]) do |r, result|
+      if r.groupable_with?(result.last)
+        result.last.variants += r.variants
+      else
+        result << r
+      end
+    end
+  end
+
+  def groupable_with? rec
+    return unless rec
+    [price_fare, price_tax, validating_carrier_iata,  booking_classes, variants.first.flights.every.operating_carrier_iata, variants.first.flights.every.arrival_iata] == [rec.price_fare, rec.price_tax, rec.validating_carrier_iata,  rec.booking_classes, rec.variants.first.flights.every.operating_carrier_iata, rec.variants.first.flights.every.arrival_iata]
   end
 
   def hash

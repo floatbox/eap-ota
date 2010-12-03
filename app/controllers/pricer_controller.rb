@@ -32,6 +32,7 @@ class PricerController < ApplicationController
     if params[:search_type] == 'calendar'
       render :partial => 'matrix'
     else
+      @recommendations = Recommendation.corrected @recommendations
       render :partial => 'recommendations'
     end
   rescue Amadeus::Error, Handsoap::Fault => e
