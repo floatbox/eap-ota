@@ -59,7 +59,7 @@
                 <div class="filter" data-name="cities"><span class="control">город пересадки</span><span class="values"></span><div class="dropdown"><dl><dt>город пересадки</dt><dd class="empty">любой</dd></dl></div></div><span class="comma">,</span>
                 <div class="filter" data-name="planes"><span class="control">самолёт</span><span class="values"></span><div class="dropdown"><dl><dt>самолёт</dt><dd class="empty">любой</dd></dl></div></div><span class="comma">,</span>
                 <div class="filter" data-name="airlines"><span class="control">авиакомпанию</span><span class="values"></span><div class="dropdown"><dl><dt>авиакомпания</dt><dd class="empty">любая</dd></dl></div></div>
-                <a href="#" class="g-none" id="offers-reset-filters"><u>все варианты</u></a>
+                <a href="#" class="g-none" id="offers-reset-filters">все&nbsp;варианты</a>
                 </div>
             </td>
         </tr>
@@ -69,7 +69,7 @@
         <div id="offers-tabs">
             <ul>
                 <li class="active"><a href="#" onclick="return {v: 'featured'}">Наши предложения</a></li>
-                <li><a href="#" onclick="return {v: 'matrix'}">&plusmn; 3 дня</a></li>
+                <li id="offers-tab-matrix"><a href="#" onclick="return {v: 'matrix'}">&plusmn; 3 дня</a></li>
                 <li id="offers-tab-all"><a href="#" onclick="return {v: 'all'}">Всего 250 вариантов</a></li>
             </ul>
         </div>
@@ -83,21 +83,19 @@
         <div id="offers-matrix" class="g-none">
             <div class="offer">
                 <table class="offer-prices">
-                <colgroup>
-                    <col width="120">
-                    <col width="*" span="7">
-                </colgroup>
+                <col width="120">
+                <col width="*" span="7">
                 <tr>
                     <th class="direction"><h6>Туда</h6><h6 class="ret">Обратно</h6></th>
-                    <th></th><th></th><th></th><th></th><th></th><th></th><th class="last"></th>
+                    <th class="first"></th><th></th><th></th><th></th><th></th><th></th><th class="last"></th>
                 </tr>
+                <tr class="diffret"><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
+                <tr class="diffret"><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
+                <tr class="diffret"><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
                 <tr><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
-                <tr><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
-                <tr><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
-                <tr><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
-                <tr><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
-                <tr><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
-                <tr><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
+                <tr class="diffret"><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
+                <tr class="diffret"><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
+                <tr class="diffret"><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
                 </table>
                 <div id="offers-mcollection"></div>
             </div>

@@ -204,19 +204,14 @@ toggleCollection: function(mode) {
     $('.offers-sort', context).toggleClass('g-none', !mode);
     $('.offers-improper', context).toggleClass('g-none', mode);
 },
-processLoading: function() {
-
-},
 processUpdate: function() {
     var self = this, u = this.update;
+    $('#offers-pcollection').html(u.pcontent || '');
+    $('#offers-mcollection').html(u.mcontent || '');
     if (u.pcontent.length) {
-        this.loading.timer.trigger('stop').text('');
         this.loading.find('h3').html('Еще чуть-чуть&hellip;');
         var self = this;
         var queue = [function() {
-            $('#offers-pcollection').html(u.pcontent || '');
-            $('#offers-mcollection').html(u.mcontent || '');        
-        }, function() {
             self.updateFilters();
         }, function() {
             self.parseResults()
@@ -228,11 +223,11 @@ processUpdate: function() {
         }, function() {
             self.showRecommendations();
         }, function() {
+            self.processMatrix();
+        }, function() {
             $('#offers-tabs').trigger('set', self.selectedTab || pageurl.tab || 'featured');
             pageurl.update('search', $('#offers-options').attr('data-query_key'));
             self.toggleCollection(true);
-        }, function() {
-            self.processMatrix();
         }, function() {
             self.toggle('results');
             self.loading.find('h3').html('Ищем для вас лучшие предложения');            
@@ -246,6 +241,7 @@ processUpdate: function() {
         this.toggle('empty');
         this.variants = [];
         this.items = [];
+        pageurl.update('search', undefined);
     }
     delete(u.pcontent);
     delete(u.mcontent);        
@@ -586,13 +582,19 @@ initMatrix: function(table) {
 },
 processMatrix: function() {
     var context = $('#offers-matrix');
-    context.find('.offer').removeClass('expanded').addClass('collapsed');
     var table = context.find('.offer-prices').hide();
     table.find('td').html('').removeClass('active');
     var ordates, origin = context.find('.matrix-origin');
+    var mtab = $('#offers-tab-matrix');    
     if (origin.length) {
+        context.find('.offer').removeClass('expanded').addClass('collapsed');
         orDates = origin.attr('data-dates').split(' ');
+        mtab.show();
     } else {
+        mtab.hide();
+        if (this.selectedTab == 'matrix' || pageurl.tab == 'matrix') {
+            this.selectedTab = 'featured';
+        }
         return;
     }
     var rows = table.get(0).rows;
@@ -603,6 +605,7 @@ processMatrix: function() {
         fdate.shiftDays(1);
     }
     if (orDates[1]) {
+        table.removeClass('owmatrix');
         var tindex = {};
         var tdate = Date.parseAmadeus(orDates[1]).shiftDays(-3);
         for (var i = 0; i < 7; i++) {
@@ -611,6 +614,7 @@ processMatrix: function() {
             tdate.shiftDays(1);
         }
     } else {
+        table.addClass('owmatrix');
         var tindex = undefined;
     }
     var cheap = undefined;

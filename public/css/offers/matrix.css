@@ -118,3 +118,22 @@
     border-top: 1px solid #D0D0D0;
     padding-top: 5px;
 }
+
+/* Матрица для одного сегмента */
+.owmatrix tr.diffret,
+.owmatrix th.direction,
+.owmatrix th.ret {
+    display: none;
+}
+.owmatrix th {
+    width: 14.286%;
+}
+.owmatrix th.first {
+    border-radius: 10px 0 0 0;
+    -moz-border-radius: 10px 0 0 0;
+    -webkit-border-radius: 10px 0 0 0;
+    -o-border-radius: 10px 0 0 0;
+}
+.owmatrix td {
+    height: 36px;
+}

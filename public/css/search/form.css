@@ -34,18 +34,15 @@
     white-space: nowrap;
 }
 
-.form .label-from
-{
+.form .label-from {
     color: #cc8000;
 }
 
-.form .label-to
-{
+.form .label-to {
     color: #9ab300;
 }
 
-.form label s
-{
+.form label s {
     position: absolute;
     right: -24px;
     top: 50%;
@@ -134,11 +131,14 @@
 .form input {
     float: left; /* иначе в IE появляется вертикальный отступ в 1px */
 }
+
 .form .from {
-    width: 354px;
+    /* width: 354px;*/
+    width: 428px;
 }
 .form .to {
-    width: 506px;
+    /* width: 506px;*/
+    width: 432px;
 }
 
 /* Кнопка туда-сюда-обратно (begin) */
