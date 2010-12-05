@@ -22,14 +22,46 @@
     visibility: hidden;
 }
 
-/* Состояния формы */
+/* Предварительное бронирование */
 
 .booking {
     border-top: 1px solid #D0D0D0;
 }
+.booking-state {
+    padding: 15px;
+}
+.booking-state h4 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 20px;    
+}
+.booking-state .progress {
+    width: 128px;
+    height: 15px;
+    margin: 1px auto 10px;    
+    background: url(/img/offers/progress.gif) 100% 2px no-repeat;
+}
+.booking-state p {
+    margin: 6px 0 0;
+    text-align: center;
+} 
 
-.booking .empty {
-    padding: 17px 15px;
+/* Изменение цены */
+
+.diff-price {
+    border-top: 1px solid #D0D0D0;
+    padding: 15px;
+}
+.diff-price h5 {
+    font-size: 100%;
+    margin: 0 0 8px;
+}
+.diff-price strong {
+    font-weight: bold;
+}
+.offer .diff-price a.a-button {
+    float: none;
 }
 
 .booking .loading {
@@ -527,18 +559,10 @@
 
 .bankcard li {
     position: relative;
-
-    width: 316px;
+    width: 318px;
     height: 192px;
-
-    border-radius: 10px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -o-border-radius: 10px;
-
-    background: #bbb;
-    
-    background: url(/img/booking/cardbgr.png) repeat-x #999;
+    padding: 1px 0;
+    background: url(/img/booking/cardbgr.png) no-repeat;
 }
 
 .bankcard li.bc-front {
@@ -637,7 +661,7 @@
         position: absolute;
 
         top: 35%;
-        left: 10px;
+        left: 11px;
 
         white-space: nowrap;
     }
@@ -653,8 +677,8 @@
     .bankcard .bankcardname {
         position: absolute;
 
-        bottom: 10px;
-        left: 10px;
+        bottom: 11px;
+        left: 11px;
     }
 
     .bankcard .bankcardname .text {
@@ -668,8 +692,8 @@
     .bankcard .bc-exp {
         position: absolute;
 
-        bottom: 10px;
-        right: 10px;
+        bottom: 11px;
+        right: 11px;
     }
 
     .bankcard .bc-exp i {
@@ -697,7 +721,7 @@
         position: absolute;
 
         top: 35%;
-        right: 10px;
+        right: 11px;
 
         white-space: nowrap;
     }

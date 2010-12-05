@@ -18,18 +18,13 @@
 
 /* верхние подписи к полям ввода */
 
-.form tr.labels td
-{
+.form tr.labels td {
     vertical-align: bottom;
 }
 
-.form label
-{
-    font: 115% Arial,a;
-    
+.form label {
     position: relative;
-
-    line-height: 1.5em;
+    font: 18px/27px Arial, sans-serif;
     letter-spacing: -0.01em;
     white-space: nowrap;
 }
@@ -134,11 +129,11 @@
 
 .form .from {
     /* width: 354px;*/
-    width: 428px;
+    width: 422px;
 }
 .form .to {
     /* width: 506px;*/
-    width: 432px;
+    width: 438px;
 }
 
 /* Кнопка туда-сюда-обратно (begin) */

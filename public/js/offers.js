@@ -108,25 +108,47 @@ load: function(params, title) {
         title: title,
         loading: true
     };
-    this.update.prequest = $.get("/pricer/", params, function(s, status, request) {
-        if (self.update.prequest != request) return;
-        self.setUpdate('pcontent', s);
+    this.update.prequest = $.ajax({
+        url: '/pricer/',
+        data: params,
+        success: function(s, status, request) {
+            if (self.update.prequest != request) return;
+            self.setUpdate('pcontent', s);
+        },
+        error: function(request) {
+            if (self.update.prequest != request) return;
+            self.setUpdate('pcontent', '');
+        },
+        timeout: 95000
     });
-    //this.update.mcontent = 'test';
-    //return
     this.mrtimer = setTimeout(function() {
         params.search_type = 'calendar';
-        self.update.mrequest = $.get("/pricer/", params, function(s, status, request) {
-            if (self.update.mrequest != request) return;
-            self.setUpdate('mcontent', s);
+        self.update.mrequest =  $.ajax({
+            url: '/pricer/',
+            data: params,
+            success: function(s, status, request) {
+                if (self.update.mrequest != request) return;
+                self.setUpdate('mcontent', s);
+            },
+            error: function(request) {
+                if (self.update.mrequest != request) return;
+                self.setUpdate('mcontent', '');
+            },
+            timeout: 45000
         });
     }, params.restore_results ? 1000 : 8000);
+    clearTimeout(this.resetTimer);
+    this.resetTimer = setTimeout(function() {
+        self.setUpdate('pcontent', '');
+        self.setUpdate('mcontent', '');
+    }, 120000);
 },
 setUpdate: function(type, s) {
     this.update[type] = typeof s == 'string' ? s : '';
     var pc = this.update.pcontent;
     var mc = this.update.mcontent;
     if (pc !== undefined && mc !== undefined) {
+        clearTimeout(this.resetTimer);
         this.update.loading = false;
         if (this.loading.is(':visible')) {
             pc ? this.processUpdate() : this.toggle('empty');
@@ -208,7 +230,7 @@ processUpdate: function() {
     var self = this, u = this.update;
     $('#offers-pcollection').html(u.pcontent || '');
     $('#offers-mcollection').html(u.mcontent || '');
-    if (u.pcontent.length) {
+    if ($('#offers-options').length) {
         this.loading.find('h3').html('Еще чуть-чуть&hellip;');
         var self = this;
         var queue = [function() {
@@ -242,6 +264,7 @@ processUpdate: function() {
         this.variants = [];
         this.items = [];
         pageurl.update('search', undefined);
+        $('#offers-pcollection').html('');
     }
     delete(u.pcontent);
     delete(u.mcontent);        
@@ -571,9 +594,11 @@ initMatrix: function(table) {
     }).delegate('td', 'mouseout', function() {
         highlight(selected);
     }).delegate('td.active', 'click', function() {
-        selected.removeClass('selected').addClass('active');
-        selected = $(this).addClass('selected').removeClass('active');
-        self.showVariant($('#mv-' + $(this).attr('data-vid')));
+        if (!$(this).closest('.offer').hasClass('active-booking')) {
+            selected.removeClass('selected').addClass('active');
+            selected = $(this).addClass('selected').removeClass('active');
+            self.showVariant($('#mv-' + $(this).attr('data-vid')));
+        }
     });
     cells.each(function() {
         var c = $(this);
@@ -618,7 +643,7 @@ processMatrix: function() {
         var tindex = undefined;
     }
     var cheap = undefined;
-    context.find('.offer-variant').each(function() {
+    var variants = context.find('.offer-variant').each(function() {
         var el = $(this);
         var summary = $.parseJSON(el.attr('data-summary'));
         var cn = findex[summary.dates[0]];
@@ -627,12 +652,14 @@ processMatrix: function() {
         var cell = $(rows[rn].cells[cn]).html(summary.price).addClass('active').attr('data-vid', vid);
         el.attr('id', 'mv-' + vid);
         if (cheap && summary.price == cheap.price) {
-            cheap.cells.add(cell);
+            cheap.cells = cheap.cells.add(cell);
         } else if (!cheap || summary.price < cheap.price) {
             cheap = {price: summary.price, cells: cell};
         }
     });
-    cheap.cells.addClass('cheap');
+    if (cheap.length / variants.length < 0.6) {
+        cheap.cells.addClass('cheap');
+    }
     $(rows[4].cells[4]).click();
     table.show();
 },

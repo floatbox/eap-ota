@@ -133,23 +133,35 @@
     </ul>
 
     <table class="bc-bill">
-        <tfoot>
-            <tr class="g-xxs">
-                <td>стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами
-                <td>
-                <td>комиссия банка за&nbsp;проведение платежа
-                <td>
-                <td>
-        <tbody>
-            <tr>
-                <th>Стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %>
-                <th rowspan="2"><i>+</i>
-                <th>Комиссия за&nbsp;транзакцию
-                <th rowspan="2"><i>=</i>
-                <th>С&nbsp;карты будет списано
-            <tr>
-                <td><u><%= @order.recommendation.price_total.to_i %></u><i><%= Russian.pluralize(@order.recommendation.price_total.to_i, 'рубль', 'рубля', 'рублей') %></i>
-                <td><u><%= @order.recommendation.price_payment.to_i %></u><i><%= Russian.pluralize(@order.recommendation.price_payment.to_i, 'рубль', 'рубля', 'рублей') %></i>
-                <td><b><%= @order.recommendation.price_with_payment_commission.to_i %></b><i><%= Russian.pluralize(@order.recommendation.price_with_payment_commission.to_i, 'рубль', 'рубля', 'рублей') %></i>
+    <tfoot>
+        <tr class="g-xxs">
+            <td>стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами
+            <td>
+            <td>комиссия банка за&nbsp;проведение платежа
+            <td>
+            <td>
+        </tr>
+    </tfoot>
+    <tbody>
+        <tr>
+            <th>Стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %>
+            <th rowspan="2"><i>+</i>
+            <th>Комиссия за&nbsp;транзакцию
+            <th rowspan="2"><i>=</i>
+            <th>С&nbsp;карты будет списано
+        </tr>
+        <tr>
+            <td><u><%= @order.recommendation.price_total.to_i %></u><i><%= Russian.pluralize(@order.recommendation.price_total.to_i, 'рубль', 'рубля', 'рублей') %></i>
+            <td><u><%= @order.recommendation.price_payment.to_i %></u><i><%= Russian.pluralize(@order.recommendation.price_payment.to_i, 'рубль', 'рубля', 'рублей') %></i>
+            <td><b><%= @order.recommendation.price_with_payment_commission.to_i %></b><i><%= Russian.pluralize(@order.recommendation.price_with_payment_commission.to_i, 'рубль', 'рубля', 'рублей') %></i>
+        </tr>
+    </tbody>
     </table>
+    
+    <div class="booking-price g-none">
+    <dl class="sum" data-value="<%= @order.recommendation.price_total.to_i + 5 %>">
+        <dt>Итого <strong><%= human_price(@order.recommendation.price_total.to_i) %></strong> за всех со всеми сборами</dt>
+        <dd>Тариф — <%= human_price((@order.recommendation.price_fare).to_i) %>, налоги и сборы — <%= human_price(@order.recommendation.price_tax_and_markup.to_i) %></dd>
+    </dl>    
+    </div>
 </div>

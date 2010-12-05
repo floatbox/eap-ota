@@ -139,7 +139,7 @@
     <td></td>
     <td colspan="6">
     <a href="#" class="a-button">Выбрать</a>
-    <dl class="sum">
+    <dl class="sum" data-value="<%= recommendation.price_total.to_i %>">
         <dt>Итого <strong><%= human_price(recommendation.price_total.to_i) %></strong> за всех со всеми сборами</dt>
         <dd>Тариф — <%= human_price((recommendation.price_fare).to_i) %>, налоги и сборы — <%= human_price(recommendation.price_tax_and_markup.to_i) %></dd>
     </dl>

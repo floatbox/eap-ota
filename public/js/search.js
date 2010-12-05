@@ -196,6 +196,7 @@ update: function(source) {
 },
 validate: function(qkey) {
     clearTimeout(this.timer);
+    clearTimeout(this.loadTimer);
     if (this.preventValidation) return;
     this.toggle(false);
     this.abort();
@@ -228,12 +229,11 @@ validate: function(qkey) {
                 self.loadOptions = {options: options, title: result.human};
                 self.toggle(true);
                 self.loadTimer = setTimeout(function() {
-                    clearTimeout(self.loadTimer);
                     if (self.loadOptions) {
-                        offersList.load(self.loadOptions.options, self.loadOptions.title);
+                        offersList.load(options, result.human);
                         delete(self.loadOptions);
                     }
-                }, 5000);
+                }, 3000);
             }
         }
         if (result.search) {
