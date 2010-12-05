@@ -37,15 +37,18 @@
     %conversionRateDetail
       %currency RUB
 
--if nonstop or cabin
-  %travelFlightInfo
-    - if cabin
-      %cabinId
-        %cabin= cabin
-    - if nonstop
-      %flightDetail
-        %flightType N
-
+%travelFlightInfo
+  - if cabin
+    %cabinId
+      %cabin= cabin
+  %companyIdentity
+    %carrierQualifier W
+    -# FIXME нужно нормально получать список подходящих авиакомпаний в модели
+    - Airline.all(:conditions => 'consolidator_id is NULL AND iata != ""', :limit => 99).each do |a|
+      %carrierId= a.iata
+  - if nonstop
+    %flightDetail
+      %flightType N
 
 %itinerary
   %requestedSegmentRef
