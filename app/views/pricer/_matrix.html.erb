@@ -1,3 +1,4 @@
+<% cache(:action => "index", :action_suffix => ('matrix' + @query_key)) do %>
 <% if @recommendations.present? %>
 <div class="matrix-origin" data-dates="<%= @search.dates.join(' ') %>"></div>
 <% @recommendations.each do |recommendation| %>
@@ -6,5 +7,6 @@
         <% variant_summary = {:price => recommendation.price_total.to_i, :dates => variant.segments.map{|s| s.flights[0].departure_date }} %>
         <%= render :partial => 'variant', :locals => {:variant => variant, :recommendation => recommendation, :variant_cabins => different_cabins, :variant_summary => variant_summary.to_json} %>
     <% end %>    
+<% end %>
 <% end %>
 <% end %>

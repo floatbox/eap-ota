@@ -45,11 +45,13 @@ class PricerController < ApplicationController
     require 'pricer_form'
     if params[:query_key]
       @search = Rails.cache.read('pricer_form' + params[:query_key])
+      fragment_exist = fragment_exist?({:action => 'index', :action_suffix => params[:query_key]}) &&
+        fragment_exist?({:action => 'index', :action_suffix => ('matrix' + params[:query_key])})
       render :json => {
         :search => @search,
         :valid => @search.present? && @search.valid?,
         :human => @search && @search.human,
-        :fragment_exist => fragment_exist?({:action => 'index', :action_suffix => params[:query_key]})
+        :fragment_exist => fragment_exist
       }
     else
       @search = PricerForm.new(params[:search])
