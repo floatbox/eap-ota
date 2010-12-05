@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101203172112) do
+ActiveRecord::Schema.define(:version => 20101204181847) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -30,6 +30,8 @@ ActiveRecord::Schema.define(:version => 20101203172112) do
     t.boolean  "aviacentr",           :default => false, :null => false
     t.integer  "airline_alliance_id"
     t.string   "bonus_program_name"
+    t.integer  "gds_id"
+    t.integer  "consolidator_id"
   end
 
   create_table "airplanes", :force => true do |t|
@@ -104,6 +106,12 @@ ActiveRecord::Schema.define(:version => 20101203172112) do
   add_index "cities", ["name_en"], :name => "index_cities_on_name_en"
   add_index "cities", ["name_ru"], :name => "index_cities_on_name_ru"
 
+  create_table "consolidators", :force => true do |t|
+    t.string "name"
+    t.string "booking_office"
+    t.string "ticketing_office"
+  end
+
   create_table "countries", :force => true do |t|
     t.string   "name_en"
     t.string   "name_ru"
@@ -151,6 +159,10 @@ ActiveRecord::Schema.define(:version => 20101203172112) do
     t.string   "proper_in"
     t.float    "lat"
     t.float    "lng"
+  end
+
+  create_table "global_distribution_systems", :force => true do |t|
+    t.string "name"
   end
 
   create_table "interline_agreements", :id => false, :force => true do |t|

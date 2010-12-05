@@ -11,14 +11,30 @@ AirlineAlliance:
   relationships: airlines
   application: Eviterra
 
+GlobalDistributionSystem:
+  fields:
+    default: name
+    list: name
+    form: name
+  relationships: airlines
+  application: Eviterra
+
+Consolidator:
+  fields:
+    default: name, booking_office, ticketing_office
+    list: name, booking_office, ticketing_office
+    form: name, booking_office, ticketing_office
+  relationships: airlines
+  application: Eviterra
+
 Airline:
   fields:
     default: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
     list: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
-    form: ru_shortname, ru_longname, en_shortname, en_longname, aviacentr, iata, country, bonus_program_name, alliance
+    form: ru_shortname, ru_longname, en_shortname, en_longname, aviacentr, iata, country, bonus_program_name, alliance, gds, consolidator
   order_by: en_shortname, ru_shortname
-  relationships: country, alliance 
-  filters: country
+  relationships: country, alliance, gds, consolidator
+  filters: country, gds, consolidator
   search: ru_shortname, ru_longname, en_shortname, en_longname, iata
   application: Eviterra
   export: csv

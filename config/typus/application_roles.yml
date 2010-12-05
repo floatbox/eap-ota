@@ -13,3 +13,5 @@ admin:
   Region: create, read, update, delete
   Preset: create, read, update, delete
   AirlineAlliance: create, read, update, delete
+  Consolidator: create, read, update, delete
+  GlobalDistributionSystem: create, read, update, delete

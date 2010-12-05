@@ -12,6 +12,8 @@ class Airline < ActiveRecord::Base
   belongs_to :alliance, :foreign_key => 'airline_alliance_id', :class_name => 'AirlineAlliance'
   
   belongs_to :country
+  belongs_to :consolidator
+  belongs_to :gds, :foreign_key => 'gds_id', :class_name =>'GlobalDistributionSystem'
 
   def name
     ru_longname.presence ||
