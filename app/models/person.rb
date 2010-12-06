@@ -1,11 +1,11 @@
 class Person < ActiveRecord::BaseWithoutTable
-  column :first_name, :string, "Имя"
-  column :last_name, :string, "Фамилия"
+  column :first_name, :string
+  column :last_name, :string
   column :sex, :string
   column :nationality_id, :integer
   column :birthday, :date
   column :document_expiration_date, :date
-  column :passport, :string, "Номер документа"
+  column :passport, :string
   column :document_noexpiration, :boolean, false
   column :bonus_present, :boolean, false
   column :bonuscard_type, :string
