@@ -6,13 +6,27 @@
            <col width="224">
            <col width="217">
         </colgroup>        
-
+        
+        <tr>
+            <td>
+                <label 
+                 for="person_attributes_<%=person_form_counter%>_first_name"
+                 class="bold g-s"
+                 title="Имя пассажира латинскими буквами"
+                >Имя</label>
+            <td>
+                <label
+                 for="person_attributes_<%=person_form_counter%>_last_name"
+                 class="bold g-s"
+                 title="Фамилия пассажира латинскими буквами"
+                >Фамилия</label>
+            <td>        
         <tr>
             <td class="g-middle text-upper">
                 <%= person.text_field :first_name,
                  :class => "text text-name g-xl",
                  :title => "имя пассажира",
-                 :onclick => "return {def: 'Имя', mask: /[a-z]/i, rules: {req: true, minl: 2, latin: true, gender: 'N'}}"
+                 :onclick => "return {mask: /[a-z]/i, rules: {req: true, minl: 2, latin: true, gender: 'N'}}"
                  %>
                  <%= person.error_message_on :first_name, 
                  :id => "error_person_#{person_form_counter}_first_name" %>
@@ -21,7 +35,7 @@
                 <%= person.text_field :last_name,
                  :class => "text text-name g-xl",
                  :title => "фамилия пассажира",
-                 :onclick => "return {def: 'Фамилия', mask: /[a-z]/i, rules: {req: true, minl: 2, latin: true, gender: 'F'}}"
+                 :onclick => "return {mask: /[a-z]/i, rules: {req: true, minl: 2, latin: true, gender: 'F'}}"
                  %>
                  <%= person.error_message_on :last_name, 
                   :id => "error_person_#{person_form_counter}_last_name" %>
@@ -129,6 +143,11 @@
 
         <tr class="label">
             <td>
+                <label
+                 for="bp-<%=person_form_counter%>-passport"
+                 class="bold g-s"
+                 title="Номер документа, который будет предъявлен при посадке. Если у документа срока действия нет, то поставьте отметку справа от поля."
+                >Номер документа</label>
             <td>
                 <label
                  id="bp-<%=person_form_counter%>-expires-label"
@@ -146,7 +165,7 @@
                  :class => "text g-xl",
                  :maxlength => '100',
                  :title => 'номер документа',
-                 :onclick => "return {def: 'Номер документа', rules: {req: true, minl: 1, gender: 'M'}}"
+                 :onclick => "return {rules: {req: true, minl: 1, gender: 'M'}}"
                  %>
                  <%= person.error_message_on :passport, 
                   :id => "error_person_#{person_form_counter}_passport" %>

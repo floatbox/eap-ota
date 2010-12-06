@@ -56,27 +56,11 @@ init: function() {
         self[$(this).attr('data-name')] = new controls.Filter(this, {radio: true, preserve: true});
     });
     this.persons.el.bind('change', function(e, values) {
-        self.update();
+        self.update(self.persons);
     });
     this.cabin.el.bind('change', function(e, values) {
-        self.update();
+        self.update(self.cabin);
     });
-    this.changes.el.bind('change', function(e, values) {
-        if (offersList.results.is(':visible')) {
-            self.toggle(true);
-            offersList.update = {
-                loading: true,
-                action: function() {
-                    var ao = offersList;
-                    ao.maxLayovers = values[0];
-                    ao.resetFilters();
-                    ao.applyFilter();
-                }
-            };
-        } else {
-            offersList.maxLayovers = values[0];
-        }
-    });    
     
     // Модификация списка пассажиров
     this.persons.click = function(el) {
@@ -151,7 +135,6 @@ values: function() {
         rt: this.rt.value == 'rt' ? 1 : 0,
         dates: this.calendar.values,
         people_count: this.persons.selected,
-        changes: this.changes.value[0],
         cabin: this.cabin.value[0],
         search_type: 'travel',
         day_interval: 1,
@@ -160,19 +143,15 @@ values: function() {
     return data;
 },
 restore: function(data) {
-    var df = this.defvalues;
-    this.from.trigger('set', data.from || df.from || '');
-    this.to.trigger('set', data.to || '');    
+    this.from.trigger('set', data.from || '').trigger('iata', '');
+    this.to.trigger('set', data.to || '').trigger('iata', '');
+    this.persons.select($.extend({}, data.people_count || df.people_count));
+    this.cabin.select(data.cabin || []);
     this.calendar.selected = [];
+    this.rt.set(data.rt !== undefined && data.rt == 0 ? 'ow' : 'rt');
     if (data.dates) {
         this.calendar.select(data.dates);
-    } else {
-        this.calendar.update();
-    }
-    this.persons.select($.extend({}, data.people_count || df.people_count));
-    this.changes.select(data.changes || []);
-    this.cabin.select(data.cabin || []);
-    this.rt.set(data.rt !== undefined && data.rt == 0 ? 'ow' : 'rt');
+    }    
 },
 update: function(source) {
     var self = this;
@@ -184,10 +163,16 @@ update: function(source) {
         }
         if (improper.length) {
             var current = this.to.val(); 
-            var pattern = new RegExp('(\\s*)(?:' + improper.join('|') + ')(\\s*)', 'i');        
+            var pattern = new RegExp('(\\s*)(?:' + improper.join('|') + ')(\\s*)', 'i');
             var result = current.replace(pattern, function(s, p1, p2) {return (p1 && p2) ? ' ' : '';});
             if (result != current) this.to.trigger('set', result);
         }
+    }
+    if (source == this.persons && this.parsed && this.parsed.people_count) {
+        var current = this.to.val(); 
+        var pattern = new RegExp('(\\s*)(?:' + this.parsed.people_count.str + ')(\\s*)', 'i');
+        var result = current.replace(pattern, function(s, p1, p2) {return (p1 && p2) ? ' ' : '';});
+        if (result != current) this.to.trigger('set', result);
     }
     this.timer = setTimeout(function() {
         self.validate();
@@ -198,19 +183,32 @@ validate: function(qkey) {
     clearTimeout(this.timer);
     clearTimeout(this.loadTimer);
     if (this.preventValidation) return;
+    if (qkey) {
+        var data = {query_key: qkey};
+    } else {
+        var values = this.values();
+        var data = {search: values};
+        var params = $.param(values);
+        if (params != this.lastParams) {
+            this.lastParams = params;
+        } else {
+            return;
+        }
+    }
     this.toggle(false);
     this.abort();
-    var self = this, data = qkey ? {query_key: qkey} : {search: this.values()};
     if (window._gaq && data.search) {
         _gaq.push(['_trackEvent', 'Search', 'To', data.search.to]);
     }
-    this.request = $.get("/pricer/validate/", data, function(result, status, request) {
+    var self = this;
+    var restoreResults = Boolean(qkey);
+    this.request = $.get('/pricer/validate/', data, function(result, status, request) {
         if (request != self.request) return;
         if (data.query_key && result.search) {
             self.preventValidation = true;
             self.restore(result.search);
             setTimeout(function() {
-                delete(self.preventValidation);
+                self.preventValidation = false;
             }, 1000);
             self.apply(result.search.complex_to_parse_results || {});
         } else {
@@ -221,7 +219,7 @@ validate: function(qkey) {
                 query_key: result.query_key || data.query_key,
                 search_type: 'travel'
             };
-            if (data.query_key) {
+            if (restoreResults) {
                 options.restore_results = true;
                 offersList.load(options, result.human);
                 offersList.show(false);
@@ -236,8 +234,15 @@ validate: function(qkey) {
                 }, 3000);
             }
         }
-        if (result.search) {
-            self.updateMap(result.search.from_as_object, result.search.to_as_object);
+        var rs = result.search;
+        if (rs) {
+            self.updateMap(rs.from_as_object, rs.to_as_object);
+            if (rs.from_as_object) {
+                self.from.trigger('iata', rs.from_as_object.iata);
+            }
+            if (rs.to_as_object) {
+                self.to.trigger('iata', rs.to_as_object.iata);
+            }
         }        
         delete(self.request);
     });
@@ -277,6 +282,14 @@ apply: function(data) {
             dates[i] = data.dates[i].value;
         }
         this.calendar.select(dates);
+    }
+    if (data.people_count) {
+        var pcv = data.people_count.value;
+        this.persons.select({
+            adults: pcv.adults || 1,
+            children: pcv.children || 0,
+            infants: pcv.infants || 0
+        });
     }
 },
 toggle: function(mode) {
