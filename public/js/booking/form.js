@@ -86,6 +86,7 @@ init: function() {
 show: function(variant) {
     var self = this;
     if (this.el) this.hide();
+    this.variant = variant;
     this.offer = variant.closest('.offer');
     if (this.offer.hasClass('collapsed')) {
         $('.expand', variant).click();
@@ -93,8 +94,11 @@ show: function(variant) {
     this.selfhide = function(event) {
         event.preventDefault();
         self.hide();
-    };    
-    $('<a class="stop-booking" href="#">Вернуться к выбору вариантов</a>').click(this.selfhide).prependTo(this.offer);
+    };
+    var link = $('<a class="stop-booking" href="#">Вернуться к выбору вариантов</a>').click(this.selfhide).prependTo(this.offer);
+    if (this.offer.parent('#offers-matrix').length) {
+        link.css('top', this.offer.find('.offer-prices').height());
+    }
     this.el = $('<div class="booking"></div>').appendTo(this.offer);
     this.offer.addClass('active-booking');
 },
@@ -104,17 +108,18 @@ hide: function() {
     this.offer.removeClass('active-booking');
     this.el.remove();
     delete(this.el);
+    delete(this.variant);
     pageurl.update('booking', undefined);
 },
 book: function(variant) {
     var self = this;
-    this.el.html('<div class="empty"><span class="loading">Делаем предварительное бронирование и уточняем цену</span></div>');
+    this.el.html('<div class="booking-state"><div class="progress"></div><h4>Делаем предварительное бронирование и уточняем цену</h4></div>');
     $.get("/booking/preliminary_booking?" + variant.attr('data-booking'), function(s) {
         if (s && s.success) {
             self.load(s.number);
             pageurl.update('booking', s.number);
         } else {
-            self.el.html('<div class="empty">В данный момент невозможно выбрать этот вариант. <a href="#">Почему?</a></div>');
+            self.el.html('<div class="booking-state"><h4>В данный момент невозможно выбрать этот вариант</h4><p><a href="#">Почему?</a></p></div>');
         }
     });
     var w = $(window), offset = this.el.offset().top;
@@ -133,11 +138,42 @@ load: function(number) {
     var self = this;
     $.get("/booking/", {number: number}, function(s) {
         self.el = $(s).replaceAll(self.el);
-        if (self.el.children('form').length) {
+        if (self.el.children('form').length && self.comparePrice()) {
             self.fasten(self.offer);
             self.init();
         }
     });
+},
+comparePrice: function() {
+    var vp = parseInt(this.variant.find('.book .sum').attr('data-value'), 10);
+    var bp = parseInt(this.el.find('.booking-price .sum').attr('data-value'), 10);
+    if (bp != vp) {
+        var block = $('<div class="diff-price"></div>');
+        var template = '<h5>Цена этого варианта изменилась: стало <strong>{type} на {value}&nbsp;{currency}</strong></h5>';
+        block.append(template.supplant({
+            type: bp > vp ? 'дороже' : 'дешевле',
+            currency: app.utils.plural(Math.abs(bp - vp), ['рубль', 'рубля',  'рублей']),
+            value: Math.abs(bp - vp)
+        })).append('<p><a class="a-button continue" href="#">Продолжить бронировать</a> или <a class="cancel" href="#">выбрать другой вариант</a></p>');
+        var self = this;
+        block.find('.cancel').click(function(event) {
+            event.preventDefault();
+            $(this).closest('.diff-price').remove();
+            self.hide();
+        });
+        block.find('.continue').click(function(event) {
+            event.preventDefault();
+            $(this).closest('.diff-price').remove();
+            self.el.removeClass('g-none');
+            self.fasten(self.offer);
+            self.init();                      
+        });
+        this.el.before(block);
+        return false;
+    } else {
+        this.el.removeClass('g-none');
+        return true;
+    }
 },
 fasten: function(offer) {
     var wrapper = $('#page-wrapper');

@@ -104,7 +104,8 @@
     background: #fef3f9;
 }
 
-.offer-prices td.selected {
+.offer-prices td.selected,
+.active-booking .offer-prices td.selected {
     background: #ED1192;
     color: #FFF;    
     cursor: default;
@@ -136,4 +137,12 @@
 }
 .owmatrix td {
     height: 36px;
+}
+
+/* Матрица во время бронирования */
+.active-booking .offer-prices td.active,
+.active-booking .offer-prices td.active:hover {
+    background: none;
+    color: #CCC;
+    cursor: default;
 }

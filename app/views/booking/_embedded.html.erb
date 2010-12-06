@@ -1,7 +1,4 @@
-<div class="booking">
-<div class='hidden'>
-  <%= @order.variant_id %>
-</div>
+<div class="booking g-none" data-variant="<%= @order.variant_id %>">
 <% form_for :card, @order.card, :url => booking_pay_path, :html => { :autocomplete => "off" } do |f| %>
     
     <% if false %>
