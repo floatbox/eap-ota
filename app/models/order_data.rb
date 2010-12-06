@@ -149,7 +149,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
         # FIXME среагировать на отсутствие маски
         amadeus.ticket_create_tst_from_pricing
         # надо ли? - проверить что создание маски НЕ сохраняет PNR
-        amadeus.commit_and_retrieve
+        amadeus.pnr_commit_and_retrieve
         # FIXME среагировать на различие в цене
         add_passport_data(amadeus)
         amadeus.give_permission_to_ticketing_office

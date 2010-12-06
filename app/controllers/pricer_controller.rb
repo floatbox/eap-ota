@@ -26,7 +26,6 @@ class PricerController < ApplicationController
         @recommendations.delete_if(&:ground?)
         @recommendations = @recommendations.sort_by(&:price_total)
         @locations = @search.human_locations
-        Rails.cache.write('pricer_form' + @query_key, @search)
       end
     end
     if params[:search_type] == 'calendar'
