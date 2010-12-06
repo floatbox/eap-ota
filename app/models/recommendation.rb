@@ -38,7 +38,7 @@ class Recommendation
   end
 
   def sellable?
-    segments.map(&:marketing_carrier).all? &:aviacentr
+    validating_carrier.consolidator
   end
 
   def ground?
