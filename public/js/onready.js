@@ -4,7 +4,7 @@
     offersList.init();
 
     // образец содержимого поля "Куда"
-    var e = search.to.example = $('#search-to-example');
+    /*var e = search.to.example = $('#search-to-example');
     e.label = $('u', e);
     e.data  = e.label[0].onclick();
     e.data.current = 0;
@@ -24,7 +24,7 @@
             search.to.focus();
             search.to.trigger('set', e.innerHTML);
         }
-    });      
+    });*/
 
     // затычка для сворачивания панели
     var $spanel = $('#search-panel');
@@ -47,8 +47,8 @@
     });
     
     // составное поле "туда-обратно"
-    var $retTabs = $('#search\\.ret\\.tabs').radio();
-    var $retButton = $('#search\\.ret\\.button').button();
+    var $retTabs = $('#search-ret-tabs').radio();
+    var $retButton = $('#search-ret-button').button();
 
     // Синхронизация кнопки и табов
     search.rt = new app.MultiField({'value': 'rt'});

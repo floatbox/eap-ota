@@ -183,11 +183,17 @@ validate: function(qkey) {
     clearTimeout(this.timer);
     clearTimeout(this.loadTimer);
     if (this.preventValidation) return;
-    var data = jQuery.param(qkey ? {query_key: qkey} : {search: this.values()});
-    if (data != this.lastData) {
-        this.lastData = data;
+    if (qkey) {
+        var data = {query_key: qkey};
     } else {
-        return;
+        var values = this.values();
+        var data = {search: values};
+        var params = $.param(values);
+        if (params != this.lastParams) {
+            this.lastParams = params;
+        } else {
+            return;
+        }
     }
     this.toggle(false);
     this.abort();
@@ -196,7 +202,7 @@ validate: function(qkey) {
     }
     var self = this;
     var restoreResults = Boolean(qkey);
-    this.request = $.get("/pricer/validate/", data, function(result, status, request) {
+    this.request = $.get('/pricer/validate/', data, function(result, status, request) {
         if (request != self.request) return;
         if (data.query_key && result.search) {
             self.preventValidation = true;
@@ -210,7 +216,7 @@ validate: function(qkey) {
         }
         if (result.valid) {
             var options = {
-                query_key: result.query_key || qkey,
+                query_key: result.query_key || data.query_key,
                 search_type: 'travel'
             };
             if (restoreResults) {
