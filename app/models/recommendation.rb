@@ -129,19 +129,15 @@ class Recommendation
   def self.corrected recs
     #объединяем эквивалентные варианты
     recs.each_with_object([]) do |r, result|
-      unless r.try_to_merge_with_prev_recommendations result
+      #некрасиво, но просто и работает
+      if r.groupable_with? result[-1]
+        result[-1].variants += r.variants
+      elsif r.groupable_with? result[-2]
+        result[-1].variants += r.variants
+      elsif r.groupable_with? result[-3]
+        result[-1].variants += r.variants
+      else
         result << r
-      end
-    end
-  end
-
-  def try_to_merge_with_prev_recommendations (recommendations)
-    return if recommendations.blank? || recommendations.last.price_total != price_total
-    recommendations.reverse.each do |r|
-      return if r.price_total != self.price_total
-      if groupable_with? r
-        r.variants += r.variants
-        return true
       end
     end
   end
