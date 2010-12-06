@@ -130,10 +130,19 @@ class Recommendation
   def self.corrected recs
     #объединяем эквивалентные варианты
     recs.each_with_object([]) do |r, result|
-      if r.groupable_with?(result.last)
-        result.last.variants += r.variants
-      else
+      unless r.try_to_merge_with_prev_recommendations result
         result << r
+      end
+    end
+  end
+
+  def try_to_merge_with_prev_recommendations (recommendations)
+    return if recommendations.blank? || recommendations.last.price_total != price_total
+    recommendations.reverse.each do |r|
+      return if r.price_total != self.price_total
+      if groupable_with? r
+        r.variants += r.variants
+        return true
       end
     end
   end
@@ -167,23 +176,22 @@ class Recommendation
     variant = Variant.new(:segments => segments)
     recommendation = Recommendation.new(:variants => [variant])
     recommendation.booking_classes = variant.flights.every.class_of_service
-
+    amadeus = Amadeus::Service.new(:book => true)
     recommendation.price_fare, recommendation.price_tax =
-      Amadeus::Service.fare_informative_pricing_without_pnr(
+      amadeus.fare_informative_pricing_without_pnr(
         :flights => flights, :people_count => pricer_form.real_people_count, :validating_carrier => validating_carrier_code
       ).prices
 
     # FIXME не очень надежный признак
     return if recommendation.price_fare.to_i == 0
 
-    # FIXME сломается, когда появятся инфанты
-    amadeus = Amadeus::Service.new(:book => true)
     air_sfr = amadeus.air_sell_from_recommendation(:segments => segments, :people_count => (pricer_form.real_people_count[:adults] + pricer_form.real_people_count[:children]))
     amadeus.cmd('IG')
-    amadeus.session.destroy
     return unless air_sfr.segments_confirmed?
     air_sfr.fill_itinerary!(segments)
     recommendation
+  ensure
+    amadeus.session.destroy
   end
 
   def cabins_except selected_cabin
