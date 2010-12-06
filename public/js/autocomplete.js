@@ -247,6 +247,9 @@ $.Autocompleter = function(input, options) {
         $el.addClass(options.focusCls);
         $iata.update(); // надо поменять цвет подложки
         setCompareTimer(300);
+        setTimeout(function() {
+            $el.select();
+        }, 10);
     }).blur(function() {
         hasFocus = 0;
         hideResults();
@@ -261,7 +264,7 @@ $.Autocompleter = function(input, options) {
         $el.trigger('change');
         if (!s) $iata.hide();
     }).bind('iata', function(e, v) {
-        if (v) $iata.show(v);
+        $iata.show(v);
     });
     
     options.hoverCls && $el.hover(

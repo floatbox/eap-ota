@@ -18,11 +18,10 @@
 #offers-filter td {
     padding: 0 15px 12px 10px;
     vertical-align: top;
-    color: #4B4B4B;
+    color: #333;
 }
 
 #offers-reset-filters {
-    margin-left: 0.3em;
     color: #ED1192;
 }
 
@@ -37,4 +36,21 @@
 #offers-filter .dropdown {
     margin-top: -6px;
     line-height: 118.75%;
+}
+
+#layovers-filter {
+    background: #f5eec9;
+    position: relative;
+    left: -5px;
+    padding: 0 5px 2px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+#layovers-filter .dropdown {
+    margin-left: -11px;
+}
+.mac-safari #layovers-filter .dropdown,
+.mac-chrome #layovers-filter .dropdown {
+    margin-top: -8px;
 }

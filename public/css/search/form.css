@@ -1,6 +1,6 @@
 .form {
     position: relative;
-    padding: 6px 15px 10px;
+    padding: 6px 15px 15px;
     color: #c8c8c8;
     background: #2c2c2c;
     zoom: 1;
@@ -141,7 +141,7 @@
     display: block;
     width: 26px;
     height: 26px;
-    margin: 8px;
+    margin: 8px 8px 6px;
     background: url(/img/search/retmode.png) no-repeat;
     cursor: pointer;
 }
@@ -151,8 +151,6 @@
 .form .button-none {
     background-position: 0 30px;
 }
-
-
 
 /* Псевдоссылка с примером (begin) */
     .form table tr.subs .pseudo-example

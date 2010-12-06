@@ -236,7 +236,9 @@ select: function(dates) {
             updated = true;
         }
     }
-    if (updated) this.update();    
+    if (updated) {
+        this.update();
+    }
 },
 showResetButton: function() {
     var offset, items = this.selected.compact();
@@ -274,7 +276,7 @@ fillSelected: function() {
     for (var i = selected.length; i--;) {
         this.dates.eq(selected[i]).addClass('selected segment' + i);
     }
-    this.filled = selected.length && this.dates.slice(selected[0], selected[selected.length - 1] + 1).addClass("period");
+    this.filled = selected.length ? this.dates.slice(selected[0], selected[selected.length - 1] + 1).addClass("period") : undefined;
 },
 highlight: function(items) {
     if (this.highlighted) this.highlighted.removeClass(function() {

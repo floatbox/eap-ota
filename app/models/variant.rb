@@ -10,12 +10,13 @@ class Variant
 
   def summary
     result = {
-     :airlines => flights.every.operating_carrier_iata.uniq,
-     :planes => flights.every.equipment_type_iata.uniq,
-     :departures => segments.every.departure_time,
-     :duration => segments.sum(&:total_duration),
-     :cities => segments.map{|s| s.flights[1..-1].map{|f| f.departure.city.iata}}.flatten.uniq,
-     :flights => flights.size
+      :airlines => flights.every.operating_carrier_iata.uniq,
+      :planes => flights.every.equipment_type_iata.uniq,
+      :departures => segments.every.departure_time,
+      :duration => segments.sum(&:total_duration),
+      :cities => segments.map{|s| s.flights[1..-1].map{|f| f.departure.city.iata}}.flatten.uniq,
+      :layovers => segments.map{|s| s.flights.size}.max - 1,
+      :flights => flights.size
     }
     segments.each_with_index do |segment, i|
       result['dpt_city_' + i.to_s] = segment.departure.city.iata

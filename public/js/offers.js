@@ -183,12 +183,7 @@ show: function(fixed) {
             self.processUpdate();
         }, 300);
     }
-    if (u.action) {
-        u.action();
-        setTimeout(function() {
-            self.toggle('results');
-        }, 1200);
-    }
+    this.loading.find('h3').html('Ищем для вас лучшие предложения');                
     this.container.removeClass('g-none');
     var w = $(window), offset = this.container.offset().top;
     if (fixed !== false && offset - w.scrollTop() > w.height() / 2) {
@@ -231,15 +226,14 @@ processUpdate: function() {
     $('#offers-pcollection').html(u.pcontent || '');
     $('#offers-mcollection').html(u.mcontent || '');
     if ($('#offers-options').length) {
-        this.loading.find('h3').html('Еще чуть-чуть&hellip;');
+        this.loading.find('h3').html('&nbsp;&nbsp;Еще чуть-чуть&hellip;');
         var self = this;
         var queue = [function() {
             self.updateFilters();
         }, function() {
             self.parseResults()
             self.applySort('price');
-        }, function() {
-            self.maxLayovers ? self.filterOffers() : self.showAmount();
+            self.showAmount();
         }, function() {
             self.showDepartures();
         }, function() {
@@ -252,7 +246,6 @@ processUpdate: function() {
             self.toggleCollection(true);
         }, function() {
             self.toggle('results');
-            self.loading.find('h3').html('Ищем для вас лучшие предложения');            
         }];
         var qstep = 0, processQueue = function() {
             queue[qstep++]();
@@ -378,24 +371,17 @@ applyFilter: function(name, values) {
 filterOffers: function() {
     var filters = this.activeFilters, empty = true;
     var items = this.items, variants = this.variants;
-    var ml = this.maxLayovers, total = items.length;
+    var total = items.length;
     for (var i = items.length; i--;) {
-        var offer = items[i];
-        if (offer.longer = ml && offer.summary.layovers > ml) total--;
-        offer.improper = true;
+        items[i].improper = true;
     }
     for (var i = 0, im = variants.length; i < im; i++) {
         var v = variants[i], improper = false;
-        if (v.offer.longer) {
-            v.improper = true;
-            v.el.addClass('improper');
-            continue;
-        }
         for (var key in filters) {
             empty = false;
             var fvalues = filters[key];
             var svalues = v.summary[key];
-            if (!svalues) continue;
+            if (svalues === undefined) continue;
             var values = {};
             for (var k = fvalues.length; k--;) {
                 values[fvalues[k]] = true;

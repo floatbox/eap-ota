@@ -126,21 +126,20 @@
         ao.applyFilter();
     });    
     
-    // Фокус на поле ввода "Куда"
-    search.to.focus();
-
     // Сохраненные результаты
     pageurl.parse();
     if (pageurl.search) {
         search.validate(pageurl.search);
+    } else {
+        search.to.focus();
     }
 
     // Сброс по клику на логотипе
     $('#logo').click(function() {
         app.booking.unfasten();
         offersList.hide();
-        search.restore({});
         pageurl.reset();
+        search.restore(search.defvalues || {});
     });
     
     // Данные по умолчанию для сброса
