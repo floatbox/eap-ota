@@ -144,10 +144,11 @@ class OrderData < ActiveRecord::BaseWithoutTable
     )
 
     if self.pnr_number = amadeus.pnr_add_multi_elements(self).pnr_number
+      amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier)
+      # FIXME среагировать на отсутствие маски
+      amadeus.ticket_create_tst_from_pricing
+
       if block_money
-        amadeus.fare_price_pnr_with_booking_class
-        # FIXME среагировать на отсутствие маски
-        amadeus.ticket_create_tst_from_pricing
         # надо ли? - проверить что создание маски НЕ сохраняет PNR
         amadeus.pnr_commit_and_retrieve
         # FIXME среагировать на различие в цене
@@ -155,6 +156,8 @@ class OrderData < ActiveRecord::BaseWithoutTable
         amadeus.give_permission_to_ticketing_office
         # FIXME
         #amadeus.pnr_archive( как-то добыть текущее количество мест )
+        amadeus.pnr_commit
+        # дополнительно - эта зараза не делает коммит если пришли ремарки
         amadeus.pnr_commit
         #amadeus.queue_place_pnr(:number => pnr_number)
         Order.create(:order_data => self)
