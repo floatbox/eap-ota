@@ -61,6 +61,7 @@ class PricerController < ApplicationController
       end
       render :json => {
         :valid => @search.valid?,
+        :errors => @search.errors,
         :human => @search.human,
         :search => @search,
         :complex_to_parse_results => @search.complex_to_parse_results,

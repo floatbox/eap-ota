@@ -7,13 +7,11 @@
 <col width="109">
 <thead>
 <tr>
-    <td class="cost"><dl>
+    <th class="book"><a href="#" class="a-button">Выбрать</a></th>
+    <td class="cost" colspan="5"><dl>
         <dt><%= recommendation.price_total.to_i.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') %></dt>
         <dd><%= Russian.pluralize(recommendation.price_total.to_i, 'рубль', 'рубля', 'рублей') %></dd>
     </dl></td>
-    <td class="book" colspan="5">
-        <a href="#" class="a-button">Выбрать</a>
-    </td>
 </tr>
 </thead>
 
@@ -136,9 +134,8 @@
     <%= render :partial => 'segment_details', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter, :segment_cabins => variant_cabins[segment_counter]} %>
 <% end %>
 <tr class="book">
-    <td></td>
+    <th><a href="#" class="a-button">Выбрать</a></th>
     <td colspan="6">
-    <a href="#" class="a-button">Выбрать</a>
     <dl class="sum" data-value="<%= recommendation.price_total.to_i %>">
         <dt>Итого <strong><%= human_price(recommendation.price_total.to_i) %></strong> за всех со всеми сборами</dt>
         <dd>Тариф — <%= human_price((recommendation.price_fare).to_i) %>, налоги и сборы — <%= human_price(recommendation.price_tax_and_markup.to_i) %></dd>

@@ -464,14 +464,21 @@ sortOffers: function() {
 },
 showRecommendations: function() {
     var variants = this.variants, cheap, fast, optimal;
+    var optimals = [];
     for (var i = 0, im = variants.length; i < im; i++) {
         var v = variants[i];
         if (v.improper) continue;
-        var d = v.summary.duration, p = v.offer.summary.price, pfd = p * (5 + v.summary.flights) + d * 2;
+        var d = v.summary.duration, p = v.offer.summary.price;
         if (!cheap || p < cheap.price || (p == cheap.price && d < cheap.duration)) cheap = {variant: v, duration: d, price: p};
-        if (!fast || d < fast.duration || (d == fast.duration && p < fast.price)) fast = {variant: v, duration: d, price: p};
-        if (!optimal || pfd < optimal.pfd) optimal = {variant: v, pfd: pfd};
+        if (!fast || ((1 - d / fast.duration) + (1 - p / fast.price) / 5) > 0) fast = {variant: v, duration: d, price: p};
+        optimals.push({duration: d, price: p, n: i});
     }
+    optimals = optimals.sort(function(a, b) {
+        return (a.duration - b.duration);
+    }).slice(0, Math.round(im / 2)).sort(function(a, b) {
+        return (a.price - b.price);
+    });
+    optimal = {variant: variants[optimals[0].n]};
     var container = $('#offers-featured').html('');
     if (!cheap && !fast && !optimal) {
         container.append($('#offers-pcollection').prev().clone());
@@ -498,7 +505,7 @@ showRecommendations: function() {
     }
     if (cheap) container.append(this.makeRecommendation(cheap, 'Самый выгодный вариант'));
     if (optimal) container.append(this.makeRecommendation(optimal, otitle));
-    if (fast) container.append(this.makeRecommendation(fast, 'Самый быстрый вариант'));
+    if (fast) container.append(this.makeRecommendation(fast, 'Быстрый вариант'));
 },
 makeRecommendation: function(obj, title) {
     var el = obj.variant.el, offer = el.parent().clone();
@@ -635,7 +642,7 @@ processMatrix: function() {
         var cn = findex[summary.dates[0]];
         var rn = (tindex && summary.dates[1]) ? tindex[summary.dates[1]] : 4;
         var vid = summary.dates.join('-');
-        var cell = $(rows[rn].cells[cn]).html(summary.price).addClass('active').attr('data-vid', vid);
+        var cell = $(rows[rn].cells[cn]).html(el.find('td.cost dt').html()).addClass('active').attr('data-vid', vid);
         el.attr('id', 'mv-' + vid);
         if (cheap && summary.price == cheap.price) {
             cheap.cells = cheap.cells.add(cell);

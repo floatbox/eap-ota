@@ -1,138 +1,78 @@
 <!-- Форма поиска -->
+<div id="search">
 
-<div class="form">
-    <table>
-        <tr class="labels">
-            <td>
-                <label for="search-from" accesskey="1"><i class="label-from">Откуда</i><s id="search-from-loader"></s></label>
-            </td>
-            
-            <td>
-            </td>
-            
-            <td>
-                <label for="search-to" accesskey="2" id="search-to-label"><i data-key="to">Куда</i>, <i data-key="dates">когда</i>, <i data-key="people_count">сколько человек</i><s id="search-to-loader"></s></label>
-            </td>
-
-            <td>
-                <ul id="search-ret-tabs" class="tabs return-tabs">
-                    <li><a href="#" onclick="return {v: 'rt'}" title="Билет до пункта назначения и обратно. Самый популярный вариант путешествия." class="active">туда и обратно</a>
-                    <li><a href="#" onclick="return {v: 'ow'}" title="Билет только до пункта назначения, в одну сторону.">только туда</a>
-                    <!--
-                    <li><a href="#" onclick="return {v: 'mw'}" title="Транзит через несколько городов. Остановки на желаемый срок. Впишите в поле ввода города и даты. ">сложный маршрут</a>
-                    -->
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <!-- Откуда -->
-                <div class="autocomplete-box">
-                    <input type="text" 
-                     id="search-from"
-                     class="autocomplete from"
-                     tabindex="1"
-                     value="<%= nearest_city.try(:name) || 'Москва' %>"
-                     onclick="return <%=h nearest_city.to_json %>"
-                     title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом"
-                    >
-                </div>
-            </td>
-
-            <td>
-                <!-- Замкнутость маршрута -->
-                <a 
-                    id="search-ret-button"
-                    class="button button-rt" 
-                    title="Искать билеты &laquo;туда и обратно&raquo;. Нажмите, чтобы изменить"
-                    onclick="return [{v: 'rt', cls: 'rt', t: 'Искать билеты &laquo;туда и обратно&raquo;. Нажмите, чтобы изменить'},{v: 'ow', cls: 'ow', t: 'Билеты только &laquo;туда&raquo;'}/*,{v: 'mw', cls: 'mw', t: 'Сложный маршрут'}*/]"
-                ></a>
-            </td>
-
-            <td colspan="2">
-                <!-- Куда, когда и с кем -->
-                <div class="autocomplete-box">
-                    <input type="text" 
-                     id="search-to"
-                     class="autocomplete to"
-                     tabindex="2"
-                     value=""
-                     title="Город, страна или IATA-код"
-                    >
-                </div>
-            </td>
-        </tr>
-        <tr class="subs g-none">
-            <td>
-                <a href="#" id="search-from-reset" class="b-pseudo" title="Отредактировать это поле"><u>изменить</u></a>
-            </td>
-            
-            <td>
-            </td>
-            
-            <td colspan="2">
-                <i>например,&nbsp;</i>
-                <a href="#" id="search-to-example" class="b-pseudo pseudo-example"><s title="Показать другой пример"></s><u title="Нажмите, чтобы подставить" onclick="return ['Стамбул', 'Франция']">Стамбул</u></a>
-            </td>
-        </tr>
-
-    </table>
+<!-- Откуда и куда -->
+<div id="search-fields">
+<table>
+<tr class="labels">
+    <td><label for="search-from" accesskey="1"><i class="label-from">Откуда</i><s id="search-from-loader"></s></label></td>
+    <td></td>
+    <td><label for="search-to" accesskey="2" id="search-to-label"><i data-key="to">Куда</i>, <i data-key="dates">когда</i>, <i data-key="people_count">сколько человек</i><s id="search-to-loader"></s></label></td>
+    <td>
+        <ul id="search-ret-tabs" class="tabs return-tabs">
+            <li><a href="#" onclick="return {v: 'rt'}" title="Билет до пункта назначения и обратно. Самый популярный вариант путешествия." class="active">туда и обратно</a>
+            <li><a href="#" onclick="return {v: 'ow'}" title="Билет только до пункта назначения, в одну сторону.">только туда</a>
+            <!-- <li><a href="#" onclick="return {v: 'mw'}" title="Транзит через несколько городов. Остановки на желаемый срок.">сложный маршрут</a> -->
+        </ul>
+    </td>
+</tr>
+<tr>
+    <td>
+        <div class="autocomplete-box">
+            <input type="text" id="search-from" class="autocomplete from" tabindex="1"
+             value="<%= nearest_city.try(:name) || 'Москва' %>"
+             onclick="return <%=h nearest_city.to_json %>"
+             title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом">
+        </div>
+    </td>
+    <td>
+        <a id="search-ret-button" class="button button-rt" title="Искать билеты &laquo;туда и обратно&raquo;. Нажмите, чтобы изменить"
+            onclick="return [{v: 'rt', cls: 'rt', t: 'Искать билеты &laquo;туда и обратно&raquo;. Нажмите, чтобы изменить'},{v: 'ow', cls: 'ow', t: 'Билеты только &laquo;туда&raquo;'}/*,{v: 'mw', cls: 'mw', t: 'Сложный маршрут'}*/]"
+        ></a>
+    </td>
+    <td colspan="2">
+        <div class="autocomplete-box">
+            <input type="text" id="search-to" class="autocomplete to" tabindex="2" value="" title="Город, страна или IATA-код">
+        </div>
+    </td>
+</tr>
+</table>
 </div>
 
-
-<!-- Панель поиска -->
-
+<!-- Карта и календарь -->
 <div id="search-panel">
-    <div class="search-blocks">
-
-        <!-- Куда -->
-        <div id="search-where" class="wt0">
-            <h2>Карта</h2>
-            <div id="where-map" class="map wp0">
-                <div id="bingmap" style="position: relative; width: 320px; height: 316px;"></div>
-            </div>
-        </div>
-        
-        <!-- Когда -->
-        <div id="search-when" onselectstart="return false;">
-            <div class="calendar" id="search-calendar">
-                <h2>Выберите даты</h2>
-                <div class="scroller">
-                    <div class="scrollbar"><div class="overlay"></div></div>
-                    <div class="preview"></div>
-                    <ul class="timeline"></ul>
-                    <div class="before"></div>
-                    <div class="after"></div>
-                </div>
-                <div class="scrollfw">
-                    <div class="arrow"></div>
-                </div>
-                <div class="scrollbw">
-                    <div class="arrow"></div>
-                </div>
-                <div class="viewport">
-                    <ul class="week">
-                        <li>пн</li>
-                        <li>вт</li>
-                        <li>ср</li>
-                        <li>чт</li>
-                        <li>пт</li>
-                        <li class="dayoff">сб</li>
-                        <li class="dayoff">вс</li>
-                    </ul>
-                    <div class="dates"></div>
-                    <div class="shadow"></div>
-                </div>
-            </div>
-            <a href="#" class="b-pseudo panel-reset g-none"><i></i><u>сбросить</u></a>
-        </div>
-
+<div id="search-where" class="wt0">
+    <h2>Карта</h2>
+    <div id="where-map" class="map wp0">
+        <div id="bingmap" style="position: relative; width: 320px; height: 316px;"></div>
     </div>
-    <a href="#" class="panel-switch" title="Скрыть карту и календарь"><i><u>свернуть</u><i></i></i></a>
+</div>
+<div id="search-when" onselectstart="return false;">
+    <div class="calendar" id="search-calendar">
+        <h2>Выберите даты</h2>
+        <div class="scroller">
+            <div class="scrollbar"><div class="overlay"></div></div>
+            <div class="preview"></div>
+            <ul class="timeline"></ul>
+            <div class="before"></div>
+            <div class="after"></div>
+        </div>
+        <div class="scrollfw">
+            <div class="arrow"></div>
+        </div>
+        <div class="scrollbw">
+            <div class="arrow"></div>
+        </div>
+        <div class="viewport">
+            <ul class="week"><li>пн</li><li>вт</li><li>ср</li><li>чт</li><li>пт</li><li class="dayoff">сб</li><li class="dayoff">вс</li></ul>
+            <div class="dates"></div>
+            <div class="shadow"></div>
+        </div>
+    </div>
+</div>
 </div>
 
-
-<!-- Панель уточнений -->
+<!-- Количество пассажиров, класс и кнопка поиска-->
 <table id="search-define">
 <tr>
     <th>Выбрать</th>
@@ -141,7 +81,7 @@
         количество
 
         <div class="filter persons" data-name="persons">
-            <span class="control">пассажиров</span><span class="values"></span> и
+            <span class="control">пассажиров</span><span class="values"></span>
             <div class="dropdown">
                 <div class="wrap">
                 <dl class="pg-adults" data-group="adults">
@@ -178,7 +118,7 @@
         </div>
 
         <div class="filter" data-name="cabin">
-            <span class="control">класс</span><span class="values"></span>
+            и&nbsp;<span class="control">класс</span><span class="values"></span>
             <div class="dropdown">
             <dl>
                 <dt>класс</dt>
@@ -193,7 +133,10 @@
         </div>
     </td>
     <td id="search-submit" class="disabled">
+        <div class="progress"></div>
         <a href="#" class="b-submit">Искать</a>
     </td>
 </tr>
 </table>
+
+</div>

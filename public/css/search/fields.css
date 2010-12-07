@@ -1,0 +1,110 @@
+#search-fields {
+    position: relative;
+    padding: 6px 15px 15px;
+    color: #c8c8c8;
+    background: #2c2c2c;
+    zoom: 1;
+}
+#search-fields table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+#search-fields table td {
+    padding: 0;
+    vertical-align: top;
+}
+
+/* верхние подписи к полям ввода */
+#search-fields tr.labels td {
+    vertical-align: bottom;
+}
+#search-fields label {
+    position: relative;
+    font: 18px/27px Arial, sans-serif;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+}
+#search-fields .label-from {
+    color: #cc8000;
+}
+#search-fields .label-to {
+    color: #9ab300;
+}
+#search-fields label s {
+    position: absolute;
+    right: -24px;
+    top: 50%;
+    margin-top: -8px;
+}
+
+/* вкладки-переключалки */
+.return-tabs {
+    position: relative;
+    z-index: 2;
+    top: 1px;
+    float: right;
+    overflow: hidden;
+    font-size: 75%;
+    zoom: 1;
+}
+.return-tabs li {
+    float: left;
+}
+.return-tabs a {
+    display: inline-block;
+    padding: 0 .45em;
+    height: 23px;
+    line-height: 23px;
+    outline: none;
+    white-space: nowrap;
+    text-decoration: none;
+    color: #c8c8c8;
+    border: 1px solid transparent;
+}
+.return-tabs a:hover {
+    color: #fff;
+}
+.return-tabs a.active {
+    cursor: default;
+    text-decoration: none;
+    color: #4b4b4b;
+    background: #fff;
+    border-color: #424445 #424445 #fff #424445;
+}
+.return-tabs-focus a:hover,
+.return-tabs-hover a:hover {
+    border-color: transparent transparent #db3f89 transparent;
+}
+.return-tabs-focus a.active,
+.return-tabs-hover a.active {
+    color: #4b4b4b;
+    background: #fff;
+    border-color: #db3f89 #db3f89 #fff #db3f89;
+}
+
+/* Поля ввода */
+#search-fields input {
+    float: left; /* иначе в IE появляется вертикальный отступ в 1px */
+}
+#search-fields .from {
+    width: 422px;
+}
+#search-fields .to {
+    width: 438px;
+}
+
+/* Кнопка туда-сюда-обратно */
+#search-fields .button {
+    display: block;
+    width: 26px;
+    height: 26px;
+    margin: 8px 8px 6px;
+    background: url(/img/search/retmode.png) no-repeat;
+    cursor: pointer;
+}
+#search-fields .button-ow {
+    background-position: 0 -30px;
+}
+#search-fields .button-none {
+    background-position: 0 30px;
+}

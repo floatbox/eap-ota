@@ -3,36 +3,6 @@
     search.init();
     offersList.init();
 
-    // образец содержимого поля "Куда"
-    /*var e = search.to.example = $('#search-to-example');
-    e.label = $('u', e);
-    e.data  = e.label[0].onclick();
-    e.data.current = 0;
-    e.click(function(e) {
-        e.preventDefault();
-        e = e.target;
-        if (e.tagName == 'S') with (search.to.example) {
-            data.current = ++data.current % data.length;
-            e.className = 'animate';
-            window.setTimeout(function(){e.className = ''}, 300);
-            label.fadeTo(150, 0.4, function() {
-                label.text(data[data.current]);
-            }).fadeTo(150, 1);
-            return;
-        }
-        if (e.tagName == 'U') {
-            search.to.focus();
-            search.to.trigger('set', e.innerHTML);
-        }
-    });*/
-
-    // затычка для сворачивания панели
-    var $spanel = $('#search-panel');
-    $('.panel-switch', $spanel).click(function() {
-        var cl = 'collapsed', st = $spanel.hasClass(cl);
-        $spanel.switchClass(st ? cl : '', st ? '' :cl, 300);
-    });
-    
     // кнопка отправки запроса
     $('#search-submit .b-submit').click(function(event) {
         event.preventDefault();

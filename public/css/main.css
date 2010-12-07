@@ -13,23 +13,16 @@
 @import 'atoms/b-rur.css';
 
 @import 'controls/filter.css';
+@import 'controls/autocomplete.css';
 
 @import 'search/form.css';
-@import 'search/autocomplete.css';
-@import 'search/define.css';
-@import 'search/submit.css';
-
-@import 'panel/panel.css';
-@import 'panel/map.css';
-
-@import 'calendar/scroller.css';
-@import 'calendar/viewport.css';
-
-@import 'media/media.css';
+@import 'search/fields.css';
+@import 'search/panel.css';
+@import 'search/calendar.css';
 
 @import 'offers/filters.css';
 @import 'offers/tabs.css';
-@import 'offers/loading.css';
+@import 'offers/message.css';
 @import 'offers/results.css';
 @import 'offers/matrix.css';
 @import 'offers/booking.css';

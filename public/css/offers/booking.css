@@ -6,7 +6,7 @@
 }
 
 .active-booking .offer-variant tr.book,
-.active-booking .offer-variant td.book .a-button {
+.active-booking .offer-variant th.book .a-button {
     display: none;
 }
 
@@ -16,7 +16,7 @@
     cursor: default;
 }
 
-.l-crop .offer-variant td.book .a-button,
+.l-crop .offer-variant th.book .a-button,
 .l-crop .offer-variant tr.book .a-button,
 .l-crop .offer-variant tr.book .sum {
     visibility: hidden;

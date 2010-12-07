@@ -103,37 +103,34 @@
 }
 
 /* Заголовок предложения */
-.offer thead .cost {
-    width: 98px;
-    padding: 8px 10px 0;
+.offer thead td.cost {
+    padding: 11px 10px 10px 0;
 }
-.offer thead .cost dl {
-    font-weight: bold;
-    width: 98px;
-}    
 .offer thead .cost dt {
+    display: inline;
+    margin-right: 3px;
+    font-weight: bold;
     font-size: 30px;
     line-height: 28px;
-    letter-spacing: -1px;
-    text-align: center;
+    letter-spacing: -0.045em;
     color: #ed1192;
 }
 .offer thead .cost dd {
-    font-size: 14px;
-    line-height: 14px;
-    text-align: center;    
+    display: inline;
+    font-size: 16px;
     color: #828282;
 }
 .offer .digit {
-    margin-left: 0.2em;
+    margin-left: 0.15em;
 }
 
 /* Кнопка */
-.offer thead td.book {
-    padding: 8px 14px 7px 0;
+.offer thead th.book {
+    padding: 10px;
+    width: 88px;    
 }
-.offer a.a-button {
-    float: left;
+.offer .book a.a-button {
+    display: block;
     border-color: #7b8e12;
     padding: 3px 6px;
     font-size: 16px;
@@ -444,12 +441,14 @@
 .offer .details .book {
     background: none;
 }
+.offer .details .book th,
 .offer .details .book td {
-    padding: 12px 10px 12px 0;
+    padding: 10px;
     border-top: 1px solid #d0d0d0;
+    vertical-align: middle;
 }
-.offer .details .book .a-button {
-    margin-right: 12px;
+.offer .details .book td {
+    padding-left: 0;
 }
 .offer .details .book .sum {
     float: left;

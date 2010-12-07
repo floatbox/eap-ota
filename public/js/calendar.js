@@ -13,11 +13,6 @@ init: function() {
     this.makeDates();
     this.initDates();
     this.scroller = new app.CalendarScroller(this);
-    $('.panel-reset', this.el.parent()).click(function(event) {
-        event.preventDefault();
-        self.selected.length = 0;
-        self.update();
-    });
     this.resetButton = $('<div class="reset-button"></div>').appendTo(this.el);
     this.resetButton.css('margin-top', this.container.offset().top - this.el.offset().top);
     this.resetButton.click(function() {

@@ -1,216 +1,95 @@
-.form {
-    position: relative;
-    padding: 6px 15px 15px;
-    color: #c8c8c8;
-    background: #2c2c2c;
-    zoom: 1;
+/* Фон */
+#search {
+    background: #343434;
 }
 
-.form table {
-    border-collapse: collapse;
-    border-spacing: 0;
+/* Селекты и кнопка */
+#search-define {
+    width: 100%;
+    background: #3e3e3e;
+    font-size: 22px;
 }
-
-.form table td {
-    padding: 0;
+#search-define th {
+    width: 90px;
+    padding: 13px 0 14px 15px;
+    font-weight: bold;
+    text-align: left;
     vertical-align: top;
+    color: #ed1192;
+}
+#search-define td {
+    padding: 13px 0 14px 10px;
+    vertical-align: top;
+    color: #ccc;
+}
+#search-define td a {
+    color: #ccc;
 }
 
-/* верхние подписи к полям ввода */
-
-.form tr.labels td {
-    vertical-align: bottom;
+/* Подсветка кнопки */
+#search-define #search-submit {
+    padding: 10px 15px 10px 80px;
+    color: #fff;
+    background-color: #3e3e3e;
+}
+#search-submit {
+    width: 100px;
+    padding: 10px 15px 10px 80px;
+    background: url(/img/search/btnglow.png) no-repeat 100% 0 #3e3e3e;
+}
+#search-submit.disabled {
+    background-position: 0 -100px;
 }
 
-.form label {
-    position: relative;
-    font: 18px/27px Arial, sans-serif;
-    letter-spacing: -0.01em;
-    white-space: nowrap;
-}
-
-.form .label-from {
-    color: #cc8000;
-}
-
-.form .label-to {
-    color: #9ab300;
-}
-
-.form label s {
+/* Лоадер */
+#search-submit .progress {
+    display: none;
     position: absolute;
-    right: -24px;
-    top: 50%;
-    margin-top: -8px;
+    margin: 10px 0 0 -30px;
+    width: 16px;
+    height: 16px;
+    background: transparent url(/img/search/btnprogress.gif) no-repeat;    
 }
 
-/* вкладки-переключалки */
-
-.return-tabs
-{
-    font-size: 75%;
-
-    position: relative;
-    z-index: 2;
-    top: 1px;
-
-    overflow: hidden;
-
-    float: right;
-    zoom: 1;
-}
-
-.return-tabs li
-{
-    float: left;
-}
-
-.return-tabs a
-{
-    display: inline-block;
-    
-    padding: 0 .45em;
-    height: 23px;
-    line-height: 23px;
-    
-    outline: none;
-    white-space: nowrap;
-    text-decoration: none;
-
-    color: #c8c8c8;
-    border: 1px solid transparent;
-
-    /*
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-    -webkit-border-top-left-radius: 3px;
-    -webkit-border-top-right-radius: 3px;
-    -moz-border-radius-topleft: 3px;
-    -moz-border-radius-topright: 3px;
-    */
-}
-
-.return-tabs a:hover
-{
+/* Кнопка */
+#search-submit a.b-submit {
+    display: block;
+    top: 0;
     color: #fff;
 }
-
-.return-tabs a.active {
-    cursor: default;
+#search-submit a {
+    color: #FFF;
+}
+#search-submit.disabled a {
+    color: #CCC;
+}
+a.b-submit {
+    padding: 6px 22px;
+    border: 1px solid #d0dc8a;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    background: #8a9f13;
+    background-image: linear-gradient(top, #a0b914, #7b8e12);
+    background-image: -moz-linear-gradient(top, #a0b914, #7b8e12);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#a0b914), to(#7b8e12));
+    font: bold 22px/22px Arial, sans-serif;
+    text-align: center;
     text-decoration: none;
-    color: #4b4b4b;
-    background: #fff;
-    border-color: #424445 #424445 #fff #424445;
+    color: #fff;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
 }
-
-.return-tabs-focus a:hover,
-.return-tabs-hover a:hover {
-    border-color: transparent transparent #db3f89 transparent;
+a.b-submit:hover {
+    border: 1px solid #c52471;
+    background: #dc3f8a;
+    background-image: -moz-linear-gradient(top, #f062a5, #d92c7e);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f062a5), to(#d92c7e));
 }
-
-.return-tabs-focus a.active,
-.return-tabs-hover a.active {
-    color: #4b4b4b;
-    background: #fff;
-    border-color: #db3f89 #db3f89 #fff #db3f89;
+.disabled a.b-submit,
+.disabled a.b-submit:hover {
+    border-color: #999;
+    background: #666;
+    cursor: default;
 }
-
-/* нижние подписи к полям ввода */
-.form table tr.subs td {
-    font-size: 75%;
-    padding: 0.25em 0 0 8px;
-    color: #6b6b6b;
-}
-
-/* Поля ввода (begin) */
-.form input {
-    float: left; /* иначе в IE появляется вертикальный отступ в 1px */
-}
-
-.form .from {
-    /* width: 354px;*/
-    width: 422px;
-}
-.form .to {
-    /* width: 506px;*/
-    width: 438px;
-}
-
-/* Кнопка туда-сюда-обратно (begin) */
-.form .button {
-    display: block;
-    width: 26px;
-    height: 26px;
-    margin: 8px 8px 6px;
-    background: url(/img/search/retmode.png) no-repeat;
-    cursor: pointer;
-}
-.form .button-ow {
-    background-position: 0 -30px;
-}
-.form .button-none {
-    background-position: 0 30px;
-}
-
-/* Псевдоссылка с примером (begin) */
-    .form table tr.subs .pseudo-example
-    {
-       margin: 0 0 0 10px;
-    }
-    .form table tr.subs .b-pseudo
-    {
-        color: #6b6b6b;
-    }
-
-    .form table tr.subs .b-pseudo s
-    {
-        position: absolute;
-        display: block;
-
-        width: 7px;
-        height: 12px;
-        padding: 2px 3px;
-
-        left: -15px;
-        bottom: -3px;
-
-        background: url(/img/ico/refresh.gif) no-repeat center center;
-    }
-
-    .form table tr.subs .b-pseudo s:hover
-    {
-        /*
-        background-color: #555;
-        */
-        cursor: default;
-    }
-
-    .form table tr.subs .b-pseudo s:active
-    {
-        /*
-        background-color: #dc3f8a;
-        */
-    }
-
-    .form table tr.subs .b-pseudo s.animate
-    {
-        -moz-transform: rotate(90deg);
-        -moz-transition: -moz-transform .3s ease-out;
-
-        -webkit-transform: rotate(180deg);
-        -webkit-transition: -webkit-transform .5s ease-out;
-
-        transform: rotate(180deg);
-        transition: transform .5s ease-out;
-
-        filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
-    }
-
-    .form table tr.subs .b-pseudo:hover,
-    .form table tr.subs .b-pseudo:hover u
-    {
-        color: #fff;
-    }
-/* Псевдоссылка с примером (end) */
-
-

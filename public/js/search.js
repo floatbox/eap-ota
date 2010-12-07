@@ -127,6 +127,7 @@ init: function() {
     
     // Кнопка
     this.submit = $('#search-submit');
+    this.sprogress = this.submit.find('.progress');
 },
 values: function() {
     var data = {
@@ -176,7 +177,7 @@ update: function(source) {
     }
     this.timer = setTimeout(function() {
         self.validate();
-    }, 750);
+    }, 500);
     this.toggle(false);    
 },
 validate: function(qkey) {
@@ -202,8 +203,12 @@ validate: function(qkey) {
     }
     var self = this;
     var restoreResults = Boolean(qkey);
+    this.sprogress.show();
     this.request = $.get('/pricer/validate/', data, function(result, status, request) {
-        if (request != self.request) return;
+        if (request != self.request) {
+            return;
+        }
+        self.sprogress.hide();
         if (data.query_key && result.search) {
             self.preventValidation = true;
             self.restore(result.search);
@@ -231,7 +236,7 @@ validate: function(qkey) {
                         offersList.load(options, result.human);
                         delete(self.loadOptions);
                     }
-                }, 3000);
+                }, 10000);
             }
         }
         var rs = result.search;
