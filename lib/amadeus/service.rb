@@ -48,7 +48,7 @@ module Amadeus
 
   def invoke_rendered action, opts={}
 
-    args = opts[:args]
+    args = opts[:args] || {}
     if args.is_a? Hash
       args = OpenStruct.new({:debug => false}.merge(args))
     end

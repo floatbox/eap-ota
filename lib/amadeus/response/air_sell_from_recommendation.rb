@@ -5,7 +5,20 @@ module Amadeus
       # FIXME нужно разобраться со statusCode - когда все хорошо, а когда - нет
       # возможно, не только OK подходит
       def segments_confirmed?
-        xpath('//r:segmentInformation/r:actionDetails/r:statusCode').every.to_s.uniq == ['OK']
+        segments_status_codes.uniq == ['OK']
+      end
+
+      def segments_status_codes
+        xpath('//r:segmentInformation/r:actionDetails/r:statusCode').every.to_s
+      end
+
+      # сомнительный способ
+      def success?
+        segments_confirmed?
+      end
+
+      def message
+        "segments' status codes: #{segments_status_codes}"
       end
 
       # апдейтит недостающую инфу в рекомендации
