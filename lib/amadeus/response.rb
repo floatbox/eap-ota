@@ -17,5 +17,12 @@ module Amadeus::Response
 
     delegate :xpath, :to => :doc
 
+
+    def bang!
+      unless success?
+        raise "#{self.class.name}: #{message}"
+      end
+      self
+    end
   end
 end

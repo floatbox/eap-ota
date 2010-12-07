@@ -177,7 +177,7 @@ module Amadeus
   def self.issue_ticket(pnr_number)
     amadeus = Amadeus::Service.new(:book => true, :office => Amadeus::Session::TICKETING)
     amadeus.pnr_retrieve(:number => pnr_number)
-    amadeus.doc_issuance_issue_ticket
+    amadeus.doc_issuance_issue_ticket.bang!
   ensure
     amadeus.session.destroy
   end
