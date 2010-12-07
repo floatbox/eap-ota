@@ -40,6 +40,12 @@ module Amadeus
     doc.add_namespace 'r', result_namespace
   end
 
+  def invoke(*)
+    debug '==============='
+    debug "unixtime: #{Time.now.to_i}"
+    super
+  end
+
   def invoke_rendered action, opts={}
 
     args = opts[:args]
