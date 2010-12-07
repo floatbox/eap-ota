@@ -24,5 +24,17 @@ module Amadeus::Response
       end
       self
     end
+
+    def success?
+      true
+    end
+
+    def message
+      nil
+    end
+
+    def inspect
+      "<#{self.class.name} #{success? ? 'Success' : 'Fail' }: #{message.presence && message.inspect}\n#{doc.to_xml.to_s}"
+    end
   end
 end
