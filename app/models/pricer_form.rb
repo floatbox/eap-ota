@@ -166,11 +166,10 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     if children > 0
       r << ['с&nbsp;ребенком', 'с&nbsp;двумя детьми', 'с&nbsp;тремя детьми', 'с&nbsp;четыремя детьми', 'с&nbsp;пятью детьми', 'с&nbsp;шестью детьми', 'с&nbsp;семью детьми'][children-1]
     end
-=begin
+    r << 'и' if infants > 0 && children > 0
     if infants > 0
-      r << ['с&nbsp;младенцем', 'с&nbsp;двумя младенцами', 'с&nbsp;тремя младенцами', '4 младенцев', '5 младенцев', '6 младенцев', '7 младенцев'][children-1]
+      r << ['с&nbsp;младенцем', 'с&nbsp;двумя младенцами', 'с&nbsp;тремя младенцами', 'с&nbsp;четыремя младенцами', 'с&nbsp;пятью младенцами', 'с&nbsp;шестью младенцами', '7 младенцев'][infants-1]
     end
-=end
 
     r << human_cabin if cabin
 
