@@ -81,7 +81,11 @@ class OrderData < ActiveRecord::BaseWithoutTable
         Person.new
     }
   end
-  
+
+  def seat_count
+    people_count[:adults] + people_count[:children]
+  end
+
   def validate
     errors.add :card, 'Отсутствуют данные карты' unless card
     errors.add :card, 'Некорректные данные карты' if card && !card.valid?
@@ -140,7 +144,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   def create_booking
     amadeus = Amadeus::Service.new(:book => true)
     amadeus.air_sell_from_recommendation(
-      :segments => recommendation.variants[0].segments, :people_count => (people_count[:adults] + people_count[:children])
+      :segments => recommendation.variants[0].segments, :people_count => seat_count
     ).bang!
 
     if self.pnr_number = amadeus.pnr_add_multi_elements(self).bang!.pnr_number
@@ -158,8 +162,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
         # FIXME среагировать на различие в цене
         add_passport_data(amadeus)
         amadeus.give_permission_to_ticketing_office
-        # FIXME
-        #amadeus.pnr_archive( как-то добыть текущее количество мест )
+        amadeus.pnr_archive(seat_count)
         amadeus.pnr_commit
         #amadeus.queue_place_pnr(:number => pnr_number)
         Order.create(:order_data => self)
