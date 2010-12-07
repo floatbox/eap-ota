@@ -463,7 +463,7 @@ sortOffers: function() {
     }
 },
 showRecommendations: function() {
-    var variants = this.variants, cheap, fast, optimal;
+    var variants = this.variants, cheap, fast, optimal, optimal2;
     var optimals = [];
     for (var i = 0, im = variants.length; i < im; i++) {
         var v = variants[i];
@@ -471,11 +471,12 @@ showRecommendations: function() {
         var d = v.summary.duration, p = v.offer.summary.price;
         if (!cheap || p < cheap.price || (p == cheap.price && d < cheap.duration)) cheap = {variant: v, duration: d, price: p};
         if (!fast || ((1 - d / fast.duration) + (1 - p / fast.price) / 5) > 0) fast = {variant: v, duration: d, price: p};
+        if (!optimal2 || ((1 - d / optimal2.duration) + (1 - p / optimal2.price)) > 0) optimal2 = {variant: v, duration: d, price: p};
         optimals.push({duration: d, price: p, n: i});
     }
     optimals = optimals.sort(function(a, b) {
         return (a.duration - b.duration);
-    }).slice(0, Math.round(im / 2)).sort(function(a, b) {
+    }).slice(0, Math.round(im * 0.5)).sort(function(a, b) {
         return (a.price - b.price);
     });
     optimal = {variant: variants[optimals[0].n]};
@@ -499,13 +500,14 @@ showRecommendations: function() {
     if (cheap && fast) {
         otitle = 'Оптимальный вариант — разумная цена и время в пути';
     } else if (cheap) {
-        otitle = 'Самый быстрый и оптимальный вариант';
+        otitle = 'Быстрый и оптимальный вариант';
     } else if (fast) {
         otitle = 'Самый выгодный и оптимальный вариант';
     }
     if (cheap) container.append(this.makeRecommendation(cheap, 'Самый выгодный вариант'));
     if (optimal) container.append(this.makeRecommendation(optimal, otitle));
     if (fast) container.append(this.makeRecommendation(fast, 'Быстрый вариант'));
+    if (optimal2) container.append(this.makeRecommendation(optimal2, 'Оптимальный вариант с другим алгоритмом'));    
 },
 makeRecommendation: function(obj, title) {
     var el = obj.variant.el, offer = el.parent().clone();

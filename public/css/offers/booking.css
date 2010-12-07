@@ -325,6 +325,7 @@
 /******* БЛОК 2: ДАННЫЕ ПАССАЖИРОВ *******/
 
 .booking .book-p {
+    padding-top: 10px;
     padding-right:  12px;
 }
 
@@ -852,8 +853,12 @@
 .booking .book-s {
     overflow: hidden;
     zoom: 1;
+    padding: 30px 15px 15px;
+}
 
-    padding: 30px 15px;
+.booking .disclaimer {
+    margin: 20px 0 0;
+    color: #777;
 }
 
 .book-s .control {
