@@ -40,9 +40,15 @@ module Amadeus
     doc.add_namespace 'r', result_namespace
   end
 
+  def invoke(*)
+    debug '==============='
+    debug "unixtime: #{Time.now.to_i}"
+    super
+  end
+
   def invoke_rendered action, opts={}
 
-    args = opts[:args]
+    args = opts[:args] || {}
     if args.is_a? Hash
       args = OpenStruct.new({:debug => false}.merge(args))
     end
