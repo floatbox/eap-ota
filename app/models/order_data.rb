@@ -144,9 +144,10 @@ class OrderData < ActiveRecord::BaseWithoutTable
     ).bang!
 
     if self.pnr_number = amadeus.pnr_add_multi_elements(self).bang!.pnr_number
-      amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier).bang!
+      fares_count =
+        amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier).bang!.fares_count
       # FIXME среагировать на отсутствие маски
-      amadeus.ticket_create_tst_from_pricing.bang!
+      amadeus.ticket_create_tst_from_pricing(:fares_count => fares_count).bang!
 
       if block_money
         # надо ли? - проверить что создание маски НЕ сохраняет PNR

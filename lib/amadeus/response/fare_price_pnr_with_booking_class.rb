@@ -24,7 +24,7 @@ module Amadeus
         message.nil?
       end
 
-      def fare_list_count
+      def fares_count
         xpath('//r:fareList').size
       end
     end
