@@ -2,7 +2,7 @@ class Recommendation
 
   include KeyValueInit
 
-  attr_accessor :variants, :price_fare, :price_tax, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source
+  attr_accessor :variants, :price_fare, :price_tax, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules
 
   def validating_carrier
     validating_carrier_iata && Airline[validating_carrier_iata]
@@ -179,7 +179,7 @@ class Recommendation
 
     # FIXME не очень надежный признак
     return if recommendation.price_fare.to_i == 0
-
+    recommendation.rules = amadeus.fare_check_rules.rules
     air_sfr = amadeus.air_sell_from_recommendation(:segments => segments, :people_count => (pricer_form.real_people_count[:adults] + pricer_form.real_people_count[:children]))
     amadeus.cmd('IG')
     return unless air_sfr.segments_confirmed?

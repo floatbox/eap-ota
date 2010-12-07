@@ -1,0 +1,15 @@
+ <msgType>
+   <messageFunctionDetails>
+     <messageFunction>712</messageFunction>
+   </messageFunctionDetails>
+ </msgType>
+ <itemNumber>
+   <itemNumberDetails>
+     <number>1</number>
+   </itemNumberDetails>
+ </itemNumber>
+ <fareRule>
+   <tarifFareRule>
+     <ruleSectionId>PE</ruleSectionId>
+   </tarifFareRule>
+ </fareRule>
