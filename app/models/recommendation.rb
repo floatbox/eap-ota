@@ -129,26 +129,22 @@ class Recommendation
   def self.corrected recs
     #объединяем эквивалентные варианты
     recs.each_with_object([]) do |r, result|
-      unless r.try_to_merge_with_prev_recommendations result
+      #некрасиво, но просто и работает
+      if r.groupable_with? result[-1]
+        result[-1].variants += r.variants
+      elsif r.groupable_with? result[-2]
+        result[-2].variants += r.variants
+      elsif r.groupable_with? result[-3]
+        result[-3].variants += r.variants
+      else
         result << r
-      end
-    end
-  end
-
-  def try_to_merge_with_prev_recommendations (recommendations)
-    return if recommendations.blank? || recommendations.last.price_total != price_total
-    recommendations.reverse.each do |r|
-      return if r.price_total != self.price_total
-      if groupable_with? r
-        r.variants += r.variants
-        return true
       end
     end
   end
 
   def groupable_with? rec
     return unless rec
-    [price_fare, price_tax, validating_carrier_iata,  booking_classes, variants.first.flights.every.operating_carrier_iata, variants.first.flights.every.arrival_iata] == [rec.price_fare, rec.price_tax, rec.validating_carrier_iata,  rec.booking_classes, rec.variants.first.flights.every.operating_carrier_iata, rec.variants.first.flights.every.arrival_iata]
+    [price_fare, price_tax, validating_carrier_iata,  booking_classes, variants.first.flights.every.marketing_carrier_iata, variants.first.flights.every.arrival_iata] == [rec.price_fare, rec.price_tax, rec.validating_carrier_iata,  rec.booking_classes, rec.variants.first.flights.every.marketing_carrier_iata, rec.variants.first.flights.every.arrival_iata]
   end
 
   def hash
