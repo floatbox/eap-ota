@@ -117,3 +117,7 @@
     font-size: 75%;
     color: #FFF;
 }
+.persons dd.selected.one:hover {
+    background-color: #ed1192;
+    color: #FFF;
+}

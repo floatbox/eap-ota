@@ -6,12 +6,8 @@
     // кнопка отправки запроса
     $('#search-submit .b-submit').click(function(event) {
         event.preventDefault();
-        if (!$(this).parent().hasClass('disabled')) {
-            clearTimeout(search.loadTimer);
-            if (search.loadOptions) {
-                offersList.load(search.loadOptions.options, search.loadOptions.title);
-                delete(search.loadOptions);            
-            }
+        if (offersList.nextUpdate) {
+            offersList.load();
             offersList.show();
         }
     });

@@ -953,6 +953,13 @@
     color: #333;    
 }
 
+.booking .book-retry {
+    padding-bottom: 0;
+}
+.book-retry .disclaimer {
+    display: none;
+}
+
 /* Ошибки заполнения */
 .booking .formError {
     display: none;

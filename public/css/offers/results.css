@@ -1,7 +1,7 @@
 /* Блок с результатами */
 #offers {
     padding-top: 15px;
-    background: #f7f7f7;
+    background: #fff;
 }
 #offers-results {
     position: relative;
@@ -22,9 +22,14 @@
 }
 
 /* Список предложений */
+#offers {
+    background: #e7ecee;
+}
+#offers.with-results {
+    background: #fff;
+}
 #offers-list {
-    background: #e5e5e5;
-    border-top: 1px solid #d0d0d0;
+    background: #e7ecee;
     padding: 15px 0;
     color: #333;
 }
@@ -197,7 +202,8 @@
     margin: 0 0 1px;
     font-size: 22px;
     font-weight: bold;
-    line-height: 1;        
+    line-height: 1;
+    letter-spacing: -0.04em;
 }
 .offer .summary .direction {
     position: relative;

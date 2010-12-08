@@ -19,7 +19,7 @@ class Completer
   include Normalizer
 
   def self.cached_or_new
-    if !@completer || (cache_loaded_at > cache_updated_at)
+    if !@completer || (cache_loaded_at < cache_updated_at)
       @completer = Completer.load rescue nil
     end
     if !@completer || @completer.outdated?
@@ -46,6 +46,7 @@ class Completer
     open(MARSHAL_FILE, 'w') do |f|
       Marshal.dump(self, f)
     end
+    Rails.logger.debug "Completer: dumped to cache"
   end
 
   def self.cache_loaded_at
@@ -59,6 +60,7 @@ class Completer
   def self.load
     @completer = Marshal.load(open(MARSHAL_FILE))
     @cache_loaded_at = Time.now
+    Rails.logger.debug "Completer: loaded from cache"
     @completer
   end
 

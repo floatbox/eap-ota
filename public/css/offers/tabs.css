@@ -1,9 +1,7 @@
 /* Вкладки списка результатов */
 #offers-tabs {
     position: relative;
-    top: 1px;
     overflow: hidden;
-    margin: 0 15px;
     zoom: 1;
 }
 #offers-tabs ul {
@@ -15,20 +13,21 @@
 }
 #offers-tabs li {
     float: left;
-    margin-right: -1px;
+    padding: 8px 15px;
+    border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    -webkit-border-radius: 5px 5px 0 0;
     font-weight: bold;
     font-size: 20px;
     line-height: 22px;
     letter-spacing: -0.03em;
 }
+#offers-tabs #offers-tabs-featured {
+    border-radius: 0 5px 0 0;
+    -moz-border-radius: 0 5px 0 0;
+    -webkit-border-radius: 0 5px 0 0;
+}
 #offers-tabs li a {
-    display: block;
-    float: left;
-    padding: 7px 14px 8px;
-    border: 1px solid #d0d0d0;
-    border-bottom: none;
-    border-radius: 5px 5px 0 0;
-    -moz-border-radius: 5px 5px 0 0;
     text-decoration: underline;
     color: #ed1192;
 }
@@ -39,10 +38,10 @@
 #offers-tabs li.active {
     position: relative;
     z-index: 1;
+    background: #e7ecee;    
 }
 #offers-tabs li.active a {
     text-decoration: none;
     color: #333;
-    background: #e5e5e5;
     cursor: default;
 }

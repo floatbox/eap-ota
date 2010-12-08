@@ -13,14 +13,17 @@ init: function() {
         if (!self.submit.hasClass('a-button-ready')) return;
         var data = $(this).serialize();
         $.post($(this).attr('action'), data, function(s) {
+            self.el.find('result').remove();
             if (typeof s == 'string') {
-                $('.book-s', self.el).addClass('g-none');
                 var result = $(s).appendTo(self.el);
-                pageurl.update('payment', result.attr('data-type'));
+                var rtype = result.attr('data-type');
+                self.el.find('.book-s').addClass(rtype == 'success' ? 'g-none' : 'book-retry');
+                pageurl.update('payment', rtype);
             } else if (s.errors) {
                 var items = [];
                 for (var eid in s.errors) items.push('<li>' + eid + ' ' + s.errors[eid] + '</li>');
-                $('.blocker', self.el).find('.b-pseudo').html(items.join('')).end().show();
+                self.el.find('.blocker').show().find('.b-pseudo').html(items.join(''));
+                self.el.removeClass('book-retry');
             } else if (s.exception) {
                 alert(s.exception.message);
             }
@@ -88,6 +91,7 @@ show: function(variant) {
     if (this.el) this.hide();
     this.variant = variant;
     this.offer = variant.closest('.offer');
+    this.offersTab = offersList.selectedTab;
     if (this.offer.hasClass('collapsed')) {
         $('.expand', variant).click();
     }
@@ -95,10 +99,10 @@ show: function(variant) {
         event.preventDefault();
         self.hide();
     };
-    var link = $('<a class="stop-booking" href="#">Вернуться к выбору вариантов</a>').click(this.selfhide).prependTo(this.offer);
+    /*var link = $('<a class="stop-booking" href="#">Вернуться к выбору вариантов</a>').click(this.selfhide).prependTo(this.offer);
     if (this.offer.parent('#offers-matrix').length) {
         link.css('top', this.offer.find('.offer-prices').height());
-    }
+    }*/
     this.el = $('<div class="booking"></div>').appendTo(this.offer);
     this.offer.addClass('active-booking');
 },
@@ -115,6 +119,7 @@ book: function(variant) {
     var self = this;
     this.el.html('<div class="booking-state"><div class="progress"></div><h4>Делаем предварительное бронирование и уточняем цену</h4></div>');
     $.get("/booking/preliminary_booking?" + variant.attr('data-booking'), function(s) {
+        $('#offers-tabs').trigger('set', self.offersTab);
         if (s && s.success) {
             self.load(s.number);
             pageurl.update('booking', s.number);

@@ -178,7 +178,6 @@ update: function(source) {
     this.timer = setTimeout(function() {
         self.validate();
     }, 500);
-    this.toggle(false);    
 },
 validate: function(qkey) {
     clearTimeout(this.timer);
@@ -220,24 +219,22 @@ validate: function(qkey) {
             self.apply(result.complex_to_parse_results || {});
         }
         if (result.valid) {
-            var options = {
+            offersList.nextUpdate = {
+                title: result.human
+            };
+            offersList.nextUpdate.params = {
                 query_key: result.query_key || data.query_key,
                 search_type: 'travel'
             };
             if (restoreResults) {
-                options.restore_results = true;
-                offersList.load(options, result.human);
+                offersList.nextUpdate.params.restore_results = true;
+                offersList.load();
                 offersList.show(false);
             } else {
-                self.loadOptions = {options: options, title: result.human};
                 self.toggle(true);
-                self.loadTimer = setTimeout(function() {
-                    if (self.loadOptions) {
-                        offersList.load(options, result.human);
-                        delete(self.loadOptions);
-                    }
-                }, 10000);
             }
+        } else {
+            delete(offersList.nextUpdate);
         }
         var rs = result.search;
         if (rs) {
@@ -273,7 +270,6 @@ updateMap: function(lf, lt) {
 abort: function() {
     var r = this.request;
     if (r && r.abort) r.abort();
-    offersList.abort();
 },
 apply: function(data) {
     this.parsed = data;
