@@ -32,6 +32,8 @@ module Amadeus
   include Amadeus::SOAPActions
   include Amadeus::Macros
 
+  include Amadeus::Compression
+
   def on_response_document(doc)
     doc.add_namespace 'header', 'http://webservices.amadeus.com/definitions'
     doc.add_namespace 'soap', envelope_namespace
