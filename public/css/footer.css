@@ -1,52 +1,60 @@
 .footer {
-    font-size: 90%;
-
     position: relative;
-    overflow: hidden;
-    zoom: 1;
-
     width: 960px;
-
     margin: 0 auto;
     padding: 15px 0;
-
-    background: #fff url(/img/logos/logos-iata-visa.gif) no-repeat 720px 15px;
-    
     border-top: #ddd 1px solid;
+    background: #fff;
+    font-size: 12px;
+    line-height: 16px;
 }
 
-.footer dl {
-    float:  left;
-    width: 225px;
-    margin: 0 0 0 15px;
+.f-info {
+    position: absolute;
+    top: 15px; left: 15px;
+    width: 220px;
+    color: #777;
 }
-
-.footer dt {
+.f-info .social {
+    margin-top: 1em;
+}
+.f-info strong {
     font-weight: bold;
-
-    margin: 0 0 0.4em 0;
-
-    color: #7b7b7b;
+}
+.f-info a {
+    color: #777;
 }
 
-.footer dd {
-    font-size: 90%;
-
-    margin: 0 0 0.4em 0;
+.f-links {
+    position: absolute;
+    top: 15px; left: 275px;
+}
+.f-links li {
+    margin: 0 0 3px;
+}
+.f-links a {
+    color: #3270a6;
 }
 
-.footer dd a {
-    color: #3a6c9a;
+.f-logotypes {
+    position: absolute;
+    top: 15px; left: 713px;
+    width: 232px;
+}
+.fl-amadeus {
+    position: absolute;
+    top: 0; left: 0;
+}
+.fl-thawte {
+    position: absolute;
+    top: 0; left: 121px;
+}
+.fl-amadeus {
+    position: absolute;
+    top: 42px; left: 60px;
 }
 
-/* Копирайт (BEGIN) */
-    .footer i {
-        font-size: 90%;
 
-        position: absolute;
-        left: 720px;
-        top: 60px;
-
-        color: #454545;
-    }
-/* Копирайт (END) */
+.footer a:hover {
+    color: #ed1192;
+}

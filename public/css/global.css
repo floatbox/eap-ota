@@ -60,19 +60,15 @@ abbr, acronym {
 /* Сброс (конец) */
 
 html,
-body 
-{
+body {
     height: 100%;
 }
 
 body {
     font: 100% Arial,Helvetica,sans-serif;
-
     text-align: center;
-
     color: #000;
-    /*background: url("/img/bg/bg1.jpg") no-repeat 50% 0% #004472;*/
-    background: #0366a3;
+    background: #4bc0d1;
 }
 
 body * {

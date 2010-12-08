@@ -90,6 +90,11 @@ init: function() {
         }
     });
     
+    // Ссылка на все варианты в наших предложениях
+    $('#offers-list').delegate('.featured-tip .link', 'click', function(event) {
+        $('#offers-tabs').trigger('set', 'all');
+    });
+    
     // Бронирование
     $('#offers-list').delegate('.book .a-button', 'click', function(event) {
         event.preventDefault();
@@ -102,12 +107,20 @@ init: function() {
     this.initMatrix();
     
 },
-load: function(params, title) {
+load: function() {
     var self = this;
+    if (!this.nextUpdate) {
+        return;
+    }
+    if (this.update && this.update.loading) {
+        this.abort();
+    }
     this.update = {
-        title: title,
+        title: this.nextUpdate.title,
         loading: true
     };
+    var params = $.extend({}, this.nextUpdate.params);
+    this.nextUpdate = undefined;
     this.update.prequest = $.ajax({
         url: '/pricer/',
         data: params,
@@ -119,7 +132,7 @@ load: function(params, title) {
             if (self.update.prequest != request) return;
             self.setUpdate('pcontent', '');
         },
-        timeout: 95000
+        timeout: 150000
     });
     this.mrtimer = setTimeout(function() {
         params.search_type = 'calendar';
@@ -134,7 +147,7 @@ load: function(params, title) {
                 if (self.update.mrequest != request) return;
                 self.setUpdate('mcontent', '');
             },
-            timeout: 45000
+            timeout: 60000
         });
     }, params.restore_results ? 1000 : 8000);
     clearTimeout(this.resetTimer);
@@ -157,9 +170,6 @@ setUpdate: function(type, s) {
 },
 abort: function() {
     clearTimeout(this.mrtimer);
-    if (this.loading.is(':visible')) {
-        this.container.addClass('g-none');
-    }
     if (this.update) {
         var pr = this.update.prequest;
         var mr = this.update.mrequest;
@@ -211,6 +221,7 @@ hide: function() {
     this.container.addClass('g-none');
 },
 toggle: function(mode) {
+    this.container.toggleClass('with-results', mode == 'results');
     this.loading.toggleClass('g-none', mode != 'loading');
     this.results.toggleClass('g-none', mode != 'results');
     this.empty.toggleClass('g-none', mode != 'empty');
@@ -223,12 +234,12 @@ toggleCollection: function(mode) {
 },
 processUpdate: function() {
     var self = this, u = this.update;
-    $('#offers-pcollection').html(u.pcontent || '');
-    $('#offers-mcollection').html(u.mcontent || '');
-    if ($('#offers-options').length) {
+    if (u.pcontent && u.pcontent.indexOf('offers-options') > 0) {
         this.loading.find('h3').html('&nbsp;&nbsp;Еще чуть-чуть&hellip;');
-        var self = this;
         var queue = [function() {
+            $('#offers-pcollection').html(u.pcontent);
+            $('#offers-mcollection').html(u.mcontent);
+        }, function() {
             self.updateFilters();
         }, function() {
             self.parseResults()
@@ -246,21 +257,24 @@ processUpdate: function() {
             self.toggleCollection(true);
         }, function() {
             self.toggle('results');
+            delete(u.pcontent);
+            delete(u.mcontent);
         }];
         var qstep = 0, processQueue = function() {
             queue[qstep++]();
             if (queue[qstep]) setTimeout(processQueue, 150);
         };
-        processQueue();
+        setTimeout(processQueue, 500);
     } else {
         this.toggle('empty');
+        $('#offers-pcollection').html('');
+        $('#offers-mcollection').html('');
+        pageurl.update('search', undefined);
         this.variants = [];
         this.items = [];
-        pageurl.update('search', undefined);
-        $('#offers-pcollection').html('');
+        delete(u.pcontent);
+        delete(u.mcontent);
     }
-    delete(u.pcontent);
-    delete(u.mcontent);        
 },
 parseResults: function() {
     var items = [], variants = [];
@@ -290,7 +304,7 @@ showAmount: function(amount, total) {
     if (total === undefined) total = this.items.length;
     if (amount === undefined) amount = total;
     var str = amount + ' ' + app.utils.plural(amount, ['вариант', 'варианта', 'вариантов']);
-    $('#offers-tab-all > a').text(amount == total ? ('Всего ' + str) : (str + ' из ' + total))
+    $('#offers-tab-all > a').text(amount == total ? ('Всего ' + str) : (str + ' из ' + total));
 },
 showVariant: function(el) {
     el.removeClass('g-none').siblings().addClass('g-none');
@@ -409,6 +423,7 @@ filterOffers: function() {
         if (!offer.improper) amount++;
         offer.el.toggleClass('improper', offer.improper);
     }
+    this.filtered = amount != total;
     this.showAmount(amount, total);
     this.toggleCollection(amount > 0);
     $('#offers-reset-filters').toggleClass('g-none', empty);
@@ -470,9 +485,13 @@ showRecommendations: function() {
         if (v.improper) continue;
         var d = v.summary.duration, p = v.offer.summary.price;
         if (!cheap || p < cheap.price || (p == cheap.price && d < cheap.duration)) cheap = {variant: v, duration: d, price: p};
-        if (!fast || ((1 - d / fast.duration) + (1 - p / fast.price) / 5) > 0) fast = {variant: v, duration: d, price: p};
-        if (!optimal2 || ((1 - d / optimal2.duration) + (1 - p / optimal2.price)) > 0) optimal2 = {variant: v, duration: d, price: p};
+        if (!fast || ((1 - d / fast.duration) + (1 - p / fast.price) / 10) > 0) fast = {variant: v, duration: d, price: p};
+        if (!optimal2 || ((1 - d / optimal2.duration) + (1 - p / optimal2.price) * 0.75) > 0) optimal2 = {variant: v, duration: d, price: p};
         optimals.push({duration: d, price: p, n: i});
+    }
+    if (!cheap && !fast && !optimal) {
+        container.append($('#offers-pcollection').prev().clone());
+        return;
     }
     optimals = optimals.sort(function(a, b) {
         return (a.duration - b.duration);
@@ -480,11 +499,6 @@ showRecommendations: function() {
         return (a.price - b.price);
     });
     optimal = {variant: variants[optimals[0].n]};
-    var container = $('#offers-featured').html('');
-    if (!cheap && !fast && !optimal) {
-        container.append($('#offers-pcollection').prev().clone());
-        return;
-    }
     if (cheap && fast && cheap.variant == fast.variant) {
         optimal = {variant: cheap.variant};
         cheap = undefined;
@@ -504,14 +518,24 @@ showRecommendations: function() {
     } else if (fast) {
         otitle = 'Самый выгодный и оптимальный вариант';
     }
+    var container = $('#offers-featured').hide().html('');
     if (cheap) container.append(this.makeRecommendation(cheap, 'Самый выгодный вариант'));
     if (optimal) container.append(this.makeRecommendation(optimal, otitle));
     if (fast) container.append(this.makeRecommendation(fast, 'Быстрый вариант'));
-    if (optimal2) container.append(this.makeRecommendation(optimal2, 'Оптимальный вариант с другим алгоритмом'));    
+    if (optimal2) container.append(this.makeRecommendation(optimal2, 'Оптимальный вариант с другим алгоритмом'));
+    if (!this.filtered) {
+        container.append('<div class="featured-tip"><strong>Не подошло?</strong> Воспользуйтесь уточнениями вверху &uarr; или посмотрите <span class="link">все варианты</span></div>');
+    }
+    container.show();
 },
 makeRecommendation: function(obj, title) {
     var el = obj.variant.el, offer = el.parent().clone();
     this.showVariant(offer.children().eq(el.prevAll().length));
+    if (title.search(/выгодный/i) != -1) {
+        var cost = offer.find('td.cost dl'), ctext = cost.find('dd');
+        ctext.html(ctext.html() + ' за всех, включая налоги и сборы');
+        cost.prepend('<dd>Всего </dd>');
+    }
     return $('<div><h3 class="offers-title">' + title + '</h3></div>').append(offer);
 },
 getDepartures: function(offer) {

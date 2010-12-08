@@ -1,32 +1,26 @@
 /* Wrapper */
-
 .l-wrapper {
     position: relative;
     width: 960px;
     min-height: 100%;
     margin: 0 auto;
-    background: #e5e5e5;
+    background: #fff;
 }
-
 .l-content {
     padding-top: 42px;
-    padding-bottom: 210px;
+    padding-bottom: 130px;
 }
 
 /* Crop */
-
 .l-crop {
     overflow: hidden;
 }
-
 .l-overlay {
     display: none;
 }
-
 .l-crop .l-canvas {
     position: relative;    
 }
-
 .l-crop .l-overlay {
     position: absolute;
     top: 0;
@@ -41,12 +35,11 @@
 }
 
 /* Footer */
-
 .l-footer {
     position: absolute;
     bottom: 0;
     width: 960px;
-    height: 210px;
+    height: 130px;
     margin: 0 auto;
     background: #FFF;
 }
