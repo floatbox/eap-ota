@@ -1,13 +1,14 @@
 -# https://webservices.amadeus.com/extranet/structures/viewMessageStructure.do?id=1325&serviceVersionId=1497
--if end_transact
+-# FIXME куда-то это надо вынести
+- action_codes = {:NOP => 0, :ET => 10, :ER => 11, :ETK => 12, :ERK => 13, :EF => 14, :ETX => 15, :ERX => 16, :IG => 20, :IR => 21, :STOP => 267, :WARNINGS => 30, :SHORT => 50}
+
+-if action
   %pnrActions
-    %optionCode 10
--elsif ignore
-  %pnrActions
-    %optionCode 20
+    %optionCode= action_codes[action] || raise "unknown action_code #{action}"
+    %optionCode= action_codes[:SHORT]
 -else
   %pnrActions
-    %optionCode 11
+    %optionCode action_codes[:ER]
   - adults.each_with_index do |person, index|
     %travellerInfo
       %elementManagementPassenger

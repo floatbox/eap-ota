@@ -132,14 +132,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
     false
   end
 
-  def end_transact
-    false
-  end
-
-  def ignore
-    false
-  end
-
   # по идее, как-то должно быть перенесено прямо в lib/amadeus
   def create_booking
     amadeus = Amadeus::Service.new(:book => true)

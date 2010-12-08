@@ -15,21 +15,19 @@ module Amadeus
     end
 
     def pnr_ignore
-      pnr_add_multi_elements :ignore => true
+      pnr_add_multi_elements :action => :IG
     end
 
     def pnr_ignore_and_retrieve
-      # сделать опцию для pnr_add_multi_elements
-      cmd("IR")
+      pnr_add_multi_elements :action => :IR
     end
 
     def pnr_commit
-      pnr_add_multi_elements :end_transact => true
+      pnr_add_multi_elements :action => :ET
     end
 
     def pnr_commit_and_retrieve
-      # сделать опцию для pnr_add_multi_elements
-      cmd("ER")
+      pnr_add_multi_elements :action => :ER
     end
 
     def pnr_cancel
