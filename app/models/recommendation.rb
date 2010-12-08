@@ -144,7 +144,7 @@ class Recommendation
 
   def groupable_with? rec
     return unless rec
-    [price_fare, price_tax, validating_carrier_iata,  booking_classes, variants.first.flights.every.marketing_carrier_iata, variants.first.flights.every.arrival_iata] == [rec.price_fare, rec.price_tax, rec.validating_carrier_iata,  rec.booking_classes, rec.variants.first.flights.every.marketing_carrier_iata, rec.variants.first.flights.every.arrival_iata]
+    [price_fare, price_tax, validating_carrier_iata, booking_classes] == [rec.price_fare, rec.price_tax, rec.validating_carrier_iata,  rec.booking_classes]
   end
 
   def hash
