@@ -166,37 +166,42 @@ class Recommendation
   def eql?(b)
     signature.eql?(b.signature)
   end
-  
-  def self.check_price_and_avaliability(flight_codes, pricer_form, validating_carrier_code)
-    # FIXME вынести в Recommendation.from_flight_codes?
-    flights = flight_codes.map do |flight_code|
-      Flight.from_flight_code flight_code
+
+  def self.from_flight_codes(flight_codes)
+    flights = flight_codes.collect do |flight_code|
+      Flight.from_flight_code(flight_code)
     end
-    segments = []
-    flights.each do |fl|
-      if segments.blank? || segments.length <= fl.segment_number.to_i
-        segments << Segment.new(:flights => [fl])
-      else
-        segments.last.flights << fl
-      end
+    segments = flights.group_by(&:segment_number).values.collect do |flight_group|
+      Segment.new(:flights => flight_group)
     end
     variant = Variant.new(:segments => segments)
     recommendation = Recommendation.new(:variants => [variant])
     recommendation.booking_classes = variant.flights.every.class_of_service
+    recommendation
+  end
+
+  def self.check_price_and_avaliability(flight_codes, pricer_form, validating_carrier_code)
+    from_flight_codes(flight_codes)\
+      .check_price_and_availability(pricer_form, validating_carrier_code)
+  end
+
+  def check_price_and_avaliability(pricer_form, validating_carrier_code)
     amadeus = Amadeus::Service.new(:book => true)
-    recommendation.price_fare, recommendation.price_tax =
+    self.price_fare, self.price_tax =
       amadeus.fare_informative_pricing_without_pnr(
-        :flights => flights, :people_count => pricer_form.real_people_count, :validating_carrier => validating_carrier_code
+        :flights => flights,
+        :people_count => pricer_form.real_people_count,
+        :validating_carrier => validating_carrier_code
       ).prices
 
     # FIXME не очень надежный признак
-    return if recommendation.price_fare.to_i == 0
-    recommendation.rules = amadeus.fare_check_rules.rules
+    return if price_fare.to_i == 0
+    self.rules = amadeus.fare_check_rules.rules
     air_sfr = amadeus.air_sell_from_recommendation(:segments => segments, :people_count => (pricer_form.real_people_count[:adults] + pricer_form.real_people_count[:children]))
     amadeus.pnr_ignore
     return unless air_sfr.segments_confirmed?
     air_sfr.fill_itinerary!(segments)
-    recommendation
+    self
   ensure
     amadeus.session.destroy
   end
