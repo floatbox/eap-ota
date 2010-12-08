@@ -18,9 +18,14 @@ class Completer
 
   include Normalizer
 
-  def self.new_or_cached
+  def self.cached_or_new
+    if !@completer || (cache_loaded_at > cache_updated_at)
+      @completer = Completer.load rescue nil
+    end
     if !@completer || @completer.outdated?
-      @completer = (['cucumber', 'test'].include? RAILS_ENV) ? Completer.load : Completer.new
+      @completer = Completer.new
+      @completer.dump
+      @cache_loaded_at = Time.now
     end
     @completer
   end
@@ -43,13 +48,22 @@ class Completer
     end
   end
 
+  def self.cache_loaded_at
+    @cache_loaded_at
+  end
+
+  def self.cache_updated_at
+    File.mtime(MARSHAL_FILE)
+  end
+
   def self.load
     @completer = Marshal.load(open(MARSHAL_FILE))
+    @cache_loaded_at = Time.now
     @completer
   end
 
   class << self
-    delegate :complete, :dump, :iata_from_name, :record_from_string, :to => :new_or_cached
+    delegate :complete, :dump, :iata_from_name, :record_from_string, :to => :cached_or_new
   end
 
 
