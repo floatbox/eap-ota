@@ -8,6 +8,8 @@ class PNRForm < ActiveRecord::BaseWithoutTable
   column :number, :string
   column :end_transact, :boolean, false
   column :validating_carrier, :string
+  # убить?
+  column :action, :string
   
   validates_presence_of :first_name, :surname
   

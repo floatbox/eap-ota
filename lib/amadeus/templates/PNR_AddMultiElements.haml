@@ -4,11 +4,12 @@
 
 -if action
   %pnrActions
-    %optionCode= action_codes[action] || raise "unknown action_code #{action}"
-    %optionCode= action_codes[:SHORT]
+    %optionCode= action_codes[action] || raise("unknown action_code #{action}")
+    -# ошибка для ET IR, никакого эффекта для ER, IG
+    -# %optionCode= action_codes[:SHORT]
 -else
   %pnrActions
-    %optionCode action_codes[:ER]
+    %optionCode= action_codes[:ER]
   - adults.each_with_index do |person, index|
     %travellerInfo
       %elementManagementPassenger
