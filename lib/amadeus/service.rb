@@ -32,7 +32,9 @@ module Amadeus
   include Amadeus::SOAPActions
   include Amadeus::Macros
 
-  include Amadeus::Compression
+  # херит логгинг. надо как-то обернуть инспект у Handsoap::Response
+  # чтоб тоже раззиповывал
+  # include Amadeus::Compression
 
   def on_response_document(doc)
     doc.add_namespace 'header', 'http://webservices.amadeus.com/definitions'
