@@ -154,7 +154,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
         amadeus.pnr_commit_and_retrieve
         sleep(2)
         # дополнительно - эта зараза не делает коммит если пришли ремарки
-        amadeus.pnr_commit_and_retrieve
+        amadeus.pnr_ignore_and_retrieve
         # FIXME среагировать на различие в цене
         add_passport_data(amadeus)
         amadeus.give_permission_to_ticketing_office
