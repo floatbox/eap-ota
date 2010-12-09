@@ -88,13 +88,18 @@ init: function() {
 },
 show: function(variant) {
     var self = this;
-    if (this.el) this.hide();
-    this.variant = variant;
-    this.offer = variant.closest('.offer');
-    this.offersTab = offersList.selectedTab;
-    if (this.offer.hasClass('collapsed')) {
-        $('.expand', variant).click();
+    if (variant) {
+        if (this.el) this.hide();
+        this.variant = variant;
+        this.offer = variant.closest('.offer');
+        this.el = $('<div class="booking"></div>').appendTo(this.offer);
+        if (this.offer.hasClass('collapsed')) {
+            $('.expand', variant).click();
+        }
+    } else {
+        this.offer.removeClass('collapsed').addClass('expanded');
     }
+    this.offersTab = offersList.selectedTab;
     this.selfhide = function(event) {
         event.preventDefault();
         self.hide();
@@ -103,7 +108,6 @@ show: function(variant) {
     if (this.offer.parent('#offers-matrix').length) {
         link.css('top', this.offer.find('.offer-prices').height());
     }*/
-    this.el = $('<div class="booking"></div>').appendTo(this.offer);
     this.offer.addClass('active-booking');
 },
 hide: function() {
@@ -112,13 +116,15 @@ hide: function() {
     this.offer.removeClass('active-booking');
     this.el.remove();
     delete(this.el);
+    delete(this.offer);
     delete(this.variant);
     pageurl.update('booking', undefined);
 },
 book: function(variant) {
     var self = this;
     this.el.html('<div class="booking-state"><div class="progress"></div><h4>Делаем предварительное бронирование и уточняем цену</h4></div>');
-    $.get("/booking/preliminary_booking?" + variant.attr('data-booking'), function(s) {
+    var vid = '&variant_id=' + [self.offersTab, this.variant.attr('data-index')].join('-');
+    $.get("/booking/preliminary_booking?" + variant.attr('data-booking') + vid, function(s) {
         $('#offers-tabs').trigger('set', self.offersTab);
         if (s && s.success) {
             self.load(s.number);
@@ -141,9 +147,9 @@ book: function(variant) {
 },
 load: function(number) {
     var self = this;
-    $.get("/booking/", {number: number}, function(s) {
+    $.get('/booking/', {number: number}, function(s) {
         self.el = $(s).replaceAll(self.el);
-        if (self.el.children('form').length && self.comparePrice()) {
+        if (self.el.attr('data-variant') && self.variant && self.comparePrice()) {
             self.fasten(self.offer);
             self.init();
         }
