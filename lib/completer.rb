@@ -132,10 +132,21 @@ class Completer
       end
     end
 
+
     if data.blank? && (opts.delete(:jcuken) != false)
       complete(Qwerty.jcuken(string), position, opts.merge(:jcuken => false))
     else
-      data
+      uniq_by(data) {|e| e[:entity].merge({:name => nil})}
+    end
+  end
+
+  def uniq_by(array, &blk)
+    transforms = {}
+    array.select do |el|
+      t = blk[el]
+      should_keep = !transforms[t]
+      transforms[t] = true
+      should_keep
     end
   end
 
@@ -277,9 +288,9 @@ class Completer
     synonyms = []
     synonyms << c.name_en unless c.name_en == c.name
     synonyms += c.synonyms
-    synonyms += [c.case_in, c.case_to, c.case_from]
     synonyms.delete_if &:blank?
     add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms, :hint => c.continent_part_ru)
+    add(:name => c.name, :word => c.case_to, :type => c.kind, :code => c.iata, :hint => c.continent_part_ru)
   end
   
   
@@ -293,9 +304,9 @@ class Completer
     synonyms = []
     synonyms << c.name_en unless c.name_en == c.name
     synonyms += c.synonyms
-    synonyms += [c.case_in, c.case_to, c.case_from]
     synonyms.delete_if &:blank?
     add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms, :hint => c.country.name, :info => "Город #{c.name} #{c.country.proper_in}")
+    add(:name => c.name, :word => c.case_to, :type => c.kind, :code => c.iata, :hint => c.country.name, :info => "Город #{c.name} #{c.country.proper_in}")
   end
   
   def read_cities
@@ -323,11 +334,14 @@ class Completer
   end
   
   def add_airport(c)
-    synonyms = []
-    synonyms << c.name_en unless c.name_en == c.name
-    synonyms += c.synonyms
-    synonyms.delete_if &:blank?
-    add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms, :hint => c.city.name,  :info => "Аэропорт #{c.name} #{c.city.case_in}, #{c.city.country.name}") unless c.equal_to_city
+    unless c.equal_to_city
+      synonyms = []
+      synonyms << c.name_en unless c.name_en == c.name
+      synonyms += c.synonyms
+      synonyms.delete_if &:blank?
+      add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms, :hint => c.city.name,  :info => "Аэропорт #{c.name} #{c.city.case_in}, #{c.city.country.name}")
+      add(:name => c.name, :word => c.case_to, :type => c.kind, :code => c.iata, :hint => c.city.name,  :info => "Аэропорт #{c.name} #{c.city.case_in}, #{c.city.country.name}")
+    end
   end
   
   def read_airports
