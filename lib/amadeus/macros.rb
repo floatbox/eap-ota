@@ -34,6 +34,22 @@ module Amadeus
       cmd('XI')
     end
 
+    def pnr_commit_really_hard
+      yield
+      result = pnr_commit_and_retrieve
+      # закоммитить такое не удастся. надо повторять
+      if result.message == "SIMULTANEOUS CHANGES TO PNR - USE WRA/RT TO PRINT OR IGNORE"
+        pnr_ignore_and_retrieve
+        yield
+        result = pnr_commit_and_retrieve
+      end
+      # ER;ER трюк - двойной коммит для обхода ворнингов
+      unless result.success?
+        pnr_commit_and_retrieve
+      end
+      # если и сейчас не вышло - не судьба!
+    end
+
     def pnr_archive(seats)
       # 11 месяцев по каким-то причинам не сработало. +10
       monthplus10 =
