@@ -1,4 +1,4 @@
-<table class="offer-variant g-none" data-summary='<%= variant_summary || variant.summary.to_json %>' data-booking="query_key=<%= @query_key %>&total_price=<%= recommendation.price_total  %>&flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>&adults=<%= @search.adults %>&children=<%=@search.children %>&validating_carrier=<%= recommendation.validating_carrier.iata%>">
+<table class="offer-variant g-none" data-summary='<%= variant_summary || variant.summary.to_json %>' data-booking="query_key=<%= @query_key %>&total_price=<%= recommendation.price_total %>&flight_codes=<%= variant.flight_codes(recommendation.booking_classes).join('_') %>&validating_carrier=<%= recommendation.validating_carrier.iata %>">
 <col width="118">
 <col width="140">
 <col width="85">

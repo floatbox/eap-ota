@@ -80,7 +80,6 @@
     border-radius: 10px;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
-    -o-border-radius: 10px;
     background: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -393,9 +392,10 @@
 }
 .offer .details .time h5 {
     margin: 0 0 2px;
+    font-weight: bold;
     font-size: 22px;
-    font-weight: bold;        
     line-height: 22px;
+    letter-spacing: -0.04em;
     color: #777;
 }
 .offer .details .arv .time h5,

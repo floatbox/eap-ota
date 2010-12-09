@@ -252,11 +252,28 @@ processUpdate: function() {
         }, function() {
             self.processMatrix();
         }, function() {
-            $('#offers-tabs').trigger('set', self.selectedTab || pageurl.tab || 'featured');
-            pageurl.update('search', $('#offers-options').attr('data-query_key'));
+            var b = app.booking, vid = b.el && b.el.attr('data-variant');
+            if (vid && !b.variant) {
+                var vparts = vid.split('-');
+                b.variant = $('#offers-' + vparts[0] + ' .offer-variant[data-index="' + vparts[1] + '"]').eq(0);
+                b.offer = b.variant.closest('.offer');
+                self.showVariant(b.variant);
+                b.el.appendTo(b.offer).addClass('restored');
+                $('#offers-tabs').trigger('set', vparts[0]);
+            } else {
+                $('#offers-tabs').trigger('set', self.selectedTab || pageurl.tab || 'featured');
+                pageurl.update('search', $('#offers-options').attr('data-query_key'));
+            }
             self.toggleCollection(true);
         }, function() {
             self.toggle('results');
+            var b = app.booking;
+            if (b.el && b.el.hasClass('restored')) {
+                b.show();
+                b.el.removeClass('restored g-none');
+                b.fasten(b.offer);
+                b.init();
+            }
             delete(u.pcontent);
             delete(u.mcontent);
         }];
@@ -484,7 +501,7 @@ showRecommendations: function() {
         var v = variants[i];
         if (v.improper) continue;
         var d = v.summary.duration, p = v.offer.summary.price;
-        if (!cheap || p < cheap.price || (p == cheap.price && d < cheap.duration)) cheap = {variant: v, duration: d, price: p};
+        if (!cheap || ((1 - d / cheap.duration) / 10 + (1 - p / cheap.price)) > 0) cheap = {variant: v, duration: d, price: p};
         if (!fast || ((1 - d / fast.duration) + (1 - p / fast.price) / 10) > 0) fast = {variant: v, duration: d, price: p};
         if (!optimal2 || ((1 - d / optimal2.duration) + (1 - p / optimal2.price) * 0.75) > 0) optimal2 = {variant: v, duration: d, price: p};
         optimals.push({duration: d, price: p, n: i});
@@ -662,14 +679,14 @@ processMatrix: function() {
         var tindex = undefined;
     }
     var cheap = undefined;
-    var variants = context.find('.offer-variant').each(function() {
+    var variants = context.find('.offer-variant').each(function(i) {
         var el = $(this);
         var summary = $.parseJSON(el.attr('data-summary'));
         var cn = findex[summary.dates[0]];
         var rn = (tindex && summary.dates[1]) ? tindex[summary.dates[1]] : 4;
         var vid = summary.dates.join('-');
         var cell = $(rows[rn].cells[cn]).html(el.find('td.cost dt').html()).addClass('active').attr('data-vid', vid);
-        el.attr('id', 'mv-' + vid);
+        el.attr('id', 'mv-' + vid).attr('data-index', i);
         if (cheap && summary.price == cheap.price) {
             cheap.cells = cheap.cells.add(cell);
         } else if (!cheap || summary.price < cheap.price) {

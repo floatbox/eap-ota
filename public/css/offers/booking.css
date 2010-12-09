@@ -209,7 +209,7 @@
     }
 
     .booking .text-invalid {
-        border: 1px dashed red;
+        border: 1px solid red;
     }
 
     .booking .text-upper .text-value {
@@ -272,53 +272,6 @@
 
 .booking .tip-popup i {
     color: red;
-}
-
-/* Тариф */
-
-.book-v {
-    margin: 0 15px 15px;
-}
-.book-v .tarif h3 {
-    font-weight: bold;
-    margin-left: 0;
-    color: #333;
-}
-.book-v .tarif ul {
-    margin: .2em 0 .6em 15px;
-    list-style: disc;
-}
-
-.book-v .tarif pre {
-    font: normal 65% Courier, monospace;
-    display: none;
-    height: 18em;
-    margin: .5em 0;
-    padding: 5px;
-    overflow: auto;
-    color: #333;
-    background: #fff;
-    border: 1px solid #777;
-}
-
-.book-v .tarif a:hover {
-    color: red;
-}
-
-.book-v .agree {
-    color: #333;
-    margin: .6em 0 .4em 0;
-    text-align: right;
-}
-.book-v .agree input {
-    margin: 0 .3em 0 0;
-}
-.book-v .agree label {
-    font-weight: bold;
-    cursor: pointer;
-}
-.book-v .agree label:hover {
-    color: #000;
 }
 
 
@@ -964,4 +917,39 @@
 .booking .formError {
     display: none;
 }
+
+/* Правила тарифов */
+.farerules {
+    display: none;
+    position: absolute;
+    margin: -400px 0 0 -20px;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    padding: 18px 20px 20px;
+    background: #eee;
+    font-size: 14px;
+    line-height: 19px;
+    color: #000;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+    -o-box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3); 
+}
+.farerules h3 {
+    margin: 0 0 12px;
+    font-size: 26px;
+    line-height: 1;
+}
+.farerules pre {
+    max-height: 250px;
+    overflow: auto;
+    border: 1px solid #999;
+    margin-top: 18px;
+    border-color: #757575 #999 #B0B0B0;
+    padding: 3px 8px;
+    background: #fff;
+    font-size: 12px;
+}
+
 

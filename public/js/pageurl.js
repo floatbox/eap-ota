@@ -5,7 +5,7 @@ parse: function() {
         var hparts = hash.split(':');
         this.search = hparts[0];
         this.tab = hparts[1] || 'featured';
-        this.booking = hparts[3];
+        this.booking = hparts[2];
     }
 },
 update: function(key, value) {
