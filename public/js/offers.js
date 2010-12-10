@@ -501,21 +501,43 @@ showRecommendations: function() {
         var v = variants[i];
         if (v.improper) continue;
         var d = v.summary.duration, p = v.offer.summary.price;
-        if (!cheap || ((1 - d / cheap.duration) / 10 + (1 - p / cheap.price)) > 0) cheap = {variant: v, duration: d, price: p};
-        if (!fast || ((1 - d / fast.duration) + (1 - p / fast.price) / 10) > 0) fast = {variant: v, duration: d, price: p};
-        if (!optimal2 || ((1 - d / optimal2.duration) + (1 - p / optimal2.price) * 0.75) > 0) optimal2 = {variant: v, duration: d, price: p};
+        if (!cheap || ((1 - d / cheap.duration) / 20 + (1 - p / cheap.price)) > 0) {
+            cheap = {variant: v, duration: d, price: p};
+        }
+        if (!fast || ((1 - d / fast.duration) + (1 - p / fast.price) / 10) > 0) {
+            fast = {variant: v, duration: d, price: p};
+        }
         optimals.push({duration: d, price: p, n: i});
     }
-    if (!cheap && !fast && !optimal) {
+    if (!cheap && !fast) {
         container.append($('#offers-pcollection').prev().clone());
         return;
     }
+    var optDuration = (cheap.duration + fast.duration) / 2;
     optimals = optimals.sort(function(a, b) {
         return (a.duration - b.duration);
-    }).slice(0, Math.round(im * 0.5)).sort(function(a, b) {
+    });
+    for (var oi = 0, im = optimals.length; oi < im; oi++) {
+        var item = optimals[oi], p = item.price;
+        if (item.duration < optDuration) {
+            if (!optimal || p < optimal.price) {
+                optimal = {variant: variants[item.n], price: p, duration: item.duration};
+            }
+        } else {
+            break;
+        }
+    }
+    optimal.dp = (fast.price - optimal.price) / Math.max(1, optimal.duration - fast.duration);
+    for (var i = oi, im = optimals.length; i < im; i++) {
+        var item = optimals[i], dp = (fast.price - item.price) / Math.max(1, item.duration - fast.duration);
+        if (dp > optimal.dp) {
+            optimal = {variant: variants[item.n], dp: dp};
+        }
+    }    
+    optimals = optimals.slice(0, Math.round(im * 0.5)).sort(function(a, b) {
         return (a.price - b.price);
     });
-    optimal = {variant: variants[optimals[0].n]};
+    optimal2 = {variant: variants[optimals[0].n]};
     if (cheap && fast && cheap.variant == fast.variant) {
         optimal = {variant: cheap.variant};
         cheap = undefined;

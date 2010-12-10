@@ -82,6 +82,25 @@ init: function() {
         }
     });
     sections.eq(0).trigger('setready');
+    
+    // Правила тарифов
+    var frPopup = this.el.find('.farerules').click(function(event) {
+        event.stopPropagation();
+    });
+    var frHide = function(event) {
+        if (event.type == 'click' || event.which == 27) {
+            frPopup.hide();
+            $('body').unbind('click keydown', frHide);
+        }
+    };
+    frPopup.find('.close').click(frHide);
+    this.el.find('.farerules-link').click(function(event) {
+        event.preventDefault();
+        frPopup.show().css('margin-top', 15 - Math.round(frPopup.outerHeight() / 2));
+        setTimeout(function() {
+            $('body').bind('click keydown', frHide);
+        }, 50);
+    });
 
     // Прекращение бронирования
     this.el.delegate('a.stop-booking', 'click', this.selfhide);

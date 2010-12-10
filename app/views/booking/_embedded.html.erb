@@ -70,9 +70,10 @@ FARES ONLY APPLY IF PURCHASED BEFORE DEPARTURE
         </div>
         
         <div class="disclaimer">
-            <p>Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="#">условиями использования</a>, <a href="#">правилами IATA</a> и&nbsp;<a href="#">правилами тарифов</a></p>
+            <p>Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="#">условиями использования</a>, <a href="#">правилами IATA</a> и&nbsp;<a class="farerules-link" href="#">правилами тарифов</a></p>
         </div>
-        <div class="farerules">
+        <div class="farerules b-popup">
+            <div class="close"></div>
             <h3>Правила тарифов</h3>
             <p>Внимание! Возврат средств в&nbsp;случае отказа при получении визы, болезни и&nbsp;прочиз обстоятельств без штрафных санкций невозможен. Возврат билета производится строго по&nbsp;правилам авиакомпании. В&nbsp;случае комбинации в&nbsp;билете тарифов с&nbsp;различными правилами, наиболее строгие ограничения применются ко&nbsp;всему маршруту.</p>
             <pre><%= @order.recommendation.rules %></pre>
