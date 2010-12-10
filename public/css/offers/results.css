@@ -322,7 +322,7 @@
     font-size: 14px;
     border-radius: 5px 5px 0 0;
     -moz-border-radius: 5px 5px 0 0;
-    -webkit-border-radius: 5px 5px 0 0;    
+    -webkit-moniborder-radius: 5px 5px 0 0;    
 }
 .offer .expand,
 .offer.collapsed .collapse {

@@ -947,7 +947,7 @@
     font-size: 26px;
     line-height: 1;
 }
-.farerules pre {
+.frcontent {
     max-height: 250px;
     overflow: auto;
     border: 1px solid #999;
@@ -955,7 +955,22 @@
     border-color: #757575 #999 #B0B0B0;
     padding: 3px 8px;
     background: #fff;
+}
+.frcontent pre {
     font-size: 12px;
+    margin: 0 0 15px;
+}
+.frcontent .fheader {
+    margin: 0 0 5px;
+}
+.frcontent .fheader h5 {
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 20px;
+}
+.frcontent .fheader .clofs {
+    font-size: 12px;
+    color: #777;
 }
 
 
