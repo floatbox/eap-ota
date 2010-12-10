@@ -1,5 +1,5 @@
 class Pnr
-  attr_accessor :number, :flights, :passengers, :phone, :email, :raw, :ticket_number
+  attr_accessor :number, :flights, :passengers, :phone, :email, :raw, :ticket_numbers
 
   def self.get_by_number number
     pnr = self.new
@@ -11,7 +11,7 @@ class Pnr
     pnr.passengers = resp.passengers
     pnr.email = resp.email
     pnr.phone = resp.phone
-    pnr.ticket_number = resp.ticket_number
+    pnr.ticket_numbers = resp.ticket_numbers
 
     pnr.raw = amadeus.pnr_raw number
     # FIXME может, надо?

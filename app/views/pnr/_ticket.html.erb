@@ -14,8 +14,16 @@
         <div><font size="5" family="Arial" color="#ED1192" style="font-size: 30px; line-height: 32px; color: #ED1192;"><strong><%= @pnr.number %></strong></font></div>
     </td>
     <td class="pad_null">
-        <div><font family="Arial" size="3" color="#444444" style="font-size: 14px; line-height: 14px;"><strong>Номер билета</strong></font></div>
-        <div><font size="5" family="Arial" color="#ED1192" style="font-size: 30px; line-height: 32px; color: #ED1192;"><strong style="white-space: nowrap;"><nobr><%= @pnr.ticket_number || 'в процессе выписки' %></nobr></strong></font></div>
+      <div><font family="Arial" size="3" color="#444444" style="font-size: 14px; line-height: 14px;"><strong>
+            <% if @pnr.ticket_numbers.present? %>
+              <%= @pnr.ticket_numbers.one? ? 'Номер билета' : 'Номера билетов' %>
+            <% end %>
+      </strong></font></div>
+        <div>
+          <% for number in @pnr.ticket_numbers %>
+            <font size="5" family="Arial" color="#ED1192" style="font-size: 30px; line-height: 32px; color: #ED1192;"><strong style="white-space: nowrap;"><nobr><%= number %></nobr></strong></font>
+          <% end %>
+        </div>
     </td>
 </tr>
 </tbody>
