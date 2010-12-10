@@ -22,6 +22,7 @@ class Order < ActiveRecord::Base
       self.price_tax = recommendation.price_tax_and_markup.to_i
     end
     self.payment_status = 'blocked'
+    self.ticket_status = 'booked'
   end
 
   def raw
@@ -39,6 +40,14 @@ class Order < ActiveRecord::Base
     res = Payture.new.unblock(self.price_with_payment_commission * 100, :order_id => self.order_id)
     update_attribute(:payment_status, 'unblocked') if res["Success"] == "True"
     res
+  end
+
+  def ticket!
+    update_attribute(:ticket_status, 'ticketed')
+  end
+
+  def cancel
+    update_attribute(:ticket_status, 'canceled')
   end
 
 end

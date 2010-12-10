@@ -30,6 +30,17 @@ class Admin::OrdersController < Admin::MasterController
     end
     redirect_to :action => :show, :id => @order.id
   end
-  
-  
+
+  def ticket
+    @order = Order.find(params[:id])
+    res = @order.ticket!
+    redirect_to :action => :show, :id => @order.id
+  end
+
+  def cancel
+    @order = Order.find(params[:id])
+    res = @order.cancel
+    redirect_to :action => :show, :id => @order.id
+  end
+
 end
