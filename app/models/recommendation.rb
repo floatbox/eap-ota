@@ -109,6 +109,17 @@ class Recommendation
     end
   end
 
+  def rules_with_flights
+    rule_index = 0
+    flights.each_with_object([]) do |flight, result|
+      if result.blank? || !result.last[:flights].last.has_equal_tariff_with?(flight)
+        result << {:rule => rules[rule_index], :flights => [flight]}
+      else
+        result.last[:flights] << flight
+      end
+    end
+  end
+
   def summary
     result = {
       :price => price_total,
