@@ -114,6 +114,7 @@ class Recommendation
     flights.each_with_object([]) do |flight, result|
       if result.blank? || !result.last[:flights].last.has_equal_tariff_with?(flight)
         result << {:rule => rules[rule_index], :flights => [flight]}
+        rule_index += 1
       else
         result.last[:flights] << flight
       end
