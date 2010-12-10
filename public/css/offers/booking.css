@@ -228,25 +228,20 @@
 
 
 /* Подписи к полям */
-
-    .booking td.sub {
-        padding-top: 4px;
-
-        color: #777;
-    }
-
-    .booking td.sub p {
-        display: none;
-
-        margin: 2px 0 0 0;
-    }
-
-    .booking label.label-disabled {
-        cursor: not-allowed;
-        
-        color: #aaa;
-    }
-
+.booking td.sub {
+    padding-top: 5px;
+    font-size: 12px;
+    line-height: 15px;
+    color: #777;
+}
+.booking td.sub p {
+    display: none;
+    margin: 3px 0 0 0;
+}
+.booking label.label-disabled {
+    cursor: not-allowed;
+    color: #aaa;
+}
 
 /* Прочее - общие свойства */
 .booking fieldset legend {
@@ -757,14 +752,16 @@
     }
 
     .book-bc .bc-bill td u {
+        margin: 0 0.25em 0 0;
         font: bold 162.5%/100% Arial, sans-serif;
-        margin: 0 0.1em 0 0;
+        letter-spacing: -0.045em;
         color: #ed1192;
     }
 
     .book-bc .bc-bill td b {
         font: bold 200%/100% Arial, sans-serif;
-        margin: 0 0.1em 0 0;
+        margin: 0 0.25em 0 0;
+        letter-spacing: -0.045em;        
         color: #6F7C26;
     }
 
@@ -921,8 +918,10 @@
 /* Правила тарифов */
 .farerules {
     display: none;
-    position: absolute;
-    margin: -400px 0 0 -20px;
+    position: fixed;
+    top: 50%; left: 50%;
+    width: 654px;
+    margin: -200px 0 0 -347px;
     border-radius: 10px;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
@@ -931,17 +930,24 @@
     font-size: 14px;
     line-height: 19px;
     color: #000;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
-    -moz-box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
-    -o-box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3); 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    -moz-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    -o-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35); 
+}
+.farerules .close {
+    float: right;
+    width: 18px; height: 18px;
+    margin: -12px -14px 0 0;
+    background: url(/img/booking/close.png) no-repeat;
+    cursor: pointer;
 }
 .farerules h3 {
     margin: 0 0 12px;
     font-size: 26px;
     line-height: 1;
 }
-.farerules pre {
+.frcontent {
     max-height: 250px;
     overflow: auto;
     border: 1px solid #999;
@@ -949,7 +955,22 @@
     border-color: #757575 #999 #B0B0B0;
     padding: 3px 8px;
     background: #fff;
+}
+.frcontent pre {
     font-size: 12px;
+    margin: 0 0 15px;
+}
+.frcontent .fheader {
+    margin: 0 0 5px;
+}
+.frcontent .fheader h5 {
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 20px;
+}
+.frcontent .fheader .clofs {
+    font-size: 12px;
+    color: #777;
 }
 
 

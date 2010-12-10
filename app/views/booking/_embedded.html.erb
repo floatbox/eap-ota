@@ -70,12 +70,24 @@ FARES ONLY APPLY IF PURCHASED BEFORE DEPARTURE
         </div>
         
         <div class="disclaimer">
-            <p>Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="#">условиями использования</a>, <a href="#">правилами IATA</a> и&nbsp;<a href="#">правилами тарифов</a></p>
+            <p>Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="#">условиями использования</a>, <a href="#">правилами IATA</a> и&nbsp;<a class="farerules-link" href="#">правилами тарифов</a></p>
         </div>
-        <div class="farerules">
+        <div class="farerules b-popup">
+            <div class="close"></div>
             <h3>Правила тарифов</h3>
             <p>Внимание! Возврат средств в&nbsp;случае отказа при получении визы, болезни и&nbsp;прочиз обстоятельств без штрафных санкций невозможен. Возврат билета производится строго по&nbsp;правилам авиакомпании. В&nbsp;случае комбинации в&nbsp;билете тарифов с&nbsp;различными правилами, наиболее строгие ограничения применются ко&nbsp;всему маршруту.</p>
-            <pre><%= @order.recommendation.rules %></pre>
+            <div class="frcontent">
+            <% show_flight_details = @order.recommendation.rules_with_flights.length > 1 %>
+            <% @order.recommendation.rules_with_flights.each do |fgroup| %>
+                <div class="fheader">
+                <% if show_flight_details %>
+                    <h5><% fgroup[:flights].each_with_index do |flight, i| %><%= flight.departure.city.name %> — <%= flight.arrival.city.name %><%= ', ' if i < fgroup[:flights].length - 1 %><% end %></h5>
+                <% end %>
+                <p class="clofs">Класс бронирования <%= fgroup[:flights].first.class_of_service %></p>
+                </div>
+                <pre><%= fgroup[:rule] %></pre>
+            <% end %>
+            </div>
         </div>
 
     </div>
