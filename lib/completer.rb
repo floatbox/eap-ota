@@ -290,7 +290,7 @@ class Completer
     synonyms += c.synonyms
     synonyms.delete_if &:blank?
     add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms, :hint => c.continent_part_ru)
-    add(:name => c.name, :word => c.case_to, :type => c.kind, :code => c.iata, :hint => c.continent_part_ru)
+    add(:name => c.case_to, :type => c.kind, :code => c.iata, :hint => c.continent_part_ru)
   end
   
   
@@ -306,7 +306,7 @@ class Completer
     synonyms += c.synonyms
     synonyms.delete_if &:blank?
     add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms, :hint => c.country.name, :info => "Город #{c.name} #{c.country.proper_in}")
-    add(:name => c.name, :word => c.case_to, :type => c.kind, :code => c.iata, :hint => c.country.name, :info => "Город #{c.name} #{c.country.proper_in}")
+    add(:name => c.case_to, :type => c.kind, :code => c.iata, :hint => c.country.name, :info => "Город #{c.name} #{c.country.proper_in}")
   end
   
   def read_cities
@@ -340,7 +340,7 @@ class Completer
       synonyms += c.synonyms
       synonyms.delete_if &:blank?
       add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms, :hint => c.city.name,  :info => "Аэропорт #{c.name} #{c.city.case_in}, #{c.city.country.name}")
-      add(:name => c.name, :word => c.case_to, :type => c.kind, :code => c.iata, :hint => c.city.name,  :info => "Аэропорт #{c.name} #{c.city.case_in}, #{c.city.country.name}")
+      add(:name => c.case_to, :type => c.kind, :code => c.iata, :hint => c.city.name,  :info => "Аэропорт #{c.name} #{c.city.case_in}, #{c.city.country.name}")
     end
   end
   

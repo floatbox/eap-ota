@@ -130,4 +130,8 @@ class Flight
   def eql?(b)
     signature.eql?(b.signature)
   end
+
+  def has_equal_tariff_with? flight
+    [marketing_carrier_iata, class_of_service] == [flight.marketing_carrier_iata, flight.class_of_service]
+  end
 end

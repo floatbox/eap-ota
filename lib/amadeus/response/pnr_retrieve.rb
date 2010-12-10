@@ -36,12 +36,12 @@ module Amadeus
         xpath('//r:otherDataFreetext[r:freetextDetail/r:type=3]/r:longFreetext').to_s
       end
 
-      def ticket_number
+      def ticket_numbers
         # PAX 257-9748002002/ETOS/RUB9880/30SEP10/MOWR2290Q/00000000
-        fa = xpath('//r:otherDataFreetext[r:freetextDetail/r:type="P06"]/r:longFreetext').to_s
-        return unless fa
-        fa =~ %r|PAX ([^/]*)|
-        $1
+        xpath('//r:otherDataFreetext[r:freetextDetail/r:type="P06"]/r:longFreetext').map do |fa|
+          fa.to_s =~ %r|PAX ([^/]*)|
+          $1
+        end
       end
 
       # def prices

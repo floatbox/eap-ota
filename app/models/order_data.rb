@@ -144,22 +144,20 @@ class OrderData < ActiveRecord::BaseWithoutTable
     ).bang!
 
     if self.pnr_number = amadeus.pnr_add_multi_elements(self).bang!.pnr_number
-      fares_count =
-        amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier).bang!.fares_count
-      # FIXME среагировать на отсутствие маски
-      amadeus.ticket_create_tst_from_pricing(:fares_count => fares_count).bang!
+      amadeus.pnr_commit_really_hard do
+        fares_count =
+          amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier).bang!.fares_count
+        # FIXME среагировать на отсутствие маски
+        amadeus.ticket_create_tst_from_pricing(:fares_count => fares_count).bang!
+      end
 
       if block_money
-        # надо ли? - проверить что создание маски НЕ сохраняет PNR
-        amadeus.pnr_commit_and_retrieve
-        sleep(2)
-        # дополнительно - эта зараза не делает коммит если пришли ремарки
-        amadeus.pnr_ignore_and_retrieve
-        # FIXME среагировать на различие в цене
-        add_passport_data(amadeus)
-        amadeus.give_permission_to_ticketing_office
-        amadeus.pnr_archive(seat_count)
-        amadeus.pnr_commit
+        amadeus.pnr_commit_really_hard do
+          # FIXME среагировать на различие в цене
+          add_passport_data(amadeus)
+          amadeus.give_permission_to_ticketing_office
+          amadeus.pnr_archive(seat_count)
+        end
         #amadeus.queue_place_pnr(:number => pnr_number)
         Order.create(:order_data => self)
 
@@ -183,7 +181,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
 
   def add_passport_data(amadeus)
-    amadeus.pnr_ignore_and_retrieve
     validating_carrier_code = recommendation.validating_carrier.iata
     (adults + children).each_with_index do |person, i|
       amadeus.cmd( "SRDOCS#{validating_carrier_code}HK1-P-#{person.nationality.alpha3}-#{person.passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{i+1}")
@@ -195,7 +192,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
       amadeus.cmd( "SRDOCS#{validating_carrier_code}HK1-P-#{person.nationality.alpha3}-#{person.passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}I-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{i+1}")
       amadeus.cmd("FE INF #{validating_carrier_code} ONLY PSPT #{person.passport}/P#{i+1}")
     end
-    amadeus.pnr_commit_and_retrieve
   end
   
   
