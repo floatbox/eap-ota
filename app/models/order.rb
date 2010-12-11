@@ -32,13 +32,13 @@ class Order < ActiveRecord::Base
 
   def charge
     res = Payture.new.charge(:order_id => self.order_id)
-    update_attribute(:payment_status, 'charged') if res["Success"] == "True"
+    update_attribute(:payment_status, 'charged') if res
     res
   end
 
   def unblock
-    res = Payture.new.unblock(self.price_with_payment_commission * 100, :order_id => self.order_id)
-    update_attribute(:payment_status, 'unblocked') if res["Success"] == "True"
+    res = Payture.new.unblock(self.price_with_payment_commission, :order_id => self.order_id)
+    update_attribute(:payment_status, 'unblocked') if res
     res
   end
 

@@ -109,9 +109,8 @@ class OrderData < ActiveRecord::BaseWithoutTable
   
   def block_money
     self.order_id = 'am' + self.pnr_number
-    result = Payture.new.block(recommendation.price_with_payment_commission*100, card, :order_id => order_id)
-    if result["Success"] != "True"
-      card.errors.add :number, ("не удалось провести платеж (#{result["ErrCode"]})" )
+    unless Payture.new.block(recommendation.price_with_payment_commission, card, :order_id => order_id)
+      card.errors.add :number, "не удалось провести платеж"
       self.errors.add :card, 'Платеж не прошел'
       return
     else
@@ -122,11 +121,11 @@ class OrderData < ActiveRecord::BaseWithoutTable
   def commission
     recommendation.commission
   end
-  
+
   def validating_carrier
     recommendation.validating_carrier.iata
   end
-  
+
   #4 следующих метода нужно для нормального pnr_add_multi_elements
   def flights
     []

@@ -4,6 +4,9 @@ require 'httparty'
 
 class Payture
 
+  # комиссионные за транзакцию
+  def self.commission; 0.028 end
+
   HOST = 'engine-sandbox.payture.com'
   PEM = <<-"END".gsub(/^\s*/,'')
     -----BEGIN PUBLIC KEY-----
@@ -32,8 +35,9 @@ class Payture
     add_creditcard(post, card)
     encrypt_payinfo(post)
 
-    #args = {:Key => @key, :PayInfo => encode_pay_info(opts), :OrderId => opts[:OrderId], :Amount => opts[:Amount]}
-    response = post_request 'Pay', post
+    result = post_request 'Pay', post
+    debug "pay #{result.inspect}"
+    result["Success"] == "True"
   end
 
   # блокировка средств на карте пользователя
@@ -44,20 +48,25 @@ class Payture
     add_merchant(post)
     add_creditcard(post, card)
     encrypt_payinfo(post)
-    
-    response = post_request 'Block', post
-    
+
+    result = post_request 'Block', post
+    debug "block #{result.inspect}"
+    result["Success"] == "True"
   end
-  
+
   def charge opts={}
     post = {}
     add_order(post, opts)
     add_merchant(post)
     encrypt_payinfo(post)
 
-    response = post_request 'Charge', post
+    result = post_request 'Charge', post
+    debug "charge #{result.inspect}"
+    result["Success"] == "True"
   end
 
+  # разблокировка средств.
+  # частичная блокировка не принимается
   def unblock amount, opts={}
     post = {}
     add_order(post, opts)
@@ -65,20 +74,36 @@ class Payture
     add_money(post, amount)
     encrypt_payinfo(post)
 
-    response = post_request 'Unblock', post
+    result = post_request 'Unblock', post
+    debug "unblock #{result.inspect}"
+    result["Success"] == "True"
   end
 
-  ## возврат средств (полный или частичный) на карту пользователя
-  #def refund amount, opts={}
-  #  args = {:Key => @key, :OrderId => opts[:OrderId], :Amount => opts[:Amount]}
-  #  response = post 'Refund', args
-  #end
+  # возврат средств (полный или частичный) на карту пользователя
+  # FIXME не получалось ни разу!
+  def refund amount, opts={}
+    post = {}
+    add_order(post, opts)
+    add_merchant(post)
+    add_money(post, amount)
+    encrypt_payinfo(post)
 
-  ## уточнение текущего состояния платежа
-  #def status opts
-  #  args = {:Key => @key, :OrderId => opts[:OrderId]}
-  #  response = post 'GetStatus', args
-  #end
+    result = post_request 'Refund', post
+    debug "refund #{result.inspect}"
+    result["Success"] == "True"
+  end
+
+  # уточнение текущего состояния платежа
+  # {"Comment"=>"", "Tag"=>"", "LastChange"=>"11/12/2010 9:24:07 AM", "State"=>"Charged"}
+  # "State"=>"Authorized", "Voided", "Charged"
+  def status opts={}
+    post = {}
+    add_order(post, opts)
+    add_merchant(post)
+    encrypt_payinfo(post)
+
+    post_request 'GetState', post
+  end
 
   private
   def validate! opts, *required_keys
@@ -94,6 +119,7 @@ class Payture
 
   # copied back from active_merchant alfa_bank_gateway
   def add_order(post, options={})
+    validate! options, :order_id
     post[:OrderId] = options[:order_id]
   end
 
@@ -110,8 +136,8 @@ class Payture
   end
 
   def add_money(post, money)
-    # похэндлить преобразование к копейкам?
-    post[:Amount] = money.to_i.to_s
+    # система принимает суммы в копейках
+    post[:Amount] = (money.to_f * 100).ceil.to_s
   end
 
   def encrypt_payinfo(post)
@@ -121,15 +147,12 @@ class Payture
     [:PAN, :EMonth, :EYear, :CardHolder, :SecureCode].each {|key| post.delete(key) }
   end
 
-  def encrypt_payinfo_wo_validation(post)
-    keys = post.keys
-    keys.delete(:Key)
-    pay_info_string = keys.collect {|k| "#{k}=#{post[k]}" }.join(';')
-    post[:PayInfo] = Base64::encode64( encrypt(pay_info_string) ).rstrip
-  end
-
   def encrypt(string)
     @public.public_encrypt(string)
+  end
+
+  def debug message
+    Rails.logger.debug "Payture: #{message}"
   end
 
   # for testing purposes

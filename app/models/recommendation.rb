@@ -16,9 +16,8 @@ class Recommendation
     price_total + price_payment
   end
 
-  # FIXME константу комиссии засунуть куда-нибудь в lib/payture
   def price_payment
-    (price_total * 0.028).ceil
+    (price_total * Payture.commission).ceil
   end
 
   def price_tax_and_markup
