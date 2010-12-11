@@ -235,7 +235,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
       :nationality_id => 1,
       :sex => 'f'
     )]
-    order.card = Billing::CreditCard.new :number => '4111111111111112', :verification_value => '123', :month => 10, :year => 2012, :name => 'doesnt matter'
+    order.card = Payture.test_card
     order.create_booking
   end
 end
