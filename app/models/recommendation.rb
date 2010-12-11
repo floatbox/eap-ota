@@ -193,7 +193,7 @@ class Recommendation
     return if recommendation.price_fare.to_i == 0
     recommendation.rules = amadeus.fare_check_rules.rules
     air_sfr = amadeus.air_sell_from_recommendation(:segments => segments, :people_count => (pricer_form.real_people_count[:adults] + pricer_form.real_people_count[:children]))
-    amadeus.cmd('IG')
+    amadeus.pnr_ignore
     return unless air_sfr.segments_confirmed?
     air_sfr.fill_itinerary!(segments)
     recommendation
