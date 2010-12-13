@@ -179,12 +179,12 @@ class Recommendation
     recommendation
   end
 
-  def self.check_price_and_avaliability(flight_codes, pricer_form, validating_carrier_code)
+  def self.check_price_and_availability(flight_codes, pricer_form, validating_carrier_code)
     from_flight_codes(flight_codes)\
       .check_price_and_availability(pricer_form, validating_carrier_code)
   end
 
-  def check_price_and_avaliability(pricer_form, validating_carrier_code)
+  def check_price_and_availability(pricer_form, validating_carrier_code)
     amadeus = Amadeus::Service.new(:book => true)
     self.price_fare, self.price_tax =
       amadeus.fare_informative_pricing_without_pnr(
