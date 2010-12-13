@@ -138,9 +138,12 @@ values: function() {
         people_count: this.persons.selected,
         cabin: this.cabin.value[0],
         search_type: 'travel',
-        day_interval: 1,
-        debug: $('#sdmode').get(0).checked ? 1 : 0
+        day_interval: 1
     };
+    var debug = $('#sdmode');
+    if (debug.length && debug.get(0).checked) {
+        data.debug = 1;
+    }
     return data;
 },
 restore: function(data) {

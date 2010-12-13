@@ -8,7 +8,9 @@
     <div class="phone">+7 (495) <strong>660-35-20</strong></div>
 </div>
 <div class="shadow"></div>
+<% unless Rails.env.production? %>
 <div id="search-debug">
     <input type="checkbox" id="sdmode"> <label for="sdmode">Режим отладки</label>
 </div>
+<% end %>
 </div>
