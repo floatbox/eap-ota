@@ -95,6 +95,7 @@ module Amadeus
   def haml_template(action); File.expand_path("../templates/#{action}.haml", __FILE__) end
 
   def render(action, locals=nil)
+    "\n  " +
     if File.file?(haml_template(action))
       render_haml( haml_template(action), locals)
     elsif File.file?(xml_template(action))
