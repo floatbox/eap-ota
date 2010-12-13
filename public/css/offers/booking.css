@@ -23,7 +23,6 @@
 }
 
 /* Предварительное бронирование */
-
 .booking {
     border-top: 1px solid #D0D0D0;
 }
@@ -48,7 +47,6 @@
 } 
 
 /* Изменение цены */
-
 .diff-price {
     border-top: 1px solid #D0D0D0;
     padding: 15px;
@@ -947,30 +945,30 @@
     font-size: 26px;
     line-height: 1;
 }
-.frcontent {
-    max-height: 250px;
-    overflow: auto;
-    border: 1px solid #999;
-    margin-top: 18px;
-    border-color: #757575 #999 #B0B0B0;
-    padding: 3px 8px;
-    background: #fff;
+.farerules .fgroup {
+    margin: 12px 0 0;
 }
-.frcontent pre {
-    font-size: 12px;
-    margin: 0 0 15px;
-}
-.frcontent .fheader {
+.fgheader {
     margin: 0 0 5px;
 }
-.frcontent .fheader h5 {
+.fgheader h5 {
+    display: inline;
+    margin-right: 5px;
     font-weight: bold;
     font-size: 18px;
     line-height: 20px;
 }
-.frcontent .fheader .clofs {
+.fgheader .clofs {
+    display: inline;
     font-size: 12px;
     color: #777;
 }
-
-
+.farerules pre {
+    max-height: 130px;
+    overflow: auto;
+    border: 1px solid #999;
+    border-color: #757575 #999 #B0B0B0;
+    padding: 3px 8px;
+    background: #fff;
+    font-size: 12px;
+}

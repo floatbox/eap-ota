@@ -482,59 +482,39 @@ sortOffers: function() {
     }
 },
 showRecommendations: function() {
-    var variants = this.variants, cheap, fast, optimal, optimal2;
-    var optimals = [];
+    var variants = this.variants;
+    var items = [], cheap, fast, optimal;
     for (var i = 0, im = variants.length; i < im; i++) {
         var v = variants[i];
-        if (v.improper) continue;
-        var d = v.summary.duration, p = v.offer.summary.price;
-        if (!cheap || ((1 - d / cheap.duration) / 20 + (1 - p / cheap.price)) > 0) {
-            cheap = {variant: v, duration: d, price: p};
+        if (!v.improper) {
+            items.push({n: i, p: v.offer.summary.price, d: v.summary.duration});
         }
-        if (!fast || ((1 - d / fast.duration) + (1 - p / fast.price) / 10) > 0) {
-            fast = {variant: v, duration: d, price: p};
-        }
-        optimals.push({duration: d, price: p, n: i});
     }
-    if (!cheap && !fast) {
+    if (items.length == 0) {
         container.append($('#offers-pcollection').prev().clone());
         return;
-    }
-    var optDuration = (cheap.duration + fast.duration) / 2;
-    optimals = optimals.sort(function(a, b) {
-        return (a.duration - b.duration);
-    });
-    for (var oi = 0, im = optimals.length; oi < im; oi++) {
-        var item = optimals[oi], p = item.price;
-        if (item.duration < optDuration) {
-            if (!optimal || p < optimal.price) {
-                optimal = {variant: variants[item.n], price: p, duration: item.duration};
-            }
-        } else {
-            break;
+    } else if (items.length == 1) {
+        optimal = items[0];
+    } else {
+        cheap = items[0];        
+        items = items.sort(function(a, b) {
+            return (a.d - b.d) || (a.p - b.p);
+        });
+        fast = items[0];
+        optimal = items.slice(0, Math.round(items.length * 0.5)).sort(function(a, b) {
+            return (a.p - b.p) || (a.d - b.d);
+        })[0];
+        if (cheap.n === fast.n) {
+            optimal = {n: cheap.n};
+            cheap = undefined;
+            fast = undefined;
         }
-    }
-    optimal.dp = (fast.price - optimal.price) / Math.max(1, optimal.duration - fast.duration);
-    for (var i = oi, im = optimals.length; i < im; i++) {
-        var item = optimals[i], dp = (fast.price - item.price) / Math.max(1, item.duration - fast.duration);
-        if (dp > optimal.dp) {
-            optimal = {variant: variants[item.n], dp: dp};
+        if (cheap && cheap.n === optimal.n) {
+            cheap = undefined;
         }
-    }    
-    optimals = optimals.slice(0, Math.round(im * 0.5)).sort(function(a, b) {
-        return (a.price - b.price);
-    });
-    optimal2 = {variant: variants[optimals[0].n]};
-    if (cheap && fast && cheap.variant == fast.variant) {
-        optimal = {variant: cheap.variant};
-        cheap = undefined;
-        fast = undefined;
-    }
-    if (cheap && optimal && cheap.variant == optimal.variant) {
-        cheap = undefined;
-    }
-    if (fast && optimal && fast.variant == optimal.variant) {
-        fast = undefined;
+        if (fast && fast.n === optimal.n) {
+            fast = undefined;
+        }
     }
     var otitle = 'Самый выгодный и быстрый вариант';
     if (cheap && fast) {
@@ -545,10 +525,9 @@ showRecommendations: function() {
         otitle = 'Самый выгодный и оптимальный вариант';
     }
     var container = $('#offers-featured').hide().html('');
-    if (cheap) container.append(this.makeRecommendation(cheap, 'Самый выгодный вариант'));
-    if (optimal) container.append(this.makeRecommendation(optimal, otitle));
-    if (fast) container.append(this.makeRecommendation(fast, 'Быстрый вариант'));
-    if (optimal2) container.append(this.makeRecommendation(optimal2, 'Оптимальный вариант с другим алгоритмом'));
+    if (cheap) container.append(this.makeRecommendation(variants[cheap.n], 'Самый выгодный вариант'));
+    if (optimal) container.append(this.makeRecommendation(variants[optimal.n], otitle));
+    if (fast) container.append(this.makeRecommendation(variants[fast.n], 'Быстрый вариант'));
     if (!this.filtered) {
         var aln = this.filters['airlines'].items.length, alamount = aln + '&nbsp;' + app.utils.plural(aln, ['авиакомпании', 'авиакомпаний', 'авиакомпаний']);
         var ftip = $('<div class="offers-title featured-tip"><strong>Не подошло?</strong> Воспользуйтесь уточнениями <span class="up">вверху&nbsp;&uarr;</span> или посмотрите <span class="link">все&nbsp;варианты</span> от&nbsp;' + alamount + '</div>');
@@ -564,8 +543,8 @@ showRecommendations: function() {
     }
     container.show();
 },
-makeRecommendation: function(obj, title) {
-    var el = obj.variant.el, offer = el.parent().clone();
+makeRecommendation: function(variant, title) {
+    var el = variant.el, offer = el.parent().clone();
     this.showVariant(offer.children().eq(el.prevAll().length));
     if (title.search(/выгодный/i) != -1) {
         var cost = offer.find('td.cost dl'), ctext = cost.find('dd');
