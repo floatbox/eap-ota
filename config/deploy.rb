@@ -1,6 +1,6 @@
 require 'bundler/capistrano'
 
-set :application, "gamma"
+set :application, "delta"
 
 set :scm, :git
 
@@ -9,7 +9,7 @@ set :user, "rack"
 set :use_sudo, false
 
 set :deploy_to, "/home/#{user}/#{application}"
-set :srv, "team.eviterra.ru"
+set :srv, "eviterra.com"
 
 # если репозиторий лежит на той же машине
 #set :deploy_via, :copy
