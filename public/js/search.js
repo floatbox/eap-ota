@@ -163,19 +163,24 @@ update: function(source) {
     if (source == this.calendar && this.parsed && this.parsed.dates) {
         var pd =  this.parsed.dates, improper = [];
         for (var i = pd.length; i--;) {
-            if (pd[i].value != this.calendar.values[i]) improper.push(pd[i].str);
+            if (pd[i].value != this.calendar.values[i]) improper.push($.trim(pd[i].str));
         }
         if (improper.length) {
-            var current = this.to.val(); 
+            var current = this.to.val();
             var pattern = new RegExp('(\\s*)(?:' + improper.join('|') + ')(\\s*)', 'i');
-            var result = current.replace(pattern, function(s, p1, p2) {return (p1 && p2) ? ' ' : '';});
+            console.log(pattern);
+            var result = current.replace(pattern, function(s, p1, p2) {
+                return (p1 && p2) ? ' ' : '';}
+            );
             if (result != current) this.to.trigger('set', result);
         }
     }
     if (source == this.persons && this.parsed && this.parsed.people_count) {
         var current = this.to.val(); 
-        var pattern = new RegExp('(\\s*)(?:' + this.parsed.people_count.str + ')(\\s*)', 'i');
-        var result = current.replace(pattern, function(s, p1, p2) {return (p1 && p2) ? ' ' : '';});
+        var pattern = new RegExp('(\\s*)(?:' + $.trim(this.parsed.people_count.str) + ')(\\s*)', 'i');
+        var result = current.replace(pattern, function(s, p1, p2) {
+            return (p1 && p2) ? ' ' : '';
+        });
         if (result != current) this.to.trigger('set', result);
     }
     this.timer = setTimeout(function() {
