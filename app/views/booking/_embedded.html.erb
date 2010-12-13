@@ -1,39 +1,6 @@
 <div class="booking g-none" data-variant="<%= @order.variant_id %>">
 <% form_for :card, @order.card, :url => booking_pay_path, :html => { :autocomplete => "off" } do |f| %>
     
-    <% if false %>
-    <!-- описание тарифа (убираем, пока не начнем выводить настоящее) -->
-    <div class="book-v">
-    <div class="tarif">
-        <h3 class="g-xs">Важно</h3>
-        <ul class="g-xxs">
-            <li>Эти билеты невозвратные.
-            <li>Максимальный вес бесплатного багажа - 20 Кг.
-            <li>Перенести дату вылета можно за сутки до вылета или ранее.
-            <li>Стоимость переноса - 20% от стоимости тарифа (5&nbsp;150&nbsp;<s class="rur">р<s>уб.</s></s>).
-        </ul>
-        <span class="g-xxs">Прочитать <a href="#" id="tarif-expand" class="b-pseudo" onclick="return 'tarif-text'"><u>текст тарифа целиком</u></a></span>
-        <pre id="tarif-text">
-0.  APPLICATION AND OTHER CONDITIONS
-RULE - 021/0921
-UNLESS OTHERWISE SPECIFIED
-ECONOMY NORMAL FARE WITHIN EUROPE VIA MSQ
-APPLICATION
-AREA
-THESE FARES APPLY
-WITHIN EUROPE
-VIA MSQ.
-CLASS OF SERVICE
-THESE FARES APPLY FOR ECONOMY CLASS SERVICE.
-TYPES OF TRANSPORTATION
-FARES GOVERNED BY THIS RULE CAN BE USED TO CREATE
-ONE-WAY/ROUND-TRIP JOURNEYS.
-FARES ONLY APPLY IF PURCHASED BEFORE DEPARTURE
-        </pre>
-    </div>
-    </div>
-    <% end %>
-    
     <!-- Данные пассажиров -->
     <h3>Введите данные <%= @order.people.size == 1 ? 'пассажира' : 'пассажиров' %></h3>
     <%= render :partial => 'person_form', :collection => @order.people %>
@@ -76,18 +43,18 @@ FARES ONLY APPLY IF PURCHASED BEFORE DEPARTURE
             <div class="close"></div>
             <h3>Правила тарифов</h3>
             <p>Внимание! Возврат средств в&nbsp;случае отказа при получении визы, болезни и&nbsp;прочиз обстоятельств без штрафных санкций невозможен. Возврат билета производится строго по&nbsp;правилам авиакомпании. В&nbsp;случае комбинации в&nbsp;билете тарифов с&nbsp;различными правилами, наиболее строгие ограничения применются ко&nbsp;всему маршруту.</p>
-            <div class="frcontent">
-            <% show_flight_details = @order.recommendation.rules_with_flights.length > 1 %>
+            <% common_fare = @order.recommendation.rules_with_flights.length == 1 %>
             <% @order.recommendation.rules_with_flights.each do |fgroup| %>
-                <div class="fheader">
-                <% if show_flight_details %>
+            <div class="fgroup">
+                <div class="fgheader">
+                <% unless common_fare %>
                     <h5><% fgroup[:flights].each_with_index do |flight, i| %><%= flight.departure.city.name %> — <%= flight.arrival.city.name %><%= ', ' if i < fgroup[:flights].length - 1 %><% end %></h5>
                 <% end %>
                 <p class="clofs">Класс бронирования <%= fgroup[:flights].first.class_of_service %></p>
                 </div>
                 <pre><%= fgroup[:rule] %></pre>
-            <% end %>
             </div>
+            <% end %>
         </div>
 
     </div>

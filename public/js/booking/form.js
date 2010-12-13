@@ -13,7 +13,7 @@ init: function() {
         if (!self.submit.hasClass('a-button-ready')) return;
         var data = $(this).serialize();
         $.post($(this).attr('action'), data, function(s) {
-            self.el.find('result').remove();
+            self.el.find('.result').remove();
             if (typeof s == 'string') {
                 var result = $(s).appendTo(self.el);
                 var rtype = result.attr('data-type');
@@ -152,16 +152,9 @@ book: function(variant) {
             self.el.html('<div class="booking-state"><h4>В данный момент невозможно выбрать этот вариант</h4><p><a href="#">Почему?</a></p></div>');
         }
     });
-    var w = $(window), offset = this.el.offset().top;
-    if (offset > w.scrollTop() + w.height()) {
-        $({st: w.scrollTop()}).animate({
-            st: offset - w.height() + 250 
-        }, {
-            duration: 800,
-            step: function() {
-                w.scrollTop(this.st);
-            }
-        });
+    var w = $(window), offset = this.el.offset().top - w.height();
+    if (offset > w.scrollTop()) {
+        $.animateScrollTop(offset + 250);
     }
 },
 load: function(number) {
