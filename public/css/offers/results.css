@@ -49,6 +49,16 @@
     line-height: 100%;
     letter-spacing: -0.035em;
 }
+.featured-tip {
+    margin-top: 20px;
+}
+.featured-tip strong {
+    color: #ED1192;
+}
+.featured-tip .up {
+    cursor: pointer;
+}
+
 
 /* Сортировка */
 .offers-sort {

@@ -90,11 +90,6 @@ init: function() {
         }
     });
     
-    // Ссылка на все варианты в наших предложениях
-    $('#offers-list').delegate('.featured-tip .link', 'click', function(event) {
-        $('#offers-tabs').trigger('set', 'all');
-    });
-    
     // Бронирование
     $('#offers-list').delegate('.book .a-button', 'click', function(event) {
         event.preventDefault();
@@ -197,21 +192,13 @@ show: function(fixed) {
     this.container.removeClass('g-none');
     var w = $(window), offset = this.container.offset().top;
     if (fixed !== false && offset - w.scrollTop() > w.height() / 2) {
-        $({st: w.scrollTop()}).animate({
-            st: offset - 112
-        }, {
-            duration: 500,
-            step: function() {
-                w.scrollTop(this.st);
-            },
-            complete: function() {
-                var promo = $('#promo');
-                if (promo.is(':visible')) {
-                    var st = this.st - promo.outerHeight();
-                    promo.hide();
-                    w.scrollTop(st);
-                }
-            }
+        $.animateScrollTop(offset - 112, function() {
+            var promo = $('#promo');
+            if (promo.is(':visible')) {
+                var st = w.scrollTop() - promo.outerHeight();
+                promo.hide();
+                w.scrollTop(st);
+            }        
         });
     } else {
         $('#promo').slideUp(200);
@@ -563,7 +550,17 @@ showRecommendations: function() {
     if (fast) container.append(this.makeRecommendation(fast, 'Быстрый вариант'));
     if (optimal2) container.append(this.makeRecommendation(optimal2, 'Оптимальный вариант с другим алгоритмом'));
     if (!this.filtered) {
-        container.append('<div class="featured-tip"><strong>Не подошло?</strong> Воспользуйтесь уточнениями вверху &uarr; или посмотрите <span class="link">все варианты</span></div>');
+        var aln = this.filters['airlines'].items.length, alamount = aln + '&nbsp;' + app.utils.plural(aln, ['авиакомпании', 'авиакомпаний', 'авиакомпаний']);
+        var ftip = $('<div class="offers-title featured-tip"><strong>Не подошло?</strong> Воспользуйтесь уточнениями <span class="up">вверху&nbsp;&uarr;</span> или посмотрите <span class="link">все&nbsp;варианты</span> от&nbsp;' + alamount + '</div>');
+        var that = this;
+        ftip.find('.link').click(function() {
+            $('#offers-tabs').trigger('set', 'all');
+            $.animateScrollTop(that.container.offset().top - 42);
+        });
+        ftip.find('.up').click(function() {
+            $.animateScrollTop(that.container.offset().top - 42);
+        });
+        container.append(ftip);
     }
     container.show();
 },

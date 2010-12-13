@@ -172,3 +172,21 @@ $.extend($.easing, {
 		return -c/2 * ((t-=2)*t*t*t - 2) + b;
 	}
 });
+
+/* Animated window scrolling */
+$.animateScrollTop = function(st, complete) {
+    var w = $(window);
+    var cst = w.scrollTop();
+    var options = {
+        duration: 250 + Math.round(Math.abs(st - cst) / 5),
+        step: function() {
+            w.scrollTop(this.st);
+        }
+    };
+    if (complete) {
+        options.complete = complete;
+    }
+    $({st: cst}).animate({
+        st: st
+    }, options);
+};
