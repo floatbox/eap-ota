@@ -38,6 +38,11 @@ namespace :deploy do
     run "ln -s #{shared_path}/cache #{latest_release}/tmp/cache"
   end
 
+  task :symlink_completer do
+    run "ln -s #{shared_path}/completer.dat #{latest_release}/tmp/completer.dat || echo #{shared_path}/completer.dat does not exist"
+  end
+
   after "deploy:finalize_update", "deploy:symlink_shared_configs"
   after "deploy:finalize_update", "deploy:symlink_persistent_cache"
+  after "deploy:finalize_update", "deploy:symlink_completer"
 end
