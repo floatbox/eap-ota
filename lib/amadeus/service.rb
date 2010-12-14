@@ -4,8 +4,13 @@ module Amadeus
   class Service < Handsoap::Service
 
   endpoint :uri => "https://test.webservices.amadeus.com", :version => 1
-  #Handsoap.http_driver = :http_client
+
+  # сжатие
+  require 'handsoap/compressed_curb_driver'
+  Handsoap.http_driver = :compressed_curb
+
   Handsoap.timeout = 500
+
 
   # response logger
   include FileLogger
