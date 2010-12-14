@@ -169,31 +169,16 @@
 
     .booking .text:hover {
         z-index: 2;
-        -webkit-transition: border-color linear .2s;
+        -webkit-transition: border-color linear 0.2s;
 
         background: #fff;
     }
 
     .booking .text:focus {
         z-index: 3;
-
         color: #333;
         background: #fff;
         outline: none;
-
-        box-shadow: 0 0 6px rgba(0, 0, 0, .15);
-        -moz-box-shadow: 0 0 6px rgba(0, 0, 0, .15);
-        -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, .15);
-        -o-box-shadow: 0 0 6px rgba(0, 0, 0, .15);
-
-        -moz-transition: color linear .2s;
-        -moz-transition: -moz-box-shadow linear .2s;
-        
-        -webkit-transition: color linear .2s;
-        -webkit-transition: -webkit-box-shadow linear .2s;
-
-        -o-transition: color linear .2s;
-        -o-transition: -o-box-shadow linear .2s;
     }
 
     .booking .text-value {
@@ -265,6 +250,31 @@
 
 .booking .tip-popup i {
     color: red;
+}
+
+/* Предупреждение о неправильной раскладке */
+
+.booking .language-warning {
+    display: none;
+    position: absolute;
+    z-index: 3;
+    width: 413px;
+    margin-top: 3px;
+    padding: 10px 15px;
+    background: #ffc4c4;
+    
+    font-size: 12px;
+    line-height: 16px;
+
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;    
+
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    -o-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
 }
 
 
@@ -452,29 +462,6 @@
     width: 187px;
 }
 
-.book-p .language-warning {
-    display: none;
-    position: absolute;
-    z-index: 3;
-    width: 413px;
-    margin-top: 3px;
-    padding: 10px 15px;
-    background: #ffc4c4;
-    
-    font-size: 12px;
-    line-height: 16px;
-
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -o-border-radius: 5px;    
-
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
-    -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
-    -o-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
-}
-
 /******* БЛОК 3: БАНКОВСКАЯ КАРТОЧКА *******/
 
 .payments {
@@ -497,11 +484,8 @@
 }
 
 .bankcard {
-    overflow: hidden;
-    
     margin: 0 15px;
-
-    zoom: 1;
+    height: 194px;
 }
 
 .bankcard li {
@@ -576,14 +560,11 @@
     }
 
 .bankcard label {
-    font-weight: bold;
-
     display: block;
-
-    margin: 0 0 2px 0;
-
-    letter-spacing: -.03em;
-
+    margin: 0 0 3px;
+    font-weight: bold;
+    font-size: 13px;
+    letter-spacing: -0.03em;
     color: #333;
 }
 
@@ -599,60 +580,61 @@
 }
 
 .bankcard .text-value {
-    text-shadow: -1px 1px 0 rgba(180, 180, 180, 1);
+    text-shadow: 0 1px rgba(0, 0, 0, 0.2);
 }
 
-    /* Лицевая сторона */
 
-    .bankcard .bc-num {
-        position: absolute;
-
-        top: 35%;
-        left: 11px;
-
-        white-space: nowrap;
-    }
-
-    .bankcard .bc-num .text {
-        font: bold 140% Courier, monospace;
-
-        margin: 0 10px 0 0;
-
-        letter-spacing: -.1em;
-    }
-
-    .bankcard .bankcardname {
-        position: absolute;
-
-        bottom: 11px;
-        left: 11px;
-    }
-
-    .bankcard .bankcardname .text {
-        width: 180px;
-
-        padding: 2px 2px;
-
-        letter-spacing: -.03em;
-    }
-
-    .bankcard .bc-exp {
-        position: absolute;
-
-        bottom: 11px;
-        right: 11px;
-    }
-
-    .bankcard .bc-exp i {
-        font: normal 140% Courier,monospace;
-    }
-
-    .bankcard .bc-exp .text
-    {
-        width: 30px;
-
-        padding: 2px 4px;
-    }
+/* Лицевая сторона */
+.bankcard .bc-num {
+    position: absolute;
+    top: 35%;
+    left: 11px;
+}
+.bankcard .bc-num .text {
+    position: absolute;
+    top: 0;
+    width: 55px;
+    font-weight: bold;
+    font-size: 22px;
+    letter-spacing: -0.04em;
+}
+.bankcard .bc-num-fields {
+    position: relative;
+}
+.bankcard #bc-num1 {
+    left: 0;
+}
+.bankcard #bc-num2 {
+    left: 77px;
+}
+.bankcard #bc-num3 {
+    left: 154px;
+}
+.bankcard #bc-num4 {
+    left: 231px;
+}
+.bankcard .bankcardname {
+    position: absolute;
+    bottom: 11px;
+    left: 11px;
+}
+.bankcard .bankcardname .text {
+    width: 170px;
+    padding: 2px 2px;
+    letter-spacing: -0.03em;
+}
+.bankcard .bc-exp {
+    position: absolute;
+    bottom: 11px;
+    right: 11px;
+}
+.bankcard .bc-exp i {
+    font: normal 140% Courier,monospace;
+}
+.bankcard .bc-exp .text {
+    width: 30px;
+    padding: 2px 4px;
+}
 
     /* оборотная сторона */
 
@@ -679,13 +661,15 @@
     }
 
     .bankcard .bccvv label.num4 {
-        font: bold 140% Courier,monospace;
-
         display: inline;
-
         margin: 0 8px 0 0;
-
-        letter-spacing: -.1em;
+        font-weight: bold;
+        font-size: 22px;
+        letter-spacing: -0.04em;
+    }
+    
+    .bankcard .bccvv .empty {
+        color: #A8A8A8;
     }
 
     .bankcard .bccvv label.novalue {
@@ -693,11 +677,10 @@
     }
 
     .bankcard .bccvv .text {
-        font: bold 140% Courier,monospace;
-
         width: 2em;
-
-        letter-spacing: -.1em;
+        font-weight: bold;
+        font-size: 22px;
+        letter-spacing: -0.04em;
         text-shadow: none;
     }
 

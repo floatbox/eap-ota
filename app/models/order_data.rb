@@ -161,7 +161,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
         Order.create(:order_data => self)
 
         # обилечивание
-        Amadeus::Service.issue_ticket(pnr_number)
+        #Amadeus::Service.issue_ticket(pnr_number)
 
         PnrMailer.deliver_pnr_notification(email, self.pnr_number) if email
         return pnr_number

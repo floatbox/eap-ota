@@ -222,6 +222,9 @@ ptp.dates = function($dd, $mm, $yyyy) {
             return;
         }
     });
+    
+    // Показываем подсказки
+    $ddmm.add($yyyy).trigger('blur').removeClass('text-invalid');
 }
 
 // ======  Данные банковской карты  ============
@@ -241,6 +244,9 @@ app.BankCard = function() {
 
     // CVV - код
     this.cvv('#bc-cvv');
+    
+    // Имя на карте
+    this.name($('#bc-name'));
 
     return this;
 };
@@ -335,13 +341,16 @@ ptp.num = function(s) {
     $el.last().change(function() {
         var $el = $(this);
         var valid = !$el.validate().length;
-        me.$cvvnum.text(valid ? $el.val() : 'XXXX');
-        // .toggleClass('novalue', !valid);
-
+        me.$cvvnum.html(valid ? $el.val() : '<span class="empty">####</span>');
     }).keyup(function() {
         var v = parseInt(this.value);
-        if (isNaN(v)) return;
-        me.$cvvnum.text((v + 'XXXX').slice(0, 4));
+        if (isNaN(v)) {
+            me.$cvvnum.html('<span class="empty">####</span>');
+        } else {
+            var vs = v.toString();
+            var es = vs.length < 4 ? ('<span class="empty">' + '####'.substring(0, 4 - vs.length) + '</span>') : '';
+            me.$cvvnum.html(vs + es);
+        }
     });
 
 }
@@ -378,6 +387,31 @@ ptp.cvv = function(s) {
     var me  = this;
     var $el = $(s, this.$el);
 }
+
+ptp.name = function($name) {
+    var warning = $name.eq(0).closest('fieldset').find('.language-warning');
+    var mask = /[а-я]/i;
+    var active = false;
+    var hwtimer, hideWarning = function() {
+        clearTimeout(hwtimer);
+        warning.fadeOut(150);
+        active = false;
+    }
+    $name.keypress(function(e) {
+        if (mask.test(String.fromCharCode(e.which))) {
+            if (!active) {
+                warning.fadeIn(150);
+                active = true;
+            }
+            clearTimeout(hwtimer);
+            hwtimer = setTimeout(hideWarning, 5000);
+        } else if (active) {
+            hideWarning();
+        }
+    }).blur(function() {
+        if (active) hideWarning();
+    });
+};
 
 
 // ======  Данные покупателя  ============

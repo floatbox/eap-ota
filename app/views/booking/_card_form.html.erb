@@ -17,7 +17,7 @@
                  class="g-xs"
                  title="Шестнадцатизначный номер карты"
                 >Номер карты</label>
-
+                <div class="bc-num-fields">
                 <%= f.text_field :number1,
                  :id => "bc-num1",
                  :class => "text g-xl",
@@ -46,7 +46,8 @@
                  :title => "последние четыре цифры номера карты",
                  :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 4, maxl: 4}}"
                 %>
-               <%= f.error_message_on :number, :id => 'error_card_number' %>
+                </div>
+                <%= f.error_message_on :number, :id => 'error_card_number' %>
             </fieldset>
 
             <fieldset class="bankcardname text-upper">
@@ -57,12 +58,12 @@
                  title="Имя и фамилию нужно вписать латинскими буквами &mdash; точно, как на карте"
                 >Имя на&nbsp;карте</label>
                 <%= f.text_field :name,
-                 :id => 'bc-name',
-                 :class => "text g-l",
-                 :title => "имя на карте",
-                 :onclick => "return {mask: /[a-z\\s]/i, rules: {latin: true, minl: 3}}"
-                 %>
-                 <%= f.error_message_on :name, :id => 'error_card_name' %>
+                  :id => 'bc-name',
+                  :class => "text g-l",
+                  :title => "имя на карте",
+                  :onclick => "return {mask: /[a-z\s]/i, rules: {latin: true, minl: 3}}" %>
+                <%= f.error_message_on :name, :id => 'error_card_name' %>
+                <div class="language-warning">Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры. Имя нужно вводить латинскими буквами</div>                 
             </fieldset>
 
             <fieldset class="bc-exp">
@@ -101,8 +102,7 @@
                  title="Трёхзначный CVV (CVC) код карты. Карта без этого кода непригодна для оплаты услуг через интернет."
                 >CVV/CVC</label>
 
-                <!--b id="bc-cvv-num" class="g-xs novalue" title="Последние четыре цифры номера карты">XXXX</b-->
-                <label id="bc-cvv-num" for="bc-num4" class="num4 g-xs novalue" title="Последние четыре цифры номера карты">XXXX</label>
+                <label id="bc-cvv-num" for="bc-num4" class="num4 g-xs novalue" title="Последние четыре цифры номера карты"><span class="empty">####</span></label>
 
                 <%= f.text_field :verification_value, 
                  :id => "bc-cvv",

@@ -164,7 +164,13 @@ app.InputText = function(el, form) {
         $el.trigger('mark', false);
     }).blur(function(){
         // если есть фоновая подсказка, то восстанавливаем её
-        if (params.def && isDefault()) el.value = params.def;
+        if (params.def && isDefault()) {
+            el.value = params.def;
+            // если подсказка не влезла в maxlength, очищаем
+            if (el.value != params.def) {
+                el.value = '';
+            }
+        }
         $el.toggleClass('text-value', !isDefault());
         // определять изменения больше не нужно
         clearTimeout(compareTimer);

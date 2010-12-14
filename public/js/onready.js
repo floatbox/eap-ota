@@ -111,6 +111,7 @@
         app.booking.unfasten();
         offersList.hide();
         pageurl.reset();
+        document.title = 'Eviterra / Выбор направления';
         search.restore(search.defvalues || {});
     });
     

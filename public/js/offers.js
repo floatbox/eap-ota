@@ -182,13 +182,14 @@ show: function(fixed) {
     }
     if (u.loading) {
         this.toggle('loading');
+        document.title = 'Eviterra / Ищем для вас лучшие предложения…';
     } else if (u.pcontent) {
         this.toggle('loading');
         setTimeout(function() {
             self.processUpdate();
         }, 300);
     }
-    this.loading.find('h3').html('Ищем для вас лучшие предложения');                
+    this.loading.find('h3').html('Ищем для вас лучшие предложения');
     this.container.removeClass('g-none');
     var w = $(window), offset = this.container.offset().top;
     if (fixed !== false && offset - w.scrollTop() > w.height() / 2) {
@@ -250,6 +251,7 @@ processUpdate: function() {
             } else {
                 $('#offers-tabs').trigger('set', self.selectedTab || pageurl.tab || 'featured');
                 pageurl.update('search', $('#offers-options').attr('data-query_key'));
+                document.title = 'Eviterra / ' + $('#offers-title h1').text();
             }
             self.toggleCollection(true);
         }, function() {
@@ -274,6 +276,7 @@ processUpdate: function() {
         $('#offers-pcollection').html('');
         $('#offers-mcollection').html('');
         pageurl.update('search', undefined);
+        document.title = 'Eviterra / Выбор направления';
         this.variants = [];
         this.items = [];
         delete(u.pcontent);
