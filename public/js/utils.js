@@ -190,3 +190,15 @@ $.animateScrollTop = function(st, complete) {
         st: st
     }, options);
 };
+
+
+/* Detect browser */
+var browser = (function() {
+    var os = navigator.platform.toLowerCase().match(/mac|win|linux|ipad|iphone/);
+    var agent = navigator.userAgent.toLowerCase().match(/safari|opera|msie \d|firefox|chrome/);
+    agent = agent && agent[0].replace(/\s/, '');
+    var browser = os && agent ? os + "-" + agent : undefined;
+    if (agent == 'msie6') try {document.execCommand('BackgroundImageCache', false, true);} catch(e) {}
+    if (browser) $(document.documentElement).addClass(browser);
+    return browser;
+})();

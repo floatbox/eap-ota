@@ -7,23 +7,23 @@
 <tr>
     <td class="pad_null"><img src="/img/booking/eviterra.png" alt="eviterra" width="210" height="30"></td>
     <td class="pad_null">
-        <div style="margin: 0 0 2px;"><font size="3" family="Arial" color="#444444"><strong>Электронный билет<br>E-ticket</strong></font></div>
+        <font size="3" family="Arial" style="font-size: 15px;"><strong>Электронный билет<br>E-ticket</strong></font>
     </td>
     <td class="pad_null">
-        <div><font family="Arial" size="3" color="#444444" style="font-size: 14px; line-height: 14px;"><strong>Номер брони</strong></font></div>
-        <div><font size="5" family="Arial" color="#ED1192" style="font-size: 30px; line-height: 32px; color: #ED1192;"><strong><%= @pnr.number %></strong></font></div>
+        <div><font family="Arial" size="2" style="font-size: 13px; line-height: 16px;"><strong>Номер брони</strong></font></div>
+        <div><font size="5" family="Arial" color="#ED1192" style="font-size: 30px; line-height: 30px; color: #ED1192;"><strong><%= @pnr.number %></strong></font></div>
     </td>
     <td class="pad_null">
-      <div><font family="Arial" size="3" color="#444444" style="font-size: 14px; line-height: 14px;"><strong>
-            <% if @pnr.ticket_numbers.present? %>
+        <% if @pnr.ticket_numbers.present? %>
+        <font family="Arial" size="3" style="font-size: 13px; line-height: 16px;"><strong>
               <%= @pnr.ticket_numbers.one? ? 'Номер билета' : 'Номера билетов' %>
-            <% end %>
-      </strong></font></div>
-        <div>
-          <% for number in @pnr.ticket_numbers %>
-            <font size="5" family="Arial" color="#ED1192" style="font-size: 30px; line-height: 32px; color: #ED1192;"><strong style="white-space: nowrap;"><nobr><%= number %></nobr></strong></font>
-          <% end %>
-        </div>
+        </strong></font><br>
+        <font size="5" family="Arial" color="#ED1192" style="font-size: 30px; line-height: 30px; color: #ED1192;">
+        <% for number in @pnr.ticket_numbers %>
+            <strong style="white-space: nowrap;"><nobr><%= number %></nobr></strong><br>
+        <% end %>
+        </font>
+        <% end %>
     </td>
 </tr>
 </tbody>

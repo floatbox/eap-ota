@@ -126,8 +126,31 @@ init: function() {
     search.persons.select({adults: 1, children: 0, infants: 0});
     
     // Кнопка
-    this.submit = $('#search-submit');
+    this.submit = $('#search-submit').attr('data-required', 'to');
+    this.smessage = this.submit.find('.message');
     this.sprogress = this.submit.find('.progress');
+    this.submit.find('.b-submit').click(function(event) {
+        event.preventDefault();
+        if (offersList.nextUpdate) {
+            offersList.load();
+            offersList.show();
+        }
+    }).mouseover(function() {
+        if (self.submit.is('.disabled:not(.current)')) {
+            self.smessage.fadeIn(150);
+        }
+    }).mouseout(function() {
+        if (self.smessage.is(':visible')) {
+            self.smessage.fadeOut(150);
+        }
+    });
+    this.messages = {
+        from: 'Введите, пожалуйста, пункт отправления',
+        to: 'Введите, пожалуйста, пункт назначения',
+        date1: 'Выберите, пожалуйста дату вылета',
+        date2: 'Выберите, пожалуйста, дату обратного вылета'
+    };
+    this.smessage.find('.ssm-content').html(this.messages.to);
 },
 values: function() {
     var data = {
@@ -226,6 +249,7 @@ validate: function(qkey) {
         } else {
             self.apply(result.complex_to_parse_results || {});
         }
+        self.submit.removeClass('current');        
         if (result.valid) {
             offersList.nextUpdate = {
                 title: result.human
@@ -243,15 +267,21 @@ validate: function(qkey) {
             }
         } else {
             delete(offersList.nextUpdate);
+            if (result.errors) {
+                var text = self.messages[result.errors[0][0]];
+                self.smessage.find('.ssm-content').html(text);
+            }
         }
         var rs = result.search;
         if (rs) {
-            self.updateMap(rs.from_as_object, rs.to_as_object);
+            if (self.map) {
+                self.updateMap(rs.from_as_object, rs.to_as_object);
+            }
             if (rs.from_as_object) {
-                self.from.trigger('iata', rs.from_as_object.iata);
+                self.from.trigger('iata', rs.from_as_object.iata || rs.from_as_object.alpha2);
             }
             if (rs.to_as_object) {
-                self.to.trigger('iata', rs.to_as_object.iata);
+                self.to.trigger('iata', rs.to_as_object.iata || rs.to_as_object.alpha2);
             }
         }        
         delete(self.request);

@@ -60,7 +60,7 @@
     position: absolute;
     top: 50%;
     right: 1px;
-    margin-top: -14px;
+    margin-top: -13px;
 
     white-space: nowrap;
     text-transform: uppercase;
@@ -68,12 +68,12 @@
 
 .autocomplete-box .iata i,
 .autocomplete-box .iata u {
-    display: inline-block;
-
+    position: absolute;
+    top: 0; right: 0;
+    display: block;
     height: 23px;
     line-height: 23px;
     vertical-align: bottom;
-    
     padding: 3px 0;
 }
 

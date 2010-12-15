@@ -21,7 +21,7 @@
         <div class="autocomplete-box">
             <input type="text" id="search-from" class="autocomplete from" tabindex="1"
              value="<%= nearest_city.try(:name) || 'Москва' %>"
-             onclick="return <%=h nearest_city.to_json %>"
+             onclick="return <%= h nearest_city.to_json %>"
              title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом">
         </div>
     </td>

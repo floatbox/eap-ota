@@ -757,28 +757,17 @@ $.Autocompleter.List.Item = function(data) {
     return $li.data('data', data);
 };
 
-
-/* ================================================ */
-/* =======  IATA-код текущего объекта  ============ */
-/* ================================================ */
+// IATA-код текущего объекта
 
 $.Autocompleter.IATA = function($input) {
     var title = 'IATA-код, принятый в авиации';
     var o = $input.data('options');
-
-    var $el = $('<s/>')
-    .append('<i/>')
-    .append($('<u/>'))
-    .addClass(o.iataCls)
-    .appendTo($input.parent());
-
+    var $el = $('<div/>').append('<i/>').append($('<u/>')).addClass(o.iataCls).appendTo($input.parent());
     var $text = $('u', $el);
-    
     function update() {
         $('*', $el).css('backgroundColor', $input.css('backgroundColor'));
     }
     update();
-    
     return {
         show: function(v, t) {
             $el.show();

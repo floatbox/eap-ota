@@ -3,15 +3,8 @@
 <head>
     <%= render 'shared/head_common', {:title => 'авиабилеты по всему миру онлайн'} %>
 
-    <!-- Google maps API -->
-    <!--<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&language=ru&region=RU"></script>-->
-    
-    <!-- Bing maps API -->
-    <script type="text/javascript" src="https://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.3&s=1&mkt=ru-RU"></script>
-    
     <!-- [production] Все нижеследующие скрипты объединить в таком же порядке и упаковать -->
     <script type="text/javascript" src="/js/lib/json2.js"></script>
-
     <script type="text/javascript" src="/js/main.js"></script>
     <script type="text/javascript" src="/js/utils.js"></script>
     <script type="text/javascript" src="/js/pageurl.js"></script>
@@ -28,10 +21,8 @@
     <script type="text/javascript" src="/js/booking/validation.js"></script>
     <script type="text/javascript" src="/js/booking/wizard.js"></script>
     <script type="text/javascript" src="/js/booking/form.js"></script>
-    <script type="text/javascript" src="/js/onready.js"></script>
 
 </head>
-
 <body>
 <%= render 'shared/header' %>
 <div class="l-wrapper" id="page-wrapper">
@@ -50,5 +41,8 @@
     <div class="l-overlay"></div>
 </div>
 </div>
+<script type="text/javascript" src="/js/onready.js"></script>
+<script type="text/javascript" src="https://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.3&s=1&mkt=ru-RU"></script>
+<script type="text/javascript" src="/js/map.js"></script>
 </body>
 </html>

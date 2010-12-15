@@ -98,7 +98,7 @@ a.b-submit:hover {
 #search-submit .message {
     display: none;
     position: absolute;
-    margin-left: -250px;
+    margin: -8px 0 0 -245px;
     z-index: 5;
     width: 200px;
     padding: 10px 15px;
@@ -106,7 +106,7 @@ a.b-submit:hover {
         -moz-border-radius: 5px;
         -webkit-border-radius: 5px;
         -o-border-radius: 5px;
-    background: #FFF;
+    background: #fff8ce;
     box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
         -moz-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
         -webkit-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
@@ -114,4 +114,12 @@ a.b-submit:hover {
     font-size: 14px;
     line-height: 16px;
     color: #333;
+}
+#search-submit .ssm-arrow {
+    position: absolute;
+    top: 50%; left: 229px;
+    margin-top: -8px;
+    border: 8px solid transparent;
+    border-right: 0;
+    border-color: transparent #fff8ce;
 }

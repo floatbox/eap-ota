@@ -177,12 +177,13 @@ abort: function() {
 show: function(fixed) {
     var self = this, u = this.update;
     search.toggle(false);
+    search.submit.addClass('current');
     if (u.title) {
         $('#offers-title h1').html(u.title);
     }
     if (u.loading) {
         this.toggle('loading');
-        document.title = 'Eviterra / Ищем для вас лучшие предложения…';
+        pageurl.title('ищем для вас лучшие предложения…')
     } else if (u.pcontent) {
         this.toggle('loading');
         setTimeout(function() {
@@ -341,8 +342,12 @@ updateFilters: function() {
         var name = $(this).attr('data-name');
         var filter = self.filters[name];
         filter.fill(data[name]);
-        filter.el.toggleClass('g-none', filter.items.length < 2);
-        $(this).next('.comma').toggle(!filter.el.hasClass('g-none'));
+        if (name == 'layovers') {
+            filter.el.toggleClass('g-none', filter.items.length == 0);
+        } else {
+            filter.el.toggleClass('g-none', filter.items.length < 2);
+            $(this).next('.comma').toggle(!filter.el.hasClass('g-none'));
+        }
     });
     items.filter(':not(.g-none)').last().next('.comma').hide();
     this.currentData = data;
@@ -485,16 +490,17 @@ sortOffers: function() {
     }
 },
 showRecommendations: function() {
-    var variants = this.variants;
-    var items = [], cheap, fast, optimal;
+    var items = [], variants = this.variants;
+    var cheap = undefined, fast = undefined, optimal = undefined;
     for (var i = 0, im = variants.length; i < im; i++) {
         var v = variants[i];
         if (!v.improper) {
             items.push({n: i, p: v.offer.summary.price, d: v.summary.duration});
         }
     }
+    var container = $('#offers-featured').hide().html('');
     if (items.length == 0) {
-        container.append($('#offers-pcollection').prev().clone());
+        container.append($('#offers-pcollection').prev().clone()).show();
         return;
     } else if (items.length == 1) {
         optimal = items[0];
@@ -527,7 +533,6 @@ showRecommendations: function() {
     } else if (fast) {
         otitle = 'Самый выгодный и оптимальный вариант';
     }
-    var container = $('#offers-featured').hide().html('');
     if (cheap) container.append(this.makeRecommendation(variants[cheap.n], 'Самый выгодный вариант'));
     if (optimal) container.append(this.makeRecommendation(variants[optimal.n], otitle));
     if (fast) container.append(this.makeRecommendation(variants[fast.n], 'Быстрый вариант'));
