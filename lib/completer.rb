@@ -22,7 +22,8 @@ class Completer
     if !@completer || (cache_loaded_at < cache_updated_at)
       @completer = Completer.load rescue nil
     end
-    if !@completer || @completer.outdated?
+    # временно выключил автоматическую перегенерацию
+    if !@completer # || @completer.outdated?
       @completer = Completer.new
       @completer.dump
       @cache_loaded_at = Time.now
