@@ -88,8 +88,8 @@ module CommissionRules
     # один аргумент, разделенный пробелами или /; или два аргумента
     def commission *args, &block
       if args.size == 1
-        if args == [0]
-          vals = [0, 0]
+        if args == [0] || args == ['0']
+          vals = ["0", "0"]
         else
           vals = args[0].split(/[ \/]+/)
         end
@@ -100,7 +100,7 @@ module CommissionRules
         raise ArgumentError, "strange commission: #{args.join(' ')}"
       end
 
-      commission = new(:carrier => @carrier, :agent => vals[0], :subagent => vals[1])
+      commission = new(:carrier => @carrier, :agent => vals[0].to_s, :subagent => vals[1].to_s)
 
       # дополнительные параметры бронирования
       if block_given?
