@@ -17,10 +17,13 @@ class PricerController < ApplicationController
         @recommendations = @search.search
         # TODO перенести в модель
         if @search.search_type == 'travel' && !@search.nonstop?
-          @search.nonstop = true
-          recommendations_nonstop = @search.search
-          # только новые
-          @recommendations = Recommendation.merge(@recommendations, recommendations_nonstop)
+          begin
+            @search.nonstop = true
+            recommendations_nonstop = @search.search
+            # только новые
+            @recommendations = Recommendation.merge(@recommendations, recommendations_nonstop)
+          rescue
+          end
         end
         # автобусы и поезда
         @recommendations.delete_if(&:ground?)

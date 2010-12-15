@@ -5,7 +5,9 @@ require 'httparty'
 class Payture
 
   # комиссионные за транзакцию
-  def self.commission; 0.028 end
+  def self.commission(price)
+    (price * 0.0325 + 3).ceil
+  end
 
   HOST = 'engine-sandbox.payture.com'
   PEM = <<-"END".gsub(/^\s*/,'')
