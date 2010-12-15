@@ -37,5 +37,8 @@ show: function() {
         window.location.hash = '';
     }
     $(window).scrollTop(cst);
+},
+title: function(t) {
+    document.title = 'Eviterra — ' + (t || 'авиабилеты по всему миру онлайн');
 }
 };

@@ -93,3 +93,25 @@ a.b-submit:hover {
     background: #666;
     cursor: default;
 }
+
+/* Сообщение о нехватке данных */
+#search-submit .message {
+    display: none;
+    position: absolute;
+    margin-left: -250px;
+    z-index: 5;
+    width: 200px;
+    padding: 10px 15px;
+    border-radius: 5px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -o-border-radius: 5px;
+    background: #FFF;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+        -moz-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+        -webkit-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+        -o-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+    font-size: 14px;
+    line-height: 16px;
+    color: #333;
+}

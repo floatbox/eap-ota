@@ -251,7 +251,7 @@ processUpdate: function() {
             } else {
                 $('#offers-tabs').trigger('set', self.selectedTab || pageurl.tab || 'featured');
                 pageurl.update('search', $('#offers-options').attr('data-query_key'));
-                document.title = 'Eviterra / ' + $('#offers-title h1').text();
+                pageurl.title($('#offers-title h1').text());
             }
             self.toggleCollection(true);
         }, function() {
@@ -276,7 +276,7 @@ processUpdate: function() {
         $('#offers-pcollection').html('');
         $('#offers-mcollection').html('');
         pageurl.update('search', undefined);
-        document.title = 'Eviterra / Выбор направления';
+        pageurl.title();
         this.variants = [];
         this.items = [];
         delete(u.pcontent);

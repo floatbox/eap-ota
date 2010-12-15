@@ -104,6 +104,10 @@ init: function() {
 
     // Прекращение бронирования
     this.el.delegate('a.stop-booking', 'click', this.selfhide);
+    
+    // Заголовок страницы
+    pageurl.title('бронирование авиабилета');
+
 },
 show: function(variant) {
     var self = this;
@@ -138,6 +142,7 @@ hide: function() {
     delete(this.offer);
     delete(this.variant);
     pageurl.update('booking', undefined);
+    pageurl.title();
 },
 book: function(variant) {
     var self = this;
@@ -199,6 +204,7 @@ comparePrice: function() {
     }
 },
 fasten: function(offer) {
+    if (browser.indexOf('ip') !== -1) return; // for iPad and iPhone
     var wrapper = $('#page-wrapper');
     var ot = offer.offset().top;
     var ob = wrapper.height() - ot - offer.height();
@@ -210,7 +216,7 @@ fasten: function(offer) {
 },
 unfasten: function() {
     var wrapper = $('#page-wrapper');
-    if (wrapper.hasClass('l-crop')) {
+    if (browser.indexOf('ip') === -1 && wrapper.hasClass('l-crop')) {
         wrapper.children('.l-canvas').css('margin-top', 0).css('top', 0);
         wrapper.removeClass('l-crop');
         $(window).scrollTop($(window).scrollTop() + this.dst);

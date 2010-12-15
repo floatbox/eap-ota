@@ -153,11 +153,8 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     r = []
 
     locations = human_locations
-    if locations[:dpt_0]
-      r << locations[:dpt_0] 
-    end
-    if locations[:arv_0]
-      r << locations[:arv_0]
+    if locations[:dpt_0] && locations[:arv_0]
+      r << "<span class=\"locations\">#{locations[:dpt_0]} #{locations[:arv_0]}</span>"
     end
 
     if adults > 1
@@ -173,11 +170,11 @@ class PricerForm < ActiveRecord::BaseWithoutTable
 
     r << human_cabin if cabin
 
-    r << human_dates(Date.strptime(date1, '%d%m%y'))
+    r << "<span class=\"date\" data-date=\"#{[date1[0,2],date1[2,2]].join('.')}\">#{human_date(date1)}</span>"
 
     if rt
       r << 'и&nbsp;обратно'
-      r << human_dates(Date.strptime(date2, '%d%m%y'))
+      r << "<span class=\"date\" data-date=\"#{[date2[0,2],date1[2,2]].join('.')}\">#{human_date(date2)}</span>"
     end
 
     r.join(' ')
@@ -216,33 +213,12 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     result
   end
 
-  def human_dates(d1, d2=nil)
-    if d2.blank?
-      if d1.year == Date.today.year
-        return I18n.l(d1, :format => '%e&nbsp;%B')
-      else
-        return I18n.l(d1, :format => '%e&nbsp;%B %Y')
-      end
-
+  def human_date(ds)
+    d = Date.strptime(ds, '%d%m%y')
+    if d.year == Date.today.year
+      return I18n.l(d, :format => '%e&nbsp;%B')
     else
-      if d1.year == d2.year
-        if d1.month == d2.month
-          f1, f2 = '%e', '%e %B'
-        else
-          f1, f2 = '%e %B', '%e %B'
-        end
-
-        if d1.year != Date.today.year
-          f2 += ' %Y'
-        end
-      else
-        f1, f2 = '%e %B %Y', '%e %B %Y'
-      end
-
-      return "с %s по %s" % [
-        I18n.l(d1, :format => f1),
-        I18n.l(d2, :format => f2)
-      ]
+      return I18n.l(d, :format => '%e&nbsp;%B %Y')
     end
   end
 
