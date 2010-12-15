@@ -4,7 +4,9 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
-
+  #TODO временно закрываем доступ для не залогиненых в админку
+  include Typus::Authentication
+  before_filter :require_login
 
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
