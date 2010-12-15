@@ -17,7 +17,7 @@ class Recommendation
   end
 
   def price_payment
-    (price_total * Payture.commission).ceil
+    Payture.commission(price_total)
   end
 
   def price_tax_and_markup
