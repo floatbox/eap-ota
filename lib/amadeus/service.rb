@@ -6,7 +6,7 @@ module Amadeus
   if Rails.env.production?
     endpoint :uri => "https://production.webservices.amadeus.com", :version => 1
   else
-    endpoint :uri => "http://production.webservices.amadeus.com", :version => 1
+    endpoint :uri => "https://test.webservices.amadeus.com", :version => 1
   end
 
   # сжатие
@@ -40,10 +40,6 @@ module Amadeus
   # вынесены во внешний модуль, чтобы методы можно было оверрайдить
   include Amadeus::SOAPActions
   include Amadeus::Macros
-
-  # херит логгинг. надо как-то обернуть инспект у Handsoap::Response
-  # чтоб тоже раззиповывал
-  # include Amadeus::Compression
 
   def on_response_document(doc)
     doc.add_namespace 'header', 'http://webservices.amadeus.com/definitions'
