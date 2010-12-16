@@ -312,9 +312,11 @@ class Recommendation
           carrier = code
         when 1
           klass = code
+        else
+          raise ArgumentError, 'should consist of itinerary (MOWLON), carrier(AB) or cabin class (Y). example "mowaer/s7 aermow/y'
         end
       end
-      flight.operating_carrier_iata = carrier
+      flight.marketing_carrier_iata = carrier
       segments << Segment.new(:flights => [flight])
       classes << klass
     end
