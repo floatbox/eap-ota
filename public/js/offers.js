@@ -1,6 +1,7 @@
 var offersList = {
 options: {},
 init: function() {
+    this.title = $('#offers-title h1');
     this.container = $('#offers');
     this.loading = $('#offers-loading');
     this.results = $('#offers-results');
@@ -129,6 +130,8 @@ load: function() {
         },
         timeout: 150000
     });
+
+    // Запрос матрицы с задержкой, чтобы не слать лишние запросы при автоматическом поиске
     this.mrtimer = setTimeout(function() {
         params.search_type = 'calendar';
         self.update.mrequest =  $.ajax({
@@ -144,12 +147,15 @@ load: function() {
             },
             timeout: 60000
         });
-    }, params.restore_results ? 1000 : 8000);
+    }, params.restore_results ? 1000 : 10000);
+    
+    // Ничего не найдено, если не сработали таймауты запросов
     clearTimeout(this.resetTimer);
     this.resetTimer = setTimeout(function() {
         self.setUpdate('pcontent', '');
         self.setUpdate('mcontent', '');
-    }, 120000);
+    }, 160000);
+    
 },
 setUpdate: function(type, s) {
     this.update[type] = typeof s == 'string' ? s : '';
@@ -179,11 +185,15 @@ show: function(fixed) {
     search.toggle(false);
     search.submit.addClass('current');
     if (u.title) {
-        $('#offers-title h1').html(u.title);
+        this.title.html(u.title);
+        var sdates = this.title.find('.date').map(function() {
+            return $(this).attr('data-date');
+        }).get().join('—');
+        this.title.attr('data-title', this.title.find('.locations').html() + ' (' + sdates + ')');
     }
     if (u.loading) {
         this.toggle('loading');
-        pageurl.title('ищем для вас лучшие предложения…')
+        pageurl.title();
     } else if (u.pcontent) {
         this.toggle('loading');
         setTimeout(function() {
@@ -252,7 +262,7 @@ processUpdate: function() {
             } else {
                 $('#offers-tabs').trigger('set', self.selectedTab || pageurl.tab || 'featured');
                 pageurl.update('search', $('#offers-options').attr('data-query_key'));
-                pageurl.title($('#offers-title h1').text());
+                pageurl.title('авиабилеты ' + self.title.attr('data-title'));
             }
             self.toggleCollection(true);
         }, function() {
@@ -342,12 +352,8 @@ updateFilters: function() {
         var name = $(this).attr('data-name');
         var filter = self.filters[name];
         filter.fill(data[name]);
-        if (name == 'layovers') {
-            filter.el.toggleClass('g-none', filter.items.length == 0);
-        } else {
-            filter.el.toggleClass('g-none', filter.items.length < 2);
-            $(this).next('.comma').toggle(!filter.el.hasClass('g-none'));
-        }
+        filter.el.toggleClass('g-none', filter.items.length < 2);
+        $(this).next('.comma').toggle(!filter.el.hasClass('g-none'));
     });
     items.filter(':not(.g-none)').last().next('.comma').hide();
     this.currentData = data;
@@ -505,11 +511,29 @@ showRecommendations: function() {
     } else if (items.length == 1) {
         optimal = items[0];
     } else {
-        cheap = items[0];        
+        cheap = items[0];
+        var item, ratio, defitem = items[0], minratio = 0.8;
+        for (var i = 1, im = items.length; i < im; i++) {
+            item = items[i];
+            if (item.p / defitem.p > 1.05) break;
+            if ((ratio = item.p / defitem.p * item.d / defitem.d) < minratio) {
+                minratio = ratio;
+                cheap = item;
+            }
+        }
         items = items.sort(function(a, b) {
             return (a.d - b.d) || (a.p - b.p);
         });
         fast = items[0];
+        var item, ratio, defitem = items[0], minratio = 0.7;
+        for (var i = 1, im = items.length; i < im; i++) {
+            item = items[i];
+            if (item.d / defitem.d > 1.2) break;
+            if ((ratio = item.p / defitem.p * item.d / defitem.d) < minratio) {
+                minratio = ratio;
+                fast = item;
+            }
+        }
         optimal = items.slice(0, Math.round(items.length * 0.5)).sort(function(a, b) {
             return (a.p - b.p) || (a.d - b.d);
         })[0];

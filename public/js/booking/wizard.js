@@ -305,7 +305,7 @@ ptp.num = function(s) {
         }, 50);
     });
 
-    // если первая цифра 4, то это Виза, если 5 - Мастер
+    // если первая цифра 4, то это Виза, если 3, 5 и 6 - Мастеркард
     $el.first().keyup(function() {
         me.ctype = me.ctype || 'none';
         var ctype = me.ctype;
@@ -314,13 +314,13 @@ ptp.num = function(s) {
             case '4':
                 me.ctype = 'bc-type-visa';
                 break;
+            case '3':
             case '5':
+            case '6':
                 me.ctype = 'bc-type-master';
                 break;
             default:
                 me.ctype = 'bc-type-none';
-            // '3' - American Express
-            // '6' - Maestro
         }
 
         if (me.ctype == ctype) return;

@@ -6,9 +6,9 @@ module CommissionRules
 
   include KeyValueInit
 
-  attr_accessor :carrier, :agent, :subagent, :disabled, :interline,
+  attr_accessor :carrier, :agent, :subagent, :disabled, :no_commission, :interline,
     :domestic, :international, :klass, :departure, :departure_country,
-    :check, :examples, :agent_comments, :subagent_comments
+    :check, :examples, :agent_comments, :subagent_comments, :source
 
   KLASSES = {
     :first => %W(P F A),
@@ -17,9 +17,9 @@ module CommissionRules
   }
 
   def applicable? recommendation
+    return if disabled
     #return unless carrier == recommendation.validating_carrier_iata
     return unless applicable_classes?(recommendation)
-    return if disabled
     true
   end
 
@@ -87,8 +87,8 @@ module CommissionRules
     end
 
     # один аргумент, разделенный пробелами или /; или два аргумента
-    def commission *args
-      vals = args[0].split(/[ \/]+/)
+    def commission arg
+      vals = arg.split(/[ \/]+/)
       if vals.size != 2
         raise ArgumentError, "strange commission: #{args.join(' ')}"
       end
@@ -96,50 +96,116 @@ module CommissionRules
       commission = new({
         :carrier => @carrier,
         :agent => vals[0].to_s,
-        :subagent => vals[1].to_s
+        :subagent => vals[1].to_s,
+        :source => caller_address
       }.merge(opts))
 
-      # дополнительные параметры бронирования
+      self.opts = {}
+      register commission
+    end
 
+    # заглушка для example который _не должны_ найти комиссию
+    def no_commission
+      # opts здесь по идее содержит только examples
+      commission = new({
+        :carrier => @carrier,
+        :source => caller_address
+      }.merge(opts))
+
+      self.opts = {}
+      register commission
+    end
+
+    def register commission
       commissions[@carrier] ||= []
       commissions[@carrier] << commission
-      self.opts = {}
       commission
     end
 
+    # параметры конкретных правил
+    # задаются после carrier,
+    # но перед commission/no_commission
+    #############################
+
+    # выключает правило
     def disable
       opts[:disabled] = true
     end
 
+    # правило интерлайна
     def interline value=:yes
       opts[:interline] = value
     end
 
+    # строчки из агентского договора (FM, комиссии, указываемые в бронировании)
     def agent line
       opts[:agent_comments] ||= ""
       opts[:agent_comments] += line + "\n"
     end
 
+    # строчки из субагентского договора (маржа, которую мы оставим себе от fare)
     def subagent line
       opts[:subagent_comments] ||= ""
       opts[:subagent_comments] += line + "\n"
     end
 
+    # внутренние авиалинии
     def domestic
       opts[:domestic] = true
     end
 
+    # внешние авиалинии
     def international
       opts[:international] = true
     end
 
-    def p
-      p commissions
+    def example str
+      opts[:examples] ||= []
+      opts[:examples] << [str, caller_address]
     end
 
+    # метод поиска рекомендации
+
     def find_for(recommendation)
-      (commissions[recommendation.validating_carrier_iata] || []).find {|c| c.applicable?(recommendation) }
+      (commissions[recommendation.validating_carrier_iata] || return).find do |c|
+        c.applicable?(recommendation)
+      end
     end
+
+
+    # test methods
+    def test
+      commissions.values.flatten.each do |commission|
+        (commission.examples || next).each do |code, source|
+          rec = Recommendation.example(code, :carrier => commission.carrier)
+          proposed = find_for(rec)
+          if proposed == commission ||
+             proposed.nil? && (commission.no_commission || commission.disabled)
+            ok "#{commission.carrier} (line #{source}): #{code} - OK"
+          elsif proposed.nil?
+            error "#{commission.carrier} (line #{source}): #{code} - no applicable commission!"
+          else
+            error "#{commission.carrier} (line #{source}): #{code} - wrong commission applied (#{proposed.agent}/#{proposed.subagent}, line #{proposed.source})"
+          end
+        end
+      end
+
+    end
+
+    private
+    def error msg
+      puts "\e[31m" + msg + "\e[0m"
+    end
+
+    def ok msg
+      puts "\e[32m" + msg + "\e[0m"
+    end
+
+    def caller_address level=1
+      caller[level] =~ /:(\d+)/
+      $1 || 'unknown'
+    end
+
   end
 
 end

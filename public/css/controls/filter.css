@@ -57,15 +57,13 @@
 .dropdown dd {
     color: #36d4f1;
 }
-.dropdown dd:hover,
-.dropdown dd.selected:hover {
+.dropdown dd:hover {
     color: #eee;
     background-color: #ed1192;
     background-color: rgba(237, 17, 146, 0.5);
     cursor: pointer;
 }
-.dropdown dd.selected,
-.dropdown dd.selected.empty:hover {
+.dropdown dd.selected {
     background-color: #ed1192;
     color: #FFF;
 }
@@ -115,9 +113,5 @@
 .persons .excess {
     margin: 12px 16px;
     font-size: 75%;
-    color: #FFF;
-}
-.persons dd.selected.one:hover {
-    background-color: #ed1192;
     color: #FFF;
 }
