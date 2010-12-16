@@ -1,6 +1,7 @@
 var offersList = {
 options: {},
 init: function() {
+    this.title = $('#offers-title h1');
     this.container = $('#offers');
     this.loading = $('#offers-loading');
     this.results = $('#offers-results');
@@ -129,6 +130,8 @@ load: function() {
         },
         timeout: 150000
     });
+
+    // Запрос матрицы с задержкой, чтобы не слать лишние запросы при автоматическом поиске
     this.mrtimer = setTimeout(function() {
         params.search_type = 'calendar';
         self.update.mrequest =  $.ajax({
@@ -144,12 +147,15 @@ load: function() {
             },
             timeout: 60000
         });
-    }, params.restore_results ? 1000 : 8000);
+    }, params.restore_results ? 1000 : 10000);
+    
+    // Ничего не найдено, если не сработали таймауты запросов
     clearTimeout(this.resetTimer);
     this.resetTimer = setTimeout(function() {
         self.setUpdate('pcontent', '');
         self.setUpdate('mcontent', '');
-    }, 120000);
+    }, 160000);
+    
 },
 setUpdate: function(type, s) {
     this.update[type] = typeof s == 'string' ? s : '';
@@ -179,11 +185,15 @@ show: function(fixed) {
     search.toggle(false);
     search.submit.addClass('current');
     if (u.title) {
-        $('#offers-title h1').html(u.title);
+        this.title.html(u.title);
+        var sdates = this.title.find('.date').map(function() {
+            return $(this).attr('data-date');
+        }).get().join('—');
+        this.title.attr('data-title', this.title.find('.locations').html() + ' (' + sdates + ')');
     }
     if (u.loading) {
         this.toggle('loading');
-        pageurl.title('ищем для вас лучшие предложения…')
+        pageurl.title('поиск авиабилетов ' + this.title.attr('data-title'));
     } else if (u.pcontent) {
         this.toggle('loading');
         setTimeout(function() {
@@ -252,7 +262,7 @@ processUpdate: function() {
             } else {
                 $('#offers-tabs').trigger('set', self.selectedTab || pageurl.tab || 'featured');
                 pageurl.update('search', $('#offers-options').attr('data-query_key'));
-                pageurl.title($('#offers-title h1').text());
+                pageurl.title('авиабилеты ' + this.title.attr('data-title'));
             }
             self.toggleCollection(true);
         }, function() {

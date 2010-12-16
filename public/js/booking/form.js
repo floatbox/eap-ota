@@ -106,7 +106,7 @@ init: function() {
     this.el.delegate('a.stop-booking', 'click', this.selfhide);
     
     // Заголовок страницы
-    pageurl.title('бронирование авиабилета');
+    pageurl.title('бронирование авиабилета ' + offersList.title.attr('data-title'));
 
 },
 show: function(variant) {
@@ -142,7 +142,7 @@ hide: function() {
     delete(this.offer);
     delete(this.variant);
     pageurl.update('booking', undefined);
-    pageurl.title();
+    pageurl.title('авиабилеты ' + this.title.attr('data-title'));    
 },
 book: function(variant) {
     var self = this;
