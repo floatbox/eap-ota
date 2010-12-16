@@ -51,12 +51,16 @@ common_carriers.sort.each do |carrier|
   puts "########################################"
   puts
 
-  at.split(/ *\n */).zip(st.split(/ *\n */)).each do |al, sl|
+  atr = at.split(/ *\n */)
+  str = st.split(/ *\n */)
+  [atr.size,str.size].max.times do
+    al = atr.shift
+    sl = str.shift
     av = value(al)
     sv = value(sl)
     if  !(av && sv) && results[-1]
-      results[-1][:agent] << al if al && (al == '')
-      results[-1][:subagent] << sl if sl && (sl == '')
+      results[-1][:agent] << al if al && (al != '')
+      results[-1][:subagent] << sl if sl && (sl != '')
     else
       results << {
         :carrier => carrier, :name => an, :commission => "#{av}/#{sv}", :agent => [al], :subagent => [sl]
