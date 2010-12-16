@@ -96,8 +96,8 @@ module Amadeus
       amadeus.session.destroy
     end
 
-    def give_permission_to_ticketing_office
-      cmd("ES #{Amadeus::Session::TICKETING}-B")
+    def give_permission_to_offices *office_ids
+      cmd("ES " + office_ids.map{|id| "#{id}-B"}.join(','))
     end
 
     def conversion_rate(currency_code)

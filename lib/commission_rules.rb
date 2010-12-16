@@ -8,7 +8,7 @@ module CommissionRules
 
   attr_accessor :carrier, :agent, :subagent, :disabled, :interline,
     :domestic, :international, :klass, :departure, :departure_country,
-    :check, :examples
+    :check, :examples, :agent_comments, :subagent_comments
 
   KLASSES = {
     :first => %W(P F A),
@@ -73,47 +73,64 @@ module CommissionRules
   module ClassMethods
 
     mattr_accessor :commissions
+    mattr_accessor :opts
     self.commissions = {}
 
-    def carrier carrier
+    def carrier carrier, carrier_name=nil
       if carrier =~ /\A..\Z/
         @carrier = carrier
-      elsif carrier =~ /\(([A-Z0-9]{2})\)/
-        @carrier = $1
+        @carrier_name = carrier_name
+        self.opts={}
       else
         raise ArgumentError, "strange carrier: #{carrier}"
       end
     end
 
     # один аргумент, разделенный пробелами или /; или два аргумента
-    def commission *args, &block
-      if args.size == 1
-        if args == [0] || args == ['0']
-          vals = ["0", "0"]
-        else
-          vals = args[0].split(/[ \/]+/)
-        end
-      else
-        vals = args
-      end
+    def commission *args
+      vals = args[0].split(/[ \/]+/)
       if vals.size != 2
         raise ArgumentError, "strange commission: #{args.join(' ')}"
       end
 
-      commission = new(:carrier => @carrier, :agent => vals[0].to_s, :subagent => vals[1].to_s)
+      commission = new({
+        :carrier => @carrier,
+        :agent => vals[0].to_s,
+        :subagent => vals[1].to_s
+      }.merge(opts))
 
       # дополнительные параметры бронирования
-      if block_given?
-        Definition.new(commission).instance_eval(&block)
-      end
 
       commissions[@carrier] ||= []
       commissions[@carrier] << commission
+      self.opts = {}
       commission
     end
 
-    def disabled_commission *args, &block
-      commission(*args, &block).disabled = true
+    def disable
+      opts[:disabled] = true
+    end
+
+    def interline value=:yes
+      opts[:interline] = value
+    end
+
+    def agent line
+      opts[:agent_comments] ||= ""
+      opts[:agent_comments] += line + "\n"
+    end
+
+    def subagent line
+      opts[:subagent_comments] ||= ""
+      opts[:subagent_comments] += line + "\n"
+    end
+
+    def domestic
+      opts[:domestic] = true
+    end
+
+    def international
+      opts[:international] = true
     end
 
     def p
@@ -125,22 +142,4 @@ module CommissionRules
     end
   end
 
-  # вспомогательный класс для украшения синтаксиса
-  class Definition
-    def initialize(commission)
-      @commission = commission
-    end
-
-    def method_missing sym, *args, &block
-      if block_given?
-        @commission.send :"#{sym}=", block
-      elsif args.empty?
-        @commission.send :"#{sym}=", true
-      elsif args.size > 1
-        @commission.send :"#{sym}=", args
-      else
-        @commission.send :"#{sym}=", *args
-      end
-    end
-  end
 end

@@ -154,7 +154,10 @@ class OrderData < ActiveRecord::BaseWithoutTable
         amadeus.pnr_commit_really_hard do
           # FIXME среагировать на различие в цене
           add_passport_data(amadeus)
-          amadeus.give_permission_to_ticketing_office
+          amadeus.give_permission_to_offices(
+            Amadeus::Session::TICKETING,
+            Amadeus::Session::WORKING
+          )
           amadeus.pnr_archive(seat_count)
         end
         #amadeus.queue_place_pnr(:number => pnr_number)
