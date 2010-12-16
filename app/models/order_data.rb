@@ -142,7 +142,9 @@ class OrderData < ActiveRecord::BaseWithoutTable
       :segments => recommendation.variants[0].segments, :people_count => seat_count
     ).bang!
 
-    if self.pnr_number = amadeus.pnr_add_multi_elements(self).bang!.pnr_number
+    add_multi_elements = amadeus.pnr_add_multi_elements(self).bang!
+    if self.pnr_number = add_multi_elements.pnr_number
+      set_people_numbers(add_multi_elements.passengers)
       amadeus.pnr_commit_really_hard do
         fares_count =
           amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier).bang!.fares_count
@@ -184,19 +186,26 @@ class OrderData < ActiveRecord::BaseWithoutTable
 
   def add_passport_data(amadeus)
     validating_carrier_code = recommendation.validating_carrier.iata
-    (adults + children).each_with_index do |person, i|
-      amadeus.cmd( "SRDOCS#{validating_carrier_code}HK1-P-#{person.nationality.alpha3}-#{person.passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{i+1}")
-      amadeus.cmd("SR FOID #{validating_carrier_code} HK1-PP#{person.passport}/P#{i+1}")
-      amadeus.cmd("FE #{validating_carrier_code} ONLY PSPT #{person.passport}/P#{i+1}")
-      amadeus.cmd("FFN#{person.bonuscard_type}-#{person.bonuscard_number}/P#{i+1}") if person.bonus_present
+    (adults + children).each do |person|
+      amadeus.cmd( "SRDOCS#{validating_carrier_code}HK1-P-#{person.nationality.alpha3}-#{person.passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{person.number_in_amadeus}")
+      amadeus.cmd("SR FOID #{validating_carrier_code} HK1-PP#{person.passport}/P#{person.number_in_amadeus}")
+      amadeus.cmd("FE #{validating_carrier_code} ONLY PSPT #{person.passport}/P#{person.number_in_amadeus}")
+      amadeus.cmd("FFN#{person.bonuscard_type}-#{person.bonuscard_number}/P#{person.number_in_amadeus}") if person.bonus_present
     end
     infants.each_with_index do |person, i|
-      amadeus.cmd( "SRDOCS#{validating_carrier_code}HK1-P-#{person.nationality.alpha3}-#{person.passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}I-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{i+1}")
-      amadeus.cmd("FE INF #{validating_carrier_code} ONLY PSPT #{person.passport}/P#{i+1}")
+      amadeus.cmd( "SRDOCS#{validating_carrier_code}HK1-P-#{person.nationality.alpha3}-#{person.passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}I-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{person.number_in_amadeus}")
+      amadeus.cmd("FE INF #{validating_carrier_code} ONLY PSPT #{person.passport}/P#{person.number_in_amadeus}")
     end
   end
-  
-  
+
+  def set_people_numbers(returned_people)
+    returned_people.each do |p|
+      people.detect do |person|
+        person.last_name.upcase == p.last_name && person.first_name.upcase == p.first_name
+      end.number_in_amadeus = p.number_in_amadeus
+    end
+  end
+
   def full_info
     res = ''
     people.every.coded.join("\n")
@@ -209,10 +218,10 @@ class OrderData < ActiveRecord::BaseWithoutTable
     order.people_count = {:infants => 1, :children => 1, :adults => 1}
     order.people = [Person.new(
       :first_name => 'Ivan',
-      :last_name => 'Adult',
+      :last_name => 'ZAdult',
       :birthday => Date.today - 20.years,
       :document_expiration_date => Date.today + 1.year,
-      :passport => '123232323',
+      :passport => '999999999',
       :nationality_id => 1,
       :sex => 'm',
       :bonus_present => true,
@@ -224,7 +233,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
       :last_name => 'Infant',
       :birthday => Date.today - 1.years,
       :document_expiration_date => Date.today + 1.year,
-      :passport => '5556565',
+      :passport => '88888888',
       :nationality_id => 1,
       :sex => 'f'
     ),
@@ -233,7 +242,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
       :last_name => 'Child',
       :birthday => Date.today - 10.years,
       :document_expiration_date => Date.today + 1.year,
-      :passport => '5556565',
+      :passport => '77777777',
       :nationality_id => 1,
       :sex => 'f'
     )]
