@@ -193,7 +193,7 @@ show: function(fixed) {
     }
     if (u.loading) {
         this.toggle('loading');
-        pageurl.title('поиск авиабилетов ' + this.title.attr('data-title'));
+        pageurl.title();
     } else if (u.pcontent) {
         this.toggle('loading');
         setTimeout(function() {
@@ -262,7 +262,7 @@ processUpdate: function() {
             } else {
                 $('#offers-tabs').trigger('set', self.selectedTab || pageurl.tab || 'featured');
                 pageurl.update('search', $('#offers-options').attr('data-query_key'));
-                pageurl.title('авиабилеты ' + this.title.attr('data-title'));
+                pageurl.title('авиабилеты ' + self.title.attr('data-title'));
             }
             self.toggleCollection(true);
         }, function() {
