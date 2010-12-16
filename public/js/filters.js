@@ -42,7 +42,8 @@ fill: function(items) {
     var list = $('dl', this.dropdown);
     this.items && this.items.remove();
     if (items) for (var i = 0, im = items.length; i < im; i++) {
-        list.append(template.supplant(items[i]));
+        var el = $(template.supplant(items[i])).appendTo(list);
+        if (!items[i].t) el.hide();
     }
     this.items = $('dd:not(.empty)', list);
     this.reset();

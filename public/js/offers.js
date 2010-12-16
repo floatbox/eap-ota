@@ -352,12 +352,8 @@ updateFilters: function() {
         var name = $(this).attr('data-name');
         var filter = self.filters[name];
         filter.fill(data[name]);
-        if (name == 'layovers') {
-            filter.el.toggleClass('g-none', filter.items.length == 0);
-        } else {
-            filter.el.toggleClass('g-none', filter.items.length < 2);
-            $(this).next('.comma').toggle(!filter.el.hasClass('g-none'));
-        }
+        filter.el.toggleClass('g-none', filter.items.length < 2);
+        $(this).next('.comma').toggle(!filter.el.hasClass('g-none'));
     });
     items.filter(':not(.g-none)').last().next('.comma').hide();
     this.currentData = data;
@@ -515,11 +511,29 @@ showRecommendations: function() {
     } else if (items.length == 1) {
         optimal = items[0];
     } else {
-        cheap = items[0];        
+        cheap = items[0];
+        var item, ratio, defitem = items[0], minratio = 0.8;
+        for (var i = 1, im = items.length; i < im; i++) {
+            item = items[i];
+            if (item.p / defitem.p > 1.05) break;
+            if ((ratio = item.p / defitem.p * item.d / defitem.d) < minratio) {
+                minratio = ratio;
+                cheap = item;
+            }
+        }
         items = items.sort(function(a, b) {
             return (a.d - b.d) || (a.p - b.p);
         });
         fast = items[0];
+        var item, ratio, defitem = items[0], minratio = 0.7;
+        for (var i = 1, im = items.length; i < im; i++) {
+            item = items[i];
+            if (item.d / defitem.d > 1.2) break;
+            if ((ratio = item.p / defitem.p * item.d / defitem.d) < minratio) {
+                minratio = ratio;
+                fast = item;
+            }
+        }
         optimal = items.slice(0, Math.round(items.length * 0.5)).sort(function(a, b) {
             return (a.p - b.p) || (a.d - b.d);
         })[0];
