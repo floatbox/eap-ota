@@ -199,6 +199,18 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     from_iata && [City[from_iata], Airport[from_iata], Country.find_by_alpha2(from_iata)].find(&:id)
   end
 
+  def nearby_cities
+    [from_as_object, to_as_object].map do |location|
+      if location.class == City
+        location.nearby_cities
+      elsif location.class == Airport
+        location.city.nearby_cities
+      else
+        []
+      end
+    end
+  end
+
   def human_locations
     fl = from_as_object
     tl = to_as_object

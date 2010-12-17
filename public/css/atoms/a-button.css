@@ -79,7 +79,7 @@ input.a-button::-moz-focus-inner {
     
     width: 11px;
     height: 6px;
-    margin: 0 0 0 .2em;
+    margin: 0 0 0 0.2em;
 
     cursor: pointer;
     vertical-align: 1px;
@@ -101,6 +101,5 @@ input.a-button::-moz-focus-inner {
 
     .b-expand:active,
     .b-expand-up:active {
-        left: 1px;
         top: 1px;
     }

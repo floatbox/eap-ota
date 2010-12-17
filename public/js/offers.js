@@ -352,12 +352,8 @@ updateFilters: function() {
         var name = $(this).attr('data-name');
         var filter = self.filters[name];
         filter.fill(data[name]);
-        if (name == 'layovers') {
-            filter.el.toggleClass('g-none', filter.items.length == 0);
-        } else {
-            filter.el.toggleClass('g-none', filter.items.length < 2);
-            $(this).next('.comma').toggle(!filter.el.hasClass('g-none'));
-        }
+        filter.el.toggleClass('g-none', filter.items.length < 2);
+        $(this).next('.comma').toggle(!filter.el.hasClass('g-none'));
     });
     items.filter(':not(.g-none)').last().next('.comma').hide();
     this.currentData = data;
@@ -515,25 +511,59 @@ showRecommendations: function() {
     } else if (items.length == 1) {
         optimal = items[0];
     } else {
-        cheap = items[0];        
+
+        // Выгодный вариант с отсеиванием слишком долгих
+        cheap = items[0];
+        var item, ratio, defitem = items[0], minratio = 0.8;
+        for (var i = 1, im = items.length; i < im; i++) {
+            item = items[i];
+            if (item.p / defitem.p > 1.05) break;
+            if ((ratio = item.p / defitem.p * item.d / defitem.d) < minratio) {
+                minratio = ratio;
+                cheap = item;
+            }
+        }
+        
+        // Быстрый вариант с отсеиванием слишком дорогих
         items = items.sort(function(a, b) {
             return (a.d - b.d) || (a.p - b.p);
         });
         fast = items[0];
-        optimal = items.slice(0, Math.round(items.length * 0.5)).sort(function(a, b) {
-            return (a.p - b.p) || (a.d - b.d);
-        })[0];
+        var item, ratio, defitem = items[0], minratio = 0.7;
+        for (var i = 1, im = items.length; i < im; i++) {
+            item = items[i];
+            if (item.d / defitem.d > 1.2) break;
+            if ((ratio = item.p / defitem.p * item.d / defitem.d) < minratio) {
+                minratio = ratio;
+                fast = item;
+            }
+        }
+        
+        // Оптимальный вариант
         if (cheap.n === fast.n) {
             optimal = {n: cheap.n};
             cheap = undefined;
             fast = undefined;
+        } else {
+            optimal = cheap;
+            var item, ratio, maxratio = 0;
+            var dd = cheap.d - fast.d, pp = fast.p - cheap.p;
+            for (var i = 1, im = items.length; i < im; i++) {
+                item = items[i];
+                if (item.d < fast.d || item.d > cheap.d || item.p < cheap.p || item.p > fast.p) continue;
+                if ((ratio = (cheap.d - item.d) / dd - (item.p - cheap.p) / pp) > maxratio) {
+                    maxratio = ratio;
+                    optimal = items[i];
+                }
+            }
+            if (cheap.n === optimal.n) {
+                cheap = undefined;
+            }
+            if (fast.n === optimal.n) {
+                fast = undefined;
+            }
         }
-        if (cheap && cheap.n === optimal.n) {
-            cheap = undefined;
-        }
-        if (fast && fast.n === optimal.n) {
-            fast = undefined;
-        }
+
     }
     var otitle = 'Самый выгодный и быстрый вариант';
     if (cheap && fast) {
@@ -606,7 +636,7 @@ showDepartures: function() {
                 var dt = dtimes[index];
                 if (dt) {
                     var str = offer.summary['dpt_location_' + index] + '<br>в ' + self.joinDepartures(dt, v.summary.departures[index]);
-                    $(this).html('<p class="b-pseudo" data-segment="' + index + '">Ещё по такой же цене можно улететь ' + str + '</p>');
+                    $(this).html('<p data-segment="' + index + '">Ещё по такой же цене можно улететь ' + str + '</p>');
                 } else {
                     $(this).html('');
                 }
@@ -620,7 +650,7 @@ joinDepartures: function(dtimes, current) {
         var time = dtimes[i];
         if (time == current) continue;
         if (parts.length) parts.push(', ');
-        parts.push('<a href="#"><u>' + time.substring(0,2) + ':' + time.substring(2,4) + '</u></a>');
+        parts.push('<a href="#">' + time.substring(0,2) + ':' + time.substring(2,4) + '</a>');
     }
     var pl = parts.length;
     if (pl > 2) parts[pl - 2] = ' и в ';

@@ -265,7 +265,7 @@ class Recommendation
       :cities => cities.uniq.map{|c| {:v => c, :t => City[c].name}}.sort_by{|a| a[:t] },
       :segments => segments_amount,
       :locations => locations,
-      :layovers => layovers.uniq.delete_if{|l| l > 1}.sort.map{|l| {:v => l, :t => layover_titles[l]}}
+      :layovers => layovers.uniq.sort.map{|l| {:v => l, :t => layover_titles[l] || ''}}
     }
     departure_cities.each_with_index {|cities, i|
       result['dpt_city_' + i.to_s] = cities.uniq.map{|city| {:v => city, :t => City[city].name} }.sort_by{|a| a[:t] }

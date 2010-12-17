@@ -10,8 +10,8 @@
     display: none;
 }
 
-.active-booking .offer-variant .variants .b-pseudo,
-.active-booking .offer-variant .variants .b-pseudo a {
+.active-booking .offer-variant td.variants p,
+.active-booking .offer-variant td.variants p a {
     color: #CCC;
     cursor: default;
 }
@@ -25,6 +25,9 @@
 /* Предварительное бронирование */
 .booking {
     border-top: 1px solid #D0D0D0;
+}
+.booking form {
+    position: relative;
 }
 .booking-state {
     padding: 15px;
@@ -896,32 +899,57 @@
     display: none;
 }
 
-/* Правила тарифов */
-.farerules {
+/* Правила тарифов и всплывающие подсказки */
+.farerules,
+.booking-hint {
     display: none;
-    position: fixed;
-    top: 50%; left: 50%;
-    width: 654px;
-    margin: -200px 0 0 -347px;
     border-radius: 10px;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
-    padding: 18px 20px 20px;
     background: #eee;
-    font-size: 14px;
-    line-height: 19px;
     color: #000;
+}
+.booking-hint {
+    position: absolute;
+    left: 0; top: 0;
+    width: 320px;
+    padding: 13px 18px;
+    font-size: 13px;
+    line-height: 18px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+    -webkit-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+    -o-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25); 
+}
+.b-hint {
+    cursor: pointer;
+    font-weight: bold;
+    color: #477db3;
+}
+.farerules {
+    position: fixed;
+    top: 50%; left: 50%;
+    width: 654px;
+    padding: 18px 20px 20px;
+    margin: -200px 0 0 -347px;
+    font-size: 14px;
+    line-height: 19px;    
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
     -moz-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
     -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
     -o-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35); 
 }
-.farerules .close {
+.farerules .close,
+.booking-hint .close {
     float: right;
+    position: relative;
+    top: -12px; left: 14px;
     width: 18px; height: 18px;
-    margin: -12px -14px 0 0;
     background: url(/img/booking/close.png) no-repeat;
     cursor: pointer;
+}
+.booking-hint .close {
+    top: -7px; left: 12px;
 }
 .farerules h3 {
     margin: 0 0 12px;
@@ -955,3 +983,4 @@
     background: #fff;
     font-size: 12px;
 }
+

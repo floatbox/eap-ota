@@ -147,7 +147,7 @@ init: function() {
     this.messages = {
         from: 'Введите, пожалуйста, пункт отправления',
         to: 'Введите, пожалуйста, пункт назначения',
-        date1: 'Выберите, пожалуйста дату вылета',
+        date1: 'Выберите, пожалуйста, дату вылета',
         date2: 'Выберите, пожалуйста, дату обратного вылета'
     };
     this.smessage.find('.ssm-content').html(this.messages.to);
@@ -233,12 +233,11 @@ validate: function(qkey) {
     }
     var self = this;
     var restoreResults = Boolean(qkey);
-    this.sprogress.show();
+    this.submit.addClass('validating');
     this.request = $.get('/pricer/validate/', data, function(result, status, request) {
         if (request != self.request) {
             return;
         }
-        self.sprogress.hide();
         if (data.query_key && result.search) {
             self.preventValidation = true;
             self.restore(result.search);
@@ -249,7 +248,7 @@ validate: function(qkey) {
         } else {
             self.apply(result.complex_to_parse_results || {});
         }
-        self.submit.removeClass('current');        
+        self.submit.removeClass('current validating');
         if (result.valid) {
             offersList.nextUpdate = {
                 title: result.human

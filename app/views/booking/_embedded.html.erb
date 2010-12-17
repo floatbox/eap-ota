@@ -15,7 +15,6 @@
 
     <!-- Отправка -->
     <div class="book-s">
-
         <div class="control">
         <table><tr>
             <td class="g-xl">Всё правильно?</td>
@@ -26,7 +25,6 @@
             </td>
         </tr></table>
         </div>
-        
         <div class="blocker g-xs">
             <s></s>
             <h6>Пока невозможно. И вот почему:</h6>
@@ -35,29 +33,33 @@
                 <li><a href="#" title="Отредактировать имя"><u>имя</u></a> второго пассажира написано не латинскими буквами
             </ul>
         </div>
-        
         <div class="disclaimer">
             <p>Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="#">условиями использования</a>, <a href="#">правилами IATA</a> и&nbsp;<a class="farerules-link" href="#">правилами тарифов</a></p>
         </div>
-        <div class="farerules b-popup">
-            <div class="close"></div>
-            <h3>Правила тарифов</h3>
-            <p>Внимание! Возврат средств в&nbsp;случае отказа при получении визы, болезни и&nbsp;прочиз обстоятельств без штрафных санкций невозможен. Возврат билета производится строго по&nbsp;правилам авиакомпании. В&nbsp;случае комбинации в&nbsp;билете тарифов с&nbsp;различными правилами, наиболее строгие ограничения применются ко&nbsp;всему маршруту.</p>
-            <% common_fare = @order.recommendation.rules_with_flights.length == 1 %>
-            <% @order.recommendation.rules_with_flights.each do |fgroup| %>
-            <div class="fgroup">
-                <div class="fgheader">
-                <% unless common_fare %>
-                    <h5><% fgroup[:flights].each_with_index do |flight, i| %><%= flight.departure.city.name %> — <%= flight.arrival.city.name %><%= ', ' if i < fgroup[:flights].length - 1 %><% end %></h5>
-                <% end %>
-                <p class="clofs">Класс бронирования <%= fgroup[:flights].first.class_of_service %></p>
-                </div>
-                <pre><%= fgroup[:rule] %></pre>
-            </div>
-            <% end %>
-        </div>
+    </div>
 
+    <!-- Подсказки -->    
+    <div class="booking-hint">
+        <div class="close"></div>
+        <div class="bh-content"></div>
     </div>
 
 <% end %>
+<div class="farerules">
+    <div class="close"></div>
+    <h3>Правила тарифов</h3>
+    <p>Внимание! Возврат средств в&nbsp;случае отказа при получении визы, болезни и&nbsp;прочиз обстоятельств без штрафных санкций невозможен. Возврат билета производится строго по&nbsp;правилам авиакомпании. В&nbsp;случае комбинации в&nbsp;билете тарифов с&nbsp;различными правилами, наиболее строгие ограничения применются ко&nbsp;всему маршруту.</p>
+    <% common_fare = @order.recommendation.rules_with_flights.length == 1 %>
+    <% @order.recommendation.rules_with_flights.each do |fgroup| %>
+    <div class="fgroup">
+        <div class="fgheader">
+        <% unless common_fare %>
+            <h5><% fgroup[:flights].each_with_index do |flight, i| %><%= flight.departure.city.name %> — <%= flight.arrival.city.name %><%= ', ' if i < fgroup[:flights].length - 1 %><% end %></h5>
+        <% end %>
+        <p class="clofs">Класс бронирования <%= fgroup[:flights].first.class_of_service %></p>
+        </div>
+        <pre><%= fgroup[:rule] %></pre>
+    </div>
+    <% end %>
+</div>
 </div>
