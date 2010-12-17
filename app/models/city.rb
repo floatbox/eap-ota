@@ -25,6 +25,16 @@ class City < ActiveRecord::Base
       :order => "distance asc"
   end
 
+  def nearby_cities
+    City.all(:select => "*, (ABS(lat - #{lat.to_f}) + ABS(lng - #{lng.to_f})) as distance",
+      :conditions => "lat is not null AND lng is not null AND
+                      (ABS(lat - #{lat.to_f}) + ABS(lng - #{lng.to_f})) < 4.5 AND
+                      id != #{id} AND
+                      importance > 0",
+      :order => "distance asc",
+      :limit => 10)
+  end
+
   def name
     name_ru.presence ||  name_en.presence || iata
   end
