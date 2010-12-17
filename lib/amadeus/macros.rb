@@ -108,5 +108,12 @@ module Amadeus
       $1.to_f if $1
     end
 
+    def interline_iatas(company_iata)
+      cmd_full("TGAD-#{company_iata}") \
+        .split(/\s*-\s+/) \
+        .collect {|s| s.split(' ', 2) } \
+        .select {|airline, agreement| agreement['E'] && !agreement['*']} \
+        .collect {|airline,_| airline}
+    end
   end
 end
