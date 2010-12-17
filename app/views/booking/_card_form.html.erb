@@ -61,7 +61,7 @@
                   :id => 'bc-name',
                   :class => "text g-l",
                   :title => "имя на карте",
-                  :onclick => "return {mask: /[a-z\s]/i, rules: {latin: true, minl: 3}}" %>
+                  :onclick => "return {mask: /[a-z ]/i, rules: {latin: true, minl: 3}}" %>
                 <%= f.error_message_on :name, :id => 'error_card_name' %>
                 <div class="language-warning">Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры. Имя нужно вводить латинскими буквами</div>                 
             </fieldset>

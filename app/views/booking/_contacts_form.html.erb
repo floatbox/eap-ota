@@ -27,12 +27,11 @@
 </tr>
 <tr>
     <td class="sub g-xxs">
-        <label for="booking-contacts-email" title="">На&nbsp;этот адрес мы вышлем <%= @order.people.size == 1 ? 'ваш билет' : 'ваши билеты' %>
-        </label>&nbsp;<u class="b-expand" title="Для чего ещё нужен E-mail?"></u>
+        <label for="booking-contacts-email" title="">На&nbsp;этот адрес мы вышлем <%= @order.people.size == 1 ? 'ваш билет' : 'ваши билеты' %></label>&nbsp;<u class="b-hint" title="Для чего ещё нужен E-mail?">?</u>
         <p>Адрес должен быть реально существующим, чтобы вы&nbsp;смогли получить электронный билет и&nbsp;другие полезные инструкции.</p>
 
     <td class="sub g-xxs">
-        <label for="booking-contacts-phone" title="">Для чего он нужен?</label>&nbsp;<u class="b-expand" title="Подробнее об обратной связи"></u>
+        <label for="booking-contacts-phone" title="">Для чего он нужен</label>&nbsp;<u class="b-hint" title="Подробнее об обратной связи">?</u>
         <p>Телефон нужен для связи в&nbsp;экстренных случаях, например, чтобы уладить затруднения с&nbsp;оплатой или сообщить об&nbsp;изменении расписания.</p>
 </tr>
 </table>

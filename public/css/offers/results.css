@@ -284,8 +284,11 @@
     border-top: none;
     color: #777;
 }
-.offer .variants p.b-pseudo {
+.offer .variants p {
     margin: 0 0 10px;
+}
+.offer .variants a {
+    font-weight: bold;
 }
 .offer .variants h6 {
     position: relative;
@@ -299,14 +302,14 @@
     font-weight: bold;
 }
 .offer .summary .segment0 h5,
-.offer .summary .segment0 .b-pseudo a {
+.offer .summary .segment0 .variants a {
     color: #6F7C26;
 }
 .offer .summary .segment1 h5,
-.offer .summary .segment1 .b-pseudo a {
+.offer .summary .segment1 .variants a {
     color: #C46F26;
 }
-.offer .summary .b-pseudo a:hover {
+.offer .summary .variants a:hover {
     color: #ED1192;
 }
 
