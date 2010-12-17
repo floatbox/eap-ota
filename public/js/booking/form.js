@@ -44,11 +44,32 @@ init: function() {
         pageurl.update('payment', undefined);
     });
 
-    // Раскрывающаяся подсказка
-    $('.b-expand').mousedown(function(e) {
-        var $u = $(this);
-        $u.toggleClass('b-expand-up');
-        $u.next('p').slideToggle(200);
+    // Всплывающие подсказки
+    var bhPopup = this.el.find('.booking-hint').click(function(event) {
+        event.stopPropagation();
+    });
+    var bhHide = function(event) {
+        if (event.type == 'click' || event.which == 27) {
+            bhPopup.fadeOut(80);
+            $('body').unbind('click keydown', bhHide);
+        }
+    };
+    bhPopup.find('.close').click(bhHide);    
+    this.el.delegate('.b-hint', 'click', function() {
+        var el = $(this), offset = el.offset();
+        var foffset = self.el.offset();
+        bhPopup.css({
+            left: (offset.left - foffset.left - 337).constrain(15, 600),
+            top: offset.top - foffset.top - 24
+        });
+        if (bhPopup.is(':visible')) {
+            $('body').unbind('click keydown', bhHide);
+        }
+        bhPopup.find('.bh-content').html(el.next('p').html());
+        bhPopup.fadeIn(150);
+        setTimeout(function() {
+            $('body').bind('click keydown', bhHide);
+        }, 20);
     });
 
     // Текст тарифа
@@ -99,7 +120,7 @@ init: function() {
         frPopup.show().css('margin-top', 15 - Math.round(frPopup.outerHeight() / 2));
         setTimeout(function() {
             $('body').bind('click keydown', frHide);
-        }, 50);
+        }, 20);
     });
 
     // Прекращение бронирования
@@ -142,7 +163,7 @@ hide: function() {
     delete(this.offer);
     delete(this.variant);
     pageurl.update('booking', undefined);
-    pageurl.title('авиабилеты ' + this.title.attr('data-title'));    
+    pageurl.title('авиабилеты ' + offersList.title.attr('data-title'));    
 },
 book: function(variant) {
     var self = this;
@@ -204,7 +225,7 @@ comparePrice: function() {
     }
 },
 fasten: function(offer) {
-    if (browser.indexOf('ip') !== -1) return; // for iPad and iPhone
+    if (browser.search(/ipad|iphone|msie6|msie7/) !== -1) return;
     var wrapper = $('#page-wrapper');
     var ot = offer.offset().top;
     var ob = wrapper.height() - ot - offer.height();
@@ -216,7 +237,7 @@ fasten: function(offer) {
 },
 unfasten: function() {
     var wrapper = $('#page-wrapper');
-    if (browser.indexOf('ip') === -1 && wrapper.hasClass('l-crop')) {
+    if (browser.search(/ipad|iphone|msie6|msie7/) === -1 && wrapper.hasClass('l-crop')) {
         wrapper.children('.l-canvas').css('margin-top', 0).css('top', 0);
         wrapper.removeClass('l-crop');
         $(window).scrollTop($(window).scrollTop() + this.dst);
