@@ -104,7 +104,8 @@ init: function() {
     
     // Соседние города
     this.content.delegate('.offers-context .city', 'click', function() {
-        search.to.trigger('set', $(this).text());
+        var el = $(this);
+        search[el.closest('.cities').attr('data-name')].trigger('set', el.text());
         $.animateScrollTop(0);
     });
     

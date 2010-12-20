@@ -6,9 +6,10 @@
 <div class="offers-context g-none">
     <h3 class="offers-title">Соседние города</h3>
     <% location_titles = ['Вылет', 'Прилет'] %>
+    <% location_names = ['from', 'to'] %>
     <% @search.nearby_cities.each_with_index do |cities, i| %>
         <% unless cities.empty? %>
-        <p class="cities"><strong><%= location_titles[i] %>:</strong> <%= cities.map{|c| "<span class=\"city\">#{c.name}</span>"}.join(', ') %></p>
+        <p class="cities" data-name="<%= location_names[i] %>"><strong><%= location_titles[i] %>:</strong> <%= cities.map{|c| "<span class=\"city\">#{c.name}</span>"}.join(', ') %></p>
         <% end %>
     <% end %>
 </div>

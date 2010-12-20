@@ -202,6 +202,7 @@
 }
 .offer .summary .carrier {
     vertical-align: middle;
+    width: 98px;
 }
 .offer .summary .changes {
     width: 89px;
@@ -249,6 +250,10 @@
 .hover .summary .direction {
     visibility: inherit;    
 }
+.offer .summary td.dpt,
+.offer .summary td.arv {
+    width: 130px;
+}    
 .offer .summary .dpt p,
 .offer .summary .arv p {
     line-height: 115.385%;
@@ -448,6 +453,12 @@
     padding-bottom: 10px;
     font-size: 92.3%;
     line-height: 133.33%;
+}
+.offer .details .lpoint {
+    width: 214px;
+}
+.offer .details .rpoint {
+    width: 238px;
 }
 .offer .details .last .point {
     padding-bottom: 12px;
