@@ -5,6 +5,7 @@ init: function() {
     this.container = $('#offers');
     this.loading = $('#offers-loading');
     this.results = $('#offers-results');
+    this.content = $('#offers-content');
     this.empty = $('#offers-empty');
     this.update = {};
 
@@ -19,9 +20,11 @@ init: function() {
     }).radio({
         toggleClosest: 'li'
     });
+    
+    var list = $('#offers-list');
 
     // Подсветка
-    $('#offers-list').delegate('.offer', 'mouseenter', function() {
+    list.delegate('.offer', 'mouseenter', function() {
         var self = $(this);
         $(this).data('timer', setTimeout(function() {
             self.addClass('hover');
@@ -33,7 +36,7 @@ init: function() {
     });
     
     // Подробности
-    $('#offers-list').delegate('.expand', 'click', function(event) {
+    list.delegate('.expand', 'click', function(event) {
         var variant = $(this).closest('.offer-variant');
         var offer = variant.closest('.offer');
         if (offer.hasClass('collapsed')) {
@@ -44,12 +47,12 @@ init: function() {
             });
         }
     });
-    $('#offers-list').delegate('.collapse', 'click', function(event) {
+    list.delegate('.collapse', 'click', function(event) {
         $(this).closest('.offer').removeClass('expanded').addClass('collapsed');
     });
     
     // Сортировка
-    $('#offers-list').delegate('.offers-sort a', 'click', function(event) {
+    list.delegate('.offers-sort a', 'click', function(event) {
         event.preventDefault();
         var self = offersList, key = this.onclick();
         if (key != self.sortby) {
@@ -64,7 +67,7 @@ init: function() {
     });
     
     // Выбор времени вылета
-    $('#offers-list').delegate('td.variants a', 'click', function(event) {
+    list.delegate('td.variants a', 'click', function(event) {
         event.preventDefault();
         var el = $(this), dtime = el.text().replace(':', '');
         if (el.closest('.offer').hasClass('active-booking')) {
@@ -92,11 +95,17 @@ init: function() {
     });
     
     // Бронирование
-    $('#offers-list').delegate('.book .a-button', 'click', function(event) {
+    list.delegate('.book .a-button', 'click', function(event) {
         event.preventDefault();
         var variant = $(this).closest('.offer-variant');
         app.booking.show(variant);
         app.booking.book(variant);
+    });
+    
+    // Соседние города
+    this.content.delegate('.offers-context .city', 'click', function() {
+        search.to.trigger('set', $(this).text());
+        $.animateScrollTop(0);
     });
     
     // Матрица цен
@@ -264,8 +273,10 @@ processUpdate: function() {
                 pageurl.update('search', $('#offers-options').attr('data-query_key'));
                 pageurl.title('авиабилеты ' + self.title.attr('data-title'));
             }
-            self.toggleCollection(true);
         }, function() {
+            self.content.children('.offers-context').remove();
+            self.content.find('.offers-context').prependTo(self.content).removeClass('g-none');
+            self.toggleCollection(true);
             self.toggle('results');
             var b = app.booking;
             if (b.el && b.el.hasClass('restored')) {

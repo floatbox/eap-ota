@@ -2,6 +2,18 @@
 <% if @recommendations.present? %>
 <div id="offers-options" data-filters='<%= Recommendation.summary(@recommendations, @locations).to_json.gsub("'", '&rsquo;') %>' data-query_key="<%= @query_key %>"></div>
 
+<% unless @search.nearby_cities.empty? %>
+<div class="offers-context g-none">
+    <h3 class="offers-title">Соседние города</h3>
+    <% location_titles = ['Вылет', 'Прилет'] %>
+    <% @search.nearby_cities.each_with_index do |cities, i| %>
+        <% unless cities.empty? %>
+        <p class="cities"><strong><%= location_titles[i] %>:</strong> <%= cities.map{|c| "<span class=\"city\">#{c.name}</span>"}.join(', ') %></p>
+        <% end %>
+    <% end %>
+</div>
+<% end %>
+
 <% @recommendations.each do |recommendation| %>
 <div class="offer collapsed<%= ' multiple' if recommendation.variants.length > 1 %>" data-summary='<%= recommendation.summary.to_json %>'>
     <% different_cabins = recommendation.cabins_except(@search.cabin) %>
