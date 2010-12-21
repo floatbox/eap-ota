@@ -1,12 +1,6 @@
 class Airline < ActiveRecord::Base
   include ExtResource
   extend IataStash
-  
-  has_many :interline_agreements,
-    :foreign_key => 'company_id',  :class_name => 'InterlineAgreement'
-  
-  has_many :interline_partners,
-    :through => :interline_agreements, :source => :partner
 
   has_many :amadeus_commissions
   belongs_to :alliance, :foreign_key => 'airline_alliance_id', :class_name => 'AirlineAlliance'
@@ -40,19 +34,33 @@ class Airline < ActiveRecord::Base
     end
     url
   end
-  
+
   def short_name
     ru_shortname.presence || en_shortname
   end
 
-  # TODO перенести в amadeus.rb или куда-то в более нейтральное место
-  # TODO выкачать/закэшировать пакетно
-  def fetch_interline_iatas
-    Amadeus::Service.cmd_full("TGAD-#{iata}") \
-      .split(/\s*-\s+/) \
-      .collect {|s| s.split(' ', 2) } \
-      .select {|airline, agreement| agreement['E'] && !agreement['*']} \
-      .collect {|airline,_| airline}
+  def fetch_interlines
+    if iata.present?
+      Amadeus::Service.interline_iatas(iata)
+    else
+      []
+    end
+  rescue Amadeus::Macros::CommandCrypticError
+    []
+  end
+
+  def update_interlines!
+    self.interlines = fetch_interlines.join(' ')
+    save
+  end
+
+  def interline_with?(airline)
+    airline = airline.iata if airline.is_a? Airline
+    interlines.split.include?(airline)
+  end
+
+  def interline_partners
+    interlines.split.map {|iata| Airline[iata]}
   end
 
 end

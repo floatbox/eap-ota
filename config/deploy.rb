@@ -24,6 +24,9 @@ role :db, srv, :primary => true
 
 set :shared_children, %w(log pids system config initializers cache)
 
+# для deploy:migrate
+set :rake, 'bundle exec rake'
+
 # нужен для нормального форвардинга ключей, соответствующая настройка
 # в пользовательском .ssh/config почему-то не читается
 ssh_options[:forward_agent] = true
