@@ -925,6 +925,7 @@
     cursor: pointer;
     font-weight: bold;
     color: #477db3;
+    text-decoration: underline;
 }
 .farerules {
     position: fixed;

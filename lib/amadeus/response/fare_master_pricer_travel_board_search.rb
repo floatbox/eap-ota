@@ -11,7 +11,22 @@ module Amadeus
             rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:cabin").every.to_s
           booking_classes =
             rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:rbd").every.to_s
+=begin
           booking_classes_child = rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='CH']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:rbd").every.to_s
+          fare_basis_child = rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='CH']/r:fareDetails/r:groupOfFares/r:productInformation/r:fareProductDetail/r:fareBasis").every.to_s
+          booking_classes_infant = rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='INF']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:rbd").every.to_s
+          fare_basis_infant = rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='INF']/r:fareDetails/r:groupOfFares/r:productInformation/r:fareProductDetail/r:fareBasis").every.to_s
+
+
+          fare_details = {}
+          fare_details[:fare_basis] = rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:fareProductDetail/r:fareBasis").every.to_s
+          fare_details[:booking_classes_child] = booking_classes_child if booking_classes_child != booking_classes
+          fare_details[:fare_basis_child] = fare_basis_child if fare_basis_child != fare_details[:fare_basis]
+          fare_details[:booking_classes_infant] = booking_classes_infant if booking_classes_infant != booking_classes
+          fare_details[:fare_basis_infant] = fare_basis_infant if fare_basis_infant != fare_details[:fare_basis]
+          debugger if fare_details[:booking_classes_infant] || fare_details[:booking_classes_child]
+=end
+
           # компаний может быть несколько, нас интересует та, где
           # r:transportStageQualifier[text()="V"]. но она обычно первая.
           validating_carrier_iata = 
@@ -74,7 +89,18 @@ module Amadeus
           :arrival_time =>           fi.xpath("r:productDateTime/r:timeOfArrival").to_s,
           :departure_date =>         fi.xpath("r:productDateTime/r:dateOfDeparture").to_s,
           :departure_time =>         fi.xpath("r:productDateTime/r:timeOfDeparture").to_s,
-          :equipment_type_iata =>    fi.xpath("r:productDetail/r:equipmentType").to_s
+          :equipment_type_iata =>    fi.xpath("r:productDetail/r:equipmentType").to_s,
+          :technical_stops => fi.xpath('../r:technicalStop').to_a.map{|ts| parse_technical_stop(ts)}
+        )
+      end
+
+      def parse_technical_stop(ts)
+        TechnicalStop.new(
+          :departure_time => ts.xpath('r:stopDetails[r:dateQualifier="AD"]/r:firstTime').to_s,
+          :departure_date => ts.xpath('r:stopDetails[r:dateQualifier="AD"]/r:date').to_s,
+          :arrival_time => ts.xpath('r:stopDetails[r:dateQualifier="AA"]/r:firstTime').to_s,
+          :arrival_date => ts.xpath('r:stopDetails[r:dateQualifier="AA"]/r:date').to_s,
+          :location_iata => ts.xpath('r:stopDetails/r:locationId').to_s
         )
       end
 

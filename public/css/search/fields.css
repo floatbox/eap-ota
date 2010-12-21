@@ -44,11 +44,12 @@
     top: 1px;
     float: right;
     overflow: hidden;
+    width: 190px;
     font-size: 75%;
     zoom: 1;
 }
 .return-tabs li {
-    float: left;
+    float: right;
 }
 .return-tabs a {
     display: inline-block;

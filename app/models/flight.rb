@@ -4,7 +4,7 @@ class Flight
 
   attr_accessor :operating_carrier_iata, :marketing_carrier_iata, :departure_iata,
    :departure_term, :arrival_iata, :arrival_term, :flight_number, :arrival_date,
-   :arrival_time, :departure_date, :departure_time, :equipment_type_iata, :class_of_service, :seat_count, :warning, :cabin, :segment_number
+   :arrival_time, :departure_date, :departure_time, :equipment_type_iata, :class_of_service, :seat_count, :warning, :cabin, :segment_number, :technical_stops
 
   def departure
     departure_iata && Airport[departure_iata]
