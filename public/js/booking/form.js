@@ -45,31 +45,8 @@ init: function() {
     });
 
     // Всплывающие подсказки
-    var bhPopup = this.el.find('.booking-hint').click(function(event) {
-        event.stopPropagation();
-    });
-    var bhHide = function(event) {
-        if (event.type == 'click' || event.which == 27) {
-            bhPopup.fadeOut(80);
-            $('body').unbind('click keydown', bhHide);
-        }
-    };
-    bhPopup.find('.close').click(bhHide);    
-    this.el.delegate('.b-hint', 'click', function() {
-        var el = $(this), offset = el.offset();
-        var foffset = self.el.offset();
-        bhPopup.css({
-            left: (offset.left - foffset.left - 337).constrain(15, 600),
-            top: offset.top - foffset.top - 24
-        });
-        if (bhPopup.is(':visible')) {
-            $('body').unbind('click keydown', bhHide);
-        }
-        bhPopup.find('.bh-content').html(el.next('p').html());
-        bhPopup.fadeIn(150);
-        setTimeout(function() {
-            $('body').bind('click keydown', bhHide);
-        }, 20);
+    this.el.delegate('.b-hint', 'click', function(event) {
+        hint.show(event, $(this).next('p').html());
     });
 
     // Текст тарифа
@@ -175,7 +152,11 @@ book: function(variant) {
             self.load(s.number);
             pageurl.update('booking', s.number);
         } else {
-            self.el.html('<div class="booking-state"><h4>В данный момент невозможно выбрать этот вариант</h4><p><a href="#">Почему?</a></p></div>');
+            var message = $('<div class="booking-state"><h4>В данный момент невозможно выбрать этот вариант</h4><p><span class="link">Почему?</span></p></div>');
+            message.find('.link').click(function(event) {
+                hint.show(event, 'Так иногда бывает, потому что авиакомпания не&nbsp;может подтвердить наличие мест на&nbsp;этот рейс по&nbsp;этому тарифу. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.');
+            });
+            self.el.html('').append(message);
         }
     });
     var w = $(window), offset = this.el.offset().top - w.height();
@@ -198,13 +179,16 @@ comparePrice: function() {
     var bp = parseInt(this.el.find('.booking-price .sum').attr('data-value'), 10);
     if (bp != vp) {
         var block = $('<div class="diff-price"></div>');
-        var template = '<h5>Цена этого варианта изменилась: стало <strong>{type} на {value}&nbsp;{currency}</strong></h5>';
+        var template = '<h5>Цена этого варианта изменилась: стало <strong>{type} на {value}&nbsp;{currency}</strong> (<span class="link">почему?</span>)</h5>';
         block.append(template.supplant({
             type: bp > vp ? 'дороже' : 'дешевле',
             currency: app.utils.plural(Math.abs(bp - vp), ['рубль', 'рубля',  'рублей']),
             value: Math.abs(bp - vp)
-        })).append('<p><a class="a-button continue" href="#">Продолжить бронировать</a> или <a class="cancel" href="#">выбрать другой вариант</a></p>');
+        })).append('<p><a class="a-button continue" href="#">Продолжить бронировать</a> или <a class="cancel" href="#">выбрать другой вариант</span></p>');
         var self = this;
+        block.find('.link').click(function(event) {
+            hint.show(event, 'Так иногда бывает, потому что авиакомпания изменяет цену на&nbsp;этот тариф. Цена может меняться как в&nbsp;большую, так и&nbsp;в&nbsp;меньшую сторону. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.');
+        });
         block.find('.cancel').click(function(event) {
             event.preventDefault();
             $(this).closest('.diff-price').remove();

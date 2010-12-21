@@ -85,6 +85,8 @@
         pageurl.reset();
         pageurl.title();
         search.restore(search.defvalues || {});
+    }).find('a').click(function(event) {
+        event.preventDefault();
     });
     
     // Данные по умолчанию для сброса
@@ -92,5 +94,8 @@
         from: search.from.val(),
         people_count: $.extend({}, search.persons.selected)
     };
+    
+    // Всплывающие подсказки
+    hint.init();
     
 })();

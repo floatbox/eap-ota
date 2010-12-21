@@ -14,6 +14,7 @@
 
 @import 'controls/filter.css';
 @import 'controls/autocomplete.css';
+@import 'controls/hint.css';
 
 @import 'search/form.css';
 @import 'search/fields.css';

@@ -1,0 +1,36 @@
+/* Return to search */
+#back2search {
+    padding: 13px 15px 14px;
+    background: #3e3e3e;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 22px;
+    letter-spacing: -0.035em;
+}
+#back2search a {
+    color: #CCC;
+}
+
+/* Article */
+.article {
+    margin: 15px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333;
+}
+.article h2 {
+    margin: 0 0 10px;
+    font-weight: bold;
+    font-size: 26px;
+    line-height: 30px;
+    letter-spacing: -0.035em;
+}
+.article h2 strong {
+    color: #ED1192;
+}
+.article p {
+    margin: 0 0 10px;
+}
+.asection {
+    margin: 0 0 20px;
+}

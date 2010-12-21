@@ -107,8 +107,9 @@ show: function() {
     d.css('visibility', 'hidden').show();
     var coffset = this.el.closest('.filters').offset();
     var foffset = this.el.find('.control').offset();
+    var wheight = $('#page-wrapper').height();
     d.hide().css({
-        'top': Math.min(foffset.top, w.height() + w.scrollTop() - d.height() - 5) - coffset.top,
+        'top': Math.min(foffset.top, w.height() + w.scrollTop() - d.height() - 5, wheight - d.height() - 24) - coffset.top,
         'left': foffset.left - coffset.left,
         'visibility': 'inherit'
     });

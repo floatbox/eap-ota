@@ -192,7 +192,7 @@
 /* Scroller */
 .calendar .scroller {
     position: absolute;
-    top: 0; left: 265px;
+    top: 0; left: 258px;
     height: 23px;
     background: #555;
 }
