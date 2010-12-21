@@ -45,7 +45,8 @@ class Variant
     segments.every.marketing_carrier_name.uniq.one? && segments.first.marketing_carrier
   end
 
-  def common_layovers
+  # задизаблен в единственной вьюшке, где использовался. убить?
+  def common_layovers?
     segments.map{|s| s.layovers.every.iata.sort}.uniq.one?
   end
 

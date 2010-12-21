@@ -73,7 +73,7 @@
         <% end %>
     </td>
     
-    <% if false && variant.common_layovers && variant.segments.length > 1 %>
+    <% if false && variant.common_layovers? && variant.segments.length > 1 %>
     <!-- Временно отказываемся от объединения пересадок -->
     <td class="changes common" rowspan="2">
     <% if segment_counter == 0 && segment.layovers? %>

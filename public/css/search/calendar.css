@@ -3,7 +3,6 @@
     position: relative;
     width: 595px;
 }
-
 .calendar .viewport {
     position: relative;
     width: 595px;
@@ -51,7 +50,7 @@
     overflow: visible;
 }
 .calendar .dates li {
-    float: left;
+    display: inline-block;
     position: relative;
     width: 34px;
     height: 40px;
@@ -61,6 +60,11 @@
     font: bold 95% Arial, sans-serif;
     text-align: center;
     cursor: pointer;
+}
+.win-msie6 .calendar .dates li,
+.win-msie7 .calendar .dates li {
+    float: left;
+    display: inline;
 }
 .calendar .dates .label {
     position: relative;
@@ -255,6 +259,7 @@
 }
 .calendar .preview .period {
     opacity: 0.25;
+    filter: alpha(opacity=25);
 }
 
 /* Scrollbar */
