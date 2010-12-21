@@ -89,7 +89,18 @@ module Amadeus
           :arrival_time =>           fi.xpath("r:productDateTime/r:timeOfArrival").to_s,
           :departure_date =>         fi.xpath("r:productDateTime/r:dateOfDeparture").to_s,
           :departure_time =>         fi.xpath("r:productDateTime/r:timeOfDeparture").to_s,
-          :equipment_type_iata =>    fi.xpath("r:productDetail/r:equipmentType").to_s
+          :equipment_type_iata =>    fi.xpath("r:productDetail/r:equipmentType").to_s,
+          :technical_stops => fi.xpath('../r:technicalStop').to_a.map{|ts| parse_technical_stop(ts)}
+        )
+      end
+
+      def parse_technical_stop(ts)
+        TechnicalStop.new(
+          :departure_time => ts.xpath('r:stopDetails[r:dateQualifier="AD"]/r:firstTime').to_s,
+          :departure_date => ts.xpath('r:stopDetails[r:dateQualifier="AD"]/r:date').to_s,
+          :arrival_time => ts.xpath('r:stopDetails[r:dateQualifier="AA"]/r:firstTime').to_s,
+          :arrival_date => ts.xpath('r:stopDetails[r:dateQualifier="AA"]/r:date').to_s,
+          :location_iata => ts.xpath('r:stopDetails/r:locationId').to_s
         )
       end
 
