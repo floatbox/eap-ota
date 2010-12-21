@@ -43,11 +43,11 @@
 
 .dropdown dl {
     float: left;
-    padding: 2px 0 6px;
+    padding: 2px 5px 5px;
 }
 .dropdown dt,
 .dropdown dd {
-    padding: 4px 16px;
+    padding: 4px 10px;
     white-space: nowrap;
     cursor: default;
 }
@@ -65,22 +65,27 @@
 }
 .dropdown dd.selected {
     background-color: #ed1192;
-    color: #FFF;
+    color: #fff;
+    font-weight: bold;
 }
 .dropdown dd.empty {
     font-weight: bold;
-    color: #FFF;
+    color: #fff;
 }
 
 /* Big and small filters */
 #search-define .dropdown dd {
     font-size: 72.727%;
     line-height: 118.75%;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 #offers-filter .dropdown dd {
     font-size: 75%;
     line-height: 125%;
-    padding: 4px 16px 3px;    
+    padding: 4px 10px 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 
 /* Persons dropdown */
@@ -90,25 +95,25 @@
     font-size: 50%;
 }
 .persons .wrap {
-    width: 467px;
-    padding: 2px 0;
+    width: 465px;
+    padding: 2px 0 0 5px;
 }
 .persons dl {
-    width: 156px;
-    margin-left: -1px;
-    padding: 0;
+    width: 150px;
+    /* margin-left: -1px; */
+    padding: 0 5px 0 0;
 }
 .persons dl.pg-children,
 .persons dl.pg-infants {
-    border-left: 1px solid #555;
+    /* border-left: 1px solid #555; */
 }
 .persons dd.disabled {
     opacity: 0.3;
 }
 .persons .a-button {
     display: block;
-    font: bold 65%/100% Arial,a;
-    margin: 0.6em;
+    font: bold 85%/100% Arial,a;
+    margin: 5px;
 }
 .persons .excess {
     margin: 12px 16px;

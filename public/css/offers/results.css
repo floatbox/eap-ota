@@ -301,8 +301,7 @@
     padding-top: 2px;
 }
 .offer .summary .cabin {
-    padding: 1px 3px;
-    border: 1px solid #b8b396;
+    padding: 2px 4px;
 }
 
 /* Варианты */
@@ -408,7 +407,6 @@
 .offer .details th .cabin {
     margin: 0 -2px;
     padding: 0 3px;
-    border: 1px solid #ede7c3;
 }
 .offer .details .info .cabin {
     margin: 0 -4px;

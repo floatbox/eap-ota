@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+require File.expand_path('../../config/environment',  __FILE__)
+xpath = ARGV.pop
+
+files = ARGV
+
+files.each do |filename|
+  Amadeus::Service.parse_string(File.read(filename)).xpath(xpath).each do |el|
+    puts filename
+    puts el.native_element.path
+    puts '---'
+    puts el.to_xml
+    puts '---'
+  end
+end
