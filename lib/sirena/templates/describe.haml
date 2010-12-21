@@ -1,0 +1,14 @@
+%sirena
+  %query
+    %describe
+      %data= data
+      -if code
+        %code= code
+      -if !show_all.nil? || company || !show_real_codes.nil?
+        %request_params
+          -if company
+            %company= company
+          -elsif !show_all.nil?
+            %show_all= show_all.to_s
+          -if !show_real_codes.nil?
+            %show_real_codes= show_real_codes.to_s

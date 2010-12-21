@@ -1,0 +1,21 @@
+%sirena
+  %query
+    %availability
+      %departure= departure
+      %arrival= arrival
+      -if date
+        %date= date
+      -if company
+        %company= company
+      -if num
+        %num= num
+      -if baseclass
+        - baseclass.split('').each do |bc|
+          %baseclass= bc
+      -if subclass
+        - subclass.split('').each do |sc|
+          %subclass= sc
+      %answer_params
+        %show_flighttime true
+      %request_params
+        %joint_type= joint_type || 'jtAll'

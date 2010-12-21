@@ -1,0 +1,30 @@
+%sirena
+  %query
+    %pricing
+      %segment
+        %departure= departure
+        %arrival= arrival
+        -if date
+          %date= date
+        -if company
+          %company= company
+        -if num
+          %num= num
+        -if baseclass
+          %class= baseclass.split('')[0]
+        -if subclass
+          %subclass= subclass.split('')[0]
+        %direct= direct.to_s
+      - passangers.each do |passanger|
+        %passenger
+          %code= passanger[:code]
+          %count= passanger[:count]
+          -if passanger[:age]
+            %age= passanger[:age]
+      %request_params
+        %mix_scls true
+        %fingering_order ordinary
+      %answer_params
+        %show_flighttime true
+        %show_upt_rec true
+        %show_fareexpdate true

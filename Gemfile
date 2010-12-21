@@ -29,6 +29,7 @@ gem 'haml'
 group :development do
   gem 'mongrel'
   gem 'cucumber-rails'
+  gem 'socksify'
 end
 
 group :test do
