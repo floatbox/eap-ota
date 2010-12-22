@@ -257,9 +257,9 @@ processUpdate: function() {
         }, function() {
             self.showDepartures();
         }, function() {
-            self.showRecommendations();
-        }, function() {
             self.processMatrix();
+        }, function() {
+            self.showRecommendations();
         }, function() {
             var b = app.booking, vid = b.el && b.el.attr('data-variant');
             if (vid && !b.variant) {
@@ -552,8 +552,8 @@ showRecommendations: function() {
         }
         
         // Оптимальный вариант
-        if (cheap.n === fast.n) {
-            optimal = {n: cheap.n};
+        if (cheap.n === fast.n || Math.abs(fast.p - cheap.p) < (cheap.p + fast.p) * 0.02) {
+            optimal = {n: fast.n, p: fast.p};
             cheap = undefined;
             fast = undefined;
         } else {
@@ -600,6 +600,16 @@ showRecommendations: function() {
             $.animateScrollTop(that.container.offset().top - 42);
         });
         container.append(ftip);
+        var rprice = cheap ? cheap.p : optimal.p;
+        var mprice = parseInt($('#offers-matrix .offer-prices').attr('data-minprice'), 10);
+        if (mprice < rprice) {
+            var mtip = $('<div class="offers-title featured-tip"><strong>Дорого?</strong> Посмотрите <span class="link">другие дни</span> — есть предложения от&nbsp;' + mprice + '&nbsp;' + app.utils.plural(mprice, ['рубля', 'рублей', 'рублей']) + '</div>');
+            mtip.find('.link').click(function() {
+                $('#offers-tabs').trigger('set', 'matrix');
+                $.animateScrollTop(that.container.offset().top - 42);
+            });
+            container.append(mtip);
+        }
     }
     container.show();
 },
@@ -755,7 +765,7 @@ processMatrix: function() {
         cheap.cells.addClass('cheap');
     }
     $(rows[4].cells[4]).click();
-    table.show();
+    table.attr('data-minprice', cheap.price).show();
 },
 matrixDate: function(date) {
     var dm = date.getDate() + '&nbsp;' + app.constant.MNg[date.getMonth()];
