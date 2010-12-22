@@ -311,6 +311,7 @@ class Recommendation
     default_carrier = (opts[:carrier] || 'SU').upcase
     segments = []
     classes = []
+    marketing_carrier_iatas = [default_carrier]
     itinerary.split.each do |fragment|
       flight = Flight.new
       # defaults
@@ -328,11 +329,13 @@ class Recommendation
         end
       end
       flight.marketing_carrier_iata = carrier
+      marketing_carrier_iatas |= [carrier]
       segments << Segment.new(:flights => [flight])
       classes << klass
     end
     Recommendation.new(
       :validating_carrier_iata => default_carrier,
+      :marketing_carrier_iatas => marketing_carrier_iatas,
       :variants => [Variant.new(:segments => segments)],
       :booking_classes => classes
     )
