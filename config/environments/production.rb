@@ -9,7 +9,17 @@ config.action_controller.consider_all_requests_local = true
 config.action_controller.perform_caching             = true
 config.action_view.cache_template_loading            = true
 
-config.action_mailer.delivery_method = :sendmail
+#config.action_mailer.delivery_method = :sendmail
+config.action_mailer.delivery_method = :smtp
+config.action_mailer.smtp_settings = {
+  :enable_starttls_auto => true,
+  :address => 'smtp.gmail.com',
+  :port => 587,
+  :domain => "eviterra.com",
+  :authentication => :plain,
+  :user_name => "no-reply@eviterra.com",
+  :password => "delta_mailer"
+}
 config.action_mailer.default_content_type = "text/html"
 config.action_controller.perform_caching = true
 config.cache_store = :file_store, Rails.root + "tmp/cache/"
