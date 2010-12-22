@@ -41,8 +41,16 @@ class Variant
     result
   end
 
+  def marketing_carriers
+    segments.every.marketing_carrier.uniq
+  end
+
+  def marketing_carrier_iatas
+    segments.every.marketing_carrier_iata.uniq
+  end
+
   def common_carrier
-    segments.every.marketing_carrier_name.uniq.one? && segments.first.marketing_carrier
+    marketing_carriers.one? && marketing_carriers.first
   end
 
   # задизаблен в единственной вьюшке, где использовался. убить?

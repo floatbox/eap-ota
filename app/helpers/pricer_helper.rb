@@ -89,6 +89,7 @@ module PricerHelper
     titles[cabin]  
   end
   
+  # FIXME отrubyить его посимпатишнее
   def primary_operating_carriers variant
     primary_carriers = []
     variant.segments.each_with_index do |segment, sindex|    

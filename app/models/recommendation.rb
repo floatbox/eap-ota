@@ -2,10 +2,21 @@ class Recommendation
 
   include KeyValueInit
 
-  attr_accessor :variants, :price_fare, :price_tax, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules
+  attr_accessor :variants, :price_fare, :price_tax, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
+    :marketing_carrier_iatas
 
   def validating_carrier
     validating_carrier_iata && Airline[validating_carrier_iata]
+  end
+
+  def interline?
+    marketing_carrier_iatas.size > 1
+  end
+
+  def valid_interline?
+    (marketing_carrier_iatas - [validating_carrier_iata]).all? do |iata|
+      validating_carrier.interline_with?(iata)
+    end
   end
 
   def price_total

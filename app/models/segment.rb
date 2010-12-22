@@ -6,7 +6,7 @@ class Segment
     :to => 'flights.first', :allow_nil => true
   delegate :arrival, :arrival_name, :arrival_term, :arrival_iata, :arrv_date, :arrival_date, :arrv_time, :arrival_time, :arrival_datetime_utc,
     :to => 'flights.last', :allow_nil => true
-  delegate :marketing_carrier, :marketing_carrier_name, :to => 'flights.first', :allow_nil => true
+  delegate :marketing_carrier, :marketing_carrier_name, :marketing_carrier_iata, :to => 'flights.first', :allow_nil => true
 
   def layover_durations
     (0...flights.size-1).map do |i|

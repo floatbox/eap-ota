@@ -27,10 +27,11 @@ module Amadeus
           debugger if fare_details[:booking_classes_infant] || fare_details[:booking_classes_child]
 =end
 
-          # компаний может быть несколько, нас интересует та, где
-          # r:transportStageQualifier[text()="V"]. но она обычно первая.
-          validating_carrier_iata = 
+          validating_carrier_iata =
             rec.xpath("r:paxFareProduct/r:paxFareDetail/r:codeShareDetails[r:transportStageQualifier='V']/r:company").to_s
+
+          marketing_carrier_iatas =
+            rec.xpath("r:paxFareProduct/r:paxFareDetail/r:codeShareDetails/r:company").every.to_s
 
           variants = rec.xpath("r:segmentFlightRef").map {|sf|
             segments = sf.xpath("r:referencingDetail").each_with_index.collect { |rd, i|
@@ -55,6 +56,7 @@ module Amadeus
             :price_tax => price_tax,
             :variants => variants,
             :validating_carrier_iata => validating_carrier_iata,
+            :marketing_carrier_iatas => marketing_carrier_iatas,
             :additional_info => additional_info,
             :cabins => cabins,
             :booking_classes => booking_classes
