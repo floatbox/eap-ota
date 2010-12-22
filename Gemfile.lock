@@ -120,7 +120,6 @@ GEM
       ffi (~> 0.6.3)
       json_pure
       rubyzip
-    socksify (1.1.2)
     spoon (0.0.1)
     spork (0.8.4)
     term-ansicolor (1.0.5)
@@ -159,7 +158,6 @@ DEPENDENCIES
   ruby-debug
   ruby-prof
   russian
-  socksify
   spork
   tzinfo
   wirble
