@@ -163,6 +163,10 @@ module CommissionRules
       opts[:international] = true
     end
 
+    def klass klasses
+      opts[:klass] = klasses
+    end
+
     def example str
       opts[:examples] ||= []
       opts[:examples] << [str, caller_address]
