@@ -10,16 +10,25 @@ module  FileLogger
 
   def save_xml(prefix, xml)
     base_name = Time.now.strftime('%y%m%d-%H%M%S') + '.xml'
-    path = Rails.root + "log/xmls/#{prefix}_#{base_name}"
+    path = Rails.root + debug_dir + "#{prefix}_#{base_name}"
     File.open(path, 'w') {|f| f.write(xml) }
     base_name
   end
 
-  def read_xml(prefix)
+  def read_latest_xml(prefix)
     mask = Rails.root + debug_dir + "#{prefix}_*.xml"
     path = Dir[mask].max_by {|f| File.mtime(f) }
     raise "no #{prefix}*.xml found" unless path
     File.read(path)
+  end
+
+  def read_each_xml(prefix)
+    mask = Rails.root + debug_dir + "#{prefix}_*.xml"
+    paths = Dir[mask]
+    raise "no #{prefix}*.xml found" if paths.empty?
+    paths.each do |p|
+      yield(File.read(p), p)
+    end
   end
 end
 

@@ -7,6 +7,23 @@ module Amadeus::Response
     Amadeus::Response::Base
   end
 
+  # дебажные метод
+  def self.latest_saved_for action
+    self.for(action).new(
+      Amadeus::Service.parse_string(
+        Amadeus::Service.read_latest_xml(action)
+      )
+    )
+  end
+
+  def self.each_saved_for action, &block
+    self.for(action).new(
+      Amadeus::Service.parse_string(
+        Amadeus::Service.read_each_xml(action, &block)
+      )
+    )
+  end
+
   class Base
 
     attr_accessor :doc

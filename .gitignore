@@ -2,8 +2,10 @@ config/database.yml
 doc
 log/*
 log/**/*.xml
-!log/xmls/.gitkeep
+!log/**/.gitkeep
 !log/xmls
+!log/amadeus
+!log/sirena
 tmp
 db/*.sqlite3
 public/ext

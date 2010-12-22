@@ -18,6 +18,8 @@ module Amadeus
 
   # response logger
   include FileLogger
+  def debug_dir; 'log/amadeus' end
+
   # handsoap logger
   fh = open(Rails.root + 'log/amadeus.log', 'a')
   fh.sync=true
@@ -64,7 +66,7 @@ module Amadeus
     end
 
     if Amadeus.fake || opts[:debug] || args.try(:debug)
-      xml_string = read_xml(action)
+      xml_string = read_latest_xml(action)
       response = parse_string(xml_string)
     else
       soap_body = render(action, args)
