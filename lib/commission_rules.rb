@@ -19,6 +19,7 @@ module CommissionRules
   def applicable? recommendation
     return if disabled
     #return unless carrier == recommendation.validating_carrier_iata
+    return unless applicable_interline
     return unless applicable_classes?(recommendation)
     true
   end
@@ -128,9 +129,12 @@ module CommissionRules
     #############################
 
     # выключает правило
-    def disable
+    def disabled
       opts[:disabled] = true
     end
+
+    alias_method :not_implemented, :disabled
+    alias_method :vague, :disabled
 
     # правило интерлайна
     def interline value=:yes
