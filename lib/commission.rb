@@ -4,50 +4,61 @@ include CommissionRules
 carrier "2U", "SUN D’OR International Airlines (РИНГ-АВИА)"
 ########################################
 
+example 'mowpar'
 agent    "5% от опубл. тарифов на собств. рейсы 2U (В договоре Interline отдельно не прописан.)"
 subagent "3,5% от опубл. тарифов на собств. рейсы 2U"
-interline :no
-not_implemented
 commission "5%/3.5%"
+
+example 'parmow mowpar/ab'
+no_commission
 
 carrier "5N", "Нордавиа-РА"
 ########################################
 
+example 'mowpar'
 agent    "7% от всех опубл. тарифов на рейсы 5N (В договоре Interline отдельно не прописан.)"
 subagent "5% от опубл. тарифов на собств.рейсы 5N"
-interline :no
-not_implemented
 commission "7%/5%"
+
+example 'parmow mowpar/ab'
+no_commission
 
 carrier "6H", "ISRAIR AIRLINE"
 ########################################
 
+example 'mowpar'
 agent    "7% от всех опубл. тарифов на рейсы 6H (В договоре Interline отдельно не прописан.)"
 subagent "5% от опубл. тарифов на собств. рейсы 6H"
-interline :no
-not_implemented
 commission "7%/5%"
+
+example 'parmow mowpar/ab'
+no_commission
 
 carrier "7B", "ATLANT-SOYUZ"
 ########################################
 
+example 'mowpar'
 agent    "4% от всех опубл. тарифов на cобств. рейсы 7B"
 subagent "2,8% от опубл. тарифов на cобств. рейсы 7B"
-not_implemented
 commission "4%/2.8%"
 
+example 'parmow mowpar/ab'
 agent    "3% от всех опубл. тарифов на рейсы Interline"
 subagent "2% от опубл. тарифов на рейсы Interline"
 interline :yes
 not_implemented
 commission "3%/2%"
 
+example 'mowpar/ab'
+vague
+no_commission
+
 carrier "7D", "DONBASSAERO"
 ########################################
 
+example 'mowpar'
 agent    "7% от всех опубл. тарифов на собств. рейсы 7D;"
 subagent "5% от всех опубл. тарифов на собств. рейсы 7D;"
-not_implemented
 commission "7%/5%"
 
 agent    "5% от всех опубл. тарифов на рейсы Interline с участием собств. рейсов 7D;"
@@ -65,9 +76,9 @@ commission "5%/3.5%"
 carrier "7W", "WINDROSE"
 ########################################
 
+not_implemented
 agent    "9% от всех опубл. тарифов на собств.рейсы 7W"
 subagent "6,3% от опубл. тарифов на собств.рейсы 7W"
-not_implemented
 commission "9%/6.3%"
 
 agent    "5% от всех опубл. тарифов на рейсы Interline c участком 7W"
@@ -96,16 +107,13 @@ commission "1%/0.5%"
 
 agent    "0% от опубл. тарифов по маршрутам из 50 штатов США (включая Пуэрто Рико/Виргинские острова (США) и Канады;"
 subagent "0% от опубл. тарифов по маршрутам из 50 штатов США (включая Пуэрто Рико/Виргинские острова (США) и Канады;"
-disabled #правило needed
 #geo
 not_implemented
 commission "0%/0%"
 
 agent    "0% от тарифов VUSA, N1VISIT и N2VISIT."
 subagent "0% от тарифов VUSA, N1VISIT и N2VISIT."
-disabled #правило needed
 #tariff
-#unknown
 not_implemented
 commission "0%/0%"
 
@@ -169,9 +177,9 @@ commission "1/0.5"
 carrier "AZ", "ALITALIA"
 ########################################
 
+example 'mowpar'
 agent    "1 euro. с билета по опубл. тарифам на собств. рейсы AZ;"
 subagent "5 руб. с билета по опубл. тарифам на собств. рейсы AZ;"
-not_implemented
 commission "1eur/5"
 
 agent    "1 euro с билета по опубл. тарифам на рейсы Interline, если 1-ый сегмент выполнен под кодом AZ."
@@ -183,10 +191,9 @@ commission "1eur/5"
 carrier "B2", "Belavia"
 ########################################
 
+example 'mowpar'
 agent    "5% от всех опубл. тарифов на собств. рейсы B2;"
 subagent "3,5% от всех опубл. тарифов на собств. рейсы B2;"
-interline :no
-not_implemented
 commission "5%/3.5%"
 
 agent    "3% от опубл. тарифов на рейсы “SAS” по маршрутам между Данией, Швецией, Норвегией, Гренландией и по внутренним маршрутам Дании, Швеции и Норвегии;"
@@ -227,10 +234,9 @@ commission "3%/2%"
 carrier "BA", "BRITISH AIRWAYS (См. в конце таблицы продолжение в 4-х частях)"
 ########################################
 
+example 'mowpar'
 agent    "1 euro с билета по опубл. тарифам на собств. рейсы BA;"
 subagent "5 руб. с билета по опубл. тарифам на собств. рейсы BA;"
-interline :no
-not_implemented
 commission "1eur/5"
 
 agent    "1 euro с билета по опубл. тарифам на рейсы Interline, с участком BA. (British Airways и другие перевозчики (oneworld и авиакомпании имеющие договор interline с British Airways), выписанные на одном бланке. Правило первого перевозчика не является обязательным, то есть первый перелет может быть выполнен другой авиакомпанией. Не  разрешается использование бланков ВА для выписки других перевозчиков (даже авиакомпаний членов альянса oneworld, кроме Qantas) без участия ВА. Нарушение этого правила повлечет за собой ADM на сумму GBP 25."
@@ -242,20 +248,21 @@ commission "1eur/5"
 carrier "BD", "BMI"
 ########################################
 
+example 'mowpar'
 agent    "7% от опубл. тарифов на собств. рейсы BD. (В договоре Interline не прописан.)"
 subagent "5% от опубл. тарифов на собств. рейсы BD."
-interline :no
-not_implemented
 commission "7%/5%"
 
 carrier "BI", "ROYAL BRUNEY AIRLINES"
 ########################################
 
+example 'mowpar'
 agent    "1% от опубл. тарифов на собств. рейсы BI (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на собств. рейсы BI"
-interline :no
-not_implemented
 commission "1%/0.5%"
+
+example 'mowpar parmow/ab'
+no_commission
 
 carrier "BT", "AIR BALTIC"
 ########################################
@@ -271,7 +278,7 @@ carrier "CA", "AIR CHINA"
 
 agent    "1 евро за билет, выписанный c началом  перевозки от пунктов РФ;"
 subagent "5 руб. с билета, от опубл.тарифов на рейсы CA с началом перевозки от пунктов РФ;"
-not_implemented
+not_implemented #geo
 commission "1eur/5"
 
 agent    "1 евро за билет, выписанный c началом  перевозки от пунктов РФ;"
@@ -284,10 +291,9 @@ commission "1eur/0"
 carrier "CI", "China Airlines"
 ########################################
 
+example 'mowpar'
 agent    "1% от всех опубл. тарифов на рейсы CI (В договоре Interline отдельно не прописан.)"
 subagent "0,5% от опубл. тарифа на собств. рейсы CI"
-interline :no
-not_implemented
 commission "1%/0.5%"
 
 carrier "CX", "CATHAY PACIFIC (Тальавиэйшн)"
@@ -305,18 +311,20 @@ commission "7%/5%"
 carrier "CY", "CYPRUS AIRWAYS"
 ########################################
 
+example 'mowpar'
 agent    "9% от всех опубл. тарифов на рейсы CY. (В договоре Interline не прописан.)"
 subagent "6,3% от опубликованных тарифов на рейсы CY."
-interline :no
-not_implemented
 commission "9%/6.3%"
+
+example 'mowpar parmow/ab'
+no_commission
 
 carrier "CZ", "CHINA SOUTHERN"
 ########################################
 
+example 'mowpar'
 agent    "9% от тарифа на рейсы, полностью выполняемые CZ;"
 subagent "6,3% от тарифа на рейсы, полностью выполняемые CZ;"
-not_implemented
 commission "9%/6.3%"
 
 agent    "7% от тарифа на рейсы CZ с участием других перевозчиков;"
@@ -356,10 +364,9 @@ commission "2%/1.4%"
 carrier "DE", "Condor Flugdienst (Авиарепс)"
 ########################################
 
+example 'mowpar'
 agent    "1% от всех опубл. тарифов на рейсы DE. (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на рейсы DE."
-interline :no
-not_implemented
 commission "1%/0.5%"
 
 carrier "DL", "DELTA AIRLINES"
@@ -453,18 +460,19 @@ commission "1/0.05"
 carrier "ET", "Ethiopian Airlines Enterprise  (АВИАРЕПС)"
 ########################################
 
+example 'mowpar'
 agent    "7% от опубл. тарифов на собств. рейсы ET"
 subagent "5% от опубл. тарифов на собств. рейсы ET"
-interline :no
-not_implemented
 commission "7%/5%"
 
+example 'mowpar parmow/ab'
 agent    "5 % от опубл. тарифов на рейсы Interline с участком ET"
 subagent "3,5 % от опубл. тарифов на рейсы Interline с участком ET"
 interline :yes
 not_implemented
 commission "5%/3.5%"
 
+example 'parmow/ab'
 agent    "0 % от опубл. тарифов на рейсы Interline без участка ET"
 subagent "0 % от опубл. тарифов на рейсы Interline без участка ET"
 interline :without
@@ -474,27 +482,27 @@ commission "0%/0%"
 carrier "EY", "ETIHAD AIRWAYS"
 ########################################
 
+example 'mowpar'
 agent    "5% от опубл. тарифов на собств. рейсы EY (В договоре Interline не прописан.)"
 subagent "3,5% от опубл. тарифов на собств. рейсы EY"
-interline :no
-not_implemented
 commission "5%/3.5%"
 
 carrier "F7", "FLY BABOO (РИНГ АВИА)"
 ########################################
 
+example 'mowpar'
 agent    "1% от опубл. тарифов на собств.рейсы F7"
 subagent "0,5% от опубл. тарифа на рейсы F7"
-interline :no
-not_implemented
 commission "1%/0.5%"
 
+example 'mowpar parmow/ab'
 agent    "1% от опубл. тар. на рейсы Interline c участком F7"
 subagent "0,5% от опубл. тарифа на рейсы F7"
 interline :yes
 not_implemented
 commission "1%/0%"
 
+example 'parmow/ab'
 agent    "1% от опубл. тар. на рейсы Interline без участка F7"
 subagent "0,5% от опубл. тарифа на рейсы F7"
 interline :without
@@ -504,19 +512,17 @@ commission "1%/0%"
 carrier "FB", "BULGARIA AIR"
 ########################################
 
+example 'mowpar'
 agent    "4% от опубл. тарифов на собств. рейсы FB. (В договоре Interline не прописан.)"
 subagent "2,8% от опубл. тарифов на собств. рейсы FB."
-interline :no
-not_implemented
 commission "4%/2.8%"
 
 carrier "FI", "ICELANDAIR  (РИНГ АВИА)"
 ########################################
 
+example 'mowpar'
 agent    "1% от всех опубл. тарифов на рейсы FI (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на рейсы FI"
-interline :no
-not_implemented
 commission "1%/0.5%"
 
 carrier "FV", "RUSSIA"
@@ -579,10 +585,9 @@ commission "3.5%/3.5%"
 carrier "HM", "AIR SEYCHELLES (АВИАРЕПС)"
 ########################################
 
+example 'mowpar'
 agent    "1% от опубл. тарифа на собств. рейсы HM (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на собств. рейсы HM"
-interline :no
-not_implemented
 commission "1%/0.5%"
 
 carrier "HR", "HAHN AIR  (Авиарепс)"
@@ -600,70 +605,65 @@ commission "1/0.05"
 carrier "HU", "HAINAN AIRLINES"
 ########################################
 
+example 'mowpar'
 agent    "9% от всех опубл. тарифов на рейсы HU (В договоре Interline не прописан.)"
 subagent "6,3% от опубл. тарифов на собств. рейсы HU"
-interline :no
-not_implemented
 commission "9%/6.3%"
 
 carrier "HX", "Hong Kong Airlines"
 ########################################
 
+example 'mowpar'
 agent    "7% от всех опубл. тарифов на собств.рейсы HX (В договоре Interline не прописан.)"
 subagent "5% от опубл. тарифов на собств.рейсы HX"
-interline :no
-not_implemented
 commission "7%/5%"
 
 carrier "HY", "UZBEKISTAN AIRWAYS (Узбекистон Хаво Йуллари) (НЕ BSP!!!)"
 ########################################
 
+example 'mowpar'
 agent    "5% от опубл. тарифов на собств. рейсы HY"
 subagent "5% от опубл. тарифов на собств. рейсы HY"
-interline :no
-not_implemented
+disabled 'не BSP'
 commission "5%/5%"
 
+example 'mowpar parmow/ab'
 agent    "2% от опубл. тарифов на рейсы Interline"
 subagent "2% от опубл. тарифов на рейсы Interline"
 interline :yes
-not_implemented
+disabled 'не BSP'
 commission "2%/2%"
 
 carrier "IB", "IBERIA"
 ########################################
 
+example 'mowpar'
 agent    "1 руб. с билета на рейсы IB (В договоре Interline не прописан.)"
 subagent "50 коп. с билета на рейсы IB"
-interline :no
-not_implemented
 commission "1/0.5"
 
 carrier "IG", "MERIDIANA (РИНГ-АВИА)"
 ########################################
 
+example 'mowpar'
 agent    "5% от опубл. тарифов на собств.рейсы IG (В договоре Interline не прописан.)"
 subagent "3,5% от опубл. тарифов на собств.рейсы IG"
-interline :no
-not_implemented
 commission "5%/3.5%"
 
 carrier "IY", "YEMENIA YEMEN AIRWAYS"
 ########################################
 
+example 'mowpar'
 agent    "1% от опубл. тарифов на собств. рейсы IY (В договоре Interline отдельно не прописан.)"
 subagent "0,5% от опубл. тарифов на собств. рейсы IY"
-interline :no
-not_implemented
 commission "1%/0.5%"
 
 carrier "JJ", "TAM Linhas Aereas S.A."
 ########################################
 
+example 'mowpar'
 agent    "1% от всех опубл. тарифов на собств. рейсы JJ (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на собств.рейсы JJ"
-interline :no
-not_implemented
 commission "1%/0.5%"
 
 carrier "JL", "JAPAN AIRLINES INTERNATIONAL"
@@ -728,19 +728,17 @@ commission "7%/5%"
 carrier "JP", "ADRIA AIRWAYS"
 ########################################
 
+example 'mowpar'
 agent    "1 руб. с билета на рейсы JP (В договоре Interline не прописан.)"
 subagent "50 коп. с билета на рейсы JP"
-interline :no
-not_implemented
 commission "1/0.5"
 
 carrier "JU", "JAT AIRWAYS"
 ########################################
 
+example 'mowpar'
 agent    "80 руб. с билета на собств.рейсы JU (В договоре Interline отдельно не прописан.)"
 subagent "30 руб. с билета на собств.рейсы JU"
-interline :no
-not_implemented
 commission "80/30"
 
 carrier "KC", "Air Astana"
@@ -833,10 +831,9 @@ commission "1eur/5"
 carrier "KM", "AIR MALTA  (Авиарепс)"
 ########################################
 
+example 'mowpar'
 agent    "1% от опубл. тарифов на собств. рейсы KM"
 subagent "0,5% от опубл. тарифа на рейсы KM"
-interline :no
-not_implemented
 commission "1%/0.5%"
 
 agent    "1% от опубл. тарифов на рейсы Interline"
@@ -874,10 +871,9 @@ commission "1/0.05"
 carrier "LO", "LOT"
 ########################################
 
+example 'mowpar'
 agent    "1 euro с билета по опубл. тарифам на рейсы LO;"
 subagent "5 руб. с билета по опубл. тарифам на рейсы LO;"
-interline :no
-not_implemented
 commission "1eur/5"
 
 agent    "С 01.11.2010 года: 5% от тарифа на маршруты только между Россией и Польшей."
@@ -935,10 +931,9 @@ commission "1/0.05"
 carrier "MK", "AIR MAURITIUS"
 ########################################
 
+example 'mowpar'
 agent    "1% от опубл. тарифов на рейсы MK (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на рейсы MK"
-interline :no
-not_implemented
 commission "1%/0.5%"
 
 carrier "MS", "EGYPT AIR"
@@ -963,14 +958,13 @@ commission "5%/3.5%"
 agent    "5% от тарифа для иных международных рейсов MS"
 subagent "3,5% от тарифа для иных международных рейсов MS"
 interline :no
-not_implemented
+international
 commission "5%/3.5%"
 
 agent    "0% от тарифа на рейсы MS внутри Египта"
 subagent "0% от тарифа на рейсы MS внутри Египта"
 interline :no
-disabled #интернал
-#geo
+domestic
 not_implemented
 commission "0%/0%"
 
@@ -984,16 +978,14 @@ carrier "MU", "CHINA EASTERN"
 ########################################
 
 agent    "0% от тарифа по конфид. тарифам;"
-agent    "от опубликованных тарифов:"
 subagent "0% от тарифа по конфид. тарифам;"
-subagent "от опубликованных тарифов:"
-disabled #видимо дальше ↓ к этому относится, не понял
-#unknown
-not_implemented
+disabled 'конфиденциальные тарифы'
 commission "0%/0%"
 
+agent    "от опубликованных тарифов:"
 agent    "1euro на международные рейсы MU; на рейсы MU до Гонконга, Макао; при выписке международного перелета MU и перелета по территории КНР MU на одном бланке; на внутренние рейсы MU по территории КНР; на рейсы MU и рейсы других авиакомпаний на бланке MU или на  рейсы других  авиакомпаний на бланке MU на любые участки."
 agent    "Опубл. считаются только классы: “F” – первый класс, “C” – бизнес класс, “Y” – эконом класс"
+subagent "от опубликованных тарифов:"
 subagent "5 руб. на международные рейсы MU; на рейсы MU до Гонконга, Макао; при выписке международного перелета MU и перелета по территории КНР MU на одном бланке; на внутренние рейсы MU по территории КНР; на рейсы MU и рейсы других авиакомпаний на бланке MU или на  рейсы других  авиакомпаний на бланке MU на любые участки."
 subagent "Опубл. считаются только классы: “F” – первый класс, “C” – бизнес класс, “Y” – эконом класс"
 disabled #ну а тут правило
@@ -1027,34 +1019,30 @@ carrier "NZ", "AIR NEW ZEALAND (НЕ BSP!!!)"
 
 agent    "5% от тарифа на международные перелеты на рейсы NZ;"
 subagent "5% от тарифа на международные перелеты на рейсы NZ;"
-interline :no
-not_implemented
+international
+disabled 'не BSP'
 commission "5%/5%"
 
 agent    "3,5% от тарифа на внутренние перелеты на рейсы NZ."
 subagent "3,5% от тарифа на внутренние перелеты на рейсы NZ."
-interline :no
-disabled #только внутренние, правило нужно
-#geo
-not_implemented
+domestic
+disabled 'не BSP'
 commission "3.5%/3.5%"
 
 carrier "OA", "OLYMPIC AIR (АВИАРЕПС)"
 ########################################
 
+example 'mowpar'
 agent    "1% от опубл. тарифов на собственные рейсы OA (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на собств.рейсы OA"
-interline :no
-not_implemented
 commission "1%/0.5%"
 
 carrier "OK", "CZECH AIRLINES"
 ########################################
 
+example 'mowpar'
 agent    "1% от опубл. тарифов на собств.рейсы OK;"
 subagent "0,5% от опубл. тарифа на рейсы OK;"
-interline :no
-not_implemented
 commission "1%/0.5%"
 
 agent    "1% от опубл. тарифов на рейсы Interline, если один из сегментов выполнен под кодом OK."
@@ -1066,10 +1054,9 @@ commission "1%/0.5%"
 carrier "OM", "MIAT-Монгольские Авиалинии"
 ########################################
 
+example 'mowpar'
 agent    "9% от всех опубл. тарифов на рейсы OM (В договоре Interline не прописан.)"
 subagent "6,3% от опубл. тарифов на собств.рейсы OM"
-interline :no
-not_implemented
 commission "9%/6.3%"
 
 carrier "OS", "AUSTRIAN AIRLINES"
@@ -1085,10 +1072,9 @@ commission "1/0.05"
 carrier "OU", "CROATIA AIRLINES  (РИНГ АВИА)"
 ########################################
 
+example 'mowpar'
 agent    "1% от всех опубл. тарифов на рейсы OU"
 subagent "0,5% от опубл. тарифа на собств.рейсы OU"
-interline :no
-not_implemented
 commission "1%/0.5%"
 
 agent    "1% от опубл. тарифов на рейсы Interline с участком OU."
@@ -1100,72 +1086,64 @@ commission "1%/0.5%"
 carrier "OV", "ESTONIAN AIR  (РИНГ АВИА)"
 ########################################
 
+example 'mowpar'
 agent    "1% от всех опубл. тарифов на рейсы OV (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на рейсы OV"
-interline :no
-not_implemented
 commission "1%/0.5%"
 
 carrier "PG", "BANGKOK AIRWAYS (Тальавиэйшн)"
 ########################################
 
+example 'mowpar'
 agent    "5% от всех опубл. тарифов на рейсы PG (В договоре Interline не прописан.)"
 subagent "3,5% от опубликованных тарифов на рейсы PG"
-interline :no
-not_implemented
 commission "5%/3.5%"
 
 carrier "PS", "Ukraine International Airlines (ГЛОНАСС)"
 ########################################
 
+example 'mowpar'
 agent    "9% от опубл. тарифов на собств.рейсы PS (В договоре Interline отдельно не прописан.)"
 subagent "6,3% от опубл. тарифов на собств.рейсы PS"
-interline :no
-not_implemented
 commission "9%/6.3%"
 
 carrier "QF", "QANTAS AIRWAYS\n(не BSP!!!)"
 ########################################
 
+example 'mowpar'
 agent    "7% от опубл. тарифов на рейсы QF (В договоре Interline не прописан.)"
 subagent "4,9% от опубл. тарифов на рейсы QF"
-interline :no
-disabled #опять с bsp какие-то непонятки
-#notbsp
-not_implemented
+disabled 'не bsp'
 commission "7%/4.9%"
 
 carrier "QR", "QATAR AIRWAYS"
 ########################################
 
+example 'mowpar'
 agent    "5% от опубл. тарифов на собств. рейсы QR"
 subagent "3,5% от опубл. тарифов на собственные рейсы QR"
-interline :no
-not_implemented
 commission "5%/3.5%"
 
 agent    "5% от опубл. тарифов на рейсы Interline (только при обязательном пролете первого сектора на рейсах QR)"
 subagent "3,5% от опубл. тарифов на рейсы Interline (только при обязательном пролете первого сектора на рейсах QR)"
-interline :yes
+interline :first
 not_implemented
 commission "5%/3.5%"
 
 carrier "RB", "SYRIAN ARAB AIRLINES"
 ########################################
 
+example 'mowpar'
 agent    "7% от всех опубл. тарифов на рейсы RB (В договоре Interline не прописан.)"
 subagent "5% от опубл. тарифов на рейсы RB"
-interline :no
-not_implemented
 commission "7%/5%"
 
 carrier "S4", "SATA INTERNACIONAL (РИНГ АВИА)"
 ########################################
 
+example 'mowpar'
 agent    "1% от всех опубл. тарифов на собств.рейсы S4 (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на собств. рейсы S4"
-interline :no
-not_implemented
 commission "1%/0.5%"
 
 carrier "SA", "South African Airways"
@@ -1189,10 +1167,9 @@ commission "1/0.5"
 carrier "SN", "BRUSSELS AIRLINES"
 ########################################
 
+example 'mowpar'
 agent    "0,5% от опубл. тарифам на собств. рейсы SN;"
 subagent "5 руб. с билета по опубл. тарифам на собств. рейсы SN;"
-interline :yes
-not_implemented
 commission "0.5%/5"
 
 agent    "0,5% от опубл. тарифам в случае применения совмещенного тарифа авиакомпаний;"
@@ -1231,10 +1208,9 @@ commission "3%/2%"
 carrier "SW", "AIR NAMIBIA (АВИАРЕПС)"
 ########################################
 
+example 'mowpar'
 agent    "7% от опубл. тарифов на собств. рейсы SW (В договоре Interline отдельно не прописан.)"
 subagent "5% от опубл. тарифов на собств.рейсы SW"
-interline :no
-not_implemented
 commission "7%/5%"
 
 carrier "TG", "THAI AIRWAYS"
@@ -1242,7 +1218,7 @@ carrier "TG", "THAI AIRWAYS"
 
 agent    "7% от опубл. и конфиде.тарифов на международные рейсы TG"
 subagent "5% от опубл. и конфиде.тарифов на международные рейсы TG"
-interline :no
+international
 not_implemented
 commission "7%/5%"
 
@@ -1354,10 +1330,9 @@ commission "1%/0.5%"
 carrier "UX", "Air Europa"
 ########################################
 
+example 'mowpar'
 agent    "5% от всех опубл. тарифов на рейсы UX (В договоре Interline отдельно не прописан.)"
 subagent "3,5% от опубл. тарифов на собств. рейсы UX"
-interline :no
-not_implemented
 commission "5%/3.5%"
 
 carrier "VN", "VIETNAM AIRLINES"
@@ -1365,16 +1340,12 @@ carrier "VN", "VIETNAM AIRLINES"
 
 agent    "7% от конфиденциальных тарифов на рейсы VN;"
 subagent "5% от конфиденциальных тарифов на рейсы VN;"
-interline :no
-disabled #конфиденциальная хрень — я не знаю, что это такое
-#unknown
-#confidentional
-not_implemented
+disabled 'конфиденциальные тарифы'
 commission "7%/5%"
 
 agent    "7% от опубликованных тарифов на международных рейсах VN;"
 subagent "5% от опубликованных тарифов на международных рейсах VN;"
-interline :no
+international
 not_implemented
 commission "7%/5%"
 
@@ -1398,10 +1369,9 @@ commission "0%/0%"
 carrier "VS", "Virgin Atlantic Airways Limited (ГЛОНАСС)"
 ########################################
 
+example 'mowpar'
 agent    "7% от опубл. тарифов на собств. рейсы VS"
 subagent "5% от опубл. тарифов на собств.рейсы VS"
-interline :no
-not_implemented
 commission "7%/5%"
 
 agent    "7% от опубл. тарифов на рейсы Interline (до Лондона: BD, BA, SU), выписанные на ОДНОМ бланке. Первый трансатлантический перелет на Virgin Atlantic является обязательным."
@@ -1417,10 +1387,9 @@ commission "7%/5%"
 carrier "VV", "AEROSVIT"
 ########################################
 
+example 'mowpar'
 agent    "5% от опубл. тарифов на рейсы VV;"
 subagent "3,5% от опубл. тарифов на рейсы VV;"
-interline :no
-not_implemented
 commission "5%/3.5%"
 
 agent    "3% от опубл. тарифов на рейсы VV в комбинации с рейсами Interline"
@@ -1441,46 +1410,41 @@ commission "1%/0.5%"
 carrier "WY", "OMAN AIR"
 ########################################
 
+example 'mowpar'
 agent    "1% от опубл. тарифов на собств. рейсы WY (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на собств.рейсы WY"
-interline :no
-not_implemented
 commission "1%/0.5%"
 
 carrier "XW", "SkyExpress Limited"
 ########################################
 
+example 'mowpar'
 agent    "5% от всех опубл. тарифов на собств.рейсы XW (В договоре Interline не прописан.)"
 subagent "3,5% от опубл. тарифов на собств.рейсы XW"
-interline :no
-not_implemented
 commission "5%/3.5%"
 
 carrier "YM", "MONTENEGRO AIRLINES"
 ########################################
 
+example 'mowpar'
 agent    "8% от всех опубл. тарифов на рейсы YM (В договоре Interline не прописан.)"
 subagent "5,6% от всех опубл. тарифов на рейсы YM"
-interline :no
-not_implemented
 commission "8%/5.6%"
 
 carrier "YO", "Heli air Monaco (РИНГ АВИА)"
 ########################################
 
+example 'mowpar'
 agent    "1 руб. с билета на все виды тарифов (В договоре Interline не прописан.)"
 subagent "50 коп. с билета на рейсы YO"
-interline :no
-not_implemented
 commission "1/0.5"
 
 carrier "ZI", "AIGLE AZUR (РИНГ-АВИА)"
 ########################################
 
+example 'mowpar'
 agent    "1% от опубл. тарифов на собств. рейсы ZI (В договоре Interline отдельно не прописан.)"
 subagent "0,5% от опубл. тарифа на собств. рейсы ZI"
-interline :no
-not_implemented
 commission "1%/0.5%"
 
 
