@@ -11,6 +11,7 @@ class HomeController < ApplicationController
 
   # naive geolocation
   def nearest_city
+    return Location.default unless Rails.env.production?
     @nearest_city ||= begin
       loc = GeoIp.geolocation(request.remote_ip)
       if loc[:latitude] == "0" && loc[:longitude] == "0" ||

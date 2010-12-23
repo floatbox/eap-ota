@@ -7,58 +7,61 @@
 <col width="60">
 <tbody valign="top">
 <tr>
-    <td class="pad_null"><img src="/img/booking/eviterra.png" alt="eviterra" width="210" height="30"></td>
+    <%#FIXME Заменить адрес логотипа на eviterra.com %>
+    <td class="pad_null"><img src="http://maxim.team.eviterra.ru/img/booking/eviterra.png" alt="eviterra" width="210" height="30"></td>
     <td class="pad_null" colspan="2">
         <font size="3" family="Arial" style="font-size: 15px;"><strong>Электронный билет<br>E-ticket</strong></font>
     </td>
     <td class="pad_null" colspan="3">
         <div><font family="Arial" size="2" style="font-size: 13px; line-height: 16px;"><strong>Номер брони</strong></font></div>
         <div><font size="5" family="Arial" color="#ED1192" style="font-size: 30px; line-height: 30px; color: #ED1192;"><strong><%= @pnr.number %></strong></font></div>
-        <% if @pnr.ticket_numbers.present? %>
-        <font family="Arial" size="3" style="font-size: 13px; line-height: 16px;"><strong>
-              <%= @pnr.ticket_numbers.one? ? 'Номер билета' : 'Номера билетов' %>
-        </strong></font><br>
-        <font size="5" family="Arial" color="#ED1192" style="font-size: 30px; line-height: 30px; color: #ED1192;">
-        <% for number in @pnr.ticket_numbers %>
-            <strong style="white-space: nowrap;"><nobr><%= number %></nobr></strong><br>
-        <% end %>
-        </font>
-        <% end %>
     </td>
 </tr>
 </tbody>
 <tbody valign="top">
 <tr>
-    <td colspan="6"><br></td>
+    <td colspan="6" class="pad_null"><br></td>
 </tr>
-<tr>
+<tr valign="bottom">
     <td class="pad_null">
-        <font size="3" family="Arial" style="font-size: 18px;"><strong>Сведения о пассажирах<br>Traveler Information</strong></font><br>
-        <font size="1" style="font-size: 6px;"><br></font>
+        <font family="Arial" size="3" style="font-size: 18px;"><strong>Сведения о пассажирах<br>Traveler Information</strong></font>
     </td>
     <td class="pad_null" colspan="2"><br></td>
-    <td class="pad_null" colspan="3" rowspan="2">
-        <font family="Arial" size="3" style="font-size: 15px;"><strong>Сведения об агенте<br>Agent Information</strong></font><br>
-        <font size="1" style="font-size: 6px;"><br></font>
-        <font family="Arial" size="2">Eviterra Travel<br>+7 (495) 660-35-20<br>www.eviterra.com<br>ticket@eviterra.com</font>
+    <td class="pad_null" colspan="3">
+        <font family="Arial" size="3" style="font-size: 15px;"><strong>Сведения об агенте<br>Agent Information</strong></font>
     </td>
 </tr>
 <tr>
+    <td colspan="6" class="pad_null"><font size="2" style="font-size: 8px;"><br></font></td>
+</tr>
+<tr>
     <td class="pad_null">
-    <% for p in @pnr.passengers %>
-        <div><font family="Arial" size="2"><%= p.first_name %> <%= p.last_name %></font></div>
-    <% end %>
+        <font family="Arial" size="2">
+        <% for p in @pnr.passengers %>
+            <strong style="font-weight: bold;"><%= p.first_name %> <%= p.last_name %>&nbsp;</strong> <%= p.passport %><br>
+        <% end %>
+        </font>
     </td>
     <td class="pad_null" colspan="2">
-    <% for p in @pnr.passengers %>
-        <div><font family="Arial" size="2"><%=p.passport%></font></div>
-    <% end %>
+    <% if @pnr.ticket_numbers.present? %>
+        <font family="Arial" size="2">
+        <% for number in @pnr.ticket_numbers %>
+            <%= number %><br>
+        <% end %>
+        </font>
+    <% end %>    
+    </td>
+    <td class="pad_null">
+        <font family="Arial" size="2">Eviterra Travel<br>+7 (495) 660-35-20<br>
+        <a href="http://www.eviterra.com/" target="_blank" style="color: #ed1192;"><font color="#ed1192">www.eviterra.com</font></a><br>
+        <a href="mailto:ticket@eviterra.com" target="_blank" style="color: #ed1192;"><font color="#ed1192">ticket@eviterra.com</font></a>
+        </font>    
     </td>
 </tr>
 </tbody>
 <tbody valign="top">
 <tr>
-    <td colspan="6"><font size="3"><br></font></td>
+    <td colspan="6" class="pad_null"><font size="3"><br></font></td>
 </tr>
 <tr valign="bottom">
     <td class="pad_null">
@@ -73,7 +76,7 @@
     <td class="pad_null"><br></td>
 </tr>
 <tr>
-    <td colspan="6"><font size="2"><br></font></td>
+    <td colspan="6" class="pad_null"><font size="2"><br></font></td>
 </tr>
 <% for flight in @pnr.flights %>
 <tr>
@@ -104,7 +107,7 @@
 </tr>
 <% end %>
 <tr>
-    <td colspan="6"><font size="2"><br></font></td>
+    <td colspan="6" class="pad_null"><font size="2"><br></font></td>
 </tr>
 </tbody>
 <tbody valign="top">
@@ -116,7 +119,7 @@
     </td>
 </tr>
 <tr>
-    <td colspan="6"><font size="3"><br></font></td>
+    <td colspan="6" class="pad_null"><font size="3"><br></font></td>
 </tr>
 </tbody>
 <tbody valign="top">
@@ -133,7 +136,8 @@
         Тариф / Fare<br>
         Налоги и сборы / Taxes<br>
         Итоговая стоимость / Total<br>
-        Форма оплаты / Paid by
+        Форма оплаты / Paid by<br>
+        Дата офрмления / Issue date
         </font>
     </td>
     <td class="pad_null" colspan="2">
@@ -142,13 +146,20 @@
         <%= @pnr.order.price_fare %> RUB<br>
         <%= @pnr.order.price_tax %> RUB<br>
         <%= @pnr.order && (@pnr.order.price_fare.to_i + @pnr.order.price_tax.to_i) %> RUB<br>
-        Cash
+        Cash<br>
+        <%= @pnr.order.create_date %> RUB
         </font>
     <% end %>
     </td>
     <td class="pad_null" colspan="3">
         <font family="Arial" size="2">Адрес и телефон покупателя</font><br>
-        <font family="Arial" size="2"><%= @pnr.email %></font>
+        <font family="Arial" size="1" style="font-size: 6px;"><br></font>
+        <font family="Arial" size="2">
+        <% if @pnr.email %>
+            <a href="mailto:<%= @pnr.email %>" target="_blank" style="color: #ed1192;"><font color="#ed1192"><%= @pnr.email %></font></a><br>
+        <% end %>
+        <%= @pnr.phone %>
+        </font>
     </td>
 </tr>
 </tbody>
@@ -157,8 +168,8 @@
     <td class="pad_null" style="text-align: center; font-size: 24px; line-height: 1.25; letter-spacing: -0.02em;" colspan="6">
     <font size="5"><br></font>
     <center>
-        <font family="Arial" size="5"><strong>Спасибо за то, что забронировали на <span style="color: #ED1192;"><font color="#ED1192">eviterra.com</font></span>!</strong></font><br>
-        <font family="Arial" size="5"><strong>Thank you for booking at <span style="color: #ED1192;"><font color="#ED1192">eviterra.com</font></span>!</strong></font><br>
+        <font family="Arial" size="5"><strong>Спасибо за то, что забронировали на <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
+        <font family="Arial" size="5"><strong>Thank you for booking at <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
     </center>    
     </td>
 </tbody>
