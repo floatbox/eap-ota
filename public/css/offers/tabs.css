@@ -20,7 +20,7 @@
     font-weight: bold;
     font-size: 20px;
     line-height: 22px;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.035em;
 }
 #offers-tabs #offers-tabs-featured {
     border-radius: 0 5px 0 0;
@@ -42,6 +42,6 @@
 }
 #offers-tabs li.active a {
     text-decoration: none;
-    color: #333;
+    color: #4b4b4b;
     cursor: default;
 }
