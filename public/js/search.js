@@ -1,52 +1,46 @@
 var search = {
 init: function() {
     var self = this;
+
+    /* Режим (по умолчанию туда и обратно) */
+    this.mode = 'rt';
+    $('#search-fields .sicon').click(function() {
+        self.toggleMode();
+    });
+    $('#search-mode li').click(function() {
+        self.toggleMode($(this).attr('data-mode'));
+    });
+
+    /* Поля */
+    var searchField = function(selector) {
+        var el = $(selector); 
+        return el.autocomplete({
+            cls: 'autocomplete',
+            url: '/complete.json',
+            root: 'data',
+            width: 340,
+            height: 374,
+            loader: el.closest('td').find('.loader'),
+            params: {
+                limit: 30
+            }
+        }).change(function() {
+            var el = $(this), v = el.val();
+            if (v === '') el.trigger('iata', '');
+            if (v !== el.data('pval')) self.update(this);
+            el.data('pval', v);
+        });
+    };
+    this.segments = [{
+        from: searchField('#search-s1-from'),
+        to: searchField('#search-s1-to')
+    }];
     
-    // Откуда
-    this.from = $('#search-from').autocomplete({
-        cls: 'autocomplete',
-        url: '/complete.json',
-        root: 'data',
-        height: 374,
-        loader: new app.Loader({
-            parent: $('#search-from-loader')
-        }),
-        params: {
-            input: 'from',
-            limit: 30
-        }
-    }).focus(function() {
-        self.from.reset.fadeOut(200);
-    }).change(function() {
-        self.update(this);
-    });
-    this.from.reset = $('#search-from-reset').click(function(e) {
-        self.from.focus().trigger('set', '');
-    });
-    var fdata = this.from.get(0).onclick();
+    // IATA в первом поле «Откуда»
+    var fdata = this.segments[0].from.get(0).onclick();
     if (fdata && fdata.iata) {
-        self.from.trigger('iata', fdata.iata);
+        this.segments[0].from.trigger('iata', fdata.iata);
     }    
-    
-    // Куда
-    this.to = $('#search-to').autocomplete({
-        cls: 'autocomplete',
-        url: '/complete.json',
-        root: 'data',
-        width: 340,
-        height: 378,
-        loader: new app.Loader({
-            parent: $('#search-to-loader')
-        }),
-        params: {
-            input: 'to',
-            limit: 30
-        }
-    }).change(function() {
-        var el = $(this), v = el.val();
-        if (v != el.data('pval')) self.update(this);
-        el.data('pval', v);
-    });
     
     // Календарь
     this.calendar = new app.Calendar("#search-calendar");
@@ -152,11 +146,16 @@ init: function() {
     };
     this.smessage.find('.ssm-content').html(this.messages.to);
 },
+toggleMode: function(mode) {
+    if (mode === undefined) mode = {ow: 'rt', rt: 'ow'}[this.mode];
+    $('#search-fields').removeClass('smode-' + this.mode).addClass('smode-' + mode);
+    this.mode = mode;
+},
 values: function() {
     var data = {
-        from: this.from.val(),
-        to: this.to.val(),
-        rt: this.rt.value == 'rt' ? 1 : 0,
+        from: this.segments[0].from.val(),
+        to: this.segments[0].to.val(),
+        rt: this.mode == 'rt' ? 1 : 0,
         dates: this.calendar.values,
         people_count: this.persons.selected,
         cabin: this.cabin.value[0],
@@ -170,12 +169,12 @@ values: function() {
     return data;
 },
 restore: function(data) {
-    this.from.trigger('set', data.from || '').trigger('iata', '');
-    this.to.trigger('set', data.to || '').trigger('iata', '');
+    this.segments[0].from.trigger('set', data.from || '').trigger('iata', '');
+    this.segments[0].to.trigger('set', data.to || '').trigger('iata', '');
     this.persons.select($.extend({}, data.people_count || df.people_count));
     this.cabin.select(data.cabin || []);
     this.calendar.selected = [];
-    this.rt.set(data.rt !== undefined && data.rt == 0 ? 'ow' : 'rt');
+    this.setMode(data.rt !== undefined && data.rt == 0 ? 'ow' : 'rt');
     if (data.dates) {
         this.calendar.select(data.dates);
     }    
@@ -189,13 +188,13 @@ update: function(source) {
             if (pd[i].value != this.calendar.values[i]) improper.push($.trim(pd[i].str));
         }
         if (improper.length) {
-            var current = this.to.val();
+            var current = this.segments[0].to.val();
             var pattern = new RegExp('(\\s*)(?:' + improper.join('|') + ')(\\s*)', 'i');
             console.log(pattern);
             var result = current.replace(pattern, function(s, p1, p2) {
                 return (p1 && p2) ? ' ' : '';}
             );
-            if (result != current) this.to.trigger('set', result);
+            if (result != current) this.segments[0].to.trigger('set', result);
         }
     }
     if (source == this.persons && this.parsed && this.parsed.people_count) {
@@ -204,7 +203,7 @@ update: function(source) {
         var result = current.replace(pattern, function(s, p1, p2) {
             return (p1 && p2) ? ' ' : '';
         });
-        if (result != current) this.to.trigger('set', result);
+        if (result != current) this.segments[0].to.trigger('set', result);
     }
     this.timer = setTimeout(function() {
         self.validate();
@@ -234,6 +233,24 @@ validate: function(qkey) {
     var self = this;
     var restoreResults = Boolean(qkey);
     this.submit.addClass('validating');
+
+    // Данные в новом формате
+    var ds = data.search;
+    if (ds) {
+        ds.form_segments = [{
+            from: ds.from,
+            to: ds.to,
+            date: ds.dates && ds.dates[0]
+        }];
+        if (ds.rt) {
+            ds.form_segments.push({
+                from: ds.to,
+                to: ds.from,
+                date: ds.dates && ds.dates[1]
+            });
+        }
+    }
+    
     this.request = $.get('/pricer/validate/', data, function(result, status, request) {
         if (request != self.request) {
             return;
@@ -277,10 +294,10 @@ validate: function(qkey) {
                 self.updateMap(rs.from_as_object, rs.to_as_object);
             }
             if (rs.from_as_object) {
-                self.from.trigger('iata', rs.from_as_object.iata || rs.from_as_object.alpha2);
+                self.segments[0].from.trigger('iata', rs.from_as_object.iata || rs.from_as_object.alpha2);
             }
             if (rs.to_as_object) {
-                self.to.trigger('iata', rs.to_as_object.iata || rs.to_as_object.alpha2);
+                self.segments[0].to.trigger('iata', rs.to_as_object.iata || rs.to_as_object.alpha2);
             }
         }        
         delete(self.request);
@@ -310,9 +327,9 @@ abort: function() {
 },
 apply: function(data) {
     this.parsed = data;
-    $('#search-to-label i').each(function() {
-        var label = $(this);
-        label.toggleClass('label-to', data[label.attr('data-key')] !== undefined);
+    $('#search-s1-to').closest('td').find('label span').each(function() {
+        var fragment = $(this);
+        fragment.toggleClass('highlight', data[fragment.attr('data-key')] !== undefined);
     });
     if (data.dates) {
         var dates = [];

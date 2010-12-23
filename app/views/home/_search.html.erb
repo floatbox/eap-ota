@@ -2,38 +2,48 @@
 <div id="search">
 
 <!-- Откуда и куда -->
-<div id="search-fields">
+<div id="search-fields" class="smode-rt">
+<ul id="search-mode">
+    <li class="rt" data-mode="rt" title="Билет до пункта назначения и обратно. Самый популярный вариант путешествия." class="active">туда и обратно</li>
+    <li class="ow" data-mode="ow" title="Билет только до пункта назначения, в одну сторону.">только туда</li>
+    <li class="mw" title="Транзит через несколько городов. Остановки на желаемый срок.">сложный маршрут</li>
+</ul>
 <table>
-<tr class="labels">
-    <td><label for="search-from" accesskey="1"><i class="label-from">Откуда</i><s id="search-from-loader"></s></label></td>
-    <td></td>
-    <td><label for="search-to" accesskey="2" id="search-to-label"><i data-key="to">Куда</i>, <i data-key="dates">когда</i>, <i data-key="people_count">сколько человек</i><s id="search-to-loader"></s></label></td>
-    <td>
-        <ul id="search-ret-tabs" class="tabs return-tabs">
-            <li><a href="#" onclick="return {v: 'ow'}" title="Билет только до пункта назначения, в одну сторону.">только туда</a>
-            <li><a href="#" onclick="return {v: 'rt'}" title="Билет до пункта назначения и обратно. Самый популярный вариант путешествия." class="active">туда и обратно</a>
-            <!-- <li><a href="#" onclick="return {v: 'mw'}" title="Транзит через несколько городов. Остановки на желаемый срок.">сложный маршрут</a> -->
-        </ul>
-    </td>
-</tr>
-<tr>
-    <td>
+<tr class="segment1">
+    <td class="from">
+        <h6><label for="search-s1-from"><span class="highlight">Откуда</span></label><span class="loader"></span></h6>
         <div class="autocomplete-box">
-            <input type="text" id="search-from" class="autocomplete from" tabindex="1"
+            <input type="text" id="search-s1-from" class="autocomplete" tabindex="1"
              value="<%= nearest_city.try(:name) || 'Москва' %>"
              onclick="return <%= h nearest_city.to_json %>"
              title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом">
         </div>
     </td>
     <td>
-        <a id="search-ret-button" class="button button-rt" title="Искать билеты &laquo;туда и обратно&raquo;. Нажмите, чтобы изменить"
-            onclick="return [{v: 'rt', cls: 'rt', t: 'Искать билеты &laquo;туда и обратно&raquo;. Нажмите, чтобы изменить'},{v: 'ow', cls: 'ow', t: 'Билеты только &laquo;туда&raquo;'}/*,{v: 'mw', cls: 'mw', t: 'Сложный маршрут'}*/]"
-        ></a>
+        <div class="sicon"></div>
     </td>
-    <td colspan="2">
+    <td class="to">
+        <h6><label for="search-s1-to"><span data-key="to">Куда</span>, <span data-key="dates">когда</span>, <span data-key="people_count">сколько человек</span></label><span class="loader"></span></h6>
         <div class="autocomplete-box">
-            <input type="text" id="search-to" class="autocomplete to" tabindex="2" value="" title="Город, страна или IATA-код">
+            <input type="text" id="search-s1-to" class="autocomplete" tabindex="2" value="" title="Город, страна или IATA-код">
+        </div>   
+    </td>
+</tr>
+<tr class="segment2 g-none">
+    <td>
+        <h6><label for="search-s2-from">Откуда</label><span class="loader"></span></h6>
+        <div class="autocomplete-box">
+            <input disabled="disabled" type="text" id="search-s2-from" class="autocomplete" tabindex="3" value="" title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом">
         </div>
+    </td>
+    <td>
+        <div class="sicon"></div>
+    </td>
+    <td>
+        <h6><label for="search-s2-to"><span data-key="to">Куда</span>, <span data-key="dates">когда</span>, <span data-key="people_count">сколько человек</span></label><span class="loader"></span></h6>
+        <div class="autocomplete-box">
+            <input disabled="disabled" type="text" id="search-s2-to" class="autocomplete" tabindex="4" value="" title="Город, страна или IATA-код">
+        </div>   
     </td>
 </tr>
 </table>

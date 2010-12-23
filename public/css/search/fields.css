@@ -15,97 +15,74 @@
 }
 
 /* верхние подписи к полям ввода */
-#search-fields tr.labels td {
-    vertical-align: bottom;
-}
-#search-fields label {
-    position: relative;
+#search-fields h6 {
+    height: 28px;
     font: 18px/27px Arial, sans-serif;
     letter-spacing: -0.01em;
     white-space: nowrap;
 }
-#search-fields .label-from {
-    color: #cc8000;
-}
-#search-fields .label-to {
+#search-fields .segment1 .highlight {
     color: #9ab300;
 }
-#search-fields label s {
+#search-fields.smode-rt .segment1 .to .highlight {
+    color: #cc8000;
+}
+#search-fields .loader {
+    display: none;
     position: absolute;
-    right: -24px;
-    top: 50%;
-    margin-top: -8px;
+    width: 16px;
+    height: 16px;
+    margin: 5px 0 0 8px;
+    background: transparent url(/img/loader/loader-dots.gif) no-repeat;
+    background-image: url(data:image/gif;base64,R0lGODlhEAAQAPIAACwsLO0RklglQ7oXd+0RkqEaaYkeXX0gVyH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==);    
 }
 
 /* вкладки-переключалки */
-.return-tabs {
+#search-mode {
     position: relative;
-    z-index: 2;
-    top: 1px;
+    left: 15px;
     float: right;
-    overflow: hidden;
-    width: 190px;
-    font-size: 75%;
-    zoom: 1;
+    width: 150px;
+    padding-top: 3px;
+    font-size: 14px;
+    line-height: 16px;
 }
-.return-tabs li {
-    float: right;
+#search-mode li {
+    padding: 4px 10px;
+    cursor: pointer;
 }
-.return-tabs a {
-    display: inline-block;
-    padding: 0 .45em;
-    height: 23px;
-    line-height: 23px;
-    outline: none;
-    white-space: nowrap;
-    text-decoration: none;
-    color: #c8c8c8;
-    border: 1px solid transparent;
+#search-mode li:hover {
+    background: #3E3E3E;
 }
-.return-tabs a:hover {
-    color: #fff;
-}
-.return-tabs a.active {
+.smode-ow #search-mode li.ow,
+.smode-rt #search-mode li.rt {
+    background: #ed1192;
+    color: #FFF;
     cursor: default;
-    text-decoration: none;
-    color: #4b4b4b;
-    background: #fff;
-    border-color: #424445 #424445 #fff #424445;
-}
-.return-tabs-focus a:hover,
-.return-tabs-hover a:hover {
-    border-color: transparent transparent #db3f89 transparent;
-}
-.return-tabs-focus a.active,
-.return-tabs-hover a.active {
-    color: #4b4b4b;
-    background: #fff;
-    border-color: #db3f89 #db3f89 #fff #db3f89;
 }
 
 /* Поля ввода */
-#search-fields input {
+#search-fields .autocomplete {
     float: left; /* иначе в IE появляется вертикальный отступ в 1px */
 }
-#search-fields .from {
-    width: 422px;
+#search-fields .from .autocomplete {
+    /*width: 422px;*/
+    width: 342px;
 }
-#search-fields .to {
-    width: 438px;
+#search-fields .to .autocomplete {
+    /*width: 438px;*/
+    width: 358px;
 }
 
 /* Кнопка туда-сюда-обратно */
-#search-fields .button {
+#search-fields .sicon {
     display: block;
     width: 26px;
     height: 26px;
-    margin: 8px 8px 6px;
+    margin: 36px 8px 6px;
     background: url(/img/search/retmode.png) no-repeat;
     cursor: pointer;
 }
-#search-fields .button-ow {
+#search-fields.smode-ow .segment1 .sicon {
     background-position: 0 -30px;
-}
-#search-fields .button-none {
-    background-position: 0 30px;
 }
