@@ -142,8 +142,8 @@ module CommissionRules
     #############################
 
     # выключает правило
-    def disabled
-      opts[:disabled] = true
+    def disabled reason=true
+      opts[:disabled] = reason
     end
 
     alias_method :not_implemented, :disabled
