@@ -2,10 +2,21 @@ class Recommendation
 
   include KeyValueInit
 
-  attr_accessor :variants, :price_fare, :price_tax, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules
+  attr_accessor :variants, :price_fare, :price_tax, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
+    :marketing_carrier_iatas
 
   def validating_carrier
     validating_carrier_iata && Airline[validating_carrier_iata]
+  end
+
+  def interline?
+    marketing_carrier_iatas.size > 1
+  end
+
+  def valid_interline?
+    (marketing_carrier_iatas - [validating_carrier_iata]).all? do |iata|
+      validating_carrier.interline_with?(iata)
+    end
   end
 
   def price_total
@@ -300,6 +311,7 @@ class Recommendation
     default_carrier = (opts[:carrier] || 'SU').upcase
     segments = []
     classes = []
+    marketing_carrier_iatas = [default_carrier]
     itinerary.split.each do |fragment|
       flight = Flight.new
       # defaults
@@ -317,11 +329,13 @@ class Recommendation
         end
       end
       flight.marketing_carrier_iata = carrier
+      marketing_carrier_iatas |= [carrier]
       segments << Segment.new(:flights => [flight])
       classes << klass
     end
     Recommendation.new(
       :validating_carrier_iata => default_carrier,
+      :marketing_carrier_iatas => marketing_carrier_iatas,
       :variants => [Variant.new(:segments => segments)],
       :booking_classes => classes
     )

@@ -17,13 +17,25 @@ module CommissionRules
   }
 
   def applicable? recommendation
-    return if disabled
-    #return unless carrier == recommendation.validating_carrier_iata
-    return unless applicable_classes?(recommendation)
-    true
+    not disabled and
+    # carrier == recommendation.validating_carrier_iata and
+    applicable_interline?(recommendation) and
+    applicable_classes?(recommendation)
   end
 
-  def applicable_classes?(recommendation)
+  def applicable_interline? recommendation
+    case interline
+    when nil, :no
+      not recommendation.interline?
+    when :yes
+      recommendation.interline? # and recommendation.valid_interline?
+    # FIXME доделать:
+    # when :absent
+    # when :first
+    end
+  end
+
+  def applicable_classes? recommendation
     return true unless klass
     # symbol(s)?
     if Array(klass)[0].is_a? Symbol
@@ -109,7 +121,9 @@ module CommissionRules
       # opts здесь по идее содержит только examples
       commission = new({
         :carrier => @carrier,
-        :source => caller_address
+        :source => caller_address,
+        :disabled => true,
+        :no_commission => true
       }.merge(opts))
 
       self.opts = {}
@@ -128,9 +142,12 @@ module CommissionRules
     #############################
 
     # выключает правило
-    def disable
-      opts[:disabled] = true
+    def disabled reason=true
+      opts[:disabled] = reason
     end
+
+    alias_method :not_implemented, :disabled
+    alias_method :vague, :disabled
 
     # правило интерлайна
     def interline value=:yes
@@ -159,6 +176,10 @@ module CommissionRules
       opts[:international] = true
     end
 
+    def klass klasses
+      opts[:klass] = klasses
+    end
+
     def example str
       opts[:examples] ||= []
       opts[:examples] << [str, caller_address]
@@ -185,7 +206,16 @@ module CommissionRules
           elsif proposed.nil?
             error "#{commission.carrier} (line #{source}): #{code} - no applicable commission!"
           else
-            error "#{commission.carrier} (line #{source}): #{code} - wrong commission applied (#{proposed.agent}/#{proposed.subagent}, line #{proposed.source})"
+            if commission.no_commission
+              error "#{commission.carrier} (line #{source}): #{code} - commission non applicable, but got line #{proposed.source}:"
+            else
+              error "#{commission.carrier} (line #{source}): #{code} - wrong commission applied. Should be:"
+              error "agent:    #{commission.agent_comments.chomp}"
+              error "subagent: #{commission.subagent_comments.chomp}"
+              error " got line #{proposed.source}:"
+            end
+            error "agent: #{proposed.agent_comments.chomp}"
+            error "subagent: #{proposed.subagent_comments.chomp}"
           end
         end
       end
