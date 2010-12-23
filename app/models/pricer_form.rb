@@ -19,6 +19,9 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   validates_presence_of :from_iata, :to_iata, :date1
   validates_presence_of :date2, :if => :rt
 
+  # FIXME заглушка пока не переделаем from и to
+  attr_accessor :form_segments
+
   attr_reader :to_iata, :from_iata, :complex_to_parse_results
 
   def to_json(args={})
