@@ -54,7 +54,7 @@ class PricerController < ApplicationController
       }
     else
       @search = PricerForm.new(params[:search].merge({:form_segments => []}))
-      @search.form_segments = params[:search][:form_segments].to_a.sort_by{|a| a[0]}.map{|k, v| PricerForm::FormSegment.new(v)}
+      @search.form_segments = params[:search][:form_segments].to_a.sort_by{|a| a[0]}.map{|k, v| PricerForm::FormSegment.new(:from => v[0], :to => v[1], :date => v[2])}
       @search.parse_complex_to
       if @search.valid?
         @query_key = ShortUrl.generate_url([@search, @search.form_segments, Time.now].hash)
