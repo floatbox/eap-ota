@@ -72,13 +72,9 @@
     display: block;
 }
 
-#header .phone,
-#header .soon {
-    margin-top: 10px;
-}
-
 #header .phone {
     float: right;
+    margin-top: 10px;
 }
 #header .phone strong {
     font-weight: normal;
@@ -87,6 +83,7 @@
 
 #header .soon {
     float: left;
+    margin-top: 11px;
     font-size: 14px;
     letter-spacing: -0.015em;
 }
@@ -94,7 +91,22 @@
     font-weight: normal;
     color: #ED1192;
 }
-.b-share__text {
+
+/* Share icons */
+#ya-share {
+    display: inline;
+    float: left;
+    margin: 7px 0 0 65px;
+    font-size: 14px;
+    letter-spacing: -0.015em;
+}
+#ya-share .b-share {
+    font-size: 100%;
+    line-height: 18px;
+}
+#ya-share .b-share__text {
 	position: relative;
-	top: -0.1em;	
+}
+#ya-share .b-share__handle:hover .b-share__text {
+    color: #ED1192;
 }

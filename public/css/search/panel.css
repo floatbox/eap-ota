@@ -48,15 +48,15 @@
 
 /* Чекбокс для режима отладки */
 #search-debug {
+    position: relative;
+    top: -1px;
     font-size: 11px;
-    position: absolute;
-    left: 50%; top: 15px;
-    margin-left: 190px;
-    visibility: hidden;
+    margin-left: 15px;
+    opacity: 0.2;
 }
 #search-debug input {
     margin: 0 3px 0 0;
 }
-#header:hover #search-debug {
-    visibility: visible;
+#search-debug:hover {
+    opacity: 1;
 }

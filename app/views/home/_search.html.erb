@@ -2,11 +2,11 @@
 <div id="search">
 
 <!-- Откуда и куда -->
-<div id="search-fields" class="smode-rt">
+<div id="search-fields" class="rtmode">
 <ul id="search-mode">
-    <li class="rt" data-mode="rt" title="Билет до пункта назначения и обратно. Самый популярный вариант путешествия." class="active">туда и обратно</li>
-    <li class="ow" data-mode="ow" title="Билет только до пункта назначения, в одну сторону.">только туда</li>
-    <li class="mw" title="Транзит через несколько городов. Остановки на желаемый срок.">сложный маршрут</li>
+    <li class="rttab" data-mode="rt" title="Билет до пункта назначения и обратно. Самый популярный вариант путешествия." class="active">туда и обратно</li>
+    <li class="owtab" data-mode="ow" title="Билет только до пункта назначения, в одну сторону.">только туда</li>
+    <li class="mwtab" data-mode="mw" title="Транзит через несколько городов. Остановки на желаемый срок.">сложный маршрут</li>
 </ul>
 <table>
 <tr class="segment1">
@@ -30,7 +30,7 @@
     </td>
 </tr>
 <tr class="segment2 g-none">
-    <td>
+    <td class="from">
         <h6><label for="search-s2-from">Откуда</label><span class="loader"></span></h6>
         <div class="autocomplete-box">
             <input disabled="disabled" type="text" id="search-s2-from" class="autocomplete" tabindex="3" value="" title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом">
@@ -39,10 +39,27 @@
     <td>
         <div class="sicon"></div>
     </td>
-    <td>
+    <td class="to">
         <h6><label for="search-s2-to"><span data-key="to">Куда</span>, <span data-key="dates">когда</span>, <span data-key="people_count">сколько человек</span></label><span class="loader"></span></h6>
         <div class="autocomplete-box">
             <input disabled="disabled" type="text" id="search-s2-to" class="autocomplete" tabindex="4" value="" title="Город, страна или IATA-код">
+        </div>   
+    </td>
+</tr>
+<tr class="segment3 g-none">
+    <td class="from">
+        <h6><label for="search-s3-from">Откуда</label><span class="loader"></span></h6>
+        <div class="autocomplete-box">
+            <input disabled="disabled" type="text" id="search-s3-from" class="autocomplete" tabindex="3" value="" title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом">
+        </div>
+    </td>
+    <td>
+        <div class="sicon"></div>
+    </td>
+    <td class="to">
+        <h6><label for="search-s3-to"><span data-key="to">Куда</span>, <span data-key="dates">когда</span>, <span data-key="people_count">сколько человек</span></label><span class="loader"></span></h6>
+        <div class="autocomplete-box">
+            <input disabled="disabled" type="text" id="search-s3-to" class="autocomplete" tabindex="4" value="" title="Город, страна или IATA-код">
         </div>   
     </td>
 </tr>
@@ -103,7 +120,7 @@
                     <dd data-value="6">шестеро</dd>
                 </dl>
                 <dl class="pg-children" data-group="children">
-                    <dt>дети <em class="age">от 2 до 12 лет</em></dt>
+                    <dt>дети <em class="age">от 2 до 11 лет</em></dt>
                     <dd class="empty selected">нет</dd>
                     <dd data-value="1">один</dd>
                     <dd data-value="2">двое</dd>
@@ -138,6 +155,12 @@
             </dl>
             </div>
         </div>
+        
+        <% unless Rails.env.production? %>
+        <span id="search-debug">
+            <input type="checkbox" id="sdmode"> <label for="sdmode">Режим отладки</label>
+        </span>
+        <% end %>
         
         </div>
     </td>

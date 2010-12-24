@@ -1,15 +1,9 @@
+/* [production] Объединить стили в таком же порядке и упаковать */
 
-@import 'global.css';
-@import 'layout.css';
-
-@import 'header.css';
-@import 'footer.css';
 @import 'promo.css';
 
 @import 'atoms/a-button.css';
 @import 'atoms/b-pseudo.css';
-@import 'atoms/b-tips.css';
-@import 'atoms/b-rur.css';
 
 @import 'controls/filter.css';
 @import 'controls/autocomplete.css';
