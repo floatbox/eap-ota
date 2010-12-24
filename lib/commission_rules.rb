@@ -25,6 +25,9 @@ module CommissionRules
 
   def applicable_interline? recommendation
     case interline
+    when :possible
+      # FIXME для различий с absent
+      true
     when nil, :no
       not recommendation.interline?
     when :yes

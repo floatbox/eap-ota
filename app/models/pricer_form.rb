@@ -59,7 +59,16 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   column :changes, :string
   has_many :form_segments
 
-  delegate :to, :from, :to => 'form_segments.first'
+<<<<<<< HEAD
+  delegate :to, :from, :from_iata, :to_iata, :to => 'form_segments.first'
+=======
+  validates_presence_of :from_iata, :to_iata, :date1
+  validates_presence_of :date2, :if => :rt
+
+  # FIXME заглушка пока не переделаем from и to
+  attr_accessor :form_segments
+
+>>>>>>> 95a3dcc563ae19f08c15df91806ef4a302e8454a
   attr_reader :to_iata, :from_iata, :complex_to_parse_results
 
   def date1

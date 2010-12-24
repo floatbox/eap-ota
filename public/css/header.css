@@ -87,8 +87,14 @@
 
 #header .soon {
     float: left;
+    font-size: 14px;
+    letter-spacing: -0.015em;
 }
 #header .soon strong {
     font-weight: normal;
     color: #ED1192;
+}
+.b-share__text {
+	position: relative;
+	top: -0.1em;	
 }

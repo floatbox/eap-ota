@@ -4,6 +4,7 @@
     position: relative;
     top: -3px;
     line-height: 137.5%;
+    letter-spacing: -0.014em;
 }
 
 #offers-filter th {

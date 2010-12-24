@@ -358,13 +358,10 @@
 }
 .offer .toggle-tab {
     float: left;
-    margin-left: -10px;
+    margin-left: -15px;
     padding: 8px 10px;
-    background: #F7F7F7;
-    font-size: 14px;
-    border-radius: 5px 5px 0 0;
-    -moz-border-radius: 5px 5px 0 0;
-    -webkit-border-radius: 5px 5px 0 0;    
+    /* background: #F7F7F7; */
+    font-size: 14px; 
 }
 .offer .expand,
 .offer.collapsed .collapse {
@@ -374,8 +371,13 @@
     display: inline;
 }
 .offer .toggle .link {
-    font-weight: bold;
-    color: #1F64BE;
+    font-weight: normal;
+    color: #4b4b4b;
+    padding: 2px 5px;
+    background: #f5eec9;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 
 /* Подробности */
