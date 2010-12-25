@@ -9,6 +9,7 @@ class Variant
   end
 
   def summary
+    # FIXME airlines для фильтров - operating carrier. ok?
     result = {
       :airlines => flights.every.operating_carrier_iata.uniq,
       :planes => flights.every.equipment_type_iata.uniq,
@@ -42,11 +43,11 @@ class Variant
   end
 
   def marketing_carriers
-    segments.every.marketing_carrier.uniq
+    flights.every.marketing_carrier.uniq
   end
 
   def marketing_carrier_iatas
-    segments.every.marketing_carrier_iata.uniq
+    flights.every.marketing_carrier_iata.uniq
   end
 
   def common_carrier
@@ -54,6 +55,8 @@ class Variant
   end
 
   # задизаблен в единственной вьюшке, где использовался. убить?
+  # FIXME - говорит ли, что пересадки одинаковые, если во втором сегменте
+  # не было пересадок?
   def common_layovers?
     segments.map{|s| s.layovers.every.iata.sort}.uniq.one?
   end
