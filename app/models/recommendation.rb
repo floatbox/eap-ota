@@ -3,18 +3,25 @@ class Recommendation
   include KeyValueInit
 
   attr_accessor :variants, :price_fare, :price_tax, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
-    :marketing_carrier_iatas
+    :suggested_marketing_carrier_iatas
+
+  delegate :marketing_carriers, :marketing_carrier_iatas, :to => 'variants.first'
 
   def validating_carrier
     validating_carrier_iata && Airline[validating_carrier_iata]
   end
 
+  def other_marketing_carrier_iatas
+    marketing_carrier_iatas - [validating_carrier_iata]
+  end
+
   def interline?
-    marketing_carrier_iatas.size > 1
+    other_marketing_carrier_iatas.any?
   end
 
   def valid_interline?
-    (marketing_carrier_iatas - [validating_carrier_iata]).all? do |iata|
+    not interline? or
+    other_marketing_carrier_iatas.all? do |iata|
       validating_carrier.interline_with?(iata)
     end
   end
@@ -148,6 +155,14 @@ class Recommendation
     [validating_carrier_iata, price_fare, price_tax, variants, booking_classes]
   end
 
+  def hash
+    signature.hash
+  end
+
+  def eql?(b)
+    signature.eql?(b.signature)
+  end
+
   def self.corrected recs
     #объединяем эквивалентные варианты
     recs.each_with_object([]) do |r, result|
@@ -166,15 +181,7 @@ class Recommendation
 
   def groupable_with? rec
     return unless rec
-    [price_fare, price_tax, validating_carrier_iata, booking_classes] == [rec.price_fare, rec.price_tax, rec.validating_carrier_iata,  rec.booking_classes]
-  end
-
-  def hash
-    signature.hash
-  end
-
-  def eql?(b)
-    signature.eql?(b.signature)
+    [price_fare, price_tax, validating_carrier_iata, booking_classes, marketing_carrier_iatas] == [rec.price_fare, rec.price_tax, rec.validating_carrier_iata,  rec.booking_classes, rec.marketing_carrier_iatas]
   end
 
   def self.from_flight_codes(flight_codes)
@@ -311,7 +318,6 @@ class Recommendation
     default_carrier = (opts[:carrier] || 'SU').upcase
     segments = []
     classes = []
-    marketing_carrier_iatas = [default_carrier]
     itinerary.split.each do |fragment|
       flight = Flight.new
       # defaults
@@ -335,7 +341,6 @@ class Recommendation
     end
     Recommendation.new(
       :validating_carrier_iata => default_carrier,
-      :marketing_carrier_iatas => marketing_carrier_iatas,
       :variants => [Variant.new(:segments => segments)],
       :booking_classes => classes
     )
