@@ -83,7 +83,11 @@ class Flight
   end
 
   def full_flight_number
-    "#{operating_carrier_iata}#{marketing_carrier_iata}#{flight_number}"
+    if operating_carrier_iata != marketing_carrier_iata
+      "#{operating_carrier_iata}:#{marketing_carrier_iata}#{flight_number}"
+    else
+      "#{marketing_carrier_iata}#{flight_number}"
+    end
   end
 
   def distance
@@ -97,18 +101,21 @@ class Flight
   
   def self.from_flight_code code
     fl = Flight.new
-    fl.operating_carrier_iata,
-    fl.marketing_carrier_iata,
-    fl.flight_number,
-    fl.class_of_service,
-    fl.departure_date,
-    fl.departure_iata,
-    fl.arrival_iata,
-    fl.seat_count,
-    fl.segment_number = /^(\w\w)(\w\w)(\d+)(\w)(\d{6})(\w{3})(\w{3})(\d)(\d)$/.match(code).captures
+    ( fl.operating_carrier_iata,
+      fl.marketing_carrier_iata,
+      fl.flight_number,
+      fl.class_of_service,
+      fl.departure_date,
+      fl.departure_iata,
+      fl.arrival_iata,
+      fl.seat_count,
+      fl.segment_number ) =
+      /^(?:(\w\w):)?(\w\w)(\d+)(\w)(\d{6})(\w{3})(\w{3})(\d)(\d)$/.match(code).captures
+    fl.operating_carrier_iata ||= fl.marketing_carrier_iata
     fl
   end
   
+  # FIXME убить?
   def comfort
     :econom
   end
@@ -129,6 +136,10 @@ class Flight
 
   def eql?(b)
     signature.eql?(b.signature)
+  end
+
+  def inspect
+    flight_code
   end
 
   def has_equal_tariff_with? flight
