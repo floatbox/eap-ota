@@ -287,8 +287,8 @@ highlight: function(items) {
         delete(this.highlighted);
     }
 },
-toggleOneway: function(mode) {
-    this.selectedLimit = mode ? 1 : 2;
+toggleMode: function(mode) {
+    this.selectedLimit = {'ow': 1, 'rt': 2, 'mw': 3}[mode];
     if (!this.savedSelected || this.selected.length > this.savedSelected.length) {
         this.savedSelected = this.selected.concat();
     }

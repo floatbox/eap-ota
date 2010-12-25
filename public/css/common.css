@@ -1,0 +1,6 @@
+/* [production] Объединить стили в таком же порядке и упаковать */
+
+@import 'global.css';
+@import 'layout.css';
+@import 'header.css';
+@import 'footer.css';

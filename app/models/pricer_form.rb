@@ -1,11 +1,53 @@
 class PricerForm < ActiveRecord::BaseWithoutTable
 
+  class FormSegment < ActiveRecord::BaseWithoutTable
+    column :from, :string
+    column :to, :string
+    column :date, :string
+    attr_reader :to_iata, :from_iata
+    validates_presence_of :from_iata, :to_iata, :date
+
+    def to_json(args={})
+      args[:methods] = (args[:methods].to_a + [:to_as_object, :from_as_object]).uniq
+      super(args)
+    end
+
+    def to= name
+      @to_iata =  Completer.iata_from_name(name) rescue nil
+      super
+    end
+
+    def from= name
+      @from_iata = Completer.iata_from_name(name) rescue nil
+      super
+    end
+
+    def to_as_object
+       to_iata && [City[to_iata], Airport[to_iata], Country.find_by_alpha2(to_iata)].find(&:id)
+    end
+
+    def from_as_object
+      from_iata && [City[from_iata], Airport[from_iata], Country.find_by_alpha2(from_iata)].find(&:id)
+    end
+
+    def nearby_cities
+      [from_as_object, to_as_object].map do |location|
+        if location.class == City
+          location.nearby_cities
+        elsif location.class == Airport
+          location.city.nearby_cities
+        else
+          []
+        end
+      end
+    end
+  end
+
+  column :dates, :string
+  column :rt, :string
   column :from, :string
   column :to, :string
   column :complex_to, :string
-  column :date1, :string
-  column :date2, :string
-  column :rt, :boolean
   column :adults, :integer, 1
   column :children, :integer, 0
   column :infants, :integer, 0
@@ -15,18 +57,40 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   column :debug, :boolean, false
   column :cabin, :string
   column :changes, :string
+  has_many :form_segments
 
-  validates_presence_of :from_iata, :to_iata, :date1
-  validates_presence_of :date2, :if => :rt
-
-  # FIXME заглушка пока не переделаем from и to
-  attr_accessor :form_segments
+  delegate :to, :from, :from_iata, :to_iata, :to => 'form_segments.first'
 
   attr_reader :to_iata, :from_iata, :complex_to_parse_results
 
+  def date1
+    form_segments.first.date
+  end
+
+  def date2
+    form_segments[1].date if form_segments[1]
+  end
+
+  def dates
+    [date1, date2] if date2
+    [date1]
+  end
+
+  def save_to_cache(query_key)
+    Rails.cache.write('pricer_form' + query_key, self)
+  end
+
+  def self.load_from_cache(query_key)
+    Rails.cache.read('pricer_form' + query_key)
+  end
+
   def to_json(args={})
-    args[:methods] = (args[:methods].to_a + [:dates, :people_count, :complex_to_parse_results, :to_as_object, :from_as_object]).uniq
+    args[:methods] = (args[:methods].to_a + [:people_count, :complex_to_parse_results, :form_segments]).uniq
     super(args)
+  end
+
+  def rt
+    (form_segments.length == 2) && (form_segments[0].to_iata == form_segments[1].from_iata) && (form_segments[1].to_iata == form_segments[0].from_iata)
   end
 
   def real_people_count
@@ -38,18 +102,6 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     }
   end
 
-
-  #временная херня
-  def dates
-    return [date1, date2] if date1 && date2
-    return [date1] if date1
-  end
-
-  def dates= dates
-    self.date1 = dates[0] if dates.length > 0
-    self.date2 = dates[1] if dates.length > 1
-  end
-
   def people_count
     {:adults => adults || 1, :children => children || 0, :infants => infants || 0}
   end
@@ -59,7 +111,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   end
 
   def parse_complex_to
-    self.complex_to ||= to
+    self.complex_to ||= form_segments[0].to
     res = {}
     str = self.complex_to.mb_chars
     not_finished = true
@@ -136,17 +188,6 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       Date.new(Date.today.year, month, day).strftime('%d%m%y')
   end 
 
-  def to= name
-    @to_iata =  Completer.iata_from_name(name) rescue nil
-    super
-  end
-
-  def from= name
-    @from_iata = Completer.iata_from_name(name) rescue nil
-    super
-  end
-
-
   def to_key
     []
   end
@@ -194,29 +235,15 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     end
   end
 
-  def to_as_object
-    to_iata && [City[to_iata], Airport[to_iata], Country.find_by_alpha2(to_iata)].find(&:id)
-  end
-
-  def from_as_object
-    from_iata && [City[from_iata], Airport[from_iata], Country.find_by_alpha2(from_iata)].find(&:id)
-  end
-
   def nearby_cities
-    [from_as_object, to_as_object].map do |location|
-      if location.class == City
-        location.nearby_cities
-      elsif location.class == Airport
-        location.city.nearby_cities
-      else
-        []
-      end
-    end
+    #FIXME
+    form_segments[0].nearby_cities
   end
 
   def human_locations
-    fl = from_as_object
-    tl = to_as_object
+    #FIXME
+    fl = form_segments[0].from_as_object
+    tl = form_segments[0].to_as_object
     result = {
       :dpt_0 => fl && fl.case_from,
       :arv_0 => tl && tl.case_to,

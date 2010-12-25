@@ -2,15 +2,12 @@ class PricerController < ApplicationController
   layout false
 
   def index
-    require "pricer_form"
     if params[:query_key]
       @query_key = params[:query_key]
-      @search = Rails.cache.read('pricer_form' + params[:query_key])
+      @search = PricerForm.load_from_cache(params[:query_key])
       @search.search_type = params[:search_type]
     else
-      @search = PricerForm.new(params[:search])
-      @query_key = ShortUrl.generate_url([@search, Time.now].hash)
-      Rails.cache.write('pricer_form' + @query_key, @search)
+      render :text => 'PricerForm not found'
     end
     unless params[:restore_results]
       if @search.valid?
@@ -46,7 +43,7 @@ class PricerController < ApplicationController
   def validate
     require 'pricer_form'
     if params[:query_key]
-      @search = Rails.cache.read('pricer_form' + params[:query_key])
+      @search = PricerForm.load_from_cache(params[:query_key])
       fragment_exist = fragment_exist?({:action => 'index', :action_suffix => params[:query_key]}) &&
         fragment_exist?({:action => 'index', :action_suffix => ('matrix' + params[:query_key])})
       render :json => {
@@ -56,15 +53,16 @@ class PricerController < ApplicationController
         :fragment_exist => fragment_exist
       }
     else
-      @search = PricerForm.new(params[:search])
+      @search = PricerForm.new(params[:search].merge({:form_segments => []}))
+      @search.form_segments = params[:search][:form_segments].to_a.sort_by{|a| a[0]}.map{|k, v| PricerForm::FormSegment.new(:from => v[0], :to => v[1], :date => v[2])}
       @search.parse_complex_to
       if @search.valid?
-        @query_key = ShortUrl.generate_url([@search, Time.now].hash)
-        Rails.cache.write('pricer_form' + @query_key, @search)
+        @query_key = ShortUrl.generate_url([@search, @search.form_segments, Time.now].hash)
+        @search.save_to_cache(@query_key)
       end
       render :json => {
         :valid => @search.valid?,
-        :errors => @search.errors,
+        :errors => @search.form_segments.every.errors,
         :human => @search.human,
         :search => @search,
         :complex_to_parse_results => @search.complex_to_parse_results,

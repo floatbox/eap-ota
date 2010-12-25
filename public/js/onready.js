@@ -1,5 +1,19 @@
 ﻿(function() {
 
+    /* Социальная шапка */
+    new Ya.share({
+        'element': 'ya-share',
+        'elementStyle': {
+        	'type': 'link',
+        	'linkIcon': true,
+        	'border': false,
+        	'quickServices': ['facebook', 'twitter', 'friendfeed', 'lj', 'vkontakte', 'odnoklassniki', 'yaru']
+        },
+        'popupStyle': {
+        	'copyPasteField': true
+        }
+    });    
+
     search.init();
     offersList.init();
 

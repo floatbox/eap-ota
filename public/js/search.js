@@ -34,6 +34,12 @@ init: function() {
     this.segments = [{
         from: searchField('#search-s1-from'),
         to: searchField('#search-s1-to')
+    }, {
+        from: searchField('#search-s2-from'),
+        to: searchField('#search-s2-to')
+    }, {
+        from: searchField('#search-s3-from'),
+        to: searchField('#search-s3-to')
     }];
     
     // IATA в первом поле «Откуда»
@@ -147,8 +153,13 @@ init: function() {
     this.smessage.find('.ssm-content').html(this.messages.to);
 },
 toggleMode: function(mode) {
-    if (mode === undefined) mode = {ow: 'rt', rt: 'ow'}[this.mode];
-    $('#search-fields').removeClass('smode-' + this.mode).addClass('smode-' + mode);
+    var context = $('#search-fields');
+    if (mode === undefined) mode = {rt: 'ow', ow: 'mw', mw: 'rt'}[this.mode];
+    context.removeClass(this.mode + 'mode').addClass(mode + 'mode');
+    context.find('tr.segment2, tr.segment3').toggleClass('g-none', mode !== 'mw').find('.autocomplete').each(function() {
+        this.disabled = mode !== 'mw';
+    });
+    this.calendar.toggleMode(mode);
     this.mode = mode;
 },
 values: function() {
@@ -162,6 +173,13 @@ values: function() {
         search_type: 'travel',
         day_interval: 1
     };
+    data.form_segments = [[data.from, data.to, data.dates && data.dates[0]]];
+    if (this.mode === 'rt') {
+        data.form_segments[1] = [data.to, data.from, data.dates && data.dates[1]];
+    } else if (this.mode === 'mw') {
+        data.form_segments[1] = [this.segments[1].from.val(), this.segments[1].to.val(), data.dates && data.dates[1]];
+        data.form_segments[2] = [this.segments[2].from.val(), this.segments[2].to.val(), data.dates && data.dates[2]];
+    }
     var debug = $('#sdmode');
     if (debug.length && debug.get(0).checked) {
         data.debug = 1;
@@ -234,23 +252,6 @@ validate: function(qkey) {
     var restoreResults = Boolean(qkey);
     this.submit.addClass('validating');
 
-    // Данные в новом формате
-    var ds = data.search;
-    if (ds) {
-        ds.form_segments = [{
-            from: ds.from,
-            to: ds.to,
-            date: ds.dates && ds.dates[0]
-        }];
-        if (ds.rt) {
-            ds.form_segments.push({
-                from: ds.to,
-                to: ds.from,
-                date: ds.dates && ds.dates[1]
-            });
-        }
-    }
-    
     this.request = $.get('/pricer/validate/', data, function(result, status, request) {
         if (request != self.request) {
             return;
