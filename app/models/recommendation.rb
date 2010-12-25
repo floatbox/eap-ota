@@ -15,6 +15,10 @@ class Recommendation
     marketing_carrier_iatas - [validating_carrier_iata]
   end
 
+  def validating_carrier_participates?
+    marketing_carrier_iatas.include?(validating_carrier_iata)
+  end
+
   def interline?
     other_marketing_carrier_iatas.any?
   end

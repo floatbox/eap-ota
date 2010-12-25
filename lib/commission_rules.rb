@@ -26,15 +26,20 @@ module CommissionRules
   def applicable_interline? recommendation
     case interline
     when :possible
-      # FIXME для различий с absent
-      true
+      recommendation.validating_carrier_participates?
     when nil, :no
       not recommendation.interline?
     when :yes
-      recommendation.interline? # and recommendation.valid_interline?
+      recommendation.interline? and # and recommendation.valid_interline?
+        recommendation.validating_carrier_participates?
     # FIXME доделать:
-    # when :absent
-    # when :first
+    when :absent
+      recommendation.interline? and
+        not recommendation.validating_carrier_participates?
+    when :first
+      recommendation.interline? and
+      recommendation.variants[0].flights.first.marketing_carrier_iata ==
+        recommendation.validating_carrier_iata
     end
   end
 
