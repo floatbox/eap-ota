@@ -196,7 +196,6 @@ example 'mowpar parmow/ab'
 agent    "1 euro с билета по опубл. тарифам на рейсы Interline, если 1-ый сегмент выполнен под кодом AZ."
 subagent "5 руб. с билета по опубл. тарифам на рейсы Interline, если 1-ый сегмент выполнен под кодом AZ."
 interline :first
-not_implemented
 commission "1eur/5"
 
 example 'mowpar/ab parmow'
@@ -1112,7 +1111,6 @@ agent    "1% от всех опубл. тарифов на рейсы OU"
 subagent "0,5% от опубл. тарифа на собств.рейсы OU"
 commission "1%/0.5%"
 
-example 'mowpar'
 example 'mowpar parmow/ab'
 agent    "1% от опубл. тарифов на рейсы Interline с участком OU."
 subagent "0,5% от опубл. тарифа на рейсы Interline с участком OU."
@@ -1163,11 +1161,14 @@ agent    "5% от опубл. тарифов на собств. рейсы QR"
 subagent "3,5% от опубл. тарифов на собственные рейсы QR"
 commission "5%/3.5%"
 
+example 'mowpar parmow/ab'
 agent    "5% от опубл. тарифов на рейсы Interline (только при обязательном пролете первого сектора на рейсах QR)"
 subagent "3,5% от опубл. тарифов на рейсы Interline (только при обязательном пролете первого сектора на рейсах QR)"
 interline :first
-not_implemented
 commission "5%/3.5%"
+
+example 'parmow/ab mowpar'
+no_commission
 
 carrier "RB", "SYRIAN ARAB AIRLINES"
 ########################################
