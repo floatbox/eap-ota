@@ -162,6 +162,17 @@ module Amadeus
     doc
   end
 
+  def read_latest_doc(action)
+    xml_string = read_latest_xml(action)
+    parse_string(xml_string)
+  end
+
+  def read_each_doc(action)
+    read_each_xml(action) do |xml, path|
+      yield parse_string(xml), path
+    end
+  end
+
   end
 
 end
