@@ -6,7 +6,7 @@ module CommissionRules
 
   include KeyValueInit
 
-  attr_accessor :carrier, :agent, :subagent, :disabled, :no_commission, :interline,
+  attr_accessor :carrier, :agent, :subagent, :disabled, :not_implemented, :no_commission, :interline,
     :domestic, :international, :klass, :departure, :departure_country,
     :check, :examples, :agent_comments, :subagent_comments, :source
 
@@ -16,8 +16,12 @@ module CommissionRules
     :economy => %W(B H K L M N Q T V X W S Y)
   }
 
+  def disabled?
+    disabled || not_implemented || no_commission
+  end
+
   def applicable? recommendation
-    not disabled and
+    not disabled? and
     # carrier == recommendation.validating_carrier_iata and
     applicable_interline?(recommendation) and
     applicable_classes?(recommendation)
@@ -130,7 +134,6 @@ module CommissionRules
       commission = new({
         :carrier => @carrier,
         :source => caller_address,
-        :disabled => true,
         :no_commission => true
       }.merge(opts))
 
@@ -153,9 +156,11 @@ module CommissionRules
     def disabled reason=true
       opts[:disabled] = reason
     end
-
-    alias_method :not_implemented, :disabled
     alias_method :vague, :disabled
+
+    def not_implemented
+      opts[:not_implemented] = true
+    end
 
     # правило интерлайна
     def interline value=:yes
@@ -212,12 +217,12 @@ module CommissionRules
           rec = Recommendation.example(code, :carrier => commission.carrier)
           proposed = find_for(rec)
           if proposed == commission ||
-             proposed.nil? && (commission.no_commission || commission.disabled)
+             proposed.nil? && commission.disabled?
             ok "#{commission.carrier} (line #{source}): #{code} - OK"
           elsif proposed.nil?
             error "#{commission.carrier} (line #{source}): #{code} - no applicable commission!"
           else
-            if commission.no_commission
+            if commission.disabled?
               error "#{commission.carrier} (line #{source}): #{code} - commission non applicable, but got line #{proposed.source}:"
             else
               error "#{commission.carrier} (line #{source}): #{code} - wrong commission applied. Should be:"
@@ -231,6 +236,16 @@ module CommissionRules
         end
       end
 
+    end
+
+    def stats
+      puts "#{commissions.keys.size} airlines"
+      puts "#{commissions.values.sum(&:size)} rules total"
+      puts "#{commissions.values.every.select(&:disabled?).sum(&:size)} rules disabled"
+      puts "#{commissions.values.every.select(&:not_implemented).sum(&:size)} of which not implemented"
+      disabled, enabled = commissions.keys.partition {|iata| commissions[iata].all?(&:disabled?)}
+      puts "enabled #{enabled.size}: #{enabled.sort.join(' ')}"
+      puts "disabled #{disabled.size}: #{disabled.sort.join(' ')}"
     end
 
     private
