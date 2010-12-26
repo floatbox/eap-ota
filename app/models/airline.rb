@@ -63,4 +63,10 @@ class Airline < ActiveRecord::Base
     interlines.split.map {|iata| Airline[iata]}
   end
 
+  # для кронтаска
+  def self.update_interlines!
+    all.each do |airline|
+      airline.update_interlines!
+    end
+  end
 end
