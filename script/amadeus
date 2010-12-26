@@ -12,7 +12,9 @@ begin
     command_line.chomp!
     break if command_line == 'q'
     next if command_line == ''
-    puts amadeus.cmd(command_line)
+    command_line.split(';').each do |cmd|
+      puts amadeus.cmd(cmd)
+    end
   end
 ensure
   puts "logging out amadeus session ..."
