@@ -107,5 +107,24 @@ module PricerHelper
     primary_carriers
   end
 
+  def variant_debug_info(recommendation, variant)
+    concat %(<a onclick="prompt('ctrl+c!', '#{recommendation.cryptic(variant)}');return false">КОД</a>)
+    if recommendation.ground?
+      concat %(<span style="color:red">наземный участок.</span>)
+    end
+    concat 'Не можем продать' unless recommendation.sellable?
+    if recommendation.commission
+      concat %( #{recommendation.commission.carrier}
+        #{recommendation.commission.agent}
+        #{recommendation.commission.subagent}
+        #{recommendation.price_share} р.)
+      unless recommendation.price_markup == 0
+        concat %(#{recommendation.price_markup} р.)
+      end
+    else
+      concat %(#{recommendation.validating_carrier_iata} <span style="color:red">нет комиссий</span>)
+    end
+  end
+
 end
 

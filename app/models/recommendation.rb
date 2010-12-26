@@ -242,6 +242,13 @@ class Recommendation
     }
   end
 
+  # попытка сделать код для script/amadeus
+  def cryptic(variant)
+    ( variant.flights.zip(booking_classes).map { |fl, cl| fl.cryptic(cl) } +
+      [ "FV #{validating_carrier_iata}" ]
+    ).join('; ')
+  end
+
   # FIXME порнография какая-то. чего так сложно?
   def self.summary recs, locations
     airlines = []

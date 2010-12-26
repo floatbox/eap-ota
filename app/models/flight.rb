@@ -142,6 +142,12 @@ class Flight
     flight_code
   end
 
+  # для отображения в формате, пригодном для script/amadeus SS
+  def cryptic(class_of_service=nil)
+    # EI154/C 12JUL DUBLHR 1
+    "SS #{marketing_carrier_iata} #{flight_number} #{class_of_service || '?' } #{dept_date.strftime('%d%b').upcase} #{departure_iata}#{arrival_iata} #{seat_count || 1}"
+  end
+
   def has_equal_tariff_with? flight
     [marketing_carrier_iata, class_of_service] == [flight.marketing_carrier_iata, flight.class_of_service]
   end
