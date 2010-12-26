@@ -108,21 +108,21 @@ module PricerHelper
   end
 
   def variant_debug_info(recommendation, variant)
-    concat %(<a onclick="prompt('ctrl+c!', '#{recommendation.cryptic(variant)}');return false">КОД</a>)
-    if recommendation.ground?
-      concat %(<span style="color:red">наземный участок.</span>)
-    end
-    concat 'Не можем продать' unless recommendation.sellable?
+    concat %(<a href="#" onclick="prompt('ctrl+c!', '#{recommendation.cryptic(variant)}'); return false">КОД</a> )
+    concat 'Наземный участок ' if recommendation.ground?
+    concat 'Не можем продать ' unless recommendation.sellable?
+    concat 'Нет интерлайна ' unless recommendation.valid_interline?
+    concat recommendation.validating_carrier_iata + ' '
     if recommendation.commission
-      concat %( #{recommendation.commission.carrier}
-        #{recommendation.commission.agent}
-        #{recommendation.commission.subagent}
-        #{recommendation.price_share} р.)
+      concat %( #{recommendation.commission.agent}/#{recommendation.commission.subagent})
+      concat %( #{recommendation.price_share} р.)
       unless recommendation.price_markup == 0
         concat %(#{recommendation.price_markup} р.)
       end
+    elsif Commission.exists_for?(recommendation)
+      concat %(Не подходят правила)
     else
-      concat %(#{recommendation.validating_carrier_iata} <span style="color:red">нет комиссий</span>)
+      concat %(Нет в договорe)
     end
   end
 

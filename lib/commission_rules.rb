@@ -201,6 +201,9 @@ module CommissionRules
       end
     end
 
+    def exists_for?(recommendation)
+      commissions[recommendation.validating_carrier_iata].blank?
+    end
 
     # test methods
     def test
