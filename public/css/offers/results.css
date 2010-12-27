@@ -284,17 +284,21 @@
     background: url(/img/offers/trip.png) no-repeat;
     cursor: help;
 }
-.offer .segment1 .trip li.flight {
+.offer .segment-2 .trip li.flight {
     background-position: 0 -25px;
 }
-.offer .trip .parts li.layover {
+.offer .segment-3 .trip li.flight,
+.offer .segment-last .trip li.flight {
     background-position: 0 -50px;
 }
-.offer .trip .parts li.lovs {
+.offer .trip .parts li.layover {
     background-position: 0 -75px;
 }
-.offer .trip .parts li.lovl {
+.offer .trip .parts li.lovs {
     background-position: 0 -100px;
+}
+.offer .trip .parts li.lovl {
+    background-position: 0 -125px;
 }
     
 /* Класс */
@@ -328,12 +332,18 @@
 .offer .variants strong {
     font-weight: bold;
 }
-.offer .summary .segment0 h5,
-.offer .summary .segment0 .variants a {
+.offer .summary .segment-1 h5,
+.offer .summary .segment-1 .variants a {
     color: #6F7C26;
 }
-.offer .summary .segment1 h5,
-.offer .summary .segment1 .variants a {
+.offer .summary .segment-2 h5,
+.offer .summary .segment-2 .variants a {
+    color: #0aa0c6;
+}
+.offer .summary .segment-last h5,
+.offer .summary .segment-last .variants a,
+.offer .summary .segment-3 h5,
+.offer .summary .segment-3 .variants a {
     color: #C46F26;
 }
 .offer .summary .variants a:hover {
@@ -399,10 +409,14 @@
 .offer .details .ret th {
     padding-top: 0;
 }
-.offer .details .direction {
+.offer .details .segment-1 .direction {
     color: #6F7C26;
 }
-.offer .details .ret .direction {
+.offer .details .segment-2 .direction {
+    color: #0aa0c6;
+}
+.offer .details .segment-3 .direction,
+.offer .details .segment-last .direction {
     color: #C46F26;
 }
 
@@ -439,12 +453,18 @@
     letter-spacing: -0.04em;
     color: #777;
 }
-.offer .details .arv .time h5,
-.offer .details .dpt .time h5 {
+.offer .details .segment-1 .arv .time h5,
+.offer .details .segment-1 .dpt .time h5 {
     color: #6F7C26;
 }
-.offer .details .ret .arv .time h5,
-.offer .details .ret .dpt .time h5 {
+.offer .details .segment-2 .arv .time h5,
+.offer .details .segment-2 .dpt .time h5 {
+    color: #0aa0c6;
+}
+.offer .details .segment-3 .arv .time h5,
+.offer .details .segment-3 .dpt .time h5,
+.offer .details .segment-last .arv .time h5,
+.offer .details .segment-last .dpt .time h5 {
     color: #C46F26;
 }
     
@@ -481,13 +501,13 @@
     background: url(/img/offers/trip.png) no-repeat -25px 0;
 }
 .offer .details li.schange {
-    background-position: 0 -75px;
-}
-.offer .details li.lchange {
     background-position: 0 -100px;
 }
-.offer .details li.diffad {
+.offer .details li.lchange {
     background-position: 0 -125px;
+}
+.offer .details li.diffad {
+    background-position: 0 -150px;
 }
 
 /* Сумма и кнопка */

@@ -10,9 +10,11 @@
     display: none;
 }
 
-.active-booking .offer-variant td.variants p,
-.active-booking .offer-variant td.variants p a {
+.active-booking .offer-variant .summary .variants p,
+.active-booking .offer-variant .summary .variants a {
     color: #CCC;
+    cursor: default;
+    text-decoration: none;
     cursor: default;
 }
 

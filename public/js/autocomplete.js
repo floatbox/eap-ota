@@ -459,7 +459,7 @@ $.Autocompleter.List = function(input, insert) {
     var $input = $(input);
     var options = $input.data('options');
 
-    var $box, $list, items, status;
+    var $box, $list, items, status, maxleft;
     var active = -1;
 
     
@@ -472,8 +472,6 @@ $.Autocompleter.List = function(input, insert) {
             width: options.width
         })
         .appendTo(document.body);
-
-        $box.data('maxleft', $input.outerWidth() - $box.outerWidth());
         
         $list = $('<ul/>')
         .appendTo($box)
@@ -608,7 +606,10 @@ $.Autocompleter.List = function(input, insert) {
             var me = this;
 
             var offset = $input.offset();
-            left = Math.min(left || 0, $box.data('maxleft'));
+            if (maxleft === undefined) {
+                maxleft = $input.outerWidth() - $box.outerWidth();
+            }
+            left = Math.min(left || 0, maxleft);
 
             $box.css({
                 top: offset.top + input.offsetHeight - 1,
@@ -628,7 +629,7 @@ $.Autocompleter.List = function(input, insert) {
                 }
             );
 
-            if(options.scroll) {
+            if (options.scroll) {
                 $list.scrollTop(0);
                 $list.css({
                     maxHeight: options.height,
