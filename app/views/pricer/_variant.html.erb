@@ -108,21 +108,7 @@
     </div>
     </td>
     <td class="rules" colspan="3">
-    <% if recommendation.ground? %>
-        <span style="color:red">наземный участок.</span>
-    <% end %>
-    <%= 'Не можем продать' unless recommendation.sellable? %>
-    <% if recommendation.commission %>
-        <%= recommendation.commission.carrier %>
-        <%= recommendation.commission.agent %>
-        <%= recommendation.commission.subagent %>
-        (<%= recommendation.price_share %>р.
-        <% unless recommendation.price_markup == 0 %>
-        + <%= recommendation.price_markup %>р.
-        <% end %>)
-    <% else %>
-        <%= recommendation.validating_carrier_iata %><span style="color:red">???</span>
-    <% end %>
+      <% variant_debug_info recommendation, variant %>
     <a href="#">Правила тарифа</a> (<%= recommendation.booking_classes.join(', ') %>) 
     </td>
 </tr>

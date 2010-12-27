@@ -9,16 +9,13 @@ class Segment
   delegate :marketing_carrier, :marketing_carrier_name, :marketing_carrier_iata, :to => 'flights.first', :allow_nil => true
 
   def layover_durations
-    (0...flights.size-1).map do |i|
-      (flights[i+1].departure_datetime_utc.to_i -
-       flights[i].arrival_datetime_utc.to_i) / 60
+    flights.each_cons(2).map do |landing, takeoff|
+      (takeoff.departure_datetime_utc.to_i - landing.arrival_datetime_utc.to_i) / 60
     end
   end
 
   def layovers
-    (0...flights.size-1).map do |i|
-      flights[i].arrival
-    end
+    flights[0...-1].map(&:arrival)
   end
 
   attr_accessor :flights, :eft
@@ -44,6 +41,7 @@ class Segment
     time_to_day_part(departure_time)
   end
 
+  # FIXME неужто еще надо?
   def as_json( options={} )
     {
       :departure => departure,

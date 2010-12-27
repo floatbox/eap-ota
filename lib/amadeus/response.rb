@@ -9,19 +9,14 @@ module Amadeus::Response
 
   # дебажные метод
   def self.latest_saved_for action
-    self.for(action).new(
-      Amadeus::Service.parse_string(
-        Amadeus::Service.read_latest_xml(action)
-      )
-    )
+    self.for(action).new(Amadeus::Service.read_latest_doc(action))
   end
 
-  def self.each_saved_for action, &block
-    self.for(action).new(
-      Amadeus::Service.parse_string(
-        Amadeus::Service.read_each_xml(action, &block)
-      )
-    )
+  def self.grep_saved action
+    Amadeus::Service.read_each_doc(action) do |doc, path|
+      response = self.for(action).new(doc)
+      puts(path) if yield(response)
+    end
   end
 
   class Base

@@ -30,6 +30,7 @@ module Amadeus
           validating_carrier_iata =
             rec.xpath("r:paxFareProduct/r:paxFareDetail/r:codeShareDetails[r:transportStageQualifier='V']/r:company").to_s
 
+          # иногда не все. возможно, только основного перевозчика на маршруте
           marketing_carrier_iatas =
             rec.xpath("r:paxFareProduct/r:paxFareDetail/r:codeShareDetails/r:company").every.to_s
 
@@ -56,7 +57,7 @@ module Amadeus
             :price_tax => price_tax,
             :variants => variants,
             :validating_carrier_iata => validating_carrier_iata,
-            :marketing_carrier_iatas => marketing_carrier_iatas,
+            :suggested_marketing_carrier_iatas => marketing_carrier_iatas,
             :additional_info => additional_info,
             :cabins => cabins,
             :booking_classes => booking_classes
