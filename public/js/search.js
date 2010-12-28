@@ -145,10 +145,10 @@ init: function() {
         }
     });
     this.messages = {
-        from: 'Введите, пожалуйста, пункт отправления',
-        to: 'Введите, пожалуйста, пункт назначения',
-        date1: 'Выберите, пожалуйста, дату вылета',
-        date2: 'Выберите, пожалуйста, дату обратного вылета'
+        from_iata: 'Введите, пожалуйста, пункт отправления',
+        to_iata: 'Введите, пожалуйста, пункт назначения',
+        date: 'Выберите, пожалуйста, дату вылета',
+        date2rt: 'Выберите, пожалуйста, дату обратного вылета'
     };
     this.smessage.find('.ssm-content').html(this.messages.to);
 },
@@ -163,23 +163,23 @@ toggleMode: function(mode) {
     this.mode = mode;
 },
 values: function() {
+    var s = this.segments;
+    var d = this.calendar.values || [];
     var data = {
-        from: this.segments[0].from.val(),
-        to: this.segments[0].to.val(),
-        rt: this.mode == 'rt' ? 1 : 0,
-        dates: this.calendar.values,
         people_count: this.persons.selected,
         cabin: this.cabin.value[0],
         search_type: 'travel',
         day_interval: 1
     };
-    data.form_segments = [[data.from, data.to, data.dates && data.dates[0]]];
+    var fs = [{from: s[0].from.val(), to: s[0].to.val(), date: d[0]}];
     if (this.mode === 'rt') {
-        data.form_segments[1] = [data.to, data.from, data.dates && data.dates[1]];
+        fs[1] = {from: s[0].to.val(), to: s[0].from.val(), date: d[1]};
     } else if (this.mode === 'mw') {
-        data.form_segments[1] = [this.segments[1].from.val(), this.segments[1].to.val(), data.dates && data.dates[1]];
-        data.form_segments[2] = [this.segments[2].from.val(), this.segments[2].to.val(), data.dates && data.dates[2]];
+        fs[1] = {from: s[1].from.val(), to: s[1].to.val(), date: d[1]};
+        fs[2] = {from: s[2].from.val(), to: s[2].to.val(), date: d[2]};
+        if (!(fs[2].from || fs[2].to || fs[2].date)) fs.length = 2;
     }
+    data.form_segments = fs;
     var debug = $('#sdmode');
     if (debug.length && debug.get(0).checked) {
         data.debug = 1;
@@ -187,41 +187,42 @@ values: function() {
     return data;
 },
 restore: function(data) {
-    this.segments[0].from.trigger('set', data.from || '').trigger('iata', '');
-    this.segments[0].to.trigger('set', data.to || '').trigger('iata', '');
+    var fs = data.form_segments;
+    for (var i = fs.length; i--;) {
+        this.segments[i].from.trigger('set', fs[i].from || '').trigger('iata', '');
+        this.segments[i].to.trigger('set', fs[i].to || '').trigger('iata', '');
+    }
+    this.toggleMode(['ow', 'rt', 'mw'][fs.length]);
     this.persons.select($.extend({}, data.people_count || df.people_count));
     this.cabin.select(data.cabin || []);
     this.calendar.selected = [];
-    this.setMode(data.rt !== undefined && data.rt == 0 ? 'ow' : 'rt');
     if (data.dates) {
         this.calendar.select(data.dates);
     }    
 },
 update: function(source) {
-    var self = this;
     clearTimeout(this.timer);
-    if (source == this.calendar && this.parsed && this.parsed.dates) {
-        var pd =  this.parsed.dates, improper = [];
-        for (var i = pd.length; i--;) {
-            if (pd[i].value != this.calendar.values[i]) improper.push($.trim(pd[i].str));
+    var self = this;
+    if (this.parsed) {
+        var current = this.segments[0].to.val(), result = current, pattern;
+        if (source == this.calendar && this.parsed.dates) {
+            var pd =  this.parsed.dates, improper = [];
+            for (var i = pd.length; i--;) {
+                if (pd[i].value != this.calendar.values[i]) improper.push($.trim(pd[i].str));
+            }
+            if (improper.length) {
+                pattern = new RegExp(improper.join('|'), 'i');
+                result = result.replace(pattern, '');
+            }
         }
-        if (improper.length) {
-            var current = this.segments[0].to.val();
-            var pattern = new RegExp('(\\s*)(?:' + improper.join('|') + ')(\\s*)', 'i');
-            console.log(pattern);
-            var result = current.replace(pattern, function(s, p1, p2) {
-                return (p1 && p2) ? ' ' : '';}
-            );
-            if (result != current) this.segments[0].to.trigger('set', result);
+        if (source == this.persons && this.parsed.people_count) {
+            pattern = new RegExp($.trim(this.parsed.people_count.str), 'i');
+            result = result.replace(pattern, '');
         }
-    }
-    if (source == this.persons && this.parsed && this.parsed.people_count) {
-        var current = this.to.val(); 
-        var pattern = new RegExp('(\\s*)(?:' + $.trim(this.parsed.people_count.str) + ')(\\s*)', 'i');
-        var result = current.replace(pattern, function(s, p1, p2) {
-            return (p1 && p2) ? ' ' : '';
-        });
-        if (result != current) this.segments[0].to.trigger('set', result);
+        if (result != current) {
+            result = result.replace(/\s(?=\s)|$\s/g, '');
+            this.segments[0].to.trigger('set', result);
+        }
     }
     this.timer = setTimeout(function() {
         self.validate();
@@ -285,8 +286,15 @@ validate: function(qkey) {
         } else {
             delete(offersList.nextUpdate);
             if (result.errors) {
-                var text = self.messages[result.errors[0][0]];
-                self.smessage.find('.ssm-content').html(text);
+                for (var i = 0, im = result.errors.length; i < im; i++) {
+                    var err = result.errors[i];
+                    if (err.length) {
+                        var mid = err[0][0], fmid = mid + (i + 1) + self.mode;
+                        var mtext = self.messages[fmid] || self.messages[mid] || err[0][1];
+                        self.smessage.find('.ssm-content').html(mtext);
+                        break;
+                    }
+                }
             }
         }
         var rs = result.search;

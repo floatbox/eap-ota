@@ -1,14 +1,12 @@
 <% common_cabin = segment_cabins && segment_cabins.length == 1 && segment_cabins[0] %>
-<tr<%= ' class="ret"' if segment_counter > 0 %>>
+<% row_classname = segment_counter == variant.segments.length - 1 ? 'last' : (segment_counter + 1).to_s %>
+<tr class="segment-<%= row_classname %>">
     <td></td>
     <th colspan="5"><strong class="direction"><%= segment_counter == 0 ? 'Перелёт туда' : 'Обратный перелёт' %><% if common_cabin %> <span class="cabin"><%= human_cabin_ins(common_cabin) %></span><% end %></strong><% if segment.layovers? %> с&nbsp;<%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %><% end %></th>
 </tr>
 <% segment.flights.each_with_index do |flight, flight_index| %>
 <% next_date_arrival = (flight_index == segment.flights.length - 1 && flight.arrival_date != segment.flights[0].departure_date) %>
-<% row_classnames = [] %>
-<% row_classnames << 'ret' if segment_counter > 0 %>
-<% row_classnames << 'last' if flight_index == segment.flights.length - 1 %>
-<tr<%= " class=\"#{row_classnames.join(' ')}\"" unless row_classnames.empty? %>>
+<tr class="segment<%= row_classname %><%= ' last' if flight_index == segment.flights.length - 1 %>">
     <td></td>
     <td class="point lpoint<%= ' arv' if flight_index == 0 %>" colspan="2">
         <div class="time">

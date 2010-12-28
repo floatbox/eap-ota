@@ -18,7 +18,7 @@
 <% variant_carriers = primary_operating_carriers(variant) %>
 <% common_carrier = variant.segments.length > 1 && variant_carriers.map{|vc| vc['name'] }.uniq.length == 1 %>
 <% variant.segments.each_with_index do |segment, segment_counter| %>
-<tr class="segment<%= segment_counter %>">
+<tr class="segment-<%= segment_counter == variant.segments.length - 1 ? 'last' : segment_counter + 1 %>">
 
     <% if common_carrier %>
     <td class="carrier common" rowspan="2">
@@ -95,7 +95,7 @@
     <% end %>
    
 </tr>
-<tr class="segment<%= segment_counter %>">
+<tr class="segment-<%= segment_counter == variant.segments.length - 1 ? 'last' : segment_counter + 1 %>">
     <td colspan="4" class="variants"></td>
 </tr>
 <% end %>
