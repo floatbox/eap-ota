@@ -73,16 +73,12 @@ makeDates: function() {
     };     
 },
 selectiveSegment: function(index) {
-    var nearest, unselected, items = this.selected;
-    var limit = this.selectedLimit || items.length;
-    for (var i = 0; i < limit + 1; i++) {
-        if (items[i] === undefined) {
-            if (unselected === undefined) unselected = i;
-        } else {
-            if (nearest === undefined || Math.abs(items[i] - index) < Math.abs(items[nearest] - index)) nearest = i;
-        }
+    var nearest, items = this.selected;
+    for (var i = 0; i < this.selectedLimit; i++) {
+        if (items[i] === undefined) return i;
+        if (nearest === undefined || Math.abs(items[i] + i / 10 - index) < Math.abs(items[nearest] + nearest / 10 - index)) nearest = i;
     }
-    return unselected == this.selectedLimit ? nearest : unselected;
+    return nearest;
 },
 initDates: function() {
     var self = this, selector = 'li:not(.inactive)';
@@ -188,7 +184,7 @@ dragSelected: function(e) {
             d.marked = this.dates.eq((d.index + offset).constrain(0, md)).addClass('drag');
         }
         for (var i = this.selected.length; i--;) {
-            this.selected[i] = (d.selected[i] + offset * d.segments[i]).constrain(0, md);
+            this.selected[i] = this.selected[i] !== undefined ? (d.selected[i] + offset * d.segments[i]).constrain(0, md) : undefined;
         }
         this.savedSelected = undefined;
         this.selected.sortInt();
@@ -264,22 +260,20 @@ showResetButton: function() {
     }
 },
 fillSelected: function() {
-    if (this.filled) this.filled.removeClass(function() {
-        return this.className.match(/\b(period|selected|segment\d+)\b/g).join(' ');
-    });
+    if (this.filled) this.filled.removeClass('selected period segment-1 segment-2 segment-3 segment-last');
     var selected = this.selected.compact();
     for (var i = selected.length; i--;) {
-        this.dates.eq(selected[i]).addClass('selected segment' + i);
+        var el = this.dates.eq(selected[i]).addClass('selected segment-' + (i + 1));
+        if (i > 0 && i === selected.length - 1) el.addClass('segment-last');
     }
     this.filled = selected.length ? this.dates.slice(selected[0], selected[selected.length - 1] + 1).addClass("period") : undefined;
 },
 highlight: function(items) {
-    if (this.highlighted) this.highlighted.removeClass(function() {
-        return this.className.match(/\b(p?hover|s\d+hover)\b/g).join(' ');
-    });
+    if (this.highlighted) this.highlighted.removeClass('hover phover shover-1 shover-2 shover-3 shover-last');
     if (items) {
         for (var i = items.length; i--;) {
-            this.dates.eq(items[i]).addClass('hover s' + i + 'hover');
+            var el = this.dates.eq(items[i]).addClass('hover shover-' + (i + 1));
+            if (i > 0 && i === items.length - 1) el.addClass('shover-last');
         }
         items.sortInt();
         this.highlighted = items.length && this.dates.slice(items[0], items[items.length - 1] + 1).addClass("phover");
@@ -288,6 +282,7 @@ highlight: function(items) {
     }
 },
 toggleMode: function(mode) {
+    this.container.removeClass('owmode rtmode mwmode').addClass(mode + 'mode');
     this.selectedLimit = {'ow': 1, 'rt': 2, 'mw': 3}[mode];
     if (!this.savedSelected || this.selected.length > this.savedSelected.length) {
         this.savedSelected = this.selected.concat();
@@ -445,7 +440,9 @@ initScrollbar: function() {
 updatePreview: function(items) {
     this.preview.html('');
     for (var i = items.length; i--;) {
-        $('<div class="date"></div>').css('left', Math.round(items[i] * this.factor)).appendTo(this.preview);
+        var el = $('<div class="date"></div>').addClass('segment-' + (i + 1));
+        if (i > 0 && i === items.length - 1) el.addClass('segment-last');
+        el.css('left', Math.round(items[i] * this.factor)).appendTo(this.preview);
     }
     if (items.length > 1) {
         var pl = Math.round(items[0] * this.factor);

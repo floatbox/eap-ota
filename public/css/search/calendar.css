@@ -106,49 +106,81 @@
 
 /* Highlighted date */
 .calendar .dates .phover {
-    background-color: #b992b8;
-    border-color: #ccc2d0;
+    background-color: #a2acb9;
 }
 .calendar .odd .phover {
-    background-color: #c198bd;
+    background-color: #acb4bf;
 }
-.calendar .dates li.hover {
-    background-color: #d167ad;
-    border-color: #d8a0c0;
-}
-.calendar .dates li.s0hover {
+.calendar .dates li.shover-1 {
     background-position: 0 0;
+    background-color: #98b263;
 }
-.calendar .dates li.s1hover {
+.calendar .dates li.shover-2 {
+    background-position: 0 0;
+    background-color: #5dadc6;
+}
+.calendar .dates li.shover-last {
+    background-position: 0 0;
+    background-color: #b99374;
+}
+.calendar .rtmode li.shover-last {
     background-position: 0 -100px;
 }
 
 /* Selected date */
 .calendar .dates .period {
-    background-color: #c17cb2;
-    border-color: #d0b5ca;
+    background-color: #9fa7b1;
+    border-color: #aeb5bc;
 }
 .calendar .dates li.selected {
-    border-color: #e67bae;
-    background-color: #ED1192;
-    background-repeat: no-repeat;
     color: #fff;
     cursor: move;
 }
-.calendar .dates li.segment0 {
+.calendar .dates li.segment-1 {
     background-position: 0 -50px;
+    background-color: #81aa00;
+    border-color: #92b336;
 }
-.calendar .dates li.segment1 {
+.calendar .dates li.segment-2 {
+    background-position: 0 -50px;
+    background-color: #0aa0c6;
+    border-color: #39acca;
+}
+.calendar .dates li.segment-last {
+    background-position: 0 -50px;
+    background-color: #C46F26;
+    border-color: #c38550;
+}
+.calendar .rtmode li.segment-last {
     background-position: 0 -150px;
 }
-.calendar .dates li.segment0.s1hover {
-    background-position: 0 -200px;
+.calendar .dates li.segment-1.shover-last {
+    background-color: #81aa00;
+    background-position: 0 -325px;
 }
-.calendar .dates li.segment1.s0hover {
-    background-position: 0 -250px;
+.calendar .rtmode li.segment-1.shover-last {
+    background-position: 0 -205px;
 }
-.calendar .dates li.segment0.segment1 {
-    background-position: 0 -250px;
+.calendar .dates li.segment-1.segment-2,
+.calendar .dates li.segment-2.segment-3,
+.calendar .dates li.segment-1.segment-last {
+    border-bottom: none;
+    padding-bottom: 6px;
+}
+.calendar .dates li.segment-1.segment-2 {
+    background-color: #0aa0c6;
+    background-position: 0 -385px;
+}
+.calendar .dates li.segment-2.segment-3 {
+    background-color: #c26c23;
+    background-position: 0 -445px;
+}
+.calendar .dates li.segment-1.segment-last {
+    background-color: #c26c23;
+    background-position: 0 -385px;
+}
+.calendar .rtmode li.segment-1.segment-last {
+    background-position: 0 -265px;
 }
 .calendar .selected .dayoff {
     color: #fff;
@@ -252,14 +284,23 @@
     top: 0;
     height: 18px;
     overflow: hidden;
-    background: #ED1192;
 }
 .calendar .preview .date {
     width: 2px;
 }
+.calendar .preview .segment-1 {
+    background-color: #81aa00;
+}
+.calendar .preview .segment-2 {
+    background-color: #0aa0c6;    
+}
+.calendar .preview .segment-last {
+    background-color: #C46F26;    
+}
 .calendar .preview .period {
-    opacity: 0.25;
-    filter: alpha(opacity=25);
+    background: #000;
+    opacity: 0.12;
+    filter: alpha(opacity=12);
 }
 
 /* Scrollbar */
