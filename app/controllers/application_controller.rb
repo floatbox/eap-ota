@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
 
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
-
+=begin
   def rescue_action_without_handler(exception)
     unless request.xhr?
       super
@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
       }
     }
   end
-
+=end
   protected
 
   def set_locale
