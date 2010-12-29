@@ -297,37 +297,57 @@ validate: function(qkey) {
                 }
             }
         }
-        var rs = result.search;
-        if (rs) {
+        var fs = result.search && result.search.form_segments;
+        if (fs) {
+            var sfrom, sto, segments = [];
+            for (var i = 0, im = fs.length; i < im; i++) {
+                sfrom = fs[i].from_as_object, sto = fs[i].to_as_object;
+                self.segments[i].from.trigger('iata', sfrom ? (sfrom.code = sfrom.iata || sfrom.alpha2) : '');
+                self.segments[i].to.trigger('iata', sto ? (sto.code = sto.iata || sto.alpha2) : '');                
+                segments[i] = {from: sfrom, to: sto};
+            }
             if (self.map) {
-                self.updateMap(rs.from_as_object, rs.to_as_object);
-            }
-            if (rs.from_as_object) {
-                self.segments[0].from.trigger('iata', rs.from_as_object.iata || rs.from_as_object.alpha2);
-            }
-            if (rs.to_as_object) {
-                self.segments[0].to.trigger('iata', rs.to_as_object.iata || rs.to_as_object.alpha2);
+                self.updateMap(segments);
             }
         }        
         delete(self.request);
     });
 },
-updateMap: function(lf, lt) {
+updateMap: function(segments) {
     this.map.Clear();
-    var pf = lf && lf.lat && lf.lng ? new VELatLong(lf.lat, lf.lng) : undefined;
-    var pt = lt && lt.lat && lt.lng ? new VELatLong(lt.lat, lt.lng) : undefined;    
-    if (pf) this.map.AddShape(new VEShape(VEShapeType.Pushpin, pf));
-    if (pt) this.map.AddShape(new VEShape(VEShapeType.Pushpin, pt));
-    if (pf && pt) {
-        var route = new VEShape(VEShapeType.Polyline, [pf, pt]);
+    var pins = [], lines = [], pindex = {}, lindex = {};
+    for (var i = 0, im = segments.length; i < im; i++) {
+        var f = segments[i].from, t = segments[i].to;
+        var fp = f && f.lat && f.lng && new VELatLong(f.lat, f.lng);
+        var tp = t && t.lat && t.lng && new VELatLong(t.lat, t.lng);
+        if (fp && !pindex[f.code]) {
+            pins.push(fp);
+            pindex[f.code] = true;
+        }
+        if (tp && !pindex[t.code]) {
+            pins.push(tp);
+            pindex[t.code] = true;
+        }
+        if (fp && tp && !lindex[f.code + t.code] && !lindex[t.code + f.code]) {
+            lines.push([fp, tp]);
+            lindex[f.code + t.code] = true;
+            lindex[t.code + f.code] = true;
+        }
+    }
+    for (var i = 0, im = pins.length; i < im; i++) {
+        this.map.AddShape(new VEShape(VEShapeType.Pushpin, pins[i]));
+    }
+    for (var i = 0, im = lines.length; i < im; i++) {
+        var route = new VEShape(VEShapeType.Polyline, lines[i]);
         route.SetLineWidth(3);
         route.SetLineColor(new VEColor(237, 17, 146, 0.75));
         route.HideIcon();
         this.map.AddShape(route);
-        this.map.SetMapView([pf, pt]);
-    } else {
-        var ft = pf || pt;
-        if (ft) this.map.SetCenterAndZoom(ft, 4);
+    }
+    if (pins.length > 1) {
+        this.map.SetMapView(pins);
+    } else if (pins.length) {
+        this.map.SetCenterAndZoom(pins[0], 4);
     }
 },
 abort: function() {

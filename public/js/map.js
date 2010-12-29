@@ -6,6 +6,6 @@ $(function() {
         search.map.SetDashboardSize(VEDashboardSize.Tiny);
         search.map.LoadMap(new VELatLong(fdata.lat, fdata.lng), 4);
         search.map.SetScaleBarDistanceUnit(VEDistanceUnit.Kilometers);
-        search.updateMap(fdata);
+        search.updateMap([{from: fdata}]);
     }
 });

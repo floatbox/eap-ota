@@ -42,8 +42,8 @@ makeDates: function() {
             });
         }
         var dmy = curd.toAmadeus();
-        var day = $('<li>').attr('data-dmy', dmy);
-        var label = $('<span class="label">' + date + ' <span class="mtitle">' + app.constant.MNg[curd.getMonth()] + '</span></span>');
+        var day = $('<li>').attr('data-dmy', dmy).attr('data-title', date + ' ' + app.constant.MNg[curd.getMonth()]);
+        var label = $('<span class="label">' + date + '<span class="mtitle">&nbsp;' + app.constant.MNg[curd.getMonth()] + '</span></span>');
         if (curd.dayoff()) {
             label.addClass('dayoff');
         }
@@ -202,9 +202,9 @@ update: function() {
     var items = this.selected.compact();
     var title = 'Выберите даты';
     if (items.length) {
-        title = this.dates.eq(items[0]).text();
+        title = this.dates.eq(items[0]).attr('data-title');
         if (items.length > 1) {
-            var d1 = title.split(' '), d2 = this.dates.eq(items.last()).text().split(' ');
+            var d1 = title.split(' '), d2 = this.dates.eq(items.last()).attr('data-title').split(' ');
             var spacer = ' — ';
             if (d1[1] == d2[1]) {
                 d1.length = 1;
@@ -271,11 +271,11 @@ fillSelected: function() {
 highlight: function(items) {
     if (this.highlighted) this.highlighted.removeClass('hover phover shover-1 shover-2 shover-3 shover-last');
     if (items) {
+        items.sortInt();
         for (var i = items.length; i--;) {
             var el = this.dates.eq(items[i]).addClass('hover shover-' + (i + 1));
             if (i > 0 && i === items.length - 1) el.addClass('shover-last');
         }
-        items.sortInt();
         this.highlighted = items.length && this.dates.slice(items[0], items[items.length - 1] + 1).addClass("phover");
     } else {
         delete(this.highlighted);
