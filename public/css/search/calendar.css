@@ -111,16 +111,17 @@
     background-position: 0 0;
     background-color: #98b263;
 }
-.calendar .dates li.shover-2 {
-    background-position: 0 0;
-    background-color: #5dadc6;
-}
-.calendar .dates li.shover-last {
+.calendar .dates li.shover-2, 
+.calendar .dates li.shover-3 {
     background-position: 0 0;
     background-color: #b99374;
 }
-.calendar .rtmode li.shover-last {
+.calendar .rtmode li.shover-2 {
     background-position: 0 -100px;
+}
+.calendar .twmode li.shover-2 {
+    background-position: 0 0;
+    background-color: #5dadc6;
 }
 
 /* Selected date */
@@ -137,46 +138,63 @@
     background-color: #81aa00;
     border-color: #92b336;
 }
-.calendar .dates li.segment-2 {
-    background-position: 0 -50px;
-    background-color: #0aa0c6;
-    border-color: #39acca;
-}
-.calendar .dates li.segment-last {
+.calendar .dates li.segment-2,
+.calendar .dates li.segment-3 {
     background-position: 0 -50px;
     background-color: #C46F26;
     border-color: #c38550;
 }
-.calendar .rtmode li.segment-last {
+.calendar .twmode li.segment-2 {
+    background-position: 0 -50px;
+    background-color: #0aa0c6;
+    border-color: #39acca;
+}
+.calendar .rtmode li.segment-2 {
     background-position: 0 -150px;
 }
-.calendar .dates li.segment-1.shover-last {
-    background-color: #81aa00;
+.calendar .dates li.segment-1.shover-2 {
+    background-color: #b99374;
     background-position: 0 -325px;
 }
-.calendar .rtmode li.segment-1.shover-last {
+.calendar .dates li.segment-2.shover-3 {
+    background-color: #b99374;
+    background-position: 0 -445px;
+}
+.calendar .dates li.segment-1.segment-2.shover-3 {
+    background-color: #b99374;
+    background-position: 0 -565px;
+}
+.calendar .rtmode li.segment-1.shover-2 {
     background-position: 0 -205px;
+}
+.calendar .twmode li.segment-1.shover-2 {
+    background-color: #5dadc6;
 }
 .calendar .dates li.segment-1.segment-2,
 .calendar .dates li.segment-2.segment-3,
-.calendar .dates li.segment-1.segment-last {
+.calendar .dates li.segment-1.shover-2,
+.calendar .dates li.segment-2.shover-3 {
     border-bottom: none;
     padding-bottom: 6px;
 }
+.calendar .dates li.segment-2.segment-3 {
+    background-color: #c26c23;
+    background-position: 0 -505px;
+}
 .calendar .dates li.segment-1.segment-2 {
+    background-color: #c26c23;
+    background-position: 0 -385px;
+}
+.calendar .twmode li.segment-1.segment-2 {
     background-color: #0aa0c6;
     background-position: 0 -385px;
 }
-.calendar .dates li.segment-2.segment-3 {
-    background-color: #c26c23;
-    background-position: 0 -445px;
-}
-.calendar .dates li.segment-1.segment-last {
-    background-color: #c26c23;
-    background-position: 0 -385px;
-}
-.calendar .rtmode li.segment-1.segment-last {
+.calendar .rtmode li.segment-1.segment-2 {
     background-position: 0 -265px;
+}
+.calendar .dates li.segment-1.segment-2.segment-3 {
+    background-color: #c26c23;
+    background-position: 0 -625px;
 }
 .calendar .selected .dayoff {
     color: #fff;
@@ -287,11 +305,12 @@
 .calendar .preview .segment-1 {
     background-color: #81aa00;
 }
-.calendar .preview .segment-2 {
-    background-color: #0aa0c6;    
-}
-.calendar .preview .segment-last {
+.calendar .preview .segment-2,
+.calendar .preview .segment-3 {
     background-color: #C46F26;    
+}
+.calendar .twmode .preview .segment-2 {
+    background-color: #0aa0c6;    
 }
 .calendar .preview .period {
     background: #000;

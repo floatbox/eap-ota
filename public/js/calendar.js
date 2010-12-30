@@ -102,7 +102,7 @@ initDates: function() {
         var segment = self.selectiveSegment(index);
         var items = self.selected.concat();
         items[segment] = index;
-        self.highlight(items && items.compact());
+        self.highlight(items && items.compact(), index);
     }).delegate(selector, 'mousedown', function(e) {
         var el = $(this);
         if (el.hasClass('period')) {
@@ -260,21 +260,25 @@ showResetButton: function() {
     }
 },
 fillSelected: function() {
-    if (this.filled) this.filled.removeClass('selected period segment-1 segment-2 segment-3 segment-last');
     var selected = this.selected.compact();
+    if (this.filled) {
+        this.filled.removeClass('selected period segment-1 segment-2 segment-3');
+    }
     for (var i = selected.length; i--;) {
         var el = this.dates.eq(selected[i]).addClass('selected segment-' + (i + 1));
-        if (i > 0 && i === selected.length - 1) el.addClass('segment-last');
     }
     this.filled = selected.length ? this.dates.slice(selected[0], selected[selected.length - 1] + 1).addClass("period") : undefined;
 },
-highlight: function(items) {
-    if (this.highlighted) this.highlighted.removeClass('hover phover shover-1 shover-2 shover-3 shover-last');
+highlight: function(items, index) {
+    if (this.highlighted) {
+        this.highlighted.removeClass('hover phover shover-1 shover-2 shover-3');
+    }
     if (items) {
         items.sortInt();
         for (var i = items.length; i--;) {
-            var el = this.dates.eq(items[i]).addClass('hover shover-' + (i + 1));
-            if (i > 0 && i === items.length - 1) el.addClass('shover-last');
+            if (items[i] === index) {
+                this.dates.eq(index).addClass('hover shover-' + (i + 1));
+            }
         }
         this.highlighted = items.length && this.dates.slice(items[0], items[items.length - 1] + 1).addClass("phover");
     } else {
@@ -282,8 +286,8 @@ highlight: function(items) {
     }
 },
 toggleMode: function(mode) {
-    this.container.removeClass('owmode rtmode mwmode').addClass(mode + 'mode');
-    this.selectedLimit = {'ow': 1, 'rt': 2, 'mw': 3}[mode];
+    this.selectedLimit = {ow: 1, rt: 2, dw: 2, tw: 3}[mode];
+    this.container.removeClass('owmode rtmode dwmode twmode').addClass(mode + 'mode');
     if (!this.savedSelected || this.selected.length > this.savedSelected.length) {
         this.savedSelected = this.selected.concat();
     }
@@ -441,7 +445,6 @@ updatePreview: function(items) {
     this.preview.html('');
     for (var i = items.length; i--;) {
         var el = $('<div class="date"></div>').addClass('segment-' + (i + 1));
-        if (i > 0 && i === items.length - 1) el.addClass('segment-last');
         el.css('left', Math.round(items[i] * this.factor)).appendTo(this.preview);
     }
     if (items.length > 1) {

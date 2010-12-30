@@ -10,6 +10,21 @@ init: function() {
     $('#search-mode li').click(function() {
         self.toggleMode($(this).attr('data-mode'));
     });
+    $('#search-fields .add-segment').click(function() {
+        self.toggleMode('tw');
+    });
+    $('#search-fields .segment2 .remove-segment').click(function() {
+        self.segments[1].from.trigger('set', self.segments[2].from.val());
+        self.segments[1].to.trigger('set', self.segments[2].to.val());
+        self.segments[2].from.trigger('set', '');
+        self.segments[2].to.trigger('set', '');
+        self.toggleMode('dw');
+    });
+    $('#search-fields .segment3 .remove-segment').click(function() {
+        self.segments[2].from.trigger('set', '');
+        self.segments[2].to.trigger('set', '');
+        self.toggleMode('dw');
+    });
 
     /* Поля */
     var searchField = function(selector) {
@@ -154,11 +169,22 @@ init: function() {
 },
 toggleMode: function(mode) {
     var context = $('#search-fields');
-    if (mode === undefined) mode = {rt: 'ow', ow: 'mw', mw: 'rt'}[this.mode];
+    if (mode === undefined) {
+        mode = {rt: 'ow', ow: 'mw', dw: 'rt', tw: 'rw'}[this.mode];
+    }
+    if (mode === 'mw') {
+        mode = this.segments[2].from.val() || this.segments[2].to.val() ? 'tw' : 'dw';
+    }
+    if (mode === 'dw' && !this.segments[1].from.val()) {
+        this.segments[1].from.trigger('set', this.segments[0].to.val());
+    }
+    if (mode === 'tw' && !this.segments[2].from.val()) {
+        this.segments[2].from.trigger('set', this.segments[1].to.val());
+    }
     context.removeClass(this.mode + 'mode').addClass(mode + 'mode');
-    context.find('tr.segment2, tr.segment3').toggleClass('g-none', mode !== 'mw').find('.autocomplete').each(function() {
-        this.disabled = mode !== 'mw';
-    });
+    context.find('tr.segment2').toggleClass('g-none', mode !== 'dw' && mode !== 'tw');
+    context.find('tr.segment3').toggleClass('g-none', mode !== 'tw');
+    context.find('.autocomplete:visible[value=""]').eq(0).focus();
     this.calendar.toggleMode(mode);
     this.mode = mode;
 },
@@ -166,20 +192,26 @@ values: function() {
     var s = this.segments;
     var d = this.calendar.values || [];
     var data = {
+        form_segments: [],
         people_count: this.persons.selected,
         cabin: this.cabin.value[0],
         search_type: 'travel',
         day_interval: 1
     };
-    var fs = [{from: s[0].from.val(), to: s[0].to.val(), date: d[0]}];
-    if (this.mode === 'rt') {
-        fs[1] = {from: s[0].to.val(), to: s[0].from.val(), date: d[1]};
-    } else if (this.mode === 'mw') {
-        fs[1] = {from: s[1].from.val(), to: s[1].to.val(), date: d[1]};
-        fs[2] = {from: s[2].from.val(), to: s[2].to.val(), date: d[2]};
-        if (!(fs[2].from || fs[2].to || fs[2].date)) fs.length = 2;
+    for (var i = {rt: 1, ow: 1, dw: 2, tw: 3}[this.mode]; i--;) {
+        data.form_segments[i] = {
+            from: s[i].from.val(),
+            to: s[i].to.val(),
+            date: d[i]
+        }; 
     }
-    data.form_segments = fs;
+    if (this.mode === 'rt') {
+        data.form_segments[1] = {
+            from: data.form_segments[0].to,
+            to: data.form_segments[0].from,
+            date: d[1]
+        };
+    }
     var debug = $('#sdmode');
     if (debug.length && debug.get(0).checked) {
         data.debug = 1;
@@ -300,7 +332,7 @@ validate: function(qkey) {
         var fs = result.search && result.search.form_segments;
         if (fs) {
             var sfrom, sto, segments = [];
-            for (var i = 0, im = fs.length; i < im; i++) {
+            for (var i = 0, im = Math.min(fs.length, {ow: 1, rt: 2, dw: 2, tw: 3}[self.mode]); i < im; i++) {
                 sfrom = fs[i].from_as_object, sto = fs[i].to_as_object;
                 self.segments[i].from.trigger('iata', sfrom ? (sfrom.code = sfrom.iata || sfrom.alpha2) : '');
                 self.segments[i].to.trigger('iata', sto ? (sto.code = sto.iata || sto.alpha2) : '');                

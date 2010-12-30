@@ -1,11 +1,12 @@
 #search-fields {
     position: relative;
-    padding: 6px 15px 5px;
+    padding: 6px 0 5px 15px;
     color: #c8c8c8;
     background: #2c2c2c;
     zoom: 1;
 }
 #search-fields table {
+    width: 945px;
     border-collapse: collapse;
     border-spacing: 0;
 }
@@ -13,6 +14,9 @@
     padding: 0 0 10px;
     vertical-align: top;
 }
+#search-fields td.search-mode {
+    padding-bottom: 0;
+} 
 
 /* верхние подписи к полям ввода */
 #search-fields h6 {
@@ -38,13 +42,12 @@
     background-image: url(data:image/gif;base64,R0lGODlhEAAQAPIAACwsLO0RklglQ7oXd+0RkqEaaYkeXX0gVyH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==);    
 }
 
-/* вкладки-переключалки */
+/* Режим поиска */
 #search-mode {
-    position: relative;
-    left: 15px;
-    float: right;
-    width: 150px;
+    width: 155px;
+    margin-left: 20px;
     padding-top: 3px;
+    font-weight: bold;
     font-size: 14px;
     line-height: 16px;
 }
@@ -57,10 +60,22 @@
 }
 #search-fields.owmode .owtab,
 #search-fields.rtmode .rttab,
-#search-fields.mwmode .mwtab {
+#search-fields.dwmode .mwtab,
+#search-fields.twmode .mwtab {
     background: #ed1192;
     color: #FFF;
     cursor: default;
+}
+
+/* Переключение третьего перелёта */
+#search-fields .toggle-segment {
+    padding: 40px 0 0 30px;
+    font-size: 14px;
+    line-height: 16px;    
+}
+#search-fields.twmode .add-segment,
+#search-fields.dwmode .remove-segment {
+    display: none;
 }
 
 /* Поля ввода */
@@ -88,11 +103,12 @@
 #search-fields .segment1 .sicon {
     background-position: 0 -30px;
 }
-#search-fields .segment2 .sicon {
-    background-position: 0 -90px;
-}
+#search-fields .segment2 .sicon,
 #search-fields .segment3 .sicon {
     background-position: 0 -60px;
+}
+#search-fields.twmode .segment2 .sicon {
+    background-position: 0 -90px;
 }
 #search-fields.rtmode .segment1 .sicon {
     background-position: 0 0;

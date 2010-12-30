@@ -3,11 +3,6 @@
 
 <!-- Откуда и куда -->
 <div id="search-fields" class="rtmode">
-<ul id="search-mode">
-    <li class="rttab" data-mode="rt" title="Билет до пункта назначения и обратно. Самый популярный вариант путешествия." class="active">туда и обратно</li>
-    <li class="owtab" data-mode="ow" title="Билет только до пункта назначения, в одну сторону.">только туда</li>
-    <li class="mwtab" data-mode="mw" title="Транзит через несколько городов. Остановки на желаемый срок.">сложный маршрут</li>
-</ul>
 <table>
 <tr class="segment1">
     <td class="from">
@@ -28,12 +23,19 @@
             <input type="text" id="search-s1-to" class="autocomplete" tabindex="2" value="" title="Город, страна или IATA-код">
         </div>   
     </td>
+    <td class="search-mode">
+        <ul id="search-mode">
+            <li class="rttab" data-mode="rt" title="Билет до пункта назначения и обратно. Самый популярный вариант путешествия." class="active">Туда и обратно</li>
+            <li class="owtab" data-mode="ow" title="Билет только до пункта назначения, в одну сторону.">Только туда</li>
+            <li class="mwtab" data-mode="mw" title="Транзит через несколько городов. Остановки на желаемый срок.">Сложный маршрут</li>
+        </ul>    
+    </td>
 </tr>
 <tr class="segment2 g-none">
     <td class="from">
         <h6><label for="search-s2-from">Откуда</label><span class="loader"></span></h6>
         <div class="autocomplete-box">
-            <input disabled="disabled" type="text" id="search-s2-from" class="autocomplete" tabindex="3" value="" title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом">
+            <input type="text" id="search-s2-from" class="autocomplete" tabindex="3" value="" title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом">
         </div>
     </td>
     <td>
@@ -42,15 +44,19 @@
     <td class="to">
         <h6><label for="search-s2-to"><span data-key="to">Куда</span>, <span data-key="dates">когда</span></label><span class="loader"></span></h6>
         <div class="autocomplete-box">
-            <input disabled="disabled" type="text" id="search-s2-to" class="autocomplete" tabindex="4" value="" title="Город, страна или IATA-код">
+            <input type="text" id="search-s2-to" class="autocomplete" tabindex="4" value="" title="Город, страна или IATA-код">
         </div>   
+    </td>
+    <td class="toggle-segment">
+        <span class="link add-segment">Добавить перелёт</span>
+        <span class="link remove-segment">Убрать перелёт</span>
     </td>
 </tr>
 <tr class="segment3 g-none">
     <td class="from">
         <h6><label for="search-s3-from">Откуда</label><span class="loader"></span></h6>
         <div class="autocomplete-box">
-            <input disabled="disabled" type="text" id="search-s3-from" class="autocomplete" tabindex="5" value="" title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом">
+            <input type="text" id="search-s3-from" class="autocomplete" tabindex="5" value="" title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом">
         </div>
     </td>
     <td>
@@ -59,9 +65,12 @@
     <td class="to">
         <h6><label for="search-s3-to"><span data-key="to">Куда</span>, <span data-key="dates">когда</span></label><span class="loader"></span></h6>
         <div class="autocomplete-box">
-            <input disabled="disabled" type="text" id="search-s3-to" class="autocomplete" tabindex="6" value="" title="Город, страна или IATA-код">
+            <input type="text" id="search-s3-to" class="autocomplete" tabindex="6" value="" title="Город, страна или IATA-код">
         </div>   
     </td>
+    <td class="toggle-segment">
+        <span class="link remove-segment">Убрать перелёт</span>
+    </td>    
 </tr>
 </table>
 </div>
