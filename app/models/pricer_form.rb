@@ -45,12 +45,10 @@ class PricerForm < ActiveRecord::BaseWithoutTable
 
   column :dates, :string
   column :rt, :string
-  column :from, :string
-  column :to, :string
-  column :complex_to, :string
   column :adults, :integer, 1
   column :children, :integer, 0
   column :infants, :integer, 0
+  column :complex_to, :string
   column :search_type, :string, 'travel'
   column :nonstop, :boolean
   column :day_interval, :integer, 3
