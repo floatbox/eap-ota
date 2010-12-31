@@ -19,3 +19,4 @@ rerun.txt
 config/*.sphinx.conf
 db/sphinx
 .DS_Store
+tags
