@@ -14,8 +14,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :airplanes
 
-  map.resources :airlines
-
   map.resources :airports
 
   map.resources :cities

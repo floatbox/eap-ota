@@ -21,18 +21,18 @@ def import_aircrafts
   end
 end
 
-def import_airlines
+def import_carriers
   headers = nil
 
-  Airline.delete_all
+  Carrier.delete_all
   CSV.open('db/csv/airlines.csv', 'r', ?,) do |row|
     unless headers
       headers = row.map(&:to_s)
       next
     end
-    Airline.create!( Hash[headers.zip(row.map(&:to_s))])
+    Carrier.create!( Hash[headers.zip(row.map(&:to_s))])
   end
 end
 
 import_aircrafts
-import_airlines
+import_carriers

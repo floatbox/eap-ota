@@ -7,7 +7,7 @@ class Country < ActiveRecord::Base
   has_many :airports, :through => :cities
   has_many :geo_taggings, :as => :location, :dependent => :destroy
   has_many :geo_tags, :through => :geo_taggings
-  has_many :airlines
+  has_many :carriers
   has_many :regions
   include GeoTaggable
 

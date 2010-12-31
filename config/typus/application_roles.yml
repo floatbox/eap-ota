@@ -3,7 +3,7 @@
 # Use the README file as a reference to customize settings.
 
 admin:
-  Airline: create, read, update, delete
+  Carrier: create, read, update, delete
   Airplane: create, read, update, delete
   Airport: create, read, update, delete
   City: create, read, update, delete

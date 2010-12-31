@@ -8,7 +8,7 @@ AirlineAlliance:
     default: name, bonus_program_name
     list: name, bonus_program_name
     form: name, bonus_program_name
-  relationships: airlines
+  relationships: carriers
   application: Eviterra
 
 GlobalDistributionSystem:
@@ -16,7 +16,7 @@ GlobalDistributionSystem:
     default: name
     list: name
     form: name
-  relationships: airlines
+  relationships: carriers
   application: Eviterra
 
 Consolidator:
@@ -24,10 +24,10 @@ Consolidator:
     default: name, booking_office, ticketing_office
     list: name, booking_office, ticketing_office
     form: name, booking_office, ticketing_office
-  relationships: airlines
+  relationships: carriers
   application: Eviterra
 
-Airline:
+Carrier:
   fields:
     default: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
     list: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
@@ -115,7 +115,7 @@ Country:
     options:
       read_only: morpher_to, morpher_from, morpher_in
   order_by: name_ru
-  relationships: airlines, airports, cities, geo_tags, regions
+  relationships: carriers, airports, cities, geo_tags, regions
   filters:
   search:  name_en, name_ru, full_name_ru, continent_ru, synonym_list
   application: Eviterra

@@ -9,29 +9,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101226041600) do
+ActiveRecord::Schema.define(:version => 20101231065943) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
     t.string "bonus_program_name"
-  end
-
-  create_table "airlines", :force => true do |t|
-    t.string   "en_shortname"
-    t.string   "en_longname"
-    t.string   "iata"
-    t.string   "icao"
-    t.string   "country_ru"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "country_id"
-    t.string   "ru_shortname"
-    t.string   "ru_longname"
-    t.integer  "airline_alliance_id"
-    t.string   "bonus_program_name"
-    t.integer  "gds_id"
-    t.integer  "consolidator_id"
-    t.text     "interlines",          :null => false
   end
 
   create_table "airplanes", :force => true do |t|
@@ -79,6 +61,24 @@ ActiveRecord::Schema.define(:version => 20101226041600) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "office",     :default => "", :null => false
+  end
+
+  create_table "carriers", :force => true do |t|
+    t.string   "en_shortname"
+    t.string   "en_longname"
+    t.string   "iata"
+    t.string   "icao"
+    t.string   "country_ru"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "country_id"
+    t.string   "ru_shortname"
+    t.string   "ru_longname"
+    t.integer  "airline_alliance_id"
+    t.string   "bonus_program_name"
+    t.integer  "gds_id"
+    t.integer  "consolidator_id"
+    t.text     "interlines",          :null => false
   end
 
   create_table "cities", :force => true do |t|

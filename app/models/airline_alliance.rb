@@ -1,4 +1,4 @@
 class AirlineAlliance < ActiveRecord::Base
-  has_many :airlines
+  has_many :carriers
   
 end

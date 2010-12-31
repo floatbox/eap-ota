@@ -79,15 +79,15 @@ namespace :import do
   # 1000
   # http://www.adria.si
 
-  task :airlines => :environment do
-    airline = nil
+  task :carriers => :environment do
+    carrier = nil
     counter = 0
     open('tmp/airline_members_list.txt', 'r').each_line do |line|
 
       line.chomp!
-      if airline.nil?
+      if carrier.nil?
         short_name, iata, digit, icao, country = line.split(/  +/)
-        airline = Airline.new(
+        carrier = Carrier.new(
           :short_name => short_name,
           :iata => iata,
           :digit => digit,
@@ -96,19 +96,19 @@ namespace :import do
           :address => ''
         )
 
-      elsif airline.long_name.blank?
-        airline.long_name = line
+      elsif carrier.long_name.blank?
+        carrier.long_name = line
 
       elsif line['http://']
-        airline.site = line
-        airline.save!
-        airline = nil
+        carrier.site = line
+        carrier.save!
+        carrier = nil
 
         counter += 1
         puts counter if (counter % 100).zero?
 
       else
-        airline.address += line + ' '
+        carrier.address += line + ' '
       end
 
     end

@@ -8,7 +8,7 @@ class Recommendation
   delegate :marketing_carriers, :marketing_carrier_iatas, :to => 'variants.first'
 
   def validating_carrier
-    validating_carrier_iata && Airline[validating_carrier_iata]
+    validating_carrier_iata && Carrier[validating_carrier_iata]
   end
 
   def other_marketing_carrier_iatas
@@ -145,7 +145,7 @@ class Recommendation
   def summary
     result = {
       :price => price_total,
-      :airline => segments.first.marketing_carrier_name,
+      :carrier => segments.first.marketing_carrier_name,
     }
     variants.first.segments.each_with_index do |segment, i|
       result['dpt_location_' + i.to_s] = segment.departure.city.case_from.gsub(/ /, '&nbsp;')
@@ -251,7 +251,7 @@ class Recommendation
 
   # FIXME порнография какая-то. чего так сложно?
   def self.summary recs, locations
-    airlines = []
+    carriers = []
     planes = []
     cities = []
     departure_cities = []
@@ -273,7 +273,7 @@ class Recommendation
     recs.each {|r|
       r.variants.each{|v|
         summary = v.summary
-        airlines += summary[:airlines]
+        carriers += summary[:carriers]
         planes += summary[:planes]
         cities += summary[:cities]
         layovers << summary[:layovers]
@@ -289,7 +289,7 @@ class Recommendation
     }
     layover_titles = ['без пересадок', 'с одной пересадкой']
     result = {
-      :airlines => airlines.uniq.map{|a| {:v => a, :t => Airline[a].name}}.sort_by{|a| a[:t] },
+      :carriers => carriers.uniq.map{|a| {:v => a, :t => Carrier[a].name}}.sort_by{|a| a[:t] },
       :planes => planes.uniq.map{|a| {:v => a, :t => Airplane[a].name}}.sort_by{|a| a[:t] },
       :cities => cities.uniq.map{|c| {:v => c, :t => City[c].name}}.sort_by{|a| a[:t] },
       :segments => segments_amount,

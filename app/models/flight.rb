@@ -15,11 +15,11 @@ class Flight
   end
 
   def operating_carrier
-    operating_carrier_iata && Airline[operating_carrier_iata]
+    operating_carrier_iata && Carrier[operating_carrier_iata]
   end
 
   def marketing_carrier
-    marketing_carrier_iata && Airline[marketing_carrier_iata]
+    marketing_carrier_iata && Carrier[marketing_carrier_iata]
   end
 
   def equipment_type

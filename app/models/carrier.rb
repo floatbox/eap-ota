@@ -1,4 +1,4 @@
-class Airline < ActiveRecord::Base
+class Carrier < ActiveRecord::Base
   include ExtResource
   extend IataStash
 
@@ -22,7 +22,7 @@ class Airline < ActiveRecord::Base
     #бонусные программы авиакомпаний, входящие в тот же альянс, что и данная
     #пока без бонусной программы альянса
     if alliance
-      return alliance.airlines.find(:all, :conditions => 'bonus_program_name IS NOT NULL AND bonus_program_name != ""', :order => 'bonus_program_name')
+      return alliance.carriers.all(:conditions => 'bonus_program_name IS NOT NULL AND bonus_program_name != ""', :order => 'bonus_program_name')
     end
     return []
   end
@@ -54,19 +54,19 @@ class Airline < ActiveRecord::Base
     save
   end
 
-  def interline_with?(airline)
-    airline = airline.iata if airline.is_a? Airline
-    interlines.split.include?(airline)
+  def interline_with?(carrier)
+    carrier = carrier.iata if carrier.is_a? Carrier
+    interlines.split.include?(carrier)
   end
 
   def interline_partners
-    interlines.split.map {|iata| Airline[iata]}
+    interlines.split.map {|iata| Carrier[iata]}
   end
 
   # для кронтаска
   def self.update_interlines!
-    all.each do |airline|
-      airline.update_interlines!
+    all.each do |carrier|
+      carrier.update_interlines!
     end
   end
 end

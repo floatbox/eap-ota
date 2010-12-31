@@ -197,7 +197,7 @@ class Completer
     read_important_objects
     read_countries
     read_cities
-    #read_airlines
+    #read_carriers
     #read_airplanes
     read_airports
     #read_geotags
@@ -316,8 +316,8 @@ class Completer
     end
   end
 
-  def read_airlines
-    Airline.all.each do |c|
+  def read_carriers
+    Carrier.all.each do |c|
       synonyms = []
       synonyms << c.short_name unless c.short_name == c.name
       synonyms.delete_if &:blank?
@@ -359,7 +359,7 @@ class Completer
 
   def outdated?
     @updated_at && (
-      @updated_at < [Airline, Airplane, Airport, City, Country, GeoTag].every.maximum(:updated_at).max ||
+      @updated_at < [Carrier, Airplane, Airport, City, Country, GeoTag].every.maximum(:updated_at).max ||
       @updated_at.to_date < Date.today
     )
   end

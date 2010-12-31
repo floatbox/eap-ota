@@ -9,9 +9,9 @@ class Variant
   end
 
   def summary
-    # FIXME airlines для фильтров - operating carrier. ok?
+    # FIXME carriers для фильтров - operating carrier. ok?
     result = {
-      :airlines => flights.every.operating_carrier_iata.uniq,
+      :carriers => flights.every.operating_carrier_iata.uniq,
       :planes => flights.every.equipment_type_iata.uniq,
       :departures => segments.every.departure_time,
       :duration => segments.sum(&:total_duration),

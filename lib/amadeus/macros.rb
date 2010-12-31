@@ -112,8 +112,8 @@ module Amadeus
       cmd_full("TGAD-#{company_iata}") \
         .split(/\s*-\s+/) \
         .collect {|s| s.split(' ', 2) } \
-        .select {|airline, agreement| agreement['E'] && !agreement['*']} \
-        .collect {|airline,_| airline}
+        .select {|carrier, agreement| agreement['E'] && !agreement['*']} \
+        .collect {|carrier,_| carrier}
     end
   end
 end

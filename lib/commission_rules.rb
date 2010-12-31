@@ -239,7 +239,7 @@ module CommissionRules
     end
 
     def stats
-      puts "#{commissions.keys.size} airlines"
+      puts "#{commissions.keys.size} carriers"
       puts "#{commissions.values.sum(&:size)} rules total"
       puts "#{commissions.values.every.select(&:disabled?).sum(&:size)} rules disabled"
       puts "#{commissions.values.every.select(&:not_implemented).sum(&:size)} of which not implemented"
