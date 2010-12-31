@@ -10,14 +10,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :locations, :collection => {:current => :get}
 
-  map.resources :countries
-
-  map.resources :airplanes
-
-  map.resources :airports
-
-  map.resources :cities
-
   map.resources :geo_tags
   
   map.resources :pnr_form, :controller => 'PNR'
