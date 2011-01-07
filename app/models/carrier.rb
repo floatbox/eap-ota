@@ -27,6 +27,11 @@ class Carrier < ActiveRecord::Base
     return []
   end
 
+  def self.non_consolidated_iatas
+    all(:conditions => 'consolidator_id is NULL AND iata != ""', :limit => 99)\
+      .collect(&:iata)
+  end
+
   def icon_url
     url = "/img/carriers/#{iata}.gif"
     unless File.exist?("#{Rails.root}/public#{url}")

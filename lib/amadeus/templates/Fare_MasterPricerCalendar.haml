@@ -45,8 +45,8 @@
   %companyIdentity
     %carrierQualifier W
     -# FIXME нужно нормально получать список подходящих авиакомпаний в модели
-    - Airline.all(:conditions => 'consolidator_id is NULL AND iata != ""', :limit => 99).each do |a|
-      %carrierId= a.iata
+    - Carrier.non_consolidated_iatas.each do |iata|
+      %carrierId= iata
   - if nonstop
     %flightDetail
       %flightType N
