@@ -64,7 +64,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   
   def store_to_cache
     self.number ||= ShortUrl.generate_url(self.hash)
-    Rails.cache.write("order_data#{self.number}", self)
+    Cache.write("order_data", number, self)
   end
   
   def self.get_from_cache(cache_number)
@@ -73,7 +73,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     require 'flight'
     require 'recommendation'
     require 'person'
-    Rails.cache.read('order_data'+ cache_number)
+    Cache.read("order_data", cache_number)
   end
   
   def variant
