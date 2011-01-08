@@ -9,7 +9,7 @@
     <% location_names = ['from', 'to'] %>
     <% @search.nearby_cities.each_with_index do |cities, i| %>
         <% unless cities.empty? %>
-        <p class="cities" data-name="<%= location_names[i] %>"><strong><%= location_titles[i] %>:</strong> <%= cities.map{|c| "<span class=\"city\">#{c.name}</span>"}.join(', ') %></p>
+        <p class="cities" data-name="<%= location_names[i] %>"><strong><%= location_titles[i] %>:</strong> <%= raw cities.map{|c| "<span class=\"city\">#{h c.name}</span>"}.join(', ') %></p>
         <% end %>
     <% end %>
 </div>

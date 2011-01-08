@@ -13,7 +13,7 @@
     25 мая 2010, 22:55 - 23:55, Самара-Пермь, SU533, Airbus A319, 1 час 5 минут<br>
 
     <br><br><b>8500 р.</b>-->
-    <% form_for @pnr_form, :url => '/pnr_form/' do  |f| %>
+    <%= form_for @pnr_form, :url => '/pnr_form/' do  |f| %>
     <% for flight in @pnr_form.flights %>
       <b> <%=flight.departure_iata + ' - ' + flight.arrival_iata %></b><br>
       <%= flight.departure_date %> - <%= flight.arrival_date %>, <%= flight.full_flight_number %><br />

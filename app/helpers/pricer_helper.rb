@@ -9,7 +9,7 @@ module PricerHelper
       human_minutes =
         "#{ minutes }&nbsp;#{ Russian.pluralize(minutes, 'минута', 'минуты', 'минут') }"
     end
-    [human_hours, human_minutes].compact.join(' ')
+    [human_hours, human_minutes].compact.join(' ').html_safe
   end
 
   def fmt_time time
@@ -37,7 +37,7 @@ module PricerHelper
   end
   
   def human_price price
-    "#{ price }&nbsp;#{ Russian.pluralize(price, 'рубль', 'рубля', 'рублей') }"
+    "#{ price }&nbsp;#{ Russian.pluralize(price, 'рубль', 'рубля', 'рублей') }".html_safe
   end
 
   def human_date date
@@ -50,7 +50,7 @@ module PricerHelper
   end
   
   def layovers_in flights
-    flights.map {|flight| flight.arrival.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;')
+    flights.map {|flight| flight.arrival.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;').html_safe
   end
   
   def segments_departure variant
@@ -76,7 +76,7 @@ module PricerHelper
         result << "<strong>#{segment['city'].case_from}</strong> — в #{time_links.to_sentence}"
       end
     end
-    result.join(', ')
+    result.join(', ').html_safe
   end
 
   def human_cabin_nom cabin
@@ -108,7 +108,7 @@ module PricerHelper
   end
 
   def variant_debug_info(recommendation, variant)
-    concat %(<a href="#" onclick="prompt('ctrl+c!', '#{recommendation.cryptic(variant)}'); return false">КОД</a> )
+    concat %(<a href="#" onclick="prompt('ctrl+c!', '#{h recommendation.cryptic(variant)}'); return false">КОД</a> ).html_safe
     concat 'Наземный участок ' if recommendation.ground?
     concat 'Не можем продать ' unless recommendation.sellable?
     concat 'Нет интерлайна ' unless recommendation.valid_interline?
