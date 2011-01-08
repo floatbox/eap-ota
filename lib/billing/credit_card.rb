@@ -37,6 +37,16 @@ module Billing #:nodoc:
   class CreditCard
     include CreditCardMethods
     include ActiveModel::Validations
+    include KeyValueInit
+
+    # FIXME before_validate по идее должен бы вызываться в недрах ActiveModel
+    # FIXME заменить на ActiveModel колбэки или что там
+    def valid?
+      super
+      before_validate
+      validate
+      errors.empty?
+    end
 
     ## Attributes
 
