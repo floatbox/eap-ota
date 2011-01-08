@@ -1,3 +1,4 @@
+require 'ostruct'
 module Amadeus
 
   class Error < StandardError

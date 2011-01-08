@@ -1,5 +1,5 @@
-source :gemcutter
-gem 'rails', '2.3.10'
+source 'http://rubygems.org'
+gem 'rails', '3.0.3'
 
 
 

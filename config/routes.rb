@@ -1,29 +1,90 @@
-ActionController::Routing::Routes.draw do |map|
-  Typus::Routes.draw(map)
+Eviterra::Application.routes.draw do
 
-  map.pricer 'pricer', :controller => 'pricer', :action => 'index'
-  map.pricer_validate 'pricer/validate', :controller => 'pricer', :action => 'validate'
-  map.booking 'booking', :controller => 'booking', :action => 'index'
-  map.booking_form 'booking/form', :controller => 'booking', :action => 'form'
-  map.booking_pay 'booking/pay', :controller => 'booking', :action => 'pay'
-  map.preliminary_booking 'booking/preliminary_booking', :controller => 'booking', :action => 'preliminary_booking'
+  match 'pricer' => 'pricer#index', :as => :pricer
+  match 'pricer/validate' => 'pricer#validate', :as => :pricer_validate
 
-  map.resources :locations, :collection => {:current => :get}
+  match 'booking' => 'booking#index', :as => :booking
+  match 'booking/form' => 'booking#form', :as => :booking_form
+  match 'booking/pay' => 'booking#pay', :as => :booking_pay
+  match 'booking/preliminary_booking' => 'booking#preliminary_booking', :as => :preliminary_booking
 
-  map.resources :geo_tags
-  
-  map.resources :pnr_form, :controller => 'PNR'
+  resources :locations do
+    get :current, :on => :collection
+  end
 
-  map.geo_flight_query 'flight_queries/geo/:location', :controller => :flight_queries, :action => :geo, :method => :get
+  resources :geo_tags
 
-  map.resources :flight_queries, :collection => {:default => :get, :presets => :get}
+  resources :pnr_form, :controller => 'PNR'
 
-  map.resources :presets, :except => [:new, :create]
+  match 'flight_queries/geo/:location' => 'flight_queries#geo', :method => :get, :as => :geo_flight_query
 
-  map.connect 'complete.json', :controller => :complete, :action => :complete
+  resources :flight_queries do
+    get :default, :presets, :on => :collection
+  end
 
-  map.about 'about/:action', :controller => :about
+  resources :presets, :except => [:new, :create]
 
-  map.root :controller => "home"
-  map.geo "geo", :controller => "home", :action => "geo"
+  match 'complete.json' => 'complete#complete'
+
+  match 'about/:action' => 'about', :as => :about
+
+  match "geo" => 'home#geo', :as => :geo
+  root :to => 'home#index'
+
+  # The priority is based upon order of creation:
+  # first created -> highest priority.
+
+  # Sample of regular route:
+  #   match 'products/:id' => 'catalog#view'
+  # Keep in mind you can assign values other than :controller and :action
+
+  # Sample of named route:
+  #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
+  # This route can be invoked with purchase_url(:id => product.id)
+
+  # Sample resource route (maps HTTP verbs to controller actions automatically):
+  #   resources :products
+
+  # Sample resource route with options:
+  #   resources :products do
+  #     member do
+  #       get 'short'
+  #       post 'toggle'
+  #     end
+  #
+  #     collection do
+  #       get 'sold'
+  #     end
+  #   end
+
+  # Sample resource route with sub-resources:
+  #   resources :products do
+  #     resources :comments, :sales
+  #     resource :seller
+  #   end
+
+  # Sample resource route with more complex sub-resources
+  #   resources :products do
+  #     resources :comments
+  #     resources :sales do
+  #       get 'recent', :on => :collection
+  #     end
+  #   end
+
+  # Sample resource route within a namespace:
+  #   namespace :admin do
+  #     # Directs /admin/products/* to Admin::ProductsController
+  #     # (app/controllers/admin/products_controller.rb)
+  #     resources :products
+  #   end
+
+  # You can have the root of your site routed with "root"
+  # just remember to delete public/index.html.
+  # root :to => "welcome#index"
+
+  # See how all your routes lay out with "rake routes"
+
+  # This is a legacy wild controller route that's not recommended for RESTful applications.
+  # Note: This route will make all actions in every controller accessible via GET requests.
+  # match ':controller(/:action(/:id(.:format)))'
 end
