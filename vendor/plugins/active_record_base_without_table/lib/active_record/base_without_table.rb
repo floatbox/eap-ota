@@ -2,9 +2,8 @@ module ActiveRecord
   class BaseWithoutTable < Base
     self.abstract_class = true
     
-    def create_or_update
-      errors.empty?
-    end
+    def create; errors.empty? end
+    def update; errors.empty? end
     
     class << self
       def columns()
@@ -16,10 +15,11 @@ module ActiveRecord
         reset_column_information
       end
       
-      # Do not reset @columns
+      # Reset everything, except the column information
       def reset_column_information
-        generated_methods.each { |name| undef_method(name) }
-        @column_names = @columns_hash = @content_columns = @dynamic_methods_hash = @read_methods = nil
+	columns = @columns
+	super
+	@columns = columns
       end
     end
   end
