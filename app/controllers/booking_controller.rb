@@ -3,7 +3,6 @@ class BookingController < ApplicationController
   filter_parameter_logging :card
   
   def preliminary_booking
-    require 'pricer_form'
     pricer_form = PricerForm.load_from_cache(params[:query_key])
     recommendation = Recommendation.check_price_and_availability(params[:flight_codes].split('_'), pricer_form, params[:validating_carrier])
     if !recommendation
@@ -26,12 +25,6 @@ class BookingController < ApplicationController
     render :partial => 'embedded'
   end
   
-
-  # FIXME temporary bullshit
-  def form
-    @card = Billing::CreditCard.new(valid_card)
-  end
-
   def pay
     @order = OrderData.get_from_cache(params[:order][:number])
     @order.people = params['person_attributes'].to_a.sort_by{|a| a[0]}.map{|k, v| Person.new(v)}
