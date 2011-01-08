@@ -429,7 +429,7 @@ class Completer
     JCUKEN = ('йцукенгшщзхъ' + 'ЙЦУКЕНГШЩЗХЪ' +
       'фывапролджэ' + 'ФЫВАПРОЛДЖЭ' +
       'ячсмитьбю.' + 'ЯЧСМИТЬБЮ,').mb_chars
-    QJ_MAP = Hash[*QWERTY.chars.zip(JCUKEN.chars).flatten]
+    QJ_MAP = Hash[QWERTY.chars.zip(JCUKEN.chars)]
 
 
     module_function
