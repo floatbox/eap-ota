@@ -54,7 +54,6 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   column :day_interval, :integer, 3
   column :debug, :boolean, false
   column :cabin, :string
-  column :changes, :string
   has_many :form_segments
 
   delegate :to, :from, :from_iata, :to_iata, :to => 'form_segments.first'
