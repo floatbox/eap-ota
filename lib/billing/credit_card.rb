@@ -36,7 +36,7 @@ module Billing #:nodoc:
   #
   class CreditCard
     include CreditCardMethods
-    include Validateable
+    include ActiveModel::Validations
 
     ## Attributes
 
