@@ -35,10 +35,10 @@ class Location
   end
 
   def self.quick_search(prefix)
-    geo_tags = GeoTag.prefixed(prefix) #.limited(5)
-    countries = Country.prefixed(prefix) #.limited(5)
-    cities = City.prefixed(prefix) #.limited(5)
-    airports = Airport.prefixed(prefix) #.limited(5)
+    geo_tags = GeoTag.prefixed(prefix)
+    countries = Country.prefixed(prefix)
+    cities = City.prefixed(prefix)
+    airports = Airport.prefixed(prefix)
     # убираем найденные аэропорты если город с тем же iata уже есть в выдаче
     cities_iatas = cities.map &:iata
 

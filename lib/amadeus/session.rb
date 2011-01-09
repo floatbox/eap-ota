@@ -14,13 +14,10 @@ module Amadeus
   INACTIVITY_TIMEOUT = 10*60
   MAX_SESSIONS = 10
 
-  named_scope :stale,
-    lambda { {:conditions => ["updated_at < ?", INACTIVITY_TIMEOUT.seconds.ago]}}
-  named_scope :busy, :conditions => "booking is not null"
-  named_scope :free,
-    lambda { {:conditions => [
-      "updated_at >= ? AND booking is null", INACTIVITY_TIMEOUT.seconds.ago
-    ]}}
+  scope :stale, lambda { where("updated_at < ?", INACTIVITY_TIMEOUT.seconds.ago)}
+  scope :busy, where("booking is not null")
+  scope :free,
+    lambda { where("updated_at >= ? AND booking is null", INACTIVITY_TIMEOUT.seconds.ago)}
 
   def self.from_token(auth_token)
     session = new

@@ -14,7 +14,7 @@ module Traviata
         #  prefixed.map {|field| "#{field} like ?"}
         #).join(' or ')
 
-        #named_scope :prefixed, lambda { |word|
+        #scope :prefixed, lambda { |word|
         #  prefix = "#{word}%"
         #  { :conditions => [condition] + [word]*full.size + [prefix]*prefixed.size }
         #}

@@ -1,5 +1,4 @@
 class City < ActiveRecord::Base
-  include ExtResource
   include HasSynonyms
   extend IataStash
 
@@ -14,31 +13,40 @@ class City < ActiveRecord::Base
   def latitude; lat end
   def longitude; lng end
 
-  default_scope :order => "importance desc"
-  has_cases_for :name
-  
+  scope :important, where("importance > 0")
+  scope :not_important, where("importance = 0")
+  scope :with_country, includes(:country)
+  scope :has_coords, where("lat is not null AND lng is not null")
+
   # UGLY
+  # order теперь складывается, importance забивает все, except(:order) - не помог
+  # выключил default_scope
+  # c радиусом - неэффективно, но повторять "формулу"
+  # три раза - некайф. а в 1.8 у lambda нет optional args
+  scope :with_distance_to, lambda {|lat, lng, radius|
+    formulae = "(ABS(lat - #{lat.to_f}) + ABS(lng - #{lng.to_f}))"
+    select( "*, #{formulae} as distance") \
+      .where( radius && ["#{formulae} < ?", radius] ) \
+      .has_coords \
+      .order("distance asc")
+  }
+
+  has_cases_for :name
+
   def self.nearest_to lat, lng
     return unless lat.present? && lng.present?
-    first :select => "*, (ABS(lat - #{lat.to_f}) + ABS(lng - #{lng.to_f})) as distance",
-      :conditions => "lat is not null AND lng is not null",
-      :order => "distance asc"
+    with_distance_to( lat, lng, false).first
   end
 
   def nearby_cities
-    City.all(:select => "*, (ABS(lat - #{lat.to_f}) + ABS(lng - #{lng.to_f})) as distance",
-      :conditions => "lat is not null AND lng is not null AND
-                      (ABS(lat - #{lat.to_f}) + ABS(lng - #{lng.to_f})) < 4.5 AND
-                      id != #{id} AND
-                      importance > 0",
-      :order => "distance asc",
-      :limit => 10)
+    City.with_distance_to( lat, lng, 4.5)\
+      .where("id != ?", id).limit(10).to_a
   end
 
   def name
     name_ru.presence ||  name_en.presence || iata
   end
-  
+
   def typus_name
     name + ' ' + iata
   end

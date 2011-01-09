@@ -1,5 +1,4 @@
 class Airport < ActiveRecord::Base
-  include ExtResource
   include HasSynonyms
   extend IataStash
 
@@ -14,15 +13,17 @@ class Airport < ActiveRecord::Base
 
   delegate :tz, :to => :city
   has_cases_for :name
-  named_scope :near, lambda {|other|
+  scope :near, lambda {|other|
     radius = 10
-    { :conditions => {
+    where(
         :lat => other.lat-radius..other.lat+radius,
         :lng => other.lng-radius..other.lng+radius
-    } }
+    )
   }
 
-  default_scope :order => "importance desc"
+  scope :important, where("importance > 0")
+  scope :not_important, where("importance = 0")
+  scope :with_country, where("city_id is not null").includes(:city => :country)
 
   def name
     name_ru.presence || name_en.presence || iata

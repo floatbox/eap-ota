@@ -1,5 +1,4 @@
 class Country < ActiveRecord::Base
-  include ExtResource
   include HasSynonyms
 
   has_many :cities, :order => 'cities.name_ru'
@@ -11,7 +10,9 @@ class Country < ActiveRecord::Base
   has_many :regions
   include GeoTaggable
 
-  default_scope :order => "importance desc"
+  scope :important, where("importance > 0")
+  scope :not_important, where("importance = 0")
+
   has_cases_for :name
   
   def iata
@@ -32,11 +33,12 @@ class Country < ActiveRecord::Base
     url
   end
   
-  def self.main_city_iatas (code)
+  def self.main_city_iatas(code)
     country = Country.find_by_alpha2(code)
-    country.cities.all(:order => 'importance DESC', :limit => 5).every.iata
+    country.cities.order('importance DESC').limit(5).every.iata
   end
   
+  # FIXME WTF? хотя бы iata коды использовать. не айдишники из базы!1
   def self.options_for_nationality_select
     [ ['', [['Россия', 170]]],
       [ '&mdash;&mdash;&mdash;&mdash;',

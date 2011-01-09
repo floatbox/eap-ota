@@ -73,11 +73,12 @@ class Completer
   def iata_from_name(name)
     # FIXME перенести отсюда в фильтр например
     scan_eq(name) do |record|
-      return record.code if record.type == 'city' || record.type == 'airport' || record.type == 'country'
+      return record.code if %W(city airport country).include? record.type
     end
     nil
   end
   
+  # FIXME объединить с iata_from_name
   def record_from_string(name, types=['city', 'airport', 'country'])
     scan_eq(name) do |record|
       return record if types.include? record.type
@@ -271,15 +272,16 @@ class Completer
 
   # dictionaries from database
   def read_important_objects
-    cnd = {:conditions => 'importance > 0'}
-    (Country.all(cnd) + 
-     City.all(cnd.merge({:include => :country})) + 
-     Airport.all(cnd.merge(:include => {:city => :country}))).sort_by(&:importance).reverse.each do |c|
-      if c.class == Country
+    ( Country.important.all +
+      City.important.with_country.all +
+      Airport.important.with_country.all
+    ).sort_by(&:importance).reverse.each do |c|
+      case c
+      when Country
         add_country(c)
-      elsif c.class == City
+      when City
         add_city(c)
-      elsif c.class == Airport
+      when Airport
         add_airport(c)
       end
     end
@@ -290,13 +292,13 @@ class Completer
     synonyms << c.name_en unless c.name_en == c.name
     synonyms += c.synonyms
     synonyms.delete_if &:blank?
-    add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms, :hint => c.continent_part_ru)
-    add(:name => c.case_to, :type => c.kind, :code => c.iata, :hint => c.continent_part_ru)
+    add(:name => c.name, :type => 'country', :code => c.iata, :aliases => synonyms, :hint => c.continent_part_ru)
+    add(:name => c.case_to, :type => 'country', :code => c.iata, :hint => c.continent_part_ru)
   end
   
   
   def read_countries
-    Country.all(:conditions => 'importance = 0').each do |c|
+    Country.not_important.each do |c|
       add_country(c)
     end
   end
@@ -306,12 +308,12 @@ class Completer
     synonyms << c.name_en unless c.name_en == c.name
     synonyms += c.synonyms
     synonyms.delete_if &:blank?
-    add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms, :hint => c.country.name, :info => "Город #{c.name} #{c.country.proper_in}")
-    add(:name => c.case_to, :type => c.kind, :code => c.iata, :hint => c.country.name, :info => "Город #{c.name} #{c.country.proper_in}")
+    add(:name => c.name, :type => 'city', :code => c.iata, :aliases => synonyms, :hint => c.country.name, :info => "Город #{c.name} #{c.country.proper_in}")
+    add(:name => c.case_to, :type => 'city', :code => c.iata, :hint => c.country.name, :info => "Город #{c.name} #{c.country.proper_in}")
   end
   
   def read_cities
-    City.all(:include => :country, :conditions => 'importance = 0').each do |c|
+    City.not_important.with_country.each do |c|
       add_city(c)
     end
   end
@@ -321,7 +323,7 @@ class Completer
       synonyms = []
       synonyms << c.short_name unless c.short_name == c.name
       synonyms.delete_if &:blank?
-      add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms)
+      add(:name => c.name, :type => 'carrier', :code => c.iata, :aliases => synonyms)
     end
   end
 
@@ -340,20 +342,20 @@ class Completer
       synonyms << c.name_en unless c.name_en == c.name
       synonyms += c.synonyms
       synonyms.delete_if &:blank?
-      add(:name => c.name, :type => c.kind, :code => c.iata, :aliases => synonyms, :hint => c.city.name,  :info => "Аэропорт #{c.name} #{c.city.case_in}, #{c.city.country.name}")
-      add(:name => c.case_to, :type => c.kind, :code => c.iata, :hint => c.city.name,  :info => "Аэропорт #{c.name} #{c.city.case_in}, #{c.city.country.name}")
+      add(:name => c.name, :type => 'airport', :code => c.iata, :aliases => synonyms, :hint => c.city.name,  :info => "Аэропорт #{c.name} #{c.city.case_in}, #{c.city.country.name}")
+      add(:name => c.case_to, :type => 'airport', :code => c.iata, :hint => c.city.name,  :info => "Аэропорт #{c.name} #{c.city.case_in}, #{c.city.country.name}")
     end
   end
   
   def read_airports
-    Airport.all(:include => {:city => :country}, :conditions => 'city_id is not null AND importance = 0').each do |c|
+    Airport.not_important.with_country.each do |c|
       add_airport(c)
     end
   end
 
   def read_geotags
     GeoTag.all.each do |c|
-      add(:name => c.name, :type => c.kind, :aliases => c.synonyms)
+      add(:name => c.name, :type => 'geo_tag', :aliases => c.synonyms)
     end
   end
 

@@ -1,5 +1,4 @@
 class Carrier < ActiveRecord::Base
-  include ExtResource
   extend IataStash
 
   has_many :amadeus_commissions
@@ -22,14 +21,13 @@ class Carrier < ActiveRecord::Base
     #бонусные программы авиакомпаний, входящие в тот же альянс, что и данная
     #пока без бонусной программы альянса
     if alliance
-      return alliance.carriers.all(:conditions => 'bonus_program_name IS NOT NULL AND bonus_program_name != ""', :order => 'bonus_program_name')
+      return alliance.carriers.where('bonus_program_name IS NOT NULL AND bonus_program_name != ""').order('bonus_program_name').all
     end
     return []
   end
 
   def self.non_consolidated_iatas
-    all(:conditions => 'consolidator_id is NULL AND iata != ""', :limit => 99)\
-      .collect(&:iata)
+    where('consolidator_id is NULL AND iata != ""').limit(99).collect(&:iata)
   end
 
   def icon_url
