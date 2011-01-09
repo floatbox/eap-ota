@@ -90,7 +90,9 @@ class OrderData < ActiveRecord::BaseWithoutTable
     people_count[:adults] + people_count[:children]
   end
 
-  def validate
+  validate :validate_card
+
+  def validate_card
     errors.add :card, 'Отсутствуют данные карты' unless card
     errors.add :card, 'Некорректные данные карты' if card && !card.valid?
   end

@@ -1,7 +1,5 @@
 class BookingController < ApplicationController
 
-  filter_parameter_logging :card
-  
   def preliminary_booking
     pricer_form = PricerForm.load_from_cache(params[:query_key])
     recommendation = Recommendation.check_price_and_availability(params[:flight_codes].split('_'), pricer_form, params[:validating_carrier])

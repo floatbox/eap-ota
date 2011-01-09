@@ -13,6 +13,10 @@ class Person < ActiveRecord::BaseWithoutTable
   column :number_in_amadeus, :integer
   validates_presence_of :first_name, :last_name, :sex, :nationality_id, :birthday, :passport
   validates_presence_of :document_expiration_date, :unless => :document_noexpiration
+  # FIXME WRONG! фамилии через дефис? два имени? сокращения?
+  validates_format_of :first_name, :with => /^[a-zA-Z]*$/, :message => "Некорректное имя"
+  validates_format_of :last_name,  :with => /^[a-zA-Z]*$/, :message => "Некорректная фамилия"
+  validate :check_age
   attr_accessor :flight_date, :infant_or_child
 
   def smart_document_expiration_date
@@ -28,16 +32,15 @@ class Person < ActiveRecord::BaseWithoutTable
     res
   end
 
-  def validate
-    errors.add :first_name,       "Некорректное имя"    if first_name && !(first_name =~ /^[a-zA-Z]*$/)
-    errors.add :last_name,       "Некорректная фамилия"    if first_name && !(last_name =~ /^[a-zA-Z]*$/)
-    check_infant_or_child_age(infant_or_child == 'i') if infant_or_child && flight_date
-  end
-
   def nationality
     Country.find_by_id(nationality_id) if nationality_id
   end
 
+  def check_age
+    check_infant_or_child_age(infant_or_child == 'i') if infant_or_child && flight_date
+  end
+
+  # FIXME а если день рождения между рейсами?
   def check_infant_or_child_age(infant=true)
     if birthday && (birthday + (infant ? 2 : 13).years <= flight_date)
       errors.add :birthday, "на момент вылета будет более #{infant ? '1 года' : '12 лет'}"

@@ -41,7 +41,6 @@ class PricerController < ApplicationController
 
 
   def validate
-    require 'pricer_form'
     if params[:query_key]
       @search = PricerForm.load_from_cache(params[:query_key])
       fragment_exist = fragment_exist?({:action => 'index', :action_suffix => params[:query_key]}) &&
