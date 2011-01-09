@@ -152,7 +152,9 @@ class OrderData < ActiveRecord::BaseWithoutTable
         amadeus.ticket_create_tst_from_pricing(:fares_count => fares_count).bang!
       end
 
-      if block_money
+      # FIXME Payture глючит
+      # if block_money
+      if true
         amadeus.pnr_commit_really_hard do
           # FIXME среагировать на различие в цене
           add_passport_data(amadeus)
