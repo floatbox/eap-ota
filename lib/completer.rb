@@ -276,7 +276,7 @@ class Completer
      City.all(cnd.merge({:include => :country})) + 
      Airport.all(cnd.merge(:include => {:city => :country}))).sort_by(&:importance).reverse.each do |c|
       if c.class == Country
-        add_county(c)
+        add_country(c)
       elsif c.class == City
         add_city(c)
       elsif c.class == Airport
@@ -285,7 +285,7 @@ class Completer
     end
   end
   
-  def add_county(c)
+  def add_country(c)
     synonyms = []
     synonyms << c.name_en unless c.name_en == c.name
     synonyms += c.synonyms
@@ -297,7 +297,7 @@ class Completer
   
   def read_countries
     Country.all(:conditions => 'importance = 0').each do |c|
-      add_county(c)
+      add_country(c)
     end
   end
 
