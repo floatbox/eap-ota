@@ -21,12 +21,14 @@ gem 'russian'
 gem 'graticule'
 gem 'mysql'
 gem 'tzinfo'
-gem 'fastercsv'
 gem 'geo_ip'
 gem 'hoptoad_notifier'
 gem 'newrelic_rpm'
 
 gem 'haml'
+
+gem 'typus', :git => 'https://github.com/fesplugas/typus.git'
+#gem 'typus', :path => '../typus'
 
 group :development do
   gem 'mongrel'

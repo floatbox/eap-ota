@@ -1,3 +1,2 @@
-class Admin::AirlineAlliancesController < Admin::MasterController
-
+class Admin::AirlineAlliancesController < Admin::ResourcesController
 end

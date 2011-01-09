@@ -1,3 +1,2 @@
-class Admin::ConsolidatorsController < Admin::MasterController
-
+class Admin::ConsolidatorsController < Admin::ResourcesController
 end

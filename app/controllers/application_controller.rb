@@ -2,11 +2,11 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
-  # if Rails.env.production?
-  #   #TODO временно закрываем доступ для не залогиненых в админку
-  #   include Typus::Authentication
-  #   before_filter :require_login
-  # end
+  if Rails.env.production?
+     #TODO временно закрываем доступ для не залогиненых в админку
+     include Typus::Authentication::Session
+     before_filter :authenticate
+  end
 
   protected
 

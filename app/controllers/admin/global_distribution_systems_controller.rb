@@ -1,3 +1,2 @@
-class Admin::GlobalDistributionSystemsController < Admin::MasterController
-
+class Admin::GlobalDistributionSystemsController < Admin::ResourcesController
 end
