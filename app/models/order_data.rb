@@ -168,7 +168,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
         # обилечивание
         #Amadeus::Service.issue_ticket(pnr_number)
 
-        PnrMailer.deliver_pnr_notification(email, self.pnr_number) if email
+        PnrMailer.notification(email, self.pnr_number).deliver if email
         return pnr_number
       else
         # FIXME добавить какой-то индикатор ошибки блокировки денег
