@@ -40,7 +40,7 @@ class City < ActiveRecord::Base
 
   def nearby_cities
     City.with_distance_to( lat, lng, 4.5)\
-      .where("id != ?", id).limit(10).to_a
+      .where("id != ?", id).important.limit(10).to_a
   end
 
   def name
