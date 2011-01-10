@@ -16,7 +16,7 @@
             <% end %>
         </div>
         <div class="info">
-            <h6>Вылет <%= raw flight.departure.city.case_from.gsub(/ /, '&nbsp;') %></h6>
+            <h6>Вылет <%=nbsp flight.departure.city.case_from %></h6>
             <p>Аэропорт <%= flight.departure_name %><% if flight.departure_term %>, терминал&nbsp;<%= flight.departure_term %><% end %></p>
             <p>Авиакомпания <%= flight.operating_carrier_name %></p>
             <p>Рейс <%= flight.marketing_carrier_iata %>&nbsp;<%= flight.flight_number %> <%= flight.departure.city.name %> — <%= flight.arrival.city.name %></p>
@@ -36,7 +36,7 @@
             <% end %>
         </div>
         <div class="info">
-            <h6>Прилёт <%= raw flight.arrival.city.case_to.gsub(/ /, '&nbsp;') %><%= raw ' на&nbsp;следующий день' if next_date_arrival %></h6>
+            <h6>Прилёт <%=nbsp flight.arrival.city.case_to %><% if next_date_arrival %> на&nbsp;следующий день<% end %></h6>
             <p>Аэропорт <%= flight.arrival_name %><% if flight.arrival_term %>, терминал&nbsp;<%= flight.arrival_term %><% end %></p>
             <% layover = segment.layover_durations[flight_index] %>
             <% if layover %>

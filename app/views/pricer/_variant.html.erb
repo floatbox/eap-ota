@@ -9,7 +9,7 @@
 <tr>
     <th class="book"><a href="#" class="a-button">Выбрать</a></th>
     <td class="cost" colspan="5"><dl>
-        <dt><%= raw recommendation.price_total.to_i.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') %></dt><dd>&nbsp;<%= Russian.pluralize(recommendation.price_total.to_i, 'рубль', 'рубля', 'рублей') %></dd>
+        <%= decorated_price recommendation.price_total, 'dt', 'dd' %>
     </dl></td>
 </tr>
 </thead>

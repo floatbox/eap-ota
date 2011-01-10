@@ -151,9 +151,9 @@
             <th>С&nbsp;карты будет списано
         </tr>
         <tr>
-            <td><u><%= raw @order.recommendation.price_total.to_i.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') %></u><i><%= Russian.pluralize(@order.recommendation.price_total.to_i, 'рубль', 'рубля', 'рублей') %></i>
-            <td><u><%= raw @order.recommendation.price_payment.to_i.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') %></u><i><%= Russian.pluralize(@order.recommendation.price_payment.to_i, 'рубль', 'рубля', 'рублей') %></i>
-            <td><b><%= raw @order.recommendation.price_with_payment_commission.to_i.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') %></b><i><%= Russian.pluralize(@order.recommendation.price_with_payment_commission.to_i, 'рубль', 'рубля', 'рублей') %></i>
+            <td><%= decorated_price @order.recommendation.price_total, 'u', 'i' %></td>
+            <td><%= decorated_price @order.recommendation.price_payment, 'u', 'i' %></td>
+            <td><%= decorated_price @order.recommendation.price_with_payment_commission, 'b', 'i' %></td>
         </tr>
     </tbody>
     </table>
