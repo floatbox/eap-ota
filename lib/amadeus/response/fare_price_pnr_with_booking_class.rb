@@ -5,15 +5,16 @@ module Amadeus
       # копипаста. для данного запроса - не работает. нужна?
       def prices
         xpath('//r:fareList/r:fareDataInformation').collect do |pg|
-          price_total = pg.xpath('r:fareDataSupInformation[r:fareDataQualifier="712"][r:fareCurrency="RUB"]/r:fareAmount').to_s.to_i
+          people_count = pg.xpath('../r:paxSegReference/r:refDetails').count
+          price_total = pg.xpath('r:fareDataSupInformation[r:fareDataQualifier="712"][r:fareCurrency="RUB"]/r:fareAmount').to_s.to_i * people_count
           # FIXME сделать один xpath
           price_fare = (
             pg.xpath('r:fareDataSupInformation[r:fareDataQualifier="B"][r:fareCurrency="RUB"]/r:fareAmount').to_s ||
             pg.xpath('r:fareDataSupInformation[r:fareDataQualifier="E"][r:fareCurrency="RUB"]/r:fareAmount').to_s
-          ).to_i
+          ).to_i * people_count
           price_tax = price_total - price_fare
           [price_fare, price_tax]
-        end
+        end.inject {|a, pr| [a[0] + pr[0], a[1] + pr[1]]}
       end
 
       def message

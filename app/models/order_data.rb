@@ -148,15 +148,20 @@ class OrderData < ActiveRecord::BaseWithoutTable
     if self.pnr_number = add_multi_elements.pnr_number
       set_people_numbers(add_multi_elements.passengers)
       amadeus.pnr_commit_really_hard do
-        fares_count =
-          amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier).bang!.fares_count
+        resp = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier).bang!
+        fares_count = resp.fares_count
+        prices = resp.prices
+        unless [recommendation.price_fare, recommendation.price_tax] == prices
+          errors.add :pnr_number, 'Ошибка при создании PNR'
+          amadeus.pnr_cancel
+          return
+        end
         # FIXME среагировать на отсутствие маски
         amadeus.ticket_create_tst_from_pricing(:fares_count => fares_count).bang!
       end
 
       if block_money
         amadeus.pnr_commit_really_hard do
-          # FIXME среагировать на различие в цене
           add_passport_data(amadeus)
           amadeus.give_permission_to_offices(
             Amadeus::Session::TICKETING,
