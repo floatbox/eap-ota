@@ -1,12 +1,12 @@
 class Admin::OrdersController < Admin::ResourcesController
-=begin
-  def show
-    @order = Order.find(params[:id])
-    #@pnr = Pnr.get_by_number params[:id]
-    
-    #redirect_to pnr_form_path(order.pnr_number)
+
+  def show_pnr
+    order = Order.find(params[:id])
+    #@pnr = Pnr.get_by_number(order.pnr_number)
+
+    #render 'pnr/show', :layout => false
+    redirect_to pnr_form_path(order.pnr_number)
   end
-=end
 
   def unblock
     @order = Order.find(params[:id])

@@ -9,7 +9,7 @@ AirlineAlliance:
     list: name, bonus_program_name
     form: name, bonus_program_name
   relationships: carriers
-  application: Eviterra
+  application: Base
 
 GlobalDistributionSystem:
   fields:
@@ -17,7 +17,7 @@ GlobalDistributionSystem:
     list: name
     form: name
   relationships: carriers
-  application: Eviterra
+  application: Base
 
 Consolidator:
   fields:
@@ -25,7 +25,7 @@ Consolidator:
     list: name, booking_office, ticketing_office
     form: name, booking_office, ticketing_office
   relationships: carriers
-  application: Eviterra
+  application: Base
 
 Carrier:
   fields:
@@ -38,8 +38,7 @@ Carrier:
   relationships: country, alliance, gds, consolidator
   filters: country, gds, consolidator
   search: ru_shortname, ru_longname, en_shortname, en_longname, iata
-  application: Eviterra
-  export: csv
+  application: Base
 
 Airplane:
   fields:
@@ -53,8 +52,7 @@ Airplane:
   relationships:
   filters: engine_type
   search: iata, name_ru, name_en
-  application: Eviterra
-  export: csv
+  application: Base
 
 Airport:
   fields:
@@ -67,8 +65,7 @@ Airport:
   relationships: city, country, geo_tags
   filters:
   search: name_ru, name_en, iata, synonym_list
-  application: Eviterra
-  export: csv
+  application: Geo
 
 City:
   fields:
@@ -78,22 +75,27 @@ City:
     options:
       selectors: timezone
       read_only: morpher_to, morpher_from, morpher_in
-
   order_by: name_ru
   relationships: airports, country, geo_tags, region
   filters: country
   search: name_ru, name_en, iata, synonym_list
-  application: Eviterra
-  export: csv
+  application: Geo
 
 Order:
   fields:
-    defaul: pnr_number, email, phone, updated_at
-    list: pnr_number, email, created_at, price_total, price_share, price_markup, payment_status, ticket_status
-    show: pnr_number, email, created_at, updated_at, price_total, price_share, price_markup, price_with_payment_commission, order_id, full_info, payment_status, ticket_status
+    default: order_id, pnr_number, email, phone, updated_at
+    list: order_id, pnr_number, email, created_at, price_total, price_share, price_markup, payment_status, ticket_status
+    show: order_id, pnr_number, payment_status, ticket_status, email, created_at, updated_at, price_total, price_share, price_markup, price_with_payment_commission, full_info
+    csv:  order_id, pnr_number, email, created_at, updated_at, price_total, price_share, price_markup, price_with_payment_commission, full_info, payment_status, ticket_status
   order_by: -created_at
   search: pnr_number, email, phone
-  application: Eviterra
+  options:
+    default_action_on_item: show
+  actions:
+    show: cancel, ticket, charge, unblock, show_pnr
+  filters: payment_status, ticket_status
+  application: Orders
+  export: csv
 
 Region:
   fields:
@@ -104,8 +106,7 @@ Region:
   relationships: cities, country
   filters: country
   search: name_ru, name_en, synonym_list
-  application: Eviterra
-  export: csv
+  application: Geo
 
 Country:
   fields:
@@ -118,8 +119,7 @@ Country:
   relationships: carriers, airports, cities, geo_tags, regions
   filters:
   search:  name_en, name_ru, full_name_ru, continent_ru, synonym_list
-  application: Eviterra
-  export: csv
+  application: Geo
 
 GeoTag:
   fields:
@@ -130,7 +130,7 @@ GeoTag:
   # relationships: geo_taggings
   filters:
   search: name, synonym_list
-  application: Eviterra
+  application: Geo
 
 Preset:
   fields:
@@ -141,4 +141,4 @@ Preset:
   relationships:
   filters:
   search: name
-  application: Eviterra
+  application: Disabled

@@ -7,11 +7,11 @@ admin:
   Airplane: create, read, update, delete
   Airport: create, read, update, delete
   City: create, read, update, delete
-  Order: read, unblock, charge, ticket, cancel
+  Order: read, unblock, charge, ticket, cancel, show_pnr
   Country: create, read, update, delete
   GeoTag: create, read, update, delete
   Region: create, read, update, delete
-  Preset: create, read, update, delete
+  # Preset: create, read, update, delete
   AirlineAlliance: create, read, update, delete
   Consolidator: create, read, update, delete
   GlobalDistributionSystem: create, read, update, delete

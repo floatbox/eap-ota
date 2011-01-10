@@ -2,11 +2,11 @@ Typus.setup do |config|
 
   # Application name.
   config.admin_title = "eviterra"
-  # config.admin_sub_title = ""
+  config.admin_sub_title = "`=>="
 
   # When mailer_sender is set, password recover is enabled. This email
   # address will be used in Admin::Mailer.
-  # config.mailer_sender = "admin@example.com"
+  config.mailer_sender = "webmaster@eviterra.com"
 
   # Define paperclip attachment styles.
   # config.file_preview = :medium

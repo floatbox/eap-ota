@@ -38,6 +38,15 @@ class Carrier < ActiveRecord::Base
     url
   end
 
+  # попытка сделать картинку для админки. можно как-то лучше сделать
+  def icon_img
+    "<img src='#{icon_url}'>".html_safe
+  end
+
+  def self.model_fields
+    super.merge(:icon_img => :file)
+  end
+
   def short_name
     ru_shortname.presence || en_shortname
   end

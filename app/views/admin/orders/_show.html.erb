@@ -1,0 +1,13 @@
+<div id="term">Терминал: <pre><%= @item.raw %></pre></div>
+<table><tr>
+<% if @item.payment_status == 'blocked'  %>
+  <td><%= button_to 'Charge', {:action => 'charge', :id => @item.id} %></td>
+  <td><%= button_to 'Unblock', {:action => 'unblock', :id => @item.id} %></td>
+<% end %>
+<% if @item.ticket_status == 'booked' %>
+  <td><%= button_to 'Ticket', {:action => 'ticket', :id => @item.id} %></td>
+<% end %>
+<% unless @item.ticket_status == 'canceled'  %>
+  <td><%= button_to 'Cancel', {:action => 'cancel', :id => @item.id} %></td>
+<% end %>
+</tr> </table>
