@@ -7,7 +7,8 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     attr_reader :to_iata, :from_iata
     validates_presence_of :from_iata, :to_iata, :date
 
-    def to_json(args={})
+    def as_json(args)
+      args ||= {}
       args[:methods] = (args[:methods].to_a + [:to_as_object, :from_as_object]).uniq
       super(args)
     end
@@ -81,7 +82,8 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     Cache.read('pricer_form', query_key)
   end
 
-  def to_json(args={})
+  def as_json(args)
+    args ||= {}
     args[:methods] = (args[:methods].to_a + [:people_count, :complex_to_parse_results, :form_segments]).uniq
     super(args)
   end
