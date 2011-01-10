@@ -25,6 +25,7 @@ class BookingController < ApplicationController
   
   def pay
     @order = OrderData.get_from_cache(params[:order][:number])
+    # @order.people = params[:person_attributes].sort.map{|k, v| Person.new(v)}
     @order.people = params['person_attributes'].to_a.sort_by{|a| a[0]}.map{|k, v| Person.new(v)}
     @order.set_flight_date_for_childen_and_infants
     @order.card = Billing::CreditCard.new(params[:card])

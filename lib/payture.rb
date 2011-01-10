@@ -6,6 +6,7 @@ class Payture
 
   # комиссионные за транзакцию
   def self.commission(price)
+    # 3.25% + 10c (3рубля), округляем до рублей
     (price * 0.0325 + 3).ceil
   end
 
