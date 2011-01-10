@@ -5,7 +5,11 @@ class ApplicationController < ActionController::Base
   if Rails.env.production?
      #TODO временно закрываем доступ для не залогиненых в админку
      include Typus::Authentication::Session
+     before_filter :set_typus_constantized
      before_filter :authenticate
+     def set_typus_constantized
+        Typus::Configuration.models_constantized!
+     end
   end
 
   protected
