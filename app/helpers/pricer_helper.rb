@@ -1,4 +1,9 @@
 module PricerHelper
+
+  def nbsp(string)
+    html_escape(string).gsub(/ +/, '&nbsp;'.html_safe)
+  end
+
   def human_duration(duration)
     hours, minutes = duration.divmod(60)
     unless hours.zero?
@@ -38,6 +43,16 @@ module PricerHelper
   
   def human_price price
     "#{ price }&nbsp;#{ Russian.pluralize(price, 'рубль', 'рубля', 'рублей') }".html_safe
+  end
+
+  # можно вызывать даже как decorated_price(12312.23, ['u', {:class=>'special'}], 'i')
+  def decorated_price price, price_tag='u', currency_tag='i'
+    content_tag(*price_tag) {
+      price.to_i.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>').html_safe
+    } + content_tag(*currency_tag) {
+      # '&nbsp;'.html_safe +
+      Russian.pluralize(price.to_i, 'рубль', 'рубля', 'рублей').html_safe
+    }
   end
 
   def human_date date
