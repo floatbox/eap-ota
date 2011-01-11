@@ -4,7 +4,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     column :from, :string
     column :to, :string
     column :date, :string
-    attr_reader :to_iata, :from_iata
+    attr_accessor :to_iata, :from_iata
     validates_presence_of :from_iata, :to_iata, :date
 
     def as_json(args)
@@ -59,7 +59,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
 
   delegate :to, :from, :from_iata, :to_iata, :to => 'form_segments.first'
 
-  attr_reader :to_iata, :from_iata, :complex_to_parse_results
+  attr_reader :complex_to_parse_results
 
   def date1
     form_segments.first.date
@@ -155,9 +155,10 @@ class PricerForm < ActiveRecord::BaseWithoutTable
               str = str[0...(str.length - word_part.length)]
               not_finished = true
             elsif r && (['airport', 'city', 'country'].include? r.type)
-              @to_iata = r.code rescue nil
+              form_segments[0].to_iata = r.code rescue nil
+              form_segments[1].from_iata = r.code if form_segments.length == 2 && form_segments[0].to == form_segments[1].from rescue nil
               res[:to] = {
-                :value => @to_iata,
+                :value => r.code,
                 :str => word_part.to_s,
                 :start => str.length - word_part.length,
                 :end => str.length-1
