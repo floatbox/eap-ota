@@ -32,15 +32,16 @@ gem 'typus', :git => 'https://github.com/fesplugas/typus.git'
 
 group :development do
   gem 'mongrel'
+end
+
+group :test, :development do
+  gem 'rspec-rails'
   gem 'cucumber-rails'
+  gem 'autotest'
 end
 
 group :test do
-  gem 'rspec', '~>1.3'
-  gem 'rspec-rails', '~>1.3'
   gem 'capybara'
-  gem 'cucumber'
-  gem 'cucumber-rails'
   gem 'spork'
   gem 'database_cleaner'
 end
