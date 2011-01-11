@@ -4,7 +4,7 @@ init: function() {
 
     /* Режим (по умолчанию туда и обратно) */
     this.mode = 'rt';
-    $('#search-fields .sicon').click(function() {
+    $('#search-fields .segment1 .sicon').click(function() {
         self.toggleMode();
     });
     $('#search-mode li').click(function() {
@@ -170,23 +170,18 @@ init: function() {
 toggleMode: function(mode) {
     var context = $('#search-fields');
     if (mode === undefined) {
-        mode = {rt: 'ow', ow: 'mw', dw: 'rt', tw: 'rw'}[this.mode];
-    }
-    if (mode === 'mw') {
+        mode = {rt: 'ow', ow: 'rt'}[this.mode] || this.mode;
+    } else if (mode === 'mw') {
         mode = this.segments[2].from.val() || this.segments[2].to.val() ? 'tw' : 'dw';
     }
-    if (mode === 'dw' && !this.segments[1].from.val()) {
-        this.segments[1].from.trigger('set', this.segments[0].to.val());
+    if (mode !== this.mode) {
+        context.removeClass(this.mode + 'mode').addClass(mode + 'mode');
+        context.find('tr.segment2').toggleClass('g-none', mode !== 'dw' && mode !== 'tw');
+        context.find('tr.segment3').toggleClass('g-none', mode !== 'tw');
+        context.find('.autocomplete:visible[value=""]').eq(0).focus();
+        this.calendar.toggleMode(mode);
+        this.mode = mode;
     }
-    if (mode === 'tw' && !this.segments[2].from.val()) {
-        this.segments[2].from.trigger('set', this.segments[1].to.val());
-    }
-    context.removeClass(this.mode + 'mode').addClass(mode + 'mode');
-    context.find('tr.segment2').toggleClass('g-none', mode !== 'dw' && mode !== 'tw');
-    context.find('tr.segment3').toggleClass('g-none', mode !== 'tw');
-    context.find('.autocomplete:visible[value=""]').eq(0).focus();
-    this.calendar.toggleMode(mode);
-    this.mode = mode;
 },
 values: function() {
     var s = this.segments;
@@ -321,8 +316,8 @@ validate: function(qkey) {
                 for (var i = 0, im = result.errors.length; i < im; i++) {
                     var err = result.errors[i];
                     if (err.length) {
-                        var mid = err[0][0], fmid = mid + (i + 1) + self.mode;
-                        var mtext = self.messages[fmid] || self.messages[mid] || err[0][1];
+                        var mid = err[0], fmid = mid + (i + 1) + self.mode;
+                        var mtext = self.messages[fmid] || self.messages[mid];
                         self.smessage.find('.ssm-content').html(mtext);
                         break;
                     }
@@ -366,9 +361,9 @@ updateMap: function(segments) {
             lindex[t.code + f.code] = true;
         }
     }
-    for (var i = 0, im = pins.length; i < im; i++) {
+    /*for (var i = 0, im = pins.length; i < im; i++) {
         this.map.AddShape(new VEShape(VEShapeType.Pushpin, pins[i]));
-    }
+    }*/
     for (var i = 0, im = lines.length; i < im; i++) {
         var route = new VEShape(VEShapeType.Polyline, lines[i]);
         route.SetLineWidth(3);
