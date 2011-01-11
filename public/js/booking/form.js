@@ -125,10 +125,10 @@ show: function(variant) {
         event.preventDefault();
         self.hide();
     };
-    /*var link = $('<a class="stop-booking" href="#">Вернуться к выбору вариантов</a>').click(this.selfhide).prependTo(this.offer);
+    var link = $('<a class="stop-booking" href="#">Вернуться к выбору вариантов</a>').click(this.selfhide).prependTo(this.offer);
     if (this.offer.parent('#offers-matrix').length) {
         link.css('top', this.offer.find('.offer-prices').height());
-    }*/
+    }
     this.offer.addClass('active-booking');
 },
 hide: function() {

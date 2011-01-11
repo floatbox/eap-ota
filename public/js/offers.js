@@ -618,7 +618,7 @@ makeRecommendation: function(variant, title) {
     this.showVariant(offer.children().eq(el.prevAll().length));
     if (title.search(/выгодный/i) != -1) {
         var cost = offer.find('td.cost dl'), ctext = cost.find('dd');
-        ctext.html(ctext.html() + ' за всех, включая налоги и сборы');
+        ctext.html(ctext.html() + '<span class="cost-tip"> за всех, включая налоги и сборы</span>');
         cost.prepend('<dd>Всего </dd>');
     }
     return $('<div><h3 class="offers-title">' + title + '</h3></div>').append(offer);

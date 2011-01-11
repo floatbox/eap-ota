@@ -18,17 +18,26 @@
 <% variant_carriers = primary_operating_carriers(variant) %>
 <% common_carrier = variant.segments.length > 1 && variant_carriers.map{|vc| vc['name'] }.uniq.length == 1 %>
 <% variant.segments.each_with_index do |segment, segment_counter| %>
-<tr class="segment-<%= segment_counter == variant.segments.length - 1 ? 'last' : segment_counter + 1 %>">
+<tr class="segment-<%= segment_counter + 1 %>">
 
     <% if common_carrier %>
-    <td class="carrier common" rowspan="2">
-    <% if segment_counter == 0 %>
-    <table class="shift"><tr><td>
-        <p><img src="<%= variant_carriers[segment_counter]['icon_url'] %>" alt=""></p>
-        <p><%= variant_carriers[segment_counter]['name'] %></p>
-    </td></tr></table>
-    <% end %>
-    </td>
+        <% if segment_counter == 0 %>
+            <% if variant.segments.length > 2 %>
+            <td class="carrier common-mw" rowspan="<%= variant.segments.length * 2 %>">
+                <p><img src="<%= variant_carriers[0]['icon_url'] %>" alt=""></p>
+                <p><%= variant_carriers[0]['name'] %></p>            
+            </td>
+            <% else %>
+            <td class="carrier common" rowspan="2">
+            <table class="shift"><tr><td>
+                <p><img src="<%= variant_carriers[0]['icon_url'] %>" alt=""></p>
+                <p><%= variant_carriers[0]['name'] %></p>
+            </td></tr></table>
+            </td>
+            <% end %>
+        <% elsif variant.segments.length < 3 %>
+        <td rowspan="2"></td>
+        <% end %>
     <% else %>
     <td class="carrier" rowspan="2">
         <p><img src="<%= variant_carriers[segment_counter]['icon_url'] %>" alt=""></p>
@@ -37,7 +46,7 @@
     <% end %>
 
     <td class="dpt">
-        <h5><%= fmt_time( segment.departure_time ) %><span class="direction"> — <%= segment_counter == 0 ? 'туда' : 'обратно' %></span></h5>
+        <h5><%= fmt_time( segment.departure_time ) %><% if @search.rt %><span class="direction"> — <%= segment_counter == 0 ? 'туда' : 'обратно' %></span><% end %></h5>
         <h6><%= segment.departure.city.name %></h6>
         <% unless segment.departure.equal_to_city %>
             <p><%= segment.departure_name %></p>
@@ -50,7 +59,7 @@
         <ul class="parts wrap">
         <% layover_human_durations = [] %>
         <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
-            <li class="flight" title="Перелёт <%= flight.departure.city.name %> — <%= flight.arrival.city.name %>"></li>
+            <li class="flight" title="Перелёт <%= flight.departure.city.case_from %> <%= flight.arrival.city.case_to %>"></li>
             <% if layover %>
                 <% layover_human_durations << human_duration(layover) %>
                 <li class="layover<% if layover < 90 %> lovs<% elsif layover > 240 %> lovl<% end %>" title="Пересадка <%= flight.arrival.city.case_in %>, <%= human_duration(layover) %>"></li>
@@ -73,16 +82,6 @@
         <% end %>
     </td>
     
-    <% if false && variant.common_layovers? && variant.segments.length > 1 %>
-    <!-- Временно отказываемся от объединения пересадок -->
-    <td class="changes common" rowspan="2">
-    <% if segment_counter == 0 && segment.layovers? %>
-    <table class="shift"><tr><td>
-        <p>С <%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %></p>
-    </td></tr></table>
-    <% end %>
-    </td>
-    <% else %>
     <td class="changes" rowspan="2">
         <% if segment.layovers? %>
         <p>С <%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %></p>
@@ -92,10 +91,9 @@
             <p class="cnote"><span class="cabin"><%= human_cabin_nom(visible_cabins.first) %></span></p>
         <% end %>        
     </td>    
-    <% end %>
    
 </tr>
-<tr class="segment-<%= segment_counter == variant.segments.length - 1 ? 'last' : segment_counter + 1 %>">
+<tr class="segment-<%= segment_counter + 1 %>">
     <td colspan="4" class="variants"></td>
 </tr>
 <% end %>

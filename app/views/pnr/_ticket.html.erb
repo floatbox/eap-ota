@@ -137,7 +137,7 @@
         Налоги и сборы / Taxes<br>
         Итоговая стоимость / Total<br>
         Форма оплаты / Paid by<br>
-        Дата офрмления / Issue date
+        Дата оформления / Issue date
         </font>
     </td>
     <td class="pad_null" colspan="2">
@@ -147,7 +147,7 @@
         <%= @pnr.order.price_tax %> RUB<br>
         <%= @pnr.order && (@pnr.order.price_fare.to_i + @pnr.order.price_tax.to_i) %> RUB<br>
         Cash<br>
-        <%= @pnr.order.created_at.strftime('%d.%m.%y') %> RUB
+        <%= @pnr.order.created_at.strftime('%d.%m.%y') %>
         </font>
     <% end %>
     </td>

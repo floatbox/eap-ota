@@ -17,6 +17,9 @@
     text-decoration: none;
     cursor: default;
 }
+.active-booking .cost-tip {
+	display: none;
+}
 
 .l-crop .offer-variant th.book .a-button,
 .l-crop .offer-variant tr.book .a-button,
@@ -109,7 +112,7 @@
 .offer a.stop-booking {
     position: absolute;
     right: 15px;
-    margin-top: 20px;
+    margin-top: 15px;
     font-size: 12px;
     font-weight: normal;
     color: #333;

@@ -4,7 +4,7 @@ init: function() {
 
     /* Режим (по умолчанию туда и обратно) */
     this.mode = 'rt';
-    $('#search-fields .sicon').click(function() {
+    $('#search-fields .segment1 .sicon').click(function() {
         self.toggleMode();
     });
     $('#search-mode li').click(function() {
@@ -170,23 +170,18 @@ init: function() {
 toggleMode: function(mode) {
     var context = $('#search-fields');
     if (mode === undefined) {
-        mode = {rt: 'ow', ow: 'mw', dw: 'rt', tw: 'rw'}[this.mode];
-    }
-    if (mode === 'mw') {
+        mode = {rt: 'ow', ow: 'rt'}[this.mode] || this.mode;
+    } else if (mode === 'mw') {
         mode = this.segments[2].from.val() || this.segments[2].to.val() ? 'tw' : 'dw';
     }
-    if (mode === 'dw' && !this.segments[1].from.val()) {
-        this.segments[1].from.trigger('set', this.segments[0].to.val());
+    if (mode !== this.mode) {
+        context.removeClass(this.mode + 'mode').addClass(mode + 'mode');
+        context.find('tr.segment2').toggleClass('g-none', mode !== 'dw' && mode !== 'tw');
+        context.find('tr.segment3').toggleClass('g-none', mode !== 'tw');
+        context.find('.autocomplete:visible[value=""]').eq(0).focus();
+        this.calendar.toggleMode(mode);
+        this.mode = mode;
     }
-    if (mode === 'tw' && !this.segments[2].from.val()) {
-        this.segments[2].from.trigger('set', this.segments[1].to.val());
-    }
-    context.removeClass(this.mode + 'mode').addClass(mode + 'mode');
-    context.find('tr.segment2').toggleClass('g-none', mode !== 'dw' && mode !== 'tw');
-    context.find('tr.segment3').toggleClass('g-none', mode !== 'tw');
-    context.find('.autocomplete:visible[value=""]').eq(0).focus();
-    this.calendar.toggleMode(mode);
-    this.mode = mode;
 },
 values: function() {
     var s = this.segments;
@@ -321,8 +316,8 @@ validate: function(qkey) {
                 for (var i = 0, im = result.errors.length; i < im; i++) {
                     var err = result.errors[i];
                     if (err.length) {
-                        var mid = err[0][0], fmid = mid + (i + 1) + self.mode;
-                        var mtext = self.messages[fmid] || self.messages[mid] || err[0][1];
+                        var mid = err[0], fmid = mid + (i + 1) + self.mode;
+                        var mtext = self.messages[fmid] || self.messages[mid];
                         self.smessage.find('.ssm-content').html(mtext);
                         break;
                     }
@@ -347,35 +342,34 @@ validate: function(qkey) {
 },
 updateMap: function(segments) {
     this.map.Clear();
-    var pins = [], lines = [], pindex = {}, lindex = {};
+    var pins = [], lines = [], colors = [];
+    colors[0] = new VEColor(129, 170, 0, 0.9);
+    colors[1] = new VEColor(196, 111, 38, 0.9);
+    colors[2] = new VEColor(10, 160, 198, 0.9);
+    colors[3] = new VEColor(237, 17, 146, 0.75);
     for (var i = 0, im = segments.length; i < im; i++) {
         var f = segments[i].from, t = segments[i].to;
         var fp = f && f.lat && f.lng && new VELatLong(f.lat, f.lng);
         var tp = t && t.lat && t.lng && new VELatLong(t.lat, t.lng);
-        if (fp && !pindex[f.code]) {
-            pins.push(fp);
-            pindex[f.code] = true;
-        }
-        if (tp && !pindex[t.code]) {
-            pins.push(tp);
-            pindex[t.code] = true;
-        }
-        if (fp && tp && !lindex[f.code + t.code] && !lindex[t.code + f.code]) {
-            lines.push([fp, tp]);
-            lindex[f.code + t.code] = true;
-            lindex[t.code + f.code] = true;
+        if (fp) pins.push(fp);
+        if (tp) pins.push(tp);
+        if (fp && tp) {
+            lines.push({points: [fp, tp], color: colors[i]});
         }
     }
-    for (var i = 0, im = pins.length; i < im; i++) {
-        this.map.AddShape(new VEShape(VEShapeType.Pushpin, pins[i]));
+    if (this.mode === 'rt' && lines.length === 2) {
+        lines[1].color = new VEColor(196, 111, 38, 0.5);        
     }
     for (var i = 0, im = lines.length; i < im; i++) {
-        var route = new VEShape(VEShapeType.Polyline, lines[i]);
+        var route = new VEShape(VEShapeType.Polyline, lines[i].points);
         route.SetLineWidth(3);
-        route.SetLineColor(new VEColor(237, 17, 146, 0.75));
+        route.SetLineColor(lines[i].color);
         route.HideIcon();
         this.map.AddShape(route);
     }
+    /*for (var i = 0, im = pins.length; i < im; i++) {
+        this.map.AddShape(new VEShape(VEShapeType.Pushpin, pins[i]));
+    }*/
     if (pins.length > 1) {
         this.map.SetMapView(pins);
     } else if (pins.length) {
