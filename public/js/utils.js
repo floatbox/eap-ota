@@ -34,11 +34,7 @@ app.utils = {
     }
 }
 
-
-//////// Расширения встроенных объектов /////////////
-
-//////// Function /////////////
-
+// Function prototype
 Function.prototype.extend = function(p) {
     var f = function(){};
     f.prototype = p.prototype;
@@ -47,19 +43,16 @@ Function.prototype.extend = function(p) {
     this.superclass = p.prototype;
 };
 
-//////// Array //////////////
-
+// Array prototype
 Array.prototype.last = function() {
     return this[this.length - 1];
 };
-
 Array.prototype.sortInt = function() {
     this.sort(function(a, b) {
         return (a - b);
     });
     return this;
 };
-
 Array.prototype.compact = function() {
     var result = [];
     for (var i = 0, im = this.length; i < im; i++) {
@@ -67,7 +60,6 @@ Array.prototype.compact = function() {
     }
     return result;
 };
-
 Array.prototype.enumeration = function(cnj) {
     var str = this.slice(0, this.length - 1).join(', ');
     if (str) str += cnj || ' и ';
@@ -75,8 +67,13 @@ Array.prototype.enumeration = function(cnj) {
     return str;
 };
 
-//////// String /////////////
+// Number prototype
+Number.prototype.constrain = function(min, max) {
+    var n = this.valueOf();
+    return (n < min) ? min : ((n > max) ? max : n);
+};
 
+// String prototype
 String.prototype.supplant = function(o) { // см. http://sreznikov.blogspot.com/2010/01/supplant.html
     return this.replace(/{([^{}]*)}/g,
         function(a, b) {
@@ -86,41 +83,34 @@ String.prototype.supplant = function(o) { // см. http://sreznikov.blogspot.com
     );
 };
 
-//////// Date /////////////
-
+// Date prototype
 Date.prototype.clone = function() {
     return new Date(this.getTime());
 };
-
 Date.prototype.shiftDays = function(d) {
     this.setDate(this.getDate() + d);
     return this;
 };
-
 Date.prototype.shiftMonthes = function(m) {
     this.setMonth(this.getMonth() + m);
     return this;
 };
-
 Date.prototype.dayoff = function() {
     var dow = this.getDay();
     return (dow == 0 || dow == 6);
 };
-
 Date.prototype.toAmadeus = function() {
     var d = this.getDate();
     var m = this.getMonth() + 1;
     var y = this.getFullYear() % 100;
     return [d < 10 ? '0' : '', d, m < 10 ? '0' : '', m, y].join('');
 };
-
 Date.parseAmadeus = function(str) {
     var d = parseInt(str.substring(0,2), 10);
     var m = parseInt(str.substring(2,4), 10) - 1;
     var y = parseInt(str.substring(4,6), 10) + 2000;
     return new Date(y, m, d);
 };
-
 Date.daysInMonth = function(m, y) {
     var date = new Date(y, m, 1);
     date.setMonth(m + 1);
@@ -190,7 +180,6 @@ $.animateScrollTop = function(st, complete) {
         st: st
     }, options);
 };
-
 
 /* Detect browser */
 var browser = (function() {

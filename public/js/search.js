@@ -342,35 +342,34 @@ validate: function(qkey) {
 },
 updateMap: function(segments) {
     this.map.Clear();
-    var pins = [], lines = [], pindex = {}, lindex = {};
+    var pins = [], lines = [], colors = [];
+    colors[0] = new VEColor(129, 170, 0, 0.9);
+    colors[1] = new VEColor(196, 111, 38, 0.9);
+    colors[2] = new VEColor(10, 160, 198, 0.9);
+    colors[3] = new VEColor(237, 17, 146, 0.75);
     for (var i = 0, im = segments.length; i < im; i++) {
         var f = segments[i].from, t = segments[i].to;
         var fp = f && f.lat && f.lng && new VELatLong(f.lat, f.lng);
         var tp = t && t.lat && t.lng && new VELatLong(t.lat, t.lng);
-        if (fp && !pindex[f.code]) {
-            pins.push(fp);
-            pindex[f.code] = true;
+        if (fp) pins.push(fp);
+        if (tp) pins.push(tp);
+        if (fp && tp) {
+            lines.push({points: [fp, tp], color: colors[i]});
         }
-        if (tp && !pindex[t.code]) {
-            pins.push(tp);
-            pindex[t.code] = true;
-        }
-        if (fp && tp && !lindex[f.code + t.code] && !lindex[t.code + f.code]) {
-            lines.push([fp, tp]);
-            lindex[f.code + t.code] = true;
-            lindex[t.code + f.code] = true;
-        }
+    }
+    if (this.mode === 'rt' && lines.length === 2) {
+        lines[1].color = new VEColor(196, 111, 38, 0.5);        
+    }
+    for (var i = 0, im = lines.length; i < im; i++) {
+        var route = new VEShape(VEShapeType.Polyline, lines[i].points);
+        route.SetLineWidth(3);
+        route.SetLineColor(lines[i].color);
+        route.HideIcon();
+        this.map.AddShape(route);
     }
     /*for (var i = 0, im = pins.length; i < im; i++) {
         this.map.AddShape(new VEShape(VEShapeType.Pushpin, pins[i]));
     }*/
-    for (var i = 0, im = lines.length; i < im; i++) {
-        var route = new VEShape(VEShapeType.Polyline, lines[i]);
-        route.SetLineWidth(3);
-        route.SetLineColor(new VEColor(237, 17, 146, 0.75));
-        route.HideIcon();
-        this.map.AddShape(route);
-    }
     if (pins.length > 1) {
         this.map.SetMapView(pins);
     } else if (pins.length) {
