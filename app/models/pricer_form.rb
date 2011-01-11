@@ -191,13 +191,28 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     []
   end
 
+  def complex_route?
+    form_segments.length > 1 && !rt
+  end
+
   def human
     return "запрос не полон" unless valid?
     r = []
 
     locations = human_locations
-    if locations[:dpt_0] && locations[:arv_0]
-      r << "<span class=\"locations\">#{locations[:dpt_0]} #{locations[:arv_0]}</span>"
+    if locations[:dpt] && locations[:arv]
+      r << "<span class=\"locations\">#{locations[:dpt]} #{locations[:arv]}</span>"
+    end
+    if complex_route?
+      r << "<span class=\"date\" data-date=\"#{[dates[0][0,2],dates[0][2,2]].join('.')}\">#{human_date(date1)}</span>,"
+      form_segments[1..-1].each do |fs|
+        locations = human_locations(fs)
+        if locations[:dpt] && locations[:arv]
+          r << " <span class=\"locations\">#{locations[:dpt]} #{locations[:arv]}</span>"
+          r << "<span class='date' data-date='#{[fs.date[0,2], fs.date[2,2]].join('.')}'>#{human_date(fs.date)}</span>,"
+        end
+      end
+      r[-1].chop!
     end
 
     if adults > 1
@@ -212,14 +227,14 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     end
 
     r << human_cabin if cabin
+    unless complex_route?
+      r << "<span class=\"date\" data-date=\"#{[date1[0,2],date1[2,2]].join('.')}\">#{human_date(date1)}</span>"
 
-    r << "<span class=\"date\" data-date=\"#{[date1[0,2],date1[2,2]].join('.')}\">#{human_date(date1)}</span>"
-
-    if rt
-      r << 'и&nbsp;обратно'
-      r << "<span class=\"date\" data-date=\"#{[date2[0,2],date1[2,2]].join('.')}\">#{human_date(date2)}</span>"
+      if rt
+        r << 'и&nbsp;обратно'
+        r << "<span class=\"date\" data-date=\"#{[date2[0,2],date1[2,2]].join('.')}\">#{human_date(date2)}</span>"
+      end
     end
-
     r.join(' ')
   end
 
@@ -239,19 +254,13 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     form_segments[0].nearby_cities
   end
 
-  def human_locations
-    #FIXME
-    fl = form_segments[0].from_as_object
-    tl = form_segments[0].to_as_object
-    result = {
-      :dpt_0 => fl && fl.case_from,
-      :arv_0 => tl && tl.case_to,
+  def human_locations(fs = form_segments[0])
+    fl = fs.from_as_object
+    tl = fs.to_as_object
+    {
+      :dpt => fl && fl.case_from,
+      :arv => tl && tl.case_to,
     }
-    if rt
-      result[:dpt_1] = tl && tl.case_from
-      result[:arv_1] = fl && fl.case_to
-    end
-    result
   end
 
   def human_date(ds)
