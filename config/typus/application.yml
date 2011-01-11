@@ -131,14 +131,3 @@ GeoTag:
   filters:
   search: name, synonym_list
   application: Geo
-
-Preset:
-  fields:
-    default: name
-    list: name
-    form: name, query
-  order_by:
-  relationships:
-  filters:
-  search: name
-  application: Disabled
