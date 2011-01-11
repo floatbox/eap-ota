@@ -103,11 +103,10 @@
 #search-fields .segment1 .sicon {
     background-position: 0 -30px;
 }
-#search-fields .segment2 .sicon,
-#search-fields .segment3 .sicon {
+#search-fields .segment2 .sicon {
     background-position: 0 -60px;
 }
-#search-fields.twmode .segment2 .sicon {
+#search-fields .segment3 .sicon {
     background-position: 0 -90px;
 }
 #search-fields.rtmode .segment1 .sicon {

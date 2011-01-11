@@ -11,14 +11,14 @@
 }
 #search-define th {
     width: 90px;
-    padding: 15px 0 12px 15px;
+    padding: 13px 0 14px 15px;
     font-weight: bold;
     text-align: left;
     vertical-align: top;
     color: #fff;
 }
 #search-define td {
-    padding: 15px 0 12px 10px;
+    padding: 13px 0 14px 10px;
     vertical-align: top;
     color: #ccc;
 }

@@ -285,11 +285,10 @@
     cursor: help;
 }
 .offer .segment-2 .trip li.flight {
-    background-position: 0 -25px;
-}
-.offer .segment-3 .trip li.flight,
-.offer .segment-last .trip li.flight {
     background-position: 0 -50px;
+}
+.offer .segment-3 .trip li.flight {
+    background-position: 0 -25px;
 }
 .offer .trip .parts li.layover {
     background-position: 0 -75px;
@@ -338,13 +337,11 @@
 }
 .offer .summary .segment-2 h5,
 .offer .summary .segment-2 .variants a {
-    color: #0aa0c6;
+    color: #C46F26;
 }
-.offer .summary .segment-last h5,
-.offer .summary .segment-last .variants a,
 .offer .summary .segment-3 h5,
 .offer .summary .segment-3 .variants a {
-    color: #C46F26;
+    color: #0aa0c6;
 }
 .offer .summary .variants a:hover {
     color: #ED1192;
@@ -413,11 +410,10 @@
     color: #6F7C26;
 }
 .offer .details .segment-2 .direction {
-    color: #0aa0c6;
-}
-.offer .details .segment-3 .direction,
-.offer .details .segment-last .direction {
     color: #C46F26;
+}
+.offer .details .segment-3 .direction {
+    color: #0aa0c6;
 }
 
 /* Класс */
@@ -459,13 +455,11 @@
 }
 .offer .details .segment-2 .arv .time h5,
 .offer .details .segment-2 .dpt .time h5 {
-    color: #0aa0c6;
+    color: #C46F26;
 }
 .offer .details .segment-3 .arv .time h5,
-.offer .details .segment-3 .dpt .time h5,
-.offer .details .segment-last .arv .time h5,
-.offer .details .segment-last .dpt .time h5 {
-    color: #C46F26;
+.offer .details .segment-3 .dpt .time h5 {
+    color: #0aa0c6;
 }
     
 /* Описание рейса */

@@ -454,9 +454,3 @@ updatePreview: function(items) {
     }
 }
 };
-
-/* Constrain */
-Number.prototype.constrain = function(min, max) {
-    var n = this.valueOf();
-    return (n < min) ? min : ((n > max) ? max : n);
-};
