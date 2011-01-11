@@ -16,14 +16,6 @@ Eviterra::Application.routes.draw do
 
   resources :pnr_form, :controller => 'PNR'
 
-  match 'flight_queries/geo/:location' => 'flight_queries#geo', :method => :get, :as => :geo_flight_query
-
-  resources :flight_queries do
-    get :default, :presets, :on => :collection
-  end
-
-  resources :presets, :except => [:new, :create]
-
   match 'complete.json' => 'complete#complete'
 
   match 'about/:action' => 'about', :as => :about
