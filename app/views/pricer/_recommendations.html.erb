@@ -5,11 +5,13 @@
 <% unless @search.nearby_cities.empty? %>
 <div class="offers-context g-none">
     <h3 class="offers-title">Соседние города</h3>
-    <% location_titles = ['Вылет', 'Прилет'] %>
     <% location_names = ['from', 'to'] %>
-    <% @search.nearby_cities.each_with_index do |cities, i| %>
+    <% @search.form_segments.each_with_index do |segment, s| %>
+        <% segment.nearby_cities.each_with_index do |cities, c| %>
         <% unless cities.empty? %>
-        <p class="cities" data-name="<%= location_names[i] %>"><strong><%= location_titles[i] %>:</strong> <%= raw cities.map{|c| "<span class=\"city\">#{h c.name}</span>"}.join(', ') %></p>
+            <% city = c == 0 ? segment.from_as_object : segment.to_as_object %>
+            <p class="cities"><strong><%= city.name_ru %>:</strong> <%= raw cities.map{|c| "<span class=\"city\">#{h c.name}</span>"}.join(', ') %></p>
+        <% end %>
         <% end %>
     <% end %>
 </div>

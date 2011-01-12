@@ -25,10 +25,10 @@
     letter-spacing: -0.01em;
     white-space: nowrap;
 }
-#search-fields .segment1 .highlight {
+#search-fields .segment1 .to .highlight {
     color: #9ab300;
 }
-#search-fields .segment2 .highlight,
+#search-fields .segment2 .to .highlight,
 #search-fields.rtmode .segment1 .from .highlight {
     color: #cc8000;
 }
