@@ -105,7 +105,11 @@ init: function() {
     // Соседние города
     this.content.delegate('.offers-context .city', 'click', function() {
         var el = $(this);
-        search[el.closest('.cities').attr('data-name')].trigger('set', el.text());
+        var fields = el.closest('.cities').attr('data-fields').split(' ');
+        for (var i = fields.length; i--;) {
+            var fparts = fields[i].split('-');
+            search.segments[parseInt(fparts[1], 10)][fparts[0]].trigger('set', el.text());
+        }
         $.animateScrollTop(0);
     });
     
@@ -196,10 +200,14 @@ show: function(fixed) {
     search.submit.addClass('current');
     if (u.title) {
         this.title.html(u.title);
-        var sdates = this.title.find('.date').map(function() {
+        var locations = this.title.find('.locations');
+        var ls = locations.map(function() {
+            return locations.length > 1 ? $(this).attr('data-short') : $(this).text();
+        }).get().join(', ');
+        var ds = this.title.find('.date').map(function() {
             return $(this).attr('data-date');
-        }).get().join('—');
-        this.title.attr('data-title', this.title.find('.locations').html() + ' (' + sdates + ')');
+        }).get().join(locations.length > 1 ? ', ' : '—');
+        this.title.attr('data-title', ls.replace(/— (.*?),(?= \1 —)/g, '—') + ' (' + ds + ')');
     }
     if (u.loading) {
         this.toggle('loading');

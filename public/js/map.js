@@ -62,7 +62,3 @@ show: function(segments) {
     }
 }
 };
-
-$(function() {
-    search.map.init();
-});

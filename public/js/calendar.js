@@ -42,7 +42,7 @@ makeDates: function() {
             });
         }
         var dmy = curd.toAmadeus();
-        var day = $('<li>').attr('data-dmy', dmy).attr('data-title', date + ' ' + app.constant.MNg[curd.getMonth()]);
+        var day = $('<li>').attr('data-dmy', dmy);
         var label = $('<span class="label">' + date + '<span class="mtitle">&nbsp;' + app.constant.MNg[curd.getMonth()] + '</span></span>');
         if (curd.dayoff()) {
             label.addClass('dayoff');
@@ -199,18 +199,19 @@ update: function() {
         var d = this.selected[i];
         if (d !== undefined) this.values[i] = this.dates.eq(d).attr('data-dmy');
     }
-    var items = this.selected.compact();
+    var items = this.values.compact();
     var title = 'Выберите даты';
     if (items.length) {
-        title = this.dates.eq(items[0]).attr('data-title');
-        if (items.length > 1) {
-            var d1 = title.split(' '), d2 = this.dates.eq(items.last()).attr('data-title').split(' ');
-            var spacer = ' — ';
-            if (d1[1] == d2[1]) {
-                d1.length = 1;
-                spacer = '<span class="spacer">—</span>';
-            }
-            title = d1.join(' ') + spacer + d2.join(' ');
+        var tparts = [];
+        for (var i = 0, im = items.length; i < im; i++) {
+            var d = Date.parseAmadeus(items[i]);
+            tparts.push(d.getDate() + ' ' + app.constant[im > 2 ? 'SMN' : 'MNg'][d.getMonth()]);
+        }
+        title = tparts.join(' — ');
+        if (items.length === 2) {
+            title = title.replace(/( [а-я]+)(?= — \d+\1)/, '');
+        } else if (items.length > 2) {
+            title = title.replace(/май/g, 'мая');
         }
     }
     this.title.html(title);

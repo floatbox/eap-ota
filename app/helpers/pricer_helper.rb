@@ -122,6 +122,28 @@ module PricerHelper
     primary_carriers
   end
 
+  def nearby_cities_list segments
+    result = []
+    index = {}
+    segments.each_with_index do |segment, s|
+      segment.nearby_cities.each_with_index do |cities, c|
+        title = c == 0 ? segment.from_as_object.name_ru : segment.to_as_object.name_ru
+        field = "#{c == 0 ? 'from' : 'to'}-#{s}"
+        if index[title]
+          index[title]['fields'] << field
+        elsif !cities.empty?
+          item = {}
+          item['cities'] = cities.map{|c| content_tag('span', c.name, {:class => 'city'}) }.join(', ')
+          item['fields'] = [field]
+          item['title'] = title
+          index[title] = item
+          result << item
+        end
+      end
+    end
+    result
+  end
+
   def variant_debug_info(recommendation, variant)
     concat %(<a href="#" onclick="prompt('ctrl+c!', '#{h recommendation.cryptic(variant)}'); return false">КОД</a> ).html_safe
     concat 'Наземный участок ' if recommendation.ground?
