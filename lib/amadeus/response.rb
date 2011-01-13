@@ -30,7 +30,7 @@ module Amadeus::Response
     delegate :xpath, :to => :doc
 
 
-    def bang!
+    def or_fail!
       unless success?
         raise "#{self.class.name}: #{message}"
       end

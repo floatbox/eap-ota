@@ -142,13 +142,13 @@ class OrderData < ActiveRecord::BaseWithoutTable
     amadeus = Amadeus::Service.new(:book => true)
     amadeus.air_sell_from_recommendation(
       :segments => recommendation.variants[0].segments, :people_count => seat_count
-    ).bang!
+    ).or_fail!
 
-    add_multi_elements = amadeus.pnr_add_multi_elements(self).bang!
+    add_multi_elements = amadeus.pnr_add_multi_elements(self).or_fail!
     if self.pnr_number = add_multi_elements.pnr_number
       set_people_numbers(add_multi_elements.passengers)
       amadeus.pnr_commit_really_hard do
-        resp = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier).bang!
+        resp = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier).or_fail!
         fares_count = resp.fares_count
         prices = resp.prices
         unless [recommendation.price_fare, recommendation.price_tax] == prices
@@ -157,7 +157,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
           return
         end
         # FIXME среагировать на отсутствие маски
-        amadeus.ticket_create_tst_from_pricing(:fares_count => fares_count).bang!
+        amadeus.ticket_create_tst_from_pricing(:fares_count => fares_count).or_fail!
       end
 
       if block_money
