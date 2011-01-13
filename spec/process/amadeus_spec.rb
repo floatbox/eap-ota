@@ -1,11 +1,10 @@
 require 'spec_helper'
 
 describe Amadeus::Service do
+  use_vcr_cassette 'foo', :record => :new_episodes
 
   it "should be ok" do
-    VCR.use_cassette('foo', :record => :new_episodes) do
-      Amadeus::Service.cmd('help').should =~ /HELP/
-    end
+    Amadeus::Service.cmd('help').should =~ /HELP/
   end
 end
 
