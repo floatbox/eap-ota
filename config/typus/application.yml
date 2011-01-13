@@ -84,9 +84,9 @@ City:
 Order:
   fields:
     default: order_id, pnr_number, email, phone, updated_at
-    list: order_id, pnr_number, email, created_at, price_total, price_share, price_markup, payment_status, ticket_status
-    show: order_id, pnr_number, payment_status, ticket_status, email, created_at, updated_at, price_total, price_share, price_markup, price_with_payment_commission, full_info
-    csv:  order_id, pnr_number, email, created_at, updated_at, price_total, price_share, price_markup, price_with_payment_commission, full_info, payment_status, ticket_status
+    list: order_id, pnr_number, email, created_at, price_total, price_share, price_our_markup, payment_status, ticket_status
+    show: order_id, pnr_number, payment_status, ticket_status, email, created_at, updated_at, price_total, price_share, price_our_markup, price_consolidator_markup, price_with_payment_commission, full_info
+    csv:  order_id, pnr_number, email, created_at, updated_at, price_total, price_share, price_our_markup, price_consolidator_markup, price_with_payment_commission, full_info, payment_status, ticket_status
   order_by: -created_at
   search: pnr_number, email, phone
   options:

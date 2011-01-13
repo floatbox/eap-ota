@@ -21,7 +21,8 @@ class Order < ActiveRecord::Base
       self.commission_agent = c.agent
       self.commission_subagent = c.subagent
       self.price_share = recommendation.price_share
-      self.price_markup = recommendation.price_markup
+      self.price_our_markup = recommendation.price_our_markup
+      self.price_consolidator_markup = recommendation.price_consolidator_markup
       self.price_fare = recommendation.price_fare.to_i
       self.price_tax = recommendation.price_tax_and_markup.to_i
     end

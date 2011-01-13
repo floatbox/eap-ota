@@ -2,7 +2,7 @@ class Recommendation
 
   include KeyValueInit
 
-  attr_accessor :variants, :price_fare, :price_tax, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
+  attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
     :suggested_marketing_carrier_iatas
 
   delegate :marketing_carriers, :marketing_carrier_iatas, :to => 'variants.first'
@@ -30,20 +30,54 @@ class Recommendation
     end
   end
 
+  attr_accessor :price_fare, :price_tax, :price_our_markup, :price_consolidator_markup
+
+  # сумма, которая придет нам от платежного шлюза
   def price_total
     price_fare + price_tax + price_markup
   end
 
+  # сумма для списывания с карточки
   def price_with_payment_commission
     price_total + price_payment
   end
 
+  # комиссия платежного шлюза
   def price_payment
     Payture.commission(price_total)
   end
 
+  # "налоги и сборы" для отображения клиенту
   def price_tax_and_markup
     price_tax + price_markup
+  end
+
+  # доля от комиссии консолидатора, которая достанется нам
+  def price_share
+    if commission
+      commission.share(price_fare)
+    else
+      0
+    end
+  end
+
+  # надбавка к цене амадеуса
+  def price_markup
+    ajust_markup! if @price_our_markup.nil? || @price_consolidator_markup.nil?
+    price_our_markup + price_consolidator_markup
+  end
+
+  def ajust_markup!
+    @price_our_markup = 350
+    if price_share <= 5
+      @price_consolidator_markup = (price_fare * 0.02).to_i
+    else
+      @price_consolidator_markup = 0
+    end
+  end
+
+  def commission
+    @commission ||= Commission.find_for(self)
   end
 
   def segments
@@ -101,33 +135,6 @@ class Recommendation
 
   def variants_by_duration
     variants.sort_by(&:total_duration)
-  end
-
-  def commission
-    @commission ||= Commission.find_for(self)
-  end
-
-  def price_share
-    if commission
-      commission.share(price_fare)
-    else
-      0
-    end
-  end
-
-  # надеюсь, никто его не дернет до выставления всех остальных параметров
-  def price_markup
-    ajust_markup! if @price_markup.nil?
-    @price_markup
-  end
-
-  def ajust_markup!
-    # если меньше 350 рублей, то три процента сверху
-    if (price_share) < 350
-      @price_markup = ((price_fare + price_tax) * 0.03).to_i
-    else
-      @price_markup = 0
-    end
   end
 
   def rules_with_flights
