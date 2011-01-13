@@ -1,0 +1,99 @@
+--- 
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :post
+    uri: https://test.webservices.amadeus.com:443/
+    body: |-
+      <?xml version='1.0' ?>
+      <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
+        <env:Header />
+        <env:Body>
+          <Security_Authenticate>
+        <userIdentifier>
+        <originIdentification>
+          <sourceOffice>MOWR228FA</sourceOffice>
+        </originIdentification>
+        <originatorTypeCode>U</originatorTypeCode>
+        <originator>WSEVIOAB</originator>
+      </userIdentifier>
+      <dutyCode>
+        <dutyCodeDetails>
+          <referenceQualifier>DUT</referenceQualifier>
+          <referenceIdentifier>SU</referenceIdentifier>
+        </dutyCodeDetails>
+      </dutyCode>
+      <systemDetails>
+        <organizationDetails>
+          <organizationId>NMC-RUSSIA</organizationId>
+        </organizationDetails>
+      </systemDetails>
+      <passwordInfo>
+        <dataLength>8</dataLength>
+        <dataType>E</dataType>
+        <binaryData>TUk4Vlg4N00=</binaryData>
+      </passwordInfo>
+      </Security_Authenticate>
+        </env:Body>
+      </env:Envelope>
+    headers: 
+      "soapaction: http://webservices.amadeus.com/1asiwoabevi/vlsslq-06-1-1a": 
+      - ""
+      "content-type: text/xml; charset=utf-8": 
+      - ""
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: OK
+    headers: 
+      content-type: 
+      - text/xml
+      content-length: 
+      - "263"
+      content-encoding: 
+      - gzip
+    body: <?xml version="1.0" encoding="UTF-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Header xmlns="http://webservices.amadeus.com/definitions"><SessionId>000J91B9M6|1</SessionId></soap:Header><soap:Body><Security_AuthenticateReply xmlns="http://xml.amadeus.com/VLSSLR_06_1_1A"><processStatus><statusCode>P</statusCode></processStatus></Security_AuthenticateReply></soap:Body></soap:Envelope>
+    http_version: "1.1"
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :post
+    uri: https://test.webservices.amadeus.com:443/
+    body: |-
+      <?xml version='1.0' ?>
+      <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
+        <env:Header>
+          <SessionId>000J91B9M6|2</SessionId>
+        </env:Header>
+        <env:Body>
+          <Command_Cryptic>
+        <messageAction>
+        <messageFunctionDetails>
+          <messageFunction>F</messageFunction>
+        </messageFunctionDetails>
+      </messageAction>
+      <longTextString>
+        <textStringDetails>help</textStringDetails>
+      </longTextString>
+      </Command_Cryptic>
+        </env:Body>
+      </env:Envelope>
+    headers: 
+      "soapaction: http://webservices.amadeus.com/1asiwoabevi/hsfreq-07-3-1a": 
+      - ""
+      "content-type: text/xml; charset=utf-8": 
+      - ""
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: OK
+    headers: 
+      content-type: 
+      - text/xml
+      content-length: 
+      - "578"
+      content-encoding: 
+      - gzip
+    body: |-
+      <?xml version="1.0" encoding="UTF-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Header xmlns="http://webservices.amadeus.com/definitions"><SessionId>000J91B9M6|2</SessionId></soap:Header><soap:Body><Command_CrypticReply xmlns="http://xml.amadeus.com/HSFRES_07_3_1A"><longTextString><textStringDetails>/$                        INTRODUCTION TO HELP  EN   9SEP08 1218Z  THESE ARE THE WAYS YOU CAN FIND THE HELP YOU NEED:  TYPE OF HELP                 ENTRY                  EXAMPLE ------------                 -----                  ------- SPECIFIC SUBJECT             HE(SUBJECT NAME)       HE HOTELS  SPECIFIC TRANSACTION         HE(TRANSACTION CODE)   HE HA  HELP ON YOUR LAST ENTRY      HE/  WHAT&apos;S NEW IN HELP           HE UPDATES  HELP ON HELP                 HE HELP  COMPLETING TASKS IN HELP     HE STEPS  LIST OF KEYWORDS OR          HE (SUBJECT NAME)     HE TICKETING
+       QUICKPATHS FOR A SUBJECT     FOLLOWED BY GP QPS    GP QPS                                                               MD
+        SUBJECTS AVAILABLE IN HELP </textStringDetails></longTextString></Command_CrypticReply></soap:Body></soap:Envelope>
+    http_version: "1.1"
