@@ -37,7 +37,7 @@ module Amadeus
         ssr_nodes = xpath("//r:serviceRequest[r:ssr/r:type='DOCS' and ../r:referenceForDataElement/r:reference/r:number=#{number} and ../r:referenceForDataElement/r:reference/r:qualifier='PT']")
         ssr_nodes.each do |ssr_node|
           ssr_text = (ssr_node / "r:ssr/r:freeText").to_s
-          passport = ssr_text.match(/^P\/.{3}\/(\w+)\//)[1]
+          passport = ssr_text.match(/^P\/.{3}\/([\w ]+)\//)[1]
           return passport if infant_indicator == !!(ssr_text.to_s =~ /^P\/\w{3}\/\w+\/\w{3}\/\w+\/[F,M]I/)
         end
       end
