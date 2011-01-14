@@ -70,14 +70,6 @@ class Recommendation
     variants.map(&:total_duration).min
   end
 
-  def self.cheap recs
-    recs.select(&:sellable?).min_by(&:price_total)
-  end
-
-  def self.fast recs
-    recs.select(&:sellable?).min_by(&:minimal_duration)
-  end
-
   def self.merge left, right
     # работает только пока signature не учитывает sources
     merged = left | right
