@@ -18,6 +18,7 @@ Eviterra::Application.routes.draw do
 
   match 'complete.json' => 'complete#complete'
 
+  match 'about' => 'about#index', :as => :about
   match 'about/:action' => 'about', :as => :about
 
   match "geo" => 'home#geo', :as => :geo

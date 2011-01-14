@@ -1,6 +1,6 @@
 <% cache(:action => "index", :action_suffix => ('matrix' + @query_key)) do %>
 <% if @recommendations.present? %>
-<div class="matrix-origin" data-dates="<%= @search.dates.join(' ') %>"></div>
+<div class="matrix-origin" data-dates="<%= @search.form_segments.map{|fs| fs.date }.join(' ') %>"></div>
 <% @recommendations.each do |recommendation| %>
     <% different_cabins = recommendation.cabins_except(@search.cabin) %>
     <% recommendation.variants.each_with_index do |variant, variant_index| %>

@@ -215,7 +215,7 @@ update: function() {
         }
     }
     this.title.html(title);
-    this.scroller.updatePreview(items);
+    this.scroller.updatePreview(this.selected.compact());
     this.showResetButton();
     search.update(this);
 },

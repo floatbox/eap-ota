@@ -217,8 +217,8 @@ values: function() {
 },
 restore: function(data) {
     var segments = data.form_segments || [], dates = [];
-    this.toggleMode(data.rt ? 'rt' : ['rt', 'ow', 'dw', 'tw'][segments.length - 1]);
-    for (var i = this.segments.length; i--;) {
+    this.toggleMode(data.rt ? 'rt' : ['ow', 'dw', 'tw'][segments.length - 1]);
+    for (var i = 0, im = this.segments.length; i < im; i++) {
         var segment = segments[i];
         this.segments[i].from.trigger('set', segment && segment.from || '').trigger('iata', '');
         this.segments[i].to.trigger('set', segment && segment.to || '').trigger('iata', '');
@@ -230,7 +230,7 @@ restore: function(data) {
     this.cabin.select(data.cabin || []);
     this.calendar.selected = [];
     if (dates.length) {
-        this.calendar.select(data.dates);
+        this.calendar.select(dates);
     }    
 },
 update: function(source) {
