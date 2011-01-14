@@ -56,6 +56,7 @@ init: function() {
         from: searchField('#search-s3-from'),
         to: searchField('#search-s3-to')
     }];
+    this.toValues = [];
     
     // IATA в первом поле «Откуда»
     var fdata = this.segments[0].from.get(0).onclick();
@@ -178,9 +179,10 @@ toggleMode: function(mode) {
         context.removeClass(this.mode + 'mode').addClass(mode + 'mode');
         context.find('tr.segment2').toggleClass('g-none', mode !== 'dw' && mode !== 'tw');
         context.find('tr.segment3').toggleClass('g-none', mode !== 'tw');
-        context.find('.autocomplete:visible[value=""]').eq(0).focus();
         this.calendar.toggleMode(mode);
         this.mode = mode;
+        this.autoFrom();
+        context.find('.autocomplete:visible[value=""]').eq(0).focus();
     }
 },
 values: function() {
@@ -214,16 +216,20 @@ values: function() {
     return data;
 },
 restore: function(data) {
-    var fs = data.form_segments;
-    for (var i = fs.length; i--;) {
-        this.segments[i].from.trigger('set', fs[i].from || '').trigger('iata', '');
-        this.segments[i].to.trigger('set', fs[i].to || '').trigger('iata', '');
+    var segments = data.form_segments || [], dates = [];
+    this.toggleMode(data.rt ? 'rt' : ['rt', 'ow', 'dw', 'tw'][segments.length - 1]);
+    for (var i = this.segments.length; i--;) {
+        var segment = segments[i];
+        this.segments[i].from.trigger('set', segment && segment.from || '').trigger('iata', '');
+        this.segments[i].to.trigger('set', segment && segment.to || '').trigger('iata', '');
+        if (segment && segment.date) {
+            dates.push(segment.date);
+        }
     }
-    this.toggleMode(['ow', 'rt', 'mw'][fs.length]);
-    this.persons.select($.extend({}, data.people_count || df.people_count));
+    this.persons.select($.extend({}, data.people_count));
     this.cabin.select(data.cabin || []);
     this.calendar.selected = [];
-    if (data.dates) {
+    if (dates.length) {
         this.calendar.select(data.dates);
     }    
 },
@@ -324,56 +330,38 @@ validate: function(qkey) {
                 }
             }
         }
-        var fs = result.search && result.search.form_segments;
-        if (fs) {
-            var sfrom, sto, segments = [];
-            for (var i = 0, im = Math.min(fs.length, {ow: 1, rt: 2, dw: 2, tw: 3}[self.mode]); i < im; i++) {
-                sfrom = fs[i].from_as_object, sto = fs[i].to_as_object;
-                self.segments[i].from.trigger('iata', sfrom ? (sfrom.code = sfrom.iata || sfrom.alpha2) : '');
-                self.segments[i].to.trigger('iata', sto ? (sto.code = sto.iata || sto.alpha2) : '');                
-                segments[i] = {from: sfrom, to: sto};
-            }
-            if (self.map) {
-                self.updateMap(segments);
-            }
-        }        
+        this.toValues = [];
+        if (result.search && result.search.form_segments) {
+            self.applySegments(result.search.form_segments);
+        }
         delete(self.request);
     });
 },
-updateMap: function(segments) {
-    this.map.Clear();
-    var pins = [], lines = [], colors = [];
-    colors[0] = new VEColor(129, 170, 0, 0.9);
-    colors[1] = new VEColor(196, 111, 38, 0.9);
-    colors[2] = new VEColor(10, 160, 198, 0.9);
-    colors[3] = new VEColor(237, 17, 146, 0.75);
+applySegments: function(segments) {
+    var items = [];
     for (var i = 0, im = segments.length; i < im; i++) {
-        var f = segments[i].from, t = segments[i].to;
-        var fp = f && f.lat && f.lng && new VELatLong(f.lat, f.lng);
-        var tp = t && t.lat && t.lng && new VELatLong(t.lat, t.lng);
-        if (fp) pins.push(fp);
-        if (tp) pins.push(tp);
-        if (fp && tp) {
-            lines.push({points: [fp, tp], color: colors[i]});
+        var sf = segments[i].from_as_object;
+        var st = segments[i].to_as_object;
+        if (sf) sf.code = sf.iata || sf.alpha2;
+        if (st) st.code = st.iata || st.alpha2;
+        this.segments[i].from.trigger('iata', sf && this.segments[i].from.val() ? sf.code : '');
+        this.segments[i].to.trigger('iata', st && this.segments[i].to.val() ? st.code : '');
+        this.toValues[i] = st && st.name_ru;
+        items[i] = {from: sf, to: st};
+    }
+    this.autoFrom();
+    if (this.map.active) {
+        this.map.show(items);
+    }    
+},
+autoFrom: function() {
+    if (this.mode === 'dw' || this.mode === 'tw') {
+        for (var i = 1, im = this.mode === 'tw' ? 3 : 2; i < im; i++) {
+            var field = this.segments[i].from;
+            if (!field.val() && this.toValues[i - 1] && !field.hasClass('autocomplete-focus')) {
+                field.trigger('set', this.toValues[i - 1]);
+            }
         }
-    }
-    if (this.mode === 'rt' && lines.length === 2) {
-        lines[1].color = new VEColor(196, 111, 38, 0.5);        
-    }
-    for (var i = 0, im = lines.length; i < im; i++) {
-        var route = new VEShape(VEShapeType.Polyline, lines[i].points);
-        route.SetLineWidth(3);
-        route.SetLineColor(lines[i].color);
-        route.HideIcon();
-        this.map.AddShape(route);
-    }
-    /*for (var i = 0, im = pins.length; i < im; i++) {
-        this.map.AddShape(new VEShape(VEShapeType.Pushpin, pins[i]));
-    }*/
-    if (pins.length > 1) {
-        this.map.SetMapView(pins);
-    } else if (pins.length) {
-        this.map.SetCenterAndZoom(pins[0], 4);
     }
 },
 abort: function() {

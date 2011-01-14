@@ -44,6 +44,9 @@ group :test do
   gem 'capybara'
   gem 'spork'
   gem 'database_cleaner'
+
+  gem 'vcr'
+  gem 'webmock'
 end
 
 group :console do

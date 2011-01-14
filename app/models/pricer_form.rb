@@ -200,16 +200,15 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     return "запрос не полон" unless valid?
     r = []
 
-    locations = human_locations
-    if locations[:dpt] && locations[:arv]
-      r << "<span class=\"locations\">#{locations[:dpt]} #{locations[:arv]}</span>"
+    fs = form_segments[0];
+    if fs.from_as_object && fs.to_as_object
+      r << "<span class=\"locations\" data-short=\"#{fs.from_as_object.name} — #{fs.to_as_object.name}\">#{fs.from_as_object.case_from} #{fs.to_as_object.case_to}</span>"
     end
     if complex_route?
       r << "<span class=\"date\" data-date=\"#{[dates[0][0,2],dates[0][2,2]].join('.')}\">#{human_date(date1)}</span>,"
       form_segments[1..-1].each do |fs|
-        locations = human_locations(fs)
-        if locations[:dpt] && locations[:arv]
-          r << " <span class=\"locations\">#{locations[:dpt]} #{locations[:arv]}</span>"
+        if fs.from_as_object && fs.to_as_object
+          r << " <span class=\"locations\" data-short=\"#{fs.from_as_object.name} — #{fs.to_as_object.name}\">#{fs.from_as_object.case_from} #{fs.to_as_object.case_to}</span>"
           r << "<span class='date' data-date='#{[fs.date[0,2], fs.date[2,2]].join('.')}'>#{human_date(fs.date)}</span>,"
         end
       end
@@ -255,13 +254,15 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     form_segments[0].nearby_cities
   end
 
-  def human_locations(fs = form_segments[0])
-    fl = fs.from_as_object
-    tl = fs.to_as_object
-    {
-      :dpt => fl && fl.case_from,
-      :arv => tl && tl.case_to,
-    }
+  def human_locations
+    result = {}
+    form_segments.each_with_index do |fs, i|
+      if fs.from_as_object && fs.to_as_object
+        result['dpt_' + i.to_s] = fs.from_as_object.case_from
+        result['arv_' + i.to_s] = fs.to_as_object.case_to
+      end
+    end
+    result
   end
 
   def human_date(ds)

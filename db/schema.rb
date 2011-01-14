@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110111190945) do
+ActiveRecord::Schema.define(:version => 20110113153551) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -177,7 +177,7 @@ ActiveRecord::Schema.define(:version => 20110111190945) do
     t.string   "commission_agent"
     t.string   "commission_subagent"
     t.integer  "price_share"
-    t.integer  "price_markup"
+    t.integer  "price_our_markup"
     t.integer  "price_with_payment_commission"
     t.string   "order_id"
     t.string   "full_info"
@@ -185,6 +185,7 @@ ActiveRecord::Schema.define(:version => 20110111190945) do
     t.integer  "price_fare"
     t.integer  "price_tax"
     t.string   "ticket_status"
+    t.integer  "price_consolidator_markup"
   end
 
   create_table "regions", :force => true do |t|
