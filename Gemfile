@@ -19,7 +19,7 @@ gem "memoize"
 gem 'morpher_inflect'
 gem 'russian'
 gem 'graticule'
-gem 'mysql'
+gem 'mysql2'
 gem 'tzinfo'
 gem 'geo_ip'
 gem 'hoptoad_notifier'
@@ -31,7 +31,7 @@ gem 'typus', :git => 'https://github.com/fesplugas/typus.git'
 #gem 'typus', :path => '../typus'
 
 group :development do
-  gem 'mongrel'
+  gem 'mongrel' if RUBY_VERSION < "1.9.0"
 end
 
 group :test, :development do
@@ -57,7 +57,7 @@ group :console do
 end
 
 group :debug do
-  gem 'ruby-debug'
+  gem 'ruby-debug' if RUBY_VERSION < "1.9.0"
 end
 
 group :profiling do

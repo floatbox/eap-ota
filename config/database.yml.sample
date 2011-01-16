@@ -1,7 +1,7 @@
 ### sample adapters
 # 
 # mysql: &MYSQL
-#   adapter: mysql
+#   adapter: mysql2
 #   # host: 127.0.0.1 #localhost doesn't force TCP sockets
 #   # port: 3306
 #   encoding: utf8
