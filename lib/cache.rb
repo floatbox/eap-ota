@@ -13,7 +13,7 @@ class Cache
 
   def self.write(type, key, data)
     open(filename_for(type, key), 'w') do |f|
-       f << Marshal.dump(data)
+       Marshal.dump(data, f)
     end
   end
 end

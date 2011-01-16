@@ -4,7 +4,6 @@ require 'active_support/core_ext/string/multibyte'
 require 'traviata/active_record_ext'#почему то из инициалайзера не подключается, вылезает undefined method `has_cases_for'
 require 'every'
 require 'russian'
-$KCODE = 'u'
 
 class Completer
   attr_reader :updated_at
@@ -12,7 +11,7 @@ class Completer
 
   module Normalizer
     def normalize(word)
-      word.mb_chars.downcase.gsub(/\W+/, ' ').strip
+      word.mb_chars.downcase.gsub(/[^[:alpha:]]/, ' ').strip
     end
   end
 
