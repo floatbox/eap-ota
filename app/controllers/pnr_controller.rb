@@ -1,3 +1,4 @@
+# encoding: utf-8
 class PNRController < ApplicationController
   # FIXME не используется?
   def create

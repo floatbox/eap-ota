@@ -1,3 +1,4 @@
+# encoding: utf-8
 class Pnr
   attr_accessor :number, :flights, :passengers, :phone, :email, :raw, :ticket_numbers
 

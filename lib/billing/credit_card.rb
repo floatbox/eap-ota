@@ -1,3 +1,4 @@
+# encoding: utf-8
 # стырено у активмерчанта
 require 'time'
 require 'date'

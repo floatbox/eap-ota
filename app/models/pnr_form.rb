@@ -1,3 +1,4 @@
+# encoding: utf-8
 class PNRForm < ActiveRecord::BaseWithoutTable
   attr_accessor :flights
   attr_accessor :people, :adults, :children, :infants, :people_count

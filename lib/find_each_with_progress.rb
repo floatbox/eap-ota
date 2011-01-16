@@ -1,3 +1,4 @@
+# encoding: utf-8
 # FIXME переделать с манкипатча на модуль с extend
 # проверять идет ли вывод на tty
 gem 'nex3-ruby-progressbar'

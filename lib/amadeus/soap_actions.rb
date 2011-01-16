@@ -1,3 +1,4 @@
+# encoding: utf-8
 module Amadeus
   # soap_actions.yml loader
   module SOAPActions

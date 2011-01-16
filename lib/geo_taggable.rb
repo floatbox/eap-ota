@@ -1,3 +1,4 @@
+# encoding: utf-8
 module GeoTaggable
   def self.included(base)
     base.send :include, InstanceMethods

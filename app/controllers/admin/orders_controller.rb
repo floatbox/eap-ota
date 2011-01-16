@@ -1,3 +1,4 @@
+# encoding: utf-8
 class Admin::OrdersController < Admin::ResourcesController
 
   def show_pnr

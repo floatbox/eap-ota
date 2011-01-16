@@ -1,3 +1,4 @@
+# encoding: utf-8
 class PricerForm < ActiveRecord::BaseWithoutTable
 
   class FormSegment < ActiveRecord::BaseWithoutTable

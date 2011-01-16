@@ -1,3 +1,4 @@
+# encoding: utf-8
 # Field 01 - ICAO Code: 4 character ICAO code
 # Field 02 - IATA Code: 3 character IATA code
 # Field 03 - Airport Name: string of varying length

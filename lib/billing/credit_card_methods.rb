@@ -1,3 +1,4 @@
+# encoding: utf-8
 module Billing #:nodoc:
   # Convenience methods that can be included into a custom Credit Card object, such as an ActiveRecord based Credit Card object.
   module CreditCardMethods

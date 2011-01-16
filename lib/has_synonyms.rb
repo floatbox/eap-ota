@@ -1,3 +1,4 @@
+# encoding: utf-8
 module HasSynonyms
   def synonyms
     synonym_list.present? ? synonym_list.split(',').every.strip : []

@@ -1,3 +1,4 @@
+# encoding: utf-8
 class Person < ActiveRecord::BaseWithoutTable
   column :first_name, :string
   column :last_name, :string

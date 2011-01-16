@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'pp'
 module LogJSON
   def self.debug(struct)

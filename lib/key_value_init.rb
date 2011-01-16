@@ -1,3 +1,4 @@
+# encoding: utf-8
 module KeyValueInit
   # common idiom. tired of typing it everywhere
   def initialize attrs={}

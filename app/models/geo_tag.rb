@@ -1,3 +1,4 @@
+# encoding: utf-8
 class GeoTag < ActiveRecord::Base
   include HasSynonyms
   has_many :geo_taggings, :dependent => :destroy

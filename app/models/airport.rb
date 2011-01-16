@@ -1,3 +1,4 @@
+# encoding: utf-8
 class Airport < ActiveRecord::Base
   include HasSynonyms
   extend IataStash

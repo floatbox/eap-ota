@@ -1,3 +1,4 @@
+# encoding: utf-8
 module CommissionRules
 
   def self.included base

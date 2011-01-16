@@ -1,3 +1,4 @@
+# encoding: utf-8
 module  FileLogger
 
   def debug_dir= dir

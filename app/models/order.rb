@@ -1,3 +1,4 @@
+# encoding: utf-8
 class Order < ActiveRecord::Base
 
   PAYMENT_STATUS = { 'blocked' => 'blocked', 'charged' => 'charged'}

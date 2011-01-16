@@ -1,3 +1,4 @@
+# encoding: utf-8
 class Carrier < ActiveRecord::Base
   extend IataStash
 

@@ -1,3 +1,4 @@
+# encoding: utf-8
 class PricerController < ApplicationController
   layout false
 

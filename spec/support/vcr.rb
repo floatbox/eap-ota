@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'vcr'
 
 RSpec.configure do |c|

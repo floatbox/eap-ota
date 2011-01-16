@@ -1,3 +1,4 @@
+# encoding: utf-8
 RUSSIAN_MAPPING = {'имя' => :name, 'тип' => :type, /синонимы?|IATA/u => :aliases, 'заменит' => :insert, 'начало' => :start, 'конец' => :end, 'подсветит' => :hl }
 
 Допустим /^в словаре есть:$/ do |table|

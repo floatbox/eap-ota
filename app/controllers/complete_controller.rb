@@ -1,5 +1,5 @@
+# encoding: utf-8
 class CompleteController < ApplicationController
-# -*- coding: utf-8 -*-
 
   def completer
     Completer

@@ -1,3 +1,4 @@
+# encoding: utf-8
 class OrderData < ActiveRecord::BaseWithoutTable
   column :email
   column :phone

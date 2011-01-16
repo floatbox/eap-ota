@@ -1,3 +1,4 @@
+# encoding: utf-8
 class BookingController < ApplicationController
 
   def preliminary_booking

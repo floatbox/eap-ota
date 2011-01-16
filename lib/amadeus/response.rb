@@ -1,3 +1,4 @@
+# encoding: utf-8
 module Amadeus::Response
 
   # возможно, не самый эффективный способ сделать method_missing для классов

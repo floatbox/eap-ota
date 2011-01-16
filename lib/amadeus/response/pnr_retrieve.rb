@@ -1,3 +1,4 @@
+# encoding: utf-8
 module Amadeus
   module Response
     class PNRRetrieve < Amadeus::Response::Base

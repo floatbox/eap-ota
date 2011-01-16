@@ -1,3 +1,4 @@
+# encoding: utf-8
 module IataStash
   # добавляет метод SomeClass[iata], который кэширует записи в текущем thread/request
   # ActiveRecord's query cache нааамного медленнее

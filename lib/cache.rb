@@ -1,3 +1,4 @@
+# encoding: utf-8
 class Cache
   # Rails.cache.load теперь возвращает frozen объекты
   # временно обходим это

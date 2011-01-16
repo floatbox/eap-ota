@@ -1,3 +1,4 @@
+# encoding: utf-8
 class GeoTagsController < ApplicationController
   # GET /geo_tags
   # GET /geo_tags.json
