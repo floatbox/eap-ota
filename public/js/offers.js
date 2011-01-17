@@ -695,16 +695,19 @@ initMatrix: function(table) {
     var cells = $('td', table);
     var frow = table.get(0).rows[0];
     var selected = $('td.selected', table); 
-    var highlight = function(td) {
+    var htimer, highlight = function(td) {
         hlcurrent.removeClass('current');
         hlcurrent = $(frow.cells[parseInt(td.attr('data-col'), 10)]).add(td.parent()).addClass('current');
     };
     var self = this;
     var hlcurrent = $('.current', table);
-    $(table).delegate('td', 'mouseover', function() {
+    $(table).delegate('td', 'mouseenter', function() {
+        clearTimeout(htimer);
         highlight($(this));
-    }).delegate('td', 'mouseout', function() {
-        highlight(selected);
+    }).delegate('td', 'mouseleave', function() {
+        htimer = setTimeout(function() {
+            highlight(selected);
+        }, 50);
     }).delegate('td.active', 'click', function() {
         if (!$(this).closest('.offer').hasClass('active-booking')) {
             selected.removeClass('selected').addClass('active');

@@ -32,10 +32,13 @@
     $('#offers-reset-filters').click(function(event) {
         event.preventDefault();
         $(this).addClass('g-none');
-        var ao = offersList;
-        ao.resetFilters();
-        ao.applyFilter();
-    });    
+        offersList.resetFilters();
+        offersList.applyFilter();
+    });
+    $('#offers-list').delegate('.reset-filters', 'click', function() {
+        offersList.resetFilters();
+        offersList.applyFilter();
+    });
     
     // Сохраненные результаты
     pageurl.parse();

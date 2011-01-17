@@ -211,8 +211,7 @@
     background: url(/img/calendar/drag-origin.png) no-repeat;
 }
 .calendar .dates li.drag {
-    background-color: #c675a4;
-    border-color: #d8a0c0;
+    background-color: #8a9099;
 }
 
 /* Dragging overlay */

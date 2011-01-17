@@ -48,9 +48,6 @@
     margin-top: 4px;
     margin-bottom: 8px;
 }
-.article ol {
-    list-style: decimal;
-}
 .article ul {
     list-style: disc;
 }
@@ -63,3 +60,62 @@
 .asection {
     margin: 0 0 25px;
 }
+
+.agreement ol {
+    list-style-type: none;
+    margin-left: 0;
+}
+.agreement li.asection {
+    margin: 0 0 25px;
+}
+.agreement ol ol {
+    list-style-type: none !important;
+    list-style-type: decimal;
+    margin-left: 3em;
+}
+.agreement ol {
+    counter-reset: list1;
+}
+.agreement > ol > li {
+    counter-increment: list1;
+    margin-left: 0;
+}
+.agreement h3 {
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: -0.035em;
+    line-height: 24px;
+}
+.agreement ol > li h3:before {
+    content: counter(list1) ". ";
+}
+.agreement ol ol {
+    margin-left: 3em;
+    list-style-type: none !important;
+    list-style-type: decimal;
+    counter-reset: list2;
+}
+.agreement ol ol > li:before {
+    counter-increment: list2;
+    content: counter(list1) "." counter(list2);
+    position: absolute;
+    width: 2.3em;
+    margin-left: -3em;
+    text-align: right;
+}
+.agreement ol ol ul {
+    margin-left: 16px;
+}
+.agreement ol ol ol {
+    margin-left: 3.5em;
+    counter-reset: list3;
+}
+.agreement ol ol ol > li:before {
+    counter-increment: list3;
+    content: counter(list1) "." counter(list2) "." counter(list3);
+    position: absolute;
+    width: 2.8em;
+    margin-left: -3.5em;
+    text-align: right;
+}
+

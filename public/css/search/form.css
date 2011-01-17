@@ -96,6 +96,7 @@ a.b-submit:hover {
 .disabled a.b-submit:hover {
     border-color: #999;
     background: #666;
+    -ms-filter: "";
     cursor: default;
 }
 

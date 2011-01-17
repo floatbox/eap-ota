@@ -49,12 +49,6 @@ init: function() {
         hint.show(event, $(this).next('p').html());
     });
 
-    // Текст тарифа
-    $('#tarif-expand').click(function(e) {
-        e.preventDefault();
-        $('#tarif-text').slideToggle(200);
-    });
-
     // Список неправильно заполненных полей
     $('.blocker', this.el).delegate('a', 'click', function(event) {
         event.preventDefault();
@@ -92,12 +86,41 @@ init: function() {
         }
     };
     frPopup.find('.close').click(frHide);
+    frPopup.find('.fgrus').click(function() {
+        var rus = $(this).addClass('g-none'), eng = rus.siblings('.fgeng');
+        var text = rus.closest('.fgroup').find('pre');
+        if (!eng.data('text')) {
+            eng.data('text', text.html());
+        }
+        if (rus.data('text')) {
+            text.html(rus.data('text'));
+            eng.removeClass('g-none');
+        } else {
+            google.language.translate({
+                text: text.html(),
+                type: 'text'
+            }, "en", "ru", function(result) {
+                if (result.error) return;
+                text.html(result.translation);
+                eng.removeClass('g-none');
+                rus.data('text', result.translation);
+            });
+        }
+    });
+    frPopup.find('.fgeng').click(function() {
+        var eng = $(this).addClass('g-none');
+        var rus = eng.siblings('.fgrus').removeClass('g-none');
+        rus.closest('.fgroup').find('pre').html(eng.data('text'));
+    });
     this.el.find('.farerules-link').click(function(event) {
         event.preventDefault();
         frPopup.show().css('margin-top', 15 - Math.round(frPopup.outerHeight() / 2));
         setTimeout(function() {
             $('body').bind('click keydown', frHide);
         }, 20);
+        if (window.google && google.language) {
+            frPopup.find('.fgtranslate').removeClass('g-none');
+        }
     });
 
     // Прекращение бронирования

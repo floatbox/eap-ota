@@ -948,8 +948,17 @@
 .farerules .fgroup {
     margin: 12px 0 0;
 }
+.fgtranslate {
+    float: right;
+    margin-top: 2px;
+    font-size: 12px;
+}
+.fgrus {
+    padding: 0 55px 2px 0;
+    background: url(/img/booking/google.png) no-repeat 100% 1px;
+}
 .fgheader {
-    margin: 0 0 5px;
+    margin: 0 150px 5px 0;
 }
 .fgheader h5 {
     display: inline;

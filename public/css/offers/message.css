@@ -65,14 +65,19 @@
 }
 
 /* Нет результатов */
-#offers-empty .om-photo {
+#offers-empty .om-photo,
+.offers-improper .om-photo {
     padding-left: 587px;
     background: url(/img/offers/photo-empty.jpg) no-repeat 50% 50%;    
 }
-#offers-empty .om-text p {
+#offers-empty .om-text p,
+.offers-improper .om-text p {
     margin: 6px 0 0;
     text-align: center;
     font-size: 18px;
     line-height: 20px;
+}
+.offers-improper {
+    margin: 0;
 }
 

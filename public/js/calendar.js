@@ -214,8 +214,16 @@ update: function() {
             title = title.replace(/май/g, 'мая');
         }
     }
+    var selected = this.selected.compact();
+    if (selected.length && selected.length < this.selectedLimit) {
+        var offset = this.dates.eq(selected[selected.length - 1]).position().top;
+        if (offset > this.scroller.rheight * 3 - 1) {
+            var st = this.scroller.el.scrollTop() + offset - this.scroller.rheight * 1;
+            this.scroller.scrollTo(this.scroller.snap(st));
+        }
+    }
     this.title.html(title);
-    this.scroller.updatePreview(this.selected.compact());
+    this.scroller.updatePreview(selected);
     this.showResetButton();
     search.update(this);
 },

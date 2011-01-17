@@ -91,15 +91,15 @@ init: function() {
     };
     this.persons.update = function() {
         var d = this.dropdown, s = this.selected;
-        var correct = s.adults + s.children + s.infants < 7; 
+        var correct = s.adults + s.children + s.infants < 9; 
         this.items.removeClass('selected');
         this.empty.removeClass('selected');
         $('.pg-adults dd', d).eq(s.adults - 1).addClass('selected');
         $('.pg-children dd', d).eq(s.children).addClass('selected').end().slice(1).each(function(i) {
-            $(this).toggleClass('disabled', i > 5 - s.adults);
+            $(this).toggleClass('disabled', i > 7 - s.adults);
         });
         $('.pg-infants dd', d).eq(s.infants).addClass('selected').end().slice(1).each(function(i) {
-            $(this).toggleClass('disabled', i > 5 - s.adults - s.children);
+            $(this).toggleClass('disabled', i > 7 - s.adults - s.children);
         });
         $('.excess', d).toggle(!correct);
         $('.a-button', d).toggle(correct);
@@ -231,7 +231,9 @@ restore: function(data) {
     this.calendar.selected = [];
     if (dates.length) {
         this.calendar.select(dates);
-    }    
+    } else {
+        this.calendar.update();
+    }
 },
 update: function(source) {
     clearTimeout(this.timer);

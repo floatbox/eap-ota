@@ -46,6 +46,10 @@
     <% common_fare = @order.recommendation.rules_with_flights.length == 1 %>
     <% @order.recommendation.rules_with_flights.each do |fgroup| %>
     <div class="fgroup">
+        <div class="fgtranslate g-none">
+            <span class="link fgrus">Перевести с помощью</span>
+            <span class="link fgeng g-none">Оригинальный текст</span>
+        </div>
         <div class="fgheader">
         <% unless common_fare %>
             <h5><% fgroup[:flights].each_with_index do |flight, i| %><%= flight.departure.city.name %> — <%= flight.arrival.city.name %><%= ', ' if i < fgroup[:flights].length - 1 %><% end %></h5>
