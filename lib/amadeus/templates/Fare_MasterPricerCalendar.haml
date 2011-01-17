@@ -1,6 +1,6 @@
 %numberOfUnit
   %unitNumberDetail
-    %numberOfUnits= adults + real_people_count[:children]
+    %numberOfUnits= people_count[:adults] + people_count[:children]
     %typeOfUnit PX
   %unitNumberDetail
     %numberOfUnits 200
@@ -8,19 +8,19 @@
 
 %paxReference
   %ptc ADT
-  - 1.upto(real_people_count[:adults]) do |n|
+  - 1.upto(people_count[:adults]) do |n|
     %traveller
       %ref=n
-- if real_people_count[:children] > 0
+- if people_count[:children] > 0
   %paxReference
     %ptc CH
-    - 1.upto(real_people_count[:children]) do |n|
+    - 1.upto(people_count[:children]) do |n|
       %traveller
         %ref= n+adults
-- if real_people_count[:infants] > 0
+- if people_count[:infants] > 0
   %paxReference
     %ptc INF
-    - 1.upto(real_people_count[:infants]) do |n|
+    - 1.upto(people_count[:infants]) do |n|
       %traveller
         %ref= n
         %infantIndicator 1
@@ -51,7 +51,7 @@
     %flightDetail
       %flightType N
 
--form_segments.each_with_index do |segment, i|
+-segments.each_with_index do |segment, i|
   %itinerary
     %requestedSegmentRef
       %segRef= i+1

@@ -3,6 +3,7 @@ class PricerController < ApplicationController
   layout false
 
   def index
+    require 'Amadeus'
     if params[:query_key]
       @query_key = params[:query_key]
       @search = PricerForm.load_from_cache(params[:query_key])
@@ -12,16 +13,20 @@ class PricerController < ApplicationController
     end
     unless params[:restore_results]
       if @search.valid?
-        @recommendations = @search.search
-        # TODO перенести в модель
-        if @search.search_type == 'travel' && !@search.nonstop?
-          begin
-            @search.nonstop = true
-            recommendations_nonstop = @search.search
-            # только новые
-            @recommendations = Recommendation.merge(@recommendations, recommendations_nonstop)
-          rescue
+        # TODO перенести в модел
+        if @search.search_type == 'travel'
+          @recommendations = Amadeus::Request.for('fare_master_pricer_travel_board_search').from_pricer_form(@search).invoke.recommendations
+          unless @search.nonstop?
+            begin
+              @search.nonstop = true
+              recommendations_nonstop = Amadeus::Request.for('fare_master_pricer_travel_board_search').from_pricer_form(@search).invoke.recommendations
+              # только новые
+              @recommendations = Recommendation.merge(@recommendations, recommendations_nonstop)
+            rescue
+            end
           end
+        else
+           @recommendations = Amadeus::Request.for('fare_master_pricer_calendar').from_pricer_form(@search).invoke.recommendations
         end
         # автобусы и поезда
         @recommendations.delete_if(&:ground?)
