@@ -741,7 +741,7 @@
     }
 
     .book-bc .bc-bill td u {
-        margin: 0 0.25em 0 0;
+        margin: 0 3px 0 0;
         font: bold 162.5%/100% Arial, sans-serif;
         letter-spacing: -0.045em;
         color: #ed1192;
@@ -749,7 +749,7 @@
 
     .book-bc .bc-bill td b {
         font: bold 200%/100% Arial, sans-serif;
-        margin: 0 0.25em 0 0;
+        margin: 0 4px 0 0;
         letter-spacing: -0.045em;        
         color: #6F7C26;
     }
@@ -920,11 +920,10 @@
     text-decoration: underline;
 }
 .farerules {
-    position: fixed;
-    top: 50%; left: 50%;
+    position: absolute;
+    top: 0; left: 119px;
     width: 654px;
     padding: 18px 20px 20px;
-    margin: -200px 0 0 -347px;
     font-size: 14px;
     line-height: 19px;    
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
@@ -958,7 +957,7 @@
     background: url(/img/booking/google.png) no-repeat 100% 1px;
 }
 .fgheader {
-    margin: 0 150px 5px 0;
+    margin: 0 200px 5px 0;
 }
 .fgheader h5 {
     display: inline;

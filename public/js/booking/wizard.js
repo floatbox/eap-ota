@@ -160,7 +160,7 @@ ptp.dates = function($dd, $mm, $yyyy) {
     
     // день и месяц - добавляем ведущий ноль
     $ddmm.change(function() {
-        var v = parseInt(this.value);
+        var v = parseInt(this.value, 10);
         if (isNaN(v)) return;
 
         if (!v) this.value = ''; // это был нуль
@@ -185,18 +185,18 @@ ptp.dates = function($dd, $mm, $yyyy) {
     // перескакивание после ввода одного числа
     $dd.keyup(function(e) {
         if (!isDigit(e.which)) return;
-        var n = parseInt(this.value);
+        var n = parseInt(this.value, 10);
         (n > 3 && n < 10) && me.nextField($(this)).focus();
     });
     $mm.keyup(function(e) {
         if (!isDigit(e.which)) return;
-        var n = parseInt(this.value);
+        var n = parseInt(this.value, 10);
         (n > 1 && n < 10) && me.nextField($(this)).focus();
     });
     
     // Из пустого поля не нужно переходить по табу
     $ddmm.add($yyyy).keydown(function(e) {
-        if (e.which == 9 && !this.value) return false;
+        if (e.which == 9 && !e.shiftKey && !this.value) return false;
     });
 
 
@@ -204,7 +204,7 @@ ptp.dates = function($dd, $mm, $yyyy) {
 
     // если нужно, достраиваем год
     $yyyy.change(function() {
-        var v = parseInt(this.value);
+        var v = parseInt(this.value, 10);
         if (isNaN(v)) return;
 
         var future = $(this).attr('name').indexOf('expir') > -1;
@@ -269,7 +269,7 @@ ptp.num = function(s) {
         me.nextField($(this)).focus();
     });
     $el.keydown(function(e) {
-        if (e.which == 9 && !this.value) return false;
+        if (e.which == 9 && !e.shiftKey && !this.value) return false;
     });
 
     // перескакивание в след поле после вставки
@@ -343,7 +343,7 @@ ptp.num = function(s) {
         var valid = !$el.validate().length;
         me.$cvvnum.html(valid ? $el.val() : '<span class="empty">####</span>');
     }).keyup(function() {
-        var v = parseInt(this.value);
+        var v = parseInt(this.value, 10);
         if (isNaN(v)) {
             me.$cvvnum.html('<span class="empty">####</span>');
         } else {
@@ -361,7 +361,7 @@ ptp.expir = function($mm, $yy) {
 
     // добавляем ведущий ноль
     $mmyy.change(function() {
-        var v = parseInt(this.value);
+        var v = parseInt(this.value, 10);
         if (isNaN(v)) return;
 
         this.value = v ? v : ''; // тут был нуль
@@ -374,11 +374,11 @@ ptp.expir = function($mm, $yy) {
     
     $mm.keyup(function(e) {
         if (!isDigit(e.which)) return;
-        var n = parseInt(this.value);
+        var n = parseInt(this.value, 10);
         if (n > 1 && $(this).validate().length == 0) me.nextField($(this)).focus();
     });
     $yy.keydown(function(e) {
-        if (e.which == 9 && !this.value) return false;
+        if (e.which == 9 && !e.shiftKey && !this.value) return false;
     });
     
 }

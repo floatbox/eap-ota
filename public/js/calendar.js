@@ -23,11 +23,11 @@ init: function() {
 },
 makeDates: function() {
     this.container = $('.dates', this.el).hide().html('');
-    var today = new Date();
+    var today = new Date(), tt = today.getTime();
     var curd = today.clone().shiftDays(1 - (today.getDay() || 7));
     var curt = curd.getTime();
     var actend = today.clone().shiftMonthes(6);
-    var abt = today.getTime();
+    var abt = today.clone().shiftDays(2).getTime();
     var aet = actend.getTime() - 1;
     var end = actend.shiftDays((actend.getDay() == 1 ? 8 : 15) - (actend.getDay() || 7)).getTime();
     var month = undefined, dcounter = 0;
@@ -52,6 +52,9 @@ makeDates: function() {
         }
         if (curt < abt || curt > aet) {
             day.addClass('inactive');
+            if (curt === tt) {
+                //day.append('<span class="today">сегодня</span>')
+            }
         } else {
             this.dmyindex[dmy] = dcounter;
             day.attr('data-index', dcounter++);

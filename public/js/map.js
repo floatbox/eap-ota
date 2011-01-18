@@ -17,6 +17,10 @@ init: function() {
             LoadMap((f && f.lat && f.lng && new VELatLong(f.lat, f.lng)) || this.defpoint, 4);
             SetScaleBarDistanceUnit(VEDistanceUnit.Kilometers);
         }
+        if (this.deferred) {
+            this.show(this.deferred);
+            delete(this.deferred);
+        }
         this.active = true;
     }
 },

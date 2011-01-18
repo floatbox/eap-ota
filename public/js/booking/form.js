@@ -100,10 +100,13 @@ init: function() {
                 text: text.html(),
                 type: 'text'
             }, "en", "ru", function(result) {
-                if (result.error) return;
-                text.html(result.translation);
-                eng.removeClass('g-none');
-                rus.data('text', result.translation);
+                if (result.error) {
+                    rus.removeClass('g-none');
+                } else {
+                    text.html(result.translation);
+                    eng.removeClass('g-none');
+                    rus.data('text', result.translation);
+                }
             });
         }
     });
@@ -114,7 +117,10 @@ init: function() {
     });
     this.el.find('.farerules-link').click(function(event) {
         event.preventDefault();
-        frPopup.show().css('margin-top', 15 - Math.round(frPopup.outerHeight() / 2));
+        frPopup.css('top', 0).show();
+        var fh = frPopup.outerHeight(), ft = frPopup.offset().top;
+        var ws = $(window).scrollTop(), wh = $(window).height();
+        frPopup.css('top', Math.min(ws + (wh - fh) / 2, ws + wh - fh - 50) - ft);
         setTimeout(function() {
             $('body').bind('click keydown', frHide);
         }, 20);
@@ -165,22 +171,32 @@ hide: function() {
     pageurl.update('booking', undefined);
     pageurl.title('авиабилеты ' + offersList.title.attr('data-title'));    
 },
+error: function() {
+    var message = $('<div class="booking-state"><h4>В данный момент невозможно выбрать этот вариант</h4><p><span class="link">Почему?</span></p></div>');
+    message.find('.link').click(function(event) {
+        hint.show(event, 'Так иногда бывает, потому что авиакомпания не&nbsp;может подтвердить наличие мест на&nbsp;этот рейс по&nbsp;этому тарифу. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.');
+    });
+    this.el.html('').append(message);
+},
 book: function(variant) {
     var self = this;
     this.el.html('<div class="booking-state"><div class="progress"></div><h4>Делаем предварительное бронирование и уточняем цену</h4></div>');
     var vid = '&variant_id=' + [self.offersTab, this.variant.attr('data-index')].join('-');
-    $.get("/booking/preliminary_booking?" + variant.attr('data-booking') + vid, function(s) {
-        $('#offers-tabs').trigger('set', self.offersTab);
-        if (s && s.success) {
-            self.load(s.number);
-            pageurl.update('booking', s.number);
-        } else {
-            var message = $('<div class="booking-state"><h4>В данный момент невозможно выбрать этот вариант</h4><p><span class="link">Почему?</span></p></div>');
-            message.find('.link').click(function(event) {
-                hint.show(event, 'Так иногда бывает, потому что авиакомпания не&nbsp;может подтвердить наличие мест на&nbsp;этот рейс по&nbsp;этому тарифу. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.');
-            });
-            self.el.html('').append(message);
-        }
+    $.ajax({
+        url: "/booking/preliminary_booking?" + variant.attr('data-booking') + vid,
+        success: function(s) {
+            $('#offers-tabs').trigger('set', self.offersTab);
+            if (s && s.success) {
+                self.load(s.number);
+                pageurl.update('booking', s.number);
+            } else {
+                self.error();
+            }
+        },
+        error: function() {
+            self.error();
+        },
+        timeout: 60000
     });
     var w = $(window), offset = this.el.offset().top - w.height();
     if (offset > w.scrollTop()) {
@@ -201,6 +217,11 @@ comparePrice: function() {
     var vp = parseInt(this.variant.find('.book .sum').attr('data-value'), 10);
     var bp = parseInt(this.el.find('.booking-price .sum').attr('data-value'), 10);
     if (bp != vp) {
+        var source = this.el.find('.booking-price');
+        this.variant.closest('.offer').find('.offer-variant').each(function() {
+            $(this).find('.book .sum').replaceWith(source.find('.sum').clone());
+            $(this).find('.cost dl').replaceWith(source.find('.cost dl').clone());
+        });
         var block = $('<div class="diff-price"></div>');
         var template = '<h5>Цена этого варианта изменилась: стало <strong>{type} на {value}&nbsp;{currency}</strong> (<span class="link">почему?</span>)</h5>';
         block.append(template.supplant({
