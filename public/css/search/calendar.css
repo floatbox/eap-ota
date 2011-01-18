@@ -66,6 +66,9 @@
     float: left;
     display: inline;
 }
+.calendar .dates .today {
+    position: absolute;
+}
 .calendar .dates .label {
     position: relative;
 }

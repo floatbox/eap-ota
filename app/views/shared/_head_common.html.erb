@@ -8,8 +8,12 @@
 <script type="text/javascript" src="/js/lib/jquery-1.4.2.min.js"></script>
 <script type="text/javascript">
 var _gaq = _gaq || [];
+<% if Rails.env.production? %>
+_gaq.push(['_setAccount', 'UA-19832395-1']);
+<% else %>
 _gaq.push(['_setAccount', 'UA-19832395-2']);
 _gaq.push(['_setDomainName', '.team.eviterra.ru']);
+<% end %>
 _gaq.push(['_trackPageview']);
 (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;

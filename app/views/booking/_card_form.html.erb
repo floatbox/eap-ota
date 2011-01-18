@@ -23,28 +23,28 @@
                  :class => "text g-xl",
                  :maxlength => "4",
                  :title => "первые четыре цифры номера карты",
-                 :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 4, maxl: 4, min: 4000, max: 5999}}"
+                 :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 4, maxl: 4, gender: 'D'}}"
                 %>
                 <%= f.text_field :number2,
                  :id => "bc-num2",
                  :class => "text g-xl",
                  :maxlength => "4",
                  :title => "вторые четыре цифры номера карты",
-                 :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 4, maxl: 4}}"
+                 :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 4, maxl: 4, gender: 'D'}}"
                 %>
                 <%= f.text_field :number3,
                  :id => "bc-num3",
                  :class => "text g-xl",
                  :maxlength => "4",
                  :title => "предпоследние четыре цифры номера карты",
-                 :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 4, maxl: 4}}"
+                 :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 4, maxl: 4, gender: 'D'}}"
                 %>
                 <%= f.text_field :number4,
                  :id => "bc-num4",
                  :class => "text g-xl",
                  :maxlength => "4",
                  :title => "последние четыре цифры номера карты",
-                 :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 4, maxl: 4}}"
+                 :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 4, maxl: 4, gender: 'D'}}"
                 %>
                 </div>
                 <%= f.error_message_on :number, :id => 'error_card_number' %>
@@ -75,8 +75,8 @@
                  :class => "text g-l",
                  :maxlength => "2",
                  :value => @order.card.month  || "мм",
-                 :title => "последний месяц действия карты &laquo;MONTH&raquo;",
-                 :onclick => "return {def: 'мм', mask: /\\d/, rules: {req: true, num: true, minl: 1, maxl: 2, min: 1, max: 12}}"
+                 :title => "месяц окончания действия карты",
+                 :onclick => "return {def: 'мм', mask: /\\d/, rules: {req: true, num: true, minl: 1, maxl: 2, min: 1, max: 12, gender: 'M'}}"
                  %>
                 <%= f.error_message_on :month, :id => 'error_card_month' %>
                 <i>/</i>
@@ -85,8 +85,8 @@
                  :class => "text g-l",
                  :maxlength => "2",
                  :value =>  @order.card.year_short  ||"гг",
-                 :title => "последний год действия карты &laquo;YEAR&raquo;",
-                 :onclick => "return {def: 'гг', mask: /\\d/, rules: {req: true, num: true, minl: 2, maxl: 2, min: 10, max: 50}}"
+                 :title => "год окончания действия карты",
+                 :onclick => "return {def: 'гг', mask: /\\d/, rules: {req: true, num: true, minl: 2, maxl: 2, min: 11, gender: 'M'}}"
                 %>
                 <%= f.error_message_on :year, :id => 'error_card_year'  %>
             </fieldset>
@@ -109,7 +109,7 @@
                  :class => "text g-xl",
                  :maxlength => "3",
                  :title => "CVV код банковской карты",
-                 :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 3, maxl: 3}}"
+                 :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 3, maxl: 3, gender: 'M'}}"
                 %>
                 <%= f.error_message_on :verification_value, :id => 'error_card_verification_value' %>
             </fieldset>
@@ -159,6 +159,9 @@
     </table>
     
     <div class="booking-price g-none">
+    <div class="cost"><dl>
+        <%= decorated_price @order.recommendation.price_total, 'dt', 'dd' %>
+    </dl></div>
     <dl class="sum" data-value="<%= @order.recommendation.price_total.to_i %>">
         <dt>Итого <strong><%= human_price(@order.recommendation.price_total.to_i) %></strong> за всех со всеми сборами</dt>
         <dd>Тариф — <%= human_price((@order.recommendation.price_fare).to_i) %>, налоги и сборы — <%= human_price(@order.recommendation.price_tax_and_markup.to_i) %></dd>

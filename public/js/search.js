@@ -354,6 +354,8 @@ applySegments: function(segments) {
     this.autoFrom();
     if (this.map.active) {
         this.map.show(items);
+    } else {
+        this.map.deferred = items;
     }    
 },
 autoFrom: function() {

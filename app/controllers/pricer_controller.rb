@@ -3,7 +3,7 @@ class PricerController < ApplicationController
   layout false
 
   def index
-    require 'Amadeus'
+    #require 'Amadeus'
     if params[:query_key]
       @query_key = params[:query_key]
       @search = PricerForm.load_from_cache(params[:query_key])

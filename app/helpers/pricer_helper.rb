@@ -51,8 +51,7 @@ module PricerHelper
     content_tag(*price_tag) {
       price.to_i.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>').html_safe
     } + content_tag(*currency_tag) {
-      # '&nbsp;'.html_safe +
-      Russian.pluralize(price.to_i, 'рубль', 'рубля', 'рублей').html_safe
+      '&nbsp;'.html_safe + Russian.pluralize(price.to_i, 'рубль', 'рубля', 'рублей').html_safe
     }
   end
 
