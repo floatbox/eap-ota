@@ -60,7 +60,7 @@ module Amadeus
 
     args = opts[:args] || {}
     if args.is_a? Hash
-      args = Amadeus::Request::Base.new({:debug => false}.merge(args))
+      args = OpenStruct.new({:debug => false}.merge(args))
     end
 
     if Amadeus.fake || opts[:debug] || args.try(:debug)
