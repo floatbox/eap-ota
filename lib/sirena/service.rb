@@ -45,17 +45,17 @@ module Sirena
 
       # это должно быть не здесь, подумаю об этом позже
       def convert_params(form)
-        params = {:passangers=>[], :segments=>[]}
+        params = {:passengers=>[], :segments=>[]}
         if form.people_count[:adults] > 0
-          params[:passangers] << {:code=>"ААА", :count=>form.people_count[:adults]}
+          params[:passengers] << {:code=>"ААА", :count=>form.people_count[:adults]}
         end
         # я не знаю, откуда брать возраст в реальной жизни,
         # но он - необходимый параметр, поэтому от балды пока
         if form.people_count[:children] > 0
-          params[:passangers] << {:code=>"CHILD", :count=>form.people_count[:children], :age=>10}
+          params[:passengers] << {:code=>"CHILD", :count=>form.people_count[:children], :age=>10}
         end
         if form.people_count[:infants] > 0
-          params[:passangers] << {:code=>"INFANT", :count=>form.people_count[:infants], :age=>1}
+          params[:passengers] << {:code=>"INFANT", :count=>form.people_count[:infants], :age=>1}
         end
 
         form.form_segments.each{|fs|
