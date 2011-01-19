@@ -16,7 +16,7 @@
     %ptc CH
     - 1.upto(people_count[:children]) do |n|
       %traveller
-        %ref= n+adults
+        %ref= n+people_count[:adults]
 - if people_count[:infants] > 0
   %paxReference
     %ptc INF
