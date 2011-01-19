@@ -13,6 +13,13 @@ class PricerController < ApplicationController
     end
     unless params[:restore_results]
       if @search.valid?
+
+        # FIXME это должно быть не здесь
+        if @search.sirena
+          make_sirena_search
+          return
+        end
+
         # TODO перенести в модел
         if @search.search_type == 'travel'
           @recommendations = Amadeus::Request.for('fare_master_pricer_travel_board_search').from_pricer_form(@search).invoke.recommendations
@@ -74,6 +81,11 @@ class PricerController < ApplicationController
         :query_key => @query_key
       }
     end
+  end
+
+  def make_sirena_search
+    @recommendations = Sirena::Service.action("pricing", @search) || []
+    render :partial => 'recommendations'
   end
 end
 

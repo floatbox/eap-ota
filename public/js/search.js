@@ -213,6 +213,10 @@ values: function() {
     if (debug.length && debug.get(0).checked) {
         data.debug = 1;
     }
+    var sirena = $('#sirena');
+    if (sirena.length && sirena.get(0).checked) {
+        data.sirena = 1;
+    }
     return data;
 },
 restore: function(data) {

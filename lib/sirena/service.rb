@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+require 'ostruct'
 module Sirena
 
   class Service
@@ -6,8 +7,6 @@ module Sirena
     HOST = 'eviterra.com'#"127.0.0.1"
     PORT = 8888
     PATH = "/"
-
-    PARAMETERS = {:schedule=>%w(departure arrival company date date2 time_from time_till direct)}
 
     class << self
 
@@ -17,10 +16,11 @@ module Sirena
       def action(name, params)
         file = File.expand_path("../templates/#{name}.haml", __FILE__)
         if File.file? file
-           request = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+Haml::Engine.new(File.read(file)).render(OpenStruct.new(params))
-           print request+"\n\n"
-           http= Net::HTTP.new(HOST, PORT)
-           parse_response(name, http.post(PATH, request))
+          params = convert_params(params) if params.is_a?(PricerForm)
+          request = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+Haml::Engine.new(File.read(file)).render(OpenStruct.new(params))
+          print request+"\n\n"
+          http= Net::HTTP.new(HOST, PORT)
+          parse_response(name, http.post(PATH, request))
         else
           puts "unknown action #{name}"
         end
@@ -38,9 +38,32 @@ module Sirena
           else
             info = doc.xpath('//info')
             print info.inner_html unless info.blank?
-            doc.xpath("//#{name}")
+            "Sirena::Response::#{name.camelize}".constantize.response(doc)
           end
         end
+      end
+
+      # это должно быть не здесь, подумаю об этом позже
+      def convert_params(form)
+        params = {:passangers=>[], :segments=>[]}
+        if form.people_count[:adults] > 0
+          params[:passangers] << {:code=>"ААА", :count=>form.people_count[:adults]}
+        end
+        # я не знаю, откуда брать возраст в реальной жизни,
+        # но он - необходимый параметр, поэтому от балды пока
+        if form.people_count[:children] > 0
+          params[:passangers] << {:code=>"CHILD", :count=>form.people_count[:children], :age=>10}
+        end
+        if form.people_count[:infants] > 0
+          params[:passangers] << {:code=>"INFANT", :count=>form.people_count[:infants], :age=>1}
+        end
+
+        form.form_segments.each{|fs|
+          params[:segments] << {:departure=>fs.from_iata, :arrival=>fs.to_iata, 
+            :date=>fs.date.insert(2, ".").insert(5, ".20"), :baseclass=>"Э"}
+        }
+
+        params
       end
     end
 

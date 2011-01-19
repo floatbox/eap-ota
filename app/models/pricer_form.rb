@@ -55,6 +55,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   column :nonstop, :boolean
   column :day_interval, :integer, 3
   column :debug, :boolean, false
+  column :sirena, :boolean, false # omg! i didn't want it! really!
   column :cabin, :string
   has_many :form_segments
 

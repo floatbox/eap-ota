@@ -361,7 +361,7 @@ updateFilters: function() {
         }).filter(':not(.g-none)');
         if (active.length > 0) {
             var city = $('.city', this);
-            city.text(data.locations[city.attr('data-location')] || '');
+            city.text((data.locations || [])[city.attr('data-location')] || '');
             $('.conjunction', this).toggle(active.length > 1);
             $(this).removeClass('g-none');
         } else {

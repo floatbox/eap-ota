@@ -1,20 +1,21 @@
 %sirena
   %query
     %pricing
-      %segment
-        %departure= departure
-        %arrival= arrival
-        -if date
-          %date= date
-        -if company
-          %company= company
-        -if num
-          %num= num
-        -if baseclass
-          %class= baseclass.split('')[0]
-        -if subclass
-          %subclass= subclass.split('')[0]
-        %direct= direct.to_s
+      - segments.each do |segment|
+        %segment
+          %departure{"xml:lang"=>"en"}= segment[:departure]
+          %arrival{"xml:lang"=>"en"}= segment[:arrival]
+          -if segment[:date]
+            %date= segment[:date]
+          -if segment[:company]
+            %company= segment[:company]
+          -if segment[:num]
+            %num= segment[:num]
+          -if segment[:baseclass]
+            %class= segment[:baseclass].split('')[0]
+          -if segment[:subclass]
+            %subclass= segment[:subclass].split('')[0]
+          %direct= segment[:direct] ? "true" : "false"
       - passangers.each do |passanger|
         %passenger
           %code= passanger[:code]
@@ -22,9 +23,18 @@
           -if passanger[:age]
             %age= passanger[:age]
       %request_params
+        %lang en
+        %min_results 1
+        %max_results 50
         %mix_scls true
         %fingering_order ordinary
+        %comb_rules{"comb"=>"yes"}
+          %acomp *
+          %acomp *
       %answer_params
         %show_flighttime true
-        %show_upt_rec true
         %show_fareexpdate true
+        %show_io_matching true
+        %show_varianttotal true
+        %show_reg_latin true
+        %regroup true
