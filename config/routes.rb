@@ -1,6 +1,7 @@
 Eviterra::Application.routes.draw do
 
-  match 'pricer' => 'pricer#index', :as => :pricer
+  match 'pricer' => 'pricer#pricer', :as => :pricer
+  match 'calendar' => 'pricer#calendar', :as => :calendar
   match 'pricer/validate' => 'pricer#validate', :as => :pricer_validate
 
   match 'booking' => 'booking#index', :as => :booking

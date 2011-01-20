@@ -51,13 +51,17 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   column :children, :integer, 0
   column :infants, :integer, 0
   column :complex_to, :string
-  column :search_type, :string, 'travel'
-  column :nonstop, :boolean
   column :day_interval, :integer, 3
   column :debug, :boolean, false
   column :sirena, :boolean, false # omg! i didn't want it! really!
   column :cabin, :string
-  has_many :form_segments
+  has_many :form_segments, :class_name => 'PricerForm::FormSegment'
+  accepts_nested_attributes_for :form_segments
+  # FIXME обходит необходимость использовать form_segments_attributes в жаваскрипте
+  # но нет уверенности, что не создаю каких-то дополнительных проблем
+  def form_segments=(attrs)
+    self.form_segments_attributes = attrs
+  end
 
   delegate :to, :from, :from_iata, :to_iata, :to => 'form_segments.first'
 
@@ -274,16 +278,6 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     else
       return I18n.l(d, :format => '%e&nbsp;%B %Y')
     end
-  end
-
-  def search
-    case search_type
-    when 'travel'
-      Amadeus::Service.fare_master_pricer_travel_board_search(self)
-    when 'calendar'
-      Amadeus::Service.fare_master_pricer_calendar(self)
-    end.recommendations
-    # .select(&:sellable?)
   end
 
 end

@@ -6,7 +6,7 @@ module Amadeus
       def flights
         xpath("//r:itineraryInfo[r:elementManagementItinerary/r:segmentName='AIR']").map do |fi|
             Flight.new(
-              :operating_carrier_iata => fi.xpath("r:travelProduct/r:companyDetail/r:identification").to_s,
+              :marketing_carrier_iata => fi.xpath("r:travelProduct/r:companyDetail/r:identification").to_s,
               :departure_iata =>         fi.xpath("r:travelProduct/r:boardpointDetail/r:cityCode").to_s,
               :arrival_iata =>           fi.xpath("r:travelProduct/r:offpointDetail/r:cityCode").to_s,
               :flight_number =>          fi.xpath("r:travelProduct/r:productDetails/r:identification").to_s,

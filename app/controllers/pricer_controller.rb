@@ -2,62 +2,35 @@
 class PricerController < ApplicationController
   layout false
 
-  def index
-    #require 'Amadeus'
-    if params[:query_key]
-      @query_key = params[:query_key]
-      @search = PricerForm.load_from_cache(params[:query_key])
-      @search.search_type = params[:search_type]
-    else
-      render :text => 'PricerForm not found'
-    end
+  before_filter :load_form_from_cache, :only => [:pricer, :calendar]
+
+  def pricer
     unless params[:restore_results]
       if @search.valid?
-
-        # FIXME это должно быть не здесь
-        if @search.sirena
-          make_sirena_search
-          return
-        end
-
-        # TODO перенести в модел
-        if @search.search_type == 'travel'
-          @recommendations = Amadeus::Request.for('fare_master_pricer_travel_board_search').from_pricer_form(@search).invoke.recommendations
-          unless @search.nonstop?
-            begin
-              @search.nonstop = true
-              recommendations_nonstop = Amadeus::Request.for('fare_master_pricer_travel_board_search').from_pricer_form(@search).invoke.recommendations
-              # только новые
-              @recommendations = Recommendation.merge(@recommendations, recommendations_nonstop)
-            rescue
-            end
-          end
-        else
-           @recommendations = Amadeus::Request.for('fare_master_pricer_calendar').from_pricer_form(@search).invoke.recommendations
-        end
-        # автобусы и поезда
-        @recommendations.delete_if(&:ground?)
-        @recommendations = @recommendations.sort_by(&:price_total)
+        @recommendations = Mux.pricer(@search)
         @locations = @search.human_locations
       end
     end
-    if params[:search_type] == 'calendar'
-      render :partial => 'matrix'
-    else
-      @recommendations = Recommendation.corrected @recommendations unless params[:restore_results]
-      render :partial => 'recommendations'
-    end
-  rescue Amadeus::Error, Handsoap::Fault => e
-    @error_message = e.message
-    render :text => @errorMessage
+
+    render :partial => 'recommendations'
   end
 
+  def calendar
+    unless params[:restore_results]
+      if @search.valid?
+        @recommendations = Mux.calendar(@search)
+      end
+    end
+
+    render :partial => 'matrix'
+  end
 
   def validate
-    if params[:query_key]
-      @search = PricerForm.load_from_cache(params[:query_key])
-      fragment_exist = fragment_exist?({:action => 'index', :action_suffix => params[:query_key]}) &&
-        fragment_exist?({:action => 'index', :action_suffix => ('matrix' + params[:query_key])})
+    if @query_key = params[:query_key]
+      @search = PricerForm.load_from_cache(@query_key)
+      fragment_exist =
+        fragment_exist?([:pricer, @query_key]) &&
+        fragment_exist?([:calendar, @query_key])
       render :json => {
         :search => @search,
         :valid => @search.present? && @search.valid?,
@@ -65,8 +38,7 @@ class PricerController < ApplicationController
         :fragment_exist => fragment_exist
       }
     else
-      @search = PricerForm.new(params[:search].merge({:form_segments => []}))
-      @search.form_segments = params[:search][:form_segments].to_a.sort_by{|a| a[0]}.map{|k, v| PricerForm::FormSegment.new(v)}
+      @search = PricerForm.new(params[:search])
       @search.parse_complex_to
       if @search.valid?
         @query_key = ShortUrl.generate_url([@search, @search.form_segments, Time.now].hash)
@@ -83,9 +55,11 @@ class PricerController < ApplicationController
     end
   end
 
-  def make_sirena_search
-    @recommendations = Sirena::Service.action("pricing", @search) || []
-    render :partial => 'recommendations'
+  protected
+
+  def load_form_from_cache
+    @query_key = params[:query_key] or raise 'no query_key provided'
+    @search = PricerForm.load_from_cache(params[:query_key])
   end
 end
 
