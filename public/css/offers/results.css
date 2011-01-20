@@ -511,25 +511,33 @@
 .offer .details .book th,
 .offer .details .book td {
     padding: 10px;
-    /*border-top: 1px solid #d0d0d0;*/
-    vertical-align: middle;
+    vertical-align: top;
 }
 .offer .details .book td {
     padding-left: 0;
+    padding-top: 9px;
 }
 .offer .details .book .sum {
-    float: left;
+    margin-right: 225px;
 }
 .offer .details .book .sum dt {
     margin: 0 0 2px;
-    font-size: 107.7%;
-    line-height: 107.14%;
+    font-size: 14px;
+    line-height: 15px;
     color: #000;
 }
 .offer .details .book .sum strong {
     font-weight: bold;
 }
 .offer .details .book .sum dd {
-    font-size: 92.3%;
+    font-size: 11px;
+    color: #777;
+}
+.offer .details .valcarrier {
+    float: right;
+    width: 205px;
+    margin-top: 1px;
+    font-size: 11px;
+    line-height: 14px;
     color: #777;
 }

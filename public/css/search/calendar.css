@@ -68,6 +68,8 @@
 }
 .calendar .dates .today {
     position: absolute;
+    left: 0; top: 20px;
+    font-weight: normal;
 }
 .calendar .dates .label {
     position: relative;
@@ -91,6 +93,9 @@
     cursor: default;
     border-color: #c7ced6;
     background: none;
+}
+.calendar .dates li.withtoday {
+    color: #858b93;
 }
 .calendar .dayoff {
     color: #ce001a;
@@ -296,7 +301,7 @@
     width: 2px;
 }
 .calendar .preview .segment-1 {
-    background-color: #81aa00;
+    background-color: #6F7C26;
 }
 .calendar .preview .segment-2 {
     background-color: #C46F26;    

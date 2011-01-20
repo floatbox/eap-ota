@@ -38,7 +38,7 @@
     <td class="pad_null">
         <font family="Arial" size="2">
         <% for p in @pnr.passengers %>
-            <strong style="font-weight: bold;"><%= p.first_name %> <%= p.last_name %>&nbsp;</strong> <%= p.passport %><br>
+            <strong style="font-weight: bold;"><%= p.last_name %> <%= p.first_name %> &nbsp;</strong><br><%= p.passport %><br>
         <% end %>
         </font>
     </td>
@@ -46,7 +46,7 @@
     <% if @pnr.ticket_numbers.present? %>
         <font family="Arial" size="2">
         <% for number in @pnr.ticket_numbers %>
-            <%= number %><br>
+            <%= number %><br><br>
         <% end %>
         </font>
     <% end %>    
@@ -81,7 +81,7 @@
 <% for flight in @pnr.flights %>
 <tr>
     <td class="pad_null"><%= fmt_date( flight.departure_date ) %></td>
-    <td class="pad_null">
+    <td class="pad_null" valign="top" style="vertical-align: top;">
         <font size="2" family="Arial">
         <font color="#ed1192"><strong style="color: #ed1192;"><%= fmt_time(flight.departure_time) %></strong></font><br>
         <%= flight.departure.city.name %><br>
@@ -93,7 +93,7 @@
         <br>
     </td>
     <td class="pad_null"><br></td>
-    <td class="pad_null">
+    <td class="pad_null" valign="top" style="vertical-align: top;">
         <font size="2" family="Arial">
         <strong><font color="#ed1192"><%= fmt_time( flight.arrival_time ) %></font><% if flight.arrival_date != flight.departure_date %> <%= fmt_date(flight.arrival_date) %><% end %></strong><br>
         <%= flight.arrival.city.name %><br>

@@ -559,7 +559,7 @@ showRecommendations: function() {
         }
         
         // Оптимальный вариант
-        if (cheap.n === fast.n || Math.abs(fast.p - cheap.p) < (cheap.p + fast.p) * 0.02) {
+        if (cheap.n === fast.n || Math.abs(fast.p - cheap.p) < (fast.p + cheap.p) * 0.02) {
             optimal = {n: fast.n, p: fast.p};
             cheap = undefined;
             fast = undefined;
@@ -575,10 +575,11 @@ showRecommendations: function() {
                     optimal = items[i];
                 }
             }
-            if (cheap.n === optimal.n) {
+            if (cheap.n === optimal.n || Math.abs(optimal.p - cheap.p) < (optimal.p + cheap.p) * 0.01) {
                 cheap = undefined;
             }
-            if (fast.n === optimal.n) {
+            if (fast.n === optimal.n || Math.abs(fast.p - optimal.p) < (fast.p + optimal.p) * 0.01) {
+                optimal = {n: fast.n, p: fast.p};
                 fast = undefined;
             }
         }
