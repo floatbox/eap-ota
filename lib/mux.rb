@@ -15,8 +15,16 @@ class Mux
     end
 
     def calendar(form)
+
+      if form.debug
+        was_fake, Amadeus.fake = Amadeus.fake, true
+      end
+
       request = Amadeus::Request::FareMasterPricerCalendar.from_pricer_form(form)
       recommendations = request.invoke.recommendations
+
+      Amadeus.fake = was_fake if form.debug
+
       recommendations
     end
 
@@ -26,8 +34,14 @@ class Mux
       request_ns = Amadeus::Request::FareMasterPricerTravelBoardSearch.from_pricer_form(form)
       request_ns.nonstop = true
 
+      if form.debug
+        was_fake, Amadeus.fake = Amadeus.fake, true
+      end
+
       recommendations_ws = request_ws.invoke.recommendations
       recommendations_ns = request_ns.invoke.recommendations
+
+      Amadeus.fake = was_fake if form.debug
 
       # merge
       recommendations = Recommendation.merge(recommendations_ws, recommendations_ns)
