@@ -1,3 +1,4 @@
+# encoding: utf-8
 module Amadeus::Request
 
   def self.for action
@@ -27,7 +28,13 @@ module Amadeus::Request
     end
 
     def render_haml(template, locals=nil)
-      Haml::Engine.new(File.read(template)).render(locals)
+      Haml::Engine.new( File.read(template),
+        :autoclose => [],
+        :preserve => [],
+        :filename => template,
+        :ugly => false,
+        :escape_html => true
+      ).render(locals)
     end
 
     def render_xml(template)

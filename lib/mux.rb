@@ -60,7 +60,7 @@ class Mux
     end
 
     def sirena_pricer(form)
-      Sirena::Service.action("pricing", form) || []
+      Sirena::Service.pricing(form).recommendations || []
     end
 
   end

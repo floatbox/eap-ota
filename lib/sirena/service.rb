@@ -1,5 +1,4 @@
-# -*- encoding: utf-8 -*-
-require 'ostruct'
+# encoding: utf-8
 module Sirena
 
   class Service
@@ -14,57 +13,30 @@ module Sirena
       def debug_dir; 'log/sirena' end
 
       def action(name, params)
-        file = File.expand_path("../templates/#{name}.haml", __FILE__)
-        if File.file? file
-          params = convert_params(params) if params.is_a?(PricerForm)
-          request = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+Haml::Engine.new(File.read(file)).render(OpenStruct.new(params))
-          print request+"\n\n"
-          http= Net::HTTP.new(HOST, PORT)
-          parse_response(name, http.post(PATH, request))
-        else
-          puts "unknown action #{name}"
-        end
+        request = Sirena::Request.for(name).new(params)
+        request_body = request.render
+        response_body = do_http(request_body)
+        save_xml(name, response_body)
+        response = Sirena::Response.for(name).new(response_body)
       end
 
-      def parse_response(name, http_response)
+      # FIXME заменить нафик на Curl::Easy
+      def do_http(request)
+        http = Net::HTTP.new(HOST, PORT)
+        http_response = http.post(PATH, request)
+
         if http_response.code != '200'
-          puts http_response.code+": \n\n"+http_response.body
-        else
-          save_xml(name, http_response.body)
-          doc = Nokogiri::XML::Document.parse(http_response.body)
-          error = doc.xpath('//error')
-          unless error.blank?
-            puts error.inner_html
-          else
-            info = doc.xpath('//info')
-            print info.inner_html unless info.blank?
-            "Sirena::Response::#{name.camelize}".constantize.response(doc)
-          end
+          raise "HTTP error, status code: #{http_response.code}"
+        end
+        http_response.body
+      end
+
+      for method_name in %W(pricing availability describe schedule)
+        define_method method_name.underscore do |params|
+          action(method_name, params)
         end
       end
 
-      # это должно быть не здесь, подумаю об этом позже
-      def convert_params(form)
-        params = {:passengers=>[], :segments=>[]}
-        if form.people_count[:adults] > 0
-          params[:passengers] << {:code=>"ААА", :count=>form.people_count[:adults]}
-        end
-        # я не знаю, откуда брать возраст в реальной жизни,
-        # но он - необходимый параметр, поэтому от балды пока
-        if form.people_count[:children] > 0
-          params[:passengers] << {:code=>"CHILD", :count=>form.people_count[:children], :age=>10}
-        end
-        if form.people_count[:infants] > 0
-          params[:passengers] << {:code=>"INFANT", :count=>form.people_count[:infants], :age=>1}
-        end
-
-        form.form_segments.each{|fs|
-          params[:segments] << {:departure=>fs.from_iata, :arrival=>fs.to_iata, 
-            :date=>fs.date.insert(2, ".").insert(5, ".20"), :baseclass=>"Э"}
-        }
-
-        params
-      end
     end
 
   end

@@ -1,11 +1,9 @@
-%sirena
-  %query
-    %schedule
-      -if departure
-        %departure= departure
-      -if arrival
-        %arrival= arrival
-      %date= date
-      -if date2 && date2 != date
-        %date2= date2
-      %direct= direct.to_s
+%schedule
+  -if departure
+    %departure= departure
+  -if arrival
+    %arrival= arrival
+  %date= date
+  -if date2 && date2 != date
+    %date2= date2
+  %direct= direct.to_s
