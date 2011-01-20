@@ -1,4 +1,4 @@
-<% cache(:action => "index", :action_suffix => ('matrix' + @query_key)) do %>
+<% cache [:calendar, @query_key] do %>
 <% if @recommendations.present? %>
 <div class="matrix-origin" data-dates="<%= @search.form_segments.map{|fs| fs.date }.join(' ') %>"></div>
 <% @recommendations.each do |recommendation| %>

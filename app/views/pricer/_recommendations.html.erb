@@ -1,4 +1,4 @@
-<% cache(:action => "index", :action_suffix => @query_key) do %>
+<% cache [:pricer, @query_key] do %>
 <% if @recommendations.present? %>
 <div id="offers-options" data-filters='<%= Recommendation.summary(@recommendations, @locations).to_json.gsub("'", '&rsquo;') %>' data-query_key="<%= @query_key %>"></div>
 

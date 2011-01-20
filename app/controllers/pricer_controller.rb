@@ -26,10 +26,11 @@ class PricerController < ApplicationController
   end
 
   def validate
-    if params[:query_key]
-      @search = PricerForm.load_from_cache(params[:query_key])
-      fragment_exist = fragment_exist?({:action => 'index', :action_suffix => params[:query_key]}) &&
-        fragment_exist?({:action => 'index', :action_suffix => ('matrix' + params[:query_key])})
+    if @query_key = params[:query_key]
+      @search = PricerForm.load_from_cache(@query_key)
+      fragment_exist =
+        fragment_exist?([:pricer, @query_key]) &&
+        fragment_exist?([:calendar, @query_key])
       render :json => {
         :search => @search,
         :valid => @search.present? && @search.valid?,
