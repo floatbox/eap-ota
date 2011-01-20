@@ -17,9 +17,18 @@ class Variant
       :departures => segments.every.departure_time,
       :duration => segments.sum(&:total_duration),
       :cities => segments.map{|s| s.flights[1..-1].map{|f| f.departure.city.iata}}.flatten.uniq,
-      :layovers => segments.map{|s| s.flights.size}.max - 1,
       :flights => flights.size
     }
+    flights_amount = segments.map{|s| s.flights.size}.max
+    if flights_amount == 1
+      result['layovers'] = 0
+    else
+      if segments.map{|s| s.layover_durations }.flatten.max < 121
+        result['layovers'] = [flights_amount, 1]
+      else
+        result['layovers'] = flights_amount
+      end
+    end
     segments.each_with_index do |segment, i|
       result['dpt_city_' + i.to_s] = segment.departure.city.iata
       result['arv_city_' + i.to_s] = segment.arrival.city.iata

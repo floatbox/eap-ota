@@ -89,6 +89,7 @@ init: function() {
     frPopup.find('.fgrus').click(function() {
         var rus = $(this).addClass('g-none'), eng = rus.siblings('.fgeng');
         var text = rus.closest('.fgroup').find('pre');
+        var loading = rus.siblings('.fgloading');
         if (!eng.data('text')) {
             eng.data('text', text.html());
         }
@@ -96,10 +97,12 @@ init: function() {
             text.html(rus.data('text'));
             eng.removeClass('g-none');
         } else {
+            loading.removeClass('g-none');
             google.language.translate({
                 text: text.html(),
                 type: 'text'
             }, "en", "ru", function(result) {
+                loading.addClass('g-none');
                 if (result.error) {
                     rus.removeClass('g-none');
                 } else {
