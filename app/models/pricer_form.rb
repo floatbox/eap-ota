@@ -51,8 +51,6 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   column :children, :integer, 0
   column :infants, :integer, 0
   column :complex_to, :string
-  column :search_type, :string, 'travel'
-  column :nonstop, :boolean
   column :day_interval, :integer, 3
   column :debug, :boolean, false
   column :sirena, :boolean, false # omg! i didn't want it! really!
@@ -274,16 +272,6 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     else
       return I18n.l(d, :format => '%e&nbsp;%B %Y')
     end
-  end
-
-  def search
-    case search_type
-    when 'travel'
-      Amadeus::Service.fare_master_pricer_travel_board_search(self)
-    when 'calendar'
-      Amadeus::Service.fare_master_pricer_calendar(self)
-    end.recommendations
-    # .select(&:sellable?)
   end
 
 end
