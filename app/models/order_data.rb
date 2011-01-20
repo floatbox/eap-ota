@@ -14,7 +14,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   # убить? используется в pnr_add_multi_elements
   attr_accessor :action
 
-  validates_format_of :email, :with => 
+  validates_format_of :email, :with =>
   /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email"
   validates_presence_of :email, :phone
   validates_format_of :phone, :with => /^[\d \+\-\(\)]+$/
@@ -41,8 +41,8 @@ class OrderData < ActiveRecord::BaseWithoutTable
 
   def errors_hash
     res = {}
-    res['order[email]'] = errors[:email] if errors[:email]
-    res['order[phone]'] = errors[:phone] if errors[:phone]
+    res['order[email]'] = errors[:email] if errors[:email].present?
+    res['order[phone]'] = errors[:phone] if errors[:phone].present?
     people.each_with_index{|p, i|
       unless p.valid?
         p.errors.each{|e,v|
@@ -57,17 +57,17 @@ class OrderData < ActiveRecord::BaseWithoutTable
     end
     res
   end
-  
-  
+
+
   def hash
     [recommendation, people_count, people, card].hash
   end
-  
+
   def store_to_cache
     self.number ||= ShortUrl.generate_url(self.hash)
     Cache.write("order_data", number, self)
   end
-  
+
   def self.get_from_cache(cache_number)
     require 'segment'
     require 'variant'
@@ -76,11 +76,11 @@ class OrderData < ActiveRecord::BaseWithoutTable
     require 'person'
     Cache.read("order_data", cache_number)
   end
-  
+
   def variant
     recommendation && recommendation.variants.first
   end
-  
+
   def init_people
     self.people = (1..(people_count[:adults].to_i + people_count[:children].to_i + people_count[:infants].to_i)).map {|n|
         Person.new
@@ -109,7 +109,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
       i.infant_or_child = 'i'
     }
   end
-  
+
   def block_money
     self.order_id = 'am' + self.pnr_number
     unless Payture.new.block(recommendation.price_with_payment_commission, card, :order_id => order_id)
@@ -185,7 +185,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
       end
     else
       amadeus.pnr_ignore
-      errors.add :pnr_number, 'Ошибка при создании PNR' 
+      errors.add :pnr_number, 'Ошибка при создании PNR'
       return
     end
   ensure
@@ -218,7 +218,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     res = ''
     people.every.coded.join("\n")
   end
-  
+
   def self.create_sample_booking(cache_key)
     order = OrderData.get_from_cache(cache_key)
     order.email = 'email@example.com'

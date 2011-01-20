@@ -20,8 +20,8 @@ class Mux
         was_fake, Amadeus.fake = Amadeus.fake, true
       end
 
-      request = Amadeus::Request::FareMasterPricerCalendar.from_pricer_form(form)
-      recommendations = request.invoke.recommendations
+      request = Amadeus::Request::FareMasterPricerCalendar.new(form)
+      recommendations = Amadeus::Service.fare_master_pricer_calendar(request).recommendations
 
       Amadeus.fake = was_fake if form.debug
 
@@ -30,16 +30,16 @@ class Mux
 
     # TODO exception handling
     def amadeus_pricer(form)
-      request_ws = Amadeus::Request::FareMasterPricerTravelBoardSearch.from_pricer_form(form)
-      request_ns = Amadeus::Request::FareMasterPricerTravelBoardSearch.from_pricer_form(form)
+      request_ws = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form)
+      request_ns = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form)
       request_ns.nonstop = true
 
       if form.debug
         was_fake, Amadeus.fake = Amadeus.fake, true
       end
 
-      recommendations_ws = request_ws.invoke.recommendations
-      recommendations_ns = request_ns.invoke.recommendations
+      recommendations_ws = Amadeus::Service.fare_master_pricer_travel_board_search(request_ws).recommendations
+      recommendations_ns = Amadeus::Service.fare_master_pricer_travel_board_search(request_ns).recommendations
 
       Amadeus.fake = was_fake if form.debug
 

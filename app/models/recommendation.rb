@@ -151,7 +151,7 @@ class Recommendation
       result['dpt_location_' + i.to_s] = segment.departure.city.case_from.gsub(/ /, '&nbsp;')
       result['arv_location_' + i.to_s] = segment.arrival.city.case_to.gsub(/ /, '&nbsp;')
     end
-    result 
+    result
   end
 
   # comparison, uniquiness, etc.

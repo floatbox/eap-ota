@@ -17,13 +17,13 @@ class BookingController < ApplicationController
     order_data.store_to_cache
     render :json => {:success => true, :number => order_data.number}
   end
-  
+
   def index
     @order = OrderData.get_from_cache(params[:number])
     @order.init_people
     render :partial => 'embedded'
   end
-  
+
   def pay
     @order = OrderData.get_from_cache(params[:order][:number])
     # @order.people = params[:person_attributes].sort.map{|k, v| Person.new(v)}

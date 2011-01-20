@@ -35,10 +35,6 @@ module Amadeus::Request
       File.read(template)
     end
 
-    def invoke 
-      Amadeus::Service.send action.underscore, self
-    end
-
     def action
       self.class.name.gsub(/^.*::/,'')
     end
