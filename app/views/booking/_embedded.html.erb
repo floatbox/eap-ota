@@ -42,10 +42,12 @@
     <p>Внимание! Возврат средств в&nbsp;случае отказа при получении визы, болезни и&nbsp;прочих обстоятельств без штрафных санкций невозможен. Возврат билета производится строго по&nbsp;правилам авиакомпании. В&nbsp;случае комбинации в&nbsp;билете тарифов с&nbsp;различными правилами, наиболее строгие ограничения применются ко&nbsp;всему маршруту.</p>
     <% common_fare = @order.recommendation.rules_with_flights.length == 1 %>
     <% @order.recommendation.rules_with_flights.each do |fgroup| %>
+    <% if fgroup[:rule] %>
     <div class="fgroup">
         <div class="fgtranslate g-none">
             <span class="link fgrus">Перевести с помощью</span>
             <span class="link fgeng g-none">Оригинальный текст</span>
+            <span class="fgloading g-none">Переводится…</span>
         </div>
         <div class="fgheader">
         <% unless common_fare %>
@@ -55,6 +57,7 @@
         </div>
         <pre><%= fgroup[:rule] %></pre>
     </div>
+    <% end %>
     <% end %>
 </div>
 </div>

@@ -62,7 +62,7 @@
             <li class="flight" title="Перелёт <%= flight.departure.city.case_from %> <%= flight.arrival.city.case_to %>"></li>
             <% if layover %>
                 <% layover_human_durations << human_duration(layover) %>
-                <li class="layover<% if layover < 90 %> lovs<% elsif layover > 240 %> lovl<% end %>" title="Пересадка <%= flight.arrival.city.case_in %>, <%= human_duration(layover) %>"></li>
+                <li class="layover<% if layover < 121 %> lovs<% elsif layover > 240 %> lovl<% end %>" title="Пересадка <%= flight.arrival.city.case_in %>, <%= human_duration(layover) %>"></li>
             <% end %>
         <% end %>
         </ul>
