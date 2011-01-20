@@ -68,7 +68,8 @@
     // Данные по умолчанию для сброса
     search.defvalues = {
         form_segments: [{from: search.segments[0].from.val()}],
-        people_count: $.extend({}, search.persons.selected)
+        people_count: $.extend({}, search.persons.selected),
+        rt: true
     };
     
     // Всплывающие подсказки

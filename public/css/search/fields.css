@@ -30,7 +30,10 @@
 }
 #search-fields .segment2 .to .highlight,
 #search-fields.rtmode .segment1 .from .highlight {
-    color: #cc8000;
+    color: #C46F26;
+}
+#search-fields .segment3 .to .highlight {
+    color: #0aa0c6;
 }
 #search-fields .loader {
     display: none;

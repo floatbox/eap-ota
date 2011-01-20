@@ -53,7 +53,8 @@ makeDates: function() {
         if (curt < abt || curt > aet) {
             day.addClass('inactive');
             if (curt === tt) {
-                //day.append('<span class="today">сегодня</span>')
+                day.addClass('withmonth withtoday');
+                label.append('<span class="today">сегодня</span>');
             }
         } else {
             this.dmyindex[dmy] = dcounter;

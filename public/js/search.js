@@ -91,7 +91,8 @@ init: function() {
     };
     this.persons.update = function() {
         var d = this.dropdown, s = this.selected;
-        var correct = s.adults + s.children + s.infants < 9; 
+        var manyinf = s.infants > s.adults;
+        var manyall = s.adults + s.children + s.infants > 8;
         this.items.removeClass('selected');
         this.empty.removeClass('selected');
         $('.pg-adults dd', d).eq(s.adults - 1).addClass('selected');
@@ -99,11 +100,12 @@ init: function() {
             $(this).toggleClass('disabled', i > 7 - s.adults);
         });
         $('.pg-infants dd', d).eq(s.infants).addClass('selected').end().slice(1).each(function(i) {
-            $(this).toggleClass('disabled', i > 7 - s.adults - s.children);
+            $(this).toggleClass('disabled', i > 7 - s.adults - s.children || i > s.adults - 1);
         });
-        $('.excess', d).toggle(!correct);
-        $('.a-button', d).toggle(correct);
-        if (correct) {
+        $('.excess', d).toggle(manyall);
+        $('.infants', d).toggle(manyinf && !manyall);
+        $('.a-button', d).toggle(!manyall && !manyinf);
+        if (!manyall && !manyinf) {
             var template = '<span class="value">{nt}{gt}</span>';
             var nc = app.constant.numbers.collective;
             var result = [template.supplant({
@@ -220,7 +222,7 @@ values: function() {
 },
 restore: function(data) {
     var segments = data.form_segments || [], dates = [];
-    this.toggleMode(data.rt ? 'rt' : ['ow', 'dw', 'tw'][segments.length - 1]);
+    this.toggleMode(data.rt ? 'rt' : ['rt', 'ow', 'dw', 'tw'][segments.length]);
     for (var i = 0, im = this.segments.length; i < im; i++) {
         var segment = segments[i];
         this.segments[i].from.trigger('set', segment && segment.from || '').trigger('iata', '');
@@ -352,6 +354,9 @@ applySegments: function(segments) {
         this.segments[i].to.trigger('iata', st && this.segments[i].to.val() ? st.code : '');
         this.toValues[i] = st && st.name_ru;
         items[i] = {from: sf, to: st};
+    }
+    for (var i = 1; i < 3; i++) {
+        this.segments[i].to.closest('td').find('label').toggleClass('highlight', Boolean(segments[i] && segments[i].to_as_object));
     }
     this.autoFrom();
     if (this.map.active) {
