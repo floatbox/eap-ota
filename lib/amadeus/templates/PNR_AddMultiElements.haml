@@ -1,10 +1,8 @@
 -# https://webservices.amadeus.com/extranet/structures/viewMessageStructure.do?id=1325&serviceVersionId=1497
--# FIXME куда-то это надо вынести
-- action_codes = {:NOP => 0, :ET => 10, :ER => 11, :ETK => 12, :ERK => 13, :EF => 14, :ETX => 15, :ERX => 16, :IG => 20, :IR => 21, :STOP => 267, :WARNINGS => 30, :SHORT => 50}
-
--if action
+-#FIXME нужно распилить на 2 шаблона
+-if pnr_action && !adults
   %pnrActions
-    %optionCode= action_codes[action] || raise("unknown action_code #{action}")
+    %optionCode= action_codes[pnr_action] || raise("unknown action_code #{pnr_action}")
     -# ошибка для ET IR, никакого эффекта для ER, IG
     -# %optionCode= action_codes[:SHORT]
 -else

@@ -16,19 +16,19 @@ module Amadeus
     end
 
     def pnr_ignore
-      pnr_add_multi_elements :action => :IG
+      pnr_add_multi_elements :pnr_action => :IG
     end
 
     def pnr_ignore_and_retrieve
-      pnr_add_multi_elements :action => :IR
+      pnr_add_multi_elements :pnr_action => :IR
     end
 
     def pnr_commit
-      pnr_add_multi_elements :action => :ET
+      pnr_add_multi_elements :pnr_action => :ET
     end
 
     def pnr_commit_and_retrieve
-      pnr_add_multi_elements :action => :ER
+      pnr_add_multi_elements :pnr_action => :ER
     end
 
     def pnr_cancel
