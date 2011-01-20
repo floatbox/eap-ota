@@ -147,9 +147,8 @@ load: function() {
 
     // Запрос матрицы с задержкой, чтобы не слать лишние запросы при автоматическом поиске
     this.mrtimer = setTimeout(function() {
-        params.search_type = 'calendar';
         self.update.mrequest =  $.ajax({
-            url: '/pricer/',
+            url: '/calendar/',
             data: params,
             success: function(s, status, request) {
                 if (self.update.mrequest != request) return;

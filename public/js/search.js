@@ -192,7 +192,6 @@ values: function() {
         form_segments: [],
         people_count: this.persons.selected,
         cabin: this.cabin.value[0],
-        search_type: 'travel',
         day_interval: 1
     };
     for (var i = {rt: 1, ow: 1, dw: 2, tw: 3}[this.mode]; i--;) {
@@ -312,8 +311,7 @@ validate: function(qkey) {
                 title: result.human
             };
             offersList.nextUpdate.params = {
-                query_key: result.query_key || data.query_key,
-                search_type: 'travel'
+                query_key: result.query_key || data.query_key
             };
             if (restoreResults) {
                 offersList.nextUpdate.params.restore_results = true;

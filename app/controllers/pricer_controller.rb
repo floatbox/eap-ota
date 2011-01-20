@@ -2,36 +2,28 @@
 class PricerController < ApplicationController
   layout false
 
-  def index
-    if params[:query_key]
-      @query_key = params[:query_key]
-      @search = PricerForm.load_from_cache(params[:query_key])
-      @search.search_type = params[:search_type]
-    else
-      render :text => 'PricerForm not found'
-    end
+  before_filter :load_form_from_cache, :only => [:pricer, :calendar]
 
+  def pricer
     unless params[:restore_results]
       if @search.valid?
-        if @search.search_type == 'travel'
-          @recommendations = Mux.pricer(@search)
-        else
-          @recommendations = Mux.calendar(@search)
-        end
+        @recommendations = Mux.pricer(@search)
         @locations = @search.human_locations
       end
     end
 
-    if params[:search_type] == 'calendar'
-      render :partial => 'matrix'
-    else
-      render :partial => 'recommendations'
-    end
-  rescue Amadeus::Error, Handsoap::Fault => e
-    @error_message = e.message
-    render :text => @errorMessage
+    render :partial => 'recommendations'
   end
 
+  def calendar
+    unless params[:restore_results]
+      if @search.valid?
+        @recommendations = Mux.calendar(@search)
+      end
+    end
+
+    render :partial => 'matrix'
+  end
 
   def validate
     if params[:query_key]
@@ -63,5 +55,11 @@ class PricerController < ApplicationController
     end
   end
 
+  protected
+
+  def load_form_from_cache
+    @query_key = params[:query_key] or raise 'no query_key provided'
+    @search = PricerForm.load_from_cache(params[:query_key])
+  end
 end
 

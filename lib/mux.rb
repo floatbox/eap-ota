@@ -41,6 +41,7 @@ class Mux
       # regroup
       recommendations = Recommendation.corrected(recommendations)
       recommendations
+    # rescue Amadeus::Error, Handsoap::Fault => e
     end
 
     def sirena_pricer(form)
