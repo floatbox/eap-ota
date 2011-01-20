@@ -41,8 +41,8 @@ class OrderData < ActiveRecord::BaseWithoutTable
 
   def errors_hash
     res = {}
-    res['order[email]'] = errors[:email] if errors[:email]
-    res['order[phone]'] = errors[:phone] if errors[:phone]
+    res['order[email]'] = errors[:email] if errors[:email].present?
+    res['order[phone]'] = errors[:phone] if errors[:phone].present?
     people.each_with_index{|p, i|
       unless p.valid?
         p.errors.each{|e,v|
