@@ -1,6 +1,10 @@
 %retrievalFacts
-  %retrieve
-    %type 2
-  %reservationOrProfileIdentifier
-    %reservation
-      %controlNumber= number
+  - if number == :active
+    %retrieve
+      %type 1
+  - else
+    %retrieve
+      %type 2
+    %reservationOrProfileIdentifier
+      %reservation
+        %controlNumber= number
