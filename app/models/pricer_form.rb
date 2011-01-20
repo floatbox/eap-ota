@@ -55,7 +55,13 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   column :debug, :boolean, false
   column :sirena, :boolean, false # omg! i didn't want it! really!
   column :cabin, :string
-  has_many :form_segments
+  has_many :form_segments, :class_name => 'PricerForm::FormSegment'
+  accepts_nested_attributes_for :form_segments
+  # FIXME обходит необходимость использовать form_segments_attributes в жаваскрипте
+  # но нет уверенности, что не создаю каких-то дополнительных проблем
+  def form_segments=(attrs)
+    self.form_segments_attributes = attrs
+  end
 
   delegate :to, :from, :from_iata, :to_iata, :to => 'form_segments.first'
 

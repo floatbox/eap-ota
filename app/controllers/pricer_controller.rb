@@ -38,8 +38,7 @@ class PricerController < ApplicationController
         :fragment_exist => fragment_exist
       }
     else
-      @search = PricerForm.new(params[:search].merge({:form_segments => []}))
-      @search.form_segments = params[:search][:form_segments].to_a.sort_by{|a| a[0]}.map{|k, v| PricerForm::FormSegment.new(v)}
+      @search = PricerForm.new(params[:search])
       @search.parse_complex_to
       if @search.valid?
         @query_key = ShortUrl.generate_url([@search, @search.form_segments, Time.now].hash)
