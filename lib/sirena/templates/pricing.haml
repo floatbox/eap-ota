@@ -16,12 +16,12 @@
           -if segment[:subclass]
             %subclass= segment[:subclass].split('')[0]
           %direct= segment[:direct] ? "true" : "false"
-      - passangers.each do |passanger|
+      - passengers.each do |passenger|
         %passenger
-          %code= passanger[:code]
-          %count= passanger[:count]
-          -if passanger[:age]
-            %age= passanger[:age]
+          %code= passenger[:code]
+          %count= passenger[:count]
+          -if passenger[:age]
+            %age= passenger[:age]
       %request_params
         %lang en
         %min_results 1
