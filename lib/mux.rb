@@ -15,6 +15,7 @@ class Mux
     end
 
     def calendar(form)
+      return [] if form.sirena
 
       if form.debug
         was_fake, Amadeus.fake = Amadeus.fake, true
