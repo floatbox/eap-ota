@@ -97,6 +97,11 @@ class Recommendation
     validating_carrier.consolidator
   end
 
+  def without_full_information?
+    #проверяем, что все аэропорты есть в базе
+    !((flights.every.arrival + flights.every.departure).all? &:id)
+  end
+
   def ground?
     flights.any? {|f| %W(train bus).include?(f.equipment_type.engine_type) }
   end

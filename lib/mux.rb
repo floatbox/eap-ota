@@ -51,6 +51,7 @@ class Mux
       # TODO рапортовать, если хотя бы одно предложение выброшено
       # мы вроде что-то делали, чтобы амадеус не возвращал всякие поезда
       recommendations.delete_if(&:ground?)
+      recommendations.delete_if(&:without_full_information?)
       # sort
       recommendations = recommendations.sort_by(&:price_total)
       # regroup
