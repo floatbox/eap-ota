@@ -19,7 +19,7 @@ module Amadeus
               :departure_term =>         fi.xpath("r:flightDetail/r:departureInformation/r:departTerminal").to_s,
               :warning =>                fi.xpath("r:errorInfo/r:errorfreeFormText/r:text").to_s
             )
-        end
+        end.find_all(&:marketing_carrier_iata)#для пустых перелетов (случай сложного маршрута)
       end
 
       def passengers
