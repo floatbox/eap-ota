@@ -4,8 +4,8 @@ module Sirena
 
     def self.for action
       "::Sirena::Request::#{action.camelize}".constantize
-    rescue NameError
-      Sirena::Request::Base
+    # rescue NameError
+    #   Sirena::Request::Base
     end
 
     class Base
