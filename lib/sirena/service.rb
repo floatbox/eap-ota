@@ -22,6 +22,10 @@ module Sirena
 
       # FIXME заменить нафик на Curl::Easy
       def do_http(request)
+        # sirenad понимает хедеры
+        # X-Timeout
+        # X-Priority
+        # надо бы добавить и привести в соответствие с Net::HTTP таймаутом
         http = Net::HTTP.new(HOST, PORT)
         http_response = http.post(PATH, request)
 
@@ -31,7 +35,7 @@ module Sirena
         http_response.body
       end
 
-      for method_name in %W(pricing availability describe schedule)
+      for method_name in %W(pricing) # availability describe schedule)
         define_method method_name.underscore do |params|
           action(method_name, params)
         end
