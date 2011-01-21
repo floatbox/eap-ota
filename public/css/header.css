@@ -110,3 +110,8 @@
 #ya-share .b-share__handle:hover .b-share__text {
     color: #ED1192;
 }
+.b-share-popup-wrap .b-share-popup__item {
+    padding: 3px 15px !important;
+    font-size: 14px;
+    line-height: 20px;
+}

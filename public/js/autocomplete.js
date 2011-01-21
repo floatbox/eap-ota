@@ -711,8 +711,8 @@ $.Autocompleter.List.Item = function(data) {
             return {hint: e.hint, code: e.iata, cls: null}
         },
         country: function(e) {
-            var i = app.constant.countries.length - 1;
-            while (i && app.constant.countries[i] != data.entity.iata.toLowerCase()) i--;
+            var i = constants.countries.length - 1;
+            while (i && constants.countries[i] != data.entity.iata.toLowerCase()) i--;
             // i хранит номер флага в панорамной картинке countries.png
             return {hint: e.hint || '', code: i, cls: 'country'}
         },

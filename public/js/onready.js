@@ -1,19 +1,5 @@
 ﻿(function() {
 
-    /* Социальная шапка */
-    new Ya.share({
-        'element': 'ya-share',
-        'elementStyle': {
-        	'type': 'link',
-        	'linkIcon': true,
-        	'border': false,
-        	'quickServices': ['facebook', 'twitter', 'friendfeed', 'lj', 'vkontakte', 'odnoklassniki', 'yaru']
-        },
-        'popupStyle': {
-        	'copyPasteField': true
-        }
-    });    
-
     search.init();
     offersList.init();
 
@@ -74,5 +60,24 @@
     
     // Всплывающие подсказки
     hint.init();
+    
+    /* Социальная шапка */
+    if (typeof Ya !== 'undefined') {
+        search.share = new Ya.share({
+            element: 'ya-share',
+            elementStyle: {
+                type: 'link',
+                linkIcon: false,
+                border: false,
+                quickServices: ['facebook', 'twitter', 'friendfeed', 'lj', 'vkontakte', 'odnoklassniki', 'yaru']
+            },
+            popupStyle: {
+                copyPasteField: true,
+                blocks: {
+                   'Поделитесь с друзьями': ['facebook', 'twitter', 'friendfeed', 'lj', 'vkontakte', 'odnoklassniki', 'yaru', 'gbuzz', 'juick', 'moikrug', 'moimir', 'blogger', 'linkedin']
+                }
+            }
+        });
+    }     
     
 })();

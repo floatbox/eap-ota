@@ -43,7 +43,7 @@ makeDates: function() {
         }
         var dmy = curd.toAmadeus();
         var day = $('<li>').attr('data-dmy', dmy);
-        var label = $('<span class="label">' + date + '<span class="mtitle">&nbsp;' + app.constant.MNg[curd.getMonth()] + '</span></span>');
+        var label = $('<span class="label">' + date + '<span class="mtitle">&nbsp;' + constants.monthes.genitive[curd.getMonth()] + '</span></span>');
         if (curd.dayoff()) {
             label.addClass('dayoff');
         }
@@ -209,7 +209,7 @@ update: function() {
         var tparts = [];
         for (var i = 0, im = items.length; i < im; i++) {
             var d = Date.parseAmadeus(items[i]);
-            tparts.push(d.getDate() + ' ' + app.constant[im > 2 ? 'SMN' : 'MNg'][d.getMonth()]);
+            tparts.push(d.getDate() + ' ' + constants.monthes[im > 2 ? 'short' : 'genitive'][d.getMonth()]);
         }
         title = tparts.join(' — ');
         if (items.length === 2) {
@@ -416,7 +416,7 @@ initTimeline: function() {
     $('.month', this.el).each(function() {
         var mdate = $(this).data('monthyear');
         var mw = Math.round(Date.daysInMonth(mdate.month, mdate.year) * self.factor);
-        var label = $('<span>').addClass('label').width(mw).text(app.constant.SMN[mdate.month]);
+        var label = $('<span>').addClass('label').width(mw).text(constants.monthes.short[mdate.month]);
         $('<li>').width(mw).append(label).appendTo(self.timeline);
     });
     this.timeline.css('left', Math.round((1 - parseInt(dates.eq(0).attr('data-dmy').substring(0,2), 10)) * self.factor)).show();

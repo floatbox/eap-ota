@@ -22,6 +22,11 @@
     color: #333;
 }
 
+#offers-filter .filters-list {
+    display: inline;
+    margin-right: 5px;
+}
+
 #offers-reset-filters {
     color: #ED1192;
 }

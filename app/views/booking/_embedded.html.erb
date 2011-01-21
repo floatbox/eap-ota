@@ -44,16 +44,18 @@
     <% @order.recommendation.rules_with_flights.each do |fgroup| %>
     <% if fgroup[:rule] %>
     <div class="fgroup">
-        <div class="fgtranslate g-none">
+        <div class="fgtranslate">
             <span class="link fgrus">Перевести с помощью</span>
             <span class="link fgeng g-none">Оригинальный текст</span>
             <span class="fgloading g-none">Переводится…</span>
         </div>
         <div class="fgheader">
-        <% unless common_fare %>
+        <% if common_fare %>
+            <p class="clofs">Класс бронирования <%= fgroup[:flights].first.class_of_service %></p><h5>&nbsp;</h5>
+        <% else %>
             <h5><% fgroup[:flights].each_with_index do |flight, i| %><%= flight.departure.city.name %> — <%= flight.arrival.city.name %><%= ', ' if i < fgroup[:flights].length - 1 %><% end %></h5>
+            <p class="clofs">Класс бронирования <%= fgroup[:flights].first.class_of_service %></p>
         <% end %>
-        <p class="clofs">Класс бронирования <%= fgroup[:flights].first.class_of_service %></p>
         </div>
         <pre><%= fgroup[:rule] %></pre>
     </div>

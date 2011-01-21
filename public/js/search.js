@@ -107,18 +107,18 @@ init: function() {
         $('.a-button', d).toggle(!manyall && !manyinf);
         if (!manyall && !manyinf) {
             var template = '<span class="value">{nt}{gt}</span>';
-            var nc = app.constant.numbers.collective;
+            var nc = constants.numbers.collective;
             var result = [template.supplant({
                 nt: nc[s.adults],
-                gt: (s.children || s.infants) ? (' ' + app.utils.plural(s.adults, ['взрослый', 'взрослых', 'взрослых'])) : ''
+                gt: (s.children || s.infants) ? s.adults.inflect(' взрослый', ' взрослых', ' взрослых', false) : ''
             })];
             if (s.children) result.push(template.supplant({
                 nt: nc[s.children] + ' ',
-                gt: app.utils.plural(s.children, ['ребёнок', 'детей', 'детей'])
+                gt: s.children.inflect('ребёнок', 'детей', 'детей', false)
             }));
             if (s.infants) result.push(template.supplant({
                 nt: nc[s.infants] + ' ',
-                gt: app.utils.plural(s.infants, ['младенец', 'младенцев', 'младенцев'])
+                gt: s.infants.inflect('младенец', 'младенцев', 'младенцев', false)
             }));
             this.values.html(' (' + result.enumeration() + ')').show();
             this.lastCorrect = $.extend({}, this.selected);

@@ -98,18 +98,31 @@ init: function() {
             eng.removeClass('g-none');
         } else {
             loading.removeClass('g-none');
-            google.language.translate({
-                text: text.html(),
-                type: 'text'
-            }, "en", "ru", function(result) {
-                loading.addClass('g-none');
-                if (result.error) {
+            $.ajax({
+                url: 'https://ajax.googleapis.com/ajax/services/language/translate',
+                dataType: 'jsonp',
+                data: {
+                    q : text.html().substr(0, 5000),
+                    v: '1.0',
+                    langpair: 'en|ru',
+                    format: 'text'
+                },
+                success: function(response) {
+                    var data = response.responseData;
+                    loading.addClass('g-none');
+                    if (data && data.translatedText) {
+                        text.html(data.translatedText);
+                        eng.removeClass('g-none');
+                        rus.data('text', data.translatedText);
+                    } else {
+                        rus.removeClass('g-none');
+                    }
+                },
+                error: function() {
+                    loading.addClass('g-none');
                     rus.removeClass('g-none');
-                } else {
-                    text.html(result.translation);
-                    eng.removeClass('g-none');
-                    rus.data('text', result.translation);
-                }
+                },
+                timeout: 20000
             });
         }
     });
@@ -127,9 +140,6 @@ init: function() {
         setTimeout(function() {
             $('body').bind('click keydown', frHide);
         }, 20);
-        if (window.google && google.language) {
-            frPopup.find('.fgtranslate').removeClass('g-none');
-        }
     });
 
     // Прекращение бронирования
@@ -226,11 +236,10 @@ comparePrice: function() {
             $(this).find('.cost dl').replaceWith(source.find('.cost dl').clone());
         });
         var block = $('<div class="diff-price"></div>');
-        var template = '<h5>Цена этого варианта изменилась: стало <strong>{type} на {value}&nbsp;{currency}</strong> (<span class="link">почему?</span>)</h5>';
+        var template = '<h5>Цена этого варианта изменилась: стало <strong>{type} на {value}</strong> (<span class="link">почему?</span>)</h5>';
         block.append(template.supplant({
             type: bp > vp ? 'дороже' : 'дешевле',
-            currency: app.utils.plural(Math.abs(bp - vp), ['рубль', 'рубля',  'рублей']),
-            value: Math.abs(bp - vp)
+            value: Math.abs(bp - vp).inflect('рубль', 'рубля',  'рублей')
         })).append('<p><a class="a-button continue" href="#">Продолжить бронировать</a> или <a class="cancel" href="#">выбрать другой вариант</span></p>');
         var self = this;
         block.find('.link').click(function(event) {

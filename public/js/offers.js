@@ -340,8 +340,8 @@ parseResults: function() {
 showAmount: function(amount, total) {
     if (total === undefined) total = this.items.length;
     if (amount === undefined) amount = total;
-    var str = amount + ' ' + app.utils.plural(amount, ['вариант', 'варианта', 'вариантов']);
-    $('#offers-tab-all > a').text(amount == total ? ('Всего ' + str) : (str + ' из ' + total));
+    var str = amount.inflect('вариант', 'варианта', 'вариантов');
+    $('#offers-tab-all > a').html(amount == total ? ('Всего ' + str) : (str + ' из ' + total));
 },
 showVariant: function(el) {
     el.removeClass('g-none').siblings().addClass('g-none');
@@ -367,7 +367,7 @@ updateFilters: function() {
             $(this).addClass('g-none');
         }
     });
-    var items = $('#offers-filter .filters > .filter').each(function() {
+    var items = $('#offers-filter .filters-list > .filter').each(function() {
         var name = $(this).attr('data-name');
         var filter = self.filters[name];
         filter.fill(data[name]);
@@ -597,7 +597,7 @@ showRecommendations: function() {
     if (optimal) container.append(this.makeRecommendation(variants[optimal.n], otitle));
     if (fast) container.append(this.makeRecommendation(variants[fast.n], 'Быстрый вариант'));
     if (!this.filtered) {
-        var aln = this.filters['carriers'].items.length, alamount = aln + '&nbsp;' + app.utils.plural(aln, ['авиакомпании', 'авиакомпаний', 'авиакомпаний']);
+        var alamount = this.filters['carriers'].items.length.inflect('авиакомпании', 'авиакомпаний', 'авиакомпаний');
         var ftip = $('<div class="offers-title featured-tip"><strong>Не подошло?</strong> Воспользуйтесь уточнениями <span class="up">вверху&nbsp;&uarr;</span> или посмотрите <span class="link">все&nbsp;варианты</span> от&nbsp;' + alamount + '</div>');
         var that = this;
         ftip.find('.link').click(function() {
@@ -611,7 +611,7 @@ showRecommendations: function() {
         var rprice = cheap ? cheap.p : optimal.p;
         var mprice = parseInt($('#offers-matrix .offer-prices').attr('data-minprice'), 10);
         if (mprice < rprice) {
-            var mtip = $('<div class="offers-title featured-tip"><strong>Дорого?</strong> Посмотрите <span class="link">другие дни</span> — есть предложения от&nbsp;' + mprice + '&nbsp;' + app.utils.plural(mprice, ['рубля', 'рублей', 'рублей']) + '</div>');
+            var mtip = $('<div class="offers-title featured-tip"><strong>Дорого?</strong> Посмотрите <span class="link">другие дни</span> — есть предложения от&nbsp;' + mprice.inflect('рубля', 'рублей', 'рублей') + '</div>');
             mtip.find('.link').click(function() {
                 $('#offers-tabs').trigger('set', 'matrix');
                 $.animateScrollTop(that.container.offset().top - 42);
@@ -779,8 +779,8 @@ processMatrix: function() {
     table.attr('data-minprice', cheap.price).show();
 },
 matrixDate: function(date) {
-    var dm = date.getDate() + '&nbsp;' + app.constant.MNg[date.getMonth()];
-    var wd = app.constant.DN[(date.getDay() || 7) - 1];
+    var dm = date.getDate() + '&nbsp;' + constants.monthes.genitive[date.getMonth()];
+    var wd = constants.weekdays[(date.getDay() || 7) - 1];
     return '<h6>' + dm + '</h6><p>' + wd + '</p>';
 }
 });
