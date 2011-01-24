@@ -29,7 +29,7 @@ module Sirena
       end
 
       def template_for_action
-        File.expand_path("../templates/#{action}.haml", __FILE__)
+        File.expand_path("../templates/#{action.underscore}.haml", __FILE__)
       end
 
       def action
