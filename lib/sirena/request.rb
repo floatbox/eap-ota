@@ -13,8 +13,8 @@ module Sirena
         template = template_for_action
 
         %(<?xml version="1.0" encoding="UTF-8"?>\n) +
-        %(<query>\n) +
         %(<sirena>\n) +
+        %(<query>\n) +
 
         Haml::Engine.new( File.read(template),
           :autoclose => [],
@@ -24,8 +24,8 @@ module Sirena
           :escape_html => true
         ).render(self) +
 
-        %(</sirena>\n) +
-        %(</query>\n)
+        %(</query>\n) +
+        %(</sirena>\n)
       end
 
       def template_for_action
