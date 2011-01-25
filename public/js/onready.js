@@ -58,6 +58,9 @@
         rt: true
     };
     
+    // Фон для лоадера
+    preload('/img/offers/photo-search.jpg', '/img/offers/progress.gif');
+
     // Всплывающие подсказки
     hint.init();
     

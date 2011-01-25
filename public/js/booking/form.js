@@ -21,7 +21,13 @@ init: function() {
                 pageurl.update('payment', rtype);
             } else if (s.errors) {
                 var items = [];
-                for (var eid in s.errors) items.push('<li>' + eid + ' ' + s.errors[eid] + '</li>');
+                for (var eid in s.errors) {
+                    var ftitle = eid;
+                    ftitle = ftitle.replace(/person\[(\d)\]\[birthday\]/, function(s, n) {
+                        return '<a href="#" data-id="book-p-' + n + '-birth"><u>' + constants.numbers.ordinaldat[parseInt(n, 10)] + ' пассажиру</u></a>';
+                    });
+                    items.push('<li>' + ftitle + ' ' + s.errors[eid] + '</li>');
+                }
                 self.el.find('.blocker').show().find('.b-pseudo').html(items.join(''));
                 self.el.removeClass('book-retry');
             } else if (s.exception) {

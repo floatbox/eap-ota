@@ -535,9 +535,16 @@
 }
 .offer .details .valcarrier {
     float: right;
+    position: relative;
+    top: 1px;
     width: 205px;
-    margin-top: 1px;
     font-size: 11px;
     line-height: 14px;
     color: #777;
+}
+.offer .alliance {
+    color: #333;
+}
+.offer .alliance:hover {
+    color: #ED1192;
 }

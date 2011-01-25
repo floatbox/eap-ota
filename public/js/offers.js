@@ -102,6 +102,12 @@ init: function() {
         app.booking.book(variant);
     });
     
+    // Альянсы
+    list.delegate('.alliance', 'click', function(event) {
+        var el = $(this);
+        hint.show(event, 'В альянс ' + el.html() + ' входят авиакомпании: ' + el.attr('data-details') + '.');
+    });
+
     // Соседние города
     this.content.delegate('.offers-context .city', 'click', function() {
         var el = $(this);
