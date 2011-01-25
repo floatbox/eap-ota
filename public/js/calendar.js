@@ -323,7 +323,7 @@ init: function() {
     this.el = this.parent.container;
     this.rheight = $(this.parent.dates.eq(0)).outerHeight();
     this.active = true;
-    this.factor = 1.5
+    this.factor = 2.5;
     this.initNative();
     this.initTimeline();
     this.initScrollbar();
@@ -416,11 +416,11 @@ initTimeline: function() {
     $('.month', this.el).each(function() {
         var mdate = $(this).data('monthyear');
         var mw = Math.round(Date.daysInMonth(mdate.month, mdate.year) * self.factor);
-        var label = $('<span>').addClass('label').width(mw).text(constants.monthes.short[mdate.month]);
+        var label = $('<span>').addClass('label').width(mw).text(constants.monthes.nomimative[mdate.month]);
         $('<li>').width(mw).append(label).appendTo(self.timeline);
     });
     this.timeline.css('left', Math.round((1 - parseInt(dates.eq(0).attr('data-dmy').substring(0,2), 10)) * self.factor)).show();
-    this.preview = $('.preview', this.scroller).css('left', Math.round(dates.eq(0).prevAll('li').length * self.factor));
+    this.preview = $('.preview', this.scroller).css('left', Math.round(this.parent.dates.eq(0).prevAll('li').length * self.factor));
 },
 initScrollbar: function() {
     var self = this;

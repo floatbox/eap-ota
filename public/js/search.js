@@ -405,3 +405,27 @@ toggle: function(mode) {
     this.submit.toggleClass('disabled', !mode);
 }
 };
+
+/* Share */
+search.share = {
+init: function() {
+    if (typeof Ya === 'undefined') {
+        return false;
+    }
+    this.obj = new Ya.share({
+        element: 'ya-share',
+        elementStyle: {
+            type: 'link',
+            linkIcon: false,
+            border: false,
+            quickServices: ['facebook', 'twitter', 'friendfeed', 'lj', 'vkontakte', 'odnoklassniki', 'yaru']
+        },
+        popupStyle: {
+            copyPasteField: true,
+            blocks: {
+               'Поделитесь с друзьями': ['facebook', 'twitter', 'friendfeed', 'lj', 'vkontakte', 'odnoklassniki', 'yaru', 'gbuzz', 'juick', 'moikrug', 'moimir', 'blogger', 'linkedin']
+            }
+        }
+    });
+}
+};

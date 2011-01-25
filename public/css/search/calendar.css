@@ -25,7 +25,6 @@
     background: url(/img/calendar/shadow.png) repeat-x;
 }
 
-
 /* Days of the week */
 .calendar ul.week {
     width: 595px;
@@ -236,7 +235,7 @@
 /* Scroller */
 .calendar .scroller {
     position: absolute;
-    top: 0; left: 258px;
+    top: 0; left: 61px;
     height: 23px;
     background: #555;
 }
@@ -246,7 +245,7 @@
     position: absolute;
     top: 0; left: 0;
     z-index: 0;
-    width: 380px;
+    width: 580px;
     overflow: visible;
     font-size: 13px;
     cursor: default;
@@ -256,7 +255,7 @@
     float: left;
     height: 16px;
     overflow: hidden;
-    padding: 4px 0 3px;
+    padding: 3px 0 4px;
     text-align: center;
     color: #E8E8E8;
     cursor: pointer;
@@ -271,7 +270,7 @@
     position: absolute;
     top: 0;
     z-index: 0;
-    width: 50px;
+    width: 60px;
     height: 23px;
     background: #343434;
     opacity: 0.4;
@@ -279,7 +278,7 @@
     cursor: default;
 }
 .calendar .scroller .before {
-    left: -50px;
+    left: -60px;
 }
 .calendar .scroller .after {
     left: 100%;

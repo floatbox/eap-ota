@@ -28,6 +28,7 @@
     height: 23px;
     color: #c9c8c8;
     line-height: 1.2;
+    visibility: hidden;
 }
 #search-panel h2 b {
     color: #6b6b6b;

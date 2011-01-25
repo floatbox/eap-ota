@@ -36,8 +36,8 @@ show: function() {
     } else {
         window.location.hash = '';
     }
-    if (search.share) {
-        search.share.updateShareLink(window.location.href, document.title);
+    if (search.share.obj) {
+        search.share.obj.updateShareLink(window.location.href, document.title);
     }
     $(window).scrollTop(cst);
 },
