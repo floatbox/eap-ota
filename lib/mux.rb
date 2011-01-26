@@ -39,6 +39,7 @@ class Mux
         was_fake, Amadeus.fake = Amadeus.fake, true
       end
 
+      # игнорируем ошибки, если это конечно не SOAP Error
       recommendations_ws = Amadeus::Service.fare_master_pricer_travel_board_search(request_ws).recommendations
       recommendations_ns = Amadeus::Service.fare_master_pricer_travel_board_search(request_ns).recommendations
 

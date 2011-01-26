@@ -85,11 +85,6 @@ module Amadeus
     #end
     # first element in envelope root
     response_body = response.xpath('soap:Envelope/soap:Body/*').first
-
-    if (response_body / 'r:errorMessage').present?
-      raise Amadeus::Error, "#{ response_body / '//r:error' }: #{response_body / '//r:description'}"
-    end
-
     response_body
   end
 

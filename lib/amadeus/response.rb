@@ -39,11 +39,19 @@ module Amadeus::Response
     end
 
     def success?
-      true
+      errors.blank?
     end
 
     def message
-      nil
+      errors.join("; ")
+    end
+
+    def errors
+      xpath('//r:errorMessage/r:errorMessageText/r:description').map(&:to_s)
+    end
+
+    def error_code
+      xpath('//r:errorMessage/r:applicationError/r:applicationErrorDetail/r:error').to_s
     end
 
     def inspect
