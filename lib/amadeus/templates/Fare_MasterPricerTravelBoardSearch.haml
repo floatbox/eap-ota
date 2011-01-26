@@ -51,7 +51,7 @@
 -segments.each_with_index do |segment, i|
   %itinerary
     %requestedSegmentRef
-      %segRef 1
+      %segRef= i+1
     %departureLocalization
       -if segment.from_iata.length == 3
         %departurePoint
