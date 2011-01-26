@@ -67,7 +67,7 @@ module Sirena
           :arrival_time =>           to_amadeus_time(fi.xpath("arrvtime").text),
           :departure_date =>         fi.xpath("deptdate").text.gsub(".", ""),
           :departure_time =>         to_amadeus_time(fi.xpath("depttime").text),
-          :equipment_type_iata =>    "", # что это?
+          :equipment_type_iata =>    fi.xpath("airplane").text, # иногда кириллица!
           :technical_stops => [] #не нашла, есть ли там информация на эту тему. скорее нет
         )
         id = fi.attribute("id") && fi.attribute("id").value
