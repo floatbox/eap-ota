@@ -9,7 +9,7 @@ set :user, "rack"
 set :use_sudo, false
 
 set :deploy_to, "/home/#{user}/#{application}"
-set :srv, "eviterra.com"
+set :srv, "delta.eviterra.com"
 
 # если репозиторий лежит на той же машине
 #set :deploy_via, :copy
