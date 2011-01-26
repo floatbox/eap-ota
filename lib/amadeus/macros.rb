@@ -39,7 +39,7 @@ module Amadeus
       yield
       result = pnr_commit_and_retrieve
       # закоммитить такое не удастся. надо повторять
-      if result.message == "SIMULTANEOUS CHANGES TO PNR - USE WRA/RT TO PRINT OR IGNORE"
+      if result.error_message == "SIMULTANEOUS CHANGES TO PNR - USE WRA/RT TO PRINT OR IGNORE"
         pnr_ignore_and_retrieve
         yield
         result = pnr_commit_and_retrieve

@@ -66,6 +66,14 @@ module Amadeus
         end
       end
 
+      def error_message
+        xpath('//r:errorMessage/r:errorMessageText/r:description').to_s
+      end
+
+      def error_code
+        xpath('//r:errorMessage/r:applicationError/r:applicationErrorDetail/r:error').to_s
+      end
+
       private
 
       def flight_indexes

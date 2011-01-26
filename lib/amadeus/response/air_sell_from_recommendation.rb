@@ -18,8 +18,8 @@ module Amadeus
         segments_confirmed?
       end
 
-      def message
-        "segments' status codes: #{segments_status_codes}"
+      def error_message
+        "segments' status codes: #{segments_status_codes}" unless success?
       end
 
       # апдейтит недостающую инфу в рекомендации

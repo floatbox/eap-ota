@@ -39,23 +39,15 @@ module Amadeus::Response
     end
 
     def success?
-      errors.blank?
+      error_message.blank?
     end
 
-    def message
-      errors.join("; ")
-    end
-
-    def errors
-      xpath('//r:errorMessage/r:errorMessageText/r:description').map(&:to_s)
-    end
-
-    def error_code
-      xpath('//r:errorMessage/r:applicationError/r:applicationErrorDetail/r:error').to_s
+    def error_message
+      nil
     end
 
     def inspect
-      "<#{self.class.name} #{success? ? 'Success' : 'Fail' }: #{message.presence && message.inspect}\n#{doc.to_xml.to_s}"
+      "<#{self.class.name} #{success? ? 'Success' : 'Fail' }: #{error_message.presence && error_message.inspect}\n#{doc.to_xml.to_s}"
     end
   end
 end

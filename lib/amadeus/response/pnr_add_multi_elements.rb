@@ -10,8 +10,8 @@ module Amadeus
         xpath('//r:messageErrorText/r:text').every.to_s.join(', ')
       end
 
-      def message
-        # учитывать только ошибки, в дальнейшем?
+      def error_message
+        # тут и warnings тоже, скорее всего. учитывать только ошибки, в дальнейшем?
         error_text
       end
 

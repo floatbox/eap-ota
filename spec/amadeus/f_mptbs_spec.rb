@@ -11,7 +11,7 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
     }
 
     it { should_not be_success }
-    its(:errors) { should == ['NO ITINERARY FOUND FOR REQUESTED SEGMENT 2'] }
+    its(:error_message) { should == 'NO ITINERARY FOUND FOR REQUESTED SEGMENT 2' }
     its(:error_code) { should == '931' }
     its(:recommendations) { should be_empty }
 
