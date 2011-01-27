@@ -90,7 +90,6 @@ class Payture
     add_order(post, opts)
     add_merchant(post)
     add_money(post, amount)
-    encrypt_payinfo(post)
 
     result = post_request 'Refund', post
     debug "refund #{result.inspect}"
