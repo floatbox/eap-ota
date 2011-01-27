@@ -36,13 +36,13 @@ class Order < ActiveRecord::Base
   end
 
 
-  def charge
+  def charge!
     res = Payture.new.charge(:order_id => self.order_id)
     update_attribute(:payment_status, 'charged') if res
     res
   end
 
-  def unblock
+  def unblock!
     res = Payture.new.unblock(self.price_with_payment_commission, :order_id => self.order_id)
     update_attribute(:payment_status, 'unblocked') if res
     res
@@ -52,7 +52,7 @@ class Order < ActiveRecord::Base
     update_attribute(:ticket_status, 'ticketed')
   end
 
-  def cancel
+  def cancel!
     update_attribute(:ticket_status, 'canceled')
   end
 
