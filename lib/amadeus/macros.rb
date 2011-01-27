@@ -64,6 +64,10 @@ module Amadeus
       $1
     end
 
+    def pnr_add_remark
+      cmd('RM INTERNET BOOKING')
+    end
+
     def cmd(command)
       response = command_cryptic :command => command
       response.xpath('//r:textStringDetails').to_s

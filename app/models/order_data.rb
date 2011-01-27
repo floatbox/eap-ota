@@ -169,6 +169,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
             Amadeus::Session::WORKING
           )
           amadeus.pnr_archive(seat_count)
+          amadeus.pnr_add_remark
         end
         #amadeus.queue_place_pnr(:number => pnr_number)
         Order.create(:order_data => self)
