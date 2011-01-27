@@ -15,6 +15,9 @@
     letter-spacing: -0.025em;
     color: #777;
 }
+* html #header {
+    position: absolute;
+}
 .ipad-safari .hcontent,
 .iphone-safari .hcontent {
     width: 930px;

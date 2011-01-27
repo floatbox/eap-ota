@@ -1,6 +1,14 @@
 <% cache [:calendar, @query_key] do %>
 <% if @recommendations.present? %>
-<div class="matrix-origin" data-dates="<%= @search.form_segments.map{|fs| fs.date }.join(' ') %>"></div>
+<div class="matrix-origin" data-dates="<%= @search.form_segments.map{|fs| fs.date }.join(' ') %>">
+<% if @search.rt %>
+    <h6 class="segment1">Туда</h6><h6 class="segment2">Обратно</h6>
+<% else %>
+<% @search.form_segments[0, 2].each_with_index do |fs, index| %>
+    <h6 class="segment<%= index + 1 %>"><%= fs.from_as_object.iata || fs.from_as_object.alpha2 %> &rarr; <%= fs.to_as_object.iata || fs.to_as_object.alpha2 %></h6>
+<% end %>
+<% end %>
+</div>
 <% @recommendations.each do |recommendation| %>
     <% different_cabins = recommendation.cabins_except(@search.cabin) %>
     <% recommendation.variants.each_with_index do |variant, variant_index| %>

@@ -1,6 +1,7 @@
 /* [production] Объединить стили в таком же порядке и упаковать */
 
 @import 'promo.css';
+@import 'pushup.css';
 
 @import 'atoms/a-button.css';
 @import 'atoms/b-pseudo.css';

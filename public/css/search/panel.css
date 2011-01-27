@@ -23,12 +23,12 @@
 
 /* Заголовки */
 #search-panel h2 {
+    display: none;
     font-size: 100%;
     font-weight: normal;
     height: 23px;
     color: #c9c8c8;
     line-height: 1.2;
-    visibility: hidden;
 }
 #search-panel h2 b {
     color: #6b6b6b;
@@ -42,7 +42,7 @@
     position: relative;
     z-index: 1;
     width: 320px;
-    height: 316px;
+    height: 339px;
     overflow: hidden;
     background: #f6f1e6;
 }

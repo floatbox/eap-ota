@@ -240,14 +240,23 @@
     background: #555;
 }
 
+.calendar .scroller-bgr {
+    position: relative;
+    width: 595px;
+    height: 23px;
+    overflow: hidden;
+    background: #555;
+}
+
 /* Monthes */
 .calendar .timeline {
     position: absolute;
     top: 0; left: 0;
     z-index: 0;
-    width: 580px;
+    width: 620px;
     overflow: visible;
-    font-size: 13px;
+    font-size: 14px;
+    letter-spacing: -0.0em;
     cursor: default;
 }
 .calendar .timeline li {
@@ -272,9 +281,9 @@
     z-index: 0;
     width: 60px;
     height: 23px;
-    background: #343434;
-    opacity: 0.4;
-    filter: alpha(opacity=40);
+    background: #555;
+    opacity: 0.6;
+    filter: alpha(opacity=60);
     cursor: default;
 }
 .calendar .scroller .before {

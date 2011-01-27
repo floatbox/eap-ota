@@ -733,6 +733,7 @@ processMatrix: function() {
     var ordates, origin = context.find('.matrix-origin');
     var mtab = $('#offers-tab-matrix');    
     if (origin.length) {
+        table.find('.direction').html(origin.html());
         context.find('.offer').removeClass('expanded').addClass('collapsed');
         orDates = origin.attr('data-dates').split(' ');
         mtab.show();

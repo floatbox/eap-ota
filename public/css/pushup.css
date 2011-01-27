@@ -1,0 +1,52 @@
+#pushup {
+    position: fixed;
+    top: 50px;
+    right: 10px;
+    margin: 0;
+    width: 350px;
+    padding: 9px 10px 8px 38px;
+    background: #fff8ce;
+    border: 1px solid #d9c8a3;
+    z-index: 9999;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+}
+* html #pushup {
+    position: absolute;
+}
+#pushup * {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+}
+.withReminder {
+    padding-bottom: 6px;
+}
+#pushup a { 
+    outline-style: none;
+}
+
+#pushup .pushup_messageLink {
+    position: relative;
+    font-size: 16px;
+    line-height: 19px;    
+    cursor: pointer;
+}
+
+#pushup .pushup_icon {
+    position: absolute;
+    top: 0; left: -28px;
+    height: 22px;
+    width: 22px;
+    overflow: hidden;
+}
+
+#pushup .pushup_reminder {
+    font-size: 11px;
+    margin-top: 6px;
+}
+
+#pushup .pushup_reminder .link:hover {
+    text-decoration: underline;
+}

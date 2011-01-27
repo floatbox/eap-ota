@@ -62,7 +62,8 @@
 }
 
 .offer-prices th.ret h6,
-.offer-prices th h6.ret {
+.offer-prices th h6.ret,
+.offer-prices th h6.segment2 {
     color: #b36100;
 }
 
