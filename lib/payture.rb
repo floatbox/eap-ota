@@ -11,24 +11,14 @@ class Payture
     (price * 0.0325 + 3).ceil
   end
 
-  HOST = 'engine-sandbox.payture.com'
-  PEM = <<-"END".gsub(/^\s*/,'')
-    -----BEGIN PUBLIC KEY-----
-    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ
-    8AMIIBCgKCAQEAwebFFBxoAUkFL48Ag8OA
-    7aVOsjjx2ohJGQzPOv0HD8TkkjTpE3NAsTPhz7VQHdaMT2Gbaz4ueT/J2VpkXd4E
-    Zs4RbjFSe4tkT30GTougWe7xstnRbVPekvWoL5GBnW1fqXvcaLcF4Sw8My2ovbVm
-    szNaNrkUl+/qHeo9GPbo6tUSedMj+EybKBqqdoQjPwNEESbxWV2KFFhGz4Pkhy5t
-    NHbgRmc1NDEXNte5KfZzNTtiqFbHDRC+nOskj/mvJlv2DqlugMI2lBtfpRnkcF8M
-    f1cYvvC7eERx5sNAscUqQQnEsXm5wCZOX+g/9kK4NgaDeVr+C4QGqo+Wzk1n1gI/
-    WQIDAQAB
-    -----END PUBLIC KEY-----
-  END
+  def config
+    @@config ||= YAML.load_file(Rails.root + 'config/payture.yml')
+  end
 
   def initialize(opts={})
-    @key = opts[:key] || 'MerchantETerra'
-    @host = opts[:host] || HOST
-    @public = OpenSSL::PKey::RSA.new(opts[:pem] || PEM)
+    @key = opts[:key] || config[:key]
+    @host = opts[:host] || config[:host]
+    @public = OpenSSL::PKey::RSA.new(opts[:pem] || config[:pem])
   end
 
   def pay amount, card, opts={}
