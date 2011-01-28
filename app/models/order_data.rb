@@ -3,6 +3,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   column :email
   column :phone
   has_many :people
+  accepts_nested_attributes_for :people
   attr_writer :card
   attr_accessor :recommendation
   attr_accessor :pnr_number
@@ -10,9 +11,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
   attr_accessor :number
   attr_accessor :order_id
   attr_accessor :variant_id #нужен при восстановлении формы по урлу
-
-  # убить? используется в pnr_add_multi_elements
-  attr_accessor :action
 
   validates_format_of :email, :with =>
   /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email"
