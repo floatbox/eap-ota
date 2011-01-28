@@ -105,12 +105,12 @@ update: function() {
 show: function() {
     var d = this.dropdown, w = $(window), self = this;
     d.css('visibility', 'hidden').show();
-    var coffset = this.el.closest('.filters').offset();
-    var foffset = this.el.find('.control').offset();
+    var foffset = this.el.closest('.filters').offset();
+    var coffset = this.el.find('.control').offset();
     var wheight = $('#page-wrapper').height();
     d.hide().css({
-        'top': Math.min(foffset.top, w.height() + w.scrollTop() - d.height() - 5, wheight - d.height() - 24) - coffset.top,
-        'left': foffset.left - coffset.left,
+        'top': Math.min(coffset.top, w.height() + w.scrollTop() - d.height() - 5, wheight - d.height() - 24) - foffset.top,
+        'left': Math.min(coffset.left, w.width() - d.width() - 3) - foffset.left,
         'visibility': 'inherit'
     });
     setTimeout(function() {
