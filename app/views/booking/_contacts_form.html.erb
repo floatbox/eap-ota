@@ -20,7 +20,7 @@
           :id => "booking-contacts-phone",
           :class => "text g-xl",
           :value => @order.phone || "Номер телефона",
-          :onclick => "return {def: 'Номер телефона', mask: /[\\d \\(\\)\\+-]/i, minl: 7, rules: {req: true}}",
+          :onclick => "return {def: 'Номер телефона', mask: /[\\d \\(\\)\\+-]/i, rules: {req: true, minl: 6}}",
           :title => "номер телефона"
          %>
         <%= o.error_message_on :phone, :id => "error_order_phone" %>
