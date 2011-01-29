@@ -110,7 +110,11 @@ class OrderData < ActiveRecord::BaseWithoutTable
 
   def block_money
     self.order_id = 'am' + self.pnr_number
-    unless Payture.new.block(recommendation.price_with_payment_commission, card, :order_id => order_id)
+
+    response = Payture.new.block(
+      recommendation.price_with_payment_commission, card, :order_id => order_id)
+
+    unless response.success?
       card.errors.add :number, "не удалось провести платеж"
       self.errors.add :card, 'Платеж не прошел'
       return

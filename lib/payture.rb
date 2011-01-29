@@ -11,6 +11,50 @@ class Payture
     (price * 0.0325 + 3).ceil
   end
 
+  class Response
+    def initialize(doc)
+      @doc = doc
+    end
+
+    def success?
+      @doc["Success"] == "True"
+    end
+
+    def err_code?
+      @doc["ErrCode"]
+    end
+
+    def order_id
+      @doc["OrderId"]
+    end
+
+    def amount
+      @doc["Amount"].to_i / 100
+    end
+
+    # 3-D Secure
+    def threeds?
+      @doc["Success"] == "3DS"
+    end
+
+    def acs_url
+      @doc["ACSUrl"]
+    end
+
+    def pa_req
+      @doc["PaReq"]
+    end
+
+    def threeds_key
+      @doc["ThreeDSKey"]
+    end
+
+    # GetState
+    def state
+      @doc["State"]
+    end
+  end
+
   def config
     @@config ||= YAML.load_file(Rails.root + 'config/payture.yml')
   end
@@ -29,9 +73,7 @@ class Payture
     add_creditcard(post, card)
     encrypt_payinfo(post)
 
-    result = post_request 'Pay', post
-    debug "pay #{result.inspect}"
-    result["Success"] == "True"
+    post_request 'Pay', post
   end
 
   # блокировка средств на карте пользователя
@@ -43,9 +85,7 @@ class Payture
     add_creditcard(post, card)
     encrypt_payinfo(post)
 
-    result = post_request 'Block', post
-    debug "block #{result.inspect}"
-    result["Success"] == "True"
+    post_request 'Block', post
   end
 
   def charge opts={}
@@ -54,9 +94,7 @@ class Payture
     add_merchant(post)
     encrypt_payinfo(post)
 
-    result = post_request 'Charge', post
-    debug "charge #{result.inspect}"
-    result["Success"] == "True"
+    post_request 'Charge', post
   end
 
   # разблокировка средств.
@@ -68,9 +106,7 @@ class Payture
     add_money(post, amount)
     encrypt_payinfo(post)
 
-    result = post_request 'Unblock', post
-    debug "unblock #{result.inspect}"
-    result["Success"] == "True"
+    post_request 'Unblock', post
   end
 
   # возврат средств (полный или частичный) на карту пользователя
@@ -81,9 +117,7 @@ class Payture
     add_merchant(post)
     add_money(post, amount)
 
-    result = post_request 'Refund', post
-    debug "refund #{result.inspect}"
-    result["Success"] == "True"
+    post_request 'Refund', post
   end
 
   # уточнение текущего состояния платежа
@@ -107,7 +141,8 @@ class Payture
 
   def post_request action, args
     response = HTTParty.post("http://#{@host}/api/#{action}/", :body => args, :format => :xml)
-    response.parsed_response.values.first
+    debug response.parsed_response.inspect
+    Response.new( response.parsed_response.values.first )
   end
 
   # copied back from active_merchant alfa_bank_gateway
