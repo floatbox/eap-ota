@@ -32,7 +32,12 @@ class Payture
       @doc["Amount"].to_i / 100
     end
 
+    def new_amount
+      @doc["NewAmount"].to_i / 100
+    end
+
     # 3-D Secure
+
     def threeds?
       @doc["Success"] == "3DS"
     end
@@ -50,8 +55,14 @@ class Payture
     end
 
     # GetState
+
     def state
       @doc["State"]
+    end
+
+    # "11/12/2010 9:24:07 AM"
+    def last_change
+      @doc["LastChange"]
     end
   end
 
@@ -92,7 +103,6 @@ class Payture
     post = {}
     add_order(post, opts)
     add_merchant(post)
-    encrypt_payinfo(post)
 
     post_request 'Charge', post
   end
@@ -104,13 +114,11 @@ class Payture
     add_order(post, opts)
     add_merchant(post)
     add_money(post, amount)
-    encrypt_payinfo(post)
 
     post_request 'Unblock', post
   end
 
   # возврат средств (полный или частичный) на карту пользователя
-  # FIXME не получалось ни разу!
   def refund amount, opts={}
     post = {}
     add_order(post, opts)
@@ -123,11 +131,10 @@ class Payture
   # уточнение текущего состояния платежа
   # {"Comment"=>"", "Tag"=>"", "LastChange"=>"11/12/2010 9:24:07 AM", "State"=>"Charged"}
   # "State"=>"Authorized", "Voided", "Charged"
-  def status opts={}
+  def state opts={}
     post = {}
     add_order(post, opts)
     add_merchant(post)
-    encrypt_payinfo(post)
 
     post_request 'GetState', post
   end
