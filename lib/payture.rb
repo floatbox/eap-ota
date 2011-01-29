@@ -150,13 +150,13 @@ class Payture
 
   # for testing purposes
   def self.test_card(opts = {})
-    Billing::CreditCard.new(
+    CreditCard.new(
       {:number => '4111111111111112', :verification_value => '123', :year => 2012, :month => 12, :name => 'card one'}.merge(opts)
     )
   end
 
   def self.test_card2(opts = {})
-    Billing::CreditCard.new(
+    CreditCard.new(
       {:number => '5222230546300090', :verification_value => '123', :year => 2012, :month => 12, :name => 'card two'}.merge(opts)
     )
   end

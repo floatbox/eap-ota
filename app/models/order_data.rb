@@ -18,7 +18,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   validates_format_of :phone, :with => /^[\d \+\-\(\)]+$/
 
   def card
-    @card || Billing::CreditCard.new
+    @card || CreditCard.new
   end
 
 

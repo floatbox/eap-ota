@@ -28,7 +28,7 @@ class BookingController < ApplicationController
     @order = OrderData.get_from_cache(params[:order][:number])
     @order.people_attributes = params[:person_attributes]
     @order.set_flight_date_for_childen_and_infants
-    @order.card = Billing::CreditCard.new(params[:card])
+    @order.card = CreditCard.new(params[:card])
     @order.update_attributes(params[:order])
     if @order.valid?
       if @order.create_booking
