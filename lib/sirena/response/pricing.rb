@@ -52,9 +52,6 @@ module Sirena
       def parse_flight(fi)
         dep_iata = fi.xpath("origin").text
         arr_iata = fi.xpath("destination").text
-        # Здесь должно быть что-то, что конвертировало бы русское в английское
-        dep_iata = convert_to_en(dep_iata)
-        arr_iata = convert_to_en(arr_iata)
         f = Flight.new(
           :operating_carrier_iata => fi.xpath("company").text,
           :marketing_carrier_iata => fi.xpath("company").text,
@@ -79,15 +76,6 @@ module Sirena
           str="0"+str
         end
         str.gsub(":", "")
-      end
-
-      def convert_to_en(str)
-        if str[0] >= "A"[0] && str[0] <= "Z"[0]
-          str
-        else
-          {"ДМД"=>"DME", "ПЛК"=>"LED", "ШРМ"=>"SVO", 
-           "ВНК"=>"VKO", "ЦДГ"=>"CDG"}[str] || "SCU"
-        end
       end
     end
   end
