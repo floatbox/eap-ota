@@ -40,7 +40,7 @@ module Sirena
         http_response.body
       end
 
-      for method_name in %W(pricing availability describe schedule)
+      %W(pricing describe).each do |method_name| # availability schedule)
         define_method method_name.underscore do |params|
           action(method_name, params)
         end
