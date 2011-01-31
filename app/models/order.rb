@@ -5,9 +5,9 @@ class Order < ActiveRecord::Base
   TICKET_STATUS = { 'ticketed' => 'ticketed', 'booked' => 'booked', 'canceled' => 'canceled'}
 
   validates_presence_of :email#, :phone
-  validates_format_of :email, :with => 
+  validates_format_of :email, :with =>
   /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email"
-  
+
   def order_data= order_data
     recommendation = order_data.recommendation
     self.order_id = order_data.order_id
@@ -35,6 +35,10 @@ class Order < ActiveRecord::Base
     Amadeus::Service.pnr_raw(pnr_number)
   end
 
+  def confirm_3ds pa_res, md
+    res = Payture.new.block_3ds(:order_id => self.order_id, :pa_res => pa_res)
+    res.success?
+  end
 
   def charge!
     res = Payture.new.charge(:order_id => self.order_id)

@@ -99,6 +99,16 @@ class Payture
     post_request 'Block', post
   end
 
+  def block_3ds opts={}
+    post = {}
+    add_order(post, opts)
+    add_merchant(post)
+    add_3ds_info(post, opts)
+    encrypt_payinfo(post)
+
+    post_request 'Block3DS', post
+  end
+
   def charge opts={}
     post = {}
     add_order(post, opts)
@@ -168,6 +178,10 @@ class Payture
 
   def add_merchant(post)
     post[:Key] = @key
+  end
+
+  def add_3ds_info(post, opts)
+    post[:PaRes] = opts[:pa_res]
   end
 
   def add_money(post, money)

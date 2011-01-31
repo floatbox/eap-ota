@@ -1,5 +1,6 @@
 # encoding: utf-8
 class BookingController < ApplicationController
+  protect_from_forgery :except => :confirm_3ds
 
   def preliminary_booking
     pricer_form = PricerForm.load_from_cache(params[:query_key])
@@ -32,11 +33,16 @@ class BookingController < ApplicationController
     @order.update_attributes(params[:order])
     if @order.valid?
       if @order.create_booking
-        render :partial => 'success', :locals => {:pnr_path => pnr_form_path(@order.pnr_number), :pnr_number => @order.pnr_number}
+        payture_response = @order.block_money
+        if payture_response.success?
+          render :partial => 'success', :locals => {:pnr_path => pnr_form_path(@order.pnr_number), :pnr_number => @order.pnr_number, :threeds => false}
+        elsif payture_response.threeds?
+          render :partial => 'success', :locals => {:order => @order, :payture_response => payture_response, :threeds => true}
+        else
+          render :partial => 'fail', :locals => {:errors => @order.card.errors[:number]}
+        end
       elsif @order.errors[:pnr_number]
         render :partial => 'fail', :locals => {:errors => @order.errors[:pnr_number]}
-      else
-        render :partial => 'fail', :locals => {:errors => @order.card.errors[:number]}
       end
       return
     elsif !@order.card.valid?
@@ -44,6 +50,16 @@ class BookingController < ApplicationController
         return
     end
     render :json => {:errors => @order.errors_hash}
+  end
+
+
+  def confirm_3ds
+    @order = Order.find_by_order_id(params[:order_id])
+    if @order.confirm_3ds(params['PaRes'], params['MD'])
+      render :text => 'ok'
+    else
+      render :text => 'не получилось'
+    end
   end
 
   def valid_card

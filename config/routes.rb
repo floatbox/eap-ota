@@ -8,6 +8,7 @@ Eviterra::Application.routes.draw do
   match 'booking/form' => 'booking#form', :as => :booking_form
   match 'booking/pay' => 'booking#pay', :as => :booking_pay
   match 'booking/preliminary_booking' => 'booking#preliminary_booking', :as => :preliminary_booking
+  match '/confirm_3ds/:order_id' => 'booking#confirm_3ds', :as => :confirm_3ds
 
   resources :locations do
     get :current, :on => :collection

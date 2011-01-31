@@ -109,17 +109,15 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
 
   def block_money
-    self.order_id = 'am' + self.pnr_number
-
     response = Payture.new.block(
       recommendation.price_with_payment_commission, card, :order_id => order_id)
 
-    unless response.success?
+    if response.success? || response.threeds?
+      return response
+    else
       card.errors.add :number, "не удалось провести платеж"
       self.errors.add :card, 'Платеж не прошел'
       return
-    else
-      return true
     end
   end
 
@@ -163,29 +161,32 @@ class OrderData < ActiveRecord::BaseWithoutTable
         amadeus.ticket_create_tst_from_pricing(:fares_count => fares_count).or_fail!
       end
 
-      if block_money
-        amadeus.pnr_commit_really_hard do
-          add_passport_data(amadeus)
-          amadeus.give_permission_to_offices(
-            Amadeus::Session::TICKETING,
-            Amadeus::Session::WORKING
-          )
-          amadeus.pnr_archive(seat_count)
-          amadeus.pnr_add_remark
-        end
-        #amadeus.queue_place_pnr(:number => pnr_number)
-        Order.create(:order_data => self)
+      #if block_money
+      self.order_id = 'am' + pnr_number
+      amadeus.pnr_commit_really_hard do
+        add_passport_data(amadeus)
+        amadeus.give_permission_to_offices(
+          Amadeus::Session::TICKETING,
+          Amadeus::Session::WORKING
+        )
+        amadeus.pnr_archive(seat_count)
+        amadeus.pnr_add_remark
+      end
+      #amadeus.queue_place_pnr(:number => pnr_number)
+      Order.create(:order_data => self)
 
-        # обилечивание
-        #Amadeus::Service.issue_ticket(pnr_number)
+      # обилечивание
+      #Amadeus::Service.issue_ticket(pnr_number)
 
-        PnrMailer.notification(email, self.pnr_number).deliver if email
-        return pnr_number
+      PnrMailer.notification(email, self.pnr_number).deliver if email
+      return pnr_number
+=begin
       else
         # FIXME добавить какой-то индикатор ошибки блокировки денег
         amadeus.pnr_cancel
         return
       end
+=end
     else
       amadeus.pnr_ignore
       errors.add :pnr_number, 'Ошибка при создании PNR'

@@ -67,7 +67,7 @@ class CreditCard
 
   # Provides proxy access to an expiry date object
   def expiry_date
-    ExpiryDate.new(@month, @year)
+    Billing::ExpiryDate.new(@month, @year)
   end
 
   def year_short= (y)
