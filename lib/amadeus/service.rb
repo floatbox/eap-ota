@@ -58,17 +58,13 @@ module Amadeus
 
   def invoke_rendered action, opts={}
 
-    args = opts[:args] || {}
-    if args.is_a? Hash
-      args = OpenStruct.new({:debug => false}.merge(args))
-    end
+    request = opts[:request]
 
-    if Amadeus.fake || opts[:debug] || args.try(:debug)
+    if Amadeus.fake || opts[:debug] || request.debug
       xml_string = read_latest_xml(action)
       response = parse_string(xml_string)
     else
-      soap_body = render(action, args)
-      #save_xml('request_'+ action, soap_body)
+      soap_body = render(action, request)
       response = nil
       Amadeus::Session.with_session(session) do |booked_session|
         response = invoke(action,
@@ -80,12 +76,7 @@ module Amadeus
       save_xml(action, response.to_xml)
     end
 
-    #if opts[:r]
-    #  response.add_namespace 'r', opts[:r]
-    #end
-    # first element in envelope root
-    response_body = response.xpath('soap:Envelope/soap:Body/*').first
-    response_body
+    response
   end
 
 
@@ -106,7 +97,13 @@ module Amadeus
   end
 
   def render_haml(template, locals=nil)
-    Haml::Engine.new(File.read(template)).render(locals)
+    Haml::Engine.new( File.read(template),
+      :autoclose => [],
+      :preserve => [],
+      :filename => template,
+      :ugly => false,
+      :escape_html => true
+    ).render(locals)
   end
 
   def render_xml(template)
@@ -118,7 +115,8 @@ module Amadeus
 
   # оверрайд методов из SOAPACTions
   def security_authenticate(office)
-    payload = render('Security_Authenticate', OpenStruct.new(:office => office))
+    request = Amadeus::Request::SecurityAuthenticate.new(:office => office)
+    payload = render('Security_Authenticate', request)
     response = invoke(
       'Security_Authenticate',
       :soap_action => 'http://webservices.amadeus.com/1ASIWOABEVI/VLSSLQ_06_1_1A'

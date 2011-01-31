@@ -5,7 +5,7 @@ module Amadeus
 
     SOAP_ACTIONS = YAML.load_file(File.expand_path("../soap_actions.yml",  __FILE__))
 
-    def soap_action(action, args = [])
+    def soap_action(action, args = {})
       if args.is_a? Amadeus::Request::Base
         request_object = args
       else
@@ -14,7 +14,7 @@ module Amadeus
       xmldoc = invoke_rendered action,
         :soap_action => SOAP_ACTIONS[action]['soap_action'],
         :r => SOAP_ACTIONS[action]['r'],
-        :args => request_object
+        :request => request_object
       Amadeus::Response.for(action).new(xmldoc)
     end
 

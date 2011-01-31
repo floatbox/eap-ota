@@ -1,5 +1,4 @@
 # encoding: utf-8
-require 'ostruct'
 module Amadeus
 
   class Error < StandardError
