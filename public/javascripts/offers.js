@@ -255,12 +255,17 @@ toggleCollection: function(mode) {
     $('.offers-improper', context).toggleClass('g-none', mode);
 },
 processUpdate: function() {
-    var self = this, u = this.update;
-    if (u.pcontent && u.pcontent.indexOf('offers-options') > 0) {
-        this.loading.find('h3').html('&nbsp;&nbsp;Еще чуть-чуть&hellip;');
-        var queue = [function() {
-            $('#offers-pcollection').html(u.pcontent);
+    var self = this, u = this.update, queue = [];
+    if (u.mcontent && u.mcontent.indexOf('matrix-origin') > 0) {
+        queue.push(function() {
             $('#offers-mcollection').html(u.mcontent);
+        }, function() {
+            self.processMatrix();        
+        });
+    }
+    if (u.pcontent && u.pcontent.indexOf('offers-options') > 0) {
+        queue.push(function() {
+            $('#offers-pcollection').html(u.pcontent);
         }, function() {
             self.updateFilters();
         }, function() {
@@ -270,42 +275,49 @@ processUpdate: function() {
         }, function() {
             self.showDepartures();
         }, function() {
-            self.processMatrix();
-        }, function() {
             self.showRecommendations();
-        }, function() {
-            var b = app.booking, vid = b.el && b.el.attr('data-variant');
-            if (vid && !b.variant) {
-                var vparts = vid.split('-');
-                b.variant = $('#offers-' + vparts[0] + ' .offer-variant[data-index="' + vparts[1] + '"]').eq(0);
-                b.offer = b.variant.closest('.offer');
-                self.showVariant(b.variant);
-                b.el.appendTo(b.offer).addClass('restored');
-                $('#offers-tabs').trigger('set', vparts[0]);
-            } else {
-                $('#offers-tabs').trigger('set', self.selectedTab || pageurl.tab || 'featured');
-                pageurl.update('search', $('#offers-options').attr('data-query_key'));
-                pageurl.title('авиабилеты ' + self.title.attr('data-title'));
-            }
         }, function() {
             self.content.children('.offers-context').remove();
             self.content.find('.offers-context').prependTo(self.content).removeClass('g-none');
             self.toggleCollection(true);
-            self.toggle('results');
-            var b = app.booking;
-            if (b.el && b.el.hasClass('restored')) {
-                b.show();
-                b.el.removeClass('restored g-none');
-                b.fasten(b.offer);
-                b.init();
-            }
-            delete(u.pcontent);
-            delete(u.mcontent);
-        }];
+        });
+    } else {
+        this.variants = [];
+        this.items = [];    
+    }
+    if (queue.length) {
+        this.loading.find('h3').html('&nbsp;&nbsp;Еще чуть-чуть&hellip;');        
         var qstep = 0, processQueue = function() {
             queue[qstep++]();
             if (queue[qstep]) setTimeout(processQueue, 150);
         };
+        queue.push(function() {
+            self.toggle('results');
+            var imprecise = self.variants.length == 0;
+            $('#offers-filter').toggleClass('g-none', imprecise);
+            $('#offers-tabs').toggleClass('g-none', imprecise);
+            $('#offers-imprecise').toggleClass('g-none', !imprecise);
+            var b = app.booking, vid = b.el && b.el.attr('data-variant');
+            if (vid && !b.variant) {
+                var vparts = vid.split('-');
+                b.variant = $('#offers-' + vparts[0] + ' .offer-variant[data-index="' + vparts[1] + '"]').eq(0);
+                if (b.variant) {
+                    b.offer = b.variant.closest('.offer');
+                    self.showVariant(b.variant);
+                    $('#offers-tabs').trigger('set', vparts[0]);
+                    b.el.appendTo(b.offer).removeClass('g-none');
+                    b.show();
+                    b.fasten(b.offer);
+                    b.init();
+                }
+            } else {
+                $('#offers-tabs').trigger('set', imprecise ? 'matrix' : (self.selectedTab || pageurl.tab || 'featured'));
+                pageurl.update('search', $(imprecise ? '#offers-matrix .matrix-origin' : '#offers-options').attr('data-query_key'));
+                pageurl.title('авиабилеты ' + self.title.attr('data-title'));
+            }
+            delete(u.pcontent);
+            delete(u.mcontent);
+        });
         setTimeout(processQueue, 500);
     } else {
         this.toggle('empty');
@@ -313,8 +325,6 @@ processUpdate: function() {
         $('#offers-mcollection').html('');
         pageurl.update('search', undefined);
         pageurl.title();
-        this.variants = [];
-        this.items = [];
         delete(u.pcontent);
         delete(u.mcontent);
     }
@@ -779,7 +789,7 @@ processMatrix: function() {
             cheap = {price: summary.price, cells: cell};
         }
     });
-    if (cheap.length / variants.length < 0.6) {
+    if (cheap.cells.length / variants.length < 0.6) {
         cheap.cells.addClass('cheap');
     }
     $(rows[4].cells[4]).click();
