@@ -779,7 +779,7 @@ processMatrix: function() {
             cheap = {price: summary.price, cells: cell};
         }
     });
-    if (cheap.length / variants.length < 0.6) {
+    if (cheap.cells.length / variants.length < 0.6) {
         cheap.cells.addClass('cheap');
     }
     $(rows[4].cells[4]).click();
