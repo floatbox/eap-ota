@@ -2,27 +2,8 @@
 <html>
 <head>
     <%= render 'shared/head_common', {:title => 'авиабилеты по всему миру онлайн'} %>
-    
     <link rel="stylesheet" type="text/css" href="/css/main.css">
-
-    <!-- [production] Все нижеследующие скрипты объединить в таком же порядке и упаковать -->
-    <script type="text/javascript" src="/javascripts/lib/json2.js"></script>
-    <script type="text/javascript" src="/javascripts/lib/pushup.js"></script>
-    <script type="text/javascript" src="/javascripts/main.js"></script>
-    <script type="text/javascript" src="/javascripts/pageurl.js"></script>
-    <script type="text/javascript" src="/javascripts/autocomplete.js"></script>
-    <script type="text/javascript" src="/javascripts/radio.js"></script>
-    <script type="text/javascript" src="/javascripts/search.js"></script>
-    <script type="text/javascript" src="/javascripts/map.js"></script>    
-    <script type="text/javascript" src="/javascripts/calendar.js"></script>
-    <script type="text/javascript" src="/javascripts/filters.js"></script>
-    <script type="text/javascript" src="/javascripts/offers.js"></script>
-    <script type="text/javascript" src="/javascripts/timer.js"></script>
-    <script type="text/javascript" src="/javascripts/hint.js"></script>
-    <script type="text/javascript" src="/javascripts/booking/validation.js"></script>
-    <script type="text/javascript" src="/javascripts/booking/wizard.js"></script>
-    <script type="text/javascript" src="/javascripts/booking/form.js"></script>
-
+    <%= javascript_include_tag "lib/json2", "lib/pushup", "main", "pageurl", "autocomplete", "radio", "search", "map", "calendar", "filters", "offers", "timer", "hint", "booking/validation", "booking/wizard", "booking/form" %>
 </head>
 <body>
 <%= render 'shared/header' %>

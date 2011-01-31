@@ -1,6 +1,6 @@
 <% cache [:calendar, @query_key] do %>
 <% if @recommendations.present? %>
-<div class="matrix-origin" data-dates="<%= @search.form_segments.map{|fs| fs.date }.join(' ') %>">
+<div class="matrix-origin g-none" data-dates="<%= @search.form_segments.map{|fs| fs.date }.join(' ') %>" data-query_key="<%= @query_key %>">
 <% if @search.rt %>
     <h6 class="segment1">Туда</h6><h6 class="segment2">Обратно</h6>
 <% else %>
