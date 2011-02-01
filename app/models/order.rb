@@ -1,7 +1,7 @@
 # encoding: utf-8
 class Order < ActiveRecord::Base
 
-  PAYMENT_STATUS = { 'blocked' => 'blocked', 'charged' => 'charged'}
+  PAYMENT_STATUS = {'not blocked' => 'not blocked', 'blocked' => 'blocked', 'charged' => 'charged'}
   TICKET_STATUS = { 'ticketed' => 'ticketed', 'booked' => 'booked', 'canceled' => 'canceled'}
 
   validates_presence_of :email#, :phone
@@ -27,7 +27,7 @@ class Order < ActiveRecord::Base
       self.price_fare = recommendation.price_fare.to_i
       self.price_tax = recommendation.price_tax_and_markup.to_i
     end
-    self.payment_status = 'blocked'
+    self.payment_status = 'not blocked'
     self.ticket_status = 'booked'
   end
 
@@ -52,12 +52,26 @@ class Order < ActiveRecord::Base
     res.success?
   end
 
+  def money_blocked!
+    send_email
+    update_attribute(:payment_status, 'blocked')
+  end
+
   def ticket!
     update_attribute(:ticket_status, 'ticketed')
   end
 
   def cancel!
+    #использовать осторожно. Отменяет существующую бронь. видимо, при несработавшем 3ds использовать нельзя.
+    begin
+      amadeus = Amadeus::Service.new(:book => true)
+      amadeus.pnr_retrieve(:number => pnr_number)
+      amadeus.pnr_cancel
+    rescue
+    end
     update_attribute(:ticket_status, 'canceled')
+  ensure
+    amadeus.session.destroy
   end
 
   def send_email

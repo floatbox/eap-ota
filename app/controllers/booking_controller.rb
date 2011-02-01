@@ -35,11 +35,12 @@ class BookingController < ApplicationController
       if @order.create_booking
         payture_response = @order.block_money
         if payture_response.success?
-          Order.find_by_order_id(@order.order_id).send_email
+          @order.order.money_blocked!
           render :partial => 'success', :locals => {:pnr_path => pnr_form_path(@order.pnr_number), :pnr_number => @order.pnr_number}
         elsif payture_response.threeds?
           render :partial => 'threeds', :locals => {:order => @order, :payture_response => payture_response}
         else
+          @order.order.cancel!
           render :partial => 'fail', :locals => {:errors => @order.card.errors[:number]}
         end
       elsif @order.errors[:pnr_number]
@@ -56,8 +57,8 @@ class BookingController < ApplicationController
 
   def confirm_3ds
     @order = Order.find_by_order_id(params[:order_id])
-    if @order.confirm_3ds(params['PaRes'], params['MD'])
-      @order.send_email
+    if @order && @order.confirm_3ds(params['PaRes'], params['MD'])
+      @order.money_blocked!
       render :text => 'ok'
     else
       render :text => 'не получилось'

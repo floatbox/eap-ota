@@ -10,6 +10,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   attr_accessor :people_count
   attr_accessor :number
   attr_accessor :order_id
+  attr_reader :order # то, что сохраняется в базу
   attr_accessor :variant_id #нужен при восстановлении формы по урлу
 
   validates_format_of :email, :with =>
@@ -173,7 +174,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
         amadeus.pnr_add_remark
       end
       #amadeus.queue_place_pnr(:number => pnr_number)
-      Order.create(:order_data => self)
+      @order = Order.create(:order_data => self)
 
       # обилечивание
       #Amadeus::Service.issue_ticket(pnr_number)
