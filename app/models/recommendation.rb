@@ -212,7 +212,7 @@ class Recommendation
   end
 
   def check_price_and_availability(pricer_form, validating_carrier_code)
-    amadeus = Amadeus::Service.new(:book => true)
+    amadeus = Amadeus.booking
     self.price_fare, self.price_tax =
       amadeus.fare_informative_pricing_without_pnr(
         :flights => flights,
