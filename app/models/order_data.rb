@@ -130,15 +130,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
     recommendation.validating_carrier.iata
   end
 
-  #4 следующих метода нужно для нормального pnr_add_multi_elements
-  def flights
-    []
-  end
-
-  def debug
-    false
-  end
-
   # по идее, как-то должно быть перенесено прямо в lib/amadeus
   def create_booking
     amadeus = Amadeus.booking
