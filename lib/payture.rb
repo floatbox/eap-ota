@@ -104,7 +104,6 @@ class Payture
     add_order(post, opts)
     add_merchant(post)
     add_3ds_info(post, opts)
-    encrypt_payinfo(post)
 
     post_request 'Block3DS', post
   end

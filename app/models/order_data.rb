@@ -10,6 +10,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   attr_accessor :people_count
   attr_accessor :number
   attr_accessor :order_id
+  attr_reader :order # то, что сохраняется в базу
   attr_accessor :variant_id #нужен при восстановлении формы по урлу
 
   validates_format_of :email, :with =>
@@ -129,18 +130,9 @@ class OrderData < ActiveRecord::BaseWithoutTable
     recommendation.validating_carrier.iata
   end
 
-  #4 следующих метода нужно для нормального pnr_add_multi_elements
-  def flights
-    []
-  end
-
-  def debug
-    false
-  end
-
   # по идее, как-то должно быть перенесено прямо в lib/amadeus
   def create_booking
-    amadeus = Amadeus::Service.new(:book => true)
+    amadeus = Amadeus.booking
     amadeus.air_sell_from_recommendation(
       :segments => recommendation.variants[0].segments, :people_count => seat_count
     ).or_fail!
@@ -161,7 +153,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
         amadeus.ticket_create_tst_from_pricing(:fares_count => fares_count).or_fail!
       end
 
-      #if block_money
       self.order_id = 'am' + pnr_number
       amadeus.pnr_commit_really_hard do
         add_passport_data(amadeus)
@@ -173,20 +164,12 @@ class OrderData < ActiveRecord::BaseWithoutTable
         amadeus.pnr_add_remark
       end
       #amadeus.queue_place_pnr(:number => pnr_number)
-      Order.create(:order_data => self)
+      @order = Order.create(:order_data => self)
 
       # обилечивание
       #Amadeus::Service.issue_ticket(pnr_number)
 
-      PnrMailer.notification(email, self.pnr_number).deliver if email
       return pnr_number
-=begin
-      else
-        # FIXME добавить какой-то индикатор ошибки блокировки денег
-        amadeus.pnr_cancel
-        return
-      end
-=end
     else
       amadeus.pnr_ignore
       errors.add :pnr_number, 'Ошибка при создании PNR'

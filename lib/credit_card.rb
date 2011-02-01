@@ -156,7 +156,7 @@ class CreditCard
 
   def validate_card_number #:nodoc:
     errors.add :number, "is not a valid credit card number" unless CreditCard.valid_number?(number)
-    unless errors.on(:number) || errors.on(:type)
+    unless errors[:number].present? || errors[:type].present?
       errors.add :type, "is not the correct card type" unless CreditCard.matching_type?(number, type)
     end
   end

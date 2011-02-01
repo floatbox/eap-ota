@@ -1,0 +1,13 @@
+<div class="result" data-type="success">
+    <p class="success"><strong>Подтверждение 3ds</strong> </p>
+    <% form_tag payture_response.acs_url do %>
+      <%= hidden_field_tag 'PaReq', payture_response.pa_req %>
+      <%= hidden_field_tag 'TermUrl', confirm_3ds_url(:order_id => order.order_id) %>
+      <%= hidden_field_tag 'MD', payture_response.threeds_key %>
+      <%= submit_tag 'Подтвердить' %>
+    <% end %>
+    <p class="tip">
+        <a class="stop-booking" href="#">Вернуться к выбору вариантов</a>
+        <a href="#">Что делать, если на почту ничего не пришло?</a>
+    </p>
+</div>
