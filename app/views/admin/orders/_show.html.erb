@@ -1,4 +1,5 @@
 <div id="term">Терминал: <pre><%= @item.raw %></pre></div>
+<div id="payture">Платежная система: <%= @item.payture_state %></div>
 <table><tr>
 <% if @item.payment_status == 'blocked'  %>
   <td><%= button_to 'Charge', {:action => 'charge', :id => @item.id} %></td>
