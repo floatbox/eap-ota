@@ -178,7 +178,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
       # обилечивание
       #Amadeus::Service.issue_ticket(pnr_number)
 
-      PnrMailer.notification(email, self.pnr_number).deliver if email
       return pnr_number
     else
       amadeus.pnr_ignore
