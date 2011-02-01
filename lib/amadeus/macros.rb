@@ -31,8 +31,10 @@ module Amadeus
       pnr_add_multi_elements :pnr_action => :ER
     end
 
+    # сохраняет pnr!
     def pnr_cancel
       cmd('XI')
+      pnr_commit
     end
 
     def pnr_commit_really_hard
