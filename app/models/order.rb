@@ -53,8 +53,8 @@ class Order < ActiveRecord::Base
   end
 
   def money_blocked!
-    send_email
     update_attribute(:payment_status, 'blocked')
+    send_email
   end
 
   def ticket!
