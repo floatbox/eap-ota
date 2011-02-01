@@ -367,30 +367,16 @@ updateFilters: function() {
     var self = this;
     var data = $.parseJSON($('#offers-options').attr('data-filters'));
     $('#offers-reset-filters').addClass('g-none');
-    $('#offers-filter .flight').each(function() {
-        var active = $('.filter', this).each(function() {
-            var name = $(this).attr('data-name');
-            var filter = self.filters[name];
-            filter.fill(data[name]);
-            filter.el.toggleClass('g-none', filter.items.length < 2);
-        }).filter(':not(.g-none)');
-        if (active.length > 0) {
-            var city = $('.city', this);
-            city.text((data.locations || [])[city.attr('data-location')] || '');
-            $('.conjunction', this).toggle(active.length > 1);
-            $(this).removeClass('g-none');
-        } else {
-            $(this).addClass('g-none');
-        }
-    });
-    var items = $('#offers-filter .filters-list > .filter').each(function() {
+    $('#offers-filter .filter').each(function() {
         var name = $(this).attr('data-name');
         var filter = self.filters[name];
         filter.fill(data[name]);
         filter.el.toggleClass('g-none', filter.items.length < 2);
-        $(this).next('.comma').toggle(!filter.el.hasClass('g-none'));
+        var lid = filter.el.attr('data-location');
+        if (lid && data.locations[lid]) {
+            filter.el.find('.control').html((lid.charAt(0) == 'd' ? 'вылет ' : 'прилёт ') + data.locations[lid]);
+        }
     });
-    items.filter(':not(.g-none)').last().next('.comma').hide();
     this.currentData = data;
     this.activeFilters = {};
     this.filterable = true;
@@ -479,6 +465,7 @@ filterOffers: function() {
     this.filtered = amount != total;
     this.showAmount(amount, total);
     this.toggleCollection(amount > 0);
+    $('#offers-empty-filters').toggleClass('g-none', !empty);
     $('#offers-reset-filters').toggleClass('g-none', empty);
 },
 applySort: function(key) {

@@ -2,7 +2,7 @@
 
     <!-- Человекочитаемая строка запроса -->
     <div id="offers-title">
-        <h1></h1>
+        <h1>Из Москвы в Париж</h1>
     </div>
 
     <!-- Панель ожидания результатов -->
@@ -31,57 +31,66 @@
     <div id="offers-results" class="g-none">
     
         <!-- Только другие даты -->
-        <div id="offers-imprecise">
+        <div id="offers-imprecise" class="g-none">
             <p>Мы не смогли ничего найти в выбранные дни, но есть предложения на другие даты</p>
         </div>
         
         <!-- Фильтр результатов -->
-        <table id="offers-filter">
+        <div id="offers-filter">
+        <div class="offers-filter-collapsed">
+        
+        </div>
+        <table class="offers-filter-expanded">
         <tr>
-            <th>Уточнить</th>
+            <th>
+                <span id="offers-empty-filters">Уточнить</span>
+                <a href="#" class="g-none" id="offers-reset-filters">Все&nbsp;варианты</a>
+            </th>
             <td>
+                <h5>Пересадки</h5>
                 <div class="filters">
-                <div class="filters-list">
                     <div class="filter" id="layovers-filter" data-name="layovers"><span class="control">количество и длительность пересадок</span><span class="values"></span><div class="dropdown"><dl><dt>количество пересадок</dt><dd class="empty">всё равно</dd></dl></div></div>
-                    <div class="flight">
-                        <div class="filter" data-name="dpt_time_0"><span class="control">время</span><span class="values"></span><div class="dropdown"><dl><dt>время вылета</dt><dd class="empty">любое</dd></dl></div></div> 
-                        <span class="conjunction">и&nbsp;</span><div class="filter" data-name="dpt_city_0"><span class="control">город</span><span class="values"></span><div class="dropdown"><dl><dt>город вылета</dt><dd class="empty">любой</dd></dl></div></div><div class="filter" data-name="dpt_airport_0"><span class="control">аэропорт</span><span class="values"></span><div class="dropdown"><dl><dt>аэропорт вылета</dt><dd class="empty">любой</dd></dl></div></div>
-                        вылета <span class="city" data-location="dpt_0">туда</span>,
-                    </div>
-                    <div class="flight">
-                        <div class="filter" data-name="arv_time_0"><span class="control">время</span><span class="values"></span><div class="dropdown"><dl><dt>время прилёта</dt><dd class="empty">любое</dd></dl></div></div>
-                        <span class="conjunction">и&nbsp;</span><div class="filter" data-name="arv_city_0"><span class="control">город</span><span class="values"></span><div class="dropdown"><dl><dt>город прилёта</dt><dd class="empty">любой</dd></dl></div></div><div class="filter" data-name="arv_airport_0"><span class="control">аэропорт</span><span class="values"></span><div class="dropdown"><dl><dt>аэропорт прилёта</dt><dd class="empty">любой</dd></dl></div></div>
-                        прилёта <span class="city" data-location="arv_0">туда</span>,
-                    </div>
-                    <div class="flight">
-                        <div class="filter" data-name="dpt_time_1"><span class="control">время</span><span class="values"></span><div class="dropdown"><dl><dt>время вылета</dt><dd class="empty">любое</dd></dl></div></div>
-                        <span class="conjunction">и&nbsp;</span><div class="filter" data-name="dpt_city_1"><span class="control">город</span><span class="values"></span><div class="dropdown"><dl><dt>город вылета</dt><dd class="empty">любой</dd></dl></div></div><div class="filter" data-name="dpt_airport_1"><span class="control">аэропорт</span><span class="values"></span><div class="dropdown"><dl><dt>аэропорт вылета</dt><dd class="empty">любой</dd></dl></div></div>
-                        вылета <span class="city" data-location="dpt_1">обратно</span>,
-                    </div>
-                    <div class="flight">
-                        <div class="filter" data-name="arv_time_1"><span class="control">время</span><span class="values"></span><div class="dropdown"><dl><dt>время прилёта</dt><dd class="empty">любое</dd></dl></div></div>
-                        <span class="conjunction">и&nbsp;</span><div class="filter" data-name="arv_city_1"><span class="control">город</span><span class="values"></span><div class="dropdown"><dl><dt>город прилёта</dt><dd class="empty">любой</dd></dl></div></div><div class="filter" data-name="arv_airport_1"><span class="control">аэропорт</span><span class="values"></span><div class="dropdown"><dl><dt>аэропорт прилёта</dt><dd class="empty">любой</dd></dl></div></div>
-                        прилёта <span class="city" data-location="arv_1">обратно</span>,
-                    </div>
-                    <div class="flight">
-                        <div class="filter" data-name="dpt_time_2"><span class="control">время</span><span class="values"></span><div class="dropdown"><dl><dt>время вылета</dt><dd class="empty">любое</dd></dl></div></div>
-                        <span class="conjunction">и&nbsp;</span><div class="filter" data-name="dpt_city_2"><span class="control">город</span><span class="values"></span><div class="dropdown"><dl><dt>город вылета</dt><dd class="empty">любой</dd></dl></div></div><div class="filter" data-name="dpt_airport_2"><span class="control">аэропорт</span><span class="values"></span><div class="dropdown"><dl><dt>аэропорт вылета</dt><dd class="empty">любой</dd></dl></div></div>
-                        вылета <span class="city" data-location="dpt_2"></span>,
-                    </div>
-                    <div class="flight">
-                        <div class="filter" data-name="arv_time_2"><span class="control">время</span><span class="values"></span><div class="dropdown"><dl><dt>время прилёта</dt><dd class="empty">любое</dd></dl></div></div>
-                        <span class="conjunction">и&nbsp;</span><div class="filter" data-name="arv_city_2"><span class="control">город</span><span class="values"></span><div class="dropdown"><dl><dt>город прилёта</dt><dd class="empty">любой</dd></dl></div></div><div class="filter" data-name="arv_airport_2"><span class="control">аэропорт</span><span class="values"></span><div class="dropdown"><dl><dt>аэропорт прилёта</dt><dd class="empty">любой</dd></dl></div></div>
-                        прилёта <span class="city" data-location="arv_2"></span>,
-                    </div>
-                    <div class="filter" data-name="cities"><span class="control">город пересадки</span><span class="values"></span><div class="dropdown"><dl><dt>город пересадки</dt><dd class="empty">любой</dd></dl></div></div><span class="comma">,</span>
-                    <div class="filter" data-name="planes"><span class="control">самолёт</span><span class="values"></span><div class="dropdown"><dl><dt>самолёт</dt><dd class="empty">любой</dd></dl></div></div><span class="comma">,</span>
-                    <div class="filter" data-name="carriers"><span class="control">авиакомпанию</span><span class="values"></span><div class="dropdown"><dl><dt>авиакомпания</dt><dd class="empty">любая</dd></dl></div></div>
-                </div>
-                <a href="#" class="g-none" id="offers-reset-filters">все&nbsp;варианты</a>
+                    <div class="filter" data-name="cities"><span class="control">город пересадки</span><span class="values">…</span><div class="dropdown"><dl><dt>город пересадки</dt><dd class="empty">любой</dd></dl></div></div>
                 </div>
             </td>
+            <td>
+                <h5>Время</h5>
+                <div class="filters">
+                    <div class="filter" data-name="dpt_time_0" data-location="dpt_0"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>время вылета</dt><dd class="empty">любое</dd></dl></div></div>
+                    <div class="filter" data-name="arv_time_0" data-location="arv_0"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>время прилёта</dt><dd class="empty">любое</dd></dl></div></div>
+                    <div class="filter" data-name="dpt_time_1" data-location="dpt_1"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>время вылета</dt><dd class="empty">любое</dd></dl></div></div>
+                    <div class="filter" data-name="arv_time_1" data-location="arv_1"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>время прилёта</dt><dd class="empty">любое</dd></dl></div></div>
+                    <div class="filter" data-name="dpt_time_2" data-location="dpt_2"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>время вылета</dt><dd class="empty">любое</dd></dl></div></div>
+                    <div class="filter" data-name="arv_time_2" data-location="arv_2"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>время прилёта</dt><dd class="empty">любое</dd></dl></div></div>
+                </div>
+            </td>
+            <td>
+                <h5>Аэропорты</h5>
+                <div class="filters">
+                    <div class="filter" data-name="dpt_city_0" data-location="dpt_0"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>город вылета</dt><dd class="empty">любой</dd></dl></div></div>
+                    <div class="filter" data-name="dpt_airport_0" data-location="dpt_0"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>аэропорт вылета</dt><dd class="empty">любой</dd></dl></div></div>
+                    <div class="filter" data-name="arv_city_0" data-location="arv_0"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>город прилёта</dt><dd class="empty">любой</dd></dl></div></div>
+                    <div class="filter" data-name="arv_airport_0" data-location="arv_0"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>аэропорт прилёта</dt><dd class="empty">любой</dd></dl></div></div>
+                    <div class="filter" data-name="dpt_city_1" data-location="dpt_1"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>город вылета</dt><dd class="empty">любой</dd></dl></div></div>
+                    <div class="filter" data-name="dpt_airport_1" data-location="dpt_1"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>аэропорт вылета</dt><dd class="empty">любой</dd></dl></div></div>
+                    <div class="filter" data-name="arv_city_1" data-location="arv_1"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>город прилёта</dt><dd class="empty">любой</dd></dl></div></div>
+                    <div class="filter" data-name="arv_airport_1" data-location="arv_1"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>аэропорт прилёта</dt><dd class="empty">любой</dd></dl></div></div>
+                    <div class="filter" data-name="dpt_city_2" data-location="dpt_2"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>город вылета</dt><dd class="empty">любой</dd></dl></div></div>
+                    <div class="filter" data-name="dpt_airport_2" data-location="dpt_2"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>аэропорт вылета</dt><dd class="empty">любой</dd></dl></div></div>
+                    <div class="filter" data-name="arv_city_2" data-location="arv_2"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>город прилёта</dt><dd class="empty">любой</dd></dl></div></div>
+                    <div class="filter" data-name="arv_airport_2" data-location="arv_2"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>аэропорт прилёта</dt><dd class="empty">любой</dd></dl></div></div>
+                </div>
+            </td>
+            <td>
+                <h5>Другие детали</h5>
+                <div class="filters">
+                    <div class="filter" data-name="carriers"><span class="control">авиакомпания</span><span class="values">…</span><div class="dropdown"><dl><dt>авиакомпания</dt><dd class="empty">любая</dd></dl></div></div>                
+                    <div class="filter" data-name="planes"><span class="control">самолёт</span><span class="values">…</span><div class="dropdown"><dl><dt>самолёт</dt><dd class="empty">любой</dd></dl></div></div>
+                </div>
+            </td>               
         </tr>
         </table>
+        </div>
 
         <!-- Вкладки списка результатов -->
         <div id="offers-tabs">

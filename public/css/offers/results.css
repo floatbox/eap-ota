@@ -1,6 +1,5 @@
 /* Блок с результатами */
 #offers {
-    padding-top: 15px;
     background: #fff;
 }
 #offers-results {
@@ -15,7 +14,8 @@
 
 /* Заголовок */
 #offers-title {
-    margin: 0 15px 15px;
+    padding: 15px;
+    background: #FFF;
 }
 #offers-title h1 {
     font: bold 190%/100% Arial, sans-serif;
@@ -24,6 +24,12 @@
 }
 #offers-title h1:first-letter {
     text-transform: uppercase;
+}
+.scrolled #offers-title {
+    position: fixed;
+    top: 0;
+    width: 930px;
+    z-index: 10;
 }
 
 /* Список предложений */

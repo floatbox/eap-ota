@@ -1,3 +1,4 @@
+/* Fixed header */
 #header {
     position: fixed;
     top: 0;
@@ -30,6 +31,13 @@
     background: url(/img/header/shadow.png) repeat-x;
 }
 
+/* Scrolled header */
+.scrolled #header {
+    position: absolute;
+    top: 608px;
+}
+
+/* Header elements */
 #logo {
     position: absolute;
     top: 0; left: -10px;

@@ -18,6 +18,7 @@ init: function(options) {
             });
         }
     });
+    this.placeholder = this.values.html();
     if (options && options.preserve) {
         this.values.addClass('preserved');
     }
@@ -95,9 +96,10 @@ update: function() {
         values = result = [];
     }
     if (result.length) {
-        this.values.html(' (' + result.enumeration(' или ') + ')').show();
+        var template = this.template || ' ($)';
+        this.values.html(template.replace('$', result.enumeration(' или&nbsp;'))).show();
     } else {
-        this.values.html('').hide();
+        this.values.html(this.placeholder).toggle(Boolean(this.placeholder));
     }
     this.value = values;
     this.el.trigger('change', [values]);

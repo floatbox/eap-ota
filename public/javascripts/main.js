@@ -169,6 +169,20 @@ $.animateScrollTop = function(st, complete) {
     }, options);
 };
 
+/* Fixed blocks */
+var fixedBlocks = {
+init: function() {
+    var that = this;
+       
+},
+update: function() {
+
+},
+apply: function() {
+    var scrolled = this.canvas.scrollTop();
+}
+};
+
 /* Console */
 window.log = (document.location.host).indexOf('team') > -1 ? (window.console && console.log || alert) : $.noop;
 

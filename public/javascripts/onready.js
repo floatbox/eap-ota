@@ -7,6 +7,7 @@
     offersList.filters = {};
     $('#offers-filter .filter').each(function() {
         var f = new controls.Filter($(this));
+        f.template = ': $';
         f.el.bind('change', function(e, values) {
             var name = $(this).attr('data-name');
             if (offersList.filterable) offersList.applyFilter(name, values);
@@ -14,10 +15,15 @@
         offersList.filters[$(this).attr('data-name')] = f;
     });
     
+    // Фильтр количества пересадок
+    var lf = offersList.filters['layovers'];
+    lf.dropdown.removeClass('dropdown').addClass('vlist');
+    lf.show = function() {};
+    lf.hide = function() {};
+    
     // Сброс фильтров
     $('#offers-reset-filters').click(function(event) {
         event.preventDefault();
-        $(this).addClass('g-none');
         offersList.resetFilters();
         offersList.applyFilter();
     });
@@ -34,7 +40,7 @@
         search.segments[0].to.focus();
     }
     
-    /* Сохраненное бронирование */
+    // Сохраненное бронирование
     if (pageurl.booking) {
         app.booking.el = $('<div class="booking"></div>').appendTo(offersList.results);
         app.booking.load(pageurl.booking);

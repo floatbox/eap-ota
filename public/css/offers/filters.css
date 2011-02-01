@@ -1,62 +1,89 @@
-/* Фильтры предложений */
-
+/* Filters */
 #offers-filter {
     position: relative;
     top: -3px;
-    line-height: 137.5%;
+    background: #FFF;
+    font-size: 14px;
+    line-height: 18px;
     letter-spacing: -0.014em;
 }
-
 #offers-filter th {
-    width: 70px;
+    width: 105px;
     padding: 0 0 12px 15px;
     font-weight: bold;
     text-align: left;
     vertical-align: top;
     color: #ed1192;
 }
-
 #offers-filter td {
-    padding: 0 15px 12px 10px;
+    width: 180px;
+    padding: 0 15px 12px 15px;
     vertical-align: top;
     color: #333;
 }
-
-#offers-filter .filters-list {
-    display: inline;
-    margin-right: 5px;
-}
-
 #offers-reset-filters {
     color: #ED1192;
 }
 
-#offers-filter .flight {
-    display: inline;
+/* Fixed filters */
+.scrolled #offers-filter {
+    position: fixed;
+    top: 57px;
+    z-index: 10;
 }
 
-#offers-filter .pseudo:hover {
-    color: #000;
+/* Filters group */
+#offers-filter h5 {
+    margin: 0 0 3px;
+    font-weight: bold;
 }
-
+#offers-filter .filter {
+    display: block;
+    margin: 0 0 3px;
+}
 #offers-filter .dropdown {
     margin-top: -6px;
-    line-height: 118.75%;
+    font-size: 16px;
+    line-height: 19px;
 }
 
-#layovers-filter {
-    background: #f5eec9;
+/* Layovers */
+#offers-filter #layovers-filter {
+    margin-bottom: 0;
+}
+#layovers-filter .control {
+    display: none;
+}
+#layovers-filter .values {
+    position: absolute;
+    height: 0;
+    overflow: hidden;
+}
+#layovers-filter .vlist {
     position: relative;
-    left: -5px;
-    padding: 0 5px 2px;
-    border-radius: 3px;
+    left: -3px;
+    overflow: hidden;
+    zoom: 1;
+}
+#layovers-filter .vlist dt {
+    display: none;
+}
+#layovers-filter .vlist dd {
+    display: inline;
+    float: left;
+    clear: left;
+    margin: 0 3px 3px;
+    white-space: nowrap;
+    text-decoration: underline;
+    cursor: pointer;
+}
+#layovers-filter .vlist dd.selected {
+    margin: 0 0 3px;
+    padding: 0 3px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
-}
-#layovers-filter .dropdown {
-    margin-left: -11px;
-}
-.mac-safari #layovers-filter .dropdown,
-.mac-chrome #layovers-filter .dropdown {
-    margin-top: -8px;
+    border-radius: 3px;    
+    background: #ED1192;
+    color: #FFF;
+    text-decoration: none;
 }
