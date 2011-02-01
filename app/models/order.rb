@@ -60,4 +60,8 @@ class Order < ActiveRecord::Base
     update_attribute(:ticket_status, 'canceled')
   end
 
+  def send_email
+    PnrMailer.notification(email, pnr_number).deliver if email
+  end
+
 end

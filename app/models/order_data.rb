@@ -180,13 +180,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
 
       PnrMailer.notification(email, self.pnr_number).deliver if email
       return pnr_number
-=begin
-      else
-        # FIXME добавить какой-то индикатор ошибки блокировки денег
-        amadeus.pnr_cancel
-        return
-      end
-=end
     else
       amadeus.pnr_ignore
       errors.add :pnr_number, 'Ошибка при создании PNR'
