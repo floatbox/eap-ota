@@ -34,10 +34,10 @@ class BookingController < ApplicationController
     if @order.valid?
       if @order.create_booking
         payture_response = @order.block_money
-        if payture_response.success?
+        if payture_response && payture_response.success?
           @order.order.money_blocked!
           render :partial => 'success', :locals => {:pnr_path => pnr_form_path(@order.pnr_number), :pnr_number => @order.pnr_number}
-        elsif payture_response.threeds?
+        elsif payture_response && payture_response.threeds?
           render :partial => 'threeds', :locals => {:order => @order, :payture_response => payture_response}
         else
           @order.order.cancel!

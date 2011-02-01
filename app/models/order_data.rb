@@ -162,7 +162,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
         amadeus.ticket_create_tst_from_pricing(:fares_count => fares_count).or_fail!
       end
 
-      #if block_money
       self.order_id = 'am' + pnr_number
       amadeus.pnr_commit_really_hard do
         add_passport_data(amadeus)
