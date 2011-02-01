@@ -47,6 +47,8 @@ class Mux
       # игнорируем ошибки, если это конечно не SOAP Error
       recommendations_ws = t_ws.value.recommendations
       recommendations_ns = t_ns.value.recommendations
+      a_ws.session.release
+      a_ns.session.release
 
       Amadeus.fake = was_fake if form.debug
 

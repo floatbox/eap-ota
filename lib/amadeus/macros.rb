@@ -98,11 +98,10 @@ module Amadeus
     # временное название для метода
     # WARNING - использует отдельную сессию!
     def issue_ticket(pnr_number)
-      amadeus = Amadeus.ticketing
-      amadeus.pnr_retrieve(:number => pnr_number)
-      amadeus.doc_issuance_issue_ticket.or_fail!
-    ensure
-      amadeus.session.destroy
+      Amadeus.ticketing do |amadeus|
+        amadeus.pnr_retrieve(:number => pnr_number)
+        amadeus.doc_issuance_issue_ticket.or_fail!
+      end
     end
 
     def give_permission_to_offices *office_ids

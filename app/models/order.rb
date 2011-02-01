@@ -63,15 +63,11 @@ class Order < ActiveRecord::Base
 
   def cancel!
     #использовать осторожно. Отменяет существующую бронь. видимо, при несработавшем 3ds использовать нельзя.
-    begin
-      amadeus = Amadeus.booking
+    Amadeus.booking do |amadeus|
       amadeus.pnr_retrieve(:number => pnr_number)
       amadeus.pnr_cancel
-    rescue
+      update_attribute(:ticket_status, 'canceled')
     end
-    update_attribute(:ticket_status, 'canceled')
-  ensure
-    amadeus.session.destroy
   end
 
   def send_email
