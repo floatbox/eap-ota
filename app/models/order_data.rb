@@ -113,13 +113,12 @@ class OrderData < ActiveRecord::BaseWithoutTable
     response = Payture.new.block(
       recommendation.price_with_payment_commission, card, :order_id => order_id)
 
-    if response.success? || response.threeds?
-      return response
-    else
+    if response.error?
       card.errors.add :number, "не удалось провести платеж"
       self.errors.add :card, 'Платеж не прошел'
-      return
     end
+
+    response
   end
 
   def commission
