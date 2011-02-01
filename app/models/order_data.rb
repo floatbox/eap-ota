@@ -141,7 +141,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
 
   # по идее, как-то должно быть перенесено прямо в lib/amadeus
   def create_booking
-    amadeus = Amadeus::Service.new(:book => true)
+    amadeus = Amadeus.booking
     amadeus.air_sell_from_recommendation(
       :segments => recommendation.variants[0].segments, :people_count => seat_count
     ).or_fail!

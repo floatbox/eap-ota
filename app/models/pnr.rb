@@ -5,7 +5,7 @@ class Pnr
   def self.get_by_number number
     pnr = self.new
     pnr.number = number
-    amadeus = Amadeus::Service.new(:book => true)
+    amadeus = Amadeus.booking
 
     resp = amadeus.pnr_retrieve_and_ignore(:number => number)
     pnr.flights = resp.flights
