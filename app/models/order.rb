@@ -35,6 +35,10 @@ class Order < ActiveRecord::Base
     Amadeus::Service.pnr_raw(pnr_number)
   end
 
+  def payture_state
+    Payture.new.state(:order_id => order_id).state
+  end
+
   def confirm_3ds pa_res, md
     res = Payture.new.block_3ds(:order_id => self.order_id, :pa_res => pa_res)
     res.success?
@@ -63,15 +67,11 @@ class Order < ActiveRecord::Base
 
   def cancel!
     #использовать осторожно. Отменяет существующую бронь. видимо, при несработавшем 3ds использовать нельзя.
-    begin
-      amadeus = Amadeus.booking
+    Amadeus.booking do |amadeus|
       amadeus.pnr_retrieve(:number => pnr_number)
       amadeus.pnr_cancel
-    rescue
+      update_attribute(:ticket_status, 'canceled')
     end
-    update_attribute(:ticket_status, 'canceled')
-  ensure
-    amadeus.session.destroy
   end
 
   def send_email

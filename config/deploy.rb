@@ -1,4 +1,5 @@
 require 'bundler/capistrano'
+require 'hoptoad_notifier/capistrano'
 
 set :application, "delta"
 
@@ -49,10 +50,3 @@ namespace :deploy do
   after "deploy:finalize_update", "deploy:symlink_persistent_cache"
   after "deploy:finalize_update", "deploy:symlink_completer"
 end
-
-
-Dir[File.join(File.dirname(__FILE__), '..', 'vendor', 'gems', 'hoptoad_notifier-*')].each do |vendored_notifier|
-  $: << File.join(vendored_notifier, 'lib')
-end
-
-require 'hoptoad_notifier/capistrano'

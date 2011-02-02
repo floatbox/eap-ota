@@ -20,8 +20,13 @@ class Payture
       @doc["Success"] == "True"
     end
 
-    def err_code?
+    def err_code
       @doc["ErrCode"]
+    end
+
+    # не !success? потому что может быть и "3DS"
+    def error?
+      @doc["Success"] == "False"
     end
 
     def order_id

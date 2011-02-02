@@ -113,13 +113,12 @@ class OrderData < ActiveRecord::BaseWithoutTable
     response = Payture.new.block(
       recommendation.price_with_payment_commission, card, :order_id => order_id)
 
-    if response.success? || response.threeds?
-      return response
-    else
+    if response.error?
       card.errors.add :number, "не удалось провести платеж"
       self.errors.add :card, 'Платеж не прошел'
-      return
     end
+
+    response
   end
 
   def commission
@@ -132,51 +131,50 @@ class OrderData < ActiveRecord::BaseWithoutTable
 
   # по идее, как-то должно быть перенесено прямо в lib/amadeus
   def create_booking
-    amadeus = Amadeus.booking
-    amadeus.air_sell_from_recommendation(
-      :segments => recommendation.variants[0].segments, :people_count => seat_count
-    ).or_fail!
+    Amadeus.booking do |amadeus|
+      amadeus.air_sell_from_recommendation(
+        :segments => recommendation.variants[0].segments, :people_count => seat_count
+      ).or_fail!
 
-    add_multi_elements = amadeus.pnr_add_multi_elements(self).or_fail!
-    if self.pnr_number = add_multi_elements.pnr_number
-      set_people_numbers(add_multi_elements.passengers)
-      amadeus.pnr_commit_really_hard do
-        resp = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier).or_fail!
-        fares_count = resp.fares_count
-        prices = resp.prices
-        unless [recommendation.price_fare, recommendation.price_tax] == prices
-          errors.add :pnr_number, 'Ошибка при создании PNR'
-          amadeus.pnr_cancel
-          return
+      add_multi_elements = amadeus.pnr_add_multi_elements(self).or_fail!
+      if self.pnr_number = add_multi_elements.pnr_number
+        set_people_numbers(add_multi_elements.passengers)
+        amadeus.pnr_commit_really_hard do
+          resp = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier).or_fail!
+          fares_count = resp.fares_count
+          prices = resp.prices
+          unless [recommendation.price_fare, recommendation.price_tax] == prices
+            errors.add :pnr_number, 'Ошибка при создании PNR'
+            amadeus.pnr_cancel
+            return
+          end
+          # FIXME среагировать на отсутствие маски
+          amadeus.ticket_create_tst_from_pricing(:fares_count => fares_count).or_fail!
         end
-        # FIXME среагировать на отсутствие маски
-        amadeus.ticket_create_tst_from_pricing(:fares_count => fares_count).or_fail!
+
+        self.order_id = 'am' + pnr_number
+        amadeus.pnr_commit_really_hard do
+          add_passport_data(amadeus)
+          amadeus.give_permission_to_offices(
+            Amadeus::Session::TICKETING,
+            Amadeus::Session::WORKING
+          )
+          amadeus.pnr_archive(seat_count)
+          amadeus.pnr_add_remark
+        end
+        #amadeus.queue_place_pnr(:number => pnr_number)
+        @order = Order.create(:order_data => self)
+
+        # обилечивание
+        #Amadeus::Service.issue_ticket(pnr_number)
+
+        return pnr_number
+      else
+        amadeus.pnr_ignore
+        errors.add :pnr_number, 'Ошибка при создании PNR'
+        return
       end
-
-      self.order_id = 'am' + pnr_number
-      amadeus.pnr_commit_really_hard do
-        add_passport_data(amadeus)
-        amadeus.give_permission_to_offices(
-          Amadeus::Session::TICKETING,
-          Amadeus::Session::WORKING
-        )
-        amadeus.pnr_archive(seat_count)
-        amadeus.pnr_add_remark
-      end
-      #amadeus.queue_place_pnr(:number => pnr_number)
-      @order = Order.create(:order_data => self)
-
-      # обилечивание
-      #Amadeus::Service.issue_ticket(pnr_number)
-
-      return pnr_number
-    else
-      amadeus.pnr_ignore
-      errors.add :pnr_number, 'Ошибка при создании PNR'
-      return
     end
-  ensure
-    amadeus.session.destroy
   end
 
   def add_passport_data(amadeus)

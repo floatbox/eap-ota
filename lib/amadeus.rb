@@ -8,12 +8,33 @@ module Amadeus
   def self.fake; $amadeus_fake; end
 
   module Shortcuts
+
+    # FIXME как-то объединить бы код, что ли
+
     def booking
-      Amadeus::Service.new(:book => true, :office => Amadeus::Session::BOOKING)
+      amadeus = Amadeus::Service.new(:book => true, :office => Amadeus::Session::BOOKING)
+      if block_given?
+        begin
+          return yield(amadeus)
+        ensure
+          amadeus.session.destroy
+        end
+      else
+        return amadeus
+      end
     end
 
     def ticketing
-      Amadeus::Service.new(:book => true, :office => Amadeus::Session::TICKETING)
+      amadeus = Amadeus::Service.new(:book => true, :office => Amadeus::Session::TICKETING)
+      if block_given?
+        begin
+          return yield(amadeus)
+        ensure
+          amadeus.session.destroy
+        end
+      else
+        return amadeus
+      end
     end
   end
 
