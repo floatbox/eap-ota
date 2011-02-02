@@ -45,8 +45,6 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     end
   end
 
-  column :dates, :string
-  column :rt, :string
   column :adults, :integer, 1
   column :children, :integer, 0
   column :infants, :integer, 0
