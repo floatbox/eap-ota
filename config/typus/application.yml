@@ -65,6 +65,8 @@ Airport:
   relationships: city, country, geo_tags
   filters:
   search: name_ru, name_en, iata, synonym_list
+  actions:
+    index: update_completer
   application: Geo
 
 City:
@@ -79,6 +81,8 @@ City:
   relationships: airports, country, geo_tags, region
   filters: country
   search: name_ru, name_en, iata, synonym_list
+  actions:
+    index: update_completer
   application: Geo
 
 Order:
