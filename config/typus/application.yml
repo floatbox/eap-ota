@@ -91,8 +91,9 @@ Order:
   search: pnr_number, email, phone
   options:
     default_action_on_item: show
-  actions:
-    show: cancel, ticket, charge, unblock, show_pnr
+  # тут не ввернешь конфирмации. временно убрал
+  # actions:
+  #   show: cancel, ticket, charge, unblock, show_pnr
   filters: payment_status, ticket_status
   application: Orders
   export: csv
