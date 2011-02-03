@@ -83,7 +83,7 @@ class Completer
     end
     nil
   end
-  
+
   # FIXME объединить с iata_from_name
   def record_from_string(name, types=['city', 'airport', 'country'])
     scan_eq(name) do |record|
@@ -144,7 +144,8 @@ class Completer
     if data.blank? && (opts.delete(:jcuken) != false)
       complete(Qwerty.jcuken(string), position, opts.merge(:jcuken => false))
     else
-      uniq_by(data) {|e| e[:entity].merge({:name => nil})}
+      data = uniq_by(data){|e| e[:entity].merge({:name => nil})}
+      uniq_by(data){|e| e[:name]}
     end
   end
 
@@ -237,7 +238,7 @@ class Completer
   end
 
   # FIXME пока не возвращает числа
-  MONTHS = [['январь', ['января']], 
+  MONTHS = [['январь', ['января']],
              ['февраль', ['февраля']],
              ['март', ['марта']],
              ['апрель', ['апреля']],
@@ -292,7 +293,7 @@ class Completer
       end
     end
   end
-  
+
   def add_country(c)
     synonyms = []
     synonyms << c.name_en unless c.name_en == c.name
@@ -301,8 +302,8 @@ class Completer
     add(:name => c.name, :type => 'country', :code => c.iata, :aliases => synonyms, :hint => c.continent_part_ru)
     add(:name => c.case_to, :type => 'country', :code => c.iata, :hint => c.continent_part_ru)
   end
-  
-  
+
+
   def read_countries
     Country.not_important.each do |c|
       add_country(c)
@@ -317,7 +318,7 @@ class Completer
     add(:name => c.name, :type => 'city', :code => c.iata, :aliases => synonyms, :hint => c.country.name, :info => "Город #{c.name} #{c.country.proper_in}")
     add(:name => c.case_to, :type => 'city', :code => c.iata, :hint => c.country.name, :info => "Город #{c.name} #{c.country.proper_in}")
   end
-  
+
   def read_cities
     City.not_important.with_country.each do |c|
       add_city(c)
@@ -341,7 +342,7 @@ class Completer
       add(:name => c.name, :type => :aircraft, :code => c.iata, :aliases => synonyms)
     end
   end
-  
+
   def add_airport(c)
     unless c.equal_to_city
       synonyms = []
@@ -352,7 +353,7 @@ class Completer
       add(:name => c.case_to, :type => 'airport', :code => c.iata, :hint => c.city.name,  :info => "Аэропорт #{c.name} #{c.city.case_in}, #{c.city.country.name}")
     end
   end
-  
+
   def read_airports
     Airport.not_important.with_country.each do |c|
       add_airport(c)
