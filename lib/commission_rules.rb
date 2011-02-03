@@ -14,7 +14,7 @@ module CommissionRules
   KLASSES = {
     :first => %W(P F A),
     :business => %W(D I Z J C),
-    :economy => %W(B H K L M N Q T V X W S Y)
+    :economy => %W(B H K L M N Q T V X W S Y  G R O U E)
   }
 
   def disabled?
