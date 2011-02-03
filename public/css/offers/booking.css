@@ -26,6 +26,9 @@
 .l-crop .offer-variant tr.book .sum {
     visibility: hidden;
 }
+.l-crop #offers-filter .fixed {
+    visibility: hidden;
+}
 
 /* Предварительное бронирование */
 .booking {
@@ -79,33 +82,44 @@
 .booking .result {
     padding: 15px;
 }
-
 .booking .success,
 .booking .fail {
     font-size: 125%;
     line-height: 120%;
 }
-
 .booking .success strong {
     font-weight: bold;
     color: #447b00;
 }
-
 .booking .fail strong {
     font-weight: bold;
     color: #ea2535;
 }
-
 .booking .result a {
     color: #3081d1;
 }
-
 .booking .result .tip {
     margin: 10px 0 0;
     font-size: 75%;
     line-height: 125%;
 }
-
+.booking .tds-form {
+    position: absolute;
+    height: 0;
+    overflow: hidden;
+}
+.booking .tds-submit {
+    margin-top: 8px;
+}
+.booking .tds-submit .link {
+    font-size: 20px;
+    line-height: 22px;
+    color: #3081d1;
+}
+.booking .tds-submit a.stop-booking {
+    position: relative;
+    top: 6px;
+}
 
 /* Кнопки прекращения бронирования */
 
