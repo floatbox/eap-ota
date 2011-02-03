@@ -1,12 +1,13 @@
-<div class="result" data-type="success">
-    <p class="success"><strong>Подтверждение 3ds</strong> </p>
-    <% form_tag payture_response.acs_url do %>
+<div class="result" data-type="3dsecure">
+    <p class="success">Ваша банковская карта требует дополнительной авторизации 3DSecure. Вы будете перенаправлены на сайт платёжного шлюза. После успешной авторизации вы получите подтверждение покупки.</p>
+    <% form_tag payture_response.acs_url, :class => 'tds-form' do %>
       <%= hidden_field_tag 'PaReq', payture_response.pa_req %>
       <%= hidden_field_tag 'TermUrl', confirm_3ds_url(:order_id => order.order_id) %>
       <%= hidden_field_tag 'MD', payture_response.threeds_key %>
-      <%= submit_tag 'Подтвердить' %>
+      <%= submit_tag 'Перейти к авторизации' %>
     <% end %>
-    <p class="tip">
+    <div class="tds-submit tip">
         <a class="stop-booking" href="#">Вернуться к выбору вариантов</a>
-    </p>
+        <span class="link">Перейти к авторизации</span>
+    </div>
 </div>

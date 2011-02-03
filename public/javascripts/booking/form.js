@@ -17,8 +17,10 @@ init: function() {
             if (typeof s == 'string') {
                 var result = $(s).appendTo(self.el);
                 var rtype = result.attr('data-type');
-                self.el.find('.book-s').addClass(rtype == 'success' ? 'g-none' : 'book-retry');
-                pageurl.update('payment', rtype);
+                self.el.find('.book-s').addClass(rtype === 'error' ? 'book-retry' : 'g-none');
+                if (rtype !== '3dsecure') {
+                    pageurl.update('payment', rtype);
+                }
             } else if (s.errors) {
                 var items = [];
                 for (var eid in s.errors) {
@@ -151,6 +153,11 @@ init: function() {
     // Прекращение бронирования
     this.el.delegate('a.stop-booking', 'click', this.selfhide);
     
+    // 3DSecure
+    this.el.delegate('.tds-submit .link', 'click', function() {
+        $(this).closest('.result').find('form').submit();
+    });
+
     // Заголовок страницы
     pageurl.title('бронирование авиабилета ' + offersList.title.attr('data-title'));
 
