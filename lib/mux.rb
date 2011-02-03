@@ -39,16 +39,22 @@ class Mux
         was_fake, Amadeus.fake = Amadeus.fake, true
       end
 
-      a_ws = Amadeus.booking
-      a_ns = Amadeus.booking
+      # TODO можно когда-нибудь вернуться. сейчас эта штука _иногда_ одновременно пытается загрузить класс
+      # Country, в разных тредах
+      # a_ws = Amadeus.booking
+      # a_ns = Amadeus.booking
 
-      t_ws = Thread.new { a_ws.fare_master_pricer_travel_board_search(request_ws) }
-      t_ns = Thread.new { a_ns.fare_master_pricer_travel_board_search(request_ns) }
-      # игнорируем ошибки, если это конечно не SOAP Error
-      recommendations_ws = t_ws.value.recommendations
-      recommendations_ns = t_ns.value.recommendations
-      a_ws.session.release
-      a_ns.session.release
+      # t_ws = Thread.new { a_ws.fare_master_pricer_travel_board_search(request_ws) }
+      # t_ns = Thread.new { a_ns.fare_master_pricer_travel_board_search(request_ns) }
+      # # игнорируем ошибки, если это конечно не SOAP Error
+      # recommendations_ws = t_ws.value.recommendations
+      # recommendations_ns = t_ns.value.recommendations
+      # a_ws.session.release
+      # a_ns.session.release
+
+      # non threaded variant
+      recommendations_ws = Amadeus::Service.fare_master_pricer_travel_board_search(request_ws).recommendations
+      recommendations_ns = Amadeus::Service.fare_master_pricer_travel_board_search(request_ns).recommendations
 
       Amadeus.fake = was_fake if form.debug
 
