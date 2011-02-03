@@ -73,9 +73,11 @@ init: function() {
     });
     this.persons.el.bind('change', function(e, values) {
         self.update(self.persons);
+        fixedBlocks.update();
     });
     this.cabin.el.bind('change', function(e, values) {
         self.update(self.cabin);
+        fixedBlocks.update();
     });
     
     // Модификация списка пассажиров
@@ -185,6 +187,7 @@ toggleMode: function(mode) {
         this.mode = mode;
         this.autoFrom();
         context.find('.autocomplete:visible[value=""]').eq(0).focus();
+        fixedBlocks.update();
     }
 },
 values: function() {

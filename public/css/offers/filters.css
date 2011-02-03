@@ -1,7 +1,6 @@
 /* Filters */
 #offers-filter {
     position: relative;
-    top: -3px;
     background: #FFF;
     font-size: 14px;
     line-height: 18px;
@@ -21,15 +20,54 @@
     vertical-align: top;
     color: #333;
 }
-#offers-reset-filters {
+#offers-filter .reset-filters {
     color: #ED1192;
 }
 
 /* Fixed filters */
-.scrolled #offers-filter {
+#offers-filter-content.fixed {
     position: fixed;
-    top: 57px;
     z-index: 10;
+    width: 960px;
+    background: #FFF;
+}
+#offers-filter-content .of-collapsed {
+    display: none;
+    padding: 0 15px;
+    height: 30px;
+}
+#offers-filter-content .shadow {
+    display: none;
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 6px;
+    background: url(/img/header/shadow.png) repeat-x;    
+}
+#offers-filter-content .expand-filters {
+    font-weight: bold;
+    color: #ED1192;
+}
+#offers-filter .of-collapsed .reset-filters {
+    float: right;
+}
+#offers-filter-content .collapse-container {
+    vertical-align: bottom;
+    padding-bottom: 14px;
+    font-weight: normal;
+}
+#offers-filter-content .collapse-filters {
+    display: none;
+    font-size: 11px;
+    cursor: pointer;
+}
+#offers-filter-content.fixed .collapse-filters {
+    display: inline;
+}
+#offers-filter-content.fixed .shadow {
+    display: block;
 }
 
 /* Filters group */

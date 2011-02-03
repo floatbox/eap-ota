@@ -9,10 +9,43 @@
         var f = new controls.Filter($(this));
         f.template = ': $';
         f.el.bind('change', function(e, values) {
+            fixedBlocks.update();
             var name = $(this).attr('data-name');
             if (offersList.filterable) offersList.applyFilter(name, values);
         });
         offersList.filters[$(this).attr('data-name')] = f;
+    });
+    $('#offers-filter .expand-filters').click(function() {
+        var filter = $('#offers-filter-content'), fh = filter.height();
+        filter.children('.of-collapsed').hide();
+        filter.children('.of-expanded').show();
+        filter.css({
+            height: fh,
+            overflow: 'hidden'
+        }).animate({
+            height: filter.children('.of-expanded').height()
+        }, 120, function() {
+            $(this).css({
+                height: 'auto',
+                overflow: 'visible'
+            });
+        });
+    });
+    $('#offers-filter .collapse-filters').click(function() {
+        var filter = $('#offers-filter-content');
+        filter.css({
+            height: filter.height(),
+            overflow: 'hidden'
+        }).animate({
+            height: 30
+        }, 120, function() {
+            filter.children('.of-expanded').hide();
+            filter.children('.of-collapsed').show();
+            $(this).css({
+                height: 'auto',
+                overflow: 'visible'
+            });
+        });
     });
     
     // Фильтр количества пересадок
@@ -22,7 +55,7 @@
     lf.hide = function() {};
     
     // Сброс фильтров
-    $('#offers-reset-filters').click(function(event) {
+    $('#offers-filter .reset-filters').click(function(event) {
         event.preventDefault();
         offersList.resetFilters();
         offersList.applyFilter();
@@ -70,4 +103,7 @@
     // Всплывающие подсказки
     hint.init();
     
+    // Переключение блоков при прокрутке
+    fixedBlocks.init();
+
 })();

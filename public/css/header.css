@@ -31,12 +31,6 @@
     background: url(/img/header/shadow.png) repeat-x;
 }
 
-/* Scrolled header */
-.scrolled #header {
-    position: absolute;
-    top: 608px;
-}
-
 /* Header elements */
 #logo {
     position: absolute;

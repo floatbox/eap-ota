@@ -13,11 +13,8 @@
 }
 
 /* Заголовок */
-#offers-title {
-    padding: 15px;
-    background: #FFF;
-}
 #offers-title h1 {
+    padding: 15px;
     font: bold 190%/100% Arial, sans-serif;
     letter-spacing: -1px;
     color: #333;
@@ -25,11 +22,25 @@
 #offers-title h1:first-letter {
     text-transform: uppercase;
 }
-.scrolled #offers-title {
+#offers-title .shadow {
+    display: none;
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 6px;
+    background: url(/img/header/shadow.png) repeat-x;    
+}
+#offers-title.fixed {
     position: fixed;
     top: 0;
-    width: 930px;
+    width: 960px;
     z-index: 10;
+    background: #FFF;
+}
+#offers-title.fixed .shadow {
+    display: block;
 }
 
 /* Список предложений */

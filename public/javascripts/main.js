@@ -173,13 +173,54 @@ $.animateScrollTop = function(st, complete) {
 var fixedBlocks = {
 init: function() {
     var that = this;
-       
+    this.canvas = $(window).scroll(function() {
+        that.toggle();
+    });
+    this.update();
 },
-update: function() {
-
+update: function(forced) {
+    var define = $('#search-define');
+    var filter = $('#offers-filter');
+    var title = $('#offers-title');
+    var fcontent = $('#offers-filter-content');
+    title.closest('.placeholder').height(title.height() || 'auto');
+    fcontent.closest('.placeholder').height(fcontent.height() || 'auto');
+    this.top2 = Math.ceil(define.offset().top + define.height());
+    this.top3 = filter.is(':visible') ? Math.ceil(filter.offset().top + filter.height() - title.height() - 30) : 2000;
+    this.top1 = this.top2 - $('#header').height();
+    this.toggle(forced);
 },
-apply: function() {
-    var scrolled = this.canvas.scrollTop();
+toggle: function(forced) {
+    var section = 0;
+    var st = this.canvas.scrollTop();
+    if (st > this.top3) {
+        section = 3;
+    } else if (st > this.top2) {
+        section = 2;
+    } else if (st > this.top1) {
+        section = 1;
+    }
+    if (forced || section !== this.section) {
+        this.section = section;
+        var header = $('#header').css({
+            top: section === 0 ? 0 : this.top1,
+            position: section === 0 ? 'fixed' : 'absolute'
+        });
+        var title = $('#offers-title').toggleClass('fixed', section > 1);
+        var filter = $('#offers-filter-content');
+        if (section > 2) {
+            filter.hide().addClass('fixed').hide().css('top', title.height());
+            filter.find('.of-expanded').hide();
+            filter.find('.of-collapsed').show();
+            filter.fadeIn(150);
+        } else {
+            var fph = filter.closest('.placeholder');
+            filter.removeClass('fixed').css('top', 0);
+            filter.find('.of-collapsed').hide();
+            filter.find('.of-expanded').show();
+            fph.height('auto').height(fph.height() || 'auto');
+        }
+    }
 }
 };
 
