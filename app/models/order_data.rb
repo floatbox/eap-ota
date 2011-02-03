@@ -42,11 +42,22 @@ class OrderData < ActiveRecord::BaseWithoutTable
     res = {}
     res['order[email]'] = errors[:email] if errors[:email].present?
     res['order[phone]'] = errors[:phone] if errors[:phone].present?
+    last_flight_word = if recommendation.rt
+      "на момент обратного вылета"
+    elsif recommendation.segments.length > 1
+      "на момент вылета #{recommendation.segments.last.departure.city.case_from} #{recommendation.segments.last.arrival.city.case_to}"
+    else
+      nil
+    end
     people.each_with_index{|p, i|
       unless p.valid?
-        p.errors.each{|e,v|
-          res["person[#{i}][#{e}]"] = v
-        }
+        p.errors.each do |e,v|
+          if last_flight_word && e == :birthday
+            res["person[#{i}][#{e}]"] = v.sub('на момент вылета', last_flight_word)
+          else
+            res["person[#{i}][#{e}]"] = v
+          end
+        end
       end
     }
     unless card.valid?

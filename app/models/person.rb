@@ -43,8 +43,8 @@ class Person < ActiveRecord::BaseWithoutTable
 
   # FIXME а если день рождения между рейсами?
   def check_infant_or_child_age(infant=true)
-    if birthday && (birthday + (infant ? 2 : 13).years <= flight_date)
-      errors.add :birthday, "на момент вылета будет более #{infant ? '1 года' : '12 лет'}"
+    if birthday && (birthday + (infant ? 2 : 12).years <= flight_date)
+      errors.add :birthday, "на момент вылета будет более #{infant ? '2 лет' : '12 лет'}"
     end
   end
 
