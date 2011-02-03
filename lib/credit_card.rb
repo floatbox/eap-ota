@@ -130,7 +130,7 @@ class CreditCard
     validate_essential_attributes
 
     # Bogus card is pretty much for testing purposes. Lets just skip these extra tests if its used
-    return if type == 'bogus'
+    return if type == 'bogus' && !Rails.env.production?
 
     validate_card_type
     validate_card_number
