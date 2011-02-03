@@ -48,7 +48,13 @@ init: function() {
         }
     });
     list.delegate('.collapse', 'click', function(event) {
-        $(this).closest('.offer').removeClass('expanded').addClass('collapsed');
+        var variant = $(this).closest('.offer-variant');
+        var offer = variant.closest('.offer'), oh = offer.height();
+        offer.height(oh).animate({
+            height: oh - variant.find('.details').height()
+        }, 400, function() {
+            offer.removeClass('expanded').addClass('collapsed').height('auto');
+        });
     });
     
     // Сортировка
@@ -213,6 +219,7 @@ show: function(fixed) {
             return $(this).attr('data-date');
         }).get().join(locations.length > 1 ? ', ' : '—');
         this.title.attr('data-title', ls.replace(/— (.*?),(?= \1 —)/g, '—') + ' (' + ds + ')');
+        fixedBlocks.update(true);
     }
     if (u.loading) {
         this.toggle('loading');
@@ -233,10 +240,13 @@ show: function(fixed) {
                 var st = w.scrollTop() - promo.outerHeight();
                 promo.hide();
                 w.scrollTop(st);
+                fixedBlocks.update();
             }        
         });
     } else {
-        $('#promo').slideUp(200);
+        $('#promo').slideUp(200, function() {
+            fixedBlocks.update();
+        });
     }
 },
 hide: function() {
@@ -317,6 +327,7 @@ processUpdate: function() {
             }
             delete(u.pcontent);
             delete(u.mcontent);
+            fixedBlocks.update(true);
         });
         setTimeout(processQueue, 500);
     } else {
@@ -327,6 +338,7 @@ processUpdate: function() {
         pageurl.title();
         delete(u.pcontent);
         delete(u.mcontent);
+        fixedBlocks.update(true);
     }
 },
 parseResults: function() {
@@ -366,7 +378,7 @@ updateFilters: function() {
     this.filterable = false;
     var self = this;
     var data = $.parseJSON($('#offers-options').attr('data-filters'));
-    $('#offers-reset-filters').addClass('g-none');
+    $('#offers-filter .reset-filters').addClass('g-none');
     $('#offers-filter .filter').each(function() {
         var name = $(this).attr('data-name');
         var filter = self.filters[name];
@@ -397,6 +409,10 @@ applyFilter: function(name, values) {
         } else {
             delete(filters[name]);
         }
+    }
+    var st = $('#offers').position().top;
+    if (st < $(window).scrollTop()) {
+        $(window).scrollTop(st);
     }
     var list = $('#offers-list').css('opacity', 0.7);
     var queue = [function() {
@@ -465,8 +481,8 @@ filterOffers: function() {
     this.filtered = amount != total;
     this.showAmount(amount, total);
     this.toggleCollection(amount > 0);
+    $('#offers-filter .reset-filters').toggleClass('g-none', empty);
     $('#offers-empty-filters').toggleClass('g-none', !empty);
-    $('#offers-reset-filters').toggleClass('g-none', empty);
 },
 applySort: function(key) {
     $('#offers-all .offers-sort a').each(function() {
