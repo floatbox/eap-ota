@@ -5,12 +5,12 @@ class Mux
 
   module ClassMethods
 
-    def pricer(form)
+    def pricer(form, admin_user = nil)
       # пока не мержим
       if form.sirena
         sirena_pricer(form)
       else
-        amadeus_pricer(form)
+        amadeus_pricer(form, admin_user)
       end
     end
 
@@ -30,7 +30,7 @@ class Mux
     end
 
     # TODO exception handling
-    def amadeus_pricer(form)
+    def amadeus_pricer(form, admin_user = nil)
       request_ws = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form)
       request_ns = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form)
       request_ns.nonstop = true
@@ -60,6 +60,7 @@ class Mux
       # мы вроде что-то делали, чтобы амадеус не возвращал всякие поезда
       recommendations.delete_if(&:ground?)
       recommendations.delete_if(&:without_full_information?)
+      recommendations = recommendations.select(&:sellable?) unless admin_user
       # sort
       recommendations = recommendations.sort_by(&:price_total)
       # regroup

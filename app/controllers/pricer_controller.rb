@@ -7,7 +7,7 @@ class PricerController < ApplicationController
   def pricer
     unless params[:restore_results]
       if @search.valid?
-        @recommendations = Mux.pricer(@search)
+        @recommendations = Mux.pricer(@search, admin_user)
         @locations = @search.human_locations
       end
     end

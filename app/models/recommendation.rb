@@ -98,7 +98,7 @@ class Recommendation
   end
 
   def sellable?
-    validating_carrier.consolidator
+    validating_carrier.consolidator && commission
   end
 
   def without_full_information?
