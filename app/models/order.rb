@@ -6,7 +6,12 @@ class Order < ActiveRecord::Base
 
   validates_presence_of :email#, :phone
   validates_format_of :email, :with =>
-  /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email"
+    /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email"
+
+  named_scope :stale, lambda {
+    where(:payment_status => 'not blocked', :ticket_status => 'booked')\
+      .where("created_at < ?", 30.minutes.ago)
+  }
 
   def order_data= order_data
     recommendation = order_data.recommendation
@@ -66,7 +71,6 @@ class Order < ActiveRecord::Base
   end
 
   def cancel!
-    #использовать осторожно. Отменяет существующую бронь. видимо, при несработавшем 3ds использовать нельзя.
     Amadeus.booking do |amadeus|
       amadeus.pnr_retrieve(:number => pnr_number)
       amadeus.pnr_cancel
@@ -76,6 +80,16 @@ class Order < ActiveRecord::Base
 
   def send_email
     PnrMailer.notification(email, pnr_number).deliver if email
+  end
+
+# class methods
+
+  # FIXME надо какой-то логгинг
+  def self.cancel_stale!
+    stale.each do |order|
+      puts "Automatic cancel of pnr #{order.pnr_number}"
+      order.cancel!
+    end
   end
 
 end

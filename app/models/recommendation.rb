@@ -16,6 +16,10 @@ class Recommendation
     marketing_carrier_iatas - [validating_carrier_iata]
   end
 
+  def rt
+    (segments.length == 2) && (segments[0].departure_iata == segments[1].arrival_iata) && (segments[1].departure_iata == segments[0].arrival_iata)
+  end
+
   def validating_carrier_participates?
     marketing_carrier_iatas.include?(validating_carrier_iata)
   end

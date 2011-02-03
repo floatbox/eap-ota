@@ -45,7 +45,7 @@ module Billing #:nodoc:
       # - http://perl.about.com/compute/perl/library/nosearch/P073000.htm
       # - http://www.beachnet.com/~hstiles/cardtype.html
       def valid_number?(number)
-        valid_test_mode_card_number?(number) ||
+        (valid_test_mode_card_number?(number) && !Rails.env.production?) ||
           valid_card_number_length?(number) &&
           valid_checksum?(number)
       end

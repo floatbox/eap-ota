@@ -2,16 +2,14 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
+   include Typus::Authentication::Session
+   before_filter :set_typus_constantized
+   #before_filter :authenticate
+   def set_typus_constantized
+      Typus::Configuration.models_constantized!
+   end
 
-  if Rails.env.production?
-     #TODO временно закрываем доступ для не залогиненых в админку
-     include Typus::Authentication::Session
-     before_filter :set_typus_constantized
-     before_filter :authenticate
-     def set_typus_constantized
-        Typus::Configuration.models_constantized!
-     end
-  end
+  helper_method :admin_user
 
   protected
 

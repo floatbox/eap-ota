@@ -47,9 +47,6 @@ class BookingController < ApplicationController
         render :partial => 'fail', :locals => {:errors => @order.errors[:pnr_number]}
       end
       return
-    elsif !@order.card.valid?
-      render :partial => 'fail', :locals => {:errors => []}
-      return
     end
     render :json => {:errors => @order.errors_hash}
   end
