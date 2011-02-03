@@ -8,7 +8,7 @@ class Order < ActiveRecord::Base
   validates_format_of :email, :with =>
     /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email"
 
-  named_scope :stale, lambda {
+  scope :stale, lambda {
     where(:payment_status => 'not blocked', :ticket_status => 'booked')\
       .where("created_at < ?", 30.minutes.ago)
   }

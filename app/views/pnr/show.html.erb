@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Eviterra — ваш электронный билет</title>
-    <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico">     
+    <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico">
     <style type="text/css">
         html, body {margin: 0; padding: 0;}
         #canvas {width: 740px; margin: 0 auto; padding: 40px 0 10px;}
@@ -19,9 +19,10 @@
 <div id="canvas">
 
 <%= render 'ticket' %>
-
+<% if admin_user %>
 <div id="term">Терминал: <pre><%= @pnr.raw %></pre></div>
 </div>
+<% end %>
 <script type="text/javascript">
 //document.print();
 </script>
