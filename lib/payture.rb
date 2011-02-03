@@ -60,7 +60,7 @@ class Payture
     end
 
     # GetState
-
+    # 'PreAuthorized3DS', 'Voided', 'Rejected', какие еще?
     def state
       @doc["State"]
     end

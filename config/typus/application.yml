@@ -65,6 +65,8 @@ Airport:
   relationships: city, country, geo_tags
   filters:
   search: name_ru, name_en, iata, synonym_list
+  actions:
+    index: update_completer
   application: Geo
 
 City:
@@ -79,6 +81,8 @@ City:
   relationships: airports, country, geo_tags, region
   filters: country
   search: name_ru, name_en, iata, synonym_list
+  actions:
+    index: update_completer
   application: Geo
 
 Order:
@@ -91,8 +95,9 @@ Order:
   search: pnr_number, email, phone
   options:
     default_action_on_item: show
-  actions:
-    show: cancel, ticket, charge, unblock, show_pnr
+  # тут не ввернешь конфирмации. временно убрал
+  # actions:
+  #   show: cancel, ticket, charge, unblock, show_pnr
   filters: payment_status, ticket_status
   application: Orders
   export: csv

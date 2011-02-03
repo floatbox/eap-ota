@@ -52,6 +52,10 @@ class Completer
     Rails.logger.debug "Completer: dumped to cache"
   end
 
+  def self.regen
+    new.dump
+  end
+
   def self.cache_loaded_at
     @cache_loaded_at
   end
