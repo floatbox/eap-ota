@@ -21,14 +21,14 @@
         <h6><label for="search-s1-to"><span data-key="to">Куда</span>, <span data-key="dates">когда</span>, <span data-key="people_count">сколько человек</span></label><span class="loader"></span></h6>
         <div class="autocomplete-box">
             <input type="text" id="search-s1-to" class="autocomplete" tabindex="2" value="" title="Город, страна или IATA-код">
-        </div>   
+        </div>
     </td>
     <td class="search-mode">
         <ul id="search-mode">
             <li class="rttab" data-mode="rt" title="Билет до пункта назначения и обратно. Самый популярный вариант путешествия." class="active">Туда и обратно</li>
             <li class="owtab" data-mode="ow" title="Билет только до пункта назначения, в одну сторону.">Только туда</li>
             <li class="mwtab" data-mode="mw" title="Транзит через несколько городов. Остановки на желаемый срок.">Сложный маршрут</li>
-        </ul>    
+        </ul>
     </td>
 </tr>
 <tr class="segment2 g-none">
@@ -45,7 +45,7 @@
         <h6><label for="search-s2-to">Куда</label><span class="loader"></span></h6>
         <div class="autocomplete-box">
             <input type="text" id="search-s2-to" class="autocomplete" tabindex="4" value="" title="Город, страна или IATA-код">
-        </div>   
+        </div>
     </td>
     <td class="toggle-segment">
         <span class="link add-segment">Добавить перелёт</span>
@@ -66,11 +66,11 @@
         <h6><label for="search-s3-to">Куда</label><span class="loader"></span></h6>
         <div class="autocomplete-box">
             <input type="text" id="search-s3-to" class="autocomplete" tabindex="6" value="" title="Город, страна или IATA-код">
-        </div>   
+        </div>
     </td>
     <td class="toggle-segment">
         <span class="link remove-segment">Убрать перелёт</span>
-    </td>    
+    </td>
 </tr>
 </table>
 </div>
@@ -173,12 +173,14 @@
             </dl>
             </div>
         </div>
-        
-        <span id="search-debug">
-            <input type="checkbox" id="sdmode"> <label for="sdmode">Режим отладки</label>&nbsp;
-            <input type="checkbox" id="sirena"> <label for="sirena">Сирена</label>
-        </span>
-        
+
+        <% if admin_user %>
+          <span id="search-debug">
+              <input type="checkbox" id="sdmode"> <label for="sdmode">Режим отладки</label>&nbsp;
+              <input type="checkbox" id="sirena"> <label for="sirena">Сирена</label>
+          </span>
+        <% end %>
+
         </div>
     </td>
     <td id="search-submit" class="disabled">

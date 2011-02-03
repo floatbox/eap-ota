@@ -17,15 +17,18 @@
     <% different_cabins = recommendation.cabins_except(@search.cabin) %>
     <% recommendation.variants.each_with_index do |variant, variant_index| %>
         <%= render :partial => 'variant', :locals => {:variant => variant, :recommendation => recommendation, :variant_cabins => different_cabins, :variant_summary => nil} %>
-    <% end %>    
+    <% end %>
     <div class="aux">
+      <% if admin_user %>
         <span style="color:green">
-        <%= 'только в беспосадочном запросе.' if recommendation.source == 'right' %>
-        <%#= 'в обоих запросах' if recommendation.source.nil? %>
-        <%= 'не было в беспосадочном запросе!' if recommendation.source == 'left' && !recommendation.layovers? %>
+            <%= 'только в беспосадочном запросе.' if recommendation.source == 'right' %>
+            <%#= 'в обоих запросах' if recommendation.source.nil? %>
+            <%= 'не было в беспосадочном запросе!' if recommendation.source == 'left' && !recommendation.layovers? %>
         </span>
+      <% end %>
+
     </div>
-</div>    
+</div>
 <% end %>
 
 <% end %>
