@@ -2,6 +2,93 @@
 class Commission
 include CommissionRules
 
+carrier "SU", "Aeroflot"
+########################################
+
+example "mowpar"
+example "mowpar/c parmow/y"
+agent "1.1.На рейсы под кодом «SU», включая рейсы по соглашению «Код-шеринг» (в том числе по тарифам ИАТА):"
+agent "- за продажу в Эконом классе 7 % от тарифа;"
+agent "..."
+agent "- за переоформление авиабилета с доплатой по тарифу в Эконом классе 7 % от суммы доплаты по тарифу;"
+agent "- за переоформление авиабилета с доплатой по тарифу в Бизнес классе 9% от суммы доплаты по тарифу;"
+agent "- за продажу при комбинации тарифов Эконом класса и Бизнес класса 7% от тарифа;"
+agent "- за переоформление авиабилета с доплатой по тарифу при комбинации тарифов Эконом класса и Бизнес класса 7% суммы доплаты по тарифу."
+subagent "1.1. На БСО Перевозчика ОАО «АЭРОФЛОТ – Российские авиалинии», ЕТ или STD BSP комиссионное вознаграждение Субагента при продаже авиаперевозок составит:"
+subagent "• на собственные рейсы (в т.ч. по соглашениям «code-share»):"
+subagent "4,5 (четыре с половиной) % от тарифов Эконом класса (в т.ч. при комбинации Эконом и Бизнес классов),   при переоформлении с доплатой по тарифам Эконом класса (в т.ч. при комбинации Эконом и Бизнес классов);"
+commission "7%/4.5%"
+
+example "mowpar/c"
+important!
+agent "- за продажу в Бизнес классе  9 % от тарифа;"
+subagent "4,5 (четыре с половиной) % от тарифов Бизнес класса, при переоформлении с доплатой по тарифам Бизнес класса;"
+klass :business
+commission "9%/4.5%"
+
+
+example "mowpar/su parmow/ab"
+agent "1.2. На рейсы других авиакомпаний по соглашениям «Интерлайн» при продаже перевозок в комбинации с рейсом под кодом «SU»:"
+agent "- за продажу пассажирских перевозок по сквозным или участковым тарифам –   5 процентов от всего тарифа;"
+agent "- при переоформлении авиабилета с доплатой по тарифу –  5  процентов  от суммы доплаты по тарифу."
+subagent "• на рейсы Interline в комбинации с рейсом под кодом «SU»:"
+subagent "(три) % от сквозных или участковых тарифов (в т.ч. при переоформлении авиабилета с       доплатой по тарифу)"
+interline :yes
+commission "5%/3%"
+
+agent "- за оформление бесплатных  пассажирских перевозок комиссия не начисляется."
+no_commission
+
+example "parmow/ab"
+agent "1.3. На рейсы других авиакомпаний по соглашениям «Интерлайн» при продаже перевозок без комбинации с рейсом под кодом «SU»:"
+agent "- 1 евро по курсу GDS на день выписки авиабилета) за авиаперевозку  (в рублевом эквиваленте, исчисляемом по расчетному курсу, установленному ОАО «Аэрофлот» на день оформления авиабилета с округлением до целого числа в большую сторону);"
+agent "- 1 евро по курсу GDS на день выписки авиабилета) при переоформлении авиабилета с доплатой по тарифу (в рублевом эквиваленте, исчисляемом по расчетному курсу, установленному ОАО «Аэрофлот» на день оформления  авиабилета с округлением до целого числа в большую сторону); "
+subagent "• на рейсы Interline без комбинации с рейсом под кодом «SU»:"
+subagent "5 (пять) руб. с авиабилета (в т.ч. при переоформлении авиабилета с доплатой по тарифу)."
+interline :absent
+commission "1eur/5"
+
+carrier "UN", "TRANSAERO"
+########################################
+
+agent "11% МВЛ, ВВЛ Класс F (Империал); J, C, D (Бизнес)"
+subagent "1.2.7. При продаже авиаперевозок на рейсы авиакомпании ОАО «АВИАЦИОННАЯ КОМПАНИЯ «ТРАНСАЭРО» (код УН) с расчетным кодом 670 (кроме перевозок по интерлайн-соглашениям) на рейсы «УН», а также с расчетным кодом 99А на рейсы «УН» комиссионное вознаграждение Субагента составит:"
+subagent "• с формой оплаты НАЛ и кодами подклассов: F, J, C, D (латиница); П, И, Б, Д (кириллица) 9 (девять) % от тарифа;"
+not_implemented
+commission "11%/9%"
+
+agent "7% МВЛ. ВВЛ Y, H, M, Q, B, K, O, R, E"
+subagent "• с формой оплаты НАЛ и кодами подклассов: Y, H, M, Q, B, K (латиница); Э, Ц, М, Я, Ж, К (кириллица) 5 (пять) % от тарифа;"
+not_implemented
+commission "7%/5%"
+
+agent "3% МВЛ. ВВЛ L, V, X, T, N, I, G, W, U"
+subagent "• с формой оплаты НАЛ и кодами подклассов: L, V, X, T, N, I, W (латиница); Л, В, Х, Т, Н, Ы, Ю (кириллица) 1 (один) % от тарифа;"
+not_implemented
+commission "3%/1%"
+
+agent "12% Oт всех применяемых опубликованных тарифов на собственные  регулярные рейсы между Москвой и Пекином/Майами/Нью-Йорком (OW,RT)  и на сквозные перевозки между пунктами полетов АК  «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW,RT)."
+subagent "???"
+not_implemented
+commission "12%/0"
+
+agent "4% МВЛ. ВВЛ Interline с участком UN"
+agent "от применяемых опубликованных тарифов премиального экономического, туристического экономического и бизнес классов (one way, round trip; open jaw) за все виды продаж на рейсы UN, включая Interline продажи премиального экономического, туристического экономического и бизнес классов с участком авиакомпании «ТРАНСАЭРО»; запрещена продажа по Interline без участка авиакомпании «ТРАНСАЭРО»."
+subagent "???"
+domestic
+interline :possible
+not_implemented
+commission "4%/0"
+
+agent "5% Дополнительное вознаграждение на продажу Interline от применяемых опубликованных тарифов первого, бизнес, премиального экономического и туристического экономического классов на рейсы авиакомпаний Lufthansa (LH), Austrian Airlines (OS), Swiss International Airlines (LX), British Midland Airways (BD) от Москвы и/или через Москву с участком перевозки на рейсы ТРАНСАЭРО. Дополнительное вознаграждение не выплачивается в случае остальных Interline продаж, а также с сумм произведенных возвратов."
+agent "(Т.е. комиссия по этим Interline будет 9%)"
+interline :yes
+not_implemented
+commission "9%/0"
+
+subagent "с формой оплаты РТА комиссионное вознаграждение Субагента не выплачивается."
+no_commission
+
 carrier "2U", "SUN D’OR International Airlines (РИНГ-АВИА)"
 ########################################
 
@@ -70,8 +157,7 @@ commission "5%/3.5%"
 
 agent    "5% от всех опубл. тарифов на рейсы Interline без участия собств. рейсов 7D;"
 subagent "3,5% от всех опубл. тарифов на рейсы Interline без участия собств. рейсов 7D;"
-interline :without
-not_implemented
+interline :absent
 commission "5%/3.5%"
 
 carrier "7W", "WINDROSE"
@@ -135,13 +221,13 @@ carrier "AC", "AIR CANADA (НЕ BSP!!!)"
 
 agent    "5% от опубл. тарифов на рейсы АС из России и Европы;"
 subagent "5% от опубл. тарифов на рейсы АС из России и Европы;"
+disabled "не BSP"
 not_implemented
 commission "5%/5%"
 
 agent    "0% от опубл. тарифов на внутренние рейсы по Канаде, а также на международные рейсы из Канады и США"
 subagent "0% от опубл. тарифов на внутренние рейсы по Канаде, а также на международные рейсы из Канады и США"
-disabled # не BSP? буммжная выписка?
-#notbsp
+disabled "не BSP"
 not_implemented
 commission "0%/0%"
 
@@ -328,12 +414,17 @@ commission "1%/0.5%"
 carrier "CX", "CATHAY PACIFIC (Тальавиэйшн)"
 ########################################
 
+example 'mowpar'
 agent    "7% от опубл. тарифов на собств. рейсы CX и рейсы Interline c участком СX. Можно выписывать на бланках CX других авиаперевозчиков (при условии действующего интерлайна), если: - хотя бы один перелет совершается авиакомпанией CX,"
 agent    "- перелет на другом перевозчике является связующим билетом к основному перелету на авиакомпании CX."
 agent    "1 руб. от туроператорских тарифов. (Тарифы можно использовать строго при наличии ваучера у пассажира)."
 subagent "5% от опубликованных тарифов на рейсы CX. 50 коп с билета по туроператорским тарифам на собств. рейсы СХ (наличие ваучера обязательно)."
+commission "7%/5%"
+
+example 'mowpar parmow/ab'
+subagent "???" # субагентская комиссия при интерлайне?
 interline :yes
-not_implemented # "субагентская комиссия при интерлайне?"
+not_implemented
 commission "7%/5%"
 
 carrier "CY", "CYPRUS AIRWAYS"
@@ -365,8 +456,7 @@ commission "7%/5%"
 example 'parmow/ab'
 agent    "0% от тарифа на рейсы Interline без участка СZ."
 subagent "0% от тарифа на рейсы Interline без участка СZ."
-interline :without
-not_implemented
+interline :absent
 commission "0%/0%"
 
 carrier "D9", "ДОНАВИА"
@@ -375,13 +465,11 @@ carrier "D9", "ДОНАВИА"
 agent    "7% от опубл. тарифов эконом класса на собств. рейсы D9"
 subagent "5% от опубл. тарифов эконом класса на собств. рейсы D9"
 klass :economy
-not_implemented
 commission "7%/5%"
 
 agent    "9% от опубл. тарифов бизнес класса на собств. рейсы D9"
 subagent "6,3% от опубл. тарифов бизнес класса на собств. рейсы D9"
 klass :business
-not_implemented
 commission "9%/6.3%"
 
 example 'mowpar parmow/ab'
@@ -418,7 +506,7 @@ commission "1%/0.5%"
 example 'parmow/ab'
 agent    "1% от опубл. тарифа на рейсы Interline без участка DL."
 subagent "0,5% от опубл. тарифа на рейсы Interline без участка DL."
-interline :without
+interline :absent
 not_implemented
 commission "1%/0.5%"
 
@@ -465,29 +553,30 @@ commission "0%/0%"
 carrier "EK", "EMIRATES"
 ########################################
 
+example 'mowpar/f parmow/c'
 agent    "5% от тарифов Первого и Бизнес классов на рейсы EK;"
 subagent "3,5% от тарифов Первого и Бизнес классов на рейсы EK;"
-klass :first
-klass :business
-interline :no
-not_implemented
+klass :first, :business
 commission "5%/3.5%"
 
+example 'mowpar/f parmow/y'
 agent    "5% от комб. тарифов Первого и/или Бизнес класса с тарифами Эконом класса на рейсы EK;"
 subagent "3,5% от комб. тарифов Первого и/или Бизнес класса с тарифами Эконом класса на рейсы EK;"
-interline :no
-disabled #комбинации какие-то - нужны новые правила
-#combinations
-not_implemented
 commission "5%/3.5%"
 
+example 'mowpar'
+important!
 agent    "1 руб. с билета по опубл.тарифам Эконом класса на рейсы EK."
 agent    "(Билеты «Интерлайн» могут быть выписаны, если на долю перевозчика приходится более 50% маршрута.)"
 subagent "5 коп. с билета по опубл.тарифам Эконом класса на собств. рейсы EK."
 klass :economy
-interline :yes
+commission "1/0.05"
+
+example 'mowpar parmow/ab'
+interline :half
 not_implemented
 commission "1/0.05"
+
 
 carrier "ET", "Ethiopian Airlines Enterprise  (АВИАРЕПС)"
 ########################################
@@ -506,8 +595,7 @@ commission "5%/3.5%"
 example 'parmow/ab'
 agent    "0 % от опубл. тарифов на рейсы Interline без участка ET"
 subagent "0 % от опубл. тарифов на рейсы Interline без участка ET"
-interline :without
-not_implemented
+interline :absent
 commission "0%/0%"
 
 carrier "EY", "ETIHAD AIRWAYS"
@@ -535,8 +623,7 @@ commission "1%/0%"
 example 'parmow/ab'
 agent    "1% от опубл. тар. на рейсы Interline без участка F7"
 subagent "0,5% от опубл. тарифа на рейсы F7"
-interline :without
-not_implemented
+interline :absent
 commission "1%/0%"
 
 carrier "FB", "BULGARIA AIR"
@@ -568,30 +655,29 @@ disabled 'срок вышел'
 commission "8%/6%"
 
 agent    "1 euro с билета на рейсы Interline без участка FV."
-agent    "С 01.11.2010г."
 subagent "1 руб. с билета на рейсы Interline без участка FV."
-subagent "С 01.11.2010г."
-interline :without
-not_implemented
+interline :absent
 commission "1eur/1"
 
 example 'mowpar'
 example 'mowpar parmow/ab'
+agent    "С 01.11.2010г."
 agent    "7% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
+subagent "С 01.11.2010г."
 subagent "5% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
+klass :economy # пытаюсь заблокировать неимплементированное geo правило ниже
 interline :possible
 commission "7%/5%"
 
-agent    "1 euro с билета на рейсы Interline без участка FV."
+example 'ledmow/c mowled/c'
 agent    "C 01.10.2010 года по 31.03.2011 года"
 agent    "9% при продаже пассажирских перевозок в бизнес-классе на рейсы ФГУП «ГТК «Россия» (FV) на направлениях Санкт-Петербург-Москва и обратно, включая рейсы по соглашению «CODE-Share» (в том числе по тарифам ИАТА)."
-subagent "1 руб. с билета на рейсы Interline без участка FV."
-interline :without
-disabled #правило, сроки
+subagent "???"
+disabled #правило
+klass :business
 #geo
-#diedperiod
 not_implemented
-commission "1eur/1"
+commission "9%/0%"
 
 carrier "GF", "GULF AIR (Глонасс) (НЕ BSP!!!)"
 ########################################
@@ -652,8 +738,20 @@ agent "2.  The date of valid flight — 01 January 2011 - 31 March 2011;"
 agent "3.  Flight direction is PEK=LED=PEK only;"
 agent "4.  The commission of infant and child is the same with adult;"
 agent "5.  The commission only for individual passenger, not for group."
-subagent ""
+subagent "С 01.02.2011г по 31.03.2011г."
+subagent "дополнительная комиссия: 15% на С CLASS"
+subagent "10% на D CLASS"
+subagent "10% на I CLASS"
+subagent "10% на J CLASS"
+subagent "5% на Y/B/H/K/L/M/Q/X/V/T/W/S/N/U/E/O"
+subagent "Rules and conditions:"
+subagent "1. Point of sales in Russia only;"
+subagent "2. The date of valid flight — 01 January 2011 - 31 March 2011;"
+subagent "3. Flight direction is PEK=LED=PEK only;"
+subagent "4. The commission of infant and child is the same with adult;"
+subagent "5. The commission only for individual passenger, not for group"
 not_implemented
+no_commission
 
 carrier "HX", "Hong Kong Airlines"
 ########################################
@@ -723,8 +821,7 @@ commission "7%/5%"
 agent    "7% от тарифов бизнес и первого классов;"
 subagent "5% от тарифов бизнес и первого классов;"
 interline :no
-klass :first
-klass :business
+klass :first, :business
 not_implemented
 commission "7%/5%"
 
@@ -831,7 +928,7 @@ commission "6%/4.2%"
 
 agent    "5% от тарифов на рейсы Interline без сегмента КС;"
 subagent "3,5% от тарифов на рейсы Interline без сегмента КС;"
-interline :without
+interline :absent
 not_implemented
 commission "5%/3.5%"
 
@@ -950,35 +1047,38 @@ commission "1/0.05"
 carrier "LY", "EL AL ISRAEL AIRLINES"
 ########################################
 
+example 'mowpar'
 agent    "5% от опубл. тарифов Эконом класса на рейсы LY"
 subagent "3,5% от опубл. тарифов Эконом класса на рейсы LY"
-interline :no
 klass :economy
-not_implemented
 commission "5%/3.5%"
 
+example 'mowpar/c parmow/c'
 agent    "9,7% от опубл. тарифов Бизнес класса на рейсы LY"
 subagent "6,7% от опубл. тарифов Бизнес класса на рейсы LY"
-interline :no
 klass :business
-not_implemented
 commission "9.7%/6.7%"
+
+example 'mowpar parmow/c'
+example 'mowpar parmow/ab'
+no_commission
 
 carrier "MA", "MALEV"
 ########################################
 
 agent    "1 руб. с билета от опубл., конфиде.тарифов Эконом и Бизнес класса и при комбинации классов; от опубл.тарифа в случае применения совместного тарифа авиакомпаний при условии, что не менее 50 процентов маршрута должно быть закрыто на авиакомпанию МАЛЕВ (запрещается оформлять перевозку на билетах Авиакомпании без хотя бы одного участка Авиакомпании)"
-agent    "с 01.01.2011 года по 31.03.2011"
-agent    "7% с продаж опубл. структуры тарифов МАЛЕВ в Бизнес и Эконом. классах с вылетами из Москвы по всем направлениям МАЛЕВ. Вышеизложенная комиссия действует только на продажи рейсов МАЛЕВ (рейсы совместного выполнения исключаются)."
 subagent "5 коп. с билета от опубл., конфиде.тарифов Экономического и Бизнес класса и при комбинации классов; от опубл.тарифа в случае применения совместного тарифа авиакомпаний при условии, что не менее 50 процентов маршрута должно быть закрыто на авиакомпанию МАЛЕВ (запрещается оформлять перевозку на билетах Авиакомпании без хотя бы одного участка Авиакомпании)"
-klass :economy
-klass :business
-interline :yes
+interline :half
 disabled #не понял, вроде срок относится к семипроцентной доле агенту и он закончился. А вот правило придется написать, опять комбинации
 #combinations
 #newinterline
 not_implemented
 commission "1/0.05"
+
+agent    "с 01.01.2011 года по 31.03.2011"
+agent    "7% с продаж опубл. структуры тарифов МАЛЕВ в Бизнес и Эконом. классах с вылетами из Москвы по всем направлениям МАЛЕВ. Вышеизложенная комиссия действует только на продажи рейсов МАЛЕВ (рейсы совместного выполнения исключаются)."
+subagent "На период до 31.03.2011г. 5% от опубл. тарифов МАЛЕВ Бизнес и Эконом класса с вылетами из Москвы по всем направлениям МАЛЕВ на собств. рейсы MA (совместные рейсы исключаются)."
+no_commission
 
 carrier "MK", "AIR MAURITIUS"
 ########################################
@@ -1272,7 +1372,7 @@ agent    "3% от опубл.тарифов на собств.рейсы SQ/Silk
 agent    "При продаже перевозок по Interline комиссионное вознаграждение начисляется в полном объеме, если перевозка включает хотя бы один полетный сегмент SQ/Silk Air и оформлена на бланке SQ/618. Оформление перевозки на бланках SQ/618 по маршруту, который не включает хотя бы один полетный сегмент, выполняемый SQ/Silk Air, запрещено."
 subagent "2% от опубл.тарифов на собств.рейсы SQ/Silk Air с началом от пунктов, не указанных выше;"
 subagent "При продаже перевозок по Interline комиссионное вознаграждение начисляется в полном объеме, если перевозка включает хотя бы один полетный сегмент SQ/Silk Air и оформлена на бланке SQ/618. Оформление перевозки на бланках SQ/618 по маршруту, который не включает хотя бы один полетный сегмент, выполняемый SQ/Silk Air, запрещено."
-interline :yes
+interline :possible
 not_implemented
 commission "3%/2%"
 
@@ -1311,14 +1411,12 @@ carrier "TK", "TURKISH AIRLINES"
 
 agent    "7% от полного опубл. тарифа IATA на рейсы TK;"
 subagent "5% от полного опубл. тарифа IATA на рейсы TK;"
-interline :no
 not_implemented
 commission "7%/5%"
 
 agent    "7% от тарифа эконом класса на рейсы TK;"
 subagent "5% от тарифа экономического класса на рейсы TK;"
 klass :economy
-interline :no
 not_implemented
 commission "7%/5%"
 
@@ -1331,9 +1429,7 @@ commission "12%/8.4%"
 
 agent    "5% от тарифа эконом и бизнес класса при перелетах внутри Турции на рейсы TK."
 subagent "3,5% от тарифа эконом и бизнес класса при перелетах внутри Турции на рейсы TK."
-klass :economy
-klass :business
-interline :no
+klass :economy, :business
 disabled #внутри турции, гео-правило
 #geo
 not_implemented
@@ -1342,8 +1438,7 @@ commission "5%/3.5%"
 agent    "*Если C+Y, то 12% Если С+B(M и т.п.) 7%"
 agent    "(Билеты «Интерлайн» под кодом TK могут быть выписаны только в случае существования опубл. тарифов и только при условии, если TK выполняет первый рейс)"
 subagent "ну, ноль процентов (не было соответствующей записи)"
-klass :business
-klass :economy
+klass :business, :economy
 interline :first
 disabled #задизейблю пока, мне непонятны коды C+Y и прочие
 #combinations
@@ -1367,8 +1462,7 @@ carrier "TP", "TAP PORTUGAL"
 
 agent    "1% от опубл. тарифов на собств. рейсы TP и рейсы Interline"
 subagent "0,5% от опубл. тарифа на собственные рейсы TP и рейсы Interline"
-interline :yes
-not_implemented
+interline :possible
 commission "1%/0.5%"
 
 carrier "UA", "UNITED AIRLINES (ГЛОНАСС)"
@@ -1473,19 +1567,16 @@ agent    "5% от опубл. тарифов на рейсы VV;"
 subagent "3,5% от опубл. тарифов на рейсы VV;"
 commission "5%/3.5%"
 
+example 'mowpar parmow/ab'
 agent    "3% от опубл. тарифов на рейсы VV в комбинации с рейсами Interline"
 subagent "2% от опубл. тарифов на рейсы VV в комбинации с рейсами Interline"
 interline :yes
-vague #комбинации, нужно новое интерлайн правило… или одни и те же проценты как на интерлайн, так и на рейсы валидатора? Тоже к Тане
-#unknown
-#newinterline
-not_implemented
 commission "3%/2%"
 
+example 'parmow/ab'
 agent    "1% от тарифа на рейсы Interline без участка VV"
 subagent "0,5% от опубл. тарифа на рейсы Interline без участка VV"
-interline :without
-not_implemented
+interline :absent
 commission "1%/0.5%"
 
 carrier "WY", "OMAN AIR"
@@ -1501,8 +1592,8 @@ carrier "XW", "SkyExpress Limited"
 
 example 'mowpar'
 agent    "9% от всех опубл. тарифов на собств.рейсы XW (В договоре Interline не прописан.)"
-subagent "3,5% от опубл. тарифов на собств.рейсы XW"
-commission "9%/3.5%"
+subagent "7% от опубл. тарифов на собств.рейсы XW"
+commission "9%/7%"
 
 carrier "YM", "MONTENEGRO AIRLINES"
 ########################################

@@ -12,6 +12,7 @@ set :use_sudo, false
 set :deploy_to, "/home/#{user}/#{application}"
 set :srv, "delta.eviterra.com"
 
+set :deploy_via, :remote_cache
 # если репозиторий лежит на той же машине
 #set :deploy_via, :copy
 #set :repository,  "."
