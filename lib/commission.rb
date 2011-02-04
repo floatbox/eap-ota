@@ -738,8 +738,20 @@ agent "2.  The date of valid flight — 01 January 2011 - 31 March 2011;"
 agent "3.  Flight direction is PEK=LED=PEK only;"
 agent "4.  The commission of infant and child is the same with adult;"
 agent "5.  The commission only for individual passenger, not for group."
-subagent ""
+subagent "С 01.02.2011г по 31.03.2011г."
+subagent "дополнительная комиссия: 15% на С CLASS"
+subagent "10% на D CLASS"
+subagent "10% на I CLASS"
+subagent "10% на J CLASS"
+subagent "5% на Y/B/H/K/L/M/Q/X/V/T/W/S/N/U/E/O"
+subagent "Rules and conditions:"
+subagent "1. Point of sales in Russia only;"
+subagent "2. The date of valid flight — 01 January 2011 - 31 March 2011;"
+subagent "3. Flight direction is PEK=LED=PEK only;"
+subagent "4. The commission of infant and child is the same with adult;"
+subagent "5. The commission only for individual passenger, not for group"
 not_implemented
+no_commission
 
 carrier "HX", "Hong Kong Airlines"
 ########################################
@@ -1580,8 +1592,8 @@ carrier "XW", "SkyExpress Limited"
 
 example 'mowpar'
 agent    "9% от всех опубл. тарифов на собств.рейсы XW (В договоре Interline не прописан.)"
-subagent "3,5% от опубл. тарифов на собств.рейсы XW"
-commission "9%/3.5%"
+subagent "7% от опубл. тарифов на собств.рейсы XW"
+commission "9%/7%"
 
 carrier "YM", "MONTENEGRO AIRLINES"
 ########################################
