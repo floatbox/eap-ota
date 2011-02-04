@@ -8,7 +8,7 @@ module CommissionRules
   include KeyValueInit
 
   attr_accessor :carrier, :agent, :subagent, :disabled, :not_implemented, :no_commission, :interline,
-    :domestic, :international, :klass, :departure, :departure_country,
+    :domestic, :international, :klass, :departure, :departure_country, :important,
     :check, :examples, :agent_comments, :subagent_comments, :source
 
   KLASSES = {
@@ -144,7 +144,11 @@ module CommissionRules
 
     def register commission
       commissions[@carrier] ||= []
-      commissions[@carrier] << commission
+      if commission.important
+        commissions[@carrier].unshift commission
+      else
+        commissions[@carrier].push commission
+      end
       commission
     end
 
@@ -190,8 +194,12 @@ module CommissionRules
       opts[:international] = true
     end
 
-    def klass klasses
+    def klass *klasses
       opts[:klass] = klasses
+    end
+
+    def important!
+      opts[:important] = true
     end
 
     def example str
