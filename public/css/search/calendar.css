@@ -102,6 +102,9 @@
 .calendar .inactive .dayoff {
     color: #b796a6;
 }
+.calendar .withtoday .dayoff {
+    color: #b37995;
+}
 .calendar .dates li.selected,
 .calendar .dates li.hover {
     background: url(/img/calendar/planes.png) no-repeat;
