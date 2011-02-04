@@ -12,7 +12,7 @@
 .f-info {
     position: absolute;
     top: 15px; left: 15px;
-    width: 220px;
+    width: 250px;
     color: #777;
 }
 .f-info .social {
@@ -27,7 +27,7 @@
 
 .f-links {
     position: absolute;
-    top: 15px; left: 275px;
+    top: 15px; left: 350px;
 }
 .f-links li {
     margin: 0 0 3px;

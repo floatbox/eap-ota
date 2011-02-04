@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <%= render 'shared/head_common', {:title => @error_message ? 'не удалось оплатить билет' : 'ваш билет оплачен и забронирован'} %>
+    <link rel="stylesheet" type="text/css" href="/css/static.css">
+    <script type="text/javascript" src="/javascripts/static.js"></script>
+</head>
+<body>
+<%= render 'shared/header' %>
+<div class="l-wrapper" id="page-wrapper">
+<div class="l-canvas">
+    <div class="l-content">
+    <div id="back2search">
+        <a href="/">Вернуться к поиску</a>
+    </div>
+    <div class="article tds-result">
+    <% if @error_message %>
+        <p class="fail"><strong>Упс…</strong> Что-то пошло не так. Скорее всего, банк отклонил попытку платежа по&nbsp;вашей карте.</p>
+        <p class="tip">Попробуйте проверить, правильно ли введены данные, или используйте другую карту. Если это невозможно, узнайте <a href="/about/#payment">какими ещё способами</a> можно купить у&nbsp;нас билет.</p>    
+    <% else %>
+        <p class="success"><strong>Всё отлично!</strong> Ваш билет оплачен, забронирован и выслан на&nbsp;ваш электронный адрес. Номер брони&nbsp;— <%= @pnr_number %>. Если хотите, можете <a target="_blank" href="<%= @pnr_path %>">распечатать</a> ваш билет.</p>    
+        <p class="tip"><a href="#">Что делать, если на почту ничего не пришло?</a></p>
+    <% end %>
+    </div>
+    </div>
+    <div class="l-footer">
+        <%= render 'shared/footer' %>
+    </div>
+</div>
+</div>
+</body>
+</html>    

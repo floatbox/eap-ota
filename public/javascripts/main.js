@@ -173,10 +173,15 @@ $.animateScrollTop = function(st, complete) {
 var fixedBlocks = {
 init: function() {
     var that = this;
-    this.canvas = $(window).scroll(function() {
-        that.toggle();
-    });
-    this.update();
+    if (browser.search(/ipad|iphone|msie6|msie7/) === -1) {
+        this.canvas = $(window).scroll(function() {
+            that.toggle();
+        });
+        this.update();
+    } else {
+        this.update = function() {};
+        this.toggle = function() {};
+    }
 },
 update: function(forced) {
     var define = $('#search-define');
@@ -200,7 +205,7 @@ toggle: function(forced) {
     } else if (st > this.top1) {
         section = 1;
     }
-    if (forced || section !== this.section) {
+    if ((forced || section !== this.section) && !this.disabled) {
         this.section = section;
         var header = $('#header').css({
             top: section === 0 ? 0 : this.top1,

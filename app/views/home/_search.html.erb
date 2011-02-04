@@ -8,7 +8,7 @@
     <td class="from">
         <h6><label for="search-s1-from"><span class="highlight">Откуда</span></label><span class="loader"></span></h6>
         <div class="autocomplete-box">
-            <input type="text" id="search-s1-from" class="autocomplete" tabindex="1"
+            <input type="text" id="search-s1-from" data-label="From" class="autocomplete" tabindex="1"
              value="<%= nearest_city.try(:name) || 'Москва' %>"
              onclick="return <%= h nearest_city.to_json %>"
              title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом">
@@ -20,7 +20,7 @@
     <td class="to">
         <h6><label for="search-s1-to"><span data-key="to">Куда</span>, <span data-key="dates">когда</span>, <span data-key="people_count">сколько человек</span></label><span class="loader"></span></h6>
         <div class="autocomplete-box">
-            <input type="text" id="search-s1-to" class="autocomplete" tabindex="2" value="" title="Город, страна или IATA-код">
+            <input type="text" id="search-s1-to" data-label="To" class="autocomplete" tabindex="2" value="" title="Город, страна или IATA-код">
         </div>
     </td>
     <td class="search-mode">
@@ -35,7 +35,7 @@
     <td class="from">
         <h6><label for="search-s2-from">Откуда</label><span class="loader"></span></h6>
         <div class="autocomplete-box">
-            <input type="text" id="search-s2-from" class="autocomplete" tabindex="3" value="" title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом">
+            <input type="text" id="search-s2-from" data-label="From" class="autocomplete" tabindex="3" value="" title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом">
         </div>
     </td>
     <td>
@@ -44,7 +44,7 @@
     <td class="to">
         <h6><label for="search-s2-to">Куда</label><span class="loader"></span></h6>
         <div class="autocomplete-box">
-            <input type="text" id="search-s2-to" class="autocomplete" tabindex="4" value="" title="Город, страна или IATA-код">
+            <input type="text" id="search-s2-to" data-label="To" class="autocomplete" tabindex="4" value="" title="Город, страна или IATA-код">
         </div>
     </td>
     <td class="toggle-segment">
@@ -56,7 +56,7 @@
     <td class="from">
         <h6><label for="search-s3-from">Откуда</label><span class="loader"></span></h6>
         <div class="autocomplete-box">
-            <input type="text" id="search-s3-from" class="autocomplete" tabindex="5" value="" title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом">
+            <input type="text" id="search-s3-from" data-label="From" class="autocomplete" tabindex="5" value="" title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом">
         </div>
     </td>
     <td>
@@ -65,7 +65,7 @@
     <td class="to">
         <h6><label for="search-s3-to">Куда</label><span class="loader"></span></h6>
         <div class="autocomplete-box">
-            <input type="text" id="search-s3-to" class="autocomplete" tabindex="6" value="" title="Город, страна или IATA-код">
+            <input type="text" id="search-s3-to" data-label="To" class="autocomplete" tabindex="6" value="" title="Город, страна или IATA-код">
         </div>
     </td>
     <td class="toggle-segment">

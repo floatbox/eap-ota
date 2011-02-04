@@ -88,7 +88,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
 
   def as_json(args)
     args ||= {}
-    args[:methods] = (args[:methods].to_a + [:people_count, :complex_to_parse_results, :form_segments]).uniq
+    args[:methods] = (args[:methods].to_a + [:people_count, :complex_to_parse_results, :form_segments, :rt]).uniq
     super(args)
   end
 

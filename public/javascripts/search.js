@@ -42,7 +42,12 @@ init: function() {
         }).change(function() {
             var el = $(this), v = el.val();
             if (v === '') el.trigger('iata', '');
-            if (v !== el.data('pval')) self.update(this);
+            if (v !== el.data('pval')) {
+                self.update(this);
+                if (window._gaq && v) {
+                    _gaq.push(['_trackEvent', 'Search', el.attr('data-label'), v]);
+                }
+            }
             el.data('pval', v);
         });
     };
@@ -289,9 +294,6 @@ validate: function(qkey) {
     }
     this.toggle(false);
     this.abort();
-    if (window._gaq && data.search) {
-        _gaq.push(['_trackEvent', 'Search', 'To', data.search.to]);
-    }
     var self = this;
     var restoreResults = Boolean(qkey);
     this.submit.addClass('validating');

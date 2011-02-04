@@ -266,13 +266,10 @@ toggleCollection: function(mode) {
 },
 processUpdate: function() {
     var self = this, u = this.update, queue = [];
-    if (u.mcontent && u.mcontent.indexOf('matrix-origin') > 0) {
-        queue.push(function() {
-            $('#offers-mcollection').html(u.mcontent);
-        }, function() {
-            self.processMatrix();        
-        });
-    }
+    queue.push(function() {
+        $('#offers-mcollection').html(u.mcontent || '');
+        self.processMatrix();
+    });
     if (u.pcontent && u.pcontent.indexOf('offers-options') > 0) {
         queue.push(function() {
             $('#offers-pcollection').html(u.pcontent);
@@ -292,6 +289,7 @@ processUpdate: function() {
             self.toggleCollection(true);
         });
     } else {
+        $('#offers-pcollection').html('');
         this.variants = [];
         this.items = [];    
     }
@@ -388,6 +386,9 @@ updateFilters: function() {
         if (lid && data.locations[lid]) {
             filter.el.find('.control').html((lid.charAt(0) == 'd' ? 'вылет ' : 'прилёт ') + data.locations[lid]);
         }
+    });
+    $('#offers-filter .filters').each(function() {
+        $(this).closest('td').toggleClass('g-none', $(this).find('.filter:not(.g-none)').length === 0);
     });
     this.currentData = data;
     this.activeFilters = {};
@@ -742,7 +743,7 @@ initMatrix: function(table) {
 processMatrix: function() {
     var context = $('#offers-matrix');
     var table = context.find('.offer-prices').hide();
-    table.find('td').html('').removeClass('active');
+    table.find('td').html('').removeClass('cheap active');
     var ordates, origin = context.find('.matrix-origin');
     var mtab = $('#offers-tab-matrix');    
     if (origin.length) {
@@ -786,10 +787,10 @@ processMatrix: function() {
         var vid = summary.dates.join('-');
         var cell = $(rows[rn].cells[cn]).html(el.find('td.cost dt').html()).addClass('active').attr('data-vid', vid);
         el.attr('id', 'mv-' + vid).attr('data-index', i);
-        if (cheap && summary.price == cheap.price) {
-            cheap.cells = cheap.cells.add(cell);
-        } else if (!cheap || summary.price < cheap.price) {
+        if (!cheap || summary.price < cheap.price) {
             cheap = {price: summary.price, cells: cell};
+        } else if (summary.price === cheap.price) {
+            cheap.cells = cheap.cells.add(cell);
         }
     });
     if (cheap.cells.length / variants.length < 0.6) {

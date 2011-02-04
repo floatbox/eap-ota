@@ -26,7 +26,7 @@
 .l-crop .offer-variant tr.book .sum {
     visibility: hidden;
 }
-.l-crop #offers-filter .fixed {
+.l-crop #offers-filter-content {
     visibility: hidden;
 }
 

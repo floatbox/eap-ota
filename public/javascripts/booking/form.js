@@ -286,7 +286,11 @@ fasten: function(offer) {
     wrapper.addClass('l-crop');
     wrapper.children('.l-canvas').css('margin-top', 200 - ot - ob).css('top', ob - 100);
     this.dst = ot - 100;
+    fixedBlocks.section = undefined;
+    fixedBlocks.disabled = true;
     $(window).scrollTop(cst - this.dst);
+    $('#offers-title').addClass('fixed');
+    $('#header').addClass('g-none');
 },
 unfasten: function() {
     var wrapper = $('#page-wrapper');
@@ -294,6 +298,9 @@ unfasten: function() {
         wrapper.children('.l-canvas').css('margin-top', 0).css('top', 0);
         wrapper.removeClass('l-crop');
         $(window).scrollTop($(window).scrollTop() + this.dst);
+        $('#header').removeClass('g-none');
+        fixedBlocks.disabled = false;
+        fixedBlocks.update();
     }
     this.dstop = 0;
 }

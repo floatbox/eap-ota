@@ -55,9 +55,10 @@ class BookingController < ApplicationController
     @order = Order.find_by_order_id(params[:order_id])
     if @order && @order.confirm_3ds(params['PaRes'], params['MD'])
       @order.money_blocked!
-      render :text => 'ok'
+      @pnr_number = @order.pnr_number
+      @pnr_path = pnr_form_path(@order.pnr_number)
     else
-      render :text => 'не получилось'
+      @error_message = 'Не удалось оплатить билет'
     end
   end
 

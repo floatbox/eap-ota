@@ -119,3 +119,25 @@
     text-align: right;
 }
 
+/* 3DSecure result */
+.tds-result .success,
+.tds-result .fail {
+    font-size: 24px;
+    line-height: 28px;
+}
+.tds-result .success strong {
+    font-weight: bold;
+    color: #447b00;
+}
+.tds-result .fail strong {
+    font-weight: bold;
+    color: #ea2535;
+}
+.tds-result a {
+    color: #3081d1;
+}
+.tds-result .tip {
+    margin: 10px 0 0;
+}
+
+
