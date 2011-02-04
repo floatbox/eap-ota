@@ -53,7 +53,7 @@
     %requestedSegmentRef
       %segRef= i+1
     %departureLocalization
-      -if segment.from_iata.length == 3
+      -unless segment.from_country?
         %departurePoint
           %locationId= segment.from_iata
       -else
@@ -61,7 +61,7 @@
           %depMultiCity
             %locationId= code
     %arrivalLocalization
-      -if segment.to_iata.length == 3
+      -unless segment.to_country?
         %arrivalPointDetails
           %locationId= segment.to_iata
       -else
