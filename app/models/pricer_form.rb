@@ -14,6 +14,14 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       super(args)
     end
 
+    def from_country?
+      from_as_object.class == Country
+    end
+
+    def to_country?
+      to_as_object.class == Country
+    end
+
     def to= name
       @to_iata =  Completer.iata_from_name(name) rescue nil
       super
@@ -143,7 +151,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
         str = str[0...(str.length - word_part.length)]
         not_finished = true
       end
-      
+
       for word_beginning_pattern in [ /\S+\s+\S+\s+\S+\s*$/, /\S+\s+\S+\s*$/, /\S+\s*$/ ]
         if (m = str.match(word_beginning_pattern)) && !not_finished
           word_part = m[0].mb_chars
@@ -185,12 +193,12 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     end
     @complex_to_parse_results = res
   end
-  
+
   def date_from_month_and_day(month, day)
     self.date1 = (Date.today > Date.new(Date.today.year, month, day)) ?
-      Date.new(Date.today.year+1, month, day).strftime('%d%m%y') : 
+      Date.new(Date.today.year+1, month, day).strftime('%d%m%y') :
       Date.new(Date.today.year, month, day).strftime('%d%m%y')
-  end 
+  end
 
   def to_key
     []
