@@ -9,14 +9,13 @@ Eviterra::Application.routes.draw do
   match 'booking/pay' => 'booking#pay', :as => :booking_pay
   match 'booking/preliminary_booking' => 'booking#preliminary_booking', :as => :preliminary_booking
   match '/confirm_3ds/:order_id' => 'booking#confirm_3ds', :as => :confirm_3ds
+  match 'order/:id' => 'PNR#show', :as => :show_order
 
   resources :locations do
     get :current, :on => :collection
   end
 
   resources :geo_tags
-
-  resources :pnr_form, :controller => 'PNR'
 
   match 'complete.json' => 'complete#complete'
 

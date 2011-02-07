@@ -36,7 +36,7 @@ class BookingController < ApplicationController
         payture_response = @order.block_money
         if payture_response.success?
           @order.order.money_blocked!
-          render :partial => 'success', :locals => {:pnr_path => pnr_form_path(@order.pnr_number), :pnr_number => @order.pnr_number}
+          render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}
         elsif payture_response.threeds?
           render :partial => 'threeds', :locals => {:order => @order, :payture_response => payture_response}
         else
