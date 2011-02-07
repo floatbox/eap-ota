@@ -115,7 +115,6 @@ module Amadeus
 
   # оверрайд методов из SOAPACTions
   def security_authenticate(office)
-    office ||= Amadeus::Session::BOOKING
     request = Amadeus::Request::SecurityAuthenticate.new(:office => office)
     payload = render('Security_Authenticate', request)
     response = invoke(

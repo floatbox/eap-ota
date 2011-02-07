@@ -77,6 +77,7 @@ module Amadeus
 
   # без параметра создает незарезервированную сессию
   def self.increase_pool(booking=nil, office=nil)
+    office ||= Amadeus::Session::BOOKING
     logger.debug "Allocating new amadeus session"
     token = Amadeus::Service.security_authenticate(office)
     session = from_token(token)
