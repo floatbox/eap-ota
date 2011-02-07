@@ -28,7 +28,11 @@ init: function() {
                     ftitle = ftitle.replace(/person\[(\d)\]\[birthday\]/, function(s, n) {
                         return '<a href="#" data-id="book-p-' + n + '-birth"><u>' + constants.numbers.ordinaldat[parseInt(n, 10)] + ' пассажиру</u></a>';
                     });
-                    items.push('<li>' + ftitle + ' ' + s.errors[eid] + '</li>');
+                    if (ftitle.indexOf('Card[number] неверный') > -1) {
+                        items.push('<li>введён неправильный <a href="#" data-id="bc-num1"><u>номер карты</u></a></li>');
+                    } else {
+                        items.push('<li>' + ftitle + ' ' + s.errors[eid] + '</li>');
+                    }
                 }
                 self.el.find('.blocker').show().find('.b-pseudo').html(items.join(''));
                 self.el.removeClass('book-retry');
@@ -54,6 +58,7 @@ init: function() {
 
     // Всплывающие подсказки
     this.el.delegate('.b-hint', 'click', function(event) {
+        event.preventDefault();
         hint.show(event, $(this).next('p').html());
     });
 
