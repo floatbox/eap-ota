@@ -5,7 +5,6 @@ module Sirena
 
       attr_accessor :flights, :recommendations
 
-      # вот это все фигово очень, но переписывать боязно
       def initialize(*)
         super
         self.flights = {}
@@ -22,16 +21,19 @@ module Sirena
       def parse_recommendation(rec, flights)
         booking_classes = [] # тут я думаю, что это классы мест, которые бронируются. права ли я?
         variants = rec.xpath("flights").map{|variant|
-          time = ""
+          time = 0
+          prev_arr = ""
           ff = variant.xpath("flight").map{|fi|
             id = fi.attribute("id") && fi.attribute("id").value
             cl = fi.attribute("subclass") && fi.attribute("subclass").value
             booking_classes << cl if cl
-            time = flights[id][:time] if time.blank?
+            time += flights[id][:time]
+            time +=(flights[id][:departure]-prev_arr).to_i/60 if !prev_arr.blank?
+            prev_arr=flights[id][:arrival]
             flights[id][:flight]
           }
           # eft = estimated flight time!
-          segments = [Segment.new(:eft=>time, :flights=>ff)]
+          segments = [Segment.new(:eft=>(time/60).to_s+":"+"%02i".%(time % 60), :flights=>ff)]
           Variant.new( :segments => segments )
         }
 
@@ -52,6 +54,8 @@ module Sirena
       def parse_flight(fi)
         dep_iata = fi.xpath("origin").text
         arr_iata = fi.xpath("destination").text
+        dep = Time.parse(fi.xpath("deptdate").text+" "+fi.xpath("depttime").text)
+        arr = Time.parse(fi.xpath("arrvdate").text+" "+fi.xpath("arrvtime").text)
         f = Flight.new(
           :operating_carrier_iata => fi.xpath("company").text,
           :marketing_carrier_iata => fi.xpath("company").text,
@@ -67,8 +71,13 @@ module Sirena
           :equipment_type_iata =>    fi.xpath("airplane").text, # иногда кириллица!
           :technical_stops => [] #не нашла, есть ли там информация на эту тему. скорее нет
         )
+        time = fi.xpath("flightTime").text
+        if !time.blank?
+          scanned = time.scan(/(([0-9]+):)?([0-9]+):([0-9]+)/)[0]
+          time = scanned[1].to_i*1440+scanned[2].to_i*60+scanned[3].to_i
+        end
         id = fi.attribute("id") && fi.attribute("id").value
-        [id, {:flight=>f, :time=>fi.xpath("flightTime").text}]
+        [id, {:flight=>f, :time=>time.to_i, :departure=>dep, :arrival=>arr}]
       end
 
       def to_amadeus_time(str)
