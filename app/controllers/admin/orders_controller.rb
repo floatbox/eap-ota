@@ -3,7 +3,7 @@ class Admin::OrdersController < Admin::ResourcesController
 
   def show_pnr
     order = Order.find(params[:id])
-    redirect_to pnr_form_path(order.pnr_number)
+    redirect_to show_order_path(:id => order.pnr_number)
   end
 
   def unblock
