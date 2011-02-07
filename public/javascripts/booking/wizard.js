@@ -283,11 +283,11 @@ ptp.num = function(s) {
             $self.attr('maxlength', 4);
             
             var v = self.value;
-
-            if (v.length < 4) return;
-
             if (v.length == 4) {
                 me.nextField($(self)).focus();
+                $self.change();
+                return;
+            } else if (v.length < 4) {
                 return;
             }
 

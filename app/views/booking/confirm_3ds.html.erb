@@ -3,7 +3,8 @@
 <head>
     <%= render 'shared/head_common', {:title => @error_message ? 'не удалось оплатить билет' : 'ваш билет оплачен и забронирован'} %>
     <link rel="stylesheet" type="text/css" href="/css/static.css">
-    <script type="text/javascript" src="/javascripts/static.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/controls/hint.css">
+    <%= javascript_include_tag "main", "static", "hint" %>
 </head>
 <body>
 <%= render 'shared/header' %>
@@ -19,7 +20,8 @@
         <p class="tip">Попробуйте проверить, правильно ли введены данные, или используйте другую карту. Если это невозможно, узнайте <a href="/about/#payment">какими ещё способами</a> можно купить у&nbsp;нас билет.</p>    
     <% else %>
         <p class="success"><strong>Всё отлично!</strong> Ваш билет оплачен, забронирован и выслан на&nbsp;ваш электронный адрес. Номер брони&nbsp;— <%= @pnr_number %>. Если хотите, можете <a target="_blank" href="<%= @pnr_path %>">распечатать</a> ваш билет.</p>    
-        <p class="tip"><a href="#">Что делать, если на почту ничего не пришло?</a></p>
+        <p class="tip"><a href="#" onclick="event.preventDefault(); hint.show(event, $(this).parent().next('p').html());">Что делать, если на почту ничего не пришло?</a></p>
+        <p class="g-none">Если вы&nbsp;не&nbsp;получили письмо с&nbsp;электронным билетом в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, то&nbsp;напишите нам (<a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a>) или позвоните <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p>        
     <% end %>
     </div>
     </div>
@@ -28,5 +30,12 @@
     </div>
 </div>
 </div>
+<div id="hint">
+    <div class="close"></div>
+    <div class="content"></div>
+</div>
+<script type="text/javascript">
+hint.init();
+</script>
 </body>
 </html>    
