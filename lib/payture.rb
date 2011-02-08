@@ -205,7 +205,7 @@ class Payture
   end
 
   def debug message
-    Rails.logger.debug "Payture: #{message}"
+    Rails.logger.info "Payture: #{message}"
   end
 
   # for testing purposes
