@@ -4,6 +4,7 @@ class Cache
   # временно обходим это
 
   def self.filename_for(type, key)
+    key.gsub!(/[^0-9a-zA-Z]/, '')
     Rails.root + 'tmp/cache' + "#{type}#{key}.cache"
   end
 

@@ -78,6 +78,8 @@ class Payture
   def initialize(opts={})
     @key = opts[:key] || config[:key]
     @host = opts[:host] || config[:host]
+    @ssl = opts[:ssl]
+    @ssl = config[:ssl] if @ssl.nil?
     @public = OpenSSL::PKey::RSA.new(opts[:pem] || config[:pem])
   end
 
@@ -161,7 +163,7 @@ class Payture
   end
 
   def post_request action, args
-    response = HTTParty.post("http://#{@host}/api/#{action}/", :body => args, :format => :xml)
+    response = HTTParty.post("#{@ssl ? 'https' : 'http'}://#{@host}/api/#{action}/", :body => args, :format => :xml)
     debug response.parsed_response.inspect
     Response.new( response.parsed_response.values.first )
   end
@@ -205,7 +207,7 @@ class Payture
   end
 
   def debug message
-    Rails.logger.debug "Payture: #{message}"
+    Rails.logger.info "Payture: #{message}"
   end
 
   # for testing purposes

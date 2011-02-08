@@ -1,7 +1,14 @@
+# Add RVM's lib directory to the load path.
+$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
+# Load RVM's capistrano plugin.
+require "rvm/capistrano"
+# Set it to the ruby + gemset of your app, e.g:
+set :rvm_ruby_string, 'ree'
+
 require 'bundler/capistrano'
 require 'hoptoad_notifier/capistrano'
 
-set :application, "delta"
+set :application, "eviterra"
 
 set :scm, :git
 
@@ -10,7 +17,7 @@ set :user, "rack"
 set :use_sudo, false
 
 set :deploy_to, "/home/#{user}/#{application}"
-set :srv, "delta.eviterra.com"
+set :srv, "eviterra.com"
 
 set :deploy_via, :remote_cache
 # если репозиторий лежит на той же машине
