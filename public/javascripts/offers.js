@@ -143,6 +143,8 @@ load: function() {
     };
     var params = $.extend({}, this.nextUpdate.params);
     this.nextUpdate = undefined;
+
+    // Запросы для списка и календаря
     this.update.prequest = $.ajax({
         url: '/pricer/',
         data: params,
@@ -156,24 +158,20 @@ load: function() {
         },
         timeout: 150000
     });
+    this.update.mrequest = $.ajax({
+        url: '/calendar/',
+        data: params,
+        success: function(s, status, request) {
+            if (self.update.mrequest != request) return;
+            self.setUpdate('mcontent', s);
+        },
+        error: function(request) {
+            if (self.update.mrequest != request) return;
+            self.setUpdate('mcontent', '');
+        },
+        timeout: 60000
+    });
 
-    // Запрос матрицы с задержкой, чтобы не слать лишние запросы при автоматическом поиске
-    this.mrtimer = setTimeout(function() {
-        self.update.mrequest =  $.ajax({
-            url: '/calendar/',
-            data: params,
-            success: function(s, status, request) {
-                if (self.update.mrequest != request) return;
-                self.setUpdate('mcontent', s);
-            },
-            error: function(request) {
-                if (self.update.mrequest != request) return;
-                self.setUpdate('mcontent', '');
-            },
-            timeout: 60000
-        });
-    }, params.restore_results ? 1000 : 10000);
-    
     // Ничего не найдено, если не сработали таймауты запросов
     clearTimeout(this.resetTimer);
     this.resetTimer = setTimeout(function() {
@@ -195,7 +193,6 @@ setUpdate: function(type, s) {
     }
 },
 abort: function() {
-    clearTimeout(this.mrtimer);
     if (this.update) {
         var pr = this.update.prequest;
         var mr = this.update.mrequest;
@@ -297,7 +294,7 @@ processUpdate: function() {
         this.loading.find('h3').html('&nbsp;&nbsp;Еще чуть-чуть&hellip;');        
         var qstep = 0, processQueue = function() {
             queue[qstep++]();
-            if (queue[qstep]) setTimeout(processQueue, 150);
+            if (queue[qstep]) setTimeout(processQueue, 100);
         };
         queue.push(function() {
             self.toggle('results');
@@ -327,7 +324,7 @@ processUpdate: function() {
             delete(u.mcontent);
             fixedBlocks.update(true);
         });
-        setTimeout(processQueue, 500);
+        setTimeout(processQueue, 250);
     } else {
         this.toggle('empty');
         $('#offers-pcollection').html('');
@@ -630,7 +627,7 @@ showRecommendations: function() {
         container.append(ftip);
         var rprice = cheap ? cheap.p : optimal.p;
         var mprice = parseInt($('#offers-matrix .offer-prices').attr('data-minprice'), 10);
-        if (mprice < rprice) {
+        if (!isNaN(mprice) && mprice < rprice) {
             var mtip = $('<div class="offers-title featured-tip"><strong>Дорого?</strong> Посмотрите <span class="link">другие дни</span> — есть предложения от&nbsp;' + mprice.inflect('рубля', 'рублей', 'рублей') + '</div>');
             mtip.find('.link').click(function() {
                 $('#offers-tabs').trigger('set', 'matrix');
@@ -646,7 +643,7 @@ makeRecommendation: function(variant, title) {
     this.showVariant(offer.children().eq(el.prevAll().length));
     if (title.search(/выгодный/i) != -1) {
         var cost = offer.find('td.cost dl'), ctext = cost.find('dd');
-        ctext.html(ctext.html() + '<span class="cost-tip"> за всех, включая налоги и сборы</span>');
+        ctext.html(ctext.html() + '<span class="cost-tip">' + ($('#offers-options').attr('data-people') !== '1' ? ' за всех' : '') + ', включая налоги и сборы</span>');
         cost.prepend('<dd>Всего </dd>');
     }
     return $('<div><h3 class="offers-title">' + title + '</h3></div>').append(offer);
@@ -756,6 +753,7 @@ processMatrix: function() {
         if (this.selectedTab == 'matrix' || pageurl.tab == 'matrix') {
             this.selectedTab = 'featured';
         }
+        table.attr('data-minprice', '');
         return;
     }
     var rows = table.get(0).rows;

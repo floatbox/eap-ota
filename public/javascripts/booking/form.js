@@ -25,12 +25,12 @@ init: function() {
                 var items = [];
                 for (var eid in s.errors) {
                     var ftitle = eid;
-                    ftitle = ftitle.replace(/person\[(\d)\]\[birthday\]/, function(s, n) {
-                        return '<a href="#" data-id="book-p-' + n + '-birth"><u>' + constants.numbers.ordinaldat[parseInt(n, 10)] + ' пассажиру</u></a>';
-                    });
-                    if (ftitle.indexOf('Card[number] неверный') > -1) {
+                    if (ftitle.search(/card\[number|type\]/i) > -1) {
                         items.push('<li>введён неправильный <a href="#" data-id="bc-num1"><u>номер карты</u></a></li>');
                     } else {
+                        ftitle = ftitle.replace(/person\[(\d)\]\[birthday\]/i, function(s, n) {
+                            return '<a href="#" data-id="book-p-' + n + '-birth"><u>' + constants.numbers.ordinaldat[parseInt(n, 10)] + ' пассажиру</u></a>';
+                        });
                         items.push('<li>' + ftitle + ' ' + s.errors[eid] + '</li>');
                     }
                 }
