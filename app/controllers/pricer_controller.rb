@@ -18,7 +18,7 @@ class PricerController < ApplicationController
   def calendar
     unless params[:restore_results]
       if @search.valid? && @search.form_segments.size < 3
-        @recommendations = Mux.calendar(@search)
+        @recommendations = Mux.calendar(@search, admin_user)
       end
     end
     render :partial => 'matrix'
