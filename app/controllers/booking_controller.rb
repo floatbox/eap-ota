@@ -56,7 +56,7 @@ class BookingController < ApplicationController
     if @order && @order.confirm_3ds(params['PaRes'], params['MD'])
       @order.money_blocked!
       @pnr_number = @order.pnr_number
-      @pnr_path = pnr_form_path(@order.pnr_number)
+      @pnr_path = show_order_path(@order.pnr_number)
     else
       @error_message = 'Не удалось оплатить билет'
     end
