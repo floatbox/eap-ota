@@ -14,7 +14,7 @@ class Mux
       end
     end
 
-    def calendar(form)
+    def calendar(form, admin_user = nil)
       return [] if form.sirena
 
       if form.debug
@@ -25,6 +25,7 @@ class Mux
       recommendations = Amadeus::Service.fare_master_pricer_calendar(request).recommendations
 
       Amadeus.fake = was_fake if form.debug
+      recommendations = recommendations.select(&:sellable?) unless admin_user
 
       recommendations
     end
