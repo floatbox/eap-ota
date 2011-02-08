@@ -16,7 +16,8 @@
     letter-spacing: -0.025em;
     color: #777;
 }
-* html #header {
+* html #header,
+.mac-opera #header {
     position: absolute;
 }
 .ipad-safari .hcontent,

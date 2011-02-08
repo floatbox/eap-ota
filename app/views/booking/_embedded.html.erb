@@ -42,6 +42,7 @@
     <p>Внимание! Возврат средств в&nbsp;случае отказа при получении визы, болезни и&nbsp;прочих обстоятельств без штрафных санкций невозможен. Возврат билета производится строго по&nbsp;правилам авиакомпании. В&nbsp;случае комбинации в&nbsp;билете тарифов с&nbsp;различными правилами, наиболее строгие ограничения применются ко&nbsp;всему маршруту.</p>
     <% common_fare = @order.recommendation.rules_with_flights.length == 1 %>
     <% @order.recommendation.rules_with_flights.each do |fgroup| %>
+    <%= fgroup[:flights].first.class_of_service %>
     <% if fgroup[:rule] %>
     <div class="fgroup">
         <div class="fgtranslate">
