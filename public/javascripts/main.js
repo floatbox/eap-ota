@@ -173,14 +173,14 @@ $.animateScrollTop = function(st, complete) {
 var fixedBlocks = {
 init: function() {
     var that = this;
-    if (browser.search(/ipad|iphone|msie6|msie7/) === -1) {
+    if (browser.search(/ipad|iphone|msie6|msie7|opera/) !== -1) {
+        this.update = function() {};
+        this.toggle = function() {};
+    } else {
         this.canvas = $(window).scroll(function() {
             that.toggle();
         });
         this.update();
-    } else {
-        this.update = function() {};
-        this.toggle = function() {};
     }
 },
 update: function(forced) {

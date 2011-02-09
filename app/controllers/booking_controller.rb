@@ -53,10 +53,13 @@ class BookingController < ApplicationController
 
   def confirm_3ds
     @order = Order.find_by_order_id(params[:order_id])
-    if @order && @order.confirm_3ds(params['PaRes'], params['MD'])
+    pa_res = params['PaRes']
+    md = params['MD']
+    # FIXME сделать более внятное и понятное пользователю поведение
+    if @order && pa_res && md && @order.confirm_3ds(pa_res, md)
       @order.money_blocked!
       @pnr_number = @order.pnr_number
-      @pnr_path = pnr_form_path(@order.pnr_number)
+      @pnr_path = show_order_path(@order.pnr_number)
     else
       @error_message = 'Не удалось оплатить билет'
     end

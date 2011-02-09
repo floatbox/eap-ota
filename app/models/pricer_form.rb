@@ -117,6 +117,10 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     {:adults => adults || 1, :children => children || 0, :infants => infants || 0}
   end
 
+  def people_total
+    [adults, children, infants].compact.sum
+  end
+
   def people_count= count
     self.adults, self.children, self.infants = count[:adults] || 1, count[:children] || 0, count[:infants] || 0
   end

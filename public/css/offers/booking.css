@@ -103,6 +103,9 @@
     font-size: 75%;
     line-height: 125%;
 }
+.booking .result .b-hint {
+    font-weight: normal;
+}
 .booking .tds-form {
     position: absolute;
     height: 0;

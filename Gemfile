@@ -27,7 +27,7 @@ gem 'newrelic_rpm'
 
 gem 'haml'
 
-gem 'typus', :git => 'https://github.com/fesplugas/typus.git'
+gem 'typus', :git => 'https://github.com/fesplugas/typus.git', :branch => "3-0-stable"
 #gem 'typus', :path => '../typus'
 
 group :development do
