@@ -266,8 +266,8 @@ class Recommendation
 
   # попытка сделать код для script/amadeus
   def cryptic(variant)
-    ( variant.flights.zip(booking_classes).map { |fl, cl| fl.cryptic(cl) } +
-      [ "FV #{validating_carrier_iata}" ]
+    ( [ "FV #{validating_carrier_iata}", "RMCABS #{cabins.join}"] +
+      variant.flights.zip(booking_classes).map { |fl, cl| fl.cryptic(cl) }
     ).join('; ')
   end
 
