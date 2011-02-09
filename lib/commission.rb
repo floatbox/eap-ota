@@ -48,7 +48,7 @@ subagent "5 (пять) руб. с авиабилета (в т.ч. при пер�
 interline :absent
 commission "1eur/5"
 
- "UN", "TRANSAERO"
+carrier "UN", "TRANSAERO"
 ########################################
 
 agent "11% МВЛ, ВВЛ Класс F (Империал); J, C, D (Бизнес)"
@@ -657,6 +657,7 @@ commission "8%/6%"
 
 agent    "1 euro с билета на рейсы Interline без участка FV."
 subagent "1 руб. с билета на рейсы Interline без участка FV."
+disabled
 interline :absent
 commission "1eur/1"
 
