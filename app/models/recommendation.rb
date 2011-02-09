@@ -28,6 +28,11 @@ class Recommendation
     other_marketing_carrier_iatas.any?
   end
 
+  def clear_variants
+    #удаляем варианты на сегодня/завтра
+    variants.delete_if{|v| v.segments[0].dept_date < Date.today + 2.days}
+  end
+
   def valid_interline?
     not interline? or
     other_marketing_carrier_iatas.all? do |iata|
