@@ -24,6 +24,15 @@ class Recommendation
     marketing_carrier_iatas.include?(validating_carrier_iata)
   end
 
+  # предполагается, что у всех вариантов одинаковый набор marketing carrier-ов
+  def validating_carrier_makes_half_of_itinerary?
+    validating, other =
+      variants.first.flights.every.marketing_carrier_iata.partition do |iata|
+        iata == validating_carrier_iata
+      end
+    validating.size >= other.size
+  end
+
   def interline?
     other_marketing_carrier_iatas.any?
   end

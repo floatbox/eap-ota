@@ -568,16 +568,20 @@ commission "5%/3.5%"
 example 'mowpar'
 important!
 agent    "1 руб. с билета по опубл.тарифам Эконом класса на рейсы EK."
-agent    "(Билеты «Интерлайн» могут быть выписаны, если на долю перевозчика приходится более 50% маршрута.)"
 subagent "5 коп. с билета по опубл.тарифам Эконом класса на собств. рейсы EK."
 klass :economy
 commission "1/0.05"
 
+agent    "(Билеты «Интерлайн» могут быть выписаны, если на долю перевозчика приходится более 50% маршрута.)"
+subagent "???"
 example 'mowpar parmow/ab'
 interline :half
-not_implemented
+disabled "нет уверенности, что правила классов и бизнес классов не применяются к интерлайну"
 commission "1/0.05"
 
+example 'mowpar parled/ab ledmow/ab'
+example 'mowpar/ab parmow/ab'
+no_commission
 
 carrier "ET", "Ethiopian Airlines Enterprise  (АВИАРЕПС)"
 ########################################
