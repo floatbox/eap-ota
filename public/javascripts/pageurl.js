@@ -28,13 +28,16 @@ show: function() {
         var parts = [this.search, this.tab];
         if (this.booking) {
             parts.push(this.booking);
-            this.payment && parts.push(this.payment);
         }
         var url = parts.join(':');
         window.location.hash = url;
-        if (window._gaq) _gaq.push(['_trackPageview', '/#' + url]);
+        if (window._gaq) {
+            _gaq.push(['_trackPageview', '/#' + url]);
+        }
+        this.summary = url;
     } else {
         window.location.hash = '';
+        this.summary = '';
     }
     if (search.share.obj) {
         search.share.obj.updateShareLink(window.location.href, document.title);

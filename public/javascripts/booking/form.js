@@ -26,8 +26,10 @@ init: function() {
                     var result = $(s).appendTo(self.el);
                     var rtype = result.attr('data-type');
                     self.el.find('.book-s').addClass(rtype === 'fail' ? 'book-retry' : 'g-none');
-                    if (rtype === 'success') {
-                        pageurl.update('payment', 'success');
+                    if (rtype === 'success' && window._gaq) {
+                        _gaq.push(['_trackPageview', '/#' + pageurl.summary + ':success']);
+                        _gaq.push(['_addTrans', result.find('.pnr').text(), self.el.find('.booking-price .sum').attr('data-value')]);
+                        _gaq.push(['_trackTrans']);
                     }
                 } else if (s && s.errors) {
                     var items = [];
