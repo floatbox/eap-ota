@@ -18,6 +18,10 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       from_as_object.class == Country
     end
 
+    def date_as_date
+      Date.strptime(date, '%d%m%y')
+    end
+
     def to_country?
       to_as_object.class == Country
     end
