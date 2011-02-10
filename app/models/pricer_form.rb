@@ -130,7 +130,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   end
 
   def parse_complex_to
-    self.complex_to ||= form_segments[0].to
+    self.complex_to ||= form_segments[0].to.gsub(',', ' ')
     res = {}
     str = self.complex_to.mb_chars
     not_finished = true
