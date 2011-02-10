@@ -1,6 +1,4 @@
 <% cache [:pricer, @query_key] do %>
-<% if @recommendations.present? %>
-<div id="offers-options" data-filters='<%= raw Recommendation.summary(@recommendations, @locations).to_json.gsub("'", '&rsquo;') %>' data-query_key="<%= @query_key %>" data-people="<%= @search.people_total %>"></div>
 
 <% nearby_list = nearby_cities_list(@search.rt ? @search.form_segments[0, 1] : @search.form_segments) %>
 <% unless nearby_list.empty? %>
@@ -12,6 +10,8 @@
 </div>
 <% end %>
 
+<% if @recommendations.present? %>
+<div id="offers-options" data-filters='<%= raw Recommendation.summary(@recommendations, @locations).to_json.gsub("'", '&rsquo;') %>' data-query_key="<%= @query_key %>" data-people="<%= @search.people_total %>"></div>
 <% @recommendations.each do |recommendation| %>
 <div class="offer collapsed<%= ' multiple' if recommendation.variants.length > 1 %>" data-summary='<%= recommendation.summary.to_json %>'>
     <% different_cabins = recommendation.cabins_except(@search.cabin) %>
@@ -30,6 +30,6 @@
     </div>
 </div>
 <% end %>
-
 <% end %>
+
 <% end %>

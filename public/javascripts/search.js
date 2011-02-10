@@ -297,7 +297,6 @@ validate: function(qkey) {
     var self = this;
     var restoreResults = Boolean(qkey);
     this.submit.addClass('validating');
-
     this.request = $.get('/pricer/validate/', data, function(result, status, request) {
         if (request != self.request) {
             return;
@@ -326,6 +325,9 @@ validate: function(qkey) {
                 offersList.show(false);
             } else {
                 self.toggle(true);
+                if (typeof self.onValid === 'function') {
+                    self.onValid();
+                }
             }
         } else {
             delete(offersList.nextUpdate);

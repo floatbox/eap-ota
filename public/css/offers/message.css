@@ -22,12 +22,11 @@
     color: #ed1192;
 }
 .om-text {
-    height: 65px;
     border-top: 1px solid #ebebeb;
     border-radius: 0 0 10px 10px;
     -moz-border-radius: 0 0 10px 10px;
     -webkit-border-radius: 0 0 10px 10px;
-    padding-top: 19px;
+    padding: 19px 15px 17px;
     background: #f0f0f0;
     color: #333;
 }

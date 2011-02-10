@@ -115,6 +115,11 @@ init: function() {
     });
 
     // Соседние города
+    var autoLoad = function() {
+        offersList.load();
+        offersList.show();
+        search.onValid = undefined;
+    };
     this.content.delegate('.offers-context .city', 'click', function() {
         var el = $(this);
         var fields = el.closest('.cities').attr('data-fields').split(' ');
@@ -122,7 +127,11 @@ init: function() {
             var fparts = fields[i].split('-');
             search.segments[parseInt(fparts[1], 10)][fparts[0]].trigger('set', el.text());
         }
-        $.animateScrollTop(0);
+        search.onValid = autoLoad;
+    });
+    this.empty.delegate('.city', 'click', function() {
+        search.onValid = autoLoad;
+        search.segments[0].to.trigger('set', $(this).text());
     });
     
     // Матрица цен
@@ -263,11 +272,16 @@ toggleCollection: function(mode) {
 },
 processUpdate: function() {
     var self = this, u = this.update, queue = [];
-    queue.push(function() {
-        $('#offers-mcollection').html(u.mcontent || '');
+    if (u.mcontent && u.mcontent.indexOf('offer-variant') !== -1) {
+        queue.push(function() {
+            $('#offers-mcollection').html(u.mcontent);
+            self.processMatrix();
+        });
+    } else {
+        $('#offers-mcollection').html();
         self.processMatrix();
-    });
-    if (u.pcontent && u.pcontent.indexOf('offers-options') > 0) {
+    }
+    if (u.pcontent && u.pcontent.indexOf('offers-options') !== -1) {
         queue.push(function() {
             $('#offers-pcollection').html(u.pcontent);
         }, function() {
@@ -326,9 +340,21 @@ processUpdate: function() {
         });
         setTimeout(processQueue, 250);
     } else {
-        this.toggle('empty');
         $('#offers-pcollection').html('');
+        if (u.pcontent && u.pcontent.indexOf('offers-context') !== -1) {
+            var nearby = $('#offers-pcollection').html(u.pcontent).find('.offers-context .cities span.city');
+            if (nearby.length) {
+                var nearbyText = nearby.map(function() {
+                    return $('<div/>').append(this).html();
+                }).get().join(', ');
+                $('#offers-empty .om-text p').html('Попробуйте упростить маршрут, поискать другие даты или соседние города: ' + nearbyText);
+            } else {
+                $('#offers-empty .om-text p').html('Попробуйте упростить маршрут или поискать другие даты');
+            }
+            $('#offers-pcollection').html('');
+        }
         $('#offers-mcollection').html('');
+        this.toggle('empty');
         pageurl.update('search', undefined);
         pageurl.title();
         delete(u.pcontent);

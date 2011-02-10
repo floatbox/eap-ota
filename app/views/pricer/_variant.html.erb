@@ -73,7 +73,7 @@
         <% end %>
     </td>
     <td class="arv">
-        <h5><%= fmt_time( segment.arrival_time ) %></h5>
+        <h5><%= fmt_time( segment.arrival_time ) %><% if segment.departure_date != segment.arrival_date %>&nbsp;<span class="arvdate"><%= human_date(segment.arrival_date) %></span><% end %></h5>
         <h6><%= segment.arrival.city.name %></h6>
         <% unless segment.arrival.equal_to_city %>
             <p><%= segment.arrival_name %></p>

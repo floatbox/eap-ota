@@ -43,7 +43,7 @@ class Country < ActiveRecord::Base
   # FIXME WTF? хотя бы iata коды использовать. не айдишники из базы!1
   def self.options_for_nationality_select
     [ ['', [['Россия', 170]]],
-      [ '&mdash;&mdash;&mdash;&mdash;',
+      [ '&mdash;&mdash;&mdash;&mdash;'.html_safe,
         [['Азербайджан', 3],
         ['Армения', 13],
         ['Беларусь', 20],
@@ -59,7 +59,7 @@ class Country < ActiveRecord::Base
         ['Украина', 215],
         ['Эстония', 242]
       ]],
-      ['&mdash;&mdash;&mdash;&mdash;',
+      ['&mdash;&mdash;&mdash;&mdash;'.html_safe,
         Country.all(:order => :name_ru).map{ |c|
           ([c.name_ru.to_s, c.id])
         }

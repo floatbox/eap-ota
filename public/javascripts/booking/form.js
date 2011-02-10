@@ -12,36 +12,50 @@ init: function() {
         event.preventDefault();
         if (!self.submit.hasClass('a-button-ready')) return;
         var data = $(this).serialize();
-        $.post($(this).attr('action'), data, function(s) {
-            self.el.find('.result').remove();
-            if (typeof s == 'string') {
-                var result = $(s).appendTo(self.el);
-                var rtype = result.attr('data-type');
-                self.el.find('.book-s').addClass(rtype === 'error' ? 'book-retry' : 'g-none');
-                if (rtype !== '3dsecure') {
-                    pageurl.update('payment', rtype);
-                }
-            } else if (s.errors) {
-                var items = [];
-                for (var eid in s.errors) {
-                    var ftitle = eid;
-                    if (ftitle.search(/card\[number|type\]/i) > -1) {
-                        items.push('<li>введён неправильный <a href="#" data-id="bc-num1"><u>номер карты</u></a></li>');
-                    } else {
-                        ftitle = ftitle.replace(/person\[(\d)\]\[birthday\]/i, function(s, n) {
-                            return '<a href="#" data-id="book-p-' + n + '-birth"><u>' + constants.numbers.ordinaldat[parseInt(n, 10)] + ' пассажиру</u></a>';
-                        });
-                        items.push('<li>' + ftitle + ' ' + s.errors[eid] + '</li>');
+        var rcontrol = self.submit.addClass('a-button-ready').closest('.control');
+        var processError = function(text) {
+            self.el.find('.book-s').addClass('book-retry');
+            self.el.append('<div class="result"><p class="fail"><strong>Упс…</strong> ' + (text || 'Что-то пошло не так.') + '</p><p class="tip">Попробуйте снова или узнайте <a target="_blank" href="/about/#payment">какими ещё способами</a> можно купить у нас билет.</p></div>');
+        };
+        $.ajax({
+            url: $(this).attr('action'),
+            data: data,
+            success: function(s) {
+                self.el.find('.result').remove();
+                if (typeof s === 'string' && s.length) {
+                    var result = $(s).appendTo(self.el);
+                    var rtype = result.attr('data-type');
+                    self.el.find('.book-s').addClass(rtype === 'fail' ? 'book-retry' : 'g-none');
+                    if (rtype === 'success') {
+                        pageurl.update('payment', 'success');
                     }
+                } else if (s && s.errors) {
+                    var items = [];
+                    for (var eid in s.errors) {
+                        var ftitle = eid;
+                        if (ftitle.search(/card\[number|type\]/i) > -1) {
+                            items.push('<li>введён неправильный <a href="#" data-id="bc-num1"><u>номер карты</u></a></li>');
+                        } else {
+                            ftitle = ftitle.replace(/person\[(\d)\]\[birthday\]/i, function(s, n) {
+                                return '<a href="#" data-id="book-p-' + n + '-birth"><u>' + constants.numbers.ordinaldat[parseInt(n, 10)] + ' пассажиру</u></a>';
+                            });
+                            items.push('<li>' + ftitle + ' ' + s.errors[eid] + '</li>');
+                        }
+                    }
+                    self.el.find('.blocker').show().find('.b-pseudo').html(items.join(''));
+                    self.el.removeClass('book-retry');
+                } else {
+                    processError(s && s.exception && s.exception.message);
                 }
-                self.el.find('.blocker').show().find('.b-pseudo').html(items.join(''));
-                self.el.removeClass('book-retry');
-            } else if (s.exception) {
-                alert(s.exception.message);
-            }
-            self.submit.addClass('a-button-ready').closest('.control').removeClass('sending');
+                rcontrol.removeClass('sending');
+            },
+            error: function() {
+                processError();
+                rcontrol.removeClass('sending');
+            },
+            timeout: 45000
         });
-        self.submit.removeClass('a-button-ready').closest('.control').addClass('sending');
+        rcontrol.addClass('sending');
     });
     this.submit = $('.book-s .a-button', this.el);
     for (var i = this.steps.length; i--;) {

@@ -96,7 +96,8 @@
     font-weight: bold;
     color: #ED1192;    
 }
-.offers-context .city {
+.offers-context .city,
+.om-text .city {
     text-decoration: underline;
     cursor: pointer;
 }
@@ -261,14 +262,18 @@
     line-height: 1;
     letter-spacing: -0.04em;
 }
-.offer .summary .direction {
+.offer .summary .direction,
+.offer .summary .arvdate {
     position: relative;
     top: -3px;
-    padding-left: 2px;
-    visibility: hidden;
     font-size: 50%;
     font-weight: normal;
+    letter-spacing: 0;
     color: #777;
+}
+.offer .summary .direction {
+    padding-left: 2px;
+    visibility: hidden;
 }
 .hover .summary .direction {
     visibility: inherit;    
@@ -281,7 +286,7 @@
 .offer .summary .arv p {
     line-height: 115.385%;
     color: #777;
-}    
+}
 
 /* Перелёт */
 .offer .summary .trip {
