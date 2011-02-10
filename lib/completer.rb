@@ -231,6 +231,8 @@ class Completer
     days << ['сегодня', Date.today]
     days << ['завтра', Date.today + 1.day]
     days << ['послезавтра', Date.today + 2.days]
+    days << ['через неделю', Date.today + 7.days]
+    days << ['через месяц', Date.today + 1.month]
 
     for name, date in days
       add(:name => name, :type => 'date', :hint => Russian.strftime(date, '%e %B'), :info => Russian.strftime(date, '%A, %e %B %Y года'), :hidden_info => date.strftime('%d%m%y'))
@@ -257,8 +259,7 @@ class Completer
     end
   end
 
-  PAX = 'вдвоем', 'втроем', 'вчетвером', 'впятером', 'с ребенком', 'c подругой'
-  PEOPLE = [['вдвоем', {:adults => 2}], ['втроем', {:adults => 3}], ['вчетвером', {:adults => 4}], ['впятером', {:adults => 4}], ['с ребенком', {:children => 1}], ['с подругой', {:adults => 2}]]
+  PEOPLE = [['один', {:adults => 1}], ['вдвоем', {:adults => 2}], ['втроем', {:adults => 3}], ['вчетвером', {:adults => 4}], ['впятером', {:adults => 5}], ['с ребенком', {:children => 1}], ['с подругой', {:adults => 2}]]
   def read_passengers
     PEOPLE.each do |pax, hidden_info|
       add(:name => pax, :type => 'people', :hidden_info => hidden_info)
