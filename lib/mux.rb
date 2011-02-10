@@ -26,6 +26,8 @@ class Mux
 
       Amadeus.fake = was_fake if form.debug
       recommendations = recommendations.select(&:sellable?) unless admin_user
+      recommendations.every.clear_variants
+      recommendations.delete_if{|r| r.variants.blank?}
 
       recommendations
     end

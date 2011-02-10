@@ -18,6 +18,10 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       from_as_object.class == Country
     end
 
+    def date_as_date
+      Date.strptime(date, '%d%m%y')
+    end
+
     def to_country?
       to_as_object.class == Country
     end
@@ -199,7 +203,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   end
 
   def date_from_month_and_day(month, day)
-    self.date1 = (Date.today > Date.new(Date.today.year, month, day)) ?
+    self.form_segments[0].date = (Date.today > Date.new(Date.today.year, month, day)) ?
       Date.new(Date.today.year+1, month, day).strftime('%d%m%y') :
       Date.new(Date.today.year, month, day).strftime('%d%m%y')
   end

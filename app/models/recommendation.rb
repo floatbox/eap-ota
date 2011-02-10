@@ -24,8 +24,22 @@ class Recommendation
     marketing_carrier_iatas.include?(validating_carrier_iata)
   end
 
+  # предполагается, что у всех вариантов одинаковый набор marketing carrier-ов
+  def validating_carrier_makes_half_of_itinerary?
+    validating, other =
+      variants.first.flights.every.marketing_carrier_iata.partition do |iata|
+        iata == validating_carrier_iata
+      end
+    validating.size >= other.size
+  end
+
   def interline?
     other_marketing_carrier_iatas.any?
+  end
+
+  def clear_variants
+    #удаляем варианты на сегодня/завтра
+    variants.delete_if{|v| v.segments[0].dept_date < Date.today + 2.days}
   end
 
   def valid_interline?
@@ -252,8 +266,8 @@ class Recommendation
 
   # попытка сделать код для script/amadeus
   def cryptic(variant)
-    ( variant.flights.zip(booking_classes).map { |fl, cl| fl.cryptic(cl) } +
-      [ "FV #{validating_carrier_iata}" ]
+    ( [ "FV #{validating_carrier_iata}", "RMCABS #{cabins.join}"] +
+      variant.flights.zip(booking_classes).map { |fl, cl| fl.cryptic(cl) }
     ).join('; ')
   end
 

@@ -4,6 +4,10 @@ class BookingController < ApplicationController
 
   def preliminary_booking
     pricer_form = PricerForm.load_from_cache(params[:query_key])
+    if pricer_form.form_segments[0].date_as_date < Date.today + 2.days
+      render :json => {:success => false}
+      return
+    end
     recommendation = Recommendation.check_price_and_availability(params[:flight_codes].split('_'), pricer_form, params[:validating_carrier])
     if !recommendation
       render :json => {:success => false}

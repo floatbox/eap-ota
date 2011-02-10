@@ -42,6 +42,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     res = {}
     res['order[email]'] = errors[:email] if errors[:email].present?
     res['order[phone]'] = errors[:phone] if errors[:phone].present?
+    res[''] = errors[:recommendation] if errors[:recommendation].present?
     last_flight_word = if recommendation.rt
       "на момент обратного вылета"
     elsif recommendation.segments.length > 1
@@ -101,7 +102,11 @@ class OrderData < ActiveRecord::BaseWithoutTable
     people_count[:adults] + people_count[:children]
   end
 
-  validate :validate_card
+  validate :validate_card, :validate_dept_date
+
+  def validate_dept_date
+    errors.add :recommendation, 'Первый вылет слишком рано' if recommendation.variants[0].segments[0].dept_date < Date.today + 2.days
+  end
 
   def validate_card
     errors.add :card, 'Отсутствуют данные карты' unless card
