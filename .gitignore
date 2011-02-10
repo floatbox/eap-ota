@@ -20,3 +20,4 @@ config/*.sphinx.conf
 db/sphinx
 .DS_Store
 tags
+config/initializers/hoptoad.rb
