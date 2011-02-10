@@ -45,6 +45,11 @@ module CommissionRules
       recommendation.interline? and
       recommendation.variants[0].flights.first.marketing_carrier_iata ==
         recommendation.validating_carrier_iata
+    when :half
+      recommendation.interline? and
+        recommendation.validating_carrier_makes_half_of_itinerary?
+    else
+      raise ArgumentError, "неизвестный тип interline у #{carrier}: '#{interline}' (line #{source})"
     end
   end
 
