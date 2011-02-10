@@ -1,5 +1,5 @@
 #if Rails.env.production?
   HoptoadNotifier.configure do |config|
-    config.api_key = '47050e4ef1159c3bea6f5ec80509d7ec'
+    config.api_key = 'a4ca32b7fb71874b9f4c5f38ff2c6da2'
   end
 #end
