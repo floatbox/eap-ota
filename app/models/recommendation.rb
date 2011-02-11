@@ -119,7 +119,7 @@ class Recommendation
     #проверяем, что все аэропорты есть в базе
     missed_iatas = (flights.every.arrival + flights.every.departure).uniq.find_all{|a| !a.id}.every.iata
     File.open(RAILS_ROOT + '/log/missed_iatas.log', 'a') {|f|
-        f.write(missed_iatas.join(',') + ' ' + Time.now.strftime("%H:%m %d.%m.%Y") + "\n")
+        f.write(missed_iatas.join(',') + ' ' + Time.now.strftime("%H:%M %d.%m.%Y") + "\n")
     } unless missed_iatas.blank?
     !missed_iatas.blank?
   end
