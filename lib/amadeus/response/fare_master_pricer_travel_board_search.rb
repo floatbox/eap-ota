@@ -12,21 +12,6 @@ module Amadeus
             rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:cabin").every.to_s
           booking_classes =
             rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:rbd").every.to_s
-=begin
-          booking_classes_child = rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='CH']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:rbd").every.to_s
-          fare_basis_child = rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='CH']/r:fareDetails/r:groupOfFares/r:productInformation/r:fareProductDetail/r:fareBasis").every.to_s
-          booking_classes_infant = rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='INF']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:rbd").every.to_s
-          fare_basis_infant = rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='INF']/r:fareDetails/r:groupOfFares/r:productInformation/r:fareProductDetail/r:fareBasis").every.to_s
-
-
-          fare_details = {}
-          fare_details[:fare_basis] = rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:fareProductDetail/r:fareBasis").every.to_s
-          fare_details[:booking_classes_child] = booking_classes_child if booking_classes_child != booking_classes
-          fare_details[:fare_basis_child] = fare_basis_child if fare_basis_child != fare_details[:fare_basis]
-          fare_details[:booking_classes_infant] = booking_classes_infant if booking_classes_infant != booking_classes
-          fare_details[:fare_basis_infant] = fare_basis_infant if fare_basis_infant != fare_details[:fare_basis]
-          debugger if fare_details[:booking_classes_infant] || fare_details[:booking_classes_child]
-=end
 
           validating_carrier_iata =
             rec.xpath("r:paxFareProduct/r:paxFareDetail/r:codeShareDetails[r:transportStageQualifier='V']/r:company").to_s
