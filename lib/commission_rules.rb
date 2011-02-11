@@ -31,22 +31,24 @@ module CommissionRules
   def applicable_interline? recommendation
     case interline
     when :possible
-      recommendation.validating_carrier_participates?
+      not recommendation.interline? or
+      (recommendation.validating_carrier_participates? and
+       recommendation.valid_interline?)
     when nil, :no
       not recommendation.interline?
     when :yes
-      recommendation.interline? and # and recommendation.valid_interline?
+      recommendation.interline? and recommendation.valid_interline? and
         recommendation.validating_carrier_participates?
     # FIXME доделать:
     when :absent
-      recommendation.interline? and
+      recommendation.interline? and recommendation.valid_interline? and
         not recommendation.validating_carrier_participates?
     when :first
-      recommendation.interline? and
+      recommendation.interline? and recommendation.valid_interline? and
       recommendation.variants[0].flights.first.marketing_carrier_iata ==
         recommendation.validating_carrier_iata
     when :half
-      recommendation.interline? and
+      recommendation.interline? and recommendation.valid_interline? and
         recommendation.validating_carrier_makes_half_of_itinerary?
     else
       raise ArgumentError, "неизвестный тип interline у #{carrier}: '#{interline}' (line #{source})"
