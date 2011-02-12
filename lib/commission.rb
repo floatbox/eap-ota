@@ -217,8 +217,9 @@ subagent "5 коп с билета по опубл. тарифам на рейс
 commission "1/0.05"
 
 example 'mowpar parmow/s7'
-agent    "СанСаныч разрешил"
-subagent "СанСаныч разрешил"
+agent    "СанСаныч разрешил интерлайн"
+subagent "СанСаныч разрешил интерлайн"
+interline :yes
 commission "1/0"
 
 example 'mowpar/s7'
