@@ -9,15 +9,9 @@ module CommissionRules
 
   attr_accessor :carrier, :agent, :subagent,
     :disabled, :not_implemented, :no_commission,
-    :interline, :domestic, :international, :klass,
+    :interline, :domestic, :international, :classes, :subclasses,
     :departure, :departure_country, :important,
     :check, :examples, :agent_comments, :subagent_comments, :source
-
-  KLASSES = {
-    :first => %W(P F A),
-    :business => %W(D I Z J C),
-    :economy => %W(B H K L M N Q T V X W S Y  G R O U E)
-  }
 
   def disabled?
     disabled || not_implemented || no_commission
@@ -27,7 +21,8 @@ module CommissionRules
     not disabled? and
     # carrier == recommendation.validating_carrier_iata and
     applicable_interline?(recommendation) and
-    applicable_classes?(recommendation)
+    applicable_classes?(recommendation) and
+    applicable_subclasses?(recommendation)
   end
 
   def applicable_interline? recommendation
@@ -60,15 +55,18 @@ module CommissionRules
     end
   end
 
+  CLASS_CABIN_MAPPING = {:economy => %w(M W Y), :business => %w(C), :first => %w(F)}
+
   def applicable_classes? recommendation
-    return true unless klass
-    # symbol(s)?
-    if Array(klass)[0].is_a? Symbol
-      letters = Array(klass).map {|k| KLASSES[k]}.flatten
-    else
-      letters = klass.split('')
-    end
-    (recommendation.booking_classes - letters).blank?
+    return true unless classes
+
+    cabins = classes.each_with_object([]) {|c, a| a.push(*CLASS_CABIN_MAPPING[c])}
+    (recommendation.cabins - cabins).blank?
+  end
+
+  def applicable_subclasses? recommendation
+    return true unless subclasses
+    (recommendation.booking_classes - subclasses).blank?
   end
 
   def share(fare)
@@ -207,8 +205,12 @@ module CommissionRules
       opts[:international] = true
     end
 
-    def klass *klasses
-      opts[:klass] = klasses
+    def subclasses *sublasses
+      opts[:subclasses] = subclasses.join.upcase.gsub(' ', '').split('')
+    end
+
+    def classes *classes
+      opts[:classes] = classes
     end
 
     def important!

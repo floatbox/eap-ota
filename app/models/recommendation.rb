@@ -367,11 +367,12 @@ class Recommendation
   def self.example itinerary, opts={}
     default_carrier = (opts[:carrier] || 'SU').upcase
     segments = []
-    classes = []
+    subclasses = []
+    cabins = []
     itinerary.split.each do |fragment|
       flight = Flight.new
       # defaults
-      carrier, klass = default_carrier, 'Y'
+      carrier, subclass, cabin = default_carrier, 'Y', 'M'
       fragment.upcase.split('/').each do |code|
         case code.length
         when 6
@@ -379,19 +380,30 @@ class Recommendation
         when 2
           carrier = code
         when 1
-          klass = code
+          subclass = code
         else
-          raise ArgumentError, 'should consist of itinerary (MOWLON), carrier(AB) or cabin class (Y). example "mowaer/s7 aermow/y'
+          case code
+          when 'ECONOMY'
+            cabin = 'M'
+          when 'BUSINESS'
+            cabin = 'C'
+          when 'FIRST'
+            cabin = 'F'
+          else
+            raise ArgumentError, 'should consist of itinerary (MOWLON), carrier(AB), cabin subclass (Y) or class (economy). example "mowaer/s7 aermow/y'
+          end
         end
       end
       flight.marketing_carrier_iata = carrier
       segments << Segment.new(:flights => [flight])
-      classes << klass
+      subclasses << subclass
+      cabins << cabin
     end
     Recommendation.new(
       :validating_carrier_iata => default_carrier,
       :variants => [Variant.new(:segments => segments)],
-      :booking_classes => classes
+      :booking_classes => subclasses,
+      :cabins => cabins
     )
   end
 end
