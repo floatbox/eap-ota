@@ -7,8 +7,10 @@ module CommissionRules
 
   include KeyValueInit
 
-  attr_accessor :carrier, :agent, :subagent, :disabled, :not_implemented, :no_commission, :interline,
-    :domestic, :international, :klass, :departure, :departure_country, :important,
+  attr_accessor :carrier, :agent, :subagent,
+    :disabled, :not_implemented, :no_commission,
+    :interline, :domestic, :international, :klass,
+    :departure, :departure_country, :important,
     :check, :examples, :agent_comments, :subagent_comments, :source
 
   KLASSES = {
@@ -33,23 +35,26 @@ module CommissionRules
     when :possible
       not recommendation.interline? or
       (recommendation.validating_carrier_participates? and
-       recommendation.valid_interline?)
+       Commission.skip_interline_validity_check || recommendation.valid_interline?
+      )
     when nil, :no
       not recommendation.interline?
     when :yes
-      recommendation.interline? and recommendation.valid_interline? and
-        recommendation.validating_carrier_participates?
-    # FIXME доделать:
+      recommendation.interline? and
+      recommendation.validating_carrier_participates? and
+      Commission.skip_interline_validity_check || recommendation.valid_interline?
     when :absent
-      recommendation.interline? and recommendation.valid_interline? and
-        not recommendation.validating_carrier_participates?
+      recommendation.interline? and
+      not recommendation.validating_carrier_participates? and
+      Commission.skip_interline_validity_check || recommendation.valid_interline?
     when :first
-      recommendation.interline? and recommendation.valid_interline? and
-      recommendation.variants[0].flights.first.marketing_carrier_iata ==
-        recommendation.validating_carrier_iata
+      recommendation.interline? and
+      recommendation.variants[0].flights.first.marketing_carrier_iata == recommendation.validating_carrier_iata and
+      Commission.skip_interline_validity_check || recommendation.valid_interline?
     when :half
-      recommendation.interline? and recommendation.valid_interline? and
-        recommendation.validating_carrier_makes_half_of_itinerary?
+      recommendation.interline? and
+      recommendation.validating_carrier_makes_half_of_itinerary? and
+      Commission.skip_interline_validity_check || recommendation.valid_interline?
     else
       raise ArgumentError, "неизвестный тип interline у #{carrier}: '#{interline}' (line #{source})"
     end
@@ -104,8 +109,9 @@ module CommissionRules
 
   module ClassMethods
 
-    mattr_accessor :commissions
     mattr_accessor :opts
+    mattr_accessor :skip_interline_validity_check
+    mattr_accessor :commissions
     self.commissions = {}
 
     def carrier carrier, carrier_name=nil
@@ -228,7 +234,8 @@ module CommissionRules
 
     # test methods
     def test
-      commissions.values.flatten.each do |commission|
+      self.skip_interline_validity_check = true
+      commissions.values.flatten.sort_by {|c| c.source.to_i }.each do |commission|
         (commission.examples || next).each do |code, source|
           rec = Recommendation.example(code, :carrier => commission.carrier)
           proposed = find_for(rec)
@@ -251,7 +258,7 @@ module CommissionRules
           end
         end
       end
-
+      self.skip_interline_validity_check = false
     end
 
     def stats
