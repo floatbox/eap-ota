@@ -108,13 +108,20 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     (form_segments.length == 2) && (form_segments[0].to_iata == form_segments[1].from_iata) && (form_segments[1].to_iata == form_segments[0].from_iata)
   end
 
+  # для рассчета тарифов
+  # младенцы с местом считаются детьми
+  # FIXME переименовать во что-то типа tariff_count
   def real_people_count
-    #младенцы с местом считаются детьми
     {
       :adults => adults,
       :children => children + ((adults < infants) ? (infants - adults) : 0 ),
       :infants => (adults >= infants) ? infants : adults
     }
+  end
+
+  # понадобится мест в самолете
+  def seat_total
+    real_people_count.values_at(:adults, :children).sum
   end
 
   def people_count

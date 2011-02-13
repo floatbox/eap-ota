@@ -215,7 +215,7 @@ class Recommendation
     [price_fare, price_tax, validating_carrier_iata, booking_classes, marketing_carrier_iatas] == [rec.price_fare, rec.price_tax, rec.validating_carrier_iata,  rec.booking_classes, rec.marketing_carrier_iatas]
   end
 
-  def self.from_flight_codes(flight_codes)
+  def self.from_flight_codes(flight_codes, validating_carrier_code=nil)
     flights = flight_codes.collect do |flight_code|
       Flight.from_flight_code(flight_code)
     end
@@ -224,13 +224,14 @@ class Recommendation
     end
     variant = Variant.new(:segments => segments)
     recommendation = Recommendation.new(:variants => [variant])
+    recommendation.validating_carrier_iata = validating_carrier_code
     recommendation.booking_classes = variant.flights.every.class_of_service
     recommendation
   end
 
-  def self.check_price_and_availability(flight_codes, pricer_form, validating_carrier_code)
-    from_flight_codes(flight_codes)\
-      .check_price_and_availability(pricer_form, validating_carrier_code)
+  def self.check_price_and_availability(flight_codes, validating_carrier_code, pricer_form)
+    from_flight_codes(flight_codes, validating_carrier_code)\
+      .check_price_and_availability(pricer_form)
   end
 
   def booking_class_for_flight flight
@@ -240,14 +241,14 @@ class Recommendation
     end
   end
 
-  def check_price_and_availability(pricer_form, validating_carrier_code)
+  def check_price_and_availability(pricer_form)
     Amadeus.booking do |amadeus|
       self.price_fare, self.price_tax =
         amadeus.fare_informative_pricing_without_pnr(
           :recommendation => self,
           :flights => flights,
           :people_count => pricer_form.real_people_count,
-          :validating_carrier => validating_carrier_code
+          :validating_carrier => validating_carrier_iata
         ).prices
 
       # FIXME не очень надежный признак
@@ -256,7 +257,7 @@ class Recommendation
       air_sfr = amadeus.air_sell_from_recommendation(
         :recommendation => self,
         :segments => segments,
-        :people_count => (pricer_form.real_people_count[:adults] + pricer_form.real_people_count[:children])
+        :seat_total => pricer_form.seat_total
       )
       amadeus.pnr_ignore
       return unless air_sfr.segments_confirmed?
@@ -384,7 +385,6 @@ class Recommendation
         end
       end
       flight.marketing_carrier_iata = carrier
-      marketing_carrier_iatas |= [carrier]
       segments << Segment.new(:flights => [flight])
       classes << klass
     end

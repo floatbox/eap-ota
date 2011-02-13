@@ -98,7 +98,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     }
   end
 
-  def seat_count
+  def seat_total
     people_count[:adults] + people_count[:children]
   end
 
@@ -150,7 +150,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     Amadeus.booking do |amadeus|
       amadeus.air_sell_from_recommendation(
         :segments => recommendation.variants[0].segments,
-        :people_count => seat_count,
+        :seat_total => seat_total,
         :recommendation => recommendation
       ).or_fail!
 
@@ -177,7 +177,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
             Amadeus::Session::TICKETING,
             Amadeus::Session::WORKING
           )
-          amadeus.pnr_archive(seat_count)
+          amadeus.pnr_archive(seat_total)
           amadeus.pnr_add_remark
         end
         #amadeus.queue_place_pnr(:number => pnr_number)

@@ -8,12 +8,11 @@ class BookingController < ApplicationController
       render :json => {:success => false}
       return
     end
-    recommendation = Recommendation.check_price_and_availability(params[:flight_codes].split('_'), pricer_form, params[:validating_carrier])
+    recommendation = Recommendation.check_price_and_availability(params[:flight_codes].split('_'), params[:validating_carrier], pricer_form)
     if !recommendation
       render :json => {:success => false}
       return
     end
-    recommendation.validating_carrier_iata = params[:validating_carrier]
     order_data = OrderData.new(
       :recommendation => recommendation,
       :people_count => pricer_form.real_people_count,
