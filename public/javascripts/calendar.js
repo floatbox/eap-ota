@@ -26,7 +26,7 @@ makeDates: function() {
     var today = new Date(), tt = today.getTime();
     var curd = today.clone().shiftDays(1 - (today.getDay() || 7));
     var curt = curd.getTime();
-    var actend = today.clone().shiftMonthes(6);
+    var actend = today.clone().shiftMonthes(10);
     var abt = today.clone().shiftDays(2).getTime();
     var aet = actend.getTime() - 1;
     var end = actend.shiftDays((actend.getDay() == 1 ? 8 : 15) - (actend.getDay() || 7)).getTime();
@@ -323,7 +323,7 @@ init: function() {
     this.el = this.parent.container;
     this.rheight = $(this.parent.dates.eq(0)).outerHeight();
     this.active = true;
-    this.factor = 2.5;
+    this.factor = 1.6;
     this.initNative();
     this.initTimeline();
     this.initScrollbar();
@@ -410,13 +410,13 @@ toggleArrows: function() {
     this.scrollfw.toggleClass('enabled', st < this.stmax);
 },
 initTimeline: function() {
-    var self = this, dates = $('ul.month li', this.parent.container);
-    this.scroller = $('.scroller', this.parent.el).width(Math.round(dates.length * self.factor));
+    var self = this, dates = $('ul.month li', this.parent.container), sw = Math.round(dates.length * self.factor);
+    this.scroller = $('.scroller', this.parent.el).width(sw).css('left', Math.round((this.parent.el.width() - sw) / 2));
     this.timeline = $('.timeline', this.scroller).hide().html('');
     $('.month', this.el).each(function() {
         var mdate = $(this).data('monthyear');
         var mw = Math.round(Date.daysInMonth(mdate.month, mdate.year) * self.factor);
-        var label = $('<span>').addClass('label').width(mw).text(constants.monthes.nomimative[mdate.month]);
+        var label = $('<span>').addClass('label').width(mw).text(constants.monthes.short[mdate.month]);
         $('<li>').width(mw).append(label).appendTo(self.timeline);
     });
     this.timeline.css('left', Math.round((1 - parseInt(dates.eq(0).attr('data-dmy').substring(0,2), 10)) * self.factor)).show();
