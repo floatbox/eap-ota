@@ -78,6 +78,9 @@ app.Person = function() {
     // ввод дат, два набора полей, всего шесть
     this.dates($('.text-dd', this.$el), $('.text-mm', this.$el), $('.text-yyyy', this.$el));
 
+    // Номер документа с подсказкой
+    this.passport($('.text-passport', this.$el));
+
     return this;
 };
 app.Person.extend(app.Wizard);
@@ -85,7 +88,7 @@ var ptp = app.Person.prototype;
 
 ptp.names = function($names) {
     var warning = $names.eq(0).closest('tr').find('.language-warning');
-    var mask = /[а-я]/i;
+    var mask = /[а-яё]/i;
     var active = false;
     var hwtimer, hideWarning = function() {
         clearTimeout(hwtimer);
@@ -226,6 +229,31 @@ ptp.dates = function($dd, $mm, $yyyy) {
     // Показываем подсказки
     $ddmm.add($yyyy).trigger('blur').removeClass('text-invalid');
 }
+
+ptp.passport = function($passport) {
+    var warning = $passport.eq(0).closest('tr').find('.symbols-warning');
+    var mask = /[ёа-яa-z]/i;
+    var active = false;
+    var hwtimer, hideWarning = function() {
+        clearTimeout(hwtimer);
+        warning.fadeOut(150);
+        active = false;
+    }
+    $passport.keypress(function(e) {
+        if (mask.test(String.fromCharCode(e.which))) {
+            if (!active) {
+                warning.fadeIn(150);
+                active = true;
+            }
+            clearTimeout(hwtimer);
+            hwtimer = setTimeout(hideWarning, 5000);
+        } else if (active) {
+            hideWarning();
+        }
+    }).blur(function() {
+        if (active) hideWarning();
+    });
+};
 
 // ======  Данные банковской карты  ============
 

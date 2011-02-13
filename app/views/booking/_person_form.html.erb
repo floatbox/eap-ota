@@ -137,9 +137,9 @@
                  {},
                  :id => "bonus-type-#{person_form_counter}",
                  :class => 'text select-bonus text-value g-xl g-none'
-                 %>
-                 <%= person.error_message_on :bonuscard_type, 
-                  :id => "error_person_#{person_form_counter}_bonuscard_type" %>
+                %>
+                <%= person.error_message_on :bonuscard_type, 
+                 :id => "error_person_#{person_form_counter}_bonuscard_type" %>
 
         <tr class="label">
             <td>
@@ -162,13 +162,14 @@
             <td>
                 <%= person.text_field :passport,
                  :id => "booking-person-#{person_form_counter}-passport",
-                 :class => "text g-xl",
+                 :class => "text text-passport g-xl",
                  :maxlength => '100',
                  :title => 'номер документа',
-                 :onclick => "return {mask: /[ \\w]/, rules: {req: true, minl: 1, gender: 'M'}}"
-                 %>
+                 :onclick => "return {mask: /[ \\d]/, rules: {req: true, minl: 1, gender: 'M'}}"
+                %>
                  <%= person.error_message_on :passport, 
                   :id => "error_person_#{person_form_counter}_passport" %>
+                <div class="symbols-warning">Вводите только цифры — с пробелами или без</div>
             <td>
                 <input type="text" 
                  id="bp-<%=person_form_counter%>-expires-d"
