@@ -149,7 +149,9 @@ class OrderData < ActiveRecord::BaseWithoutTable
   def create_booking
     Amadeus.booking do |amadeus|
       amadeus.air_sell_from_recommendation(
-        :segments => recommendation.variants[0].segments, :people_count => seat_count
+        :segments => recommendation.variants[0].segments,
+        :people_count => seat_count,
+        :recommendation => recommendation
       ).or_fail!
 
       add_multi_elements = amadeus.pnr_add_multi_elements(self).or_fail!
