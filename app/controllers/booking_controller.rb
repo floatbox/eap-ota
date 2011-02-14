@@ -8,8 +8,8 @@ class BookingController < ApplicationController
       render :json => {:success => false}
       return
     end
-    recommendation = Recommendation.check_price_and_availability(params[:flight_codes].split('_'), params[:validating_carrier], pricer_form)
-    if !recommendation
+    recommendation = Recommendation.deserialize(params[:recommendation])
+    unless recommendation.check_price_and_availability(pricer_form)
       render :json => {:success => false}
       return
     end

@@ -160,13 +160,18 @@ class Recommendation
   def rules_with_flights
     rule_index = 0
     flights.each_with_object([]) do |flight, result|
-      if result.blank? || !result.last[:flights].last.has_equal_tariff_with?(flight)
+      if result.blank? || !has_equal_tariff?(result.last[:flights].last, flight)
         result << {:rule => rules[rule_index], :flights => [flight]}
         rule_index += 1
       else
         result.last[:flights] << flight
       end
     end
+  end
+
+  def has_equal_tariff? flight1, flight2
+    flight1.marketing_carrier_iata == flight2.marketing_carrier_iata &&
+      booking_class_for_flight(flight1) == booking_class_for_flight(flight2)
   end
 
   def summary
@@ -213,25 +218,6 @@ class Recommendation
   def groupable_with? rec
     return unless rec
     [price_fare, price_tax, validating_carrier_iata, booking_classes, marketing_carrier_iatas] == [rec.price_fare, rec.price_tax, rec.validating_carrier_iata,  rec.booking_classes, rec.marketing_carrier_iatas]
-  end
-
-  def self.from_flight_codes(flight_codes, validating_carrier_code=nil)
-    flights = flight_codes.collect do |flight_code|
-      Flight.from_flight_code(flight_code)
-    end
-    segments = flights.group_by(&:segment_number).values.collect do |flight_group|
-      Segment.new(:flights => flight_group)
-    end
-    variant = Variant.new(:segments => segments)
-    recommendation = Recommendation.new(:variants => [variant])
-    recommendation.validating_carrier_iata = validating_carrier_code
-    recommendation.booking_classes = variant.flights.every.class_of_service
-    recommendation
-  end
-
-  def self.check_price_and_availability(flight_codes, validating_carrier_code, pricer_form)
-    from_flight_codes(flight_codes, validating_carrier_code)\
-      .check_price_and_availability(pricer_form)
   end
 
   def booking_class_for_flight flight
@@ -286,6 +272,34 @@ class Recommendation
     ( [ "FV #{validating_carrier_iata}", "RMCABS #{cabins.join}"] +
       variant.flights.zip(booking_classes).map { |fl, cl| fl.cryptic(cl) }
     ).join('; ')
+  end
+
+  # надеюсь, однажды это будет просто ключ из кэша
+  def serialize(variant)
+    segment_codes = variant.segments.collect { |s|
+      s.flights.collect(&:flight_code).join('-')
+    }
+
+    ( [ validating_carrier_iata, booking_classes.join(''), cabins.join('') ] +
+      segment_codes ).join('.')
+  end
+
+  def self.deserialize(coded)
+    fv, classes, cabins, *segment_codes = coded.split('.')
+    variant = Variant.new(
+      :segments => segment_codes.collect { |segment_code|
+        Segment.new( :flights => segment_code.split('-').collect { |flight_code|
+          Flight.from_flight_code(flight_code)
+        })
+      }
+    )
+
+    new(
+      :validating_carrier_iata => fv,
+      :booking_classes => classes.split(''),
+      :cabins => cabins.split(''),
+      :variants => [variant]
+    )
   end
 
   # FIXME порнография какая-то. чего так сложно?

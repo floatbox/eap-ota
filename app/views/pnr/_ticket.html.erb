@@ -77,7 +77,7 @@
 <tr>
     <td colspan="6" class="pad_null"><font size="2"><br></font></td>
 </tr>
-<% for flight in @pnr.flights %>
+<% for flight, booking_class in @pnr.flights.zip(@pnr.booking_classes) %>
 <tr>
     <td class="pad_null"><%= fmt_date( flight.departure_date ) %></td>
     <td class="pad_null" valign="top" style="vertical-align: top;">
@@ -101,7 +101,7 @@
     </td>
     <td class="pad_null"><br></td>
     <td class="pad_null">
-        <font size="2" family="Arial"><%= flight.class_of_service %> (HK)</font>
+        <font size="2" family="Arial"><%= booking_class %> (HK)</font>
     </td>
 </tr>
 <% end %>

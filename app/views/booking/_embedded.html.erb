@@ -55,10 +55,10 @@
         </div>
         <div class="fgheader">
         <% if common_fare %>
-            <p class="clofs">Класс бронирования <%= fgroup[:flights].first.class_of_service %></p><h5>&nbsp;</h5>
+            <p class="clofs">Класс бронирования <%= @order.recommendation.booking_class_for_flight(fgroup[:flights].first) %></p><h5>&nbsp;</h5>
         <% else %>
             <h5><% fgroup[:flights].each_with_index do |flight, i| %><%= flight.departure.city.name %> — <%= flight.arrival.city.name %><%= ', ' if i < fgroup[:flights].length - 1 %><% end %></h5>
-            <p class="clofs">Класс бронирования <%= fgroup[:flights].first.class_of_service %></p>
+            <p class="clofs">Класс бронирования <%= @order.recommendation.booking_class_for_flight(fgroup[:flights].first) %></p>
         <% end %>
         </div>
         <pre><%= fgroup[:rule] %></pre>

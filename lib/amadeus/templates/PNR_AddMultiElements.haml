@@ -55,12 +55,12 @@
           %dateAndTimeDetails
             %date= person.birthday.strftime('%d%b%y').upcase
 
-  -if flights.present?
+  -if recommendation.present?
     %originDestinationDetails
       %originDestination
         -# %origin LGW
         -# %destination FCO
-      - flights.each_with_index do |flight, index|
+      - recommendation.flights.each_with_index do |flight, index|
         %itineraryInfo
           %elementManagementItinerary
             %reference
@@ -79,7 +79,7 @@
                 %identification= flight.operating_carrier_iata
               %productDetails
                 %identification= flight.flight_number
-                %classOfService= flight.class_of_service
+                %classOfService= recommendation.booking_class_for_flight(flight)
             %messageAction
               %business
                 %function 1
