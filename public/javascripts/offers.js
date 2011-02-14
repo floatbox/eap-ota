@@ -238,25 +238,15 @@ show: function(fixed) {
     }
     this.loading.find('h3').html('Ищем для вас лучшие предложения');
     this.container.removeClass('g-none');
+    $('#promo').addClass('g-none');
     var w = $(window), offset = this.container.offset().top;
     if (fixed !== false && offset - w.scrollTop() > w.height() / 2) {
-        $.animateScrollTop(offset - 112, function() {
-            var promo = $('#promo');
-            if (promo.is(':visible')) {
-                var st = w.scrollTop() - promo.outerHeight();
-                promo.hide();
-                w.scrollTop(st);
-                fixedBlocks.update();
-            }        
-        });
-    } else {
-        $('#promo').slideUp(200, function() {
-            fixedBlocks.update();
-        });
+        $.animateScrollTop(offset - 112);
     }
 },
 hide: function() {
     this.container.addClass('g-none');
+    $('#promo').removeClass('g-none');
 },
 toggle: function(mode) {
     this.container.toggleClass('with-results', mode == 'results');

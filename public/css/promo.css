@@ -1,20 +1,55 @@
 #promo {
-    padding: 17px 15px 16px 350px;
-    background: url(/img/promo/photo.jpg) no-repeat 20px 32% #e5e5e5;
-    font-size: 87.5%;
-    font-weight: bold;
-    color: #666;
+    background: #e7ecee;
+    color: #3e3e3e;
 }
-#promo h3 {
-    margin: 0 0 8px;
-    font-size: 18px;
-    line-height: 21px;
+#promo .facebook {
+    display: inline;
+    float: right;
+    width: 240px;
+    margin: 15px 15px 0 0;
+    background: #FFF;
+}
+#promo .description {
+    margin-right: 270px;
+    border-bottom: 1px solid #DDD;
+    padding: 18px 15px 0 255px;
+    background: url(/img/promo/photo.jpg) no-repeat 0 100%;
     letter-spacing: -0.035em;
-    color: #333;
 }
-#promo .carriers {
+#promo .description h2 {
+    margin: 0 0 3px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 32px;
+    line-height: 32px;
     color: #ED1192;
 }
-#promo .prices {
-    color: #587a00;
+#promo .description h5 {
+    margin: 0 0 10px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 24px;
+}
+#promo .description p {
+    margin: 0 0 15px;
+    text-align: center;
+    font-size: 18px;
+    line-height: 20px;
+    color: #777;
+}
+#promo .airlines {
+    margin-right: 255px;
+    padding-bottom: 20px;
+    background: url(/img/promo/bgr.jpg) no-repeat;
+}
+#promo .airlines p {
+    text-align: center;
+    padding: 28px 0;
+}
+#promo .airlines h6 {
+    text-align: center;
+    font-size: 18px;
+    line-height: 20px;
+    color: #777;
 }
