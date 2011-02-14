@@ -23,7 +23,7 @@
             %marketingCompany= flight.marketing_carrier_iata
           %flightIdentification
             %flightNumber= flight.flight_number
-            %bookingClass= flight.class_of_service
+            %bookingClass= recommendation.booking_class_for_flight flight
         %relatedproductInformation
           %quantity= people_count
           %statusCode NN

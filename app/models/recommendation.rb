@@ -233,10 +233,18 @@ class Recommendation
       .check_price_and_availability(pricer_form, validating_carrier_code)
   end
 
+  def booking_class_for_flight flight
+    variants.each do |v|
+      i = v.flights.index flight
+      return booking_classes[i] if i
+    end
+  end
+
   def check_price_and_availability(pricer_form, validating_carrier_code)
     Amadeus.booking do |amadeus|
       self.price_fare, self.price_tax =
         amadeus.fare_informative_pricing_without_pnr(
+          :recommendation => self,
           :flights => flights,
           :people_count => pricer_form.real_people_count,
           :validating_carrier => validating_carrier_code
@@ -245,7 +253,11 @@ class Recommendation
       # FIXME не очень надежный признак
       return if price_fare.to_i == 0
       self.rules = amadeus.fare_check_rules.rules
-      air_sfr = amadeus.air_sell_from_recommendation(:segments => segments, :people_count => (pricer_form.real_people_count[:adults] + pricer_form.real_people_count[:children]))
+      air_sfr = amadeus.air_sell_from_recommendation(
+        :recommendation => self,
+        :segments => segments,
+        :people_count => (pricer_form.real_people_count[:adults] + pricer_form.real_people_count[:children])
+      )
       amadeus.pnr_ignore
       return unless air_sfr.segments_confirmed?
       air_sfr.fill_itinerary!(segments)
