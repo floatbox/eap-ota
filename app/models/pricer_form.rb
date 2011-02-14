@@ -252,7 +252,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
 
       if rt
         r << 'и&nbsp;обратно'
-        r << "<span class=\"date\" data-date=\"#{[date2[0,2],date1[2,2]].join('.')}\">#{human_date(date2)}</span>"
+        r << "<span class=\"date\" data-date=\"#{[date2[0,2],date2[2,2]].join('.')}\">#{human_date(date2)}</span>"
       end
     end
     r.join(' ')
