@@ -214,7 +214,9 @@ hide: function() {
     $('.stop-booking', this.offer).remove();
     this.unfasten();
     this.offer.removeClass('active-booking');
-    this.stopPanel.remove();
+    if (this.stopPanel) {
+        this.stopPanel.remove();
+    }
     this.el.remove();
     delete(this.el);
     delete(this.offer);
