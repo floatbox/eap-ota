@@ -1,5 +1,4 @@
 /* Выделение формы бронирования */
-
 .active-booking {
     position: relative;
     z-index: 3;
@@ -28,6 +27,9 @@
 }
 .l-crop #offers-filter-content {
     visibility: hidden;
+}
+.l-crop .stop-booking-panel {
+    display: block;
 }
 
 /* Предварительное бронирование */
@@ -76,12 +78,14 @@
     float: none;
 }
 
+/* Лоадер */
 .booking .loading {
     padding-right: 28px;
     background: transparent url(/img/loader/loader-white.gif) no-repeat 100% 1px;
     background-image: url(data:image/gif;base64,R0lGODlhEAAQAPIAAP///+0RkvnG5PFOru0RkvNsu/WKyfaZ0CH+GkNyZWF0ZWQgd2l0aCBhamF4bG9hZC5pbmZvACH5BAAKAAAAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQACgABACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkEAAoAAgAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkEAAoAAwAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkEAAoABAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQACgAFACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQACgAGACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAAKAAcALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==);
 }
 
+/* Результат бронирования */
 .booking .result {
     padding: 15px;
 }
@@ -128,7 +132,6 @@
 }
 
 /* Кнопки прекращения бронирования */
-
 .offer a.stop-booking {
     position: absolute;
     right: 15px;
@@ -151,8 +154,30 @@
     float: right;
 }
 
-/* Разметка страницы бронирования на шаги */
+/* Панель прекращения бронирования */
+.stop-booking-panel {
+    display: none;
+    position: fixed;
+    z-index: 11;
+    width: 960px;
+    background: #FFF;
+    font-size: 14px;
+}
+.stop-booking-panel p {
+    padding: 0 15px;
+    height: 30px;
+}
+.stop-booking-panel .shadow {
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 6px;
+    background: url(/img/header/shadow.png) repeat-x;
+}
 
+/* Разметка страницы бронирования на шаги */
 .booking h3 {
     font: bold 22px Arial, sans-serif;
 
@@ -280,9 +305,10 @@
     color: red;
 }
 
-/* Предупреждение о неправильной раскладке */
+/* Предупреждение о неправильной раскладке или символах */
 
-.booking .language-warning {
+.booking .language-warning,
+.booking .symbols-warning {
     display: none;
     position: absolute;
     z-index: 3;

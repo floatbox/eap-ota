@@ -278,7 +278,7 @@ processUpdate: function() {
             self.processMatrix();
         });
     } else {
-        $('#offers-mcollection').html();
+        $('#offers-mcollection').html('');
         self.processMatrix();
     }
     if (u.pcontent && u.pcontent.indexOf('offers-options') !== -1) {
@@ -301,6 +301,7 @@ processUpdate: function() {
         });
     } else {
         $('#offers-pcollection').html('');
+        this.content.children('.offers-context').remove();
         this.variants = [];
         this.items = [];    
     }
@@ -340,7 +341,6 @@ processUpdate: function() {
         });
         setTimeout(processQueue, 250);
     } else {
-        $('#offers-pcollection').html('');
         if (u.pcontent && u.pcontent.indexOf('offers-context') !== -1) {
             var nearby = $('#offers-pcollection').html(u.pcontent).find('.offers-context .cities span.city');
             if (nearby.length) {
@@ -353,7 +353,6 @@ processUpdate: function() {
             }
             $('#offers-pcollection').html('');
         }
-        $('#offers-mcollection').html('');
         this.toggle('empty');
         pageurl.update('search', undefined);
         pageurl.title();
