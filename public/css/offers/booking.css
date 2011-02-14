@@ -162,6 +162,8 @@
     width: 960px;
     background: #FFF;
     font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.014em;
 }
 .stop-booking-panel p {
     padding: 0 15px;
