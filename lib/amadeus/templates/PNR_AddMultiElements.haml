@@ -21,7 +21,7 @@
             %surname= person.last_name
             %quantity= (index < people_count[:infants]) ? 2 : 1
           %passenger
-            %firstName= person.first_name
+            %firstName= person.first_name + ' ' + (person.sex == 'f' ? 'MRS' : 'MR')
             - if index < people_count[:infants]
               %type ADT
               %infantIndicator 3

@@ -33,6 +33,14 @@ class Person < ActiveRecord::BaseWithoutTable
     res
   end
 
+  def first_name_with_code
+    if infant_or_child
+      first_name
+    else
+      first_name + ' ' + (sex == 'f' ? 'MRS' : 'MR')
+    end
+  end
+
   def nationality
     Country.find_by_id(nationality_id) if nationality_id
   end

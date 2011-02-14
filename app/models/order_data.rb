@@ -212,7 +212,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   def set_people_numbers(returned_people)
     returned_people.each do |p|
       people.detect do |person|
-        person.last_name.upcase == p.last_name && person.first_name.upcase == p.first_name
+        person.last_name.upcase == p.last_name && (person.first_name_with_code).upcase == p.first_name
       end.number_in_amadeus = p.number_in_amadeus
     end
   end
@@ -226,10 +226,20 @@ class OrderData < ActiveRecord::BaseWithoutTable
     order = OrderData.get_from_cache(cache_key)
     order.email = 'email@example.com'
     order.phone = '12345678'
-    order.people_count = {:infants => 1, :children => 1, :adults => 1}
+    order.people_count = {:infants => 1, :children => 1, :adults => 2}
     order.people = [Person.new(
+      :first_name => 'Anna',
+      :last_name => 'Adult',
+      :birthday => Date.today - 19.years,
+      :document_expiration_date => Date.today + 1.year,
+      :passport => '999999343',
+      :nationality_id => 1,
+      :sex => 'f',
+      :bonus_present => false
+    ),
+      Person.new(
       :first_name => 'Ivan',
-      :last_name => 'ZAdult',
+      :last_name => 'Adult',
       :birthday => Date.today - 20.years,
       :document_expiration_date => Date.today + 1.year,
       :passport => '999999999',
@@ -258,6 +268,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
       :sex => 'f'
     )]
     order.card = Payture.test_card
+    order.set_flight_date_for_childen_and_infants
     order.create_booking
   end
 end
