@@ -87,7 +87,7 @@ class Recommendation
   end
 
   def ajust_markup!
-    @price_our_markup = 350
+    @price_our_markup = 0
     if price_share <= 5
       @price_consolidator_markup = (price_fare * 0.02).to_i
     else
