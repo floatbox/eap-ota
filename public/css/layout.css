@@ -1,27 +1,23 @@
 /* Wrapper */
-.l-wrapper {
+#wrapper {
     position: relative;
     width: 960px;
     min-height: 100%;
     margin: 0 auto;
     background: #f7f7f7;
 }
-.l-content {
-    padding-top: 42px;
-    padding-bottom: 105px;
-}
 
 /* Crop */
-.l-crop {
-    overflow: hidden;
-}
-.l-overlay {
+#overlay {
     display: none;
 }
-.l-crop .l-canvas {
+.cropped {
+    overflow: hidden;
+}
+.cropped #canvas {
     position: relative;    
 }
-.l-crop .l-overlay {
+.cropped #overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -34,8 +30,14 @@
     filter: alpha(opacity=40);
 }
 
+/* Content */
+#content {
+    padding-top: 42px;
+    padding-bottom: 105px;
+}
+
 /* Footer */
-.l-footer {
+#footer {
     position: absolute;
     bottom: 0;
     width: 960px;
