@@ -27,7 +27,7 @@ module Amadeus
       def booking_classes
         xpath("//r:itineraryInfo[r:elementManagementItinerary/r:segmentName='AIR']" +
               "[r:travelProduct/r:companyDetail/r:identification]" +
-              "/r:travelProduct/r:productDetails/r:classOfService")
+              "/r:travelProduct/r:productDetails/r:classOfService"
              ).map(&:to_s)
       end
 
