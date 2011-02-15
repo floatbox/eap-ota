@@ -1,6 +1,6 @@
 # encoding: utf-8
 class Pnr
-  attr_accessor :number, :flights, :passengers, :phone, :email, :raw, :ticket_numbers
+  attr_accessor :number, :flights, :booking_classes, :passengers, :phone, :email, :raw, :ticket_numbers
 
   def self.get_by_number number
     pnr = self.new
@@ -8,6 +8,7 @@ class Pnr
     Amadeus.booking do |amadeus|
       resp = amadeus.pnr_retrieve_and_ignore(:number => number)
       pnr.flights = resp.flights
+      pnr.booking_classes = resp.booking_classes
       pnr.passengers = resp.passengers
       pnr.email = resp.email
       pnr.phone = resp.phone

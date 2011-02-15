@@ -45,10 +45,8 @@ module Amadeus
           else
             flight.arrival_date = flight.departure_date
           end
-          flight.arrival_time = fl.xpath("r:flightDetails/r:flightDate/r:arrivalTime").to_s
-          flight.arrival_time = '0' + flight.arrival_time if flight.arrival_time.length < 4
-          flight.departure_time = fl.xpath("r:flightDetails/r:flightDate/r:departureTime").to_s
-          flight.departure_time = '0' + flight.departure_time if flight.departure_time.length < 4
+          flight.arrival_time = '%04d' % fl.xpath("r:flightDetails/r:flightDate/r:arrivalTime").to_i
+          flight.departure_time = '%04d' % fl.xpath("r:flightDetails/r:flightDate/r:departureTime").to_i
           flight.equipment_type_iata = fl.xpath("r:apdSegment/r:legDetails/r:equipment").to_s
         }
       end

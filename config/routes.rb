@@ -21,6 +21,7 @@ Eviterra::Application.routes.draw do
 
   match 'about' => 'about#index', :as => :about
   match 'iata' => 'about#iata', :as => :about
+  match 'faq' => 'about#faq', :as => :about
   match 'agreement' => 'about#agreement', :as => :about
   match 'contacts' => 'about#contacts', :as => :about
   match 'about/:action' => 'about', :as => :about

@@ -87,7 +87,7 @@ class Recommendation
   end
 
   def ajust_markup!
-    @price_our_markup = 350
+    @price_our_markup = 0
     if price_share <= 5
       @price_consolidator_markup = (price_fare * 0.02).to_i
     else
@@ -160,13 +160,18 @@ class Recommendation
   def rules_with_flights
     rule_index = 0
     flights.each_with_object([]) do |flight, result|
-      if result.blank? || !result.last[:flights].last.has_equal_tariff_with?(flight)
+      if result.blank? || !has_equal_tariff?(result.last[:flights].last, flight)
         result << {:rule => rules[rule_index], :flights => [flight]}
         rule_index += 1
       else
         result.last[:flights] << flight
       end
     end
+  end
+
+  def has_equal_tariff? flight1, flight2
+    flight1.marketing_carrier_iata == flight2.marketing_carrier_iata &&
+      booking_class_for_flight(flight1) == booking_class_for_flight(flight2)
   end
 
   def summary
@@ -215,37 +220,31 @@ class Recommendation
     [price_fare, price_tax, validating_carrier_iata, booking_classes, marketing_carrier_iatas] == [rec.price_fare, rec.price_tax, rec.validating_carrier_iata,  rec.booking_classes, rec.marketing_carrier_iatas]
   end
 
-  def self.from_flight_codes(flight_codes)
-    flights = flight_codes.collect do |flight_code|
-      Flight.from_flight_code(flight_code)
+  def booking_class_for_flight flight
+    variants.each do |v|
+      i = v.flights.index flight
+      return booking_classes[i] if i
     end
-    segments = flights.group_by(&:segment_number).values.collect do |flight_group|
-      Segment.new(:flights => flight_group)
-    end
-    variant = Variant.new(:segments => segments)
-    recommendation = Recommendation.new(:variants => [variant])
-    recommendation.booking_classes = variant.flights.every.class_of_service
-    recommendation
   end
 
-  def self.check_price_and_availability(flight_codes, pricer_form, validating_carrier_code)
-    from_flight_codes(flight_codes)\
-      .check_price_and_availability(pricer_form, validating_carrier_code)
-  end
-
-  def check_price_and_availability(pricer_form, validating_carrier_code)
+  def check_price_and_availability(pricer_form)
     Amadeus.booking do |amadeus|
       self.price_fare, self.price_tax =
         amadeus.fare_informative_pricing_without_pnr(
+          :recommendation => self,
           :flights => flights,
           :people_count => pricer_form.real_people_count,
-          :validating_carrier => validating_carrier_code
+          :validating_carrier => validating_carrier_iata
         ).prices
 
       # FIXME не очень надежный признак
       return if price_fare.to_i == 0
       self.rules = amadeus.fare_check_rules.rules
-      air_sfr = amadeus.air_sell_from_recommendation(:segments => segments, :people_count => (pricer_form.real_people_count[:adults] + pricer_form.real_people_count[:children]))
+      air_sfr = amadeus.air_sell_from_recommendation(
+        :recommendation => self,
+        :segments => segments,
+        :seat_total => pricer_form.seat_total
+      )
       amadeus.pnr_ignore
       return unless air_sfr.segments_confirmed?
       air_sfr.fill_itinerary!(segments)
@@ -273,6 +272,34 @@ class Recommendation
     ( [ "FV #{validating_carrier_iata}", "RMCABS #{cabins.join}"] +
       variant.flights.zip(booking_classes).map { |fl, cl| fl.cryptic(cl) }
     ).join('; ')
+  end
+
+  # надеюсь, однажды это будет просто ключ из кэша
+  def serialize(variant)
+    segment_codes = variant.segments.collect { |s|
+      s.flights.collect(&:flight_code).join('-')
+    }
+
+    ( [ validating_carrier_iata, booking_classes.join(''), cabins.join('') ] +
+      segment_codes ).join('.')
+  end
+
+  def self.deserialize(coded)
+    fv, classes, cabins, *segment_codes = coded.split('.')
+    variant = Variant.new(
+      :segments => segment_codes.collect { |segment_code|
+        Segment.new( :flights => segment_code.split('-').collect { |flight_code|
+          Flight.from_flight_code(flight_code)
+        })
+      }
+    )
+
+    new(
+      :validating_carrier_iata => fv,
+      :booking_classes => classes.split(''),
+      :cabins => cabins.split(''),
+      :variants => [variant]
+    )
   end
 
   # FIXME порнография какая-то. чего так сложно?
@@ -354,11 +381,12 @@ class Recommendation
   def self.example itinerary, opts={}
     default_carrier = (opts[:carrier] || 'SU').upcase
     segments = []
-    classes = []
+    subclasses = []
+    cabins = []
     itinerary.split.each do |fragment|
       flight = Flight.new
       # defaults
-      carrier, klass = default_carrier, 'Y'
+      carrier, subclass, cabin = default_carrier, 'Y', 'M'
       fragment.upcase.split('/').each do |code|
         case code.length
         when 6
@@ -366,20 +394,30 @@ class Recommendation
         when 2
           carrier = code
         when 1
-          klass = code
+          subclass = code
         else
-          raise ArgumentError, 'should consist of itinerary (MOWLON), carrier(AB) or cabin class (Y). example "mowaer/s7 aermow/y'
+          case code
+          when 'ECONOMY'
+            cabin = 'M'
+          when 'BUSINESS'
+            cabin = 'C'
+          when 'FIRST'
+            cabin = 'F'
+          else
+            raise ArgumentError, 'should consist of itinerary (MOWLON), carrier(AB), cabin subclass (Y) or class (economy). example "mowaer/s7 aermow/y'
+          end
         end
       end
       flight.marketing_carrier_iata = carrier
-      marketing_carrier_iatas |= [carrier]
       segments << Segment.new(:flights => [flight])
-      classes << klass
+      subclasses << subclass
+      cabins << cabin
     end
     Recommendation.new(
       :validating_carrier_iata => default_carrier,
       :variants => [Variant.new(:segments => segments)],
-      :booking_classes => classes
+      :booking_classes => subclasses,
+      :cabins => cabins
     )
   end
 end

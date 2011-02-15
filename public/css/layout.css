@@ -8,7 +8,7 @@
 }
 .l-content {
     padding-top: 42px;
-    padding-bottom: 130px;
+    padding-bottom: 105px;
 }
 
 /* Crop */
@@ -39,7 +39,7 @@
     position: absolute;
     bottom: 0;
     width: 960px;
-    height: 130px;
+    height: 105px;
     margin: 0 auto;
     background: #FFF;
 }

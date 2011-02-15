@@ -4,6 +4,34 @@ require 'net/http'
 require 'uri'
 
 module Tmp
+
+  def self.fill_in_iata_ru_in_cities_and_airports(path)
+    open(path + '/cities.csv').each_line do |l|
+      l.chomp
+      iata, iata_ru, name_en, name_ru, country_id, region_id, lat, lng, morpher_to, morpher_from, morpher_in = l.split(';')
+      if iata_ru.match(/[А-Я]/u)
+        city = City.find_by_iata(iata)
+        city = City.find_by_name_ru(name_ru) if !city && country_id == 'RU'
+        if city
+          city.update_attribute(:sirena_name, name_ru) if name_ru != city.name_ru
+          city.update_attribute(:iata_ru, iata_ru)
+        end
+      end
+    end
+    open(path + '/airports.csv').each_line do |l|
+      l.chomp
+      iata, iata_ru, name_en, name_ru, city_id, lat, lng, morpher_to, morpher_from, morpher_in = l.split(';')
+      if iata_ru.match(/[А-Я]/u)
+        airport = Airport.find_by_iata(iata)
+        airport = Airport.find_by_name_ru(name_ru) if !airport
+        if airport
+          airport.update_attribute(:sirena_name, name_ru) if name_ru != airport.name_ru
+          airport.update_attribute(:iata_ru, iata_ru)
+        end
+      end
+    end
+  end
+
   def self.fill_in_cities_and_airports
     open('config/cities.csv').each_line do |l|
       l.chomp

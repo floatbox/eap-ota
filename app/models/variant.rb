@@ -39,18 +39,6 @@ class Variant
     end
     result
   end
-  
-  def flight_codes(booking_classes)
-    result = []
-    i = 0
-    segments.each_with_index {|s, s_i|
-      s.flights.each{|f|
-        result << f.flight_code(booking_classes[i], s_i)
-        i += 1
-        }
-      }
-    result
-  end
 
   def marketing_carriers
     flights.every.marketing_carrier.uniq

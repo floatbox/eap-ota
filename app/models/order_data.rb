@@ -98,7 +98,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     }
   end
 
-  def seat_count
+  def seat_total
     people_count[:adults] + people_count[:children]
   end
 
@@ -149,7 +149,9 @@ class OrderData < ActiveRecord::BaseWithoutTable
   def create_booking
     Amadeus.booking do |amadeus|
       amadeus.air_sell_from_recommendation(
-        :segments => recommendation.variants[0].segments, :people_count => seat_count
+        :segments => recommendation.variants[0].segments,
+        :seat_total => seat_total,
+        :recommendation => recommendation
       ).or_fail!
 
       add_multi_elements = amadeus.pnr_add_multi_elements(self).or_fail!
@@ -175,7 +177,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
             Amadeus::Session::TICKETING,
             Amadeus::Session::WORKING
           )
-          amadeus.pnr_archive(seat_count)
+          amadeus.pnr_archive(seat_total)
           amadeus.pnr_add_remark
         end
         #amadeus.queue_place_pnr(:number => pnr_number)
@@ -210,7 +212,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   def set_people_numbers(returned_people)
     returned_people.each do |p|
       people.detect do |person|
-        person.last_name.upcase == p.last_name && person.first_name.upcase == p.first_name
+        person.last_name.upcase == p.last_name && (person.first_name_with_code).upcase == p.first_name
       end.number_in_amadeus = p.number_in_amadeus
     end
   end
@@ -224,10 +226,20 @@ class OrderData < ActiveRecord::BaseWithoutTable
     order = OrderData.get_from_cache(cache_key)
     order.email = 'email@example.com'
     order.phone = '12345678'
-    order.people_count = {:infants => 1, :children => 1, :adults => 1}
+    order.people_count = {:infants => 1, :children => 1, :adults => 2}
     order.people = [Person.new(
+      :first_name => 'Anna',
+      :last_name => 'Adult',
+      :birthday => Date.today - 19.years,
+      :document_expiration_date => Date.today + 1.year,
+      :passport => '999999343',
+      :nationality_id => 1,
+      :sex => 'f',
+      :bonus_present => false
+    ),
+      Person.new(
       :first_name => 'Ivan',
-      :last_name => 'ZAdult',
+      :last_name => 'Adult',
       :birthday => Date.today - 20.years,
       :document_expiration_date => Date.today + 1.year,
       :passport => '999999999',
@@ -256,6 +268,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
       :sex => 'f'
     )]
     order.card = Payture.test_card
+    order.set_flight_date_for_childen_and_infants
     order.create_booking
   end
 end

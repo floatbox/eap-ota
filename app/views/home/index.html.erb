@@ -3,19 +3,29 @@
 <head>
     <%= render 'shared/head_common', {:title => 'авиабилеты по всему миру онлайн'} %>
     <link rel="stylesheet" type="text/css" href="/css/main.css">
-    <%= javascript_include_tag "lib/json2", "lib/pushup", "main", "pageurl", "autocomplete", "radio", "search", "map", "calendar", "filters", "offers", "timer", "hint", "booking/validation", "booking/wizard", "booking/form" %>
+    <%= javascript_include_tag "lib/json2", "lib/pushup", "main", "pageurl", "autocomplete", "radio", "search", "map", "calendar", "filters", "offers", "timer", "hint", "booking/validation", "booking/wizard", "booking/form", :cache => Rails.env.production? %>
 </head>
 <body>
 <%= render 'shared/header' %>
 <div class="l-wrapper" id="page-wrapper">
 <div class="l-canvas">
     <div class="l-content">
-        <div id="promo">
-            <h3>Здесь можно найти, сравнить, выбрать и&nbsp;купить билеты на&nbsp;рейсы <strong class="carriers">более 200&nbsp;авиакомпаний</strong> всего мира по&nbsp;<strong class="prices">очень низкой цене</strong></h3>
-            <p>Это просто, быстро и безопасно. Убедитесь сами &darr;</p>
-        </div>
         <%= render 'search' %>
         <%= render 'offers' %>
+        <div id="promo" class="wrap">
+            <div class="facebook">
+                <iframe src="https://www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Feviterra&amp;width=240&amp;colorscheme=light&amp;show_faces=true&amp;stream=true&amp;header=false&amp;height=556" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:240px; height:556px;" allowTransparency="true"></iframe>
+            </div>
+            <div class="description">
+                <h2>Это Eviterra.</h2>
+                <h5>Здесь можно найти, сравнить, выбрать&nbsp;и&nbsp;купить билеты на&nbsp;рейсы более 200&nbsp;авиакомпаний всего мира по&nbsp;низкой цене.</h5>
+                <p>Просто введите пункт назначения (город, аэропорт или страну), выберите нужный вариант и оплатите банковской картой прямо на сайте.</p>
+            </div>
+            <div class="airlines">
+                <p><img src="/img/promo/airlines.png" alt="" width="628" height="239"></p>
+                <h6>Покупать у нас — это просто и очень удобно, быстро и безопасно.<br>Убедитесь сами.</h6>
+            </div>
+        </div>
     </div>
     <div class="l-footer">
         <%= render 'shared/footer' %>

@@ -106,6 +106,10 @@
     font-size: 14px;
     letter-spacing: -0.015em;
 }
+.ipad-safari #ya-share,
+.iphone-safari #ya-share {
+    margin-left: 25px;
+}
 #ya-share .b-share {
     font-size: 100%;
     line-height: 18px;

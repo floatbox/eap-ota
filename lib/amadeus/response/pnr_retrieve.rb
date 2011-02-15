@@ -14,12 +14,21 @@ module Amadeus
               :arrival_time =>           fi.xpath("r:travelProduct/r:product/r:arrTime").to_s,
               :departure_date =>         fi.xpath("r:travelProduct/r:product/r:depDate").to_s,
               :departure_time =>         fi.xpath("r:travelProduct/r:product/r:depTime").to_s,
-              :class_of_service =>       fi.xpath("r:travelProduct/r:productDetails/r:classOfService").to_s,
+              # :class_of_service =>       fi.xpath("r:travelProduct/r:productDetails/r:classOfService").to_s,
               :equipment_type_iata =>    fi.xpath("r:flightDetail/r:productDetails/r:equipment").to_s,
               :departure_term =>         fi.xpath("r:flightDetail/r:departureInformation/r:departTerminal").to_s,
               :warning =>                fi.xpath("r:errorInfo/r:errorfreeFormText/r:text").to_s
             )
         end.find_all(&:marketing_carrier_iata)#для пустых перелетов (случай сложного маршрута)
+        # FIXME найти более подходящий xpath для отбрасывания сервисных сегментов.
+      end
+
+      # временное решение
+      def booking_classes
+        xpath("//r:itineraryInfo[r:elementManagementItinerary/r:segmentName='AIR']" +
+              "[r:travelProduct/r:companyDetail/r:identification]" +
+              "/r:travelProduct/r:productDetails/r:classOfService"
+             ).map(&:to_s)
       end
 
       def passengers

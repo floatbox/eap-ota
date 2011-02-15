@@ -5,7 +5,7 @@ class Flight
 
   attr_accessor :operating_carrier_iata, :marketing_carrier_iata, :departure_iata,
    :departure_term, :arrival_iata, :arrival_term, :flight_number, :arrival_date,
-   :arrival_time, :departure_date, :departure_time, :equipment_type_iata, :class_of_service, :seat_count, :warning, :cabin, :segment_number, :technical_stops
+   :arrival_time, :departure_date, :departure_time, :equipment_type_iata, :warning, :technical_stops
 
   def departure
     departure_iata && Airport[departure_iata]
@@ -95,9 +95,9 @@ class Flight
     self.class.calculate_distance(departure, arrival) rescue 5000
   end
   
-  def flight_code(booking_class = nil, s_number = 0)
-    #SS LH3240 B 10SEP FRAMOW 1
-    full_flight_number + (class_of_service || booking_class ||'Y') + departure_date + departure_iata + arrival_iata + (seat_count || 1).to_s + (segment_number || s_number || 0).to_s
+  def flight_code
+    #4U:LH3240BB10SEPFRAMOW0
+    full_flight_number +  departure_iata + arrival_iata + departure_date
   end
   
   def self.from_flight_code code
@@ -105,13 +105,10 @@ class Flight
     ( fl.operating_carrier_iata,
       fl.marketing_carrier_iata,
       fl.flight_number,
-      fl.class_of_service,
-      fl.departure_date,
       fl.departure_iata,
       fl.arrival_iata,
-      fl.seat_count,
-      fl.segment_number ) =
-      /^(?:(\w\w):)?(\w\w)(\d+)(\w)(\d{6})(\w{3})(\w{3})(\d)(\d)$/.match(code).captures
+      fl.departure_date ) =
+      /^(?:(\w\w):)?(\w\w)(\d+)(\w{3})(\w{3})(\d{6})$/.match(code).captures
     fl.operating_carrier_iata ||= fl.marketing_carrier_iata
     fl
   end
@@ -144,12 +141,9 @@ class Flight
   end
 
   # для отображения в формате, пригодном для script/amadeus SS
-  def cryptic(class_of_service=nil)
+  def cryptic(class_of_service=nil, seat_count=1)
     # EI154/C 12JUL DUBLHR 1
-    "SS #{marketing_carrier_iata} #{flight_number} #{class_of_service || '?' } #{dept_date.strftime('%d%b').upcase} #{departure_iata}#{arrival_iata} #{seat_count || 1}"
+    "SS #{marketing_carrier_iata} #{flight_number} #{class_of_service || '?' } #{dept_date.strftime('%d%b').upcase} #{departure_iata}#{arrival_iata} #{seat_count}"
   end
 
-  def has_equal_tariff_with? flight
-    [marketing_carrier_iata, class_of_service] == [flight.marketing_carrier_iata, flight.class_of_service]
-  end
 end

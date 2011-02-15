@@ -421,6 +421,7 @@ init: function() {
     }
     this.obj = new Ya.share({
         element: 'ya-share',
+        description: 'Здесь можно найти, сравнить, выбрать и купить билеты на рейсы более 200 авиакомпаний всего мира по низкой цене.',        
         elementStyle: {
             type: 'link',
             linkIcon: false,
