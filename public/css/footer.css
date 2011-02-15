@@ -36,24 +36,11 @@
     color: #3270a6;
 }
 
-.f-logotypes {
+.f-partners {
     position: absolute;
     top: 15px; left: 713px;
     width: 232px;
 }
-.fl-amadeus {
-    position: absolute;
-    top: 0; left: 0;
-}
-.fl-thawte {
-    position: absolute;
-    top: 0; left: 121px;
-}
-.fl-amadeus {
-    position: absolute;
-    top: 42px; left: 60px;
-}
-
 
 .footer a:hover {
     color: #ed1192;
