@@ -6,7 +6,9 @@ class Recommendation
   attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
     :suggested_marketing_carrier_iatas
 
-  delegate :marketing_carriers, :marketing_carrier_iatas, :to => 'variants.first'
+  delegate :marketing_carriers, :marketing_carrier_iatas,
+    :city_iatas, :airport_iatas, :country_iatas,
+      :to => 'variants.first'
 
   def validating_carrier
     validating_carrier_iata && Carrier[validating_carrier_iata]
@@ -35,6 +37,14 @@ class Recommendation
 
   def interline?
     other_marketing_carrier_iatas.any?
+  end
+
+  def international?
+    country_iatas.size > 1
+  end
+
+  def domestic?
+    country_iatas == [validating_carrier.country.iata]
   end
 
   def clear_variants
