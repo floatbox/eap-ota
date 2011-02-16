@@ -99,7 +99,7 @@ class Recommendation
   def ajust_markup!
     @price_our_markup = 0
     if price_share <= 5
-      @price_consolidator_markup = (price_fare * 0.02).to_i
+      @price_consolidator_markup = (price_fare * 0.02).ceil
     else
       @price_consolidator_markup = 0
     end
