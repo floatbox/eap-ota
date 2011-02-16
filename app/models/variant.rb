@@ -40,6 +40,19 @@ class Variant
     result
   end
 
+  # можно оптимальнее, наверное
+  def city_iatas
+    airport_iatas.collect { |iata| Airport[iata].city.iata }.uniq
+  end
+
+  def airport_iatas
+    flights.collect {|f| [f.departure_iata, f.arrival_iata] }.flatten.uniq
+  end
+
+  def country_iatas
+    city_iatas.collect { |iata| City[iata].country.iata }.uniq
+  end
+
   def marketing_carriers
     flights.every.marketing_carrier.uniq
   end

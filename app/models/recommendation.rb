@@ -6,7 +6,9 @@ class Recommendation
   attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
     :suggested_marketing_carrier_iatas
 
-  delegate :marketing_carriers, :marketing_carrier_iatas, :to => 'variants.first'
+  delegate :marketing_carriers, :marketing_carrier_iatas,
+    :city_iatas, :airport_iatas, :country_iatas,
+      :to => 'variants.first'
 
   def validating_carrier
     validating_carrier_iata && Carrier[validating_carrier_iata]
@@ -35,6 +37,14 @@ class Recommendation
 
   def interline?
     other_marketing_carrier_iatas.any?
+  end
+
+  def international?
+    country_iatas.size > 1
+  end
+
+  def domestic?
+    country_iatas == [validating_carrier.country.iata]
   end
 
   def clear_variants
@@ -89,7 +99,7 @@ class Recommendation
   def ajust_markup!
     @price_our_markup = 0
     if price_share <= 5
-      @price_consolidator_markup = (price_fare * 0.02).to_i
+      @price_consolidator_markup = (price_fare * 0.02).ceil
     else
       @price_consolidator_markup = 0
     end

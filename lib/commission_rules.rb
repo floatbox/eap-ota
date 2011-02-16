@@ -22,7 +22,9 @@ module CommissionRules
     # carrier == recommendation.validating_carrier_iata and
     applicable_interline?(recommendation) and
     applicable_classes?(recommendation) and
-    applicable_subclasses?(recommendation)
+    applicable_subclasses?(recommendation) and
+    applicable_custom_check?(recommendation) and
+    applicable_geo?(recommendation)
   end
 
   def applicable_interline? recommendation
@@ -67,6 +69,17 @@ module CommissionRules
   def applicable_subclasses? recommendation
     return true unless subclasses
     (recommendation.booking_classes - subclasses).blank?
+  end
+
+  def applicable_custom_check? recommendation
+    return true unless check
+    recommendation.instance_eval &check
+  end
+
+  def applicable_geo? recommendation
+    return true unless domestic || international
+    raise "wtf?" if domestic && international
+    domestic && recommendation.domestic? || international && recommendation.international?
   end
 
   def share(fare)
@@ -220,6 +233,10 @@ module CommissionRules
     def example str
       opts[:examples] ||= []
       opts[:examples] << [str, caller_address]
+    end
+
+    def check &block
+      opts[:check] = block
     end
 
     # метод поиска рекомендации

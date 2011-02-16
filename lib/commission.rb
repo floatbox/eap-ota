@@ -1117,39 +1117,35 @@ commission "1%/0.5%"
 carrier "MS", "EGYPT AIR"
 ########################################
 
+example 'svocai caisvo'
 agent    "9% от тарифа на рейсы MS из Москвы"
 subagent "6,3% от тарифа на рейсы MS из Москвы"
-interline :no
-disabled #только из Москвы, правило надо
-#geo
-not_implemented
+check { city_iatas.first == 'MOW'}
 commission "9%/6.3%"
 
+example 'caisvo svocai'
 agent    "5% от тарифа на рейсы MS из Египта"
 subagent "3,5% от тарифа на рейсы MS из Египта"
-interline :no
-disabled #гео-правило
-#geo
-not_implemented
+international
+check { country_iatas.first == 'EG'}
 commission "5%/3.5%"
 
+example 'cdgcai'
 agent    "5% от тарифа для иных международных рейсов MS"
 subagent "3,5% от тарифа для иных международных рейсов MS"
-interline :no
 international
 commission "5%/3.5%"
 
+example 'caihrg'
 agent    "0% от тарифа на рейсы MS внутри Египта"
 subagent "0% от тарифа на рейсы MS внутри Египта"
-interline :no
 domestic
-not_implemented
 commission "0%/0%"
 
+example 'caisvo svocai/su'
 agent    "0% от тарифа на все иные сектора авиабилетов Interline"
 subagent "0% от тарифа на все иные сектора авиабилетов Interline"
 interline :yes
-not_implemented
 commission "0%/0%"
 
 carrier "MU", "CHINA EASTERN"
@@ -1422,23 +1418,22 @@ commission "7%/5%"
 carrier "TG", "THAI AIRWAYS"
 ########################################
 
+example 'svobkk'
 agent "С 01.02.2011г. 5% от всех опубл.и конфиденциальных тарифов на международные рейсы TG"
 subagent "С 01.02.2011г. 3% от опубл. и конфиде.тарифов на международные рейсы TG"
 international
-not_implemented
 commission "5%/3%"
 
+example 'bkkdmk'
 agent "С 01.02.2011г. 0% от всех опубл. тарифов на внутренние рейсы TG"
 subagent "С 01.02.2011г. 0% от опубл.тарифов на внутренние рейсы TG"
-disabled #внутренние рейсы, опять гео-правило
-#geo
-not_implemented
+domestic
 commission "0%/0%"
 
+example 'svobkk/su bkkdmk'
 agent "С 01.02.2011г. 0% от тарифов на рейсы Interline. (Билеты по Interline могут быть выписаны только при условии присутствия сегментов TG.)"
 subagent "С 01.02.2011г. 0% от опубл. тарифа на рейсы Interline с участком TG. (Билеты по Interline могут быть выписаны только при условии присутствия сегментов TG.)"
 interline :yes
-not_implemented
 commission "0%/0%"
 
 carrier "TK", "TURKISH AIRLINES"
