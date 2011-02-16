@@ -9,10 +9,20 @@ class PricerController < ApplicationController
       if @search.valid?
         @recommendations = Mux.pricer(@search, admin_user)
         @locations = @search.human_locations
+        HotOffer.create(
+          :code => @query_key,
+          :url => (url_for(:action => :index, :controller => :home) + '#' + @query_key ),
+          :description => @search.human_lite,
+          :price => @recommendations.first.price_total
+        ) unless @recommendations.blank? || @search.complex_route? || @search.people_count.values.sum > 1 || admin_user
       end
     end
 
     render :partial => 'recommendations'
+  end
+
+  def hot_offers
+    render :json => HotOffer.find(:all, :conditions => ["code != ?", params[:query_key].to_s], :limit => 20)
   end
 
   def calendar
