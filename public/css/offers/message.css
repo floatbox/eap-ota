@@ -21,6 +21,7 @@
     color: #ed1192;
 }
 .rmphoto strong {
+    font-weight: normal;
 }
 .rmtext {
     border-top: 1px solid #ebebeb;
@@ -43,7 +44,8 @@
     margin-bottom: 20px;
 }
 #results-loading .rmphoto {
-    padding-left: 587px;
+    padding-left: 600px;
+    padding-right: 25px;
     background: url(/img/offers/photo-search.jpg) no-repeat 50% 50%;
 }
 #results-loading .progress {
@@ -70,8 +72,13 @@
 /* Нет результатов */
 #results-empty .rmphoto,
 .offers-improper .rmphoto {
-    padding-left: 587px;
     background: url(/img/offers/photo-empty.jpg) no-repeat 50% 50%;    
+}
+.offers-improper .rmphoto {
+    padding-left: 587px;
+}
+#results-empty .rmphoto {
+    padding-left: 600px;
 }
 #results-empty .rmtext p,
 .offers-improper .rmtext p {

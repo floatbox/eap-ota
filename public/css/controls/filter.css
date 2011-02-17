@@ -81,9 +81,9 @@
         -moz-border-radius: 3px;
         -webkit-border-radius: 3px;
 }
-#offers-filter .dropdown dd {
-    font-size: 75%;
-    line-height: 125%;
+#results-filters .dropdown dd {
+    font-size: 12px;
+    line-height: 15px;
     margin: 1px 0 0;
     padding: 4px 10px 3px;
         -moz-border-radius: 3px;

@@ -183,7 +183,7 @@ init: function() {
     });
 
     // Заголовок страницы
-    pageurl.title('бронирование авиабилета ' + offersList.title.attr('data-title'));
+    pageurl.title('бронирование авиабилета ' + results.title.attr('data-title'));
 
 },
 show: function(variant) {
@@ -199,7 +199,7 @@ show: function(variant) {
     } else {
         this.offer.removeClass('collapsed').addClass('expanded');
     }
-    this.offersTab = offersList.selectedTab;
+    this.offersTab = results.selectedTab;
     this.selfhide = function(event) {
         event.preventDefault();
         self.hide();
@@ -222,7 +222,7 @@ hide: function() {
     delete(this.offer);
     delete(this.variant);
     pageurl.update('booking', undefined);
-    pageurl.title('авиабилеты ' + offersList.title.attr('data-title'));    
+    pageurl.title('авиабилеты ' + results.title.attr('data-title'));    
 },
 error: function() {
     var message = $('<div class="booking-state"><h4>В данный момент невозможно выбрать этот вариант</h4><p><span class="link">Почему?</span></p></div>');
@@ -306,25 +306,24 @@ comparePrice: function() {
 },
 fasten: function(offer) {
     if (browser.search(/ipad|iphone|msie6|msie7/) !== -1) return;
-    var wrapper = $('#page-wrapper');
+    var wrapper = $('#wrapper');
     var ot = offer.offset().top;
     var ob = wrapper.height() - ot - offer.height();
     var cst = $(window).scrollTop();
-    wrapper.addClass('l-crop');
-    wrapper.children('.l-canvas').css('margin-top', 200 - ot - ob).css('top', ob - 100);
+    wrapper.addClass('cropped');
+    $('#canvas').css('margin-top', 200 - ot - ob).css('top', ob - 100);
     this.dst = ot - 100;
     fixedBlocks.disabled = true;
     $(window).scrollTop(cst - this.dst);
-    $('#header').addClass('g-none');
-    $('#offers-title').addClass('fixed');
+    $('#header').addClass('latent');
 },
 unfasten: function() {
-    var wrapper = $('#page-wrapper');
+    var wrapper = $('#wrapper');
     if (browser.search(/ipad|iphone|msie6|msie7/) === -1 && wrapper.hasClass('l-crop')) {
-        wrapper.children('.l-canvas').css('margin-top', 0).css('top', 0);
-        wrapper.removeClass('l-crop');
+        $('#canvas').css('margin-top', 0).css('top', 0);
+        wrapper.removeClass('cropped');
         $(window).scrollTop($(window).scrollTop() + this.dst);
-        $('#header').removeClass('g-none');
+        $('#header').removeClass('latent');
         fixedBlocks.disabled = false;
         fixedBlocks.update();
     }

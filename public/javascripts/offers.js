@@ -79,7 +79,7 @@ init: function() {
             return; // Во время бронирования нельзя переключать варианты
         }
         var segment = parseInt(el.parent().attr('data-segment'), 10);
-        var current = offersList.variants[parseInt(el.closest('.offer-variant').attr('data-index'), 10)];
+        var current = results.variants[parseInt(el.closest('.offer-variant').attr('data-index'), 10)];
         var variants = current.offer.variants, departures = current.summary.departures.concat();
         departures[segment] = dtime;
         var query = departures.join(' '), match = undefined, half_match = undefined;
@@ -101,10 +101,10 @@ init: function() {
     
     // Бронирование
     offers.delegate('.book .a-button', 'click', function(event) {
+        event.preventDefault();
         var variant = $(this).closest('.offer-variant');
         app.booking.show(variant);
         app.booking.book(variant);
-        event.preventDefault();
     });
     
     // Альянсы
@@ -252,6 +252,7 @@ hide: function() {
 },
 toggle: function(mode) {
     this.el.toggleClass('ready', mode === 'ready');
+    $('#offers').toggleClass('latent', mode !== 'ready');
     this.empty.toggleClass('latent', mode !== 'empty');
     this.loading.toggleClass('latent', mode !== 'loading');
     this.loading.timer.trigger(mode === 'loading' ? 'start' : 'stop');
@@ -543,7 +544,7 @@ showRecommendations: function() {
     }
     var container = $('#offers-featured').addClass('processing').html('');
     if (items.length == 0) {
-        container.append($('#offers-pcollection').prev().clone()).show();
+        container.append($('#offers-pcollection').prev().clone()).removeClass('processing');
         return;
     } else if (items.length == 1) {
         optimal = items[0];

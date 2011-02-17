@@ -72,8 +72,8 @@
 
 .offers-title {
     margin: 0 0 8px;
-    font-size: 125%;
     font-weight: bold;
+    font-size: 20px;
     line-height: 100%;
     letter-spacing: -0.035em;
     color: #4B4B4B;
@@ -87,24 +87,26 @@
 .featured-tip .up {
     cursor: pointer;
 }
+.featured-tip .link {
+    color: #333;
+}
+.featured-tip .link:hover {
+    color: #ED1192;
+}
 
 /* Соседние города */
-.offers-context {
-    float: right;
-    display: inline;
-    width: 240px;
-    margin-right: 15px;
+.offers-nearby {
     color: #4b4b4b;
 }
-.offers-context .cities {
+.offers-nearby .cities {
     margin: 10px 0;
 }
-.offers-context strong {
+.offers-nearby strong {
     font-weight: bold;
     color: #ED1192;    
 }
-.offers-context .city,
-.om-text .city {
+.offers-nearby .city,
+.rmtext .city {
     text-decoration: underline;
     cursor: pointer;
 }

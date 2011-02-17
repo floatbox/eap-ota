@@ -179,6 +179,31 @@
     background: url(/img/header/shadow.png) repeat-x;
 }
 
+/* Сброс стилей (временно) */
+.booking fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+}
+.booking b, u, i {
+    font-weight: normal;
+    font-style: normal;
+    text-decoration: none;
+}
+.booking .b-pseudo a {
+    color: #333;
+    text-decoration: none;
+}
+.booking a:link,
+.booking a:visited {
+    color: #333;
+}
+.booking a:hover {
+    color: #ED1192;
+}
+
+
 /* Разметка страницы бронирования на шаги */
 .booking h3 {
     font: bold 22px Arial, sans-serif;

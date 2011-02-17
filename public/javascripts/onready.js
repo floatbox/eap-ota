@@ -15,7 +15,7 @@
     
     // Сохраненное бронирование
     if (pageurl.booking) {
-        app.booking.el = $('<div class="booking"></div>').appendTo(offersList.results);
+        app.booking.el = $('<div class="booking"></div>').appendTo($('#offers'));
         app.booking.load(pageurl.booking);
     }
 

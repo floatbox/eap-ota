@@ -109,7 +109,7 @@ show: function() {
     d.css('visibility', 'hidden').show();
     var foffset = this.el.closest('.filters').offset();
     var coffset = this.el.find('.control').offset();
-    var wheight = $('#page-wrapper').height();
+    var wheight = $('#wrapper').height();
     d.hide().css({
         'top': Math.min(coffset.top, w.height() + w.scrollTop() - d.height() - 5, wheight - d.height() - 24) - foffset.top,
         'left': Math.min(coffset.left, w.width() - d.width() - 3) - foffset.left,
