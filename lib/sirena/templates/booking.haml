@@ -1,0 +1,27 @@
+%booking
+  - segments.each do |segment|
+    %segment
+      %company= segment[:company]
+      %num= segment[:num]
+      %departure= segment[:departure]
+      %arrival= segment[:arrival]
+      %date= segment[:date]
+      %subclass= segment[:subclass]
+  - passengers.each do |passenger|
+    %passenger
+      %family= passenger[:family]
+      %name= passenger[:name]
+      %doccode= passenger[:doccode]
+      %doc= passenger[:document]
+      -if passenger[:expire_date]
+        %pspexpire= passenger[:expire_date]
+      %category= passenger[:code]
+      %sex= passenger[:sex]
+      %age= passenger[:birthdate]
+      - if passenger[:nationality]
+        %nationality= passenger[:nationality]
+  %contacts
+    %contact= phone
+  %answer_params
+    %return_request true
+    %show_tts true
