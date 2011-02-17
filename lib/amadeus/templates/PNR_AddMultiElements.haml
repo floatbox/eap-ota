@@ -114,7 +114,10 @@
           -# подозреваю, что TKXL даты не просит
           -# - еще как просит
           %indicator XL
-          %date= (Date.today + 1.day).strftime("%d%m%y")
+          -# внимание, бронирование сбрасывается с НАСТУПЛЕНИЕМ даты
+          -# для времени жизни сутки-двое надо выставлять +2.days
+          -# FIXME привинтить время
+          %date= (Date.today + 2.day).strftime("%d%m%y")
     %dataElementsIndiv
       %elementManagementData
         %reference

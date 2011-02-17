@@ -265,6 +265,10 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     r.join(' ')
   end
 
+  def human_lite
+    form_segments[0].from_as_object.name + (rt ? ' ⇄ ' : ' → ') + form_segments[0].to_as_object.name
+  end
+
   def human_cabin
     case cabin
     when 'Y'
