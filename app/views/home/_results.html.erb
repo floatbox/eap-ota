@@ -1,56 +1,16 @@
-<div id="offers" class="clear g-none">
-
-    <!-- Человекочитаемая строка запроса -->
-    <div class="placeholder">
-    <div id="offers-title">
-        <h1>Из Москвы в Париж</h1>
-        <div class="shadow"></div>
-    </div>
-    </div>
-
-    <!-- Панель ожидания результатов -->
-    <div id="offers-loading" class="offers-message g-none">
-        <div class="om-photo">
-            <p>Вы всегда можете проконсультироваться по&nbsp;всем вопросам или&nbsp;сделать заказ по&nbsp;телефону <strong><nobr>+7 495 660-35-20</nobr></strong> или&nbsp;по&nbsp;почте <a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a></p>
-        </div>
-        <div class="om-text">
-            <div class="progress"><span class="timer">0.0</span></div>
-            <h3>Ищем для вас лучшие предложения</h3>
-        </div>
-    </div>
-
-    <!-- Ничего не найдено -->
-    <div id="offers-empty" class="offers-message g-none">
-        <div class="om-photo">
-            <p>Вы всегда можете проконсультироваться по&nbsp;всем вопросам или&nbsp;сделать заказ по&nbsp;телефону <strong><nobr>+7 495 660-35-20</nobr></strong> или&nbsp;по&nbsp;почте <a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a></p>
-        </div>
-        <div class="om-text">
-            <h3>Мы не смогли ничего найти :(</h3>
-            <p>Попробуйте упростить маршрут или поискать другие даты</p>
-        </div>
-    </div>
-
-    <!-- Результаты поиска -->
-    <div id="offers-results" class="g-none">
+<div id="results" class="_latent">
     
-        <!-- Только другие даты -->
-        <div id="offers-imprecise" class="g-none">
-            <p>Мы не смогли ничего найти в выбранные дни, но есть предложения на другие даты</p>
-        </div>
-        
-        <!-- Фильтр результатов -->
-        <div id="offers-filter">
-        <div class="placeholder">
-            <div id="offers-filter-content">
-            <div class="of-collapsed">
-                <span class="link reset-filters g-none">Все варианты</span>
-                <span class="link expand-filters">Уточнить</span> количество пересадок, время, аэропорты и прочее
-            </div>
-            <table class="of-expanded">
+    <!-- Заголовок и фильтры -->
+    <div class="placeholder">
+    <div id="results-header">
+    <div class="rcontent">
+        <h1 id="results-title">Из Москвы в Париж</h1>
+        <div id="results-filters" class="latent">
+            <table class="rfvisible">
             <tr>
                 <th>
-                    <span id="offers-empty-filters">Уточнить</span>
-                    <a href="#" class="g-none reset-filters">Все&nbsp;варианты</a>
+                    <span class="rftitle">Уточнить</span>
+                    <span class="link rfreset latent">Все&nbsp;варианты</a>
                 </th>
                 <td rowspan="2">
                     <h5>Пересадки</h5>
@@ -96,30 +56,66 @@
                 </td>
             </tr>
             <tr>
-                <th class="collapse-container">
-                    <span class="collapse-filters">Свернуть &uarr;</span>
+                <th class="rfhide-cell">
+                    <span class="rfhide">Свернуть &uarr;</span>
                 </th>
             </tr>
             </table>
-            <div class="shadow"></div>
+            <div class="rfhidden">
+                <span class="link rfreset latent">Все варианты</span>
+                <span class="link rfshow">Уточнить</span> количество пересадок, время, аэропорты и прочее
             </div>
-        </div>
-        </div>
+            <div class="rfoverlay"></div>            
+        </div>        
+    </div>
+    <div class="shadow"></div>
+    </div>
+    </div>    
 
-        <!-- Вкладки списка результатов -->
-        <div id="offers-tabs">
-            <ul>
-                <li id="offers-tab-featured" class="active"><a href="#" onclick="return {v: 'featured'}">Мы рекомендуем</a></li>
-                <li id="offers-tab-all"><a href="#" onclick="return {v: 'all'}">Всего 42 варианта</a></li>
-                <li id="offers-tab-matrix"><a href="#" onclick="return {v: 'matrix'}">&plusmn; 3 дня</a></li>
-            </ul>
-        </div>
-        <div id="offers-content">
+    <!-- Панель ожидания результатов -->
+    <div id="results-loading" class="rmessage rcontent _latent">
+    <div class="rmphoto">
+        <p>Вы всегда можете проконсультироваться по&nbsp;всем вопросам или&nbsp;сделать заказ по&nbsp;телефону <strong><nobr>+7 495 660-35-20</nobr></strong> или&nbsp;по&nbsp;почте <a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a></p>
+    </div>
+    <div class="rmtext">
+        <div class="progress"><span class="timer">0.0</span></div>
+        <h3>Ищем для вас лучшие предложения</h3>
+    </div>
+    </div>
 
-        <!-- Список результатов -->
-        <div id="offers-list">
-        <div id="offers-featured" class="g-none"></div>
-        <div id="offers-matrix" class="g-none">
+    <!-- Ничего не найдено -->
+    <div id="results-empty" class="rmessage rcontent latent">
+    <div class="rmphoto">
+        <p>Вы всегда можете проконсультироваться по&nbsp;всем вопросам или&nbsp;сделать заказ по&nbsp;телефону <strong><nobr>+7 495 660-35-20</nobr></strong> или&nbsp;по&nbsp;почте <a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a></p>
+    </div>
+    <div class="rmtext">
+        <h3>Мы не смогли ничего найти :(</h3>
+        <p>Попробуйте упростить маршрут или поискать другие даты</p>
+    </div>
+    </div>
+
+    <!-- Вкладки -->
+    <div id="rtabs" class="wrap latent">
+    <ul class="primary">
+        <li id="rtab-featured" class="selected"><span class="link" data-tab="featured">Мы рекомендуем</span></li>
+        <li id="rtab-all"><span class="link" data-tab="all">Всего 42 варианта</span></li>
+        <li id="rtab-matrix"><span class="link" data-tab="matrix">&plusmn; 3 дня</span></li>
+    </ul>
+    </div>
+    <div id="offers" class="latent">
+    <div class="rcontent clearfix">
+        
+        <!-- Правая колонка -->
+        <div id="offers-context">
+            <div class="offers-nearby"></div>
+        </div>
+    
+        <!-- Рекомендации -->
+        <div id="offers-featured" class="latent"></div>
+        
+        <!-- Матрица цен -->
+        <div id="offers-matrix" class="latent">
+            <h3 class="imprecise latent">Мы не смогли ничего найти в выбранные дни, но есть предложения на другие даты</h3>
             <div class="offer">
                 <table class="offer-prices">
                 <col width="120">
@@ -139,7 +135,9 @@
                 <div id="offers-mcollection"></div>
             </div>
         </div>
-        <div id="offers-all" class="offers g-none">
+        
+        <!-- Все варианты -->
+        <div id="offers-all" class="latent">
             <div class="offers-sort">
                 <h3 class="offers-title">Все варианты, отсортированные <span id="offers-sortedby">по цене</span></h3>
                 <p>можно 
@@ -149,7 +147,7 @@
                     или&nbsp;<a href="#" onclick="return 'carrier'">по авиакомпании</a>
                 </p>
             </div>
-            <div class="offers-improper offers-message g-none">
+            <div class="offers-improper rmessage g-none">
                 <div class="om-photo"><br></div>
                 <div class="om-text">
                     <h3>Таких вариантов нет</h3>
@@ -158,8 +156,6 @@
             </div>
             <div id="offers-pcollection"></div>
         </div>
-        </div>
-        <!-- /Список результатов -->
         
         </div>
     </div>

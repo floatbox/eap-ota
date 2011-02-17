@@ -1,93 +1,52 @@
 /* Filters */
-#offers-filter {
+#results-filters {
     position: relative;
-    background: #FFF;
+    width: 960px;
+    margin: 0 auto;
     font-size: 14px;
     line-height: 18px;
     letter-spacing: -0.014em;
-    color: #333;
 }
-#offers-filter th {
+#results-filters th {
     width: 120px;
-    padding: 0 0 12px 15px;
+    padding-right: 12px;
     font-weight: bold;
-    text-align: left;
     vertical-align: top;
     color: #ed1192;
 }
-#offers-filter td {
+#results-filters td {
     width: 170px;
     padding: 0 15px 12px 15px;
     vertical-align: top;
-    color: #333;
 }
-#offers-filter .reset-filters {
+#results-filters .rfreset {
     color: #ED1192;
 }
-
-/* Fixed filters */
-#offers-filter-content.fixed {
-    position: fixed;
-    z-index: 10;
-    width: 960px;
-    background: #FFF;
-}
-#offers-filter-content .of-collapsed {
+.rfhidden,
+.rfhide {
     display: none;
-    padding: 0 15px;
-    height: 30px;
-}
-#offers-filter-content .shadow {
-    display: none;
-    position: absolute;
-    bottom: -6px;
-    left: 0;
-    z-index: -1;
-    width: 100%;
-    height: 6px;
-    background: url(/img/header/shadow.png) repeat-x;    
-}
-#offers-filter-content .expand-filters {
-    font-weight: bold;
-    color: #ED1192;
-}
-#offers-filter .of-collapsed .reset-filters {
-    float: right;
-}
-#offers-filter-content .collapse-container {
-    vertical-align: bottom;
-    padding-bottom: 14px;
-    font-weight: normal;
-}
-#offers-filter-content .collapse-filters {
-    display: none;
-    font-size: 11px;
-    cursor: pointer;
-}
-#offers-filter-content.fixed .collapse-filters {
-    display: inline;
-}
-#offers-filter-content.fixed .shadow {
-    display: block;
 }
 
 /* Filters group */
-#offers-filter h5 {
+#results-filters h5 {
     margin: 0 0 3px;
     font-weight: bold;
 }
-#offers-filter .filter {
+#results-filters .filter {
     display: block;
     margin: 0 0 3px;
 }
-#offers-filter .dropdown {
+#results-filters .latent {
+    display: none;
+}
+#results-filters .dropdown {
     margin-top: -6px;
     font-size: 16px;
     line-height: 19px;
 }
 
 /* Layovers */
-#offers-filter #layovers-filter {
+#results-filters #layovers-filter {
     margin-bottom: 0;
 }
 #layovers-filter .control {

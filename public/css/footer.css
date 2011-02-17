@@ -1,47 +1,38 @@
-.footer {
+.fcontent {
     position: relative;
     width: 960px;
     margin: 0 auto;
     padding: 15px 0;
-    border-top: #ddd 1px solid;
-    background: #fff;
     font-size: 12px;
     line-height: 16px;
 }
-
-.f-info {
+.finfo {
     position: absolute;
-    top: 15px; left: 15px;
+    top: 15px; left: 0;
     width: 250px;
     color: #777;
 }
-.f-info .social {
+.finfo .social {
     margin-top: 1em;
 }
-.f-info strong {
+.finfo strong {
     font-weight: bold;
 }
-.f-info a {
+.finfo a {
     color: #777;
 }
-
-.f-links {
+.flinks {
     position: absolute;
     top: 15px; left: 350px;
 }
-.f-links li {
+.flinks li {
     margin: 0 0 3px;
 }
-.f-links a {
-    color: #3270a6;
-}
-
-.f-partners {
+.fpartners {
     position: absolute;
-    top: 15px; left: 713px;
+    top: 15px; left: 728px;
     width: 232px;
 }
-
-.footer a:hover {
+#footer a:hover {
     color: #ed1192;
 }

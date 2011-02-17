@@ -2,43 +2,40 @@
 #search {
     background: #343434;
 }
+#search .scontent {
+    width: 960px;
+    margin: 0 auto;
+}
 
 /* Селекты и кнопка */
 #search-define {
-    width: 100%;
     background: #3e3e3e;
     font-size: 22px;
 }
+#search-define .scontent {
+    width: 990px;
+}
 #search-define th {
     width: 90px;
-    padding: 13px 0 14px 15px;
+    padding: 16px 0 15px 15px;
     font-weight: bold;
     text-align: left;
     vertical-align: top;
     color: #fff;
 }
 #search-define td {
-    padding: 13px 0 14px 10px;
+    padding: 16px 0 15px 10px;
     vertical-align: top;
     color: #ccc;
 }
 #search-define td a {
     color: #ccc;
 }
-
-/* Подсветка кнопки */
 #search-define #search-submit {
-    padding: 10px 15px 10px 80px;
+    width: 130px;
+    padding: 15px 15px 15px 80px;
     color: #fff;
     background-color: #3e3e3e;
-}
-#search-submit {
-    width: 100px;
-    padding: 10px 15px 10px 80px;
-    background: url(/img/search/btnglow.png) no-repeat 100% 0 #3e3e3e;
-}
-#search-submit.disabled {
-    background-position: 0 -100px;
 }
 
 /* Лоадер */

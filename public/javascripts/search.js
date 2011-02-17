@@ -156,9 +156,9 @@ init: function() {
     this.sprogress = this.submit.find('.progress');
     this.submit.find('.b-submit').click(function(event) {
         event.preventDefault();
-        if (offersList.nextUpdate) {
-            offersList.load();
-            offersList.show();
+        if (results.nextUpdate) {
+            results.load();
+            results.show();
         }
     }).mouseover(function() {
         if (self.submit.is('.disabled:not(.current)')) {
@@ -313,16 +313,16 @@ validate: function(qkey) {
         }
         self.submit.removeClass('current validating');
         if (result.valid) {
-            offersList.nextUpdate = {
+            results.nextUpdate = {
                 title: result.human
             };
-            offersList.nextUpdate.params = {
+            results.nextUpdate.params = {
                 query_key: result.query_key || data.query_key
             };
             if (restoreResults) {
-                offersList.nextUpdate.params.restore_results = true;
-                offersList.load();
-                offersList.show(false);
+                results.nextUpdate.params.restore_results = true;
+                results.load();
+                results.show(false);
             } else {
                 self.toggle(true);
                 if (typeof self.onValid === 'function') {
@@ -330,7 +330,7 @@ validate: function(qkey) {
                 }
             }
         } else {
-            delete(offersList.nextUpdate);
+            delete(results.nextUpdate);
             if (result.errors) {
                 for (var i = 0, im = result.errors.length; i < im; i++) {
                     var err = result.errors[i];

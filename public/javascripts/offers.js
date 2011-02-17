@@ -1,30 +1,29 @@
-var offersList = {
+var results = {
 options: {},
 init: function() {
-    this.title = $('#offers-title h1');
-    this.container = $('#offers');
-    this.loading = $('#offers-loading');
-    this.results = $('#offers-results');
-    this.content = $('#offers-content');
-    this.empty = $('#offers-empty');
+    
+    var that = this;
+
+    this.el = $('#results');
+    this.header = $('#results-header');
+    this.promo = $('#promo');
+    this.title = $('#results-title');
+    this.empty = $('#results-empty');
+    this.loading = $('#results-loading');
     this.update = {};
 
     // счётчик секунд на панели ожидания
     this.loading.timer = this.loading.find('.timer').timer();
     
     // Табы
-    $('#offers-tabs').bind('select', function(e, v) {
-        $('#offers-' + v).removeClass('g-none').siblings().addClass('g-none');
-        offersList.selectedTab = v;
-        pageurl.update('tab', v);
-    }).radio({
-        toggleClosest: 'li'
+    $('#rtabs .link').click(function() {
+        that.selectTab($(this).attr('data-tab'));
     });
     
-    var list = $('#offers-list');
+    var offers = $('#offers');
 
     // Подсветка
-    list.delegate('.offer', 'mouseenter', function() {
+    offers.delegate('.offer', 'mouseenter', function() {
         var self = $(this);
         $(this).data('timer', setTimeout(function() {
             self.addClass('hover');
@@ -36,7 +35,7 @@ init: function() {
     });
     
     // Подробности
-    list.delegate('.expand', 'click', function(event) {
+    offers.delegate('.expand', 'click', function(event) {
         var variant = $(this).closest('.offer-variant');
         var offer = variant.closest('.offer');
         if (offer.hasClass('collapsed')) {
@@ -47,7 +46,7 @@ init: function() {
             });
         }
     });
-    list.delegate('.collapse', 'click', function(event) {
+    offers.delegate('.collapse', 'click', function(event) {
         var variant = $(this).closest('.offer-variant');
         var offer = variant.closest('.offer'), oh = offer.height();
         offer.height(oh).animate({
@@ -58,22 +57,22 @@ init: function() {
     });
     
     // Сортировка
-    list.delegate('.offers-sort a', 'click', function(event) {
+    offers.delegate('.offers-sort a', 'click', function(event) {
         event.preventDefault();
-        var self = offersList, key = this.onclick();
-        if (key != self.sortby) {
+        var key = this.onclick();
+        if (key != results.sortby) {
             var list = $('#offers-pcollection').css('opacity', 0.7);
             setTimeout(function() {
                 list.hide();
-                self.applySort(key);
-                self.sortOffers();
+                results.applySort(key);
+                results.sortOffers();
                 list.css('opacity', 1).show();
             }, 250);
         }
     });
     
     // Выбор времени вылета
-    list.delegate('td.variants a', 'click', function(event) {
+    offers.delegate('td.variants a', 'click', function(event) {
         event.preventDefault();
         var el = $(this), dtime = el.text().replace(':', '');
         if (el.closest('.offer').hasClass('active-booking')) {
@@ -101,15 +100,15 @@ init: function() {
     });
     
     // Бронирование
-    list.delegate('.book .a-button', 'click', function(event) {
-        event.preventDefault();
+    offers.delegate('.book .a-button', 'click', function(event) {
         var variant = $(this).closest('.offer-variant');
         app.booking.show(variant);
         app.booking.book(variant);
+        event.preventDefault();
     });
     
     // Альянсы
-    list.delegate('.alliance', 'click', function(event) {
+    offers.delegate('.alliance', 'click', function(event) {
         var el = $(this);
         hint.show(event, 'В альянс ' + el.html() + ' входят авиакомпании: ' + el.attr('data-details') + '.');
     });
@@ -120,7 +119,7 @@ init: function() {
         offersList.show();
         search.onValid = undefined;
     };
-    this.content.delegate('.offers-context .city', 'click', function() {
+    $('#offers-context').delegate('.city', 'click', function() {
         var el = $(this);
         var fields = el.closest('.cities').attr('data-fields').split(' ');
         for (var i = fields.length; i--;) {
@@ -133,10 +132,13 @@ init: function() {
         search.onValid = autoLoad;
         search.segments[0].to.trigger('set', $(this).text());
     });
-    
-    // Матрица цен
-    this.initMatrix();
-    
+},
+selectTab: function(tab) {
+    this.selectedTab = tab;
+    $('#rtab-' + tab).addClass('selected').siblings().removeClass('selected');
+    $('#offers-featured, #offers-all, #offers-matrix').addClass('latent');
+    $('#offers-' + tab).removeClass('latent');
+    pageurl.update('tab', tab);
 },
 load: function() {
     var self = this;
@@ -237,23 +239,22 @@ show: function(fixed) {
         }, 300);
     }
     this.loading.find('h3').html('Ищем для вас лучшие предложения');
-    this.container.removeClass('g-none');
-    $('#promo').addClass('g-none');
-    var w = $(window), offset = this.container.offset().top;
+    this.promo.addClass('latent');
+    this.el.removeClass('latent');
+    var w = $(window), offset = this.el.offset().top;
     if (fixed !== false && offset - w.scrollTop() > w.height() / 2) {
         $.animateScrollTop(offset - 112);
     }
 },
 hide: function() {
-    this.container.addClass('g-none');
-    $('#promo').removeClass('g-none');
+    this.el.addClass('latent');
+    this.promo.removeClass('latent');
 },
 toggle: function(mode) {
-    this.container.toggleClass('with-results', mode == 'results');
-    this.loading.toggleClass('g-none', mode != 'loading');
-    this.results.toggleClass('g-none', mode != 'results');
-    this.empty.toggleClass('g-none', mode != 'empty');
-    this.loading.timer.trigger(mode == 'loading' ? 'start' : 'stop');
+    this.el.toggleClass('ready', mode === 'ready');
+    this.empty.toggleClass('latent', mode !== 'empty');
+    this.loading.toggleClass('latent', mode !== 'loading');
+    this.loading.timer.trigger(mode === 'loading' ? 'start' : 'stop');
 },
 toggleCollection: function(mode) {
     var context = $('#offers-all');
@@ -265,17 +266,18 @@ processUpdate: function() {
     if (u.mcontent && u.mcontent.indexOf('offer-variant') !== -1) {
         queue.push(function() {
             $('#offers-mcollection').html(u.mcontent);
-            self.processMatrix();
+            self.matrix.process();
         });
     } else {
         $('#offers-mcollection').html('');
-        self.processMatrix();
+        self.matrix.process();
     }
     if (u.pcontent && u.pcontent.indexOf('offers-options') !== -1) {
         queue.push(function() {
             $('#offers-pcollection').html(u.pcontent);
         }, function() {
-            self.updateFilters();
+            var data = $.parseJSON($('#offers-options').attr('data-filters'));
+            self.filters.update(data);
         }, function() {
             self.parseResults()
             self.applySort('price');
@@ -285,13 +287,13 @@ processUpdate: function() {
         }, function() {
             self.showRecommendations();
         }, function() {
-            self.content.children('.offers-context').remove();
-            self.content.find('.offers-context').prependTo(self.content).removeClass('g-none');
+            var nbc = $('#offers-pcollection .offers-nearby').remove();
+            $('#offers-context .offers-nearby').html(nbc.html() || '');
             self.toggleCollection(true);
         });
     } else {
         $('#offers-pcollection').html('');
-        this.content.children('.offers-context').remove();
+        $('#offers-context .offers-nearby').html('');
         this.variants = [];
         this.items = [];    
     }
@@ -302,11 +304,10 @@ processUpdate: function() {
             if (queue[qstep]) setTimeout(processQueue, 100);
         };
         queue.push(function() {
-            self.toggle('results');
+            self.toggle('ready');
             var imprecise = self.variants.length == 0;
-            $('#offers-filter').toggleClass('g-none', imprecise);
-            $('#offers-tabs').toggleClass('g-none', imprecise);
-            $('#offers-imprecise').toggleClass('g-none', !imprecise);
+            $('#rtabs').toggleClass('latent', imprecise);
+            self.filters.el.toggleClass('latent', imprecise);
             var b = app.booking, vid = b.el && b.el.attr('data-variant');
             if (vid && !b.variant) {
                 var vparts = vid.split('-');
@@ -314,14 +315,14 @@ processUpdate: function() {
                 if (b.variant) {
                     b.offer = b.variant.closest('.offer');
                     self.showVariant(b.variant);
-                    $('#offers-tabs').trigger('set', vparts[0]);
+                    self.selectTab(vparts[0]);
                     b.el.appendTo(b.offer).removeClass('g-none');
                     b.show();
                     b.fasten(b.offer);
                     b.init();
                 }
             } else {
-                $('#offers-tabs').trigger('set', imprecise ? 'matrix' : (self.selectedTab || pageurl.tab || 'featured'));
+                self.selectTab(imprecise ? 'matrix' : (self.selectedTab || pageurl.tab || 'featured'));
                 pageurl.update('search', $(imprecise ? '#offers-matrix .matrix-origin' : '#offers-options').attr('data-query_key'));
                 pageurl.title('авиабилеты ' + self.title.attr('data-title'));
             }
@@ -337,9 +338,9 @@ processUpdate: function() {
                 var nearbyText = nearby.map(function() {
                     return $('<div/>').append(this).html();
                 }).get().join(', ');
-                $('#offers-empty .om-text p').html('Попробуйте упростить маршрут, поискать другие даты или соседние города: ' + nearbyText);
+                self.empty.find('.rmtext p').html('Попробуйте упростить маршрут, поискать другие даты или соседние города: ' + nearbyText);
             } else {
-                $('#offers-empty .om-text p').html('Попробуйте упростить маршрут или поискать другие даты');
+                self.empty.find('.rmtext p').html('Попробуйте упростить маршрут или поискать другие даты');
             }
             $('#offers-pcollection').html('');
         }
@@ -406,23 +407,8 @@ updateFilters: function() {
     this.activeFilters = {};
     this.filterable = true;
 },
-resetFilters: function() {
-    this.filterable = false;
-    for (var key in this.activeFilters) {
-        this.filters[key].reset();
-        delete(this.activeFilters[key]);
-    }
-    this.filterable = true;
-},
-applyFilter: function(name, values) {
-    var self = this, filters = this.activeFilters;
-    if (name) {
-        if (values && values.length) {
-            filters[name] = values;
-        } else {
-            delete(filters[name]);
-        }
-    }
+applyFilters: function() {
+    var self = this;
     var st = $('#offers').position().top;
     if (st < $(window).scrollTop()) {
         $(window).scrollTop(st);
@@ -451,7 +437,7 @@ applyFilter: function(name, values) {
     setTimeout(processQueue, 200);
 },
 filterOffers: function() {
-    var filters = this.activeFilters, empty = true;
+    var filters = this.filters.selected, empty = true;
     var items = this.items, variants = this.variants;
     var total = items.length;
     for (var i = items.length; i--;) {
@@ -555,7 +541,7 @@ showRecommendations: function() {
             items.push({n: i, p: v.offer.summary.price, d: v.summary.duration});
         }
     }
-    var container = $('#offers-featured').hide().html('');
+    var container = $('#offers-featured').addClass('processing').html('');
     if (items.length == 0) {
         container.append($('#offers-pcollection').prev().clone()).show();
         return;
@@ -629,15 +615,15 @@ showRecommendations: function() {
     if (optimal) container.append(this.makeRecommendation(variants[optimal.n], otitle));
     if (fast) container.append(this.makeRecommendation(variants[fast.n], 'Быстрый вариант'));
     if (!this.filtered) {
-        var alamount = this.filters['carriers'].items.length.inflect('авиакомпании', 'авиакомпаний', 'авиакомпаний');
+        var alamount = this.filters.items['carriers'].items.length.inflect('авиакомпании', 'авиакомпаний', 'авиакомпаний');
         var ftip = $('<div class="offers-title featured-tip"><strong>Не подошло?</strong> Воспользуйтесь уточнениями <span class="up">вверху&nbsp;&uarr;</span> или посмотрите <span class="link">все&nbsp;варианты</span> от&nbsp;' + alamount + '</div>');
         var that = this;
         ftip.find('.link').click(function() {
-            $('#offers-tabs').trigger('set', 'all');
-            $.animateScrollTop(that.container.offset().top - 42);
+            that.selectTab('all');
+            $.animateScrollTop(that.el.offset().top - 42);
         });
         ftip.find('.up').click(function() {
-            $.animateScrollTop(that.container.offset().top - 42);
+            $.animateScrollTop(that.el.offset().top - 42);
         });
         container.append(ftip);
         var rprice = cheap ? cheap.p : optimal.p;
@@ -645,13 +631,13 @@ showRecommendations: function() {
         if (!isNaN(mprice) && mprice < rprice) {
             var mtip = $('<div class="offers-title featured-tip"><strong>Дорого?</strong> Посмотрите <span class="link">другие дни</span> — есть предложения от&nbsp;' + mprice.inflect('рубля', 'рублей', 'рублей') + '</div>');
             mtip.find('.link').click(function() {
-                $('#offers-tabs').trigger('set', 'matrix');
-                $.animateScrollTop(that.container.offset().top - 42);
+                that.selectTab('matrix');
+                $.animateScrollTop(that.el.offset().top - 42);
             });
             container.append(mtip);
         }
     }
-    container.show();
+    container.removeClass('processing');
 },
 makeRecommendation: function(variant, title) {
     var el = variant.el, offer = el.parent().clone();
@@ -720,13 +706,124 @@ joinDepartures: function(dtimes, current) {
 }
 };
 
+
+// Фильтры
+results.filters = {
+init: function() {
+    var that = this;
+    this.items = {};
+    this.selected = {};
+    this.el = $('#results-filters');
+    this.el.find('.filter').each(function() {
+        var f = new controls.Filter($(this));
+        f.template = ': $';
+        f.el.bind('change', function(e, values) {
+            var name = $(this).attr('data-name');
+            if (values && values.length) {
+                that.selected[name] = values;
+            } else {
+                delete(that.selected[name]);
+            }            
+            if (that.active) {
+                fixedBlocks.update();
+                results.applyFilters();
+            }
+        });
+        that.items[$(this).attr('data-name')] = f;
+    });
+    
+    // Сворачивание панели
+    this.el.find('.rfexpand').click(function() {
+        var filter = $('#offers-filter-content'), fh = filter.height();
+        filter.children('.of-collapsed').hide();
+        filter.children('.of-expanded').show();
+        filter.css({
+            height: fh,
+            overflow: 'hidden'
+        }).animate({
+            height: filter.children('.of-expanded').height()
+        }, 120, function() {
+            $(this).css({
+                height: 'auto',
+                overflow: 'visible'
+            });
+        });
+    });
+    this.el.find('.rfcollapse').click(function() {
+        var filter = $('#offers-filter-content');
+        filter.css({
+            height: filter.height(),
+            overflow: 'hidden'
+        }).animate({
+            height: 30
+        }, 120, function() {
+            filter.children('.of-expanded').hide();
+            filter.children('.of-collapsed').show();
+            $(this).css({
+                height: 'auto',
+                overflow: 'visible'
+            });
+        });
+    });
+    
+    // Фильтр количества пересадок
+    var lf = this.items['layovers'];
+    lf.dropdown.removeClass('dropdown').addClass('vlist');
+    lf.show = function() {};
+    lf.hide = function() {};
+    
+    // Сброс фильтров
+    this.el.find('.rfreset').click(function() {
+        that.reset();
+        results.applyFilters();
+    });        
+},
+reset: function() {
+    this.active = false;
+    for (var key in this.selected) {
+        this.items[key].reset();
+    }
+    this.selected = {};
+    this.active = true;
+},
+update: function(data) {
+    this.active = false;
+    var that = this;
+    this.el.find('.rfreset').addClass('latent');
+    this.el.find('.filter').each(function() {
+        var name = $(this).attr('data-name');
+        var f = that.items[name];
+        f.fill(data[name]);
+        f.el.toggleClass('latent', f.items.length < 2);
+        var lid = f.el.attr('data-location');
+        if (lid && data.locations[lid]) {
+            f.el.find('.control').html((lid.charAt(0) == 'd' ? 'вылет ' : 'прилёт ') + data.locations[lid]);
+        }
+    });
+    this.el.find('.filters').each(function() {
+        $(this).closest('td').toggleClass('latent', $(this).find('.filter:not(.latent)').length === 0);
+    });
+    this.data = data;
+    this.selected = {};
+    this.active = true;
+}
+};
+
+// Список предложений
+results.offers = {
+
+
+
+};
+
 // Матрица цен
-$.extend(offersList, {
-initMatrix: function(table) {
-    var table = $('#offers-matrix .offer-prices');
-    var cells = $('td', table);
+results.matrix = {
+init: function(table) {
+    this.el = $('#offers-matrix');
+    var table = this.el.find('.offer-prices');
     var frow = table.get(0).rows[0];
-    var selected = $('td.selected', table); 
+    var cells = table.find('td');
+    var selected = table.find('td.selected'); 
     var htimer, highlight = function(td) {
         hlcurrent.removeClass('current');
         hlcurrent = $(frow.cells[parseInt(td.attr('data-col'), 10)]).add(td.parent()).addClass('current');
@@ -744,7 +841,7 @@ initMatrix: function(table) {
         if (!$(this).closest('.offer').hasClass('active-booking')) {
             selected.removeClass('selected').addClass('active');
             selected = $(this).addClass('selected').removeClass('active');
-            self.showVariant($('#mv-' + $(this).attr('data-vid')));
+            results.showVariant($('#mv-' + $(this).attr('data-vid')));
         }
     });
     cells.each(function() {
@@ -752,21 +849,20 @@ initMatrix: function(table) {
         c.attr('data-col', c.prevAll().length);
     });    
 },
-processMatrix: function() {
-    var context = $('#offers-matrix');
-    var table = context.find('.offer-prices').hide();
+process: function() {
+    var table = this.el.find('.offer-prices').hide();
+    var ordates, origin = this.el.find('.matrix-origin');
+    var mtab = $('#rtab-matrix');    
     table.find('td').html('').removeClass('cheap active');
-    var ordates, origin = context.find('.matrix-origin');
-    var mtab = $('#offers-tab-matrix');    
     if (origin.length) {
+        this.el.find('.offer').removeClass('expanded').addClass('collapsed');
         table.find('.direction').html(origin.html());
-        context.find('.offer').removeClass('expanded').addClass('collapsed');
         orDates = origin.attr('data-dates').split(' ');
         mtab.show();
     } else {
         mtab.hide();
-        if (this.selectedTab == 'matrix' || pageurl.tab == 'matrix') {
-            this.selectedTab = 'featured';
+        if (results.selectedTab == 'matrix' || pageurl.tab == 'matrix') {
+            results.selectedTab = 'featured';
         }
         table.attr('data-minprice', '');
         return;
@@ -774,7 +870,7 @@ processMatrix: function() {
     var rows = table.get(0).rows;
     var findex = {}, fdate = Date.parseAmadeus(orDates[0]).shiftDays(-3);
     for (var i = 0; i < 7; i++) {
-        $(rows[0].cells[i + 1]).html(this.matrixDate(fdate));
+        $(rows[0].cells[i + 1]).html(this.date(fdate));
         findex[fdate.toAmadeus()] = i + 1;
         fdate.shiftDays(1);
     }
@@ -783,7 +879,7 @@ processMatrix: function() {
         var tindex = {};
         var tdate = Date.parseAmadeus(orDates[1]).shiftDays(-3);
         for (var i = 0; i < 7; i++) {
-            $(rows[i + 1].cells[0]).html(this.matrixDate(tdate));
+            $(rows[i + 1].cells[0]).html(this.date(tdate));
             tindex[tdate.toAmadeus()] = i + 1;
             tdate.shiftDays(1);
         }
@@ -792,7 +888,7 @@ processMatrix: function() {
         var tindex = undefined;
     }
     var cheap = undefined;
-    var variants = context.find('.offer-variant').each(function(i) {
+    var variants = this.el.find('.offer-variant').each(function(i) {
         var el = $(this);
         var summary = $.parseJSON(el.attr('data-summary'));
         var cn = findex[summary.dates[0]];
@@ -812,9 +908,9 @@ processMatrix: function() {
     $(rows[4].cells[4]).click();
     table.attr('data-minprice', cheap.price).show();
 },
-matrixDate: function(date) {
+date: function(date) {
     var dm = date.getDate() + '&nbsp;' + constants.monthes.genitive[date.getMonth()];
     var wd = constants.weekdays[(date.getDay() || 7) - 1];
     return '<h6>' + dm + '</h6><p>' + wd + '</p>';
 }
-});
+};

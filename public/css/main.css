@@ -15,9 +15,9 @@
 @import 'search/panel.css';
 @import 'search/calendar.css';
 
-@import 'offers/filters.css';
-@import 'offers/tabs.css';
-@import 'offers/message.css';
 @import 'offers/results.css';
+@import 'offers/filters.css';
+@import 'offers/message.css';
+@import 'offers/offer.css';
 @import 'offers/matrix.css';
 @import 'offers/booking.css';

@@ -1,16 +1,16 @@
 #promo {
-    background: #e7ecee;
+    width: 960px;
+    margin: 0 auto;
     color: #3e3e3e;
 }
 #promo .facebook {
-    display: inline;
     float: right;
     width: 240px;
-    margin: 15px 15px 0 0;
+    margin: 15px 0 0 0;
     background: #FFF;
 }
 #promo .description {
-    margin-right: 270px;
+    margin-right: 255px;
     border-bottom: 1px solid #DDD;
     padding: 18px 15px 0 255px;
     background: url(/img/promo/photo.jpg) no-repeat 0 100%;
@@ -39,7 +39,7 @@
     color: #777;
 }
 #promo .airlines {
-    margin-right: 255px;
+    margin-right: 240px;
     padding-bottom: 20px;
     background: url(/img/promo/bgr.jpg) no-repeat;
 }

@@ -1,9 +1,8 @@
-<!-- Форма поиска -->
 <div id="search">
 
 <!-- Откуда и куда -->
 <div id="search-fields" class="rtmode">
-<table>
+<table class="scontent">
 <tr class="segment1">
     <td class="from">
         <h6><label for="search-s1-from"><span class="highlight">Откуда</span></label><span class="loader"></span></h6>
@@ -76,11 +75,11 @@
 </div>
 
 <!-- Карта и календарь -->
-<div id="search-panel">
-<div id="search-where" class="wt0">
+<div id="search-panel" class="wrap scontent">
+<div id="search-where">
     <h2>Карта</h2>
-    <div id="where-map" class="map wp0">
-        <div id="bingmap" style="position: relative; width: 320px; height: 339px;"></div>
+    <div id="where-map" class="map">
+        <div id="bingmap" style="position: relative; width: 350px; height: 339px;"></div>
     </div>
 </div>
 <div id="search-when" onselectstart="return false;">
@@ -111,7 +110,8 @@
 </div>
 
 <!-- Количество пассажиров, класс и кнопка поиска-->
-<table id="search-define">
+<div id="search-define">
+<table class="scontent">
 <tr>
     <th>Выберите</th>
     <td>
@@ -175,10 +175,10 @@
         </div>
 
         <% if admin_user %>
-          <span id="search-debug">
-              <input type="checkbox" id="sdmode"> <label for="sdmode">Режим отладки</label>&nbsp;
-              <input type="checkbox" id="sirena"> <label for="sirena">Сирена</label>
-          </span>
+        <span id="search-debug">
+            <input type="checkbox" id="sdmode"> <label for="sdmode">Режим отладки</label>&nbsp;
+            <input type="checkbox" id="sirena"> <label for="sirena">Сирена</label>
+        </span>
         <% end %>
 
         </div>
@@ -193,5 +193,6 @@
     </td>
 </tr>
 </table>
+</div>
 
 </div>

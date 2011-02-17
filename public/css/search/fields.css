@@ -1,20 +1,18 @@
 #search-fields {
     position: relative;
-    padding: 6px 0 5px 15px;
-    color: #c8c8c8;
+    padding: 6px 0 5px;
     background: #2c2c2c;
     zoom: 1;
 }
 #search-fields table {
-    width: 945px;
-    border-collapse: collapse;
-    border-spacing: 0;
+    color: #c8c8c8;
 }
-#search-fields table td {
+#search-fields td {
     padding: 0 0 10px;
     vertical-align: top;
 }
 #search-fields td.search-mode {
+    width: 20%;
     padding-bottom: 0;
 } 
 
@@ -47,7 +45,6 @@
 
 /* Режим поиска */
 #search-mode {
-    width: 155px;
     margin-left: 20px;
     padding-top: 3px;
     font-weight: bold;
@@ -57,6 +54,9 @@
 #search-mode li {
     padding: 4px 10px;
     cursor: pointer;
+    white-space: nowrap;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
 }
 #search-mode li:hover {
     background: #3E3E3E;
@@ -83,15 +83,13 @@
 
 /* Поля ввода */
 #search-fields .autocomplete {
-    float: left; /* иначе в IE появляется вертикальный отступ в 1px */
+    float: left;
 }
 #search-fields .from .autocomplete {
-    /*width: 422px;*/
-    width: 342px;
+    width: 350px;
 }
 #search-fields .to .autocomplete {
-    /*width: 438px;*/
-    width: 358px;
+    width: 360px;
 }
 
 /* Кнопка туда-сюда-обратно */

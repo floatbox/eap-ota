@@ -1,6 +1,5 @@
 /* Блок с тенью */
-.offers-message {
-    margin: 0 15px 20px;
+.rmessage {
     border-radius: 10px;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
@@ -10,18 +9,20 @@
     -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);       
 }
-.om-photo {
+.rmphoto {
     height: 120px;
     padding: 38px 15px 0 0;
     font-size: 15px;
     line-height: 18px;
     color: #777;
 }
-.om-photo a,
-.om-photo strong {
+.rmphoto a,
+.rmphoto strong {
     color: #ed1192;
 }
-.om-text {
+.rmphoto strong {
+}
+.rmtext {
     border-top: 1px solid #ebebeb;
     border-radius: 0 0 10px 10px;
     -moz-border-radius: 0 0 10px 10px;
@@ -30,7 +31,7 @@
     background: #f0f0f0;
     color: #333;
 }
-.om-text h3 {
+.rmtext h3 {
     text-align: center;
     font-weight: bold;
     font-size: 22px;
@@ -38,25 +39,28 @@
 }
 
 /* Поиск */
-#offers-loading .om-photo {
+#results-loading {
+    margin-bottom: 20px;
+}
+#results-loading .rmphoto {
     padding-left: 587px;
     background: url(/img/offers/photo-search.jpg) no-repeat 50% 50%;
 }
-#offers-loading .progress {
+#results-loading .progress {
     position: relative;
     width: 128px;
     height: 15px;
     margin: 0 auto 12px;
     background: url(/img/offers/progress.gif) no-repeat;
 }
-#offers-loading .timer {
+#results-loading .timer {
     position: absolute;
     top: 1px; left: 140px;
     font-size: 16px;
     line-height: 15px;
     color: #777;
 }
-#offers-loading h3 {
+#results-loading h3 {
     text-align: center;
     font-weight: bold;
     font-size: 22px;
@@ -64,13 +68,13 @@
 }
 
 /* Нет результатов */
-#offers-empty .om-photo,
-.offers-improper .om-photo {
+#results-empty .rmphoto,
+.offers-improper .rmphoto {
     padding-left: 587px;
     background: url(/img/offers/photo-empty.jpg) no-repeat 50% 50%;    
 }
-#offers-empty .om-text p,
-.offers-improper .om-text p {
+#results-empty .rmtext p,
+.offers-improper .rmtext p {
     margin: 6px 0 0;
     text-align: center;
     font-size: 18px;
