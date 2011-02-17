@@ -19,34 +19,61 @@ module Sirena
       end
 
       def parse_recommendation(rec, flights)
-        booking_classes = [] # тут я думаю, что это классы мест, которые бронируются. права ли я?
+        booking_classes = []
+        first_variant = true
         variants = rec.xpath("flights").map{|variant|
           time = 0
           prev_arr = ""
-          ff = variant.xpath("flight").map{|fi|
+          prev_segment_num = ""
+          segments = []
+          segment = nil
+          variant.xpath("flight").each{|fi|
+            if prev_segment_num!=fi.attribute("iSegmentNum").text
+              if !prev_segment_num.blank?
+                segment.eft = (time/60).to_s+":"+"%02i".%(time % 60)
+                time = 0
+                prev_arr = ""
+              end
+              segment = Segment.new :flights=>[]
+              segments << segment
+              prev_segment_num=fi.attribute("iSegmentNum").text
+            end
             id = fi.attribute("id") && fi.attribute("id").value
             cl = fi.attribute("subclass") && fi.attribute("subclass").value
-            booking_classes << cl if cl
+            booking_classes << cl if cl && first_variant
             time += flights[id][:time]
             time +=(flights[id][:departure]-prev_arr).to_i/60 if !prev_arr.blank?
             prev_arr=flights[id][:arrival]
-            flights[id][:flight]
+            segment.flights << flights[id][:flight]
+            first_variant = false
           }
           # eft = estimated flight time!
-          segments = [Segment.new(:eft=>(time/60).to_s+":"+"%02i".%(time % 60), :flights=>ff)]
+          segment.eft = (time/60).to_s+":"+"%02i".%(time % 60)
           Variant.new( :segments => segments )
         }
 
-        fare = rec.xpath("direction/price/fare")[0].text.to_f
-        total = rec.xpath("direction/price/total")[0].text.to_f
+        fare = rec.xpath("direction/price/fare").sum{|elem| elem.text.to_f}
+        total = rec.xpath("direction/price/total").sum{|elem| elem.text.to_f}
+        cabins = booking_classes.map{|klass|
+          if "ЮСЭЖЦКЛМНЯТВХГУЕО".index(klass)
+            "Y"
+          elsif "ИБДШЫ".index(klass)
+            "C"
+          elsif "РФПА".index(klass)
+            "F"
+          else
+            klass
+          end
+        }
         Recommendation.new(
+          :source=>"sirena",
           :price_fare => fare,
           :price_tax => total - fare,
           :variants => variants,
           :validating_carrier_iata => "",
           :suggested_marketing_carrier_iatas => [],
           :additional_info => "",
-          :cabins => [],
+          :cabins => booking_classes,
           :booking_classes => booking_classes
         )
       end
@@ -54,8 +81,9 @@ module Sirena
       def parse_flight(fi)
         dep_iata = fi.xpath("origin").text
         arr_iata = fi.xpath("destination").text
-        dep = Time.parse(fi.xpath("deptdate").text+" "+fi.xpath("depttime").text)
-        arr = Time.parse(fi.xpath("arrvdate").text+" "+fi.xpath("arrvtime").text)
+        # без insert неправильно прасится дата
+        dep = Time.parse((fi.xpath("deptdate").text+" "+fi.xpath("depttime").text).insert(6, "20"))
+        arr = Time.parse((fi.xpath("arrvdate").text+" "+fi.xpath("arrvtime").text).insert(6, "20"))
         f = Flight.new(
           :operating_carrier_iata => fi.xpath("company").text,
           :marketing_carrier_iata => fi.xpath("company").text,

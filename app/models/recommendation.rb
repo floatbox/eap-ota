@@ -122,7 +122,7 @@ class Recommendation
   end
 
   def sellable?
-    validating_carrier.consolidator && commission
+    validating_carrier.consolidator && commission || source == 'sirena'
   end
 
   def without_full_information?
@@ -238,27 +238,39 @@ class Recommendation
   end
 
   def check_price_and_availability(pricer_form)
-    Amadeus.booking do |amadeus|
-      self.price_fare, self.price_tax =
-        amadeus.fare_informative_pricing_without_pnr(
-          :recommendation => self,
-          :flights => flights,
-          :people_count => pricer_form.real_people_count,
-          :validating_carrier => validating_carrier_iata
-        ).prices
+    unless pricer_form.sirena
+      Amadeus.booking do |amadeus|
+        self.price_fare, self.price_tax =
+          amadeus.fare_informative_pricing_without_pnr(
+            :recommendation => self,
+            :flights => flights,
+            :people_count => pricer_form.real_people_count,
+            :validating_carrier => validating_carrier_iata
+          ).prices
 
-      # FIXME не очень надежный признак
-      return if price_fare.to_i == 0
-      self.rules = amadeus.fare_check_rules.rules
-      air_sfr = amadeus.air_sell_from_recommendation(
-        :recommendation => self,
-        :segments => segments,
-        :seat_total => pricer_form.seat_total
-      )
-      amadeus.pnr_ignore
-      return unless air_sfr.segments_confirmed?
-      air_sfr.fill_itinerary!(segments)
-      self
+        # FIXME не очень надежный признак
+        return if price_fare.to_i == 0
+        self.rules = amadeus.fare_check_rules.rules
+        air_sfr = amadeus.air_sell_from_recommendation(
+          :recommendation => self,
+          :segments => segments,
+          :seat_total => pricer_form.seat_total
+        )
+        amadeus.pnr_ignore
+        return unless air_sfr.segments_confirmed?
+        air_sfr.fill_itinerary!(segments)
+        self
+      end
+    else
+      recs = Sirena::Service.pricing(pricer_form, self).recommendations
+      rec = recs && recs[0]
+      self.source = 'sirena'
+      self.rules = [] # для получения этой инфы для каждого тарифа нужно отправлять отдельный запрос fareremark
+      if rec
+        self.price_fare = rec.price_fare
+        self.price_tax = rec.price_tax
+        rec
+      end
     end
   end
 

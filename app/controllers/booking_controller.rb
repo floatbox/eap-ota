@@ -38,7 +38,12 @@ class BookingController < ApplicationController
       if @order.create_booking
         payture_response = @order.block_money
         if payture_response.success?
-          @order.order.money_blocked!
+          # FIXME отменила пока посылку почты для сирены
+          if @order.recommendation.source == 'sirena'
+            @order.order.update_attribute(:payment_status, 'blocked')
+          else
+            @order.order.money_blocked!
+          end
           render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}
         elsif payture_response.threeds?
           render :partial => 'threeds', :locals => {:order => @order, :payture_response => payture_response}
