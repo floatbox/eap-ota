@@ -109,13 +109,14 @@ Order:
 HotOffer:
   fields:
     default: url, description, price, created_at
-    list: url, description, price, created_at
+    list: clickable_url, description, price, created_at
     show:  url, description, price, created_at
     options:
       date_formats:
         created_at: long
-
-  order_by: created_at
+  options:
+    default_action_on_item: show
+  order_by: -created_at
   relationships:
   search: description, code
   application: Hot Offers
