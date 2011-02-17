@@ -84,10 +84,14 @@ class Flight
   end
 
   def full_flight_number
+    "#{carrier_pair}#{flight_number}"
+  end
+
+  def carrier_pair
     if operating_carrier_iata != marketing_carrier_iata
-      "#{operating_carrier_iata}:#{marketing_carrier_iata}#{flight_number}"
+      "#{operating_carrier_iata}:#{marketing_carrier_iata}"
     else
-      "#{marketing_carrier_iata}#{flight_number}"
+      marketing_carrier_iata
     end
   end
 

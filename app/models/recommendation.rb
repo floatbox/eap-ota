@@ -1,6 +1,14 @@
 # encoding: utf-8
 class Recommendation
 
+  # FIXME надо вынести во что-то амадеусовское?
+  cattr_accessor :cryptic_logger
+  cattr_accessor :short_logger
+  self.cryptic_logger = ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_cryptic.log')
+  self.short_logger = ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_short.log')
+  cryptic_logger.auto_flushing = nil
+  short_logger.auto_flushing = nil
+
   include KeyValueInit
 
   attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
@@ -128,7 +136,7 @@ class Recommendation
   def without_full_information?
     #проверяем, что все аэропорты есть в базе
     missed_iatas = (flights.every.arrival + flights.every.departure).uniq.find_all{|a| !a.id}.every.iata
-    File.open(RAILS_ROOT + '/log/missed_iatas.log', 'a') {|f|
+    File.open(Rails.root + 'log/missed_iatas.log', 'a') {|f|
         f.write(missed_iatas.join(',') + ' ' + Time.now.strftime("%H:%M %d.%m.%Y") + "\n")
     } unless missed_iatas.blank?
     !missed_iatas.blank?
@@ -147,6 +155,16 @@ class Recommendation
     merged = left | right
     (merged - left).each {|r| r.source = 'right' }
     (merged - right).each {|r| r.source = 'left' }
+
+    merged.each do |r|
+      r.variants.each do |v|
+        cryptic_logger.info r.cryptic(v)
+      end
+      short_logger.info r.short
+    end
+    cryptic_logger.flush
+    short_logger.flush
+
     merged
   end
 
@@ -290,10 +308,28 @@ class Recommendation
   end
 
   # попытка сделать код для script/amadeus
-  def cryptic(variant)
+  def cryptic(variant=variants.first)
     ( [ "FV #{validating_carrier_iata}", "RMCABS #{cabins.join}"] +
       variant.flights.zip(booking_classes).map { |fl, cl| fl.cryptic(cl) }
     ).join('; ')
+  end
+
+  # сгодится для Recommendation.example
+  def short(variant=variants.first)
+    ( [ validating_carrier_iata ] +
+      [ variant.flights, booking_classes, cabins].transpose.map { |fl, cl, cab|
+        r = ["#{fl.departure_iata}#{fl.arrival_iata}"]
+        if fl.marketing_carrier_iata != fl.operating_carrier_iata
+          r << fl.carrier_pair
+        elsif validating_carrier_iata != fl.marketing_carrier_iata
+          r << fl.marketing_carrier_iata
+        end
+        r << 'BUSINESS' if cab == 'C'
+        r << 'FIRST' if cab == 'F'
+        r << cl if cl != 'Y'
+        r.join('/')
+      }
+    ).join(' ')
   end
 
   # надеюсь, однажды это будет просто ключ из кэша
