@@ -13,8 +13,8 @@ module Sirena
       def debug_dir; 'log/sirena' end
       def debug_file; 'log/sirena.log'; end
 
-      def action(name, params)
-        request = Sirena::Request.for(name).new(params)
+      def action(name, *params)
+        request = Sirena::Request.for(name).new(*params)
         request_body = request.render
         log_request(name, request_body)
         response_body = do_http(request_body)
@@ -40,9 +40,13 @@ module Sirena
         http_response.body
       end
 
-      %W(pricing describe).each do |method_name| # availability schedule)
-        define_method method_name.underscore do |params|
-          action(method_name, params)
+      def payment_ext_auth(*params)
+        Response::PaymentExtAuth.new("")
+      end
+
+      %W(pricing describe booking).each do |method_name| # availability schedule)
+        define_method method_name.underscore do |*params|
+          action(method_name, *params)
         end
       end
 

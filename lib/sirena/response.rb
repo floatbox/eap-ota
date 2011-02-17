@@ -21,8 +21,8 @@ module Sirena
 
       # а везде такой метод?
       def error
-        if error = xpath('//error')
-          error.text
+        unless (error = xpath('//error')).blank?
+          error.map(&:text).join("; ")
         end
       end
 

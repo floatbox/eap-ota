@@ -5,6 +5,7 @@ Eviterra::Application.routes.draw do
   match 'pricer/validate' => 'pricer#validate', :as => :pricer_validate
 
   match 'booking' => 'booking#index', :as => :booking
+  match 'hot_offers' => 'pricer#hot_offers', :as => :hot_offers
   match 'booking/form' => 'booking#form', :as => :booking_form
   match 'booking/pay' => 'booking#pay', :as => :booking_pay
   match 'booking/preliminary_booking' => 'booking#preliminary_booking', :as => :preliminary_booking

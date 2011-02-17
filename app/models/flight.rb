@@ -94,9 +94,9 @@ class Flight
   def distance
     self.class.calculate_distance(departure, arrival) rescue 5000
   end
-  
+
+  # "4U:LH3240FRAMOW101112"
   def flight_code
-    #4U:LH3240BB10SEPFRAMOW0
     full_flight_number +  departure_iata + arrival_iata + departure_date
   end
   
