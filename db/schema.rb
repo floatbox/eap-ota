@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110216130352) do
+ActiveRecord::Schema.define(:version => 20110217150434) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -185,18 +185,18 @@ ActiveRecord::Schema.define(:version => 20110216130352) do
     t.string   "pnr_number"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "price_total"
+    t.decimal  "price_total",                   :precision => 9, :scale => 2, :default => 0.0, :null => false
     t.string   "commission_carrier"
     t.string   "commission_agent"
     t.string   "commission_subagent"
-    t.integer  "price_share"
-    t.integer  "price_our_markup"
-    t.integer  "price_with_payment_commission"
+    t.decimal  "price_share",                   :precision => 9, :scale => 2, :default => 0.0, :null => false
+    t.decimal  "price_our_markup",              :precision => 9, :scale => 2, :default => 0.0, :null => false
+    t.decimal  "price_with_payment_commission", :precision => 9, :scale => 2, :default => 0.0, :null => false
     t.string   "order_id"
     t.string   "full_info"
     t.string   "payment_status"
-    t.integer  "price_fare"
-    t.integer  "price_tax"
+    t.decimal  "price_fare",                    :precision => 9, :scale => 2, :default => 0.0, :null => false
+    t.decimal  "price_tax",                     :precision => 9, :scale => 2, :default => 0.0, :null => false
     t.string   "ticket_status"
     t.integer  "price_consolidator_markup"
   end
