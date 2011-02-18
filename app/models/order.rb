@@ -34,6 +34,8 @@ class Order < ActiveRecord::Base
     end
     self.payment_status = 'not blocked'
     self.ticket_status = 'booked'
+    self.name_in_card = order_data.card.name
+    self.last_digits_in_card = order_data.card.number4
   end
 
   def raw
