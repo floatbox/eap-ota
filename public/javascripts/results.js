@@ -115,8 +115,8 @@ init: function() {
 
     // Соседние города
     var autoLoad = function() {
-        offersList.load();
-        offersList.show();
+        results.load();
+        results.show();
         search.onValid = undefined;
     };
     $('#offers-context').delegate('.city', 'click', function() {
@@ -329,7 +329,6 @@ processUpdate: function() {
             }
             delete(u.pcontent);
             delete(u.mcontent);
-            fixedBlocks.update(true);
         });
         setTimeout(processQueue, 250);
     } else {
@@ -350,7 +349,6 @@ processUpdate: function() {
         pageurl.title();
         delete(u.pcontent);
         delete(u.mcontent);
-        fixedBlocks.update(true);
     }
 },
 parseResults: function() {
@@ -387,6 +385,7 @@ showVariant: function(el) {
     el.removeClass('g-none').siblings().addClass('g-none');
 },
 applyFilters: function() {
+    fixedBlocks.update();
     var self = this;
     var st = this.el.offset().top;
     if (st < $(window).scrollTop()) {
@@ -704,7 +703,6 @@ init: function() {
                 delete(that.selected[name]);
             }            
             if (that.active) {
-                fixedBlocks.update();
                 results.applyFilters();
             }
         });
@@ -781,6 +779,7 @@ update: function(data) {
     this.data = data;
     this.selected = {};
     this.active = true;
+    fixedBlocks.update();
 }
 };
 

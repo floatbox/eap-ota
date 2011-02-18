@@ -23,7 +23,7 @@
     // Сброс по клику на логотипе
     $('#logo').click(function() {
         app.booking.unfasten();
-        offersList.hide();
+        results.hide();
         pageurl.reset();
         pageurl.title();
         search.restore(search.defvalues || {});

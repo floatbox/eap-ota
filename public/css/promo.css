@@ -12,7 +12,7 @@
 #promo .description {
     margin-right: 255px;
     /*border-bottom: 1px solid #DDD;*/
-    padding: 18px 15px 1px 255px;
+    padding: 17px 15px 1px 255px;
     background: url(/img/promo/photo.jpg) no-repeat 0 100%;
     letter-spacing: -0.035em;
 }
@@ -32,7 +32,7 @@
     line-height: 24px;
 }
 #promo .description p {
-    margin: 0 0 15px;
+    margin: 0 0 14px;
     text-align: center;
     font-size: 18px;
     line-height: 20px;

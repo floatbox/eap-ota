@@ -307,23 +307,30 @@ comparePrice: function() {
 fasten: function(offer) {
     if (browser.search(/ipad|iphone|msie6|msie7/) !== -1) return;
     var wrapper = $('#wrapper');
-    var ot = offer.offset().top;
-    var ob = wrapper.height() - ot - offer.height();
+    var ot = offer.offset().top, ob = wrapper.height() - ot - offer.height();
     var cst = $(window).scrollTop();
     wrapper.addClass('cropped');
-    $('#canvas').css('margin-top', 200 - ot - ob).css('top', ob - 100);
-    this.dst = ot - 100;
+    $('#results-header').addClass('fixed');
+    $('#header').addClass('latent');
+    var mt = results.title.outerHeight() + 50, mb = 40;
+    $('#canvas').css({
+        'margin-top': mt - ot - ob + mb,
+        'top': ob - mb
+    });
+    this.dst = ot - mt;
     fixedBlocks.disabled = true;
     $(window).scrollTop(cst - this.dst);
-    $('#header').addClass('latent');
 },
 unfasten: function() {
     var wrapper = $('#wrapper');
-    if (browser.search(/ipad|iphone|msie6|msie7/) === -1 && wrapper.hasClass('l-crop')) {
-        $('#canvas').css('margin-top', 0).css('top', 0);
+    if (browser.search(/ipad|iphone|msie6|msie7/) === -1 && wrapper.hasClass('cropped')) {
+        $('#header').removeClass('latent');
+        $('#canvas').css({
+            'margin-top': 0,
+            'top': 0
+        });
         wrapper.removeClass('cropped');
         $(window).scrollTop($(window).scrollTop() + this.dst);
-        $('#header').removeClass('latent');
         fixedBlocks.disabled = false;
         fixedBlocks.update();
     }

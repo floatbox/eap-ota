@@ -25,10 +25,10 @@
 .cropped .offer-variant tr.book .sum {
     visibility: hidden;
 }
-.cropped #offers-filter-content {
-    visibility: hidden;
+.cropped #results-filters {
+    display: none;
 }
-.cropped .stop-booking-panel {
+.cropped #stop-booking-panel {
     display: block;
 }
 
