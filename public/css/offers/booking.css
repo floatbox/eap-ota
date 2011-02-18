@@ -20,15 +20,15 @@
 	display: none;
 }
 
-.l-crop .offer-variant th.book .a-button,
-.l-crop .offer-variant tr.book .a-button,
-.l-crop .offer-variant tr.book .sum {
+.cropped .offer-variant th.book .a-button,
+.cropped .offer-variant tr.book .a-button,
+.cropped .offer-variant tr.book .sum {
     visibility: hidden;
 }
-.l-crop #offers-filter-content {
+.cropped #offers-filter-content {
     visibility: hidden;
 }
-.l-crop .stop-booking-panel {
+.cropped .stop-booking-panel {
     display: block;
 }
 

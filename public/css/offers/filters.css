@@ -16,15 +16,36 @@
 }
 #results-filters td {
     width: 170px;
-    padding: 0 15px 12px 15px;
+    padding: 0 15px 15px 15px;
     vertical-align: top;
 }
 #results-filters .rfreset {
     color: #ED1192;
 }
-.rfhidden,
-.rfhide {
+#results-filters .rfhide-cell {
+    padding-bottom: 19px;
+    vertical-align: bottom;
+    font-weight: normal;
+    font-size: 11px;
+    line-height: 13px;
+}
+#results-filters .rfhide {
+    cursor: pointer;
+}
+#results-filters .rfshow {
+    font-weight: bold;
+    color: #ED1192;
+}
+#results-filters .rfhidden {
+    height: 30px;
+}
+#results-filters .rfhide,
+#results-filters .rfhidden,
+#results-filters.hidden .rfvisible {
     display: none;
+}
+#results-filters.hidden .rfhidden {
+    display: block;
 }
 
 /* Filters group */

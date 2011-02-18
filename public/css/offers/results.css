@@ -7,6 +7,27 @@
     margin: 0 auto;    
 }
 
+/* Fixed header */
+#results.ready #results-header {
+    background: #FFF;
+}
+#results-header.fixed {
+    position: fixed;
+    left: 0; top: 0;
+    z-index: 10;
+    width: 100%;
+}
+#results-header .shadow {
+    display: none;
+    position: absolute;
+    left: 0; z-index: -1;
+    width: 100%; height: 6px;
+    background: url(/img/header/shadow.png) repeat-x;
+}
+#results-header.fixed .shadow {
+    display: block;
+}
+
 /* Title */
 #results-title {
     padding: 15px 0;

@@ -252,7 +252,7 @@ hide: function() {
 },
 toggle: function(mode) {
     this.el.toggleClass('ready', mode === 'ready');
-    $('#offers').toggleClass('latent', mode !== 'ready');
+    $('#results-filters, #rtabs, #offers').toggleClass('latent', mode !== 'ready');
     this.empty.toggleClass('latent', mode !== 'empty');
     this.loading.toggleClass('latent', mode !== 'loading');
     this.loading.timer.trigger(mode === 'loading' ? 'start' : 'stop');
@@ -381,32 +381,10 @@ showAmount: function(amount, total) {
     if (total === undefined) total = this.items.length;
     if (amount === undefined) amount = total;
     var str = amount.inflect('вариант', 'варианта', 'вариантов');
-    $('#offers-tab-all > a').html(amount == total ? ('Всего ' + str) : (str + ' из ' + total));
+    $('#rtab-all .link').html(amount == total ? ('Всего ' + str) : (str + ' из ' + total));
 },
 showVariant: function(el) {
     el.removeClass('g-none').siblings().addClass('g-none');
-},
-updateFilters: function() {
-    this.filterable = false;
-    var self = this;
-    var data = $.parseJSON($('#offers-options').attr('data-filters'));
-    $('#offers-filter .reset-filters').addClass('g-none');
-    $('#offers-filter .filter').each(function() {
-        var name = $(this).attr('data-name');
-        var filter = self.filters[name];
-        filter.fill(data[name]);
-        filter.el.toggleClass('g-none', filter.items.length < 2);
-        var lid = filter.el.attr('data-location');
-        if (lid && data.locations[lid]) {
-            filter.el.find('.control').html((lid.charAt(0) == 'd' ? 'вылет ' : 'прилёт ') + data.locations[lid]);
-        }
-    });
-    $('#offers-filter .filters').each(function() {
-        $(this).closest('td').toggleClass('g-none', $(this).find('.filter:not(.g-none)').length === 0);
-    });
-    this.currentData = data;
-    this.activeFilters = {};
-    this.filterable = true;
 },
 applyFilters: function() {
     var self = this;
@@ -414,7 +392,7 @@ applyFilters: function() {
     if (st < $(window).scrollTop()) {
         $(window).scrollTop(st);
     }
-    var list = $('#offers-list').css('opacity', 0.7);
+    var list = $('#offers > .rcontent').css('opacity', 0.7);
     var queue = [function() {
         list.hide();
         self.filterOffers();
@@ -439,6 +417,7 @@ applyFilters: function() {
 },
 filterOffers: function() {
     var filters = this.filters.selected, empty = true;
+    console.log(filters);
     var items = this.items, variants = this.variants;
     var total = items.length;
     for (var i = items.length; i--;) {
@@ -478,11 +457,10 @@ filterOffers: function() {
         if (!offer.improper) amount++;
         offer.el.toggleClass('improper', offer.improper);
     }
+    this.filters.el.find('.rfreset').toggleClass('latent', empty);
     this.filtered = amount != total;
     this.showAmount(amount, total);
     this.toggleCollection(amount > 0);
-    $('#offers-filter .reset-filters').toggleClass('g-none', empty);
-    $('#offers-empty-filters').toggleClass('g-none', !empty);
 },
 applySort: function(key) {
     $('#offers-all .offers-sort a').each(function() {
@@ -707,7 +685,6 @@ joinDepartures: function(dtimes, current) {
 }
 };
 
-
 // Фильтры
 results.filters = {
 init: function() {
@@ -732,52 +709,48 @@ init: function() {
         });
         that.items[$(this).attr('data-name')] = f;
     });
-    
-    // Сворачивание панели
-    this.el.find('.rfexpand').click(function() {
-        var filter = $('#offers-filter-content'), fh = filter.height();
-        filter.children('.of-collapsed').hide();
-        filter.children('.of-expanded').show();
-        filter.css({
-            height: fh,
-            overflow: 'hidden'
-        }).animate({
-            height: filter.children('.of-expanded').height()
-        }, 120, function() {
-            $(this).css({
-                height: 'auto',
-                overflow: 'visible'
-            });
-        });
+    this.el.find('.rfshow').click(function() {
+        that.show();
     });
-    this.el.find('.rfcollapse').click(function() {
-        var filter = $('#offers-filter-content');
-        filter.css({
-            height: filter.height(),
-            overflow: 'hidden'
-        }).animate({
-            height: 30
-        }, 120, function() {
-            filter.children('.of-expanded').hide();
-            filter.children('.of-collapsed').show();
-            $(this).css({
-                height: 'auto',
-                overflow: 'visible'
-            });
-        });
+    this.el.find('.rfhide').click(function() {
+        that.hide();
     });
-    
-    // Фильтр количества пересадок
+    this.el.find('.rfreset').click(function() {
+        that.reset();
+        results.applyFilters();
+    });
     var lf = this.items['layovers'];
     lf.dropdown.removeClass('dropdown').addClass('vlist');
     lf.show = function() {};
     lf.hide = function() {};
-    
-    // Сброс фильтров
-    this.el.find('.rfreset').click(function() {
-        that.reset();
-        results.applyFilters();
-    });        
+},
+show: function() {
+    var height = this.el.height();
+    var el = this.el.css({
+        height: height,
+        overflow: 'hidden'
+    });
+    el.removeClass('hidden').animate({
+        height: el.find('.rfvisible').height()
+    }, 150, function() {
+        el.css({
+            height: 'auto',
+            overflow: 'visible'
+        });
+    });
+},
+hide: function() {
+    this.el.css({
+        height: this.el.height(),
+        overflow: 'hidden'
+    }).animate({
+        height: 30
+    }, 150, function() {
+        var el = $(this).addClass('hidden').css({
+            height: 'auto',
+            overflow: 'visible'
+        });
+    });
 },
 reset: function() {
     this.active = false;

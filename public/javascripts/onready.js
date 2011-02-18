@@ -10,6 +10,7 @@
     if (pageurl.search) {
         search.validate(pageurl.search);
     } else {
+        $('#promo').removeClass('latent');
         search.segments[0].to.focus();
     }
     
@@ -45,5 +46,5 @@
     
     // Переключение блоков при прокрутке
     fixedBlocks.init();
-
+    
 })();
