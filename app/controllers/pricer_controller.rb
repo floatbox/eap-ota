@@ -14,7 +14,7 @@ class PricerController < ApplicationController
           :url => (url_for(:action => :index, :controller => :home) + '#' + @query_key ),
           :description => @search.human_lite,
           :price => @recommendations.first.price_total
-        ) unless @recommendations.blank? || @search.complex_route? || @search.people_count.values.sum > 1 || admin_user
+        ) if @recommendations.present? && !@search.complex_route? && @search.people_count.values.sum == 1 && !admin_user && ([nil, '', 'Y'].include? @search.cabin)
       end
     end
 
