@@ -29,15 +29,15 @@
     position: absolute;
     top: 0; left: 0;
     z-index: 50;
-    margin: -6px 0 0 -16px;
+    margin: -7px 0 0 -15px;
     background: #3b3b3b;
     background-image: -moz-linear-gradient(top, #484848, #2d2d2d);
     background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#484848), to(#2D2D2D), color-stop(0.5, #3B3B3B));
-        -moz-border-radius: 0.4em;
-        -webkit-border-radius: 0.4em;
+    -moz-border-radius: 0.4em;
+    -webkit-border-radius: 0.4em;
     border-radius: 0.4em;
-        -moz-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-        -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);    
+    -moz-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
 
@@ -75,27 +75,28 @@
 
 /* Big and small filters */
 #search-define .dropdown dd {
-    font-size: 72.727%;
-    line-height: 118.75%;
+    font-size: 16px;
+    line-height: 19px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
     border-radius: 3px;
-        -moz-border-radius: 3px;
-        -webkit-border-radius: 3px;
 }
 #results-filters .dropdown dd {
     font-size: 12px;
     line-height: 15px;
     margin: 1px 0 0;
     padding: 4px 10px 3px;
-        -moz-border-radius: 3px;
-        -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
     border-radius: 3px;
 }
 
 /* Persons dropdown */
 .persons dt.tip {
     position: relative;
-    top: -2px;
+    top: -3px;
     font-size: 11px;
+    line-height: 13px;
     padding: 0 10px 4px;
 }
 .persons .wrap {
@@ -111,7 +112,9 @@
 }
 .persons .a-button {
     display: block;
-    font: bold 85%/100% Arial,a;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 1;
     margin: 5px;
 }
 .persons .excess,
