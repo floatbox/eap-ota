@@ -188,9 +188,9 @@ init: function() {
 },
 update: function(forced) {
     var rh = this.rheader.height();
-    this.rheader.closest('.placeholder').height(rh || 'auto');
+    var ph = this.rheader.closest('.placeholder').height(rh || 'auto');
     this.top2 = Math.ceil(this.sdefine.offset().top + this.sdefine.height());
-    this.top3 = rh ? Math.ceil(this.rheader.offset().top + rh - results.title.outerHeight() - 45) : 2000;
+    this.top3 = rh ? Math.ceil(ph.offset().top + rh - results.title.outerHeight() - 60) : 2000;
     this.top1 = this.top2 - this.pheader.height();
     this.toggle(forced);
 },

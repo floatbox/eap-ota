@@ -388,7 +388,7 @@ showVariant: function(el) {
 },
 applyFilters: function() {
     var self = this;
-    var st = $('#offers').position().top;
+    var st = this.el.offset().top;
     if (st < $(window).scrollTop()) {
         $(window).scrollTop(st);
     }
@@ -458,6 +458,7 @@ filterOffers: function() {
         offer.el.toggleClass('improper', offer.improper);
     }
     this.filters.el.find('.rfreset').toggleClass('latent', empty);
+    this.filters.el.find('.rftitle').toggleClass('latent', !empty);
     this.filtered = amount != total;
     this.showAmount(amount, total);
     this.toggleCollection(amount > 0);

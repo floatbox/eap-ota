@@ -47,6 +47,9 @@
 #results-filters.hidden .rfhidden {
     display: block;
 }
+#results-filters .rfhidden .rfreset {
+    float: right;
+}
 
 /* Filters group */
 #results-filters h5 {
