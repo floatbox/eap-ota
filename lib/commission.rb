@@ -1540,32 +1540,28 @@ commission "5%/3.5%"
 carrier "VN", "VIETNAM AIRLINES"
 ########################################
 
+# FIXME станет актуальным с включением конфиденциальных тарифов!
 agent    "7% от конфиденциальных тарифов на рейсы VN;"
 subagent "5% от конфиденциальных тарифов на рейсы VN;"
 disabled 'конфиденциальные тарифы'
 commission "7%/5%"
 
+example 'svohan hansvo'
 agent    "7% от опубликованных тарифов на международных рейсах VN;"
 subagent "5% от опубликованных тарифов на международных рейсах VN;"
 international
-not_implemented
 commission "7%/5%"
 
+example 'hansgn'
 agent    "5% от опубликованных тарифов VN на всех внутренних рейсах VN во Вьетнаме;"
 subagent "3,5% от опубликованных тарифов VN на всех внутренних рейсах VN во Вьетнаме;"
-interline :no
-disabled #гео-правило
-#geo
-not_implemented
+domestic
 commission "5%/3.5%"
 
+example 'svohan hansvo/su'
 agent    "0% от оформленных под кодом 738 опубл.тарифов на рейсы Interline."
 subagent "0% от оформленных под кодом 738 опубл.тарифов на рейсы Interline."
 interline :yes
-disabled #выцеплять под определенным кодом, может это номер рейса? i dunno
-#unknown
-#flightnumber
-not_implemented
 commission "0%/0%"
 
 carrier "VS", "Virgin Atlantic Airways Limited (ГЛОНАСС)"

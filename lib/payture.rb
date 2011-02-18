@@ -7,8 +7,9 @@ class Payture
 
   # комиссионные за транзакцию
   def self.commission(price)
-    # 3.25% + 10c (3рубля), округляем до рублей
-    (price * 0.0325 + 3).ceil
+    ten_cents = 3.0
+    pcnt = 0.0325
+    ( (ten_cents + pcnt * price) / ( 1 - pcnt) ).ceil
   end
 
   class Response
