@@ -193,7 +193,7 @@ class Payture
 
   def add_money(post, money)
     # система принимает суммы в копейках
-    post[:Amount] = (money.to_f * 100).ceil.to_s
+    post[:Amount] = (money.to_f * 100).ceil.to_i.to_s
   end
 
   def encrypt_payinfo(post)
