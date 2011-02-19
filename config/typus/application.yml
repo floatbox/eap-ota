@@ -94,6 +94,7 @@ Order:
     options:
       date_formats:
         created_at: long
+        updated_at: long
   order_by: -created_at
   search: pnr_number, email, phone
   options:
@@ -114,6 +115,7 @@ HotOffer:
     options:
       date_formats:
         created_at: long
+        updated_at: long
   options:
     default_action_on_item: show
   order_by: -created_at
