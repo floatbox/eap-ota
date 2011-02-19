@@ -9,12 +9,7 @@ class PricerController < ApplicationController
       if @search.valid?
         @recommendations = Mux.pricer(@search, admin_user)
         @locations = @search.human_locations
-        HotOffer.create(
-          :code => @query_key,
-          :url => (url_for(:action => :index, :controller => :home) + '#' + @query_key ),
-          :description => @search.human_lite,
-          :price => @recommendations.first.price_total
-        ) if @recommendations.present? && !@search.complex_route? && @search.people_count.values.sum == 1 && !admin_user && ([nil, '', 'Y'].include? @search.cabin)
+        create_hot_offer
       end
     end
 
@@ -22,7 +17,7 @@ class PricerController < ApplicationController
   end
 
   def hot_offers
-    render :json => HotOffer.find(:all, :conditions => ["code != ?", params[:query_key].to_s], :limit => 20)
+    render :json => HotOffer.find(:all, :conditions => ["code != ? AND for_stats_only = ?", params[:query_key].to_s, false], :limit => 20)
   end
 
   def calendar
@@ -65,6 +60,20 @@ class PricerController < ApplicationController
   end
 
   protected
+
+  def create_hot_offer
+    adults_only = @search.people_count.values.sum == @search.people_count[:adults]
+    if @recommendations.present? && !@search.complex_route? && adults_only && !admin_user && ([nil, '', 'Y'].include? @search.cabin)
+       HotOffer.create(
+          :code => @query_key,
+          :url => (url_for(:action => :index, :controller => :home) + '#' + @query_key ),
+          :description => @search.human_lite,
+          :price => @recommendations.first.price_total / @search.people_count.values.sum,
+          :for_stats_only => @search.people_count.values.sum > 1
+        )
+    end
+  end
+
 
   def load_form_from_cache
     @query_key = params[:query_key] or raise 'no query_key provided'

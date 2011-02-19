@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110218141747) do
+ActiveRecord::Schema.define(:version => 20110219171059) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -171,12 +171,13 @@ ActiveRecord::Schema.define(:version => 20110218141747) do
   end
 
   create_table "hot_offers", :force => true do |t|
-    t.string   "code",        :null => false
-    t.string   "url",         :null => false
-    t.string   "description", :null => false
-    t.integer  "price",       :null => false
+    t.string   "code",           :null => false
+    t.string   "url",            :null => false
+    t.string   "description",    :null => false
+    t.integer  "price",          :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "for_stats_only"
   end
 
   create_table "orders", :force => true do |t|
