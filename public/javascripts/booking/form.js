@@ -73,9 +73,9 @@ init: function() {
     });
 
     // Всплывающие подсказки
-    this.el.delegate('.b-hint', 'click', function(event) {
+    this.el.delegate('.hint', 'click', function(event) {
         event.preventDefault();
-        hint.show(event, $(this).next('p').html());
+        hint.show(event, $(this).parent().find('.htext').html());
     });
 
     // Список неправильно заполненных полей
@@ -311,7 +311,7 @@ fasten: function(offer) {
     var cst = $(window).scrollTop();
     wrapper.addClass('cropped');
     $('#results-header').addClass('fixed');
-    $('#header').addClass('latent');
+    $('#header').hide();
     var mt = results.title.outerHeight() + 50, mb = 40;
     $('#canvas').css({
         'margin-top': mt - ot - ob + mb,
@@ -324,7 +324,7 @@ fasten: function(offer) {
 unfasten: function() {
     var wrapper = $('#wrapper');
     if (browser.search(/ipad|iphone|msie6|msie7/) === -1 && wrapper.hasClass('cropped')) {
-        $('#header').removeClass('latent');
+        $('#header').show();
         $('#canvas').css({
             'margin-top': 0,
             'top': 0

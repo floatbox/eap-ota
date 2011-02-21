@@ -410,9 +410,9 @@ applyFilters: function() {
     }];
     var qstep = 0, processQueue = function() {
         queue[qstep++]();
-        if (queue[qstep]) setTimeout(processQueue, 50);
+        if (queue[qstep]) setTimeout(processQueue, 30);
     };
-    setTimeout(processQueue, 200);
+    setTimeout(processQueue, 50);
 },
 filterOffers: function() {
     var filters = this.filters.selected, empty = true;
@@ -560,6 +560,10 @@ showRecommendations: function() {
             optimal = {n: fast.n, p: fast.p};
             cheap = undefined;
             fast = undefined;
+        } else if (Math.abs(fast.d - cheap.d) < 20) {
+            optimal = {n: cheap.n, p: cheap.p};
+            cheap = undefined;
+            fast = undefined;
         } else {
             optimal = cheap;
             var item, ratio, maxratio = 0;
@@ -582,17 +586,15 @@ showRecommendations: function() {
         }
 
     }
-    var otitle = 'Самый выгодный и быстрый вариант';
+    var otitle = 'Лучшая цена';
     if (cheap && fast) {
         otitle = 'Оптимальный вариант — разумная цена и время в пути';
     } else if (cheap) {
         otitle = 'Быстрый и оптимальный вариант';
-    } else if (fast) {
-        otitle = 'Самый выгодный и оптимальный вариант';
     }
-    if (cheap) container.append(this.makeRecommendation(variants[cheap.n], 'Самый выгодный вариант'));
+    if (cheap) container.append(this.makeRecommendation(variants[cheap.n], 'Лучшая цена'));
     if (optimal) container.append(this.makeRecommendation(variants[optimal.n], otitle));
-    if (fast) container.append(this.makeRecommendation(variants[fast.n], 'Быстрый вариант'));
+    if (fast) container.append(this.makeRecommendation(variants[fast.n], 'Долететь быстро'));
     if (!this.filtered) {
         var alamount = this.filters.items['carriers'].items.length.inflect('авиакомпании', 'авиакомпаний', 'авиакомпаний');
         var ftip = $('<div class="offers-title featured-tip"><strong>Не подошло?</strong> Воспользуйтесь уточнениями <span class="up">вверху&nbsp;&uarr;</span> или посмотрите <span class="link">все&nbsp;варианты</span> от&nbsp;' + alamount + '</div>');

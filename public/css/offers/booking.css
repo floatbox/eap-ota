@@ -413,13 +413,15 @@
     float: left;
     display: inline-block;
 
-    width: 30px;
+    width: 50px;
     margin: 0;
     padding: 3px 4px;
     overflow: hidden;
 
     text-align: center;
     white-space: nowrap;
+    font-size: 20px;
+    line-height: 25px;
 
     color: #555;
     background: #fff;
@@ -552,7 +554,7 @@
     line-height: 133.333%;
     color: #777;
 }
-.payments a {
+.booking .payments a {
     color: #777;
 }
 .payments .alfa {
@@ -811,6 +813,7 @@
 
     .book-bc .bc-bill td {
         white-space: nowrap;
+        vertical-align: baseline;
     }
 
     .book-bc .bc-bill td u {
@@ -828,17 +831,15 @@
     }
 
     .book-bc .bc-bill td i {
-        font-size: 85.714%;
-        font-size: 78.571%;
-
+        font-size: 12px;
         color: #6e6e6e;
     }
 
     .book-bc .bc-bill tfoot td {
-        padding: .5em 0 0 0;
-
+        padding: 6px 0 0 0;
+        font-size: 12px;
+        line-height: 15px;
         white-space: normal;
-
         color: #777;
     }
 
@@ -920,6 +921,9 @@
 
     color: #333;
     background: #ffc4c4;
+    
+    font-size: 13px;
+    line-height: 16px;
 
     border-radius: 10px;
     -moz-border-radius: 10px;
@@ -986,11 +990,8 @@
     background: #FFF;
     color: #000;
 }
-.b-hint {
-    cursor: pointer;
-    font-weight: bold;
-    color: #477db3;
-    text-decoration: underline;
+.booking .hint {
+    color: #777;
 }
 .farerules {
     position: absolute;

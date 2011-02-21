@@ -78,12 +78,12 @@
 }
 #offers-context {
     float: right;
-    width: 240px;
+    width: 270px;
 }
 #offers-all,
 #offers-matrix,
 #offers-featured {
-    width: 705px;
+    width: 675px;
 }
 #offers .improper,
 #offers .processing {
