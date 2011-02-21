@@ -153,30 +153,18 @@
 .booking .result a.stop-booking {
     float: right;
 }
-
-/* Панель прекращения бронирования */
 .stop-booking-panel {
-    display: none;
-    position: fixed;
-    z-index: 11;
-    width: 960px;
+    height: 30px;
     background: #FFF;
     font-size: 14px;
     line-height: 18px;
     letter-spacing: -0.014em;
 }
-.stop-booking-panel p {
-    padding: 0 15px;
-    height: 30px;
+.stop-booking-panel .link {
+    color: #333;
 }
-.stop-booking-panel .shadow {
-    position: absolute;
-    bottom: -6px;
-    left: 0;
-    z-index: -1;
-    width: 100%;
-    height: 6px;
-    background: url(/img/header/shadow.png) repeat-x;
+.stop-booking-panel .link:hover {
+    color: #ED1192;
 }
 
 /* Сброс стилей (временно) */
@@ -650,22 +638,14 @@
     letter-spacing: -0.03em;
     color: #333;
 }
-
 .bankcard .text {
     width: 52px;
     padding: 1px 4px;
-
     background: #e8e8e8;
 }
-
 .bankcard .text-value {
     background: #FFF;
 }
-
-.bankcard .text-value {
-    text-shadow: 0 1px rgba(0, 0, 0, 0.2);
-}
-
 
 /* Лицевая сторона */
 .bankcard .bc-num {

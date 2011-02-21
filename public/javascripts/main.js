@@ -215,7 +215,7 @@ toggle: function(forced) {
             var hidden = results.filters.el.hasClass('hidden');
             if (section > 2 && !hidden) {
                 results.filters.hide();
-            } else if (hidden) {
+            } else if (section < 3 && hidden) {
                 results.filters.show();
             }
         }

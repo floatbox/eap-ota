@@ -252,15 +252,16 @@ hide: function() {
 },
 toggle: function(mode) {
     this.el.toggleClass('ready', mode === 'ready');
-    $('#results-filters, #rtabs, #offers').toggleClass('latent', mode !== 'ready');
+    $('#results-filters, #rtabs, #offers').toggle(mode === 'ready');
     this.empty.toggleClass('latent', mode !== 'empty');
     this.loading.toggleClass('latent', mode !== 'loading');
     this.loading.timer.trigger(mode === 'loading' ? 'start' : 'stop');
+    fixedBlocks.update();
 },
 toggleCollection: function(mode) {
     var context = $('#offers-all');
-    $('.offers-sort', context).toggleClass('g-none', !mode);
-    $('.offers-improper', context).toggleClass('g-none', mode);
+    $('.offers-sort', context).toggleClass('latent', !mode);
+    $('.offers-improper', context).toggleClass('latent', mode);
 },
 processUpdate: function() {
     var self = this, u = this.update, queue = [];
@@ -306,9 +307,9 @@ processUpdate: function() {
         };
         queue.push(function() {
             self.toggle('ready');
+            fixedBlocks.update();
             var imprecise = self.variants.length == 0;
-            $('#rtabs').toggleClass('latent', imprecise);
-            self.filters.el.toggleClass('latent', imprecise);
+            $('#results-filters, #rtabs').toggle(!imprecise);
             var b = app.booking, vid = b.el && b.el.attr('data-variant');
             if (vid && !b.variant) {
                 var vparts = vid.split('-');
@@ -345,6 +346,7 @@ processUpdate: function() {
             $('#offers-pcollection').html('');
         }
         this.toggle('empty');
+        fixedBlocks.update();
         pageurl.update('search', undefined);
         pageurl.title();
         delete(u.pcontent);
@@ -416,7 +418,6 @@ applyFilters: function() {
 },
 filterOffers: function() {
     var filters = this.filters.selected, empty = true;
-    console.log(filters);
     var items = this.items, variants = this.variants;
     var total = items.length;
     for (var i = items.length; i--;) {
@@ -601,10 +602,10 @@ showRecommendations: function() {
         var that = this;
         ftip.find('.link').click(function() {
             that.selectTab('all');
-            $.animateScrollTop(that.el.offset().top - 42);
+            $.animateScrollTop(that.el.offset().top);
         });
         ftip.find('.up').click(function() {
-            $.animateScrollTop(that.el.offset().top - 42);
+            $('#results-filters.hidden .rfshow').click();
         });
         container.append(ftip);
         var rprice = cheap ? cheap.p : optimal.p;
@@ -613,7 +614,7 @@ showRecommendations: function() {
             var mtip = $('<div class="offers-title featured-tip"><strong>Дорого?</strong> Посмотрите <span class="link">другие дни</span> — есть предложения от&nbsp;' + mprice.inflect('рубля', 'рублей', 'рублей') + '</div>');
             mtip.find('.link').click(function() {
                 that.selectTab('matrix');
-                $.animateScrollTop(that.el.offset().top - 42);
+                $.animateScrollTop(that.el.offset().top);
             });
             container.append(mtip);
         }
@@ -720,6 +721,10 @@ init: function() {
         that.reset();
         results.applyFilters();
     });
+    $('#offers').delegate('.rfreset', 'click', function() {
+        that.reset();
+        results.applyFilters();
+    });
     var lf = this.items['layovers'];
     lf.dropdown.removeClass('dropdown').addClass('vlist');
     lf.show = function() {};
@@ -781,15 +786,7 @@ update: function(data) {
     this.data = data;
     this.selected = {};
     this.active = true;
-    fixedBlocks.update();
 }
-};
-
-// Список предложений
-results.offers = {
-
-
-
 };
 
 // Матрица цен

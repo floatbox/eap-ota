@@ -90,4 +90,6 @@
 .offers-improper {
     margin: 0;
 }
-
+.offers-improper .rfreset {
+    color: #333;
+}

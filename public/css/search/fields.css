@@ -76,6 +76,12 @@
     font-size: 14px;
     line-height: 16px;    
 }
+#search-fields .toggle-segment .link {
+    color: #C8C8C8;
+}
+#search-fields .toggle-segment .link:hover {
+    color: #ED1192;
+}
 #search-fields.twmode .add-segment,
 #search-fields.dwmode .remove-segment {
     display: none;

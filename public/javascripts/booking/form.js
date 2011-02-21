@@ -172,9 +172,8 @@ init: function() {
     });
 
     // Прекращение бронирования
-    var title = $('#offers-title');
-    this.stopPanel = this.el.find('.stop-booking-panel').css('top', title.height()).insertAfter(title).removeClass('g-none');
-    this.stopPanel.find('.stop-booking').click(this.selfhide);
+    results.filters.el.hide();
+    $('<div class="stop-booking-panel"><span class="link stop-booking">Вернуться к выбору вариантов</span></div>').appendTo(results.header.find('.rcontent')).find('.stop-booking').click(this.selfhide);
     this.el.delegate('.stop-booking', 'click', this.selfhide);
     
     // 3DSecure
@@ -211,12 +210,11 @@ show: function(variant) {
     this.offer.addClass('active-booking');
 },
 hide: function() {
-    $('.stop-booking', this.offer).remove();
+    results.filters.el.addClass('hidden').show();
+    results.header.find('.stop-booking-panel').remove();
+    this.offer.find('.stop-booking').remove();
     this.unfasten();
     this.offer.removeClass('active-booking');
-    if (this.stopPanel) {
-        this.stopPanel.remove();
-    }
     this.el.remove();
     delete(this.el);
     delete(this.offer);
@@ -332,7 +330,7 @@ unfasten: function() {
         wrapper.removeClass('cropped');
         $(window).scrollTop($(window).scrollTop() + this.dst);
         fixedBlocks.disabled = false;
-        fixedBlocks.update();
+        fixedBlocks.toggle(true);
     }
     this.dstop = 0;
 }

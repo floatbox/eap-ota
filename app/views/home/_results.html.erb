@@ -5,7 +5,7 @@
     <div id="results-header">
     <div class="rcontent">
         <h1 id="results-title">Из Москвы в Париж</h1>
-        <div id="results-filters" class="latent">
+        <div id="results-filters" style="display: none;">
             <table class="rfvisible">
             <tr>
                 <th>
@@ -94,14 +94,14 @@
     </div>
 
     <!-- Вкладки -->
-    <div id="rtabs" class="wrap latent">
+    <div id="rtabs" class="wrap" style="display: none;">
     <ul class="primary">
         <li id="rtab-featured" class="selected"><span class="link" data-tab="featured">Мы рекомендуем</span></li>
         <li id="rtab-all"><span class="link" data-tab="all">Всего 42 варианта</span></li>
         <li id="rtab-matrix"><span class="link" data-tab="matrix">&plusmn; 3 дня</span></li>
     </ul>
     </div>
-    <div id="offers" class="latent">
+    <div id="offers" style="display: none;">
     <div class="rcontent clearfix">
         
         <!-- Правая колонка -->
@@ -117,8 +117,8 @@
             <h3 class="imprecise latent">Мы не смогли ничего найти в выбранные дни, но есть предложения на другие даты</h3>
             <div class="offer">
                 <table class="offer-prices">
-                <col width="120">
-                <col width="*" span="7">
+                <col width="115">
+                <col width="80" span="7">
                 <tr>
                     <th class="direction"><h6 class="segment1">Туда</h6><h6 class="segment2">Обратно</h6></th>
                     <th class="first"></th><th></th><th></th><th></th><th></th><th></th><th class="last"></th>
@@ -146,11 +146,11 @@
                     или&nbsp;<a href="#" onclick="return 'carrier'">по авиакомпании</a>
                 </p>
             </div>
-            <div class="offers-improper rmessage g-none">
-                <div class="om-photo"><br></div>
-                <div class="om-text">
+            <div class="offers-improper rmessage latent">
+                <div class="rmphoto"><br></div>
+                <div class="rmtext">
                     <h3>Таких вариантов нет</h3>
-                    <p>Нужно сбросить один или <span class="link reset-filters">все фильтры</span></p>
+                    <p>Нужно сбросить один или <span class="link rfreset">все фильтры</span></p>
                 </div>
             </div>
             <div id="offers-pcollection"></div>
