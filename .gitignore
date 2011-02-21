@@ -22,3 +22,4 @@ db/sphinx
 tags
 config/initializers/hoptoad.rb
 config/newrelic.yml
+public/javascripts/all.js
