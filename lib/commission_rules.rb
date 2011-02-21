@@ -218,7 +218,7 @@ module CommissionRules
       opts[:international] = true
     end
 
-    def subclasses *sublasses
+    def subclasses *subclasses
       opts[:subclasses] = subclasses.join.upcase.gsub(' ', '').split('')
     end
 
