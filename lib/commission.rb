@@ -51,42 +51,71 @@ commission "1eur/5"
 carrier "UN", "TRANSAERO"
 ########################################
 
+example 'AERDME/F DMEAER/C'
 agent "11% МВЛ, ВВЛ Класс F (Империал); J, C, D (Бизнес)"
-subagent "1.2.7. При продаже авиаперевозок на рейсы авиакомпании ОАО «АВИАЦИОННАЯ КОМПАНИЯ «ТРАНСАЭРО» (код УН) с расчетным кодом 670 (кроме перевозок по интерлайн-соглашениям) на рейсы «УН», а также с расчетным кодом 99А на рейсы «УН» комиссионное вознаграждение Субагента составит:"
-subagent "• с формой оплаты НАЛ и кодами подклассов: F, J, C, D (латиница); П, И, Б, Д (кириллица) 9 (девять) % от тарифа;"
-not_implemented
+subagent "9 (девять) % от тарифа на рейсы Перевозчика по всем тарифам классов F, J, C, D."
+subclasses "FJCD"
 commission "11%/9%"
 
+example 'AERDME/Y DMEAER/M'
 agent "7% МВЛ. ВВЛ Y, H, M, Q, B, K, O, R, E"
-subagent "• с формой оплаты НАЛ и кодами подклассов: Y, H, M, Q, B, K (латиница); Э, Ц, М, Я, Ж, К (кириллица) 5 (пять) % от тарифа;"
-not_implemented
+subagent "5  (пять) % от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, M, Q, B, K, O, R, E."
+subclasses "YHMQBKORE"
 commission "7%/5%"
 
+example 'TLVDME/T DMEJFK/T JFKDME/T DMETLV/T'
+example 'AERDME/W DMEAER/W'
 agent "3% МВЛ. ВВЛ L, V, X, T, N, I, G, W, U"
-subagent "• с формой оплаты НАЛ и кодами подклассов: L, V, X, T, N, I, W (латиница); Л, В, Х, Т, Н, Ы, Ю (кириллица) 1 (один) % от тарифа;"
-not_implemented
+subagent "1 (один) % от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
+subclasses "LVXTNIGWU"
 commission "3%/1%"
 
-agent "12% Oт всех применяемых опубликованных тарифов на собственные  регулярные рейсы между Москвой и Пекином/Майами/Нью-Йорком (OW,RT)  и на сквозные перевозки между пунктами полетов АК  «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW,RT)."
-subagent "2 (два) % от тарифа на рейсы Interline c участком UN. Запрещена продажа на рейсы interline без участка UN."
-not_implemented
-commission "12%/2%"
+# копии субагентских правил для этих самых 12%
 
+example 'DMEMIA/FIRST/F MIADME/FIRST/F'
+agent "12% Oт всех применяемых опубликованных тарифов на собственные  регулярные рейсы между Москвой и Пекином/Майами/Нью-Йорком (OW,RT)  и на сквозные перевозки между пунктами полетов АК  «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW,RT)."
+subagent "9 (девять) % от тарифа на рейсы Перевозчика по всем тарифам классов F, J, C, D."
+subclasses "FJCD"
+important!
+check { (city_iatas & %W(NYC MIA BJC)).present? && %W(RU UA KZ UZ).include?(country_iatas.first) }
+commission "12%/9%"
+
+example 'DMEJFK/Y JFKDME/Y'
+agent "12% Oт всех применяемых опубликованных тарифов на собственные  регулярные рейсы между Москвой и Пекином/Майами/Нью-Йорком (OW,RT)  и на сквозные перевозки между пунктами полетов АК  «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW,RT)."
+subagent "5  (пять) % от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, M, Q, B, K, O, R, E."
+subclasses "YHMQBKORE"
+important!
+check { (city_iatas & %W(NYC MIA BJC)).present? && %W(RU UA KZ UZ).include?(country_iatas.first) }
+commission "12%/5%"
+
+example 'DMEJFK/I JFKDME/I'
+agent "12% Oт всех применяемых опубликованных тарифов на собственные  регулярные рейсы между Москвой и Пекином/Майами/Нью-Йорком (OW,RT)  и на сквозные перевозки между пунктами полетов АК  «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW,RT)."
+subagent "1 (один) % от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
+subclasses "LVXTNIGWU"
+important!
+check { (city_iatas & %W(NYC MIA BJC)).present? && %W(RU UA KZ UZ).include?(country_iatas.first) }
+commission "12%/1%"
+
+example 'DOKDME DMELHR/BD LHREWR/CO'
+example 'DMEJFK/I EWRGRU/CO/B GRUEWR/CO/B JFKDME/I'
+example 'svocdg cdgmad/ab'
 agent "4% МВЛ. ВВЛ Interline с участком UN"
 agent "от применяемых опубликованных тарифов премиального экономического, туристического экономического и бизнес классов (one way, round trip; open jaw) за все виды продаж на рейсы UN, включая Interline продажи премиального экономического, туристического экономического и бизнес классов с участком авиакомпании «ТРАНСАЭРО»; запрещена продажа по Interline без участка авиакомпании «ТРАНСАЭРО»."
 subagent "2 (два) % от тарифа на рейсы Interline c участком UN. Запрещена продажа на рейсы interline без участка UN."
-domestic
-interline :possible
-not_implemented
+interline :yes
 commission "4%/2%"
 
+example 'DMELHR/X LHRMUC/BD'
+example 'svocdg cdgmad/lh'
 agent "5% Дополнительное вознаграждение на продажу Interline от применяемых опубликованных тарифов первого, бизнес, премиального экономического и туристического экономического классов на рейсы авиакомпаний Lufthansa (LH), Austrian Airlines (OS), Swiss International Airlines (LX), British Midland Airways (BD) от Москвы и/или через Москву с участком перевозки на рейсы ТРАНСАЭРО. Дополнительное вознаграждение не выплачивается в случае остальных Interline продаж, а также с сумм произведенных возвратов."
 agent "(Т.е. комиссия по этим Interline будет 9%)"
+subagent "2 (два) % от тарифа на рейсы Interline c участком UN. Запрещена продажа на рейсы interline без участка UN."
+important!
 interline :yes
-not_implemented
-commission "9%/0"
+check { city_iatas.include?('MOW') && (other_marketing_carrier_iatas - %W(LH OS LX BD)).empty? }
+commission "9%/2%"
 
-subagent "с формой оплаты РТА комиссионное вознаграждение Субагента не выплачивается."
+example 'svocdg/lh cdgmad/lh'
 no_commission
 
 carrier "2U", "SUN D’OR International Airlines (РИНГ-АВИА)"
