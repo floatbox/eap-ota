@@ -77,7 +77,7 @@ agent "12% Oт всех применяемых опубликованных та
 subagent "9 (девять) % от тарифа на рейсы Перевозчика по всем тарифам классов F, J, C, D."
 subclasses "FJCD"
 important!
-check { (city_iatas & %W(NYC MIA BJC)).present? && %W(RU UA KZ UZ).include?(country_iatas.first) }
+check { (city_iatas & %W(NYC MIA BJS)).present? && %W(RU UA KZ UZ).include?(country_iatas.first) }
 commission "12%/9%"
 
 example 'DMEJFK/Y JFKDME/Y'
@@ -85,7 +85,7 @@ agent "12% Oт всех применяемых опубликованных та
 subagent "5  (пять) % от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, M, Q, B, K, O, R, E."
 subclasses "YHMQBKORE"
 important!
-check { (city_iatas & %W(NYC MIA BJC)).present? && %W(RU UA KZ UZ).include?(country_iatas.first) }
+check { (city_iatas & %W(NYC MIA BJS)).present? && %W(RU UA KZ UZ).include?(country_iatas.first) }
 commission "12%/5%"
 
 example 'DMEJFK/I JFKDME/I'
@@ -93,7 +93,7 @@ agent "12% Oт всех применяемых опубликованных та
 subagent "1 (один) % от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWU"
 important!
-check { (city_iatas & %W(NYC MIA BJC)).present? && %W(RU UA KZ UZ).include?(country_iatas.first) }
+check { (city_iatas & %W(NYC MIA BJS)).present? && %W(RU UA KZ UZ).include?(country_iatas.first) }
 commission "12%/1%"
 
 example 'DOKDME DMELHR/BD LHREWR/CO'
