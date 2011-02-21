@@ -434,11 +434,11 @@ carrier "CA", "AIR CHINA"
 
 agent    "1 евро за билет, выписанный c началом  перевозки от пунктов РФ;"
 subagent "5 руб. с билета, от опубл.тарифов на рейсы CA с началом перевозки от пунктов РФ;"
-not_implemented #geo
+check { country_iatas.first == 'RU' }
 commission "1eur/5"
 
-agent    "1 евро за билет, выписанный c началом  перевозки от пунктов РФ;"
-subagent "0% с началом перевозки anywhere"
+agent    "???"
+subagent "0% на все остальные тарифы."
 disabled #правило
 not_implemented
 commission "1eur/0"
@@ -556,8 +556,7 @@ commission "1%/0.5%"
 
 agent    "1% от опубл. тарифа DL при внутренних перелетах по США"
 subagent "0,5% от опубл. тарифа DL при внутренних перелетах по США"
-disabled #правило (внутренние перелеты)
-#geo
+domestic
 not_implemented
 commission "1%/0.5%"
 
@@ -1383,9 +1382,6 @@ commission "0.5%/5"
 agent    "0,5% от опубл. тарифам в случае применения совмещенного тарифа авиакомпаний;"
 subagent "5 руб. с билета по опубл. тарифам в случае применения совмещенного тарифа авиакомпаний;"
 interline :yes
-disabled #так «совмещенный» это таки интерлайн… поздно догнал. Надо проверить у Тани
-#unknown
-not_implemented
 commission "0.5%/5"
 
 carrier "SQ", "SINGAPORE AIRLINES (Авиарепс)"
