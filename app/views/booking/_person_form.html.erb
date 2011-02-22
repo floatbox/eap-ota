@@ -122,7 +122,7 @@
                  value="<%= (person_form.birthday && person_form.birthday.year) %>"
                  title="год рождения"
                  maxlength="4"
-                 onclick="return {def: 'год', mask: /\d/, rules: {req: true, num: true, min: 1900, max: 2020, gender: 'M'}}"
+                 onclick="return {def: 'год', mask: /\d/, rules: {req: true, num: true, min: 1900, max: <%= Date.current.strftime('%Y') %>, gender: 'M'}}"
                 >
                 <%= person.error_message_on :birthday, 
                  :id => "error_person_#{person_form_counter}_birthday" %>
@@ -189,7 +189,7 @@
                  value="<%= (person_form.document_expiration_date &&  person_form.document_expiration_date.year) %>"
                  title="год окончания действия документа"
                  maxlength="4"
-                 onclick="return {def: 'год', mask: /\d/, rules: {req: true, num: true, min: 2010, max: 2050, gender: 'M'}}"
+                 onclick="return {def: 'год', mask: /\d/, rules: {req: true, num: true, min: <%= Date.current.strftime('%Y') %>, max: 2050, gender: 'M'}}"
                 >
                 
                 <%= person.error_message_on :document_expiration_date, 

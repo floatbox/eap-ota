@@ -86,7 +86,7 @@
                  :maxlength => "2",
                  :value =>  @order.card.year_short  ||"гг",
                  :title => "год окончания действия карты",
-                 :onclick => "return {def: 'гг', mask: /\\d/, rules: {req: true, num: true, minl: 2, maxl: 2, min: 11, gender: 'M'}}"
+                 :onclick => "return {def: 'гг', mask: /\\d/, rules: {req: true, num: true, minl: 2, maxl: 2, min: #{ Date.current.strftime('%y') }, gender: 'M'}}"
                 %>
                 <%= f.error_message_on :year, :id => 'error_card_year'  %>
             </fieldset>

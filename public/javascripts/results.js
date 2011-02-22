@@ -135,6 +135,7 @@ init: function() {
 },
 selectTab: function(tab) {
     this.selectedTab = tab;
+    this.filters.el.toggleClass('disabled', tab === 'matrix');
     $('#rtab-' + tab).addClass('selected').siblings().removeClass('selected');
     $('#offers-featured, #offers-all, #offers-matrix').addClass('latent');
     $('#offers-' + tab).removeClass('latent');
@@ -605,7 +606,11 @@ showRecommendations: function() {
             $.animateScrollTop(that.el.offset().top);
         });
         ftip.find('.up').click(function() {
-            $('#results-filters.hidden .rfshow').click();
+            if (that.header.hasClass('fixed')) {
+                $('#results-filters.hidden .rfshow').click();
+            } else {
+                $.animateScrollTop(that.el.offset().top);
+            }
         });
         container.append(ftip);
         var rprice = cheap ? cheap.p : optimal.p;
@@ -624,7 +629,7 @@ showRecommendations: function() {
 makeRecommendation: function(variant, title) {
     var el = variant.el, offer = el.parent().clone();
     this.showVariant(offer.children().eq(el.prevAll().length));
-    if (title.search(/выгодный/i) != -1) {
+    if (title.search(/лучшая/i) !== -1) {
         var cost = offer.find('td.cost dl'), ctext = cost.find('dd');
         ctext.html(ctext.html() + '<span class="cost-tip">' + ($('#offers-options').attr('data-people') !== '1' ? ' за всех' : '') + ', включая налоги и сборы</span>');
         cost.prepend('<dd>Всего </dd>');
@@ -741,7 +746,7 @@ show: function() {
     }, 150, function() {
         el.css({
             height: 'auto',
-            overflow: 'visible'
+            overflow: ''
         });
     });
 },
@@ -754,7 +759,7 @@ hide: function() {
     }, 150, function() {
         var el = $(this).addClass('hidden').css({
             height: 'auto',
-            overflow: 'visible'
+            overflow: ''
         });
     });
 },
@@ -770,6 +775,7 @@ update: function(data) {
     this.active = false;
     var that = this;
     this.el.find('.rfreset').addClass('latent');
+    this.el.find('.rftitle').removeClass('latent');
     this.el.find('.filter').each(function() {
         var name = $(this).attr('data-name');
         var f = that.items[name];
@@ -878,7 +884,12 @@ process: function() {
     if (cheap.cells.length / variants.length < 0.6) {
         cheap.cells.addClass('cheap');
     }
-    $(rows[4].cells[4]).click();
+    var current = $(rows[4].cells[4]);
+    if (current.hasClass('active')) {
+        current.click();
+    } else {
+        cheap.cells.eq(0).click();
+    }
     table.attr('data-minprice', cheap.price).show();
 },
 date: function(date) {

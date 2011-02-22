@@ -7,11 +7,10 @@
 </head>
 <body>
 <%= render 'shared/header' %>
-<div class="l-wrapper" id="page-wrapper">
-<div class="l-canvas">
-    <div class="l-content">
+<div id="wrapper">
+<div id="content">
     <div id="back2search">
-        <a href="/">Вернуться к поиску</a>
+        <div class="bscontent"><a href="/">Вернуться к поиску</a></div>
     </div>
     <div class="article">
 
@@ -81,10 +80,9 @@ YMaps.jQuery(window).load(function () {
 </div>
 
     </div>
-    </div>
-    <div class="l-footer">
-        <%= render 'shared/footer' %>
-    </div>
+</div>
+<div id="footer">
+    <%= render 'shared/footer' %>
 </div>
 </div>
 </body>

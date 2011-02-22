@@ -34,7 +34,8 @@
 
 /* Предварительное бронирование */
 .booking {
-    border-top: 1px solid #D0D0D0;
+    /*border-top: 1px solid #D0D0D0;*/
+    padding-top: 1px;
 }
 .booking .g-xl  {
     font-size: 20px;

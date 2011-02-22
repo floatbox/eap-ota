@@ -70,6 +70,9 @@
 }
 
 /* Нет результатов */
+#results-empty {
+    margin-bottom: 20px;
+}
 #results-empty .rmphoto,
 .offers-improper .rmphoto {
     background: url(/img/offers/photo-empty.jpg) no-repeat 50% 50%;    

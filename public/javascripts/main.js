@@ -90,7 +90,7 @@ Date.prototype.dayoff = function() {
 Date.prototype.toAmadeus = function() {
     var d = this.getDate();
     var m = this.getMonth() + 1;
-    var y = this.getFullYear() % 100;
+    var y = this.getFullYear().toString().substring(2);
     return [d < 10 ? '0' : '', d, m < 10 ? '0' : '', m, y].join('');
 };
 Date.parseAmadeus = function(str) {

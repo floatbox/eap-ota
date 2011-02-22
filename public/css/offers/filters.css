@@ -109,3 +109,29 @@
     color: #FFF;
     text-decoration: none;
 }
+
+/* Disabled filters */
+#results-filters .rfoverlay {
+    display: none;
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 960px;
+    cursor: default;
+}
+.win-msie6 #results-filters .rfoverlay {
+    height: 300px;
+}
+#results-filters.disabled {
+    overflow: hidden;
+    color: #999;
+}
+#results-filters.disabled .rfoverlay {
+    display: block;
+}
+#results-filters.disabled .vlist dd.selected {
+    background: #AAA;
+} 
+#results-filters.disabled th,
+#results-filters.disabled .link {
+    color: #999;
+}
