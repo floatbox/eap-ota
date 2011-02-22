@@ -34,7 +34,6 @@
 
 /* Предварительное бронирование */
 .booking {
-    /*border-top: 1px solid #D0D0D0;*/
     padding-top: 1px;
 }
 .booking .g-xl  {
@@ -215,68 +214,72 @@
 
 /* Текстовые поля - общие свойства */
 
-    .booking .text {
-        padding: 3px 4px;
+.booking .text {
+    padding: 3px 4px;
 
-        color: #aaa;
-        border: 1px solid #909090;
-        background: #f8f8f8;
+    color: #aaa;
+    border: 1px solid #909090;
+    background: #f8f8f8;
 
-        border-radius: 3px;
-        -moz-border-radius: 3px;
-        -webkit-border-radius: 3px;
-        -o-border-radius: 3px;
-    }
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -o-border-radius: 3px;
+    
+    font-size: 20px;
+    line-height: 25px;
+}
 
-    .booking select.text {
-        padding: 2px 3px;
-    }
+.booking select.text {
+    padding: 2px 3px;
+    font-size: 19px;
+}
+.mac-chrome .booking select.text,
+.mac-safari .booking select.text {
+    height: 33px;
+}
 
-    .mac-chrome .booking select.text {
-        padding: 3px 3px;
-    }
+.booking .text:hover {
+    z-index: 2;
+    -webkit-transition: border-color linear 0.2s;
 
-    .booking .text:hover {
-        z-index: 2;
-        -webkit-transition: border-color linear 0.2s;
+    background: #fff;
+}
 
-        background: #fff;
-    }
+.booking .text:focus {
+    z-index: 3;
+    color: #333;
+    background: #fff;
+    outline: none;
+}
 
-    .booking .text:focus {
-        z-index: 3;
-        color: #333;
-        background: #fff;
-        outline: none;
-    }
+.booking .text-value {
+    color: #333;
+    border: 1px solid #4eb700;
+    background: #fff;
+}
 
-    .booking .text-value {
-        color: #333;
-        border: 1px solid #4eb700;
-        background: #fff;
-    }
+.booking .text-value:focus {
+    border: 1px solid #909090;
+}
 
-    .booking .text-value:focus {
-        border: 1px solid #909090;
-    }
+.booking .text-invalid {
+    border: 1px solid red;
+}
 
-    .booking .text-invalid {
-        border: 1px solid red;
-    }
+.booking .text-upper .text-value {
+    text-transform: uppercase;
+}
 
-    .booking .text-upper .text-value {
-        text-transform: uppercase;
-    }
-
-    .booking .text-disabled,
-    .booking .text-disabled:hover,
-    .booking .text-disabled:focus {
-        cursor: not-allowed;
-        
-        color: transparent;
-        border: 1px solid #aaa;
-        background: transparent;
-    }
+.booking .text-disabled,
+.booking .text-disabled:hover,
+.booking .text-disabled:focus {
+    cursor: not-allowed;
+    
+    color: transparent;
+    border: 1px solid #aaa;
+    background: transparent;
+}
 
 
 /* Подписи к полям */
@@ -416,26 +419,22 @@
     background: #fff;
 
     border: 1px solid #ccc;
-    border-radius: 6px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-    -o-border-radius: 6px;
 }
 
 .book-p label.bp-sex-m {
     border-right: none;
 
-    border-radius: 6px 0 0 6px;
-    -moz-border-radius: 6px 0 0 6px;
-    -webkit-border-radius: 6px 0 0 6px;
-    -o-border-radius: 6px 0 0 6px;
+    border-radius: 3px 0 0 3px;
+    -moz-border-radius: 3px 0 0 3px;
+    -webkit-border-radius: 3px 0 0 3px;
+    -o-border-radius: 3px 0 0 3px;
 }
 
 .book-p label.bp-sex-f {
-    border-radius: 0 6px 6px 0;
-    -moz-border-radius: 0 6px 6px 0;
-    -webkit-border-radius: 0 6px 6px 0;
-    -o-border-radius: 0 6px 6px 0;
+    border-radius: 0 3px 3px 0;
+    -moz-border-radius: 0 3px 3px 0;
+    -webkit-border-radius: 0 3px 3px 0;
+    -o-border-radius: 0 3px 3px 0;
 }
 
 .book-p label.bp-sex:hover {

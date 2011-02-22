@@ -82,8 +82,10 @@ init: function() {
     $('.blocker', this.el).delegate('a', 'click', function(event) {
         event.preventDefault();
         var control = $('#' + $(this).attr('data-id'));
-        $(window).scrollTop(control.closest(':visible').offset().top - 50);
-        control.focus();
+        var st = control.closest(':visible').offset().top - results.header.height() - 25;
+        $.animateScrollTop(Math.min(st, $(window).scrollTop()), function() {
+            control.focus();
+        });
     });
     sections.bind('setready', function() {
         var ready = true, errors = [];

@@ -44,7 +44,7 @@
                  %>
                  <%= person.error_message_on :last_name, 
                   :id => "error_person_#{person_form_counter}_last_name" %>
-            <td class="g-middle">
+            <td style="vertical-align: middle;">
 
                 <label class="bp-sex bp-sex-m g-xl" title="Мужской" for="book-p-<%= person_form_counter %>-sex-m">
                 <%= person.radio_button :sex,
@@ -91,7 +91,7 @@
                 >Бонусная программа</label>
 
         <tr>
-            <td>
+            <td style="vertical-align: middle;">
                 <%= person.select :nationality_id,
                  grouped_options_for_select(Country.options_for_nationality_select, person_form.nationality_id),
                  {},
