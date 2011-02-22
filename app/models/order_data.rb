@@ -178,10 +178,11 @@ class OrderData < ActiveRecord::BaseWithoutTable
           self.order_id = 'am' + pnr_number
           amadeus.pnr_commit_really_hard do
             add_passport_data(amadeus)
-            amadeus.give_permission_to_offices(
-              Amadeus::Session::TICKETING,
-              Amadeus::Session::WORKING
-            )
+            # делается автоматически, настройками booking office_id
+            #amadeus.give_permission_to_offices(
+            #  Amadeus::Session::TICKETING,
+            #  Amadeus::Session::WORKING
+            #)
             amadeus.pnr_archive(seat_total)
             amadeus.pnr_add_remark
           end

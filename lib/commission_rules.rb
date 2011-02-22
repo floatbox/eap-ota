@@ -48,7 +48,7 @@ module CommissionRules
       recommendation.interline? and
       recommendation.variants[0].flights.first.marketing_carrier_iata == recommendation.validating_carrier_iata and
       Commission.skip_interline_validity_check || recommendation.valid_interline?
-    when :half
+    when :half, :unconfirmed
       recommendation.interline? and
       recommendation.validating_carrier_makes_half_of_itinerary? and
       Commission.skip_interline_validity_check || recommendation.valid_interline?
@@ -218,7 +218,7 @@ module CommissionRules
       opts[:international] = true
     end
 
-    def subclasses *sublasses
+    def subclasses *subclasses
       opts[:subclasses] = subclasses.join.upcase.gsub(' ', '').split('')
     end
 

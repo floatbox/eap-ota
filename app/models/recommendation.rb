@@ -130,7 +130,10 @@ class Recommendation
   end
 
   def sellable?
-    validating_carrier.consolidator && commission || source == 'sirena'
+    # consolidator-а пока не проверяем.
+    # FIXME перепровить после подключения новых договоров
+    # validating_carrier.consolidator && commission || source == 'sirena'
+    source == 'sirena' || commission
   end
 
   def without_full_information?
