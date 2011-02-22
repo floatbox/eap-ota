@@ -1,5 +1,120 @@
-/* Сброс (начало) */
+/* Reset */
+html, body {
+	height: 100%;
+}
+html, body, td, th, form,
+h1, h2, h3, h4, h5, h6, p,
+ul, ol, li, dl, dt, dd, pre {
+	margin: 0;
+	padding: 0;
+}
+table {
+	border: none;
+    border-spacing: 0;	
+	border-collapse: collapse;
+}
+caption, th, td {
+    text-align: left;
+    font-weight: normal;
+}
+ul {
+	list-style: none;
+}
+img	{
+	border: none;
+}
+:focus {
+    outline: 0;
+}
 
+/* Clear */
+.clearfix:after {
+	display: block;
+	clear: both;
+	overflow: hidden;
+	height: 0;
+	content: ' ';
+	font-size: 0;
+}
+.wrap {
+	overflow: hidden;
+}
+* html .wrap,
+* html .clearfix,
+*+html .wrap,
+*+html .clearfix {
+	zoom: 1;
+}
+
+/* Links */
+a:link,
+a:visited {
+    outline: none;
+    color: #3270A6;
+}
+a:hover {
+    color: #ED1192;
+}
+.link {
+    text-decoration: underline;
+    color: #3270A6;
+    cursor: pointer;
+}
+.link:hover {
+    color: #ED1192;
+}
+.pseudo {
+    position: relative;
+    top: -0.14em;
+    border-bottom: 1px dotted #333;
+    text-decoration: none;
+    cursor: pointer;
+}
+.pseudo em {
+    position: relative;
+    top: 0.14em;
+    font-style: normal;
+}
+.pseudo:hover {
+    color: #ED1192;
+    border-color: #ED1192;
+}
+
+/* Text */
+body,
+input,
+select,
+textarea {
+    font: 14px/1.357 Arial, Helvetica, sans-serif;
+    color: #333;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-weight: normal;
+}
+::-moz-selection {
+    background: #D93D87;
+    color: #fff;
+}
+::selection {
+    background: #D93D87;
+    color: #fff;
+}
+
+/* Shortcuts */
+.latent {
+    display: none;
+}
+.g-none {
+    display: none!important;
+}
+.g-external {
+    background: url('/img/ico/external-link.png') no-repeat scroll right center transparent;
+    padding-right: 13px;
+}
+
+/* Сброс (начало) */
+/*
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -18,113 +133,15 @@ table, caption, tbody, tfoot, thead, tr, th, td {
     font-family: inherit;
     vertical-align: baseline;
 }
-
-i, b, u, s {
-    font-weight: normal;
-    font-style: normal;
-    text-decoration: none;
-}
-
-/* remember to define focus styles! */
-
-:focus {
-    outline: 0;
-}
-
-ol, ul {
-    list-style: none;
-}
-
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-
 caption, th, td {
     text-align: left;
     font-weight: normal;
-}
-
-img {
-    border: 0;
-}
-
-q:before, q:after {
-    content: '';
-}
-
-abbr, acronym {
-    border: 0;
-}
-
+}*/
 /* Сброс (конец) */
 
-html,
-body {
-    height: 100%;
-}
-
-body {
-    font: 100% Arial,Helvetica,sans-serif;
-    text-align: center;
-    color: #000;
-    background: #4bc0d1;
-}
-
-body * {
-    font-family: Arial,Helvetica,sans-serif;
-    text-align: left;
-}
-
-::-moz-selection {
-    background: #D93D87;
-    color: #fff;
-}
-
-::selection {
-    background: #D93D87;
-    color: #fff;
-}
-
-
-/* классы-шоткаты */
-
-.g-none
-{
-    display: none!important;
-}
-
-.g-hidden
-{
-    visibility: hidden!important;
-}
-
-.g-block
-{
-    display: block!important;
-}
-
-.g-fixed
-{
-    position: fixed!important;
-}
-
-.g-right
-{
-    text-align: right!important;
-}
-
-.g-middle
-{
-    vertical-align: middle!important;
-}
-
-.g-upper
-{
-    text-transform: uppercase!important;
-}
 
 /* Шрифты */
+
 .g-xxxl
 {
     font-size: 214.286%;
@@ -158,58 +175,4 @@ body * {
 .g-xxs
 {
     font-size: 78.571%;
-}
-
-
-/* утилиты */
-.clear:after {
-    content: '.';
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
-}
-.wrap {
-    overflow: hidden;
-}
-.wrap,
-.clear {
-    zoom: 1;
-}
-
-.g-external {
-    background: url('/img/ico/external-link.png') no-repeat scroll right center transparent;
-    padding-right: 13px;
-}
-
-
-/* Links */
-a:link,
-a:visited {
-    outline: none;
-    color: #333;
-}
-a:hover {
-    color: #ED1192;
-}
-
-.link {
-    text-decoration: underline;
-    cursor: pointer;
-}
-.link:hover {
-    color: #ED1192;
-}
-
-.pseudo {
-    position: relative;
-    top: -0.14em;
-    border-bottom: 1px dotted;
-    text-decoration: none;
-    cursor: pointer;
-}
-.pseudo em {
-    position: relative;
-    top: 0.14em;
-    font-style: normal;
 }

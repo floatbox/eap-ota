@@ -1,18 +1,14 @@
 /* Fixed header */
 #header {
     position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 7;
-    width: 100%;
-    height: 42px;
+    top: 0; left: 0; z-index: 7;
+    width: 100%; height: 42px;
     background: #FFF;
 }
 .hcontent {
     position: relative;
     width: 960px;
     margin: 0 auto;
-    font: 20px/22px bold Arial, sans-serif;
     letter-spacing: -0.025em;
     color: #777;
 }
@@ -20,14 +16,9 @@
 .mac-opera #header {
     position: absolute;
 }
-.ipad-safari .hcontent,
-.iphone-safari .hcontent {
-    width: 930px;
-}
 #header .shadow {
     position: absolute;
-    top: 42px; left: 0;
-    z-index: -1;
+    top: 42px; left: 0; z-index: -1;
     width: 100%; height: 6px;
     background: url(/img/header/shadow.png) repeat-x;
 }
@@ -41,9 +32,10 @@
 }
 
 #header .tabs {
-    displayL: inline;
+    display: inline;
     float: left;
     margin: 0 20px 0 133px;
+    font: 20px/22px Arial, sans-serif;    
 }
 #header .tabs li {
     position: relative;
@@ -60,7 +52,6 @@
     text-decoration: none;
     color: #ED1192;
     outline: none;
-   
 }
 #header .active a {
     color: #FFF;
@@ -81,6 +72,7 @@
 #header .phone {
     float: right;
     margin-top: 10px;
+    font: 20px/22px Arial, sans-serif;    
 }
 #header .phone strong {
     font-weight: normal;
@@ -102,13 +94,9 @@
 #ya-share {
     display: inline;
     float: left;
-    margin: 7px 0 0 42px;
+    margin: 7px 0 0 40px;
     font-size: 14px;
     letter-spacing: -0.015em;
-}
-.ipad-safari #ya-share,
-.iphone-safari #ya-share {
-    margin-left: 25px;
 }
 #ya-share .b-share {
     font-size: 100%;
@@ -116,6 +104,8 @@
 }
 #ya-share .b-share__text {
 	position: relative;
+	top: -1px;
+	margin-right: 3px;
     letter-spacing: -0.015em;	
 }
 #ya-share .b-share__handle:hover .b-share__text {

@@ -3,16 +3,16 @@
 <head>
     <%= render 'shared/head_common', {:title => 'авиабилеты по всему миру онлайн'} %>
     <link rel="stylesheet" type="text/css" href="/css/main.css">
-    <%= javascript_include_tag "lib/json2", "lib/pushup", "main", "pageurl", "autocomplete", "radio", "search", "map", "calendar", "filters", "offers", "timer", "hint", "booking/validation", "booking/wizard", "booking/form", :cache => Rails.env.production? %>
+    <%= javascript_include_tag "lib/json2", "lib/pushup", "main", "pageurl", "autocomplete", "search", "map", "calendar", "filters", "results", "timer", "hint", "booking/validation", "booking/wizard", "booking/form", :cache => Rails.env.production? %>
 </head>
 <body>
 <%= render 'shared/header' %>
-<div class="l-wrapper" id="page-wrapper">
-<div class="l-canvas">
-    <div class="l-content">
+<div id="wrapper">
+<div id="canvas">
+    <div id="content">
         <%= render 'search' %>
-        <%= render 'offers' %>
-        <div id="promo" class="wrap">
+        <%= render 'results' %>
+        <div id="promo" class="wrap latent">
             <div class="facebook">
                 <iframe src="https://www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Feviterra&amp;width=240&amp;colorscheme=light&amp;show_faces=true&amp;stream=true&amp;header=false&amp;height=556" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:240px; height:556px;" allowTransparency="true"></iframe>
             </div>
@@ -27,10 +27,8 @@
             </div>
         </div>
     </div>
-    <div class="l-footer">
-        <%= render 'shared/footer' %>
-    </div>
-    <div class="l-overlay"></div>
+    <%= render 'shared/footer' %>
+    <div id="overlay"></div>
 </div>
 </div>
 <div id="hint">

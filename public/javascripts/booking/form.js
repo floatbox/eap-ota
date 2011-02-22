@@ -17,11 +17,11 @@ init: function() {
             self.el.find('.book-s').addClass('book-retry');
             self.el.append('<div class="result"><p class="fail"><strong>Упс…</strong> ' + (text || 'Что-то пошло не так.') + '</p><p class="tip">Попробуйте снова или узнайте <a target="_blank" href="/about/#payment">какими ещё способами</a> можно купить у нас билет.</p></div>');
         };
+        this.el.find('.result').remove();
         $.ajax({
             url: $(this).attr('action'),
             data: data,
             success: function(s) {
-                self.el.find('.result').remove();
                 if (typeof s === 'string' && s.length) {
                     var result = $(s).appendTo(self.el);
                     var rtype = result.attr('data-type');
@@ -73,17 +73,19 @@ init: function() {
     });
 
     // Всплывающие подсказки
-    this.el.delegate('.b-hint', 'click', function(event) {
+    this.el.delegate('.hint', 'click', function(event) {
         event.preventDefault();
-        hint.show(event, $(this).next('p').html());
+        hint.show(event, $(this).parent().find('.htext').html());
     });
 
     // Список неправильно заполненных полей
     $('.blocker', this.el).delegate('a', 'click', function(event) {
         event.preventDefault();
         var control = $('#' + $(this).attr('data-id'));
-        $(window).scrollTop(control.closest(':visible').offset().top - 50);
-        control.focus();
+        var st = control.closest(':visible').offset().top - results.header.height() - 25;
+        $.animateScrollTop(Math.min(st, $(window).scrollTop()), function() {
+            control.focus();
+        });
     });
     sections.bind('setready', function() {
         var ready = true, errors = [];
@@ -172,9 +174,8 @@ init: function() {
     });
 
     // Прекращение бронирования
-    var title = $('#offers-title');
-    this.stopPanel = this.el.find('.stop-booking-panel').css('top', title.height()).insertAfter(title).removeClass('g-none');
-    this.stopPanel.find('.stop-booking').click(this.selfhide);
+    results.filters.el.hide();
+    $('<div class="stop-booking-panel"><span class="link stop-booking">Вернуться к выбору вариантов</span></div>').appendTo(results.header.find('.rcontent')).find('.stop-booking').click(this.selfhide);
     this.el.delegate('.stop-booking', 'click', this.selfhide);
     
     // 3DSecure
@@ -183,7 +184,7 @@ init: function() {
     });
 
     // Заголовок страницы
-    pageurl.title('бронирование авиабилета ' + offersList.title.attr('data-title'));
+    pageurl.title('бронирование авиабилета ' + results.title.attr('data-title'));
 
 },
 show: function(variant) {
@@ -199,7 +200,7 @@ show: function(variant) {
     } else {
         this.offer.removeClass('collapsed').addClass('expanded');
     }
-    this.offersTab = offersList.selectedTab;
+    this.offersTab = results.selectedTab;
     this.selfhide = function(event) {
         event.preventDefault();
         self.hide();
@@ -211,18 +212,17 @@ show: function(variant) {
     this.offer.addClass('active-booking');
 },
 hide: function() {
-    $('.stop-booking', this.offer).remove();
+    results.filters.el.addClass('hidden').show();
+    results.header.find('.stop-booking-panel').remove();
+    this.offer.find('.stop-booking').remove();
     this.unfasten();
     this.offer.removeClass('active-booking');
-    if (this.stopPanel) {
-        this.stopPanel.remove();
-    }
     this.el.remove();
     delete(this.el);
     delete(this.offer);
     delete(this.variant);
     pageurl.update('booking', undefined);
-    pageurl.title('авиабилеты ' + offersList.title.attr('data-title'));    
+    pageurl.title('авиабилеты ' + results.title.attr('data-title'));    
 },
 error: function() {
     var message = $('<div class="booking-state"><h4>В данный момент невозможно выбрать этот вариант</h4><p><span class="link">Почему?</span></p></div>');
@@ -306,27 +306,33 @@ comparePrice: function() {
 },
 fasten: function(offer) {
     if (browser.search(/ipad|iphone|msie6|msie7/) !== -1) return;
-    var wrapper = $('#page-wrapper');
-    var ot = offer.offset().top;
-    var ob = wrapper.height() - ot - offer.height();
+    var wrapper = $('#wrapper');
+    var ot = offer.offset().top, ob = wrapper.height() - ot - offer.height();
     var cst = $(window).scrollTop();
-    wrapper.addClass('l-crop');
-    wrapper.children('.l-canvas').css('margin-top', 200 - ot - ob).css('top', ob - 100);
-    this.dst = ot - 100;
+    wrapper.addClass('cropped');
+    $('#results-header').addClass('fixed');
+    $('#header').hide();
+    var mt = results.title.outerHeight() + 50, mb = 40;
+    $('#canvas').css({
+        'margin-top': mt - ot - ob + mb,
+        'top': ob - mb
+    });
+    this.dst = ot - mt;
     fixedBlocks.disabled = true;
     $(window).scrollTop(cst - this.dst);
-    $('#header').addClass('g-none');
-    $('#offers-title').addClass('fixed');
 },
 unfasten: function() {
-    var wrapper = $('#page-wrapper');
-    if (browser.search(/ipad|iphone|msie6|msie7/) === -1 && wrapper.hasClass('l-crop')) {
-        wrapper.children('.l-canvas').css('margin-top', 0).css('top', 0);
-        wrapper.removeClass('l-crop');
+    var wrapper = $('#wrapper');
+    if (browser.search(/ipad|iphone|msie6|msie7/) === -1 && wrapper.hasClass('cropped')) {
+        $('#header').show();
+        $('#canvas').css({
+            'margin-top': 0,
+            'top': 0
+        });
+        wrapper.removeClass('cropped');
         $(window).scrollTop($(window).scrollTop() + this.dst);
-        $('#header').removeClass('g-none');
         fixedBlocks.disabled = false;
-        fixedBlocks.update();
+        fixedBlocks.toggle(true);
     }
     this.dstop = 0;
 }

@@ -16,8 +16,19 @@ Eviterra::Application.configure do
   config.cache_store = :file_store, Rails.root + "tmp/cache/"
 
   # Don't care if the mailer can't send
-  config.action_mailer.raise_delivery_errors = false
+  #config.action_mailer.raise_delivery_errors = false
 
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :enable_starttls_auto => true,
+    :address => 'smtp.gmail.com',
+    :port => 587,
+    :domain => "eviterra.com",
+    :authentication => :plain,
+    :user_name => "no-reply@eviterra.com",
+    :password => "delta_mailer"
+  }
+  config.action_mailer.default_content_type = "text/html"
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
 

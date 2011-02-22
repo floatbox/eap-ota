@@ -1,11 +1,15 @@
 /* Return to search */
 #back2search {
-    padding: 13px 15px 14px;
+    padding: 13px 0 14px;
     background: #3e3e3e;
     font-weight: bold;
     font-size: 20px;
     line-height: 22px;
     letter-spacing: -0.035em;
+}
+#back2search .bscontent {
+    width: 960px;
+    margin: 0 auto;
 }
 #back2search a {
     color: #CCC;
@@ -13,7 +17,8 @@
 
 /* Article */
 .article {
-    margin: 15px;
+    width: 960px;
+    margin: 15px auto;
     font-size: 14px;
     line-height: 19px;
     color: #333;
@@ -120,9 +125,6 @@
 }
 
 /* Faq */
-.faq {
-    margin-right: 285px;
-}
 .faq dt {
     margin: 15px 0 5px;
     font-weight: bold;
@@ -131,7 +133,7 @@
     margin: 0 0 5px 0;
 }
 .faq .asection {
-    margin: 0 0 20px;
+    margin: 0 285px 20px 0;
     padding-top: 15px;
     border-top: 1px solid #DDD;
 }
@@ -149,7 +151,7 @@
 .fc-fixed {
     position: fixed;
     top: 110px;
-    width: 240px;
+    width: 255px;
 }
 .fc-fixed ul {
     margin: 0 0 15px;
