@@ -127,7 +127,10 @@ subagent "3,5% от опубл. тарифов на собств. рейсы 2U"
 commission "5%/3.5%"
 
 example 'cdgsvo svocdg/ab'
-no_commission
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "5N", "Нордавиа-РА"
 ########################################
@@ -138,7 +141,10 @@ subagent "5% от опубл. тарифов на собств.рейсы 5N"
 commission "7%/5%"
 
 example 'cdgsvo svocdg/ab'
-no_commission
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "6H", "ISRAIR AIRLINE"
 ########################################
@@ -149,7 +155,10 @@ subagent "5% от опубл. тарифов на собств. рейсы 6H"
 commission "7%/5%"
 
 example 'cdgsvo svocdg/ab'
-no_commission
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "7B", "ATLANT-SOYUZ"
 ########################################
@@ -245,11 +254,11 @@ agent    "1 руб с билета по опубл. тарифам на рейс
 subagent "5 коп с билета по опубл. тарифам на рейсы AB"
 commission "1/0.05"
 
-example 'svocdg cdgsvo/s7'
-agent    "СанСаныч разрешил интерлайн"
-subagent "СанСаныч разрешил интерлайн"
-interline :yes
-commission "1/0"
+example 'cdgsvo svocdg/lh'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 example 'svocdg/s7'
 no_commission
@@ -413,8 +422,11 @@ agent    "1% от опубл. тарифов на собств. рейсы BI (�
 subagent "0,5% от опубл. тарифа на собств. рейсы BI"
 commission "1%/0.5%"
 
-example 'svocdg cdgsvo/ab'
-no_commission
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "BT", "AIR BALTIC"
 ########################################
@@ -453,6 +465,12 @@ agent    "1% от всех опубл. тарифов на рейсы CI (В д�
 subagent "0,5% от опубл. тарифа на собств. рейсы CI"
 commission "1%/0.5%"
 
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
+
 carrier "CX", "CATHAY PACIFIC (Тальавиэйшн)"
 ########################################
 
@@ -477,8 +495,11 @@ agent    "9% от всех опубл. тарифов на рейсы CY. (В д
 subagent "6,3% от опубликованных тарифов на рейсы CY."
 commission "9%/6.3%"
 
-example 'svocdg cdgsvo/ab'
-no_commission
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "CZ", "CHINA SOUTHERN"
 ########################################
@@ -530,6 +551,12 @@ example 'svocdg'
 agent    "1% от всех опубл. тарифов на рейсы DE. (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на рейсы DE."
 commission "1%/0.5%"
+
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "DL", "DELTA AIRLINES"
 ########################################
@@ -656,6 +683,12 @@ agent    "5% от опубл. тарифов на собств. рейсы EY (
 subagent "3,5% от опубл. тарифов на собств. рейсы EY"
 commission "5%/3.5%"
 
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
+
 carrier "F7", "FLY BABOO (РИНГ АВИА)"
 ########################################
 
@@ -684,6 +717,12 @@ agent    "4% от опубл. тарифов на собств. рейсы FB. (
 subagent "2,8% от опубл. тарифов на собств. рейсы FB."
 commission "4%/2.8%"
 
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
+
 carrier "FI", "ICELANDAIR  (РИНГ АВИА)"
 ########################################
 
@@ -691,6 +730,12 @@ example 'svocdg'
 agent    "1% от всех опубл. тарифов на рейсы FI (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на рейсы FI"
 commission "1%/0.5%"
+
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "FV", "RUSSIA"
 ########################################
@@ -743,6 +788,12 @@ agent    "1% от опубл. тарифа на собств. рейсы HM (В 
 subagent "0,5% от опубл. тарифа на собств. рейсы HM"
 commission "1%/0.5%"
 
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
+
 carrier "HR", "HAHN AIR  (Авиарепс)"
 ########################################
 
@@ -791,6 +842,13 @@ subagent "5. The commission only for individual passenger, not for group"
 not_implemented
 no_commission
 
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+disabled
+interline :unconfirmed
+commission '1/0'
+
 carrier "HX", "Hong Kong Airlines"
 ########################################
 
@@ -798,6 +856,12 @@ example 'svocdg'
 agent    "7% от всех опубл. тарифов на собств.рейсы HX (В договоре Interline не прописан.)"
 subagent "5% от опубл. тарифов на собств.рейсы HX"
 commission "7%/5%"
+
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "HY", "UZBEKISTAN AIRWAYS (Узбекистон Хаво Йуллари) (НЕ BSP!!!)"
 ########################################
@@ -823,6 +887,12 @@ agent    "1 руб. с билета на рейсы IB (В договоре Inte
 subagent "50 коп. с билета на рейсы IB"
 commission "1/0.5"
 
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
+
 carrier "IG", "MERIDIANA (РИНГ-АВИА)"
 ########################################
 
@@ -830,6 +900,12 @@ example 'svocdg'
 agent    "5% от опубл. тарифов на собств.рейсы IG (В договоре Interline не прописан.)"
 subagent "3,5% от опубл. тарифов на собств.рейсы IG"
 commission "5%/3.5%"
+
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "IY", "YEMENIA YEMEN AIRWAYS"
 ########################################
@@ -839,6 +915,12 @@ agent    "1% от опубл. тарифов на собств. рейсы IY (�
 subagent "0,5% от опубл. тарифов на собств. рейсы IY"
 commission "1%/0.5%"
 
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
+
 carrier "JJ", "TAM Linhas Aereas S.A."
 ########################################
 
@@ -846,6 +928,12 @@ example 'svocdg'
 agent    "1% от всех опубл. тарифов на собств. рейсы JJ (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на собств.рейсы JJ"
 commission "1%/0.5%"
+
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "JL", "JAPAN AIRLINES INTERNATIONAL"
 ########################################
@@ -916,6 +1004,12 @@ agent    "1 руб. с билета на рейсы JP (В договоре Inte
 subagent "50 коп. с билета на рейсы JP"
 commission "1/0.5"
 
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
+
 carrier "JU", "JAT AIRWAYS"
 ########################################
 
@@ -923,6 +1017,12 @@ example 'svocdg'
 agent    "80 руб. с билета на собств.рейсы JU (В договоре Interline отдельно не прописан.)"
 subagent "30 руб. с билета на собств.рейсы JU"
 commission "80/30"
+
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "KC", "Air Astana"
 ########################################
@@ -1129,6 +1229,12 @@ agent    "1% от опубл. тарифов на рейсы MK (В догово
 subagent "0,5% от опубл. тарифа на рейсы MK"
 commission "1%/0.5%"
 
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
+
 carrier "MS", "EGYPT AIR"
 ########################################
 
@@ -1207,6 +1313,13 @@ interline :no
 not_implemented
 commission "5%/3.5%"
 
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+disabled
+interline :unconfirmed
+commission '1/0'
+
 carrier "NZ", "AIR NEW ZEALAND (НЕ BSP!!!)"
 ########################################
 
@@ -1229,6 +1342,12 @@ example 'svocdg'
 agent    "1% от опубл. тарифов на собственные рейсы OA (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на собств.рейсы OA"
 commission "1%/0.5%"
+
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "OK", "CZECH AIRLINES"
 ########################################
@@ -1254,6 +1373,12 @@ example 'svocdg'
 agent    "9% от всех опубл. тарифов на рейсы OM (В договоре Interline не прописан.)"
 subagent "6,3% от опубл. тарифов на собств.рейсы OM"
 commission "9%/6.3%"
+
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "OS", "AUSTRIAN AIRLINES"
 ########################################
@@ -1294,6 +1419,12 @@ agent    "1% от всех опубл. тарифов на рейсы OV (В д�
 subagent "0,5% от опубл. тарифа на рейсы OV"
 commission "1%/0.5%"
 
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
+
 carrier "PG", "BANGKOK AIRWAYS (Тальавиэйшн)"
 ########################################
 
@@ -1301,6 +1432,12 @@ example 'svocdg'
 agent    "5% от всех опубл. тарифов на рейсы PG (В договоре Interline не прописан.)"
 subagent "3,5% от опубликованных тарифов на рейсы PG"
 commission "5%/3.5%"
+
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "PS", "Ukraine International Airlines (ГЛОНАСС)"
 ########################################
@@ -1310,6 +1447,12 @@ agent    "9% от опубл. тарифов на собств.рейсы PS (В
 subagent "6,3% от опубл. тарифов на собств.рейсы PS"
 commission "9%/6.3%"
 
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
+
 carrier "QF", "QANTAS AIRWAYS\n(не BSP!!!)"
 ########################################
 
@@ -1318,6 +1461,13 @@ agent    "7% от опубл. тарифов на рейсы QF (В догово
 subagent "4,9% от опубл. тарифов на рейсы QF"
 disabled 'не bsp'
 commission "7%/4.9%"
+
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+disabled 'не bsp'
+interline :unconfirmed
+commission '1/0'
 
 carrier "QR", "QATAR AIRWAYS"
 ########################################
@@ -1344,6 +1494,12 @@ agent    "7% от всех опубл. тарифов на рейсы RB (В д�
 subagent "5% от опубл. тарифов на рейсы RB"
 commission "7%/5%"
 
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
+
 carrier "S4", "SATA INTERNACIONAL (РИНГ АВИА)"
 ########################################
 
@@ -1351,6 +1507,12 @@ example 'svocdg'
 agent    "1% от всех опубл. тарифов на собств.рейсы S4 (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на собств. рейсы S4"
 commission "1%/0.5%"
+
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "SA", "South African Airways"
 ########################################
@@ -1424,6 +1586,12 @@ example 'svocdg'
 agent    "7% от опубл. тарифов на собств. рейсы SW (В договоре Interline отдельно не прописан.)"
 subagent "5% от опубл. тарифов на собств.рейсы SW"
 commission "7%/5%"
+
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "TG", "THAI AIRWAYS"
 ########################################
@@ -1542,6 +1710,12 @@ agent    "1% от всех опубл. тарифов на собств. рей�
 subagent "0,5% от опубл. тарифа на собств.рейсы UL"
 commission "1%/0.5%"
 
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
+
 carrier "UX", "Air Europa"
 ########################################
 
@@ -1549,6 +1723,12 @@ example 'svocdg'
 agent    "5% от всех опубл. тарифов на рейсы UX (В договоре Interline отдельно не прописан.)"
 subagent "3,5% от опубл. тарифов на собств. рейсы UX"
 commission "5%/3.5%"
+
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "VN", "VIETNAM AIRLINES"
 ########################################
@@ -1623,6 +1803,12 @@ agent    "1% от опубл. тарифов на собств. рейсы WY (�
 subagent "0,5% от опубл. тарифа на собств.рейсы WY"
 commission "1%/0.5%"
 
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
+
 carrier "XW", "SkyExpress Limited"
 ########################################
 
@@ -1630,6 +1816,12 @@ example 'svocdg'
 agent    "9% от всех опубл. тарифов на собств.рейсы XW (В договоре Interline не прописан.)"
 subagent "7% от опубл. тарифов на собств.рейсы XW"
 commission "9%/7%"
+
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "YM", "MONTENEGRO AIRLINES"
 ########################################
@@ -1639,6 +1831,12 @@ agent    "8% от всех опубл. тарифов на рейсы YM (В д�
 subagent "5,6% от всех опубл. тарифов на рейсы YM"
 commission "8%/5.6%"
 
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
+
 carrier "YO", "Heli air Monaco (РИНГ АВИА)"
 ########################################
 
@@ -1647,6 +1845,12 @@ agent    "1 руб. с билета на все виды тарифов (В до
 subagent "50 коп. с билета на рейсы YO"
 commission "1/0.5"
 
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
+
 carrier "ZI", "AIGLE AZUR (РИНГ-АВИА)"
 ########################################
 
@@ -1654,6 +1858,12 @@ example 'svocdg'
 agent    "1% от опубл. тарифов на собств. рейсы ZI (В договоре Interline отдельно не прописан.)"
 subagent "0,5% от опубл. тарифа на собств. рейсы ZI"
 commission "1%/0.5%"
+
+example 'cdgsvo svocdg/ab'
+agent "1р Interline не прописан"
+subagent "0р Interline не прописан"
+interline :unconfirmed
+commission '1/0'
 
 carrier "J2", "Azerbaijan Hava Yollari"
 ########################################
