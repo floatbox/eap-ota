@@ -17,7 +17,7 @@ init: function() {
             self.el.find('.book-s').addClass('book-retry');
             self.el.append('<div class="result"><p class="fail"><strong>Упс…</strong> ' + (text || 'Что-то пошло не так.') + '</p><p class="tip">Попробуйте снова или узнайте <a target="_blank" href="/about/#payment">какими ещё способами</a> можно купить у нас билет.</p></div>');
         };
-        this.el.find('.result').remove();
+        self.el.find('.result').remove();
         $.ajax({
             url: $(this).attr('action'),
             data: data,
