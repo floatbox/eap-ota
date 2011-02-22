@@ -90,7 +90,7 @@ Date.prototype.dayoff = function() {
 Date.prototype.toAmadeus = function() {
     var d = this.getDate();
     var m = this.getMonth() + 1;
-    var y = this.getFullYear() % 100;
+    var y = this.getFullYear().toString().substring(2);
     return [d < 10 ? '0' : '', d, m < 10 ? '0' : '', m, y].join('');
 };
 Date.parseAmadeus = function(str) {
@@ -180,19 +180,18 @@ init: function() {
         this.canvas = $(window).scroll(function() {
             that.toggle();
         });
+        this.pheader = $('#header');
+        this.rheader = $('#results-header');
+        this.sdefine = $('#search-define');
         this.update();
     }
 },
 update: function(forced) {
-    var define = $('#search-define');
-    var filter = $('#offers-filter');
-    var title = $('#offers-title');
-    var fcontent = $('#offers-filter-content');
-    title.closest('.placeholder').height(title.height() || 'auto');
-    fcontent.closest('.placeholder').height(fcontent.height() || 'auto');
-    this.top2 = Math.ceil(define.offset().top + define.height());
-    this.top3 = filter.is(':visible') ? Math.ceil(filter.offset().top + filter.height() - title.height() - 30) : 2000;
-    this.top1 = this.top2 - $('#header').height();
+    var rh = this.rheader.height();
+    var ph = this.rheader.closest('.placeholder').height(rh || 'auto');
+    this.top2 = Math.ceil(this.sdefine.offset().top + this.sdefine.height());
+    this.top3 = rh ? Math.ceil(ph.offset().top + rh - results.title.outerHeight() - 60) : 2000;
+    this.top1 = this.top2 - this.pheader.height();
     this.toggle(forced);
 },
 toggle: function(forced) {
@@ -206,25 +205,21 @@ toggle: function(forced) {
         section = 1;
     }
     if ((forced || section !== this.section) && !this.disabled) {
-        this.section = section;
-        var header = $('#header').css({
+        this.pheader.css({
             top: section === 0 ? 0 : this.top1,
             position: section === 0 ? 'fixed' : 'absolute'
         });
-        var title = $('#offers-title').toggleClass('fixed', section > 1);
-        var filter = $('#offers-filter-content');
-        if (section > 2) {
-            filter.hide().addClass('fixed').hide().css('top', title.height());
-            filter.find('.of-expanded').hide();
-            filter.find('.of-collapsed').show();
-            filter.fadeIn(150);
-        } else {
-            var fph = filter.closest('.placeholder');
-            filter.removeClass('fixed').css('top', 0);
-            filter.find('.of-collapsed').hide();
-            filter.find('.of-expanded').show();
-            fph.height('auto').height(fph.height() || 'auto');
+        this.rheader.toggleClass('fixed', section > 1);
+        this.rheader.find('.rfhide').toggle(section > 2);
+        if (results.filters.el.is(':visible')) {
+            var hidden = results.filters.el.hasClass('hidden');
+            if (section > 2 && !hidden) {
+                results.filters.hide();
+            } else if (section < 3 && hidden) {
+                results.filters.show();
+            }
         }
+        this.section = section;
     }
 }
 };

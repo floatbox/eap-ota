@@ -20,21 +20,21 @@
 	display: none;
 }
 
-.l-crop .offer-variant th.book .a-button,
-.l-crop .offer-variant tr.book .a-button,
-.l-crop .offer-variant tr.book .sum {
+.cropped .offer-variant th.book .a-button,
+.cropped .offer-variant tr.book .a-button,
+.cropped .offer-variant tr.book .sum {
     visibility: hidden;
 }
-.l-crop #offers-filter-content {
-    visibility: hidden;
+.cropped #results-filters {
+    display: none;
 }
-.l-crop .stop-booking-panel {
+.cropped #stop-booking-panel {
     display: block;
 }
 
 /* Предварительное бронирование */
 .booking {
-    border-top: 1px solid #D0D0D0;
+    padding-top: 1px;
 }
 .booking .g-xl  {
     font-size: 20px;
@@ -153,31 +153,44 @@
 .booking .result a.stop-booking {
     float: right;
 }
-
-/* Панель прекращения бронирования */
 .stop-booking-panel {
-    display: none;
-    position: fixed;
-    z-index: 11;
-    width: 960px;
+    height: 30px;
     background: #FFF;
     font-size: 14px;
     line-height: 18px;
     letter-spacing: -0.014em;
 }
-.stop-booking-panel p {
-    padding: 0 15px;
-    height: 30px;
+.stop-booking-panel .link {
+    color: #333;
 }
-.stop-booking-panel .shadow {
-    position: absolute;
-    bottom: -6px;
-    left: 0;
-    z-index: -1;
-    width: 100%;
-    height: 6px;
-    background: url(/img/header/shadow.png) repeat-x;
+.stop-booking-panel .link:hover {
+    color: #ED1192;
 }
+
+/* Сброс стилей (временно) */
+.booking fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+}
+.booking b, u, i {
+    font-weight: normal;
+    font-style: normal;
+    text-decoration: none;
+}
+.booking .b-pseudo a {
+    color: #333;
+    text-decoration: none;
+}
+.booking a:link,
+.booking a:visited {
+    color: #333;
+}
+.booking a:hover {
+    color: #ED1192;
+}
+
 
 /* Разметка страницы бронирования на шаги */
 .booking h3 {
@@ -201,68 +214,72 @@
 
 /* Текстовые поля - общие свойства */
 
-    .booking .text {
-        padding: 3px 4px;
+.booking .text {
+    padding: 3px 4px;
 
-        color: #aaa;
-        border: 1px solid #909090;
-        background: #f8f8f8;
+    color: #aaa;
+    border: 1px solid #909090;
+    background: #f8f8f8;
 
-        border-radius: 3px;
-        -moz-border-radius: 3px;
-        -webkit-border-radius: 3px;
-        -o-border-radius: 3px;
-    }
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -o-border-radius: 3px;
+    
+    font-size: 20px;
+    line-height: 25px;
+}
 
-    .booking select.text {
-        padding: 2px 3px;
-    }
+.booking select.text {
+    padding: 2px 3px;
+    font-size: 19px;
+}
+.mac-chrome .booking select.text,
+.mac-safari .booking select.text {
+    height: 33px;
+}
 
-    .mac-chrome .booking select.text {
-        padding: 3px 3px;
-    }
+.booking .text:hover {
+    z-index: 2;
+    -webkit-transition: border-color linear 0.2s;
 
-    .booking .text:hover {
-        z-index: 2;
-        -webkit-transition: border-color linear 0.2s;
+    background: #fff;
+}
 
-        background: #fff;
-    }
+.booking .text:focus {
+    z-index: 3;
+    color: #333;
+    background: #fff;
+    outline: none;
+}
 
-    .booking .text:focus {
-        z-index: 3;
-        color: #333;
-        background: #fff;
-        outline: none;
-    }
+.booking .text-value {
+    color: #333;
+    border: 1px solid #4eb700;
+    background: #fff;
+}
 
-    .booking .text-value {
-        color: #333;
-        border: 1px solid #4eb700;
-        background: #fff;
-    }
+.booking .text-value:focus {
+    border: 1px solid #909090;
+}
 
-    .booking .text-value:focus {
-        border: 1px solid #909090;
-    }
+.booking .text-invalid {
+    border: 1px solid red;
+}
 
-    .booking .text-invalid {
-        border: 1px solid red;
-    }
+.booking .text-upper .text-value {
+    text-transform: uppercase;
+}
 
-    .booking .text-upper .text-value {
-        text-transform: uppercase;
-    }
-
-    .booking .text-disabled,
-    .booking .text-disabled:hover,
-    .booking .text-disabled:focus {
-        cursor: not-allowed;
-        
-        color: transparent;
-        border: 1px solid #aaa;
-        background: transparent;
-    }
+.booking .text-disabled,
+.booking .text-disabled:hover,
+.booking .text-disabled:focus {
+    cursor: not-allowed;
+    
+    color: transparent;
+    border: 1px solid #aaa;
+    background: transparent;
+}
 
 
 /* Подписи к полям */
@@ -388,38 +405,36 @@
     float: left;
     display: inline-block;
 
-    width: 30px;
+    width: 50px;
     margin: 0;
     padding: 3px 4px;
     overflow: hidden;
 
     text-align: center;
     white-space: nowrap;
+    font-size: 20px;
+    line-height: 25px;
 
     color: #555;
     background: #fff;
 
     border: 1px solid #ccc;
-    border-radius: 6px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-    -o-border-radius: 6px;
 }
 
 .book-p label.bp-sex-m {
     border-right: none;
 
-    border-radius: 6px 0 0 6px;
-    -moz-border-radius: 6px 0 0 6px;
-    -webkit-border-radius: 6px 0 0 6px;
-    -o-border-radius: 6px 0 0 6px;
+    border-radius: 3px 0 0 3px;
+    -moz-border-radius: 3px 0 0 3px;
+    -webkit-border-radius: 3px 0 0 3px;
+    -o-border-radius: 3px 0 0 3px;
 }
 
 .book-p label.bp-sex-f {
-    border-radius: 0 6px 6px 0;
-    -moz-border-radius: 0 6px 6px 0;
-    -webkit-border-radius: 0 6px 6px 0;
-    -o-border-radius: 0 6px 6px 0;
+    border-radius: 0 3px 3px 0;
+    -moz-border-radius: 0 3px 3px 0;
+    -webkit-border-radius: 0 3px 3px 0;
+    -o-border-radius: 0 3px 3px 0;
 }
 
 .book-p label.bp-sex:hover {
@@ -527,7 +542,7 @@
     line-height: 133.333%;
     color: #777;
 }
-.payments a {
+.booking .payments a {
     color: #777;
 }
 .payments .alfa {
@@ -623,22 +638,14 @@
     letter-spacing: -0.03em;
     color: #333;
 }
-
 .bankcard .text {
     width: 52px;
     padding: 1px 4px;
-
     background: #e8e8e8;
 }
-
 .bankcard .text-value {
     background: #FFF;
 }
-
-.bankcard .text-value {
-    text-shadow: 0 1px rgba(0, 0, 0, 0.2);
-}
-
 
 /* Лицевая сторона */
 .bankcard .bc-num {
@@ -786,6 +793,7 @@
 
     .book-bc .bc-bill td {
         white-space: nowrap;
+        vertical-align: baseline;
     }
 
     .book-bc .bc-bill td u {
@@ -803,17 +811,15 @@
     }
 
     .book-bc .bc-bill td i {
-        font-size: 85.714%;
-        font-size: 78.571%;
-
+        font-size: 12px;
         color: #6e6e6e;
     }
 
     .book-bc .bc-bill tfoot td {
-        padding: .5em 0 0 0;
-
+        padding: 6px 0 0 0;
+        font-size: 12px;
+        line-height: 15px;
         white-space: normal;
-
         color: #777;
     }
 
@@ -895,6 +901,9 @@
 
     color: #333;
     background: #ffc4c4;
+    
+    font-size: 13px;
+    line-height: 16px;
 
     border-radius: 10px;
     -moz-border-radius: 10px;
@@ -961,11 +970,8 @@
     background: #FFF;
     color: #000;
 }
-.b-hint {
-    cursor: pointer;
-    font-weight: bold;
-    color: #477db3;
-    text-decoration: underline;
+.booking .hint {
+    color: #777;
 }
 .farerules {
     position: absolute;

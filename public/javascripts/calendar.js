@@ -23,7 +23,11 @@ init: function() {
 },
 makeDates: function() {
     this.container = $('.dates', this.el).hide().html('');
-    var today = new Date(), tt = today.getTime();
+    var today = new Date(), stoday = Date.parseAmadeus(this.container.attr('data-current'));
+    if (Math.abs(today.getTime() - stoday.getTime()) > 172800000) {
+        today.setTime(stoday.getTime()); // используем серверное время, если разница с клиентским больше 2 суток
+    }
+    var tt = today.getTime();
     var curd = today.clone().shiftDays(1 - (today.getDay() || 7));
     var curt = curd.getTime();
     var actend = today.clone().shiftMonthes(10);

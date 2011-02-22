@@ -1,56 +1,41 @@
-
-/* поле с автокомплитом */
-
+/* Field */
 .autocomplete,
 .autocomplete-gray {
-    font-size: 22px;
-
-    padding: 6px;
-    /*
-    height: auto;
-    */
     height: 1%;
-
-    letter-spacing: -.02em;
-
-    color: #4b4b4b;
+    padding: 6px;
     border: 1px solid #424445;
     background: #fff;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    color: #4b4b4b;
 }
-
 .autocomplete-gray {
     color: #cfcfcf;
     background: #373737;
 }
-
 .autocomplete-hover {
     border-color: #ed1192;
 }
-
 .autocomplete-focus {
     color: #333;
     border: 1px solid #ed1192;
     background: #fff;
 }
 
-/* контейнер для инпута */
-
+/* Container */
 .autocomplete-box {
     position: relative;
     overflow: hidden;
     zoom: 1;
 }
-
 .autocomplete-box div.ruler {
     font-size: 22px;
-
     position: absolute;
     display: none;
-   
     white-space: pre;
 }
 
-/* IATA-код */
+/* IATA */
 .autocomplete-box .iata {
     display: none;
     position: absolute;
@@ -72,44 +57,36 @@
 }
 .autocomplete-box .iata u {
     color: #656565;
+    text-decoration: none;
     cursor: default;
 }
 
-/* выпадающий список */
-
+/* Dropdown */
 .autocomplete-list {
     overflow: hidden;
     z-index: 5;
-
-    letter-spacing: -.02em;
-
     border: 1px solid;
     border-width: 0 1px 1px 1px;
     border-color: #dedede #ed1192 #ed1192;
-
+    letter-spacing: -0.02em;
     box-shadow: 0 20px 20px rgba(0, 0, 0, 0.45);
     -moz-box-shadow: 0 20px 20px rgba(0, 0, 0, 0.45);
     -webkit-box-shadow: 0 20px 20px rgba(0, 0, 0, 0.45);
 }
-
 .autocomplete-list ul {
     width: 100%;
     background: #fff url(data:image/gif;base64,R0lGODlhAQCcANUAAOzs7Pv7++bm5uTk5OLi4+rq6u/v7vDw8OHh4Nvb2/7//9ra2/7+/v39/fn5+fj4+Ojo6N3d3fX19fPy8/38/PT09Onp6fLy8urq6d/f4PDv8OHi4fv7+97d3v7//trb2tzd3fb39/f29/X09fPz8/Tz9ODg39zc2+Xm5ePj5OHh4ufo5+Hi4tvc293d3vHx8d7e3vz8/Pz7+/j399zc3Nzd3Pv8+/n6+t3c3Pj4+fn5+vb29v7+/d/f39ra2v///yH5BAAAAAAALAAAAAABAJwAAAZowJ9wSCz+FEgPY8lrOCmUmIxj41g5N50j53g8ZiFRKLSTSEaVSok0mVwur/hBY6jXAfg8voCx+CEQKysChCgoA4gpKQSMLCobCJEmGT2VPTAdES4RIDg1NC0nCaMLCx8LPqmqq6ytq0EAOw==) repeat-x bottom;
 }
-
 .autocomplete-list li {
-    font-size: 22px;
-
     position: relative;
     display: block;
     padding: 8px 50px 8px 6px;
-
-    line-height: 24px; /* it is very important, if line-height not setted or setted in relative units scroll will be broken in firefox */
     overflow: hidden;
-
-    color: #333;
     border: none;
     border-top: 1px solid #dedede;
+    font-size: 22px;
+    line-height: 24px; /* it is very important, if line-height not setted or setted in relative units scroll will be broken in firefox */
+    color: #333;
     cursor: pointer;
 }
 
@@ -121,21 +98,19 @@
 .autocomplete-list li {
     *padding-left: 6px;
 } 
-
 .autocomplete-list li u {
     margin: 0 .5em 0 0;
+    text-decoration: none;
 }
-
 .autocomplete-list li u u {
     margin: 0;
     color: #ed1192;
 }
 
 .autocomplete-list li s {
-    font-size: 14px;
-
     vertical-align: 2px;
-
+    font-size: 14px;
+    text-decoration: none;
     color: #9e9e9e;
 }
 

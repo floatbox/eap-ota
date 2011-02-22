@@ -1,93 +1,76 @@
 /* Filters */
-#offers-filter {
+#results-filters {
     position: relative;
-    background: #FFF;
+    width: 960px;
+    margin: 0 auto;
     font-size: 14px;
     line-height: 18px;
     letter-spacing: -0.014em;
-    color: #333;
 }
-#offers-filter th {
+#results-filters th {
     width: 120px;
-    padding: 0 0 12px 15px;
+    padding-right: 12px;
     font-weight: bold;
-    text-align: left;
     vertical-align: top;
     color: #ed1192;
 }
-#offers-filter td {
-    width: 170px;
-    padding: 0 15px 12px 15px;
+#results-filters td {
+    width: 175px;
+    padding: 0 15px 15px 15px;
     vertical-align: top;
-    color: #333;
 }
-#offers-filter .reset-filters {
+#results-filters .rfreset {
     color: #ED1192;
 }
-
-/* Fixed filters */
-#offers-filter-content.fixed {
-    position: fixed;
-    z-index: 10;
-    width: 960px;
-    background: #FFF;
+#results-filters .rfhide-cell {
+    padding-bottom: 19px;
+    vertical-align: bottom;
+    font-weight: normal;
+    font-size: 11px;
+    line-height: 13px;
 }
-#offers-filter-content .of-collapsed {
-    display: none;
-    padding: 0 15px;
-    height: 30px;
+#results-filters .rfhide {
+    cursor: pointer;
 }
-#offers-filter-content .shadow {
-    display: none;
-    position: absolute;
-    bottom: -6px;
-    left: 0;
-    z-index: -1;
-    width: 100%;
-    height: 6px;
-    background: url(/img/header/shadow.png) repeat-x;    
-}
-#offers-filter-content .expand-filters {
+#results-filters .rfshow {
     font-weight: bold;
     color: #ED1192;
 }
-#offers-filter .of-collapsed .reset-filters {
-    float: right;
+#results-filters .rfhidden {
+    height: 30px;
 }
-#offers-filter-content .collapse-container {
-    vertical-align: bottom;
-    padding-bottom: 14px;
-    font-weight: normal;
-}
-#offers-filter-content .collapse-filters {
+#results-filters .rfhide,
+#results-filters .rfhidden,
+#results-filters.hidden .rfvisible {
     display: none;
-    font-size: 11px;
-    cursor: pointer;
 }
-#offers-filter-content.fixed .collapse-filters {
-    display: inline;
-}
-#offers-filter-content.fixed .shadow {
+#results-filters.hidden .rfhidden {
     display: block;
+}
+#results-filters .rfhidden .rfreset {
+    float: right;
 }
 
 /* Filters group */
-#offers-filter h5 {
+#results-filters h5 {
     margin: 0 0 3px;
     font-weight: bold;
 }
-#offers-filter .filter {
+#results-filters .filter {
     display: block;
     margin: 0 0 3px;
 }
-#offers-filter .dropdown {
+#results-filters .latent {
+    display: none;
+}
+#results-filters .dropdown {
     margin-top: -6px;
     font-size: 16px;
     line-height: 19px;
 }
 
 /* Layovers */
-#offers-filter #layovers-filter {
+#results-filters #layovers-filter {
     margin-bottom: 0;
 }
 #layovers-filter .control {
@@ -125,4 +108,30 @@
     background: #ED1192;
     color: #FFF;
     text-decoration: none;
+}
+
+/* Disabled filters */
+#results-filters .rfoverlay {
+    display: none;
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 960px;
+    cursor: default;
+}
+.win-msie6 #results-filters .rfoverlay {
+    height: 300px;
+}
+#results-filters.disabled {
+    overflow: hidden;
+    color: #999;
+}
+#results-filters.disabled .rfoverlay {
+    display: block;
+}
+#results-filters.disabled .vlist dd.selected {
+    background: #AAA;
+} 
+#results-filters.disabled th,
+#results-filters.disabled .link {
+    color: #999;
 }
