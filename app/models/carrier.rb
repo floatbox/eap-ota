@@ -4,7 +4,7 @@ class Carrier < ActiveRecord::Base
 
   has_many :amadeus_commissions
   belongs_to :alliance, :foreign_key => 'airline_alliance_id', :class_name => 'AirlineAlliance'
-  
+
   belongs_to :country
   belongs_to :consolidator
   belongs_to :gds, :foreign_key => 'gds_id', :class_name =>'GlobalDistributionSystem'
@@ -16,15 +16,18 @@ class Carrier < ActiveRecord::Base
       en_shortname.presence ||
       iata
   end
-  
-  
+
+
   def avaliable_bonus_programms
     #бонусные программы авиакомпаний, входящие в тот же альянс, что и данная
     #пока без бонусной программы альянса
     if alliance
-      return alliance.carriers.where('bonus_program_name IS NOT NULL AND bonus_program_name != ""').order('bonus_program_name').all
+      alliance.carriers.where('bonus_program_name IS NOT NULL AND bonus_program_name != ""').order('bonus_program_name').all
+    elsif bonus_program_name.present?
+      [self]
+    else
+      []
     end
-    return []
   end
 
   def self.non_consolidated_iatas
