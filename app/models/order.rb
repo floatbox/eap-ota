@@ -26,6 +26,8 @@ class Order < ActiveRecord::Base
       self.commission_carrier = c.carrier
       self.commission_agent = c.agent
       self.commission_subagent = c.subagent
+      self.commission_agent_comments = c.agent_comments
+      self.commission_subagent_comments = c.subagent_comments
       self.price_share = recommendation.price_share
       self.price_our_markup = recommendation.price_our_markup
       self.price_consolidator_markup = recommendation.price_consolidator_markup
