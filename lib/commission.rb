@@ -744,8 +744,6 @@ example 'svocdg'
 example 'svocdg cdgsvo/ab'
 agent "7% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 subagent "5% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
-# временно блокирую москва-питер, пока не разберусь с правилом ниже
-check { (city_iatas - %W(MOW LED)).present? }
 interline :possible
 commission '7%/5%'
 
@@ -759,7 +757,9 @@ example 'ledsvo/business svoled/business'
 agent "по 31.03.2011 года"
 agent "9% при продаже пассажирских перевозок в бизнес-классе на рейсы ФГУП «ГТК «Россия» (FV) на направлениях Санкт-Петербург-Москва и обратно, включая рейсы по соглашению «CODE-Share» (в том числе по тарифам ИАТА)."
 subagent "5% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
-disabled 'а москва-питер-москва?'
+important!
+classes :business
+check { (city_iatas - %W(MOW LED)).empty? }
 commission '9%/5%'
 
 carrier "GF", "GULF AIR (Глонасс) (НЕ BSP!!!)"
