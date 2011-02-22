@@ -8,16 +8,11 @@ set :rvm_ruby_string, 'ree'
 require 'bundler/capistrano'
 require 'hoptoad_notifier/capistrano'
 
-set :application, "eviterra"
-
 set :scm, :git
 
 set :rails_env, 'production'
 set :user, "rack"
 set :use_sudo, false
-
-set :deploy_to, "/home/#{user}/#{application}"
-set :srv, "eviterra.com"
 
 set :deploy_via, :remote_cache
 # если репозиторий лежит на той же машине
@@ -25,10 +20,6 @@ set :deploy_via, :remote_cache
 #set :repository,  "."
 
 set :repository,  "git@team.eviterra.ru:eviterra.git"
-
-role :app, srv
-role :web, srv
-role :db, srv, :primary => true
 
 
 set :shared_children, %w(log pids system config initializers cache)
@@ -40,7 +31,23 @@ set :rake, 'bundle exec rake'
 # в пользовательском .ssh/config почему-то не читается
 ssh_options[:forward_agent] = true
 
+task :delta do
+  server 'delta.eviterra.com', :app, :web
+  role :db, 'delta.eviterra.com', :primary => true
+  set :application, "delta"
+  set :deploy_to, "/home/#{user}/#{application}"
+end
+
+task :eviterra do
+  server 'eviterra.com', :app, :web
+  role :db, 'eviterra.com', :primary => true
+  set :application, "eviterra"
+  set :deploy_to, "/home/#{user}/#{application}"
+end
+
+
 namespace :deploy do
+
   task :symlink_shared_configs do
       run "ln -sf #{shared_path}/config/* #{latest_release}/config/; true"
       run "ln -sf #{shared_path}/initializers/* #{latest_release}/config/initializers/; true"
