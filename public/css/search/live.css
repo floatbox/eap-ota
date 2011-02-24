@@ -1,0 +1,35 @@
+#live {
+    background: #CCC;
+    padding: 12px 0;
+}
+#live h5 {
+    float: left;
+    font-weight: bold;
+    color: #ED1192;
+}
+.live-content {
+    width: 960px;
+    margin: 0 auto;
+}
+.live-stator {
+    position: relative;
+    height: 19px;
+    margin-left: 150px;
+    overflow: hidden;
+}
+.live-slider {
+    position: absolute;
+    top: 0; left: 0;
+    white-space: nowrap;
+}
+.live-slider ul,
+.live-slider li {
+    display: inline;
+}
+.live-slider li {
+    padding: 0 8px;
+}
+.live-slider a {
+    color: #333;
+    text-decoration: none;
+}

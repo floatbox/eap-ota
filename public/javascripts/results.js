@@ -6,14 +6,24 @@ init: function() {
 
     this.el = $('#results');
     this.header = $('#results-header');
-    this.promo = $('#promo');
     this.title = $('#results-title');
     this.empty = $('#results-empty');
     this.loading = $('#results-loading');
     this.update = {};
 
     // счётчик секунд на панели ожидания
-    this.loading.timer = this.loading.find('.timer').timer();
+    this.stopwatch = this.loading.find('.timer');
+    var swtimer, swstart, swupdate = function() {
+        var current = new Date();
+        that.stopwatch.text(((current - swstart) / 1000).toFixed(1));
+    };
+    this.stopwatch.bind('start', function() {
+        swstart = new Date();
+        swtimer = setInterval(swupdate, 100);
+    });
+    this.stopwatch.bind('stop', function() {
+        clearInterval(swtimer);
+    });
     
     // Табы
     $('#rtabs .link').click(function() {
@@ -240,7 +250,8 @@ show: function(fixed) {
         }, 300);
     }
     this.loading.find('h3').html('Ищем для вас лучшие предложения');
-    this.promo.addClass('latent');
+    $('#promo').addClass('latent');
+    search.live.toggle(false);
     this.el.removeClass('latent');
     var w = $(window), offset = this.el.offset().top;
     if (fixed !== false && offset - w.scrollTop() > w.height() / 2) {
@@ -249,14 +260,15 @@ show: function(fixed) {
 },
 hide: function() {
     this.el.addClass('latent');
-    this.promo.removeClass('latent');
+    $('#promo').removeClass('latent');
+    search.live.toggle(true);
 },
 toggle: function(mode) {
     this.el.toggleClass('ready', mode === 'ready');
     $('#results-filters, #rtabs, #offers').toggle(mode === 'ready');
     this.empty.toggleClass('latent', mode !== 'empty');
     this.loading.toggleClass('latent', mode !== 'loading');
-    this.loading.timer.trigger(mode === 'loading' ? 'start' : 'stop');
+    this.stopwatch.trigger(mode === 'loading' ? 'start' : 'stop');
     fixedBlocks.update();
 },
 toggleCollection: function(mode) {
