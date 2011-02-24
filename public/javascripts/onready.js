@@ -41,10 +41,13 @@
     // Фон для лоадера
     preload('/img/offers/photo-search.jpg', '/img/offers/progress.gif');
 
-    // Всплывающие подсказки
-    hint.init();
-    
+    // Прямой эфир
+    search.live.init();
+
     // Переключение блоков при прокрутке
     fixedBlocks.init();
+
+    // Всплывающие подсказки
+    hint.init();
     
 })();

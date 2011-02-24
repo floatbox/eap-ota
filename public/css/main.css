@@ -14,6 +14,7 @@
 @import 'search/fields.css';
 @import 'search/panel.css';
 @import 'search/calendar.css';
+@import 'search/live.css';
 
 @import 'offers/results.css';
 @import 'offers/filters.css';

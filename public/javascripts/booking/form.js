@@ -12,7 +12,7 @@ init: function() {
         event.preventDefault();
         if (!self.submit.hasClass('a-button-ready')) return;
         var data = $(this).serialize();
-        var rcontrol = self.submit.addClass('a-button-ready').closest('.control');
+        var rcontrol = self.submit.removeClass('a-button-ready').closest('.control');
         var processError = function(text) {
             self.el.find('.book-s').addClass('book-retry');
             self.el.append('<div class="result"><p class="fail"><strong>Упс…</strong> ' + (text || 'Что-то пошло не так.') + '</p><p class="tip">Попробуйте снова или узнайте <a target="_blank" href="/about/#payment">какими ещё способами</a> можно купить у нас билет.</p></div>');
@@ -35,9 +35,9 @@ init: function() {
                     var items = [];
                     for (var eid in s.errors) {
                         var ftitle = eid;
-                        if (ftitle.search(/card\[number|type\]/i) > -1) {
+                        if (ftitle.search(/card\[number\]/i) !== -1) {
                             items.push('<li>введён неправильный <a href="#" data-id="bc-num1"><u>номер карты</u></a></li>');
-                        } else {
+                        } else if (ftitle.search(/card\[type\]/i) === -1) {
                             ftitle = ftitle.replace(/person\[(\d)\]\[birthday\]/i, function(s, n) {
                                 return '<a href="#" data-id="book-p-' + n + '-birth"><u>' + constants.numbers.ordinaldat[parseInt(n, 10)] + ' пассажиру</u></a>';
                             });
@@ -49,6 +49,7 @@ init: function() {
                 } else {
                     processError(s && s.exception && s.exception.message);
                 }
+                self.submit.addClass('a-button-ready');
                 rcontrol.removeClass('sending');
             },
             error: function() {
