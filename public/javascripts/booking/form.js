@@ -32,11 +32,12 @@ init: function() {
                         _gaq.push(['_trackTrans']);
                     }
                 } else if (s && s.errors) {
-                    var items = [];
+                    var items = [], bcerror = false;
                     for (var eid in s.errors) {
                         var ftitle = eid;
-                        if (ftitle.search(/card\[number|type\]/i) > -1) {
+                        if (ftitle.search(/card\[number|type\]/i) > -1 && !bcerror) {
                             items.push('<li>введён неправильный <a href="#" data-id="bc-num1"><u>номер карты</u></a></li>');
+                            bcerror = true;
                         } else {
                             ftitle = ftitle.replace(/person\[(\d)\]\[birthday\]/i, function(s, n) {
                                 return '<a href="#" data-id="book-p-' + n + '-birth"><u>' + constants.numbers.ordinaldat[parseInt(n, 10)] + ' пассажиру</u></a>';
