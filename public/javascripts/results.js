@@ -334,8 +334,8 @@ processUpdate: function() {
         });
         setTimeout(processQueue, 250);
     } else {
-        if (u.pcontent && u.pcontent.indexOf('offers-context') !== -1) {
-            var nearby = $('#offers-pcollection').html(u.pcontent).find('.offers-context .cities span.city');
+        if (u.pcontent && u.pcontent.indexOf('offers-nearby') !== -1) {
+            var nearby = $('#offers-pcollection').html(u.pcontent).find('.offers-nearby .cities span.city');
             if (nearby.length) {
                 var nearbyText = nearby.map(function() {
                     return $('<div/>').append(this).html();

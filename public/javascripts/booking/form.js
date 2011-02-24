@@ -17,7 +17,7 @@ init: function() {
             self.el.find('.book-s').addClass('book-retry');
             self.el.append('<div class="result"><p class="fail"><strong>Упс…</strong> ' + (text || 'Что-то пошло не так.') + '</p><p class="tip">Попробуйте снова или узнайте <a target="_blank" href="/about/#payment">какими ещё способами</a> можно купить у нас билет.</p></div>');
         };
-        this.el.find('.result').remove();
+        self.el.find('.result').remove();
         $.ajax({
             url: $(this).attr('action'),
             data: data,
@@ -32,11 +32,12 @@ init: function() {
                         _gaq.push(['_trackTrans']);
                     }
                 } else if (s && s.errors) {
-                    var items = [];
+                    var items = [], bcerror = false;
                     for (var eid in s.errors) {
                         var ftitle = eid;
-                        if (ftitle.search(/card\[number|type\]/i) > -1) {
+                        if (ftitle.search(/card\[number|type\]/i) > -1 && !bcerror) {
                             items.push('<li>введён неправильный <a href="#" data-id="bc-num1"><u>номер карты</u></a></li>');
+                            bcerror = true;
                         } else {
                             ftitle = ftitle.replace(/person\[(\d)\]\[birthday\]/i, function(s, n) {
                                 return '<a href="#" data-id="book-p-' + n + '-birth"><u>' + constants.numbers.ordinaldat[parseInt(n, 10)] + ' пассажиру</u></a>';
