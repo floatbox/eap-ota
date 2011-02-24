@@ -869,8 +869,8 @@
     text-align: right;
 }
 .book-s .control td.g-xxs {
-    padding-top: 2px;
     color: #777;
+    font-size: 13px;
 }
 .book-s .control th {
     padding: 0 15px 2px;
