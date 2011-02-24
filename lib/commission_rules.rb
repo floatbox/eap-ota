@@ -107,7 +107,7 @@ module CommissionRules
 
   #FIXME нужно починить для работы с валютой
   def euro_rate
-    43
+    40
   end
 
   private
