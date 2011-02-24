@@ -11,6 +11,8 @@ class Country < ActiveRecord::Base
   has_many :regions
   include GeoTaggable
 
+  CONTINENT_RU = ['Азия', 'Америка', 'Антарктика' , 'Африка', 'Европа', 'Океания']
+
   scope :important, where("importance > 0")
   scope :not_important, where("importance = 0")
 
