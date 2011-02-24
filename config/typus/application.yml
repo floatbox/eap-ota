@@ -142,6 +142,7 @@ Country:
     form: name_ru, name_en, full_name_ru, alpha2, alpha3, iso, continent_ru, continent_part_ru, importance, synonym_list, lat, lng, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in
     options:
       read_only: morpher_to, morpher_from, morpher_in
+      selectors: continent_ru
   order_by: name_ru
   relationships: carriers, airports, cities, geo_tags, regions
   filters:
