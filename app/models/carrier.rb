@@ -24,7 +24,7 @@ class Carrier < ActiveRecord::Base
     if alliance
       alliance.carriers.where('bonus_program_name IS NOT NULL AND bonus_program_name != ""').order('bonus_program_name').all
     elsif bonus_program_name.present?
-      [] #[self] временно вернул назад
+      [self]
     else
       []
     end
