@@ -9,7 +9,7 @@ class Payture
   def self.commission(price)
     ten_cents = 3.0
     pcnt = 0.0325
-    ( (ten_cents + pcnt * price) / ( 1 - pcnt) ).ceil
+    ((ten_cents + pcnt * price) / ( 1 - pcnt)).round(2)
   end
 
   class Response
@@ -35,11 +35,11 @@ class Payture
     end
 
     def amount
-      @doc["Amount"].to_i / 100
+      @doc["Amount"].to_f / 100
     end
 
     def new_amount
-      @doc["NewAmount"].to_i / 100
+      @doc["NewAmount"].to_f / 100
     end
 
     # 3-D Secure
@@ -193,7 +193,7 @@ class Payture
 
   def add_money(post, money)
     # система принимает суммы в копейках
-    post[:Amount] = (money.to_f * 100).ceil.to_i.to_s
+    post[:Amount] = (money.to_f * 100).round.to_i.to_s
   end
 
   def encrypt_payinfo(post)

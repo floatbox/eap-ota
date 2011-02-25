@@ -6,7 +6,7 @@ module Amadeus
       def recommendations
         xpath("//r:recommendation").map do |rec|
           price_total, price_tax =
-            rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").every.to_i
+            rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").every.to_f
           price_fare = price_total - price_tax
           cabins =
             rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:cabin").every.to_s
