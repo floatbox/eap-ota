@@ -1659,48 +1659,51 @@ subagent "5% от полного опубл. тарифа IATA на рейсы T
 not_implemented
 commission "7%/5%"
 
+example 'svoist istsvo'
 agent    "7% от тарифа эконом класса на рейсы TK;"
 subagent "5% от тарифа экономического класса на рейсы TK;"
 classes :economy
-not_implemented
 commission "7%/5%"
 
+example 'svoist/business istsvo/business'
 agent    "12% от тарифа бизнес класса на рейсы TK. (только при вылете из РФ. При вылете из других пунктов 7%);"
 subagent "8,4% от тарифа бизнес класса на рейсы TK. (только при вылете из РФ. При вылете из других пунктов 5%);"
-disabled #вылет из РФ, гео-правило
-#geo
-not_implemented
+important!
+classes :business
+check { country_iatas.first == 'RU' }
 commission "12%/8.4%"
 
+example 'istsvo/business svoist/business'
+agent    "12% от тарифа бизнес класса на рейсы TK. (только при вылете из РФ. При вылете из других пунктов 7%);"
+subagent "8,4% от тарифа бизнес класса на рейсы TK. (только при вылете из РФ. При вылете из других пунктов 5%);"
+important!
+check { country_iatas.first != 'RU' }
+classes :business
+commission "7%/5%"
+
+example 'istank'
+example 'istank/business'
 agent    "5% от тарифа эконом и бизнес класса при перелетах внутри Турции на рейсы TK."
 subagent "3,5% от тарифа эконом и бизнес класса при перелетах внутри Турции на рейсы TK."
-classes :economy, :business
-disabled #внутри турции, гео-правило
-#geo
-not_implemented
+important!
+domestic
 commission "5%/3.5%"
 
 agent    "*Если C+Y, то 12% Если С+B(M и т.п.) 7%"
-agent    "(Билеты «Интерлайн» под кодом TK могут быть выписаны только в случае существования опубл. тарифов и только при условии, если TK выполняет первый рейс)"
-subagent "ну, ноль процентов (не было соответствующей записи)"
-#subclasses ???
-interline :first
-disabled #задизейблю пока, мне непонятны коды C+Y и прочие
-#combinations
-#unknown
-not_implemented
+subagent "???"
+disabled "комбинации"
 commission "12%/0%"
 
-agent    "*Если C+Y, то 12% Если С+B(M и т.п.) 7%"
+example 'svoist istsvo/ab'
 agent    "(Билеты «Интерлайн» под кодом TK могут быть выписаны только в случае существования опубл. тарифов и только при условии, если TK выполняет первый рейс)"
-subagent "# ну, ноль процентов (не было соответствующей записи)"
-classes :business
+subagent "???"
 interline :first
-disabled #нужны еще коды классов билетов, пока дизейблю
-#combinations
-not_implemented
-commission "7%/0%"
+disabled "нет субагентской комиссии"
+commission "0%/0%"
 
+example 'svoist istsvo/business'
+disabled "не включены комбинации"
+no_commission
 
 carrier "TP", "TAP PORTUGAL"
 ########################################
