@@ -89,6 +89,9 @@
 #offers .processing {
     display: none;
 }
+#offers .translucent {
+    opacity: 0.7;
+}
 
 .offers-title {
     margin: 0 0 8px;

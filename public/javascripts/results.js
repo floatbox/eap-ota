@@ -406,7 +406,7 @@ applyFilters: function() {
     if (st < $(window).scrollTop()) {
         $(window).scrollTop(st);
     }
-    var list = $('#offers > .rcontent').css('opacity', 0.7);
+    var list = $('#offers > .rcontent').addClass('translucent');
     var queue = [function() {
         list.hide();
         self.filterOffers();
@@ -421,7 +421,7 @@ applyFilters: function() {
         list.show();
     }, function() {
         self.showRecommendations();
-        list.css('opacity', 1);
+        list.removeClass('translucent');
     }];
     var qstep = 0, processQueue = function() {
         queue[qstep++]();
@@ -801,6 +801,7 @@ update: function(data) {
     this.el.find('.filters').each(function() {
         $(this).closest('td').toggleClass('latent', $(this).find('.filter:not(.latent)').length === 0);
     });
+    this.el.removeClass('hidden');
     this.data = data;
     this.selected = {};
     this.active = true;

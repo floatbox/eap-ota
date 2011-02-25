@@ -212,6 +212,7 @@
                 <p class="htext">Для полетов внутри страны подходит российский паспорт (для детей&nbsp;&mdash; свидетельство о&nbsp;рождении). Для полетов за&nbsp;рубеж нужен загранпаспорт. Обратите внимание, что помимо загранпаспорта, для въезда во&nbsp;многие страны требуется соответствующая виза (<a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%B7%D0%BE%D0%B2%D1%8B%D0%B5_%D1%82%D1%80%D0%B5%D0%B1%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_%D0%B4%D0%BB%D1%8F_%D0%B3%D1%80%D0%B0%D0%B6%D0%B4%D0%B0%D0%BD_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8">подробнее в&nbsp;Википедии</a>)</p>
             </td>
             <td class="sub g-xxs">
+                <div class="checkbox">
                 <%= person.check_box :document_noexpiration, {
                   :id => "bp-#{person_form_counter}-noexpiration",
                   :class => "noexpiration g-middle",
@@ -219,9 +220,10 @@
                 } %>
                 <label for="bp-<%=person_form_counter%>-noexpiration">нет срока действия</label>&nbsp;(<span class="link hint">подробнее</span>)
                 <p class="htext">Если вы&nbsp;путешествуете с&nbsp;российским паспортом или свидетельством о&nbsp;рождении, то&nbsp;срок действия указывать не&nbsp;нужно, так как эти документы его не&nbsp;имеют. В&nbsp;загранпаспорте&nbsp;же проставлена дата окончания его действия&nbsp;&mdash; ее&nbsp;необходимо указать.</p>
+                </div>
             </td>
             <td class="sub g-xxs">
-                <span<%= raw ' class="g-none"' if @order.recommendation.validating_carrier.avaliable_bonus_programms.empty? %>>
+                <div class="checkbox<%= raw ' latent' if @order.recommendation.validating_carrier.avaliable_bonus_programms.empty? %>">
                 <%= person.check_box :bonus_present, {
                   :id => "bonus-#{person_form_counter}",
                   :class => 'bonus',
@@ -232,7 +234,7 @@
                  title="Карта участника программы премирования пассажиров (мильной программы или программы для&nbsp;часто летающих пассажиров, англ. frequent flyer program)"
                 >есть бонусная карта</label>
                 <a class="g-external" href="http://ru.wikipedia.org/wiki/Бонусные_программы_авиакомпаний" target="_blank" title="Что такое бонусная программа? (ссылка откроется в новом окне)"> </a>
-                </span>
+                </div>
 
     </table>
 </div>

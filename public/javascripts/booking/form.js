@@ -16,6 +16,7 @@ init: function() {
         var processError = function(text) {
             self.el.find('.book-s').addClass('book-retry');
             self.el.append('<div class="result"><p class="fail"><strong>Упс…</strong> ' + (text || 'Что-то пошло не так.') + '</p><p class="tip">Попробуйте снова или узнайте <a target="_blank" href="/about/#payment">какими ещё способами</a> можно купить у нас билет.</p></div>');
+            self.submit.addClass('a-button-ready');
         };
         self.el.find('.result').remove();
         self.el.find('.book-s').removeClass('book-retry');        
@@ -29,7 +30,7 @@ init: function() {
                     self.el.find('.book-s').addClass(rtype === 'fail' ? 'book-retry' : 'g-none');
                     if (rtype === 'success' && window._gaq) {
                         _gaq.push(['_trackPageview', '/#' + pageurl.summary + ':success']);
-                        _gaq.push(['_addTrans', result.find('.pnr').text(), self.el.find('.booking-price .sum').attr('data-value')]);
+                        _gaq.push(['_addTrans', result.find('.pnr').text(), '', self.el.find('.booking-price .sum').attr('data-value')]);
                         _gaq.push(['_trackTrans']);
                     }
                 } else if (s && s.errors) {
@@ -45,19 +46,19 @@ init: function() {
                             items.push('<li>' + ftitle + ' ' + s.errors[eid] + '</li>');
                         }
                     }
+                    self.submit.addClass('a-button-ready');
                     self.el.find('.blocker').show().find('.b-pseudo').html(items.join(''));
                     self.el.removeClass('book-retry');
                 } else {
                     processError(s && s.exception && s.exception.message);
                 }
-                self.submit.addClass('a-button-ready');
                 rcontrol.removeClass('sending');
             },
             error: function() {
                 processError();
                 rcontrol.removeClass('sending');
             },
-            timeout: 45000
+            timeout: 90000
         });
         rcontrol.addClass('sending');
     });

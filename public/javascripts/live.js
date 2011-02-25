@@ -16,7 +16,6 @@ init: function() {
         event.preventDefault();
         search.validate($(this).attr('data-key'));
     });
-    this.stw = this.el.find('.live-stator').width();
     this.vmax = 2;
     this.vel = 2;
     this.slx = 0;
@@ -44,11 +43,11 @@ move: function() {
     }
 },
 toggle: function(mode) {
-    if (this.slw === undefined) mode = false;
     if (mode === this.active) return;
     if (mode) {
-        this.timer = setInterval(this.self_move, 50);
         this.el.removeClass('latent');
+        this.stw = this.el.find('.live-stator').width();
+        this.timer = setInterval(this.self_move, 50);
     } else {
         clearInterval(this.timer);
         this.el.addClass('latent');
@@ -72,7 +71,6 @@ process: function(data) {
     if (this.slw === undefined) {
         this.proceed();
     }
-    this.toggle(true);
 },
 proceed: function() {
     var groups = this.slider.children('ul');

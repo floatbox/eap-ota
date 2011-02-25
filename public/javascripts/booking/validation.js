@@ -181,7 +181,7 @@ app.InputText = function(el, form) {
     $el.bind('blur', function() {
         form.change();
         var v = $el.validate()[0];
-        $el.trigger('mark', Boolean(v));
+        $el.trigger('mark', Boolean(v) && !isDefault());
     });
 
     // Проверяем валидность при изменении, если осталась одна ошибка
