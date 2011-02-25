@@ -1039,11 +1039,12 @@ commission '1/0'
 carrier "JU", "JAT AIRWAYS"
 ########################################
 
-
+example 'svocdg'
 agent "С 15.02.2011г. 7% от опубл. тарифов на собств. рейсы JU"
 subagent "JU	С 21.02.2011г. 5% от опубл. тарифов на собств. рейсы JU"
 commission "7%/5%"
 
+example 'svocdg cdgsvo/ab'
 agent "С 15.02.2011г. 0% от опубл. тарифов на рейсы Interline"
 subagent "С 21.02.2011г. 0% от опубл. тарифов на рейсы Interline"
 interline :yes
@@ -1092,10 +1093,10 @@ disabled #правило
 not_implemented
 commission "6%/4.2%"
 
+example 'svocdg/ab cdgsvo/ab'
 agent    "5% от тарифов на рейсы Interline без сегмента КС;"
 subagent "3,5% от тарифов на рейсы Interline без сегмента КС;"
 interline :absent
-not_implemented
 commission "5%/3.5%"
 
 agent    "7% от тарифов на рейсы Interline в комбинации с рейсом KC по всему маршруту;"
@@ -1113,14 +1114,15 @@ commission "7%/5%"
 carrier "KE", "KOREAN AIR"
 ########################################
 
-example 'svosel'
+example 'svoicn'
+example 'svoicn icnsvo'
 agent    "По 31.03.2011г. 9% от опубл. тарифов на собств. рейсы KE только с вылетом из России."
 subagent "По 31.03.2011г. 6,3% от опубл. тарифов на собств. рейсы KE только с вылетом из России."
-#geo
-not_implemented
+check { country_iatas.first == 'RU' }
 commission "9%/6.3%"
 
-example 'selsvo'
+example 'icnsvo'
+example 'svoicn icnsvo/ab'
 no_commission
 
 agent "С 01.04.2011г. 5% от опубл. тарифов на собств. рейсы KE с пунктом начала маршрута в России."
@@ -1711,15 +1713,17 @@ commission "1%/0.5%"
 carrier "UA", "UNITED AIRLINES (ГЛОНАСС)"
 ########################################
 
+# FIXME покрывает не все - латинскую америку - не
 agent "До 31.03.11г. 7% от опубл. тарифов по классам бронирования: M, H, Q, V, W, S, L  на собств. рейсы UA из России в США с  обяз. уч. трансатлантич. рейсов UA965/UA964."
 subagent "До 31.03.2011г. 3,5% от опубл. тарифов эконом. класса за исключением подклассов Y, B на все рейсы UA из Москвы в США, Канаду и Латинскую Америку с обяз. уч. трансатлантич. рейса UA965/UA964."
-not_implemented
+subclasses 'MHQVWSL'
+check { (flights.every.full_flight_number & %W(UA965 UA964)).any? }
 commission "7%/3.5%"
-
 
 agent "До 31.03.11г. 9% от опубл.тарифов по классам бронирования: F, A, J, C, D, Z, Y, B на собств. рейсы UA из России в США с обязат. уч. трансатлантич. рейсов UA965/UA964."
 subagent "До 31.03.2011г. 4,5% от опубл. тарифов в следующих подклассах бронирования: F/A/J/C/D/Z/Y/B на все рейсы UA из Москвы в США, Канаду и Латинскую Америку с обязат. уч. трансатлантич. рейса UA965/UA964."
-not_implemented
+subclasses 'FAJCDZYB'
+check { (flights.every.full_flight_number & %W(UA965 UA964)).any? }
 commission "9%/4.5%"
 
 agent    "0% - на продажу рейсов UA без участия трансатлант. рейса авиакомпании UA965/UA964."
@@ -1911,19 +1915,25 @@ commission "1/0.05"
 carrier "AT", "ROYAL AIR MAROC"
 ########################################
 
+example 'svocdg'
 agent "5% от опубл. тарифов Эконом класса на собств. рейсы АТ"
 subagent "3% от опубл. тарифов Эконом класса на собств. рейсы АТ"
 classes :economy
-commission "5%/7%"
+commission "5%/3%"
 
+example 'svocdg/business'
 agent "7% от опубл. тарифов Бизнес класса на собств. рейсы АТ"
 subagent "5% от опубл. тарифов Бизнес класса на собств. рейсы АТ"
 classes :business
 commission "7%/5%"
 
+example 'svocdg cdgsvo/ab'
+no_commission
+
 carrier "NX", "AIR MACAU"
 ########################################
 
+example 'svocdg'
 agent "5 % от всех опубл. тарифов на собственные рейсы NX"
 subagent "3% от всех опубл. тарифов на собственные рейсы NX"
 commission "5%/3%"
