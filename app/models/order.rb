@@ -32,7 +32,7 @@ class Order < ActiveRecord::Base
       self.price_our_markup = recommendation.price_our_markup
       self.price_consolidator_markup = recommendation.price_consolidator_markup
       self.price_fare = recommendation.price_fare
-      self.price_tax = recommendation.price_tax_and_markup
+      self.price_tax_and_markup = recommendation.price_tax_and_markup
     end
     self.payment_status = 'not blocked'
     self.ticket_status = 'booked'
@@ -46,6 +46,10 @@ class Order < ActiveRecord::Base
 
   def payture_state
     Payture.new.state(:order_id => order_id).state
+  end
+
+  def payture_amount
+    Payture.new.state(:order_id => order_id).amount
   end
 
   def confirm_3ds pa_res, md

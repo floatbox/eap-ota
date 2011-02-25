@@ -143,8 +143,8 @@
     <% if @pnr.order %>
         <font family="Arial" size="2">
         <%= @pnr.order.price_fare.ceil.to_i %> RUB<br>
-        <%= @pnr.order.price_tax.ceil.to_i %> RUB<br>
-        <%= @pnr.order && (@pnr.order.price_fare.ceil + @pnr.order.price_tax.ceil).to_i %> RUB<br>
+        <%= @pnr.order.price_tax_and_markup.ceil.to_i %> RUB<br>
+        <%= @pnr.order.price_total.ceil.to_i %> RUB<br>
         Cash<br>
         <%= @pnr.order.created_at.strftime('%d.%m.%y') %>
         </font>

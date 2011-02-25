@@ -43,15 +43,17 @@ module PricerHelper
   end
   
   def human_price price
-    "#{ price }&nbsp;#{ Russian.pluralize(price, 'рубль', 'рубля', 'рублей') }".html_safe
+    rounded = price.round.to_i
+    "#{ rounded }&nbsp;#{ Russian.pluralize(rounded, 'рубль', 'рубля', 'рублей') }".html_safe
   end
 
   # можно вызывать даже как decorated_price(12312.23, ['u', {:class=>'special'}], 'i')
   def decorated_price price, price_tag='u', currency_tag='i'
+    rounded = price.round.to_i
     content_tag(*price_tag) {
-      price.to_i.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>').html_safe
+      rounded.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>').html_safe
     } + content_tag(*currency_tag) {
-      '&nbsp;'.html_safe + Russian.pluralize(price.to_i, 'рубль', 'рубля', 'рублей').html_safe
+      '&nbsp;'.html_safe + Russian.pluralize(rounded, 'рубль', 'рубля', 'рублей').html_safe
     }
   end
 
