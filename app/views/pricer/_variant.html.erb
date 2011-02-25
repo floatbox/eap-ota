@@ -126,7 +126,7 @@
     </th>
     <td colspan="6">
     <% bonus_programs = recommendation.validating_carrier.avaliable_bonus_programms %>
-    <div class="valcarrier">Билет оформляет авиакомпания <%= recommendation.validating_carrier.name %>.<% unless bonus_programs.empty? %> Применяются бонусные программы альянса <span class="link alliance" data-details="<%= bonus_programs.map{|bp| bp.name}.to_sentence %>"><%= recommendation.validating_carrier.alliance.name %></span>.<% end %></div>
+    <div class="valcarrier">Билет оформляет авиакомпания <%= recommendation.validating_carrier.name %>.<% if recommendation.validating_carrier.alliance %> Применяются бонусные программы альянса <span class="link alliance" data-details="<%= bonus_programs.map{|bp| bp.name}.to_sentence %>"><%= recommendation.validating_carrier.alliance.name %></span>.<% end %></div>
     <dl class="sum" data-value="<%= recommendation.price_total %>">
         <dt>Итого <strong><%= human_price(recommendation.price_total) %></strong><%= ' за всех' if @search.people_total > 1 %> со всеми сборами</dt>
         <dd>Тариф — <%= human_price(recommendation.price_fare) %>, налоги и сборы — <%= human_price(recommendation.price_tax_and_markup) %></dd>
