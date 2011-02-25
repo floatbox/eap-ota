@@ -63,7 +63,7 @@ module Amadeus
       def ticket_numbers
         # PAX 257-9748002002/ETOS/RUB9880/30SEP10/MOWR2290Q/00000000
         xpath('//r:otherDataFreetext[r:freetextDetail/r:type="P06"]/r:longFreetext').map do |fa|
-          fa.to_s =~ %r|PAX ([^/]*)|
+          fa.to_s =~ %r|(?:PAX|INF) ([^/]*)|
           $1
         end
       end
