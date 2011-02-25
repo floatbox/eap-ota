@@ -13,7 +13,7 @@
     };
 
     // Обработка ссылки
-    pageurl.parse();
+    pageurl.init();
 
     // Сохраненное бронирование
     if (pageurl.booking) {
