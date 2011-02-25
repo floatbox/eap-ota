@@ -229,21 +229,21 @@ no_commission
 carrier "AA", "AMERICAN AIRLINES"
 ########################################
 
+example 'svocdg'
 agent    "1% от опубл. тарифа на собственные рейсы AA, кроме:"
 subagent "0,5% от опубл. тарифа на собственные рейсы AA, кроме:"
-not_implemented
 commission "1%/0.5%"
 
+example 'miaiad'
 agent    "0% от опубл. тарифов по маршрутам из 50 штатов США (включая Пуэрто Рико/Виргинские острова (США) и Канады;"
 subagent "0% от опубл. тарифов по маршрутам из 50 штатов США (включая Пуэрто Рико/Виргинские острова (США) и Канады;"
-#geo
-not_implemented
+important!
+check { %W(US CA PR VI).include?(country_iatas.first) }
 commission "0%/0%"
 
 agent    "0% от тарифов VUSA, N1VISIT и N2VISIT."
 subagent "0% от тарифов VUSA, N1VISIT и N2VISIT."
-#tariff
-not_implemented
+disabled "ни разу не попадались"
 commission "0%/0%"
 
 carrier "AB", "AIR BERLIN"
@@ -1713,15 +1713,16 @@ commission "1%/0.5%"
 carrier "UA", "UNITED AIRLINES (ГЛОНАСС)"
 ########################################
 
-# FIXME покрывает не все - латинскую америку - не
+# FIXME использую приоритет чтобы закрыть эти субклассы!
 agent "До 31.03.11г. 7% от опубл. тарифов по классам бронирования: M, H, Q, V, W, S, L  на собств. рейсы UA из России в США с  обяз. уч. трансатлантич. рейсов UA965/UA964."
 subagent "До 31.03.2011г. 3,5% от опубл. тарифов эконом. класса за исключением подклассов Y, B на все рейсы UA из Москвы в США, Канаду и Латинскую Америку с обяз. уч. трансатлантич. рейса UA965/UA964."
-subclasses 'MHQVWSL'
+#subclasses 'MHQVWSL'
 check { (flights.every.full_flight_number & %W(UA965 UA964)).any? }
 commission "7%/3.5%"
 
 agent "До 31.03.11г. 9% от опубл.тарифов по классам бронирования: F, A, J, C, D, Z, Y, B на собств. рейсы UA из России в США с обязат. уч. трансатлантич. рейсов UA965/UA964."
 subagent "До 31.03.2011г. 4,5% от опубл. тарифов в следующих подклассах бронирования: F/A/J/C/D/Z/Y/B на все рейсы UA из Москвы в США, Канаду и Латинскую Америку с обязат. уч. трансатлантич. рейса UA965/UA964."
+important!
 subclasses 'FAJCDZYB'
 check { (flights.every.full_flight_number & %W(UA965 UA964)).any? }
 commission "9%/4.5%"
