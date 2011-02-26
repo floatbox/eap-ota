@@ -33,26 +33,38 @@ module Amadeus
 
       def passengers
         xpath('//r:travellerInformation').map do |ti|
-          surname = (ti / 'r:traveller/r:surname').to_s
-          (ti / 'r:passenger').map do |passenger|
+          surname = ti.xpath('r:traveller/r:surname').to_s
+          ti.xpath('r:passenger').map do |passenger|
+              passenger_ref = (passenger / '../../../r:elementManagementPassenger/r:reference/r:number').to_s
+              need_infant = (passenger / 'r:type').to_s == 'INF'
               Person.new(:first_name => passenger.xpath('r:firstName').to_s,
                          :last_name => surname,
-                         :passport => passport_number(passenger),
+                         :passport => passport(passenger_ref, need_infant),
+                         :ticket => ticket(passenger_ref, need_infant),
                          :number_in_amadeus => (ti / '../../r:elementManagementPassenger/r:lineNumber').to_s
                          )
           end
         end.flatten
       end
 
-      def passport_number(passenger_node)
-        number = (passenger_node / '../../../r:elementManagementPassenger/r:reference/r:number').to_s
-        need_infant = (passenger_node / 'r:type').to_s == 'INF'
+      def passport(passenger_ref, need_infant=false)
         xpath( "//r:dataElementsIndiv[
-           r:referenceForDataElement/r:reference[r:qualifier='PT'][r:number=#{number}]
+            r:referenceForDataElement/r:reference[r:qualifier='PT'][r:number=#{passenger_ref}]
           ]/r:serviceRequest/r:ssr[r:type='DOCS']/r:freeText"
         ).each do |ssr_text|
           passport, sex = ssr_text.to_s.split('/').values_at(2, 5)
           return passport if need_infant == (sex == 'FI' || sex == 'MI')
+        end
+      end
+
+      # PAX 257-9748002002/ETOS/RUB9880/30SEP10/MOWR2290Q/00000000
+      def ticket(passenger_ref, need_infant=false)
+        xpath( "//r:dataElementsIndiv[
+            r:referenceForDataElement/r:reference[r:qualifier='PT'][r:number=#{passenger_ref}]
+          ]/r:otherDataFreetext[r:freetextDetail/r:type='P06']/r:longFreetext"
+        ).each do |fa|
+          fa.to_s =~ %r<(PAX|INF) ([^/]*)>
+          return $2 if need_infant == ($1 == 'INF')
         end
       end
 
@@ -64,13 +76,6 @@ module Amadeus
         xpath('//r:otherDataFreetext[r:freetextDetail/r:type=3]/r:longFreetext').to_s
       end
 
-      def ticket_numbers
-        # PAX 257-9748002002/ETOS/RUB9880/30SEP10/MOWR2290Q/00000000
-        xpath('//r:otherDataFreetext[r:freetextDetail/r:type="P06"]/r:longFreetext').map do |fa|
-          fa.to_s =~ %r<(?:PAX|INF) ([^/]*)>
-          $1
-        end
-      end
 
       # def prices
         # можно вытащить аналогично fare_price_pnr_with_booking_class.rb
