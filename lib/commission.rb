@@ -298,6 +298,7 @@ no_commission
 carrier "AM", "AEROMEXICO"
 ########################################
 
+example 'SVOCDG/AF/K CDGMEX/Q MEXCDG/Q CDGSVO/SU/W'
 agent    "9% от всех опубл. тарифов на рейсы AM;"
 agent    "новые тарифы экономического класса в Мексику через Европу:"
 agent    "• Q, K, S, M"
@@ -305,9 +306,12 @@ agent    "• До Парижа/Мадрида – SU, AF, UX"
 agent    "• 9 % комиссии при условии одного трансатлантического рейса в бронировании"
 agent    "вместе с SU, AF, UX и на собственные рейсы авиакомпании"
 subagent "6,3% от опубл. тарифов на рейсы AM"
-interline :no
-not_implemented
+interline :possible
+check { country_iatas.first == 'RU' && city_iatas.include?('MEX') }
 commission "9%/6.3%"
+
+example 'PRGCDG CDGBCN'
+no_commission
 
 carrier "AY", "FINNAIR"
 ########################################
