@@ -33,22 +33,26 @@ module Amadeus
 
       def passengers
         xpath('//r:travellerInformation').map do |ti|
-          Person.new(:first_name => (ti / 'r:passenger/r:firstName').to_s,
-                     :last_name => (ti / 'r:traveller/r:surname').to_s,
-                     :passport => passport_number(ti),
-                     :number_in_amadeus => (ti / '../../r:elementManagementPassenger/r:lineNumber').to_s
-                     )
-        end
+          surname = (ti / 'r:traveller/r:surname').to_s
+          (ti / 'r:passenger').map do |passenger|
+              Person.new(:first_name => passenger.xpath('r:firstName').to_s,
+                         :last_name => surname,
+                         :passport => passport_number(passenger),
+                         :number_in_amadeus => (ti / '../../r:elementManagementPassenger/r:lineNumber').to_s
+                         )
+          end
+        end.flatten
       end
 
-      def passport_number(traveller_information_node)
-        number = (traveller_information_node / '../../r:elementManagementPassenger/r:reference/r:number/text()').to_s
-        infant_indicator = (traveller_information_node / 'r:passenger/r:type').to_s == 'INF'
-        ssr_nodes = xpath("//r:serviceRequest[r:ssr/r:type='DOCS' and ../r:referenceForDataElement/r:reference/r:number=#{number} and ../r:referenceForDataElement/r:reference/r:qualifier='PT']")
-        ssr_nodes.each do |ssr_node|
-          ssr_text = (ssr_node / "r:ssr/r:freeText").to_s
-          passport = ssr_text.match(/^P\/.{3}\/([\w ]+)\//)[1]
-          return passport if infant_indicator == !!(ssr_text.to_s =~ /^P\/\w{3}\/\w+\/\w{3}\/\w+\/[F,M]I/)
+      def passport_number(passenger_node)
+        number = (passenger_node / '../../../r:elementManagementPassenger/r:reference/r:number').to_s
+        need_infant = (passenger_node / 'r:type').to_s == 'INF'
+        xpath( "//r:dataElementsIndiv[
+           r:referenceForDataElement/r:reference[r:qualifier='PT'][r:number=#{number}]
+          ]/r:serviceRequest/r:ssr[r:type='DOCS']/r:freeText"
+        ).each do |ssr_text|
+          passport, sex = ssr_text.to_s.split('/').values_at(2, 5)
+          return passport if need_infant == (sex == 'FI' || sex == 'MI')
         end
       end
 
