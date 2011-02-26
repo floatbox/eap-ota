@@ -7,7 +7,7 @@ class Payture
 
   # комиссионные за транзакцию
   def self.commission(price)
-    ten_cents = 2.91
+    ten_cents = 2.89
     pcnt = 0.0325
     ((ten_cents + pcnt * price) / ( 1 - pcnt)).round(2)
   end
