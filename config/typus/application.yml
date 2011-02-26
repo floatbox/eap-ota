@@ -146,7 +146,7 @@ Country:
   order_by: name_ru
   relationships: carriers, airports, cities, geo_tags, regions
   filters:
-  search:  name_en, name_ru, full_name_ru, continent_ru, synonym_list
+  search:  name_en, name_ru, full_name_ru, synonym_list
   application: Geo
 
 GeoTag:
