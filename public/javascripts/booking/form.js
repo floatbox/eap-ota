@@ -186,6 +186,15 @@ init: function() {
         $(this).closest('.result').find('form').submit();
     });
 
+    // Имена
+    if (constants.names === undefined) {
+        constants.names = {m: '', f: ''};
+    } else if (!constants.names.ready) {
+        constants.names['m'] = ' ' + constants.names['m'].toLowerCase() + ',';
+        constants.names['f'] = ' ' + constants.names['f'].toLowerCase() + ',';
+        constants.names.ready = true;
+    }
+
     // Заголовок страницы
     pageurl.title('бронирование авиабилета ' + results.title.attr('data-title'));
 

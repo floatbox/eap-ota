@@ -63,8 +63,8 @@
     text-align: center;
     cursor: pointer;
 }
-.win-msie6 .calendar .dates li,
-.win-msie7 .calendar .dates li {
+.msie6 .calendar .dates li,
+.msie7 .calendar .dates li {
     float: left;
     display: inline;
 }

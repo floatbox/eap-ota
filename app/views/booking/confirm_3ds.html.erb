@@ -25,7 +25,7 @@
         <script type="text/javascript">
         if (window._gaq) {
             _gaq.push(['_trackPageview', '/#3ds:success']);
-            _gaq.push(['_addTrans', '<%= @pnr_number %>', '0']);
+            _gaq.push(['_addTrans', '<%= @pnr_number %>', '', '<%= @order.recommendation.price_total.round.to_i %>']);
             _gaq.push(['_trackTrans']);
         }
         </script>

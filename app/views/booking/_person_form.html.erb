@@ -32,10 +32,10 @@
                  :class => "text text-name g-xl",
                  :title => "имя пассажира",
                  :onclick => "return {mask: /[a-z]/i, rules: {req: true, minl: 2, latin: true, gender: 'N'}}"
-                 %>
-                 <%= person.error_message_on :first_name, 
-                 :id => "error_person_#{person_form_counter}_first_name" %>
-                 <div class="language-warning">Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры. Имя&nbsp;и&nbsp;фамилию нужно вводить латинскими буквами</div>
+                %>
+                <%= person.error_message_on :first_name, :id => "error_person_#{person_form_counter}_first_name" %>
+                <div class="language-warning">Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры. Имя&nbsp;и&nbsp;фамилию нужно вводить латинскими буквами</div>
+                <div class="nameorder-warning">Проверьте пожалуйста, что вы не перепутали поля «Имя» и «Фамилия» <span class="link nameorder-replace">Поменять&nbsp;местами</span> или <span class="link">оставить</span> как есть</div>
             <td class="g-middle text-upper">
                 <%= person.text_field :last_name,
                  :class => "text text-name g-xl",

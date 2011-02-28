@@ -162,7 +162,7 @@
     <div class="cost"><dl>
         <%= decorated_price @order.recommendation.price_total, 'dt', 'dd' %>
     </dl></div>
-    <dl class="sum" data-value="<%= @order.recommendation.price_total %>">
+    <dl class="sum" data-value="<%= @order.recommendation.price_total.round.to_i %>">
         <dt>Итого <strong><%= human_price(@order.recommendation.price_total) %></strong> за всех со всеми сборами</dt>
         <dd>Тариф — <%= human_price(@order.recommendation.price_fare) %>, налоги и сборы — <%= human_price(@order.recommendation.price_tax_and_markup) %></dd>
     </dl>

@@ -109,6 +109,43 @@ ptp.names = function($names) {
     }).blur(function() {
         if (active) hideWarning();
     });
+    var getGender = function(name) {
+        var pattern = ' ' + name.toLowerCase() + ',', gender;
+        if (constants.names['m'].indexOf(pattern) !== -1) gender = 'm';
+        if (constants.names['f'].indexOf(pattern) !== -1) gender = 'f';
+        return gender;
+    };
+    $names.eq(0).blur(function() {
+        var name = $(this).val();
+        var controls = $(this).closest('tr').find('.bp-sex');
+        if (name !== '' && controls.find('input:checked').length === 0) {
+            var gender = getGender(name);
+            if (gender) {
+                var control = controls.filter('.bp-sex-' + gender).find('input');
+                control.get(0).checked = true;
+                control.change();
+            }
+        }
+    });
+    var orderWarning = $names.eq(0).closest('tr').find('.nameorder-warning');
+    $names.blur(function() {
+        var fn = $names.eq(0).val();
+        var ln = $names.eq(1).val();
+        if (fn && ln && getGender(ln) && !getGender(fn)) {
+            orderWarning.fadeIn(150);
+        } else {
+            orderWarning.fadeOut(150);
+        }
+    });
+    orderWarning.find('.link').click(function() {
+        orderWarning.fadeOut(150);
+        if ($(this).hasClass('nameorder-replace')) {
+            var fn = $names.eq(0).val();
+            var ln = $names.eq(1).val();
+            $names.eq(0).val(ln).blur();
+            $names.eq(1).val(fn);
+        }
+    });
 };
 
 ptp.bonus = function($el) {
