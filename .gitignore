@@ -16,7 +16,8 @@ rerun.txt
 *.swp
 .idea
 .com.*
-config/*.sphinx.conf
+config/local.yml
+config/local
 db/sphinx
 .DS_Store
 tags

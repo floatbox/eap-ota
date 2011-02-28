@@ -3,11 +3,7 @@ module Amadeus
 
   class Service < Handsoap::Service
 
-  if Rails.env.production?
-    endpoint :uri => "https://production.webservices.amadeus.com", :version => 1
-  else
-    endpoint :uri => "https://test.webservices.amadeus.com", :version => 1
-  end
+  endpoint :uri => Conf.amadeus.endpoint, :version => 1
 
   # сжатие
   require 'handsoap/compressed_curb_driver'

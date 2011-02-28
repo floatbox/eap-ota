@@ -3,9 +3,9 @@ module Sirena
 
   class Service
 
-    HOST = 'delta.eviterra.com' #"127.0.0.1"
-    PORT = 8888
-    PATH = "/"
+    HOST = Conf.sirena.host
+    PORT = Conf.sirena.port
+    PATH = Conf.sirena.path
 
     class << self
 

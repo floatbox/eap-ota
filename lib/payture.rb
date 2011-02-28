@@ -72,16 +72,12 @@ class Payture
     end
   end
 
-  def config
-    @@config ||= YAML.load_file(Rails.root + 'config/payture.yml')
-  end
-
   def initialize(opts={})
-    @key = opts[:key] || config[:key]
-    @host = opts[:host] || config[:host]
+    @key = opts[:key] || Conf.payture.key
+    @host = opts[:host] || Conf.payture.host
     @ssl = opts[:ssl]
-    @ssl = config[:ssl] if @ssl.nil?
-    @public = OpenSSL::PKey::RSA.new(opts[:pem] || config[:pem])
+    @ssl = Conf.payture.ssl if @ssl.nil?
+    @public = OpenSSL::PKey::RSA.new(opts[:pem] || Conf.payture.pem)
   end
 
   def pay amount, card, opts={}
