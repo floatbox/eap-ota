@@ -109,6 +109,24 @@ ptp.names = function($names) {
     }).blur(function() {
         if (active) hideWarning();
     });
+    var getGender = function(name) {
+        var pattern = ' ' + name.toLowerCase() + ',', gender;
+        if (constants.names['m'].indexOf(pattern) !== -1) gender = 'm';
+        if (constants.names['f'].indexOf(pattern) !== -1) gender = 'f';
+        return gender;
+    };
+    $names.eq(0).blur(function() {
+        var name = $(this).val();
+        var controls = $(this).closest('tr').find('.bp-sex');
+        if (name !== '' && controls.find('input:checked').length === 0) {
+            var gender = getGender(name);
+            if (gender) {
+                var control = controls.filter('.bp-sex-' + gender).find('input');
+                control.get(0).checked = true;
+                control.change();
+            }
+        }
+    });
 };
 
 ptp.bonus = function($el) {
