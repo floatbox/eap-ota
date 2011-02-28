@@ -127,6 +127,25 @@ ptp.names = function($names) {
             }
         }
     });
+    var orderWarning = $names.eq(0).closest('tr').find('.nameorder-warning');
+    $names.blur(function() {
+        var fn = $names.eq(0).val();
+        var ln = $names.eq(1).val();
+        if (fn && ln && getGender(ln) && !getGender(fn)) {
+            orderWarning.fadeIn(150);
+        } else {
+            orderWarning.fadeOut(150);
+        }
+    });
+    orderWarning.find('.link').click(function() {
+        orderWarning.fadeOut(150);
+        if ($(this).hasClass('nameorder-replace')) {
+            var fn = $names.eq(0).val();
+            var ln = $names.eq(1).val();
+            $names.eq(0).val(ln).blur();
+            $names.eq(1).val(fn);
+        }
+    });
 };
 
 ptp.bonus = function($el) {
