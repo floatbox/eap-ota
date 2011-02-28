@@ -12,11 +12,12 @@ class Person < ActiveRecord::BaseWithoutTable
   column :bonuscard_type, :string
   column :bonuscard_number, :string, 'Номер карты'
   column :number_in_amadeus, :integer
+  column :ticket, :string
   validates_presence_of :first_name, :last_name, :sex, :nationality_id, :birthday, :passport
   validates_presence_of :document_expiration_date, :unless => :document_noexpiration
   # FIXME WRONG! фамилии через дефис? два имени? сокращения?
-  validates_format_of :first_name, :with => /^[a-zA-Z]*$/, :message => "Некорректное имя"
-  validates_format_of :last_name,  :with => /^[a-zA-Z]*$/, :message => "Некорректная фамилия"
+  validates_format_of :first_name, :with => /^[a-zA-Z-]*$/, :message => "Некорректное имя"
+  validates_format_of :last_name,  :with => /^[a-zA-Z-]*$/, :message => "Некорректная фамилия"
   validate :check_age
   attr_accessor :flight_date, :infant_or_child
 

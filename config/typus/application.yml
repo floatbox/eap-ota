@@ -137,16 +137,16 @@ Region:
 
 Country:
   fields:
-    default: alpha2, name_ru, name_en, full_name_ru, continent_ru, importance, synonym_list
-    list: alpha2, name_ru, name_en, full_name_ru, continent_ru, importance, synonym_list
-    form: name_ru, name_en, full_name_ru, alpha2, alpha3, iso, continent_ru, continent_part_ru, importance, synonym_list, lat, lng, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in
+    default: alpha2, name_ru, name_en, full_name_ru, continent, importance, synonym_list
+    list: alpha2, name_ru, name_en, full_name_ru, continent, importance, synonym_list
+    form: name_ru, name_en, full_name_ru, alpha2, alpha3, iso, continent, continent_part_ru, importance, synonym_list, lat, lng, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in
     options:
       read_only: morpher_to, morpher_from, morpher_in
-      selectors: continent_ru
+      selectors: continent
   order_by: name_ru
   relationships: carriers, airports, cities, geo_tags, regions
   filters:
-  search:  name_en, name_ru, full_name_ru, continent_ru, synonym_list
+  search:  name_en, name_ru, full_name_ru, synonym_list
   application: Geo
 
 GeoTag:

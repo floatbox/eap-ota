@@ -42,10 +42,10 @@
         </font>
     </td>
     <td class="pad_null" colspan="2">
-    <% if @pnr.ticket_numbers.present? %>
+    <% if @pnr.passengers.any?(&:ticket) %>
         <font family="Arial" size="2">
-        <% for number in @pnr.ticket_numbers %>
-            <%= number %><br><br>
+        <% for p in @pnr.passengers %>
+            <%= p.ticket %><br><br>
         <% end %>
         </font>
     <% end %>

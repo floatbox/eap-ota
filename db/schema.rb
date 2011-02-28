@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110224143014) do
+ActiveRecord::Schema.define(:version => 20110225174352) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -124,7 +124,7 @@ ActiveRecord::Schema.define(:version => 20110224143014) do
     t.string   "alpha2"
     t.string   "alpha3"
     t.string   "iso"
-    t.string   "continent_ru"
+    t.string   "continent"
     t.string   "continent_part_ru"
     t.datetime "created_at"
     t.datetime "updated_at"
