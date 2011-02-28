@@ -13,7 +13,7 @@
     color: #777;
 }
 * html #header,
-.mac-opera #header {
+.mac.opera #header {
     position: absolute;
 }
 #header .shadow {

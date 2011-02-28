@@ -233,8 +233,8 @@
 .booking select.text {
     padding: 2px 3px;
 }
-.mac-chrome .booking select.text,
-.mac-safari .booking select.text {
+.mac.chrome .booking select.text,
+.mac.safari .booking select.text {
     height: 32px;
 }
 

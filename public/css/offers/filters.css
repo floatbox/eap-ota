@@ -118,7 +118,7 @@
     width: 960px;
     cursor: default;
 }
-.win-msie6 #results-filters .rfoverlay {
+.msie6 #results-filters .rfoverlay {
     height: 300px;
 }
 #results-filters.disabled {
