@@ -16,6 +16,11 @@ init: function() {
             SetDashboardSize(VEDashboardSize.Tiny);
             LoadMap((f && f.lat && f.lng && new VELatLong(f.lat, f.lng)) || this.defpoint, 4);
             SetScaleBarDistanceUnit(VEDistanceUnit.Kilometers);
+            AttachEvent('onmousewheel', function(event) {
+                var change = event.mouseWheelChange;
+                window.scrollBy(0, (Math.abs(change) > 50 ? -0.05 : -5) * change);
+                return true;
+            });
         }
         if (this.deferred) {
             this.show(this.deferred);
