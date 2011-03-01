@@ -565,17 +565,17 @@ commission '1/0'
 carrier "DL", "DELTA AIRLINES"
 ########################################
 
+example 'svocdg cdgsvo/ab'
+example 'cdgsvo'
+example 'svomia'
+example 'jfkbwi'
 agent    "1% от опубл. тарифа DL на трансатлантический перелет при перевозке, начинающейся в Европе, Азии или Африке;"
-subagent "0,5% от опубл. тарифа DL на трансатлантический перелет при перевозке, начинающейся в Европе, Азии или Африке;"
-disabled #правило
-#geo
-not_implemented
-commission "1%/0.5%"
-
 agent    "1% от опубл. тарифа других авиакомпаний в комбинации с опубл. тарифом DL на трансатлант.перелет при перевозке, нач.в Европе, Азии или Африке;"
+agent    "1% от опубл. тарифа DL при внутренних перелетах по США"
+subagent "0,5% от опубл. тарифа DL на трансатлантический перелет при перевозке, начинающейся в Европе, Азии или Африке;"
 subagent "0,5% от опубл. тарифа других авиакомпаний в комбинации с опубл. тарифом DL на трансатлант.перелет при перевозке, нач.в Европе, Азии или Африке;"
-disabled #правило
-#geo
+subagent "0,5% от опубл. тарифа DL при внутренних перелетах по США"
+interline :possible
 not_implemented
 commission "1%/0.5%"
 
@@ -583,19 +583,15 @@ example 'cdgsvo/ab'
 agent    "1% от опубл. тарифа на рейсы Interline без участка DL."
 subagent "0,5% от опубл. тарифа на рейсы Interline без участка DL."
 interline :absent
-not_implemented
 commission "1%/0.5%"
 
-agent    "1% от опубл. тарифа DL при внутренних перелетах по США"
-subagent "0,5% от опубл. тарифа DL при внутренних перелетах по США"
-domestic
-not_implemented
-commission "1%/0.5%"
-
+example 'EWRDTW DTWYYZ' # ньюйорк - детройт - торонто
 agent    "0% на перевозки, нач.в США (включая Пуэрто Рико, Острова Вирджинии и Канада)"
 subagent "0% на перевозки, нач.в США (включая Пуэрто Рико, Острова Вирджинии и Канада)"
-not_implemented
-#geo
+important!
+international
+interline :possible
+check { %W(US PR VI CA).include? country_iatas.first }
 commission "0%/0%"
 
 agent "с 01.10.10г. по 31.03.2011 г. "
