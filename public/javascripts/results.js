@@ -380,6 +380,9 @@ parseResults: function() {
                 offer: offer,
                 summary: $.parseJSON(vel.attr('data-summary'))
             };
+            if (offer.summary.alliance !== undefined) {
+                variant.summary.alliance = offer.summary.alliance;
+            }
             vel.attr('data-index', variants.length);
             offer.variants.push(variant);
             variants.push(variant);
@@ -442,7 +445,10 @@ filterOffers: function() {
             empty = false;
             var fvalues = filters[key];
             var svalues = v.summary[key];
-            if (svalues === undefined) continue;
+            if (svalues === undefined) {
+                improper = true;
+                continue;
+            }
             var values = {};
             for (var k = fvalues.length; k--;) {
                 values[fvalues[k]] = true;
@@ -450,13 +456,13 @@ filterOffers: function() {
             if (svalues instanceof Array) {
                 improper = true;
                 for (var k = svalues.length; k--;) {
-                    if (values[svalues[k]]) {
+                    if (values[svalues[k]] !== undefined) {
                         improper = false;
                         break;
                     }
                 }
             } else {
-                if (!values[svalues]) improper = true;
+                if (values[svalues] === undefined) improper = true;
             }
             if (improper) break;
         }
