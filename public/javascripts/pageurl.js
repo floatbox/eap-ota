@@ -4,7 +4,7 @@ init: function() {
     this.summary = this.hash();
     setInterval(function() {
         that.compare();
-    }, 1500);
+    }, 1000);
     this.parse();
 },
 hash: function() {
