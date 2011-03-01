@@ -423,8 +423,9 @@ initTimeline: function() {
         var label = $('<span>').addClass('label').width(mw).text(constants.monthes.short[mdate.month]);
         $('<li>').width(mw).append(label).appendTo(self.timeline);
     });
+    var first = this.parent.dates.eq(0), before = first.prevAll('li').length + first.closest('ul').prev('ul').find('li').length;
     this.timeline.css('left', Math.round((1 - parseInt(dates.eq(0).attr('data-dmy').substring(0,2), 10)) * self.factor)).show();
-    this.preview = $('.preview', this.scroller).css('left', Math.round(this.parent.dates.eq(0).prevAll('li').length * self.factor));
+    this.preview = $('.preview', this.scroller).css('left', Math.round(before * self.factor));
 },
 initScrollbar: function() {
     var self = this;
