@@ -28,7 +28,7 @@ class HotOffer < ActiveRecord::Base
       destination.average_time_delta = time_delta
     end
     destination.save
-    self.price_variation = destination.average_price - price
+    self.price_variation =  price - destination.average_price
     self.price_variation_percent = ((price / destination.average_price.to_f - 1)*100).to_i
   end
 
