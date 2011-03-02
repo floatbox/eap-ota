@@ -210,8 +210,9 @@ class Recommendation
       :price => price_total,
       :carrier => segments.first.marketing_carrier_name
     }
-    if validating_carrier.alliance
-      result['alliance'] = validating_carrier.alliance.id
+    alliance = validating_carrier.alliance
+    if alliance
+      result['alliance'] = alliance.id
     end
     variants.first.segments.each_with_index do |segment, i|
       result['dpt_location_' + i.to_s] = segment.departure.city.case_from.gsub(/ /, '&nbsp;')

@@ -17,6 +17,11 @@ payture:
     jEqhpDYkFUu0XMbGBYr0m6JcVXHGy3xV4J7YasVrvs0kqYJNiyaUhaHQYbAM2AWz
     IwIDAQAB
     -----END PUBLIC KEY-----
+cbr:
+  usd:
+    2011-01-01: 30.0000
+    2011-01-02: 30.0001
+  usd_default: 30.0
 sirena:
   enabled: false
   host: delta.eviterra.com

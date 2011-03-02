@@ -5,7 +5,9 @@ module Conf
   module ClassMethods
     def reload!
       config_files.each_with_object( config={} ) do |file, cfg_hash|
-        cfg_hash.deep_merge!( YAML.load_file(file) )
+        yml = YAML.load_file(file)
+        # сплошные комментарии отдаются как false
+        cfg_hash.deep_merge!(yml) if yml
       end
       config.each_with_object( @config = {}) do |(k,v), cfg|
         cfg.merge! k => process_node(v)

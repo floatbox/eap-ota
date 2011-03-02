@@ -182,7 +182,8 @@ init: function() {
     this.el.delegate('.stop-booking', 'click', this.selfhide);
     
     // 3DSecure
-    this.el.delegate('.tds-submit .link', 'click', function() {
+    this.el.delegate('.tds-submit .a-button', 'click', function(event) {
+        event.preventDefault();
         $(this).closest('.result').find('form').submit();
     });
 

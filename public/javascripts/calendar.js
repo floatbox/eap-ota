@@ -355,6 +355,17 @@ scrollTo: function(nst) {
         });
     }
 },
+scrollToSelected: function() {
+    var selected = this.parent.selected;
+    if (selected.length > 0) {
+        var cst = this.el.scrollTop();
+        var dates = this.parent.dates;
+        var ftop = dates.eq(selected[0]).position().top + cst;
+        var ltop = dates.eq(selected[selected.length - 1]).position().top + cst;
+        var nst = ftop + Math.min(0, (ltop - ftop) / 2 - this.rheight * 3);
+        this.el.scrollTop(this.snap(nst));
+    }
+},
 initNative: function() {
     var self = this, atimer, pst;
     var cst = this.el.scrollTop();
@@ -423,8 +434,9 @@ initTimeline: function() {
         var label = $('<span>').addClass('label').width(mw).text(constants.monthes.short[mdate.month]);
         $('<li>').width(mw).append(label).appendTo(self.timeline);
     });
+    var first = this.parent.dates.eq(0), before = first.prevAll('li').length + first.closest('ul').prev('ul').find('li').length;
     this.timeline.css('left', Math.round((1 - parseInt(dates.eq(0).attr('data-dmy').substring(0,2), 10)) * self.factor)).show();
-    this.preview = $('.preview', this.scroller).css('left', Math.round(this.parent.dates.eq(0).prevAll('li').length * self.factor));
+    this.preview = $('.preview', this.scroller).css('left', Math.round(before * self.factor));
 },
 initScrollbar: function() {
     var self = this;

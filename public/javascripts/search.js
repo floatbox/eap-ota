@@ -320,9 +320,10 @@ validate: function(qkey) {
                 query_key: result.query_key || data.query_key
             };
             if (restoreResults) {
+                self.calendar.scroller.scrollToSelected();
                 results.nextUpdate.params.restore_results = true;
                 results.load();
-                results.show(false);
+                results.show();
             } else {
                 self.toggle(true);
                 if (typeof self.onValid === 'function') {

@@ -76,6 +76,10 @@
 }
 .offer .diff-price a.a-button {
     float: none;
+    border-color: #7b8e12;
+    margin-right: 2px;
+    padding: 3px 10px;
+    font-weight: bold;
 }
 
 /* Лоадер */
@@ -121,14 +125,18 @@
 .booking .tds-submit {
     margin-top: 8px;
 }
-.booking .tds-submit .link {
-    font-size: 20px;
-    line-height: 22px;
-    color: #3081d1;
+.booking .tds-submit a.a-button {
+    float: none;
+    border-color: #7b8e12;
+    margin-right: 2px;
+    padding: 3px 10px;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: bold;
 }
-.booking .tds-submit a.stop-booking {
+.booking .result .tds-submit a.stop-booking {
     position: relative;
-    top: 6px;
+    top: 8px;
 }
 
 /* Кнопки прекращения бронирования */
