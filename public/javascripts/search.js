@@ -323,7 +323,7 @@ validate: function(qkey) {
                 self.calendar.scroller.scrollToSelected();
                 results.nextUpdate.params.restore_results = true;
                 results.load();
-                results.show(false);
+                results.show();
             } else {
                 self.toggle(true);
                 if (typeof self.onValid === 'function') {

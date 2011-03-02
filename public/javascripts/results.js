@@ -320,9 +320,10 @@ processUpdate: function() {
         };
         queue.push(function() {
             self.toggle('ready');
-            fixedBlocks.update();
             var imprecise = self.variants.length == 0;
             $('#results-filters, #rtabs').toggle(!imprecise);
+            $('#offers-matrix .imprecise').toggleClass('latent', !imprecise)
+            fixedBlocks.update();
             var b = app.booking, vid = b.el && b.el.attr('data-variant');
             if (vid && !b.variant) {
                 var vparts = vid.split('-');
