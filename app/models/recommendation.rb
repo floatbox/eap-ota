@@ -488,3 +488,4 @@ class Recommendation
     )
   end
 end
+

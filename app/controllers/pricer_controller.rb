@@ -63,13 +63,15 @@ class PricerController < ApplicationController
 
   def create_hot_offer
     adults_only = @search.people_count.values.sum == @search.people_count[:adults]
-    if @recommendations.present? && !@search.complex_route? && adults_only && !admin_user && ([nil, '', 'Y'].include? @search.cabin)
+    if (@recommendations.present? && !@search.complex_route? && adults_only && !admin_user &&
+        ([nil, '', 'Y'].include? @search.cabin) &&
+        @search.form_segments[0].to_as_object.class == City && @search.form_segments[0].from_as_object.class == City
+      )
        HotOffer.create(
           :code => @query_key,
-          :url => (url_for(:action => :index, :controller => :home) + '#' + @query_key ),
-          :description => @search.human_lite,
-          :price => @recommendations.first.price_total / @search.people_count.values.sum,
-          :for_stats_only => @search.people_count.values.sum > 1
+          :search => @search,
+          :recommendation => @recommendations.first,
+          :url => (url_for(:action => :index, :controller => :home) + '#' + @query_key )
         )
     end
   end

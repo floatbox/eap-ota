@@ -107,12 +107,25 @@ Order:
   application: Orders
   export: csv
 
+Destination:
+  fields:
+    default: from, to, rt
+    list: from, rt, to, average_price, average_time_delta
+    show: from, rt, to
+    options:
+      selectors: rt
+  options:
+    default_action_on_item: show
+  order_by: -created_at
+  relationships: hot_offers, from, to
+  filters: from, to, rt
+  application: Hot Offers
 
 HotOffer:
   fields:
-    default: url, description, price, created_at
-    list: clickable_url, description, price, created_at
-    show:  url, description, price, created_at
+    default: clickable_url, description, price, created_at
+    list: clickable_url, description, price, created_at, price_variation, price_variation_percent
+    show:  url, description, price, created_at, destination
     options:
       date_formats:
         created_at: long
@@ -120,8 +133,9 @@ HotOffer:
   options:
     default_action_on_item: show
   order_by: -created_at
-  relationships:
-  search: description, code
+  relationships: destination
+  filters: destination
+  search: description, url
   application: Hot Offers
 
 Region:
@@ -159,3 +173,4 @@ GeoTag:
   filters:
   search: name, synonym_list
   application: Geo
+
