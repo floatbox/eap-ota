@@ -110,7 +110,7 @@ Order:
 Destination:
   fields:
     default: from, to, rt
-    list: from, rt, to, average_price, average_time_delta
+    list: from, rt, to, average_price, average_time_delta, hot_offers_counter
     show: from, rt, to
     options:
       selectors: rt
