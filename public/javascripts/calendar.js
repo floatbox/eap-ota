@@ -355,6 +355,17 @@ scrollTo: function(nst) {
         });
     }
 },
+scrollToSelected: function() {
+    var selected = this.parent.selected;
+    if (selected.length > 0) {
+        var cst = this.el.scrollTop();
+        var dates = this.parent.dates;
+        var ftop = dates.eq(selected[0]).position().top + cst;
+        var ltop = dates.eq(selected[selected.length - 1]).position().top + cst;
+        var nst = ftop + Math.min(0, (ltop - ftop) / 2 - this.rheight * 3);
+        this.el.scrollTop(this.snap(nst));
+    }
+},
 initNative: function() {
     var self = this, atimer, pst;
     var cst = this.el.scrollTop();
