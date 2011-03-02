@@ -1,7 +1,0 @@
-/* http://www.artlebedev.ru/tools/technogrette/html/rouble/ */
-
-s.rur { text-transform: uppercase; // text-transform: none;}
-
-s.rur s { position: absolute; overflow: hidden; width: .45em; height: 1em; margin: .14ex 0 0 -.70em; // display: none; }
-
-s.rur s:before { content: '\2013'; }

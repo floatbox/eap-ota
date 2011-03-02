@@ -113,66 +113,25 @@ h1, h2, h3, h4, h5, h6 {
     padding-right: 13px;
 }
 
-/* Сброс (начало) */
-/*
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, font, img, ins, kbd, q, s, samp,
-small, strike, strong, tt, var,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    outline: 0;
-    font-weight: inherit;
-    font-style: inherit;
-    font-size: 100%;
-    font-family: inherit;
-    vertical-align: baseline;
-}
-caption, th, td {
-    text-align: left;
-    font-weight: normal;
-}*/
-/* Сброс (конец) */
-
-
 /* Шрифты */
-
-.g-xxxl
-{
+.g-xxxl {
     font-size: 214.286%;
 }
-
-.g-xxl
-{
+.g-xxl {
     font-size: 157.143%;
 }
-
-.g-xl
-{
+.g-xl {
     font-size: 128.571%;
 }
-
-.g-l
-{
+.g-l {
     font-size: 114.286%;
 }
-
-.g-s
-{
+.g-s {
     font-size: 92.857%;
 }
-
-.g-xs
-{
+.g-xs {
     font-size: 85.714%;
 }
-
-.g-xxs
-{
+.g-xxs {
     font-size: 78.571%;
 }

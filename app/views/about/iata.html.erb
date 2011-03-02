@@ -2,8 +2,8 @@
 <html>
 <head>
     <%= render 'shared/head_common', {:title => 'правила IATA'} %>
-    <link rel="stylesheet" type="text/css" href="/css/static.css">
-    <script type="text/javascript" src="/javascripts/static.js"></script>
+    <%= stylesheet_link_tag "static" %>
+    <%= javascript_include_tag "static" %>
 </head>
 <body>
 <%= render 'shared/header' %>
