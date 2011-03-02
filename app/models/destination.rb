@@ -9,11 +9,5 @@ class Destination < ActiveRecord::Base
     "#{from.name} #{RT.invert[rt]} #{to.name}"
   end
 
-  def calculate_avg_values
-    if hot_offers.present?
-      self.average_price = hot_offers.every.price.sum / hot_offers.count
-      self.average_time_delta = hot_offers.every.time_delta.sum / hot_offers.count
-    end
-  end
 end
 
