@@ -91,11 +91,26 @@
     <td colspan="4" class="variants"></td>
 </tr>
 <% end %>
-<tr class="bar">
+<tr class="bars">
     <td colspan="6">
-        <div class="segment">
-    
+    <% variant.segments.each_with_index do |segment, segment_counter| %>    
+        <div class="segment" data-dpt="<%= segment.departure_time %>" data-arv="<%= segment.departure_time.to_i + segment.total_duration %>">
+            <div class="dpt">
+                <span class="iata"><%= segment.departure_iata %></span>
+                <span class="time"><%= fmt_time( segment.departure_time ) %></span>
+            </div>
+            <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
+            <div class="flight" data-duration="<%= flight.duration %>"><%= flight.operating_carrier.name %></div>
+            <% if layover %>
+                <div class="layover" data-duration="<%= layover %>"><%= flight.arrival.city.name %></div>
+            <% end %>
+            <% end %>    
+            <div class="arv">
+                <span class="iata"><%= segment.arrival_iata %></span>
+                <span class="time"><%= fmt_time( segment.arrival_time ) %></span>
+            </div>
         </div>
+    <% end %>
     </td>
 </tr>
 <tr class="controls">
