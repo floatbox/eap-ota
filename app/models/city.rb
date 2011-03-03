@@ -48,7 +48,7 @@ class City < ActiveRecord::Base
     name_ru.presence ||  name_en.presence || iata
   end
 
-  def typus_name
+  def to_label
     name + ' ' + iata
   end
 
@@ -58,3 +58,4 @@ class City < ActiveRecord::Base
   end
 
 end
+
