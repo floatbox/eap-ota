@@ -9,7 +9,8 @@ class PricerController < ApplicationController
       if @search.valid?
         @recommendations = Mux.pricer(@search, admin_user)
         @locations = @search.human_locations
-        create_hot_offer
+        hot_offer = create_hot_offer
+        @average_price = hot_offer.destination.average_price if hot_offer
       end
     end
 
@@ -17,7 +18,7 @@ class PricerController < ApplicationController
   end
 
   def hot_offers
-    render :json => HotOffer.find(:all, :conditions => ["code != ? AND for_stats_only = ?", params[:query_key].to_s, false], :limit => 20, :order => 'created_at DESC')
+    render :json => HotOffer.find(:all, :conditions => ["code != ? AND for_stats_only = ?", params[:query_key].to_s, false], :limit => 20, :order => 'created_at DESC', :group => 'destination_id')
   end
 
   def calendar
@@ -62,8 +63,9 @@ class PricerController < ApplicationController
   protected
 
   def create_hot_offer
-    adults_only = @search.people_count.values.sum == @search.people_count[:adults]
-    if (@recommendations.present? && !@search.complex_route? && adults_only && !admin_user &&
+    if (@recommendations.present? && !@search.complex_route? &&
+        @search.people_count.values.sum == @search.people_count[:adults] &&
+        !admin_user &&
         ([nil, '', 'Y'].include? @search.cabin) &&
         @search.form_segments[0].to_as_object.class == City && @search.form_segments[0].from_as_object.class == City
       )

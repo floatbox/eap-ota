@@ -30,7 +30,6 @@ class HotOffer < ActiveRecord::Base
     destination.hot_offers_counter += 1
     destination.save
     self.price_variation =  price - destination.average_price
-    self.for_stats_only |= price_variation >= 0
     self.price_variation_percent = ((price / destination.average_price.to_f - 1)*100).to_i
   end
 
