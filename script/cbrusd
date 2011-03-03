@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require 'net/http'
 require 'rexml/document'
 require 'date'
@@ -21,11 +22,12 @@ today_usd = today_root.elements["Valute[@ID='R01235']/Value"].get_text.to_s.gsub
 tomorrow_date = tomorrow_root.attributes["Date"]
 tomorrow_usd = tomorrow_root.elements["Valute[@ID='R01235']/Value"].get_text.to_s.gsub(",", ".")
 
-file = File.new("currencies.txt", "w+")
-file.puts("cbr:")
-file.puts("  usd:")
-file.puts("    #{(DateTime.now).strftime("%F")}: #{today_usd}")
-file.puts("    #{(DateTime.now + 1).strftime("%F")}: #{tomorrow_usd}")
+open("config/local/cbr.yml", "w") do |file|
+  file.puts("cbr:")
+  file.puts("  usd:")
+  file.puts("    #{(DateTime.now).strftime("%F")}: #{today_usd}")
+  file.puts("    #{(DateTime.now + 1).strftime("%F")}: #{tomorrow_usd}")
+end
 
 
 #puts eur = root.elements["Valute[@ID='R01239']/Value"].get_text
