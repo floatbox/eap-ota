@@ -7,7 +7,9 @@ getSegments: function() {
     for (var s = samount; s--;) {
         segments[i] = {
             items: [],
-        }
+            dpt: 1440,
+            arv: 0
+        };
     }
     for (var i = 0, im = variants.length; i < im; i++) {
         var variant = variants[i];
