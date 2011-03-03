@@ -96,6 +96,7 @@
     opacity: 0.7;
 }
 
+/* Заголовки */
 .offers-title {
     margin: 0 0 8px;
     font-weight: bold;
@@ -104,6 +105,21 @@
     letter-spacing: -0.035em;
     color: #4B4B4B;
 }
+
+/* Разница со средней ценой */
+.offers-title .saving {
+    margin-left: 3px;
+    vertical-align: 1px;
+    font-weight: normal;
+    font-size: 14px;
+    letter-spacing: 0;
+}
+.offers-title .saving strong {
+    font-weight: normal;
+    color: #ED1192;
+}
+
+/* Подсказки в наших реколмендациях  */
 .featured-tip {
     margin-top: 20px;
 }
