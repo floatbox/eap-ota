@@ -114,6 +114,9 @@ Destination:
     show: from, rt, to
     options:
       selectors: rt
+      booleans:
+        # attribute: true, false
+        rt: ["⇄", "→"]
   options:
     default_action_on_item: show
   order_by: -created_at
