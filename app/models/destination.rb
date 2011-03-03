@@ -1,3 +1,4 @@
+# encoding: utf-8
 class Destination < ActiveRecord::Base
   belongs_to :from, :class_name => "City"
   belongs_to :to, :class_name => "City"
