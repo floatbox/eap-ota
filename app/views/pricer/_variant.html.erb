@@ -7,11 +7,8 @@
 <col width="109">
 <thead>
 <tr>
-    <th class="book">
-      <% if recommendation.sellable? %><a href="#" class="a-button">Выбрать</a><% end %></th>
-    <td class="cost" colspan="5"><dl>
-        <%= decorated_price recommendation.price_total, 'dt', 'dd' %>
-    </dl></td>
+    <th class="book"><% if recommendation.sellable? %><a href="#" class="a-button">Выбрать</a><% end %></th>
+    <td class="cost" colspan="5"><dl><%= decorated_price recommendation.price_total, 'dt', 'dd' %></dl></td>
 </tr>
 </thead>
 
@@ -20,7 +17,6 @@
 <% common_carrier = variant.segments.length > 1 && variant_carriers.map{|vc| vc['name'] }.uniq.length == 1 %>
 <% variant.segments.each_with_index do |segment, segment_counter| %>
 <tr class="segment-<%= segment_counter + 1 %>">
-
     <% if common_carrier %>
         <% if segment_counter == 0 %>
             <% if variant.segments.length > 2 %>
@@ -45,7 +41,6 @@
         <p><%= variant_carriers[segment_counter]['name'] %></p>
     </td>
     <% end %>
-
     <td class="dpt">
         <h5><%= fmt_time( segment.departure_time ) %><% if @search.rt %><span class="direction"> — <%= segment_counter == 0 ? 'туда' : 'обратно' %></span><% end %></h5>
         <h6><%= segment.departure.city.name %></h6>
@@ -82,7 +77,6 @@
             <p class="note">Терминал&nbsp;<%= segment.arrival_term %></p>
         <% end %>
     </td>
-
     <td class="changes" rowspan="2">
         <% if segment.layovers? %>
         <p>С <%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %></p>
@@ -92,12 +86,18 @@
             <p class="cnote"><span class="cabin"><%= human_cabin_nom(visible_cabins.first) %></span></p>
         <% end %>
     </td>
-
 </tr>
 <tr class="segment-<%= segment_counter + 1 %>">
     <td colspan="4" class="variants"></td>
 </tr>
 <% end %>
+<tr class="bar">
+    <td colspan="6">
+        <div class="segment">
+    
+        </div>
+    </td>
+</tr>
 <tr class="controls">
     <td></td>
     <td class="toggle" colspan="2">
@@ -114,6 +114,7 @@
     </td>
 </tr>
 </tbody>
+
 <tbody class="details">
 <% variant.segments.each_with_index do |segment, segment_counter| %>
     <%= render :partial => 'segment_details', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter, :segment_cabins => variant_cabins[segment_counter]} %>
