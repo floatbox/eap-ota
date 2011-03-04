@@ -88,9 +88,9 @@ City:
 Order:
   fields:
     default: order_id, pnr_number, email, phone, updated_at
-    list: order_id, pnr_number, email, phone, created_at, price_total, payment_status, ticket_status
-    show: order_id, pnr_number, payment_status, ticket_status, email, phone, name_in_card, last_digits_in_card, full_info, price_total, price_fare, price_share, price_our_markup, price_consolidator_markup, price_with_payment_commission, commission_carrier, commission_agent_comments, commission_subagent_comments, created_at, updated_at
-    csv:  order_id, pnr_number, email, created_at, updated_at, price_total, price_share, price_our_markup, price_consolidator_markup, price_with_payment_commission, full_info, payment_status, ticket_status
+    list: source, pnr_number, email, phone, created_at, price_total, payment_status, ticket_status
+    show: order_id, source, pnr_number, payment_status, ticket_status, email, phone, name_in_card, last_digits_in_card, full_info, price_total, price_fare, price_share, price_our_markup, price_consolidator_markup, price_with_payment_commission, commission_carrier, commission_agent_comments, commission_subagent_comments, created_at, updated_at
+    csv:  source, pnr_number, email, created_at, updated_at, price_total, price_share, price_our_markup, price_consolidator_markup, price_with_payment_commission, full_info, payment_status, ticket_status
     options:
       read_only: commission_carrier, commission_agent_comments, commission_subagent_comments
       date_formats:
@@ -103,7 +103,7 @@ Order:
   # тут не ввернешь конфирмации. временно убрал
   # actions:
   #   show: cancel, ticket, charge, unblock, show_pnr
-  filters: payment_status, ticket_status
+  filters: source, payment_status, ticket_status
   application: Orders
   export: csv
 

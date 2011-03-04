@@ -176,8 +176,8 @@
 
         <% if admin_user %>
         <span id="search-debug">
-            <input type="checkbox" id="sdmode"> <label for="sdmode">Режим отладки</label>&nbsp;
-            <input type="checkbox" id="sirena"> <label for="sirena">Сирена</label>
+          <input type="checkbox" id="sdmode" disabled="disabled" <%= 'checked="checked"' if Conf.amadeus.fake %> > <label for="sdmode">Режим отладки</label>&nbsp;
+            <input type="checkbox" id="sirena" disabled="disabled" <%= 'checked="checked"' if Conf.sirena.enabled %> > <label for="sirena">Сирена</label>
         </span>
         <% end %>
 

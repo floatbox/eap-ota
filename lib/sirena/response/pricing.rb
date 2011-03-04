@@ -54,6 +54,7 @@ module Sirena
 
         fare = rec.xpath("direction/price/fare").sum{|elem| elem.text.to_f}
         total = rec.xpath("direction/price/total").sum{|elem| elem.text.to_f}
+        # FIXME wrong???
         cabins = booking_classes.map{|klass|
           if "ЮСЭЖЦКЛМНЯТВХГУЕО".index(klass)
             "Y"
@@ -66,7 +67,7 @@ module Sirena
           end
         }
         Recommendation.new(
-          :source=>"sirena",
+          :source => "sirena",
           :price_fare => fare,
           :price_tax => total - fare,
           :variants => variants,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110302172228) do
+ActiveRecord::Schema.define(:version => 20110304041733) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -222,6 +222,7 @@ ActiveRecord::Schema.define(:version => 20110302172228) do
     t.string   "last_digits_in_card"
     t.text     "commission_agent_comments",                                                    :null => false
     t.text     "commission_subagent_comments",                                                 :null => false
+    t.string   "source"
   end
 
   create_table "regions", :force => true do |t|

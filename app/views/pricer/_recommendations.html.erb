@@ -21,12 +21,9 @@
     <div class="aux">
       <% if admin_user %>
         <span style="color:green">
-            <%= 'только в беспосадочном запросе.' if recommendation.source == 'right' %>
-            <%#= 'в обоих запросах' if recommendation.source.nil? %>
-            <%= 'не было в беспосадочном запросе!' if recommendation.source == 'left' && !recommendation.layovers? %>
+            <%= recommendation.source %>
         </span>
       <% end %>
-
     </div>
 </div>
 <% end %>
