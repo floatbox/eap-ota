@@ -10,6 +10,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   attr_accessor :people_count
   attr_accessor :number
   attr_accessor :order_id
+  attr_accessor :sirena_lead_pass
   attr_reader :order # то, что сохраняется в базу
   attr_accessor :variant_id #нужен при восстановлении формы по урлу
 
@@ -126,16 +127,12 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
 
   def block_money
-    if recommendation.source != 'sirena'
-      response = Payture.new.block(
-        recommendation.price_with_payment_commission, card, :order_id => order_id)
+    response = Payture.new.block(
+      recommendation.price_with_payment_commission, card, :order_id => order_id)
 
-      if response.error?
-        card.errors.add :number, "не удалось провести платеж"
-        self.errors.add :card, 'Платеж не прошел'
-      end
-    else
-      response = Sirena::Service.payment_ext_auth(self)
+    if response.error?
+      card.errors.add :number, "не удалось провести платеж"
+      self.errors.add :card, 'Платеж не прошел'
     end
 
     response
@@ -204,6 +201,8 @@ class OrderData < ActiveRecord::BaseWithoutTable
       unless response.error
         self.pnr_number = response.pnr_number
         if pnr_number
+          self.order_id = "si#{rand(655535).to_s(36)}"
+          self.sirena_lead_pass = response.lead_family
           @order = Order.create(:order_data => self)
           return pnr_number
         else

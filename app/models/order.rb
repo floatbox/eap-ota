@@ -25,6 +25,7 @@ class Order < ActiveRecord::Base
     self.price_fare = recommendation.price_fare
     self.price_with_payment_commission = recommendation.price_with_payment_commission
     self.full_info = order_data.full_info
+    self.sirena_lead_pass = order_data.sirena_lead_pass
     if c = recommendation.commission
       self.commission_carrier = c.carrier
       self.commission_agent = c.agent
@@ -73,6 +74,7 @@ class Order < ActiveRecord::Base
 
   def money_blocked!
     update_attribute(:payment_status, 'blocked')
+    #Sirena::Adapter.approve_payment(self) if recommendation.source == 'sirena'
     send_email
   end
 

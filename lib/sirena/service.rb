@@ -40,11 +40,7 @@ module Sirena
         http_response.body
       end
 
-      def payment_ext_auth(*params)
-        Response::PaymentExtAuth.new("")
-      end
-
-      %W(pricing describe booking).each do |method_name| # availability schedule)
+      %W(pricing describe booking payment_ext_auth).each do |method_name|
         define_method method_name.underscore do |*params|
           action(method_name, *params)
         end

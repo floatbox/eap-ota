@@ -21,7 +21,7 @@ module Sirena
         @status = xpath("//pnr/status").first
         @status = @status.text if @status
 
-        xpath("//pnr/passangers/passanger").each do |passanger|
+        xpath("//pnr/passengers/passenger").each do |passanger|
           if passanger.attribute("lead_pass") || @lead_family.blank?
             @lead_family = passanger.xpath('surname').first
             @lead_family = @lead_family.text if @lead_family
