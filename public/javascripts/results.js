@@ -147,7 +147,7 @@ selectTab: function(tab) {
     this.selectedTab = tab;
     this.filters.el.toggleClass('disabled', tab === 'matrix');
     $('#rtab-' + tab).addClass('selected').siblings().removeClass('selected');
-    $('#offers-featured, #offers-all, #offers-matrix').addClass('latent');
+    $('#offers-featured, #offers-all, #offers-diagram, #offers-matrix').addClass('latent');
     $('#offers-' + tab).removeClass('latent');
     pageurl.update('tab', tab);
 },
@@ -306,6 +306,8 @@ processUpdate: function() {
             var nbc = $('#offers-pcollection .offers-nearby').remove();
             $('#offers-context .offers-nearby').html(nbc.html() || '');
             self.toggleCollection(true);
+        }, function() {
+            self.diagram.update();
         });
     } else {
         $('#offers-pcollection').html('');
