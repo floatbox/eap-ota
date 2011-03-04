@@ -62,8 +62,9 @@ module Sirena
 
         fare = rec.xpath("direction/price/fare").sum{|elem| elem.text.to_f}
         total = rec.xpath("direction/price/total").sum{|elem| elem.text.to_f}
+
         Recommendation.new(
-          :source=>"sirena",
+          :source => "sirena",
           :price_fare => fare,
           :price_tax => total - fare,
           :variants => variants,
