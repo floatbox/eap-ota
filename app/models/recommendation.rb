@@ -263,7 +263,7 @@ class Recommendation
   end
 
   def check_price_and_availability(pricer_form)
-    unless pricer_form.sirena
+    unless source == "sirena"
       Amadeus.booking do |amadeus|
         self.price_fare, self.price_tax =
           amadeus.fare_informative_pricing_without_pnr(
@@ -345,12 +345,12 @@ class Recommendation
       s.flights.collect(&:flight_code).join('-')
     }
 
-    ( [ validating_carrier_iata, booking_classes.join(''), cabins.join('') ] +
+    ( [ (source == 'sirena' ? "SR" : "AM"), validating_carrier_iata, booking_classes.join(''), cabins.join('') ] +
       segment_codes ).join('.')
   end
 
   def self.deserialize(coded)
-    fv, classes, cabins, *segment_codes = coded.split('.')
+    sr, fv, classes, cabins, *segment_codes = coded.split('.')
     variant = Variant.new(
       :segments => segment_codes.collect { |segment_code|
         Segment.new( :flights => segment_code.split('-').collect { |flight_code|
@@ -360,6 +360,7 @@ class Recommendation
     )
 
     new(
+      :source=>(sr=="SR" ? "sirena" : ""),
       :validating_carrier_iata => fv,
       :booking_classes => classes.split(''),
       :cabins => cabins.split(''),

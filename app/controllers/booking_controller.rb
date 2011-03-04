@@ -41,6 +41,7 @@ class BookingController < ApplicationController
           # FIXME отменила пока посылку почты для сирены
           if @order.recommendation.source == 'sirena'
             @order.order.update_attribute(:payment_status, 'blocked')
+            Sirena::Adapter.approve_payment(@order)
           else
             @order.order.money_blocked!
           end
