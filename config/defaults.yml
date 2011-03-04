@@ -1,12 +1,17 @@
 # put local overrides in config/local.yml or config/local/*.yml
 amadeus:
+  endpoint: "https://test.webservices.amadeus.com"
+  enabled: yes
+  nonstop_search: yes
+  calendar: yes
+  fake: no
   production:
     endpoint: "https://production.webservices.amadeus.com"
-  endpoint: "https://test.webservices.amadeus.com"
 payture:
+  enabled: yes
   key: MerchantETerra
   host: engine-sandbox.payture.com
-  ssl: false
+  ssl: no
   pem: |-
     -----BEGIN PUBLIC KEY-----
     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp6EhXtBS3uHS24D2F+jE
@@ -17,17 +22,21 @@ payture:
     jEqhpDYkFUu0XMbGBYr0m6JcVXHGy3xV4J7YasVrvs0kqYJNiyaUhaHQYbAM2AWz
     IwIDAQAB
     -----END PUBLIC KEY-----
+payonline:
+  enabled: no
+  merchant: '3925'
+  security: '3495dbcb-aa90-46d4-91cf-8be89238ac77'
 cbr:
   usd:
     2011-01-01: 30.0000
     2011-01-02: 30.0001
   usd_default: 30.0
 sirena:
-  enabled: false
-  host: delta.eviterra.com
+  enabled: no
+  host: localhost
   port: 8888
   path: /
 geolocation:
-  enabled: false
+  enabled: no
   production:
-    enabled: true
+    enabled: yes

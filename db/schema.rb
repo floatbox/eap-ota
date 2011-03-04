@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110225174352) do
+ActiveRecord::Schema.define(:version => 20110304041733) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -144,6 +144,17 @@ ActiveRecord::Schema.define(:version => 20110225174352) do
   add_index "countries", ["name_en"], :name => "index_countries_on_name_en"
   add_index "countries", ["name_ru"], :name => "index_countries_on_name_ru"
 
+  create_table "destinations", :force => true do |t|
+    t.integer  "to_id"
+    t.integer  "from_id"
+    t.boolean  "rt"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "average_price"
+    t.integer  "average_time_delta"
+    t.integer  "hot_offers_counter", :default => 0
+  end
+
   create_table "geo_taggings", :force => true do |t|
     t.integer  "geo_tag_id"
     t.integer  "location_id"
@@ -171,14 +182,21 @@ ActiveRecord::Schema.define(:version => 20110225174352) do
   end
 
   create_table "hot_offers", :force => true do |t|
-    t.string   "code",           :null => false
-    t.string   "url",            :null => false
-    t.string   "description",    :null => false
-    t.integer  "price",          :null => false
+    t.string   "code",                    :null => false
+    t.string   "url",                     :null => false
+    t.string   "description",             :null => false
+    t.integer  "price",                   :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "for_stats_only"
+    t.integer  "destination_id"
+    t.integer  "time_delta"
+    t.integer  "price_variation"
+    t.integer  "price_variation_percent"
   end
+
+  add_index "hot_offers", ["created_at"], :name => "index_hot_offers_on_created_at"
+  add_index "hot_offers", ["destination_id"], :name => "index_hot_offers_on_destination_id"
 
   create_table "orders", :force => true do |t|
     t.string   "email"
@@ -204,6 +222,7 @@ ActiveRecord::Schema.define(:version => 20110225174352) do
     t.string   "last_digits_in_card"
     t.text     "commission_agent_comments",                                                    :null => false
     t.text     "commission_subagent_comments",                                                 :null => false
+    t.string   "source"
   end
 
   create_table "regions", :force => true do |t|

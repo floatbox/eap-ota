@@ -7,24 +7,21 @@ class Mux
 
     def pricer(form, admin_user = nil)
       # пока не мержим
-      if form.sirena
+      if Conf.sirena.enabled
         sirena_pricer(form)
-      else
+      elsif Conf.amadeus.enabled
         amadeus_pricer(form, admin_user)
+      else
+        []
       end
     end
 
     def calendar(form, admin_user = nil)
-      return [] if form.sirena
-
-      if form.debug
-        was_fake, Amadeus.fake = Amadeus.fake, true
-      end
+      return [] unless Conf.amadeus.enabled && Conf.amadeus.calendar
 
       request = Amadeus::Request::FareMasterPricerCalendar.new(form)
       recommendations = Amadeus::Service.fare_master_pricer_calendar(request).recommendations
 
-      Amadeus.fake = was_fake if form.debug
       recommendations = recommendations.select(&:sellable?) unless admin_user
       recommendations.delete_if(&:without_full_information?)
       recommendations.every.clear_variants
@@ -38,10 +35,6 @@ class Mux
       request_ws = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form)
       request_ns = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form)
       request_ns.nonstop = true
-
-      if form.debug
-        was_fake, Amadeus.fake = Amadeus.fake, true
-      end
 
       # TODO можно когда-нибудь вернуться. сейчас эта штука _иногда_ одновременно пытается загрузить класс
       # Country, в разных тредах
@@ -58,9 +51,9 @@ class Mux
 
       # non threaded variant
       recommendations_ws = Amadeus::Service.fare_master_pricer_travel_board_search(request_ws).recommendations
-      recommendations_ns = Amadeus::Service.fare_master_pricer_travel_board_search(request_ns).recommendations
-
-      Amadeus.fake = was_fake if form.debug
+      recommendations_ns = if Conf.amadeus.nonstop_search
+                           Amadeus::Service.fare_master_pricer_travel_board_search(request_ns).recommendations
+                           else [] end
 
       # merge
       recommendations = Recommendation.merge(recommendations_ws, recommendations_ns)

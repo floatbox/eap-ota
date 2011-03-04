@@ -650,6 +650,14 @@ makeRecommendation: function(variant, title) {
     var el = variant.el, offer = el.parent().clone();
     this.showVariant(offer.children().eq(el.prevAll().length));
     if (title.search(/лучшая/i) !== -1) {
+        var aveprice = $('#offers-options').attr('data-aveprice');
+        if (aveprice) {
+            aveprice = parseInt(aveprice, 10);
+            var saving = (aveprice - variant.offer.summary.price) / aveprice;
+            if (saving > 0.026) {
+                title += ' <span class="saving">(на <strong>' + Math.round(saving * 100) + '%</strong> дешевле, чем в среднем по этому направлению)';
+            }
+        }
         var cost = offer.find('td.cost dl'), ctext = cost.find('dd');
         ctext.html(ctext.html() + '<span class="cost-tip">' + ($('#offers-options').attr('data-people') !== '1' ? ' за всех' : '') + ', включая налоги и сборы</span>');
         cost.prepend('<dd>Всего </dd>');

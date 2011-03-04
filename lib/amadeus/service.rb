@@ -56,7 +56,7 @@ module Amadeus
 
     request = opts[:request]
 
-    if Amadeus.fake || opts[:debug] || request.debug
+    if Conf.amadeus.fake
       xml_string = read_latest_xml(action)
       response = parse_string(xml_string)
     else

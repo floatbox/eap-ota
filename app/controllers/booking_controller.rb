@@ -4,7 +4,7 @@ class BookingController < ApplicationController
 
   def preliminary_booking
     pricer_form = PricerForm.load_from_cache(params[:query_key])
-    if pricer_form.form_segments[0].date_as_date < Date.today + 2.days
+    if pricer_form.form_segments[0].date_as_date < ( Time.now.hour < 17 ? Date.today + 1.days : Date.today + 2.days)
       render :json => {:success => false}
       return
     end
@@ -79,3 +79,4 @@ class BookingController < ApplicationController
   helper_method :valid_card
 
 end
+

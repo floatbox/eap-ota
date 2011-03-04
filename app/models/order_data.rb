@@ -105,7 +105,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   validate :validate_card, :validate_dept_date
 
   def validate_dept_date
-    errors.add :recommendation, 'Первый вылет слишком рано' if recommendation.variants[0].segments[0].dept_date < Date.today + 2.days
+    errors.add :recommendation, 'Первый вылет слишком рано' if recommendation.variants[0].segments[0].dept_date < ( Time.now.hour < 17 ? Date.today + 1.days : Date.today + 2.days)
   end
 
   def validate_card
@@ -293,3 +293,4 @@ class OrderData < ActiveRecord::BaseWithoutTable
     order.create_booking
   end
 end
+

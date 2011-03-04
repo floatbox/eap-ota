@@ -11,7 +11,7 @@
 <% end %>
 
 <% if @recommendations.present? %>
-<div id="offers-options" data-filters='<%= raw Recommendation.summary(@recommendations, @locations).to_json.gsub("'", '&rsquo;') %>' data-query_key="<%= @query_key %>" data-people="<%= @search.people_total %>"></div>
+<div id="offers-options" data-filters='<%= raw Recommendation.summary(@recommendations, @locations).to_json.gsub("'", '&rsquo;') %>' data-query_key="<%= @query_key %>" data-people="<%= @search.people_total %>" data-aveprice="<%= @average_price %>"></div>
 <% @recommendations.each do |recommendation| %>
 <div class="offer collapsed<%= ' multiple' if recommendation.variants.length > 1 %>" data-summary='<%= recommendation.summary.to_json %>'>
     <% different_cabins = recommendation.cabins_except(@search.cabin) %>
@@ -21,12 +21,9 @@
     <div class="aux">
       <% if admin_user %>
         <span style="color:green">
-            <%= 'только в беспосадочном запросе.' if recommendation.source == 'right' %>
-            <%#= 'в обоих запросах' if recommendation.source.nil? %>
-            <%= 'не было в беспосадочном запросе!' if recommendation.source == 'left' && !recommendation.layovers? %>
+            <%= recommendation.source %>
         </span>
       <% end %>
-
     </div>
 </div>
 <% end %>
