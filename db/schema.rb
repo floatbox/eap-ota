@@ -222,8 +222,8 @@ ActiveRecord::Schema.define(:version => 20110304063509) do
     t.string   "last_digits_in_card"
     t.text     "commission_agent_comments",                                                    :null => false
     t.text     "commission_subagent_comments",                                                 :null => false
-    t.string   "sirena_lead_pass"
     t.string   "source"
+    t.string   "sirena_lead_pass"
   end
 
   create_table "regions", :force => true do |t|
