@@ -43,8 +43,17 @@ update: function() {
     var segments = this.getSegments();
     var list = $('<div/>');
     var items = segments[0].items;
+    var length = segments[0].arv - segments[0].dpt;
     for (var i = 0, im = items.length; i < im; i++) {
-        list.append(items[i]);
+        var item = items[i].clone();
+        item.find('.flight, .layover').each(function() {
+            var el = $(this);
+            var d = parseInt(el.attr('data-duration'), 10);
+            el.width(Math.round(d / length * 500));
+        });
+        var dpt = parseInt(item.attr('data-dpt'), 10) - segments[0].dpt;
+        item.css('margin-left', Math.round(dpt / length * 500));
+        list.append(item);
     }
     $('#offers-diagram').html(list.html());
 }

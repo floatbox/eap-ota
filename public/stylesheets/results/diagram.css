@@ -1,0 +1,36 @@
+#offers-diagram .segment {
+    margin: 0 0 10px;
+    overflow: hidden;
+    font-size: 11px;
+}
+#offers-diagram .dpt,
+#offers-diagram .arv,
+#offers-diagram .flight,
+#offers-diagram .layover {
+    float: left;
+}
+
+#offers-diagram .dpt,
+#offers-diagram .arv {
+    position: relative;
+    width: 34px;
+    text-align: center;
+    color: #999;
+}
+#offers-diagram .dpt .time,
+#offers-diagram .arv .time {
+    position: absolute;
+    visibility: hidden;
+}
+
+#offers-diagram .flight,
+#offers-diagram .layover {
+    overflow: hidden;
+    white-space: nowrap;
+}
+#offers-diagram .flight {
+    background: #CCC;
+}
+#offers-diagram .layover {
+    background: #FFF;
+}
