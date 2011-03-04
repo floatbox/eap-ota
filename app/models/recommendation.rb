@@ -347,6 +347,8 @@ class Recommendation
   end
 
   def self.deserialize(coded)
+    # временная штука, пока не инвалидируем весь кэш старых рекомендаций
+    coded = 'amadeus.' + coded unless coded =~ /^amadeus|^sirena/
     source, fv, classes, cabins, *segment_codes = coded.split('.')
     variant = Variant.new(
       :segments => segment_codes.collect { |segment_code|
@@ -480,6 +482,7 @@ class Recommendation
       cabins << cabin
     end
     Recommendation.new(
+      :source => 'amadeus',
       :validating_carrier_iata => default_carrier,
       :variants => [Variant.new(:segments => segments)],
       :booking_classes => subclasses,
