@@ -6,7 +6,7 @@ require 'uri'
 module Tmp
 
   def self.fill_in_lat_and_lng_in_regions
-    Region.all do |r|
+    Region.all.each do |r|
       city = City.first(:conditions => ['region_id = ?', r.id], :order => 'importance DESC')
       r.update_attributes(:lat => city.lat, :lng => city.lng)
     end
