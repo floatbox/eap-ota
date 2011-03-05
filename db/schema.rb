@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110304163919) do
+ActiveRecord::Schema.define(:version => 20110305141037) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -240,6 +240,8 @@ ActiveRecord::Schema.define(:version => 20110304163919) do
     t.string   "proper_in"
     t.string   "lat"
     t.string   "lng"
+    t.integer  "importance",   :default => 0
+    t.string   "region_type"
   end
 
   create_table "typus_users", :force => true do |t|

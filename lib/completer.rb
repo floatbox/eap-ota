@@ -79,13 +79,13 @@ class Completer
   def iata_from_name(name)
     # FIXME перенести отсюда в фильтр например
     scan_eq(name) do |record|
-      return record.code if %W(city airport country).include? record.type
+      return record.code if %W(city airport country region).include? record.type
     end
     nil
   end
 
   # FIXME объединить с iata_from_name
-  def record_from_string(name, types=['city', 'airport', 'country'])
+  def record_from_string(name, types=['city', 'airport', 'country', 'region'])
     scan_eq(name) do |record|
       return record if types.include? record.type
     end
@@ -208,6 +208,7 @@ class Completer
     #read_carriers
     #read_airplanes
     read_airports
+    read_regions
     #read_geotags
 
     read_dates
@@ -282,7 +283,8 @@ class Completer
   def read_important_objects
     ( Country.important.all +
       City.important.with_country.all +
-      Airport.important.with_country.all
+      Airport.important.with_country.all +
+      Region.important.with_country.all
     ).sort_by(&:importance).reverse.each do |c|
       case c
       when Country
@@ -311,13 +313,27 @@ class Completer
     end
   end
 
+  def add_region(c)
+    synonyms = []
+    synonyms << c.name_en unless c.name_en == c.name
+    synonyms.delete_if &:blank?
+    add(:name => c.name, :type => 'region', :aliases => synonyms, :hint => c.country.name, :info => "#{c.region_type} #{c.name} #{c.country.case_in}")
+    add(:name => c.case_to, :type => 'region', :hint => c.country.name, :info => "#{c.region_type} #{c.name} #{c.country.case_in}")
+  end
+
+  def read_regions
+    Region.not_important.with_country.each do |c|
+      add_region(c)
+    end
+  end
+
   def add_city(c)
     synonyms = []
     synonyms << c.name_en unless c.name_en == c.name
     synonyms += c.synonyms
     synonyms.delete_if &:blank?
-    add(:name => c.name, :type => 'city', :code => c.iata, :aliases => synonyms, :hint => c.country.name, :info => "Город #{c.name} #{c.country.proper_in}")
-    add(:name => c.case_to, :type => 'city', :code => c.iata, :hint => c.country.name, :info => "Город #{c.name} #{c.country.proper_in}")
+    add(:name => c.name, :type => 'city', :code => c.iata, :aliases => synonyms, :hint => c.country.name, :info => "Город #{c.name} #{c.country.case_in}")
+    add(:name => c.case_to, :type => 'city', :code => c.iata, :hint => c.country.name, :info => "Город #{c.name} #{c.country.case_in}")
   end
 
   def read_cities
