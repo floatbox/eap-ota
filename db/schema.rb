@@ -223,6 +223,7 @@ ActiveRecord::Schema.define(:version => 20110304163919) do
     t.text     "commission_agent_comments",                                                    :null => false
     t.text     "commission_subagent_comments",                                                 :null => false
     t.string   "source"
+    t.string   "sirena_lead_pass"
   end
 
   create_table "regions", :force => true do |t|

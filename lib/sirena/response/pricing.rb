@@ -15,13 +15,17 @@ module Sirena
 
         self.recommendations = xpath("//pricing/variant").map do |rec|
           parse_recommendation(rec, flights)
-        end
+        end.compact
       end
 
       def parse_recommendation(rec, flights)
         booking_classes = []
+        cabins = []
         first_variant = true
         variants = rec.xpath("flights").map{|variant|
+          if variant.attribute("et_possible") && variant.attribute("et_possible").value != 'true'
+            next
+          end
           time = 0
           prev_arr = ""
           prev_segment_num = ""
@@ -40,7 +44,11 @@ module Sirena
             end
             id = fi.attribute("id") && fi.attribute("id").value
             cl = fi.attribute("subclass") && fi.attribute("subclass").value
-            booking_classes << cl if cl && first_variant
+            base_cl = fi.attribute("baseclass") && fi.attribute("baseclass").value
+            if first_variant
+              booking_classes << cl if cl
+              cabins << {"Э"=>"Y", "Б"=>"C", "П"=>"F"}[base_cl] || base_cl
+            end
             time += flights[id][:time]
             time +=(flights[id][:departure]-prev_arr).to_i/60 if !prev_arr.blank?
             prev_arr=flights[id][:arrival]
@@ -50,22 +58,11 @@ module Sirena
           # eft = estimated flight time!
           segment.eft = (time/60).to_s+":"+"%02i".%(time % 60)
           Variant.new( :segments => segments )
-        }
+        }.compact
 
         fare = rec.xpath("direction/price/fare").sum{|elem| elem.text.to_f}
         total = rec.xpath("direction/price/total").sum{|elem| elem.text.to_f}
-        # FIXME wrong???
-        cabins = booking_classes.map{|klass|
-          if "ЮСЭЖЦКЛМНЯТВХГУЕО".index(klass)
-            "Y"
-          elsif "ИБДШЫ".index(klass)
-            "C"
-          elsif "РФПА".index(klass)
-            "F"
-          else
-            klass
-          end
-        }
+
         Recommendation.new(
           :source => "sirena",
           :price_fare => fare,
@@ -76,7 +73,7 @@ module Sirena
           :additional_info => "",
           :cabins => booking_classes,
           :booking_classes => booking_classes
-        )
+        ) unless variants.blank?
       end
 
       def parse_flight(fi)
