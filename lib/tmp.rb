@@ -5,6 +5,12 @@ require 'uri'
 
 module Tmp
 
+  def self.fill_in_lat_and_lng_in_regions
+    Region.all do |r|
+      city = City.first(:conditions => ['region_id = ?', r.id], :order => 'importance DESC')
+    end
+  end
+
   def self.fill_in_iata_ru_in_cities_and_airports(path)
     open(path + '/cities.csv').each_line do |l|
       l.chomp

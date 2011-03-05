@@ -14,16 +14,16 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       super(args)
     end
 
-    def from_country?
-      from_as_object.class == Country
+    def from_country_or_region?
+       [Country, Region].include? from_as_object.class
     end
 
     def date_as_date
       Date.strptime(date, '%d%m%y')
     end
 
-    def to_country?
-      to_as_object.class == Country
+    def to_country_or_region?
+      [Country, Region].include? to_as_object.class
     end
 
     def to= name

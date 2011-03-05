@@ -36,10 +36,8 @@ class Country < ActiveRecord::Base
     url
   end
 
-  def self.main_city_iatas(code)
-    country = Country.find_by_alpha2(code)
-    #country.cities.order('importance DESC').limit(5).every.iata
-    City.find(:all, :conditions => ['country_id = ?', country.id], :limit => 5, :order => 'importance DESC').every.iata
+  def main_city_iatas
+    City.all(:conditions => ['country_id = ?', self.id], :order => 'importance DESC', :limit => 5).every.iata
   end
 
   # FIXME WTF? хотя бы iata коды использовать. не айдишники из базы!1
@@ -69,3 +67,4 @@ class Country < ActiveRecord::Base
     ]
   end
 end
+
