@@ -31,7 +31,7 @@ Carrier:
   fields:
     default: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
     list: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
-    form: ru_shortname, ru_longname, en_shortname, en_longname, iata, country, bonus_program_name, alliance, gds, interlines, consolidator
+    form: ru_shortname, ru_longname, en_shortname, en_longname, iata, country, bonus_program_name, alliance, gds, interlines, consolidator, color
     options:
       read_only: interlines
   order_by: en_shortname, ru_shortname
@@ -144,8 +144,10 @@ HotOffer:
 Region:
   fields:
     default: name_ru, name_en, country
-    list: name_ru, name_en, country
-    form: name_ru, name_en, country
+    list: name_ru, name_en, country,
+    form: name_ru, name_en, country, lat, lng, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in
+    options:
+      read_only: morpher_to, morpher_from, morpher_in
   order_by: name_ru
   relationships: cities, country
   filters: country

@@ -5,8 +5,8 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     column :from, :string
     column :to, :string
     column :date, :string
-    attr_accessor :to_iata, :from_iata
-    validates_presence_of :from_iata, :to_iata, :date
+    attr_reader :to_as_object, :from_as_object
+    validates_presence_of :from_as_object, :to_as_object, :date
 
     def as_json(args)
       args ||= {}
@@ -14,34 +14,45 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       super(args)
     end
 
-    def from_country?
-      from_as_object.class == Country
+    def location_from_string name
+      record = Completer.record_from_string(name) rescue nil
+      if record
+        if record.code && (['country', 'city', 'airport'].include? record.type)
+          [City[record.code], Airport[record.code], Country.find_by_alpha2(record.code)].find(&:id)
+        elsif record.type == 'region'
+          Region.first(:conditions => ['name_ru = ? OR name_en = ?', record.name, record.name])
+        end
+      end
+    end
+
+    def from_country_or_region?
+      [Country, Region].include? from_as_object.class
+    end
+
+    def to_country_or_region?
+      [Country, Region].include? to_as_object.class
     end
 
     def date_as_date
       Date.strptime(date, '%d%m%y')
     end
 
-    def to_country?
-      to_as_object.class == Country
-    end
-
     def to= name
-      @to_iata =  Completer.iata_from_name(name) rescue nil
+      @to_as_object = location_from_string name
       super
     end
 
     def from= name
-      @from_iata = Completer.iata_from_name(name) rescue nil
+      @from_as_object = location_from_string name
       super
     end
 
-    def to_as_object
-       to_iata && [City[to_iata], Airport[to_iata], Country.find_by_alpha2(to_iata)].find(&:id)
+    def to_iata
+      to_as_object.iata
     end
 
-    def from_as_object
-      from_iata && [City[from_iata], Airport[from_iata], Country.find_by_alpha2(from_iata)].find(&:id)
+    def from_iata
+      from_as_object.iata
     end
 
     def nearby_cities
@@ -105,7 +116,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   end
 
   def rt
-    (form_segments.length == 2) && (form_segments[0].to_iata == form_segments[1].from_iata) && (form_segments[1].to_iata == form_segments[0].from_iata)
+    (form_segments.length == 2) && (form_segments[0].to_as_object == form_segments[1].from_as_object) && (form_segments[1].to_as_object == form_segments[0].from_as_object)
   end
 
   # для рассчета тарифов
@@ -181,11 +192,11 @@ class PricerForm < ActiveRecord::BaseWithoutTable
                 ]
               str = str[0...(str.length - word_part.length)]
               not_finished = true
-            elsif r && (['airport', 'city', 'country'].include? r.type)
-              form_segments[0].to_iata = r.code rescue nil
-              form_segments[1].from_iata = r.code if form_segments.length == 2 && form_segments[0].to == form_segments[1].from rescue nil
+            elsif r && (['airport', 'city', 'country', 'region'].include? r.type)
+              form_segments[0].to = r.name rescue nil
+              form_segments[1].from = r.name if form_segments.length == 2 && form_segments[0].to == form_segments[1].from rescue nil
               res[:to] = {
-                :value => r.code,
+                :value => r.name,
                 :str => word_part.to_s,
                 :start => str.length - word_part.length,
                 :end => str.length-1
