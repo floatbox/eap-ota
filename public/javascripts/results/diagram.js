@@ -64,9 +64,9 @@ update: function() {
             item.find('.bar').css('left', Math.round(dpt / length * dwidth) + 80);
             list.append(item);
         }
-        if (s > 0) list.hide();
         container.append(list);
+        if (s > 0) list.hide();
     }
-    $('#offers-diagram').html(list.html());
+    $('#offers-diagram').append(list);
 }
 };

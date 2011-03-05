@@ -101,7 +101,7 @@
             <div class="dpt"><%= fmt_time( segment.departure_time ) %> <span class="iata"><%= segment.departure_iata %></span></div>
             <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
             <% carrier_color = flight.operating_carrier.color %>
-            <div class="flight" data-duration="<%= flight.duration %>"<%= if carrier_color %> style="background-color: #<%= carrier_color %>;"<% end %>><%= flight.operating_carrier.name %></div>
+            <div class="flight" data-duration="<%= flight.duration %>"<% if carrier_color %> style="background-color: #<%= carrier_color %>;"<% end %>><%= flight.operating_carrier.name %></div>
             <% if layover %>
                 <div class="layover" data-duration="<%= layover %>"><%= flight.arrival.city.name %></div>
             <% end %>
