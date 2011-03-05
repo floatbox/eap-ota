@@ -1,6 +1,20 @@
 #offers-diagram .segment {
+    position: relative;
     margin: 0 0 10px;
-    overflow: hidden;
+}
+
+#offers-diagram a.a-button {
+    display: block;
+    width: 60px;
+    border-color: #7b8e12;
+    padding: 1px 5px;
+    font-size: 14px;
+}
+
+
+#offers-diagram .bar {
+    position: absolute;
+    top: 5px;
     font-size: 11px;
 }
 #offers-diagram .dpt,
@@ -12,24 +26,32 @@
 
 #offers-diagram .dpt,
 #offers-diagram .arv {
-    position: relative;
-    width: 34px;
-    text-align: center;
-    color: #999;
-}
-#offers-diagram .dpt .time,
-#offers-diagram .arv .time {
-    position: absolute;
     visibility: hidden;
+    width: 60px;
+    padding-top: 1px;
+    color: #666;
 }
+#offers-diagram .dpt {
+    padding-right: 5px;
+    text-align: right;
+}
+#offers-diagram .arv {
+    padding-left: 5px;
+}
+#offers-diagram .bar:hover .dpt,
+#offers-diagram .bar:hover .arv {
+    visibility: inherit;
+}
+
 
 #offers-diagram .flight,
 #offers-diagram .layover {
     overflow: hidden;
+    padding: 0 4px;
     white-space: nowrap;
 }
 #offers-diagram .flight {
-    background: #CCC;
+    background: #bcc3cc;
 }
 #offers-diagram .layover {
     background: #FFF;

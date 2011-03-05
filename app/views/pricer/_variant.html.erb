@@ -95,21 +95,19 @@
     <td colspan="6">
     <% variant.segments.each_with_index do |segment, segment_counter| %>
         <% segment_departure = time_in_minutes(segment.departure_time) %>
-        <div class="segment" data-dpt="<%= segment_departure %>" data-arv="<%= segment_departure + segment.total_duration %>">
-            <div class="dpt">
-                <span class="iata"><%= segment.departure_iata %></span>
-                <span class="time"><%= fmt_time( segment.departure_time ) %></span>
-            </div>
+        <div class="segment" data-flights="<%= segment_flight_numbers(segment) %>" data-dpt="<%= segment_departure %>" data-arv="<%= segment_departure + segment.total_duration %>">
+        <a class="a-button" href="#"><%= recommendation.price_total.round.to_i %>&nbsp;Р</a>
+        <div class="bar">
+            <div class="dpt"><%= fmt_time( segment.departure_time ) %> <span class="iata"><%= segment.departure_iata %></span></div>
             <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
-            <div class="flight" data-duration="<%= flight.duration %>"><%= flight.operating_carrier.name %></div>
+            <% carrier_color = flight.operating_carrier.color %>
+            <div class="flight" data-duration="<%= flight.duration %>"<%= if carrier_color %> style="background-color: #<%= carrier_color %>;"<% end %>><%= flight.operating_carrier.name %></div>
             <% if layover %>
                 <div class="layover" data-duration="<%= layover %>"><%= flight.arrival.city.name %></div>
             <% end %>
             <% end %>    
-            <div class="arv">
-                <span class="iata"><%= segment.arrival_iata %></span>
-                <span class="time"><%= fmt_time( segment.arrival_time ) %></span>
-            </div>
+            <div class="arv"><span class="iata"><%= segment.arrival_iata %></span> <%= fmt_time( segment.arrival_time ) %></div>
+        </div>
         </div>
     <% end %>
     </td>

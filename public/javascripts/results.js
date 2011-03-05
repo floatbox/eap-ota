@@ -146,6 +146,7 @@ init: function() {
 selectTab: function(tab) {
     this.selectedTab = tab;
     this.filters.el.toggleClass('disabled', tab === 'matrix');
+    $('#offers-context').toggleClass('latent', tab === 'diagram');
     $('#rtab-' + tab).addClass('selected').siblings().removeClass('selected');
     $('#offers-featured, #offers-all, #offers-diagram, #offers-matrix').addClass('latent');
     $('#offers-' + tab).removeClass('latent');
@@ -426,6 +427,8 @@ applyFilters: function() {
         list.hide();
         self.showDepartures();
         list.show();
+    }, function() {
+        self.diagram.update();
     }, function() {
         self.showRecommendations();
         list.removeClass('translucent');

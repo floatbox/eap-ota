@@ -110,6 +110,10 @@ module PricerHelper
     titles[cabin]  
   end
   
+  def segment_flight_numbers segment
+    segment.flights.map{|f| "#{f.marketing_carrier_iata}#{f.flight_number}" }.join('-')
+  end
+  
   # FIXME отrubyить его посимпатишнее
   def primary_operating_carriers variant
     primary_carriers = []

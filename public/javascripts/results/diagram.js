@@ -6,6 +6,7 @@ getSegments: function() {
     var segments = [];
     for (var s = samount; s--;) {
         segments[s] = {
+            contents: {},
             items: [],
             dpt: 1440,
             arv: 0
@@ -20,9 +21,12 @@ getSegments: function() {
         for (var s = samount; s--;) {
             var bar = variant.bars[s];
             var segment = segments[s];
-            segment.items.push(bar.el);
-            segment.dpt = Math.min(segment.dpt, bar.dpt);
-            segment.arv = Math.max(segment.arv, bar.arv);
+            if (segment.contents[bar.flights] === undefined) {            
+                segment.items.push(bar.el);
+                segment.dpt = Math.min(segment.dpt, bar.dpt);
+                segment.arv = Math.max(segment.arv, bar.arv);
+                segment.contents[bar.flights] = true;
+            }
         }
     }
     return segments;
@@ -33,6 +37,7 @@ parseBars: function(items) {
         var item = items.eq(i);
         bars[i] = {
             el: item,
+            flights: item.attr('data-flights'),
             dpt: item.attr('data-dpt'),
             arv: item.attr('data-arv')                    
         };
@@ -41,19 +46,26 @@ parseBars: function(items) {
 },
 update: function() {
     var segments = this.getSegments();
-    var list = $('<div/>');
-    var items = segments[0].items;
-    var length = segments[0].arv - segments[0].dpt;
-    for (var i = 0, im = items.length; i < im; i++) {
-        var item = items[i].clone();
-        item.find('.flight, .layover').each(function() {
-            var el = $(this);
-            var d = parseInt(el.attr('data-duration'), 10);
-            el.width(Math.round(d / length * 500));
-        });
-        var dpt = parseInt(item.attr('data-dpt'), 10) - segments[0].dpt;
-        item.css('margin-left', Math.round(dpt / length * 500));
-        list.append(item);
+    var dwidth = 750;
+    var container = $('#offers-diagram').html('');
+    for (var s = 0; s < segments.length; s++) {
+        var list = $('<div/>');    
+        var segment = segments[s];
+        var items = segment.items;        
+        var length = segment.arv - segment.dpt;
+        for (var i = 0, im = items.length; i < im; i++) {
+            var item = items[i].clone();
+            item.find('.flight, .layover').each(function() {
+                var el = $(this);
+                var d = parseInt(el.attr('data-duration'), 10);
+                el.width(Math.round(d / length * dwidth) - 8);
+            });
+            var dpt = parseInt(item.attr('data-dpt'), 10) - segment.dpt;
+            item.find('.bar').css('left', Math.round(dpt / length * dwidth) + 80);
+            list.append(item);
+        }
+        if (s > 0) list.hide();
+        container.append(list);
     }
     $('#offers-diagram').html(list.html());
 }
