@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110305141037) do
+ActiveRecord::Schema.define(:version => 20110305160258) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(:version => 20110305141037) do
     t.integer  "gds_id"
     t.integer  "consolidator_id"
     t.text     "interlines",          :null => false
+    t.string   "color"
   end
 
   create_table "cities", :force => true do |t|
