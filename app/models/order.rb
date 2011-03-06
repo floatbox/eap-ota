@@ -44,7 +44,12 @@ class Order < ActiveRecord::Base
   end
 
   def raw
-    Amadeus::Service.pnr_raw(pnr_number)
+    case source
+    when 'amadeus'
+      Amadeus::Service.pnr_raw(pnr_number)
+    when 'sirena'
+      Sirena::Service.pnr_history(:number => pnr_number).history
+    end
   end
 
   def payture_state
