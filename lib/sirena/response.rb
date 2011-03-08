@@ -26,6 +26,12 @@ module Sirena
         end
       end
 
+      def to_amadeus_time(str)
+        if str.length < 5
+          str="0"+str
+        end
+        str.gsub(":", "")
+      end
     end
   end
 end

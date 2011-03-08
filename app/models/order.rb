@@ -79,7 +79,6 @@ class Order < ActiveRecord::Base
 
   def money_blocked!
     update_attribute(:payment_status, 'blocked')
-    #Sirena::Adapter.approve_payment(self) if recommendation.source == 'sirena'
     send_email
   end
 
