@@ -87,9 +87,15 @@ class Order < ActiveRecord::Base
   end
 
   def cancel!
-    Amadeus.booking do |amadeus|
-      amadeus.pnr_retrieve(:number => pnr_number)
-      amadeus.pnr_cancel
+    case source
+    when 'amadeus'
+      Amadeus.booking do |amadeus|
+        amadeus.pnr_retrieve(:number => pnr_number)
+        amadeus.pnr_cancel
+        update_attribute(:ticket_status, 'canceled')
+      end
+    when 'sirena'
+      Sirena::Service.payment_ext_auth(self, 'cancel')
       update_attribute(:ticket_status, 'canceled')
     end
   end
