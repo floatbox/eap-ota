@@ -46,8 +46,9 @@ parseBars: function(items) {
 },
 update: function() {
     var segments = this.getSegments();
-    var dwidth = 750;
+    var dwidth = 750, dleft = 80;
     var container = $('#offers-diagram').html('');
+    var gsteps = [15, 30, 60, 90, 120, 180, 240, 360];
     for (var s = 0; s < segments.length; s++) {
         var list = $('<div/>');    
         var segment = segments[s];
@@ -61,8 +62,23 @@ update: function() {
                 el.width(Math.round(d / length * dwidth) - 8);
             });
             var dpt = parseInt(item.attr('data-dpt'), 10) - segment.dpt;
-            item.find('.bar').css('left', Math.round(dpt / length * dwidth) + 80);
+            item.find('.bar').css('left', Math.round(dpt / length * dwidth) + dleft);
             list.append(item);
+        }
+        for (var i = gsteps.length; i--;) {
+            if (length / gsteps[i] > 8) break;
+            var gstep = gsteps[i];
+        }
+        var tmin = Math.ceil(segment.dpt / gstep) * gstep;
+        var tmax = Math.floor(segment.arv / gstep) * gstep;
+        for (var t = tmin; t < tmax + 1; t += gstep) {
+            var time = $('<div class="grid"/>');
+            time.html('<span class="time">' + Math.floor((t % 1440) / 60) + ':' + (t % 60 / 100).toFixed(2).substring(2) + '</span>');
+            if (t === 1440) {
+                time.addClass('midnight');
+            }
+            time.css('left', Math.round((t - segment.dpt) / length * dwidth) + dleft + 65);
+            list.append(time);
         }
         container.append(list);
         if (s > 0) list.hide();

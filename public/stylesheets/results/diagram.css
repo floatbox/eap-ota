@@ -1,3 +1,7 @@
+#offers-diagram {
+    position: relative;
+    margin-top: 30px;
+}
 #offers-diagram .segment {
     position: relative;
     margin: 0 0 10px;
@@ -7,14 +11,15 @@
     display: block;
     width: 60px;
     border-color: #7b8e12;
-    padding: 1px 5px;
+    padding: 0 4px;
     font-size: 14px;
 }
 
 
 #offers-diagram .bar {
     position: absolute;
-    top: 5px;
+    top: 3px;
+    z-index: 1;
     font-size: 11px;
 }
 #offers-diagram .dpt,
@@ -28,8 +33,9 @@
 #offers-diagram .arv {
     visibility: hidden;
     width: 60px;
-    padding-top: 1px;
+    padding-top: 2px;
     color: #666;
+    cursor: default;
 }
 #offers-diagram .dpt {
     padding-right: 5px;
@@ -47,12 +53,35 @@
 #offers-diagram .flight,
 #offers-diagram .layover {
     overflow: hidden;
+    border-top: 1px solid #E7ECEE;
+    border-bottom: 1px solid #E7ECEE;
     padding: 0 4px;
     white-space: nowrap;
+    cursor: pointer;
 }
 #offers-diagram .flight {
     background: #bcc3cc;
 }
 #offers-diagram .layover {
     background: #FFF;
+}
+
+/* Grid */
+#offers-diagram .grid {
+    position: absolute;
+    top: -10px;
+    height: 100%;
+    padding-bottom: 10px;
+    border-left: 1px solid #cfd4d6;
+}
+#offers-diagram .midnight {
+    border-left: 1px solid #a1a5a6;
+}
+#offers-diagram .grid .time {
+    position: absolute;
+    left: -15px;
+    top: -20px;
+    width: 30px;
+    font-size: 11px;
+    text-align: center;
 }
