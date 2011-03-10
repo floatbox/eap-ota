@@ -156,8 +156,11 @@ app.InputText = function(el, form) {
         $el.toggleClass('text-invalid', mark);
     });
 
-    // Обработчики событий
-    
+    // динамическое изменение шаблона
+    $el.bind('mask', function(e, mask) {
+        params.mask = mask;
+    });
+
     // при получении фокуса сбрасываем визуальный признак невалидности
     $el.focus(function() {
         // если есть фоновая подсказка, то прячем её

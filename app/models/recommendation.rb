@@ -154,11 +154,9 @@ class Recommendation
   end
 
   def self.merge left, right
-    # работает только пока signature не учитывает sources
     merged = left | right
-    (merged - left).each {|r| r.source = 'right' }
-    (merged - right).each {|r| r.source = 'left' }
 
+    # FIXME вынести логгер отсюдова
     merged.each do |r|
       r.variants.each do |v|
         cryptic_logger.info r.cryptic(v)
@@ -223,7 +221,7 @@ class Recommendation
 
   # comparison, uniquiness, etc.
   def signature
-    [validating_carrier_iata, price_fare, price_tax, variants, booking_classes]
+    [source, validating_carrier_iata, price_fare, price_tax, variants, booking_classes]
   end
 
   def hash
@@ -263,7 +261,7 @@ class Recommendation
   end
 
   def check_price_and_availability(pricer_form)
-    unless pricer_form.sirena
+    if source == 'amadeus'
       Amadeus.booking do |amadeus|
         self.price_fare, self.price_tax =
           amadeus.fare_informative_pricing_without_pnr(
@@ -286,10 +284,9 @@ class Recommendation
         air_sfr.fill_itinerary!(segments)
         self
       end
-    else
+    elsif source == 'sirena'
       recs = Sirena::Service.pricing(pricer_form, self).recommendations
       rec = recs && recs[0]
-      self.source = 'sirena'
       self.rules = [] # для получения этой инфы для каждого тарифа нужно отправлять отдельный запрос fareremark
       if rec
         self.price_fare = rec.price_fare
@@ -345,12 +342,14 @@ class Recommendation
       s.flights.collect(&:flight_code).join('-')
     }
 
-    ( [ validating_carrier_iata, booking_classes.join(''), cabins.join('') ] +
+    ( [ source, validating_carrier_iata, booking_classes.join(''), cabins.join('') ] +
       segment_codes ).join('.')
   end
 
   def self.deserialize(coded)
-    fv, classes, cabins, *segment_codes = coded.split('.')
+    # временная штука, пока не инвалидируем весь кэш старых рекомендаций
+    coded = 'amadeus.' + coded unless coded =~ /^amadeus|^sirena/
+    source, fv, classes, cabins, *segment_codes = coded.split('.')
     variant = Variant.new(
       :segments => segment_codes.collect { |segment_code|
         Segment.new( :flights => segment_code.split('-').collect { |flight_code|
@@ -360,6 +359,7 @@ class Recommendation
     )
 
     new(
+      :source => source,
       :validating_carrier_iata => fv,
       :booking_classes => classes.split(''),
       :cabins => cabins.split(''),
@@ -482,6 +482,7 @@ class Recommendation
       cabins << cabin
     end
     Recommendation.new(
+      :source => 'amadeus',
       :validating_carrier_iata => default_carrier,
       :variants => [Variant.new(:segments => segments)],
       :booking_classes => subclasses,

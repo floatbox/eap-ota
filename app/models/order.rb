@@ -3,6 +3,7 @@ class Order < ActiveRecord::Base
 
   PAYMENT_STATUS = {'not blocked' => 'not blocked', 'blocked' => 'blocked', 'charged' => 'charged'}
   TICKET_STATUS = { 'ticketed' => 'ticketed', 'booked' => 'booked', 'canceled' => 'canceled'}
+  SOURCE = { 'amadeus' => 'amadeus', 'sirena' => 'sirena' }
 
   validates_presence_of :email#, :phone
   validates_format_of :email, :with =>
@@ -18,10 +19,13 @@ class Order < ActiveRecord::Base
     self.order_id = order_data.order_id
     self.email = order_data.email
     self.phone = order_data.phone
+    self.source = recommendation.source
     self.pnr_number = order_data.pnr_number
     self.price_total = recommendation.price_total
+    self.price_fare = recommendation.price_fare
     self.price_with_payment_commission = recommendation.price_with_payment_commission
     self.full_info = order_data.full_info
+    self.sirena_lead_pass = order_data.sirena_lead_pass
     if c = recommendation.commission
       self.commission_carrier = c.carrier
       self.commission_agent = c.agent
@@ -31,7 +35,6 @@ class Order < ActiveRecord::Base
       self.price_share = recommendation.price_share
       self.price_our_markup = recommendation.price_our_markup
       self.price_consolidator_markup = recommendation.price_consolidator_markup
-      self.price_fare = recommendation.price_fare
       self.price_tax_and_markup = recommendation.price_tax_and_markup
     end
     self.payment_status = 'not blocked'
@@ -41,7 +44,12 @@ class Order < ActiveRecord::Base
   end
 
   def raw
-    Amadeus::Service.pnr_raw(pnr_number)
+    case source
+    when 'amadeus'
+      Amadeus::Service.pnr_raw(pnr_number)
+    when 'sirena'
+      Sirena::Service.pnr_history(:number => pnr_number).history
+    end
   end
 
   def payture_state
@@ -79,9 +87,15 @@ class Order < ActiveRecord::Base
   end
 
   def cancel!
-    Amadeus.booking do |amadeus|
-      amadeus.pnr_retrieve(:number => pnr_number)
-      amadeus.pnr_cancel
+    case source
+    when 'amadeus'
+      Amadeus.booking do |amadeus|
+        amadeus.pnr_retrieve(:number => pnr_number)
+        amadeus.pnr_cancel
+        update_attribute(:ticket_status, 'canceled')
+      end
+    when 'sirena'
+      Sirena::Service.payment_ext_auth(self, 'cancel')
       update_attribute(:ticket_status, 'canceled')
     end
   end

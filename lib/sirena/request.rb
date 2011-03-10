@@ -9,6 +9,9 @@ module Sirena
     end
 
     class Base
+
+      include KeyValueInit
+
       def render
         template = template_for_action
 

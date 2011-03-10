@@ -56,19 +56,19 @@
     %requestedSegmentRef
       %segRef= i+1
     %departureLocalization
-      -unless segment.from_country?
+      -unless segment.from_country_or_region?
         %departurePoint
           %locationId= segment.from_iata
       -else
-        - Country.main_city_iatas(segment.from_iata).each do |code|
+        - segment.from_as_object.main_city_iatas.each do |code|
           %depMultiCity
             %locationId= code
     %arrivalLocalization
-      -unless segment.to_country?
+      -unless segment.to_country_or_region?
         %arrivalPointDetails
           %locationId= segment.to_iata
       -else
-        - Country.main_city_iatas(segment.to_iata).each do |code|
+        - segment.to_as_object.main_city_iatas.each do |code|
           %arrivalMultiCity
             %locationId= code
     %timeDetails
@@ -77,3 +77,4 @@
       %rangeOfDate
         %rangeQualifier C
         %dayInterval= 3#day_interval
+

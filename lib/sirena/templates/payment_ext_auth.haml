@@ -1,0 +1,14 @@
+%payment-ext-auth
+  %regnum= pnr_number
+  %surname= lead_family
+  %action= payment_action
+  - if payment_action == 'query' || payment_action == 'confirm'
+    %paydoc
+      %formpay НА
+      - if payment_action == 'confirm'
+        %num eviterra.com
+  -if cost
+    %cost{"curr"=>curr}= cost
+  - if payment_action == 'query' || payment_action == 'confirm'
+    %request_params
+      %tick_ser ЭБМ

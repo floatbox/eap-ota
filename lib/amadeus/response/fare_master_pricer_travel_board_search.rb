@@ -39,6 +39,7 @@ module Amadeus
           #cabins остаются только у recommendation и не назначаются flight-ам,
           # тк на один и тот же flight продаются билеты разных классов
           Recommendation.new(
+            :source => 'amadeus',
             :price_fare => price_fare,
             :price_tax => price_tax,
             :variants => variants,
