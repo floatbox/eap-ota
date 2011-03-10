@@ -130,7 +130,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "5%/3.5%"
 
 carrier "5N", "Нордавиа-РА"
 ########################################
@@ -144,7 +144,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "7%/5%"
 
 carrier "6H", "ISRAIR AIRLINE"
 ########################################
@@ -158,7 +158,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "7%/5%"
 
 carrier "7B", "ATLANT-SOYUZ"
 ########################################
@@ -258,7 +258,7 @@ example 'cdgsvo svocdg/lh'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "1/0.05"
 
 example 'svocdg/s7'
 no_commission
@@ -430,7 +430,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "1%/0.5%"
 
 carrier "BT", "AIR BALTIC"
 ########################################
@@ -473,7 +473,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "1%/0.5%"
 
 carrier "CX", "CATHAY PACIFIC (Тальавиэйшн)"
 ########################################
@@ -503,7 +503,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "9%/6.3%"
 
 carrier "CZ", "CHINA SOUTHERN"
 ########################################
@@ -560,7 +560,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "1%/0.5%"
 
 carrier "DL", "DELTA AIRLINES"
 ########################################
@@ -686,7 +686,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "5%/3.5%"
 
 carrier "F7", "FLY BABOO (РИНГ АВИА)"
 ########################################
@@ -720,7 +720,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "4%/2.8%"
 
 carrier "FI", "ICELANDAIR  (РИНГ АВИА)"
 ########################################
@@ -734,7 +734,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "1%/0.5%"
 
 carrier "FV", "RUSSIA"
 ########################################
@@ -791,7 +791,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "1%/0.5%"
 
 carrier "HR", "HAHN AIR  (Авиарепс)"
 ########################################
@@ -846,7 +846,7 @@ agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 disabled
 interline :unconfirmed
-commission '1/0'
+commission "9%/6.3%" #wtf checkout
 
 agent "На период до 31.03.2011г. на собств.рейсы HU по опубл. тарифам:"
 agent "В России выписать билет, на первый участок из России (например: svo--pek--svo):"
@@ -886,7 +886,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "7%/5%"
 
 carrier "HY", "UZBEKISTAN AIRWAYS (Узбекистон Хаво Йуллари) (НЕ BSP!!!)"
 ########################################
@@ -916,7 +916,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "1/0.5"
 
 carrier "IG", "MERIDIANA (РИНГ-АВИА)"
 ########################################
@@ -930,7 +930,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "5%/3.5%"
 
 carrier "IY", "YEMENIA YEMEN AIRWAYS"
 ########################################
@@ -944,7 +944,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "1%/0.5%"
 
 carrier "JJ", "TAM Linhas Aereas S.A."
 ########################################
@@ -958,7 +958,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "1%/0.5%"
 
 carrier "JL", "JAPAN AIRLINES INTERNATIONAL"
 ########################################
@@ -1033,7 +1033,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "1/0.5"
 
 carrier "JU", "JAT AIRWAYS"
 ########################################
@@ -1276,7 +1276,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "1%/0.5%"
 
 carrier "MS", "EGYPT AIR"
 ########################################
@@ -1387,7 +1387,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "1%/0.5%"
 
 carrier "OK", "CZECH AIRLINES"
 ########################################
@@ -1418,7 +1418,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "9%/6.3%"
 
 carrier "OS", "AUSTRIAN AIRLINES"
 ########################################
@@ -1463,7 +1463,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "1%/0.5%"
 
 carrier "PG", "BANGKOK AIRWAYS (Тальавиэйшн)"
 ########################################
@@ -1477,7 +1477,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "5%/3.5%"
 
 carrier "PS", "Ukraine International Airlines (ГЛОНАСС)"
 ########################################
@@ -1491,7 +1491,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "9%/6.3%"
 
 carrier "QF", "QANTAS AIRWAYS\n(не BSP!!!)"
 ########################################
@@ -1507,7 +1507,7 @@ agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 disabled 'не bsp'
 interline :unconfirmed
-commission '1/0'
+commission "7%/4.9%"
 
 carrier "QR", "QATAR AIRWAYS"
 ########################################
@@ -1538,7 +1538,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "7%/5%"
 
 carrier "S4", "SATA INTERNACIONAL (РИНГ АВИА)"
 ########################################
@@ -1552,7 +1552,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "1%/0.5%"
 
 carrier "SA", "South African Airways"
 ########################################
@@ -1631,7 +1631,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "7%/5%"
 
 carrier "TG", "THAI AIRWAYS"
 ########################################
@@ -1760,7 +1760,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "1%/0.5%"
 
 carrier "UX", "Air Europa"
 ########################################
@@ -1774,7 +1774,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "5%/3.5%"
 
 carrier "VN", "VIETNAM AIRLINES"
 ########################################
@@ -1853,7 +1853,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "1%/0.5%"
 
 carrier "XW", "SkyExpress Limited"
 ########################################
@@ -1867,7 +1867,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "9%/7%"
 
 carrier "YM", "MONTENEGRO AIRLINES"
 ########################################
@@ -1881,7 +1881,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "8%/5.6%"
 
 carrier "YO", "Heli air Monaco (РИНГ АВИА)"
 ########################################
@@ -1895,7 +1895,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "1/0.5"
 
 carrier "ZI", "AIGLE AZUR (РИНГ-АВИА)"
 ########################################
@@ -1909,7 +1909,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission '1/0'
+commission "1%/0.5%"
 
 carrier "J2", "Azerbaijan Hava Yollari"
 ########################################
