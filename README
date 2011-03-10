@@ -1,2 +1,6 @@
 eviterra.com
 ============
+
+На Ubuntu требуется выполнить:
+
+sudo apt-get install libcurl3-dev
