@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110305160258) do
+ActiveRecord::Schema.define(:version => 20110310132758) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(:version => 20110305160258) do
     t.integer  "consolidator_id"
     t.text     "interlines",          :null => false
     t.string   "color"
+    t.string   "font_color"
   end
 
   create_table "cities", :force => true do |t|
@@ -239,8 +240,8 @@ ActiveRecord::Schema.define(:version => 20110305160258) do
     t.string   "proper_to"
     t.string   "proper_from"
     t.string   "proper_in"
-    t.string   "lat"
-    t.string   "lng"
+    t.float    "lat"
+    t.float    "lng"
     t.integer  "importance",   :default => 0
     t.string   "region_type"
   end

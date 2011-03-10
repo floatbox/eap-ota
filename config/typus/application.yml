@@ -31,7 +31,7 @@ Carrier:
   fields:
     default: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
     list: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
-    form: ru_shortname, ru_longname, en_shortname, en_longname, iata, country, bonus_program_name, alliance, gds, interlines, consolidator, color
+    form: ru_shortname, ru_longname, en_shortname, en_longname, iata, country, bonus_program_name, alliance, gds, interlines, consolidator, color, font_color
     options:
       read_only: interlines
   order_by: en_shortname, ru_shortname
