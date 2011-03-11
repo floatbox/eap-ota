@@ -13,7 +13,6 @@ class PricerController < ApplicationController
         @average_price = hot_offer.destination.average_price if hot_offer
       end
     end
-
     render :partial => 'recommendations'
   end
 
