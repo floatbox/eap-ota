@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110310132758) do
+ActiveRecord::Schema.define(:version => 20110310160348) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20110310132758) do
     t.string   "morpher_in"
     t.string   "iata_ru"
     t.string   "sirena_name"
+    t.boolean  "disabled"
   end
 
   add_index "airports", ["iata"], :name => "index_airports_on_iata"
@@ -107,6 +108,7 @@ ActiveRecord::Schema.define(:version => 20110310132758) do
     t.string   "morpher_in"
     t.string   "iata_ru"
     t.string   "sirena_name"
+    t.boolean  "disabled"
   end
 
   add_index "cities", ["iata"], :name => "index_cities_on_iata"

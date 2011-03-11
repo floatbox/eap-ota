@@ -5,6 +5,22 @@ require 'uri'
 
 module Tmp
 
+  def self.fill_in_disabled_flag_in_cities_and_airports
+    Amadeus.booking do |amadeus|
+      City.all(:conditions => 'iata != ""  and iata is not null').each do |c|
+        res = amadeus.cmd("dac #{c.iata}")
+        c.update_attribute(:disabled, true) if res['LOCATION NOT IN TABLE']
+        sleep 0.5
+      end
+      Airport.all(:conditions => 'iata != ""  and iata is not null').each do |c|
+        res = amadeus.cmd("dac #{c.iata}")
+        c.update_attribute(:disabled, true) if res['LOCATION NOT IN TABLE']
+        sleep 0.5
+      end
+
+    end
+  end
+
   def self.fill_in_lat_and_lng_in_regions
     Region.all.each do |r|
       city = City.first(:conditions => ['region_id = ?', r.id], :order => 'importance DESC')
