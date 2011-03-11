@@ -2,56 +2,55 @@
     position: relative;
     margin-top: 30px;
 }
-#offers-diagram .segment {
+.odcontent .segment {
     position: relative;
-    margin: 0 0 10px;
+    z-index: 1;
+    padding: 5px 15px;
+    margin: 0 -15px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    cursor: pointer;
 }
-
-#offers-diagram a.a-button {
+.odcontent a.a-button {
     display: block;
-    width: 60px;
+    width: 80px;
     border-color: #7b8e12;
     padding: 0 4px;
     font-size: 14px;
+    text-align: center;
 }
 
-
-#offers-diagram .bar {
+/* Bar */
+.odcontent .bar {
     position: absolute;
-    top: 3px;
-    z-index: 1;
+    top: 8px;
     font-size: 11px;
 }
-#offers-diagram .dpt,
-#offers-diagram .arv,
-#offers-diagram .flight,
-#offers-diagram .layover {
+.odcontent .dpt,
+.odcontent .arv,
+.odcontent .flight,
+.odcontent .layover {
     float: left;
 }
 
-#offers-diagram .dpt,
-#offers-diagram .arv {
+.odcontent .dpt,
+.odcontent .arv {
     visibility: hidden;
     width: 60px;
     padding-top: 2px;
     color: #666;
-    cursor: default;
 }
-#offers-diagram .dpt {
+.odcontent .dpt {
     padding-right: 5px;
     text-align: right;
 }
-#offers-diagram .arv {
+.odcontent .arv {
     padding-left: 5px;
 }
-#offers-diagram .bar:hover .dpt,
-#offers-diagram .bar:hover .arv {
-    visibility: inherit;
-}
 
 
-#offers-diagram .flight,
-#offers-diagram .layover {
+.odcontent .flight,
+.odcontent .layover {
     overflow: hidden;
     border-top: 1px solid #E7ECEE;
     border-bottom: 1px solid #E7ECEE;
@@ -59,29 +58,48 @@
     white-space: nowrap;
     cursor: pointer;
 }
-#offers-diagram .flight {
+.odcontent .flight {
     background: #bcc3cc;
 }
-#offers-diagram .layover {
+.odcontent .layover {
     background: #FFF;
 }
 
+/* Mouseover */
+.odcontent .segment:hover {
+    background: #f3f6f7;
+    background: rgba(255, 255, 255, 0.5);
+}
+.odcontent .segment:hover .dpt,
+.odcontent .segment:hover .arv {
+    visibility: inherit;
+}
+.odcontent .segment:hover .flight,
+.odcontent .segment:hover .layover {
+    border-color: #f3f6f7;
+}
+
 /* Grid */
-#offers-diagram .grid {
+.odcontent .grid {
     position: absolute;
     top: -10px;
     height: 100%;
     padding-bottom: 10px;
     border-left: 1px solid #cfd4d6;
 }
-#offers-diagram .midnight {
+.odcontent .midnight {
     border-left: 1px solid #a1a5a6;
 }
-#offers-diagram .grid .time {
+.odcontent .grid .time {
     position: absolute;
     left: -15px;
     top: -20px;
     width: 30px;
     font-size: 11px;
     text-align: center;
+}
+
+/* Selected variant */
+#offers-diagram .offer {
+    width: 675px;
 }
