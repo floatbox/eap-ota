@@ -11,7 +11,13 @@
 <% end %>
 
 <% if @recommendations.present? %>
-<div id="offers-options" data-filters='<%= raw Recommendation.summary(@recommendations, @locations).to_json.gsub("'", '&rsquo;') %>' data-query_key="<%= @query_key %>" data-people="<%= @search.people_total %>" data-aveprice="<%= @average_price %>"></div>
+<div id="offers-options" 
+    data-filters='<%= raw Recommendation.summary(@recommendations, @locations).to_json.gsub("'", '&rsquo;') %>' 
+    data-query_key="<%= @query_key %>" 
+    data-people="<%= @search.people_total %>" 
+    data-aveprice="<%= @average_price %>"
+    data-locations="<%= @search.form_segments.map{|fs| {:from => fs.from_as_object.name, :to => fs.to_as_object.name} }.to_json %>"
+></div>
 <% @recommendations.each do |recommendation| %>
 <div class="offer collapsed<%= ' multiple' if recommendation.variants.length > 1 %>" data-summary='<%= recommendation.summary.to_json %>'>
     <% different_cabins = recommendation.cabins_except(@search.cabin) %>

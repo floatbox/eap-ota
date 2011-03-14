@@ -30,6 +30,15 @@ module PricerHelper
     time ? (time[0,2].to_i * 60 + time[2,2].to_i) : 0
   end
 
+  def time_shift(arv, local_arv)
+    tshift = local_arv - arv % 1440
+    if tshift.abs > 720
+      tshift % -720
+    else
+      tshift
+    end
+  end
+
   def fmt_departure flight
     flight.departure_name + ' (' + flight.departure_iata +
       (flight.departure_term ? ' ' + flight.departure_term : '') +

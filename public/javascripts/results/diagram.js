@@ -66,6 +66,7 @@ getSegment: function(s, flights) {
         this.parseBars();
     }
     var all = flights === undefined;
+    var shifts = 0;
     for (var i = 0, im = variants.length; i < im; i++) {
         var variant = variants[i];
         var bar = variant.bars[s];
@@ -80,9 +81,19 @@ getSegment: function(s, flights) {
             } else {
                 segment.contents[bf].push(i);
                 segment.prices[bf].push(variant.offer.summary.price);
-            }        
+            }
+            if (bar.shift !== segment.shift) {
+                segment.shift = bar.shift;
+                shifts++;
+            }
         }
     }
+    if (shifts > 1) {
+        segment.shift = 0;
+    }
+    var locations = $.parseJSON($('#offers-options').attr('data-locations'));
+    segment.dptcity = locations[s].from;
+    segment.arvcity = locations[s].to;
     return segment;
 },
 parseBars: function() {
@@ -95,8 +106,9 @@ parseBars: function() {
             v.bars[s] = {
                 el: item,
                 flights: item.attr('data-flights'),
-                dpt: item.attr('data-dpt'),
-                arv: item.attr('data-arv')
+                shift: parseInt(item.attr('data-shift'), 10),
+                dpt: parseInt(item.attr('data-dpt'), 10),
+                arv: parseInt(item.attr('data-arv'), 10)
             };
         });
     }
@@ -121,6 +133,10 @@ updateList: function(list, segment) {
     var that = this;
     var items = segment.items;
     var length = segment.arv - segment.dpt;
+    var locations = $('<ul class="locations"><li>' + segment.dptcity + '</li></ul>').appendTo(list);
+    if (segment.shift) {
+        locations.append('<li>' + segment.arvcity + '</li>');
+    }
     for (var i = 0, im = items.length; i < im; i++) {
         var item = items[i].clone();
         item.find('.flight, .layover').each(function() {
@@ -146,13 +162,20 @@ updateList: function(list, segment) {
     var tmin = Math.ceil(segment.dpt / gstep) * gstep;
     var tmax = Math.floor(segment.arv / gstep) * gstep;
     for (var t = tmin; t < tmax + 1; t += gstep) {
-        var time = $('<div class="grid"/>');
-        time.html('<span class="time">' + Math.floor((t % 1440) / 60) + ':' + (t % 60 / 100).toFixed(2).substring(2) + '</span>');
-        if (t === 1440) {
-            time.addClass('midnight');
+        var gline = $('<div class="grid"/>'); 
+        var gtime = '<li>' + this.formatTime(t) + '</li>';
+        if (segment.shift) {
+            gtime += '<li>' + this.formatTime(t + segment.shift) + '</li>';
         }
-        time.css('left', Math.round((t - segment.dpt) / length * this.width) + this.offset + 65);
-        list.append(time);
+        gline.append('<ul class="times"><li>' + gtime + '</li></ul>');
+        if (t === 1440) {
+            gline.addClass('midnight');
+        }
+        gline.css('left', Math.round((t - segment.dpt) / length * this.width) + this.offset + 50);
+        list.append(gline);
     }
+},
+formatTime: function(t) {
+    return Math.floor((t % 1440) / 60) + ':' + (t % 60 / 100).toFixed(2).substring(2);
 }
 };
