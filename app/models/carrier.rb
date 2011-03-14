@@ -18,7 +18,7 @@ class Carrier < ActiveRecord::Base
   end
 
 
-  def avaliable_bonus_programms
+  def available_bonus_programms
     #бонусные программы авиакомпаний, входящие в тот же альянс, что и данная
     #пока без бонусной программы альянса
     if alliance
@@ -86,3 +86,4 @@ class Carrier < ActiveRecord::Base
     end
   end
 end
+
