@@ -4,7 +4,7 @@
     <% availability = @order.recommendation.availability %>
     <% if availability > 0 && availability < 9 %>
     <div class="availability">
-        По этому тарифу осталось <strong><%= availability %>&nbsp;<%= Russian.pluralize(availability, 'место', 'места', 'мест') %></strong>. Не&nbsp;откладывайте бронирование.
+        По этому тарифу осталось <strong><%= availability %>&nbsp;<%= Russian.pluralize(availability, 'место', 'места', 'мест') %></strong>. Не&nbsp;откладывайте покупку.
     </div>
     <% end %>
     
