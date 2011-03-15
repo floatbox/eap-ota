@@ -152,11 +152,11 @@ body {
 .finfo {
     position: absolute;
     top: 15px; left: 0;
-    width: 250px;
+    width: 280px;
     color: #777;
 }
 .finfo .social {
-    margin-top: 1em;
+    margin-top: 9px;
 }
 .finfo strong {
     font-weight: bold;
