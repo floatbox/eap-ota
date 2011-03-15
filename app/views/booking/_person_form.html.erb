@@ -5,11 +5,11 @@
            <col width="224">
            <col width="224">
            <col width="217">
-        </colgroup>        
-        
+        </colgroup>
+
         <tr>
             <td>
-                <label 
+                <label
                  for="person_attributes_<%=person_form_counter%>_first_name"
                  class="bold g-s"
                  title="Имя пассажира латинскими буквами"
@@ -42,7 +42,7 @@
                  :title => "фамилия пассажира",
                  :onclick => "return {mask: /[a-z]/i, rules: {req: true, minl: 2, latin: true, gender: 'F'}}"
                  %>
-                 <%= person.error_message_on :last_name, 
+                 <%= person.error_message_on :last_name,
                   :id => "error_person_#{person_form_counter}_last_name" %>
             <td style="vertical-align: middle;">
 
@@ -60,7 +60,7 @@
                  :title => "пол пассажира"
                  %>ж
                 </label>
-                <%= person.error_message_on :sex, 
+                <%= person.error_message_on :sex,
                  :id => "error_person_#{person_form_counter}_sex" %>
 
         <tr>
@@ -70,7 +70,7 @@
             <td>
         <tr class="label">
             <td>
-                <label 
+                <label
                  for="book-p-<%=person_form_counter%>-nationality"
                  class="bold g-s"
                  title="Гражданство пассажира"
@@ -98,10 +98,10 @@
                  :id => "book-p-#{person_form_counter+1}-nationality",
                  :class => "text text-value nationality"
                 %>
-                <%= person.error_message_on :nationality, 
+                <%= person.error_message_on :nationality,
                  :id => "error_person_#{person_form_counter}_nationality" %>
             <td>
-                <input type="text" 
+                <input type="text"
                  id="book-p-<%=person_form_counter%>-birth"
                  name="person_attributes[<%= person_form_counter %>][birthday(3i)]"
                  class="text text-dd g-xl"
@@ -109,14 +109,14 @@
                  title="день рождения"
                  maxlength="2"
                  onclick="return {def: 'день', mask: /\d/, rules: {req: true, num: true, min: 1, max: 31, gender: 'M'}}"
-                ><input type="text" 
+                ><input type="text"
                  name="person_attributes[<%= person_form_counter %>][birthday(2i)]"
                  class="text text-mm g-xl"
                  value="<%= (person_form.birthday && person_form.birthday.month) %>"
                  title="месяц рождения"
                  maxlength="2"
                  onclick="return {def: 'месяц', mask: /\d/, rules: {req: true, num: true, min: 1, max: 12, gender: 'M'}}"
-                ><input type="text" 
+                ><input type="text"
                  name="person_attributes[<%= person_form_counter %>][birthday(1i)]"
                  class="text text-yyyy g-xl"
                  value="<%= (person_form.birthday && person_form.birthday.year) %>"
@@ -124,16 +124,16 @@
                  maxlength="4"
                  onclick="return {def: 'год', mask: /\d/, rules: {req: true, num: true, min: 1900, max: <%= Date.current.strftime('%Y') %>, gender: 'M'}}"
                 >
-                <%= person.error_message_on :birthday, 
+                <%= person.error_message_on :birthday,
                  :id => "error_person_#{person_form_counter}_birthday" %>
             <td>
                 <%= person.select :bonuscard_type,
-                 @order.recommendation.validating_carrier.avaliable_bonus_programms.map {|a| [ a.bonus_program_name, a.iata ] },
+                 @order.recommendation.validating_carrier.available_bonus_programms.map {|a| [ a.bonus_program_name, a.iata ] },
                  {},
                  :id => "bonus-type-#{person_form_counter}",
                  :class => 'text select-bonus text-value g-xl g-none'
                 %>
-                <%= person.error_message_on :bonuscard_type, 
+                <%= person.error_message_on :bonuscard_type,
                  :id => "error_person_#{person_form_counter}_bonuscard_type" %>
 
         <tr class="label">
@@ -151,7 +151,7 @@
                  title="Срок действия документа, который будет предъявлен при посадке. Если у документа срока действия нет, то поставьте отметку справа от поля."
                 >Срок действия документа</label>
             <td>
-                
+
 
         <tr>
             <td>
@@ -165,7 +165,7 @@
                 <%= person.error_message_on :passport, :id => "error_person_#{person_form_counter}_passport" %>
                 <div class="symbols-warning">Вводите только цифры — с пробелами или без</div>
             <td>
-                <input type="text" 
+                <input type="text"
                  id="bp-<%=person_form_counter%>-expires-d"
                  class="text text-dd g-xl"
                  name="person_attributes[<%= person_form_counter %>][document_expiration_date(3i)]"
@@ -173,7 +173,7 @@
                  title="день окончания действия документа"
                  maxlength="2"
                  onclick="return {def: 'день', mask: /\d/, rules: {req: true, num: true, min: 1, max: 31, gender: 'M'}}"
-                ><input type="text" 
+                ><input type="text"
                  id="bp-<%=person_form_counter%>-expires-m"
                  class="text text-mm g-xl"
                  name="person_attributes[<%= person_form_counter %>][document_expiration_date(2i)]"
@@ -181,7 +181,7 @@
                  title="месяц окончания действия документа"
                  maxlength="2"
                  onclick="return {def: 'месяц', mask: /\d/, rules: {req: true, num: true, min: 1, max: 12, gender: 'M'}}"
-                ><input type="text" 
+                ><input type="text"
                  id="bp-<%=person_form_counter%>-expires-y"
                  class="text text-yyyy g-xl"
                  name="person_attributes[<%= person_form_counter %>][document_expiration_date(1i)]"
@@ -190,8 +190,8 @@
                  maxlength="4"
                  onclick="return {def: 'год', mask: /\d/, rules: {req: true, num: true, min: <%= Date.current.strftime('%Y') %>, max: 2050, gender: 'M'}}"
                 >
-                
-                <%= person.error_message_on :document_expiration_date, 
+
+                <%= person.error_message_on :document_expiration_date,
                  :id => "error_person_#{person_form_counter}_document_expiration_date" %>
             <td>
                 <%=person.text_field :bonuscard_number,
@@ -202,7 +202,7 @@
                  :title => 'Номер бонусной карты',
                  :onclick => "return {def: 'Номер карты', rules: {req: true, minl: 2, gender: 'M'}}"
                  %>
-                 <%= person.error_message_on :bonuscard_number, 
+                 <%= person.error_message_on :bonuscard_number,
                   :id => "error_person_#{person_form_counter}_bonuscard_number" %>
 
         <tr>
@@ -222,13 +222,13 @@
                 </div>
             </td>
             <td class="sub g-xxs">
-                <div class="checkbox<%= raw ' latent' if @order.recommendation.validating_carrier.avaliable_bonus_programms.empty? %>">
+                <div class="checkbox<%= raw ' latent' if @order.recommendation.validating_carrier.available_bonus_programms.empty? %>">
                 <%= person.check_box :bonus_present, {
                   :id => "bonus-#{person_form_counter}",
                   :class => 'bonus',
                   :onclick => "return {ctrls: '#bonus-type-#{person_form_counter}, #bonus-num-#{person_form_counter}', label: '#bonus-type-#{person_form_counter}-label'}"
                 } %>
-                <label 
+                <label
                  for="bonus-<%= person_form_counter %>"
                  title="Карта участника программы премирования пассажиров (мильной программы или программы для&nbsp;часто летающих пассажиров, англ. frequent flyer program)"
                 >есть бонусная карта</label>
@@ -238,3 +238,4 @@
     </table>
 </div>
 <% end  %>
+

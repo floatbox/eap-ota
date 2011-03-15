@@ -50,7 +50,8 @@ class Mux
       # a_ns.session.release
 
       # non threaded variant
-      recommendations_ws = Amadeus::Service.fare_master_pricer_travel_board_search(request_ws).recommendations
+      recommendations_ws = Amadeus::Service.fare_master_pricer_travel_board_search(request_ws).or_fail!.recommendations
+      #не ловим ошибку, так как может просто не быть беспосадочных вариантов, а это exception
       recommendations_ns = if Conf.amadeus.nonstop_search
                            Amadeus::Service.fare_master_pricer_travel_board_search(request_ns).recommendations
                            else [] end
@@ -80,3 +81,4 @@ class Mux
   extend ClassMethods
 
 end
+

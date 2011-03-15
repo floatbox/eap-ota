@@ -9,12 +9,12 @@ module Sirena
         @cost = params[:cost]
         @curr = params[:curr]
         @payment_action = params[:action]
-        @card = {
-          :num=>order.card.number,
-          :expire_date=>"01."+order.card.month.to_s+"."+order.card.year_short.to_s,
-          :holder=>order.card.name.to_s,
-          :auth_code=>order.card.number4
-        }
+#        @card = {
+#          :num=>order.card.number,
+#          :expire_date=>"01."+order.card.month.to_s+"."+order.card.year_short.to_s,
+#          :holder=>order.card.name.to_s,
+#          :auth_code=>order.card.number4
+#        }
       end
     end
   end

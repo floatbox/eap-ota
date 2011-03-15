@@ -12,6 +12,8 @@ module Amadeus
             rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:cabin").every.to_s
           booking_classes =
             rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:rbd").every.to_s
+          availabilities =
+            rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:avlStatus").every.to_s
 
           validating_carrier_iata =
             rec.xpath("r:paxFareProduct/r:paxFareDetail/r:codeShareDetails[r:transportStageQualifier='V']/r:company").to_s
@@ -47,7 +49,8 @@ module Amadeus
             :suggested_marketing_carrier_iatas => marketing_carrier_iatas,
             :additional_info => additional_info,
             :cabins => cabins,
-            :booking_classes => booking_classes
+            :booking_classes => booking_classes,
+            :availabilities => availabilities
           )
         end
       end
@@ -136,3 +139,4 @@ module Amadeus
     end
   end
 end
+

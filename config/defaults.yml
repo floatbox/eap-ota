@@ -1,4 +1,4 @@
-# put local overrides in config/local.yml or config/local/*.yml
+﻿# put local overrides in config/local.yml or config/local/*.yml
 amadeus:
   endpoint: "https://test.webservices.amadeus.com"
   enabled: yes
@@ -24,8 +24,10 @@ payture:
     -----END PUBLIC KEY-----
 payonline:
   enabled: no
-  merchant: '3925'
-  security: '3495dbcb-aa90-46d4-91cf-8be89238ac77'
+  merchant_id: '3925'
+  private_security_key: '3495dbcb-aa90-46d4-91cf-8be89238ac77'
+  host: secure.payonlinesystem.com
+  preauthorization: true
 cbr:
   usd:
     2011-01-01: 30.0000

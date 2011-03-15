@@ -4,11 +4,11 @@
   %action= payment_action
   - if payment_action == 'query' || payment_action == 'confirm'
     %paydoc
-      %formpay ПП
+      %formpay НА
       - if payment_action == 'confirm'
         %num eviterra.com
   -if cost
     %cost{"curr"=>curr}= cost
-- if payment_action == 'query' || payment_action == 'confirm'
-  %request_params
-    %tick_ser ЭБМ
+  - if payment_action == 'query' || payment_action == 'confirm'
+    %request_params
+      %tick_ser ЭБМ

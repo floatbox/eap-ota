@@ -12,11 +12,15 @@ class Recommendation
   include KeyValueInit
 
   attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
-    :suggested_marketing_carrier_iatas
+    :suggested_marketing_carrier_iatas, :availabilities
 
   delegate :marketing_carriers, :marketing_carrier_iatas,
     :city_iatas, :airport_iatas, :country_iatas,
       :to => 'variants.first'
+
+  def availability
+    availabilities.compact.min.to_i
+  end
 
   def validating_carrier
     validating_carrier_iata && Carrier[validating_carrier_iata]
@@ -342,14 +346,14 @@ class Recommendation
       s.flights.collect(&:flight_code).join('-')
     }
 
-    ( [ source, validating_carrier_iata, booking_classes.join(''), cabins.join('') ] +
+    ( [ source, validating_carrier_iata, booking_classes.join(''), cabins.join(''), availabilities.join('') ] +
       segment_codes ).join('.')
   end
 
   def self.deserialize(coded)
     # временная штука, пока не инвалидируем весь кэш старых рекомендаций
     coded = 'amadeus.' + coded unless coded =~ /^amadeus|^sirena/
-    source, fv, classes, cabins, *segment_codes = coded.split('.')
+    source, fv, classes, cabins, availabilities, *segment_codes = coded.split('.')
     variant = Variant.new(
       :segments => segment_codes.collect { |segment_code|
         Segment.new( :flights => segment_code.split('-').collect { |flight_code|
@@ -363,7 +367,8 @@ class Recommendation
       :validating_carrier_iata => fv,
       :booking_classes => classes.split(''),
       :cabins => cabins.split(''),
-      :variants => [variant]
+      :variants => [variant],
+      :availabilities => availabilities.split('')
     )
   end
 

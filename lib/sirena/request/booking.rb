@@ -2,7 +2,7 @@
 module Sirena
   module Request
     class Booking < Sirena::Request::Base
-      attr_accessor :passengers, :segments, :phone
+      attr_accessor :passengers, :segments, :phone, :email
 
       def initialize(order)
         # актуальные коды документов:
@@ -47,6 +47,7 @@ module Sirena
         }
 
         @phone = order.phone
+        @email = order.email
       end
 
       def fake_passenger(lat=false)

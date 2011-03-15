@@ -31,7 +31,7 @@ Carrier:
   fields:
     default: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
     list: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
-    form: ru_shortname, ru_longname, en_shortname, en_longname, iata, country, bonus_program_name, alliance, gds, interlines, consolidator, color
+    form: ru_shortname, ru_longname, en_shortname, en_longname, iata, country, bonus_program_name, alliance, gds, interlines, consolidator, color, font_color
     options:
       read_only: interlines
   order_by: en_shortname, ru_shortname
@@ -58,7 +58,7 @@ Airport:
   fields:
     default: iata, name_ru, name_en, importance, city
     list: iata, name_ru, name_en, importance, city
-    form: iata, iata_ru, name_en, name_ru, synonym_list, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in, domestic, icao, federal, international, runway_length, lat, lng, importance, city
+    form: iata, iata_ru, name_en, name_ru, synonym_list, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in, domestic, icao, federal, international, runway_length, lat, lng, importance, city, disabled
     options:
       read_only: morpher_to, morpher_from, morpher_in
   order_by: name_ru
@@ -73,7 +73,7 @@ City:
   fields:
     default: iata, name_ru, name_en, synonym_list, importance, country, region
     list: iata, name_ru, name_en, synonym_list, importance, country, region
-    form: iata, iata_ru, name_ru, name_en, synonym_list, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in, lat, lng, importance, country, region, timezone
+    form: iata, iata_ru, name_ru, name_en, synonym_list, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in, lat, lng, importance, country, region, timezone, disabled
     options:
       selectors: timezone
       read_only: morpher_to, morpher_from, morpher_in

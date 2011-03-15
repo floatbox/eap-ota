@@ -44,7 +44,12 @@ class Order < ActiveRecord::Base
   end
 
   def raw
-    Amadeus::Service.pnr_raw(pnr_number)
+    case source
+    when 'amadeus'
+      Amadeus::Service.pnr_raw(pnr_number)
+    when 'sirena'
+      Sirena::Service.pnr_history(:number => pnr_number).history
+    end
   end
 
   def payture_state
@@ -74,7 +79,6 @@ class Order < ActiveRecord::Base
 
   def money_blocked!
     update_attribute(:payment_status, 'blocked')
-    #Sirena::Adapter.approve_payment(self) if recommendation.source == 'sirena'
     send_email
   end
 
@@ -83,9 +87,15 @@ class Order < ActiveRecord::Base
   end
 
   def cancel!
-    Amadeus.booking do |amadeus|
-      amadeus.pnr_retrieve(:number => pnr_number)
-      amadeus.pnr_cancel
+    case source
+    when 'amadeus'
+      Amadeus.booking do |amadeus|
+        amadeus.pnr_retrieve(:number => pnr_number)
+        amadeus.pnr_cancel
+        update_attribute(:ticket_status, 'canceled')
+      end
+    when 'sirena'
+      Sirena::Service.payment_ext_auth(self, 'cancel')
       update_attribute(:ticket_status, 'canceled')
     end
   end

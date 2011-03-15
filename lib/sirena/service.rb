@@ -40,7 +40,7 @@ module Sirena
         http_response.body
       end
 
-      %W(pricing describe booking payment_ext_auth).each do |method_name|
+      %W(pricing describe booking payment_ext_auth order PNRHistory).each do |method_name|
         define_method method_name.underscore do |*params|
           action(method_name, *params)
         end
