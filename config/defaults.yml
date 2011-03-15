@@ -1,4 +1,4 @@
-﻿# put local overrides in config/local.yml or config/local/*.yml
+# put local overrides in config/local.yml or config/local/*.yml
 amadeus:
   endpoint: "https://test.webservices.amadeus.com"
   enabled: yes
