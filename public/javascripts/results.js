@@ -306,11 +306,17 @@ processUpdate: function() {
             $('#offers-context .offers-nearby').html(nbc.html() || '');
             self.toggleCollection(true);
         });
+        if (window._gaq) {
+            _gaq.push(['_trackPageview','/virtual/search?query=' + this.title.text()]);
+        }
     } else {
         $('#offers-pcollection').html('');
         $('#offers-context .offers-nearby').html('');
         this.variants = [];
         this.items = [];    
+        if (window._gaq) {
+            _gaq.push(['_trackPageview','/virtual/search?query=' + this.title.text() + '&querycat=NULL']);
+        }
     }
     if (queue.length) {
         this.loading.find('h3').html('&nbsp;&nbsp;Еще чуть-чуть&hellip;');        
