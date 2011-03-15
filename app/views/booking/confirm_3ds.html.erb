@@ -7,13 +7,13 @@
 </head>
 <body>
 <%= render 'shared/header' %>
-<div class="l-wrapper" id="page-wrapper">
-<div class="l-canvas">
-    <div class="l-content">
+<div id="wrapper">
+<div id="content">
     <div id="back2search">
-        <a href="/">Вернуться к поиску</a>
+        <div class="bscontent"><a href="/">Вернуться к поиску</a></div>
     </div>
     <div class="article tds-result">
+
     <% if @error_message %>
         <p class="fail"><strong>Упс…</strong> Что-то пошло не так. Скорее всего, банк отклонил попытку платежа по&nbsp;вашей карте.</p>
         <p class="tip">Попробуйте проверить, правильно ли введены данные, или используйте другую карту. Если это невозможно, узнайте <a href="/about/#payment">какими ещё способами</a> можно купить у&nbsp;нас билет.</p>
@@ -29,11 +29,11 @@
         }
         </script>
     <% end %>
+
     </div>
-    </div>
-    <div class="l-footer">
-        <%= render 'shared/footer' %>
-    </div>
+</div>
+<div id="footer">
+    <%= render 'shared/footer' %>
 </div>
 </div>
 <div id="hint">
