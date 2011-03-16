@@ -346,7 +346,7 @@ class Recommendation
       s.flights.collect(&:flight_code).join('-')
     }
 
-    ( [ source, validating_carrier_iata, booking_classes.join(''), cabins.join(''), availabilities.join('') ] +
+    ( [ source, validating_carrier_iata, booking_classes.join(''), cabins.join(''), (availabilities || []).join('') ] +
       segment_codes ).join('.')
   end
 
