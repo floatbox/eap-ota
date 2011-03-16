@@ -1,10 +1,9 @@
 module Sirena
   module Response
     class Order < Sirena::Response::Base
-      attr_accessor :number, :flights, :booking_classes, :passengers, :phone, :email, :raw
+      attr_accessor :number, :flights, :booking_classes, :passengers, :phone, :email
 
-      def initialize(*)
-        super
+      def parse
         @number = xpath("//regnum").first
         if @number
           @number=@number.text

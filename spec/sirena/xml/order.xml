@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sirena>
+  <answer pult="ГРФ365">
+    <order agency="36МОС">
+      <pnr bdate="09:29 16.03.2011">
+        <passengers>
+          <passenger id="11" lead_pass="true">
+            <name>ALEKSEY 19МАР83</name>
+            <surname>TROFIMENKO</surname>
+            <sex>male</sex>
+            <birthdate>19.03.1983</birthdate>
+            <age>27</age>
+            <doccode>ПС</doccode>
+            <doc>6555555555</doc>
+            <category rbm="0">ААА</category>
+          </passenger>
+        </passengers>
+        <segments>
+          <segment id="12">
+            <company>U6</company>
+            <flight>778</flight>
+            <class>Y</class>
+            <seatcount>1</seatcount>
+            <departure>
+              <city>МОВ</city>
+              <airport>ДМД</airport>
+              <date>13.04.11</date>
+              <time>23:15</time>
+            </departure>
+            <arrival>
+              <city>СПТ</city>
+              <airport>ПЛК</airport>
+              <date>14.04.11</date>
+              <time>00:30</time>
+            </arrival>
+            <status>confirmed</status>
+            <airplane>320</airplane>
+          </segment>
+          <segment id="13">
+            <company>U6</company>
+            <flight>777</flight>
+            <class>Y</class>
+            <seatcount>1</seatcount>
+            <departure>
+              <city>СПТ</city>
+              <airport>ПЛК</airport>
+              <date>06.05.11</date>
+              <time>07:00</time>
+            </departure>
+            <arrival>
+              <city>МОВ</city>
+              <airport>ДМД</airport>
+              <date>06.05.11</date>
+              <time>09:15</time>
+            </arrival>
+            <status>confirmed</status>
+            <airplane>320</airplane>
+          </segment>
+        </segments>
+        <prices tick_ser="Е60" fop="НА">
+          <price segment-id="12" passenger-id="11">
+            <fare fare_expdate="2011-04-13 23:15">
+              <code base_code="Y">Y</code>
+              <value currency="РУБ">1000.00</value>
+            </fare>
+            <taxes>
+              <tax owner="aircompany">
+                <code>YQ</code>
+                <value>525.00</value>
+              </tax>
+              <tax owner="aircompany">
+                <code>ZZ</code>
+                <value>125.00</value>
+              </tax>
+              <tax owner="aircompany">
+                <code>SA</code>
+                <value>700.00</value>
+              </tax>
+            </taxes>
+          </price>
+          <price segment-id="13" passenger-id="11">
+            <fare fare_expdate="2011-04-13 23:15">
+              <code base_code="Y">Y</code>
+              <value currency="РУБ">1000.00</value>
+            </fare>
+            <taxes>
+              <tax owner="aircompany">
+                <code>YQ</code>
+                <value>525.00</value>
+              </tax>
+              <tax owner="aircompany">
+                <code>ZZ</code>
+                <value>125.00</value>
+              </tax>
+            </taxes>
+          </price>
+          <variant_total currency="РУБ">4000.00</variant_total>
+        </prices>
+        <timelimit>21.03.11 09:30</timelimit>
+        <regnum>08ВГЦП</regnum>
+        <possible_action_list>
+          <action>cancel_pnr</action>
+          <action>pay_for_pnr</action>
+        </possible_action_list>
+      </pnr>
+      <contacts>
+        <contact>+79265555555</contact>
+        <contact>USER@EXAMPLE.COM</contact>
+        <customer>
+          <firstname></firstname>
+          <lastname></lastname>
+        </customer>
+      </contacts>
+    </order>
+  </answer>
+</sirena>

@@ -5,8 +5,7 @@ module Sirena
 
       attr_accessor :pnr_number, :timelimit, :status, :lead_family
 
-      def initialize(*)
-        super
+      def parse
         @pnr_number = xpath("//pnr/regnum").first
         if @pnr_number
           @pnr_number=@pnr_number.text

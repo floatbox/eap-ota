@@ -6,8 +6,7 @@ module Sirena
 
       attr_accessor :datas, :data_type
 
-      def initialize(*)
-        super
+      def parse
         self.datas = []
         descr = xpath("//describe")[0].attribute("data")
         self.data_type = descr && descr.value

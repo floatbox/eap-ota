@@ -15,6 +15,12 @@ module Sirena
         # TODO имеет ли смысл использовать QueryFront?
         # @doc = Handsoap::XmlQueryFront.parse_string(xml_string, :nokogiri)
         @doc = Nokogiri::XML::Document.parse(xml)
+        parse
+      end
+
+      # заглушка для парсинга при инициализации
+      # оверрайд в субклассах
+      def parse
       end
 
       delegate :xpath, :to_s, :to => :doc
@@ -24,6 +30,10 @@ module Sirena
         unless (error = xpath('//error')).blank?
           error.map(&:text).join("; ")
         end
+      end
+
+      def success?
+        error.blank?
       end
 
       def to_amadeus_time(str)

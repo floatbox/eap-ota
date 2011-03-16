@@ -5,8 +5,7 @@ module Sirena
 
       attr_accessor :flights, :recommendations
 
-      def initialize(*)
-        super
+      def parse
         self.flights = {}
         xpath("//pricing/flight").each do |fi|
           h = parse_flight(fi);
