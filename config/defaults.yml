@@ -42,3 +42,5 @@ geolocation:
   enabled: no
   production:
     enabled: yes
+mail:
+  ticket_cc: ~
