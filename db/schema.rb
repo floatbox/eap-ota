@@ -232,6 +232,18 @@ ActiveRecord::Schema.define(:version => 20110317173219) do
     t.string   "sirena_lead_pass"
   end
 
+  create_table "payments", :force => true do |t|
+    t.decimal  "price",                 :precision => 9, :scale => 2, :default => 0.0, :null => false
+    t.string   "last_digits_in_card"
+    t.string   "name_in_card"
+    t.string   "payment_system_name"
+    t.string   "payment_status"
+    t.integer  "transaction_id"
+    t.integer  "refund_transaction_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "regions", :force => true do |t|
     t.string   "name_en"
     t.string   "name_ru"
