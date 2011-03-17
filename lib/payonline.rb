@@ -1,6 +1,6 @@
-﻿# encoding: utf-8
+# encoding: utf-8
 require 'openssl'
-require 'base64'
+require 'digest/md5'
 require 'httparty'
 
 class Payonline
