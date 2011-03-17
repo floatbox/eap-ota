@@ -120,7 +120,7 @@ class Recommendation
   def commission
     @commission ||=
       if source == 'sirena'
-        Commission.new(:agent => '0', :subagent => '0')
+        Commission.new(:agent => '0', :subagent => '0', :agent_comments => '', :subagent_comments => '')
       else
         Commission.find_for(self)
       end
