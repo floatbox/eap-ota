@@ -1,12 +1,11 @@
 #offers-diagram .odpage {
     position: relative;
-    margin-top: 10px;
 }
 .odcontent .segment {
     position: relative;
     z-index: 1;
-    padding: 5px 15px;
-    margin: 0 -15px;
+    padding: 5px;
+    margin: 0 -5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
     cursor: pointer;
@@ -17,13 +16,51 @@
     border-color: #7b8e12;
     padding: 0 4px;
     font-size: 14px;
+    line-height: 19px;
     text-align: center;
+}
+
+/* Header */
+.odheader {
+    margin: 0 0 15px;
+}
+.odhsegments td {
+    width: 250px;
+    padding-right: 5px;
+}
+.odhsegment {
+    padding: 10px 15px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background: #FFF;
+    color: #4B4B4B;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.odhsegment h5 {
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 18px;
+}
+.odhsegment h6 {
+    font-size: 13px;
+    line-height: 16px;
+}
+.odhsegments .selected {
+    color: #FFF;
+    cursor: default;
+}
+.odhs1 .selected {
+    background: #81aa00;
+}
+.odhs2 .selected {
+    background: #C46F26;
 }
 
 /* Bar */
 .odcontent .bar {
     position: absolute;
-    top: 8px;
+    top: 7px;
     font-size: 11px;
 }
 .odcontent .dpt,
@@ -47,7 +84,6 @@
 .odcontent .arv {
     padding-left: 5px;
 }
-
 
 .odcontent .flight,
 .odcontent .layover {
@@ -103,7 +139,7 @@
 /* Cities */
 .odcontent .locations {
     font-size: 11px;
-    padding-bottom: 15px;    
+    padding-bottom: 10px;
 }
 
 /* Selected variant */
