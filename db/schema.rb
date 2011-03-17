@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110310160348) do
+ActiveRecord::Schema.define(:version => 20110317173219) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(:version => 20110310160348) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "engine_type", :default => "jet"
+    t.string   "iata_ru"
   end
 
   create_table "airports", :force => true do |t|
@@ -85,6 +86,7 @@ ActiveRecord::Schema.define(:version => 20110310160348) do
     t.text     "interlines",          :null => false
     t.string   "color"
     t.string   "font_color"
+    t.string   "iata_ru"
   end
 
   create_table "cities", :force => true do |t|
@@ -263,3 +265,4 @@ ActiveRecord::Schema.define(:version => 20110310160348) do
   end
 
 end
+
