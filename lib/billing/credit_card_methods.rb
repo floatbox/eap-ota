@@ -45,9 +45,9 @@ module Billing #:nodoc:
       # - http://perl.about.com/compute/perl/library/nosearch/P073000.htm
       # - http://www.beachnet.com/~hstiles/cardtype.html
       def valid_number?(number)
-        (valid_test_mode_card_number?(number) && !Rails.env.production?) ||
-          valid_card_number_length?(number) &&
-          valid_checksum?(number)
+        valid_card_number_length?(number) &&
+          (Conf.payment.skip_checksum_validation ||
+          valid_checksum?(number))
       end
 
       # Regular expressions for the known card companies.
@@ -103,8 +103,9 @@ module Billing #:nodoc:
         number.to_s.length >= 12
       end
 
+      # не используется, может быть временно
       def valid_test_mode_card_number?(number) #:nodoc:
-        %w[4111111111111112 5222230546300090
+        %w[4111111111111111 4111111111111112 5222230546300090
           1 2 3 success failure error].include?(number.to_s)
       end
 

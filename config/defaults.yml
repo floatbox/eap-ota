@@ -7,6 +7,8 @@ amadeus:
   fake: no
   production:
     endpoint: "https://production.webservices.amadeus.com"
+payment:
+  skip_checksum_validation: no
 payture:
   enabled: yes
   key: MerchantETerra
