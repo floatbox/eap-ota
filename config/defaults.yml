@@ -8,7 +8,9 @@ amadeus:
   production:
     endpoint: "https://production.webservices.amadeus.com"
 payment:
-  skip_checksum_validation: no
+  skip_checksum_validation: yes
+  production:
+    skip_checksum_validation: no
 payture:
   enabled: yes
   key: MerchantETerra
