@@ -1,5 +1,12 @@
 <div class="booking g-none" data-variant="<%= @order.variant_id %>">
 <%= form_for @order.card, :as => :card, :url => booking_pay_path, :html => { :autocomplete => "off" } do |f| %>
+
+    <% availability = @order.recommendation.availability %>
+    <% if availability > 0 && availability < 9 %>
+    <div class="availability">
+        По этому тарифу осталось <strong><%= availability %>&nbsp;<%= Russian.pluralize(availability, 'место', 'места', 'мест') %></strong>. Не&nbsp;откладывайте покупку.
+    </div>
+    <% end %>
     
     <!-- Данные пассажиров -->
     <h3>Введите данные <%= @order.people.size == 1 ? 'пассажира' : 'пассажиров' %></h3>

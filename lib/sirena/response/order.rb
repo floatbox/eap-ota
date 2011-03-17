@@ -5,7 +5,6 @@ module Sirena
 
       def initialize(*)
         super
-        puts doc
         @number = xpath("//regnum").first
         if @number
           @number=@number.text
