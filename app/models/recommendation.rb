@@ -118,7 +118,12 @@ class Recommendation
   end
 
   def commission
-    @commission ||= Commission.find_for(self)
+    @commission ||=
+      if source == 'sirena'
+        Commission.new(:agent => '0', :subagent => '0')
+      else
+        Commission.find_for(self)
+      end
   end
 
   def segments
@@ -136,8 +141,8 @@ class Recommendation
   def sellable?
     # consolidator-а пока не проверяем.
     # FIXME перепровить после подключения новых договоров
-    # validating_carrier.consolidator && commission || source == 'sirena'
-    source == 'sirena' || commission
+    # validating_carrier.consolidator && commission
+    commission
   end
 
   def without_full_information?
