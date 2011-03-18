@@ -5,6 +5,8 @@ class Order < ActiveRecord::Base
   TICKET_STATUS = { 'ticketed' => 'ticketed', 'booked' => 'booked', 'canceled' => 'canceled'}
   SOURCE = { 'amadeus' => 'amadeus', 'sirena' => 'sirena' }
 
+  has_many :payments
+
   validates_presence_of :email#, :phone
   validates_format_of :email, :with =>
     /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email"
@@ -120,3 +122,4 @@ class Order < ActiveRecord::Base
   end
 
 end
+
