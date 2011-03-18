@@ -84,6 +84,7 @@ class Order < ActiveRecord::Base
 
   def ticket!
     update_attribute(:ticket_status, 'ticketed')
+    send_receipt
   end
 
   def cancel!
@@ -101,7 +102,11 @@ class Order < ActiveRecord::Base
   end
 
   def send_email
-    PnrMailer.notification(email, pnr_number).deliver if email
+    PnrMailer.notification(email, pnr_number).deliver if source == 'amadeus'
+  end
+
+  def send_receipt
+    PnrMailer.sirena_receipt(email, pnr_number).deliver if source == 'sirena'
   end
 
 # class methods

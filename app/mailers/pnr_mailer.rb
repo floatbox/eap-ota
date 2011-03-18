@@ -9,4 +9,10 @@ class PnrMailer < ActionMailer::Base
     mail :to => email, :subject => "Ваш электронный билет"
   end
 
+  def sirena_receipt(email, number)
+    @pnr = Pnr.get_by_number(number)
+    attachments['eticket.pdf'] = @pnr.sirena_receipt
+    mail :to => email, :subject => "Ваш электронный билет"
+  end
+
 end

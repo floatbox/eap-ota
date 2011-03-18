@@ -30,8 +30,11 @@ class Pnr
   end
 
   def order
-    @order || @order = Order.find_by_pnr_number(number)
+    @order ||= Order.find_by_pnr_number(number)
   end
 
+  def sirena_receipt
+    Sirena::Service.get_itin_receipts(number, order.sirena_lead_pass).pdf
+  end
 
 end
