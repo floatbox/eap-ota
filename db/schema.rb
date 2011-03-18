@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110317173219) do
+ActiveRecord::Schema.define(:version => 20110318171550) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -242,6 +242,8 @@ ActiveRecord::Schema.define(:version => 20110317173219) do
     t.integer  "refund_transaction_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "reject_reason"
+    t.string   "id_override"
   end
 
   create_table "regions", :force => true do |t|
