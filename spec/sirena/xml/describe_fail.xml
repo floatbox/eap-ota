@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sirena>
+  <answer pult="ГРФ365">
+    <describe data="passengers">
+      <error code="33010">Неправильный формат элемента 'data'</error>
+    </describe>
+  </answer>
+</sirena>
