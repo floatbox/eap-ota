@@ -1,13 +1,21 @@
 class Payment < ActiveRecord::Base
   belongs_to :order
-  attr_reader :card
+
+
+  def card= card
+    @card = card
+    self.last_digits_in_card = card.number4
+    self.name_in_card = card.name
+  end
 
   def payture_block
     response = Payture.new.block(price, @card, :order_id => id)
   end
 
   def payture_state
-    Payture.new.state(:order_id => id).state
+    state = Payture.new.state(:order_id => id).state
+    update_attribute(:payment_status, state)
+    state
   end
 
   def payture_amount
