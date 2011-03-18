@@ -73,6 +73,10 @@ module PricerHelper
   def human_date date
     I18n.l(Date.strptime(date, '%d%m%y'), :format => '%e %B')
   end
+
+  def date_with_dow date
+    I18n.l(Date.strptime(date, '%d%m%y'), :format => '%e %B, %A')
+  end
   
   def human_layovers_count count
     numbers = ['одной', 'двумя', 'тремя', 'четыремя', 'пятью']

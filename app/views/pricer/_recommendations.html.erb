@@ -16,7 +16,7 @@
     data-query_key="<%= @query_key %>" 
     data-people="<%= @search.people_total %>" 
     data-aveprice="<%= @average_price %>"
-    data-segments="<%= @search.form_segments.map{|fs| {:from => fs.from_as_object.name, :to => fs.to_as_object.name, :date => human_date(fs.date)} }.to_json %>"
+    data-segments="<%= @search.form_segments.map{|fs| {:from => fs.from_as_object.name, :to => fs.to_as_object.name, :date => date_with_dow(fs.date)} }.to_json %>"
 ></div>
 <% @recommendations.each do |recommendation| %>
 <div class="offer collapsed<%= ' multiple' if recommendation.variants.length > 1 %>" data-summary='<%= recommendation.summary.to_json %>'>

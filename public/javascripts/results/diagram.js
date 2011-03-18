@@ -10,9 +10,11 @@ init: function() {
     this.content.delegate('.segment', 'click', function() {
         var el = $(this);
         that.selectSegment(el.closest('.odpage').data('segment'), el.attr('data-flights'));
+        that.savedSelected = that.selected.concat();
     });
     this.header.delegate('.odhsegment:not(.selected)', 'click', function() {
         var el = $(this);
+        that.selected = that.savedSelected.concat();
         that.selectSegment(el.closest('td').data('segment'), undefined, false);
     });
 },
@@ -29,6 +31,7 @@ update: function() {
         this.unselected.push[s];
     }
     this.selected = [];
+    this.savedSelected = [];
     this.selectVariants();
     this.showSegment(0);
 },
@@ -108,14 +111,14 @@ showSegment: function(s) {
 },
 selectSegment: function(s, flights, auto) {
     this.selected[s] = flights;
-    this.undselected = [];
+    this.unselected = [];
     for (var i = 0; i < results.samount; i++) {
         if (this.selected[i] === undefined) {
             this.unselected.push(i);
         }
     }
     this.selectVariants();
-    this.header.find('.selected').removeClass('selected');    
+    this.header.find('.selected').removeClass('selected');
     if (this.proper.length === 1 && auto !== false) {
         var variant = this.proper[0].el.clone();
         variant.removeClass('g-none').find('.variants').hide();
