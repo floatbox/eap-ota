@@ -147,7 +147,7 @@ module PricerHelper
   end
 
   def variant_debug_info(recommendation, variant)
-    concat recommendation.source
+    # concat recommendation.source
     concat %( <a href="#" onclick="prompt('ctrl+c!', '#{h recommendation.cryptic(variant)}'); return false">КОД</a> ).html_safe if recommendation.source == 'amadeus'
     concat 'Наземный участок ' if recommendation.ground?
     concat 'Не можем продать ' unless recommendation.sellable?
