@@ -4,19 +4,21 @@ module Sirena
     class Pricing < Sirena::Request::Base
       CabinsMatch = {"Y"=>"Э", "F"=>"П", "C"=>"Б"}
       attr_accessor :passengers, :segments
-      # это должно быть здесь, я уже всеоо придумал
+
       def initialize(form, recommendation = nil)
         @passengers = []
         if form.people_count[:adults] > 0
           @passengers << {:code => "ААА", :count => form.people_count[:adults]}
         end
-        # я не знаю, откуда брать возраст в реальной жизни,
-        # но он - необходимый параметр, поэтому от балды пока
+        # ААА - взрослый, РБГ - ребенок, РМГ - младенец, РВГ - младенец с местом
+        # CHILD и INFANT, видимо, сами подбирают категории с учетом необходимости мест,
+        # но требуют возраст
+        # FIXME выбрать один из методов
         if form.people_count[:children] > 0
-          @passengers << {:code=>"РБГ", :count => form.people_count[:children], :age => 5}
+          @passengers << {:code=>"CHILD", :count => form.people_count[:children], :age => 5}
         end
         if form.people_count[:infants] > 0
-          @passengers << {:code=>"РМГ", :count => form.people_count[:infants], :age => 1 }
+          @passengers << {:code=>"INFANT", :count => form.people_count[:infants], :age => 1 }
         end
 
         @segments = recommendation.blank? ? form.form_segments.collect { |fs|
