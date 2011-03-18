@@ -21,7 +21,10 @@ module Sirena
           else
             person.document_noexpiration ? "ПС" : "ПСП"
           end
-          pass_code = person.infant_or_child == 'i' ? "INFANT" : (person.infant_or_child == 'c' ? "CHILD" : "ААА")
+          pass_code = case person.infant_or_child
+                      when 'i' then "РМГ"
+                      when 'c' then "РБГ"
+                      else "ААА" end
           {
             :family=>person.last_name,
             :name=>person.first_name,

@@ -31,7 +31,7 @@ Carrier:
   fields:
     default: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
     list: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
-    form: ru_shortname, ru_longname, en_shortname, en_longname, iata, country, bonus_program_name, alliance, gds, interlines, consolidator, color, font_color
+    form: ru_shortname, ru_longname, en_shortname, en_longname, iata, iata_ru, country, bonus_program_name, alliance, gds, interlines, consolidator, color, font_color
     options:
       read_only: interlines
   order_by: en_shortname, ru_shortname
@@ -44,7 +44,7 @@ Airplane:
   fields:
     default: iata, name_ru, name_en, engine_type
     list: iata, name_ru, name_en, engine_type
-    form: iata, icao, name_ru, name_en, engine_type
+    form: iata, iata_ru, icao, name_ru, name_en, engine_type
     options:
       selectors: engine_type
 

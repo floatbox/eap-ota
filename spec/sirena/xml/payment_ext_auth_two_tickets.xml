@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sirena>
+  <answer pult="ГРФ365">
+    <payment-ext-auth regnum="08ВЛР9" action="CONFIRM" mode="PAYMENT">
+      <regnum>08ВЛР9</regnum>
+      <timelimit></timelimit>
+      <book_time>17.03.2011 20:53</book_time>
+      <nseats>2</nseats>
+      <agn>36МОС</agn>
+      <ppr>92388085</ppr>
+      <nseg>2</nseg>
+      <npax>1</npax>
+      <tickinfo ticknum="2626150600107" tick_ser="ЭБМ" accode="262" is_etick="true" tkt_ppr="92388085" seg_id="12" pass_id="11">ticket</tickinfo>
+      <tickinfo ticknum="2626150600107" tick_ser="ЭБМ" accode="262" is_etick="true" tkt_ppr="92388085" seg_id="13" pass_id="11">ticket</tickinfo>
+      <common_status>ticket</common_status>
+      <ok/>
+    </payment-ext-auth>
+  </answer>
+</sirena>

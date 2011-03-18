@@ -118,7 +118,12 @@ class Recommendation
   end
 
   def commission
-    @commission ||= Commission.find_for(self)
+    @commission ||=
+      if source == 'sirena'
+        Commission.new(:agent => '0', :subagent => '0', :agent_comments => '', :subagent_comments => '')
+      else
+        Commission.find_for(self)
+      end
   end
 
   def segments
@@ -136,8 +141,8 @@ class Recommendation
   def sellable?
     # consolidator-а пока не проверяем.
     # FIXME перепровить после подключения новых договоров
-    # validating_carrier.consolidator && commission || source == 'sirena'
-    source == 'sirena' || commission
+    # validating_carrier.consolidator && commission
+    commission
   end
 
   def without_full_information?
@@ -346,7 +351,7 @@ class Recommendation
       s.flights.collect(&:flight_code).join('-')
     }
 
-    ( [ source, validating_carrier_iata, booking_classes.join(''), cabins.join(''), availabilities.join('') ] +
+    ( [ source, validating_carrier_iata, booking_classes.join(''), cabins.join(''), (availabilities || []).join('') ] +
       segment_codes ).join('.')
   end
 

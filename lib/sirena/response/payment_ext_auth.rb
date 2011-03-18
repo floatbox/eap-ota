@@ -4,8 +4,7 @@ module Sirena
     class PaymentExtAuth < Sirena::Response::Base
       attr_accessor :cost, :curr
 
-      def initialize(*)
-        super
+      def parse
         @cost = xpath("///cost")[0]
         if @cost
           @curr = @cost.attribute("curr") && @cost.attribute("curr").value

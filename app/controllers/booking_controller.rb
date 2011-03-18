@@ -38,8 +38,12 @@ class BookingController < ApplicationController
       if @order.create_booking
         payture_response = @order.block_money
         if payture_response.success?
-          Sirena::Adapter.approve_payment(@order) if @order.recommendation.source == 'sirena'
           @order.order.money_blocked!
+          # FIXME вынести в кронтаск
+          if @order.recommendation.source == 'sirena'
+            Sirena::Adapter.approve_payment(@order)
+            @order.order.ticket!
+          end
           render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}
         elsif payture_response.threeds?
           render :partial => 'threeds', :locals => {:order => @order, :payture_response => payture_response}
@@ -64,15 +68,15 @@ class BookingController < ApplicationController
       @order.money_blocked!
       @pnr_number = @order.pnr_number
       @pnr_path = show_order_path(@order.pnr_number)
+      # FIXME вынести в кронтаск
+      if @order.source == 'sirena'
+        Sirena::Adapter.approve_payment(@order)
+        @order.ticket!
+      end
     else
       @error_message = 'Не удалось оплатить билет'
     end
   end
-
-  def valid_card
-    {:number => '4111111111111112', :verification_value => '123', :month => 10, :year => 2010, :first_name => 'doesnt', :last_name => 'matter'}
-  end
-  helper_method :valid_card
 
 end
 

@@ -4,8 +4,7 @@ module Sirena
     class PNRHistory < Sirena::Response::Base
       attr_accessor :history
 
-      def initialize(*)
-        super
+      def parse
         @history = xpath('//pnr_history').text
       end
     end

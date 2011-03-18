@@ -1,29 +1,23 @@
 module Sirena
   module Response
     class Order < Sirena::Response::Base
-      attr_accessor :number, :flights, :booking_classes, :passengers, :phone, :email, :raw
+      attr_accessor :number, :flights, :booking_classes, :passengers, :phone, :email
 
-      def initialize(*)
-        super
-        puts doc
-        @number = xpath("//regnum").first
-        if @number
-          @number=@number.text
-        end
-
-        @passengers = xpath("//passengers/passenger").map{|p|
+      def parse
+        @number = xpath("//regnum").text
+        @passengers = xpath("//passengers/passenger").map do |p|
           Person.new({
-            :first_name=>p.xpath("name").text,
-            :last_name=>p.xpath("surname").text,
-            :passport=>p.xpath("doc").text,
-            :sex=>p.xpath("sex").text
+            :first_name => p.xpath("name").text,
+            :last_name => p.xpath("surname").text,
+            :passport => p.xpath("doc").text,
+            :sex => p.xpath("sex").text
           })
-        }
+        end
         @booking_classes = []
-        @flights = xpath("//segments/segment").map{|s|
+        @flights = xpath("//segments/segment").map do |s|
           @booking_classes << s.xpath("class").text
           Flight.new({
-            :flight_number=>           s.xpath("flight").text,
+            :flight_number =>          s.xpath("flight").text,
             :operating_carrier_iata => s.xpath("company").text,
             :marketing_carrier_iata => s.xpath("company").text,
             :departure_iata =>         s.xpath("departure/airport").text,
@@ -35,7 +29,7 @@ module Sirena
             :equipment_type_iata =>    s.xpath("airplane").text, # иногда кириллица!
             :technical_stops => []
           })
-        }
+        end
         @phone, @email = xpath("//contacts/contact").map(&:text)
       end
     end
