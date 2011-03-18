@@ -41,21 +41,29 @@ class BookingController < ApplicationController
           @order.order.money_blocked!
           # FIXME вынести в кронтаск
           if @order.recommendation.source == 'sirena'
+            logger.info "Pay: sirena ticketing"
             Sirena::Adapter.approve_payment(@order)
             @order.order.ticket!
           end
+          logger.info "Pay: payment and booking successful"
           render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}
         elsif payture_response.threeds?
+          logger.info "Pay: payment system requested 3D-Secure authorization"
           render :partial => 'threeds', :locals => {:order => @order, :payture_response => payture_response}
         else
           @order.order.cancel!
-          render :partial => 'fail', :locals => {:errors => @order.card.errors[:number]}
+          msg = @order.card.errors[:number]
+          logger.info "Pay: payment failed with error message #{msg}"
+          render :partial => 'fail', :locals => {:errors => msg}
         end
-      elsif @order.errors[:pnr_number]
-        render :partial => 'fail', :locals => {:errors => @order.errors[:pnr_number]}
+      elsif msg = @order.errors[:pnr_number]
+        logger.info "Pay: booking failed with error message #{msg}"
+        render :partial => 'fail', :locals => {:errors => msg}
       end
+      logger.info "Pay: booking failed without error message"
       return
     end
+    logger.info "Pay: invalid order"
     render :json => {:errors => @order.errors_hash}
   end
 
