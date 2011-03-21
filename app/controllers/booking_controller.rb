@@ -59,8 +59,9 @@ class BookingController < ApplicationController
       elsif msg = @order.errors[:pnr_number]
         logger.info "Pay: booking failed with error message #{msg}"
         render :partial => 'fail', :locals => {:errors => msg}
+      else
+        logger.info "Pay: booking failed misteriously not giving an error message"
       end
-      logger.info "Pay: booking failed without error message"
       return
     end
     logger.info "Pay: invalid order"
