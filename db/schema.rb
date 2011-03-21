@@ -240,6 +240,7 @@ ActiveRecord::Schema.define(:version => 20110318171550) do
     t.string   "payment_status"
     t.integer  "transaction_id"
     t.integer  "refund_transaction_id"
+    t.integer  "order_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "reject_reason"

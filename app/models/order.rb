@@ -67,13 +67,15 @@ class Order < ActiveRecord::Base
   end
 
   def charge!
-    payments.first.charge!
+    res = payments.first.charge!
+    update_attribute(:payment_status, 'charged') if res
+    res
   end
 
   def unblock!
     res = payments.first.unblock!
     update_attribute(:payment_status, 'unblocked') if res
-    res.success?
+    res
   end
 
   def money_blocked!

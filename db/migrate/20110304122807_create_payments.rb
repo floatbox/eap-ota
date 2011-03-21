@@ -8,6 +8,7 @@ class CreatePayments < ActiveRecord::Migration
       t.string :payment_status
       t.integer :transaction_id
       t.integer :refund_transaction_id
+      t.integer :order_id
 
       t.timestamps
     end
