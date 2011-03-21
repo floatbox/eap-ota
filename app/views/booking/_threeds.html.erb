@@ -1,6 +1,6 @@
 <div class="result" data-type="3dsecure">
     <p class="success">Ваша банковская карта требует дополнительной авторизации 3DSecure. Вы будете перенаправлены на сайт платёжного шлюза. После успешной авторизации вы получите подтверждение покупки.</p>
-    <% form_tag payture_response.acs_url, :class => 'tds-form' do %>
+    <%= form_tag payture_response.acs_url, :class => 'tds-form' do %>
       <%= hidden_field_tag 'PaReq', payture_response.pa_req %>
       <%= hidden_field_tag 'TermUrl', confirm_3ds_url(:order_id => order.order_id) %>
       <%= hidden_field_tag 'MD', payture_response.threeds_key %>
