@@ -59,7 +59,7 @@ class City < ActiveRecord::Base
 
   def utc_offset date=Date.today
     time = date.to_time.utc
-    (time - tz.local_to_utc(time)).to_i/60
+    (time - tz.local_to_utc(time)).to_i
   end
 
 end

@@ -94,9 +94,7 @@
 <tr class="bars">
     <td colspan="6">
     <% variant.segments.each_with_index do |segment, segment_counter| %>
-        <% segment_dpt = time_in_minutes(segment.departure_time) %>
-        <% segment_arv = segment_dpt + segment.total_duration %>
-        <div class="segment" data-flights="<%= segment_flight_numbers(segment) %>" data-dpt="<%= segment_dpt %>" data-arv="<%= segment_arv %>" data-shift="<%= time_shift(segment_arv, time_in_minutes(segment.arrival_time)) %>">
+        <div class="segment" data-flights="<%= segment_flight_numbers(segment) %>" data-options="<%= bar_options(segment).to_json %>">
         <a class="a-button" href="#"><%= recommendation.price_total.round.to_i %>&nbsp;Р</a>
         <div class="bar">
             <div class="dpt"><%= fmt_time( segment.departure_time ) %> <span class="iata"><%= segment.departure_iata %></span></div>

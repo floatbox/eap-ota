@@ -30,13 +30,15 @@ module PricerHelper
     time ? (time[0,2].to_i * 60 + time[2,2].to_i) : 0
   end
 
-  def time_shift(arv, local_arv)
-    tshift = local_arv - arv % 1440
-    if tshift.abs > 720
-      tshift % -720
-    else
-      tshift
-    end
+  def bar_options segment
+    dpt = time_in_minutes(segment.departure_time)
+    dpt_offset = segment.departure.city.utc_offset(Date.strptime(segment.departure_date, '%d%m%y'))
+    arv_offset = segment.arrival.city.utc_offset(Date.strptime(segment.arrival_date, '%d%m%y'))
+    {
+      :dpt => dpt,
+      :arv => dpt + segment.total_duration,
+      :shift => (arv_offset - dpt_offset) / 60
+    }
   end
 
   def fmt_departure flight

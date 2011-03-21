@@ -65,17 +65,17 @@ showSegment: function(s) {
     if (segment.shift) {
         locations.append('<li>' + segment.arvcity + '</li>');
     }
-    var items = segment.items;
+    var bars = segment.bars;
     var length = segment.arv - segment.dpt;
     var that = this;
-    for (var i = 0, im = items.length; i < im; i++) {
-        var item = items[i].clone();
+    for (var i = 0, im = bars.length; i < im; i++) {
+        var item = bars[i].el.clone();
         item.find('.flight, .layover').each(function() {
             var el = $(this);
             var d = parseInt(el.attr('data-duration'), 10);
             el.width(Math.round(d / length * that.width) - 8);
         });
-        var dpt = parseInt(item.attr('data-dpt'), 10) - segment.dpt;
+        var dpt = bars[i].dpt - segment.dpt;
         var prices = $.grep(segment.prices[item.attr('data-flights')].unique(), function(p) {
             return p >= that.minprice;
         });
@@ -133,7 +133,7 @@ selectSegment: function(s, flights, auto) {
 getSegment: function(s) {
     var that = this;
     var segment = {
-        items: [],
+        bars: [],
         contents: {},
         prices: {},
         dpt: 1440,
@@ -146,7 +146,7 @@ getSegment: function(s) {
         var bar = variant.bars[s];
         var bf = bar.flights;
         if (segment.contents[bf] === undefined) {
-            segment.items.push(bar.el);
+            segment.bars.push(bar);
             segment.dpt = Math.min(segment.dpt, bar.dpt);
             segment.arv = Math.max(segment.arv, bar.arv);
             segment.contents[bf] = [i];
@@ -174,12 +174,13 @@ parseBars: function() {
         v.bars = [];
         v.el.find('.bars .segment').each(function(s) {
             var item = $(this);
+            var options = $.parseJSON(item.attr('data-options'));
             v.bars[s] = {
                 el: item,
                 flights: item.attr('data-flights'),
-                shift: parseInt(item.attr('data-shift'), 10),
-                dpt: parseInt(item.attr('data-dpt'), 10),
-                arv: parseInt(item.attr('data-arv'), 10)
+                shift: options.shift,
+                dpt: options.dpt,
+                arv: options.arv
             };
         });
     }
