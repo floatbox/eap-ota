@@ -269,7 +269,7 @@ ptp.dates = function($dd, $mm, $yyyy) {
 
 ptp.passport = function($passport) {
     var warning = $passport.eq(0).closest('tr').find('.symbols-warning');
-    var mask;
+    var mask = /[ёа-я]/i;
     var active = false;
     var hwtimer, hideWarning = function() {
         clearTimeout(hwtimer);
@@ -290,12 +290,6 @@ ptp.passport = function($passport) {
     }).blur(function() {
         if (active) hideWarning();
     });
-    $passport.closest('tbody').find('.nationality').change(function() {
-        var rus = $(this).val() == 170;
-        mask = rus ? /[ёа-яa-z]/i : /[ёа-я]/i;
-        warning.html('Вводите только ' + (rus ? 'цифры' : 'латинские буквы и цифры') + ' — с пробелами или без');
-        $passport.trigger('mask', rus ? /[ \d]/ : /[ a-z\d]/i);
-    }).change();
 };
 
 // ======  Данные банковской карты  ============
