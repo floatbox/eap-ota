@@ -2,7 +2,7 @@ class Payment < ActiveRecord::Base
   belongs_to :order
 
   def ref
-    id_override || id
+    id_override || (Conf.payment.order_id_prefix + id.to_s)
   end
 
   def card= card

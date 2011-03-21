@@ -5,6 +5,13 @@ require 'uri'
 
 module Tmp
 
+
+  def self.create_payments_for_existing_orders
+    Order.all.each do |o|
+      Payment.create(:price => o.price_with_payment_commission, :last_digits_in_card => o.last_digits_in_card, :order => o, :name_in_card => o.name_in_card, :id_override => o.order_id)
+    end
+  end
+
   def self.fill_in_disabled_flag_in_cities_and_airports
     Amadeus.booking do |amadeus|
       City.all(:conditions => 'iata != ""  and iata is not null').each do |c|

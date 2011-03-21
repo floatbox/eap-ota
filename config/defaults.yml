@@ -9,6 +9,7 @@ amadeus:
     endpoint: "https://production.webservices.amadeus.com"
 payment:
   skip_checksum_validation: yes
+  order_id_prefix: o
   production:
     skip_checksum_validation: no
 payture:
@@ -47,3 +48,4 @@ geolocation:
     enabled: yes
 mail:
   ticket_cc: ~
+
