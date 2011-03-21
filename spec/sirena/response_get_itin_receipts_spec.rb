@@ -2,12 +2,12 @@
 require 'spec_helper'
 
 describe Sirena::Response::GetItinReceipts do
+
+  subject { described_class.new( File.read(response) ) }
+
   describe 'with one adult' do
 
-    subject {
-      body = File.read('spec/sirena/xml/get_itin_receipts_successful.xml')
-      Sirena::Response::GetItinReceipts.new(body)
-    }
+    let(:response) { 'spec/sirena/xml/get_itin_receipts_successful.xml' }
 
     it { should be_success }
     its(:pdf) { should match(/^%PDF-1.3/) }

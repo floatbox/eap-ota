@@ -163,13 +163,13 @@
                  :onclick => "return {mask: /[ a-z\\d]/i, rules: {req: true, minl: 1, gender: 'M'}}"
                 %>
                 <%= person.error_message_on :passport, :id => "error_person_#{person_form_counter}_passport" %>
-                <div class="symbols-warning">Вводите только цифры — с пробелами или без</div>
+                <div class="symbols-warning">Вводите только латинские буквы и цифры — с пробелами или без</div>
             <td>
                 <input type="text"
                  id="bp-<%=person_form_counter%>-expires-d"
                  class="text text-dd g-xl"
                  name="person_attributes[<%= person_form_counter %>][document_expiration_date(3i)]"
-                 value="<%= (person_form.document_expiration_date &&  person_form.document_expiration_date.day) %>"
+                 value="<%= (person_form.document_expiration_date && person_form.document_expiration_date.day) %>"
                  title="день окончания действия документа"
                  maxlength="2"
                  onclick="return {def: 'день', mask: /\d/, rules: {req: true, num: true, min: 1, max: 31, gender: 'M'}}"

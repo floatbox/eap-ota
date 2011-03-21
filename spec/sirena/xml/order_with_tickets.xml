@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sirena>
+  <answer pult="ГРФ365">
+    <order agency="36МОС">
+      <pnr bdate="15:14 18.03.2011">
+        <passengers>
+          <passenger id="11" lead_pass="true">
+            <name>ALEKSEY 19АПР83</name>
+            <surname>IVANOV</surname>
+            <sex>male</sex>
+            <birthdate>19.04.1983</birthdate>
+            <age>27</age>
+            <doccode>ПС</doccode>
+            <doc>6555555555</doc>
+            <category rbm="0">ААА</category>
+          </passenger>
+          <passenger id="13" parent_id="11">
+            <name>MASHA 20ФЕВ00</name>
+            <surname>IVANOVA</surname>
+            <sex>male</sex>
+            <birthdate>20.02.2000</birthdate>
+            <age>11</age>
+            <doccode>СР</doccode>
+            <doc>VВГ123456</doc>
+            <category rbm="1">РБГ</category>
+          </passenger>
+        </passengers>
+        <segments>
+          <segment id="14">
+            <company>U6</company>
+            <flight>778</flight>
+            <class>Y</class>
+            <seatcount>2</seatcount>
+            <departure>
+              <city>МОВ</city>
+              <airport>ДМД</airport>
+              <date>14.04.11</date>
+              <time>23:15</time>
+            </departure>
+            <arrival>
+              <city>СПТ</city>
+              <airport>ПЛК</airport>
+              <date>15.04.11</date>
+              <time>00:30</time>
+            </arrival>
+            <status>confirmed</status>
+            <airplane>320</airplane>
+          </segment>
+          <segment id="15">
+            <company>U6</company>
+            <flight>777</flight>
+            <class>Y</class>
+            <seatcount>2</seatcount>
+            <departure>
+              <city>СПТ</city>
+              <airport>ПЛК</airport>
+              <date>30.04.11</date>
+              <time>07:00</time>
+            </departure>
+            <arrival>
+              <city>МОВ</city>
+              <airport>ДМД</airport>
+              <date>30.04.11</date>
+              <time>09:15</time>
+            </arrival>
+            <status>confirmed</status>
+            <airplane>320</airplane>
+          </segment>
+        </segments>
+        <prices tick_ser="Е60" fop="НА">
+          <price segment-id="14" passenger-id="11">
+            <fare fare_expdate="2049-12-31 23:59">
+              <code base_code="Y">Y</code>
+              <value currency="РУБ">1000.00</value>
+            </fare>
+            <taxes>
+              <tax owner="aircompany">
+                <code>YQ</code>
+                <value>525.00</value>
+              </tax>
+              <tax owner="aircompany">
+                <code>ZZ</code>
+                <value>125.00</value>
+              </tax>
+              <tax owner="aircompany">
+                <code>SA</code>
+                <value>700.00</value>
+              </tax>
+            </taxes>
+          </price>
+          <price segment-id="14" passenger-id="13">
+            <fare fare_expdate="2049-12-31 23:59">
+              <code base_code="Y">Y/CN50</code>
+              <value currency="РУБ">500.00</value>
+            </fare>
+            <taxes>
+              <tax owner="aircompany">
+                <code>YQ</code>
+                <value>525.00</value>
+              </tax>
+              <tax owner="aircompany">
+                <code>ZZ</code>
+                <value>125.00</value>
+              </tax>
+              <tax owner="aircompany">
+                <code>SA</code>
+                <value>700.00</value>
+              </tax>
+            </taxes>
+          </price>
+          <price segment-id="15" passenger-id="11">
+            <fare fare_expdate="2049-12-31 23:59">
+              <code base_code="Y">Y</code>
+              <value currency="РУБ">1000.00</value>
+            </fare>
+            <taxes>
+              <tax owner="aircompany">
+                <code>YQ</code>
+                <value>525.00</value>
+              </tax>
+              <tax owner="aircompany">
+                <code>ZZ</code>
+                <value>125.00</value>
+              </tax>
+            </taxes>
+          </price>
+          <price segment-id="15" passenger-id="13">
+            <fare fare_expdate="2049-12-31 23:59">
+              <code base_code="Y">Y/CN50</code>
+              <value currency="РУБ">500.00</value>
+            </fare>
+            <taxes>
+              <tax owner="aircompany">
+                <code>YQ</code>
+                <value>525.00</value>
+              </tax>
+              <tax owner="aircompany">
+                <code>ZZ</code>
+                <value>125.00</value>
+              </tax>
+            </taxes>
+          </price>
+          <variant_total currency="РУБ">7000.00</variant_total>
+        </prices>
+        <timelimit>14.04.11 23:15</timelimit>
+        <regnum>08ВМГХ</regnum>
+        <possible_action_list>
+          <action>get_itin_receipt</action>
+        </possible_action_list>
+      </pnr>
+      <contacts>
+        <contact>+79265555555</contact>
+        <contact>USER@EXAMPLE.COM</contact>
+        <customer>
+          <firstname></firstname>
+          <lastname></lastname>
+        </customer>
+      </contacts>
+      <tickinfo ticknum="2626150600213" tick_ser="ЭБМ" accode="262" is_etick="true" tkt_ppr="92388085" seg_id="14" pass_id="11">ticket</tickinfo>
+      <tickinfo ticknum="2626150600214" tick_ser="ЭБМ" accode="262" is_etick="true" tkt_ppr="92388085" seg_id="14" pass_id="13">ticket</tickinfo>
+      <tickinfo ticknum="2626150600213" tick_ser="ЭБМ" accode="262" is_etick="true" tkt_ppr="92388085" seg_id="15" pass_id="11">ticket</tickinfo>
+      <tickinfo ticknum="2626150600214" tick_ser="ЭБМ" accode="262" is_etick="true" tkt_ppr="92388085" seg_id="15" pass_id="13">ticket</tickinfo>
+    </order>
+  </answer>
+</sirena>

@@ -23,6 +23,7 @@ init: function() {
         $.ajax({
             url: $(this).attr('action'),
             data: data,
+            type: 'POST',
             success: function(s) {
                 if (typeof s === 'string' && s.length) {
                     var result = $(s).appendTo(self.el);

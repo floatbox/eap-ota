@@ -6,14 +6,10 @@ class Mux
   module ClassMethods
 
     def pricer(form, admin_user = nil)
-      # пока не мержим
-      if Conf.sirena.enabled
-        sirena_pricer(form)
-      elsif Conf.amadeus.enabled
-        amadeus_pricer(form, admin_user)
-      else
-        []
-      end
+      # FIXME делает сортировку дважды
+      (
+        sirena_pricer(form) + amadeus_pricer(form, admin_user)
+      ).sort_by(&:price_total)
     end
 
     def calendar(form, admin_user = nil)
@@ -32,6 +28,7 @@ class Mux
 
     # TODO exception handling
     def amadeus_pricer(form, admin_user = nil)
+      return [] unless Conf.amadeus.enabled
       request_ws = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form)
       request_ns = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form)
       request_ns.nonstop = true
@@ -74,6 +71,7 @@ class Mux
     end
 
     def sirena_pricer(form)
+      return [] unless Conf.sirena.enabled
       Sirena::Service.pricing(form).recommendations || []
     end
 

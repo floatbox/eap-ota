@@ -62,17 +62,21 @@ module Sirena
         fare = rec.xpath("direction/price/fare").sum{|elem| elem.text.to_f}
         total = rec.xpath("direction/price/total").sum{|elem| elem.text.to_f}
 
-        Recommendation.new(
-          :source => "sirena",
-          :price_fare => fare,
-          :price_tax => total - fare,
-          :variants => variants,
-          :validating_carrier_iata => "",
-          :suggested_marketing_carrier_iatas => [],
-          :additional_info => "",
-          :cabins => booking_classes,
-          :booking_classes => booking_classes
-        ) unless variants.blank?
+        unless variants.blank?
+          # пока что для сирены это верно
+          validating_carrier_iata = variants.first.flights.first.marketing_carrier_iata
+
+          Recommendation.new(
+            :source => "sirena",
+            :price_fare => fare,
+            :price_tax => total - fare,
+            :variants => variants,
+            :validating_carrier_iata => validating_carrier_iata,
+            :additional_info => "",
+            :cabins => booking_classes,
+            :booking_classes => booking_classes
+          ) 
+        end
       end
 
       def parse_flight(fi)

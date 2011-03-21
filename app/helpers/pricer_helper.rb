@@ -170,10 +170,11 @@ module PricerHelper
   end
 
   def variant_debug_info(recommendation, variant)
-    concat %(<a href="#" onclick="prompt('ctrl+c!', '#{h recommendation.cryptic(variant)}'); return false">КОД</a> ).html_safe
+    # concat recommendation.source
+    concat %( <a href="#" onclick="prompt('ctrl+c!', '#{h recommendation.cryptic(variant)}'); return false">КОД</a> ).html_safe if recommendation.source == 'amadeus'
     concat 'Наземный участок ' if recommendation.ground?
     concat 'Не можем продать ' unless recommendation.sellable?
-    concat 'Нет интерлайна ' unless recommendation.valid_interline?
+    concat 'Нет интерлайна ' if recommendation.source == 'amadeus' && !recommendation.valid_interline?
     concat recommendation.validating_carrier_iata + ' '
     if recommendation.commission
       concat %( #{recommendation.commission.agent}/#{recommendation.commission.subagent})
@@ -189,6 +190,7 @@ module PricerHelper
     else
       concat %(Нет в договорe)
     end
+    concat '(' + recommendation.booking_classes.join(',') + ')'
   end
 
 end

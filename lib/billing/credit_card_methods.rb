@@ -103,7 +103,6 @@ module Billing #:nodoc:
         number.to_s.length >= 12
       end
 
-      # не используется, может быть временно
       def valid_test_mode_card_number?(number) #:nodoc:
         %w[4111111111111111 4111111111111112 5222230546300090
           1 2 3 success failure error].include?(number.to_s)
