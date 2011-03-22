@@ -17,7 +17,7 @@ class Payture
     end
 
     def success?
-      @doc["Success"] == "True"
+      @doc["Success"].to_s.downcase == "true"
     end
 
     def err_code
@@ -26,7 +26,7 @@ class Payture
 
     # не !success? потому что может быть и "3DS"
     def error?
-      @doc["Success"] == "False"
+      @doc["Success"].to_s.downcase == "false"
     end
 
     def order_id
@@ -44,7 +44,7 @@ class Payture
     # 3-D Secure
 
     def threeds?
-      @doc["Success"] == "3DS"
+      @doc["Success"].to_s.downcase == "3ds"
     end
 
     def acs_url
