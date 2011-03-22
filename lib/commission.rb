@@ -1864,9 +1864,14 @@ subagent "7% от опубл. тарифов на собств.рейсы XW"
 commission "9%/7%"
 
 example 'cdgsvo svocdg/ab'
-agent "1р Interline не прописан"
+agent "C 21.03.2011г."
+agent "Разрешена выписка на рейсы Interline c/без участка собственного рейса XW:"
+agent "5% от опубл. тарифа на рейсы Interline при участии рейса а/к Авиалинии Кубани (GW/113);"
+agent "1 рубль с билета по опубл. тарифам на рейсы Interline при участии рейса а/к Владивосток авиа (XF/277);"
+agent "0% от опубл. тарифа на все остальные рейсы Interline;"
 subagent "0р Interline не прописан"
 interline :unconfirmed
+disabled "субагентских нет"
 commission "9%/7%"
 
 carrier "YM", "MONTENEGRO AIRLINES"
