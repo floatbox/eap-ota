@@ -45,7 +45,7 @@ class PricerController < ApplicationController
       @search = PricerForm.new(params[:search])
       @search.parse_complex_to
       if @search.valid?
-        @query_key = ShortUrl.random_hash
+        @query_key = ShortUrl.random_hash(params[:search].hash)
         @search.save_to_cache(@query_key)
       end
       render :json => {

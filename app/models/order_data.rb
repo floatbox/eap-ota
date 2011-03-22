@@ -76,7 +76,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
 
   def store_to_cache
-    self.number ||= ShortUrl.random_hash
+    self.number ||= ShortUrl.random_hash(hash)
     Cache.write("order_data", number, self)
   end
 
