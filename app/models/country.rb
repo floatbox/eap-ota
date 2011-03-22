@@ -37,7 +37,7 @@ class Country < ActiveRecord::Base
   end
 
   def main_city_iatas
-    City.all(:conditions => ['country_id = ?', self.id], :order => 'importance DESC', :limit => 5).every.iata
+    City.all(:conditions => ['country_id = ? AND disabled != ?', self.id, true], :order => 'importance DESC', :limit => 5).every.iata
   end
 
   # FIXME WTF? хотя бы iata коды использовать. не айдишники из базы!1

@@ -12,7 +12,7 @@ class Region < ActiveRecord::Base
   end
 
   def main_city_iatas
-    City.all(:conditions => ['region_id = ?', self.id], :order => 'importance DESC', :limit => 5).every.iata
+    City.all(:conditions => ['region_id = ? AND disabled != ?', self.id, true], :order => 'importance DESC', :limit => 5).every.iata
   end
 end
 
