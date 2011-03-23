@@ -1,5 +1,21 @@
-#offers-diagram .odpage {
+/* Tab */
+#rtab-diagram .new {
     position: relative;
+    top: -2px;
+    left: 1px;
+    padding: 2px 5px 1px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    background: #fff8d2;
+    font-weight: normal;
+    font-size: 11px;
+    line-height: 15px;
+}
+
+/* Tab content */
+#offers-diagram .ods-content {
+    position: relative;
+    margin-bottom: 15px;
 }
 .odcontent .segment {
     position: relative;
@@ -10,9 +26,12 @@
     border-radius: 5px;
     cursor: pointer;
 }
+.ods-improper .segment {
+    opacity: 0.5;
+}
 .odcontent a.a-button {
     display: block;
-    width: 80px;
+    width: 85px;
     border-color: #7b8e12;
     padding: 0 4px;
     font-size: 13px;
@@ -29,7 +48,7 @@
     padding-right: 5px;
 }
 .odhsegment {
-    padding: 9px 14px;
+    padding: 9px 14px 8px;
     border: 1px solid #cfd4d6;
     -moz-border-radius: 5px;
     border-radius: 5px;
@@ -61,6 +80,28 @@
 }
 .odhs2 .selected {
     background: #C46F26;
+}
+.odhs3 .selected {
+    background: #0aa0c6;
+}
+
+/* Titles */
+.ods-title {
+    position: relative;
+    z-index: 1;
+    margin: 0 0 15px;
+    background: #E7ECEE;
+    font-size: 11px;
+    line-height: 15px;
+}
+.ods-title h4 {
+    margin: 0 0 3px;
+    font-weight: bold;
+    font-size: 18px;
+}
+.ods-improper .ods-title {
+    margin: 0;
+    padding: 15px 0 8px;
 }
 
 /* Bar */
@@ -111,7 +152,8 @@
 /* Mouseover */
 .odcontent .segment:hover {
     background: #f3f6f7;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.4);
+    opacity: 1;
 }
 .odcontent .segment:hover .dpt,
 .odcontent .segment:hover .arv {
@@ -120,6 +162,19 @@
 .odcontent .segment:hover .flight,
 .odcontent .segment:hover .layover {
     border-color: #f3f6f7;
+}
+#offers-diagram .segment:hover a.a-button {
+    border-color: #c52471;
+}
+
+/* Selection */
+.odcontent .segment.selected {
+    background: #f3f6f7;
+    background: rgba(255, 255, 255, 0.6);
+}
+.odcontent .segment.selected .dpt,
+.odcontent .segment.selected .arv {
+    visibility: inherit;
 }
 
 /* Grid */
