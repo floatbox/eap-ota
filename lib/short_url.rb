@@ -18,8 +18,8 @@ module ShortUrl
   end
 
 
-  def self.random_hash p=0
-    (2**25 + p.abs + rand(2**30 - 2**25)).to_s(32) # уже не всегда ровно 6 символов
+  def self.random_hash
+    (2**25 + rand(2**30 - 2**25)).to_s(32) #ровно 6 символов
   end
 end
 
