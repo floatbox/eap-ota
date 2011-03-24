@@ -44,7 +44,7 @@ update: function() {
         this.drawSegment(s);
     }
     if (this.segments.length > 1) {
-        $('<td class="odh-tip">Обратите внимание, что не все варианты перелета туда совместимы с&nbsp;любым вариантом перелета обратно.</td>').appendTo(row);
+        $('<td class="odh-tip">Обратите внимание, что не все варианты перелета <span class="odh-direction1">туда</span> совместимы с&nbsp;любым вариантом перелета <span class="odh-direction2">обратно</span>.</td>').appendTo(row);
     }
     this.selected = [];
     this.updateSegments();

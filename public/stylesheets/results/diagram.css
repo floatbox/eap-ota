@@ -92,6 +92,12 @@ td.odh-tip {
     vertical-align: top;
     color: #777;
 }
+.odh-direction1 {
+    color: #6F7C26;
+}
+.odh-direction2 {
+    color: #C46F26;
+}
 
 /* Titles */
 .ods-title {
