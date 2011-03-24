@@ -22,6 +22,7 @@
       :date => date_with_dow(fs.date),
       :human => "#{fs.from_as_object.case_from} #{fs.to_as_object.case_to}"
     } }.to_json %>"
+    data-mode="<%= @search.form_segments.length > 1 ? (@search.rt ? 'rt' : 'mw') : 'ow' %>"
 ></div>
 <% @recommendations.each do |recommendation| %>
 <div class="offer collapsed<%= ' multiple' if recommendation.variants.length > 1 %>" data-summary='<%= recommendation.summary.to_json %>'>

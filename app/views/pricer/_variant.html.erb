@@ -100,9 +100,9 @@
             <div class="dpt"><%= fmt_time( segment.departure_time ) %> <span class="iata"><%= segment.departure_iata %></span></div>
             <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
             <% opcarrier = flight.operating_carrier %>
-            <div class="flight" data-duration="<%= flight.duration %>"<% if opcarrier.color %> style="background-color: #<%= opcarrier.color %>;<% if opcarrier.font_color %> color: #<%= opcarrier.font_color %>;<% end %>"<% end %>><%= opcarrier.name %></div>
+            <div class="flight" title="<%= opcarrier.name %>, <%= flight.equipment_type_name %>" data-duration="<%= flight.duration %>"<% if opcarrier.color %> style="background-color: #<%= opcarrier.color %>;<% if opcarrier.font_color %> color: #<%= opcarrier.font_color %>;<% end %>"<% end %>><%= opcarrier.name %></div>
             <% if layover %>
-                <div class="layover" data-duration="<%= layover %>"><%= flight.arrival.city.name %></div>
+                <div class="layover" title="Пересадка <%= flight.arrival.city.case_in %>" data-duration="<%= layover %>"><%= flight.arrival.city.name %></div>
             <% end %>
             <% end %>    
             <div class="arv"><span class="iata"><%= segment.arrival_iata %></span> <%= fmt_time( segment.arrival_time ) %></div>

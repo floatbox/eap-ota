@@ -84,6 +84,14 @@
 .odhs3 .selected {
     background: #0aa0c6;
 }
+td.odh-tip {
+    padding-top: 3px;
+    padding-left: 10px;
+    font-size: 13px;
+    line-height: 16px;
+    vertical-align: top;
+    color: #777;
+}
 
 /* Titles */
 .ods-title {
@@ -151,7 +159,7 @@
 
 /* Mouseover */
 .odcontent .segment:hover {
-    background: #f3f6f7;
+    background: #f1f4f5;
     background: rgba(255, 255, 255, 0.4);
     opacity: 1;
 }
@@ -161,7 +169,7 @@
 }
 .odcontent .segment:hover .flight,
 .odcontent .segment:hover .layover {
-    border-color: #f3f6f7;
+    border-color: #f1f4f5;
 }
 #offers-diagram .segment:hover a.a-button {
     border-color: #c52471;
@@ -169,12 +177,16 @@
 
 /* Selection */
 .odcontent .segment.selected {
-    background: #f3f6f7;
+    background: #f5f7f8;
     background: rgba(255, 255, 255, 0.6);
 }
 .odcontent .segment.selected .dpt,
 .odcontent .segment.selected .arv {
     visibility: inherit;
+}
+.odcontent .segment.selected .flight,
+.odcontent .segment.selected .layover {
+    border-color: #f5f7f8;
 }
 
 /* Grid */

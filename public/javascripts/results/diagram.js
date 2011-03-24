@@ -7,7 +7,8 @@ init: function() {
     this.offset = 115;
     this.grid = [15, 30, 60, 90, 120, 180, 240, 360];
     var that = this;
-    this.content.delegate('.segment', 'click', function() {
+    this.content.delegate('.segment', 'click', function(event) {
+        event.preventDefault();
         var el = $(this);
         var s = el.closest('.odsegment').data('segment');
         if (el.parent().hasClass('ods-improper')) {
@@ -42,8 +43,10 @@ update: function() {
         $('<td class="odhs' + (s + 1) + '"></td>').data('segment', s).html(template.supplant(this.options[s])).appendTo(row);
         this.drawSegment(s);
     }
+    if (this.segments.length > 1) {
+        $('<td class="odh-tip">Обратите внимание, что не все варианты перелета туда совместимы с&nbsp;любым вариантом перелета обратно.</td>').appendTo(row);
+    }
     this.selected = [];
-    this.minprice = 0;
     this.updateSegments();
     this.showSegment(0);
 },
@@ -97,10 +100,10 @@ getSegment: function(s) {
             segment.dpt = Math.min(segment.dpt, bar.dpt);
             segment.arv = Math.max(segment.arv, bar.arv);
             segment.contents[bf] = [i];
-            segment.prices[bf] = [variant.offer.summary.price];
+            segment.prices[bf] = [Math.round(variant.offer.summary.price)];
         } else {
             segment.contents[bf].push(i);
-            segment.prices[bf].push(variant.offer.summary.price);
+            segment.prices[bf].push(Math.round(variant.offer.summary.price));
         }
         if (bar.shift !== segment.shift) {
             segment.shift = bar.shift;
@@ -117,9 +120,9 @@ getSegment: function(s) {
 drawSegment: function(s) {
     var segment = this.segments[s], stitle;
     if (s === 1) {
-        stitle = 'Варианты, совместимые с выбранным перелётом ' + this.options[0].human;
+        stitle = 'Варианты, совместимые с выбранным перелетом ' + this.options[0].human;
     } else {
-        stitle = 'Варианты, совместимые с выбранным обратным перелётом';
+        stitle = 'Варианты, совместимые с выбранным обратным перелетом';
     }
     var list = segment.el.html('<div class="ods-title"><h4>' + stitle + '</h4></div><div class="ods-content"></div>').find('.ods-content');
     var locations = $('<ul class="locations"><li>' + segment.dptcity + '</li></ul>').appendTo(list);
@@ -138,9 +141,16 @@ drawSegment: function(s) {
             el.width(Math.round(d / length * that.width) - 8);
         });
         item.find('.bar').css('left', Math.round(dpt / length * this.width) + this.offset);
+        var prices = segment.prices[bars[i].flights];
+        if (prices.length > 1) {
+            prices = prices.unique();
+            if (prices.length > 1) {
+                item.find('.a-button').html('От ' + prices[0] + ' Р');
+            }
+        }
     }
     list.append('<div class="ods-proper"></div>');
-    list.append('<div class="ods-improper"><div class="ods-title"><h4>Остальные варианты</h4><p>Выбор этих вариантов сбросит другие выбранные перелёты.</p></div></div>');    
+    list.append('<div class="ods-improper"><div class="ods-title"><h4>Остальные варианты</h4><p>Выбор этих вариантов сбросит другие выбранные перелеты.</p></div></div>');
     for (var i = this.grid.length; i--;) {
         if (length / this.grid[i] > 8) break;
         var gstep = this.grid[i];
@@ -208,6 +218,7 @@ selectSegment: function(s, flights) {
     }
 },
 updateSegments: function() {
+    var that = this;
     for (var s = this.segments.length; s--;) {
         var segment = this.segments[s];
         var pf = this.properFlights(s);

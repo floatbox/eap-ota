@@ -308,7 +308,12 @@ processUpdate: function() {
             $('#offers-context .offers-nearby').html(nbc.html() || '');
             self.toggleCollection(true);
         }, function() {
-            self.diagram.update();
+            var mode = $('#offers-options').attr('data-mode');
+            self.diagram.active = (mode === 'ow' || mode === 'rt');
+            $('#rtab-diagram').toggle(self.diagram.active);
+            if (self.diagram.active) {
+                self.diagram.update();
+            }
         });
         if (window._gaq) {
             _gaq.push(['_trackPageview','/virtual/search?query=' + this.title.text()]);
@@ -434,7 +439,9 @@ applyFilters: function() {
         self.showDepartures();
         list.show();
     }, function() {
-        self.diagram.update();
+        if (self.diagram.active) {
+            self.diagram.update();
+        }
     }, function() {
         self.showRecommendations();
         list.removeClass('translucent');
