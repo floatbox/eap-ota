@@ -43,6 +43,17 @@ Array.prototype.compact = function() {
     }
     return result;
 };
+Array.prototype.unique = function() {
+    var result = [], index = {};
+    for (var i = 0, im = this.length; i < im; i++) {
+        var value = this[i];
+        if (index[value] === undefined) {
+            result.push(value);
+            index[value] = true;
+        }
+    }
+    return result;
+};
 Array.prototype.enumeration = function(cnj) {
     var str = this.slice(0, this.length - 1).join(', ');
     if (str) str += cnj || ' и ';
