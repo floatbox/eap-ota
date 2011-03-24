@@ -93,9 +93,11 @@ td.odh-tip {
     color: #777;
 }
 .odh-direction1 {
+    font-weight: bold;
     color: #6F7C26;
 }
 .odh-direction2 {
+    font-weight: bold;
     color: #C46F26;
 }
 

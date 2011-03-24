@@ -44,7 +44,7 @@ update: function() {
         this.drawSegment(s);
     }
     if (this.segments.length > 1) {
-        $('<td class="odh-tip">Обратите внимание, что не все варианты перелета <span class="odh-direction1">туда</span> совместимы с&nbsp;любым вариантом перелета <span class="odh-direction2">обратно</span>.</td>').appendTo(row);
+        $('<td class="odh-tip">Обратите внимание, что не все варианты перелёта <span class="odh-direction1">туда</span> совместимы с&nbsp;любым вариантом перелёта <span class="odh-direction2">обратно</span>.</td>').appendTo(row);
     }
     this.selected = [];
     this.updateSegments();
@@ -120,9 +120,9 @@ getSegment: function(s) {
 drawSegment: function(s) {
     var segment = this.segments[s], stitle;
     if (s === 1) {
-        stitle = 'Варианты, совместимые с выбранным перелетом ' + this.options[0].human;
+        stitle = 'Варианты, совместимые с выбранным перелётом ' + this.options[0].human;
     } else {
-        stitle = 'Варианты, совместимые с выбранным обратным перелетом';
+        stitle = 'Варианты, совместимые с выбранным обратным перелётом';
     }
     var list = segment.el.html('<div class="ods-title"><h4>' + stitle + '</h4></div><div class="ods-content"></div>').find('.ods-content');
     var locations = $('<ul class="locations"><li>' + segment.dptcity + '</li></ul>').appendTo(list);
@@ -150,7 +150,7 @@ drawSegment: function(s) {
         }
     }
     list.append('<div class="ods-proper"></div>');
-    list.append('<div class="ods-improper"><div class="ods-title"><h4>Остальные варианты</h4><p>Выбор этих вариантов сбросит другие выбранные перелеты.</p></div></div>');
+    list.append('<div class="ods-improper"><div class="ods-title"><h4>Остальные варианты</h4><p>Выбор этих вариантов сбросит другие выбранные перелёты.</p></div></div>');
     for (var i = this.grid.length; i--;) {
         if (length / this.grid[i] > 8) break;
         var gstep = this.grid[i];
