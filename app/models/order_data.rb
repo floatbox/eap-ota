@@ -127,12 +127,12 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
 
   def block_money
-    response = Payture.new.block(
-      recommendation.price_with_payment_commission, card, :order_id => order_id)
+    payment = Payment.create(:price => recommendation.price_with_payment_commission, :card => @card, :order => order)
+    response = payment.payture_block
 
     if response.error?
       card.errors.add :number, "не удалось провести платеж"
-      self.errors.add :card, 'Платеж не прошел'
+      errors.add :card, 'Платеж не прошел'
     end
 
     response

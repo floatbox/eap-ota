@@ -5,6 +5,8 @@ class Order < ActiveRecord::Base
   TICKET_STATUS = { 'ticketed' => 'ticketed', 'booked' => 'booked', 'canceled' => 'canceled'}
   SOURCE = { 'amadeus' => 'amadeus', 'sirena' => 'sirena' }
 
+  has_many :payments
+
   validates_presence_of :email#, :phone
   validates_format_of :email, :with =>
     /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email"
@@ -53,28 +55,27 @@ class Order < ActiveRecord::Base
   end
 
   def payture_state
-    Payture.new.state(:order_id => order_id).state
+    payments.first.payture_state
   end
 
   def payture_amount
-    Payture.new.state(:order_id => order_id).amount
+    payments.first.payture_amount
   end
 
   def confirm_3ds pa_res, md
-    res = Payture.new.block_3ds(:order_id => self.order_id, :pa_res => pa_res)
-    res.success?
+    payments.first.confirm_3ds pa_res, md
   end
 
   def charge!
-    res = Payture.new.charge(:order_id => self.order_id)
-    update_attribute(:payment_status, 'charged') if res.success?
-    res.success?
+    res = payments.first.charge!
+    update_attribute(:payment_status, 'charged') if res
+    res
   end
 
   def unblock!
-    res = Payture.new.unblock(self.price_with_payment_commission, :order_id => self.order_id)
-    update_attribute(:payment_status, 'unblocked') if res.success?
-    res.success?
+    res = payments.first.unblock!
+    update_attribute(:payment_status, 'unblocked') if res
+    res
   end
 
   def money_blocked!
@@ -120,3 +121,4 @@ class Order < ActiveRecord::Base
   end
 
 end
+

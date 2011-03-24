@@ -32,11 +32,6 @@ module Amadeus
     end
 
     # сохраняет pnr!
-    def pnr_cancel
-      cmd('XI')
-      pnr_commit
-    end
-
     def pnr_commit_really_hard
       yield
       result = pnr_commit_and_retrieve
@@ -123,3 +118,4 @@ module Amadeus
     end
   end
 end
+

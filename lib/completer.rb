@@ -260,7 +260,7 @@ class Completer
     end
   end
 
-  PEOPLE = [['один', {:adults => 1}], ['вдвоем', {:adults => 2}], ['втроем', {:adults => 3}], ['вчетвером', {:adults => 4}], ['впятером', {:adults => 5}], ['с ребенком', {:children => 1}], ['с подругой', {:adults => 2}],['одна', {:adults => 1}], ['двое', {:adults => 2}], ['трое', {:adults => 3}], ['четверо', {:adults => 4}], ['пятеро', {:adults => 5}]]
+  PEOPLE = [['один', {:adults => 1}], ['вдвоем', {:adults => 2}], ['втроем', {:adults => 3}], ['вчетвером', {:adults => 4}], ['впятером', {:adults => 5}], ['с ребенком', {:children => 1}], ['с подругой', {:adults => 2}],['одна', {:adults => 1}], ['двое', {:adults => 2}], ['трое', {:adults => 3}], ['четверо', {:adults => 4}], ['пятеро', {:adults => 5}], ['с младенцем', {:infants => 1}]]
   def read_passengers
     PEOPLE.each do |pax, hidden_info|
       add(:name => pax, :type => 'people', :hidden_info => hidden_info)

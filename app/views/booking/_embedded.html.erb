@@ -2,7 +2,7 @@
 <%= form_for @order.card, :as => :card, :url => booking_pay_path, :html => { :autocomplete => "off" } do |f| %>
 
     <% availability = @order.recommendation.availability %>
-    <% if availability > 0 && availability < 9 %>
+    <% if availability && availability > 0 && availability < 9 %>
     <div class="availability">
         По этому тарифу осталось <strong><%= availability %>&nbsp;<%= Russian.pluralize(availability, 'место', 'места', 'мест') %></strong>. Не&nbsp;откладывайте покупку.
     </div>

@@ -49,7 +49,7 @@ class City < ActiveRecord::Base
   end
 
   def to_label
-    name + ' ' + iata
+    "#{name} #{iata}"
   end
 
   # FIXME - сдохнет если nil.

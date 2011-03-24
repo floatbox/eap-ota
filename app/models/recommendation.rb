@@ -19,7 +19,7 @@ class Recommendation
       :to => 'variants.first'
 
   def availability
-    availabilities.compact.min.to_i
+    availabilities.compact.min.to_i if availabilities
   end
 
   def validating_carrier

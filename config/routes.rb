@@ -12,10 +12,6 @@ Eviterra::Application.routes.draw do
   match '/confirm_3ds/:order_id' => 'booking#confirm_3ds', :as => :confirm_3ds
   match 'order/:id' => 'PNR#show', :as => :show_order
 
-  resources :locations do
-    get :current, :on => :collection
-  end
-
   resources :geo_tags
 
   match 'complete.json' => 'complete#complete'
