@@ -91,6 +91,9 @@
 .offer .controls td {
     border-top: none;
 }
+.offer .bars {
+    display: none;
+}
 
 /* Авиакомпания и пересадки */
 .offer .summary .carrier,
