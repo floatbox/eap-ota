@@ -143,6 +143,17 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     [adults, children, infants].compact.sum
   end
 
+  def cabin_list
+    case cabin
+    when 'C'
+      return ['C', 'F']
+    when nil
+      return []
+    else
+      return [cabin]
+    end
+  end
+
   def people_count= count
     self.adults, self.children, self.infants = count[:adults] || 1, count[:children] || 0, count[:infants] || 0
   end
