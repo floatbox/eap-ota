@@ -260,11 +260,17 @@ subagent "0р Interline не прописан"
 interline :unconfirmed
 commission "1/0.05"
 
+# FIXME - внести это в основное правило для собственных рейсов
+example 'svocdg/hg'
+interline :absent
+check { marketing_carrier_iatas == ['HG'] }
+agent    "1 руб с билета по опубл. тарифам на рейсы HG (подразделение)"
+subagent "5 коп с билета по опубл. тарифам на рейсы HG (подразделение)"
+commission "1/0.05"
+
 example 'svocdg/s7'
 no_commission
 
-# example 'svocdg/HG'
-# для авиакомпании HG можно interline :absent
 
 carrier "AC", "AIR CANADA (НЕ BSP!!!)"
 ########################################
@@ -1192,9 +1198,15 @@ subagent "5 коп. с билета по опубл. тарифам на соб�
 interline :possible
 commission "1/0.05"
 
+# FIXME вынести подразделения в основное правило
+example 'svocdg/GW'
+agent    "1 руб. с билета на рейсы GW на бланках LH (подразделение)"
+subagent "5 коп. с билета на рейсы GW на бланках LH (подразделение)"
+interline :absent
+check { marketing_carrier_iatas == ['GW'] }
+commission "1/0.05"
+
 example 'svocdg/ab'
-#FIXME с этой странной доплатой выше - что?
-not_implemented
 no_commission
 
 
