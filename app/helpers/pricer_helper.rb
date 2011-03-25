@@ -26,6 +26,21 @@ module PricerHelper
     [date[0,2],date[2,2],date[4,2]].join('.') if date
   end
 
+  def time_in_minutes time
+    time ? (time[0,2].to_i * 60 + time[2,2].to_i) : 0
+  end
+
+  def bar_options segment
+    dpt = time_in_minutes(segment.departure_time)
+    dpt_offset = segment.departure.city.utc_offset(Date.strptime(segment.departure_date, '%d%m%y'))
+    arv_offset = segment.arrival.city.utc_offset(Date.strptime(segment.arrival_date, '%d%m%y'))
+    {
+      :dpt => dpt,
+      :arv => dpt + segment.total_duration,
+      :shift => (arv_offset - dpt_offset) / 60
+    }
+  end
+
   def fmt_departure flight
     flight.departure_name + ' (' + flight.departure_iata +
       (flight.departure_term ? ' ' + flight.departure_term : '') +
@@ -59,6 +74,10 @@ module PricerHelper
 
   def human_date date
     I18n.l(Date.strptime(date, '%d%m%y'), :format => '%e %B')
+  end
+
+  def date_with_dow date
+    I18n.l(Date.strptime(date, '%d%m%y'), :format => '%e %B, %A')
   end
   
   def human_layovers_count count
@@ -104,6 +123,10 @@ module PricerHelper
   def human_cabin_ins cabin
     titles = {'Y' => 'эконом-классом', 'C' => 'бизнес-классом', 'F' => 'первым классом'}
     titles[cabin]  
+  end
+  
+  def segment_flight_numbers segment
+    segment.flights.map{|f| "#{f.marketing_carrier_iata}#{f.flight_number}" }.join('-')
   end
   
   # FIXME отrubyить его посимпатишнее

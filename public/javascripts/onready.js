@@ -4,6 +4,7 @@
     results.init();
     results.filters.init();
     results.matrix.init();
+    results.diagram.init();
 
     // Данные по умолчанию для сброса
     search.defvalues = {
