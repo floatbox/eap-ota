@@ -1199,11 +1199,11 @@ interline :possible
 commission "1/0.05"
 
 # FIXME вынести подразделения в основное правило
-example 'svocdg/GW'
-agent    "1 руб. с билета на рейсы GW на бланках LH (подразделение)"
-subagent "5 коп. с билета на рейсы GW на бланках LH (подразделение)"
+example 'svocdg/4U'
+agent    "1 руб. с билета на рейсы 4U на бланках LH (подразделение)"
+subagent "5 коп. с билета на рейсы 4U на бланках LH (подразделение)"
 interline :absent
-check { marketing_carrier_iatas == ['GW'] }
+check { marketing_carrier_iatas == ['4U'] }
 commission "1/0.05"
 
 example 'svocdg/ab'
