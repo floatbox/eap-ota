@@ -5,7 +5,7 @@ init: function() {
     this.content = this.el.find('.odcontent');
     this.width = 710;
     this.offset = 115;
-    this.grid = [15, 30, 60, 90, 120, 180, 240, 360, 480, 720];
+    this.grid = [15, 30, 60, 90, 120, 180, 240, 360, 480, 720, 1440];
     var that = this;
     this.content.delegate('.segment', 'click', function(event) {
         event.preventDefault();
