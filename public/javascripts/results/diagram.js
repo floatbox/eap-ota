@@ -153,7 +153,7 @@ drawSegment: function(s) {
         if (prices.length > 1) {
             prices = prices.unique();
             if (prices.length > 1) {
-                item.find('.a-button').html('От ' + prices[0] + ' Р');
+                item.find('.a-button').html('от ' + prices[0] + '&nbsp;р.');
             }
         }
     }
@@ -272,6 +272,7 @@ parseBars: function() {
 },
 formatTime: function(t) {
     if (t < 0) t += 1440;
-    return Math.floor((t % 1440) / 60) + ':' + (t % 60 / 100).toFixed(2).substring(2);
+    var h = Math.floor((t % 1440) / 60), hh = h < 10 ? ('<span class="zero">0</span>' + h) : h;
+    return hh + ':' + (t % 60 / 100).toFixed(2).substring(2);
 }
 };
