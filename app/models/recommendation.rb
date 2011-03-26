@@ -30,6 +30,7 @@ class Recommendation
     marketing_carrier_iatas - [validating_carrier_iata]
   end
 
+  # FIXME? правильно работает только для recommendation с одним вариантом
   def rt
     (segments.length == 2) && (segments[0].departure_iata == segments[1].arrival_iata) && (segments[1].departure_iata == segments[0].arrival_iata)
   end
