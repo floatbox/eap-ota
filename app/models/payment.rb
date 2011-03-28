@@ -1,5 +1,6 @@
 class Payment < ActiveRecord::Base
   belongs_to :order
+  attr_reader :card
 
   def ref
     id_override || (Conf.payment.order_id_prefix + id.to_s)

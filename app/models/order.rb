@@ -1,15 +1,16 @@
 # encoding: utf-8
 class Order < ActiveRecord::Base
 
-  PAYMENT_STATUS = {'not blocked' => 'not blocked', 'blocked' => 'blocked', 'charged' => 'charged'}
+  PAYMENT_STATUS = {'not blocked' => 'not blocked', 'blocked' => 'blocked', 'charged' => 'charged', 'new' => 'new'}
   TICKET_STATUS = { 'ticketed' => 'ticketed', 'booked' => 'booked', 'canceled' => 'canceled'}
   SOURCE = { 'amadeus' => 'amadeus', 'sirena' => 'sirena' }
 
   has_many :payments
 
-  validates_presence_of :email#, :phone
+  validates_presence_of :email, :if => (Proc.new{ |order| order.source != 'other' })
   validates_format_of :email, :with =>
-    /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email"
+    /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email", :if => (Proc.new{ |order| order.source != 'other' })
+  before_create :generate_code
 
   scope :stale, lambda {
     where(:payment_status => 'not blocked', :ticket_status => 'booked')\
@@ -55,27 +56,32 @@ class Order < ActiveRecord::Base
   end
 
   def payture_state
-    payments.first.payture_state
+    payments.last ? payments.last.payture_state : ''
   end
 
   def payture_amount
-    payments.first.payture_amount
+    payments.last ?  payments.last.payture_amount : nil
   end
 
   def confirm_3ds pa_res, md
-    payments.first.confirm_3ds pa_res, md
+    payments.last.confirm_3ds pa_res, md
   end
 
   def charge!
-    res = payments.first.charge!
+    res = payments.last.charge!
     update_attribute(:payment_status, 'charged') if res
     res
   end
 
   def unblock!
-    res = payments.first.unblock!
+    res = payments.last.unblock!
     update_attribute(:payment_status, 'unblocked') if res
     res
+  end
+
+  def block_money card
+    payment = Payment.create(:price => price_with_payment_commission, :card => card, :order => self)
+    payment.payture_block
   end
 
   def money_blocked!

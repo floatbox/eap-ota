@@ -1,5 +1,10 @@
 <div id="term">Терминал: <pre><%= @item.raw %></pre></div>
 <div id="payture">Платежная система: <%= @item.payture_state %> <%= @item.payture_amount %></div>
+<% if @item.code && @item.payment_status == 'new' %>
+<div id="pay_url">
+URL для оплаты: <%= link_to edit_payment_url(:code => @item.code), edit_payment_url(:code => @item.code)%>
+</div>
+<% end %>
 <table><tr>
   <td><%= button_to 'показать pnr', {:action => 'show_pnr', :id => @item.id} %></td>
 <% if @item.payment_status == 'blocked'  %>
@@ -13,3 +18,4 @@
   <td><%= button_to 'Cancel', {:action => 'cancel', :id => @item.id}, {:confirm => 'отменить бронирование?'} %></td>
 <% end %>
 </tr> </table>
+
