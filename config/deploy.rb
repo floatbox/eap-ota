@@ -19,7 +19,11 @@ set :deploy_via, :remote_cache
 #set :deploy_via, :copy
 #set :repository,  "."
 
-set :repository,  "git@team.eviterra.ru:eviterra.git"
+# если гитхаб ляжет
+# то выключить :remote_cache выше и сделать
+# set :repository,  "git@team.eviterra.ru:eviterra.git"
+
+set :repository,  "git@github.com:Eviterra/eviterra.git"
 
 
 set :shared_children, %w(log pids system config initializers cache)
@@ -29,7 +33,7 @@ set :rake, 'bundle exec rake'
 
 # нужен для нормального форвардинга ключей, соответствующая настройка
 # в пользовательском .ssh/config почему-то не читается
-ssh_options[:forward_agent] = true
+# ssh_options[:forward_agent] = true
 
 task :delta do
   server 'delta.eviterra.com', :app, :web

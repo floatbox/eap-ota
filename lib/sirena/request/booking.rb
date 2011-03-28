@@ -11,6 +11,8 @@ module Sirena
         # СР - свидетельство о рождении
         # ЗА - загранпаспорт не РФ
         # НП - национальный паспорт (я так понимаю, что это паспорт не РФ)
+        infant_num = 0
+        order.people_count[:infants] - order.people_count[:adults]
         @passengers = order.people.collect{|person|
           expire_date = person.document_noexpiration ? nil : person.document_expiration_date.strftime('%d.%m.%y')
           # угадайка. может, имеет смысл добавить в форму?
@@ -22,7 +24,13 @@ module Sirena
             person.document_noexpiration ? "ПС" : "ПСП"
           end
           pass_code = case person.infant_or_child
-                      when 'i' then "РМГ"
+                      when 'i' then
+                        infant_num+=1
+                        if infant_num <= order.people_count[:adults]
+                          "РМГ"
+                        else
+                          "РВГ"
+                        end
                       when 'c' then "РБГ"
                       else "ААА" end
           {

@@ -39,9 +39,10 @@
       %currency RUB
 
 %travelFlightInfo
-  - if cabin
+  - if cabin_list.present?
     %cabinId
-      %cabin= cabin
+      - cabin_list.each do |cabin|
+        %cabin= cabin
   %companyIdentity
     %carrierQualifier W
     -# FIXME нужно нормально получать список подходящих авиакомпаний в модели
