@@ -42,15 +42,15 @@ class Variant
 
   # можно оптимальнее, наверное
   def city_iatas
-    airport_iatas.collect { |iata| Airport[iata].city.iata }.uniq
+    airport_iatas.collect { |iata| Airport[iata].city.iata }
   end
 
   def airport_iatas
-    flights.collect {|f| [f.departure_iata, f.arrival_iata] }.flatten.uniq
+    flights.collect {|f| [f.departure_iata, f.arrival_iata] }.flatten
   end
 
   def country_iatas
-    city_iatas.collect { |iata| City[iata].country.iata }.uniq
+    city_iatas.collect { |iata| City[iata].country.iata }
   end
 
   def marketing_carriers

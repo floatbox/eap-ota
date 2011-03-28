@@ -1617,7 +1617,7 @@ subagent "4,2% от опубл.тарифов (вкл.промотарифы в 
 important!
 # interline :possible
 check { country_iatas.first == 'RU' && city_iatas.include?('HOU') ||
-  city_iatas.first == 'HOU' && flights.last.arrival.city.country.iata == 'RU' }
+  city_iatas.first == 'HOU' && country_iatas.last == 'RU' }
 commission "6%/4.2%"
 
 example 'miahou housvo'
@@ -2019,6 +2019,7 @@ subagent "Екатеринбург-Уфа; Уфа-Екатеринбург."
 subagent "Екатеринбург-Казань; Казань-Екатеринбург;"
 important!
 not_implemented
+# routes %W(SVX-AER AER-SVX SVX-SIP SIP-SVX SVX-KUF KUF-SVX SVX-YKS YKS-SVX SVX-NSK NSK-SVX SVX-HTA HTA-SVX SVX-AAQ AAQ-SVX SVX-UFA UFA-SVX SVX-KZN KZN-SVX)
 #check { city_iatas.include?('SVX') && variants.first.segments.size == 1 && %W(AER SIP KUF YKS NSK HTA AAQ UFA KZN).include?((city_iatas - ['SVX']).first) }
 commission '15/5'
 
