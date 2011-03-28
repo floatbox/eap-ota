@@ -5,11 +5,12 @@ require "rvm/capistrano"
 # Set it to the ruby + gemset of your app, e.g:
 set :rvm_ruby_string, 'ree'
 
+require 'bundler/capistrano'
+
 # cron tasks
 set :whenever_command, "bundle exec whenever"
 require "whenever/capistrano"
 
-require 'bundler/capistrano'
 require 'hoptoad_notifier/capistrano'
 
 set :scm, :git
