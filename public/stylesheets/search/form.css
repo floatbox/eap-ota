@@ -124,8 +124,7 @@ a.b-submit:hover {
 }
 #search-submit .ssm-arrow {
     position: absolute;
-    top: 50%; left: 229px;
-    margin-top: -8px;
+    top: 19px; left: 229px;
     border: 8px solid transparent;
     border-right: 0;
     border-color: transparent #fff8ce;
