@@ -42,8 +42,12 @@ class BookingController < ApplicationController
           # FIXME вынести в кронтаск
           if @order.recommendation.source == 'sirena'
             logger.info "Pay: sirena ticketing"
-            Sirena::Adapter.approve_payment(@order)
-            @order.order.ticket!
+            err_msg = Sirena::Adapter.approve_payment(@order.order)
+            if err_msg
+              logger.info "Pay: sirena ticketing error "+err_msg
+              render :partial => 'fail', :locals => {:errors => err_msg}
+              return
+            end
           end
           logger.info "Pay: payment and booking successful"
           render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}

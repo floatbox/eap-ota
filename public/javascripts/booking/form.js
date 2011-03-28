@@ -247,7 +247,7 @@ error: function() {
 },
 book: function(variant) {
     var self = this;
-    this.el.html('<div class="booking-state"><div class="progress"></div><h4>Делаем предварительное бронирование и уточняем цену</h4></div>');
+    this.el.html('<div class="booking-state"><div class="progress"></div><h4>Проверяем доступность</h4></div>');
     var vid = '&variant_id=' + [self.offersTab, this.variant.attr('data-index')].join('-');
     $.ajax({
         url: "/booking/preliminary_booking?" + variant.attr('data-booking') + vid,

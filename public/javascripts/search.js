@@ -28,7 +28,7 @@ init: function() {
 
     /* Поля */
     var searchField = function(selector) {
-        var el = $(selector); 
+        var el = $(selector);
         return el.autocomplete({
             cls: 'autocomplete',
             url: '/complete.json',
@@ -62,16 +62,16 @@ init: function() {
         to: searchField('#search-s3-to')
     }];
     this.toValues = [];
-    
+
     // IATA в первом поле «Откуда»
     var fdata = this.segments[0].from.get(0).onclick();
     if (fdata && fdata.iata) {
         this.segments[0].from.trigger('iata', fdata.iata);
-    }    
-    
+    }
+
     // Календарь
     this.calendar = new app.Calendar("#search-calendar");
-    
+
     // Селекты
     $('#search-define .filter').each(function() {
         self[$(this).attr('data-name')] = new controls.Filter(this, {radio: true, preserve: true});
@@ -84,7 +84,7 @@ init: function() {
         self.update(self.cabin);
         fixedBlocks.update();
     });
-    
+
     // Модификация списка пассажиров
     this.persons.click = function(el) {
         var group = el.parent().attr('data-group');
@@ -145,11 +145,11 @@ init: function() {
     };
     $('.a-button', this.persons.dropdown).click(function() {
         self.persons.hide();
-    });    
-    
+    });
+
     // Один пассажир по умолчанию
     search.persons.select({adults: 1, children: 0, infants: 0});
-    
+
     // Кнопка
     this.submit = $('#search-submit').attr('data-required', 'to');
     this.smessage = this.submit.find('.message');
@@ -169,13 +169,6 @@ init: function() {
             self.smessage.fadeOut(150);
         }
     });
-    this.messages = {
-        from_iata: 'Введите, пожалуйста, пункт отправления',
-        to_iata: 'Введите, пожалуйста, пункт назначения',
-        date: 'Выберите, пожалуйста, дату вылета',
-        date2rt: 'Выберите, пожалуйста, дату обратного вылета'
-    };
-    this.smessage.find('.ssm-content').html(this.messages.to);
 },
 toggleMode: function(mode) {
     var context = $('#search-fields');
@@ -209,11 +202,11 @@ values: function() {
             from: s[i].from.val(),
             to: s[i].to.val(),
             date: d[i]
-        }; 
+        };
     }
     if (this.mode === 'rt') {
         data.form_segments[1] = {
-            from: data.form_segments[0].to,
+            from: s[1].from.val(),
             to: data.form_segments[0].from,
             date: d[1]
         };
@@ -334,11 +327,29 @@ validate: function(qkey) {
             delete(results.nextUpdate);
             if (result.errors) {
                 for (var i = 0, im = result.errors.length; i < im; i++) {
-                    var err = result.errors[i];
-                    if (err.length) {
-                        var mid = err[0], fmid = mid + (i + 1) + self.mode;
-                        var mtext = self.messages[fmid] || self.messages[mid];
-                        self.smessage.find('.ssm-content').html(mtext);
+                    var text, error = result.errors[i][0];
+                    if (error) {
+                        switch (error.split('_')[0]) {
+                        case 'date':
+                            text = 'Выберите, пожалуйста, дату вылета';
+                            if (self.mode === 'rt' && i === 1) {
+                                text = 'Выберите, пожалуйста, дату обратного вылета';
+                            } else if (self.mode === 'dw' || self.mode === 'tw') {
+                                var segment = result.search.form_segments[i];
+                                var sf = segment.from_as_object && segment.from_as_object.morpher_from;
+                                var st = segment.to_as_object && segment.to_as_object.morpher_to;
+                                if (sf) text += ' ' + sf.replace(/ /, '&nbsp;');
+                                if (st) text += ' ' + st.replace(/ /, '&nbsp;');
+                            }
+                            break;
+                        case 'from':
+                            text = 'Введите, пожалуйста, пункт отправления';
+                            break;
+                        case 'to':
+                            text = 'Введите, пожалуйста, пункт назначения';
+                            break;
+                        }
+                        self.smessage.find('.ssm-content').html(text);
                         break;
                     }
                 }
@@ -371,10 +382,12 @@ applySegments: function(segments) {
         this.map.show(items);
     } else {
         this.map.deferred = items;
-    }    
+    }
 },
 autoFrom: function() {
-    if (this.mode === 'dw' || this.mode === 'tw') {
+    if (this.mode === 'rt') {
+        this.segments[1].from.trigger('set', this.toValues[0]);
+    } else if (this.mode !== 'ow') {
         for (var i = 1, im = this.mode === 'tw' ? 3 : 2; i < im; i++) {
             var field = this.segments[i].from;
             if (!field.val() && this.toValues[i - 1] && !field.hasClass('autocomplete-focus')) {
@@ -422,7 +435,7 @@ init: function() {
     }
     this.obj = new Ya.share({
         element: 'ya-share',
-        description: 'Здесь можно найти, сравнить, выбрать и купить билеты на рейсы более 200 авиакомпаний всего мира по низкой цене.',        
+        description: 'Здесь можно найти, сравнить, выбрать и купить билеты на рейсы более 200 авиакомпаний всего мира по низкой цене.',
         elementStyle: {
             type: 'link',
             linkIcon: false,
