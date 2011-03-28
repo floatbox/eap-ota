@@ -172,6 +172,8 @@ init: function() {
     this.messages = {
         from_iata: 'Введите, пожалуйста, пункт отправления',
         to_iata: 'Введите, пожалуйста, пункт назначения',
+        from_as_object: 'Введите, пожалуйста, пункт отправления',
+        to_as_object: 'Введите, пожалуйста, пункт назначения',
         date: 'Выберите, пожалуйста, дату вылета',
         date2rt: 'Выберите, пожалуйста, дату обратного вылета'
     };
@@ -213,7 +215,7 @@ values: function() {
     }
     if (this.mode === 'rt') {
         data.form_segments[1] = {
-            from: data.form_segments[0].to,
+            from: data.form_segments[0].to.split(' ')[0],
             to: data.form_segments[0].from,
             date: d[1]
         };
