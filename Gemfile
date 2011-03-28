@@ -8,6 +8,7 @@ group :deployment do
   gem 'capistrano'
 end
 
+gem 'whenever', :require => false
 gem 'i18n'
 gem 'cucumber'
 gem 'handsoap'
