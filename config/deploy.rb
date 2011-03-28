@@ -2,8 +2,9 @@
 $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 # Load RVM's capistrano plugin.
 require "rvm/capistrano"
-# Set it to the ruby + gemset of your app, e.g:
-set :rvm_ruby_string, 'ree'
+
+# закрепил версию, чтобы не прыгала в продакшне
+set :rvm_ruby_string, 'ree-1.8.7-2011.03'
 
 require 'bundler/capistrano'
 
