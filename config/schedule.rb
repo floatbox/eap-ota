@@ -21,6 +21,6 @@ every :day do
   command 'cd /home/rack/eviterra/shared/backup && (mysqldump -uroot eviterra | gzip > eviterra-`date +\%F`.sql.gz ) && ln -sf eviterra-`date +\%F`.sql.gz latest.sql.gz'
 end
 
-every :day, :at => '18:00' do
+every 1.day, :at => '18:00' do
   command 'script/cbrusd && touch tmp/restart.txt'
 end
