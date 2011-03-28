@@ -215,7 +215,7 @@ values: function() {
     }
     if (this.mode === 'rt') {
         data.form_segments[1] = {
-            from: data.form_segments[0].to.split(' ')[0],
+            from: s[1].from.val(),
             to: data.form_segments[0].from,
             date: d[1]
         };
@@ -376,7 +376,9 @@ applySegments: function(segments) {
     }    
 },
 autoFrom: function() {
-    if (this.mode === 'dw' || this.mode === 'tw') {
+    if (this.mode === 'rt') {
+        this.segments[1].from.trigger('set', this.toValues[0]);
+    } else if (this.mode !== 'ow') {
         for (var i = 1, im = this.mode === 'tw' ? 3 : 2; i < im; i++) {
             var field = this.segments[i].from;
             if (!field.val() && this.toValues[i - 1] && !field.hasClass('autocomplete-focus')) {
