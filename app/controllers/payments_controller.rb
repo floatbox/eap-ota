@@ -12,7 +12,7 @@ class PaymentsController < ApplicationController
     if card.valid?
       payture_response = @order.block_money(card)
       if payture_response.success?
-        order.money_blocked!
+        @order.money_blocked!
         render :text => 'ok'
       end
     end

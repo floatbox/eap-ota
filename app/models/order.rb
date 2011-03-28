@@ -7,6 +7,7 @@ class Order < ActiveRecord::Base
 
   has_many :payments
 
+
   validates_presence_of :email, :if => (Proc.new{ |order| order.source != 'other' })
   validates_format_of :email, :with =>
     /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email", :if => (Proc.new{ |order| order.source != 'other' })
@@ -16,6 +17,10 @@ class Order < ActiveRecord::Base
     where(:payment_status => 'not blocked', :ticket_status => 'booked')\
       .where("created_at < ?", 30.minutes.ago)
   }
+
+  def generate_code
+    self.code = ShortUrl.random_hash
+  end
 
   def order_data= order_data
     recommendation = order_data.recommendation
