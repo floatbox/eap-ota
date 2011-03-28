@@ -10,7 +10,7 @@ module Sirena
         if @pnr_number
           @pnr_number=@pnr_number.text
         else
-          book = xpath("//booking").first.attribute("regnum")
+          book = xpath("//booking").first && xpath("//booking").first.attribute("regnum")
           @pnr_number = book.value if book
         end
 
