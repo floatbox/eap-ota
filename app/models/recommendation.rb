@@ -14,6 +14,8 @@ class Recommendation
   attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
     :suggested_marketing_carrier_iatas, :availabilities
 
+  attr_accessor :sirena_blank_count
+
   delegate :marketing_carriers, :marketing_carrier_iatas,
     :city_iatas, :airport_iatas, :country_iatas,
       :to => 'variants.first'

@@ -62,6 +62,10 @@ module Sirena
         fare = rec.xpath("direction/price/fare").sum{|elem| elem.text.to_f}
         total = rec.xpath("direction/price/total").sum{|elem| elem.text.to_f}
 
+        if blank_count = rec['n_blanks']
+          blank_count = blank_count.to_i
+        end
+
         unless variants.blank?
           # пока что для сирены это верно
           validating_carrier_iata = variants.first.flights.first.marketing_carrier_iata
@@ -73,6 +77,7 @@ module Sirena
             :variants => variants,
             :validating_carrier_iata => validating_carrier_iata,
             :additional_info => "",
+            :sirena_blank_count => blank_count,
             :cabins => booking_classes,
             :booking_classes => booking_classes
           ) 

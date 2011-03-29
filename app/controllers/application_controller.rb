@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   end
 
   def admin_user
-    @admin_user ||= Typus.user_class.find_by_id(session[:typus_user_id])
+    @admin_user ||= ( id = session[:typus_user_id] && Typus.user_class.find_by_id(id) )
   end
 
   helper_method :admin_user
