@@ -9,7 +9,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
   attr_accessor :pnr_number
   attr_accessor :people_count
   attr_accessor :number
-  attr_accessor :order_id
   attr_accessor :sirena_lead_pass
   attr_reader :order # то, что сохраняется в базу
   attr_accessor :variant_id #нужен при восстановлении формы по урлу
@@ -171,7 +170,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
             amadeus.ticket_create_tst_from_pricing(:fares_count => fares_count).or_fail!
           end
 
-          self.order_id = 'am' + pnr_number
           amadeus.pnr_commit_really_hard do
             add_passport_data(amadeus)
             # делается автоматически, настройками booking office_id
@@ -200,7 +198,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
       unless response.error
         self.pnr_number = response.pnr_number
         if pnr_number
-          self.order_id = "si#{rand(655535).to_s(36)}"
           self.sirena_lead_pass = response.lead_family
           @order = Order.create(:order_data => self)
           return pnr_number

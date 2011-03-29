@@ -18,13 +18,16 @@ class Order < ActiveRecord::Base
       .where("created_at < ?", 30.minutes.ago)
   }
 
+  def order_id
+    payments.last ? payments.last.ref : ''
+  end
+
   def generate_code
     self.code = ShortUrl.random_hash
   end
 
   def order_data= order_data
     recommendation = order_data.recommendation
-    self.order_id = order_data.order_id
     self.email = order_data.email
     self.phone = order_data.phone
     self.source = recommendation.source
