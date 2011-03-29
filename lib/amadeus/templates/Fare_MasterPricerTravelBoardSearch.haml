@@ -41,11 +41,10 @@
 
 
 %travelFlightInfo
-  -if cabin_list.present?
+  -if cabin
     %cabinId
       %cabinQualifier MC
-      - cabin_list.each do |cabin|
-        %cabin= cabin
+      %cabin= cabin
   - if nonstop
     %flightDetail
       %flightType N
