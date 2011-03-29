@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sirena>
+  <answer pult="ГРФ365">
+    <pricing results="cut">
+      <flight id="1">
+        <company>U6</company>
+        <num>778</num>
+        <flight>778</flight>
+        <origin>ДМД</origin>
+        <destination>ПЛК</destination>
+        <deptdate delay="0">01.05.11</deptdate>
+        <arrvdate delay="0">02.05.11</arrvdate>
+        <depttime>23:15</depttime>
+        <arrvtime>00:30</arrvtime>
+        <flightTime>1:15</flightTime>
+        <airplane>320</airplane>
+      </flight>
+      <flight id="2">
+        <company>U6</company>
+        <num>777</num>
+        <flight>777</flight>
+        <origin>ПЛК</origin>
+        <destination>ДМД</destination>
+        <deptdate delay="0">08.05.11</deptdate>
+        <arrvdate delay="0">08.05.11</arrvdate>
+        <depttime>07:00</depttime>
+        <arrvtime>09:15</arrvtime>
+        <flightTime>2:15</flightTime>
+        <airplane>320</airplane>
+      </flight>
+      <flight id="3">
+        <company>1Н</company>
+        <num>22</num>
+        <flight>22</flight>
+        <origin terminal="1 ">ШРМ</origin>
+        <destination>ПЛК</destination>
+        <deptdate delay="0">01.05.11</deptdate>
+        <arrvdate delay="0">01.05.11</arrvdate>
+        <depttime>20:00</depttime>
+        <arrvtime>21:20</arrvtime>
+        <flightTime>1:20</flightTime>
+        <airplane>ТУ5</airplane>
+      </flight>
+      <variant id="1" fop="НА" n_blanks="1">
+        <flights latin_registration="false" et_possible="true">
+          <flight id="1" num="1" class="Y" subclass="Y" baseclass="Y" iSegmentOrig="MOW" iSegmentDest="LED" iSegmentNum="MOW-LED" oSegmentPartNum="0" oSegmentPartQuantity="1" fare_expdate="2011-05-01 23:15"/>
+          <flight id="2" num="2" class="Y" subclass="Y" baseclass="Y" iSegmentOrig="LED" iSegmentDest="MOW" iSegmentNum="LED-MOW" oSegmentPartNum="0" oSegmentPartQuantity="1" fare_expdate="2011-05-08 07:00"/>
+        </flights>
+        <direction num="1">
+          <price code="ААА" orig_code="ААА" count="1" currency="РУБ">
+            <fare code="Y" remark="1001" fare_expdate="2011-05-01 23:15">1000.00</fare>
+            <tax code="YQ" owner="aircompany">525.00</tax>
+            <tax code="ZZ" owner="aircompany">125.00</tax>
+            <tax code="SA" owner="aircompany">700.00</tax>
+            <total>2350.00</total>
+          </price>
+        </direction>
+        <direction num="2">
+          <price code="ААА" orig_code="ААА" count="1" currency="РУБ">
+            <fare code="Y" remark="1001" fare_expdate="2011-05-08 07:00">1000.00</fare>
+            <tax code="YQ" owner="aircompany">525.00</tax>
+            <tax code="ZZ" owner="aircompany">125.00</tax>
+            <total>1650.00</total>
+          </price>
+        </direction>
+        <variant_total currency="РУБ">4000.00</variant_total>
+      </variant>
+      <variant id="2" fop="НА" n_blanks="1">
+        <flights latin_registration="false" et_possible="true">
+          <flight id="1" num="1" class="M" subclass="M" baseclass="Y" iSegmentOrig="MOW" iSegmentDest="LED" iSegmentNum="MOW-LED" oSegmentPartNum="0" oSegmentPartQuantity="1" fare_expdate="2011-05-01 23:15"/>
+          <flight id="2" num="2" class="Y" subclass="Y" baseclass="Y" iSegmentOrig="LED" iSegmentDest="MOW" iSegmentNum="LED-MOW" oSegmentPartNum="0" oSegmentPartQuantity="1" fare_expdate="2011-05-08 07:00"/>
+        </flights>
+        <direction num="1">
+          <price code="ААА" orig_code="ААА" count="1" currency="РУБ">
+            <fare code="MM" remark="1001" fare_expdate="2011-05-01 23:15">1525.00</fare>
+            <tax code="YQ" owner="aircompany">525.00</tax>
+            <tax code="ZZ" owner="aircompany">125.00</tax>
+            <tax code="SA" owner="aircompany">700.00</tax>
+            <total>2875.00</total>
+          </price>
+        </direction>
+        <direction num="2">
+          <price code="ААА" orig_code="ААА" count="1" currency="РУБ">
+            <fare code="Y" remark="1001" fare_expdate="2011-05-08 07:00">1000.00</fare>
+            <tax code="YQ" owner="aircompany">525.00</tax>
+            <tax code="ZZ" owner="aircompany">125.00</tax>
+            <total>1650.00</total>
+          </price>
+        </direction>
+        <variant_total currency="РУБ">4525.00</variant_total>
+      </variant>
+      <variant id="3" fop="НА" n_blanks="1">
+        <flights latin_registration="false" et_possible="true">
+          <flight id="1" num="1" class="Y" subclass="Y" baseclass="Y" iSegmentOrig="MOW" iSegmentDest="LED" iSegmentNum="MOW-LED" oSegmentPartNum="0" oSegmentPartQuantity="1" fare_expdate="2011-05-01 23:15"/>
+          <flight id="2" num="2" class="M" subclass="M" baseclass="Y" iSegmentOrig="LED" iSegmentDest="MOW" iSegmentNum="LED-MOW" oSegmentPartNum="0" oSegmentPartQuantity="1" fare_expdate="2011-05-08 07:00"/>
+        </flights>
+        <direction num="1">
+          <price code="ААА" orig_code="ААА" count="1" currency="РУБ">
+            <fare code="Y" remark="1001" fare_expdate="2011-05-01 23:15">1000.00</fare>
+            <tax code="YQ" owner="aircompany">525.00</tax>
+            <tax code="ZZ" owner="aircompany">125.00</tax>
+            <tax code="SA" owner="aircompany">700.00</tax>
+            <total>2350.00</total>
+          </price>
+        </direction>
+        <direction num="2">
+          <price code="ААА" orig_code="ААА" count="1" currency="РУБ">
+            <fare code="MM" remark="1001" fare_expdate="2011-05-08 07:00">1525.00</fare>
+            <tax code="YQ" owner="aircompany">525.00</tax>
+            <tax code="ZZ" owner="aircompany">125.00</tax>
+            <total>2175.00</total>
+          </price>
+        </direction>
+        <variant_total currency="РУБ">4525.00</variant_total>
+      </variant>
+      <variant id="5" fop="НА" n_blanks="1">
+        <flights latin_registration="false" et_possible="false">
+          <flight id="3" num="1" class="Э" subclass="Э" baseclass="Э" iSegmentOrig="MOW" iSegmentDest="LED" iSegmentNum="MOW-LED" oSegmentPartNum="0" oSegmentPartQuantity="1" fare_expdate="2011-05-01 20:00"/>
+          <flight id="2" num="2" class="Y" subclass="Y" baseclass="Y" iSegmentOrig="LED" iSegmentDest="MOW" iSegmentNum="LED-MOW" oSegmentPartNum="0" oSegmentPartQuantity="1" fare_expdate="2011-05-08 07:00"/>
+        </flights>
+        <direction num="1">
+          <price code="ААА" orig_code="ААА" count="1" currency="РУБ">
+            <fare code="YRT" remark="0002" fare_expdate="2011-05-01 20:00">2835.00</fare>
+            <tax code="YQ" owner="aircompany">375.00</tax>
+            <tax code="ZZ" owner="aircompany">125.00</tax>
+            <total>3335.00</total>
+          </price>
+        </direction>
+        <direction num="2">
+          <price code="ААА" orig_code="ААА" count="1" currency="РУБ">
+            <fare code="Y" remark="1001" fare_expdate="2011-05-08 07:00">1000.00</fare>
+            <tax code="YQ" owner="aircompany">525.00</tax>
+            <tax code="ZZ" owner="aircompany">125.00</tax>
+            <total>1650.00</total>
+          </price>
+        </direction>
+        <variant_total currency="РУБ">4985.00</variant_total>
+      </variant>
+      <variant id="4" fop="НА" n_blanks="1">
+        <flights latin_registration="false" et_possible="true">
+          <flight id="1" num="1" class="M" subclass="M" baseclass="Y" iSegmentOrig="MOW" iSegmentDest="LED" iSegmentNum="MOW-LED" oSegmentPartNum="0" oSegmentPartQuantity="1" fare_expdate="2011-05-01 23:15"/>
+          <flight id="2" num="2" class="M" subclass="M" baseclass="Y" iSegmentOrig="LED" iSegmentDest="MOW" iSegmentNum="LED-MOW" oSegmentPartNum="0" oSegmentPartQuantity="1" fare_expdate="2011-05-08 07:00"/>
+        </flights>
+        <direction num="1">
+          <price code="ААА" orig_code="ААА" count="1" currency="РУБ">
+            <fare code="MM" remark="1001" fare_expdate="2011-05-01 23:15">1525.00</fare>
+            <tax code="YQ" owner="aircompany">525.00</tax>
+            <tax code="ZZ" owner="aircompany">125.00</tax>
+            <tax code="SA" owner="aircompany">700.00</tax>
+            <total>2875.00</total>
+          </price>
+        </direction>
+        <direction num="2">
+          <price code="ААА" orig_code="ААА" count="1" currency="РУБ">
+            <fare code="MM" remark="1001" fare_expdate="2011-05-08 07:00">1525.00</fare>
+            <tax code="YQ" owner="aircompany">525.00</tax>
+            <tax code="ZZ" owner="aircompany">125.00</tax>
+            <total>2175.00</total>
+          </price>
+        </direction>
+        <variant_total currency="РУБ">5050.00</variant_total>
+      </variant>
+      <request>
+        <pricing>
+          <segment>
+            <departure xml:lang="en">MOW</departure>
+            <arrival xml:lang="en">LED</arrival>
+            <date>01.05.2011</date>
+            <class>Э</class>
+            <direct>false</direct>
+          </segment>
+          <segment>
+            <departure xml:lang="en">LED</departure>
+            <arrival xml:lang="en">MOW</arrival>
+            <date>08.05.2011</date>
+            <class>Э</class>
+            <direct>false</direct>
+          </segment>
+          <passenger>
+            <code>ААА</code>
+            <count>1</count>
+          </passenger>
+          <request_params>
+            <lang>en</lang>
+            <min_results>1</min_results>
+            <max_results>5</max_results>
+            <mix_scls>true</mix_scls>
+            <mix_ac>false</mix_ac>
+            <fingering_order>ordinary</fingering_order>
+          </request_params>
+          <answer_params>
+            <return_request>true</return_request>
+            <show_flighttime>true</show_flighttime>
+            <show_fareexpdate>true</show_fareexpdate>
+            <show_io_matching>true</show_io_matching>
+            <show_varianttotal>true</show_varianttotal>
+            <show_reg_latin>true</show_reg_latin>
+            <show_baseclass>true</show_baseclass>
+            <show_n_blanks>true</show_n_blanks>
+            <show_et>true</show_et>
+            <regroup>true</regroup>
+          </answer_params>
+        </pricing>
+      </request>
+    </pricing>
+  </answer>
+</sirena>
