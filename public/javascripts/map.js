@@ -14,11 +14,11 @@ init: function() {
             mapTypeControl: false,
             scrollwheel: false
         });
+        this.lines = [];
         if (this.deferred) {
             this.show(this.deferred);
             delete(this.deferred);
         }
-        this.lines = [];
         this.active = true;
     }
 },
