@@ -45,7 +45,7 @@ class Variant
     waypoints = city_iatas.dup
     from = waypoints.shift
     to = waypoints.pop
-    ([from] + waypoints.each_cons(2).map { |a, b| a == b ? a : "#{a} #{b}" } + [to]).join('-')
+    ([from] + waypoints.each_slice(2).map { |a, b| a == b ? a : "#{a} #{b}" } + [to]).join('-')
   end
 
   # можно оптимальнее, наверное
