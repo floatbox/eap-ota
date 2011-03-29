@@ -14,6 +14,8 @@ class Payment < ActiveRecord::Base
 
   def payture_block
     response = Payture.new.block(price, @card, :order_id => ref)
+    update_attribute(:reject_reason, response.err_code) if !response.success? && !response.threeds?
+    response
   end
 
   def payture_state
@@ -28,6 +30,7 @@ class Payment < ActiveRecord::Base
 
   def confirm_3ds pa_res, md
     res = Payture.new.block_3ds(:order_id => ref, :pa_res => pa_res)
+    update_attribute(:reject_reason, res.err_code) unless res.success?
     res.success?
   end
 
