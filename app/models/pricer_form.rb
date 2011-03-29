@@ -158,6 +158,21 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     self.adults, self.children, self.infants = count[:adults] || 1, count[:children] || 0, count[:infants] || 0
   end
 
+  # в этом порядке!
+  before_validation :parse_complex_to
+  before_validation :fix_segments
+
+  # заполняет невведенные from во втором и далее сегментах
+  def fix_segments
+    # пришлось использовать to_a - какие-то идиосинкразии внутри активрекорда
+    # TODO оформить и зафиксить баг?
+    form_segments.to_a.each_cons(2) do |a, b|
+      if b.from.empty?
+        b.from = a.to
+      end
+    end
+  end
+
   def parse_complex_to
     self.complex_to ||= form_segments[0].to.gsub(',', ' ')
     res = {}
@@ -205,7 +220,6 @@ class PricerForm < ActiveRecord::BaseWithoutTable
               not_finished = true
             elsif r && (['airport', 'city', 'country', 'region'].include? r.type)
               form_segments[0].to = r.name rescue nil
-              form_segments[1].from = r.name if form_segments.length == 2 && form_segments[0].to == form_segments[1].from rescue nil
               res[:to] = {
                 :value => r.name,
                 :str => word_part.to_s,
