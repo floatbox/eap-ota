@@ -17,7 +17,7 @@ class Recommendation
   attr_accessor :sirena_blank_count
 
   delegate :marketing_carriers, :marketing_carrier_iatas,
-    :city_iatas, :airport_iatas, :country_iatas,
+    :city_iatas, :airport_iatas, :country_iatas, :route,
       :to => 'variants.first'
 
   def availability

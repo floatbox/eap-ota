@@ -40,6 +40,14 @@ class Variant
     result
   end
 
+  # маршрут в виде 'SVX-CDG-SVX'
+  def route
+    waypoints = city_iatas.dup
+    from = waypoints.shift
+    to = waypoints.pop
+    ([from] + waypoints.each_cons(2).map { |a, b| a == b ? a : "#{a} #{b}" } + [to]).join('-')
+  end
+
   # можно оптимальнее, наверное
   def city_iatas
     airport_iatas.collect { |iata| Airport[iata].city.iata }
