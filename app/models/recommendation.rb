@@ -17,7 +17,7 @@ class Recommendation
   attr_accessor :sirena_blank_count
 
   delegate :marketing_carriers, :marketing_carrier_iatas,
-    :city_iatas, :airport_iatas, :country_iatas,
+    :city_iatas, :airport_iatas, :country_iatas, :route,
       :to => 'variants.first'
 
   def availability
@@ -55,11 +55,11 @@ class Recommendation
   end
 
   def international?
-    country_iatas.size > 1
+    country_iatas.uniq.size > 1
   end
 
   def domestic?
-    country_iatas == [validating_carrier.country.iata]
+    country_iatas.uniq == [validating_carrier.country.iata]
   end
 
   def clear_variants
@@ -69,7 +69,7 @@ class Recommendation
 
   def valid_interline?
     not interline? or
-    other_marketing_carrier_iatas.all? do |iata|
+    other_marketing_carrier_iatas.uniq.all? do |iata|
       validating_carrier.interline_with?(iata)
     end
   end
