@@ -11,7 +11,7 @@ class Order < ActiveRecord::Base
   validates_presence_of :email, :if => (Proc.new{ |order| order.source != 'other' })
   validates_format_of :email, :with =>
     /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email", :if => (Proc.new{ |order| order.source != 'other' })
-  before_create :generate_code
+  before_create :generate_code, :calculate_price_with_payment_commission
 
   scope :stale, lambda {
     where(:payment_status => 'not blocked', :ticket_status => 'booked')\
@@ -24,6 +24,10 @@ class Order < ActiveRecord::Base
 
   def generate_code
     self.code = ShortUrl.random_hash
+  end
+
+  def calculate_price_with_payment_commission
+    self.price_with_payment_commission = price_total + Payture.commission(price_total) if price_with_payment_commission == 0 || !price_with_payment_commission
   end
 
   def order_data= order_data
