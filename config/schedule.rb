@@ -1,5 +1,5 @@
 # Learn more: http://github.com/javan/whenever
-set :output, "cron.log"
+set :output, "log/cron.log"
 
 every :day do
   rake 'completer:regen'
