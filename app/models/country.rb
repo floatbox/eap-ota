@@ -9,6 +9,8 @@ class Country < ActiveRecord::Base
   has_many :geo_tags, :through => :geo_taggings
   has_many :carriers
   has_many :regions
+
+  attr_writer :main_city_iatas_as_text #хак для typus
   include GeoTaggable
 
   CONTINENT = {'Азия' => 'asia', 'Америка' => 'america', 'Антарктика' => 'antarctica', 'Африка' => 'africa', 'Европа' => 'europe', 'Океания' => 'oceania'}
@@ -34,6 +36,10 @@ class Country < ActiveRecord::Base
       url = "/system/countries/icons/default.png"
     end
     url
+  end
+
+  def main_city_iatas_as_text
+    main_city_iatas.join(', ')
   end
 
   def main_city_iatas
