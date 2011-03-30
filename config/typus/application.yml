@@ -105,8 +105,25 @@ Order:
   # actions:
   #   show: cancel, ticket, charge, unblock, show_pnr
   filters: source, payment_status, ticket_status
+  relationships: payments
   application: Orders
   export: csv
+
+Payment:
+  fields:
+    default: price, created_at, name_in_card, last_digits_in_card, payture_state, reject_reason
+    list: price, created_at, name_in_card
+    show: price, created_at, last_digits_in_card, name_in_card, reject_reason, order
+    options:
+      date_formats:
+        created_at: long
+  options:
+    default_action_on_item: show
+  search: id
+  relationships: order
+  order_by: -created_at
+  application: Orders
+
 
 Destination:
   fields:
@@ -141,23 +158,6 @@ HotOffer:
   filters: destination
   search: description, url
   application: Hot Offers
-
-Payment:
-  fields:
-    default: price, description, payment_status
-    list: price, description, created_at, url, payment_status
-    new: price, description, url
-    show: price, description, name_in_card, last_digits_in_card
-    options:
-      read_only: url
-      date_formats:
-        created_at: long
-  options:
-    default_action_on_item: show
-  filters:
-  search: description, name_in_card, last_digits_in_card
-  order_by: -created_at
-  application: Orders
 
 Region:
   fields:
