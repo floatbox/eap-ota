@@ -43,7 +43,6 @@ class PricerController < ApplicationController
       }
     else
       @search = PricerForm.new(params[:search])
-      @search.parse_complex_to
       if @search.valid?
         @query_key = ShortUrl.random_hash
         @search.save_to_cache(@query_key)

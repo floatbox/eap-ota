@@ -74,18 +74,21 @@ class OrderData < ActiveRecord::BaseWithoutTable
     [recommendation, people_count, people, card].hash
   end
 
-  def store_to_cache
+  def save_to_cache
     self.number ||= ShortUrl.random_hash
     Cache.write("order_data", number, self)
   end
 
-  def self.get_from_cache(cache_number)
-    require 'segment'
-    require 'variant'
-    require 'flight'
-    require 'recommendation'
-    require 'person'
-    Cache.read("order_data", cache_number)
+  class << self
+    def load_from_cache(cache_number)
+      require 'segment'
+      require 'variant'
+      require 'flight'
+      require 'recommendation'
+      require 'person'
+      Cache.read("order_data", cache_number)
+    end
+    alias :[] load_from_cache
   end
 
   def variant
@@ -241,7 +244,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
 
   def self.create_sample_booking(cache_key)
-    order = OrderData.get_from_cache(cache_key)
+    order = OrderData.load_from_cache(cache_key)
     order.email = 'email@example.com'
     order.phone = '12345678'
     order.people_count = {:infants => 1, :children => 1, :adults => 2}
