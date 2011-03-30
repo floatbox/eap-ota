@@ -22,7 +22,7 @@ module Sirena
         cabins = []
         first_variant = true
         variants = rec.xpath("flights").map{|variant|
-          if variant.attribute("et_possible") && variant.attribute("et_possible").value != 'true'
+          if variant["et_possible"] == 'false'
             next
           end
           time = 0
@@ -31,7 +31,7 @@ module Sirena
           segments = []
           segment = nil
           variant.xpath("flight").each{|fi|
-            if prev_segment_num!=fi.attribute("iSegmentNum").text
+            if prev_segment_num!=fi["iSegmentNum"]
               if !prev_segment_num.blank?
                 segment.eft = (time/60).to_s+":"+"%02i".%(time % 60)
                 time = 0
@@ -39,15 +39,13 @@ module Sirena
               end
               segment = Segment.new :flights=>[]
               segments << segment
-              prev_segment_num=fi.attribute("iSegmentNum").text
+              prev_segment_num=fi["iSegmentNum"]
             end
-            id = fi.attribute("id") && fi.attribute("id").value
-            cl = fi.attribute("subclass") && fi.attribute("subclass").value
-            base_cl = fi.attribute("baseclass") && fi.attribute("baseclass").value
             if first_variant
-              booking_classes << cl if cl
-              cabins << {"Э"=>"Y", "Б"=>"C", "П"=>"F"}[base_cl] || base_cl
+              booking_classes << fi["subclass"] if fi["subclass"]
+              cabins << {"Э"=>"Y", "Б"=>"C", "П"=>"F"}[fi["baseclass"]] || fi["baseclass"]
             end
+            id = fi["id"]
             time += flights[id][:time]
             time +=(flights[id][:departure]-prev_arr).to_i/60 if !prev_arr.blank?
             prev_arr=flights[id][:arrival]
@@ -94,9 +92,9 @@ module Sirena
           :operating_carrier_iata => fi.xpath("company").text,
           :marketing_carrier_iata => fi.xpath("company").text,
           :departure_iata =>         dep_iata,
-          :departure_term =>         fi.xpath("origin").attribute("terminal") && fi.xpath("origin").attribute("terminal").value,
+          :departure_term =>         fi.at_xpath("origin")["terminal"],
           :arrival_iata =>           arr_iata,
-          :arrival_term =>           fi.xpath("destination").attribute("terminal") && fi.xpath("destination").attribute("terminal").value,
+          :arrival_term =>           fi.at_xpath("destination")["terminal"],
           :flight_number =>          fi.xpath("num").text,
           :arrival_date =>           fi.xpath("arrvdate").text.gsub(".", ""),
           :arrival_time =>           to_amadeus_time(fi.xpath("arrvtime").text),
@@ -110,8 +108,7 @@ module Sirena
           scanned = time.scan(/(([0-9]+):)?([0-9]+):([0-9]+)/)[0]
           time = scanned[1].to_i*1440+scanned[2].to_i*60+scanned[3].to_i
         end
-        id = fi.attribute("id") && fi.attribute("id").value
-        [id, {:flight=>f, :time=>time.to_i, :departure=>dep, :arrival=>arr}]
+        [fi["id"], {:flight=>f, :time=>time.to_i, :departure=>dep, :arrival=>arr}]
       end
     end
   end

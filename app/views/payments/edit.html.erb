@@ -1,8 +1,57 @@
-Description: <%= @order.description%>
-<br >
-Total price: <%= @order.price_with_payment_commission %>
-<%= form_for @card, :as => :card, :url => edit_payment_url(:code=> @order.code), :html => { :autocomplete => "off" } do |f| %>
-<%= render 'booking/card', :f => f %>
-<%= f.submit 'OK'%>
-<% end %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <%= render 'shared/head_common', {:title => @order.description} %>
+    <%= stylesheet_link_tag "static", "atoms/button", "atoms/pseudo", "results/booking" %>
+    <%= javascript_include_tag "static", "main", "booking/wizard", "booking/validation" %>
+</head>
+<body>
+<%= render 'shared/header' %>
+<div id="wrapper">
+<div id="content">
+    <div id="back2search">
+        <div class="bscontent"><a href="/">Вернуться к поиску</a></div>
+    </div>
+    <div class="payment">
 
+<div class="booking">
+<%= form_for @card, :as => :card, :url => edit_payment_url(:code=> @order.code), :html => { :autocomplete => "off" } do |f| %>
+    <h3><%= @order.description %></h3>
+    <div class="section book-bc" onclick="return 'BankCard'">
+        <div class="payments">
+            <p>Данные вашей банковской карты обрабатываются платежным центром <a target="_blank" href="http://www.alfabank.ru/">Альфа-Банка</a> и защищены 256-битным шифрованием, обеспеченным компанией <a target="_blank" href="http://www.thawte.com/">Thawte</a></p>
+            <img class="alfa" src="/img/booking/alfabank.png" alt="Альфа-Банк">
+            <img class="thawte" src="/img/booking/thawte.png" alt="Thawte">
+        </div>
+        <%= render 'booking/card', :f => f %>
+        <table class="bc-bill">
+            <tr><th>С&nbsp;карты будет списано</th></tr>
+            <tr><td><%= decorated_price @order.price_with_payment_commission, 'b', 'i' %></td></tr>
+        </table>
+    </div>
+    <div class="book-s">
+        <div class="control">
+        <table><tr>
+            <td class="g-xl">Всё правильно?</td>
+            <th><input type="submit" class="a-button g-xl" value="Оплатить"></th>
+            <td class="g-xxs"><div class="loading"><br></div></td>
+        </tr></table>
+        </div>
+        <div class="blocker">
+            <s></s>
+            <h6>Пока невозможно. И вот почему:</h6>
+            <ul class="b-pseudo"></ul>
+        </div>
+    </div>
+<% end %>
+</div>
+
+    </div>
+</div>
+<div id="footer">
+    <%= render 'shared/footer' %>
+</div>
+</div>
+<%= javascript_include_tag "payment" %>
+</body>
+</html>

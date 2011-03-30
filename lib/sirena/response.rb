@@ -23,7 +23,7 @@ module Sirena
       def parse
       end
 
-      delegate :xpath, :to_s, :to => :doc
+      delegate :xpath, :at_xpath, :to_s, :to => :doc
 
       # а везде такой метод?
       def error

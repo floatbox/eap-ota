@@ -189,4 +189,34 @@
     margin: 10px 0 0;
 }
 
-
+/* Payment */
+.payment {
+    width: 960px;
+    margin: 15px auto;
+    font-size: 14px;
+    line-height: 19px;
+    color: #333;
+}
+.payment .booking {
+    width: 675px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    padding-bottom: 15px;
+    background: #fff;
+    font-size: 16px;
+    line-height: 19px;
+    color: #333;
+    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.payment .booking h3 {
+    margin-bottom: 12px;
+}
+.payment .booking .result {
+    padding-bottom: 0;
+}
+.payment .booking .tds-submit a.stop-booking {
+    display: none;
+}

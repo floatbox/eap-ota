@@ -6,24 +6,22 @@ module Sirena
       attr_accessor :pnr_number, :timelimit, :status, :lead_family
 
       def parse
-        @pnr_number = xpath("//pnr/regnum").first
+        @pnr_number = at_xpath("//pnr/regnum")
         if @pnr_number
           @pnr_number=@pnr_number.text
         else
-          book = xpath("//booking").first && xpath("//booking").first.attribute("regnum")
-          @pnr_number = book.value if book
+          book = at_xpath("//booking")
+          @pnr_number = book["regnum"] if book
         end
 
-        @timelimit = xpath("//pnr/timelimit").first
+        @timelimit = at_xpath("//pnr/timelimit")
         @timelimit = Time.parse(@timelimit.text.insert(6, "20")) if @timelimit
 
-        @status = xpath("//pnr/status").first
-        @status = @status.text if @status
+        @status = xpath("//pnr/status").text
 
         xpath("//pnr/passengers/passenger").each do |passanger|
           if passanger.attribute("lead_pass") || @lead_family.blank?
-            @lead_family = passanger.xpath('surname').first
-            @lead_family = @lead_family.text if @lead_family
+            @lead_family = passanger.xpath('surname').text
           end
         end
       end

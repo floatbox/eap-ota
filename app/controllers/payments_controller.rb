@@ -13,10 +13,13 @@ class PaymentsController < ApplicationController
       payture_response = @order.block_money(card)
       if payture_response.success?
         @order.money_blocked!
-        render :text => 'ok'
+        render :partial => 'success'
       elsif payture_response.threeds?
         logger.info "Pay: payment system requested 3D-Secure authorization"
         render :partial => 'booking/threeds', :locals => {:order_id => @order.order_id, :payture_response => payture_response}
+      else
+        logger.info "Pay: payment failed"
+        render :partial => 'fail'
       end
     end
   end
