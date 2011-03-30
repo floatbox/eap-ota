@@ -181,19 +181,6 @@ class Recommendation
     merged
   end
 
-  def self.load_from_cache(recommendation_number)
-    # shouldn be neccessary, no?
-    require 'segment'
-    require 'variant'
-    require 'flight'
-    Cache.read('recommendation', recommendation_number)
-  end
-
-  def self.store_to_cache(recommendation_number, recommendation)
-    Cache.write('recommendation', recommendation_number, recommendation)
-  end
-
-
   def variants_by_duration
     variants.sort_by(&:total_duration)
   end
@@ -467,7 +454,7 @@ class Recommendation
     itinerary.split.each do |fragment|
       flight = Flight.new
       # defaults
-      carrier, subclass, cabin = default_carrier, 'Y', 'M'
+      carrier, operating_carrier, subclass, cabin = default_carrier, nil, 'Y', 'M'
       fragment.upcase.split('/').each do |code|
         case code.length
         when 6
@@ -478,6 +465,8 @@ class Recommendation
           subclass = code
         else
           case code
+          when /^(..):(..)$/
+            operating_carrier, carrier = $1, $2
           when 'ECONOMY'
             cabin = 'M'
           when 'BUSINESS'
@@ -490,6 +479,7 @@ class Recommendation
         end
       end
       flight.marketing_carrier_iata = carrier
+      flight.operating_carrier_iata = operating_carrier || carrier
       segments << Segment.new(:flights => [flight])
       subclasses << subclass
       cabins << cabin

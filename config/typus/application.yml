@@ -176,9 +176,9 @@ Country:
   fields:
     default: alpha2, name_ru, name_en, full_name_ru, continent, importance, synonym_list
     list: alpha2, name_ru, name_en, full_name_ru, continent, importance, synonym_list
-    form: name_ru, name_en, full_name_ru, alpha2, alpha3, iso, continent, continent_part_ru, importance, synonym_list, lat, lng, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in
+    form: name_ru, name_en, full_name_ru, alpha2, alpha3, iso, continent, continent_part_ru, importance, synonym_list, lat, lng, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in, main_city_iatas_as_text
     options:
-      read_only: morpher_to, morpher_from, morpher_in
+      read_only: morpher_to, morpher_from, morpher_in, main_city_iatas_as_text
       selectors: continent
   order_by: name_ru
   relationships: carriers, airports, cities, geo_tags, regions

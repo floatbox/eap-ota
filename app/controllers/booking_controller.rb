@@ -18,18 +18,18 @@ class BookingController < ApplicationController
       :people_count => pricer_form.real_people_count,
       :variant_id => params[:variant_id]
     )
-    order_data.store_to_cache
+    order_data.save_to_cache
     render :json => {:success => true, :number => order_data.number}
   end
 
   def index
-    @order = OrderData.get_from_cache(params[:number])
+    @order = OrderData.load_from_cache(params[:number])
     @order.init_people
     render :partial => 'embedded'
   end
 
   def pay
-    @order = OrderData.get_from_cache(params[:order][:number])
+    @order = OrderData.load_from_cache(params[:order][:number])
     @order.people_attributes = params[:person_attributes]
     @order.set_flight_date_for_childen_and_infants
     @order.card = CreditCard.new(params[:card])

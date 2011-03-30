@@ -47,6 +47,7 @@ show: function(segments) {
     var isrt = (this.parent.mode === 'rt');
     for (var i = 0, im = lines.length; i < im; i++) {
         var route = new google.maps.Polyline({
+            geodesic: true,
             path: lines[i].points,
             strokeColor: lines[i].color,
             strokeOpacity: (isrt && i === 1) ? 0.5 : 0.9,
