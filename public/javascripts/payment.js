@@ -17,7 +17,7 @@
             var data = $(this).serialize();
             var rcontrol = button.removeClass('a-button-ready').closest('.control');
             context.find('.result').remove();
-            context.find('.book-s').removeClass('book-retry');        
+            context.find('.book-s').removeClass('book-retry');
             $.ajax({
                 url: $(this).attr('action'),
                 data: data,
@@ -89,11 +89,11 @@
         }
     });
     sections.eq(0).trigger('setready');
-    
+
     // 3DSecure
     context.delegate('.tds-submit .a-button', 'click', function(event) {
         event.preventDefault();
         $(this).closest('.result').find('form').submit();
-    });    
+    });
 
 })();
