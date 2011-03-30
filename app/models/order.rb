@@ -110,8 +110,7 @@ class Order < ActiveRecord::Base
     case source
     when 'amadeus'
       Amadeus.booking do |amadeus|
-        amadeus.pnr_retrieve(:number => pnr_number)
-        amadeus.pnr_cancel
+        amadeus.pnr_cancel(:number => pnr_number)
         update_attribute(:ticket_status, 'canceled')
       end
     when 'sirena'
