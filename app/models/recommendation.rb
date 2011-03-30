@@ -181,19 +181,6 @@ class Recommendation
     merged
   end
 
-  def self.load_from_cache(recommendation_number)
-    # shouldn be neccessary, no?
-    require 'segment'
-    require 'variant'
-    require 'flight'
-    Cache.read('recommendation', recommendation_number)
-  end
-
-  def self.store_to_cache(recommendation_number, recommendation)
-    Cache.write('recommendation', recommendation_number, recommendation)
-  end
-
-
   def variants_by_duration
     variants.sort_by(&:total_duration)
   end

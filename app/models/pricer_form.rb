@@ -105,8 +105,11 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     Cache.write('pricer_form', query_key, self)
   end
 
-  def self.load_from_cache(query_key)
-    Cache.read('pricer_form', query_key)
+  class << self
+    def load_from_cache(query_key)
+      Cache.read('pricer_form', query_key)
+    end
+    alias :[] load_from_cache
   end
 
   def as_json(args)
