@@ -16,5 +16,5 @@ admin:
   AirlineAlliance: create, read, update, delete
   Consolidator: create, read, update, delete
   GlobalDistributionSystem: create, read, update, delete
-  #Payment: create, read
+  Payment: read
 
