@@ -31,12 +31,12 @@
 }
 .odcontent a.a-button {
     display: block;
-    width: 85px;
+    width: 90px;
     border-color: #7b8e12;
-    padding: 0 4px;
+    padding: 0 6px 0 0;
     font-size: 13px;
     line-height: 19px;
-    text-align: center;
+    text-align: right;
 }
 
 /* Header */
@@ -216,6 +216,9 @@ td.odh-tip {
     background: #E7ECEE;
     font-size: 11px;
     text-align: center;
+}
+.odcontent .times .zero {
+    visibility: hidden;
 }
 
 /* Cities */

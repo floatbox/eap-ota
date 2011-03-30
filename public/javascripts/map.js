@@ -1,27 +1,20 @@
 search.map = {
 init: function() {
     this.parent = search;
-    if (typeof VEMap !== 'undefined') {
-        this.obj = new VEMap('bingmap');
-        this.defpoint = new VELatLong(55.751463, 37.621651);
-        this.colors = [
-            new VEColor(129, 170, 0, 0.9),
-            new VEColor(196, 111, 38, 0.9),
-            new VEColor(10, 160, 198, 0.9),
-            new VEColor(196, 111, 38, 0.5)
-        ];
+    this.colors = ['#81aa00', '#C46F26', '#0aa0c6'];
+    var that = this;
+    if (typeof google !== 'undefined' && google.maps) {
         var f = search.segments[0].from.get(0).onclick();
-        with (this.obj) {
-            SetCredentials('AtNWTyXWDDDWemqtCdOBchagXymI0P5Sh14O7GSlQpl2BJxBm_xn6YRUR7TPhJD0');
-            SetDashboardSize(VEDashboardSize.Tiny);
-            LoadMap((f && f.lat && f.lng && new VELatLong(f.lat, f.lng)) || this.defpoint, 4);
-            SetScaleBarDistanceUnit(VEDistanceUnit.Kilometers);
-            AttachEvent('onmousewheel', function(event) {
-                var change = event.mouseWheelChange;
-                window.scrollBy(0, (Math.abs(change) > 50 ? -0.05 : -5) * change);
-                return true;
-            });
-        }
+        this.defpoint = new google.maps.LatLng(55.751463, 37.621651);
+        this.obj = new google.maps.Map($('#map-canvas').get(0), {
+            zoom: 5,
+            center: (f && f.lat && f.lng) ? new google.maps.LatLng(f.lat, f.lng) : that.defpoint,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            streetViewControl: false,
+            mapTypeControl: false,
+            scrollwheel: false
+        });
+        this.lines = [];
         if (this.deferred) {
             this.show(this.deferred);
             delete(this.deferred);
@@ -30,12 +23,12 @@ init: function() {
     }
 },
 show: function(segments) {
-    this.obj.Clear();
+    this.clean();
     var lines = [], pins = [], pindex = {};
     for (var i = 0, im = segments.length; i < im; i++) {
         var f = segments[i].from, t = segments[i].to;
-        var fp = f && f.lat && f.lng && new VELatLong(f.lat, f.lng);
-        var tp = t && t.lat && t.lng && new VELatLong(t.lat, t.lng);
+        var fp = f && f.lat && f.lng && new google.maps.LatLng(f.lat, f.lng);
+        var tp = t && t.lat && t.lng && new google.maps.LatLng(t.lat, t.lng);
         if (fp && !pindex[f.code]) {
             pindex[f.code] = true;
             pins.push(fp);
@@ -51,23 +44,33 @@ show: function(segments) {
             });
         }
     }
-    if (this.parent.mode === 'rt' && lines.length === 2) {
-        lines[1].color = this.colors[3];        
-    }
+    var isrt = (this.parent.mode === 'rt');
     for (var i = 0, im = lines.length; i < im; i++) {
-        var route = new VEShape(VEShapeType.Polyline, lines[i].points);
-        route.SetLineWidth(3);
-        route.SetLineColor(lines[i].color);
-        route.HideIcon();
-        this.obj.AddShape(route);
+        var route = new google.maps.Polyline({
+            geodesic: true,
+            path: lines[i].points,
+            strokeColor: lines[i].color,
+            strokeOpacity: (isrt && i === 1) ? 0.5 : 0.9,
+            strokeWeight: 3
+        });
+        this.lines.push(route);
+        route.setMap(this.obj);
     }
-    /*for (var i = 0, im = pins.length; i < im; i++) {
-        this.map.AddShape(new VEShape(VEShapeType.Pushpin, pins[i]));
-    }*/
     if (pins.length > 1) {
-        this.obj.SetMapView(pins);
+        var bounds = new google.maps.LatLngBounds();
+        for (var i = pins.length; i--;) {
+            bounds.extend(pins[i]);
+        }
+        this.obj.fitBounds(bounds);
     } else {
-        this.obj.SetCenterAndZoom(pins[0] || this.defpoint, 4);
+        this.obj.setCenter(pins[0] || this.defpoint);
+        this.obj.setZoom(5);
     }
+},
+clean: function() {
+    for (var i = this.lines.length; i--;) {
+        this.lines[i].setMap(null);
+    }
+    this.lines.length = 0;
 }
 };

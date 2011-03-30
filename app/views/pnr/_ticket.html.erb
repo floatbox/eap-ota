@@ -19,7 +19,7 @@
 </tbody>
 <tbody valign="top">
 <tr>
-    <td colspan="6" class="pad_null"><br></td>
+    <td colspan="6" class="pad_null">&nbsp;<br></td>
 </tr>
 <tr valign="bottom">
     <td class="pad_null">
@@ -31,7 +31,7 @@
     </td>
 </tr>
 <tr>
-    <td colspan="6" class="pad_null"><font size="2" style="font-size: 8px;"><br></font></td>
+    <td colspan="6" class="pad_null"><font size="2" style="font-size: 8px;">&nbsp;<br></font></td>
 </tr>
 <tr>
     <td class="pad_null">
@@ -60,7 +60,7 @@
 </tbody>
 <tbody valign="top">
 <tr>
-    <td colspan="6" class="pad_null"><font size="3"><br></font></td>
+    <td colspan="6" class="pad_null"><font size="3">&nbsp;<br></font></td>
 </tr>
 <tr valign="bottom">
     <td class="pad_null">
@@ -75,7 +75,7 @@
     <td class="pad_null"><br></td>
 </tr>
 <tr>
-    <td colspan="6" class="pad_null"><font size="2"><br></font></td>
+    <td colspan="6" class="pad_null"><font size="2">&nbsp;<br></font></td>
 </tr>
 <% for flight, booking_class in @pnr.flights.zip(@pnr.booking_classes) %>
 <tr>
@@ -106,7 +106,7 @@
 </tr>
 <% end %>
 <tr>
-    <td colspan="6" class="pad_null"><font size="2"><br></font></td>
+    <td colspan="6" class="pad_null"><font size="2">&nbsp;<br></font></td>
 </tr>
 </tbody>
 <tbody valign="top">
@@ -118,7 +118,7 @@
     </td>
 </tr>
 <tr>
-    <td colspan="6" class="pad_null"><font size="3"><br></font></td>
+    <td colspan="6" class="pad_null"><font size="3">&nbsp;<br></font></td>
 </tr>
 </tbody>
 <tbody valign="top">
@@ -145,7 +145,7 @@
         <%= @pnr.order.price_fare.ceil.to_i %> RUB<br>
         <%= @pnr.order.price_tax_and_markup.ceil.to_i %> RUB<br>
         <%= @pnr.order.price_total.ceil.to_i %> RUB<br>
-        Cash<br>
+        Invoice<br>
         <%= @pnr.order.created_at.strftime('%d.%m.%y') %>
         </font>
     <% end %>
@@ -167,8 +167,8 @@
     <td class="pad_null" style="text-align: center; font-size: 24px; line-height: 1.25; letter-spacing: -0.02em;" colspan="6">
     <font size="5"><br></font>
     <center>
-        <font family="Arial" size="5"><strong>Спасибо за то, что забронировали на <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
-        <font family="Arial" size="5"><strong>Thank you for booking at <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
+        <font family="Arial" size="5"><strong>Спасибо за покупку на <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
+        <font family="Arial" size="5"><strong>Thank you for purchase at <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
     </center>
     </td>
 </tbody>

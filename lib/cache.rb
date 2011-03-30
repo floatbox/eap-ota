@@ -10,6 +10,7 @@ class Cache
 
   def self.read(type, key)
     Marshal.load(File.read(filename_for(type, key)))
+  rescue Errno::ENOENT
   end
 
   def self.write(type, key, data)

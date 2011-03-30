@@ -10,6 +10,7 @@ module CommissionRules
   attr_accessor :carrier, :agent, :subagent,
     :disabled, :not_implemented, :no_commission,
     :interline, :domestic, :international, :classes, :subclasses,
+    :routes,
     :departure, :departure_country, :important,
     :check, :examples, :agent_comments, :subagent_comments, :source
 
@@ -24,6 +25,7 @@ module CommissionRules
     applicable_classes?(recommendation) and
     applicable_subclasses?(recommendation) and
     applicable_custom_check?(recommendation) and
+    applicable_routes?(recommendation) and
     applicable_geo?(recommendation)
   end
 
@@ -80,6 +82,11 @@ module CommissionRules
     return true unless domestic || international
     raise "wtf?" if domestic && international
     domestic && recommendation.domestic? || international && recommendation.international?
+  end
+
+  def applicable_routes? recommendation
+    return true unless routes
+    routes.include? recommendation.route
   end
 
   def share(fare)
@@ -216,6 +223,11 @@ module CommissionRules
     # внешние авиалинии
     def international
       opts[:international] = true
+    end
+
+    # пока принимает уже готовый массив
+    def routes routes
+      opts[:routes] = routes
     end
 
     def subclasses *subclasses

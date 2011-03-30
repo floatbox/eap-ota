@@ -6,9 +6,14 @@ class Region < ActiveRecord::Base
   scope :important, where("importance > 0")
   scope :not_important, where("importance = 0")
   scope :with_country, includes(:country)
+  attr_writer :main_city_iatas_as_text #хак для typus
 
   def name
     name_ru || name_en
+  end
+
+  def main_city_iatas_as_text
+    main_city_iatas.join(', ')
   end
 
   def main_city_iatas

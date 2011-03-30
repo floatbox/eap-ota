@@ -325,9 +325,6 @@
 }
 
 /* Прочее - общие свойства */
-.booking fieldset legend {
-    display: none;
-}
 .booking .b-pseudo {
     color: inherit;
 }
@@ -861,7 +858,7 @@
         color: #6e6e6e;
     }
 
-    .book-bc .bc-bill tfoot td {
+    .book-bc .bc-bill-hints td {
         padding: 6px 0 0 0;
         font-size: 12px;
         line-height: 15px;

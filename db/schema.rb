@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110318171550) do
+ActiveRecord::Schema.define(:version => 20110328120349) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -210,26 +210,28 @@ ActiveRecord::Schema.define(:version => 20110318171550) do
     t.string   "pnr_number"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "price_total",                   :precision => 9, :scale => 2, :default => 0.0, :null => false
+    t.decimal  "price_total",                   :precision => 9, :scale => 2, :default => 0.0,     :null => false
     t.string   "commission_carrier"
     t.string   "commission_agent"
     t.string   "commission_subagent"
-    t.decimal  "price_share",                   :precision => 9, :scale => 2, :default => 0.0, :null => false
-    t.decimal  "price_our_markup",              :precision => 9, :scale => 2, :default => 0.0, :null => false
-    t.decimal  "price_with_payment_commission", :precision => 9, :scale => 2, :default => 0.0, :null => false
+    t.decimal  "price_share",                   :precision => 9, :scale => 2, :default => 0.0,     :null => false
+    t.decimal  "price_our_markup",              :precision => 9, :scale => 2, :default => 0.0,     :null => false
+    t.decimal  "price_with_payment_commission", :precision => 9, :scale => 2, :default => 0.0,     :null => false
     t.string   "order_id"
     t.string   "full_info"
-    t.string   "payment_status"
-    t.decimal  "price_fare",                    :precision => 9, :scale => 2, :default => 0.0, :null => false
-    t.decimal  "price_tax_and_markup",          :precision => 9, :scale => 2, :default => 0.0, :null => false
+    t.string   "payment_status",                                              :default => "new"
+    t.decimal  "price_fare",                    :precision => 9, :scale => 2, :default => 0.0,     :null => false
+    t.decimal  "price_tax_and_markup",          :precision => 9, :scale => 2, :default => 0.0,     :null => false
     t.string   "ticket_status"
-    t.decimal  "price_consolidator_markup",     :precision => 9, :scale => 2, :default => 0.0, :null => false
+    t.decimal  "price_consolidator_markup",     :precision => 9, :scale => 2, :default => 0.0,     :null => false
     t.string   "name_in_card"
     t.string   "last_digits_in_card"
-    t.text     "commission_agent_comments",                                                    :null => false
-    t.text     "commission_subagent_comments",                                                 :null => false
-    t.string   "source"
+    t.text     "commission_agent_comments",                                                        :null => false
+    t.text     "commission_subagent_comments",                                                     :null => false
+    t.string   "source",                                                      :default => "other"
     t.string   "sirena_lead_pass"
+    t.string   "code"
+    t.string   "description"
   end
 
   create_table "payments", :force => true do |t|

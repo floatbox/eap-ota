@@ -1,14 +1,14 @@
 module Amadeus
   module Request
     class FareMasterPricerTravelBoardSearch < Amadeus::Request::Base
-      attr_accessor :people_count, :nonstop, :segments, :cabin_list
+      attr_accessor :people_count, :nonstop, :segments, :cabin
 
       def initialize(opts)
         if opts.is_a? Hash
           super
         else
           @people_count = opts.real_people_count
-          @cabin_list = opts.cabin_list
+          @cabin = opts.cabin
           @segments = opts.form_segments
         end
       end

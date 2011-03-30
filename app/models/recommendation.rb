@@ -14,8 +14,10 @@ class Recommendation
   attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
     :suggested_marketing_carrier_iatas, :availabilities
 
+  attr_accessor :sirena_blank_count
+
   delegate :marketing_carriers, :marketing_carrier_iatas,
-    :city_iatas, :airport_iatas, :country_iatas,
+    :city_iatas, :airport_iatas, :country_iatas, :route,
       :to => 'variants.first'
 
   def availability
@@ -53,11 +55,11 @@ class Recommendation
   end
 
   def international?
-    country_iatas.size > 1
+    country_iatas.uniq.size > 1
   end
 
   def domestic?
-    country_iatas == [validating_carrier.country.iata]
+    country_iatas.uniq == [validating_carrier.country.iata]
   end
 
   def clear_variants
@@ -67,7 +69,7 @@ class Recommendation
 
   def valid_interline?
     not interline? or
-    other_marketing_carrier_iatas.all? do |iata|
+    other_marketing_carrier_iatas.uniq.all? do |iata|
       validating_carrier.interline_with?(iata)
     end
   end
@@ -178,19 +180,6 @@ class Recommendation
 
     merged
   end
-
-  def self.load_from_cache(recommendation_number)
-    # shouldn be neccessary, no?
-    require 'segment'
-    require 'variant'
-    require 'flight'
-    Cache.read('recommendation', recommendation_number)
-  end
-
-  def self.store_to_cache(recommendation_number, recommendation)
-    Cache.write('recommendation', recommendation_number, recommendation)
-  end
-
 
   def variants_by_duration
     variants.sort_by(&:total_duration)
@@ -465,7 +454,7 @@ class Recommendation
     itinerary.split.each do |fragment|
       flight = Flight.new
       # defaults
-      carrier, subclass, cabin = default_carrier, 'Y', 'M'
+      carrier, operating_carrier, subclass, cabin = default_carrier, nil, 'Y', 'M'
       fragment.upcase.split('/').each do |code|
         case code.length
         when 6
@@ -476,6 +465,8 @@ class Recommendation
           subclass = code
         else
           case code
+          when /^(..):(..)$/
+            operating_carrier, carrier = $1, $2
           when 'ECONOMY'
             cabin = 'M'
           when 'BUSINESS'
@@ -488,6 +479,7 @@ class Recommendation
         end
       end
       flight.marketing_carrier_iata = carrier
+      flight.operating_carrier_iata = operating_carrier || carrier
       segments << Segment.new(:flights => [flight])
       subclasses << subclass
       cabins << cabin

@@ -88,8 +88,9 @@ City:
 Order:
   fields:
     default: order_id, pnr_number, email, phone, updated_at
-    list: source, pnr_number, email, phone, created_at, price_total, payment_status, ticket_status
-    show: order_id, source, pnr_number, payment_status, ticket_status, email, phone, name_in_card, last_digits_in_card, full_info, price_total, price_fare, price_share, price_our_markup, price_consolidator_markup, price_with_payment_commission, commission_carrier, commission_agent_comments, commission_subagent_comments, created_at, updated_at
+    list: source, pnr_number, email, phone, created_at,  price_with_payment_commission, payment_status, ticket_status
+    show: order_id, source, pnr_number, description, payment_status, ticket_status, email, phone, name_in_card, last_digits_in_card, full_info, price_total, price_fare, price_share, price_our_markup, price_consolidator_markup, price_with_payment_commission, commission_carrier, commission_agent_comments, commission_subagent_comments, created_at, updated_at
+    new: description, price_total
     csv:  source, pnr_number, email, created_at, updated_at, price_total, price_share, price_our_markup, price_consolidator_markup, price_with_payment_commission, full_info, payment_status, ticket_status
     options:
       read_only: commission_carrier, commission_agent_comments, commission_subagent_comments
@@ -141,6 +142,23 @@ HotOffer:
   search: description, url
   application: Hot Offers
 
+Payment:
+  fields:
+    default: price, description, payment_status
+    list: price, description, created_at, url, payment_status
+    new: price, description, url
+    show: price, description, name_in_card, last_digits_in_card
+    options:
+      read_only: url
+      date_formats:
+        created_at: long
+  options:
+    default_action_on_item: show
+  filters:
+  search: description, name_in_card, last_digits_in_card
+  order_by: -created_at
+  application: Orders
+
 Region:
   fields:
     default: name_ru, name_en, country
@@ -158,9 +176,9 @@ Country:
   fields:
     default: alpha2, name_ru, name_en, full_name_ru, continent, importance, synonym_list
     list: alpha2, name_ru, name_en, full_name_ru, continent, importance, synonym_list
-    form: name_ru, name_en, full_name_ru, alpha2, alpha3, iso, continent, continent_part_ru, importance, synonym_list, lat, lng, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in
+    form: name_ru, name_en, full_name_ru, alpha2, alpha3, iso, continent, continent_part_ru, importance, synonym_list, lat, lng, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in, main_city_iatas_as_text
     options:
-      read_only: morpher_to, morpher_from, morpher_in
+      read_only: morpher_to, morpher_from, morpher_in, main_city_iatas_as_text
       selectors: continent
   order_by: name_ru
   relationships: carriers, airports, cities, geo_tags, regions

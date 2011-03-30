@@ -5,7 +5,7 @@ init: function() {
     this.content = this.el.find('.odcontent');
     this.width = 710;
     this.offset = 115;
-    this.grid = [15, 30, 60, 90, 120, 180, 240, 360];
+    this.grid = [15, 30, 60, 90, 120, 180, 240, 360, 480, 720, 1440];
     var that = this;
     this.content.delegate('.segment', 'click', function(event) {
         event.preventDefault();
@@ -32,23 +32,31 @@ update: function() {
             this.variants.push(variant);
         }
     }
-    this.content.html('');
-    this.options = $.parseJSON($('#offers-options').attr('data-segments'));
-    this.segments = [];
-    var template = '<div class="odhsegment"><h5>{from} — {to}</h5><h6>{date}</h6></div>';
-    var row = this.header.find('.odhsegments tr').find('td').remove().end();
-    for (var s = 0; s < results.samount; s++) {
-        this.segments[s] = this.getSegment(s);
-        this.segments[s].el = $('<div class="odsegment"/>').data('segment', s).hide().appendTo(this.content);
-        $('<td class="odhs' + (s + 1) + '"></td>').data('segment', s).html(template.supplant(this.options[s])).appendTo(row);
-        this.drawSegment(s);
+    this.content.height(this.content.height()).html('');
+    if (this.variants.length !== 0) {
+        this.options = $.parseJSON($('#offers-options').attr('data-segments'));
+        this.segments = [];
+        var template = '<div class="odhsegment"><h5>{from} — {to}</h5><h6>{date}</h6></div>';
+        var row = this.header.find('.odhsegments tr').find('td').remove().end();
+        for (var s = 0; s < results.samount; s++) {
+            this.segments[s] = this.getSegment(s);
+            this.segments[s].el = $('<div class="odsegment"/>').data('segment', s).hide().appendTo(this.content);
+            $('<td class="odhs' + (s + 1) + '"></td>').data('segment', s).html(template.supplant(this.options[s])).appendTo(row);
+            this.drawSegment(s);
+        }
+        if (this.segments.length > 1) {
+            $('<td class="odh-tip">Обратите внимание, что не все варианты перелёта <span class="odh-direction1">туда</span> совместимы с&nbsp;любым вариантом перелёта <span class="odh-direction2">обратно</span>.</td>').appendTo(row);
+        }
+        this.selected = [];
+        this.header.show();
+        this.updateSegments();
+        this.showSegment(0);
+        this.content.height('auto');
+    } else {
+        this.header.hide();
+        this.content.append($('#offers-pcollection').prev().clone()).height('auto');
+        this.el.find('.offer').addClass('latent');
     }
-    if (this.segments.length > 1) {
-        $('<td class="odh-tip">Обратите внимание, что не все варианты перелёта <span class="odh-direction1">туда</span> совместимы с&nbsp;любым вариантом перелёта <span class="odh-direction2">обратно</span>.</td>').appendTo(row);
-    }
-    this.selected = [];
-    this.updateSegments();
-    this.showSegment(0);
 },
 showVariant: function() {
     var variant;
@@ -145,7 +153,7 @@ drawSegment: function(s) {
         if (prices.length > 1) {
             prices = prices.unique();
             if (prices.length > 1) {
-                item.find('.a-button').html('От ' + prices[0] + ' Р');
+                item.find('.a-button').html('от ' + prices[0] + '&nbsp;р.');
             }
         }
     }
@@ -263,6 +271,8 @@ parseBars: function() {
     }
 },
 formatTime: function(t) {
-    return Math.floor((t % 1440) / 60) + ':' + (t % 60 / 100).toFixed(2).substring(2);
+    if (t < 0) t += 1440;
+    var h = Math.floor((t % 1440) / 60), hh = h < 10 ? ('<span class="zero">0</span>' + h) : h;
+    return hh + ':' + (t % 60 / 100).toFixed(2).substring(2);
 }
 };

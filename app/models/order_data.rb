@@ -9,7 +9,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
   attr_accessor :pnr_number
   attr_accessor :people_count
   attr_accessor :number
-  attr_accessor :order_id
   attr_accessor :sirena_lead_pass
   attr_reader :order # то, что сохраняется в базу
   attr_accessor :variant_id #нужен при восстановлении формы по урлу
@@ -75,18 +74,21 @@ class OrderData < ActiveRecord::BaseWithoutTable
     [recommendation, people_count, people, card].hash
   end
 
-  def store_to_cache
+  def save_to_cache
     self.number ||= ShortUrl.random_hash
     Cache.write("order_data", number, self)
   end
 
-  def self.get_from_cache(cache_number)
-    require 'segment'
-    require 'variant'
-    require 'flight'
-    require 'recommendation'
-    require 'person'
-    Cache.read("order_data", cache_number)
+  class << self
+    def load_from_cache(cache_number)
+      require 'segment'
+      require 'variant'
+      require 'flight'
+      require 'recommendation'
+      require 'person'
+      Cache.read("order_data", cache_number)
+    end
+    alias :[] load_from_cache
   end
 
   def variant
@@ -127,8 +129,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
 
   def block_money
-    payment = Payment.create(:price => recommendation.price_with_payment_commission, :card => @card, :order => order)
-    response = payment.payture_block
+    response = order.block_money(card)
 
     if response.error?
       card.errors.add :number, "не удалось провести платеж"
@@ -172,7 +173,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
             amadeus.ticket_create_tst_from_pricing(:fares_count => fares_count).or_fail!
           end
 
-          self.order_id = 'am' + pnr_number
           amadeus.pnr_commit_really_hard do
             add_passport_data(amadeus)
             # делается автоматически, настройками booking office_id
@@ -201,7 +201,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
       unless response.error
         self.pnr_number = response.pnr_number
         if pnr_number
-          self.order_id = "si#{rand(655535).to_s(36)}"
           self.sirena_lead_pass = response.lead_family
           @order = Order.create(:order_data => self)
           return pnr_number
@@ -245,7 +244,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
 
   def self.create_sample_booking(cache_key)
-    order = OrderData.get_from_cache(cache_key)
+    order = OrderData.load_from_cache(cache_key)
     order.email = 'email@example.com'
     order.phone = '12345678'
     order.people_count = {:infants => 1, :children => 1, :adults => 2}

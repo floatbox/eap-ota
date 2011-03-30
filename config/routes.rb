@@ -11,6 +11,8 @@ Eviterra::Application.routes.draw do
   match 'booking/preliminary_booking' => 'booking#preliminary_booking', :as => :preliminary_booking
   match '/confirm_3ds/:order_id' => 'booking#confirm_3ds', :as => :confirm_3ds
   match 'order/:id' => 'PNR#show', :as => :show_order
+  match '/pay/:code' => 'payments#edit', :via => :get, :as => :edit_payment
+  match '/pay/:code' => 'payments#update', :via => :post, :as => :edit_payment
 
   resources :geo_tags
 
@@ -83,3 +85,4 @@ Eviterra::Application.routes.draw do
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id(.:format)))'
 end
+
