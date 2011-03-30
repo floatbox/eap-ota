@@ -8,14 +8,13 @@ module Sirena
 
       def parse
         self.datas = []
-        descr = xpath("//describe")[0].attribute("data")
-        self.data_type = descr && descr.value
+        self.data_type = at_xpath("//describe")["data"]
         xpath("//describe/data").each do |data|
           d = {}
           data.children.each{|ch|
             unless ch.name.blank? || ch.name.strip.blank?
               name = ch.name.strip.to_sym
-              lang = ch.attribute("lang") && ch.attribute("lang").value
+              lang = ch["lang"]
               if !lang.blank?
                 lang = lang.strip.to_sym
                 d[name] = {} if d[name].blank?
@@ -23,8 +22,9 @@ module Sirena
               elsif !ch.children.blank?
                 d[name]={}
                 ch.children.each{|subclass|
-                  klass = subclass.attribute("class") && subclass.attribute("class").value.strip
+                  klass = subclass["class"]
                   if klass
+                    klass.strip!
                     d[name][klass] ||= []
                     d[name][klass] << subclass.text
                   end

@@ -44,7 +44,7 @@ class BookingController < ApplicationController
             logger.info "Pay: sirena ticketing"
             err_msg = Sirena::Adapter.approve_payment(@order.order)
             if err_msg
-              logger.info "Pay: sirena ticketing error "+err_msg
+              logger.info "Pay: sirena ticketing error " + err_msg
               render :partial => 'fail', :locals => {:errors => err_msg}
               return
             end

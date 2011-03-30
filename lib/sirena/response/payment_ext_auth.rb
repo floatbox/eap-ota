@@ -5,13 +5,12 @@ module Sirena
       attr_accessor :cost, :curr, :common_status
 
       def parse
-        @cost = xpath("///cost")[0]
+        @cost = at_xpath("//cost")
         if @cost
-          @curr = @cost.attribute("curr") && @cost.attribute("curr").value
+          @curr = @cost["curr"]
           @cost = @cost.text
         end
-        @common_status = xpath("///common_status")
-        @common_status = @common_status.text if @common_status
+        @common_status = xpath("//common_status").text
       end
     end
   end
