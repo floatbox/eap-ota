@@ -1352,25 +1352,24 @@ example 'DMEBSL/Q BSLDME/W'
 example 'DMEVDA/V VDADME/V'
 agent    "7% от опубл. тарифов по маршрутам DME-BSL-DME; DME-VDA-DME на собств.рейсы NN"
 subagent "5% от опубл. тарифов по маршрутам DME-BSL-DME; DME-VDA-DME на собств.рейсы NN"
-disabled
+routes %W(MOW-BSL-MOW MOW-VDA-MOW)
 commission "7%/5%"
 
 example 'SVXDME/W DMESVX/T'
 example 'KRRDME/W DMEKRR/W'
 agent    "C 29.11.2010г. 7% от опубл. тарифов по маршрутам SVX-DME-SVX; KRR-DME-KRR на собств.рейсы NN"
 subagent "5% от опубл.тарифов по маршрутам SVX-DME-SVX; KRR-DME-KRR на собств.рейсы NN"
-disabled
+routes %W(SVX-MOW-SVX KRR-MOW-KRR)
 commission "7%/5%"
 
 example 'DMEBCN/Q BCNDME/Q'
 agent    "5% от всех опубл. тарифов по другим маршрутам на собств.рейсы NN"
 agent    "(В договоре Interline не прописан.)"
 subagent "3,5% от всех опубл. тарифов по другим маршрутам на собств.рейсы NN"
-disabled
 commission "5%/3.5%"
 
-example 'DMEKRR/W KRRDME'
-disabled 'а так можно?'
+#example 'DMEKRR/W KRRDME'
+#disabled 'а так можно?'
 
 carrier "NZ", "AIR NEW ZEALAND (НЕ BSP!!!)"
 ########################################
