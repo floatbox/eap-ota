@@ -1823,15 +1823,16 @@ agent    "7% от опубл. тарифов на собств. рейсы VS"
 subagent "5% от опубл. тарифов на собств.рейсы VS"
 commission "7%/5%"
 
+example 'svolhr/ba lhrcce'
 agent    "7% от опубл. тарифов на рейсы Interline (до Лондона: BD, BA, SU), выписанные на ОДНОМ бланке. Первый трансатлантический перелет на Virgin Atlantic является обязательным."
 subagent "5% от опубл. тарифов на рейсы Interline (до Лондона: BD, BA, SU), выписанные на ОДНОМ бланке. Первый трансатлантический перелет на Virgin Atlantic является обязательным."
-interline :first
-disabled #только до Лондона, гемор с бланком и правило интерлайна хитровыебанное - не первый перелет, а первый трансатлантический им надо
-#newinterline
-#unknown
-#geo
-not_implemented
+interline :yes
+# FIXME надо ли проверять трансатлантику?
+check { %W(BD BA SU).include?(marketing_carrier_iatas.first) && marketing_carrier_iatas.second == 'VS' }
 commission "7%/5%"
+
+example 'svocdg cdgsvo/ab'
+no_commission
 
 carrier "VV", "AEROSVIT"
 ########################################
