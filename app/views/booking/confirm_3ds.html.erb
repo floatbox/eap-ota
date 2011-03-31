@@ -28,6 +28,9 @@
             _gaq.push(['_addTrans', '<%= @pnr_number %>', '', '<%= @order.price_total.round.to_i %>']);
             _gaq.push(['_trackTrans']);
         }
+        if (window.yaCounter5324671) {
+            yaCounter5324671.hit('/#3ds:success');
+        }
         </script>
         <% end %>
     <% end %>

@@ -68,6 +68,9 @@ show: function() {
         if (window._gaq) {
             _gaq.push(['_trackPageview', '/#' + url]);
         }
+        if (window.yaCounter5324671) {
+            yaCounter5324671.hit('/#' + url);
+        }
         this.summary = url;
     } else {
         window.location.hash = '';
