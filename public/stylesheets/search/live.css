@@ -10,6 +10,7 @@
 .live-content {
     width: 960px;
     margin: 0 auto;
+    overflow: hidden;
 }
 .live-stator {
     position: relative;

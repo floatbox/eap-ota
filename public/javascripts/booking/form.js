@@ -319,7 +319,7 @@ comparePrice: function() {
     }
 },
 fasten: function(offer) {
-    if (browser.search(/ipad|iphone|msie6|msie7/) !== -1) return;
+    if (browser.scanty) return;
     var wrapper = $('#wrapper');
     var ot = offer.offset().top, ob = wrapper.height() - ot - offer.height();
     var cst = $(window).scrollTop();
@@ -337,7 +337,7 @@ fasten: function(offer) {
 },
 unfasten: function() {
     var wrapper = $('#wrapper');
-    if (browser.search(/ipad|iphone|msie6|msie7/) === -1 && wrapper.hasClass('cropped')) {
+    if (!browser.scanty && wrapper.hasClass('cropped')) {
         $('#header').show();
         $('#canvas').css({
             'margin-top': 0,

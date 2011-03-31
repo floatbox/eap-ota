@@ -20,9 +20,9 @@
         <td><%= decorated_price @order.recommendation.price_with_payment_commission, 'b', 'i' %></td>
     </tr>
     <tr class="bc-bill-hints">
-        <td>стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами</td>
+        <td><p style="width: 165px;">стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами</p></td>
         <td></td>
-        <td>комиссия банка за&nbsp;проведение платежа</td>
+        <td><p style="width: 185px;">комиссия банка за&nbsp;проведение платежа</p></td>
         <td></td>
         <td></td>
     </tr>

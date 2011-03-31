@@ -184,7 +184,7 @@ $.animateScrollTop = function(st, complete) {
 var fixedBlocks = {
 init: function() {
     var that = this;
-    if (browser.search(/ipad|iphone|msie6|msie7|opera/) !== -1) {
+    if (browser.scanty) {
         this.update = function() {};
         this.toggle = function() {};
     } else {
@@ -250,9 +250,13 @@ function preload() {
 var browser = (function() {
     var os = navigator.platform.toLowerCase().match(/mac|win|linux|ipad|iphone/);
     var agent = navigator.userAgent.toLowerCase().match(/safari|opera|msie \d|firefox|chrome/);
-    agent = agent && agent[0].replace(/\s/, '');
-    var browser = os && agent ? os + " " + agent : undefined;
-    if (agent == 'msie6') try {document.execCommand('BackgroundImageCache', false, true);} catch(e) {}
-    if (browser) $(document.documentElement).addClass(browser);
+    var browser = {
+        platform: os ? os[0] : '',
+        name: agent ? agent[0].replace(/\s/, '') : ''
+    };
+    var $d = $(document.documentElement);
+    if (browser.platform) $d.addClass(browser.platform);
+    if (browser.name) $d.addClass(browser.name);
+    if (agent === 'msie6') try {document.execCommand('BackgroundImageCache', false, true);} catch(e) {}
     return browser;
 })();

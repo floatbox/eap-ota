@@ -1,5 +1,9 @@
 ﻿(function() {
 
+    // Браузеры с упрощенными эффектами
+    browser.scanty = (browser.platform.search(/ipad|iphone/) !== -1 || browser.name.search(/msie6|msie7|opera/) !== -1);
+
+    // Инициализация блоков
     search.init();
     results.init();
     results.filters.init();
@@ -21,7 +25,7 @@
         app.booking.el = $('<div class="booking"></div>').appendTo($('#offers'));
         app.booking.load(pageurl.booking);
     }
-    
+
     // Прямой эфир
     search.live.init();
 
@@ -53,5 +57,5 @@
 
     // Всплывающие подсказки
     hint.init();
-    
+
 })();
