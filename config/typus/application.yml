@@ -111,9 +111,9 @@ Order:
 
 Payment:
   fields:
-    default: price, created_at, name_in_card, last_digits_in_card, payture_state, reject_reason
-    list: price, created_at, name_in_card
-    show: price, created_at, last_digits_in_card, name_in_card, reject_reason, order
+    default: ref, price, created_at, name_in_card, last_digits_in_card, payture_state, reject_reason
+    default: ref, price, created_at, name_in_card, last_digits_in_card, payture_state, reject_reason
+    show: ref, price, created_at, last_digits_in_card, name_in_card, reject_reason, order
     options:
       date_formats:
         created_at: long
