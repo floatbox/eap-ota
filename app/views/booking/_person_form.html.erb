@@ -163,7 +163,7 @@
                  :onclick => "return {mask: /[ a-z\\d]/i, rules: {req: true, minl: 1, gender: 'M'}}"
                 %>
                 <%= person.error_message_on :passport, :id => "error_person_#{person_form_counter}_passport" %>
-                <div class="symbols-warning">Вводите только латинские буквы и цифры — с пробелами или без</div>
+                <div class="symbols-warning">Вводите только цифры и латинские буквы — с пробелами или без</div>
             <td>
                 <input type="text"
                  id="bp-<%=person_form_counter%>-expires-d"

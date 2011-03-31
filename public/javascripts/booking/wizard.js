@@ -269,7 +269,7 @@ ptp.dates = function($dd, $mm, $yyyy) {
 
 ptp.passport = function($passport) {
     var warning = $passport.eq(0).closest('tr').find('.symbols-warning');
-    var mask = /[ёа-я]/i;
+    var mask = /[ёа-я№#\-]/i;
     var active = false;
     var hwtimer, hideWarning = function() {
         clearTimeout(hwtimer);
