@@ -15,4 +15,10 @@ module ApplicationHelper
     return "#{number}й" unless (1..9) === number.to_i
     %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}[number - 1]
   end
+
+  #для тайпуса
+  def display_date item, attribute
+    item.send(attribute).strftime("%d %b %Y")
+  end
 end
+

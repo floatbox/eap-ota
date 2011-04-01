@@ -10,6 +10,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   attr_accessor :people_count
   attr_accessor :number
   attr_accessor :sirena_lead_pass
+  attr_accessor :last_tkt_date
   attr_reader :order # то, что сохраняется в базу
   attr_accessor :variant_id #нужен при восстановлении формы по урлу
 
@@ -163,6 +164,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
           amadeus.pnr_commit_really_hard do
             resp = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier).or_fail!
             fares_count = resp.fares_count
+            self.last_tkt_date = resp.last_tkt_date
             prices = resp.prices
             unless [recommendation.price_fare, recommendation.price_tax] == prices
               errors.add :pnr_number, 'Ошибка при создании PNR'

@@ -41,6 +41,7 @@ class Order < ActiveRecord::Base
     self.price_with_payment_commission = recommendation.price_with_payment_commission
     self.full_info = order_data.full_info
     self.sirena_lead_pass = order_data.sirena_lead_pass
+    self.last_tkt_date = order_data.last_tkt_date
     if c = recommendation.commission
       self.commission_carrier = c.carrier
       self.commission_agent = c.agent
@@ -125,6 +126,10 @@ class Order < ActiveRecord::Base
 
   def send_receipt
     PnrMailer.sirena_receipt(email, pnr_number).deliver if source == 'sirena'
+  end
+
+  def display_date date
+    date.strftime("%d %b %Y")
   end
 
 # class methods

@@ -1,8 +1,5 @@
 # encoding: utf-8
 class Admin::OrdersController < Admin::ResourcesController
-  def edit
-    redirect_to :action => :show, :id => params[:id]
-  end
 
   def show_pnr
     order = Order.find(params[:id])
