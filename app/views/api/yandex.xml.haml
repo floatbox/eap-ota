@@ -1,0 +1,20 @@
+!!! XML
+%variants
+  - @recommendations.each do |recommendation|
+    - recommendation.variants.each do |variant|
+      %variant
+        %price= recommendation.price_total
+        %validatingCarrier= recommendation.va
+        - variant.segments.each do |segment|
+          %segment
+            - segment.flights.each do |flight|
+              %flight
+                %departureCode= flight.departure_iata
+                %departureCodeRu= flight.departure.iata_rus
+                %arrivalCode= flight.arrival_iata
+                %arrivalCodeRu= flight.departure.iata_rus
+                %number= flight.flightNumber
+                -# %departureTime=
+                -# %arrivalTime=
+                %marketingCarrierCode= flight.marketing_carrier_iata
+                %operatingCarrierCode= flight.operating_carrier_iata

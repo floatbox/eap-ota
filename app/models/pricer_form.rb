@@ -1,6 +1,14 @@
 # encoding: utf-8
 class PricerForm < ActiveRecord::BaseWithoutTable
 
+  def self.simple(args)
+    form_segments = [ {:from => args[:from], :to => args[:to], :date => args[:date1]} ]
+    if args[:date2]
+      form_segments << {:from => args[:to], :to => args[:from], :date => args[:date2]}
+    end
+    new :form_segments => form_segments
+  end
+
   class FormSegment < ActiveRecord::BaseWithoutTable
     column :from, :string
     column :to, :string
