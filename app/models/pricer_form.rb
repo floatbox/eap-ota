@@ -87,6 +87,8 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   delegate :to, :from, :from_iata, :to_iata, :to => 'form_segments.first'
 
   attr_reader :complex_to_parse_results
+  attr_accessor :query_key
+  attr_accessor :partner
 
   def date1
     form_segments.first.date
@@ -101,7 +103,8 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     [date1]
   end
 
-  def save_to_cache(query_key)
+  def save_to_cache
+    self.query_key ||= ShortUrl.random_hash
     Cache.write('pricer_form', query_key, self)
   end
 
