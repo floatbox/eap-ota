@@ -1183,13 +1183,11 @@ agent    "1 euro с билета по опубл. тарифам на рейсы
 subagent "5 руб. с билета по опубл. тарифам на рейсы LO;"
 commission "1eur/5"
 
-agent ""
+example "svocdg cdgsvo/ab"
+agent "отсутствует в договоре, но считаем равным обычным тарифам"
 subagent "5 руб. с билета по опубл. тарифам на рейсы Interline с участком LO."
 interline :yes
-disabled #нет агентской ставки в случае интерлайна
-#geo
-not_implemented
-commission "nil/5"
+commission "1eur/5"
 
 carrier "LX", "SWISS"
 ########################################
