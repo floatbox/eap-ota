@@ -128,10 +128,6 @@ class Order < ActiveRecord::Base
     PnrMailer.sirena_receipt(email, pnr_number).deliver if source == 'sirena'
   end
 
-  def display_date date
-    date.strftime("%d %b %Y")
-  end
-
 # class methods
 
   # FIXME надо какой-то логгинг
