@@ -117,7 +117,7 @@
           -# внимание, бронирование сбрасывается с НАСТУПЛЕНИЕМ даты
           -# для времени жизни сутки-двое надо выставлять +2.days
           -# FIXME привинтить время
-          %date= (Date.today + 2.day).strftime("%d%m%y")
+          %date= tk_xl_date
     %dataElementsIndiv
       %elementManagementData
         %reference
@@ -185,3 +185,4 @@
               %percentage= commission.agent_value
             -else
               %amount= commission.agent_value
+
