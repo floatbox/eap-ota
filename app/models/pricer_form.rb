@@ -18,7 +18,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       record = Completer.record_from_string(name) rescue nil
       if record
         if record.code && (['country', 'city', 'airport'].include? record.type)
-          [City[record.code], Airport[record.code], Country.find_by_alpha2(record.code)].find(&:id)
+          [City[record.code], Airport[record.code], Country[record.code]].find(&:id)
         elsif record.type == 'region'
           Region.first(:conditions => ['name_ru = ? OR name_en = ?', record.name, record.name])
         end

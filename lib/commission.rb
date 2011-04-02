@@ -601,7 +601,7 @@ subagent "0,5% от опубл. тарифа DL на трансатлантич�
 subagent "0,5% от опубл. тарифа других авиакомпаний в комбинации с опубл. тарифом DL на трансатлант.перелет при перевозке, нач.в Европе, Азии или Африке;"
 subagent "0,5% от опубл. тарифа DL при внутренних перелетах по США"
 interline :possible
-check { %W(europe asia africa).include?( Country.find_by_alpha2(country_iatas.first).continent ) }
+check { %W(europe asia africa).include?( Country[country_iatas.first].continent ) }
 commission "1%/0.5%"
 
 example 'cdgsvo/ab'
