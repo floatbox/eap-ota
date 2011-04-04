@@ -2,10 +2,10 @@
 app.booking = {
 init: function() {
     var self = this;
-    var sections = $('.section[onclick]', this.el);
+    /*var sections = $('.section[onclick]', this.el);
     this.steps = $.map(sections, function(el, i) {
         return new (app[el.onclick()])(el, i);
-    });
+    });*/
 
     // Отправка формы
     $('form', this.el).submit(function(event) {
@@ -69,9 +69,9 @@ init: function() {
         rcontrol.addClass('sending');
     });
     this.submit = $('.book-s .a-button', this.el);
-    for (var i = this.steps.length; i--;) {
+    /*for (var i = this.steps.length; i--;) {
         this.steps[i].change();
-    }
+    }*/
     
     // Повторная попытка
     this.el.delegate('a.retry', 'click', function(event) {
@@ -96,6 +96,7 @@ init: function() {
             control.focus();
         });
     });
+    /*
     sections.bind('setready', function() {
         var ready = true, errors = [];
         for (var i = 0, im = self.steps.length; i < im; i++) {
@@ -114,73 +115,10 @@ init: function() {
         }
     });
     sections.eq(0).trigger('setready');
+    */
     
     // Правила тарифов
-    var frPopup = this.el.find('.farerules').click(function(event) {
-        event.stopPropagation();
-    });
-    var frHide = function(event) {
-        if (event.type == 'click' || event.which == 27) {
-            frPopup.hide();
-            $('body').unbind('click keydown', frHide);
-        }
-    };
-    frPopup.find('.close').click(frHide);
-    frPopup.find('.fgrus').click(function() {
-        var rus = $(this).addClass('g-none'), eng = rus.siblings('.fgeng');
-        var text = rus.closest('.fgroup').find('pre');
-        var loading = rus.siblings('.fgloading');
-        if (!eng.data('text')) {
-            eng.data('text', text.html());
-        }
-        if (rus.data('text')) {
-            text.html(rus.data('text'));
-            eng.removeClass('g-none');
-        } else {
-            loading.removeClass('g-none');
-            $.ajax({
-                url: 'https://ajax.googleapis.com/ajax/services/language/translate',
-                dataType: 'jsonp',
-                data: {
-                    q : text.html().substr(0, 5000),
-                    v: '1.0',
-                    langpair: 'en|ru',
-                    format: 'text'
-                },
-                success: function(response) {
-                    var data = response.responseData;
-                    loading.addClass('g-none');
-                    if (data && data.translatedText) {
-                        text.html(data.translatedText);
-                        eng.removeClass('g-none');
-                        rus.data('text', data.translatedText);
-                    } else {
-                        rus.removeClass('g-none');
-                    }
-                },
-                error: function() {
-                    loading.addClass('g-none');
-                    rus.removeClass('g-none');
-                },
-                timeout: 20000
-            });
-        }
-    });
-    frPopup.find('.fgeng').click(function() {
-        var eng = $(this).addClass('g-none');
-        var rus = eng.siblings('.fgrus').removeClass('g-none');
-        rus.closest('.fgroup').find('pre').html(eng.data('text'));
-    });
-    this.el.find('.farerules-link').click(function(event) {
-        event.preventDefault();
-        frPopup.css('top', 0).show();
-        var fh = frPopup.outerHeight(), ft = frPopup.offset().top;
-        var ws = $(window).scrollTop(), wh = $(window).height();
-        frPopup.css('top', Math.min(ws + (wh - fh) / 2, ws + wh - fh - 50) - ft);
-        setTimeout(function() {
-            $('body').bind('click keydown', frHide);
-        }, 20);
-    });
+    this.farerules.init(this.el);
 
     // Прекращение бронирования
     results.filters.el.hide();
@@ -354,5 +292,86 @@ unfasten: function() {
         fixedBlocks.toggle(true);
     }
     this.dstop = 0;
+}
+};
+
+/* Farerules */
+app.booking.farerules = {
+init: function(context) {
+    var that = this;
+    this.selfhide = function(event) {
+        if (event.type == 'click' || event.which == 27) {
+            that.popup.hide();
+            $('body').unbind('click keydown', that.selfhide);
+        }
+    };    
+    this.popup = context.find('.farerules').click(function(event) {
+        event.stopPropagation();
+    });
+    this.popup.find('.close').click(this.selfhide);
+    this.popup.find('.fgrus').click(function() {
+        var rus = $(this).addClass('g-none');
+        var eng = rus.siblings('.fgeng');    
+        that.translate(rus, eng);
+    });
+    this.popup.find('.fgeng').click(function() {
+        var eng = $(this).addClass('g-none');
+        var rus = eng.siblings('.fgrus').removeClass('g-none');
+        rus.closest('.fgroup').find('pre').html(eng.data('text'));
+    });
+    context.find('.farerules-link').click(function(event) {
+        event.preventDefault();
+        that.show();
+    });    
+},
+show: function() {
+    this.popup.css('top', 0).show();
+    var fh = this.popup.outerHeight();
+    var ft = this.popup.offset().top;
+    var ws = $(window).scrollTop();
+    var wh = $(window).height();
+    this.popup.css('top', Math.min(ws + (wh - fh) / 2, ws + wh - fh - 50) - ft);
+    setTimeout(function() {
+        $('body').bind('click keydown', this.selfhide);
+    }, 20);
+},
+translate: function(rus, eng) {
+    var text = rus.closest('.fgroup').find('pre');
+    var loading = rus.siblings('.fgloading');
+    if (!eng.data('text')) {
+        eng.data('text', text.html());
+    }
+    if (rus.data('text')) {
+        text.html(rus.data('text'));
+        eng.removeClass('g-none');
+    } else {
+        loading.removeClass('g-none');
+        $.ajax({
+            url: 'https://ajax.googleapis.com/ajax/services/language/translate',
+            dataType: 'jsonp',
+            data: {
+                q : text.html().substr(0, 5000),
+                v: '1.0',
+                langpair: 'en|ru',
+                format: 'text'
+            },
+            success: function(response) {
+                var data = response.responseData;
+                loading.addClass('g-none');
+                if (data && data.translatedText) {
+                    text.html(data.translatedText);
+                    eng.removeClass('g-none');
+                    rus.data('text', data.translatedText);
+                } else {
+                    rus.removeClass('g-none');
+                }
+            },
+            error: function() {
+                loading.addClass('g-none');
+                rus.removeClass('g-none');
+            },
+            timeout: 20000
+        });
+    }
 }
 };

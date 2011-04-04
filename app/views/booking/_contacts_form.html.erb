@@ -1,40 +1,25 @@
-<div class="section book-c" onclick="return 'Contacts'">
+<div class="section booking-contacts">
 <%= fields_for :order do |o| %>
 <%= o.hidden_field :number %>
 <table>
-<col width="314">
-<col width="313">
 <tr>
     <td>
-        <%= o.text_field :email,
-          :id => "booking-contacts-email",
-          :class => "text g-xl",
-          :value => @order.email || "Адрес электронной почты",
-          :onclick => "return {def: 'Адрес электронной почты', mask: /[^а-яё]/i, rules: {req: true, email: true}}",
-          :title => "электронная почта"
-         %>
-         <%= o.error_message_on :email, 
-           :id => "error_order_email" %>
-    <td>
-        <%= o.text_field :phone,
-          :id => "booking-contacts-phone",
-          :class => "text g-xl",
-          :value => @order.phone || "Номер телефона",
-          :onclick => "return {def: 'Номер телефона', mask: /[\\d \\(\\)\\+-]/i, rules: {req: true, minl: 6}}",
-          :title => "номер телефона"
-         %>
-        <%= o.error_message_on :phone, :id => "error_order_phone" %>
-</tr>
-<tr>
-    <td class="sub g-xxs">
-        <span class="link hint">Для чего он нужен?</span>
-        <p class="htext">Адрес должен быть реально существующим, чтобы вы&nbsp;смогли получить <%= @order.people.size == 1 ? 'ваш электронный билет' : 'ваши электронные билеты' %> и&nbsp;другие полезные инструкции.</p>
+        <h6 class="blabel"><label for="bcontacts-email">Адрес электронной почты</label></h6>
+        <%= o.text_field :email, :id => "bcontacts-email", :class => "bfield" %>
+        <div class="bdescription">
+            <span class="link hint">Для чего он нужен?</span>
+            <p class="htext">Адрес должен быть реально существующим, чтобы вы&nbsp;смогли получить <%= @order.people.size == 1 ? 'ваш электронный билет' : 'ваши электронные билеты' %> и&nbsp;другие полезные инструкции.</p>        
+        </div>
     </td>
-    <td class="sub g-xxs">
-        <span class="link hint">Для чего он нужен?</span>
-        <p class="htext">Телефон нужен для связи в&nbsp;экстренных случаях, например, чтобы уладить затруднения с&nbsp;оплатой или сообщить об&nbsp;изменении расписания.</p>
+    <td>
+        <h6 class="blabel"><label for="bcontacts-phone">Номер телефона</label></h6>
+        <%= o.text_field :phone, :id => "bcontacts-phone", :class => "bfield" %>
+        <div class="bdescription">
+            <span class="link hint">Для чего он нужен?</span>
+            <p class="htext">Телефон нужен для связи в&nbsp;экстренных случаях, например, чтобы уладить затруднения с&nbsp;оплатой или сообщить об&nbsp;изменении расписания.</p>        </div>
+        </div>
     </td>
 </tr>
 </table>
-<% end  %>
+<% end %>
 </div>

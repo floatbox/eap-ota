@@ -1,241 +1,94 @@
 <%= fields_for "person_attributes", person_form, :index => person_form_counter do |person| %>
-<div class="section book-p" onclick="return 'Person'">
-    <table>
-        <colgroup>
-           <col width="224">
-           <col width="224">
-           <col width="217">
-        </colgroup>
-
-        <tr>
-            <td>
-                <label
-                 for="person_attributes_<%=person_form_counter%>_first_name"
-                 class="bold g-s"
-                 title="Имя пассажира латинскими буквами"
-                >Имя</label>
-            </td>
-            <td>
-                <label
-                 for="person_attributes_<%=person_form_counter%>_last_name"
-                 class="bold g-s"
-                 title="Фамилия пассажира латинскими буквами"
-                >Фамилия</label>
-            </td>
-            <td>
-                <label class="bold g-s" title="Пол пассажира">Пол</label>
-            </td>
-        </tr>
-        <tr>
-            <td class="g-middle text-upper">
-                <%= person.text_field :first_name,
-                 :class => "text text-name g-xl",
-                 :title => "имя пассажира",
-                 :onclick => "return {mask: /[a-z]/i, rules: {req: true, minl: 2, latin: true, gender: 'N'}}"
-                %>
-                <%= person.error_message_on :first_name, :id => "error_person_#{person_form_counter}_first_name" %>
-                <div class="language-warning">Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры. Имя&nbsp;и&nbsp;фамилию нужно вводить латинскими буквами</div>
-                <div class="nameorder-warning">Проверьте пожалуйста, что вы не перепутали поля «Имя» и «Фамилия» <span class="link nameorder-replace">Поменять&nbsp;местами</span> или <span class="link">оставить</span> как есть</div>
-            <td class="g-middle text-upper">
-                <%= person.text_field :last_name,
-                 :class => "text text-name g-xl",
-                 :title => "фамилия пассажира",
-                 :onclick => "return {mask: /[a-z]/i, rules: {req: true, minl: 2, latin: true, gender: 'F'}}"
-                 %>
-                 <%= person.error_message_on :last_name,
-                  :id => "error_person_#{person_form_counter}_last_name" %>
-            <td style="vertical-align: middle;">
-
-                <label class="bp-sex bp-sex-m g-xl" title="Мужской" for="book-p-<%= person_form_counter %>-sex-m">
-                <%= person.radio_button :sex,
-                 'm',
-                 :id => "book-p-#{person_form_counter}-sex-m",
-                 :title => "пол пассажира"
-                 %>м
-                </label>
-                <label class="bp-sex bp-sex-f g-xl" title="Женский" for="book-p-<%= person_form_counter %>-sex-f">
-                <%= person.radio_button :sex,
-                 'f',
-                 :id => "book-p-#{person_form_counter}-sex-f",
-                 :title => "пол пассажира"
-                 %>ж
-                </label>
-                <%= person.error_message_on :sex,
-                 :id => "error_person_#{person_form_counter}_sex" %>
-
-        <tr>
-            <td class="g-xxs sub" colspan="2">
-                Латинскими буквами, как в загранпаспорте или банковской карте&nbsp;(<span class="link hint">подробнее</span>)
-                <p class="htext">Имя и&nbsp;фамилия в авиабилете пишутся латинскими буквами. Написание должно быть точно как в&nbsp;документе, по&nbsp;которому будет выполняться полёт. Дефисы и&nbsp;другие знаки нужно пропустить&nbsp;&mdash;&nbsp;разрешены только буквы.</p>
-            <td>
-        <tr class="label">
-            <td>
-                <label
-                 for="book-p-<%=person_form_counter%>-nationality"
-                 class="bold g-s"
-                 title="Гражданство пассажира"
-                >Гражданство</label>
-
-            <td>
-                <label
-                 for="book-p-<%=person_form_counter%>-birth"
-                 class="bold g-s"
-                 title="Дата рождения пассажира в формате дд/мм/гггг"
-                >Дата рождения</label>
-            <td>
-                <label
-                 for="bonus-type-<%=person_form_counter%>"
-                 id="bonus-type-<%=person_form_counter%>-label"
-                 class="bold g-s g-none"
-                 title="Название бонусной программы"
-                >Бонусная программа</label>
-
-        <tr>
-            <td style="vertical-align: middle;">
-                <%= person.select :nationality_id,
-                 grouped_options_for_select(Country.options_for_nationality_select, person_form.nationality_id),
-                 {},
-                 :id => "book-p-#{person_form_counter+1}-nationality",
-                 :class => "text text-value nationality"
-                %>
-                <%= person.error_message_on :nationality,
-                 :id => "error_person_#{person_form_counter}_nationality" %>
-            <td>
-                <input type="text"
-                 id="book-p-<%=person_form_counter%>-birth"
-                 name="person_attributes[<%= person_form_counter %>][birthday(3i)]"
-                 class="text text-dd g-xl"
-                 value="<%= (person_form.birthday && person_form.birthday.day) %>"
-                 title="день рождения"
-                 maxlength="2"
-                 onclick="return {def: 'день', mask: /\d/, rules: {req: true, num: true, min: 1, max: 31, gender: 'M'}}"
-                ><input type="text"
-                 name="person_attributes[<%= person_form_counter %>][birthday(2i)]"
-                 class="text text-mm g-xl"
-                 value="<%= (person_form.birthday && person_form.birthday.month) %>"
-                 title="месяц рождения"
-                 maxlength="2"
-                 onclick="return {def: 'месяц', mask: /\d/, rules: {req: true, num: true, min: 1, max: 12, gender: 'M'}}"
-                ><input type="text"
-                 name="person_attributes[<%= person_form_counter %>][birthday(1i)]"
-                 class="text text-yyyy g-xl"
-                 value="<%= (person_form.birthday && person_form.birthday.year) %>"
-                 title="год рождения"
-                 maxlength="4"
-                 onclick="return {def: 'год', mask: /\d/, rules: {req: true, num: true, min: 1900, max: <%= Date.current.strftime('%Y') %>, gender: 'M'}}"
-                >
-                <%= person.error_message_on :birthday,
-                 :id => "error_person_#{person_form_counter}_birthday" %>
-            <td>
-                <%= person.select :bonuscard_type,
-                 @order.recommendation.validating_carrier.available_bonus_programms.map {|a| [ a.bonus_program_name, a.iata ] },
-                 {},
-                 :id => "bonus-type-#{person_form_counter}",
-                 :class => 'text select-bonus text-value g-xl g-none'
-                %>
-                <%= person.error_message_on :bonuscard_type,
-                 :id => "error_person_#{person_form_counter}_bonuscard_type" %>
-
-        <tr class="label">
-            <td>
-                <label
-                 for="bp-<%=person_form_counter%>-passport"
-                 class="bold g-s"
-                 title="Номер документа, который будет предъявлен при посадке. Если у документа срока действия нет, то поставьте отметку справа от поля."
-                >Номер документа</label>
-            <td>
-                <label
-                 id="bp-<%=person_form_counter%>-expires-label"
-                 for="bp-<%=person_form_counter%>-expires-d"
-                 class="bold g-s"
-                 title="Срок действия документа, который будет предъявлен при посадке. Если у документа срока действия нет, то поставьте отметку справа от поля."
-                >Срок действия документа</label>
-            <td>
-
-
-        <tr>
-            <td>
-                <%= person.text_field :passport,
-                 :id => "booking-person-#{person_form_counter}-passport",
-                 :class => "text text-passport",
-                 :maxlength => '100',
-                 :title => 'номер документа',
-                 :onclick => "return {mask: /[ a-z\\d]/i, rules: {req: true, minl: 1, gender: 'M'}}"
-                %>
-                <%= person.error_message_on :passport, :id => "error_person_#{person_form_counter}_passport" %>
-                <div class="symbols-warning">Вводите только цифры и латинские буквы — с пробелами или без</div>
-            <td>
-                <input type="text"
-                 id="bp-<%=person_form_counter%>-expires-d"
-                 class="text text-dd g-xl"
-                 name="person_attributes[<%= person_form_counter %>][document_expiration_date(3i)]"
-                 value="<%= (person_form.document_expiration_date && person_form.document_expiration_date.day) %>"
-                 title="день окончания действия документа"
-                 maxlength="2"
-                 onclick="return {def: 'день', mask: /\d/, rules: {req: true, num: true, min: 1, max: 31, gender: 'M'}}"
-                ><input type="text"
-                 id="bp-<%=person_form_counter%>-expires-m"
-                 class="text text-mm g-xl"
-                 name="person_attributes[<%= person_form_counter %>][document_expiration_date(2i)]"
-                 value="<%= (person_form.document_expiration_date &&  person_form.document_expiration_date.month) %>"
-                 title="месяц окончания действия документа"
-                 maxlength="2"
-                 onclick="return {def: 'месяц', mask: /\d/, rules: {req: true, num: true, min: 1, max: 12, gender: 'M'}}"
-                ><input type="text"
-                 id="bp-<%=person_form_counter%>-expires-y"
-                 class="text text-yyyy g-xl"
-                 name="person_attributes[<%= person_form_counter %>][document_expiration_date(1i)]"
-                 value="<%= (person_form.document_expiration_date &&  person_form.document_expiration_date.year) %>"
-                 title="год окончания действия документа"
-                 maxlength="4"
-                 onclick="return {def: 'год', mask: /\d/, rules: {req: true, num: true, min: <%= Date.current.strftime('%Y') %>, max: 2050, gender: 'M'}}"
-                >
-
-                <%= person.error_message_on :document_expiration_date,
-                 :id => "error_person_#{person_form_counter}_document_expiration_date" %>
-            <td>
-                <%=person.text_field :bonuscard_number,
-                 :id => "bonus-num-#{person_form_counter}",
-                 :class => 'text input-bonus g-xl g-none',
-                 :maxlength => '50',
-                 :disabled => 'disabled',
-                 :title => 'Номер бонусной карты',
-                 :onclick => "return {def: 'Номер карты', rules: {req: true, minl: 2, gender: 'M'}}"
-                 %>
-                 <%= person.error_message_on :bonuscard_number,
-                  :id => "error_person_#{person_form_counter}_bonuscard_number" %>
-
-        <tr>
-            <td class="sub g-xxs">
-                <span class="link hint" title="Подробнее о документах">Какие нужны документы?</span>
-                <p class="htext">Для полетов внутри страны подходит российский паспорт (для детей&nbsp;&mdash; свидетельство о&nbsp;рождении). Для полетов за&nbsp;рубеж нужен загранпаспорт. Обратите внимание, что помимо загранпаспорта, для въезда во&nbsp;многие страны требуется соответствующая виза (<a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%B7%D0%BE%D0%B2%D1%8B%D0%B5_%D1%82%D1%80%D0%B5%D0%B1%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_%D0%B4%D0%BB%D1%8F_%D0%B3%D1%80%D0%B0%D0%B6%D0%B4%D0%B0%D0%BD_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8">подробнее в&nbsp;Википедии</a>)</p>
-            </td>
-            <td class="sub g-xxs">
-                <div class="checkbox">
-                <%= person.check_box :document_noexpiration, {
-                  :id => "bp-#{person_form_counter}-noexpiration",
-                  :class => "noexpiration g-middle",
-                  :onclick => "return {ctrls: '#bp-#{person_form_counter}-expires-d, #bp-#{person_form_counter}-expires-m, #bp-#{person_form_counter}-expires-y', label: '#bp-#{person_form_counter}-expires-label'}"
-                } %>
-                <label for="bp-<%=person_form_counter%>-noexpiration">нет срока действия</label>&nbsp;(<span class="link hint">подробнее</span>)
-                <p class="htext">Если вы&nbsp;путешествуете с&nbsp;российским паспортом или свидетельством о&nbsp;рождении, то&nbsp;срок действия указывать не&nbsp;нужно, так как эти документы его не&nbsp;имеют. В&nbsp;загранпаспорте&nbsp;же проставлена дата окончания его действия&nbsp;&mdash; ее&nbsp;необходимо указать.</p>
-                </div>
-            </td>
-            <td class="sub g-xxs">
-                <div class="checkbox<%= raw ' latent' if @order.recommendation.validating_carrier.available_bonus_programms.empty? %>">
-                <%= person.check_box :bonus_present, {
-                  :id => "bonus-#{person_form_counter}",
-                  :class => 'bonus',
-                  :onclick => "return {ctrls: '#bonus-type-#{person_form_counter}, #bonus-num-#{person_form_counter}', label: '#bonus-type-#{person_form_counter}-label'}"
-                } %>
-                <label
-                 for="bonus-<%= person_form_counter %>"
-                 title="Карта участника программы премирования пассажиров (мильной программы или программы для&nbsp;часто летающих пассажиров, англ. frequent flyer program)"
-                >есть бонусная карта</label>
-                <a class="g-external" href="http://ru.wikipedia.org/wiki/Бонусные_программы_авиакомпаний" target="_blank" title="Что такое бонусная программа? (ссылка откроется в новом окне)"> </a>
-                </div>
-
-    </table>
+<div class="section booking-person">
+<table>
+<colgroup>
+    <col width="224">
+    <col width="224">
+    <col width="217">
+</colgroup>
+<tr>
+    <td>
+        <h6 class="blabel"><label for="person_attributes_<%= person_form_counter %>_first_name">Имя</label></h6>
+        <%= person.text_field :first_name, :class => "bfield" %>            
+    </td>
+    <td>
+        <h6 class="blabel"><label for="person_attributes_<%= person_form_counter %>_last_name">Фамилия</label></h6>
+        <%= person.text_field :last_name, :class => "bfield" %>
+    </td>
+    <td rowspan="2">
+        <h6 class="blabel"><label>Пол</label></h6>
+        <div class="bp-sex">
+            <label class="bp-sex-m" title="Мужской" for="bp-<%= person_form_counter %>-sex-m">М</label>
+            <label class="bp-sex-f" title="Женский" for="bp-<%= person_form_counter %>-sex-f">Ж</label>
+            <%= person.radio_button :sex, 'm', :class => "bp-sex-radio", :id => "bp-#{person_form_counter}-sex-m" %>
+            <%= person.radio_button :sex, 'f', :class => "bp-sex-radio", :id => "bp-#{person_form_counter}-sex-f" %>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td colspan="2">
+        <div class="language-warning">Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры. Имя&nbsp;и&nbsp;фамилию нужно вводить латинскими буквами</div>
+        <div class="nameorder-warning">Проверьте пожалуйста, что вы не перепутали поля «Имя» и «Фамилия» <span class="link nameorder-replace">Поменять&nbsp;местами</span> или <span class="link">оставить</span> как есть</div>                    
+        <div class="bdescription">
+            Латинскими буквами, как в загранпаспорте или банковской карте&nbsp;(<span class="link hint">подробнее</span>)
+            <p class="htext">Имя и&nbsp;фамилия в авиабилете пишутся латинскими буквами. Написание должно быть точно как в&nbsp;документе, по&nbsp;которому будет выполняться полёт. Дефисы и&nbsp;другие знаки нужно пропустить&nbsp;&mdash;&nbsp;разрешены только буквы.</p>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td>
+        <h6 class="blabel"><label for="bp-<%= person_form_counter %>-nationality">Гражданство</label></h6>
+        <%= person.select :nationality_id, grouped_options_for_select(Country.options_for_nationality_select, person_form.nationality_id), {}, :id => "bp-#{person_form_counter+1}-nationality", :class => "bfield nationality" %>
+    </td>
+    <td>
+        <h6 class="blabel"><label for="bp-<%= person_form_counter %>-bday" title="Дата рождения в формате дд/мм/гггг">Дата рождения</label></h6>
+        <div class="wrap">
+            <div class="date-item"><label class="placeholder" for="bp-<%= person_form_counter %>-bday">ДД</label><input type="text" class="bfield date-day" id="bp-<%= person_form_counter %>-bday" name="person_attributes[<%= person_form_counter %>][birthday(3i)]" maxlength="2" title="День рождения"></div>
+            <div class="date-item"><label class="placeholder" for="bp-<%= person_form_counter %>-bmonth">ММ</label><input type="text" class="bfield date-month" id="bp-<%= person_form_counter %>-bmonth" name="person_attributes[<%= person_form_counter %>][birthday(2i)]" maxlength="2" title="Месяц рождения"></div>
+            <div class="date-item"><label class="placeholder" for="bp-<%= person_form_counter %>-byear">ГГГГ</label><input type="text" class="bfield date-year" id="bp-<%= person_form_counter %>-byear" name="person_attributes[<%= person_form_counter %>][birthday(1i)]" maxlength="4" title="Год рождения" data-current="<%= Date.current.strftime('%Y') %>"></div>
+        </div>
+    </td>
+    <td>
+        <div class="bp-bonus">
+            <h6 class="blabel"><label for="bonus-type-<%= person_form_counter %>">Бонусная программа</label></h6>
+            <%= person.select :bonuscard_type, @order.recommendation.validating_carrier.available_bonus_programms.map {|a| [ a.bonus_program_name, a.iata ] }, {}, :id => "bonus-type-#{person_form_counter}", :class => 'bfield' %>        
+        </div>
+    </td>
+</tr>
+<tr>
+    <td>
+        <h6 class="blabel"><label for="bp-<%= person_form_counter %>-passport" title="Номер документа, который будет предъявлен при посадке.">Номер документа</label></h6>
+        <%= person.text_field :passport, :id => "booking-person-#{person_form_counter}-passport", :class => "bfield", :maxlength => '100' %>
+        <div class="bdescription">
+            <span class="link hint" title="Подробнее о документах">Какие нужны документы?</span>
+            <p class="htext">Для полетов внутри страны подходит российский паспорт (для детей&nbsp;&mdash; свидетельство о&nbsp;рождении). Для полетов за&nbsp;рубеж нужен загранпаспорт. Обратите внимание, что помимо загранпаспорта, для въезда во&nbsp;многие страны требуется соответствующая виза (<a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%B7%D0%BE%D0%B2%D1%8B%D0%B5_%D1%82%D1%80%D0%B5%D0%B1%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_%D0%B4%D0%BB%D1%8F_%D0%B3%D1%80%D0%B0%D0%B6%D0%B4%D0%B0%D0%BD_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8">подробнее в&nbsp;Википедии</a>)</p>
+        </div>
+    </td>
+    <td>
+        <h6 class="blabel"><label for="bp-<%= person_form_counter %>-eday" title="Срок действия документа в формате дд/мм/гггг. Если у документа нет срока действия, то поставьте отметку под полем.">Срок действия документа</label></h6>
+        <div class="wrap">
+            <div class="date-item"><label class="placeholder" for="bp-<%= person_form_counter %>-eday">ДД</label><input type="text" class="bfield date-day" id="bp-<%= person_form_counter %>-eday" name="person_attributes[<%= person_form_counter %>][document_expiration_date(3i)]" maxlength="2" title="День окончания срока действия документа"></div>
+            <div class="date-item"><label class="placeholder" for="bp-<%= person_form_counter %>-emonth">ММ</label><input type="text" class="bfield date-month" id="bp-<%= person_form_counter %>-emonth" name="person_attributes[<%= person_form_counter %>][document_expiration_date(2i)]" maxlength="2" title="Месяц окончания срока действия документа"></div>
+            <div class="date-item"><label class="placeholder" for="bp-<%= person_form_counter %>-eyear">ГГГГ</label><input type="text" class="bfield date-year" id="bp-<%= person_form_counter %>-eyear" name="person_attributes[<%= person_form_counter %>][document_expiration_date(1i)]" maxlength="4" title="Год окончания срока действия документа" data-current="<%= Date.current.strftime('%Y') %>"></div>
+        </div>
+        <div class="bdescription checkbox">
+            <%= person.check_box :document_noexpiration, {:id => "bp-#{person_form_counter}-noexpiration"} %>
+            <label for="bp-<%= person_form_counter %>-noexpiration">нет срока действия</label>&nbsp;(<span class="link hint">подробнее</span>)
+            <p class="htext">Если вы&nbsp;путешествуете с&nbsp;российским паспортом или свидетельством о&nbsp;рождении, то&nbsp;срок действия указывать не&nbsp;нужно, так как эти документы его не&nbsp;имеют. В&nbsp;загранпаспорте&nbsp;же проставлена дата окончания его действия&nbsp;&mdash; ее&nbsp;необходимо указать.</p>
+        </div>
+    </td>
+    <td>
+        <div class="bp-bonus">
+            <h6 class="blabel">Номер карты</h6>
+            <%= person.text_field :bonuscard_number, :id => "bonus-num-#{person_form_counter}", :class => 'bfield', :maxlength => '50', :disabled => 'disabled' %>  
+        </div>
+        <div class="bdescription checkbox<%= raw ' latent' if @order.recommendation.validating_carrier.available_bonus_programms.empty? %>">
+            <%= person.check_box :bonus_present, {:id => "bonus-#{person_form_counter}"} %>
+            <label for="bonus-<%= person_form_counter %>" title="Карта участника программы премирования пассажиров (мильной программы или программы для&nbsp;часто летающих пассажиров, англ. frequent flyer program)">есть бонусная карта</label>&nbsp;<a class="g-external" href="http://ru.wikipedia.org/wiki/Бонусные_программы_авиакомпаний" target="_blank" title="Что такое бонусная программа? (ссылка откроется в новом окне)">&nbsp;</a>
+        </div>
+    </td>
+</tr>
+</table>
 </div>
-<% end  %>
+<% end %>
 
