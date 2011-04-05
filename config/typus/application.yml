@@ -33,7 +33,7 @@ Carrier:
     list: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
     form: ru_shortname, ru_longname, en_shortname, en_longname, iata, iata_ru, country, bonus_program_name, alliance, gds, interlines, consolidator, color, font_color
     options:
-      read_only: interlines
+      read_only: interlines, payments
   order_by: en_shortname, ru_shortname
   relationships: country, alliance, gds, consolidator
   filters: country, gds, consolidator
@@ -165,9 +165,10 @@ Region:
   fields:
     default: name_ru, name_en, country
     list: name_ru, name_en, country,
-    form: name_ru, name_en, country, lat, lng, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in
+    form: name_ru, name_en, country, lat, lng, region_type, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in
     options:
       read_only: morpher_to, morpher_from, morpher_in
+      selectors: region_type
   order_by: name_ru
   relationships: cities, country
   filters: country

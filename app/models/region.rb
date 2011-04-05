@@ -8,6 +8,8 @@ class Region < ActiveRecord::Base
   scope :with_country, includes(:country)
   attr_writer :main_city_iatas_as_text #хак для typus
 
+  REGION_TYPE = ['', 'штат', 'провинция']
+
   def name
     name_ru || name_en
   end
