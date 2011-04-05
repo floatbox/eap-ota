@@ -40,7 +40,7 @@
         <h6 class="blabel"><label for="bp-<%= person_form_counter %>-nationality">Гражданство</label></h6>
         <%= person.select :nationality_id, grouped_options_for_select(Country.options_for_nationality_select, person_form.nationality_id), {}, :id => "bp-#{person_form_counter+1}-nationality", :class => "bfield nationality" %>
     </td>
-    <td>
+    <td class="bp-birthday">
         <h6 class="blabel"><label for="bp-<%= person_form_counter %>-bday" title="Дата рождения в формате дд/мм/гггг">Дата рождения</label></h6>
         <div class="wrap">
             <div class="date-item"><label class="placeholder" for="bp-<%= person_form_counter %>-bday">ДД</label><input type="text" class="bfield date-day" id="bp-<%= person_form_counter %>-bday" name="person_attributes[<%= person_form_counter %>][birthday(3i)]" maxlength="2" title="День рождения"></div>

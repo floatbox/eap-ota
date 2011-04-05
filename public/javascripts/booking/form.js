@@ -6,6 +6,13 @@ init: function() {
     this.steps = $.map(sections, function(el, i) {
         return new (app[el.onclick()])(el, i);
     });*/
+    
+    // Проверка формы
+    this.sections = [];
+    this.el.find('.booking-person').each(function() {
+        self.initPerson($(this));
+    });
+    this.validate(true);
 
     // Отправка формы
     $('form', this.el).submit(function(event) {
