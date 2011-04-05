@@ -4,5 +4,9 @@
 en:
   hello: "Hello world"
   time:
-      formats:
-        long: "%d %b %Y, %H:%M"
+    formats:
+      long: "%d %b %Y, %H:%M"
+  date:
+    formats:
+      long: "%d %b %Y"
+

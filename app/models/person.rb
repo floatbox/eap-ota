@@ -18,7 +18,6 @@ class Person < ActiveRecord::BaseWithoutTable
   # FIXME WRONG! фамилии через дефис? два имени? сокращения?
   validates_format_of :first_name, :with => /^[a-zA-Z-]*$/, :message => "Некорректное имя"
   validates_format_of :last_name,  :with => /^[a-zA-Z-]*$/, :message => "Некорректная фамилия"
-  validates_format_of :passport, :with => /^[a-zA-Z\d ]+$/, :message => 'Некорректный номер документа'
   validate :check_age
   attr_accessor :flight_date, :infant_or_child
 
@@ -33,6 +32,10 @@ class Person < ActiveRecord::BaseWithoutTable
     res += "child" if infant_or_child == 'c'
     res += "infant" if infant_or_child == 'i'
     res
+  end
+
+  def cleared_passport
+    passport.gsub(/[^a-zA-Z\d ]+/, '')
   end
 
   def first_name_with_code

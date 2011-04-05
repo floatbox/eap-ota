@@ -18,6 +18,10 @@ module Amadeus
         end.inject {|a, pr| [a[0] + pr[0], a[1] + pr[1]]}
       end
 
+      def last_tkt_date
+        parse_date(xpath('//r:lastTktDate/r:dateTime'))
+      end
+
       def error_message
         xpath('//r:applicationError/r:errorText/r:errorFreeText').to_s
       end
@@ -28,3 +32,4 @@ module Amadeus
     end
   end
 end
+

@@ -10,6 +10,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   attr_accessor :people_count
   attr_accessor :number
   attr_accessor :sirena_lead_pass
+  attr_accessor :last_tkt_date
   attr_reader :order # то, что сохраняется в базу
   attr_accessor :variant_id #нужен при восстановлении формы по урлу
 
@@ -163,6 +164,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
           amadeus.pnr_commit_really_hard do
             resp = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier).or_fail!
             fares_count = resp.fares_count
+            self.last_tkt_date = resp.last_tkt_date
             prices = resp.prices
             unless [recommendation.price_fare, recommendation.price_tax] == prices
               errors.add :pnr_number, 'Ошибка при создании PNR'
@@ -218,15 +220,15 @@ class OrderData < ActiveRecord::BaseWithoutTable
     validating_carrier_code = recommendation.validating_carrier.iata
     (adults + children).each do |person|
       # YY - для всех перевозчиков в бронировании
-      amadeus.cmd( "SRDOCSYYHK1-P-#{person.nationality.alpha3}-#{person.passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{person.number_in_amadeus}")
-      amadeus.cmd("SR FOID #{validating_carrier_code} HK1-PP#{person.passport}/P#{person.number_in_amadeus}")
-      amadeus.cmd("FE #{validating_carrier_code} ONLY PSPT #{person.passport}/P#{person.number_in_amadeus}")
+      amadeus.cmd( "SRDOCSYYHK1-P-#{person.nationality.alpha3}-#{person.cleared_passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{person.number_in_amadeus}")
+      amadeus.cmd("SR FOID #{validating_carrier_code} HK1-PP#{person.cleared_passport}/P#{person.number_in_amadeus}")
+      amadeus.cmd("FE #{validating_carrier_code} ONLY PSPT #{person.cleared_passport}/P#{person.number_in_amadeus}")
       amadeus.cmd("FFN#{person.bonuscard_type}-#{person.bonuscard_number}/P#{person.number_in_amadeus}") if person.bonus_present
     end
     infants.each_with_index do |person, i|
       # YY - для всех перевозчиков в бронировании
-      amadeus.cmd( "SRDOCSYYHK1-P-#{person.nationality.alpha3}-#{person.passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}I-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{person.number_in_amadeus}")
-      amadeus.cmd("FE INF #{validating_carrier_code} ONLY PSPT #{person.passport}/P#{person.number_in_amadeus}")
+      amadeus.cmd( "SRDOCSYYHK1-P-#{person.nationality.alpha3}-#{person.cleared_passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}I-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{person.number_in_amadeus}")
+      amadeus.cmd("FE INF #{validating_carrier_code} ONLY PSPT #{person.cleared_passport}/P#{person.number_in_amadeus}")
     end
   end
 

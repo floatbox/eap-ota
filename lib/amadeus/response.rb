@@ -1,6 +1,5 @@
 # encoding: utf-8
 module Amadeus::Response
-
   # возможно, не самый эффективный способ сделать method_missing для классов
   def self.for action
     "::Amadeus::Response::#{action.camelize}".constantize
@@ -30,6 +29,18 @@ module Amadeus::Response
 
     delegate :xpath, :to => :doc
 
+    def parse_date elem
+      year = (elem / "r:year").to_i
+      month = (elem / "r:month").to_i
+      day = (elem / "r:day").to_i
+      if [year, month, day].all?
+        Date.new(year, month, day)
+      else
+        nil
+      end
+
+    end
+
 
     def or_fail!
       unless success?
@@ -51,3 +62,4 @@ module Amadeus::Response
     end
   end
 end
+
