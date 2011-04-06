@@ -322,8 +322,13 @@ no_commission
 carrier "AM", "AEROMEXICO"
 ########################################
 
-example 'SVOCDG/AF/K CDGMEX/Q MEXCDG/Q CDGSVO/SU/W'
+example "SVOCDG"
+# копия для чистых рейсов AM
 agent    "9% от всех опубл. тарифов на рейсы AM;"
+subagent "6,3% от опубл. тарифов на рейсы AM"
+commission "9%/6.3%"
+
+example 'SVOCDG/AF/K CDGMEX/Q MEXCDG/Q CDGSVO/SU/W'
 agent    "новые тарифы экономического класса в Мексику через Европу:"
 agent    "• Q, K, S, M"
 agent    "• До Парижа/Мадрида – SU, AF, UX"
@@ -334,8 +339,9 @@ interline :possible
 check { country_iatas.first == 'RU' && city_iatas.include?('MEX') }
 commission "9%/6.3%"
 
-example 'PRGCDG CDGBCN'
-no_commission
+#example 'PRGCDG CDGBCN'
+# однажды был такой маршрут, но не повторялся
+#no_commission
 
 carrier "AY", "FINNAIR"
 ########################################
