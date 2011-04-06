@@ -1,5 +1,6 @@
 # encoding: utf-8
 class Region < ActiveRecord::Base
+  include HasSynonyms
   belongs_to :country
   has_many :cities
   has_cases_for :name

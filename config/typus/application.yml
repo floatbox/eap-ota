@@ -164,8 +164,8 @@ HotOffer:
 Region:
   fields:
     default: name_ru, name_en, country
-    list: name_ru, name_en, country,
-    form: name_ru, name_en, country, lat, lng, region_type, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in
+    list: name_ru, name_en, country, synonym_list
+    form: name_ru, name_en, country, lat, lng, synonym_list, region_type, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in
     options:
       read_only: morpher_to, morpher_from, morpher_in
       selectors: region_type

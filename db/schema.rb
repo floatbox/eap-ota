@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110401115528) do
+ActiveRecord::Schema.define(:version => 20110406154854) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -266,6 +266,7 @@ ActiveRecord::Schema.define(:version => 20110401115528) do
     t.float    "lng"
     t.integer  "importance",   :default => 0
     t.string   "region_type"
+    t.string   "synonym_list"
   end
 
   create_table "typus_users", :force => true do |t|
