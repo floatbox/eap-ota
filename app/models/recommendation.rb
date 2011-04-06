@@ -17,6 +17,7 @@ class Recommendation
   attr_accessor :sirena_blank_count
 
   delegate :marketing_carriers, :marketing_carrier_iatas,
+    :operating_carriers, :operating_carrier_iatas,
     :city_iatas, :airport_iatas, :country_iatas, :route,
       :to => 'variants.first'
 
@@ -260,6 +261,7 @@ class Recommendation
   end
 
   def check_price_and_availability(pricer_form)
+    return unless hahn_air_allows?
     if source == 'amadeus'
       Amadeus.booking do |amadeus|
         self.price_fare, self.price_tax =
@@ -293,6 +295,10 @@ class Recommendation
         rec
       end
     end
+  end
+
+  def hahn_air_allows?
+    validating_carrier_iata != 'HR' || HahnAir.allow?(marketing_carrier_iatas | operating_carrier_iatas)
   end
 
   def cabins_except selected_cabin
