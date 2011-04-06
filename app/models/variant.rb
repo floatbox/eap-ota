@@ -69,6 +69,14 @@ class Variant
     flights.every.marketing_carrier_iata.uniq
   end
 
+  def operating_carriers
+    flights.every.operating_carrier.uniq
+  end
+
+  def operating_carrier_iatas
+    flights.every.operating_carrier_iata.uniq
+  end
+
   def common_carrier
     marketing_carriers.one? && marketing_carriers.first
   end
