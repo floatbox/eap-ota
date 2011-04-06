@@ -20,5 +20,9 @@ module ApplicationHelper
   def display_date item, attribute
     item.send(attribute).strftime("%d %b %Y")
   end
+
+  def display_virtual *attrs
+    display_string *attrs
+  end
 end
 
