@@ -451,7 +451,11 @@ class Recommendation
     segments = []
     subclasses = []
     cabins = []
-    itinerary.split.each do |fragment|
+    fragments = itinerary.split
+    if fragments.first.size == 2
+      default_carrier = fragments.shift
+    end
+    fragments.each do |fragment|
       flight = Flight.new
       # defaults
       carrier, operating_carrier, subclass, cabin = default_carrier, nil, 'Y', 'M'
