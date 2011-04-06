@@ -206,7 +206,7 @@ values: function() {
     }
     if (this.mode === 'rt') {
         data.form_segments[1] = {
-            from: s[1].from.val(),
+            from: '',
             to: data.form_segments[0].from,
             date: d[1]
         };

@@ -8,23 +8,23 @@ class Flight
    :arrival_time, :departure_date, :departure_time, :equipment_type_iata, :warning, :technical_stops
 
   def departure
-    departure_iata && Airport[departure_iata]
+    Airport[departure_iata]
   end
 
   def arrival
-    arrival_iata && Airport[arrival_iata]
+    Airport[arrival_iata]
   end
 
   def operating_carrier
-    operating_carrier_iata && Carrier[operating_carrier_iata]
+    Carrier[operating_carrier_iata]
   end
 
   def marketing_carrier
-    marketing_carrier_iata && Carrier[marketing_carrier_iata]
+    Carrier[marketing_carrier_iata]
   end
 
   def equipment_type
-    equipment_type_iata && Airplane[equipment_type_iata]
+    Airplane[equipment_type_iata]
   end
 
   delegate :name, :prefix => true, :allow_nil => true, :to => :departure

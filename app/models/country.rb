@@ -20,6 +20,11 @@ class Country < ActiveRecord::Base
 
   has_cases_for :name
 
+  # синтаксис вместо iata_stash
+  def self.[] arg
+    arg && find_by_alpha2(arg)
+  end
+
   def iata
     alpha2
   end
