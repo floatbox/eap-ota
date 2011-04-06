@@ -69,6 +69,8 @@ class Recommendation
   end
 
   def valid_interline?
+    # FIXME убрать проверку HR отсюда
+    validating_carrier_iata == 'HR' or
     not interline? or
     other_marketing_carrier_iatas.uniq.all? do |iata|
       validating_carrier.interline_with?(iata)
