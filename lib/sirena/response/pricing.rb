@@ -43,15 +43,16 @@ module Sirena
             end
             if first_variant
               booking_classes << fi["subclass"] if fi["subclass"]
-              cabins << {"Э"=>"Y", "Б"=>"C", "П"=>"F"}[fi["baseclass"]] || fi["baseclass"]
+              cabins << ({"Э"=>"Y", "Б"=>"C", "П"=>"F"}[fi["baseclass"]] || fi["baseclass"])
             end
             id = fi["id"]
             time += flights[id][:time]
             time +=(flights[id][:departure]-prev_arr).to_i/60 if !prev_arr.blank?
             prev_arr=flights[id][:arrival]
             segment.flights << flights[id][:flight]
-            first_variant = false
+
           }
+          first_variant = false
           # eft = estimated flight time!
           segment.eft = (time/60).to_s+":"+"%02i".%(time % 60)
           Variant.new( :segments => segments )
@@ -76,9 +77,9 @@ module Sirena
             :validating_carrier_iata => validating_carrier_iata,
             :additional_info => "",
             :sirena_blank_count => blank_count,
-            :cabins => booking_classes,
+            :cabins => cabins,
             :booking_classes => booking_classes
-          ) 
+          )
         end
       end
 
@@ -113,3 +114,4 @@ module Sirena
     end
   end
 end
+

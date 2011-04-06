@@ -104,7 +104,7 @@
             <% if layover %>
                 <div class="layover" title="Пересадка <%= flight.arrival.city.case_in %>, <%= human_duration(layover) %>" data-duration="<%= layover %>"><%= flight.arrival.city.name %></div>
             <% end %>
-            <% end %>    
+            <% end %>
             <div class="arv"><span class="iata"><%= segment.arrival_iata %></span> <%= fmt_time( segment.arrival_time ) %></div>
         </div>
         </div>

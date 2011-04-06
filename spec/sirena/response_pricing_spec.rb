@@ -12,6 +12,7 @@ describe Sirena::Response::Pricing do
     it { should be_success }
     it { should have(4).recommendations }
     specify { subject.recommendations.first.sirena_blank_count.should == 1 }
+    specify { subject.recommendations.first.cabins.should == ['Y', 'Y']}
   end
-
 end
+
