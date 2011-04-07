@@ -228,6 +228,9 @@
 .booking input.bfield {
     height: 25px;
 }
+.booking select.bfield {
+    background: #FFF;
+}
 .booking .bfield:hover {
     z-index: 2;
     background: #fff;
@@ -237,13 +240,19 @@
     outline: none;
     background: #fff;
 }
-.booking .bf-valid {
+.booking .valid {
     border-color: #4eb700;
     background: #FFF;
 }
-.booking .bf-invalid {
+.booking .invalid {
     border-color: #F02020;
     /*color: #F02020;*/
+}
+.booking .bfield:disabled {
+    border-color: #CCC;
+    background: #f0f0f0;
+    background: rgba(248, 248, 248, 0.5);
+    color: #CCC;
 }
 .booking .placeholder {
     position: absolute;
@@ -251,6 +260,9 @@
     font-size: 20px;
     line-height: 25px;    
     color: #C0C0C0;
+}
+.booking .disabled .placeholder {
+    visibility: hidden;
 }
 
 /* Подсказки */
@@ -318,6 +330,7 @@
 .bp-sex-f {
     float: left;
     display: inline-block;
+    position: relative;    
     width: 50px;
     padding: 3px 5px;
     border: 1px solid #909090;    
@@ -338,8 +351,8 @@
     border-radius: 0 3px 3px 0;
 }
 .bp-sex-m:hover,
-.bp-sex-f:hover {
-    position: relative;
+.bp-sex-f:hover,
+.bp-sex .focus {
     z-index: 2;
     background: #FFF;
 }
@@ -411,8 +424,7 @@
 /* Информация о платежах */
 .bc-payments {
     position: relative;
-    margin: 0 175px 15px 15px;
-    padding-top: 8px;
+    margin: 8px 175px 15px 15px;
     font-size: 12px;
     line-height: 16px;
     color: #777;

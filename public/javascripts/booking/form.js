@@ -12,6 +12,7 @@ init: function() {
     this.el.find('.booking-person').each(function() {
         self.initPerson($(this));
     });
+    this.initContacts(this.el.find('.booking-contacts'));
     this.validate(true);
 
     // Отправка формы

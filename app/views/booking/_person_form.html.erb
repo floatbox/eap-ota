@@ -18,10 +18,8 @@
     <td rowspan="2">
         <h6 class="blabel"><label>Пол</label></h6>
         <div class="bp-sex">
-            <label class="bp-sex-m" title="Мужской" for="bp-<%= person_form_counter %>-sex-m">М</label>
-            <label class="bp-sex-f" title="Женский" for="bp-<%= person_form_counter %>-sex-f">Ж</label>
-            <%= person.radio_button :sex, 'm', :class => "bp-sex-radio", :id => "bp-#{person_form_counter}-sex-m" %>
-            <%= person.radio_button :sex, 'f', :class => "bp-sex-radio", :id => "bp-#{person_form_counter}-sex-f" %>
+            <label class="bp-sex-m" title="Мужской" for="bp-<%= person_form_counter %>-sex-m">М<%= person.radio_button :sex, 'm', :class => "bp-sex-radio", :id => "bp-#{person_form_counter}-sex-m" %></label>
+            <label class="bp-sex-f" title="Женский" for="bp-<%= person_form_counter %>-sex-f">Ж<%= person.radio_button :sex, 'f', :class => "bp-sex-radio", :id => "bp-#{person_form_counter}-sex-f" %></label>
         </div>
     </td>
 </tr>
@@ -64,7 +62,7 @@
             <p class="htext">Для полетов внутри страны подходит российский паспорт (для детей&nbsp;&mdash; свидетельство о&nbsp;рождении). Для полетов за&nbsp;рубеж нужен загранпаспорт. Обратите внимание, что помимо загранпаспорта, для въезда во&nbsp;многие страны требуется соответствующая виза (<a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%B7%D0%BE%D0%B2%D1%8B%D0%B5_%D1%82%D1%80%D0%B5%D0%B1%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_%D0%B4%D0%BB%D1%8F_%D0%B3%D1%80%D0%B0%D0%B6%D0%B4%D0%B0%D0%BD_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8">подробнее в&nbsp;Википедии</a>)</p>
         </div>
     </td>
-    <td>
+    <td class="bp-docexp">
         <h6 class="blabel"><label for="bp-<%= person_form_counter %>-eday" title="Срок действия документа в формате дд/мм/гггг. Если у документа нет срока действия, то поставьте отметку под полем.">Срок действия документа</label></h6>
         <div class="wrap">
             <div class="date-item"><label class="placeholder" for="bp-<%= person_form_counter %>-eday">ДД</label><input type="text" class="bfield date-day" id="bp-<%= person_form_counter %>-eday" name="person_attributes[<%= person_form_counter %>][document_expiration_date(3i)]" maxlength="2" title="День окончания срока действия документа"></div>
@@ -80,7 +78,7 @@
     <td>
         <div class="bp-bonus">
             <h6 class="blabel">Номер карты</h6>
-            <%= person.text_field :bonuscard_number, :id => "bonus-num-#{person_form_counter}", :class => 'bfield', :maxlength => '50', :disabled => 'disabled' %>  
+            <%= person.text_field :bonuscard_number, :id => "bonus-num-#{person_form_counter}", :class => 'bfield', :maxlength => '50' %>  
         </div>
         <div class="bdescription checkbox<%= raw ' latent' if @order.recommendation.validating_carrier.available_bonus_programms.empty? %>">
             <%= person.check_box :bonus_present, {:id => "bonus-#{person_form_counter}"} %>
