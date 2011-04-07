@@ -1,20 +1,33 @@
-!!! XML
+-# !!! xml
+<?xml version='1.0' encoding='utf-8' ?>
 %variants
   - @recommendations.each do |recommendation|
     - recommendation.variants.each do |variant|
       %variant
         %price= recommendation.price_total
-        %validatingCarrier= recommendation.va
+        %url= yandex_url(@search)
+        %validatingCarrier= recommendation.validating_carrier_iata
         - variant.segments.each do |segment|
           %segment
             - segment.flights.each do |flight|
               %flight
-                %departureCode= flight.departure_iata
-                %departureCodeRu= flight.departure.iata_rus
-                %arrivalCode= flight.arrival_iata
-                %arrivalCodeRu= flight.departure.iata_rus
-                %number= flight.flightNumber
-                -# %departureTime=
-                -# %arrivalTime=
-                %marketingCarrierCode= flight.marketing_carrier_iata
-                %operatingCarrierCode= flight.operating_carrier_iata
+                %marketingCarrier= flight.marketing_carrier_iata
+                %operatingCarrier= flight.operating_carrier_iata
+                %number= flight.flight_number
+                %departure= flight.departure_iata
+                - if flight.departure.iata_ru.present?
+                  %departureRu= flight.departure.iata_ru
+                - if flight.departure_term.present?
+                  %departureTerm= flight.departure_term
+                %departureDate= yandex_date(flight.departure_date)
+                %departureTime= yandex_time(flight.departure_time)
+                %arrival= flight.arrival_iata
+                - if flight.arrival.iata_ru.present?
+                  %arrivalRu= flight.arrival.iata_ru
+                - if flight.arrival_term.present?
+                  %arrivalTerm= flight.arrival_term
+                %arrivalDate= yandex_date(flight.arrival_date)
+                %arrivalTime= yandex_time(flight.arrival_time)
+                %equipment= flight.equipment_type_iata
+                %class= recommendation.booking_class_for_flight(flight)
+                %cabin= yandex_cabin(recommendation.cabin_for_flight(flight))

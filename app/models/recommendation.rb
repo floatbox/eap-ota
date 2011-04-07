@@ -262,6 +262,13 @@ class Recommendation
     end
   end
 
+  def cabin_for_flight flight
+    variants.each do |v|
+      i = v.flights.index flight
+      return cabins[i] if i
+    end
+  end
+
   def check_price_and_availability(pricer_form)
     return unless hahn_air_allows?
     if source == 'amadeus'
