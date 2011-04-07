@@ -17,7 +17,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     end
     adults = args[:adults] || 1
     children = args[:children]
-    infants = args[:infants].to_i + args[:infants_seated].to_i
+    infants = args[:infants].to_i + args[:seated_infants].to_i
 
     new :form_segments => form_segments,
       :adults => adults, :children => children, :infants => infants
