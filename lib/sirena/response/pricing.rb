@@ -90,8 +90,8 @@ module Sirena
         dep = Time.parse((fi.xpath("deptdate").text+" "+fi.xpath("depttime").text).insert(6, "20"))
         arr = Time.parse((fi.xpath("arrvdate").text+" "+fi.xpath("arrvtime").text).insert(6, "20"))
         f = Flight.new(
-          :operating_carrier_iata => fi.xpath("company").text,
           :marketing_carrier_iata => fi.xpath("company").text,
+          :operating_carrier_iata => fi.xpath("operating_company").text,
           :departure_iata =>         dep_iata,
           :departure_term =>         fi.at_xpath("origin")["terminal"],
           :arrival_iata =>           arr_iata,
