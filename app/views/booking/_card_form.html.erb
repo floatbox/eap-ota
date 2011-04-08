@@ -9,15 +9,15 @@
     <table class="bc-bill">
     <tr>
         <th>Стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %></th>
-        <th rowspan="2"><i>+</i></th>
+        <th rowspan="2"><span class="sign">+</span></th>
         <th>Комиссия за&nbsp;транзакцию</th>
-        <th rowspan="2"><i>=</i></th>
+        <th rowspan="2"><span class="sign">=</span></th>
         <th>С&nbsp;карты будет списано</th>
     </tr>
-    <tr>
-        <td><%= decorated_price @order.recommendation.price_total, 'u', 'i' %></td>
-        <td><%= decorated_price @order.recommendation.price_payment, 'u', 'i' %></td>
-        <td><%= decorated_price @order.recommendation.price_with_payment_commission, 'b', 'i' %></td>
+    <tr class="prices">
+        <td><%= decorated_price @order.recommendation.price_total, 'strong', 'em' %></td>
+        <td><%= decorated_price @order.recommendation.price_payment, 'strong', 'em' %></td>
+        <td class="prices-total"><%= decorated_price @order.recommendation.price_with_payment_commission, 'strong', 'em' %></td>
     </tr>
     <tr class="bc-bill-hints">
         <td><p style="width: 165px;">стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами</p></td>

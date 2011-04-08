@@ -109,9 +109,22 @@ app.booking.initPerson = function(el) {
 };
 
 app.booking.initCard = function(el) {
+    var cardnumber = validator.cardnumber(el.find('.bcn-fields input'), {
+        empty: 'Не указан {номер банковской карты}',
+        letters: 'В {номере банковской карты} можно использовать только цифры'
+    });
+    var numsample = $('#bc-num-sample');
+    cardnumber.el.last().bind('keyup change', function() {
+        var v = $(this).val(), s = [], digits = /\d/;
+        for (var i = 0; i < 4; i++) {
+            var c = v.charAt(i);
+            s[i] = digits.test(c) ? c : '<span class="empty">#</span>';
+        }
+        numsample.html(s.join(''));
+    });
     this.sections.push({
         el: el,
-        items: []
+        items: [cardnumber]
     });
 };
 
@@ -305,7 +318,7 @@ phone: function(el, messages) {
         if (!value) {
             return 'empty';
         }
-        if (value.search(/[^\d() -+]/i) !== -1) {
+        if (value.search(/[^\d() \-+]/i) !== -1) {
             return 'letters';
         }
         var digits = value.replace(/\D/g, '');
@@ -315,13 +328,78 @@ phone: function(el, messages) {
         return undefined;
     };
     el.change(function() {
-        el.val($.trim(el.val()));
+        var v = $.trim(el.val());
+        v = v.replace(/(\d)\(/, '$1 (');
+        v = v.replace(/\)(\d)/, ') $1');
+        v = v.replace(/(\D)(\d{2,3})(\d{2})(\d{2})$/, '$1$2-$3-$4');
+        el.val(v);
         item.validate();
     });
     el.keyup(function() {
         item.change();
     });
     return item;  
+},
+cardnumber: function(parts, messages) {
+    var item = new this.control(parts, messages);
+    item.important = {
+        letters: true
+    };
+    item.check = function() {
+        for (var i = 0; i < 4; i++) {
+            var f = parts.eq(i), v = f.val();
+            this.invalid = f;
+            if (v.length === 0) return 'empty';
+            if (v.search(/[^\d]/) !== -1) return 'letters';
+            if (v.length < 4) return 'empty';
+        }
+        return undefined;
+    };
+    parts.bind('paste', function() {
+        var field = $(this);
+        var el = $(this).attr('maxlength', 50);
+        setTimeout(function() {
+            var v = el.val().replace(/\D/g, '');
+            while (el.length && v.length) {
+                el.val(v.substring(0, 4));
+                if (v.length > 3) {
+                    el = el.next('input');
+                    v = v.substring(4);
+                } else {
+                    break;
+                }
+            }
+            el.focus();
+            field.attr('maxlength', 4);
+        }, 10);
+    });
+    var throwFocus = false;
+    parts.slice(0, 3).keydown(function(e) {
+        var code = e.which;
+        var digit = (code > 47 && code < 58) || (code > 95 && code < 106);
+        var space = (code === 32);
+        if (throwFocus && (digit || space)) {
+            throwFocus = false;
+            $(this).trigger('change').next('input').select();
+            if (space) e.preventDefault();
+        }
+    }).keyup(function(e) {
+        throwFocus = (this.value.length === 4);
+        if (throwFocus && String.fromCharCode(e.which).search(/[ .,\-\/]/) === 0) {
+            e.preventDefault();
+            $(this).trigger('change').next('input').select();
+            throwFocus = false;
+        }
+    });
+    parts.slice(1).keydown(function(e) {
+        if (this.value.length === 0 && e.which === 8) {
+            $(this).trigger('change').prev('input').focus();
+        }
+    });
+    parts.keyup(function() {
+        item.change();
+    });    
+    return item;    
 }
 };
 

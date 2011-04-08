@@ -220,7 +220,7 @@
     border: 1px solid #909090;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    background: #f8f8f8;        
+    background: #FFF;        
     font-size: 20px;
     line-height: 25px;
     color: #333;
@@ -228,25 +228,14 @@
 .booking input.bfield {
     height: 25px;
 }
-.booking select.bfield {
-    background: #FFF;
-}
-.booking .bfield:hover {
-    z-index: 2;
-    background: #fff;
-}
 .booking .bfield:focus {
-    z-index: 3;
     outline: none;
-    background: #fff;
 }
 .booking .valid {
     border-color: #4eb700;
-    background: #FFF;
 }
 .booking .invalid {
     border-color: #F02020;
-    /*color: #F02020;*/
 }
 .booking .bfield:disabled {
     border-color: #CCC;
@@ -418,7 +407,7 @@
     line-height: 16px;
 }
 .booking-card .bfield {
-    background: #E8E8E8;
+    background: #F8F8F8;
 }
 
 /* Информация о платежах */
@@ -472,19 +461,28 @@
 .bcn-fields .bfield {
     position: absolute;
     top: 0;
-    width: 55px;
+    width: 63px;
 }
 #bc-num1 {
     left: 0;
+    -moz-border-radius: 3px 0 0 3px;
+    border-radius: 3px 0 0 3px;    
 }
 #bc-num2 {
-    left: 77px;
+    left: 74px;
+    -moz-border-radius: 0;
+    border-radius: 0;
 }
 #bc-num3 {
-    left: 154px;
+    left: 148px;
+    -moz-border-radius: 0;
+    border-radius: 0;
 }
 #bc-num4 {
-    left: 231px;
+    left: 222px;
+    width: 62px;
+    -moz-border-radius: 0 3px 3px 0;
+    border-radius: 0 3px 3px 0;    
 }
 
 /* Имя на карте */
@@ -508,11 +506,28 @@
     right: 11px;
 }
 .bc-exp .bfield {
-    width: 32px;
+    width: 40px;
     height: 23px;
     padding: 2px 5px;
     font-size: 18px;
-    line-height: 23px;    
+    line-height: 23px;
+}
+.bc-exp .date-item {
+    float: left;
+}
+.bc-exp .placeholder {
+    margin: 4px 6px;
+    font-size: 18px;
+    line-height: 23px;   
+}
+.bc-exp .date-month {
+    margin-right: -1px;
+    -moz-border-radius: 3px 0 0 3px;
+    border-radius: 3px 0 0 3px;
+}
+.bc-exp .date-year {
+    -moz-border-radius: 0 3px 3px 0;
+    border-radius: 0 3px 3px 0;    
 }
 
 /* Полоса */
@@ -535,53 +550,54 @@
 #bc-num-sample {
     display: inline;
     margin: 0 8px 0 0;
-    font-weight: bold;
     font-size: 22px;
+    line-height: 25px;
 }
 #bc-num-sample .empty {
     color: #A8A8A8;
 }
 
 /* Раскладка цены */
-.booking-card table.bc-bill {
+.bc-bill {
     width: 645px;
     margin: 1em 0 0 12px;
 }
-.booking-card .bc-bill th {
-    font: bold 87.5% Arial,a;
+.bc-bill th {
+    font: bold 14px/17px Arial, sans-serif;
     padding-bottom: 1px;
     vertical-align: middle;
     white-space: nowrap;
     color: #333;
 }
-.booking-card .bc-bill th i {
-    font: bold 70px/40px Arial,a;
+.bc-bill .sign {
+    font: bold 70px/40px Arial, sans-serif;
     display: inline-block;
     overflow: hidden;
     margin: 0 12px;
     color: #6e6e6e;
 }
-.booking-card .bc-bill td {
+.bc-bill td {
     white-space: nowrap;
     vertical-align: baseline;
 }
-.booking-card .bc-bill td u {
+.bc-bill .prices strong {
     margin: 0 3px 0 0;
     font: bold 162.5%/100% Arial, sans-serif;
     letter-spacing: -0.045em;
     color: #ed1192;
 }
-.booking-card .bc-bill td b {
-    font: bold 200%/100% Arial, sans-serif;
+.bc-bill .prices-total strong {
     margin: 0 4px 0 0;
+    font: bold 200%/100% Arial, sans-serif;
     letter-spacing: -0.045em;        
     color: #6F7C26;
 }
-.booking-card .bc-bill td i {
+.bc-bill .prices em {
+    font-style: normal;
     font-size: 12px;
     color: #6e6e6e;
 }
-.booking-card .bc-bill-hints td {
+.bc-bill-hints td {
     padding: 6px 0 0 0;
     font-size: 12px;
     line-height: 15px;
@@ -617,23 +633,6 @@
 .booking a:hover {
     color: #ED1192;
 }
-
-
-/* Текстовые поля - общие свойства */
-.booking .text-disabled,
-.booking .text-disabled:hover,
-.booking .text-disabled:focus {
-    color: #FFF8CE;
-    border: 1px solid #aaa;
-    background: transparent;
-    cursor: not-allowed;
-}
-.booking .ready .text-disabled,
-.booking .ready .text-disabled:hover,
-.booking .ready .text-disabled:focus {
-    color: #E5FFD2;
-}
-
 
 /* Прочее - общие свойства */
 .booking .b-pseudo {
@@ -691,79 +690,6 @@
 }
 .booking .nameorder-warning .link:hover {
     color: #ED1192;
-}
-
-
-/* логотипы Виза и МастерКард */
-
-.bankcard .bc-type {
-    padding: 0;
-    margin: 9px 0 0;
-
-    height: 54px;
-    line-height: 54px;
-    text-align: center;
-
-    color: #777;
-}
-
-    .bankcard .bc-type i {
-        display: inline-block;
-
-        height: 54px;
-
-        padding: 0;
-        margin: 0;
-        
-        vertical-align: top;
-    }
-
-    .bankcard .bc-type i.bc-visa {
-        width: 92px;
-
-        background: url(/img/booking/visa.png);
-    }
-
-    .bankcard .bc-type i.bc-master {
-        width: 89px;
-
-        background: url(/img/booking/mastercard.png);
-    }
-    
-    .bankcard .bc-type b {
-        font-size: 14px;
-        
-        padding: 0 10px;
-    }
-
-    .bankcard .bc-type-visa i.bc-master,
-    .bankcard .bc-type-master i.bc-visa,
-    .bankcard .bc-type-visa b,
-    .bankcard .bc-type-master b
-    {
-        display: none;
-    }
-
-    .bankcard .bc-type-none
-    {
-        opacity: 0.5;
-    }
-
-.bankcard label {
-    display: block;
-    margin: 0 0 3px;
-    font-weight: bold;
-    font-size: 13px;
-    letter-spacing: -0.03em;
-    color: #333;
-}
-.bankcard .text {
-    width: 52px;
-    padding: 1px 4px;
-    background: #e8e8e8;
-}
-.bankcard .text-value {
-    background: #FFF;
 }
 
 /******* БЛОК 5: САБМИТ *******/
@@ -879,11 +805,6 @@
     padding-bottom: 0;
 }
 .book-retry .disclaimer {
-    display: none;
-}
-
-/* Ошибки заполнения */
-.booking .formError {
     display: none;
 }
 
