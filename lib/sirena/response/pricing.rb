@@ -89,10 +89,13 @@ module Sirena
         # без insert неправильно прасится дата
         dep = Time.parse((fi.xpath("deptdate").text+" "+fi.xpath("depttime").text).insert(6, "20"))
         arr = Time.parse((fi.xpath("arrvdate").text+" "+fi.xpath("arrvtime").text).insert(6, "20"))
+        marketing_carrier = fi.xpath("company").text
+        operating_carrier = fi.xpath("operating_company").text.presense || marketing_carrier
         f = Flight.new(
-          :operating_carrier_iata => fi.xpath("company").text,
-          :marketing_carrier_iata => fi.xpath("company").text,
+          :marketing_carrier_iata => marketing_carreir,
+          :operating_carrier_iata => operating_carrier,
           :departure_iata =>         dep_iata,
+          # часто бывает "Ш ", например. strip?
           :departure_term =>         fi.at_xpath("origin")["terminal"],
           :arrival_iata =>           arr_iata,
           :arrival_term =>           fi.at_xpath("destination")["terminal"],

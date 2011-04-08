@@ -31,7 +31,7 @@ module Sirena
           i ||= -1
           { :departure => flight.departure_iata,
             :arrival=> flight.arrival_iata,
-            :company=> flight.operating_carrier_iata,
+            :company=> flight.marketing_carrier_iata,
             :num=>flight.flight_number,
             :date => sirena_date(flight.departure_date),
             :subclass => recommendation.booking_classes[i+=1]
