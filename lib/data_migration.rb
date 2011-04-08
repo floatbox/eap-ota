@@ -8,17 +8,17 @@ module DataMigration
 
 
   def self.update_iata_ru_in_carriers_and_airplanes(path)
-    open("#{path}/airplane_sirena.csv").each_line do |row|
+    open("#{path}/airplanes.csv").each_line do |row|
       row.chomp
       iata, iata_ru, *smth = row.split(';')
       airplane = Airplane.find_by_iata(iata)
-      airplane.update_attribute(:iata_ru, iata_ru) if airplane && airplane.iata_ru.blank?
+      airplane.update_attribute(:iata_ru, iata_ru) if airplane && airplane.iata_ru.blank? && (iata_ru != iata)
     end
-    open("#{path}/carrier_sirena.csv").each_line do |row|
+    open("#{path}/carriers.csv").each_line do |row|
       row.chomp
-      iata, iata_ru, *smth = row.split(';')
-      carrier = Carrier.find_by_iata(iata)
-      carrier.update_attribute(:iata_ru, iata_ru) if carrier && carrier.iata_ru.blank?
+      iata, iata_ru, name_en, country_code, name_ru = row.split(';')
+      carrier = Carrier.find_by_iata(iata) || Carrier.find_by_ru_shortname(name_ru) || Carrier.find_by_en_shortname(name_en)
+      carrier.update_attribute(:iata_ru, iata_ru) if carrier && (iata != iata_ru)
     end
   end
 
