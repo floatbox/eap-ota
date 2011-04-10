@@ -85,7 +85,7 @@ module Sirena
                 value["morpher_from"] = make_case(without_state, "from")
               end
               if columns.include?("city_id")
-                city = cities[data[:city][:en]]
+                city = City[data[:city][:en]]
                 if city.blank?
                   puts "нет города "+data.inspect
                   next
@@ -103,7 +103,7 @@ module Sirena
               end
               if columns.include?("lat")
                 str = country ? country.name_ru+", " : ""
-                str+= city ? city.name_ru+", " : ""
+                str+= (city && city.id) ? city.name_ru+", " : ""
                 str+=name_ru
                 value["lat"], value["lng"] = find_coords(str)
               end
@@ -132,7 +132,7 @@ module Sirena
                 value["region_id"]= orig.region && orig.region.name_ru || match && match[0].strip.to_s
               end
             end
-            
+
             csv << columns.map{|col| value[col]}
           }
         end
@@ -142,12 +142,11 @@ module Sirena
         result
       end
 
-      # тупо берем первые координаты с яндекса (потому что много русских городов)
       def find_coords(str)
         resp = Net::HTTP.get(URI.parse(URI.encode("http://maps.yandex.ru/?text="+str)))
-        m = resp.match(/"ll":\[([^,]+),([^\]]+)\]/)
-        if m
-          [m[1].to_f,m[2].to_f]
+         m = resp.match(/"ll":\[([^,]+),([^\]]+)\]/)
+         if m
+           [m[1].to_f,m[2].to_f]
         end
       end
 
@@ -195,3 +194,4 @@ module Sirena
     end
   end
 end
+

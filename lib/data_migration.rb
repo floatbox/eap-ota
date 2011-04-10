@@ -2,112 +2,62 @@
 require "rexml/document"
 require 'net/http'
 require 'uri'
+require 'csv'
 
 module DataMigration
+
+
+  def self.update_iata_ru_in_carriers_and_airplanes(path)
+    open("#{path}/airplanes.csv").each_line do |row|
+      row.chomp
+      iata, iata_ru, *smth = row.split(';')
+      airplane = Airplane.find_by_iata(iata)
+      airplane.update_attribute(:iata_ru, iata_ru) if airplane && airplane.iata_ru.blank? && (iata_ru != iata)
+    end
+    open("#{path}/carriers.csv").each_line do |row|
+      row.chomp
+      iata, iata_ru, name_en, country_code, name_ru = row.split(';')
+      carrier = Carrier.find_by_iata(iata) || Carrier.find_by_ru_shortname(name_ru) || Carrier.find_by_en_shortname(name_en)
+      carrier.update_attribute(:iata_ru, iata_ru) if carrier && (iata != iata_ru)
+    end
+  end
 
   def self.update_iata_ru
     cities = City.all(:conditions => 'iata_ru is NOT null and iata_ru != ""')
     cities.each do |c|
       if c.airports.count == 1 && c.airports.first.iata_ru.blank?
         c.airports.first.update_attribute(:iata_ru, c.iata_ru)
+      elsif  c.airports.count == 0
+        Airport.create(:name_en => c.name_en, :name_ru => c.name_ru, :iata => c.iata, :iata_ru => c.iata_ru, :city => c, :morpher_in => c.morpher_in, :morpher_from => c.morpher_from, :morpher_to => c.morpher_to)
       end
     end
   end
 
 
-  def self.create_payments_for_existing_orders
-    Order.all.each do |o|
-      Payment.create(:price => o.price_with_payment_commission, :last_digits_in_card => o.last_digits_in_card, :order => o, :name_in_card => o.name_in_card, :id_override => o.order_id)
-    end
-  end
-
-  def self.fill_in_disabled_flag_in_cities_and_airports
-    Amadeus.booking do |amadeus|
-      City.all(:conditions => 'iata != ""  and iata is not null').each do |c|
-        res = amadeus.cmd("dac #{c.iata}")
-        c.update_attribute(:disabled, true) if res['LOCATION NOT IN TABLE']
-        sleep 0.5
-      end
-      Airport.all(:conditions => 'iata != ""  and iata is not null').each do |c|
-        res = amadeus.cmd("dac #{c.iata}")
-        c.update_attribute(:disabled, true) if res['LOCATION NOT IN TABLE']
-        sleep 0.5
-      end
-
-    end
-  end
-
-  def self.fill_in_lat_and_lng_in_regions
-    Region.all.each do |r|
-      city = City.first(:conditions => ['region_id = ?', r.id], :order => 'importance DESC')
-      r.update_attributes(:lat => city.lat, :lng => city.lng)
-    end
-  end
-
-  def self.fill_in_iata_ru_in_cities_and_airports(path)
+  def self.update_cities_with_sirena_data(path)
     open(path + '/cities.csv').each_line do |l|
       l.chomp
       iata, iata_ru, name_en, name_ru, country_id, region_id, lat, lng, morpher_to, morpher_from, morpher_in = l.split(';')
-      if iata_ru.match(/[А-Я]/u)
+      if iata_ru && iata_ru.match(/[А-Я]/u)
         city = City.find_by_iata(iata)
         city = City.find_by_name_ru(name_ru) if !city && country_id == 'RU'
         if city
           city.update_attribute(:sirena_name, name_ru) if name_ru != city.name_ru
           city.update_attribute(:iata_ru, iata_ru)
+        else
+          country = Country.find_by_alpha2(country_id) || Country.find_by_id(country_id)
+          if country && (iata =~ /^[A-Z]+$/) && lat.present?
+            City.create(:iata => iata, :iata_ru => iata_ru,
+                        :name_en => name_en, :name_ru => name_ru,
+                        :country => country, :lat => lat, :lng => lng,
+                        :morpher_to => morpher_to, :morpher_from => morpher_from,
+                        :morpher_in => morpher_in)
+          end
         end
       end
     end
-    open(path + '/airports.csv').each_line do |l|
-      l.chomp
-      iata, iata_ru, name_en, name_ru, city_id, lat, lng, morpher_to, morpher_from, morpher_in = l.split(';')
-      if iata_ru.match(/[А-Я]/u)
-        airport = Airport.find_by_iata(iata)
-        airport = Airport.find_by_name_ru(name_ru) if !airport
-        if airport
-          airport.update_attribute(:sirena_name, name_ru) if name_ru != airport.name_ru
-          airport.update_attribute(:iata_ru, iata_ru)
-        end
-      end
-    end
   end
 
-  def self.fill_in_cities_and_airports
-    open('config/cities.csv').each_line do |l|
-      l.chomp
-      next if l =~ /^\s*$/
-      next if l =~ /^#/
-      code, name_en, name_ru = l.split(';')
-      city = City.find_by_iata(code)
-      city.update_attributes(:name_en => name_en, :name_ru => name_ru) if city
-    end
-    open('config/airports.csv').each_line do |l|
-      l.chomp
-      next if l =~ /^\s*$/
-      next if l =~ /^#/
-      code, name_en, name_ru = l.split(';')
-      airport = Airport.find_by_iata(code)
-      airport.update_attributes(:name_en => name_en, :name_ru => name_ru) if airport
-    end
-
-  end
-
-  def self.fill_in_regions_and_clean_cities
-    usa = Country.find_by_name_en("United States")
-    City.all.each do |c|
-      if c.name_ru && c.name_ru[', шт. '] && c.name_ru.split(',').length == 2 && c.name_en && c.name_en.split(',').length == 2
-        city_name_ru, name_ru = c.name_ru.chomp.split(', шт. ')
-        city_name_en, name_en = c.name_en.split(', ')
-        r = Region.find_or_create_by_name_ru(name_ru)
-        r.name_en = name_en
-        r.country = usa
-        r.save
-        c.name_ru = city_name_ru
-        c.name_en = city_name_en
-        c.region = r
-        c.save
-      end
-    end
-  end
 
   def self.get_tz_from_lat_and_lng(lat, lng)
     xml = Net::HTTP.get URI.parse("http://ws.geonames.org/timezone?lat=#{lat}&lng=#{lng}&style=full")
