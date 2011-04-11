@@ -103,7 +103,11 @@ class Flight
   def flight_code
     full_flight_number +  departure_iata + arrival_iata + departure_date
   end
-  
+
+  def destination
+    "#{departure_iata} #{arrival_iata}"
+  end
+
   def self.from_flight_code code
     fl = Flight.new
     ( fl.operating_carrier_iata,
@@ -116,12 +120,12 @@ class Flight
     fl.operating_carrier_iata ||= fl.marketing_carrier_iata
     fl
   end
-  
+
   # FIXME убить?
   def comfort
     :econom
   end
-  
+
   #private
   def self.calculate_distance from, to
     Graticule::Distance::Vincenty.distance(from, to, :kilometers)
@@ -151,3 +155,4 @@ class Flight
   end
 
 end
+
