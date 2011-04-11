@@ -505,10 +505,8 @@ commission "5%/3.5%"
 
 agent    "0% на все остальные тарифы."
 subagent "0% на все остальные тарифы."
-disabled "такого уже нет"
-not_implemented
-commission "1eur/0"
-
+interline :possible
+commission "0/0"
 
 carrier "CI", "China Airlines"
 ########################################
