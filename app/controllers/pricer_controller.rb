@@ -57,6 +57,19 @@ class PricerController < ApplicationController
     end
   end
 
+  # FIXME попытаться вынести общие методы или объединить с pricer/validate
+  def yandex
+    @search = PricerForm.simple( params.slice(:from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants) )
+    @search.partner = 'yandex'
+    if @search.valid?
+      @search.save_to_cache
+      @recommendations = Mux.pricer(@search)
+      render 'api/yandex'
+    else
+      render 'api/yandex_failure', :locals => {:message => 'from, to and date1 parameters are required'}
+    end
+  end
+
   protected
 
   def create_hot_offer

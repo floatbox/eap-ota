@@ -2,39 +2,65 @@
 require 'spec_helper'
 
 describe PricerForm do
-  subject do
-    described_class.new( attrs )
-  end
-
-  let :people_attrs do
-    {"infants"=>"0", "adults"=>"1", "children"=>"0"}
-  end
-
-  context "when filled" do
-    let :attrs do
-      { "people_count" => people_attrs,
-        "form_segments" => {
-          "0" => {"from"=>"Москва", "date"=>"210411", "to"=>"Париж"},
-          "1" => {"from"=>"Париж", "date"=>"280411", "to"=>"Москва"}}
-      }
+  context "filled via ajax" do
+    subject do
+      described_class.new( attrs )
     end
 
-    it do
-      should be_valid
+    let :people_attrs do
+      {"infants"=>"0", "adults"=>"1", "children"=>"0"}
+    end
+
+    context "when filled" do
+      let :attrs do
+        { "people_count" => people_attrs,
+          "form_segments" => {
+            "0" => {"from"=>"Москва", "date"=>"210411", "to"=>"Париж"},
+            "1" => {"from"=>"Париж", "date"=>"280411", "to"=>"Москва"}}
+        }
+      end
+
+      it do
+        should be_valid
+      end
+    end
+
+    context "when second row 'from' is not filled" do
+      let :attrs do
+        { "people_count" => people_attrs,
+          "form_segments"=> {
+            "0" => {"from"=>"Москва", "date"=>"210411", "to"=>"Париж"},
+            "1" => {"from"=>"", "date"=>"280411", "to"=>"Москва"}}
+        }
+      end
+
+      it do
+        should be_valid
+      end
     end
   end
 
-  context "when second row 'from' is not filled" do
-    let :attrs do
-      { "people_count" => people_attrs,
-        "form_segments"=> {
-          "0" => {"from"=>"Москва", "date"=>"210411", "to"=>"Париж"},
-          "1" => {"from"=>"", "date"=>"280411", "to"=>"Москва"}}
-      }
+  context "filled via api" do
+    subject do
+      described_class.simple( attrs )
     end
 
-    it do
-      should be_valid
+    context "when oneway" do
+      let :attrs do
+        { :from => 'MOW', :to => 'LON', :date1 => '091011' }
+      end
+
+      it { should be_valid }
+      its(:rt) { should == false }
+    end
+
+    context "when twoway" do
+      let :attrs do
+        { :from => 'MOW', :to => 'LON', :date1 => '091011', :date2 => '092011' }
+      end
+
+      it { should be_valid }
+      its(:rt) { should == true }
     end
   end
 end

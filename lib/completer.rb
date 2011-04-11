@@ -316,6 +316,7 @@ class Completer
   def add_region(c)
     synonyms = []
     synonyms << c.name_en unless c.name_en == c.name
+    synonyms += c.synonyms
     synonyms.delete_if &:blank?
     add(:name => c.name, :type => 'region', :aliases => synonyms, :hint => c.country.name, :info => "#{c.region_type.mb_chars.capitalize} #{c.name} #{c.country.case_in}")
     add(:name => c.case_to, :type => 'region', :hint => c.country.name, :info => "#{c.region_type.mb_chars.capitalize} #{c.name} #{c.country.case_in}")

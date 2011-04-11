@@ -43,15 +43,16 @@ module Sirena
             end
             if first_variant
               booking_classes << fi["subclass"] if fi["subclass"]
-              cabins << {"Э"=>"Y", "Б"=>"C", "П"=>"F"}[fi["baseclass"]] || fi["baseclass"]
+              cabins << ({"Э"=>"Y", "Б"=>"C", "П"=>"F"}[fi["baseclass"]] || fi["baseclass"])
             end
             id = fi["id"]
             time += flights[id][:time]
             time +=(flights[id][:departure]-prev_arr).to_i/60 if !prev_arr.blank?
             prev_arr=flights[id][:arrival]
             segment.flights << flights[id][:flight]
-            first_variant = false
+
           }
+          first_variant = false
           # eft = estimated flight time!
           segment.eft = (time/60).to_s+":"+"%02i".%(time % 60)
           Variant.new( :segments => segments )
@@ -76,9 +77,9 @@ module Sirena
             :validating_carrier_iata => validating_carrier_iata,
             :additional_info => "",
             :sirena_blank_count => blank_count,
-            :cabins => booking_classes,
+            :cabins => cabins,
             :booking_classes => booking_classes
-          ) 
+          )
         end
       end
 
@@ -88,10 +89,13 @@ module Sirena
         # без insert неправильно прасится дата
         dep = Time.parse((fi.xpath("deptdate").text+" "+fi.xpath("depttime").text).insert(6, "20"))
         arr = Time.parse((fi.xpath("arrvdate").text+" "+fi.xpath("arrvtime").text).insert(6, "20"))
+        marketing_carrier = fi.xpath("company").text
+        operating_carrier = fi.xpath("operating_company").text.presense || marketing_carrier
         f = Flight.new(
-          :operating_carrier_iata => fi.xpath("company").text,
-          :marketing_carrier_iata => fi.xpath("company").text,
+          :marketing_carrier_iata => marketing_carreir,
+          :operating_carrier_iata => operating_carrier,
           :departure_iata =>         dep_iata,
+          # часто бывает "Ш ", например. strip?
           :departure_term =>         fi.at_xpath("origin")["terminal"],
           :arrival_iata =>           arr_iata,
           :arrival_term =>           fi.at_xpath("destination")["terminal"],
@@ -113,3 +117,4 @@ module Sirena
     end
   end
 end
+

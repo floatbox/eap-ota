@@ -69,6 +69,8 @@ class Recommendation
   end
 
   def valid_interline?
+    # FIXME убрать проверку HR отсюда
+    validating_carrier_iata == 'HR' or
     not interline? or
     other_marketing_carrier_iatas.uniq.all? do |iata|
       validating_carrier.interline_with?(iata)
@@ -260,6 +262,13 @@ class Recommendation
     end
   end
 
+  def cabin_for_flight flight
+    variants.each do |v|
+      i = v.flights.index flight
+      return cabins[i] if i
+    end
+  end
+
   def check_price_and_availability(pricer_form)
     return unless hahn_air_allows?
     if source == 'amadeus'
@@ -298,7 +307,7 @@ class Recommendation
   end
 
   def hahn_air_allows?
-    validating_carrier_iata != 'HR' || HahnAir.allow?(marketing_carrier_iatas | operating_carrier_iatas)
+    validating_carrier_iata != 'HR' || HahnAir.allows?(marketing_carrier_iatas | operating_carrier_iatas)
   end
 
   def cabins_except selected_cabin

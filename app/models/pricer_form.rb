@@ -1,6 +1,28 @@
 # encoding: utf-8
 class PricerForm < ActiveRecord::BaseWithoutTable
 
+  # перенести в хелпер
+  def self.convert_api_date(date_str)
+    if date_str =~ /^20(\d\d)-(\d\d?)-(\d\d?)$/
+      "%02d%02d%02d" % [$3, $2, $1]
+    else
+      date_str
+    end
+  end
+
+  def self.simple(args)
+    form_segments = [ {:from => args[:from], :to => args[:to], :date => convert_api_date(args[:date1])} ]
+    if args[:date2]
+      form_segments << {:from => args[:to], :to => args[:from], :date => convert_api_date(args[:date2])}
+    end
+    adults = args[:adults] || 1
+    children = args[:children]
+    infants = args[:infants].to_i + args[:seated_infants].to_i
+
+    new :form_segments => form_segments,
+      :adults => adults, :children => children, :infants => infants
+  end
+
   class FormSegment < ActiveRecord::BaseWithoutTable
     column :from, :string
     column :to, :string

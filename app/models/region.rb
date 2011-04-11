@@ -1,5 +1,6 @@
 # encoding: utf-8
 class Region < ActiveRecord::Base
+  include HasSynonyms
   belongs_to :country
   has_many :cities
   has_cases_for :name
@@ -7,6 +8,8 @@ class Region < ActiveRecord::Base
   scope :not_important, where("importance = 0")
   scope :with_country, includes(:country)
   attr_writer :main_city_iatas_as_text #хак для typus
+
+  REGION_TYPE = ['', 'штат', 'провинция']
 
   def name
     name_ru || name_en
