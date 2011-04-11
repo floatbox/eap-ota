@@ -90,9 +90,9 @@ module Sirena
         dep = Time.parse((fi.xpath("deptdate").text+" "+fi.xpath("depttime").text).insert(6, "20"))
         arr = Time.parse((fi.xpath("arrvdate").text+" "+fi.xpath("arrvtime").text).insert(6, "20"))
         marketing_carrier = fi.xpath("company").text
-        operating_carrier = fi.xpath("operating_company").text.presense || marketing_carrier
+        operating_carrier = fi.xpath("operating_company").text.presence || marketing_carrier
         f = Flight.new(
-          :marketing_carrier_iata => marketing_carreir,
+          :marketing_carrier_iata => marketing_carrier,
           :operating_carrier_iata => operating_carrier,
           :departure_iata =>         dep_iata,
           # часто бывает "Ш ", например. strip?
