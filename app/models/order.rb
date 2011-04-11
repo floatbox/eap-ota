@@ -72,6 +72,10 @@ class Order < ActiveRecord::Base
     payments.last ? payments.last.payture_state : ''
   end
 
+  def charge_date
+    payments.last ? payments.last.charge_date : nil
+  end
+
   def payture_amount
     payments.last ?  payments.last.payture_amount : nil
   end

@@ -36,6 +36,7 @@ class Payment < ActiveRecord::Base
 
   def charge!
     res = Payture.new.charge(:order_id => ref)
+    update_attribute(:charge_date, Date.today) if res.success?
     res.success?
   end
 
