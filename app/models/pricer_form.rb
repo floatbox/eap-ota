@@ -4,7 +4,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   # перенести в хелпер
   def self.convert_api_date(date_str)
     if date_str =~ /^20(\d\d)-(\d\d?)-(\d\d?)$/
-      "%02d%02d%02d" % [$3, $2, $1]
+      "%02d%02d%02d" % [$3, $2, $1].map(&:to_i)
     else
       date_str
     end
