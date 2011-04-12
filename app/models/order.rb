@@ -69,6 +69,13 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def load_ticket_numbers
+    Amadeus.booking do |amadeus|
+      resp = amadeus.pnr_retrieve_and_ignore(:number => number)
+    end
+    update_attribute(:tickets, resp.passengers.every.ticket.join(', '))
+  end
+
   def payture_state
     payments.last ? payments.last.payture_state : ''
   end
@@ -113,6 +120,7 @@ class Order < ActiveRecord::Base
 
   def ticket!
     update_attributes(:ticket_status =>'ticketed', :ticketed_date => Date.today)
+    load_ticket_numbers
     send_receipt
   end
 
