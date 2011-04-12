@@ -9,37 +9,38 @@
     <% end %>
     
     <!-- Данные пассажиров -->
-    <h3>Введите данные <%= @order.people.size == 1 ? 'пассажира' : 'пассажиров' %></h3>
+    <h3 class="bstitle">Введите данные <%= @order.people.size == 1 ? 'пассажира' : 'пассажиров' %></h3>
     <%= render :partial => 'person_form', :collection => @order.people %>
 
-    <!-- Банковская карточка -->
-    <h3>Введите данные банковской карты</h3>
-    <%= render 'card_form' , :f => f %>
+    <!-- Платёжные данные -->
+    <h3 class="bstitle">Выберите способ оплаты и введите платёжные данные</h3>
+    <%= render 'card_form', :f => f %>
+    <%= render 'cash_form' %>
             
     <!-- Контакты -->
-    <h3>Введите данные покупателя</h3>
+    <h3 class="bstitle">Введите данные покупателя</h3>
     <%= render 'contacts_form' %>
 
     <!-- Отправка -->
-    <div class="book-s">
-        <div class="control">
-        <table><tr>
-            <td class="g-xl">Всё правильно?</td>
-            <th><input type="submit" class="a-button g-xl" value="Купить"></th>
-            <td class="g-xxs">
+    <div class="booking-submit">
+        <table>
+        <tr>
+            <td class="bs-left">Всё правильно?</td>
+            <td class="bs-button"><input type="submit" class="a-button" value="Купить"></th>
+            <td class="bs-right">
                 <div class="cancel">или <a class="stop-booking" href="#">вернуться к выбору вариантов</a></div>
                 <div class="loading"><br></div>
             </td>
-        </tr></table>
-        </div>
-        <div class="blocker">
-            <s></s>
+        </tr>
+        </table>
+        <div class="booking-errors">
+            <div class="be-triangle"></div>
             <h6>Пока невозможно. И вот почему:</h6>
-            <ul class="b-pseudo"></ul>
+            <ul class="be-list"></ul>
         </div>
-        <div class="disclaimer">
-            <p>После нажатия кнопки «Купить» данные пассажиров попадут в&nbsp;систему бронирования, билет будет оформлен и&nbsp;выслан вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="/agreement/" target="_blank">условиями использования</a>, <a href="/iata/" target="_blank">правилами IATA</a> и&nbsp;<a class="farerules-link" href="#">правилами тарифов</a></p>
-        </div>
+    </div>
+    <div class="booking-disclaimer">
+        <p>После нажатия кнопки «Купить» данные пассажиров попадут в&nbsp;систему бронирования, билет будет оформлен и&nbsp;выслан вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="/agreement/" target="_blank">условиями использования</a>, <a href="/iata/" target="_blank">правилами IATA</a> и&nbsp;<a class="farerules-link" href="#">правилами тарифов</a></p>
     </div>
 
 <% end %>

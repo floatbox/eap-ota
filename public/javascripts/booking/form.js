@@ -1,11 +1,8 @@
 /* Booking form */
 app.booking = {
 init: function() {
+
     var self = this;
-    /*var sections = $('.section[onclick]', this.el);
-    this.steps = $.map(sections, function(el, i) {
-        return new (app[el.onclick()])(el, i);
-    });*/
     
     // Проверка формы
     this.sections = [];
@@ -78,9 +75,6 @@ init: function() {
         rcontrol.addClass('sending');
     });
     this.submit = $('.book-s .a-button', this.el);
-    /*for (var i = this.steps.length; i--;) {
-        this.steps[i].change();
-    }*/
     
     // Повторная попытка
     this.el.delegate('a.retry', 'click', function(event) {
@@ -97,34 +91,13 @@ init: function() {
     });
 
     // Список неправильно заполненных полей
-    $('.blocker', this.el).delegate('a', 'click', function(event) {
-        event.preventDefault();
-        var control = $('#' + $(this).attr('data-id'));
-        var st = control.closest(':visible').offset().top - results.header.height() - 25;
+    this.el.find('.be-list').delegate('.link', 'click', function() {
+        var control = $('#' + $(this).attr('data-field'));
+        var st = control.closest(':visible').offset().top - results.header.height() - 35;
         $.animateScrollTop(Math.min(st, $(window).scrollTop()), function() {
             control.focus();
         });
     });
-    /*
-    sections.bind('setready', function() {
-        var ready = true, errors = [];
-        for (var i = 0, im = self.steps.length; i < im; i++) {
-            var step = self.steps[i];
-            if (!step.ready) {
-                ready = false;
-                if (step.state) {
-                    errors = errors.concat(step.state);
-                }
-            }
-        }
-        self.submit.toggleClass('a-button-ready', ready);
-        var blocker = $('.blocker', self.el).toggle(!ready);
-        if (!ready && errors.length) {
-            $('.b-pseudo', blocker).html('<li>' + errors.slice(0, 3).join('</li><li>') + '</li>');
-        }
-    });
-    sections.eq(0).trigger('setready');
-    */
     
     // Правила тарифов
     this.farerules.init(this.el);

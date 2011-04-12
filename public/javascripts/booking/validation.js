@@ -17,9 +17,11 @@ app.booking.validate = function(full) {
         section.el.toggleClass('ready', valid);
     }
     if (errors.length) {
-        this.el.find('.b-pseudo').html('<li>' + errors.slice(0, 3).join('</li><li>') + '</li>');
+        this.el.find('.be-list').html('<li>' + errors.slice(0, 3).join('</li><li>') + '</li>');
+        this.el.find('.booking-errors').show();
     } else {
-        this.el.find('.b-pseudo').html('');
+        this.el.find('.booking-errors').hide();
+        this.el.find('.be-list').html('');
     }
 };
 
@@ -27,12 +29,14 @@ app.booking.initPerson = function(el) {
     var fname = validator.name(el.find('input[id$="first_name"]'), {
         empty: 'Не указано {имя пассажира}',
         short: '{Имя пассажира} нужно ввести полностью',
-        latin: '{Имя пассажира} нужно ввести латинскими буквами'
+        latin: '{Имя пассажира} нужно ввести латинскими буквами',
+        space: '{Имя пассажира} нужно ввести без пробелов'
     });
     var lname = validator.name(el.find('input[id$="last_name"]'), {
         empty: 'Не указана {фамилия пассажира}',
         short: '{Фамилию пассажира} нужно ввести полностью',
-        latin: '{Фамилию пассажира} нужно ввести латинскими буквами'
+        latin: '{Фамилию пассажира} нужно ввести латинскими буквами',
+        space: '{Фамилию пассажира} нужно ввести без пробелов'
     });
     var gender = validator.gender(el.find('.bp-sex-radio'), {
         empty: 'Не выбран {пол пассажира}'
@@ -55,6 +59,25 @@ app.booking.initPerson = function(el) {
             }
         }
     });
+    fname.el.add(lname.el).change(function() {
+        var fn = fname.el.val();
+        var ln = lname.el.val();
+        if (fn && ln && getGender(ln) && !getGender(fn)) {
+            orderWarning.fadeIn(150);
+        } else {
+            orderWarning.fadeOut(150);
+        }
+    });
+    var orderWarning = el.find('.nameorder-warning');
+    orderWarning.find('.link').click(function() {
+        orderWarning.fadeOut(150);
+        if ($(this).hasClass('nameorder-replace')) {
+            var fn = fname.el.val();
+            var ln = lname.el.val();
+            fname.el.val(ln).change();
+            lname.el.val(fn).change();
+        }
+    }); 
     var bdate = validator.date(el.find('.bp-birthday input'), {
         empty: 'Не указана {дата рождения} пассажира',
         letters: '{Дату рождения} нужно ввести цифрами в формате дд/мм/гггг',
@@ -122,9 +145,23 @@ app.booking.initCard = function(el) {
         }
         numsample.html(s.join(''));
     });
+    var cardcvv = validator.cardcvv($('#bc-cvv'), {
+        empty: 'Не указан трёхзначный {CVV/CVC код} банковской карты',
+        letters: '{CVV/CVC код} банковской карты нужно ввести цифрами',
+    });
+    var cardname = validator.name($('#bc-name'), {
+        empty: 'Не указано {имя владельца} банковской карты',
+        latin: '{Имя владельца} банковской карты нужно ввести латинскими буквами'
+    });
+    var cardexp = validator.cardexp(el.find('.bc-exp input'), {
+        empty: 'Не указан {срок действия} банковской карты',
+        letters: '{Cрок действия} банковской карты нужно ввести цифрами в формате дд/гг',
+        month: 'Месяц в {сроке действия} банковской карты должене быть числом от 1 до 12',
+        past: 'Указан истекший {срок действия} банковской карты'
+    });
     this.sections.push({
         el: el,
-        items: [cardnumber]
+        items: [cardnumber, cardname, cardexp, cardcvv]
     });
 };
 
@@ -158,17 +195,21 @@ control: function(el, messages) {
 name: function(el, messages) {
     var item = new this.control(el, messages);
     item.important = {
-        latin: true
+        latin: true,
+        space: true
     };
     item.check = function() {
         var value = $.trim(this.el.val());
         if (!value) {
             return 'empty';
         }
-        if (value.search(/[^a-z]/i) !== -1) {
+        if (value.search(/[^a-z ]/i) !== -1) {
             return 'latin';
         }
-        if (value.length < 2) {
+        if (messages.space && value.search(/ /) !== -1) {
+            return 'space';
+        }
+        if (messages.short && value.length < 2) {
             return 'short';
         }
         return undefined;
@@ -176,8 +217,7 @@ name: function(el, messages) {
     el.change(function() {
         el.val($.trim(el.val().toUpperCase()));
         item.validate();
-    });
-    el.keyup(function() {
+    }).bind('keyup propertychange input', function() {
         item.change();
     });
     return item;
@@ -219,8 +259,7 @@ number: function(el, messages) {
     el.change(function() {
         el.val($.trim(el.val().toUpperCase()));
         item.validate();
-    });
-    el.keyup(function() {
+    }).bind('keyup propertychange input', function() {
         item.change();
     });
     return item;    
@@ -263,7 +302,7 @@ date: function(parts, messages) {
     }).blur(function() {
         var f = $(this);
         f.prev('.placeholder').toggle(f.val().length === 0);
-    }).keyup(function() {
+    }).bind('keyup propertychange input', function() {
         item.change();
     });
     parts.slice(0, 2).change(function() {
@@ -273,7 +312,7 @@ date: function(parts, messages) {
     }).keypress(function(e) {
         if (String.fromCharCode(e.which).search(/[ .,\-\/]/) === 0) {
             e.preventDefault();
-            $(this).parent().next().find('input').focus();
+            $(this).change().parent().next().find('input').focus();
         }
     });
     parts.eq(2).change(function() {
@@ -302,8 +341,7 @@ email: function(el, messages) {
     el.change(function() {
         el.val($.trim(el.val()));
         item.validate();
-    });
-    el.keyup(function() {
+    }).bind('keyup propertychange input', function() {
         item.change();
     });
     return item;  
@@ -334,8 +372,7 @@ phone: function(el, messages) {
         v = v.replace(/(\D)(\d{2,3})(\d{2})(\d{2})$/, '$1$2-$3-$4');
         el.val(v);
         item.validate();
-    });
-    el.keyup(function() {
+    }).bind('keyup propertychange input', function() {
         item.change();
     });
     return item;  
@@ -396,9 +433,91 @@ cardnumber: function(parts, messages) {
             $(this).trigger('change').prev('input').focus();
         }
     });
-    parts.keyup(function() {
+    parts.bind('keyup propertychange input', function() {
         item.change();
     });    
+    return item;    
+},
+cardexp: function(parts, messages) {
+    var item = new this.control(parts, messages);
+    var mf = parts.eq(0);
+    var yf = parts.eq(1);
+    var today = new Date();    
+    item.important = {
+        month: true,
+        past: true,
+        letters: true
+    };
+    item.check = function() {
+        var mv = mf.val();
+        var yv = yf.val();
+        this.invalid = mf;
+        if (mv.length === 0) {
+            return 'empty';
+        }
+        if (mv.search(/\D/) !== -1) {
+            return 'letters';
+        }
+        var m = parseInt(mv, 10);
+        if (m < 1 || m > 12) {
+            return 'month';
+        }
+        if (yv.length < 2) {
+            this.invalid = yf;
+            return 'empty';        
+        }
+        if (yv.search(/\D/) !== -1) {
+            this.invalid = yf;
+            return 'letters';
+        }
+        var y = parseInt(yv, 10);
+        if (y * 12 + m < today.getFullYear() % 100 * 12 + today.getMonth() + 1) {
+            return 'past';
+        }
+        return undefined;
+    };
+    mf.change(function() {
+        var f = $(this), v = f.val();
+        if (v && v.length < 2) f.val('0' + v);
+    }).keypress(function(e) {
+        if (String.fromCharCode(e.which).search(/[ .,\-\/]/) === 0) {
+            e.preventDefault();
+            mf.change();
+            yf.focus();
+        }
+    });
+    parts.focus(function() {
+        $(this).prev('.placeholder').hide();
+    }).blur(function() {
+        var f = $(this);
+        f.prev('.placeholder').toggle(f.val().length === 0);
+    }).bind('keyup propertychange input', function() {
+        item.change();
+    }).change(function() {
+        item.validate();
+    });
+    return item;
+},
+cardcvv: function(el, messages) {
+    var item = new this.control(el, messages);
+    item.important = {
+        letters: true,
+    };
+    item.check = function() {
+        var value = this.el.val();
+        if (value.length < 3) {
+            return 'empty';
+        }
+        if (value.search(/\D/) !== -1) {
+            return 'letters';
+        }
+        return undefined;
+    };
+    el.change(function() {
+        item.validate();
+    }).bind('keyup propertychange input', function() {
+        item.change();
+    });
     return item;    
 }
 };

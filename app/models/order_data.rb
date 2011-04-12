@@ -2,6 +2,7 @@
 class OrderData < ActiveRecord::BaseWithoutTable
   column :email
   column :phone
+  column :delivery
   has_many :people
   accepts_nested_attributes_for :people
   attr_writer :card

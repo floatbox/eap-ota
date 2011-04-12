@@ -15,7 +15,7 @@
     <div class="bc-name">
         <h6 class="blabel"><label for="bc-num1" title="Имя и фамилия латинскими буквами, как на карте">Имя на&nbsp;карте</label></h6>    
         <%= f.text_field :name, :id => 'bc-name', :class => "bfield" %>
-        <div class="language-warning">Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры. Имя нужно вводить латинскими буквами</div>
+        <div class="bwarning language-warning">Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры. Имя нужно вводить латинскими буквами</div>
     </div>
     <div class="bc-exp">
         <h6 class="blabel"><label for="bc-exp-month" title="На карте обозначен как &laquo;VALID THRU&raquo;">Срок действия</label></h6>
@@ -28,7 +28,7 @@
 <div class="bc-back">
     <div class="bc-stripe">&nbsp;</div>
     <div class="bc-cvv">
-        <h6 class="blabel"><label for="bc-cvv" title="Трёхзначный CVV (CVC) код карты. Карта без этого кода непригодна для оплаты услуг через интернет.">CVV/CVC</label></h6>
+        <h6 class="blabel"><label for="bc-cvv" title="Трёхзначный CVV (CVC) код карты. Карта без этого кода не подходит для оплаты услуг через интернет.">CVV/CVC</label></h6>
         <div id="bc-num-sample" title="Последние четыре цифры номера карты"><span class="empty">####</span></div>
         <%= f.text_field :verification_value, :id => "bc-cvv", :class => "bfield", :maxlength => "3" %>
     </div>

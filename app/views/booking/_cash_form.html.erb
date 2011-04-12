@@ -1,0 +1,44 @@
+<div class="section booking-cash">
+<ul class="section-tabs wrap">
+    <li><span class="link">Банковской картой</span></li>
+    <li class="selected">Наличными</li>
+</ul>
+
+<%= fields_for :cash do |cash| %>    
+<p>Бронирование необходимо оплатить до {date}, иначе оно будет автоматически аннулировано.</p>
+<div class="bc-delivery">
+    <div class="radio"><%= cash.radio_button :delivery, '1', :class => "bc-delivery-radio", :id => "bc-delivery-yes" %>&nbsp;<label for="bc-delivery-yes">Хочу оплатить курьеру при доставке (+500&nbsp;рублей)</label></div>
+    <div class="radio"><%= cash.radio_button :delivery, '0', :class => "bc-delivery-radio", :id => "bc-delivery-no" %>&nbsp;<label for="bc-delivery-no">Хочу самостоятельно приехать в офис и оплатить</label></div>        
+</div>
+<div class="bc-address">
+    <h6 class="blabel">Адрес доставки</h6>
+    <div class="bca-description">
+        <p>Введите адрес доставки, желательно подробный (если есть код домофона или другие тонкости — укажите, пожалуйста). Желаемое время доставки тоже можно указать.</p>
+        <p>Обратите внимание, что доставка возможна только по Москве.</p>
+    </div>
+    <textarea class="bfield"></textarea>
+</div>
+<% end %>
+
+<table class="bc-bill">
+<tr>
+    <th>Стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %></th>
+    <th rowspan="2"><span class="sign">+</span></th>
+    <th>Доставка&nbsp;курьером</th>
+    <th rowspan="2"><span class="sign">=</span></th>
+    <th>Итого&nbsp;к&nbsp;оплате</th>
+</tr>
+<tr class="prices">
+    <td><%= decorated_price @order.recommendation.price_total, 'strong', 'em' %></td>
+    <td><%= decorated_price 500, 'strong', 'em' %></td>
+    <td class="prices-total"><%= decorated_price @order.recommendation.price_total + 500, 'strong', 'em' %></td>
+</tr>
+<tr class="bc-bill-hints">
+    <td><p style="width: 165px;">стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами</p></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+</table>
+</div>
