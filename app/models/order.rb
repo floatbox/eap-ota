@@ -42,7 +42,7 @@ class Order < ActiveRecord::Base
     self.full_info = order_data.full_info
     self.sirena_lead_pass = order_data.sirena_lead_pass
     self.last_tkt_date = order_data.last_tkt_date
-    self.description = recommendation.variants[0].flights.every.destination.join(', ')
+    self.description = recommendation.variants[0].flights.every.destination.join('; ')
     if c = recommendation.commission
       self.commission_carrier = c.carrier
       self.commission_agent = c.agent
@@ -74,7 +74,11 @@ class Order < ActiveRecord::Base
   end
 
   def charge_date
-    payments.last ? payments.last.charge_date : nil
+    (payments.last && payments.last.charged_at) ? payments.last.charged_at.to_date : nil
+  end
+
+  def charge_time
+    (payments.last && payments.last.charged_at) ? payments.last.charged_at.strftime('%H:%m') : nil
   end
 
   def payture_amount
@@ -108,7 +112,7 @@ class Order < ActiveRecord::Base
   end
 
   def ticket!
-    update_attribute(:ticket_status, 'ticketed')
+    update_attributes(:ticket_status =>'ticketed', :ticketed_date => Date.today)
     send_receipt
   end
 

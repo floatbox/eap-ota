@@ -105,7 +105,7 @@ class Flight
   end
 
   def destination
-    "#{departure_iata} #{arrival_iata}"
+    "#{departure_iata} \- #{arrival_iata}"
   end
 
   def self.from_flight_code code
