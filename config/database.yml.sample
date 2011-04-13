@@ -1,11 +1,11 @@
 ### sample adapters
 # 
-# mysql: &MYSQL
-#   adapter: mysql2
-#   # host: 127.0.0.1 #localhost doesn't force TCP sockets
-#   # port: 3306
-#   encoding: utf8
-#   username: root
+mysql: &MYSQL
+  adapter: mysql2
+  # host: 127.0.0.1 #localhost doesn't force TCP sockets
+  # port: 3306
+  encoding: utf8
+  username: root
  
 # # SQLite version 3.x
 # #   gem install sqlite3-ruby (not necessary on OS X Leopard)
@@ -23,13 +23,13 @@
 #   # database: production
 
 production:
-  database: site
+  database: eviterra
   <<: *MYSQL
 
 development:
-  database: site
+  database: eviterra
   <<: *MYSQL
 
 test:
-  database: site_test
+  database: eviterra_test
   <<: *MYSQL
