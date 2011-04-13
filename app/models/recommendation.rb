@@ -99,6 +99,11 @@ class Recommendation
     price_tax + price_markup
   end
 
+  # "налоги и сборы c комиссией" для отображения клиенту
+  def price_tax_and_markup_and_payment
+    price_tax + price_markup + price_payment
+  end
+
   # доля от комиссии консолидатора, которая достанется нам
   def price_share
     if commission
@@ -207,7 +212,7 @@ class Recommendation
 
   def summary
     result = {
-      :price => price_total,
+      :price => price_with_payment_commission,
       :carrier => segments.first.marketing_carrier_name
     }
     alliance = validating_carrier.alliance
