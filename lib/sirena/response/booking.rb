@@ -19,9 +19,9 @@ module Sirena
 
         @status = xpath("//pnr/status").text
 
-        xpath("//pnr/passengers/passenger").each do |passanger|
-          if passanger.attribute("lead_pass") || @lead_family.blank?
-            @lead_family = passanger.xpath('surname').text
+        xpath("//pnr/passengers/passenger").each do |passenger|
+          if passenger.attribute("lead_pass") || @lead_family.blank?
+            @lead_family = passenger.xpath('surname').text
           end
         end
       end

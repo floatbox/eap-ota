@@ -62,5 +62,14 @@ describe PricerForm do
       it { should be_valid }
       its(:rt) { should == true }
     end
+
+    context "when requested business class" do
+      let :attrs do
+        { :from => 'MOW', :to => 'LON', :date1 => '091011', :cabin => 'C' }
+      end
+
+      it { should be_valid }
+      its(:cabin) { should == 'C' }
+    end
   end
 end

@@ -4,7 +4,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   # перенести в хелпер
   def self.convert_api_date(date_str)
     if date_str =~ /^20(\d\d)-(\d\d?)-(\d\d?)$/
-      "%02d%02d%02d" % [$3, $2, $1]
+      "%02d%02d%02d" % [$3, $2, $1].map(&:to_i)
     else
       date_str
     end
@@ -18,9 +18,10 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     adults = args[:adults] || 1
     children = args[:children]
     infants = args[:infants].to_i + args[:seated_infants].to_i
+    cabin = args[:cabin]
 
     new :form_segments => form_segments,
-      :adults => adults, :children => children, :infants => infants
+      :adults => adults, :children => children, :infants => infants, :cabin => cabin
   end
 
   class FormSegment < ActiveRecord::BaseWithoutTable

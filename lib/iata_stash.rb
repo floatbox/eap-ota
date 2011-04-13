@@ -1,5 +1,12 @@
 # encoding: utf-8
 module IataStash
+
+  class NotFound < ActiveRecord::RecordNotFound
+    def initialize(iata)
+      @message = "#{iata} not found"
+    end
+  end
+
   # добавляет метод SomeClass[iata], который кэширует записи в текущем thread/request
   # ActiveRecord's query cache нааамного медленнее
   delegate :[], :to => :iata_stash

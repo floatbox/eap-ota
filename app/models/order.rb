@@ -42,6 +42,7 @@ class Order < ActiveRecord::Base
     self.full_info = order_data.full_info
     self.sirena_lead_pass = order_data.sirena_lead_pass
     self.last_tkt_date = order_data.last_tkt_date
+    self.description = recommendation.variants[0].flights.every.destination.join('; ')
     if c = recommendation.commission
       self.commission_carrier = c.carrier
       self.commission_agent = c.agent
@@ -68,8 +69,23 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def load_ticket_numbers
+    Amadeus.booking do |amadeus|
+      resp = amadeus.pnr_retrieve_and_ignore(:number => number)
+    end
+    update_attribute(:tickets, resp.passengers.every.ticket.join(', '))
+  end
+
   def payture_state
     payments.last ? payments.last.payture_state : ''
+  end
+
+  def charge_date
+    (payments.last && payments.last.charged_at) ? payments.last.charged_at.to_date : nil
+  end
+
+  def charge_time
+    (payments.last && payments.last.charged_at) ? payments.last.charged_at.strftime('%H:%m') : nil
   end
 
   def payture_amount
@@ -103,7 +119,8 @@ class Order < ActiveRecord::Base
   end
 
   def ticket!
-    update_attribute(:ticket_status, 'ticketed')
+    update_attributes(:ticket_status =>'ticketed', :ticketed_date => Date.today)
+    load_ticket_numbers
     send_receipt
   end
 

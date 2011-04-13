@@ -95,6 +95,7 @@ class Completer
   def complete(string, position=nil, opts={})
     string = string.mb_chars
     position = (position || string.size).to_i
+    position = [position, string.size].min
     data = []
     limit = opts[:limit] && opts[:limit].to_i
 
