@@ -3,9 +3,9 @@ module Sirena
   module Request
     class BookingCancel < Sirena::Request::Base
       attr_accessor :pnr_number, :lead_family
-      def initialize(order)
-        @pnr_number = order.pnr_number
-        @lead_family = order.sirena_lead_pass
+      def initialize(pnr_number, lead_family)
+        @pnr_number = pnr_number
+        @lead_family = lead_family
       end
     end
   end
