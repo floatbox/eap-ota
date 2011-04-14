@@ -60,6 +60,11 @@ class Order < ActiveRecord::Base
     self.last_digits_in_card = order_data.card.number4
   end
 
+  # вынести куда-нибудь
+  def price_tax_and_markup_and_payment
+    price_with_payment_commission - price_fare
+  end
+
   def raw
     case source
     when 'amadeus'
