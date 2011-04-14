@@ -4,7 +4,11 @@ module Sirena
     class Booking < Sirena::Request::Base
       attr_accessor :passengers, :segments, :phone, :email
 
-      def initialize(order)
+      def initialize(order, recommendation = nil)
+        if recommendation
+          fake_init(order, recommendation)
+          return
+        end
         # актуальные коды документов:
         # ПС - паспорт РФ
         # ПСП - загранпаспорт РФ
@@ -16,7 +20,7 @@ module Sirena
         @passengers = order.people.collect{|person|
           expire_date = person.document_noexpiration ? nil : person.document_expiration_date.strftime('%d.%m.%y')
           # угадайка. может, имеет смысл добавить в форму?
-          doccode = if person.infant_or_child
+          doccode = if person.infant_or_child && person.document_noexpiration
             "СР"
           elsif !person.nationality || person.nationality.alpha2 != "RU"
             person.document_noexpiration ? "НП" : "ЗА"
@@ -46,37 +50,215 @@ module Sirena
           }
         }
 
-        @segments = order.recommendation.flights.collect{|flight|
+        init_segments(order.recommendation)
+
+        @phone = order.phone
+        @email = order.email
+      end
+
+      def fake_init(form, recommendation)
+        @passengers = fake_adults(form.people_count[:adults])+
+                      fake_children(form.people_count[:children])+
+                      fake_infants(form.people_count[:infants], form.people_count[:adults])
+        init_segments(recommendation)
+        @phone = "+7 495 660-35-20"
+        @email = "hello@eviterra.com"
+      end
+
+      def init_segments(recommendation)
+        @segments = recommendation.flights.collect{|flight|
           i ||= -1
           { :departure => flight.departure_iata,
             :arrival=> flight.arrival_iata,
             :company=> flight.operating_carrier_iata,
             :num=>flight.flight_number,
             :date => sirena_date(flight.departure_date),
-            :subclass => order.recommendation.booking_classes[i+=1]
+            :subclass => recommendation.booking_classes[i+=1]
           }
         }
-
-        @phone = order.phone
-        @email = order.email
       end
 
-      def fake_passenger(lat=false)
-        data = {
-          :family=>"ЧАПАЕВ",
-          :name=>"ВАСИЛИЙ ИВАНОВИЧ",
+      def fake_adults(count)
+        [{
+          :family=>"CHAPAEV",
+          :name=>"VASILIY IVANOVICH",
           :document=>"1234561234",
+          :doccode=>"ПС",
           :code=>"ААА",
           :sex=>"male",
-          :birthdate=>"28.01.87"
-        }
-        if lat
-          data[:family]="CHAPAEV"
-          data[:name]="VASILII IVANOVICH"
-        end
-        data
+          :birthdate=>"28.01." + ('%02d' % ((Date.today.year-35)%100))
+        },
+        {
+          :family=>"CHAPAEV",
+          :name=>"IVAN STEPANOVICH",
+          :document=>"2233445566",
+          :doccode=>"ПС",
+          :code=>"ААА",
+          :sex=>"male",
+          :birthdate=>"13.05." + ('%02d' % ((Date.today.year-35)%100))
+        },
+       {
+          :family=>"CHAPAEV",
+          :name=>"SERGEI IVANOVICH",
+          :document=>"1234561234",
+          :doccode=>"ПС",
+          :code=>"ААА",
+          :sex=>"male",
+          :birthdate=>"28.01." + ('%02d' % ((Date.today.year-35)%100))
+        },
+        {
+          :family=>"CHAPAEV",
+          :name=>"YURI IVANOVICH",
+          :document=>"1234561234",
+          :doccode=>"ПС",
+          :code=>"ААА",
+          :sex=>"male",
+          :birthdate=>"28.01." + ('%02d' % ((Date.today.year-35)%100))
+        },
+        {
+          :family=>"CHAPAEV",
+          :name=>"NICKOLAY IVANOVICH",
+          :document=>"1234561234",
+          :doccode=>"ПС",
+          :code=>"ААА",
+          :sex=>"male",
+          :birthdate=>"28.01." + ('%02d' % ((Date.today.year-35)%100))
+        },
+        {
+          :family=>"CHAPAEV",
+          :name=>"MIKHAIL IVANOVICH",
+          :document=>"1234561234",
+          :doccode=>"ПС",
+          :code=>"ААА",
+          :sex=>"male",
+          :birthdate=>"28.01." + ('%02d' % ((Date.today.year-35)%100))
+        },
+        {
+          :family=>"CHAPAEVA",
+          :name=>"SOPHIA IVANOVNA",
+          :document=>"1234561234",
+          :doccode=>"ПС",
+          :code=>"ААА",
+          :sex=>"female",
+          :birthdate=>"28.01." + ('%02d' % ((Date.today.year-35)%100))
+        },
+        {
+          :family=>"CHAPAEVA",
+          :name=>"ANNA IOANNA",
+          :document=>"1234561234",
+          :doccode=>"ПС",
+          :code=>"ААА",
+          :sex=>"female",
+          :birthdate=>"28.01." + ('%02d' % ((Date.today.year-35)%100))
+        }][0...count]
       end
 
+      def fake_children(count)
+        [{
+          :family=>"ISAEV",
+          :name=>"PETR SEMENOVICH",
+          :document=>"123456",
+          :doccode=>"СР",
+          :code=>"РБГ",
+          :sex=>"male",
+          :birthdate=>"15.04." + ('%02d' % ((Date.today.year-5)%100))
+        },
+        {
+          :family=>"ISAEV",
+          :name=>"EVGENII SEMENOVICH",
+          :document=>"123456",
+          :doccode=>"СР",
+          :code=>"РБГ",
+          :sex=>"male",
+          :birthdate=>"15.04." + ('%02d' % ((Date.today.year-5)%100))
+        },
+        {
+          :family=>"ISAEV",
+          :name=>"GIRIGORY SEMENOVICH",
+          :document=>"123456",
+          :doccode=>"СР",
+          :code=>"РБГ",
+          :sex=>"male",
+          :birthdate=>"15.04." + ('%02d' % ((Date.today.year-5)%100))
+        },
+        {
+          :family=>"ISAEV",
+          :name=>"EVLAMPIY SEMENOVICH",
+          :document=>"123456",
+          :doccode=>"СР",
+          :code=>"РБГ",
+          :sex=>"male",
+          :birthdate=>"15.04." + ('%02d' % ((Date.today.year-5)%100))
+        },
+        {
+          :family=>"ISAEV",
+          :name=>"VLADIMIR SEMENOVICH",
+          :document=>"123456",
+          :doccode=>"СР",
+          :code=>"РБГ",
+          :sex=>"male",
+          :birthdate=>"15.04." + ('%02d' % ((Date.today.year-5)%100))
+        },
+        {
+          :family=>"ISAEV",
+          :name=>"SEMEN SEMENOVICH",
+          :document=>"123456",
+          :doccode=>"СР",
+          :code=>"РБГ",
+          :sex=>"male",
+          :birthdate=>"15.04." + ('%02d' % ((Date.today.year-5)%100))
+        },
+        {
+          :family=>"ISAEV",
+          :name=>"DMITRY SEMENOVICH",
+          :document=>"123456",
+          :doccode=>"СР",
+          :code=>"РБГ",
+          :sex=>"male",
+          :birthdate=>"15.04." + ('%02d' % ((Date.today.year-5)%100))
+        }][0...count]
+      end
+
+      def fake_infants(count, adults_count)
+        infs = [{
+          :family=>"POPOVA",
+          :name=>"MARIA ANDREEVNA",
+          :document=>"125678",
+          :doccode=>"СР",
+          :code=>"РМГ",
+          :sex=>"female",
+          :birthdate=>"04.09." + ('%02d' % ((Date.today.year-1)%100))
+        },
+        {
+          :family=>"POPOVA",
+          :name=>"ELENA ANDREEVNA",
+          :document=>"125678",
+          :doccode=>"СР",
+          :code=>"РМГ",
+          :sex=>"female",
+          :birthdate=>"04.09." + ('%02d' % ((Date.today.year-1)%100))
+        },
+        {
+          :family=>"POPOVA",
+          :name=>"IRINA ANDREEVNA",
+          :document=>"125678",
+          :doccode=>"СР",
+          :code=>"РМГ",
+          :sex=>"female",
+          :birthdate=>"04.09." + ('%02d' % ((Date.today.year-1)%100))
+        },
+        {
+          :family=>"POPOVA",
+          :name=>"LUKERIA ANDREEVNA",
+          :document=>"125678",
+          :doccode=>"СР",
+          :code=>"РМГ",
+          :sex=>"female",
+          :birthdate=>"04.09." + ('%02d' % ((Date.today.year-1)%100))
+        }][0...count]
+        infs[adults_count...count].each{|inf| inf[:code] = "РВГ"} if adults_count < count
+        infs
+      end
     end
   end
 end

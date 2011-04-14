@@ -3,7 +3,7 @@ module Sirena
   module Response
     class Booking < Sirena::Response::Base
 
-      attr_accessor :pnr_number, :timelimit, :status, :lead_family
+      attr_accessor :pnr_number, :timelimit, :status, :lead_family, :price_fare, :price_tax
 
       def parse
         @pnr_number = at_xpath("//pnr/regnum")
@@ -17,7 +17,10 @@ module Sirena
         @timelimit = at_xpath("//pnr/timelimit")
         @timelimit = Time.parse(@timelimit.text.insert(6, "20")) if @timelimit
 
-        @status = xpath("//pnr/status").text
+        @status = xpath("//status").text
+
+        @price_fare = xpath("//fare/value").sum{|x| x.text.to_f}
+        @price_tax = xpath("//tax/value").sum{|x| x.text.to_f}
 
         xpath("//pnr/passengers/passenger").each do |passenger|
           if passenger.attribute("lead_pass") || @lead_family.blank?
