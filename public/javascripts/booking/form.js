@@ -3,29 +3,56 @@ app.booking = {
 init: function() {
 
     var self = this;
-    
+
     // Проверка формы
     this.sections = [];
     this.el.find('.booking-person').each(function() {
         self.initPerson($(this));
     });
-    this.initCard(this.el.find('.booking-card'));
+    var card = this.el.find('.booking-card');
+    var cash = this.el.find('.booking-cash');
+    var cardSection = this.initCard(card);
+    if (cash.length) {
+        var cashSection = this.initCash(cash);
+        var toggleCash = function(mode) {
+            card.toggleClass('latent', mode);
+            cash.toggleClass('latent', !mode);
+            card.find('input').each(function() {
+                this.disabled = mode;
+            });
+            cash.find('input, textarea').each(function() {
+                this.disabled = !mode;
+            });
+            cardSection.disabled = mode;
+            cashSection.disabled = !mode;
+            self.validate();
+        };
+        card.find('.section-tabs .link').click(function() {
+            toggleCash(true);
+        });
+        cash.find('.section-tabs .link').click(function() {
+            toggleCash(false);
+        });
+        toggleCash(false);
+    } else {
+        card.find('.section-tabs .link').removeClass('.link').html('Этот билет возможно оплатить только банковской картой');
+    }
     this.initContacts(this.el.find('.booking-contacts'));
     this.validate(true);
 
     // Отправка формы
     $('form', this.el).submit(function(event) {
         event.preventDefault();
-        if (!self.submit.hasClass('a-button-ready')) return;
+        if (!self.button.hasClass('a-button-ready')) return;
         var data = $(this).serialize();
-        var rcontrol = self.submit.removeClass('a-button-ready').closest('.control');
         var processError = function(text) {
-            self.el.find('.book-s').addClass('book-retry');
-            self.el.append('<div class="result"><p class="fail"><strong>Упс…</strong> ' + (text || 'Что-то пошло не так.') + '</p><p class="tip">Попробуйте снова или узнайте <a target="_blank" href="/about/#payment">какими ещё способами</a> можно купить у нас билет.</p></div>');
-            self.submit.addClass('a-button-ready');
+            self.el.append('<div class="result"><p class="fail"><strong>Упс…</strong> ' + (text || 'Что-то пошло не так.') + '</p><p class="tip">Попробуйте снова или узнайте, <a target="_blank" href="/about/#payment">какими ещё способами</a> можно купить у нас билет.</p></div>');
+            self.button.addClass('a-button-ready');
         };
         self.el.find('.result').remove();
-        self.el.find('.book-s').removeClass('book-retry');        
+        self.el.find('.booking-disclaimer').hide();
+        self.button.removeClass('a-button-ready');
+        self.submit.addClass('sending');
         $.ajax({
             url: $(this).attr('action'),
             data: data,
@@ -33,9 +60,8 @@ init: function() {
             success: function(s) {
                 if (typeof s === 'string' && s.length) {
                     var result = $(s).appendTo(self.el);
-                    var rtype = result.attr('data-type');
-                    self.el.find('.book-s').addClass(rtype === 'fail' ? 'book-retry' : 'g-none');
-                    if (rtype === 'success') {
+                    if (result.attr('data-type') === 'success') {
+                        self.submit.addClass('latent');
                         if (window._gaq) {
                             _gaq.push(['_trackPageview', '/#' + pageurl.summary + ':success']);
                             _gaq.push(['_addTrans', result.find('.pnr').text(), '', self.el.find('.booking-price .sum').attr('data-value')]);
@@ -50,32 +76,32 @@ init: function() {
                     for (var eid in s.errors) {
                         var ftitle = eid;
                         if (ftitle.search(/card\[number\]/i) !== -1) {
-                            items.push('<li>введён неправильный <a href="#" data-id="bc-num1"><u>номер карты</u></a></li>');
+                            items.push('<li>Введён неправильный <span class="link" data-field="bc-num1">омер банковской карты</span></li>');
                         } else if (ftitle.search(/card\[type\]/i) === -1) {
                             ftitle = ftitle.replace(/person\[(\d)\]\[birthday\]/i, function(s, n) {
-                                return '<a href="#" data-id="book-p-' + n + '-birth"><u>' + constants.numbers.ordinaldat[parseInt(n, 10)] + ' пассажиру</u></a>';
+                                return '<span class="link" data-field="book-p-' + n + '-birth">' + constants.numbers.ordinaldat[parseInt(n, 10)] + ' пассажиру</span>';
                             });
                             items.push('<li>' + ftitle + ' ' + s.errors[eid] + '</li>');
                         }
                     }
-                    self.submit.addClass('a-button-ready');
-                    self.el.find('.blocker').show().find('.b-pseudo').html(items.join(''));
-                    self.el.removeClass('book-retry');
+                    self.button.addClass('a-button-ready');
+                    self.el.find('.be-list').html(items.join(''));
+                    self.el.find('.booking-errors').show();
                 } else {
                     processError(s && s.exception && s.exception.message);
                 }
-                rcontrol.removeClass('sending');
+                self.submit.removeClass('sending');
             },
             error: function() {
                 processError();
-                rcontrol.removeClass('sending');
+                self.submit.removeClass('sending');
             },
             timeout: 90000
         });
-        rcontrol.addClass('sending');
     });
-    this.submit = $('.book-s .a-button', this.el);
-    
+    this.submit = this.el.find('.booking-submit');
+    this.button = this.submit.find('.a-button');
+
     // Повторная попытка
     this.el.delegate('a.retry', 'click', function(event) {
         event.preventDefault();
@@ -98,7 +124,7 @@ init: function() {
             control.focus();
         });
     });
-    
+
     // Правила тарифов
     this.farerules.init(this.el);
 
@@ -106,7 +132,7 @@ init: function() {
     results.filters.el.hide();
     $('<div class="stop-booking-panel"><span class="link stop-booking">Вернуться к выбору вариантов</span></div>').appendTo(results.header.find('.rcontent')).find('.stop-booking').click(this.selfhide);
     this.el.delegate('.stop-booking', 'click', this.selfhide);
-    
+
     // 3DSecure
     this.el.delegate('.tds-submit .a-button', 'click', function(event) {
         event.preventDefault();
@@ -161,7 +187,7 @@ hide: function() {
     delete(this.offer);
     delete(this.variant);
     pageurl.update('booking', undefined);
-    pageurl.title('авиабилеты ' + results.title.attr('data-title'));    
+    pageurl.title('авиабилеты ' + results.title.attr('data-title'));
 },
 error: function() {
     var message = $('<div class="booking-state"><h4>В данный момент невозможно выбрать этот вариант</h4><p><span class="link">Почему?</span></p></div>');
@@ -234,7 +260,7 @@ comparePrice: function() {
             $(this).closest('.diff-price').remove();
             self.el.removeClass('g-none');
             self.fasten(self.offer);
-            self.init();                      
+            self.init();
         });
         this.el.before(block);
         return false;
@@ -286,14 +312,14 @@ init: function(context) {
             that.popup.hide();
             $('body').unbind('click keydown', that.selfhide);
         }
-    };    
+    };
     this.popup = context.find('.farerules').click(function(event) {
         event.stopPropagation();
     });
     this.popup.find('.close').click(this.selfhide);
     this.popup.find('.fgrus').click(function() {
         var rus = $(this).addClass('g-none');
-        var eng = rus.siblings('.fgeng');    
+        var eng = rus.siblings('.fgeng');
         that.translate(rus, eng);
     });
     this.popup.find('.fgeng').click(function() {
@@ -304,7 +330,7 @@ init: function(context) {
     context.find('.farerules-link').click(function(event) {
         event.preventDefault();
         that.show();
-    });    
+    });
 },
 show: function() {
     this.popup.css('top', 0).show();

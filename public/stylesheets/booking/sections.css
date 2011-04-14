@@ -28,7 +28,7 @@
     border: 1px solid #909090;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    background: #FFF;        
+    background: #FFF;
     font-size: 20px;
     line-height: 25px;
     color: #333;
@@ -55,7 +55,7 @@
     position: absolute;
     margin: 4px 6px;
     font-size: 20px;
-    line-height: 25px;    
+    line-height: 25px;
     color: #C0C0C0;
 }
 .booking .disabled .placeholder {
@@ -88,7 +88,7 @@
     border-radius: 5px;
     background: #ffc4c4;
     font-size: 12px;
-    line-height: 16px;    
+    line-height: 16px;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
     -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
@@ -140,7 +140,7 @@
 .booking-person input.date-year {
     width: 80px;
     -moz-border-radius: 0 3px 3px 0;
-    border-radius: 0 3px 3px 0;    
+    border-radius: 0 3px 3px 0;
 }
 
 /* Пол */
@@ -152,14 +152,14 @@
 .bp-sex-f {
     float: left;
     display: inline-block;
-    position: relative;    
+    position: relative;
     width: 50px;
     padding: 3px 5px;
-    border: 1px solid #909090;    
+    border: 1px solid #909090;
     background: #f8f8f8;
     text-align: center;
     font-size: 20px;
-    line-height: 25px;    
+    line-height: 25px;
     color: #909090;
     cursor: pointer;
 }
@@ -184,11 +184,11 @@
     -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
-    background: #f8f8f8;    
+    background: #f8f8f8;
     font-weight: bold;
     color: green;
-    cursor: default;    
-} 
+    cursor: default;
+}
 .bp-sex-radio {
     position: absolute;
     top: -30px;
@@ -214,6 +214,16 @@
 .bp-bonus select.bfield {
     width: 187px;
 }
+.booking .external {
+    position: relative;
+    top: 1px;
+    left: 3px;
+    display: inline-block;
+    width: 10px; height: 10px;
+    background: url(/img/booking/external.png) no-repeat;
+    vertical-align: baseline;
+    text-decoration: none;
+}
 
 /* Способы оплаты */
 .booking .section-tabs {
@@ -227,6 +237,9 @@
     top: 1px;
     float: left;
     padding: 10px 15px;
+}
+.booking .section-tabs .link {
+    color: #333;
 }
 .booking .section-tabs .selected {
     background: #fff8ce;
@@ -319,7 +332,7 @@
 #bc-num1 {
     left: 0;
     -moz-border-radius: 3px 0 0 3px;
-    border-radius: 3px 0 0 3px;    
+    border-radius: 3px 0 0 3px;
 }
 #bc-num2 {
     left: 74px;
@@ -335,7 +348,7 @@
     left: 222px;
     width: 62px;
     -moz-border-radius: 0 3px 3px 0;
-    border-radius: 0 3px 3px 0;    
+    border-radius: 0 3px 3px 0;
 }
 
 /* Имя на карте */
@@ -371,7 +384,7 @@
 .bc-exp .placeholder {
     margin: 4px 6px;
     font-size: 18px;
-    line-height: 23px;   
+    line-height: 23px;
 }
 .bc-exp .date-month {
     margin-right: -1px;
@@ -380,7 +393,7 @@
 }
 .bc-exp .date-year {
     -moz-border-radius: 0 3px 3px 0;
-    border-radius: 0 3px 3px 0;    
+    border-radius: 0 3px 3px 0;
 }
 
 /* Полоса */
@@ -411,24 +424,36 @@
 }
 
 /* Оплата наличными */
+.bc-pay-warning {
+    margin: 0 15px;
+    padding-top: 8px;
+}
 .bc-delivery {
     margin: 12px 15px;
 }
 .bc-delivery .radio {
     position: relative;
-    margin: 0 0 5px 18px;
+    margin: 0 0 6px 16px;
     font-size: 13px;
-    line-height: 16px;    
+    line-height: 16px;
+}
+.bc-delivery .radio input {
+    position: absolute;
+    top: 1px;
+    left: -16px;
+    margin: 0;
+    padding: 0;
 }
 .bc-address {
     margin: 0 15px;
 }
 .bc-address .bfield {
-    width: 366px;
+    width: 368px;
     height: 105px;
-    min-height: 105px; 
+    min-height: 105px;
+    padding-right: 3px;
     font-size: 16px;
-    line-height: 21px;       
+    line-height: 21px;
     resize: vertical;
 }
 .bca-description {
@@ -447,46 +472,48 @@
     width: 645px;
     margin: 12px 0 0 15px;
 }
-.bc-bill th {
-    font: bold 14px/17px Arial, sans-serif;
-    padding-bottom: 1px;
-    vertical-align: middle;
-    white-space: nowrap;
-    color: #333;
+.bc-bill td {
+    width: 173px;
+    font-size: 12px;
+    line-height: 15px;
 }
-.bc-bill .sign {
-    font: bold 70px/40px Arial, sans-serif;
-    display: inline-block;
-    overflow: hidden;
-    margin: 0 12px;
+.bc-bill td.sign {
+    width: 63px;
+    font: bold 60px/1 Arial, sans-serif;
+    text-align: center;
     color: #6e6e6e;
 }
-.bc-bill td {
-    white-space: nowrap;
-    vertical-align: baseline;
+.bc-bill h6 {
+    margin: 0 0 3px;
+    font-weight: bold;
+    font-size: 13px;
+    color: #333;
 }
-.bc-bill .prices strong {
-    margin: 0 3px 0 0;
-    font: bold 162.5%/100% Arial, sans-serif;
+.bc-bill .price {
+    font-size: 32px;
+    line-height: 32px;
+}
+.bc-bill .price strong {
+    margin-right: 3px;
+    font-size: 26px;
     letter-spacing: -0.045em;
     color: #ed1192;
 }
-.bc-bill .prices-total strong {
-    margin: 0 4px 0 0;
-    font: bold 200%/100% Arial, sans-serif;
-    letter-spacing: -0.045em;        
+.bc-bill .price-total strong {
+    margin-right: 4px;
+    font-size: 100%;
     color: #6F7C26;
 }
-.bc-bill .prices em {
+.bc-bill .price em {
     font-style: normal;
     font-size: 12px;
     color: #6e6e6e;
 }
-.bc-bill-hints td {
-    padding: 6px 0 0 0;
-    font-size: 12px;
-    line-height: 15px;
-    white-space: normal;
+.bc-bill .hint {
+    color: #777;
+}
+.bcb-nodelivery h6 {
+    margin-top: 22px;
     color: #777;
 }
 
@@ -495,10 +522,6 @@
     padding-left: 15px;
     vertical-align: top;
 }
-#booking-contacts-email {
-    width: 304px;
-}
-#booking-contacts-phone {
+.booking-contacts .bfield {
     width: 303px;
 }
-

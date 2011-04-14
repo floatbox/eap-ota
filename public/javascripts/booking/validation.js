@@ -2,8 +2,11 @@ app.booking.validate = function(full) {
     clearTimeout(this.vtimer);
     var errors = [];
     for (var s = 0, sm = this.sections.length; s < sm; s++) {
-        var valid = true;
         var section = this.sections[s];
+        if (section.disabled) {
+            continue;
+        }
+        var valid = true;
         for (var i = 0, im = section.items.length; i < im; i++) {
             var item = section.items[i];
             if (full) {
@@ -16,6 +19,7 @@ app.booking.validate = function(full) {
         }
         section.el.toggleClass('ready', valid);
     }
+    this.el.find('.a-button').toggleClass('a-button-ready', errors.length === 0);
     if (errors.length) {
         this.el.find('.be-list').html('<li>' + errors.slice(0, 3).join('</li><li>') + '</li>');
         this.el.find('.booking-errors').show();
@@ -77,7 +81,7 @@ app.booking.initPerson = function(el) {
             fname.el.val(ln).change();
             lname.el.val(fn).change();
         }
-    }); 
+    });
     var bdate = validator.date(el.find('.bp-birthday input'), {
         empty: 'Не указана {дата рождения} пассажира',
         letters: '{Дату рождения} нужно ввести цифрами в формате дд/мм/гггг',
@@ -123,7 +127,7 @@ app.booking.initPerson = function(el) {
             bonus.el.focus();
         }
         bonus.validate();
-        
+
     }).get(0).checked);
     this.sections.push({
         el: el,
@@ -137,13 +141,36 @@ app.booking.initCard = function(el) {
         letters: 'В {номере банковской карты} можно использовать только цифры'
     });
     var numsample = $('#bc-num-sample');
-    cardnumber.el.last().bind('keyup change', function() {
+    cardnumber.el.last().bind('keyup propertychange input change', function() {
         var v = $(this).val(), s = [], digits = /\d/;
         for (var i = 0; i < 4; i++) {
             var c = v.charAt(i);
             s[i] = digits.test(c) ? c : '<span class="empty">#</span>';
         }
         numsample.html(s.join(''));
+    });
+    var typeor = el.find('.bc-type-or');
+    var toggleType = function(type) {
+        visa.toggle(type !== 'mastercard');
+        mastercard.toggle(type !== 'visa');
+        typeor.toggle(type === undefined);
+    };
+    var types = {
+        '4': 'visa',
+        '3': 'mastercard',
+        '5': 'mastercard',
+        '6': 'mastercard'
+    };
+    var visa = el.find('.bc-visa').click(function() {
+        toggleType('visa');
+        cardnumber.el.first().focus();
+    });
+    var mastercard = el.find('.bc-master').click(function() {
+        toggleType('mastercard');
+        cardnumber.el.first().focus();
+    });
+    cardnumber.el.first().bind('keyup propertychange input', function() {
+        toggleType(types[this.value.charAt(0)]);
     });
     var cardcvv = validator.cardcvv($('#bc-cvv'), {
         empty: 'Не указан трёхзначный {CVV/CVC код} банковской карты',
@@ -159,10 +186,33 @@ app.booking.initCard = function(el) {
         month: 'Месяц в {сроке действия} банковской карты должене быть числом от 1 до 12',
         past: 'Указан истекший {срок действия} банковской карты'
     });
-    this.sections.push({
+    return this.sections[this.sections.push({
         el: el,
         items: [cardnumber, cardname, cardexp, cardcvv]
+    }) - 1];
+};
+
+app.booking.initCash = function(el) {
+    var address = validator.text($('#bc-address'), {
+        empty: 'Не указан {адрес доставки}'
     });
+    var toggleDelivery = function(mode) {
+        el.find('.bc-address').toggle(mode);
+        el.find('.bcb-delivery').toggle(mode);
+        el.find('.bcb-nodelivery').toggle(!mode);
+        address.el.get(0).disabled = !mode;
+        address.disabled = !mode;
+    };
+    this.el.find('.bc-delivery input').click(function() {
+        toggleDelivery($(this).attr('value') == 1);
+        address.validate();
+    }).get(0).checked = true;
+    toggleDelivery(true);
+    address.validate();
+    return this.sections[this.sections.push({
+        el: el,
+        items: [address]
+    }) - 1];
 };
 
 app.booking.initContacts = function(el) {
@@ -191,6 +241,16 @@ control: function(el, messages) {
     };
     this.important = {};
     return this;
+},
+text: function(el, messages) {
+    var item = new this.control(el, messages);
+    el.change(function() {
+        el.val($.trim(el.val()));
+        item.validate();
+    }).bind('keyup propertychange input', function() {
+        item.change();
+    });
+    return item;
 },
 name: function(el, messages) {
     var item = new this.control(el, messages);
@@ -226,7 +286,7 @@ gender: function(radio, messages) {
     var item = new this.control(radio, messages);
     var m = radio.get(0);
     var f = radio.get(1);
-    item.invalid = radio.eq(0).parent();
+    item.invalid = radio.eq(0).closest('.bp-sex');
     item.check = function() {
         return (m.checked || f.checked) ? undefined : 'empty';
     };
@@ -262,7 +322,7 @@ number: function(el, messages) {
     }).bind('keyup propertychange input', function() {
         item.change();
     });
-    return item;    
+    return item;
 },
 date: function(parts, messages) {
     var item = new this.control(parts, messages);
@@ -314,16 +374,25 @@ date: function(parts, messages) {
             e.preventDefault();
             $(this).change().parent().next().find('input').focus();
         }
+    }).keydown(function(e) {
+        var code = e.which;
+        var digit = (code > 47 && code < 58) || (code > 95 && code < 106);
+        if (this.value.length === 2 && digit) {
+            $(this).change().parent().next().find('input').focus();
+        }
     });
     parts.eq(2).change(function() {
-        var f = $(this), y = parseInt(f.val(), 10);
-        if (messages.past && y < 100) y += 2000;
-        if (y <= today.getFullYear() % 100) y += 2000;
-        if (y < 1000) y = 1900 + y % 100;
-        f.val(y);
+        var f = $(this), v = f.val();
+        if (v && v.length < 4) {
+            var y = parseInt(f.val(), 10);
+            if (messages.past && y < 100) y += 2000;
+            if (y <= today.getFullYear() % 100) y += 2000;
+            if (y < 1000) y = 1900 + y % 100;
+            f.val(y);
+        }
         item.validate();
-    });    
-    return item; 
+    });
+    return item;
 },
 email: function(el, messages) {
     var item = new this.control(el, messages);
@@ -344,7 +413,7 @@ email: function(el, messages) {
     }).bind('keyup propertychange input', function() {
         item.change();
     });
-    return item;  
+    return item;
 },
 phone: function(el, messages) {
     var item = new this.control(el, messages);
@@ -375,7 +444,7 @@ phone: function(el, messages) {
     }).bind('keyup propertychange input', function() {
         item.change();
     });
-    return item;  
+    return item;
 },
 cardnumber: function(parts, messages) {
     var item = new this.control(parts, messages);
@@ -422,7 +491,7 @@ cardnumber: function(parts, messages) {
         }
     }).keyup(function(e) {
         throwFocus = (this.value.length === 4);
-        if (throwFocus && String.fromCharCode(e.which).search(/[ .,\-\/]/) === 0) {
+        if (throwFocus && String.fromCharCode(e.which).search(/[ \-]/) === 0) {
             e.preventDefault();
             $(this).trigger('change').next('input').select();
             throwFocus = false;
@@ -435,14 +504,14 @@ cardnumber: function(parts, messages) {
     });
     parts.bind('keyup propertychange input', function() {
         item.change();
-    });    
-    return item;    
+    });
+    return item;
 },
 cardexp: function(parts, messages) {
     var item = new this.control(parts, messages);
     var mf = parts.eq(0);
     var yf = parts.eq(1);
-    var today = new Date();    
+    var today = new Date();
     item.important = {
         month: true,
         past: true,
@@ -464,7 +533,7 @@ cardexp: function(parts, messages) {
         }
         if (yv.length < 2) {
             this.invalid = yf;
-            return 'empty';        
+            return 'empty';
         }
         if (yv.search(/\D/) !== -1) {
             this.invalid = yf;
@@ -482,6 +551,13 @@ cardexp: function(parts, messages) {
     }).keypress(function(e) {
         if (String.fromCharCode(e.which).search(/[ .,\-\/]/) === 0) {
             e.preventDefault();
+            mf.change();
+            yf.focus();
+        }
+    }).keydown(function(e) {
+        var code = e.which;
+        var digit = (code > 47 && code < 58) || (code > 95 && code < 106);
+        if (this.value.length === 2 && digit) {
             mf.change();
             yf.focus();
         }
@@ -518,7 +594,7 @@ cardcvv: function(el, messages) {
     }).bind('keyup propertychange input', function() {
         item.change();
     });
-    return item;    
+    return item;
 }
 };
 
@@ -526,7 +602,7 @@ validator.control.prototype = {
 validate: function() {
     clearTimeout(this.vtimer);
     var error = this.disabled ? undefined : this.check();
-    if (error !== this.error) {
+    if (error !== this.error || this.invalid) {
         if (error) {
             var message = this.messages[error], el = this.invalid || this.el;
             message = message.replace('{', '<span class="link" data-field="' + el.attr('id') + '">');

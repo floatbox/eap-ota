@@ -108,10 +108,6 @@ h1, h2, h3, h4, h5, h6 {
 .g-none {
     display: none!important;
 }
-.g-external {
-    background: url('/img/ico/external-link.png') no-repeat scroll right center transparent;
-    padding-right: 13px;
-}
 
 /* Шрифты */
 .g-xxxl {

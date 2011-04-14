@@ -17,7 +17,7 @@
     </td>
     <td rowspan="2">
         <h6 class="blabel"><label>Пол</label></h6>
-        <div class="bp-sex">
+        <div class="bp-sex" id="bp-<%= person_form_counter %>-sex">
             <label class="bp-sex-m" title="Мужской" for="bp-<%= person_form_counter %>-sex-m">М<%= person.radio_button :sex, 'm', :class => "bp-sex-radio", :id => "bp-#{person_form_counter}-sex-m" %></label>
             <label class="bp-sex-f" title="Женский" for="bp-<%= person_form_counter %>-sex-f">Ж<%= person.radio_button :sex, 'f', :class => "bp-sex-radio", :id => "bp-#{person_form_counter}-sex-f" %></label>
         </div>
@@ -82,7 +82,7 @@
         </div>
         <div class="bdescription checkbox<%= raw ' latent' if @order.recommendation.validating_carrier.available_bonus_programms.empty? %>">
             <%= person.check_box :bonus_present, {:id => "bonus-#{person_form_counter}"} %>
-            <label for="bonus-<%= person_form_counter %>" title="Карта участника программы премирования пассажиров (мильной программы или программы для&nbsp;часто летающих пассажиров, англ. frequent flyer program)">есть бонусная карта</label>&nbsp;<a class="g-external" href="http://ru.wikipedia.org/wiki/Бонусные_программы_авиакомпаний" target="_blank" title="Статья о бонусных программах авиакомпаний в Википедии (откроется в новом окне)">&nbsp;</a>
+            <label for="bonus-<%= person_form_counter %>" title="Карта участника программы премирования пассажиров (мильной программы или программы для&nbsp;часто летающих пассажиров, англ. frequent flyer program)">есть бонусная карта</label>&nbsp;<a class="external" href="http://ru.wikipedia.org/wiki/Бонусные_программы_авиакомпаний" target="_blank" title="Статья о бонусных программах авиакомпаний в Википедии (откроется в новом окне)">&nbsp;</a>
         </div>
     </td>
 </tr>

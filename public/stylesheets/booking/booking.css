@@ -100,7 +100,7 @@
 
 /* Результат бронирования */
 .booking .result {
-    padding: 15px;
+    margin: 12px 15px;
 }
 .booking .success,
 .booking .fail {
@@ -225,10 +225,10 @@
     font-size: 20px;    
 }
 .booking-submit .loading,
-.booking-submit .sending .cancel {
+.booking .sending .cancel {
     display: none;
 }
-.booking-submit .sending .loading {
+.booking .sending .loading {
     display: block;
     height: 16px;
     background-position: 0 0;
@@ -276,11 +276,6 @@
 }
 .be-list .link:hover {
     color: #ED1192;
-}
-
-.book-s .notice {
-    clear: both;
-    color: #333;    
 }
 
 /* Предупреждение */
