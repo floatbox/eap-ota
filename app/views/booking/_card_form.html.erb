@@ -6,17 +6,9 @@
     </div>
     <%= render "card", :f => f %>
 
-    <table class="bc-bill">
-    <tr>
-        <th>Стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %></th>
-    </tr>
-    <tr>
-        <td><%= decorated_price @order.recommendation.price_with_payment_commission, 'b', 'i' %></td>
-    </tr>
-    <tr class="bc-bill-hints">
-        <td><p style="width: 165px;">стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами</p></td>
-    </tr>
-    </table>
+    <div class="bc-bill-short">
+        <span style="padding-right: 2px;">Стоимость&nbsp;<%= @order.people.size == 1 ? 'билета' : 'билетов' %>&nbsp;—</span> <span style="white-space: nowrap;"><%= decorated_price @order.recommendation.price_with_payment_commission, 'strong', 'span' %><%= ' за всех пассажиров' if @order.people.size > 1 %> со&nbsp;всеми налогами и&nbsp;сборами</span>
+    </div>
 
     <div class="booking-price g-none">
     <div class="cost"><dl>

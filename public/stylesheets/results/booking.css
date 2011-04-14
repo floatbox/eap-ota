@@ -49,18 +49,18 @@
     text-align: center;
     font-weight: bold;
     font-size: 18px;
-    line-height: 20px;    
+    line-height: 20px;
 }
 .booking-state .progress {
     width: 128px;
     height: 15px;
-    margin: 1px auto 10px;    
+    margin: 1px auto 10px;
     background: url(/img/offers/progress.gif) 100% 2px no-repeat;
 }
 .booking-state p {
     margin: 6px 0 0;
     text-align: center;
-} 
+}
 
 /* Изменение цены */
 .diff-price {
@@ -248,7 +248,7 @@
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     -o-border-radius: 3px;
-    
+
     font-size: 20px;
     line-height: 24px;
 }
@@ -372,14 +372,14 @@
     margin-top: 3px;
     padding: 10px 15px;
     background: #ffc4c4;
-    
+
     font-size: 12px;
     line-height: 16px;
 
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    -o-border-radius: 5px;    
+    -o-border-radius: 5px;
 
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
@@ -444,7 +444,7 @@
     font-weight: normal;
 
     position: relative;
-    
+
     float: left;
     display: inline-block;
 
@@ -489,7 +489,7 @@
 .book-p label.bp-sex-pressed,
 .book-p label.bp-sex-pressed:hover {
     font-weight: bold;
-    
+
     cursor: default;
 
     text-transform: uppercase;
@@ -638,7 +638,7 @@
 
         padding: 0;
         margin: 0;
-        
+
         vertical-align: top;
     }
 
@@ -653,10 +653,10 @@
 
         background: url(/img/booking/mastercard.png);
     }
-    
+
     .bankcard .bc-type b {
         font-size: 14px;
-        
+
         padding: 0 10px;
     }
 
@@ -773,7 +773,7 @@
         font-size: 22px;
         letter-spacing: -0.04em;
     }
-    
+
     .bankcard .bccvv .empty {
         color: #A8A8A8;
     }
@@ -814,7 +814,7 @@
 
     .book-bc .bc-bill th {
         font: bold 87.5% Arial,a;
-        
+
         padding-bottom: 1px;
 
         vertical-align: middle;
@@ -849,7 +849,7 @@
     .book-bc .bc-bill td b {
         font: bold 200%/100% Arial, sans-serif;
         margin: 0 4px 0 0;
-        letter-spacing: -0.045em;        
+        letter-spacing: -0.045em;
         color: #6F7C26;
     }
 
@@ -865,6 +865,21 @@
         white-space: normal;
         color: #777;
     }
+
+.bc-bill-short {
+    margin: 20px 15px 7px;
+    font-size: 14px;
+    line-height: 18px;
+}
+.bc-bill-short strong {
+    position: relative;
+    top: 4px;
+    padding-right: 2px;
+    font-size: 28px;
+    letter-spacing: -0.045em;
+    color: #ed1192;
+}
+
 
 
 /******* БЛОК 4: КОНТАКТЫ *******/
@@ -938,13 +953,13 @@
     position: relative;
 
     width: 380px;
-    
+
     margin: 22px auto 0;
     padding: 14px 20px 12px;
 
     color: #333;
     background: #ffc4c4;
-    
+
     font-size: 13px;
     line-height: 16px;
 
@@ -982,14 +997,14 @@
         list-style: disc;
         margin: 0 0 0.2em 0;
     }
-    
+
     .book-s .blocker li:first-letter {
         text-transform: uppercase;
     }
 
 .book-s .notice {
     clear: both;
-    color: #333;    
+    color: #333;
 }
 
 .booking .book-retry {
@@ -1022,11 +1037,11 @@
     width: 654px;
     padding: 18px 20px 20px;
     font-size: 14px;
-    line-height: 19px;    
+    line-height: 19px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
     -moz-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
     -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
-    -o-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35); 
+    -o-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
 }
 .farerules .close {
     float: right;
