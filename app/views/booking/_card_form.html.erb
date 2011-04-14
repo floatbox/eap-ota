@@ -6,35 +6,17 @@
     </div>
     <%= render "card", :f => f %>
 
-    <table class="bc-bill">
-    <tr>
-        <th>Стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %></th>
-        <th rowspan="2"><i>+</i></th>
-        <th>Комиссия за&nbsp;транзакцию</th>
-        <th rowspan="2"><i>=</i></th>
-        <th>С&nbsp;карты будет списано</th>
-    </tr>
-    <tr>
-        <td><%= decorated_price @order.recommendation.price_total, 'u', 'i' %></td>
-        <td><%= decorated_price @order.recommendation.price_payment, 'u', 'i' %></td>
-        <td><%= decorated_price @order.recommendation.price_with_payment_commission, 'b', 'i' %></td>
-    </tr>
-    <tr class="bc-bill-hints">
-        <td><p style="width: 165px;">стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами</p></td>
-        <td></td>
-        <td><p style="width: 185px;">комиссия банка за&nbsp;проведение платежа</p></td>
-        <td></td>
-        <td></td>
-    </tr>
-    </table>
+    <div class="bc-bill-short">
+        <span style="padding-right: 2px;">Стоимость&nbsp;<%= @order.people.size == 1 ? 'билета' : 'билетов' %>&nbsp;—</span> <span style="white-space: nowrap;"><%= decorated_price @order.recommendation.price_with_payment_commission, 'strong', 'span' %><%= ' за всех пассажиров' if @order.people.size > 1 %> со&nbsp;всеми налогами и&nbsp;сборами</span>
+    </div>
 
     <div class="booking-price g-none">
     <div class="cost"><dl>
-        <%= decorated_price @order.recommendation.price_total, 'dt', 'dd' %>
+        <%= decorated_price @order.recommendation.price_with_payment_commission, 'dt', 'dd' %>
     </dl></div>
-    <dl class="sum" data-value="<%= @order.recommendation.price_total.round.to_i %>">
-        <dt>Итого <strong><%= human_price(@order.recommendation.price_total) %></strong> за всех со всеми сборами</dt>
-        <dd>Тариф — <%= human_price(@order.recommendation.price_fare) %>, налоги и сборы — <%= human_price(@order.recommendation.price_tax_and_markup) %></dd>
+    <dl class="sum" data-value="<%= @order.recommendation.price_with_payment_commission.round.to_i %>">
+        <dt>Итого <strong><%= human_price(@order.recommendation.price_with_payment_commission) %></strong> за всех со всеми сборами</dt>
+        <dd>Тариф — <%= human_price(@order.recommendation.price_fare) %>, налоги и сборы — <%= human_price(@order.recommendation.price_tax_and_markup_and_payment) %></dd>
     </dl>
     </div>
 </div>

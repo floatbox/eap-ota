@@ -8,7 +8,7 @@
 <thead>
 <tr>
     <th class="book"><% if recommendation.sellable? %><a href="#" class="a-button">Выбрать</a><% end %></th>
-    <td class="cost" colspan="5"><dl><%= decorated_price recommendation.price_total, 'dt', 'dd' %></dl></td>
+    <td class="cost" colspan="5"><dl><%= decorated_price recommendation.price_with_payment_commission, 'dt', 'dd' %></dl></td>
 </tr>
 </thead>
 
@@ -95,7 +95,7 @@
     <td colspan="6">
     <% variant.segments.each_with_index do |segment, segment_counter| %>
         <div class="segment" data-flights="<%= segment_flight_numbers(segment) %>" data-options="<%= bar_options(segment).to_json %>">
-        <a class="a-button" href="#"><%= recommendation.price_total.round.to_i %>&nbsp;р.</a>
+        <a class="a-button" href="#"><%= recommendation.price_with_payment_commission.round.to_i %>&nbsp;р.</a>
         <div class="bar">
             <div class="dpt"><%= fmt_time( segment.departure_time ) %> <span class="iata"><%= segment.departure_iata %></span></div>
             <% for flight, layover in segment.flights.zip(segment.layover_durations) %>
@@ -140,9 +140,9 @@
     <td colspan="6">
     <% bonus_programs = recommendation.validating_carrier.available_bonus_programms %>
     <div class="valcarrier">Билет оформляет авиакомпания <%= recommendation.validating_carrier.name %>.<% if recommendation.validating_carrier.alliance %> Применяются бонусные программы альянса <span class="link alliance" data-details="<%= bonus_programs.map{|bp| bp.name}.to_sentence %>"><%= recommendation.validating_carrier.alliance.name %></span>.<% end %></div>
-    <dl class="sum" data-value="<%= recommendation.price_total.round.to_i %>">
-        <dt>Итого <strong><%= human_price(recommendation.price_total) %></strong><%= ' за всех' if @search.people_total > 1 %> со всеми сборами</dt>
-        <dd>Тариф — <%= human_price(recommendation.price_fare) %>, налоги и сборы — <%= human_price(recommendation.price_tax_and_markup) %></dd>
+    <dl class="sum" data-value="<%= recommendation.price_with_payment_commission.round.to_i %>">
+        <dt>Итого <strong><%= human_price(recommendation.price_with_payment_commission) %></strong><%= ' за всех' if @search.people_total > 1 %> со всеми сборами</dt>
+        <dd>Тариф — <%= human_price(recommendation.price_fare) %>, налоги и сборы — <%= human_price(recommendation.price_tax_and_markup_and_payment) %></dd>
     </dl>
     </td>
 </tr>
