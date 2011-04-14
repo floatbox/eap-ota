@@ -314,9 +314,21 @@ validate: function(qkey) {
             };
             if (restoreResults) {
                 self.calendar.scroller.scrollToSelected();
-                results.nextUpdate.params.restore_results = true;
-                results.load();
-                results.show();
+                if (result.fragment_exist) {
+                    results.nextUpdate.params.restore_results = true;
+                    results.load();
+                    results.show();
+                } else {
+                    this.timer = setTimeout(function() {
+                        self.preventValidation = false;
+                        self.onValid = function() {
+                            results.load();
+                            results.show();
+                            delete(self.onValid);
+                        };
+                        self.validate();
+                    }, 200);
+                }
             } else {
                 self.toggle(true);
                 if (typeof self.onValid === 'function') {
