@@ -303,6 +303,7 @@ class Recommendation
       recs = Sirena::Service.pricing(pricer_form, self).recommendations
       rec = recs && recs[0]
       book = Sirena::Service.booking(pricer_form, self)
+      Sirena::Service.booking_cancel(book.pnr_number, book.lead_family) if book.success?
       self.rules = [] # для получения этой инфы для каждого тарифа нужно отправлять отдельный запрос fareremark
       if book.success? && book.price_fare
         self.price_fare = book.price_fare
