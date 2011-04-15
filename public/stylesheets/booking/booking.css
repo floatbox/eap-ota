@@ -1,0 +1,365 @@
+/* Выделение формы бронирования */
+.active-booking {
+    position: relative;
+    z-index: 3;
+}
+.active-booking .offer-variant tr.book,
+.active-booking .offer-variant th.book .a-button {
+    display: none;
+}
+.active-booking .offer-variant .summary .variants p,
+.active-booking .offer-variant .summary .variants a {
+    color: #CCC;
+    cursor: default;
+    text-decoration: none;
+    cursor: default;
+}
+.active-booking .cost-tip {
+	display: none;
+}
+.cropped .offer-variant th.book .a-button,
+.cropped .offer-variant tr.book .a-button,
+.cropped .offer-variant tr.book .sum {
+    visibility: hidden;
+}
+.cropped #results-filters {
+    display: none;
+}
+.cropped #stop-booking-panel {
+    display: block;
+}
+
+/* Предварительное бронирование */
+.booking {
+    padding: 1px 0;
+}
+.booking form {
+    position: relative;
+}
+.booking-state {
+    padding: 15px;
+}
+.booking-state h4 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 20px;    
+}
+.booking-state .progress {
+    width: 128px;
+    height: 15px;
+    margin: 1px auto 10px;    
+    background: url(/img/offers/progress.gif) 100% 2px no-repeat;
+}
+.booking-state p {
+    margin: 6px 0 0;
+    text-align: center;
+} 
+
+/* Изменение цены */
+.diff-price {
+    border-top: 1px solid #D0D0D0;
+    padding: 15px;
+}
+.diff-price h5 {
+    font-size: 100%;
+    margin: 0 0 8px;
+}
+.diff-price strong {
+    font-weight: bold;
+}
+.offer .diff-price a.a-button {
+    float: none;
+    border-color: #7b8e12;
+    margin-right: 2px;
+    padding: 3px 10px;
+    font-weight: bold;
+}
+
+/* Лоадер */
+.booking .loading {
+    padding-right: 28px;
+    background: transparent url(/img/loader/loader-white.gif) no-repeat 100% 1px;
+    background-image: url(data:image/gif;base64,R0lGODlhEAAQAPIAAP///+0RkvnG5PFOru0RkvNsu/WKyfaZ0CH+GkNyZWF0ZWQgd2l0aCBhamF4bG9hZC5pbmZvACH5BAAKAAAAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQACgABACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkEAAoAAgAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkEAAoAAwAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkEAAoABAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQACgAFACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQACgAGACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAAKAAcALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==);
+}
+
+/* Оставшиеся места */
+.booking .availability {
+    display: inline;
+    float: right;
+    position: relative;
+    top: -5px;
+    width: 233px;
+    margin-right: 15px;
+    font-size: 13px;
+    line-height: 15px;
+}
+.booking .availability strong {
+    color: #ED1192;
+}
+
+/* Результат бронирования */
+.booking .result {
+    margin: 12px 15px;
+}
+.booking .success,
+.booking .fail {
+    font-size: 125%;
+    line-height: 120%;
+}
+.booking .success strong {
+    font-weight: bold;
+    color: #447b00;
+}
+.booking .fail strong {
+    font-weight: bold;
+    color: #ea2535;
+}
+.booking .result .tip {
+    margin: 10px 0 0;
+    font-size: 75%;
+    line-height: 125%;
+}
+.booking .result .hint {
+    color: #333;
+}
+.booking .tds-form {
+    position: absolute;
+    height: 0;
+    overflow: hidden;
+}
+.booking .tds-submit {
+    margin-top: 8px;
+}
+.booking .tds-submit a.a-button {
+    float: none;
+    border-color: #7b8e12;
+    margin-right: 2px;
+    padding: 3px 10px;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: bold;
+}
+.booking .result .tds-submit a.stop-booking {
+    position: relative;
+    top: 8px;
+}
+
+/* Кнопки прекращения бронирования */
+.offer a.stop-booking {
+    position: absolute;
+    right: 15px;
+    margin-top: 15px;
+    font-size: 12px;
+    font-weight: normal;
+    color: #333;
+}
+.offer a.stop-booking:hover {
+    color: #ED1192;
+}
+.booking-submit a.stop-booking,
+.booking .result a.stop-booking {
+    position: static;
+    right: 0;
+    margin: 0;
+    font-size: 100%;
+}
+.booking .result a.stop-booking {
+    float: right;
+}
+.stop-booking-panel {
+    height: 30px;
+    background: #FFF;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.014em;
+}
+.stop-booking-panel .link {
+    color: #333;
+}
+.stop-booking-panel .link:hover {
+    color: #ED1192;
+}
+
+/* Кнопки */
+.booking .a-button {
+    margin: 0 0 0 .25em;
+    padding: 4px 10px;
+    font-weight: bold;
+    color: #777;
+}
+.booking .a-button-ready {
+    color: #FFF;
+}
+
+/* Кнопка отправки */
+.booking-submit {
+    margin: 30px 15px;
+}
+.booking-submit table {
+    margin: 0 auto;
+}
+.booking .bs-left {
+    width: 250px;
+    font-weight: bold;
+    font-size: 20px;
+    text-align: right;
+    vertical-align: middle;
+}
+.booking .bs-right {
+    width: 250px;
+    color: #777;
+    font-size: 13px;
+    vertical-align: middle;
+}
+.bs-button {
+    padding: 0 15px 2px;
+    text-align: center;
+    vertical-align: middle;
+}
+.booking-submit .a-button {
+    margin: 0;
+    font-size: 20px;    
+}
+.booking-submit .loading,
+.booking .sending .cancel {
+    display: none;
+}
+.booking .sending .loading {
+    display: block;
+    height: 16px;
+    background-position: 0 0;
+}
+
+/* Список ошибок */
+.booking-errors {
+    position: relative;
+    top: 5px;
+    width: 380px;
+    margin: 17px auto 0;
+    padding: 14px 20px 12px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    background: #ffc4c4;
+    font-size: 13px;
+    line-height: 16px;
+    color: #333;
+}
+.be-triangle {
+    display: block;
+    position: absolute;
+    top: -15px;
+    left: 194px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: transparent transparent #ffc4c4;
+    border-width: 0 16px 16px;
+}
+.booking-errors h6 {
+    font-weight: bold;
+    font-size: 100%;
+    margin: 0 0 5px;
+}
+.be-list {
+    margin-left: 1.2em;
+    list-style: disc;
+}
+.be-list li {
+    margin: 3px 0 0;
+}
+.be-list .link {
+    color: #333333;
+}
+.be-list .link:hover {
+    color: #ED1192;
+}
+
+/* Предупреждение */
+.booking-disclaimer {
+    margin: 12px 15px;
+    font-size: 16px;
+    line-height: 19px;
+    color: #777;    
+}
+.booking-disclaimer a {
+    color: #333;
+}
+.booking-disclaimer a:hover {
+    color: #ED1192;
+}
+
+/* Правила тарифов и всплывающие подсказки */
+.farerules {
+    display: none;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    background: #FFF;
+    color: #000;
+}
+.booking .hint {
+    color: #777;
+}
+.farerules {
+    position: absolute;
+    top: 0; left: 119px;
+    width: 654px;
+    padding: 18px 20px 20px;
+    font-size: 14px;
+    line-height: 19px;    
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    -moz-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    -o-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35); 
+}
+.farerules .close {
+    float: right;
+    position: relative;
+    top: -12px; left: 14px;
+    width: 18px; height: 18px;
+    background: url(/img/booking/close.png) no-repeat;
+    cursor: pointer;
+}
+.farerules h3 {
+    margin: 0 0 12px;
+    font-size: 26px;
+    line-height: 1;
+}
+.farerules .fgroup {
+    margin: 12px 0 0;
+}
+.fgtranslate {
+    float: right;
+    margin-top: 2px;
+    font-size: 12px;
+}
+.fgrus {
+    padding: 0 55px 2px 0;
+    background: url(/img/booking/google.png) no-repeat 100% 1px;
+}
+.fgheader {
+    margin: 0 200px 5px 0;
+}
+.fgheader h5 {
+    display: inline;
+    margin-right: 5px;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 20px;
+}
+.fgheader .clofs {
+    display: inline;
+    font-size: 12px;
+    color: #777;
+}
+.farerules pre {
+    max-height: 130px;
+    overflow: auto;
+    border: 1px solid #999;
+    border-color: #757575 #999 #B0B0B0;
+    padding: 3px 8px;
+    background: #fff;
+    font-size: 12px;
+}
+

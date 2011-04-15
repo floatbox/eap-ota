@@ -1,5 +1,9 @@
-<div class="section book-bc" onclick="return 'BankCard'">
-    <div class="payments">
+<div class="section booking-card">
+    <ul class="section-tabs wrap latent">
+        <li class="selected">Банковской картой</li>
+        <li><span class="link">Наличными</span></li>
+    </ul>
+    <div class="bc-payments">
         <p>Данные вашей банковской карты обрабатываются платежным центром <a target="_blank" href="http://www.alfabank.ru/">Альфа-Банка</a> и защищены 256-битным шифрованием, обеспеченным компанией <a target="_blank" href="http://www.thawte.com/">Thawte</a></p>
         <img class="alfa" src="/img/booking/alfabank.png" alt="Альфа-Банк">
         <img class="thawte" src="/img/booking/thawte.png" alt="Thawte">
@@ -9,6 +13,27 @@
     <div class="bc-bill-short">
         <span style="padding-right: 2px;">Стоимость&nbsp;<%= @order.people.size == 1 ? 'билета' : 'билетов' %>&nbsp;—</span> <span style="white-space: nowrap;"><%= decorated_price @order.recommendation.price_with_payment_commission, 'strong', 'span' %><%= ' за всех пассажиров' if @order.people.size > 1 %> со&nbsp;всеми налогами и&nbsp;сборами</span>
     </div>
+
+    <table class="bc-bill latent">
+    <tr>
+        <td>
+            <h6>Стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %></h6>
+            <div class="price"><%= decorated_price @order.recommendation.price_total, 'strong', 'em' %>&nbsp;</div>
+            <p class="hint">стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами</p>
+        </td>
+        <td class="sign">+</td>
+        <td>
+            <h6>Комиссия за&nbsp;транзакцию</h6>
+            <div class="price"><%= decorated_price @order.recommendation.price_payment, 'strong', 'em' %>&nbsp;</div>
+            <p class="hint">комиссия банка за&nbsp;проведение платежа</p>
+        </td>
+        <td class="sign">=</td>
+        <td>
+            <h6>С&nbsp;карты будет списано</h6>
+            <div class="price price-total"><%= decorated_price @order.recommendation.price_with_payment_commission, 'strong', 'em' %>&nbsp;</div>
+        </td>
+    </tr>
+    </table>
 
     <div class="booking-price g-none">
     <div class="cost"><dl>

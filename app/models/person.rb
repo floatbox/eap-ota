@@ -10,7 +10,7 @@ class Person < ActiveRecord::BaseWithoutTable
   column :document_noexpiration, :boolean, false
   column :bonus_present, :boolean, false
   column :bonuscard_type, :string
-  column :bonuscard_number, :string, 'Номер карты'
+  column :bonuscard_number, :string
   column :number_in_amadeus, :integer
   column :ticket, :string
   validates_presence_of :first_name, :last_name, :sex, :nationality_id, :birthday, :passport

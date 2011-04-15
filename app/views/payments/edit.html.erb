@@ -2,8 +2,8 @@
 <html>
 <head>
     <%= render 'shared/head_common', {:title => @order.description} %>
-    <%= stylesheet_link_tag "static", "atoms/button", "atoms/pseudo", "results/booking" %>
-    <%= javascript_include_tag "static", "main", "booking/wizard", "booking/validation" %>
+    <%= stylesheet_link_tag "static", "atoms/button", "atoms/pseudo", "controls/hint", "booking/booking", "booking/sections" %>
+    <%= javascript_include_tag "static", "main", "payment", "booking/validation", "hint" %>
 </head>
 <body>
 <%= render 'shared/header' %>
@@ -17,30 +17,31 @@
 <div class="booking">
 <%= form_for @card, :as => :card, :url => edit_payment_url(:code=> @order.code), :html => { :autocomplete => "off" } do |f| %>
     <h3><%= @order.description %></h3>
-    <div class="section book-bc" onclick="return 'BankCard'">
-        <div class="payments">
+    <div class="section booking-card">
+        <div class="bc-payments">
             <p>Данные вашей банковской карты обрабатываются платежным центром <a target="_blank" href="http://www.alfabank.ru/">Альфа-Банка</a> и защищены 256-битным шифрованием, обеспеченным компанией <a target="_blank" href="http://www.thawte.com/">Thawte</a></p>
             <img class="alfa" src="/img/booking/alfabank.png" alt="Альфа-Банк">
             <img class="thawte" src="/img/booking/thawte.png" alt="Thawte">
         </div>
         <%= render 'booking/card', :f => f %>
-        <table class="bc-bill">
-            <tr><th>С&nbsp;карты будет списано</th></tr>
-            <tr><td><%= decorated_price @order.price_with_payment_commission, 'b', 'i' %></td></tr>
-        </table>
+        <div class="bc-bill-short">
+            <span style="padding-right: 2px;">С&nbsp;карты будет списано</span> <span style="white-space: nowrap;"><%= decorated_price @order.price_with_payment_commission, 'strong', 'span' %></span>
+        </div>        
     </div>
-    <div class="book-s">
-        <div class="control">
-        <table><tr>
-            <td class="g-xl">Всё правильно?</td>
-            <th><input type="submit" class="a-button g-xl" value="Оплатить"></th>
-            <td class="g-xxs"><div class="loading"><br></div></td>
-        </tr></table>
-        </div>
-        <div class="blocker">
-            <s></s>
+    <div class="booking-submit">
+        <table>
+        <tr>
+            <td class="bs-left">Всё правильно?</td>
+            <td class="bs-button"><input type="submit" class="a-button" value="Оплатить"></th>
+            <td class="bs-right">
+                <div class="loading"><br></div>
+            </td>
+        </tr>
+        </table>
+        <div class="booking-errors">
+            <div class="be-triangle"></div>
             <h6>Пока невозможно. И вот почему:</h6>
-            <ul class="b-pseudo"></ul>
+            <ul class="be-list"></ul>
         </div>
     </div>
 <% end %>
@@ -52,6 +53,13 @@
     <%= render 'shared/footer' %>
 </div>
 </div>
-<%= javascript_include_tag "payment" %>
+<div id="hint">
+    <div class="close"></div>
+    <div class="content"></div>
+</div>
+<script type="text/javascript">
+app.booking.init();
+hint.init();
+</script>
 </body>
 </html>

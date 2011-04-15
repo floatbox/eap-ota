@@ -2,8 +2,8 @@
 <html>
 <head>
     <%= render 'shared/head_common', {:title => 'авиабилеты по всему миру онлайн'} %>
-    <%= stylesheet_link_tag "promo", "pushup", "atoms/button", "atoms/pseudo", "controls/filter", "controls/autocomplete", "controls/hint", "search/form", "search/fields", "search/panel", "search/calendar", "search/live", "results/results", "results/filters", "results/message", "results/offer", "results/matrix", "results/diagram", "results/booking", :cache => Rails.env.production? %>
-    <%= javascript_include_tag "lib/json2", "lib/pushup", "main", "pageurl", "autocomplete", "search", "map", "calendar", "filters", "results", "results/filters", "results/matrix", "results/diagram", "live", "hint", "booking/validation", "booking/wizard", "booking/form", "booking/names", :cache => Rails.env.production? %>
+    <%= stylesheet_link_tag "promo", "pushup", "atoms/button", "controls/filter", "controls/autocomplete", "controls/hint", "search/form", "search/fields", "search/panel", "search/calendar", "search/live", "results/results", "results/filters", "results/message", "results/offer", "results/matrix", "results/diagram", "booking/booking", "booking/sections", :cache => Rails.env.production? %>
+    <%= javascript_include_tag "lib/json2", "lib/pushup", "main", "pageurl", "autocomplete", "search", "map", "calendar", "filters", "results", "results/filters", "results/matrix", "results/diagram", "live", "hint", "booking/form", "booking/validation", "booking/names", :cache => Rails.env.production? %>
 </head>
 <body>
 <%= render 'shared/header' %>

@@ -1,88 +1,36 @@
-<ul class="bankcard">
-<li class="bc-front">
-    <p id="bc-type" class="bc-type g-xxs" title="Вы можете использовать карточки платёжных систем Visa или MasterCard">
-        <i class="bc-visa"></i><b>&nbsp;или&nbsp;</b><i class="bc-master"></i>
-    </p>
-    <fieldset class="bc-num">
-        <label for="bc-num1" title="Шестнадцатизначный номер карты">Номер карты</label>
-        <div class="bc-num-fields">
-        <%= f.text_field :number1,
-         :id => "bc-num1",
-         :class => "text",
-         :maxlength => "4",
-         :title => "первые четыре цифры номера карты",
-         :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 4, maxl: 4, gender: 'D'}}"
-        %>
-        <%= f.text_field :number2,
-         :id => "bc-num2",
-         :class => "text",
-         :maxlength => "4",
-         :title => "вторые четыре цифры номера карты",
-         :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 4, maxl: 4, gender: 'D'}}"
-        %>
-        <%= f.text_field :number3,
-         :id => "bc-num3",
-         :class => "text",
-         :maxlength => "4",
-         :title => "предпоследние четыре цифры номера карты",
-         :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 4, maxl: 4, gender: 'D'}}"
-        %>
-        <%= f.text_field :number4,
-         :id => "bc-num4",
-         :class => "text",
-         :maxlength => "4",
-         :title => "последние четыре цифры номера карты",
-         :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 4, maxl: 4, gender: 'D'}}"
-        %>
+<div class="bc-sides">
+<div class="bc-front">
+    <div class="bc-type" title="Вы можете использовать карты платёжных систем Visa или MasterCard">
+        <img class="bc-visa" src="/img/booking/visa.png" alt="Visa"><span class="bc-type-or">&nbsp;или&nbsp;</span><img class="bc-master" src="/img/booking/mastercard.png" alt="MasterCard">
+    </div>
+    <div class="bc-number">
+        <h6 class="blabel"><label for="bc-num1" title="Шестнадцатизначный номер карты">Номер карты</label></h6>
+        <div class="bcn-fields">
+        <%= f.text_field :number2, :id => "bc-num1", :class => "bfield", :maxlength => "4" %>
+        <%= f.text_field :number2, :id => "bc-num2", :class => "bfield", :maxlength => "4" %> 
+        <%= f.text_field :number2, :id => "bc-num3", :class => "bfield", :maxlength => "4" %>
+        <%= f.text_field :number2, :id => "bc-num4", :class => "bfield", :maxlength => "4" %>
         </div>
-        <%= f.error_message_on :number, :id => 'error_card_number' %>
-    </fieldset>
-    <fieldset class="bankcardname text-upper">
-        <label for="bc-name" title="Имя и фамилию нужно вписать латинскими буквами &mdash; точно, как на карте">Имя на&nbsp;карте</label>
-        <%= f.text_field :name,
-          :id => 'bc-name',
-          :class => "text",
-          :title => "имя на карте",
-          :onclick => "return {mask: /[a-z ]/i, rules: {latin: true, minl: 3}}" %>
-        <%= f.error_message_on :name, :id => 'error_card_name' %>
-        <div class="language-warning">Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры. Имя нужно вводить латинскими буквами</div>
-    </fieldset>
-    <fieldset class="bc-exp">
-        <label for="bc-exp-mm" class="g-xs" title="На карте обозначено как &laquo;VALID THRU&raquo;">Срок действия</label>
-        <%= f.text_field :month,
-         :id => "bc-exp-mm",
-         :class => "text",
-         :maxlength => "2",
-         :value => "мм",
-         :title => "месяц окончания действия карты",
-         :onclick => "return {def: 'мм', mask: /\\d/, rules: {req: true, num: true, minl: 1, maxl: 2, min: 1, max: 12, gender: 'M'}}"
-         %>
-        <%= f.error_message_on :month, :id => 'error_card_month' %>
-        <i>/</i>
-        <%= f.text_field :year_short,
-         :id => "bc-exp-yy",
-         :class => "text",
-         :maxlength => "2",
-         :value =>  "гг",
-         :title => "год окончания действия карты",
-         :onclick => "return {def: 'гг', mask: /\\d/, rules: {req: true, num: true, minl: 2, maxl: 2, min: #{ Date.current.strftime('%y') }, gender: 'M'}}"
-        %>
-        <%= f.error_message_on :year, :id => 'error_card_year'  %>
-    </fieldset>
-</li>
-<li class="bc-back">
-    <p class="magneticstrip">&nbsp;
-    <fieldset class="bccvv">
-        <label for="bc-cvv" class="cvv" title="Трёхзначный CVV (CVC) код карты. Карта без этого кода непригодна для оплаты услуг через интернет.">CVV/CVC</label>
-        <label for="bc-num4" class="num4 novalue" id="bc-cvv-num" title="Последние четыре цифры номера карты"><span class="empty">####</span></label>
-        <%= f.text_field :verification_value,
-         :id => "bc-cvv",
-         :class => "text",
-         :maxlength => "3",
-         :title => "CVV-код банковской карты",
-         :onclick => "return {mask: /\\d/, rules: {req: true, num: true, minl: 3, maxl: 3, gender: 'M'}}"
-        %>
-        <%= f.error_message_on :verification_value, :id => 'error_card_verification_value' %>
-    </fieldset>
-</li>
-</ul>
+    </div>
+    <div class="bc-name">
+        <h6 class="blabel"><label for="bc-num1" title="Имя и фамилия латинскими буквами, как на карте">Имя на&nbsp;карте</label></h6>    
+        <%= f.text_field :name, :id => 'bc-name', :class => "bfield" %>
+        <div class="bwarning language-warning">Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры. Имя нужно вводить латинскими буквами</div>
+    </div>
+    <div class="bc-exp">
+        <h6 class="blabel"><label for="bc-exp-month" title="На карте обозначен как &laquo;VALID THRU&raquo;">Срок действия</label></h6>
+        <div class="wrap">
+            <div class="date-item" title="Месяц окончания действия карты"><label class="placeholder" for="bc-exp-month">ММ</label><%= f.text_field :month, :id => "bc-exp-month", :class => "bfield date-month", :maxlength => "2" %></div>
+            <div class="date-item" title="Год окончания действия карты"><label class="placeholder" for="bc-exp-year">ГГ</label><%= f.text_field :year_short, :id => "bc-exp-year", :class => "bfield date-year", :maxlength => "2" %></div>
+        </div>
+    </div>
+</div>
+<div class="bc-back">
+    <div class="bc-stripe">&nbsp;</div>
+    <div class="bc-cvv">
+        <h6 class="blabel"><label for="bc-cvv" title="Трёхзначный CVV (CVC) код карты. Карта без этого кода не подходит для оплаты услуг через интернет.">CVV/CVC</label></h6>
+        <div id="bc-num-sample" title="Последние четыре цифры номера карты"><span class="empty">####</span></div>
+        <%= f.text_field :verification_value, :id => "bc-cvv", :class => "bfield", :maxlength => "3" %>
+    </div>
+</div>
+</div>

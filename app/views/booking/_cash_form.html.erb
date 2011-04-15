@@ -1,0 +1,46 @@
+<div class="section booking-cash latent">
+<ul class="section-tabs wrap">
+    <li><span class="link">Банковской картой</span></li>
+    <li class="selected">Наличными</li>
+</ul>
+<%= fields_for :cash do |cash| %>
+<p class="bc-pay-warning">Бронирование необходимо оплатить до {date}, иначе оно будет автоматически аннулировано.</p>
+<div class="bc-delivery">
+    <div class="radio"><%= cash.radio_button :delivery, '1', :id => "bc-delivery-yes" %>&nbsp;<label for="bc-delivery-yes">Хочу оплатить курьеру при доставке (+500&nbsp;рублей)</label></div>
+    <div class="radio"><%= cash.radio_button :delivery, '0', :id => "bc-delivery-no" %>&nbsp;<label for="bc-delivery-no">Хочу самостоятельно приехать в офис и оплатить</label></div>
+</div>
+<div class="bc-address">
+    <h6 class="blabel">Адрес доставки</h6>
+    <div class="bca-description">
+        <p>Введите адрес доставки, желательно подробный (если есть код домофона или другие тонкости — укажите, пожалуйста). Желаемое время доставки тоже можно указать.</p>
+        <p>Обратите внимание, что доставка возможна только по Москве.</p>
+    </div>
+    <textarea class="bfield" id="bc-address"></textarea>
+</div>
+<% end %>
+<table class="bc-bill">
+<tr>
+    <td>
+        <h6>Стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %></h6>
+        <div class="price"><%= decorated_price @order.recommendation.price_total, 'strong', 'em' %>&nbsp;</div>
+        <p class="hint">стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами</p>
+    </td>
+    <td class="sign">+</td>
+    <td>
+        <div class="bcb-delivery">
+            <h6>Доставка курьером</h6>
+            <div class="price"><%= decorated_price 500, 'strong', 'em' %>&nbsp;</div>
+        </div>
+        <div class="bcb-nodelivery">
+            <h6>Оплата в&nbsp;офисе</h6>
+        </div>
+    </td>
+    <td class="sign">=</td>
+    <td>
+        <h6>Итого к&nbsp;оплате</h6>
+        <div class="price price-total bcb-delivery"><%= decorated_price @order.recommendation.price_total + 500, 'strong', 'em' %>&nbsp;</div>
+        <div class="price price-total bcb-nodelivery"><%= decorated_price @order.recommendation.price_total, 'strong', 'em' %>&nbsp;</div>
+    </td>
+</tr>
+</table>
+</div>
