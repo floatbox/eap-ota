@@ -32,18 +32,9 @@ init: function() {
                     if (result.attr('data-type') === 'success') {
                         self.submit.addClass('latent');
                     }
-                } else if (s && s.errors) {
-                    var items = [];
-                    for (var eid in s.errors) {
-                        var ftitle = eid;
-                        if (ftitle.search(/card\[number\]/i) !== -1) {
-                            items.push('<li>Введён неправильный <span class="link" data-field="bc-num1">номер банковской карты</span></li>');
-                        } else if (ftitle.search(/card\[type\]/i) === -1) {
-                            items.push('<li>' + ftitle + ' ' + s.errors[eid] + '</li>');
-                        }
-                    }
+                } else if (s && s.error) {
                     self.button.addClass('a-button-ready');
-                    self.el.find('.be-list').html(items.join(''));
+                    self.el.find('.be-list').html('<li>Введён неправильный <span class="link" data-field="bc-num1">номер банковской карты</span></li>');
                     self.el.find('.booking-errors').show();
                 } else {
                     processError(s && s.exception && s.exception.message);

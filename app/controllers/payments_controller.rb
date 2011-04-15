@@ -22,6 +22,7 @@ class PaymentsController < ApplicationController
         render :partial => 'fail'
       end
     end
+    render :json => {:error => 'card[number]'}
   end
 
 end
