@@ -75,8 +75,8 @@ class Order < ActiveRecord::Base
   end
 
   def load_ticket_numbers
-    Amadeus.booking do |amadeus|
-      resp = amadeus.pnr_retrieve_and_ignore(:number => number)
+    resp = Amadeus.booking do |amadeus|
+      amadeus.pnr_retrieve_and_ignore(:number => pnr_number)
     end
     update_attribute(:tickets, resp.passengers.every.ticket.join(', '))
   end

@@ -200,20 +200,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
         end
       end
     else
-      response = Sirena::Service.booking(self)
-      unless response.error
-        self.pnr_number = response.pnr_number
-        if pnr_number
-          self.sirena_lead_pass = response.lead_family
-          @order = Order.create(:order_data => self)
-          return pnr_number
-        else
-          errors.add :pnr_number, 'Ошибка при создании PNR'
-        end
-      else
-        errors.add :pnr_number, response.error
-        return
-      end
+      Sirena::Adapter.book_for_data(self)
     end
   end
 

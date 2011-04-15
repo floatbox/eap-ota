@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sirena>
+  <answer pult="ГРФ365">
+    <pricing results="cut">
+      <flight id="1">
+        <company>SU</company>
+        <num>750</num>
+        <flight>750</flight>
+        <origin>ИКТ</origin>
+        <destination terminal="D ">ШРМ</destination>
+        <deptdate delay="0">29.04.11</deptdate>
+        <arrvdate delay="0">29.04.11</arrvdate>
+        <depttime>06:30</depttime>
+        <arrvtime>07:35</arrvtime>
+        <flightTime>6:05</flightTime>
+        <airplane>320</airplane>
+      </flight>
+      <flight id="2">
+        <company>SU</company>
+        <num>867</num>
+        <flight>867</flight>
+        <origin terminal="D ">ШРМ</origin>
+        <destination>СОЧ</destination>
+        <deptdate delay="0">29.04.11</deptdate>
+        <arrvdate delay="0">29.04.11</arrvdate>
+        <depttime>10:20</depttime>
+        <arrvtime>12:45</arrvtime>
+        <flightTime>2:25</flightTime>
+        <airplane>320</airplane>
+      </flight>
+      <flight id="3">
+        <company>SU</company>
+        <num>868</num>
+        <flight>868</flight>
+        <origin>СОЧ</origin>
+        <destination terminal="D ">ШРМ</destination>
+        <deptdate delay="0">14.05.11</deptdate>
+        <arrvdate delay="0">14.05.11</arrvdate>
+        <depttime>13:45</depttime>
+        <arrvtime>16:00</arrvtime>
+        <flightTime>2:15</flightTime>
+        <airplane>321</airplane>
+      </flight>
+      <flight id="4">
+        <company>SU</company>
+        <num>749</num>
+        <flight>749</flight>
+        <origin terminal="D ">ШРМ</origin>
+        <destination>ИКТ</destination>
+        <deptdate delay="0">14.05.11</deptdate>
+        <arrvdate delay="0">15.05.11</arrvdate>
+        <depttime>18:45</depttime>
+        <arrvtime>05:00</arrvtime>
+        <flightTime>5:15</flightTime>
+        <airplane>320</airplane>
+      </flight>
+      <flight id="5">
+        <company>SU</company>
+        <num>872</num>
+        <flight>872</flight>
+        <origin>СОЧ</origin>
+        <destination terminal="D ">ШРМ</destination>
+        <deptdate delay="0">14.05.11</deptdate>
+        <arrvdate delay="0">14.05.11</arrvdate>
+        <depttime>18:45</depttime>
+        <arrvtime>21:05</arrvtime>
+        <flightTime>2:20</flightTime>
+        <airplane>321</airplane>
+      </flight>
+      <flight id="6">
+        <company>SU</company>
+        <num>747</num>
+        <flight>747</flight>
+        <origin terminal="D ">ШРМ</origin>
+        <destination>ИКТ</destination>
+        <deptdate delay="0">15.05.11</deptdate>
+        <arrvdate delay="0">15.05.11</arrvdate>
+        <depttime>01:15</depttime>
+        <arrvtime>11:30</arrvtime>
+        <flightTime>5:15</flightTime>
+        <airplane>320</airplane>
+      </flight>
+      <variant id="1" fop="НА" n_blanks="4">
+        <flights latin_registration="true" et_possible="true">
+          <flight id="1" num="1" class="H" subclass="H" baseclass="Y" iSegmentOrig="IKT" iSegmentDest="AER" iSegmentNum="IKT-AER" oSegmentPartNum="0" oSegmentPartQuantity="2" fare_expdate="2011-04-22 23:59"/>
+          <flight id="2" num="2" class="H" subclass="H" baseclass="Y" iSegmentOrig="IKT" iSegmentDest="AER" iSegmentNum="IKT-AER" oSegmentPartNum="1" oSegmentPartQuantity="2" fare_expdate="2011-04-22 23:59"/>
+          <flight id="3" num="3" class="H" subclass="H" baseclass="Y" iSegmentOrig="AER" iSegmentDest="IKT" iSegmentNum="AER-IKT" oSegmentPartNum="0" oSegmentPartQuantity="2" fare_expdate="2011-04-22 23:59"/>
+          <flight id="4" num="4" class="H" subclass="H" baseclass="Y" iSegmentOrig="AER" iSegmentDest="IKT" iSegmentNum="AER-IKT" oSegmentPartNum="1" oSegmentPartQuantity="2" fare_expdate="2011-04-22 23:59"/>
+        </flights>
+        <flights latin_registration="true" et_possible="true">
+          <flight id="1" num="1" class="H" subclass="H" baseclass="Y" iSegmentOrig="IKT" iSegmentDest="AER" iSegmentNum="IKT-AER" oSegmentPartNum="0" oSegmentPartQuantity="2" fare_expdate="2011-04-22 23:59"/>
+          <flight id="2" num="2" class="H" subclass="H" baseclass="Y" iSegmentOrig="IKT" iSegmentDest="AER" iSegmentNum="IKT-AER" oSegmentPartNum="1" oSegmentPartQuantity="2" fare_expdate="2011-04-22 23:59"/>
+          <flight id="5" num="3" class="H" subclass="H" baseclass="Y" iSegmentOrig="AER" iSegmentDest="IKT" iSegmentNum="AER-IKT" oSegmentPartNum="0" oSegmentPartQuantity="2" fare_expdate="2011-04-22 23:59"/>
+          <flight id="6" num="4" class="H" subclass="H" baseclass="Y" iSegmentOrig="AER" iSegmentDest="IKT" iSegmentNum="AER-IKT" oSegmentPartNum="1" oSegmentPartQuantity="2" fare_expdate="2011-04-22 23:59"/>
+        </flights>
+        <direction num="1">
+          <price code="ААА" orig_code="ААА" count="1" currency="РУБ">
+            <fare code="HEXRF" remark="VLRF" unpoundable="true" fare_expdate="2011-04-22 23:59">15000.00</fare>
+            <tax code="РУ" owner="aircompany">41.00</tax>
+            <tax code="ZZ" owner="aircompany">125.00</tax>
+            <tax code="YQ" owner="aircompany">1100.00</tax>
+            <tax code="YR" owner="aircompany">136.00</tax>
+            <total>16402.00</total>
+          </price>
+          <price code="РБГ" orig_code="CHILD" count="2" currency="РУБ">
+            <fare code="HEXRF/CH33" remark="VLRF" unpoundable="true" base_code="HEXRF" fare_expdate="2011-04-22 23:59">20100.00</fare>
+            <tax code="РУ" owner="aircompany">82.00</tax>
+            <tax code="ZZ" owner="aircompany">250.00</tax>
+            <tax code="YQ" owner="aircompany">2200.00</tax>
+            <tax code="YR" owner="aircompany">272.00</tax>
+            <total>22904.00</total>
+          </price>
+          <price code="РМГ" orig_code="INFANT" count="1" currency="РУБ">
+            <fare code="HEXRF/IN00" remark="VLRF" unpoundable="true" base_code="HEXRF" fare_expdate="2011-04-22 23:59">0.00</fare>
+            <total>0.00</total>
+          </price>
+        </direction>
+        <direction num="2">
+          <price code="ААА" orig_code="ААА" count="1" currency="РУБ">
+            <fare code="HEXRF" remark="VLRF" unpoundable="true" fare_expdate="2011-04-22 23:59">0.00</fare>
+            <tax code="ZZ" owner="aircompany">125.00</tax>
+            <tax code="YQ" owner="aircompany">1100.00</tax>
+            <tax code="YR" owner="aircompany">136.00</tax>
+            <total>1361.00</total>
+          </price>
+          <price code="РБГ" orig_code="CHILD" count="2" currency="РУБ">
+            <fare code="HEXRF/CH33" remark="VLRF" unpoundable="true" base_code="HEXRF" fare_expdate="2011-04-22 23:59">0.00</fare>
+            <tax code="ZZ" owner="aircompany">250.00</tax>
+            <tax code="YQ" owner="aircompany">2200.00</tax>
+            <tax code="YR" owner="aircompany">272.00</tax>
+            <total>2722.00</total>
+          </price>
+          <price code="РМГ" orig_code="INFANT" count="1" currency="РУБ">
+            <fare code="HEXRF/IN00" remark="VLRF" unpoundable="true" base_code="HEXRF" fare_expdate="2011-04-22 23:59">0.00</fare>
+            <total>0.00</total>
+          </price>
+        </direction>
+        <direction num="3">
+          <price code="ААА" orig_code="ААА" count="1" currency="РУБ">
+            <fare code="HEXRF" remark="VLRF" unpoundable="true" fare_expdate="2011-04-22 23:59">15000.00</fare>
+            <tax code="ZZ" owner="aircompany">125.00</tax>
+            <tax code="YQ" owner="aircompany">1100.00</tax>
+            <tax code="YR" owner="aircompany">136.00</tax>
+            <total>16361.00</total>
+          </price>
+          <price code="РБГ" orig_code="CHILD" count="2" currency="РУБ">
+            <fare code="HEXRF/CH33" remark="VLRF" unpoundable="true" base_code="HEXRF" fare_expdate="2011-04-22 23:59">20100.00</fare>
+            <tax code="ZZ" owner="aircompany">250.00</tax>
+            <tax code="YQ" owner="aircompany">2200.00</tax>
+            <tax code="YR" owner="aircompany">272.00</tax>
+            <total>22822.00</total>
+          </price>
+          <price code="РМГ" orig_code="INFANT" count="1" currency="РУБ">
+            <fare code="HEXRF/IN00" remark="VLRF" unpoundable="true" base_code="HEXRF" fare_expdate="2011-04-22 23:59">0.00</fare>
+            <total>0.00</total>
+          </price>
+        </direction>
+        <direction num="4">
+          <price code="ААА" orig_code="ААА" count="1" currency="РУБ">
+            <fare code="HEXRF" remark="VLRF" unpoundable="true" fare_expdate="2011-04-22 23:59">0.00</fare>
+            <tax code="ZZ" owner="aircompany">125.00</tax>
+            <tax code="YQ" owner="aircompany">1100.00</tax>
+            <tax code="YR" owner="aircompany">136.00</tax>
+            <total>1361.00</total>
+          </price>
+          <price code="РБГ" orig_code="CHILD" count="2" currency="РУБ">
+            <fare code="HEXRF/CH33" remark="VLRF" unpoundable="true" base_code="HEXRF" fare_expdate="2011-04-22 23:59">0.00</fare>
+            <tax code="ZZ" owner="aircompany">250.00</tax>
+            <tax code="YQ" owner="aircompany">2200.00</tax>
+            <tax code="YR" owner="aircompany">272.00</tax>
+            <total>2722.00</total>
+          </price>
+          <price code="РМГ" orig_code="INFANT" count="1" currency="РУБ">
+            <fare code="HEXRF/IN00" remark="VLRF" unpoundable="true" base_code="HEXRF" fare_expdate="2011-04-22 23:59">0.00</fare>
+            <total>0.00</total>
+          </price>
+        </direction>
+        <variant_total currency="РУБ">86655.00</variant_total>
+      </variant>
+      <request>
+        <pricing>
+          <segment>
+            <departure xml:lang="en">IKT</departure>
+            <arrival xml:lang="en">AER</arrival>
+            <date>29.04.2011</date>
+            <class>Э</class>
+            <direct>false</direct>
+          </segment>
+          <segment>
+            <departure xml:lang="en">AER</departure>
+            <arrival xml:lang="en">IKT</arrival>
+            <date>14.05.2011</date>
+            <class>Э</class>
+            <direct>false</direct>
+          </segment>
+          <passenger>
+            <code>ААА</code>
+            <count>1</count>
+          </passenger>
+          <passenger>
+            <code>CHILD</code>
+            <count>2</count>
+            <age>5</age>
+          </passenger>
+          <passenger>
+            <code>INFANT</code>
+            <count>1</count>
+            <age>1</age>
+          </passenger>
+          <request_params>
+            <lang>en</lang>
+            <min_results>1</min_results>
+            <max_results>2</max_results>
+            <mix_scls>true</mix_scls>
+            <mix_ac>false</mix_ac>
+            <fingering_order>ordinary</fingering_order>
+          </request_params>
+          <answer_params>
+            <return_request>true</return_request>
+            <show_flighttime>true</show_flighttime>
+            <show_fareexpdate>true</show_fareexpdate>
+            <show_io_matching>true</show_io_matching>
+            <show_varianttotal>true</show_varianttotal>
+            <show_reg_latin>true</show_reg_latin>
+            <show_baseclass>true</show_baseclass>
+            <show_n_blanks>true</show_n_blanks>
+            <show_et>true</show_et>
+            <regroup>true</regroup>
+          </answer_params>
+        </pricing>
+      </request>
+    </pricing>
+  </answer>
+</sirena>
