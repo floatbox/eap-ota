@@ -39,16 +39,6 @@ class BookingController < ApplicationController
         payture_response = @order.block_money
         if payture_response.success?
           @order.order.money_blocked!
-          # FIXME вынести в кронтаск
-          if @order.recommendation.source == 'sirena'
-            logger.info "Pay: sirena ticketing"
-            err_msg = Sirena::Adapter.approve_payment(@order.order)
-            if err_msg
-              logger.info "Pay: sirena ticketing error " + err_msg
-              render :partial => 'fail', :locals => {:errors => err_msg}
-              return
-            end
-          end
           logger.info "Pay: payment and booking successful"
           render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}
         elsif payture_response.threeds?

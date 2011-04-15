@@ -3,12 +3,12 @@ module Sirena
   module Request
     class PaymentExtAuth < Sirena::Request::Base
       attr_accessor :pnr_number, :lead_family, :card, :payment_action, :cost, :curr
-      def initialize(order, params={})
-        @pnr_number = order.pnr_number
-        @lead_family = order.sirena_lead_pass
+      def initialize(pnr_number, lead_family, action, params={})
+        @pnr_number = pnr_number
+        @lead_family = lead_family
         @cost = params[:cost]
         @curr = params[:curr]
-        @payment_action = params[:action]
+        @payment_action = action
 #        @card = {
 #          :num=>order.card.number,
 #          :expire_date=>"01."+order.card.month.to_s+"."+order.card.year_short.to_s,
