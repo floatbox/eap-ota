@@ -140,7 +140,7 @@ Destination:
     default_action_on_item: show
   order_by: -created_at
   relationships: hot_offers, from, to
-  filters: from, to, rt
+  #filters: from, to, rt
   application: Hot Offers
 
 HotOffer:
@@ -156,7 +156,7 @@ HotOffer:
     default_action_on_item: show
   order_by: -created_at
   relationships: destination
-  filters: destination
+  #filters: destination
   search: description, url
   application: Hot Offers
 
