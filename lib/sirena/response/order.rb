@@ -6,11 +6,15 @@ module Sirena
       def parse
         @number = xpath("//regnum").text
         @passengers = xpath("//passengers/passenger").map do |p|
+          tickets = xpath("//tickinfo[@pass_id=#{p["id"]}][.='ticket']").map{|tickinfo|
+                      tickinfo["ticknum"]
+                    }.uniq
           Person.new({
             :first_name => p.xpath("name").text,
             :last_name => p.xpath("surname").text,
             :passport => p.xpath("doc").text,
-            :sex => p.xpath("sex").text
+            :sex => p.xpath("sex").text,
+            :ticket => tickets.blank? ? nil : tickets.join(" ")
           })
         end
         @booking_classes = []

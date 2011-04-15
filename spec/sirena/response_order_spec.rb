@@ -32,7 +32,7 @@ describe Sirena::Response::Order do
     its("passengers.every.first_name") { should == ["ALEKSEY 19АПР83", "MASHA 20ФЕВ00"] }
     its("passengers.every.last_name") { should == ['IVANOV', 'IVANOVA'] }
     its("passengers.every.passport") { should == ["6555555555", "VВГ123456"] }
-    pending ("passengers.every.ticket") { should == [ '2626150600213', '2626150600214'] }
+    its ("passengers.every.ticket") { should == [ '2626150600213', '2626150600214'] }
     its(:email) { should == 'USER@EXAMPLE.COM' }
     its(:phone) { should == '+79265555555' }
     it { should have(2).flights }
