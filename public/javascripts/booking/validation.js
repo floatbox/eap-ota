@@ -367,7 +367,7 @@ date: function(parts, messages) {
     });
     parts.slice(0, 2).change(function() {
         var f = $(this), v = f.val();
-        if (v && v.length < 2) f.val('0' + v);
+        if (v && v.length < 2 && v.search(/\D/) === -1) f.val('0' + v);
         item.validate();
     }).keypress(function(e) {
         if (String.fromCharCode(e.which).search(/[ .,\-\/]/) === 0) {
@@ -383,7 +383,7 @@ date: function(parts, messages) {
     });
     parts.eq(2).change(function() {
         var f = $(this), v = f.val();
-        if (v && v.length < 4) {
+        if (v && v.length < 4 && v.search(/\D/) === -1) {
             var y = parseInt(f.val(), 10);
             if (messages.past && y < 100) y += 2000;
             if (y <= today.getFullYear() % 100) y += 2000;

@@ -30,11 +30,11 @@
     border-radius: 3px;
     background: #FFF;
     font-size: 20px;
-    line-height: 25px;
+    line-height: 24px;
     color: #333;
 }
 .booking input.bfield {
-    height: 25px;
+    height: 24px;
 }
 .booking .bfield:focus {
     outline: none;
@@ -55,7 +55,7 @@
     position: absolute;
     margin: 4px 6px;
     font-size: 20px;
-    line-height: 25px;
+    line-height: 24px;
     color: #C0C0C0;
 }
 .booking .disabled .placeholder {
@@ -115,9 +115,8 @@
     width: 214px;
     padding: 2px;
 }
-.mac.chrome .booking-person select.bfield,
-.mac.safari .booking-person select.bfield {
-    height: 33px;
+.booking-person select.bfield {
+    height: 32px;
 }
 
 /* Даты */
@@ -154,13 +153,13 @@
     display: inline-block;
     position: relative;
     width: 50px;
-    height: 25px;
-    padding: 3px 5px;
+    height: 24px;
+    padding: 4px 5px 2px;
     border: 1px solid #909090;
     background: #f8f8f8;
     text-align: center;
     font-size: 18px;
-    line-height: 25px;
+    line-height: 24px;
     color: #909090;
     cursor: pointer;
 }
