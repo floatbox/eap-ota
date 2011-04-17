@@ -114,7 +114,7 @@ module CommissionRules
 
   #FIXME нужно починить для работы с валютой
   def euro_rate
-    40
+    Conf.amadeus.euro_rate
   end
 
   private

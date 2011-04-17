@@ -5,8 +5,7 @@ amadeus:
   nonstop_search: yes
   calendar: yes
   fake: no
-  production:
-    endpoint: "https://production.webservices.amadeus.com"
+  euro_rate: 40
 payment:
   skip_checksum_validation: yes
   order_id_prefix: o
