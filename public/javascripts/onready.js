@@ -58,4 +58,8 @@
     // Всплывающие подсказки
     hint.init();
 
+    // Один пассажир и эконом по умолчанию
+    search.persons.select({adults: 1, children: 0, infants: 0});
+    search.cabin.select('Y');
+
 })();
