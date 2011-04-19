@@ -20,23 +20,11 @@
     // Обработка ссылки
     pageurl.init();
 
-    // Сохраненное бронирование
-    if (pageurl.booking) {
-        app.booking.el = $('<div class="booking"></div>').appendTo($('#offers'));
-        app.booking.load(pageurl.booking);
-    }
+    // Переключение блоков при прокрутке
+    fixedBlocks.init();
 
     // Прямой эфир
     search.live.init();
-
-    // Восстановление результатов
-    if (pageurl.search) {
-        search.validate(pageurl.search);
-    } else {
-        $('#promo').removeClass('latent');
-        search.live.toggle(true);
-        search.segments[0].to.focus();
-    }
 
     // Фон для лоадера
     preload('/img/offers/photo-search.jpg', '/img/offers/progress.gif');
@@ -52,14 +40,26 @@
         event.preventDefault();
     });
 
-    // Переключение блоков при прокрутке
-    fixedBlocks.init();
+    // Один пассажир и эконом по умолчанию
+
+    // Сохраненное бронирование
+    if (pageurl.booking) {
+        app.booking.el = $('<div class="booking"></div>').appendTo($('#offers'));
+        app.booking.load(pageurl.booking);
+    }
+
+    // Восстановление результатов
+    if (pageurl.search) {
+        search.validate(pageurl.search);
+    } else {
+        $('#promo').removeClass('latent');
+        search.persons.select({adults: 1, children: 0, infants: 0});
+        search.cabin.select('Y');
+        search.live.toggle(true);
+        search.segments[0].to.focus();
+    }
 
     // Всплывающие подсказки
     hint.init();
-
-    // Один пассажир и эконом по умолчанию
-    search.persons.select({adults: 1, children: 0, infants: 0});
-    search.cabin.select('Y');
 
 })();
