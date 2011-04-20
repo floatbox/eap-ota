@@ -148,7 +148,11 @@ drawSegment: function(s) {
             var d = parseInt(el.attr('data-duration'), 10);
             el.width(Math.round(d / length * that.width) - 8);
         });
-        item.find('.bar').css('left', Math.round(dpt / length * this.width) + this.offset);
+        var left = Math.round(dpt / length * this.width);
+        item.find('.bar').css({
+            left: left + this.offset,
+            width: this.width + 140 - left
+        });
         var prices = segment.prices[bars[i].flights];
         if (prices.length > 1) {
             prices = prices.unique();
@@ -166,7 +170,7 @@ drawSegment: function(s) {
     var tmin = Math.ceil(segment.dpt / gstep) * gstep;
     var tmax = Math.floor(segment.arv / gstep) * gstep;
     for (var t = tmin; t < tmax + 1; t += gstep) {
-        var gline = $('<div class="grid"/>'); 
+        var gline = $('<div class="grid"/>');
         var gtime = '<li>' + this.formatTime(t) + '</li>';
         if (segment.shift) {
             gtime += '<li>' + this.formatTime(t + segment.shift) + '</li>';

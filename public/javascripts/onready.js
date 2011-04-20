@@ -10,13 +10,6 @@
     results.matrix.init();
     results.diagram.init();
 
-    // Данные по умолчанию для сброса
-    search.defvalues = {
-        form_segments: [{from: search.segments[0].from.val()}],
-        people_count: $.extend({}, search.persons.selected),
-        rt: true
-    };
-
     // Обработка ссылки
     pageurl.init();
 
@@ -40,13 +33,19 @@
         event.preventDefault();
     });
 
-    // Один пассажир и эконом по умолчанию
-
     // Сохраненное бронирование
     if (pageurl.booking) {
         app.booking.el = $('<div class="booking"></div>').appendTo($('#offers'));
         app.booking.load(pageurl.booking);
     }
+
+    // Данные по умолчанию для сброса
+    search.defvalues = {
+        form_segments: [{from: search.segments[0].from.val()}],
+        people_count: {adults: 1, children: 0, infants: 0},
+        cabin: 'Y',
+        rt: true
+    };
 
     // Восстановление результатов
     if (pageurl.search) {
