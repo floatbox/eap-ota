@@ -12,7 +12,7 @@ class Recommendation
   include KeyValueInit
 
   attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
-    :suggested_marketing_carrier_iatas, :availabilities
+    :suggested_marketing_carrier_iatas, :availabilities, :upts
 
   attr_accessor :sirena_blank_count
 
