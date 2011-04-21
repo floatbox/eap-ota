@@ -147,9 +147,6 @@ init: function() {
         self.persons.hide();
     });
 
-    // Один пассажир по умолчанию
-    search.persons.select({adults: 1, children: 0, infants: 0});
-
     // Кнопка
     this.submit = $('#search-submit').attr('data-required', 'to');
     this.smessage = this.submit.find('.message');

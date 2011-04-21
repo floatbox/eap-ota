@@ -150,7 +150,7 @@ app.booking.initCard = function(el) {
         numsample.html(s.join(''));
     });
     var typeor = el.find('.bc-type-or');
-    var toggleType = function(type) {
+    var toggleCardType = function(type) {
         visa.toggle(type !== 'mastercard');
         mastercard.toggle(type !== 'visa');
         typeor.toggle(type === undefined);
@@ -170,7 +170,7 @@ app.booking.initCard = function(el) {
         cardnumber.el.first().focus();
     });
     cardnumber.el.first().bind('keyup propertychange input', function() {
-        toggleType(types[this.value.charAt(0)]);
+        toggleCardType(this.value ? types[this.value.charAt(0)] : undefined);
     });
     var cardcvv = validator.cardcvv($('#bc-cvv'), {
         empty: 'Не указан трёхзначный {CVV/CVC код} банковской карты',
@@ -359,27 +359,38 @@ date: function(parts, messages) {
     };
     parts.focus(function() {
         $(this).prev('.placeholder').hide();
+        ignoreTab = true;
     }).blur(function() {
         var f = $(this);
         f.prev('.placeholder').toggle(f.val().length === 0);
     }).bind('keyup propertychange input', function() {
         item.change();
     });
+    var ignoreTab = false;
     parts.slice(0, 2).change(function() {
         var f = $(this), v = f.val();
         if (v && v.length < 2 && v.search(/\D/) === -1) f.val('0' + v);
         item.validate();
     }).keypress(function(e) {
-        if (String.fromCharCode(e.which).search(/[ .,\-\/]/) === 0) {
-            e.preventDefault();
+        if (this.value && String.fromCharCode(e.which).search(/[ .,\-\/]/) === 0) {
             $(this).change().parent().next().find('input').focus();
+            e.preventDefault();
         }
-    }).keydown(function(e) {
+    }).keyup(function(e) {
         var code = e.which;
         var digit = (code > 47 && code < 58) || (code > 95 && code < 106);
         if (this.value.length === 2 && digit) {
             $(this).change().parent().next().find('input').focus();
+            ignoreTab = true;
         }
+    });
+    parts.slice(1).keydown(function(e) {
+        if (e.which === 8 && this.value.length === 0) {
+            $(this).blur().change().parent().prev().find('input').focus();
+        } else if (ignoreTab && e.which === 9 && !e.shiftKey) {
+            e.preventDefault();
+        }
+        ignoreTab = false;
     });
     parts.eq(2).change(function() {
         var f = $(this), v = f.val();
@@ -478,29 +489,25 @@ cardnumber: function(parts, messages) {
             el.focus();
             field.attr('maxlength', 4);
         }, 10);
+    }).focus(function() {
+        ignoreTab = true;
     });
-    var throwFocus = false;
-    parts.slice(0, 3).keydown(function(e) {
+    var ignoreTab = false;
+    parts.slice(0, 3).keyup(function(e) {
         var code = e.which;
         var digit = (code > 47 && code < 58) || (code > 95 && code < 106);
-        var space = (code === 32);
-        if (throwFocus && (digit || space)) {
-            throwFocus = false;
+        if (this.value.length === 4 && digit) {
             $(this).trigger('change').next('input').select();
-            if (space) e.preventDefault();
-        }
-    }).keyup(function(e) {
-        throwFocus = (this.value.length === 4);
-        if (throwFocus && String.fromCharCode(e.which).search(/[ \-]/) === 0) {
-            e.preventDefault();
-            $(this).trigger('change').next('input').select();
-            throwFocus = false;
+            ignoreTab = true;
         }
     });
     parts.slice(1).keydown(function(e) {
         if (this.value.length === 0 && e.which === 8) {
             $(this).trigger('change').prev('input').focus();
+        } else if (ignoreTab && e.which === 9 && !e.shiftKey) {
+            e.preventDefault();
         }
+        ignoreTab = false;
     });
     parts.bind('keyup propertychange input', function() {
         item.change();
@@ -545,25 +552,37 @@ cardexp: function(parts, messages) {
         }
         return undefined;
     };
+    var ignoreTab = false;
     mf.change(function() {
         var f = $(this), v = f.val();
         if (v && v.length < 2) f.val('0' + v);
     }).keypress(function(e) {
-        if (String.fromCharCode(e.which).search(/[ .,\-\/]/) === 0) {
+        if (this.value && String.fromCharCode(e.which).search(/[ .,\-\/]/) === 0) {
             e.preventDefault();
             mf.change();
             yf.focus();
         }
-    }).keydown(function(e) {
+    }).keyup(function(e) {
         var code = e.which;
         var digit = (code > 47 && code < 58) || (code > 95 && code < 106);
         if (this.value.length === 2 && digit) {
             mf.change();
             yf.focus();
+            ignoreTab = true;
         }
+    });
+    yf.slice(1).keydown(function(e) {
+        if (e.which === 8 && this.value.length === 0) {
+            yf.change();
+            mf.focus();
+        } else if (ignoreTab && e.which === 9 && !e.shiftKey) {
+            e.preventDefault();
+        }
+        ignoreTab = false;
     });
     parts.focus(function() {
         $(this).prev('.placeholder').hide();
+        ignoreTab = false;
     }).blur(function() {
         var f = $(this);
         f.prev('.placeholder').toggle(f.val().length === 0);

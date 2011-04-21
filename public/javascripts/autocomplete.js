@@ -1,48 +1,5 @@
-/*
-    TODO 
+(function($) {
 
-    чтобы фигачить дальше, т.к. нету
-        - сервиса геолокации
-        - разбора строки
-
-
-    ВНЕШНИЙ ВИД
-    + приаттачить градиент через data-uri
-    + лого
-    + IATA-код в списке
-
-    - невалидное значение подчёркивать красным
-    - плавное затухание правой границы
-    - кратность общей высоты списка высоте отдельного элемента
-
-
-    ПОВЕДЕНИЕ
-    - прогресс вынести в отдельный класс; шаблон класса
-    - в конструкторе объекта инициализивароть его из атрибута "onclick"
-    - обновлять IATA-код(ы) после разборщика; несколько кодов
-
-    - привесить обработчик мышиных событий, а также копипаста и драг&дропа
-    - методы set/get, добавление в форму
-
-    КОД
-
-    КОСЯКИ
-    * позиция списка при проскролленой строке в инпуте будет неопределена, увы
-    * поебень с определением клавиши в макинтоше - не уверен, что стоит бороться
-    - IE: почему-то остаётся пустая полоса от скроллбара
-    - у Коли в ФФ не перекрывается розовая рамка поля ввода
-    - табуляция при закрытом спсике почему-то перестала переводить фокус в другое поле
-
-    ИДЕИ
-    - может и закэшированные цены тоже показывать?
-
-*/
-
-// Depends:
-//  jquery.ui.core.js
-
-;(function($) {
-    
 $.fn.extend({
 
     autocomplete: function(options) {
@@ -155,7 +112,7 @@ $.Autocompleter = function(input, options) {
             return false;
         }
     });
-    
+
     // отслеживание изменений
     var storedValue = $el.val();
     var compareTimer;
@@ -180,7 +137,7 @@ $.Autocompleter = function(input, options) {
         // avoids issue where input had focus before the autocomplete was applied
         hasFocus = 1;
         // track last key pressed
-        
+
         keyCode = event.which;
 
         switch(keyCode) {
@@ -188,17 +145,17 @@ $.Autocompleter = function(input, options) {
                 event.preventDefault();
                 select.visible() ? select.prev() : keypress();
                 break;
-                
+
             case KEY.DOWN:
                 event.preventDefault();
                 select.visible() ? select.next() : keypress();
                 break;
-                
+
             case KEY.PAGE_UP:
                 event.preventDefault();
                 select.visible() ? select.pageUp() : keypress();
                 break;
-                
+
             case KEY.PAGE_DOWN:
                 event.preventDefault();
                 select.visible() ? select.pageDown() : keypress();
@@ -213,10 +170,10 @@ $.Autocompleter = function(input, options) {
                     timeout = setTimeout(keypress, options.delay);
                 }
                 break;
-               
+
             case KEY.ENTER:
                 event.preventDefault();
-            
+
             case KEY.TAB:
                 // stop default to prevent a form submit, Opera needs special handling
                 blockSubmit = true;
@@ -225,7 +182,7 @@ $.Autocompleter = function(input, options) {
                     return false;
                 }
                 break;
-                
+
             case KEY.ESCAPE:
                 event.preventDefault();
                 select.hide();
@@ -266,11 +223,11 @@ $.Autocompleter = function(input, options) {
     }).bind('iata', function(e, v) {
         $iata.show(v);
     });
-    
+
     options.hoverCls && $el.hover(
         function() {
             $el.addClass(options.hoverCls);
-        }, 
+        },
         function() {
             $el.removeClass(options.hoverCls);
         }
@@ -402,8 +359,8 @@ $.Autocompleter = function(input, options) {
         if (params.cursorAtTheEnd) {
             // курсор в середине слова? не подставляем
             if (/\S/.test(val.substr(cur, 1))) return false;
-        } 
-            
+        }
+
         // если такое значение в инпуте уже есть, то снимаем выделение, прячем список и выходим
         if (val.indexOf(data.insert) >= 0) {
             var sel = $el.selection();
@@ -462,7 +419,7 @@ $.Autocompleter.List = function(input, insert) {
     var $box, $list, items, status, maxleft;
     var active = -1;
 
-    
+
     (function init() {
         $box = $('<div/>')
         .hide()
@@ -472,7 +429,7 @@ $.Autocompleter.List = function(input, insert) {
             width: options.width
         })
         .appendTo(document.body);
-        
+
         $list = $('<ul/>')
         .appendTo($box)
         .mouseover(function(e) {
@@ -490,27 +447,12 @@ $.Autocompleter.List = function(input, insert) {
         .click(function(e) {
             var d = data(e);
             if (!d) return;
-
-            // щёлкнули по IATA или ещё куда, показываем объект на карте
-            // todo: 1) переделать как метода app.map 2) искать лбые гео.объекты 
-            // 3) задавать яндексу область поиска (напр, для аэропорта - город и страну)
-
-            var isGeo = (d.entity.type == 'country' && e.target.tagName == 'I') || (d.entity.type == 'city' && e.target.tagName == 'B');
-            if (isGeo && app.map) { 
-                var geo = new YMaps.Geocoder(d.entity.name);
-                YMaps.Events.observe(geo, geo.Events.Load, function () {
-                    if (this.length()) with (app.map.map) {
-                        var g = this.get(0).getGeoPoint();
-                        openBalloon(g, d.entity.name);
-                        panTo(g, {flying: 1});
-                    }
-                });
-                return false;
-            }
-
             insert({data: d});
             input.focus();
             return false;
+        })
+        .mousedown(function(event) {
+            event.preventDefault();
         });
 
         status = $('<p/>')
@@ -521,7 +463,7 @@ $.Autocompleter.List = function(input, insert) {
         // arguments.callee = $.noop;
 
     })();
-    
+
     function data(e) {
         e = e.target;
         while (e.parentNode && e.tagName != 'LI') e = e.parentNode;
@@ -552,7 +494,7 @@ $.Autocompleter.List = function(input, insert) {
 
         setStatus(activeItem);
     };
-    
+
     function movePosition(step) {
         active += step;
         if (active < 0) {
@@ -561,7 +503,7 @@ $.Autocompleter.List = function(input, insert) {
             active = 0;
         }
     }
-    
+
     function fill(data) {
         $list.empty();
         active = 0;
@@ -574,7 +516,7 @@ $.Autocompleter.List = function(input, insert) {
 
         $.fn.bgiframe && $list.bgiframe();
     }
-    
+
     return {
         fill: function(data) {
             fill(data);
@@ -615,7 +557,7 @@ $.Autocompleter.List = function(input, insert) {
                 top: offset.top + input.offsetHeight - 1,
                 left: offset.left + left
             }).delay(0);
-            
+
             me.visible() || $box.animate(
                 {
                     height: ['show', 'easeInOutQuart'],
@@ -635,7 +577,7 @@ $.Autocompleter.List = function(input, insert) {
                     maxHeight: options.height,
                     overflow: 'auto'
                 });
-                
+
                 if($.browser.msie && typeof document.body.style.maxHeight === "undefined") {
                     var listHeight = 0;
                     items.each(function() {
@@ -745,7 +687,7 @@ $.Autocompleter.List.Item = function(data) {
 
     with (r(data.entity)) {
         hint && $('<s/>').html(hint).appendTo($li.append('<wbr/>'));
-        
+
         cls && $li.addClass(cls).append($('<i/>'));
 
         if (code) if (cls == 'country')

@@ -373,6 +373,11 @@ processUpdate: function() {
                 self.empty.find('.rmtext p').html('Попробуйте упростить маршрут или поискать другие даты');
             }
             $('#offers-pcollection').html('');
+            pageurl.update('search', undefined);
+            pageurl.title();
+            if (window._gaq) {
+                _gaq.push(['_trackPageview', '/#empty']);
+            }
         }
         this.toggle('empty');
         fixedBlocks.update();

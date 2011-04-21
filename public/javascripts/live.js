@@ -20,6 +20,7 @@ init: function() {
     this.vel = 2;
     this.slx = 0;
     this.dv = 0;
+    this.ucounter = 0;
     this.update();
 },
 move: function() {
@@ -30,7 +31,10 @@ move: function() {
     }
     if (slx <= this.stw - this.slw) {
         this.proceed();
-        this.update();
+        if (this.ucounter++ > 3) {
+            this.update();
+            this.ucounter = 0;
+        }
     }
     if (this.dv !== 0) {
         var v = this.vel + this.dv;

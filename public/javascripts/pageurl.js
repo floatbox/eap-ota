@@ -36,7 +36,7 @@ compare: function() {
 parse: function() {
     var hash = this.hash();
     if (hash) {
-        var hparts = hash.split(':');
+        var hparts = hash.split(/:|\//);
         this.search = hparts[0];
         this.tab = hparts[1] || 'featured';
         this.booking = hparts[2];
@@ -64,7 +64,7 @@ show: function() {
             parts.push(this.booking);
         }
         var url = parts.join(':');
-        window.location.hash = url;
+        window.location.hash = url.replace(':', '/');
         if (window._gaq) {
             _gaq.push(['_trackPageview', '/#' + url]);
         }
