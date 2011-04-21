@@ -4,7 +4,7 @@ Eviterra::Application.routes.draw do
   match 'calendar' => 'pricer#calendar', :as => :calendar
   match 'pricer/validate' => 'pricer#validate', :as => :pricer_validate
 
-  match 'api/search(.:format)' => 'pricer#yandex'
+  match 'api/search(.:format)' => 'pricer#api'
 
   match 'booking' => 'booking#index', :as => :booking
   match 'hot_offers' => 'pricer#hot_offers', :as => :hot_offers

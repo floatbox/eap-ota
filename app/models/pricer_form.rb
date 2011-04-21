@@ -15,8 +15,8 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     if args[:date2]
       form_segments << {:from => args[:to], :to => args[:from], :date => convert_api_date(args[:date2])}
     end
-    adults = args[:adults] || 1
-    children = args[:children]
+    adults = (args[:adults] || 1).to_i
+    children = args[:children].to_i
     infants = args[:infants].to_i + args[:seated_infants].to_i
     cabin = args[:cabin]
 

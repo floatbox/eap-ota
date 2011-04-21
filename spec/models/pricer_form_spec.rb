@@ -71,5 +71,14 @@ describe PricerForm do
       it { should be_valid }
       its(:cabin) { should == 'C' }
     end
+
+    context "when got empty people values" do
+      let :attrs do
+        { :from => 'MOW', :to => 'LON', :date1 => '091011', :cabin => 'C', :adults => nil, :children => nil, :infants => nil, :seated_infants => nil }
+      end
+
+      it { should be_valid }
+      its(:real_people_count) { should == {:children=>0, :adults=>1, :infants=>0} }
+    end
   end
 end
