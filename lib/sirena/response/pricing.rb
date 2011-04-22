@@ -61,6 +61,8 @@ module Sirena
         fare = rec.xpath("direction/price/fare").sum{|elem| elem.text.to_f}
         total = rec.xpath("direction/price/total").sum{|elem| elem.text.to_f}
 
+        upts = Hash[*(rec.xpath("direction/price/upt").map{|u| [u.at_xpath("code_upt").text, u.to_s]}.flatten)]
+
         if blank_count = rec['n_blanks']
           blank_count = blank_count.to_i
         end
@@ -76,6 +78,7 @@ module Sirena
             :variants => variants,
             :validating_carrier_iata => validating_carrier_iata,
             :additional_info => "",
+            :upts => upts,
             :sirena_blank_count => blank_count,
             :cabins => cabins,
             :booking_classes => booking_classes

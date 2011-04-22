@@ -19,7 +19,7 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
 
   end
 
-  context 'with some crazy passengers and itinerary', :focus => true do
+  context 'with some crazy passengers and itinerary' do
 
     before(:all) {
       body = File.read('spec/amadeus/xml/Fare_MasterPricerTravelBoardSearch_Pathological.xml')
