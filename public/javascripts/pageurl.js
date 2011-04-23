@@ -64,7 +64,7 @@ show: function() {
             parts.push(this.booking);
         }
         var url = parts.join(':');
-        window.location.hash = url.replace(':', '/');
+        window.location.hash = url.replace(/:/g, '/');
         if (window._gaq) {
             _gaq.push(['_trackPageview', '/#' + url]);
         }
