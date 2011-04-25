@@ -1,0 +1,8 @@
+<div class="booking-social">
+<% fsegment = @order.recommendation.segments.first %>
+<% lsegment = @order.recommendation.segments.last %>
+<% order_date1 = fsegment.departure.city.tz.local_to_utc(DateTime.strptime(fsegment.departure_date + fsegment.departure_time, '%d%m%y%H%M')).strftime('%Y%m%dT%H%M00Z') %>
+<% order_date2 = lsegment.arrival.city.tz.local_to_utc(DateTime.strptime(lsegment.arrival_date + lsegment.arrival_time, '%d%m%y%H%M')).strftime('%Y%m%dT%H%M00Z') %>
+<% order_cities = ([fsegment.departure.city.case_to] + @order.recommendation.segments.map{|s| s.arrival.city.case_to}).uniq[1..-1].to_sentence %>
+<a href="http://www.google.com/calendar/event?action=TEMPLATE&text=<%= @order.recommendation.segments.length == 1 ? 'Перелёт' : 'Поездка' %> <%= order_cities %>&dates=<%= order_date1 %>/<%= order_date2 %>&location=Аэропорт <%= fsegment.flights.first.departure_name %>, <%= fsegment.departure.city.name %>">Поездка</a>
+</div>

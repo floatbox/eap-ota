@@ -1,9 +1,5 @@
 <div class="booking g-none" data-variant="<%= @order.variant_id %>">
-<div class="booking-social">
-
-Поездка <%= @order.recommendation.segments[0].arrival.city.case_to %>
-
-</div>
+<%= render 'share' %>
 <%= form_for @order.card, :as => :card, :url => booking_pay_path, :html => { :autocomplete => "off" } do |f| %>
 
     <% availability = @order.recommendation.availability %>

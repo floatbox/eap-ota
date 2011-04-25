@@ -63,13 +63,13 @@ show: function() {
         if (this.booking) {
             parts.push(this.booking);
         }
-        var url = parts.join(':');
-        window.location.hash = url.replace(/:/g, '/');
+        var url = parts.join('/');
+        window.location.hash = url;
         if (window._gaq) {
-            _gaq.push(['_trackPageview', '/#' + url]);
+            _gaq.push(['_trackPageview', '/#' + parts.join(':')]);
         }
         if (window.yaCounter5324671) {
-            yaCounter5324671.hit('/#' + url);
+            yaCounter5324671.hit('/#' + parts.join(':'));
         }
         this.summary = url;
     } else {
