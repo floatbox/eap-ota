@@ -12,7 +12,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   attr_accessor :number
   attr_accessor :sirena_lead_pass
   attr_accessor :last_tkt_date
-  attr_reader :order # то, что сохраняется в базу
+  attr_accessor :order # то, что сохраняется в базу
   attr_accessor :variant_id #нужен при восстановлении формы по урлу
 
   validates_format_of :email, :with =>
