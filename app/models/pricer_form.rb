@@ -318,10 +318,17 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       r << ['с&nbsp;младенцем', 'с&nbsp;двумя младенцами', 'с&nbsp;тремя младенцами', 'с&nbsp;четырьмя младенцами', 'с&nbsp;пятью младенцами', 'с&nbsp;шестью младенцами', '7 младенцев'][infants-1]
     end
 
-    r << human_cabin if cabin
+    if cabin
+      case cabin
+      when 'C'
+        r << 'бизнес-классом'
+      when 'F'
+        r << 'первым классом'
+      end
+    end
+
     unless complex_route?
       r << "<span class=\"date\" data-date=\"#{[date1[0,2],date1[2,2]].join('.')}\">#{human_date(date1)}</span>"
-
       if rt
         r << 'и&nbsp;обратно'
         r << "<span class=\"date\" data-date=\"#{[date2[0,2],date2[2,2]].join('.')}\">#{human_date(date2)}</span>"
@@ -332,17 +339,6 @@ class PricerForm < ActiveRecord::BaseWithoutTable
 
   def human_lite
     form_segments[0].from_as_object.name + (rt ? ' ⇄ ' : ' → ') + form_segments[0].to_as_object.name
-  end
-
-  def human_cabin
-    case cabin
-    when 'Y'
-      return 'эконом-классом'
-    when 'C'
-      return 'бизнес-классом'
-    when 'F'
-      return 'первым классом'
-    end
   end
 
   def nearby_cities
