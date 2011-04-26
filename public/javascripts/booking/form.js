@@ -47,11 +47,10 @@ init: function() {
         var data = $(this).serialize();
         var processError = function(text) {
             self.el.append('<div class="result"><p class="fail"><strong>Упс…</strong> ' + (text || 'Что-то пошло не так.') + '</p><p class="tip">Попробуйте снова или узнайте, <a target="_blank" href="/about/#payment">какими ещё способами</a> можно купить у нас билет.</p></div>');
-            self.button.addClass('a-button-ready');
         };
         self.el.find('.result').remove();
         self.el.find('.booking-disclaimer').hide();
-        self.button.removeClass('a-button-ready');
+        self.button.removeClass('a-button-ready').attr('value', 'Секундочку…');
         self.submit.addClass('sending');
         $.ajax({
             url: $(this).attr('action'),
@@ -87,17 +86,18 @@ init: function() {
                             items.push('<li>' + ftitle + ' ' + s.errors[eid] + '</li>');
                         }
                     }
-                    self.button.addClass('a-button-ready');
                     self.el.find('.be-list').html(items.join(''));
                     self.el.find('.booking-errors').show();
                 } else {
                     processError(s && s.exception && s.exception.message);
                 }
+                self.button.attr('value', self.button.attr('data-text')).addClass('a-button-ready');
                 self.submit.removeClass('sending');
             },
             error: function() {
                 processError();
                 self.submit.removeClass('sending');
+                self.button.attr('value', self.button.attr('data-text')).addClass('a-button-ready');
             },
             timeout: 90000
         });

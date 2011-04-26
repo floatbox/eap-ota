@@ -233,6 +233,13 @@
     height: 16px;
     background-position: 0 0;
 }
+.booking .sending .bs-left,
+.booking .sending .bs-right {
+    width: 200px;
+}
+.booking .sending .bs-left {
+    visibility: hidden;
+}
 
 /* Список ошибок */
 .booking-errors {
@@ -389,4 +396,3 @@
 .booking .booking-social a:hover {
     color: #ED1192;
 }
-
