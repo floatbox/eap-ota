@@ -13,6 +13,7 @@ class Person < ActiveRecord::BaseWithoutTable
   column :bonuscard_number, :string
   column :number_in_amadeus, :integer
   column :ticket, :string
+  column :passenger_ref, :integer
   validates_presence_of :first_name, :last_name, :sex, :nationality_id, :birthday, :passport
   validates_presence_of :document_expiration_date, :unless => :document_noexpiration
   # FIXME WRONG! фамилии через дефис? два имени? сокращения?

@@ -106,9 +106,27 @@ Order:
   # actions:
   #   show: cancel, ticket, charge, unblock, show_pnr
   filters: source, payment_status, ticket_status, ticketed_date
-  relationships: payments
+  relationships: payments, tickets
   application: Orders
   export: csv
+
+Ticket:
+  fields:
+    default: source, created_at, number, commission_carrier, description, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share
+    list: source, created_at, number, commission_carrier, description, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share
+    show: source, created_at, number, commission_carrier, description, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, order
+    csv: source, created_at, number, commission_carrier, description, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share
+    options:
+      date_formats:
+        created_at: long
+  options:
+    default_action_on_item: show
+  order_by: -created_at
+  filters: created_at
+  relationships: order
+  application: Orders
+  export: csv
+
 
 Payment:
   fields:

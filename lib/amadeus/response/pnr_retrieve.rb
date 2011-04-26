@@ -39,6 +39,7 @@ module Amadeus
               need_infant = (passenger / 'r:type').to_s == 'INF'
               Person.new(:first_name => passenger.xpath('r:firstName').to_s,
                          :last_name => surname,
+                         :passenger_ref => passenger_ref,
                          :passport => passport(passenger_ref, need_infant),
                          :ticket => ticket(passenger_ref, need_infant),
                          :number_in_amadeus => (ti / '../../r:elementManagementPassenger/r:lineNumber').to_s
@@ -84,3 +85,4 @@ module Amadeus
     end
   end
 end
+

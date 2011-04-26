@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110412115001) do
+ActiveRecord::Schema.define(:version => 20110425164421) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -234,7 +234,7 @@ ActiveRecord::Schema.define(:version => 20110412115001) do
     t.string   "description"
     t.date     "last_tkt_date"
     t.date     "ticketed_date"
-    t.string   "tickets"
+    t.string   "ticket_numbers_as_text"
   end
 
   create_table "payments", :force => true do |t|
@@ -251,6 +251,7 @@ ActiveRecord::Schema.define(:version => 20110412115001) do
     t.string   "reject_reason"
     t.string   "id_override"
     t.datetime "charged_at"
+    t.string   "threeds_key"
   end
 
   create_table "regions", :force => true do |t|
@@ -270,6 +271,18 @@ ActiveRecord::Schema.define(:version => 20110412115001) do
     t.integer  "importance",   :default => 0
     t.string   "region_type"
     t.string   "synonym_list"
+  end
+
+  create_table "tickets", :force => true do |t|
+    t.string   "number"
+    t.decimal  "price_fare",                :precision => 9, :scale => 2, :default => 0.0, :null => false
+    t.string   "commission_subagent"
+    t.decimal  "price_tax",                 :precision => 9, :scale => 2, :default => 0.0, :null => false
+    t.decimal  "price_share",               :precision => 9, :scale => 2, :default => 0.0, :null => false
+    t.decimal  "price_consolidator_markup", :precision => 9, :scale => 2, :default => 0.0, :null => false
+    t.integer  "order_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "typus_users", :force => true do |t|
