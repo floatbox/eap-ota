@@ -30,8 +30,8 @@ class Carrier < ActiveRecord::Base
     end
   end
 
-  def self.non_consolidated_iatas
-    where('consolidator_id is NULL AND iata != ""').limit(99).collect(&:iata)
+  def self.non_commissioned_iatas
+    (where('consolidator_id is NULL AND iata != ""').find_all{|a| Commission.commissions[a.iata]}).to_a[0..98].collect(&:iata)
   end
 
   def icon_url

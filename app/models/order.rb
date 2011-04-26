@@ -6,6 +6,7 @@ class Order < ActiveRecord::Base
   SOURCE = { 'amadeus' => 'amadeus', 'sirena' => 'sirena' }
 
   has_many :payments
+  has_many :tickets
 
 
   validates_presence_of :email, :if => (Proc.new{ |order| order.source != 'other' })
@@ -65,6 +66,11 @@ class Order < ActiveRecord::Base
     price_with_payment_commission - price_fare
   end
 
+  # а это понадобилось сирене. тоже колонку завести?
+  def price_tax
+    price_total - price_consolidator_markup - price_our_markup - price_fare
+  end
+
   def raw
     case source
     when 'amadeus'
@@ -74,11 +80,34 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def load_ticket_numbers
-    resp = Amadeus.booking do |amadeus|
-      amadeus.pnr_retrieve_and_ignore(:number => pnr_number)
+  def load_tickets
+    if source == 'amadeus' && tickets.blank?
+      pnr_resp = tst_resp = nil
+      Amadeus.booking do |amadeus|
+        pnr_resp = amadeus.pnr_retrieve(:number => pnr_number)
+        tst_resp = amadeus.ticket_display_tst(:number => pnr_number)
+        amadeus.pnr_ignore
+      end
+      prices = tst_resp.prices_with_refs
+      pnr_resp.passengers.map do |passenger|
+        ref = passenger.passenger_ref
+        price_fare_ticket = prices.present? ? prices[ref][:price_fare] : 0
+        price_tax_ticket = prices.present? ? prices[ref][:price_tax] : 0
+        price_share_ticket = commission_subagent['%'] ? (price_fare_ticket * commission_subagent[0...-1].to_f / 100) : commission_subagent.to_f
+        price_consolidator_markup_ticket = (price_share_ticket > 5) ? 0 : price_fare_ticket * 0.02
+        Ticket.create(
+          :order => self,
+          :number => passenger.ticket.to_s,
+          :commission_subagent => commission_subagent.to_s,
+          :price_fare => price_fare_ticket,
+          :price_tax => price_tax_ticket,
+          :price_consolidator_markup => price_consolidator_markup_ticket,
+          :price_share => price_share_ticket
+        )
+      end
+
+      update_attribute(:ticket_numbers_as_text, pnr_resp.passengers.every.ticket.join(' '))
     end
-    update_attribute(:tickets, resp.passengers.every.ticket.join(', '))
   end
 
   def payture_state
@@ -125,7 +154,8 @@ class Order < ActiveRecord::Base
 
   def ticket!
     update_attributes(:ticket_status =>'ticketed', :ticketed_date => Date.today)
-    load_ticket_numbers
+
+    load_tickets
     send_receipt
   end
 

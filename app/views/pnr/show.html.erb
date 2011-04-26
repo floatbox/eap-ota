@@ -18,9 +18,6 @@
 <body>
 <div id="canvas">
     <%= render 'ticket' %>
-    <% if admin_user %>
-        <div id="term">Терминал: <pre><%= @pnr.raw %></pre></div>
-    <% end %>
 </div>
 <script type="text/javascript">
 window.print();

@@ -5,10 +5,10 @@ module Sirena
       attr_accessor :cost, :curr, :common_status
 
       def parse
-        @cost = at_xpath("//cost")
-        if @cost
-          @curr = @cost["curr"]
-          @cost = @cost.text
+        if cost = at_xpath("//cost")
+          @curr = cost["curr"]
+          raise "unexpected currency #{@curr}" unless @curr == 'РУБ'
+          @cost = cost.text.to_f
         end
         @common_status = xpath("//common_status").text
       end

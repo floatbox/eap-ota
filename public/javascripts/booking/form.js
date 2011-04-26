@@ -47,11 +47,10 @@ init: function() {
         var data = $(this).serialize();
         var processError = function(text) {
             self.el.append('<div class="result"><p class="fail"><strong>Упс…</strong> ' + (text || 'Что-то пошло не так.') + '</p><p class="tip">Попробуйте снова или узнайте, <a target="_blank" href="/about/#payment">какими ещё способами</a> можно купить у нас билет.</p></div>');
-            self.button.addClass('a-button-ready');
         };
         self.el.find('.result').remove();
         self.el.find('.booking-disclaimer').hide();
-        self.button.removeClass('a-button-ready');
+        self.button.removeClass('a-button-ready').attr('value', 'Секундочку…');
         self.submit.addClass('sending');
         $.ajax({
             url: $(this).attr('action'),
@@ -60,7 +59,8 @@ init: function() {
             success: function(s) {
                 if (typeof s === 'string' && s.length) {
                     var result = $(s).appendTo(self.el);
-                    if (result.attr('data-type') === 'success') {
+                    var rtype = result.eq(0).attr('data-type');
+                    if (rtype === 'success') {
                         self.submit.addClass('latent');
                         if (window._gaq) {
                             _gaq.push(['_trackPageview', '/#' + pageurl.summary + ':success']);
@@ -70,31 +70,40 @@ init: function() {
                         if (window.yaCounter5324671) {
                             yaCounter5324671.hit('/#' + pageurl.summary + ':success');
                         }
+                    } else if (rtype === 'fail') {
+                        self.button.addClass('a-button-ready');
                     }
                 } else if (s && s.errors) {
-                    var items = [];
+                    var items = [], carderror = false;
                     for (var eid in s.errors) {
                         var ftitle = eid;
-                        if (ftitle.search(/card\[number\]/i) !== -1) {
-                            items.push('<li>Введён неправильный <span class="link" data-field="bc-num1">номер банковской карты</span></li>');
-                        } else if (ftitle.search(/card\[type\]/i) === -1) {
+                        if (ftitle.search(/card\[(?:number|type)\]/i) !== -1) {
+                            carderror = true;
+                        } else if (ftitle.search('birthday') !== -1) {
                             ftitle = ftitle.replace(/person\[(\d)\]\[birthday\]/i, function(s, n) {
-                                return '<span class="link" data-field="book-p-' + n + '-birth">' + constants.numbers.ordinaldat[parseInt(n, 10)] + ' пассажиру</span>';
+                                var num = constants.numbers.ordinaldat[parseInt(n, 10)];
+                                return '<span class="link" data-field="book-p-' + n + '-birth">' + num.charAt(0).toUpperCase() + num.substring(1) + ' пассажиру</span>';
                             });
+                            items.push('<li>' + ftitle + ' ' + s.errors[eid] + '</li>');
+                        } else {
                             items.push('<li>' + ftitle + ' ' + s.errors[eid] + '</li>');
                         }
                     }
-                    self.button.addClass('a-button-ready');
+                    if (carderror) {
+                        items.push('<li>Введён неправильный <span class="link" data-field="bc-num1">номер банковской карты</span></li>');
+                    }
                     self.el.find('.be-list').html(items.join(''));
                     self.el.find('.booking-errors').show();
                 } else {
                     processError(s && s.exception && s.exception.message);
                 }
+                self.button.attr('value', self.button.attr('data-text')).addClass('a-button-ready');
                 self.submit.removeClass('sending');
             },
             error: function() {
                 processError();
                 self.submit.removeClass('sending');
+                self.button.attr('value', self.button.attr('data-text')).addClass('a-button-ready');
             },
             timeout: 90000
         });

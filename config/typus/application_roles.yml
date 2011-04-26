@@ -8,6 +8,7 @@ admin:
   Airport: create, read, update, delete, update_completer
   City: create, read, update, delete, update_completer
   Order: create, read, unblock, charge, ticket, cancel, show_pnr
+  Ticket: read
   Country: create, read, update, delete
   GeoTag: create, read, update, delete
   Region: create, read, update, delete
