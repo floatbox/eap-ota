@@ -1,7 +1,7 @@
 var results = {
 options: {},
 init: function() {
-    
+
     var that = this;
 
     this.el = $('#results');
@@ -24,12 +24,12 @@ init: function() {
     this.stopwatch.bind('stop', function() {
         clearInterval(swtimer);
     });
-    
+
     // Табы
     $('#rtabs .link').click(function() {
         that.selectTab($(this).attr('data-tab'));
     });
-    
+
     var offers = $('#offers');
 
     // Подсветка
@@ -43,7 +43,7 @@ init: function() {
         clearTimeout(el.data('timer'));
         if (el.hasClass('collapsed')) el.removeClass('hover');
     });
-    
+
     // Подробности
     offers.delegate('.expand', 'click', function(event) {
         var variant = $(this).closest('.offer-variant');
@@ -65,7 +65,7 @@ init: function() {
             offer.removeClass('expanded').addClass('collapsed').height('auto');
         });
     });
-    
+
     // Сортировка
     offers.delegate('.offers-sort a', 'click', function(event) {
         event.preventDefault();
@@ -80,7 +80,7 @@ init: function() {
             }, 250);
         }
     });
-    
+
     // Выбор времени вылета
     offers.delegate('td.variants a', 'click', function(event) {
         event.preventDefault();
@@ -108,7 +108,7 @@ init: function() {
             $('.offer-variant', offer).eq(parseInt(result, 10)).removeClass('g-none');
         }
     });
-    
+
     // Бронирование
     offers.delegate('.book .a-button', 'click', function(event) {
         event.preventDefault();
@@ -116,7 +116,7 @@ init: function() {
         app.booking.show(variant);
         app.booking.book(variant);
     });
-    
+
     // Альянсы
     offers.delegate('.alliance', 'click', function(event) {
         var el = $(this);
@@ -201,7 +201,7 @@ load: function() {
         self.setUpdate('pcontent', '');
         self.setUpdate('mcontent', '');
     }, 160000);
-    
+
 },
 setUpdate: function(type, s) {
     this.update[type] = typeof s == 'string' ? s : '';
@@ -302,6 +302,8 @@ processUpdate: function() {
         }, function() {
             self.showDepartures();
         }, function() {
+            self.cheapest = undefined;
+            self.fastest = undefined;
             self.showRecommendations();
         }, function() {
             var nbc = $('#offers-pcollection .offers-nearby').remove();
@@ -322,13 +324,13 @@ processUpdate: function() {
         $('#offers-pcollection').html('');
         $('#offers-context .offers-nearby').html('');
         this.variants = [];
-        this.items = [];    
+        this.items = [];
         if (window._gaq) {
             _gaq.push(['_trackPageview','/virtual/search?query=' + this.title.text() + '&querycat=NULL']);
         }
     }
     if (queue.length) {
-        this.loading.find('h3').html('&nbsp;&nbsp;Еще чуть-чуть&hellip;');        
+        this.loading.find('h3').html('&nbsp;&nbsp;Еще чуть-чуть&hellip;');
         var qstep = 0, processQueue = function() {
             queue[qstep++]();
             if (queue[qstep]) setTimeout(processQueue, 100);
@@ -438,7 +440,7 @@ applyFilters: function() {
     }, function() {
         list.hide();
         self.sortOffers();
-        list.show();        
+        list.show();
     }, function() {
         list.hide();
         self.showDepartures();
@@ -566,42 +568,46 @@ showRecommendations: function() {
         }
     }
     var container = $('#offers-featured').addClass('processing').html('');
-    if (items.length == 0) {
+    if (items.length === 0) {
         container.append($('#offers-pcollection').prev().clone()).removeClass('processing');
         return;
-    } else if (items.length == 1) {
+    } else if (items.length === 1) {
         optimal = items[0];
     } else {
 
         // Выгодный вариант с отсеиванием слишком долгих
         cheap = items[0];
-        var item, ratio, defitem = items[0], minratio = 0.8;
+        if (this.cheapest === undefined) {
+            this.cheapest = $.extend({}, cheap);
+        }
+        var item, saving, cd = this.cheapest.d, cp = this.cheapest.p, maxsaving = 1.05;
         for (var i = 1, im = items.length; i < im; i++) {
             item = items[i];
-            if (item.p / defitem.p > 1.05) break;
-            if ((ratio = item.p / defitem.p * item.d / defitem.d) < minratio) {
-                minratio = ratio;
+            if (item.d < cd && (saving = (fd / item.d) / (1 + Math.pow((item.p - fp) / 500, 2))) > maxsaving) {
+                maxsaving = saving;
                 cheap = item;
             }
         }
-        
+
         // Быстрый вариант с отсеиванием слишком дорогих
         items = items.sort(function(a, b) {
             return (a.d - b.d) || (a.p - b.p);
         });
         fast = items[0];
-        var item, ratio, defitem = items[0], minratio = 0.7;
+        if (this.fastest === undefined) {
+            this.fastest = $.extend({}, fast);
+        }
+        var item, saving, fd = this.fastest.d, fp = this.fastest.p, maxsaving = 1.05;
         for (var i = 1, im = items.length; i < im; i++) {
             item = items[i];
-            if (item.d / defitem.d > 1.2) break;
-            if ((ratio = item.p / defitem.p * item.d / defitem.d) < minratio) {
-                minratio = ratio;
+            if (item.p < fp && (saving = (fp / item.p) / (1 + Math.pow((item.d - fd) / 15, 2))) > maxsaving) {
+                maxsaving = saving;
                 fast = item;
             }
         }
-        
+
         // Оптимальный вариант
-        if (cheap.n === fast.n || Math.abs(fast.p - cheap.p) < (fast.p + cheap.p) * 0.02) {
+        if (cheap.n === fast.n || Math.abs(fast.p - cheap.p) < Math.max(500, (fast.p + cheap.p) * 0.02)) {
             optimal = {n: fast.n, p: fast.p};
             cheap = undefined;
             fast = undefined;
@@ -621,10 +627,10 @@ showRecommendations: function() {
                     optimal = items[i];
                 }
             }
-            if (cheap.n === optimal.n || Math.abs(optimal.p - cheap.p) < (optimal.p + cheap.p) * 0.01) {
+            if (cheap.n === optimal.n || Math.abs(optimal.p - cheap.p) < Math.max(500, (optimal.p + cheap.p) * 0.015)) {
                 cheap = undefined;
             }
-            if (fast.n === optimal.n || Math.abs(fast.p - optimal.p) < (fast.p + optimal.p) * 0.01) {
+            if (fast.n === optimal.n || Math.abs(fast.p - optimal.p) < Math.max(500, (fast.p + optimal.p) * 0.015)) {
                 optimal = {n: fast.n, p: fast.p};
                 fast = undefined;
             }
@@ -704,11 +710,11 @@ getDepartures: function(offer) {
     for (var i = od.length; i--;) {
         var d = [];
         for (var time in od[i]) d.push(time);
-        if (od[i] = (d.length > 1) && d.sort()) various = true; 
+        if (od[i] = (d.length > 1) && d.sort()) various = true;
     }
     return various && od;
 },
-showDepartures: function() {    
+showDepartures: function() {
     var self = this, offers = this.items;
     for (var i = 0, im = offers.length; i < im; i++) {
         var offer = offers[i];
@@ -728,7 +734,7 @@ showDepartures: function() {
                 }
             });
         }
-    } 
+    }
 },
 joinDepartures: function(dtimes, current) {
     var parts = [];

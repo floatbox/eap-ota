@@ -66,6 +66,11 @@ class Order < ActiveRecord::Base
     price_with_payment_commission - price_fare
   end
 
+  # а это понадобилось сирене. тоже колонку завести?
+  def price_tax
+    price_total - price_consolidator_markup - price_our_markup - price_fare
+  end
+
   def raw
     case source
     when 'amadeus'
