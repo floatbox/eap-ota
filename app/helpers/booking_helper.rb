@@ -42,7 +42,7 @@ module BookingHelper
       amounts = ['двоих', 'троих', 'четверых', 'пятерых']
       price_parts << "за #{order.people.size > 5 ? 'всех' : amounts[order.people.size - 2]}"
     end
-    "#{segments_summary}. Билеты куплены на Eviterra.com — #{price_parts.join(' ')}."
+    "#{segments_summary}. Билеты куплены на https://eviterra.com — #{price_parts.join(' ')}."
   end
 
 end

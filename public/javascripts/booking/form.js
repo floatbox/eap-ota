@@ -60,7 +60,8 @@ init: function() {
             success: function(s) {
                 if (typeof s === 'string' && s.length) {
                     var result = $(s).appendTo(self.el);
-                    if (result.attr('data-type') === 'success') {
+                    var rtype = result.eq(0).attr('data-type');
+                    if (rtype === 'success') {
                         self.submit.addClass('latent');
                         if (window._gaq) {
                             _gaq.push(['_trackPageview', '/#' + pageurl.summary + ':success']);
@@ -70,6 +71,8 @@ init: function() {
                         if (window.yaCounter5324671) {
                             yaCounter5324671.hit('/#' + pageurl.summary + ':success');
                         }
+                    } else if (rtype === 'fail') {
+                        self.button.addClass('a-button-ready');
                     }
                 } else if (s && s.errors) {
                     var items = [];

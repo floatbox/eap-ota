@@ -1,5 +1,4 @@
 <div class="booking g-none" data-variant="<%= @order.variant_id %>">
-<%= render 'share' %>
 <%= form_for @order.card, :as => :card, :url => booking_pay_path, :html => { :autocomplete => "off" } do |f| %>
 
     <% availability = @order.recommendation.availability %>

@@ -43,18 +43,18 @@
     text-align: center;
     font-weight: bold;
     font-size: 18px;
-    line-height: 20px;    
+    line-height: 20px;
 }
 .booking-state .progress {
     width: 128px;
     height: 15px;
-    margin: 1px auto 10px;    
+    margin: 1px auto 10px;
     background: url(/img/offers/progress.gif) 100% 2px no-repeat;
 }
 .booking-state p {
     margin: 6px 0 0;
     text-align: center;
-} 
+}
 
 /* Изменение цены */
 .diff-price {
@@ -194,7 +194,10 @@
 
 /* Кнопка отправки */
 .booking-submit {
-    margin: 30px 15px;
+    margin: 30px 15px 25px;
+}
+.booking-submit.sending {
+    margin-bottom: 30px;
 }
 .booking-submit table {
     margin: 0 auto;
@@ -219,7 +222,7 @@
 }
 .booking-submit .a-button {
     margin: 0;
-    font-size: 20px;    
+    font-size: 20px;
 }
 .booking-submit .loading,
 .booking .sending .cancel {
@@ -280,7 +283,7 @@
     margin: 12px 15px;
     font-size: 16px;
     line-height: 19px;
-    color: #777;    
+    color: #777;
 }
 .booking-disclaimer a {
     color: #333;
@@ -307,11 +310,11 @@
     width: 654px;
     padding: 18px 20px 20px;
     font-size: 14px;
-    line-height: 19px;    
+    line-height: 19px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
     -moz-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
     -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
-    -o-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35); 
+    -o-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
 }
 .farerules .close {
     float: right;
@@ -361,5 +364,29 @@
     padding: 3px 8px;
     background: #fff;
     font-size: 12px;
+}
+
+/* Ссылки для добавления в социальные сети */
+.booking-social {
+    margin: 15px 0 15px;
+    padding: 12px 15px 0;
+    border-top: 1px solid #ddd;
+}
+.booking .booking-social h3 {
+    margin: 0 0 10px;
+    line-height: 22px;
+}
+.booking .booking-social li {
+    margin: 0 0 10px;
+    font-size: 14px;
+    line-height: 17px;
+}
+.booking .booking-social a {
+    padding: 5px 0 5px 32px;
+    background: url(/img/booking/social.png) no-repeat;
+    color: #777;
+}
+.booking .booking-social a:hover {
+    color: #ED1192;
 }
 
