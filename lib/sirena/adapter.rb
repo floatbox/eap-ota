@@ -11,6 +11,8 @@ module Sirena
             order_data.errors.add :pnr_number, 'Ошибка при создании PNR'
             Sirena::Service.booking_cancel(response.pnr_number, response.lead_family)
           else
+            # FIXME просто проверяем возможность добавления
+            # Sirena::Service.add_remark(response.pnr_number, response.lead_family, '')
             payment_query = Sirena::Service.payment_ext_auth(:query, response.pnr_number, response.lead_family)
             if payment_query.success? && payment_query.cost
               if payment_query.cost == recommendation.price_fare + recommendation.price_tax
