@@ -228,6 +228,10 @@ selectSegment: function(s, flights) {
     } else {
         this.showVariant();
     }
+    var st = $('#offers').offset().top - results.header.height();
+    if ($(window).scrollTop() > st) {
+        $.animateScrollTop(st);
+    }
 },
 updateSegments: function() {
     var that = this;
