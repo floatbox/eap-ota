@@ -56,7 +56,7 @@ module PricerHelper
   def fmt_duration duration
     "(%d:%02d)" % duration.divmod(60)
   end
-  
+
   def human_price price
     rounded = price.round.to_i
     "#{ rounded }&nbsp;#{ Russian.pluralize(rounded, 'рубль', 'рубля', 'рублей') }".html_safe
@@ -79,16 +79,16 @@ module PricerHelper
   def date_with_dow date
     I18n.l(Date.strptime(date, '%d%m%y'), :format => '%e %B, %A')
   end
-  
+
   def human_layovers_count count
     numbers = ['одной', 'двумя', 'тремя', 'четыремя', 'пятью']
     count == 1 ? 'пересадкой' : (numbers[count - 1] + ' пересадками —')
   end
-  
+
   def layovers_in flights
     flights.map {|flight| flight.arrival.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;').html_safe
   end
-  
+
   def segments_departure variant
     variant.segments.map {|segment| segment.departure_time }.join(' ')
   end
@@ -122,17 +122,17 @@ module PricerHelper
 
   def human_cabin_ins cabin
     titles = {'Y' => 'эконом-классом', 'C' => 'бизнес-классом', 'F' => 'первым классом'}
-    titles[cabin]  
+    titles[cabin]
   end
-  
+
   def segment_flight_numbers segment
     segment.flights.map{|f| "#{f.marketing_carrier_iata}#{f.flight_number}" }.join('-')
   end
-  
+
   # FIXME отrubyить его посимпатишнее
   def primary_operating_carriers variant
     primary_carriers = []
-    variant.segments.each_with_index do |segment, sindex|    
+    variant.segments.each_with_index do |segment, sindex|
       carriers = {}
       primary_carriers[sindex] = {'duration' => 0}
       segment.flights.each do |f|
