@@ -74,18 +74,23 @@ init: function() {
                         self.button.addClass('a-button-ready');
                     }
                 } else if (s && s.errors) {
-                    var items = [];
+                    var items = [], carderror = false;
                     for (var eid in s.errors) {
-                        var ftitle = eid, carderror = false;
-                        if (ftitle.search(/card\[(?:number|type)\]/i) !== -1 && !carderror) {
-                            items.push('<li>Введён неправильный <span class="link" data-field="bc-num1">номер банковской карты</span></li>');
+                        var ftitle = eid;
+                        if (ftitle.search(/card\[(?:number|type)\]/i) !== -1) {
                             carderror = true;
                         } else if (ftitle.search('birthday') !== -1) {
                             ftitle = ftitle.replace(/person\[(\d)\]\[birthday\]/i, function(s, n) {
-                                return '<span class="link" data-field="book-p-' + n + '-birth">' + constants.numbers.ordinaldat[parseInt(n, 10)] + ' пассажиру</span>';
+                                var num = constants.numbers.ordinaldat[parseInt(n, 10)];
+                                return '<span class="link" data-field="book-p-' + n + '-birth">' + num.charAt(0).toUpperCase() + num.substring(1) + ' пассажиру</span>';
                             });
                             items.push('<li>' + ftitle + ' ' + s.errors[eid] + '</li>');
+                        } else {
+                            items.push('<li>' + ftitle + ' ' + s.errors[eid] + '</li>');
                         }
+                    }
+                    if (carderror) {
+                        items.push('<li>Введён неправильный <span class="link" data-field="bc-num1">номер банковской карты</span></li>');
                     }
                     self.el.find('.be-list').html(items.join(''));
                     self.el.find('.booking-errors').show();
