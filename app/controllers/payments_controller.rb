@@ -21,8 +21,9 @@ class PaymentsController < ApplicationController
         logger.info "Pay: payment failed"
         render :partial => 'fail'
       end
+    else
+      render :json => {:error => 'card[number]'}
     end
-    render :json => {:error => 'card[number]'}
   end
 
 end
