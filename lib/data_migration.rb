@@ -6,6 +6,16 @@ require 'csv'
 
 module DataMigration
 
+  def self.load_tickets
+    orders = Order.where('ticket_status = "ticketed"')
+    orders.each do |order|
+      order.load_tickets
+    end
+    Ticket.all.each do |t|
+      t.update_attribute(:created_at, t.order.ticketed_date) if t.order.ticketed_date
+    end
+  end
+
 
   def self.update_iata_ru_in_carriers_and_airplanes(path)
     open("#{path}/airplanes.csv").each_line do |row|

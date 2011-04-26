@@ -95,10 +95,10 @@ class Order < ActiveRecord::Base
         price_consolidator_markup = (price_share > 5) ? 0 : price_fare * 0.02
         Ticket.create(
           :order => self,
-          :number => passenger.ticket,
-          :commission_subagent => commission_subagent,
-          :price_fare => prices[ref][:price_fare],
-          :price_tax => prices[ref][:price_tax],
+          :number => passenger.ticket.to_s,
+          :commission_subagent => commission_subagent.to_s,
+          :price_fare => prices.present? ? prices[ref][:price_fare] : 0,
+          :price_tax => prices.present? ? prices[ref][:price_tax] : 0,
           :price_consolidator_markup => price_consolidator_markup,
           :price_share => price_share
         )
