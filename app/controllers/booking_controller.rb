@@ -33,23 +33,28 @@ class BookingController < ApplicationController
     @order = OrderData.load_from_cache(params[:order][:number])
     @order.people_attributes = params[:person_attributes]
     @order.set_flight_date_for_childen_and_infants
-    @order.card = CreditCard.new(params[:card])
+    @order.card = CreditCard.new(params[:card]) if @order.payment_type == 'card'
     @order.update_attributes(params[:order])
     if @order.valid?
       if @order.create_booking
-        payture_response = @order.block_money
-        if payture_response.success?
-          @order.order.money_blocked!
-          logger.info "Pay: payment and booking successful"
-          render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}
-        elsif payture_response.threeds?
-          logger.info "Pay: payment system requested 3D-Secure authorization"
-          render :partial => 'threeds', :locals => {:order_id => @order.order.order_id, :payture_response => payture_response}
+        if @order.payment_type == 'card'
+          payture_response = @order.block_money
+          if payture_response.success?
+            @order.order.money_blocked!
+            logger.info "Pay: payment and booking successful"
+            render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}
+          elsif payture_response.threeds?
+            logger.info "Pay: payment system requested 3D-Secure authorization"
+            render :partial => 'threeds', :locals => {:order_id => @order.order.order_id, :payture_response => payture_response}
+          else
+            @order.order.cancel!
+            msg = @order.card.errors[:number]
+            logger.info "Pay: payment failed with error message #{msg}"
+            render :partial => 'fail', :locals => {:errors => msg}
+          end
         else
-          @order.order.cancel!
-          msg = @order.card.errors[:number]
-          logger.info "Pay: payment failed with error message #{msg}"
-          render :partial => 'fail', :locals => {:errors => msg}
+          logger.info "Pay: booking successful, payment: cash"
+          render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}
         end
       elsif msg = @order.errors[:pnr_number]
         logger.info "Pay: booking failed with error message #{msg}"

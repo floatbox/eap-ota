@@ -30,7 +30,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     if Rails.env.production?
       return nil
     else
-      return Time.now + 24
+      return Time.now + 24.hours
     end
     return nil if recommendation.flights.first.departure_datetime_utc - 72.hours > Time.now
     return nil unless last_tkt_date
@@ -129,8 +129,10 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
 
   def validate_card
-    errors.add :card, 'Отсутствуют данные карты' unless card
-    errors.add :card, 'Некорректные данные карты' if card && !card.valid?
+    if payment_type == 'card'
+      errors.add :card, 'Отсутствуют данные карты' unless card
+      errors.add :card, 'Некорректные данные карты' if card && !card.valid?
+    end
   end
 
   def set_flight_date_for_childen_and_infants
