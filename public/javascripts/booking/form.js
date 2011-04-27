@@ -27,6 +27,8 @@ init: function() {
             cashSection.disabled = !mode;
             self.validate();
             $('#booking-payment-type').val(mode ? cash.find('.bc-delivery input:checked').attr('value') : 'card');
+            self.el.find('.payment-card').toggleClass('latent', mode);
+            self.el.find('.payment-cash').toggleClass('latent', !mode);
         };
         card.find('.section-tabs .link').click(function() {
             toggleCash(true);
