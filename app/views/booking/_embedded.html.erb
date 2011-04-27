@@ -13,10 +13,10 @@
     <%= render :partial => 'person_form', :collection => @order.people %>
 
     <!-- Платёжные данные -->
-    <!--<h3 class="bstitle">Выберите способ оплаты и введите платёжные данные</h3>-->
-    <h3 class="bstitle">Введите данные банковской карты</h3>
+    <h3 class="bstitle">Выберите способ оплаты и введите платёжные данные</h3>
+    <!--<h3 class="bstitle">Введите данные банковской карты</h3>-->
     <%= render 'card_form', :f => f %>
-    <%#= render 'cash_form' %>
+    <%= render 'cash_form' %>
             
     <!-- Контакты -->
     <h3 class="bstitle">Введите данные покупателя</h3>
