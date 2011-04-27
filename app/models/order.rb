@@ -44,6 +44,9 @@ class Order < ActiveRecord::Base
     self.sirena_lead_pass = order_data.sirena_lead_pass
     self.last_tkt_date = order_data.last_tkt_date
     self.description = recommendation.variants[0].flights.every.destination.join('; ')
+    self.payment_type = order_data.payment_type
+    self.delivery = order_data.delivery
+    self.last_pay_time = order_data.last_pay_time
     if c = recommendation.commission
       self.commission_carrier = c.carrier
       self.commission_agent = c.agent
