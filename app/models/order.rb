@@ -91,16 +91,18 @@ class Order < ActiveRecord::Base
       prices = tst_resp.prices_with_refs
       pnr_resp.passengers.map do |passenger|
         ref = passenger.passenger_ref
-        price_share = commission_subagent['%'] ? (price_fare * commission_subagent[0...-1].to_f / 100) : commission_subagent.to_f
-        price_consolidator_markup = (price_share > 5) ? 0 : price_fare * 0.02
+        price_fare_ticket = prices.present? ? prices[ref][:price_fare] : 0
+        price_tax_ticket = prices.present? ? prices[ref][:price_tax] : 0
+        price_share_ticket = commission_subagent['%'] ? (price_fare_ticket * commission_subagent[0...-1].to_f / 100) : commission_subagent.to_f
+        price_consolidator_markup_ticket = (price_share_ticket > 5) ? 0 : price_fare_ticket * 0.02
         Ticket.create(
           :order => self,
           :number => passenger.ticket.to_s,
           :commission_subagent => commission_subagent.to_s,
-          :price_fare => prices.present? ? prices[ref][:price_fare] : 0,
-          :price_tax => prices.present? ? prices[ref][:price_tax] : 0,
-          :price_consolidator_markup => price_consolidator_markup,
-          :price_share => price_share
+          :price_fare => price_fare_ticket,
+          :price_tax => price_tax_ticket,
+          :price_consolidator_markup => price_consolidator_markup_ticket,
+          :price_share => price_share_ticket
         )
       end
 

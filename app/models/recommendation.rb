@@ -12,7 +12,7 @@ class Recommendation
   include KeyValueInit
 
   attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
-    :suggested_marketing_carrier_iatas, :availabilities, :upts
+    :suggested_marketing_carrier_iatas, :availabilities, :upts, :last_tkt_date
 
   attr_accessor :sirena_blank_count
 
@@ -294,6 +294,7 @@ class Recommendation
           :segments => segments,
           :seat_total => pricer_form.seat_total
         )
+        self.last_tkt_date = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier.iata).last_tkt_date
         amadeus.pnr_ignore
         return unless air_sfr.segments_confirmed?
         air_sfr.fill_itinerary!(segments)
