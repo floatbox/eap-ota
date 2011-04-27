@@ -1,7 +1,7 @@
 # encoding: utf-8
 class Order < ActiveRecord::Base
 
-  PAYMENT_STATUS = {'not blocked' => 'not blocked', 'blocked' => 'blocked', 'charged' => 'charged', 'new' => 'new'}
+  PAYMENT_STATUS = {'not blocked' => 'not blocked', 'blocked' => 'blocked', 'charged' => 'charged', 'new' => 'new', 'pending' => 'pending'}
   TICKET_STATUS = { 'ticketed' => 'ticketed', 'booked' => 'booked', 'canceled' => 'canceled'}
   SOURCE = { 'amadeus' => 'amadeus', 'sirena' => 'sirena' }
 
@@ -58,7 +58,7 @@ class Order < ActiveRecord::Base
       self.price_consolidator_markup = recommendation.price_consolidator_markup
       self.price_tax_and_markup = recommendation.price_tax_and_markup
     end
-    self.payment_status = 'not blocked'
+    self.payment_status = (order_data.payment_type == 'card') ? 'not blocked' : 'pending'
     self.ticket_status = 'booked'
     self.name_in_card = order_data.card.name
     self.last_digits_in_card = order_data.card.number4
