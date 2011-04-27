@@ -442,9 +442,9 @@
 }
 .bc-delivery .radio {
     position: relative;
-    margin: 0 0 6px 16px;
+    margin: 0 0 8px 16px;
     font-size: 16px;
-    line-height: 18px;
+    line-height: 16px;
 }
 .bc-delivery .radio input {
     position: absolute;
