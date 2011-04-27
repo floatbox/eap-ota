@@ -45,4 +45,8 @@ module BookingHelper
     "#{segments_summary}. Билеты куплены на https://eviterra.com — #{price_parts.join(' ')}."
   end
 
+  def full_human_date date
+    I18n.l(Date.strptime(date, '%d%m%y'), :format => '%e %B %Y')
+  end
+
 end
