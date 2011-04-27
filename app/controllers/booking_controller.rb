@@ -16,7 +16,8 @@ class BookingController < ApplicationController
     order_data = OrderData.new(
       :recommendation => recommendation,
       :people_count => pricer_form.real_people_count,
-      :variant_id => params[:variant_id]
+      :variant_id => params[:variant_id],
+      :last_tkt_date => recommendation.last_tkt_date
     )
     order_data.save_to_cache
     render :json => {:success => true, :number => order_data.number}

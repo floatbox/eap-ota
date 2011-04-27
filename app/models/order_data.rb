@@ -24,6 +24,14 @@ class OrderData < ActiveRecord::BaseWithoutTable
     @card || CreditCard.new
   end
 
+  def last_pay_time
+    return nil if recommendation.flights.first.departure_datetime_utc - 72.hours > Time.now
+    return nil unless last_tkt_date
+    return nil if last_tkt_date == Date.today
+    return Time.now + 24.hours if last_tkt_date == Date.today + 1.day
+    return (last_tkt_date - 1.day).to_time
+  end
+
 
   def adults
     people && (people.sort_by(&:birthday)[0..(people_count[:adults]-1)])
