@@ -3,11 +3,10 @@
     <li><span class="link">Банковской картой</span></li>
     <li class="selected">Наличными</li>
 </ul>
-<%= fields_for :cash do |cash| %>
-<p class="bc-pay-warning">Бронирование необходимо оплатить до {date}, иначе оно будет автоматически аннулировано.</p>
+<p class="bc-pay-warning">Бронирование необходимо оплатить до <strong><%= I18n.l(@order.last_pay_time, :format => '%H:%M %e %B') %></strong>, иначе оно будет автоматически аннулировано.</p>
 <div class="bc-delivery">
-    <div class="radio"><%= cash.radio_button :delivery, '1', :id => "bc-delivery-yes" %>&nbsp;<label for="bc-delivery-yes">Хочу оплатить курьеру при доставке (+500&nbsp;рублей)</label></div>
-    <div class="radio"><%= cash.radio_button :delivery, '0', :id => "bc-delivery-no" %>&nbsp;<label for="bc-delivery-no">Хочу самостоятельно приехать в офис и оплатить</label></div>
+    <div class="radio"><input type="radio" name="ptype" value="delivery" id="bcpt-delivery" checked="checked">&nbsp;<label for="bcpt-delivery">Хочу оплатить курьеру при доставке (+350&nbsp;рублей)</label></div>
+    <div class="radio"><input type="radio" name="ptype" value="cash" id="bcpt-cash">&nbsp;<label for="bcpt-cash">Хочу самостоятельно приехать в офис и оплатить</label></div>
 </div>
 <div class="bc-address">
     <h6 class="blabel">Адрес доставки</h6>
@@ -15,31 +14,38 @@
         <p>Введите адрес доставки, желательно подробный (если есть код домофона или другие тонкости — укажите, пожалуйста). Желаемое время доставки тоже можно указать.</p>
         <p>Обратите внимание, что доставка возможна только по Москве.</p>
     </div>
-    <textarea class="bfield" id="bc-address"></textarea>
+    <textarea class="bfield" id="bc-address" name="order[delivery]" rows="5" cols="32"></textarea>
 </div>
-<% end %>
+<div class="bc-contacts">
+    <p>К нам можно приехать в будние дни с 10:00 до 20:00. Пожалуйста, возьмите с собой документ, удостоверяющий личность, и позвоните нам по телефону +7 495 660-35-20, чтобы вас встретили.</p>
+    <h6 class="blabel">Адрес офиса</h6>
+    <p>Бизнес-центр «Магистраль Плаза», 4-й этаж<br>1-й Магистральный тупик, дом 5А</p>
+    <p><a href="/contacts/" target="_blank">Вся контактная информация</a></p>
+</div>
+<% total_price = @order.recommendation.price_with_payment_commission.round.to_i %>
 <table class="bc-bill">
 <tr>
     <td>
         <h6>Стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %></h6>
-        <div class="price"><%= decorated_price @order.recommendation.price_total, 'strong', 'em' %>&nbsp;</div>
+        <div class="price"><%= decorated_price total_price, 'strong', 'em' %>&nbsp;</div>
         <p class="hint">стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами</p>
     </td>
     <td class="sign">+</td>
     <td>
         <div class="bcb-delivery">
             <h6>Доставка курьером</h6>
-            <div class="price"><%= decorated_price 500, 'strong', 'em' %>&nbsp;</div>
+            <div class="price"><%= decorated_price 350, 'strong', 'em' %>&nbsp;</div>
         </div>
         <div class="bcb-nodelivery">
             <h6>Оплата в&nbsp;офисе</h6>
+            <div class="price"><%= decorated_price 0, 'strong', 'em' %>&nbsp;</div>
         </div>
     </td>
     <td class="sign">=</td>
     <td>
         <h6>Итого к&nbsp;оплате</h6>
-        <div class="price price-total bcb-delivery"><%= decorated_price @order.recommendation.price_total + 500, 'strong', 'em' %>&nbsp;</div>
-        <div class="price price-total bcb-nodelivery"><%= decorated_price @order.recommendation.price_total, 'strong', 'em' %>&nbsp;</div>
+        <div class="price price-total bcb-delivery"><%= decorated_price total_price + 350, 'strong', 'em' %>&nbsp;</div>
+        <div class="price price-total bcb-nodelivery"><%= decorated_price total_price, 'strong', 'em' %>&nbsp;</div>
     </td>
 </tr>
 </table>

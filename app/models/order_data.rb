@@ -2,6 +2,7 @@
 class OrderData < ActiveRecord::BaseWithoutTable
   column :email
   column :phone
+  column :payment_type
   column :delivery
   has_many :people
   accepts_nested_attributes_for :people
@@ -25,6 +26,12 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
 
   def last_pay_time
+    # временная заглушка
+    if Rails.env.production?
+      return nil
+    else
+      return Time.now + 24
+    end
     return nil if recommendation.flights.first.departure_datetime_utc - 72.hours > Time.now
     return nil unless last_tkt_date
     return nil if last_tkt_date == Date.today

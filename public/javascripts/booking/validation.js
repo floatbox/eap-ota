@@ -197,14 +197,15 @@ app.booking.initCash = function(el) {
         empty: 'Не указан {адрес доставки}'
     });
     var toggleDelivery = function(mode) {
-        el.find('.bc-address').toggle(mode);
-        el.find('.bcb-delivery').toggle(mode);
-        el.find('.bcb-nodelivery').toggle(!mode);
+        el.find('.bc-address, .bcb-delivery').toggle(mode);
+        el.find('.bc-contacts, .bcb-nodelivery').toggle(!mode);
         address.el.get(0).disabled = !mode;
         address.disabled = !mode;
     };
     this.el.find('.bc-delivery input').click(function() {
-        toggleDelivery($(this).attr('value') == 1);
+        var value = $(this).attr('value');
+        $('#booking-payment-type').val(value);
+        toggleDelivery(value == 'delivery');
         address.validate();
     }).get(0).checked = true;
     toggleDelivery(true);

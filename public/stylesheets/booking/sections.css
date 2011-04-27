@@ -443,8 +443,8 @@
 .bc-delivery .radio {
     position: relative;
     margin: 0 0 6px 16px;
-    font-size: 13px;
-    line-height: 16px;
+    font-size: 16px;
+    line-height: 18px;
 }
 .bc-delivery .radio input {
     position: absolute;
@@ -474,6 +474,11 @@
 }
 .bca-description p {
     margin: 0 0 10px;
+}
+.bc-contacts {
+    margin: 0 15px;
+    font-size: 13px;
+    line-height: 16px;
 }
 
 /* Раскладка цены */
@@ -519,10 +524,6 @@
     color: #6e6e6e;
 }
 .bc-bill .hint {
-    color: #777;
-}
-.bcb-nodelivery h6 {
-    margin-top: 22px;
     color: #777;
 }
 
