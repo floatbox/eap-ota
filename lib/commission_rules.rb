@@ -107,7 +107,7 @@ module CommissionRules
   end
 
   def agent_value
-    val = agent.to_i
+    val = agent.to_f
     val *= euro_rate if agent_euro?
     val
   end

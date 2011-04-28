@@ -32,6 +32,7 @@ class PricerController < ApplicationController
   def validate
     if @query_key = params[:query_key]
       @search = PricerForm.load_from_cache(@query_key)
+      set_search_context
       fragment_exist =
         fragment_exist?([:pricer, @query_key]) &&
         fragment_exist?([:calendar, @query_key])
@@ -43,6 +44,7 @@ class PricerController < ApplicationController
       }
     else
       @search = PricerForm.new(params[:search])
+      set_search_context
       if @search.valid?
         @search.save_to_cache
       end
@@ -92,6 +94,8 @@ class PricerController < ApplicationController
   def load_form_from_cache
     @query_key = params[:query_key] or raise 'no query_key provided'
     @search = PricerForm.load_from_cache(params[:query_key])
+    set_search_context
   end
+
 end
 

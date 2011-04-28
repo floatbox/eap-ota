@@ -1,3 +1,4 @@
+<% paid_order = @pnr.order.payment_type == 'card' %>
 <table cellspacing="0" cellpadding="0" width="740" style="width: 740px; color: #000; font-size: 13px; line-height: 1.25; font-family: Arial, sans-serif; letter-spacing: -0.02em;">
 <col width="240">
 <col width="240">
@@ -9,7 +10,11 @@
 <tr>
     <td class="pad_null"><img src="https://eviterra.com/img/booking/eviterra.png" alt="eviterra" width="210" height="30"></td>
     <td class="pad_null" colspan="2">
+    <% if paid_order %>
         <font size="3" family="Arial" style="font-size: 15px;"><strong>Электронный билет<br>E-ticket</strong></font>
+    <% else %>
+        <font size="3" family="Arial" style="font-size: 15px;"><strong>Бронирование<br>Booking</strong></font>
+    <% end %>
     </td>
     <td class="pad_null" colspan="3">
         <div><font family="Arial" size="2" style="font-size: 13px; line-height: 16px;"><strong>Номер брони</strong></font></div>
@@ -17,6 +22,20 @@
     </td>
 </tr>
 </tbody>
+<% unless paid_order %>
+<tbody valign="top">
+<tr>
+    <td colspan="6" class="pad_null">&nbsp;<br></td>
+</tr>
+<tr>
+    <td class="pad_null" colspan="6">
+        <font size="3" family="Arial" style="font-size: 15px;"><strong>Действительно до<br>Valid until</strong></font><br>
+        <font size="3" family="Arial" color="#ED1192" style="font-size: 18px; color: #ED1192;"><strong><%= @pnr.order.last_pay_time.strftime('%H:%M %d.%m.%Y') %></strong></font><br>
+        <br>
+    </td>
+</tr>
+</tbody>
+<% end %>
 <tbody valign="top">
 <tr>
     <td colspan="6" class="pad_null">&nbsp;<br></td>
@@ -113,66 +132,119 @@
     <td colspan="6" class="pad_null"><font size="2">&nbsp;<br></font></td>
 </tr>
 </tbody>
-<tbody valign="top">
-<tr>
-    <td colspan="6" class="pad_null">
-        <font size="2" family="Arial"><strong>Обратите внимание</strong>, что время отправления и прибытия указано местное. Регистрация на внутренние рейсы заканчивается как правило за 40 минут до отправления, на международные рейсы — за полтора часа до отправления.</font><br>
-        <font size="1" style="font-size: 6px;"><br></font>
-        <font size="2" family="Arial"><strong>Attention!</strong> Local departure and arrival time is indicated.</font>
-    </td>
-</tr>
-<tr>
-    <td colspan="6" class="pad_null"><font size="3">&nbsp;<br></font></td>
-</tr>
-</tbody>
-<tbody valign="top">
-<tr>
-    <td class="pad_null">
-        <font family="Arial" size="3" style="font-size: 18px;"><strong>Сведения об оплате<br>Payment Information</strong></font><br>
-        <font size="1" style="line-height: 8px;"><br></font>
-    </td>
-    <td  class="pad_null" colspan="5"><br></td>
-</tr>
-<tr>
-    <td class="pad_null">
-        <font family="Arial" size="2">
-        Тариф / Fare<br>
-        Налоги и сборы / Taxes<br>
-        Итоговая стоимость / Total<br>
-        Форма оплаты / Paid by<br>
-        Дата оформления / Issue date
-        </font>
-    </td>
-    <td class="pad_null" colspan="2">
-    <% if @pnr.order %>
-        <font family="Arial" size="2">
-        <%= @pnr.order.price_fare.ceil.to_i %> RUB<br>
-        <%= @pnr.order.price_tax_and_markup_and_payment.ceil.to_i %> RUB<br>
-        <%= @pnr.order.price_with_payment_commission.ceil.to_i %> RUB<br>
-        Invoice<br>
-        <%= @pnr.order.created_at.strftime('%d.%m.%y') %>
-        </font>
-    <% end %>
-    </td>
-    <td class="pad_null" colspan="3">
-        <font family="Arial" size="2">Адрес и телефон покупателя</font><br>
-        <font family="Arial" size="1" style="font-size: 6px;"><br></font>
-        <font family="Arial" size="2">
-        <% if @pnr.email %>
-            <a href="mailto:<%= @pnr.email %>" target="_blank" style="color: #ed1192;"><font color="#ed1192"><%= @pnr.email %></font></a><br>
-        <% end %>
-        <%= @pnr.phone %>
-        </font>
-    </td>
-</tr>
-</tbody>
+
+<% if @pnr.order %>
+<% if paid_order %>
+    <tbody valign="top">
+    <tr>
+        <td colspan="6" class="pad_null">
+            <font size="2" family="Arial"><strong>Обратите внимание</strong>, что время отправления и прибытия указано местное. Регистрация на внутренние рейсы заканчивается как правило за 40 минут до отправления, на международные рейсы — за полтора часа до отправления.</font><br>
+            <font size="1" style="font-size: 6px;"><br></font>
+            <font size="2" family="Arial"><strong>Attention!</strong> Local departure and arrival time is indicated.</font>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6" class="pad_null"><font size="3">&nbsp;<br></font></td>
+    </tr>
+    </tbody>
+    <tbody valign="top">
+    <tr>
+        <td class="pad_null">
+            <font family="Arial" size="3" style="font-size: 18px;"><strong>Сведения об оплате<br>Payment Information</strong></font><br>
+            <font size="1" style="line-height: 8px;"><br></font>
+        </td>
+        <td class="pad_null" colspan="5"><br></td>
+    </tr>
+    <tr>
+        <td class="pad_null">
+            <font family="Arial" size="2">
+            Тариф / Fare<br>
+            Налоги и сборы / Taxes<br>
+            Итоговая стоимость / Total<br>
+            Форма оплаты / Paid by<br>
+            Дата оформления / Issue date
+            </font>
+        </td>
+        <td class="pad_null" colspan="2">
+            <font family="Arial" size="2">
+            <%= @pnr.order.price_fare.ceil.to_i %> RUB<br>
+            <%= @pnr.order.price_tax_and_markup_and_payment.ceil.to_i %> RUB<br>
+            <%= @pnr.order.price_with_payment_commission.ceil.to_i %> RUB<br>
+            Invoice<br>
+            <%= @pnr.order.created_at.strftime('%d.%m.%y') %>
+            </font>
+        </td>
+        <td class="pad_null" colspan="3">
+            <font family="Arial" size="2">Адрес и телефон покупателя</font><br>
+            <font family="Arial" size="1" style="font-size: 6px;"><br></font>
+            <font family="Arial" size="2">
+            <% if @pnr.email %>
+                <a href="mailto:<%= @pnr.email %>" target="_blank" style="color: #ed1192;"><font color="#ed1192"><%= @pnr.email %></font></a><br>
+            <% end %>
+            <%= @pnr.phone %>
+            </font>
+        </td>
+    </tr>
+    </tbody>
+<% else %>
+    <tbody valign="top">
+    <tr>
+        <td class="pad_null">
+            <font family="Arial" size="3" style="font-size: 18px;"><strong>Информация для оплаты<br>Information for payment</strong></font><br>
+            <font size="1" style="line-height: 8px;"><br></font>
+        </td>
+        <td class="pad_null" colspan="5"><br></td>
+    </tr>
+    <tr>
+        <td class="pad_null">
+            <font family="Arial" size="2">
+            Тариф / Fare<br>
+            Налоги и сборы / Taxes<br>
+            <% if @pnr.order.payment_type == 'delivery' %>
+                Доставка / Delivery<br>
+            <% end %>
+            Итоговая стоимость / Total<br>
+            </font>
+        </td>
+        <td class="pad_null" colspan="2">
+            <font family="Arial" size="2">
+            <%= @pnr.order.price_fare.ceil.to_i %> RUB<br>
+            <%= @pnr.order.price_tax_and_markup_and_payment.ceil.to_i %> RUB<br>
+            <% if @pnr.order.payment_type == 'delivery' %>
+                350 RUB<br>
+                <%= @pnr.order.price_with_payment_commission.ceil.to_i + 350 %> RUB<br>
+            <% else %>
+                <%= @pnr.order.price_with_payment_commission.ceil.to_i %> RUB<br>
+            <% end %>
+            </font>
+        </td>
+        <td class="pad_null" colspan="3">
+            <font family="Arial" size="2">Адрес и телефон</font><br>
+            <font family="Arial" size="1" style="font-size: 6px;"><br></font>
+            <font family="Arial" size="2">
+            <% if @pnr.email %>
+                <a href="mailto:<%= @pnr.email %>" target="_blank" style="color: #ed1192;"><font color="#ed1192"><%= @pnr.email %></font></a><br>
+            <% end %>
+            <%= @pnr.phone %>
+            </font>
+        </td>
+    </tr>
+    </tbody>
+<% end %>
+<% end %>
+
 <tbody valign="top">
 <tr>
     <td class="pad_null" style="text-align: center; font-size: 24px; line-height: 1.25; letter-spacing: -0.02em;" colspan="6">
     <font size="5"><br></font>
     <center>
+    <% if paid_order %>
         <font family="Arial" size="5"><strong>Спасибо за покупку на <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
         <font family="Arial" size="5"><strong>Thank you for purchase at <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
+    <% else %>
+        <font family="Arial" size="5"><strong>Спасибо за то, что забронировали на <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
+        <font family="Arial" size="5"><strong>Thank you for booking at <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>    
+    <% end %>
     </center>
     </td>
 </tbody>
