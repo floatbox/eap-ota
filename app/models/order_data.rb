@@ -39,6 +39,14 @@ class OrderData < ActiveRecord::BaseWithoutTable
     return (last_tkt_date - 1.day).to_time
   end
 
+  def tk_xl
+    if payment_type == 'card'
+      (Time.now.hour < 17 ? Date.today + 1.day : Date.today + 2.days)
+    else
+      (last_pay_time + 1.day).to_date
+    end
+  end
+
 
   def adults
     people && (people.sort_by(&:birthday)[0..(people_count[:adults]-1)])

@@ -1,7 +1,7 @@
 module Amadeus
   module Request
     class PNRAddMultiElements < Amadeus::Request::Base
-      attr_accessor :people_count, :email, :phone, :people, :adults, :children, :infants, :validating_carrier, :commission
+      attr_accessor :people_count, :email, :phone, :people, :adults, :children, :infants, :validating_carrier, :commission, :tk_xl
       def action_codes
         {:NOP => 0, :ET => 10, :ER => 11, :ETK => 12, :ERK => 13, :EF => 14, :ETX => 15, :ERX => 16, :IG => 20, :IR => 21, :STOP => 267, :WARNINGS => 30, :SHORT => 50}
       end
@@ -21,10 +21,12 @@ module Amadeus
           @infants = opts.infants
           @validating_carrier = opts.validating_carrier
           @commission = opts.commission
+          @tk_xl = opts.tk_xl
         end
       end
 
       def tk_xl_date
+        return (tk_xl).strftime("%d%m%y") if tk_xl
         (Time.now.hour < 17 ? Date.today + 1.day : Date.today + 2.days).strftime("%d%m%y")
       end
 
