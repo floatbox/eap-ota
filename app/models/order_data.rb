@@ -26,6 +26,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
 
   def last_pay_time
+    return nil if Rails.env.production? # пока оплата наличными только на дельте
     return Time.now + 24.hours if Conf.amadeus.env != 'production' # так как тестовый Амадеус в прошлом
     return nil if recommendation.flights.first.departure_datetime_utc - 72.hours > Time.now
     return nil unless last_tkt_date
@@ -33,7 +34,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
     return Time.now + 24.hours if last_tkt_date == Date.today + 1.day
     return (last_tkt_date - 1.day).to_time
   end
-
 
   def adults
     people && (people.sort_by(&:birthday)[0..(people_count[:adults]-1)])
