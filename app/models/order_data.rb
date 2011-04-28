@@ -31,8 +31,8 @@ class OrderData < ActiveRecord::BaseWithoutTable
     return nil if recommendation.flights.first.departure_datetime_utc - 72.hours < Time.now
     return nil unless last_tkt_date
     return nil if last_tkt_date == Date.today
-    return Time.now + 24.hours if last_tkt_date == Date.today + 1.day
-    return (last_tkt_date - 1.day).to_time
+    return Time.now + 24.hours - Time.now.min.minutes if last_tkt_date == Date.today + 1.day
+    return last_tkt_date.to_time
   end
 
   def tk_xl
