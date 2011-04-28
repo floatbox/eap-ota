@@ -3,6 +3,7 @@
     <p class="success"><strong>Всё отлично!</strong> Ваш билет оплачен, забронирован и выслан на&nbsp;ваш электронный адрес. Номер брони&nbsp;— <span class="pnr"><%= pnr_number %></span>. Если хотите, можете <a target="_blank" href="<%= pnr_path %>">распечатать</a> ваш билет.</p>
 <% else %>
     <p class="success"><strong>Всё отлично!</strong> Ваш билет забронирован, подтверждение выслано на&nbsp;ваш электронный адрес. Номер брони&nbsp;— <span class="pnr"><%= pnr_number %></span>. Если хотите, можете <a target="_blank" href="<%= pnr_path %>">распечатать</a> подтверждение.</p>
+    <p class="success" style="margin-top: 10px;">Обратите внимание, что в&nbsp;случае несвоевременной оплаты бронирование будет аннулировано.</p>
 <% end %>
     <div class="tip">
         <a class="stop-booking" href="#">Вернуться к выбору вариантов</a>
