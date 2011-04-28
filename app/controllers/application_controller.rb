@@ -3,19 +3,25 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
   include Typus::Authentication::Session
-  before_filter :set_typus_constantized
-  #before_filter :authenticate
-  def set_typus_constantized
-    Typus::Configuration.models_constantized!
-  end
-
-  def admin_user
-    @admin_user ||= ( id = session[:typus_user_id]) && Typus.user_class.find_by_id(id)
-  end
-
-  helper_method :admin_user
 
   protected
+
+  before_filter :set_admin_user
+  #before_filter :authenticate
+  def set_admin_user
+    Typus::Configuration.models_constantized!
+    @admin_user = Typus.user_class.find_by_id(session[:typus_user_id]) if session[:typus_user_id]
+    # for hoptoad_notifier
+    request.env['eviterra.admin_user'] = @admin_user.email if @admin_user
+  end
+
+  attr_reader :admin_user
+  helper_method :admin_user
+
+  # для хоптода
+  def set_search_context
+    request.env['eviterra.search'] = @search.human_lite rescue '[incomplete]'
+  end
 
   def set_locale
     I18n.locale = :ru

@@ -3,19 +3,20 @@ class BookingController < ApplicationController
   protect_from_forgery :except => :confirm_3ds
 
   def preliminary_booking
-    pricer_form = PricerForm.load_from_cache(params[:query_key])
-    if pricer_form.form_segments[0].date_as_date < ( Time.now.hour < 17 ? Date.today + 1.days : Date.today + 2.days)
+    @search = PricerForm.load_from_cache(params[:query_key])
+    set_search_context
+    if @search.form_segments[0].date_as_date < ( Time.now.hour < 17 ? Date.today + 1.days : Date.today + 2.days)
       render :json => {:success => false}
       return
     end
     recommendation = Recommendation.deserialize(params[:recommendation])
-    unless recommendation.check_price_and_availability(pricer_form)
+    unless recommendation.check_price_and_availability(@search)
       render :json => {:success => false}
       return
     end
     order_data = OrderData.new(
       :recommendation => recommendation,
-      :people_count => pricer_form.real_people_count,
+      :people_count => @search.real_people_count,
       :variant_id => params[:variant_id],
       :last_tkt_date => recommendation.last_tkt_date
     )
