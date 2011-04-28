@@ -135,10 +135,15 @@
     float: none;
     border-color: #7b8e12;
     margin-right: 2px;
+    margin-left: 0;
     padding: 3px 10px;
     font-size: 16px;
     line-height: 20px;
     font-weight: bold;
+    color: #333;
+}
+.booking .tds-submit a.a-button:hover {
+    color: #FFF;
 }
 .booking .result .tds-submit a.stop-booking {
     position: relative;
