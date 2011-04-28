@@ -29,6 +29,8 @@
         pageurl.reset();
         pageurl.title();
         search.restore(search.defvalues || {});
+        search.segments[0].to.focus();
+        $(window).scrollTop(0);
     }).find('a').click(function(event) {
         event.preventDefault();
     });
