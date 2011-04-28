@@ -28,12 +28,21 @@ class OrderData < ActiveRecord::BaseWithoutTable
   def last_pay_time
     return nil if Rails.env.production? # пока оплата наличными только на дельте
     return Time.now + 24.hours if Conf.amadeus.env != 'production' # так как тестовый Амадеус в прошлом
-    return nil if recommendation.flights.first.departure_datetime_utc - 72.hours > Time.now
+    return nil if recommendation.flights.first.departure_datetime_utc - 72.hours < Time.now
     return nil unless last_tkt_date
     return nil if last_tkt_date == Date.today
-    return Time.now + 24.hours if last_tkt_date == Date.today + 1.day
-    return (last_tkt_date - 1.day).to_time
+    return Time.now + 24.hours - Time.now.min.minutes if last_tkt_date == Date.today + 1.day
+    return last_tkt_date.to_time
   end
+
+  def tk_xl
+    if payment_type == 'card'
+      (Time.now.hour < 17 ? Date.today + 1.day : Date.today + 2.days)
+    else
+      (last_pay_time + 1.day).to_date
+    end
+  end
+
 
   def adults
     people && (people.sort_by(&:birthday)[0..(people_count[:adults]-1)])
