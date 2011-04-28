@@ -182,7 +182,8 @@
         %commission
           %commissionInfo
             -if commission.agent_percentage?
-              %percentage= commission.agent_value
+              %percentage= "%g" % commission.agent_value
             -else
-              %amount= commission.agent_value
+              -# рублевая комиссия округляется до ближайшего целого
+              %amount= commission.agent_value.round
 
