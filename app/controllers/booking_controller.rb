@@ -33,8 +33,8 @@ class BookingController < ApplicationController
     @order = OrderData.load_from_cache(params[:order][:number])
     @order.people_attributes = params[:person_attributes]
     @order.set_flight_date_for_childen_and_infants
-    @order.card = CreditCard.new(params[:card]) if @order.payment_type == 'card'
     @order.update_attributes(params[:order])
+    @order.card = CreditCard.new(params[:card]) if @order.payment_type == 'card'
     if @order.valid?
       if @order.create_booking
         if @order.payment_type == 'card'

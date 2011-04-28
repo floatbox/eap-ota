@@ -47,6 +47,9 @@ class Order < ActiveRecord::Base
     self.payment_type = order_data.payment_type
     self.delivery = order_data.delivery
     self.last_pay_time = order_data.last_pay_time
+    if order_data.payment_type != 'card'
+      self.cash_payment_markup = recommendation.price_payment + (order_data.payment_type == 'delivery' ? 350 : 0)
+    end
     if c = recommendation.commission
       self.commission_carrier = c.carrier
       self.commission_agent = c.agent
@@ -153,6 +156,14 @@ class Order < ActiveRecord::Base
   def money_blocked!
     update_attribute(:payment_status, 'blocked')
     send_email
+  end
+
+  def money_received!
+    update_attribute(:payment_status, 'charged') if payment_status == 'pending'
+  end
+
+  def no_money_received!
+    update_attribute(:payment_status, 'not blocked') if payment_status == 'pending'
   end
 
   def ticket!
