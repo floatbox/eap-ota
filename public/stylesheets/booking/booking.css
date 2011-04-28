@@ -336,7 +336,7 @@
     background: url(/img/booking/close.png) no-repeat;
     cursor: pointer;
 }
-.farerules h3 {
+.booking .farerules h3 {
     margin: 0 0 12px;
     font-size: 26px;
     line-height: 1;

@@ -340,6 +340,7 @@ init: function(context) {
     });
 },
 show: function() {
+    var self = this;
     this.popup.css('top', 0).show();
     var fh = this.popup.outerHeight();
     var ft = this.popup.offset().top;
@@ -347,7 +348,7 @@ show: function() {
     var wh = $(window).height();
     this.popup.css('top', Math.min(ws + (wh - fh) / 2, ws + wh - fh - 50) - ft);
     setTimeout(function() {
-        $('body').bind('click keydown', this.selfhide);
+        $('body').bind('click keydown', self.selfhide);
     }, 20);
 },
 translate: function(rus, eng) {
@@ -361,11 +362,16 @@ translate: function(rus, eng) {
         eng.removeClass('g-none');
     } else {
         loading.removeClass('g-none');
+        var s = text.text();
+        if (s.length > 1838) {
+            s = s.substring(0, 1835);
+            s = s.substring(0, s.lastIndexOf('\n') + 1) + '…';
+        }
         $.ajax({
             url: 'https://ajax.googleapis.com/ajax/services/language/translate',
             dataType: 'jsonp',
             data: {
-                q : text.html().substr(0, 5000),
+                q: s,
                 v: '1.0',
                 langpair: 'en|ru',
                 format: 'text'
