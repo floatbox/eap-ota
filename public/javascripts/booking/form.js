@@ -53,6 +53,7 @@ init: function() {
         };
         self.el.find('.result').remove();
         self.el.find('.booking-disclaimer').hide();
+        self.el.find('.booking-errors').hide();
         self.button.removeClass('a-button-ready').attr('value', 'Секундочку…');
         self.submit.addClass('sending');
         $.ajax({
@@ -73,6 +74,8 @@ init: function() {
                         if (window.yaCounter5324671) {
                             yaCounter5324671.hit('/#' + pageurl.summary + ':success');
                         }
+                    } else if (rtype === '3dsecure') {
+                        self.submit.addClass('latent');
                     } else if (rtype === 'fail') {
                         self.button.addClass('a-button-ready');
                     }
