@@ -54,6 +54,7 @@ class BookingController < ApplicationController
             render :partial => 'failed_payment', :locals => {:errors => msg}
           end
         else
+          @order.order.send_email
           logger.info "Pay: booking successful, payment: cash"
           render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}
         end
