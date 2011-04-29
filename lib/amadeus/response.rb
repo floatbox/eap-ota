@@ -30,7 +30,7 @@ module Amadeus::Response
     delegate :xpath, :to => :doc
 
     def parse_date elem
-      return unless elem
+      return unless elem.present?
       year = (elem / "r:year").to_i
       month = (elem / "r:month").to_i
       day = (elem / "r:day").to_i
