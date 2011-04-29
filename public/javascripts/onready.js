@@ -39,6 +39,7 @@
     if (pageurl.booking) {
         app.booking.el = $('<div class="booking"></div>').appendTo($('#offers'));
         app.booking.load(pageurl.booking);
+        app.booking.restored = true;
     }
 
     // Данные по умолчанию для сброса
