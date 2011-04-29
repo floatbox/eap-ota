@@ -358,6 +358,10 @@ processUpdate: function() {
                 self.selectTab(imprecise ? 'matrix' : (self.selectedTab || pageurl.tab || 'featured'));
                 pageurl.update('search', $(imprecise ? '#offers-matrix .matrix-origin' : '#offers-options').attr('data-query_key'));
                 pageurl.title('авиабилеты ' + self.title.attr('data-title'));
+                var st = self.el.offset().top - $('#header').height();
+                if (st > $(window).scrollTop()) {
+                    $(window).scrollTop(st);
+                }
             }
             delete(u.pcontent);
             delete(u.mcontent);
