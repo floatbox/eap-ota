@@ -73,6 +73,9 @@
 #results-empty {
     margin-bottom: 20px;
 }
+#results-empty .rmessage {
+    width: 675px;
+}
 #results-empty .rmphoto {
     padding-left: 600px;
     padding-right: 25px;
@@ -80,12 +83,6 @@
 #results-empty .rmphoto,
 .offers-improper .rmphoto {
     background: url(/img/offers/photo-empty.jpg) no-repeat 50% 50%;    
-}
-.offers-improper .rmphoto {
-    padding-left: 587px;
-}
-#results-empty .rmphoto {
-    padding-left: 600px;
 }
 #results-empty .rmtext p,
 .offers-improper .rmtext p {
@@ -97,6 +94,30 @@
 .offers-improper {
     margin: 0;
 }
+.offers-improper .rmphoto {
+    padding-left: 587px;
+}
 .offers-improper .rfreset {
     color: #333;
 }
+#results-empty .rmtext {
+    padding: 13px 15px;
+}
+#results-empty .rmtext h3 {
+    margin-bottom: 8px;
+    text-align: left;
+}
+#results-empty .re-reasons li {
+    position: relative;
+    margin-left: 18px;
+}
+#results-empty .re-reasons li:before {
+    position: absolute;
+    left: -16px;
+    margin-top: -3px;
+    content: '•';
+    font-weight: bold;
+    font-size: 20px;
+    color: #ED1192;
+}
+

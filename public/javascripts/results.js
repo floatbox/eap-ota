@@ -341,10 +341,11 @@ processUpdate: function() {
             $('#results-filters, #rtabs').toggle(!imprecise);
             $('#offers-matrix .imprecise').toggleClass('latent', !imprecise)
             fixedBlocks.update();
-            var b = app.booking, vid = b.el && b.el.attr('data-variant');
+            var b = app.booking, vid = b.restored && b.el && b.el.attr('data-variant');
             if (vid && !b.variant) {
                 var vparts = vid.split('-');
                 b.variant = $('#offers-' + vparts[0] + ' .offer-variant[data-index="' + vparts[1] + '"]').eq(0);
+                b.restored = false;
                 if (b.variant) {
                     b.offer = b.variant.closest('.offer');
                     self.showVariant(b.variant);
@@ -360,7 +361,9 @@ processUpdate: function() {
                 pageurl.title('авиабилеты ' + self.title.attr('data-title'));
                 var st = self.el.offset().top - $('#header').height();
                 if (st > $(window).scrollTop()) {
-                    $(window).scrollTop(st);
+                    $.animateScrollTop(st, function() {
+                        $(window).scrollTop(st);
+                    });
                 }
             }
             delete(u.pcontent);
@@ -368,22 +371,19 @@ processUpdate: function() {
         });
         setTimeout(processQueue, 250);
     } else {
+        this.empty.find('.re-cities').html('другой город');
         if (u.pcontent && u.pcontent.indexOf('offers-nearby') !== -1) {
             var nearby = $('#offers-pcollection').html(u.pcontent).find('.offers-nearby .cities span.city');
             if (nearby.length) {
                 var nearbyText = nearby.map(function() {
                     return $('<div/>').append(this).html();
                 }).get().join(', ');
-                self.empty.find('.rmtext p').html('Попробуйте упростить маршрут, поискать другие даты или соседние города: ' + nearbyText);
-            } else {
-                self.empty.find('.rmtext p').html('Попробуйте упростить маршрут или поискать другие даты');
+                this.empty.find('.re-cities').html('соседние города: ' + nearbyText);
             }
             $('#offers-pcollection').html('');
-            pageurl.update('search', undefined);
-            pageurl.title();
-            if (window._gaq) {
-                _gaq.push(['_trackPageview', '/#empty']);
-            }
+        }
+        if (window._gaq) {
+            _gaq.push(['_trackPageview', '/#empty']);
         }
         this.toggle('empty');
         fixedBlocks.update();
