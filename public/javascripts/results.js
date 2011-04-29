@@ -380,11 +380,11 @@ processUpdate: function() {
                 }).get().join(', ');
                 this.empty.find('.re-cities').html('соседние города: ' + nearbyText);
             }
+            $('#offers-pcollection').html('');
         }
         if (window._gaq) {
             _gaq.push(['_trackPageview', '/#empty']);
         }
-        $('#offers-pcollection').html('');
         this.toggle('empty');
         fixedBlocks.update();
         pageurl.update('search', undefined);
