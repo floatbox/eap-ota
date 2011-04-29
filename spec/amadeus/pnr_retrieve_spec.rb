@@ -20,5 +20,19 @@ describe Amadeus::Response::PNRRetrieve do
     its(:phone) { should == '+75557777555' }
 
   end
+
+  describe 'strange error, two persons but 3 tickets' do
+
+    subject {
+      body = File.read('spec/amadeus/xml/PNR_Retrieve_Strange_Ticket_Number.xml')
+      doc = Amadeus::Service.parse_string(body)
+      Amadeus::Response::PNRRetrieve.new(doc)
+    }
+
+    it { should be_success }
+    it { should have(2).passengers }
+    specify { subject.passengers.collect(&:ticket).should == %W( 006-2791485245 006-2791485244 ) }
+
+  end
 end
 

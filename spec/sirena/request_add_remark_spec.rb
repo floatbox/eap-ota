@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Sirena::Request::AddRemark, :focus => true do
+describe Sirena::Request::AddRemark do
 
   describe 'common case' do
 
@@ -13,3 +13,4 @@ describe Sirena::Request::AddRemark, :focus => true do
 
   end
 end
+
