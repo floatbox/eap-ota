@@ -47,6 +47,7 @@ class Order < ActiveRecord::Base
     self.payment_type = order_data.payment_type
     self.delivery = order_data.delivery
     self.last_pay_time = order_data.last_pay_time
+    self.cabins = recommendation.cabins.join(',')
     if order_data.payment_type != 'card'
       self.cash_payment_markup = recommendation.price_payment + (order_data.payment_type == 'delivery' ? 350 : 0)
     end
@@ -108,7 +109,8 @@ class Order < ActiveRecord::Base
           :price_fare => price_fare_ticket,
           :price_tax => price_tax_ticket,
           :price_consolidator_markup => price_consolidator_markup_ticket,
-          :price_share => price_share_ticket
+          :price_share => price_share_ticket,
+          :cabins => cabins.gsub(/[MW]/, "Y").split(',').uniq.join(' + ')
         )
       end
 
