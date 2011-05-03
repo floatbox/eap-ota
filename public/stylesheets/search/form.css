@@ -119,9 +119,6 @@ a.b-submit:hover {
     line-height: 16px;
     color: #333;
 }
-#search-submit.validating .message {
-    visibility: hidden;
-}
 #search-submit .ssm-arrow {
     position: absolute;
     top: 19px; left: 229px;
