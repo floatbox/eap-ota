@@ -79,7 +79,9 @@
     </td>
     <td class="changes" rowspan="2">
         <% if segment.layovers? %>
-        <p>С <%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %></p>
+            <p>С <%= human_layovers_count(segment.layover_count) %> <%= layovers_in(segment.flights[0..-2]) %></p>
+        <% else %>
+            <p>Без пересадок</p>
         <% end %>
         <% visible_cabins = variant_cabins[segment_counter].compact %>
         <% unless visible_cabins.empty? %>
