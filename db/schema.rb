@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110428122622) do
+ActiveRecord::Schema.define(:version => 20110429154548) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -239,6 +239,7 @@ ActiveRecord::Schema.define(:version => 20110428122622) do
     t.string   "payment_type"
     t.datetime "last_pay_time"
     t.decimal  "cash_payment_markup",           :precision => 9, :scale => 2, :default => 0.0,     :null => false
+    t.string   "cabins"
   end
 
   create_table "payments", :force => true do |t|
@@ -287,6 +288,7 @@ ActiveRecord::Schema.define(:version => 20110428122622) do
     t.integer  "order_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "cabins"
   end
 
   create_table "typus_users", :force => true do |t|
