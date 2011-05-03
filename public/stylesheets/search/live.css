@@ -14,9 +14,9 @@
 }
 .live-stator {
     position: relative;
-    width: 810px;
+    width: 775px;
     height: 19px;
-    margin-left: 150px;
+    margin-left: 185px;
     overflow: hidden;
 }
 .live-slider {
@@ -47,6 +47,6 @@
     background: url(/img/search/live.png) no-repeat;
 }
 .live-right {
-    left: 785px;
+    left: 750px;
     background-position: 100% 0;
 }
