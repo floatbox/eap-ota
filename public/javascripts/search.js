@@ -287,6 +287,7 @@ validate: function(qkey) {
     var self = this;
     var restoreResults = Boolean(qkey);
     this.submit.addClass('validating');
+    this.smessage.find('.ssm-content').html('Проверка введенных данных…');
     this.request = $.get('/pricer/validate/', data, function(result, status, request) {
         if (request != self.request) {
             return;
@@ -309,6 +310,7 @@ validate: function(qkey) {
             results.nextUpdate.params = {
                 query_key: result.query_key || data.query_key
             };
+            self.smessage.stop().hide();
             if (restoreResults) {
                 self.calendar.scroller.scrollToSelected();
                 if (result.fragment_exist) {
