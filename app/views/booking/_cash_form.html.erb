@@ -12,7 +12,7 @@
     <h6 class="blabel">Адрес доставки</h6>
     <div class="bca-description">
         <p>Введите адрес доставки, желательно подробный (если есть код домофона или другие тонкости — укажите, пожалуйста). Желаемое время доставки тоже можно указать.</p>
-        <p>Обратите внимание, что доставка возможна только по Москве.</p>
+        <p>Обратите внимание, что доставка возможна только по&nbsp;Москве с&nbsp;10:00 до&nbsp;19:00 в&nbsp;будние&nbsp;дни.</p>
     </div>
     <textarea class="bfield" id="bc-address" name="order[delivery]" rows="5" cols="32"></textarea>
 </div>
@@ -28,7 +28,6 @@
     <td>
         <h6>Стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %></h6>
         <div class="price"><%= decorated_price total_price, 'strong', 'em' %>&nbsp;</div>
-        <p class="hint">стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами</p>
     </td>
     <td class="sign">+</td>
     <td>
@@ -47,6 +46,12 @@
         <div class="price price-total bcb-delivery"><%= decorated_price total_price + 350, 'strong', 'em' %>&nbsp;</div>
         <div class="price price-total bcb-nodelivery"><%= decorated_price total_price, 'strong', 'em' %>&nbsp;</div>
     </td>
+</tr>
+<tr>
+    <td colspan="2">
+        <p class="hint" style="margin-right: 10px;">стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами (не&nbsp;гарантируется до&nbsp;момента выписки билета)</p>    
+    </td>
+    <td colspan="3"></td>
 </tr>
 </table>
 </div>

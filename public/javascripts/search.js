@@ -112,6 +112,7 @@ init: function() {
         $('.excess', d).toggle(manyall);
         $('.infants', d).toggle(manyinf && !manyall);
         $('.a-button', d).toggle(!manyall && !manyinf);
+        this.el.trigger('update');
         if (!manyall && !manyinf) {
             var template = '<span class="value">{nt}{gt}</span>';
             var nc = constants.numbers.collective;
@@ -153,7 +154,7 @@ init: function() {
     this.sprogress = this.submit.find('.progress');
     this.submit.find('.b-submit').click(function(event) {
         event.preventDefault();
-        if (results.nextUpdate) {
+        if (results.nextUpdate && !self.submit.hasClass('disabled')) {
             results.load();
             results.show();
         }
@@ -165,6 +166,10 @@ init: function() {
         if (self.smessage.is(':visible')) {
             self.smessage.fadeOut(150);
         }
+    });
+    this.persons.el.bind('update', function() {
+        self.submit.addClass('disabled');
+        self.smessage.find('.ssm-content').html('Выберите, пожалуйста, количество пассажиров');
     });
 },
 toggleMode: function(mode) {
