@@ -65,7 +65,7 @@ update: function() {
     });
 },
 process: function(data) {
-    var items = [], template = '<li><a href="/#{code}:featured" data-key="{code}">{description} от {hprice}</a></li>';
+    var items = [], template = '<li><a href="/#{code}/featured" data-key="{code}">{description} от {hprice}</a></li>';
     for (var i = 0, im = data.length; i < im; i++) {
         var d = data[i];
         d.hprice = d.price.inflect('рубля', 'рублей', 'рублей')
