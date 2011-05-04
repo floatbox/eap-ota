@@ -82,10 +82,7 @@ makeDates: function() {
     this.dsize = {
         w: 85,
         h: 51
-    };     
-},
-selectiveSegment: function(index) {
-    return this.selected.length < this.selectedLimit ? this.selected.length : 0;
+    };
 },
 initDates: function() {
     var self = this, selector = 'li:not(.inactive)';
@@ -97,20 +94,23 @@ initDates: function() {
             self.ignoreClick = false;
         } else {
             var index = parseInt($(this).attr('data-index'), 10);
-            var segment = self.selectiveSegment(index);
-            self.selected[segment] = index;
-            self.selected.length = segment + 1;
-            self.selected.sortInt();
+            if (self.selected.length < self.selectedLimit) {
+                self.selected.push(index);
+                self.selected.sortInt();
+            } else {
+                self.selected = [index];
+            }
             self.savedSelected = undefined;
             self.update();
         }
     }).delegate(selector, 'mouseover', function() {
         if (self.dragging) return;
         var index = parseInt($(this).attr('data-index'), 10);
-        var segment = self.selectiveSegment(index);
-        var items = self.selected.concat();
-        items[segment] = index;
-        items.length = segment + 1;
+        if (self.selected.length < self.selectedLimit) {
+            var items = self.selected.concat(index);
+        } else {
+            var items = [index];
+        }
         self.highlight(items && items.compact(), index);
     }).delegate(selector, 'mousedown', function(e) {
         var el = $(this);
@@ -126,7 +126,7 @@ initDates: function() {
                 dsegments[i] = (dragall || self.selected[i] == index) ? 1 : 0;
             }
             var dx = e.pageX - doffset.left;
-            var dy = e.pageY - doffset.top;  
+            var dy = e.pageY - doffset.top;
             var coffset = self.container.offset();
             self.dragging = {
                 el: el,
@@ -366,7 +366,7 @@ scrollTo: function(nst) {
             complete: function() {
                 el.scrollTop(nst);
                 self.parent.showResetButton();
-                self.toggleArrows();                
+                self.toggleArrows();
             }
         });
     }
@@ -399,7 +399,7 @@ initNative: function() {
         var rb = self.parent.resetButton;
         if (rb.visible) {
             rb.visible = false;
-            rb.hide();        
+            rb.hide();
         }
     });
 },
@@ -419,7 +419,7 @@ initArrows: function() {
     };
     var stopScroll = function() {
         clearInterval(stimer);
-        if (dir) self.scrollTo(self.snap(cst + (30 - vel) * dir));       
+        if (dir) self.scrollTo(self.snap(cst + (30 - vel) * dir));
         dir = 0;
     };
     this.scrollbw = $('.scrollbw', this.parent.el).mousedown(function(event) {
@@ -484,7 +484,7 @@ initScrollbar: function() {
     }).click(function(event) {
         var x = event.pageX - $(this).offset().left - sbw / 2;
         self.scrollTo(self.snap(x.constrain(0, sbm) / sbf));
-    });     
+    });
 },
 updatePreview: function(items) {
     this.preview.html('');

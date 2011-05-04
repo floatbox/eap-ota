@@ -171,6 +171,14 @@ init: function() {
         self.submit.addClass('disabled');
         self.smessage.find('.ssm-content').html('Выберите, пожалуйста, количество пассажиров');
     });
+
+    // Поиск по энтеру
+    $('#search-fields .autocomplete').bind('enter', function(e) {
+        if (!self.submit.hasClass('disabled')) {
+            self.submit.find('.b-submit').click();
+        }
+    });
+
 },
 toggleMode: function(mode) {
     var context = $('#search-fields');
