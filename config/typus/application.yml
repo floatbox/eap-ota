@@ -116,7 +116,7 @@ Ticket:
     default: source, created_at, number, commission_carrier, description, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share
     list: source, created_at, number, commission_carrier, description, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share
     show: source, created_at, number, commission_carrier, description, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, order
-    csv: source, created_at, number, commission_carrier, description, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share
+    csv: number, ticket_date, commission_carrier, description, cabins, price_fare, price_tax, price_total,  price_consolidator_markup, commission_subagent, price_share, price_transfer
     options:
       date_formats:
         created_at: long
