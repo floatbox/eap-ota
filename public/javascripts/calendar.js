@@ -19,6 +19,10 @@ init: function() {
         self.selected.length = 0;
         self.update();
     });
+    this.message = this.el.parent().find('.calendar-message');
+    this.message.find('.cm-close .link').click(function() {
+        self.message.hide();
+    });
     this.values = [];
 },
 makeDates: function() {
@@ -81,12 +85,7 @@ makeDates: function() {
     };     
 },
 selectiveSegment: function(index) {
-    var nearest, items = this.selected;
-    for (var i = 0; i < this.selectedLimit; i++) {
-        if (items[i] === undefined) return i;
-        if (nearest === undefined || Math.abs(items[i] + i / 10 - index) < Math.abs(items[nearest] + nearest / 10 - index)) nearest = i;
-    }
-    return nearest;
+    return this.selected.length < this.selectedLimit ? this.selected.length : 0;
 },
 initDates: function() {
     var self = this, selector = 'li:not(.inactive)';
@@ -100,6 +99,7 @@ initDates: function() {
             var index = parseInt($(this).attr('data-index'), 10);
             var segment = self.selectiveSegment(index);
             self.selected[segment] = index;
+            self.selected.length = segment + 1;
             self.selected.sortInt();
             self.savedSelected = undefined;
             self.update();
@@ -110,6 +110,7 @@ initDates: function() {
         var segment = self.selectiveSegment(index);
         var items = self.selected.concat();
         items[segment] = index;
+        items.length = segment + 1;
         self.highlight(items && items.compact(), index);
     }).delegate(selector, 'mousedown', function(e) {
         var el = $(this);
@@ -237,16 +238,31 @@ update: function() {
 },
 select: function(dates) {
     var updated = false;
-    for (var i = dates.length; i--;) {
-        var n = this.dmyindex[dates[i]];
-        if (n != this.selected[i]) {
-            this.selected[i] = n;
+    if (this.dmyindex[dates[0]] === undefined) {
+        this.showMessage('Выбранная дата вылета (' + Date.parseAmadeus(dates[0]).human() + ') уже прошла. Выберите, пожалуйста, другую дату.');
+        if (this.selected.length !== 0) {
+            this.selected = [];
             updated = true;
+        }
+    } else {
+        for (var i = dates.length; i--;) {
+            var n = this.dmyindex[dates[i]];
+            if (n != this.selected[i]) {
+                this.selected[i] = n;
+                updated = true;
+            }
         }
     }
     if (updated) {
         this.update();
     }
+},
+showMessage: function(text) {
+    this.message.find('.cm-content').html(text);
+    this.message.show().css({
+        left: Math.round((this.el.width() - this.message.outerWidth()) / 2),
+        top: Math.round((this.el.height() - this.message.outerHeight()) / 2)
+    });
 },
 showResetButton: function() {
     var offset, items = this.selected.compact();

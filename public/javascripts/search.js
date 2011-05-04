@@ -308,7 +308,10 @@ validate: function(qkey) {
             self.apply(result.complex_to_parse_results || {});
         }
         self.submit.removeClass('current validating');
-        if (result.valid) {
+        if (restoreResults && self.calendar.selected.length === 0) {
+            $('#promo').removeClass('latent');
+            self.live.toggle(true);
+        } else if (result.valid) {
             results.nextUpdate = {
                 title: result.human
             };
