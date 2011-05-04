@@ -118,6 +118,18 @@ getSegment: function(s) {
             shifts++;
         }
     }
+    segment.order = [];
+    for (var i = segment.bars.length; i--;) {
+        var bar = segment.bars[i];
+        segment.order.push({
+            n: i,
+            p: segment.prices[bar.flights][0],
+            d: bar.arv - bar.dpt
+        });
+    }
+    segment.order.sort(function(a, b) {
+        return (a.d - b.d) || (a.p - b.p);
+    });
     if (shifts > 1) {
         segment.shift = 0;
     }
@@ -242,10 +254,10 @@ updateSegments: function() {
         segment.el.find('.selected').removeClass('selected');
         var spl = segment.el.find('.ods-proper');
         var sil = segment.el.find('.ods-improper');
-        var bars = segment.bars;
+        var bars = segment.bars, order = segment.order;
         var iamount = 0;
-        for (var i = 0, im = bars.length; i < im; i++) {
-            var bar = bars[i];
+        for (var i = 0, im = order.length; i < im; i++) {
+            var bar = bars[order[i].n];
             if (pf[bar.flights]) {
                 bar.el.appendTo(spl);
             } else {
