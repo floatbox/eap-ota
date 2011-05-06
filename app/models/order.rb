@@ -31,6 +31,13 @@ class Order < ActiveRecord::Base
     self.price_with_payment_commission = price_total + Payture.commission(price_total) if price_with_payment_commission == 0 || !price_with_payment_commission
   end
 
+  # по этой штуке во маршрут-квитанции определяется, "бронирование" это или уже "билет"
+  # FIXME избавиться от глупостей типа "пишем что это билет, хотя это еще бронирование"
+  # FIXME добавить проверки на обилеченность, может быть? для ручных бронек
+  def paid?
+    payment_type == 'card'
+  end
+
   def order_data= order_data
     recommendation = order_data.recommendation
     self.email = order_data.email

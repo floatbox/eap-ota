@@ -1,4 +1,4 @@
-<% paid_order = @pnr.order && (@pnr.order.payment_type == 'card') %>
+<% @order ||= @pnr.order_real_or_dummy %>
 <table cellspacing="0" cellpadding="0" width="740" style="width: 740px; color: #000; font-size: 13px; line-height: 1.25; font-family: Arial, sans-serif; letter-spacing: -0.02em;">
 <col width="240">
 <col width="240">
@@ -10,7 +10,7 @@
 <tr>
     <td class="pad_null"><img src="https://eviterra.com/img/booking/eviterra.png" alt="eviterra" width="210" height="30"></td>
     <td class="pad_null" colspan="2">
-    <% if paid_order %>
+    <% if @order.paid? %>
         <font size="3" family="Arial" style="font-size: 15px;"><strong>Электронный билет<br>E-ticket</strong></font>
     <% else %>
         <font size="3" family="Arial" style="font-size: 15px;"><strong>Бронирование<br>Booking</strong></font>
@@ -22,7 +22,7 @@
     </td>
 </tr>
 </tbody>
-<% if !paid_order && @pnr.order && @pnr.order.last_pay_time %>
+<% if @order.last_pay_time %>
 <tbody valign="top">
 <tr>
     <td colspan="6" class="pad_null">&nbsp;<br></td>
@@ -30,7 +30,7 @@
 <tr>
     <td class="pad_null" colspan="6">
         <font size="3" family="Arial" style="font-size: 15px;"><strong>Действительно до<br>Valid until</strong></font><br>
-        <font size="3" family="Arial" color="#ED1192" style="font-size: 18px; color: #ED1192;"><strong><%= @pnr.order.last_pay_time.strftime('%H:%M %d.%m.%Y') %></strong></font><br>
+        <font size="3" family="Arial" color="#ED1192" style="font-size: 18px; color: #ED1192;"><strong><%= @order.last_pay_time.strftime('%H:%M %d.%m.%Y') %></strong></font><br>
         <br>
     </td>
 </tr>
@@ -133,8 +133,7 @@
 </tr>
 </tbody>
 
-<% if @pnr.order %>
-<% if paid_order %>
+<% if @order.paid? %>
     <tbody valign="top">
     <tr>
         <td colspan="6" class="pad_null">
@@ -167,11 +166,11 @@
         </td>
         <td class="pad_null" colspan="2">
             <font family="Arial" size="2">
-            <%= @pnr.order.price_fare.ceil.to_i %> RUB<br>
-            <%= @pnr.order.price_tax_and_markup_and_payment.ceil.to_i %> RUB<br>
-            <%= @pnr.order.price_with_payment_commission.ceil.to_i %> RUB<br>
+            <%= @order.price_fare.ceil.to_i %> RUB<br>
+            <%= @order.price_tax_and_markup_and_payment.ceil.to_i %> RUB<br>
+            <%= @order.price_with_payment_commission.ceil.to_i %> RUB<br>
             Invoice<br>
-            <%= @pnr.order.created_at.strftime('%d.%m.%y') %>
+            <%= @order.created_at.strftime('%d.%m.%y') %>
             </font>
         </td>
         <td class="pad_null" colspan="3">
@@ -200,7 +199,7 @@
             <font family="Arial" size="2">
             Тариф / Fare<br>
             Налоги и сборы / Taxes<br>
-            <% if @pnr.order.payment_type == 'delivery' %>
+            <% if @order.payment_type == 'delivery' %>
                 Доставка / Delivery<br>
             <% end %>
             Итоговая стоимость / Total<br>
@@ -208,13 +207,13 @@
         </td>
         <td class="pad_null" colspan="2">
             <font family="Arial" size="2">
-            <%= @pnr.order.price_fare.ceil.to_i %> RUB<br>
-            <%= @pnr.order.price_tax_and_markup_and_payment.ceil.to_i %> RUB<br>
-            <% if @pnr.order.payment_type == 'delivery' %>
+            <%= @order.price_fare.ceil.to_i %> RUB<br>
+            <%= @order.price_tax_and_markup_and_payment.ceil.to_i %> RUB<br>
+            <% if @order.payment_type == 'delivery' %>
                 350 RUB<br>
-                <%= @pnr.order.price_with_payment_commission.ceil.to_i + 350 %> RUB<br>
+                <%= @order.price_with_payment_commission.ceil.to_i + 350 %> RUB<br>
             <% else %>
-                <%= @pnr.order.price_with_payment_commission.ceil.to_i %> RUB<br>
+                <%= @order.price_with_payment_commission.ceil.to_i %> RUB<br>
             <% end %>
             </font>
         </td>
@@ -231,14 +230,13 @@
     </tr>
     </tbody>
 <% end %>
-<% end %>
 
 <tbody valign="top">
 <tr>
     <td class="pad_null" style="text-align: center; font-size: 24px; line-height: 1.25; letter-spacing: -0.02em;" colspan="6">
     <font size="5"><br></font>
     <center>
-    <% if paid_order %>
+    <% if @order.paid? %>
         <font family="Arial" size="5"><strong>Спасибо за покупку на <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
         <font family="Arial" size="5"><strong>Thank you for purchase at <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
     <% else %>
