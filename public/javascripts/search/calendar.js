@@ -327,7 +327,7 @@ toggleMode: function(mode) {
     if (this.selectedLimit > this.selected.length && this.savedSelected && this.savedSelected.length > this.selected.length) {
         this.selected = this.savedSelected.concat();
     }
-    this.selected.length = this.selectedLimit;
+    this.selected.length = Math.min(this.selected.length, this.selectedLimit);
     this.update();
 }
 };
