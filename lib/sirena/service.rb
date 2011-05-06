@@ -16,9 +16,13 @@ module Sirena
       def action(name, *params)
         request = Sirena::Request.for(name).new(*params)
         request_body = request.render
-        log_request(name, request_body)
-        response_body = do_http(request_body)
-        log_response(name, response_body)
+        if Conf.sirena.fake
+          response_body = read_latest_xml(name)
+        else
+          log_request(name, request_body)
+          response_body = do_http(request_body)
+          log_response(name, response_body)
+        end
         response = Sirena::Response.for(name).new(response_body)
       end
 

@@ -33,6 +33,12 @@ class Pnr
     @order ||= Order.find_by_pnr_number(number)
   end
 
+  # для order_show, временное
+  # FIXME заменить на #order или убить вообще
+  def order_real_or_dummy
+    order || Order.new(:source => 'amadeus')
+  end
+
   def sirena_receipt
     Sirena::Service.get_itin_receipts(number, order.sirena_lead_pass).pdf
   end

@@ -12,7 +12,7 @@ module DataMigration
       order.load_tickets
     end
     Ticket.all.each do |t|
-      t.update_attribute(:created_at, t.order.ticketed_date) if t.order.ticketed_date
+      t.update_attribute(:created_at, t.order.ticketed_date)
     end
   end
 
