@@ -173,6 +173,7 @@ $.Autocompleter = function(input, options) {
 
             case KEY.ENTER:
                 event.preventDefault();
+                $el.trigger('enter');
 
             case KEY.TAB:
                 // stop default to prevent a form submit, Opera needs special handling

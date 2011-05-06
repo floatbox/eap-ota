@@ -384,3 +384,28 @@
     border-bottom-color: #ED1192;
 }
 
+/* Message */
+.calendar-message {
+    display: none;
+    position: absolute;
+    left: 100px; top: 100px;
+    width: 250px;
+    padding: 10px 15px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+    background: #fff8ce;
+    -moz-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+    -o-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+    font-size: 14px;
+    line-height: 16px;
+    color: #333;
+}
+.cm-close {
+    margin-top: 8px;
+    font-size: 11px;
+    line-height: 13px;
+}

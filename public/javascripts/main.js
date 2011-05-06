@@ -104,6 +104,9 @@ Date.prototype.toAmadeus = function() {
     var y = this.getFullYear().toString().substring(2);
     return [d < 10 ? '0' : '', d, m < 10 ? '0' : '', m, y].join('');
 };
+Date.prototype.human = function() {
+    return this.getDate() + '&nbsp;' + constants.monthes.genitive[this.getMonth()];
+};
 Date.parseAmadeus = function(str) {
     var d = parseInt(str.substring(0,2), 10);
     var m = parseInt(str.substring(2,4), 10) - 1;
@@ -116,6 +119,7 @@ Date.daysInMonth = function(m, y) {
     date.setDate(0);
     return date.getDate();
 };
+
 
 /* Jquery UI emulation */
 $.ui = {

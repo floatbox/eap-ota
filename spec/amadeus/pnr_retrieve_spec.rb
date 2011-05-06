@@ -22,7 +22,7 @@ describe Amadeus::Response::PNRRetrieve do
 
   end
 
-  describe 'strange error, two persons but 3 tickets' do
+  describe 'three passengers, but only two tickets', :focus => true do
 
     subject {
       body = File.read('spec/amadeus/xml/PNR_Retrieve_Strange_Ticket_Number.xml')
@@ -31,8 +31,8 @@ describe Amadeus::Response::PNRRetrieve do
     }
 
     it { should be_success }
-    it { should have(2).passengers }
-    specify { subject.passengers.collect(&:ticket).should == %W( 006-2791485245 006-2791485244 ) }
+    it { should have(3).passengers }
+    specify { subject.passengers.collect(&:ticket).should == ['006-2791485245', '006-2791485244', nil]  }
 
   end
 end

@@ -19,6 +19,10 @@ init: function() {
         self.selected.length = 0;
         self.update();
     });
+    this.message = this.el.parent().find('.calendar-message');
+    this.message.find('.cm-close .link').click(function() {
+        self.message.hide();
+    });
     this.values = [];
 },
 makeDates: function() {
@@ -78,15 +82,7 @@ makeDates: function() {
     this.dsize = {
         w: 85,
         h: 51
-    };     
-},
-selectiveSegment: function(index) {
-    var nearest, items = this.selected;
-    for (var i = 0; i < this.selectedLimit; i++) {
-        if (items[i] === undefined) return i;
-        if (nearest === undefined || Math.abs(items[i] + i / 10 - index) < Math.abs(items[nearest] + nearest / 10 - index)) nearest = i;
-    }
-    return nearest;
+    };
 },
 initDates: function() {
     var self = this, selector = 'li:not(.inactive)';
@@ -98,18 +94,23 @@ initDates: function() {
             self.ignoreClick = false;
         } else {
             var index = parseInt($(this).attr('data-index'), 10);
-            var segment = self.selectiveSegment(index);
-            self.selected[segment] = index;
-            self.selected.sortInt();
+            if (self.selected.length < self.selectedLimit) {
+                self.selected.push(index);
+                self.selected.sortInt();
+            } else {
+                self.selected = [index];
+            }
             self.savedSelected = undefined;
             self.update();
         }
     }).delegate(selector, 'mouseover', function() {
         if (self.dragging) return;
         var index = parseInt($(this).attr('data-index'), 10);
-        var segment = self.selectiveSegment(index);
-        var items = self.selected.concat();
-        items[segment] = index;
+        if (self.selected.length < self.selectedLimit) {
+            var items = self.selected.concat(index);
+        } else {
+            var items = [index];
+        }
         self.highlight(items && items.compact(), index);
     }).delegate(selector, 'mousedown', function(e) {
         var el = $(this);
@@ -125,7 +126,7 @@ initDates: function() {
                 dsegments[i] = (dragall || self.selected[i] == index) ? 1 : 0;
             }
             var dx = e.pageX - doffset.left;
-            var dy = e.pageY - doffset.top;  
+            var dy = e.pageY - doffset.top;
             var coffset = self.container.offset();
             self.dragging = {
                 el: el,
@@ -237,16 +238,31 @@ update: function() {
 },
 select: function(dates) {
     var updated = false;
-    for (var i = dates.length; i--;) {
-        var n = this.dmyindex[dates[i]];
-        if (n != this.selected[i]) {
-            this.selected[i] = n;
+    if (this.dmyindex[dates[0]] === undefined) {
+        this.showMessage('Выбранная дата вылета (' + Date.parseAmadeus(dates[0]).human() + ') уже прошла. Выберите, пожалуйста, другую дату.');
+        if (this.selected.length !== 0) {
+            this.selected = [];
             updated = true;
+        }
+    } else {
+        for (var i = dates.length; i--;) {
+            var n = this.dmyindex[dates[i]];
+            if (n != this.selected[i]) {
+                this.selected[i] = n;
+                updated = true;
+            }
         }
     }
     if (updated) {
         this.update();
     }
+},
+showMessage: function(text) {
+    this.message.find('.cm-content').html(text);
+    this.message.show().css({
+        left: Math.round((this.el.width() - this.message.outerWidth()) / 2),
+        top: Math.round((this.el.height() - this.message.outerHeight()) / 2)
+    });
 },
 showResetButton: function() {
     var offset, items = this.selected.compact();
@@ -350,7 +366,7 @@ scrollTo: function(nst) {
             complete: function() {
                 el.scrollTop(nst);
                 self.parent.showResetButton();
-                self.toggleArrows();                
+                self.toggleArrows();
             }
         });
     }
@@ -383,7 +399,7 @@ initNative: function() {
         var rb = self.parent.resetButton;
         if (rb.visible) {
             rb.visible = false;
-            rb.hide();        
+            rb.hide();
         }
     });
 },
@@ -403,7 +419,7 @@ initArrows: function() {
     };
     var stopScroll = function() {
         clearInterval(stimer);
-        if (dir) self.scrollTo(self.snap(cst + (30 - vel) * dir));       
+        if (dir) self.scrollTo(self.snap(cst + (30 - vel) * dir));
         dir = 0;
     };
     this.scrollbw = $('.scrollbw', this.parent.el).mousedown(function(event) {
@@ -468,7 +484,7 @@ initScrollbar: function() {
     }).click(function(event) {
         var x = event.pageX - $(this).offset().left - sbw / 2;
         self.scrollTo(self.snap(x.constrain(0, sbm) / sbf));
-    });     
+    });
 },
 updatePreview: function(items) {
     this.preview.html('');

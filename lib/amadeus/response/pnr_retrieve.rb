@@ -57,6 +57,7 @@ module Amadeus
           passport, sex = ssr_text.to_s.split('/').values_at(2, 5)
           return passport if need_infant == (sex == 'FI' || sex == 'MI')
         end
+        return
       end
 
       # PAX 257-9748002002/ETOS/RUB9880/30SEP10/MOWR2290Q/00000000
@@ -68,6 +69,7 @@ module Amadeus
           fa.to_s =~ %r<(PAX|INF) ([^/]*)>
           return $2 if need_infant == ($1 == 'INF')
         end
+        return
       end
 
       def email
