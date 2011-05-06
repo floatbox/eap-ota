@@ -21,6 +21,8 @@ module BookingHelper
     result << "dates=#{date1}/#{date2}"
     result << "location=Аэропорт #{fs.flights.first.departure_name}, #{fs.departure.city.name}"
     result.join('&')
+  rescue
+    ""
   end
 
   def order_summary order
@@ -43,6 +45,9 @@ module BookingHelper
       price_parts << "за #{order.people.size > 5 ? 'всех' : amounts[order.people.size - 2]}"
     end
     "#{segments_summary}. Билеты куплены на https://eviterra.com — #{price_parts.join(' ')}."
+  rescue
+    # FIXME dirty
+    ""
   end
 
   def full_human_date date

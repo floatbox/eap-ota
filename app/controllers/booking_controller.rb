@@ -43,6 +43,14 @@ class BookingController < ApplicationController
           if payture_response.success?
             @order.order.money_blocked!
             logger.info "Pay: payment and booking successful"
+
+            # FIXME не выносить в кронтаск. но, может быть, внести обратно в .ticket!
+            if @order.order.source == 'sirena'
+              Sirena::Adapter.approve_payment(@order.order)
+              @order.order.ticket!
+              logger.info "Pay: ticketing sirena"
+            end
+
             render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}
           elsif payture_response.threeds?
             logger.info "Pay: payment system requested 3D-Secure authorization"
@@ -78,15 +86,18 @@ class BookingController < ApplicationController
     md = params['MD']
     # FIXME сделать более внятное и понятное пользователю поведение
     if @order && pa_res && md && @order.confirm_3ds(pa_res, md)
+      logger.info "Pay: payment and booking successful"
       @order.money_blocked!
       @pnr_number = @order.pnr_number
       @pnr_path = show_order_path(@order.pnr_number)
-      # FIXME вынести в кронтаск
+      # FIXME не выносить в кронтаск. но, может быть, внести обратно в .ticket!
       if @order.source == 'sirena'
         Sirena::Adapter.approve_payment(@order)
         @order.ticket!
+        logger.info "Pay: ticketing sirena"
       end
     else
+      logger.info "Pay: payment and booking successful"
       @error_message = 'Не удалось оплатить билет'
     end
   end

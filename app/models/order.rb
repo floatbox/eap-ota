@@ -216,6 +216,7 @@ class Order < ActiveRecord::Base
         update_attribute(:ticket_status, 'canceled')
       end
     when 'sirena'
+      Sirena::Service.payment_ext_auth(:cancel, pnr_number, sirena_lead_pass)
       Sirena::Service.booking_cancel(pnr_number, sirena_lead_pass)
       update_attribute(:ticket_status, 'canceled')
     end
