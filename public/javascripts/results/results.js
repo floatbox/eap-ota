@@ -194,6 +194,12 @@ load: function() {
         },
         timeout: 60000
     });
+    
+    // Сбрасываем неактуальный адрес страницы
+    if (pageurl.search !== params.query_key) {
+        pageurl.update('search', undefined);
+        search.history.show();
+    }
 
     // Ничего не найдено, если не сработали таймауты запросов
     clearTimeout(this.resetTimer);
@@ -359,6 +365,7 @@ processUpdate: function() {
                 self.selectTab(imprecise ? 'matrix' : (self.selectedTab || pageurl.tab || 'featured'));
                 pageurl.update('search', $(imprecise ? '#offers-matrix .matrix-origin' : '#offers-options').attr('data-query_key'));
                 pageurl.title('авиабилеты ' + self.title.attr('data-title'));
+                search.history.update();
                 var st = self.el.offset().top - $('#header').height();
                 if (st > $(window).scrollTop()) {
                     $.animateScrollTop(st, function() {

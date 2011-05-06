@@ -26,6 +26,10 @@ module PricerHelper
     [date[0,2],date[2,2],date[4,2]].join('.') if date
   end
 
+  def fmt_date_short date
+    date[0,2] + '.' + date[2,2] if date
+  end
+
   def time_in_minutes time
     time ? (time[0,2].to_i * 60 + time[2,2].to_i) : 0
   end

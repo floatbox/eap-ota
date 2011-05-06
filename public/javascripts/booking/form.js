@@ -190,9 +190,9 @@ hide: function() {
     this.unfasten();
     this.offer.removeClass('active-booking');
     this.el.remove();
-    delete(this.el);
-    delete(this.offer);
-    delete(this.variant);
+    delete this.el;
+    delete this.offer;
+    delete this.variant;
     pageurl.update('booking', undefined);
     pageurl.title('авиабилеты ' + results.title.attr('data-title'));
 },

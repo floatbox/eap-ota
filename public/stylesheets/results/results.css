@@ -79,6 +79,9 @@
     padding: 15px 0;
     background: #E7ECEE;
 }
+#offers-options {
+    display: none;
+}
 #offers-context {
     float: right;
     width: 270px;

@@ -1,7 +1,7 @@
 ﻿(function() {
 
     // Браузеры с упрощенными эффектами
-    browser.scanty = (browser.platform.search(/ipad|iphone/) !== -1 || browser.name.search(/msie6|msie7|opera/) !== -1);
+    browser.scanty = (browser.platform.search(/ipad|iphone/) !== -1 || browser.name.search(/safari|chrome|firefox|msie9/) === -1);
 
     // Инициализация блоков
     search.init();
@@ -24,10 +24,13 @@
 
     // Сброс по клику на логотипе
     $('#logo').click(function() {
-        app.booking.unfasten();
+        if (app.booking.el) {
+            app.booking.hide();
+        }
         results.hide();
         pageurl.reset();
         pageurl.title();
+        search.history.show();
         search.restore(search.defvalues || {});
         search.segments[0].to.focus();
         $(window).scrollTop(0);
@@ -60,6 +63,9 @@
         search.live.toggle(true);
         search.segments[0].to.focus();
     }
+
+    // Вкладки с сохраненными поисками
+    search.history.init();
 
     // Всплывающие подсказки
     hint.init();

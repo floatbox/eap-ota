@@ -22,6 +22,7 @@ compare: function() {
         this.show();
         if (this.search !== p.search) {
             if (this.search) {
+                search.history.show();
                 search.validate(this.search);
             } else {
                 $('#logo').click();

@@ -250,6 +250,19 @@ function preload() {
     }
 }
 
+/* Cookies */
+var Cookie = function(name, value, date) {
+	if (arguments.length > 1) {
+		var exp = (value !== undefined) ? (date ? date.toGMTString() : '') : 'Thu, 01-Jan-1970 00:00:01 GMT';
+		document.cookie = name + '=' + escape(value) + ';' +  (exp ? ('expires=' + exp + ';') : '') + 'path=/';
+		return value;
+	} else {
+		var pattern = new RegExp('(?:^' + name + '|; ?' + name + ')=([^;]*)');
+		var result = pattern.exec(document.cookie);
+		return (result) ? unescape(result[1]) : undefined;
+	}
+}
+
 /* Detect browser */
 var browser = (function() {
     var os = navigator.platform.toLowerCase().match(/mac|win|linux|ipad|iphone/);
