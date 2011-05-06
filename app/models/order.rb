@@ -19,8 +19,16 @@ class Order < ActiveRecord::Base
       .where("created_at < ?", 30.minutes.ago)
   }
 
+  def tickets_count
+    ticket_numbers_as_text.split(/[, ]/).delete_if(&:blank?).size
+  end
+
   def order_id
     payments.last ? payments.last.ref : ''
+  end
+
+  def need_attention
+    1 if price_difference != 0
   end
 
   def generate_code
@@ -98,8 +106,13 @@ class Order < ActiveRecord::Base
       prices = tst_resp.prices_with_refs
       pnr_resp.passengers.map do |passenger|
         ref = passenger.passenger_ref
-        price_fare_ticket = prices.present? ? prices[ref][:price_fare] : 0
-        price_tax_ticket = prices.present? ? prices[ref][:price_tax] : 0
+        if passenger.infant_or_child == 'i'
+          price_fare_ticket = prices.present? ? prices[ref][:price_fare_infant].to_i : 0
+          price_tax_ticket = prices.present? ? prices[ref][:price_tax_infant].to_i : 0
+        else
+          price_fare_ticket = prices.present? ? prices[ref][:price_fare].to_i : 0
+          price_tax_ticket = prices.present? ? prices[ref][:price_tax].to_i : 0
+        end
         price_share_ticket = commission_subagent['%'] ? (price_fare_ticket * commission_subagent[0...-1].to_f / 100) : commission_subagent.to_f
         price_consolidator_markup_ticket = (price_share_ticket > 5) ? 0 : price_fare_ticket * 0.02
         Ticket.create(
@@ -110,12 +123,24 @@ class Order < ActiveRecord::Base
           :price_tax => price_tax_ticket,
           :price_consolidator_markup => price_consolidator_markup_ticket,
           :price_share => price_share_ticket,
-          :cabins => cabins.gsub(/[MW]/, "Y").split(',').uniq.join(' + ')
+          :cabins => cabins && cabins.gsub(/[MW]/, "Y").split(',').uniq.join(' + ')
         )
       end
 
       update_attribute(:ticket_numbers_as_text, pnr_resp.passengers.every.ticket.join(' '))
     end
+  end
+
+  def update_prices_from_tickets
+    self.price_fare = tickets.sum(:price_fare)
+    self.price_consolidator_markup = tickets.sum(:price_consolidator_markup)
+    self.price_share = tickets.sum(:price_share)
+
+    price_total_new = tickets.sum(:price_tax) + price_fare + price_consolidator_markup + price_our_markup
+    self.price_tax_and_markup = price_total_new - price_fare
+    self.price_difference = price_total_new - price_total if price_difference == 0
+    self.price_total = price_total_new
+    save
   end
 
   def payture_state
@@ -172,6 +197,7 @@ class Order < ActiveRecord::Base
     update_attributes(:ticket_status =>'ticketed', :ticketed_date => Date.today)
 
     load_tickets
+    update_prices_from_tickets
     send_receipt
   end
 

@@ -42,7 +42,8 @@ module Amadeus
                          :passenger_ref => passenger_ref,
                          :passport => passport(passenger_ref, need_infant),
                          :ticket => ticket(passenger_ref, need_infant),
-                         :number_in_amadeus => (ti / '../../r:elementManagementPassenger/r:lineNumber').to_s
+                         :number_in_amadeus => (ti / '../../r:elementManagementPassenger/r:lineNumber').to_s,
+                         :infant_or_child => need_infant ? 'i' : nil
                          )
           end
         end.flatten
