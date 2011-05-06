@@ -193,7 +193,9 @@ class Order < ActiveRecord::Base
   end
 
   def send_receipt
-    PnrMailer.sirena_receipt(email, pnr_number).deliver if source == 'sirena'
+    # временное решение. отодвигаем отправку электронного билета
+    PnrMailer.notification(email, pnr_number).deliver if source == 'sirena'
+    #PnrMailer.sirena_receipt(email, pnr_number).deliver if source == 'sirena'
   end
 
 # class methods
