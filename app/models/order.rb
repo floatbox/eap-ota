@@ -223,10 +223,12 @@ class Order < ActiveRecord::Base
   end
 
   def send_email
+    logger.info 'Order: sending email'
     PnrMailer.notification(email, pnr_number).deliver if source == 'amadeus'
   end
 
   def send_receipt
+    logger.info 'Order: sending receipt'
     # временное решение. отодвигаем отправку электронного билета
     PnrMailer.notification(email, pnr_number).deliver if source == 'sirena'
     #PnrMailer.sirena_receipt(email, pnr_number).deliver if source == 'sirena'
