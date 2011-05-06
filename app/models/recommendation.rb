@@ -122,7 +122,11 @@ class Recommendation
   def ajust_markup!
     @price_our_markup = 0
     if price_share <= 5
-      @price_consolidator_markup = (price_fare * 0.02)
+      if %W( LH LX KL AF OS ).include? validating_carrier_iata
+        @price_consolidator_markup = (price_fare * 0.01)
+      else
+        @price_consolidator_markup = (price_fare * 0.02)
+      end
     else
       @price_consolidator_markup = 0
     end
