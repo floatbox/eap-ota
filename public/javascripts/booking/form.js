@@ -291,6 +291,7 @@ fasten: function(offer) {
     });
     this.dst = ot - mt;
     fixedBlocks.disabled = true;
+    search.history.toggle(false);
     $(window).scrollTop(cst - this.dst);
 },
 unfasten: function() {
@@ -305,6 +306,7 @@ unfasten: function() {
         $(window).scrollTop($(window).scrollTop() + this.dst);
         fixedBlocks.disabled = false;
         fixedBlocks.toggle(true);
+        search.history.toggle(search.history.active);
     }
     this.dstop = 0;
 }

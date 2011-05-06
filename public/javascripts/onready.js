@@ -53,6 +53,9 @@
         rt: true
     };
 
+    // Вкладки с сохраненными поисками
+    search.history.init();
+
     // Восстановление результатов
     if (pageurl.search) {
         search.validate(pageurl.search);
@@ -60,12 +63,10 @@
         $('#promo').removeClass('latent');
         search.persons.select({adults: 1, children: 0, infants: 0});
         search.cabin.select('Y');
+        search.history.toggle(true);
         search.live.toggle(true);
         search.segments[0].to.focus();
     }
-
-    // Вкладки с сохраненными поисками
-    search.history.init();
 
     // Всплывающие подсказки
     hint.init();

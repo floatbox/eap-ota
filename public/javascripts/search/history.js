@@ -4,6 +4,7 @@ init: function() {
     this.items = [];
     var saved = Cookie('searches');
     if (browser.platform.search(/ipad|iphone/) !== -1 || browser.name.search(/msie6|msie7/) !== -1) {
+        this.toggle = function() {};
         this.update = function() {};
         this.show = function() {};
         return;
@@ -14,7 +15,6 @@ init: function() {
             var item = saved[i];
             var key = item.split(' ', 1)[0];
             this.add(key, item.substring(key.length));
-            this.toggle(true);
         }
         this.show();
     }
@@ -83,6 +83,7 @@ show: function() {
 toggle: function(mode) {
     if (this.items.length !== 0 && mode) {
         this.el.show().height(this.items[0].el.find('.ht-content').outerHeight() + 4);
+        this.active = true;
     } else {
         this.el.hide();
     }
