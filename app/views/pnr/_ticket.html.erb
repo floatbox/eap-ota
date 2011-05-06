@@ -22,7 +22,7 @@
     </td>
 </tr>
 </tbody>
-<% if @order.last_pay_time %>
+<% if !@order.paid? && @order.last_pay_time.present? %>
 <tbody valign="top">
 <tr>
     <td colspan="6" class="pad_null">&nbsp;<br></td>
