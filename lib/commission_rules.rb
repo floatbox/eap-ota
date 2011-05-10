@@ -98,6 +98,18 @@ module CommissionRules
     end
   end
 
+  def consolidator_markup(fare)
+    if share(fare) <= 5
+      if %W( LH LX KL AF OS ).include? carrier
+        fare * 0.01
+      else
+        fare * 0.02
+      end
+    else
+      0
+    end
+  end
+
   def agent_percentage?
     agent['%']
   end
