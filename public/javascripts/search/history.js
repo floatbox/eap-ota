@@ -36,8 +36,11 @@ init: function() {
 update: function() {
     var selected = pageurl.search;
     if (selected && $('#ht' + selected).length === 0) {
-        this.add(selected, $('#offers-options .ht-content').html());
-        this.save();
+        var content = $('#offers-options .ht-content');
+        if (content.length !== 0) {
+            this.add(selected, content.html());
+            this.save();
+        }
     }
     if (this.items.length > 1) {
         this.toggle(true);
