@@ -2,12 +2,12 @@
 class PaymentsController < ApplicationController
 
   def edit
-    @order = Order.first(:conditions => ["code = ? AND payment_status = 'new'", params[:code]])
+    @order = Order.first(:conditions => ["code = ? AND payment_status = 'not blocked' AND offline_booking = ?", params[:code], true])
     @card = CreditCard.new
   end
 
   def update
-    @order = Order.first(:conditions => ["code = ? AND payment_status = 'new'", params[:code]])
+    @order = Order.first(:conditions => ["code = ? AND payment_status = 'not blocked' AND offline_booking = ?", params[:code], true])
     card = CreditCard.new(params[:card])
     if card.valid?
       payture_response = @order.block_money(card)

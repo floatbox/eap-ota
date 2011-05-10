@@ -5,19 +5,16 @@ class Order < ActiveRecord::Base
 
   PAYMENT_STATUS = {'not blocked' => 'not blocked', 'blocked' => 'blocked', 'charged' => 'charged', 'new' => 'new', 'pending' => 'pending'}
   TICKET_STATUS = { 'ticketed' => 'ticketed', 'booked' => 'booked', 'canceled' => 'canceled'}
-  SOURCE = { 'amadeus' => 'amadeus', 'sirena' => 'sirena' }
+  SOURCE = { 'amadeus' => 'amadeus', 'sirena' => 'sirena', 'other' => 'other' }
+  PAYMENT_TYPE = ['card', 'delivery', 'cash']
 
   has_many :payments
   has_many :tickets
 
-
-  validates_presence_of :email, :if => (Proc.new{ |order| order.source != 'other' })
-  validates_format_of :email, :with =>
-    /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email", :if => (Proc.new{ |order| order.source != 'other' })
-  before_create :generate_code, :calculate_price_with_payment_commission
+  before_create :generate_code, :calculate_price_with_payment_commission, :set_payment_status
 
   scope :stale, lambda {
-    where(:payment_status => 'not blocked', :ticket_status => 'booked')\
+    where(:payment_status => 'not blocked', :ticket_status => 'booked', :offline_booking => false)\
       .where("created_at < ?", 30.minutes.ago)
   }
 
@@ -86,7 +83,6 @@ class Order < ActiveRecord::Base
         :price_consolidator_markup,
         :price_tax_and_markup
     end
-    self.payment_status = (order_data.payment_type == 'card') ? 'not blocked' : 'pending'
     self.ticket_status = 'booked'
     self.name_in_card = order_data.card.name
     self.last_digits_in_card = order_data.card.number4
@@ -112,7 +108,8 @@ class Order < ActiveRecord::Base
   end
 
   def load_tickets
-    if source == 'amadeus' && tickets.blank?
+    if source == 'amadeus'
+      tickets.every.delete
       pnr_resp = tst_resp = nil
       Amadeus.booking do |amadeus|
         pnr_resp = amadeus.pnr_retrieve(:number => pnr_number)
@@ -223,6 +220,11 @@ class Order < ActiveRecord::Base
     send_receipt
   end
 
+  def reload_tickets
+    load_tickets
+    update_prices_from_tickets
+  end
+
   def cancel!
     case source
     when 'amadeus'
@@ -239,13 +241,13 @@ class Order < ActiveRecord::Base
 
   def send_email
     logger.info 'Order: sending email'
-    PnrMailer.notification(email, pnr_number).deliver if source == 'amadeus'
+    PnrMailer.notification(email, pnr_number).deliver if source == 'amadeus' && email.present?
   end
 
   def send_receipt
     logger.info 'Order: sending receipt'
     # временное решение. отодвигаем отправку электронного билета
-    PnrMailer.notification(email, pnr_number).deliver if source == 'sirena'
+    PnrMailer.notification(email, pnr_number).deliver if source == 'sirena' && email.present?
     #PnrMailer.sirena_receipt(email, pnr_number).deliver if source == 'sirena'
   end
 
@@ -257,6 +259,10 @@ class Order < ActiveRecord::Base
       puts "Automatic cancel of pnr #{order.pnr_number}"
       order.cancel!
     end
+  end
+
+  def set_payment_status
+    self.payment_status = (payment_type == 'card') ? 'not blocked' : 'pending'
   end
 
 end
