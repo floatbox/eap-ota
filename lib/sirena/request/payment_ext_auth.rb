@@ -10,6 +10,11 @@ module Sirena
         @curr = 'РУБ'
         @payment_action = action.to_s
       end
+
+      def encrypt?
+        true
+      end
+
     end
   end
 end

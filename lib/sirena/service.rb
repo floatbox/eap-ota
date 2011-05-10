@@ -20,14 +20,14 @@ module Sirena
           response_body = read_latest_xml(name)
         else
           log_request(name, request_body)
-          response_body = do_http(request_body)
+          response_body = do_http(request_body, :encrypt => request.encrypt?)
           log_response(name, response_body)
         end
         response = Sirena::Response.for(name).new(response_body)
       end
 
       # FIXME заменить нафик на Curl::Easy
-      def do_http(request)
+      def do_http(request, args={})
         # pricing: 150
         # client_summary: 100
         # superclient_summary: 150
@@ -35,8 +35,11 @@ module Sirena
         # выставляю пока для прайсера, с запасом
         http = Net::HTTP.new(HOST, PORT)
         http.read_timeout = 160
-        http_response = http.post(PATH, request,
-                                 'X-Timeout' => '155')
+        headers = {}
+        headers['X-Encrypt'] = 'true' if args[:encrypt]
+        headers['X-Timeout'] = (args[:timeout] || 155).to_s
+
+        http_response = http.post(PATH, request, headers)
 
         unless http_response.is_a? Net::HTTPSuccess
           http_response.error!
