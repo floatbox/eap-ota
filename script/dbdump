@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+# дамп базы без кэширующих и социально опасных таблиц
+
+SKIP_TABLES = %W(
+  amadeus_sessions
+  orders
+  payments
+  tickets
+
+  hot_offers
+)
+
+require 'yaml'
+
+database_yml = YAML.load_file(File.expand_path('../../config/database.yml', __FILE__))
+cfg = database_yml[ENV['RAILS_ENV'] || 'development' ]
+
+cmd_pass = 'mysqldump'
+
+cmd_pass += " -u #{cfg['username']}" if cfg['username']
+cmd_pass += " -p#{cfg['password']}" if cfg['password']
+
+ignore_tables_cmd = SKIP_TABLES.map { |t| "--ignore-table=#{cfg['database']}.#{t}"}.join(' ')
+only_tables_cmd = SKIP_TABLES.map.join(' ') + ' --no-data'
+system "#{cmd_pass} #{cfg['database']} #{ignore_tables_cmd}"
+system "#{cmd_pass} #{cfg['database']} #{only_tables_cmd}"
