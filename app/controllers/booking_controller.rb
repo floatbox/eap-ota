@@ -80,13 +80,12 @@ class BookingController < ApplicationController
 
   def confirm_3ds
     payment_id = params[:order_id].match(/\d+$/)[0]
-    @payment = Payment.find(payment_id)
-    @order = @payment.order
     pa_res = params['PaRes']
     md = params['MD']
+    @payment = Payment.find_by_threeds_key(md)
+    @order = @payment.order if @payment
     # FIXME сделать более внятное и понятное пользователю поведение
-    if @order && pa_res && md && @order.confirm_3ds(pa_res, md)
-      logger.info "Pay: payment and booking successful"
+    if @order && pa_res && md && @order.payment_status == 'not blocked' && @order.confirm_3ds(pa_res, md)
       @order.money_blocked!
       @pnr_number = @order.pnr_number
       @pnr_path = show_order_path(@order.pnr_number)
@@ -96,6 +95,9 @@ class BookingController < ApplicationController
         @order.ticket!
         logger.info "Pay: ticketing sirena"
       end
+    elsif ['blocked', 'charged'].include? @order.payment_status
+      @pnr_number = @order.pnr_number
+      @pnr_path = show_order_path(@order.pnr_number)
     else
       logger.info "Pay: payment and booking successful"
       @error_message = 'Не удалось оплатить билет'
