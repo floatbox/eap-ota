@@ -177,6 +177,7 @@ HotOffer:
   relationships: destination
   #filters: destination
   search: description, url
+  filters: created_at
   application: Hot Offers
 
 Region:
