@@ -72,7 +72,9 @@ class Mux
 
     def sirena_pricer(form)
       return [] unless Conf.sirena.enabled
-      Sirena::Service.pricing(form).recommendations || []
+      recommendations = Sirena::Service.pricing(form).recommendations || []
+      recommendations.delete_if(&:without_full_information?)
+      recommendations
     end
 
   end

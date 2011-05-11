@@ -173,9 +173,8 @@ HotOffer:
         updated_at: long
   options:
     default_action_on_item: show
-  order_by: -created_at
+  order_by: price_variation
   relationships: destination
-  #filters: destination
   search: description, url
   filters: created_at
   application: Hot Offers
