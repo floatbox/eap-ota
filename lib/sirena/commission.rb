@@ -4,12 +4,12 @@ class Sirena::Commission
   self.commissions = {}
   self.opts = {}
 
-  attr_accessor :carrier, :carrier_name, :doc, :code, :consolidator, :subagent,
+  attr_accessor :carrier, :twopcnt, :carrier_name, :doc, :code, :consolidator, :subagent,
     :interline, :subclasses, :routes, :expire, :fares, :directions
 
   class << self
     [:doc, :code, :consolidator, :interline, :subclasses,
-     :routes, :expire, :fares, :directions].each{|method_name|
+     :routes, :expire, :fares, :directions, :expire].each{|method_name|
       self.class_eval do
         define_method method_name.to_s do |value|
           opts[method_name] = value
@@ -28,7 +28,35 @@ class Sirena::Commission
       self.opts = {:carrier=>opts[:carrier], 
         :carrier_name=>opts[:carrier_name], :doc => opts[:doc]}
     end
+
+    def find_for(recommendation)
+      twopcnt = %W[OS 3Р РЛ QW РГ МА XF ПМ J2 ЭВ EK ТИ 5H]
+      new(
+        :carrier => recommendation.validating_carrier_iata,
+        :twopcnt => (twopcnt.include?(recommendation.validating_carrier.iata) ||
+                    twopcnt.include?(recommendation.validating_carrier.iata_ru))
+      )
+    end
   end
+
+  def consolidator_markup(fare, tickets=1)
+    blank_cost = 50
+    if twopcnt
+      fare * 0.02 + blank_cost * tickets
+    else
+      blank_cost * tickets
+    end
+  end
+
+  # ВРЕМЕННОЕ РЕШЕНИЕ
+  def share(fare, tickets=1)
+    0
+  end
+
+  def agent; '0' end
+  def subagent; '0' end
+  def agent_comments; '' end
+  def subagent_comments; '' end
 
 doc "1.2. На БСО ЗАО «Транспортная Клиринговая Палата»:
     1.2.1. При продаже и оформлении авиаперевозок на БСО и электронных билетах
@@ -38,7 +66,6 @@ doc "1.2. На БСО ЗАО «Транспортная Клиринговая �
     1.2.2. При продаже и оформлении авиаперевозок на БСО и электронных билетах
     СПД НСАВ – ТКП комиссионное вознаграждение Субагента составит 4 (четыре) %
     от тарифа на все авиакомпании входящие в ТКП, кроме:  "
-consolidator "50"
 subagent "4%"
 
 
@@ -148,7 +175,7 @@ doc "1.2.14. При продаже авиаперевозок с формой о
     (кроме перевозок по интерлайн-соглашениям) на рейсы «МА»:
     - комиссионное вознаграждение Субагента составит 50 (пятьдесят) копеек с билета;
     - Сервисный Сбор Агента составит 2 (два) % от тарифа."
-carrier "МА", "MALEV HUNGARIAN AIRLINES LTD"
+carrier "MА", "MALEV HUNGARIAN AIRLINES LTD"
 code "182"
 interline false
 consolidator "2%"
@@ -174,7 +201,7 @@ doc "от 1.05.2011
 carrier "ДД", "ОАО «Владивосток Авиа»"
 code "277 99А"
 interline false
-expires "31.12.2011"
+expire "31.12.2011"
 routes "ВВО-ПУС; ПУС-ВВО; ВВО-ПУС/ПУС-ВВО; ПУС-ВВО/ВВО-ПУС;
       ВВО-ХАО; ХАО-ВВО; ВВО-ХАО/ХАО-ВВО; ХАО-ВВО/ВВО-ХАО; ВВО-МДН; МДН-ВВО; ВВО-МДН/МДН-ВВО;
       МДН-ВВО/ВВО-МДН; ВВО-АБН; АБН-ВВО; ВВО-АБН/АБН-ВВО; АБН-ВВО/ВВО-АБН; ВВО-КРВ; КРВ-ВВО;
@@ -373,13 +400,13 @@ doc "1. На период с 01.04.2011г. по 31.05.2011г. при прода�
      МУН-ХЕЛ/ХЕЛ-МУН; ХЕЛ-МУН/МУН-ХЕЛ; НРС-ЧЛБ; ЧЛБ-НРС; ЧЛБ-СОЧ; СОЧ-ЧЛБ.
    - 5 коп с билета, (Сервисный Сбор Агента составит 2 (Два) % от тарифа), если авиаперевозка
      содержит участок с Кодом тарифа: FSSOW; FSS1M: FPROMCH."
-  carrier "5H", "ЗАО «Нордавиа - РА»"
-  code "316"
-  expire "31.05.2011"
-  fares "FSSOW; FSS1M: FPROMCH"
-  interline false
-  consolidator "2%"
-  subagent "0.05"
+carrier "5H", "ЗАО «Нордавиа - РА»"
+code "316"
+expire "31.05.2011"
+fares "FSSOW; FSS1M: FPROMCH"
+interline false
+consolidator "2%"
+subagent "0.05"
 
 
 end
