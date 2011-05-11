@@ -4,7 +4,7 @@ class Sirena::Commission
   self.commissions = {}
   self.opts = {}
 
-  attr_accessor :carrier, :carrier_name, :doc, :code, :consolidator, :subagent,
+  attr_accessor :carrier, :twopcnt, :carrier_name, :doc, :code, :consolidator, :subagent,
     :interline, :subclasses, :routes, :expire, :fares, :directions
 
   class << self
@@ -28,7 +28,35 @@ class Sirena::Commission
       self.opts = {:carrier=>opts[:carrier], 
         :carrier_name=>opts[:carrier_name], :doc => opts[:doc]}
     end
+
+    def find_for(recommendation)
+      twopcnt = %W[OS 3Р РЛ QW РГ МА XF ПМ J2 ЭВ EK ТИ 5H]
+      new(
+        :carrier => recommendation.validating_carrier_iata
+        :twopcnt => (twopcnt.include?(recommendation.validating_carrier.iata) ||
+                    twopcnt.include?(recommendation.validating_carrier.iata_ru))
+      )
+    end
   end
+
+  def consolidator_markup(fare, tickets=1)
+    blank_cost = 50
+    if twopcnt
+      fare * 0.02 + blank_cost * tickets
+    else
+      blank_cost * tickets
+    end
+  end
+
+  # ВРЕМЕННОЕ РЕШЕНИЕ
+  def share(fare, tickets=1)
+    0
+  end
+
+  def agent; '0' end
+  def subagent; '0' end
+  def agent_comments; '' end
+  def subagent_comments; '' end
 
 doc "1.2. На БСО ЗАО «Транспортная Клиринговая Палата»:
     1.2.1. При продаже и оформлении авиаперевозок на БСО и электронных билетах
