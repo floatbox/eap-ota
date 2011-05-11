@@ -20,7 +20,7 @@ class Order < ActiveRecord::Base
   }
 
   def tickets_count
-    ticket_numbers_as_text.split(/[, ]/).delete_if(&:blank?).size
+    ticket_numbers_as_text.to_s.split(/[, ]/).delete_if(&:blank?).size
   end
 
   def order_id
@@ -158,6 +158,10 @@ class Order < ActiveRecord::Base
 
   def charge_date
     (payments.last && payments.last.charged_at) ? payments.last.charged_at.to_date : nil
+  end
+
+  def created_date
+    created_at.to_date
   end
 
   def charge_time
