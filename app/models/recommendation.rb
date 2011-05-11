@@ -496,7 +496,7 @@ class Recommendation
           when 'FIRST'
             cabin = 'F'
           else
-            raise ArgumentError, 'should consist of itinerary (MOWLON), carrier(AB), cabin subclass (Y) or class (economy). example "mowaer/s7 aermow/y'
+            raise ArgumentError, 'should consist of itinerary (SVOCDG), carrier(AB), cabin subclass (Y) or class (economy). example "mowaer/s7 aermow/y'
           end
         end
       end
