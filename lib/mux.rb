@@ -72,9 +72,16 @@ class Mux
 
     def sirena_pricer(form)
       return [] unless Conf.sirena.enabled
+      return [] unless sirena_searchable?(form)
       recommendations = Sirena::Service.pricing(form).recommendations || []
       recommendations.delete_if(&:without_full_information?)
       recommendations
+    end
+
+    def sirena_searchable?(form)
+      !Conf.sirena.restrict ||
+      form.adults == 1 && form.children == 0 && form.infants == 0 &&
+      form.form_segments.none?(&:multicity?)
     end
 
   end
