@@ -1,29 +1,29 @@
 /* Разметка страницы бронирования на шаги */
-.booking h3 {
+.booking-form h3 {
     font: bold 22px/26px Arial, sans-serif;
     margin: 15px 15px 8px;
     color: #333;
 }
-.booking .section {
+.booking-form .section {
     margin: 0 0 2px;
     padding: 5px 0 15px;
     background: #fff8ce;
 }
-.booking .ready {
+.booking-form .ready {
     background: #e5ffd2;
 }
 
 /* Поля */
-.booking td {
+.booking-form td {
     vertical-align: top;
 }
-.booking .blabel {
+.booking-form .blabel {
     margin: 8px 0 4px;
     font-weight: bold;
     font-size: 14px;
     line-height: 18px;
 }
-.booking .bfield {
+.booking-form .bfield {
     padding: 3px 5px;
     border: 1px solid #909090;
     -moz-border-radius: 3px;
@@ -33,32 +33,32 @@
     line-height: 24px;
     color: #333;
 }
-.booking input.bfield {
+.booking-form input.bfield {
     height: 24px;
 }
-.booking .bfield:focus {
+.booking-form .bfield:focus {
     outline: none;
 }
-.booking .valid {
+.booking-form .valid {
     border-color: #4eb700;
 }
-.booking .invalid {
+.booking-form .invalid {
     border-color: #F02020;
 }
-.booking .bfield:disabled {
+.booking-form .bfield:disabled {
     border-color: #CCC;
     background: #f0f0f0;
     background: rgba(248, 248, 248, 0.5);
     color: #CCC;
 }
-.booking .placeholder {
+.booking-form .placeholder {
     position: absolute;
     margin: 4px 6px;
     font-size: 20px;
     line-height: 24px;
     color: #C0C0C0;
 }
-.booking .disabled .placeholder {
+.booking-form .disabled .placeholder {
     visibility: hidden;
 }
 
@@ -94,10 +94,10 @@
     -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
     -o-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
 }
-.booking .nameorder-warning .link {
+.booking-form .nameorder-warning .link {
     color: #333;
 }
-.booking .nameorder-warning .link:hover {
+.booking-form .nameorder-warning .link:hover {
     color: #ED1192;
 }
 
@@ -215,7 +215,7 @@
 .bp-bonus select.bfield {
     width: 187px;
 }
-.booking .external {
+#booking .external {
     position: relative;
     top: 1px;
     left: 3px;
@@ -227,13 +227,13 @@
 }
 
 /* Способы оплаты */
-.booking .section-tabs {
+.booking-form .section-tabs {
     position: relative;
     top: -6px;
     background: #FFF;
     font-weight: bold;
 }
-.booking .section-tabs li {
+.booking-form .section-tabs li {
     position: relative;
     top: 1px;
     float: left;
@@ -241,16 +241,16 @@
     font-size: 14px;
     line-height: 16px;
 }
-.booking .section-tabs .link {
+.booking-form .section-tabs .link {
     color: #333;
 }
-.booking .section-tabs .selected {
+.booking-form .section-tabs .selected {
     background: #fff8ce;
 }
-.booking .ready .section-tabs .selected {
+.booking-form .ready .section-tabs .selected {
     background: #e5ffd2;
 }
-.booking .section-tabs .disabled {
+.booking-form .section-tabs .disabled {
     padding-top: 13px;
     font-weight: normal;
     font-size: 12px;

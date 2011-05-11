@@ -9,6 +9,7 @@
     results.filters.init();
     results.matrix.init();
     results.diagram.init();
+    booking.init();
 
     // Обработка ссылки
     pageurl.init();

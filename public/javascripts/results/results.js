@@ -109,12 +109,11 @@ init: function() {
         }
     });
 
-    // Бронирование
+    // Предварительное бронирование
     offers.delegate('.book .a-button', 'click', function(event) {
         event.preventDefault();
         var variant = $(this).closest('.offer-variant');
-        app.booking.show(variant);
-        app.booking.book(variant);
+        booking.prebook(variant);
     });
 
     // Альянсы
