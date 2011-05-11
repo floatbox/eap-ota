@@ -9,7 +9,7 @@ class Sirena::Commission
 
   class << self
     [:doc, :code, :consolidator, :interline, :subclasses,
-     :routes, :expire, :fares, :directions].each{|method_name|
+     :routes, :expire, :fares, :directions, :expire].each{|method_name|
       self.class_eval do
         define_method method_name.to_s do |value|
           opts[method_name] = value
@@ -201,7 +201,7 @@ doc "от 1.05.2011
 carrier "ДД", "ОАО «Владивосток Авиа»"
 code "277 99А"
 interline false
-expires "31.12.2011"
+expire "31.12.2011"
 routes "ВВО-ПУС; ПУС-ВВО; ВВО-ПУС/ПУС-ВВО; ПУС-ВВО/ВВО-ПУС;
       ВВО-ХАО; ХАО-ВВО; ВВО-ХАО/ХАО-ВВО; ХАО-ВВО/ВВО-ХАО; ВВО-МДН; МДН-ВВО; ВВО-МДН/МДН-ВВО;
       МДН-ВВО/ВВО-МДН; ВВО-АБН; АБН-ВВО; ВВО-АБН/АБН-ВВО; АБН-ВВО/ВВО-АБН; ВВО-КРВ; КРВ-ВВО;
