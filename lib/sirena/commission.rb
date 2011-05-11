@@ -32,7 +32,7 @@ class Sirena::Commission
     def find_for(recommendation)
       twopcnt = %W[OS 3Р РЛ QW РГ МА XF ПМ J2 ЭВ EK ТИ 5H]
       new(
-        :carrier => recommendation.validating_carrier_iata
+        :carrier => recommendation.validating_carrier_iata,
         :twopcnt => (twopcnt.include?(recommendation.validating_carrier.iata) ||
                     twopcnt.include?(recommendation.validating_carrier.iata_ru))
       )
