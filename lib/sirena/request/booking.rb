@@ -19,14 +19,7 @@ module Sirena
         order.people_count[:infants] - order.people_count[:adults]
         @passengers = order.people.collect{|person|
           expire_date = person.document_noexpiration ? nil : person.document_expiration_date.strftime('%d.%m.%y')
-          # угадайка. может, имеет смысл добавить в форму?
-          doccode = if person.infant_or_child && person.document_noexpiration
-            "СР"
-          elsif !person.nationality || person.nationality.alpha2 != "RU"
-            person.document_noexpiration ? "НП" : "ЗА"
-          else
-            person.document_noexpiration ? "ПС" : "ПСП"
-          end
+          doccode = person.doccode_sirena
           pass_code = case person.infant_or_child
                       when 'i' then
                         infant_num+=1
@@ -39,8 +32,8 @@ module Sirena
                       else "ААА" end
           {
             :family=>person.last_name,
-            :name=>person.first_name,
-            :document=>person.passport,
+            :name=>person.first_name_sirena,
+            :document=>person.passport_sirena,
             :doccode => doccode,
             :expire_date=>expire_date,
             :code=>pass_code,
@@ -262,3 +255,4 @@ module Sirena
     end
   end
 end
+
