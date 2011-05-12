@@ -281,7 +281,7 @@ process: function(result) {
 parse: function(errors) {
     var items = [];
     var carderror = false;
-    for (var eid in s.errors) {
+    for (var eid in errors) {
         var ftitle = eid;
         if (ftitle.search(/card\[(?:number|type)\]/i) !== -1) {
             carderror = true;
@@ -290,9 +290,9 @@ parse: function(errors) {
                 var num = constants.numbers.ordinaldat[parseInt(n, 10)];
                 return '<span class="link" data-field="book-p-' + n + '-birth">' + num.charAt(0).toUpperCase() + num.substring(1) + ' пассажиру</span>';
             });
-            items.push('<li>' + ftitle + ' ' + s.errors[eid] + '</li>');
+            items.push('<li>' + ftitle + ' ' + errors[eid] + '</li>');
         } else {
-            items.push('<li>' + ftitle + ' ' + s.errors[eid] + '</li>');
+            items.push('<li>' + ftitle + ' ' + errors[eid] + '</li>');
         }
     }
     if (carderror) {
