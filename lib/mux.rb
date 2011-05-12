@@ -85,7 +85,8 @@ class Mux
 
     def sirena_searchable?(form)
       !Conf.sirena.restrict ||
-      form.adults == 1 && form.children == 0 && form.infants == 0 &&
+      # form.adults == 1 &&
+      form.children == 0 && form.infants == 0 &&
       form.form_segments.none?(&:multicity?)
     end
 
