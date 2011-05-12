@@ -107,7 +107,7 @@ compare: function() {
         });
         var self = this;
         var template = '<h5>Цена этого варианта изменилась: стало <strong>{type} на {value}</strong> (<span class="link">почему?</span>)</h5>';
-        this.prebooking.html(template.supplant({
+        this.prebooking.addClass('changed-price').html(template.supplant({
             type: bp > vp ? 'дороже' : 'дешевле',
             value: Math.abs(bp - vp).inflect('рубль', 'рубля',  'рублей')
         }));

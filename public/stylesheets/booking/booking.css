@@ -7,6 +7,8 @@
 .prebooking-state {
     padding: 15px;
     text-align: center;
+    font-size: 14px;
+    line-height: 16px;
 }
 .prebooking-state h4 {
     margin: 0 0 10px;
@@ -16,27 +18,32 @@
 }
 .prebooking-state p {
     margin: 6px 0 0;
-    text-align: center;
 }
 .prebooking-state .progress {
     margin: 0;
     padding: 25px 0 0;
     background: url(/img/offers/progress.gif) 50% 2px no-repeat;
 }
+.prebooking-state .link {
+    color: #333;
+}
 
 /* Изменение цены */
-.diff-price {
-    border-top: 1px solid #D0D0D0;
-    padding: 15px;
+.changed-price {
+    text-align: left;
 }
-.diff-price h5 {
-    font-size: 100%;
+.changed-price h5 {
+    font-size: 18px;
+    line-height: 20px;
     margin: 0 0 8px;
 }
-.diff-price strong {
+.changed-price strong {
     font-weight: bold;
 }
-.offer .diff-price a.a-button {
+.changed-price .cancel:hover {
+    color: #ED1192;
+}
+.offer .changed-price a.a-button {
     float: none;
     border-color: #7b8e12;
     margin-right: 2px;
