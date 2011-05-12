@@ -56,6 +56,7 @@
     background: #E7ECEE;
 }
 .booking-body {
+    position: relative;
     width: 960px;
     margin: 0 auto;
     padding: 15px 0 30px;
@@ -362,10 +363,12 @@
     background: url(/img/booking/close.png) no-repeat;
     cursor: pointer;
 }
-.booking .farerules h3 {
+.farerules h3 {
     margin: 0 0 12px;
+    font-weight: bold;
     font-size: 26px;
     line-height: 1;
+    color: #333;
 }
 .farerules .fgroup {
     margin: 12px 0 0;

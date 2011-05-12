@@ -1,7 +1,9 @@
 /* Разметка страницы бронирования на шаги */
 .booking-form h3 {
-    font: bold 22px/26px Arial, sans-serif;
     margin: 15px 15px 8px;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 26px;
     color: #333;
 }
 .booking-form .section {
