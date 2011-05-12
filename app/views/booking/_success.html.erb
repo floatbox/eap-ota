@@ -11,12 +11,14 @@
         <p class="htext latent">Если вы&nbsp;не&nbsp;получили письмо с&nbsp;<% @order.payment_type == 'card' ? 'электронным билетом' : 'подтверждением бронирования' %> в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, то&nbsp;напишите нам (<a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a>) или позвоните <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p>
     </div>
 </div>
+<% summary = order_summary(@order) %>
+<% unless summary.empty? %>
 <div class="booking-social">
 <h3>Что ещё можно сделать</h3>
-<% summary = order_summary(@order) %>
 <ul>
     <li><a href="http://www.google.com/calendar/event?action=TEMPLATE&<%= order_event_params(@order) %>" target="_blank">Добавить поездку в Гугл-календарь</a></li>
     <li><a style="background-position: 0 -30px;" href="http://www.facebook.com/connect/prompt_feed.php?&message=<%= summary %>" target="_blank">Поделиться с друзьями в Фейсбуке</a></li> 
     <li><a style="background-position: 0 -60px;" href="http://twitter.com/?status=<%= summary %>" target="_blank">Поделиться с друзьями в Твиттере</a></li>
 </ul>
 </div>
+<% end %>

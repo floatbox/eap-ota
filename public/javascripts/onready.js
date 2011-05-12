@@ -25,8 +25,8 @@
 
     // Сброс по клику на логотипе
     $('#logo').click(function() {
-        if (app.booking.el) {
-            app.booking.hide();
+        if (booking.el.is(':visible')) {
+            booking.hide();
         }
         results.hide();
         pageurl.reset();
@@ -41,9 +41,8 @@
 
     // Сохраненное бронирование
     if (pageurl.booking) {
-        app.booking.el = $('<div class="booking"></div>').appendTo($('#offers'));
-        app.booking.load(pageurl.booking);
-        app.booking.restored = true;
+        booking.load(pageurl.booking);
+        booking.restored = true;
     }
 
     // Данные по умолчанию для сброса

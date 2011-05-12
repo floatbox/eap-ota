@@ -215,15 +215,18 @@
 .bp-bonus select.bfield {
     width: 187px;
 }
-#booking .external {
+.booking-form .external {
     position: relative;
-    top: 1px;
+    top: 0;
     left: 3px;
     display: inline-block;
     width: 10px; height: 10px;
     background: url(/img/booking/external.png) no-repeat;
     vertical-align: baseline;
     text-decoration: none;
+}
+.mac.firefox .booking-form .external {
+    top: 2px;
 }
 
 /* Способы оплаты */
@@ -301,7 +304,7 @@
     position: absolute;
     top: 1px; left: 539px;
 }
-.booking .bc-payments a {
+.booking-form .bc-payments a {
     color: #777;
 }
 

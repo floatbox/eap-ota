@@ -63,7 +63,11 @@ prebook: function(variant) {
     });
     if (variant.closest('.offer').hasClass('collapsed')) {
         $('.expand', variant).click();
-    }    
+    }
+    var st = variant.offset().top + variant.height() - Math.round($(window).height() / 2);
+    if (st > $(window).scrollTop()) {
+        $.animateScrollTop(st);
+    }
 },
 failed: function() {
     var content = '<h4>В данный момент невозможно выбрать этот вариант</h4><p><span class="link">Почему?</span></p>';
@@ -72,7 +76,8 @@ failed: function() {
         hint.show(event, message);
     });
 },
-import: function() {
+getVariant: function() {
+    this.variant.closest('.offer').removeClass('collapsed').addClass('expanded');
     this.el.find('.booking-variant').html('').append(this.variant.clone());
 },
 load: function(number) {
@@ -116,15 +121,15 @@ compare: function() {
             event.preventDefault();
             self.show();
         });
-        this.import();
+        this.getVariant();
         return false;
     } else {
-        this.import();    
+        this.getVariant();    
         return true;
     }
 },
 activate: function() {
-    var content = this.el.find('.booking-content');
+    var context = this.el.find('.booking-content');
     this.form.init(context);
     this.farerules.init(context);
 }
@@ -136,6 +141,48 @@ init: function(context) {
     var that = this;
     this.el = context.find('.booking-form');
 
+    // Всплывающие подсказки
+    this.el.delegate('.hint', 'click', function(event) {
+        event.preventDefault();
+        hint.show(event, $(this).parent().find('.htext').html());
+    });
+    
+    // Список неправильно заполненных полей
+    this.el.find('.be-list').delegate('.link', 'click', function() {
+        var control = $('#' + $(this).attr('data-field'));
+        var st = control.closest(':visible').offset().top - results.header.height() - 35;
+        $.animateScrollTop(Math.min(st, $(window).scrollTop()), function() {
+            control.focus();
+        });
+    });
+    
+    // 3DSecure
+    this.el.delegate('.tds-submit .a-button', 'click', function(event) {
+        event.preventDefault();
+        $(this).closest('.result').find('form').submit();
+    });
+    
+    // Кнопка
+    this.submit = this.el.find('.booking-submit');
+    this.button = this.submit.find('.a-button');
+
+    // Отправка формы
+    this.el.find('form').submit(function(event) {
+        event.preventDefault();
+        if (that.button.hasClass('a-button-ready')) {
+            that.send($(this).attr('action'), $(this).serialize());
+        }
+    });
+
+    // Имена
+    if (constants.names === undefined) {
+        constants.names = {m: '', f: ''};
+    } else if (!constants.names.ready) {
+        constants.names['m'] = ' ' + constants.names['m'].toLowerCase() + ',';
+        constants.names['f'] = ' ' + constants.names['f'].toLowerCase() + ',';
+        constants.names.ready = true;
+    }
+    
     // Проверка формы
     this.sections = [];
     this.el.find('.booking-person').each(function() {
@@ -172,53 +219,11 @@ init: function(context) {
     } else {
         card.find('.section-tabs .link').closest('li').addClass('disabled').html('Этот билет возможно оплатить только банковской картой');
     }
-    this.initContacts(this.el.find('.booking-contacts'));
+    this.initContacts(this.el.find('.booking-contacts'));    
     this.validate(true);
-    
-    // Всплывающие подсказки
-    this.el.delegate('.hint', 'click', function(event) {
-        event.preventDefault();
-        hint.show(event, $(this).parent().find('.htext').html());
-    });
-    
-    // Список неправильно заполненных полей
-    this.el.find('.be-list').delegate('.link', 'click', function() {
-        var control = $('#' + $(this).attr('data-field'));
-        var st = control.closest(':visible').offset().top - results.header.height() - 35;
-        $.animateScrollTop(Math.min(st, $(window).scrollTop()), function() {
-            control.focus();
-        });
-    });
-    
-    // 3DSecure
-    this.el.delegate('.tds-submit .a-button', 'click', function(event) {
-        event.preventDefault();
-        $(this).closest('.result').find('form').submit();
-    });
-    
-    // Кнопка
-    this.submit = this.el.find('.booking-submit');
-    this.button = this.submit.find('.a-button');
-
-    // Отправка формы
-    this.el.find('form').submit(function(event) {
-        event.preventDefault();
-        if (that.button.hasClass('a-button-ready')) {
-            that.submit($(this).attr('action'), $(this).serialize());
-        }
-    });
-
-    // Имена
-    if (constants.names === undefined) {
-        constants.names = {m: '', f: ''};
-    } else if (!constants.names.ready) {
-        constants.names['m'] = ' ' + constants.names['m'].toLowerCase() + ',';
-        constants.names['f'] = ' ' + constants.names['f'].toLowerCase() + ',';
-        constants.names.ready = true;
-    }
 
 },
-submit: function(url, data) {
+send: function(url, data) {
     var that = this;
     this.el.find('.result').remove();
     this.el.find('.booking-disclaimer').hide();
@@ -229,7 +234,8 @@ submit: function(url, data) {
         type: 'POST',
         success: function(result) {
             if (typeof result === 'string' && result.length) {
-                this.process($(result).appendTo(that.el));
+                that.el.append(result);
+                that.process();
             } else if (result && result.errors) {
                 var items = that.parse(result.errors);
                 that.el.find('.be-list').html(items.join(''));
@@ -251,7 +257,7 @@ submit: function(url, data) {
     this.submit.addClass('sending');
 },
 process: function(result) {
-    switch (result.eq(0).attr('data-type')) {
+    switch (this.el.find('.result').attr('data-type')) {
     case 'success':
         this.submit.addClass('latent');
         if (window._gaq) {
@@ -298,282 +304,8 @@ error: function(text) {
     block.append('<p class="fail"><strong>Упс…</strong> ' + (text || 'Что-то пошло не так.') + '</p>');
     block.append('<p class="tip">Попробуйте снова или узнайте, <a target="_blank" href="/about/#payment">какими ещё способами</a> можно купить у нас билет.</p>');
     this.el.append(block);
-}
-};
-
-app.booking = {
-init: function() {
-
-    var self = this;
-
-
-
-    // Отправка формы
-    $('form', this.el).submit(function(event) {
-        event.preventDefault();
-        if (!self.button.hasClass('a-button-ready')) return;
-        var data = $(this).serialize();
-        var processError = function(text) {
-            self.el.append('<div class="result"><p class="fail"><strong>Упс…</strong> ' + (text || 'Что-то пошло не так.') + '</p><p class="tip">Попробуйте снова или узнайте, <a target="_blank" href="/about/#payment">какими ещё способами</a> можно купить у нас билет.</p></div>');
-        };
-        self.el.find('.result').remove();
-        self.el.find('.booking-disclaimer').hide();
-        self.el.find('.booking-errors').hide();
-        self.button.removeClass('a-button-ready').attr('value', 'Секундочку…');
-        self.submit.addClass('sending');
-        $.ajax({
-            url: $(this).attr('action'),
-            data: data,
-            type: 'POST',
-            success: function(s) {
-                if (typeof s === 'string' && s.length) {
-                    var result = $(s).appendTo(self.el);
-                    var rtype = result.eq(0).attr('data-type');
-                    if (rtype === 'success') {
-                        self.submit.addClass('latent');
-                        if (window._gaq) {
-                            _gaq.push(['_trackPageview', '/#' + pageurl.summary + ':success']);
-                            _gaq.push(['_addTrans', result.find('.pnr').text(), '', self.el.find('.booking-price .sum').attr('data-value')]);
-                            _gaq.push(['_trackTrans']);
-                        }
-                        if (window.yaCounter5324671) {
-                            yaCounter5324671.hit('/#' + pageurl.summary + ':success');
-                        }
-                    } else if (rtype === '3dsecure') {
-                        self.submit.addClass('latent');
-                    } else if (rtype === 'fail') {
-                        self.button.addClass('a-button-ready');
-                    }
-                } else if (s && s.errors) {
-                    var items = [], carderror = false;
-                    for (var eid in s.errors) {
-                        var ftitle = eid;
-                        if (ftitle.search(/card\[(?:number|type)\]/i) !== -1) {
-                            carderror = true;
-                        } else if (ftitle.search('birthday') !== -1) {
-                            ftitle = ftitle.replace(/person\[(\d)\]\[birthday\]/i, function(s, n) {
-                                var num = constants.numbers.ordinaldat[parseInt(n, 10)];
-                                return '<span class="link" data-field="book-p-' + n + '-birth">' + num.charAt(0).toUpperCase() + num.substring(1) + ' пассажиру</span>';
-                            });
-                            items.push('<li>' + ftitle + ' ' + s.errors[eid] + '</li>');
-                        } else {
-                            items.push('<li>' + ftitle + ' ' + s.errors[eid] + '</li>');
-                        }
-                    }
-                    if (carderror) {
-                        items.push('<li>Введён неправильный <span class="link" data-field="bc-num1">номер банковской карты</span></li>');
-                    }
-                    self.el.find('.be-list').html(items.join(''));
-                    self.el.find('.booking-errors').show();
-                } else {
-                    processError(s && s.exception && s.exception.message);
-                }
-                self.button.attr('value', self.button.attr('data-text')).addClass('a-button-ready');
-                self.submit.removeClass('sending');
-            },
-            error: function() {
-                processError();
-                self.submit.removeClass('sending');
-                self.button.attr('value', self.button.attr('data-text')).addClass('a-button-ready');
-            },
-            timeout: 90000
-        });
-    });
-
-    // Правила тарифов
-    this.farerules.init(this.el);
-
-    // 3DSecure
-    this.el.delegate('.tds-submit .a-button', 'click', function(event) {
-        event.preventDefault();
-        $(this).closest('.result').find('form').submit();
-    });
-
-    // Имена
-    if (constants.names === undefined) {
-        constants.names = {m: '', f: ''};
-    } else if (!constants.names.ready) {
-        constants.names['m'] = ' ' + constants.names['m'].toLowerCase() + ',';
-        constants.names['f'] = ' ' + constants.names['f'].toLowerCase() + ',';
-        constants.names.ready = true;
-    }
-
-    // Заголовок страницы
-    pageurl.title('бронирование авиабилета ' + results.title.attr('data-title'));
-
 },
-show: function(variant) {
-    var self = this;
-    if (variant) {
-        if (this.el) this.hide();
-        this.variant = variant;
-        this.offer = variant.closest('.offer');
-        this.el = $('<div class="booking"></div>').appendTo(this.offer);
-        if (this.offer.hasClass('collapsed')) {
-            $('.expand', variant).click();
-        }
-    } else {
-        this.offer.removeClass('collapsed').addClass('expanded');
-    }
-    this.offersTab = results.selectedTab;
-    this.selfhide = function(event) {
-        event.preventDefault();
-        self.hide();
-    };
-    var link = $('<a class="stop-booking" href="#">Вернуться к выбору вариантов</a>').click(this.selfhide).prependTo(this.offer);
-    if (this.offer.parent('#offers-matrix').length) {
-        link.css('top', this.offer.find('.offer-prices').height());
-    }
-    this.offer.addClass('active-booking');
-},
-hide: function() {
-    results.filters.el.addClass('hidden').show();
-    results.header.find('.stop-booking-panel').remove();
-    this.offer.find('.stop-booking').remove();
-    this.unfasten();
-    this.offer.removeClass('active-booking');
-    this.el.remove();
-    delete this.el;
-    delete this.offer;
-    delete this.variant;
-
-},
-prebook: function() {
-    var that = this;
-    var vid = '&variant_id=' + this.offersTab + '-' + variant.attr('data-index');
-    this.el.html('<div class="booking-state"><div class="progress"></div><h4>Проверяем доступность</h4></div>');
-    this.request = $.ajax({
-        url: '/booking/preliminary_booking?' + variant.attr('data-booking') + vid,
-        success: function(result) {
-            if (result && result.success) {
-                that.load(result.number);
-            } else {
-                that.pberror();
-            }
-        },
-        error: function() {
-            that.pberror();
-        },
-        timeout: 60000
-    });
-},
-pberror: function() {
-    var content = '<div class="booking-state"><h4>В данный момент невозможно выбрать этот вариант</h4><p><span class="link">Почему?</span></p></div>';
-    var message = 'Так иногда бывает, потому что авиакомпания не&nbsp;может подтвердить наличие мест на&nbsp;этот рейс по&nbsp;этому тарифу. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.';
-    this.el.html(content).find('.link').click(function(event) {
-        hint.show(event, message);
-    });
-},
-book: function(variant) {
-    var self = this;
-    this.el.html('<div class="booking-state"><div class="progress"></div><h4>Проверяем доступность</h4></div>');
-    var vid = '&variant_id=' + [self.offersTab, this.variant.attr('data-index')].join('-');
-    $.ajax({
-        url: "/booking/preliminary_booking?" + variant.attr('data-booking') + vid,
-        success: function(s) {
-            $('#offers-tabs').trigger('set', self.offersTab);
-            if (s && s.success) {
-                self.load(s.number);
-                pageurl.update('booking', s.number);
-            } else {
-                self.error();
-            }
-        },
-        error: function() {
-            self.error();
-        },
-        timeout: 60000
-    });
-    var w = $(window), offset = this.el.offset().top - w.height();
-    if (offset > w.scrollTop()) {
-        $.animateScrollTop(offset + 250);
-    }
-},
-load: function(number) {
-    var that = this;
-    this.request = $.get('/booking/', {number: number}, function(result) {
-        that.el = $(result).replaceAll(that.el);
-        if (that.variant && that.comparePrice()) {
-            that.fasten();
-            that.init();
-        }
-    });
-},
-comparePrice: function() {
-    var vp = parseInt(this.variant.find('.book .sum').attr('data-value'), 10);
-    var bp = parseInt(this.el.find('.booking-price .sum').attr('data-value'), 10);
-    if (bp != vp) {
-        var source = this.el.find('.booking-price');
-        this.variant.closest('.offer').find('.offer-variant').each(function() {
-            $(this).find('.book .sum').replaceWith(source.find('.sum').clone());
-            $(this).find('.cost dl').replaceWith(source.find('.cost dl').clone());
-        });
-        var block = $('<div class="diff-price"></div>');
-        var template = '<h5>Цена этого варианта изменилась: стало <strong>{type} на {value}</strong> (<span class="link">почему?</span>)</h5>';
-        block.append(template.supplant({
-            type: bp > vp ? 'дороже' : 'дешевле',
-            value: Math.abs(bp - vp).inflect('рубль', 'рубля',  'рублей')
-        })).append('<p><a class="a-button continue" href="#">Продолжить бронировать</a> или <a class="cancel" href="#">выбрать другой вариант</span></p>');
-        var self = this;
-        block.find('.link').click(function(event) {
-            hint.show(event, 'Так иногда бывает, потому что авиакомпания изменяет цену на&nbsp;этот тариф. Цена может меняться как в&nbsp;большую, так и&nbsp;в&nbsp;меньшую сторону. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.');
-        });
-        block.find('.cancel').click(function(event) {
-            event.preventDefault();
-            $(this).closest('.diff-price').remove();
-            self.hide();
-        });
-        block.find('.continue').click(function(event) {
-            event.preventDefault();
-            $(this).closest('.diff-price').remove();
-            self.el.removeClass('g-none');
-            self.fasten(self.offer);
-            self.init();
-        });
-        this.el.before(block);
-        return false;
-    } else {
-        this.el.removeClass('g-none');
-        return true;
-    }
-},
-fasten: function(offer) {
-    if (browser.scanty) return;
-    var wrapper = $('#wrapper');
-    var ot = offer.offset().top, ob = wrapper.height() - ot - offer.height();
-    var cst = $(window).scrollTop();
-    wrapper.addClass('cropped');
-    $('#results-header').addClass('fixed');
-    $('#header').hide();
-    var mt = results.title.outerHeight() + 50, mb = 40;
-    $('#canvas').css({
-        'margin-top': mt - ot - ob + mb,
-        'top': ob - mb
-    });
-    this.dst = ot - mt;
-    fixedBlocks.disabled = true;
-    search.history.toggle(false);
-    $(window).scrollTop(cst - this.dst);
-},
-unfasten: function() {
-    var wrapper = $('#wrapper');
-    if (!browser.scanty && wrapper.hasClass('cropped')) {
-        $('#header').show();
-        $('#canvas').css({
-            'margin-top': 0,
-            'top': 0
-        });
-        wrapper.removeClass('cropped');
-        $(window).scrollTop($(window).scrollTop() + this.dst);
-        fixedBlocks.disabled = false;
-        fixedBlocks.toggle(true);
-        search.history.toggle(search.history.active);
-    }
-    this.dstop = 0;
-}
-};
-
-booking.form.validate = function(full) {
+validate: function(full) {
     clearTimeout(this.vtimer);
     var errors = [];
     for (var s = 0, sm = this.sections.length; s < sm; s++) {
@@ -594,7 +326,7 @@ booking.form.validate = function(full) {
         }
         section.el.toggleClass('ready', valid);
     }
-    this.booking.toggleClass('a-button-ready', errors.length === 0);
+    this.button.toggleClass('a-button-ready', errors.length === 0);
     if (errors.length) {
         this.el.find('.be-list').html('<li>' + errors.slice(0, 3).join('</li><li>') + '</li>');
         this.el.find('.booking-errors').show();
@@ -602,8 +334,10 @@ booking.form.validate = function(full) {
         this.el.find('.booking-errors').hide();
         this.el.find('.be-list').html('');
     }
+}
 };
 
+/* Person fields */
 booking.form.initPerson = function(el) {
     var fname = validator.name(el.find('input[id$="first_name"]'), {
         empty: 'Не указано {имя пассажира}',
@@ -710,6 +444,7 @@ booking.form.initPerson = function(el) {
     });
 };
 
+/* Card fields */
 booking.form.initCard = function(el) {
     var cardnumber = validator.cardnumber(el.find('.bcn-fields input'), {
         empty: 'Не указан {номер банковской карты}',
@@ -737,11 +472,11 @@ booking.form.initCard = function(el) {
         '6': 'mastercard'
     };
     var visa = el.find('.bc-visa').click(function() {
-        toggleType('visa');
+        toggleCardType('visa');
         cardnumber.el.first().focus();
     });
     var mastercard = el.find('.bc-master').click(function() {
-        toggleType('mastercard');
+        toggleCardType('mastercard');
         cardnumber.el.first().focus();
     });
     cardnumber.el.first().bind('keyup propertychange input', function() {
@@ -767,7 +502,8 @@ booking.form.initCard = function(el) {
     }) - 1];
 };
 
-app.booking.initCash = function(el) {
+/* Cash fields */
+booking.form.initCash = function(el) {
     var address = validator.text($('#bc-address'), {
         empty: 'Не указан {адрес доставки}'
     });
@@ -791,6 +527,7 @@ app.booking.initCash = function(el) {
     }) - 1];
 };
 
+/* Contacts fields */
 booking.form.initContacts = function(el) {
     var email = validator.email(el.find('input[id$=email]'), {
         empty: 'Не указан {адрес электронной почты}',
@@ -808,7 +545,7 @@ booking.form.initContacts = function(el) {
 };
 
 /* Farerules */
-app.booking.farerules = {
+booking.farerules = {
 init: function(context) {
     var that = this;
     this.selfhide = function(event) {

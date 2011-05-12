@@ -416,6 +416,6 @@ check: function() {
     return v.length ? undefined : 'empty';
 },
 onchange: function() {
-    app.booking.validate();
+    booking.form.validate();
 }
 };

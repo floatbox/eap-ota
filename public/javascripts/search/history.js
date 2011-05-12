@@ -66,6 +66,10 @@ remove: function(key) {
     this.items = $.grep(this.items, function(item) {
         return item.key !== key;
     });
+    if (this.items.length === 0) {
+        this.active = false;
+        this.el.hide();
+    }
     this.save();
 },
 save: function() {
