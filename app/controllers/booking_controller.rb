@@ -87,8 +87,6 @@ class BookingController < ApplicationController
     # FIXME сделать более внятное и понятное пользователю поведение
     if @order && pa_res && md && (@order.payment_status == 'not blocked' || @order.payment_status == 'new') && @order.confirm_3ds(pa_res, md)
       @order.money_blocked!
-      @pnr_number = @order.pnr_number
-      @pnr_path = show_order_path(@order.pnr_number) if @order.pnr_number.present?
       # FIXME не выносить в кронтаск. но, может быть, внести обратно в .ticket!
       if @order.source == 'sirena'
         Sirena::Adapter.approve_payment(@order)
@@ -96,8 +94,6 @@ class BookingController < ApplicationController
         logger.info "Pay: ticketing sirena"
       end
     elsif ['blocked', 'charged'].include? @order.payment_status
-      @pnr_number = @order.pnr_number
-      @pnr_path = show_order_path(@order.pnr_number)
     else
       logger.info "Pay: payment and booking successful"
       @error_message = 'Не удалось оплатить билет'

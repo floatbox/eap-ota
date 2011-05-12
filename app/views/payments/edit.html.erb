@@ -3,7 +3,7 @@
 <head>
     <%= render 'shared/head_common', {:title => @order.description} %>
     <%= stylesheet_link_tag "static", "atoms/button", "atoms/pseudo", "controls/hint", "booking/booking", "booking/sections" %>
-    <%= javascript_include_tag "static", "main", "payment", "booking/validation", "hint" %>
+    <%= javascript_include_tag "static", "main", "booking/form", "booking/validation", "payment", "controls/hint" %>
 </head>
 <body>
 <%= render 'shared/header' %>
@@ -14,7 +14,7 @@
     </div>
     <div class="payment">
 
-<div class="booking">
+<div class="booking-form">
 <%= form_for @card, :as => :card, :url => edit_payment_url(:code=> @order.code), :html => { :autocomplete => "off" } do |f| %>
     <h3><%= @order.description %></h3>
     <div class="section booking-card">
@@ -32,7 +32,7 @@
         <table>
         <tr>
             <td class="bs-left">Всё правильно?</td>
-            <td class="bs-button"><input type="submit" class="a-button" value="Оплатить"></th>
+            <td class="bs-button"><input type="submit" class="a-button" value="Оплатить" data-text="Оплатить"></th>
             <td class="bs-right">
                 <div class="loading"><br></div>
             </td>
@@ -58,7 +58,7 @@
     <div class="content"></div>
 </div>
 <script type="text/javascript">
-app.booking.init();
+booking.form.init();
 hint.init();
 </script>
 </body>

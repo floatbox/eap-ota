@@ -19,22 +19,22 @@
         <p class="tip"><strong>Это могло произойти по одной из нескольких причин:</strong> вы неверно ввели данные карты, либо на счете карты нет достаточной суммы, либо банк запретил для вашей карты транзакции в интернете или установил лимит на такие транзакции.</p>
         <p class="tip"><strong>Что можно сделать:</strong> еще раз проверить, правильно ли введены данные, использовать другую карту или связаться с банком, выдавшим карту.</p>
         <p class="tip">Если это невозможно, узнайте <a target="_blank" href="/about/#payment">какими ещё способами</a> можно купить у нас билет. Если вы абсолютно уверены, что отказ произошел не по вышеуказнным причинам и это у нас что-то не работает, свяжитесь с нами по электронной почте <a href="mailto:support@eviterra.com">support@eviterra.com</a>.</p>
-    <% else %>
-        <p class="success"><strong>Всё отлично!</strong> Ваш билет оплачен, забронирован и выслан на&nbsp;ваш электронный адрес.<% if @pnr_number %> Номер брони&nbsp;— <%= @pnr_number %>. Если хотите, можете <a target="_blank" href="<%= @pnr_path %>">распечатать</a> ваш билет.<% end %></p>
+    <% elsif @order.pnr_number.present? %>
+        <p class="success"><strong>Всё отлично!</strong> Ваш билет оплачен, забронирован и выслан на&nbsp;ваш электронный адрес.<% if @pnr_number %> Номер брони&nbsp;— <%= @order.pnr_number %>. Если хотите, можете <a target="_blank" href="<%= show_order_path(@order.pnr_number) %>">распечатать</a> ваш билет.</p>
         <p class="tip"><span class="link" onclick="hint.show(event, $(this).parent().next('.htext').html());">Что делать, если на почту ничего не пришло?</span></p>
         <p class="htext latent">Если вы&nbsp;не&nbsp;получили письмо с&nbsp;электронным билетом в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, то&nbsp;напишите нам (<a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a>) или позвоните <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p>
-        <% if @pnr_number %>
         <script type="text/javascript">
         if (window._gaq) {
             _gaq.push(['_trackPageview', '/#3ds:success']);
-            _gaq.push(['_addTrans', '<%= @pnr_number %>', '', '<%= @order.price_with_payment_commission.round.to_i %>']);
+            _gaq.push(['_addTrans', '<%= @order.pnr_number %>', '', '<%= @order.price_with_payment_commission.round.to_i %>']);
             _gaq.push(['_trackTrans']);
         }
         if (window.yaCounter5324671) {
             yaCounter5324671.hit('/#3ds:success');
         }
         </script>
-        <% end %>
+    <% else %>
+        <p class="success"><strong>Всё отлично!</strong> Ваша оплата принята.</p>
     <% end %>
 
     </div>

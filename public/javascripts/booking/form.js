@@ -3,6 +3,7 @@ var booking = {
 init: function() {
     var that = this;
     this.el = $('#booking');
+    this.header = this.el.find('.booking-header');
     this.el.delegate('.stop-booking', 'click', function() {
         that.hide();
     });
@@ -12,7 +13,7 @@ show: function() {
     $('#header, #wrapper, #footer').hide();
     this.el.removeClass('latent');
     this.el.find('.bh-title').html(results.title.html());
-    this.el.find('.bh-placeholder').height(this.el.find('.booking-header').height());
+    this.el.find('.bh-placeholder').height(this.header.height());
     fixedBlocks.disabled = true;
     $(window).scrollTop(offset ? (this.el.find('.booking-frame').offset().top - offset) : 0);
     pageurl.update('booking', this.key);
@@ -150,7 +151,7 @@ init: function(context) {
     // Список неправильно заполненных полей
     this.el.find('.be-list').delegate('.link', 'click', function() {
         var control = $('#' + $(this).attr('data-field'));
-        var st = control.closest(':visible').offset().top - results.header.height() - 35;
+        var st = control.closest(':visible').offset().top - booking.header.height() - 35;
         $.animateScrollTop(Math.min(st, $(window).scrollTop()), function() {
             control.focus();
         });
@@ -167,7 +168,7 @@ init: function(context) {
     this.button = this.submit.find('.a-button');
 
     // Отправка формы
-    this.el.find('form').submit(function(event) {
+    this.el.children('form').submit(function(event) {
         event.preventDefault();
         if (that.button.hasClass('a-button-ready')) {
             that.send($(this).attr('action'), $(this).serialize());
@@ -243,12 +244,12 @@ send: function(url, data) {
             } else {
                 that.error(result && result.exception && result.exception.message);
             }
-            that.button.attr('value', that.button.attr('data-text')).addClass('a-button-ready');
+            that.button.addClass('a-button-ready').attr('value', that.button.attr('data-text'));
             that.submit.removeClass('sending');
         },
         error: function() {
             that.error();
-            that.button.attr('value', that.button.attr('data-text')).addClass('a-button-ready');
+            that.button.addClass('a-button-ready').attr('value', that.button.attr('data-text'));
             that.submit.removeClass('sending');
         },
         timeout: 90000
