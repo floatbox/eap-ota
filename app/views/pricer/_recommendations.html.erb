@@ -41,11 +41,7 @@
         <%= render :partial => 'variant', :locals => {:variant => variant, :recommendation => recommendation, :variant_cabins => different_cabins, :variant_summary => nil} %>
     <% end %>
     <div class="aux">
-      <% if admin_user %>
-        <span style="color:green">
-            <%= recommendation.source %>
-        </span>
-      <% end %>
+      <% # для меток %>
     </div>
 </div>
 <% end %>

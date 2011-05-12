@@ -14,6 +14,7 @@ class BookingController < ApplicationController
       render :json => {:success => false}
       return
     end
+    logger.info "Recommendation: blank_count #{recommendation.blank_count}"
     order_data = OrderData.new(
       :recommendation => recommendation,
       :people_count => @search.real_people_count,

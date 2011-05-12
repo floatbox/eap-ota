@@ -194,6 +194,7 @@ module PricerHelper
     else
       concat %(Нет в договорe)
     end
+    concat " #{recommendation.blank_count} бл." if recommendation.blank_count && recommendation.blank_count > 1
     concat '(' + recommendation.booking_classes.join(',') + ')'
   end
 

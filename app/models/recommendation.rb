@@ -21,6 +21,10 @@ class Recommendation
     :city_iatas, :airport_iatas, :country_iatas, :route,
       :to => 'variants.first'
 
+  def blank_count
+    sirena_blank_count
+  end
+
   def availability
     availabilities.compact.min.to_i if availabilities
   end
@@ -262,6 +266,7 @@ class Recommendation
       i = v.flights.index flight
       return booking_classes[i] if i
     end
+    return
   end
 
   def cabin_for_flight flight
@@ -269,6 +274,7 @@ class Recommendation
       i = v.flights.index flight
       return cabins[i] if i
     end
+    return
   end
 
   def check_price_and_availability(pricer_form)
