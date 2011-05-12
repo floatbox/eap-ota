@@ -1,4 +1,6 @@
 # put local overrides in config/local.yml or config/local/*.yml
+api:
+  enabled: yes
 amadeus:
   endpoint: "https://test.webservices.amadeus.com"
   enabled: yes
