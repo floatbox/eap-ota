@@ -124,6 +124,9 @@
     <td class="rules" colspan="3">
       <% if admin_user  %>
         <% variant_debug_info recommendation, variant %>
+        <span style="color:green">
+           <%= recommendation.source %>
+        </span>
       <% end %>
     </td>
 </tr>

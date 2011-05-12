@@ -21,6 +21,10 @@ class Recommendation
     :city_iatas, :airport_iatas, :country_iatas, :route,
       :to => 'variants.first'
 
+  def blank_count
+    sirena_blank_count
+  end
+
   def availability
     availabilities.compact.min.to_i if availabilities
   end
