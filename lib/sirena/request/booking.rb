@@ -59,16 +59,15 @@ module Sirena
       end
 
       def init_segments(recommendation)
-        @segments = recommendation.flights.collect{|flight|
-          i ||= -1
+        @segments = recommendation.flights.collect do |flight|
           { :departure => flight.departure_iata,
-            :arrival=> flight.arrival_iata,
-            :company=> flight.operating_carrier_iata,
-            :num=>flight.flight_number,
+            :arrival => flight.arrival_iata,
+            :company => flight.operating_carrier_iata,
+            :num => flight.flight_number,
             :date => sirena_date(flight.departure_date),
-            :subclass => recommendation.booking_classes[i+=1]
+            :subclass => recommendation.booking_class_for_flight(flight)
           }
-        }
+        end
       end
 
       def fake_adults(count)

@@ -266,6 +266,7 @@ class Recommendation
       i = v.flights.index flight
       return booking_classes[i] if i
     end
+    return
   end
 
   def cabin_for_flight flight
@@ -273,6 +274,7 @@ class Recommendation
       i = v.flights.index flight
       return cabins[i] if i
     end
+    return
   end
 
   def check_price_and_availability(pricer_form)
