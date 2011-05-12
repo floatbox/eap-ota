@@ -14,7 +14,7 @@ class BookingController < ApplicationController
       render :json => {:success => false}
       return
     end
-    logger.info "Recommendation: blank_count #{recommendation.blank_count}"
+    logger.info "Recommendation: blank_count #{recommendation.blank_count} consolidator_markup #{recommendation.price_consolidator_markup}"
     order_data = OrderData.new(
       :recommendation => recommendation,
       :people_count => @search.real_people_count,
@@ -27,6 +27,7 @@ class BookingController < ApplicationController
 
   def index
     @order = OrderData.load_from_cache(params[:number])
+    logger.info "Recommendation: blank_count #{@order.recommendation.blank_count} consolidator_markup #{@order.recommendation.price_consolidator_markup}"
     @order.init_people
     render :partial => 'embedded'
   end
@@ -35,6 +36,7 @@ class BookingController < ApplicationController
     @order = OrderData.load_from_cache(params[:order][:number])
     @order.people_attributes = params[:person_attributes]
     @order.set_flight_date_for_childen_and_infants
+    logger.info "Recommendation: blank_count #{@order.recommendation.blank_count} consolidator_markup #{@order.recommendation.price_consolidator_markup}"
     @order.update_attributes(params[:order])
     @order.card = CreditCard.new(params[:card]) if @order.payment_type == 'card'
     if @order.valid?

@@ -21,8 +21,10 @@ class Recommendation
     :city_iatas, :airport_iatas, :country_iatas, :route,
       :to => 'variants.first'
 
+  # TODO амадеус как-то репортит количество бланков?
+  # FIXME посчитать и для амадеуса, хотя бы по количеству мест, чтоб правильно считать price_share
   def blank_count
-    sirena_blank_count
+    source == 'sirena' ? sirena_blank_count : 1
   end
 
   def availability
@@ -116,7 +118,7 @@ class Recommendation
 
   def price_consolidator_markup
     return 0 unless commission
-    commission.consolidator_markup(price_fare)
+    commission.consolidator_markup(price_fare, blank_count)
   end
 
   # надбавка к цене амадеуса
@@ -310,6 +312,8 @@ class Recommendation
       if rec
         self.price_fare = rec.price_fare
         self.price_tax = rec.price_tax
+        # обновим количество бланков, на всякий случай
+        self.sirena_blank_count = rec.sirena_blank_count
         rec
       end
     end
