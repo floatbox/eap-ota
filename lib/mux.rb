@@ -102,7 +102,7 @@ class Mux
         message << "  " << backtrace.join("\n  ")
         Rails.logger.error("#{message}\n  ...reported and continued\n")
       end
-      HoptoadNotifier.notify(exception)
+      HoptoadNotifier.notify(exception) rescue Rails.logger.error("  can't notify hoptoad #{$!.class}: #{$!.message}")
     end
 
   end
