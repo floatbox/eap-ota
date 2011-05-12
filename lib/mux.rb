@@ -84,12 +84,13 @@ class Mux
     end
 
     def sirena_searchable?(form)
-      !Conf.sirena.restrict ||
       # временно выключаем для яндексов
-      form.partner.present? ||
-      # form.adults == 1 &&
-      form.children == 0 && form.infants == 0 &&
-      form.form_segments.none?(&:multicity?)
+      form.partner.blank? && (
+        !Conf.sirena.restrict ||
+        # form.adults == 1 &&
+        form.children == 0 && form.infants == 0 &&
+        form.form_segments.none?(&:multicity?)
+      )
     end
 
     # report error and continue
