@@ -130,7 +130,7 @@ module PricerHelper
   end
 
   def segment_flight_numbers segment
-    segment.flights.map{|f| "#{f.marketing_carrier_iata}#{f.flight_number}" }.join('-')
+    segment.flights.map{|f| "#{f.marketing_carrier.iata}#{f.flight_number}" }.join('-')
   end
 
   # FIXME отrubyить его посимпатишнее

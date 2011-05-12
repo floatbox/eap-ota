@@ -256,8 +256,8 @@ updateSegments: function() {
         var sil = segment.el.find('.ods-improper');
         var bars = segment.bars, order = segment.order;
         var iamount = 0;
-        for (var i = 0, im = order.length; i < im; i++) {
-            var bar = bars[order[i].n];
+        for (var i = 0, im = bars.length; i < im; i++) {
+            var bar = bars[i];
             if (pf[bar.flights]) {
                 bar.el.appendTo(spl);
             } else {
