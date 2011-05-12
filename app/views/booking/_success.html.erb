@@ -6,7 +6,7 @@
     <p class="success" style="margin-top: 10px;">Обратите внимание, что в&nbsp;случае несвоевременной оплаты бронирование будет аннулировано.</p>
 <% end %>
     <div class="tip">
-        <a class="stop-booking" href="#">Вернуться к выбору вариантов</a>
+        <span class="link stop-booking">Вернуться к выбору вариантов</span>
         <span class="link hint">Что делать, если на почту ничего не пришло?</span>
         <p class="htext latent">Если вы&nbsp;не&nbsp;получили письмо с&nbsp;<% @order.payment_type == 'card' ? 'электронным билетом' : 'подтверждением бронирования' %> в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, то&nbsp;напишите нам (<a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a>) или позвоните <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p>
     </div>
