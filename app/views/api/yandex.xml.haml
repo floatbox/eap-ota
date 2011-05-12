@@ -4,7 +4,8 @@
   - @recommendations.each do |recommendation|
     - recommendation.variants.each do |variant|
       %variant
-        %price= recommendation.price_with_payment_commission
+        -# округляем цену. может быть, временно
+        %price= recommendation.price_with_payment_commission.round
         %url= yandex_url(@search)
         %validatingCarrier= recommendation.validating_carrier_iata
         - variant.segments.each do |segment|
