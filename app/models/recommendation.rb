@@ -77,7 +77,7 @@ class Recommendation
     end
   end
 
-  attr_accessor :price_fare, :price_tax, :price_our_markup, :price_consolidator_markup
+  attr_accessor :price_fare, :price_tax, :price_our_markup
 
   # сумма, которая придет нам от платежного шлюза
   def price_total
@@ -106,36 +106,29 @@ class Recommendation
 
   # доля от комиссии консолидатора, которая достанется нам
   def price_share
-    if commission
-      commission.share(price_fare)
-    else
-      0
-    end
+    return 0 unless commission
+    commission.share(price_fare)
+  end
+
+  def price_consolidator_markup
+    return 0 unless commission
+    commission.consolidator_markup(price_fare)
   end
 
   # надбавка к цене амадеуса
   def price_markup
-    ajust_markup! if @price_our_markup.nil? || @price_consolidator_markup.nil?
+    ajust_markup! if @price_our_markup.nil?
     price_our_markup + price_consolidator_markup
   end
 
   def ajust_markup!
     @price_our_markup = 0
-    if price_share <= 5
-      if %W( LH LX KL AF OS ).include? validating_carrier_iata
-        @price_consolidator_markup = (price_fare * 0.01)
-      else
-        @price_consolidator_markup = (price_fare * 0.02)
-      end
-    else
-      @price_consolidator_markup = 0
-    end
   end
 
   def commission
     @commission ||=
       if source == 'sirena'
-        Commission.new(:agent => '0', :subagent => '0', :agent_comments => '', :subagent_comments => '')
+        Sirena::Commission.find_for(self)
       else
         Commission.find_for(self)
       end
@@ -503,7 +496,7 @@ class Recommendation
           when 'FIRST'
             cabin = 'F'
           else
-            raise ArgumentError, 'should consist of itinerary (MOWLON), carrier(AB), cabin subclass (Y) or class (economy). example "mowaer/s7 aermow/y'
+            raise ArgumentError, 'should consist of itinerary (SVOCDG), carrier(AB), cabin subclass (Y) or class (economy). example "mowaer/s7 aermow/y'
           end
         end
       end

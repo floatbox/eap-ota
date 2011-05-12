@@ -20,7 +20,7 @@ class Order < ActiveRecord::Base
   }
 
   def tickets_count
-    ticket_numbers_as_text.split(/[, ]/).delete_if(&:blank?).size
+    ticket_numbers_as_text.to_s.split(/[, ]/).delete_if(&:blank?).size
   end
 
   def order_id
@@ -139,15 +139,17 @@ class Order < ActiveRecord::Base
   end
 
   def update_prices_from_tickets
-    self.price_fare = tickets.sum(:price_fare)
-    self.price_consolidator_markup = tickets.sum(:price_consolidator_markup)
-    self.price_share = tickets.sum(:price_share)
+    if source == 'amadeus'
+      self.price_fare = tickets.sum(:price_fare)
+      self.price_consolidator_markup = tickets.sum(:price_consolidator_markup)
+      self.price_share = tickets.sum(:price_share)
 
-    price_total_new = tickets.sum(:price_tax) + price_fare + price_consolidator_markup + price_our_markup
-    self.price_tax_and_markup = price_total_new - price_fare
-    self.price_difference = price_total_new - price_total if price_difference == 0
-    self.price_total = price_total_new
-    save
+      price_total_new = tickets.sum(:price_tax) + price_fare + price_consolidator_markup + price_our_markup
+      self.price_tax_and_markup = price_total_new - price_fare
+      self.price_difference = price_total_new - price_total if price_difference == 0
+      self.price_total = price_total_new
+      save
+    end
   end
 
   def payture_state
@@ -156,6 +158,10 @@ class Order < ActiveRecord::Base
 
   def charge_date
     (payments.last && payments.last.charged_at) ? payments.last.charged_at.to_date : nil
+  end
+
+  def created_date
+    created_at.to_date
   end
 
   def charge_time

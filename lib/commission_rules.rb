@@ -89,12 +89,25 @@ module CommissionRules
     routes.include? recommendation.route
   end
 
-  def share(fare)
+  def share(fare, tickets=1)
     # FIXME сделать поддержу EUR
     if subagent['%']
       fround(fare * subagent.to_f / 100)
     else
       fround(subagent.to_f)
+    end
+  end
+
+  def consolidator_markup(fare, tickets=1)
+    if share(fare) <= 5
+      # особые условия для этих компаний.
+      if %W( LH LX KL AF OS ).include? carrier
+        fare * 0.01
+      else
+        fare * 0.02
+      end
+    else
+      0
     end
   end
 

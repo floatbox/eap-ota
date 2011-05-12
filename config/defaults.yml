@@ -38,6 +38,7 @@ cbr:
     2011-01-02: 30.0001
 sirena:
   enabled: no
+  restrict: no
   fake: no
   host: localhost
   port: 8888

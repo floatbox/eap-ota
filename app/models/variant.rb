@@ -12,8 +12,8 @@ class Variant
   def summary
     # FIXME carriers для фильтров - operating carrier. ok?
     result = {
-      :carriers => flights.every.operating_carrier_iata.uniq,
-      :planes => flights.every.equipment_type_iata.uniq,
+      :carriers => flights.every.operating_carrier.uniq.every.iata,
+      :planes => flights.every.equipment_type.uniq.every.iata,
       :departures => segments.every.departure_time,
       :duration => segments.sum(&:total_duration),
       :cities => segments.map{|s| s.flights[1..-1].map{|f| f.departure.city.iata}}.flatten.uniq,
@@ -34,8 +34,8 @@ class Variant
       result['arv_city_' + i.to_s] = segment.arrival.city.iata
       result['dpt_time_' + i.to_s] = segment.departure_day_part
       result['arv_time_' + i.to_s] = segment.arrival_day_part
-      result['dpt_airport_' + i.to_s] = segment.departure_iata
-      result['arv_airport_' + i.to_s] = segment.arrival_iata
+      result['dpt_airport_' + i.to_s] = segment.departure.iata
+      result['arv_airport_' + i.to_s] = segment.arrival.iata
     end
     result
   end

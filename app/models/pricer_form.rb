@@ -56,6 +56,10 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       [Country, Region].include? to_as_object.class
     end
 
+    def multicity?
+      from_country_or_region? || to_country_or_region?
+    end
+
     def date_as_date
       Date.strptime(date, '%d%m%y')
     end

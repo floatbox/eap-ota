@@ -39,6 +39,11 @@ module Sirena
         self.class.name.gsub(/^.*::/,'')
       end
 
+      # сделать оверрайд где это нужно
+      def encrypt?
+        false
+      end
+
       # helpers
 
       # TODO на наших датах всегда работает?
