@@ -1,5 +1,5 @@
 <div id="term">Терминал: <pre><%= @item.raw %></pre></div>
-<% if @item.payment_type == 'card' || @item.payment_type == '' %>
+<% if @item.payment_type == 'card' || @item.payment_type == '' || !@item.payment_type %>
 <div id="payture">Платежная система: <%= @item.payture_state %> <%= @item.payture_amount %></div>
 <% end %>
 <% if @item.code && @item.payment_status == 'new' %>

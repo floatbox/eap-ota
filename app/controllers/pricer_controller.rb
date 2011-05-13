@@ -17,7 +17,7 @@ class PricerController < ApplicationController
   end
 
   def hot_offers
-    render :json => HotOffer.find(:all, :conditions => ["code != ? AND for_stats_only = ? AND price_variation < 0", params[:query_key].to_s, false], :limit => 20, :order => 'created_at DESC', :group => 'destination_id')
+    render :json => HotOffer.find(:all, :conditions => ["code != ? AND for_stats_only = ? AND price_variation < 0", params[:query_key].to_s, false], :limit => 30, :order => 'created_at DESC').group_by(&:destination_id).values.every.first
   end
 
   def calendar
