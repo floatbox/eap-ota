@@ -39,7 +39,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
     if payment_type == 'card'
       (Time.now.hour < 17 ? Date.today + 1.day : Date.today + 2.days)
     else
-      (last_pay_time + 1.day).to_date
+      last_pay_time.to_date
     end
   end
 
