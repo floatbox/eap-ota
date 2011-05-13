@@ -257,17 +257,18 @@ send: function(url, data) {
     this.button.removeClass('a-button-ready').attr('value', 'Секундочку…');
     this.submit.addClass('sending');
 },
-process: function(result) {
-    switch (this.el.find('.result').attr('data-type')) {
+process: function() {
+    var result = this.el.find('.result');
+    switch (result.attr('data-type')) {
     case 'success':
         this.submit.addClass('latent');
         if (window._gaq) {
-            _gaq.push(['_trackPageview', '/#' + pageurl.summary + ':success']);
+            _gaq.push(['_trackPageview', '/#' + pageurl.summary + '/success']);
             _gaq.push(['_addTrans', result.find('.pnr').text(), '', this.el.find('.booking-price .sum').attr('data-value')]);
             _gaq.push(['_trackTrans']);
         }
         if (window.yaCounter5324671) {
-            yaCounter5324671.hit('/#' + pageurl.summary + ':success');
+            yaCounter5324671.hit('/#' + pageurl.summary + '/success');
         }
         break;
     case '3dsecure':

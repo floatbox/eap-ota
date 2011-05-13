@@ -12,7 +12,7 @@ init: function(options) {
         if (self.options.preserve) {
             self.show();
         } else {
-            delete(self.selected[el.attr('data-value')]);
+            delete self.selected[el.attr('data-value')];
             el.fadeTo(200, 0.5, function() {
                 self.update();
             });
@@ -55,7 +55,7 @@ click: function(el) {
     } else {
         var value = el.attr('data-value');
         if (this.selected[value]) {
-            delete(this.selected[value]);
+            delete this.selected[value];
         } else {
             if (this.options.radio) this.selected = {};
             this.selected[value] = true;

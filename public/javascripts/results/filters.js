@@ -12,7 +12,7 @@ init: function() {
             if (values && values.length) {
                 that.selected[name] = values;
             } else {
-                delete(that.selected[name]);
+                delete that.selected[name];
             }            
             if (that.active) {
                 results.applyFilters();

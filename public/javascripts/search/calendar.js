@@ -151,7 +151,7 @@ initDates: function() {
                 if (self.dragging.marked) {
                     self.dragging.marked.removeClass('drag');
                 }
-                delete(self.dragging);
+                delete self.dragging;
                 self.update();
             }).bind('selectstart', function() {
                 return false;
@@ -315,7 +315,7 @@ highlight: function(items, index) {
         }
         this.highlighted = items.length && this.dates.slice(items[0], items[items.length - 1] + 1).addClass("phover");
     } else {
-        delete(this.highlighted);
+        delete this.highlighted;
     }
 },
 toggleMode: function(mode) {

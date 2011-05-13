@@ -331,19 +331,9 @@ validate: function(qkey) {
                 self.calendar.scroller.scrollToSelected();
                 if (result.fragment_exist) {
                     results.nextUpdate.params.restore_results = true;
-                    results.load();
-                    results.show();
-                } else {
-                    this.timer = setTimeout(function() {
-                        self.preventValidation = false;
-                        self.onValid = function() {
-                            results.load();
-                            results.show();
-                            delete(self.onValid);
-                        };
-                        self.validate();
-                    }, 200);
                 }
+                results.load();
+                results.show();
             } else {
                 self.toggle(true);
                 if (typeof self.onValid === 'function') {
@@ -351,7 +341,7 @@ validate: function(qkey) {
                 }
             }
         } else {
-            delete(results.nextUpdate);
+            delete results.nextUpdate;
             if (result.errors) {
                 for (var i = 0, im = result.errors.length; i < im; i++) {
                     var text, error = result.errors[i][0];
@@ -386,7 +376,7 @@ validate: function(qkey) {
         if (result.search && result.search.form_segments) {
             self.applySegments(result.search.form_segments);
         }
-        delete(self.request);
+        delete self.request;
     });
 },
 applySegments: function(segments) {

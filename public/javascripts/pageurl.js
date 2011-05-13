@@ -47,14 +47,14 @@ update: function(key, value) {
     var current = this[key];
     if (current != value) {
         this[key] = value;
-        if (key == 'search') delete(this.booking);
-        if (key == 'booking') delete(this.payment);        
+        if (key == 'search') delete this.booking;
+        if (key == 'booking') delete this.payment;
         this.show();
     }
 },
 reset: function() {
-    delete(this.search);
-    delete(this.booking);
+    delete this.search;
+    delete this.booking;
     this.show();
 },
 show: function() {
@@ -67,10 +67,10 @@ show: function() {
         var url = parts.join('/');
         window.location.hash = url;
         if (window._gaq) {
-            _gaq.push(['_trackPageview', '/#' + parts.join(':')]);
+            _gaq.push(['_trackPageview', '/#' + url]);
         }
         if (window.yaCounter5324671) {
-            yaCounter5324671.hit('/#' + parts.join(':'));
+            yaCounter5324671.hit('/#' + url);
         }
         this.summary = url;
     } else {

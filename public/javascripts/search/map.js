@@ -17,7 +17,7 @@ init: function() {
         this.lines = [];
         if (this.deferred) {
             this.show(this.deferred);
-            delete(this.deferred);
+            delete this.deferred;
         }
         this.active = true;
     }
