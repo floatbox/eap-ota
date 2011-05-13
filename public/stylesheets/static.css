@@ -197,7 +197,7 @@
     line-height: 19px;
     color: #333;
 }
-.payment .booking {
+.payment .booking-form {
     width: 675px;
     -moz-border-radius: 10px;
     border-radius: 10px;
@@ -211,12 +211,14 @@
     -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
-.payment .booking h3 {
+.payment .booking-form h3 {
+    margin-top: 0;
+    padding-top: 14px;
     margin-bottom: 12px;
 }
-.payment .booking .result {
+.payment .booking-form .result {
     padding-bottom: 0;
 }
-.payment .booking .tds-submit a.stop-booking {
+.payment .booking-form .tds-submit a.stop-booking {
     display: none;
 }

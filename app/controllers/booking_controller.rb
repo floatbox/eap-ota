@@ -14,6 +14,7 @@ class BookingController < ApplicationController
       render :json => {:success => false}
       return
     end
+    logger.info "Recommendation: blank_count #{recommendation.blank_count} consolidator_markup #{recommendation.price_consolidator_markup}"
     order_data = OrderData.new(
       :recommendation => recommendation,
       :people_count => @search.real_people_count,
@@ -26,6 +27,7 @@ class BookingController < ApplicationController
 
   def index
     @order = OrderData.load_from_cache(params[:number])
+    logger.info "Recommendation: blank_count #{@order.recommendation.blank_count} consolidator_markup #{@order.recommendation.price_consolidator_markup}"
     @order.init_people
     render :partial => 'embedded'
   end
@@ -34,6 +36,7 @@ class BookingController < ApplicationController
     @order = OrderData.load_from_cache(params[:order][:number])
     @order.people_attributes = params[:person_attributes]
     @order.set_flight_date_for_childen_and_infants
+    logger.info "Recommendation: blank_count #{@order.recommendation.blank_count} consolidator_markup #{@order.recommendation.price_consolidator_markup}"
     @order.update_attributes(params[:order])
     @order.card = CreditCard.new(params[:card]) if @order.payment_type == 'card'
     if @order.valid?
@@ -87,8 +90,6 @@ class BookingController < ApplicationController
     # FIXME сделать более внятное и понятное пользователю поведение
     if @order && pa_res && md && (@order.payment_status == 'not blocked' || @order.payment_status == 'new') && @order.confirm_3ds(pa_res, md)
       @order.money_blocked!
-      @pnr_number = @order.pnr_number
-      @pnr_path = show_order_path(@order.pnr_number) if @order.pnr_number.present?
       # FIXME не выносить в кронтаск. но, может быть, внести обратно в .ticket!
       if @order.source == 'sirena'
         Sirena::Adapter.approve_payment(@order)
@@ -96,8 +97,6 @@ class BookingController < ApplicationController
         logger.info "Pay: ticketing sirena"
       end
     elsif ['blocked', 'charged'].include? @order.payment_status
-      @pnr_number = @order.pnr_number
-      @pnr_path = show_order_path(@order.pnr_number)
     else
       logger.info "Pay: payment and booking successful"
       @error_message = 'Не удалось оплатить билет'

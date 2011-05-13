@@ -11,7 +11,7 @@ init: function() {
     this.loading = $('#results-loading');
     this.update = {};
 
-    // счётчик секунд на панели ожидания
+    // Счётчик секунд
     this.stopwatch = this.loading.find('.timer');
     var swtimer, swstart, swupdate = function() {
         var current = new Date();
@@ -49,19 +49,24 @@ init: function() {
         var variant = $(this).closest('.offer-variant');
         var offer = variant.closest('.offer');
         if (offer.hasClass('collapsed')) {
-            offer.height(offer.height()).removeClass('collapsed').animate({
-                height: variant.height()
-            }, 400, function() {
+            var ch = offer.height();
+            offer.height(ch).removeClass('collapsed');
+            var nh = variant.height();
+            offer.animate({
+                height: nh
+            }, 100 + Math.round((nh - ch) / 2), function() {
                 offer.height('auto').addClass('expanded hover');
             });
         }
     });
     offers.delegate('.collapse', 'click', function(event) {
         var variant = $(this).closest('.offer-variant');
-        var offer = variant.closest('.offer'), oh = offer.height();
-        offer.height(oh).animate({
-            height: oh - variant.find('.details').height()
-        }, 400, function() {
+        var offer = variant.closest('.offer');
+        var ch = offer.height();
+        var nh = ch - variant.find('.details').height();
+        offer.height(ch).animate({
+            height: nh
+        }, 100 + Math.round((ch - nh) / 2), function() {
             offer.removeClass('expanded').addClass('collapsed').height('auto');
         });
     });
@@ -82,8 +87,7 @@ init: function() {
     });
 
     // Выбор времени вылета
-    offers.delegate('td.variants a', 'click', function(event) {
-        event.preventDefault();
+    offers.delegate('td.variants .link', 'click', function() {
         var el = $(this), dtime = el.text().replace(':', '');
         if (el.closest('.offer').hasClass('active-booking')) {
             return; // Во время бронирования нельзя переключать варианты
@@ -109,12 +113,11 @@ init: function() {
         }
     });
 
-    // Бронирование
+    // Предварительное бронирование
     offers.delegate('.book .a-button', 'click', function(event) {
         event.preventDefault();
         var variant = $(this).closest('.offer-variant');
-        app.booking.show(variant);
-        app.booking.book(variant);
+        booking.prebook(variant);
     });
 
     // Альянсы
@@ -347,19 +350,15 @@ processUpdate: function() {
             $('#results-filters, #rtabs').toggle(!imprecise);
             $('#offers-matrix .imprecise').toggleClass('latent', !imprecise)
             fixedBlocks.update();
-            var b = app.booking, vid = b.restored && b.el && b.el.attr('data-variant');
-            if (vid && !b.variant) {
-                var vparts = vid.split('-');
-                b.variant = $('#offers-' + vparts[0] + ' .offer-variant[data-index="' + vparts[1] + '"]').eq(0);
-                b.restored = false;
-                if (b.variant) {
-                    b.offer = b.variant.closest('.offer');
-                    self.showVariant(b.variant);
-                    self.selectTab(vparts[0]);
-                    b.el.appendTo(b.offer).removeClass('g-none');
-                    b.show();
-                    b.fasten(b.offer);
-                    b.init();
+            if (booking.waiting) {
+                var parts = booking.form.el.attr('data-variant').split('-');
+                booking.variant = $('#offers-' + parts[0] + ' .offer-variant[data-index="' + parts[1] + '"]').eq(0);
+                booking.waiting = false;
+                if (booking.variant) {
+                    self.selectTab(parts[0]);
+                    self.showVariant(booking.variant);
+                    booking.getVariant();
+                    booking.show();
                 }
             } else {
                 self.selectTab(imprecise ? 'matrix' : (self.selectedTab || pageurl.tab || 'featured'));
@@ -618,11 +617,7 @@ showRecommendations: function() {
         }
 
         // Оптимальный вариант
-        if (cheap.n === fast.n || Math.abs(fast.p - cheap.p) < Math.max(500, (fast.p + cheap.p) * 0.02)) {
-            optimal = {n: fast.n, p: fast.p};
-            cheap = undefined;
-            fast = undefined;
-        } else if (Math.abs(fast.d - cheap.d) < 20) {
+        if (cheap.n === fast.n || Math.abs(fast.d - cheap.d) < 20) {
             optimal = {n: cheap.n, p: cheap.p};
             cheap = undefined;
             fast = undefined;
@@ -638,12 +633,12 @@ showRecommendations: function() {
                     optimal = items[i];
                 }
             }
-            if (cheap.n === optimal.n || Math.abs(optimal.p - cheap.p) < Math.max(500, (optimal.p + cheap.p) * 0.015)) {
-                cheap = undefined;
-            }
-            if (fast.n === optimal.n || Math.abs(fast.p - optimal.p) < Math.max(500, (fast.p + optimal.p) * 0.015)) {
+            if (cheap.n === optimal.n || fast.n === optimal.n || Math.abs(fast.p - optimal.p) < Math.max(500, (fast.p + optimal.p) * 0.015)) {
                 optimal = {n: fast.n, p: fast.p};
                 fast = undefined;
+            }
+            if (cheap.n === optimal.n) {
+                cheap = undefined;
             }
         }
 
@@ -658,21 +653,23 @@ showRecommendations: function() {
     if (optimal) container.append(this.makeRecommendation(variants[optimal.n], otitle));
     if (fast) container.append(this.makeRecommendation(variants[fast.n], 'Долететь быстро'));
     if (!this.filtered) {
-        var alamount = this.filters.items['carriers'].items.length.inflect('авиакомпании', 'авиакомпаний', 'авиакомпаний');
-        var ftip = $('<div class="offers-title featured-tip"><strong>Не подошло?</strong> Воспользуйтесь уточнениями <span class="up">вверху&nbsp;&uarr;</span> или посмотрите <span class="link">все&nbsp;варианты</span> от&nbsp;' + alamount + '</div>');
-        var that = this;
-        ftip.find('.link').click(function() {
-            that.selectTab('all');
-            $.animateScrollTop(that.el.offset().top);
-        });
-        ftip.find('.up').click(function() {
-            if (that.header.hasClass('fixed')) {
-                $('#results-filters.hidden .rfshow').click();
-            } else {
+        if (this.items.length > 1) {
+            var alamount = this.filters.items['carriers'].items.length.inflect('авиакомпании', 'авиакомпаний', 'авиакомпаний');
+            var ftip = $('<div class="offers-title featured-tip"><strong>Не подошло?</strong> Воспользуйтесь уточнениями <span class="up">вверху&nbsp;&uarr;</span> или посмотрите <span class="link">все&nbsp;варианты</span> от&nbsp;' + alamount + '</div>');
+            var that = this;
+            ftip.find('.link').click(function() {
+                that.selectTab('all');
                 $.animateScrollTop(that.el.offset().top);
-            }
-        });
-        container.append(ftip);
+            });
+            ftip.find('.up').click(function() {
+                if (that.header.hasClass('fixed')) {
+                    $('#results-filters.hidden .rfshow').click();
+                } else {
+                    $.animateScrollTop(that.el.offset().top);
+                }
+            });
+            container.append(ftip);
+        }
         var rprice = cheap ? cheap.p : optimal.p;
         var mprice = parseInt($('#offers-matrix .offer-prices').attr('data-minprice'), 10);
         if (!isNaN(mprice) && mprice < rprice) {

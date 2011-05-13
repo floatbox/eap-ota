@@ -61,6 +61,10 @@ class PricerController < ApplicationController
 
   # FIXME попытаться вынести общие методы или объединить с pricer/validate
   def api
+    unless Conf.api.enabled
+      render :status => 503, :text => '<error>service disabled by administrator</error>'
+      return
+    end
     @search = PricerForm.simple( params.slice(:from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin) )
     @search.partner = params[:partner] || 'yandex'
     if @search.valid?

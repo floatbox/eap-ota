@@ -10,9 +10,9 @@
       -if segment[:num]
         %num= segment[:num]
       -if segment[:baseclass]
-        %class= segment[:baseclass].split('')[0]
+        %class= segment[:baseclass]
       -if segment[:subclass]
-        %subclass= segment[:subclass].split('')[0]
+        %subclass= segment[:subclass]
       %direct= segment[:direct] ? "true" : "false"
   - passengers.each do |passenger|
     %passenger

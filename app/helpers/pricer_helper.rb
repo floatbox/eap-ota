@@ -130,7 +130,7 @@ module PricerHelper
   end
 
   def segment_flight_numbers segment
-    segment.flights.map{|f| "#{f.marketing_carrier_iata}#{f.flight_number}" }.join('-')
+    segment.flights.map{|f| "#{f.marketing_carrier.iata}#{f.flight_number}" }.join('-')
   end
 
   # FIXME отrubyить его посимпатишнее
@@ -194,6 +194,7 @@ module PricerHelper
     else
       concat %(Нет в договорe)
     end
+    concat " #{recommendation.blank_count} бл." if recommendation.blank_count && recommendation.blank_count > 1
     concat '(' + recommendation.booking_classes.join(',') + ')'
   end
 

@@ -1,4 +1,4 @@
-<div class="booking g-none" data-variant="<%= @order.variant_id %>">
+<div class="booking-form" data-variant="<%= @order.variant_id %>">
 <%= form_for @order.card, :as => :card, :url => booking_pay_path, :html => { :autocomplete => "off" } do |f| %>
 
     <% availability = @order.recommendation.availability %>
@@ -8,28 +8,24 @@
     </div>
     <% end %>
     
-    <!-- Данные пассажиров -->
     <h3 class="bstitle">Введите данные <%= @order.people.size == 1 ? 'пассажира' : 'пассажиров' %></h3>
     <%= render :partial => 'person_form', :collection => @order.people %>
 
-    <!-- Платёжные данные -->
     <h3 class="bstitle">Выберите способ оплаты и введите платёжные данные</h3>
     <input type="hidden" name="order[payment_type]" id="booking-payment-type" value="card">
     <%= render 'card_form', :f => f %>
     <%= render 'cash_form' if @order.last_pay_time %>
             
-    <!-- Контакты -->
     <h3 class="bstitle">Введите данные покупателя</h3>
     <%= render 'contacts_form' %>
 
-    <!-- Отправка -->
     <div class="booking-submit">
         <table>
         <tr>
             <td class="bs-left">Всё правильно?</td>
             <td class="bs-button"><input type="submit" class="a-button" value="Купить" data-text="Купить"></th>
             <td class="bs-right">
-                <div class="cancel">или <a class="stop-booking" href="#">вернуться к выбору вариантов</a></div>
+                <div class="cancel">или <span class="link stop-booking">вернуться к выбору вариантов</span></div>
                 <div class="loading"><br></div>
             </td>
         </tr>
@@ -40,12 +36,23 @@
             <ul class="be-list"></ul>
         </div>
     </div>
+
     <div class="booking-disclaimer">
         <p class="payment-card">После нажатия кнопки «Купить» данные пассажиров попадут в&nbsp;систему бронирования, билет будет оформлен и&nbsp;выслан вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="/agreement/" target="_blank">условиями использования</a>, <a href="/iata/" target="_blank">правилами IATA</a> и&nbsp;<a class="farerules-link" href="#">правилами тарифов</a></p>
         <p class="payment-cash latent">После нажатия кнопки «Купить» подтверждение бронирования будет выслано вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Мы свяжемся с&nbsp;вами по&nbsp;телефону для уточнения деталей доставки. Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="/agreement/" target="_blank">условиями использования</a>, <a href="/iata/" target="_blank">правилами IATA</a> и&nbsp;<a class="farerules-link" href="#">правилами тарифов</a></p>
     </div>
 
 <% end %>
+</div>
+<div class="booking-price latent">
+    <div class="cost"><dl>
+        <%= decorated_price @order.recommendation.price_with_payment_commission, 'dt', 'dd' %>
+    </dl></div>
+    <dl class="sum" data-value="<%= @order.recommendation.price_with_payment_commission.round.to_i %>">
+        <dt>Итого <strong><%= human_price(@order.recommendation.price_with_payment_commission) %></strong> за всех со всеми сборами</dt>
+        <dd>Тариф — <%= human_price(@order.recommendation.price_fare) %>, налоги и сборы — <%= human_price(@order.recommendation.price_tax_and_markup_and_payment) %></dd>
+    </dl>
+</div>
 <div class="farerules">
     <div class="close"></div>
     <h3>Правила тарифов</h3>
@@ -71,5 +78,4 @@
     </div>
     <% end %>
     <% end %>
-</div>
 </div>

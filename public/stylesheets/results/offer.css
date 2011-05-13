@@ -1,5 +1,5 @@
 /* Предложение */
-.offer {
+#results .offer {
     margin: 0 0 15px;
     color: #333;
     -moz-border-radius: 10px;

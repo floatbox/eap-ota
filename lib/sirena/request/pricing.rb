@@ -21,22 +21,27 @@ module Sirena
           @passengers << {:code=>"INFANT", :count => form.people_count[:infants], :age => 1 }
         end
 
-        @segments = recommendation.blank? ? form.form_segments.collect { |fs|
-          { :departure => fs.from_iata,
-            :arrival => fs.to_iata,
-            :date => sirena_date(fs.date),
-            :baseclass => CabinsMatch[form.cabin] || "Э" # это плохо,плохо,плохо
-          }
-        }: recommendation.flights.collect{|flight|
-          i ||= -1
-          { :departure => flight.departure_iata,
-            :arrival=> flight.arrival_iata,
-            :company=> flight.marketing_carrier_iata,
-            :num=>flight.flight_number,
-            :date => sirena_date(flight.departure_date),
-            :subclass => recommendation.booking_classes[i+=1]
-          }
-        }
+        @segments =
+          if recommendation
+            recommendation.flights.collect do |flight|
+              { :departure => flight.departure_iata,
+                :arrival=> flight.arrival_iata,
+                :company=> flight.marketing_carrier_iata,
+                :num=>flight.flight_number,
+                :date => sirena_date(flight.departure_date),
+                :subclass => recommendation.booking_class_for_flight(flight)
+              }
+            end
+          else
+            form.form_segments.collect do |fs|
+              { :departure => fs.from_iata,
+                :arrival => fs.to_iata,
+                :date => sirena_date(fs.date),
+                :baseclass => CabinsMatch[form.cabin] || "Э" # это плохо,плохо,плохо
+              }
+            end
+          end
+
       end
 
     end

@@ -54,7 +54,7 @@ input.a-button::-moz-focus-inner {
 
 .a-button-ready:hover,
 .offer .book .a-button:hover,
-.offer .diff-price a.a-button:hover,
+.offer .changed-price a.a-button:hover,
 .booking .tds-submit a.a-button:hover,
 #offers-diagram .selected a.a-button {
     color: #FFF;

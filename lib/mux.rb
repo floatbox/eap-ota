@@ -67,7 +67,9 @@ class Mux
       # regroup
       recommendations = Recommendation.corrected(recommendations)
       recommendations
-    # rescue Amadeus::Error, Handsoap::Fault => e
+    rescue
+      notify
+      []
     end
 
     def sirena_pricer(form)
@@ -76,12 +78,34 @@ class Mux
       recommendations = Sirena::Service.pricing(form).recommendations || []
       recommendations.delete_if(&:without_full_information?)
       recommendations
+    rescue
+      notify
+      []
     end
 
     def sirena_searchable?(form)
-      !Conf.sirena.restrict ||
-      form.adults == 1 && form.children == 0 && form.infants == 0 &&
-      form.form_segments.none?(&:multicity?)
+      # временно выключаем для яндексов
+      form.partner.blank? && (
+        !Conf.sirena.restrict ||
+        # form.adults == 1 &&
+        form.children == 0 && form.infants == 0 &&
+        form.form_segments.none?(&:multicity?)
+      )
+    end
+
+    # report error and continue
+    # yanked from rails
+    # actionpack/lib/action_dispatch/middleware/show_exceptions.rb
+    def notify(exception = $!)
+      # до логгера, чтоб была видна вся инфа по эксепшну
+      ActiveSupport::Deprecation.silence do
+        # выяснить, что делает именно :silent?
+        backtrace = Rails.backtrace_cleaner.clean(exception.backtrace, :silent)
+        message = "\n#{exception.class} (#{exception.message}):\n"
+        message << "  " << backtrace.join("\n  ")
+        Rails.logger.error("#{message}\n  ...reported and continued\n")
+      end
+      HoptoadNotifier.notify(exception) rescue Rails.logger.error("  can't notify hoptoad #{$!.class}: #{$!.message}")
     end
 
   end

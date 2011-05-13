@@ -1,69 +1,20 @@
-app.booking = {
-init: function() {
-
-    var self = this;
-    this.el = $('.booking');
-
-    // Проверка формы
-    this.sections = [];
-    var card = this.el.find('.booking-card');
-    var cardSection = this.initCard(card);
-    this.validate(true);
-
-    // Отправка формы
-    $('form', this.el).submit(function(event) {
-        event.preventDefault();
-        if (!self.button.hasClass('a-button-ready')) return;
-        var data = $(this).serialize();
-        var processError = function(text) {
-            self.el.append('<div class="result"><p class="fail"><strong>Упс…</strong> ' + (text || 'Что-то пошло не так.') + '</p><p class="tip">Попробуйте снова или узнайте, <a target="_blank" href="/about/#payment">какими ещё способами</a> можно купить у нас билет.</p></div>');
-            self.button.addClass('a-button-ready');
-        };
-        self.el.find('.result').remove();
-        self.button.removeClass('a-button-ready');
-        self.submit.addClass('sending');
-        $.ajax({
-            url: $(this).attr('action'),
-            data: data,
-            type: 'POST',
-            success: function(s) {
-                if (typeof s === 'string' && s.length) {
-                    var result = $(s).appendTo(self.el);
-                    if (result.attr('data-type') === 'success') {
-                        self.submit.addClass('latent');
-                    }
-                } else if (s && s.error) {
-                    self.button.addClass('a-button-ready');
-                    self.el.find('.be-list').html('<li>Введён неправильный <span class="link" data-field="bc-num1">номер банковской карты</span></li>');
-                    self.el.find('.booking-errors').show();
-                } else {
-                    processError(s && s.exception && s.exception.message);
-                }
-                self.submit.removeClass('sending');
-            },
-            error: function() {
-                processError();
-                self.submit.removeClass('sending');
-            },
-            timeout: 90000
-        });
-    });
-    this.submit = this.el.find('.booking-submit');
-    this.button = this.submit.find('.a-button');
-
-    // Список неправильно заполненных полей
-    this.el.find('.be-list').delegate('.link', 'click', function() {
-        var control = $('#' + $(this).attr('data-field'));
-        var st = control.closest(':visible').offset().top - results.header.height() - 35;
-        $.animateScrollTop(Math.min(st, $(window).scrollTop()), function() {
-            control.focus();
-        });
-    });
+booking.form.init = function() {
+    var that = this;
+    this.el = $('.booking-form');
 
     // Всплывающие подсказки
     this.el.delegate('.hint', 'click', function(event) {
         event.preventDefault();
         hint.show(event, $(this).parent().find('.htext').html());
+    });
+
+    // Список неправильно заполненных полей
+    this.el.find('.be-list').delegate('.link', 'click', function() {
+        var control = $('#' + $(this).attr('data-field'));
+        var st = control.closest(':visible').offset().top - $('#header').height() - 35;
+        $.animateScrollTop(Math.min(st, $(window).scrollTop()), function() {
+            control.focus();
+        });
     });
 
     // 3DSecure
@@ -72,4 +23,41 @@ init: function() {
         $(this).closest('.result').find('form').submit();
     });
 
-}};
+    // Кнопка
+    this.submit = this.el.find('.booking-submit');
+    this.button = this.submit.find('.a-button');
+
+    // Отправка формы
+    this.el.children('form').submit(function(event) {
+        event.preventDefault();
+        if (that.button.hasClass('a-button-ready')) {
+            that.send($(this).attr('action'), $(this).serialize());
+        }
+    });
+
+    // Проверка формы
+    this.sections = [];
+    var card = this.el.find('.booking-card');
+    var cardSection = this.initCard(card);
+    this.validate(true);
+
+};
+booking.form.process = function(result) {
+    switch (this.el.find('.result').attr('data-type')) {
+    case 'success':
+        this.submit.addClass('latent');
+        break;
+    case '3dsecure':
+        this.submit.addClass('latent');
+        break;
+    case 'fail':
+        this.button.addClass('a-button-ready');
+        break;
+    }
+};
+booking.form.error = function(text) {
+    var block = $('<div class="result"></div>');
+    block.append('<p class="fail"><strong>Упс…</strong> ' + (text || 'Что-то пошло не так.') + '</p>');
+    block.append('<p class="tip">Свяжитесь с нами по электронной почте <a href="mailto:support@eviterra.com">support@eviterra.com</a> или позвоните <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p>');
+    this.el.append(block);
+};
