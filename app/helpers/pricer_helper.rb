@@ -162,7 +162,7 @@ module PricerHelper
           index[title]['fields'] << field
         elsif !cities.empty?
           item = {}
-          item['cities'] = cities.map{|c| content_tag('span', c.name, {:class => 'city'}) }.join(', ')
+          item['cities'] = cities.map{|c| c.name}
           item['fields'] = [field]
           item['title'] = title
           index[title] = item

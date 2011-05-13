@@ -4,8 +4,9 @@
 <% unless nearby_list.empty? %>
 <div class="offers-nearby latent">
     <h3 class="offers-title">Соседние города</h3>
-    <% nearby_list.each do |item| %>
-        <p class="cities" data-fields="<%= item['fields'].join(' ') %>"><strong><%= item['title'] %>:</strong> <%= raw item['cities'] %></p>
+    <% nearby_list.each do |ncgroup| %>
+        <% ncgroup_fields = ncgroup['fields'].join(' ') %>
+        <p class="cities"><strong><%= ncgroup['title'] %>:</strong> <% ncgroup['cities'].each_with_index do |city, city_index| %><%= ', ' if city_index != 0 %><span class="city" data-fields="<%= ncgroup_fields %>"><%= raw city %></span><% end %></p>
     <% end %>
 </div>
 <% end %>

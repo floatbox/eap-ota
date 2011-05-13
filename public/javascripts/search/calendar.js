@@ -100,6 +100,7 @@ initDates: function() {
             } else {
                 self.selected = [index];
             }
+            self.message.hide();
             self.savedSelected = undefined;
             self.update();
         }
@@ -239,12 +240,13 @@ update: function() {
 select: function(dates) {
     var updated = false;
     if (this.dmyindex[dates[0]] === undefined) {
-        this.showMessage('Выбранная дата вылета (' + Date.parseAmadeus(dates[0]).human() + ') уже прошла. Выберите, пожалуйста, другую дату.');
+        this.showMessage('На выбранную дату (' + Date.parseAmadeus(dates[0]).human() + ') невозможно забронировать билеты. Выберите, пожалуйста, другую дату.');
         if (this.selected.length !== 0) {
             this.selected = [];
             updated = true;
         }
     } else {
+        this.message.hide();
         for (var i = dates.length; i--;) {
             var n = this.dmyindex[dates[i]];
             if (n != this.selected[i]) {
