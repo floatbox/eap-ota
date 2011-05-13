@@ -132,18 +132,14 @@ init: function() {
         results.show();
         search.onValid = undefined;
     };
-    $('#offers-context').delegate('.city', 'click', function() {
+    $('#offers-context').add(this.empty).delegate('.city', 'click', function() {
         var el = $(this);
-        var fields = el.closest('.cities').attr('data-fields').split(' ');
+        var fields = el.attr('data-fields').split(' ');
         for (var i = fields.length; i--;) {
             var fparts = fields[i].split('-');
             search.segments[parseInt(fparts[1], 10)][fparts[0]].trigger('set', el.text());
         }
         search.onValid = autoLoad;
-    });
-    this.empty.delegate('.city', 'click', function() {
-        search.onValid = autoLoad;
-        search.segments[0].to.trigger('set', $(this).text());
     });
 },
 selectTab: function(tab) {
@@ -381,10 +377,9 @@ processUpdate: function() {
         if (u.pcontent && u.pcontent.indexOf('offers-nearby') !== -1) {
             var nearby = $('#offers-pcollection').html(u.pcontent).find('.offers-nearby .cities span.city');
             if (nearby.length) {
-                var nearbyText = nearby.map(function() {
-                    return $('<div/>').append(this).html();
-                }).get().join(', ');
-                this.empty.find('.re-cities').html('соседние города: ' + nearbyText);
+                var list = this.empty.find('.re-cities').hide().html('соседние города: ');
+                nearby.clone().appendTo(list).slice(0, -1).after(', ');
+                list.show();
             }
             $('#offers-pcollection').html('');
         }
