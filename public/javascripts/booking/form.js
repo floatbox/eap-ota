@@ -14,6 +14,7 @@ show: function() {
     this.el.removeClass('latent');
     this.el.find('.bh-title').html(results.title.html());
     this.el.find('.bh-placeholder').height(this.header.height());
+    search.history.toggle(false);
     fixedBlocks.disabled = true;
     $(window).scrollTop(offset ? (this.el.find('.booking-frame').offset().top - offset) : 0);
     pageurl.update('booking', this.key);
@@ -29,6 +30,7 @@ hide: function() {
     pageurl.title('авиабилеты ' + results.title.attr('data-title'));
     fixedBlocks.disabled = false;
     fixedBlocks.toggle(true);    
+    search.history.toggle(search.history.active);
 },
 abort: function() {
     if (this.request && this.request.abort) {
