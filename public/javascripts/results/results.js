@@ -230,8 +230,8 @@ abort: function() {
         var mr = this.update.mrequest;
         if (pr && pr.abort) pr.abort();
         if (mr && mr.abort) mr.abort();
-        delete(this.update.pr);
-        delete(this.update.mr);
+        delete this.update.pr;
+        delete this.update.mr;
     }
 },
 show: function(fixed) {
@@ -372,8 +372,8 @@ processUpdate: function() {
                     });
                 }
             }
-            delete(u.pcontent);
-            delete(u.mcontent);
+            delete u.pcontent;
+            delete u.mcontent;
         });
         setTimeout(processQueue, 250);
     } else {
@@ -395,8 +395,8 @@ processUpdate: function() {
         fixedBlocks.update();
         pageurl.update('search', undefined);
         pageurl.title();
-        delete(u.pcontent);
-        delete(u.mcontent);
+        delete u.pcontent;
+        delete u.mcontent;
     }
 },
 parseResults: function() {
@@ -637,7 +637,7 @@ showRecommendations: function() {
                 optimal = {n: fast.n, p: fast.p};
                 fast = undefined;
             }
-            if (cheap.n === optimal.n) {
+            if (cheap.n === optimal.n || cheap.p === optimal.p) {
                 cheap = undefined;
             }
         }
@@ -750,7 +750,7 @@ joinDepartures: function(dtimes, current) {
         var time = dtimes[i];
         if (time == current) continue;
         if (parts.length) parts.push(', ');
-        parts.push('<a href="#">' + time.substring(0,2) + ':' + time.substring(2,4) + '</a>');
+        parts.push('<span class="link">' + time.substring(0,2) + ':' + time.substring(2,4) + '</span>');
     }
     var pl = parts.length;
     if (pl > 2) parts[pl - 2] = ' и в ';

@@ -113,7 +113,7 @@
 
 /* Прячем и дизейблим лишние элементы */
 #booking .offer-variant .summary .variants p,
-#booking .offer-variant .summary .variants a {
+#booking .offer-variant .summary .variants .link {
     color: #CCC;
     cursor: default;
     text-decoration: none;
