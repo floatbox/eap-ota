@@ -108,8 +108,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
       require 'recommendation'
       require 'person'
       # FIXME попытаться избавиться от этой загрузки
-      require 'sirena'
-      require 'sirena/commission'
       Cache.read("order_data", cache_number)
     end
     alias :[] load_from_cache

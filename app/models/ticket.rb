@@ -3,7 +3,7 @@ class Ticket < ActiveRecord::Base
   delegate :source, :commission_carrier, :description, :pnr_number, :need_attention, :to => 'order'
 
   def ticket_date
-    created_at.strftime('%d.%m.%Y')
+    created_at.strftime('%d.%m.%Y') if created_at
   end
 
   def price_total

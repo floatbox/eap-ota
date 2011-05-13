@@ -9,7 +9,7 @@
 <tr>
     <td>
         <h6 class="blabel"><label for="person_attributes_<%= person_form_counter %>_first_name">Имя</label></h6>
-        <%= person.text_field :first_name, :class => "bfield" %>            
+        <%= person.text_field :first_name, :class => "bfield" %>
     </td>
     <td>
         <h6 class="blabel"><label for="person_attributes_<%= person_form_counter %>_last_name">Фамилия</label></h6>
@@ -26,7 +26,7 @@
 <tr>
     <td colspan="2">
         <div class="bwarning language-warning">Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры. Имя&nbsp;и&nbsp;фамилию нужно вводить латинскими буквами</div>
-        <div class="bwarning nameorder-warning">Проверьте пожалуйста, что вы не перепутали поля «Имя» и «Фамилия» <span class="link nameorder-replace">Поменять&nbsp;местами</span> или <span class="link">оставить</span> как есть</div>                    
+        <div class="bwarning nameorder-warning">Проверьте пожалуйста, что вы не перепутали поля «Имя» и «Фамилия» <span class="link nameorder-replace">Поменять&nbsp;местами</span> или <span class="link">оставить</span> как есть</div>
         <div class="bdescription">
             Латинскими буквами, как в загранпаспорте или банковской карте&nbsp;(<span class="link hint">подробнее</span>)
             <p class="htext">Имя и&nbsp;фамилия в авиабилете пишутся латинскими буквами. Написание должно быть точно как в&nbsp;документе, по&nbsp;которому будет выполняться полёт. Дефисы и&nbsp;другие знаки нужно пропустить&nbsp;&mdash;&nbsp;разрешены только буквы.</p>
@@ -49,7 +49,7 @@
     <td>
         <div class="bp-bonus">
             <h6 class="blabel"><label for="bonus-type-<%= person_form_counter %>">Бонусная программа</label></h6>
-            <%= person.select :bonuscard_type, @order.recommendation.validating_carrier.available_bonus_programms.map {|a| [ a.bonus_program_name, a.iata ] }, {}, :id => "bonus-type-#{person_form_counter}", :class => 'bfield' %>        
+            <%= person.select :bonuscard_type, @order.recommendation.validating_carrier.available_bonus_programms.map {|a| [ a.bonus_program_name, a.iata ] }, {}, :id => "bonus-type-#{person_form_counter}", :class => 'bfield' %>
         </div>
     </td>
 </tr>
@@ -78,9 +78,9 @@
     <td>
         <div class="bp-bonus">
             <h6 class="blabel">Номер карты</h6>
-            <%= person.text_field :bonuscard_number, :id => "bonus-num-#{person_form_counter}", :class => 'bfield', :maxlength => '50' %>  
+            <%= person.text_field :bonuscard_number, :id => "bonus-num-#{person_form_counter}", :class => 'bfield', :maxlength => '50' %>
         </div>
-        <div class="bdescription checkbox<%= raw ' latent' if @order.recommendation.validating_carrier.available_bonus_programms.empty? %>">
+        <div class="bdescription checkbox<%= raw ' latent' if @order.recommendation.validating_carrier.available_bonus_programms.empty? || @order.recommendation.source == 'sirena'%>">
             <%= person.check_box :bonus_present, {:id => "bonus-#{person_form_counter}"} %>
             <label for="bonus-<%= person_form_counter %>" title="Карта участника программы премирования пассажиров (мильной программы или программы для&nbsp;часто летающих пассажиров, англ. frequent flyer program)">есть бонусная карта</label>&nbsp;<a class="external" href="http://ru.wikipedia.org/wiki/Бонусные_программы_авиакомпаний" target="_blank" title="Статья о бонусных программах авиакомпаний в Википедии (откроется в новом окне)">&nbsp;</a>
         </div>
