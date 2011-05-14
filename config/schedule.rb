@@ -12,7 +12,8 @@ every 5.minutes do
 end
 
 every 10.minutes do
-  runner 'Amadeus::Session.housekeep'
+  #runner 'Amadeus::Session.housekeep'
+  runner 'Amadeus::Session.dirty_housekeep'
 end
 
 every 1.day, :at => '18:00' do

@@ -88,10 +88,14 @@ module Amadeus
   end
 
   # для кронтасков, скоростью не блещет
-  # TODO сделать logout для старых сессий
   def self.housekeep
     stale.destroy_all
     (MAX_SESSIONS-count).times { increase_pool }
+  end
+
+  # тоже для кронтасков, не разлогинивает, не создает новые
+  def self.dirty_housekeep
+    stale.delete_all
   end
 
   def destroy
