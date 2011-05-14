@@ -7,6 +7,7 @@ amadeus:
   nonstop_search: yes
   calendar: yes
   fake: no
+  recommendations_lite: 20
   euro_rate: 40
 payment:
   skip_checksum_validation: yes
