@@ -203,7 +203,7 @@ init: function() {
 },
 update: function(forced) {
     var rh = this.rheader.height();
-    var ph = this.rheader.closest('.placeholder').height(rh || 'auto');
+    var ph = this.rheader.height(rh || 'auto');
     this.top2 = Math.ceil(this.sdefine.offset().top + this.sdefine.height());
     this.top3 = rh ? Math.ceil(ph.offset().top + rh - results.title.outerHeight() - 60) : 2000;
     this.top1 = this.top2 - this.pheader.height();

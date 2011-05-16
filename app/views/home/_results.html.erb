@@ -1,13 +1,15 @@
 <div id="results" class="latent">
     
     <!-- Заголовок и фильтры -->
-    <div class="placeholder">
     <div id="results-header">
-    <div class="rcontent">
-    <noindex>
-        <h1 id="results-title"></h1>
-        <div id="results-filters" style="display: none;">
-            <table class="rfvisible">
+    <div class="rh-content">
+        <h1 class="results-title"></h1>
+        <div id="results-filters" class="latent">
+            <div class="rf-control">
+                <span class="link rfreset latent">Все варианты</span>
+                <span class="link rfshow">Уточнить</span> количество пересадок, время, аэропорты и прочее
+            </div>
+            <table class="rf-content">
             <tr>
                 <th>
                     <div class="rfleft">
@@ -65,17 +67,15 @@
                 </th>
             </tr>
             </table>
-            <div class="rfhidden">
-                <span class="link rfreset latent">Все варианты</span>
-                <span class="link rfshow">Уточнить</span> количество пересадок, время, аэропорты и прочее
-            </div>
-            <div class="rfoverlay"></div>
+            <div class="rf-overlay"></div>
         </div>
-    </noindex>
+        <div class="hshadow"></div>
     </div>
-    <div class="shadow"></div>
+    <div class="rh-clone">
+        <h1 class="results-title"></h1>
+        <div class="hshadow"></div>
     </div>
-    </div>    
+    </div>
 
     <!-- Панель ожидания результатов -->
     <div id="results-loading" class="rmessage rcontent latent">

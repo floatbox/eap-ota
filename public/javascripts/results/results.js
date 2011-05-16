@@ -6,9 +6,11 @@ init: function() {
 
     this.el = $('#results');
     this.header = $('#results-header');
-    this.title = $('#results-title');
-    this.empty = $('#results-empty');
+    this.hcontent = this.header.find('.rh-content');
+    this.title = this.hcontent.find('.results-title');
+    this.hclone = this.header.find('.rh-clone');
     this.loading = $('#results-loading');
+    this.empty = $('#results-empty');
     this.update = {};
 
     // Счётчик секунд
@@ -244,6 +246,7 @@ show: function(fixed) {
             return $(this).attr('data-date');
         }).get().join(locations.length > 1 ? ', ' : '—');
         this.title.attr('data-title', ls.replace(/— (.*?),(?= \1 —)/g, '—') + ' (' + ds + ')');
+        this.hclone.find('.results-title').html(u.title);
         fixedBlocks.update(true);
     }
     if (u.loading) {
