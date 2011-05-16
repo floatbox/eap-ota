@@ -12,10 +12,11 @@ every 5.minutes do
 end
 
 every 10.minutes do
-  #runner 'Amadeus::Session.housekeep'
-  runner 'Amadeus::Session.dirty_housekeep'
+  runner 'Amadeus::Session.housekeep'
+  #runner 'Amadeus::Session.dirty_housekeep'
 end
 
 every 1.day, :at => '18:00' do
   command_at_current 'script/cbrusd && touch tmp/restart.txt'
 end
+
