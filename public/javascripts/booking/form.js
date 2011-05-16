@@ -265,8 +265,9 @@ process: function() {
     case 'success':
         this.submit.addClass('latent');
         if (window._gaq) {
+            var price = booking.el.find('.booking-content .booking-price .sum').attr('data-value');
             _gaq.push(['_trackPageview', '/#' + pageurl.summary + '/success']);
-            _gaq.push(['_addTrans', result.find('.pnr').text(), '', this.el.find('.booking-price .sum').attr('data-value')]);
+            _gaq.push(['_addTrans', result.find('.pnr').text(), '', price]);
             _gaq.push(['_trackTrans']);
         }
         if (window.yaCounter5324671) {
