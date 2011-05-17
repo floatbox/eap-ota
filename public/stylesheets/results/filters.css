@@ -1,20 +1,21 @@
 /* Filters */
 #results-filters {
     position: relative;
+    z-index: 2;
     width: 960px;
     margin: 0 auto;
     font-size: 14px;
     line-height: 18px;
     letter-spacing: -0.014em;
 }
+#results-filters.empty {
+    display: none;
+}
 #results-filters th {
     width: 130px;
     font-weight: bold;
     vertical-align: top;
     color: #ed1192;
-}
-#results-filters .rfleft {
-    width: 130px;
 }
 #results-filters td {
     width: 175px;
@@ -32,25 +33,48 @@
     line-height: 13px;
 }
 #results-filters .rfhide {
+    display: none;
     cursor: pointer;
 }
 #results-filters .rfshow {
     font-weight: bold;
     color: #ED1192;
 }
-#results-filters .rfhidden {
+#results-filters .rf-control {
+    display: none;
     height: 30px;
 }
-#results-filters .rfhide,
-#results-filters .rfhidden,
-#results-filters.hidden .rfvisible {
-    display: none;
+#results-filters .rf-control .rfreset {
+    float: right;
 }
-#results-filters.hidden .rfhidden {
+.fixed #results-filters.hidden {
+    height: 30px;
+    overflow: hidden;
+}
+.fixed #results-filters.hidden .rf-control {
     display: block;
 }
-#results-filters .rfhidden .rfreset {
-    float: right;
+.fixed #results-filters .rfhide {
+    display: inline;
+}
+
+/* Left column */
+#results-filters .rfleft {
+    width: 130px;
+}
+#results-filters .rfleft .bar {
+    padding-right: 8px;
+    background: #FFF;
+}
+
+/* Line */
+.rf-stroke {
+    position: absolute;
+    z-index: -1;
+    width: 800px;
+    margin-top: 10px;
+    border-top: 1px solid #cfd4d6;
+    cursor: default;
 }
 
 /* Filters group */
@@ -58,8 +82,15 @@
     margin: 0 0 3px;
     font-weight: bold;
 }
+#results-filters h5 .bar {
+    position: relative;
+    left: -8px;
+    padding: 0 8px;
+    background: #FFF;
+}
 #results-filters .filter {
     display: block;
+    clear: left;
     margin: 0 0 3px;
 }
 #results-filters .latent {
@@ -86,13 +117,13 @@
 #layovers-filter .vlist {
     position: relative;
     left: -3px;
-    overflow: hidden;
     zoom: 1;
 }
 #layovers-filter .vlist dt {
     display: none;
 }
 #layovers-filter .vlist dd {
+    position: relative;
     display: inline;
     float: left;
     clear: left;
@@ -111,9 +142,26 @@
     color: #FFF;
     text-decoration: none;
 }
+.lf-icon {
+    position: absolute;
+    top: 4px;
+    left: -20px;
+    width: 13px;
+    height: 12px;
+    background: url(/img/controls/layovers.png) no-repeat;
+}
+.lf-icon-1 {
+    background-position: 0 -21px;
+}
+.lf-icon-2 {
+    background-position: 0 -42px;
+}
+.selected .lf-icon {
+    left: -17px;
+}
 
 /* Disabled filters */
-#results-filters .rfoverlay {
+#results-filters .rf-overlay {
     display: none;
     position: absolute;
     top: 0; left: 0; bottom: 0;
@@ -127,7 +175,7 @@
     overflow: hidden;
     color: #999;
 }
-#results-filters.disabled .rfoverlay {
+#results-filters.disabled .rf-overlay {
     display: block;
 }
 #results-filters.disabled .vlist dd.selected {

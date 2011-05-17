@@ -6,9 +6,11 @@ init: function() {
 
     this.el = $('#results');
     this.header = $('#results-header');
-    this.title = $('#results-title');
-    this.empty = $('#results-empty');
+    this.hcontent = this.header.find('.rh-content');
+    this.title = this.hcontent.find('.results-title');
+    this.hclone = this.header.find('.rh-clone');
     this.loading = $('#results-loading');
+    this.empty = $('#results-empty');
     this.update = {};
 
     // Счётчик секунд
@@ -244,7 +246,7 @@ show: function(fixed) {
             return $(this).attr('data-date');
         }).get().join(locations.length > 1 ? ', ' : '—');
         this.title.attr('data-title', ls.replace(/— (.*?),(?= \1 —)/g, '—') + ' (' + ds + ')');
-        fixedBlocks.update(true);
+        this.hclone.find('.results-title').html(u.title);
     }
     if (u.loading) {
         this.toggle('loading');
@@ -259,19 +261,21 @@ show: function(fixed) {
     $('#promo').addClass('latent');
     search.live.toggle(false);
     this.el.removeClass('latent');
+    fixedBlocks.update();
     var w = $(window), offset = this.el.offset().top;
     if (fixed !== false && offset - w.scrollTop() > w.height() / 2) {
         $.animateScrollTop(offset - 112);
     }
 },
 hide: function() {
-    this.el.addClass('latent');
+    this.el.addClass('latent').removeClass('ready');
     $('#promo').removeClass('latent');
     search.live.toggle(true);
 },
 toggle: function(mode) {
     this.el.toggleClass('ready', mode === 'ready');
-    $('#results-filters, #rtabs, #offers').toggle(mode === 'ready');
+    $('#rtabs, #offers').toggle(mode === 'ready');
+    this.filters.el.toggleClass('latent', mode !== 'ready');
     this.empty.toggleClass('latent', mode !== 'empty');
     this.loading.toggleClass('latent', mode !== 'loading');
     this.stopwatch.trigger(mode === 'loading' ? 'start' : 'stop');
@@ -343,8 +347,9 @@ processUpdate: function() {
         queue.push(function() {
             self.toggle('ready');
             var imprecise = self.variants.length == 0;
-            $('#results-filters, #rtabs').toggle(!imprecise);
+            $('#rtabs').toggle(!imprecise);
             $('#offers-matrix .imprecise').toggleClass('latent', !imprecise)
+            self.filters.el.toggleClass('latent', imprecise);
             fixedBlocks.update();
             if (booking.waiting) {
                 var parts = booking.form.el.attr('data-variant').split('-');
@@ -648,7 +653,7 @@ showRecommendations: function() {
     if (optimal) container.append(this.makeRecommendation(variants[optimal.n], otitle));
     if (fast) container.append(this.makeRecommendation(variants[fast.n], 'Долететь быстро'));
     if (!this.filtered) {
-        if (this.items.length > 1) {
+        if (this.items.length > 1 && !this.filters.el.hasClass('empty')) {
             var alamount = this.filters.items['carriers'].items.length.inflect('авиакомпании', 'авиакомпаний', 'авиакомпаний');
             var ftip = $('<div class="offers-title featured-tip"><strong>Не подошло?</strong> Воспользуйтесь уточнениями <span class="up">вверху&nbsp;&uarr;</span> или посмотрите <span class="link">все&nbsp;варианты</span> от&nbsp;' + alamount + '</div>');
             var that = this;

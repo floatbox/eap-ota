@@ -1,29 +1,34 @@
 <div id="results" class="latent">
     
     <!-- Заголовок и фильтры -->
-    <div class="placeholder">
     <div id="results-header">
-    <div class="rcontent">
-    <noindex>
-        <h1 id="results-title"></h1>
-        <div id="results-filters" style="display: none;">
-            <table class="rfvisible">
+    <div class="rh-content">
+        <h1 class="results-title"></h1>
+        <div id="results-filters">
+            <div class="rf-control">
+                <span class="link rfreset latent">Все варианты</span>
+                <span class="link rfshow">Уточнить</span> количество пересадок, время, аэропорты и прочее
+            </div>
+            <table class="rf-content">
             <tr>
                 <th>
                     <div class="rfleft">
-                    <span class="rftitle">Уточнить</span>
-                    <span class="link rfreset latent">Все&nbsp;варианты</span>
+                        <span class="rf-stroke"></span>
+                        <span class="bar">
+                            <span class="rftitle">Уточнить</span>
+                            <span class="link rfreset latent">Все&nbsp;варианты</span>
+                        </span>
                     </div>
                 </th>
                 <td rowspan="2">
-                    <h5>Пересадки</h5>
+                    <h5><span class="bar">Пересадки</span></h5>
                     <div class="filters">
                         <div class="filter" id="layovers-filter" data-name="layovers"><span class="control">количество и длительность пересадок</span><span class="values"></span><div class="dropdown"><dl><dt>количество пересадок</dt><dd class="empty">всё равно</dd></dl></div></div>
                         <div class="filter" data-name="cities"><span class="control">город пересадки</span><span class="values">…</span><div class="dropdown"><dl><dt>город пересадки</dt><dd class="empty">любой</dd></dl></div></div>
                     </div>
                 </td>
                 <td rowspan="2">
-                    <h5>Время</h5>
+                    <h5><span class="bar">Время</span></h5>
                     <div class="filters">
                         <div class="filter" data-name="dpt_time_0" data-location="dpt_0"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>время вылета</dt><dd class="empty">любое</dd></dl></div></div>
                         <div class="filter" data-name="arv_time_0" data-location="arv_0"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>время прилёта</dt><dd class="empty">любое</dd></dl></div></div>
@@ -34,7 +39,7 @@
                     </div>
                 </td>
                 <td rowspan="2">
-                    <h5>Аэропорты</h5>
+                    <h5><span class="bar">Аэропорты</span></h5>
                     <div class="filters">
                         <div class="filter" data-name="dpt_city_0" data-location="dpt_0"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>город вылета</dt><dd class="empty">любой</dd></dl></div></div>
                         <div class="filter" data-name="dpt_airport_0" data-location="dpt_0"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>аэропорт вылета</dt><dd class="empty">любой</dd></dl></div></div>
@@ -51,7 +56,7 @@
                     </div>
                 </td>
                 <td rowspan="2">
-                    <h5>Другие детали</h5>
+                    <h5><span class="bar">Другие детали</span></h5>
                     <div class="filters">
                         <div class="filter" data-name="carriers"><span class="control">авиакомпания</span><span class="values">…</span><div class="dropdown"><dl><dt>авиакомпания</dt><dd class="empty">любая</dd></dl></div></div>                
                         <div class="filter" data-name="alliance"><span class="control">альянс</span><span class="values">…</span><div class="dropdown"><dl><dt>альянс</dt><dd class="empty">любой</dd></dl></div></div>
@@ -65,17 +70,15 @@
                 </th>
             </tr>
             </table>
-            <div class="rfhidden">
-                <span class="link rfreset latent">Все варианты</span>
-                <span class="link rfshow">Уточнить</span> количество пересадок, время, аэропорты и прочее
-            </div>
-            <div class="rfoverlay"></div>
+            <div class="rf-overlay"></div>
         </div>
-    </noindex>
+        <div class="hshadow"></div>
     </div>
-    <div class="shadow"></div>
+    <div class="rh-clone">
+        <h1 class="results-title"></h1>
+        <div class="hshadow"></div>
     </div>
-    </div>    
+    </div>
 
     <!-- Панель ожидания результатов -->
     <div id="results-loading" class="rmessage rcontent latent">

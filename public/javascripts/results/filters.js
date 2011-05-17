@@ -4,7 +4,8 @@ init: function() {
     this.items = {};
     this.selected = {};
     this.el = $('#results-filters');
-    this.el.find('.filter').each(function() {
+    this.content = this.el.find('.rf-content');
+    this.content.find('.filter').each(function() {
         var f = new controls.Filter($(this));
         f.template = ': $';
         f.el.bind('change', function(e, values) {
@@ -46,12 +47,14 @@ show: function() {
         overflow: 'hidden'
     });
     el.removeClass('hidden').animate({
-        height: el.find('.rfvisible').height()
+        height: this.content.height()
     }, 150, function() {
         el.css({
-            height: 'auto',
+            height: '',
+            display: '',
             overflow: ''
         });
+        fixedBlocks.update();
     });
 },
 hide: function() {
@@ -61,10 +64,12 @@ hide: function() {
     }).animate({
         height: 30
     }, 150, function() {
-        var el = $(this).addClass('hidden').css({
-            height: 'auto',
+        $(this).addClass('hidden').css({
+            height: '',
+            display: '',
             overflow: ''
         });
+        fixedBlocks.update();
     });
 },
 reset: function() {
@@ -93,7 +98,11 @@ update: function(data) {
     this.el.find('.filters').each(function() {
         $(this).closest('td').toggleClass('latent', $(this).find('.filter:not(.latent)').length === 0);
     });
-    this.el.removeClass('hidden');
+    this.items['layovers'].items.each(function() {
+        var item = $(this);
+        item.append('<span class="lf-icon lf-icon-' + item.attr('data-value') + '"></span>');
+    });
+    this.el.toggleClass('empty', this.el.find('td:not(.latent)').length === 0);
     this.data = data;
     this.selected = {};
     this.active = true;
