@@ -653,7 +653,7 @@ showRecommendations: function() {
     if (optimal) container.append(this.makeRecommendation(variants[optimal.n], otitle));
     if (fast) container.append(this.makeRecommendation(variants[fast.n], 'Долететь быстро'));
     if (!this.filtered) {
-        if (this.items.length > 1) {
+        if (this.items.length > 1 && !this.filters.el.hasClass('empty')) {
             var alamount = this.filters.items['carriers'].items.length.inflect('авиакомпании', 'авиакомпаний', 'авиакомпаний');
             var ftip = $('<div class="offers-title featured-tip"><strong>Не подошло?</strong> Воспользуйтесь уточнениями <span class="up">вверху&nbsp;&uarr;</span> или посмотрите <span class="link">все&nbsp;варианты</span> от&nbsp;' + alamount + '</div>');
             var that = this;
