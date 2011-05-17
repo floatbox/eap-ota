@@ -69,7 +69,7 @@ class PricerController < ApplicationController
     @search.partner = params[:partner] || 'yandex'
     if @search.valid?
       @search.save_to_cache
-      @recommendations = Mux.pricer(@search)
+      @recommendations = Mux.pricer(@search, false, true)
       render 'api/yandex'
     else
       render 'api/yandex_failure', :locals => {:message => 'from, to and date1 parameters are required'}

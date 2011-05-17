@@ -5,14 +5,14 @@ class Mux
 
   module ClassMethods
 
-    def pricer(form, admin_user = nil)
+    def pricer(form, admin_user=false, lite=false)
       # FIXME делает сортировку дважды
       (
-        sirena_pricer(form) + amadeus_pricer(form, admin_user)
+        sirena_pricer(form, admin_user, lite) + amadeus_pricer(form, admin_user, lite)
       ).sort_by(&:price_total)
     end
 
-    def calendar(form, admin_user = nil)
+    def calendar(form, admin_user=false)
       return [] unless Conf.amadeus.enabled && Conf.amadeus.calendar
 
       request = Amadeus::Request::FareMasterPricerCalendar.new(form)
@@ -27,10 +27,10 @@ class Mux
     end
 
     # TODO exception handling
-    def amadeus_pricer(form, admin_user = nil)
+    def amadeus_pricer(form, admin_user=false, lite=false)
       return [] unless Conf.amadeus.enabled
-      request_ws = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form)
-      request_ns = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form)
+      request_ws = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, lite)
+      request_ns = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, lite)
       request_ns.nonstop = true
 
       # TODO можно когда-нибудь вернуться. сейчас эта штука _иногда_ одновременно пытается загрузить класс
@@ -49,7 +49,7 @@ class Mux
       # non threaded variant
       recommendations_ws = Amadeus::Service.fare_master_pricer_travel_board_search(request_ws).recommendations
       #не ловим ошибку, так как может просто не быть беспосадочных вариантов, а это exception
-      recommendations_ns = if Conf.amadeus.nonstop_search
+      recommendations_ns = if Conf.amadeus.nonstop_search && !lite
                            Amadeus::Service.fare_master_pricer_travel_board_search(request_ns).recommendations
                            else [] end
 
@@ -62,18 +62,21 @@ class Mux
       recommendations.delete_if(&:ground?)
       recommendations.delete_if(&:without_full_information?)
       recommendations = recommendations.select(&:sellable?) unless admin_user
-      # sort
-      recommendations = recommendations.sort_by(&:price_total)
-      # regroup
-      recommendations = Recommendation.corrected(recommendations)
+      unless lite
+        # sort
+        recommendations = recommendations.sort_by(&:price_total)
+        # regroup
+        recommendations = Recommendation.corrected(recommendations)
+      end
       recommendations
     rescue
       notify
       []
     end
 
-    def sirena_pricer(form)
+    def sirena_pricer(form, admin_user=false, lite=false)
       return [] unless Conf.sirena.enabled
+      return [] if lite
       return [] unless sirena_searchable?(form)
       recommendations = Sirena::Service.pricing(form).recommendations || []
       recommendations.delete_if(&:without_full_information?)
@@ -85,12 +88,12 @@ class Mux
 
     def sirena_searchable?(form)
       # временно выключаем для яндексов
-      form.partner.blank? && (
+      # form.partner.blank? && (
         !Conf.sirena.restrict ||
         # form.adults == 1 &&
         form.children == 0 && form.infants == 0 &&
         form.form_segments.none?(&:multicity?)
-      )
+      #)
     end
 
     # report error and continue
