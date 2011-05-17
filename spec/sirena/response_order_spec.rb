@@ -38,4 +38,13 @@ describe Sirena::Response::Order do
     it { should have(2).flights }
     its(:booking_classes) { should == %W(Y Y) }
   end
+
+  describe 'when airport is not reported' do
+
+    let(:response) { 'spec/sirena/xml/order_without_arrival_airport.xml' }
+
+    it { should be_success }
+    it { should have(1).flights }
+    specify { subject.flights.first.arrival.city.name.should == 'Воронеж' }
+  end
 end

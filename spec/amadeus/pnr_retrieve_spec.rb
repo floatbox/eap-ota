@@ -22,7 +22,7 @@ describe Amadeus::Response::PNRRetrieve do
 
   end
 
-  describe 'three passengers, but only two tickets', :focus => true do
+  describe 'three passengers, but only two tickets' do
 
     subject {
       body = File.read('spec/amadeus/xml/PNR_Retrieve_Strange_Ticket_Number.xml')

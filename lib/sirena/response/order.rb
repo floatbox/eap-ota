@@ -20,12 +20,20 @@ module Sirena
         @booking_classes = []
         @flights = xpath("//segments/segment").map do |s|
           @booking_classes << s.xpath("class").text
+
+          # иногда не отдается airport. рискну предположить, что это в случае
+          # если код аэропорта совпадает с кодом города
+          departure_iata = s.xpath("departure/airport").text.presence ||
+            s.xpath("departure/city").text
+          arrival_iata = s.xpath("arrival/airport").text.presence ||
+            s.xpath("arrival/city").text
+
           Flight.new({
             :flight_number =>          s.xpath("flight").text,
             :operating_carrier_iata => s.xpath("company").text,
             :marketing_carrier_iata => s.xpath("company").text,
-            :departure_iata =>         s.xpath("departure/airport").text,
-            :arrival_iata =>           s.xpath("arrival/airport").text,
+            :departure_iata =>         departure_iata,
+            :arrival_iata =>           arrival_iata,
             :arrival_date =>           s.xpath("arrival/date").text.gsub(".", ""),
             :arrival_time =>           to_amadeus_time(s.xpath("arrival/time").text),
             :departure_date =>         s.xpath("departure/date").text.gsub(".", ""),
