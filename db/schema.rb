@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110506120811) do
+ActiveRecord::Schema.define(:version => 20110517133616) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(:version => 20110506120811) do
     t.string   "color"
     t.string   "font_color"
     t.string   "iata_ru"
+    t.text     "comment"
   end
 
   create_table "cities", :force => true do |t|
