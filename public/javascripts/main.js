@@ -196,23 +196,32 @@ init: function() {
             that.toggle();
         });
         this.pheader = $('#header');
-        this.rheader = $('#results-header');
         this.sdefine = $('#search-define');
         this.update();
     }
 },
-update: function(forced) {
-    var rh = this.rheader.height();
-    var ph = this.rheader.height(rh || 'auto');
-    this.top2 = Math.ceil(this.sdefine.offset().top + this.sdefine.height());
-    this.top3 = rh ? Math.ceil(ph.offset().top + rh - results.title.outerHeight() - 60) : 2000;
+update: function() {
+    this.top2 = this.sdefine.offset().top + this.sdefine.height();
     this.top1 = this.top2 - this.pheader.height();
-    this.toggle(forced);
+    if (results.el.hasClass('ready')) {
+        var rth = results.title.outerHeight();
+        var rfh = results.filters.content.height();
+        var rfo = results.hcontent.hasClass('fixed') ? results.filters.el.height() : 30;
+        this.top3 = results.header.height(rth + rfh).offset().top;
+        this.top4 = results.filters.el.is(':visible') ? (this.top3 + rfh - rfo) : this.top3;
+    } else {
+        results.header.height('auto');
+        this.top3 = 5000;
+        this.top4 = 5000;
+    }
+    this.toggle();
 },
 toggle: function(forced) {
     var section = 0;
     var st = this.canvas.scrollTop();
-    if (st > this.top3) {
+    if (st > this.top4) {
+        section = 4;
+    } else if (st > this.top3) {
         section = 3;
     } else if (st > this.top2) {
         section = 2;
@@ -224,15 +233,13 @@ toggle: function(forced) {
             top: section === 0 ? 0 : this.top1,
             position: section === 0 ? 'fixed' : 'absolute'
         });
-        this.rheader.toggleClass('fixed', section > 1);
-        this.rheader.find('.rfhide').toggle(section > 2);
-        if (results.filters.el.is(':visible')) {
-            var hidden = results.filters.el.hasClass('hidden');
-            if (section > 2 && !hidden) {
-                results.filters.hide();
-            } else if (section < 3 && hidden) {
-                results.filters.show();
-            }
+        results.filters.el.toggleClass('hidden', section === 4);
+        results.hcontent.toggleClass('fixed', section === 4);
+        results.hclone.toggleClass('fixed', section === 3);
+        if (this.section === 4) {
+            var rfh = results.filters.content.height();
+            var rfo = section === 4 ? results.filters.el.height() : 30;
+            this.top4 = results.filters.el.is(':visible') ? (this.top3 + rfh - rfo) : this.top3;
         }
         this.section = section;
     }

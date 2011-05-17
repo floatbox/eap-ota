@@ -17,17 +17,17 @@
 #results.ready .rh-clone {
     background: #FFF;
 }
-#results.ready .rh-fixed {
+#results.ready .fixed {
     display: block;
     position: fixed;
     left: 0; top: 0;
     z-index: 10;
     width: 100%;
 }
-#results.ready .rh-fixed .shadow {
+#results.ready .fixed .hshadow {
     display: block;
 }
-.firefox #results.ready .rh-fixed {
+.firefox #results.ready .fixed {
     background: rgba(255, 255, 255, 0.99);
 }
 
