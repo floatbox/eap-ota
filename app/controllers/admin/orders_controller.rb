@@ -1,5 +1,6 @@
 # encoding: utf-8
 class Admin::OrdersController < Admin::ResourcesController
+  include CustomCSV
   before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel]
 
   def show_pnr

@@ -23,12 +23,6 @@ class Order < ActiveRecord::Base
     ticket_numbers_as_text.to_s.split(/[, ]/).delete_if(&:blank?).size
   end
 
-  require 'iconv'
-  def number_cp1251
-    cp1251 = Iconv.new("windows-1251", 'utf-8')
-    cp1251.iconv(pnr_number)
-  end
-
   def order_id
     payments.last ? payments.last.ref : ''
   end
