@@ -49,9 +49,10 @@ class BookingController < ApplicationController
 
             # FIXME не выносить в кронтаск. но, может быть, внести обратно в .ticket!
             if @order.order.source == 'sirena'
-              Sirena::Adapter.approve_payment(@order.order)
-              @order.order.ticket!
               logger.info "Pay: ticketing sirena"
+              Sirena::Adapter.approve_payment(@order.order)
+              # сейчас это делает approve payment
+              # @order.order.ticket!
             end
 
             render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}
@@ -92,9 +93,10 @@ class BookingController < ApplicationController
       @order.money_blocked!
       # FIXME не выносить в кронтаск. но, может быть, внести обратно в .ticket!
       if @order.source == 'sirena'
-        Sirena::Adapter.approve_payment(@order)
-        @order.ticket!
         logger.info "Pay: ticketing sirena"
+        Sirena::Adapter.approve_payment(@order)
+        # сейчас это делает approve payment
+        # @order.order.ticket!
       end
     elsif ['blocked', 'charged'].include? @order.payment_status
     else
