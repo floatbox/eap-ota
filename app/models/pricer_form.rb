@@ -100,6 +100,11 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   column :infants, :integer, 0
   column :complex_to, :string
   column :cabin, :string
+  # FIXME delete tomorrow
+  column :day_interval, :integer, 3
+  column :debug, :boolean, false
+  column :sirena, :boolean, false
+  # end of FIXME
   has_many :form_segments, :class_name => 'PricerForm::FormSegment'
   accepts_nested_attributes_for :form_segments
   # FIXME обходит необходимость использовать form_segments_attributes в жаваскрипте
