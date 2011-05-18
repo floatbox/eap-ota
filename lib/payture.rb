@@ -8,11 +8,11 @@ class Payture
   # комиссионные за транзакцию
   PCNT = 0.0325
   def self.commission(price)
-    ((CBR.usd(0.10) + PCNT * price) / ( 1 - PCNT)).round(2)
+    (PCNT * price / ( 1 - PCNT)).round(2)
   end
 
   def self.sans_commission(price_with_commission)
-    (price_with_commission * (1 - PCNT) - CBR.usd(0.10)).round(2)
+    (price_with_commission * (1 - PCNT)).round(2)
   end
 
   class Response
