@@ -3,9 +3,9 @@ class Order < ActiveRecord::Base
 
   include CopyAttrs
 
-  PAYMENT_STATUS = {'not blocked' => 'not blocked', 'blocked' => 'blocked', 'charged' => 'charged', 'new' => 'new', 'pending' => 'pending'}
-  TICKET_STATUS = { 'ticketed' => 'ticketed', 'booked' => 'booked', 'canceled' => 'canceled'}
-  SOURCE = { 'amadeus' => 'amadeus', 'sirena' => 'sirena', 'other' => 'other' }
+  PAYMENT_STATUS = ['not blocked', 'blocked', 'charged', 'new', 'pending']
+  TICKET_STATUS = [ 'booked', 'canceled', 'ticketed']
+  SOURCE = [ 'amadeus', 'sirena', 'other']
   PAYMENT_TYPE = ['card', 'delivery', 'cash']
 
   has_many :payments
