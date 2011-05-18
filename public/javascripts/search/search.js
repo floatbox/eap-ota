@@ -204,8 +204,7 @@ values: function() {
     var data = {
         form_segments: [],
         people_count: this.persons.selected,
-        cabin: this.cabin.value[0],
-        day_interval: 1
+        cabin: this.cabin.value[0]
     };
     for (var i = {rt: 1, ow: 1, dw: 2, tw: 3}[this.mode]; i--;) {
         data.form_segments[i] = {
@@ -220,14 +219,6 @@ values: function() {
             to: data.form_segments[0].from,
             date: d[1]
         };
-    }
-    var debug = $('#sdmode');
-    if (debug.length && debug.get(0).checked) {
-        data.debug = 1;
-    }
-    var sirena = $('#sirena');
-    if (sirena.length && sirena.get(0).checked) {
-        data.sirena = 1;
     }
     return data;
 },
