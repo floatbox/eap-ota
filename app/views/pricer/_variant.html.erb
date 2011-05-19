@@ -96,7 +96,7 @@
 <tr class="bars">
     <td colspan="6">
     <% variant.segments.each_with_index do |segment, segment_counter| %>
-        <div class="segment" data-flights="<%= segment_flight_numbers(segment) %>" data-options="<%= bar_options(segment).to_json %>">
+        <div class="segment" data-flights="<%= segment_flight_numbers(segment) %>" data-options="<%= bar_options(segment).to_json %>" data-carrier="<%= variant_carriers[segment_counter]['name'] %>">
         <a class="a-button" href="#"><%= recommendation.price_with_payment_commission.round.to_i %>&nbsp;р.</a>
         <div class="bar">
             <div class="dpt"><%= fmt_time( segment.departure_time ) %> <span class="iata"><%= segment.departure.iata %></span></div>

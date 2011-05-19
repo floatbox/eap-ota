@@ -168,14 +168,14 @@
 .offers-sort p {
     color: #4B4B4B;
 }
-.offers-sort a {
+.offers-sort .link {
     color: #4B4B4B;
 }
-.offers-sort a:hover {
+.offers-sort .link:hover {
     color: #000;
 }
-.offers-sort a.sortedby,
-.offers-sort a.sortedby u {
+.offers-sort .sortedby,
+.offers-sort .sortedby:hover {
     text-decoration: none;
     color: #4B4B4B;
     cursor: text;

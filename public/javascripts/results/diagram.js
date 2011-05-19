@@ -16,11 +16,16 @@ init: function() {
         }
         that.selectSegment(s, el.attr('data-flights'));
     });
+    this.content.delegate('.sort-items .link:not(.sortedby)', 'click', function() {
+        that.sortby = $(this).attr('data-sort');
+        that.sortSegments();
+        that.updateSegments();
+    });
     this.header.delegate('.odhsegment:not(.selected)', 'click', function() {
         that.showSegment($(this).closest('td').data('segment'));
     });
 },
-update: function() {
+update: function(reset) {
     var variants = results.variants;
     if (variants[0].bars === undefined) {
         this.parseBars();
@@ -31,6 +36,9 @@ update: function() {
         if (variant.improper !== true) {
             this.variants.push(variant);
         }
+    }
+    if (reset) {
+        this.sortby = 'price';
     }
     this.content.height(this.content.height()).html('');
     if (this.variants.length !== 0) {
@@ -49,6 +57,9 @@ update: function() {
         }
         this.selected = [];
         this.header.show();
+        if (this.sortby !== 'price') {
+            this.sortSegments();
+        }
         this.updateSegments();
         this.showSegment(0);
         this.content.height('auto');
@@ -78,7 +89,7 @@ showVariant: function() {
     variant.removeClass('g-none').find('.variants').hide();
     this.content.addClass('latent');
     this.header.find('.selected').removeClass('selected');
-    this.el.find('.offer').html('').append(variant).removeClass('latent');
+    this.el.find('.offer').html('').append(variant).removeClass('latent prebooking');
 },
 showSegment: function(s) {
     this.el.find('.offer').addClass('latent');
@@ -119,17 +130,16 @@ getSegment: function(s) {
         }
     }
     segment.order = [];
-    for (var i = segment.bars.length; i--;) {
+    for (var i = 0, im = segment.bars.length; i < im; i++) {
         var bar = segment.bars[i];
         segment.order.push({
             n: i,
-            p: segment.prices[bar.flights][0],
-            d: bar.arv - bar.dpt
+            price: segment.prices[bar.flights][0],
+            duration: bar.arv - bar.dpt,
+            departure: bar.dpt,
+            carrier: bar.carrier
         });
     }
-    segment.order.sort(function(a, b) {
-        return (a.d - b.d) || (a.p - b.p);
-    });
     if (shifts > 1) {
         segment.shift = 0;
     }
@@ -139,12 +149,10 @@ getSegment: function(s) {
 },
 drawSegment: function(s) {
     var segment = this.segments[s], stitle;
-    if (s === 1) {
-        stitle = 'Варианты, совместимые с выбранным перелётом ' + this.options[0].human;
-    } else {
-        stitle = 'Варианты, совместимые с выбранным обратным перелётом';
-    }
-    var list = segment.el.html('<div class="ods-title"><h4>' + stitle + '</h4></div><div class="ods-content"></div>').find('.ods-content');
+    segment.el.html('<div class="ods-title"><h4>Все варианты</h4></div>');
+    segment.el.append($('#offers-all .offers-sort .sort-items').clone());
+    segment.title = segment.el.find('.ods-title h4');
+    var list = $('<div class="ods-content"></div>').appendTo(segment.el);
     var locations = $('<ul class="locations"><li>' + segment.dptcity + '</li></ul>').appendTo(list);
     if (segment.shift) {
         locations.append('<li>' + segment.arvcity + '</li>');
@@ -256,8 +264,8 @@ updateSegments: function() {
         var sil = segment.el.find('.ods-improper');
         var bars = segment.bars, order = segment.order;
         var iamount = 0;
-        for (var i = 0, im = bars.length; i < im; i++) {
-            var bar = bars[i];
+        for (var i = 0, im = order.length; i < im; i++) {
+            var bar = bars[order[i].n];
             if (pf[bar.flights]) {
                 bar.el.appendTo(spl);
             } else {
@@ -268,8 +276,22 @@ updateSegments: function() {
                 bar.el.addClass('selected');
             }
         }
-        segment.el.children('.ods-title').toggle(iamount > 0);
+        var title = 'Варианты';
+        if (iamount > 0) {
+            var direction = s === 1 ? ('перелётом ' + this.options[0].human) : 'обратным перелётом';
+            title = 'Совместимые с выбранным ' + direction + ' варианты';
+        }
+        var sitems = segment.el.find('.sort-items .link').removeClass('sortedby');
+        var sorted = sitems.filter('[data-sort="' + this.sortby + '"]').addClass('sortedby');
+        segment.title.html(title + ', отсортированные ' + sorted.html());
         sil.toggle(iamount > 0);
+    }
+},
+sortSegments: function() {
+    var sf = this.sortFunctions[this.sortby];
+    for (var s = this.segments.length; s--;) {
+        var segment = this.segments[s];
+        segment.order.sort(sf);
     }
 },
 parseBars: function() {
@@ -283,6 +305,7 @@ parseBars: function() {
             v.bars[s] = {
                 el: item.clone(),
                 flights: item.attr('data-flights'),
+                carrier: item.attr('data-carrier'),
                 shift: options.shift,
                 dpt: options.dpt,
                 arv: options.arv
@@ -294,5 +317,21 @@ formatTime: function(t) {
     if (t < 0) t += 1440;
     var h = Math.floor((t % 1440) / 60), hh = h < 10 ? ('<span class="zero">0</span>' + h) : h;
     return hh + ':' + (t % 60 / 100).toFixed(2).substring(2);
+},
+sortFunctions: {
+    price: function(a, b) {
+        return (a.price - b.price) || (a.duration - b.duration) || (a.departure - b.departure);
+    },
+    duration: function(a, b) {
+        return (a.duration - b.duration) || (a.price - b.price) || (a.departure - b.departure);
+    },
+    departures: function(a, b) {
+        return (a.departure - b.departure) || (a.price - b.price) || (a.duration - b.duration);
+    },
+    carrier: function(a, b) {
+        if (a.carrier > b.carrier) return 1;
+        if (a.carrier < b.carrier) return -1;
+        return (a.price - b.price) || (a.duration - b.duration) || (a.departure - b.departure);
+    }
 }
 };

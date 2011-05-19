@@ -74,17 +74,14 @@ init: function() {
     });
 
     // Сортировка
-    offers.delegate('.offers-sort a', 'click', function(event) {
-        event.preventDefault();
-        var key = this.onclick();
+    offers.delegate('.offers-sort .link', 'click', function() {
+        var key = $(this).attr('data-sort');
         if (key != results.sortby) {
-            var list = $('#offers-pcollection').css('opacity', 0.7);
+            $('#offers-pcollection').css('opacity', 0.7);
+            results.applySort(key);
             setTimeout(function() {
-                list.hide();
-                results.applySort(key);
                 results.sortOffers();
-                list.css('opacity', 1).show();
-            }, 250);
+            }, 150);
         }
     });
 
@@ -323,7 +320,7 @@ processUpdate: function() {
             self.diagram.active = (mode === 'ow' || mode === 'rt');
             $('#rtab-diagram').toggle(self.diagram.active);
             if (self.diagram.active) {
-                self.diagram.update();
+                self.diagram.update(true);
             }
         });
         if (window._gaq) {
@@ -520,9 +517,10 @@ filterOffers: function() {
     this.toggleCollection(amount > 0);
 },
 applySort: function(key) {
-    $('#offers-all .offers-sort a').each(function() {
-        var hidden = (this.onclick() == key);
-        var el = $(this).toggleClass('sortedby', hidden);
+    $('#offers-all .offers-sort .link').each(function() {
+        var el = $(this);
+        var hidden = (el.attr('data-sort') == key);
+        el.toggleClass('sortedby', hidden);
         if (hidden) $('#offers-sortedby').text(el.text());
     });
     this.sortby = key;
@@ -563,10 +561,14 @@ sortOffers: function() {
         if (a.price < b.price) return -1;
         return 0;
     });
-    var list = $('#offers-pcollection');
+    var list = $('#offers-pcollection').hide();
+    setTimeout(function() {
+        list.css('opacity', 1);
+    }, 250);
     for (var i = 0, lim = sitems.length; i < lim; i++) {
         list.append(sitems[i].offer.el);
     }
+    list.show();
 },
 showRecommendations: function() {
     var items = [], variants = this.variants;

@@ -105,7 +105,7 @@ td.odh-tip {
 .ods-title {
     position: relative;
     z-index: 1;
-    margin: 0 0 15px;
+    margin: 0 0 4px;
     background: #E7ECEE;
     font-size: 11px;
     line-height: 15px;
@@ -114,6 +114,7 @@ td.odh-tip {
     margin: 0 0 3px;
     font-weight: bold;
     font-size: 18px;
+    line-height: 20px;
 }
 .ods-improper .ods-title {
     margin: 0;
@@ -230,4 +231,22 @@ td.odh-tip {
 /* Selected variant */
 #offers-diagram .offer {
     width: 675px;
+}
+
+/* Sort */
+.odsegment .sort-items {
+    margin: 0 0 12px;
+    color: #4B4B4B;
+}
+.odsegment .sort-items .link {
+    color: #4B4B4B;
+}
+.odsegment .sort-items .link:hover {
+    color: #000;
+}
+.odsegment .sort-items .sortedby,
+.odsegment .sort-items .sortedby:hover {
+    text-decoration: none;
+    color: #4B4B4B;
+    cursor: text;
 }
