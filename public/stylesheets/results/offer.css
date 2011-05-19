@@ -290,9 +290,6 @@
 }
 
 /* Подробности */
-.offer .details {
-    /*border-top: 1px solid #d0d0d0;*/
-}
 .offer .details tr {
     background: #f7f7f7;
 }
@@ -316,6 +313,17 @@
 }
 .offer .details .segment-3 .direction {
     color: #0aa0c6;
+}
+
+/* Комментарии */
+.offer .details tr.comments {
+    background: #f5eec9;
+}
+.offer-variant .comments td {
+    padding: 6px 15px 6px 0;
+}
+.offer .details .comment {
+    margin: 5px 0;
 }
 
 /* Класс */

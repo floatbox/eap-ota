@@ -136,6 +136,16 @@
 <% variant.segments.each_with_index do |segment, segment_counter| %>
     <%= render :partial => 'segment_details', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter, :segment_cabins => variant_cabins[segment_counter]} %>
 <% end %>
+<% unless variant.carrier_comments.empty? %>
+<tr class="comments">
+    <td></td>
+    <td colspan="6">
+    <% variant.carrier_comments.each do |comment| %>
+        <div class="comment"><%= comment %></div>
+    <% end %>
+    </td>
+</tr>
+<% end %>
 <tr class="book">
     <th>
       <% if recommendation.sellable? %>
