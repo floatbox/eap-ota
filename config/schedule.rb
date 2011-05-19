@@ -16,7 +16,7 @@ every 10.minutes do
   #runner 'Amadeus::Session.dirty_housekeep'
 end
 
-every 1.day, :at => '18:00' do
-  command_at_current 'script/cbrusd && touch tmp/restart.txt'
-end
+#every 1.day, :at => '18:00' do
+#  command_at_current 'script/cbrusd && touch tmp/restart.txt'
+#end
 

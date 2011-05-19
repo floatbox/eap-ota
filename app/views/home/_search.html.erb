@@ -180,8 +180,9 @@
 
         <% if admin_user %>
         <span id="search-debug">
-          <input type="checkbox" id="sdmode" disabled="disabled" <%= 'checked="checked"' if Conf.amadeus.fake %> > <label for="sdmode">Режим отладки</label>&nbsp;
-            <input type="checkbox" id="sirena" disabled="disabled" <%= 'checked="checked"' if Conf.sirena.enabled %> > <label for="sirena">Сирена</label>
+          Amadeus:&nbsp;<%= Conf.amadeus.enabled ? Conf.amadeus.env : 'no' %>
+          Сирена:&nbsp;<%= Conf.sirena.enabled ? Conf.sirena.env : 'no' %>
+          Payture:&nbsp;<%= Conf.payture.enabled ? Conf.payture.env : 'no' %>
         </span>
         <% end %>
 
