@@ -34,13 +34,13 @@ class Flight
   delegate :name, :prefix => true, :allow_nil => true, :to => :equipment_type
 
   def arrival_datetime_utc
-    local = DateTime.strptime( arrival_date + arrival_time, '%d%m%y%H%M' )
-    arrival.tz.local_to_utc(local).to_time
+    @arrival_datetime_utc ||=
+      arrival.tz.local_to_utc(DateTime.strptime( arrival_date + arrival_time, '%d%m%y%H%M' )).to_time
   end
 
   def departure_datetime_utc
-    local = DateTime.strptime( departure_date + departure_time, '%d%m%y%H%M' )
-    departure.tz.local_to_utc(local).to_time
+    @departure_datetime_utc ||=
+      departure.tz.local_to_utc(DateTime.strptime( departure_date + departure_time, '%d%m%y%H%M' )).to_time
   end
 
   def duration
