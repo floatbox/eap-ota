@@ -1,6 +1,8 @@
 # encoding: utf-8
 class Order < ActiveRecord::Base
 
+  include CopyAttrs
+
   PAYMENT_STATUS = {'not blocked' => 'not blocked', 'blocked' => 'blocked', 'charged' => 'charged', 'new' => 'new', 'pending' => 'pending'}
   TICKET_STATUS = { 'ticketed' => 'ticketed', 'booked' => 'booked', 'canceled' => 'canceled'}
   SOURCE = { 'amadeus' => 'amadeus', 'sirena' => 'sirena' }
@@ -48,34 +50,41 @@ class Order < ActiveRecord::Base
 
   def order_data= order_data
     recommendation = order_data.recommendation
-    self.email = order_data.email
-    self.phone = order_data.phone
-    self.source = recommendation.source
-    self.pnr_number = order_data.pnr_number
-    self.price_total = recommendation.price_total
-    self.price_fare = recommendation.price_fare
-    self.price_with_payment_commission = recommendation.price_with_payment_commission
-    self.full_info = order_data.full_info
-    self.sirena_lead_pass = order_data.sirena_lead_pass
-    self.last_tkt_date = order_data.last_tkt_date
+    copy_attrs order_data, self,
+      :email,
+      :phone,
+      :pnr_number,
+      :full_info,
+      :sirena_lead_pass,
+      :last_tkt_date,
+      :payment_type,
+      :delivery,
+      :last_pay_time
+
+    copy_attrs recommendation, self,
+      :source,
+      :price_total,
+      :price_fare,
+      :price_with_payment_commission
+
     self.description = recommendation.variants[0].flights.every.destination.join('; ')
-    self.payment_type = order_data.payment_type
-    self.delivery = order_data.delivery
-    self.last_pay_time = order_data.last_pay_time
     self.cabins = recommendation.cabins.join(',')
     if order_data.payment_type != 'card'
       self.cash_payment_markup = recommendation.price_payment + (order_data.payment_type == 'delivery' ? 350 : 0)
     end
-    if c = recommendation.commission
-      self.commission_carrier = c.carrier
-      self.commission_agent = c.agent
-      self.commission_subagent = c.subagent
-      self.commission_agent_comments = c.agent_comments
-      self.commission_subagent_comments = c.subagent_comments
-      self.price_share = recommendation.price_share
-      self.price_our_markup = recommendation.price_our_markup
-      self.price_consolidator_markup = recommendation.price_consolidator_markup
-      self.price_tax_and_markup = recommendation.price_tax_and_markup
+    if recommendation.commission
+      copy_attrs recommendation.commission, self, :prefix => :commission,
+        :carrier,
+        :agent,
+        :subagent,
+        :agent_comments,
+        :subagent_comments
+
+      copy_attrs recommendation, self,
+        :price_share,
+        :price_our_markup,
+        :price_consolidator_markup,
+        :price_tax_and_markup
     end
     self.payment_status = (order_data.payment_type == 'card') ? 'not blocked' : 'pending'
     self.ticket_status = 'booked'

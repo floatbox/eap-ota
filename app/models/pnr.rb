@@ -1,5 +1,6 @@
 # encoding: utf-8
 class Pnr
+  extend CopyAttrs
   attr_accessor :number, :flights, :booking_classes, :passengers, :phone, :email, :raw
 
   def self.get_by_number number
@@ -7,21 +8,21 @@ class Pnr
     pnr.number = number
     if pnr.order && pnr.order.source == 'sirena'
       order = Sirena::Service.order(number, pnr.order.sirena_lead_pass)
-      pnr.flights = order.flights
-      pnr.passengers = order.passengers
-      pnr.booking_classes = order.booking_classes
-      pnr.phone = order.phone
-      pnr.email = order.email
+      copy_attrs order, pnr,
+        :flights,
+        :booking_classes,
+        :passengers,
+        :phone,
+        :email
     else
       Amadeus.booking do |amadeus|
         resp = amadeus.pnr_retrieve_and_ignore(:number => number)
-        pnr.flights = resp.flights
-        pnr.booking_classes = resp.booking_classes
-        pnr.passengers = resp.passengers
-        pnr.email = resp.email
-        pnr.phone = resp.phone
-        # FIXME может, надо?
-        # amadeus.session.destroy
+        copy_attrs resp, pnr,
+          :flights,
+          :booking_classes,
+          :passengers,
+          :phone,
+          :email
       end
     end
     pnr
