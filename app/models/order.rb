@@ -73,7 +73,7 @@ class Order < ActiveRecord::Base
       self.cash_payment_markup = recommendation.price_payment + (order_data.payment_type == 'delivery' ? 350 : 0)
     end
     if recommendation.commission
-      copy_attrs recommendation.commission, self, :prefix => :commission,
+      copy_attrs recommendation.commission, self, {:prefix => :commission},
         :carrier,
         :agent,
         :subagent,
