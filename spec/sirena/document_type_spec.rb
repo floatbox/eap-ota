@@ -5,7 +5,7 @@ describe 'проверяем, правильно ли угадывается т�
   def convert(passport, nationality_code, birthday, document_noexpiration)
     p = Person.new(
       :passport => passport,
-      :birthday => birthday.to_time,
+      :birthday => birthday,
       :document_noexpiration => document_noexpiration
     )
     p.stub!(:nationality).and_return(Country.new(:alpha2 => nationality_code))

@@ -9,6 +9,10 @@ class Variant
     segments.sum(&:flights)
   end
 
+  def carrier_comments
+    flights.every.operating_carrier.uniq.every.comment.delete_if(&:blank?)
+  end
+
   def summary
     # FIXME carriers для фильтров - operating carrier. ok?
     result = {

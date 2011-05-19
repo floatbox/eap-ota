@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sirena>
+  <answer pult="ГРФ365">
+    <order agency="36МОС">
+      <pnr bdate="17:50 17.05.2011">
+        <passengers>
+          <passenger id="11" lead_pass="true">
+            <name>ELENA 05ИЮЛ56</name>
+            <surname>ZAYTSEVA</surname>
+            <sex>female</sex>
+            <birthdate>05.07.1956</birthdate>
+            <age>54</age>
+            <doccode>ПС</doccode>
+            <doc>4501069471</doc>
+            <category rbm="0">ААА</category>
+          </passenger>
+        </passengers>
+        <segments>
+          <segment id="12">
+            <company>UT</company>
+            <flight>197</flight>
+            <class>O</class>
+            <seatcount>1</seatcount>
+            <departure>
+              <city>МОВ</city>
+              <airport>ВНК</airport>
+              <date>19.05.11</date>
+              <time>12:10</time>
+            </departure>
+            <arrival>
+              <city>ВРН</city>
+              <date>19.05.11</date>
+              <time>13:25</time>
+            </arrival>
+            <status>confirmed</status>
+            <airplane>АТ4</airplane>
+          </segment>
+        </segments>
+        <prices tick_ser="ЭБМ" fop="НА">
+          <price segment-id="12" passenger-id="11">
+            <fare>
+              <code base_code="OSSOW">OSSOW</code>
+              <value currency="РУБ">2290.00</value>
+            </fare>
+            <taxes>
+              <tax owner="aircompany">
+                <code>ZZ</code>
+                <value>125.00</value>
+              </tax>
+              <tax owner="aircompany">
+                <code>YQ</code>
+                <value>375.00</value>
+              </tax>
+            </taxes>
+          </price>
+          <variant_total currency="РУБ">2790.00</variant_total>
+        </prices>
+        <timelimit>19.05.11 12:10</timelimit>
+        <regnum>БХС1Н7</regnum>
+        <common_status>ticket</common_status>
+        <possible_action_list>
+          <action>get_itin_receipt</action>
+        </possible_action_list>
+      </pnr>
+      <contacts>
+        <contact>+79857655981</contact>
+        <contact>LENAZAITSEVA@YANDEX.RU</contact>
+        <customer>
+          <firstname></firstname>
+          <lastname></lastname>
+        </customer>
+      </contacts>
+      <tickinfo ticknum="2986164564255" tick_ser="ЭБМ" accode="298" is_etick="true" tkt_ppr="92390476" seg_id="12" pass_id="11">ticket</tickinfo>
+    </order>
+  </answer>
+</sirena>
