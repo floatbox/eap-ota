@@ -20,8 +20,6 @@ class Pnr
         pnr.passengers = resp.passengers
         pnr.email = resp.email
         pnr.phone = resp.phone
-
-        pnr.raw = amadeus.pnr_raw number
         # FIXME может, надо?
         # amadeus.session.destroy
       end
