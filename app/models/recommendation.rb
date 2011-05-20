@@ -160,12 +160,11 @@ class Recommendation
   end
 
   def without_full_information?
-    #проверяем, что все аэропорты есть в базе
-    missed_iatas = (flights.every.arrival + flights.every.departure).uniq.find_all{|a| !a.id}.every.iata
-    File.open(Rails.root + 'log/missed_iatas.log', 'a') {|f|
-        f.write(missed_iatas.join(',') + ' ' + Time.now.strftime("%H:%M %d.%m.%Y") + "\n")
-    } unless missed_iatas.blank?
-    !missed_iatas.blank?
+    #проверяем, что все аэропорты и авиакомпании есть в базе
+    flights.map {|f| f.arrival; f.departure; f.operating_carrier; f.validating_carrier}
+    false
+  rescue IataStash::NotFound => e
+    return true
   end
 
   def ground?

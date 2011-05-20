@@ -1,10 +1,7 @@
 # encoding: utf-8
 module IataStash
 
-  class NotFound < ActiveRecord::RecordNotFound
-    def initialize(iata)
-      @message = "#{iata} not found"
-    end
+  class NotFound < RuntimeError
   end
 
   # добавляет метод SomeClass[iata], который кэширует записи в текущем thread/request
@@ -15,9 +12,19 @@ module IataStash
     @iata_cache ||= {}
     @iata_cache["#{name}_stash"] ||= Hash.new do |hash, iata|
       unless iata.nil?
-        data = find_by_iata_ru(iata) if iata.match(/[А-Я]/u)
-        hash[iata] = data || find_by_iata(iata) || new(:iata => iata, :iata_ru => iata)
+        data = find_by_iata(iata) || find_by_iata_ru(iata)
+        if data
+          hash[data.iata] = data if data.iata.present?
+          hash[data.iata_ru] = data if data.iata_ru.present?
+          data
+        else
+          File.open(Rails.root + 'log/missed_iatas.log', 'a') {|f|
+            f.write(name + ' ' + iata + ' ' + Time.now.strftime("%H:%M %d.%m.%Y") + "\n")
+          }
+          raise NotFound, "Couldn't find #{name} with IATA '#{iata}'"
+        end
       end
     end
   end
 end
+

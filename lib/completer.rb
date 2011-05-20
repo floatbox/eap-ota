@@ -432,6 +432,10 @@ class Completer
       prenormalized_matches?(normalize(prefix))
     end
 
+    def original_object
+      (Kernel.const_get(type.camelize))[code] if code.present? && (['airport', 'city', 'country'].include? type)
+    end
+
     def prenormalized_matches?(normalized_prefix)
       if normalized_prefix.length == 3
         # full match of IATA for countries
