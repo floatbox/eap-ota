@@ -13,6 +13,7 @@ gem 'i18n'
 gem 'cucumber'
 gem 'handsoap'
 gem 'curb'
+gem 'typhoeus'
 gem 'nokogiri'
 gem 'crack'
 gem "every"
