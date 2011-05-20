@@ -43,7 +43,11 @@ module Sirena
       def encrypt?
         false
       end
-
+      
+      def timeout
+        45
+      end
+      
       # helpers
 
       # TODO на наших датах всегда работает?
