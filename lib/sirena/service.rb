@@ -20,7 +20,7 @@ module Sirena
           response_body = read_latest_xml(name)
         else
           log_request(name, request_body)
-          response_body = do_http(request_body, :encrypt => request.encrypt?)
+          response_body = do_http(request_body, :encrypt => request.encrypt?, :timeout => request.timeout)
           log_response(name, response_body)
         end
         response = Sirena::Response.for(name).new(response_body)

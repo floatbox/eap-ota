@@ -4,6 +4,10 @@ module Sirena
     class Pricing < Sirena::Request::Base
       CabinsMatch = {"Y"=>"Э", "F"=>"П", "C"=>"Б"}
       attr_accessor :passengers, :segments
+      
+      def timeout
+        155
+      end
 
       def initialize(form, recommendation = nil)
         @passengers = []

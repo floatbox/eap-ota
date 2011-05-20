@@ -344,8 +344,8 @@ validate: function(qkey) {
                                 text = 'Выберите, пожалуйста, дату обратного вылета';
                             } else if (self.mode === 'dw' || self.mode === 'tw') {
                                 var segment = result.search.form_segments[i];
-                                var sf = segment.from_as_object && segment.from_as_object.morpher_from;
-                                var st = segment.to_as_object && segment.to_as_object.morpher_to;
+                                var sf = segment.from_as_object && (segment.from_as_object.proper_from || segment.from_as_object.morpher_from);
+                                var st = segment.to_as_object && (segment.to_as_object.proper_to || segment.to_as_object.morpher_to);
                                 if (sf) text += ' ' + sf.replace(/ /, '&nbsp;');
                                 if (st) text += ' ' + st.replace(/ /, '&nbsp;');
                             }
