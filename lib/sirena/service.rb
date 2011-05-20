@@ -26,25 +26,29 @@ module Sirena
         response = Sirena::Response.for(name).new(response_body)
       end
 
-      # FIXME заменить нафик на Curl::Easy
       def do_http(request, args={})
         # pricing: 150
         # client_summary: 100
         # superclient_summary: 150
         # остальные запросы: 40
         # выставляю пока для прайсера, с запасом
-        http = Net::HTTP.new(HOST, PORT)
-        http.read_timeout = 160
+        http = Typhoeus::Easy.new
+        http.timeout = 160 * 1000 # in ms
+        http.url = "http://#{HOST}:#{PORT}#{PATH}"
+        http.method = :post
+
         headers = {}
         headers['X-Encrypt'] = 'true' if args[:encrypt]
         headers['X-Timeout'] = (args[:timeout] || 155).to_s
+        http.headers = headers
 
-        http_response = http.post(PATH, request, headers)
+        http.request_body = request
+        http.perform
 
-        unless http_response.is_a? Net::HTTPSuccess
-          http_response.error!
+        unless (200..299) === http.response_code
+          raise HTTPError, "Status code: #{http.response_code}"
         end
-        http_response.body
+        http.response_body
       end
 
       %W(pricing describe booking booking_cancel payment_ext_auth \
@@ -72,6 +76,9 @@ module Sirena
       end
     end
 
+  end
+
+  class HTTPError < RuntimeError
   end
 
 end
