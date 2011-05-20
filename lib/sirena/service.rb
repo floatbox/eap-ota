@@ -27,28 +27,18 @@ module Sirena
       end
 
       def do_http(request, args={})
-        # pricing: 150
-        # client_summary: 100
-        # superclient_summary: 150
-        # остальные запросы: 40
-        # выставляю пока для прайсера, с запасом
-        http = Typhoeus::Easy.new
-        http.timeout = 160 * 1000 # in ms
-        http.url = "http://#{HOST}:#{PORT}#{PATH}"
-        http.method = :post
+        req = Typhoeus::Request.new "http://#{HOST}:#{PORT}#{PATH}",
+          :method => :post,
+          :body => request,
+          :timeout => 160 * 1000, # in ms
+          :headers => {
+            'X-Encrypt' => (args[:encrypt] ? 'true' : 'false'),
+            'X-Timeout' => ((args[:timeout] || 150) + 5).to_s
+          }
+        Typhoeus::Hydra.hydra.queue req
+        Typhoeus::Hydra.hydra.run
 
-        headers = {}
-        headers['X-Encrypt'] = 'true' if args[:encrypt]
-        headers['X-Timeout'] = ((args[:timeout] || 150) + 5).to_s
-        http.headers = headers
-
-        http.request_body = request
-        http.perform
-
-        unless (200..299) === http.response_code
-          raise HTTPError, "Status code: #{http.response_code}"
-        end
-        http.response_body
+        req.response.body
       end
 
       %W(pricing describe booking booking_cancel payment_ext_auth \
