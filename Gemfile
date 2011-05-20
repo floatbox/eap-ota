@@ -1,5 +1,5 @@
 source 'http://rubygems.org'
-gem 'rails', '3.0.3'
+gem 'rails', '3.0.7'
 
 
 
@@ -20,7 +20,8 @@ gem "memoize"
 gem 'morpher_inflect'
 gem 'russian'
 gem 'graticule'
-gem 'mysql2'
+# поменять при апгрейде до рельсов 3.1
+gem 'mysql2', '0.2.7'
 gem 'tzinfo'
 gem 'geo_ip'
 gem 'hoptoad_notifier'
