@@ -66,8 +66,8 @@ module Sirena
       end
 
       %W(pricing).each do |method_name|
-        define_method "async_" + method_name.underscore do |*params|
-          async_action(method_name, *params)
+        define_method "async_" + method_name.underscore do |*params, &block|
+          async_action(method_name, *params, &block)
         end
       end
 
