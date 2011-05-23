@@ -3,13 +3,13 @@ module Sirena
   module Request
     class Pricing < Sirena::Request::Base
       CabinsMatch = {"Y"=>"Э", "F"=>"П", "C"=>"Б"}
-      attr_accessor :passengers, :segments
+      attr_accessor :passengers, :segments, :timeout
       
       def timeout
-        155
+        @timeout_lite || 150
       end
 
-      def initialize(form, recommendation = nil)
+      def initialize(form, recommendation = nil, lite = nil)
         @passengers = []
         if form.people_count[:adults] > 0
           @passengers << {:code => "ААА", :count => form.people_count[:adults]}
@@ -45,6 +45,8 @@ module Sirena
               }
             end
           end
+          
+        @timeout_lite = Conf.sirena.timeout_lite if lite
 
       end
 

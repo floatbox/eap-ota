@@ -78,7 +78,7 @@ class Mux
       return [] unless Conf.sirena.enabled
       return [] if lite
       return [] unless sirena_searchable?(form)
-      recommendations = Sirena::Service.pricing(form).recommendations || []
+      recommendations = Sirena::Service.pricing(form, nil, lite).recommendations || []
       recommendations.delete_if(&:without_full_information?)
       recommendations
     rescue

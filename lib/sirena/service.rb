@@ -39,7 +39,7 @@ module Sirena
 
         headers = {}
         headers['X-Encrypt'] = 'true' if args[:encrypt]
-        headers['X-Timeout'] = (args[:timeout] || 155).to_s
+        headers['X-Timeout'] = ((args[:timeout] || 150) + 5).to_s
         http.headers = headers
 
         http.request_body = request
