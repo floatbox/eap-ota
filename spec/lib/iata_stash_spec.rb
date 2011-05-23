@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 # FIXME по-stub-ить все эти внешние зависимости, что ли
-describe IataStash, :focus => true do
+describe IataStash do
 
   it "should not raise when searching for IATA" do
     expect { Airport['DME'] }.to_not raise_error(IataStash::NotFound)
