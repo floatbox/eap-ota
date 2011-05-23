@@ -1,6 +1,6 @@
 class AddOfflineBookingFlagToOrders < ActiveRecord::Migration
   def self.up
-    add_column :orders, :offline_booking, :boolean, :default => false
+    add_column :orders, :offline_booking, :boolean, :default => false, :null => false
   end
 
   def self.down
