@@ -10,7 +10,31 @@ module Handsoap
         end
 
         def send_http_request(request)
-          req = Typhoeus::Request.new request.url,
+          req = typhoeus_request(request)
+          Typhoeus::Hydra.hydra.queue req
+          Typhoeus::Hydra.hydra.run
+          response = req.response
+          parse_http_part(response.headers.gsub(/^HTTP.*\r\n/, ""), response.body, response.code)
+        end
+
+        def send_http_request_async(request)
+          req = typhoeus_request(request)
+          Typhoeus::Hydra.hydra.queue req
+
+          deferred = Handsoap::Deferred.new
+          req.on_complete do
+            # сделать errback
+            # deferred.trigger_errback emdef
+            response = req.response
+            http_response = parse_http_part(response.headers.gsub(/^HTTP.*\r\n/, ""), response.body, response.code)
+            deferred.trigger_callback http_response
+          end
+          deferred
+        end
+
+
+        def typhoeus_request(request)
+          Typhoeus::Request.new request.url,
             :username => request.username,
             :password => request.password,
             :ssl_cacert => request.trust_ca_file,
@@ -19,11 +43,6 @@ module Handsoap
             :headers => request.headers,
             :method => request.http_method,
             :body => request.body
-          Typhoeus::Hydra.hydra.queue req
-          Typhoeus::Hydra.hydra.run
-
-          response = req.response
-          parse_http_part(response.headers.gsub(/^HTTP.*\r\n/, ""), response.body, response.code)
         end
 
       end

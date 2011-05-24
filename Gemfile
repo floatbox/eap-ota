@@ -11,7 +11,7 @@ end
 gem 'whenever', :require => false
 gem 'i18n'
 gem 'cucumber'
-gem 'handsoap'
+gem 'handsoap', :git => 'git://github.com/codesnik/handsoap.git', :branch => 'fixing_async_again'
 gem 'curb'
 gem 'typhoeus'
 gem 'nokogiri'
