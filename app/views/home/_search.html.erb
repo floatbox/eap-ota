@@ -102,7 +102,10 @@
         </div>
         <div class="viewport">
             <ul class="week"><li>пн</li><li>вт</li><li>ср</li><li>чт</li><li>пт</li><li class="dayoff">сб</li><li class="dayoff">вс</li></ul>
-            <div class="dates rtmode" data-current="<%= Time.now.strftime('%d %b %Y %R') %>"></div>
+            <div class="dates rtmode" data-current="<%= Time.now.strftime('%d %b %Y %R') %>">
+                <div class="reset-button"></div>
+                <div class="week-offset"></div>
+            </div>
             <div class="shadow"></div>
         </div>
     </div>

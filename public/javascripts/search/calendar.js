@@ -13,8 +13,7 @@ init: function() {
     this.makeDates();
     this.initDates();
     this.scroller = new app.CalendarScroller(this);
-    this.resetButton = $('<div class="reset-button"></div>').appendTo(this.el);
-    this.resetButton.css('margin-top', this.container.offset().top - this.el.offset().top);
+    this.resetButton = this.container.find('.reset-button');
     this.resetButton.click(function() {
         self.selected.length = 0;
         self.update();
@@ -26,7 +25,7 @@ init: function() {
     this.values = [];
 },
 makeDates: function() {
-    this.container = $('.dates', this.el).hide().html('');
+    this.container = $('.dates', this.el).hide();
     var today = new Date(), stoday = new Date(this.container.attr('data-current'));
     if (Math.abs(today.getTime() - stoday.getTime()) > 172800000) {
         today.setTime(stoday.getTime()); // используем серверное время, если разница с клиентским больше 2 суток
@@ -76,7 +75,7 @@ makeDates: function() {
     this.dates.eq(0).addClass('withmonth');
     this.container.show();
     this.csize = {
-        w: this.container.parent().width(),
+        w: 595,
         h: this.container.height()
     };
     this.dsize = {
@@ -139,9 +138,9 @@ initDates: function() {
                 dx: dx,
                 dy: dy,
                 minx: coffset.left + dx - 15,
-                maxx: coffset.left + dx + self.container.parent().width() - 69,
+                maxx: coffset.left + dx + self.csize.w - 69,
                 miny: coffset.top + dy - 15,
-                maxy: coffset.top + dy + self.container.height() - 36,
+                maxy: coffset.top + dy + self.csize.h - 36,
                 offset: 0
             };
             e.preventDefault();
@@ -267,31 +266,44 @@ showMessage: function(text) {
     });
 },
 showResetButton: function() {
-    var offset, items = this.selected.compact();
+    var items = this.selected.compact();
     if (items.length) {
+        var st = this.container.scrollTop();
+        var foffset = this.dates.eq(items[0]).position();
         var loffset = this.dates.eq(items.last()).position();
-        if (loffset && loffset.top > -1) {
-            if (loffset.top < this.csize.h) {
-                offset = loffset;
-            } else if (items.length > 1) {
-                var foffset = this.dates.eq(items[0]).position();
-                if (foffset.top < this.csize.h) offset = {
-                    left: this.csize.w - this.dsize.w,
-                    top: this.csize.h - this.dsize.h
-                };
-            }
-        }
-    }
-    var rb = this.resetButton;
-    if (offset) {
-        rb.css({
-            'left': offset.left + this.dsize.w - 15,
-            'top': offset.top - 7
-        }).show();
-        rb.visible = true;
+        this.rboffset = {
+            top: loffset.top + st,
+            left: loffset.left + this.dsize.w,
+            min: foffset.top + st
+        };
+        this.rbactive = true;
+        this.rbtop = undefined;
+        this.toggleResetButton();
     } else {
-        rb.visible = false;
-        rb.hide();
+        this.rbactive = false;
+        this.resetButton.hide();
+    }
+},
+toggleResetButton: function() {
+    if (this.rbactive && !this.dragging) {
+        var st = this.container.scrollTop();
+        if (this.rboffset.top > st + 25) {
+            var t = this.rboffset.top;
+            var l = this.rboffset.left;
+            var bottom = st + this.csize.h - 25;
+            var delta = bottom - this.rboffset.min;
+            if (this.rboffset.top > bottom && delta > 0) {
+                t = this.rboffset.min + delta - delta % this.dsize.h;
+                l = this.csize.w;
+            }
+            if (t !== this.rbtop) {
+                this.resetButton.css({top: t, left: l});
+                this.rbtop = t;
+            }
+            this.resetButton.show();
+        } else {
+            this.resetButton.hide();
+        }
     }
 },
 fillSelected: function() {
@@ -358,7 +370,7 @@ scrollTo: function(nst) {
     var self = this, el = this.el, cst = el.scrollTop();
     self.toggleArrows();
     if (cst == nst) {
-        self.parent.showResetButton();
+        self.parent.toggleResetButton();
     } else {
         $({st: cst}).animate({st: nst}, {
             duration: 100 + Math.round(Math.abs(cst - nst) / 3),
@@ -367,7 +379,7 @@ scrollTo: function(nst) {
             },
             complete: function() {
                 el.scrollTop(nst);
-                self.parent.showResetButton();
+                self.parent.toggleResetButton();
                 self.toggleArrows();
             }
         });
@@ -398,11 +410,7 @@ initNative: function() {
             self.display(cst);
             atimer = setTimeout(align, 500);
         }
-        var rb = self.parent.resetButton;
-        if (rb.visible) {
-            rb.visible = false;
-            rb.hide();
-        }
+        self.parent.toggleResetButton();
     });
 },
 initArrows: function() {

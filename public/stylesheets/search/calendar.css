@@ -5,16 +5,15 @@
 }
 .calendar .viewport {
     position: relative;
-    width: 595px;
+    width: 605px;
     height: 316px;
     overflow: hidden;
-    background: #acb6c3;
 }
 
 .calendar .dates {
     position: relative;
-    width: 625px;
-    height: 306px;
+    width: 635px;
+    height: 332px;
     overflow: auto;
 }
 
@@ -27,6 +26,8 @@
 
 /* Days of the week */
 .calendar ul.week {
+    position: absolute;
+    z-index: 1;
     width: 595px;
     height: 25px;
     border-bottom: 1px solid #c7ced6;
@@ -40,6 +41,9 @@
     width: 24px;
     padding: 5px 56px 5px 5px;
     text-align: center;
+}
+.calendar .week-offset {
+    height: 26px;
 }
 
 /* Calendar dates */
@@ -56,6 +60,7 @@
     height: 40px;
     border-bottom: 1px solid #c7ced6;
     padding: 5px 51px 5px 0;
+    background: #acb6c3;
     color: #4b4b4b;
     font-weight: bold;
     font-size: 15px;
@@ -95,7 +100,6 @@
     color: #9da5b0;
     cursor: default;
     border-color: #c7ced6;
-    background: none;
 }
 .calendar .dates li.withtoday {
     color: #858b93;
@@ -209,8 +213,10 @@
 .calendar .reset-button {
     display: none;
     position: absolute;
-    top: 0; left: 0;
+    top: 26px; left: 595px;
+    z-index: 2;
     width: 24px; height: 24px;
+    margin: -7px 0 0 -15px;
     background: url(/img/calendar/reset.png) no-repeat;
     cursor: pointer;
 }
