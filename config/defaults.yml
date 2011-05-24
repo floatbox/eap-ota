@@ -43,6 +43,7 @@ sirena:
   enabled: no
   restrict: no
   fake: no
+  timeout_lite: 20
   host: localhost
   port: 8888
   path: /

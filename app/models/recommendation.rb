@@ -161,7 +161,7 @@ class Recommendation
 
   def without_full_information?
     #проверяем, что все аэропорты и авиакомпании есть в базе
-    flights.map {|f| f.arrival; f.departure; f.operating_carrier; f.validating_carrier}
+    flights.map {|f| f.arrival; f.departure; f.operating_carrier; f.marketing_carrier}
     false
   rescue IataStash::NotFound => e
     return true

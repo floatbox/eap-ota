@@ -45,7 +45,7 @@ module Sirena
       end
       
       def timeout
-        45
+        40
       end
       
       # helpers

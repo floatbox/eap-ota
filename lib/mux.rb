@@ -78,7 +78,7 @@ class Mux
       return [] unless Conf.sirena.enabled
       return [] if lite
       return [] unless sirena_searchable?(form)
-      recommendations = Sirena::Service.pricing(form).recommendations || []
+      recommendations = Sirena::Service.pricing(form, nil, lite).recommendations || []
       recommendations.delete_if(&:without_full_information?)
       recommendations
     rescue
@@ -92,7 +92,7 @@ class Mux
 	  !Conf.sirena.restrict ||
 	  # form.adults == 1 &&
 	  form.children == 0 && form.infants == 0 &&
-	  form.form_segments.none?(&:multicity?) && 
+	  form.form_segments.none?(&:multicity?) &&
 	  locations.all?{|l| l.iata_ru != l.iata && l.iata_ru.present?} &&
 	  locations.any?{|l| SNG_COUNTRY_CODES.include? l.country.alpha2}
     end
