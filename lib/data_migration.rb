@@ -6,6 +6,12 @@ require 'csv'
 
 module DataMigration
 
+  def self.update_route_in_tickets
+    Ticket.all.each do |t|
+      t.route = t.order.route
+    end
+  end
+
   def self.load_tickets
     orders = Order.where('ticket_status = "ticketed"')
     orders.each do |order|

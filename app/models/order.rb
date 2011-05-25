@@ -3,23 +3,21 @@ class Order < ActiveRecord::Base
 
   include CopyAttrs
 
-  PAYMENT_STATUS = {'not blocked' => 'not blocked', 'blocked' => 'blocked', 'charged' => 'charged', 'new' => 'new', 'pending' => 'pending'}
-  TICKET_STATUS = { 'ticketed' => 'ticketed', 'booked' => 'booked', 'canceled' => 'canceled'}
-  SOURCE = { 'amadeus' => 'amadeus', 'sirena' => 'sirena' }
+  PAYMENT_STATUS = ['not blocked', 'blocked', 'charged', 'new', 'pending']
+  TICKET_STATUS = [ 'booked', 'canceled', 'ticketed']
+  SOURCE = [ 'amadeus', 'sirena', 'other']
+  PAYMENT_TYPE = ['card', 'delivery', 'cash']
 
   has_many :payments
   has_many :tickets
+  validates_uniqueness_of :pnr_number, :scope => :source
 
-
-  validates_presence_of :email, :if => (Proc.new{ |order| order.source != 'other' })
-  validates_format_of :email, :with =>
-    /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email", :if => (Proc.new{ |order| order.source != 'other' })
-  before_create :generate_code, :calculate_price_with_payment_commission
+  before_create :generate_code, :calculate_price_with_payment_commission, :set_payment_status
 
   scope :stale, lambda {
-      where(:payment_status => 'not blocked', :ticket_status => 'booked')\
-        .where("created_at < ?", 30.minutes.ago)
-    }
+    where(:payment_status => 'not blocked', :ticket_status => 'booked', :offline_booking => false)\
+      .where("created_at < ?", 30.minutes.ago)
+  }
 
   def tickets_count
     ticket_numbers_as_text.to_s.split(/[, ]/).delete_if(&:blank?).size
@@ -31,6 +29,10 @@ class Order < ActiveRecord::Base
 
   def need_attention
     1 if price_difference != 0
+  end
+
+  def price_total
+    price_fare + price_tax + price_our_markup + price_consolidator_markup
   end
 
   def generate_code
@@ -63,11 +65,12 @@ class Order < ActiveRecord::Base
 
     copy_attrs recommendation, self,
       :source,
-      :price_total,
+      :price_our_markup,
+      :price_tax,
       :price_fare,
       :price_with_payment_commission
 
-    self.description = recommendation.variants[0].flights.every.destination.join('; ')
+    self.route = recommendation.variants[0].flights.every.destination.join('; ')
     self.cabins = recommendation.cabins.join(',')
     if order_data.payment_type != 'card'
       self.cash_payment_markup = recommendation.price_payment + (order_data.payment_type == 'delivery' ? 350 : 0)
@@ -84,9 +87,8 @@ class Order < ActiveRecord::Base
         :price_share,
         :price_our_markup,
         :price_consolidator_markup,
-        :price_tax_and_markup
+        :price_tax
     end
-    self.payment_status = (order_data.payment_type == 'card') ? 'not blocked' : 'pending'
     self.ticket_status = 'booked'
     self.name_in_card = order_data.card.name
     self.last_digits_in_card = order_data.card.number4
@@ -97,9 +99,8 @@ class Order < ActiveRecord::Base
     price_with_payment_commission - price_fare
   end
 
-  # а это понадобилось сирене. тоже колонку завести?
-  def price_tax
-    price_total - price_consolidator_markup - price_our_markup - price_fare
+  def price_tax_and_markup
+    price_tax + price_consolidator_markup + price_our_markup
   end
 
   def raw
@@ -112,7 +113,8 @@ class Order < ActiveRecord::Base
   end
 
   def load_tickets
-    if source == 'amadeus' && tickets.blank?
+    if source == 'amadeus'
+      tickets.every.delete
       pnr_resp = tst_resp = nil
       Amadeus.booking do |amadeus|
         pnr_resp = amadeus.pnr_retrieve(:number => pnr_number)
@@ -139,24 +141,36 @@ class Order < ActiveRecord::Base
           :price_tax => price_tax_ticket,
           :price_consolidator_markup => price_consolidator_markup_ticket,
           :price_share => price_share_ticket,
-          :cabins => cabins && cabins.gsub(/[MW]/, "Y").split(',').uniq.join(' + ')
+          :cabins => cabins && cabins.gsub(/[MW]/, "Y").split(',').uniq.join(' + '),
+          :route => route
         )
       end
 
       update_attribute(:ticket_numbers_as_text, pnr_resp.passengers.every.ticket.join(' '))
+    elsif source == 'sirena'
+      tickets.every.delete
+      order_resp = Sirena::Service.order(pnr_number, sirena_lead_pass)
+      order_resp.tickets.each do |t|
+        t.order = self
+        t.save
+      end
+      update_attribute(:ticket_numbers_as_text, order_resp.passengers.every.ticket.join(' '))
     end
   end
 
   def update_prices_from_tickets
     if source == 'amadeus'
+      price_total_old = self.price_total
       self.price_fare = tickets.sum(:price_fare)
       self.price_consolidator_markup = tickets.sum(:price_consolidator_markup)
       self.price_share = tickets.sum(:price_share)
 
-      price_total_new = tickets.sum(:price_tax) + price_fare + price_consolidator_markup + price_our_markup
-      self.price_tax_and_markup = price_total_new - price_fare
-      self.price_difference = price_total_new - price_total if price_difference == 0
-      self.price_total = price_total_new
+      self.price_tax = tickets.sum(:price_tax)
+      self.price_difference = price_total - price_total_old if price_difference == 0
+      save
+    elsif source == 'sirena'
+      self.price_fare = tickets.sum(:price_fare)
+      self.price_tax = tickets.sum(:price_tax)
       save
     end
   end
@@ -217,6 +231,11 @@ class Order < ActiveRecord::Base
   def ticket!
     update_attributes(:ticket_status =>'ticketed', :ticketed_date => Date.today)
 
+    load_tickets
+    update_prices_from_tickets
+  end
+
+  def reload_tickets
     load_tickets
     update_prices_from_tickets
   end

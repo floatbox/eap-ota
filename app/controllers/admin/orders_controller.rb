@@ -1,7 +1,16 @@
 # encoding: utf-8
 class Admin::OrdersController < Admin::ResourcesController
   include CustomCSV
-  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel]
+  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel, :reload_tickets, :update]
+  before_filter :update_offline_booking_flag, :only => :create
+
+  def update
+    if @order.offline_booking
+      super
+    else
+      raise 'Someone is trying to update online booking'
+    end
+  end
 
   def show_pnr
     redirect_to show_order_path(:id => @order.pnr_number)
@@ -45,8 +54,17 @@ class Admin::OrdersController < Admin::ResourcesController
     redirect_to :action => :show, :id => @order.id
   end
 
+  def reload_tickets
+    @order.reload_tickets
+    redirect_to :action => :show, :id => @order.id
+  end
+
   def find_order
     @order = Order.find(params[:id])
+  end
+
+  def update_offline_booking_flag
+    params[:order][:offline_booking] = '1'
   end
 
 end
