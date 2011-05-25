@@ -37,6 +37,11 @@ describe Sirena::Response::Order do
     its(:phone) { should == '+79265555555' }
     it { should have(2).flights }
     its(:booking_classes) { should == %W(Y Y) }
+    its("tickets.every.number") { should == [ '2626150600213', '2626150600214']}
+    its("tickets.every.price_fare") { should == [ 2000, 1000]}
+    its("tickets.every.price_tax") { should == [ 2000, 2000]}
+    its("tickets.every.route") { should == [ "ДМД - ПЛК; ПЛК - ДМД", "ДМД - ПЛК; ПЛК - ДМД"]}
+    its("tickets.every.cabins") { should == [ "Y", "Y"]}
   end
 
   describe 'when airport is not reported' do
@@ -48,3 +53,4 @@ describe Sirena::Response::Order do
     specify { subject.flights.first.arrival.city.name.should == 'Воронеж' }
   end
 end
+

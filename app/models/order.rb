@@ -141,6 +141,14 @@ class Order < ActiveRecord::Base
       end
 
       update_attribute(:ticket_numbers_as_text, pnr_resp.passengers.every.ticket.join(' '))
+    elsif source == 'sirena'
+      tickets.every.delete
+      order_resp = Sirena::Service.order(pnr_number, sirena_lead_pass)
+      order_resp.tickets.each do |t|
+        t.order = self
+        t.save
+      end
+      update_attribute(:ticket_numbers_as_text, order_resp.passengers.every.ticket.join(' '))
     end
   end
 
