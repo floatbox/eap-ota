@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110523161416) do
+ActiveRecord::Schema.define(:version => 20110525135415) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -211,7 +211,6 @@ ActiveRecord::Schema.define(:version => 20110523161416) do
     t.string   "pnr_number"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "price_total",                   :precision => 9, :scale => 2, :default => 0.0,     :null => false
     t.string   "commission_carrier"
     t.string   "commission_agent"
     t.string   "commission_subagent"
@@ -222,7 +221,6 @@ ActiveRecord::Schema.define(:version => 20110523161416) do
     t.string   "full_info"
     t.string   "payment_status",                                              :default => "new"
     t.decimal  "price_fare",                    :precision => 9, :scale => 2, :default => 0.0,     :null => false
-    t.decimal  "price_tax_and_markup",          :precision => 9, :scale => 2, :default => 0.0,     :null => false
     t.string   "ticket_status"
     t.decimal  "price_consolidator_markup",     :precision => 9, :scale => 2, :default => 0.0,     :null => false
     t.string   "name_in_card"
@@ -244,6 +242,7 @@ ActiveRecord::Schema.define(:version => 20110523161416) do
     t.decimal  "price_difference",              :precision => 9, :scale => 2, :default => 0.0,     :null => false
     t.boolean  "offline_booking",                                             :default => false,   :null => false
     t.string   "route"
+    t.decimal  "price_tax",                     :precision => 9, :scale => 2, :default => 0.0,     :null => false
   end
 
   create_table "payments", :force => true do |t|
