@@ -65,7 +65,7 @@ class Order < ActiveRecord::Base
       :price_fare,
       :price_with_payment_commission
 
-    self.description = recommendation.variants[0].flights.every.destination.join('; ')
+    self.route = recommendation.variants[0].flights.every.destination.join('; ')
     self.cabins = recommendation.cabins.join(',')
     if order_data.payment_type != 'card'
       self.cash_payment_markup = recommendation.price_payment + (order_data.payment_type == 'delivery' ? 350 : 0)
@@ -137,7 +137,8 @@ class Order < ActiveRecord::Base
           :price_tax => price_tax_ticket,
           :price_consolidator_markup => price_consolidator_markup_ticket,
           :price_share => price_share_ticket,
-          :cabins => cabins && cabins.gsub(/[MW]/, "Y").split(',').uniq.join(' + ')
+          :cabins => cabins && cabins.gsub(/[MW]/, "Y").split(',').uniq.join(' + '),
+          :route => route
         )
       end
 
