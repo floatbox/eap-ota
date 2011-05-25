@@ -10,6 +10,7 @@ class Order < ActiveRecord::Base
 
   has_many :payments
   has_many :tickets
+  validates_uniqueness_of :pnr_number, :scope => :source
 
   before_create :generate_code, :calculate_price_with_payment_commission, :set_payment_status
 
