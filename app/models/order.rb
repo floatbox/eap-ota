@@ -288,5 +288,9 @@ class Order < ActiveRecord::Base
       HoptoadNotifier.notify($!) rescue Rails.logger.error("  can't notify hoptoad #{$!.class}: #{$!.message}")
   end
 
+   def set_payment_status
+    self.payment_status = (payment_type == 'card') ? 'not blocked' : 'pending'
+  end
+
 end
 
