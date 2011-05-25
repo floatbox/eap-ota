@@ -11,6 +11,10 @@ every 5.minutes do
   runner 'Order.cancel_stale!'
 end
 
+every 5.minutes do
+  # runner 'Order.process_queued_emails!'
+end
+
 every 10.minutes do
   runner 'Amadeus::Session.housekeep'
   #runner 'Amadeus::Session.dirty_housekeep'

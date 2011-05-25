@@ -1,7 +1,14 @@
 # encoding: utf-8
 class PNRController < ApplicationController
+
+  rescue_from RuntimeError, :with => :error
+
   def show
     @pnr = Pnr.get_by_number params[:id]
+  end
+
+  def error
+    render 'error'
   end
 
   # sirena pdf receipt FIXME unfinished, unused

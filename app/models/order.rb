@@ -17,9 +17,9 @@ class Order < ActiveRecord::Base
   before_create :generate_code, :calculate_price_with_payment_commission
 
   scope :stale, lambda {
-    where(:payment_status => 'not blocked', :ticket_status => 'booked')\
-      .where("created_at < ?", 30.minutes.ago)
-  }
+      where(:payment_status => 'not blocked', :ticket_status => 'booked')\
+        .where("created_at < ?", 30.minutes.ago)
+    }
 
   def tickets_count
     ticket_numbers_as_text.to_s.split(/[, ]/).delete_if(&:blank?).size
@@ -204,7 +204,6 @@ class Order < ActiveRecord::Base
 
   def money_blocked!
     update_attribute(:payment_status, 'blocked')
-    send_email
   end
 
   def money_received!
@@ -220,7 +219,6 @@ class Order < ActiveRecord::Base
 
     load_tickets
     update_prices_from_tickets
-    send_receipt
   end
 
   def cancel!
@@ -239,14 +237,15 @@ class Order < ActiveRecord::Base
 
   def send_email
     logger.info 'Order: sending email'
-    PnrMailer.notification(email, pnr_number).deliver if source == 'amadeus'
+    PnrMailer.notification(email, pnr_number).deliver
+    update_attribute(:email_status, 'sent')
+  rescue
+    update_attribute(:email_status, 'error')
+    raise
   end
 
-  def send_receipt
-    logger.info 'Order: sending receipt'
-    # временное решение. отодвигаем отправку электронного билета
-    PnrMailer.notification(email, pnr_number).deliver if source == 'sirena'
-    #PnrMailer.sirena_receipt(email, pnr_number).deliver if source == 'sirena'
+  def resend_email!
+      update_attribute(:email_status, '')
   end
 
 # class methods
@@ -257,6 +256,17 @@ class Order < ActiveRecord::Base
       puts "Automatic cancel of pnr #{order.pnr_number}"
       order.cancel!
     end
+  end
+
+  def self.process_queued_emails!
+    counter = 0
+    while order_to_send = Order.where(:email_status => '').first
+      order_to_send.send_email
+      counter += 1
+      break if counter > 50
+    end
+    rescue
+      HoptoadNotifier.notify($!) rescue Rails.logger.error("  can't notify hoptoad #{$!.class}: #{$!.message}")
   end
 
 end
