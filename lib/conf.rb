@@ -49,4 +49,16 @@ module Conf
   end
   extend ClassMethods
 
+  # Middleware для релоада конфига перед реквестом
+  class Reloader
+    def initialize(app)
+      @app = app
+    end
+
+    def call(env)
+      ::Conf.reload!
+      @app.call(env)
+    end
+  end
+
 end

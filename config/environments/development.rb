@@ -26,5 +26,9 @@ Eviterra::Application.configure do
 
   # Raise exceptions instead of rendering exception templates
   # config.action_dispatch.show_exceptions = false
+
+  # перечитываем конфиг перед каждым реквестом.
+  # не все опции работают без рестарта!
+  config.middleware.use 'Conf::Reloader'
 end
 

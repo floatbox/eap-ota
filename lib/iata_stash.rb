@@ -45,7 +45,7 @@ module IataStash
     def call(env)
       @app.call(env)
     ensure
-      IataStash.clear
+      ::IataStash.clear
     end
   end
 end
