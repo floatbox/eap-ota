@@ -50,12 +50,19 @@ class BookingController < ApplicationController
             # FIXME не выносить в кронтаск. но, может быть, внести обратно в .ticket!
             if @order.order.source == 'sirena'
               logger.info "Pay: ticketing sirena"
-              Sirena::Adapter.approve_payment(@order.order)
+              unless Sirena::Adapter.approve_payment(@order.order)
+                @error_message = 'Не удалось выписать билет'
+                @order.order.unblock!
+                @order.order.cancel!
+              end
               # сейчас это делает approve payment
               # @order.order.ticket!
             end
-
-            render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}
+            if @error_message
+              render :partial => 'failed_booking', :locals => {:errors => @error_message}
+            else
+              render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}
+            end
           elsif payture_response.threeds?
             logger.info "Pay: payment system requested 3D-Secure authorization"
             render :partial => 'threeds', :locals => {:order_id => @order.order.order_id, :payture_response => payture_response}
@@ -94,7 +101,11 @@ class BookingController < ApplicationController
       # FIXME не выносить в кронтаск. но, может быть, внести обратно в .ticket!
       if @order.source == 'sirena'
         logger.info "Pay: ticketing sirena"
-        Sirena::Adapter.approve_payment(@order)
+        unless Sirena::Adapter.approve_payment(@order)
+          @error_message = 'Не удалось выписать билет'
+          @order.unblock!
+          @order.cancel!
+        end
         # сейчас это делает approve payment
         # @order.order.ticket!
       end

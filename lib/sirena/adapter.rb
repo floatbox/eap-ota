@@ -36,24 +36,19 @@ module Sirena
       end
 
       def approve_payment(order)
-        error_msg = nil
         payment_confirm = Sirena::Service.payment_ext_auth(:confirm, order.pnr_number, order.sirena_lead_pass,
                                           :cost => (order.price_fare + order.price_tax))
         if payment_confirm.success?
-          if payment_confirm.common_status == 'ticket'
-            order.ticket!
-          else
-            error_msg = "Не смогли выписать билет"
-            # FIXME: how to cancel ticket in this case?
-          end
+          order.ticket!
+          return true
         else
+          #FIXME Отменять в случае exception
           error_msg = payment_confirm.error
           Sirena::Service.payment_ext_auth(:cancel, order.pnr_number, order.sirena_lead_pass)
           # we can't simply cancel order if it is in query
           order.cancel!
+          return false
         end
-
-        error_msg
       end
 
       def approve_all
@@ -68,3 +63,4 @@ module Sirena
     end
   end
 end
+

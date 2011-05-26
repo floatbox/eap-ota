@@ -15,7 +15,7 @@ class Order < ActiveRecord::Base
   before_create :generate_code, :calculate_price_with_payment_commission, :set_payment_status
 
   scope :stale, lambda {
-    where(:payment_status => 'not blocked', :ticket_status => 'booked', :offline_booking => false)\
+    where(:payment_status => 'not blocked', :ticket_status => 'booked', :offline_booking => false, :source => 'amadeus')\
       .where("created_at < ?", 30.minutes.ago)
   }
 
