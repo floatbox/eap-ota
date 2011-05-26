@@ -9,11 +9,14 @@ module Handsoap
           require 'typhoeus'
         end
 
+        include TyphoeusHelper
+
         def send_http_request(request)
           req = typhoeus_request(request)
           Typhoeus::Hydra.hydra.queue req
           Typhoeus::Hydra.hydra.run
           response = req.response
+          raise_if_error response
           parse_http_part(response.headers.gsub(/^HTTP.*\r\n/, ""), response.body, response.code)
         end
 
@@ -23,9 +26,11 @@ module Handsoap
 
           deferred = Handsoap::Deferred.new
           req.on_complete do
-            # сделать errback
-            # deferred.trigger_errback emdef
             response = req.response
+            # обвалит цикл
+            raise_if_error response
+            # поймать эксепшн и сделать errback
+            # deferred.trigger_errback emdef
             http_response = parse_http_part(response.headers.gsub(/^HTTP.*\r\n/, ""), response.body, response.code)
             deferred.trigger_callback http_response
           end

@@ -13,6 +13,8 @@ module Sirena
       def debug_dir; 'log/sirena' end
       def debug_file; 'log/sirena.log'; end
 
+      include TyphoeusHelper
+
       def action(name, *params)
         request = Sirena::Request.for(name).new(*params)
         request_body = request.render
@@ -30,8 +32,10 @@ module Sirena
         request = Sirena::Request.for(name).new(*params)
         request_body = request.render
         log_request(name, request_body)
-        req = make_request(request_body, :encrypt => request.encrypt?)
+        req = make_request(request_body, :encrypt => request.encrypt?, :timeout => request.timeout)
         req.on_complete do |response|
+          # не обвалит весь цикл?
+          raise_if_error response
           log_response(name, response.body)
           Sirena::Response.for(name).new(response.body)
         end
@@ -44,7 +48,9 @@ module Sirena
         req = make_request(*args)
         Typhoeus::Hydra.hydra.queue req
         Typhoeus::Hydra.hydra.run
-        req.response.body
+        response = req.response
+        raise_if_error response
+        response.body
       end
 
       def make_request(body, opts={})
@@ -89,9 +95,6 @@ module Sirena
       end
     end
 
-  end
-
-  class HTTPError < RuntimeError
   end
 
 end

@@ -380,7 +380,7 @@ processUpdate: function() {
             var nearby = $('#offers-pcollection').html(u.pcontent).find('.offers-nearby .cities span.city');
             if (nearby.length) {
                 var list = this.empty.find('.re-cities').hide().html('соседние города: ');
-                nearby.clone().appendTo(list).slice(0, -1).after(', ');
+                nearby.clone().appendTo(list).slice(0, -1).after('<span>, </span>');
                 list.show();
             }
             $('#offers-pcollection').html('');
