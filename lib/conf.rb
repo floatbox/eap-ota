@@ -2,15 +2,25 @@ require 'yaml'
 
 module Conf
 
+  class SyntaxError < RuntimeError; end
+
   module ClassMethods
     def reload!
       config_files.each_with_object( config={} ) do |file, cfg_hash|
-        yml = YAML.load_file(file)
-        # сплошные комментарии отдаются как false
-        cfg_hash.deep_merge!(yml) if yml
+        begin
+          yml = YAML.load_file(file)
+          # пустые файлы отдаются как false
+          cfg_hash.deep_merge!(yml) if yml
+        rescue => e
+          raise SyntaxError, "at file #{file}: #{e.class}, #{e.message}"
+        end
       end
       config.each_with_object( @config = {}) do |(k,v), cfg|
-        cfg.merge! k => process_node(v)
+        begin
+          cfg.merge! k => process_node(v)
+        rescue => e
+          raise SyntaxError, "while merging section #{k}: #{e.class}, #{e.message}"
+        end
       end
       @last_updated = last_updated
     end
@@ -30,8 +40,9 @@ module Conf
     def process_node hash
       # позволяем задать настройки для конкретного сервиса, отличные от текущего Rails.env
       # например, использовать amadeus.production настройки в rails s -e development
-      # TODO запретить оверрайд в Rails.env.test?
       env = (hash["env"] ||= Rails.env)
+      # в тестовой среде не оверрайдим env
+      env = hash["env"] = "test" if Rails.env.test?
       # оверрайдим дефолты 
       hash.merge!( hash[env] ) if hash[env]
 
