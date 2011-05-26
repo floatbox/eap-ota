@@ -4,6 +4,12 @@ class Order < ActiveRecord::Base
   include CopyAttrs
 
   PAYMENT_STATUS = ['not blocked', 'blocked', 'charged', 'new', 'pending']
+  # new - дефолтное значение без смысла
+  # not blocked - ожидание 3ds, неприход наличных, убивается шедулером
+  # unblocked - разблокирование денег на карте
+  # blocked - блокирование денег на карте
+  # charged - списание денег с карты или приход наличных
+  # pending - ожидание оплаты наличныии или курьером
   TICKET_STATUS = [ 'booked', 'canceled', 'ticketed']
   SOURCE = [ 'amadeus', 'sirena', 'other']
   PAYMENT_TYPE = ['card', 'delivery', 'cash']
@@ -18,6 +24,17 @@ class Order < ActiveRecord::Base
     where(:payment_status => 'not blocked', :ticket_status => 'booked', :offline_booking => false)\
       .where("created_at < ?", 30.minutes.ago)
   }
+
+  scope :amadeus_email_queue, where(
+    :email_status => '',
+    :source => 'amadeus',
+    :ticket_status => ['booked', 'ticketed'],
+    :payment_status => ['blocked', 'charged'])
+
+  scope :sirena_email_queue, where(
+    :email_status => '',
+    :source => 'sirena',
+    :ticket_status => 'ticketed')
 
   def tickets_count
     ticket_numbers_as_text.to_s.split(/[, ]/).delete_if(&:blank?).size
@@ -264,7 +281,7 @@ class Order < ActiveRecord::Base
   end
 
   def resend_email!
-      update_attribute(:email_status, '')
+    update_attribute(:email_status, '')
   end
 
 # class methods
@@ -279,16 +296,15 @@ class Order < ActiveRecord::Base
 
   def self.process_queued_emails!
     counter = 0
-    while order_to_send = Order.where(:email_status => '').first
+    while (order_to_send = Order.sirena_email_queue.first || order_to_send = Order.amadeus_email_queue.first) && counter < 50
       order_to_send.send_email
       counter += 1
-      break if counter > 50
     end
     rescue
       HoptoadNotifier.notify($!) rescue Rails.logger.error("  can't notify hoptoad #{$!.class}: #{$!.message}")
   end
 
-   def set_payment_status
+  def set_payment_status
     self.payment_status = (payment_type == 'card') ? 'not blocked' : 'pending'
   end
 
