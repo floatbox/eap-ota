@@ -29,12 +29,15 @@ class Order < ActiveRecord::Base
     :email_status => '',
     :source => 'amadeus',
     :ticket_status => ['booked', 'ticketed'],
-    :payment_status => ['blocked', 'charged'])
+    :payment_status => ['blocked', 'charged'])\
+    .where("email IS NOT NULL AND email REGEXP '^[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9.-]@[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9].[a-zA-Z]{2,4}$'")
 
   scope :sirena_email_queue, where(
     :email_status => '',
     :source => 'sirena',
-    :ticket_status => 'ticketed')
+    :ticket_status => 'ticketed')\
+    .where("email IS NOT NULL AND email REGEXP '^[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9.-]@[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9].[a-zA-Z]{2,4}$'")
+    
 
   def tickets_count
     ticket_numbers_as_text.to_s.split(/[, ]/).delete_if(&:blank?).size
