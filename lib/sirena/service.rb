@@ -3,10 +3,6 @@ module Sirena
 
   class Service
 
-    HOST = Conf.sirena.host
-    PORT = Conf.sirena.port
-    PATH = Conf.sirena.path
-
     class << self
 
       include FileLogger
@@ -54,7 +50,11 @@ module Sirena
       end
 
       def make_request(body, opts={})
-        req = Typhoeus::Request.new "http://#{HOST}:#{PORT}#{PATH}",
+        host = Conf.sirena.host
+        port = Conf.sirena.port
+        path = Conf.sirena.path
+
+        req = Typhoeus::Request.new "http://#{host}:#{port}#{path}",
           :method => :post,
           :body => body,
           :timeout => 160 * 1000, # in ms
