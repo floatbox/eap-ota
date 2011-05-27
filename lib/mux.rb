@@ -88,6 +88,8 @@ class Mux
 
     SNG_COUNTRY_CODES = ["RU", "AZ", "AM", "BY", "GE", "KZ", "KG", "LV", "LT", "MD", "TJ", "TM", "UZ", "UA", "EE"]
     def sirena_searchable?(form)
+      return false if form.form_segments.size > 2
+      return false if form.form_segments.any? {|fs| fs.from_as_object == fs.to_as_object}
       locations = (form.form_segments.every.from_as_object + form.form_segments.every.to_as_object).uniq
 	  !Conf.sirena.restrict ||
 	  # form.adults == 1 &&
