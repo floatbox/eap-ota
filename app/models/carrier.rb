@@ -21,7 +21,7 @@ class Carrier < ActiveRecord::Base
   def available_bonus_programms
     #бонусные программы авиакомпаний, входящие в тот же альянс, что и данная
     #пока без бонусной программы альянса
-    if alliance
+    @available_bonus_programs ||= if alliance
       alliance.carriers.where('bonus_program_name IS NOT NULL AND bonus_program_name != ""').order('bonus_program_name').all
     elsif bonus_program_name.present?
       [self]
