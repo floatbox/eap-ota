@@ -22,7 +22,7 @@ gem 'morpher_inflect'
 gem 'russian'
 gem 'graticule'
 # поменять при апгрейде до рельсов 3.1
-gem 'mysql2', '0.2.7'
+gem 'mysql2', '0.2.6'
 gem 'tzinfo'
 gem 'geo_ip'
 gem 'hoptoad_notifier'

@@ -124,7 +124,7 @@ GEM
       gem_plugin (>= 0.2.3)
     morpher_inflect (0.0.1)
       httparty
-    mysql2 (0.2.7)
+    mysql2 (0.2.6)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-sftp (2.0.5)
@@ -234,7 +234,7 @@ DEPENDENCIES
   memoize
   mongrel
   morpher_inflect
-  mysql2 (= 0.2.7)
+  mysql2 (= 0.2.6)
   newrelic_rpm
   nokogiri
   rails (= 3.0.7)
