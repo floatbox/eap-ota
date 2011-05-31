@@ -8,6 +8,7 @@ group :deployment do
   gem 'capistrano'
 end
 
+gem 'rake', '~> 0.8.7'
 gem 'whenever', :require => false
 gem 'i18n'
 gem 'cucumber'
