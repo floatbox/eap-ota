@@ -26,5 +26,8 @@ URL для оплаты: <%= link_to edit_payment_url(:code => @item.code), edit
 <% if @item.ticket_status == 'ticketed' %>
   <td><%= button_to 'Обновить билеты', {:action => 'reload_tickets', :id => @item.id} %></td>
 <% end %>
+<% if @item.email_status == 'sent' %>
+  <td align='right' width="15%"><%= button_to 'Перепослать email', {:action => 'resend_email', :id => @item.id} %></td>
+<% end %>
 </tr> </table>
 

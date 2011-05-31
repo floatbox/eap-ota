@@ -7,7 +7,7 @@ admin:
   Airplane: create, read, update, delete
   Airport: create, read, update, delete, update_completer
   City: create, read, update, delete, update_completer
-  Order: create, read, update, unblock, charge, ticket, reload_tickets, cancel, show_pnr, money_received, no_money_received
+  Order: create, read, update, unblock, charge, ticket, reload_tickets, cancel, show_pnr, money_received, no_money_received, resend_email
   Ticket: read
   Country: create, read, update, delete
   GeoTag: create, read, update, delete
