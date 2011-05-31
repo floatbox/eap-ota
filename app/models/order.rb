@@ -30,13 +30,13 @@ class Order < ActiveRecord::Base
     :source => 'amadeus',
     :ticket_status => ['booked', 'ticketed'],
     :payment_status => ['blocked', 'charged'])\
-    .where("email IS NOT NULL AND email REGEXP '^[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9.-]@[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9].[a-zA-Z]{2,4}$'")
+    .where("email IS NOT NULL AND email != ''")
 
   scope :sirena_email_queue, where(
     :email_status => '',
     :source => 'sirena',
     :ticket_status => 'ticketed')\
-    .where("email IS NOT NULL AND email REGEXP '^[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9.-]@[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9].[a-zA-Z]{2,4}$'")
+    .where("email IS NOT NULL AND email != ''")
     
 
   def tickets_count
