@@ -141,7 +141,12 @@ module Amadeus
     (response / '//r:statusCode').to_s == 'P'
   end
 
+# метрика
 
+  include NewRelic::Agent::MethodTracer
+  add_method_tracer :save_xml, 'Custom/Amadeus/log'
+  add_method_tracer :debug, 'Custom/Amadeus/log'
+  add_method_tracer :parse_soap_response_document, 'Custom/Amadeus/xmlparse'
 # debugging
 
   # for debugging of handsoap parser

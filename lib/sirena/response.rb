@@ -17,6 +17,8 @@ module Sirena
         @doc = Nokogiri::XML::Document.parse(xml)
         parse
       end
+      include NewRelic::Agent::MethodTracer
+      add_method_tracer :initialize, 'Custom/Sirena/parse'
 
       # заглушка для парсинга при инициализации
       # оверрайд в субклассах

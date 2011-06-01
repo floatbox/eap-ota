@@ -5,6 +5,8 @@ module Sirena
 
     class << self
 
+      include NewRelic::Agent::MethodTracer
+
       include FileLogger
       def debug_dir; 'log/sirena' end
       def debug_file; 'log/sirena.log'; end
@@ -48,6 +50,7 @@ module Sirena
         raise_if_error response
         response.body
       end
+      add_method_tracer :do_http, 'Custom/Sirena/http'
 
       def make_request(body, opts={})
         host = Conf.sirena.host
@@ -85,6 +88,7 @@ module Sirena
           f << request
         }
       end
+      add_method_tracer :log_request, 'Custom/Sirena/log'
 
       def log_response(name, response)
         open(debug_file, 'a') {|f|
@@ -93,6 +97,7 @@ module Sirena
         }
         save_xml(name, response)
       end
+      add_method_tracer :log_response, 'Custom/Sirena/log'
     end
 
   end
