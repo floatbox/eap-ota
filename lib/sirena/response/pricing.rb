@@ -61,12 +61,11 @@ module Sirena
         fare = rec.xpath("direction/price/fare").sum{|elem| elem.text.to_f}
         total = rec.xpath("direction/price/total").sum{|elem| elem.text.to_f}
 
-        upts = Hash[*(rec.xpath("direction/price/upt").map{|u| [u.at_xpath("code_upt").text, u.to_s]}.flatten)]
-
+        upts = rec.xpath("direction/price/upt").map{|u| {:code => u.at_xpath("code_upt").text, :upt => u.to_s, :fare_base => u.at_xpath("base_fare").text} }
+          # Hash[*(rec.xpath("direction/price/upt").map{|u| [u.at_xpath("code_upt").text, u.to_s]}.flatten)]
         if blank_count = rec['n_blanks']
           blank_count = blank_count.to_i
         end
-
         unless variants.blank?
           # пока что для сирены это верно
           validating_carrier_iata = variants.first.flights.first.marketing_carrier_iata

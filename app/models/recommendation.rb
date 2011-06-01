@@ -195,18 +195,6 @@ class Recommendation
     variants.sort_by(&:total_duration)
   end
 
-  def rules_with_flights
-    rule_index = 0
-    flights.each_with_object([]) do |flight, result|
-      if result.blank? || !has_equal_tariff?(result.last[:flights].last, flight)
-        result << {:rule => rules[rule_index], :flights => [flight]}
-        rule_index += 1
-      else
-        result.last[:flights] << flight
-      end
-    end
-  end
-
   def has_equal_tariff? flight1, flight2
     flight1.marketing_carrier_iata == flight2.marketing_carrier_iata &&
       booking_class_for_flight(flight1) == booking_class_for_flight(flight2)
@@ -307,13 +295,22 @@ class Recommendation
     elsif source == 'sirena'
       recs = Sirena::Service.pricing(pricer_form, self).recommendations
       rec = recs && recs[0]
-      self.rules = [] # для получения этой инфы для каждого тарифа нужно отправлять отдельный запрос fareremark
+      self.rules = sirena_rules(rec) # для получения этой инфы для каждого тарифа нужно отправлять отдельный запрос fareremark
       if rec
         self.price_fare = rec.price_fare
         self.price_tax = rec.price_tax
         # обновим количество бланков, на всякий случай
         self.sirena_blank_count = rec.sirena_blank_count
         rec
+      end
+    end
+  end
+
+  def sirena_rules rec
+    rec.upts.each_with_object({}) do |u, result|
+      unless result[[rec.validating_carrier_iata, u[:fare_base]]]
+        resp = Sirena::Service.fareremark(:carrier => rec.validating_carrier_iata, :upt => u[:upt], :upt_code => u[:code])
+        result[[rec.validating_carrier_iata, u[:fare_base]]] = resp.text
       end
     end
   end

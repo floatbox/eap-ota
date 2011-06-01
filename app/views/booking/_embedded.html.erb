@@ -7,7 +7,7 @@
         По этому тарифу осталось <strong><%= availability %>&nbsp;<%= Russian.pluralize(availability, 'место', 'места', 'мест') %></strong>. Не&nbsp;откладывайте покупку.
     </div>
     <% end %>
-    
+
     <h3 class="bstitle">Введите данные <%= @order.people.size == 1 ? 'пассажира' : 'пассажиров' %></h3>
     <%= render :partial => 'person_form', :collection => @order.people %>
 
@@ -15,7 +15,7 @@
     <input type="hidden" name="order[payment_type]" id="booking-payment-type" value="card">
     <%= render 'card_form', :f => f %>
     <%= render 'cash_form' if @order.last_pay_time %>
-            
+
     <h3 class="bstitle">Введите данные покупателя</h3>
     <%= render 'contacts_form' %>
 
@@ -57,25 +57,20 @@
     <div class="close"></div>
     <h3>Правила тарифов</h3>
     <p>Внимание! Возврат средств в&nbsp;случае отказа при получении визы, болезни и&nbsp;прочих обстоятельств без штрафных санкций невозможен. Возврат билета производится строго по&nbsp;правилам авиакомпании. В&nbsp;случае комбинации в&nbsp;билете тарифов с&nbsp;различными правилами, наиболее строгие ограничения применются ко&nbsp;всему маршруту.</p>
-    <% common_fare = @order.recommendation.rules_with_flights.length == 1 %>
-    <% @order.recommendation.rules_with_flights.each do |fgroup| %>
-    <% if fgroup[:rule] %>
+    <% @order.recommendation.rules.each do |airline_and_fare ,rule| %>
     <div class="fgroup">
-        <div class="fgtranslate">
-            <span class="link fgrus">Перевести с помощью</span>
-            <span class="link fgeng g-none">Оригинальный текст</span>
-            <span class="fgloading g-none">Переводится…</span>
-        </div>
-        <div class="fgheader">
-        <% if common_fare %>
-            <p class="clofs">Класс бронирования <%= @order.recommendation.booking_class_for_flight(fgroup[:flights].first) %></p><h5>&nbsp;</h5>
-        <% else %>
-            <h5><% fgroup[:flights].each_with_index do |flight, i| %><%= flight.departure.city.name %> — <%= flight.arrival.city.name %><%= ', ' if i < fgroup[:flights].length - 1 %><% end %></h5>
-            <p class="clofs">Класс бронирования <%= @order.recommendation.booking_class_for_flight(fgroup[:flights].first) %></p>
+        <% if @order.recommendation.source != 'sirena' %>
+          <div class="fgtranslate">
+              <span class="link fgrus">Перевести с помощью</span>
+              <span class="link fgeng g-none">Оригинальный текст</span>
+              <span class="fgloading g-none">Переводится…</span>
+          </div>
         <% end %>
+        <div class="fgheader">
+        <p class="clofs">Тариф <%= airline_and_fare[1] %></p><h5>&nbsp;</h5>
         </div>
-        <pre><%= fgroup[:rule] %></pre>
+        <pre><%= rule.html_safe %></pre>
     </div>
     <% end %>
-    <% end %>
 </div>
+
