@@ -37,7 +37,7 @@ class Order < ActiveRecord::Base
     :source => 'sirena',
     :ticket_status => 'ticketed')\
     .where("email IS NOT NULL AND email != ''")
-    
+
 
   def tickets_count
     ticket_numbers_as_text.to_s.split(/[, ]/).delete_if(&:blank?).size
@@ -167,6 +167,7 @@ class Order < ActiveRecord::Base
       end
 
       update_attribute(:ticket_numbers_as_text, pnr_resp.passengers.every.ticket.join(' '))
+      update_attribute(:departure_date, pnr_resp.flights.first.dept_date)
     elsif source == 'sirena'
       tickets.every.delete
       order_resp = Sirena::Service.order(pnr_number, sirena_lead_pass)
@@ -175,7 +176,9 @@ class Order < ActiveRecord::Base
         t.save
       end
       update_attribute(:ticket_numbers_as_text, order_resp.passengers.every.ticket.join(' '))
+      update_attribute(:departure_date, order_resp.flights.first.dept_date)
     end
+
   end
 
   def update_prices_from_tickets
