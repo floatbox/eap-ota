@@ -71,6 +71,9 @@ class PricerController < ApplicationController
       @search.save_to_cache
       @recommendations = Mux.pricer(@search, false, true)
       render 'api/yandex'
+    elsif @search.errors[:"form_segments.date"] == ["Первый вылет слишком рано"]
+      @recommendations = []
+      render 'api/yandex'
     else
       render 'api/yandex_failure', :locals => {:message => 'from, to and date1 parameters are required'}
     end
