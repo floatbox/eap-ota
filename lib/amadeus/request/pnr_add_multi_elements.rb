@@ -26,8 +26,7 @@ module Amadeus
       end
 
       def tk_xl_date
-        return (tk_xl).strftime("%d%m%y") if tk_xl
-        (Time.now.hour < 17 ? Date.today + 1.day : Date.today + 2.days).strftime("%d%m%y")
+        (tk_xl).strftime("%d%m%y") if tk_xl
       end
 
     end

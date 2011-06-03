@@ -36,8 +36,11 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
 
   def tk_xl
+    default_tk_xl = (Time.now.hour < 17 ? Date.today + 1.day : Date.today + 2.days)
+    dept_date = recommendation.variants[0].flights[0].dept_date
+    last_tkt_date = recommendation.last_tkt_date || default_tk_xl
     if payment_type == 'card'
-      (Time.now.hour < 17 ? Date.today + 1.day : Date.today + 2.days)
+      [default_tk_xl, dept_date, last_tkt_date].min
     else
       last_pay_time.to_date
     end
