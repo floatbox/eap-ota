@@ -30,6 +30,11 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     column :date, :string
     attr_reader :to_as_object, :from_as_object
     validates_presence_of :from_as_object, :to_as_object, :date
+    validate :check_date
+
+    def check_date
+      errors.add :date, 'Первый вылет слишком рано' if !date.present? || !TimeChecker.ok_to_sell(date_as_date)
+    end
 
     def as_json(args)
       args ||= {}

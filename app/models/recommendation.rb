@@ -289,13 +289,15 @@ class Recommendation
         self.last_tkt_date = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier.iata).last_tkt_date
         amadeus.pnr_ignore
         return unless air_sfr.segments_confirmed?
+        return unless TimeChecker.ok_to_sell(variants[0].flights[0].dept_date, last_tkt_date)
         air_sfr.fill_itinerary!(segments)
         self
       end
     elsif source == 'sirena'
       recs = Sirena::Service.pricing(pricer_form, self).recommendations
       rec = recs && recs[0]
-      self.rules = sirena_rules(rec) # для получения этой инфы для каждого тарифа нужно отправлять отдельный запрос fareremark
+      self.rules = sirena_rules(rec)
+      return unless TimeChecker.ok_to_sell(rec.variants[0].flights[0].dept_date)
       if rec
         self.price_fare = rec.price_fare
         self.price_tax = rec.price_tax

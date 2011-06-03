@@ -5,7 +5,7 @@ class BookingController < ApplicationController
   def preliminary_booking
     @search = PricerForm.load_from_cache(params[:query_key])
     set_search_context
-    if @search.form_segments[0].date_as_date < ( Time.now.hour < 17 ? Date.today + 1.days : Date.today + 2.days)
+    unless TimeChecker.ok_to_sell(@search.form_segments[0].date_as_date)
       render :json => {:success => false}
       return
     end

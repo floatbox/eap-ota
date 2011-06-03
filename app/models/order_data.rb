@@ -130,7 +130,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   validate :validate_card, :validate_dept_date
 
   def validate_dept_date
-    errors.add :recommendation, 'Первый вылет слишком рано' if recommendation.variants[0].segments[0].dept_date < ( Time.now.hour < 17 ? Date.today + 1.days : Date.today + 2.days)
+    errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell(recommendation.variants[0].segments[0].dept_date, recommendation.last_tkt_date)
   end
 
   def validate_card
