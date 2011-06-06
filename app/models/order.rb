@@ -27,6 +27,7 @@ class Order < ActiveRecord::Base
 
   scope :amadeus_email_queue, where(
     :email_status => '',
+    :offline_booking => false,
     :source => 'amadeus',
     :ticket_status => ['booked', 'ticketed'],
     :payment_status => ['blocked', 'charged'])\
@@ -34,6 +35,7 @@ class Order < ActiveRecord::Base
 
   scope :sirena_email_queue, where(
     :email_status => '',
+    :offline_booking => false,
     :source => 'sirena',
     :ticket_status => 'ticketed')\
     .where("email IS NOT NULL AND email != ''")
