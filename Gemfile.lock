@@ -5,6 +5,12 @@ GIT
   specs:
     handsoap (1.1.8)
 
+GIT
+  remote: git://github.com/codesnik/eviterra-instrumentation.git
+  revision: bd9edf156b4724ab697481c7045130bb20f392c4
+  specs:
+    eviterra-instrumentation (0.0.1)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -226,6 +232,7 @@ DEPENDENCIES
   curb
   database_cleaner
   every
+  eviterra-instrumentation!
   geo_ip
   graticule
   haml
