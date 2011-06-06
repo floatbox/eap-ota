@@ -15,8 +15,8 @@ describe PricerForm do
       let :attrs do
         { "people_count" => people_attrs,
           "form_segments" => {
-            "0" => {"from"=>"Москва", "date"=>"210411", "to"=>"Париж"},
-            "1" => {"from"=>"Париж", "date"=>"280411", "to"=>"Москва"}}
+            "0" => {"from"=>"Москва", "date"=>"210412", "to"=>"Париж"},
+            "1" => {"from"=>"Париж", "date"=>"280412", "to"=>"Москва"}}
         }
       end
 
@@ -29,8 +29,8 @@ describe PricerForm do
       let :attrs do
         { "people_count" => people_attrs,
           "form_segments"=> {
-            "0" => {"from"=>"Москва", "date"=>"210411", "to"=>"Париж"},
-            "1" => {"from"=>"", "date"=>"280411", "to"=>"Москва"}}
+            "0" => {"from"=>"Москва", "date"=>"210412", "to"=>"Париж"},
+            "1" => {"from"=>"", "date"=>"280412", "to"=>"Москва"}}
         }
       end
 
@@ -56,7 +56,7 @@ describe PricerForm do
 
     context "when twoway" do
       let :attrs do
-        { :from => 'MOW', :to => 'LON', :date1 => '091011', :date2 => '092011' }
+        { :from => 'MOW', :to => 'LON', :date1 => '091011', :date2 => '091111' }
       end
 
       it { should be_valid }
@@ -82,3 +82,4 @@ describe PricerForm do
     end
   end
 end
+
