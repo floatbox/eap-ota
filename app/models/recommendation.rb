@@ -4,8 +4,10 @@ class Recommendation
   # FIXME надо вынести во что-то амадеусовское?
   cattr_accessor :cryptic_logger
   cattr_accessor :short_logger
+  cattr_accessor :dropped_recommendations_logger
   self.cryptic_logger = ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_cryptic.log')
   self.short_logger = ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_short.log')
+  self.dropped_recommendations_logger = ActiveSupport::BufferedLogger.new(Rails.root + 'log/dropped_recommendations.log')
   cryptic_logger.auto_flushing = nil
   short_logger.auto_flushing = nil
 
@@ -289,7 +291,11 @@ class Recommendation
         self.last_tkt_date = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier.iata).last_tkt_date
         amadeus.pnr_ignore
         return unless air_sfr.segments_confirmed?
-        return unless TimeChecker.ok_to_sell(variants[0].flights[0].dept_date, last_tkt_date)
+        #TODO когда будет собрана достаточная статистика, логгер нужно будет убрать
+        unless TimeChecker.ok_to_sell(variants[0].flights[0].dept_date, last_tkt_date)
+          Recommendation.dropped_recommendations_logger.info "recommendation: #{serialize(variants[0])} price_total: #{price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
+          return
+        end
         air_sfr.fill_itinerary!(segments)
         self
       end
