@@ -10,7 +10,7 @@
 <tr>
     <td class="pad_null"><img src="https://eviterra.com/img/booking/eviterra.png" alt="eviterra" width="210" height="30"></td>
     <td class="pad_null" colspan="2">
-    <% if @order.paid? %>
+    <% if @order.ticketed_email? %>
         <font size="3" family="Arial" style="font-size: 15px;"><strong>Электронный билет<br>E-ticket</strong></font>
     <% else %>
         <font size="3" family="Arial" style="font-size: 15px;"><strong>Бронирование<br>Booking</strong></font>
@@ -22,7 +22,7 @@
     </td>
 </tr>
 </tbody>
-<% if !@order.paid? && @order.last_pay_time.present? %>
+<% if !@order.ticketed_email? && @order.last_pay_time.present? %>
 <tbody valign="top">
 <tr>
     <td colspan="6" class="pad_null">&nbsp;<br></td>
@@ -133,7 +133,7 @@
 </tr>
 </tbody>
 
-<% if @order.paid? %>
+<% if @order.ticketed_email? %>
     <tbody valign="top">
     <tr>
         <td colspan="6" class="pad_null">
@@ -236,7 +236,7 @@
     <td class="pad_null" style="text-align: center; font-size: 24px; line-height: 1.25; letter-spacing: -0.02em;" colspan="6">
     <font size="5"><br></font>
     <center>
-    <% if @order.paid? %>
+    <% if @order.ticketed_email? %>
         <font family="Arial" size="5"><strong>Спасибо за покупку на <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
         <font family="Arial" size="5"><strong>Thank you for purchase at <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
     <% else %>
