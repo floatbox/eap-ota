@@ -283,8 +283,10 @@ class Order < ActiveRecord::Base
     logger.info 'Order: sending email'
     PnrMailer.notification(email, pnr_number).deliver
     update_attribute(:email_status, 'sent')
+    puts "Email pnr #{pnr_number} to #{email} SENT on #{Time.now}"
   rescue
     update_attribute(:email_status, 'error')
+    puts "Email pnr #{pnr_number} to #{email} ERROR on #{Time.now}"
     raise
   end
 
