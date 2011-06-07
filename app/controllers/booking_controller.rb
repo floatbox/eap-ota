@@ -10,7 +10,8 @@ class BookingController < ApplicationController
       return
     end
     recommendation = Recommendation.deserialize(params[:recommendation])
-    unless recommendation.check_price_and_availability(@search)
+    strategy = Strategy.new( :recommendation => recommendation, :search => @search )
+    unless strategy.check_price_and_availability
       render :json => {:success => false}
       return
     end

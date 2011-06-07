@@ -71,11 +71,13 @@ class Recommendation
     country_iatas.uniq == [validating_carrier.country.iata]
   end
 
+  # FIXME перенести в TimeChecker
   def clear_variants
     #удаляем варианты на сегодня/завтра
     variants.delete_if{|v| v.segments[0].dept_date < Date.today + 2.days}
   end
 
+  # FIXME перенести в amadeus strategy?
   def valid_interline?
     # FIXME убрать проверку HR отсюда
     validating_carrier_iata == 'HR' or
@@ -266,65 +268,6 @@ class Recommendation
       return cabins[i] if i
     end
     return
-  end
-
-  def check_price_and_availability(pricer_form)
-    return unless hahn_air_allows?
-    if source == 'amadeus'
-      Amadeus.booking do |amadeus|
-        self.price_fare, self.price_tax =
-          amadeus.fare_informative_pricing_without_pnr(
-            :recommendation => self,
-            :flights => flights,
-            :people_count => pricer_form.real_people_count,
-            :validating_carrier => validating_carrier_iata
-          ).prices
-
-        # FIXME не очень надежный признак
-        return if price_fare.to_i == 0
-        self.rules = amadeus.fare_check_rules.rules
-        air_sfr = amadeus.air_sell_from_recommendation(
-          :recommendation => self,
-          :segments => segments,
-          :seat_total => pricer_form.seat_total
-        )
-        self.last_tkt_date = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier.iata).last_tkt_date
-        amadeus.pnr_ignore
-        return unless air_sfr.segments_confirmed?
-        #TODO когда будет собрана достаточная статистика, логгер нужно будет убрать
-        unless TimeChecker.ok_to_sell(variants[0].flights[0].dept_date, last_tkt_date)
-          Recommendation.dropped_recommendations_logger.info "recommendation: #{serialize(variants[0])} price_total: #{price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
-          return
-        end
-        air_sfr.fill_itinerary!(segments)
-        self
-      end
-    elsif source == 'sirena'
-      recs = Sirena::Service.pricing(pricer_form, self).recommendations
-      rec = recs && recs[0]
-      self.rules = sirena_rules(rec)
-      return unless TimeChecker.ok_to_sell(rec.variants[0].flights[0].dept_date)
-      if rec
-        self.price_fare = rec.price_fare
-        self.price_tax = rec.price_tax
-        # обновим количество бланков, на всякий случай
-        self.sirena_blank_count = rec.sirena_blank_count
-        rec
-      end
-    end
-  end
-
-  def sirena_rules rec
-    rec.upts.each_with_object({}) do |u, result|
-      unless result[[rec.validating_carrier_iata, u[:fare_base]]]
-        resp = Sirena::Service.fareremark(:carrier => rec.validating_carrier_iata, :upt => u[:upt], :upt_code => u[:code])
-        result[[rec.validating_carrier_iata, u[:fare_base]]] = resp.text
-      end
-    end
-  end
-
-  def hahn_air_allows?
-    validating_carrier_iata != 'HR' || HahnAir.allows?(marketing_carrier_iatas | operating_carrier_iatas)
   end
 
   def cabins_except selected_cabin
