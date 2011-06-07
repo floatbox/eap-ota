@@ -1,14 +1,6 @@
 # encoding: utf-8
 class Recommendation
 
-  # FIXME надо вынести во что-то амадеусовское?
-  cattr_accessor :cryptic_logger
-  cattr_accessor :short_logger
-  self.cryptic_logger = ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_cryptic.log')
-  self.short_logger = ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_short.log')
-  cryptic_logger.auto_flushing = nil
-  short_logger.auto_flushing = nil
-
   include KeyValueInit
 
   attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
@@ -181,19 +173,7 @@ class Recommendation
   end
 
   def self.merge left, right
-    merged = left | right
-
-    # FIXME вынести логгер отсюдова
-    merged.each do |r|
-      r.variants.each do |v|
-        cryptic_logger.info r.cryptic(v)
-      end
-      short_logger.info r.short
-    end
-    cryptic_logger.flush
-    short_logger.flush
-
-    merged
+    left | right
   end
 
   def variants_by_duration
