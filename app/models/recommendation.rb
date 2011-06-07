@@ -4,10 +4,8 @@ class Recommendation
   # FIXME надо вынести во что-то амадеусовское?
   cattr_accessor :cryptic_logger
   cattr_accessor :short_logger
-  cattr_accessor :dropped_recommendations_logger
   self.cryptic_logger = ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_cryptic.log')
   self.short_logger = ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_short.log')
-  self.dropped_recommendations_logger = ActiveSupport::BufferedLogger.new(Rails.root + 'log/dropped_recommendations.log')
   cryptic_logger.auto_flushing = nil
   short_logger.auto_flushing = nil
 
@@ -36,6 +34,9 @@ class Recommendation
   def validating_carrier
     validating_carrier_iata && Carrier[validating_carrier_iata]
   end
+
+  # INTERLINES
+  # ##########
 
   def other_marketing_carrier_iatas
     marketing_carrier_iatas - [validating_carrier_iata]
@@ -311,7 +312,13 @@ class Recommendation
   end
 
   # надеюсь, однажды это будет просто ключ из кэша
-  def serialize(variant)
+  def serialize(variant=nil)
+    variant ||=
+      if variants.one?
+        variants.first
+      else
+        raise ArgumentError, "Recommendation#serialize without arguments works only if there's exactly one variant"
+      end
     segment_codes = variant.segments.collect { |s|
       s.flights.collect(&:flight_code).join('-')
     }

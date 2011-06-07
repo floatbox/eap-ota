@@ -10,6 +10,10 @@ class Strategy
     recommendation
   end
 
+  cattr_accessor :dropped_recommendations_logger do
+    ActiveSupport::BufferedLogger.new(Rails.root + 'log/dropped_recommendations.log')
+  end
+
   # preliminary booking
   # ###################
 
@@ -40,7 +44,7 @@ class Strategy
         return unless air_sfr.segments_confirmed?
         return unless TimeChecker.ok_to_sell(rec.variants[0].flights[0].dept_date, rec.last_tkt_date)
         unless TimeChecker.ok_to_sell(rec.variants[0].flights[0].dept_date, rec.last_tkt_date)
-          Recommendation.dropped_recommendations_logger.info "recommendation: #{rec.serialize(rec.variants[0])} price_total: #{rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
+          dropped_recommendations_logger.info "recommendation: #{rec.serialize} price_total: #{rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
           return
         end
         air_sfr.fill_itinerary!(rec.segments)
