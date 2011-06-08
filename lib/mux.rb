@@ -3,7 +3,15 @@
 # читается как "мэкс", если что.
 class Mux
 
+  cattr_accessor :cryptic_logger do ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_cryptic.log') end
+  cryptic_logger.auto_flushing = nil
+  cattr_accessor :short_logger do ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_short.log') end
+  short_logger.auto_flushing = nil
+  cattr_accessor :logger do Rails.logger end
+
   module ClassMethods
+
+    include ActiveSupport::Benchmarkable
 
     def pricer(form, admin_user=false, lite=false)
       # FIXME делает сортировку дважды
@@ -67,6 +75,9 @@ class Mux
         benchmark 'Pricer amadeus, merging and cleanup' do
           recommendations = Recommendation.merge(recommendations_ws, recommendations_ns)
 
+          # log amadeus recommendations
+          log_examples(recommendations)
+
           # cleanup
           # TODO рапортовать, если хотя бы одно предложение выброшено
           # мы вроде что-то делали, чтобы амадеус не возвращал всякие поезда
@@ -116,6 +127,18 @@ class Mux
         locations.any?{|l| SNG_COUNTRY_CODES.include? l.country.alpha2}
     end
 
+    # применяем только к амадеусу, для разбора интерлайнов
+    def log_examples(recommendations)
+      recommendations.each do |r|
+        r.variants.each do |v|
+          cryptic_logger.info r.cryptic(v)
+        end
+        short_logger.info r.short
+      end
+      cryptic_logger.flush
+      short_logger.flush
+    end
+
     # report error and continue
     # yanked from rails
     # actionpack/lib/action_dispatch/middleware/show_exceptions.rb
@@ -130,13 +153,6 @@ class Mux
       end
       HoptoadNotifier.notify(exception) rescue Rails.logger.error("  can't notify hoptoad #{$!.class}: #{$!.message}")
     end
-
-    include ActiveSupport::Benchmarkable
-
-    def logger
-      Rails.logger
-    end
-
   end
   extend ClassMethods
 
