@@ -10,7 +10,7 @@ class BookingController < ApplicationController
       return
     end
     recommendation = Recommendation.deserialize(params[:recommendation])
-    strategy = Strategy.new( :recommendation => recommendation, :search => @search )
+    strategy = Strategy.new( :rec => recommendation, :search => @search )
     unless strategy.check_price_and_availability
       render :json => {:success => false}
       return
@@ -37,8 +37,9 @@ class BookingController < ApplicationController
     @order.set_flight_date_for_childen_and_infants
     @order.update_attributes(params[:order])
     @order.card = CreditCard.new(params[:card]) if @order.payment_type == 'card'
+    strategy = Strategy.new( :rec => @order.recommendation, :order_data => @order )
     if @order.valid?
-      if @order.create_booking
+      if strategy.create_booking
         if @order.payment_type == 'card'
           payture_response = @order.block_money
           if payture_response.success?
