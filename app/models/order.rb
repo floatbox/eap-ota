@@ -16,9 +16,14 @@ class Order < ActiveRecord::Base
 
   has_many :payments
   has_many :tickets
-  validates_uniqueness_of :pnr_number, :scope => :source
+  validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
 
   before_create :generate_code, :calculate_price_with_payment_commission, :set_payment_status
+  before_save :capitalize_pnr
+
+  def capitalize_pnr
+    self.pnr_number = pnr_number.mb_chars.strip.upcase
+  end
 
   scope :stale, lambda {
     where(:payment_status => 'not blocked', :ticket_status => 'booked', :offline_booking => false, :source => 'amadeus')\
