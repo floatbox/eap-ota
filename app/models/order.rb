@@ -129,7 +129,7 @@ class Order < ActiveRecord::Base
     price_tax + price_consolidator_markup + price_our_markup
   end
 
-  def raw
+  def raw # FIXME тоже в стратегию?
     case source
     when 'amadeus'
       Amadeus::Service.pnr_raw(pnr_number)
@@ -187,7 +187,7 @@ class Order < ActiveRecord::Base
 
   end
 
-  def update_prices_from_tickets
+  def update_prices_from_tickets # FIXME перенести в strategy
     if source == 'amadeus'
       price_total_old = self.price_total
       self.price_fare = tickets.sum(:price_fare)
@@ -269,7 +269,7 @@ class Order < ActiveRecord::Base
     update_prices_from_tickets
   end
 
-  def cancel!
+  def cancel! # FIXME перенести в strategy
     case source
     when 'amadeus'
       Amadeus.booking do |amadeus|
