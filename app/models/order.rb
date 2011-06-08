@@ -68,6 +68,10 @@ class Order < ActiveRecord::Base
   # по этой штуке во маршрут-квитанции определяется, "бронирование" это или уже "билет"
   # FIXME избавиться от глупостей типа "пишем что это билет, хотя это еще бронирование"
   # FIXME добавить проверки на обилеченность, может быть? для ручных бронек
+  def ticketed_email?
+    ticket_status == 'ticketed' || payment_type == 'card'
+  end
+
   def paid?
     payment_type == 'card'
   end
@@ -283,8 +287,10 @@ class Order < ActiveRecord::Base
     logger.info 'Order: sending email'
     PnrMailer.notification(email, pnr_number).deliver
     update_attribute(:email_status, 'sent')
+    puts "Email pnr #{pnr_number} to #{email} SENT on #{Time.now}"
   rescue
     update_attribute(:email_status, 'error')
+    puts "Email pnr #{pnr_number} to #{email} ERROR on #{Time.now}"
     raise
   end
 

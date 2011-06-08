@@ -1,16 +1,6 @@
 # encoding: utf-8
 class Recommendation
 
-  # FIXME надо вынести во что-то амадеусовское?
-  cattr_accessor :cryptic_logger
-  cattr_accessor :short_logger
-  cattr_accessor :dropped_recommendations_logger
-  self.cryptic_logger = ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_cryptic.log')
-  self.short_logger = ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_short.log')
-  self.dropped_recommendations_logger = ActiveSupport::BufferedLogger.new(Rails.root + 'log/dropped_recommendations.log')
-  cryptic_logger.auto_flushing = nil
-  short_logger.auto_flushing = nil
-
   include KeyValueInit
 
   attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
@@ -36,6 +26,9 @@ class Recommendation
   def validating_carrier
     validating_carrier_iata && Carrier[validating_carrier_iata]
   end
+
+  # INTERLINES
+  # ##########
 
   def other_marketing_carrier_iatas
     marketing_carrier_iatas - [validating_carrier_iata]
@@ -71,11 +64,13 @@ class Recommendation
     country_iatas.uniq == [validating_carrier.country.iata]
   end
 
+  # FIXME перенести в TimeChecker
   def clear_variants
     #удаляем варианты на сегодня/завтра
     variants.delete_if{|v| v.segments[0].dept_date < Date.today + 2.days}
   end
 
+  # FIXME перенести в amadeus strategy?
   def valid_interline?
     # FIXME убрать проверку HR отсюда
     validating_carrier_iata == 'HR' or
@@ -178,19 +173,7 @@ class Recommendation
   end
 
   def self.merge left, right
-    merged = left | right
-
-    # FIXME вынести логгер отсюдова
-    merged.each do |r|
-      r.variants.each do |v|
-        cryptic_logger.info r.cryptic(v)
-      end
-      short_logger.info r.short
-    end
-    cryptic_logger.flush
-    short_logger.flush
-
-    merged
+    left | right
   end
 
   def variants_by_duration
@@ -268,65 +251,6 @@ class Recommendation
     return
   end
 
-  def check_price_and_availability(pricer_form)
-    return unless hahn_air_allows?
-    if source == 'amadeus'
-      Amadeus.booking do |amadeus|
-        self.price_fare, self.price_tax =
-          amadeus.fare_informative_pricing_without_pnr(
-            :recommendation => self,
-            :flights => flights,
-            :people_count => pricer_form.real_people_count,
-            :validating_carrier => validating_carrier_iata
-          ).prices
-
-        # FIXME не очень надежный признак
-        return if price_fare.to_i == 0
-        self.rules = amadeus.fare_check_rules.rules
-        air_sfr = amadeus.air_sell_from_recommendation(
-          :recommendation => self,
-          :segments => segments,
-          :seat_total => pricer_form.seat_total
-        )
-        self.last_tkt_date = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier.iata).last_tkt_date
-        amadeus.pnr_ignore
-        return unless air_sfr.segments_confirmed?
-        #TODO когда будет собрана достаточная статистика, логгер нужно будет убрать
-        unless TimeChecker.ok_to_sell(variants[0].flights[0].dept_date, last_tkt_date)
-          Recommendation.dropped_recommendations_logger.info "recommendation: #{serialize(variants[0])} price_total: #{price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
-          return
-        end
-        air_sfr.fill_itinerary!(segments)
-        self
-      end
-    elsif source == 'sirena'
-      recs = Sirena::Service.pricing(pricer_form, self).recommendations
-      rec = recs && recs[0]
-      self.rules = sirena_rules(rec)
-      return unless TimeChecker.ok_to_sell(rec.variants[0].flights[0].dept_date)
-      if rec
-        self.price_fare = rec.price_fare
-        self.price_tax = rec.price_tax
-        # обновим количество бланков, на всякий случай
-        self.sirena_blank_count = rec.sirena_blank_count
-        rec
-      end
-    end
-  end
-
-  def sirena_rules rec
-    rec.upts.each_with_object({}) do |u, result|
-      unless result[[rec.validating_carrier_iata, u[:fare_base]]]
-        resp = Sirena::Service.fareremark(:carrier => rec.validating_carrier_iata, :upt => u[:upt], :upt_code => u[:code])
-        result[[rec.validating_carrier_iata, u[:fare_base]]] = resp.text
-      end
-    end
-  end
-
-  def hahn_air_allows?
-    validating_carrier_iata != 'HR' || HahnAir.allows?(marketing_carrier_iatas | operating_carrier_iatas)
-  end
-
   def cabins_except selected_cabin
     selected_cabin = 'Y' if selected_cabin.nil?
     dcabins = cabins.map {|c|
@@ -368,7 +292,13 @@ class Recommendation
   end
 
   # надеюсь, однажды это будет просто ключ из кэша
-  def serialize(variant)
+  def serialize(variant=nil)
+    variant ||=
+      if variants.one?
+        variants.first
+      else
+        raise ArgumentError, "Recommendation#serialize without arguments works only if there's exactly one variant"
+      end
     segment_codes = variant.segments.collect { |s|
       s.flights.collect(&:flight_code).join('-')
     }
