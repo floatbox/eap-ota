@@ -62,7 +62,7 @@ module Amadeus
   def self.book(office=nil)
     office ||= Amadeus::Session::BOOKING
     logger.debug { "Free sessions count: #{free.count}" }
-    booking = rand(2**31)
+    booking = SecureRandom.random_number(2**31)
     free.update_all({:booking => booking}, nil, {:limit => 1})
     session = find_by_booking(booking)
     unless session
@@ -108,3 +108,4 @@ module Amadeus
 
   end
 end
+
