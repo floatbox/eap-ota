@@ -136,7 +136,7 @@ class Strategy
 
           #amadeus.queue_place_pnr(:number => @order_form.pnr_number)
           # FIXME вынести в контроллер
-          @order_form.order = Order.create(:order_form => @order_form)
+          @order_form.save_to_order
 
           # обилечивание
           #Amadeus::Service.issue_ticket(@order_form.pnr_number)
@@ -165,7 +165,7 @@ class Strategy
             if payment_query.cost == @rec.price_fare + @rec.price_tax
               @order_form.pnr_number = response.pnr_number
               @order_form.sirena_lead_pass = response.lead_family
-              @order_form.order = Order.create(:order_form => @order_form)
+              @order_form.save_to_order
             else
               @order_form.errors.add :pnr_number, 'Изменилась цена после тарификации'
               Sirena::Service.payment_ext_auth(:cancel, response.pnr_number, response.lead_family)

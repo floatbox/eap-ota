@@ -116,6 +116,10 @@ class OrderForm < ActiveRecord::BaseWithoutTable
     alias :[] load_from_cache
   end
 
+  def save_to_order
+    self.order = Order.create(:order_form => self)
+  end
+
   def variant
     recommendation && recommendation.variants.first
   end
