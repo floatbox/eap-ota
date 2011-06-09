@@ -107,8 +107,7 @@ init: function() {
         }
         var result = match !== undefined ? match : half_match;
         if (result !== undefined) {
-            var offer = el.closest('.offer-variant').addClass('g-none').closest('.offer');
-            $('.offer-variant', offer).eq(parseInt(result, 10)).removeClass('g-none');
+            that.showVariant(el.closest('.offer').find('.offer-variant').eq(parseInt(result, 10)));
         }
     });
 
@@ -430,6 +429,7 @@ showAmount: function(amount, total) {
     $('#rtab-all .link').html(amount == total ? ('Всего ' + str) : (str + ' из ' + total));
 },
 showVariant: function(el) {
+    el.closest('.offer').removeClass('prebooking');
     el.removeClass('g-none').siblings().addClass('g-none');
 },
 applyFilters: function() {
