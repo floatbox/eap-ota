@@ -3,7 +3,7 @@
 <head>
     <%= render 'shared/head_common', {:title => @error_message ? 'не удалось оплатить билет' : 'ваш билет оплачен и забронирован'} %>
     <%= stylesheet_link_tag "static", "controls/hint" %>
-    <%= javascript_include_tag "main", "static", "hint" %>
+    <%= javascript_include_tag "main", "static", "controls/hint" %>
 </head>
 <body>
 <%= render 'shared/header' %>
