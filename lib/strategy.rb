@@ -10,11 +10,16 @@ class Strategy
     ActiveSupport::BufferedLogger.new(Rails.root + 'log/dropped_recommendations.log')
   end
 
+  attr_writer :source
+  def source
+    @source || @rec.source
+  end
+
   # preliminary booking
   # ###################
 
   def check_price_and_availability
-    case @rec.source
+    case source
 
     when 'amadeus'
       return unless hahn_air_allows?(@rec)
@@ -88,7 +93,7 @@ class Strategy
   attr_accessor :order_data
 
   def create_booking
-    case @rec.source
+    case source
 
     when 'amadeus'
       Amadeus.booking do |amadeus|
@@ -105,7 +110,7 @@ class Strategy
           set_people_numbers(add_multi_elements.passengers)
 
           amadeus.pnr_commit_really_hard do
-            pricing = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier).or_fail!
+            pricing = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).or_fail!
             @order_data.last_tkt_date = pricing.last_tkt_date
             unless [@rec.price_fare, @rec.price_tax] == pricing.prices
               @order_data.errors.add :pnr_number, 'Ошибка при создании PNR'
@@ -124,7 +129,7 @@ class Strategy
             #  Amadeus::Session::WORKING
             #)
             # FIXME надо ли архивировать в самом конце?
-            amadeus.pnr_archive(seat_total)
+            amadeus.pnr_archive(@order_data.seat_total)
             # FIXME перенести ремарку поближе к началу.
             amadeus.pnr_add_remark
           end
@@ -146,7 +151,35 @@ class Strategy
       end
 
     when 'sirena'
-      Sirena::Adapter.book_for_data(@order_data)
+      response = Sirena::Service.booking(@order_data)
+      if response.success? && response.pnr_number
+        if @rec.price_fare != response.price_fare ||
+           @rec.price_tax != response.price_tax
+          @order_data.errors.add :pnr_number, 'Изменилась цена предложения при бронировании'
+          Sirena::Service.booking_cancel(response.pnr_number, response.lead_family)
+        else
+          # FIXME просто проверяем возможность добавления
+          # Sirena::Service.add_remark(response.pnr_number, response.lead_family, '')
+          payment_query = Sirena::Service.payment_ext_auth(:query, response.pnr_number, response.lead_family)
+          if payment_query.success? && payment_query.cost
+            if payment_query.cost == @rec.price_fare + @rec.price_tax
+              @order_data.pnr_number = response.pnr_number
+              @order_data.sirena_lead_pass = response.lead_family
+              @order_data.order = Order.create(:order_data => @order_data)
+            else
+              @order_data.errors.add :pnr_number, 'Изменилась цена после тарификации'
+              Sirena::Service.payment_ext_auth(:cancel, response.pnr_number, response.lead_family)
+              Sirena::Service.booking_cancel(response.pnr_number, response.lead_family)
+            end
+          else
+            @order_data.errors.add :pnr_number,  payment_query.error || 'Ошибка при тарицифировании PNR'
+            Sirena::Service.booking_cancel(response.pnr_number, response.lead_family)
+          end
+        end
+      else
+        @order_data.errors.add :pnr_number, response.error || 'Ошибка при бронировании'
+      end
+      @order_data.pnr_number
     end
   end
 
@@ -179,4 +212,31 @@ class Strategy
   end
   private :set_people_numbers
 
+
+  # ticketing
+  # #########
+
+  def delayed_ticketing?
+    case source
+    when 'amadeus'
+      true
+    when 'sirena'
+      false
+    end
+  end
+
+  def ticket(order)
+    payment_confirm = Sirena::Service.payment_ext_auth(:confirm, order.pnr_number, order.sirena_lead_pass,
+                                      :cost => (order.price_fare + order.price_tax))
+    if payment_confirm.success?
+      order.ticket!
+      return true
+    else
+      #FIXME Отменять в случае exception
+      Sirena::Service.payment_ext_auth(:cancel, order.pnr_number, order.sirena_lead_pass)
+      # we can't simply cancel order if it is in query
+      order.cancel!
+      return false
+    end
+  end
 end

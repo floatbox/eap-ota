@@ -47,21 +47,20 @@ class BookingController < ApplicationController
             logger.info "Pay: payment and booking successful"
 
             # FIXME не выносить в кронтаск. но, может быть, внести обратно в .ticket!
-            if @order.order.source == 'sirena'
-              logger.info "Pay: ticketing sirena"
-              unless Sirena::Adapter.approve_payment(@order.order)
-                @error_message = 'Не удалось выписать билет'
-                @order.order.unblock!
-                @order.order.cancel!
-              end
-              # сейчас это делает approve payment
+            unless strategy.delayed_ticketing?
+              logger.info "Pay: ticketing"
+              # сейчас это делает Strategy
               # @order.order.ticket!
+              unless strategy.ticket(@order.order)
+                logger.info "Pay: ticketing failed"
+                @order.order.unblock!
+                # это делает Strategy
+                # @order.order.cancel!
+                render :partial => 'failed_booking', :locals => {:errors => 'Не удалось выписать билет'}
+                return
+              end
             end
-            if @error_message
-              render :partial => 'failed_booking', :locals => {:errors => @error_message}
-            else
-              render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}
-            end
+            render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}
           elsif payture_response.threeds?
             logger.info "Pay: payment system requested 3D-Secure authorization"
             render :partial => 'threeds', :locals => {:order_id => @order.order.order_id, :payture_response => payture_response}
@@ -72,6 +71,7 @@ class BookingController < ApplicationController
             render :partial => 'failed_payment', :locals => {:errors => msg}
           end
         else
+          # FIXME WTF не асинхронно?
           @order.order.send_email
           logger.info "Pay: booking successful, payment: cash"
           render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}
@@ -97,16 +97,18 @@ class BookingController < ApplicationController
     # FIXME сделать более внятное и понятное пользователю поведение
     if @order && pa_res && md && (@order.payment_status == 'not blocked' || @order.payment_status == 'new') && @order.confirm_3ds(pa_res, md)
       @order.money_blocked!
-      # FIXME не выносить в кронтаск. но, может быть, внести обратно в .ticket!
-      if @order.source == 'sirena'
-        logger.info "Pay: ticketing sirena"
-        unless Sirena::Adapter.approve_payment(@order)
+      strategy = Strategy.new(:source => @order.source)
+      unless strategy.delayed_ticketing?
+        logger.info "Pay: ticketing"
+        # сейчас это делает Strategy
+        # @order.order.ticket!
+        unless strategy.ticket(@order)
+          logger.info "Pay: ticketing failed"
           @error_message = 'Не удалось выписать билет'
           @order.unblock!
-          @order.cancel!
+          # это делает Strategy
+          # @order.cancel!
         end
-        # сейчас это делает approve payment
-        # @order.order.ticket!
       end
     elsif ['blocked', 'charged'].include? @order.payment_status
     else
