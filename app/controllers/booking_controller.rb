@@ -5,24 +5,20 @@ class BookingController < ApplicationController
   def preliminary_booking
     @search = PricerForm.load_from_cache(params[:query_key])
     set_search_context
-    unless TimeChecker.ok_to_sell(@search.form_segments[0].date_as_date)
-      render :json => {:success => false}
-      return
-    end
     recommendation = Recommendation.deserialize(params[:recommendation])
     strategy = Strategy.new( :rec => recommendation, :search => @search )
     unless strategy.check_price_and_availability
       render :json => {:success => false}
-      return
+    else
+      order_form = OrderForm.new(
+        :recommendation => recommendation,
+        :people_count => @search.real_people_count,
+        :variant_id => params[:variant_id],
+        :last_tkt_date => recommendation.last_tkt_date
+      )
+      order_form.save_to_cache
+      render :json => {:success => true, :number => order_form.number}
     end
-    order_form = OrderForm.new(
-      :recommendation => recommendation,
-      :people_count => @search.real_people_count,
-      :variant_id => params[:variant_id],
-      :last_tkt_date => recommendation.last_tkt_date
-    )
-    order_form.save_to_cache
-    render :json => {:success => true, :number => order_form.number}
   end
 
   def index
@@ -112,7 +108,7 @@ class BookingController < ApplicationController
       end
     elsif ['blocked', 'charged'].include? @order.payment_status
     else
-      logger.info "Pay: payment and booking successful"
+      logger.info "Pay: problem confirming 3ds"
       @error_message = 'Не удалось оплатить билет'
     end
   end

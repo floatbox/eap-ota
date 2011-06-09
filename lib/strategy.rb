@@ -10,6 +10,10 @@ class Strategy
     ActiveSupport::BufferedLogger.new(Rails.root + 'log/dropped_recommendations.log')
   end
 
+  cattr_accessor :logger do
+    Rails.logger
+  end
+
   attr_writer :source
   def source
     @source || @rec.source
@@ -19,10 +23,18 @@ class Strategy
   # ###################
 
   def check_price_and_availability
+    unless TimeChecker.ok_to_sell(@search.form_segments[0].date_as_date)
+      logger.error 'Strategy: time criteria missed'
+      return
+    end
+
     case source
 
     when 'amadeus'
-      return unless hahn_air_allows?(@rec)
+      unless hahn_air_allows?(@rec)
+        logger.error 'Strategy: forbidden by Hahn Air'
+        return
+      end
       Amadeus.booking do |amadeus|
         @rec.price_fare, @rec.price_tax =
           amadeus.fare_informative_pricing_without_pnr(
@@ -33,8 +45,13 @@ class Strategy
           ).prices
 
         # FIXME не очень надежный признак
-        return if @rec.price_fare.to_i == 0
+        if @rec.price_fare.to_i == 0
+          logger.error 'Strategy: price_fare is 0?'
+        end
+
         @rec.rules = amadeus.fare_check_rules.rules
+
+        # FIXME точно здесь нельзя нечаянно заморозить места?
         air_sfr = amadeus.air_sell_from_recommendation(
           :recommendation => @rec,
           :segments => @rec.segments,
@@ -42,9 +59,12 @@ class Strategy
         )
         @rec.last_tkt_date = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).last_tkt_date
         amadeus.pnr_ignore
-        return unless air_sfr.segments_confirmed?
-        return unless TimeChecker.ok_to_sell(@rec.variants[0].flights[0].dept_date, @rec.last_tkt_date)
+        unless air_sfr.segments_confirmed?
+          logger.error 'Strategy: segments aren\'t confirmed'
+          return
+        end
         unless TimeChecker.ok_to_sell(@rec.variants[0].flights[0].dept_date, @rec.last_tkt_date)
+          logger.error 'Strategy: time criteria for last tkt date missed'
           dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
           return
         end
@@ -54,18 +74,21 @@ class Strategy
 
     when 'sirena'
       # FIXME может быть, просто вернуть новую рекомендацию?
-      recs = Sirena::Service.pricing(@search, @rec).recommendations
-      # вынести в Sirena::Response::Pricing
-      repriced_rec = recs && recs[0]
-      @rec.rules = sirena_rules(repriced_rec)
-      return unless TimeChecker.ok_to_sell(repriced_rec.variants[0].flights[0].dept_date)
-      if repriced_rec
-        @rec.price_fare = repriced_rec.price_fare
-        @rec.price_tax = repriced_rec.price_tax
-        # обновим количество бланков, на всякий случай
-        @rec.sirena_blank_count = repriced_rec.sirena_blank_count
-        @rec
+      unless repriced_rec = Sirena::Service.pricing(@search, @rec).recommendation
+        logger.info 'Strategy: got no recommendation'
+        return
       end
+      # FIXME действительно может отличаться от результата проверки выше?
+      unless TimeChecker.ok_to_sell(repriced_rec.variants[0].flights[0].dept_date)
+        logger.error 'Strategy: missed time criteria, again'
+        return
+      end
+      @rec.rules = sirena_rules(repriced_rec)
+      @rec.price_fare = repriced_rec.price_fare
+      @rec.price_tax = repriced_rec.price_tax
+      # обновим количество бланков, на всякий случай
+      @rec.sirena_blank_count = repriced_rec.sirena_blank_count
+      @rec
 
     end
   end
@@ -203,6 +226,7 @@ class Strategy
   private :add_passport_data
 
   # for amadeus
+  # FIXME наверное испортится, если совпадают имена у двух пассажиров, или если будем делать транслитерацию
   def set_people_numbers(returned_people)
     returned_people.each do |p|
       @order_form.people.detect do |person|
@@ -233,7 +257,8 @@ class Strategy
       return true
     else
       #FIXME Отменять в случае exception
-      Sirena::Service.payment_ext_auth(:cancel, order.pnr_number, order.sirena_lead_pass)
+      # FIXME Order#cancel! делает то же самое.
+      # Sirena::Service.payment_ext_auth(:cancel, order.pnr_number, order.sirena_lead_pass)
       # we can't simply cancel order if it is in query
       order.cancel!
       return false
