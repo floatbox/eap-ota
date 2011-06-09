@@ -26,24 +26,24 @@ class BookingController < ApplicationController
   end
 
   def index
-    @order = OrderForm.load_from_cache(params[:number])
-    @order.init_people
+    @order_form = OrderForm.load_from_cache(params[:number])
+    @order_form.init_people
     render :partial => 'embedded'
   end
 
   def pay
-    @order = OrderForm.load_from_cache(params[:order][:number])
-    @order.people_attributes = params[:person_attributes]
-    @order.set_flight_date_for_childen_and_infants
-    @order.update_attributes(params[:order])
-    @order.card = CreditCard.new(params[:card]) if @order.payment_type == 'card'
-    strategy = Strategy.new( :rec => @order.recommendation, :order_form => @order )
-    if @order.valid?
+    @order_form = OrderForm.load_from_cache(params[:order][:number])
+    @order_form.people_attributes = params[:person_attributes]
+    @order_form.set_flight_date_for_childen_and_infants
+    @order_form.update_attributes(params[:order])
+    @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
+    strategy = Strategy.new( :rec => @order_form.recommendation, :order_form => @order_form )
+    if @order_form.valid?
       if strategy.create_booking
-        if @order.payment_type == 'card'
-          payture_response = @order.block_money
+        if @order_form.payment_type == 'card'
+          payture_response = @order_form.block_money
           if payture_response.success?
-            @order.order.money_blocked!
+            @order_form.order.money_blocked!
             logger.info "Pay: payment and booking successful"
 
             # FIXME не выносить в кронтаск. но, может быть, внести обратно в .ticket!
@@ -51,41 +51,41 @@ class BookingController < ApplicationController
               logger.info "Pay: ticketing"
               # сейчас это делает Strategy
               # @order.order.ticket!
-              unless strategy.ticket(@order.order)
+              unless strategy.ticket(@order_form.order)
                 logger.info "Pay: ticketing failed"
-                @order.order.unblock!
+                @order_form.order.unblock!
                 # это делает Strategy
                 # @order.order.cancel!
-                render :partial => 'failed_booking', :locals => {:errors => 'Не удалось выписать билет'}
+                render :partial => 'failed_booking'
                 return
               end
             end
-            render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}
+            render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order_form.pnr_number), :pnr_number => @order_form.pnr_number}
           elsif payture_response.threeds?
             logger.info "Pay: payment system requested 3D-Secure authorization"
-            render :partial => 'threeds', :locals => {:order_id => @order.order.order_id, :payture_response => payture_response}
+            render :partial => 'threeds', :locals => {:order_id => @order_form.order.order_id, :payture_response => payture_response}
           else
-            @order.order.cancel!
-            msg = @order.card.errors[:number]
+            @order_form.order.cancel!
+            msg = @order_form.card.errors[:number]
             logger.info "Pay: payment failed with error message #{msg}"
-            render :partial => 'failed_payment', :locals => {:errors => msg}
+            render :partial => 'failed_payment'
           end
         else
           # FIXME WTF не асинхронно?
-          @order.order.send_email
+          @order_form.order.send_email
           logger.info "Pay: booking successful, payment: cash"
-          render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order.pnr_number), :pnr_number => @order.pnr_number}
+          render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order_form.pnr_number), :pnr_number => @order_form.pnr_number}
         end
-      elsif msg = @order.errors[:pnr_number]
+      elsif msg = @order_form.errors[:pnr_number]
         logger.info "Pay: booking failed with error message #{msg}"
-        render :partial => 'failed_booking', :locals => {:errors => msg}
+        render :partial => 'failed_booking'
       else
         logger.info "Pay: booking failed misteriously not giving an error message"
       end
       return
     end
     logger.info "Pay: invalid order"
-    render :json => {:errors => @order.errors_hash}
+    render :json => {:errors => @order_form.errors_hash}
   end
 
   def confirm_3ds
