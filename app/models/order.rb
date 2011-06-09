@@ -35,7 +35,7 @@ class Order < ActiveRecord::Base
     :offline_booking => false,
     :source => 'amadeus',
     :ticket_status => ['booked', 'ticketed'],
-    :payment_status => ['blocked', 'charged'])\
+    :payment_status => ['blocked', 'pending', 'charged'])\
     .where("email IS NOT NULL AND email != ''")
 
   scope :sirena_email_queue, where(
