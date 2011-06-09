@@ -15,29 +15,29 @@ class BookingController < ApplicationController
       render :json => {:success => false}
       return
     end
-    order_data = OrderData.new(
+    order_form = OrderForm.new(
       :recommendation => recommendation,
       :people_count => @search.real_people_count,
       :variant_id => params[:variant_id],
       :last_tkt_date => recommendation.last_tkt_date
     )
-    order_data.save_to_cache
-    render :json => {:success => true, :number => order_data.number}
+    order_form.save_to_cache
+    render :json => {:success => true, :number => order_form.number}
   end
 
   def index
-    @order = OrderData.load_from_cache(params[:number])
+    @order = OrderForm.load_from_cache(params[:number])
     @order.init_people
     render :partial => 'embedded'
   end
 
   def pay
-    @order = OrderData.load_from_cache(params[:order][:number])
+    @order = OrderForm.load_from_cache(params[:order][:number])
     @order.people_attributes = params[:person_attributes]
     @order.set_flight_date_for_childen_and_infants
     @order.update_attributes(params[:order])
     @order.card = CreditCard.new(params[:card]) if @order.payment_type == 'card'
-    strategy = Strategy.new( :rec => @order.recommendation, :order_data => @order )
+    strategy = Strategy.new( :rec => @order.recommendation, :order_form => @order )
     if @order.valid?
       if strategy.create_booking
         if @order.payment_type == 'card'

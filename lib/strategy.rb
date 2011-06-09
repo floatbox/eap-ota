@@ -90,7 +90,7 @@ class Strategy
   # booking
   # #######
 
-  attr_accessor :order_data
+  attr_accessor :order_form
 
   def create_booking
     case source
@@ -101,19 +101,19 @@ class Strategy
         # может быть, при ошибке канселить бронирование на всякий случай?
         amadeus.air_sell_from_recommendation(
           :segments => @rec.variants[0].segments,
-          :seat_total => @order_data.seat_total,
+          :seat_total => @order_form.seat_total,
           :recommendation => @rec
         ).or_fail!
 
-        add_multi_elements = amadeus.pnr_add_multi_elements(@order_data).or_fail!
-        if @order_data.pnr_number = add_multi_elements.pnr_number
+        add_multi_elements = amadeus.pnr_add_multi_elements(@order_form).or_fail!
+        if @order_form.pnr_number = add_multi_elements.pnr_number
           set_people_numbers(add_multi_elements.passengers)
 
           amadeus.pnr_commit_really_hard do
             pricing = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).or_fail!
-            @order_data.last_tkt_date = pricing.last_tkt_date
+            @order_form.last_tkt_date = pricing.last_tkt_date
             unless [@rec.price_fare, @rec.price_tax] == pricing.prices
-              @order_data.errors.add :pnr_number, 'Ошибка при создании PNR'
+              @order_form.errors.add :pnr_number, 'Ошибка при создании PNR'
               amadeus.pnr_cancel
               return
             end
@@ -129,33 +129,33 @@ class Strategy
             #  Amadeus::Session::WORKING
             #)
             # FIXME надо ли архивировать в самом конце?
-            amadeus.pnr_archive(@order_data.seat_total)
+            amadeus.pnr_archive(@order_form.seat_total)
             # FIXME перенести ремарку поближе к началу.
             amadeus.pnr_add_remark
           end
 
-          #amadeus.queue_place_pnr(:number => @order_data.pnr_number)
+          #amadeus.queue_place_pnr(:number => @order_form.pnr_number)
           # FIXME вынести в контроллер
-          @order_data.order = Order.create(:order_data => @order_data)
+          @order_form.order = Order.create(:order_form => @order_form)
 
           # обилечивание
-          #Amadeus::Service.issue_ticket(@order_data.pnr_number)
+          #Amadeus::Service.issue_ticket(@order_form.pnr_number)
 
-          return @order_data.pnr_number
+          return @order_form.pnr_number
         else
           # при сохранении случилась какая-то ошибка, номер брони не выдан.
           amadeus.pnr_ignore
-          @order_data.errors.add :pnr_number, 'Ошибка при создании PNR'
+          @order_form.errors.add :pnr_number, 'Ошибка при создании PNR'
           return
         end
       end
 
     when 'sirena'
-      response = Sirena::Service.booking(@order_data)
+      response = Sirena::Service.booking(@order_form)
       if response.success? && response.pnr_number
         if @rec.price_fare != response.price_fare ||
            @rec.price_tax != response.price_tax
-          @order_data.errors.add :pnr_number, 'Изменилась цена предложения при бронировании'
+          @order_form.errors.add :pnr_number, 'Изменилась цена предложения при бронировании'
           Sirena::Service.booking_cancel(response.pnr_number, response.lead_family)
         else
           # FIXME просто проверяем возможность добавления
@@ -163,23 +163,23 @@ class Strategy
           payment_query = Sirena::Service.payment_ext_auth(:query, response.pnr_number, response.lead_family)
           if payment_query.success? && payment_query.cost
             if payment_query.cost == @rec.price_fare + @rec.price_tax
-              @order_data.pnr_number = response.pnr_number
-              @order_data.sirena_lead_pass = response.lead_family
-              @order_data.order = Order.create(:order_data => @order_data)
+              @order_form.pnr_number = response.pnr_number
+              @order_form.sirena_lead_pass = response.lead_family
+              @order_form.order = Order.create(:order_form => @order_form)
             else
-              @order_data.errors.add :pnr_number, 'Изменилась цена после тарификации'
+              @order_form.errors.add :pnr_number, 'Изменилась цена после тарификации'
               Sirena::Service.payment_ext_auth(:cancel, response.pnr_number, response.lead_family)
               Sirena::Service.booking_cancel(response.pnr_number, response.lead_family)
             end
           else
-            @order_data.errors.add :pnr_number,  payment_query.error || 'Ошибка при тарицифировании PNR'
+            @order_form.errors.add :pnr_number,  payment_query.error || 'Ошибка при тарицифировании PNR'
             Sirena::Service.booking_cancel(response.pnr_number, response.lead_family)
           end
         end
       else
-        @order_data.errors.add :pnr_number, response.error || 'Ошибка при бронировании'
+        @order_form.errors.add :pnr_number, response.error || 'Ошибка при бронировании'
       end
-      @order_data.pnr_number
+      @order_form.pnr_number
     end
   end
 
@@ -187,14 +187,14 @@ class Strategy
   # FIXME нужна же какая-то обработка ошибок?
   def add_passport_data(amadeus)
     validating_carrier_code = @rec.validating_carrier.iata
-    (@order_data.adults + @order_data.children).each do |person|
+    (@order_form.adults + @order_form.children).each do |person|
       # YY = для всех перевозчиков в бронировании
       amadeus.cmd( "SRDOCSYYHK1-P-#{person.nationality.alpha3}-#{person.cleared_passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{person.number_in_amadeus}")
       amadeus.cmd("SR FOID #{validating_carrier_code} HK1-PP#{person.cleared_passport}/P#{person.number_in_amadeus}")
       amadeus.cmd("FE #{validating_carrier_code} ONLY PSPT #{person.cleared_passport}/P#{person.number_in_amadeus}")
       amadeus.cmd("FFN#{person.bonuscard_type}-#{person.bonuscard_number}/P#{person.number_in_amadeus}") if person.bonus_present
     end
-    @order_data.infants.each_with_index do |person, i|
+    @order_form.infants.each_with_index do |person, i|
       # YY = для всех перевозчиков в бронировании
       amadeus.cmd( "SRDOCSYYHK1-P-#{person.nationality.alpha3}-#{person.cleared_passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}I-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{person.number_in_amadeus}")
       amadeus.cmd("FE INF #{validating_carrier_code} ONLY PSPT #{person.cleared_passport}/P#{person.number_in_amadeus}")
@@ -205,7 +205,7 @@ class Strategy
   # for amadeus
   def set_people_numbers(returned_people)
     returned_people.each do |p|
-      @order_data.people.detect do |person|
+      @order_form.people.detect do |person|
         person.last_name.upcase == p.last_name && (person.first_name_with_code).upcase == p.first_name
       end.number_in_amadeus = p.number_in_amadeus
     end

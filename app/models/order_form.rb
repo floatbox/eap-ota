@@ -1,5 +1,5 @@
 # encoding: utf-8
-class OrderData < ActiveRecord::BaseWithoutTable
+class OrderForm < ActiveRecord::BaseWithoutTable
   column :email
   column :phone
   column :payment_type
@@ -100,7 +100,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
 
   def save_to_cache
     self.number ||= ShortUrl.random_hash
-    Cache.write("order_data", number, self)
+    Cache.write("order_form", number, self)
   end
 
   class << self
@@ -111,7 +111,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
       require 'recommendation'
       require 'person'
       # FIXME попытаться избавиться от этой загрузки
-      Cache.read("order_data", cache_number)
+      Cache.read("order_form", cache_number)
     end
     alias :[] load_from_cache
   end
@@ -181,7 +181,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
 
   def self.create_sample_booking(cache_key)
-    order = OrderData.load_from_cache(cache_key)
+    order = OrderForm.load_from_cache(cache_key)
     order.email = 'email@example.com'
     order.phone = '12345678'
     order.people_count = {:infants => 1, :children => 1, :adults => 2}
