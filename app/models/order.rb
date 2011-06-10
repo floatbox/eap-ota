@@ -18,8 +18,8 @@ class Order < ActiveRecord::Base
   has_many :tickets
   validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
 
-  before_create :generate_code, :calculate_price_with_payment_commission, :set_payment_status
-  before_save :capitalize_pnr
+  before_create :generate_code, :set_payment_status
+  before_save :capitalize_pnr, :calculate_price_with_payment_commission
 
   def capitalize_pnr
     self.pnr_number = pnr_number.mb_chars.strip.upcase
@@ -67,7 +67,7 @@ class Order < ActiveRecord::Base
   end
 
   def calculate_price_with_payment_commission
-    self.price_with_payment_commission = price_total + Payture.commission(price_total) if price_with_payment_commission == 0 || !price_with_payment_commission
+    self.price_with_payment_commission = price_total + Payture.commission(price_total) if offline_booking || price_with_payment_commission == 0 || !price_with_payment_commission
   end
 
   # по этой штуке во маршрут-квитанции определяется, "бронирование" это или уже "билет"
