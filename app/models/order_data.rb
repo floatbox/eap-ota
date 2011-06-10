@@ -40,9 +40,9 @@ class OrderData < ActiveRecord::BaseWithoutTable
     dept_date = recommendation.variants[0].flights[0].dept_date
     last_tkt_date = recommendation.last_tkt_date || default_tk_xl
     if payment_type == 'card'
-      [default_tk_xl, dept_date, last_tkt_date].min
+      [default_tk_xl, dept_date, last_tkt_date + 1.day].min
     else
-      last_pay_time.to_date
+      last_pay_time.to_date + 1.day
     end
   end
 
