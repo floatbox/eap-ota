@@ -57,7 +57,7 @@
     <div class="close"></div>
     <h3>Правила тарифов</h3>
     <p>Внимание! Возврат средств в&nbsp;случае отказа при получении визы, болезни и&nbsp;прочих обстоятельств без штрафных санкций невозможен. Возврат билета производится строго по&nbsp;правилам авиакомпании. В&nbsp;случае комбинации в&nbsp;билете тарифов с&nbsp;различными правилами, наиболее строгие ограничения применются ко&nbsp;всему маршруту.</p>
-    <% @order.recommendation.rules.each do |airline_and_fare ,rule| %>
+    <% @order.recommendation.rules.each do |(airline, fare) ,rule| %>
     <div class="fgroup">
         <% if @order.recommendation.source != 'sirena' %>
           <div class="fgtranslate">
@@ -67,9 +67,9 @@
           </div>
         <% end %>
         <div class="fgheader">
-        <p class="clofs">Тариф <%= airline_and_fare[1] %></p><h5>&nbsp;</h5>
+        <p class="clofs">Тариф <%= fare %></p><h5>&nbsp;</h5>
         </div>
-        <pre><%= rule.html_safe %></pre>
+        <pre><%= raw(rule) %></pre>
     </div>
     <% end %>
 </div>
