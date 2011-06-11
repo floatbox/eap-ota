@@ -141,6 +141,18 @@ class Order < ActiveRecord::Base
     when 'sirena'
       Sirena::Service.pnr_history(:number => pnr_number).history
     end
+  rescue => e
+    e.message
+  end
+
+  def payment_state_raw
+    if payment_type == 'card'
+       "#{payture_state} #{payture_amount}"
+    else
+      "не использовалась"
+    end
+  rescue => e
+    "ошибка получения состояния: #{e.message}"
   end
 
   def load_tickets
