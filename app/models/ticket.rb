@@ -14,5 +14,9 @@ class Ticket < ActiveRecord::Base
     price_fare + price_tax + price_consolidator_markup - price_share
   end
 
+  def name
+    "#{number} #{route} #{updated_at}"
+  end
+
 end
 
