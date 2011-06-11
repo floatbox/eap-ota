@@ -14,21 +14,21 @@
 
 <tbody class="summary">
 <% variant_carriers = primary_operating_carriers(variant) %>
-<% common_carrier = variant.segments.length > 1 && variant_carriers.map{|vc| vc['name'] }.uniq.length == 1 %>
+<% common_carrier = variant_carriers.first if variant_carriers.uniq.one? %>
 <% variant.segments.each_with_index do |segment, segment_counter| %>
 <tr class="segment-<%= segment_counter + 1 %>">
     <% if common_carrier %>
         <% if segment_counter == 0 %>
             <% if variant.segments.length > 2 %>
             <td class="carrier common-mw" rowspan="<%= variant.segments.length * 2 %>">
-                <p><img src="<%= variant_carriers[0]['icon_url'] %>" alt=""></p>
-                <p><%= variant_carriers[0]['name'] %></p>
+                <p><img src="<%= common_carrier.icon_url %>" alt=""></p>
+                <p><%= common_carrier.name %></p>
             </td>
             <% else %>
             <td class="carrier common" rowspan="2">
             <table class="shift"><tr><td>
-                <p><img src="<%= variant_carriers[0]['icon_url'] %>" alt=""></p>
-                <p><%= variant_carriers[0]['name'] %></p>
+                <p><img src="<%= common_carrier.icon_url %>" alt=""></p>
+                <p><%= common_carrier.name %></p>
             </td></tr></table>
             </td>
             <% end %>
@@ -37,8 +37,8 @@
         <% end %>
     <% else %>
     <td class="carrier" rowspan="2">
-        <p><img src="<%= variant_carriers[segment_counter]['icon_url'] %>" alt=""></p>
-        <p><%= variant_carriers[segment_counter]['name'] %></p>
+        <p><img src="<%= variant_carriers[segment_counter].icon_url %>" alt=""></p>
+        <p><%= variant_carriers[segment_counter].name %></p>
     </td>
     <% end %>
     <td class="dpt">
@@ -96,7 +96,7 @@
 <tr class="bars">
     <td colspan="6">
     <% variant.segments.each_with_index do |segment, segment_counter| %>
-        <div class="segment" data-flights="<%= segment_flight_numbers(segment) %>" data-options="<%= bar_options(segment).to_json %>" data-carrier="<%= variant_carriers[segment_counter]['name'] %>">
+        <div class="segment" data-flights="<%= segment_flight_numbers(segment) %>" data-options="<%= bar_options(segment).to_json %>" data-carrier="<%= variant_carriers[segment_counter].name %>">
         <a class="a-button" href="#"><%= recommendation.price_with_payment_commission.round.to_i %>&nbsp;р.</a>
         <div class="bar">
             <div class="dpt"><%= fmt_time( segment.departure_time ) %> <span class="iata"><%= segment.departure.iata %></span></div>

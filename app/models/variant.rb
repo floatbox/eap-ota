@@ -14,8 +14,10 @@ class Variant
   end
 
   def summary
+    # экономия 3%
+    return @summary if @summary
     # FIXME carriers для фильтров - operating carrier. ok?
-    result = {
+    @summary = {
       :carriers => flights.every.operating_carrier.uniq.every.iata,
       :planes => flights.every.equipment_type.uniq.every.iata,
       :departures => segments.every.departure_time,
@@ -25,23 +27,23 @@ class Variant
     }
     flights_amount = segments.map{|s| s.flights.size}.max
     if flights_amount == 1
-      result['layovers'] = 0
+      @summary['layovers'] = 0
     else
       if segments.map{|s| s.layover_durations }.flatten.max < 121
-        result['layovers'] = [flights_amount, 1]
+        @summary['layovers'] = [flights_amount, 1]
       else
-        result['layovers'] = flights_amount
+        @summary['layovers'] = flights_amount
       end
     end
     segments.each_with_index do |segment, i|
-      result['dpt_city_' + i.to_s] = segment.departure.city.iata
-      result['arv_city_' + i.to_s] = segment.arrival.city.iata
-      result['dpt_time_' + i.to_s] = segment.departure_day_part
-      result['arv_time_' + i.to_s] = segment.arrival_day_part
-      result['dpt_airport_' + i.to_s] = segment.departure.iata
-      result['arv_airport_' + i.to_s] = segment.arrival.iata
+      @summary['dpt_city_' + i.to_s] = segment.departure.city.iata
+      @summary['arv_city_' + i.to_s] = segment.arrival.city.iata
+      @summary['dpt_time_' + i.to_s] = segment.departure_day_part
+      @summary['arv_time_' + i.to_s] = segment.arrival_day_part
+      @summary['dpt_airport_' + i.to_s] = segment.departure.iata
+      @summary['arv_airport_' + i.to_s] = segment.arrival.iata
     end
-    result
+    @summary
   end
 
   # маршрут в виде 'SVX-CDG-SVX'
