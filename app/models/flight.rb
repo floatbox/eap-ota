@@ -44,28 +44,10 @@ class Flight
   end
 
   def duration
-    (arrival_datetime_utc.to_i - departure_datetime_utc.to_i) / 60 rescue 0
+    @duration ||= (arrival_datetime_utc.to_i - departure_datetime_utc.to_i) / 60 rescue 0
   end
 
-  attr_accessor :classes, :distance, :comfort
-
-  def as_json options={}
-    {
-      :departure => departure,
-      :arrival => arrival,
-      :company => operating_carrier,
-      :arrv_date => arrv_date,
-      :arrv_time => arrv_time,
-      :dept_date => dept_date,
-      :dept_time => dept_time,
-      :airplane => equipment_type,
-      :classes => classes,
-      :duration => duration,
-      :distance => distance,
-      :comfort => comfort,
-      :flight_number => full_flight_number
-    }
-  end
+  attr_accessor :classes, :distance
 
   def dept_date
     Date.strptime(departure_date, '%d%m%y')
@@ -121,11 +103,6 @@ class Flight
     fl
   end
 
-  # FIXME убить?
-  def comfort
-    :econom
-  end
-
   #private
   def self.calculate_distance from, to
     Graticule::Distance::Vincenty.distance(from, to, :kilometers)
@@ -151,7 +128,14 @@ class Flight
   # для отображения в формате, пригодном для script/amadeus SS
   def cryptic(class_of_service=nil, seat_count=1)
     # EI154/C 12JUL DUBLHR 1
-    "SS #{marketing_carrier_iata} #{flight_number} #{class_of_service || '?' } #{dept_date.strftime('%d%b').upcase} #{departure_iata}#{arrival_iata} #{seat_count}"
+    "SS #{marketing_carrier_iata} #{flight_number} #{class_of_service || '?' } #{cryptic_departure_date} #{departure_iata}#{arrival_iata} #{seat_count}"
+  end
+
+  MONTH_ENUM = %W(_ JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC)
+
+  # "010212" -> "1FEB"
+  def cryptic_departure_date
+    "#{ departure_date[0,2].to_i }#{ MONTH_ENUM[departure_date[2,2].to_i] }"
   end
 
 end

@@ -29,6 +29,9 @@ gem 'geo_ip'
 gem 'hoptoad_notifier'
 gem 'newrelic_rpm'
 
+#gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
+gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'
+
 gem 'haml'
 
 gem 'typus'

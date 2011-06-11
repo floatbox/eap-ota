@@ -1,4 +1,10 @@
 GIT
+  remote: git://github.com/codesnik/eviterra-instrumentation.git
+  revision: bd9edf156b4724ab697481c7045130bb20f392c4
+  specs:
+    eviterra-instrumentation (0.0.1)
+
+GIT
   remote: git://github.com/codesnik/handsoap.git
   revision: 9f7a2f22049d713cfd41bb9fa9979438c935e6e0
   branch: fixing_async_again
@@ -226,6 +232,7 @@ DEPENDENCIES
   curb
   database_cleaner
   every
+  eviterra-instrumentation!
   geo_ip
   graticule
   haml

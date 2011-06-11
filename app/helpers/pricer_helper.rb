@@ -34,14 +34,14 @@ module PricerHelper
     time ? (time[0,2].to_i * 60 + time[2,2].to_i) : 0
   end
 
+  # отжирало 15% cpu time! теперь не отжирает
   def bar_options segment
     dpt = time_in_minutes(segment.departure_time)
-    dpt_offset = segment.departure.city.utc_offset(Date.strptime(segment.departure_date, '%d%m%y'))
-    arv_offset = segment.arrival.city.utc_offset(Date.strptime(segment.arrival_date, '%d%m%y'))
+    arv = time_in_minutes(segment.arrival_time)
     {
-      :dpt => dpt,
-      :arv => dpt + segment.total_duration,
-      :shift => (arv_offset - dpt_offset) / 60
+      :dpt => dpt, # местное время, минут
+      :arv => dpt + segment.total_duration, # местное время в точке вылета на момент прилета, минут
+      :shift => arv - (dpt + segment.total_duration) # для москвы-минска: -60
     }
   end
 
@@ -66,14 +66,16 @@ module PricerHelper
     "#{ rounded }&nbsp;#{ Russian.pluralize(rounded, 'рубль', 'рубля', 'рублей') }".html_safe
   end
 
-  # можно вызывать даже как decorated_price(12312.23, ['u', {:class=>'special'}], 'i')
   def decorated_price price, price_tag='u', currency_tag='i'
     rounded = price.round.to_i
-    content_tag(*price_tag) {
-      rounded.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>').html_safe
-    } + content_tag(*currency_tag) {
-      '&nbsp;'.html_safe + Russian.pluralize(rounded, 'рубль', 'рубля', 'рублей').html_safe
-    }
+    (
+      "<#{price_tag}>" +
+      rounded.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') +
+      "</#{price_tag}>" +
+      "<#{currency_tag}>" +
+      '&nbsp;' + Russian.pluralize(rounded, 'рубль', 'рубля', 'рублей') +
+      "</#{currency_tag}>"
+    ).html_safe
   end
 
   def human_date date
@@ -133,22 +135,13 @@ module PricerHelper
     segment.flights.map{|f| "#{f.marketing_carrier.iata}#{f.flight_number}" }.join('-')
   end
 
-  # FIXME отrubyить его посимпатишнее
+  # самый долгий перевозчик на каждом сегменте
   def primary_operating_carriers variant
-    primary_carriers = []
-    variant.segments.each_with_index do |segment, sindex|
-      carriers = {}
-      primary_carriers[sindex] = {'duration' => 0}
-      segment.flights.each do |f|
-        cname = f.operating_carrier_name
-        carriers[cname] = {'duration' => 0, 'name' => cname, 'icon_url' => f.operating_carrier.icon_url} unless carriers[cname]
-        carriers[cname]['duration'] += f.duration
-        if carriers[cname]['duration'] > primary_carriers[sindex]['duration']
-          primary_carriers[sindex] = carriers[cname]
-        end
-      end
+    variant.segments.map do |segment|
+      segment.flights.group_by(&:operating_carrier).max_by do |op_carrier, flights|
+        flights.sum(&:duration)
+      end.first
     end
-    primary_carriers
   end
 
   def nearby_cities_list segments

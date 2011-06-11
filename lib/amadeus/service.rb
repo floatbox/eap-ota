@@ -35,6 +35,8 @@ module Amadeus
     end
   end
 
+  delegate :release, :to => :session
+
 # generic helpers
 
   # вынесены во внешний модуль, чтобы методы можно было оверрайдить
