@@ -41,6 +41,7 @@ module Amadeus
   end
 
   def release
+    logger.debug "Amadeus::Session: #{token} released"
     self.booking = nil
     save
   end
@@ -61,7 +62,7 @@ module Amadeus
 
   def self.book(office=nil)
     office ||= Amadeus::Session::BOOKING
-    logger.debug { "Free sessions count: #{free.count}" }
+    logger.debug { "Amadeus::Session: free sessions count: #{free.count}" }
     booking = SecureRandom.random_number(2**31)
     free.update_all({:booking => booking}, nil, {:limit => 1})
     session = find_by_booking(booking)
@@ -70,7 +71,7 @@ module Amadeus
         raise "somehow can't get new session"
       end
     else
-      logger.debug "Reusing session #{session.token}"
+      logger.debug "Amadeus::Session: #{session.token} reused (#{session.seq})"
     end
     session
   end
@@ -78,11 +79,11 @@ module Amadeus
   # без параметра создает незарезервированную сессию
   def self.increase_pool(booking=nil, office=nil)
     office ||= Amadeus::Session::BOOKING
-    logger.debug "Allocating new amadeus session"
     token = Amadeus::Service.security_authenticate(office)
     session = from_token(token)
     session.booking = booking if booking
     session.office = office
+    logger.debug "Amadeus::Session: #{session.token} signed in"
     session.save
     session
   end
@@ -99,7 +100,7 @@ module Amadeus
   end
 
   def destroy
-    logger.debug "Signing out amadeus session #{token}"
+    logger.debug "Amadeus::Session: #{token} signing out (#{seq})"
     super
     Amadeus::Service.security_sign_out(self)
   rescue Handsoap::Fault

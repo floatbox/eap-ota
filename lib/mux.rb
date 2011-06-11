@@ -26,7 +26,9 @@ class Mux
       return [] unless Conf.amadeus.enabled && Conf.amadeus.calendar
 
       request = Amadeus::Request::FareMasterPricerCalendar.new(form)
-      recommendations = Amadeus::Service.fare_master_pricer_calendar(request).recommendations
+      amadeus = Amadeus.booking
+      recommendations = amadeus.fare_master_pricer_calendar(request).recommendations
+      amadeus.release
 
       recommendations = recommendations.select(&:sellable?) unless admin_user
       recommendations.delete_if(&:without_full_information?)
@@ -57,18 +59,21 @@ class Mux
         # a_ws.session.release
         # a_ns.session.release
 
+        amadeus = Amadeus.booking
         # non threaded variant
         recommendations_ws = benchmark 'Pricer amadeus, with stops' do
-          Amadeus::Service.fare_master_pricer_travel_board_search(request_ws).recommendations
+          amadeus.fare_master_pricer_travel_board_search(request_ws).recommendations
         end
         #не ловим ошибку, так как может просто не быть беспосадочных вариантов, а это exception
         recommendations_ns = if Conf.amadeus.nonstop_search && !lite
             benchmark 'Pricer amadeus, without stops' do
-              Amadeus::Service.fare_master_pricer_travel_board_search(request_ns).recommendations
+              amadeus.fare_master_pricer_travel_board_search(request_ns).recommendations
             end
           else
             []
           end
+
+        amadeus.release
 
         # merge
         recommendations = []
