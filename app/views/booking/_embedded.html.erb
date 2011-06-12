@@ -1,20 +1,20 @@
-<div class="booking-form" data-variant="<%= @order.variant_id %>">
-<%= form_for @order.card, :as => :card, :url => booking_pay_path, :html => { :autocomplete => "off" } do |f| %>
+<div class="booking-form" data-variant="<%= @order_form.variant_id %>">
+<%= form_for @order_form.card, :as => :card, :url => booking_pay_path, :html => { :autocomplete => "off" } do |f| %>
 
-    <% availability = @order.recommendation.availability %>
+    <% availability = @order_form.recommendation.availability %>
     <% if availability && availability > 0 && availability < 9 %>
     <div class="availability">
         По этому тарифу осталось <strong><%= availability %>&nbsp;<%= Russian.pluralize(availability, 'место', 'места', 'мест') %></strong>. Не&nbsp;откладывайте покупку.
     </div>
     <% end %>
 
-    <h3 class="bstitle">Введите данные <%= @order.people.size == 1 ? 'пассажира' : 'пассажиров' %></h3>
-    <%= render :partial => 'person_form', :collection => @order.people %>
+    <h3 class="bstitle">Введите данные <%= @order_form.people.one? ? 'пассажира' : 'пассажиров' %></h3>
+    <%= render :partial => 'person_form', :collection => @order_form.people %>
 
     <h3 class="bstitle">Выберите способ оплаты и введите платёжные данные</h3>
     <input type="hidden" name="order[payment_type]" id="booking-payment-type" value="card">
     <%= render 'card_form', :f => f %>
-    <%= render 'cash_form' if @order.last_pay_time %>
+    <%= render 'cash_form' if @order_form.last_pay_time %>
 
     <h3 class="bstitle">Введите данные покупателя</h3>
     <%= render 'contacts_form' %>
@@ -46,20 +46,20 @@
 </div>
 <div class="booking-price latent">
     <div class="cost"><dl>
-        <%= decorated_price @order.recommendation.price_with_payment_commission, 'dt', 'dd' %>
+        <%= decorated_price @order_form.recommendation.price_with_payment_commission, 'dt', 'dd' %>
     </dl></div>
-    <dl class="sum" data-value="<%= @order.recommendation.price_with_payment_commission.round.to_i %>">
-        <dt>Итого <strong><%= human_price(@order.recommendation.price_with_payment_commission) %></strong> за всех со всеми сборами</dt>
-        <dd>Тариф — <%= human_price(@order.recommendation.price_fare) %>, налоги и сборы — <%= human_price(@order.recommendation.price_tax_and_markup_and_payment) %></dd>
+    <dl class="sum" data-value="<%= @order_form.recommendation.price_with_payment_commission.round.to_i %>">
+        <dt>Итого <strong><%= human_price(@order_form.recommendation.price_with_payment_commission) %></strong> за всех со всеми сборами</dt>
+        <dd>Тариф — <%= human_price(@order_form.recommendation.price_fare) %>, налоги и сборы — <%= human_price(@order_form.recommendation.price_tax_and_markup_and_payment) %></dd>
     </dl>
 </div>
 <div class="farerules">
     <div class="close"></div>
     <h3>Правила тарифов</h3>
     <p>Внимание! Возврат средств в&nbsp;случае отказа при получении визы, болезни и&nbsp;прочих обстоятельств без штрафных санкций невозможен. Возврат билета производится строго по&nbsp;правилам авиакомпании. В&nbsp;случае комбинации в&nbsp;билете тарифов с&nbsp;различными правилами, наиболее строгие ограничения применются ко&nbsp;всему маршруту.</p>
-    <% @order.recommendation.rules.each do |(airline, fare) ,rule| %>
+    <% @order_form.recommendation.rules.each do |(airline, fare) ,rule| %>
     <div class="fgroup">
-        <% if @order.recommendation.source != 'sirena' %>
+        <% if @order_form.recommendation.source != 'sirena' %>
           <div class="fgtranslate">
               <span class="link fgrus">Перевести с помощью</span>
               <span class="link fgeng g-none">Оригинальный текст</span>

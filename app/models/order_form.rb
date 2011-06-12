@@ -1,5 +1,5 @@
 # encoding: utf-8
-class OrderData < ActiveRecord::BaseWithoutTable
+class OrderForm < ActiveRecord::BaseWithoutTable
   column :email
   column :phone
   column :payment_type
@@ -100,7 +100,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
 
   def save_to_cache
     self.number ||= ShortUrl.random_hash
-    Cache.write("order_data", number, self)
+    Cache.write("order_form", number, self)
   end
 
   class << self
@@ -111,9 +111,13 @@ class OrderData < ActiveRecord::BaseWithoutTable
       require 'recommendation'
       require 'person'
       # FIXME попытаться избавиться от этой загрузки
-      Cache.read("order_data", cache_number)
+      Cache.read("order_form", cache_number)
     end
     alias :[] load_from_cache
+  end
+
+  def save_to_order
+    self.order = Order.create(:order_form => self)
   end
 
   def variant
@@ -174,84 +178,6 @@ class OrderData < ActiveRecord::BaseWithoutTable
     recommendation.validating_carrier.iata
   end
 
-  # по идее, как-то должно быть перенесено прямо в lib/amadeus
-  def create_booking
-    if recommendation.source != 'sirena'
-      Amadeus.booking do |amadeus|
-        amadeus.air_sell_from_recommendation(
-          :segments => recommendation.variants[0].segments,
-          :seat_total => seat_total,
-          :recommendation => recommendation
-        ).or_fail!
-
-        add_multi_elements = amadeus.pnr_add_multi_elements(self).or_fail!
-        if self.pnr_number = add_multi_elements.pnr_number
-          set_people_numbers(add_multi_elements.passengers)
-          amadeus.pnr_commit_really_hard do
-            resp = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => validating_carrier).or_fail!
-            fares_count = resp.fares_count
-            self.last_tkt_date = resp.last_tkt_date
-            prices = resp.prices
-            unless [recommendation.price_fare, recommendation.price_tax] == prices
-              errors.add :pnr_number, 'Ошибка при создании PNR'
-              amadeus.pnr_cancel
-              return
-            end
-            # FIXME среагировать на отсутствие маски
-            amadeus.ticket_create_tst_from_pricing(:fares_count => fares_count).or_fail!
-          end
-
-          amadeus.pnr_commit_really_hard do
-            add_passport_data(amadeus)
-            # делается автоматически, настройками booking office_id
-            #amadeus.give_permission_to_offices(
-            #  Amadeus::Session::TICKETING,
-            #  Amadeus::Session::WORKING
-            #)
-            amadeus.pnr_archive(seat_total)
-            amadeus.pnr_add_remark
-          end
-          #amadeus.queue_place_pnr(:number => pnr_number)
-          @order = Order.create(:order_data => self)
-
-          # обилечивание
-          #Amadeus::Service.issue_ticket(pnr_number)
-
-          return pnr_number
-        else
-          amadeus.pnr_ignore
-          errors.add :pnr_number, 'Ошибка при создании PNR'
-          return
-        end
-      end
-    else
-      Sirena::Adapter.book_for_data(self)
-    end
-  end
-
-  def add_passport_data(amadeus)
-    validating_carrier_code = recommendation.validating_carrier.iata
-    (adults + children).each do |person|
-      # YY - для всех перевозчиков в бронировании
-      amadeus.cmd( "SRDOCSYYHK1-P-#{person.nationality.alpha3}-#{person.cleared_passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{person.number_in_amadeus}")
-      amadeus.cmd("SR FOID #{validating_carrier_code} HK1-PP#{person.cleared_passport}/P#{person.number_in_amadeus}")
-      amadeus.cmd("FE #{validating_carrier_code} ONLY PSPT #{person.cleared_passport}/P#{person.number_in_amadeus}")
-      amadeus.cmd("FFN#{person.bonuscard_type}-#{person.bonuscard_number}/P#{person.number_in_amadeus}") if person.bonus_present
-    end
-    infants.each_with_index do |person, i|
-      # YY - для всех перевозчиков в бронировании
-      amadeus.cmd( "SRDOCSYYHK1-P-#{person.nationality.alpha3}-#{person.cleared_passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}I-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{person.number_in_amadeus}")
-      amadeus.cmd("FE INF #{validating_carrier_code} ONLY PSPT #{person.cleared_passport}/P#{person.number_in_amadeus}")
-    end
-  end
-
-  def set_people_numbers(returned_people)
-    returned_people.each do |p|
-      people.detect do |person|
-        person.last_name.upcase == p.last_name && (person.first_name_with_code).upcase == p.first_name
-      end.number_in_amadeus = p.number_in_amadeus
-    end
-  end
 
   def full_info
     res = ''
@@ -259,7 +185,7 @@ class OrderData < ActiveRecord::BaseWithoutTable
   end
 
   def self.create_sample_booking(cache_key)
-    order = OrderData.load_from_cache(cache_key)
+    order = OrderForm.load_from_cache(cache_key)
     order.email = 'email@example.com'
     order.phone = '12345678'
     order.people_count = {:infants => 1, :children => 1, :adults => 2}

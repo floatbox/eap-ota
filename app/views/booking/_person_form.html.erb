@@ -49,7 +49,7 @@
     <td>
         <div class="bp-bonus">
             <h6 class="blabel"><label for="bonus-type-<%= person_form_counter %>">Бонусная программа</label></h6>
-            <%= person.select :bonuscard_type, @order.recommendation.validating_carrier.available_bonus_programms.map {|a| [ a.bonus_program_name, a.iata ] }, {}, :id => "bonus-type-#{person_form_counter}", :class => 'bfield' %>
+            <%= person.select :bonuscard_type, @order_form.recommendation.validating_carrier.available_bonus_programms.map {|a| [ a.bonus_program_name, a.iata ] }, {}, :id => "bonus-type-#{person_form_counter}", :class => 'bfield' %>
         </div>
     </td>
 </tr>
@@ -81,7 +81,7 @@
             <h6 class="blabel">Номер карты</h6>
             <%= person.text_field :bonuscard_number, :id => "bonus-num-#{person_form_counter}", :class => 'bfield', :maxlength => '50' %>
         </div>
-        <div class="bdescription checkbox<%= raw ' latent' if @order.recommendation.validating_carrier.available_bonus_programms.empty? || @order.recommendation.source == 'sirena'%>">
+        <div class="bdescription checkbox<%= raw ' latent' if @order_form.recommendation.validating_carrier.available_bonus_programms.empty? || @order_form.recommendation.source == 'sirena'%>">
             <%= person.check_box :bonus_present, {:id => "bonus-#{person_form_counter}"} %>
             <label for="bonus-<%= person_form_counter %>" title="Карта участника программы премирования пассажиров (мильной программы или программы для&nbsp;часто летающих пассажиров, англ. frequent flyer program)">есть бонусная карта</label>&nbsp;<a class="external" href="http://ru.wikipedia.org/wiki/Бонусные_программы_авиакомпаний" target="_blank" title="Статья о бонусных программах авиакомпаний в Википедии (откроется в новом окне)">&nbsp;</a>
         </div>

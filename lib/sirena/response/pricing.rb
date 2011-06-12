@@ -5,6 +5,11 @@ module Sirena
 
       attr_accessor :flights, :recommendations
 
+      def recommendation
+        raise ArgumentError, "expected 1 recommendation, got #{recommendations.size}" if recommendations.many?
+        recommendations.first
+      end
+
       def parse
         self.flights = {}
         xpath("//pricing/flight").each do |fi|

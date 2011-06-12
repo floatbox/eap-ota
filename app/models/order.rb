@@ -81,9 +81,9 @@ class Order < ActiveRecord::Base
     payment_type == 'card'
   end
 
-  def order_data= order_data
-    recommendation = order_data.recommendation
-    copy_attrs order_data, self,
+  def order_form= order_form
+    recommendation = order_form.recommendation
+    copy_attrs order_form, self,
       :email,
       :phone,
       :pnr_number,
@@ -103,8 +103,8 @@ class Order < ActiveRecord::Base
 
     self.route = recommendation.variants[0].flights.every.destination.join('; ')
     self.cabins = recommendation.cabins.join(',')
-    if order_data.payment_type != 'card'
-      self.cash_payment_markup = recommendation.price_payment + (order_data.payment_type == 'delivery' ? 350 : 0)
+    if order_form.payment_type != 'card'
+      self.cash_payment_markup = recommendation.price_payment + (order_form.payment_type == 'delivery' ? 350 : 0)
     end
     if recommendation.commission
       copy_attrs recommendation.commission, self, {:prefix => :commission},
@@ -121,8 +121,8 @@ class Order < ActiveRecord::Base
         :price_tax
     end
     self.ticket_status = 'booked'
-    self.name_in_card = order_data.card.name
-    self.last_digits_in_card = order_data.card.number4
+    self.name_in_card = order_form.card.name
+    self.last_digits_in_card = order_form.card.number4
   end
 
   # вынести куда-нибудь
@@ -134,7 +134,7 @@ class Order < ActiveRecord::Base
     price_tax + price_consolidator_markup + price_our_markup
   end
 
-  def raw
+  def raw # FIXME тоже в стратегию?
     case source
     when 'amadeus'
       Amadeus::Service.pnr_raw(pnr_number)
@@ -204,7 +204,7 @@ class Order < ActiveRecord::Base
 
   end
 
-  def update_prices_from_tickets
+  def update_prices_from_tickets # FIXME перенести в strategy
     if source == 'amadeus'
       price_total_old = self.price_total
       self.price_fare = tickets.sum(:price_fare)
@@ -286,7 +286,7 @@ class Order < ActiveRecord::Base
     update_prices_from_tickets
   end
 
-  def cancel!
+  def cancel! # FIXME перенести в strategy
     case source
     when 'amadeus'
       Amadeus.booking do |amadeus|
