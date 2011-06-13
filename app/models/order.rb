@@ -139,7 +139,7 @@ class Order < ActiveRecord::Base
     when 'amadeus'
       Amadeus::Service.pnr_raw(pnr_number)
     when 'sirena'
-      Sirena::Service.pnr_history(:number => pnr_number).history
+      Sirena::Service.new.pnr_history(:number => pnr_number).history
     end
   rescue => e
     e.message
@@ -193,7 +193,7 @@ class Order < ActiveRecord::Base
       update_attribute(:departure_date, pnr_resp.flights.first.dept_date)
     elsif source == 'sirena'
       tickets.every.delete
-      order_resp = Sirena::Service.order(pnr_number, sirena_lead_pass)
+      order_resp = Sirena::Service.new.order(pnr_number, sirena_lead_pass)
       order_resp.tickets.each do |t|
         t.order = self
         t.save
@@ -294,8 +294,8 @@ class Order < ActiveRecord::Base
         update_attribute(:ticket_status, 'canceled')
       end
     when 'sirena'
-      Sirena::Service.payment_ext_auth(:cancel, pnr_number, sirena_lead_pass)
-      Sirena::Service.booking_cancel(pnr_number, sirena_lead_pass)
+      Sirena::Service.new.payment_ext_auth(:cancel, pnr_number, sirena_lead_pass)
+      Sirena::Service.new.booking_cancel(pnr_number, sirena_lead_pass)
       update_attribute(:ticket_status, 'canceled')
     end
   end

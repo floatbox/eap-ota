@@ -3,7 +3,7 @@ module Sirena
 
   class Service
 
-    class << self
+    module Methods
 
       include NewRelic::Agent::MethodTracer
 
@@ -98,7 +98,9 @@ module Sirena
         save_xml(name, response)
       end
       add_method_tracer :log_response, 'Custom/Sirena/log'
+
     end
+    include Methods
 
   end
 

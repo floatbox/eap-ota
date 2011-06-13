@@ -74,7 +74,8 @@ class Strategy
 
     when 'sirena'
       # FIXME может быть, просто вернуть новую рекомендацию?
-      unless repriced_rec = Sirena::Service.pricing(@search, @rec).recommendation
+      sirena = Sirena::Service.new
+      unless repriced_rec = sirena.pricing(@search, @rec).recommendation
         logger.info 'Strategy: got no recommendation'
         return
       end
@@ -102,7 +103,8 @@ class Strategy
   def sirena_rules rec
     rec.upts.each_with_object({}) do |u, result|
       unless result[[rec.validating_carrier_iata, u[:fare_base]]]
-        resp = Sirena::Service.fareremark(:carrier => rec.validating_carrier_iata, :upt => u[:upt], :upt_code => u[:code])
+        sirena = Sirena::Service.new
+        resp = sirena.fareremark(:carrier => rec.validating_carrier_iata, :upt => u[:upt], :upt_code => u[:code])
         result[[rec.validating_carrier_iata, u[:fare_base]]] = resp.text
       end
     end
@@ -174,16 +176,17 @@ class Strategy
       end
 
     when 'sirena'
-      response = Sirena::Service.booking(@order_form)
+      sirena = Sirena::Service.new
+      response = sirena.booking(@order_form)
       if response.success? && response.pnr_number
         if @rec.price_fare != response.price_fare ||
            @rec.price_tax != response.price_tax
           @order_form.errors.add :pnr_number, 'Изменилась цена предложения при бронировании'
-          Sirena::Service.booking_cancel(response.pnr_number, response.lead_family)
+          sirena.booking_cancel(response.pnr_number, response.lead_family)
         else
           # FIXME просто проверяем возможность добавления
-          # Sirena::Service.add_remark(response.pnr_number, response.lead_family, '')
-          payment_query = Sirena::Service.payment_ext_auth(:query, response.pnr_number, response.lead_family)
+          # sirena.add_remark(response.pnr_number, response.lead_family, '')
+          payment_query = sirena.payment_ext_auth(:query, response.pnr_number, response.lead_family)
           if payment_query.success? && payment_query.cost
             if payment_query.cost == @rec.price_fare + @rec.price_tax
               @order_form.pnr_number = response.pnr_number
@@ -191,12 +194,12 @@ class Strategy
               @order_form.save_to_order
             else
               @order_form.errors.add :pnr_number, 'Изменилась цена после тарификации'
-              Sirena::Service.payment_ext_auth(:cancel, response.pnr_number, response.lead_family)
-              Sirena::Service.booking_cancel(response.pnr_number, response.lead_family)
+              sirena.payment_ext_auth(:cancel, response.pnr_number, response.lead_family)
+              sirena.booking_cancel(response.pnr_number, response.lead_family)
             end
           else
             @order_form.errors.add :pnr_number,  payment_query.error || 'Ошибка при тарицифировании PNR'
-            Sirena::Service.booking_cancel(response.pnr_number, response.lead_family)
+            sirena.booking_cancel(response.pnr_number, response.lead_family)
           end
         end
       else
@@ -250,7 +253,8 @@ class Strategy
   end
 
   def ticket(order)
-    payment_confirm = Sirena::Service.payment_ext_auth(:confirm, order.pnr_number, order.sirena_lead_pass,
+    sirena = Sirena::Service.new
+    payment_confirm = sirena.payment_ext_auth(:confirm, order.pnr_number, order.sirena_lead_pass,
                                       :cost => (order.price_fare + order.price_tax))
     if payment_confirm.success?
       order.ticket!
@@ -258,7 +262,7 @@ class Strategy
     else
       #FIXME Отменять в случае exception
       # FIXME Order#cancel! делает то же самое.
-      # Sirena::Service.payment_ext_auth(:cancel, order.pnr_number, order.sirena_lead_pass)
+      # sirena.payment_ext_auth(:cancel, order.pnr_number, order.sirena_lead_pass)
       # we can't simply cancel order if it is in query
       order.cancel!
       return false

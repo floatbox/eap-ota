@@ -109,7 +109,7 @@ class Mux
       return [] unless sirena_searchable?(form)
       recommendations = []
       benchmark 'Pricer sirena' do
-        recommendations = Sirena::Service.pricing(form, nil, lite).recommendations || []
+        recommendations = Sirena::Service.new.pricing(form, nil, lite).recommendations || []
         recommendations.delete_if(&:without_full_information?)
       end
       recommendations
