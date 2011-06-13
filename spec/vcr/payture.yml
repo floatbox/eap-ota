@@ -2,7 +2,7 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://engine-sandbox.payture.com:80/api/Block/
+    uri: http://sandbox.payture.com:80/api/Block/
     body: Amount=10000&PayInfo=eKnA6o3hv2SBeXbSjLwtB2M8o0Q463UaG6fhQFnMRJdIdawkzR8HFqwDT7lu%0AylRU1XV%2BZfFemDANJaOoatuUPSTgYEh5gRgKAaO1PD2zLY04qAaoOuOxgB8G%0A4Qt1E%2B476QdQURveNTTHWgM5H5yUmbldzt0rZcwu9bRHgBWE2ZpGEpFRKINU%0AWRQmdRdtqOjop4GlPxH83HV%2BivHEOYA4zgpMUzbnQW%2FaU23%2B3PfvovyIV%2F5a%0AqA5AZhqFjc8CjlxQY20mcB3h1VMrG4TaAGiY3IN%2Fm14WNgrD0SIy4xxHZ6Al%0Ar7xaMCeXuwHWGmgpctSppRZTFJ8ZhC7RvPKTavph%2Fg%3D%3D&Key=MerchantETerra&OrderId=rspec00010
     headers: 
   response: !ruby/struct:VCR::Response 
@@ -26,7 +26,7 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://engine-sandbox.payture.com:80/api/Unblock/
+    uri: http://sandbox.payture.com:80/api/Unblock/
     body: Amount=10000&Key=MerchantETerra&OrderId=rspec00010
     headers: 
   response: !ruby/struct:VCR::Response 
@@ -50,7 +50,7 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://engine-sandbox.payture.com:80/api/Pay/
+    uri: http://sandbox.payture.com:80/api/Pay/
     body: Amount=10000&PayInfo=Waz%2Bqcl1%2BMztDolUlAayqgj5NaOh6Dm72ABYv6A3jaxfeJ9UUVorKoE4BKnv%0A8GP42ZYnWWwOJ5rIFG09jThJp5DfNQ7LoGFyw0gfSj2%2BnaYlCcKHwFadyWxI%0AZkG9E5AtvR73hVmtGY1uEQYzURt9vy34P%2FjL%2FrGZwVK4%2B%2BFIVxdF2bCy8CVU%0AUdhI7VGKNovO4Gh71dktfa2BUaR9lT3sMAPTTpKG83zF6rpgYU6yV1ltmDNQ%0AAkWLKvsJqfKvJWXHalr%2BUD8cVaaWdLu5knZJcmZ4JS6PvOJpO4RS%2BZw1hY2C%0AwgDlc7OMnOQoUyKphMg0M9gtHNE80ROfEh9UBP9ReA%3D%3D&Key=MerchantETerra&OrderId=rspec00011
     headers: 
   response: !ruby/struct:VCR::Response 
@@ -74,7 +74,7 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://engine-sandbox.payture.com:80/api/Refund/
+    uri: http://sandbox.payture.com:80/api/Refund/
     body: Amount=10000&Key=MerchantETerra&OrderId=rspec00011
     headers: 
   response: !ruby/struct:VCR::Response 
