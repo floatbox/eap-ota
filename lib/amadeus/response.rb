@@ -45,7 +45,7 @@ module Amadeus::Response
 
     def or_fail!
       unless success?
-        raise "#{self.class.name}: #{error_message}"
+        raise Amadeus::Error, "#{self.class.name}: #{error_message}"
       end
       self
     end
