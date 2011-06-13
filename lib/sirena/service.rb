@@ -7,11 +7,18 @@ module Sirena
 
       include NewRelic::Agent::MethodTracer
 
+      include KeyValueInit
+
+      attr_accessor :driver
+
+      def initialize(*)
+        super
+        @driver ||= Sirena::Driver::Typhoeus.new
+      end
+
       include FileLogger
       def debug_dir; 'log/sirena' end
       def debug_file; 'log/sirena.log'; end
-
-      include TyphoeusHelper
 
       def action(name, *params)
         request = Sirena::Request.for(name).new(*params)
@@ -20,17 +27,19 @@ module Sirena
           response_body = read_latest_xml(name)
         else
           log_request(name, request_body)
-          response_body = do_http(request_body, :encrypt => request.encrypt?, :timeout => request.timeout)
+          response_body = driver.send_request(request_body, :encrypt => request.encrypt?, :timeout => request.timeout)
           log_response(name, response_body)
         end
         response = Sirena::Response.for(name).new(response_body)
       end
+      add_method_tracer :action, 'Custom/Sirena/http'
 
+      # FIXME вынести raise_error колбэк в драйвер
       def async_action(name, *params, &block)
         request = Sirena::Request.for(name).new(*params)
         request_body = request.render
         log_request(name, request_body)
-        req = make_request(request_body, :encrypt => request.encrypt?, :timeout => request.timeout)
+        req = driver.make_request(request_body, :encrypt => request.encrypt?, :timeout => request.timeout)
         req.on_complete do |response|
           # не обвалит весь цикл?
           raise_if_error response
@@ -39,32 +48,6 @@ module Sirena
         end
         req.after_complete(&block)
         req
-      end
-
-      # blocking call
-      def do_http(*args)
-        req = make_request(*args)
-        Typhoeus::Hydra.hydra.queue req
-        Typhoeus::Hydra.hydra.run
-        response = req.response
-        raise_if_error response
-        response.body
-      end
-      add_method_tracer :do_http, 'Custom/Sirena/http'
-
-      def make_request(body, opts={})
-        host = Conf.sirena.host
-        port = Conf.sirena.port
-        path = Conf.sirena.path
-
-        req = Typhoeus::Request.new "http://#{host}:#{port}#{path}",
-          :method => :post,
-          :body => body,
-          :timeout => 160 * 1000, # in ms
-          :headers => {
-            'X-Encrypt' => (opts[:encrypt] ? 'true' : 'false'),
-            'X-Timeout' => ((opts[:timeout] || 150) + 5).to_s
-          }
       end
 
       %W(pricing describe booking booking_cancel payment_ext_auth bill_static
