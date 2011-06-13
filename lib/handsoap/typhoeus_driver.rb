@@ -9,12 +9,21 @@ module Handsoap
           require 'typhoeus'
         end
 
+        include KeyValueInit
         include TyphoeusHelper
+
+        attr_accessor :hydra
+
+        def initialize(*)
+          super
+          @hydra ||= Typhoeus::Hydra.hydra
+        end
 
         def send_http_request(request)
           req = typhoeus_request(request)
-          Typhoeus::Hydra.hydra.queue req
-          Typhoeus::Hydra.hydra.run
+          hydra.queue req
+
+          run
           response = req.response
           raise_if_error response
           parse_http_part(response.headers.gsub(/^HTTP.*\r\n/, ""), response.body, response.code)
@@ -22,7 +31,7 @@ module Handsoap
 
         def send_http_request_async(request)
           req = typhoeus_request(request)
-          Typhoeus::Hydra.hydra.queue req
+          hydra.queue req
 
           deferred = Handsoap::Deferred.new
           req.on_complete do
@@ -50,6 +59,9 @@ module Handsoap
             :body => request.body
         end
 
+        def run
+          hydra.run
+        end
       end
     end
   end
