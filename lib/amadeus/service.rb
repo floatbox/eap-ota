@@ -69,24 +69,45 @@ module Amadeus
       xml_string = read_latest_xml(request.action)
       xml_response = parse_string(xml_string)
     else
-      if request.needs_session?
-        Amadeus::Session.with_session(session) do |booked_session|
-          xml_response = invoke(request.action,
-            :soap_action => request.soap_action,
-            :soap_header => {'SessionId' => booked_session.session_id} ) do |body|
-            body.set_value request.soap_body, :raw => true
-          end
-        end
-      else
-        xml_response = invoke(request.action,
-          :soap_action => request.soap_action) do |body|
-          body.set_value request.soap_body, :raw => true
-        end
+      req_session = self.session || (booked_session = Amadeus::Session.book) if request.needs_session?
+      invoke_opts = {}
+      invoke_opts[:soap_action] = request.soap_action
+      invoke_opts[:soap_header] = {'SessionId' => req_session.session_id} if req_session
+      xml_response = invoke(request.action, invoke_opts) do |body|
+        body.set_value request.soap_body, :raw => true
       end
+      # FIXME среагировать на HTTP error
+      req_session.increment if req_session
+      # возвращаем только свежезалогиненную сессию
+      booked_session.release if booked_session
       save_xml(request.action, xml_response.to_xml)
     end
 
     request.process_response(xml_response)
+  end
+
+  def invoke_async_request request, &callback
+    Rails.logger.info "Amadeus::Service: #{request.action} async queued"
+    invoke_opts = {}
+    invoke_opts[:soap_action] = request.soap_action
+    invoke_opts[:soap_header] = {'SessionId' => session.session_id}
+
+    callbacks = Proc.new do |deffered|
+      deffered.callback &callback
+      deffered.errback do |err|
+        Rails.logger.error "Amadeus::Service: async: #{err.inspect}"
+      end
+    end
+
+    async(callbacks) do |dispatcher|
+      dispatcher.request(request.action, invoke_opts) do |body|
+        body.set_value request.soap_body, :raw => true
+      end
+      dispatcher.response do |xml_response|
+        session.increment
+        request.process_response(xml_response)
+      end
+    end
   end
 
   # fare_master_pricer_travel_board_search
@@ -97,7 +118,7 @@ module Amadeus
     end
 
     define_method "async_#{action.underscore}" do |*args, &block|
-      invoke_async_request Amadeus::Request.wrap(action, *args, &block)
+      invoke_async_request Amadeus::Request.wrap(action, *args), &block
     end
   end
 

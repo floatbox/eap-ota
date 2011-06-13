@@ -26,9 +26,17 @@ module Sirena
         response.body
       end
 
-      # FIXME приделать колбэки
-      def send_async_request(*args)
+      def send_request_async(*args, &block)
         req = make_request(*args)
+        req.on_complete do |response|
+          begin
+            raise_if_error response
+            # FIXME обработать ошибку
+            block.call response
+          rescue => e
+            Rails.logger.error "Sirena::Service: async: error: #{e.inspect}"
+          end
+        end
         hydra.queue req
       end
 

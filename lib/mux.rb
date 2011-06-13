@@ -1,6 +1,7 @@
 # encoding: utf-8
 # мультиплексор-демультиплексор запросов.
 # читается как "мэкс", если что.
+require 'handsoap/typhoeus_driver'
 class Mux
 
   cattr_accessor :cryptic_logger do ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_cryptic.log') end
@@ -45,62 +46,60 @@ class Mux
         request_ws = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, lite)
         request_ns = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, lite)
         request_ns.nonstop = true
-
-        # TODO можно когда-нибудь вернуться. сейчас эта штука _иногда_ одновременно пытается загрузить класс
-        # Country, в разных тредах
-        # a_ws = Amadeus.booking
-        # a_ns = Amadeus.booking
-
-        # t_ws = Thread.new { a_ws.fare_master_pricer_travel_board_search(request_ws) }
-        # t_ns = Thread.new { a_ns.fare_master_pricer_travel_board_search(request_ns) }
-        # # игнорируем ошибки, если это конечно не SOAP Error
-        # recommendations_ws = t_ws.value.recommendations
-        # recommendations_ns = t_ns.value.recommendations
-        # a_ws.session.release
-        # a_ns.session.release
-
         amadeus = Amadeus.booking
         # non threaded variant
         recommendations_ws = benchmark 'Pricer amadeus, with stops' do
           amadeus.fare_master_pricer_travel_board_search(request_ws).recommendations
         end
-        #не ловим ошибку, так как может просто не быть беспосадочных вариантов, а это exception
         recommendations_ns = if Conf.amadeus.nonstop_search && !lite
-            benchmark 'Pricer amadeus, without stops' do
-              amadeus.fare_master_pricer_travel_board_search(request_ns).recommendations
-            end
-          else
-            []
+          benchmark 'Pricer amadeus, without stops' do
+            amadeus.fare_master_pricer_travel_board_search(request_ns).recommendations
           end
+        else [] end
 
         amadeus.release
-
-        # merge
-        recommendations = []
-        benchmark 'Pricer amadeus, merging and cleanup' do
-          recommendations = Recommendation.merge(recommendations_ws, recommendations_ns)
-
-          # log amadeus recommendations
-          log_examples(recommendations)
-
-          # cleanup
-          # TODO рапортовать, если хотя бы одно предложение выброшено
-          # мы вроде что-то делали, чтобы амадеус не возвращал всякие поезда
-          recommendations.delete_if(&:without_full_information?)
-          recommendations.delete_if(&:ground?)
-          recommendations = recommendations.select(&:sellable?) unless admin_user
-          unless lite
-            # sort
-            recommendations = recommendations.sort_by(&:price_total)
-            # regroup
-            recommendations = Recommendation.corrected(recommendations)
-          end
-        end
-        recommendations
+        amadeus_merge_and_cleanup(recommendations_ws + recommendations_ns, admin_user, lite)
       end
     rescue
       notify
       []
+    end
+
+    def amadeus_merge_and_cleanup(recommendations, admin_user=false, lite=false)
+      benchmark 'Pricer amadeus, merging and cleanup' do
+
+        recommendations.uniq! unless lite
+
+        # log amadeus recommendations
+        log_examples(recommendations)
+
+        recommendations.delete_if(&:without_full_information?)
+        recommendations.delete_if(&:ground?)
+        recommendations = recommendations.select(&:sellable?) unless admin_user
+        unless lite
+          # sort
+          recommendations = recommendations.sort_by(&:price_total)
+          # regroup
+          recommendations = Recommendation.corrected(recommendations)
+        end
+      end
+    end
+
+    def amadeus_async_pricer(form, admin_user=false, lite=false, &block)
+      return [] unless Conf.amadeus.enabled
+      request_ws = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, lite)
+      request_ns = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, lite)
+      request_ns.nonstop = true
+      reqs = lite ? [request_ws] : [request_ns, request_ws]
+      amadeus_driver = Handsoap::Http::Drivers::TyphoeusDriver.new
+      reqs.each do |req|
+        session = Amadeus::Session.book
+        amadeus = Amadeus::Service.new(:session => session, :driver => amadeus_driver)
+        amadeus.async_fare_master_pricer_travel_board_search(req, lite) do |res|
+          session.release
+          block.call(res)
+        end
+      end
     end
 
     def sirena_pricer(form, admin_user=false, lite=false)
@@ -110,12 +109,49 @@ class Mux
       recommendations = []
       benchmark 'Pricer sirena' do
         recommendations = Sirena::Service.new.pricing(form, nil, lite).recommendations || []
-        recommendations.delete_if(&:without_full_information?)
+        sirena_cleanup(recommendations)
       end
       recommendations
     rescue
       notify
       []
+    end
+
+    def sirena_cleanup(recs)
+      recs.delete_if(&:without_full_information?)
+    end
+
+    def sirena_async_pricer(form, admin_user=false, lite=false, &block)
+      return [] unless Conf.sirena.enabled
+      return [] if lite
+      return [] unless sirena_searchable?(form)
+
+      sirena = Sirena::Service.new(:driver => Sirena::Driver::Typhoeus.new)
+      sirena.async_pricing(form, nil, lite, &block)
+    end
+
+    def async_pricer(form, admin_user=false, lite=false)
+      benchmark 'Pricer, async total' do
+        amadeus_recommendations = []
+        sirena_recommendations = []
+        amadeus_async_pricer(form, admin_user, lite) do |res|
+          amadeus_recommendations += res.recommendations
+        end
+        sirena_async_pricer(form, admin_user, lite) do |res|
+          sirena_recommendations += res.recommendations
+        end
+
+        Typhoeus::Hydra.hydra.run
+
+        recommendations = amadeus_merge_and_cleanup(amadeus_recommendations, admin_user, lite) + sirena_cleanup(sirena_recommendations)
+
+        if lite
+          recommendations
+        else
+          recommendations.sort_by(&:price_total)
+        end
+
+      end
     end
 
     SNG_COUNTRY_CODES = ["RU", "AZ", "AM", "BY", "GE", "KZ", "KG", "LV", "LT", "MD", "TJ", "TM", "UZ", "UA", "EE"]

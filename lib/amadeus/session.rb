@@ -48,20 +48,6 @@ module Amadeus
     save
   end
 
-  def self.with_session(previous_session=nil)
-    session = previous_session || book
-    result = yield session
-    session.increment
-    result
-  rescue Amadeus::Error
-    # TODO проверить что нужно увеличивать счетчик в случае разных 91ых ошибок
-    session.increment
-    raise
-  ensure
-    # не освобождаем сессию, переданную явно
-    session.release if session && !previous_session
-  end
-
   def self.book(office=nil)
     office ||= Amadeus::Session::BOOKING
     logger.debug { "Amadeus::Session: free sessions count: #{free.count}" }

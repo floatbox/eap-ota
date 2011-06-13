@@ -32,7 +32,6 @@ module Handsoap
         def send_http_request_async(request)
           req = typhoeus_request(request)
           hydra.queue req
-
           deferred = Handsoap::Deferred.new
           req.on_complete do
             response = req.response
