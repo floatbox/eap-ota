@@ -43,11 +43,15 @@ module Sirena
       def encrypt?
         false
       end
-      
+
       def timeout
         40
       end
-      
+
+      def process_response(response_body)
+        Sirena::Response.for(action).new(response_body)
+      end
+
       # helpers
 
       # TODO на наших датах всегда работает?

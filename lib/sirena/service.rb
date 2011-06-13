@@ -30,7 +30,7 @@ module Sirena
           response_body = driver.send_request(request_body, :encrypt => request.encrypt?, :timeout => request.timeout)
           log_response(name, response_body)
         end
-        response = Sirena::Response.for(name).new(response_body)
+        request.process_response(response_body)
       end
       add_method_tracer :action, 'Custom/Sirena/http'
 
@@ -44,7 +44,7 @@ module Sirena
           # не обвалит весь цикл?
           raise_if_error response
           log_response(name, response.body)
-          Sirena::Response.for(name).new(response.body)
+          request.process_response(response.body)
         end
         req.after_complete(&block)
         req
