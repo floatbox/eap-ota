@@ -67,7 +67,7 @@ module Sirena
           }
       end
 
-      %W(pricing describe booking booking_cancel payment_ext_auth
+      %W(pricing describe booking booking_cancel payment_ext_auth bill_static
          order PNRHistory get_itin_receipts fareremark add_remark pnr_status).each do |method_name|
         define_method method_name.underscore do |*params|
           action(method_name, *params)
