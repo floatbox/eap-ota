@@ -81,6 +81,7 @@ class Mux
         # regroup
         recommendations = Recommendation.corrected(recommendations)
       end
+      recommendations
     end
   end
 
