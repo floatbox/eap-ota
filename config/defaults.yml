@@ -17,7 +17,7 @@ payment:
 payture:
   enabled: yes
   key: MerchantETerra
-  host: engine-sandbox.payture.com
+  host: sandbox.payture.com
   ssl: no
   pem: |-
     -----BEGIN PUBLIC KEY-----

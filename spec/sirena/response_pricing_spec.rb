@@ -20,7 +20,8 @@ describe Sirena::Response::Pricing do
     let(:response) { 'spec/sirena/xml/pricing_ITK_AER.xml' }
 
     it { should be_success }
-    it { should have(1).recommendation }
+    # recommendation в единственном числе - другой метод
+    it { should have(1).recommendations }
     specify { subject.recommendations.first.sirena_blank_count.should == 4 }
     specify { subject.recommendations.first.cabins.should == %W[Y Y Y Y] }
   end

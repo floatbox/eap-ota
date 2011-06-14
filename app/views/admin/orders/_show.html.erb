@@ -1,7 +1,5 @@
 <div id="term">Терминал: <pre><%= @item.raw %></pre></div>
-<% if @item.payment_type == 'card' || @item.payment_type == '' || !@item.payment_type %>
-<div id="payture">Платежная система: <%= @item.payture_state %> <%= @item.payture_amount %></div>
-<% end %>
+<div id="payture">Платежная система: <%= @item.payment_state_raw %></div>
 <% if @item.code && @item.payment_status == 'not blocked' && @item.offline_booking? %>
 <div id="pay_url">
 URL для оплаты: <%= link_to edit_payment_url(:code => @item.code), edit_payment_url(:code => @item.code)%>

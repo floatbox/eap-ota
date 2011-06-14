@@ -3,7 +3,7 @@
     <li><span class="link">Банковской картой онлайн</span></li>
     <li class="selected">Наличными в Москве</li>
 </ul>
-<p class="bc-pay-warning">Бронирование необходимо оплатить до <strong><%= I18n.l(@order.last_pay_time, :format => '%H:%M %e %B') %></strong>, иначе оно будет автоматически аннулировано.</p>
+<p class="bc-pay-warning">Бронирование необходимо оплатить до <strong><%= I18n.l(@order_form.last_pay_time, :format => '%H:%M %e %B') %></strong>, иначе оно будет автоматически аннулировано.</p>
 <div class="bc-delivery">
     <div class="radio"><input type="radio" name="ptype" value="delivery" id="bcpt-delivery" checked="checked">&nbsp;<label for="bcpt-delivery">Хочу оплатить курьеру при доставке (+350&nbsp;рублей)</label></div>
     <div class="radio"><input type="radio" name="ptype" value="cash" id="bcpt-cash">&nbsp;<label for="bcpt-cash">Хочу самостоятельно приехать в офис и оплатить</label></div>
@@ -22,11 +22,11 @@
     <p>Бизнес-центр «Магистраль Плаза», 4-й этаж<br>1-й Магистральный тупик, дом 5А</p>
     <p><a href="/contacts/" target="_blank">Вся контактная информация</a></p>
 </div>
-<% total_price = @order.recommendation.price_with_payment_commission.round.to_i %>
+<% total_price = @order_form.recommendation.price_with_payment_commission.round.to_i %>
 <table class="bc-bill">
 <tr>
     <td>
-        <h6>Стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %></h6>
+        <h6>Стоимость <%= @order_form.people.one? ? 'билета' : 'билетов' %></h6>
         <div class="price"><%= decorated_price total_price, 'strong', 'em' %>&nbsp;</div>
     </td>
     <td class="sign">+</td>
@@ -49,7 +49,7 @@
 </tr>
 <tr>
     <td colspan="2">
-        <p class="hint" style="margin-right: 10px;">стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами (не&nbsp;гарантируется до&nbsp;момента выписки билета)</p>    
+        <p class="hint" style="margin-right: 10px;">стоимость <%= @order_form.people.one? ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами (не&nbsp;гарантируется до&nbsp;момента выписки билета)</p>    
     </td>
     <td colspan="3"></td>
 </tr>

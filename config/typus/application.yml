@@ -130,6 +130,7 @@ Ticket:
   relationships: order
   application: Orders
   export: csv
+  search: number
 
 
 Payment:

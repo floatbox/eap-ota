@@ -10,25 +10,25 @@
 </div>
 <%= render "card", :f => f %>
 <div class="bc-bill-short">
-    <span style="padding-right: 2px;">Стоимость&nbsp;<%= @order.people.size == 1 ? 'билета' : 'билетов' %>&nbsp;—</span> <span style="white-space: nowrap;"><%= decorated_price @order.recommendation.price_with_payment_commission, 'strong', 'span' %><%= ' за всех пассажиров' if @order.people.size > 1 %> со&nbsp;всеми налогами и&nbsp;сборами</span>
+    <span style="padding-right: 2px;">Стоимость&nbsp;<%= @order_form.people.one? ? 'билета' : 'билетов' %>&nbsp;—</span> <span style="white-space: nowrap;"><%= decorated_price @order_form.recommendation.price_with_payment_commission, 'strong', 'span' %><%= ' за всех пассажиров' if @order_form.people.many? %> со&nbsp;всеми налогами и&nbsp;сборами</span>
 </div>
 <table class="bc-bill latent">
 <tr>
     <td>
-        <h6>Стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %></h6>
-        <div class="price"><%= decorated_price @order.recommendation.price_total, 'strong', 'em' %>&nbsp;</div>
-        <p class="hint">стоимость <%= @order.people.size == 1 ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами</p>
+        <h6>Стоимость <%= @order_form.people.one? ? 'билета' : 'билетов' %></h6>
+        <div class="price"><%= decorated_price @order_form.recommendation.price_total, 'strong', 'em' %>&nbsp;</div>
+        <p class="hint">стоимость <%= @order_form.people.one? ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами</p>
     </td>
     <td class="sign">+</td>
     <td>
         <h6>Комиссия за&nbsp;транзакцию</h6>
-        <div class="price"><%= decorated_price @order.recommendation.price_payment, 'strong', 'em' %>&nbsp;</div>
+        <div class="price"><%= decorated_price @order_form.recommendation.price_payment, 'strong', 'em' %>&nbsp;</div>
         <p class="hint">комиссия банка за&nbsp;проведение платежа</p>
     </td>
     <td class="sign">=</td>
     <td>
         <h6>С&nbsp;карты будет списано</h6>
-        <div class="price price-total"><%= decorated_price @order.recommendation.price_with_payment_commission, 'strong', 'em' %>&nbsp;</div>
+        <div class="price price-total"><%= decorated_price @order_form.recommendation.price_with_payment_commission, 'strong', 'em' %>&nbsp;</div>
     </td>
 </tr>
 </table>
