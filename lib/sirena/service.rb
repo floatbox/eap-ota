@@ -13,7 +13,7 @@ module Sirena
 
       def initialize(*)
         super
-        @driver ||= Sirena::Driver::Typhoeus.new
+        @driver ||= Sirena::TyphoeusDriver.new
       end
 
       include FileLogger

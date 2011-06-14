@@ -1,7 +1,6 @@
 # encoding: utf-8
 # мультиплексор-демультиплексор запросов.
 # читается как "мэкс", если что.
-require 'handsoap/typhoeus_driver'
 class Mux
 
   cattr_accessor :cryptic_logger do ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_cryptic.log') end
@@ -91,7 +90,7 @@ class Mux
       request_ns = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, lite)
       request_ns.nonstop = true
       reqs = lite ? [request_ws] : [request_ns, request_ws]
-      amadeus_driver = Handsoap::Http::Drivers::TyphoeusDriver.new
+      amadeus_driver = Handsoap::TyphoeusDriver.new
       reqs.each do |req|
         session = Amadeus::Session.book
         amadeus = Amadeus::Service.new(:session => session, :driver => amadeus_driver)
@@ -126,7 +125,7 @@ class Mux
       return [] if lite
       return [] unless sirena_searchable?(form)
 
-      sirena = Sirena::Service.new(:driver => Sirena::Driver::Typhoeus.new)
+      sirena = Sirena::Service.new(:driver => Sirena::TyphoeusDriver.new)
       sirena.async_pricing(form, nil, lite, &block)
     end
 
