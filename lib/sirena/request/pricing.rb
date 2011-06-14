@@ -54,6 +54,7 @@ module Sirena
 
       def suggested_timeout
         @suggested_timeout || (lite ? Conf.sirena.timeout_lite : 150)
+      end
     end
   end
 end
