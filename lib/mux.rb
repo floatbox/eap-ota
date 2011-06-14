@@ -42,9 +42,8 @@ class Mux
     def amadeus_pricer(form, admin_user=false, lite=false)
       return [] unless Conf.amadeus.enabled
       benchmark 'Pricer amadeus, total' do
-        request_ws = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, lite)
-        request_ns = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, lite)
-        request_ns.nonstop = true
+        request_ws = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, :lite => lite)
+        request_ns = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, :lite => lite, :nonstop => true)
         amadeus = Amadeus.booking
         # non threaded variant
         recommendations_ws = benchmark 'Pricer amadeus, with stops' do
@@ -86,9 +85,8 @@ class Mux
 
     def amadeus_async_pricer(form, admin_user=false, lite=false, &block)
       return [] unless Conf.amadeus.enabled
-      request_ws = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, lite)
-      request_ns = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, lite)
-      request_ns.nonstop = true
+      request_ws = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, :lite => lite)
+      request_ns = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, :lite => lite, :nonstop => true)
       reqs = lite ? [request_ws] : [request_ns, request_ws]
       amadeus_driver = Handsoap::TyphoeusDriver.new
       reqs.each do |req|
@@ -107,7 +105,7 @@ class Mux
       return [] unless sirena_searchable?(form)
       recommendations = []
       benchmark 'Pricer sirena' do
-        recommendations = Sirena::Service.new.pricing(form, nil, lite).recommendations || []
+        recommendations = Sirena::Service.new.pricing(form, :lite => lite).recommendations || []
         sirena_cleanup(recommendations)
       end
       recommendations
@@ -126,7 +124,7 @@ class Mux
       return [] unless sirena_searchable?(form)
 
       sirena = Sirena::Service.new(:driver => Sirena::TyphoeusDriver.new)
-      sirena.async_pricing(form, nil, lite, &block)
+      sirena.async_pricing(form, :lite => lite, &block)
     end
 
     def async_pricer(form, admin_user=false, lite=false)

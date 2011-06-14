@@ -75,7 +75,7 @@ class Strategy
     when 'sirena'
       # FIXME может быть, просто вернуть новую рекомендацию?
       sirena = Sirena::Service.new
-      unless repriced_rec = sirena.pricing(@search, @rec).recommendation
+      unless repriced_rec = sirena.pricing(@search, :recommendation => @rec).recommendation
         logger.info 'Strategy: got no recommendation'
         return
       end

@@ -3,27 +3,32 @@ module Sirena
   module Request
     class Pricing < Sirena::Request::Base
       CabinsMatch = {"Y"=>"Э", "F"=>"П", "C"=>"Б"}
-      attr_accessor :passengers, :segments, :timeout
-      
+      attr_accessor :passengers, :segments, :timeout, :recommendation, :lite, :suggested_timeout
+
+      # FIXME не стоит ли увеличить
       def timeout
-        @timeout_lite || 150
+        suggested_timeout
       end
 
-      def initialize(form, recommendation = nil, lite = nil)
-        @passengers = []
-        if form.people_count[:adults] > 0
-          @passengers << {:code => "ААА", :count => form.people_count[:adults]}
+      def initialize(*args)
+        unless args.first.is_a?(Hash)
+          form = args.shift
+          @passengers = []
+          if form.people_count[:adults] > 0
+            @passengers << {:code => "ААА", :count => form.people_count[:adults]}
+          end
+          # ААА - взрослый, РБГ - ребенок, РМГ - младенец, РВГ - младенец с местом
+          # CHILD и INFANT, видимо, сами подбирают категории с учетом необходимости мест,
+          # но требуют возраст
+          # FIXME выбрать один из методов
+          if form.people_count[:children] > 0
+            @passengers << {:code=>"CHILD", :count => form.people_count[:children], :age => 5}
+          end
+          if form.people_count[:infants] > 0
+            @passengers << {:code=>"INFANT", :count => form.people_count[:infants], :age => 1 }
+          end
         end
-        # ААА - взрослый, РБГ - ребенок, РМГ - младенец, РВГ - младенец с местом
-        # CHILD и INFANT, видимо, сами подбирают категории с учетом необходимости мест,
-        # но требуют возраст
-        # FIXME выбрать один из методов
-        if form.people_count[:children] > 0
-          @passengers << {:code=>"CHILD", :count => form.people_count[:children], :age => 5}
-        end
-        if form.people_count[:infants] > 0
-          @passengers << {:code=>"INFANT", :count => form.people_count[:infants], :age => 1 }
-        end
+        super *args
 
         @segments =
           if recommendation
@@ -45,11 +50,10 @@ module Sirena
               }
             end
           end
-          
-        @timeout_lite = Conf.sirena.timeout_lite if lite
-
       end
 
+      def suggested_timeout
+        @suggested_timeout || (lite ? Conf.sirena.timeout_lite : 150)
     end
   end
 end

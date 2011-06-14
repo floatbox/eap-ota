@@ -34,6 +34,7 @@ module Sirena
       end
       add_method_tracer :action, 'Custom/Sirena/http'
 
+      # FIXME вернуть поддержку fake
       def async_action(name, *params, &block)
         request = Sirena::Request.for(name).new(*params)
         request_body = request.render
