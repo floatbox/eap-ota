@@ -33,6 +33,11 @@ module Amadeus
     elsif args[:session]
       self.session = args[:session]
     end
+    @driver = args[:driver]
+  end
+
+  def http_driver_instance
+    @driver || super
   end
 
   delegate :release, :to => :session
@@ -40,7 +45,6 @@ module Amadeus
 # generic helpers
 
   # вынесены во внешний модуль, чтобы методы можно было оверрайдить
-  include Amadeus::SOAPActions
   include Amadeus::Macros
 
   def on_response_document(doc)
@@ -56,91 +60,66 @@ module Amadeus
     super
   end
 
-  def invoke_rendered action, opts={}
+  def invoke_request request
 
-    request = opts[:request]
+    Rails.logger.info "Amadeus::Service: #{request.action} started"
 
+    xml_response = nil
     if Conf.amadeus.fake
-      xml_string = read_latest_xml(action)
-      response = parse_string(xml_string)
+      xml_string = read_latest_xml(request.action)
+      xml_response = parse_string(xml_string)
     else
-      soap_body = render(action, request)
-      response = nil
-      Amadeus::Session.with_session(session) do |booked_session|
-        response = invoke(action,
-          :soap_action => opts[:soap_action],
-          :soap_header => {'SessionId' => booked_session.session_id} ) do |body|
-          body.set_value soap_body, :raw => true
-        end
+      req_session = self.session || (booked_session = Amadeus::Session.book) if request.needs_session?
+      invoke_opts = {}
+      invoke_opts[:soap_action] = request.soap_action
+      invoke_opts[:soap_header] = {'SessionId' => req_session.session_id} if req_session
+      xml_response = invoke(request.action, invoke_opts) do |body|
+        body.set_value request.soap_body, :raw => true
       end
-      save_xml(action, response.to_xml)
+      # FIXME среагировать на HTTP error
+      req_session.increment if req_session
+      # возвращаем только свежезалогиненную сессию
+      booked_session.release if booked_session
+      save_xml(request.action, xml_response.to_xml)
     end
 
-    response
+    request.process_response(xml_response)
   end
 
+  def invoke_async_request request, &callback
+    Rails.logger.info "Amadeus::Service: #{request.action} async queued"
+    invoke_opts = {}
+    invoke_opts[:soap_action] = request.soap_action
+    invoke_opts[:soap_header] = {'SessionId' => session.session_id}
 
-# request template rendering
-
-  def xml_template(action);  File.expand_path("../templates/#{action}.xml",  __FILE__) end
-  def haml_template(action); File.expand_path("../templates/#{action}.haml", __FILE__) end
-
-  def render(action, locals=nil)
-    "\n  " +
-    if File.file?(haml_template(action))
-      render_haml( haml_template(action), locals)
-    elsif File.file?(xml_template(action))
-      render_xml(xml_template(action))
-    else
-      raise "no template found for action #{action}"
+    callbacks = Proc.new do |deffered|
+      deffered.callback &callback
+      deffered.errback do |err|
+        Rails.logger.error "Amadeus::Service: async: #{err.inspect}"
+      end
     end
-  end
 
-  def render_haml(template, locals=nil)
-    Haml::Engine.new( File.read(template),
-      :autoclose => [],
-      :preserve => [],
-      :filename => template,
-      :ugly => false,
-      :escape_html => true
-    ).render(locals)
-  end
-
-  def render_xml(template)
-    # locals ignored
-    File.read(template)
-  end
-
-# sign in and sign out sessions
-
-  # оверрайд методов из SOAPACTions
-  def security_authenticate(office)
-    request = Amadeus::Request::SecurityAuthenticate.new(:office => office)
-    payload = render('Security_Authenticate', request)
-    response = invoke(
-      'Security_Authenticate',
-      :soap_action => 'http://webservices.amadeus.com/1ASIWOABEVI/VLSSLQ_06_1_1A'
-    ) { |body| body.set_value( payload, :raw => true) }
-
-    response.add_namespace 'r', 'http://xml.amadeus.com/VLSSLR_06_1_1A'
-
-    if (response / '//r:statusCode').to_s == 'P'
-       (response / '//header:SessionId').to_s
+    async(callbacks) do |dispatcher|
+      dispatcher.request(request.action, invoke_opts) do |body|
+        body.set_value request.soap_body, :raw => true
+      end
+      dispatcher.response do |xml_response|
+        session.increment
+        request.process_response(xml_response)
+      end
     end
   end
 
-  def security_sign_out(session)
-    # у запроса пустое тело, поэтому оверрайдим SOAPActions
-    response = invoke(
-      'Security_SignOut',
-      :soap_action => 'http://webservices.amadeus.com/1ASIWOABEVI/VLSSOQ_04_1_1A',
-      :soap_header => {'SessionId' => session.session_id}
-    )
+  # fare_master_pricer_travel_board_search
+  Amadeus::Request::SOAP_ACTIONS.keys.each do |action|
+    # Amadeus::Service.pnr_add_multi_elements etc.
+    define_method action.underscore do |*args|
+      invoke_request Amadeus::Request.wrap(action, *args)
+    end
 
-    response.add_namespace 'r', "http://xml.amadeus.com/VLSSOR_04_1_1A"
-
-    # нужно ли ловить тип ошибки?
-    (response / '//r:statusCode').to_s == 'P'
+    define_method "async_#{action.underscore}" do |*args, &block|
+      invoke_async_request Amadeus::Request.wrap(action, *args), &block
+    end
   end
 
 # метрика

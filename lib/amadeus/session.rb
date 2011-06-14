@@ -33,6 +33,7 @@ module Amadeus
   end
 
   def increment
+    return if destroyed?
     self.seq += 1
   end
 
@@ -41,23 +42,10 @@ module Amadeus
   end
 
   def release
+    return if destroyed?
     logger.debug "Amadeus::Session: #{token} released"
     self.booking = nil
     save
-  end
-
-  def self.with_session(previous_session=nil)
-    session = previous_session || book
-    result = yield session
-    session.increment
-    result
-  rescue Amadeus::Error
-    # TODO проверить что нужно увеличивать счетчик в случае разных 91ых ошибок
-    session.increment
-    raise
-  ensure
-    # не освобождаем сессию, переданную явно
-    session.release if session && !previous_session
   end
 
   def self.book(office=nil)
@@ -79,7 +67,7 @@ module Amadeus
   # без параметра создает незарезервированную сессию
   def self.increase_pool(booking=nil, office=nil)
     office ||= Amadeus::Session::BOOKING
-    token = Amadeus::Service.security_authenticate(office)
+    token = Amadeus::Service.security_authenticate(:office => office).or_fail!.session_id
     session = from_token(token)
     session.booking = booking if booking
     session.office = office
@@ -102,7 +90,7 @@ module Amadeus
   def destroy
     logger.debug "Amadeus::Session: #{token} signing out (#{seq})"
     super
-    Amadeus::Service.security_sign_out(self)
+    Amadeus::Service.new(:session => self).security_sign_out
   rescue Handsoap::Fault
     # it's ok
   end

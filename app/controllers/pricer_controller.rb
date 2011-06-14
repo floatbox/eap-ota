@@ -7,7 +7,7 @@ class PricerController < ApplicationController
   def pricer
     unless params[:restore_results]
       if @search.valid?
-        @recommendations = Mux.pricer(@search, admin_user)
+        @recommendations = Mux.new(:admin_user => admin_user).async_pricer(@search)
         @locations = @search.human_locations
         hot_offer = create_hot_offer
         @average_price = hot_offer.destination.average_price if hot_offer
@@ -23,7 +23,7 @@ class PricerController < ApplicationController
   def calendar
     unless params[:restore_results]
       if @search.valid? && @search.form_segments.size < 3
-        @recommendations = Mux.calendar(@search, admin_user)
+        @recommendations = Mux.new(:admin_user => admin_user).calendar(@search)
       end
     end
     render :partial => 'matrix'
@@ -69,7 +69,7 @@ class PricerController < ApplicationController
     @search.partner = params[:partner] || 'unknown'
     if @search.valid?
       @search.save_to_cache
-      @recommendations = Mux.pricer(@search, false, true)
+      @recommendations = Mux.new(:lite => true).pricer(@search)
       render 'api/yandex'
     elsif @search.errors[:"form_segments.date"] == ["Первый вылет слишком рано"]
       @recommendations = []

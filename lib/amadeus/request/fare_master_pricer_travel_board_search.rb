@@ -1,17 +1,20 @@
 module Amadeus
   module Request
     class FareMasterPricerTravelBoardSearch < Amadeus::Request::Base
-      attr_accessor :people_count, :nonstop, :segments, :cabin
+      attr_accessor :people_count, :nonstop, :segments, :cabin, :lite, :suggested_limit
 
-      def initialize(opts, lite=false)
-        if opts.is_a? Hash
-          super
-        else
-          @people_count = opts.real_people_count
-          @cabin = opts.cabin
-          @segments = opts.form_segments
-          @how_many = Conf.amadeus.recommendations_lite if lite
+      def initialize(*args)
+        unless args.first.is_a?(Hash)
+          form = args.shift
+          @people_count = form.real_people_count
+          @cabin = form.cabin
+          @segments = form.form_segments
         end
+        super *args
+      end
+
+      def suggested_limit
+         @suggested_limit || (lite ? Conf.amadeus.recommendations_lite : 200)
       end
 
     end

@@ -7,7 +7,7 @@ class Pnr
     pnr = self.new
     pnr.number = number
     if pnr.order && pnr.order.source == 'sirena'
-      order = Sirena::Service.order(number, pnr.order.sirena_lead_pass)
+      order = Sirena::Service.new.order(number, pnr.order.sirena_lead_pass)
       copy_attrs order, pnr,
         :flights,
         :booking_classes,
@@ -33,7 +33,7 @@ class Pnr
   end
 
   def sirena_receipt
-    Sirena::Service.get_itin_receipts(number, order.sirena_lead_pass).pdf
+    Sirena::Service.new.get_itin_receipts(number, order.sirena_lead_pass).pdf
   end
 
 end
