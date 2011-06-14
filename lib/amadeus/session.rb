@@ -43,14 +43,14 @@ module Amadeus
 
   def release
     return if destroyed?
-    logger.debug "Amadeus::Session: #{token} released"
+    logger.info "Amadeus::Session: #{token} released"
     self.booking = nil
     save
   end
 
   def self.book(office=nil)
     office ||= Amadeus::Session::BOOKING
-    logger.debug { "Amadeus::Session: free sessions count: #{free.count}" }
+    logger.info { "Amadeus::Session: free sessions count: #{free.count}" }
     booking = SecureRandom.random_number(2**31)
     free.update_all({:booking => booking}, nil, {:limit => 1})
     session = find_by_booking(booking)
@@ -59,7 +59,7 @@ module Amadeus
         raise "somehow can't get new session"
       end
     else
-      logger.debug "Amadeus::Session: #{session.token} reused (#{session.seq})"
+      logger.info "Amadeus::Session: #{session.token} reused (#{session.seq})"
     end
     session
   end
@@ -71,7 +71,7 @@ module Amadeus
     session = from_token(token)
     session.booking = booking if booking
     session.office = office
-    logger.debug "Amadeus::Session: #{session.token} signed in"
+    logger.info "Amadeus::Session: #{session.token} signed in"
     session.save
     session
   end
@@ -88,7 +88,7 @@ module Amadeus
   end
 
   def destroy
-    logger.debug "Amadeus::Session: #{token} signing out (#{seq})"
+    logger.info "Amadeus::Session: #{token} signing out (#{seq})"
     super
     Amadeus::Service.new(:session => self).security_sign_out
   rescue Handsoap::Fault
