@@ -45,6 +45,13 @@ class Order < ActiveRecord::Base
     :ticket_status => 'ticketed')\
     .where("email IS NOT NULL AND email != ''")
 
+  scope :reminder_queue, where('departure_date = ?', 2.days.since.to_date )\
+    .where(
+    :email_status => 'sent',
+    :offline_booking => false,
+    :ticket_status => 'ticketed',
+    :payment_status => 'charged')
+
 
   def tickets_count
     ticket_numbers_as_text.to_s.split(/[, ]/).delete_if(&:blank?).size
@@ -311,6 +318,17 @@ class Order < ActiveRecord::Base
     raise
   end
 
+  def send_reminder
+    logger.info 'Order: sending reminder'
+    PnrMailer.notification(email, pnr_number).deliver
+    update_attribute(:email_status, 'sent_reminder')
+    puts "Reminder pnr #{pnr_number} to #{email} SENT on #{Time.now}"
+  rescue
+    update_attribute(:email_status, 'error_reminder')
+    puts "Reminder pnr #{pnr_number} to #{email} ERROR on #{Time.now}"
+    raise
+  end
+
   def resend_email!
     update_attribute(:email_status, '')
   end
@@ -329,6 +347,16 @@ class Order < ActiveRecord::Base
     counter = 0
     while (order_to_send = Order.sirena_email_queue.first || order_to_send = Order.amadeus_email_queue.first) && counter < 50
       order_to_send.send_email
+      counter += 1
+    end
+    rescue
+      HoptoadNotifier.notify($!) rescue Rails.logger.error("  can't notify hoptoad #{$!.class}: #{$!.message}")
+  end
+
+  def self.process_queued_reminders!
+    counter = 0
+    while (order_to_send = Order.reminder_queue.first) && counter < 50
+      order_to_send.send_reminder
       counter += 1
     end
     rescue
