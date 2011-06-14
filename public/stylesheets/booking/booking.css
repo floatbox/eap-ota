@@ -5,6 +5,7 @@
     display: none;
 }
 .prebooking-state {
+    display: none;
     padding: 15px;
     text-align: center;
     font-size: 14px;
@@ -26,6 +27,9 @@
 }
 .prebooking-state .link {
     color: #333;
+}
+.prebooking .prebooking-state {
+    display: block;
 }
 
 /* Изменение цены */
