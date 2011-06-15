@@ -27,17 +27,17 @@ module Sirena
       req.perform
       req.body_str
     ensure
-      logger.debug "#{self.class.name}: " + debug_easy(req)
+      logger.info "#{self.class.name}: " + debug_easy(req)
     end
 
     def send_request_async(*args, &block)
       req = make_request(*args)
       req.on_failure do |klass, msg|
-        logger.debug "#{self.class.name}: " + debug_easy(req)
+        logger.info "#{self.class.name}: " + debug_easy(req)
         logger.error "#{self.class.name}: #{klass}: #{msg}"
       end
       req.on_success do |response|
-        logger.debug "#{self.class.name}: " + debug_easy(req)
+        logger.info "#{self.class.name}: " + debug_easy(req)
         block.call req.body_str
       end
       queue req

@@ -31,7 +31,7 @@ module Handsoap
       req.perform
       parse_http_part(req.header_str.gsub(/^HTTP.*\r\n/, ""), req.body_str, req.response_code, req.content_type)
     ensure
-      logger.debug "#{self.class.name}: " + debug_easy(req)
+      logger.info "#{self.class.name}: " + debug_easy(req)
     end
 
     def send_http_request_async(request)
@@ -39,11 +39,11 @@ module Handsoap
       deferred = Handsoap::Deferred.new
       # returns Curl::Err::* and message
       req.on_failure do |klass, msg|
-        logger.debug "#{self.class.name}: " + debug_easy(req)
+        logger.info "#{self.class.name}: " + debug_easy(req)
         deffered.trigger_errback [klass, msg]
       end
       req.on_success do
-        logger.debug "#{self.class.name}: " + debug_easy(req)
+        logger.info "#{self.class.name}: " + debug_easy(req)
         http_response = parse_http_part(req.header_str.gsub(/^HTTP.*\r\n/, ""), req.body_str, req.response_code, req.content_type)
         deferred.trigger_callback http_response
       end
