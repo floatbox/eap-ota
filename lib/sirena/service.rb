@@ -13,7 +13,8 @@ module Sirena
 
       def initialize(*)
         super
-        @driver ||= Sirena::TyphoeusDriver.new
+        # @driver ||= Sirena::TyphoeusDriver.new
+        @driver ||= Sirena::MultiCurbDriver.new
       end
 
       include FileLogger
@@ -40,8 +41,8 @@ module Sirena
         request_body = request.render
         log_request(name, request_body)
         driver.send_request_async(request_body, :encrypt => request.encrypt?, :timeout => request.timeout) do |response|
-          log_response(name, response.body)
-          block.call request.process_response(response.body)
+          log_response(name, response)
+          block.call request.process_response(response)
         end
       end
 

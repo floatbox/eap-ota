@@ -31,12 +31,12 @@ module Sirena
         begin
           raise_if_error response
           # FIXME обработать ошибку
-          block.call response
+          block.call response.body
         rescue => e
           Rails.logger.error "Sirena::Service: async: error: #{e.inspect}"
         end
       end
-      hydra.queue req
+      queue req
     end
 
     def make_request(body, opts={})
@@ -48,6 +48,10 @@ module Sirena
           'X-Encrypt' => (opts[:encrypt] ? 'true' : 'false'),
           'X-Timeout' => ((opts[:timeout] || 150) + 5).to_s
         }
+    end
+
+    def queue req
+      hydra.queue req
     end
 
     def run

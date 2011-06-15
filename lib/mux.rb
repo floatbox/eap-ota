@@ -90,11 +90,11 @@ class Mux
     request_ws = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, :lite => lite)
     request_ns = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, :lite => lite, :nonstop => true)
     reqs = lite ? [request_ws] : [request_ns, request_ws]
-    amadeus_driver = Handsoap::TyphoeusDriver.new
+    amadeus_driver = async_amadeus_driver
     reqs.each do |req|
       session = Amadeus::Session.book
       amadeus = Amadeus::Service.new(:session => session, :driver => amadeus_driver)
-      amadeus.async_fare_master_pricer_travel_board_search(req, lite) do |res|
+      amadeus.async_fare_master_pricer_travel_board_search(req) do |res|
         session.release
         block.call(res)
       end
@@ -125,7 +125,7 @@ class Mux
     return [] if lite
     return [] unless sirena_searchable?(form)
 
-    sirena = Sirena::Service.new(:driver => Sirena::TyphoeusDriver.new)
+    sirena = Sirena::Service.new(:driver => async_sirena_driver)
     sirena.async_pricing(form, :lite => lite, &block)
   end
 
@@ -140,7 +140,7 @@ class Mux
         sirena_recommendations += res.recommendations
       end
 
-      Typhoeus::Hydra.hydra.run
+      async_perform
 
       recommendations = amadeus_merge_and_cleanup(amadeus_recommendations) + sirena_cleanup(sirena_recommendations)
 
@@ -151,6 +151,29 @@ class Mux
       end
 
     end
+  end
+
+  def async_sirena_driver
+    # Sirena::TyphoeusDriver.new( :hydra => hydra )
+    Sirena::MultiCurbDriver.new( :multi => multi )
+  end
+
+  def async_amadeus_driver
+    # Handsoap::TyphoeusDriver.new( :hydra => hydra )
+    Handsoap::MultiCurbDriver.new( :multi => multi )
+  end
+
+  def async_perform
+    # hydra.run
+    multi.perform
+  end
+
+  def hydra
+    @hydra ||= Typhoeus::Hydra.new
+  end
+
+  def multi
+    @multi ||= Curl::Multi.new
   end
 
   SNG_COUNTRY_CODES = ["RU", "AZ", "AM", "BY", "GE", "KZ", "KG", "LV", "LT", "MD", "TJ", "TM", "UZ", "UA", "EE"]

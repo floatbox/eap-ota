@@ -19,7 +19,7 @@ module Handsoap
 
     def send_http_request(request)
       req = typhoeus_request(request)
-      hydra.queue req
+      queue req
 
       run
       response = req.response
@@ -29,14 +29,13 @@ module Handsoap
 
     def send_http_request_async(request)
       req = typhoeus_request(request)
-      hydra.queue req
+      queue req
       deferred = Handsoap::Deferred.new
-      req.on_complete do
+      req.on_failure do |*args|
+        deffered.trigger_errback args
+      end
+      req.on_success do
         response = req.response
-        # обвалит цикл
-        raise_if_error response
-        # поймать эксепшн и сделать errback
-        # deferred.trigger_errback emdef
         http_response = parse_http_part(response.headers.gsub(/^HTTP.*\r\n/, ""), response.body, response.code)
         deferred.trigger_callback http_response
       end
@@ -58,6 +57,10 @@ module Handsoap
 
     def run
       hydra.run
+    end
+
+    def queue req
+      hydra.queue req
     end
   end
 end

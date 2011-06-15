@@ -6,12 +6,14 @@ module Amadeus
   endpoint :uri => Conf.amadeus.endpoint, :version => 1
 
   # сжатие
-  require 'handsoap/compressed_curb_driver'
-  Handsoap.http_driver = :compressed_curb
+  #require 'handsoap/compressed_curb_driver'
+  #Handsoap.http_driver = :compressed_curb
   #require 'handsoap/typhoeus_driver'
   #Handsoap.http_driver = :typhoeus
+  require 'handsoap/multi_curb_driver'
+  Handsoap.http_driver = :multicurb
 
-  Handsoap.timeout = 500
+  Handsoap.timeout = 60
 
 
   # response logger
