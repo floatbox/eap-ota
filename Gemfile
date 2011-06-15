@@ -37,6 +37,8 @@ gem 'haml'
 gem 'typus'
 #gem 'typus', :git => 'https://github.com/fesplugas/typus.git', :branch => "3-0-stable"
 
+gem 'trashed', :git => 'https://github.com/37signals/trashed.git'
+
 group :development do
   gem 'mongrel' if RUBY_VERSION < "1.9.0"
 end

@@ -11,6 +11,13 @@ GIT
   specs:
     handsoap (1.1.8)
 
+GIT
+  remote: https://github.com/37signals/trashed.git
+  revision: 655eac5db862701fb12f1e3217802159697a607c
+  specs:
+    trashed (1.0.0)
+      activesupport (>= 2.3.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -254,6 +261,7 @@ DEPENDENCIES
   ruby-prof
   russian
   spork
+  trashed!
   typhoeus
   typus
   tzinfo
