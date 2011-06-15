@@ -69,7 +69,7 @@ class PricerController < ApplicationController
     @search.partner = params[:partner] || 'unknown'
     if @search.valid?
       @search.save_to_cache
-      @recommendations = Mux.new(:lite => true).pricer(@search)
+      @recommendations = Mux.new(:lite => true).async_pricer(@search)
       render 'api/yandex'
     elsif @search.errors[:"form_segments.date"] == ["Первый вылет слишком рано"]
       @recommendations = []

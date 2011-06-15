@@ -41,6 +41,7 @@ cbr:
     2011-01-02: 30.0001
 sirena:
   enabled: no
+  enabled_in_lite: no
   restrict: no
   fake: no
   timeout_lite: 20
