@@ -52,7 +52,11 @@ module Amadeus
     office ||= Amadeus::Session::BOOKING
     logger.info { "Amadeus::Session: free sessions count: #{free.count}" }
     booking = SecureRandom.random_number(2**31)
-    free.update_all({:booking => booking}, nil, {:limit => 1})
+
+    # FIXME fucking awesome! AREL simply ignores "limit 1" from some version above
+    # free.limit(1).update_all(:booking => booking)
+    update_all( "booking = #{booking} WHERE #{free.where_values} LIMIT 1" )
+
     session = find_by_booking(booking)
     unless session
       unless session = increase_pool(booking, office)
