@@ -103,7 +103,7 @@ class Mux
 
   def sirena_pricer(form)
     return [] unless Conf.sirena.enabled
-    return [] if lite
+    return [] if lite && !Conf.sirena.enabled_in_lite
     return [] unless sirena_searchable?(form)
     recommendations = []
     benchmark 'Pricer sirena' do
@@ -122,7 +122,7 @@ class Mux
 
   def sirena_async_pricer(form, &block)
     return [] unless Conf.sirena.enabled
-    return [] if lite
+    return [] if lite && !Conf.sirena.enabled_in_lite
     return [] unless sirena_searchable?(form)
 
     sirena = Sirena::Service.new(:driver => async_sirena_driver)
@@ -134,9 +134,11 @@ class Mux
       amadeus_recommendations = []
       sirena_recommendations = []
       amadeus_async_pricer(form) do |res|
+        logger.info "Mux: amadeus recs: #{res.recommendations.size}"
         amadeus_recommendations += res.recommendations
       end
       sirena_async_pricer(form) do |res|
+        logger.info "Mux: sirena recs: #{res.recommendations.size}"
         sirena_recommendations += res.recommendations
       end
 
