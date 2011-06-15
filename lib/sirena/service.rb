@@ -28,7 +28,12 @@ module Sirena
           response_body = read_latest_xml(name)
         else
           log_request(name, request_body)
-          response_body = driver.send_request(request_body, :encrypt => request.encrypt?, :timeout => request.timeout)
+          response_body = driver.send_request(
+            request_body,
+            :encrypt => request.encrypt?,
+            :timeout => request.timeout,
+            :priority => request.priority
+          )
           log_response(name, response_body)
         end
         request.process_response(response_body)
@@ -40,7 +45,12 @@ module Sirena
         request = Sirena::Request.for(name).new(*params)
         request_body = request.render
         log_request(name, request_body)
-        driver.send_request_async(request_body, :encrypt => request.encrypt?, :timeout => request.timeout) do |response|
+        driver.send_request_async(
+          request_body,
+          :encrypt => request.encrypt?,
+          :timeout => request.timeout,
+          :priority => request.priority
+        ) do |response|
           log_response(name, response)
           block.call request.process_response(response)
         end

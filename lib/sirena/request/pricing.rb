@@ -10,6 +10,16 @@ module Sirena
         suggested_timeout
       end
 
+      def priority
+        if lite
+          0
+        elsif !recommendation
+          1
+        else
+          2
+        end
+      end
+
       def initialize(*args)
         unless args.first.is_a?(Hash)
           form = args.shift

@@ -15,6 +15,9 @@ module Sirena
         true
       end
 
+      def priority
+        3
+      end
     end
   end
 end

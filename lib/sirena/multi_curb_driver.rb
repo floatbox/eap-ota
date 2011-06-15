@@ -52,7 +52,8 @@ module Sirena
       curl.post_body = body
       curl.headers = {
           'X-Encrypt' => (opts[:encrypt] ? 'true' : 'false'),
-          'X-Timeout' => ((opts[:timeout] || 150) + 5).to_s
+          'X-Timeout' => ((opts[:timeout] || 150) + 5).to_s,
+          'X-Priority' => (opts[:priority] || 0).to_s
         }
       curl
     end

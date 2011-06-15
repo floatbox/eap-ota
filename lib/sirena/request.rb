@@ -13,22 +13,23 @@ module Sirena
       include KeyValueInit
 
       def render
-        template = template_for_action
-
         %(<?xml version="1.0" encoding="UTF-8"?>\n) +
         %(<sirena>\n) +
         %(<query>\n) +
+        query_body +
+        %(</query>\n) +
+        %(</sirena>\n)
+      end
 
+      def query_body
+        template = template_for_action
         Haml::Engine.new( File.read(template),
           :autoclose => [],
           :preserve => [],
           :filename => template,
           :ugly => false,
           :escape_html => true
-        ).render(self) +
-
-        %(</query>\n) +
-        %(</sirena>\n)
+        ).render(self)
       end
 
       def template_for_action
@@ -42,6 +43,10 @@ module Sirena
       # сделать оверрайд где это нужно
       def encrypt?
         false
+      end
+
+      def priority
+        2
       end
 
       def timeout
