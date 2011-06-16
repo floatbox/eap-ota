@@ -159,14 +159,24 @@ class Strategy
             amadeus.pnr_add_remark
           end
 
+          amadeus.pnr_ignore_and_retrieve
+
           #amadeus.queue_place_pnr(:number => @order_form.pnr_number)
           # FIXME вынести в контроллер
           @order_form.save_to_order
 
-          # обилечивание
-          #Amadeus::Service.issue_ticket(@order_form.pnr_number)
+          #Еще раз проверяем, что все сегменты доступны
+          if amadeus.pnr_retrieve(:number => @order_form.pnr_number).all_segments_available?
 
-          return @order_form.pnr_number
+            # обилечивание
+            #Amadeus::Service.issue_ticket(@order_form.pnr_number)
+
+            return @order_form.pnr_number
+          else
+            @order_form.order.cancel!
+            @order_form.errors.add :pnr_number, 'Ошибка при создании PNR'
+            return
+          end
         else
           # при сохранении случилась какая-то ошибка, номер брони не выдан.
           amadeus.pnr_ignore
@@ -269,3 +279,4 @@ class Strategy
     end
   end
 end
+

@@ -23,6 +23,10 @@ module Amadeus
         # FIXME найти более подходящий xpath для отбрасывания сервисных сегментов.
       end
 
+      def all_segments_available?
+        xpath('//r:relatedProduct/r:status').every.to_s - ['HK', 'KK'] == []
+      end
+
       # временное решение
       def booking_classes
         xpath("//r:itineraryInfo[r:elementManagementItinerary/r:segmentName='AIR']" +
