@@ -74,6 +74,9 @@ class Mux
 
       recommendations.delete_if(&:without_full_information?)
       recommendations.delete_if(&:ground?)
+      # временно выключаем потому что баг какой-то
+      recommendations.delete_if {|x| x.validating_carrier.iata == 'SU' || x.validating_carrier.iata == 'OK' }
+
       recommendations = recommendations.select(&:sellable?) unless admin_user
       unless lite
         # sort
@@ -103,7 +106,7 @@ class Mux
 
   def sirena_pricer(form)
     return [] unless Conf.sirena.enabled
-    return [] if lite
+    return [] if lite && !Conf.sirena.enabled_in_lite
     return [] unless sirena_searchable?(form)
     recommendations = []
     benchmark 'Pricer sirena' do
@@ -118,11 +121,13 @@ class Mux
 
   def sirena_cleanup(recs)
     recs.delete_if(&:without_full_information?)
+    # временно выключаем потому что баг какой-то
+    recs.delete_if {|x| x.validating_carrier.iata == 'SU' || x.validating_carrier.iata == 'OK' }
   end
 
   def sirena_async_pricer(form, &block)
     return [] unless Conf.sirena.enabled
-    return [] if lite
+    return [] if lite && !Conf.sirena.enabled_in_lite
     return [] unless sirena_searchable?(form)
 
     sirena = Sirena::Service.new(:driver => async_sirena_driver)
@@ -134,9 +139,11 @@ class Mux
       amadeus_recommendations = []
       sirena_recommendations = []
       amadeus_async_pricer(form) do |res|
+        logger.info "Mux: amadeus recs: #{res.recommendations.size}"
         amadeus_recommendations += res.recommendations
       end
       sirena_async_pricer(form) do |res|
+        logger.info "Mux: sirena recs: #{res.recommendations.size}"
         sirena_recommendations += res.recommendations
       end
 

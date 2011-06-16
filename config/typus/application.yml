@@ -59,6 +59,7 @@ Airport:
     default: iata, name_ru, name_en, importance, city
     list: iata, name_ru, name_en, importance, city
     form: iata, iata_ru, name_en, name_ru, synonym_list, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in, domestic, icao, federal, international, runway_length, lat, lng, importance, city, disabled
+    csv: iata, name_ru, city
     options:
       read_only: morpher_to, morpher_from, morpher_in
   order_by: name_ru
@@ -68,6 +69,7 @@ Airport:
   actions:
     index: update_completer
   application: Geo
+  export: csv
 
 City:
   fields:

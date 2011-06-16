@@ -576,7 +576,25 @@ commission "0%/0%"
 carrier "D9", "ДОНАВИА"
 ########################################
 
-example 'svocdg'
+example 'rovfru/business'
+example 'frurov/business'
+example 'rovfru/business frurov/business'
+agent "На период с 15.06.11г. по 31.07.211г. 10% от опубл. тарифов по маршруту Ростов-на-Дону–Бишкек–Ростов-на-Дону от суммы тарифов эконом и бизнес классов"
+subagent "6,3% от опубл. тарифов бизнес класса на собств. рейсы D9"
+classes :business
+check { city_iatas.first == 'ROV' && city_iatas.include?('FRU') || city_iatas.first == 'FRU' && city_iatas.include?('ROV')}
+commission "10%/6.3%"
+
+example 'rovfru frurov/economy'
+example 'rovfru/economy'
+example 'frurov/economy'
+agent "На период с 15.06.11г. по 31.07.211г. 10% от опубл. тарифов по маршруту Ростов-на-Дону–Бишкек–Ростов-на-Дону от суммы тарифов эконом и бизнес классов"
+subagent "5% от опубл. тарифов эконом класса на собств. рейсы D9"
+classes :economy
+check { city_iatas.first == 'ROV' && city_iatas.include?('FRU') || city_iatas.first == 'FRU' && city_iatas.include?('ROV')}
+commission "10%/5%"
+
+example 'svocdg/economy'
 agent    "7% от опубл. тарифов эконом класса на собств. рейсы D9"
 subagent "5% от опубл. тарифов эконом класса на собств. рейсы D9"
 classes :economy
@@ -2198,7 +2216,6 @@ carrier "MD", "AIR MADAGASCAR (Только с момента авторизац
 
 agent "1 (Один) % от всех опубл. тарифов на собств. рейсы авиакомпании MD"
 subagent "5 коп. с билета по опубл. тарифам на собств. рейсы MD"
-disabled
 commission "1%/0.05"
 
 carrier "TN", "AIR TAHITI NUI (Только с момента авторизации! ПРОВЕРЯТЬ!)"
@@ -2206,6 +2223,24 @@ carrier "TN", "AIR TAHITI NUI (Только с момента авторизац
 
 agent "1 (Один) рубль от всех опубл. тарифов на собств.рейсы авиакомпании TN"
 subagent "5 коп. с билета по опубл. тарифам на собств. рейсы TN"
-disabled
 commission "1/0.05"
+
+carrier "9U", "Air Moldova"
+########################################
+
+agent "5 (пять) % от всех опубликованных тарифов."
+subagent ""
+disabled
+commission "5%/1"
+
+carrier "A9", "GEORGIAN AIRWAYS"
+########################################
+
+agent "8 (восемь) % от опубл. тарифа на собств. рейсы авиакомпании А9;"
+agent "7 (семь)  % от опубл. тарифа по маршрутам со сквозными тарифами, включающими участок авиакомпании  А9 и авиакомпаний, с которыми А9 имеет Интерлайн-Соглашение;"
+agent "5 (пять)   % от опубл. тарифа на рейсы Interline без участка А9."
+subagent ""
+disabled
+commission "0/0"
+
 end
