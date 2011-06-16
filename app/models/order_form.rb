@@ -42,7 +42,7 @@ class OrderForm < ActiveRecord::BaseWithoutTable
     if payment_type == 'card'
       [default_tk_xl, dept_date, last_tkt_date + 1.day].min
     else
-      last_pay_time.to_date + 1.day
+      [last_tkt_date + 1.day, dept_date].min
     end
   end
 
