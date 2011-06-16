@@ -159,8 +159,6 @@ class Strategy
             amadeus.pnr_add_remark
           end
 
-          amadeus.pnr_ignore_and_retrieve
-
           #amadeus.queue_place_pnr(:number => @order_form.pnr_number)
           # FIXME вынести в контроллер
           @order_form.save_to_order
