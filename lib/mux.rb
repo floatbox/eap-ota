@@ -74,8 +74,6 @@ class Mux
 
       recommendations.delete_if(&:without_full_information?)
       recommendations.delete_if(&:ground?)
-      # временно выключаем потому что баг какой-то
-      recommendations.delete_if {|x| x.validating_carrier.iata == 'SU' || x.validating_carrier.iata == 'OK' }
 
       recommendations = recommendations.select(&:sellable?) unless admin_user
       unless lite
