@@ -1,5 +1,8 @@
 # encoding: utf-8
 class Cache
+
+  class NotFound < StandardError; end
+
   # Rails.cache.load теперь возвращает frozen объекты
   # временно обходим это
 
@@ -11,6 +14,7 @@ class Cache
   def self.read(type, key)
     Marshal.load(File.read(filename_for(type, key)))
   rescue Errno::ENOENT
+    raise NotFound, "#{type} #{key} not found"
   end
 
   def self.write(type, key, data)
