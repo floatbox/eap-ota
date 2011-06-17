@@ -47,6 +47,7 @@ class Strategy
         # FIXME не очень надежный признак
         if @rec.price_fare.to_i == 0
           logger.error 'Strategy: price_fare is 0?'
+          return
         end
 
         @rec.rules = amadeus.fare_check_rules.rules
@@ -124,6 +125,7 @@ class Strategy
       Amadeus.booking do |amadeus|
         # FIXME могут ли остаться частичные резервирования сегментов, если одно из них не прошло?
         # может быть, при ошибке канселить бронирование на всякий случай?
+        # лучше сделать IG
         amadeus.air_sell_from_recommendation(
           :segments => @rec.variants[0].segments,
           :seat_total => @order_form.seat_total,
@@ -131,92 +133,115 @@ class Strategy
         ).or_fail!
 
         add_multi_elements = amadeus.pnr_add_multi_elements(@order_form).or_fail!
-        if @order_form.pnr_number = add_multi_elements.pnr_number
-          set_people_numbers(add_multi_elements.passengers)
-
-          amadeus.pnr_commit_really_hard do
-            pricing = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).or_fail!
-            @order_form.last_tkt_date = pricing.last_tkt_date
-            unless [@rec.price_fare, @rec.price_tax] == pricing.prices
-              @order_form.errors.add :pnr_number, 'Изменилась цена при тарифицировании'
-              amadeus.pnr_cancel
-              return
-            end
-            # FIXME среагировать на отсутствие маски
-            amadeus.ticket_create_tst_from_pricing(:fares_count => pricing.fares_count).or_fail!
-          end
-
-          amadeus.pnr_commit_really_hard do
-            add_passport_data(amadeus)
-            # делается автоматически, настройками booking office_id
-            #amadeus.give_permission_to_offices(
-            #  Amadeus::Session::TICKETING,
-            #  Amadeus::Session::WORKING
-            #)
-            # FIXME надо ли архивировать в самом конце?
-            amadeus.pnr_archive(@order_form.seat_total)
-            # FIXME перенести ремарку поближе к началу.
-            amadeus.pnr_add_remark
-          end
-
-          #amadeus.queue_place_pnr(:number => @order_form.pnr_number)
-          # FIXME вынести в контроллер
-          @order_form.save_to_order
-          @order = @order_form.order
-
-          #Еще раз проверяем, что все сегменты доступны
-          if amadeus.pnr_retrieve(:number => @order_form.pnr_number).all_segments_available?
-
-            # обилечивание
-            #Amadeus::Service.issue_ticket(@order_form.pnr_number)
-
-            return @order_form.pnr_number
-          else
-            cancel
-            @order_form.errors.add :pnr_number, 'Компания не подтвердила места'
-            return
-          end
-        else
+        unless @order_form.pnr_number = add_multi_elements.pnr_number
           # при сохранении случилась какая-то ошибка, номер брони не выдан.
+          logger.error "Strategy::Amadeus: Не получили номер брони"
           amadeus.pnr_ignore
-          @order_form.errors.add :pnr_number, 'Ошибка при сохранении PNR'
           return
         end
+
+        logger.info "Strategy::Amadeus: processing booking: #{add_multi_elements.pnr_number}"
+
+        set_people_numbers(add_multi_elements.passengers)
+
+        # надо попытаться сохранить эти сообщения в заказе
+        # может сохранить при:
+        # неправильно выставленном таймлимите
+        # недостаточном времени стыковки
+        # (не страшно, но) наземный участок
+        amadeus.pnr_commit_really_hard do
+          pricing = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).or_fail!
+          @order_form.last_tkt_date = pricing.last_tkt_date
+          unless [@rec.price_fare, @rec.price_tax] == pricing.prices
+            logger.error "Strategy::Amadeus: Изменилась цена при тарифицировании: #{pricing.prices}"
+            # не попытается ли сохранить бронь после выхода из блока?
+            amadeus.pnr_cancel
+            return
+          end
+
+          # FIXME среагировать на отсутствие маски
+          amadeus.ticket_create_tst_from_pricing(:fares_count => pricing.fares_count).or_fail!
+        end
+
+        # повторяем в случае прихода ремарок
+        amadeus.pnr_commit_really_hard do
+          add_passport_data(amadeus)
+          # делается автоматически, настройками booking office_id
+          #amadeus.give_permission_to_offices(
+          #  Amadeus::Session::TICKETING,
+          #  Amadeus::Session::WORKING
+          #)
+          # FIXME надо ли архивировать в самом конце?
+          amadeus.pnr_archive(@order_form.seat_total)
+          # FIXME перенести ремарку поближе к началу.
+          amadeus.pnr_add_remark
+        end
+
+        #amadeus.queue_place_pnr(:number => @order_form.pnr_number)
+        # FIXME вынести в контроллер
+        @order_form.save_to_order
+        # важно для дальнейшего cancel
+        @order = @order_form.order
+
+        #Еще раз проверяем, что все сегменты доступны
+        # вообще говоря, pnr_really_hard тоже получает эти данные. сэкономить транзакцию?
+        unless amadeus.pnr_retrieve(:number => @order_form.pnr_number).all_segments_available?
+          logger.error "Strategy::Amadeus: Не подтверждены места"
+          cancel
+          return
+        end
+
+        # обилечивание
+        #Amadeus::Service.issue_ticket(@order_form.pnr_number)
+
+        # success!!
+        return @order_form.pnr_number
       end
 
     when 'sirena'
+      # FIXME обработать ошибку cancel бронирования
       sirena = Sirena::Service.new
       response = sirena.booking(@order_form)
-      if response.success? && response.pnr_number
-        if @rec.price_fare != response.price_fare ||
-           @rec.price_tax != response.price_tax
-          @order_form.errors.add :pnr_number, 'Изменилась цена предложения при бронировании'
-          sirena.booking_cancel(response.pnr_number, response.lead_family)
-        else
-          # FIXME просто проверяем возможность добавления
-          # sirena.add_remark(response.pnr_number, response.lead_family, '')
-          payment_query = sirena.payment_ext_auth(:query, response.pnr_number, response.lead_family)
-          if payment_query.success? && payment_query.cost
-            if payment_query.cost == @rec.price_fare + @rec.price_tax
-              @order_form.pnr_number = response.pnr_number
-              @order_form.sirena_lead_pass = response.lead_family
-              @order_form.save_to_order
-              @order = @order_form.order
-            else
-              @order_form.errors.add :pnr_number, 'Изменилась цена после тарификации'
-              sirena.payment_ext_auth(:cancel, response.pnr_number, response.lead_family)
-              sirena.booking_cancel(response.pnr_number, response.lead_family)
-            end
-          else
-            @order_form.errors.add :pnr_number,  payment_query.error || 'Ошибка при тарицифировании PNR'
-            # заменить ли на Strategy#cancel?
-            sirena.booking_cancel(response.pnr_number, response.lead_family)
-          end
-        end
-      else
-        @order_form.errors.add :pnr_number, response.error || 'Ошибка при бронировании'
+
+      unless response.success? && response.pnr_number
+        sirena.booking_cancel(response.pnr_number, response.lead_family) if response.pnr_number
+        logger.error "Strategy::Sirena: booking error: #{response.error}"
+        return
       end
-      @order_form.pnr_number
+
+      logger.info "Strategy::Sirena: processing booking: #{response.pnr_number}"
+
+      if @rec.price_fare != response.price_fare ||
+         @rec.price_tax != response.price_tax
+        logger.error "Strategy::Sirena: price changed on booking"
+        sirena.booking_cancel(response.pnr_number, response.lead_family)
+        return
+      end
+
+      # FIXME просто проверяем возможность добавления
+      # sirena.add_remark(response.pnr_number, response.lead_family, '')
+      payment_query = sirena.payment_ext_auth(:query, response.pnr_number, response.lead_family)
+      unless payment_query.success? && payment_query.cost
+        logger.error "Strategy::Sirena: pricing error: #{payment_query.error}"
+        # заменить ли на Strategy#cancel?
+        sirena.payment_ext_auth(:cancel, response.pnr_number, response.lead_family)
+        sirena.booking_cancel(response.pnr_number, response.lead_family)
+        return
+      end
+
+      unless payment_query.cost == @rec.price_fare + @rec.price_tax
+        logger.error "Strategy::Sirena: price changed on payment query #{payment_query.cost}"
+        sirena.payment_ext_auth(:cancel, response.pnr_number, response.lead_family)
+        sirena.booking_cancel(response.pnr_number, response.lead_family)
+        return
+      end
+
+      @order_form.pnr_number = response.pnr_number
+      @order_form.sirena_lead_pass = response.lead_family
+      @order_form.save_to_order
+      # важно для дальнейшего cancel и ticket
+      @order = @order_form.order
+      return @order_form.pnr_number
     end
   end
 
@@ -257,11 +282,13 @@ class Strategy
     case source
     when 'amadeus'
       Amadeus.booking do |amadeus|
+        logger.error "Strategy::Amadeus: canceling #{@order.pnr_number}"
         amadeus.pnr_cancel(:number => @order.pnr_number)
         @order.cancel!
       end
     when 'sirena'
       sirena = Sirena::Service.new
+      logger.error "Strategy::Sirena: canceling #{@order.pnr_number}"
       sirena.payment_ext_auth(:cancel, @order.pnr_number, @order.sirena_lead_pass)
       sirena.booking_cancel(@order.pnr_number, @order.sirena_lead_pass)
       @order.cancel!
@@ -288,9 +315,11 @@ class Strategy
       payment_confirm = sirena.payment_ext_auth(:confirm, @order.pnr_number, @order.sirena_lead_pass,
                                         :cost => (@order.price_fare + @order.price_tax))
       if payment_confirm.success?
+        logger.info "Strategy::Sirena: ticketed succesfully"
         @order.ticket!
         return true
       else
+        logger.error "Strategy::Sirena: ticketing error: #{payment_confirm.error}"
         cancel
         return false
       end

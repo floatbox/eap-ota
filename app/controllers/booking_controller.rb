@@ -33,74 +33,93 @@ class BookingController < ApplicationController
     @order_form.set_flight_date_for_childen_and_infants
     @order_form.update_attributes(params[:order])
     @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
-    strategy = Strategy.new( :rec => @order_form.recommendation, :order_form => @order_form )
-    if @order_form.valid?
-      if strategy.create_booking
-        if @order_form.payment_type == 'card'
-          payture_response = @order_form.block_money
-          if payture_response.success?
-            @order_form.order.money_blocked!
-            logger.info "Pay: payment and booking successful"
-
-            unless strategy.delayed_ticketing?
-              logger.info "Pay: ticketing"
-              unless strategy.ticket
-                logger.info "Pay: ticketing failed"
-                @order_form.order.unblock!
-                render :partial => 'failed_booking'
-                return
-              end
-            end
-            render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order_form.pnr_number), :pnr_number => @order_form.pnr_number}
-          elsif payture_response.threeds?
-            logger.info "Pay: payment system requested 3D-Secure authorization"
-            render :partial => 'threeds', :locals => {:order_id => @order_form.order.order_id, :payture_response => payture_response}
-          else
-            strategy.cancel
-            msg = @order_form.card.errors[:number]
-            logger.info "Pay: payment failed with error message #{msg}"
-            render :partial => 'failed_payment'
-          end
-        else
-        #  @order.order.send_email
-          logger.info "Pay: booking successful, payment: cash"
-          render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order_form.pnr_number), :pnr_number => @order_form.pnr_number}
-        end
-      elsif msg = @order_form.errors[:pnr_number]
-        logger.info "Pay: booking failed with error message #{msg}"
-        render :partial => 'failed_booking'
-      else
-        logger.info "Pay: booking failed misteriously not giving an error message"
-      end
+    unless @order_form.valid?
+      logger.info "Pay: invalid order"
+      render :json => {:errors => @order_form.errors_hash}
       return
     end
-    logger.info "Pay: invalid order"
-    render :json => {:errors => @order_form.errors_hash}
-  end
 
-  def confirm_3ds
-    payment_id = params[:order_id].match(/\d+$/)[0]
-    pa_res = params['PaRes']
-    md = params['MD']
-    @payment = Payment.find_by_threeds_key(md)
-    @order = @payment.order if @payment
-    # FIXME сделать более внятное и понятное пользователю поведение
-    if @order && pa_res && md && (@order.payment_status == 'not blocked' || @order.payment_status == 'new') && @order.confirm_3ds(pa_res, md)
-      @order.money_blocked!
-      strategy = Strategy.new(:order => @order)
+    strategy = Strategy.new( :rec => @order_form.recommendation, :order_form => @order_form )
+
+    unless strategy.create_booking
+      render :partial => 'failed_booking'
+      return
+    end
+
+    unless @order_form.payment_type == 'card'
+      logger.info "Pay: booking successful, payment: cash"
+      render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order_form.pnr_number), :pnr_number => @order_form.pnr_number}
+      return
+    end
+
+    payture_response = @order_form.block_money
+
+    if payture_response.success?
+      @order_form.order.money_blocked!
+      logger.info "Pay: payment and booking successful"
 
       unless strategy.delayed_ticketing?
         logger.info "Pay: ticketing"
         unless strategy.ticket
           logger.info "Pay: ticketing failed"
-          @error_message = 'Не удалось выписать билет'
-          @order.unblock!
+          @order_form.order.unblock!
+          render :partial => 'failed_booking'
+          return
         end
       end
-    elsif ['blocked', 'charged'].include? @order.payment_status
+      render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order_form.pnr_number), :pnr_number => @order_form.pnr_number}
+
+    elsif payture_response.threeds?
+      logger.info "Pay: payment system requested 3D-Secure authorization"
+      render :partial => 'threeds', :locals => {:payture_response => payture_response}
+
+    else # payture_response failed
+      strategy.cancel
+      msg = @order_form.card.errors[:number]
+      logger.info "Pay: payment failed with error message #{msg}"
+      render :partial => 'failed_payment'
+    end
+  end
+
+  def confirm_3ds
+    pa_res, md = params['PaRes'], params['MD']
+    @payment = Payment.find_by_threeds_key(md)
+    unless @payment
+      render :status => :not_found
+      return
+    end
+
+    @order = @payment.order
+    if @order.ticket_status == 'canceled'
+      logger.info "Pay: booking canceled"
+      @error_message = :ticketing
+      return
+    end
+
+    case @order.payment_status
+    when 'not blocked', 'new'
+      unless @order.confirm_3ds(pa_res, md)
+        logger.info "Pay: problem confirming 3ds"
+        @error_message = :payment
+      else
+        @order.money_blocked!
+        strategy = Strategy.new(:order => @order)
+
+        unless strategy.delayed_ticketing?
+          logger.info "Pay: ticketing"
+
+          unless strategy.ticket
+            logger.info "Pay: ticketing failed"
+            @error_message = :ticketing
+            @order.unblock!
+          end
+        end
+      end
+    when 'blocked', 'charged'
+      # do nothing?
     else
-      logger.info "Pay: problem confirming 3ds"
-      @error_message = 'Не удалось оплатить билет'
+      logger.info "Pay: money unblocked?"
+      @error_message = :ticketing
     end
   end
 
