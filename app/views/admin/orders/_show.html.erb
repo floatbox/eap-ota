@@ -1,4 +1,4 @@
-<div id="term">Терминал: <pre><%= @item.raw %></pre></div>
+<div id="term">Терминал: <pre style="font-family: Monaco, monospace; line-height: 1.2"><%= @item.raw %></pre></div>
 <div id="payture">Платежная система: <%= @item.payment_state_raw %></div>
 <% if @item.code && @item.payment_status == 'not blocked' && @item.offline_booking? %>
 <div id="pay_url">
