@@ -50,7 +50,8 @@ class Admin::OrdersController < Admin::ResourcesController
   end
 
   def cancel
-    res = @order.cancel!
+    # может упасть и не изменить статус?
+    Strategy.new(:order => @order).cancel
     redirect_to :action => :show, :id => @order.id
   end
 

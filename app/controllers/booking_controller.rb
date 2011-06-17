@@ -42,16 +42,11 @@ class BookingController < ApplicationController
             @order_form.order.money_blocked!
             logger.info "Pay: payment and booking successful"
 
-            # FIXME не выносить в кронтаск. но, может быть, внести обратно в .ticket!
             unless strategy.delayed_ticketing?
               logger.info "Pay: ticketing"
-              # сейчас это делает Strategy
-              # @order.order.ticket!
-              unless strategy.ticket(@order_form.order)
+              unless strategy.ticket
                 logger.info "Pay: ticketing failed"
                 @order_form.order.unblock!
-                # это делает Strategy
-                # @order.order.cancel!
                 render :partial => 'failed_booking'
                 return
               end
@@ -61,7 +56,7 @@ class BookingController < ApplicationController
             logger.info "Pay: payment system requested 3D-Secure authorization"
             render :partial => 'threeds', :locals => {:order_id => @order_form.order.order_id, :payture_response => payture_response}
           else
-            @order_form.order.cancel!
+            strategy.cancel
             msg = @order_form.card.errors[:number]
             logger.info "Pay: payment failed with error message #{msg}"
             render :partial => 'failed_payment'
@@ -92,17 +87,14 @@ class BookingController < ApplicationController
     # FIXME сделать более внятное и понятное пользователю поведение
     if @order && pa_res && md && (@order.payment_status == 'not blocked' || @order.payment_status == 'new') && @order.confirm_3ds(pa_res, md)
       @order.money_blocked!
-      strategy = Strategy.new(:source => @order.source)
+      strategy = Strategy.new(:order => @order)
+
       unless strategy.delayed_ticketing?
         logger.info "Pay: ticketing"
-        # сейчас это делает Strategy
-        # @order.order.ticket!
-        unless strategy.ticket(@order)
+        unless strategy.ticket
           logger.info "Pay: ticketing failed"
           @error_message = 'Не удалось выписать билет'
           @order.unblock!
-          # это делает Strategy
-          # @order.cancel!
         end
       end
     elsif ['blocked', 'charged'].include? @order.payment_status

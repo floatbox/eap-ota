@@ -293,18 +293,8 @@ class Order < ActiveRecord::Base
     update_prices_from_tickets
   end
 
-  def cancel! # FIXME перенести в strategy
-    case source
-    when 'amadeus'
-      Amadeus.booking do |amadeus|
-        amadeus.pnr_cancel(:number => pnr_number)
-        update_attribute(:ticket_status, 'canceled')
-      end
-    when 'sirena'
-      Sirena::Service.new.payment_ext_auth(:cancel, pnr_number, sirena_lead_pass)
-      Sirena::Service.new.booking_cancel(pnr_number, sirena_lead_pass)
-      update_attribute(:ticket_status, 'canceled')
-    end
+  def cancel!
+    update_attribute(:ticket_status, 'canceled')
   end
 
   def send_email
@@ -339,7 +329,7 @@ class Order < ActiveRecord::Base
   def self.cancel_stale!
     stale.each do |order|
       puts "Automatic cancel of pnr #{order.pnr_number}"
-      order.cancel!
+      Strategy.new(:order => order).cancel
     end
   end
 

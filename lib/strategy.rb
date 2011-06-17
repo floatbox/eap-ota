@@ -16,7 +16,7 @@ class Strategy
 
   attr_writer :source
   def source
-    @source || @rec.source
+    @source || @rec.try(:source) || @order.try(:source)
   end
 
   # preliminary booking
@@ -162,6 +162,7 @@ class Strategy
           #amadeus.queue_place_pnr(:number => @order_form.pnr_number)
           # FIXME вынести в контроллер
           @order_form.save_to_order
+          @order = @order_form.order
 
           #Еще раз проверяем, что все сегменты доступны
           if amadeus.pnr_retrieve(:number => @order_form.pnr_number).all_segments_available?
@@ -171,7 +172,7 @@ class Strategy
 
             return @order_form.pnr_number
           else
-            @order_form.order.cancel!
+            cancel
             @order_form.errors.add :pnr_number, 'Компания не подтвердила места'
             return
           end
@@ -200,6 +201,7 @@ class Strategy
               @order_form.pnr_number = response.pnr_number
               @order_form.sirena_lead_pass = response.lead_family
               @order_form.save_to_order
+              @order = @order_form.order
             else
               @order_form.errors.add :pnr_number, 'Изменилась цена после тарификации'
               sirena.payment_ext_auth(:cancel, response.pnr_number, response.lead_family)
@@ -207,6 +209,7 @@ class Strategy
             end
           else
             @order_form.errors.add :pnr_number,  payment_query.error || 'Ошибка при тарицифировании PNR'
+            # заменить ли на Strategy#cancel?
             sirena.booking_cancel(response.pnr_number, response.lead_family)
           end
         end
@@ -247,7 +250,23 @@ class Strategy
   end
   private :set_people_numbers
 
-
+  # canceling
+  # ########
+  # FIXME обработать ошибки?
+  def cancel
+    case source
+    when 'amadeus'
+      Amadeus.booking do |amadeus|
+        amadeus.pnr_cancel(:number => @order.pnr_number)
+        @order.cancel!
+      end
+    when 'sirena'
+      sirena = Sirena::Service.new
+      sirena.payment_ext_auth(:cancel, @order.pnr_number, @order.sirena_lead_pass)
+      sirena.booking_cancel(@order.pnr_number, @order.sirena_lead_pass)
+      @order.cancel!
+    end
+  end
   # ticketing
   # #########
 
@@ -260,20 +279,21 @@ class Strategy
     end
   end
 
-  def ticket(order)
-    sirena = Sirena::Service.new
-    payment_confirm = sirena.payment_ext_auth(:confirm, order.pnr_number, order.sirena_lead_pass,
-                                      :cost => (order.price_fare + order.price_tax))
-    if payment_confirm.success?
-      order.ticket!
-      return true
-    else
-      #FIXME Отменять в случае exception
-      # FIXME Order#cancel! делает то же самое.
-      # sirena.payment_ext_auth(:cancel, order.pnr_number, order.sirena_lead_pass)
-      # we can't simply cancel order if it is in query
-      order.cancel!
-      return false
+  def ticket
+    case source
+    when 'amadeus'
+      raise 'Trying to ticket amadeus. why?'
+    when 'sirena'
+      sirena = Sirena::Service.new
+      payment_confirm = sirena.payment_ext_auth(:confirm, @order.pnr_number, @order.sirena_lead_pass,
+                                        :cost => (@order.price_fare + @order.price_tax))
+      if payment_confirm.success?
+        @order.ticket!
+        return true
+      else
+        cancel
+        return false
+      end
     end
   end
 end
