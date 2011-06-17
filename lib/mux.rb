@@ -119,8 +119,6 @@ class Mux
 
   def sirena_cleanup(recs)
     recs.delete_if(&:without_full_information?)
-    # временно выключаем потому что баг какой-то
-    recs.delete_if {|x| x.validating_carrier.iata == 'SU' || x.validating_carrier.iata == 'OK' }
   end
 
   def sirena_async_pricer(form, &block)
