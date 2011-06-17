@@ -25,6 +25,7 @@ module Sirena
     def send_request(*args)
       req = make_request(*args)
       req.perform
+      fix_encoding!(req.body_str)
       req.body_str
     ensure
       logger.info "#{self.class.name}: " + debug_easy(req)
@@ -38,6 +39,7 @@ module Sirena
       end
       req.on_success do |response|
         logger.info "#{self.class.name}: " + debug_easy(req)
+        fix_encoding!(req.body_str)
         block.call req.body_str
       end
       queue req
@@ -56,6 +58,11 @@ module Sirena
           'X-Priority' => (opts[:priority] || 0).to_s
         }
       curl
+    end
+
+    # for ruby1.9
+    def fix_encoding!(str)
+      str.force_encoding('utf-8') if str.respond_to?(:force_encoding)
     end
 
     def queue req

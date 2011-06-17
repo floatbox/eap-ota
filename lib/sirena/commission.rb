@@ -1,3 +1,4 @@
+# encoding: utf-8
 class Sirena::Commission
   include KeyValueInit
   cattr_accessor :commissions, :opts
