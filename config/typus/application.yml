@@ -147,7 +147,7 @@ Payment:
         created_at: long
   options:
     default_action_on_item: show
-  search: id
+  search: id_override, name_in_card
   relationships: order
   order_by: -created_at
   application: Orders

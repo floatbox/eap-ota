@@ -2,6 +2,11 @@ class Payment < ActiveRecord::Base
   belongs_to :order
   attr_reader :card
 
+  # для админки
+  def name
+    "#{ref} #{name_in_card} #{'%.2f' % price} #{payment_status}"
+  end
+
   def ref
     id_override || (Conf.payment.order_id_prefix + id.to_s)
   end

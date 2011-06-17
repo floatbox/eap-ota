@@ -15,7 +15,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def name
-    "#{number} #{route} #{updated_at}"
+    "#{source} #{number} #{route} #{updated_at}"
   end
 
 end
