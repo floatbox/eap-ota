@@ -3,6 +3,10 @@ module Sirena
 
   class Service
 
+    cattr_accessor :logger do
+      Rails.logger
+    end
+
     module Methods
 
       include NewRelic::Agent::MethodTracer
@@ -70,6 +74,7 @@ module Sirena
       end
 
       def log_request(name, request)
+        logger.info "Sirena::Service: #{name} started"
         open(debug_file, 'a') {|f|
           f.puts "==============="
           f.puts "Request: #{name}"
