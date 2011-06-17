@@ -153,7 +153,7 @@ class Strategy
           pricing = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).or_fail!
           @order_form.last_tkt_date = pricing.last_tkt_date
           unless [@rec.price_fare, @rec.price_tax] == pricing.prices
-            logger.error "Strategy::Amadeus: Изменилась цена при тарифицировании: #{pricing.prices}"
+            logger.error "Strategy::Amadeus: Изменилась цена при тарифицировании: #{@rec.price_fare}, #{@rec.price_tax} -> #{pricing.prices}"
             # не попытается ли сохранить бронь после выхода из блока?
             amadeus.pnr_cancel
             return
@@ -211,9 +211,8 @@ class Strategy
 
       logger.info "Strategy::Sirena: processing booking: #{response.pnr_number}"
 
-      if @rec.price_fare != response.price_fare ||
-         @rec.price_tax != response.price_tax
-        logger.error "Strategy::Sirena: price changed on booking"
+      unless [@rec.price_fare, @rec.price_tax] == [response.price_fare, response.price_tax]
+        logger.error "Strategy::Sirena: price changed on booking: #{@rec.price_fare}, #{@rec.price_tax} -> #{response.price_fare}, #{response.price_tax}"
         sirena.booking_cancel(response.pnr_number, response.lead_family)
         return
       end
@@ -230,7 +229,7 @@ class Strategy
       end
 
       unless payment_query.cost == @rec.price_fare + @rec.price_tax
-        logger.error "Strategy::Sirena: price changed on payment query #{payment_query.cost}"
+        logger.error "Strategy::Sirena: price changed on payment query: #{@rec.price_fare}, #{@rec.price_tax} -> #{payment_query.cost}"
         sirena.payment_ext_auth(:cancel, response.pnr_number, response.lead_family)
         sirena.booking_cancel(response.pnr_number, response.lead_family)
         return
