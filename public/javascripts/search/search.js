@@ -292,82 +292,91 @@ validate: function(qkey) {
     var restoreResults = Boolean(qkey);
     this.submit.addClass('validating');
     this.smessage.find('.ssm-content').html('Проверка введенных данных…');
-    this.request = $.get('/pricer/validate/', data, function(result, status, request) {
-        if (request != self.request) {
-            return;
-        }
-        if (data.query_key && result.search) {
-            self.preventValidation = true;
-            self.restore(result.search);
-            setTimeout(function() {
-                self.preventValidation = false;
-            }, 1000);
-            self.apply(result.search.complex_to_parse_results || {});
-        } else {
-            self.apply(result.complex_to_parse_results || {});
-        }
-        self.submit.removeClass('current validating');
-        if (restoreResults && self.calendar.selected.length === 0) {
-            $('#promo').removeClass('latent');
-            self.live.toggle(true);
-        } else if (result.valid) {
-            results.nextUpdate = {
-                title: result.human
-            };
-            results.nextUpdate.params = {
-                query_key: result.query_key || data.query_key
-            };
-            self.smessage.stop().hide();
-            if (restoreResults) {
-                self.calendar.scroller.scrollToSelected();
-                if (result.fragment_exist) {
-                    results.nextUpdate.params.restore_results = true;
-                }
-                results.load();
-                results.show();
-            } else {
-                self.toggle(true);
-                if (typeof self.onValid === 'function') {
-                    self.onValid();
-                }
+    this.request = $.ajax({
+        method: 'GET',
+        url: '/pricer/validate/',
+        data: data,
+        success: function(result, status, request) {
+            if (request != self.request) {
+                return;
             }
-        } else {
-            delete results.nextUpdate;
-            if (result.errors) {
-                for (var i = 0, im = result.errors.length; i < im; i++) {
-                    var text, error = result.errors[i][0];
-                    if (error) {
-                        switch (error.split('_')[0]) {
-                        case 'date':
-                            text = 'Выберите, пожалуйста, дату вылета';
-                            if (self.mode === 'rt' && i === 1) {
-                                text = 'Выберите, пожалуйста, дату обратного вылета';
-                            } else if (self.mode === 'dw' || self.mode === 'tw') {
-                                var segment = result.search.form_segments[i];
-                                var sf = segment.from_as_object && (segment.from_as_object.proper_from || segment.from_as_object.morpher_from);
-                                var st = segment.to_as_object && (segment.to_as_object.proper_to || segment.to_as_object.morpher_to);
-                                if (sf) text += ' ' + sf.replace(/ /, '&nbsp;');
-                                if (st) text += ' ' + st.replace(/ /, '&nbsp;');
+            if (data.query_key && result.search) {
+                self.preventValidation = true;
+                self.restore(result.search);
+                setTimeout(function() {
+                    self.preventValidation = false;
+                }, 1000);
+                self.apply(result.search.complex_to_parse_results || {});
+            } else {
+                self.apply(result.complex_to_parse_results || {});
+            }
+            self.submit.removeClass('current validating');
+            if (restoreResults && self.calendar.selected.length === 0) {
+                $('#promo').removeClass('latent');
+                self.live.toggle(true);
+            } else if (result.valid) {
+                results.nextUpdate = {
+                    title: result.human
+                };
+                results.nextUpdate.params = {
+                    query_key: result.query_key || data.query_key
+                };
+                self.smessage.stop().hide();
+                if (restoreResults) {
+                    self.calendar.scroller.scrollToSelected();
+                    if (result.fragment_exist) {
+                        results.nextUpdate.params.restore_results = true;
+                    }
+                    results.load();
+                    results.show();
+                } else {
+                    self.toggle(true);
+                    if (typeof self.onValid === 'function') {
+                        self.onValid();
+                    }
+                }
+            } else {
+                delete results.nextUpdate;
+                if (result.errors) {
+                    for (var i = 0, im = result.errors.length; i < im; i++) {
+                        var text, error = result.errors[i][0];
+                        if (error) {
+                            switch (error.split('_')[0]) {
+                            case 'date':
+                                text = 'Выберите, пожалуйста, дату вылета';
+                                if (self.mode === 'rt' && i === 1) {
+                                    text = 'Выберите, пожалуйста, дату обратного вылета';
+                                } else if (self.mode === 'dw' || self.mode === 'tw') {
+                                    var segment = result.search.form_segments[i];
+                                    var sf = segment.from_as_object && (segment.from_as_object.proper_from || segment.from_as_object.morpher_from);
+                                    var st = segment.to_as_object && (segment.to_as_object.proper_to || segment.to_as_object.morpher_to);
+                                    if (sf) text += ' ' + sf.replace(/ /, '&nbsp;');
+                                    if (st) text += ' ' + st.replace(/ /, '&nbsp;');
+                                }
+                                break;
+                            case 'from':
+                                text = 'Введите, пожалуйста, пункт отправления';
+                                break;
+                            case 'to':
+                                text = 'Введите, пожалуйста, пункт назначения';
+                                break;
                             }
-                            break;
-                        case 'from':
-                            text = 'Введите, пожалуйста, пункт отправления';
-                            break;
-                        case 'to':
-                            text = 'Введите, пожалуйста, пункт назначения';
+                            self.smessage.find('.ssm-content').html(text);
                             break;
                         }
-                        self.smessage.find('.ssm-content').html(text);
-                        break;
                     }
                 }
             }
-        }
-        this.toValues = [];
-        if (result.search && result.search.form_segments) {
-            self.applySegments(result.search.form_segments);
-        }
-        delete self.request;
+            this.toValues = [];
+            if (result.search && result.search.form_segments) {
+                self.applySegments(result.search.form_segments);
+            }
+            delete self.request;
+        },
+        error: function() {
+            self.submit.removeClass('validating');
+        },
+        timeout: 15000
     });
 },
 applySegments: function(segments) {
