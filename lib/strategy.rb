@@ -138,7 +138,7 @@ class Strategy
             pricing = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).or_fail!
             @order_form.last_tkt_date = pricing.last_tkt_date
             unless [@rec.price_fare, @rec.price_tax] == pricing.prices
-              @order_form.errors.add :pnr_number, 'Ошибка при создании PNR'
+              @order_form.errors.add :pnr_number, 'Изменилась цена при тарифицировании'
               amadeus.pnr_cancel
               return
             end
@@ -172,13 +172,13 @@ class Strategy
             return @order_form.pnr_number
           else
             @order_form.order.cancel!
-            @order_form.errors.add :pnr_number, 'Ошибка при создании PNR'
+            @order_form.errors.add :pnr_number, 'Компания не подтвердила места'
             return
           end
         else
           # при сохранении случилась какая-то ошибка, номер брони не выдан.
           amadeus.pnr_ignore
-          @order_form.errors.add :pnr_number, 'Ошибка при создании PNR'
+          @order_form.errors.add :pnr_number, 'Ошибка при сохранении PNR'
           return
         end
       end
