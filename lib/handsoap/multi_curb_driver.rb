@@ -40,7 +40,7 @@ module Handsoap
       # returns Curl::Err::* and message
       req.on_failure do |klass, msg|
         logger.info "#{self.class.name}: " + debug_easy(req)
-        deffered.trigger_errback [klass, msg]
+        deferred.trigger_errback [klass, msg]
       end
       req.on_success do
         logger.info "#{self.class.name}: " + debug_easy(req)
