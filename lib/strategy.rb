@@ -4,7 +4,7 @@ class Strategy
 
   include KeyValueInit
 
-  attr_accessor :rec, :search
+  attr_accessor :rec, :search, :order
 
   cattr_accessor :dropped_recommendations_logger do
     ActiveSupport::BufferedLogger.new(Rails.root + 'log/dropped_recommendations.log')
