@@ -55,7 +55,7 @@ module Amadeus
 
     # FIXME fucking awesome! AREL simply ignores "limit 1" from some version above
     # free.limit(1).update_all(:booking => booking)
-    update_all( "booking = #{booking} WHERE #{free.where_values} LIMIT 1" )
+    update_all( "booking = #{booking} WHERE #{free.where_values.join ' AND '} LIMIT 1" )
 
     session = find_by_booking(booking)
     unless session
