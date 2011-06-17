@@ -15,6 +15,7 @@
     <div class="payment">
 
 <div class="booking-form">
+<% if @card %>
 <%= form_for @card, :as => :card, :url => edit_payment_url(:code=> @order.code), :html => { :autocomplete => "off" } do |f| %>
     <h3><%= @order.description %></h3>
     <div class="section booking-card">
@@ -44,6 +45,10 @@
             <ul class="be-list"></ul>
         </div>
     </div>
+<% end %>
+<% else %>
+    <h3><%= @order.description %></h3>
+    <div>Платеж уже обработан.</div>
 <% end %>
 </div>
 
