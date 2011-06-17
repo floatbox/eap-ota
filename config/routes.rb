@@ -12,7 +12,7 @@ Eviterra::Application.routes.draw do
   post 'booking/pay' => 'booking#pay', :as => :booking_pay
   # FIXME сделать POST однажды
   match 'booking/preliminary_booking' => 'booking#preliminary_booking', :as => :preliminary_booking
-  match '/confirm_3ds/:order_id' => 'booking#confirm_3ds', :as => :confirm_3ds
+  match '/confirm_3ds/(:order_id)' => 'booking#confirm_3ds', :as => :confirm_3ds
   match 'order/:id' => 'PNR#show', :as => :show_order
   match 'order/:id/receipt' => 'PNR#receipt', :as => :show_order_receipt
   match '/pay/:code' => 'payments#edit', :via => :get, :as => :edit_payment
