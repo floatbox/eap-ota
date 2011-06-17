@@ -2,10 +2,7 @@
 class PaymentsController < ApplicationController
 
   def edit
-    unless params[:code] and @order = Order.where(:offline_booking => true, :code => params[:code]).first
-      render :status => :not_found
-      return
-    end
+    @order = Order.where(:offline_booking => true).find_by_code!( params[:code].presence || 'not specified' )
 
     if @order.payment_status == 'not blocked'
       @card = CreditCard.new
@@ -13,10 +10,7 @@ class PaymentsController < ApplicationController
   end
 
   def update
-    unless params[:code] and @order = Order.where(:offline_booking => true, :code => params[:code]).first
-      render :status => :not_found
-      return
-    end
+    @order = Order.where(:offline_booking => true).find_by_code!( params[:code].presence || 'not specified' )
 
     unless @order.payment_status == 'not blocked'
       render :partial => 'success'
