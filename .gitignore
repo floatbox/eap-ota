@@ -15,6 +15,7 @@ public/system
 rerun.txt
 *.swp
 .idea
+.powrc
 .com.*
 config/local.yml
 config/local
