@@ -37,7 +37,7 @@ Carrier:
   order_by: en_shortname, ru_shortname
   relationships: country, alliance, gds, consolidator
   filters: country, gds, consolidator
-  search: ru_shortname, ru_longname, en_shortname, en_longname, iata
+  search: ru_shortname, ru_longname, en_shortname, en_longname, ^iata
   application: Base
 
 Airplane:
@@ -51,7 +51,7 @@ Airplane:
   order_by: name_ru
   relationships:
   filters: engine_type
-  search: iata, name_ru, name_en
+  search: ^iata, name_ru, name_en
   application: Base
 
 Airport:
@@ -65,7 +65,7 @@ Airport:
   order_by: name_ru
   relationships: city, country, geo_tags
   filters:
-  search: name_ru, name_en, iata, synonym_list
+  search: name_ru, name_en, ^iata, synonym_list
   actions:
     index: update_completer
   application: Geo
@@ -83,7 +83,7 @@ City:
   order_by: name_ru
   relationships: airports, country, geo_tags, region
   filters: country
-  search: name_ru, name_en, iata, synonym_list
+  search: name_ru, name_en, ^iata, synonym_list
   actions:
     index: update_completer
   application: Geo
@@ -104,7 +104,7 @@ Order:
         updated_at: long
         last_pay_time: long
   order_by: -created_at
-  search: pnr_number, email, phone
+  search: ^pnr_number, email, phone
   options:
     default_action_on_item: show
     action_after_save: show
@@ -134,7 +134,7 @@ Ticket:
   relationships: order
   application: Orders
   export: csv
-  search: number
+  search: ^number
 
 
 Payment:
@@ -147,7 +147,7 @@ Payment:
         created_at: long
   options:
     default_action_on_item: show
-  search: id_override, name_in_card
+  search: =id_override, =id, name_in_card
   relationships: order
   order_by: -created_at
   application: Orders
@@ -183,7 +183,7 @@ HotOffer:
     default_action_on_item: show
   order_by: price_variation
   relationships: destination
-  search: description, url
+  search: description, ^url
   filters: created_at
   application: Hot Offers
 

@@ -1,10 +1,11 @@
+# encoding: utf-8
 class Payment < ActiveRecord::Base
   belongs_to :order
   attr_reader :card
 
   # для админки
-  def name
-    "#{ref} #{name_in_card} #{'%.2f' % price} #{payment_status}"
+  def to_label
+    "#{ref} #{name_in_card} #{'%.2f' % price} р. #{payment_status}"
   end
 
   def ref
