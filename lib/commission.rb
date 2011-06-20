@@ -580,19 +580,19 @@ example 'rovfru/business'
 example 'frurov/business'
 example 'rovfru/business frurov/business'
 agent "На период с 15.06.11г. по 31.07.211г. 10% от опубл. тарифов по маршруту Ростов-на-Дону–Бишкек–Ростов-на-Дону от суммы тарифов эконом и бизнес классов"
-subagent "6,3% от опубл. тарифов бизнес класса на собств. рейсы D9"
+subagent "На период с 15.06.11г. по 31.07.211г. 8% от опубл. тарифов по маршруту Ростов-на-Дону– Бишкек–Ростов-на-Дону от суммы тарифов эконом и бизнес классов"
 classes :business
 check { city_iatas.first == 'ROV' && city_iatas.include?('FRU') || city_iatas.first == 'FRU' && city_iatas.include?('ROV')}
-commission "10%/6.3%"
+commission "10%/8%"
 
 example 'rovfru frurov/economy'
 example 'rovfru/economy'
 example 'frurov/economy'
 agent "На период с 15.06.11г. по 31.07.211г. 10% от опубл. тарифов по маршруту Ростов-на-Дону–Бишкек–Ростов-на-Дону от суммы тарифов эконом и бизнес классов"
-subagent "5% от опубл. тарифов эконом класса на собств. рейсы D9"
+subagent "На период с 15.06.11г. по 31.07.211г. 8% от опубл. тарифов по маршруту Ростов-на-Дону– Бишкек–Ростов-на-Дону от суммы тарифов эконом и бизнес классов"
 classes :economy
 check { city_iatas.first == 'ROV' && city_iatas.include?('FRU') || city_iatas.first == 'FRU' && city_iatas.include?('ROV')}
-commission "10%/5%"
+commission "10%/8%"
 
 example 'svocdg/economy'
 agent    "7% от опубл. тарифов эконом класса на собств. рейсы D9"
@@ -948,7 +948,7 @@ subagent "5% от опубл. тарифов на совбств. рейсы HX"
 classes :business
 subclasses "CDJ"
 important!
-commission "15%/5%"
+commission "15%/12%"
 
 example 'svocdg'
 agent    "7% от всех опубл. тарифов на собств.рейсы HX (В договоре Interline не прописан.)"
@@ -2237,19 +2237,29 @@ commission "1/0.05"
 carrier "9U", "Air Moldova"
 ########################################
 
+example 'dmekiv'
 agent "5 (пять) % от всех опубликованных тарифов."
-subagent ""
-disabled
-commission "5%/1"
+subagent "3% от опубл. тарифов на рейсы 9U"
+commission "5%/3%"
 
 carrier "A9", "GEORGIAN AIRWAYS"
 ########################################
 
+example 'tbsdme'
 agent "8 (восемь) % от опубл. тарифа на собств. рейсы авиакомпании А9;"
+subagent "6 % от опубл. тарифа на собств. рейсы А9;"
+commission "8%/6%"
+
+example 'tbsdme dmetbs/ab'
 agent "7 (семь)  % от опубл. тарифа по маршрутам со сквозными тарифами, включающими участок авиакомпании  А9 и авиакомпаний, с которыми А9 имеет Интерлайн-Соглашение;"
+subagent "5 % от опубл. тарифа по маршрутам со сквозными тарифами, включающими участок авиакомпании А9 и авиакомпаний, с которыми А9 имеет Интерлайн-Соглашение"
+interline :yes
+commission "7%/5%"
+
+example 'dmetbs/ab'
 agent "5 (пять)   % от опубл. тарифа на рейсы Interline без участка А9."
-subagent ""
-disabled
-commission "0/0"
+subagent "3 % от опубл. тарифа на рейсы Interline без участка А9."
+interline :absent
+commission "5%/3%"
 
 end
