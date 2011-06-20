@@ -4,6 +4,14 @@ class HotOffer < ActiveRecord::Base
   belongs_to :destination
   before_create :set_some_vars
 
+  def self.featured code=nil
+    # FIXME SQL group_by не был бы лучше?
+    offers = where("for_stats_only = ? AND price_variation < 0", false).order('created_at DESC').limit(30)
+    # эта строчка, видимо, не используется
+    offers = offers.where("code != ?", code) if code
+    offers.all.group_by(&:destination_id).values.every.first
+  end
+
   def clickable_url
     "<a href=#{url}>#{url}</a>".html_safe
   end

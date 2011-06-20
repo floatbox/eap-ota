@@ -16,9 +16,9 @@ class PricerController < ApplicationController
     render :partial => 'recommendations'
   end
 
-  # FIXME rewrite (and check!) this shit
   def hot_offers
-    render :json => HotOffer.find(:all, :conditions => ["code != ? AND for_stats_only = ? AND price_variation < 0", params[:query_key].to_s, false], :limit => 30, :order => 'created_at DESC').group_by(&:destination_id).values.every.first
+    # FIXME а когда здесь параметр должен был случаться?
+    render :json => HotOffer.featured(params[:query_key])
   end
 
   def calendar
