@@ -416,13 +416,23 @@ booking.form.initPerson = function(el) {
         unreal: 'Указана несуществующая дата в {сроке действия} документа',
         past: 'Указан истекший {срок действия} документа'
     });
-    el.find('.bp-docexp input:checkbox').click(function() {
-        pdate.disabled = $(this).get(0).checked;
-        $(this).closest('td').toggleClass('disabled', pdate.disabled);
+    var toggleExp = function() {
+        pdate.disabled = docexp.get(0).checked;
+        docexp.closest('td').toggleClass('disabled', pdate.disabled);
         pdate.el.each(function() {
             this.disabled = pdate.disabled;
         });
         pdate.validate();
+    };
+    var docexp = el.find('.bp-docexp input:checkbox').click(toggleExp);
+    var nationality = el.find('.nationality');
+    passport.el.bind('keyup propertychange input', function() {
+        var value = $(this).val().replace(/\D/g, '');
+        var noexp = docexp.get(0);
+        if (!noexp.checked && value.length === 10 && nationality.val() === '170') {
+            noexp.checked = true;
+            toggleExp();
+        }
     });
     var bonus = validator.number(el.find('input[id^="bonus-num"]'), {
         empty: 'Не указан {номер бонусной карты}',
@@ -441,7 +451,6 @@ booking.form.initPerson = function(el) {
             bonus.el.focus();
         }
         bonus.validate();
-
     }).get(0).checked);
     this.sections.push({
         el: el,

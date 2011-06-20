@@ -191,7 +191,7 @@ load: function() {
         },
         timeout: 60000
     });
-    
+
     // Сбрасываем неактуальный адрес страницы
     if (pageurl.search !== params.query_key) {
         pageurl.update('search', undefined);
@@ -205,6 +205,9 @@ load: function() {
         self.setUpdate('mcontent', '');
     }, 160000);
 
+    if (window._gaq) {
+        _gaq.push(['_trackPageview', '/#' + params.query_key + '/loading']);
+    }
 },
 setUpdate: function(type, s) {
     this.update[type] = typeof s == 'string' ? s : '';

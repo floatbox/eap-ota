@@ -2,7 +2,7 @@
 module PricerHelper
 
   def nbsp(string)
-    html_escape(string).gsub(/ +/, '&nbsp;'.html_safe)
+    html_escape(string).gsub(/ +/, '&nbsp;').html_safe
   end
 
   def human_duration(duration)

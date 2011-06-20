@@ -14,7 +14,7 @@
 
 <tbody class="summary">
 <% variant_carriers = primary_operating_carriers(variant) %>
-<% common_carrier = variant_carriers.first if variant_carriers.uniq.one? %>
+<% common_carrier = variant_carriers.first if variant.segments.length > 1 && variant_carriers.uniq.one? %>
 <% variant.segments.each_with_index do |segment, segment_counter| %>
 <tr class="segment-<%= segment_counter + 1 %>">
     <% if common_carrier %>
