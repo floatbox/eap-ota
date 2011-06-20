@@ -206,7 +206,7 @@ load: function() {
     }, 160000);
 
     if (window._gaq) {
-        _gaq.push(['_trackPageview', '/#' + params.query_key + '/loading']);
+        _gaq.push(['_trackPageview', '/#loading']);
     }
 },
 setUpdate: function(type, s) {
