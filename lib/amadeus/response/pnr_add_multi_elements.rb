@@ -16,8 +16,10 @@ module Amadeus
       end
 
       def success?
-        xpath('//r:generalErrorInfo/r:messageErrorInformation/r:errorDetail[r:qualifier="EC"]').empty?
+        xpath('//r:generalErrorInfo/r:messageErrorInformation/r:errorDetail[r:qualifier="EC"]').empty? &&
+          xpath('//r:nameError/r:nameErrorInformation/r:errorDetail[r:qualifier="EC"]').empty?
       end
     end
   end
 end
+

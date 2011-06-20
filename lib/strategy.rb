@@ -132,7 +132,18 @@ class Strategy
           :recommendation => @rec
         ).or_fail!
 
-        add_multi_elements = amadeus.pnr_add_multi_elements(@order_form).or_fail!
+        add_multi_elements = amadeus.pnr_add_multi_elements(@order_form)
+        unless add_multi_elements.success?
+          if add_multi_elements.pnr_number
+            logger.error "Strategy::Amadeus: номер брони есть, но возникла какая-то ошибка"
+            amadeus.pnr_cancel
+          else
+            logger.error "Strategy::Amadeus: Не получили номер брони"
+            amadeus.pnr_ignore
+          end
+          return
+        end
+
         unless @order_form.pnr_number = add_multi_elements.pnr_number
           # при сохранении случилась какая-то ошибка, номер брони не выдан.
           logger.error "Strategy::Amadeus: Не получили номер брони"
