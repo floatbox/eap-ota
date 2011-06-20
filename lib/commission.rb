@@ -935,15 +935,24 @@ disabled
 carrier "HX", "Hong Kong Airlines"
 ########################################
 
+example 'dmehkg hkgdme/ab'
+agent "7% от всех опубликованных тарифов на собственные рейсы HX  и рейсы Interline с участком HX (в/из России). (Без участка HX    интерлайн выписывать запрещено!)"
+subagent "5% от опубл. тарифов на совбств. рейсы HX"
+check { country_iatas.include?('RU') }
+interline :yes
+commission "7%/5%"
+
+example 'SVOHKG/BUSINESS/J HKGSVO/BUSINESS/J'
+agent "C 15.06.11г. 15% от опубликованных тарифов Бизнес класса (RBD: C,D,J) на собственные рейсы HX (RT или OW)."
+subagent "5% от опубл. тарифов на совбств. рейсы HX"
+classes :business
+subclasses "CDJ"
+important!
+commission "15%/5%"
+
 example 'svocdg'
 agent    "7% от всех опубл. тарифов на собств.рейсы HX (В договоре Interline не прописан.)"
 subagent "5% от опубл. тарифов на собств.рейсы HX"
-commission "7%/5%"
-
-example 'cdgsvo svocdg/ab'
-agent "1р Interline не прописан"
-subagent "0р Interline не прописан"
-interline :unconfirmed
 commission "7%/5%"
 
 carrier "HY", "UZBEKISTAN AIRWAYS (Узбекистон Хаво Йуллари) (НЕ BSP!!!)"
