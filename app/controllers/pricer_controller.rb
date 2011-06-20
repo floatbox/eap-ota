@@ -16,6 +16,7 @@ class PricerController < ApplicationController
     render :partial => 'recommendations'
   end
 
+  # FIXME rewrite (and check!) this shit
   def hot_offers
     render :json => HotOffer.find(:all, :conditions => ["code != ? AND for_stats_only = ? AND price_variation < 0", params[:query_key].to_s, false], :limit => 30, :order => 'created_at DESC').group_by(&:destination_id).values.every.first
   end
@@ -32,6 +33,8 @@ class PricerController < ApplicationController
   def validate
     if @query_key = params[:query_key]
       @search = PricerForm.load_from_cache(@query_key)
+      # для log_partner
+      session[:partner] = @search.partner if @search.partner
       set_search_context
       fragment_exist =
         fragment_exist?([:pricer, @query_key]) &&
