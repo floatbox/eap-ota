@@ -19,7 +19,8 @@ class Segment
     flights[0...-1].map(&:arrival)
   end
 
-  attr_accessor :flights, :eft
+  attr_accessor :flights
+  attr_writer :total_duration
 
   def time_to_day_part(time) #в данном случае time - строка
     case time
@@ -59,9 +60,7 @@ class Segment
   end
 
   def total_duration
-    #(arrival_datetime_utc.to_i - departure_datetime_utc.to_i) / 60 rescue 0
-    # estimated flight time!
-    eft[0,2].to_i*60 + eft[2,2].to_i
+    @total_duratin ||= ((arrival_datetime_utc.to_i - departure_datetime_utc.to_i) / 60 rescue 0)
   end
 
   def layover_count
