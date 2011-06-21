@@ -21,12 +21,12 @@ describe Sirena::Response::Pricing do
 
       context "first segment" do
         subject { response.recommendations.first.segments.first }
-        its(:total_duration) {should == 140}
+        its(:total_duration) {should == 135}
       end
 
       context "first flight" do
         subject { response.recommendations.first.flights.first }
-        its(:duration) {should == 140}
+        its(:duration) {should == 135}
       end
     end
   end
@@ -46,12 +46,12 @@ describe Sirena::Response::Pricing do
 
       context "first segment" do
         subject { response.recommendations.first.segments.first }
-        its(:total_duration) {should == 140}
+        its(:total_duration) {should == 375}
       end
 
       context "first flight" do
         subject { response.recommendations.first.flights.first }
-        its(:duration) {should == 140}
+        its(:duration) {should == 365}
       end
     end
   end
