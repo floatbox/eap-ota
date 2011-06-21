@@ -3,27 +3,57 @@ require 'spec_helper'
 
 describe Sirena::Response::Pricing do
 
-  subject { described_class.new( File.read(response) ) }
+  let(:response) { described_class.new( File.read(xml) ) }
 
-  describe 'with one adult, two way' do
+  context 'with one adult, two way' do
 
-    let(:response) { 'spec/sirena/xml/pricing_two_way.xml' }
+    let(:xml) { 'spec/sirena/xml/pricing_two_way.xml' }
+    subject {response}
 
     it { should be_success }
     it { should have(4).recommendations }
-    specify { subject.recommendations.first.sirena_blank_count.should == 1 }
-    specify { subject.recommendations.first.cabins.should == ['Y', 'Y']}
+
+    context "first recommendation" do
+      subject {response.recommendations.first}
+
+      its(:sirena_blank_count) {should == 1}
+      its(:cabins) {should == ['Y', 'Y']}
+
+      context "first segment" do
+        subject { response.recommendations.first.segments.first }
+        its(:total_duration) {should == 140}
+      end
+
+      context "first flight" do
+        subject { response.recommendations.first.flights.first }
+        its(:duration) {should == 140}
+      end
+    end
   end
 
-  describe 'ITK-AER' do
+  context 'ITK-AER' do
 
-    let(:response) { 'spec/sirena/xml/pricing_ITK_AER.xml' }
+    let(:xml) { 'spec/sirena/xml/pricing_ITK_AER.xml' }
+    subject {response}
 
     it { should be_success }
-    # recommendation в единственном числе - другой метод
     it { should have(1).recommendations }
-    specify { subject.recommendations.first.sirena_blank_count.should == 4 }
-    specify { subject.recommendations.first.cabins.should == %W[Y Y Y Y] }
+
+    context "first recommendation" do
+      subject {response.recommendations.first}
+      its(:sirena_blank_count) {should == 4}
+      its(:cabins) {should == ['Y', 'Y', 'Y', 'Y']}
+
+      context "first segment" do
+        subject { response.recommendations.first.segments.first }
+        its(:total_duration) {should == 140}
+      end
+
+      context "first flight" do
+        subject { response.recommendations.first.flights.first }
+        its(:duration) {should == 140}
+      end
+    end
   end
 end
 
