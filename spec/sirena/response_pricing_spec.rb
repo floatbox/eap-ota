@@ -18,6 +18,7 @@ describe Sirena::Response::Pricing do
 
       its(:sirena_blank_count) {should == 1}
       its(:cabins) {should == ['Y', 'Y']}
+      its(:booking_classes) {should == ['Y', 'Y']}
 
       context "first segment" do
         subject { response.recommendations.first.segments.first }
@@ -28,6 +29,14 @@ describe Sirena::Response::Pricing do
         subject { response.recommendations.first.flights.first }
         its(:duration) {should == 75}
       end
+    end
+
+    context "second recommendation" do
+      subject {response.recommendations[1]}
+
+      its(:sirena_blank_count) {should == 1}
+      its(:cabins) {should == ['Y', 'Y']}
+      its(:booking_classes) {should == ['M', 'Y']}
     end
   end
 
@@ -41,16 +50,23 @@ describe Sirena::Response::Pricing do
 
     context "first recommendation" do
       subject {response.recommendations.first}
+      it {should have(2).variants}
       its(:sirena_blank_count) {should == 4}
       its(:cabins) {should == ['Y', 'Y', 'Y', 'Y']}
+      its(:booking_classes) {should == ['H', 'H', 'H', 'H']}
 
       context "first segment" do
-        subject { response.recommendations.first.segments.first }
+        subject { response.recommendations.first.variants.first.segments[0] }
         its(:total_duration) {should == 675}
       end
 
+      context "second segment" do
+        subject { response.recommendations.first.variants.first.segments[1] }
+        its(:total_duration) {should == 615}
+      end
+
       context "first flight" do
-        subject { response.recommendations.first.flights.first }
+        subject { response.recommendations.first.variants.first.flights.first }
         its(:duration) {should == 365}
       end
     end
