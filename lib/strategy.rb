@@ -173,6 +173,7 @@ class Strategy
           unless TimeChecker.ok_to_sell(@rec.dept_date, @rec.last_tkt_date)
             logger.error 'Strategy: time criteria for last tkt date missed'
             dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
+            amadeus.pnr_cancel
             return
           end
 
