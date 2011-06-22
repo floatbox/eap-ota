@@ -44,19 +44,25 @@ module Sirena
       end
       add_method_tracer :action, 'Custom/Sirena/http'
 
-      # FIXME вернуть поддержку fake
-      def async_action(name, *params, &block)
+      def async_action(name, *params, &on_success)
         request = Sirena::Request.for(name).new(*params)
         request_body = request.render
-        log_request(name, request_body)
-        driver.send_request_async(
-          request_body,
-          :encrypt => request.encrypt?,
-          :timeout => request.timeout,
-          :priority => request.priority
-        ) do |response|
-          log_response(name, response)
-          block.call request.process_response(response)
+
+        if Conf.sirena.fake
+          response_body = read_latest_xml(name)
+          on_success.call( request.process_response(response_body) )
+
+        else
+          log_request(name, request_body)
+          driver.send_request_async(
+            request_body,
+            :encrypt => request.encrypt?,
+            :timeout => request.timeout,
+            :priority => request.priority
+          ) do |response_body|
+            log_response(name, response_body)
+            on_success.call( request.process_response(response_body) )
+          end
         end
       end
 

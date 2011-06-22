@@ -32,6 +32,11 @@ class ApplicationController < ActionController::Base
 
   before_filter :set_locale
 
+  def log_partner
+    logger.info "API::Partner: #{session[:partner]}" if session[:partner]
+  end
+  after_filter :log_partner
+
   ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
     html_tag
   end

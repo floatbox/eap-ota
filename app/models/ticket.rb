@@ -14,7 +14,8 @@ class Ticket < ActiveRecord::Base
     price_fare + price_tax + price_consolidator_markup - price_share
   end
 
-  def name
+  # для админки
+  def to_label
     "#{source} #{number} #{route} #{updated_at}"
   end
 

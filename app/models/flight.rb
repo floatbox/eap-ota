@@ -98,7 +98,7 @@ class Flight
       fl.departure_iata,
       fl.arrival_iata,
       fl.departure_date ) =
-      /^(?: (..) : )? (..) (\d+) (...) (...) (\d{6})$/x.match(code.mb_chars).captures
+      /^(?: (..) : )? (..) (\d+) (...) (...) (\d{6})$/x.match(code).captures
     fl.operating_carrier_iata ||= fl.marketing_carrier_iata
     fl
   end

@@ -68,8 +68,10 @@ module Amadeus
       def flight_indexes
         @flight_indexes ||= xpath('//r:flightIndex').map do |flight_index|
           flight_index.xpath('r:groupOfFlights').map do |group|
+            # 0130 for 1 hour 30 minutes
+            estimated_flight_time = group.xpath("r:propFlightGrDetail/r:flightProposal[r:unitQualifier='EFT']/r:ref").to_i
             Segment.new(
-              :eft => group.xpath("r:propFlightGrDetail/r:flightProposal[r:unitQualifier='EFT']/r:ref").to_s,
+              :total_duration => (estimated_flight_time / 100 * 60 + estimated_flight_time % 100),
               :flights => group.xpath("r:flightDetails/r:flightInformation").map { |fi| parse_flight(fi) }
             )
           end

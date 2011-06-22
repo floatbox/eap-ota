@@ -88,26 +88,33 @@ module Amadeus
     request.process_response(xml_response)
   end
 
-  def invoke_async_request request, &callback
+  def invoke_async_request request, &on_success
     Rails.logger.info "Amadeus::Service: #{request.action} async queued"
     invoke_opts = {}
     invoke_opts[:soap_action] = request.soap_action
     invoke_opts[:soap_header] = {'SessionId' => session.session_id}
 
-    callbacks = Proc.new do |deffered|
-      deffered.callback &callback
-      deffered.errback do |err|
-        Rails.logger.error "Amadeus::Service: async: #{err.inspect}"
-      end
-    end
+    if Conf.amadeus.fake
+      xml_string = read_latest_xml(request.action)
+      xml_response = parse_string(xml_string)
+      on_success.call( request.process_response(xml_response) )
 
-    async(callbacks) do |dispatcher|
-      dispatcher.request(request.action, invoke_opts) do |body|
-        body.set_value request.soap_body, :raw => true
+    else
+      callbacks = Proc.new do |deffered|
+        deffered.callback &on_success
+        deffered.errback do |err|
+          Rails.logger.error "Amadeus::Service: async: #{err.inspect}"
+        end
       end
-      dispatcher.response do |xml_response|
-        session.increment
-        request.process_response(xml_response)
+
+      async(callbacks) do |dispatcher|
+        dispatcher.request(request.action, invoke_opts) do |body|
+          body.set_value request.soap_body, :raw => true
+        end
+        dispatcher.response do |xml_response|
+          session.increment
+          request.process_response(xml_response)
+        end
       end
     end
   end

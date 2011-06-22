@@ -38,7 +38,7 @@ module Sirena
           variant.xpath("flight").each{|fi|
             if prev_segment_num!=fi["iSegmentNum"]
               if !prev_segment_num.blank?
-                segment.eft = (time/60).to_s+":"+"%02i".%(time % 60)
+                segment.total_duration = time
                 time = 0
                 prev_arr = ""
               end
@@ -58,8 +58,7 @@ module Sirena
 
           }
           first_variant = false
-          # eft = estimated flight time!
-          segment.eft = (time/60).to_s+":"+"%02i".%(time % 60)
+          segment.total_duration = time
           Variant.new( :segments => segments )
         }.compact
 

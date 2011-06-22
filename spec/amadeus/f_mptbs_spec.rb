@@ -60,8 +60,6 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
           describe 'first segment' do
             subject { @recommendations.first.variants.first.segments.first }
 
-            # 1920 minutes?
-            its(:eft) { should == '1920' }
             its(:total_duration) { should == 1160 }
 
             describe 'first flight' do

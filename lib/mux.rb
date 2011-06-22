@@ -26,9 +26,8 @@ class Mux
   def calendar(form)
     return [] unless Conf.amadeus.enabled && Conf.amadeus.calendar
 
-    request = Amadeus::Request::FareMasterPricerCalendar.new(form)
     amadeus = Amadeus.booking
-    recommendations = amadeus.fare_master_pricer_calendar(request).recommendations
+    recommendations = amadeus.fare_master_pricer_calendar(form).recommendations
     amadeus.release
 
     recommendations = recommendations.select(&:sellable?) unless admin_user
@@ -43,16 +42,16 @@ class Mux
   def amadeus_pricer(form)
     return [] unless Conf.amadeus.enabled
     benchmark 'Pricer amadeus, total' do
-      request_ws = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, :lite => lite)
-      request_ns = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, :lite => lite, :nonstop => true)
+      request_ws = {:lite => lite}
+      request_ns = {:lite => lite, :nonstop => true}
       amadeus = Amadeus.booking
       # non threaded variant
       recommendations_ws = benchmark 'Pricer amadeus, with stops' do
-        amadeus.fare_master_pricer_travel_board_search(request_ws).recommendations
+        amadeus.fare_master_pricer_travel_board_search(form, request_ws).recommendations
       end
       recommendations_ns = if Conf.amadeus.nonstop_search && !lite
         benchmark 'Pricer amadeus, without stops' do
-          amadeus.fare_master_pricer_travel_board_search(request_ns).recommendations
+          amadeus.fare_master_pricer_travel_board_search(form, request_ns).recommendations
         end
       else [] end
 
@@ -88,14 +87,14 @@ class Mux
 
   def amadeus_async_pricer(form, &block)
     return [] unless Conf.amadeus.enabled
-    request_ws = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, :lite => lite)
-    request_ns = Amadeus::Request::FareMasterPricerTravelBoardSearch.new(form, :lite => lite, :nonstop => true)
+    request_ws = {:lite => lite}
+    request_ns = {:lite => lite, :nonstop => true}
     reqs = lite ? [request_ws] : [request_ns, request_ws]
     amadeus_driver = async_amadeus_driver
     reqs.each do |req|
       session = Amadeus::Session.book
       amadeus = Amadeus::Service.new(:session => session, :driver => amadeus_driver)
-      amadeus.async_fare_master_pricer_travel_board_search(req) do |res|
+      amadeus.async_fare_master_pricer_travel_board_search(form, req) do |res|
         session.release
         block.call(res)
       end
