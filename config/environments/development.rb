@@ -27,6 +27,9 @@ Eviterra::Application.configure do
   # Raise exceptions instead of rendering exception templates
   # config.action_dispatch.show_exceptions = false
 
+  # затыкаю логгер активрекорда. от него пользы не очень много
+  config.active_record.logger = nil
+
   # перечитываем конфиг перед каждым реквестом.
   # не все опции работают без рестарта!
   config.middleware.use 'Conf::Reloader'

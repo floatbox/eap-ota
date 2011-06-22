@@ -12,6 +12,10 @@ module Amadeus
 
   set_table_name 'amadeus_sessions'
 
+  cattr_accessor :logger do
+    Rails.logger
+  end
+
   INACTIVITY_TIMEOUT = 10*60
   MAX_SESSIONS = 10
 
