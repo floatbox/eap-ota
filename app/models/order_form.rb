@@ -12,10 +12,10 @@ class OrderForm < ActiveRecord::BaseWithoutTable
   attr_accessor :people_count
   attr_accessor :number
   attr_accessor :sirena_lead_pass
-  attr_accessor :last_tkt_date
   attr_accessor :order # то, что сохраняется в базу
   attr_accessor :variant_id #нужен при восстановлении формы по урлу
 
+  delegate :last_tkt_date, :to => :recommendation
   validates_format_of :email, :with =>
   /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email"
   validates_presence_of :email, :phone
@@ -37,12 +37,12 @@ class OrderForm < ActiveRecord::BaseWithoutTable
 
   def tk_xl
     default_tk_xl = (Time.now.hour < 17 ? Date.today + 1.day : Date.today + 2.days)
-    dept_date = recommendation.variants[0].flights[0].dept_date
-    last_tkt_date = recommendation.last_tkt_date || default_tk_xl
+    dept_date = recommendation.dept_date
+    last_ticket_date = last_tkt_date || default_tk_xl
     if payment_type == 'card'
-      [default_tk_xl, dept_date, last_tkt_date + 1.day].min
+      [default_tk_xl, dept_date, last_ticket_date + 1.day].min
     else
-      [last_tkt_date + 1.day, dept_date].min
+      [last_ticket_date + 1.day, dept_date].min
     end
   end
 

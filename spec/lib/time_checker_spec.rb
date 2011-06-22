@@ -10,6 +10,7 @@ describe TimeChecker do
     late_time = Date.today + 20.hours + 31.minutes
     Time.stub!(:now).and_return(morning_time)
 
+    TimeChecker.ok_to_sell(Date.today + 2.days, Date.today - 1.day).should == false
     [nil, Date.today, Date.today + 1.day].each do |last_tkt_date|
       TimeChecker.ok_to_sell(Date.today + 2.days, last_tkt_date).should == true
       TimeChecker.ok_to_sell(Date.today + 1.days, last_tkt_date).should == true

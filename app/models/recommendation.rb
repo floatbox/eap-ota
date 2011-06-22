@@ -64,6 +64,10 @@ class Recommendation
     country_iatas.uniq == [validating_carrier.country.iata]
   end
 
+  def dept_date
+    variants.first.segments.first.dept_date
+  end
+
   # FIXME перенести в TimeChecker
   def clear_variants
     #удаляем варианты на сегодня/завтра

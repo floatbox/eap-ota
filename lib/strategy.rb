@@ -162,11 +162,17 @@ class Strategy
         # (не страшно, но) наземный участок
         amadeus.pnr_commit_really_hard do
           pricing = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).or_fail!
-          @order_form.last_tkt_date = pricing.last_tkt_date
+          @rec.last_tkt_date = pricing.last_tkt_date
           unless [@rec.price_fare, @rec.price_tax] == pricing.prices
             logger.error "Strategy::Amadeus: Изменилась цена при тарифицировании: #{@rec.price_fare}, #{@rec.price_tax} -> #{pricing.prices}"
             # не попытается ли сохранить бронь после выхода из блока?
             amadeus.pnr_cancel
+            return
+          end
+
+          unless TimeChecker.ok_to_sell(@rec.dept_date, @rec.last_tkt_date)
+            logger.error 'Strategy: time criteria for last tkt date missed'
+            dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
             return
           end
 
@@ -187,6 +193,8 @@ class Strategy
           # FIXME перенести ремарку поближе к началу.
           amadeus.pnr_add_remark
         end
+
+
 
         #amadeus.queue_place_pnr(:number => @order_form.pnr_number)
         # FIXME вынести в контроллер
