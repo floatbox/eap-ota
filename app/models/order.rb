@@ -142,12 +142,7 @@ class Order < ActiveRecord::Base
   end
 
   def raw # FIXME тоже в стратегию?
-    case source
-    when 'amadeus'
-      "disabled temporarily" # Amadeus::Service.pnr_raw(pnr_number)
-    when 'sirena'
-      Sirena::Service.new.pnr_history(:number => pnr_number).history
-    end
+    Strategy.new(:order => self).raw_pnr
   rescue => e
     e.message
   end
