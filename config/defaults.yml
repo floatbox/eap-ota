@@ -8,6 +8,7 @@ amadeus:
   calendar: yes
   fake: no
   recommendations_lite: 20
+  recommendations_full: 200
   euro_rate: 40
 payment:
   skip_checksum_validation: yes
@@ -45,6 +46,7 @@ sirena:
   restrict: no
   fake: no
   timeout_lite: 20
+  timeout_full: 50
   host: localhost
   port: 8888
   path: /
