@@ -14,6 +14,10 @@ class Order < ActiveRecord::Base
   SOURCE = [ 'amadeus', 'sirena', 'other']
   PAYMENT_TYPE = ['card', 'delivery', 'cash']
 
+  def self.[] number
+    find_by_pnr_number number
+  end
+
   has_many :payments
   has_many :tickets
   validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
