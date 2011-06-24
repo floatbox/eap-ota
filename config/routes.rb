@@ -5,6 +5,7 @@ Eviterra::Application.routes.draw do
   match 'pricer/validate' => 'pricer#validate', :as => :pricer_validate
 
   match 'api/search(.:format)' => 'pricer#api'
+  match 'api/booking' => 'booking#api_booking',:via => :get, :as => :api_booking
 
   match 'booking' => 'booking#index', :as => :booking
   match 'hot_offers' => 'pricer#hot_offers', :as => :hot_offers
@@ -12,6 +13,7 @@ Eviterra::Application.routes.draw do
   post 'booking/pay' => 'booking#pay', :as => :booking_pay
   # FIXME сделать POST однажды
   match 'booking/preliminary_booking' => 'booking#preliminary_booking', :as => :preliminary_booking
+  match 'booking/:query_key/variant/:orderform_key' => 'booking#variant', :as => :booking_variant
   match '/confirm_3ds/(:order_id)' => 'booking#confirm_3ds', :as => :confirm_3ds
   match 'order/:id' => 'PNR#show', :as => :show_order
   match 'order/:id/receipt' => 'PNR#receipt', :as => :show_order_receipt
