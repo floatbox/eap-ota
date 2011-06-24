@@ -58,18 +58,22 @@ class Strategy
           :segments => @rec.segments,
           :seat_total => @search.seat_total
         )
-        @rec.last_tkt_date = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).last_tkt_date
-        amadeus.pnr_ignore
         unless air_sfr.segments_confirmed?
           logger.error 'Strategy: segments aren\'t confirmed'
           return
         end
+        air_sfr.fill_itinerary!(@rec.segments)
+
+        @rec.last_tkt_date = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).last_tkt_date
+
+        # не нужно, booking {...} убьет бронирование
+        # amadeus.pnr_ignore
+
         unless TimeChecker.ok_to_sell(@rec.variants[0].flights[0].dept_date, @rec.last_tkt_date)
           logger.error 'Strategy: time criteria for last tkt date missed'
           dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
           return
         end
-        air_sfr.fill_itinerary!(@rec.segments)
         @rec
       end
 
