@@ -20,6 +20,35 @@ class BookingController < ApplicationController
     end
   end
 
+
+  def api_booking
+    @query_key = params[:query_key]
+    @search = PricerForm.load_from_cache(params[:query_key])
+    set_search_context
+    recommendation = Recommendation.deserialize(params[:recommendation])
+    strategy = Strategy.new( :rec => recommendation, :search => @search )
+    unless strategy.check_price_and_availability
+#      TODO добавить сообщение о ошибке
+#      render :json => {:success => false}
+    else
+      order_form = OrderForm.new(
+        :recommendation => recommendation,
+        :people_count => @search.real_people_count,
+        :variant_id => params[:variant_id],
+        :last_tkt_date => recommendation.last_tkt_date
+      )
+      order_form.save_to_cache
+      redirect_to :action => "variant", :query_key => @query_key, :orderform_key => order_form.number
+    end
+  end
+
+  def variant
+    @query_key = params[:query_key]
+    @search = PricerForm.load_from_cache(params[:query_key])
+    @order_form = OrderForm.load_from_cache(params[:orderform_key])
+    @recommendations = [@order_form.recommendation]
+  end
+
   def index
     @order_form = OrderForm.load_from_cache(params[:number])
     @order_form.init_people
