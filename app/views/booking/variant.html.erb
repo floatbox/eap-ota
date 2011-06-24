@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <%= render 'shared/head_common', {:title => 'ваш вариант'} %>
+    <%= stylesheet_link_tag "static", "controls/hint" %>
+    <%= javascript_include_tag "main", "static", "controls/hint" %>
+</head>
+<body>
+<%= render 'shared/header' %>
+<div id="wrapper">
+<div id="content">
+    <div id="back2search">
+        <div class="bscontent"><a href="/">Вернуться к поиску</a></div>
+    </div>
+    <div class="article tds-result">
+
+	<%= render :partial => 'recommendations' %>
+   
+    </div>
+</div>
+<div id="footer">
+    <%= render 'shared/footer' %>
+</div>
+</div>
+<div id="hint">
+    <div class="close"></div>
+    <div class="content"></div>
+</div>
+<script type="text/javascript">
+hint.init();
+</script>
+</body>
+</html>
+
