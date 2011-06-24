@@ -144,6 +144,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
 
   class << self
     def load_from_cache(query_key)
+      require 'city'
       Cache.read('pricer_form', query_key)
     end
     alias :[] load_from_cache
