@@ -1,0 +1,15 @@
+#header {
+    position: absolute;
+    z-index: 4;
+}
+#booking {
+    padding: 42px 0 125px;
+}
+.bh-static {
+    position: static;
+    background: none;
+    z-index: 3;
+}
+.bh-static .hshadow {
+    display: none;
+}

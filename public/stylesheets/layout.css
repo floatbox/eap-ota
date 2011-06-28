@@ -4,9 +4,11 @@ body {
 }
 #wrapper {
     min-height: 100%;
-    margin-bottom: -125px;
-    padding: 42px 0 125px;
+    margin-bottom: -126px;
     background: #E7ECEE;
+}
+.wcontent {
+    padding: 42px 0 126px;
 }
 
 /* Fixed header */

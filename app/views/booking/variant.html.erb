@@ -2,25 +2,37 @@
 <html>
 <head>
     <%= render 'shared/head_common', {:title => 'ваш вариант'} %>
-    <%= stylesheet_link_tag "static", "controls/hint" %>
-    <%= javascript_include_tag "main", "static", "controls/hint" %>
+    <%= stylesheet_link_tag "atoms/button", "results/results", "results/offer", "controls/hint", "booking/booking", "booking/sections", "booking/independent" %>
+    <%= javascript_include_tag "main", "controls/hint", "booking/independent" %>
 </head>
 <body>
 <%= render 'shared/header' %>
 <div id="wrapper">
-<div id="content">
-    <div id="back2search">
-        <div class="bscontent"><a href="/">Вернуться к поиску</a></div>
+<div id="booking">
+    <div class="bh-placeholder">
+    <div class="booking-header bh-static">
+        <h3 class="bh-title"><span data-short="Москва &mdash; Пермь" class="locations">из Москвы в Пермь</span> <span data-date="13.07" class="date">13&nbsp;июля</span> и&nbsp;обратно <span data-date="15.07" class="date">15&nbsp;июля</span></h3>
+        <div class="bh-content"><span class="link stop-booking">Выбрать другой вариант</span></div>
+        <div class="hshadow"></div>
     </div>
-    <div class="article tds-result">
-
-	<%= render :partial => 'recommendations' %>
-   
     </div>
+    <div class="booking-body">
+    <div class="booking-frame">
+        <div class="booking-variant offer">
+        <%= render :partial => 'variant', :locals => {
+          :variant => @recommendations.first.variants.first,
+          :recommendation => @recommendations.first,
+          :variant_cabins => @recommendations.first.cabins_except(@search.cabin),
+          :variant_summary => nil
+        } %>
+        </div>
+        <div class="booking-content"></div>
+    </div>
+    </div>
+</div>
 </div>
 <div id="footer">
     <%= render 'shared/footer' %>
-</div>
 </div>
 <div id="hint">
     <div class="close"></div>
