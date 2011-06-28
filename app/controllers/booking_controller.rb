@@ -21,7 +21,9 @@ class BookingController < ApplicationController
   end
 
   def api_booking
-   render 'variant'
+    @query_key = params[:query_key]
+    @search = PricerForm.load_from_cache(params[:query_key])
+    render 'variant'
   end
 
   def variant
