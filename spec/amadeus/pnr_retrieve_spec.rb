@@ -47,5 +47,16 @@ describe Amadeus::Response::PNRRetrieve do
     specify {subject.all_segments_available?.should == false}
 
   end
+
+  describe 'with additional pnr numbers' do
+    subject {
+      body = File.read('spec/amadeus/xml/PNR_Retrieve_with_cancelled_by_airline_segments.xml')
+      doc = Amadeus::Service.parse_string(body)
+      Amadeus::Response::PNRRetrieve.new(doc)
+    }
+    specify {subject.additional_pnr_numbers.should == {'OK' => 'ZF10C', 'SU' => 'SUPNR'}}
+    #subject.additional_pnr_numbers.should == {
+  end
+
 end
 

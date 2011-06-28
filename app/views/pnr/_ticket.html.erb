@@ -19,6 +19,9 @@
     <td class="pad_null" colspan="3">
         <div><font family="Arial" size="2" style="font-size: 13px; line-height: 16px;"><strong>Номер брони</strong></font></div>
         <div><font size="5" family="Arial" color="#ED1192" style="font-size: 30px; line-height: 30px; color: #ED1192;"><strong><%= @pnr.number %></strong></font></div>
+        <% if @pnr.additional_number %>
+          <div><font size="2" family="Arial" style="font-size: 13px; line-height: 16px;">Номер подтверждения &mdash; <%= @pnr.additional_number %></font></div>
+        <% end %>
     </td>
 </tr>
 </tbody>
@@ -241,9 +244,10 @@
         <font family="Arial" size="5"><strong>Thank you for purchase at <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
     <% else %>
         <font family="Arial" size="5"><strong>Спасибо за то, что забронировали на <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
-        <font family="Arial" size="5"><strong>Thank you for booking at <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>    
+        <font family="Arial" size="5"><strong>Thank you for booking at <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
     <% end %>
     </center>
     </td>
 </tbody>
 </table>
+

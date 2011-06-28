@@ -27,6 +27,14 @@ module Amadeus
         xpath('//r:relatedProduct/r:status').every.to_s - ['HK', 'KK'] == []
       end
 
+      def additional_pnr_numbers
+        xpath('//r:itineraryReservationInfo/r:reservation').inject({}) do |result, ri|
+          marketing_carrier = ri.xpath('r:companyId').to_s
+          pnr_number = ri.xpath('r:controlNumber').to_s
+          result.merge({marketing_carrier => pnr_number})
+        end
+      end
+
       # временное решение
       def booking_classes
         xpath("//r:itineraryInfo[r:elementManagementItinerary/r:segmentName='AIR']" +

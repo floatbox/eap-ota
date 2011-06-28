@@ -181,7 +181,7 @@
               <cityCode>SVO</cityCode>
             </offpointDetail>
             <companyDetail>
-              <identification>OK</identification>
+              <identification>SU</identification>
             </companyDetail>
             <productDetails>
               <identification>3895</identification>
@@ -198,8 +198,8 @@
           </itineraryMessageAction>
           <itineraryReservationInfo>
             <reservation>
-              <companyId>OK</companyId>
-              <controlNumber>ZF10C</controlNumber>
+              <companyId>SU</companyId>
+              <controlNumber>SUPNR</controlNumber>
             </reservation>
           </itineraryReservationInfo>
           <relatedProduct>
@@ -759,3 +759,4 @@
     </PNR_Reply>
   </soap:Body>
 </soap:Envelope>
+

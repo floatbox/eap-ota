@@ -1,7 +1,7 @@
 # encoding: utf-8
 class Pnr
   extend CopyAttrs
-  attr_accessor :number, :flights, :booking_classes, :passengers, :phone, :email, :raw
+  attr_accessor :number, :flights, :booking_classes, :passengers, :phone, :email, :raw, :additional_number
 
   def self.get_by_number number
     pnr = self.new
@@ -23,6 +23,8 @@ class Pnr
           :passengers,
           :phone,
           :email
+        add_number = resp.additional_pnr_numbers[pnr.order.commission_carrier]
+        pnr.additional_number = add_number if add_number != pnr.order.pnr_number
       end
     end
     pnr
@@ -37,3 +39,4 @@ class Pnr
   end
 
 end
+
