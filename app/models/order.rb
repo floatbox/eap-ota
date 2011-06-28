@@ -14,6 +14,10 @@ class Order < ActiveRecord::Base
   SOURCE = [ 'amadeus', 'sirena', 'other']
   PAYMENT_TYPE = ['card', 'delivery', 'cash']
 
+  def self.[] number
+    find_by_pnr_number number
+  end
+
   has_many :payments
   has_many :tickets
   validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
@@ -142,12 +146,7 @@ class Order < ActiveRecord::Base
   end
 
   def raw # FIXME тоже в стратегию?
-    case source
-    when 'amadeus'
-      Amadeus::Service.pnr_raw(pnr_number)
-    when 'sirena'
-      Sirena::Service.new.pnr_history(:number => pnr_number).history
-    end
+    Strategy.new(:order => self).raw_pnr
   rescue => e
     e.message
   end

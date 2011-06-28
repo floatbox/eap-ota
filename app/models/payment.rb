@@ -3,6 +3,10 @@ class Payment < ActiveRecord::Base
   belongs_to :order
   attr_reader :card
 
+  def self.[] id
+    find id
+  end
+
   # для админки
   def to_label
     "#{ref} #{name_in_card} #{'%.2f' % price} р. #{payment_status}"

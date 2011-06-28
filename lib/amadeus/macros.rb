@@ -12,7 +12,8 @@ module Amadeus
     def pnr_raw(pnr_number)
       cmd_full("RT#{pnr_number}", true) rescue $!.message
     ensure
-      pnr_ignore
+      # временно не нужно - все равно сессию закрываем
+      # pnr_ignore
     end
 
     def pnr_ignore
@@ -66,6 +67,7 @@ module Amadeus
     end
 
     def cmd(command)
+      raise "you really want dedicated session" unless session
       response = command_cryptic :command => command
       response.xpath('//r:textStringDetails').to_s
     end

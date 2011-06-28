@@ -290,7 +290,12 @@ processUpdate: function() {
     if (u.mcontent && u.mcontent.indexOf('offer-variant') !== -1) {
         queue.push(function() {
             $('#offers-mcollection').html(u.mcontent);
-            self.matrix.process();
+            try {
+                self.matrix.process();
+            } catch(error) {
+                $('#rtab-matrix').hide()
+                results.selectedTab = 'featured';
+            }
         });
     } else {
         $('#offers-mcollection').html('');

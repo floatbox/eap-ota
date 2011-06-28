@@ -344,5 +344,20 @@ class Strategy
       end
     end
   end
+
+  # debug view
+  ############
+
+  def raw_pnr
+    case source
+    when 'amadeus'
+      Amadeus.booking do |amadeus|
+        amadeus.pnr_raw(@order.pnr_number)
+      end
+    when 'sirena'
+      Sirena::Service.new.pnr_history(:number => @order.pnr_number).history
+    end
+  end
+
 end
 

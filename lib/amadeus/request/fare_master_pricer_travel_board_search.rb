@@ -14,7 +14,7 @@ module Amadeus
       end
 
       def suggested_limit
-         @suggested_limit || (lite ? Conf.amadeus.recommendations_lite : 200)
+         @suggested_limit || (lite ? Conf.amadeus.recommendations_lite : Conf.amadeus.recommendations_full)
       end
 
     end

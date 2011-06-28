@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/codesnik/eviterra-instrumentation.git
-  revision: bd9edf156b4724ab697481c7045130bb20f392c4
+  revision: 27dbe27b672596f9a89e71ff87ea2d9689a3231a
   specs:
-    eviterra-instrumentation (0.0.1)
+    eviterra-instrumentation (0.0.2)
 
 GIT
   remote: git://github.com/codesnik/handsoap.git
