@@ -20,7 +20,7 @@ module YandexHelper
   end
   
   def yandex_newurl(search, recommendation, variant)
-    "https://eviterra.com/api/booking/#{@search.query_key}##{recommendation.serialize(variant)}"
+    "https://eviterra.com/api/booking/#{@search.query_key}#recommendation/#{recommendation.serialize(variant)}"
 #    "https://eviterra.com/api/booking?query_key=#{@search.query_key}&recommendation=#{recommendation.serialize(variant)}"
   end
 end

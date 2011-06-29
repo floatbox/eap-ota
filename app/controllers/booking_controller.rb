@@ -13,7 +13,9 @@ class BookingController < ApplicationController
       order_form = OrderForm.new(
         :recommendation => recommendation,
         :people_count => @search.real_people_count,
-        :variant_id => params[:variant_id]
+        :variant_id => params[:variant_id],
+        :last_tkt_date => recommendation.last_tkt_date,
+        :query_key => @search.query_key
       )
       order_form.save_to_cache
       render :json => {:success => true, :number => order_form.number}
@@ -36,6 +38,7 @@ class BookingController < ApplicationController
   def index
     @order_form = OrderForm.load_from_cache(params[:number])
     @order_form.init_people
+    @search = PricerForm.load_from_cache(@order_form.query_key)
     render :partial => 'embedded'
   end
 

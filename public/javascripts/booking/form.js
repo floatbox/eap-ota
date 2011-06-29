@@ -85,7 +85,9 @@ getVariant: function() {
 },
 load: function(number) {
     var that = this;
-    this.request = $.get('/booking/', {number: number}, function(result) {
+    this.request = $.get('/booking/', {
+        number: number
+    }, function(result) {
         that.key = number;
         that.el.find('.booking-content').html(result);
         if (that.variant && that.prebooking) {
@@ -264,15 +266,7 @@ process: function() {
     switch (result.attr('data-type')) {
     case 'success':
         this.submit.addClass('latent');
-        if (window._gaq) {
-            var price = booking.el.find('.booking-content .booking-price .sum').attr('data-value');
-            _gaq.push(['_trackPageview', '/#' + pageurl.summary + '/success']);
-            _gaq.push(['_addTrans', result.find('.pnr').text(), '', price]);
-            _gaq.push(['_trackTrans']);
-        }
-        if (window.yaCounter5324671) {
-            yaCounter5324671.hit('/#' + pageurl.summary + '/success');
-        }
+        this.track(result);
         break;
     case '3dsecure':
         this.submit.addClass('latent');
@@ -280,6 +274,17 @@ process: function() {
     case 'fail':    
         this.button.addClass('a-button-ready');
         break;
+    }
+},
+track: function(result) {
+    if (window._gaq) {
+        var price = booking.el.find('.booking-content .booking-price .sum').attr('data-value');
+        _gaq.push(['_trackPageview', '/#' + pageurl.summary + '/success']);
+        _gaq.push(['_addTrans', result.find('.pnr').text(), '', price]);
+        _gaq.push(['_trackTrans']);
+    }
+    if (window.yaCounter5324671) {
+        yaCounter5324671.hit('/#' + pageurl.summary + '/success');
     }
 },
 parse: function(errors) {

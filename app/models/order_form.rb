@@ -10,6 +10,7 @@ class OrderForm < ActiveRecord::BaseWithoutTable
   attr_accessor :recommendation
   attr_accessor :pnr_number
   attr_accessor :people_count
+  attr_accessor :query_key
   attr_accessor :number
   attr_accessor :sirena_lead_pass
   attr_accessor :order # то, что сохраняется в базу

@@ -13,3 +13,16 @@
 .bh-static .hshadow {
     display: none;
 }
+.booking-body {
+    display: none;
+    padding: 10px 0 30px;
+}
+.rmessage {
+    margin-top: 10px;
+}
+a.stop-booking {
+    color: #333;
+}
+span.stop-booking {
+    visibility: hidden;
+}
