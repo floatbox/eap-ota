@@ -56,6 +56,7 @@ booking.load = function(number) {
         number: number,
         load_variant: 1
     }, function(result) {
+        window.location.hash = number;
         that.key = number;
         var bcontent = that.el.find('.booking-content').html(result);
         var bvariant = that.el.find('.booking-variant').html('');
