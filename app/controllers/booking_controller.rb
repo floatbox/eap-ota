@@ -14,7 +14,6 @@ class BookingController < ApplicationController
         :recommendation => recommendation,
         :people_count => @search.real_people_count,
         :variant_id => params[:variant_id],
-        :last_tkt_date => recommendation.last_tkt_date,
         :query_key => @search.query_key
       )
       order_form.save_to_cache
@@ -26,6 +25,10 @@ class BookingController < ApplicationController
     @query_key = params[:query_key]
     @search = PricerForm.load_from_cache(params[:query_key])
     render 'variant'
+  end
+
+  def api_form
+    render 'api/form'
   end
 
   def index

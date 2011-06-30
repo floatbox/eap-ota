@@ -1,6 +1,7 @@
 # put local overrides in config/local.yml or config/local/*.yml
 api:
   enabled: yes
+  url_base: 'https://eviterra.com'
 amadeus:
   endpoint: "https://test.webservices.amadeus.com"
   enabled: yes
