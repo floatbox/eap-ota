@@ -60,7 +60,7 @@ booking.load = function(number) {
         that.key = number;
         var bcontent = that.el.find('.booking-content').html(result);
         var bvariant = that.el.find('.booking-variant').html('');
-        bvariant.append(bcontent.find('.offer-variant'));
+        bvariant.append(bcontent.find('.offer-variant').removeClass('g-none'));
         $('#results-loading').addClass('latent');
         that.updateLinks('выбрать другой вариант');
         that.el.find('.booking-body').show();

@@ -1,4 +1,4 @@
-<table class="offer-variant g-none" data-summary='<%= raw variant_summary || variant.summary.to_json %>' data-booking="query_key=<%= @query_key %>&recommendation=<%=u recommendation.serialize(variant) %>">
+<table class="offer-variant g-none" data-summary='<%= raw variant_summary || variant.summary.to_json %>' data-booking="query_key=<%= @search.query_key %>&recommendation=<%=u recommendation.serialize(variant) %>">
 <col width="118">
 <col width="140">
 <col width="85">
@@ -134,7 +134,7 @@
 
 <tbody class="details">
 <% variant.segments.each_with_index do |segment, segment_counter| %>
-    <%= render :partial => 'segment_details', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter, :segment_cabins => variant_cabins[segment_counter]} %>
+    <%= render :partial => 'pricer/segment_details', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter, :segment_cabins => variant_cabins[segment_counter]} %>
 <% end %>
 <% unless variant.carrier_comments.empty? %>
 <tr class="comments">
@@ -163,4 +163,3 @@
 </tr>
 </tbody>
 </table>
-
