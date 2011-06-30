@@ -37,9 +37,13 @@
         <div class="info">
             <h6>Прилёт <%=nbsp flight.arrival.city.case_to %><% if next_date_arrival %> на&nbsp;следующий день<% end %></h6>
             <p>Аэропорт <%= flight.arrival_name %><% if flight.arrival_term %>, терминал&nbsp;<%= flight.arrival_term %><% end %></p>
+            <% techstops = flight.technical_stops %>
+            <% unless techstops.empty? %>
+                <p class="tstops">Рейс выполняется с <%= techstops.length == 1 ? 'промежуточной посадкой' : 'промежуточными посадками' %> <%= technical_stops_in(techstops) %></p>
+            <% end %>
             <% layover = segment.layover_durations[flight_index] %>
             <% if layover %>
-            <p><%= human_duration(layover) %> между рейсами</p>
+                <p><%= human_duration(layover) %> между рейсами</p>
             <% end %>
             <ul class="warnings">
             <% if layover %>

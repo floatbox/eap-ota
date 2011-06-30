@@ -60,7 +60,7 @@
 /* Кнопка */
 .offer thead th.book {
     padding: 10px;
-    width: 88px;    
+    width: 88px;
 }
 .offer .book a.a-button {
     display: block;
@@ -72,7 +72,7 @@
 .offer a.a-button:active {
     padding: 3px 6px;
 }
-    
+
 /* Класс */
 .offer .cabin {
     background: #fff8d2;
@@ -80,12 +80,12 @@
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     -o-border-radius: 3px;
-}    
-    
+}
+
 /* Обзор предложения */
 .offer .summary p.note {
     font-size: 84.62%;
-    line-height: 118.18%;    
+    line-height: 118.18%;
     color: #777777;
 }
 .offer .controls td {
@@ -99,7 +99,7 @@
 .offer .summary .carrier,
 .offer .summary .changes {
     font-size: 84.62%;
-    line-height: 109.09%;        
+    line-height: 109.09%;
     padding-left: 10px;
 }
 .offer .summary .carrier {
@@ -124,7 +124,7 @@
     border-top: none;
     vertical-align: middle;
 }
-.offer .summary .carrier p {    
+.offer .summary .carrier p {
     margin: 0 0 4px;
     text-align: center;
 }
@@ -154,12 +154,12 @@
     visibility: hidden;
 }
 .hover .summary .direction {
-    visibility: inherit;    
+    visibility: inherit;
 }
 .offer .summary td.dpt,
 .offer .summary td.arv {
     width: 130px;
-}    
+}
 .offer .summary .dpt p,
 .offer .summary .arv p {
     line-height: 115.385%;
@@ -204,7 +204,7 @@
 .offer .trip .parts li.lovl {
     background-position: 0 -125px;
 }
-    
+
 /* Класс */
 .offer .summary p.cnote {
     padding-top: 2px;
@@ -270,7 +270,7 @@
     margin-left: -15px;
     padding: 8px 10px;
     /* background: #F7F7F7; */
-    font-size: 14px; 
+    font-size: 14px;
 }
 .offer .expand,
 .offer.collapsed .collapse {
@@ -344,7 +344,7 @@
     float: left;
     width: 80px;
     margin-right: -80px;
-    font-size: 11px;        
+    font-size: 11px;
     line-height: 13px;
 }
 .offer .details .time h5,
@@ -371,7 +371,7 @@
 .offer .details .segment-3 .dpt .time h5 {
     color: #0aa0c6;
 }
-    
+
 /* Описание рейса */
 .offer .details .point {
     padding-top: 0;
@@ -393,11 +393,16 @@
     font-size: 116.667%;
     font-weight: bold;
 }
+.offer .details .tstops {
+    margin: 7px 0;
+    line-height: 108.33%;
+    color: #777;
+}
 .offer .details .warnings {
     clear: left;
     margin: 7px 0 0 -30px;
-    line-height: 108.33%;        
-    color: #777;    
+    line-height: 108.33%;
+    color: #777;
 }
 .offer .details .warnings li {
     margin: 0 0 2px;

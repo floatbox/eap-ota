@@ -95,6 +95,10 @@ module PricerHelper
     flights.map {|flight| flight.arrival.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;').html_safe
   end
 
+  def technical_stops_in tstops
+    tstops.map {|tstop| tstop.airport.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;').html_safe
+  end
+
   def segments_departure variant
     variant.segments.map {|segment| segment.departure_time }.join(' ')
   end
