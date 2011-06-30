@@ -46,8 +46,12 @@ class Recommendation
     validating.size >= other.size
   end
 
+  def validating_carrier_starts_itinerary?
+    variants.first.flights.first.marketing_carrier_iata == validating_carrier_iata
+  end
+
   def interline?
-    other_marketing_carrier_iatas.any?
+    @interline ||= other_marketing_carrier_iatas.any?
   end
 
   def international?

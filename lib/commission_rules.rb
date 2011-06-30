@@ -22,6 +22,7 @@ module CommissionRules
     not disabled? and
     # carrier == recommendation.validating_carrier_iata and
     applicable_interline?(recommendation) and
+    valid_interline?(recommendation) and
     applicable_classes?(recommendation) and
     applicable_subclasses?(recommendation) and
     applicable_custom_check?(recommendation) and
@@ -33,30 +34,28 @@ module CommissionRules
     case interline
     when :possible
       not recommendation.interline? or
-      (recommendation.validating_carrier_participates? and
-       Commission.skip_interline_validity_check || recommendation.valid_interline?
-      )
+      recommendation.validating_carrier_participates?
     when nil, :no
       not recommendation.interline?
     when :yes
       recommendation.interline? and
-      recommendation.validating_carrier_participates? and
-      Commission.skip_interline_validity_check || recommendation.valid_interline?
+      recommendation.validating_carrier_participates?
     when :absent
       recommendation.interline? and
-      not recommendation.validating_carrier_participates? and
-      Commission.skip_interline_validity_check || recommendation.valid_interline?
+      not recommendation.validating_carrier_participates?
     when :first
       recommendation.interline? and
-      recommendation.variants[0].flights.first.marketing_carrier_iata == recommendation.validating_carrier_iata and
-      Commission.skip_interline_validity_check || recommendation.valid_interline?
+      recommendation.validating_carrier_starts_itinerary?
     when :half, :unconfirmed
       recommendation.interline? and
-      recommendation.validating_carrier_makes_half_of_itinerary? and
-      Commission.skip_interline_validity_check || recommendation.valid_interline?
+      recommendation.validating_carrier_makes_half_of_itinerary?
     else
       raise ArgumentError, "неизвестный тип interline у #{carrier}: '#{interline}' (line #{source})"
     end
+  end
+
+  def valid_interline? recommendation
+    Commission.skip_interline_validity_check || recommendation.valid_interline?
   end
 
   CLASS_CABIN_MAPPING = {:economy => %w(M W Y), :business => %w(C), :first => %w(F)}
