@@ -28,6 +28,10 @@ class BookingController < ApplicationController
     render 'variant'
   end
 
+  def api_form
+    render 'api/form'
+  end
+
   def index
     @order_form = OrderForm.load_from_cache(params[:number])
     @order_form.init_people
