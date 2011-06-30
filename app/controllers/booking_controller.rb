@@ -28,13 +28,6 @@ class BookingController < ApplicationController
     render 'variant'
   end
 
-  def variant
-    @query_key = params[:query_key]
-    @search = PricerForm.load_from_cache(params[:query_key])
-    @order_form = OrderForm.load_from_cache(params[:orderform_key])
-    @recommendations = [@order_form.recommendation]
-  end
-
   def index
     @order_form = OrderForm.load_from_cache(params[:number])
     @order_form.init_people
