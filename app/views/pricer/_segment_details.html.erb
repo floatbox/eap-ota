@@ -59,7 +59,7 @@
             <% end %>
             </ul>
             <% techstops = flight.technical_stops %>
-            <% unless techstops.empty? %>
+            <% unless techstops.blank? %>
                 <p class="tstops">Рейс выполняется с <%= techstops.length == 1 ? 'промежуточной посадкой' : 'промежуточными посадками' %> <%= technical_stops_in(techstops) %></p>
             <% end %>
         </div>
