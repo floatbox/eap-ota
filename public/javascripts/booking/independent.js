@@ -26,6 +26,7 @@ booking.init = function() {
     var hash = window.location.hash.substring(1);
     this.query_key = path.split('/').last();
     if (hash.indexOf('recommendation/') !== -1) {
+        window.location.hash = '';
         this.prebook(this.query_key, hash.replace('recommendation/', ''));
     } else {
         this.load(hash);
