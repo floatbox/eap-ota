@@ -31,7 +31,6 @@ booking.init = function() {
         this.load(hash);
     }
     this.updateLinks();
-    this.initFixedHeader();
 };
 booking.prebook = function(query_key, hash) {
     var that = this;
@@ -63,7 +62,9 @@ booking.load = function(number) {
         bvariant.append(bcontent.find('.offer-variant').removeClass('g-none'));
         $('#results-loading').addClass('latent');
         that.updateLinks('выбрать другой вариант');
+        that.el.find('.bh-content').removeClass('latent');
         that.el.find('.booking-body').show();
+        that.initFixedHeader();
         that.activate();
     });
 };
