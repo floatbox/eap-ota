@@ -26,3 +26,6 @@ a.stop-booking {
 span.stop-booking {
     visibility: hidden;
 }
+.offer .toggle-tab {
+    display: none;
+}
