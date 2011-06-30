@@ -54,7 +54,9 @@
 <% end %>
 <div class="booking-price latent">
     <div class="cost"><dl>
-        <%= decorated_price @order_form.recommendation.price_with_payment_commission, 'dt', 'dd' %>
+        <% price = @order_form.recommendation.price_with_payment_commission.round.to_i %>
+        <dt><%= raw price.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') %></dt>
+        <dd><%= Russian.pluralize(price, 'рубль', 'рубля', 'рублей') %><span class="cost-tip"><%= ' за всех' if @search.people_total != 1 %>, включая налоги и сборы</span></dd>
     </dl></div>
     <dl class="sum" data-value="<%= @order_form.recommendation.price_with_payment_commission.round.to_i %>">
         <dt>Итого <strong><%= human_price(@order_form.recommendation.price_with_payment_commission) %></strong> за всех со всеми сборами</dt>

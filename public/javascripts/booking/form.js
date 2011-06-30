@@ -105,10 +105,14 @@ compare: function() {
     var bp = parseInt(source.find('.sum').attr('data-value'), 10);
     var vp = parseInt(this.variant.find('.book .sum').attr('data-value'), 10);
     if (bp != vp) {
-        this.variant.closest('.offer').find('.offer-variant').each(function() {
+        var offer = this.variant.closest('.offer');
+        offer.find('.offer-variant').each(function() {
             $(this).find('.book .sum').replaceWith(source.find('.sum').clone());
             $(this).find('.cost dl').replaceWith(source.find('.cost dl').clone());
         });
+        if (offer.hasClass('cheap-offer')) {
+            offer.find('.cost dl').prepend('<dd>Всего </dd>');
+        }
         var self = this;
         var template = '<h5>Цена этого варианта изменилась: стало <strong>{type} на {value}</strong> (<span class="link">почему?</span>)</h5>';
         this.prebooking.addClass('changed-price').html(template.supplant({

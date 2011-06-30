@@ -31,6 +31,11 @@
 .prebooking .prebooking-state {
     display: block;
 }
+.prebooking .cost-tip {
+    display: inline;
+}
+
+
 
 /* Изменение цены */
 .changed-price {
@@ -79,6 +84,9 @@
     -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+#booking .cost-tip {
+    display: inline;
 }
 
 /* Подсказки */

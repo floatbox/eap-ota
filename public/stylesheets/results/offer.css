@@ -56,6 +56,12 @@
 .offer .digit {
     margin-left: 0.15em;
 }
+.offer .cost-tip {
+    display: none;
+}
+.cheap-offer .cost-tip {
+    display: inline;
+}
 
 /* Кнопка */
 .offer thead th.book {

@@ -705,9 +705,7 @@ makeRecommendation: function(variant, title) {
                 title += ' <span class="saving">(на <strong>' + Math.round(saving * 100) + '%</strong> дешевле, чем в среднем по этому направлению)';
             }
         }
-        var cost = offer.find('td.cost dl'), ctext = cost.find('dd');
-        ctext.html(ctext.html() + '<span class="cost-tip">' + ($('#offers-options').attr('data-people') !== '1' ? ' за всех' : '') + ', включая налоги и сборы</span>');
-        cost.prepend('<dd>Всего </dd>');
+        offer.addClass('cheap-offer').find('td.cost dl').prepend('<dd>Всего </dd>');
     }
     return $('<div><h3 class="offers-title">' + title + '</h3></div>').append(offer);
 },

@@ -8,7 +8,11 @@
 <thead>
 <tr>
     <th class="book"><% if recommendation.sellable? %><a href="#" class="a-button">Выбрать</a><% end %></th>
-    <td class="cost" colspan="5"><dl><%= decorated_price recommendation.price_with_payment_commission, 'dt', 'dd' %></dl></td>
+    <td class="cost" colspan="5"><dl>
+        <% price = recommendation.price_with_payment_commission.round.to_i %>
+        <dt><%= raw price.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') %></dt>
+        <dd><%= Russian.pluralize(price, 'рубль', 'рубля', 'рублей') %><span class="cost-tip"><%= ' за всех' if @search.people_total != 1 %>, включая налоги и сборы</span></dd>
+    </dl></td>
 </tr>
 </thead>
 
