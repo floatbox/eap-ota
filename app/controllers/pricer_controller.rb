@@ -33,8 +33,6 @@ class PricerController < ApplicationController
   def validate
     if @query_key = params[:query_key]
       @search = PricerForm.load_from_cache(@query_key)
-      # для log_partner
-      session[:partner] = @search.partner if @search.partner
       set_search_context
       fragment_exist =
         fragment_exist?([:pricer, @query_key]) &&
