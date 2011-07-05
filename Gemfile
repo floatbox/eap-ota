@@ -59,6 +59,7 @@ gem 'trashed', :git => 'https://github.com/codesnik/trashed.git'
 group :development do
   gem 'mongrel', :platforms => :ruby_18
 end
+gem 'passenger', :group => :production
 
 group :test, :development do
   gem 'rspec-rails'
