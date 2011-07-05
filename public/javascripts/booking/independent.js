@@ -28,10 +28,13 @@ booking.init = function() {
     if (hash.indexOf('recommendation/') !== -1) {
         window.location.hash = '';
         this.prebook(this.query_key, hash.replace('recommendation/', ''));
-    } else {
+    } else if (hash.length !== 0) {
         this.load(hash);
+    } else {
+        window.location = '/#' + query_key;
     }
     this.updateLinks();
+    this.el.find('.bh-title .stop-booking').addClass('latent');    
 };
 booking.prebook = function(query_key, hash) {
     var that = this;
@@ -62,8 +65,8 @@ booking.load = function(number) {
         var bvariant = that.el.find('.booking-variant').html('');
         bvariant.append(bcontent.find('.offer-variant').removeClass('g-none'));
         $('#results-loading').addClass('latent');
-        that.updateLinks('выбрать другой вариант');
-        that.el.find('.bh-content').removeClass('latent');
+        that.updateLinks('найти другой вариант');
+        that.el.find('.bh-title .stop-booking').removeClass('latent');
         that.el.find('.booking-body').show();
         that.initFixedHeader();
         that.activate();

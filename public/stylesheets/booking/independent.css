@@ -13,12 +13,14 @@
 .bh-static .hshadow {
     display: none;
 }
+.bh-title .stop-booking {
+    font-weight: normal;
+    font-size: 14px;
+    vertical-align: 3px;
+}
 .booking-body {
     display: none;
-    padding: 10px 0 30px;
-}
-.rmessage {
-    margin-top: 10px;
+    padding: 0 0 30px;
 }
 a.stop-booking {
     color: #333;

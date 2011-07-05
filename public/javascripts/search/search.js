@@ -274,18 +274,7 @@ validate: function(qkey) {
     clearTimeout(this.timer);
     clearTimeout(this.loadTimer);
     if (this.preventValidation) return;
-    if (qkey) {
-        var data = {query_key: qkey};
-    } else {
-        var values = this.values();
-        var data = {search: values};
-        var params = $.param(values);
-        if (params != this.lastParams) {
-            this.lastParams = params;
-        } else {
-            return;
-        }
-    }
+    var data = qkey ? {query_key: qkey} : {search: this.values()};
     this.toggle(false);
     this.abort();
     var self = this;
