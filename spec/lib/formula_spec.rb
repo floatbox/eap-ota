@@ -15,10 +15,19 @@ describe Commission::Formula do
   specify { Commission::Formula.new("12.3eur").should be_valid }
   specify { Commission::Formula.new("12.3eur").call(42, :eur => 43.2).should == 531.36 }
 
-  context "with multiplier" do
+  context "it accepts Numerics" do
+    specify { Commission::Formula.new(23.45).should be_valid }
+    specify { Commission::Formula.new(23.45).call.should == 23.45 }
+  end
+
+  context "works with multiplier" do
     specify { Commission::Formula.new("3.5%").call(200, :multiplier => 2).should == 7 }
     specify { Commission::Formula.new("3.6").call(200, :multiplier => 2).should == 7.2 }
     specify { Commission::Formula.new("1.1eur").call(200, :eur => 24.2, :multiplier => 2).should == 53.24 }
+  end
+
+  context "it should round to 2 digits by default" do
+    pending {}
   end
 
   pending "should work with sums" do

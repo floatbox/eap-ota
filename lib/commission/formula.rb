@@ -5,7 +5,7 @@ class Commission
     attr_accessor :formula
 
     def initialize formula
-      @formula = formula
+      @formula = formula.to_s
     end
 
     def percentage?
