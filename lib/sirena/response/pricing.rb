@@ -82,7 +82,7 @@ module Sirena
             :validating_carrier_iata => validating_carrier_iata,
             :additional_info => "",
             :upts => upts,
-            :sirena_blank_count => blank_count,
+            :blank_count => blank_count,
             :cabins => cabins,
             :booking_classes => booking_classes
           )

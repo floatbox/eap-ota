@@ -8,6 +8,7 @@ module Amadeus
           price_total, price_tax =
             rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").every.to_f
           price_fare = price_total - price_tax
+          blank_count = rec.xpath(".//r:traveller").count
           cabins =
             rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:cabin").every.to_s
           booking_classes =
@@ -42,6 +43,7 @@ module Amadeus
           # тк на один и тот же flight продаются билеты разных классов
           Recommendation.new(
             :source => 'amadeus',
+            :blank_count => blank_count,
             :price_fare => price_fare,
             :price_tax => price_tax,
             :variants => variants,

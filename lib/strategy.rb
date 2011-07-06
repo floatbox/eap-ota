@@ -50,6 +50,9 @@ class Strategy
           return
         end
 
+        # считаем что в амадеусе всегда один билет на человека
+        @rec.blank_count = @search.people_total
+
         @rec.rules = amadeus.fare_check_rules.rules
 
         # FIXME точно здесь нельзя нечаянно заморозить места?
@@ -88,8 +91,7 @@ class Strategy
       @rec.price_fare = repriced_rec.price_fare
       @rec.price_tax = repriced_rec.price_tax
       @rec.variants[0].segments = repriced_rec.segments
-      # обновим количество бланков, на всякий случай
-      @rec.sirena_blank_count = repriced_rec.sirena_blank_count
+      @rec.blank_count = repriced_rec.blank_count
       @rec
 
     end
