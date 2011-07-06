@@ -68,6 +68,39 @@ describe Sirena::Response::Pricing do
       context "first flight" do
         subject { response.recommendations.first.variants.first.flights.first }
         its(:duration) {should == 365}
+
+        its(:technical_stop_count) {should == 0}
+        its(:technical_stops) {should == []}
+      end
+    end
+  end
+
+  context 'with technical stop' do
+
+    let(:xml) { 'spec/sirena/xml/pricing_with_stops.xml' }
+    subject {response}
+
+    it { should be_success }
+    it { should have(1).recommendations }
+
+    context "first recommendation" do
+      subject {response.recommendations.first}
+      it {should have(1).variant}
+      its(:sirena_blank_count) {should == 1}
+      its(:cabins) {should == ['Y']}
+      its(:booking_classes) {should == ['Ц']}
+
+      context "first segment" do
+        subject { response.recommendations.first.variants.first.segments[0] }
+        its(:total_duration) {should == 680 }
+      end
+
+      context "first flight" do
+        subject { response.recommendations.first.variants.first.flights.first }
+        its(:duration) {should == 680}
+        its(:technical_stop_count) {should == 1}
+        # нет детальной информации
+        its(:technical_stops) {should be_instance_of(Array)}
       end
     end
   end

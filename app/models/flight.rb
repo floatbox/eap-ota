@@ -5,7 +5,8 @@ class Flight
 
   attr_accessor :operating_carrier_iata, :marketing_carrier_iata, :departure_iata,
    :departure_term, :arrival_iata, :arrival_term, :flight_number, :arrival_date,
-   :arrival_time, :departure_date, :departure_time, :equipment_type_iata, :warning, :technical_stops
+   :arrival_time, :departure_date, :departure_time, :equipment_type_iata, :warning, :technical_stop_count
+  attr_accessor_with_default(:technical_stops) { [] }
 
   def departure
     Airport[departure_iata]
@@ -45,6 +46,12 @@ class Flight
 
   def duration
     @duration ||= (arrival_datetime_utc.to_i - departure_datetime_utc.to_i) / 60 rescue 0
+  end
+
+  # иногда известно только количество пересадок
+  # массив technical_stops в этом случае пустой
+  def technical_stop_count
+    @technical_stop_count || technical_stops.size
   end
 
   attr_accessor :classes, :distance

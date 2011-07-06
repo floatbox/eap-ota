@@ -64,6 +64,8 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
 
             describe 'first flight' do
               subject { @recommendations.first.variants.first.segments.first.flights.first }
+              its(:technical_stop_count) { should == 0 }
+              its(:technical_stops) { should == [] }
               its(:departure_iata) { should == 'ROV' }
               its(:arrival_iata) { should == 'VIE' }
               its(:marketing_carrier_iata) { should == 'OS'}
@@ -95,9 +97,77 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
           end
         end
       end
-
     end
-
   end
+
+  context 'with two technical stops' do
+
+    before(:all) {
+      body = File.read('spec/amadeus/xml/Fare_MasterPricerTravelBoardSearch_with_stops.xml')
+      doc = Amadeus::Service.parse_string(body)
+      @response = Amadeus::Response::FareMasterPricerTravelBoardSearch.new(doc)
+    }
+
+    describe "response" do
+      subject { @response }
+      it { should be_success }
+      its(:error_message) { should be_blank }
+      it { should have(1).recommendations }
+
+      describe 'first recommendations' do
+
+        before(:all) {
+          @recommendations = @response.recommendations
+        }
+
+        subject { @recommendations.first }
+        it { should have(1).flight }
+        it { should have(1).variant }
+
+        its(:cabins) { should == %W( M ) }
+        its(:booking_classes) { should == %W( V ) }
+
+        its(:price_fare) { should == 15000.0 }
+        its(:price_tax) { should == 122.0 }
+
+        describe 'variant' do
+          subject { @recommendations.first.variants.first }
+
+          it { should have(1).segment }
+          it { should have(1).flight }
+
+          describe 'first segment' do
+            subject { @recommendations.first.variants.first.segments.first }
+
+            its(:total_duration) { should == 775 }
+            it { should have(1).flight }
+
+            describe 'first flight' do
+              subject { @recommendations.first.variants.first.segments.first.flights.first }
+
+              # ради этого все затевалось
+              its(:technical_stop_count) { should == 2 }
+              its('technical_stops.first.location_iata') { should == 'SVX' }
+              its('technical_stops.last.location_iata') { should == 'OVB' }
+
+              # просто на всякий случай
+              its(:departure_iata) { should == 'LED' }
+              its(:arrival_iata) { should == 'KHV' }
+              its(:marketing_carrier_iata) { should == 'U6'}
+              its(:operating_carrier_iata) { should == 'U6'}
+              its(:equipment_type_iata) { should == '320'}
+              its(:departure_date) { should == '290711'}
+              its(:departure_time) { should == '1445'}
+              its(:arrival_date) { should == '300711'}
+              its(:arrival_time) { should == '1040'}
+
+              its(:duration) { should == 775 }
+            end
+          end
+        end
+      end
+    end
+  end
+
 end
 

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sirena>
+  <answer pult="ГРФ365">
+    <pricing results="all">
+      <flight id="1">
+        <company>ЯК</company>
+        <num>731</num>
+        <flight>731</flight>
+        <origin terminal="A ">ВНК</origin>
+        <destination>АНЫ</destination>
+        <deptdate delay="0">31.07.11</deptdate>
+        <arrvdate delay="0">01.08.11</arrvdate>
+        <depttime>19:10</depttime>
+        <arrvtime>14:30</arrvtime>
+        <n_landings>1</n_landings>
+        <flightTime>11:20</flightTime>
+        <airplane>737</airplane>
+      </flight>
+      <variant id="1" fop="НА" n_blanks="1">
+        <flights latin_registration="false" et_possible="true">
+          <flight id="1" num="1" class="Ц" subclass="Ц" baseclass="Э" iSegmentOrig="MOW" iSegmentDest="DYR" iSegmentNum="MOW-DYR" oSegmentPartNum="0" oSegmentPartQuantity="1"/>
+        </flights>
+        <direction num="1">
+          <price code="ААА" orig_code="ААА" count="1" currency="РУБ">
+            <fare code="H" remark="0411" fare_expdate="2011-07-31 19:10">44000.00</fare>
+            <upt>
+              <idar1>3739570</idar1>
+              <addon_ida>-1</addon_ida>
+              <ntrip>0</ntrip>
+              <nvr>-1</nvr>
+              <ftnt> </ftnt>
+              <code_upt>0411</code_upt>
+              <tariff>0</tariff>
+              <main_awk>5919</main_awk>
+              <cat>-1</cat>
+              <vcat/>
+              <city1>902</city1>
+              <city2>1131</city2>
+              <dport>902</dport>
+              <aport>1131</aport>
+              <base_fare>H       </base_fare>
+              <iit>3</iit>
+              <owrt>OW</owrt>
+              <ddate>20110706064913</ddate>
+              <fdate>20110731191000</fdate>
+              <deliv_type>4</deliv_type>
+            </upt>
+            <tax code="ZZ" owner="aircompany">125.00</tax>
+            <total>44125.00</total>
+          </price>
+        </direction>
+        <variant_total currency="РУБ">44125.00</variant_total>
+      </variant>
+      <request>
+        <pricing>
+          <segment>
+            <departure xml:lang="en">MOW</departure>
+            <arrival xml:lang="en">DYR</arrival>
+            <date>31.07.2011</date>
+            <class>Э</class>
+            <direct>false</direct>
+          </segment>
+          <passenger>
+            <code>ААА</code>
+            <count>1</count>
+          </passenger>
+          <request_params>
+            <lang>en</lang>
+            <min_results>1</min_results>
+            <max_results>50</max_results>
+            <mix_scls>true</mix_scls>
+            <mix_ac>false</mix_ac>
+            <timeout>50</timeout>
+            <fingering_order>ordinary</fingering_order>
+          </request_params>
+          <answer_params>
+            <return_request>true</return_request>
+            <show_flighttime>true</show_flighttime>
+            <show_fareexpdate>true</show_fareexpdate>
+            <show_io_matching>true</show_io_matching>
+            <show_varianttotal>true</show_varianttotal>
+            <show_reg_latin>true</show_reg_latin>
+            <show_baseclass>true</show_baseclass>
+            <show_n_blanks>true</show_n_blanks>
+            <show_upt_rec>true</show_upt_rec>
+            <show_et>true</show_et>
+            <regroup>true</regroup>
+          </answer_params>
+        </pricing>
+      </request>
+    </pricing>
+  </answer>
+</sirena>

@@ -111,7 +111,8 @@ module Sirena
           :departure_date =>         fi.xpath("deptdate").text.gsub(".", ""),
           :departure_time =>         to_amadeus_time(fi.xpath("depttime").text),
           :equipment_type_iata =>    fi.xpath("airplane").text, # иногда кириллица!
-          :technical_stops => [] #не нашла, есть ли там информация на эту тему. скорее нет
+          :technical_stop_count =>   fi.xpath("n_landings").text.to_i
+          # :technical_stops => [] # нет информации
         )
         time = fi.xpath("flightTime").text
         if !time.blank?

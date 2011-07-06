@@ -93,6 +93,8 @@ module Amadeus
           :departure_date =>         fi.xpath("r:productDateTime/r:dateOfDeparture").to_s,
           :departure_time =>         fi.xpath("r:productDateTime/r:timeOfDeparture").to_s,
           :equipment_type_iata =>    fi.xpath("r:productDetail/r:equipmentType").to_s,
+          # высчитывается из technical_stops
+          # :technical_stop_count =>   fi.xpath("r:productDetail/r:techStopNumber").to_i || 0,
           :technical_stops => fi.xpath('../r:technicalStop').to_a.map{|ts| parse_technical_stop(ts)}
         )
       end
