@@ -24,10 +24,10 @@ class BookingController < ApplicationController
   def api_booking
     @query_key = params[:query_key]
     @search = PricerForm.load_from_cache(params[:query_key])
-    if partner = @search.partner
+    if @partner = @search.partner
       # для log_partner
-      session[:partner] = partner
-      logger.info "API::Partner::Enter: #{partner} #{Time.now}"
+      session[:partner] = @partner
+      logger.info "API::Partner::Enter: #{@partner} #{Time.now}"
     end
     render 'variant'
   end
