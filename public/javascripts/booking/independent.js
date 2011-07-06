@@ -31,7 +31,7 @@ booking.init = function() {
     } else if (hash.length !== 0) {
         this.load(hash);
     } else {
-        window.location = '/#' + query_key;
+        window.location = '/#' + this.query_key;
     }
     this.updateLinks();
     this.el.find('.bh-title .stop-booking').addClass('latent');    
