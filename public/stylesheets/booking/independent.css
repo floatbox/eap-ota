@@ -22,6 +22,9 @@
     display: none;
     padding: 0 0 30px;
 }
+.booking-content {
+    padding-top: 1px;
+}
 a.stop-booking {
     color: #333;
 }

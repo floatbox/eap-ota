@@ -34,7 +34,7 @@ booking.init = function() {
         window.location = '/#' + this.query_key;
     }
     this.updateLinks();
-    this.el.find('.bh-title .stop-booking').addClass('latent');    
+    this.el.find('.bh-title .stop-booking').addClass('latent');
 };
 booking.prebook = function(query_key, hash) {
     var that = this;
@@ -67,6 +67,10 @@ booking.load = function(number) {
         $('#results-loading').addClass('latent');
         that.updateLinks('найти другой вариант');
         that.el.find('.bh-title .stop-booking').removeClass('latent');
+        that.el.find('th.book .a-button').html('Купить').click(function(event) {
+            event.preventDefault();
+            $.animateScrollTop(bcontent.offset().top - $('#booking .booking-header').height());
+        }).css('display', 'block');
         that.el.find('.booking-body').show();
         that.initFixedHeader();
         that.activate();
