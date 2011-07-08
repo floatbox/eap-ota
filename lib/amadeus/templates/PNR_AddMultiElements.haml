@@ -168,7 +168,7 @@
             %subjectQualifier 3
             %type P02
           %longFreetext= email
-    - if commission
+    - if commission?
       %dataElementsIndiv
         %elementManagementData
           %reference
@@ -177,9 +177,7 @@
           %segmentName FM
         %commission
           %commissionInfo
-            -if commission.agent_percentage?
-              %percentage= "%g" % commission.agent_value
+            -if commission_percentage
+              %percentage= commission_percentage
             -else
-              -# рублевая комиссия округляется до ближайшего целого
-              %amount= commission.agent_value.round
-
+              %amount= commission_value
