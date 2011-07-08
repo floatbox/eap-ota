@@ -249,11 +249,12 @@ ActiveRecord::Schema.define(:version => 20110715131854) do
     t.decimal  "cash_payment_markup",           :precision => 9, :scale => 2, :default => 0.0,     :null => false
     t.string   "cabins"
     t.decimal  "price_difference",              :precision => 9, :scale => 2, :default => 0.0,     :null => false
-    t.boolean  "offline_booking",                                             :default => false,   :null => false
+    t.boolean  "offline_booking",                                             :default => false
     t.string   "email_status",                                                :default => "",      :null => false
     t.string   "route"
     t.decimal  "price_tax",                     :precision => 9, :scale => 2, :default => 0.0,     :null => false
     t.date     "departure_date"
+    t.integer  "blank_count"
   end
 
   create_table "payments", :force => true do |t|

@@ -26,6 +26,7 @@ class Order < ActiveRecord::Base
   before_create :generate_code, :set_payment_status
   before_save :capitalize_pnr, :calculate_price_with_payment_commission
 
+  # FIXME сломается на ruby1.9
   def capitalize_pnr
     self.pnr_number = pnr_number.mb_chars.strip.upcase
   end
@@ -108,6 +109,7 @@ class Order < ActiveRecord::Base
 
     copy_attrs recommendation, self,
       :source,
+      :blank_count,
       :price_our_markup,
       :price_tax,
       :price_fare,
@@ -115,6 +117,7 @@ class Order < ActiveRecord::Base
 
     self.route = recommendation.variants[0].flights.every.destination.join('; ')
     self.cabins = recommendation.cabins.join(',')
+    # FIXME вынести рассчет доставки отсюда
     if order_form.payment_type != 'card'
       self.cash_payment_markup = recommendation.price_payment + (order_form.payment_type == 'delivery' ? 350 : 0)
     end
@@ -129,8 +132,7 @@ class Order < ActiveRecord::Base
       copy_attrs recommendation, self,
         :price_share,
         :price_our_markup,
-        :price_consolidator_markup,
-        :price_tax
+        :price_consolidator_markup
     end
     self.ticket_status = 'booked'
     self.name_in_card = order_form.card.name

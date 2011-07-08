@@ -6,6 +6,13 @@ require 'csv'
 
 module DataMigration
 
+  def self.update_blank_count
+    Order.where(:blank_count => nil).includes(:tickets).all.each do |order|
+      order.blank_count = order.tickets.any? && order.tickets.size
+      order.save
+    end
+  end
+
   def self.update_route_in_tickets
     Ticket.all.each do |t|
       t.route = t.order.route
