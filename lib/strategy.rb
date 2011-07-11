@@ -63,7 +63,7 @@ class Strategy
           return
         end
         air_sfr.fill_itinerary!(@rec.segments)
-
+        #FIXME не плохо бы здесь получать и цены (вместо первого informative_pricing_without_pnr)
         @rec.last_tkt_date = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).last_tkt_date
 
         # не нужно, booking {...} убьет бронирование
