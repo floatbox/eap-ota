@@ -87,7 +87,7 @@ module Amadeus
   # для кронтасков, скоростью не блещет
   def self.housekeep
     stale.destroy_all
-    (MAX_SESSIONS-count).times { increase_pool }
+    (Conf.amadeus.session_pool_size - count).times { increase_pool }
   end
 
   # тоже для кронтасков, не разлогинивает, не создает новые

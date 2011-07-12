@@ -11,6 +11,7 @@ amadeus:
   recommendations_lite: 20
   recommendations_full: 200
   euro_rate: 40
+  session_pool_size: 10
 payment:
   skip_checksum_validation: yes
   order_id_prefix: o
