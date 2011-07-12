@@ -114,9 +114,27 @@ Order:
   # actions:
   #   show: cancel, ticket, charge, unblock, show_pnr
   filters: source, payment_status, ticket_status, ticketed_date
-  relationships: payments, tickets
+  relationships: payments, tickets, order_comments
   application: Orders
   export: csv
+  
+OrderComment:
+  fields:
+    default: typus_user, text, created_at 
+    list: order, text, typus_user
+    form: order, text
+    show: order, text, typus_user
+    options:
+      read_only: order
+      date_formats:
+        created_at: long
+        updated_at: long
+  options:
+    default_action_on_item: show
+    action_after_save: show
+  relationships: order, typus_user
+  order_by: created_at
+  application: Orders
 
 Ticket:
   fields:
