@@ -139,13 +139,21 @@ class PricerForm < ActiveRecord::BaseWithoutTable
 
   def save_to_cache
     self.query_key ||= ShortUrl.random_hash
+    MongoPricerForm.new(:pricer_form => self).save
     Cache.write('pricer_form', query_key, self)
   end
 
   class << self
     def load_from_cache(query_key)
       require 'city'
-      Cache.read('pricer_form', query_key)
+      res = Cache.read('pricer_form', query_key)
+      mongo_pricer_form = MongoPricerForm.where(:query_key => res.query_key).first
+      if mongo_pricer_form
+        mongo_pricer_form.inc(:use_count, 1)
+      else
+        MongoPricerForm.new(:pricer_form => res).save
+      end
+      res
     end
     alias :[] load_from_cache
   end
