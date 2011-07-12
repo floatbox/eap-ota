@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110602145126) do
+ActiveRecord::Schema.define(:version => 20110712133830) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -204,6 +204,14 @@ ActiveRecord::Schema.define(:version => 20110602145126) do
 
   add_index "hot_offers", ["created_at"], :name => "index_hot_offers_on_created_at"
   add_index "hot_offers", ["destination_id"], :name => "index_hot_offers_on_destination_id"
+
+  create_table "order_comments", :force => true do |t|
+    t.integer  "order_id"
+    t.integer  "typus_user_id"
+    t.text     "text",          :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "orders", :force => true do |t|
     t.string   "email"
