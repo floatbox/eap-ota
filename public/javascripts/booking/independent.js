@@ -18,7 +18,7 @@ booking.initFixedHeader = function() {
 };
 
 /* Booking form */
-booking.init = function() {
+booking.init = function(partner) {
     var that = this;
     this.el = $('#booking');
     this.header = this.el.find('.booking-header');
@@ -33,6 +33,8 @@ booking.init = function() {
     } else {
         window.location = '/#' + this.query_key;
     }
+    _gaq.push(['_setReferrerOverride', partner]);
+    _gaq.push(['_trackPageview']);
     this.updateLinks();
     this.el.find('.bh-title .stop-booking').addClass('latent');
 };
