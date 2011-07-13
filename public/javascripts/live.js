@@ -31,10 +31,10 @@ move: function() {
     }
     if (slx <= this.stw - this.slw) {
         this.proceed();
-        if (this.ucounter++ > 3) {
+        /*if (this.ucounter++ > 3) {
             this.update();
             this.ucounter = 0;
-        }
+        }*/
     }
     if (this.dv !== 0) {
         var v = this.vel + this.dv;
