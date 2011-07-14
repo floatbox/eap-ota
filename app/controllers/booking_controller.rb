@@ -24,12 +24,19 @@ class BookingController < ApplicationController
   def api_booking
     @query_key = params[:query_key]
     @search = PricerForm.load_from_cache(params[:query_key])
-    if @partner = @search.partner
-      # для log_partner
-      session[:partner] = @partner
-      logger.info "API::Partner::Enter: #{@partner} #{Time.now}"
-    end
+    save_partner if @partner = @search.partner
     render 'variant'
+  end
+
+  def api_redirect
+    @search = PricerForm.simple( params.slice(:from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner) )
+    save_partner if @partner = @search.partner
+    if @search.valid?
+      @search.save_to_cache
+      redirect_to "/##{@search.query_key}"
+    else
+      redirect_to '/'
+    end
   end
 
   def api_form
@@ -137,6 +144,14 @@ class BookingController < ApplicationController
       logger.info "Pay: money unblocked?"
       @error_message = :ticketing
     end
+  end
+
+  private
+
+  def save_partner
+    session[:partner] = @partner
+    cookies[:partner] = { :value => @partner, :expires => Time.now + 3600*24*30}
+    logger.info "API::Partner::Enter: #{@partner} #{Time.now}"
   end
 
 end

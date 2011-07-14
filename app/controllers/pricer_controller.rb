@@ -66,8 +66,7 @@ class PricerController < ApplicationController
       render :status => 503, :text => '<error>service disabled by administrator</error>'
       return
     end
-    @search = PricerForm.simple( params.slice(:from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin) )
-    @search.partner = params[:partner] || 'unknown'
+    @search = PricerForm.simple( params.slice(:from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner) )
     if @search.valid?
       @search.save_to_cache
       @recommendations = Mux.new(:lite => true).async_pricer(@search)

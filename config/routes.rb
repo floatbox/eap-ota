@@ -5,6 +5,7 @@ Eviterra::Application.routes.draw do
   match 'pricer/validate' => 'pricer#validate', :as => :pricer_validate
 
   match 'api/search(.:format)' => 'pricer#api'
+  match 'api/redirection(.:format)' => 'booking#api_redirect'
   match 'api/booking/:query_key' => 'booking#api_booking', :via => :get, :as => :api_booking
   match 'api/form' => 'booking#api_form'
 
