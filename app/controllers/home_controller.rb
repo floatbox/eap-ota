@@ -23,7 +23,7 @@ class HomeController < ApplicationController
         City.nearest_to loc[:latitude], loc[:longitude]
       end
     # для оффлайна
-    rescue Errno::EHOSTUNREACH, SocketError, JSON::ParserError, Timeout::Error
+    rescue Errno::EHOSTUNREACH, SocketError, JSON::ParserError, Timeout::Error, RestClient::Exception
       Location.default
     end
   end
