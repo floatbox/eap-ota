@@ -21,6 +21,7 @@ GIT
 GEM
   remote: http://rubygems.org/
   specs:
+    SystemTimer (1.2.3)
     ZenTest (4.5.0)
     aaronh-chronic (0.3.9)
     abstract (1.0.0)
@@ -239,6 +240,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  SystemTimer
   autotest
   awesome_print
   bson_ext
