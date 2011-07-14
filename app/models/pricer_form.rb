@@ -32,6 +32,14 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     validates_presence_of :from_as_object, :to_as_object, :date
     validate :check_date
 
+    def to_as_object_iata
+      to_as_object.iata if to_as_object.respond_to? :iata
+    end
+
+    def from_as_object_iata
+      from_as_object.iata if from_as_object.respond_to? :iata
+    end
+
     def check_date
       errors.add :date, 'Первый вылет слишком рано' if !date.present? || !TimeChecker.ok_to_sell(date_as_date)
     end
@@ -88,11 +96,11 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     end
 
     def to_iata
-      to_as_object.iata
+      to_as_object_iata
     end
 
     def from_iata
-      from_as_object.iata
+      from_as_object_iata
     end
 
     def nearby_cities
