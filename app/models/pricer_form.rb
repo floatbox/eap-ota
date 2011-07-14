@@ -57,6 +57,14 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       [Country, Region].include? from_as_object.class
     end
 
+    def search_around_from
+      from_as_object.class == City && from_as_object.importance == 0
+    end
+
+    def search_around_to
+      to_as_object.class == City && to_as_object.importance == 0
+    end
+
     def to_country_or_region?
       [Country, Region].include? to_as_object.class
     end
