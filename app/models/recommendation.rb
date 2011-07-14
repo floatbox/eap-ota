@@ -384,19 +384,19 @@ class Recommendation
       :alliance => alliances.compact.uniq.map{|a| {:v => a, :t => AirlineAlliance.find(a).name}}.sort_by{|a| a[:t] }
     }
     departure_cities.each_with_index {|cities, i|
-      result['dpt_city_' + i.to_s] = cities.uniq.map{|city| {:v => city, :t => City[city].name} }.sort_by{|a| a[:t] }
+      result['dpt_city_' + i.to_s] = cities.uniq.map{|city| {:v => city, :t => City[city].case_from} }.sort_by{|a| a[:t] }
     }
     arrival_cities.each_with_index {|cities, i|
-      result['arv_city_' + i.to_s] = cities.uniq.map{|city| {:v => city, :t => City[city].name} }.sort_by{|a| a[:t] }
+      result['arv_city_' + i.to_s] = cities.uniq.map{|city| {:v => city, :t => City[city].case_to} }.sort_by{|a| a[:t] }
     }
     departure_airports.each_with_index {|airports, i|
       if result['dpt_city_' + i.to_s].size < 2
-        result['dpt_airport_' + i.to_s] = airports.uniq.map{|airport| {:v => airport, :t => Airport[airport].name} }.sort_by{|a| a[:t] }
+        result['dpt_airport_' + i.to_s] = airports.uniq.map{|airport| {:v => airport, :t => Airport[airport].case_from} }.sort_by{|a| a[:t] }
       end
     }
     arrival_airports.each_with_index {|airports, i|
       if result['arv_city_' + i.to_s].size < 2
-        result['arv_airport_' + i.to_s] = airports.uniq.map{|airport| {:v => airport, :t => Airport[airport].name} }.sort_by{|a| a[:t] }
+        result['arv_airport_' + i.to_s] = airports.uniq.map{|airport| {:v => airport, :t => Airport[airport].case_to} }.sort_by{|a| a[:t] }
       end
     }
     time_titles = ['ночь', 'утро', 'день', 'вечер']

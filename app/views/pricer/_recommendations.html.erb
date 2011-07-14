@@ -21,7 +21,9 @@
       :from => fs.from_as_object.name,
       :to => fs.to_as_object.name,
       :date => date_with_dow(fs.date),
-      :human => "#{fs.from_as_object.case_from} #{fs.to_as_object.case_to}"
+      :human => "#{fs.from_as_object.case_from} #{fs.to_as_object.case_to}",
+      :from_iata => fs.from_as_object.iata,
+      :to_iata => fs.to_as_object.iata
     } }.to_json %>"
     data-mode="<%= @search.form_segments.length > 1 ? (@search.rt ? 'rt' : 'mw') : 'ow' %>">
 <% if @search.form_segments.length == 1 %>
