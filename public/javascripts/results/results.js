@@ -309,9 +309,10 @@ processUpdate: function() {
             self.samount = data.segments;
             self.filters.update(data);
         }, function() {
-            self.parseResults()
+            self.parseResults();
             self.applySort('price');
-            self.showAmount();
+        }, function() {
+            self.filterNearby();
         }, function() {
             self.showDepartures();
         }, function() {
@@ -600,6 +601,7 @@ showRecommendations: function() {
         if (this.cheapest === undefined) {
             this.cheapest = $.extend({}, cheap);
         }
+        /*
         var item, saving, cd = this.cheapest.d, cp = this.cheapest.p, maxsaving = 1.05;
         for (var i = 1, im = items.length; i < im; i++) {
             item = items[i];
@@ -607,7 +609,7 @@ showRecommendations: function() {
                 maxsaving = saving;
                 cheap = item;
             }
-        }
+        }*/
 
         // Быстрый вариант с отсеиванием слишком дорогих
         items = items.sort(function(a, b) {
@@ -662,35 +664,49 @@ showRecommendations: function() {
     if (cheap) container.append(this.makeRecommendation(variants[cheap.n], 'Лучшая цена'));
     if (optimal) container.append(this.makeRecommendation(variants[optimal.n], otitle));
     if (fast) container.append(this.makeRecommendation(variants[fast.n], 'Долететь быстро'));
-    if (!this.filtered) {
-        if (this.items.length > 1 && !this.filters.el.hasClass('empty')) {
-            var alamount = this.filters.items['carriers'].items.length.inflect('авиакомпании', 'авиакомпаний', 'авиакомпаний');
-            var ftip = $('<div class="offers-title featured-tip"><strong>Не подошло?</strong> Воспользуйтесь уточнениями <span class="up">вверху&nbsp;&uarr;</span> или посмотрите <span class="link">все&nbsp;варианты</span> от&nbsp;' + alamount + '</div>');
-            var that = this;
-            ftip.find('.link').click(function() {
-                that.selectTab('all');
+
+    //if (!this.filtered) {
+    if (this.items.length > 1 && !this.filters.el.hasClass('empty')) {
+        var alamount = this.filters.items['carriers'].items.length.inflect('авиакомпании', 'авиакомпаний', 'авиакомпаний');
+        var ftip = $('<div class="offers-title featured-tip"><strong>Не подошло?</strong> Воспользуйтесь уточнениями <span class="up">вверху&nbsp;&uarr;</span> или посмотрите <span class="link">все&nbsp;варианты</span> от&nbsp;' + alamount + '</div>');
+        var that = this;
+        ftip.find('.link').click(function() {
+            that.selectTab('all');
+            $.animateScrollTop(that.el.offset().top);
+        });
+        ftip.find('.up').click(function() {
+            if (that.header.hasClass('fixed')) {
+                $('#results-filters.hidden .rfshow').click();
+            } else {
                 $.animateScrollTop(that.el.offset().top);
-            });
-            ftip.find('.up').click(function() {
-                if (that.header.hasClass('fixed')) {
-                    $('#results-filters.hidden .rfshow').click();
-                } else {
-                    $.animateScrollTop(that.el.offset().top);
-                }
-            });
-            container.append(ftip);
-        }
-        var rprice = cheap ? cheap.p : optimal.p;
-        var mprice = parseInt($('#offers-matrix .offer-prices').attr('data-minprice'), 10);
-        if (!isNaN(mprice) && mprice < rprice) {
-            var mtip = $('<div class="offers-title featured-tip"><strong>Дорого?</strong> Посмотрите <span class="link">другие дни</span> — есть предложения от&nbsp;' + mprice.inflect('рубля', 'рублей', 'рублей') + '</div>');
-            mtip.find('.link').click(function() {
-                that.selectTab('matrix');
-                $.animateScrollTop(that.el.offset().top);
-            });
-            container.append(mtip);
-        }
+            }
+        });
+        container.append(ftip);
     }
+    var rprice = cheap ? cheap.p : optimal.p;
+    var mprice = parseInt($('#offers-matrix .offer-prices').attr('data-minprice'), 10);
+    var nprice = parseInt($('#offers-options').attr('data-nearprice'), 10);
+    var otherPrices = [];
+    if (!isNaN(nprice) && rprice - nprice > 100) {
+        otherPrices.push('<span class="link show-nearby">соседние города</span> (от ' + nprice.inflect('рубля', 'рублей', 'рублей') + ')');
+    }
+    if (!isNaN(mprice) && rprice - mprice > 100) {
+        otherPrices.push('<span class="link show-matrix">другие дни</span> (от ' + mprice.inflect('рубля', 'рублей', 'рублей') + ')');
+    }
+    if (otherPrices.length !== 0) {
+        var mtip = $('<div class="offers-title featured-tip"><strong>Дорого?</strong> Посмотрите ' + otherPrices.join(' или ') + '</div>');
+        mtip.find('.show-matrix').click(function() {
+            that.selectTab('matrix');
+            $.animateScrollTop(that.el.offset().top);
+        });
+        mtip.find('.show-nearby').click(function() {
+            that.filters.reset();
+            that.applyFilters();
+            $.animateScrollTop(that.el.offset().top);
+        });
+        container.append(mtip);
+    }
+
     container.removeClass('processing');
 },
 makeRecommendation: function(variant, title) {
@@ -763,5 +779,30 @@ joinDepartures: function(dtimes, current) {
     var pl = parts.length;
     if (pl > 2) parts[pl - 2] = ' и в ';
     return pl ? parts.join('') : '';
+},
+filterNearby: function() {
+    this.filters.active = false;
+    var segments = $.parseJSON($('#offers-options').attr('data-segments'));
+    for (var i = 0, im = segments.length; i < im; i++) {
+        this.selectFilter('dpt_city_' + i, segments[i].from_iata);
+        this.selectFilter('arv_city_' + i, segments[i].to_iata);
+    }
+    this.filters.active = true;
+    this.filterOffers();
+    if (!$('#offers-all .offers-improper').hasClass('latent')) {
+        this.filters.reset();
+        this.filterOffers();
+    }
+    var offer = this.items[0];
+    if (offer.el.hasClass('improper')) {
+        $('#offers-options').attr('data-nearprice', offer.summary.price);
+    }
+},
+selectFilter: function(name, value) {
+    var filter = this.filters.items[name];
+    filter.select([value]);
+    if (!this.filters.selected[name]) {
+        filter.selected = {};
+    }
 }
 };

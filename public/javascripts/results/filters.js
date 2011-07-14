@@ -14,7 +14,7 @@ init: function() {
                 that.selected[name] = values;
             } else {
                 delete that.selected[name];
-            }            
+            }
             if (that.active) {
                 results.applyFilters();
             }
@@ -83,6 +83,7 @@ reset: function() {
 update: function(data) {
     this.active = false;
     var that = this;
+    var mode = $('#offers-options').attr('data-mode');
     this.el.find('.rfreset').addClass('latent');
     this.el.find('.rftitle').removeClass('latent');
     this.el.find('.filter').each(function() {
@@ -91,8 +92,11 @@ update: function(data) {
         f.fill(data[name]);
         f.el.toggleClass('latent', f.items.length < 2);
         var lid = f.el.attr('data-location');
-        if (lid && data.locations[lid]) {
-            f.el.find('.control').html((lid.charAt(0) == 'd' ? 'вылет ' : 'прилёт ') + data.locations[lid]);
+        if (mode === 'mw') {
+            var prefix = that.titles.ow[lid.substring(0, 4) + '0'];
+            f.el.find('.control').html(data.locations[lid] ? (prefix + ' ' + data.locations[lid]) : prefix);
+        } else {
+            f.el.find('.control').html(that.titles[mode][lid]);
         }
     });
     this.el.find('.filters').each(function() {
@@ -106,5 +110,17 @@ update: function(data) {
     this.data = data;
     this.selected = {};
     this.active = true;
+},
+titles: {
+    ow: {
+        dpt_0: 'вылет',
+        arv_0: 'прилёт'
+    },
+    rt: {
+        dpt_0: 'вылет туда',
+        arv_0: 'прилёт туда',
+        dpt_1: 'вылет обратно',
+        arv_1: 'прилёт обратно'
+    }
 }
 };
