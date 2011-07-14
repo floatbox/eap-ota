@@ -92,12 +92,16 @@ update: function(data) {
         f.fill(data[name]);
         f.el.toggleClass('latent', f.items.length < 2);
         var lid = f.el.attr('data-location');
-        if (mode === 'mw') {
-            var prefix = that.titles.ow[lid.substring(0, 4) + '0'];
-            f.el.find('.control').html(data.locations[lid] ? (prefix + ' ' + data.locations[lid]) : prefix);
-        } else {
-            f.el.find('.control').html(that.titles[mode][lid]);
+        // временно вернул, сломался "сложный маршрут"
+        if (lid && data.locations[lid]) {
+            f.el.find('.control').html((lid.charAt(0) == 'd' ? 'вылет ' : 'прилёт ') + data.locations[lid]);
         }
+        // if (mode === 'mw') {
+        //     var prefix = that.titles.ow[lid.substring(0, 4) + '0'];
+        //     f.el.find('.control').html(data.locations[lid] ? (prefix + ' ' + data.locations[lid]) : prefix);
+        // } else {
+        //     f.el.find('.control').html(that.titles[mode][lid]);
+        // }
     });
     this.el.find('.filters').each(function() {
         $(this).closest('td').toggleClass('latent', $(this).find('.filter:not(.latent)').length === 0);
