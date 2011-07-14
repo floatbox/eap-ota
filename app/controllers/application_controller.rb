@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_locale
 
   def log_partner
-    logger.info "API::Partner: #{session[:partner]}" if session[:partner]
+    logger.info "API::Partner: #{cookies[:partner]}" if cookies[:partner]
   end
   after_filter :log_partner
 
