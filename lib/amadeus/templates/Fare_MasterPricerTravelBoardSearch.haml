@@ -62,6 +62,9 @@
     %departureLocalization
       -unless segment.from_country_or_region?
         %departurePoint
+          -unless lite
+            %distance 200
+            %distanceUnit K
           %locationId= segment.from_iata
       -else
         - segment.from_as_object.main_city_iatas.each do |code|
@@ -70,6 +73,9 @@
     %arrivalLocalization
       -unless segment.to_country_or_region?
         %arrivalPointDetails
+          -unless lite
+            %distance 200
+            %distanceUnit K
           %locationId= segment.to_iata
       -else
         - segment.to_as_object.main_city_iatas.each do |code|
