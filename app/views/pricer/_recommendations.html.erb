@@ -12,18 +12,18 @@
 <% end %>
 
 <% if @recommendations.present? %>
-<div id="offers-options" 
-    data-filters='<%= raw Recommendation.summary(@recommendations, @locations).to_json.gsub("'", '&rsquo;') %>' 
-    data-query_key="<%= @query_key %>" 
-    data-people="<%= @search.people_total %>" 
+<div id="offers-options"
+    data-filters='<%= raw Recommendation.summary(@recommendations, @locations).to_json.gsub("'", '&rsquo;') %>'
+    data-query_key="<%= @query_key %>"
+    data-people="<%= @search.people_total %>"
     data-aveprice="<%= @average_price %>"
     data-segments="<%= @search.form_segments.map{|fs| {
       :from => fs.from_as_object.name,
       :to => fs.to_as_object.name,
       :date => date_with_dow(fs.date),
       :human => "#{fs.from_as_object.case_from} #{fs.to_as_object.case_to}",
-      :from_iata => fs.from_as_object.iata,
-      :to_iata => fs.to_as_object.iata
+      :from_iata => fs.from_as_object_iata,
+      :to_iata => fs.to_as_object_iata
     } }.to_json %>"
     data-mode="<%= @search.form_segments.length > 1 ? (@search.rt ? 'rt' : 'mw') : 'ow' %>">
 <% if @search.form_segments.length == 1 %>
@@ -32,7 +32,7 @@
 <% elsif @search.rt %>
     <% fs1 = @search.form_segments[0] %>
     <% fs2 = @search.form_segments[1] %>
-    <div class="ht-content"><span class="segment1"><%= fs1.from_as_object.name %></span> &#8644; <span class="segment2"><%= fs1.to_as_object.name %></span>, <%= fmt_date_short(fs1.date) %><% if fs2.date != fs1.date %> — <%= fmt_date_short(fs2.date) %><% end %></div>    
+    <div class="ht-content"><span class="segment1"><%= fs1.from_as_object.name %></span> &#8644; <span class="segment2"><%= fs1.to_as_object.name %></span>, <%= fmt_date_short(fs1.date) %><% if fs2.date != fs1.date %> — <%= fmt_date_short(fs2.date) %><% end %></div>
 <% else %>
     <div class="ht-content"><% @search.form_segments.each_with_index do |fs, fs_counter| %><% if fs_counter > 0 %> <span class="separator">&bull;</span> <% end %><span class="segment<%= fs_counter + 1 %>"><%= fs.from_as_object.name %></span> &rarr; <span class="segment<%= fs_counter + 1 %>"><%= fs.to_as_object.name %></span>, <%= fmt_date_short(fs.date) %><% end %></div>
 <% end %>
@@ -51,3 +51,4 @@
 <% end %>
 
 <% end %>
+
