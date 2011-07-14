@@ -27,14 +27,14 @@ booking.init = function(partner) {
     this.query_key = path.split('/').last();
     if (hash.indexOf('recommendation/') !== -1) {
         window.location.hash = '';
+        _gaq.push(['_trackPageview', path + '?utm_campaign=api&utm_medium=api&utm_source=' + partner]);
         this.prebook(this.query_key, hash.replace('recommendation/', ''));
     } else if (hash.length !== 0) {
+        _gaq.push(['_trackPageview']);
         this.load(hash);
     } else {
         window.location = '/#' + this.query_key;
     }
-    _gaq.push(['_setReferrerOverride', partner]);
-    _gaq.push(['_trackPageview']);
     this.updateLinks();
     this.el.find('.bh-title .stop-booking').addClass('latent');
 };

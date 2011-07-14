@@ -19,7 +19,7 @@ _gaq.push(['_setAccount', 'UA-19832395-1']);
 _gaq.push(['_setAccount', 'UA-19832395-2']);
 _gaq.push(['_setDomainName', '.team.eviterra.ru']);
 <% end %>
-if (!window.ignorePageview) {
+if (typeof ignorePageview === 'undefined') {
     _gaq.push(['_trackPageview']);
 }
 (function() {
