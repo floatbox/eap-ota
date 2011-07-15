@@ -68,11 +68,11 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     end
 
     def search_around_from
-      from_as_object.class == City && from_as_object.importance == 0
+      from_as_object.class == City && from_as_object.search_around
     end
 
     def search_around_to
-      to_as_object.class == City && to_as_object.importance == 0
+      to_as_object.class == City && to_as_object.search_around
     end
 
     def to_country_or_region?

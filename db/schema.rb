@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110602145126) do
+ActiveRecord::Schema.define(:version => 20110715131854) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -99,19 +99,20 @@ ActiveRecord::Schema.define(:version => 20110602145126) do
     t.integer  "country_id"
     t.float    "lat"
     t.float    "lng"
-    t.integer  "importance",   :default => 0,  :null => false
+    t.integer  "importance",    :default => 0,  :null => false
     t.string   "synonym_list"
     t.string   "proper_to"
     t.string   "proper_from"
     t.string   "proper_in"
     t.integer  "region_id"
-    t.string   "timezone",     :default => ""
+    t.string   "timezone",      :default => ""
     t.string   "morpher_to"
     t.string   "morpher_from"
     t.string   "morpher_in"
     t.string   "iata_ru"
     t.string   "sirena_name"
     t.boolean  "disabled"
+    t.boolean  "search_around"
   end
 
   add_index "cities", ["iata"], :name => "index_cities_on_iata"

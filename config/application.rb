@@ -41,5 +41,10 @@ module Eviterra
     config.filter_parameters += [:password]
 
     config.middleware.use "IataStash::Middleware"
+
+    config.generators do |g|
+      g.orm :active_record
+    end
   end
 end
+
