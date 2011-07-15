@@ -38,11 +38,14 @@ init: function(options) {
     this.options = options || {};
     this.value = [];
 },
-fill: function(items) {
+fill: function(items, nbsp) {
     var template = '<dd data-value="{v}">{t}</dd>';
     var list = $('dl', this.dropdown);
     this.items && this.items.remove();
     if (items) for (var i = 0, im = items.length; i < im; i++) {
+        if (nbsp) {
+            items[i].t = items[i].t.replace(' ', '&nbsp;');
+        }
         var el = $(template.supplant(items[i])).appendTo(list);
         if (!items[i].t) el.hide();
     }

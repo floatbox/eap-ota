@@ -89,19 +89,17 @@ update: function(data) {
     this.el.find('.filter').each(function() {
         var name = $(this).attr('data-name');
         var f = that.items[name];
-        f.fill(data[name]);
-        f.el.toggleClass('latent', f.items.length < 2);
         var lid = f.el.attr('data-location');
-        // временно вернул, сломался "сложный маршрут"
-        if (lid && data.locations[lid]) {
-            f.el.find('.control').html((lid.charAt(0) == 'd' ? 'вылет ' : 'прилёт ') + data.locations[lid]);
+        f.fill(data[name], Boolean(lid));
+        f.el.toggleClass('latent', f.items.length < 2);
+        if (lid) {
+            if (mode === 'mw') {
+                var prefix = that.titles.ow[lid.substring(0, 4) + '0'];
+                f.el.find('.control').html(data.locations[lid] ? (prefix + ' ' + data.locations[lid]) : prefix);
+            } else {
+                f.el.find('.control').html(that.titles[mode][lid]);
+            }
         }
-        // if (mode === 'mw') {
-        //     var prefix = that.titles.ow[lid.substring(0, 4) + '0'];
-        //     f.el.find('.control').html(data.locations[lid] ? (prefix + ' ' + data.locations[lid]) : prefix);
-        // } else {
-        //     f.el.find('.control').html(that.titles[mode][lid]);
-        // }
     });
     this.el.find('.filters').each(function() {
         $(this).closest('td').toggleClass('latent', $(this).find('.filter:not(.latent)').length === 0);

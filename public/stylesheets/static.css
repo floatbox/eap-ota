@@ -1,6 +1,11 @@
+/* Content */
+#content {
+    padding-bottom: 125px;
+}
+
 /* Return to search */
 #back2search {
-    padding: 13px 0 14px;
+    padding: 52px 0 14px;
     background: #3e3e3e;
     font-weight: bold;
     font-size: 20px;

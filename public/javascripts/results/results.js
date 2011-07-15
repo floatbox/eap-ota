@@ -355,6 +355,7 @@ processUpdate: function() {
             $('#rtabs').toggle(!imprecise);
             $('#offers-matrix .imprecise').toggleClass('latent', !imprecise)
             self.filters.el.toggleClass('latent', imprecise);
+            self.filters.el.find('.rf-stroke').width(self.filters.content.width() - 150);
             fixedBlocks.update();
             if (booking.waiting) {
                 var parts = booking.form.el.attr('data-variant').split('-');
