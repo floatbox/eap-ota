@@ -1,5 +1,6 @@
 class MongoPricerForm
   include Mongoid::Document
+  include Mongoid::Timestamps
   include CopyAttrs
   store_in :pricer_forms
   field :adults, :type => Integer, :default => 1
