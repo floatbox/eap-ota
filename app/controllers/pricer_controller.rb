@@ -23,7 +23,7 @@ class PricerController < ApplicationController
 
   def calendar
     unless params[:restore_results]
-      if @search.valid? && @search.form_segments.size < 3
+      if @search.valid? && @search.segments.size < 3
         @recommendations = Mux.new(:admin_user => admin_user).calendar(@search)
       end
     end
@@ -51,7 +51,7 @@ class PricerController < ApplicationController
       end
       render :json => {
         :valid => @search.valid?,
-        :errors => @search.form_segments.map{|fs| fs.errors.keys},
+        :errors => @search.segments.map{|fs| fs.errors.keys},
         :human => @search.human,
         :search => @search,
         :complex_to_parse_results => @search.complex_to_parse_results,
@@ -71,7 +71,7 @@ class PricerController < ApplicationController
       @search.save_to_cache
       @recommendations = Mux.new(:lite => true).async_pricer(@search)
       render 'api/yandex'
-    elsif @search.errors[:"form_segments.date"] == ["Первый вылет слишком рано"]
+    elsif @search.errors[:"segments.date"] == ["Первый вылет слишком рано"]
       @recommendations = []
       render 'api/yandex'
     else
@@ -86,7 +86,7 @@ class PricerController < ApplicationController
         @search.people_count.values.sum == @search.people_count[:adults] &&
         !admin_user &&
         ([nil, '', 'Y'].include? @search.cabin) &&
-        @search.form_segments[0].to_as_object.class == City && @search.form_segments[0].from_as_object.class == City
+        @search.segments[0].to_as_object.class == City && @search.segments[0].from_as_object.class == City
       )
        HotOffer.create(
           :code => @query_key,

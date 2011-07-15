@@ -8,7 +8,7 @@ module Amadeus
           form = args.shift
           @people_count = form.real_people_count
           @cabin = form.cabin
-          @segments = form.form_segments
+          @segments = form.segments
         end
         super *args
       end

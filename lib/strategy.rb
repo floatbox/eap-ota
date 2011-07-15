@@ -23,7 +23,7 @@ class Strategy
   # ###################
 
   def check_price_and_availability
-    unless TimeChecker.ok_to_book(@search.form_segments[0].date_as_date + 1.day)
+    unless TimeChecker.ok_to_book(@search.segments[0].date_as_date + 1.day)
       logger.error 'Strategy: time criteria missed'
       return
     end

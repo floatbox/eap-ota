@@ -14,7 +14,7 @@ describe PricerForm do
     context "when filled" do
       let :attrs do
         { "people_count" => people_attrs,
-          "form_segments" => {
+          "segments" => {
             "0" => {"from"=>"Москва", "date"=>"210412", "to"=>"Париж"},
             "1" => {"from"=>"Париж", "date"=>"280412", "to"=>"Москва"}}
         }
@@ -28,7 +28,7 @@ describe PricerForm do
     context "when second row 'from' is not filled" do
       let :attrs do
         { "people_count" => people_attrs,
-          "form_segments"=> {
+          "segments"=> {
             "0" => {"from"=>"Москва", "date"=>"210412", "to"=>"Париж"},
             "1" => {"from"=>"", "date"=>"280412", "to"=>"Москва"}}
         }

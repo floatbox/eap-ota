@@ -202,28 +202,28 @@ values: function() {
     var s = this.segments;
     var d = this.calendar.values || [];
     var data = {
-        form_segments: [],
+        segments: [],
         people_count: this.persons.selected,
         cabin: this.cabin.value[0]
     };
     for (var i = {rt: 1, ow: 1, dw: 2, tw: 3}[this.mode]; i--;) {
-        data.form_segments[i] = {
+        data.segments[i] = {
             from: s[i].from.val(),
             to: s[i].to.val(),
             date: d[i]
         };
     }
     if (this.mode === 'rt') {
-        data.form_segments[1] = {
+        data.segments[1] = {
             from: '',
-            to: data.form_segments[0].from,
+            to: data.segments[0].from,
             date: d[1]
         };
     }
     return data;
 },
 restore: function(data) {
-    var segments = data.form_segments || [], dates = [];
+    var segments = data.segments || [], dates = [];
     this.toggleMode(data.rt ? 'rt' : ['rt', 'ow', 'dw', 'tw'][segments.length]);
     for (var i = 0, im = this.segments.length; i < im; i++) {
         var segment = segments[i];
@@ -336,7 +336,7 @@ validate: function(qkey) {
                                 if (self.mode === 'rt' && i === 1) {
                                     text = 'Выберите, пожалуйста, дату обратного вылета';
                                 } else if (self.mode === 'dw' || self.mode === 'tw') {
-                                    var segment = result.search.form_segments[i];
+                                    var segment = result.search.segments[i];
                                     var sf = segment.from_as_object && (segment.from_as_object.proper_from || segment.from_as_object.morpher_from);
                                     var st = segment.to_as_object && (segment.to_as_object.proper_to || segment.to_as_object.morpher_to);
                                     if (sf) text += ' ' + sf.replace(/ /, '&nbsp;');
@@ -357,8 +357,8 @@ validate: function(qkey) {
                 }
             }
             this.toValues = [];
-            if (result.search && result.search.form_segments) {
-                self.applySegments(result.search.form_segments);
+            if (result.search && result.search.segments) {
+                self.applySegments(result.search.segments);
             }
             delete self.request;
         },

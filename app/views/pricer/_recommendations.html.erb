@@ -1,6 +1,6 @@
 <% cache [:pricer, @query_key] do %>
 
-<% nearby_list = nearby_cities_list(@search.rt ? @search.form_segments[0, 1] : @search.form_segments) %>
+<% nearby_list = nearby_cities_list(@search.rt ? @search.segments[0, 1] : @search.segments) %>
 <% unless nearby_list.empty? %>
 <div class="offers-nearby latent">
     <h3 class="offers-title">Соседние города</h3>
@@ -17,7 +17,7 @@
     data-query_key="<%= @query_key %>"
     data-people="<%= @search.people_total %>"
     data-aveprice="<%= @average_price %>"
-    data-segments="<%= @search.form_segments.map{|fs| {
+    data-segments="<%= @search.segments.map{|fs| {
       :from => fs.from_as_object.name,
       :to => fs.to_as_object.name,
       :date => date_with_dow(fs.date),
@@ -25,16 +25,16 @@
       :from_iata => fs.from_as_object_iata,
       :to_iata => fs.to_as_object_iata
     } }.to_json %>"
-    data-mode="<%= @search.form_segments.length > 1 ? (@search.rt ? 'rt' : 'mw') : 'ow' %>">
-<% if @search.form_segments.length == 1 %>
-    <% fs1 = @search.form_segments[0] %>
+    data-mode="<%= @search.segments.length > 1 ? (@search.rt ? 'rt' : 'mw') : 'ow' %>">
+<% if @search.segments.length == 1 %>
+    <% fs1 = @search.segments[0] %>
     <div class="ht-content"><span class="segment1"><%= fs1.from_as_object.name %></span> &rarr; <span class="segment2"><%= fs1.to_as_object.name %></span>, <%= fmt_date_short(fs1.date) %></div>
 <% elsif @search.rt %>
-    <% fs1 = @search.form_segments[0] %>
-    <% fs2 = @search.form_segments[1] %>
+    <% fs1 = @search.segments[0] %>
+    <% fs2 = @search.segments[1] %>
     <div class="ht-content"><span class="segment1"><%= fs1.from_as_object.name %></span> &#8644; <span class="segment2"><%= fs1.to_as_object.name %></span>, <%= fmt_date_short(fs1.date) %><% if fs2.date != fs1.date %> — <%= fmt_date_short(fs2.date) %><% end %></div>
 <% else %>
-    <div class="ht-content"><% @search.form_segments.each_with_index do |fs, fs_counter| %><% if fs_counter > 0 %> <span class="separator">&bull;</span> <% end %><span class="segment<%= fs_counter + 1 %>"><%= fs.from_as_object.name %></span> &rarr; <span class="segment<%= fs_counter + 1 %>"><%= fs.to_as_object.name %></span>, <%= fmt_date_short(fs.date) %><% end %></div>
+    <div class="ht-content"><% @search.segments.each_with_index do |fs, fs_counter| %><% if fs_counter > 0 %> <span class="separator">&bull;</span> <% end %><span class="segment<%= fs_counter + 1 %>"><%= fs.from_as_object.name %></span> &rarr; <span class="segment<%= fs_counter + 1 %>"><%= fs.to_as_object.name %></span>, <%= fmt_date_short(fs.date) %><% end %></div>
 <% end %>
 </div>
 <% @recommendations.each do |recommendation| %>

@@ -47,7 +47,7 @@
 
     // Данные по умолчанию для сброса
     search.defvalues = {
-        form_segments: [{from: search.segments[0].from.val()}],
+        segments: [{from: search.segments[0].from.val()}],
         people_count: {adults: 1, children: 0, infants: 0},
         cabin: 'Y',
         rt: true

@@ -52,7 +52,7 @@ module Sirena
               }
             end
           else
-            form.form_segments.collect do |fs|
+            form.segments.collect do |fs|
               { :departure => fs.from_iata,
                 :arrival => fs.to_iata,
                 :date => sirena_date(fs.date),

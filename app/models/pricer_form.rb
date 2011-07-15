@@ -1,5 +1,20 @@
 # encoding: utf-8
-class PricerForm < ActiveRecord::BaseWithoutTable
+class PricerForm
+  include Mongoid::Document
+  include Mongoid::Timestamps
+  #store_in :pricer_forms
+  field :adults, :type => Integer, :default => 1
+  field :children, :type => Integer, :default => 0
+  field :infants, :type => Integer, :default => 0
+  field :complex_to
+  field :cabin
+  field :query_key
+  field :partner
+  field :use_count, :type => Integer, :default => 1
+  embeds_many :segments, :class_name => 'PricerForm::Segment'
+  accepts_nested_attributes_for :segments
+  delegate :to, :from, :from_iata, :to_iata, :to => 'segments.first'
+  attr_reader :complex_to_parse_results
 
   # перенести в хелпер
   def self.convert_api_date(date_str)
@@ -11,9 +26,10 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   end
 
   def self.simple(args)
-    form_segments = [ {:from => args[:from], :to => args[:to], :date => convert_api_date(args[:date1])} ]
+    segments = {}
+    segments["0"] = {:from => args[:from], :to => args[:to], :date => convert_api_date(args[:date1])}
     if args[:date2]
-      form_segments << {:from => args[:to], :to => args[:from], :date => convert_api_date(args[:date2])}
+      segments["1"] = {:from => args[:to], :to => args[:from], :date => convert_api_date(args[:date2])}
     end
     adults = (args[:adults] || 1).to_i
     children = args[:children].to_i
@@ -21,15 +37,18 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     cabin = args[:cabin]
     partner = args[:partner]
 
-    new :form_segments => form_segments,
+    new :segments => segments,
       :adults => adults, :children => children, :infants => infants, :cabin => cabin,
       :partner => partner
   end
 
-  class FormSegment < ActiveRecord::BaseWithoutTable
-    column :from, :string
-    column :to, :string
-    column :date, :string
+  class Segment
+    include Mongoid::Document
+    embedded_in :form, :class_name => 'PricerForm'
+    field :from
+    field :to
+    field :date
+
     attr_reader :to_as_object, :from_as_object
     validates_presence_of :from_as_object, :to_as_object, :date, :date_as_date
     validate :check_date
@@ -91,14 +110,12 @@ class PricerForm < ActiveRecord::BaseWithoutTable
       end
     end
 
-    def to= name
-      @to_as_object = location_from_string name
-      super
+    def to_as_object
+      @to_as_object ||= location_from_string(to)
     end
 
-    def from= name
-      @from_as_object = location_from_string name
-      super
+    def from_as_object
+      @from_as_object ||= location_from_string(from)
     end
 
     def to_iata
@@ -122,36 +139,18 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     end
   end
 
-  column :adults, :integer, 1
-  column :children, :integer, 0
-  column :infants, :integer, 0
-  column :complex_to, :string
-  column :cabin, :string
-  # FIXME delete tomorrow
-  column :day_interval, :integer, 3
-  column :debug, :boolean, false
-  column :sirena, :boolean, false
-  # end of FIXME
-  has_many :form_segments, :class_name => 'PricerForm::FormSegment'
-  accepts_nested_attributes_for :form_segments
-  # FIXME обходит необходимость использовать form_segments_attributes в жаваскрипте
+  # FIXME обходит необходимость использовать segments_attributes в жаваскрипте
   # но нет уверенности, что не создаю каких-то дополнительных проблем
-  def form_segments=(attrs)
-    self.form_segments_attributes = attrs
+  def segments=(attrs)
+    self.segments_attributes = attrs
   end
 
-  delegate :to, :from, :from_iata, :to_iata, :to => 'form_segments.first'
-
-  attr_reader :complex_to_parse_results
-  attr_accessor :query_key
-  attr_accessor :partner
-
   def date1
-    form_segments.first.date
+    segments.first.date
   end
 
   def date2
-    form_segments[1].date if form_segments[1]
+    segments[1].date if segments[1]
   end
 
   def dates
@@ -161,33 +160,28 @@ class PricerForm < ActiveRecord::BaseWithoutTable
 
   def save_to_cache
     self.query_key ||= ShortUrl.random_hash
-    MongoPricerForm.new(:pricer_form => self).save
-    Cache.write('pricer_form', query_key, self)
+    save
   end
 
   class << self
     def load_from_cache(query_key)
-      require 'city'
-      res = Cache.read('pricer_form', query_key)
-      mongo_pricer_form = MongoPricerForm.where(:query_key => res.query_key).first
-      if mongo_pricer_form
-        mongo_pricer_form.inc(:use_count, 1)
-      else
-        MongoPricerForm.new(:pricer_form => res).save
+      pricer_form = PricerForm.where(:query_key => query_key).first
+      if pricer_form
+        pricer_form.inc(:use_count, 1)
       end
-      res
+      pricer_form
     end
     alias :[] load_from_cache
   end
 
   def as_json(args)
     args ||= {}
-    args[:methods] = (args[:methods].to_a + [:people_count, :complex_to_parse_results, :form_segments, :rt]).uniq
+    args[:methods] = (args[:methods].to_a + [:people_count, :complex_to_parse_results, :segments, :rt]).uniq
     super(args)
   end
 
   def rt
-    (form_segments.length == 2) && (form_segments[0].to_as_object == form_segments[1].from_as_object) && (form_segments[1].to_as_object == form_segments[0].from_as_object)
+    (segments.length == 2) && (segments[0].to_as_object == segments[1].from_as_object) && (segments[1].to_as_object == segments[0].from_as_object)
   end
 
   # для рассчета тарифов
@@ -235,9 +229,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
 
   # заполняет невведенные from во втором и далее сегментах
   def fix_segments
-    # пришлось использовать to_a - какие-то идиосинкразии внутри активрекорда
-    # TODO оформить и зафиксить баг?
-    form_segments.to_a.each_cons(2) do |a, b|
+    segments.each_cons(2) do |a, b|
       if b.from.empty?
         b.from = a.to
       end
@@ -245,7 +237,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   end
 
   def parse_complex_to
-    self.complex_to ||= form_segments[0].to.gsub(',', ' ')
+    self.complex_to ||= segments[0].to.gsub(',', ' ')
     res = {}
     str = self.complex_to.mb_chars
     not_finished = true
@@ -290,7 +282,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
               str = str[0...(str.length - word_part.length)]
               not_finished = true
             elsif r && (['airport', 'city', 'country', 'region'].include? r.type)
-              form_segments[0].to = r.name rescue nil
+              segments[0].to = r.name rescue nil
               res[:to] = {
                 :value => r.name,
                 :str => word_part.to_s,
@@ -317,7 +309,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   end
 
   def date_from_month_and_day(month, day)
-    self.form_segments[0].date = (Date.today > Date.new(Date.today.year, month, day)) ?
+    self.segments[0].date = (Date.today > Date.new(Date.today.year, month, day)) ?
       Date.new(Date.today.year+1, month, day).strftime('%d%m%y') :
       Date.new(Date.today.year, month, day).strftime('%d%m%y')
   end
@@ -327,20 +319,20 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   end
 
   def complex_route?
-    form_segments.length > 1 && !rt
+    segments.length > 1 && !rt
   end
 
   def human
     return "запрос не полон" unless valid?
     r = []
 
-    fs = form_segments[0];
+    fs = segments[0];
     if fs.from_as_object && fs.to_as_object
       r << "<span class=\"locations\" data-short=\"#{fs.from_as_object.name} — #{fs.to_as_object.name}\">#{fs.from_as_object.case_from} #{fs.to_as_object.case_to}</span>"
     end
     if complex_route?
       r << "<span class=\"date\" data-date=\"#{[dates[0][0,2],dates[0][2,2]].join('.')}\">#{human_date(date1)}</span>,"
-      form_segments[1..-1].each do |fs|
+      segments[1..-1].each do |fs|
         if fs.from_as_object && fs.to_as_object
           r << " <span class=\"locations\" data-short=\"#{fs.from_as_object.name} — #{fs.to_as_object.name}\">#{fs.from_as_object.case_from} #{fs.to_as_object.case_to}</span>"
           r << "<span class='date' data-date='#{[fs.date[0,2], fs.date[2,2]].join('.')}'>#{human_date(fs.date)}</span>,"
@@ -380,17 +372,17 @@ class PricerForm < ActiveRecord::BaseWithoutTable
   end
 
   def human_lite
-    form_segments[0].from_as_object.name + (rt ? ' ⇄ ' : ' → ') + form_segments[0].to_as_object.name
+    segments[0].from_as_object.name + (rt ? ' ⇄ ' : ' → ') + segments[0].to_as_object.name
   end
 
   def nearby_cities
     #FIXME
-    form_segments[0].nearby_cities
+    segments[0].nearby_cities
   end
 
   def human_locations
     result = {}
-    form_segments.each_with_index do |fs, i|
+    segments.each_with_index do |fs, i|
       if fs.from_as_object && fs.to_as_object
         result['dpt_' + i.to_s] = fs.from_as_object.case_from
         result['arv_' + i.to_s] = fs.to_as_object.case_to

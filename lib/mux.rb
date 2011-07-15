@@ -187,14 +187,14 @@ class Mux
 
   SNG_COUNTRY_CODES = ["RU", "AZ", "AM", "BY", "GE", "KZ", "KG", "LV", "LT", "MD", "TJ", "TM", "UZ", "UA", "EE"]
   def sirena_searchable?(form)
-    return false if form.form_segments.size > 2
-    return false if form.form_segments.any? {|fs| fs.from_as_object == fs.to_as_object}
-    locations = (form.form_segments.every.from_as_object + form.form_segments.every.to_as_object).uniq
+    return false if form.segments.size > 2
+    return false if form.segments.any? {|fs| fs.from_as_object == fs.to_as_object}
+    locations = (form.segments.every.from_as_object + form.segments.every.to_as_object).uniq
 
     !Conf.sirena.restrict ||
       # form.adults == 1 &&
       # form.children == 0 && form.infants == 0 &&
-      form.form_segments.none?(&:multicity?) &&
+      form.segments.none?(&:multicity?) &&
       locations.all?{|l| l.iata_ru != l.iata && l.iata_ru.present?} &&
       locations.any?{|l| SNG_COUNTRY_CODES.include? l.country.alpha2}
   end
