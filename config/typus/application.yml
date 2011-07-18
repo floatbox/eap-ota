@@ -113,7 +113,7 @@ Order:
   # тут не ввернешь конфирмации. временно убрал
   # actions:
   #   show: cancel, ticket, charge, unblock, show_pnr
-  filters: source, payment_status, ticket_status, ticketed_date
+  filters: source, payment_status, ticket_status, created_at
   relationships: payments, tickets, order_comments
   application: Orders
   export: csv
