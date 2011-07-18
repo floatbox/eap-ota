@@ -68,10 +68,9 @@ class Recommendation
     variants.first.segments.first.dept_date
   end
 
-  # FIXME перенести в TimeChecker
   def clear_variants
     #удаляем варианты на сегодня/завтра
-    variants.delete_if{|v| v.segments[0].dept_date < Date.today + 2.days}
+    variants.delete_if{|v| !TimeChecker.ok_to_show(v.departure_datetime_utc)}
   end
 
   # FIXME перенести в amadeus strategy?

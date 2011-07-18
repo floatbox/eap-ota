@@ -81,6 +81,8 @@ class Mux
         # regroup
         recommendations = Recommendation.corrected(recommendations)
       end
+      recommendations.every.clear_variants
+      recommendations.delete_if{|r| r.variants.blank?}
       recommendations
     end
   end

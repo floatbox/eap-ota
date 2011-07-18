@@ -138,7 +138,7 @@ class OrderForm < ActiveRecord::BaseWithoutTable
   validate :validate_card, :validate_dept_date
 
   def validate_dept_date
-    errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell(recommendation.variants[0].segments[0].dept_date, recommendation.last_tkt_date)
+    errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell(recommendation.variants[0].departure_datetime_utc, recommendation.last_tkt_date)
   end
 
   def validate_card

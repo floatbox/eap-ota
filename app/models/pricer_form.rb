@@ -43,7 +43,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     end
 
     def check_date
-      errors.add :date, 'Первый вылет слишком рано' if !date.present? || !TimeChecker.ok_to_sell(date_as_date)
+      errors.add :date, 'Первый вылет слишком рано' if !date.present? || !TimeChecker.ok_to_show(date_as_date + 1.day)
     end
 
     def as_json(args)

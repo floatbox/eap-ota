@@ -23,7 +23,7 @@ class Strategy
   # ###################
 
   def check_price_and_availability
-    unless TimeChecker.ok_to_sell(@search.form_segments[0].date_as_date)
+    unless TimeChecker.ok_to_book(@search.form_segments[0].date_as_date + 1.day)
       logger.error 'Strategy: time criteria missed'
       return
     end
@@ -69,7 +69,7 @@ class Strategy
         # не нужно, booking {...} убьет бронирование
         # amadeus.pnr_ignore
 
-        unless TimeChecker.ok_to_sell(@rec.variants[0].flights[0].dept_date, @rec.last_tkt_date)
+        unless TimeChecker.ok_to_book(@rec.variants[0].departure_datetime_utc, @rec.last_tkt_date)
           logger.error 'Strategy: time criteria for last tkt date missed'
           dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
           return
@@ -82,11 +82,6 @@ class Strategy
       sirena = Sirena::Service.new
       unless repriced_rec = sirena.pricing(@search, :recommendation => @rec).recommendation
         logger.info 'Strategy: got no recommendation'
-        return
-      end
-      # FIXME действительно может отличаться от результата проверки выше?
-      unless TimeChecker.ok_to_sell(repriced_rec.variants[0].flights[0].dept_date)
-        logger.error 'Strategy: missed time criteria, again'
         return
       end
       @rec.rules = sirena_rules(repriced_rec)
@@ -174,7 +169,7 @@ class Strategy
             return
           end
 
-          unless TimeChecker.ok_to_sell(@rec.dept_date, @rec.last_tkt_date)
+          unless TimeChecker.ok_to_sell(@rec.variants[0].departure_datetime_utc, @rec.last_tkt_date)
             logger.error 'Strategy: time criteria for last tkt date missed'
             dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
             amadeus.pnr_cancel

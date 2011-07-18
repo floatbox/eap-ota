@@ -4,6 +4,7 @@ class Variant
   include KeyValueInit
 
   attr_accessor :segments
+  delegate :departure_datetime_utc, :to => 'segments.first', :allow_nil => true
 
   def flights
     segments.sum(&:flights)
