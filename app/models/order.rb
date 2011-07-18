@@ -20,6 +20,7 @@ class Order < ActiveRecord::Base
 
   has_many :payments
   has_many :tickets
+  has_many :order_comments
   validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
 
   before_create :generate_code, :set_payment_status
