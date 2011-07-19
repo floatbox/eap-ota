@@ -111,13 +111,9 @@
       %ticketElement
         %passengerType PAX
         %ticket
-          -# подозреваю, что TKXL даты не просит
-          -# - еще как просит
           %indicator XL
-          -# внимание, бронирование сбрасывается с НАСТУПЛЕНИЕМ даты
-          -# для времени жизни сутки-двое надо выставлять +2.days
-          -# FIXME привинтить время
           %date= tk_xl_date
+          %time= tk_xl_time
     %dataElementsIndiv
       %elementManagementData
         %reference

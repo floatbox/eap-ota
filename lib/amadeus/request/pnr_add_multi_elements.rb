@@ -29,6 +29,10 @@ module Amadeus
         (tk_xl).strftime("%d%m%y") if tk_xl
       end
 
+      def tk_xl_time
+        (tk_xl).strftime("%H%M") if tk_xl
+      end
+
     end
   end
 end
