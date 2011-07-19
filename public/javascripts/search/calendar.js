@@ -34,7 +34,8 @@ makeDates: function() {
     var curd = today.clone().shiftDays(1 - (today.getDay() || 7));
     var curt = curd.getTime();
     var actend = today.clone().shiftMonthes(10);
-    var abt = today.clone().shiftDays(stoday.getHours() < 20 ? 0 : 1).getTime();
+    // Активируем сегодняшнюю дату с 9 до 20 по будням
+    var abt = today.clone().shiftDays((stoday.getDay() !== 0 && stoday.getDay() !== 6 && stoday.getHours() > 9 && stoday.getHours() < 20) ? 0 : 1).getTime();
     var aet = actend.getTime() - 1;
     var end = actend.shiftDays((actend.getDay() == 1 ? 8 : 15) - (actend.getDay() || 7)).getTime();
     var month = undefined, dcounter = 0;

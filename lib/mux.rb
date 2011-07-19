@@ -112,6 +112,8 @@ class Mux
       recommendations = Sirena::Service.new.pricing(form, :lite => lite).recommendations || []
       sirena_cleanup(recommendations)
     end
+    recommendations.every.clear_variants
+    recommendations.delete_if{|r| r.variants.blank?}
     recommendations
   rescue
     notify
