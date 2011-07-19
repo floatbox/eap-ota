@@ -87,7 +87,7 @@ class Strategy
       @rec.rules = sirena_rules(repriced_rec)
       @rec.price_fare = repriced_rec.price_fare
       @rec.price_tax = repriced_rec.price_tax
-      @rec.segments = repriced_rec.segments
+      @rec.variants[0].segments = repriced_rec.segments
       # обновим количество бланков, на всякий случай
       @rec.sirena_blank_count = repriced_rec.sirena_blank_count
       @rec
