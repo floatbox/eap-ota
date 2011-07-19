@@ -6,10 +6,10 @@ module TimeChecker
     return false if last_tkt_date && last_tkt_date < Date.today && ['production', 'test'].include?(Rails.env)
     last_tkt_date ||= Date.today + 1.day
     time_of_sell ||= Time.now
-    return departure_datetime_utc > time_of_sell + 24.hours  if time_of_sell.hour < WORK_START_HOUR
+    return departure_datetime_utc.to_time > time_of_sell + 24.hours  if time_of_sell.hour < WORK_START_HOUR
 
-    return time_of_sell + 4.hours < departure_datetime_utc if (WORK_START_HOUR...WORK_END_HOUR).include? time_of_sell.hour
-    return departure_datetime_utc > time_of_sell + 24.hours && last_tkt_date > Date.today
+    return time_of_sell + 4.hours < departure_datetime_utc.to_time if (WORK_START_HOUR...WORK_END_HOUR).include? time_of_sell.hour
+    return departure_datetime_utc.to_time > time_of_sell + 24.hours && last_tkt_date > Date.today
   end
 
   def self.ok_to_show departure_datetime_utc
