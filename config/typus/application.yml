@@ -92,9 +92,9 @@ City:
 Order:
   fields:
     default: order_id, pnr_number, email, phone, updated_at
-    list: source, pnr_number, email, phone, created_at,  price_with_payment_commission, payment_status, ticket_status, last_tkt_date, payment_type
-    show: order_id, source, pnr_number, description, route, payment_status, ticket_status, email, phone, name_in_card, last_digits_in_card, full_info, price_total, price_tax, price_fare, price_share, price_our_markup, price_consolidator_markup, price_with_payment_commission, commission_carrier, commission_agent_comments, commission_subagent_comments, created_at, updated_at, last_tkt_date, payment_type, delivery, last_pay_time
-    form: description, email, source, pnr_number, sirena_lead_pass, route, payment_type, price_tax, price_fare, price_consolidator_markup, price_our_markup, commission_subagent, ticket_status
+    list: source, pnr_number, blank_count, email, phone, created_at,  price_with_payment_commission, payment_status, ticket_status, last_tkt_date, payment_type
+    show: order_id, source, pnr_number, blank_count, description, route, payment_status, ticket_status, email, phone, name_in_card, last_digits_in_card, full_info, price_total, price_tax, price_fare, price_share, price_our_markup, price_consolidator_markup, price_with_payment_commission, commission_carrier, commission_agent_comments, commission_subagent_comments, created_at, updated_at, last_tkt_date, payment_type, delivery, last_pay_time
+    form: description, email, source, pnr_number, sirena_lead_pass, blank_count, route, payment_type, price_tax, price_fare, price_consolidator_markup, price_our_markup, commission_subagent, ticket_status
     csv: pnr_number, charge_date, created_date, tickets_count, route, commission_carrier, price_tax, price_fare, price_consolidator_markup, commission_subagent, price_share, price_with_payment_commission, need_attention
     options:
       read_only: commission_carrier, commission_agent_comments, commission_subagent_comments
@@ -113,7 +113,7 @@ Order:
   # тут не ввернешь конфирмации. временно убрал
   # actions:
   #   show: cancel, ticket, charge, unblock, show_pnr
-  filters: source, payment_status, ticket_status, ticketed_date
+  filters: source, payment_status, ticket_status, created_at
   relationships: payments, tickets, order_comments
   application: Orders
   export: csv

@@ -43,6 +43,7 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
         it { should have(4).flights }
         it { should have(1).variant }
 
+        its(:blank_count) { should == 4 }
         its(:cabins) { should == %W( M M M M ) }
         its(:booking_classes) { should == %W( T T T T ) }
 
@@ -124,6 +125,7 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
         it { should have(1).flight }
         it { should have(1).variant }
 
+        its(:blank_count) { should == 1 }
         its(:cabins) { should == %W( M ) }
         its(:booking_classes) { should == %W( V ) }
 

@@ -6,18 +6,12 @@ class Recommendation
   attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
     :suggested_marketing_carrier_iatas, :availabilities, :upts, :last_tkt_date
 
-  attr_accessor :sirena_blank_count
+  attr_accessor :blank_count
 
   delegate :marketing_carriers, :marketing_carrier_iatas,
     :operating_carriers, :operating_carrier_iatas,
     :city_iatas, :airport_iatas, :country_iatas, :route,
       :to => 'variants.first'
-
-  # TODO амадеус как-то репортит количество бланков?
-  # FIXME посчитать и для амадеуса, хотя бы по количеству мест, чтоб правильно считать price_share
-  def blank_count
-    source == 'sirena' ? sirena_blank_count : 1
-  end
 
   def availability
     availabilities.compact.min.to_i if availabilities

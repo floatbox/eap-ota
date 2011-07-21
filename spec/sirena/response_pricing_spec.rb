@@ -16,7 +16,7 @@ describe Sirena::Response::Pricing do
     context "first recommendation" do
       subject {response.recommendations.first}
 
-      its(:sirena_blank_count) {should == 1}
+      its(:blank_count) {should == 1}
       its(:cabins) {should == ['Y', 'Y']}
       its(:booking_classes) {should == ['Y', 'Y']}
 
@@ -34,7 +34,7 @@ describe Sirena::Response::Pricing do
     context "second recommendation" do
       subject {response.recommendations[1]}
 
-      its(:sirena_blank_count) {should == 1}
+      its(:blank_count) {should == 1}
       its(:cabins) {should == ['Y', 'Y']}
       its(:booking_classes) {should == ['M', 'Y']}
     end
@@ -51,7 +51,7 @@ describe Sirena::Response::Pricing do
     context "first recommendation" do
       subject {response.recommendations.first}
       it {should have(2).variants}
-      its(:sirena_blank_count) {should == 4}
+      its(:blank_count) {should == 4}
       its(:cabins) {should == ['Y', 'Y', 'Y', 'Y']}
       its(:booking_classes) {should == ['H', 'H', 'H', 'H']}
 
@@ -86,7 +86,7 @@ describe Sirena::Response::Pricing do
     context "first recommendation" do
       subject {response.recommendations.first}
       it {should have(1).variant}
-      its(:sirena_blank_count) {should == 1}
+      its(:blank_count) {should == 1}
       its(:cabins) {should == ['Y']}
       its(:booking_classes) {should == ['Ц']}
 
