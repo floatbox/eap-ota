@@ -90,6 +90,11 @@ class Strategy
       @rec.variants[0].segments = repriced_rec.segments
       # обновим количество бланков, на всякий случай
       @rec.sirena_blank_count = repriced_rec.sirena_blank_count
+      unless TimeChecker.ok_to_book_sirena(@rec.variants[0].departure_datetime_utc)
+        logger.error 'Strategy: time criteria missed'
+        dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
+        return
+      end
       @rec
 
     end
@@ -220,7 +225,13 @@ class Strategy
 
     when 'sirena'
       # FIXME обработать ошибку cancel бронирования
+      unless TimeChecker.ok_to_sell_sirena(@rec.variants[0].departure_datetime_utc, @rec.last_tkt_date)
+        logger.error 'Strategy: time criteria missed'
+        dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
+        return
+      end
       sirena = Sirena::Service.new
+
       response = sirena.booking(@order_form)
 
       unless response.success? && response.pnr_number
