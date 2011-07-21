@@ -14,7 +14,8 @@ class BookingController < ApplicationController
         :recommendation => recommendation,
         :people_count => @search.real_people_count,
         :variant_id => params[:variant_id],
-        :query_key => @search.query_key
+        :query_key => @search.query_key,
+        :partner => @search.partner
       )
       order_form.save_to_cache
       render :json => {:success => true, :number => order_form.number}

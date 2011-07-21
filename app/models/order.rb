@@ -105,7 +105,8 @@ class Order < ActiveRecord::Base
       :last_tkt_date,
       :payment_type,
       :delivery,
-      :last_pay_time
+      :last_pay_time,
+      :partner
 
     copy_attrs recommendation, self,
       :source,
