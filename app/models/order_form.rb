@@ -38,14 +38,9 @@ class OrderForm < ActiveRecord::BaseWithoutTable
   end
 
   def tk_xl
-    default_tk_xl = (Time.now.hour < 17 ? Date.today + 1.day : Date.today + 2.days).to_time
-    dept_datetime_mow = Location.default.tz.utc_to_local(recommendation.variants[0].departure_datetime_utc)
-    last_ticket_date = (last_tkt_date || default_tk_xl).to_time
-    if payment_type == 'card'
-      [default_tk_xl, dept_datetime_mow, last_ticket_date + 1.day].min
-    else
-      [last_ticket_date + 1.day, dept_datetime_mow].min
-    end
+    dept_datetime_mow = Location.default.tz.utc_to_local(recommendation.variants[0].departure_datetime_utc) - 1.hour
+    last_ticket_date = self.last_tkt_date || (Date.today + 2.days)
+    [dept_datetime_mow, last_ticket_date.to_time + 1.day].min
   end
 
 
@@ -139,7 +134,11 @@ class OrderForm < ActiveRecord::BaseWithoutTable
   validate :validate_card, :validate_dept_date
 
   def validate_dept_date
-    errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell(recommendation.variants[0].departure_datetime_utc, recommendation.last_tkt_date)
+    if recommendation.source == 'amadeus'
+      errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell(recommendation.variants[0].departure_datetime_utc, recommendation.last_tkt_date)
+    elsif recommendation.source == 'sirena'
+      errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell_sirena(recommendation.variants[0].departure_datetime_utc)
+    end
   end
 
   def validate_card

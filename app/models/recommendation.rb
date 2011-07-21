@@ -64,7 +64,11 @@ class Recommendation
 
   def clear_variants
     #удаляем варианты на сегодня/завтра
-    variants.delete_if{|v| !TimeChecker.ok_to_show(v.departure_datetime_utc)}
+    if source == 'amadeus'
+      variants.delete_if{|v| !TimeChecker.ok_to_show(v.departure_datetime_utc)}
+    elsif source == 'sirena'
+      variants.delete_if{|v| !TimeChecker.ok_to_show_sirena(v.departure_datetime_utc)}
+    end
   end
 
   # FIXME перенести в amadeus strategy?
