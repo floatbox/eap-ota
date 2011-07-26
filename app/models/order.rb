@@ -58,6 +58,15 @@ class Order < ActiveRecord::Base
     :ticket_status => 'ticketed',
     :payment_status => 'charged')
 
+  #флаг для админки
+  def urgent
+    if last_tkt_date && last_tkt_date == Date.today && payment_status == 'blocked' && ticket_status == 'booked'
+      '!'
+    else
+      '.'
+    end
+  end
+
 
   def tickets_count
     ticket_numbers_as_text.to_s.split(/[, ]/).delete_if(&:blank?).size

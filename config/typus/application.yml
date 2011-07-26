@@ -92,7 +92,7 @@ City:
 Order:
   fields:
     default: order_id, pnr_number, email, phone, updated_at
-    list: source, pnr_number, blank_count, email, phone, created_at,  price_with_payment_commission, payment_status, ticket_status, last_tkt_date, payment_type
+    list: source, pnr_number, blank_count, email, phone, created_at,  price_with_payment_commission, payment_status, ticket_status, last_tkt_date, payment_type, urgent
     show: order_id, source, pnr_number, blank_count, description, route, payment_status, ticket_status, email, phone, name_in_card, last_digits_in_card, full_info, price_total, price_tax, price_fare, price_share, price_our_markup, price_consolidator_markup, price_with_payment_commission, commission_carrier, commission_agent_comments, commission_subagent_comments, created_at, updated_at, last_tkt_date, payment_type, delivery, last_pay_time
     form: description, email, source, pnr_number, sirena_lead_pass, blank_count, route, payment_type, price_tax, price_fare, price_consolidator_markup, price_our_markup, commission_subagent, ticket_status
     csv: pnr_number, charge_date, created_date, tickets_count, route, commission_carrier, price_tax, price_fare, price_consolidator_markup, commission_subagent, price_share, price_with_payment_commission, need_attention
@@ -103,6 +103,7 @@ Order:
         created_at: long
         updated_at: long
         last_pay_time: long
+
   order_by: -created_at
   search: ^pnr_number, email, phone
   options:
@@ -117,10 +118,10 @@ Order:
   relationships: payments, tickets, order_comments
   application: Orders
   export: csv
-  
+
 OrderComment:
   fields:
-    default: typus_user, text, created_at 
+    default: typus_user, text, created_at
     list: order, text, typus_user
     form: order, text
     show: order, text, typus_user
