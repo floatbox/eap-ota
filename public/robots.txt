@@ -1,11 +1,7 @@
 User-agent: *
-Disallow: /api
-Disallow: /order
-Disallow: /pay
-Disallow: /confirm_3ds
-Disallow: /admin
-#Allow: /
-#Allow: /about
-#Allow: /faq
-#Allow: /agreement
-#Allow: /contacts
+Allow: /$
+Allow: /about
+Allow: /faq
+Allow: /agreement
+Allow: /contacts
+Disallow: /
