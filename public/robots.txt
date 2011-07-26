@@ -1,6 +1,7 @@
 User-agent: *
 Disallow: /api
 Disallow: /order
+Disallow: /pay
 Disallow: /confirm_3ds
 Disallow: /admin
 #Allow: /
