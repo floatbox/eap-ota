@@ -36,26 +36,26 @@ class Person < ActiveRecord::BaseWithoutTable
   end
 
   def cleared_passport
-    passport.gsub(/[^a-zA-Z\d ]+/, '')
+    Russian.translit(passport.mb_chars.gsub(/[^a-zA-Z\dа-яА-Я]+/, ''))
   end
 
   def passport_sirena
     if doccode_sirena == "СР"
       passport.mb_chars.gsub(/[^a-zA-Z\dа-яА-Я]+/, '')
-    elsif nationality && nationality.alpha2 == "RU"
+    elsif ["ПС", "ПСП"].include? doccode_sirena
       passport.mb_chars.gsub(/[^\d]+/, '')
-    else
+    elsif doccode_sirena.present?
       passport.mb_chars.gsub(/[^a-zA-Z\dа-яА-Я]+/, '')
     end
   end
 
   def doccode_sirena
     if nationality && nationality.alpha2 == "RU"
-      return "СР" if passport.mb_chars.gsub(/[^a-zA-Z\dа-яА-Я]+/, '').match(/[\dA-Za-z]+[а-яА-Я]{2}\d{6}/) && (Date.today - 14.years < birthday)
-      return "ПС" if passport.mb_chars.gsub(/[^\d]+/, '').match(/\d{10}/)
+      return "СР" if passport.mb_chars.gsub(/[^a-zA-Z\dа-яА-Я]+/, '').match(/[\dA-Za-z]{1,2}[а-яА-Яa-zA-Z]{2}\d{6}/) && (Date.today - 14.years <= birthday)
+      return "ПС" if passport.mb_chars.gsub(/[^\d]+/, '').match(/\d{10}/) && (Date.today - 14.years >= birthday)
       return "ПСП" if passport.mb_chars.gsub(/[^\d]+/, '').match(/\d{9}/) && !document_noexpiration
       return nil
-    else
+    elsif cleared_passport.mb_chars.length > 5
       return document_noexpiration ? "НП" : "ЗА"
     end
   end
