@@ -5,11 +5,7 @@ class Admin::OrdersController < Admin::ResourcesController
   before_filter :update_offline_booking_flag, :only => :create
 
   def update
-    if @order.offline_booking
-      super
-    else
-      raise 'Someone is trying to update online booking'
-    end
+    super 
   end
 
   def show_pnr
