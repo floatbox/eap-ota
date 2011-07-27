@@ -301,9 +301,17 @@ parse: function(errors) {
         } else if (ftitle.search('birthday') !== -1) {
             ftitle = ftitle.replace(/person\[(\d)\]\[birthday\]/i, function(s, n) {
                 var num = constants.numbers.ordinaldat[parseInt(n, 10)];
-                return '<span class="link" data-field="book-p-' + n + '-birth">' + num.charAt(0).toUpperCase() + num.substring(1) + ' пассажиру</span>';
+                var ptitle = this.el.find('.booking-person').length > 1 ? (num.charAt(0).toUpperCase() + num.substring(1) + ' пассажиру') : 'Пассажиру';
+                return '<span class="link" data-field="bp-' + n + '-byear">' + ptitle + '</span>';
             });
             items.push('<li>' + ftitle + ' ' + errors[eid] + '</li>');
+        } else if (ftitle.search('passport') !== -1) {
+            var index = parseInt(ftitle.match(/person\[(\d)\]\[passport\]/)[1], 10);
+            var str = 'Введён неправильный <span class="link" data-field="booking-person-' + index + '-passport">номер документа</span>';
+            if (this.el.find('.booking-person').length > 1) {
+                str += ' ' + constants.numbers.ordinalgen[index] + ' пассажира';
+            }
+            items.push('<li>' + str + '</li>');
         } else {
             items.push('<li>' + ftitle + ' ' + errors[eid] + '</li>');
         }
@@ -434,11 +442,13 @@ booking.form.initPerson = function(el) {
         pdate.validate();
     };
     var docexp = el.find('.bp-docexp input:checkbox').click(toggleExp);
-    var nationality = el.find('.nationality');
+    var nationality = el.find('.nationality').change(function() {
+        passport.russian = $(this).val() === '170';
+    }).trigger('change');
     passport.el.bind('keyup propertychange input', function() {
         var value = $(this).val().replace(/\D/g, '');
         var noexp = docexp.get(0);
-        if (!noexp.checked && value.length === 10 && nationality.val() === '170') {
+        if (passport.russian && !noexp.checked && value.length === 10) {
             noexp.checked = true;
             toggleExp();
         }

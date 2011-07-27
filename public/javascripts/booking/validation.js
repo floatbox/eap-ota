@@ -78,9 +78,6 @@ number: function(el, messages) {
         if (!value) {
             return 'empty';
         }
-        if (value.search(/[а-яё]/i) !== -1) {
-            return 'latin';
-        }
         return undefined;
     };
     el.change(function() {
