@@ -19,7 +19,7 @@ class Person < ActiveRecord::BaseWithoutTable
   # FIXME WRONG! фамилии через дефис? два имени? сокращения?
   validates_format_of :first_name, :with => /^[a-zA-Z-]*$/, :message => "Некорректное имя"
   validates_format_of :last_name,  :with => /^[a-zA-Z-]*$/, :message => "Некорректная фамилия"
-  validate :check_age
+  validate :check_age, :check_passport
   attr_accessor :flight_date, :infant_or_child
 
   def smart_document_expiration_date
@@ -68,8 +68,8 @@ class Person < ActiveRecord::BaseWithoutTable
     end
   end
 
-  def validate_for_sirena
-    errors.add :first_name, "Некорректное имя" if first_name_sirena.length < 3
+  def check_passport
+    #errors.add :first_name, "Некорректное имя" if first_name_sirena.length < 3
     errors.add :passport, 'Неверный номер документа' unless doccode_sirena
   end
 
