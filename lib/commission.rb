@@ -1512,15 +1512,22 @@ carrier "PS", "Ukraine International Airlines (ГЛОНАСС)"
 ########################################
 
 example 'svocdg'
-agent    "9% от опубл. тарифов на собств.рейсы PS (В договоре Interline отдельно не прописан.)"
+agent    "9% от опубл. тарифов на собств.рейсы PS"
 subagent "7% от опубл. тарифов на собств.рейсы PS"
 commission "9%/7%"
 
 example 'cdgsvo svocdg/ab'
-agent "1р Interline не прописан"
+agent "С 01.08.11г. 5% от опубл. тарифов на рейсы Interline c обязательным участком PS"
 subagent "0р Interline не прописан"
-interline :unconfirmed
-commission "9%/7%"
+interline :yes
+disabled "no subagent"
+commission "5%/7%"
+
+example 'cdgsvo/ab'
+agent "С 01.08.11г. 0% от опубл. тарифов на рейсы Interline без участка PS"
+subagent ""
+interline :absent
+no_commission
 
 carrier "QF", "QANTAS AIRWAYS\n(не BSP!!!)"
 ########################################
