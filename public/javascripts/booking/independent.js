@@ -25,14 +25,11 @@ booking.init = function(partner) {
     var path = window.location.path || window.location.pathname;
     var hash = window.location.hash.substring(1);
     this.query_key = path.split('/').last();
-    if (hash.indexOf('recommendation/') !== -1) {
+    if (hash.indexOf('recommendation') !== -1) {
         window.location.hash = '';
-        _gaq.push(['_setReferrerOverride', partner]);
-        _gaq.push(['_trackPageview', path + '?utm_medium=api&utm_source=' + partner]);
-        this.prebook(this.query_key, hash.replace('recommendation/', ''));
+        this.prebook(this.query_key, hash.match(/recommendation=([^&]+)/)[1]);
         this.partner = partner;
     } else if (hash.length !== 0) {
-        _gaq.push(['_trackPageview']);
         this.load(hash);
     } else {
         window.location = '/#' + this.query_key;
@@ -96,12 +93,9 @@ booking.form.track = function(result) {
     var path = window.location.href;
     if (window._gaq) {
         var price = booking.el.find('.booking-content .booking-price .sum').attr('data-value');
-        _gaq.push(['_trackPageview', path + '/success']);
+        _gaq.push(['_trackPageview', '/booking/success']);
         _gaq.push(['_addTrans', result.find('.pnr').text(), '', price]);
         _gaq.push(['_trackTrans']);
-        if (booking.partner) {
-            _gaq.push(['_trackPageview', '/api/' + booking.partner + '/success']);
-        }
     }
     if (window.yaCounter5324671) {
         yaCounter5324671.hit(path + '/success');
