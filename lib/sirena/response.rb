@@ -15,6 +15,7 @@ module Sirena
         # TODO имеет ли смысл использовать QueryFront?
         # @doc = Handsoap::XmlQueryFront.parse_string(xml_string, :nokogiri)
         @doc = Nokogiri::XML::Document.parse(xml)
+        raise Sirena::Error, 'Bad answer from sirenad' if @doc.xpath('/sirena').blank?
         parse
       end
       include NewRelic::Agent::MethodTracer
@@ -35,7 +36,7 @@ module Sirena
       end
 
       def success?
-        error.blank?
+        error.blank? && xpath('sirena')
       end
 
       def to_amadeus_time(str)
@@ -47,3 +48,4 @@ module Sirena
     end
   end
 end
+

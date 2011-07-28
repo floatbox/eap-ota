@@ -10,7 +10,7 @@ module Sirena
                       tickinfo["ticknum"]
                     }.uniq
           Person.new({
-            :first_name => p.xpath("name").text,
+            :first_name => p.xpath("name").text.split(' ')[0...-1].join(' '),#тк последнее слово - дата рождения
             :last_name => p.xpath("surname").text,
             :passport => p.xpath("doc").text,
             :sex => p.xpath("sex").text,

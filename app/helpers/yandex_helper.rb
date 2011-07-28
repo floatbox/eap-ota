@@ -20,6 +20,6 @@ module YandexHelper
   end
 
   def yandex_newurl(search, recommendation, variant)
-    "#{Conf.api.url_base}/api/booking/#{@search.query_key}#recommendation/#{recommendation.serialize(variant)}"
+    "#{Conf.api.url_base}/api/booking/#{@search.query_key}#recommendation=#{recommendation.serialize(variant)}&type=api&partner=#{search.partner}"
   end
 end
