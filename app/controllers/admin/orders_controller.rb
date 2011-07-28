@@ -1,7 +1,7 @@
 # encoding: utf-8
 class Admin::OrdersController < Admin::ResourcesController
   include CustomCSV
-  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel, :reload_tickets, :update, :resend_email]
+  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel, :reload_tickets, :update, :resend_email, :send_offline_email]
   before_filter :update_offline_booking_flag, :only => :create
 
   def update
@@ -58,6 +58,11 @@ class Admin::OrdersController < Admin::ResourcesController
 
   def resend_email
     @order.resend_email!
+    redirect_to :action => :show, :id => @order.id
+  end
+
+  def send_offline_email
+    @order.send_email
     redirect_to :action => :show, :id => @order.id
   end
 
