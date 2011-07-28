@@ -191,7 +191,7 @@ class Mux
 
     !Conf.sirena.restrict ||
       # form.adults == 1 &&
-      form.children == 0 && form.infants == 0 &&
+      # form.children == 0 && form.infants == 0 &&
       form.form_segments.none?(&:multicity?) &&
       locations.all?{|l| l.iata_ru != l.iata && l.iata_ru.present?} &&
       locations.any?{|l| SNG_COUNTRY_CODES.include? l.country.alpha2}
