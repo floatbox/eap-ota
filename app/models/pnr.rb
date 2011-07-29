@@ -32,6 +32,8 @@ class Pnr
 
   def order
     @order ||= Order.find_by_pnr_number(number)
+    raise ActiveRecord::RecordNotFound unless @order
+    @order
   end
 
   def sirena_receipt
