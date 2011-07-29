@@ -69,9 +69,9 @@ class Recommendation
   def clear_variants
     #удаляем варианты на сегодня/завтра
     if source == 'amadeus'
-      variants.delete_if{|v| !TimeChecker.ok_to_show(v.departure_datetime_utc)}
+      variants.delete_if{|v| v.with_bad_time || !TimeChecker.ok_to_show(v.departure_datetime_utc)}
     elsif source == 'sirena'
-      variants.delete_if{|v| !TimeChecker.ok_to_show_sirena(v.departure_datetime_utc)}
+      variants.delete_if{|v| v.with_bad_time || !TimeChecker.ok_to_show_sirena(v.departure_datetime_utc)}
     end
   end
 

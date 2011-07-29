@@ -14,6 +14,13 @@ class Variant
     flights.every.operating_carrier.uniq.every.comment.delete_if(&:blank?)
   end
 
+  def with_bad_time
+    flights.map{|f| [f.departure_datetime_utc, f.arrival_datetime_utc]}
+    false
+  rescue TZInfo::AmbiguousTime
+    true
+  end
+
   def summary
     # экономия 3%
     return @summary if @summary
