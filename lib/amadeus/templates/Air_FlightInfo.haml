@@ -1,0 +1,10 @@
+%generalFlightInfo
+  -if date.present?
+    %flightDate
+      %departureDate= date
+  -if carrier.present?
+    %companyDetails
+      %marketingCompany= carrier
+  -if number.present?
+    %flightIdentification>
+      %flightNumber= number
