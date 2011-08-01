@@ -17,7 +17,7 @@ class Variant
   def with_bad_time
     flights.map{|f| [f.departure_datetime_utc, f.arrival_datetime_utc]}
     false
-  rescue TZInfo::AmbiguousTime
+  rescue TZInfo::AmbiguousTime, TZInfo::PeriodNotFound
     true
   end
 
