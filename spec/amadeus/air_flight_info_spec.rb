@@ -13,7 +13,7 @@ describe Amadeus::Response::AirFlightInfo do
     its(:arrival_iata) { should == 'CAN' }
     its(:departure_iata) { should == 'SVO' }
     its(:marketing_carrier_iata) { should == 'CZ'}
-    its(:operating_carrier_iata) { should == 'CZ'}
+    its(:operating_carrier_iata) { should == 'SU'}
     its(:departure_term) { should == 'F' }
     its(:arrival_term) { should == '3' }
     its(:flight_number) { should == '6002' }

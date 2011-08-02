@@ -12,7 +12,7 @@ describe Sirena::Response::Order do
     it { should be_success }
     its(:number) { should == '08ВГЦП' }
     it { should have(1).passenger }
-    its("passengers.every.first_name") { should == ['ALEKSEY 19МАР83'] }
+    its("passengers.every.first_name") { should == ['ALEKSEY'] }
     its("passengers.every.ticket") { should == [nil] }
     its("passengers.every.last_name") { should == ['TROFIMENKO'] }
     its("passengers.every.passport") { should == ['6555555555'] }
@@ -29,7 +29,7 @@ describe Sirena::Response::Order do
     it { should be_success }
     its(:number) { should == '08ВМГХ' }
     it { should have(2).passengers }
-    its("passengers.every.first_name") { should == ["ALEKSEY 19АПР83", "MASHA 20ФЕВ00"] }
+    its("passengers.every.first_name") { should == ["ALEKSEY", "MASHA"] }
     its("passengers.every.last_name") { should == ['IVANOV', 'IVANOVA'] }
     its("passengers.every.passport") { should == ["6555555555", "VВГ123456"] }
     its ("passengers.every.ticket") { should == [ '2626150600213', '2626150600214'] }

@@ -3,7 +3,6 @@ module Amadeus
   module Response
     class AirFlightInfo < Amadeus::Response::Base
 
-      # fi: flightInformation node
       def flight
         Flight.new(
           :operating_carrier_iata => (xpath("//r:companyDetails/r:operatingCompany").to_s ||
