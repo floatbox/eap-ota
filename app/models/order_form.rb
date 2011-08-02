@@ -41,7 +41,7 @@ class OrderForm < ActiveRecord::BaseWithoutTable
     dept_datetime_mow = Location.default.tz.utc_to_local(recommendation.variants[0].departure_datetime_utc) - 1.hour
     last_ticket_date = self.last_tkt_date || (Date.today + 2.days)
     #эта херня нужна, просто .min не подходит тк dept_datetime_mow
-    if dept_datetime_mow.to_date <= last_ticket_date + 1.day
+    if dept_datetime_mow.to_date <= last_ticket_date
       dept_datetime_mow
     else
       last_ticket_date.to_time + 1.day
