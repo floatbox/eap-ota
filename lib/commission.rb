@@ -1879,12 +1879,14 @@ carrier "WY", "OMAN AIR"
 example 'svocdg'
 agent    "1% от опубл. тарифов на собств. рейсы WY (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на собств.рейсы WY"
+disabled
 commission "1%/0.5%"
 
 example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
+disabled
 commission "1%/0.5%"
 
 carrier "XW", "SkyExpress Limited"
