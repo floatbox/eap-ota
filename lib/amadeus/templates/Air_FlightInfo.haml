@@ -2,6 +2,12 @@
   -if date.present?
     %flightDate
       %departureDate= date
+  -if departure_iata.present?
+    %boardPointDetails
+      %trueLocationId= departure_iata
+  -if arrival_iata.present?
+    %offPointDetails
+      %trueLocationId= arrival_iata
   -if carrier.present?
     %companyDetails
       %marketingCompany= carrier
