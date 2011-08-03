@@ -139,7 +139,7 @@ OrderComment:
 
 Ticket:
   fields:
-    default: source, last_name, first_name, created_at, number, commission_carrier, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share
+    default: source, last_name, first_name, created_at, number, commission_carrier, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, itinerary_receipt
     list: source, last_name, first_name, created_at, number, commission_carrier, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share
     show: source, last_name, first_name, created_at, number, commission_carrier, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, order
     csv: number, ticket_date, commission_carrier, route, cabins, price_fare, price_tax, price_total,  price_consolidator_markup, commission_subagent, price_share, price_transfer, pnr_number, need_attention

@@ -1,4 +1,5 @@
 class Ticket < ActiveRecord::Base
+  include Rails.application.routes.url_helpers
   belongs_to :order
   delegate :source, :commission_carrier, :pnr_number, :need_attention, :to => 'order'
 
@@ -19,5 +20,9 @@ class Ticket < ActiveRecord::Base
     "#{source} #{number} #{route} #{updated_at}"
   end
 
+  def itinerary_receipt
+    url = show_order_for_ticket_path(order.pnr_number, self)
+    "<a href=#{url}>билет</a>".html_safe
+  end
 end
 
