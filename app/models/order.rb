@@ -13,6 +13,7 @@ class Order < ActiveRecord::Base
   TICKET_STATUS = [ 'booked', 'canceled', 'ticketed']
   SOURCE = [ 'amadeus', 'sirena', 'other']
   PAYMENT_TYPE = ['card', 'delivery', 'cash']
+  attr_writer :itinerary_receipt_view
 
   def self.[] number
     find_by_pnr_number number
@@ -96,6 +97,8 @@ class Order < ActiveRecord::Base
   # FIXME избавиться от глупостей типа "пишем что это билет, хотя это еще бронирование"
   # FIXME добавить проверки на обилеченность, может быть? для ручных бронек
   def ticketed_email?
+    return false if @itinerary_receipt_view == 'booked'
+    return true if @itinerary_receipt_view == 'ticketed'
     ticket_status == 'ticketed' || payment_type == 'card'
   end
 

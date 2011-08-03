@@ -17,6 +17,8 @@ Eviterra::Application.routes.draw do
   match 'booking/preliminary_booking' => 'booking#preliminary_booking', :as => :preliminary_booking
   match '/confirm_3ds/(:order_id)' => 'booking#confirm_3ds', :as => :confirm_3ds
   match 'order/:id' => 'PNR#show', :as => :show_order
+  match 'order/:id/booked' => 'PNR#show_as_booked', :as => :show_booked_order
+  match 'order/:id/ticketed' => 'PNR#show_as_ticketed', :as => :show_ticketed_order
   match 'order/:id/receipt' => 'PNR#receipt', :as => :show_order_receipt
   match '/pay/:code' => 'payments#edit', :via => :get, :as => :edit_payment
   match '/pay/:code' => 'payments#update', :via => :post, :as => :edit_payment

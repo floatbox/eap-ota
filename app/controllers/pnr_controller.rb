@@ -2,9 +2,20 @@
 class PNRController < ApplicationController
 
   rescue_from RuntimeError, :with => :error
+  before_filter :get_pnr, :only => [:show, :show_as_booked, :show_as_ticketed]
 
-  def show
+  def get_pnr
     @pnr = Pnr.get_by_number params[:id]
+  end
+
+  def show_as_booked
+    @pnr.order.itinerary_receipt_view = 'booked'
+    render :action => "show"
+  end
+
+  def show_as_ticketed
+    @pnr.order.itinerary_receipt_view = 'ticketed'
+    render :action => "show"
   end
 
   def error
