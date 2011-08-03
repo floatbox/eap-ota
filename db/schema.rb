@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110721140919) do
+ActiveRecord::Schema.define(:version => 20110803135313) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -306,6 +306,9 @@ ActiveRecord::Schema.define(:version => 20110721140919) do
     t.datetime "updated_at"
     t.string   "cabins"
     t.string   "route"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "passport"
   end
 
   create_table "typus_users", :force => true do |t|

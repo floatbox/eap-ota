@@ -207,7 +207,10 @@ class Order < ActiveRecord::Base
           :price_consolidator_markup => price_consolidator_markup_ticket,
           :price_share => price_share_ticket,
           :cabins => cabins && cabins.gsub(/[MW]/, "Y").split(',').uniq.join(' + '),
-          :route => route
+          :route => route,
+          :first_name => passenger.first_name,
+          :last_name => passenger.last_name,
+          :passport => passenger.passport
         )
       end
 
