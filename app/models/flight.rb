@@ -28,6 +28,14 @@ class Flight
     Airplane[equipment_type_iata]
   end
 
+  #используем Air_FlightInfo для получения fligh-а из кода pnr, скопиписченого из терминала
+  def self.from_amadeus_code (code)
+    if m = code.match(/(\w{2})\s{0,1}(\d+)\s(\w)\s(\d{2}\w{3})\s\d\s(\w{3})(\w{3})/)
+      date = Date.strptime(m[4], '%d%h')
+      date += 1.year if date < Date.today
+      flight = Amadeus::Service.air_flight_info(:date => date.strftime('%d%m%y'), :number => m[2], :carrier => m[1], :departure_iata => m[5], :arrival_iata => m[6])
+    end
+  end
   delegate :name, :prefix => true, :allow_nil => true, :to => :departure
   delegate :name, :prefix => true, :allow_nil => true, :to => :arrival
   delegate :name, :prefix => true, :allow_nil => true, :to => :operating_carrier
