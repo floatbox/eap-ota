@@ -432,15 +432,15 @@ subclasses "CD"
 check { city_iatas.first == 'MOW' && city_iatas.include?('BJS') }
 commission "15%/13.5%"
 
-example 'svopek/q'
-example 'svopek/q peksvo/q'
+example 'svopek/economy'
+example 'svopek/economy peksvo/economy'
 agent   "9%   от опубл. тарифов по классам Q и выше на собств. рейсы СА."
 subagent "7,5%  от опубл. тарифов по классам Q и выше на собств. рейсы СА."
-subclasses "Q"
+subagent "YBMHNGKLOQ"
 check { city_iatas.first == 'MOW' && city_iatas.include?('BJS') }
 commission "9%/7.5"
 
-#другие маршруты
+#другие маршруы
 agent   "9% от опубл. тарифов на собств. рейсы CA по маршрутам Москва-Пекин или Москва-Пекин-Москва и далее в третий пункт (кроме класса E и рейсов совместной эксплуатации) или города Китая (классы S, G и выше)."
 subagent "7,5% от опубл. тарифов на собств. рейсы CA по маршрутам Москва-Пекин или Москва-Пекин-Москва и далее в третий пункт (кроме класса E и рейсов совместной эксплуатации) или города Китая (классы S, G и выше)."
 disabled "не знаю пока как сделать"
@@ -538,24 +538,6 @@ commission "0%/0%"
 carrier "D9", "ДОНАВИА"
 ########################################
 
-example 'rovfru/business'
-example 'frurov/business'
-example 'rovfru/business frurov/business'
-agent "На период с 15.06.11г. по 31.07.211г. 10% от опубл. тарифов по маршруту Ростов-на-Дону–Бишкек–Ростов-на-Дону от суммы тарифов эконом и бизнес классов"
-subagent "На период с 15.06.11г. по 31.07.211г. 8% от опубл. тарифов по маршруту Ростов-на-Дону– Бишкек–Ростов-на-Дону от суммы тарифов эконом и бизнес классов"
-classes :business
-check { city_iatas.first == 'ROV' && city_iatas.include?('FRU') || city_iatas.first == 'FRU' && city_iatas.include?('ROV')}
-commission "10%/8%"
-
-example 'rovfru frurov/economy'
-example 'rovfru/economy'
-example 'frurov/economy'
-agent "На период с 15.06.11г. по 31.07.211г. 10% от опубл. тарифов по маршруту Ростов-на-Дону–Бишкек–Ростов-на-Дону от суммы тарифов эконом и бизнес классов"
-subagent "На период с 15.06.11г. по 31.07.211г. 8% от опубл. тарифов по маршруту Ростов-на-Дону– Бишкек–Ростов-на-Дону от суммы тарифов эконом и бизнес классов"
-classes :economy
-check { city_iatas.first == 'ROV' && city_iatas.include?('FRU') || city_iatas.first == 'FRU' && city_iatas.include?('ROV')}
-commission "10%/8%"
-
 example 'svocdg/economy'
 agent    "7% от опубл. тарифов эконом класса на собств. рейсы D9"
 subagent "5% от опубл. тарифов эконом класса на собств. рейсы D9"
@@ -578,7 +560,7 @@ commission "2%/1.4%"
 carrier "DE", "Condor Flugdienst (Авиарепс)"
 ########################################
 
-example 'svocdg'
+example 'svocdg' #date 30.09, с 1.10 — 1 руб
 agent    "1% от всех опубл. тарифов на рейсы DE. (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на рейсы DE."
 commission "1%/0.5%"
@@ -709,7 +691,7 @@ carrier "EY", "ETIHAD AIRWAYS"
 ########################################
 
 example 'svocdg'
-agent    "5% от опубл. тарифов на собств. рейсы EY (В договоре Interline не прописан.)"
+agent   "5% от опубл. тарифов на собств. рейсы EY (В договоре Interline не прописан.)"
 subagent "3,5% от опубл. тарифов на собств. рейсы EY"
 commission "5%/3.5%"
 
@@ -1128,10 +1110,10 @@ disabled "комбинация"
 commission "6%/4.2%"
 
 example 'svocdg/ab cdgsvo/ab'
-agent    "7% от тарифов на рейсы Interline без сегмента КС;"
+agent    "5% от тарифов на рейсы Interline без сегмента КС;"
 subagent "3,5% от тарифов на рейсы Interline без сегмента КС;"
 interline :absent
-commission "7%/3.5%"
+commission "5%/3.5%"
 
 example 'svocdg/ab cdgsvo'
 agent    "7% от тарифов на рейсы Interline в комбинации с рейсом KC по всему маршруту;"
@@ -1751,13 +1733,13 @@ carrier "UA", "UNITED AIRLINES (ГЛОНАСС)"
 ########################################
 
 # FIXME использую приоритет чтобы закрыть эти субклассы!
-agent "До 30.06.11г. 7% от опубл. тарифов по классам бронирования: M, H, Q, V, W, S, L  на собств. рейсы UA из России в США с  обяз. уч. трансатлантич. рейсов UA965/UA964."
+agent "До 31.12.11г. 7% от опубл. тарифов по классам бронирования: M, H, Q, V, W, S, L  на собств. рейсы UA из России в США с  обяз. уч. трансатлантич. рейсов UA965/UA964."
 subagent "До 31.12.11г. 5% от опубл. тарифов по классам бронирования: M, H, Q, V, W, S, L на собств. рейсы UA из России в США с обяз. уч. трансатлантич. рейсов UA965/UA964."
 #subclasses 'MHQVWSL'
 check { (flights.every.full_flight_number & %W(UA965 UA964)).any? }
 commission "7%/5%"
 
-agent "До 30.06.11г. 9% от опубл.тарифов по классам бронирования: F, A, J, C, D, Z, Y, B на собств. рейсы UA из России в США с обязат. уч. трансатлантич. рейсов UA965/UA964."
+agent "До 31.12.11г. 9% от опубл.тарифов по классам бронирования: F, A, J, C, D, Z, Y, B на собств. рейсы UA из России в США с обязат. уч. трансатлантич. рейсов UA965/UA964."
 subagent "До 31.12.11г. 7% от опубл. тарифов по классам бронирования: F, A, J, C, D, Z, Y, B на собств. рейсы UA из России в США с обязат. уч. трансатлантич. рейсов UA965/UA964."
 important!
 subclasses 'FAJCDZYB'
@@ -2088,14 +2070,14 @@ carrier "GW", "AIR LINES OF KUBAN"
 ########################################
 
 example 'svocdg'
-agent "5% от всех опубл. тарифов на собств. рейсы авиакомпании. (Interline отдельно не прописан)"
+agent "5% от опубл. тарифов на собств. рейсы авиакомпании."
 subagent "3% от всех опубл. тарифов на собств. рейсы GW"
 commission "5%/3%"
 
 example 'svocdg cdgsvo/ab'
-agent "5% от всех опубл. тарифов на собств. рейсы авиакомпании. (Interline отдельно не прописан)"
+agent "3% от опубл. тарифов на рейсы Interline c обязательным участием GW. Выписка на рейсы Interline без участка GW запрещена."
 subagent "3% от всех опубл. тарифов на собств. рейсы GW"
-interline :unconfirmed
+interline :yes
 commission "5%/3%"
 
 carrier "CQ", "Czech Connect Airlines"
@@ -2266,9 +2248,8 @@ commission "5%/3%"
 carrier "5H", "Five Fourty Aviation Limited"
 ########################################
 
-#example
-agent ""
+exmaple "svocdg"
+agent "5 (пять) % от опубл. тарифов на собств. рейсы 5H"
 subagent "3% от опубл. тарифов на собств. рейсы 5H"
-no_commission
-
+commission "5%/3%"
 end
