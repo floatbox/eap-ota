@@ -1,11 +1,15 @@
 # encoding: utf-8
-class OrderForm < ActiveRecord::BaseWithoutTable
-  column :email
-  column :phone
-  column :payment_type
-  column :delivery
-  has_many :people
-  accepts_nested_attributes_for :people
+class OrderForm
+  include ActiveModel::Validations
+  include KeyValueInit
+
+  attr_accessor :email
+  attr_accessor :phone
+  attr_accessor :payment_type
+  attr_accessor :delivery
+  attr_accessor :people
+  #accepts_nested_attributes_for :people
+
   attr_writer :card
   attr_accessor :recommendation
   attr_accessor :pnr_number
@@ -62,6 +66,13 @@ class OrderForm < ActiveRecord::BaseWithoutTable
   def infants
     s_pos = people_count[:adults] + people_count[:children]
     (people && (people_count[:infants] > 0) && (people.sort_by(&:birthday)[s_pos..-1])) || []
+  end
+
+  def people_attributes= attrs
+    @people ||= []
+    attrs.each do |k, person_attrs|
+      @people[k.to_i] = Person.new(person_attrs)
+    end
   end
 
   def errors_hash

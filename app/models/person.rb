@@ -1,19 +1,22 @@
 # encoding: utf-8
-class Person < ActiveRecord::BaseWithoutTable
-  column :first_name, :string
-  column :last_name, :string
-  column :sex, :string
-  column :nationality_id, :integer
-  column :birthday, :date
-  column :document_expiration_date, :date
-  column :passport, :string
-  column :document_noexpiration, :boolean, false
-  column :bonus_present, :boolean, false
-  column :bonuscard_type, :string
-  column :bonuscard_number, :string
-  column :number_in_amadeus, :integer
-  column :ticket, :string
-  column :passenger_ref, :integer
+class Person
+  include Mongoid::Document
+  field :first_name, :type => String
+  field :last_name, :type => String
+  field :sex, :type => String
+  field :nationality_id, :type => Integer
+  field :birthday, :type => Date
+  field :document_expiration_date, :type => Date
+  field :passport, :type => String
+  field :document_noexpiration, :type => Boolean, :default => false
+  field :bonus_present, :type => Boolean, :default => false
+  field :bonuscard_type, :type => String
+  field :bonuscard_number, :type => String
+  field :number_in_amadeus, :type => Integer
+  field :ticket, :type => String
+
+  attr_accessor :passenger_ref
+
   validates_presence_of :first_name, :last_name, :sex, :nationality_id, :birthday, :passport
   validates_presence_of :document_expiration_date, :unless => :document_noexpiration
   # FIXME WRONG! фамилии через дефис? два имени? сокращения?
@@ -21,6 +24,22 @@ class Person < ActiveRecord::BaseWithoutTable
   validates_format_of :last_name,  :with => /^[a-zA-Z-]*$/, :message => "Некорректная фамилия"
   validate :check_age, :check_passport
   attr_accessor :flight_date, :infant_or_child
+
+  # совместимость с "активрекордным" стилем
+  before_validation :set_birthday
+  before_validation :set_document_expiration_date
+
+  def set_birthday
+    self.birthday ||=
+      (1..3).collect { |n| attributes["birthday(#{n}i)"] }.join('-')
+  end
+
+  def set_document_expiration_date
+    unless document_noexpiration
+      self.document_expiration_date ||=
+        (1..3).collect { |n| attributes["document_expiration_date(#{n}i)"] }.join('-')
+    end
+  end
 
   def smart_document_expiration_date
     document_noexpiration ? (Date.today + 18.months) : document_expiration_date

@@ -20,7 +20,7 @@ describe Person do
      "first_name"=>"ALEKSEY"}
   end
 
-  subject { Person.new(adult_attributes) }
+  subject { Person.new(adult_attributes).tap(&:valid?) }
 
   its(:birthday) {should == Date.new(1984, 6, 16)}
   its(:document_expiration_date) {should == Date.new(2014, 9, 8)}
