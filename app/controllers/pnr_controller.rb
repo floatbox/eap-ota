@@ -21,7 +21,7 @@ class PNRController < ApplicationController
   def show_for_ticket
     ticket = Ticket.find(params[:ticket_id])
     raise 'ticket don\'t belong to order' if ticket.order != @pnr.order
-    k = (ticket.price_tax + ticket_price_fare).to_f / (ticket.order.price_fare + ticket.order.price_tax)
+    k = (ticket.price_tax + ticket.price_fare).to_f / (ticket.order.price_fare + ticket.order.price_tax)
     @pnr.order.price_with_payment_commission *= k
     @pnr.order.price_fare = ticket.price_fare
     @pnr.passengers = [Person.new(:first_name => ticket.first_name, :last_name => ticket.last_name, :passport => ticket.passport, :ticket => ticket.number)]
