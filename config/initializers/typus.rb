@@ -20,9 +20,7 @@ Typus.setup do |config|
   # config.username = "admin"
   # config.password = "columbia"
 
-  # Pagination options:
-  # These options are passed to `will_paginate`. You can see the available
-  # options in the plugin source. (https://github.com/mislav/will_paginate/blob/rails3/lib/will_paginate/view_helpers.rb)
+  # Pagination options: These options are passed to `kaminari`.
   # config.pagination = { :previous_label => "&larr; " + Typus::I18n.t("Previous"),
   #                       :next_label => Typus::I18n.t("Next") + " &rarr;" }
 

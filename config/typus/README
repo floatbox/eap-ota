@@ -26,7 +26,6 @@ most common settings.
         index: cleanup
         edit: send_as_newsletter
         show: rebuild
-      export: csv, xml
       order_by: created_at
       relationships:
       filters: is_published?, created_at, category_id
@@ -34,14 +33,13 @@ most common settings.
       application: Application
       description: Some text to describe the model
       options:
-        action_after_save: index
         default_action_on_item: show
         end_year: 2015
         form_rows: 25
         minute_step: 15
         nil: 'nil'
         only_user_items: true
-        per_page: 5
+        per_page: 25
         start_year: 1990
 
 Note: To define namespace models use :: as a separator. (i.e. Delayed::Job)

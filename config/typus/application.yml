@@ -108,7 +108,7 @@ Order:
   search: ^pnr_number, email, phone
   options:
     default_action_on_item: show
-    action_after_save: show
+    #action_after_save: show
   actions:
     show: edit
   # тут не ввернешь конфирмации. временно убрал
@@ -132,7 +132,7 @@ OrderComment:
         created_at: long
         updated_at: long
   options:
-    action_after_save: show
+    #action_after_save: show
   actions:
     show: edit
   order_by: -created_at

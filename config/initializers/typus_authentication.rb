@@ -13,6 +13,6 @@ Typus.setup do |config|
   config.user_class_name = "TypusUser"
 
   # Define user_fk.
-  config.user_fk = "admin_user_id"
+  #config.user_fk = "admin_user_id"
 
 end

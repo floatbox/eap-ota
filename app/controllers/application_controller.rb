@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   # 404 на старые урлы
   ActionDispatch::ShowExceptions.rescue_responses.update 'Cache::NotFound' => :not_found
 
-  before_filter :set_admin_user
+  #before_filter :set_admin_user
   #before_filter :authenticate
   def set_admin_user
     Typus::Configuration.models_constantized!
