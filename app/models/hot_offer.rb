@@ -25,7 +25,7 @@ class HotOffer < ActiveRecord::Base
   private
 
   def set_some_vars
-    self.price = @recommendation.price_total / @search.people_count.values.sum
+    self.price = @recommendation.price_with_payment_commission / @search.people_count.values.sum
     self.time_delta = (Date.strptime(@search.form_segments[0].date, '%d%m%y') - Date.today).to_i
     self.destination = Destination.find_or_create_by_from_id_and_to_id_and_rt(@search.form_segments[0].from_as_object.id, @search.form_segments[0].to_as_object.id, @search.rt)
     unless destination.new_record?

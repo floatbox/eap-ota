@@ -10,7 +10,7 @@ class PricerController < ApplicationController
         @recommendations = Mux.new(:admin_user => admin_user).async_pricer(@search)
         @locations = @search.human_locations
         hot_offer = create_hot_offer
-        @average_price = hot_offer.destination.average_price if hot_offer
+        @average_price = hot_offer.destination.average_price * @search.people_count[:adults] if hot_offer
       end
     end
     render :partial => 'recommendations'
