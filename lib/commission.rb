@@ -2248,7 +2248,7 @@ commission "5%/3%"
 carrier "5H", "Five Fourty Aviation Limited"
 ########################################
 
-exmaple "svocdg"
+example "svocdg"
 agent "5 (пять) % от опубл. тарифов на собств. рейсы 5H"
 subagent "3% от опубл. тарифов на собств. рейсы 5H"
 commission "5%/3%"
