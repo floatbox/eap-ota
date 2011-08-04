@@ -90,7 +90,7 @@ class Order < ActiveRecord::Base
   end
 
   def calculate_price_with_payment_commission
-    self.price_with_payment_commission = price_total + Payture.commission(price_total) if offline_booking || price_with_payment_commission == 0 || !price_with_payment_commission
+    self.price_with_payment_commission = price_total + Payture.commission(price_total) unless ['blocked', 'charged'].include? payment_status
   end
 
   # по этой штуке во маршрут-квитанции определяется, "бронирование" это или уже "билет"
