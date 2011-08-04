@@ -118,6 +118,7 @@ class Variant
   def eql?(b)
     signature.eql?(b.signature)
   end
+  alias == eql?
 
 end
 

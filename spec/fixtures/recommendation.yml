@@ -1,0 +1,64 @@
+--- !ruby/object:Recommendation 
+availabilities: 
+- "9"
+- "9"
+blank_count: 1
+booking_classes: 
+- I
+- I
+cabins: 
+- M
+- M
+last_tkt_date: 2011-08-01
+price_fare: 1670.0
+price_tax: 2760.0
+rules: 
+  ? 
+    - UN
+    - IPR1M
+  : |-
+    PE.PENALTIES
+      CHANGES
+     
+         CHARGE EUR 30.00 FOR REISSUE/REVALIDATION.
+          NOTE -
+           THE ABOVE CHARGES PERMITTED WITHIN FARE VALIDITY.
+           -PENALTY NOT APPLY FOR INFANT.
+           -CHILD DISCOUNTS APPLY FOR PENALTIES.
+
+source: amadeus
+validating_carrier_iata: UN
+variants: 
+- !ruby/object:Variant 
+  segments: 
+  - !ruby/object:Segment 
+    flights: 
+    - !ruby/object:Flight 
+      arrival_date: "100811"
+      arrival_iata: LED
+      arrival_term: "1"
+      arrival_time: 0910
+      departure_date: "100811"
+      departure_datetime_utc: 2011-08-10 03:45:00 Z
+      departure_iata: DME
+      departure_term: 
+      departure_time: "0745"
+      equipment_type_iata: "735"
+      flight_number: "3"
+      marketing_carrier_iata: UN
+      operating_carrier_iata: UN
+  - !ruby/object:Segment 
+    flights: 
+    - !ruby/object:Flight 
+      arrival_date: "240811"
+      arrival_iata: DME
+      arrival_term: 
+      arrival_time: "2235"
+      departure_date: "240811"
+      departure_iata: LED
+      departure_term: "1"
+      departure_time: "2110"
+      equipment_type_iata: "735"
+      flight_number: "4"
+      marketing_carrier_iata: UN
+      operating_carrier_iata: UN
