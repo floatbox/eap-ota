@@ -176,7 +176,7 @@
             <%= @order.price_fare.ceil.to_i %> RUB<br>
             <%= @order.price_tax_and_markup_and_payment.ceil.to_i %> RUB<br>
             <%= @order.price_with_payment_commission.ceil.to_i %> RUB<br>
-            Invoice<br>
+            <%= @order.paid_by %><br>
             <%= @order.created_at.strftime('%d.%m.%y') %>
             </font>
         </td>

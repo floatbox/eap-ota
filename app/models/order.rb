@@ -12,7 +12,9 @@ class Order < ActiveRecord::Base
   # pending - ожидание оплаты наличныии или курьером
   TICKET_STATUS = [ 'booked', 'canceled', 'ticketed']
   SOURCE = [ 'amadeus', 'sirena', 'other']
-  PAYMENT_TYPE = ['card', 'delivery', 'cash']
+  PAYMENT_TYPE = ['card', 'delivery', 'cash', 'invoice']
+  
+  PAID_BY = {'card' => 'Invoice', 'delivery' => 'Cash', 'cash' => 'Cash', 'invoice' => 'Invoice'}
   attr_writer :itinerary_receipt_view
 
   def self.[] number
@@ -104,6 +106,10 @@ class Order < ActiveRecord::Base
 
   def paid?
     payment_type == 'card'
+  end
+
+  def paid_by
+    PAID_BY[payment_type]
   end
 
   def order_form= order_form
