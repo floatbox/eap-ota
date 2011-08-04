@@ -147,7 +147,7 @@ class OrderForm
     people_count[:adults] + people_count[:children]
   end
 
-  validate :validate_card, :validate_dept_date
+  validate :validate_card, :validate_dept_date, :validate_people
 
   def validate_dept_date
     if recommendation.source == 'amadeus'
@@ -161,6 +161,16 @@ class OrderForm
     if payment_type == 'card'
       errors.add :card, 'Отсутствуют данные карты' unless card
       errors.add :card, 'Некорректные данные карты' if card && !card.valid?
+    end
+  end
+
+  # FIXME убрать внутрь Person
+  def validate_people
+    people.each(&:set_birthday)
+    people.each(&:set_document_expiration_date)
+    set_flight_date_for_childen_and_infants
+    unless people.all?(&:valid?)
+      errors.add :people, 'Проверьте данные пассажиров'
     end
   end
 
@@ -247,7 +257,7 @@ class OrderForm
       :sex => 'f'
     )]
     order.card = Payture.test_card
-    order.set_flight_date_for_childen_and_infants
+    order.valid?
     order.create_booking
   end
 end
