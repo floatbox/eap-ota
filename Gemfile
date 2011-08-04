@@ -1,5 +1,5 @@
 source 'http://rubygems.org'
-gem 'rails', '3.0.9'
+gem 'rails', '3.1.0.rc5'
 
 
 
@@ -8,7 +8,7 @@ group :deployment do
   gem 'capistrano'
 end
 
-gem 'rake', '~> 0.8.7'
+gem 'rake'
 gem 'whenever', :require => false
 gem 'i18n'
 gem 'cucumber'
@@ -22,8 +22,7 @@ gem "memoize"
 gem 'morpher_inflect'
 gem 'russian'
 gem 'graticule'
-# поменять при апгрейде до рельсов 3.1
-gem 'mysql2', '0.2.6'
+gem 'mysql2'
 gem 'tzinfo'
 gem 'geo_ip'
 gem 'hoptoad_notifier'
@@ -37,8 +36,8 @@ gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-inst
 
 gem 'haml'
 
-gem 'typus'
-#gem 'typus', :git => 'https://github.com/fesplugas/typus.git', :branch => "3-0-stable"
+#gem 'typus'
+gem 'typus', :git => 'https://github.com/typus/typus.git', :branch => "3-1-unstable"
 
 gem 'trashed', :git => 'https://github.com/37signals/trashed.git'
 
