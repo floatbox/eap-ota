@@ -42,6 +42,9 @@ describe Sirena::Response::Order do
     its("tickets.every.price_tax") { should == [ 2000, 2000]}
     its("tickets.every.route") { should == [ "ДМД - ПЛК; ПЛК - ДМД", "ДМД - ПЛК; ПЛК - ДМД"]}
     its("tickets.every.cabins") { should == [ "Y", "Y"]}
+    its("tickets.every.first_name") { should == ["ALEKSEY", "MASHA"] }
+    its("tickets.every.last_name") { should == ["IVANOV", "IVANOVA"] }
+    its("tickets.every.passport") { should == ["6555555555", "VВГ123456"] }
   end
 
   describe 'when airport is not reported' do

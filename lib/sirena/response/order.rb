@@ -61,8 +61,11 @@ module Sirena
             flight_element.xpath("departure/city").text
           arrival_iata = flight_element.xpath("arrival/airport").text.presence ||
             flight_element.xpath("arrival/city").text
+          first_name = xpath("//passenger[@id=#{pass_id}]/name").text.split(' ')[0...-1].join(' ')
+          last_name = xpath("//passenger[@id=#{pass_id}]/surname").text
+          passport = xpath("//passenger[@id=#{pass_id}]/doc").text
 
-          res = result[number] ||= {:flights => [], :price_fare => 0, :price_tax => 0, :cabins => [], :flights => []}
+          res = result[number] ||= {:flights => [], :price_fare => 0, :price_tax => 0, :cabins => [], :flights => [], :first_name => first_name, :last_name => last_name, :passport => passport}
           res[:price_fare] += price_fare
           res[:price_tax] += price_tax
           res[:cabins] << cabin
@@ -73,7 +76,10 @@ module Sirena
             :price_fare => v[:price_fare],
             :price_tax => v[:price_tax],
             :cabins => v[:cabins].uniq.join(' + '),
-            :route => v[:flights].join('; ')
+            :route => v[:flights].join('; '),
+            :first_name => v[:first_name],
+            :last_name => v[:last_name],
+            :passport => v[:passport]
           })
         end
 
