@@ -3,6 +3,7 @@ class PnrMailer < ActionMailer::Base
   helper :pricer
   helper :booking
 
+  add_template_helper(ApplicationHelper)
   default :from => "Eviterra.com <ticket@eviterra.com>", :bcc => Conf.mail.ticket_cc
 
   def notification(email, number)

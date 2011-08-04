@@ -173,9 +173,9 @@
         </td>
         <td class="pad_null" colspan="2">
             <font family="Arial" size="2">
-            <%= @order.price_fare.ceil.to_i %> RUB<br>
-            <%= @order.price_tax_and_markup_and_payment.ceil.to_i %> RUB<br>
-            <%= @order.price_with_payment_commission.ceil.to_i %> RUB<br>
+            <%= exact_price(@order.price_fare) %> RUB<br>
+            <%= exact_price(@order.price_tax_and_markup_and_payment) %> RUB<br>
+            <%= exact_price(@order.price_with_payment_commission) %> RUB<br>
             Invoice<br>
             <%= @order.created_at.strftime('%d.%m.%y') %>
             </font>

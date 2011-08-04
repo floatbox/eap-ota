@@ -24,5 +24,9 @@ module ApplicationHelper
   def display_virtual *attrs
     display_string *attrs
   end
+
+  def exact_price(price)
+    sprintf("%.2f", price).sub('.', ',')
+  end
 end
 
