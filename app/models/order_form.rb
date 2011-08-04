@@ -2,6 +2,8 @@
 class OrderForm
   include ActiveModel::Validations
   include KeyValueInit
+  include CopyAttrs
+  extend CopyAttrs
 
   attr_accessor :email
   attr_accessor :phone
@@ -112,20 +114,22 @@ class OrderForm
   end
 
   def save_to_cache
-    self.number ||= ShortUrl.random_hash
-    Cache.write("order_form", number, self)
+    cache = OrderFormCache.new
+    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner
+    cache.save
+    self.number = cache.id.to_s
   end
 
+  class NotFound < StandardError; end
   class << self
     def load_from_cache(cache_number)
-      require 'segment'
-      require 'variant'
-      require 'flight'
-      require 'recommendation'
-      require 'person'
-      # FIXME попытаться избавиться от этой загрузки
-      Cache.read("order_form", cache_number)
+      cache = OrderFormCache.find(cache_number) or raise(NotFound, "#{cache_number} not found")
+      order = new
+      copy_attrs cache, order, :recommendation, :people_count, :variant_id, :query_key, :partner
+      order.number = cache.id.to_s
+      order
     end
+
     alias :[] load_from_cache
   end
 
