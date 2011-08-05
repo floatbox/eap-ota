@@ -8,7 +8,8 @@ module Amadeus
   TICKETING = 'MOWR2290Q'
   # логин сюда не работает
   # только для передачи прав доступа
-  WORKING = 'MOWR2233B'
+  WORKING = 'MOWR223BB'
+  #WORKING = 'MOWR2233B'
 
   set_table_name 'amadeus_sessions'
 
