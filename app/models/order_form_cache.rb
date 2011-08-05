@@ -21,7 +21,7 @@ class OrderFormCache
 
   def people_count
     # возвращается почему-то BSON::OrderedHash
-    Hash[super].symbolize_keys
+    Hash[ super || {} ].symbolize_keys
   end
 
 end
