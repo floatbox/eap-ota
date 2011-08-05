@@ -11,3 +11,11 @@ ru:
         price_our_markup: "Сервисный сбор Эвитерра"
         price_total: "Итого себестоимость билета"
         price_with_payment_commission: "Итого к оплате"
+
+  views:
+    pagination:
+      first: "&laquo; First"
+      last: "Last &raquo;"
+      previous: "&lsaquo; Prev"
+      next: "Next &rsaquo;"
+      truncate: "..."

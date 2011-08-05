@@ -18,3 +18,11 @@ en:
         price_our_markup: "Eviterra fee"
         price_total: "Ticket price total"
         price_with_payment_commission: "TOTAL CLIENT PRICE"
+
+  views:
+    pagination:
+      first: "&laquo; First"
+      last: "Last &raquo;"
+      previous: "&lsaquo; Prev"
+      next: "Next &rsaquo;"
+      truncate: "..."
