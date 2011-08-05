@@ -139,7 +139,8 @@ OrderComment:
   search: ^order_id, text
   filters: created_at, typus_user, assigned_to, status, priority
   relationships: order, typus_user
-  application: Orders
+  order_by: created_at
+  application: Misc
 
 Ticket:
   fields:
@@ -155,7 +156,7 @@ Ticket:
   order_by: -created_at
   filters: created_at
   relationships: order
-  application: Orders
+  application: Misc
   export: csv
   search: ^number
 
@@ -173,7 +174,7 @@ Payment:
   search: =id_override, =id, name_in_card
   relationships: order
   order_by: -created_at
-  application: Orders
+  application: Misc
 
 
 Destination:
