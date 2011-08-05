@@ -5,7 +5,7 @@ class PNRController < ApplicationController
   before_filter :get_pnr, :only => [:show, :show_as_booked, :show_as_ticketed, :show_for_ticket]
 
   def get_pnr
-    @pnr = Pnr.get_by_number params[:id]
+    @pnr = PNR.get_by_number params[:id]
   end
 
   def show_as_booked
@@ -34,7 +34,7 @@ class PNRController < ApplicationController
 
   # sirena pdf receipt FIXME unfinished, unused
   def receipt
-    @pnr = Pnr.get_by_number params[:id]
+    @pnr = PNR.get_by_number params[:id]
     if @pnr.order && @pnr.order.source == 'sirena'
       render :text => @pnr.sirena_receipt, :content_type => 'application/pdf'
     end
