@@ -73,6 +73,13 @@ namespace :deploy do
     run "ln -s #{shared_path}/completer.dat #{latest_release}/tmp/completer.dat || echo #{shared_path}/completer.dat does not exist"
   end
 
+  before "deploy:symlink", "deploy:assets"
+
+  desc "Compile asets"
+  task :assets do
+    run "cd #{release_path}; RAILS_ENV=#{rails_env} bundle exec rake assets:precompile"
+  end
+
   desc <<-DESC
     Checks if there're migrations pending. By default, it runs this in most recently \
     deployed version of the app. However, you can specify a different release \
