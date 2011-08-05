@@ -23,7 +23,7 @@ gem "every"
 gem "memoize"
 gem 'morpher_inflect'
 gem 'russian'
-gem 'graticule'
+#gem 'graticule'
 gem 'mysql2'
 gem 'tzinfo'
 gem 'geo_ip'
