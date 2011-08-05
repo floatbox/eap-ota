@@ -1,6 +1,8 @@
 # encoding: utf-8
 class Admin::OrdersController < Admin::ResourcesController
   include CustomCSV
+  include Typus::Controller::Bulk
+
   before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel, :reload_tickets, :update, :resend_email, :send_offline_email]
   before_filter :update_offline_booking_flag, :only => :create
 
@@ -74,5 +76,17 @@ class Admin::OrdersController < Admin::ResourcesController
     params[:order][:offline_booking] = '1'
   end
 
+
+  def set_bulk_action
+    add_bulk_action("Charge", "bulk_charge")
+  end
+  private :set_bulk_action
+
+  def bulk_charge(ids)
+    ids.each { |id| @resource.find(id).charge! }
+    notice = Typus::I18n.t("Tried to charge #{ids.count} entries. Probably successfully")
+    redirect_to :back, :notice => notice
+  end
+  private :bulk_charge
 end
 
