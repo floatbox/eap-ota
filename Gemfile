@@ -38,6 +38,7 @@ gem 'haml'
 
 #gem 'typus'
 gem 'typus', :git => 'https://github.com/typus/typus.git', :branch => "3-1-unstable"
+gem 'fastercsv' if RUBY_VERSION < "1.9.0"
 
 gem 'trashed', :git => 'https://github.com/37signals/trashed.git'
 

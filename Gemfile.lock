@@ -107,6 +107,7 @@ GEM
     diff-lcs (1.1.2)
     erubis (2.7.0)
     every (1.1)
+    fastercsv (1.5.4)
     fastthread (1.0.7)
     ffi (1.0.9)
     gem_plugin (0.2.3)
@@ -280,6 +281,7 @@ DEPENDENCIES
   database_cleaner
   every
   eviterra-instrumentation!
+  fastercsv
   geo_ip
   graticule
   haml
