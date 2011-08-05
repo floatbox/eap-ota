@@ -588,6 +588,13 @@ interline :possible
 check { %W(europe asia africa).include?( Country[country_iatas.first].continent ) }
 commission "1%/0.5%"
 
+example 'miadtw dtwmia/ab'
+agent    "1% от опубл. тарифа DL при внутренних перелетах по США"
+subagent "0,5% от опубл. тарифа DL при внутренних перелетах по США"
+interline :possible
+domestic
+commission "1%/0.5%"
+
 example 'cdgsvo/ab'
 agent    "1% от опубл. тарифа на рейсы Interline без участка DL."
 subagent "0,5% от опубл. тарифа на рейсы Interline без участка DL."

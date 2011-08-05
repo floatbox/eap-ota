@@ -218,6 +218,7 @@ class Recommendation
   def eql?(b)
     signature.eql?(b.signature)
   end
+  alias == eql?
 
   def self.corrected recs
     #объединяем эквивалентные варианты

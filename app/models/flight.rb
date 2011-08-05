@@ -135,6 +135,7 @@ class Flight
   def eql?(b)
     signature.eql?(b.signature)
   end
+  alias == eql?
 
   def inspect
     flight_code
