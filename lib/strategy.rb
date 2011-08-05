@@ -157,6 +157,9 @@ class Strategy
           amadeus.pnr_ignore
           return
         end
+        #Передача прав из одного офиса в другой
+        amadeus.cmd("es#{Amadeus::Session::BOOKING}-B")
+        amadeus.cmd("rp/#{Amadeus::Session::WORKING}/all")
 
         logger.info "Strategy::Amadeus: processing booking: #{add_multi_elements.pnr_number}"
 
