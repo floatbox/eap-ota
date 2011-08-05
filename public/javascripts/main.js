@@ -262,12 +262,12 @@ function preload() {
 var Cookie = function(name, value, date) {
 	if (arguments.length > 1) {
 		var exp = (value !== undefined) ? (date ? date.toGMTString() : '') : 'Thu, 01-Jan-1970 00:00:01 GMT';
-		document.cookie = name + '=' + escape(value) + ';' +  (exp ? ('expires=' + exp + ';') : '') + 'path=/';
+		document.cookie = name + '=' + encodeURIComponent(value) + ';' +  (exp ? ('expires=' + exp + ';') : '') + 'path=/';
 		return value;
 	} else {
 		var pattern = new RegExp('(?:^' + name + '|; ?' + name + ')=([^;]*)');
 		var result = pattern.exec(document.cookie);
-		return (result) ? unescape(result[1]) : undefined;
+		return (result) ? decodeURIComponent(result[1]) : undefined;
 	}
 }
 

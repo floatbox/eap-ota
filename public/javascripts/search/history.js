@@ -2,7 +2,7 @@ search.history = {
 init: function() {
     this.el = $('#history');
     this.items = [];
-    var saved = Cookie('searches');
+    var saved = Cookie('searches_encoded');
     if (browser.platform.search(/ipad|iphone/) !== -1 || browser.name.search(/msie6|msie7/) !== -1) {
         this.toggle = function() {};
         this.update = function() {};
@@ -78,7 +78,7 @@ save: function() {
         var item = this.items[i];
         result.push(item.key + ' ' + item.content);
     }
-    Cookie('searches', result.length ? result.join('|') : undefined, new Date().shiftDays(3));
+    Cookie('searches_encoded', result.length ? result.join('|') : undefined, new Date().shiftDays(3));
 },
 show: function() {
     var selected = pageurl.search;
