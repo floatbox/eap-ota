@@ -3,18 +3,35 @@ class Order < ActiveRecord::Base
 
   include CopyAttrs
 
-  PAYMENT_STATUS = ['not blocked', 'blocked', 'charged', 'new', 'pending']
   # new - дефолтное значение без смысла
   # not blocked - ожидание 3ds, неприход наличных, убивается шедулером
   # unblocked - разблокирование денег на карте
   # blocked - блокирование денег на карте
   # charged - списание денег с карты или приход наличных
   # pending - ожидание оплаты наличныии или курьером
-  TICKET_STATUS = [ 'booked', 'canceled', 'ticketed']
-  SOURCE = [ 'amadeus', 'sirena', 'other']
-  PAYMENT_TYPE = ['card', 'delivery', 'cash', 'invoice']
-  
+  def self.payment_statuses
+    ['not blocked', 'blocked', 'charged', 'new', 'pending']
+  end
+
+  def self.ticket_statuses
+    [ 'booked', 'canceled', 'ticketed']
+  end
+
+  def self.sources
+    [ 'amadeus', 'sirena', 'other']
+  end
+
+  def self.payment_types
+    ['card', 'delivery', 'cash', 'invoice']
+  end
+
+  # фейковый текст для маршрут-квитанций. может быть, вынести в хелпер?
   PAID_BY = {'card' => 'Invoice', 'delivery' => 'Cash', 'cash' => 'Cash', 'invoice' => 'Invoice'}
+  # ugly name for paid_by filter. нужен ли на самом деле?
+  def self.paid_bies
+    PAID_BY
+  end
+
   attr_writer :itinerary_receipt_view
 
   def self.[] number

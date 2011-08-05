@@ -13,7 +13,9 @@ class Country < ActiveRecord::Base
   attr_writer :main_city_iatas_as_text #хак для typus
   include GeoTaggable
 
-  CONTINENT = {'Азия' => 'asia', 'Америка' => 'america', 'Антарктика' => 'antarctica', 'Африка' => 'africa', 'Европа' => 'europe', 'Океания' => 'oceania'}
+  def self.continents
+   {'Азия' => 'asia', 'Америка' => 'america', 'Антарктика' => 'antarctica', 'Африка' => 'africa', 'Европа' => 'europe', 'Океания' => 'oceania'}
+  end
 
   scope :important, where("importance > 0")
   scope :not_important, where("importance = 0")

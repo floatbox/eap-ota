@@ -4,7 +4,9 @@ class Destination < ActiveRecord::Base
   belongs_to :to, :class_name => "City"
   has_many :hot_offers, :dependent => :destroy
 
-  RT = { ' → ' => false, ' ⇄ ' => true}
+  def self.rts
+    { ' → ' => false, ' ⇄ ' => true}
+  end
 
   def name
     "#{from.name} #{RT.invert[rt]} #{to.name}"

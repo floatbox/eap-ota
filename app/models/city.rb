@@ -3,7 +3,9 @@ class City < ActiveRecord::Base
   include HasSynonyms
   extend IataStash
 
-  TIMEZONE = TZInfo::Timezone.all_identifiers
+  def self.timezones
+    TZInfo::Timezone.all_identifiers
+  end
 
   has_many :airports
   belongs_to :country

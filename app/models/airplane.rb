@@ -2,9 +2,11 @@
 class Airplane < ActiveRecord::Base
   extend IataStash
 
-  ENGINE_TYPE = { 'Реактивный' => 'jet','Турбовинтовой' => 'prop', 'Поезд' => 'train', 'Автобус' => 'bus' }
+  def self.engine_types
+    { 'Реактивный' => 'jet','Турбовинтовой' => 'prop', 'Поезд' => 'train', 'Автобус' => 'bus' }
+  end
 
-  validates_inclusion_of :engine_type, :in => ENGINE_TYPE.values
+  validates_inclusion_of :engine_type, :in => engine_types.values
 
 
   def name
