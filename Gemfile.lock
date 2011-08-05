@@ -287,6 +287,7 @@ DEPENDENCIES
   hoptoad_notifier
   i18n
   interactive_editor
+  jquery-rails
   looksee
   memoize
   mongoid

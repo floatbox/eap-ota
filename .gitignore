@@ -9,8 +9,9 @@ log/**/*.xml
 !log/sirena
 tmp
 db/*.sqlite3
-public/ext
+public/assets
 public/system
+.sass-cache/
 .rake_tasks
 .bundle
 rerun.txt
