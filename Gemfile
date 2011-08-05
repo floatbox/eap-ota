@@ -3,6 +3,8 @@ gem 'rails', '3.1.0.rc5'
 
 gem 'jquery-rails'
 
+gem "uglifier"
+
 # Deploy with Capistrano
 group :deployment do
   gem 'capistrano'
