@@ -203,7 +203,13 @@ class Order < ActiveRecord::Base
           price_tax_ticket = prices.present? ? prices[ref][:price_tax].to_i : 0
         end
         price_share_ticket = commission_subagent['%'] ? (price_fare_ticket * commission_subagent[0...-1].to_f / 100) : commission_subagent.to_f
-        price_consolidator_markup_ticket = (price_share_ticket > 5) ? 0 : price_fare_ticket * 0.02
+        price_consolidator_markup_ticket = if price_share_ticket > 5
+          0
+        elsif %W( LH LX KL AF OS ).include? commission_carrier
+          price_fare_ticket * 0.01
+        else
+          price_fare_ticket * 0.02
+        end
         Ticket.create(
           :order => self,
           :number => passenger.ticket.to_s,
