@@ -74,7 +74,7 @@ remove: function(key) {
 },
 save: function() {
     var result = [];
-    for (var i = 0, im = this.items.length; i < im; i++) {
+    for (var i = Math.max(0, this.items.length - 10), im = this.items.length; i < im; i++) {
         var item = this.items[i];
         result.push(item.key + ' ' + item.content);
     }
