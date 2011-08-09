@@ -157,9 +157,6 @@ class Strategy
           amadeus.pnr_ignore
           return
         end
-        #Передача прав из одного офиса в другой
-        amadeus.cmd("es#{Amadeus::Session::BOOKING}-B")
-        amadeus.cmd("rp/#{Amadeus::Session::WORKING}/all")
 
         logger.info "Strategy::Amadeus: processing booking: #{add_multi_elements.pnr_number}"
 
@@ -199,6 +196,10 @@ class Strategy
           #  Amadeus::Session::TICKETING,
           #  Amadeus::Session::WORKING
           #)
+          #Передача прав из одного офиса в другой
+          #FIXME надо как-то согласовать с предыдущей частью
+          amadeus.cmd("es#{Amadeus::Session::BOOKING}-B")
+          amadeus.cmd("rp/#{Amadeus::Session::WORKING}/all")
           # FIXME надо ли архивировать в самом конце?
           amadeus.pnr_archive(@order_form.seat_total)
           # FIXME перенести ремарку поближе к началу.
