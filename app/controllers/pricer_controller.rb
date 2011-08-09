@@ -75,7 +75,7 @@ class PricerController < ApplicationController
       @recommendations = []
       render 'api/yandex'
     else
-      render 'api/yandex_failure', :locals => {:message => 'from, to and date1 parameters are required'}
+      render 'api/yandex_failure', :status => 400, :locals => {:message => 'from, to and date1 parameters are required'}
     end
   end
 

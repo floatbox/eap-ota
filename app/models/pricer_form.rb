@@ -31,7 +31,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     column :to, :string
     column :date, :string
     attr_reader :to_as_object, :from_as_object
-    validates_presence_of :from_as_object, :to_as_object, :date
+    validates_presence_of :from_as_object, :to_as_object, :date, :date_as_date
     validate :check_date
 
     def to_as_object_iata
@@ -43,7 +43,7 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     end
 
     def check_date
-      errors.add :date, 'Первый вылет слишком рано' if !date.present? || !TimeChecker.ok_to_show(date_as_date + 1.day)
+      errors.add :date, 'Первый вылет слишком рано' if date_as_date.present? && !TimeChecker.ok_to_show(date_as_date + 1.day)
     end
 
     def as_json(args)
@@ -84,7 +84,11 @@ class PricerForm < ActiveRecord::BaseWithoutTable
     end
 
     def date_as_date
-      Date.strptime(date, '%d%m%y')
+      begin
+        @date_as_date ||= Date.strptime(date, '%d%m%y')
+      rescue
+        nil
+      end
     end
 
     def to= name
