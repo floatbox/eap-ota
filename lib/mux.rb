@@ -122,7 +122,7 @@ class Mux
   def sirena_cleanup(recs)
     recs.delete_if(&:without_full_information?)
     # временно из-за проблем с тарифами AB удаляем из рекоммендации
-    recs.delete_if {|r| r.variants.first.validating_carrier_iata == 'AB'}
+    recs.delete_if {|r| r.validating_carrier_iata == 'AB'}
     recs.every.clear_variants
     recs.delete_if{|r| r.variants.blank?}
   end
