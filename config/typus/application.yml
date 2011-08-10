@@ -137,7 +137,7 @@ OrderComment:
     show: edit
   order_by: -created_at
   search: ^order_id, text
-  filters: created_at, typus_user
+  filters: created_at, typus_user, assigned_to, status, priority
   relationships: order, typus_user
   application: Orders
 
