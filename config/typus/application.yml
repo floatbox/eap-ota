@@ -132,10 +132,13 @@ OrderComment:
         created_at: long
         updated_at: long
   options:
-    default_action_on_item: show
     action_after_save: show
+  actions:
+    show: edit
+  order_by: -created_at
+  search: ^order_id, text
+  filters: created_at, typus_user
   relationships: order, typus_user
-  order_by: created_at
   application: Orders
 
 Ticket:
