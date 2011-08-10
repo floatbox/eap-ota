@@ -63,10 +63,13 @@ class Order < ActiveRecord::Base
 
   #флаг для админки
   def urgent
-    if last_tkt_date && last_tkt_date == Date.today && payment_status == 'blocked' && ticket_status == 'booked'
+    if  payment_status == 'blocked' && ticket_status == 'booked' && 
+        ((last_tkt_date && last_tkt_date == Date.today) ||
+         (departure_date && departure_date < Date.today + 3.days)
+        )
       '!'
     else
-      '.'
+      '&nbsp;'.html_safe
     end
   end
 
@@ -136,6 +139,7 @@ class Order < ActiveRecord::Base
 
     self.route = recommendation.variants[0].flights.every.destination.join('; ')
     self.cabins = recommendation.cabins.join(',')
+    self.departure_date = recommendation.variants[0].flights[0].dept_date
     # FIXME вынести рассчет доставки отсюда
     if order_form.payment_type != 'card'
       self.cash_payment_markup = recommendation.price_payment + (order_form.payment_type == 'delivery' ? 350 : 0)
