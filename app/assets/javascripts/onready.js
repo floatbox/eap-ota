@@ -1,4 +1,4 @@
-﻿(function() {
+﻿window.eviterraInit = function() {
 
     // Браузеры с упрощенными эффектами
     browser.scanty = (browser.platform.search(/ipad|iphone/) !== -1 || browser.name.search(/safari|chrome|firefox|msie9/) === -1);
@@ -95,4 +95,4 @@
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(po, s);
       })();
-})();
+};
