@@ -71,6 +71,12 @@ subagent "2 % от тарифа на рейсы Перевозчика по вс
 subclasses "LVXTNIGWU"
 commission "3%/2%"
 
+example 'aerdme dmeaer/ab'
+agent "4% МВЛ. ВВЛ Interline с участком UN"
+subagent "2 (два) % от тарифа на рейсы Interline c участком UN. Запрещена продажа на рейсы interline без участка UN."
+interline :yes
+commission "4%/2%"
+
 example 'DMEMIA/FIRST/F MIADME/FIRST/F'
 agent "12% Oт всех применяемых опубликованных тарифов на собственные  регулярные рейсы между Москвой и Пекином/Майами/Нью-Йорком (OW,RT)  и на сквозные перевозки между пунктами полетов АК  «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW,RT)."
 subagent "9 % от всех применяемых опубликованных тарифов между Москвой и Пекином/Майами/Нью-Йорком (OW.RT) и на сквозные перевозки между пунктами полетов АК «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW.RT). (Через АСБ «GABRIEL»: установлен специальный «Код тура» NEWDE10 при продаже перевозок с полетными сегментами между Москвой-Майами/Нью-Йорком (OW/RT). СУБАГЕНТ обязан внести «Код тура» NEWDE10 для автоматического начисления комиссии.)"
@@ -562,7 +568,7 @@ carrier "DE", "Condor Flugdienst (Авиарепс)"
 
 example 'svocdg' #date 30.09, с 1.10 — 1 руб
 agent    "1% от всех опубл. тарифов на рейсы DE. (В договоре Interline не прописан.)"
-subagent "0,5% от опубл. тарифа на рейсы DE."
+subagent "0,5% от опубл. тарифа на рейсы DE." #date 5 коп
 commission "1%/0.5%"
 
 example 'cdgsvo svocdg/ab'
@@ -588,6 +594,7 @@ interline :possible
 check { %W(europe asia africa).include?( Country[country_iatas.first].continent ) }
 commission "1%/0.5%"
 
+example 'miadtw dtwmia'
 example 'miadtw dtwmia/ab'
 agent    "1% от опубл. тарифа DL при внутренних перелетах по США"
 subagent "0,5% от опубл. тарифа DL при внутренних перелетах по США"
@@ -829,6 +836,7 @@ carrier "HU", "HAINAN AIRLINES"
 
 example 'svopek/f'
 example 'svopek/f/ab peksvo/f'
+#date 31.10
 agent "20% перелет с 01.01.11-31.10.11 / class F, P, C  of the flight MOW - CHINA или MOW - CHINA - MOW"
 subagent "18% перелет с 01.01.11-31.10.11 / class F, P, C of the flight MOW - CHINA или MOW - CHINA - MOW"
 subclasses "FPC"
@@ -838,6 +846,7 @@ commission "20%/18%"
 
 example 'svopek/d'
 example 'svopek/d/ab persvo/d'
+#date 31.10
 agent "15% перелет с 01.01.11-31.10.11 / class D, I, J  of the flight MOW - CHINA или MOW - CHINA - MOW"
 subagent "13% перелет с 01.01.11-31.10.11 / class D, I, J of the flight MOW - CHINA или MOW - CHINA - MOW"
 subclasses "DIJ"
@@ -846,16 +855,41 @@ check { city_iatas.first == 'MOW' && country_iatas.include?('CN') }
 commission "15%/13%"
 
 example 'svopek/z'
-example 'svopek/z/ab peksvo'
+example 'svopek/z/ab peksvo/z'
+example 'svopek/u/ab peksvo/u'
+#date 31.10
 agent "9% перелет с 01.01.11-31.10.11 / class Y,B,H,K,L,M,Q,W,S,U,E,O of the flight MOW - CHINA или MOW - CHINA - MOW"
 subagent "7% перелет с 01.01.11-31.10.11 / class Y,B,H,K,L,M,Q,W,S,U,E,O of the flight MOW - CHINA или MOW - CHINA - MOW"
-subclasses "YBHKLMQWSUEOZ" #Z из другого правила
+subclasses "YBHKLMQWSUEOZ" #Z из другого правила, которое я не завел отдельно, проценты те же
 interline :possible
 check { city_iatas.first == 'MOW' && country_iatas.include?('CN') }
 commission "9%/7%"
 
+example 'ledpek/c pekled/c'
+example 'ledpek/c/ab pekled/c'
+example 'ledpek/d/ab pekled/d'
+#date 31.12
+agent "15% перелет до 31.12.11 / class C, D, J  of the flight LED=PEK=LED"
+subagent "13% перелет до 31.12.11 / class C, D, J of the flight LED=PEK=LED"
+subclasses "CDJ"
+interline :possible
+check { city_iatas.first == 'LED' && city_iatas.include?('BJS') }
+commission "15%/13%"
+
+example 'ledpek/u pekled/u'
+example 'ledpek/u/ab pekled/u'
+example 'ledpek/t/ab pekled/t'
+#date 31.12
+agent "9% перелет до 31.12.11 / class I / Z / Y / B / H / K / L / M / Q / X / V / T / W / S / N / U / E / O of the flight LED=PEK=LED"
+subagent "7% перелет до 31.12.11 / class I / Z / Y / B / H / K / L / M / Q / X / V / T / W / S / N / U / E / O of the flight LED=PEK=LED"
+subclasses "IZYBHKLMQXVTWSNUEO"
+interline :possible
+check { city_iatas.first == 'LED' && city_iatas.include?('BJS') }
+commission "9%/7%"
+
 example 'ovbpek'
 example 'kjapek pekkja/ab'
+#date 31.10
 agent "9% перелет с 15.05.11-31.10.11с началом перевозки из городов KJA OVB IKT / all class "
 subagent "7% перелет с 15.05.11-31.10.11с началом перевозки из городов KJA OVB IKT / all class"
 interline :possible
@@ -863,7 +897,8 @@ check { %W(KJA OVB IKT).include?(city_iatas.first) }
 commission "9%/7%"
 
 example 'peksvo/f'
-example 'peksvo/f/ab svopek/d'
+example 'peksvo/d/ab svopek/d'
+#date 31.10
 agent "3% перелет с 05.05.11 по 31.10.11г./class F, P, C , D , I , J  of the flight CHINA - MOW  или  CHINA - MOW - CHINA"
 subagent "1% перелет с 05.05.11 по 31.10.11г./class F, P, C , D , I , J of the flight CHINA - MOW или CHINA - MOW - CHINA"
 subclasses "FPCDIJ"
@@ -871,8 +906,9 @@ interline :possible
 check { city_iatas.include?('MOW') && country_iatas.first == 'CN' }
 commission "3%/1%"
 
-example 'peksvo'
-example 'peksvo svopek'
+example 'peksvo/economy'
+example 'peksvo/economy svopek/economy'
+#date 31.10
 agent "3% перелет с 05.05.11 по 31.10.11г./class Y,B,H,K,L,M,Q,X,V,T,S,N,U,  of the flight CHINA - MOW  или  CHINA - MOW - CHINA"
 subagent "1% перелет с 05.05.11 по 31.10.11г./class Y,B,H,K,L,M,Q,X,V,T,S,N,U, of the flight CHINA - MOW или CHINA - MOW - CHINA"
 classes :economy
@@ -885,15 +921,16 @@ example 'nayweh wehnay'
 agent "0% по опубл. тарифам отдельные перелеты с вылетами из Пекина по Китаю на собств. рейсы HU"
 subagent "0% по опубл. тарифам отдельные перелеты с вылетами из Пекина по Китаю на собств. рейсы HU"
 check { (country_iatas - ['CN']).blank? && city_iatas.first == 'BJS' }
+domestic
 commission "0%/0%"
 
-example 'cdgnay'
+example 'miapek'
 agent "3% начало перелета из третьей страны в Китай на все классы"
 subagent "1% начало перелета из третьей страны в Китай на все классы"
-check { country_iatas.first != 'CN' }
+check { country_iatas.first != 'CN' && country_iatas.include?('CN') }
 commission "3%/1%"
 
-#С 01.11.2011г.
+#date С 01.11.2011г.
 agent "9% от всех опубл. тарифов на рейсы HU (В договоре Interline не прописан.)"
 subagent "7% от опубл. тарифов на собств. рейсы HU"
 not_implemented
@@ -1087,33 +1124,28 @@ carrier "KC", "Air Astana"
 example 'tsekgf'
 agent    "5% от тарифа по маршрутам внутри Республики Казахстан;"
 subagent "3,5% от тарифа по маршрутам внутри Республики Казахстан;"
-interline :no
 domestic
 commission "5%/3.5%"
 
-example 'svoala'
+example 'svoala alasvo'
 agent    "7% от прямых опубликованных тарифов по международным маршрутам;"
 subagent "5% от прямых опубликованных тарифов по международным маршрутам;"
-disabled "фильтр прямого тарифа"
 commission "7%/5%"
 
-example 'svoala alasvo'
 agent    "7% от сквозных опубликованных тарифов по международным маршрутам;"
 subagent "5% от сквозных опубликованных тарифов по международным маршрутам;"
-disabled "фильтр сквозного тарифа"
+disabled "С Любой решили, что это тоже самое, что выше"
 commission "7%/5%"
 
-example 'svoala alasvo'
+example 'svoala/ab alasvo'
 agent    "7% от сквозных опубликованных тарифов, установленных в соответствии со специальным прорейтовым соглашением с другой авиакомпанией, по международным маршрутам;"
 subagent "5% от сквозных опубликованных тарифов, установленных в соответствии со специальным прорейтовым соглашением с другой авиакомпанией, по международным маршрутам;"
 interline :yes
-disabled "фильтр сквозного тарифа"
 commission "7%/5%"
 
-example 'tseala alasvo'
 agent    "6% от опубликованных тарифов при их комбинации END-ON-END (внутренний тариф + международный тариф) за продажу перевозки по внутреннему и международному маршрутам, оформленным в одном авиабилете;"
 subagent "4,2% от опубликованных тарифов при их комбинации END-ON-END (внутренний тариф + международный тариф) за продажу перевозки по внутреннему и международному маршрутам, оформленным в одном авиабилете; "
-disabled "комбинация"
+disabled "комбинация международных и внутренних"
 commission "6%/4.2%"
 
 example 'svocdg/ab cdgsvo/ab'
@@ -1122,10 +1154,10 @@ subagent "3,5% от тарифов на рейсы Interline без сегмен
 interline :absent
 commission "5%/3.5%"
 
-example 'svocdg/ab cdgsvo'
 agent    "7% от тарифов на рейсы Interline в комбинации с рейсом KC по всему маршруту;"
 subagent "5% от тарифов на рейсы Interline в комбинации с рейсом KC по всему маршруту;"
 interline :yes
+disabled "Такое уже есть"
 commission "7%/5%"
 
 carrier "KE", "KOREAN AIR"
@@ -1500,16 +1532,15 @@ commission "9%/7%"
 
 example 'cdgsvo svocdg/ab'
 agent "С 01.08.11г. 5% от опубл. тарифов на рейсы Interline c обязательным участком PS"
-subagent "0р Interline не прописан"
+subagent "С 01.08.11г. 3% от опубл. тарифов на рейсы Interline c обязательным участком PS"
 interline :yes
-disabled "no subagent"
-commission "5%/7%"
+commission "5%/3%"
 
 example 'cdgsvo/ab'
 agent "С 01.08.11г. 0% от опубл. тарифов на рейсы Interline без участка PS"
-subagent ""
+subagent "С 01.08.11г. 0% от опубл. тарифов на рейсы Interline без участка PS"
 interline :absent
-no_commission
+commission "0%/0%"
 
 carrier "QF", "QANTAS AIRWAYS\n(не BSP!!!)"
 ########################################
