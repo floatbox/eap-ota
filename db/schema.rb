@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110803135313) do
+ActiveRecord::Schema.define(:version => 20110810103522) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -209,9 +209,12 @@ ActiveRecord::Schema.define(:version => 20110803135313) do
   create_table "order_comments", :force => true do |t|
     t.integer  "order_id"
     t.integer  "typus_user_id"
-    t.text     "text",          :null => false
+    t.text     "text",           :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "assigned_to_id"
+    t.string   "status"
+    t.string   "priority"
   end
 
   create_table "orders", :force => true do |t|

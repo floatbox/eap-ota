@@ -121,12 +121,13 @@ Order:
 
 OrderComment:
   fields:
-    default: typus_user, text, created_at
-    list: order, text, typus_user
-    form: order, text
-    show: order, text, typus_user
+    default: typus_user, text, created_at, status, assigned_to, priority
+    list: order, text, typus_user, status, assigned_to, priority
+    form: order, text, status, assigned_to, priority
+    show: order, text, typus_user, status, assigned_to, priority
     options:
       read_only: order
+      selectors: status, priority
       date_formats:
         created_at: long
         updated_at: long
