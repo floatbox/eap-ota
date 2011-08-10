@@ -1,0 +1,22 @@
+ /*
+  *= require promo
+  *= require pushup
+  *= require atoms/button
+  *= require controls/filter
+  *= require controls/autocomplete
+  *= require controls/hint
+  *= require controls/history
+  *= require search/form
+  *= require search/fields
+  *= require search/panel
+  *= require search/calendar
+  *= require search/live
+  *= require results/results
+  *= require results/filters
+  *= require results/message
+  *= require results/offer
+  *= require results/matrix
+  *= require results/diagram
+  *= require booking/booking
+  *= require booking/sections
+  */
