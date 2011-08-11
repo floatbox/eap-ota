@@ -1,7 +1,7 @@
 # encoding: utf-8
 class Payment < ActiveRecord::Base
   belongs_to :order
-  before_create :set_ref
+  after_create :set_ref
   attr_reader :card
 
   def self.[] id
@@ -14,7 +14,7 @@ class Payment < ActiveRecord::Base
   end
 
   def set_ref
-    ref = Conf.payment.order_id_prefix + id.to_s
+    update_attribute(:ref, Conf.payment.order_id_prefix + id.to_s)
   end
 
   def card= card
