@@ -12,7 +12,9 @@ describe Amadeus::Response::PNRRetrieve do
 
     it { should be_success }
     it { should have(4).passengers }
-    specify { subject.passengers.collect(&:ticket).should == %W( 220-2791248713 220-2791248714 220-2791248716 220-2791248715 ) }
+    specify { subject.passengers.collect(&:ticket).should == %W( 220-2791248713 220-2791248714 220-2791248716-17 220-2791248715 ) }
+    specify { subject.passengers.collect(&:ticket_number).should == %W( 2791248713 2791248714 2791248716-17 2791248715 ) }
+    specify { subject.passengers.collect(&:ticket_code).should == ['220'] * 4 }
     specify { subject.passengers.collect(&:last_name).should == ['MITROFANOV', 'MITROFANOVA', 'MITROFANOVA', 'MITROFANOVA'] }
     specify { subject.passengers.collect(&:first_name).should == ['PAVEL MR', 'VALENTINA MRS', 'MARIA', 'ARINA'] }
     specify { subject.passengers.collect(&:passport).should == ['111116818', '222228156', '333335276', '444442618'] }

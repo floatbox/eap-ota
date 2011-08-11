@@ -216,7 +216,8 @@ class Order < ActiveRecord::Base
         end
         Ticket.create(
           :order => self,
-          :number => passenger.ticket.to_s,
+          :number => passenger.ticket_number.to_s,
+          :code => passenger.ticket_code.to_s,
           :commission_subagent => commission_subagent.to_s,
           :price_fare => price_fare_ticket,
           :price_tax => price_tax_ticket,

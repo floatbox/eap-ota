@@ -7,6 +7,10 @@ class Ticket < ActiveRecord::Base
     created_at.strftime('%d.%m.%Y') if created_at
   end
 
+  def number_with_code
+    "#{code}-#{number}" if number.present?
+  end
+
   def price_total
     price_fare + price_tax
   end
