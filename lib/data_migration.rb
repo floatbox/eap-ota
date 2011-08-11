@@ -6,6 +6,15 @@ require 'csv'
 
 module DataMigration
 
+  def self.fill_in_code_in_tickets
+    Ticket.all.each do |t|
+      number = t.number
+      t.update_attributes(:code => (number.match(/([\d\w]+)-{0,1}(\d{10}-{0,1}\d*)/).to_a)[1],
+                          :number => (number.match(/([\d\w]+)-{0,1}(\d{10}-{0,1}\d*)/).to_a)[2]
+                          ) if t.code.blank?
+    end
+  end
+
   def self.update_blank_count
     Order.where(:blank_count => nil).includes(:tickets).all.each do |order|
       order.blank_count = order.tickets.any? && order.tickets.size
