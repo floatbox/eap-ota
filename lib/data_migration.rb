@@ -6,6 +6,12 @@ require 'csv'
 
 module DataMigration
 
+  def self.fill_in_ref_in_payments
+    Payment.all(:conditions => 'ref = "" OR ref is NULL').each do |p|
+      p.update_attribute(:ref,  Conf.payment.order_id_prefix + p.id.to_s)
+    end
+  end
+
   def self.fill_in_code_in_tickets
     Ticket.all.each do |t|
       number = t.number
