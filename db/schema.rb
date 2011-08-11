@@ -311,7 +311,6 @@ ActiveRecord::Schema.define(:version => 20110811130440) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "passport"
-    t.string   "series"
     t.string   "code"
   end
 
