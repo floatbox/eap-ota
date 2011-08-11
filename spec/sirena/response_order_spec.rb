@@ -33,11 +33,14 @@ describe Sirena::Response::Order do
     its("passengers.every.last_name") { should == ['IVANOV', 'IVANOVA'] }
     its("passengers.every.passport") { should == ["6555555555", "VВГ123456"] }
     its ("passengers.every.ticket") { should == [ '2626150600213', '2626150600214'] }
+    its ("passengers.every.ticket_number") { should == [ '6150600213', '6150600214' ] }
+    its ("passengers.every.ticket_code") { should == [ '262', '262'] }
     its(:email) { should == 'USER@EXAMPLE.COM' }
     its(:phone) { should == '+79265555555' }
     it { should have(2).flights }
     its(:booking_classes) { should == %W(Y Y) }
-    its("tickets.every.number") { should == [ '2626150600213', '2626150600214']}
+    its("tickets.every.number") { should == [ '6150600213', '6150600214']}
+    its("tickets.every.code") { should == ['262', '262'] }
     its("tickets.every.price_fare") { should == [ 2000, 1000]}
     its("tickets.every.price_tax") { should == [ 2000, 2000]}
     its("tickets.every.route") { should == [ "ДМД - ПЛК; ПЛК - ДМД", "ДМД - ПЛК; ПЛК - ДМД"]}

@@ -72,7 +72,8 @@ module Sirena
           res[:flights] << "#{departure_iata} - #{arrival_iata}"
         }
         @tickets = result.map do |k, v| Ticket.new({
-            :number => k,
+            :number => (k.match(/([\d\w]+)-{0,1}(\d{10}-{0,1}\d*)/).to_a)[2],
+            :code => (k.match(/([\d\w]+)-{0,1}(\d{10}-{0,1}\d*)/).to_a)[1],
             :price_fare => v[:price_fare],
             :price_tax => v[:price_tax],
             :cabins => v[:cabins].uniq.join(' + '),

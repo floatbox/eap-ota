@@ -26,6 +26,14 @@ class Person < ActiveRecord::BaseWithoutTable
     document_noexpiration ? (Date.today + 18.months) : document_expiration_date
   end
 
+  def ticket_number
+    (ticket.match(/([\d\w]+)-{0,1}(\d{10}-{0,1}\d*)/).to_a)[2]
+  end
+
+  def ticket_code
+    (ticket.match(/([\d\w]+)-{0,1}(\d{10}-{0,1}\d*)/).to_a)[1]
+  end
+
   def coded
     res = "#{first_name}/#{last_name}/#{sex}/#{nationality.alpha3}/#{birthday.strftime('%d%b%y').upcase}/#{passport}/"
     res += "expires:#{document_expiration_date.strftime('%d%b%y').upcase}/" unless document_noexpiration

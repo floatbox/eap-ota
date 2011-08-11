@@ -75,7 +75,7 @@ class Order < ActiveRecord::Base
 
 
   def tickets_count
-    ticket_numbers_as_text.to_s.split(/[, ]/).delete_if(&:blank?).size
+    tickets.count 
   end
 
   def order_id
@@ -216,7 +216,8 @@ class Order < ActiveRecord::Base
         end
         Ticket.create(
           :order => self,
-          :number => passenger.ticket.to_s,
+          :number => passenger.ticket_number.to_s,
+          :code => passenger.ticket_code.to_s,
           :commission_subagent => commission_subagent.to_s,
           :price_fare => price_fare_ticket,
           :price_tax => price_tax_ticket,
@@ -230,7 +231,6 @@ class Order < ActiveRecord::Base
         )
       end
 
-      update_attribute(:ticket_numbers_as_text, pnr_resp.passengers.every.ticket.join(' '))
       update_attribute(:departure_date, pnr_resp.flights.first.dept_date)
     elsif source == 'sirena'
       tickets.every.delete
@@ -239,7 +239,6 @@ class Order < ActiveRecord::Base
         t.order = self
         t.save
       end
-      update_attribute(:ticket_numbers_as_text, order_resp.passengers.every.ticket.join(' '))
       update_attribute(:departure_date, order_resp.flights.first.dept_date)
     end
 
