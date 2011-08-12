@@ -71,4 +71,28 @@
     // Всплывающие подсказки
     hint.init();
 
+    /* Определение координат
+    function show_map(position) {
+      var latitude = position.coords.latitude;
+      var longitude = position.coords.longitude;
+    }
+
+      function get_location() {
+        navigator.geolocation.getCurrentPosition(show_map);
+      }
+
+      $(function() {
+        get_location();
+      });
+*/
+    // Генератор google plusone
+      window.___gcfg = {lang: 'ru'};
+
+      (function() {
+        var po = document.createElement('script'); 
+        po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(po, s);
+      })();
 })();

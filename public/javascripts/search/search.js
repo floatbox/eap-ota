@@ -446,7 +446,7 @@ init: function() {
             type: 'link',
             linkIcon: false,
             border: false,
-            quickServices: ['facebook', 'twitter', 'friendfeed', 'lj', 'vkontakte', 'odnoklassniki', 'yaru']
+            quickServices: ['facebook', 'twitter', 'friendfeed', 'lj', 'vkontakte', 'odnoklassniki']
         },
         popupStyle: {
             copyPasteField: true,

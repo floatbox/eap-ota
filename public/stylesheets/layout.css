@@ -107,7 +107,7 @@ body {
 #ya-share {
     display: inline;
     float: left;
-    margin: 7px 0 0 40px;
+    margin: 7px 0 0 25px;
     font-size: 14px;
     letter-spacing: -0.015em;
 }
@@ -128,6 +128,11 @@ body {
     padding: 3px 15px !important;
     font-size: 14px;
     line-height: 20px;
+}
+
+#g-plus {
+    float: left;
+    margin-top: 14px;
 }
 
 /* Footer */
