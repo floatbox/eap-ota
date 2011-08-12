@@ -133,12 +133,15 @@ class Strategy
         # FIXME могут ли остаться частичные резервирования сегментов, если одно из них не прошло?
         # может быть, при ошибке канселить бронирование на всякий случай?
         # лучше сделать IG
-        amadeus.air_sell_from_recommendation(
-          :segments => @rec.variants[0].segments,
-          :seat_total => @order_form.seat_total,
-          :recommendation => @rec
-        ).or_fail!
+        unless amadeus.air_sell_from_recommendation(
+              :segments => @rec.variants[0].segments,
+              :seat_total => @order_form.seat_total,
+              :recommendation => @rec
+            ).segments_confirmed?
 
+          logger.error 'Strategy::Amadeus: segments aren\'t confirmed in create_booking method'
+          return
+        end
         add_multi_elements = amadeus.pnr_add_multi_elements(@order_form)
         unless add_multi_elements.success?
           if add_multi_elements.pnr_number
