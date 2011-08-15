@@ -20,8 +20,8 @@ GIT
 
 GIT
   remote: https://github.com/typus/typus.git
-  revision: d1dfd1f3fd0dccdf4b2df399bf7415082e61f82e
-  branch: 3-1-unstable
+  revision: 0574577f657950ca1a72e38da1a139b3ba154579
+  branch: 3-1-stable
   specs:
     typus (3.1.0.rc17)
       jquery-rails
