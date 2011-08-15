@@ -53,7 +53,7 @@ module Amadeus
         xpath('//r:travellerInformation').map do |ti|
           surname = ti.xpath('r:traveller/r:surname').to_s
           ti.xpath('r:passenger').map do |passenger|
-              passenger_ref = (passenger / '../../../r:elementManagementPassenger/r:reference/r:number').to_s
+              passenger_ref = (passenger / '../../../r:elementManagementPassenger/r:reference/r:number').to_i
               need_infant = (passenger / 'r:type').to_s == 'INF'
               Person.new(:first_name => passenger.xpath('r:firstName').to_s,
                          :last_name => surname,
