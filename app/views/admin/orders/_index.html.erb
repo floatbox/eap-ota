@@ -1,0 +1,23 @@
+<div><%= button_to 'Edit' %></div><br>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	input = '<input name="created_at" id="created_at" type="text" value="<%= params[:created_at] %>" />'
+	$('#created_at').parent().html(input);
+	
+	$("#created_at").glDatePicker({
+	    cssName: "android",
+	
+			onChange: function(target, newDate)
+			{
+				target.val
+				(
+				newDate.getFullYear() + "-" +
+					(newDate.getMonth() + 1) + "-" +
+					newDate.getDate()
+				);
+			}
+	});
+	
+})
+</script>
