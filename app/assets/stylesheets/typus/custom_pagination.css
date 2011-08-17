@@ -1,0 +1,5 @@
+.pagination .current {
+  background: black;
+  color: white;
+  display: inline;
+}

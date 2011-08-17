@@ -21,7 +21,8 @@ Typus.setup do |config|
   # config.password = "columbia"
 
   # Pagination options: These options are passed to `kaminari`.
-  # config.pagination = { :previous_label => "&larr; " + Typus::I18n.t("Previous"),
-  #                       :next_label => Typus::I18n.t("Next") + " &rarr;" }
+   config.pagination = { :previous_label => "&larr; " + Typus::I18n.t("Previous"),
+                         :next_label => Typus::I18n.t("Next") + " &rarr;",
+                         :outer_window => 4}
 
 end
