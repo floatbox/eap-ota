@@ -37,6 +37,9 @@ set :shared_children, %w(log pids system config initializers cache)
 # для deploy:migrate
 set :rake, 'bundle exec rake'
 
+# для деплоймента ассетов
+load 'deploy/assets'
+
 # нужен для нормального форвардинга ключей, соответствующая настройка
 # в пользовательском .ssh/config почему-то не читается
 # ssh_options[:forward_agent] = true
@@ -71,13 +74,6 @@ namespace :deploy do
 
   task :symlink_completer do
     run "ln -s #{shared_path}/completer.dat #{latest_release}/tmp/completer.dat || echo #{shared_path}/completer.dat does not exist"
-  end
-
-  before "deploy:symlink", "deploy:assets"
-
-  desc "Compile asets"
-  task :assets do
-    run "cd #{release_path}; RAILS_ENV=#{rails_env} bundle exec rake assets:precompile"
   end
 
   desc <<-DESC
