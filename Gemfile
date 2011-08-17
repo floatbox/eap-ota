@@ -1,5 +1,5 @@
 source 'http://rubygems.org'
-gem 'rails', '3.1.0.rc5'
+gem 'rails', '3.1.0.rc6'
 
 gem 'jquery-rails'
 group :assets do
@@ -43,7 +43,7 @@ gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-inst
 gem 'haml'
 
 #gem 'typus'
-gem 'typus', :git => 'https://github.com/typus/typus.git', :branch => "3-1-stable"
+gem 'typus', :git => 'https://github.com/typus/typus.git' #, :branch => "3-1-stable"
 gem 'fastercsv' if RUBY_VERSION < "1.9.0"
 
 gem 'trashed', :git => 'https://github.com/37signals/trashed.git'
