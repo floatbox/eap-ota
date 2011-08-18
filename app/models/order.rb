@@ -27,10 +27,6 @@ class Order < ActiveRecord::Base
 
   # фейковый текст для маршрут-квитанций. может быть, вынести в хелпер?
   PAID_BY = {'card' => 'Invoice', 'delivery' => 'Cash', 'cash' => 'Cash', 'invoice' => 'Invoice'}
-  # ugly name for paid_by filter. нужен ли на самом деле?
-  def self.paid_bies
-    PAID_BY
-  end
 
   attr_writer :itinerary_receipt_view
 
