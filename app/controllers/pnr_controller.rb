@@ -29,7 +29,8 @@ class PNRController < ApplicationController
   end
 
   def error
-    render 'error'
+    HoptoadNotifier.notify($!) rescue Rails.logger.error("  can't notify hoptoad #{$!.class}: #{$!.message}")
+    render 'error', :status => 500
   end
 
   # sirena pdf receipt FIXME unfinished, unused
