@@ -47,6 +47,9 @@ class Order < ActiveRecord::Base
     self.pnr_number = pnr_number.mb_chars.strip.upcase
   end
 
+  scope :unticketed, where(:payment_status => 'blocked', :ticket_status => 'booked')
+  scope :ticketed, where(:payment_status => ['blocked', 'charged'], :ticket_status => 'ticketed')
+
   scope :stale, lambda {
     where(:payment_status => 'not blocked', :ticket_status => 'booked', :offline_booking => false, :source => 'amadeus')\
       .where("created_at < ?", 30.minutes.ago)
