@@ -23,6 +23,7 @@ Eviterra::Application.routes.draw do
   match 'order/:id/receipt' => 'PNR#receipt', :as => :show_order_receipt
   match '/pay/:code' => 'payments#edit', :via => :get, :as => :edit_payment
   match '/pay/:code' => 'payments#update', :via => :post, :as => :edit_payment
+  match '/flight_groups/:id' => 'flight_groups#show', :as => :show_flight_group
 
   resources :geo_tags
 
