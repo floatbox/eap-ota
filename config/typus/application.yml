@@ -114,17 +114,17 @@ Order:
   # тут не ввернешь конфирмации. временно убрал
   # actions:
   #   show: cancel, ticket, charge, unblock, show_pnr
-  filters: source, payment_status, ticket_status, payment_type, created_at
+  filters:  created_at, source, payment_status, ticket_status, payment_type
   relationships: payments, tickets, order_comments
   application: Orders
   export: csv
 
 OrderComment:
   fields:
-    default: typus_user, text, created_at, status, assigned_to, priority
-    list: order, text, typus_user, status, assigned_to, priority
-    form: order, text, status, assigned_to, priority
-    show: order, text, typus_user, status, assigned_to, priority
+    default: text, created_at, typus_user, assigned_to, status, priority
+    list: order, text, created_at, typus_user, assigned_to, status, priority
+    form: order, text, assigned_to, status, priority
+    show: order, text, created_at, typus_user, assigned_to, status, priority
     options:
       read_only: order
       selectors: status, priority
