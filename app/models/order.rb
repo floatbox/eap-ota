@@ -27,10 +27,6 @@ class Order < ActiveRecord::Base
 
   # фейковый текст для маршрут-квитанций. может быть, вынести в хелпер?
   PAID_BY = {'card' => 'Invoice', 'delivery' => 'Cash', 'cash' => 'Cash', 'invoice' => 'Invoice'}
-  # ugly name for paid_by filter. нужен ли на самом деле?
-  def self.paid_bies
-    PAID_BY
-  end
 
   attr_writer :itinerary_receipt_view
 
@@ -50,6 +46,9 @@ class Order < ActiveRecord::Base
   def capitalize_pnr
     self.pnr_number = pnr_number.mb_chars.strip.upcase
   end
+
+  scope :unticketed, where(:payment_status => 'blocked', :ticket_status => 'booked')
+  scope :ticketed, where(:payment_status => ['blocked', 'charged'], :ticket_status => 'ticketed')
 
   scope :stale, lambda {
     where(:payment_status => 'not blocked', :ticket_status => 'booked', :offline_booking => false, :source => 'amadeus')\

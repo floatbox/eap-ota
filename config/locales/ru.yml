@@ -19,3 +19,8 @@ ru:
       previous: "&lsaquo; Prev"
       next: "Next &rsaquo;"
       truncate: "..."
+
+  # typus использует верхний уровень
+  Yesterday: 'Вчера'
+  All: 'Все'
+  Unticketed: 'Необилечено'

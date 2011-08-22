@@ -7,6 +7,25 @@ class Admin::OrdersController < Admin::ResourcesController
   before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel, :reload_tickets, :update, :resend_email, :send_offline_email]
   before_filter :update_offline_booking_flag, :only => :create
 
+  # def set_scope
+  #   # добавлять фильтры лучше в def index и т.п., но так тоже работает (пока?)
+  #   # Title, url, scope (можно пропустить, не будет счета)
+  #   add_predefined_filter 'Unticketed', {:scope => 'unticketed'}, 'unticketed'
+  #   add_predefined_filter 'Ticketed', {:scope => 'ticketed'}, 'ticketed'
+  #   scope = params[:scope]
+  #  if %W[unticketed ticketed].include?(scope)
+  #    @resource = @resource.send(scope)
+  #  end
+  # end
+
+  def index
+    # так тоже можно. просто выставляет параметры обычных фильтров
+    add_predefined_filter 'Unticketed', Order.unticketed.scope_attributes, 'unticketed'
+    add_predefined_filter 'Today', {:created_at => Date.today.to_s(:db)}
+    add_predefined_filter 'Yesterday', {:created_at => Date.yesterday.to_s(:db)}
+    super
+  end
+
   def update
     super 
   end
