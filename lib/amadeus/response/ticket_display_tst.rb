@@ -19,6 +19,11 @@ module Amadeus
           end
         end
       end
+
+      # может быть несколько, для разных сегментов и тарифов. но для целей помощи операторам - первый сойдет.
+      def validating_carrier_code
+        xpath('//r:carrierCode').to_s
+      end
     end
   end
 end
