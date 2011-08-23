@@ -1,5 +1,4 @@
 /* ...
-*= require ./android
 *= require daterangepicker/ui.daterangepicker
 *= require daterangepicker/jquery-ui-1.7.3.custom
 *= require ./custom_pagination

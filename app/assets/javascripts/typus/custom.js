@@ -1,2 +1,2 @@
-//= require daterangepicker/jquery-ui-1.7.1.custom.min
+//= require jquery-ui
 //= require daterangepicker/daterangepicker.jQuery
