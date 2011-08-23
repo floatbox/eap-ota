@@ -264,6 +264,7 @@ class Order < ActiveRecord::Base
     if source == 'amadeus'
       price_total_old = self.price_total
       self.price_fare = tickets.sum(:price_fare)
+      # FIXME почему unless?
       self.price_consolidator_markup = tickets.sum(:price_consolidator_markup) unless offline_booking
       self.price_share = tickets.sum(:price_share)
 

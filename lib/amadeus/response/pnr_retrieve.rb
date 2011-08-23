@@ -98,6 +98,11 @@ module Amadeus
         xpath('//r:otherDataFreetext[r:freetextDetail/r:type=3]/r:longFreetext').to_s
       end
 
+      # их может быть несколько. возвращаем первый найденный
+      def validating_carrier_code
+        xpath('//r:dataElementsIndiv[r:elementManagementData/r:segmentName="FV"]/r:otherDataFreetext/r:longFreetext').to_s \
+          .try(:gsub, /INF |PAX /, '')
+      end
 
       # def prices
         # можно вытащить аналогично fare_price_pnr_with_booking_class.rb
