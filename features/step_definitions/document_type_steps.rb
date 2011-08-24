@@ -22,7 +22,7 @@ end
   @person.doccode_sirena.to_s.mb_chars.should == doccode_sirena.mb_chars
 end
 
-То /^в сирены в качестве номера документа будет передан "([^"]*)"$/ do |number_sirena|
+То /^в сирену в качестве номера документа будет передан "([^"]*)"$/ do |number_sirena|
   @person.passport_sirena.to_s.mb_chars.should == number_sirena.mb_chars
 end
 
