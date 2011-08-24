@@ -46,6 +46,10 @@
     letter-spacing: -0.045em;
     color: #ed1192;
 }
+.offer thead .cost .usual {
+    color: #828282;
+    text-decoration: line-through;
+}
 .offer thead .cost dd {
     display: inline;
     margin-right: 2px;

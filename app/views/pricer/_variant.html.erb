@@ -7,9 +7,13 @@
 <col width="109">
 <thead>
 <tr>
-    <th class="book"><% if recommendation.sellable? %><a href="#" class="a-button">Выбрать</a><% end %></th>
+    <th class="book"><% if recommendation.sellable? && !corporate_mode? %><a href="#" class="a-button">Выбрать</a><% end %></th>
     <td class="cost" colspan="5"><dl>
         <% price = recommendation.price_with_payment_commission.round.to_i %>
+        <% if corporate_mode? %>
+            <dt class="usual"><%= raw price.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') %></dt>
+            <% price = recommendation.price_total.round.to_i %>
+        <% end %>
         <dt><%= raw price.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') %></dt>
         <dd><%= Russian.pluralize(price, 'рубль', 'рубля', 'рублей') %><span class="cost-tip"><%= ' за всех' if @search.people_total != 1 %>, включая налоги и сборы</span></dd>
     </dl></td>
@@ -152,16 +156,16 @@
 <% end %>
 <tr class="book">
     <th>
-      <% if recommendation.sellable? %>
+      <% if recommendation.sellable? && !corporate_mode? %>
         <a href="#" class="a-button">Выбрать</a>
       <% end %>
     </th>
     <td colspan="6">
     <% bonus_programs = recommendation.validating_carrier.available_bonus_programms %>
     <div class="valcarrier">Билет оформляет авиакомпания <%= recommendation.validating_carrier.name %>.<% if recommendation.validating_carrier.alliance %> Применяются бонусные программы альянса <span class="link alliance" data-details="<%= bonus_programs.map{|bp| bp.name}.to_sentence %>"><%= recommendation.validating_carrier.alliance.name %></span>.<% end %></div>
-    <dl class="sum" data-value="<%= recommendation.price_with_payment_commission.round.to_i %>">
-        <dt>Итого <strong><%= human_price(recommendation.price_with_payment_commission) %></strong><%= ' за всех' if @search.people_total > 1 %> со всеми сборами</dt>
-        <dd>Тариф — <%= human_price(recommendation.price_fare) %>, налоги и сборы — <%= human_price(recommendation.price_tax_and_markup_and_payment) %></dd>
+    <dl class="sum" data-value="<%= price %>">
+        <dt>Итого <strong><%= human_price(price) %></strong><%= ' за всех' if @search.people_total > 1 %> со всеми сборами</dt>
+        <dd>Тариф — <%= human_price(recommendation.price_fare) %>, налоги и сборы — <%= human_price(corporate_mode? ? recommendation.price_tax_and_markup : recommendation.price_tax_and_markup_and_payment) %></dd>
     </dl>
     </td>
 </tr>

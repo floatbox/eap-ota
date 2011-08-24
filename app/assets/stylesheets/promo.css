@@ -53,3 +53,23 @@
     line-height: 20px;
     color: #777;
 }
+
+#corporate {
+    padding: 15px 0;
+    background: #555555;
+}
+.corporate-content {
+    width: 960px;
+    margin: 0 auto;
+}
+.corporate-message {
+    margin-right: 200px;
+    font-size: 18px;
+    line-height: 20px;
+    color: #FFF;
+}
+a.corporate-exit {
+    margin-top: 1px;
+    float: right;
+    color: #CCC;
+}

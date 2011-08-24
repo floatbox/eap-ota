@@ -9,6 +9,14 @@
 <%= render 'shared/header' %>
 <div id="wrapper">
 <div class="wcontent">
+    <% if corporate_mode? %>
+        <div id="corporate">
+        <div class="corporate-content">
+            <a class="corporate-exit" href="<%= stop_corporate_url %>">Выйти</a>
+            <p class="corporate-message">Вы находитесь в корпоративном режиме.</p>
+        </div>
+        </div>
+    <% end %>
     <%= render 'search' %>
     <%= render 'results' %>
     <div id="promo" class="wrap latent">

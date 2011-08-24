@@ -1,1 +1,22 @@
-<%= button_to  "перейти в корпоративный режим", start_corporate_url %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <%= render 'shared/head_common', {:title => 'корпоративный режим'} %>
+    <%= stylesheet_link_tag "static" %>
+</head>
+<body>
+<%= render 'shared/header' %>
+<div id="wrapper">
+<div id="content">
+
+    <div style="position: absolute; left: 50%; top: 50%;">
+    <div style="position: relative; top: -70px; margin-left: -50%; font-size: 28px; font-weight: bold;">
+        <a href="<%= start_corporate_url %>">Перейти в корпоративный режим</a>
+    </div>
+    </div>
+    
+</div>
+</div>
+<%= render 'shared/footer' %>
+</body>
+</html>
