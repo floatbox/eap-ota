@@ -5,8 +5,13 @@ class Flight
 
   attr_accessor :operating_carrier_iata, :marketing_carrier_iata, :departure_iata,
    :departure_term, :arrival_iata, :arrival_term, :flight_number, :arrival_date,
-   :arrival_time, :departure_date, :departure_time, :equipment_type_iata, :warning, :technical_stop_count
-  attr_accessor_with_default(:technical_stops) { [] }
+   :arrival_time, :departure_date, :departure_time, :equipment_type_iata, :warning, :technical_stop_count,
+   :technical_stops
+
+  def initialize(*)
+    @technical_stops = []
+    super
+  end
 
   def departure
     Airport[departure_iata]

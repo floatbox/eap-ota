@@ -1,1 +1,2 @@
-//= require typus/glDatePicker
+//= require jquery-ui
+//= require daterangepicker/daterangepicker.jQuery

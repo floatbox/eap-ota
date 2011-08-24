@@ -1,0 +1,26 @@
+<script type="text/javascript">
+
+$(function(){
+	input = '<input name="created_at" id="created_at" type="text" value="<%= params[:created_at] %>" style="height: 1.8em;" />'
+	$('#created_at').parent().html(input);
+
+	$('#created_at').daterangepicker({
+		earliestDate: '02/02/11',
+		latestDate: '02/02/12',
+		dateFormat: 'yy-m-d',
+		rangeSplitter: '/',
+		datepickerOptions: {
+			duration: 'fast',
+			minDate: new Date(2011, 1 - 1, 1),
+			maxDate: '+1m +1w',
+			changeMonth: true,
+			changeYear: true,
+			firstDay: 1.
+		}
+	}); 
+});
+
+</script>
+<ul class="additional_actions">
+  <li><%= link_to 'экспорт в Excel', params.merge(:format => 'csv') %></li>
+</ul>

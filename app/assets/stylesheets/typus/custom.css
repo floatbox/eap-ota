@@ -1,4 +1,16 @@
 /* ...
-*= require ./android
+*= require daterangepicker/ui.daterangepicker
+*= require daterangepicker/jquery-ui-1.7.3.custom
 *= require ./custom_pagination
 */
+
+ul.additional_actions {
+  float: right
+}
+
+ul.additional_actions li {
+  display: inline;
+  margin: 0 0.5em 0 0;
+}
+
+div#ui-datepicker-div {display: none;}

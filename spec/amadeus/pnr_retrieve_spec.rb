@@ -22,6 +22,7 @@ describe Amadeus::Response::PNRRetrieve do
     specify {subject.all_segments_available?.should == true}
     its(:email) { should == 'PAVEL@EXAMPLE.COM' }
     its(:phone) { should == '+75557777555' }
+    its(:validating_carrier_code) { should == 'LH' }
 
   end
 
@@ -58,6 +59,7 @@ describe Amadeus::Response::PNRRetrieve do
     }
     specify {subject.additional_pnr_numbers.should == {'OK' => 'ZF10C', 'SU' => 'SUPNR'}}
     #subject.additional_pnr_numbers.should == {
+    its(:validating_carrier_code) { should == 'OK' }
   end
 
 end
