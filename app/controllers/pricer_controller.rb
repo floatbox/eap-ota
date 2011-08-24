@@ -85,6 +85,7 @@ class PricerController < ApplicationController
     if (@recommendations.present? && !@search.complex_route? &&
         @search.people_count.values.sum == @search.people_count[:adults] &&
         !admin_user &&
+        !corporate_mode? &&
         ([nil, '', 'Y'].include? @search.cabin) &&
         @search.segments[0].to_as_object.class == City && @search.segments[0].from_as_object.class == City
       )
