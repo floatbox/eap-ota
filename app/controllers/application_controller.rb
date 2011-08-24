@@ -21,6 +21,11 @@ class ApplicationController < ActionController::Base
   attr_reader :admin_user
   helper_method :admin_user
 
+  def corporate_mode?
+    session[:corporate_mode]
+  end
+  helper_method :corporate_mode?
+
   # для хоптода
   def set_search_context
     request.env['eviterra.search'] = @search.human_lite rescue '[incomplete]'

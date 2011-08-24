@@ -56,6 +56,7 @@ group :test, :development do
   gem 'rspec-rails'
   gem 'cucumber-rails'
   gem 'autotest'
+  gem 'webrat'
 end
 
 group :test do
