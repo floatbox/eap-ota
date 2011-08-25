@@ -132,28 +132,28 @@ module CommissionRules
   end
 
   def date_accords?(incoming_date)
-	
+
 	incoming_date = incoming_date.to_date
 	if !startdate && !findate
 		return true
 	elsif startdate && findate
-		startdate = startdate.to_date
-		findate = findate.to_date
-		if startdate <= incoming_date && incoming_date <= findate
-			return true 
-		end 	
+		localstartdate = startdate.to_date
+		localfindate = findate.to_date
+		if localstartdate <= incoming_date && incoming_date <= localfindate
+			return true
+		end
 	elsif findate
-		findate = findate.to_date
-		if incoming_date <=findate
+		localfindate = findate.to_date
+		if incoming_date <=localfindate
 			return true
-		end 
+		end
 	elsif startdate
-		startdate = startdate.to_date
-		if incoming_date >= startdate		
+		localstartdate = startdate.to_date
+		if incoming_date >= localstartdate
 			return true
-		end	
-	end  	
-  end 	  
+		end
+	end
+  end
 
   private
 
@@ -235,7 +235,7 @@ module CommissionRules
       opts[:not_implemented] = true
     end
 
-		
+
     # правило интерлайна
     def interline value=:yes
       opts[:interline] = value
@@ -312,19 +312,20 @@ module CommissionRules
     # test methods
      def test
       self.skip_interline_validity_check = true
-      @check_date = Date.today 
+      @check_date = Date.today
       commissions.values.flatten.sort_by {|c| c.source.to_i }.each do |commission|
         (commission.examples || next).each do |code, source|
           rec = Recommendation.example(code, :carrier => commission.carrier)
           proposed = find_for(rec)
-          if (proposed == commission && proposed.date_accords?(@check_date || Date.today)) ||
+          if proposed == commission  ||
              (proposed.nil? && commission.disabled?)
             ok "#{commission.carrier} (line #{source}): #{code} - OK"
+          elsif !commission.date_accords?(@check_date || Date.today)
+            error "#{commission.carrier} (line #{source}): #{code} - this commission isn't available on selected date!"
           elsif proposed.nil?
             error "#{commission.carrier} (line #{source}): #{code} - no applicable commission!"
-          elsif !proposed.date_accords?(@check_date || Date.today)
-            error "#{commission.carrier} (line #{source}): #{code} - selected date doesn't accord!"
-	  else
+
+  	  else
             if commission.disabled?
               error "#{commission.carrier} (line #{source}): #{code} - commission non applicable, but got line #{proposed.source}:"
 	    else
@@ -370,3 +371,4 @@ module CommissionRules
   end
 
 end
+
