@@ -1,0 +1,80 @@
+<tbody valign="top">
+<tr>
+    <td class="pad_null"><img src="https://eviterra.com/img/booking/eviterra.png" alt="eviterra" width="210" height="30"></td>
+    <td class="pad_null" colspan="2">
+      <font size="3" family="Arial" style="font-size: 15px;"><strong>Электронный билет<br>E-ticket</strong></font>
+    </td>
+
+    <%= render :partial => 'numbers' %>
+
+</tr>
+</tbody>
+
+<%= render :partial => 'passengers' %>
+<%= render :partial => 'flights' %>
+
+  <tbody valign="top">
+  <tr>
+      <td colspan="6" class="pad_null">
+          <font size="2" family="Arial"><strong>Обратите внимание</strong>, что время отправления и прибытия указано местное. Регистрация на внутренние рейсы заканчивается как правило за 40 минут до отправления, на международные рейсы — за полтора часа до отправления.</font><br>
+          <font size="1" style="font-size: 6px;"><br></font>
+          <font size="2" family="Arial"><strong>Attention!</strong> Local departure and arrival time is indicated.</font>
+      </td>
+  </tr>
+  <tr>
+      <td colspan="6" class="pad_null"><font size="3">&nbsp;<br></font></td>
+  </tr>
+  </tbody>
+  <tbody valign="top">
+  <tr>
+      <td class="pad_null">
+          <font family="Arial" size="3" style="font-size: 18px;"><strong>Сведения об оплате<br>Payment Information</strong></font><br>
+          <font size="1" style="line-height: 8px;"><br></font>
+      </td>
+      <td class="pad_null" colspan="5"><br></td>
+  </tr>
+  <tr>
+      <td class="pad_null">
+          <font family="Arial" size="2">
+          Тариф / Fare<br>
+          Налоги и сборы / Taxes<br>
+          Итоговая стоимость / Total<br>
+          Форма оплаты / Paid by<br>
+          Дата оформления / Issue date
+          </font>
+      </td>
+      <td class="pad_null" colspan="2">
+          <font family="Arial" size="2">
+          <%= exact_price(@prices.price_fare) %> RUB<br>
+          <%= exact_price(@prices.price_tax_and_markup_and_payment) %> RUB<br>
+          <%= exact_price(@prices.price_with_payment_commission) %> RUB<br>
+          <%= @prices.paid_by %><br>
+          <%= @prices.created_at.strftime('%d.%m.%y') %>
+          </font>
+      </td>
+      <td class="pad_null" colspan="3">
+          <font family="Arial" size="2">Адрес и телефон покупателя</font><br>
+          <font family="Arial" size="1" style="font-size: 6px;"><br></font>
+          <font family="Arial" size="2">
+          <% if @pnr.email %>
+              <a href="mailto:<%= @pnr.email %>" target="_blank" style="color: #ed1192;"><font color="#ed1192"><%= @pnr.email %></font></a><br>
+          <% end %>
+          <%= @pnr.phone %>
+          </font>
+      </td>
+  </tr>
+  </tbody>
+
+<tbody valign="top">
+<tr>
+    <td class="pad_null" style="text-align: center; font-size: 24px; line-height: 1.25; letter-spacing: -0.02em;" colspan="6">
+    <font size="5"><br></font>
+    <center>
+
+      <font family="Arial" size="5"><strong>Спасибо за покупку на <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
+      <font family="Arial" size="5"><strong>Thank you for purchase at <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
+
+    </center>
+    </td>
+</tbody>
+

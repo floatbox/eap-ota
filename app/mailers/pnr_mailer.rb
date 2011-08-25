@@ -9,6 +9,11 @@ class PnrMailer < ActionMailer::Base
   def notification(email, number)
     @pnr = PNR.get_by_number(number)
     mail :to => email, :subject => @pnr.order.ticketed_email? ? "Ваш электронный билет" : "Ваше бронирование"
+    if @pnr.order.show_as_ticketed?
+      render 'pnr/ticket'
+    else
+      render 'pnr/booking'
+    end
   end
 
   def sirena_receipt(email, number)
