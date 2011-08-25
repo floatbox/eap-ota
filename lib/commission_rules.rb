@@ -12,7 +12,8 @@ module CommissionRules
     :interline, :domestic, :international, :classes, :subclasses,
     :routes,
     :departure, :departure_country, :important,
-    :check, :examples, :agent_comments, :subagent_comments, :source
+    :check, :examples, :agent_comments, :subagent_comments, :source, :startdate,
+    :findate
 
   def disabled?
     disabled || not_implemented || no_commission
@@ -21,6 +22,7 @@ module CommissionRules
   def applicable? recommendation
     not disabled? and
     # carrier == recommendation.validating_carrier_iata and
+    date_accords?(@check_date || Date.today) and
     applicable_interline?(recommendation) and
     valid_interline?(recommendation) and
     applicable_classes?(recommendation) and
@@ -129,12 +131,34 @@ module CommissionRules
     Conf.amadeus.euro_rate
   end
 
+  def date_accords?(incoming_date)
+	incoming_date.to_date
+	if !startdate && !findate
+		return true
+	elsif !startdate
+		findate.to_date
+		if incoming_date <=findate
+			return true
+		end 
+	elsif !findate
+		startdate.to_date
+		if incoming_date >= startdate		
+			return true
+		end	
+	else 
+		startdate.to_date
+		findate.to_date
+		if startdate <= incoming_date && incoming_date <= findate
+			return true 
+		end 	
+   	end 
+  end 	  
+
   private
 
   def fround x
     ('%.2f' % x.to_f).to_f
   end
-
 
 
   module ClassMethods
@@ -210,6 +234,7 @@ module CommissionRules
       opts[:not_implemented] = true
     end
 
+		
     # правило интерлайна
     def interline value=:yes
       opts[:interline] = value
@@ -275,22 +300,33 @@ module CommissionRules
       commissions[recommendation.validating_carrier_iata].present?
     end
 
+    def startdate startdate
+      opts[:startdate] = startdate
+    end
+
+    def findate findate
+      opts[:findate] = findate
+    end
+
     # test methods
-    def test
+     def test
       self.skip_interline_validity_check = true
+      @check_date = Date.today 
       commissions.values.flatten.sort_by {|c| c.source.to_i }.each do |commission|
         (commission.examples || next).each do |code, source|
           rec = Recommendation.example(code, :carrier => commission.carrier)
           proposed = find_for(rec)
-          if proposed == commission ||
-             proposed.nil? && commission.disabled?
+          if (proposed == commission && date_accords?(@check_date)) ||
+             (proposed.nil? && commission.disabled?)
             ok "#{commission.carrier} (line #{source}): #{code} - OK"
           elsif proposed.nil?
             error "#{commission.carrier} (line #{source}): #{code} - no applicable commission!"
-          else
+          elsif !date_accords?(@check_date)
+            error "#{commission.carrier} (line #{source}): #{code} - selected date doesn't accord!"
+	  else
             if commission.disabled?
               error "#{commission.carrier} (line #{source}): #{code} - commission non applicable, but got line #{proposed.source}:"
-            else
+	    else
               error "#{commission.carrier} (line #{source}): #{code} - wrong commission applied. Should be:"
               error "agent:    #{commission.agent_comments.chomp}"
               error "subagent: #{commission.subagent_comments.chomp}"
@@ -302,7 +338,9 @@ module CommissionRules
         end
       end
       self.skip_interline_validity_check = false
+      @check_date = nil
     end
+
 
     def stats
       puts "#{commissions.keys.size} carriers"
