@@ -8,15 +8,22 @@ class Commission
       @formula = formula.to_s
     end
 
+    def complex?
+      !!formula['+']
+    end
+
     def percentage?
+      raise ArgumentError, "#{formula} contains several parts" if complex?
       !!formula['%']
     end
 
     def euro?
+      raise ArgumentError, "#{formula} contains several parts" if complex?
       !!formula['eur']
     end
 
     def rate
+      raise ArgumentError, "#{formula} contains several parts" if complex?
       formula.to_f
     end
 
@@ -26,19 +33,30 @@ class Commission
 
     def call(base=nil, params={:eur => Conf.amadeus.euro_rate})
       multiplier = (params[:multiplier] || 1).to_i
-      if percentage?
+
+      if complex?
+        # FIXME horribly inefficcient
+        formula.split('+').map do |f|
+          Commission::Formula.new(f).call(base, params)
+        end.inject(:+)
+
+      elsif percentage?
         rate * base / 100
+
       elsif euro?
         rate * params[:eur].to_f * multiplier
+
       else
         rate * multiplier
+
       end.round(2)
     end
 
     alias [] call
 
     def valid?
-      !!( formula.strip =~ /^ \d+ (?: \.\d+ )? (?: % | eur )? $/x )
+      !!( formula.strip =~ /^ \d+ (?: \.\d+ )? (?: % | eur )?
+                ( \s* \+ \s*  \d+ (?: \.\d+ )? (?: % | eur )? )*  $/x )
     end
 
     def == other_formula
@@ -49,6 +67,8 @@ class Commission
     # FIXME не работает. хочется чтоб было
     # -- eviterra.com,2011:commission/fx 2.3% + 50
     # или что-то типа.
+    #
+    # def to_yaml_type; '!eviterra.com,2011/commission/fx' end
     #
     # yaml_as "tag:eviterra.com,2011:commission/fx"
     # YAML.add_domain_type 'eviterra.com,2011', 'commission/fx' do |type, val|

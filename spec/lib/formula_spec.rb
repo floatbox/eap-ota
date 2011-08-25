@@ -43,7 +43,32 @@ describe Commission::Formula do
     # backward compatibility?
   end
 
-  pending "should work with sums" do
-    Commission::Formula.new("2% + 4").should be_valid
+  context "formula with sums" do
+    subject {Commission::Formula.new("2.5% + 4")}
+
+    it {should be_valid}
+    it {should be_complex}
+
+    it "should be able to campute" do
+      subject.call(100).should == 6.5
+    end
+
+    it "should compute with multipliers" do
+      subject.call(100, :multiplier => 4).should == 18.5
+    end
+
+    context "used in not intended ways" do
+      it "should die" do
+        expect {subject.percentage?}.to raise_error
+      end
+
+      it "should die again" do
+        expect {subject.euro?}.to raise_error
+      end
+
+      it "should die again and again" do
+        expect {subject.rate}.to raise_error
+      end
+    end
   end
 end
