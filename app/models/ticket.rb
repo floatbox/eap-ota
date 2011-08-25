@@ -1,7 +1,7 @@
 class Ticket < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   belongs_to :order
-  delegate :source, :commission_carrier, :pnr_number, :need_attention, :to => 'order'
+  delegate :source, :commission_carrier, :pnr_number, :need_attention, :paid_by, :to => 'order'
 
   def ticket_date
     created_at.strftime('%d.%m.%Y') if created_at
