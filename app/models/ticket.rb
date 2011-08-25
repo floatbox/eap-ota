@@ -19,6 +19,12 @@ class Ticket < ActiveRecord::Base
     price_fare + price_tax + price_consolidator_markup - price_share
   end
 
+  #FIXME это костыль, работает не всегда, нужно сделать нормально
+  def price_with_payment_commission
+    k = (price_tax + price_fare).to_f / (order.price_fare + order.price_tax)
+    order.price_with_payment_commission * k
+  end
+
   # для админки
   def to_label
     "#{source} #{number} #{route} #{updated_at}"

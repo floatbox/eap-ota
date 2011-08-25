@@ -118,9 +118,7 @@ class Order < ActiveRecord::Base
   # по этой штуке во маршрут-квитанции определяется, "бронирование" это или уже "билет"
   # FIXME избавиться от глупостей типа "пишем что это билет, хотя это еще бронирование"
   # FIXME добавить проверки на обилеченность, может быть? для ручных бронек
-  def ticketed_email?
-    return false if @itinerary_receipt_view == 'booked'
-    return true if @itinerary_receipt_view == 'ticketed'
+  def show_as_ticketed?
     ticket_status == 'ticketed' || payment_type == 'card'
   end
 
