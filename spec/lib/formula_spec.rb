@@ -27,7 +27,20 @@ describe Commission::Formula do
   end
 
   context "it should round to 2 digits by default" do
-    pending {}
+    specify { Commission::Formula.new("3.235%").call(500).should == 16.18 }
+  end
+
+  it "should be equal to the same formula" do
+    Commission::Formula.new('3.34%').should == Commission::Formula.new('3.34%')
+  end
+
+  it "should be serializable by YAML" do
+    formula = Commission::Formula.new('3.34%')
+    YAML.load(YAML.dump(formula)).should == formula
+  end
+
+  pending "it should have exactly that serialization" do
+    # backward compatibility?
   end
 
   pending "should work with sums" do
