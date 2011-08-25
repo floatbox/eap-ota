@@ -12,7 +12,8 @@ module CommissionRules
     :interline, :domestic, :international, :classes, :subclasses,
     :routes,
     :departure, :departure_country, :important,
-    :check, :examples, :agent_comments, :subagent_comments, :source
+    :check, :examples, :agent_comments, :subagent_comments, :source,
+    :expr_date, :strt_date
 
   def disabled?
     disabled || not_implemented || no_commission
@@ -21,6 +22,7 @@ module CommissionRules
   def applicable? recommendation
     not disabled? and
     # carrier == recommendation.validating_carrier_iata and
+    applicable_date? and
     applicable_interline?(recommendation) and
     valid_interline?(recommendation) and
     applicable_classes?(recommendation) and
@@ -86,6 +88,16 @@ module CommissionRules
   def applicable_routes? recommendation
     return true unless routes
     routes.include? recommendation.route
+  end
+
+  def applicable_date? 
+    if expr_date 
+      return true unless expr_date.to_date.past?
+    elsif strt_date
+      return true unless strt_date.to_date.future?
+    elsif !(expr_date && strt_date)
+      return true
+    end
   end
 
   def share(fare, tickets=1)
@@ -262,6 +274,14 @@ module CommissionRules
     def check &block
       opts[:check] = block
     end
+    
+    def expr_date date
+      opts[:expr_date] = date
+    end
+
+    def strt_date date
+      opts[:strt_date] = date
+    end
 
     # метод поиска рекомендации
 
@@ -282,8 +302,12 @@ module CommissionRules
         (commission.examples || next).each do |code, source|
           rec = Recommendation.example(code, :carrier => commission.carrier)
           proposed = find_for(rec)
-          if proposed == commission ||
-             proposed.nil? && commission.disabled?
+          if commission.expr_date && commission.expr_date.to_date.past? && !commission.disabled?
+            error "#{commission.carrier} (line #{source}): - expiration date passed!"
+          elsif commission.strt_date && commission.strt_date.to_date.future? && !commission.disabled?
+            error "#{commission.carrier} (line #{source}): - start date doesn't come!"
+          elsif proposed == commission ||
+                proposed.nil? && commission.disabled?
             ok "#{commission.carrier} (line #{source}): #{code} - OK"
           elsif proposed.nil?
             error "#{commission.carrier} (line #{source}): #{code} - no applicable commission!"

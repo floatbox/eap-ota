@@ -77,6 +77,7 @@ subagent "2 (два) % от тарифа на рейсы Interline c учас�
 interline :yes
 commission "4%/2%"
 
+#strt_date "12.08.2011"
 #agent "С 12.08.11г. 9% от опубл. тарифов Эконом класса на собств. рейсы UN7061/7062 между Москвой и Хьюстоном/Сингапуром (OW, RT) и от опубл. сквозных тарифов для трансферных перевозок Эконом класса  между пунктами полетов ОАО «АК «ТРАНСАЭРО»  на территории России и Хьюстоном/Сингапуром (OW, RT)."
 #subagent ""
 #not_implemented
@@ -123,6 +124,7 @@ carrier "6H", "ISRAIR AIRLINE"
 ########################################
 
 example 'svocdg'
+strt_date "01.07.2011"
 agent    "С 01.07.11г. 5% от всех опубл. тарифов на рейсы 6H (В договоре Interline отдельно не прописан.)"
 subagent "С 01.07.11г. 3% от опубл. тарифов на собств.рейсы 6H"
 commission "5%/3%"
@@ -156,11 +158,13 @@ carrier "7D", "DONBASSAERO"
 ########################################
 
 example 'svocdg'
+strt_date "11.04.2011"
 agent "С 11.04.11г. 5 (Пять) % от всех опубликованных тарифов на собственные рейсы авиакомпании DONBASSAERO AIRLINES (LLC) (7D/897);"
 subagent "С 11.04.11г. 3,5% от всех опубл. тарифов на собств. рейсы 7D;"
 commission "5%/3.5%"
 
 example 'cdgsvo svocdg/ab'
+strt_date "11.04.2011"
 agent "С 11.04.11г. 5 (Пять) % от всех опубликованных тарифов на интерлайн-перевозки как с участием собственных, так и без участия собственных рейсов (только рейсы интерлайн-партнёров) авиакомпании DONBASSAERO AIRLINES (LLC) (7D/897);"
 subagent "С 11.04.11г. 3,5% от всех опубл. тарифов на рейсы Interline с уч. собств. рейсов 7D;"
 interline :yes
@@ -386,6 +390,7 @@ carrier "BD", "BMI"
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
+strt_date "01.02.2011"
 agent    "С   01.02.2011г. 1 руб. с билета по опубл.тарифам на рейсы BD"
 subagent "С 01.02.2011г. 5 коп. с билета по опубл. тарифам на собств. рейсы BD и рейсы Interline с участком BD"
 interline :possible
@@ -426,6 +431,8 @@ carrier "CA", "AIR CHINA"
 
 #C 05.05.2011 по 31.03.2012г.
 #по маршрутам Москва-Пекин или Москва-Пекин-Москва:
+strt_date "05.05.2011"
+expr_date "31.03.2012"
 example 'svopek/f'
 example 'svopek/f peksvo/f'
 agent   "20% от опубл. тарифов по классу F на собств. рейсы CA;"
@@ -570,9 +577,16 @@ commission "2%/1.4%"
 carrier "DE", "Condor Flugdienst (Авиарепс)"
 ########################################
 
-example 'svocdg' #date 30.09, с 1.10 — 1 руб
+example 'svocdg'
+expr_date "30.09.2011"
 agent    "1% от всех опубл. тарифов на рейсы DE. (В договоре Interline не прописан.)"
-subagent "0,5% от опубл. тарифа на рейсы DE." #date 5 коп
+subagent "0,5% от опубл. тарифа на рейсы DE." 
+commission "1%/0.5%"
+
+strt_date "01.10.2011"
+agent    "1% от всех опубл. тарифов на рейсы DE. (В договоре Interline не прописан.)"
+subagent "5 коп от опубл. тарифа на рейсы DE." 
+disabled
 commission "1%/0.5%"
 
 example 'cdgsvo svocdg/ab'
@@ -784,7 +798,7 @@ interline :absent
 commission "1eur/1"
 
 example 'ledsvo/business svoled/business'
-agent "по 31.10.2011 года"
+expr_date "31.10.2011"
 agent "9% при продаже пассажирских перевозок в бизнес-классе на рейсы ФГУП «ГТК «Россия» (FV) на направлениях Санкт-Петербург-Москва и обратно, включая рейсы по соглашению «CODE-Share» (в том числе по тарифам ИАТА)."
 subagent "По 31.10.2011г.: 7% от опубл.тарифов Бизнес класса на собственные рейсы (FV) на внутренние перевозки, включая рейсы по соглашению «CODE-Share» (в том числе по тарифам ИАТА)."
 important!
@@ -840,7 +854,7 @@ carrier "HU", "HAINAN AIRLINES"
 
 example 'svopek/f'
 example 'svopek/f/ab peksvo/f'
-#date 31.10
+expr_date "31.10.2011"
 agent "20% перелет с 01.01.11-31.10.11 / class F, P, C  of the flight MOW - CHINA или MOW - CHINA - MOW"
 subagent "18% перелет с 01.01.11-31.10.11 / class F, P, C of the flight MOW - CHINA или MOW - CHINA - MOW"
 subclasses "FPC"
@@ -850,7 +864,7 @@ commission "20%/18%"
 
 example 'svopek/d'
 example 'svopek/d/ab persvo/d'
-#date 31.10
+expr_date "31.10.2011"
 agent "15% перелет с 01.01.11-31.10.11 / class D, I, J  of the flight MOW - CHINA или MOW - CHINA - MOW"
 subagent "13% перелет с 01.01.11-31.10.11 / class D, I, J of the flight MOW - CHINA или MOW - CHINA - MOW"
 subclasses "DIJ"
@@ -861,7 +875,7 @@ commission "15%/13%"
 example 'svopek/z'
 example 'svopek/z/ab peksvo/z'
 example 'svopek/u/ab peksvo/u'
-#date 31.10
+expr_date "31.10.2011"
 agent "9% перелет с 01.01.11-31.10.11 / class Y,B,H,K,L,M,Q,W,S,U,E,O of the flight MOW - CHINA или MOW - CHINA - MOW"
 subagent "7% перелет с 01.01.11-31.10.11 / class Y,B,H,K,L,M,Q,W,S,U,E,O of the flight MOW - CHINA или MOW - CHINA - MOW"
 subclasses "YBHKLMQWSUEOZ" #Z из другого правила, которое я не завел отдельно, проценты те же
@@ -872,7 +886,7 @@ commission "9%/7%"
 example 'ledpek/c pekled/c'
 example 'ledpek/c/ab pekled/c'
 example 'ledpek/d/ab pekled/d'
-#date 31.12
+expr_date "31.12.2011"
 agent "15% перелет до 31.12.11 / class C, D, J  of the flight LED=PEK=LED"
 subagent "13% перелет до 31.12.11 / class C, D, J of the flight LED=PEK=LED"
 subclasses "CDJ"
@@ -883,7 +897,7 @@ commission "15%/13%"
 example 'ledpek/u pekled/u'
 example 'ledpek/u/ab pekled/u'
 example 'ledpek/t/ab pekled/t'
-#date 31.12
+expr_date "31.12.2011"
 agent "9% перелет до 31.12.11 / class I / Z / Y / B / H / K / L / M / Q / X / V / T / W / S / N / U / E / O of the flight LED=PEK=LED"
 subagent "7% перелет до 31.12.11 / class I / Z / Y / B / H / K / L / M / Q / X / V / T / W / S / N / U / E / O of the flight LED=PEK=LED"
 subclasses "IZYBHKLMQXVTWSNUEO"
@@ -893,7 +907,7 @@ commission "9%/7%"
 
 example 'ovbpek'
 example 'kjapek pekkja/ab'
-#date 31.10
+expr_date "31.10.2011"
 agent "9% перелет с 15.05.11-31.10.11с началом перевозки из городов KJA OVB IKT / all class "
 subagent "7% перелет с 15.05.11-31.10.11с началом перевозки из городов KJA OVB IKT / all class"
 interline :possible
@@ -902,7 +916,7 @@ commission "9%/7%"
 
 example 'peksvo/f'
 example 'peksvo/d/ab svopek/d'
-#date 31.10
+expr_date "31.10.2011"
 agent "3% перелет с 05.05.11 по 31.10.11г./class F, P, C , D , I , J  of the flight CHINA - MOW  или  CHINA - MOW - CHINA"
 subagent "1% перелет с 05.05.11 по 31.10.11г./class F, P, C , D , I , J of the flight CHINA - MOW или CHINA - MOW - CHINA"
 subclasses "FPCDIJ"
@@ -912,7 +926,7 @@ commission "3%/1%"
 
 example 'peksvo/economy'
 example 'peksvo/economy svopek/economy'
-#date 31.10
+expr_date "31.10.2011"
 agent "3% перелет с 05.05.11 по 31.10.11г./class Y,B,H,K,L,M,Q,X,V,T,S,N,U,  of the flight CHINA - MOW  или  CHINA - MOW - CHINA"
 subagent "1% перелет с 05.05.11 по 31.10.11г./class Y,B,H,K,L,M,Q,X,V,T,S,N,U, of the flight CHINA - MOW или CHINA - MOW - CHINA"
 classes :economy
@@ -934,7 +948,7 @@ subagent "1% начало перелета из третьей страны в �
 check { country_iatas.first != 'CN' && country_iatas.include?('CN') }
 commission "3%/1%"
 
-#date С 01.11.2011г.
+strt_date "01.11.2011"
 agent "9% от всех опубл. тарифов на рейсы HU (В договоре Interline не прописан.)"
 subagent "7% от опубл. тарифов на собств. рейсы HU"
 not_implemented
