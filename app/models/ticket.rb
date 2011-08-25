@@ -25,6 +25,10 @@ class Ticket < ActiveRecord::Base
     order.price_with_payment_commission * k
   end
 
+  def price_tax_and_markup_and_payment
+    price_with_payment_commission - price_fare
+  end
+
   # для админки
   def to_label
     "#{source} #{number} #{route} #{updated_at}"
