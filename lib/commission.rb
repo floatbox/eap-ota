@@ -142,6 +142,7 @@ agent    "4% от всех опубл. тарифов на cобств. рейс
 subagent "2,8% от опубл. тарифов на cобств. рейсы 7B"
 commission "4%/2.8%"
 
+
 disabled "Suspension of Moscow Airlines (7B/499)"
 example 'cdgsvo svocdg/ab'
 agent    "3% от всех опубл. тарифов на рейсы Interline"
@@ -158,12 +159,15 @@ carrier "7D", "DONBASSAERO"
 example 'svocdg'
 agent "С 11.04.11г. 5 (Пять) % от всех опубликованных тарифов на собственные рейсы авиакомпании DONBASSAERO AIRLINES (LLC) (7D/897);"
 subagent "С 11.04.11г. 3,5% от всех опубл. тарифов на собств. рейсы 7D;"
+startdate "10.08.2011"
+findate "10.09.2011"
 commission "5%/3.5%"
 
 example 'cdgsvo svocdg/ab'
 agent "С 11.04.11г. 5 (Пять) % от всех опубликованных тарифов на интерлайн-перевозки как с участием собственных, так и без участия собственных рейсов (только рейсы интерлайн-партнёров) авиакомпании DONBASSAERO AIRLINES (LLC) (7D/897);"
 subagent "С 11.04.11г. 3,5% от всех опубл. тарифов на рейсы Interline с уч. собств. рейсов 7D;"
 interline :yes
+findate "10.08.2011"
 commission "5%/3.5%"
 
 carrier "7W", "WINDROSE"
