@@ -27,7 +27,10 @@ module Amadeus::Response
       @doc = doc
     end
 
-    delegate :xpath, :to => :doc
+    # теперь это приватный метод? хм.
+    def xpath(*args)
+      doc.send(:xpath, *args)
+    end
 
     def parse_date elem
       return unless elem.present?

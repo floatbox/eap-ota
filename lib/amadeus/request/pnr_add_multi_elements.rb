@@ -8,11 +8,14 @@ module Amadeus
       def action_codes
         {:NOP => 0, :ET => 10, :ER => 11, :ETK => 12, :ERK => 13, :EF => 14, :ETX => 15, :ERX => 16, :IG => 20, :IR => 21, :STOP => 267, :WARNINGS => 30, :SHORT => 50}
       end
-      attr_accessor_with_default :pnr_action, :ER
+      attr_accessor :pnr_action
       attr_accessor :recommendation #сейчас не используется
 
       # может принимать PricerForm
       def initialize(opts)
+        # defaults
+        @pnr_action = :ER
+        # end of defaults
         if opts.is_a? Hash
           super
         else
