@@ -1,4 +1,5 @@
 <% @flights ||= @pnr.flights %>
+<% booking_classes = @pnr ? @pnr.booking_classes : [] %>
 <tbody valign="top">
 <tr>
     <td colspan="6" class="pad_null"><font size="3">&nbsp;<br></font></td>
@@ -20,7 +21,7 @@
 <tr>
     <td colspan="6" class="pad_null"><font size="2">&nbsp;<br></font></td>
 </tr>
-<% for flight, booking_class in @flights.zip(@pnr.booking_classes) %>
+<% for flight, booking_class in @flights.zip(booking_classes) %>
 <tr>
     <td class="pad_null" align="right" valign="top" style="text-align: right; vertical-align: top;">
         <font size="2" family="Arial"><%= full_human_date( flight.departure_date ) %></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

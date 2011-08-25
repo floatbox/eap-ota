@@ -13,9 +13,9 @@ class PNRController < ApplicationController
 
   def show
     if @pnr.order.show_as_ticketed?
-      render :action => "ticket"
+      render "ticket"
     else
-      render :action => "booking"
+      render "booking"
     end
   end
 
@@ -24,7 +24,7 @@ class PNRController < ApplicationController
   end
 
   def show_as_ticketed
-    render :action => "ticket"
+    render "ticket"
   end
 
   def show_for_ticket
@@ -32,7 +32,7 @@ class PNRController < ApplicationController
     raise 'ticket don\'t belong to order' if ticket.order != @pnr.order
     @prices = ticket
     @passengers = [Person.new(:first_name => ticket.first_name, :last_name => ticket.last_name, :passport => ticket.passport, :ticket => ticket.number)]
-    render :action => "ticket"
+    render "ticket"
   end
 
   def error
