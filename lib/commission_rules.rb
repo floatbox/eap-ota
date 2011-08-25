@@ -22,7 +22,7 @@ module CommissionRules
   def applicable? recommendation
     not disabled? and
     # carrier == recommendation.validating_carrier_iata and
-    date_accords?(Date.today || @check_date) and
+    date_accords?(@check_date || Date.today) and
     applicable_interline?(recommendation) and
     valid_interline?(recommendation) and
     applicable_classes?(recommendation) and
@@ -132,26 +132,27 @@ module CommissionRules
   end
 
   def date_accords?(incoming_date)
-	incoming_date.to_date
+	
+	incoming_date = incoming_date.to_date
 	if !startdate && !findate
 		return true
-	elsif !startdate && findate
-		findate = findate.to_date
-		if incoming_date <=findate
-			return true
-		end 
-	elsif !findate && startdate
-		startdate = startdate.to_date
-		if incoming_date >= startdate		
-			return true
-		end	
-	else 
+	elsif startdate && findate
 		startdate = startdate.to_date
 		findate = findate.to_date
 		if startdate <= incoming_date && incoming_date <= findate
 			return true 
 		end 	
-   	end 
+	elsif findate
+		findate = findate.to_date
+		if incoming_date <=findate
+			return true
+		end 
+	elsif startdate
+		startdate = startdate.to_date
+		if incoming_date >= startdate		
+			return true
+		end	
+	end  	
   end 	  
 
   private
@@ -316,12 +317,12 @@ module CommissionRules
         (commission.examples || next).each do |code, source|
           rec = Recommendation.example(code, :carrier => commission.carrier)
           proposed = find_for(rec)
-          if (proposed == commission && proposed.date_accords?(@check_date)) ||
+          if (proposed == commission && proposed.date_accords?(@check_date || Date.today)) ||
              (proposed.nil? && commission.disabled?)
             ok "#{commission.carrier} (line #{source}): #{code} - OK"
           elsif proposed.nil?
             error "#{commission.carrier} (line #{source}): #{code} - no applicable commission!"
-          elsif !proposed.date_accords?(@check_date)
+          elsif !proposed.date_accords?(@check_date || Date.today)
             error "#{commission.carrier} (line #{source}): #{code} - selected date doesn't accord!"
 	  else
             if commission.disabled?
