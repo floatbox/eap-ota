@@ -201,8 +201,8 @@ class OrderForm
     response
   end
 
-  def commission
-    recommendation.commission
+  def agent_commission
+    recommendation.commission_agent
   end
 
   def validating_carrier

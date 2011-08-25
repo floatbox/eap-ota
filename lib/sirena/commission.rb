@@ -41,26 +41,21 @@ class Sirena::Commission
     end
   end
 
-  def consolidator_markup(fare, tickets=1)
-    blank_cost = 50
+  def consolidator_markup_fx
     if twopcnt
-      fare * 0.02 + blank_cost * tickets
+      Commission::Formula.new('2% + 50')
     else
-      blank_cost * tickets
+      Commission::Formula.new('50')
     end
   end
 
   # ВРЕМЕННОЕ РЕШЕНИЕ
-  def share(fare, tickets=1)
-    0
-  end
-
   def discount_amount(fare, tickets=1)
     0
   end
 
-  def agent; '0' end
-  def subagent; '0' end
+  def agent; Commission::Formula.new(0) end
+  def subagent; Commission::Formula.new(0) end
   def agent_comments; '' end
   def subagent_comments; '' end
 

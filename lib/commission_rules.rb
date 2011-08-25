@@ -102,25 +102,17 @@ module CommissionRules
     end
   end
 
-  def share(fare, tickets=1)
-    # FIXME сделать поддержу EUR
-    if subagent['%']
-      fround(fare * subagent.to_f / 100)
-    else
-      fround(subagent.to_f)
-    end
-  end
-
-  def consolidator_markup(fare, tickets=1)
-    if share(fare) <= 5
+  # FIXME специфично для амадеуса+авиацентр. вынести
+  def consolidator_markup_fx
+    if !subagent.percentage? && subagent.rate <= 5
       # особые условия для этих компаний.
       if %W( LH LX KL AF OS ).include? carrier
-        fare * 0.01
+        Commission::Formula.new('1%')
       else
-        fare * 0.02
+        Commission::Formula.new('2%')
       end
     else
-      0
+      Commission::Formula.new(0)
     end
   end
 
@@ -131,32 +123,6 @@ module CommissionRules
       fround(discount.to_f)
     end
   end
-
-  def agent_percentage?
-    agent['%']
-  end
-
-  def agent_euro?
-    agent['eur']
-  end
-
-  def agent_value
-    val = agent.to_f
-    val *= euro_rate if agent_euro?
-    val
-  end
-
-  #FIXME нужно починить для работы с валютой
-  def euro_rate
-    Conf.amadeus.euro_rate
-  end
-
-  private
-
-  def fround x
-    ('%.2f' % x.to_f).to_f
-  end
-
 
   def self.create_class_attrs klass
     klass.instance_eval do
@@ -211,8 +177,8 @@ module CommissionRules
 
       commission = new({
         :carrier => @carrier,
-        :agent => vals[0].to_s,
-        :subagent => vals[1].to_s,
+        :agent => Commission::Formula.new(vals[0]),
+        :subagent => Commission::Formula.new(vals[1]),
         :source => caller_address
       }.merge(opts).reverse_merge(carrier_default_opts).reverse_merge(default_opts))
 
