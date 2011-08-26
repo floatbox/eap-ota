@@ -101,6 +101,8 @@ load: function(number) {
             }
             if (that.el.find('.booking-corporate').length === 0) {
                 that.activate();
+            } else {
+                that.form.el = that.el.find('.booking-corporate');
             }
         },
         error: function() {

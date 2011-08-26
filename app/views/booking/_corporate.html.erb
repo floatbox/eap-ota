@@ -1,5 +1,4 @@
-<div class="booking-form" data-variant="<%= @order_form.variant_id %>">
-    <div class="booking-corporate">
+<div class="booking-corporate" data-variant="<%= @order_form.variant_id %>">
     <% availability = @order_form.recommendation.availability %>
     <% if availability && availability > 0 && availability < 9 %>
         По этому тарифу осталось <strong><%= availability %>&nbsp;<%= Russian.pluralize(availability, 'место', 'места', 'мест') %></strong>.
@@ -7,7 +6,6 @@
         Места по этому тарифу доступны.
     <% end %>
     Ваша цена — <strong><%= human_price(@order_form.recommendation.price_total) %></strong><%= ' за всех' unless @order_form.people.one? %> со всеми сборами.
-    </div>
 </div>
 <div class="booking-price latent">
     <div class="cost"><dl>

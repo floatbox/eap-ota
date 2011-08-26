@@ -37,12 +37,13 @@
 
 /* Бронирование в корпоративном режиме */
 .booking-corporate {
+    padding: 13px 15px;
     font-size: 18px;
     line-height: 22px;
     text-align: left;
 }
 .booking-corporate strong {
-    font-weight: bold;
+    font-weight: normal;
     color: #ED1192;
 }
 
@@ -71,6 +72,7 @@
 
 /* Форма бронирования */
 #booking {
+    min-height: 100%;
     background: #E7ECEE;
 }
 .booking-body {
