@@ -193,6 +193,7 @@ module PricerHelper
     end
     concat " #{recommendation.blank_count} бл." if recommendation.blank_count && recommendation.blank_count > 1
     concat '(' + recommendation.booking_classes.join(',') + ')'
+    concat " Мест: #{recommendation.blank_count}"
   end
 
 end

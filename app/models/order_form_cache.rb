@@ -16,6 +16,10 @@ class OrderFormCache
   end
 
   def recommendation
+    Recommendation
+    Variant
+    Flight
+    Segment
     recommendation_yml? && YAML.load(recommendation_yml)
   end
 
