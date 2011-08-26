@@ -112,7 +112,7 @@ class Flight
 
   # "4U:LH3240FRAMOW101112"
   def flight_code
-    full_flight_number +  departure_iata + arrival_iata + departure_date
+    "#{ full_flight_number }#{ departure_iata }#{ arrival_iata }#{ departure_date }"
   end
 
   def destination
