@@ -12,13 +12,10 @@ module CommissionRules
     :interline, :domestic, :international, :classes, :subclasses,
     :routes,
     :departure, :departure_country, :important,
-<<<<<<< HEAD
     :check, :examples, :agent_comments, :subagent_comments, :source,
     :expr_date, :strt_date
-=======
-    :check, :examples, :agent_comments, :subagent_comments, :source, :startdate,
     :findate
->>>>>>> 43991301192877ff2c55302a013f450f33d6afbd
+
 
   def disabled?
     disabled || not_implemented || no_commission
@@ -27,11 +24,7 @@ module CommissionRules
   def applicable? recommendation
     not disabled? and
     # carrier == recommendation.validating_carrier_iata and
-<<<<<<< HEAD
     applicable_date? and
-=======
-    date_accords?(@check_date || Date.today) and
->>>>>>> 43991301192877ff2c55302a013f450f33d6afbd
     applicable_interline?(recommendation) and
     valid_interline?(recommendation) and
     applicable_classes?(recommendation) and
@@ -99,8 +92,8 @@ module CommissionRules
     routes.include? recommendation.route
   end
 
-  def applicable_date? 
-    if expr_date 
+  def applicable_date?
+    if expr_date
       return true unless expr_date.to_date.past?
     elsif strt_date
       return true unless strt_date.to_date.future?
@@ -307,7 +300,7 @@ module CommissionRules
     def check &block
       opts[:check] = block
     end
-    
+
     def expr_date date
       opts[:expr_date] = date
     end
@@ -328,13 +321,6 @@ module CommissionRules
       commissions[recommendation.validating_carrier_iata].present?
     end
 
-    def startdate startdate
-      opts[:startdate] = startdate
-    end
-
-    def findate findate
-      opts[:findate] = findate
-    end
 
     # test methods
      def test
@@ -344,23 +330,17 @@ module CommissionRules
         (commission.examples || next).each do |code, source|
           rec = Recommendation.example(code, :carrier => commission.carrier)
           proposed = find_for(rec)
-<<<<<<< HEAD
           if commission.expr_date && commission.expr_date.to_date.past? && !commission.disabled?
             error "#{commission.carrier} (line #{source}): - expiration date passed!"
           elsif commission.strt_date && commission.strt_date.to_date.future? && !commission.disabled?
             error "#{commission.carrier} (line #{source}): - start date doesn't come!"
           elsif proposed == commission ||
                 proposed.nil? && commission.disabled?
-=======
           if proposed == commission  ||
              (proposed.nil? && commission.disabled?)
->>>>>>> 43991301192877ff2c55302a013f450f33d6afbd
             ok "#{commission.carrier} (line #{source}): #{code} - OK"
-          elsif !commission.date_accords?(@check_date || Date.today)
-            error "#{commission.carrier} (line #{source}): #{code} - this commission isn't available on selected date!"
           elsif proposed.nil?
             error "#{commission.carrier} (line #{source}): #{code} - no applicable commission!"
-
   	  else
             if commission.disabled?
               error "#{commission.carrier} (line #{source}): #{code} - commission non applicable, but got line #{proposed.source}:"
