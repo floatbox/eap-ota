@@ -98,6 +98,6 @@ booking.form.track = function(result) {
         _gaq.push(['_trackTrans']);
     }
     if (window.yaCounter5324671) {
-        yaCounter5324671.hit(path + '/success');
+        yaCounter5324671.hit('/booking/success');
     }
 };

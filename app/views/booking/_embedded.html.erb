@@ -59,7 +59,7 @@
         <dd><%= Russian.pluralize(price, 'рубль', 'рубля', 'рублей') %><span class="cost-tip"><%= ' за всех' if @search.people_total != 1 %>, включая налоги и сборы</span></dd>
     </dl></div>
     <dl class="sum" data-value="<%= @order_form.recommendation.price_with_payment_commission.round.to_i %>">
-        <dt>Итого <strong><%= human_price(@order_form.recommendation.price_with_payment_commission) %></strong> за всех со всеми сборами</dt>
+        <dt>Итого <strong><%= human_price(@order_form.recommendation.price_with_payment_commission) %></strong><%= ' за всех' unless @order_form.people.one? %> со всеми сборами</dt>
         <dd>Тариф — <%= human_price(@order_form.recommendation.price_fare) %>, налоги и сборы — <%= human_price(@order_form.recommendation.price_tax_and_markup_and_payment) %></dd>
     </dl>
 </div>
