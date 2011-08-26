@@ -19,4 +19,6 @@ admin:
   Consolidator: create, read, update, delete
   GlobalDistributionSystem: create, read, update, delete
   Payment: read
+  FlightGroup: create, read, update, delete
+
 
