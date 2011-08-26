@@ -356,7 +356,7 @@ module CommissionRules
         end
       end
       self.skip_interline_validity_check = false
-      @check_date = nil
+
     end
 
 
