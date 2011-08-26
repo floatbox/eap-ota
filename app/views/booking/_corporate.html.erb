@@ -1,0 +1,23 @@
+<div class="booking-form" data-variant="<%= @order_form.variant_id %>">
+    <div class="booking-corporate">
+    <% availability = @order_form.recommendation.availability %>
+    <% if availability && availability > 0 && availability < 9 %>
+        По этому тарифу осталось <strong><%= availability %>&nbsp;<%= Russian.pluralize(availability, 'место', 'места', 'мест') %></strong>.
+    <% else %>
+        Места по этому тарифу доступны.
+    <% end %>
+    Ваша цена — <strong><%= human_price(@order_form.recommendation.price_total) %></strong><%= ' за всех' unless @order_form.people.one? %> со всеми сборами.
+    </div>
+</div>
+<div class="booking-price latent">
+    <div class="cost"><dl>
+        <% price = @order_form.recommendation.price_total.round.to_i %>
+        <dt class="usual"><%= raw @order_form.recommendation.price_with_payment_commission.round.to_i.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') %></dt>
+        <dt><%= raw price.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') %></dt>
+        <dd><%= Russian.pluralize(price, 'рубль', 'рубля', 'рублей') %><span class="cost-tip"><%= ' за всех' if @search.people_total != 1 %>, включая налоги и сборы</span></dd>
+    </dl></div>
+    <dl class="sum" data-value="<%= @order_form.recommendation.price_total.round.to_i %>">
+        <dt>Итого <strong><%= human_price(@order_form.recommendation.price_total) %></strong><%= ' за всех' unless @order_form.people.one? %> со всеми сборами</dt>
+        <dd>Тариф — <%= human_price(@order_form.recommendation.price_fare) %>, налоги и сборы — <%= human_price(@order_form.recommendation.price_tax_and_markup) %></dd>
+    </dl>
+</div>

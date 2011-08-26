@@ -35,7 +35,16 @@
     display: inline;
 }
 
-
+/* Бронирование в корпоративном режиме */
+.booking-corporate {
+    font-size: 18px;
+    line-height: 22px;
+    text-align: left;
+}
+.booking-corporate strong {
+    font-weight: bold;
+    color: #ED1192;
+}
 
 /* Изменение цены */
 .changed-price {
