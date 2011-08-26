@@ -1,0 +1,41 @@
+<tbody valign="top">
+<tr>
+    <td colspan="6" class="pad_null">&nbsp;<br></td>
+</tr>
+<tr valign="bottom">
+    <td class="pad_null">
+        <font family="Arial" size="3" style="font-size: 18px;"><strong>Сведения о пассажирах<br>Traveler Information</strong></font>
+    </td>
+    <td class="pad_null" colspan="2"><br></td>
+    <td class="pad_null" colspan="3">
+        <font family="Arial" size="3" style="font-size: 15px;"><strong>Сведения об агенте<br>Agent Information</strong></font>
+    </td>
+</tr>
+<tr>
+    <td colspan="6" class="pad_null"><font size="2" style="font-size: 8px;">&nbsp;<br></font></td>
+</tr>
+<tr>
+    <td class="pad_null">
+        <font family="Arial" size="2">
+        <% for p in @passengers %>
+            <strong style="font-weight: bold;"><%= p.last_name %> <%= p.first_name %> &nbsp;</strong><br><%= p.passport %><br>
+        <% end %>
+        </font>
+    </td>
+    <td class="pad_null" colspan="2">
+    <% if @passengers.any?(&:ticket) %>
+        <font family="Arial" size="2">
+        <% for p in @passengers %>
+            <%= p.ticket %><br><br>
+        <% end %>
+        </font>
+    <% end %>
+    </td>
+    <td class="pad_null">
+        <font family="Arial" size="2">Eviterra Travel<br>+7 (495) 660-35-20<br>
+        <a href="http://www.eviterra.com/" target="_blank" style="color: #ed1192;"><font color="#ed1192">www.eviterra.com</font></a><br>
+        <a href="mailto:ticket@eviterra.com" target="_blank" style="color: #ed1192;"><font color="#ed1192">ticket@eviterra.com</font></a>
+        </font>
+    </td>
+</tr>
+</tbody>

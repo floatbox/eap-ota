@@ -1,0 +1,87 @@
+<tbody valign="top">
+<tr>
+    <td class="pad_null"><img src="https://eviterra.com/img/booking/eviterra.png" alt="eviterra" width="210" height="30"></td>
+    <td class="pad_null" colspan="2">
+      <font size="3" family="Arial" style="font-size: 15px;"><strong>Бронирование<br>Booking</strong></font>
+    </td>
+    
+    <%= render :partial => 'pnr/numbers' %>
+
+</tr>
+</tbody>
+
+<% if @last_pay_time.present? %>
+<tbody valign="top">
+<tr>
+    <td colspan="6" class="pad_null">&nbsp;<br></td>
+</tr>
+<tr>
+    <td class="pad_null" colspan="6">
+        <font size="3" family="Arial" style="font-size: 15px;"><strong>Действительно до<br>Valid until</strong></font><br>
+        <font size="3" family="Arial" color="#ED1192" style="font-size: 18px; color: #ED1192;"><strong><%= @prices.last_pay_time.strftime('%H:%M %d.%m.%Y') %></strong></font><br>
+        <br>
+    </td>
+</tr>
+</tbody>
+<% end %>
+
+<%= render :partial => 'pnr/passengers' %>
+<%= render :partial => 'pnr/flights' %>
+
+  <tbody valign="top">
+  <tr>
+      <td class="pad_null">
+          <font family="Arial" size="3" style="font-size: 18px;"><strong>Информация для оплаты<br>Information for payment</strong></font><br>
+          <font size="1" style="line-height: 8px;"><br></font>
+      </td>
+      <td class="pad_null" colspan="5"><br></td>
+  </tr>
+  <tr>
+      <td class="pad_null">
+          <font family="Arial" size="2">
+          Тариф / Fare<br>
+          Налоги и сборы / Taxes<br>
+          <% if @prices.payment_type == 'delivery' %>
+              Доставка / Delivery<br>
+          <% end %>
+          Итоговая стоимость / Total<br>
+          </font>
+      </td>
+      <td class="pad_null" colspan="2">
+          <font family="Arial" size="2">
+          <%= exact_price(@prices.price_fare) %> RUB<br>
+          <%= exact_price(@prices.price_tax_and_markup_and_payment) %> RUB<br>
+          <% if @prices.payment_type == 'delivery' %>
+              350 RUB<br>
+              <%= exact_price(@prices.price_with_payment_commission + 350)  %> RUB<br>
+          <% else %>
+              <%= exact_price(@prices.price_with_payment_commission) %> RUB<br>
+          <% end %>
+          </font>
+      </td>
+      <td class="pad_null" colspan="3">
+          <font family="Arial" size="2">Адрес и телефон</font><br>
+          <font family="Arial" size="1" style="font-size: 6px;"><br></font>
+          <font family="Arial" size="2">
+          <% if @pnr.email %>
+              <a href="mailto:<%= @pnr.email %>" target="_blank" style="color: #ed1192;"><font color="#ed1192"><%= @pnr.email %></font></a><br>
+          <% end %>
+          <%= @pnr.phone %>
+          </font>
+      </td>
+  </tr>
+  </tbody>
+
+<tbody valign="top">
+<tr>
+    <td class="pad_null" style="text-align: center; font-size: 24px; line-height: 1.25; letter-spacing: -0.02em;" colspan="6">
+    <font size="5"><br></font>
+    <center>
+
+      <font family="Arial" size="5"><strong>Спасибо за то, что забронировали на <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
+      <font family="Arial" size="5"><strong>Thank you for booking at <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
+
+    </center>
+    </td>
+</tbody>
+

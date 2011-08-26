@@ -1,7 +1,7 @@
 class Ticket < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   belongs_to :order
-  delegate :source, :commission_carrier, :pnr_number, :need_attention, :to => 'order'
+  delegate :source, :commission_carrier, :pnr_number, :need_attention, :paid_by, :to => 'order'
 
   def ticket_date
     created_at.strftime('%d.%m.%Y') if created_at
@@ -17,6 +17,16 @@ class Ticket < ActiveRecord::Base
 
   def price_transfer
     price_fare + price_tax + price_consolidator_markup - price_share
+  end
+
+  #FIXME это костыль, работает не всегда, нужно сделать нормально
+  def price_with_payment_commission
+    k = (price_tax + price_fare).to_f / (order.price_fare + order.price_tax)
+    order.price_with_payment_commission * k
+  end
+
+  def price_tax_and_markup_and_payment
+    price_with_payment_commission - price_fare
   end
 
   # для админки

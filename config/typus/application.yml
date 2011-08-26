@@ -249,3 +249,11 @@ GeoTag:
   search: name, synonym_list
   application: Geo
 
+FlightGroup:
+  fields:
+    default: code, created_at
+    list: code, created_at, url
+    form: code
+  order_by: -created_at
+  application: Misc
+

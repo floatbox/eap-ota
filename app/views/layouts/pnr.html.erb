@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Eviterra — ваш электронный билет</title>
+    <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico">
+    <style type="text/css">
+        html, body {margin: 0; padding: 0;}
+        #canvas {width: 740px; margin: 0 auto; padding: 40px 0;}
+        #term {margin: 50px 0;}
+    </style>
+    <style type="text/css" media="print">
+        #canvas {padding: 0;}
+        #term {display: none;}
+        a {text-decoration: none;}
+    </style>
+</head>
+<body>
+<div id="canvas">
+
+  <table cellspacing="0" cellpadding="0" width="740" style="width: 740px; color: #000; font-size: 13px; line-height: 1.25; font-family: Arial, sans-serif; letter-spacing: -0.02em;">
+  <col width="240">
+  <col width="240">
+  <col width="15">
+  <col width="*">
+  <col width="15">
+  <col width="60">
+  <%= yield %>
+
+  </table>
+</div>
+<script type="text/javascript">
+//window.print();
+</script>
+</body>
+</html>

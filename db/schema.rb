@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110818103631) do
+ActiveRecord::Schema.define(:version => 20110819150703) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -161,6 +161,12 @@ ActiveRecord::Schema.define(:version => 20110818103631) do
     t.integer  "average_price"
     t.integer  "average_time_delta"
     t.integer  "hot_offers_counter", :default => 0
+  end
+
+  create_table "flight_groups", :force => true do |t|
+    t.text     "code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "geo_taggings", :force => true do |t|
