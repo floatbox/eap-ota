@@ -8,6 +8,9 @@ class PnrMailer < ActionMailer::Base
 
   def notification(email, number)
     @pnr = PNR.get_by_number(number)
+    @prices = @pnr.order
+    @passengers = @pnr.passengers
+    @last_pay_time = @pnr.order.last_pay_time
     mail :to => email, :subject => @pnr.order.show_as_ticketed? ? "Ваш электронный билет" : "Ваше бронирование"
     if @pnr.order.show_as_ticketed?
       render 'pnr/ticket'
