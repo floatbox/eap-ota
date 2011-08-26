@@ -11,11 +11,12 @@ class PnrMailer < ActionMailer::Base
     @prices = @pnr.order
     @passengers = @pnr.passengers
     @last_pay_time = @pnr.order.last_pay_time
-    mail :to => email, :subject => @pnr.order.show_as_ticketed? ? "Ваш электронный билет" : "Ваше бронирование"
-    if @pnr.order.show_as_ticketed?
-      render 'pnr/ticket'
-    else
-      render 'pnr/booking'
+    mail :to => email, :subject => @pnr.order.show_as_ticketed? ? "Ваш электронный билет" : "Ваше бронирование" do
+      if @pnr.order.show_as_ticketed?
+        render 'pnr/ticket'
+      else
+        render 'pnr/booking'
+      end
     end
   end
 
