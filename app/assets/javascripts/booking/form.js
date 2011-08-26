@@ -85,19 +85,29 @@ getVariant: function() {
 },
 load: function(number) {
     var that = this;
-    this.request = $.get('/booking/', {
-        number: number
-    }, function(result) {
-        that.key = number;
-        that.el.find('.booking-content').html(result);
-        if (that.variant && that.prebooking) {
-            if (that.compare()) {
-                that.show();
+    this.request = $.ajax({
+        url: '/booking/',
+        method: 'GET',
+        data: {number: number},
+        success: function(result) {
+            that.key = number;
+            that.el.find('.booking-content').html(result);
+            if (that.variant && that.prebooking) {
+                if (that.compare()) {
+                    that.show();
+                }
+            } else {
+                that.waiting = true;
             }
-        } else {
-            that.waiting = true;
+            if (that.el.find('.booking-corporate').length === 0) {
+                that.activate();
+            } else {
+                that.form.el = that.el.find('.booking-corporate');
+            }
+        },
+        error: function() {
+            that.failed();
         }
-        that.activate();
     });
 },
 compare: function() {
@@ -288,7 +298,7 @@ track: function(result) {
         _gaq.push(['_trackTrans']);
     }
     if (window.yaCounter5324671) {
-        yaCounter5324671.hit('/#' + pageurl.summary + '/success');
+        yaCounter5324671.hit('/booking/success');
     }
 },
 parse: function(errors) {

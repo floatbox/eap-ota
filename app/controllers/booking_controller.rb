@@ -48,7 +48,7 @@ class BookingController < ApplicationController
     @order_form = OrderForm.load_from_cache(params[:number])
     @order_form.init_people
     @search = PricerForm.load_from_cache(@order_form.query_key)
-    render :partial => 'embedded'
+    render :partial => corporate_mode? ? 'corporate' : 'embedded'
   end
 
   def pay

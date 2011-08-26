@@ -1,4 +1,4 @@
-﻿window.eviterraInit = function() {
+﻿var initHome = function() {
 
     // Браузеры с упрощенными эффектами
     browser.scanty = (browser.platform.search(/ipad|iphone/) !== -1 || browser.name.search(/safari|chrome|firefox|msie9/) === -1);
