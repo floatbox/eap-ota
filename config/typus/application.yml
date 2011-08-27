@@ -100,7 +100,7 @@ Order:
         last_pay_time: long
 
   order_by: -created_at
-  search: ^pnr_number, email, phone
+  search: ^pnr_number, email, phone, =order_id
   options:
     default_action_on_item: show
     #action_after_save: show
@@ -164,9 +164,10 @@ Payment:
         created_at: long
   options:
     default_action_on_item: show
-  search: =id_override, =id, name_in_card
+  search: =ref, name_in_card
   relationships: order
   order_by: -created_at
+  filters: created_at
   application: Misc
 
 
