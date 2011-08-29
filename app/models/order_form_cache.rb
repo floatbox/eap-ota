@@ -20,6 +20,7 @@ class OrderFormCache
     Variant
     Flight
     Segment
+    TechnicalStop
     recommendation_yml? && YAML.load(recommendation_yml)
   end
 

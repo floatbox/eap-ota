@@ -32,8 +32,6 @@ Carrier:
     default: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
     list: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
     form: ru_shortname, ru_longname, en_shortname, en_longname, iata, iata_ru, country, bonus_program_name, alliance, gds, interlines, consolidator, color, font_color, comment
-    options:
-      read_only: interlines, payments
   order_by: en_shortname, ru_shortname
   relationships: country, alliance, gds, consolidator
   filters: country, gds, consolidator
@@ -60,8 +58,6 @@ Airport:
     list: iata, name_ru, name_en, importance, city
     form: iata, iata_ru, name_en, name_ru, synonym_list, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in, domestic, icao, federal, international, runway_length, lat, lng, importance, city, disabled
     csv: iata, name_ru, city
-    options:
-      read_only: morpher_to, morpher_from, morpher_in
   order_by: name_ru
   relationships: city, country, geo_tags
   filters:
@@ -79,7 +75,6 @@ City:
     csv: iata, name_ru
     options:
       selectors: timezone
-      read_only: morpher_to, morpher_from, morpher_in
   order_by: name_ru
   relationships: airports, country, geo_tags, region
   filters: country
@@ -105,7 +100,7 @@ Order:
         last_pay_time: long
 
   order_by: -created_at
-  search: ^pnr_number, email, phone
+  search: ^pnr_number, email, phone, =order_id
   options:
     default_action_on_item: show
     #action_after_save: show
@@ -126,7 +121,6 @@ OrderComment:
     form: order, text, assigned_to, status, priority
     show: order, text, created_at, typus_user, assigned_to, status, priority
     options:
-      read_only: order
       selectors: status, priority
       date_formats:
         created_at: long
@@ -170,9 +164,10 @@ Payment:
         created_at: long
   options:
     default_action_on_item: show
-  search: =id_override, =id, name_in_card
+  search: =ref, name_in_card
   relationships: order
   order_by: -created_at
+  filters: created_at
   application: Misc
 
 
@@ -216,7 +211,6 @@ Region:
     list: name_ru, name_en, country, synonym_list
     form: name_ru, name_en, country, lat, lng, synonym_list, region_type, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in
     options:
-      read_only: morpher_to, morpher_from, morpher_in
       selectors: region_type
   order_by: name_ru
   relationships: cities, country
@@ -230,7 +224,6 @@ Country:
     list: alpha2, name_ru, name_en, full_name_ru, continent, importance, synonym_list
     form: name_ru, name_en, full_name_ru, alpha2, alpha3, iso, continent, continent_part_ru, importance, synonym_list, lat, lng, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in, main_city_iatas_as_text
     options:
-      read_only: morpher_to, morpher_from, morpher_in, main_city_iatas_as_text
       selectors: continent
   order_by: name_ru
   relationships: carriers, airports, cities, geo_tags, regions
