@@ -103,7 +103,7 @@ module CommissionRules
   end
 
   # FIXME специфично для амадеуса+авиацентр. вынести
-  def consolidator_markup_fx
+  def consolidator_markup
     if !subagent.percentage? && subagent.rate <= 5
       # особые условия для этих компаний.
       if %W( LH LX KL AF OS ).include? carrier

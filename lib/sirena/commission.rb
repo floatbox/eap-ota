@@ -41,7 +41,7 @@ class Sirena::Commission
     end
   end
 
-  def consolidator_markup_fx
+  def consolidator_markup
     if twopcnt
       Commission::Formula.new('2% + 50')
     else
