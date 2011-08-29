@@ -32,7 +32,7 @@ module Amadeus::Response
       doc.send(:xpath, *args)
     end
 
-    def parse_date elem
+    def parse_date_element elem
       return unless elem.present?
       year = (elem / "r:year").to_i
       month = (elem / "r:month").to_i

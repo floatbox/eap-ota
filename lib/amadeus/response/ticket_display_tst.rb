@@ -24,6 +24,11 @@ module Amadeus
       def validating_carrier_code
         xpath('//r:carrierCode').to_s
       end
+
+      # нужен LT. есть еще CRD - дата созания маски(?), LMD - дата модификации
+      def last_tkt_date
+        parse_date_element(xpath('//r:lastTktDate[r:businessSemantic="LT"]/r:dateTime'))
+      end
     end
   end
 end

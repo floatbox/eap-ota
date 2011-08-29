@@ -15,6 +15,7 @@ describe Amadeus::Response::TicketDisplayTST do
     specify { subject.prices_with_refs.values[0].should have(4).keys }
     specify { subject.prices_with_refs.values[0].should == {:price_fare=>5985, :price_tax=>656, :price_fare_infant => 600, :price_tax_infant => 171}}
     its(:validating_carrier_code) { should == 'FV' }
+    its(:last_tkt_date) { should == Date.new(2011, 4, 14) }
   end
 end
 

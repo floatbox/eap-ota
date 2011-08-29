@@ -18,8 +18,13 @@ module Amadeus
         end.inject {|a, pr| [a[0] + pr[0], a[1] + pr[1]]}
       end
 
+      # бывает еще
+      # A   Not Valid After - Last Travel Date
+      # B   Not Valid Before - First Travel Date
+      # DAT Date override
+      # DO  Booking date override
       def last_tkt_date
-        parse_date(xpath('//r:lastTktDate/r:dateTime'))
+        parse_date_element(xpath('//r:lastTktDate[r:businessSemantic="LT"]/r:dateTime'))
       end
 
       def error_message
