@@ -276,6 +276,46 @@ class Order < ActiveRecord::Base
     end
   end
 
+  # считывание offline брони из GDS
+  ######################################
+  attr_accessor :needs_update_from_gds
+  validate :needs_update_from_gds_filter
+
+  # FIXME сделать кастящий булевый акссессор
+  def needs_update_from_gds_filter
+    case needs_update_from_gds
+    when "1", true
+      update_from_gds
+    end
+  rescue => e
+    errors.add(:needs_update_from_gds, e.message)
+  end
+
+  # злая временная копипаста из load_from_tickets
+  def update_from_gds
+    if source == 'amadeus'
+      pnr_resp = tst_resp = nil
+      Amadeus.booking do |amadeus|
+        pnr_resp = amadeus.pnr_retrieve(:number => pnr_number)
+        tst_resp = amadeus.ticket_display_tst(:number => pnr_number)
+        amadeus.pnr_ignore
+      end
+      self.departure_date = pnr_resp.flights.first.dept_date
+      if tst_resp.success?
+        self.price_fare = tst_resp.total_fare
+        self.price_tax = tst_resp.total_tax
+        self.commission_carrier = tst_resp.validating_carrier
+        self.blank_count = tst_resp.fares_count
+      end
+
+    elsif source == 'sirena'
+      order_resp = Sirena::Service.new.order(pnr_number, sirena_lead_pass)
+      self.departure_date = order_resp.flights.first.dept_date
+    end
+
+  end
+
+
   def payture_state
     payments.last ? payments.last.payture_state : ''
   end
