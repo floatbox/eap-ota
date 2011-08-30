@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 $(function(){
-	input = '<input name="created_at" id="created_at" type="text" value="<%= params[:created_at] %>" style="height: 1.8em;" />'
+	input = '<label for="created_at">Дата: <input name="created_at" id="created_at" type="text" value="<%= params[:created_at] %>" style="height: 1.8em;" /></label>'
 	$('#created_at').parent().html(input);
 
 	$('#created_at').daterangepicker({

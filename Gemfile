@@ -1,5 +1,5 @@
 source 'http://rubygems.org'
-gem 'rails', '3.1.0.rc6'
+gem 'rails', '3.1.0.rc8'
 
 gem 'jquery-rails'
 group :assets do
