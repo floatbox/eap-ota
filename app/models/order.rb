@@ -72,6 +72,7 @@ class Order < ActiveRecord::Base
 
   composed_of :commission_agent, :class_name => 'Commission::Formula', :mapping => %w(commission_agent formula), :converter => lambda {|val| Commission::Formula.new(val) }, :allow_nil => true
   composed_of :commission_subagent, :class_name => 'Commission::Formula', :mapping => %w(commission_subagent formula), :converter => lambda {|val| Commission::Formula.new(val) }, :allow_nil => true
+  composed_of :commission_consolidator_markup, :class_name => 'Commission::Formula', :mapping => %w(commission_consolidator_markup formula), :converter => lambda {|val| Commission::Formula.new(val) }, :allow_nil => true
 
   # FIXME сломается на ruby1.9
   def capitalize_pnr
@@ -184,6 +185,7 @@ class Order < ActiveRecord::Base
         :carrier,
         :agent,
         :subagent,
+        :consolidator_markup,
         :agent_comments,
         :subagent_comments
 
