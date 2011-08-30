@@ -13,6 +13,8 @@ class Recommendation
     :city_iatas, :airport_iatas, :country_iatas, :route,
       :to => 'variants.first'
 
+  delegate :subagent, :agent, :consolidator_markup, :to => :commission, :prefix => :commission, :allow_nil => true
+
   def availability
     availabilities.compact.min.to_i if availabilities
   end
@@ -115,12 +117,12 @@ class Recommendation
   # доля от комиссии консолидатора, которая достанется нам
   def price_share
     return 0 unless commission
-    commission.subagent.call(price_fare, :multiplier =>  blank_count)
+    commission_subagent.call(price_fare, :multiplier =>  blank_count)
   end
 
   def price_consolidator_markup
     return 0 unless commission
-    commission.consolidator_markup.call(price_fare, :multiplier => blank_count)
+    commission_consolidator_markup.call(price_fare, :multiplier => blank_count)
   end
 
   def price_discount

@@ -6,7 +6,10 @@ class Ticket < ActiveRecord::Base
   belongs_to :order
   belongs_to :parent, :class_name => 'Ticket'
   has_one :refund, :class_name => 'Ticket', :foreign_key => 'parent_id'
-  delegate :source, :commission_carrier, :pnr_number, :need_attention, :paid_by, :commission_carrier, :to => :order, :allow_nil => true
+
+  delegate :source, :pnr_number, :need_attention, :paid_by, :to => :order
+
+  delegate :commission_carrier, :commission_agent, :commission_subagent, :commission_consolidator_markup, :to => :order, :allow_nil => true
 
   scope :uncomplete, where(:ticketed_date => nil)
 
@@ -96,7 +99,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def price_transfer
-    price_fare + price_tax + price_consolidator_markup - price_share
+      price_fare + price_tax + price_consolidator_markup - price_share
   end
 
   def price_refund
