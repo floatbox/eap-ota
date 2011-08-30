@@ -304,7 +304,7 @@ class Order < ActiveRecord::Base
       if tst_resp.success?
         self.price_fare = tst_resp.total_fare
         self.price_tax = tst_resp.total_tax
-        self.commission_carrier = tst_resp.validating_carrier
+        self.commission_carrier = tst_resp.validating_carrier_code
         self.blank_count = tst_resp.fares_count
       end
 
