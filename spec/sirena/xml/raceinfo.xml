@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sirena>
+  <answer pult="ГРФ365">
+    <raceinfo acomp="ЮТ" num="369" date="26.09.11">
+      <navigation>
+        <airplane>ТУ5</airplane>
+        <date_beg>25.06.11</date_beg>
+        <date_end>01.01.12</date_end>
+        <frequency>
+          <monday>true</monday>
+          <tuesday>true</tuesday>
+          <wednesday>true</wednesday>
+          <thursday>false</thursday>
+          <friday>false</friday>
+          <saturday>true</saturday>
+          <sunday>true</sunday>
+        </frequency>
+        <subclass letter="Б" baseclass="Б" count="9">Б</subclass>
+        <subclass letter="Д" baseclass="Б" count="8">Д</subclass>
+        <subclass letter="Ш" baseclass="Б" count="9">Ш</subclass>
+        <subclass letter="Ю" baseclass="Э" count="9">Ю</subclass>
+        <subclass letter="Э" baseclass="Э" count="9">Э</subclass>
+        <subclass letter="Ж" baseclass="Э" count="9">Ж</subclass>
+        <subclass letter="Ц" baseclass="Э" count="9">Ц</subclass>
+        <subclass letter="К" baseclass="Э" count="0">К</subclass>
+        <subclass letter="М" baseclass="Э" count="9">М</subclass>
+        <subclass letter="Н" baseclass="Э" count="9">Н</subclass>
+        <subclass letter="Я" baseclass="Э" count="9">Я</subclass>
+        <subclass letter="В" baseclass="Э" count="9">В</subclass>
+        <subclass letter="Х" baseclass="Э" count="9">Х</subclass>
+        <subclass letter="Г" baseclass="Э" count="9">Г</subclass>
+        <subclass letter="У" baseclass="Э" count="9">У</subclass>
+        <subclass letter="Е" baseclass="Э" count="9">Е</subclass>
+        <subclass letter="О" baseclass="Э" count="9">О</subclass>
+        <subclass letter="Ы" baseclass="Б" count="9">Ы</subclass>
+        <segment>
+          <departure port="ВНК">МОВ</departure>
+          <arrival port="ПЛК">СПТ</arrival>
+          <depttime>11:05</depttime>
+          <arrvtime>12:25</arrvtime>
+          <flightTime>1:20</flightTime>
+        </segment>
+      </navigation>
+    </raceinfo>
+  </answer>
+</sirena>

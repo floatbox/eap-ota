@@ -15,7 +15,7 @@ class Person
   field :number_in_amadeus, :type => Integer
   field :ticket, :type => String
 
-  attr_accessor :passenger_ref
+  attr_accessor :passenger_ref, :ticket_hash
 
   validates_presence_of :first_name, :last_name, :sex, :nationality_id, :birthday, :passport
   validates_presence_of :document_expiration_date, :unless => :document_noexpiration

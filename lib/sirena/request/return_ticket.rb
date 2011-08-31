@@ -7,6 +7,15 @@ module Sirena
         @pnr_number = pnr_number
         @lead_family = lead_family
       end
+
+      def encrypt?
+        true
+      end
+
+      # временно. документации еще нет.
+      def timeout
+        160
+      end
     end
   end
 end
