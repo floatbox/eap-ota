@@ -1,11 +1,11 @@
 source 'http://rubygems.org'
-gem 'rails', '3.1.0.rc8'
+gem 'rails', '3.1.0'
 
 gem 'jquery-rails'
 group :assets do
   gem "uglifier"
-  gem 'sass-rails', "~> 3.1.0.rc"
-  gem 'coffee-rails', "~> 3.1.0.rc"
+  gem 'sass-rails', "~> 3.1.0"
+  gem 'coffee-rails', "~> 3.1.0"
 end
 
 
