@@ -15,8 +15,6 @@ module CommissionRules
     :check, :examples, :agent_comments, :subagent_comments, :source,
     :expr_date, :strt_date
 
-
-
   def disabled?
     disabled || not_implemented || no_commission
   end
@@ -143,12 +141,12 @@ module CommissionRules
     Conf.amadeus.euro_rate
   end
 
-
   private
 
   def fround x
     ('%.2f' % x.to_f).to_f
   end
+
 
 
   module ClassMethods
@@ -224,7 +222,6 @@ module CommissionRules
       opts[:not_implemented] = true
     end
 
-
     # правило интерлайна
     def interline value=:yes
       opts[:interline] = value
@@ -298,9 +295,8 @@ module CommissionRules
       commissions[recommendation.validating_carrier_iata].present?
     end
 
-
     # test methods
-     def test
+    def test
       self.skip_interline_validity_check = true
       commissions.values.flatten.sort_by {|c| c.source.to_i }.each do |commission|
         (commission.examples || next).each do |code, source|
@@ -312,15 +308,13 @@ module CommissionRules
             error "#{commission.carrier} (line #{source}): - start date doesn't come!"
           elsif proposed == commission ||
                 proposed.nil? && commission.disabled?
-          if proposed == commission  ||
-             (proposed.nil? && commission.disabled?)
             ok "#{commission.carrier} (line #{source}): #{code} - OK"
           elsif proposed.nil?
             error "#{commission.carrier} (line #{source}): #{code} - no applicable commission!"
-  	  else
+          else
             if commission.disabled?
               error "#{commission.carrier} (line #{source}): #{code} - commission non applicable, but got line #{proposed.source}:"
-	    else
+            else
               error "#{commission.carrier} (line #{source}): #{code} - wrong commission applied. Should be:"
               error "agent:    #{commission.agent_comments.chomp}"
               error "subagent: #{commission.subagent_comments.chomp}"
@@ -332,9 +326,7 @@ module CommissionRules
         end
       end
       self.skip_interline_validity_check = false
-
     end
-
 
     def stats
       puts "#{commissions.keys.size} carriers"
