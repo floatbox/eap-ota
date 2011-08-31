@@ -19,7 +19,9 @@ describe Order do
       amadeus.stub(:pnr_ignore)
       
       Amadeus.should_receive(:booking).once.and_yield(amadeus)
-      Ticket.should_receive(:create).with(hash_including(
+      ticket = stub_model(Ticket)
+      Ticket.should_receive(:find_or_create_by_number).and_return(ticket)
+      ticket.should_receive(:update_attributes).with(hash_including(
         :code => "555",
         :number => "2962867063",
         :last_name => 'BEDAREVA',

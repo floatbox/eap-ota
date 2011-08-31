@@ -203,7 +203,6 @@ class Order < ActiveRecord::Base
 
   def load_tickets
     if source == 'amadeus'
-      tickets.every.delete
       pnr_resp = tst_resp = nil
       Amadeus.booking do |amadeus|
         pnr_resp = amadeus.pnr_retrieve(:number => pnr_number)
@@ -228,7 +227,8 @@ class Order < ActiveRecord::Base
         else
           price_fare_ticket * 0.02
         end
-        Ticket.create(passenger.ticket_hash.merge({
+        t = Ticket.find_or_create_by_number(passenger.ticket_hash[:number])
+        t.update_attributes(passenger.ticket_hash.merge({
           :order => self,
           :commission_subagent => commission_subagent.to_s,
           :price_fare => price_fare_ticket,
