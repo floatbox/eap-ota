@@ -55,11 +55,14 @@ module Amadeus
           ti.xpath('r:passenger').map do |passenger|
               passenger_ref = (passenger / '../../../r:elementManagementPassenger/r:reference/r:number').to_i
               need_infant = (passenger / 'r:type').to_s == 'INF'
+              ticket_hash = ticket(passenger_ref, need_infant) || {}
+              ticket_hash.delete(:inf)
               Person.new(:first_name => passenger.xpath('r:firstName').to_s,
                          :last_name => surname,
                          :passenger_ref => passenger_ref,
                          :passport => passport(passenger_ref, need_infant),
-                         :ticket => ticket(passenger_ref, need_infant),
+                         :ticket => ticket_hash.present? && ("#{ticket_hash[:code]}-#{ticket_hash[:number]}") || nil,
+                         :ticket_hash => ticket_hash,
                          :number_in_amadeus => (ti / '../../r:elementManagementPassenger/r:lineNumber').to_s,
                          :infant_or_child => need_infant ? 'i' : nil
                          )
@@ -84,10 +87,26 @@ module Amadeus
             r:referenceForDataElement/r:reference[r:qualifier='PT'][r:number=#{passenger_ref}]
           ]/r:otherDataFreetext[r:freetextDetail/r:type='P06']/r:longFreetext"
         ).each do |fa|
-          fa.to_s =~ %r<(PAX|INF) ([^/]*)>
-          return $2 if need_infant == ($1 == 'INF')
+          res = parsed_ticket_string(fa.to_s)
+          return res if res && need_infant == (res[:inf] == 'INF')
         end
         return
+      end
+
+      def parsed_ticket_string(s)
+        m = s.to_s.match(/(PAX|INF) (\d+)-([\d-]+)\/\w([TRV])(\w{2})\/\w+\/(\w+)\/(\w+)\/(\d+)/)
+        if m
+          return({
+            :number => m[3],
+            :code => m[2],
+            :status => {'T' => 'ticketed', 'V' => 'voided', 'R' => 'returned'}[m[4]],
+            :ticketed_date => Date.strptime(m[6], '%d%h%y'),
+            :validating_carrier => m[5],
+            :office_id => m[7],
+            :validator => m[8],
+            :inf => m[1]
+            })
+        end
       end
 
       def email

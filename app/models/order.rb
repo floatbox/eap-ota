@@ -228,10 +228,8 @@ class Order < ActiveRecord::Base
         else
           price_fare_ticket * 0.02
         end
-        Ticket.create(
+        Ticket.create(passenger.ticket_hash.merge({
           :order => self,
-          :number => passenger.ticket_number.to_s,
-          :code => passenger.ticket_code.to_s,
           :commission_subagent => commission_subagent.to_s,
           :price_fare => price_fare_ticket,
           :price_tax => price_tax_ticket,
@@ -242,6 +240,7 @@ class Order < ActiveRecord::Base
           :first_name => passenger.first_name,
           :last_name => passenger.last_name,
           :passport => passenger.passport
+        })
         )
       end
 
