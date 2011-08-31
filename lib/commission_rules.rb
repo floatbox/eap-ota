@@ -90,8 +90,8 @@ module CommissionRules
     routes.include? recommendation.route
   end
 
-  def applicable_date? 
-    if expr_date 
+  def applicable_date?
+    if expr_date
       return true unless expr_date.to_date.past?
     elsif strt_date
       return true unless strt_date.to_date.future?
@@ -274,7 +274,7 @@ module CommissionRules
     def check &block
       opts[:check] = block
     end
-    
+
     def expr_date date
       opts[:expr_date] = date
     end
@@ -355,3 +355,4 @@ module CommissionRules
   end
 
 end
+

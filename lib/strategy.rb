@@ -379,5 +379,17 @@ class Strategy
     end
   end
 
+  def void
+    debugger
+    case source
+    when 'amadeus'
+      raise "Can't do this for Amadeus, sorry"
+    when 'sirena'
+      sirena = Sirena::Service.new
+      logger.error "Strategy::Sirena: voiding #{@order.pnr_number}"
+      sirena.return_ticket(@order.pnr_number, @order.sirena_lead_pass)
+      #TODO: пометить заказ как войдрованный
+    end
+  end
 end
 

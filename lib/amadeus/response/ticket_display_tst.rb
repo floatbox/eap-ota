@@ -20,9 +20,34 @@ module Amadeus
         end
       end
 
+      def total_fare
+        prices_with_refs.values.inject(0) do |fare, prices|
+          fare += prices[:price_fare]
+          fare += prices[:price_fare_infant] if prices[:price_fare_infant]
+        end
+      end
+
+      def total_tax
+        prices_with_refs.values.inject(0) do |fare, prices|
+          fare += prices[:price_tax]
+          fare += prices[:price_tax_infant] if prices[:price_tax_infant]
+        end
+      end
+
       # может быть несколько, для разных сегментов и тарифов. но для целей помощи операторам - первый сойдет.
       def validating_carrier_code
         xpath('//r:carrierCode').to_s
+      end
+
+      # нужен LT. есть еще CRD - дата созания маски(?), LMD - дата модификации
+      def last_tkt_date
+        parse_date_element(xpath('//r:lastTktDate[r:businessSemantic="LT"]/r:dateTime'))
+      end
+
+      # количество масок. количество бланков, видимо, тоже.
+      # FIXME: проверить
+      def fares_count
+        xpath('//r:fareList').size
       end
     end
   end

@@ -11,6 +11,7 @@ ru:
         price_our_markup: "Сервисный сбор Эвитерра"
         price_total: "Итого себестоимость билета"
         price_with_payment_commission: "Итого к оплате"
+        needs_update_from_gds: "Получить данные бронирования из GDS (экспериментально)"
 
   views:
     pagination:
@@ -24,3 +25,6 @@ ru:
   Yesterday: 'Вчера'
   All: 'Все'
   Unticketed: 'Необилечено'
+  'Save and add another': 'Сохранить и добавить еще один'
+  'Save': 'Сохранить'
+  'Save and continue editing': 'Сохранить и продолжить редактирование'
