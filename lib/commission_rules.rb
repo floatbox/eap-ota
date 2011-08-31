@@ -14,7 +14,7 @@ module CommissionRules
     :departure, :departure_country, :important,
     :check, :examples, :agent_comments, :subagent_comments, :source,
     :expr_date, :strt_date
-    :findate
+
 
 
   def disabled?
@@ -143,29 +143,6 @@ module CommissionRules
     Conf.amadeus.euro_rate
   end
 
-  def date_accords?(incoming_date)
-
-	incoming_date = incoming_date.to_date
-	if !startdate && !findate
-		return true
-	elsif startdate && findate
-		localstartdate = startdate.to_date
-		localfindate = findate.to_date
-		if localstartdate <= incoming_date && incoming_date <= localfindate
-			return true
-		end
-	elsif findate
-		localfindate = findate.to_date
-		if incoming_date <=localfindate
-			return true
-		end
-	elsif startdate
-		localstartdate = startdate.to_date
-		if incoming_date >= localstartdate
-			return true
-		end
-	end
-  end
 
   private
 
@@ -325,7 +302,6 @@ module CommissionRules
     # test methods
      def test
       self.skip_interline_validity_check = true
-      @check_date = Date.today
       commissions.values.flatten.sort_by {|c| c.source.to_i }.each do |commission|
         (commission.examples || next).each do |code, source|
           rec = Recommendation.example(code, :carrier => commission.carrier)
