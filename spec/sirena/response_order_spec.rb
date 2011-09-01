@@ -39,15 +39,15 @@ describe Sirena::Response::Order do
     its(:phone) { should == '+79265555555' }
     it { should have(2).flights }
     its(:booking_classes) { should == %W(Y Y) }
-    its("tickets.every.number") { should == [ '6150600213', '6150600214']}
-    its("tickets.every.code") { should == ['262', '262'] }
-    its("tickets.every.price_fare") { should == [ 2000, 1000]}
-    its("tickets.every.price_tax") { should == [ 2000, 2000]}
-    its("tickets.every.route") { should == [ "ДМД - ПЛК; ПЛК - ДМД", "ДМД - ПЛК; ПЛК - ДМД"]}
-    its("tickets.every.cabins") { should == [ "Y", "Y"]}
-    its("tickets.every.first_name") { should == ["ALEKSEY", "MASHA"] }
-    its("tickets.every.last_name") { should == ["IVANOV", "IVANOVA"] }
-    its("tickets.every.passport") { should == ["6555555555", "VВГ123456"] }
+    specify{(subject.ticket_hashes.every[:number]).should == [ '6150600213', '6150600214']}
+    specify{(subject.ticket_hashes.every[:code]).should == ['262', '262']}
+    specify{(subject.ticket_hashes.every[:price_fare]).should == [ 2000, 1000]}
+    specify{(subject.ticket_hashes.every[:price_tax]).should == [ 2000, 2000]}
+    specify{(subject.ticket_hashes.every[:route]).should == [ "ДМД - ПЛК; ПЛК - ДМД", "ДМД - ПЛК; ПЛК - ДМД"]}
+    specify{(subject.ticket_hashes.every[:cabins]).should == [ "Y", "Y"]}
+    specify{(subject.ticket_hashes.every[:first_name]).should == ["ALEKSEY", "MASHA"]}
+    specify{(subject.ticket_hashes.every[:last_name]).should == ["IVANOV", "IVANOVA"]}
+    specify{(subject.ticket_hashes.every[:passport]).should == ["6555555555", "VВГ123456"]}
   end
 
   describe 'when airport is not reported' do

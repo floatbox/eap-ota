@@ -244,13 +244,12 @@ class Order < ActiveRecord::Base
         )
       end
 
-      update_attribute(:departure_date, pnr_resp.flights.first.dept_date)
+      update_attribute(:departure_date, pnr_resp.flights.first.dept_date) if pnr_resp.flights.present?
     elsif source == 'sirena'
-      tickets.every.delete
       order_resp = Sirena::Service.new.order(pnr_number, sirena_lead_pass)
-      order_resp.tickets.each do |t|
-        t.order = self
-        t.save
+      order_resp.ticket_hashes.each do |t|
+        ticket = tickets.find_or_create_by_number(t[:number])
+        ticket.update_attributes(t)
       end
       update_attribute(:departure_date, order_resp.flights.first.dept_date)
     end
