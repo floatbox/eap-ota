@@ -315,16 +315,23 @@ no_commission
 carrier "AZ", "ALITALIA"
 ########################################
 
-example 'svocdg'
-agent    "1 euro. с билета по опубл. тарифам на собств. рейсы AZ;"
-subagent "5 руб. с билета по опубл. тарифам на собств. рейсы AZ;"
-commission "1eur/5"
-
 example 'svocdg cdgsvo/ab'
 agent    "1 euro с билета по опубл. тарифам на рейсы Interline, если 1-ый сегмент выполнен под кодом AZ."
 subagent "5 руб. с билета по опубл. тарифам на рейсы Interline, если 1-ый сегмент выполнен под кодом AZ."
 interline :first
 commission "1eur/5"
+
+example 'svocdg/economy'
+agent "5%"
+subagent "3.5%"
+classes :economy
+commission "5%/3.5%"
+
+example 'svocdg/business cdgsvo/business'
+agent "7%"
+subagent "5%"
+classes :business
+commission "7%/5%"
 
 example 'svocdg/ab cdgsvo'
 no_commission
