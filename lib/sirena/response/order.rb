@@ -1,7 +1,7 @@
 module Sirena
   module Response
     class Order < Sirena::Response::Base
-      attr_accessor :number, :flights, :booking_classes, :passengers, :phone, :email, :tickets
+      attr_accessor :number, :flights, :booking_classes, :passengers, :phone, :email, :ticket_hashes
 
       def parse
         @number = xpath("//regnum").text
@@ -71,7 +71,7 @@ module Sirena
           res[:cabins] << cabin
           res[:flights] << "#{departure_iata} - #{arrival_iata}"
         }
-        @tickets = result.map do |k, v| Ticket.new({
+        @ticket_hashes = result.map do |k, v| {
             :number => (k.match(/([\d\w]+)-?(\d{10}-?\d*)/).to_a)[2],
             :code => (k.match(/([\d\w]+)-?(\d{10}-?\d*)/).to_a)[1],
             :price_fare => v[:price_fare],
@@ -81,7 +81,7 @@ module Sirena
             :first_name => v[:first_name],
             :last_name => v[:last_name],
             :passport => v[:passport]
-          })
+          }
         end
 
       end

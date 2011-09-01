@@ -8,6 +8,7 @@ class PNR
     pnr.number = number
     if pnr.order && pnr.order.source == 'sirena'
       order = Sirena::Service.new.order(number, pnr.order.sirena_lead_pass)
+      raise Sirena::Error, order.error if order.error
       copy_attrs order, pnr,
         :flights,
         :booking_classes,

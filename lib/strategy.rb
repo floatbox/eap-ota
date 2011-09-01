@@ -250,7 +250,6 @@ class Strategy
       end
 
       logger.info "Strategy::Sirena: processing booking: #{response.pnr_number}"
-
       unless [@rec.price_fare, @rec.price_tax] == [response.price_fare, response.price_tax]
         logger.error "Strategy::Sirena: price changed on booking: #{@rec.price_fare}, #{@rec.price_tax} -> #{response.price_fare}, #{response.price_tax}"
         sirena.booking_cancel(response.pnr_number, response.lead_family)
