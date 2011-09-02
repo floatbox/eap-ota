@@ -219,22 +219,12 @@ class Order < ActiveRecord::Base
           price_fare_ticket = prices.present? ? prices[ref][:price_fare].to_i : 0
           price_tax_ticket = prices.present? ? prices[ref][:price_tax].to_i : 0
         end
-        price_share_ticket = commission_subagent['%'] ? (price_fare_ticket * commission_subagent[0...-1].to_f / 100) : commission_subagent.to_f
-        price_consolidator_markup_ticket = if price_share_ticket > 5
-          0
-        elsif %W( LH LX KL AF OS ).include? commission_carrier
-          price_fare_ticket * 0.01
-        else
-          price_fare_ticket * 0.02
-        end
         t = Ticket.find_or_create_by_number(passenger.ticket_hash[:number])
         t.update_attributes(passenger.ticket_hash.merge({
           :order => self,
           :commission_subagent => commission_subagent.to_s,
           :price_fare => price_fare_ticket,
           :price_tax => price_tax_ticket,
-          :price_consolidator_markup => price_consolidator_markup_ticket,
-          :price_share => price_share_ticket,
           :cabins => cabins && cabins.gsub(/[MW]/, "Y").split(',').uniq.join(' + '),
           :route => route,
           :first_name => passenger.first_name,
