@@ -139,7 +139,7 @@ class Strategy
               :recommendation => @rec
             ).segments_confirmed?
 
-          logger.error 'Strategy::Amadeus: segments aren\'t confirmed in create_fbooking method'
+          logger.error 'Strategy::Amadeus: segments aren\'t confirmed in create_booking method'
           return
         end
         add_multi_elements = amadeus.pnr_add_multi_elements(@order_form)
