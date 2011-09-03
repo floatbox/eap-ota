@@ -293,7 +293,8 @@ class Order < ActiveRecord::Base
         self.price_fare = tst_resp.total_fare
         self.price_tax = tst_resp.total_tax
         self.commission_carrier = tst_resp.validating_carrier_code
-        self.blank_count = tst_resp.fares_count
+        # не работает
+        # self.blank_count = tst_resp.fares_count
       end
 
     elsif source == 'sirena'
