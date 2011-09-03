@@ -3,12 +3,25 @@ class Ticket < ActiveRecord::Base
   belongs_to :order
   delegate :source, :commission_carrier, :pnr_number, :need_attention, :paid_by, :commission_carrier, :to => :order, :allow_nil => true
 
+  # FIXME сделать перечисление прямо из базы, через uniq
+  def self.office_ids
+    []
+  end
+
   def ticket_date
     created_at.strftime('%d.%m.%Y') if created_at
   end
 
   def number_with_code
     "#{code}-#{number}" if number.present?
+  end
+
+  def name
+    "#{last_name} #{first_name}"
+  end
+
+  def carrier
+    validating_carrier || commission_carrier
   end
 
   def price_total
