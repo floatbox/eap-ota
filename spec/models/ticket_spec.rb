@@ -13,20 +13,27 @@ describe Ticket do
 
   context "#recalculate_commissions" do
     context "with all the prices" do
+      let (:fare) {2000}
+      let (:order) {
+        Order.new(
+          :commission_subagent => '4',
+          :commission_consolidator_markup => '2% + 50'
+        )
+      }
       let (:ticket) {
-        described_class.new(
-          :price_fare => 2000,
-          :commission_subagent => '4'
+        Ticket.new(
+          :order => order,
+          :price_fare => fare
         )
       }
       before { ticket.recalculate_commissions }
       its(:price_share) {should == 4}
-      its(:price_consolidator_markup) {should == 2000 * 0.02}
+      its(:price_consolidator_markup) {should == (fare * 0.02 + 50) }
     end
 
     context "without commission_subagent" do
       let (:ticket) {
-        described_class.new(
+        Ticket.new(
           :price_fare => 2000
         )
       }

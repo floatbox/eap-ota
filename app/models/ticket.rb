@@ -142,14 +142,10 @@ class Ticket < ActiveRecord::Base
 
   def recalculate_commissions
     if commission_subagent
-      self.price_share = commission_subagent['%'] ? (price_fare * commission_subagent[0...-1].to_f / 100) : commission_subagent.to_f
-      self.price_consolidator_markup = if price_share > 5
-          0
-        elsif %W( LH LX KL AF OS ).include? commission_carrier
-          price_fare * 0.01
-        else
-          price_fare * 0.02
-        end
+      self.price_share = commission_subagent.call(price_fare)
+    end
+    if commission_consolidator_markup
+      self.price_consolidator_markup = commission_consolidator_markup.call(price_fare)
     end
     true
   end
