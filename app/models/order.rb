@@ -444,5 +444,10 @@ class Order < ActiveRecord::Base
     Payture.new.refund(refund_amount, ref)
   end
 
+  # для админки
+  def to_label
+    "#{source} #{pnr_number}"
+  end
+
 end
 
