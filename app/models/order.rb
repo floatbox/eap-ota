@@ -293,8 +293,8 @@ class Order < ActiveRecord::Base
 
   def needs_update_from_gds_filter
     update_from_gds
-  rescue => e
-    errors.add(:needs_update_from_gds, e.message)
+  # rescue => e
+  #  errors.add(:needs_update_from_gds, e.message)
   end
 
   # злая временная копипаста из load_from_tickets
@@ -325,6 +325,31 @@ class Order < ActiveRecord::Base
 
     end
 
+  end
+
+  # пересчет тарифов и такс
+  ######################################
+  attr_accessor :needs_recalculation
+  cast_to_boolean :needs_recalculation
+  validate :needs_recalculation_filter, :if => :needs_recalculation
+
+  def needs_recalculation_filter
+    recalculation
+  rescue => e
+    errors.add(:needs_recalculation, e.message)
+  end
+
+  def recalculation
+    # price_tax получаются из pnr
+    # price_fare получаются из pnr
+    # price_difference - неактуально и неверно? грохнуть?
+    self.price_share = commission_subagent.call(price_fare, :multiplier =>  blank_count)
+    self.price_consolidator_markup = commission_consolidator_markup.call(price_fare, :multiplier => blank_count)
+
+    # cash_payment_markup оставлять ее тоже?
+    # price_our_markup внести сюда скидку для кэша?
+
+    self.price_with_payment_commission = price_total + Payture.commission(price_total)
   end
 
 

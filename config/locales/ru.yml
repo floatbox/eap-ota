@@ -37,6 +37,7 @@ ru:
         needs_update_from_gds: "Получить данные бронирования из GDS (экспериментально)"
         offline_booking: "Неавтоматический режим обработки бронирования (offline booking)"
         pricing_method: 'Рассчет цены (pricing method)'
+        needs_recalculation: "Пересчитать комиссии"
 
   views:
     pagination:
