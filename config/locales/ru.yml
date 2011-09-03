@@ -22,9 +22,35 @@ ru:
       truncate: "..."
 
   # typus использует верхний уровень
-  Yesterday: 'Вчера'
-  All: 'Все'
-  Unticketed: 'Необилечено'
-  'Save and add another': 'Сохранить и добавить еще один'
-  'Save': 'Сохранить'
-  'Save and continue editing': 'Сохранить и продолжить редактирование'
+
+  # scopes
+  Yesterday: Вчера
+  All: Все
+  Unticketed: Необилечено
+
+  # buttons
+  Save and add another: Сохранить и добавить еще один
+  Save: Сохранить
+  Save and continue editing: Сохранить и продолжить редактирование
+
+  # Applications
+  Applications: Разделы
+  Models: Таблицы
+
+  Hot Offers: Горячие предложения
+  Misc: Прочее
+  Base: Справочники
+  Geo: Геосправочники
+  Admin: Администрирование
+  Orders: Заказы
+
+  'Show by %{attribute}': '-- %{attribute} --'
+  'View all %{attribute}': '-- %{attribute} --'
+  'No %{resources} found': '%{resources} отсутствуют'
+  All Entries: Cписок
+  Trash: Удалить
+
+  # bulk actions
+  Charge: Списать с карты
+  Apply: Применить
+
