@@ -33,6 +33,8 @@ ru:
   Save and add another: Сохранить и добавить еще один
   Save: Сохранить
   Save and continue editing: Сохранить и продолжить редактирование
+  'Add New %{resource}': 'Создание нового %{resource}'
+  'Update Completer': 'Перегенерить комплитер'
 
   # Applications
   Applications: Разделы
