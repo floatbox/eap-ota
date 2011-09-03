@@ -9,7 +9,7 @@ AirlineAlliance:
     list: name, bonus_program_name
     form: name, bonus_program_name
   relationships: carriers
-  application: Base
+  application: Base, 5
 
 GlobalDistributionSystem:
   fields:
@@ -17,7 +17,7 @@ GlobalDistributionSystem:
     list: name
     form: name
   relationships: carriers
-  application: Base
+  application: Base, 5
 
 Consolidator:
   fields:
@@ -25,7 +25,7 @@ Consolidator:
     list: name, booking_office, ticketing_office
     form: name, booking_office, ticketing_office
   relationships: carriers
-  application: Base
+  application: Base, 5
 
 Carrier:
   fields:
@@ -36,7 +36,7 @@ Carrier:
   relationships: country, alliance, gds, consolidator
   filters: country, gds, consolidator
   search: ru_shortname, ru_longname, en_shortname, en_longname, ^iata
-  application: Base
+  application: Base, 5
 
 Airplane:
   fields:
@@ -50,7 +50,7 @@ Airplane:
   relationships:
   filters: engine_type
   search: ^iata, name_ru, name_en
-  application: Base
+  application: Base, 5
 
 Airport:
   fields:
@@ -64,7 +64,7 @@ Airport:
   search: name_ru, name_en, ^iata, synonym_list
   actions:
     index: update_completer
-  application: Geo
+  application: Geo, 4
   export: csv
 
 City:
@@ -81,7 +81,7 @@ City:
   search: name_ru, name_en, ^iata, synonym_list
   actions:
     index: update_completer
-  application: Geo
+  application: Geo, 4
   export: csv
 
 Order:
@@ -113,7 +113,7 @@ Order:
   #   show: cancel, ticket, charge, unblock, show_pnr
   filters:  created_at, source, payment_status, ticket_status, payment_type
   relationships: payments, tickets, order_comments
-  application: Orders
+  application: Orders, 1
   export: csv
 
 OrderComment:
@@ -135,7 +135,7 @@ OrderComment:
   filters: created_at, typus_user, assigned_to, status, priority
   relationships: order, typus_user
   order_by: -created_at
-  application: Misc
+  application: Misc, 2
 
 Ticket:
   fields:
@@ -151,7 +151,7 @@ Ticket:
   order_by: -created_at
   filters: created_at
   relationships: order
-  application: Misc
+  application: Orders, 1
   export: csv
   search: ^number
 
@@ -170,7 +170,7 @@ Payment:
   relationships: order
   order_by: -created_at
   filters: created_at
-  application: Misc
+  application: Misc, 2
 
 
 Destination:
@@ -188,7 +188,7 @@ Destination:
   order_by: -created_at
   relationships: hot_offers, from, to
   #filters: from, to, rt
-  application: Hot Offers
+  application: Hot Offers, 3
 
 HotOffer:
   fields:
@@ -205,7 +205,7 @@ HotOffer:
   relationships: destination
   search: description, ^url
   filters: created_at
-  application: Hot Offers
+  application: Hot Offers, 3
 
 Region:
   fields:
@@ -218,7 +218,7 @@ Region:
   relationships: cities, country
   filters: country
   search: name_ru, name_en, synonym_list
-  application: Geo
+  application: Geo, 4
 
 Country:
   fields:
@@ -231,7 +231,7 @@ Country:
   relationships: carriers, airports, cities, geo_tags, regions
   filters:
   search:  name_en, name_ru, full_name_ru, synonym_list
-  application: Geo
+  application: Geo, 4
 
 GeoTag:
   fields:
@@ -242,7 +242,7 @@ GeoTag:
   # relationships: geo_taggings
   filters:
   search: name, synonym_list
-  application: Geo
+  application: Geo, 4
 
 FlightGroup:
   fields:
@@ -250,5 +250,5 @@ FlightGroup:
     list: code, created_at, url
     form: code
   order_by: -created_at
-  application: Misc
+  application: Misc, 2
 
