@@ -1,7 +1,12 @@
 class Ticket < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   belongs_to :order
-  delegate :source, :commission_carrier, :pnr_number, :need_attention, :paid_by, :to => 'order'
+  delegate :source, :commission_carrier, :pnr_number, :need_attention, :paid_by, :commission_carrier, :to => :order, :allow_nil => true
+
+  # FIXME сделать перечисление прямо из базы, через uniq
+  def self.office_ids
+    []
+  end
 
   def ticket_date
     created_at.strftime('%d.%m.%Y') if created_at
@@ -9,6 +14,14 @@ class Ticket < ActiveRecord::Base
 
   def number_with_code
     "#{code}-#{number}" if number.present?
+  end
+
+  def name
+    "#{last_name} #{first_name}"
+  end
+
+  def carrier
+    validating_carrier || commission_carrier
   end
 
   def price_total
@@ -28,6 +41,21 @@ class Ticket < ActiveRecord::Base
   def price_tax_and_markup_and_payment
     price_with_payment_commission - price_fare
   end
+
+  def recalculate_commissions
+    if commission_subagent
+      self.price_share = commission_subagent['%'] ? (price_fare * commission_subagent[0...-1].to_f / 100) : commission_subagent.to_f
+      self.price_consolidator_markup = if price_share > 5
+          0
+        elsif %W( LH LX KL AF OS ).include? commission_carrier
+          price_fare * 0.01
+        else
+          price_fare * 0.02
+        end
+    end
+    true
+  end
+  before_save :recalculate_commissions
 
   # для админки
   def to_label

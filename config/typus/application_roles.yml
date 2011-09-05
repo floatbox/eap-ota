@@ -3,10 +3,10 @@
 # Use the README file as a reference to customize settings.
 
 admin:
-  Carrier: create, read, update, delete
-  Airplane: create, read, update, delete
-  Airport: create, read, update, delete, update_completer
-  City: create, read, update, delete, update_completer
+  Carrier: create, read, update, delete, decode_amadeus, decode_sirena
+  Airplane: create, read, update, delete, decode_amadeus, decode_sirena
+  Airport: create, read, update, delete, update_completer, decode_amadeus, decode_sirena
+  City: create, read, update, delete, update_completer, decode_amadeus, decode_sirena
   Order: create, read, update, unblock, charge, ticket, reload_tickets, cancel, show_pnr, money_received, no_money_received, resend_email, send_offline_email, bulk_charge, bulk, pnr_raw, payment_raw, void
   OrderComment: create, read, update, delete
   Notification: create, read, update, delete

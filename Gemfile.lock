@@ -18,15 +18,6 @@ GIT
     trashed (1.0.0)
       activesupport (>= 2.3.0)
 
-GIT
-  remote: https://github.com/typus/typus.git
-  revision: cc9c244f482e3d0fd2d3ac9838cc138d66ce0cb4
-  specs:
-    typus (3.1.0.rc19)
-      jquery-rails
-      kaminari
-      rails (~> 3.1.0)
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -252,6 +243,10 @@ GEM
     typhoeus (0.2.4)
       mime-types
       mime-types
+    typus (3.1.0)
+      jquery-rails
+      kaminari
+      rails (~> 3.1.0)
     tzinfo (0.3.29)
     uglifier (1.0.2)
       execjs (>= 0.3.0)
@@ -270,6 +265,7 @@ GEM
     wirble (0.1.3)
     xpath (0.1.4)
       nokogiri (~> 1.3)
+    ya2yaml (0.30)
 
 PLATFORMS
   ruby
@@ -315,7 +311,7 @@ DEPENDENCIES
   spork
   trashed!
   typhoeus
-  typus!
+  typus
   tzinfo
   uglifier
   vcr
@@ -323,3 +319,4 @@ DEPENDENCIES
   webrat
   whenever
   wirble
+  ya2yaml

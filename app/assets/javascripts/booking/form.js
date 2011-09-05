@@ -78,6 +78,9 @@ failed: function() {
     this.prebooking.html(content).find('.link').click(function(event) {
         hint.show(event, message);
     });
+    if (window._gaq) {
+        _gaq.push(['_trackEvent', 'Бронирование', 'Невозможно выбрать вариант']);
+    }
 },
 getVariant: function() {
     this.variant.closest('.offer').removeClass('collapsed').addClass('expanded');
@@ -529,7 +532,7 @@ booking.form.initCard = function(el) {
         empty: 'Не указан трёхзначный {CVV/CVC код} банковской карты',
         letters: '{CVV/CVC код} банковской карты нужно ввести цифрами',
     });
-    var cardname = validator.name($('#bc-name'), {
+    var cardname = validator.cardname($('#bc-name'), {
         empty: 'Не указано {имя владельца} банковской карты',
         latin: '{Имя владельца} банковской карты нужно ввести латинскими буквами'
     });

@@ -1,5 +1,4 @@
 # encoding: utf-8
-require 'lib/typus/orm/active_record/search.rb'
 class Admin::OrdersController < Admin::ResourcesController
   include CustomCSV
   include Typus::Controller::Bulk

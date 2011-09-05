@@ -24,13 +24,15 @@ module Amadeus
         prices_with_refs.values.inject(0) do |fare, prices|
           fare += prices[:price_fare]
           fare += prices[:price_fare_infant] if prices[:price_fare_infant]
+          fare
         end
       end
 
       def total_tax
-        prices_with_refs.values.inject(0) do |fare, prices|
-          fare += prices[:price_tax]
-          fare += prices[:price_tax_infant] if prices[:price_tax_infant]
+        prices_with_refs.values.inject(0) do |tax, prices|
+          tax += prices[:price_tax]
+          tax += prices[:price_tax_infant] if prices[:price_tax_infant]
+          tax
         end
       end
 

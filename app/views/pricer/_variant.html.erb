@@ -7,7 +7,7 @@
 <col width="109">
 <thead>
 <tr>
-    <th class="book"><% if recommendation.sellable? %><a href="#" class="a-button">Выбрать</a><% end %></th>
+    <th class="book"><% if recommendation.sellable? %><a href="#" class="a-button">Купить</a><% end %></th>
     <td class="cost" colspan="5"><dl>
         <% price = recommendation.price_with_payment_commission.round.to_i %>
         <% if corporate_mode? %>
@@ -157,7 +157,7 @@
 <tr class="book">
     <th>
       <% if recommendation.sellable? %>
-        <a href="#" class="a-button">Выбрать</a>
+        <a href="#" class="a-button">Купить</a>
       <% end %>
     </th>
     <td colspan="6">

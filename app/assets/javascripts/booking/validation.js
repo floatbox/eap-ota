@@ -30,13 +30,13 @@ name: function(el, messages) {
         if (!value) {
             return 'empty';
         }
-        if (value.search(/[^a-z ]/i) !== -1) {
+        if (value.search(/[^a-z\- ]/i) !== -1) {
             return 'latin';
         }
-        if (messages.space && value.search(/ /) !== -1) {
+        if (value.search(/ /) !== -1) {
             return 'space';
         }
-        if (messages.short && value.length < 2) {
+        if (value.length < 2) {
             return 'short';
         }
         return undefined;
@@ -373,6 +373,30 @@ cardcvv: function(el, messages) {
         return undefined;
     };
     el.change(function() {
+        item.validate();
+    }).bind('keyup propertychange input', function() {
+        item.change();
+    });
+    return item;
+},
+cardname: function(el, messages) {
+    var item = new this.control(el, messages);
+    item.important = {
+        latin: true,
+        space: true
+    };
+    item.check = function() {
+        var value = $.trim(this.el.val());
+        if (!value) {
+            return 'empty';
+        }
+        if (value.search(/[^a-z.\- ]/i) !== -1) {
+            return 'latin';
+        }
+        return undefined;
+    };
+    el.change(function() {
+        el.val($.trim(el.val().toUpperCase()));
         item.validate();
     }).bind('keyup propertychange input', function() {
         item.change();

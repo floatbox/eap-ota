@@ -62,7 +62,7 @@ class Strategy
           :seat_total => @search.seat_total
         )
         unless air_sfr.segments_confirmed?
-          logger.error 'Strategy: segments aren\'t confirmed'
+          logger.error 'Strategy: segments aren\'t confirmed: recommendation: #{@rec.serialize} segments: #{air_sfr.segments_status_codes.join(', ')} Time.now.strftime("%H:%M %d.%m.%Y")}'
           return
         end
         air_sfr.fill_itinerary!(@rec.segments)
@@ -139,7 +139,7 @@ class Strategy
               :recommendation => @rec
             ).segments_confirmed?
 
-          logger.error 'Strategy::Amadeus: segments aren\'t confirmed in create_booking method'
+          logger.error 'Strategy::Amadeus: segments aren\'t confirmed in create_fbooking method'
           return
         end
         add_multi_elements = amadeus.pnr_add_multi_elements(@order_form)

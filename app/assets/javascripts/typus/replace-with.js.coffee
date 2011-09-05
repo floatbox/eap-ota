@@ -7,4 +7,6 @@ $ ->
         # $(this).hide()
         # $(this).slideDown()
         $(this).html(data)
+      error: (jqXHR, textStatus, errorThrown) ->
+        $(this).html( textStatus + ': ' + errorThrown )
     # $(this).data('replace-with', null)

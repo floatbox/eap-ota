@@ -1,0 +1,10 @@
+<% if @item.iata.present? %>
+<div id="amadeus">Амадеус
+  <pre data-replace-with="<%= url_for :action => :decode_amadeus, :id => @item.id %>"></pre>
+</div>
+<% end %>
+<% if @item.iata_ru.present? %>
+<div id="sirena">Сирена
+  <pre data-replace-with="<%= url_for :action => :decode_sirena, :id => @item.id %>"></pre>
+</div>
+<% end %>
