@@ -41,11 +41,15 @@ class Flight
       flight = Amadeus::Service.air_flight_info(:date => date.strftime('%d%m%y'), :number => m[2], :carrier => m[1], :departure_iata => m[5], :arrival_iata => m[6]).flight
     end
   end
-  
-  def self.from_short_code (code)
+
+  def self.from_short_code (code, source)
     if m = code.match(/(\w{2})\s?(\d+)\s+(\d{6})/)
       date = Date.strptime(m[3], '%d%m%y')
-      flight = Amadeus::Service.air_flight_info(:date => date.strftime('%d%m%y'), :number => m[2], :carrier => m[1]).flight
+      if source == 'amadeus'
+        flight = Amadeus::Service.air_flight_info(:date => date, :number => m[2], :carrier => m[1]).flight
+      else
+        flight = Sirena::Service.new.raceinfo(:date => date, :flight => m[2], :carrier => m[1]).flight
+      end
     end
   end
 

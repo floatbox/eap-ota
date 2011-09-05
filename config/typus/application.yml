@@ -247,9 +247,9 @@ FlightGroup:
   fields:
     default: code, created_at
     list: code, source, created_at, url
-    form: code
-  options:
-      selectors:source
+    form: code, source
+    options:
+      selectors: source
   order_by: -created_at
   application: Misc, 2
 
@@ -273,3 +273,4 @@ Notification:
   filters: created_at, typus_user
   relationships: order, typus_user
   application: Misc, 2
+

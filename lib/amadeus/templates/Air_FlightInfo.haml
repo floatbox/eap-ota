@@ -1,7 +1,7 @@
 %generalFlightInfo
   -if date.present?
     %flightDate
-      %departureDate= date
+      %departureDate= date.strftime('%d%m%y')
   -if departure_iata.present?
     %boardPointDetails
       %trueLocationId= departure_iata
@@ -14,3 +14,4 @@
   -if number.present?
     %flightIdentification>
       %flightNumber= number
+
