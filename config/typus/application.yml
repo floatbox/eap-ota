@@ -272,4 +272,4 @@ Notification:
   search: ^order_id, text
   filters: created_at, typus_user
   relationships: order, typus_user
-  application: Misc
+  application: Misc, 2

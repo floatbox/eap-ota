@@ -23,6 +23,7 @@ ru:
       consolidator: 'Консолидатор'
       airplane: 'Самолет'
       typus_user: 'Пользователь Typus'
+      notification: 'Оповещение'
     attributes:
       order:
         price_fare: "Тариф"
