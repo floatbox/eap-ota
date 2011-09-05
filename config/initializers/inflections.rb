@@ -8,6 +8,24 @@ ActiveSupport::Inflector.inflections do |inflect|
 #   inflect.singular /^(ox)en/i, '\1'
 #   inflect.irregular 'person', 'people'
 #   inflect.uncountable %w( fish sheep )
+    inflect.plural(/^Заказ$/i, 'Заказы')
+    inflect.plural(/^Билет$/i,  'Билеты' )
+    inflect.plural(/^Комментарий к заказу$/i, 'Комментарии к заказу' )
+    inflect.plural(/^Платеж$/i,  'Платежи' )
+    inflect.plural(/^Подборка рейсов$/i,  'Подборки рейсов' )
+    inflect.plural(/^Направление$/i,  'Направления' )
+    inflect.plural(/^Горячее предложение$/i,  'Горячие предложения' )
+    inflect.plural(/^Геотаг$/i,  'Геотаги' )
+    inflect.plural(/^Аэропорт$/i,  'Аэропорты' )
+    inflect.plural(/^Город$/i,  'Города' )
+    inflect.plural(/^Регион$/i,  'Регионы' )
+    inflect.plural(/^Страна$/i,  'Страны' )
+    inflect.plural(/^Альянс авиакомпаний$/i,  'Альянсы авиакомпаний' )
+    inflect.plural(/^Глобальная дистрибьюторская система$/i,  'Глобальные дистрибьюторские системы' )
+    inflect.plural(/^Перевозчик$/i,  'Перевозчики' )
+    inflect.plural(/^Консолидатор$/i,  'Консолидаторы' )
+    inflect.plural(/^Самолет$/i,  'Самолеты' )
+    inflect.plural(/^Пользователь Typus$/i,  'Пользователи Typus' )
 
-#   inflect.irregular 'Заказ', 'Заказы'
 end
+
