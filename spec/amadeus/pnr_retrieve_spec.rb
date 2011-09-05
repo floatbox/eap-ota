@@ -18,6 +18,7 @@ describe Amadeus::Response::PNRRetrieve do
     specify { subject.passengers.collect(&:passport).should == ['111116818', '222228156', '333335276', '444442618'] }
     specify { subject.passengers.find_all{|p| p.infant_or_child == 'i'}.length.should == 1 }
     specify {subject.all_segments_available?.should == true}
+    its(:complex_tickets?) {should be_false}
     its(:email) { should == 'PAVEL@EXAMPLE.COM' }
     its(:phone) { should == '+75557777555' }
     its(:validating_carrier_code) { should == 'LH' }
@@ -60,6 +61,15 @@ describe Amadeus::Response::PNRRetrieve do
     its(:validating_carrier_code) { should == 'OK' }
   end
 
+  describe "#complex_tickets" do
+    subject {
+      body = File.read('spec/amadeus/xml/PNR_Retrieve_complex_tickets.xml')
+      doc = Amadeus::Service.parse_string(body)
+      Amadeus::Response::PNRRetrieve.new(doc)
+    }
+
+    its(:complex_tickets?) {should be_true}
+  end
 
   describe "#parse_ticket_string" do
     subject {

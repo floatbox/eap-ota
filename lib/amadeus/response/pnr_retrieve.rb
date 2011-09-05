@@ -109,6 +109,12 @@ module Amadeus
         end
       end
 
+      def complex_tickets?
+        xpath("//r:dataElementsIndiv[
+            r:referenceForDataElement/r:reference[r:qualifier='PT']
+          ]/r:otherDataFreetext[r:freetextDetail/r:type='P06']/r:longFreetext").count != xpath("//r:passenger").count
+      end
+
       def email
         xpath('//r:otherDataFreetext[r:freetextDetail/r:type="P02"]/r:longFreetext').to_s
       end

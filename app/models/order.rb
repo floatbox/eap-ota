@@ -210,31 +210,34 @@ class Order < ActiveRecord::Base
         amadeus.pnr_ignore
       end
       prices = tst_resp.prices_with_refs
-      pnr_resp.passengers.map do |passenger|
-        ref = passenger.passenger_ref
-        if passenger.infant_or_child == 'i'
-          price_fare_ticket = prices.present? ? prices[ref][:price_fare_infant].to_i : 0
-          price_tax_ticket = prices.present? ? prices[ref][:price_tax_infant].to_i : 0
-        else
-          price_fare_ticket = prices.present? ? prices[ref][:price_fare].to_i : 0
-          price_tax_ticket = prices.present? ? prices[ref][:price_tax].to_i : 0
-        end
-        t = Ticket.find_or_create_by_number(passenger.ticket_hash[:number])
-        t.update_attributes(passenger.ticket_hash.merge({
-          :order => self,
-          :commission_subagent => commission_subagent.to_s,
-          :price_fare => price_fare_ticket,
-          :price_tax => price_tax_ticket,
-          :cabins => cabins && cabins.gsub(/[MW]/, "Y").split(',').uniq.join(' + '),
-          :route => route,
-          :first_name => passenger.first_name,
-          :last_name => passenger.last_name,
-          :passport => passenger.passport
-        })
-        )
-      end
 
-      update_attribute(:departure_date, pnr_resp.flights.first.dept_date) if pnr_resp.flights.present?
+      unless pnr_resp.complex_tickets?
+        pnr_resp.passengers.map do |passenger|
+          ref = passenger.passenger_ref
+          if passenger.infant_or_child == 'i'
+            price_fare_ticket = prices.present? ? prices[ref][:price_fare_infant].to_i : 0
+            price_tax_ticket = prices.present? ? prices[ref][:price_tax_infant].to_i : 0
+          else
+            price_fare_ticket = prices.present? ? prices[ref][:price_fare].to_i : 0
+            price_tax_ticket = prices.present? ? prices[ref][:price_tax].to_i : 0
+          end
+          t = Ticket.find_or_create_by_number(passenger.ticket_hash[:number])
+          t.update_attributes(passenger.ticket_hash.merge({
+            :order => self,
+            :commission_subagent => commission_subagent.to_s,
+            :price_fare => price_fare_ticket,
+            :price_tax => price_tax_ticket,
+            :cabins => cabins && cabins.gsub(/[MW]/, "Y").split(',').uniq.join(' + '),
+            :route => route,
+            :first_name => passenger.first_name,
+            :last_name => passenger.last_name,
+            :passport => passenger.passport
+          })
+          )
+        end
+
+        update_attribute(:departure_date, pnr_resp.flights.first.dept_date) if pnr_resp.flights.present?
+      end
     elsif source == 'sirena'
       order_resp = Sirena::Service.new.order(pnr_number, sirena_lead_pass)
       order_resp.ticket_hashes.each do |t|
