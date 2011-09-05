@@ -71,4 +71,14 @@ describe Commission::Formula do
       end
     end
   end
+
+  context "invalid formula" do
+    subject {Commission::Formula.new('2,4%')}
+    it {should_not be_valid}
+
+    specify {
+      expect {subject.call(1234)}.to raise_error(ArgumentError)
+    }
+
+  end
 end
