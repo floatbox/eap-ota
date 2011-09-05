@@ -9,6 +9,7 @@ admin:
   City: create, read, update, delete, update_completer
   Order: create, read, update, unblock, charge, ticket, reload_tickets, cancel, show_pnr, money_received, no_money_received, resend_email, send_offline_email, bulk_charge, bulk, pnr_raw, payment_raw, void
   OrderComment: create, read, update, delete
+  Notification: create, read, update, delete
   Ticket: read
   Country: create, read, update, delete
   GeoTag: create, read, update, delete
