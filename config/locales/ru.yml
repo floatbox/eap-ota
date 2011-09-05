@@ -3,6 +3,27 @@
 
 ru:
   activerecord:
+    models:
+      # переводы таблиц для админки
+      order: 'Заказ'
+      ticket: 'Билет'
+      order_comment: 'Комментарий к заказу'
+      payment: 'Платеж'
+      flight_group: 'Подборка рейсов'
+      destination: 'Направление'
+      hot_offer: 'Горячее предложение'
+      geo_tag: 'Геотаг'
+      airport: 'Аэропорт'
+      city: 'Город'
+      region: 'Регион'
+      country: 'Страна'
+      airline_alliance: 'Альянс авиакомпаний'
+      global_distribution_system: 'Глобальная дистрибьюторская система'
+      carrier: 'Перевозчик'
+      consolidator: 'Консолидатор'
+      airplane: 'Самолет'
+      typus_user: 'Пользователь Typus'
+      notification: 'Оповещение'
     attributes:
       order:
         price_fare: "Тариф"

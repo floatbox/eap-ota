@@ -11,5 +11,5 @@ class Admin::OrderCommentsController < Admin::ResourcesController
     add_predefined_filter 'Assigned To Me', {:assigned_to_id => admin_user.id, :status => 'не обработан'}
     super
   end
-  
+
 end

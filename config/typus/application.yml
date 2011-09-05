@@ -112,7 +112,7 @@ Order:
   # actions:
   #   show: cancel, ticket, charge, unblock, show_pnr
   filters:  created_at, source, payment_status, ticket_status, payment_type
-  relationships: payments, tickets, order_comments
+  relationships: payments, tickets, order_comments, notifications
   application: Orders, 1
   export: csv
 
@@ -246,8 +246,30 @@ GeoTag:
 FlightGroup:
   fields:
     default: code, created_at
-    list: code, created_at, url
+    list: code, source, created_at, url
     form: code
+  options:
+      selectors:source
   order_by: -created_at
   application: Misc, 2
 
+Notification:
+  fields:
+    default: comment, typus_user, created_at, status
+    list: order, typus_user, created_at, comment, status
+    form: order, comment
+    show: order, typus_user, created_at, comment, status
+    options:
+      read_only: order
+      date_formats:
+        created_at: long
+        updated_at: long
+  options:
+    action_after_save: show
+  actions:
+    show: edit
+  order_by: -created_at
+  search: ^order_id, text
+  filters: created_at, typus_user
+  relationships: order, typus_user
+  application: Misc, 2
