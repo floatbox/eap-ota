@@ -28,6 +28,12 @@ class Person
   # совместимость с "активрекордным" стилем
   before_validation :set_birthday
   before_validation :set_document_expiration_date
+  before_validation :clear_first_name_and_last_name
+
+  def clear_first_name_and_last_name
+    first_name.gsub!(/[^\w]+/, '')
+    last_name.gsub!(/[^\w]+/, '')
+  end
 
   def set_birthday
     self.birthday ||=

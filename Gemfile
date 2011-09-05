@@ -37,13 +37,15 @@ gem 'mongoid'
 gem 'bson_ext'
 gem 'SystemTimer'
 
+gem 'ya2yaml'
+
 #gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
 gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'
 
 gem 'haml'
 
-#gem 'typus'
-gem 'typus', :git => 'https://github.com/typus/typus.git' #, :branch => "3-1-stable"
+gem 'typus'
+#gem 'typus', :git => 'https://github.com/typus/typus.git' #, :branch => "3-1-stable"
 gem 'fastercsv' if RUBY_VERSION < "1.9.0"
 
 gem 'trashed', :git => 'https://github.com/37signals/trashed.git'

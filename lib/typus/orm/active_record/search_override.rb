@@ -1,7 +1,7 @@
 module Typus
   module Orm
     module ActiveRecord
-      module Search
+      module SearchOverride
 
         def build_datetime_conditions(key, value)
 
@@ -14,6 +14,8 @@ module Typus
           end
           ["#{table_name}.#{key} BETWEEN ? AND ?", interval.first.to_s(:db), interval.last.to_s(:db)]
         end
+
+        alias_method :build_date_conditions, :build_datetime_conditions
 
       end
     end

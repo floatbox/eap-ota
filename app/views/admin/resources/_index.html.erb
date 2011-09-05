@@ -1,24 +1,26 @@
 <script type="text/javascript">
 
+<% for attr in [:ticketed_date, :created_at] %>
 $(function(){
-	input = '<label for="created_at">Дата: <input name="created_at" id="created_at" type="text" value="<%= params[:created_at] %>" style="height: 1.8em;" /></label>'
-	$('#created_at').parent().html(input);
+        var input = '<label for="<%= attr %>">Дата: <input name="<%= attr %>" id="<%= attr %>" type="text" value="<%= params[attr] %>" style="height: 1.8em;" /></label>'
+        $('#<%= attr %>').parent().html(input);
 
-	$('#created_at').daterangepicker({
-		earliestDate: '02/02/11',
-		latestDate: '02/02/12',
-		dateFormat: 'yy-m-d',
-		rangeSplitter: '/',
-		datepickerOptions: {
-			duration: 'fast',
-			minDate: new Date(2011, 1 - 1, 1),
-			maxDate: '+1m +1w',
-			changeMonth: true,
-			changeYear: true,
-			firstDay: 1.
-		}
-	}); 
+        $('#<%= attr %>').daterangepicker({
+                earliestDate: '02/02/11',
+                latestDate: '02/02/12',
+                dateFormat: 'yy-m-d',
+                rangeSplitter: '/',
+                datepickerOptions: {
+                        duration: 'fast',
+                        minDate: new Date(2011, 1 - 1, 1),
+                        maxDate: '+1m +1w',
+                        changeMonth: true,
+                        changeYear: true,
+                        firstDay: 1.
+                }
+        }); 
 });
+<% end %>
 
 </script>
 <ul class="additional_actions">

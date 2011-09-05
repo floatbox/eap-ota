@@ -11,12 +11,12 @@ module Sirena
         self.data_type = at_xpath("//describe")["data"]
         xpath("//describe/data").each do |data|
           d = {}
-          data.children.each{|ch|
+          data.xpath('*').each{|ch|
             unless ch.name.blank? || ch.name.strip.blank?
-              name = ch.name.strip.to_sym
+              name = ch.name.strip
               lang = ch["lang"]
               if !lang.blank?
-                lang = lang.strip.to_sym
+                lang = lang.strip
                 d[name] = {} if d[name].blank?
                 d[name][lang] = ch.text
               elsif !ch.children.blank?
@@ -36,6 +36,10 @@ module Sirena
           }
           self.datas << d
         end
+      end
+
+      def as_yaml
+        datas.first.ya2yaml
       end
 
       # генерирует csv с результатами

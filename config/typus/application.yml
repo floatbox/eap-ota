@@ -9,7 +9,7 @@ AirlineAlliance:
     list: name, bonus_program_name
     form: name, bonus_program_name
   relationships: carriers
-  application: Base
+  application: Base, 5
 
 GlobalDistributionSystem:
   fields:
@@ -17,7 +17,7 @@ GlobalDistributionSystem:
     list: name
     form: name
   relationships: carriers
-  application: Base
+  application: Base, 5
 
 Consolidator:
   fields:
@@ -25,7 +25,7 @@ Consolidator:
     list: name, booking_office, ticketing_office
     form: name, booking_office, ticketing_office
   relationships: carriers
-  application: Base
+  application: Base, 5
 
 Carrier:
   fields:
@@ -36,7 +36,7 @@ Carrier:
   relationships: country, alliance, gds, consolidator
   filters: country, gds, consolidator
   search: ru_shortname, ru_longname, en_shortname, en_longname, ^iata
-  application: Base
+  application: Base, 5
 
 Airplane:
   fields:
@@ -50,7 +50,7 @@ Airplane:
   relationships:
   filters: engine_type
   search: ^iata, name_ru, name_en
-  application: Base
+  application: Base, 5
 
 Airport:
   fields:
@@ -64,7 +64,7 @@ Airport:
   search: name_ru, name_en, ^iata, synonym_list
   actions:
     index: update_completer
-  application: Geo
+  application: Geo, 4
   export: csv
 
 City:
@@ -81,7 +81,7 @@ City:
   search: name_ru, name_en, ^iata, synonym_list
   actions:
     index: update_completer
-  application: Geo
+  application: Geo, 4
   export: csv
 
 Order:
@@ -113,7 +113,7 @@ Order:
   #   show: cancel, ticket, charge, unblock, show_pnr
   filters:  created_at, source, payment_status, ticket_status, payment_type
   relationships: payments, tickets, order_comments
-  application: Orders
+  application: Orders, 1
   export: csv
 
 OrderComment:
@@ -135,13 +135,12 @@ OrderComment:
   filters: created_at, typus_user, assigned_to, status, priority
   relationships: order, typus_user
   order_by: -created_at
-  application: Misc
+  application: Misc, 2
 
 Ticket:
   fields:
-    default: source, last_name, first_name, created_at, number_with_code, commission_carrier, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, itinerary_receipt
-    list: source, last_name, first_name, created_at, number_with_code, commission_carrier, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, validating_carrier, office_id, validator, status, ticketed_date
-    show: source, last_name, first_name, created_at, number_with_code, commission_carrier, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, order, validating_carrier, office_id, validator, status, ticketed_date
+    default: order, carrier, number_with_code, name,                  route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, office_id, validator, status, ticketed_date
+    show: order, carrier, number_with_code, last_name, first_name, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, office_id, validator, status, ticketed_date
     csv: source, number_with_code, ticket_date, commission_carrier, route, cabins, price_fare, price_tax, price_total,  price_consolidator_markup, commission_subagent, price_share, price_transfer, pnr_number, need_attention, validating_carrier, office_id, validator, status, ticketed_date
     options:
       date_formats:
@@ -149,11 +148,11 @@ Ticket:
   options:
     default_action_on_item: show
   order_by: -created_at
-  filters: created_at
+  filters: ticketed_date, validator, office_id
   relationships: order
-  application: Misc
+  application: Orders, 1
   export: csv
-  search: ^number
+  search: ^number, last_name, first_name
 
 
 Payment:
@@ -170,7 +169,7 @@ Payment:
   relationships: order
   order_by: -created_at
   filters: created_at
-  application: Misc
+  application: Misc, 2
 
 
 Destination:
@@ -188,7 +187,7 @@ Destination:
   order_by: -created_at
   relationships: hot_offers, from, to
   #filters: from, to, rt
-  application: Hot Offers
+  application: Hot Offers, 3
 
 HotOffer:
   fields:
@@ -205,7 +204,7 @@ HotOffer:
   relationships: destination
   search: description, ^url
   filters: created_at
-  application: Hot Offers
+  application: Hot Offers, 3
 
 Region:
   fields:
@@ -218,7 +217,7 @@ Region:
   relationships: cities, country
   filters: country
   search: name_ru, name_en, synonym_list
-  application: Geo
+  application: Geo, 4
 
 Country:
   fields:
@@ -231,7 +230,7 @@ Country:
   relationships: carriers, airports, cities, geo_tags, regions
   filters:
   search:  name_en, name_ru, full_name_ru, synonym_list
-  application: Geo
+  application: Geo, 4
 
 GeoTag:
   fields:
@@ -242,7 +241,7 @@ GeoTag:
   # relationships: geo_taggings
   filters:
   search: name, synonym_list
-  application: Geo
+  application: Geo, 4
 
 FlightGroup:
   fields:
@@ -252,5 +251,5 @@ FlightGroup:
   options:
       selectors:source
   order_by: -created_at
-  application: Misc
+  application: Misc, 2
 
