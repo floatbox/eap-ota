@@ -3,6 +3,11 @@
 
 ru:
   activerecord:
+    models:
+      # переводы таблиц для админки
+      order: 'Заказ'
+      ticket: 'Билет'
+      ticket: 'Билет'
     attributes:
       order:
         price_fare: "Тариф"
