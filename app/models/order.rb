@@ -37,6 +37,7 @@ class Order < ActiveRecord::Base
   has_many :payments
   has_many :tickets
   has_many :order_comments
+  has_many :notifications
   validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
 
   before_create :generate_code, :set_payment_status
@@ -79,7 +80,7 @@ class Order < ActiveRecord::Base
 
   #флаг для админки
   def urgent
-    if  payment_status == 'blocked' && ticket_status == 'booked' && 
+    if  payment_status == 'blocked' && ticket_status == 'booked' &&
         ((last_tkt_date && last_tkt_date == Date.today) ||
          (departure_date && departure_date < Date.today + 3.days)
         )
@@ -91,7 +92,7 @@ class Order < ActiveRecord::Base
 
 
   def tickets_count
-    tickets.count 
+    tickets.count
   end
 
   def order_id
