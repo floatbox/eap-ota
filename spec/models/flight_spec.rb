@@ -26,11 +26,12 @@ describe Flight do
     describe '#from_short_code' do
       it "should call air_flight_info with correct params" do
         code = 'BT419 010812'
+        source = 'amadeus'
         Amadeus::Service.should_receive(:air_flight_info)\
-          .with(:date => '010812', :number => '419', :carrier => 'BT')\
+          .with(:date => Date.new(2012, 8, 1), :number => '419', :carrier => 'BT')\
           .and_return(stubbed_air_flight_info)
 
-        Flight.from_short_code(code)
+        Flight.from_short_code(code, source)
       end
     end
   end
@@ -61,3 +62,4 @@ describe Flight do
 
   end
 end
+

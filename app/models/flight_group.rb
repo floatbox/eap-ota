@@ -6,4 +6,10 @@ class FlightGroup < ActiveRecord::Base
     url = show_flight_group_path(self)
     "<a href=#{url}>Ссылка</a>".html_safe
   end
+
+  def self.sources
+    ['amadeus', 'sirena']
+  end
+
 end
+
