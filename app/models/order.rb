@@ -78,6 +78,10 @@ class Order < ActiveRecord::Base
     :ticket_status => 'ticketed',
     :payment_status => 'charged')
 
+  def contact
+    "#{email} #{phone}"
+  end
+
   #флаг для админки
   def urgent
     if  payment_status == 'blocked' && ticket_status == 'booked' &&
