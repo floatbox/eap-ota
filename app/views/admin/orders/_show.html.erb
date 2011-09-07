@@ -18,6 +18,7 @@ URL для оплаты: <%= link_to edit_payment_url(:code => @item.code), edit
 <% if @item.payment_status == 'pending' %>
   <td><%= button_to 'Money received', {:action => 'money_received', :id => @item.id} %></td>
   <td><%= button_to 'No money received', {:action => 'no_money_received', :id => @item.id} %></td>
+  <td><%= button_to 'дать оплатить картой', {:action => 'make_payable_by_card', :id => @item.id} %></td>
 <% end %>
 <% if @item.ticket_status == 'booked' %>
   <td><%= button_to 'Ticket', {:action => 'ticket', :id => @item.id}, {:confirm => 'сменить состояние на "ticketed"? (реальная выписка пока делается из терминала)'}%></td>

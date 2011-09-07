@@ -3,7 +3,7 @@ class Admin::OrdersController < Admin::ResourcesController
   include CustomCSV
   include Typus::Controller::Bulk
 
-  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel, :reload_tickets, :update, :resend_email, :send_offline_email, :pnr_raw, :payment_raw, :void]
+  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel, :reload_tickets, :update, :resend_email, :send_offline_email, :pnr_raw, :payment_raw, :void, :make_payable_by_card]
   before_filter :update_offline_booking_flag, :only => :create
 
   # def set_scope
@@ -66,6 +66,11 @@ class Admin::OrdersController < Admin::ResourcesController
 
   def no_money_received
     @order.no_money_received!
+    redirect_to :action => :show, :id => @order.id
+  end
+
+  def make_payable_by_card
+    @order.make_payable_by_card
     redirect_to :action => :show, :id => @order.id
   end
 

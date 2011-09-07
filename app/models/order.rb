@@ -34,6 +34,10 @@ class Order < ActiveRecord::Base
     find_by_pnr_number number
   end
 
+  def make_payable_by_card
+    update_attributes(:payment_type => 'card', :payment_status => 'not blocked', :offline_booking => true) if payment_status == 'pending'
+  end
+
   has_many :payments
   has_many :tickets
   has_many :order_comments
