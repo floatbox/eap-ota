@@ -4,7 +4,7 @@ class Strategy
 
   include KeyValueInit
 
-  attr_accessor :rec, :search, :order
+  attr_accessor :rec, :search, :order, :ticket
 
   cattr_accessor :dropped_recommendations_logger do
     ActiveSupport::BufferedLogger.new(Rails.root + 'log/dropped_recommendations.log')
@@ -378,8 +378,18 @@ class Strategy
     end
   end
 
+  def raw_ticket
+    case source
+    when 'amadeus'
+      Amadeus.booking do |amadeus|
+        amadeus.ticket_raw(@ticket.first_number_with_code)
+      end
+    when 'sirena'
+      'для сирены еще не работает'
+    end
+  end
+
   def void
-    debugger
     case source
     when 'amadeus'
       raise "Can't do this for Amadeus, sorry"

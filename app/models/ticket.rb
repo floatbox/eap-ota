@@ -20,6 +20,15 @@ class Ticket < ActiveRecord::Base
     "#{code}-#{number}" if number.present?
   end
 
+  # номер первого билета для conjunction
+  def first_number
+    number.subst /-.*/, '' if number.present?
+  end
+
+  def first_number_with_code
+    "#{code}-#{first_number}" if number.present?
+  end
+
   def name
     "#{last_name} #{first_name}"
   end
@@ -70,5 +79,10 @@ class Ticket < ActiveRecord::Base
     url = show_order_for_ticket_path(order.pnr_number, self)
     "<a href=#{url}>билет</a>".html_safe
   end
-end
 
+  def raw # FIXME в стратегию
+    Strategy.new(:ticket => self).raw_ticket
+  rescue => e
+    e.message
+  end
+end

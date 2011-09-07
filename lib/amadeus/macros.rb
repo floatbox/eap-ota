@@ -16,6 +16,18 @@ module Amadeus
       # pnr_ignore
     end
 
+    def ticket_raw(ticket_number)
+      result = ""
+      result << (cmd_full("TWD/TKT #{ticket_number}", true) rescue $!.message)
+      result << "\n\n"
+      result << (cmd_full("TWD/TAX") rescue $!.message)
+      result
+    ensure
+      # опять же, временно не нужно - все равно сессию закрываем
+      # впрочем, данная команда не оставляет бронь открытой
+      # pnr_ignore
+    end
+
     def pnr_ignore
       pnr_add_multi_elements :pnr_action => :IG
     end
