@@ -148,11 +148,11 @@ Ticket:
   options:
     default_action_on_item: show
   order_by: -created_at
-  filters: ticketed_date, validator, office_id
+  filters: ticketed_date, source, validator, office_id
   relationships: order
   application: Orders, 1
   export: csv
-  search: ^number, last_name, first_name
+  search: ^number, last_name, first_name, ^pnr_number
 
 
 Payment:

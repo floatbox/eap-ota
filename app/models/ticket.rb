@@ -8,6 +8,10 @@ class Ticket < ActiveRecord::Base
     []
   end
 
+  def self.sources
+    ['amadeus', 'sirena']
+  end
+
   def ticket_date
     created_at.strftime('%d.%m.%Y') if created_at
   end

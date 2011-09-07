@@ -225,6 +225,8 @@ class Order < ActiveRecord::Base
           t = Ticket.find_or_create_by_number(passenger.ticket_hash[:number])
           t.update_attributes(passenger.ticket_hash.merge({
             :order => self,
+            :source => 'amadeus',
+            :pnr_number => pnr_number,
             :commission_subagent => commission_subagent.to_s,
             :price_fare => price_fare_ticket,
             :price_tax => price_tax_ticket,
