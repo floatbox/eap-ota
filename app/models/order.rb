@@ -34,6 +34,9 @@ class Order < ActiveRecord::Base
 
   attr_writer :itinerary_receipt_view
 
+  extend Commission::Columns
+  has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator_markup
+
   def self.[] number
     find_by_pnr_number number
   end
@@ -70,22 +73,6 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def self.commission_columns
-    %w[commission_agent commission_subagent commission_consolidator_markup].every.to_sym
-  end
-
-  commission_columns.each do |column|
-    composed_of column,
-      :class_name => 'Commission::Formula',
-      :mapping => [column, :formula],
-      :converter => lambda {|val| Commission::Formula.new(val) },
-      :allow_nil => true
-
-    # FIXME UGLY. сделать CommissionValidator < ActiveModel::EachValidator
-    validates_each column, :allow_blank => true do |model, attr, value|
-      model.errors.add(attr, "invalid commission formula: '#{value}'") unless value.valid?
-    end
-  end
 
 
   # FIXME сломается на ruby1.9
