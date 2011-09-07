@@ -5,7 +5,11 @@ class Ticket < ActiveRecord::Base
 
   # FIXME сделать перечисление прямо из базы, через uniq
   def self.office_ids
-    []
+    ['MOWR2233B', 'MOWR228FA', 'MOWR2219U']
+  end
+
+  def self.validators
+    ['92223412', '92228065']
   end
 
   def self.sources
