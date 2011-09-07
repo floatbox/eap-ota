@@ -1,17 +1,19 @@
 # encoding: utf-8
 class PaymentsController < ApplicationController
 
-  def edit
-    @order = Order.where(:offline_booking => true).find_by_code!( params[:code].presence || 'not specified' )
+  before_filter :find_order
 
+  def find_order
+    @order = Order.where(["offline_booking = ? and last_pay_time >= ?", true, Time.now]).find_by_code!( params[:code].presence || 'not specified' )
+  end
+
+  def edit
     if @order.payment_status == 'not blocked'
       @card = CreditCard.new
     end
   end
 
   def update
-    @order = Order.where(:offline_booking => true).find_by_code!( params[:code].presence || 'not specified' )
-
     unless @order.payment_status == 'not blocked'
       render :partial => 'success'
       return
