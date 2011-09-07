@@ -22,7 +22,7 @@ class Ticket < ActiveRecord::Base
 
   # номер первого билета для conjunction
   def first_number
-    number.subst /-.*/, '' if number.present?
+    number.sub /-.*/, '' if number.present?
   end
 
   def first_number_with_code
@@ -81,7 +81,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def raw # FIXME в стратегию
-    Strategy.new(:ticket => self).raw_ticket
+    Strategy.new(:source => 'amadeus', :ticket => self).raw_ticket
   rescue => e
     e.message
   end
