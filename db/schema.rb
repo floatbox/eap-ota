@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110901135340) do
+ActiveRecord::Schema.define(:version => 20110905152718) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -167,6 +167,7 @@ ActiveRecord::Schema.define(:version => 20110901135340) do
     t.text     "code"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "source",     :null => false
   end
 
   create_table "geo_taggings", :force => true do |t|
