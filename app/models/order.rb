@@ -270,15 +270,13 @@ class Order < ActiveRecord::Base
 
   # считывание offline брони из GDS
   ######################################
+  extend CastingAccessors
   attr_accessor :needs_update_from_gds
-  validate :needs_update_from_gds_filter
+  cast_to_boolean :needs_update_from_gds
+  validate :needs_update_from_gds_filter, :if => :needs_update_from_gds
 
-  # FIXME сделать кастящий булевый акссессор
   def needs_update_from_gds_filter
-    case needs_update_from_gds
-    when "1", true
-      update_from_gds
-    end
+    update_from_gds
   rescue => e
     errors.add(:needs_update_from_gds, e.message)
   end
