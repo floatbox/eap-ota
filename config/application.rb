@@ -46,6 +46,8 @@ module Eviterra
       g.orm :active_record
     end
 
+    config.active_record.identity_map = true
+
     config.assets.enabled = true
     # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
     config.assets.precompile += %w( home.js home.css )
