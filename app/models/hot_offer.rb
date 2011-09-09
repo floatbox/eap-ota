@@ -29,15 +29,15 @@ class HotOffer < ActiveRecord::Base
     self.time_delta = (Date.strptime(@search.segments[0].date, '%d%m%y') - Date.today).to_i
     self.destination = Destination.find_or_create_by_from_id_and_to_id_and_rt(@search.segments[0].from_as_object.id, @search.segments[0].to_as_object.id, @search.rt)
     unless destination.new_record?
-      destination.average_price = (destination.hot_offers.every.price.sum + price) / (destination.hot_offers.count + 1)
-      destination.average_time_delta = (destination.hot_offers.every.time_delta.sum + time_delta) / (destination.hot_offers.count + 1)
+      destination.average_price += (price - destination.average_price) / (destination.hot_offers.count + 1)
+      destination.average_time_delta +=  (time_delta - destination.average_time_delta) / (destination.hot_offers.count + 1)
     else
       destination.average_price = price
       destination.average_time_delta = time_delta
     end
     destination.hot_offers_counter += 1
     destination.save
-    self.price_variation =  price - destination.average_price
+    self.price_variation = price - destination.average_price
     self.price_variation_percent = ((price / destination.average_price.to_f - 1)*100).to_i
   end
 

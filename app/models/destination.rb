@@ -9,7 +9,7 @@ class Destination < ActiveRecord::Base
   end
 
   def name
-    "#{from.name} #{RT.invert[rt]} #{to.name}"
+    "#{from.name} #{Destination.rts.invert[rt]} #{to.name}"
   end
 
 end
