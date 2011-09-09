@@ -10,7 +10,7 @@ admin:
   Order: create, read, update, unblock, charge, ticket, reload_tickets, cancel, show_pnr, money_received, no_money_received, resend_email, send_offline_email, bulk_charge, bulk, pnr_raw, payment_raw, void, make_payable_by_card
   OrderComment: create, read, update, delete
   Notification: create, read, update, delete
-  Ticket: read, ticket_raw
+  Ticket: create, read, update, delete, ticket_raw
   Country: create, read, update, delete
   GeoTag: create, read, update, delete
   Region: create, read, update, delete
