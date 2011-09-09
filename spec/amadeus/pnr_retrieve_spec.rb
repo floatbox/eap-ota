@@ -85,5 +85,46 @@ describe Amadeus::Response::PNRRetrieve do
     its([:validator]) { should == '92223412' }
   end
 
+  describe "#tickets" do
+
+    context "two tickets for one passenger" do
+
+      subject {
+        body = File.read('spec/amadeus/xml/PNR_Retrieve_complex_tickets.xml')
+        doc = Amadeus::Service.parse_string(body)
+        Amadeus::Response::PNRRetrieve.new(doc).tickets
+      }
+
+      its(:present?){should be_true}
+      its('keys.length'){should == 4}
+      its('keys'){should include([[2, 'a'], [5, 6, 7, 8]])}
+      its('keys'){should include([[1, 'a'], [5, 6, 7, 8]])}
+      its('keys'){should include([[1, 'a'], [11, 12]])}
+      its('keys'){should include([[2, 'a'], [11, 12]])}
+      specify{subject[[[2, 'a'], [5, 6, 7, 8]]][:first_name].should == 'GENNADY MR'}
+      specify{subject[[[2, 'a'], [5, 6, 7, 8]]][:last_name].should == 'NEDELKO'}
+      specify{subject[[[2, 'a'], [5, 6, 7, 8]]][:route].should == 'SVO - MXP; MXP - LIS; LIS - AMS; AMS - SVO'}
+      specify{subject[[[2, 'a'], [5, 6, 7, 8]]][:cabins].should == 'S + S + R + R'}
+      specify{subject[[[2, 'a'], [5, 6, 7, 8]]][:passport].should == '714512085'}
+
+    end
+
+    context "with infant" do
+      subject {
+        body = File.read('spec/amadeus/xml/PNR_Retrieve_TwoAdultsWithChildren.xml')
+        doc = Amadeus::Service.parse_string(body)
+        Amadeus::Response::PNRRetrieve.new(doc).tickets
+      }
+
+      specify{subject[[[14, 'a'], [1, 2]]][:first_name].should == 'VALENTINA MRS'}
+      specify{subject[[[14, 'i'], [1, 2]]][:first_name].should == 'MARIA'}
+      specify{subject[[[14, 'a'], [1, 2]]][:number].should == '2791248714'}
+      specify{subject[[[14, 'i'], [1, 2]]][:number].should == '2791248716-17'}
+      specify{subject[[[14, 'a'], [1, 2]]][:last_name].should == 'MITROFANOVA'}
+      specify{subject[[[14, 'i'], [1, 2]]][:last_name].should == 'MITROFANOVA'}
+    end
+
+  end
+
 end
 

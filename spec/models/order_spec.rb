@@ -17,7 +17,7 @@ describe Order do
       doc = Amadeus::Service.parse_string(body)
       amadeus.stub(:ticket_display_tst).and_return(Amadeus::Response::TicketDisplayTST.new(doc))
       amadeus.stub(:pnr_ignore)
-      
+
       Amadeus.should_receive(:booking).once.and_yield(amadeus)
       ticket = stub_model(Ticket)
       Ticket.should_receive(:find_or_create_by_number).and_return(ticket)

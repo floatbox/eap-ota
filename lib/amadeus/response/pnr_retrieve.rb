@@ -10,23 +10,7 @@ module Amadeus
       end
 
       def flights
-        xpath("//r:itineraryInfo[r:elementManagementItinerary/r:segmentName='AIR']").map do |fi|
-            Flight.new(
-              :marketing_carrier_iata => fi.xpath("r:travelProduct/r:companyDetail/r:identification").to_s,
-              :departure_iata =>         fi.xpath("r:travelProduct/r:boardpointDetail/r:cityCode").to_s,
-              :arrival_iata =>           fi.xpath("r:travelProduct/r:offpointDetail/r:cityCode").to_s,
-              :flight_number =>          fi.xpath("r:travelProduct/r:productDetails/r:identification").to_s,
-              :arrival_date =>           fi.xpath("r:travelProduct/r:product/r:arrDate").to_s,
-              :arrival_time =>           fi.xpath("r:travelProduct/r:product/r:arrTime").to_s,
-              :departure_date =>         fi.xpath("r:travelProduct/r:product/r:depDate").to_s,
-              :departure_time =>         fi.xpath("r:travelProduct/r:product/r:depTime").to_s,
-              # :class_of_service =>       fi.xpath("r:travelProduct/r:productDetails/r:classOfService").to_s,
-              :equipment_type_iata =>    fi.xpath("r:flightDetail/r:productDetails/r:equipment").to_s,
-              :departure_term =>         fi.xpath("r:flightDetail/r:departureInformation/r:departTerminal").to_s,
-              :warning =>                fi.xpath("r:errorInfo/r:errorfreeFormText/r:text").to_s
-            )
-        end.find_all(&:marketing_carrier_iata)#для пустых перелетов (случай сложного маршрута)
-        # FIXME найти более подходящий xpath для отбрасывания сервисных сегментов.
+        flights_hash.values.map{|v| Flight.new(v)}
       end
 
       def all_segments_available?
@@ -106,6 +90,61 @@ module Amadeus
             :validator => m[8],
             :inf => m[1]
             })
+        end
+      end
+
+      def flights_hash
+        @flights_hash ||= xpath("//r:itineraryInfo[r:elementManagementItinerary/r:segmentName='AIR']").inject( ActiveSupport::OrderedHash.new) do |res, fi|
+          fh = {
+            :marketing_carrier_iata => fi.xpath("r:travelProduct/r:companyDetail/r:identification").to_s,
+            :departure_iata =>         fi.xpath("r:travelProduct/r:boardpointDetail/r:cityCode").to_s,
+            :arrival_iata =>           fi.xpath("r:travelProduct/r:offpointDetail/r:cityCode").to_s,
+            :flight_number =>          fi.xpath("r:travelProduct/r:productDetails/r:identification").to_s,
+            :arrival_date =>           fi.xpath("r:travelProduct/r:product/r:arrDate").to_s,
+            :arrival_time =>           fi.xpath("r:travelProduct/r:product/r:arrTime").to_s,
+            :departure_date =>         fi.xpath("r:travelProduct/r:product/r:depDate").to_s,
+            :departure_time =>         fi.xpath("r:travelProduct/r:product/r:depTime").to_s,
+            :equipment_type_iata =>    fi.xpath("r:flightDetail/r:productDetails/r:equipment").to_s,
+            :departure_term =>         fi.xpath("r:flightDetail/r:departureInformation/r:departTerminal").to_s,
+            :cabin =>                  fi.xpath("r:travelProduct/r:productDetails/r:classOfService").to_s,
+            :warning =>                fi.xpath("r:errorInfo/r:errorfreeFormText/r:text").to_s
+          }
+          ref = fi.xpath("r:elementManagementItinerary/r:reference/r:number").to_i
+          if fh[:marketing_carrier_iata] #для пустых перелетов (случай сложного маршрута)
+            res.merge({ref => fh})
+          else
+            res
+          end
+        end
+      end
+
+      def tickets
+        xpath( "//r:dataElementsIndiv[r:referenceForDataElement/r:reference[r:qualifier='PT']]/r:otherDataFreetext[r:freetextDetail/r:type='P06']/r:longFreetext"
+        ).inject({}) do |res, fa|
+          passenger_ref = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='PT']/r:number").to_i
+          segments_refs = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='ST']/r:number").every.to_i.sort
+          passenger_elem = xpath("//r:travellerInfo[r:elementManagementPassenger/r:reference[r:qualifier='PT'][r:number=#{passenger_ref}]]")
+          passenger_last_name = passenger_elem.xpath('r:passengerData/r:travellerInformation/r:traveller/r:surname').to_s
+          ticket_hash = parsed_ticket_string(fa.to_s)
+          infant_flag = ticket_hash.delete(:inf) == 'INF' ? 'i': 'a'
+          if infant_flag != 'i'
+            passenger_first_name = passenger_elem.xpath('r:passengerData/r:travellerInformation/r:passenger/r:firstName').to_s
+          else
+            passenger_first_name = passenger_elem.xpath('r:passengerData/r:travellerInformation/r:passenger[r:type="INF"]/r:firstName').to_s
+          end
+          route = segments_refs.map do |sr|
+            "#{flights_hash[sr][:departure_iata]} \- #{flights_hash[sr][:arrival_iata]}"
+          end.join('; ')
+          cabins = segments_refs.map do |sr|
+            flights_hash[sr][:cabin]
+          end.join(' + ')
+          res.merge({[[passenger_ref, infant_flag], segments_refs] => ticket_hash.merge({
+              :first_name => passenger_first_name,
+              :passport => passport(passenger_ref, infant_flag == 'i'),
+              :last_name => passenger_last_name,
+              :route => route,
+              :cabins => cabins
+            })})
         end
       end
 
