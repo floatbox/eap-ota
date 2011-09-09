@@ -2,15 +2,17 @@
 class PnrMailer < ActionMailer::Base
   helper :pricer
   helper :booking
+  layout 'pnr'
 
   add_template_helper(ApplicationHelper)
   default :from => "Eviterra.com <ticket@eviterra.com>", :bcc => Conf.mail.ticket_cc
 
-  def notification(email, number)
+  def notification(email, number, comment = '')
     @pnr = PNR.get_by_number(number)
     @prices = @pnr.order
     @passengers = @pnr.passengers
     @last_pay_time = @pnr.order.last_pay_time
+    @comment = comment
     mail :to => email, :subject => @pnr.order.show_as_ticketed? ? "Ваш электронный билет" : "Ваше бронирование" do |format|
       format.html do
         if @pnr.order.show_as_ticketed?
