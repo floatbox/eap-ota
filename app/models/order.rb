@@ -45,7 +45,22 @@ class Order < ActiveRecord::Base
   validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
 
   before_create :generate_code, :set_payment_status
-  before_save :capitalize_pnr, :calculate_price_with_payment_commission
+  before_save :capitalize_pnr, :calculate_price_with_payment_commission, :create_notification
+  
+  def create_notification
+    if !self.offline_booking && self.email_status == ''
+      case self.source
+      when 'amadeus'
+        if self.ticket_status == 'booked' && (self.payment_status == 'blocked' || self.payment_status == 'pending')
+          self.notifications.create
+        end
+      when 'sirena'
+        if self.ticket_status == 'ticketed'
+          self.notifications.create
+        end
+      end
+    end
+  end
 
   # FIXME сломается на ruby1.9
   def capitalize_pnr
@@ -59,28 +74,6 @@ class Order < ActiveRecord::Base
     where(:payment_status => 'not blocked', :ticket_status => 'booked', :offline_booking => false, :source => 'amadeus')\
       .where("created_at < ?", 30.minutes.ago)
   }
-
-  scope :amadeus_email_queue, where(
-    :email_status => '',
-    :offline_booking => false,
-    :source => 'amadeus',
-    :ticket_status => ['booked', 'ticketed'],
-    :payment_status => ['blocked', 'pending', 'charged'])\
-    .where("email IS NOT NULL AND email != ''")
-
-  scope :sirena_email_queue, where(
-    :email_status => '',
-    :offline_booking => false,
-    :source => 'sirena',
-    :ticket_status => 'ticketed')\
-    .where("email IS NOT NULL AND email != ''")
-
-  scope :reminder_queue, where('departure_date = ?', 2.days.since.to_date )\
-    .where(
-    :email_status => 'sent',
-    :offline_booking => false,
-    :ticket_status => 'ticketed',
-    :payment_status => 'charged')
 
   def contact
     "#{email} #{phone}"
@@ -97,7 +90,6 @@ class Order < ActiveRecord::Base
       '&nbsp;'.html_safe
     end
   end
-
 
   def tickets_count
     tickets.count
@@ -368,31 +360,14 @@ class Order < ActiveRecord::Base
     update_attribute(:ticket_status, 'canceled')
   end
 
-  def send_email
-    logger.info 'Order: sending email'
-    PnrMailer.notification(email, pnr_number).deliver
-    update_attribute(:email_status, 'sent')
-    puts "Email pnr #{pnr_number} to #{email} SENT on #{Time.now}"
-  rescue
-    update_attribute(:email_status, 'error')
-    puts "Email pnr #{pnr_number} to #{email} ERROR on #{Time.now}"
-    raise
-  end
-
-  def send_reminder
-    logger.info 'Order: sending reminder'
-    PnrMailer.notification(email, pnr_number).deliver
-    update_attribute(:email_status, 'sent_reminder')
-    puts "Reminder pnr #{pnr_number} to #{email} SENT on #{Time.now}"
-  rescue
-    update_attribute(:email_status, 'error_reminder')
-    puts "Reminder pnr #{pnr_number} to #{email} ERROR on #{Time.now}"
-    raise
-  end
-
   def resend_email!
     update_attribute(:email_status, '')
   end
+  
+  def queued_email!
+    update_attribute(:email_status, 'queued')
+  end
+  
 
 # class methods
 
@@ -402,26 +377,6 @@ class Order < ActiveRecord::Base
       puts "Automatic cancel of pnr #{order.pnr_number}"
       Strategy.new(:order => order).cancel
     end
-  end
-
-  def self.process_queued_emails!
-    counter = 0
-    while (order_to_send = Order.sirena_email_queue.first || order_to_send = Order.amadeus_email_queue.first) && counter < 50
-      order_to_send.send_email
-      counter += 1
-    end
-    rescue
-      HoptoadNotifier.notify($!) rescue Rails.logger.error("  can't notify hoptoad #{$!.class}: #{$!.message}")
-  end
-
-  def self.process_queued_reminders!
-    counter = 0
-    while (order_to_send = Order.reminder_queue.first) && counter < 50
-      order_to_send.send_reminder
-      counter += 1
-    end
-    rescue
-      HoptoadNotifier.notify($!) rescue Rails.logger.error("  can't notify hoptoad #{$!.class}: #{$!.message}")
   end
 
   def set_payment_status
