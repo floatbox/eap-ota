@@ -255,7 +255,7 @@ FlightGroup:
 
 Notification:
   fields:
-    default: comment, typus_user, created_at, status
+    default: comment, typus_user, created_at, sent_at, status
     list: order, typus_user, created_at, comment, status
     form: order, comment
     show: order, typus_user, created_at, comment, status
@@ -264,13 +264,12 @@ Notification:
       date_formats:
         created_at: long
         updated_at: long
+        sent_at: long
   options:
     action_after_save: show
-  actions:
-    show: edit
   order_by: -created_at
   search: ^order_id, text
-  filters: created_at, typus_user
+  filters: created_at
   relationships: order, typus_user
   application: Misc, 2
 
