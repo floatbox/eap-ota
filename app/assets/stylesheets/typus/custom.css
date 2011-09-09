@@ -16,7 +16,3 @@ ul.additional_actions li {
 div#ui-datepicker-div {display: none;}
 
 pre {font-family: Monaco, monospace; line-height: 1.2}
-
-
-#sidebar a:hover {text-decoration: none;}
-#sidebar a:hover li {background: #444547;}
