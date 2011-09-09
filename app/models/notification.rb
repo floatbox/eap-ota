@@ -6,7 +6,7 @@ class Notification < ActiveRecord::Base
   
   validates :destination, :presence => true
   
-  before_create :set_order_data
+  before_validation :set_order_data
   after_create :set_order_email_status
   
   scope :email_queue, where(
@@ -32,8 +32,8 @@ class Notification < ActiveRecord::Base
 
   def send_email
     logger.info 'Notification: sending email'
-    PnrMailer.notification(destination, pnr_number).deliver
-    update_attribute(:status, 'sent')
+    PnrMailer.notification(destination, pnr_number, comment).deliver
+    update_attributes({:status => 'sent', 'sent_at' => Time.now})
     puts "Email pnr #{pnr_number} to #{destination} SENT on #{Time.now}"
     rescue
       update_attribute(:status, 'error')
