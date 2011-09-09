@@ -2,12 +2,12 @@
 require File.expand_path('../../config/environment',  __FILE__)
 
 require 'readline'
-prompt = 'amadeus > '
+prompt = ''
 begin
-  office = ( ARGV.shift == 'ticketing' ?
-    Amadeus::Session::TICKETING : Amadeus::Session::BOOKING
-  )
+  office = ( ARGV.shift || Amadeus::Session::BOOKING ).dup
+  office.upcase!
   amadeus = Amadeus::Service.new(:book => true, :office => office)
+  prompt = "#{Conf.amadeus.env} #{office} > "
   while !(command_line = Readline.readline(prompt, true)).nil?
     command_line.chomp!
     break if command_line == 'q'
