@@ -55,5 +55,16 @@ describe Amadeus::Response::TicketDisplayTST do
       specify{subject[[[2, 'a'], [5, 6, 7, 8]]][:price_fare].should == 7600}
 
   end
+
+  describe 'tst from booking' do
+
+      subject {
+        body = File.read('spec/amadeus/xml/Ticket_DisplayTST_without_tickets.xml')
+        doc = Amadeus::Service.parse_string(body)
+        Amadeus::Response::TicketDisplayTST.new(doc)
+      }
+    its(:total_fare) { should == 39860}
+    its(:total_tax) { should == 15879 }
+  end
 end
 
