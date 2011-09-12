@@ -21,15 +21,17 @@ set :user, "rack"
 set :use_sudo, false
 
 set :deploy_via, :remote_cache
-# если репозиторий лежит на той же машине
-#set :deploy_via, :copy
-#set :repository,  "."
 
 # если гитхаб ляжет
 # то выключить :remote_cache выше и сделать
 # set :repository,  "git@team.eviterra.ru:eviterra.git"
 
 set :repository,  "git@github.com:Eviterra/eviterra.git"
+# если репозиторий лежит на той же машине
+task :localgit do
+  set :deploy_via, :copy
+  set :repository,  "."
+end
 
 
 set :shared_children, %w(log pids system config initializers cache)
