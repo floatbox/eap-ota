@@ -46,7 +46,7 @@ class Order < ActiveRecord::Base
 
   before_create :generate_code, :set_payment_status
   before_save :capitalize_pnr, :calculate_price_with_payment_commission, :create_notification
-  
+
   def create_notification
     if !self.offline_booking && self.email_status == ''
       case self.source
@@ -279,8 +279,7 @@ class Order < ActiveRecord::Base
         self.price_fare = tst_resp.total_fare
         self.price_tax = tst_resp.total_tax
         self.commission_carrier = tst_resp.validating_carrier_code
-        # не работает
-        # self.blank_count = tst_resp.fares_count
+        self.blank_count = tst_resp.blank_count
       end
 
     elsif source == 'sirena'

@@ -47,10 +47,9 @@ module Amadeus
         parse_date_element(xpath('//r:lastTktDate[r:businessSemantic="LT"]/r:dateTime'))
       end
 
-      # количество масок. количество бланков, видимо, тоже.
-      # FIXME: проверить
-      def fares_count
-        xpath('//r:fareList').size
+      # количество бланков
+      def blank_count
+        xpath('//r:fareList/r:paxSegReference/r:refDetails[r:refQualifier="PT" or r:refQualifier="P" or r:refQualifier="PA" or r:refQualifier="PI"]').size
       end
     end
   end
