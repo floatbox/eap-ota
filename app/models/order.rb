@@ -211,6 +211,7 @@ class Order < ActiveRecord::Base
         amadeus.pnr_ignore
       end
       prices = tst_resp.prices_with_refs
+      tickets.where(:status => 'ticketed').every.update_attribute(:status, 'voided')
       pnr_resp.tickets.deep_merge(tst_resp.prices_with_refs).each do |k, ticket_hash|
         t = Ticket.find_or_create_by_number(ticket_hash[:number])
         t.update_attributes(ticket_hash.merge({
@@ -237,12 +238,13 @@ class Order < ActiveRecord::Base
   def update_prices_from_tickets # FIXME перенести в strategy
     if source == 'amadeus'
       price_total_old = self.price_total
-      self.price_fare = tickets.sum(:price_fare)
+      sold_tickets = tickets.where(:status => 'ticketed')
+      self.price_fare = sold_tickets.sum(:price_fare)
       # FIXME почему unless?
-      self.price_consolidator_markup = tickets.sum(:price_consolidator_markup) unless offline_booking
-      self.price_share = tickets.sum(:price_share)
+      self.price_consolidator_markup = sold_tickets.sum(:price_consolidator_markup) unless offline_booking
+      self.price_share = sold_tickets.sum(:price_share)
 
-      self.price_tax = tickets.sum(:price_tax)
+      self.price_tax = sold_tickets.sum(:price_tax)
       self.price_difference = price_total - price_total_old if price_difference == 0
       save
     elsif source == 'sirena'
