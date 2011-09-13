@@ -322,9 +322,12 @@ interline :first
 commission "1eur/5"
 
 example 'svocdg/economy'
+strt_date "01.09.2011"
+expr_date "31.12.2011"
 agent "5%"
 subagent "3.5%"
 classes :economy
+check { not country_iatas.include?('IT') }
 commission "5%/3.5%"
 
 example 'svocdg/business cdgsvo/business'
@@ -2316,5 +2319,6 @@ example "svocdg"
 agent "5 (пять) % от опубл. тарифов на собств. рейсы 5H"
 subagent "3% от опубл. тарифов на собств. рейсы 5H"
 commission "5%/3%"
+
 end
 
