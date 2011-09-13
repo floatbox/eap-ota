@@ -44,8 +44,9 @@ class Order < ActiveRecord::Base
   has_many :notifications
   validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
 
+  before_save :capitalize_pnr, :calculate_price_with_payment_commission
   before_create :generate_code, :set_payment_status
-  before_save :capitalize_pnr, :calculate_price_with_payment_commission, :create_notification
+  after_save :create_notification
 
   def create_notification
     if !self.offline_booking && self.email_status == ''
