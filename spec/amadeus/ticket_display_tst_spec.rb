@@ -18,7 +18,7 @@ describe Amadeus::Response::TicketDisplayTST do
     its(:total_tax) { should == 827 }
     its(:validating_carrier_code) { should == 'FV' }
     its(:last_tkt_date) { should == Date.new(2011, 4, 14) }
-    its(:fares_count) { should == 2 }
+    its(:blank_count) { should == 2 }
   end
 
   describe 'two adults' do
@@ -36,7 +36,7 @@ describe Amadeus::Response::TicketDisplayTST do
     its(:total_tax) { should == 7810 }
     its(:validating_carrier_code) { should == 'LH' }
     its(:last_tkt_date) { should == Date.new(2011, 8, 31) }
-    its(:fares_count) { should == 1 }
+    its(:blank_count) { should == 2 }
   end
 
 
@@ -44,16 +44,29 @@ describe Amadeus::Response::TicketDisplayTST do
       subject {
         body = File.read('spec/amadeus/xml/Ticket_DisplayTST_complex_tickets.xml')
         doc = Amadeus::Service.parse_string(body)
-        Amadeus::Response::TicketDisplayTST.new(doc).prices_with_refs
+        Amadeus::Response::TicketDisplayTST.new(doc)
       }
-      its('keys.length'){should == 4}
-      its('keys'){should include([[2, 'a'], [5, 6, 7, 8]])}
-      its('keys'){should include([[1, 'a'], [5, 6, 7, 8]])}
-      its('keys'){should include([[1, 'a'], [11, 12]])}
-      its('keys'){should include([[2, 'a'], [11, 12]])}
-      specify{subject[[[2, 'a'], [5, 6, 7, 8]]][:price_tax].should == 7814}
-      specify{subject[[[2, 'a'], [5, 6, 7, 8]]][:price_fare].should == 7600}
+      its('prices_with_refs.keys.length'){should == 4}
+      its('prices_with_refs.keys'){should include([[2, 'a'], [5, 6, 7, 8]])}
+      its('prices_with_refs.keys'){should include([[1, 'a'], [5, 6, 7, 8]])}
+      its('prices_with_refs.keys'){should include([[1, 'a'], [11, 12]])}
+      its('prices_with_refs.keys'){should include([[2, 'a'], [11, 12]])}
+      specify{subject.prices_with_refs[[[2, 'a'], [5, 6, 7, 8]]][:price_tax].should == 7814}
+      specify{subject.prices_with_refs[[[2, 'a'], [5, 6, 7, 8]]][:price_fare].should == 7600}
+      its(:blank_count) {should == 4}
 
+  end
+
+  describe 'tst from booking' do
+
+      subject {
+        body = File.read('spec/amadeus/xml/Ticket_DisplayTST_without_tickets.xml')
+        doc = Amadeus::Service.parse_string(body)
+        Amadeus::Response::TicketDisplayTST.new(doc)
+      }
+    its(:total_fare) { should == 39860}
+    its(:total_tax) { should == 15879 }
+    its(:blank_count) { should == 3 }
   end
 end
 

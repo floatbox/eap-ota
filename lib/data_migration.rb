@@ -6,6 +6,17 @@ require 'csv'
 
 module DataMigration
 
+  def self.fill_in_ticketed_date_in_sirena_tickets
+    orders = Order.where(['source = "sirena" AND created_at > ? AND ticket_status = "ticketed"', Date.today - 1.month]).order('created_at DESC')
+    orders.each do |o|
+      ticket_dates = Sirena::Service.new.pnr_status(o.pnr_number).tickets_with_dates
+      ticket_dates.each do |number, date|
+        ticket = o.tickets.find_by_number(number)
+        ticket.update_attribute(:ticketed_date, date) if ticket
+      end
+    end
+  end
+
   def self.fill_in_ref_in_payments
     Payment.all(:conditions => 'ref = "" OR ref is NULL').each do |p|
       p.update_attribute(:ref,  Conf.payment.order_id_prefix + p.id.to_s)

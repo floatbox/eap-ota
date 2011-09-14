@@ -336,11 +336,15 @@ class Strategy
   # #########
 
   def delayed_ticketing?
+    # временная затычка, чтоб 3ds не пытался обилетить "ручное бронирование" и обломаться
+    return true if @order.offline_booking?
     case source
-    when 'amadeus'
-      true
     when 'sirena'
       false
+    when 'amadeus'
+      true
+    else
+      true
     end
   end
 

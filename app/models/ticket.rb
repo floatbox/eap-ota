@@ -3,6 +3,8 @@ class Ticket < ActiveRecord::Base
   belongs_to :order
   delegate :source, :commission_carrier, :pnr_number, :need_attention, :paid_by, :commission_carrier, :to => :order, :allow_nil => true
 
+  scope :uncomplete, where(:ticketed_date => nil)
+
   # FIXME сделать перечисление прямо из базы, через uniq
   def self.office_ids
     ['MOWR2233B', 'MOWR228FA', 'MOWR2219U']
@@ -14,6 +16,10 @@ class Ticket < ActiveRecord::Base
 
   def self.sources
     ['amadeus', 'sirena']
+  end
+
+  def self.statuses
+    ['ticketed', 'voided']
   end
 
   def ticket_date

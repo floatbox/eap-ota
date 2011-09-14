@@ -3,7 +3,7 @@ module Amadeus
   module Response
     class TicketDisplayTST < Amadeus::Response::Base
       def prices_with_refs
-        xpath('//r:fareList/r:paxSegReference/r:refDetails[r:refQualifier="PT"]').inject({}) do |memo, rd|
+        xpath('//r:fareList/r:paxSegReference/r:refDetails[r:refQualifier="PT" or r:refQualifier="P" or r:refQualifier="PA" or r:refQualifier="PI"]').inject({}) do |memo, rd|
           passenger_ref = rd.xpath('r:refNumber').to_i
           fi = rd.xpath('../../r:fareDataInformation')
           infant_flag = rd.xpath('../../r:statusInformation/r:firstStatusDetails[r:tstFlag="INF"]').present?
@@ -47,10 +47,9 @@ module Amadeus
         parse_date_element(xpath('//r:lastTktDate[r:businessSemantic="LT"]/r:dateTime'))
       end
 
-      # количество масок. количество бланков, видимо, тоже.
-      # FIXME: проверить
-      def fares_count
-        xpath('//r:fareList').size
+      # количество бланков
+      def blank_count
+        xpath('//r:fareList/r:paxSegReference/r:refDetails[r:refQualifier="PT" or r:refQualifier="P" or r:refQualifier="PA" or r:refQualifier="PI"]').size
       end
     end
   end

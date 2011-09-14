@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sirena>
+  <answer pult="ГРФ365">
+    <pnr_status>
+      <regnum>08РГЛ0</regnum>
+      <timelimit></timelimit>
+      <book_time>14.09.2011 15:31</book_time>
+      <nseats>3</nseats>
+      <agn>36МОС</agn>
+      <ppr>92388085</ppr>
+      <nseg>1</nseg>
+      <npax>3</npax>
+      <segments>
+        <segment seg_id="16" nseats="3" book_time="14.09.2011 15:31" created_by="2647"/>
+      </segments>
+      <tickinfo ticknum="2626150617647" tick_ser="ЭБМ" accode="262" is_etick="true" tkt_ppr="92388085" seg_id="16" pass_id="11">ticket</tickinfo>
+      <tickinfo ticknum="2626150617648" tick_ser="ЭБМ" accode="262" is_etick="true" tkt_ppr="92388085" seg_id="16" pass_id="13">ticket</tickinfo>
+      <tickinfo ticknum="2626150617649" tick_ser="ЭБМ" accode="262" is_etick="true" tkt_ppr="92388085" seg_id="16" pass_id="15">ticket</tickinfo>
+      <new_tickinfo>
+        <ticket ser="ЭБМ" num="6150617647" mco="false" is_etick="true">
+          <action type="print" ontime="14.09.2011 15:32" n_seats="1" seg_id="16" opr="ТКП36МОС0465" pult="ГРФ365" sum="2350.00" curr="РУБ"/>
+        </ticket>
+        <ticket ser="ЭБМ" num="6150617648" mco="false" is_etick="true">
+          <action type="print" ontime="14.09.2011 15:32" n_seats="1" seg_id="16" opr="ТКП36МОС0465" pult="ГРФ365" sum="2350.00" curr="РУБ"/>
+        </ticket>
+        <ticket ser="ЭБМ" num="6150617649" mco="false" is_etick="true">
+          <action type="print" ontime="14.09.2011 15:32" n_seats="1" seg_id="16" opr="ТКП36МОС0465" pult="ГРФ365" sum="2350.00" curr="РУБ"/>
+        </ticket>
+      </new_tickinfo>
+      <common_status>ticket</common_status>
+    </pnr_status>
+  </answer>
+</sirena>

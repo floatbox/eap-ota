@@ -44,9 +44,10 @@ class Order < ActiveRecord::Base
   has_many :notifications
   validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
 
+  before_save :capitalize_pnr, :calculate_price_with_payment_commission
   before_create :generate_code, :set_payment_status
-  before_save :capitalize_pnr, :calculate_price_with_payment_commission, :create_notification
-  
+  after_save :create_notification
+
   def create_notification
     if !self.offline_booking && self.email_status == ''
       case self.source
@@ -211,6 +212,7 @@ class Order < ActiveRecord::Base
         amadeus.pnr_ignore
       end
       prices = tst_resp.prices_with_refs
+      tickets.where(:status => 'ticketed').every.update_attribute(:status, 'voided')
       pnr_resp.tickets.deep_merge(tst_resp.prices_with_refs).each do |k, ticket_hash|
         t = Ticket.find_or_create_by_number(ticket_hash[:number])
         t.update_attributes(ticket_hash.merge({
@@ -225,8 +227,10 @@ class Order < ActiveRecord::Base
       update_attribute(:departure_date, pnr_resp.flights.first.dept_date) if pnr_resp.flights.present?
     elsif source == 'sirena'
       order_resp = Sirena::Service.new.order(pnr_number, sirena_lead_pass)
+      ticket_dates = Sirena::Service.new.pnr_status(pnr_number).tickets_with_dates
       order_resp.ticket_hashes.each do |t|
         ticket = tickets.find_or_create_by_number(t[:number])
+        t['ticketed_date'] = ticket_dates[t[:number]] if ticket_dates[t[:number]]
         ticket.update_attributes(t)
       end
       update_attribute(:departure_date, order_resp.flights.first.dept_date)
@@ -237,12 +241,13 @@ class Order < ActiveRecord::Base
   def update_prices_from_tickets # FIXME перенести в strategy
     if source == 'amadeus'
       price_total_old = self.price_total
-      self.price_fare = tickets.sum(:price_fare)
+      sold_tickets = tickets.where(:status => 'ticketed')
+      self.price_fare = sold_tickets.sum(:price_fare)
       # FIXME почему unless?
-      self.price_consolidator_markup = tickets.sum(:price_consolidator_markup) unless offline_booking
-      self.price_share = tickets.sum(:price_share)
+      self.price_consolidator_markup = sold_tickets.sum(:price_consolidator_markup) unless offline_booking
+      self.price_share = sold_tickets.sum(:price_share)
 
-      self.price_tax = tickets.sum(:price_tax)
+      self.price_tax = sold_tickets.sum(:price_tax)
       self.price_difference = price_total - price_total_old if price_difference == 0
       save
     elsif source == 'sirena'
@@ -279,8 +284,7 @@ class Order < ActiveRecord::Base
         self.price_fare = tst_resp.total_fare
         self.price_tax = tst_resp.total_tax
         self.commission_carrier = tst_resp.validating_carrier_code
-        # не работает
-        # self.blank_count = tst_resp.fares_count
+        self.blank_count = tst_resp.blank_count
       end
 
     elsif source == 'sirena'
