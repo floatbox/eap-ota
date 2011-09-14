@@ -386,7 +386,7 @@ class Order < ActiveRecord::Base
     else
       custom_fields.order = self
     end
-    payment = Payment.create(:price => price_with_payment_commission, :card => card, :order => self, :custom_fields => custom_fields, :system => 'payture')
+    payment = PaytureCharge.create(:price => price_with_payment_commission, :card => card, :custom_fields => custom_fields, :order => self)
     payment.payture_block
   end
 
@@ -469,16 +469,6 @@ class Order < ActiveRecord::Base
   
   def set_email_status
     self.email_status = (source == 'amadeus') ? 'not ready' : ''
-  end
-
-  # надо указать текущую сумму. чтобы нечаянно не рефанднуть дважды
-  def refund(original_amount, refund_amount)
-    ref = {:order_id => payments.last.ref}
-    reported_amount = Payture.new.state(ref).amount
-    if original_amount != reported_amount
-      raise "it should have been #{original_amount} charged, got #{reported_amount} instead"
-    end
-    Payture.new.refund(refund_amount, ref)
   end
 
   # для админки

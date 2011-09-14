@@ -156,6 +156,7 @@ class BookingController < ApplicationController
 
   def confirm_3ds
     pa_res, md = params['PaRes'], params['MD']
+    # Payment::Payture::Charge ?
     @payment = Payment.find_by_threeds_key(md)
     unless @payment
       render :status => :not_found

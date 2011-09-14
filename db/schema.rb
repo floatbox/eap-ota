@@ -322,6 +322,7 @@ ActiveRecord::Schema.define(:version => 20120127130355) do
     t.string   "system"
     t.date     "charged_on"
     t.string   "pan"
+    t.string   "type"
   end
 
   create_table "regions", :force => true do |t|
