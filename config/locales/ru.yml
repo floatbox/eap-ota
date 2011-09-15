@@ -26,6 +26,7 @@ ru:
       notification: 'Оповещение'
     attributes:
       order:
+        has_refunds: "Были возвраты"
         price_fare: "Тариф"
         price_tax: "Таксы"
         price_consolidator_markup: "Сбор авиацентра в рублях"
@@ -79,4 +80,9 @@ ru:
   # bulk actions
   Charge: Списать с карты
   Apply: Применить
+
+  'yes': да
+  'Yes': Да
+  'no': нет
+  'No': Нет
 
