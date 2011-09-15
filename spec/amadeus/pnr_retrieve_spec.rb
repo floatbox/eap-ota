@@ -123,6 +123,17 @@ describe Amadeus::Response::PNRRetrieve do
 
   describe "#tickets" do
 
+    context "with service tickets" do
+
+      subject {
+        body = File.read('spec/amadeus/xml/PNR_Retrieve_with_service_tickets.xml')
+        doc = Amadeus::Service.parse_string(body)
+        Amadeus::Response::PNRRetrieve.new(doc)
+      }
+
+      its(:tickets) {should be_present}
+    end
+
     context "two tickets for one passenger" do
 
       subject {
