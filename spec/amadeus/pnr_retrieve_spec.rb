@@ -72,17 +72,53 @@ describe Amadeus::Response::PNRRetrieve do
   end
 
   describe "#parse_ticket_string" do
-    subject {
-      Amadeus::Response::PNRRetrieve.new('').parsed_ticket_string('INF 220-2791248716-17/ETLH/RUB120/25FEB11/MOWR2219U/92223412')
-    }
 
-    its([:code]) { should == '220' }
-    its([:number]) { should == '2791248716-17' }
-    its([:status]) { should == 'ticketed' }
-    its([:ticketed_date]) { should == Date.new(2011, 2, 25) }
-    its([:validating_carrier]) { should == 'LH' }
-    its([:office_id]) { should == 'MOWR2219U' }
-    its([:validator]) { should == '92223412' }
+    describe 'simple parse' do
+
+      subject {
+        Amadeus::Response::PNRRetrieve.new('').parsed_ticket_string('INF 220-2791248716-17/ETLH/RUB120/25FEB11/MOWR2219U/92223412')
+      }
+
+      its([:code]) { should == '220' }
+      its([:number]) { should == '2791248716-17' }
+      its([:status]) { should == 'ticketed' }
+      its([:ticketed_date]) { should == Date.new(2011, 2, 25) }
+      its([:validating_carrier]) { should == 'LH' }
+      its([:office_id]) { should == 'MOWR2219U' }
+      its([:validator]) { should == '92223412' }
+    end
+
+    describe 'with dot in currency' do
+
+      subject {
+        Amadeus::Response::PNRRetrieve.new('').parsed_ticket_string('PAX 996-2400495502/ETUX/EUR0.00/12SEP11/PMIUX0002/78494264')
+      }
+
+      it {should be_present}
+      its([:code]) { should == '996' }
+      its([:number]) { should == '2400495502' }
+      its([:status]) { should == 'ticketed' }
+      its([:ticketed_date]) { should == Date.new(2011, 9, 12) }
+      its([:validating_carrier]) { should == 'UX' }
+      its([:office_id]) { should == 'PMIUX0002' }
+      its([:validator]) { should == '78494264' }
+    end
+
+    describe 'without currency' do
+
+      subject {
+        Amadeus::Response::PNRRetrieve.new('').parsed_ticket_string('PAX 566-2962622407/ETPS/09AUG11/MOWR2219U/92223412')
+      }
+
+      it {should be_present}
+      its([:code]) { should == '566' }
+      its([:number]) { should == '2962622407' }
+      its([:status]) { should == 'ticketed' }
+      its([:ticketed_date]) { should == Date.new(2011, 8, 9) }
+      its([:validating_carrier]) { should == 'PS' }
+      its([:office_id]) { should == 'MOWR2219U' }
+      its([:validator]) { should == '92223412' }
+    end
   end
 
   describe "#tickets" do
