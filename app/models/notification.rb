@@ -1,6 +1,6 @@
 # encoding: utf-8
 class Notification < ActiveRecord::Base
-
+  include Rails.application.routes.url_helpers
   belongs_to :order
   belongs_to :typus_user
 
@@ -19,6 +19,8 @@ class Notification < ActiveRecord::Base
     :status => '')
 
   alias_attribute :email, :destination
+
+  def self.statuses; ["", "sent", "error"] end
 
   def set_order_data
     self.pnr_number = order.pnr_number
@@ -59,6 +61,35 @@ class Notification < ActiveRecord::Base
     end
     rescue
       HoptoadNotifier.notify($!) rescue Rails.logger.error("  can't notify hoptoad #{$!.class}: #{$!.message}")
+  end
+
+  def sent_status
+    if status == 'sent'
+      str = 'sent' 
+      str += ' at ' + sent_at.strftime('%d.%m.%y %H:%M') if sent_at
+      str += '<br>' + sent_notice_link if File.exist? log_file
+      str.html_safe
+    else
+      status
+    end
+  end
+
+  def sent_notice_link
+    url = show_sent_notice_path(self)
+    "<a href=#{url} target=\"_blank\">&rarr;письмо</a>"
+  end
+
+  def log_file
+    Rails.root + "log/notice/#{id}.html"
+  end
+
+  def save_notice(content)
+    File.open(log_file, 'w') {|f| f.write(content) }
+  end
+
+  def read_notice()
+    raise "no #{id}.html found in #{path}" unless File.exist? log_file
+    File.read(log_file)
   end
 
 end

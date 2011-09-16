@@ -19,16 +19,11 @@ class PnrMailer < ActionMailer::Base
     else
       content = render 'pnr/booking'
     end
-    save_notice(content, notification.id)
+    notification.save_notice(content)
 
     mail :to => notification.email, :subject => @pnr.order.show_as_ticketed? ? "Ваш электронный билет" : "Ваше бронирование" do |format|
       format.html { render :text => content }
     end
-  end
-
-  def save_notice(content, id)
-    path = Rails.root + 'log/notice/' + "#{id}.html"
-    File.open(path, 'w') {|f| f.write(content) }
   end
 
   def sirena_receipt(email, number)
