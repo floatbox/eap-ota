@@ -2,6 +2,13 @@ require 'spec_helper'
 
 describe Order do
 
+  describe "#tickets.spawn" do
+    it 'should raise exception if number is blank' do
+      o = Order.new
+      expect { o.tickets.spawn("") }.to raise_error
+    end
+  end
+
   describe '#load_tickets' do
     it 'loads tickets correctly from amadeus' do
       order = Order.new(:source => 'amadeus', :commission_subagent => '1%', :pnr_number => '123456')
@@ -20,7 +27,7 @@ describe Order do
 
       Amadeus.should_receive(:booking).once.and_yield(amadeus)
       ticket = stub_model(Ticket)
-      Ticket.should_receive(:find_or_create_by_number).and_return(ticket)
+      order.stub_chain(:tickets, :spawn).and_return(ticket)
       ticket.should_receive(:update_attributes).with(hash_including(
         :code => "555",
         :number => "2962867063",
