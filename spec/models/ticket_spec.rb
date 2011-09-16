@@ -26,6 +26,7 @@ describe Ticket do
           :price_fare => fare
         )
       }
+      before { ticket.copy_commissions_from_order }
       before { ticket.recalculate_commissions }
       its(:price_share) {should == 4}
       its(:price_consolidator_markup) {should == (fare * 0.02 + 50) }
@@ -38,6 +39,7 @@ describe Ticket do
         )
       }
 
+      before { ticket.copy_commissions_from_order }
       it "shouldn't raise error" do
         expect { ticket.recalculate_commissions }.to_not raise_error
       end

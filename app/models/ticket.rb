@@ -16,7 +16,7 @@ class Ticket < ActiveRecord::Base
   has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator_markup
   include PricingMethods::Ticket
 
-  before_save :copy_commissions_from_order, :on => :create
+  before_save :copy_commissions_from_order
   before_save :recalculate_commissions
 
   scope :uncomplete, where(:ticketed_date => nil)
@@ -72,10 +72,12 @@ class Ticket < ActiveRecord::Base
   end
 
   def copy_commissions_from_order
-    copy_attrs order, self,
-      :commission_agent,
-      :commission_subagent,
-      :commission_consolidator_markup
+    return unless order
+    for attr in [ :commission_agent, :commission_subagent, :commission_consolidator_markup ]
+      if send(attr).nil?
+        send("#{attr}=", order.send(attr))
+      end
+    end
   end
 
   def ticket_date
