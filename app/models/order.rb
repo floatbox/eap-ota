@@ -2,6 +2,7 @@
 class Order < ActiveRecord::Base
 
   include CopyAttrs
+  include PricingMethods::Order
 
   # new - дефолтное значение без смысла
   # not blocked - ожидание 3ds, неприход наличных, убивается шедулером
@@ -116,10 +117,6 @@ class Order < ActiveRecord::Base
     1 if price_difference != 0
   end
 
-  def price_total
-    price_fare + price_tax + price_our_markup + price_consolidator_markup
-  end
-
   def price_refund
     tickets.where(:kind => 'refund').every.price_refund.sum
   end
@@ -198,15 +195,6 @@ class Order < ActiveRecord::Base
     self.ticket_status = 'booked'
     self.name_in_card = order_form.card.name
     self.last_digits_in_card = order_form.card.number4
-  end
-
-  # вынести куда-нибудь
-  def price_tax_and_markup_and_payment
-    price_with_payment_commission - price_fare
-  end
-
-  def price_tax_and_markup
-    price_tax + price_consolidator_markup + price_our_markup
   end
 
   def raw # FIXME тоже в стратегию?
@@ -335,24 +323,11 @@ class Order < ActiveRecord::Base
   validate :needs_recalculation_filter, :if => :needs_recalculation
 
   def needs_recalculation_filter
+    # из PricingMethods::Order
     recalculation
   rescue => e
     errors.add(:needs_recalculation, e.message)
   end
-
-  def recalculation
-    # price_tax получаются из pnr
-    # price_fare получаются из pnr
-    # price_difference - неактуально и неверно? грохнуть?
-    self.price_share = commission_subagent.call(price_fare, :multiplier =>  blank_count)
-    self.price_consolidator_markup = commission_consolidator_markup.call(price_fare, :multiplier => blank_count)
-
-    # cash_payment_markup оставлять ее тоже?
-    # price_our_markup внести сюда скидку для кэша?
-
-    self.price_with_payment_commission = price_total + Payture.commission(price_total)
-  end
-
 
   def payture_state
     payments.last ? payments.last.payture_state : ''
