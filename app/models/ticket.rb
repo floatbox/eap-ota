@@ -3,6 +3,7 @@ class Ticket < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   include CopyAttrs
   has_paper_trail
+
   belongs_to :order
   belongs_to :parent, :class_name => 'Ticket'
   has_one :refund, :class_name => 'Ticket', :foreign_key => 'parent_id'
@@ -10,6 +11,8 @@ class Ticket < ActiveRecord::Base
   delegate :source, :pnr_number, :need_attention, :paid_by, :to => :order
 
   delegate :commission_carrier, :commission_agent, :commission_subagent, :commission_consolidator_markup, :to => :order, :allow_nil => true
+  include PricingMethods::Ticket
+  before_save :recalculate_commissions
 
   scope :uncomplete, where(:ticketed_date => nil)
 
@@ -94,22 +97,6 @@ class Ticket < ActiveRecord::Base
     validating_carrier || commission_carrier
   end
 
-  def price_total
-    price_fare + price_tax
-  end
-
-  def price_transfer
-      price_fare + price_tax + price_consolidator_markup - price_share
-  end
-
-  def price_refund
-    if kind == 'refund'
-      -(price_tax + price_fare + price_penalty)
-    else
-      0
-    end
-  end
-
   # для тайпуса
   def description
     if kind == 'ticket'
@@ -129,27 +116,6 @@ class Ticket < ActiveRecord::Base
       ).html_safe
     end
   end
-
-  #FIXME это костыль, работает не всегда, нужно сделать нормально
-  def price_with_payment_commission
-    k = (price_tax + price_fare).to_f / (order.price_fare + order.price_tax)
-    order.price_with_payment_commission * k
-  end
-
-  def price_tax_and_markup_and_payment
-    price_with_payment_commission - price_fare
-  end
-
-  def recalculate_commissions
-    if commission_subagent
-      self.price_share = commission_subagent.call(price_fare)
-    end
-    if commission_consolidator_markup
-      self.price_consolidator_markup = commission_consolidator_markup.call(price_fare)
-    end
-    true
-  end
-  before_save :recalculate_commissions
 
   # для админки
   def to_label

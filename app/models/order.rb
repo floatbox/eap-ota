@@ -55,7 +55,8 @@ class Order < ActiveRecord::Base
   validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
 
   before_validation :capitalize_pnr
-  before_save :calculate_price_with_payment_commission
+  before_save :calculate_price_with_payment_commission,
+    :unless => lambda { ['blocked', 'charged'].include? payment_status }
   before_create :generate_code, :set_payment_status
   after_save :create_notification
 
@@ -123,15 +124,6 @@ class Order < ActiveRecord::Base
 
   def generate_code
     self.code = ShortUrl.random_hash
-  end
-
-  def calculate_price_with_payment_commission
-    return if ['blocked', 'charged'].include? payment_status
-    if pricing_method =~ /corporate/
-      self.price_with_payment_commission = price_total
-    else
-      self.price_with_payment_commission = price_total + Payture.commission(price_total)
-    end
   end
 
   # по этой штуке во маршрут-квитанции определяется, "бронирование" это или уже "билет"
