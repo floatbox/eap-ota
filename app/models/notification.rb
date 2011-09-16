@@ -3,36 +3,35 @@ class Notification < ActiveRecord::Base
 
   belongs_to :order
   belongs_to :typus_user
-  
+
   validates :destination, :presence => true
-  
+
   before_validation :set_order_data
   after_create :set_order_email_status
-  
+
   scope :email_queue, where(
     :method => 'email',
     :status => '')
-    
+
   scope :reminder_queue, where('activate_from = ?', 2.days.since.to_date )\
     .where(
     :method => 'email',
     :status => '')
-#      :offline_booking => false,
-#      :ticket_status => 'ticketed',
-#      :payment_status => 'charged'    
+
+  alias_attribute :email, :destination
 
   def set_order_data
-    self.pnr_number = self.order.pnr_number
-    self.destination = self.order.email
+    self.pnr_number = order.pnr_number
+    self.destination = order.email
   end
-  
+
   def set_order_email_status
-    self.order.queued_email!
+    order.queued_email!
   end
 
   def send_email
     logger.info 'Notification: sending email'
-    PnrMailer.notification(destination, pnr_number, comment).deliver
+    PnrMailer.notice(self).deliver
     update_attributes({:status => 'sent', 'sent_at' => Time.now})
     puts "Email pnr #{pnr_number} to #{destination} SENT on #{Time.now}"
     rescue
@@ -40,10 +39,10 @@ class Notification < ActiveRecord::Base
       puts "Email pnr #{pnr_number} to #{destination} ERROR on #{Time.now}"
     raise
   end
-  
+
   def send_reminder
     logger.info 'Notification: sending reminder'
-    PnrMailer.notification(destination, pnr_number).deliver
+    PnrMailer.notice(self).deliver
     update_attribute(:status, 'sent')
     puts "Reminder pnr #{pnr_number} to #{destination} SENT on #{Time.now}"
   rescue
@@ -51,8 +50,7 @@ class Notification < ActiveRecord::Base
     puts "Reminder pnr #{pnr_number} to #{destination} ERROR on #{Time.now}"
     raise
   end
-  
-   
+
   def self.process_queued_emails!
     counter = 0
     while (to_send = Notification.email_queue.first) && counter < 1
