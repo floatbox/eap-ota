@@ -141,6 +141,10 @@ module PricingMethods
       end
     end
 
+    def price_payment_commission
+      Payture.commission(price_total)
+    end
+
     #FIXME это костыль, работает не всегда, нужно сделать нормально
     def price_with_payment_commission
       k = (price_tax + price_fare).to_f / (order.price_fare + order.price_tax)

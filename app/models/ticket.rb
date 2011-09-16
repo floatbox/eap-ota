@@ -10,8 +10,13 @@ class Ticket < ActiveRecord::Base
 
   delegate :source, :pnr_number, :need_attention, :paid_by, :to => :order
 
-  delegate :commission_carrier, :commission_agent, :commission_subagent, :commission_consolidator_markup, :to => :order, :allow_nil => true
+  delegate :commission_carrier, :to => :order, :allow_nil => true
+
+  extend Commission::Columns
+  has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator_markup
   include PricingMethods::Ticket
+
+  before_save :copy_commissions_from_order, :on => :create
   before_save :recalculate_commissions
 
   scope :uncomplete, where(:ticketed_date => nil)
@@ -64,6 +69,13 @@ class Ticket < ActiveRecord::Base
       :code,
       :number,
       :source
+  end
+
+  def copy_commissions_from_order
+    copy_attrs order, self,
+      :commission_agent,
+      :commission_subagent,
+      :commission_consolidator_markup
   end
 
   def ticket_date
