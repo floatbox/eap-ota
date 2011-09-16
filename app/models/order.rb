@@ -39,7 +39,12 @@ class Order < ActiveRecord::Base
   end
 
   has_many :payments
-  has_many :tickets
+  has_many :tickets do
+    def spawn number
+      raise if number.blank?
+      find_or_intialize_by_number number
+    end
+  end
   has_many :order_comments
   has_many :notifications
   validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
@@ -214,7 +219,7 @@ class Order < ActiveRecord::Base
       prices = tst_resp.prices_with_refs
       tickets.where(:status => 'ticketed').every.update_attribute(:status, 'voided')
       pnr_resp.tickets.deep_merge(tst_resp.prices_with_refs).each do |k, ticket_hash|
-        t = Ticket.find_or_create_by_number(ticket_hash[:number])
+        t = tickets.spawn(ticket_hash[:number])
         t.update_attributes(ticket_hash.merge({
           :order => self,
           :source => 'amadeus',
@@ -229,7 +234,7 @@ class Order < ActiveRecord::Base
       order_resp = Sirena::Service.new.order(pnr_number, sirena_lead_pass)
       ticket_dates = Sirena::Service.new.pnr_status(pnr_number).tickets_with_dates
       order_resp.ticket_hashes.each do |t|
-        ticket = tickets.find_or_create_by_number(t[:number])
+        ticket = tickets.spawn(t[:number])
         t['ticketed_date'] = ticket_dates[t[:number]] if ticket_dates[t[:number]]
         ticket.update_attributes(t)
       end
