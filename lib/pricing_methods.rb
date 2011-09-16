@@ -16,9 +16,9 @@ module PricingMethods
   #   *  ??? price_payment_commission      8. Комиссия за эквайринг Bank fee [=(п.7*3,25%)/(100%-3,25%)] 
   #      price_with_payment_commission     9. Итого к оплате TOTAL CLIENT PRICE [=п.7+п.8]
   #
-  #   *  ??? price_original                Поле "Режим 1 или 3" (цифра) [=п.1+п.2]
+  #   *  price_original                    Поле "Режим 1 или 3" (цифра) [=п.1+п.2]
   #
-  #   *  ??? price_tax_extra               Поле "Режим 2" (цифра) [=п.4+5+6+8]
+  #   *  price_tax_extra                   Поле "Режим 2" (цифра) [=п.4+5+6+8]
   #          но есть:
   #          price_tax_and_markup_and_payment = price_tax_extra + price_tax
   #          price_tax_and_markup             = price_tax_extra - price_payment_commission
@@ -82,6 +82,18 @@ module PricingMethods
       else
         self.price_with_payment_commission = price_total + Payture.commission(price_total)
       end
+    end
+
+    def price_payment_commission
+      Payture.commission(price_total)
+    end
+
+    def price_original
+      price_tax + price_fare
+    end
+
+    def price_tax_extra
+      price_tax_and_markup + price_payment_commission
     end
 
     def recalculation
