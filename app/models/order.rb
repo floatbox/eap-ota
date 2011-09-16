@@ -42,7 +42,7 @@ class Order < ActiveRecord::Base
   has_many :tickets do
     def spawn number
       raise if number.blank?
-      find_or_intialize_by_number number
+      find_or_initialize_by_number number
     end
   end
   has_many :order_comments
@@ -220,6 +220,7 @@ class Order < ActiveRecord::Base
       tickets.where(:status => 'ticketed').every.update_attribute(:status, 'voided')
       pnr_resp.tickets.deep_merge(tst_resp.prices_with_refs).each do |k, ticket_hash|
         t = tickets.spawn(ticket_hash[:number])
+        ticket_hash.delete(:ticketed_date) if t.ticketed_date
         t.update_attributes(ticket_hash.merge({
           :order => self,
           :source => 'amadeus',
