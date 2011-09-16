@@ -35,6 +35,11 @@ class PNRController < ApplicationController
     render "ticket"
   end
 
+  def show_sent_notice
+    notice = Notification.find(params[:id])
+    render :text => notice.read_notice
+  end
+
   def error
     HoptoadNotifier.notify($!) rescue Rails.logger.error("  can't notify hoptoad #{$!.class}: #{$!.message}")
     render 'error', :status => 500
