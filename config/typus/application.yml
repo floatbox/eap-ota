@@ -261,7 +261,7 @@ FlightGroup:
 Notification:
   fields:
     default: comment, typus_user, created_at, sent_at, status
-    list: order, typus_user, created_at, comment, status
+    list: order, comment, typus_user, created_at, sent_at, status
     form: order, comment
     show: order, typus_user, created_at, comment, status
     options:
