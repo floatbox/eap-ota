@@ -141,7 +141,7 @@ OrderComment:
 
 Ticket:
   fields:
-    default: order, carrier, number_with_code, name, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, office_id, validator, status, ticketed_date, itinerary_receipt
+    default: number_with_code, order, carrier, name, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, office_id, validator, status, ticketed_date, itinerary_receipt
     show: order, carrier, number_with_code, last_name, first_name, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, office_id, validator, status, ticketed_date, itinerary_receipt
     edit: code, number, status, ticketed_date, carrier, last_name, first_name, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, office_id, validator
     csv: source, number_with_code, ticket_date, commission_carrier, route, cabins, price_fare, price_tax, price_total,  price_consolidator_markup, commission_subagent, price_share, price_transfer, pnr_number, need_attention, validating_carrier, office_id, validator, status, ticketed_date
@@ -150,7 +150,7 @@ Ticket:
       date_formats:
         created_at: long
   options:
-    default_action_on_item: show
+    default_action_on_item: edit
   order_by: -created_at
   filters: ticketed_date, source, validator, office_id
   relationships: order
