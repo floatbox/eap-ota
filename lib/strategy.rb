@@ -62,7 +62,7 @@ class Strategy
           :seat_total => @search.seat_total
         )
         unless air_sfr.segments_confirmed?
-          logger.error "Strategy: segments aren't confirmed: recommendation: #{@rec.serialize} segments: #{air_sfr.segments_status_codes.join(', ')} Time.now.strftime('%H:%M %d.%m.%Y')}"
+          logger.error "Strategy: segments aren't confirmed: recommendation: #{@rec.serialize} segments: #{air_sfr.segments_status_codes.join(', ')} #{Time.now.strftime('%H:%M %d.%m.%Y')}"
           return
         end
         air_sfr.fill_itinerary!(@rec.segments)
