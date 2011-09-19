@@ -222,14 +222,14 @@ class Order < ActiveRecord::Base
         t = tickets.spawn(ticket_hash[:number])
         ticket_hash.delete(:ticketed_date) if t.ticketed_date
         t.update_attributes(ticket_hash.merge({
-          :order => self,
           :source => 'amadeus',
           :pnr_number => pnr_number,
           :commission_subagent => commission_subagent.to_s
         })
         )
       end
-
+      #Необходимо, тк t.update_attributes глючит при создании билетов (не обновляет self.tickets)
+      tickets.reload
       update_attribute(:departure_date, pnr_resp.flights.first.dept_date) if pnr_resp.flights.present?
     elsif source == 'sirena'
       order_resp = Sirena::Service.new.order(pnr_number, sirena_lead_pass)
