@@ -239,6 +239,7 @@ class Order < ActiveRecord::Base
         t['ticketed_date'] = ticket_dates[t[:number]] if ticket_dates[t[:number]]
         ticket.update_attributes(t)
       end
+      tickets.reload
       update_attribute(:departure_date, order_resp.flights.first.dept_date)
     end
 
