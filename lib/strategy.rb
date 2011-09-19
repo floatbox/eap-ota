@@ -73,7 +73,7 @@ class Strategy
         # amadeus.pnr_ignore
 
         unless TimeChecker.ok_to_book(@rec.variants[0].departure_datetime_utc, @rec.last_tkt_date)
-          logger.error 'Strategy: time criteria for last tkt date missed'
+          logger.error "Strategy: time criteria for last tkt date missed: #{@rec.last_tkt_date}"
           dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
           return
         end
@@ -181,7 +181,7 @@ class Strategy
           end
 
           unless TimeChecker.ok_to_sell(@rec.variants[0].departure_datetime_utc, @rec.last_tkt_date)
-            logger.error 'Strategy: time criteria for last tkt date missed'
+            logger.error "Strategy: time criteria for last tkt date missed: #{@rec.last_tkt_date}"
             dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
             amadeus.pnr_cancel
             return
