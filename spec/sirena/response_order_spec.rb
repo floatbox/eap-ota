@@ -16,7 +16,8 @@ describe Sirena::Response::Order do
     its("passengers.every.ticket") { should == [nil] }
     its("passengers.every.last_name") { should == ['TROFIMENKO'] }
     its("passengers.every.passport") { should == ['6555555555'] }
-    its(:email) { should == 'USER@EXAMPLE.COM' }
+    # теперь там контакт евитерры
+    #its(:email) { should == 'USER@EXAMPLE.COM' }
     its(:phone) { should == '+79265555555' }
     it { should have(2).flights }
     its(:booking_classes) { should == %W(Y Y) }
@@ -35,7 +36,8 @@ describe Sirena::Response::Order do
     its ("passengers.every.ticket") { should == [ '2626150600213', '2626150600214'] }
     its ("passengers.every.ticket_number") { should == [ '6150600213', '6150600214' ] }
     its ("passengers.every.ticket_code") { should == [ '262', '262'] }
-    its(:email) { should == 'USER@EXAMPLE.COM' }
+    # теперь там контакт евитерры
+    #its(:email) { should == 'USER@EXAMPLE.COM' }
     its(:phone) { should == '+79265555555' }
     it { should have(2).flights }
     its(:booking_classes) { should == %W(Y Y) }
