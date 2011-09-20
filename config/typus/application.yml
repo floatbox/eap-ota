@@ -153,7 +153,7 @@ Ticket:
   options:
     default_action_on_item: show
   order_by: -created_at
-  filters: ticketed_date, source, validator, office_id
+  filters: ticketed_date, source, validator, office_id, status
   relationships: order
   application: Orders, 1
   export: csv
