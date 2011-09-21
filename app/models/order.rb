@@ -290,6 +290,12 @@ class Order < ActiveRecord::Base
     elsif source == 'sirena'
       order_resp = Sirena::Service.new.order(pnr_number, sirena_lead_pass)
       self.departure_date = order_resp.flights.first.dept_date
+      hash = pricing_hash_for_sirena(order_resp)
+      pricing_resp = Sirena::Service.new.pricing_variant(hash)
+      recommendation_resp = pricing_resp.recommendations.first #по замыслу всегда 1 рек-я
+      self.price_fare = recommendation_resp.total_fare
+      self.price_tax = recommendation_resp.total_tax
+
     end
 
   end
@@ -367,11 +373,11 @@ class Order < ActiveRecord::Base
   def resend_email!
     update_attribute(:email_status, '')
   end
-  
+
   def queued_email!
     update_attribute(:email_status, 'queued')
   end
-  
+
 
 # class methods
 
@@ -401,6 +407,26 @@ class Order < ActiveRecord::Base
   def to_label
     "#{source} #{pnr_number}"
   end
+
+  def pricing_hash_for_sirena(order)
+
+    variants = Variant.new(
+      :segments => order.flights.collect do |flight|
+
+      Segment.new( :flights => [flight])
+      end )
+
+    recommendation =  Recommendation.new(
+      :source => 'sirena',
+      :booking_classes => order.booking_classes,
+      :variants => [variants]
+    )
+
+    passengers = order.passengers
+    hash = {:recommendation => recommendation, :given_passengers => passengers}
+  end
+
+
 
 end
 
