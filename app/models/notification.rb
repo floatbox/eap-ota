@@ -66,9 +66,9 @@ class Notification < ActiveRecord::Base
 
   def sent_status
     if status == 'sent'
-      str = 'sent' 
+      str = 'sent'
       str += ' at ' + sent_at.strftime('%d.%m.%y %H:%M') if sent_at
-      str += '<br>' + sent_notice_link if File.exist? log_file
+      str += '<br>' + sent_notice_link if rendered_message
       str.html_safe
     else
       status
