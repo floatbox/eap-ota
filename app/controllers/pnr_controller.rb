@@ -37,7 +37,7 @@ class PNRController < ApplicationController
 
   def show_sent_notice
     notice = Notification.find(params[:id])
-    render :text => notice.read_notice
+    render :text => notice.rendered_message
   end
 
   def error

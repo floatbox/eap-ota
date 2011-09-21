@@ -1,6 +1,7 @@
 # encoding: utf-8
 class Notification < ActiveRecord::Base
   include Rails.application.routes.url_helpers
+  include ActionView::Helpers::TextHelper
   belongs_to :order
   belongs_to :typus_user
 
@@ -79,17 +80,8 @@ class Notification < ActiveRecord::Base
     "<a href=#{url} target=\"_blank\">&rarr;письмо</a>"
   end
 
-  def log_file
-    Rails.root + "log/notice/#{id}.html"
-  end
-
-  def save_notice(content)
-    File.open(log_file, 'w') {|f| f.write(content) }
-  end
-
-  def read_notice()
-    raise "no #{id}.html found in #{path}" unless File.exist? log_file
-    File.read(log_file)
+  def save_rendered_message(content)
+    update_attribute(:rendered_message, content)
   end
 
 end

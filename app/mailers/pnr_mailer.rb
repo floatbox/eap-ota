@@ -19,7 +19,7 @@ class PnrMailer < ActionMailer::Base
     else
       content = render 'pnr/booking'
     end
-    notification.save_notice(content)
+    notification.save_rendered_message(content)
 
     mail :to => notification.email, :subject => @pnr.order.show_as_ticketed? ? "Ваш электронный билет" : "Ваше бронирование" do |format|
       format.html { render :text => content }

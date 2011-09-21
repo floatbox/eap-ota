@@ -263,7 +263,7 @@ Notification:
     default: comment, typus_user, created_at, sent_status
     list: order, comment, typus_user, created_at, sent_status
     form: order, comment
-    show: order, typus_user, created_at, comment, sent_status
+    show: order, typus_user, created_at, destination, comment, sent_status
     options:
       read_only: order
       date_formats:
@@ -272,6 +272,7 @@ Notification:
         sent_at: long
   options:
     action_after_save: show
+    default_action_on_item: show
   order_by: -created_at
   search: ^order_id, pnr_number, comment
   filters: created_at, status
