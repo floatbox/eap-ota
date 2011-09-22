@@ -13,15 +13,18 @@ class PnrMailer < ActionMailer::Base
     @passengers = @pnr.passengers
     @last_pay_time = @pnr.order.last_pay_time
     @comment = notification.comment
-
-    if @pnr.order.show_as_ticketed?
-      notification.rendered_message = render 'pnr/ticket'
-    else
-      notification.rendered_message = render 'pnr/booking'
+    
+    if notification.format.blank?
+      notification.format = @pnr.order.show_as_ticketed? ? "ticket" : "booking"
     end
 
-    if notification.subject.blank?
-      notification.subject = @pnr.order.show_as_ticketed? ? "Ваш электронный билет" : "Ваше бронирование"
+    case notification.format
+      when 'ticket'
+        notification.rendered_message = render 'pnr/ticket'
+        notification.subject = "Ваш электронный билет" if notification.subject.blank?
+      when 'booking'
+        notification.rendered_message = render 'pnr/booking'
+        notification.subject = "Ваше бронирование" if notification.subject.blank?
     end
 
     mail :to => notification.email, :subject => notification.subject do |format|
