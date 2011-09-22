@@ -262,10 +262,11 @@ Notification:
   fields:
     default: subject, comment, typus_user, created_at, sent_status
     list: order, subject, comment, typus_user, created_at, sent_status
-    form: order, subject, comment
+    form: order, attach_pnr, subject, comment, format, status
     show: order, typus_user, created_at, destination, subject, comment, sent_status
     options:
       read_only: order
+      selectors: status, format
       date_formats:
         created_at: long
         updated_at: long
