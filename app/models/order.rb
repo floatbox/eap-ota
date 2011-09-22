@@ -39,7 +39,12 @@ class Order < ActiveRecord::Base
   end
 
   has_many :payments
-  has_many :tickets
+  has_many :tickets do
+    def spawn number
+      raise if number.blank?
+      find_or_initialize_by_number number
+    end
+  end
   has_many :order_comments
   has_many :notifications
   validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
@@ -214,25 +219,27 @@ class Order < ActiveRecord::Base
       prices = tst_resp.prices_with_refs
       tickets.where(:status => 'ticketed').every.update_attribute(:status, 'voided')
       pnr_resp.tickets.deep_merge(tst_resp.prices_with_refs).each do |k, ticket_hash|
-        t = Ticket.find_or_create_by_number(ticket_hash[:number])
+        t = tickets.spawn(ticket_hash[:number])
+        ticket_hash.delete(:ticketed_date) if t.ticketed_date
         t.update_attributes(ticket_hash.merge({
-          :order => self,
           :source => 'amadeus',
           :pnr_number => pnr_number,
           :commission_subagent => commission_subagent.to_s
         })
         )
       end
-
+      #Необходимо, тк t.update_attributes глючит при создании билетов (не обновляет self.tickets)
+      tickets.reload
       update_attribute(:departure_date, pnr_resp.flights.first.dept_date) if pnr_resp.flights.present?
     elsif source == 'sirena'
       order_resp = Sirena::Service.new.order(pnr_number, sirena_lead_pass)
       ticket_dates = Sirena::Service.new.pnr_status(pnr_number).tickets_with_dates
       order_resp.ticket_hashes.each do |t|
-        ticket = tickets.find_or_create_by_number(t[:number])
+        ticket = tickets.spawn(t[:number])
         t['ticketed_date'] = ticket_dates[t[:number]] if ticket_dates[t[:number]]
         ticket.update_attributes(t)
       end
+      tickets.reload
       update_attribute(:departure_date, order_resp.flights.first.dept_date)
     end
 

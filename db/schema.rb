@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110907165757) do
+ActiveRecord::Schema.define(:version => 20110914170544) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -281,6 +281,7 @@ ActiveRecord::Schema.define(:version => 20110907165757) do
     t.date     "departure_date"
     t.integer  "blank_count"
     t.string   "partner"
+    t.boolean  "has_refunds",                                                 :default => false,    :null => false
   end
 
   create_table "payments", :force => true do |t|

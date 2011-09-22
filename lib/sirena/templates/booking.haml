@@ -21,8 +21,10 @@
       - if passenger[:nationality]
         %nationality= passenger[:nationality]
   %contacts
-    %contact= phone
-    %contact= email
+    %phone= phone
+    -# %email= email
+    -# указываем наш емейл, будем ловить туда маршрут-квитанции
+    %email ticket@eviterra.com
   %answer_params
     %return_request true
     %show_tts true

@@ -16,7 +16,7 @@ describe Flight do
       it "should call air_flight_info with correct params" do
         code = '3  BT 419 Z 01AUG 4 DMERIX HK1  1505 1600  01AUG  E  BT/22BFU3'
         Amadeus::Service.should_receive(:air_flight_info)\
-          .with(:date => '010812', :number => '419', :carrier => 'BT', :departure_iata => 'DME', :arrival_iata => 'RIX')\
+          .with(:date => Date.new(2012, 8, 1), :number => '419', :carrier => 'BT', :departure_iata => 'DME', :arrival_iata => 'RIX')\
           .and_return(stubbed_air_flight_info)
 
         Flight.from_amadeus_code(code)

@@ -2,25 +2,36 @@ require 'spec_helper'
 
 describe Order do
 
+  describe "#tickets.spawn" do
+    it 'should raise exception if number is blank' do
+      o = Order.new
+      expect { o.tickets.spawn("") }.to raise_error
+    end
+  end
+
   describe '#load_tickets' do
-    it 'loads tickets correctly from amadeus' do
-      order = Order.new(:source => 'amadeus', :commission_subagent => '1%', :pnr_number => '123456')
-      order.stub_chain(:tickets, :every, :delete)
-      amadeus = mock('Amadeus')
+
+    before(:each) do
+      @order = Order.new(:source => 'amadeus', :commission_subagent => '1%', :pnr_number => '123456')
+      @amadeus = mock('Amadeus')
 
       body = File.read('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml')
       doc = Amadeus::Service.parse_string(body)
-      amadeus.stub(:pnr_retrieve).and_return(Amadeus::Response::PNRRetrieve.new(doc))
+      @amadeus.stub(:pnr_retrieve).and_return(Amadeus::Response::PNRRetrieve.new(doc))
 
 
       body = File.read('spec/amadeus/xml/Ticket_DisplayTST_with_ticket.xml')
       doc = Amadeus::Service.parse_string(body)
-      amadeus.stub(:ticket_display_tst).and_return(Amadeus::Response::TicketDisplayTST.new(doc))
-      amadeus.stub(:pnr_ignore)
+      @amadeus.stub(:ticket_display_tst).and_return(Amadeus::Response::TicketDisplayTST.new(doc))
+      @amadeus.stub(:pnr_ignore)
+    end
 
-      Amadeus.should_receive(:booking).once.and_yield(amadeus)
+    it 'loads tickets correctly from amadeus' do
+      Amadeus.should_receive(:booking).once.and_yield(@amadeus)
+      @order.stub_chain(:tickets, :where, :every, :update_attribute)
+      @order.stub_chain(:tickets, :reload)
       ticket = stub_model(Ticket)
-      Ticket.should_receive(:find_or_create_by_number).and_return(ticket)
+      @order.stub_chain(:tickets, :spawn).and_return(ticket)
       ticket.should_receive(:update_attributes).with(hash_including(
         :code => "555",
         :number => "2962867063",
@@ -35,7 +46,15 @@ describe Order do
         :office_id => 'MOWR2219U',
         :validator => '92223412'
       ))
-      order.load_tickets
+      @order.load_tickets
+    end
+
+    it "doesn't create empty tickets" do
+      Amadeus.should_receive(:booking).once.and_yield(@amadeus)
+      @order.stub(:create_notification)
+      @order.save
+      @order.load_tickets
+      @order.tickets.length.should == 1
     end
   end
 
