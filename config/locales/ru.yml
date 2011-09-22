@@ -34,6 +34,7 @@ ru:
         price_total: "Итого себестоимость билета"
         price_with_payment_commission: "Итого к оплате"
         needs_update_from_gds: "Получить данные бронирования из GDS (экспериментально)"
+        offline_booking: "Неавтоматический режим обработки бронирования (offline booking)"
 
   views:
     pagination:

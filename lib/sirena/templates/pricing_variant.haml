@@ -1,0 +1,46 @@
+%pricing
+  - segments.each do |segment|
+    %segment
+      %departure{"xml:lang"=>"en"}= segment[:departure]
+      %arrival{"xml:lang"=>"en"}= segment[:arrival]
+      -if segment[:date]
+        %date= segment[:date]
+      -if segment[:company]
+        %company= segment[:company]
+      -if segment[:num]
+        %num= segment[:num]
+      -if segment[:baseclass]
+        %class= segment[:baseclass]
+      -if segment[:subclass]
+        %subclass= segment[:subclass]
+      %direct= segment[:direct] ? "true" : "false"
+  - passengers.each do |passenger|
+    %passenger
+      %code= passenger[:code]
+      %count= passenger[:count]
+      -if passenger[:age]
+        %age= passenger[:age]
+  %request_params
+    %lang en
+    %min_results 1
+    %max_results 50
+    %mix_scls true
+    %mix_ac false
+    %timeout= suggested_timeout
+    %fingering_order ordinary
+    -# %comb_rules{"comb"=>"yes"}
+      %acomp *
+      %acomp *
+  %answer_params
+    %return_request true
+    %show_flighttime true
+    %show_fareexpdate true
+    %show_io_matching true
+    %show_varianttotal true
+    %show_reg_latin true
+    %show_baseclass true
+    %show_n_blanks true
+    %show_upt_rec true
+    %show_et true
+    %regroup true
+

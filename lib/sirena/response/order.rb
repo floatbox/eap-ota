@@ -14,7 +14,8 @@ module Sirena
             :last_name => p.xpath("surname").text,
             :passport => p.xpath("doc").text,
             :sex => p.xpath("sex").text,
-            :ticket => ticket_numbers.blank? ? nil : ticket_numbers.join(" ")
+            :ticket => ticket_numbers.blank? ? nil : ticket_numbers.join(" "),
+            :birthdate => Date.parse(p.xpath("birthdate").text)
           })
         end
         @booking_classes = []

@@ -221,15 +221,19 @@ class Order < ActiveRecord::Base
       pnr_resp.tickets.deep_merge(tst_resp.prices_with_refs).each do |k, ticket_hash|
         t = tickets.spawn(ticket_hash[:number])
         ticket_hash.delete(:ticketed_date) if t.ticketed_date
-        t.update_attributes(ticket_hash.merge({
-          :order => self,
-          :source => 'amadeus',
-          :pnr_number => pnr_number,
-          :commission_subagent => commission_subagent.to_s
-        })
-        )
+        if !t.new_record? && !(Ticket.office_ids.include? ticket_hash[:office_id])
+          t.update_attribute(:status, ticket_hash[:status])
+        else
+          t.update_attributes(ticket_hash.merge({
+            :source => 'amadeus',
+            :pnr_number => pnr_number,
+            :commission_subagent => commission_subagent.to_s
+          })
+          )
+        end
       end
-
+      #Необходимо, тк t.update_attributes глючит при создании билетов (не обновляет self.tickets)
+      tickets.reload
       update_attribute(:departure_date, pnr_resp.flights.first.dept_date) if pnr_resp.flights.present?
     elsif source == 'sirena'
       order_resp = Sirena::Service.new.order(pnr_number, sirena_lead_pass)
@@ -239,6 +243,7 @@ class Order < ActiveRecord::Base
         t['ticketed_date'] = ticket_dates[t[:number]] if ticket_dates[t[:number]]
         ticket.update_attributes(t)
       end
+      tickets.reload
       update_attribute(:departure_date, order_resp.flights.first.dept_date)
     end
 
@@ -296,6 +301,12 @@ class Order < ActiveRecord::Base
     elsif source == 'sirena'
       order_resp = Sirena::Service.new.order(pnr_number, sirena_lead_pass)
       self.departure_date = order_resp.flights.first.dept_date
+      hash = pricing_hash_for_sirena(order_resp)
+      pricing_resp = Sirena::Service.new.pricing_variant(hash)
+      recommendation_resp = pricing_resp.recommendations.first #по замыслу всегда 1 рек-я
+      self.price_fare = recommendation_resp.total_fare
+      self.price_tax = recommendation_resp.total_tax
+
     end
 
   end
@@ -373,11 +384,11 @@ class Order < ActiveRecord::Base
   def resend_email!
     update_attribute(:email_status, '')
   end
-  
+
   def queued_email!
     update_attribute(:email_status, 'queued')
   end
-  
+
 
 # class methods
 
@@ -407,6 +418,26 @@ class Order < ActiveRecord::Base
   def to_label
     "#{source} #{pnr_number}"
   end
+
+  def pricing_hash_for_sirena(order)
+
+    variants = Variant.new(
+      :segments => order.flights.collect do |flight|
+
+      Segment.new( :flights => [flight])
+      end )
+
+    recommendation =  Recommendation.new(
+      :source => 'sirena',
+      :booking_classes => order.booking_classes,
+      :variants => [variants]
+    )
+
+    passengers = order.passengers
+    hash = {:recommendation => recommendation, :given_passengers => passengers}
+  end
+
+
 
 end
 

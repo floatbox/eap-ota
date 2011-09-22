@@ -88,14 +88,15 @@ Order:
   fields:
     default: order_id, pnr_number, email, phone, updated_at
     list: source, pnr_number, blank_count, contact, created_at,  price_with_payment_commission, payment_status, ticket_status, last_tkt_date, payment_type, has_refunds, partner, urgent, email_status
-    show: order_id, has_refunds, source, pnr_number, blank_count, description, route, payment_status, ticket_status, contact, name_in_card, last_digits_in_card, full_info, price_fare, price_tax, price_consolidator_markup, price_our_markup, price_total, price_with_payment_commission, price_share, commission_carrier, commission_agent_comments, commission_subagent_comments, created_at, updated_at, last_tkt_date, payment_type, delivery, last_pay_time, partner
-    form: description, has_refunds, email, source, pnr_number, sirena_lead_pass, blank_count, route, payment_type, price_fare, price_tax, price_consolidator_markup, price_our_markup, commission_subagent, ticket_status, last_pay_time, needs_update_from_gds
+    show: order_id, has_refunds, source, pnr_number, offline_booking, blank_count, description, route, payment_status, ticket_status, contact, name_in_card, last_digits_in_card, full_info, price_fare, price_tax, price_consolidator_markup, price_our_markup, price_total, price_with_payment_commission, price_share, commission_carrier, commission_agent_comments, commission_subagent_comments, created_at, updated_at, last_tkt_date, payment_type, delivery, last_pay_time, partner
+    form: description, has_refunds, email, source, pnr_number, sirena_lead_pass, offline_booking, blank_count, route, payment_type, price_fare, price_tax, price_consolidator_markup, price_our_markup, commission_subagent, ticket_status, last_pay_time, needs_update_from_gds
     csv: pnr_number, charge_date, created_date, tickets_count, route, commission_carrier, price_tax, price_fare, price_consolidator_markup, commission_subagent, price_share, price_with_payment_commission, need_attention, partner
     options:
       read_only: commission_carrier, commission_agent_comments, commission_subagent_comments
       selectors: payment_type, source, ticket_status
       booleans:
         has_refunds: ['yes', 'no']
+        offline_booking: ['yes', 'no']
       templates:
         needs_update_from_gds: boolean
       date_formats:
@@ -143,8 +144,8 @@ Ticket:
   fields:
     default: number_with_code, order, carrier, name, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, office_id, validator, status, ticketed_date, itinerary_receipt
     show: order, carrier, number_with_code, last_name, first_name, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, office_id, validator, status, ticketed_date, itinerary_receipt
-    edit: code, number, status, ticketed_date, carrier, last_name, first_name, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, office_id, validator
-    csv: source, number_with_code, ticket_date, commission_carrier, route, cabins, price_fare, price_tax, price_total,  price_consolidator_markup, commission_subagent, price_share, price_transfer, pnr_number, need_attention, validating_carrier, office_id, validator, status, ticketed_date
+    edit: code, number, status, ticketed_date, validating_carrier, last_name, first_name, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, office_id, validator
+    csv: source, number_with_code, ticket_date, carrier, route, cabins, price_fare, price_tax, price_total,  price_consolidator_markup, commission_subagent, price_share, price_transfer, pnr_number, need_attention, validating_carrier, office_id, validator, status, ticketed_date
     options:
       selectors: status, source, office_id, validator
       date_formats:
@@ -152,7 +153,7 @@ Ticket:
   options:
     default_action_on_item: edit
   order_by: -created_at
-  filters: ticketed_date, source, validator, office_id
+  filters: ticketed_date, source, validator, office_id, status
   relationships: order
   application: Orders, 1
   export: csv
