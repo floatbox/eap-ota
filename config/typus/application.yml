@@ -260,10 +260,10 @@ FlightGroup:
 
 Notification:
   fields:
-    default: comment, typus_user, created_at, sent_status
-    list: order, comment, typus_user, created_at, sent_status
-    form: order, comment
-    show: order, typus_user, created_at, destination, comment, sent_status
+    default: subject, comment, typus_user, created_at, sent_status
+    list: order, subject, comment, typus_user, created_at, sent_status
+    form: order, subject, comment
+    show: order, typus_user, created_at, destination, subject, comment, sent_status
     options:
       read_only: order
       date_formats:

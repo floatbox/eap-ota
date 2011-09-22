@@ -15,14 +15,17 @@ class PnrMailer < ActionMailer::Base
     @comment = notification.comment
 
     if @pnr.order.show_as_ticketed?
-      content = render 'pnr/ticket'
+      notification.rendered_message = render 'pnr/ticket'
     else
-      content = render 'pnr/booking'
+      notification.rendered_message = render 'pnr/booking'
     end
-    notification.save_rendered_message(content)
 
-    mail :to => notification.email, :subject => @pnr.order.show_as_ticketed? ? "Ваш электронный билет" : "Ваше бронирование" do |format|
-      format.html { render :text => content }
+    if notification.subject.blank?
+      notification.subject = @pnr.order.show_as_ticketed? ? "Ваш электронный билет" : "Ваше бронирование"
+    end
+
+    mail :to => notification.email, :subject => notification.subject do |format|
+      format.html { render :text => notification.rendered_message }
     end
   end
 

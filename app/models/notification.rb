@@ -38,6 +38,7 @@ class Notification < ActiveRecord::Base
     update_attributes({:status => 'sent', 'sent_at' => Time.now})
     puts "Email pnr #{pnr_number} to #{destination} SENT on #{Time.now}"
     rescue
+      reload
       update_attribute(:status, 'error')
       puts "Email pnr #{pnr_number} to #{destination} ERROR on #{Time.now}"
     raise
@@ -48,9 +49,10 @@ class Notification < ActiveRecord::Base
     PnrMailer.notice(self).deliver
     update_attribute(:status, 'sent')
     puts "Reminder pnr #{pnr_number} to #{destination} SENT on #{Time.now}"
-  rescue
-    update_attribute(:status, 'error')
-    puts "Reminder pnr #{pnr_number} to #{destination} ERROR on #{Time.now}"
+    rescue
+      reload
+      update_attribute(:status, 'error')
+      puts "Reminder pnr #{pnr_number} to #{destination} ERROR on #{Time.now}"
     raise
   end
 
@@ -78,10 +80,6 @@ class Notification < ActiveRecord::Base
   def sent_notice_link
     url = show_sent_notice_path(self)
     "<a href=#{url} target=\"_blank\">&rarr;письмо</a>"
-  end
-
-  def save_rendered_message(content)
-    update_attribute(:rendered_message, content)
   end
 
 end
