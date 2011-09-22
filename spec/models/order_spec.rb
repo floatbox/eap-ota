@@ -49,6 +49,41 @@ describe Order do
       @order.load_tickets
     end
 
+    it "shouldn't update tickets updated by airline" do
+      Amadeus.should_receive(:booking).once.and_yield(@amadeus)
+      new_ticket_hash = {[1, [2, 3]] => {
+        :code => "555",
+        :number => "2962867063",
+        :last_name => 'BEDAREVA',
+        :first_name => 'ALEXANDRA MRS',
+        :passport => '4510108712',
+        :ticketed_date => Date.new(2011, 8, 30),
+        :price_tax => 1281,
+        :price_fare => 1400,
+        :validating_carrier => 'SU',
+        :status => 'ticketed',
+        :office_id => 'LONR2219U',
+        :validator => '87823412'
+      }}
+      pnr_resp = stub('Amadeus::Response::PNRRetrieve')
+      pnr_resp.should_receive(:tickets).and_return(new_ticket_hash)
+      pnr_resp.stub(:flights).and_return(nil)
+      tst_resp = stub('Amadeus::Response::TicketDisplayTST')
+      tst_resp.stub(:prices_with_refs).and_return({})
+      @order.stub_chain(:tickets, :where, :every, :update_attribute)
+      @order.stub_chain(:tickets, :reload)
+      ticket = Ticket.new
+      ticket.stub(:new_record?).and_return(false)
+      @order.stub_chain(:tickets, :spawn).and_return(ticket)
+
+      @amadeus.stub(:pnr_retrieve).and_return(pnr_resp)
+      @amadeus.stub(:ticket_display_tst).and_return(tst_resp)
+
+      ticket.should_receive(:update_attribute).with(:status, 'ticketed')
+      @order.load_tickets
+    end
+
+
     it "doesn't create empty tickets" do
       Amadeus.should_receive(:booking).once.and_yield(@amadeus)
       @order.stub(:create_notification)

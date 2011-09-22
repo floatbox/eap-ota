@@ -221,12 +221,16 @@ class Order < ActiveRecord::Base
       pnr_resp.tickets.deep_merge(tst_resp.prices_with_refs).each do |k, ticket_hash|
         t = tickets.spawn(ticket_hash[:number])
         ticket_hash.delete(:ticketed_date) if t.ticketed_date
-        t.update_attributes(ticket_hash.merge({
-          :source => 'amadeus',
-          :pnr_number => pnr_number,
-          :commission_subagent => commission_subagent.to_s
-        })
-        )
+        if !t.new_record? && !(Ticket.office_ids.include? ticket_hash[:office_id])
+          t.update_attribute(:status, ticket_hash[:status])
+        else
+          t.update_attributes(ticket_hash.merge({
+            :source => 'amadeus',
+            :pnr_number => pnr_number,
+            :commission_subagent => commission_subagent.to_s
+          })
+          )
+        end
       end
       #Необходимо, тк t.update_attributes глючит при создании билетов (не обновляет self.tickets)
       tickets.reload
