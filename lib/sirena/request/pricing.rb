@@ -26,10 +26,9 @@ module Sirena
         @passengers = []
         unless args.first.is_a?(Hash)
           form = args.shift
-          determine_passengers_codes_for_priceform (form)
+          determine_passengers_codes_for_priceform(form)
         end
         super *args
-
         if given_passengers
           determine_passengers_codes_for_recommendation
         end
@@ -62,7 +61,7 @@ module Sirena
 
       private
 
-        def determine_passengers_codes_for_priceform (form)
+        def determine_passengers_codes_for_priceform(form)
           if form.people_count[:adults] > 0
             @passengers << {:code => "ААА", :count => form.people_count[:adults]}
           end
@@ -91,10 +90,11 @@ module Sirena
         end
 
         def count_people (birthdate)
+            debugger
             last_flight = @recommendation.flights.last
             string_dep_date = sirena_date(last_flight.departure_date)
             departure_date = Date.parse(string_dep_date)
-            diff = departure_date - birthdate.year
+            diff = departure_date.year - birthdate.year
             if diff < 2
               @infant_counter=+1
             elsif diff < 13
