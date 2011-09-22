@@ -261,9 +261,9 @@ FlightGroup:
 Notification:
   fields:
     default: subject, comment, typus_user, created_at, sent_status
-    list: order, subject, comment, typus_user, created_at, sent_status
+    list: subject, order, comment, typus_user, created_at, sent_status
     form: order, attach_pnr, subject, comment, format, status
-    show: order, typus_user, created_at, destination, subject, comment, sent_status
+    show: order, typus_user, created_at, format, destination, attach_pnr, subject, comment, sent_status
     options:
       read_only: order
       selectors: status, format
@@ -271,6 +271,8 @@ Notification:
         created_at: long
         updated_at: long
         sent_at: long
+      booleans:
+        attach_pnr: ["yes", "no"]
   options:
     action_after_save: show
     default_action_on_item: show
