@@ -17,13 +17,15 @@ class PnrMailer < ActionMailer::Base
     if notification.format.blank?
       notification.format = @pnr.order.show_as_ticketed? ? "ticket" : "booking"
     end
+    
+    notification.rendered_message = render 'pnr/blank' unless notification.attach_pnr
 
     case notification.format
       when 'ticket'
-        notification.rendered_message = render 'pnr/ticket'
+        notification.rendered_message = render 'pnr/ticket' if notification.attach_pnr
         notification.subject = "Ваш электронный билет" if notification.subject.blank?
       when 'booking'
-        notification.rendered_message = render 'pnr/booking'
+        notification.rendered_message = render 'pnr/booking' if notification.attach_pnr
         notification.subject = "Ваше бронирование" if notification.subject.blank?
     end
 

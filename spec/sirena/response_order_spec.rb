@@ -13,7 +13,7 @@ describe Sirena::Response::Order do
     its(:number) { should == '08ВГЦП' }
     it { should have(1).passenger }
     its("passengers.every.first_name") { should == ['ALEKSEY'] }
-    its("passengers.every.ticket") { should == [nil] }
+    its("passengers.every.tickets") { should == [[]] }
     its("passengers.every.last_name") { should == ['TROFIMENKO'] }
     its("passengers.every.passport") { should == ['6555555555'] }
     # теперь там контакт евитерры
@@ -33,9 +33,7 @@ describe Sirena::Response::Order do
     its("passengers.every.first_name") { should == ["ALEKSEY", "MASHA"] }
     its("passengers.every.last_name") { should == ['IVANOV', 'IVANOVA'] }
     its("passengers.every.passport") { should == ["6555555555", "VВГ123456"] }
-    its ("passengers.every.ticket") { should == [ '2626150600213', '2626150600214'] }
-    its ("passengers.every.ticket_number") { should == [ '6150600213', '6150600214' ] }
-    its ("passengers.every.ticket_code") { should == [ '262', '262'] }
+    its ("passengers.every.tickets") { should == [ ['2626150600213'], ['2626150600214']] }
     # теперь там контакт евитерры
     #its(:email) { should == 'USER@EXAMPLE.COM' }
     its(:phone) { should == '+79265555555' }
