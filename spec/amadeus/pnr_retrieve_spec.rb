@@ -12,7 +12,7 @@ describe Amadeus::Response::PNRRetrieve do
 
     it { should be_success }
     it { should have(4).passengers }
-    specify { subject.passengers.collect(&:ticket).should == %W( 220-2791248713 220-2791248714 220-2791248716-17 220-2791248715 ) }
+    specify { subject.passengers.collect(&:tickets).should ==  [['220-2791248713'], ['220-2791248714'], ['220-2791248716-17'], ['220-2791248715']]  }
     specify { subject.passengers.collect(&:last_name).should == ['MITROFANOV', 'MITROFANOVA', 'MITROFANOVA', 'MITROFANOVA'] }
     specify { subject.passengers.collect(&:first_name).should == ['PAVEL MR', 'VALENTINA MRS', 'MARIA', 'ARINA'] }
     specify { subject.passengers.collect(&:passport).should == ['111116818', '222228156', '333335276', '444442618'] }
@@ -35,7 +35,7 @@ describe Amadeus::Response::PNRRetrieve do
 
     it { should be_success }
     it { should have(3).passengers }
-    specify { subject.passengers.collect(&:ticket).should == ['006-2791485245', '006-2791485244', nil]  }
+    specify { subject.passengers.collect(&:tickets).should == [['006-2791485245'], ['006-2791485244'], []]  }
 
   end
 
@@ -139,20 +139,22 @@ describe Amadeus::Response::PNRRetrieve do
       subject {
         body = File.read('spec/amadeus/xml/PNR_Retrieve_complex_tickets.xml')
         doc = Amadeus::Service.parse_string(body)
-        Amadeus::Response::PNRRetrieve.new(doc).tickets
+        Amadeus::Response::PNRRetrieve.new(doc)
       }
 
-      its(:present?){should be_true}
-      its('keys.length'){should == 4}
-      its('keys'){should include([[2, 'a'], [5, 6, 7, 8]])}
-      its('keys'){should include([[1, 'a'], [5, 6, 7, 8]])}
-      its('keys'){should include([[1, 'a'], [11, 12]])}
-      its('keys'){should include([[2, 'a'], [11, 12]])}
-      specify{subject[[[2, 'a'], [5, 6, 7, 8]]][:first_name].should == 'GENNADY MR'}
-      specify{subject[[[2, 'a'], [5, 6, 7, 8]]][:last_name].should == 'NEDELKO'}
-      specify{subject[[[2, 'a'], [5, 6, 7, 8]]][:route].should == 'SVO - MXP; MXP - LIS; LIS - AMS; AMS - SVO'}
-      specify{subject[[[2, 'a'], [5, 6, 7, 8]]][:cabins].should == 'S + S + R + R'}
-      specify{subject[[[2, 'a'], [5, 6, 7, 8]]][:passport].should == '714512085'}
+      its("passengers.every.tickets") {should ==  [["074-2962537981", "047-2962537982"], ["074-2962537980", "047-2962537983"]]}
+
+      its("tickets.present?"){should be_true}
+      its('tickets.keys.length'){should == 4}
+      its('tickets.keys'){should include([[2, 'a'], [5, 6, 7, 8]])}
+      its('tickets.keys'){should include([[1, 'a'], [5, 6, 7, 8]])}
+      its('tickets.keys'){should include([[1, 'a'], [11, 12]])}
+      its('tickets.keys'){should include([[2, 'a'], [11, 12]])}
+      specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:first_name].should == 'GENNADY MR'}
+      specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:last_name].should == 'NEDELKO'}
+      specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:route].should == 'SVO - MXP; MXP - LIS; LIS - AMS; AMS - SVO'}
+      specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:cabins].should == 'S + S + R + R'}
+      specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:passport].should == '714512085'}
 
     end
 

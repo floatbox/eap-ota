@@ -13,9 +13,8 @@ class Person
   field :bonuscard_type, :type => String
   field :bonuscard_number, :type => String
   field :number_in_amadeus, :type => Integer
-  field :ticket, :type => String
 
-  attr_accessor :passenger_ref, :ticket_hash
+  attr_accessor :passenger_ref, :tickets
 
   validates_presence_of :first_name, :last_name, :sex, :nationality_id, :birthday, :passport
   validates_presence_of :document_expiration_date, :unless => :document_noexpiration
@@ -49,14 +48,6 @@ class Person
 
   def smart_document_expiration_date
     document_noexpiration ? (Date.today + 18.months) : document_expiration_date
-  end
-
-  def ticket_number
-    (ticket.match(/([\d\w]+)-{0,1}(\d{10}-{0,1}\d*)/).to_a)[2]
-  end
-
-  def ticket_code
-    (ticket.match(/([\d\w]+)-{0,1}(\d{10}-{0,1}\d*)/).to_a)[1]
   end
 
   def coded

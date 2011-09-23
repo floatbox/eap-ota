@@ -14,7 +14,7 @@ module Sirena
             :last_name => p.xpath("surname").text,
             :passport => p.xpath("doc").text,
             :sex => p.xpath("sex").text,
-            :ticket => ticket_numbers.blank? ? nil : ticket_numbers.join(" "),
+            :tickets => ticket_numbers,
             :birthdate => Date.parse(p.xpath("birthdate").text)
           })
         end
