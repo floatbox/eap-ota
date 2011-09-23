@@ -90,7 +90,6 @@ module Sirena
         end
 
         def count_people (birthdate)
-            debugger
             last_flight = @recommendation.flights.last
             string_dep_date = sirena_date(last_flight.departure_date)
             departure_date = Date.parse(string_dep_date)
