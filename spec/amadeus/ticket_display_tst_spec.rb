@@ -68,5 +68,17 @@ describe Amadeus::Response::TicketDisplayTST do
     its(:total_tax) { should == 15879 }
     its(:blank_count) { should == 3 }
   end
+
+  describe 'with ticketingStatus NO' do
+
+    subject {
+      body = File.read('spec/amadeus/xml/Ticket_DisplayTST_with_ticketingStatus_no.xml')
+      doc = Amadeus::Service.parse_string(body)
+      Amadeus::Response::TicketDisplayTST.new(doc)
+    }
+
+    its('prices_with_refs.keys.every.second.flatten.uniq') {should_not include(2)}
+    its('prices_with_refs.keys.every.second.flatten.uniq') {should include(1)}
+  end
 end
 
