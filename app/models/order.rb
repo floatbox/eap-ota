@@ -221,8 +221,11 @@ class Order < ActiveRecord::Base
       pnr_resp.tickets.deep_merge(tst_resp.prices_with_refs).each do |k, ticket_hash|
         t = tickets.spawn(ticket_hash[:number])
         ticket_hash.delete(:ticketed_date) if t.ticketed_date
-        if !t.new_record? && !(Ticket.office_ids.include? ticket_hash[:office_id])
-          t.update_attribute(:status, ticket_hash[:status])
+        if !(Ticket.office_ids.include? ticket_hash[:office_id])
+          unless t.new_record?
+            t.update_attribute(:status, ticket_hash[:status])
+          end
+
         else
           t.update_attributes(ticket_hash.merge({
             :source => 'amadeus',
