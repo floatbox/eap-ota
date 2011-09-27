@@ -41,6 +41,7 @@ gem 'ya2yaml'
 
 #gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
 gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'
+gem 'mongo-rails-instrumentation'
 
 gem 'haml'
 
