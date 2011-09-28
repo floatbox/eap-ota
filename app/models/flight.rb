@@ -35,7 +35,7 @@ class Flight
 
   #используем Air_FlightInfo для получения fligh-а из кода pnr, скопиписченого из терминала
   def self.from_amadeus_code (code)
-    if m = code.match(/(\w{2})\s?(\d+)\s(\w)\s(\d{2}\w{3})\s\d\s(\w{3})(\w{3})/)
+    if m = code.match(/(\w{2})\s?(\d+)\s(\w)\s(\d{2}\w{3})\s\d.(\w{3})(\w{3})/)
       date = Date.strptime(m[4], '%d%h')
       date += 1.year if date < Date.today
       flight = Amadeus::Service.air_flight_info(:date => date, :number => m[2], :carrier => m[1], :departure_iata => m[5], :arrival_iata => m[6]).flight
