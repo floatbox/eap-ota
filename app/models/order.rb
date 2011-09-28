@@ -38,6 +38,8 @@ class Order < ActiveRecord::Base
     update_attributes(:payment_type => 'card', :payment_status => 'not blocked', :offline_booking => true) if payment_status == 'pending'
   end
 
+  has_paper_trail
+
   has_many :payments
   has_many :tickets do
     def spawn number
