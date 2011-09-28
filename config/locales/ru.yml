@@ -35,6 +35,7 @@ ru:
         price_with_payment_commission: "Итого к оплате"
         needs_update_from_gds: "Получить данные бронирования из GDS (экспериментально)"
         offline_booking: "Неавтоматический режим обработки бронирования (offline booking)"
+        pricing_method: 'Рассчет цены (pricing method)'
 
   views:
     pagination:

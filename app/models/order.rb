@@ -25,6 +25,10 @@ class Order < ActiveRecord::Base
     ['card', 'delivery', 'cash', 'invoice']
   end
 
+  def self.pricing_methods
+    [['Корпоративный', 'corporate_0001']]
+  end
+
   # фейковый текст для маршрут-квитанций. может быть, вынести в хелпер?
   PAID_BY = {'card' => 'Invoice', 'delivery' => 'Cash', 'cash' => 'Cash', 'invoice' => 'Invoice'}
 
@@ -120,7 +124,12 @@ class Order < ActiveRecord::Base
   end
 
   def calculate_price_with_payment_commission
-    self.price_with_payment_commission = price_total + Payture.commission(price_total) unless ['blocked', 'charged'].include? payment_status
+    return if ['blocked', 'charged'].include? payment_status
+    if pricing_method =~ /corporate/
+      self.price_with_payment_commission = price_total
+    else
+      self.price_with_payment_commission = price_total + Payture.commission(price_total)
+    end
   end
 
   # по этой штуке во маршрут-квитанции определяется, "бронирование" это или уже "билет"
