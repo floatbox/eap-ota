@@ -49,7 +49,7 @@ gem 'typus'
 #gem 'typus', :git => 'https://github.com/typus/typus.git' #, :branch => "3-1-stable"
 gem 'fastercsv' if RUBY_VERSION < "1.9.0"
 
-gem 'trashed', :git => 'https://github.com/37signals/trashed.git'
+gem 'trashed', :git => 'https://github.com/codesnik/trashed.git'
 
 group :development do
   gem 'mongrel' if RUBY_VERSION < "1.9.0"

@@ -12,8 +12,8 @@ GIT
     handsoap (1.1.8)
 
 GIT
-  remote: https://github.com/37signals/trashed.git
-  revision: 655eac5db862701fb12f1e3217802159697a607c
+  remote: https://github.com/codesnik/trashed.git
+  revision: b95605b94c459cd6709e9d932aaab96faca942e7
   specs:
     trashed (1.0.0)
       activesupport (>= 2.3.0)
