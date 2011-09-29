@@ -31,7 +31,7 @@ class PNRController < ApplicationController
     ticket = Ticket.find(params[:ticket_id])
     raise 'ticket don\'t belong to order' if ticket.order != @pnr.order
     @prices = ticket
-    @passengers = [Person.new(:first_name => ticket.first_name, :last_name => ticket.last_name, :passport => ticket.passport, :ticket => "#{ticket.code}-#{ticket.number}")]
+    @passengers = [Person.new(:first_name => ticket.first_name, :last_name => ticket.last_name, :passport => ticket.passport, :tickets => ["#{ticket.code}-#{ticket.number}"])]
     render "ticket"
   end
 
