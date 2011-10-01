@@ -1,5 +1,5 @@
 # encoding: utf-8
-class Admin::OrdersController < Admin::ResourcesController
+class Admin::OrdersController < Admin::EviterraResourceController
   include CustomCSV
   include Typus::Controller::Bulk
 

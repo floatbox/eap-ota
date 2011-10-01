@@ -1,5 +1,5 @@
 # encoding: utf-8
-class Admin::TicketsController < Admin::ResourcesController
+class Admin::TicketsController < Admin::EviterraResourceController
   include CustomCSV
   include Typus::Controller::Bulk
 
