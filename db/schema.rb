@@ -328,11 +328,11 @@ ActiveRecord::Schema.define(:version => 20111003143854) do
     t.string   "source"
     t.string   "pnr_number"
     t.string   "number"
-    t.decimal  "price_fare",                :precision => 9, :scale => 2, :default => 0.0, :null => false
+    t.decimal  "price_fare",                :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.string   "commission_subagent"
-    t.decimal  "price_tax",                 :precision => 9, :scale => 2, :default => 0.0, :null => false
-    t.decimal  "price_share",               :precision => 9, :scale => 2, :default => 0.0, :null => false
-    t.decimal  "price_consolidator_markup", :precision => 9, :scale => 2, :default => 0.0, :null => false
+    t.decimal  "price_tax",                 :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_share",               :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_consolidator_markup", :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.integer  "order_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -347,6 +347,9 @@ ActiveRecord::Schema.define(:version => 20111003143854) do
     t.string   "office_id"
     t.date     "ticketed_date"
     t.string   "validating_carrier"
+    t.string   "kind",                                                    :default => "ticket"
+    t.boolean  "processed",                                               :default => false
+    t.integer  "parent_id"
   end
 
   create_table "typus_users", :force => true do |t|

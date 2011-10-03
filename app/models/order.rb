@@ -239,6 +239,7 @@ class Order < ActiveRecord::Base
 
         else
           t.update_attributes(ticket_hash.merge({
+            :processed => true,
             :source => 'amadeus',
             :pnr_number => pnr_number,
             :commission_subagent => commission_subagent.to_s
@@ -255,7 +256,7 @@ class Order < ActiveRecord::Base
       order_resp.ticket_hashes.each do |t|
         ticket = tickets.spawn(t[:number])
         t['ticketed_date'] = ticket_dates[t[:number]] if ticket_dates[t[:number]]
-        ticket.update_attributes(t)
+        ticket.update_attributes(t.merge({:processed => true}))
       end
       tickets.reload
       update_attribute(:departure_date, order_resp.flights.first.dept_date)

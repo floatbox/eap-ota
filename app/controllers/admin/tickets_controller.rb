@@ -8,6 +8,11 @@ class Admin::TicketsController < Admin::EviterraResourceController
     render :text => @item.raw
   end
 
+  def new_refund
+    @item = @resource.new(params[:resource])
+    render :action => :new
+  end
+
   def set_bulk_action
     add_bulk_action("Set ticketed date", "bulk_set_ticketed_date")
   end
