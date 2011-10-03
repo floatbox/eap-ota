@@ -3,7 +3,7 @@ class Admin::OrdersController < Admin::ResourcesController
   include CustomCSV
   include Typus::Controller::Bulk
 
-  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel, :reload_tickets, :update, :resend_email, :send_offline_email, :pnr_raw, :payment_raw, :void, :make_payable_by_card]
+  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel, :reload_tickets, :update, :resend_email, :send_offline_email, :pnr_raw, :payment_raw, :void, :make_payable_by_card, :show_versions]
   before_filter :update_offline_booking_flag, :only => :create
 
   # def set_scope
@@ -29,6 +29,10 @@ class Admin::OrdersController < Admin::ResourcesController
     super
   end
 
+  def show_versions
+    
+  end
+  
   def show_pnr
     redirect_to show_order_path(:id => @order.pnr_number)
   end

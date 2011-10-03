@@ -1,0 +1,13 @@
+<div id="term">
+  Версии:
+</div>
+
+
+<% @order.versions.each do |version| %>
+  <p><%= version.created_at %> </p>
+  <p><% version.changeset.each do |field, change| %>
+      <%= field %> 
+      <%= change %> 
+      <br>
+    <% end %> </p>
+<% end %>
