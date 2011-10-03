@@ -1,3 +1,3 @@
 # encoding: utf-8
-class Admin::RegionsController < Admin::ResourcesController
+class Admin::RegionsController < Admin::EviterraResourceController
 end

@@ -1,4 +1,4 @@
-class Admin::PaymentsController < Admin::ResourcesController
+class Admin::PaymentsController < Admin::EviterraResourceController
 
 end
 

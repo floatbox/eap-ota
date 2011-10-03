@@ -1,5 +1,5 @@
 # encoding: utf-8
-class Admin::OrderCommentsController < Admin::ResourcesController
+class Admin::OrderCommentsController < Admin::EviterraResourceController
   before_filter :update_typus_user_id, :only => [:create, :update]
 
   def update_typus_user_id
