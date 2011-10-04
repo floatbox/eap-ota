@@ -1,10 +1,15 @@
 class Ticket < ActiveRecord::Base
   include Rails.application.routes.url_helpers
+  include CopyAttrs
   has_paper_trail
   belongs_to :order
+  belongs_to :parent, :class_name => 'Ticket'
+  has_one :refund, :class_name => 'Ticket', :foreign_key => 'parent_id'
   delegate :source, :commission_carrier, :pnr_number, :need_attention, :paid_by, :commission_carrier, :to => :order, :allow_nil => true
 
   scope :uncomplete, where(:ticketed_date => nil)
+
+  before_create :set_refund_data, :if => lambda {kind == "refund"}
 
   # FIXME сделать перечисление прямо из базы, через uniq
   def self.office_ids
@@ -23,6 +28,20 @@ class Ticket < ActiveRecord::Base
     ['ticketed', 'voided']
   end
 
+  def set_refund_data
+    copy_attrs parent, self,
+      :validator,
+      :office_id,
+      :first_name,
+      :last_name,
+      :passport,
+      :pnr_number,
+      :order,
+      :code,
+      :number,
+      :source
+  end
+
   def ticket_date
     created_at.strftime('%d.%m.%Y') if created_at
   end
@@ -34,6 +53,12 @@ class Ticket < ActiveRecord::Base
   # номер первого билета для conjunction
   def first_number
     number.sub /-.*/, '' if number.present?
+  end
+
+  def refund_url
+    if kind == 'ticket' && refund.blank?
+      "<a href='/admin/tickets/new_refund?_popup=true&&resource[kind]=refund&resource[parent_id]=#{id}' class='iframe'>Add refund</a>".html_safe
+    end
   end
 
   def first_number_with_code
@@ -87,8 +112,10 @@ class Ticket < ActiveRecord::Base
   end
 
   def itinerary_receipt
-    url = show_order_for_ticket_path(order.pnr_number, self)
-    "<a href=#{url}>билет</a>".html_safe
+    if order && !new_record?
+      url = show_order_for_ticket_path(order.pnr_number, self)
+      "<a href=#{url}>билет</a>".html_safe
+    end
   end
 
   def raw # FIXME в стратегию
