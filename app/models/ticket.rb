@@ -25,7 +25,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def self.statuses
-    ['ticketed', 'voided']
+    ['ticketed', 'voided', 'pending']
   end
 
   def set_refund_data
@@ -40,6 +40,7 @@ class Ticket < ActiveRecord::Base
       :code,
       :number,
       :source
+    self.status = 'pending'
   end
 
   def ticket_date
@@ -79,6 +80,37 @@ class Ticket < ActiveRecord::Base
 
   def price_transfer
     price_fare + price_tax + price_consolidator_markup - price_share
+  end
+
+  def price_refund
+    if kind == 'refund'
+      -(price_tax + price_fare + price_consolidator_markup)
+    else
+      0
+    end
+  end
+
+  # для тайпуса
+  def description
+    res = "#{kind == 'ticket' ? 'Билет' : 'Возврат для билета'} № #{number_with_code}"
+    if kind == 'ticket'
+      (
+      "Билет  № #{number_with_code} <br>" +
+        if self.refund
+          "есть #{refund.status == 'pending' ? 'неподтвержденный клиентом' : ''} возврат "
+        else
+          "<a href='/admin/tickets/new_refund?_popup=true&&resource[kind]=refund&resource[parent_id]=#{id}' class='iframe'>Добавить возврат</a>"
+        end
+
+      ).html_safe
+    elsif kind == 'refund'
+      (
+      "Возврат для билета № #{number_with_code} <br>" +
+      (status == 'pending' ? "клиент еще не подтвердил" : "клиент подтвердил") + "<br>" +
+      "Сумма к возварату: #{price_refund} рублей" +
+      (status == 'pending' ? "<br><a href='/admin/tickets/#{id}/confirm_refund> Подтвердить </a>": '')
+      ).html_safe
+    end
   end
 
   #FIXME это костыль, работает не всегда, нужно сделать нормально
