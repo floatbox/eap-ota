@@ -88,7 +88,7 @@ class Ticket < ActiveRecord::Base
 
   def price_refund
     if kind == 'refund'
-      -(price_tax + price_fare + price_consolidator_markup)
+      -(price_tax + price_fare + price_consolidator_markup - price_penalty)
     else
       0
     end
