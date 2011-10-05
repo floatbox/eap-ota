@@ -10,6 +10,7 @@ class Ticket < ActiveRecord::Base
   scope :uncomplete, where(:ticketed_date => nil)
 
   before_create :set_refund_data, :if => lambda {kind == "refund"}
+  validate :check_uniqueness_of_refund
 
   # FIXME сделать перечисление прямо из базы, через uniq
   def self.office_ids
@@ -28,6 +29,10 @@ class Ticket < ActiveRecord::Base
     ['ticketed', 'voided', 'pending']
   end
 
+  def check_uniqueness_of_refund
+    errors.add :refund, 'для данного билета уже существует' if kind == 'refund' && new_record? && Ticket.where(:parent_id => parent.id).count > 0
+  end
+
   def set_refund_data
     copy_attrs parent, self,
       :validator,
@@ -40,7 +45,6 @@ class Ticket < ActiveRecord::Base
       :code,
       :number,
       :source
-    self.status = 'pending'
   end
 
   def ticket_date
@@ -92,12 +96,11 @@ class Ticket < ActiveRecord::Base
 
   # для тайпуса
   def description
-    res = "#{kind == 'ticket' ? 'Билет' : 'Возврат для билета'} № #{number_with_code}"
     if kind == 'ticket'
       (
       "Билет  № #{number_with_code} <br>" +
         if self.refund
-          "есть #{refund.status == 'pending' ? 'неподтвержденный клиентом' : ''} возврат "
+          "есть #{!refund.processed ? 'неподтвержденный клиентом' : ''} возврат "
         else
           "<a href='/admin/tickets/new_refund?_popup=true&&resource[kind]=refund&resource[parent_id]=#{id}' class='iframe'>Добавить возврат</a>"
         end
@@ -106,9 +109,7 @@ class Ticket < ActiveRecord::Base
     elsif kind == 'refund'
       (
       "Возврат для билета № #{number_with_code} <br>" +
-      (status == 'pending' ? "клиент еще не подтвердил" : "клиент подтвердил") + "<br>" +
-      "Сумма к возварату: #{price_refund} рублей" +
-      (status == 'pending' ? "<br><a href='/admin/tickets/#{id}/confirm_refund> Подтвердить </a>": '')
+      "Сумма к возварату: #{price_refund} рублей"
       ).html_safe
     end
   end

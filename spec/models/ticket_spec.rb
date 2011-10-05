@@ -41,4 +41,15 @@ describe Ticket do
 
     end
   end
+
+  describe 'should not allow to create second refund' do
+    original_ticket = Ticket.create :code => '29A', :number => '1234567890-91'
+    first_refund = Ticket.create(:parent => original_ticket, :kind => 'refund')
+
+    let (:ticket) {
+      described_class.new :parent => original_ticket, :kind => 'refund'
+    }
+    it {should_not be_valid}
+    its(:save) {should_not be_true}
+  end
 end
