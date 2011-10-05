@@ -153,6 +153,8 @@ Ticket:
         created_at: long
   options:
     default_action_on_item: edit
+  actions:
+    edit: show
   order_by: -created_at
   filters: ticketed_date, source, validator, office_id, status
   relationships: order
