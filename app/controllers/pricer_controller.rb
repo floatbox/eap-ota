@@ -66,7 +66,8 @@ class PricerController < ApplicationController
       render :status => 503, :text => '<error>service disabled by administrator</error>'
       return
     end
-    @search = PricerForm.simple( params.slice(:from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner) )
+    pricer_form_hash = param.delete_if {|key, value| key == :action || key == :controller}
+    @search = PricerForm.simple(pricer_form_hash)
     if @search.valid?
       @search.save_to_cache
       @recommendations = Mux.new(:lite => true).async_pricer(@search)
@@ -77,6 +78,10 @@ class PricerController < ApplicationController
     else
       render 'api/yandex_failure', :status => 400, :locals => {:message => 'from, to and date1 parameters are required'}
     end
+  rescue IataStash::NotFound => iata_error
+    render 'api/yandex_failure', :status => 404, :locals => {:message => iata_error.message}
+  rescue ArgumentError => argument_error
+    render 'api/yandex_failure', :status => 400, :locals => {:message => argument_error.message}
   end
 
   protected

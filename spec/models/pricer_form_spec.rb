@@ -30,7 +30,7 @@ describe PricerForm do
         { "people_count" => people_attrs,
           "segments"=> {
             "0" => {"from"=>"Москва", "date"=>"210412", "to"=>"Париж"},
-            "1" => {"from"=>"", "date"=>"280412", "to"=>"Москва"}}
+            "1" => {"from"=>"",     "date"=>"280412", "to"=>"Москва"}}
         }
       end
 
@@ -80,6 +80,27 @@ describe PricerForm do
       it { should be_valid }
       its(:real_people_count) { should == {:children=>0, :adults=>1, :infants=>0} }
     end
+  end
+
+  describe "#simple" do
+     it "should raise ArgumentError for parameters that do not exist" do
+      args = {
+              :from => 'MOW',
+              :to => 'LON',
+              :date1 => '091011',
+              :childrens => 1,
+              :cabin => 'C'}
+
+      expect{ PricerForm.simple(args) }.to raise_error(ArgumentError, 'Not allowed parameter(s) - "childrens"')
+     end
+    it "should raise ArgumentError if from and to are not iatas" do
+      args = {
+              :from => 'Зимбабве',
+              :to => 'LON',
+              :date1 => '091011',
+              :cabin => 'C'}
+       expect{ PricerForm.simple(args) }.to raise_error(IataStash::NotFound,"Couldn't find Airport with IATA 'Зимбабве'")
+     end
   end
 end
 

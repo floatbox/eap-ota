@@ -6,4 +6,11 @@ class Location
     City['MOW']
   end
 
+  def self.[](iata)
+    City[iata]
+  rescue IataStash::NotFound
+    Airport[iata]
+  end
+
 end
+
