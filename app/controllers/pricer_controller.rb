@@ -66,7 +66,7 @@ class PricerController < ApplicationController
       render 'api/yandex_failure', :status => 503, :locals => {:message => 'service disabled by administrator'}
       return
     end
-    pricer_form_hash = params.dup.delete_if {|key, value| key == "action" || key == "controller"}
+    pricer_form_hash = params.dup.delete_if {|key, value| %W[controller action format].include?(key)}
     @search = PricerForm.simple(pricer_form_hash)
     if @search.valid?
       @search.save_to_cache
