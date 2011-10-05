@@ -26,6 +26,14 @@ class PricerForm
   end
 
   def self.simple(args)
+    allowed_parameters = [:from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner]
+    wrong_parameters = args.keys.map(&:to_sym) - allowed_parameters
+    unless wrong_parameters.empty?
+      raise ArgumentError, "Not allowed parameter(s) - \"#{wrong_parameters.join(', ')}\""
+    end
+    return if !(Location[args[:from]] || Location[args[:to]])
+    @from_as_object = Location[args[:from]]
+    @to_as_object = Location[args[:to]]
     segments = {}
     segments["0"] = {:from => args[:from], :to => args[:to], :date => convert_api_date(args[:date1])}
     if args[:date2]
