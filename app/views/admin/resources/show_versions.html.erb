@@ -1,8 +1,8 @@
 <% content_for :main_grid do %>
 
-<div id="term">
-  Версии:
-</div>
+<%if @item.versions.size > 0 %>
+
+<h2>История изменений</h2>
 
 <table>
   <thead>
@@ -12,7 +12,7 @@
       <th>Изменения</th>
     </tr>
   </thead>
-<% @order.versions.each do |version| %>
+  <% @item.versions.each do |version| %>
   <tr class="<%= cycle("even", "odd") %>">
     <td><%= I18n.l(version.created_at, :format => 'long') %></td>
     <td><%= version.whodunnit || '--' %></td>
@@ -23,6 +23,10 @@
       <br><br>
     <% end %>
   </td>
+  <% end %>
+</table>
+<% else %>
+  <h2>Нет истории изменений</h2>
 <% end %>
 
 <% end %>
