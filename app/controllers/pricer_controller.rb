@@ -63,10 +63,10 @@ class PricerController < ApplicationController
   # FIXME попытаться вынести общие методы или объединить с pricer/validate
   def api
     unless Conf.api.enabled
-      render :status => 503, :text => '<error>service disabled by administrator</error>'
+      render 'api/yandex_failure', :status => 503, :locals => {:message => 'service disabled by administrator'}
       return
     end
-    pricer_form_hash = param.delete_if {|key, value| key == :action || key == :controller}
+    pricer_form_hash = params.dup.delete_if {|key, value| key == "action" || key == "controller"}
     @search = PricerForm.simple(pricer_form_hash)
     if @search.valid?
       @search.save_to_cache
