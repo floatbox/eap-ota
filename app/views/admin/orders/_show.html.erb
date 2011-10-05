@@ -1,3 +1,4 @@
+<p style="text-align:right"><a href='/admin/orders/show_versions/<%=@item.id %>?_popup=true' class='iframe'>История изменений</a></p>
 <div id="term">Терминал:
   <pre data-replace-with="<%= url_for :action => :pnr_raw, :id => @item.id %>"></pre>
 </div>
@@ -9,6 +10,7 @@
 URL для оплаты: <%= link_to edit_payment_url(:code => @item.code), edit_payment_url(:code => @item.code)%>
 </div>
 <% end %>
+
 <table><tr>
   <td><%= button_to 'показать pnr', {:action => 'show_pnr', :id => @item.id} %></td>
 <% if @item.payment_status == 'blocked'  %>

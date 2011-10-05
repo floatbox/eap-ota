@@ -1,13 +1,28 @@
+<% content_for :main_grid do %>
+
 <div id="term">
   Версии:
 </div>
 
-
+<table>
+  <thead>
+    <tr>
+      <th>Дата</th>
+      <th>Автор</th>
+      <th>Изменения</th>
+    </tr>
+  </thead>
 <% @order.versions.each do |version| %>
-  <p><%= version.created_at %> </p>
-  <p><% version.changeset.each do |field, change| %>
-      <%= field %> 
-      <%= change %> 
-      <br>
-    <% end %> </p>
+  <tr class="<%= cycle("even", "odd") %>">
+    <td><%= I18n.l(version.created_at, :format => 'long') %></td>
+    <td><%= version.whodunnit || '--' %></td>
+    <td>
+    <% version.changeset.each do |attribute, (before, after)| %>
+      <strong><%= @resource.human_attribute_name(attribute) %></strong>:
+      <%= before %> → <%= after %>
+      <br><br>
+    <% end %>
+  </td>
+<% end %>
+
 <% end %>
