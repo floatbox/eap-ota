@@ -133,6 +133,7 @@ GEM
       spruz (~> 0.2.8)
     kaminari (0.12.4)
       rails (>= 3.0.0)
+    libv8 (3.3.10.2)
     linecache (0.46)
       rbx-require-relative (> 0.0.4)
     looksee (1.0.2)
@@ -238,6 +239,8 @@ GEM
       tilt (!= 1.3.0, ~> 1.1)
     spruz (0.2.13)
     term-ansicolor (1.0.6)
+    therubyracer (0.9.4)
+      libv8 (~> 3.3.10)
     thor (0.14.6)
     tilt (1.3.3)
     treetop (1.4.10)
@@ -314,6 +317,7 @@ DEPENDENCIES
   russian
   sass-rails (~> 3.1.0)
   spork
+  therubyracer
   trashed!
   typhoeus
   typus
