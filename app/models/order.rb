@@ -119,6 +119,10 @@ class Order < ActiveRecord::Base
     price_fare + price_tax + price_our_markup + price_consolidator_markup
   end
 
+  def price_refund
+    tickets.where(:kind => 'refund').every.price_refund.sum
+  end
+
   def generate_code
     self.code = ShortUrl.random_hash
   end
