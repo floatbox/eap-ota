@@ -62,7 +62,6 @@ class PricerController < ApplicationController
 
   # FIXME попытаться вынести общие методы или объединить с pricer/validate
   def api
-    debugger
     unless Conf.api.enabled
       render 'api/yandex_failure', :status => 503, :locals => {:message => 'service disabled by administrator'}
       return
