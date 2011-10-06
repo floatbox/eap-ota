@@ -1,3 +1,4 @@
+<p style="text-align:right"><a href='/admin/tickets/show_versions/<%=@item.id %>?_popup=true' class='iframe'>История изменений</a></p>
 <div id="term">Терминал:
   <pre data-replace-with="<%= url_for :action => :ticket_raw, :id => @item.id %>"></pre>
 </div>

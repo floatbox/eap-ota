@@ -10,6 +10,7 @@ class Ticket < ActiveRecord::Base
   scope :uncomplete, where(:ticketed_date => nil)
 
   before_create :set_refund_data, :if => lambda {kind == "refund"}
+  validate :check_uniqueness_of_refund
 
   # FIXME сделать перечисление прямо из базы, через uniq
   def self.office_ids
@@ -25,7 +26,11 @@ class Ticket < ActiveRecord::Base
   end
 
   def self.statuses
-    ['ticketed', 'voided']
+    ['ticketed', 'voided', 'pending']
+  end
+
+  def check_uniqueness_of_refund
+    errors.add :refund, 'для данного билета уже существует' if kind == 'refund' && new_record? && Ticket.where(:parent_id => parent.id).count > 0
   end
 
   def set_refund_data
@@ -79,6 +84,34 @@ class Ticket < ActiveRecord::Base
 
   def price_transfer
     price_fare + price_tax + price_consolidator_markup - price_share
+  end
+
+  def price_refund
+    if kind == 'refund'
+      -(price_tax + price_fare + price_consolidator_markup - price_penalty)
+    else
+      0
+    end
+  end
+
+  # для тайпуса
+  def description
+    if kind == 'ticket'
+      (
+      "Билет  № #{number_with_code} <br>" +
+        if self.refund
+          "есть #{!refund.processed ? 'неподтвержденный клиентом' : ''} возврат "
+        else
+          "<a href='/admin/tickets/new_refund?_popup=true&&resource[kind]=refund&resource[parent_id]=#{id}' class='iframe'>Добавить возврат</a>"
+        end
+
+      ).html_safe
+    elsif kind == 'refund'
+      (
+      "Возврат для билета № #{number_with_code} <br>" +
+      "Сумма к возварату: #{price_refund} рублей"
+      ).html_safe
+    end
   end
 
   #FIXME это костыль, работает не всегда, нужно сделать нормально

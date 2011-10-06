@@ -3,6 +3,10 @@ class Admin::TicketsController < Admin::EviterraResourceController
   include CustomCSV
   include Typus::Controller::Bulk
 
+  def show_versions
+    get_object
+  end
+
   def ticket_raw
     get_object
     render :text => @item.raw

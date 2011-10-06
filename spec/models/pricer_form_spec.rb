@@ -91,7 +91,7 @@ describe PricerForm do
               :childrens => 1,
               :cabin => 'C'}
 
-      expect{ PricerForm.simple(args) }.to raise_error(ArgumentError, 'Not allowed parameter(s) - "childrens"')
+      expect{ PricerForm.simple(args) }.to raise_error(ArgumentError, 'Unknown parameter(s) - "childrens"')
      end
     it "should raise ArgumentError if from and to are not iatas" do
       args = {

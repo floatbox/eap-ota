@@ -1,0 +1,9 @@
+<% if @item.kind == 'refund' %>
+  <% ticket = @item.parent %>
+  Номер: <%= ticket.number_with_code %><br>
+  Price fare <%= ticket.price_fare %><br>
+  Price tax <%= ticket.price_tax  %><br>
+  Price consolidator markup <%= ticket.price_consolidator_markup %><br>
+  Маршрут: <%= ticket.route %><br>
+  Авиакомпания: <%= ticket.carrier %>
+<% end %>
