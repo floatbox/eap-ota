@@ -105,7 +105,7 @@ describe PricerForm do
       args = {
               :date1 => '091011',
               :cabin => 'C'}
-       expect{ PricerForm.simple(args) }.to raise_error(ArgumentError, 'Lack of required parameter(s) - "from, to"')
+       expect{ PricerForm.simple(args) }.to raise_error(ArgumentError, 'Lack of required parameter(s)  - "from, to"')
     end
   end
 end
