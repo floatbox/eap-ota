@@ -62,6 +62,7 @@ class PricerController < ApplicationController
 
   # FIXME попытаться вынести общие методы или объединить с pricer/validate
   def api
+    debugger
     unless Conf.api.enabled
       render 'api/yandex_failure', :status => 503, :locals => {:message => 'service disabled by administrator'}
       return
@@ -72,7 +73,7 @@ class PricerController < ApplicationController
       @search.save_to_cache
       @recommendations = Mux.new(:lite => true).async_pricer(@search)
       render 'api/yandex'
-    elsif @search.errors[:"segments.date"] == ["Первый вылет слишком рано"]
+    else
       @recommendations = []
       render 'api/yandex'
     end
