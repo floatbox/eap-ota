@@ -28,8 +28,12 @@ class PricerForm
   def self.simple(args)
     allowed_parameters = [:from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner]
     wrong_parameters = args.keys.map(&:to_sym) - allowed_parameters
+    lack_of_parameters = [:from, :to, :date1] - args.keys.map(&:to_sym)
     unless wrong_parameters.empty?
       raise ArgumentError, "Not allowed parameter(s) - \"#{wrong_parameters.join(', ')}\""
+    end
+    unless lack_of_parameters.empty?
+      raise ArgumentError, "Lack of required parameter(s)  - \"#{lack_of_parameters.join(', ')}\""
     end
     return if !(Location[args[:from]] || Location[args[:to]])
     @from_as_object = Location[args[:from]]
