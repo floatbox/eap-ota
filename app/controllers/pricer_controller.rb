@@ -75,8 +75,6 @@ class PricerController < ApplicationController
     elsif @search.errors[:"segments.date"] == ["Первый вылет слишком рано"]
       @recommendations = []
       render 'api/yandex'
-    else
-      render 'api/yandex_failure', :status => 400, :locals => {:message => 'from, to and date1 parameters are required'}
     end
   rescue IataStash::NotFound => iata_error
     render 'api/yandex_failure', :status => 404, :locals => {:message => iata_error.message}
