@@ -100,7 +100,13 @@ describe PricerForm do
               :date1 => '091011',
               :cabin => 'C'}
        expect{ PricerForm.simple(args) }.to raise_error(IataStash::NotFound,"Couldn't find Airport with IATA 'Зимбабве'")
-     end
+    end
+    it "should raise ArgumentError if from, to or data1 are not there" do
+      args = {
+              :date1 => '091011',
+              :cabin => 'C'}
+       expect{ PricerForm.simple(args) }.to raise_error(ArgumentError, 'Lack of required parameter(s) - "from, to"')
+    end
   end
 end
 
