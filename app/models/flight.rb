@@ -34,25 +34,20 @@ class Flight
   end
 
   #используем Air_FlightInfo для получения fligh-а из кода pnr, скопиписченого из терминала
-  def self.from_amadeus_code (code)
-    if m = code.match(/(\w{2})\s?(\d+)\s(\w)\s(\d{2}\w{3})\s\d.(\w{3})(\w{3})/)
-      date = Date.strptime(m[4], '%d%h')
-      date += 1.year if date < Date.today
-      flight = Amadeus::Service.air_flight_info(:date => date, :number => m[2], :carrier => m[1], :departure_iata => m[5], :arrival_iata => m[6]).flight
-    end
-  end
-
-  def self.from_short_code (code, source)
-    if m = code.match(/(\w{2})\s?(\d+)\s+(\d{6})/)
-      date = Date.strptime(m[3], '%d%m%y')
-      if source == 'amadeus'
-        flight = Amadeus::Service.air_flight_info(:date => date, :number => m[2], :carrier => m[1]).flight
-      else
+  def self.from_gds_code(code, source)
+    if source == 'amadeus'
+      if m = code.match(/(\w{2})\s?(\d+)\s(\w)\s(\d{2}\w{3})\s\d.(\w{3})(\w{3})/)
+        date = Date.strptime(m[4], '%d%h')
+        date += 1.year if date < Date.today
+        flight = Amadeus::Service.air_flight_info(:date => date, :number => m[2], :carrier => m[1], :departure_iata => m[5], :arrival_iata => m[6]).flight
+      end
+    elsif source == 'sirena'
+      if m = code.match(/(\w{2})-(\d+) \w (\d{2}\w{3}\d{2})/)
+        date = Date.parse(m[3])
         flight = Sirena::Service.new.raceinfo(:date => date, :flight => m[2], :carrier => m[1]).flight
       end
     end
   end
-
 
   delegate :name, :prefix => true, :allow_nil => true, :to => :departure
   delegate :name, :prefix => true, :allow_nil => true, :to => :arrival
