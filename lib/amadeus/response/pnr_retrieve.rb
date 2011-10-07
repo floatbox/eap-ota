@@ -131,7 +131,7 @@ module Amadeus
             passenger_first_name = passenger_elem.xpath('r:passengerData/r:travellerInformation/r:passenger[r:type="INF"]/r:firstName').to_s
           end
           route = segments_refs.map do |sr|
-            "#{flights_hash[sr][:departure_iata]} \- #{flights_hash[sr][:arrival_iata]}" if flights_hash[sr]
+            "#{flights_hash[sr][:departure_iata]} \- #{flights_hash[sr][:arrival_iata]} (#{flights_hash[sr][:marketing_carrier_iata]})" if flights_hash[sr]
           end.compact.join('; ')
           cabins = segments_refs.map do |sr|
             flights_hash[sr][:cabin] if flights_hash[sr]

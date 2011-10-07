@@ -64,6 +64,7 @@ module Sirena
             flight_element.xpath("departure/city").text
           arrival_iata = flight_element.xpath("arrival/airport").text.presence ||
             flight_element.xpath("arrival/city").text
+          carrier = flight_element.xpath("company").text
           first_name = xpath("//passenger[@id=#{pass_id}]/name").text.split(' ')[0...-1].join(' ')
           last_name = xpath("//passenger[@id=#{pass_id}]/surname").text
           passport = xpath("//passenger[@id=#{pass_id}]/doc").text
@@ -72,7 +73,7 @@ module Sirena
           res[:price_fare] += price_fare
           res[:price_tax] += price_tax
           res[:cabins] << cabin
-          res[:flights] << "#{departure_iata} - #{arrival_iata}"
+          res[:flights] << "#{departure_iata} - #{arrival_iata} (#{carrier})"
         }
         @ticket_hashes = result.map do |k, v| {
             :source => 'sirena',
