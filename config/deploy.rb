@@ -43,6 +43,9 @@ set :rake, 'bundle exec rake'
 # для деплоймента ассетов
 load 'deploy/assets'
 
+# не делаем touch для public/*, по идее, не помогает с ассетами
+set :normalize_asset_timestamps, false
+
 # нужен для нормального форвардинга ключей, соответствующая настройка
 # в пользовательском .ssh/config почему-то не читается
 # ssh_options[:forward_agent] = true
