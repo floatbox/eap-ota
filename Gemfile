@@ -12,6 +12,7 @@ end
 # Deploy with Capistrano
 group :deployment do
   gem 'capistrano'
+  gem 'capistrano_colors'
 end
 
 gem 'rake'

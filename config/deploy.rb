@@ -2,6 +2,7 @@
 $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 # Load RVM's capistrano plugin.
 require "rvm/capistrano"
+require "capistrano_colors"
 
 # закрепил версию, чтобы не прыгала в продакшне
 set :rvm_ruby_string, 'ree-1.8.7-2011.03'
