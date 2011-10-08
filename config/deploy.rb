@@ -22,6 +22,7 @@ set :user, "rack"
 set :use_sudo, false
 
 set :deploy_via, :remote_cache
+set :copy_exclude, '.git/*'
 
 # если гитхаб ляжет
 # то выключить :remote_cache выше и сделать
