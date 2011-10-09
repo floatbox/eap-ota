@@ -9,8 +9,8 @@ class ApplicationController < ActionController::Base
   # 404 на старые урлы
   ActionDispatch::ShowExceptions.rescue_responses.update 'Cache::NotFound' => :not_found
 
-  before_filter :set_admin_user_for_hoptoad
-  def set_admin_user_for_hoptoad
+  before_filter :set_admin_user_for_airbrake
+  def set_admin_user_for_airbrake
     request.env['eviterra.admin_user'] = admin_user.email if admin_user
   end
   helper_method :admin_user
@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   helper_method :corporate_mode?
 
   # для хоптода
-  def set_search_context_for_hoptoad
+  def set_search_context_for_airbrake
     request.env['eviterra.search'] = @search.human_lite rescue '[incomplete]'
   end
 

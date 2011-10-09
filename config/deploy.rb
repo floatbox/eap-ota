@@ -13,9 +13,6 @@ require 'bundler/capistrano'
 set :whenever_command, "bundle exec whenever"
 set :whenever_environment do rails_env end
 require "whenever/capistrano"
-
-require 'hoptoad_notifier/capistrano'
-
 set :scm, :git
 
 set :user, "rack"
@@ -120,3 +117,7 @@ namespace :deploy do
   after "deploy:finalize_update", "deploy:symlink_completer"
   after "deploy:update_code", "deploy:check_for_pending_migrations"
 end
+
+# airbrake stuff
+require './config/boot'
+require 'airbrake/capistrano'

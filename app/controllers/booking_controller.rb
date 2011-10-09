@@ -4,7 +4,7 @@ class BookingController < ApplicationController
 
   def preliminary_booking
     @search = PricerForm.load_from_cache(params[:query_key])
-    set_search_context_for_hoptoad
+    set_search_context_for_airbrake
     recommendation = Recommendation.deserialize(params[:recommendation])
     strategy = Strategy.new( :rec => recommendation, :search => @search )
     unless strategy.check_price_and_availability

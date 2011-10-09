@@ -64,7 +64,7 @@ class Notification < ActiveRecord::Base
       counter += 1
     end
     rescue
-      HoptoadNotifier.notify($!) rescue Rails.logger.error("  can't notify hoptoad #{$!.class}: #{$!.message}")
+      Airbrake.notify($!) rescue Rails.logger.error("  can't notify airbrake #{$!.class}: #{$!.message}")
   end
 
   def sent_status
