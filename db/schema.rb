@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema.define(:version => 20111010144041) do
 
+
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
     t.string "bonus_program_name"
@@ -361,6 +362,7 @@ ActiveRecord::Schema.define(:version => 20111010144041) do
     t.boolean  "processed",                                               :default => false
     t.integer  "parent_id"
     t.decimal  "price_penalty",             :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.text     "comment"
   end
 
   create_table "typus_users", :force => true do |t|
