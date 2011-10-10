@@ -38,6 +38,7 @@ gem 'airbrake'
 gem 'newrelic_rpm'
 gem 'mongoid'
 gem 'bson_ext'
+gem 'qu-mongo'
 gem 'SystemTimer'
 
 gem 'ya2yaml'
