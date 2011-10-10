@@ -12,26 +12,14 @@ describe Flight do
       Object.new.tap {|air_flight_info| air_flight_info.stub(:flight) }
     }
 
-    describe "#from_amadeus_code" do
+    describe "#from_code" do
       it "should call air_flight_info with correct params" do
         code = '3  BT 419 Z 01AUG 4 DMERIX HK1  1505 1600  01AUG  E  BT/22BFU3'
         Amadeus::Service.should_receive(:air_flight_info)\
           .with(:date => Date.new(2012, 8, 1), :number => '419', :carrier => 'BT', :departure_iata => 'DME', :arrival_iata => 'RIX')\
           .and_return(stubbed_air_flight_info)
 
-        Flight.from_amadeus_code(code)
-      end
-    end
-
-    describe '#from_short_code' do
-      it "should call air_flight_info with correct params" do
-        code = 'BT419 010812'
-        source = 'amadeus'
-        Amadeus::Service.should_receive(:air_flight_info)\
-          .with(:date => Date.new(2012, 8, 1), :number => '419', :carrier => 'BT')\
-          .and_return(stubbed_air_flight_info)
-
-        Flight.from_short_code(code, source)
+        Flight.from_gds_code(code, 'amadeus')
       end
     end
   end

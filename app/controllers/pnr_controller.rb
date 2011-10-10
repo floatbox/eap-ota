@@ -41,7 +41,7 @@ class PNRController < ApplicationController
   end
 
   def error
-    HoptoadNotifier.notify($!) rescue Rails.logger.error("  can't notify hoptoad #{$!.class}: #{$!.message}")
+    Airbrake.notify($!) rescue Rails.logger.error("  can't notify airbrake #{$!.class}: #{$!.message}")
     render 'error', :status => 500
   end
 

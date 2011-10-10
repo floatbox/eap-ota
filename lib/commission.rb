@@ -1628,24 +1628,10 @@ commission "7%/4.9%"
 carrier "QR", "QATAR AIRWAYS"
 ########################################
 
-example 'ledpek/business pekled/economy'
+example 'ledpek pekled'
 agent    "5% от опубл. тарифов на собств. рейсы QR"
 subagent "3,5% от опубл. тарифов на собственные рейсы QR"
 commission "5%/3.5%"
-
-example 'svocdg/business'
-agent    "50 eur с тарифов бизнес-класса"
-subagent "50 eur" 
-classes :business
-important!
-commission "50eur/50eur"
-
-example 'svocdg/economy'
-agent    "15 eur с тарифов эконом класса"
-subagent "15 eur эконом-класс"
-classes :economy
-important!
-commission "15eur/15eur"
 
 example 'svocdg cdgsvo/ab'
 agent    "5% от опубл. тарифов на рейсы Interline (только при обязательном пролете первого сектора на рейсах QR)"
@@ -1980,13 +1966,14 @@ carrier "WY", "OMAN AIR"
 example 'svocdg'
 agent    "1% от опубл. тарифов на собств. рейсы WY (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на собств.рейсы WY"
+disabled "не работают с BSP в России"
 commission "1%/0.5%"
 
 example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-disabled
+disabled "не работают с BSP в России"
 commission "1%/0.5%"
 
 carrier "XW", "SkyExpress Limited"

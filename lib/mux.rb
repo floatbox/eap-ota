@@ -226,7 +226,7 @@ class Mux
       message << "  " << backtrace.join("\n  ")
       Rails.logger.error("#{message}\n  ...reported and continued\n")
     end
-    HoptoadNotifier.notify(exception) rescue Rails.logger.error("  can't notify hoptoad #{$!.class}: #{$!.message}")
+    Airbrake.notify(exception) rescue Rails.logger.error("  can't notify airbrake #{$!.class}: #{$!.message}")
   end
 
 end

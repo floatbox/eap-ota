@@ -5,7 +5,7 @@ class FlightGroupsController < ApplicationController
 
   def show
     fg = FlightGroup.find(params[:id])
-    @flights = fg.code.split("\n").map{|fc| Flight.from_amadeus_code(fc) || Flight.from_short_code(fc, fg.source)}.compact
+    @flights = fg.code.split("\n").map{|fc| Flight.from_gds_code(fc, fg.source)}.compact
   end
 end
 

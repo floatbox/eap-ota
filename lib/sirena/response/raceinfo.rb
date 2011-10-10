@@ -9,8 +9,8 @@ module Sirena
           :operating_carrier_iata => xpath("//raceinfo")[0]["acomp"],
           :marketing_carrier_iata  => xpath("//raceinfo")[0]["acomp"],
           :departure_date => xpath("//raceinfo")[0]["date"].gsub('.', ''),
-          :arrival_time => xpath('//arrvtime').text.gsub(':', ''),
-          :departure_time => xpath('//depttime').text.gsub(':', ''),
+          :arrival_time => corrected_time(xpath('//arrvtime').text),
+          :departure_time => corrected_time(xpath('//depttime').text),
           :arrival_iata => xpath('//arrival')[0]['port'] || xpath('//arrival').text,
           :departure_iata => xpath('//departure')[0]['port'] || xpath('//departure').text
         )
@@ -21,7 +21,13 @@ module Sirena
         end
       end
 
-
+      def corrected_time(time)
+        if time.length == 4
+          '0' + time.gsub(':', '')
+        else
+          time.gsub(':', '')
+        end
+      end
     end
   end
 end

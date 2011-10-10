@@ -1,17 +1,18 @@
 source 'http://rubygems.org'
-gem 'rails', '3.1.0'
+gem 'rails', '3.1.1'
 
 gem 'jquery-rails'
 group :assets do
-  gem "uglifier"
-  gem 'sass-rails', "~> 3.1.0"
-  gem 'coffee-rails', "~> 3.1.0"
+  gem "uglifier", ">= 1.0.3"
+  gem 'sass-rails', "~> 3.1.4"
+  gem 'coffee-rails', "~> 3.1.1"
 end
 
 
 # Deploy with Capistrano
 group :deployment do
   gem 'capistrano'
+  gem 'capistrano_colors'
 end
 
 gem 'rake'
@@ -33,7 +34,7 @@ gem 'paper_trail'
 gem 'tzinfo'
 gem 'geo_ip'
 gem 'therubyracer'
-gem 'hoptoad_notifier'
+gem 'airbrake'
 gem 'newrelic_rpm'
 gem 'mongoid'
 gem 'bson_ext'

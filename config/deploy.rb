@@ -2,6 +2,7 @@
 $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 # Load RVM's capistrano plugin.
 require "rvm/capistrano"
+require "capistrano_colors"
 
 # закрепил версию, чтобы не прыгала в продакшне
 set :rvm_ruby_string, 'ree-1.8.7-2011.03'
@@ -12,15 +13,13 @@ require 'bundler/capistrano'
 set :whenever_command, "bundle exec whenever"
 set :whenever_environment do rails_env end
 require "whenever/capistrano"
-
-require 'hoptoad_notifier/capistrano'
-
 set :scm, :git
 
 set :user, "rack"
 set :use_sudo, false
 
 set :deploy_via, :remote_cache
+set :copy_exclude, '.git/*'
 
 # если гитхаб ляжет
 # то выключить :remote_cache выше и сделать
@@ -41,6 +40,9 @@ set :rake, 'bundle exec rake'
 
 # для деплоймента ассетов
 load 'deploy/assets'
+
+# не делаем touch для public/*, по идее, не помогает с ассетами
+set :normalize_asset_timestamps, false
 
 # нужен для нормального форвардинга ключей, соответствующая настройка
 # в пользовательском .ssh/config почему-то не читается
@@ -115,3 +117,7 @@ namespace :deploy do
   after "deploy:finalize_update", "deploy:symlink_completer"
   after "deploy:update_code", "deploy:check_for_pending_migrations"
 end
+
+# airbrake stuff
+require './config/boot'
+require 'airbrake/capistrano'

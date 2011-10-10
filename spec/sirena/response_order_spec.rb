@@ -43,7 +43,7 @@ describe Sirena::Response::Order do
     specify{(subject.ticket_hashes.every[:code]).should == ['262', '262']}
     specify{(subject.ticket_hashes.every[:price_fare]).should == [ 2000, 1000]}
     specify{(subject.ticket_hashes.every[:price_tax]).should == [ 2000, 2000]}
-    specify{(subject.ticket_hashes.every[:route]).should == [ "ДМД - ПЛК; ПЛК - ДМД", "ДМД - ПЛК; ПЛК - ДМД"]}
+    specify{(subject.ticket_hashes.every[:route]).should == [ "ДМД - ПЛК (U6); ПЛК - ДМД (U6)", "ДМД - ПЛК (U6); ПЛК - ДМД (U6)"]}
     specify{(subject.ticket_hashes.every[:cabins]).should == [ "Y", "Y"]}
     specify{(subject.ticket_hashes.every[:first_name]).should == ["ALEKSEY", "MASHA"]}
     specify{(subject.ticket_hashes.every[:last_name]).should == ["IVANOV", "IVANOVA"]}
