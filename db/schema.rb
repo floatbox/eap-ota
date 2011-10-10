@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111005161607) do
+ActiveRecord::Schema.define(:version => 20111010144041) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -323,6 +323,16 @@ ActiveRecord::Schema.define(:version => 20111005161607) do
     t.string   "region_type"
     t.string   "synonym_list"
   end
+
+  create_table "subscriptions", :force => true do |t|
+    t.integer  "destination_id",                 :null => false
+    t.string   "email",                          :null => false
+    t.string   "status",         :default => "", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "subscriptions", ["destination_id"], :name => "index_subscriptions_on_destination_id"
 
   create_table "tickets", :force => true do |t|
     t.string   "source"
