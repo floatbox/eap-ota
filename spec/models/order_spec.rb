@@ -79,7 +79,7 @@ describe Order do
       @amadeus.stub(:pnr_retrieve).and_return(pnr_resp)
       @amadeus.stub(:ticket_display_tst).and_return(tst_resp)
 
-      ticket.should_receive(:update_attribute).with(:status, 'ticketed')
+      ticket.should_not_receive(:update_attributes)
       @order.load_tickets
     end
 

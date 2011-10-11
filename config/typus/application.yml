@@ -142,10 +142,11 @@ OrderComment:
 Ticket:
   fields:
     default: description, order, carrier, name, route, price_fare, price_tax, price_refund, office_id, validator, status, kind, ticketed_date, itinerary_receipt, parent, processed
-    new: number, code, last_name, first_name, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, office_id, validator, status, ticketed_date
+    list: number_with_code, order, carrier, name, route, price_fare, price_tax, price_refund, office_id, validator, status, kind, ticketed_date, itinerary_receipt, parent, processed
+    new:  price_fare, price_tax, price_penalty, ticketed_date, comment
     show: order, carrier, number_with_code, last_name, first_name, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, office_id, validator, status, ticketed_date, itinerary_receipt
-    edit: code, number, status, ticketed_date, validating_carrier, last_name, first_name, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, office_id, validator
-    new_refund: price_fare, price_tax, price_consolidator_markup, price_penalty, ticketed_date
+    edit: code, number, status, ticketed_date, validating_carrier, last_name, first_name, route, price_fare, price_tax, price_consolidator_markup, commission_subagent, price_share, price_penalty, office_id, validator, comment
+    new_refund: price_fare, price_tax, price_penalty, ticketed_date, comment
     csv: source, number_with_code, ticket_date, carrier, route, cabins, price_fare, price_tax, price_total,  price_consolidator_markup, commission_subagent, price_share, price_transfer, pnr_number, need_attention, validating_carrier, office_id, validator, status, ticketed_date, kind
     options:
       selectors: status, source, office_id, validator

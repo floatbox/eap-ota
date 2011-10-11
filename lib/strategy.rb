@@ -299,6 +299,8 @@ class Strategy
       amadeus.cmd( "SRDOCSYYHK1-P-#{person.nationality.alpha3}-#{person.cleared_passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}I-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{person.number_in_amadeus}")
       amadeus.cmd("FE INF #{validating_carrier_code} ONLY PSPT #{person.cleared_passport}/P#{person.number_in_amadeus}")
     end
+    amadeus.cmd('OSYYCTCP74956603520 EVITERRA TRAVEL-A')
+    amadeus.cmd("OSYYCTCP#{@order_form.phone.gsub(/\D/, '' )}-M")
   end
   private :add_passport_data
 
