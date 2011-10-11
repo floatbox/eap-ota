@@ -9,12 +9,8 @@ class AmadeusRate
   def self.put_current_rate_to_file
     config_file_name = 'config/local/amadeus_rate.yml'
     existing_file = YAML.load_file(config_file_name) rescue nil
-    if existing_file
-      current_rate = existing_file["amadeus"]["euro_rate"]
-    else
-      FileUtils.touch config_file_name
-    end
-    new_rate = Amadeus.booking.conversion_rate('EUR').round rescue nil
+    current_rate = existing_file["amadeus"]["euro_rate"] if existing_file
+    new_rate = Amadeus.booking.conversion_rate('EUR').round
     if new_rate
       if current_rate == new_rate
         exit
@@ -23,10 +19,10 @@ class AmadeusRate
         File.open(config_file_name,'w') do |out|
           YAML.dump(file_content,out)
         end
+        AmadeusRate.put_current_rate_to_file
       end
     end
   end
 end
-AmadeusRate.put_current_rate_to_file
 FileUtils.touch 'tmp/restart.txt'
 
