@@ -21,7 +21,7 @@ every 10.minutes do
 end
 
 every :wednesday, :at => '12:30 am' do
-  runner 'AmadeusRate.put_current_rate_to_file'
+  runner 'script/amadeus_rate'
 end
 
 #every 1.day, :at => '18:00' do
