@@ -3,6 +3,7 @@ class HotOffer < ActiveRecord::Base
   attr_writer :recommendation
   belongs_to :destination
   before_create :set_some_vars
+  delegate :rt, :to => :destination
 
   def self.featured code=nil
     # FIXME SQL group_by не был бы лучше?
@@ -23,7 +24,7 @@ class HotOffer < ActiveRecord::Base
   end
 
   def pricer_form
-    PricerForm.load_from_cache(code)
+    @pricer_form ||= PricerForm.load_from_cache(code)
   end
 
   private
@@ -32,6 +33,8 @@ class HotOffer < ActiveRecord::Base
     self.price = @recommendation.price_with_payment_commission / @search.people_count.values.sum
     self.time_delta = (Date.strptime(@search.segments[0].date, '%d%m%y') - Date.today).to_i
     self.destination = Destination.find_or_initialize_by_from_id_and_to_id_and_rt(@search.segments[0].from_as_object.id, @search.segments[0].to_as_object.id, @search.rt)
+    self.date1 = @search.segments[0].date_as_date
+    self.date2 = @search.segments[1].date_as_date if @search.segments[1]
     unless destination.new_record?
       destination.average_price += (price - destination.average_price) / (destination.hot_offers.count + 1)
       destination.average_time_delta +=  (time_delta - destination.average_time_delta) / (destination.hot_offers.count + 1)
