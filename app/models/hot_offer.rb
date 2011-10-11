@@ -22,6 +22,10 @@ class HotOffer < ActiveRecord::Base
     self.description = @search.human_lite
   end
 
+  def pricer_form
+    PricerForm.load_from_cache(code)
+  end
+
   private
 
   def set_some_vars
