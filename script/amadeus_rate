@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 require 'net/http'
 require 'rexml/document'
 require 'date'
@@ -19,10 +18,10 @@ class AmadeusRate
         File.open(config_file_name,'w') do |out|
           YAML.dump(file_content,out)
         end
-        AmadeusRate.put_current_rate_to_file
+      FileUtils.touch 'tmp/restart.txt'
       end
     end
   end
 end
-FileUtils.touch 'tmp/restart.txt'
+AmadeusRate.put_current_rate_to_file
 
