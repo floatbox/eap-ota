@@ -32,7 +32,7 @@ class HotOffer < ActiveRecord::Base
   def set_some_vars
     self.price = @recommendation.price_with_payment_commission / @search.people_count.values.sum
     self.time_delta = (Date.strptime(@search.segments[0].date, '%d%m%y') - Date.today).to_i
-    self.destination = Destination.find_or_initialize_by_from_id_and_to_id_and_rt(@search.segments[0].from_as_object.id, @search.segments[0].to_as_object.id, @search.rt)
+    destination = Destination.find_or_initialize_by_from_id_and_to_id_and_rt(@search.segments[0].from_as_object.id, @search.segments[0].to_as_object.id, @search.rt)
     self.date1 = @search.segments[0].date_as_date
     self.date2 = @search.segments[1].date_as_date if @search.segments[1]
     unless destination.new_record?
@@ -44,6 +44,8 @@ class HotOffer < ActiveRecord::Base
     end
     destination.hot_offers_counter += 1
     destination.save
+    ## херова магия, иначе при создании hot_offer у него не было destination_id
+    self.destination = destination
     self.price_variation = price - destination.average_price
     self.price_variation_percent = ((price / destination.average_price.to_f - 1)*100).to_i
   end
