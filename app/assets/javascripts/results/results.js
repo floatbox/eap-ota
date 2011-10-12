@@ -320,8 +320,15 @@ processUpdate: function() {
             self.fastest = undefined;
             self.showRecommendations();
         }, function() {
+            var context = $('#offers-context');
             var nbc = $('#offers-pcollection .offers-nearby').remove();
-            $('#offers-context .offers-nearby').html(nbc.html() || '');
+            context.find('.offers-nearby').html(nbc.html() || '');
+            context.find('.offers-subscribe').remove();
+            var subscribe = $('#offers-pcollection .offers-subscribe');
+            if (subscribe.length) {
+                subscribe.prependTo(context).removeClass('latent');
+                results.subscription.init(subscribe);
+            }
             self.toggleCollection(true);
         }, function() {
             var mode = $('#offers-options').attr('data-mode');
@@ -805,5 +812,60 @@ selectFilter: function(name, value) {
     if (!this.filters.selected[name]) {
         filter.selected = {};
     }
+}
+};
+
+/* Subscription form */
+results.subscription = {
+init: function(el) {
+    var that = this;
+    this.el = el.find('form');
+    this.button = this.el.find('.osf-submit');
+    this.field = this.el.find('.osf-field');
+    this.label = this.el.find('.osf-label');
+    this.field.keydown(function() {
+        that.label.hide();
+    }).bind('keyup propertychange input', function() {
+        if (this.value === '') that.label.show();
+    }).change();
+    this.el.submit(function(event) {
+        event.preventDefault();
+        that.send();
+    });
+},
+send: function() {
+    var that = this;
+    var value = this.field.val();
+    if (!value || !/^\w*?@\w*?\.\w{2,3}$/.test(value)) {
+        this.error('Введите правильный адрес электронной почты.');
+        return false;
+    }
+    this.button.get(0).disabled = true;
+    $.ajax({
+        url: '/subscribe/',
+        data: {
+            destination_id: this.el.attr('data-destination'),
+            email: value
+        },
+        success: function(s) {
+            that.process(s);
+        },
+        error: function() {
+            that.error();
+        },
+        timeout: 30000
+    });
+},
+process: function(s) {
+    if (s && s.success) {
+        this.el.hide();
+        this.el.after('<div class="os-success">Спасибо, подписка создана. Отписаться можно будет по ссылке в письме.</div>');
+    } else {
+        this.error();
+    }
+},
+error: function(text) {
+    this.button.get(0).disabled = false;
+    this.el.find('.osf-error').html(text || 'Не удалось подписаться, попробуйте ещё раз.').show();
 }
 };

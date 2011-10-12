@@ -11,6 +11,7 @@ class SubscriptionController < ApplicationController
 
   def unsubscribe
     subscription = Subscription.find_by_destination_id_and_email(params[:destination_id], params[:email])
-    subscription.disable
+    subscription.disable if subscription
+    @destination = Destination.find(params[:destination_id])
   end
 end
