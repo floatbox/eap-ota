@@ -4,9 +4,11 @@ class Subscription < ActiveRecord::Base
 
   scope :active, where(:status => '')
   scope :frozen, where(:status => 'frozen')
-  
+  validates :email, :presence => true,
+                    :length => {:minimum => 3, :maximum => 254},
+                    :format => {:with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i}
   def freeze
-    update_attribute(:status, 'frozen')    
+    update_attribute(:status, 'frozen')
   end
 
   def create_notice(hot_offer)
@@ -26,7 +28,7 @@ class Subscription < ActiveRecord::Base
     }
     Qu.enqueue SubscriptionMailer, notice_info
   end
-  
+
   def human_date(ds)
     d = Date.strptime(ds, '%d%m%y')
     if d.year == Date.today.year
