@@ -5,7 +5,7 @@
 Стоимость — <%= @notice['price']%> рубля
 Вылет <%= @notice['city_from']%> — <%= @notice['from_date']%>
 <% if @notice['rt']%>
-Вылет <%= @notice['city_rt_from']%> — <%= @notice['to_date']%>
+Вылет <%= @notice['city_rt_from']%> — <%= @notice['rt_date']%>
 <%end%>
 Купить: https://eviterra.com/#<%= @notice['query_key']%>...
 
