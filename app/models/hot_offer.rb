@@ -4,6 +4,11 @@ class HotOffer < ActiveRecord::Base
   belongs_to :destination
   before_create :set_some_vars
   delegate :rt, :to => :destination
+  after_create :create_notifications
+
+  def create_notifications
+    destination.subscriptions.active.every.create_notice(self) if !for_stats_only && destination.hot_offers_counter >= 20 && price_variation_percent <= -10
+  end
 
   def self.featured code=nil
     # FIXME SQL group_by не был бы лучше?
