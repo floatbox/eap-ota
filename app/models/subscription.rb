@@ -11,7 +11,7 @@ class Subscription < ActiveRecord::Base
 
   def create_notice(hot_offer)
     notice_info = {
-      :destination_id => destination_id,
+      :id => id,
       :destination_id => destination_id,
       :email => email,
       :city_from => City.find(destination.from_id).case_from,
