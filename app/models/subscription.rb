@@ -8,11 +8,16 @@ class Subscription < ActiveRecord::Base
 
   scope :active, where(:status => '')
   scope :frozen, where(:status => 'frozen')
+  scope :disabled, where(:status => 'disable')
   scope :to_defrost, lambda {
     where(:status => 'frozen')\
       .where("updated_at < ?", 11.hours.ago)
   }
 
+  def self.statuses
+    ['frozen', 'disable']
+  end
+  
   def freeze
     update_attribute(:status, 'frozen')
   end
