@@ -10,7 +10,7 @@ class Subscription < ActiveRecord::Base
   scope :frozen, where(:status => 'frozen')
   scope :to_defrost, lambda {
     where(:status => 'frozen')\
-      .where("updated_at < ?", 12.hours.ago)
+      .where("updated_at < ?", 11.hours.ago)
   }
 
   def freeze
@@ -43,8 +43,7 @@ class Subscription < ActiveRecord::Base
     Qu.enqueue SubscriptionMailer, notice_info
   end
 
-  def human_date(ds)
-    d = Date.strptime(ds, '%d%m%y')
+  def human_date(d)
     if d.year == Date.today.year
       return I18n.l(d, :format => '%e&nbsp;%B')
     else
