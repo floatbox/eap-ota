@@ -220,7 +220,10 @@ HotOffer:
 Subscription:
   fields:
     default: destination, email, status, created_at,updated_at
+    form: destination, email, status
     options:
+      read_only: destination
+      selectors: status
       date_formats:
         created_at: long
         updated_at: long
