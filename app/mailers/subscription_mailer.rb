@@ -9,8 +9,8 @@ class SubscriptionMailer < ActionMailer::Base
     @notice = notice_info
     logger.info 'Subscription: sending email' + notice_info['email']
 
-    subject = "Появились дешевые билеты из #{@notice['city_from']} #{@notice['city_to']}"
-    subject = subject + 'и обратно' if @notice['rt']
+    subject = "Появились дешевые билеты #{@notice['city_from']} #{@notice['city_to']}"
+    subject = subject + ' и обратно' if @notice['rt']
 
     mail :to => notice_info['email'], :subject => subject do |format|
       format.text
