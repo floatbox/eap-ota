@@ -11,6 +11,6 @@ class SubscriptionController < ApplicationController
 
   def unsubscribe
     subscription = Subscription.find_by_destination_id_and_email(params[:destination_id], params[:email])
-    subscription.freeze
+    subscription.disable
   end
 end
