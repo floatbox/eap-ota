@@ -2,10 +2,10 @@
 
 Есть выгодный тариф <%= @notice['city_from']%> <%= @notice['city_to']%><% if @notice['rt']%> и обратно<%end%>:
 
-Стоимость — <%= @notice['price']%> рубля
-Вылет <%= @notice['city_from']%> — <%= @notice['from_date']%>
+Стоимость — <%= @notice['price']%>
+Вылет <%= @notice['city_from']%> —<%= @notice['from_date']%>
 <% if @notice['rt']%>
-Вылет <%= @notice['city_rt_from']%> — <%= @notice['rt_date']%>
+Вылет <%= @notice['city_rt_from']%> —<%= @notice['rt_date']%>
 <%end%>
 Купить: https://eviterra.com/#<%= @notice['query_key']%>
 
@@ -16,4 +16,4 @@
 Команда Eviterra.com
 
 Вы получили это письмо потому что подписались на уведомления о появлении выгодных тарифов на сайте Eviterra.com. 
-Чтобы отписаться от уведомлений по направлению Москва—Пекин, перейдите по этой ссылке https://eviterra.com/unsubscribe/<%= @notice['destination_id']%>?email=<%= @notice['email']%>.
+Чтобы отписаться от уведомлений по направлению <%= @notice['description'].html_safe%>, перейдите по ссылке https://eviterra.com/unsubscribe/<%= @notice['destination_id']%>?email=<%= @notice['email']%>
