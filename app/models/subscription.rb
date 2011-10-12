@@ -4,9 +4,21 @@ class Subscription < ActiveRecord::Base
 
   scope :active, where(:status => '')
   scope :frozen, where(:status => 'frozen')
-  
+  scope :to_defrost, lambda {
+    where(:status => 'frozen')\
+      .where("updated_at < ?", 12.hours.ago)
+  }
+
   def freeze
-    update_attribute(:status, 'frozen')    
+    update_attribute(:status, 'frozen')
+  end
+
+  def defrost
+    update_attribute(:status, '') if status == 'frozen'
+  end
+
+  def disable
+     update_attribute(:status, 'disable')
   end
 
   def create_notice(hot_offer)
@@ -26,7 +38,7 @@ class Subscription < ActiveRecord::Base
     }
     Qu.enqueue SubscriptionMailer, notice_info
   end
-  
+
   def human_date(ds)
     d = Date.strptime(ds, '%d%m%y')
     if d.year == Date.today.year
@@ -35,5 +47,9 @@ class Subscription < ActiveRecord::Base
       return I18n.l(d, :format => '%e&nbsp;%B %Y')
     end
   end
+  
+  def self.defrost_frozen!
+      Subscription.to_defrost.every.defrost
+    end
 
 end
