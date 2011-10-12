@@ -1,18 +1,24 @@
-# encoding: utf-8
 class SubscriptionMailer < ActionMailer::Base
+  @queue = :subscription
+  #run queu > bundle exec rake qu:work QUEUES=subscription
   
   add_template_helper(ApplicationHelper)
   default :from => "Eviterra.com <ticket@eviterra.com>", :bcc => Conf.mail.ticket_cc
 
-  def process(destination_id)
-      mail :to => 'arefiev@gmail.com', :subject => 'subject' do |format|
-      format.html { render :text => destination_id }
+  def notice(notice_info)
+    @notice = notice_info
+    logger.info 'Subscription: sending email' + notice_info['email']
+    
+    subject = "Появились дешевые билеты из #{@notice['city_from']} #{@notice['city_to']}"
+    subject = subject + 'и обратно' if @notice['rt']
+    
+    mail :to => notice_info['email'], :subject => subject do |format|
+      format.text 
     end
   end
 
-  def self.perform(destination_id)
-    presentation = new SubscriptionMailer
-    presentation.process(destination_id)
+  def self.perform(notice_info)
+    SubscriptionMailer.notice(notice_info).deliver
   end
 
 end
