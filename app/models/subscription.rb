@@ -42,7 +42,7 @@ class Subscription < ActiveRecord::Base
       :rt_date => human_date(hot_offer.date2),
       :rt => destination.rt,
       :description => hot_offer.description,
-      :price => hot_offer.price,
+      :price => human_price(hot_offer.price),
       :query_key => hot_offer.code
     }
     Qu.enqueue SubscriptionMailer, notice_info
@@ -50,14 +50,19 @@ class Subscription < ActiveRecord::Base
 
   def human_date(d)
     if d.year == Date.today.year
-      return I18n.l(d, :format => '%e&nbsp;%B')
+      return I18n.l(d, :format => '%e %B')
     else
-      return I18n.l(d, :format => '%e&nbsp;%B %Y')
+      return I18n.l(d, :format => '%e %B %Y')
     end
   end
-  
+
+  def human_price(price)
+    rounded = price.round.to_i
+    "#{ rounded } #{ Russian.pluralize(rounded, 'рубль', 'рубля', 'рублей') }"
+  end
+
   def self.defrost_frozen!
       Subscription.to_defrost.every.defrost
-    end
+  end
 
 end

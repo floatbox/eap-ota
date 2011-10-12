@@ -12,6 +12,7 @@ ru:
       flight_group: 'Подборка рейсов'
       destination: 'Направление'
       hot_offer: 'Горячее предложение'
+      subscription: 'Подписка'
       geo_tag: 'Геотаг'
       airport: 'Аэропорт'
       city: 'Город'
