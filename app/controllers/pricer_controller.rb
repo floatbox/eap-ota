@@ -103,10 +103,11 @@ class PricerController < ApplicationController
   end
 
   def get_destination
-    return if ([@search.to_as_object.class, @search.from_as_object.class] - [City, Airport]).present? || @search.complex_route
-    to = @search.to_as_object.class == Airport ? @search.to_as_object.city : @search.to_as_object
-    from = @search.from_as_object.class == Airport ? @search.from_as_object.city : @search.from_as_object
-    Destination.find_or_create_by_from_and_to_and_rt(from, to, @search.rt)
+    segment = @search.segments[0]
+    return if ([segment.to_as_object.class, segment.from_as_object.class] - [City, Airport]).present? || @search.complex_route?
+    to = segment.to_as_object.class == Airport ? segment.to_as_object.city : segment.to_as_object
+    from = segment.from_as_object.class == Airport ? segment.from_as_object.city : segment.from_as_object
+    Destination.find_or_create_by_from_id_and_to_id_and_rt(from.id, to.id, @search.rt)
   end
 
 
