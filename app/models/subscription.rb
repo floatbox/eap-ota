@@ -2,6 +2,10 @@
 class Subscription < ActiveRecord::Base
   belongs_to :destination
 
+  validates :email, :presence => true,
+                    :length => {:minimum => 3, :maximum => 254},
+                    :format => {:with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i}
+
   scope :active, where(:status => '')
   scope :frozen, where(:status => 'frozen')
   scope :to_defrost, lambda {
