@@ -836,7 +836,7 @@ init: function(el) {
 send: function() {
     var that = this;
     var value = this.field.val();
-    if (!value || !/^.*?@.*?\.\w{2,3}$/.test(value)) {
+    if (!value || !/^([^@\s]+)@((?:[-A-Za-z0-9]+\.)+[a-z]{2,})$/.test(value)) {
         this.error('Введите правильный адрес электронной почты.');
         return false;
     }
