@@ -9,10 +9,9 @@ class PricerController < ApplicationController
       if @search.valid?
         @recommendations = Mux.new(:admin_user => admin_user).async_pricer(@search)
         @locations = @search.human_locations
-        if hot_offer = create_hot_offer
-          @average_price = hot_offer.destination.average_price * @search.people_count[:adults]
-          @destination = hot_offer.destination
-        end
+        hot_offer = create_hot_offer
+        @average_price = hot_offer.destination.average_price * @search.people_count[:adults] if hot_offer
+        @destination = get_destination
       end
     end
     render :partial => 'recommendations'
@@ -101,6 +100,13 @@ class PricerController < ApplicationController
           :url => (url_for(:action => :index, :controller => :home) + '#' + @query_key )
         )
     end
+  end
+
+  def get_destination
+    return if ([@search.to_as_object.class, @search.from_as_object.class] - [City, Airport]).present? || @search.complex_route
+    to = @search.to_as_object.class == Airport ? @search.to_as_object.city : @search.to_as_object
+    from = @search.from_as_object.class == Airport ? @search.from_as_object.city : @search.from_as_object
+    Destination.find_or_create_by_from_and_to_and_rt(from, to, @search.rt)
   end
 
 

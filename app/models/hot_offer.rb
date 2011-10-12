@@ -40,11 +40,15 @@ class HotOffer < ActiveRecord::Base
     destination = Destination.find_or_initialize_by_from_id_and_to_id_and_rt(@search.segments[0].from_as_object.id, @search.segments[0].to_as_object.id, @search.rt)
     self.date1 = @search.segments[0].date_as_date
     self.date2 = @search.segments[1].date_as_date if @search.segments[1]
-    unless destination.new_record?
+    #вся эта херня из-за того, что destination ингда создается вообще без hot_offers
+    if destination.average_price
       destination.average_price += (price - destination.average_price) / (destination.hot_offers.count + 1)
-      destination.average_time_delta +=  (time_delta - destination.average_time_delta) / (destination.hot_offers.count + 1)
     else
       destination.average_price = price
+    end
+    if destination.average_time_delta
+      destination.average_time_delta +=  (time_delta - destination.average_time_delta) / (destination.hot_offers.count + 1)
+    else
       destination.average_time_delta = time_delta
     end
     destination.hot_offers_counter += 1
