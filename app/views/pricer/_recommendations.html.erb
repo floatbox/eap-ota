@@ -3,7 +3,7 @@
 <% if @destination.present? %>
 <div class="offers-subscribe latent">
     <h3 class="offers-title">Подпишитесь на тариф</h3>
-    <p class="os-description">Если вам не&nbsp;важно, когда лететь, мы сообщим вам о&nbsp;появлении дешёвых тарифов на&nbsp;билеты <%= nbsp @destination.from.case_from %> <%= nbsp @destination.to.case_to %><%= ' и обратно' if @destination.rt %> по&nbsp;электронной почте.</p>
+    <p class="os-description">Если вам не&nbsp;важно когда лететь, мы&nbsp;сообщим вам о&nbsp;появлении выгодных тарифов на&nbsp;билеты <%= nbsp @destination.from.case_from %> <%= nbsp @destination.to.case_to %><%= ' и обратно' if @destination.rt %> по&nbsp;электронной почте.</p>
     <form class="os-form" action="/subscribe/" data-destination="<%= @destination.id %>">
         <div><label class="osf-label" for="osf-email">Ваш адрес</label><input name="email" class="osf-field" id="osf-email" maxlength="50">&nbsp;<input class="osf-submit" type="submit" value="Хочу"></div>
         <p class="osf-error"></p>
