@@ -4,16 +4,36 @@ class PaymentsController < ApplicationController
   before_filter :find_order
 
   def find_order
-    @order = Order.where(["offline_booking = ? and last_pay_time >= ?", true, Time.now]).find_by_code!( params[:code].presence || 'not specified' )
+    @order = Order.find_by_code!( params[:code].presence || 'not specified' )
   end
 
   def edit
+    unless @order.last_pay_time >= Time.now
+      render "expired_pay_time"
+      return
+    end
+
+    unless @order.offline_booking
+      render 'error', :status => 404
+      return
+    end
+
     if @order.payment_status == 'not blocked'
       @card = CreditCard.new
     end
   end
 
   def update
+    unless @order.last_pay_time >= Time.now
+      render "expired_pay_time"
+      return
+    end
+
+    unless @order.offline_booking
+      render 'error', :status => 404
+      return
+    end
+
     unless @order.payment_status == 'not blocked'
       render :partial => 'success'
       return
