@@ -59,4 +59,6 @@ geolocation:
     enabled: yes
 mail:
   ticket_cc: ~
+  subscription_cc: subscription@eviterra.com
+
 

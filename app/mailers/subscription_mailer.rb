@@ -3,7 +3,7 @@ class SubscriptionMailer < ActionMailer::Base
   #run queu > bundle exec rake qu:work QUEUES=subscription
 
   add_template_helper(ApplicationHelper)
-  default :from => "Eviterra.com <ticket@eviterra.com>"
+  default :from => "Eviterra.com <ticket@eviterra.com>", :bcc => Conf.mail.subscription_cc
 
   def notice(notice_info)
     @notice = notice_info
