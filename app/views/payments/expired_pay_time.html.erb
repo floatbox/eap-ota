@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <%= render 'shared/head_common', {:title => 'истек срок оплаты'} %>
+    <%= stylesheet_link_tag "static" %>
+    <%= javascript_include_tag "static" %>
+</head>
+<body>
+<%= render 'shared/header' %>
+<div id="wrapper">
+<div id="content">
+    <div id="back2search">
+        <div class="bscontent"><a href="/">Вернуться к поиску</a></div>
+    </div>
+    <div class="article">
+
+<h2>Произошла ошибка</h2>
+
+<div class="wrap">
+<div style="float: right;">
+    <div id="map-canvas" style="width: 450px; height: 350px; border: 1px solid #C0C0C0;"></div>
+</div>
+<div style="margin-right: 480px;">
+    <div class="asection">
+        <h4>К сожалению, срок оплаты для этой брони истек.</h4>
+        <p>Если вы уверены, что здесь все-таки должна быть форма оплаты, позвоните нам.</p>
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+<%= render 'shared/footer' %>
+</body>
+</html>
+
