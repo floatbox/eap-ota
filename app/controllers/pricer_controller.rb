@@ -11,6 +11,7 @@ class PricerController < ApplicationController
         @locations = @search.human_locations
         hot_offer = create_hot_offer
         @average_price = hot_offer.destination.average_price * @search.people_count[:adults] if hot_offer
+        @destination = get_destination
       end
     end
     render :partial => 'recommendations'
@@ -99,6 +100,14 @@ class PricerController < ApplicationController
           :url => (url_for(:action => :index, :controller => :home) + '#' + @query_key )
         )
     end
+  end
+
+  def get_destination
+    segment = @search.segments[0]
+    return if ([segment.to_as_object.class, segment.from_as_object.class] - [City, Airport]).present? || @search.complex_route?
+    to = segment.to_as_object.class == Airport ? segment.to_as_object.city : segment.to_as_object
+    from = segment.from_as_object.class == Airport ? segment.from_as_object.city : segment.from_as_object
+    Destination.find_or_create_by_from_id_and_to_id_and_rt(from.id, to.id, @search.rt)
   end
 
 

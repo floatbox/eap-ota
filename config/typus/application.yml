@@ -216,6 +216,24 @@ HotOffer:
   search: description, ^url
   filters: created_at
   application: Hot Offers, 3
+  
+Subscription:
+  fields:
+    default: destination, email, status, created_at,updated_at
+    form: destination, email, status
+    options:
+      read_only: destination
+      selectors: status
+      date_formats:
+        created_at: long
+        updated_at: long
+  options:
+    default_action_on_item: show
+  relationships: destination
+  search: email,
+  scopes: active, frozen, disabled
+  filters: status, created_at
+  application: Hot Offers, 3
 
 Region:
   fields:

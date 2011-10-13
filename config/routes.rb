@@ -42,6 +42,8 @@ Eviterra::Application.routes.draw do
   match 'about/:action' => 'about', :as => :about
 
   match "geo" => 'home#geo', :as => :geo
+  match "subscribe" => 'subscription#subscribe', :as => 'subscribe'
+  match "unsubscribe/:destination_id" => 'subscription#unsubscribe', :as => 'unsubscribe'
   root :to => 'home#index'
 
   # The priority is based upon order of creation:

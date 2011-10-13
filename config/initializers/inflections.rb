@@ -15,6 +15,7 @@ ActiveSupport::Inflector.inflections do |inflect|
     inflect.plural(/^Подборка рейсов$/i,  'Подборки рейсов' )
     inflect.plural(/^Направление$/i,  'Направления' )
     inflect.plural(/^Горячее предложение$/i,  'Горячие предложения' )
+    inflect.plural(/^Подписка$/i,  'Подписки' )
     inflect.plural(/^Геотаг$/i,  'Геотаги' )
     inflect.plural(/^Аэропорт$/i,  'Аэропорты' )
     inflect.plural(/^Город$/i,  'Города' )

@@ -12,6 +12,7 @@ ru:
       flight_group: 'Подборка рейсов'
       destination: 'Направление'
       hot_offer: 'Горячее предложение'
+      subscription: 'Подписка'
       geo_tag: 'Геотаг'
       airport: 'Аэропорт'
       city: 'Город'
@@ -67,6 +68,7 @@ ru:
   Models: Таблицы
 
   Hot Offers: Горячие предложения
+  Subscriptions: Подписки
   Misc: Прочее
   Base: Справочники
   Geo: Геосправочники

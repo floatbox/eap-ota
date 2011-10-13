@@ -3,6 +3,12 @@ class HotOffer < ActiveRecord::Base
   attr_writer :recommendation
   belongs_to :destination
   before_create :set_some_vars
+  delegate :rt, :to => :destination
+  after_create :create_notifications
+
+  def create_notifications
+    destination.subscriptions.active.every.create_notice(self) if !for_stats_only && destination.hot_offers_counter >= 20 && price_variation_percent <= -10
+  end
 
   def self.featured code=nil
     # FIXME SQL group_by не был бы лучше?
@@ -23,7 +29,7 @@ class HotOffer < ActiveRecord::Base
   end
 
   def pricer_form
-    PricerForm.load_from_cache(code)
+    @pricer_form ||= PricerForm.load_from_cache(code)
   end
 
   private
@@ -31,16 +37,24 @@ class HotOffer < ActiveRecord::Base
   def set_some_vars
     self.price = @recommendation.price_with_payment_commission / @search.people_count.values.sum
     self.time_delta = (Date.strptime(@search.segments[0].date, '%d%m%y') - Date.today).to_i
-    self.destination = Destination.find_or_initialize_by_from_id_and_to_id_and_rt(@search.segments[0].from_as_object.id, @search.segments[0].to_as_object.id, @search.rt)
-    unless destination.new_record?
+    destination = Destination.find_or_initialize_by_from_id_and_to_id_and_rt(@search.segments[0].from_as_object.id, @search.segments[0].to_as_object.id, @search.rt)
+    self.date1 = @search.segments[0].date_as_date
+    self.date2 = @search.segments[1].date_as_date if @search.segments[1]
+    #вся эта херня из-за того, что destination ингда создается вообще без hot_offers
+    if destination.average_price
       destination.average_price += (price - destination.average_price) / (destination.hot_offers.count + 1)
-      destination.average_time_delta +=  (time_delta - destination.average_time_delta) / (destination.hot_offers.count + 1)
     else
       destination.average_price = price
+    end
+    if destination.average_time_delta
+      destination.average_time_delta +=  (time_delta - destination.average_time_delta) / (destination.hot_offers.count + 1)
+    else
       destination.average_time_delta = time_delta
     end
     destination.hot_offers_counter += 1
     destination.save
+    ## херова магия, иначе при создании hot_offer у него не было destination_id
+    self.destination = destination
     self.price_variation = price - destination.average_price
     self.price_variation_percent = ((price / destination.average_price.to_f - 1)*100).to_i
   end
