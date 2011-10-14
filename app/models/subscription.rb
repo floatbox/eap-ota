@@ -17,7 +17,7 @@ class Subscription < ActiveRecord::Base
   def self.statuses
     ['frozen', 'disable']
   end
-  
+
   def freeze
     update_attribute(:status, 'frozen')
   end
@@ -47,6 +47,7 @@ class Subscription < ActiveRecord::Base
       :query_key => hot_offer.code
     }
     Qu.enqueue SubscriptionMailer, notice_info
+    freeze
   end
 
   def human_date(d)
