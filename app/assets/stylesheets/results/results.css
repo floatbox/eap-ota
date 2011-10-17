@@ -141,6 +141,43 @@
     color: #ED1192;
 }
 
+/* Форма подписки */
+.offers-subscribe {
+    margin: 0 0 20px;
+}
+.os-description {
+    margin: 0 0 8px;
+    font-size: 13px;
+    line-height: 16px;
+    color: #777;
+}
+.os-form {
+    margin: 15px 0 0;
+}
+.osf-label {
+    position: absolute;
+    margin: 2px 0 0 5px;
+    color: #A0A0A0;
+}
+.osf-field {
+    width: 170px;
+    height: 19px;
+    font-size: 14px;
+    line-height: 19px;
+    border: 1px solid #999;
+    padding: 1px 4px;
+}
+.osf-error {
+    display: none;
+    margin: 5px 0 0;
+    font-size: 13px;
+    line-height: 16px;
+}
+.os-success {
+    font-size: 13px;
+    line-height: 16px;
+}
+
 /* Соседние города */
 .offers-nearby {
     color: #4b4b4b;

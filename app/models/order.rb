@@ -232,23 +232,19 @@ class Order < ActiveRecord::Base
         amadeus.pnr_ignore
       end
       prices = tst_resp.prices_with_refs
-      tickets.where(:status => 'ticketed').every.update_attribute(:status, 'voided')
       pnr_resp.tickets.deep_merge(tst_resp.prices_with_refs).each do |k, ticket_hash|
-        t = tickets.spawn(ticket_hash[:number])
-        ticket_hash.delete(:ticketed_date) if t.ticketed_date
-        if !(Ticket.office_ids.include? ticket_hash[:office_id])
-          unless t.new_record?
-            t.update_attribute(:status, ticket_hash[:status])
+        if ticket_hash[:number]
+          t = tickets.spawn(ticket_hash[:number])
+          ticket_hash.delete(:ticketed_date) if t.ticketed_date
+          if Ticket.office_ids.include? ticket_hash[:office_id]
+            t.update_attributes(ticket_hash.merge({
+              :processed => true,
+              :source => 'amadeus',
+              :pnr_number => pnr_number,
+              :commission_subagent => commission_subagent.to_s
+            })
+            )
           end
-
-        else
-          t.update_attributes(ticket_hash.merge({
-            :processed => true,
-            :source => 'amadeus',
-            :pnr_number => pnr_number,
-            :commission_subagent => commission_subagent.to_s
-          })
-          )
         end
       end
       #Необходимо, тк t.update_attributes глючит при создании билетов (не обновляет self.tickets)
@@ -388,7 +384,6 @@ class Order < ActiveRecord::Base
     update_attributes(:ticket_status =>'ticketed', :ticketed_date => Date.today)
 
     load_tickets
-    update_prices_from_tickets
   end
 
   def reload_tickets

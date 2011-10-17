@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <%= render 'shared/head_common', {:title => 'отказ от подписки'} %>
+    <%= stylesheet_link_tag "static" %>
+    <%= javascript_include_tag "static" %>
+</head>
+<body>
+<%= render 'shared/header' %>
+<div id="wrapper">
+<div id="content">
+    <div id="back2search">
+        <div class="bscontent"><a href="/">Перейти к поиску</a></div>
+    </div>
+    <div class="article">
+    
+    <h2>Отказ от подписки</h2>
+    <p>Подписка на выгодные тарифы<% if @destination.present? %> по направлению <%= @destination.from.case_from %> <%= @destination.to.case_to %><%= ' и обратно' if @destination.rt %><% end %> отменена. Спасибо, что пользуетесь нашими услугами.</p>
+    
+    </div>
+</div>
+</div>
+<%= render 'shared/footer' %>
+</body>
+</html>

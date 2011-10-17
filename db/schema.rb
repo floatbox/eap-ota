@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111005161607) do
+ActiveRecord::Schema.define(:version => 20111011164013) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -208,6 +208,8 @@ ActiveRecord::Schema.define(:version => 20111005161607) do
     t.integer  "time_delta"
     t.integer  "price_variation"
     t.integer  "price_variation_percent"
+    t.date     "date1"
+    t.date     "date2"
   end
 
   add_index "hot_offers", ["created_at"], :name => "index_hot_offers_on_created_at"
@@ -324,6 +326,16 @@ ActiveRecord::Schema.define(:version => 20111005161607) do
     t.string   "synonym_list"
   end
 
+  create_table "subscriptions", :force => true do |t|
+    t.integer  "destination_id",                 :null => false
+    t.string   "email",                          :null => false
+    t.string   "status",         :default => "", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "subscriptions", ["destination_id"], :name => "index_subscriptions_on_destination_id"
+
   create_table "tickets", :force => true do |t|
     t.string   "source"
     t.string   "pnr_number"
@@ -351,6 +363,7 @@ ActiveRecord::Schema.define(:version => 20111005161607) do
     t.boolean  "processed",                                               :default => false
     t.integer  "parent_id"
     t.decimal  "price_penalty",             :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.text     "comment"
   end
 
   create_table "typus_users", :force => true do |t|

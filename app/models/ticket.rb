@@ -11,6 +11,8 @@ class Ticket < ActiveRecord::Base
 
   before_create :set_refund_data, :if => lambda {kind == "refund"}
   validate :check_uniqueness_of_refund
+  validates_presence_of :comment, :if => lambda {kind == "refund"}
+  after_save :update_prices_in_order
 
   # FIXME сделать перечисление прямо из базы, через uniq
   def self.office_ids
@@ -27,6 +29,10 @@ class Ticket < ActiveRecord::Base
 
   def self.statuses
     ['ticketed', 'voided', 'pending']
+  end
+
+  def update_prices_in_order
+    order.update_prices_from_tickets if order
   end
 
   def check_uniqueness_of_refund
@@ -88,7 +94,7 @@ class Ticket < ActiveRecord::Base
 
   def price_refund
     if kind == 'refund'
-      -(price_tax + price_fare + price_consolidator_markup - price_penalty)
+      -(price_tax + price_fare + price_penalty)
     else
       0
     end

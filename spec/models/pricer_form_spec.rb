@@ -47,7 +47,7 @@ describe PricerForm do
 
     context "when oneway" do
       let :attrs do
-        { :from => 'MOW', :to => 'LON', :date1 => '091011' }
+        { :from => 'MOW', :to => 'LON', :date1 => '091012' }
       end
 
       it { should be_valid }
@@ -56,7 +56,7 @@ describe PricerForm do
 
     context "when twoway" do
       let :attrs do
-        { :from => 'MOW', :to => 'LON', :date1 => '091011', :date2 => '091111' }
+        { :from => 'MOW', :to => 'LON', :date1 => '091012', :date2 => '091112' }
       end
 
       it { should be_valid }
@@ -65,7 +65,7 @@ describe PricerForm do
 
     context "when requested business class" do
       let :attrs do
-        { :from => 'MOW', :to => 'LON', :date1 => '091011', :cabin => 'C' }
+        { :from => 'MOW', :to => 'LON', :date1 => '091012', :cabin => 'C' }
       end
 
       it { should be_valid }
@@ -74,7 +74,7 @@ describe PricerForm do
 
     context "when got empty people values" do
       let :attrs do
-        { :from => 'MOW', :to => 'LON', :date1 => '091011', :cabin => 'C', :adults => nil, :children => nil, :infants => nil, :seated_infants => nil }
+        { :from => 'MOW', :to => 'LON', :date1 => '091012', :cabin => 'C', :adults => nil, :children => nil, :infants => nil, :seated_infants => nil }
       end
 
       it { should be_valid }
@@ -87,7 +87,7 @@ describe PricerForm do
       args = {
               :from => 'MOW',
               :to => 'LON',
-              :date1 => '091011',
+              :date1 => '091012',
               :childrens => 1,
               :cabin => 'C'}
 
@@ -97,13 +97,13 @@ describe PricerForm do
       args = {
               :from => 'Зимбабве',
               :to => 'LON',
-              :date1 => '091011',
+              :date1 => '091012',
               :cabin => 'C'}
        expect{ PricerForm.simple(args) }.to raise_error(IataStash::NotFound,"Couldn't find Airport with IATA 'Зимбабве'")
     end
     it "should raise ArgumentError if from, to or data1 are not there" do
       args = {
-              :date1 => '091011',
+              :date1 => '091012',
               :cabin => 'C'}
        expect{ PricerForm.simple(args) }.to raise_error(ArgumentError, 'Lack of required parameter(s)  - "from, to"')
     end

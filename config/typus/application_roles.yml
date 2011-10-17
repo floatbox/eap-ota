@@ -15,6 +15,7 @@ admin:
   GeoTag: create, read, update, delete
   Region: create, read, update, delete
   HotOffer: read, delete
+  Subscription: create, read, update, delete
   Destination: read, delete
   AirlineAlliance: create, read, update, delete
   Consolidator: create, read, update, delete

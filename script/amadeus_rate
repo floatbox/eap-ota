@@ -1,0 +1,27 @@
+require 'net/http'
+require 'rexml/document'
+require 'date'
+require 'fileutils'
+include REXML
+
+class AmadeusRate
+  def self.put_current_rate_to_file
+    config_file_name = 'config/local/amadeus_rate.yml'
+    existing_file = YAML.load_file(config_file_name) rescue nil
+    current_rate = existing_file["amadeus"]["euro_rate"] if existing_file
+    new_rate = Amadeus.booking.conversion_rate('EUR').round
+    if new_rate
+      if current_rate == new_rate
+        exit
+      else
+        file_content = {"amadeus"=>{"euro_rate"=>new_rate}}
+        File.open(config_file_name,'w') do |out|
+          YAML.dump(file_content,out)
+        end
+      FileUtils.touch 'tmp/restart.txt'
+      end
+    end
+  end
+end
+AmadeusRate.put_current_rate_to_file
+
