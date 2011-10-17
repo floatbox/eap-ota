@@ -32,6 +32,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def update_prices_in_order
+    order.tickets.reload if order
     order.update_prices_from_tickets if order
   end
 
