@@ -2206,12 +2206,14 @@ carrier "W5", "Airline «MAHAN AIR» (АВИАРЕПС)"
 example 'svocdg'
 agent "5 % от всех опубликованных тарифов; (Interline отдельно не прописан)"
 subagent "3% от всех опубл.тарифов на собств. рейсы W5"
+disabled
 commission "5%/3%"
 
 example 'svocdg cdgsvo/ab'
 agent "5 % от всех опубликованных тарифов; (Interline отдельно не прописан)"
 subagent "3% от всех опубл.тарифов на собств. рейсы W5"
 interline :unconfirmed
+disabled
 commission "5%/3%"
 
 carrier "IZ", "Arkia"
