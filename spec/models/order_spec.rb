@@ -1,6 +1,29 @@
+# encoding: utf-8
 require 'spec_helper'
 
 describe Order do
+
+  it "should not allow to create two orders with the same pnr number" do
+    order1 = Order.new :pnr_number => 'foobar'
+    order2 = Order.new :pnr_number => 'FOObar'
+    order1.save.should be_true
+    order2.save.should be_false
+  end
+
+  describe "#capitalize_pnr" do
+    it "should strip spaces" do
+      order = Order.new :pnr_number => '  БХЦ45 '
+      order.send :capitalize_pnr
+      order.pnr_number.should == 'БХЦ45'
+    end
+
+    it "should capitalize cyrillics in sirena order" do
+      order = Order.new :pnr_number => 'бхЦ45'
+      order.send :capitalize_pnr
+      order.pnr_number.should == 'БХЦ45'
+    end
+  end
+
 
   describe "#tickets.spawn" do
     it 'should raise exception if number is blank' do

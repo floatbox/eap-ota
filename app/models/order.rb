@@ -55,7 +55,8 @@ class Order < ActiveRecord::Base
   has_many :notifications
   validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
 
-  before_save :capitalize_pnr, :calculate_price_with_payment_commission
+  before_validation :capitalize_pnr
+  before_save :calculate_price_with_payment_commission
   before_create :generate_code, :set_payment_status
   after_save :create_notification
 
