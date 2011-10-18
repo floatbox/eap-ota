@@ -3,6 +3,7 @@ class Payment < ActiveRecord::Base
   belongs_to :order
   after_create :set_ref
   attr_reader :card
+  attr_accessor :custom_fields
 
   def self.[] id
     find id
@@ -24,7 +25,7 @@ class Payment < ActiveRecord::Base
   end
 
   def payture_block
-    response = Payture.new.block(price, @card, :order_id => ref)
+    response = Payture.new.block(price, @card, :order_id => ref, :custom_fields => custom_fields)
     update_attribute(:reject_reason, response.err_code) if !response.success? && !response.threeds?
     update_attribute(:threeds_key, response.threeds_key) if response.threeds?
     response

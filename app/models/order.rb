@@ -364,8 +364,14 @@ class Order < ActiveRecord::Base
     res
   end
 
-  def block_money card
-    payment = Payment.create(:price => price_with_payment_commission, :card => card, :order => self)
+  def block_money card, order_form = nil, ip = nil
+    custom_fields = PaymentCustomFields.new(:ip => ip)
+    if order_form
+      custom_fields.order_form = order_form
+    else
+      custom_fields.order = self
+    end
+    payment = Payment.create(:price => price_with_payment_commission, :card => card, :order => self, :custom_fields => custom_fields)
     payment.payture_block
   end
 

@@ -31,7 +31,7 @@ class PaymentsController < ApplicationController
 
     card = CreditCard.new(params[:card])
     if card.valid?
-      payture_response = @order.block_money(card)
+      payture_response = @order.block_money(card, nil, request.remote_ip)
       if payture_response.success?
         @order.money_blocked!
         render :partial => 'success'

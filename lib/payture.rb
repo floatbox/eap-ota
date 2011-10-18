@@ -101,6 +101,7 @@ class Payture
     add_money(post, amount)
     add_merchant(post)
     add_creditcard(post, card)
+    add_custom_fields(post, opts)
     encrypt_payinfo(post)
 
     post_request 'Block', post
@@ -200,6 +201,29 @@ class Payture
     pay_info_string = keys.find_all{|k| post[k]}.collect {|k| "#{k}=#{post[k]}" }.join(';')
     post[:PayInfo] = Base64::encode64( encrypt(pay_info_string) ).rstrip
     [:PAN, :EMonth, :EYear, :CardHolder, :SecureCode].each {|key| post.delete(key) }
+  end
+
+  def add_custom_fields(post, opts)
+    custom_fields = opts[:custom_fields]
+    if custom_fields
+      res = {
+        :IP => custom_fields.ip,
+        :FirstName => custom_fields.first_name,
+        :LastName => custom_fields.last_name,
+        :Phone => custom_fields.phone,
+        :Email => custom_fields.email,
+        :Date => custom_fields.date ? custom_fields.date.strftime('%Y.%m.%d') : nil,
+        :Segments => custom_fields.segments
+      }
+      if custom_fields.points
+        res[:From] = custom_fields.points[0]
+        custom_fields.points[1..-1].each_with_index do |p, i|
+          res[("To#{i + 1}").to_sym] = p
+        end
+      end
+      res.keys.each { |k| res.delete(k) unless res[k] }
+      post[:CustomFields] = CGI.escape(res.collect {|k, v| "#{k}=#{v}"}.join(';'))
+    end
   end
 
   def encrypt(string)
