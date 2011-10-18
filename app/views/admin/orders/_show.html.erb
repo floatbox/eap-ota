@@ -8,7 +8,7 @@
 <% if @item.code && @item.payment_status == 'not blocked' && @item.offline_booking? %>
 <div id="pay_url">
 URL для оплаты: <%= link_to edit_payment_url(:code => @item.code), edit_payment_url(:code => @item.code)%>
-<% if @item.last_pay_time > Time.now %>
+<% if @item.last_pay_time.try(:future?) %>
   действительна до <%= @item.last_pay_time.strftime("%d %b %Y, %H:%M") %>
 <% else %>
   уже не действительна
