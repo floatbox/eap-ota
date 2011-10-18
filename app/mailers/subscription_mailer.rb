@@ -20,7 +20,6 @@ class SubscriptionMailer < ActionMailer::Base
   def self.perform(notice_info)
     logger.info 'Subscription: sending email' + notice_info['email']
     SubscriptionMailer.notice(notice_info).deliver
-    Subscription.find(notice_info['id']).freeze
     puts "Subscription email #{notice_info['email']} to #{notice_info['description']} SENT on #{Time.now}"
     rescue
       puts "Subscription email #{notice_info['email']} to #{notice_info['description']} ERROR on #{Time.now}"

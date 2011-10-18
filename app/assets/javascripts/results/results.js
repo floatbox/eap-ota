@@ -313,6 +313,7 @@ processUpdate: function() {
             self.applySort('price');
         }, function() {
             self.filterNearby();
+            self.sortOffers();
         }, function() {
             self.showDepartures();
         }, function() {

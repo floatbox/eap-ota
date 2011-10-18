@@ -7,7 +7,7 @@ class HotOffer < ActiveRecord::Base
   after_create :create_notifications
 
   def create_notifications
-    destination.subscriptions.active.every.create_notice(self) if !for_stats_only && destination.hot_offers_counter >= 20 && price_variation_percent <= -10
+    destination.subscriptions.active.every.create_notice(self) if !for_stats_only && destination.hot_offers_counter >= 20 && price_variation_percent <= -20
   end
 
   def self.featured code=nil

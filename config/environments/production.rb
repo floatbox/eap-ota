@@ -20,7 +20,7 @@ Eviterra::Application.configure do
     :domain => "eviterra.com",
     :authentication => :plain,
     :user_name => "no-reply@eviterra.com",
-    :password => "delta_mailer"
+    :password => "production_mailer"
   }
 
   config.action_controller.perform_caching = true
