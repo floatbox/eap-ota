@@ -190,8 +190,8 @@ class OrderForm
     }
   end
 
-  def block_money
-    response = order.block_money(card)
+  def block_money(ip = nil)
+    response = order.block_money(card, self, ip)
 
     if response.error?
       card.errors.add :number, "не удалось провести платеж"

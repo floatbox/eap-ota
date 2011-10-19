@@ -75,7 +75,7 @@ class BookingController < ApplicationController
       return
     end
 
-    payture_response = @order_form.block_money
+    payture_response = @order_form.block_money(request.remote_ip)
 
     if payture_response.success?
       @order_form.order.money_blocked!
