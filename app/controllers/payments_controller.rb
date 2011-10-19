@@ -24,7 +24,7 @@ class PaymentsController < ApplicationController
       return
     end
 
-    unless
+    unless @order.payment_status == 'not blocked'
       render :partial => 'success'
       return
     end
