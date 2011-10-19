@@ -223,7 +223,7 @@ class Payture
         end
       end
       res.keys.each { |k| res.delete(k) unless res[k] }
-      post[:CustomFields] = CGI.escape(res.collect {|k, v| "#{k}=#{v}"}.join(';'))
+      post[:CustomFields] = res.collect {|k, v| "#{k}=#{v}"}.join(';')
     end
   end
 
