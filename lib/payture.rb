@@ -213,7 +213,8 @@ class Payture
         :Phone => custom_fields.phone,
         :Email => custom_fields.email,
         :Date => custom_fields.date ? custom_fields.date.strftime('%Y.%m.%d') : nil,
-        :Segments => custom_fields.segments
+        :Segments => custom_fields.segments,
+        :Description => custom_fields.description
       }
       if custom_fields.points
         res[:From] = custom_fields.points[0]
