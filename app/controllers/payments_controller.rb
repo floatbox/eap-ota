@@ -8,8 +8,8 @@ class PaymentsController < ApplicationController
   end
 
   def edit
-    if !( @order.last_pay_time >= Time.now || @order.offline_booking )
-      render "expired_pay_time" , :status => 404
+    if @order.last_pay_time <  Date.today || !@order.offline_booking
+      render "expired_pay_time", :status => 404
       return
     end
 
@@ -19,7 +19,7 @@ class PaymentsController < ApplicationController
   end
 
   def update
-    if !( @order.last_pay_time >= Time.now || @order.payment_status == 'not blocked' )
+    if @order.last_pay_time <  Date.today || !@order.offline_booking
       render "expired_pay_time", :status => 404
       return
     end
