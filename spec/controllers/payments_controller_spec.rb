@@ -13,7 +13,7 @@ describe PaymentsController do
     end
 
 
-    it 'shows whole error page if last_pay_time has expired' do
+    it 'shows error page with 404 status if last_pay_time has expired' do
 
       record = mock_model(Order, :code=> '47b4l', :last_pay_time => Date.yesterday, :offline_booking => true, :payment_status => '')
       Order.stub(:find_by_code!).and_return(record)
@@ -33,7 +33,7 @@ describe PaymentsController do
       response.should render_template('expired_pay_time', '404')
     end
 
-    it 'shows whole error page if last_pay_time has expired' do
+    it 'shows error page with 404 status if last_pay_time has expired' do
 
       record = mock_model(Order, :code=> '47b4l', :last_pay_time => Date.yesterday, :offline_booking => true, :payment_status => '')
       Order.stub(:find_by_code!).and_return(record)
