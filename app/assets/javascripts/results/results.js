@@ -828,6 +828,9 @@ init: function(el) {
         that.label.hide();
     }).bind('keyup propertychange input', function() {
         if (this.value === '') that.label.show();
+    }).focus(function() {
+        that.like = $('<div class="os-like"></div>').hide().insertAfter(that.el);
+        that.like.html('<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Feviterra&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>');    
     }).change();
     this.el.submit(function(event) {
         event.preventDefault();
@@ -861,6 +864,7 @@ process: function(s) {
     if (s && s.success) {
         this.el.hide();
         this.el.after('<div class="os-success">Спасибо, подписка создана. Отписаться можно будет по ссылке в письме.</div>');
+        this.like.show();
     } else {
         this.error();
     }

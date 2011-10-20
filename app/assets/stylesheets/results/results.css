@@ -177,6 +177,9 @@
     font-size: 13px;
     line-height: 16px;
 }
+.os-like {
+    margin-top: 10px;
+}
 
 /* Соседние города */
 .offers-nearby {
