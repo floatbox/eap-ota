@@ -27,7 +27,7 @@ gem 'crack'
 gem "every"
 gem "memoize"
 gem 'morpher_inflect'
-gem 'russian'
+gem 'russian', :git => 'https://github.com/codesnik/russian.git'
 #gem 'graticule'
 gem 'mysql2'
 gem 'paper_trail'
@@ -39,7 +39,7 @@ gem 'newrelic_rpm'
 gem 'mongoid'
 gem 'bson_ext'
 gem 'qu-mongo'
-gem 'SystemTimer'
+gem 'SystemTimer', :platforms => :ruby_18
 
 gem 'ya2yaml'
 
@@ -51,12 +51,12 @@ gem 'haml'
 
 gem 'typus'
 #gem 'typus', :git => 'https://github.com/typus/typus.git' #, :branch => "3-1-stable"
-gem 'fastercsv' if RUBY_VERSION < "1.9.0"
+gem 'fastercsv', :platforms => :ruby_18
 
 gem 'trashed', :git => 'https://github.com/codesnik/trashed.git'
 
 group :development do
-  gem 'mongrel' if RUBY_VERSION < "1.9.0"
+  gem 'mongrel', :platforms => :ruby_18
 end
 
 group :test, :development do
@@ -83,7 +83,7 @@ group :console do
 end
 
 group :debug do
-  gem 'ruby-debug' if RUBY_VERSION < "1.9.0"
+  gem 'ruby-debug', :platforms => :ruby_18
 end
 
 group :profiling do
