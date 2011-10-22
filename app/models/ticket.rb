@@ -32,6 +32,11 @@ class Ticket < ActiveRecord::Base
     ['ticketed', 'voided', 'pending']
   end
 
+  def self.spawn number
+    raise ArgumentError, 'ticket number is blank' if number.blank?
+    find_or_initialize_by_number number
+  end
+
   def update_prices_in_order
     order.tickets.reload if order
     order.update_prices_from_tickets if order
