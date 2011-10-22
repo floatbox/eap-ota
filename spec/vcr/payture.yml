@@ -20,7 +20,7 @@
       - Microsoft-IIS/7.5
       content-length: 
       - "94"
-    body: "\xEF\xBB\xBF<?xml version=\"1.0\"?>\r\n\
+    body: "<?xml version=\"1.0\"?>\r\n\
       <Block Success=\"True\" OrderId=\"rspec00010\" Amount=\"10000\"></Block>\r\n"
     http_version: "1.1"
 - !ruby/struct:VCR::HTTPInteraction 
@@ -44,7 +44,7 @@
       - Sat, 29 Jan 2011 10:20:23 GMT
       content-length: 
       - "97"
-    body: "\xEF\xBB\xBF<?xml version=\"1.0\"?>\r\n\
+    body: "<?xml version=\"1.0\"?>\r\n\
       <Unblock Success=\"True\" OrderId=\"rspec00010\" NewAmount=\"0\"></Unblock>\r\n"
     http_version: "1.1"
 - !ruby/struct:VCR::HTTPInteraction 
@@ -68,7 +68,7 @@
       - Microsoft-IIS/7.5
       content-length: 
       - "90"
-    body: "\xEF\xBB\xBF<?xml version=\"1.0\"?>\r\n\
+    body: "<?xml version=\"1.0\"?>\r\n\
       <Pay Success=\"True\" OrderId=\"rspec00011\" Amount=\"10000\"></Pay>\r\n"
     http_version: "1.1"
 - !ruby/struct:VCR::HTTPInteraction 
@@ -92,6 +92,6 @@
       - Sat, 29 Jan 2011 10:20:27 GMT
       content-length: 
       - "95"
-    body: "\xEF\xBB\xBF<?xml version=\"1.0\"?>\r\n\
+    body: "<?xml version=\"1.0\"?>\r\n\
       <Refund Success=\"True\" OrderId=\"rspec00011\" NewAmount=\"0\"></Refund>\r\n"
     http_version: "1.1"
