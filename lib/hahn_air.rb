@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 require 'httparty'
 class HahnAir
   include HTTParty

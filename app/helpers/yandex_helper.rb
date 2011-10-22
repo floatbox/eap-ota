@@ -1,3 +1,4 @@
+# encoding: utf-8
 module YandexHelper
   def yandex_time(ourtime)
     if ourtime =~ /^(\d\d)(\d\d)$/
