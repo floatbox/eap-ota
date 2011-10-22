@@ -230,7 +230,7 @@ class Order < ActiveRecord::Base
       prices = tst_resp.prices_with_refs
       pnr_resp.tickets.deep_merge(tst_resp.prices_with_refs).each do |k, ticket_hash|
         if ticket_hash[:number]
-          t = tickets.spawn(ticket_hash[:number])
+          t = tickets.ensure_exists(ticket_hash[:number])
           ticket_hash.delete(:ticketed_date) if t.ticketed_date
           if Ticket.office_ids.include? ticket_hash[:office_id]
             t.update_attributes(ticket_hash.merge({
@@ -250,7 +250,7 @@ class Order < ActiveRecord::Base
       order_resp = Sirena::Service.new.order(pnr_number, sirena_lead_pass)
       ticket_dates = Sirena::Service.new.pnr_status(pnr_number).tickets_with_dates
       order_resp.ticket_hashes.each do |t|
-        ticket = tickets.spawn(t[:number])
+        ticket = tickets.ensure_exists(t[:number])
         t['ticketed_date'] = ticket_dates[t[:number]] if ticket_dates[t[:number]]
         ticket.update_attributes(t.merge({:processed => true}))
       end

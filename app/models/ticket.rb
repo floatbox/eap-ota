@@ -32,7 +32,7 @@ class Ticket < ActiveRecord::Base
     ['ticketed', 'voided', 'pending']
   end
 
-  def self.spawn number
+  def self.ensure_exists number
     raise ArgumentError, 'ticket number is blank' if number.blank?
     find_or_initialize_by_number number
   end
