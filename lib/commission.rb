@@ -2421,5 +2421,11 @@ agent "3% от всех опубл. тарифов на рейсы code-share."
 subagent "1% от всех опубл. тарифов на рейсы code-share;"
 no_commission
 
+carrier "RJ", "Royal Jordanian Airline"
+########################################
+
+agent "5 (пять) % от всех опубл. тарифов на собств. рейсы RJ"
+no_commission
+
 end
 
