@@ -12,6 +12,7 @@ class PricerForm
   field :partner
   field :use_count, :type => Integer, :default => 1
   embeds_many :segments, :class_name => 'PricerForm::Segment'
+  has_one :rambler_cache
   accepts_nested_attributes_for :segments
   delegate :to, :from, :from_iata, :to_iata, :to => 'segments.first'
   attr_reader :complex_to_parse_results

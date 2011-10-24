@@ -14,6 +14,16 @@ class Variant
     flights.every.operating_carrier.uniq.every.comment.delete_if(&:blank?)
   end
 
+  def rambler_hash(recommendation, people_count = {:adults => 1})
+    {
+      'va' => recommendation.validating_carrier_iata,
+      'c'  => recommendation.price_with_payment_commission,
+      'c0' => recommendation.price_with_payment_commission / people_count[:adults],
+      'dir' => segments[0].rambler_hash,
+      'ret' => segments[1] ? segments[1].rambler_hash : []
+    }
+  end
+
   def with_bad_time
     flights.map{|f| [f.departure_datetime_utc, f.arrival_datetime_utc]}
     false
