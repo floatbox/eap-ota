@@ -115,7 +115,7 @@ module DataMigration
   end
 
   def self.fill_up_mongo_base
-    Destination.all.each do |d|
+    Destination.find_each do |d|
       attr_hash = {:to_id => d.to_id,
                    :from_id => d.from_id,
                    :rt => d.rt,
@@ -125,7 +125,7 @@ module DataMigration
       dest = DestinationMongo.new(attr_hash)
       dest.save
     end
-    HotOffer.all.each do |h|
+    HotOffer.find_each do |h|
       attr_hash = {:code => h.code,
                    :url => h.url,
                    :description => h.description,
