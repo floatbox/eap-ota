@@ -114,6 +114,32 @@ module DataMigration
     doc.root.elements["timezone/timezoneId"].get_text.to_s
   end
 
+  def self.fill_up_mongo_base
+    Destination.all.each do |d|
+      attr_hash = {:to_id => d.to_id,
+                   :from_id => d.from_id,
+                   :rt => d.rt,
+                   :average_price => d.average_price,
+                   :average_time_delta => d.average_time_delta,
+                   :hot_offers_counter => d.hot_offers_counter}
+      dest = DestinationMongo.new(attr_hash)
+      dest.save
+    end
+    HotOffer.all.each do |h|
+      attr_hash = {:code => h.code,
+                   :url => h.url,
+                   :description => h.description,
+                   :price => h.price,
+                   :for_stats_only => h.for_stats_only,
+                   :destination_id => h.destination_id,
+                   :time_delta => h.time_delta,
+                   :price_variation => h.price_variation,
+                   :price_variation_percent => h.price_variation_percent}
+      hot_offer = HotOfferMongo.new(attr_hash)
+      hot_offer.save
+    end
+  end
+
   def self.fill_in_timezones_for_cities
     City.find(:all, :conditions => 'timezone = "" and lat is not null and lng is not null and lat and lng').each do |c|
       c.update_attribute :timezone, get_tz_from_lat_and_lng(c.lat, c.lng)
