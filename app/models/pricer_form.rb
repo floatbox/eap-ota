@@ -177,7 +177,7 @@ class PricerForm
 
   class << self
     def load_from_cache(query_key)
-      pricer_form = PricerForm.where(:query_key => query_key).first
+      pricer_form = PricerForm.where(:query_key => query_key).last
       if pricer_form
         pricer_form.inc(:use_count, 1)
       end
