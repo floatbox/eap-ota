@@ -163,7 +163,7 @@ class Mux
 
       recommendations = amadeus_merge_and_cleanup(amadeus_recommendations) + sirena_cleanup(sirena_recommendations)
 
-      save_to_mongo(form, recommendations) if !admin_user && !form.complex_route?
+      save_to_mongo(form, recommendations) if Conf.api.store_rambler_cache && !admin_user && !form.complex_route?
       if lite
         recommendations
       else
