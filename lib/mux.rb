@@ -10,6 +10,7 @@ class Mux
   cattr_accessor :logger do Rails.logger end
 
   include ActiveSupport::Benchmarkable
+  include RamblerApi
 
   include KeyValueInit
   attr_accessor :lite, :admin_user
@@ -17,7 +18,7 @@ class Mux
   def save_to_mongo(form, recommendations)
     RamblerCache.create(
       :pricer_form => form,
-      :data => recommendations.inject([]) {|res, rec| res + rec.variants.every.rambler_hash(rec, form.people_count)}
+      :data => rambler_data_from_recs(form, recommendations)
     )
   end
 
@@ -76,7 +77,9 @@ class Mux
       recommendations.uniq! unless lite
 
       # log amadeus recommendations
-      log_examples(recommendations)
+      benchmark 'log_examples' do
+        log_examples(recommendations)
+      end
 
       recommendations.delete_if(&:without_full_information?)
       recommendations.delete_if(&:ground?)
@@ -162,8 +165,9 @@ class Mux
       async_perform
 
       recommendations = amadeus_merge_and_cleanup(amadeus_recommendations) + sirena_cleanup(sirena_recommendations)
-
-      save_to_mongo(form, recommendations) if Conf.api.store_rambler_cache && !admin_user && !form.complex_route?
+      benchmark 'creating and saving rambler cache' do
+        save_to_mongo(form, recommendations) if Conf.api.store_rambler_cache && !admin_user && !form.complex_route?
+      end
       if lite
         recommendations
       else
