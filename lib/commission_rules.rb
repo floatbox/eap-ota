@@ -2,6 +2,7 @@
 module CommissionRules
 
   def self.included base
+    create_class_attrs base
     base.send :extend, ClassMethods
   end
 
@@ -13,7 +14,8 @@ module CommissionRules
     :routes,
     :departure, :departure_country, :important,
     :check, :examples, :agent_comments, :subagent_comments, :source,
-    :expr_date, :strt_date
+    :expr_date, :strt_date,
+    :system, :ticketing, :consolidators, :blanks, :discount
 
   def disabled?
     disabled || not_implemented || no_commission
@@ -148,19 +150,45 @@ module CommissionRules
   end
 
 
+  def self.create_class_attrs klass
+    klass.instance_eval do
+      cattr_accessor :opts
+      cattr_accessor :skip_interline_validity_check
+      cattr_accessor :commissions
+      self.commissions = {}
+
+      cattr_accessor :default_opts
+      self.default_opts = {}
+
+      cattr_accessor :carrier_default_opts
+      self.carrier_default_opts = {}
+    end
+  end
 
   module ClassMethods
 
-    mattr_accessor :opts
-    mattr_accessor :skip_interline_validity_check
-    mattr_accessor :commissions
-    self.commissions = {}
+    ALLOWED_KEYS_FOR_DEFS = %W[ system ticketing consolidators blanks discount ].map(&:to_sym)
+
+    def defaults def_opts={}
+      if wrong_keys = (def_opts.keys - ALLOWED_KEYS_FOR_DEFS).presence
+        raise ArgumentError, "wrong key(s) for defaults: #{wrong_keys}"
+      end
+      self.default_opts = def_opts
+    end
+
+    def carrier_defaults def_opts={}
+      if wrong_keys = (def_opts.keys - ALLOWED_KEYS_FOR_DEFS).presence
+        raise ArgumentError, "wrong key(s) for defaults: #{wrong_keys}"
+      end
+      self.carrier_default_opts = def_opts
+    end
 
     def carrier carrier, carrier_name=nil
       if carrier =~ /\A..\Z/
         @carrier = carrier
         @carrier_name = carrier_name
         self.opts={}
+        self.carrier_default_opts={}
       else
         raise ArgumentError, "strange carrier: #{carrier}"
       end
@@ -170,7 +198,7 @@ module CommissionRules
     def commission arg
       vals = arg.split(/[ \/]+/)
       if vals.size != 2
-        raise ArgumentError, "strange commission: #{args.join(' ')}"
+        raise ArgumentError, "strange commission: #{arg.join(' ')}"
       end
 
       commission = new({
@@ -178,7 +206,7 @@ module CommissionRules
         :agent => vals[0].to_s,
         :subagent => vals[1].to_s,
         :source => caller_address
-      }.merge(opts))
+      }.merge(opts).reverse_merge(carrier_default_opts).reverse_merge(default_opts))
 
       self.opts = {}
       register commission
@@ -283,6 +311,27 @@ module CommissionRules
       opts[:strt_date] = date
     end
 
+    # дополнительные опции, пока без обработки
+    def system value
+      opts[:system] = value
+    end
+
+    def ticketing value
+      opts[:ticketing] = value
+    end
+
+    def consolidators value
+      opts[:consolidators] = value
+    end
+
+    def blanks value
+      opts[:blanks] = value
+    end
+
+    def discount value
+      opts[:discount] = value
+    end
+
     # метод поиска рекомендации
 
     def find_for(recommendation)
@@ -291,8 +340,12 @@ module CommissionRules
       end
     end
 
+    def find_for_carrier(validating_carrier_iata)
+      commissions[validating_carrier_iata]
+    end
+
     def exists_for?(recommendation)
-      commissions[recommendation.validating_carrier_iata].present?
+      find_for_carrier(recommendation.validating_carrier_iata).present?
     end
 
     # test methods
