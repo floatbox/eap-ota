@@ -45,12 +45,7 @@ class Order < ActiveRecord::Base
   has_paper_trail
 
   has_many :payments
-  has_many :tickets do
-    def spawn number
-      raise if number.blank?
-      find_or_initialize_by_number number
-    end
-  end
+  has_many :tickets
   has_many :order_comments
   has_many :notifications
   validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
@@ -235,7 +230,7 @@ class Order < ActiveRecord::Base
       prices = tst_resp.prices_with_refs
       pnr_resp.tickets.deep_merge(tst_resp.prices_with_refs).each do |k, ticket_hash|
         if ticket_hash[:number]
-          t = tickets.spawn(ticket_hash[:number])
+          t = tickets.ensure_exists(ticket_hash[:number])
           ticket_hash.delete(:ticketed_date) if t.ticketed_date
           if Ticket.office_ids.include? ticket_hash[:office_id]
             t.update_attributes(ticket_hash.merge({
@@ -255,7 +250,7 @@ class Order < ActiveRecord::Base
       order_resp = Sirena::Service.new.order(pnr_number, sirena_lead_pass)
       ticket_dates = Sirena::Service.new.pnr_status(pnr_number).tickets_with_dates
       order_resp.ticket_hashes.each do |t|
-        ticket = tickets.spawn(t[:number])
+        ticket = tickets.ensure_exists(t[:number])
         t['ticketed_date'] = ticket_dates[t[:number]] if ticket_dates[t[:number]]
         ticket.update_attributes(t.merge({:processed => true}))
       end

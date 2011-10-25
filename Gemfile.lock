@@ -12,6 +12,12 @@ GIT
     handsoap (1.1.8)
 
 GIT
+  remote: https://github.com/codesnik/russian.git
+  revision: c06fa9ed976df2bc1753af4c5ebbb114bbc19c30
+  specs:
+    russian (0.2.7)
+
+GIT
   remote: https://github.com/codesnik/trashed.git
   revision: b95605b94c459cd6709e9d932aaab96faca942e7
   specs:
@@ -227,7 +233,6 @@ GEM
       linecache (>= 0.3)
     ruby-prof (0.10.8)
     rubyzip (0.9.4)
-    russian (0.2.7)
     sass (3.1.10)
     sass-rails (3.1.4)
       actionpack (~> 3.1.0)
@@ -325,7 +330,7 @@ DEPENDENCIES
   rspec-rails
   ruby-debug
   ruby-prof
-  russian
+  russian!
   sass-rails (~> 3.1.4)
   spork
   therubyracer

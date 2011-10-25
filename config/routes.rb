@@ -1,3 +1,4 @@
+# encoding: utf-8
 Eviterra::Application.routes.draw do
 
   match 'pricer' => 'pricer#pricer', :as => :pricer

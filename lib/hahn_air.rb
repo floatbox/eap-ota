@@ -1,9 +1,10 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 require 'httparty'
 class HahnAir
   include HTTParty
   format :json
-  base_uri 'hahnair.com'
+  base_uri 'ticketing.hahnair.travel'
 
   # sample response
   # [{"code":"EK","name":"Emirates","gdses":["ama","gal","sab"],"remarks":""},

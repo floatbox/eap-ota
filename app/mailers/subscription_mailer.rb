@@ -1,3 +1,4 @@
+# encoding: utf-8
 class SubscriptionMailer < ActionMailer::Base
   @queue = :subscription
   #run queu > bundle exec rake qu:work QUEUES=subscription

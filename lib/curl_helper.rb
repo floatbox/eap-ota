@@ -1,3 +1,4 @@
+# encoding: utf-8
 # helper methods for curb's Curl::Easy
 module CurlHelper
 

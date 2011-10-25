@@ -1,3 +1,4 @@
+# encoding: utf-8
 class Ticket < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   include CopyAttrs
@@ -29,6 +30,11 @@ class Ticket < ActiveRecord::Base
 
   def self.statuses
     ['ticketed', 'voided', 'pending']
+  end
+
+  def self.ensure_exists number
+    raise ArgumentError, 'ticket number is blank' if number.blank?
+    find_or_initialize_by_number number
   end
 
   def update_prices_in_order

@@ -59,6 +59,27 @@ class Segment
     }
   end
 
+  def rambler_hash
+    flights.map do |f|
+      {'oa' => f.operating_carrier_iata,
+       'ma' => f.marketing_carrier_iata,
+       'n' => f.flight_number.to_i,
+       'eq' => f.equipment_type_iata,
+       'dur' => f.duration,
+       'dep' => {
+          'p' => f.departure_iata,
+          'dt' => DateTime.strptime( f.departure_date + f.departure_time, '%d%m%y%H%M' ).strftime('%Y-%m-%d %H:%M:00'),
+          't' => f.departure_term
+         },
+      'arr' => {
+          'p' => f.arrival_iata,
+          'dt' => DateTime.strptime( f.arrival_date + f.arrival_time, '%d%m%y%H%M' ).strftime('%Y-%m-%d %H:%M:00'),
+          't' => f.arrival_term
+         }
+      }
+    end
+  end
+
   def total_duration
     @total_duratin ||= ((arrival_datetime_utc.to_i - departure_datetime_utc.to_i) / 60 rescue 0)
   end

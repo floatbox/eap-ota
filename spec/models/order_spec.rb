@@ -25,10 +25,10 @@ describe Order do
   end
 
 
-  describe "#tickets.spawn" do
+  describe "#tickets.ensure_exists" do
     it 'should raise exception if number is blank' do
       o = Order.new
-      expect { o.tickets.spawn("") }.to raise_error
+      expect { o.tickets.ensure_exists("") }.to raise_error
     end
   end
 
@@ -54,7 +54,7 @@ describe Order do
       @order.stub_chain(:tickets, :where, :every, :update_attribute)
       @order.stub_chain(:tickets, :reload)
       ticket = stub_model(Ticket)
-      @order.stub_chain(:tickets, :spawn).and_return(ticket)
+      @order.stub_chain(:tickets, :ensure_exists).and_return(ticket)
       ticket.should_receive(:update_attributes).with(hash_including(
         :code => "555",
         :number => "2962867063",
@@ -97,7 +97,7 @@ describe Order do
       @order.stub_chain(:tickets, :reload)
       ticket = Ticket.new
       ticket.stub(:new_record?).and_return(false)
-      @order.stub_chain(:tickets, :spawn).and_return(ticket)
+      @order.stub_chain(:tickets, :ensure_exists).and_return(ticket)
 
       @amadeus.stub(:pnr_retrieve).and_return(pnr_resp)
       @amadeus.stub(:ticket_display_tst).and_return(tst_resp)

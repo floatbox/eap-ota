@@ -1,3 +1,4 @@
+# encoding: utf-8
 class FlightGroup < ActiveRecord::Base
   include Rails.application.routes.url_helpers
 
