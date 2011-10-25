@@ -15,6 +15,7 @@ amadeus:
   session_pool_size: 10
   no_ltd_restrictions: no
 payment:
+  use_discount: no
   skip_checksum_validation: yes
   order_id_prefix: o
   production:

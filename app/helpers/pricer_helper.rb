@@ -179,6 +179,9 @@ module PricerHelper
     concat recommendation.validating_carrier_iata + ' '
     if recommendation.commission
       concat %( #{recommendation.commission.agent}/#{recommendation.commission.subagent})
+      unless recommendation.commission.discount.to_i.zero?
+        concat %(-#{recommendation.commission.discount} (#{recommendation.price_discount}) )
+      end
       concat %( #{recommendation.price_share} р.)
       unless recommendation.price_markup == 0
         concat %(#{recommendation.price_our_markup} р.)

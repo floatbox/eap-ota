@@ -6,7 +6,8 @@ class Sirena::Commission
   self.opts = {}
 
   attr_accessor :carrier, :twopcnt, :carrier_name, :doc, :code, :consolidator, :subagent,
-    :interline, :subclasses, :routes, :expire, :fares, :directions
+    :interline, :subclasses, :routes, :expire, :fares, :directions,
+    :discount # совместимость с амадеусовскими
 
   class << self
     [:doc, :code, :consolidator, :interline, :subclasses,
@@ -51,6 +52,10 @@ class Sirena::Commission
 
   # ВРЕМЕННОЕ РЕШЕНИЕ
   def share(fare, tickets=1)
+    0
+  end
+
+  def discount_amount(fare, tickets=1)
     0
   end
 

@@ -124,6 +124,14 @@ module CommissionRules
     end
   end
 
+  def discount_amount(fare, tickets=1)
+    if discount.to_s['%']
+      fround(fare * discount.to_f / 100)
+    else
+      fround(discount.to_f)
+    end
+  end
+
   def agent_percentage?
     agent['%']
   end
