@@ -5,7 +5,7 @@ describe Sirena::Request::PricingVariant do
 
   describe 'проверяем правильность работы конструктора' do
 
-    let(:form){PricerForm.simple(:from => "MOV", :to => "LED", :date1 => "290911", :date2 => "300911", :infants => 1, :children => 1, :cabin => "Y")}
+    let(:form){PricerForm.simple(:from => "MOV", :to => "LED", :date1 => "290912", :date2 => "300912", :infants => 1, :children => 1, :cabin => "Y")}
     let(:order){Sirena::Response::Order.new( File.read(response) )}
     let(:recommendation){Order.new.pricing_hash_for_sirena(order)}
     let(:response) { 'spec/sirena/xml/order_for_pricing.xml' }
