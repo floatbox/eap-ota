@@ -1,6 +1,5 @@
 module RamblerApi
-
-  include ActiveSupport::Benchmarkable
+  CABINS_MAPPING = {'Y' => 'E', 'C' => 'B', 'F' => 'F'}
 
   def rambler_data_from_recs(form, recommendations)
     recommendations.each_with_object([]) do |rec, res|
@@ -9,13 +8,18 @@ module RamblerApi
   end
 
   def variant_hash(variant, recommendation, people_count = {:adults => 1})
-    {
+    res = {
       'va' => recommendation.validating_carrier_iata,
       'c'  => recommendation.price_with_payment_commission,
       'c0' => recommendation.price_with_payment_commission / people_count[:adults],
       'dir' => segment_hash(variant.segments[0]),
       'ret' => variant.segments[1] ? segment_hash(variant.segments[1]) : []
     }
+    [(res['dir'] + res['ret']), recommendation.cabins, recommendation.booking_classes].transpose.each do |segment_hash, cabin, booking_class|
+      segment_hash['cls'] = CABINS_MAPPING[cabin]
+      segment_hash['bcl'] = booking_class
+    end
+    res
   end
 
   def segment_hash(s)
