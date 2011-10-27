@@ -22,7 +22,7 @@ class   HotOfferMongo
 
   def self.featured code=nil
     # FIXME SQL group_by не был бы лучше?
-    offers = HotOffer.where("for_stats_only" => false ).and(:price_variation.gt => 0).order_by(:created_at => :desc).limit(30)
+    offers = HotOffer.where(:for_stats_only => false ).and(:price_variation.gt => 0).order_by(:created_at => :desc).limit(30)
     # эта строчка, видимо, не используется
     offers = offers.where(:code.ne => code) if code
     offers.all.group_by(&:destination_id).values.every.first
