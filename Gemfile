@@ -62,8 +62,16 @@ end
 group :test, :development do
   gem 'rspec-rails'
   gem 'cucumber-rails'
-  gem 'autotest'
   gem 'webrat'
+
+  gem 'guard'
+  gem 'rb-inotify', :require => false
+  gem 'rb-fsevent', :require => false
+  gem 'rb-fchange', :require => false
+  gem 'growl' # for OSX
+  gem 'guard-spork'
+  gem 'guard-rspec'
+  # gem 'guard-rails-assets'
 end
 
 group :test do
