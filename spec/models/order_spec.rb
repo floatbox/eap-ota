@@ -135,14 +135,14 @@ describe Order do
   end
 
   context "without commissions" do
-    let (:valid_order) { Order.new }
+    let (:valid_order) { Order.new :pnr_number => 'abcde' }
     subject {valid_order}
     it { should be_valid }
   end
 
   context "with wrong commission" do
     let (:invalid_commission) { '123,34%' }
-    let (:invalid_order) { Order.new :commission_agent => invalid_commission }
+    let (:invalid_order) { Order.new :pnr_number => 'abcde', :commission_agent => invalid_commission }
     subject {invalid_order}
     it { should_not be_valid }
   end
