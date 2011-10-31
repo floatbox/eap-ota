@@ -49,13 +49,10 @@ class Sirena::Commission
     end
   end
 
-  # ВРЕМЕННОЕ РЕШЕНИЕ
-  def discount_amount(fare, tickets=1)
-    0
-  end
+  def agent; Fx(0) end
+  def subagent; Fx(0) end
+  def discount; Fx(0) end
 
-  def agent; Commission::Formula.new(0) end
-  def subagent; Commission::Formula.new(0) end
   def agent_comments; '' end
   def subagent_comments; '' end
 

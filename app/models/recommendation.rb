@@ -127,7 +127,7 @@ class Recommendation
 
   def price_discount
     return 0 unless commission
-    commission.discount_amount(price_fare, blank_count)
+    commission_discount.call(price_fare, :multiplier => blank_count)
   end
 
   # надбавка к цене амадеуса

@@ -8,14 +8,17 @@ module CommissionRules
 
   include KeyValueInit
 
-  attr_accessor :carrier, :agent, :subagent,
+  extend Commission::Attrs
+  has_commission_attrs :agent, :subagent, :consolidators, :blanks, :discount
+
+  attr_accessor :carrier,
     :disabled, :not_implemented, :no_commission,
     :interline, :domestic, :international, :classes, :subclasses,
     :routes,
     :departure, :departure_country, :important,
     :check, :examples, :agent_comments, :subagent_comments, :source,
     :expr_date, :strt_date,
-    :system, :ticketing, :consolidators, :blanks, :discount
+    :system, :ticketing
 
   def disabled?
     disabled || not_implemented || no_commission
@@ -116,14 +119,6 @@ module CommissionRules
     end
   end
 
-  def discount_amount(fare, tickets=1)
-    if discount.to_s['%']
-      fround(fare * discount.to_f / 100)
-    else
-      fround(discount.to_f)
-    end
-  end
-
   def self.create_class_attrs klass
     klass.instance_eval do
       cattr_accessor :opts
@@ -177,8 +172,8 @@ module CommissionRules
 
       commission = new({
         :carrier => @carrier,
-        :agent => Commission::Formula.new(vals[0]),
-        :subagent => Commission::Formula.new(vals[1]),
+        :agent => vals[0],
+        :subagent => vals[1],
         :source => caller_address
       }.merge(opts).reverse_merge(carrier_default_opts).reverse_merge(default_opts))
 
