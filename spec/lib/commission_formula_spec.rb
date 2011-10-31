@@ -40,6 +40,10 @@ describe Commission::Formula do
     YAML.load(YAML.dump(formula)).should == formula
   end
 
+  describe "#serialize" do
+    specify { Fx('3.34%').inspect.should == '#<Fx 3.34% >' }
+  end
+
   pending "it should have exactly that serialization" do
     # backward compatibility?
   end

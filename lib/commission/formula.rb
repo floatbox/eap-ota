@@ -31,6 +31,10 @@ class Commission
       formula
     end
 
+    def inspect
+      "#<Fx #{formula} >"
+    end
+
     def call(base=nil, params={:eur => Conf.amadeus.euro_rate})
       raise ArgumentError, "formula '#{@formula}' is not valid" unless valid?
       multiplier = (params[:multiplier] || 1).to_i
