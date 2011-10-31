@@ -7,7 +7,7 @@ module CommissionRules
   end
 
   include KeyValueInit
-
+  include Commission::Fx
   extend Commission::Attrs
   has_commission_attrs :agent, :subagent, :consolidators, :blanks, :discount
 
@@ -110,12 +110,12 @@ module CommissionRules
     if !subagent.percentage? && subagent.rate <= 5
       # особые условия для этих компаний.
       if %W( LH LX KL AF OS ).include? carrier
-        Commission::Formula.new('1%')
+        Fx('1%')
       else
-        Commission::Formula.new('2%')
+        Fx('2%')
       end
     else
-      Commission::Formula.new(0)
+      Fx(0)
     end
   end
 

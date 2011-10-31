@@ -4,10 +4,7 @@ require 'spec_helper'
 
 describe CommissionRules do
 
-  # просто шорткатик
-  def fx(val)
-    Commission::Formula.new(val)
-  end
+  include Commission::Fx
 
   context "just one commission" do
     let :commission_class do
@@ -95,9 +92,9 @@ describe CommissionRules do
 
         its(:system) { should eq(:amadeus) }
         its(:ticketing) { should eq(:aviacenter) }
-        its(:consolidators) { should eq(fx('2%')) }
-        its(:blanks) { should eq(fx(23)) }
-        its(:discount) { should eq(fx('5%')) }
+        its(:consolidators) { should eq(Fx('2%')) }
+        its(:blanks) { should eq(Fx(23)) }
+        its(:discount) { should eq(Fx('5%')) }
       end
 
       context "called with wrong key" do
@@ -118,9 +115,9 @@ describe CommissionRules do
 
         its(:system) { should eq(:sirena) }
         its(:ticketing) { should eq(:ours) }
-        its(:consolidators) { should eq(fx('1%')) }
-        its(:blanks) { should eq(fx(0)) }
-        its(:discount) { should eq(fx('1%')) }
+        its(:consolidators) { should eq(Fx('1%')) }
+        its(:blanks) { should eq(Fx(0)) }
+        its(:discount) { should eq(Fx('1%')) }
       end
 
       context "called with wrong key" do

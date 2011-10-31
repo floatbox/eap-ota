@@ -1,6 +1,7 @@
 # encoding: utf-8
 class Sirena::Commission
   include KeyValueInit
+  include Commission::Fx
   cattr_accessor :commissions, :opts
   self.commissions = {}
   self.opts = {}
@@ -43,9 +44,9 @@ class Sirena::Commission
 
   def consolidator_markup
     if twopcnt
-      Commission::Formula.new('2% + 50')
+      Fx('2% + 50')
     else
-      Commission::Formula.new('50')
+      Fx('50')
     end
   end
 
