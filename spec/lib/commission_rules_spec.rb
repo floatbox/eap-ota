@@ -61,6 +61,32 @@ describe CommissionRules do
     end
   end
 
+  context "all the rules" do
+    let :commission_class do
+      Class.new do
+        include CommissionRules
+
+        carrier 'FV'
+        consolidators '1%'
+        blanks 50
+        discount '2%'
+        commission '2%/3'
+      end
+    end
+
+    let :commission do
+      # FIXME сделать акссессор попроще
+      commission_class.commissions.values[0][0]
+    end
+
+    subject {commission}
+
+    its(:agent) {should == Fx('2%')}
+    its(:subagent) {should == Fx(3)}
+    its(:consolidators) {should == Fx('1%')}
+    its(:blanks) {should == Fx('50')}
+  end
+
   context "setting defaults" do
 
     let :commission_class do
