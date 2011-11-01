@@ -139,16 +139,12 @@ module CommissionRules
     ALLOWED_KEYS_FOR_DEFS = %W[ system ticketing consolidators blanks discount ].map(&:to_sym)
 
     def defaults def_opts={}
-      if wrong_keys = (def_opts.keys - ALLOWED_KEYS_FOR_DEFS).presence
-        raise ArgumentError, "wrong key(s) for defaults: #{wrong_keys}"
-      end
+      def_opts.to_options!.assert_valid_keys(ALLOWED_KEYS_FOR_DEFS)
       self.default_opts = def_opts
     end
 
     def carrier_defaults def_opts={}
-      if wrong_keys = (def_opts.keys - ALLOWED_KEYS_FOR_DEFS).presence
-        raise ArgumentError, "wrong key(s) for defaults: #{wrong_keys}"
-      end
+      def_opts.to_options!.assert_valid_keys(ALLOWED_KEYS_FOR_DEFS)
       self.carrier_default_opts = def_opts
     end
 
