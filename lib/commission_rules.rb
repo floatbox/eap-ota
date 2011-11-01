@@ -305,18 +305,22 @@ module CommissionRules
       end
     end
 
-    def find_for_carrier(validating_carrier_iata)
+    def all
+      commissions.values.flatten.sort_by {|c| c.source.to_i }
+    end
+
+    def for_carrier(validating_carrier_iata)
       commissions[validating_carrier_iata]
     end
 
     def exists_for?(recommendation)
-      find_for_carrier(recommendation.validating_carrier_iata).present?
+      for_carrier(recommendation.validating_carrier_iata).present?
     end
 
     # test methods
     def test
       self.skip_interline_validity_check = true
-      commissions.values.flatten.sort_by {|c| c.source.to_i }.each do |commission|
+      all.each do |commission|
         (commission.examples || next).each do |code, source|
           rec = Recommendation.example(code, :carrier => commission.carrier)
           proposed = find_for(rec)

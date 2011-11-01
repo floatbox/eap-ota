@@ -47,7 +47,7 @@ describe CommissionRules do
 
     it "should have registered three commissions" do
       # FIXME вынести подсчет количества комиссий в хелпер
-      commission_class.commissions.values.flatten.should have(3).items
+      commission_class.all.should have(3).items
     end
 
     describe "#exists_for?" do
@@ -75,8 +75,7 @@ describe CommissionRules do
     end
 
     let :commission do
-      # FIXME сделать акссессор попроще
-      commission_class.commissions.values[0][0]
+      commission_class.all.first
     end
 
     subject {commission}
@@ -114,7 +113,7 @@ describe CommissionRules do
 
     describe ".defaults" do
       context "called correctly" do
-        subject { commission_class.find_for_carrier('FV').first }
+        subject { commission_class.for_carrier('FV').first }
 
         its(:system) { should eq(:amadeus) }
         its(:ticketing) { should eq(:aviacenter) }
@@ -137,7 +136,7 @@ describe CommissionRules do
 
     describe ".carrier_defaults" do
       context "called correctly" do
-        subject { commission_class.find_for_carrier('AB').last }
+        subject { commission_class.for_carrier('AB').last }
 
         its(:system) { should eq(:sirena) }
         its(:ticketing) { should eq(:ours) }
@@ -157,6 +156,20 @@ describe CommissionRules do
           }.to raise_error(ArgumentError)
         end
       end
+    end
+
+    describe ".for_carrier" do
+      subject { commission_class.for_carrier('AB') }
+      it {should be_an(Array)}
+      its(:size) { should == 2 }
+      its(:first) { should be_an(commission_class) }
+    end
+
+    describe ".all" do
+      subject { commission_class.all }
+      it {should be_an(Array)}
+      its(:size) { should == 3 }
+      its(:first) { should be_an(commission_class) }
     end
   end
 end
