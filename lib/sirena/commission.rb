@@ -42,11 +42,20 @@ class Sirena::Commission
     end
   end
 
+  # временно, пока не консолидаторская комиссия не разделена с бланками
   def consolidator_markup
     if twopcnt
       Fx('2% + 50')
     else
       Fx('50')
+    end
+  end
+
+  def consolidators
+    if twopcnt
+      Fx('2%')
+    else
+      Fx(0)
     end
   end
 

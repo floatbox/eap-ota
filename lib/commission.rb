@@ -3,7 +3,7 @@ class Commission
 include CommissionRules
 
 # применяется вообще ко всем правилам ниже
-defaults :system => :amadeus, :ticketing => :aviacenter, :consolidators => '2%', :blanks => 0, :discount => 0
+defaults :system => :amadeus, :ticketing => :aviacenter, :consolidators => '2%', :blanks => 0, :discount => 0, :corrector => :twopercent
 
 carrier "SU", "Aeroflot"
 ########################################
@@ -281,6 +281,7 @@ commission "0%/0%"
 
 carrier "AF", "AIR FRANCE"
 ########################################
+carrier_defaults :consolidators => '1%'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -1295,6 +1296,7 @@ commission "0%/0%"
 
 carrier "KL", "KLM"
 ########################################
+carrier_defaults :consolidators => '1%'
 
 example 'svocdg'
 agent    "1 euro с билета на рейсы KL. Вознаграждение не выплачивается за любые тарифы net. (Билеты Interline могут быть выписаны на бланках KLM только в случае существования действующего интерлайн соглашения, официально опубл. тарифов и только при условии, если КЛМ или авиакомпания Эр Франс участвуют в одном из сегментов перевозки.)"
@@ -1339,6 +1341,7 @@ commission "1/0.05"
 
 carrier "LH", "LUFTHANSA"
 ########################################
+carrier_defaults :consolidators => '1%'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -1375,6 +1378,7 @@ commission "1eur/5"
 
 carrier "LX", "SWISS"
 ########################################
+carrier_defaults :consolidators => '1%'
 
 example 'svocdg cdgsvo/ab'
 agent    "1 руб. с билета по опубл. тарифам на собств. рейсы LX и рейсы Interline с уч. LX."
@@ -1639,6 +1643,7 @@ commission "9%/6.3%"
 
 carrier "OS", "AUSTRIAN AIRLINES"
 ########################################
+carrier_defaults :consolidators => '1%'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'

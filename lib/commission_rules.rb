@@ -18,7 +18,7 @@ module CommissionRules
     :departure, :departure_country, :important,
     :check, :examples, :agent_comments, :subagent_comments, :source,
     :expr_date, :strt_date,
-    :system, :ticketing
+    :system, :ticketing, :corrector
 
   def disabled?
     disabled || not_implemented || no_commission
@@ -105,18 +105,13 @@ module CommissionRules
     end
   end
 
-  # FIXME специфично для амадеуса+авиацентр. вынести
+  # FIXME временный алиас для недоразбитой consolidators+blanks
   def consolidator_markup
-    if !subagent.percentage? && subagent.rate <= 5
-      # особые условия для этих компаний.
-      if %W( LH LX KL AF OS ).include? carrier
-        Fx('1%')
-      else
-        Fx('2%')
-      end
-    else
-      Fx(0)
-    end
+    consolidators
+  end
+
+  def correct!
+    Commission::Correctors.apply(self, corrector)
   end
 
   def self.create_class_attrs klass
@@ -136,7 +131,7 @@ module CommissionRules
 
   module ClassMethods
 
-    ALLOWED_KEYS_FOR_DEFS = %W[ system ticketing consolidators blanks discount ].map(&:to_sym)
+    ALLOWED_KEYS_FOR_DEFS = %W[ system ticketing consolidators blanks discount corrector ].map(&:to_sym)
 
     def defaults def_opts={}
       def_opts.to_options!.assert_valid_keys(ALLOWED_KEYS_FOR_DEFS)
@@ -172,6 +167,8 @@ module CommissionRules
         :subagent => vals[1],
         :source => caller_address
       }.merge(opts).reverse_merge(carrier_default_opts).reverse_merge(default_opts))
+
+      commission.correct!
 
       self.opts = {}
       register commission
