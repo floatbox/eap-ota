@@ -100,6 +100,15 @@ module PricingMethods
       price_tax_and_markup + price_payment_commission
     end
 
+    # FIXME внести в базу оба
+    def price_agent
+      commission_agent.call(price_fare, :multiplier => blank_count)
+    end
+
+    def price_subagent
+      commission_subagent.call(price_fare, :multiplier => blank_count)
+    end
+
     def recalculation
       # price_tax получаются из pnr
       # price_fare получаются из pnr

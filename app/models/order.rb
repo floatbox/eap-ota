@@ -3,6 +3,7 @@ class Order < ActiveRecord::Base
 
   include CopyAttrs
   include PricingMethods::Order
+  include IncomeDistribution
 
   # new - дефолтное значение без смысла
   # not blocked - ожидание 3ds, неприход наличных, убивается шедулером
