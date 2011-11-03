@@ -29,8 +29,63 @@ class BookingController < ApplicationController
     render 'variant'
   end
 
+  def api_manual_booking
+    req = params[:request]
+    cabin = req[:cls]
+    if cabin == 'P'|| cabin == 'B'
+      cabin = 'C'
+    elsif cabin == 'E' || cabin == 'A'
+      cabin = 'Y'
+    end
+    date1 = PricerForm.convert_api_date(params[:request][:dir])
+    date2 = PricerForm.convert_api_date(params[:request][:ret])
+    pricer_form_hash = {
+        :from => params[:request][:src],
+        :to => params[:request][:dst],
+        :date1 => date1,
+        :date2 => date2,
+        :adults => params[:request][:adt],
+        :children => params[:request][:cnn],
+        :infants => params[:request][:inf],
+        :cabin => cabin
+    }
+    pricer_form = PricerForm.simple(pricer_form_hash)
+
+    segments = ( params[:response][:dir] + params[:response][:ret] ).collect do |segment|
+      Segment.new( :flights =>
+        [Flight.new(
+          :operating_carrier_iata => segment[:oa],
+          :marketing_carrier_iata => segment[:ma],
+          :flight_number => segment[:n],
+          :booking_class => segment[:bcl],
+          :cabin => segment[:cls],
+          :departure_iata => params[:request][:src],
+          :arrival_iata => params[:request][:dst],
+          :departure_date => date1 )])
+    end
+    variants = [segments]
+    booking_classes, cabins = segments.each do |segment|
+      booking_classes = segment.flights.collect(&:booking_class)
+      cabins = segment.flights.collect(&:cabin)
+      break booking_classes, cabins
+    end
+    recommendation = Recommendation.new(
+      :source => 'amadeus',
+      :validating_carrier_iata => params[:response][:va],
+      :booking_classes => booking_classes,
+      :cabins => cabins,
+      :variants => [variant]
+    )
+    if pricer_form.valid?
+      pricer_form.save_to_cache
+      redirect_to preliminary_booking( :query_key => pricer_form.query_key, :recommendation => recommendation )
+    else
+      redirect_to '/'
+    end
+  end
+
   def api_redirect
-    @search = PricerForm.simple( params.slice(:from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner) )
+    @search = PricerForm.simple( params.slice( :from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner ))
     save_partner if @partner = @search.partner
     if @search.valid?
       @search.save_to_cache
