@@ -69,11 +69,15 @@ module PricingMethods
     end
 
     def price_tax_and_markup
-      price_tax + price_consolidator_markup + price_our_markup
+      price_tax + price_markup
     end
 
     def price_total
-      price_fare + price_tax + price_our_markup + price_consolidator_markup
+      price_fare + price_tax + price_markup
+    end
+
+    def price_markup
+      price_our_markup + price_consolidator_markup - price_discount
     end
 
     def calculate_price_with_payment_commission
@@ -102,6 +106,7 @@ module PricingMethods
       # price_difference - неактуально и неверно? грохнуть?
       self.price_share = commission_subagent.call(price_fare, :multiplier =>  blank_count)
       self.price_consolidator_markup = commission_consolidator_markup.call(price_fare, :multiplier => blank_count)
+      self.price_discount = commission_discount.call(price_fare, :multiplier => blank_count)
 
       # cash_payment_markup оставлять ее тоже?
       # price_our_markup внести сюда скидку для кэша?
