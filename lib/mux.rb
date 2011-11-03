@@ -10,16 +10,12 @@ class Mux
   cattr_accessor :logger do Rails.logger end
 
   include ActiveSupport::Benchmarkable
-  include RamblerApi
 
   include KeyValueInit
   attr_accessor :lite, :admin_user
 
   def save_to_mongo(form, recommendations)
-    RamblerCache.create(
-      :pricer_form => form,
-      :data => rambler_data_from_recs(form, recommendations)
-    )
+    RamblerCache.from_form_and_recs(form, recommendations).save
   end
 
   def pricer(form)

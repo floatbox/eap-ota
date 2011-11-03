@@ -15,6 +15,7 @@ group :deployment do
   gem 'capistrano_colors'
 end
 
+gem 'yajl-ruby'
 gem 'rake'
 gem 'whenever', :require => false
 gem 'i18n'
