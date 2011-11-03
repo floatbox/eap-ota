@@ -86,7 +86,7 @@ class BookingController < ApplicationController
     @order_form.update_attributes(params[:order])
     @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
     unless @order_form.valid?
-      logger.info "Pay: invalid order"
+      logger.info "Pay: invalid order: #{@order_form.errors_hash.inspect}"
       render :json => {:errors => @order_form.errors_hash}
       return
     end
