@@ -15,10 +15,7 @@ class Mux
   attr_accessor :lite, :admin_user
 
   def save_to_mongo(form, recommendations)
-    RamblerCache.create(
-      :pricer_form => form,
-      :data => recommendations.inject([]) {|res, rec| res + rec.variants.every.rambler_hash(rec, form.people_count)}
-    )
+    RamblerCache.from_form_and_recs(form, recommendations).save
   end
 
   def pricer(form)
@@ -76,7 +73,9 @@ class Mux
       recommendations.uniq! unless lite
 
       # log amadeus recommendations
-      log_examples(recommendations)
+      benchmark 'log_examples' do
+        log_examples(recommendations)
+      end
 
       recommendations.delete_if(&:without_full_information?)
       recommendations.delete_if(&:ground?)
@@ -162,8 +161,9 @@ class Mux
       async_perform
 
       recommendations = amadeus_merge_and_cleanup(amadeus_recommendations) + sirena_cleanup(sirena_recommendations)
-
-      save_to_mongo(form, recommendations) if Conf.api.store_rambler_cache && !admin_user && !form.complex_route?
+      benchmark 'creating and saving rambler cache' do
+        save_to_mongo(form, recommendations) if Conf.api.store_rambler_cache && !admin_user && !form.complex_route?
+      end
       if lite
         recommendations
       else

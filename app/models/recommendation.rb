@@ -123,10 +123,15 @@ class Recommendation
     commission.consolidator_markup(price_fare, blank_count)
   end
 
+  def price_discount
+    return 0 unless commission
+    commission.discount_amount(price_fare, blank_count)
+  end
+
   # надбавка к цене амадеуса
   def price_markup
     ajust_markup! if @price_our_markup.nil?
-    price_our_markup + price_consolidator_markup
+    price_our_markup + price_consolidator_markup - (Conf.payment.use_discount ?  price_discount : 0 )
   end
 
   def ajust_markup!

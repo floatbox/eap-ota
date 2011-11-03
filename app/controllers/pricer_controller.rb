@@ -63,7 +63,7 @@ class PricerController < ApplicationController
 
   # FIXME попытаться вынести общие методы или объединить с pricer/validate
   def api
-    unless Conf.api.enabled
+    if !Conf.api.enabled || !(Conf.api.partners.include? params['partner'].to_s)
       render 'api/yandex_failure', :status => 503, :locals => {:message => 'service disabled by administrator'}
       return
     end

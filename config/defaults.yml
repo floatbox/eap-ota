@@ -3,6 +3,13 @@ api:
   enabled: yes
   store_rambler_cache: yes
   url_base: 'https://eviterra.com'
+  rambler_url: 'http://in.avia.rambler.ru/eviterra'
+  partners:
+   - yandex
+   - volmy
+   - momondo
+   - buruki
+   - airego
 amadeus:
   endpoint: "https://test.webservices.amadeus.com"
   enabled: yes
@@ -15,6 +22,7 @@ amadeus:
   session_pool_size: 10
   no_ltd_restrictions: no
 payment:
+  use_discount: no
   skip_checksum_validation: yes
   order_id_prefix: o
   production:

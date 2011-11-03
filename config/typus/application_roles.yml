@@ -23,3 +23,5 @@ admin:
   Payment: read
   FlightGroup: create, read, update, delete
 
+hoteditor:
+  HotOffer: read, delete
