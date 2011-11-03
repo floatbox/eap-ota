@@ -289,6 +289,8 @@ ActiveRecord::Schema.define(:version => 20111110164731) do
     t.boolean  "has_refunds",                                                  :default => false,    :null => false
     t.string   "pricing_method",                                               :default => "",       :null => false
     t.string   "commission_consolidator_markup"
+    t.string   "commission_discount"
+    t.decimal  "price_discount",                 :precision => 9, :scale => 2, :default => 0.0,      :null => false
   end
 
   create_table "payments", :force => true do |t|

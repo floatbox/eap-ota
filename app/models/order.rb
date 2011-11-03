@@ -36,7 +36,7 @@ class Order < ActiveRecord::Base
   attr_writer :itinerary_receipt_view
 
   extend Commission::Columns
-  has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator_markup
+  has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator_markup, :commission_discount
 
   def self.[] number
     find_by_pnr_number number
@@ -176,13 +176,15 @@ class Order < ActiveRecord::Base
         :agent,
         :subagent,
         :consolidator_markup,
+        :discount,
         :agent_comments,
         :subagent_comments
 
       copy_attrs recommendation, self,
         :price_share,
         :price_our_markup,
-        :price_consolidator_markup
+        :price_consolidator_markup,
+        :price_discount
     end
     self.ticket_status = 'booked'
     self.name_in_card = order_form.card.name
