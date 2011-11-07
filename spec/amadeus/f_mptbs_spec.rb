@@ -4,13 +4,13 @@ require 'spec_helper'
 describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
   context 'with NO ITINERARY FOUND' do
 
-    before(:all) {
+    let_once! :response do
       body = File.read('spec/amadeus/xml/Fare_MasterPricerTravelBoardSearch_NoItineraryFoundError.xml')
       doc = Amadeus::Service.parse_string(body)
-      @response = Amadeus::Response::FareMasterPricerTravelBoardSearch.new(doc)
-    }
+      Amadeus::Response::FareMasterPricerTravelBoardSearch.new(doc)
+    end
 
-    subject { @response }
+    subject { response }
 
     it { should_not be_success }
     its(:error_message) { should == 'NO ITINERARY FOUND FOR REQUESTED SEGMENT 2' }
@@ -21,25 +21,23 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
 
   context 'with some crazy passengers and itinerary' do
 
-    before(:all) {
+    let_once! :response do
       body = File.read('spec/amadeus/xml/Fare_MasterPricerTravelBoardSearch_Pathological.xml')
       doc = Amadeus::Service.parse_string(body)
-      @response = Amadeus::Response::FareMasterPricerTravelBoardSearch.new(doc)
-    }
+      Amadeus::Response::FareMasterPricerTravelBoardSearch.new(doc)
+    end
 
     describe "response" do
-      subject { @response }
+      subject { response }
       it { should be_success }
       its(:error_message) { should be_blank }
       it { should have(3).recommendations }
 
       describe 'first recommendations' do
 
-        before(:all) {
-          @recommendations = @response.recommendations
-        }
+        let_once!(:recommendation) { response.recommendations.first }
+        subject { recommendation }
 
-        subject { @recommendations.first }
         it { should have(4).flights }
         it { should have(1).variant }
 
@@ -51,7 +49,8 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
         its(:price_tax) { should == 20656.0 }
 
         describe 'variant' do
-          subject { @recommendations.first.variants.first }
+          let_once!(:variant) { recommendation.variants.first }
+          subject { variant }
 
           it { should have(2).segments }
           its('segments.first') { should have(2).flights }
@@ -59,12 +58,15 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
           it { should have(4).flights }
 
           describe 'first segment' do
-            subject { @recommendations.first.variants.first.segments.first }
+            let_once!(:segment) { variant.segments.first }
+            subject {segment}
 
             its(:total_duration) { should == 1160 }
 
             describe 'first flight' do
-              subject { @recommendations.first.variants.first.segments.first.flights.first }
+              let_once!(:flight) { segment.flights.first }
+              subject { flight }
+
               its(:technical_stop_count) { should == 0 }
               its(:technical_stops) { should == [] }
               its(:departure_iata) { should == 'ROV' }
@@ -81,7 +83,9 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
             end
 
             describe 'last flight' do
-              subject { @recommendations.first.variants.first.segments.first.flights.last }
+              let_once!(:flight) { segment.flights.last }
+              subject { flight }
+
               its(:departure_iata) { should == 'VIE' }
               its(:arrival_iata) { should == 'LHR' }
               its(:marketing_carrier_iata) { should == 'OS'}
@@ -103,25 +107,23 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
 
   context 'with two technical stops' do
 
-    before(:all) {
+    let_once! :response do
       body = File.read('spec/amadeus/xml/Fare_MasterPricerTravelBoardSearch_with_stops.xml')
       doc = Amadeus::Service.parse_string(body)
-      @response = Amadeus::Response::FareMasterPricerTravelBoardSearch.new(doc)
-    }
+      Amadeus::Response::FareMasterPricerTravelBoardSearch.new(doc)
+    end
 
     describe "response" do
-      subject { @response }
+      subject { response }
       it { should be_success }
       its(:error_message) { should be_blank }
       it { should have(1).recommendations }
 
       describe 'first recommendations' do
 
-        before(:all) {
-          @recommendations = @response.recommendations
-        }
+        let_once!(:recommendation) { response.recommendations.first }
+        subject { recommendation }
 
-        subject { @recommendations.first }
         it { should have(1).flight }
         it { should have(1).variant }
 
@@ -133,19 +135,22 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
         its(:price_tax) { should == 122.0 }
 
         describe 'variant' do
-          subject { @recommendations.first.variants.first }
+          let_once!(:variant) { recommendation.variants.first }
+          subject { variant }
 
           it { should have(1).segment }
           it { should have(1).flight }
 
           describe 'first segment' do
-            subject { @recommendations.first.variants.first.segments.first }
+            let_once!(:segment) { variant.segments.first }
+            subject {segment}
 
             its(:total_duration) { should == 775 }
             it { should have(1).flight }
 
             describe 'first flight' do
-              subject { @recommendations.first.variants.first.segments.first.flights.first }
+              let_once!(:flight) { segment.flights.first }
+              subject { flight }
 
               # ради этого все затевалось
               its(:technical_stop_count) { should == 2 }

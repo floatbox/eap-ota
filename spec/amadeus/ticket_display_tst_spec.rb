@@ -4,7 +4,7 @@ require 'spec_helper'
 describe Amadeus::Response::TicketDisplayTST do
   describe 'adult with infant' do
 
-    subject {
+    subject_once! {
       body = File.read('spec/amadeus/xml/Ticket_DisplayTST_With_Infant.xml')
       doc = Amadeus::Service.parse_string(body)
       Amadeus::Response::TicketDisplayTST.new(doc)
@@ -23,7 +23,7 @@ describe Amadeus::Response::TicketDisplayTST do
 
   describe 'two adults' do
 
-    subject {
+    subject_once! {
       body = File.read('spec/amadeus/xml/Ticket_DisplayTST_for_two.xml')
       doc = Amadeus::Service.parse_string(body)
       Amadeus::Response::TicketDisplayTST.new(doc)
@@ -41,7 +41,7 @@ describe Amadeus::Response::TicketDisplayTST do
 
 
   describe 'complex tickets' do
-      subject {
+      subject_once! {
         body = File.read('spec/amadeus/xml/Ticket_DisplayTST_complex_tickets.xml')
         doc = Amadeus::Service.parse_string(body)
         Amadeus::Response::TicketDisplayTST.new(doc)
@@ -59,11 +59,11 @@ describe Amadeus::Response::TicketDisplayTST do
 
   describe 'tst from booking' do
 
-      subject {
-        body = File.read('spec/amadeus/xml/Ticket_DisplayTST_without_tickets.xml')
-        doc = Amadeus::Service.parse_string(body)
-        Amadeus::Response::TicketDisplayTST.new(doc)
-      }
+    subject_once! {
+      body = File.read('spec/amadeus/xml/Ticket_DisplayTST_without_tickets.xml')
+      doc = Amadeus::Service.parse_string(body)
+      Amadeus::Response::TicketDisplayTST.new(doc)
+    }
     its(:total_fare) { should == 39860}
     its(:total_tax) { should == 15879 }
     its(:blank_count) { should == 3 }
