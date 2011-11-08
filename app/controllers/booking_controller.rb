@@ -30,8 +30,8 @@ class BookingController < ApplicationController
   end
 
   def api_manual_booking
-    req = params[:request]
-    cabin = req[:cls]
+
+    cabin = params[:request][:cls]
     if cabin == 'P'|| cabin == 'B'
       cabin = 'C'
     elsif cabin == 'E' || cabin == 'A'
@@ -44,15 +44,15 @@ class BookingController < ApplicationController
         :to => params[:request][:dst],
         :date1 => date1,
         :date2 => date2,
-        :adults => params[:request][:adt],
-        :children => params[:request][:cnn],
-        :infants => params[:request][:inf],
+        :adults => params[:request][:adt].to_i,
+        :children => params[:request][:cnn].to_i,
+        :infants => params[:request][:inf].to_i,
         :cabin => cabin
     }
-    pricer_form = PricerForm.simple(pricer_form_hash)
+    @pricer_form = PricerForm.simple(pricer_form_hash)
 
     segments = ( params[:response][:dir] + params[:response][:ret] ).collect do |segment|
-      Segment.new( :flights =>
+      Segment.new(:flights =>
         [Flight.new(
           :operating_carrier_iata => segment[:oa],
           :marketing_carrier_iata => segment[:ma],
@@ -63,7 +63,7 @@ class BookingController < ApplicationController
           :arrival_iata => params[:request][:dst],
           :departure_date => date1 )])
     end
-    variants = [segments]
+    variants = Variant.new(:segments =>segments)
     booking_classes, cabins = segments.each do |segment|
       booking_classes = segment.flights.collect(&:booking_class)
       cabins = segment.flights.collect(&:cabin)
@@ -74,11 +74,12 @@ class BookingController < ApplicationController
       :validating_carrier_iata => params[:response][:va],
       :booking_classes => booking_classes,
       :cabins => cabins,
-      :variants => [variant]
+      :variants => [variants]
     )
-    if pricer_form.valid?
-      pricer_form.save_to_cache
-      redirect_to preliminary_booking( :query_key => pricer_form.query_key, :recommendation => recommendation )
+    recommendation = recommendation.serialize
+    if @pricer_form.valid?
+      @pricer_form.save_to_cache
+      redirect_to :action => 'preliminary_booking', :query_key => @pricer_form.query_key, :recommendation => recommendation
     else
       redirect_to '/'
     end
