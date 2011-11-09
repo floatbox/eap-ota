@@ -40,56 +40,54 @@ describe BookingController do
     end
 
     it 'creates appropriate pricer_form' do
-
       pricer_form = mock('PricerForm')
       recommendation = mock('Recommendation')
-      recommendation.stub( :deserialize)
-      PricerForm.should_receive( :simple).with(hash_including(
+      recommendation.stub(:deserialize)
+
+      PricerForm.should_receive(:simple).with(hash_including(
         :from => 'LED',
         :to => 'MOW',
         :date1 => '280912',
         :adults => 1,
         :cabin => 'C')).and_return(pricer_form)
-      pricer_form.stub( :valid?).and_return('true')
-      pricer_form.stub( :save_to_cache).and_return('true')
-      pricer_form.stub( :query_key).and_return('7dd6jv')
+      pricer_form.stub(:valid?).and_return('true')
+      pricer_form.stub(:save_to_cache).and_return('true')
+      pricer_form.stub(:query_key).and_return('7dd6jv')
       get :api_manual_booking, request_params
-
     end
 
     it 'creates appropriate recommendation' do
-
       flights = mock('Flight')
       segments = mock('Segment')
       variant = mock('Variant')
       recommendation = mock('Recommendation')
-      segments.stub( :flights).and_return(flights)
-      Flight.should_receive( :new).with(hash_including(
+      segments.stub(:flights).and_return(flights)
+
+      Flight.should_receive(:new).with(hash_including(
         :operating_carrier_iata => 'SU',
         :marketing_carrier_iata => 'SU',
         :flight_number => '840',
         :departure_iata => 'LED',
         :arrival_iata => 'MOW',
         :departure_date => '280912')).and_return(flights)
-      flights.should_receive( :collect).and_return(["M"],["C"])
-      Segment.should_receive( :new).with( :flights => [flights]).and_return(segments)
-      Variant.should_receive( :new).with( :segments => [segments]).and_return(variant)
+      flights.should_receive(:collect).and_return(["M"],["C"])
+      Segment.should_receive(:new).with(:flights => [flights]).and_return(segments)
+      Variant.should_receive(:new).with(:segments => [segments]).and_return(variant)
+
       Recommendation.should_receive(:new).with(hash_including(
         :source => 'amadeus',
         :validating_carrier_iata => 'SU',
         :booking_classes => ['M'],
         :cabins => ['C'],
         :variants => [variant])).and_return(recommendation)
-      recommendation.should_receive( :serialize).and_return("amadeus.SU.N.P..SU840LEDMOW280911" )
+      recommendation.should_receive(:serialize).and_return("amadeus.SU.N.P..SU840LEDMOW280911" )
       get :api_manual_booking, request_params
     end
 
-   it 'redirects on booking of deliberate flight page' do
-
+    it 'redirects on booking of deliberate flight page' do
       get :api_manual_booking, request_params
-      pricer_form = assigns(:pricer_form)
+      pricer_form = assigns(:search)
       response.should redirect_to :action => 'preliminary_booking', :controller => 'booking', :query_key => pricer_form.query_key, :recommendation => 'amadeus.SU.M.P..SU840LEDMOW280912'
-
-    end
+     end
   end
 end

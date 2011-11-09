@@ -30,7 +30,6 @@ class BookingController < ApplicationController
   end
 
   def api_manual_booking
-
     cabin = params[:request][:cls]
     if cabin == 'P'|| cabin == 'B'
       cabin = 'C'
@@ -47,11 +46,13 @@ class BookingController < ApplicationController
         :adults => params[:request][:adt].to_i,
         :children => params[:request][:cnn].to_i,
         :infants => params[:request][:inf].to_i,
-        :cabin => cabin
+        :cabin => cabin,
+        :partner => 'rambler'
     }
-    @pricer_form = PricerForm.simple(pricer_form_hash)
+    @search = PricerForm.simple(pricer_form_hash)
 
-    segments = ( params[:response][:dir] + params[:response][:ret] ).collect do |segment|
+    ret = params[:response][:ret] || []
+    segments = (params[:response][:dir] + ret).collect do |segment|
       Segment.new(:flights =>
         [Flight.new(
           :operating_carrier_iata => segment[:oa],
@@ -63,12 +64,14 @@ class BookingController < ApplicationController
           :arrival_iata => params[:request][:dst],
           :departure_date => date1 )])
     end
-    variants = Variant.new(:segments =>segments)
+    variants = Variant.new(:segments => segments)
+
     booking_classes, cabins = segments.each do |segment|
       booking_classes = segment.flights.collect(&:booking_class)
       cabins = segment.flights.collect(&:cabin)
       break booking_classes, cabins
     end
+
     recommendation = Recommendation.new(
       :source => 'amadeus',
       :validating_carrier_iata => params[:response][:va],
@@ -77,16 +80,24 @@ class BookingController < ApplicationController
       :variants => [variants]
     )
     recommendation = recommendation.serialize
-    if @pricer_form.valid?
-      @pricer_form.save_to_cache
-      redirect_to :action => 'preliminary_booking', :query_key => @pricer_form.query_key, :recommendation => recommendation
+
+    if @search.valid?
+      @search.save_to_cache
+      redirect_to :action => 'preliminary_booking', :query_key => @search.query_key, :recommendation => recommendation
+    elsif @search.segments.first.errors.messages.first
+      raise ArgumentError, "#{ @search.segments.first.errors.messages.first[1][0] }"
     else
-      redirect_to '/'
+      render :text => 'Unknown error', :status => 500
     end
+
+    rescue IataStash::NotFound => iata_error
+      render 'api/rambler_failure', :status => 404, :locals => { :message => iata_error.message }
+    rescue ArgumentError => argument_error
+      render 'api/rambler_failure', :status => 400, :locals => { :message => argument_error.message }
   end
 
   def api_redirect
-    @search = PricerForm.simple( params.slice( :from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner ))
+    @search = PricerForm.simple(params.slice( :from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner ))
     save_partner if @partner = @search.partner
     if @search.valid?
       @search.save_to_cache
