@@ -15,10 +15,10 @@ class RamblerCache
   belongs_to :pricer_form
 
   def self.send_to_rambler(count = 1000)
-    data_to_send = self.where(:sent_to_rambler => false).order_by([:created_at, :asc]).limit(count)
+    data_to_send = self.where(:sent_to_rambler => false).order_by([:created_at, :asc]).limit(count).to_a
     if data_to_send.count > 0
       json_string = Yajl::Encoder.encode(data_to_send.map{|rc| {:request => rc.pricer_form_hash , :variants => rc.data}   })
-      data_to_send.update_all(:sent_to_rambler => true)
+      data_to_send.every.update_attribute(:sent_to_rambler, true)
       response = HTTParty.post(Conf.api.rambler_url, :body => json_string, :format => :json)
       Rails.logger.info "Rambler api: request sent"
     end
