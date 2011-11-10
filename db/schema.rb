@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -254,20 +255,20 @@ ActiveRecord::Schema.define(:version => 20111110164731) do
     t.string   "commission_carrier"
     t.string   "commission_agent"
     t.string   "commission_subagent"
-    t.decimal  "price_share",                    :precision => 9, :scale => 2, :default => 0.0,      :null => false
-    t.decimal  "price_our_markup",               :precision => 9, :scale => 2, :default => 0.0,      :null => false
-    t.decimal  "price_with_payment_commission",  :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_share",                   :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_our_markup",              :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_with_payment_commission", :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.string   "order_id"
     t.string   "full_info"
-    t.string   "payment_status",                                               :default => "new"
-    t.decimal  "price_fare",                     :precision => 9, :scale => 2, :default => 0.0,      :null => false
-    t.string   "ticket_status",                                                :default => "booked"
-    t.decimal  "price_consolidator_markup",      :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.string   "payment_status",                                              :default => "new"
+    t.decimal  "price_fare",                    :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.string   "ticket_status",                                               :default => "booked"
+    t.decimal  "price_consolidator_markup",     :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.string   "name_in_card"
     t.string   "last_digits_in_card"
-    t.text     "commission_agent_comments",                                                          :null => false
-    t.text     "commission_subagent_comments",                                                       :null => false
-    t.string   "source",                                                       :default => "other"
+    t.text     "commission_agent_comments",                                                         :null => false
+    t.text     "commission_subagent_comments",                                                      :null => false
+    t.string   "source",                                                      :default => "other"
     t.string   "sirena_lead_pass"
     t.string   "code"
     t.string   "description"
@@ -276,21 +277,24 @@ ActiveRecord::Schema.define(:version => 20111110164731) do
     t.text     "delivery"
     t.string   "payment_type"
     t.datetime "last_pay_time"
-    t.decimal  "cash_payment_markup",            :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "cash_payment_markup",           :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.string   "cabins"
-    t.decimal  "price_difference",               :precision => 9, :scale => 2, :default => 0.0,      :null => false
-    t.boolean  "offline_booking",                                              :default => false,    :null => false
-    t.string   "email_status",                                                 :default => "",       :null => false
+    t.decimal  "price_difference",              :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.boolean  "offline_booking",                                             :default => false,    :null => false
+    t.string   "email_status",                                                :default => "",       :null => false
     t.string   "route"
-    t.decimal  "price_tax",                      :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_tax",                     :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.date     "departure_date"
     t.integer  "blank_count"
     t.string   "partner"
-    t.boolean  "has_refunds",                                                  :default => false,    :null => false
-    t.string   "pricing_method",                                               :default => "",       :null => false
-    t.string   "commission_consolidator_markup"
+    t.boolean  "has_refunds",                                                 :default => false,    :null => false
+    t.string   "pricing_method",                                              :default => "",       :null => false
+    t.string   "commission_consolidator"
     t.string   "commission_discount"
-    t.decimal  "price_discount",                 :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_discount",                :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.string   "commission_blanks"
+    t.decimal  "price_consolidator",            :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_blanks",                  :precision => 9, :scale => 2, :default => 0.0,      :null => false
   end
 
   create_table "payments", :force => true do |t|
@@ -344,11 +348,11 @@ ActiveRecord::Schema.define(:version => 20111110164731) do
     t.string   "source"
     t.string   "pnr_number"
     t.string   "number"
-    t.decimal  "price_fare",                     :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_fare",                :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.string   "commission_subagent"
-    t.decimal  "price_tax",                      :precision => 9, :scale => 2, :default => 0.0,      :null => false
-    t.decimal  "price_share",                    :precision => 9, :scale => 2, :default => 0.0,      :null => false
-    t.decimal  "price_consolidator_markup",      :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_tax",                 :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_share",               :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_consolidator_markup", :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.integer  "order_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -363,13 +367,16 @@ ActiveRecord::Schema.define(:version => 20111110164731) do
     t.string   "office_id"
     t.date     "ticketed_date"
     t.string   "validating_carrier"
-    t.string   "kind",                                                         :default => "ticket"
-    t.boolean  "processed",                                                    :default => false
+    t.string   "kind",                                                    :default => "ticket"
+    t.boolean  "processed",                                               :default => false
     t.integer  "parent_id"
-    t.decimal  "price_penalty",                  :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_penalty",             :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.text     "comment"
     t.string   "commission_agent"
-    t.string   "commission_consolidator_markup"
+    t.string   "commission_consolidator"
+    t.string   "commission_blanks"
+    t.decimal  "price_consolidator",        :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_blanks",              :precision => 9, :scale => 2, :default => 0.0,      :null => false
   end
 
   create_table "typus_users", :force => true do |t|

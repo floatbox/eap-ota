@@ -13,7 +13,7 @@ class Ticket < ActiveRecord::Base
   delegate :commission_carrier, :to => :order, :allow_nil => true
 
   extend Commission::Columns
-  has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator_markup
+  has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks
   include PricingMethods::Ticket
 
   before_save :copy_commissions_from_order
@@ -73,7 +73,7 @@ class Ticket < ActiveRecord::Base
 
   def copy_commissions_from_order
     return unless order
-    for attr in [ :commission_agent, :commission_subagent, :commission_consolidator_markup ]
+    for attr in [ :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks ]
       if send(attr).nil?
         send("#{attr}=", order.send(attr))
       end

@@ -9,7 +9,7 @@ module CommissionRules
   include KeyValueInit
   include Commission::Fx
   extend Commission::Attrs
-  has_commission_attrs :agent, :subagent, :consolidators, :blanks, :discount
+  has_commission_attrs :agent, :subagent, :consolidator, :blanks, :discount
 
   attr_accessor :carrier,
     :disabled, :not_implemented, :no_commission,
@@ -105,11 +105,6 @@ module CommissionRules
     end
   end
 
-  # FIXME временный алиас для недоразбитой consolidators+blanks
-  def consolidator_markup
-    consolidators
-  end
-
   def correct!
     Commission::Correctors.apply(self, corrector)
   end
@@ -131,7 +126,7 @@ module CommissionRules
 
   module ClassMethods
 
-    ALLOWED_KEYS_FOR_DEFS = %W[ system ticketing consolidators blanks discount corrector ].map(&:to_sym)
+    ALLOWED_KEYS_FOR_DEFS = %W[ system ticketing consolidator blanks discount corrector ].map(&:to_sym)
 
     def defaults def_opts={}
       def_opts.to_options!.assert_valid_keys(ALLOWED_KEYS_FOR_DEFS)
@@ -282,8 +277,8 @@ module CommissionRules
       opts[:ticketing] = value
     end
 
-    def consolidators value
-      opts[:consolidators] = value
+    def consolidator value
+      opts[:consolidator] = value
     end
 
     def blanks value

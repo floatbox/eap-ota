@@ -13,7 +13,7 @@ class Recommendation
     :city_iatas, :airport_iatas, :country_iatas, :route,
       :to => 'variants.first'
 
-  delegate :subagent, :agent, :consolidator_markup, :discount, :to => :commission, :prefix => :commission, :allow_nil => true
+  delegate :subagent, :agent, :consolidator, :blanks, :discount, :to => :commission, :prefix => :commission, :allow_nil => true
 
   def availability
     availabilities.compact.min.to_i if availabilities
@@ -120,9 +120,14 @@ class Recommendation
     commission_subagent.call(price_fare, :multiplier =>  blank_count)
   end
 
-  def price_consolidator_markup
+  def price_consolidator
     return 0 unless commission
-    commission_consolidator_markup.call(price_fare, :multiplier => blank_count)
+    commission_consolidator.call(price_fare, :multiplier => blank_count)
+  end
+
+  def price_blanks
+    return 0 unless commission
+    commission_blanks.call(price_fare, :multiplier => blank_count)
   end
 
   def price_discount
@@ -133,7 +138,7 @@ class Recommendation
   # надбавка к цене амадеуса
   def price_markup
     ajust_markup! if @price_our_markup.nil?
-    price_our_markup + price_consolidator_markup - (Conf.payment.use_discount ?  price_discount : 0 )
+    price_our_markup + price_consolidator + price_blanks - (Conf.payment.use_discount ?  price_discount : 0 )
   end
 
   def ajust_markup!

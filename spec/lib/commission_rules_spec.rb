@@ -67,7 +67,7 @@ describe CommissionRules do
         include CommissionRules
 
         carrier 'FV'
-        consolidators '1%'
+        consolidator '1%'
         blanks 50
         discount '2%'
         commission '2%/3'
@@ -82,7 +82,7 @@ describe CommissionRules do
 
     its(:agent) {should == Fx('2%')}
     its(:subagent) {should == Fx(3)}
-    its(:consolidators) {should == Fx('1%')}
+    its(:consolidator) {should == Fx('1%')}
     its(:blanks) {should == Fx('50')}
   end
 
@@ -93,7 +93,7 @@ describe CommissionRules do
         include CommissionRules
         defaults :system => :amadeus,
           :ticketing => :aviacenter,
-          :consolidators => '2%',
+          :consolidator => '2%',
           :blanks => 23,
           :discount => '5%'
 
@@ -103,7 +103,7 @@ describe CommissionRules do
         carrier 'AB'
         carrier_defaults :system => :sirena,
           :ticketing => :ours,
-          :consolidators => '1%',
+          :consolidator => '1%',
           :blanks => 0,
           :discount => '1%'
         commission '1%/1%'
@@ -117,7 +117,7 @@ describe CommissionRules do
 
         its(:system) { should eq(:amadeus) }
         its(:ticketing) { should eq(:aviacenter) }
-        its(:consolidators) { should eq(Fx('2%')) }
+        its(:consolidator) { should eq(Fx('2%')) }
         its(:blanks) { should eq(Fx(23)) }
         its(:discount) { should eq(Fx('5%')) }
       end
@@ -140,7 +140,7 @@ describe CommissionRules do
 
         its(:system) { should eq(:sirena) }
         its(:ticketing) { should eq(:ours) }
-        its(:consolidators) { should eq(Fx('1%')) }
+        its(:consolidator) { should eq(Fx('1%')) }
         its(:blanks) { should eq(Fx(0)) }
         its(:discount) { should eq(Fx('1%')) }
       end

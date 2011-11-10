@@ -4,10 +4,10 @@ module PricingMethods
   #      наше название колонки:            хочется:
   # *    price_fare                        1. Тариф Fare (цифры)
   # *    price_tax                         2. Таксы Taxes (цифры)
-  #      commission_consolidator_markup    3. Сбор авиацентра % Aviacenter fee % (0/1%/2%)
-  #      price_consolidator_markup         4. Сбор авиацентра в рублях Aviacenter fee RUB [=п.1 Fare * п.3 Aviacenter fee]
+  #      commission_consolidator           3. Сбор авиацентра % Aviacenter fee % (0/1%/2%)
+  #      price_consolidator                4. Сбор авиацентра в рублях Aviacenter fee RUB [=п.1 Fare * п.3 Aviacenter fee]
   #      ??? price_blanks                  5. Сбор за бланки RUB (цифры)
-  #      ??? (commission_blanks)
+  #      ??? commission_blanks
   #      price_our_markup                  6. Сервисный сбор Эвитерра Eviterra fee (цифры)
   #      ??? (commission_our_markup)       - до эквайринга? может еще один, после эквайринга, сделать?
   #
@@ -54,7 +54,8 @@ module PricingMethods
     # price_tax
     # price_share,
     # price_our_markup,
-    # price_consolidator_markup
+    # price_consolidator
+    # price_blanks
 
     # считаются в "что-то для пересчета комиссии"
     # price_with_payment_commission
@@ -77,7 +78,7 @@ module PricingMethods
     end
 
     def price_markup
-      price_our_markup + price_consolidator_markup - price_discount
+      price_our_markup + price_consolidator + price_blanks - price_discount
     end
 
     def calculate_price_with_payment_commission
@@ -114,7 +115,8 @@ module PricingMethods
       # price_fare получаются из pnr
       # price_difference - неактуально и неверно? грохнуть?
       self.price_share = commission_subagent.call(price_fare, :multiplier =>  blank_count)
-      self.price_consolidator_markup = commission_consolidator_markup.call(price_fare, :multiplier => blank_count)
+      self.price_consolidator = commission_consolidator.call(price_fare, :multiplier => blank_count)
+      self.price_blanks = commission_blanks.call(price_fare, :multiplier => blank_count)
       self.price_discount = commission_discount.call(price_fare, :multiplier => blank_count)
 
       # cash_payment_markup оставлять ее тоже?
@@ -131,20 +133,22 @@ module PricingMethods
     # делегируются в заказ:
     # commission_agent
     # commission_subagent
-    # commission_consolidator_markup
+    # commission_consolidator
+    # commission_blanks
     #
     ### prices:
     # price_fare
     # price_tax
     # price_share
-    # price_consolidator_markup
+    # price_consolidator
+    # price_blanks
 
     def price_total
       price_fare + price_tax
     end
 
     def price_transfer
-      price_fare + price_tax + price_consolidator_markup - price_share
+      price_fare + price_tax + price_consolidator + price_blanks - price_share
     end
 
     def price_refund
@@ -173,8 +177,11 @@ module PricingMethods
       if commission_subagent
         self.price_share = commission_subagent.call(price_fare)
       end
-      if commission_consolidator_markup
-        self.price_consolidator_markup = commission_consolidator_markup.call(price_fare)
+      if commission_consolidator
+        self.price_consolidator = commission_consolidator.call(price_fare)
+      end
+      if commission_blanks
+        self.price_blanks = commission_blanks.call(price_fare)
       end
       true
     end

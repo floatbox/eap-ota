@@ -8,7 +8,7 @@ describe Commission::Correctors do
     let :commission_class do
       Class.new do
         include CommissionRules
-        defaults :corrector => :twopercent, :consolidators => '2%'
+        defaults :corrector => :twopercent, :consolidator => '2%'
 
         # авиацентр не берет доп комиссию
         carrier 'FV'
@@ -24,34 +24,34 @@ describe Commission::Correctors do
 
         # авиацентр берет измененную доп комиссию
         carrier 'HR'
-        carrier_defaults :consolidators => '1%'
+        carrier_defaults :consolidator => '1%'
         commission '0 5'
 
         # "выключаем отключение" комиссии
-        defaults :corrector => nil, :consolidators => '3%'
+        defaults :corrector => nil, :consolidator => '3%'
         carrier 'SU'
         commission '0 5'
       end
     end
 
-    it "should remove consolidators commission if agent's commission is percentage" do
-      commission_class.for_carrier('FV').first.consolidators.should == Fx(0)
+    it "should remove consolidator commission if agent's commission is percentage" do
+      commission_class.for_carrier('FV').first.consolidator.should == Fx(0)
     end
 
-    it "should not remove consolidators commission if agent's commission is lower or equal than 5" do
-      commission_class.for_carrier('AB').first.consolidators.should == Fx('2%')
+    it "should not remove consolidator commission if agent's commission is lower or equal than 5" do
+      commission_class.for_carrier('AB').first.consolidator.should == Fx('2%')
     end
 
-    it "should remove consolidators commission if agent's commission is higher than 5" do
-      commission_class.for_carrier('AF').first.consolidators.should == Fx(0)
+    it "should remove consolidator commission if agent's commission is higher than 5" do
+      commission_class.for_carrier('AF').first.consolidator.should == Fx(0)
     end
 
     it "should use changed value for consolidator's commission" do
-      commission_class.for_carrier('HR').first.consolidators.should == Fx('1%')
+      commission_class.for_carrier('HR').first.consolidator.should == Fx('1%')
     end
 
     it "should not be active when explicitly disabled" do
-      commission_class.for_carrier('SU').first.consolidators.should == Fx('3%')
+      commission_class.for_carrier('SU').first.consolidator.should == Fx('3%')
     end
   end
 end

@@ -10,8 +10,8 @@ describe PricingMethods::Order do
       # ticketing_method
       :commission_agent => '12%',
       :commission_subagent => '5%',
-      :commission_consolidator_markup => '2%',
-      # commission_blanks
+      :commission_consolidator => '2%',
+      :commission_blanks => 0,
       # commission_our_markup
       :commission_discount => '1%',
       :payment_type => 'card',
@@ -35,7 +35,7 @@ describe PricingMethods::Order do
 
     context "base scenario with percentages" do
       its(:price_share) {should == 1000}
-      its(:price_consolidator_markup) {should == 400}
+      its(:price_consolidator) {should == 400}
       its(:price_discount) {should == 200}
       its(:price_with_payment_commission) {should == 21821.92}
     end
@@ -46,7 +46,7 @@ describe PricingMethods::Order do
       end
 
       its(:price_share) {should == 1000}
-      its(:price_consolidator_markup) {should == 400}
+      its(:price_consolidator) {should == 400}
       its(:price_discount) {should == 200}
       its(:price_with_payment_commission) {should == 21821.92}
     end
@@ -55,7 +55,7 @@ describe PricingMethods::Order do
       let :order_attrs do
         {
           :blank_count => 3,
-          :commission_subagent => 50
+          :commission_subagent => 50,
         }
       end
 

@@ -37,7 +37,7 @@ class Order < ActiveRecord::Base
   attr_writer :itinerary_receipt_view
 
   extend Commission::Columns
-  has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator_markup, :commission_discount
+  has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount
 
   def self.[] number
     find_by_pnr_number number
@@ -176,7 +176,8 @@ class Order < ActiveRecord::Base
         :carrier,
         :agent,
         :subagent,
-        :consolidator_markup,
+        :consolidator,
+        :blanks,
         :discount,
         :agent_comments,
         :subagent_comments
@@ -184,7 +185,8 @@ class Order < ActiveRecord::Base
       copy_attrs recommendation, self,
         :price_share,
         :price_our_markup,
-        :price_consolidator_markup,
+        :price_consolidator,
+        :price_blanks,
         :price_discount
     end
     self.ticket_status = 'booked'
@@ -255,7 +257,8 @@ class Order < ActiveRecord::Base
       sold_tickets = tickets.where(:status => 'ticketed')
       self.price_fare = sold_tickets.sum(:price_fare)
       # FIXME почему unless?
-      self.price_consolidator_markup = sold_tickets.sum(:price_consolidator_markup) unless offline_booking
+      # FIXME поправить и в билетах
+      self.price_consolidator = sold_tickets.sum(:price_consolidator) unless offline_booking
       self.price_share = sold_tickets.sum(:price_share)
 
       self.price_tax = sold_tickets.sum(:price_tax)
