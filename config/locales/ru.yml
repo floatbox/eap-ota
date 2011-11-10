@@ -26,31 +26,39 @@ ru:
       typus_user: 'Пользователь Typus'
       notification: 'Оповещение'
     attributes:
-      order:
-        has_refunds: "Были возвраты"
+      PRICING_ATTRIBUTES: &PRICING_ATTRIBUTES
         price_fare: "Тариф"
         price_tax: "Таксы"
-        commission_consolidator: "Сбор 1%/2% авиацентра (формула)"
         price_consolidator: "Сбор 1%/2% авиацентра, руб"
-        commission_blanks: "Сбор за бланки (формула)"
         price_blanks: "Сбор за бланки, руб"
-        commission_agent: "Агентская комиссия"
-        commission_subagent: "Субагентская комиссия (формула)"
         price_agent: "Агентская комиссия, руб"
         price_subagent: "Субагентская комиссия, руб"
         price_our_markup: "Сервисный сбор Эвитерра"
         price_total: "Итого себестоимость билета"
         price_payment_commission: "Эквайринг"
         price_with_payment_commission: "Итого к оплате"
+        price_original: "Касса: Режим 1 или 3"
+        price_tax_extra: "Касса: Режим 2"
+        income: 'Доход Eviterra'
+        income_payment_gateways: 'Доход платежного шлюза'
+        income_suppliers: 'Доход поставщика'
+        commission_consolidator: "Сбор 1%/2% авиацентра (формула)"
+        commission_blanks: "Сбор за бланки (формула)"
+        commission_agent: "Агентская комиссия"
+        commission_subagent: "Субагентская комиссия (формула)"
+        commission_carrier: "Валидирующий перевозчик"
+      order:
+        commission_agent_comments: "Текст договора по агентской комиссии"
+        commission_subagent_comments: "Текст договора по субагентской комиссии"
+        blank_count: "Количество бланков"
+        has_refunds: "Были возвраты"
         needs_update_from_gds: "Получить данные бронирования из GDS (экспериментально)"
         offline_booking: "Неавтоматический режим обработки бронирования (offline booking)"
         pricing_method: 'Рассчет цены (pricing method)'
         needs_recalculation: "Пересчитать комиссии"
-        price_original: "Касса: Режим 1 или 3"
-        price_tax_extra: "Касса: Режим 2"
-        income: 'Доход'
-        income_payment_gateways: 'Доход платежного шлюза'
-        income_suppliers: 'Доход поставщика'
+        <<: *PRICING_ATTRIBUTES
+      ticket:
+        <<: *PRICING_ATTRIBUTES
 
   views:
     pagination:
