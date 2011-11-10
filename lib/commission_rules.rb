@@ -18,7 +18,7 @@ module CommissionRules
     :departure, :departure_country, :important,
     :check, :examples, :agent_comments, :subagent_comments, :source,
     :expr_date, :strt_date,
-    :system, :ticketing, :corrector
+    :system, :ticketing_method, :corrector
 
   def disabled?
     disabled || not_implemented || no_commission
@@ -126,7 +126,7 @@ module CommissionRules
 
   module ClassMethods
 
-    ALLOWED_KEYS_FOR_DEFS = %W[ system ticketing consolidator blanks discount corrector ].map(&:to_sym)
+    ALLOWED_KEYS_FOR_DEFS = %W[ system ticketing_method consolidator blanks discount corrector ].map(&:to_sym)
 
     def defaults def_opts={}
       def_opts.to_options!.assert_valid_keys(ALLOWED_KEYS_FOR_DEFS)
@@ -273,8 +273,8 @@ module CommissionRules
       opts[:system] = value
     end
 
-    def ticketing value
-      opts[:ticketing] = value
+    def ticketing_method value
+      opts[:ticketing_method] = value
     end
 
     def consolidator value

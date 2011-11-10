@@ -92,7 +92,7 @@ describe CommissionRules do
       Class.new do
         include CommissionRules
         defaults :system => :amadeus,
-          :ticketing => :aviacenter,
+          :ticketing_method => :aviacenter,
           :consolidator => '2%',
           :blanks => 23,
           :discount => '5%'
@@ -102,7 +102,7 @@ describe CommissionRules do
 
         carrier 'AB'
         carrier_defaults :system => :sirena,
-          :ticketing => :ours,
+          :ticketing_method => :direct,
           :consolidator => '1%',
           :blanks => 0,
           :discount => '1%'
@@ -116,7 +116,7 @@ describe CommissionRules do
         subject { commission_class.for_carrier('FV').first }
 
         its(:system) { should eq(:amadeus) }
-        its(:ticketing) { should eq(:aviacenter) }
+        its(:ticketing_method) { should eq(:aviacenter) }
         its(:consolidator) { should eq(Fx('2%')) }
         its(:blanks) { should eq(Fx(23)) }
         its(:discount) { should eq(Fx('5%')) }
@@ -139,7 +139,7 @@ describe CommissionRules do
         subject { commission_class.for_carrier('AB').last }
 
         its(:system) { should eq(:sirena) }
-        its(:ticketing) { should eq(:ours) }
+        its(:ticketing_method) { should eq(:direct) }
         its(:consolidator) { should eq(Fx('1%')) }
         its(:blanks) { should eq(Fx(0)) }
         its(:discount) { should eq(Fx('1%')) }

@@ -3,12 +3,12 @@ class Commission
 include CommissionRules
 
 # применяется вообще ко всем правилам ниже
-defaults :system => :amadeus, :ticketing => :aviacenter, :consolidator => '2%', :blanks => 0, :discount => 0, :corrector => :twopercent
+defaults :system => :amadeus, :ticketing_method => "aviacenter", :consolidator => '2%', :blanks => 0, :discount => 0, :corrector => :twopercent
 
 carrier "SU", "Aeroflot"
 ########################################
 # будут действовать на все правила в авиакомпании.
-# carrier_defaults :ticketing => :ours, :discount => '2%'
+# carrier_defaults :ticketing_method => "direct", :discount => '2%'
 
 example "svocdg"
 example "svocdg/business cdgsvo/economy"
@@ -24,7 +24,7 @@ subagent "• на собственные рейсы (в т.ч. по согла�
 subagent "5 % от тарифов Эконом класса (в т.ч. при комбинации Эконом и Бизнес классов),   при переоформлении с доплатой по тарифам Эконом класса (в т.ч. при комбинации Эконом и Бизнес классов);"
 # применится только к этому правилу
 # discount '2%'
-# ticketing :ours
+# ticketing_method "direct"
 discount "3%"
 commission "7%/5%"
 

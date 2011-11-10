@@ -13,7 +13,7 @@ class Recommendation
     :city_iatas, :airport_iatas, :country_iatas, :route,
       :to => 'variants.first'
 
-  delegate :subagent, :agent, :consolidator, :blanks, :discount, :to => :commission, :prefix => :commission, :allow_nil => true
+  delegate :subagent, :agent, :consolidator, :blanks, :discount, :ticketing, :to => :commission, :prefix => :commission, :allow_nil => true
 
   def availability
     availabilities.compact.min.to_i if availabilities

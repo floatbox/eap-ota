@@ -40,6 +40,10 @@ class Order < ActiveRecord::Base
     [['Корпоративный', 'corporate_0001']]
   end
 
+  def self.commission_ticketing_methods
+    [['Авиацентр (Сирена, MOWR2233B)', 'aviacenter'], ['Прямой договор (MOWR228FA)', 'direct']]
+  end
+
   # фейковый текст для маршрут-квитанций. может быть, вынести в хелпер?
   PAID_BY = {'card' => 'Invoice', 'delivery' => 'Cash', 'cash' => 'Cash', 'invoice' => 'Invoice'}
 
@@ -183,6 +187,7 @@ class Order < ActiveRecord::Base
     if recommendation.commission
       copy_attrs recommendation.commission, self, {:prefix => :commission},
         :carrier,
+        :ticketing_method,
         :agent,
         :subagent,
         :consolidator,
