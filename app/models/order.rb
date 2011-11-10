@@ -5,6 +5,15 @@ class Order < ActiveRecord::Base
   include PricingMethods::Order
   include IncomeDistribution
 
+  # FIXME сделать модуль или фикс для typus, этим оверрайдам место в typus/application.yml
+  def self.model_fields
+    super.merge(
+      :income => :decimal,
+      :income_suppliers => :decimal,
+      :income_payment_gateways => :decimal
+    )
+  end
+
   # new - дефолтное значение без смысла
   # not blocked - ожидание 3ds, неприход наличных, убивается шедулером
   # unblocked - разблокирование денег на карте
