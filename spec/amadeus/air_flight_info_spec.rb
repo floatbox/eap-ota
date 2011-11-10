@@ -4,11 +4,13 @@ require 'spec_helper'
 describe Amadeus::Response::AirFlightInfo do
   describe 'with technical stop' do
 
-    subject {
+    let_once! :flight_info do
       body = File.read('spec/amadeus/xml/Air_FlightInfo.xml')
       doc = Amadeus::Service.parse_string(body)
       Amadeus::Response::AirFlightInfo.new(doc).flight
-    }
+    end
+
+    subject { flight_info }
 
     its(:arrival_iata) { should == 'CAN' }
     its(:departure_iata) { should == 'SVO' }

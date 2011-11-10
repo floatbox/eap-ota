@@ -3,11 +3,11 @@ require 'spec_helper'
 
 describe Sirena::Response::Raceinfo do
 
-  subject { described_class.new( File.read(response) )}
 
   describe "with no errors" do
-    
-    let(:response) { 'spec/sirena/xml/raceinfo.xml' }
+
+    let(:xml) { 'spec/sirena/xml/raceinfo.xml' }
+    subject_once! { described_class.new( File.read(xml) )}
 
     it { should be_success }
     its("flight.operating_carrier_iata") { should == "ЮТ" }

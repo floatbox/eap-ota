@@ -3,11 +3,11 @@ require 'spec_helper'
 
 describe Sirena::Response::Pricing do
 
-  let(:response) { described_class.new( File.read(xml) ) }
 
   context 'with one adult, two way' do
 
     let(:xml) { 'spec/sirena/xml/pricing_two_way.xml' }
+    let_once!(:response) { described_class.new( File.read(xml) ) }
     subject {response}
 
     it { should be_success }
@@ -43,6 +43,7 @@ describe Sirena::Response::Pricing do
   context 'ITK-AER' do
 
     let(:xml) { 'spec/sirena/xml/pricing_ITK_AER.xml' }
+    let_once!(:response) { described_class.new( File.read(xml) ) }
     subject {response}
 
     it { should be_success }
@@ -78,6 +79,7 @@ describe Sirena::Response::Pricing do
   context 'with technical stop' do
 
     let(:xml) { 'spec/sirena/xml/pricing_with_stops.xml' }
+    let_once!(:response) { described_class.new( File.read(xml) ) }
     subject {response}
 
     it { should be_success }

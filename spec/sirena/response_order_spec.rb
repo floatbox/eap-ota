@@ -3,11 +3,11 @@ require 'spec_helper'
 
 describe Sirena::Response::Order do
 
-  subject { described_class.new( File.read(response) ) }
 
   describe 'with one adult, unpaid' do
 
     let(:response) { 'spec/sirena/xml/order.xml' }
+    subject_once! { described_class.new( File.read(response) ) }
 
     it { should be_success }
     its(:number) { should == '08ВГЦП' }
@@ -26,6 +26,7 @@ describe Sirena::Response::Order do
   describe 'adult and child, ticketed' do
 
     let(:response) { 'spec/sirena/xml/order_with_tickets.xml' }
+    subject_once! { described_class.new( File.read(response) ) }
 
     it { should be_success }
     its(:number) { should == '08ВМГХ' }
@@ -53,6 +54,7 @@ describe Sirena::Response::Order do
   describe 'when airport is not reported' do
 
     let(:response) { 'spec/sirena/xml/order_without_arrival_airport.xml' }
+    subject_once! { described_class.new( File.read(response) ) }
 
     it { should be_success }
     it { should have(1).flights }
