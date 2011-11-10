@@ -17,3 +17,5 @@ div#ui-datepicker-div {display: none;}
 
 pre {font-family: Monaco, monospace; line-height: 1.2}
 a:visited {color: gray }
+
+dt small {font-size: 0.85em; font-weight: normal; margin: 0 0 0 0.5em;}
