@@ -30,11 +30,11 @@ ru:
         has_refunds: "Были возвраты"
         price_fare: "Тариф"
         price_tax: "Таксы"
-        commission_consolidator_markup: "Сбор авиацентра (формула)"
-        price_consolidator_markup: "Сбор авиацентра в рублях"
+        commission_consolidator_markup: "Сбор 1%/2% авиацентра (формула)"
+        price_consolidator_markup: "Сбор 1%/2% авиацентра в рублях"
         commission_agent: "Агентская комиссия"
         commission_subagent: "Субагентская комиссия (формула)"
-        price_share: "доля комиссии Эвитерра (формула)"
+        price_share: "Доля комиссии Эвитерра (формула)"
         price_our_markup: "Сервисный сбор Эвитерра"
         price_total: "Итого себестоимость билета"
         price_payment_commission: "Эквайринг"
@@ -45,6 +45,9 @@ ru:
         needs_recalculation: "Пересчитать комиссии"
         price_original: "Касса: Режим 1 или 3"
         price_tax_extra: "Касса: Режим 2"
+        income: 'Доход'
+        income_payment_gateways: 'Доход платежного шлюза'
+        income_suppliers: 'Доход поставщика'
 
   views:
     pagination:
