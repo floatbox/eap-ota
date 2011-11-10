@@ -30,57 +30,9 @@ class BookingController < ApplicationController
   end
 
   def api_manual_booking
-    cabin = params[:request][:cls]
-    if cabin == 'P'|| cabin == 'B'
-      cabin = 'C'
-    elsif cabin == 'E' || cabin == 'A'
-      cabin = 'Y'
-    end
-    date1 = PricerForm.convert_api_date(params[:request][:dir])
-    date2 = PricerForm.convert_api_date(params[:request][:ret])
-    pricer_form_hash = {
-        :from => params[:request][:src],
-        :to => params[:request][:dst],
-        :date1 => date1,
-        :date2 => date2,
-        :adults => params[:request][:adt].to_i,
-        :children => params[:request][:cnn].to_i,
-        :infants => params[:request][:inf].to_i,
-        :cabin => cabin,
-        :partner => 'rambler'
-    }
-    @search = PricerForm.simple(pricer_form_hash)
-
-    ret = params[:response][:ret] || []
-    segments = (params[:response][:dir] + ret).collect do |segment|
-      Segment.new(:flights =>
-        [Flight.new(
-          :operating_carrier_iata => segment[:oa],
-          :marketing_carrier_iata => segment[:ma],
-          :flight_number => segment[:n],
-          :booking_class => segment[:bcl],
-          :cabin => segment[:cls],
-          :departure_iata => params[:request][:src],
-          :arrival_iata => params[:request][:dst],
-          :departure_date => date1 )])
-    end
-    variants = Variant.new(:segments => segments)
-
-    booking_classes, cabins = segments.each do |segment|
-      booking_classes = segment.flights.collect(&:booking_class)
-      cabins = segment.flights.collect(&:cabin)
-      break booking_classes, cabins
-    end
-
-    recommendation = Recommendation.new(
-      :source => 'amadeus',
-      :validating_carrier_iata => params[:response][:va],
-      :booking_classes => booking_classes,
-      :cabins => cabins,
-      :variants => [variants]
-    )
-    recommendation = recommendation.serialize
-
+    RamblerApi.new params
+    @search = RamblerApi.search
+    recommendation = RamblerApi.recommendation
     if @search.valid?
       @search.save_to_cache
       redirect_to :action => 'preliminary_booking', :query_key => @search.query_key, :recommendation => recommendation
@@ -89,7 +41,6 @@ class BookingController < ApplicationController
     else
       render :text => 'Unknown error', :status => 500
     end
-
     rescue IataStash::NotFound => iata_error
       render 'api/rambler_failure', :status => 404, :locals => { :message => iata_error.message }
     rescue ArgumentError => argument_error
