@@ -183,7 +183,8 @@ class Order < ActiveRecord::Base
         :subagent_comments
 
       copy_attrs recommendation, self,
-        :price_share,
+        :price_agent,
+        :price_subagent,
         :price_our_markup,
         :price_consolidator,
         :price_blanks,
@@ -259,7 +260,8 @@ class Order < ActiveRecord::Base
       # FIXME почему unless?
       # FIXME поправить и в билетах
       self.price_consolidator = sold_tickets.sum(:price_consolidator) unless offline_booking
-      self.price_share = sold_tickets.sum(:price_share)
+      self.price_agent = sold_tickets.sum(:price_agent)
+      self.price_subagent = sold_tickets.sum(:price_subagent)
 
       self.price_tax = sold_tickets.sum(:price_tax)
       self.price_difference = price_total - price_total_old if price_difference == 0

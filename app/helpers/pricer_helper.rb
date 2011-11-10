@@ -183,7 +183,7 @@ module PricerHelper
       if recommendation.commission.discount
         concat %(-#{recommendation.commission.discount} (#{recommendation.price_discount}) )
       end
-      concat %( #{recommendation.price_share} р.)
+      concat %( #{recommendation.price_subagent} р.)
       unless recommendation.price_markup == 0
         concat %(#{recommendation.price_our_markup} р.)
         unless recommendation.price_consolidator == 0

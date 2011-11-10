@@ -114,8 +114,12 @@ class Recommendation
     price_tax + price_markup + price_payment
   end
 
-  # доля от комиссии консолидатора, которая достанется нам
-  def price_share
+  def price_agent
+    return 0 unless commission
+    commission_agent.call(price_fare, :multiplier =>  blank_count)
+  end
+
+  def price_subagent
     return 0 unless commission
     commission_subagent.call(price_fare, :multiplier =>  blank_count)
   end

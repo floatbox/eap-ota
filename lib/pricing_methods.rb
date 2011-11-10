@@ -24,7 +24,7 @@ module PricingMethods
   #          price_tax_and_markup             = price_tax_extra - price_payment_commission
   #
   #      не учтены, но есть:
-  #      price_share                       наша доля комиссии (субагентская)
+  #      price_subagent                       наша доля комиссии (субагентская)
   #        (commission_subagent)
   #      price_difference                  price_total - price_total_old, рассчитывается после первой загрузки билетов
 
@@ -52,7 +52,7 @@ module PricingMethods
     #  из рекомендации, но пересчитываются и тут тоже:
     # price_fare
     # price_tax
-    # price_share,
+    # price_subagent,
     # price_our_markup,
     # price_consolidator
     # price_blanks
@@ -101,20 +101,12 @@ module PricingMethods
       price_tax_and_markup + price_payment_commission
     end
 
-    # FIXME внести в базу оба
-    def price_agent
-      commission_agent.call(price_fare, :multiplier => blank_count)
-    end
-
-    def price_subagent
-      commission_subagent.call(price_fare, :multiplier => blank_count)
-    end
-
     def recalculation
       # price_tax получаются из pnr
       # price_fare получаются из pnr
       # price_difference - неактуально и неверно? грохнуть?
-      self.price_share = commission_subagent.call(price_fare, :multiplier =>  blank_count)
+      self.price_agent = commission_agent.call(price_fare, :multiplier =>  blank_count)
+      self.price_subagent = commission_subagent.call(price_fare, :multiplier =>  blank_count)
       self.price_consolidator = commission_consolidator.call(price_fare, :multiplier => blank_count)
       self.price_blanks = commission_blanks.call(price_fare, :multiplier => blank_count)
       self.price_discount = commission_discount.call(price_fare, :multiplier => blank_count)
@@ -139,7 +131,8 @@ module PricingMethods
     ### prices:
     # price_fare
     # price_tax
-    # price_share
+    # price_agent
+    # price_subagent
     # price_consolidator
     # price_blanks
 
@@ -148,7 +141,7 @@ module PricingMethods
     end
 
     def price_transfer
-      price_fare + price_tax + price_consolidator + price_blanks - price_share
+      price_fare + price_tax + price_consolidator + price_blanks - price_subagent
     end
 
     def price_refund
@@ -175,7 +168,7 @@ module PricingMethods
 
     def recalculate_commissions
       if commission_subagent
-        self.price_share = commission_subagent.call(price_fare)
+        self.price_subagent = commission_subagent.call(price_fare)
       end
       if commission_consolidator
         self.price_consolidator = commission_consolidator.call(price_fare)

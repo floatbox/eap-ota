@@ -29,7 +29,7 @@ describe Ticket do
       }
       before { ticket.copy_commissions_from_order }
       before { ticket.recalculate_commissions }
-      its(:price_share) {should == 4}
+      its(:price_subagent) {should == 4}
       its(:price_consolidator) {should == fare * 0.02 }
       its(:price_blanks ) {should == 50 }
     end

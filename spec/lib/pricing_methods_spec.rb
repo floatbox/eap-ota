@@ -34,7 +34,7 @@ describe PricingMethods::Order do
     subject {order}
 
     context "base scenario with percentages" do
-      its(:price_share) {should == 1000}
+      its(:price_subagent) {should == 1000}
       its(:price_consolidator) {should == 400}
       its(:price_discount) {should == 200}
       its(:price_with_payment_commission) {should == 21821.92}
@@ -45,7 +45,7 @@ describe PricingMethods::Order do
         {:blank_count => 3 }
       end
 
-      its(:price_share) {should == 1000}
+      its(:price_subagent) {should == 1000}
       its(:price_consolidator) {should == 400}
       its(:price_discount) {should == 200}
       its(:price_with_payment_commission) {should == 21821.92}
@@ -59,7 +59,7 @@ describe PricingMethods::Order do
         }
       end
 
-      its(:price_share) {should == 150}
+      its(:price_subagent) {should == 150}
       # а тут ничего не меняется
       its(:price_with_payment_commission) {should == 21821.92}
     end

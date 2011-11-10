@@ -15,7 +15,7 @@ module IncomeDistribution
   # FIXME price_share переделать в price_subagent
   def scheme_aviacenter
     # + price_blanks
-    price_fare + price_tax - price_share + price_consolidator + price_blanks
+    price_fare + price_tax - price_subagent + price_consolidator + price_blanks
   end
 
   def scheme_direct

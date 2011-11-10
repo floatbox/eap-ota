@@ -295,6 +295,8 @@ ActiveRecord::Schema.define(:version => 20111110164731) do
     t.string   "commission_blanks"
     t.decimal  "price_consolidator",            :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.decimal  "price_blanks",                  :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_agent",                   :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_subagent",                :precision => 9, :scale => 2, :default => 0.0,      :null => false
   end
 
   create_table "payments", :force => true do |t|
@@ -377,6 +379,8 @@ ActiveRecord::Schema.define(:version => 20111110164731) do
     t.string   "commission_blanks"
     t.decimal  "price_consolidator",        :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.decimal  "price_blanks",              :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_agent",               :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_subagent",            :precision => 9, :scale => 2, :default => 0.0,      :null => false
   end
 
   create_table "typus_users", :force => true do |t|
