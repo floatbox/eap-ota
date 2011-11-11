@@ -51,6 +51,7 @@ class Order < ActiveRecord::Base
 
   extend Commission::Columns
   has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount
+  has_percentage_only_commissions :commission_consolidator, :commission_discount
 
   def self.[] number
     find_by_pnr_number number

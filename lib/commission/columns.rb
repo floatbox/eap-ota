@@ -13,10 +13,17 @@ class Commission
           :converter => lambda {|val| Commission::Formula.new(val) },
           :allow_nil => true
 
-        # FIXME UGLY. сделать CommissionValidator < ActiveModel::EachValidator
-        validates_each column, :allow_blank => true do |model, attr, value|
-          model.errors.add(attr, "invalid commission formula: '#{value}'") unless value.valid?
-        end
+      end
+      # FIXME UGLY. сделать CommissionValidator < ActiveModel::EachValidator
+      validates_each commission_columns, :allow_blank => true do |model, attr, fx|
+        model.errors.add(attr, ", некорректное значение: '#{fx}', попробуйте что-то типа '2%', '100.53', '12 eur'") unless fx.valid?
+      end
+    end
+
+    # тоже вынести в какой-то валидатор
+    def has_percentage_only_commissions *columns
+      validates_each columns, :allow_blank => true do |model, attr, fx|
+        model.errors.add(attr, ", некорректное значение: '#{fx}', попробуйте '#{fx.rate}%'") unless fx.percentage? || fx.zero?
       end
     end
 

@@ -17,6 +17,10 @@ class Commission
       !!formula['%']
     end
 
+    def zero?
+      rate.zero?
+    end
+
     def euro?
       raise ArgumentError, "#{formula} contains several parts" if complex?
       !!formula['eur']
@@ -60,6 +64,7 @@ class Commission
     alias [] call
 
     def valid?
+      formula.blank? ||
       !!( formula.strip =~ /^ \d+ (?: \.\d+ )? (?: % | eur )?
                 ( \s* \+ \s*  \d+ (?: \.\d+ )? (?: % | eur )? )*  $/x )
     end

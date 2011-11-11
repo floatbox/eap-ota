@@ -21,6 +21,14 @@ describe Commission::Formula do
     specify { Fx(23.45).call.should == 23.45 }
   end
 
+  context "it works with empty values" do
+    specify { Fx("").should be_valid }
+    specify { Fx("").call.should == 0 }
+
+    specify { Fx(nil).should be_valid }
+    specify { Fx(nil).call.should == 0 }
+  end
+
   context "works with multiplier" do
     specify { Fx("3.5%").call(200, :multiplier => 2).should == 7 }
     specify { Fx("3.6").call(200, :multiplier => 2).should == 7.2 }
@@ -46,6 +54,14 @@ describe Commission::Formula do
 
   pending "it should have exactly that serialization" do
     # backward compatibility?
+  end
+
+  describe "#zero?" do
+    specify { Fx('0').should be_zero }
+    specify { Fx('0.00').should be_zero }
+    specify { Fx(0.0).should be_zero }
+    specify { Fx('').should be_zero }
+    specify { Fx(nil).should be_zero }
   end
 
   context "formula with sums" do
