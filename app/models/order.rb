@@ -70,8 +70,7 @@ class Order < ActiveRecord::Base
   validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
 
   before_validation :capitalize_pnr
-  before_save :calculate_price_with_payment_commission,
-    :unless => lambda { ['blocked', 'charged'].include? payment_status }
+  before_save :calculate_price_with_payment_commission, :if => lambda { price_with_payment_commission.blank? || price_with_payment_commission.zero? || !fix_price? }
   before_create :generate_code, :set_payment_status
   after_save :create_notification
 

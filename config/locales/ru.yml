@@ -79,6 +79,7 @@ ru:
         updated_at: "Последнее изменение"
         delivery: "Адрес доставки"
         partner: "Партнер"
+        fix_price: "Закрепить итоговую цену / деньги уже взяты"
         <<: *PRICING_ATTRIBUTES
       ticket:
         <<: *PRICING_ATTRIBUTES
