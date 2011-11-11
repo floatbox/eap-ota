@@ -26,36 +26,59 @@ ru:
       typus_user: 'Пользователь Typus'
       notification: 'Оповещение'
     attributes:
+      # общие атрибуты в заказах и билетах
       PRICING_ATTRIBUTES: &PRICING_ATTRIBUTES
-        price_fare: "Тариф"
-        price_tax: "Таксы"
+        price_fare: "Тариф, руб"
+        price_tax: "Таксы, руб"
         price_consolidator: "Сбор 1%/2% авиацентра, руб"
         price_blanks: "Сбор за бланки, руб"
         price_agent: "Агентская комиссия, руб"
         price_subagent: "Субагентская комиссия, руб"
-        price_our_markup: "Сервисный сбор Эвитерра"
-        price_total: "Итого себестоимость билета"
-        price_payment_commission: "Эквайринг"
-        price_with_payment_commission: "Итого к оплате"
+        price_discount: "Скидка от тарифа, руб"
+        price_our_markup: "Сервисный сбор Эвитерра, руб"
+        price_total: "Cтоимость билета до эквайринга, руб"
+        price_payment_commission: "Эквайринг, руб"
+        price_with_payment_commission: "Итого к оплате, руб"
         price_original: "Касса: Режим 1 или 3"
         price_tax_extra: "Касса: Режим 2"
-        income: 'Доход Eviterra'
-        income_payment_gateways: 'Доход платежного шлюза'
-        income_suppliers: 'Доход поставщика'
-        commission_consolidator: "Сбор 1%/2% авиацентра (формула)"
-        commission_blanks: "Сбор за бланки (формула)"
-        commission_agent: "Агентская комиссия"
-        commission_subagent: "Субагентская комиссия (формула)"
+        income: 'Доход Eviterra, руб'
+        income_payment_gateways: 'Доход платежного шлюза, руб'
+        income_suppliers: 'Доход поставщика, руб'
+        commission_consolidator: "Сбор 1%/2% авиацентра, с билета"
+        commission_blanks: "Сбор за бланки, c билета"
+        commission_agent: "Агентская комиссия, с билета"
+        commission_subagent: "Субагентская комиссия, c билета"
+        commission_discount: "Скидка от тарифа, c билета"
         commission_carrier: "Валидирующий перевозчик"
+        commission_ticketing_method: "Тип договора/Office ID"
       order:
         commission_agent_comments: "Текст договора по агентской комиссии"
         commission_subagent_comments: "Текст договора по субагентской комиссии"
         blank_count: "Количество бланков"
         has_refunds: "Были возвраты"
         needs_update_from_gds: "Получить данные бронирования из GDS (экспериментально)"
-        offline_booking: "Неавтоматический режим обработки бронирования (offline booking)"
-        pricing_method: 'Рассчет цены (pricing method)'
+        offline_booking: "Неавтоматический режим обработки бронирования"
+        pricing_method: 'Рассчет цены'
         needs_recalculation: "Пересчитать комиссии"
+        order: "Идентификатор платежа"
+        source: "GDS"
+        description: "Комментарий к форме оплаты, для клиента"
+        route: "Маршрут"
+        pnr_number: "Номер PNR"
+        payment_status: "Состояние платежа"
+        ticket_status: "Состояние брони/билетов"
+        payment_type: "Способ оплаты"
+        last_pay_time: "Ссылка оплаты работает до"
+        contact: "Контактные данные"
+        phone: "Телефон"
+        sirena_lead_pass: "Фамилия первого пассажира в брони, для Сирены"
+        name_in_card: "ФИО на кредитной карте"
+        last_digits_in_card: "Последние 4 цифры карты"
+        full_info: "Данные пассажиров"
+        created_at: "Создан"
+        updated_at: "Последнее изменение"
+        delivery: "Адрес доставки"
+        partner: "Партнер"
         <<: *PRICING_ATTRIBUTES
       ticket:
         <<: *PRICING_ATTRIBUTES
