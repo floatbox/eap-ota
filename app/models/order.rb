@@ -377,8 +377,12 @@ class Order < ActiveRecord::Base
   def money_received!
     if payment_status == 'pending'
       update_attribute(:payment_status, 'charged')
-      Payment.create(:price => price_with_payment_commission, :order => self, :system => 'cash', :charged_at => Time.now)
+      create_cash_payment
     end
+  end
+
+  def create_cash_payment
+    Payment.create(:price => price_with_payment_commission, :order => self, :system => 'cash', :charged_at => Time.now)
   end
 
   def no_money_received!

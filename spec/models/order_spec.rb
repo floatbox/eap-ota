@@ -24,6 +24,24 @@ describe Order do
     end
   end
 
+  describe "#create_cash_payment" do
+    before(:each) do
+      @order = Order.new(:pnr_number => 'XXX')
+      @order.save
+      @order.price_with_payment_commission = 20.2
+      @order.create_cash_payment
+    end
+
+    it 'should create payment with system: cash' do
+      @order.payments.last.system.should == 'cash'
+    end
+
+    it 'should create payment with correct price' do
+      @order.payments.last.price.should == 20.2
+    end
+
+  end
+
 
   describe "#tickets.ensure_exists" do
     it 'should raise exception if number is blank' do
