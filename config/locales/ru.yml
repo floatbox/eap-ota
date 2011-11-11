@@ -56,6 +56,7 @@ ru:
         commission_subagent_comments: "Текст договора по субагентской комиссии"
         blank_count: "Количество бланков"
         has_refunds: "Были возвраты"
+        charge_date: "Дата получения платежа"
         needs_update_from_gds: "Получить данные бронирования из GDS (экспериментально)"
         offline_booking: "Неавтоматический режим обработки бронирования"
         pricing_method: 'Рассчет цены'
