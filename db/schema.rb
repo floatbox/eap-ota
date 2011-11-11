@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111011164013) do
+ActiveRecord::Schema.define(:version => 20111110164731) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -305,6 +305,7 @@ ActiveRecord::Schema.define(:version => 20111011164013) do
     t.string   "ref"
     t.datetime "charged_at"
     t.string   "threeds_key"
+    t.string   "system"
   end
 
   create_table "regions", :force => true do |t|

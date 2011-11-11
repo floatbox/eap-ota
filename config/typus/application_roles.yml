@@ -20,7 +20,7 @@ admin:
   AirlineAlliance: create, read, update, delete
   Consolidator: create, read, update, delete
   GlobalDistributionSystem: create, read, update, delete
-  Payment: read
+  Payment: read, update
   FlightGroup: create, read, update, delete
 
 hoteditor:

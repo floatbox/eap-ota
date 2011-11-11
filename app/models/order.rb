@@ -366,7 +366,7 @@ class Order < ActiveRecord::Base
     else
       custom_fields.order = self
     end
-    payment = Payment.create(:price => price_with_payment_commission, :card => card, :order => self, :custom_fields => custom_fields)
+    payment = Payment.create(:price => price_with_payment_commission, :card => card, :order => self, :custom_fields => custom_fields, :system => 'payture')
     payment.payture_block
   end
 
@@ -375,7 +375,10 @@ class Order < ActiveRecord::Base
   end
 
   def money_received!
-    update_attribute(:payment_status, 'charged') if payment_status == 'pending'
+    if payment_status == 'pending'
+      update_attribute(:payment_status, 'charged')
+      Payment.create(:price => price_with_payment_commission, :order => self, :system => 'cash', :charged_at => Time.now)
+    end
   end
 
   def no_money_received!

@@ -168,9 +168,10 @@ Ticket:
 
 Payment:
   fields:
-    default: ref, price, created_at, name_in_card, last_digits_in_card, reject_reason
-    list: ref, price, created_at, name_in_card, last_digits_in_card, payment_status, reject_reason
-    show: ref ,price, created_at, payture_state, last_digits_in_card, name_in_card, reject_reason, order
+    default: ref, price, charged_at, name_in_card, last_digits_in_card, reject_reason
+    list: ref, price, created_at, name_in_card, last_digits_in_card, payment_status, reject_reason, system
+    show: ref ,price, created_at, payture_state, last_digits_in_card, name_in_card, reject_reason, order, system
+    edit: price, charged_at
     options:
       date_formats:
         created_at: long

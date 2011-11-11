@@ -65,7 +65,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
 
   def money_received
     @order.money_received!
-    redirect_to :action => :show, :id => @order.id
+    redirect_to :controller => 'admin/payments', :action => :edit, :id => @order.payments.last.id
   end
 
   def no_money_received
