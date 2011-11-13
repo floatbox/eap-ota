@@ -90,7 +90,8 @@ module PricingMethods
     end
 
     def price_payment_commission
-      Payture.commission(price_total)
+      # Payture.commission(price_total)
+      price_with_payment_commission * Payture::PCNT
     end
 
     def price_original
@@ -156,8 +157,10 @@ module PricingMethods
       end
     end
 
+    # FIXME брать реальную долю платежа
     def price_payment_commission
-      Payture.commission(price_total)
+      # Payture.commission(price_total)
+      price_with_payment_commission * Payture::PCNT
     end
 
     #FIXME это костыль, работает не всегда, нужно сделать нормально

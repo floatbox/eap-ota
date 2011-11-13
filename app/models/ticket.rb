@@ -4,6 +4,17 @@ class Ticket < ActiveRecord::Base
   include CopyAttrs
   has_paper_trail
 
+  # FIXME сделать модуль или фикс для typus, этим оверрайдам место в typus/application.yml
+  def self.model_fields
+    super.merge(
+      :price_payment_commission => :decimal,
+      :price_with_payment_commission => :decimal,
+      :income => :decimal,
+      :income_suppliers => :decimal,
+      :income_payment_gateways => :decimal
+    )
+  end
+
   belongs_to :order
   belongs_to :parent, :class_name => 'Ticket'
   has_one :refund, :class_name => 'Ticket', :foreign_key => 'parent_id'

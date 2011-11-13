@@ -8,6 +8,7 @@ class Order < ActiveRecord::Base
   # FIXME сделать модуль или фикс для typus, этим оверрайдам место в typus/application.yml
   def self.model_fields
     super.merge(
+      :price_payment_commission => :decimal,
       :income => :decimal,
       :income_suppliers => :decimal,
       :income_payment_gateways => :decimal
