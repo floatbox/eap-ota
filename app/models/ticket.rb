@@ -13,7 +13,7 @@ class Ticket < ActiveRecord::Base
   delegate :commission_carrier, :to => :order, :allow_nil => true
 
   extend Commission::Columns
-  has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks
+  has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount
   include PricingMethods::Ticket
 
   before_save :copy_commissions_from_order
