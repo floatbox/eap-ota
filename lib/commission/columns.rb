@@ -11,7 +11,7 @@ class Commission
           :class_name => 'Commission::Formula',
           :mapping => [column, :formula],
           :converter => lambda {|val| Commission::Formula.new(val) },
-          :allow_nil => true
+          :allow_nil => false
 
       end
       # FIXME UGLY. сделать CommissionValidator < ActiveModel::EachValidator

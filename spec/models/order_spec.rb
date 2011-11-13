@@ -6,7 +6,7 @@ describe Order do
   it "should not allow to create two orders with the same pnr number" do
     order1 = Order.new :pnr_number => 'foobar'
     order2 = Order.new :pnr_number => 'FOObar'
-    order1.save.should be_true
+    order1.save!
     order2.save.should be_false
   end
 

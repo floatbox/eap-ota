@@ -175,11 +175,11 @@ module PricingMethods
 
     # FIXME надо принудительно выставлять ноль, если введена пустая комиссия?
     def recalculate_commissions
-      self.price_agent = commission_agent.call(price_fare) if commission_agent
-      self.price_subagent = commission_subagent.call(price_fare) if commission_subagent
-      self.price_consolidator = commission_consolidator.call(price_fare) if commission_consolidator
-      self.price_blanks = commission_blanks.call(price_fare) if commission_blanks
-      self.price_discount = commission_discount.call(price_fare) if commission_discount
+      self.price_agent = commission_agent.call(price_fare)
+      self.price_subagent = commission_subagent.call(price_fare)
+      self.price_consolidator = commission_consolidator.call(price_fare)
+      self.price_blanks = commission_blanks.call(price_fare)
+      self.price_discount = commission_discount.call(price_fare)
       true
     end
 
