@@ -83,6 +83,21 @@ ru:
         fix_price: "Закрепить итоговую цену / деньги уже взяты"
         <<: *PRICING_ATTRIBUTES
       ticket:
+        code: "Серия"
+        number: "Номер"
+        number_with_code: "Серия-номер"
+        status: "Состояние"
+        ticketed_date: "Дата обилечивания"
+        validating_carrier: "Валидирующий перевозчик"
+        carrier: "Валидирующий перевозчик"
+        order: "PNR"
+        first_name: "Имя"
+        last_name: "Фамилия"
+        route: "Маршрут"
+        comment: "Комментарий"
+        price_penalty: "Штраф, руб"
+        itinerary_receipt: "Ссылка на квитанцию"
+
         <<: *PRICING_ATTRIBUTES
 
   views:
