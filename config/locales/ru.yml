@@ -38,17 +38,17 @@ ru:
         price_our_markup: "Сервисный сбор Эвитерра, р."
         price_total: "Cтоимость билета до эквайринга, р."
         price_payment_commission: "Эквайринг, р."
-        price_with_payment_commission: "Итого к оплате, р."
+        price_with_payment_commission: "Итого к оплате / Оплачено, р."
         price_original: "Касса: Режим 1 или 3"
         price_tax_extra: "Касса: Режим 2"
         income: 'Доход Eviterra, р.'
         income_payment_gateways: 'Доход платежного шлюза, р.'
         income_suppliers: 'Доход поставщика, р.'
-        commission_consolidator: "Сбор 1%/2% авиацентра, %/р. с билета"
-        commission_blanks: "Сбор за бланки, %/р. c билета"
+        commission_consolidator: "Сбор 1%/2% авиацентра, %"
+        commission_blanks: "Сбор за бланки, р. c билета"
         commission_agent: "Агентская комиссия, %/р. с билета"
         commission_subagent: "Субагентская комиссия, %/р. c билета"
-        commission_discount: "Скидка от тарифа, %/р. c билета"
+        commission_discount: "Скидка от тарифа, %"
         commission_carrier: "Валидирующий перевозчик"
         commission_ticketing_method: "Тип договора/Office ID"
       order:
