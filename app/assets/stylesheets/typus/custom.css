@@ -18,4 +18,14 @@ div#ui-datepicker-div {display: none;}
 pre {font-family: Monaco, monospace; line-height: 1.2}
 a:visited {color: gray }
 
+.inputs .section {
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  background: #242527;
+  color: white;
+  font-size: 1.20em;
+  font-weight: bold;
+  padding: 0.25em 0.5em;
+  margin: 0.5em 0;
+}
 dt small {font-size: 0.85em; font-weight: normal; margin: 0 0 0 0.5em;}

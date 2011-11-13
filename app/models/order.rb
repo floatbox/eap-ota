@@ -329,15 +329,30 @@ class Order < ActiveRecord::Base
 
   # пересчет тарифов и такс
   ######################################
-  attr_accessor :needs_recalculation
-  cast_to_boolean :needs_recalculation
   validate :needs_recalculation_filter, :if => :needs_recalculation
+
+  def needs_recalculation
+    ticket_status != 'ticketed'
+  end
 
   def needs_recalculation_filter
     # из PricingMethods::Order
     recalculation
   rescue => e
-    errors.add(:needs_recalculation, e.message)
+    errors.add(:recalculation_alert, e.message)
+  end
+
+  def recalculation_alert
+    if needs_recalculation
+      "Суммы такс, сборов и скидок будут пересчитаны."
+    else
+      "Суммы такс, сборов и скидок НЕ будут пересчитаны, если заказ в состоянии 'ticketed'. Редактируйте каждый билет отдельно."
+    end + ' ' +
+      if fix_price
+        "Итоговая стоимость не изменится при перерасчете, если закреплена 'Итоговая цена'"
+      else
+        "Итоговая стоимость будет пересчитана, если ее не закрепить или если поле пустое."
+      end
   end
 
   def payture_state
