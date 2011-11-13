@@ -122,11 +122,12 @@ module PricingMethods
     ### formulas:
     # уже есть в базе: commission_subagent
     #
-    # делегируются в заказ:
+    # копируются из заказа:
     # commission_agent
     # commission_subagent
     # commission_consolidator
     # commission_blanks
+    # commission_discount
     #
     ### prices:
     # price_fare
@@ -135,6 +136,9 @@ module PricingMethods
     # price_subagent
     # price_consolidator
     # price_blanks
+    # price_discount
+    #
+    # price_penalty
 
     def price_total
       price_fare + price_tax
@@ -166,16 +170,13 @@ module PricingMethods
       price_with_payment_commission - price_fare
     end
 
+    # FIXME надо принудительно выставлять ноль, если введена пустая комиссия?
     def recalculate_commissions
-      if commission_subagent
-        self.price_subagent = commission_subagent.call(price_fare)
-      end
-      if commission_consolidator
-        self.price_consolidator = commission_consolidator.call(price_fare)
-      end
-      if commission_blanks
-        self.price_blanks = commission_blanks.call(price_fare)
-      end
+      self.price_agent = commission_agent.call(price_fare) if commission_agent
+      self.price_subagent = commission_subagent.call(price_fare) if commission_subagent
+      self.price_consolidator = commission_consolidator.call(price_fare) if commission_consolidator
+      self.price_blanks = commission_blanks.call(price_fare) if commission_blanks
+      self.price_discount = commission_discount.call(price_fare) if commission_discount
       true
     end
 

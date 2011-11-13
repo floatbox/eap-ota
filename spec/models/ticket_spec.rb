@@ -16,9 +16,11 @@ describe Ticket do
       let (:fare) {2000}
       let (:order) {
         Order.new(
+          :commission_agent => '3%',
           :commission_subagent => '4',
           :commission_consolidator => '2%',
-          :commission_blanks => '50'
+          :commission_blanks => '50',
+          :commission_discount => '1%'
         )
       }
       let (:ticket) {
@@ -29,9 +31,11 @@ describe Ticket do
       }
       before { ticket.copy_commissions_from_order }
       before { ticket.recalculate_commissions }
+      its(:price_agent) {should == fare * 0.03 }
       its(:price_subagent) {should == 4}
       its(:price_consolidator) {should == fare * 0.02 }
       its(:price_blanks ) {should == 50 }
+      its(:price_discount) {should == fare * 0.01 }
     end
 
     context "without commission_subagent" do

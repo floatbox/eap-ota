@@ -73,7 +73,7 @@ class Ticket < ActiveRecord::Base
 
   def copy_commissions_from_order
     return unless order
-    for attr in [ :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks ]
+    for attr in [ :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount ]
       if send(attr).nil?
         send("#{attr}=", order.send(attr))
       end

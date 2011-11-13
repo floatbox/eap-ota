@@ -267,24 +267,20 @@ class Order < ActiveRecord::Base
   end
 
   def update_prices_from_tickets # FIXME перенести в strategy
-    if source == 'amadeus'
-      price_total_old = self.price_total
-      sold_tickets = tickets.where(:status => 'ticketed')
-      self.price_fare = sold_tickets.sum(:price_fare)
-      # FIXME почему unless?
-      # FIXME поправить и в билетах
-      self.price_consolidator = sold_tickets.sum(:price_consolidator) unless offline_booking
-      self.price_agent = sold_tickets.sum(:price_agent)
-      self.price_subagent = sold_tickets.sum(:price_subagent)
+    price_total_old = self.price_total
+    sold_tickets = tickets.where(:status => 'ticketed')
 
-      self.price_tax = sold_tickets.sum(:price_tax)
-      self.price_difference = price_total - price_total_old if price_difference == 0
-      save
-    elsif source == 'sirena'
-      self.price_fare = tickets.sum(:price_fare)
-      self.price_tax = tickets.sum(:price_tax)
-      save
-    end
+    self.price_fare = sold_tickets.sum(:price_fare)
+    self.price_tax = sold_tickets.sum(:price_tax)
+
+    self.price_consolidator = sold_tickets.sum(:price_consolidator)
+    self.price_agent = sold_tickets.sum(:price_agent)
+    self.price_subagent = sold_tickets.sum(:price_subagent)
+    self.price_blanks = sold_tickets.sum(:price_blanks)
+    self.price_discount = sold_tickets.sum(:price_discount)
+
+    self.price_difference = price_total - price_total_old if price_difference == 0
+    save
   end
 
   # считывание offline брони из GDS
