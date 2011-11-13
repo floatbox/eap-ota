@@ -28,27 +28,27 @@ ru:
     attributes:
       # общие атрибуты в заказах и билетах
       PRICING_ATTRIBUTES: &PRICING_ATTRIBUTES
-        price_fare: "Тариф, руб"
-        price_tax: "Таксы, руб"
-        price_consolidator: "Сбор 1%/2% авиацентра, руб"
-        price_blanks: "Сбор за бланки, руб"
-        price_agent: "Агентская комиссия, руб"
-        price_subagent: "Субагентская комиссия, руб"
-        price_discount: "Скидка от тарифа, руб"
-        price_our_markup: "Сервисный сбор Эвитерра, руб"
-        price_total: "Cтоимость билета до эквайринга, руб"
-        price_payment_commission: "Эквайринг, руб"
-        price_with_payment_commission: "Итого к оплате, руб"
+        price_fare: "Тариф, р."
+        price_tax: "Таксы, р."
+        price_consolidator: "Сбор 1%/2% авиацентра, р."
+        price_blanks: "Сбор за бланки, р."
+        price_agent: "Агентская комиссия, р."
+        price_subagent: "Субагентская комиссия, р."
+        price_discount: "Скидка от тарифа, р."
+        price_our_markup: "Сервисный сбор Эвитерра, р."
+        price_total: "Cтоимость билета до эквайринга, р."
+        price_payment_commission: "Эквайринг, р."
+        price_with_payment_commission: "Итого к оплате, р."
         price_original: "Касса: Режим 1 или 3"
         price_tax_extra: "Касса: Режим 2"
-        income: 'Доход Eviterra, руб'
-        income_payment_gateways: 'Доход платежного шлюза, руб'
-        income_suppliers: 'Доход поставщика, руб'
-        commission_consolidator: "Сбор 1%/2% авиацентра, с билета"
-        commission_blanks: "Сбор за бланки, c билета"
-        commission_agent: "Агентская комиссия, с билета"
-        commission_subagent: "Субагентская комиссия, c билета"
-        commission_discount: "Скидка от тарифа, c билета"
+        income: 'Доход Eviterra, р.'
+        income_payment_gateways: 'Доход платежного шлюза, р.'
+        income_suppliers: 'Доход поставщика, р.'
+        commission_consolidator: "Сбор 1%/2% авиацентра, %/р. с билета"
+        commission_blanks: "Сбор за бланки, %/р. c билета"
+        commission_agent: "Агентская комиссия, %/р. с билета"
+        commission_subagent: "Субагентская комиссия, %/р. c билета"
+        commission_discount: "Скидка от тарифа, %/р. c билета"
         commission_carrier: "Валидирующий перевозчик"
         commission_ticketing_method: "Тип договора/Office ID"
       order:
@@ -95,7 +95,7 @@ ru:
         last_name: "Фамилия"
         route: "Маршрут"
         comment: "Комментарий"
-        price_penalty: "Штраф, руб"
+        price_penalty: "Штраф, р."
         itinerary_receipt: "Ссылка на квитанцию"
 
         <<: *PRICING_ATTRIBUTES
