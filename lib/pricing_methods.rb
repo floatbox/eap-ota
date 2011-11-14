@@ -81,17 +81,26 @@ module PricingMethods
       price_our_markup + price_consolidator + price_blanks - price_discount
     end
 
-    def calculate_price_with_payment_commission
+    def acquiring_percentage
       if pricing_method =~ /corporate/
-        self.price_with_payment_commission = price_total
+        0
       else
-        self.price_with_payment_commission = price_total + Payture.commission(price_total)
+        Payture::PCNT
       end
     end
 
+    def calculate_price_with_payment_commission
+      self.price_with_payment_commission = price_total + acquiring_compensation(price_total, acquiring_percentage)
+    end
+
+    def acquiring_compensation(price, percentage)
+      (percentage * price / ( 1 - percentage)).round(2)
+    end
+    private :acquiring_compensation
+
+    # реальная _ожидаемая_ комиссия на эквайринг (от объявленной суммы)
     def price_payment_commission
-      # Payture.commission(price_total)
-      price_with_payment_commission * Payture::PCNT
+      price_with_payment_commission * acquiring_percentage
     end
 
     def price_original
@@ -111,11 +120,6 @@ module PricingMethods
       self.price_consolidator = commission_consolidator.call(price_fare, :multiplier => blank_count)
       self.price_blanks = commission_blanks.call(price_fare, :multiplier => blank_count)
       self.price_discount = commission_discount.call(price_fare, :multiplier => blank_count)
-
-      # cash_payment_markup оставлять ее тоже?
-      # price_our_markup внести сюда скидку для кэша?
-
-      self.price_with_payment_commission = price_total + Payture.commission(price_total)
     end
   end
 
@@ -159,8 +163,7 @@ module PricingMethods
 
     # FIXME брать реальную долю платежа
     def price_payment_commission
-      # Payture.commission(price_total)
-      price_with_payment_commission * Payture::PCNT
+      price_with_payment_commission * acquiring_percentage
     end
 
     #FIXME это костыль, работает не всегда, нужно сделать нормально

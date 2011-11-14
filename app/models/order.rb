@@ -9,6 +9,7 @@ class Order < ActiveRecord::Base
   def self.model_fields
     super.merge(
       :price_payment_commission => :decimal,
+      :price_tax_extra => :decimal,
       :income => :decimal,
       :income_suppliers => :decimal,
       :income_payment_gateways => :decimal
@@ -38,7 +39,7 @@ class Order < ActiveRecord::Base
   end
 
   def self.pricing_methods
-    [['Корпоративный', 'corporate_0001']]
+    [['Обычный', ''], ['Корпоративный (эквайринг 0%)', 'corporate_0001']]
   end
 
   def self.commission_ticketing_methods

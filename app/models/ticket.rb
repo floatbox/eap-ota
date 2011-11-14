@@ -23,6 +23,9 @@ class Ticket < ActiveRecord::Base
 
   delegate :commission_carrier, :to => :order, :allow_nil => true
 
+  # FIXME - временно, эквайринг должен браться из суммы пейментов, ticketing_method - вычисляться из office_id
+  delegate :acquiring_percentage, :ticketing_method, :to => :order
+
   extend Commission::Columns
   has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount
   include PricingMethods::Ticket

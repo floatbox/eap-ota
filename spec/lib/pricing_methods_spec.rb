@@ -25,9 +25,11 @@ describe PricingMethods::Order do
   end
 
   describe "#recalculation" do
+    # делать обычный save?
     let :order do
       Order.new( base_order_attrs.merge(order_attrs) ).tap do |o|
         o.recalculation
+        o.calculate_price_with_payment_commission
       end
     end
 
