@@ -19,12 +19,12 @@ class Ticket < ActiveRecord::Base
   belongs_to :parent, :class_name => 'Ticket'
   has_one :refund, :class_name => 'Ticket', :foreign_key => 'parent_id'
 
-  delegate :source, :pnr_number, :need_attention, :paid_by, :to => :order
+  delegate :need_attention, :paid_by, :to => :order
 
   delegate :commission_carrier, :to => :order, :allow_nil => true
 
-  # FIXME - временно, эквайринг должен браться из суммы пейментов, ticketing_method - вычисляться из office_id
-  delegate :acquiring_percentage, :ticketing_method, :to => :order
+  # FIXME - временно, эквайринг должен браться из суммы пейментов
+  delegate :acquiring_percentage, :to => :order
 
   extend Commission::Columns
   has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount
@@ -44,6 +44,14 @@ class Ticket < ActiveRecord::Base
   # FIXME сделать перечисление прямо из базы, через uniq
   def self.office_ids
     ['MOWR2233B', 'MOWR228FA', 'MOWR2219U']
+  end
+
+  def ticketing_method
+    if source == 'amadeus' && office_id == 'MOWR228FA'
+      'direct'
+    else
+      'aviacenter'
+    end
   end
 
   def self.validators

@@ -70,4 +70,18 @@ describe Ticket do
     it {should_not be_valid}
     its(:save) {should_not be_true}
   end
+
+  describe "#ticketing_method" do
+
+    specify {
+      Ticket.new(:source => 'amadeus', :office_id => 'MOWR2233B').ticketing_method.should == 'aviacenter'
+    }
+
+    specify {
+      Ticket.new(:source => 'amadeus', :office_id => 'MOWR228FA').ticketing_method.should == 'direct'
+    }
+    specify {
+      Ticket.new(:source => 'sirena').ticketing_method.should == 'aviacenter'
+    }
+  end
 end
