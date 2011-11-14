@@ -1,10 +1,23 @@
 # encoding: utf-8
-class HotOffer < ActiveRecord::Base
-  attr_writer :recommendation
+class HotOffer
+
+  include Mongoid::Document
+  field :code, :type => String
+  field :url, :type => String
+  field :description, :type => String
+  field :price, :type => Integer
+  field :for_stats_only, :type => Boolean
+  field :destination_id, :type => Integer
+  field :time_delta, :type => Integer
+  field :price_variation, :type => Integer
+  field :price_variation_percent, :type => Integer
+
   belongs_to :destination
   before_create :set_some_vars
-  delegate :rt, :to => :destination
-  after_create :create_notifications
+
+  validates_presence_of :code, :url, :description, :price
+
+  attr_writer :recommendation
 
   def create_notifications
     Subscription.where(:from_iata => destination.from.iata, :to_iata => destination.to.iata, :rt => destination.rt).active.every.create_notice(self) if !for_stats_only && destination.hot_offers_counter >= 20 && price_variation_percent <= -20
@@ -12,9 +25,9 @@ class HotOffer < ActiveRecord::Base
 
   def self.featured code=nil
     # FIXME SQL group_by не был бы лучше?
-    offers = where("for_stats_only = ? AND price_variation < 0", false).order('created_at DESC').limit(30)
+    offers = HotOffer.where("for_stats_only" => false ).and(:price_variation.gt => 0).order_by(:created_at => :desc).limit(30)
     # эта строчка, видимо, не используется
-    offers = offers.where("code != ?", code) if code
+    offers = offers.where(:code.ne => code) if code
     offers.all.group_by(&:destination_id).values.every.first
   end
 
@@ -28,36 +41,25 @@ class HotOffer < ActiveRecord::Base
     self.description = @search.human_lite
   end
 
-  def pricer_form
-    @pricer_form ||= PricerForm.load_from_cache(code)
-  end
-
   private
 
   def set_some_vars
-    self.price = @recommendation.price_with_payment_commission / @search.people_count.values.sum
-    self.time_delta = (Date.strptime(@search.segments[0].date, '%d%m%y') - Date.today).to_i
-    destination = Destination.find_or_initialize_by_from_id_and_to_id_and_rt(@search.segments[0].from_as_object.id, @search.segments[0].to_as_object.id, @search.rt)
-    self.date1 = @search.segments[0].date_as_date
-    self.date2 = @search.segments[1].date_as_date if @search.segments[1]
-    #вся эта херня из-за того, что destination ингда создается вообще без hot_offers
-    if destination.average_price
-      destination.average_price += (price - destination.average_price) / (destination.hot_offers.count + 1)
-    else
-      destination.average_price = price
+    if @search and @recommendation
+        self.price = @recommendation.price_with_payment_commission / @search.people_count.values.sum
+        self.time_delta = (Date.strptime(@search.segments[0].date, '%d%m%y') - Date.today).to_i
+        self.destination = Destination.find_or_create_by(:from_id => @search.segments[0].from_as_object.id, :to_id => @search.segments[0].to_as_object.id, :rt => @search.rt)
+      unless destination.new_record?
+          destination.average_price = (destination.hot_offers.every.price.sum + price) / (destination.hot_offers.count + 1)
+          destination.average_time_delta = (destination.hot_offers.every.time_delta.sum + time_delta) / (destination.hot_offers.count + 1)
+      else
+        destination.average_price = price
+        destination.average_time_delta = time_delta
+      end
+      destination.hot_offers_counter += 1
+      destination.save
+      self.price_variation =  price - destination.average_price
+      self.price_variation_percent = ((price / destination.average_price.to_f - 1)*100).to_i
     end
-    if destination.average_time_delta
-      destination.average_time_delta +=  (time_delta - destination.average_time_delta) / (destination.hot_offers.count + 1)
-    else
-      destination.average_time_delta = time_delta
-    end
-    destination.hot_offers_counter += 1
-    destination.save
-    ## херова магия, иначе при создании hot_offer у него не было destination_id
-    self.destination = destination
-    self.price_variation = price - destination.average_price
-    self.price_variation_percent = ((price / destination.average_price.to_f - 1)*100).to_i
-  end
-
 end
 
+end
