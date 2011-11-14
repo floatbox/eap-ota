@@ -145,7 +145,7 @@ OrderComment:
 Ticket:
   fields:
     default: description, order, carrier, name, route, price_fare, price_tax, price_refund, office_id, validator, status, kind, ticketed_date, itinerary_receipt, parent, processed
-    list: number_with_code, order, carrier, name, route, price_fare, price_tax, price_refund, office_id, validator, status, kind, ticketed_date, itinerary_receipt, parent, processed
+    list: link_to_show, order, carrier, name, route, price_fare, price_tax, price_refund, office_id, validator, status, kind, ticketed_date, itinerary_receipt, parent, processed
     new:  price_fare, price_tax, price_penalty, ticketed_date, comment
     show: order, carrier, number_with_code, last_name, first_name, route, price_fare, price_tax, commission_consolidator, price_consolidator, price_blanks, commission_agent, price_agent, commission_subagent, price_subagent, commission_discount, price_discount, price_penalty, price_payment_commission, price_with_payment_commission, office_id, validator, commission_ticketing_method, status, ticketed_date, itinerary_receipt
     edit: code, number, status, ticketed_date, validating_carrier, last_name, first_name, route, price_fare, price_tax, commission_consolidator, commission_blanks, commission_agent, commission_subagent, commission_discount, price_penalty, office_id, validator, comment

@@ -136,7 +136,7 @@ class Ticket < ActiveRecord::Base
   def description
     if kind == 'ticket'
       (
-      "Билет  № #{number_with_code} <br>" +
+      "Билет  № #{link_to_show} <br>" +
         if self.refund
           "есть #{!refund.processed ? 'неподтвержденный клиентом' : ''} возврат "
         else
@@ -146,7 +146,7 @@ class Ticket < ActiveRecord::Base
       ).html_safe
     elsif kind == 'refund'
       (
-      "Возврат для билета № #{number_with_code} <br>" +
+      "Возврат для билета № #{link_to_show} <br>" +
       "Сумма к возварату: #{price_refund} рублей"
       ).html_safe
     end
@@ -155,6 +155,11 @@ class Ticket < ActiveRecord::Base
   # для админки
   def to_label
     "#{source} #{number} #{route} #{updated_at}"
+  end
+
+  def link_to_show
+    url = url_for(:controller => 'admin/tickets', :action => :show, :id => id, :only_path => true)
+    "<a href=#{url}>#{number_with_code}".html_safe
   end
 
   def itinerary_receipt
