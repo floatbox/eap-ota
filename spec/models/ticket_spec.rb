@@ -84,4 +84,34 @@ describe Ticket do
       Ticket.new(:source => 'sirena').commission_ticketing_method.should == 'aviacenter'
     }
   end
+
+  describe "#update_prices_in_order" do
+
+    include Commission::Fx
+
+    before do
+      @order = Order.create! :pnr_number => 'abcdefgh', :commission_consolidator => '1%'
+      @ticket = @order.tickets.ensure_exists '1234'
+      @ticket.save!
+    end
+
+    it "should have no errors" do
+      @ticket.should be_valid
+    end
+
+    it "should save ticket" do
+      @ticket.should_not be_new_record
+    end
+
+    it "should store commission when saving" do
+      @ticket.should_not_receive(:copy_commissions_from_order)
+      @ticket.price_fare = '2000'
+      @ticket.price_tax = '1000'
+      @ticket.commission_consolidator = '2%'
+      @ticket.commission_consolidator.should == Fx('2%')
+      @ticket.save!
+      @ticket.commission_consolidator.should == Fx('2%')
+    end
+
+  end
 end

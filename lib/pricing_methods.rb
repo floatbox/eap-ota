@@ -178,6 +178,10 @@ module PricingMethods
 
     # FIXME надо принудительно выставлять ноль, если введена пустая комиссия?
     def recalculate_commissions
+
+      # FIXME вынести отсюда обратно в модель
+      copy_commissions_from_order if new_record?
+
       self.price_agent = commission_agent.call(price_fare)
       self.price_subagent = commission_subagent.call(price_fare)
       self.price_consolidator = commission_consolidator.call(price_fare)
