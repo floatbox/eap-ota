@@ -71,17 +71,17 @@ describe Ticket do
     its(:save) {should_not be_true}
   end
 
-  describe "#ticketing_method" do
+  describe "#commission_ticketing_method" do
 
     specify {
-      Ticket.new(:source => 'amadeus', :office_id => 'MOWR2233B').ticketing_method.should == 'aviacenter'
+      Ticket.new(:source => 'amadeus', :office_id => 'MOWR2233B').commission_ticketing_method.should == 'aviacenter'
     }
 
     specify {
-      Ticket.new(:source => 'amadeus', :office_id => 'MOWR228FA').ticketing_method.should == 'direct'
+      Ticket.new(:source => 'amadeus', :office_id => 'MOWR228FA').commission_ticketing_method.should == 'direct'
     }
     specify {
-      Ticket.new(:source => 'sirena').ticketing_method.should == 'aviacenter'
+      Ticket.new(:source => 'sirena').commission_ticketing_method.should == 'aviacenter'
     }
   end
 end

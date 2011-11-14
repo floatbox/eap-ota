@@ -46,7 +46,7 @@ class Ticket < ActiveRecord::Base
     ['MOWR2233B', 'MOWR228FA', 'MOWR2219U']
   end
 
-  def ticketing_method
+  def commission_ticketing_method
     if source == 'amadeus' && office_id == 'MOWR228FA'
       'direct'
     else
