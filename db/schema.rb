@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111011164013) do
+ActiveRecord::Schema.define(:version => 20111116085223) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -288,6 +288,17 @@ ActiveRecord::Schema.define(:version => 20111011164013) do
     t.string   "partner"
     t.boolean  "has_refunds",                                                 :default => false,    :null => false
     t.string   "pricing_method",                                              :default => "",       :null => false
+    t.string   "commission_consolidator"
+    t.string   "commission_discount"
+    t.decimal  "price_discount",                :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.string   "commission_blanks"
+    t.decimal  "price_consolidator",            :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_blanks",                  :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_agent",                   :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_subagent",                :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.string   "commission_ticketing_method",                                 :default => "",       :null => false
+    t.boolean  "fix_price",                                                   :default => false,    :null => false
+    t.boolean  "old_booking",                                                 :default => false,    :null => false
   end
 
   create_table "payments", :force => true do |t|
@@ -305,6 +316,7 @@ ActiveRecord::Schema.define(:version => 20111011164013) do
     t.string   "ref"
     t.datetime "charged_at"
     t.string   "threeds_key"
+    t.string   "system"
   end
 
   create_table "regions", :force => true do |t|
@@ -364,6 +376,15 @@ ActiveRecord::Schema.define(:version => 20111011164013) do
     t.integer  "parent_id"
     t.decimal  "price_penalty",             :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.text     "comment"
+    t.string   "commission_agent"
+    t.string   "commission_consolidator"
+    t.string   "commission_blanks"
+    t.decimal  "price_consolidator",        :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_blanks",              :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_agent",               :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_subagent",            :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.string   "commission_discount"
+    t.decimal  "price_discount",            :precision => 9, :scale => 2, :default => 0.0,      :null => false
   end
 
   create_table "typus_users", :force => true do |t|

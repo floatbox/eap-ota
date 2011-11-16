@@ -4,6 +4,8 @@ require 'spec_helper'
 
 describe CommissionRules do
 
+  include Commission::Fx
+
   context "just one commission" do
     let :commission_class do
       Class.new do
@@ -45,7 +47,7 @@ describe CommissionRules do
 
     it "should have registered three commissions" do
       # FIXME вынести подсчет количества комиссий в хелпер
-      commission_class.commissions.values.flatten.should have(3).items
+      commission_class.all.should have(3).items
     end
 
     describe "#exists_for?" do
@@ -59,14 +61,39 @@ describe CommissionRules do
     end
   end
 
+  context "all the rules" do
+    let :commission_class do
+      Class.new do
+        include CommissionRules
+
+        carrier 'FV'
+        consolidator '1%'
+        blanks 50
+        discount '2%'
+        commission '2%/3'
+      end
+    end
+
+    let :commission do
+      commission_class.all.first
+    end
+
+    subject {commission}
+
+    its(:agent) {should == Fx('2%')}
+    its(:subagent) {should == Fx(3)}
+    its(:consolidator) {should == Fx('1%')}
+    its(:blanks) {should == Fx('50')}
+  end
+
   context "setting defaults" do
 
     let :commission_class do
       Class.new do
         include CommissionRules
         defaults :system => :amadeus,
-          :ticketing => :aviacenter,
-          :consolidators => '2%',
+          :ticketing_method => :aviacenter,
+          :consolidator => '2%',
           :blanks => 23,
           :discount => '5%'
 
@@ -75,8 +102,8 @@ describe CommissionRules do
 
         carrier 'AB'
         carrier_defaults :system => :sirena,
-          :ticketing => :ours,
-          :consolidators => '1%',
+          :ticketing_method => :direct,
+          :consolidator => '1%',
           :blanks => 0,
           :discount => '1%'
         commission '1%/1%'
@@ -86,13 +113,13 @@ describe CommissionRules do
 
     describe ".defaults" do
       context "called correctly" do
-        subject { commission_class.find_for_carrier('FV').first }
+        subject { commission_class.for_carrier('FV').first }
 
         its(:system) { should eq(:amadeus) }
-        its(:ticketing) { should eq(:aviacenter) }
-        its(:consolidators) { should eq('2%') }
-        its(:blanks) { should eq(23) }
-        its(:discount) { should eq('5%') }
+        its(:ticketing_method) { should eq(:aviacenter) }
+        its(:consolidator) { should eq(Fx('2%')) }
+        its(:blanks) { should eq(Fx(23)) }
+        its(:discount) { should eq(Fx('5%')) }
       end
 
       context "called with wrong key" do
@@ -109,13 +136,13 @@ describe CommissionRules do
 
     describe ".carrier_defaults" do
       context "called correctly" do
-        subject { commission_class.find_for_carrier('AB').last }
+        subject { commission_class.for_carrier('AB').last }
 
         its(:system) { should eq(:sirena) }
-        its(:ticketing) { should eq(:ours) }
-        its(:consolidators) { should eq('1%') }
-        its(:blanks) { should eq(0) }
-        its(:discount) { should eq('1%') }
+        its(:ticketing_method) { should eq(:direct) }
+        its(:consolidator) { should eq(Fx('1%')) }
+        its(:blanks) { should eq(Fx(0)) }
+        its(:discount) { should eq(Fx('1%')) }
       end
 
       context "called with wrong key" do
@@ -129,6 +156,20 @@ describe CommissionRules do
           }.to raise_error(ArgumentError)
         end
       end
+    end
+
+    describe ".for_carrier" do
+      subject { commission_class.for_carrier('AB') }
+      it {should be_an(Array)}
+      its(:size) { should == 2 }
+      its(:first) { should be_an(commission_class) }
+    end
+
+    describe ".all" do
+      subject { commission_class.all }
+      it {should be_an(Array)}
+      its(:size) { should == 3 }
+      its(:first) { should be_an(commission_class) }
     end
   end
 end

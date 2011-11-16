@@ -7,15 +7,18 @@ module CommissionRules
   end
 
   include KeyValueInit
+  include Commission::Fx
+  extend Commission::Attrs
+  has_commission_attrs :agent, :subagent, :consolidator, :blanks, :discount
 
-  attr_accessor :carrier, :agent, :subagent,
+  attr_accessor :carrier,
     :disabled, :not_implemented, :no_commission,
     :interline, :domestic, :international, :classes, :subclasses,
     :routes,
     :departure, :departure_country, :important,
     :check, :examples, :agent_comments, :subagent_comments, :source,
     :expr_date, :strt_date,
-    :system, :ticketing, :consolidators, :blanks, :discount
+    :system, :ticketing_method, :corrector
 
   def disabled?
     disabled || not_implemented || no_commission
@@ -102,61 +105,9 @@ module CommissionRules
     end
   end
 
-  def share(fare, tickets=1)
-    # FIXME сделать поддержу EUR
-    if subagent['%']
-      fround(fare * subagent.to_f / 100)
-    else
-      fround(subagent.to_f)
-    end
+  def correct!
+    Commission::Correctors.apply(self, corrector)
   end
-
-  def consolidator_markup(fare, tickets=1)
-    if share(fare) <= 5
-      # особые условия для этих компаний.
-      if %W( LH LX KL AF OS ).include? carrier
-        fare * 0.01
-      else
-        fare * 0.02
-      end
-    else
-      0
-    end
-  end
-
-  def discount_amount(fare, tickets=1)
-    if discount.to_s['%']
-      fround(fare * discount.to_f / 100)
-    else
-      fround(discount.to_f)
-    end
-  end
-
-  def agent_percentage?
-    agent['%']
-  end
-
-  def agent_euro?
-    agent['eur']
-  end
-
-  def agent_value
-    val = agent.to_f
-    val *= euro_rate if agent_euro?
-    val
-  end
-
-  #FIXME нужно починить для работы с валютой
-  def euro_rate
-    Conf.amadeus.euro_rate
-  end
-
-  private
-
-  def fround x
-    ('%.2f' % x.to_f).to_f
-  end
-
 
   def self.create_class_attrs klass
     klass.instance_eval do
@@ -175,19 +126,15 @@ module CommissionRules
 
   module ClassMethods
 
-    ALLOWED_KEYS_FOR_DEFS = %W[ system ticketing consolidators blanks discount ].map(&:to_sym)
+    ALLOWED_KEYS_FOR_DEFS = %W[ system ticketing_method consolidator blanks discount corrector ].map(&:to_sym)
 
     def defaults def_opts={}
-      if wrong_keys = (def_opts.keys - ALLOWED_KEYS_FOR_DEFS).presence
-        raise ArgumentError, "wrong key(s) for defaults: #{wrong_keys}"
-      end
+      def_opts.to_options!.assert_valid_keys(ALLOWED_KEYS_FOR_DEFS)
       self.default_opts = def_opts
     end
 
     def carrier_defaults def_opts={}
-      if wrong_keys = (def_opts.keys - ALLOWED_KEYS_FOR_DEFS).presence
-        raise ArgumentError, "wrong key(s) for defaults: #{wrong_keys}"
-      end
+      def_opts.to_options!.assert_valid_keys(ALLOWED_KEYS_FOR_DEFS)
       self.carrier_default_opts = def_opts
     end
 
@@ -211,10 +158,12 @@ module CommissionRules
 
       commission = new({
         :carrier => @carrier,
-        :agent => vals[0].to_s,
-        :subagent => vals[1].to_s,
+        :agent => vals[0],
+        :subagent => vals[1],
         :source => caller_address
       }.merge(opts).reverse_merge(carrier_default_opts).reverse_merge(default_opts))
+
+      commission.correct!
 
       self.opts = {}
       register commission
@@ -324,12 +273,12 @@ module CommissionRules
       opts[:system] = value
     end
 
-    def ticketing value
-      opts[:ticketing] = value
+    def ticketing_method value
+      opts[:ticketing_method] = value
     end
 
-    def consolidators value
-      opts[:consolidators] = value
+    def consolidator value
+      opts[:consolidator] = value
     end
 
     def blanks value
@@ -348,18 +297,22 @@ module CommissionRules
       end
     end
 
-    def find_for_carrier(validating_carrier_iata)
+    def all
+      commissions.values.flatten.sort_by {|c| c.source.to_i }
+    end
+
+    def for_carrier(validating_carrier_iata)
       commissions[validating_carrier_iata]
     end
 
     def exists_for?(recommendation)
-      find_for_carrier(recommendation.validating_carrier_iata).present?
+      for_carrier(recommendation.validating_carrier_iata).present?
     end
 
     # test methods
     def test
       self.skip_interline_validity_check = true
-      commissions.values.flatten.sort_by {|c| c.source.to_i }.each do |commission|
+      all.each do |commission|
         (commission.examples || next).each do |code, source|
           rec = Recommendation.example(code, :carrier => commission.carrier)
           proposed = find_for(rec)

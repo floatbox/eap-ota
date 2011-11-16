@@ -3,10 +3,36 @@ class Ticket < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   include CopyAttrs
   has_paper_trail
+
+  # FIXME сделать модуль или фикс для typus, этим оверрайдам место в typus/application.yml
+  def self.model_fields
+    super.merge(
+      :price_payment_commission => :decimal,
+      :price_with_payment_commission => :decimal,
+      :income => :decimal,
+      :income_suppliers => :decimal,
+      :income_payment_gateways => :decimal
+    )
+  end
+
   belongs_to :order
   belongs_to :parent, :class_name => 'Ticket'
   has_one :refund, :class_name => 'Ticket', :foreign_key => 'parent_id'
-  delegate :source, :commission_carrier, :pnr_number, :need_attention, :paid_by, :commission_carrier, :to => :order, :allow_nil => true
+
+  delegate :need_attention, :paid_by, :to => :order
+
+  delegate :commission_carrier, :to => :order, :allow_nil => true
+
+  delegate :old_booking, :to => :order, :allow_nil => true
+
+  # FIXME - временно, эквайринг должен браться из суммы пейментов
+  delegate :acquiring_percentage, :to => :order
+
+  extend Commission::Columns
+  has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount
+  include PricingMethods::Ticket
+
+  before_save :recalculate_commissions
 
   scope :uncomplete, where(:ticketed_date => nil)
 
@@ -18,6 +44,14 @@ class Ticket < ActiveRecord::Base
   # FIXME сделать перечисление прямо из базы, через uniq
   def self.office_ids
     ['MOWR2233B', 'MOWR228FA', 'MOWR2219U']
+  end
+
+  def commission_ticketing_method
+    if source == 'amadeus' && office_id == 'MOWR228FA'
+      'direct'
+    else
+      'aviacenter'
+    end
   end
 
   def self.validators
@@ -38,6 +72,8 @@ class Ticket < ActiveRecord::Base
   end
 
   def update_prices_in_order
+    # FIXME убить или оставить только ради тестов?
+    return unless order
     order.tickets.reload if order
     order.update_prices_from_tickets if order
   end
@@ -58,6 +94,15 @@ class Ticket < ActiveRecord::Base
       :code,
       :number,
       :source
+  end
+
+  def copy_commissions_from_order
+    return unless order
+    for attr in [ :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount ]
+      #if send(attr).nil?
+        send("#{attr}=", order.send(attr))
+      #end
+    end
   end
 
   def ticket_date
@@ -91,27 +136,11 @@ class Ticket < ActiveRecord::Base
     validating_carrier || commission_carrier
   end
 
-  def price_total
-    price_fare + price_tax
-  end
-
-  def price_transfer
-    price_fare + price_tax + price_consolidator_markup - price_share
-  end
-
-  def price_refund
-    if kind == 'refund'
-      -(price_tax + price_fare + price_penalty)
-    else
-      0
-    end
-  end
-
   # для тайпуса
   def description
     if kind == 'ticket'
       (
-      "Билет  № #{number_with_code} <br>" +
+      "Билет  № #{link_to_show} <br>" +
         if self.refund
           "есть #{!refund.processed ? 'неподтвержденный клиентом' : ''} возврат "
         else
@@ -121,40 +150,20 @@ class Ticket < ActiveRecord::Base
       ).html_safe
     elsif kind == 'refund'
       (
-      "Возврат для билета № #{number_with_code} <br>" +
+      "Возврат для билета № #{link_to_show} <br>" +
       "Сумма к возварату: #{price_refund} рублей"
       ).html_safe
     end
   end
 
-  #FIXME это костыль, работает не всегда, нужно сделать нормально
-  def price_with_payment_commission
-    k = (price_tax + price_fare).to_f / (order.price_fare + order.price_tax)
-    order.price_with_payment_commission * k
-  end
-
-  def price_tax_and_markup_and_payment
-    price_with_payment_commission - price_fare
-  end
-
-  def recalculate_commissions
-    if commission_subagent
-      self.price_share = commission_subagent['%'] ? (price_fare * commission_subagent[0...-1].to_f / 100) : commission_subagent.to_f
-      self.price_consolidator_markup = if price_share > 5
-          0
-        elsif %W( LH LX KL AF OS ).include? commission_carrier
-          price_fare * 0.01
-        else
-          price_fare * 0.02
-        end
-    end
-    true
-  end
-  before_save :recalculate_commissions
-
   # для админки
   def to_label
     "#{source} #{number} #{route} #{updated_at}"
+  end
+
+  def link_to_show
+    url = url_for(:controller => 'admin/tickets', :action => :show, :id => id, :only_path => true)
+    "<a href=#{url}>#{number_with_code}".html_safe
   end
 
   def itinerary_receipt

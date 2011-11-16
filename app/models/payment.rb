@@ -14,6 +14,10 @@ class Payment < ActiveRecord::Base
     "#{ref} #{name_in_card} #{'%.2f' % price} р. #{payment_status}"
   end
 
+  def self.systems
+    ['payture', 'cash']
+  end
+
   def set_ref
     update_attribute(:ref, Conf.payment.order_id_prefix + id.to_s)
   end

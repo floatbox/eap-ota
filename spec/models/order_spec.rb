@@ -6,7 +6,7 @@ describe Order do
   it "should not allow to create two orders with the same pnr number" do
     order1 = Order.new :pnr_number => 'foobar'
     order2 = Order.new :pnr_number => 'FOObar'
-    order1.save.should be_true
+    order1.save!
     order2.save.should be_false
   end
 
@@ -22,6 +22,24 @@ describe Order do
       order.send :capitalize_pnr
       order.pnr_number.should == 'БХЦ45'
     end
+  end
+
+  describe "#create_cash_payment" do
+    before(:each) do
+      @order = Order.new(:pnr_number => 'XXX')
+      @order.save
+      @order.price_with_payment_commission = 20.2
+      @order.create_cash_payment
+    end
+
+    it 'should create payment with system: cash' do
+      @order.payments.last.system.should == 'cash'
+    end
+
+    it 'should create payment with correct price' do
+      @order.payments.last.price.should == 20.2
+    end
+
   end
 
 
@@ -116,4 +134,16 @@ describe Order do
     end
   end
 
+  context "without commissions" do
+    let (:valid_order) { Order.new :pnr_number => 'abcde' }
+    subject {valid_order}
+    it { should be_valid }
+  end
+
+  context "with wrong commission" do
+    let (:invalid_commission) { '123,34%' }
+    let (:invalid_order) { Order.new :pnr_number => 'abcde', :commission_agent => invalid_commission }
+    subject {invalid_order}
+    it { should_not be_valid }
+  end
 end

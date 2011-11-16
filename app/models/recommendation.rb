@@ -13,6 +13,8 @@ class Recommendation
     :city_iatas, :airport_iatas, :country_iatas, :route,
       :to => 'variants.first'
 
+  delegate :subagent, :agent, :consolidator, :blanks, :discount, :ticketing, :to => :commission, :prefix => :commission, :allow_nil => true
+
   def availability
     availabilities.compact.min.to_i if availabilities
   end
@@ -112,26 +114,35 @@ class Recommendation
     price_tax + price_markup + price_payment
   end
 
-  # доля от комиссии консолидатора, которая достанется нам
-  def price_share
+  def price_agent
     return 0 unless commission
-    commission.share(price_fare)
+    commission_agent.call(price_fare, :multiplier =>  blank_count)
   end
 
-  def price_consolidator_markup
+  def price_subagent
     return 0 unless commission
-    commission.consolidator_markup(price_fare, blank_count)
+    commission_subagent.call(price_fare, :multiplier =>  blank_count)
+  end
+
+  def price_consolidator
+    return 0 unless commission
+    commission_consolidator.call(price_fare, :multiplier => blank_count)
+  end
+
+  def price_blanks
+    return 0 unless commission
+    commission_blanks.call(price_fare, :multiplier => blank_count)
   end
 
   def price_discount
     return 0 unless commission
-    commission.discount_amount(price_fare, blank_count)
+    commission_discount.call(price_fare, :multiplier => blank_count)
   end
 
   # надбавка к цене амадеуса
   def price_markup
     ajust_markup! if @price_our_markup.nil?
-    price_our_markup + price_consolidator_markup - (Conf.payment.use_discount ?  price_discount : 0 )
+    price_our_markup + price_consolidator + price_blanks - price_discount
   end
 
   def ajust_markup!
@@ -145,6 +156,11 @@ class Recommendation
       else
         Commission.find_for(self)
       end
+  end
+
+  # пытаемся избежать сохранения формул в order_forms_cache
+  def reset_commission!
+    @commission = nil
   end
 
   def segments

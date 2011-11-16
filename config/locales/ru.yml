@@ -1,4 +1,4 @@
-# Sample localization file for English. Add more files in this directory for other locales.
+# S:ample localization file for English. Add more files in this directory for other locales.
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 ru:
@@ -26,17 +26,83 @@ ru:
       typus_user: 'Пользователь Typus'
       notification: 'Оповещение'
     attributes:
+      # общие атрибуты в заказах и билетах
+      PRICING_ATTRIBUTES: &PRICING_ATTRIBUTES
+        old_booking: "Бронирование сделано до введения скидок. Запретить пересчет."
+        price_fare: "Тариф, р."
+        price_tax: "Таксы, р."
+        price_consolidator: "Сбор 1%/2% авиацентра, р."
+        price_blanks: "Сбор за бланки, р."
+        price_agent: "Агентская комиссия, р."
+        price_subagent: "Субагентская комиссия, р."
+        price_discount: "Скидка от тарифа, р."
+        price_our_markup: "Сервисный сбор Эвитерра, р."
+        price_total: "Cтоимость билета до эквайринга, р."
+        price_payment_commission: "Эквайринг, р."
+        price_with_payment_commission: "Итого к оплате / Оплачено, р."
+        price_original: "Касса: Режим 1 или 3"
+        price_tax_extra: "Касса: Режим 2"
+        income: 'Доход Eviterra, р.'
+        income_payment_gateways: 'Доход платежного шлюза, р.'
+        income_suppliers: 'Доход поставщика, р.'
+        commission_consolidator: "Сбор 1%/2% авиацентра, %"
+        commission_blanks: "Сбор за бланки, р. c билета"
+        commission_agent: "Агентская комиссия, %/р. с билета"
+        commission_subagent: "Субагентская комиссия, %/р. c билета"
+        commission_discount: "Скидка от тарифа, %"
+        commission_carrier: "Валидирующий перевозчик"
+        commission_ticketing_method: "Тип договора/Office ID"
       order:
+        commission_agent_comments: "Текст договора по агентской комиссии"
+        commission_subagent_comments: "Текст договора по субагентской комиссии"
+        blank_count: "Количество бланков"
         has_refunds: "Были возвраты"
-        price_fare: "Тариф"
-        price_tax: "Таксы"
-        price_consolidator_markup: "Сбор авиацентра в рублях"
-        price_our_markup: "Сервисный сбор Эвитерра"
-        price_total: "Итого себестоимость билета"
-        price_with_payment_commission: "Итого к оплате"
+        charge_date: "Дата получения платежа"
         needs_update_from_gds: "Получить данные бронирования из GDS (экспериментально)"
-        offline_booking: "Неавтоматический режим обработки бронирования (offline booking)"
-        pricing_method: 'Рассчет цены (pricing method)'
+        offline_booking: "Ручная обработка бронирования"
+        pricing_method: 'Рассчет итоговой цены'
+        order: "Идентификатор платежа"
+        source: "GDS"
+        description: "Комментарий к форме оплаты, для клиента"
+        route: "Маршрут"
+        pnr_number: "Номер PNR"
+        payment_status: "Состояние платежа"
+        ticket_status: "Состояние брони/билетов"
+        payment_type: "Способ оплаты"
+        last_pay_time: "Ссылка оплаты работает до"
+        contact: "Контактные данные"
+        phone: "Телефон"
+        sirena_lead_pass: "Фамилия первого пассажира в брони, для Сирены"
+        name_in_card: "ФИО на кредитной карте"
+        last_digits_in_card: "Последние 4 цифры карты"
+        full_info: "Данные пассажиров"
+        created_at: "Создан"
+        updated_at: "Последнее изменение"
+        delivery: "Адрес доставки"
+        partner: "Партнер"
+        fix_price: "Закрепить итоговую цену / деньги уже взяты"
+        recalculation_alert: "Подсказка к перерассчету комиссий, сборов и цен"
+        section_general_info: "Информация о заказе"
+        section_recalculation: "Рассчет цены"
+        section_state_and_control: "Состояние и управление заказом"
+        <<: *PRICING_ATTRIBUTES
+      ticket:
+        code: "Серия"
+        number: "Номер"
+        number_with_code: "Серия-номер"
+        status: "Состояние"
+        ticketed_date: "Дата обилечивания"
+        validating_carrier: "Валидирующий перевозчик"
+        carrier: "Валидирующий перевозчик"
+        order: "PNR"
+        first_name: "Имя"
+        last_name: "Фамилия"
+        route: "Маршрут"
+        comment: "Комментарий"
+        price_penalty: "Штраф, р."
+        itinerary_receipt: "Ссылка на квитанцию"
+
+        <<: *PRICING_ATTRIBUTES
 
   views:
     pagination:

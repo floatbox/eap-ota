@@ -2,6 +2,19 @@
 class Order < ActiveRecord::Base
 
   include CopyAttrs
+  include PricingMethods::Order
+  include IncomeDistribution
+
+  # FIXME сделать модуль или фикс для typus, этим оверрайдам место в typus/application.yml
+  def self.model_fields
+    super.merge(
+      :price_payment_commission => :decimal,
+      :price_tax_extra => :decimal,
+      :income => :decimal,
+      :income_suppliers => :decimal,
+      :income_payment_gateways => :decimal
+    )
+  end
 
   # new - дефолтное значение без смысла
   # not blocked - ожидание 3ds, неприход наличных, убивается шедулером
@@ -26,13 +39,21 @@ class Order < ActiveRecord::Base
   end
 
   def self.pricing_methods
-    [['Корпоративный', 'corporate_0001']]
+    [['Обычный', ''], ['Корпоративный (эквайринг 0%)', 'corporate_0001']]
+  end
+
+  def self.commission_ticketing_methods
+    [['Авиацентр (Сирена, MOWR2233B)', 'aviacenter'], ['Прямой договор (MOWR228FA)', 'direct']]
   end
 
   # фейковый текст для маршрут-квитанций. может быть, вынести в хелпер?
   PAID_BY = {'card' => 'Invoice', 'delivery' => 'Cash', 'cash' => 'Cash', 'invoice' => 'Invoice'}
 
   attr_writer :itinerary_receipt_view
+
+  extend Commission::Columns
+  has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount
+  has_percentage_only_commissions :commission_consolidator, :commission_discount
 
   def self.[] number
     find_by_pnr_number number
@@ -51,7 +72,7 @@ class Order < ActiveRecord::Base
   validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
 
   before_validation :capitalize_pnr
-  before_save :calculate_price_with_payment_commission
+  before_save :calculate_price_with_payment_commission, :if => lambda { price_with_payment_commission.blank? || price_with_payment_commission.zero? || !fix_price? }
   before_create :generate_code, :set_payment_status
   after_save :create_notification
 
@@ -69,6 +90,8 @@ class Order < ActiveRecord::Base
       end
     end
   end
+
+
 
   # FIXME сломается на ruby1.9
   def capitalize_pnr
@@ -111,25 +134,12 @@ class Order < ActiveRecord::Base
     1 if price_difference != 0
   end
 
-  def price_total
-    price_fare + price_tax + price_our_markup + price_consolidator_markup
-  end
-
   def price_refund
     tickets.where(:kind => 'refund').every.price_refund.sum
   end
 
   def generate_code
     self.code = ShortUrl.random_hash
-  end
-
-  def calculate_price_with_payment_commission
-    return if ['blocked', 'charged'].include? payment_status
-    if pricing_method =~ /corporate/
-      self.price_with_payment_commission = price_total
-    else
-      self.price_with_payment_commission = price_total + Payture.commission(price_total)
-    end
   end
 
   # по этой штуке во маршрут-квитанции определяется, "бронирование" это или уже "билет"
@@ -179,28 +189,26 @@ class Order < ActiveRecord::Base
     if recommendation.commission
       copy_attrs recommendation.commission, self, {:prefix => :commission},
         :carrier,
+        :ticketing_method,
         :agent,
         :subagent,
+        :consolidator,
+        :blanks,
+        :discount,
         :agent_comments,
         :subagent_comments
 
       copy_attrs recommendation, self,
-        :price_share,
+        :price_agent,
+        :price_subagent,
         :price_our_markup,
-        :price_consolidator_markup
+        :price_consolidator,
+        :price_blanks,
+        :price_discount
     end
     self.ticket_status = 'booked'
     self.name_in_card = order_form.card.name
     self.last_digits_in_card = order_form.card.number4
-  end
-
-  # вынести куда-нибудь
-  def price_tax_and_markup_and_payment
-    price_with_payment_commission - price_fare
-  end
-
-  def price_tax_and_markup
-    price_tax + price_consolidator_markup + price_our_markup
   end
 
   def raw # FIXME тоже в стратегию?
@@ -261,22 +269,22 @@ class Order < ActiveRecord::Base
   end
 
   def update_prices_from_tickets # FIXME перенести в strategy
-    if source == 'amadeus'
-      price_total_old = self.price_total
-      sold_tickets = tickets.where(:status => 'ticketed')
-      self.price_fare = sold_tickets.sum(:price_fare)
-      # FIXME почему unless?
-      self.price_consolidator_markup = sold_tickets.sum(:price_consolidator_markup) unless offline_booking
-      self.price_share = sold_tickets.sum(:price_share)
+    # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
+    return if old_booking
+    price_total_old = self.price_total
+    sold_tickets = tickets.where(:status => 'ticketed')
 
-      self.price_tax = sold_tickets.sum(:price_tax)
-      self.price_difference = price_total - price_total_old if price_difference == 0
-      save
-    elsif source == 'sirena'
-      self.price_fare = tickets.sum(:price_fare)
-      self.price_tax = tickets.sum(:price_tax)
-      save
-    end
+    self.price_fare = sold_tickets.sum(:price_fare)
+    self.price_tax = sold_tickets.sum(:price_tax)
+
+    self.price_consolidator = sold_tickets.sum(:price_consolidator)
+    self.price_agent = sold_tickets.sum(:price_agent)
+    self.price_subagent = sold_tickets.sum(:price_subagent)
+    self.price_blanks = sold_tickets.sum(:price_blanks)
+    self.price_discount = sold_tickets.sum(:price_discount)
+
+    self.price_difference = price_total - price_total_old if price_difference == 0
+    save
   end
 
   # считывание offline брони из GDS
@@ -288,8 +296,8 @@ class Order < ActiveRecord::Base
 
   def needs_update_from_gds_filter
     update_from_gds
-  rescue => e
-    errors.add(:needs_update_from_gds, e.message)
+  # rescue => e
+  #  errors.add(:needs_update_from_gds, e.message)
   end
 
   # злая временная копипаста из load_from_tickets
@@ -322,6 +330,33 @@ class Order < ActiveRecord::Base
 
   end
 
+  # пересчет тарифов и такс
+  ######################################
+  validate :needs_recalculation_filter, :if => :needs_recalculation
+
+  def needs_recalculation
+    ticket_status != 'ticketed'
+  end
+
+  def needs_recalculation_filter
+    # из PricingMethods::Order
+    recalculation
+  rescue => e
+    errors.add(:recalculation_alert, e.message)
+  end
+
+  def recalculation_alert
+    if needs_recalculation
+      "Суммы такс, сборов и скидок будут пересчитаны."
+    else
+      "Суммы такс, сборов и скидок НЕ будут пересчитаны, если заказ в состоянии 'ticketed'. Редактируйте каждый билет отдельно."
+    end + ' ' +
+      if fix_price
+        "Итоговая стоимость не изменится при перерасчете, если закреплена 'Итоговая цена'"
+      else
+        "Итоговая стоимость будет пересчитана, если ее не закрепить или если поле пустое."
+      end
+  end
 
   def payture_state
     payments.last ? payments.last.payture_state : ''
@@ -366,16 +401,27 @@ class Order < ActiveRecord::Base
     else
       custom_fields.order = self
     end
-    payment = Payment.create(:price => price_with_payment_commission, :card => card, :order => self, :custom_fields => custom_fields)
+    payment = Payment.create(:price => price_with_payment_commission, :card => card, :order => self, :custom_fields => custom_fields, :system => 'payture')
     payment.payture_block
   end
 
   def money_blocked!
+    update_attribute(:fix_price, true)
     update_attribute(:payment_status, 'blocked')
+    self.fix_price = true
   end
 
   def money_received!
-    update_attribute(:payment_status, 'charged') if payment_status == 'pending'
+    if payment_status == 'pending'
+      update_attribute(:fix_price, true)
+      self.fix_price = true
+      update_attribute(:payment_status, 'charged')
+      create_cash_payment
+    end
+  end
+
+  def create_cash_payment
+    Payment.create(:price => price_with_payment_commission, :order => self, :system => 'cash')
   end
 
   def no_money_received!

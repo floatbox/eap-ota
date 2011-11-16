@@ -179,14 +179,15 @@ module PricerHelper
     concat recommendation.validating_carrier_iata + ' '
     if recommendation.commission
       concat %( #{recommendation.commission.agent}/#{recommendation.commission.subagent})
-      unless recommendation.commission.discount.to_i.zero?
+      # FIXME, убрать нулевую комиссию?
+      if recommendation.commission.discount
         concat %(-#{recommendation.commission.discount} (#{recommendation.price_discount}) )
       end
-      concat %( #{recommendation.price_share} р.)
+      concat %( #{recommendation.price_subagent} р.)
       unless recommendation.price_markup == 0
         concat %(#{recommendation.price_our_markup} р.)
-        unless recommendation.price_consolidator_markup == 0
-          concat %(, конс: #{recommendation.price_consolidator_markup} р.)
+        unless recommendation.price_consolidator == 0
+          concat %(, конс: #{recommendation.price_consolidator} р.)
         end
       end
     elsif Commission.exists_for?(recommendation)

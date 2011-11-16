@@ -4,7 +4,7 @@ module Amadeus
 
       include CopyAttrs
 
-      attr_accessor :people_count, :email, :phone, :people, :adults, :children, :infants, :validating_carrier, :commission, :tk_xl
+      attr_accessor :people_count, :email, :phone, :people, :adults, :children, :infants, :validating_carrier, :agent_commission, :tk_xl
       def action_codes
         {:NOP => 0, :ET => 10, :ER => 11, :ETK => 12, :ERK => 13, :EF => 14, :ETX => 15, :ERX => 16, :IG => 20, :IR => 21, :STOP => 267, :WARNINGS => 30, :SHORT => 50}
       end
@@ -28,7 +28,7 @@ module Amadeus
             :children,
             :infants,
             :validating_carrier,
-            :commission,
+            :agent_commission,
             :tk_xl
         end
       end
@@ -41,17 +41,20 @@ module Amadeus
         (tk_xl).strftime("%H%M") if tk_xl
       end
 
-      def commission?
-        !!commission
+      def agent_commission?
+        !!agent_commission
       end
 
-      def commission_percentage
-        commission.agent_percentage? && ("%g" % commission.agent_value)
+      def agent_commission_percentage
+        agent_commission.percentage? && ("%g" % agent_commission.rate)
       end
 
-      def commission_value
+      def agent_commission_value
+        raise "trying to add percentage or complex formula at FM? (#{agent_commission})" if
+          agent_commission.complex? || agent_commission.percentage?
         # рублевая комиссия округляется до ближайшего целого
-        commission.agent_value.round
+        # евро подставляются в дефолтных параметрах формулы из конфига (зря?)
+        agent_commission.call.round
       end
 
     end

@@ -1,6 +1,7 @@
 # encoding: utf-8
 class Sirena::Commission
   include KeyValueInit
+  include Commission::Fx
   cattr_accessor :commissions, :opts
   self.commissions = {}
   self.opts = {}
@@ -41,26 +42,20 @@ class Sirena::Commission
     end
   end
 
-  def consolidator_markup(fare, tickets=1)
-    blank_cost = 50
+  def consolidator
     if twopcnt
-      fare * 0.02 + blank_cost * tickets
+      Fx('2%')
     else
-      blank_cost * tickets
+      Fx(0)
     end
   end
 
-  # ВРЕМЕННОЕ РЕШЕНИЕ
-  def share(fare, tickets=1)
-    0
-  end
+  def blanks; Fx(50) end
 
-  def discount_amount(fare, tickets=1)
-    0
-  end
+  def agent; Fx(0) end
+  def subagent; Fx(0) end
+  def discount; Fx(0) end
 
-  def agent; '0' end
-  def subagent; '0' end
   def agent_comments; '' end
   def subagent_comments; '' end
 

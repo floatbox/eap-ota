@@ -3,6 +3,12 @@ class BookingController < ApplicationController
   protect_from_forgery :except => :confirm_3ds
 
   def preliminary_booking
+    
+    if Conf.site.forbidden_booking
+      render :json => {:success => false}
+      return
+    end
+    
     @search = PricerForm.load_from_cache(params[:query_key])
     set_search_context_for_airbrake
     recommendation = Recommendation.deserialize(params[:recommendation])
@@ -70,12 +76,17 @@ class BookingController < ApplicationController
   end
 
   def pay
+    if Conf.site.forbidden_sale
+      render :partial => 'forbidden_sale'
+      return
+    end
+    
     @order_form = OrderForm.load_from_cache(params[:order][:number])
     @order_form.people_attributes = params[:person_attributes]
     @order_form.update_attributes(params[:order])
     @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
     unless @order_form.valid?
-      logger.info "Pay: invalid order"
+      logger.info "Pay: invalid order: #{@order_form.errors_hash.inspect}"
       render :json => {:errors => @order_form.errors_hash}
       return
     end
