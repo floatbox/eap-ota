@@ -4,7 +4,7 @@ class BookingController < ApplicationController
 
   def preliminary_booking
     
-    if Conf.payment.forbidden_booking
+    if Conf.site.forbidden_booking
       render :json => {:success => false}
       return
     end
@@ -76,7 +76,7 @@ class BookingController < ApplicationController
   end
 
   def pay
-    if Conf.payment.forbidden_sale
+    if Conf.site.forbidden_sale
       render :partial => 'forbidden_sale'
       return
     end
