@@ -203,8 +203,8 @@ module CommissionRules
     end
     alias_method :vague, :disabled
 
-    def not_implemented
-      opts[:not_implemented] = true
+    def not_implemented value=true
+      opts[:not_implemented] = value
     end
 
     # правило интерлайна

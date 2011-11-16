@@ -22,6 +22,7 @@ admin:
   GlobalDistributionSystem: create, read, update, delete
   Payment: read, update
   FlightGroup: create, read, update, delete
+  Commissions: read
 
 hoteditor:
   HotOffer: read, delete
