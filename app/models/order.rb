@@ -406,11 +406,15 @@ class Order < ActiveRecord::Base
   end
 
   def money_blocked!
+    update_attribute(:fix_price, true)
     update_attribute(:payment_status, 'blocked')
+    self.fix_price = true
   end
 
   def money_received!
     if payment_status == 'pending'
+      update_attribute(:fix_price, true)
+      self.fix_price = true
       update_attribute(:payment_status, 'charged')
       create_cash_payment
     end
