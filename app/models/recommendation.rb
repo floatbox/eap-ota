@@ -142,7 +142,7 @@ class Recommendation
   # надбавка к цене амадеуса
   def price_markup
     ajust_markup! if @price_our_markup.nil?
-    price_our_markup + price_consolidator + price_blanks - (Conf.payment.use_discount ?  price_discount : 0 )
+    price_our_markup + price_consolidator + price_blanks - price_discount
   end
 
   def ajust_markup!
@@ -156,6 +156,11 @@ class Recommendation
       else
         Commission.find_for(self)
       end
+  end
+
+  # пытаемся избежать сохранения формул в order_forms_cache
+  def reset_commission!
+    @commission = nil
   end
 
   def segments

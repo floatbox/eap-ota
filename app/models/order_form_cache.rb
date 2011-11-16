@@ -12,6 +12,8 @@ class OrderFormCache
   field :partner, :type => String
 
   def recommendation= rec
+    rec = rec.dup
+    rec.reset_commission!
     self.recommendation_yml = YAML.dump(rec)
   end
 
