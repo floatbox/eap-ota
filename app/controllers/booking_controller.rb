@@ -3,6 +3,12 @@ class BookingController < ApplicationController
   protect_from_forgery :except => :confirm_3ds
 
   def preliminary_booking
+    
+    if Conf.payment.forbidden_booking
+      render :json => {:success => false}
+      return
+    end
+    
     @search = PricerForm.load_from_cache(params[:query_key])
     set_search_context_for_airbrake
     recommendation = Recommendation.deserialize(params[:recommendation])

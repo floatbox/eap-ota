@@ -25,9 +25,11 @@ payment:
   use_discount: no
   skip_checksum_validation: yes
   order_id_prefix: o
+  forbidden_booking: no
   forbidden_sale: no
   production:
     skip_checksum_validation: no
+    forbidden_booking: no
     forbidden_sale: no
 payture:
   enabled: yes
