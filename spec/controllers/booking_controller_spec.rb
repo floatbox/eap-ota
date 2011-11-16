@@ -70,7 +70,6 @@ describe BookingController do
         :departure_iata => 'LED',
         :arrival_iata => 'MOW',
         :departure_date => '280912')).and_return(flights)
-      flights.should_receive(:collect).and_return(["M"],["C"])
       Segment.should_receive(:new).with(:flights => [flights]).and_return(segments)
       Variant.should_receive(:new).with(:segments => [segments]).and_return(variant)
 
@@ -87,7 +86,7 @@ describe BookingController do
     it 'redirects on booking of deliberate flight page' do
       get :api_manual_booking, request_params
       pricer_form = assigns(:search)
-      response.should redirect_to :action => 'preliminary_booking', :controller => 'booking', :query_key => pricer_form.query_key, :recommendation => 'amadeus.SU.M.P..SU840LEDMOW280912'
+      response.should redirect_to :action => 'preliminary_booking', :controller => 'booking', :query_key => pricer_form.query_key, :recommendation => 'amadeus.SU.M.C..SU840LEDMOW280912'
      end
   end
 end
