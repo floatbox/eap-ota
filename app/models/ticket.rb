@@ -23,6 +23,8 @@ class Ticket < ActiveRecord::Base
 
   delegate :commission_carrier, :to => :order, :allow_nil => true
 
+  delegate :old_booking, :to => :order, :allow_nil => true
+
   # FIXME - временно, эквайринг должен браться из суммы пейментов
   delegate :acquiring_percentage, :to => :order
 
@@ -71,7 +73,7 @@ class Ticket < ActiveRecord::Base
 
   def update_prices_in_order
     order.tickets.reload if order
-    order.update_prices_from_tickets if order
+    order.update_prices_from_tickets if order && !old_booking
   end
 
   def check_uniqueness_of_refund

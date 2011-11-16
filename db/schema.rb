@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111113084913) do
+ActiveRecord::Schema.define(:version => 20111116085223) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -299,6 +299,7 @@ ActiveRecord::Schema.define(:version => 20111113084913) do
     t.decimal  "price_subagent",                :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.string   "commission_ticketing_method",                                 :default => "",       :null => false
     t.boolean  "fix_price",                                                   :default => false,    :null => false
+    t.boolean  "old_booking",                                                 :default => false,    :null => false
   end
 
   create_table "payments", :force => true do |t|

@@ -28,6 +28,7 @@ ru:
     attributes:
       # общие атрибуты в заказах и билетах
       PRICING_ATTRIBUTES: &PRICING_ATTRIBUTES
+        old_booking: "Бронирование сделано до введения скидок. Запретить пересчет."
         price_fare: "Тариф, р."
         price_tax: "Таксы, р."
         price_consolidator: "Сбор 1%/2% авиацентра, р."
