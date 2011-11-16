@@ -11,6 +11,7 @@ guard 'spork', :cucumber => false, :cucumber_env => { 'RAILS_ENV' => 'test' }, :
   watch('Gemfile.lock')
   watch('spec/spec_helper.rb')
   watch('test/test_helper.rb')
+  watch(%r{^lib/(.+)\.rb$})
 end
 
 guard 'rspec', :cli => "--drb", :version => 2 do
