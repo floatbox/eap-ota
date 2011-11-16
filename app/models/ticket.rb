@@ -72,8 +72,10 @@ class Ticket < ActiveRecord::Base
   end
 
   def update_prices_in_order
+    # FIXME убить или оставить только ради тестов?
+    return unless order
     order.tickets.reload if order
-    order.update_prices_from_tickets if order && !old_booking
+    order.update_prices_from_tickets if order
   end
 
   def check_uniqueness_of_refund

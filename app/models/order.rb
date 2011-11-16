@@ -269,6 +269,8 @@ class Order < ActiveRecord::Base
   end
 
   def update_prices_from_tickets # FIXME перенести в strategy
+    # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
+    return if old_booking
     price_total_old = self.price_total
     sold_tickets = tickets.where(:status => 'ticketed')
 
