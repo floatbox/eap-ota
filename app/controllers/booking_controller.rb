@@ -70,6 +70,11 @@ class BookingController < ApplicationController
   end
 
   def pay
+    if Conf.payment.forbidden_sale
+      render :partial => 'forbidden_sale'
+      return
+    end
+    
     @order_form = OrderForm.load_from_cache(params[:order][:number])
     @order_form.people_attributes = params[:person_attributes]
     @order_form.update_attributes(params[:order])
