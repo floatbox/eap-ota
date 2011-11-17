@@ -6,7 +6,7 @@ api:
   enabled: yes
   store_rambler_cache: yes
   url_base: 'https://eviterra.com'
-  rambler_url: 'http://in.avia.rambler.ru/eviterra'
+  rambler_url: 'http://in.avia.rambler.ru/eviterra/'
   partners:
    - yandex
    - volmy
