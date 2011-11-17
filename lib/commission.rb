@@ -14,12 +14,16 @@ strt_date "01.11.2011"
 expr_date "31.12.2011"
 agent "на рейсы под кодом SU/D9  за  оформление  на нейтральных бланках  ИАТА  c кодом перевозчика (555) авиаперевозок, включающих прямые рейсы SU/D9 по направлениям между MRV (Минеральные Воды) и EVN (Ереван) / BAK (Баку) / TAS(Ташкент), также между ROV (Ростов-на-Дону) и EVN (Ереван) / LBD (Худжанд) / FRU (Бишкек) / PRG (Прага) / MUK (Мюнхен) / MOW (Москва) / KBP (Киев) в том числе в комбинации с внутренними и/или другими международными рейсами под  кодом SU по сквозным или участковым тарифам,  устанавливаются следующие размеры базового агентского вознаграждения (с учетом НДС):"
 agent "-за продажу пассажирских перевозок в экономическом классе – 9 процентов от тарифа;"
-no_commission
+subagent ""
+routes %W(MRV-EVN-MRV EVN-MRV-EVN EVN-MRV MRV-EVN MRV-BAK-MRV BAK-MRV-BAK MRV-BAK BAK-MRV MRV-TAS-MRV TAS-MRV-TAS MRV-TAS TAS-MRV ROV-EVN-ROV EVN-ROV-EVN ROV-EVN EVN-ROV ROV-LBD-ROV LBD-ROV-LBD ROV-LBD LBD-ROV ROV-FRU-ROV FRU-ROV-FRU ROV-FRU FRU-ROV ROV-PRG-ROV PRG-ROV-PRG ROV-PRG PRG-ROV ROV-MUK-ROV MUK-ROV-MUK ROV-MUK MUK-ROV ROV-MOW-ROV MOW-ROV-MOW ROV-MOW MOW-ROV ROV-KBP-ROV KBP-ROV-KBP ROV-KBP KBP-ROV)
+commission "9%/0%"
 
 strt_date "01.11.2011"
 expr_date "31.12.2011"
 agent "за продажу пассажирских перевозок в бизнес-классе – 12 процентов от тарифа"
-no_commission
+subagent ""
+classes :business
+commission "12%/0%"
 
 example "svocdg"
 example "svocdg/business cdgsvo/economy"
@@ -153,6 +157,8 @@ commission "7%/5%"
 carrier "6H", "ISRAIR AIRLINE"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svocdg'
 strt_date "01.07.2011"
 agent    "С 01.07.11г. 5% от всех опубл. тарифов на рейсы 6H (В договоре Interline отдельно не прописан.)"
@@ -219,6 +225,8 @@ commission "5%/3.5%"
 carrier "9W", "JET AIRWAYS (Авиарепс)"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svocdg'
 example 'cdgsvo svocdg/ab'
 agent    "1% от опубл. тарифов на собств.рейсы 9W"
@@ -253,6 +261,8 @@ commission "0%/0%"
 
 carrier "AB", "AIR BERLIN"
 ########################################
+
+carrier_defaults :ticketing_method => "direct"
 
 example 'svocdg'
 agent    "1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
@@ -310,7 +320,7 @@ no_commission
 carrier "AM", "AEROMEXICO"
 ########################################
 
-carrier_defaults :discount=> 0
+carrier_defaults :ticketing_method => "direct", :discount=> 0
 
 example "SVOCDG"
 # копия для чистых рейсов AM
@@ -450,6 +460,8 @@ commission "3%/2%"
 carrier "BA", "BRITISH AIRWAYS (См. в конце таблицы продолжение в 4-х частях)"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svocdg'
 agent    "1 euro с билета по опубл. тарифам на собств. рейсы BA;"
 subagent "5 руб. с билета по опубл. тарифам на собств. рейсы BA; Сбор Агента 2% от тарифа."
@@ -463,6 +475,8 @@ commission "1eur/5"
 
 carrier "BD", "BMI"
 ########################################
+
+carrier_defaults :ticketing_method => "direct"
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -491,6 +505,8 @@ commission "1%/0.5%"
 
 carrier "BT", "AIR BALTIC"
 ########################################
+
+carrier_defaults :ticketing_method => "direct"
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -567,6 +583,8 @@ commission "0%/0%"
 carrier "CI", "China Airlines"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svocdg'
 agent    "1% от всех опубл. тарифов на рейсы CI (В договоре Interline отдельно не прописан.)"
 subagent "0,5% от опубл. тарифа на собств. рейсы CI"
@@ -580,6 +598,8 @@ commission "1%/0"
 
 carrier "CX", "CATHAY PACIFIC (Тальавиэйшн)"
 ########################################
+
+carrier_defaults :ticketing_method => "direct"
 
 example 'svocdg'
 agent    "7% от опубл. тарифов на собств. рейсы CX и рейсы Interline c участком СX. Можно выписывать на бланках CX других авиаперевозчиков (при условии действующего интерлайна), если: - хотя бы один перелет совершается авиакомпанией CX,"
@@ -617,10 +637,12 @@ commission "9%/7%"
 carrier "CZ", "CHINA SOUTHERN"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svocdg'
 agent    "9% от тарифа на рейсы, полностью выполняемые CZ;"
 subagent "6,3% от тарифа на рейсы, полностью выполняемые CZ;"
-discount "4%"
+discount "5%"
 commission "9%/6.3%"
 
 example 'cdgsvo svocdg/ab'
@@ -664,6 +686,8 @@ commission "2%/1.4%"
 carrier "DE", "Condor Flugdienst (Авиарепс)"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svocdg'
 strt_date "01.10.2011"
 agent    "1руб от всех опубл. тарифов на рейсы DE. (В договоре Interline не прописан.)"
@@ -678,6 +702,8 @@ commission "1%/0.5%"
 
 carrier "DL", "DELTA AIRLINES"
 ########################################
+
+carrier_defaults :ticketing_method => "direct"
 
 example 'okocdg cdgoko/ab'
 example 'cdgoko'
@@ -785,6 +811,8 @@ no_commission
 carrier "ET", "Ethiopian Airlines Enterprise  (АВИАРЕПС)"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svocdg'
 agent    "7% от опубл. тарифов на собств. рейсы ET"
 subagent "5% от опубл. тарифов на собств. рейсы ET"
@@ -805,6 +833,8 @@ commission "0%/0%"
 
 carrier "EY", "ETIHAD AIRWAYS"
 ########################################
+
+carrier_defaults :ticketing_method => "direct"
 
 example 'svocdg'
 agent   "5% от опубл. тарифов на собств. рейсы EY (В договоре Interline не прописан.)"
@@ -915,6 +945,8 @@ commission "5%/3.5%"
 carrier "HM", "AIR SEYCHELLES (АВИАРЕПС)"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svocdg'
 agent    "1% от опубл. тарифа на собств. рейсы HM (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на собств. рейсы HM"
@@ -928,6 +960,8 @@ commission "1%/0.5%"
 
 carrier "HR", "HAHN AIR  (Авиарепс)"
 ########################################
+
+carrier_defaults :ticketing_method => "direct"
 
 # включено с дополнительной проверкой
 agent    "1 руб. от тарифов, опубликованных в системе бронирования, для авиакомпании Hahn Air и интерлайн-партнеров Hahn Air, указанных на сайте www.HR-ticketing.com;"
@@ -1094,6 +1128,8 @@ commission "2%/2%"
 
 carrier "IB", "IBERIA"
 ########################################
+
+carrier_defaults :ticketing_method => "direct"
 
 example 'svocdg'
 agent    "1 руб. с билета на рейсы IB (В договоре Interline не прописан.)"
@@ -1325,6 +1361,8 @@ commission "1eur/5"
 carrier "KM", "AIR MALTA  (Авиарепс)"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svocdg'
 agent    "1% от опубл. тарифов на собств. рейсы KM"
 subagent "0,5% от опубл. тарифа на рейсы KM"
@@ -1338,6 +1376,8 @@ commission "1%/0.5%"
 
 carrier "LA", "LAN Airlines"
 ########################################
+
+carrier_defaults :ticketing_method => "direct"
 
 example 'svocdg'
 agent    "1 руб. с билета по опубл. тарифам на собств. рейсы LA"
@@ -1354,7 +1394,8 @@ commission "1/0.05"
 
 carrier "LH", "LUFTHANSA"
 ########################################
-carrier_defaults :consolidator => '1%'
+
+carrier_defaults :ticketing_method => "direct", :consolidator => '1%'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -1378,6 +1419,8 @@ no_commission
 carrier "LO", "LOT"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svocdg'
 agent    "1 euro с билета по опубл. тарифам на рейсы LO;"
 subagent "5 руб. с билета по опубл. тарифам на рейсы LO;"
@@ -1391,7 +1434,8 @@ commission "1eur/5"
 
 carrier "LX", "SWISS"
 ########################################
-carrier_defaults :consolidator => '1%'
+
+carrier_defaults :ticketing_method => "direct", :consolidator => '1%'
 
 example 'svocdg cdgsvo/ab'
 agent    "1 руб. с билета по опубл. тарифам на собств. рейсы LX и рейсы Interline с уч. LX."
@@ -1463,6 +1507,8 @@ commission "1/0.05"
 carrier "MK", "AIR MAURITIUS"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svocdg'
 agent    "1% от опубл. тарифов на рейсы MK (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на рейсы MK"
@@ -1513,6 +1559,8 @@ commission "0%/0%"
 
 carrier "MU", "CHINA EASTERN"
 ########################################
+
+carrier_defaults :ticketing_method => "direct"
 
 example 'svohkg hkgsvo/ab'
 example 'svomfm hkgsvo/ab'
@@ -1610,6 +1658,8 @@ commission "5%/3.5%"
 carrier "OA", "OLYMPIC AIR (АВИАРЕПС)"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svocdg'
 agent    "1% от опубл. тарифов на собственные рейсы OA (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на собств.рейсы OA"
@@ -1663,7 +1713,8 @@ commission "9%/6.3%"
 
 carrier "OS", "AUSTRIAN AIRLINES"
 ########################################
-carrier_defaults :consolidator => '1%'
+
+carrier_defaults :ticketing_method => "direct", :consolidator => '1%'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -1725,6 +1776,8 @@ commission "5%/3.5%"
 
 carrier "PS", "Ukraine International Airlines (ГЛОНАСС)"
 ########################################
+
+carrier_defaults :ticketing_method => "direct"
 
 example 'svocdg'
 agent    "9% от опубл. тарифов на собств.рейсы PS"
@@ -1815,6 +1868,8 @@ commission "1%/0.5%"
 carrier "SA", "South African Airways"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
 agent    "1% от опубл. тарифов на собств. рейсы. SA и рейсы Interline"
@@ -1851,6 +1906,8 @@ commission "0.5%/5"
 carrier "SQ", "SINGAPORE AIRLINES (Авиарепс)"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svosin'
 agent    "3% от опубл.тарифов (вкл.промотарифы в V и Q классах) на собств.рейсы SQ/Silk Air с началом от пунктов РФ;"
 subagent "2% от опубл.тарифов (вкл.промотарифы в V и Q классах) на собств.рейсы SQ/Silk Air с началом от пунктов РФ;"
@@ -1885,6 +1942,8 @@ commission '3%/2%'
 carrier "SW", "AIR NAMIBIA (АВИАРЕПС)"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svocdg'
 agent    "7% от опубл. тарифов на собств. рейсы SW (В договоре Interline отдельно не прописан.)"
 subagent "5% от опубл. тарифов на собств.рейсы SW"
@@ -1900,6 +1959,8 @@ commission "7%/5%"
 
 carrier "TG", "THAI AIRWAYS"
 ########################################
+
+carrier_defaults :ticketing_method => "direct"
 
 example 'svobkk'
 agent "С 01.02.2011г. 5% от всех опубл.и конфиденциальных тарифов на международные рейсы TG"
@@ -1982,6 +2043,8 @@ no_commission
 carrier "TP", "TAP PORTUGAL"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 agent    "1% от опубл. тарифов на собств. рейсы TP и рейсы Interline"
 subagent "0,5% от опубл. тарифа на собственные рейсы TP и рейсы Interline"
 interline :possible
@@ -1989,6 +2052,8 @@ commission "1%/0.5%"
 
 carrier "UA", "UNITED AIRLINES (ГЛОНАСС)"
 ########################################
+
+carrier_defaults :ticketing_method => "direct"
 
 # FIXME использую приоритет чтобы закрыть эти субклассы!
 agent "До 31.12.11г. 7% от опубл. тарифов по классам бронирования: M, H, Q, V, W, S, L  на собств. рейсы UA из России в США с  обяз. уч. трансатлантич. рейсов UA965/UA964."
@@ -2084,6 +2149,8 @@ commission "0%/0%"
 carrier "VS", "Virgin Atlantic Airways Limited (ГЛОНАСС)"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svocdg'
 agent    "7% от опубл. тарифов на собств. рейсы VS"
 subagent "5% от опубл. тарифов на собств.рейсы VS"
@@ -2105,17 +2172,19 @@ no_commission
 carrier "VV", "AEROSVIT"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svocdg'
 agent    "5% от опубл. тарифов на рейсы VV;"
 subagent "3,5% от опубл. тарифов на рейсы VV;"
-discount "2%"
+discount "3%"
 commission "5%/3.5%"
 
 example 'svocdg cdgsvo/ab'
 agent    "3% от опубл. тарифов на рейсы VV в комбинации с рейсами Interline"
 subagent "2% от опубл. тарифов на рейсы VV в комбинации с рейсами Interline"
 interline :yes
-discount "1%"
+discount "2%"
 commission "3%/2%"
 
 example 'cdgsvo/ab'
@@ -2244,6 +2313,8 @@ no_commission
 
 carrier "NX", "AIR MACAU"
 ########################################
+
+carrier_defaults :ticketing_method => "direct"
 
 example 'svocdg'
 agent "5 % от всех опубл. тарифов на собственные рейсы NX"
@@ -2394,6 +2465,8 @@ commission "6%/4%" #первомайский апдейт
 carrier "W5", "Airline «MAHAN AIR» (АВИАРЕПС)"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svocdg'
 agent "5 % от всех опубликованных тарифов; (Interline отдельно не прописан)"
 subagent "3% от всех опубл.тарифов на собств. рейсы W5"
@@ -2483,6 +2556,8 @@ commission "5%/3%"
 carrier "A3", "AEGEAN AIRLINES S.A"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 example 'svocgd cgdsvo/ab'
 agent "1% от всех опубл. и конфиде. тарифов на междунар. и внутр. рейсы A3. Билеты по Interline могут быть выписаны только при условии присутствия сегментов A3 и если на долю А3 приходится более 50% перевозки."
 subagent "0,5% от опубл. тарифов и конфиде. тарифов на междунар. и внутр. рейсы A3. Билеты по Interline могут быть выписаны только при условии присутствия сегментов A3"
@@ -2559,6 +2634,8 @@ commission "5%/3%"
 
 carrier "5H", "Five Fourty Aviation Limited"
 ########################################
+
+carrier_defaults :ticketing_method => "direct"
 
 example "svocdg"
 agent "5 (пять) % от опубл. тарифов на собств. рейсы 5H"
