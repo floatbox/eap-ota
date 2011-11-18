@@ -26,7 +26,7 @@ booking.init = function(partner) {
     var hash = window.location.hash.substring(1);
     this.query_key = path.split('/').last();
     if (hash.indexOf('recommendation') !== -1) {
-        window.location.hash = '';
+        //window.location.hash = '';
         this.prebook(this.query_key, hash.match(/recommendation=([^&]+)/)[1]);
         this.partner = partner;
     } else if (hash.length !== 0) {
