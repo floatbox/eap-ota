@@ -16,6 +16,7 @@ agent "на рейсы под кодом SU/D9  за  оформление  на
 agent "-за продажу пассажирских перевозок в экономическом классе – 9 процентов от тарифа;"
 subagent ""
 routes %W(MRV-EVN-MRV EVN-MRV-EVN EVN-MRV MRV-EVN MRV-BAK-MRV BAK-MRV-BAK MRV-BAK BAK-MRV MRV-TAS-MRV TAS-MRV-TAS MRV-TAS TAS-MRV ROV-EVN-ROV EVN-ROV-EVN ROV-EVN EVN-ROV ROV-LBD-ROV LBD-ROV-LBD ROV-LBD LBD-ROV ROV-FRU-ROV FRU-ROV-FRU ROV-FRU FRU-ROV ROV-PRG-ROV PRG-ROV-PRG ROV-PRG PRG-ROV ROV-MUK-ROV MUK-ROV-MUK ROV-MUK MUK-ROV ROV-MOW-ROV MOW-ROV-MOW ROV-MOW MOW-ROV ROV-KBP-ROV KBP-ROV-KBP ROV-KBP KBP-ROV)
+discount "4%"
 commission "9%/0%"
 
 strt_date "01.11.2011"
@@ -23,6 +24,7 @@ expr_date "31.12.2011"
 agent "за продажу пассажирских перевозок в бизнес-классе – 12 процентов от тарифа"
 subagent ""
 classes :business
+discount "9%"
 commission "12%/0%"
 
 example "svocdg"
@@ -117,7 +119,7 @@ subagent "9 % от всех применяемых опубликованных 
 important!
 check { (city_iatas & %W(NYC MIA BJS)).present? && %W(RU UA KZ UZ).include?(country_iatas.first) }
 commission "12%/9%"
-discount "6%"
+discount "7%"
 
 example 'svocdg/lh cdgmad/lh'
 no_commission
