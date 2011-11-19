@@ -1,0 +1,130 @@
+Ticket:
+  fields:
+    default:
+     - description
+     - order
+     - carrier
+     - name
+     - route
+     - price_fare
+     - price_tax
+     - price_refund
+     - office_id
+     - validator
+     - status
+     - kind
+     - ticketed_date
+     - itinerary_receipt
+     - parent
+     - processed
+    list:
+      - link_to_show
+      - order
+      - carrier
+      - name
+      - route
+      - price_fare
+      - price_tax
+      - price_refund
+      - office_id
+      - validator
+      - status
+      - kind
+      - ticketed_date
+      - itinerary_receipt
+      - parent
+      - processed
+    new:  price_fare, price_tax, price_penalty, ticketed_date, comment
+    show:
+      - old_booking
+      - order
+      - carrier
+      - number_with_code
+      - last_name
+      - first_name
+      - route
+      - price_fare
+      - price_tax
+      - commission_consolidator
+      - price_consolidator
+      - price_blanks
+      - commission_agent
+      - price_agent
+      - commission_subagent
+      - price_subagent
+      - commission_discount
+      - price_discount
+      - price_penalty
+      - price_payment_commission
+      - price_with_payment_commission
+      - office_id
+      - validator
+      - commission_ticketing_method
+      - status
+      - ticketed_date
+      - itinerary_receipt
+    edit:
+      - code
+      - number
+      - status
+      - ticketed_date
+      - validating_carrier
+      - last_name
+      - first_name
+      - route
+      - price_fare
+      - price_tax
+      - commission_consolidator
+      - commission_blanks
+      - commission_agent
+      - commission_subagent
+      - commission_discount
+      - price_penalty
+      - office_id
+      - validator
+      - comment
+    new_refund: price_fare, price_tax, price_penalty, ticketed_date, comment
+    csv:
+      - source
+      - number_with_code
+      - ticket_date
+      - carrier
+      - route
+      - cabins
+      - price_fare
+      - price_tax
+      - price_total
+      - price_consolidator
+      - price_blanks
+      - commission_agent
+      - price_agent
+      - commission_subagent
+      - price_subagent
+      - price_transfer
+      - pnr_number
+      - need_attention
+      - validating_carrier
+      - office_id
+      - validator
+      - status
+      - ticketed_date
+      - kind
+    options:
+      selectors: status, source, office_id, validator
+      date_formats:
+        created_at: long
+      booleans:
+        processed: ["подтвержден", "не подтвержден"]
+        old_booking: ["пересчет запрещен", "пересчет разрешен"]
+  options:
+    default_action_on_item: edit
+  actions:
+    edit: show
+  order_by: -created_at
+  filters: ticketed_date, source, validator, office_id, status
+  relationships: order
+  application: Orders, 1
+  export: csv
+  scopes: uncomplete
+  search: ^number, last_name, first_name, ^pnr_number
+

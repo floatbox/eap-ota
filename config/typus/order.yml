@@ -1,0 +1,145 @@
+Order:
+  fields:
+    default: order_id, pnr_number, email, phone, updated_at
+    list:
+      - source
+      - pnr_number
+      - blank_count
+      - contact
+      - created_at
+      - price_with_payment_commission
+      - payment_status
+      - ticket_status
+      - last_tkt_date
+      - payment_type
+      - has_refunds
+      - partner
+      - urgent
+      - email_status
+    show:
+      - old_booking
+      - order_id
+      - has_refunds
+      - source
+      - pnr_number
+      - offline_booking
+      - description
+      - route
+      - payment_status
+      - charge_date
+      - ticket_status
+      - contact
+      - name_in_card
+      - last_digits_in_card
+      - full_info
+      - commission_ticketing_method
+      - blank_count
+      - price_fare
+      - price_tax
+      - commission_consolidator
+      - price_consolidator
+      - commission_blanks
+      - price_blanks
+      - commission_discount
+      - price_discount
+      - pricing_method
+      - price_total
+      - price_payment_commission
+      - price_with_payment_commission
+      - commission_agent
+      - price_agent
+      - commission_subagent
+      - price_subagent
+      - price_original
+      - price_tax_extra
+      - commission_carrier
+      - commission_agent_comments
+      - commission_subagent_comments
+      - created_at
+      - updated_at
+      - last_tkt_date
+      - payment_type
+      - delivery
+      - last_pay_time
+      - partner
+      - income_suppliers
+      - income_payment_gateways
+      - income
+    form:
+      - old_booking
+      - section_general_info
+      - description
+      - has_refunds
+      - email
+      - phone
+      - source
+      - pnr_number
+      - sirena_lead_pass
+      - route
+      - payment_type
+      - section_recalculation
+      - recalculation_alert
+      - commission_ticketing_method
+      - blank_count
+      - price_fare
+      - price_tax
+      - commission_agent
+      - commission_subagent
+      - commission_consolidator
+      - commission_blanks
+      - commission_discount
+      - pricing_method
+      - price_with_payment_commission
+      - fix_price
+      - section_state_and_control
+      - ticket_status
+      - offline_booking
+      - last_pay_time
+      - needs_update_from_gds
+    csv:
+      - pnr_number
+      - charge_date
+      - created_date
+      - tickets_count
+      - route
+      - commission_carrier
+      - price_tax
+      - price_fare
+      - price_consolidator
+      - price_blanks
+      - commission_subagent
+      - price_agent
+      - price_subagent
+      - price_with_payment_commission
+      - need_attention
+      - partner
+    options:
+      selectors: payment_type, source, ticket_status, pricing_method, commission_ticketing_method
+      booleans:
+        has_refunds: ['да', 'нет']
+        offline_booking: ['ручной', 'автоматический']
+        old_booking: ["пересчет запрещен", "пересчет разрешен"]
+      templates:
+        needs_update_from_gds: boolean
+        recalculation_alert: hint
+        section_general_info: section
+        section_recalculation: section
+        section_state_and_control: section
+      date_formats:
+        created_at: long
+        updated_at: long
+        last_pay_time: long
+  order_by: -created_at
+  search: ^pnr_number, email, phone, =order_id
+  options:
+    default_action_on_item: show
+    #action_after_save: show
+  actions:
+    show: edit
+  # тут не ввернешь конфирмации. временно убрал
+  # actions:
+  #   show: cancel, ticket, charge, unblock, show_pnr
+  filters:  created_at, source, payment_status, ticket_status, payment_type, has_refunds
+  relationships: payments, tickets, order_comments, notifications
+  application: Orders, 1
+  export: csv
