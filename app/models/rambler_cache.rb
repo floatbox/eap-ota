@@ -14,7 +14,7 @@ class RamblerCache
   field :sent_to_rambler, :type => Boolean, :default => false
   belongs_to :pricer_form
 
-  def self.send_to_rambler(count = 1000)
+  def self.send_to_rambler(count = 100)
     data_to_send = self.where(:sent_to_rambler => false).order_by([:created_at, :asc]).limit(count).to_a
     if data_to_send.count > 0
       json_string = Yajl::Encoder.encode(data_to_send.map{|rc| {:request => rc.pricer_form_hash , :variants => rc.data}   })

@@ -7,6 +7,10 @@ every :day do
   rake 'completer:regen'
 end
 
+every 20.seconds do
+  runner 'RamblerCache.send_to_rambler'
+end
+
 every 5.minutes do
   runner 'Order.cancel_stale!'
 end
