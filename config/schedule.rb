@@ -7,7 +7,7 @@ every :day do
   rake 'completer:regen'
 end
 
-every :minute do
+every 1.minute do
   runner 'RamblerCache.send_to_rambler'
   runner 'RamblerCache.send_to_rambler'
 end
