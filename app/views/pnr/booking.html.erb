@@ -41,6 +41,9 @@
           <font family="Arial" size="2">
           Тариф / Fare<br>
           Налоги и сборы / Taxes<br>
+          <% unless @prices.price_declared_discount.zero? %>
+            Скидка / Discount<br>
+          <% end %>
           <% if @prices.payment_type == 'delivery' %>
               Доставка / Delivery<br>
           <% end %>
@@ -51,6 +54,9 @@
           <font family="Arial" size="2">
           <%= exact_price(@prices.price_fare) %> RUB<br>
           <%= exact_price(@prices.price_tax_and_markup_and_payment) %> RUB<br>
+          <% unless @prices.price_declared_discount.zero? %>
+            <%= exact_price(@prices.price_declared_discount) %> RUB<br>
+          <% end %>
           <% if @prices.payment_type == 'delivery' %>
               350 RUB<br>
               <%= exact_price(@prices.price_with_payment_commission + 350)  %> RUB<br>

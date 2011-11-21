@@ -66,7 +66,11 @@ module PricingMethods
     # cash_payment_markup содержит доставку, и нигде потом не используется
 
     def price_tax_and_markup_and_payment
-      price_with_payment_commission - price_fare
+      price_with_payment_commission - price_fare + price_declared_discount
+    end
+
+    def price_declared_discount
+      price_discount
     end
 
     def price_tax_and_markup
@@ -173,7 +177,11 @@ module PricingMethods
     end
 
     def price_tax_and_markup_and_payment
-      price_with_payment_commission - price_fare
+      price_with_payment_commission - price_fare + price_declared_discount
+    end
+
+    def price_declared_discount
+      price_discount
     end
 
     # FIXME надо принудительно выставлять ноль, если введена пустая комиссия?

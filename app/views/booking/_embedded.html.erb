@@ -60,7 +60,7 @@
     </dl></div>
     <dl class="sum" data-value="<%= @order_form.recommendation.price_with_payment_commission.round.to_i %>">
         <dt>Итого <strong><%= human_price(@order_form.recommendation.price_with_payment_commission) %></strong><%= ' за всех' unless @order_form.people.one? %> со всеми сборами</dt>
-        <dd>Тариф — <%= human_price(@order_form.recommendation.price_fare) %>, налоги и сборы — <%= human_price(@order_form.recommendation.price_tax_and_markup_and_payment) %></dd>
+        <dd>Тариф — <%= human_price(@order_form.recommendation.price_fare) %>, налоги и сборы — <%= human_price(@order_form.recommendation.price_tax_and_markup_and_payment) %><% unless @order_form.recommendation.price_declared_discount.zero? %>, скидка — <%= human_price(@order_form.recommendation.price_declared_discount) %><% end %></dd>
     </dl>
 </div>
 <div class="farerules">

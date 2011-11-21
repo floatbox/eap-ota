@@ -111,7 +111,12 @@ class Recommendation
 
   # "налоги и сборы c комиссией" для отображения клиенту
   def price_tax_and_markup_and_payment
-    price_tax + price_markup + price_payment
+    price_tax + price_markup + price_payment + price_declared_discount
+  end
+
+  # "налоги и сборы c комиссией" для отображения клиенту
+  def price_tax_and_markup_but_no_payment
+    price_tax + price_markup + price_declared_discount
   end
 
   def price_agent
@@ -137,6 +142,10 @@ class Recommendation
   def price_discount
     return 0 unless commission
     commission_discount.call(price_fare, :multiplier => blank_count)
+  end
+
+  def price_declared_discount
+    price_discount
   end
 
   # надбавка к цене амадеуса
