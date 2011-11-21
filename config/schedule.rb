@@ -8,8 +8,8 @@ every :day do
 end
 
 every 1.minute do
-  runner 'RamblerCache.send_to_rambler'
-  runner 'RamblerCache.send_to_rambler'
+  # слишком болшие запросы рамблер не принимает, чаще, чем раз в минуту отправить не получится
+  runner 'RamblerCache.send_to_rambler; RamblerCache.send_to_rambler'
 end
 
 every 5.minutes do
