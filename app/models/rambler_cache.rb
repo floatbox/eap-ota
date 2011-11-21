@@ -20,7 +20,7 @@ class RamblerCache
       json_string = Yajl::Encoder.encode(data_to_send.map{|rc| {:request => rc.pricer_form_hash , :variants => rc.data}   })
       data_to_send.every.update_attribute(:sent_to_rambler, true)
       response = HTTParty.post(Conf.api.rambler_url, :body => json_string, :format => :json)
-      Rails.logger.info "Rambler api: request sent"
+      Rails.logger.info "Rambler api: request with #{data_to_send.count} searches sent"
     end
   end
 
