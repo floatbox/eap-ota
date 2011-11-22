@@ -61,7 +61,7 @@ group :development do
 end
 gem 'passenger', :group => :production
 
-group :test, :development do
+group :test do
   gem 'rspec-rails'
   gem 'cucumber-rails'
   gem 'webrat'
@@ -74,9 +74,6 @@ group :test, :development do
   gem 'guard-spork'
   gem 'guard-rspec'
   # gem 'guard-rails-assets'
-end
-
-group :test do
   gem 'capybara'
   gem 'spork'
   gem 'database_cleaner'
