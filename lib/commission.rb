@@ -1682,7 +1682,7 @@ commission "1%/0.5%"
 carrier "OK", "CZECH AIRLINES"
 ########################################
 
-example 'svocdg'
+example 'cdgsvo'
 agent    "1% от опубл. тарифов на собств.рейсы OK;"
 subagent "0,5% от опубл. тарифа на рейсы OK;"
 commission "1%/0.5%"
@@ -1693,12 +1693,15 @@ subagent "0,5% от опубл. тарифа на рейсы Interline, если
 interline :yes
 commission "1%/0.5%"
 
-# example 'svoprg/c prgsvo/l'
+example 'svoprg/c prgsvo/l'
 agent "6% по выписанным билетам с 14.11.2011г. по 31.03.2012г. (включая обе даты) по опубл. тарифов классов J,C,D,Y,M,B,H,K,T,A,L,X,Q,U,V,N. с вылетом из городов РФ в любой из городов маршрутной сети OK, включая рейсы code-share."
-subagent ""
+subagent "4% по выписанным билетам с 14.11.2011г. по 31.03.2012г. (включая обе даты) по опубл. тарифов классов J,C,D,Y,M,B,H,K,T,A,L,X,Q,U,V,N. с вылетом из городов РФ в любой из городов маршрутной сети OK, включая рейсы code-share."
 subclasses "JCDYMBHKTALXQUVN"
+expr_date '31.03.2012'
+important!
 check { country_iatas.first == 'RU' }
-no_commission
+discount "2%"
+commission "6%/4%"
 
 example 'cdgsvo/ab'
 no_commission
@@ -1994,11 +1997,11 @@ carrier "TK", "TURKISH AIRLINES"
 
 agent    "7% от полного опубл. тарифа IATA на рейсы TK;"
 subagent "5% от полного опубл. тарифа IATA на рейсы TK;"
-not_implemented
+not_implemented "что такое полный опубликованный тариф?"
 discount "3%"
 commission "7%/5%"
 
-example 'svoist istsvo'
+example 'istsvo svoist'
 agent    "7% от тарифа эконом класса на рейсы TK;"
 subagent "5% от тарифа экономического класса на рейсы TK;"
 classes :economy
@@ -2006,17 +2009,18 @@ discount "3%"
 commission "7%/5%"
 
 example 'svoist/business istsvo/business'
-agent    "12% от тарифа бизнес класса на рейсы TK. (только при вылете из РФ. При вылете из других пунктов 7%);"
+agent    "12% от тарифа бизнес класса на рейсы TK только при вылете из РФ"
 subagent "10% от тарифа бизнес класса на рейсы TK. (только при вылете из РФ. При вылете из других пунктов 5%);"
 important!
 classes :business
+expr_date '14.10.2011'
 check { country_iatas.first == 'RU' }
 discount "7%"
 commission "12%/10%"
 
 example 'istsvo/business svoist/business'
-agent    "12% от тарифа бизнес класса на рейсы TK. (только при вылете из РФ. При вылете из других пунктов 7%);"
-subagent "8,4% от тарифа бизнес класса на рейсы TK. (только при вылете из РФ. При вылете из других пунктов 5%);"
+agent    "7% от тарифа бизнес класса на рейсы TK только при вылете не из РФ"
+subagent "10% от тарифа бизнес класса на рейсы TK. (только при вылете из РФ. При вылете из других пунктов 5%);"
 important!
 check { country_iatas.first != 'RU' }
 classes :business
@@ -2047,6 +2051,32 @@ commission "0%/0%"
 example 'svoist istsvo/business'
 disabled "не включены комбинации"
 no_commission
+
+example "svoist/economy"
+agent "В период выписки с 14.10.2011 по 16.03.2012г. с началом перелета из пунктов РФ: "
+agent "10% от опубл.  тарифа Эконом класса;"
+subagent "В период выписки с 14.10.2011 по 16.03.2012г. с началом перелета из пунктов РФ:"
+subagent "8% от опубл. тарифа Эконом класса;"
+classes :economy
+strt_date '14.10.2011'
+expr_date '16.03.2012'
+check { country_iatas.first == 'RU' }
+important!
+discount "6%"
+commission "10%/8%"
+
+example "svoist/business"
+agent "В период выписки с 14.10.2011 по 16.03.2012г. с началом перелета из пунктов РФ: "
+agent "17% от опубл.  тарифа Бизнес класса;"
+subagent "В период выписки с 14.10.2011 по 16.03.2012г. с началом перелета из пунктов РФ:"
+subagent "15% от опубл. тарифа Бизнес класса;"
+classes :business
+strt_date '14.10.2011'
+expr_date '16.03.2012'
+check { country_iatas.first == 'RU' }
+important!
+discount "10%"
+commission "17%/15%"
 
 carrier "TP", "TAP PORTUGAL"
 ########################################
