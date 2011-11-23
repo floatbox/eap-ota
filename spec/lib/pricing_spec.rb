@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe PricingMethods::Order do
+describe Pricing::Order do
   let :base_order_attrs do
     {
       :price_fare => 20000,

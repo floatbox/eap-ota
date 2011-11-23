@@ -2,7 +2,7 @@
 class Order < ActiveRecord::Base
 
   include CopyAttrs
-  include PricingMethods::Order
+  include Pricing::Order
   include IncomeDistribution
 
   # FIXME сделать модуль или фикс для typus, этим оверрайдам место в typus/application.yml

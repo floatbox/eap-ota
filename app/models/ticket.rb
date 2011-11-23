@@ -30,7 +30,7 @@ class Ticket < ActiveRecord::Base
 
   extend Commission::Columns
   has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount
-  include PricingMethods::Ticket
+  include Pricing::Ticket
 
   before_save :recalculate_commissions
 
