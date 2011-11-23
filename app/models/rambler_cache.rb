@@ -55,9 +55,8 @@ class RamblerCache
       'dir' => segment_hash(variant.segments[0]),
       'ret' => variant.segments[1] ? segment_hash(variant.segments[1]) : []
     }
-    [(res['dir'] + res['ret']), recommendation.cabins, recommendation.booking_classes].transpose.each do |segment_hash, cabin, booking_class|
+    [(res['dir'] + res['ret']), recommendation.cabins].transpose.each do |segment_hash, cabin|
       segment_hash['cls'] = CABINS_MAPPING[cabin]
-      segment_hash['bcl'] = booking_class
     end
     res
   end
