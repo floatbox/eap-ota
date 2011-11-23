@@ -184,11 +184,8 @@ module PricerHelper
         concat %(-#{recommendation.commission.discount} (#{recommendation.price_discount}) )
       end
       concat %( #{recommendation.price_subagent} р.)
-      unless recommendation.price_markup == 0
-        concat %(#{recommendation.price_our_markup} р.)
-        unless recommendation.price_consolidator == 0
-          concat %(, конс: #{recommendation.price_consolidator} р.)
-        end
+      unless recommendation.price_consolidator == 0
+        concat %(, конс: #{recommendation.price_consolidator} р.)
       end
     elsif Commission.exists_for?(recommendation)
       concat %(Не подходят правила)

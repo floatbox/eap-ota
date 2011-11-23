@@ -8,7 +8,6 @@ module Pricing
   #      price_consolidator                4. Сбор авиацентра в рублях Aviacenter fee RUB [=п.1 Fare * п.3 Aviacenter fee]
   #      ??? price_blanks                  5. Сбор за бланки RUB (цифры)
   #      ??? commission_blanks
-  #      price_our_markup                  6. Сервисный сбор Эвитерра Eviterra fee (цифры)
   #      ??? (commission_our_markup)       - до эквайринга? может еще один, после эквайринга, сделать?
   #
   #

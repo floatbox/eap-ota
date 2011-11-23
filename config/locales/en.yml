@@ -14,7 +14,6 @@ en:
       order:
         # price_fare: "Fare"
         # price_tax: "Tax"
-        # price_our_markup: "Eviterra fee"
         # price_total: "Ticket price total"
         # price_with_payment_commission: "TOTAL CLIENT PRICE"
 

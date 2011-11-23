@@ -15,7 +15,6 @@ module Pricing
     # price_fare
     # price_tax
     # price_subagent,
-    # price_our_markup,
     # price_consolidator
     # price_blanks
 
@@ -44,7 +43,7 @@ module Pricing
     end
 
     def price_markup
-      price_our_markup + price_consolidator + price_blanks - price_discount
+      price_consolidator + price_blanks - price_discount
     end
 
     def acquiring_percentage

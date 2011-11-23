@@ -87,7 +87,7 @@ class Recommendation
     end
   end
 
-  attr_accessor :price_fare, :price_tax, :price_our_markup
+  attr_accessor :price_fare, :price_tax
 
   # сумма, которая придет нам от платежного шлюза
   def price_total
@@ -150,12 +150,7 @@ class Recommendation
 
   # надбавка к цене амадеуса
   def price_markup
-    ajust_markup! if @price_our_markup.nil?
-    price_our_markup + price_consolidator + price_blanks - price_discount
-  end
-
-  def ajust_markup!
-    @price_our_markup = 0
+    price_consolidator + price_blanks - price_discount
   end
 
   def commission

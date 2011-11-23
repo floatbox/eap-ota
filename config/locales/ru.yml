@@ -36,7 +36,6 @@ ru:
         price_agent: "Агентская комиссия, р."
         price_subagent: "Субагентская комиссия, р."
         price_discount: "Скидка от тарифа, р."
-        price_our_markup: "Сервисный сбор Эвитерра, р."
         price_total: "Cтоимость билета до эквайринга, р."
         price_payment_commission: "Эквайринг, р."
         price_with_payment_commission: "Итого к оплате / Оплачено, р."

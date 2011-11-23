@@ -42,7 +42,7 @@ describe RamblerCache do
       seg1 = Segment.new(:flights => [fl1, fl2])
       seg2 = Segment.new(:flights => [fl3])
       variant = Variant.new(:segments => [seg1, seg2])
-      recommendation = Recommendation.new(:variants => [variant], :cabins => ['Y', 'Y', 'Y'], :source => 'amadeus', :booking_classes => ['M', 'N', 'K'], :validating_carrier_iata => 'SU', :price_fare => 1000, :price_tax => 2000, :price_our_markup => 0)
+      recommendation = Recommendation.new(:variants => [variant], :cabins => ['Y', 'Y', 'Y'], :source => 'amadeus', :booking_classes => ['M', 'N', 'K'], :validating_carrier_iata => 'SU', :price_fare => 1000, :price_tax => 2000)
       pricer_form = PricerForm.simple(:from => 'MOW', :to => 'LON', :date1 => '131211', :date2 => '141211', :adults => 2)
       @result = RamblerCache.from_form_and_recs(pricer_form, [recommendation]).data[0]
     end

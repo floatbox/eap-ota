@@ -174,7 +174,6 @@ class Order < ActiveRecord::Base
     copy_attrs recommendation, self,
       :source,
       :blank_count,
-      :price_our_markup,
       :price_tax,
       :price_fare,
       :price_with_payment_commission
@@ -201,7 +200,6 @@ class Order < ActiveRecord::Base
       copy_attrs recommendation, self,
         :price_agent,
         :price_subagent,
-        :price_our_markup,
         :price_consolidator,
         :price_blanks,
         :price_discount
