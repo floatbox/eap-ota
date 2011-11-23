@@ -47,11 +47,6 @@ describe RamblerCache do
       @result = RamblerCache.from_form_and_recs(pricer_form, [recommendation]).data[0]
     end
 
-    it 'sets correct booking classes' do
-      @result['dir'].map{|segment| segment['bcl']}.should == ['M', 'N']
-      @result['ret'].map{|segment| segment['bcl']}.should == ['K']
-    end
-
     it 'sets correct cabins' do
       @result['dir'].map{|segment| segment['cls']}.should == ['E', 'E']
       @result['ret'].map{|segment| segment['cls']}.should == ['E']
