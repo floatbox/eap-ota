@@ -224,6 +224,9 @@ class Strategy
           cancel
           return
         end
+        
+        # если не было cancel можно посылать нотификацию
+        @order.email_ready!
 
         # обилечивание
         #Amadeus::Service.issue_ticket(@order_form.pnr_number)

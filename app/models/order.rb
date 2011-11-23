@@ -73,7 +73,7 @@ class Order < ActiveRecord::Base
 
   before_validation :capitalize_pnr
   before_save :calculate_price_with_payment_commission, :if => lambda { price_with_payment_commission.blank? || price_with_payment_commission.zero? || !fix_price? }
-  before_create :generate_code, :set_payment_status
+  before_create :generate_code, :set_payment_status, :set_email_status
   after_save :create_notification
 
   def create_notification
@@ -442,6 +442,10 @@ class Order < ActiveRecord::Base
   def cancel!
     update_attribute(:ticket_status, 'canceled')
   end
+  
+  def email_ready!
+    update_attribute(:email_status, '')
+  end
 
   def resend_email!
     update_attribute(:email_status, '')
@@ -464,6 +468,10 @@ class Order < ActiveRecord::Base
 
   def set_payment_status
     self.payment_status = (payment_type == 'card') ? 'not blocked' : 'pending'
+  end
+  
+  def set_email_status
+    self.email_status = (source == 'amadeus') ? 'not ready' : ''
   end
 
   # надо указать текущую сумму. чтобы нечаянно не рефанднуть дважды

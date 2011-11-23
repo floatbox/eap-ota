@@ -21,7 +21,7 @@ class Notification < ActiveRecord::Base
 
   alias_attribute :email, :destination
 
-  def self.statuses; [ "sent", "error", 'delayed'] end
+  def self.statuses; ["sent", "error", "delayed"] end
   def self.formats; ["booking", "ticket"] end
 
   def set_order_data
@@ -66,7 +66,7 @@ class Notification < ActiveRecord::Base
       counter += 1
     end
     rescue
-      Airbrake.notify($!) rescue Rails.logger.error("  can't notify airbrake #{$!.class}: #{$!.message}")
+      Airbrake.notify($!) rescue Rails.logger.error(" can't notify airbrake #{$!.class}: #{$!.message}")
   end
 
   def sent_status
