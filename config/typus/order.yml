@@ -111,6 +111,7 @@ Order:
       - price_agent
       - price_subagent
       - price_with_payment_commission
+      - price_total
       - need_attention
       - partner
     options:
