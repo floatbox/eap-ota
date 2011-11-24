@@ -100,7 +100,6 @@ Ticket:
       - price_agent
       - commission_subagent
       - price_subagent
-      - price_transfer
       - pnr_number
       - need_attention
       - validating_carrier

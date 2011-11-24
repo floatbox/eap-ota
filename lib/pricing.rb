@@ -26,8 +26,6 @@ module Pricing
   #      price_subagent                       наша доля комиссии (субагентская)
   #        (commission_subagent)
   #      price_difference                  price_total - price_total_old, рассчитывается после первой загрузки билетов
-
-  #      price_transfer                   - есть у билетов, вычисляется. используется?
   #
   #      ??? price_income                     прибыль?
   #      методы: карта

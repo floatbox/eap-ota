@@ -31,7 +31,7 @@ module Pricing
       price_tax + price_markup + price_payment + price_declared_discount
     end
 
-    # "налоги и сборы c комиссией" для отображения клиенту
+    # "налоги и сборы c комиссией" для отображения клиенту (без эквайринга)
     def price_tax_and_markup_but_no_payment
       price_tax + price_markup + price_declared_discount
     end

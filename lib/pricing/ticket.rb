@@ -26,10 +26,6 @@ module Pricing
       price_fare + price_tax
     end
 
-    def price_transfer
-      price_fare + price_tax + price_consolidator + price_blanks - price_subagent
-    end
-
     def price_refund
       if kind == 'refund'
         -(price_tax + price_fare + price_penalty)
