@@ -6,7 +6,6 @@ module RamblerApi
   include KeyValueInit
 
   def self.redirecting_uri params
-
     direct_flights = params[:dir].collect do |flight|
       Flight.new(
         :operating_carrier_iata => flight[:oa],
@@ -61,7 +60,7 @@ module RamblerApi
     recommendation = recommendation.serialize
     if search.valid?
       search.save_to_cache
-      uri = {:action => 'preliminary_booking', :query_key => search.query_key, :recommendation => recommendation, :controller => 'booking'}
+      uri = {:action => 'preliminary_booking', :recommendation => recommendation, :controller => 'booking'}
     elsif search.segments.first.errors.messages.first
       raise ArgumentError, "#{ search.segments.first.errors.messages.first[1][0] }"
     else
@@ -74,7 +73,7 @@ module RamblerApi
     uri = "http://eviterra.com/api/rambler_booking.xml?#{string}"
   end
 
-  def self.generate_hash search, recommendation
+  def self.generate_hash recommendation
 
     hash = {}
 
