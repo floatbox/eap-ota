@@ -25,16 +25,21 @@ module CommissionRules
   end
 
   def applicable? recommendation
-    not disabled? and
+    !turndown_reason(recommendation)
+  end
+
+  def turndown_reason recommendation
+    disabled? and return "правило отключено"
     # carrier == recommendation.validating_carrier_iata and
-    applicable_date? and
-    applicable_interline?(recommendation) and
-    valid_interline?(recommendation) and
-    applicable_classes?(recommendation) and
-    applicable_subclasses?(recommendation) and
-    applicable_custom_check?(recommendation) and
-    applicable_routes?(recommendation) and
-    applicable_geo?(recommendation)
+    applicable_date? or return "прошел/не наступил период действия"
+    applicable_interline?(recommendation) or return "интерлайн/не интерлайн"
+    valid_interline?(recommendation) or return "нет интерлайн договора между авиакомпаниями"
+    applicable_classes?(recommendation) or return "не подходит класс бронирования"
+    applicable_subclasses?(recommendation) or return "не подходит подкласс бронирования"
+    applicable_custom_check?(recommendation) or return "не прошло дополнительную проверку"
+    applicable_routes?(recommendation) or return "маршрут не в списке применимых"
+    applicable_geo?(recommendation) or return "не тот тип МВЛ/ВВЛ"
+    nil
   end
 
   def applicable_interline? recommendation
