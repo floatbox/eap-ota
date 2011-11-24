@@ -2,18 +2,10 @@ require 'spec_helper'
 
 describe BookingController do
 
-  describe '#api_manual_booking' do
+  describe '#api_rambler_booking' do
 
     let :request_params do
-      {:request => {
-        :src => 'LED',                                  #IATA города или аэропорта вылета
-        :dst => 'MOW',                                  #IATA города или аэропорта прилета
-        :dir => '280911',                           #Дата прямого вылета в формате
-        :cls => 'P',                                    #Cabin (E – эконом, B – бизнес, F – первый, P – премиум, A – любой)
-        :adt =>  1                                      #Кол-во взрослых
-      },
-      :response => {
-        :va  => 'SU',                                   #Validating airline (авиакомпания, на бланке которой выписывается билет)
+      { :va  => 'SU',                                   #Validating airline (авиакомпания, на бланке которой выписывается билет)
         :dir => [{                                      #Cегменты прямого перелета
           :bcl => 'M',                                  #Booking_class
           :cls => 'P',                                  #Cabin
@@ -24,7 +16,7 @@ describe BookingController do
           :dur => '75',                                 #Длительность перелета в сегменте (мин)
           :dep =>{                                      #Данные вылета
             :p  => 'LED',                               #IATA код аэропорта
-            :dt => '280911',                  #Дата и время в формате ГГГГ-ММ-ДД ЧЧ:ММ:СС
+            :dt => '280911',                            #Дата и время в формате ГГГГ-ММ-ДД ЧЧ:ММ:СС
             :t  => '1'                                  #Терминал, если есть, иначе пустая строка
             },
           :arr =>{                                      #Данные приземления (аналогичны dep)
@@ -36,7 +28,7 @@ describe BookingController do
         :ret => [],                                     #Дата обратного вылета
         :c   => 2151,                                   #Цена (рубли)
         :c1  => 2151                                    #Цена за одного взрослого пассажира
-      }}
+      }
     end
 
     it 'creates appropriate pricer_form' do
@@ -53,7 +45,7 @@ describe BookingController do
       pricer_form.stub(:valid?).and_return('true')
       pricer_form.stub(:save_to_cache).and_return('true')
       pricer_form.stub(:query_key).and_return('7dd6jv')
-      get :api_manual_booking, request_params
+      get :api_rambler_booking, request_params
     end
 
     it 'creates appropriate recommendation' do
@@ -61,6 +53,11 @@ describe BookingController do
       segments = [mock('Segment')]
       recommendation = mock('Recommendation')
       segments.stub(:flights).and_return(flights)
+      flights.stub_chain(:departure, :city, :iata).and_return('LED')
+      flights.stub_chain(:arrival, :city, :iata).and_return('SVO')
+      flights.stub(:departure_date).and_return('280911')
+      recommendation.stub_chain(:cabins, :first).and_return('P')
+
 
       Flight.should_receive(:new).with(hash_including(
         :operating_carrier_iata => 'SU',
@@ -76,7 +73,7 @@ describe BookingController do
         :cabins => ['C']
         )).and_return(recommendation)
       recommendation.should_receive(:serialize).and_return("amadeus.SU.N.P..SU840LEDMOW280911" )
-      get :api_manual_booking, request_params
+      get :api_rambler_booking, request_params
     end
   end
 end

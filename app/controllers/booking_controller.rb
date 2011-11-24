@@ -35,7 +35,7 @@ class BookingController < ApplicationController
     render 'variant'
   end
 
-  def api_manual_booking
+  def api_rambler_booking
     uri = RamblerApi.redirecting_uri params
     redirect_to uri
 
