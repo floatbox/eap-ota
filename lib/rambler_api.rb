@@ -1,23 +1,13 @@
 # encoding: utf-8
 
 module RamblerApi
-  CABINS_MAPPING = {'E' => 'Y', 'A' => 'Y', 'P' => 'C', 'B' => 'C', 'F' => 'F'}
+  CABINS_MAPPING = {'E' => 'Y', 'A' => '', 'P' => 'C', 'B' => 'C', 'F' => 'F', 'Y' => 'Y', 'C' => 'C'}
+  REV_CABINS_MAPPING = {'Y' => 'E', 'C' => 'B', 'F' => 'F', '' => 'A'}
   include KeyValueInit
 
   def self.redirecting_uri params
-    pricer_form_hash = {
-        :from => params[:request][:src],
-        :to => params[:request][:dst],
-        :date1 => params[:request][:dir],
-        :date2 => params[:request][:ret],
-        :adults => params[:request][:adt].to_i,
-        :children => params[:request][:cnn].to_i,
-        :infants => params[:request][:inf].to_i,
-        :cabin => CABINS_MAPPING[params[:request][:cls]],
-        :partner => 'rambler'}
-    search = PricerForm.simple(pricer_form_hash)
 
-    direct_flights = params[:response][:dir].collect do |flight|
+    direct_flights = params[:dir].collect do |flight|
       Flight.new(
         :operating_carrier_iata => flight[:oa],
         :marketing_carrier_iata => flight[:ma],
@@ -28,8 +18,8 @@ module RamblerApi
     end
     direct_segments = Segment.new(:flights => direct_flights)
 
-    if (params[:response][:ret] || params[:response][:ret] != [])
-      return_flights = params[:response][:ret].collect do |flight|
+    if (params[:ret] || params[:ret] != [])
+      return_flights = params[:ret].collect do |flight|
         Flight.new(
           :operating_carrier_iata => flight[:oa],
           :marketing_carrier_iata => flight[:ma],
@@ -45,7 +35,7 @@ module RamblerApi
     variants = Variant.new(:segments => segments)
 
     booking_classes, cabins = [],[]
-    booking_classes, cabins = (params[:response][:dir] + (params[:response][:ret] || [])).each do |segment|
+    booking_classes, cabins = (params[:dir] + (params[:ret] || [])).each do |segment|
       booking_classes << segment[:bcl]
       cabins << CABINS_MAPPING[segment[:cls]]
       break booking_classes, cabins
@@ -53,12 +43,22 @@ module RamblerApi
 
     recommendation = Recommendation.new(
       :source => 'amadeus',
-      :validating_carrier_iata => params[:response][:va],
+      :validating_carrier_iata => params[:va],
       :booking_classes => booking_classes,
       :cabins => cabins,
       :variants => [variants])
+
+    date2 = return_flights.first.departure_date if return_flights =! []
+    pricer_form_hash = {
+        :from => direct_flights.first.departure.city.iata,
+        :to => direct_flights.last.arrival.city.iata,
+        :date1 => direct_flights.first.departure_date,
+        :date2 => date2,
+        :adults => 1,
+        :cabin => recommendation.cabins.first,
+        :partner => 'rambler'}
+    search = PricerForm.simple(pricer_form_hash)
     recommendation = recommendation.serialize
-    
     if search.valid?
       search.save_to_cache
       uri = {:action => 'preliminary_booking', :query_key => search.query_key, :recommendation => recommendation, :controller => 'booking'}
@@ -71,29 +71,24 @@ module RamblerApi
 
   def self.uri_for_rambler hash
     string = hash.to_query
-    uri = "http://eviterra.com/api/manual_booking.xml?#{string}"
+    uri = "http://eviterra.com/api/rambler_booking.xml?#{string}"
   end
 
   def self.generate_hash search, recommendation
-    request = {}
-    response = {}
 
-    request[:src] = search.from
-    request[:dst] = search.to
-    request[:dir] = search.date1
-    request[:cls] = search.cabin
-    request[:adt] = search.adults
+    hash = {}
 
-    response[:va] = recommendation.validating_carrier_iata
-    response[:dir] = []
-    response[:ret] = []
 
-    response[:dir] = recommendation.segments.first.flights.collect do |flight|
+    hash[:va] = recommendation.validating_carrier_iata
+    hash[:dir] = []
+    hash[:ret] = []
+
+    hash[:dir] = recommendation.segments.first.flights.collect do |flight|
       {:oa => flight.operating_carrier_iata,
        :n  => flight.flight_number,
        :ma => flight.marketing_carrier_iata,
        :bcl =>recommendation.booking_class_for_flight(flight),
-       :cls =>recommendation.cabin_for_flight(flight),
+       :cls =>REV_CABINS_MAPPING[recommendation.cabin_for_flight(flight)],
        :dep => {
           :p => flight.departure_iata,
           :dt => flight.departure_date
@@ -104,11 +99,11 @@ module RamblerApi
       }
     end
     if recommendation.segments.second
-      response[:ret] = recommendation.segments.second.flights.collect do |flight|
+      hash[:ret] = recommendation.segments.second.flights.collect do |flight|
         {:oa => flight.operating_carrier_iata,
          :n  => flight.flight_number,
          :bcl =>recommendation.booking_class_for_flight(flight),
-         :cls =>recommendation.cabin_for_flight(flight),
+         :cls =>REV_CABINS_MAPPING[recommendation.cabin_for_flight(flight)],
          :ma => flight.marketing_carrier_iata,
          :dep => {
             :p => flight.departure_iata,
@@ -121,9 +116,7 @@ module RamblerApi
       end
     end
 
-
-
-    rambler_hash = {:response => response, :request => request}
+    hash
   end
 
 end

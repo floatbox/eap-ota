@@ -25,7 +25,7 @@ describe RamblerApi do
       :departure_time => '1400',
       :arrival_date => '131211',
       :arrival_time => '1700',
-      :arrival_iata => 'LON',
+      :arrival_iata => 'YXU',
       :departure_term => '1',
       :equipment_type_iata => 'TU3')
   end
@@ -33,7 +33,7 @@ describe RamblerApi do
     Flight.new(:operating_carrier_iata => 'BP',
       :marketing_carrier_iata => 'UN',
       :flight_number => '300',
-      :departure_iata => 'LON',
+      :departure_iata => 'YXU',
       :departure_date => '141211',
       :departure_time => '1400',
       :arrival_date => '141211',
@@ -59,70 +59,67 @@ describe RamblerApi do
   let(:pricer_form) do
     PricerForm.simple(
         :from => 'MOW',
-        :to => 'LON',
+        :to => 'YXU',
         :date1 => '131211',
         :date2 => '141211',
         :adults => 2)
   end
   let(:request_params) do
-    {:request => {
-        :src => 'MOW',
-        :dst => 'LON',
-        :dir => '131211',
-        :adt =>  2,
-        :cls => nil
-      },
-      :response => {
-        :va  => 'SU',
-        :dir => [{
+    {
+      :va  => 'SU',
+      :dir => [
+        {
           :bcl => 'M',
-          :cls => 'Y',
+          :cls => 'E',
           :oa  => 'SU',
           :n   => '100',
           :ma  => 'UN',
-          :dep =>{
+          :dep => {
             :p  => 'SVO',
             :dt => '131211'
-            },
-          :arr =>{
-            :p => 'LED'
-            }
           },
-          {
+          :arr => {
+            :p => 'LED'
+          }
+      },
+      {
           :bcl => 'N',
-          :cls => 'Y',
+          :cls => 'E',
           :oa  => 'UN',
           :n   => '200',
           :ma  => 'UN',
-          :dep =>{
+          :dep => {
             :p  => 'LED',
             :dt => '131211'
-            },
-          :arr =>{
-            :p => 'LON'
-            }
-          }],
-        :ret => [{
+          },
+          :arr => {
+            :p => 'YXU'
+          }
+        }
+      ],
+    :ret => [
+        {
           :bcl => 'K',
-          :cls => 'Y',
+          :cls => 'E',
           :oa  => 'BP',
           :n   => '300',
           :ma  => 'UN',
-          :dep =>{
-            :p  => 'LON',
+          :dep => {
+            :p  => 'YXU',
             :dt => '141211'
-            },
-          :arr =>{
+          },
+          :arr => {
             :p => 'SVO'
-            }
-          }]
-      }}
+          }
+        }
+      ]
+    }
   end
 
   it 'should generate correct url' do
     uri = described_class.redirecting_uri request_params
     uri[:query_key].should_not be nil
-    uri.should include(:recommendation => "amadeus.SU.M...SU:UN100SVOLED131211-UN200LEDLON131211.BP:UN300LONSVO141211")
+    uri.should include(:recommendation => "amadeus.SU.M.Y..SU:UN100SVOLED131211-UN200LEDYXU131211.BP:UN300YXUSVO141211")
   end
 
   it 'should generate correct hash' do
@@ -130,7 +127,7 @@ describe RamblerApi do
   end
 
   it 'should generate correct hash for rambler' do
-    described_class.uri_for_rambler(request_params).should == "http://eviterra.com/api/manual_booking.xml?request%5Badt%5D=2&request%5Bcls%5D=&request%5Bdir%5D=131211&request%5Bdst%5D=LON&request%5Bsrc%5D=MOW&response%5Bdir%5D%5B%5D%5Barr%5D%5Bp%5D=LED&response%5Bdir%5D%5B%5D%5Bbcl%5D=M&response%5Bdir%5D%5B%5D%5Bcls%5D=Y&response%5Bdir%5D%5B%5D%5Bdep%5D%5Bdt%5D=131211&response%5Bdir%5D%5B%5D%5Bdep%5D%5Bp%5D=SVO&response%5Bdir%5D%5B%5D%5Bma%5D=UN&response%5Bdir%5D%5B%5D%5Bn%5D=100&response%5Bdir%5D%5B%5D%5Boa%5D=SU&response%5Bdir%5D%5B%5D%5Barr%5D%5Bp%5D=LON&response%5Bdir%5D%5B%5D%5Bbcl%5D=N&response%5Bdir%5D%5B%5D%5Bcls%5D=Y&response%5Bdir%5D%5B%5D%5Bdep%5D%5Bdt%5D=131211&response%5Bdir%5D%5B%5D%5Bdep%5D%5Bp%5D=LED&response%5Bdir%5D%5B%5D%5Bma%5D=UN&response%5Bdir%5D%5B%5D%5Bn%5D=200&response%5Bdir%5D%5B%5D%5Boa%5D=UN&response%5Bret%5D%5B%5D%5Barr%5D%5Bp%5D=SVO&response%5Bret%5D%5B%5D%5Bbcl%5D=K&response%5Bret%5D%5B%5D%5Bcls%5D=Y&response%5Bret%5D%5B%5D%5Bdep%5D%5Bdt%5D=141211&response%5Bret%5D%5B%5D%5Bdep%5D%5Bp%5D=LON&response%5Bret%5D%5B%5D%5Bma%5D=UN&response%5Bret%5D%5B%5D%5Bn%5D=300&response%5Bret%5D%5B%5D%5Boa%5D=BP&response%5Bva%5D=SU"
+    described_class.uri_for_rambler(request_params).should == "http://eviterra.com/api/rambler_booking.xml?dir%5B%5D%5Barr%5D%5Bp%5D=LED&dir%5B%5D%5Bbcl%5D=M&dir%5B%5D%5Bcls%5D=E&dir%5B%5D%5Bdep%5D%5Bdt%5D=131211&dir%5B%5D%5Bdep%5D%5Bp%5D=SVO&dir%5B%5D%5Bma%5D=UN&dir%5B%5D%5Bn%5D=100&dir%5B%5D%5Boa%5D=SU&dir%5B%5D%5Barr%5D%5Bp%5D=YXU&dir%5B%5D%5Bbcl%5D=N&dir%5B%5D%5Bcls%5D=E&dir%5B%5D%5Bdep%5D%5Bdt%5D=131211&dir%5B%5D%5Bdep%5D%5Bp%5D=LED&dir%5B%5D%5Bma%5D=UN&dir%5B%5D%5Bn%5D=200&dir%5B%5D%5Boa%5D=UN&ret%5B%5D%5Barr%5D%5Bp%5D=SVO&ret%5B%5D%5Bbcl%5D=K&ret%5B%5D%5Bcls%5D=E&ret%5B%5D%5Bdep%5D%5Bdt%5D=141211&ret%5B%5D%5Bdep%5D%5Bp%5D=YXU&ret%5B%5D%5Bma%5D=UN&ret%5B%5D%5Bn%5D=300&ret%5B%5D%5Boa%5D=BP&va=SU"
   end
 
 end
