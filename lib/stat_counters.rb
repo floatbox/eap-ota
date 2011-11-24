@@ -17,7 +17,7 @@ class StatCounters
   end
 
   def push data
-    @counters.update(date_key, '$inc' => data)
+    @counters.update(date_key, {'$inc' => data}, {:upsert => true, :safe => true})
   end
 
 end
