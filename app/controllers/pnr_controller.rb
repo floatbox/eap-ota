@@ -7,7 +7,7 @@ class PNRController < ApplicationController
   def get_data
     @pnr = PNR.get_by_number params[:id]
     @prices = @pnr.order
-    @pnr.email = @order.email if @prices.source == 'sirena' && @pnr.email.blank?
+    @pnr.email = @prices.email if @prices.source == 'sirena' && @pnr.email.blank?
     @passengers = @pnr.passengers
     @last_pay_time = @pnr.order.last_pay_time
   end
