@@ -72,6 +72,7 @@ group :test do
   gem 'rb-fsevent', :require => false
   gem 'rb-fchange', :require => false
   gem 'growl' # for OSX
+  gem 'libnotify' # for linux
   gem 'guard-spork'
   gem 'guard-rspec'
   # gem 'guard-rails-assets'

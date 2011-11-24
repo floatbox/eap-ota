@@ -150,6 +150,7 @@ GEM
     json_pure (1.6.1)
     kaminari (0.12.4)
       rails (>= 3.0.0)
+    libnotify (0.5.9)
     libv8 (3.3.10.2)
     linecache (0.46)
       rbx-require-relative (> 0.0.4)
@@ -339,6 +340,7 @@ DEPENDENCIES
   i18n
   interactive_editor
   jquery-rails
+  libnotify
   looksee
   memoize
   mongo-rails-instrumentation
