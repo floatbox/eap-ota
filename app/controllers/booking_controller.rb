@@ -35,22 +35,14 @@ class BookingController < ApplicationController
     render 'variant'
   end
 
-  def api_manual_booking
-    RamblerApi.new params
-    @search = RamblerApi.search
-    recommendation = RamblerApi.recommendation
-    if @search.valid?
-      @search.save_to_cache
-      redirect_to :action => 'preliminary_booking', :query_key => @search.query_key, :recommendation => recommendation
-    elsif @search.segments.first.errors.messages.first
-      raise ArgumentError, "#{ @search.segments.first.errors.messages.first[1][0] }"
-    else
-      render :text => 'Unknown error', :status => 500
-    end
-    rescue IataStash::NotFound => iata_error
-      render 'api/rambler_failure', :status => 404, :locals => { :message => iata_error.message }
+  def api_rambler_booking
+    uri = RamblerApi.redirecting_uri params
+    redirect_to uri
+
+  rescue IataStash::NotFound => iata_error
+      redirect_to 'api/rambler_failure', :status => 404, :locals => { :message => iata_error.message }
     rescue ArgumentError => argument_error
-      render 'api/rambler_failure', :status => 400, :locals => { :message => argument_error.message }
+      redirect_to 'api/rambler_failure', :status => 400, :locals => { :message => argument_error.message }
   end
 
   def api_redirect

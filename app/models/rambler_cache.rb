@@ -2,7 +2,7 @@ require 'yajl'
 require 'httparty'
 
 class RamblerCache
-  CABINS_MAPPING = {'Y' => 'E', 'C' => 'B', 'F' => 'F', '' => 'A'}
+  CABINS_MAPPING = {'M' => 'E', 'W' => 'E', 'Y' => 'E', 'C' => 'B', 'F' => 'F', '' => 'A'}
   # на продакшне хранится в capped collection
   # таблицу надо создавать явно:
   # db.createCollection("rambler_caches", {capped:true, size:200000000})
@@ -30,30 +30,34 @@ class RamblerCache
       :src => pricer_form.segments[0].from_iata,
       :dst => pricer_form.segments[0].to_iata,
       :dir => pricer_form.segments[0].date_as_date.strftime('%Y-%m-%d'),
-      :cls => CABINS_MAPPING[pricer_form.cabin],
+      :cls => CABINS_MAPPING[pricer_form.cabin] || 'E',
       :adt => pricer_form.adults,
       :cnn => pricer_form.children,
       :inf => pricer_form.infants,
       :wtf => 0
     }
-    res.merge({:ret => pricer_form.segments[1].date_as_date.strftime('%Y-%m-%d')}) if pricer_form.segments[1]
+    res.merge!({:ret => pricer_form.segments[1].date_as_date.strftime('%Y-%m-%d')}) if pricer_form.segments[1]
     res
   end
 
   def self.from_form_and_recs(form, recommendations)
     data = recommendations.each_with_object([]) do |rec, res|
-      res.concat(rec.variants.map { |v| variant_hash(v, rec, form.people_count)})
+      res.concat(rec.variants.map { |v| variant_hash(v, rec, form)})
     end
     self.new(:data => data, :pricer_form => form)
   end
 
-  def self.variant_hash(variant, recommendation, people_count = {:adults => 1})
+  def self.variant_hash(variant, recommendation, form)
+    people_count = form.people_count
+    hash = RamblerApi.generate_hash(form, recommendation)
+    uri = RamblerApi.uri_for_rambler(hash)
     res = {
       'va' => recommendation.validating_carrier_iata,
       'c'  => recommendation.price_with_payment_commission,
       'c0' => recommendation.price_with_payment_commission / people_count[:adults],
       'dir' => segment_hash(variant.segments[0]),
-      'ret' => variant.segments[1] ? segment_hash(variant.segments[1]) : []
+      'ret' => variant.segments[1] ? segment_hash(variant.segments[1]) : [],
+      'uri' => uri
     }
     [(res['dir'] + res['ret']), recommendation.cabins].transpose.each do |segment_hash, cabin|
       segment_hash['cls'] = CABINS_MAPPING[cabin]
