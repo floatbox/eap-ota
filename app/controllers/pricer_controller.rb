@@ -76,7 +76,7 @@ class PricerController < ApplicationController
     if @search.valid?
       @search.save_to_cache
       @recommendations = Mux.new(:lite => true).async_pricer(@search)
-      StatCounters.inc %W[search.api.sucess search.api.#{partner}.sucess]
+      StatCounters.inc %W[search.api.success search.api.#{partner}.success]
       render 'api/yandex'
     else
       @recommendations = []
