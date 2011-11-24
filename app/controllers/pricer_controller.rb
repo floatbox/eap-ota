@@ -63,15 +63,20 @@ class PricerController < ApplicationController
 
   # FIXME попытаться вынести общие методы или объединить с pricer/validate
   def api
-    if !Conf.api.enabled || !(Conf.api.partners.include? params['partner'].to_s)
+    partner = params['partner'].to_s
+    if !Conf.api.enabled || !(Conf.api.partners.include? partner)
       render 'api/yandex_failure', :status => 503, :locals => {:message => 'service disabled by administrator'}
       return
     end
     pricer_form_hash = params.dup.delete_if {|key, value| %W[controller action format].include?(key)}
     @search = PricerForm.simple(pricer_form_hash)
+    
+    StatCounters.inc %W[search.api.total search.api.#{partner}.total]
+    
     if @search.valid?
       @search.save_to_cache
       @recommendations = Mux.new(:lite => true).async_pricer(@search)
+      StatCounters.inc %W[search.api.success search.api.#{partner}.success]
       render 'api/yandex'
     else
       @recommendations = []
