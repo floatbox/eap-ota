@@ -50,6 +50,7 @@
 }
 #rtabs ul {
     float: left;
+    width: 990px;
 }
 #rtabs li {
     float: left;
@@ -60,6 +61,9 @@
     font-size: 20px;
     line-height: 22px;
     letter-spacing: -0.035em;
+}
+#rtabs #rtab-matrix {
+    float: right;
 }
 #rtabs .link {
     text-decoration: underline;

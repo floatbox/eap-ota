@@ -20,9 +20,11 @@ init: function(table) {
         }, 50);
     }).delegate('td.active', 'click', function() {
         if (!$(this).closest('.offer').hasClass('active-booking')) {
+            var variant = $('#mv-' + $(this).attr('data-vid'));
             selected.removeClass('selected').addClass('active');
             selected = $(this).addClass('selected').removeClass('active');
-            results.showVariant($('#mv-' + $(this).attr('data-vid')));
+            results.showVariant(variant);
+            self.changeTitle(variant);
         }
     });
     cells.each(function() {
@@ -98,5 +100,21 @@ date: function(date) {
     var dm = date.getDate() + '&nbsp;' + constants.monthes.genitive[date.getMonth()];
     var wd = constants.weekdays[(date.getDay() || 7) - 1];
     return '<h6>' + dm + '</h6><p>' + wd + '</p>';
+},
+changeTitle: function(variant) {
+    var dates = variant.attr('id').split('-');
+    results.title.find('.date').each(function(i) {
+        var date = Date.parseAmadeus(dates[i + 1]);
+        var sd = dates[i + 1].substring(0, 2) + '.' + dates[i + 1].substring(2, 4);
+        var hd = date.getDate() + '&nbsp;' + constants.monthes.genitive[date.getMonth()];
+        var year = date.getFullYear();
+        if (year !== search.calendar.currentYear) {
+            hd += '&nbsp;' + year;
+        }
+        $(this).html(hd).attr('data-date', sd);
+    });
+    results.hclone.find('.results-title').html(results.title.html());
+    results.title.attr('data-title', results.getWindowTitle());
+    pageurl.title('авиабилеты ' + results.title.attr('data-title'));
 }
 };

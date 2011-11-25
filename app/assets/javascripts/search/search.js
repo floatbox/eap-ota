@@ -155,6 +155,7 @@ init: function() {
     this.submit.find('.b-submit').click(function(event) {
         event.preventDefault();
         if (results.nextUpdate && !self.submit.hasClass('disabled')) {
+            results.selectedTab = 'featured';
             results.load();
             results.show();
         }

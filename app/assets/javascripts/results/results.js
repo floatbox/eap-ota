@@ -141,6 +141,15 @@ init: function() {
     });
 },
 selectTab: function(tab) {
+    if (this.selectedTab === 'matrix') {
+        this.updateTitle(this.update.title);
+        pageurl.title('авиабилеты ' + this.title.attr('data-title'));        
+    } else if (tab === 'matrix') {
+        var cell = this.matrix.el.find('.offer-prices .selected');
+        if (cell.length) {
+            this.matrix.changeTitle($('#mv-' + cell.attr('data-vid')));
+        }
+    }
     this.selectedTab = tab;
     this.filters.el.toggleClass('disabled', tab === 'matrix');
     $('#offers-context').toggleClass('latent', tab === 'diagram');
@@ -236,16 +245,7 @@ show: function(fixed) {
     search.toggle(false);
     search.submit.addClass('current');
     if (u.title) {
-        this.title.html(u.title);
-        var locations = this.title.find('.locations');
-        var ls = locations.map(function() {
-            return locations.length > 1 ? $(this).attr('data-short') : $(this).text();
-        }).get().join(', ');
-        var ds = this.title.find('.date').map(function() {
-            return $(this).attr('data-date');
-        }).get().join(locations.length > 1 ? ', ' : '—');
-        this.title.attr('data-title', ls.replace(/— (.*?),(?= \1 —)/g, '—') + ' (' + ds + ')');
-        this.hclone.find('.results-title').html(u.title);
+        this.updateTitle(u.title);
     }
     if (u.loading) {
         this.toggle('loading');
@@ -265,6 +265,21 @@ show: function(fixed) {
     if (fixed !== false && offset - w.scrollTop() > w.height() / 2) {
         $.animateScrollTop(offset - 112);
     }
+},
+updateTitle: function(title) {
+    this.title.html(title);
+    this.hclone.find('.results-title').html(title);
+    this.title.attr('data-title', this.getWindowTitle());
+},
+getWindowTitle: function() {
+    var locations = this.title.find('.locations');
+    var ls = locations.map(function() {
+        return locations.length > 1 ? $(this).attr('data-short') : $(this).text();
+    }).get().join(', ');
+    var ds = this.title.find('.date').map(function() {
+        return $(this).attr('data-date');
+    }).get().join(locations.length > 1 ? ', ' : '—');
+    return ls.replace(/— (.*?),(?= \1 —)/g, '—') + ' (' + ds + ')';
 },
 hide: function() {
     this.el.addClass('latent').removeClass('ready');
