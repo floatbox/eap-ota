@@ -6,8 +6,9 @@ module RamblerApi
   include KeyValueInit
 
   def self.redirecting_uri params
-    direct_flights = params[:dir].collect do |flight|
-      Flight.new(
+    direct_flights = []
+      params[:dir].each do |k , flight|
+      direct_flights << Flight.new(
         :operating_carrier_iata => flight[:oa],
         :marketing_carrier_iata => flight[:ma],
         :flight_number => flight[:n],
@@ -17,9 +18,10 @@ module RamblerApi
     end
     direct_segments = Segment.new(:flights => direct_flights)
 
-    if (params[:ret] || params[:ret] != [])
-      return_flights = params[:ret].collect do |flight|
-        Flight.new(
+    if (params[:ret] != {})
+      return_flights = []
+      params[:ret].each do |k, flight|
+        return_flights << Flight.new(
           :operating_carrier_iata => flight[:oa],
           :marketing_carrier_iata => flight[:ma],
           :flight_number => flight[:n],
@@ -31,13 +33,18 @@ module RamblerApi
     end
     return_segments ||= nil
     segments = [direct_segments, return_segments]
+    segments.compact!
     variants = Variant.new(:segments => segments)
 
     booking_classes, cabins = [],[]
-    booking_classes, cabins = (params[:dir] + (params[:ret] || [])).each do |segment|
+
+    params[:dir].each do |k, segment|
       booking_classes << segment[:bcl]
       cabins << CABINS_MAPPING[segment[:cls]]
-      break booking_classes, cabins
+    end
+    params[:ret].each do |k, segment|
+      booking_classes << segment[:bcl]
+      cabins << CABINS_MAPPING[segment[:cls]]
     end
 
     recommendation = Recommendation.new(
@@ -60,7 +67,7 @@ module RamblerApi
     recommendation = recommendation.serialize
     if search.valid?
       search.save_to_cache
-      uri = {:action => 'preliminary_booking', :recommendation => recommendation, :controller => 'booking'}
+      uri = {:action => 'preliminary_booking', :recommendation => recommendation, :controller => 'booking', :query_key => search.query_key}
     elsif search.segments.first.errors.messages.first
       raise ArgumentError, "#{ search.segments.first.errors.messages.first[1][0] }"
     else
@@ -79,11 +86,12 @@ module RamblerApi
 
 
     hash[:va] = recommendation.validating_carrier_iata
-    hash[:dir] = []
-    hash[:ret] = []
+    hash[:dir] = {}
+    hash[:ret] = {}
 
-    hash[:dir] = recommendation.segments.first.flights.collect do |flight|
-      {:oa => flight.operating_carrier_iata,
+    key = 0
+    recommendation.segments.first.flights.collect do |flight|
+     hash[:dir][key]= {:oa => flight.operating_carrier_iata,
        :n  => flight.flight_number,
        :ma => flight.marketing_carrier_iata,
        :bcl =>recommendation.booking_class_for_flight(flight),
@@ -96,10 +104,12 @@ module RamblerApi
           :p => flight.arrival_iata
         }
       }
+      key += 1
     end
     if recommendation.segments.second
-      hash[:ret] = recommendation.segments.second.flights.collect do |flight|
-        {:oa => flight.operating_carrier_iata,
+      key = 0
+      recommendation.segments.second.flights.collect do |flight|
+      hash[:ret][key] = {:oa => flight.operating_carrier_iata,
          :n  => flight.flight_number,
          :bcl =>recommendation.booking_class_for_flight(flight),
          :cls =>REV_CABINS_MAPPING[recommendation.cabin_for_flight(flight)],
@@ -112,6 +122,7 @@ module RamblerApi
             :p => flight.arrival_iata
           }
         }
+        key +=1
       end
     end
 

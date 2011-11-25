@@ -6,6 +6,28 @@ require 'csv'
 
 module DataMigration
 
+  def self.update_blank_count
+    Order.where('created_at >= ? AND pnr_number is not null AND blank_count is NULL and ticket_status = "ticketed"', Date.parse('01.06.2011')).map do |o|
+      count = o.tickets.count
+      o.update_attribute(:blank_count, count) if count > 0
+    end
+  end
+
+  def self.update_price_blank_and_price_consolidator
+    Order.where('created_at >= ? AND
+     pnr_number is not null AND
+     blank_count is not NULL AND
+     blank_count > 0 AND
+     ticket_status = "ticketed" AND
+     source = "sirena" AND
+     price_blanks = 0 AND
+     price_consolidator = 0 AND
+     price_consolidator_markup > 0', Date.parse('01.06.2011')).each do |o|
+      o.update_attribute(:price_blanks, 50 * o.blank_count)
+      o.update_attribute(:price_consolidator, o.price_consolidator_markup - (50 * o.blank_count))
+    end
+  end
+
   def self.fill_in_ticketed_date_in_sirena_tickets
     orders = Order.where(['source = "sirena" AND created_at > ? AND ticket_status = "ticketed"', Date.today - 1.month]).order('created_at DESC')
     orders.each do |o|
@@ -29,13 +51,6 @@ module DataMigration
       t.update_attributes(:code => (number.match(/([\d\w]+)-{0,1}(\d{10}-{0,1}\d*)/).to_a)[1],
                           :number => (number.match(/([\d\w]+)-{0,1}(\d{10}-{0,1}\d*)/).to_a)[2]
                           ) if t.code.blank?
-    end
-  end
-
-  def self.update_blank_count
-    Order.where(:blank_count => nil).includes(:tickets).all.each do |order|
-      order.blank_count = order.tickets.any? && order.tickets.size
-      order.save
     end
   end
 

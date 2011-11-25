@@ -6,7 +6,7 @@ describe BookingController do
 
     let :request_params do
       { :va  => 'SU',                                   #Validating airline (авиакомпания, на бланке которой выписывается билет)
-        :dir => [{                                      #Cегменты прямого перелета
+        :dir => { 0=> {                                      #Cегменты прямого перелета
           :bcl => 'M',                                  #Booking_class
           :cls => 'P',                                  #Cabin
           :oa  => 'SU',                                 #Перевозчик, владелец самолета (IATA код Operating Airline)
@@ -24,8 +24,8 @@ describe BookingController do
             :d => '280911',
             :t => 'D'
             }
-          }],
-        :ret => [],                                     #Дата обратного вылета
+          }},
+        :ret => {},                                     #Дата обратного вылета
         :c   => 2151,                                   #Цена (рубли)
         :c1  => 2151                                    #Цена за одного взрослого пассажира
       }
