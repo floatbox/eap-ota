@@ -322,9 +322,9 @@ module CommissionRules
           rec = Recommendation.example(code, :carrier => commission.carrier)
           proposed = find_for(rec)
           if commission.expr_date && commission.expr_date.to_date.past? && !commission.disabled?
-            error "#{commission.carrier} (line #{source}): - expiration date passed!"
+            pending "#{commission.carrier} (line #{source}): - expiration date passed already."
           elsif commission.strt_date && commission.strt_date.to_date.future? && !commission.disabled?
-            error "#{commission.carrier} (line #{source}): - start date doesn't come!"
+            pending "#{commission.carrier} (line #{source}): - start date didn't come yet."
           elsif proposed == commission ||
                 proposed.nil? && commission.disabled?
             ok "#{commission.carrier} (line #{source}): #{code} - OK"
@@ -360,6 +360,10 @@ module CommissionRules
     private
     def error msg
       puts "\e[31m" + msg + "\e[0m"
+    end
+
+    def pending msg
+      puts "\e[33m" + msg + "\e[0m"
     end
 
     def ok msg
