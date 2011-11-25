@@ -937,7 +937,7 @@ discount "5%"
 commission '9%/7%'
 
 carrier "GF", "GULF AIR (Глонасс) (НЕ BSP!!!)"
-########################################
+#######################################
 
 agent    "7% от тарифа на международные рейсы GF"
 subagent "5% от тарифа на международные рейсы GF"
@@ -986,12 +986,12 @@ commission "1/0.05"
 carrier "HU", "HAINAN AIRLINES"
 ########################################
 
-example 'svopek/f'
-example 'svopek/f/ab peksvo/f'
-expr_date "31.10.2011"
-agent "20% перелет с 01.01.11-31.10.11 / class F, P, C  of the flight MOW - CHINA или MOW - CHINA - MOW"
-subagent "18% перелет с 01.01.11-31.10.11 / class F, P, C of the flight MOW - CHINA или MOW - CHINA - MOW"
-subclasses "FPC"
+example 'svopek/c'
+example 'svopek/c/ab peksvo/c'
+strt_date "10.11.2011"
+agent "20% от опубл.тарифов по классу С на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
+subagent "18% от опубл.тарифов по классу С на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
+subclasses "C"
 interline :possible
 check { city_iatas.first == 'MOW' && country_iatas.include?('CN') }
 discount "15%"
@@ -999,10 +999,10 @@ commission "20%/18%"
 
 example 'svopek/d'
 example 'svopek/d/ab persvo/d'
-expr_date "31.10.2011"
-agent "15% перелет с 01.01.11-31.10.11 / class D, I, J  of the flight MOW - CHINA или MOW - CHINA - MOW"
-subagent "13% перелет с 01.01.11-31.10.11 / class D, I, J of the flight MOW - CHINA или MOW - CHINA - MOW"
-subclasses "DIJ"
+strt_date "10.11.2011"
+agent "15% от опубл.тарифов по классу D на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
+subagent "13% от опубл.тарифов по классу D на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
+subclasses "D"
 interline :possible
 check { city_iatas.first == 'MOW' && country_iatas.include?('CN') }
 discount "10%"
@@ -1010,11 +1010,23 @@ commission "15%/13%"
 
 example 'svopek/z'
 example 'svopek/z/ab peksvo/z'
-example 'svopek/u/ab peksvo/u'
-expr_date "31.10.2011"
-agent "9% перелет с 01.01.11-31.10.11 / class Y,B,H,K,L,M,Q,W,S,U,E,O of the flight MOW - CHINA или MOW - CHINA - MOW"
-subagent "7% перелет с 01.01.11-31.10.11 / class Y,B,H,K,L,M,Q,W,S,U,E,O of the flight MOW - CHINA или MOW - CHINA - MOW"
-subclasses "YBHKLMQWSUEOZ" #Z из другого правила, которое я не завел отдельно, проценты те же
+example 'svopek/i/ab peksvo/i'
+strt_date "10.11.2011"
+agent "9% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
+subagent "7% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
+subclasses "IZ" 
+interline :possible
+check { city_iatas.first == 'MOW' && country_iatas.include?('CN') }
+discount "4%"
+commission "9%/7%"
+
+# копия для эконом класса
+example 'svopek'
+example 'svopek/ab peksvo'
+example 'svopek/ab peksvo'
+strt_date "10.11.2011"
+agent "9% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
+subagent "7% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 interline :possible
 check { city_iatas.first == 'MOW' && country_iatas.include?('CN') }
 discount "4%"
@@ -1023,56 +1035,98 @@ commission "9%/7%"
 example 'ledpek/c pekled/c'
 example 'ledpek/c/ab pekled/c'
 example 'ledpek/d/ab pekled/d'
-expr_date "31.12.2011"
-agent "15% перелет до 31.12.11 / class C, D, J  of the flight LED=PEK=LED"
-subagent "13% перелет до 31.12.11 / class C, D, J of the flight LED=PEK=LED"
-subclasses "CDJ"
+strt_date "10.11.2011"
+agent "15% от опубл.тарифов по классу С,D на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
+subagent "13% от опубл.тарифов по классу С,D на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
+subclasses "CD"
 interline :possible
-check { city_iatas.first == 'LED' && city_iatas.include?('BJS') }
+check { city_iatas.first == 'LED' && country_iatas.include?('CN') }
 discount "10%"
 commission "15%/13%"
 
-example 'ledpek/u pekled/u'
-example 'ledpek/u/ab pekled/u'
-example 'ledpek/t/ab pekled/t'
-expr_date "31.12.2011"
-agent "9% перелет до 31.12.11 / class I / Z / Y / B / H / K / L / M / Q / X / V / T / W / S / N / U / E / O of the flight LED=PEK=LED"
-subagent "7% перелет до 31.12.11 / class I / Z / Y / B / H / K / L / M / Q / X / V / T / W / S / N / U / E / O of the flight LED=PEK=LED"
-subclasses "IZYBHKLMQXVTWSNUEO"
+example 'ledpek/i pekled/i'
+example 'ledpek/i/ab pekled/i'
+example 'ledpek/z/ab pekled/z'
+strt_date "10.11.2011"
+agent "9% от опубл.тарифов по классам I, Z, а также на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
+subagent "7% от опубл.тарифов по классам I, Z, а также на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
+subclasses "IZ"
 interline :possible
-check { city_iatas.first == 'LED' && city_iatas.include?('BJS') }
+check { city_iatas.first == 'LED' && country_iatas.include?('CN') }
 discount "4%"
 commission "9%/7%"
 
-example 'ovbpek'
-example 'kjapek pekkja/ab'
-expr_date "31.10.2011"
-agent "9% перелет с 15.05.11-31.10.11с началом перевозки из городов KJA OVB IKT / all class "
-subagent "7% перелет с 15.05.11-31.10.11с началом перевозки из городов KJA OVB IKT / all class"
+# копия для эконом класса
+example 'ledpek pekled'
+example 'ledpek/ab pekled'
+example 'ledpek/ab pekled'
+strt_date "10.11.2011"
+agent "9% от опубл.тарифов по классам I, Z, а также на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
+subagent "7% от опубл.тарифов по классам I, Z, а также на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
+interline :possible
+check { city_iatas.first == 'LED' && country_iatas.include?('CN') }
+discount "4%"
+commission "9%/7%"
+
+example 'ovbpek/c'
+example 'kjapek/d'
+example 'iktpek/i pekikt/i/ab'
+example 'ovbpek/z pekovb/z/ab'
+strt_date "10.11.2011"
+agent "9% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Новосибирск-CHINA или  Новосибирск-CHINA-Новосибирск"
+agent "9% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Иркутск-CHINA или  Иркутск-CHINA-Иркутск"
+agent "9% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Красноярск-CHINA или Красноярск-CHINA-Красноярск"
+subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Новосибирск-CHINA или Новосибирск-CHINA-Новосибирск"
+subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Иркутск-CHINA или Иркутск-CHINA-Иркутск"
+subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Красноярск-CHINA или Красноярск-CHINA-Красноярск"
+subclasses "CDIZ"
 interline :possible
 check { %W(KJA OVB IKT).include?(city_iatas.first) }
 discount "4%"
 commission "9%/7%"
 
-example 'peksvo/f'
-example 'peksvo/d/ab svopek/d'
-expr_date "31.10.2011"
-agent "3% перелет с 05.05.11 по 31.10.11г./class F, P, C , D , I , J  of the flight CHINA - MOW  или  CHINA - MOW - CHINA"
-subagent "1% перелет с 05.05.11 по 31.10.11г./class F, P, C , D , I , J of the flight CHINA - MOW или CHINA - MOW - CHINA"
-subclasses "FPCDIJ"
+# копия для эконом класса
+example 'ovbpek'
+example 'kjapek'
+example 'iktpek pekikt/ab'
+example 'ovbpek pekovb/ab'
+strt_date "10.11.2011"
+agent "9% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Новосибирск-CHINA или  Новосибирск-CHINA-Новосибирск"
+agent "9% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Иркутск-CHINA или  Иркутск-CHINA-Иркутск"
+agent "9% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Красноярск-CHINA или Красноярск-CHINA-Красноярск"
+subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Новосибирск-CHINA или Новосибирск-CHINA-Новосибирск"
+subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Иркутск-CHINA или Иркутск-CHINA-Иркутск"
+subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Красноярск-CHINA или Красноярск-CHINA-Красноярск"
 interline :possible
-check { city_iatas.include?('MOW') && country_iatas.first == 'CN' }
-commission "3%/1%"
+check { %W(KJA OVB IKT).include?(city_iatas.first) }
+discount "4%"
+commission "9%/7%"
 
-example 'peksvo/economy'
-example 'peksvo/economy svopek/economy'
-expr_date "31.10.2011"
-agent "3% перелет с 05.05.11 по 31.10.11г./class Y,B,H,K,L,M,Q,X,V,T,S,N,U,  of the flight CHINA - MOW  или  CHINA - MOW - CHINA"
-subagent "1% перелет с 05.05.11 по 31.10.11г./class Y,B,H,K,L,M,Q,X,V,T,S,N,U, of the flight CHINA - MOW или CHINA - MOW - CHINA"
-classes :economy
-subclasses "YBHKLMQXVTSNU"
-check { city_iatas.include?('MOW') && country_iatas.first == 'CN' }
-commission "3%/1%"
+example 'alapek/c'
+example 'alapek/d'
+example 'alapek/i pekala/i/ab'
+example 'alapek/z pekala/z/ab'
+strt_date "10.11.2011"
+agent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Алма-Ата-CHINA или Алма-Ата-CHINA-Алма-Ата"
+subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Алма-Ата-CHINA или Алма-Ата-CHINA-Алма-Ата"
+subclasses "CDIZ"
+interline :possible
+check { city_iatas.first == 'ALA' }
+discount "4%"
+commission "7%/7%"
+
+# копия для эконом класса
+example 'alapek'
+example 'alapek'
+example 'alapek pekala/ab'
+example 'alapek pekala/ab'
+strt_date "10.11.2011"
+agent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Алма-Ата-CHINA или Алма-Ата-CHINA-Алма-Ата"
+subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Алма-Ата-CHINA или Алма-Ата-CHINA-Алма-Ата"
+interline :possible
+check { city_iatas.first == 'ALA' }
+discount "4%"
+commission "7%/7%"
 
 example 'pekweh'
 example 'nayweh wehnay'
@@ -1091,10 +1145,6 @@ commission "3%/1%"
 strt_date "01.11.2011"
 agent "9% от всех опубл. тарифов на рейсы HU (В договоре Interline не прописан.)"
 subagent "7% от опубл. тарифов на собств. рейсы HU"
-not_implemented
-
-agent "0% по опубл. тарифам отдельные перелеты с вылетами из Пекина по Китаю на собств. рейсы HU"
-subagent "0% по опубл. тарифам отдельные перелеты с вылетами из Пекина по Китаю на собств. рейсы HU"
 not_implemented
 
 carrier "HX", "Hong Kong Airlines"
@@ -1699,10 +1749,11 @@ interline :yes
 commission "1%/0.5%"
 
 example 'svoprg/c prgsvo/l'
+strt_date "14.11.2011"
+expr_date "31.03.2012"
 agent "6% по выписанным билетам с 14.11.2011г. по 31.03.2012г. (включая обе даты) по опубл. тарифов классов J,C,D,Y,M,B,H,K,T,A,L,X,Q,U,V,N. с вылетом из городов РФ в любой из городов маршрутной сети OK, включая рейсы code-share."
 subagent "4% по выписанным билетам с 14.11.2011г. по 31.03.2012г. (включая обе даты) по опубл. тарифов классов J,C,D,Y,M,B,H,K,T,A,L,X,Q,U,V,N. с вылетом из городов РФ в любой из городов маршрутной сети OK, включая рейсы code-share."
 subclasses "JCDYMBHKTALXQUVN"
-expr_date '31.03.2012'
 important!
 check { country_iatas.first == 'RU' }
 discount "2%"
@@ -2722,7 +2773,9 @@ no_commission
 carrier "TU", "TUNIS AIR"
 ########################################
 
+strt_date "15.10.2011"
 agent "3 (три) % от всех опубл. тарифов на собств. рейсы TU"
-no_commission
+subagent "2% от всех опубл. тарифов на собств. рейсы TU"
+commission "3%/2%"
 
 end
