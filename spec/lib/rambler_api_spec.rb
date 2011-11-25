@@ -56,11 +56,11 @@ describe RamblerApi do
         :price_tax => 2000
     )
   end
-  let(:yamled_params){"dir%5B%5D%5Barr%5D%5Bp%5D=LED&dir%5B%5D%5Bbcl%5D=M&dir%5B%5D%5Bcls%5D=E&dir%5B%5D%5Bdep%5D%5Bdt%5D=131211&dir%5B%5D%5Bdep%5D%5Bp%5D=SVO&dir%5B%5D%5Bma%5D=UN&dir%5B%5D%5Bn%5D=100&dir%5B%5D%5Boa%5D=SU&dir%5B%5D%5Barr%5D%5Bp%5D=YXU&dir%5B%5D%5Bbcl%5D=N&dir%5B%5D%5Bcls%5D=E&dir%5B%5D%5Bdep%5D%5Bdt%5D=131211&dir%5B%5D%5Bdep%5D%5Bp%5D=LED&dir%5B%5D%5Bma%5D=UN&dir%5B%5D%5Bn%5D=200&dir%5B%5D%5Boa%5D=UN&ret%5B%5D%5Barr%5D%5Bp%5D=SVO&ret%5B%5D%5Bbcl%5D=K&ret%5B%5D%5Bcls%5D=E&ret%5B%5D%5Bdep%5D%5Bdt%5D=141211&ret%5B%5D%5Bdep%5D%5Bp%5D=YXU&ret%5B%5D%5Bma%5D=UN&ret%5B%5D%5Bn%5D=300&ret%5B%5D%5Boa%5D=BP&va=SU"}
+  let(:yamled_params){"dir%5B0%5D%5Barr%5D%5Bp%5D=LED&dir%5B0%5D%5Bbcl%5D=M&dir%5B0%5D%5Bcls%5D=E&dir%5B0%5D%5Bdep%5D%5Bdt%5D=131211&dir%5B0%5D%5Bdep%5D%5Bp%5D=SVO&dir%5B0%5D%5Bma%5D=UN&dir%5B0%5D%5Bn%5D=100&dir%5B0%5D%5Boa%5D=SU&dir%5B1%5D%5Barr%5D%5Bp%5D=YXU&dir%5B1%5D%5Bbcl%5D=N&dir%5B1%5D%5Bcls%5D=E&dir%5B1%5D%5Bdep%5D%5Bdt%5D=131211&dir%5B1%5D%5Bdep%5D%5Bp%5D=LED&dir%5B1%5D%5Bma%5D=UN&dir%5B1%5D%5Bn%5D=200&dir%5B1%5D%5Boa%5D=UN&ret%5B0%5D%5Barr%5D%5Bp%5D=SVO&ret%5B0%5D%5Bbcl%5D=K&ret%5B0%5D%5Bcls%5D=E&ret%5B0%5D%5Bdep%5D%5Bdt%5D=141211&ret%5B0%5D%5Bdep%5D%5Bp%5D=YXU&ret%5B0%5D%5Bma%5D=UN&ret%5B0%5D%5Bn%5D=300&ret%5B0%5D%5Boa%5D=BP&va=SU"}
   let(:request_params) do
     {
       :va  => 'SU',
-      :dir => [
+      :dir => { 0 =>
         {
           :bcl => 'M',
           :cls => 'E',
@@ -74,7 +74,7 @@ describe RamblerApi do
           :arr => {
             :p => 'LED'
           }
-      },
+      }, 1 =>
       {
           :bcl => 'N',
           :cls => 'E',
@@ -89,8 +89,8 @@ describe RamblerApi do
             :p => 'YXU'
           }
         }
-      ],
-    :ret => [
+      },
+    :ret => {0 =>
         {
           :bcl => 'K',
           :cls => 'E',
@@ -104,14 +104,15 @@ describe RamblerApi do
           :arr => {
             :p => 'SVO'
           }
-        }
-      ]
+        }}
+
     }
   end
 
   it 'should generate correct url' do
     uri = described_class.redirecting_uri request_params
-    uri.should include(:recommendation => "amadeus.SU.M.Y..SU:UN100SVOLED131211-UN200LEDYXU131211.BP:UN300YXUSVO141211")
+    uri[:query_key].should_not be_nil
+    uri.should include(:recommendation => "amadeus.SU.MNK.YYY..SU:UN100SVOLED131211-UN200LEDYXU131211.BP:UN300YXUSVO141211")
   end
 
   it 'should generate correct hash' do
@@ -119,7 +120,7 @@ describe RamblerApi do
   end
 
   it 'should generate correct hash for rambler' do
-    described_class.uri_for_rambler(request_params).should == "http://eviterra.com/api/rambler_booking.xml?dir%5B%5D%5Barr%5D%5Bp%5D=LED&dir%5B%5D%5Bbcl%5D=M&dir%5B%5D%5Bcls%5D=E&dir%5B%5D%5Bdep%5D%5Bdt%5D=131211&dir%5B%5D%5Bdep%5D%5Bp%5D=SVO&dir%5B%5D%5Bma%5D=UN&dir%5B%5D%5Bn%5D=100&dir%5B%5D%5Boa%5D=SU&dir%5B%5D%5Barr%5D%5Bp%5D=YXU&dir%5B%5D%5Bbcl%5D=N&dir%5B%5D%5Bcls%5D=E&dir%5B%5D%5Bdep%5D%5Bdt%5D=131211&dir%5B%5D%5Bdep%5D%5Bp%5D=LED&dir%5B%5D%5Bma%5D=UN&dir%5B%5D%5Bn%5D=200&dir%5B%5D%5Boa%5D=UN&ret%5B%5D%5Barr%5D%5Bp%5D=SVO&ret%5B%5D%5Bbcl%5D=K&ret%5B%5D%5Bcls%5D=E&ret%5B%5D%5Bdep%5D%5Bdt%5D=141211&ret%5B%5D%5Bdep%5D%5Bp%5D=YXU&ret%5B%5D%5Bma%5D=UN&ret%5B%5D%5Bn%5D=300&ret%5B%5D%5Boa%5D=BP&va=SU"
+    described_class.uri_for_rambler(request_params).should == "http://eviterra.com/api/rambler_booking.xml?#{yamled_params}"
   end
 
 end
