@@ -33,6 +33,7 @@ module RamblerApi
     end
     return_segments ||= nil
     segments = [direct_segments, return_segments]
+    segments.compact!
     variants = Variant.new(:segments => segments)
 
     booking_classes, cabins = [],[]
