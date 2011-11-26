@@ -179,7 +179,7 @@ module PricerHelper
     concat recommendation.validating_carrier_iata + ' '
     if recommendation.commission
       concat %( #{recommendation.commission.agent}/#{recommendation.commission.subagent})
-      unless recommendation.commission.discount.zero?
+      unless recommendation.commission.consolidator.zero?
         concat %( +#{recommendation.commission.consolidator})
         #concat %(, конс: #{recommendation.price_consolidator} р.)
       end
@@ -198,7 +198,7 @@ module PricerHelper
       concat link_to('нет правил для авиакомпании)', admin_commissions_url, :target => '_blank')
     end
     concat " #{recommendation.blank_count} бл." if recommendation.blank_count && recommendation.blank_count > 1
-    concat '(' + recommendation.booking_classes.join(',') + ')'
+    concat ' (' + recommendation.booking_classes.join(',') + ')'
     concat " Мест: #{recommendation.availability}"
   end
 
