@@ -1,6 +1,6 @@
 # encoding: utf-8
 class Commission
-include CommissionRules
+include Commission::Rules
 
 # применяется вообще ко всем правилам ниже
 defaults :system => :amadeus, :ticketing_method => "aviacenter", :consolidator => '2%', :blanks => 0, :discount => 0, :corrector => :twopercent

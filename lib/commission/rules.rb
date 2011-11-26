@@ -1,5 +1,5 @@
 # encoding: utf-8
-module CommissionRules
+module Commission::Rules
 
   def self.included base
     create_class_attrs base

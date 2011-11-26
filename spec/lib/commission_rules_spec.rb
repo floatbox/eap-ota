@@ -2,14 +2,14 @@
 
 require 'spec_helper'
 
-describe CommissionRules do
+describe Commission::Rules do
 
   include Commission::Fx
 
   context "just one commission" do
     let :commission_class do
       Class.new do
-        include CommissionRules
+        include Commission::Rules
 
         carrier 'FV'
         commission '2%/3'
@@ -29,7 +29,7 @@ describe CommissionRules do
   context "two carriers, three simple commissions" do
     let :commission_class do
       Class.new do
-        include CommissionRules
+        include Commission::Rules
 
         carrier 'FV'
         commission '2%/3'
@@ -64,7 +64,7 @@ describe CommissionRules do
   context "all the rules" do
     let :commission_class do
       Class.new do
-        include CommissionRules
+        include Commission::Rules
 
         carrier 'FV'
         consolidator '1%'
@@ -90,7 +90,7 @@ describe CommissionRules do
 
     let :commission_class do
       Class.new do
-        include CommissionRules
+        include Commission::Rules
         defaults :system => :amadeus,
           :ticketing_method => :aviacenter,
           :consolidator => '2%',
@@ -126,7 +126,7 @@ describe CommissionRules do
         it "should raise error" do
           expect {
             Class.new do
-              include CommissionRules
+              include Commission::Rules
               defaults :wrongkey => :wrongvalue
             end
           }.to raise_error(ArgumentError)
@@ -149,7 +149,7 @@ describe CommissionRules do
         it "should raise error" do
           expect {
             Class.new do
-              include CommissionRules
+              include Commission::Rules
               carrier 'FV'
               carrier_defaults :wrongkey => :wrongvalue
             end
@@ -177,7 +177,7 @@ describe CommissionRules do
 
     let :commission_class do
       Class.new do
-        include CommissionRules
+        include Commission::Rules
 
         carrier 'FV'
         commission '2%/3'
