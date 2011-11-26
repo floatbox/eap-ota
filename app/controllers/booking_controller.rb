@@ -33,16 +33,24 @@ class BookingController < ApplicationController
     @search = PricerForm.load_from_cache(params[:query_key])
     save_partner if @partner = @search.partner
     render 'variant'
+    StatCounters.inc %W[enter.api.success]
+    StatCounters.inc %W[enter.api.#{@partner}.success] if @partner
+  ensure
+    StatCounters.inc %W[enter.api.total]
+    StatCounters.inc %W[enter.api.#{@partner}.total] if @partner
   end
 
   def api_rambler_booking
     uri = RamblerApi.redirecting_uri params
+    StatCounters.inc %W[enter.rambler_cache.success]
     redirect_to uri
 
   rescue IataStash::NotFound => iata_error
-      redirect_to 'api/rambler_failure', :status => 404, :locals => { :message => iata_error.message }
-    rescue ArgumentError => argument_error
-      redirect_to 'api/rambler_failure', :status => 400, :locals => { :message => argument_error.message }
+    redirect_to 'api/rambler_failure', :status => 404, :locals => { :message => iata_error.message }
+  rescue ArgumentError => argument_error
+    redirect_to 'api/rambler_failure', :status => 400, :locals => { :message => argument_error.message }
+  ensure
+    StatCounters.inc %W[enter.rambler_cache.total]
   end
 
   def api_redirect
@@ -50,10 +58,13 @@ class BookingController < ApplicationController
     save_partner if @partner = @search.partner
     if @search.valid?
       @search.save_to_cache
+      StatCounters.inc %W[enter.momondo_redirect.success]
       redirect_to "/##{@search.query_key}"
     else
       redirect_to '/'
     end
+  ensure
+    StatCounters.inc %W[enter.momondo_redirect.total]
   end
 
   def api_form
@@ -69,6 +80,7 @@ class BookingController < ApplicationController
 
   def pay
     if Conf.site.forbidden_sale
+      StatCounters.inc %W[pay.errors.forbidden]
       render :partial => 'forbidden_sale'
       return
     end
@@ -78,6 +90,7 @@ class BookingController < ApplicationController
     @order_form.update_attributes(params[:order])
     @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
     unless @order_form.valid?
+      StatCounters.inc %W[pay.errors.form]
       logger.info "Pay: invalid order: #{@order_form.errors_hash.inspect}"
       render :json => {:errors => @order_form.errors_hash}
       return
@@ -91,6 +104,7 @@ class BookingController < ApplicationController
     end
 
     unless @order_form.payment_type == 'card'
+      StatCounters.inc %W[pay.success.total pay.success.cash]
       logger.info "Pay: booking successful, payment: cash"
       render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order_form.pnr_number), :pnr_number => @order_form.pnr_number}
       return
@@ -105,24 +119,30 @@ class BookingController < ApplicationController
       unless strategy.delayed_ticketing?
         logger.info "Pay: ticketing"
         unless strategy.ticket
+          StatCounters.inc %W[pay.errors.ticketing]
           logger.info "Pay: ticketing failed"
           @order_form.order.unblock!
           render :partial => 'failed_booking'
           return
         end
       end
+      StatCounters.inc %W[pay.success.total pay.success.card]
       render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order_form.pnr_number), :pnr_number => @order_form.pnr_number}
 
     elsif payture_response.threeds?
+      StatCounters.inc %W[pay.3ds.requests]
       logger.info "Pay: payment system requested 3D-Secure authorization"
       render :partial => 'threeds', :locals => {:payture_response => payture_response}
 
     else # payture_response failed
       strategy.cancel
       msg = @order_form.card.errors[:number]
+      StatCounters.inc %W[pay.errors.payment]
       logger.info "Pay: payment failed with error message #{msg}"
       render :partial => 'failed_payment'
     end
+  ensure
+    StatCounters.inc %W[pay.total]
   end
 
   def confirm_3ds
@@ -143,6 +163,7 @@ class BookingController < ApplicationController
     case @order.payment_status
     when 'not blocked', 'new'
       unless @order.confirm_3ds(pa_res, md)
+        StatCounters.inc %W[pay.errors.payment pay.errors.3ds pay.errors.3ds_payment]
         logger.info "Pay: problem confirming 3ds"
         @error_message = :payment
       else
@@ -153,6 +174,7 @@ class BookingController < ApplicationController
           logger.info "Pay: ticketing"
 
           unless strategy.ticket
+            StatCounters.inc %W[pay.errors.ticketing pay.errors.3ds]
             logger.info "Pay: ticketing failed"
             @error_message = :ticketing
             @order.unblock!
@@ -165,6 +187,8 @@ class BookingController < ApplicationController
       logger.info "Pay: money unblocked?"
       @error_message = :ticketing
     end
+  ensure
+    StatCounters.inc %W[pay.total pay.3ds.confirmations]
   end
 
   private
@@ -172,6 +196,7 @@ class BookingController < ApplicationController
   def save_partner
     session[:partner] = @partner
     cookies[:partner] = { :value => @partner, :expires => Time.now + 3600*24*30}
+    StatCounters.inc %W[enter.api.first_time enter.api.#{@partner}.first_time]
     logger.info "API::Partner::Enter: #{@partner} #{Time.now}"
   end
 
