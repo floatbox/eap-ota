@@ -23,6 +23,7 @@ admin:
   Payment: read, update
   FlightGroup: create, read, update, delete
   Commissions: read
+  Counters: read
 
 hoteditor:
   HotOffer: read, delete
