@@ -297,21 +297,42 @@ module CommissionRules
     # метод поиска рекомендации
 
     def find_for(recommendation)
-      (commissions[recommendation.validating_carrier_iata] || return).find do |c|
+      all_for(recommendation).find do |c|
         c.applicable?(recommendation)
       end
     end
 
-    def all
-      commissions.values.flatten.sort_by {|c| c.source.to_i }
+    def all_for(recommendation)
+      for_carrier(recommendation.validating_carrier_iata) || []
+    end
+
+    def exists_for?(recommendation)
+      for_carrier(recommendation.validating_carrier_iata).present?
     end
 
     def for_carrier(validating_carrier_iata)
       commissions[validating_carrier_iata]
     end
 
-    def exists_for?(recommendation)
-      for_carrier(recommendation.validating_carrier_iata).present?
+    def all
+      commissions.values.flatten.sort_by {|c| c.source.to_i }
+    end
+
+    def all_with_reasons_for(recommendation)
+      found = nil
+      all_for(recommendation).map do |c|
+        reason = c.turndown_reason(recommendation)
+        status =
+          if !found && reason
+            :fail
+          elsif !found && !reason
+            :success
+          else
+            :skipped
+          end
+        found = c unless reason
+        [c, status, reason]
+      end
     end
 
     # test methods

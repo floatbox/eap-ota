@@ -179,18 +179,23 @@ module PricerHelper
     concat recommendation.validating_carrier_iata + ' '
     if recommendation.commission
       concat %( #{recommendation.commission.agent}/#{recommendation.commission.subagent})
+      unless recommendation.commission.discount.zero?
+        concat %( +#{recommendation.commission.consolidator})
+        #concat %(, конс: #{recommendation.price_consolidator} р.)
+      end
       # FIXME, убрать нулевую комиссию?
-      if recommendation.commission.discount
-        concat %(-#{recommendation.commission.discount} (#{recommendation.price_discount}) )
+      unless recommendation.commission.discount.zero?
+        concat %( -#{recommendation.commission.discount})
       end
-      concat %( #{recommendation.price_subagent} р.)
-      unless recommendation.price_consolidator == 0
-        concat %(, конс: #{recommendation.price_consolidator} р.)
-      end
+      concat ' '
+      concat recommendation.commission.ticketing_method
+      # concat %( #{recommendation.price_subagent} р.)
+      concat ' '
+      concat link_to('комиссия', check_admin_commissions_url(:code => recommendation.serialize(variant)), :target => '_blank')
     elsif Commission.exists_for?(recommendation)
-      concat %(Не подходят правила)
+      concat link_to('не подходят правила', check_admin_commissions_url(:code => recommendation.serialize(variant)), :target => '_blank')
     else
-      concat %(Нет в договорe)
+      concat link_to('нет правил для авиакомпании)', admin_commissions_url, :target => '_blank')
     end
     concat " #{recommendation.blank_count} бл." if recommendation.blank_count && recommendation.blank_count > 1
     concat '(' + recommendation.booking_classes.join(',') + ')'

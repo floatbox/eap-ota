@@ -279,6 +279,17 @@ class Recommendation
     )
   end
 
+  # FIXME недоделано - негде брать инфу о букинг классах, например
+  def self.from_gds_code(validating_carrier_iata, code, source='amadeus')
+    flights = code.split("\n").map{|fc| Flight.from_gds_code(fc, source)}.compact
+    new(
+      :source => source,
+      :validating_carrier_iata => validating_carrier_iata,
+      :variants => [Variant.new(:segments => flights.map {|f| Segment.new(:flights => [f])})]
+      # booking classes ?
+    )
+  end
+
   # FIXME порнография какая-то. чего так сложно?
   def self.summary recs, locations
     carriers = []

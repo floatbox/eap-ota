@@ -172,4 +172,75 @@ describe CommissionRules do
       its(:first) { should be_an(commission_class) }
     end
   end
+
+  context "several commissions for a company" do
+
+    let :commission_class do
+      Class.new do
+        include CommissionRules
+
+        carrier 'FV'
+        commission '2%/3'
+
+        carrier 'AB'
+
+        agent "first"
+        interline :first
+        commission '1%/1%'
+
+        agent "second"
+        interline :yes
+        commission '2%/2%'
+
+        agent "third"
+        interline :no
+        important!
+        commission '3%/3%'
+
+        agent "fourth"
+        interline :possible
+        disabled "just because"
+        commission "4%/4%"
+      end
+    end
+
+    let :recommendation do
+      Recommendation.example('SVOCDG/SU CDGSVO', :carrier => 'AB')
+    end
+
+    specify {
+      commission_class.exists_for?(recommendation).should be_true
+    }
+
+    specify {
+      commission_class.find_for(recommendation).should be_a(commission_class)
+    }
+
+    specify {
+      commission_class.all_for(recommendation).should have(4).items
+    }
+
+    describe ".all_with_reasons_for" do
+      subject { commission_class.all_with_reasons_for(recommendation) }
+
+      it {should have(4).items}
+
+      it "should display all commissions in order of importance" do
+        subject.map {|row| row[0].agent_comments.strip}.should == %W[third first second fourth]
+      end
+
+      it "should have correct statuses" do
+        subject.map {|row| row[1]}.should == [:fail, :fail, :success, :skipped]
+      end
+
+      it "should have no reason for success" do
+        subject[2][2].should be_nil
+      end
+
+      it "should display as successful really applied commission" do
+        subject.find {|row| row[1] == :success}[0].should == commission_class.find_for(recommendation)
+      end
+    end
+
+  end
 end
