@@ -9,8 +9,8 @@
 
 <% @commissions.group_by(&:carrier).each do |carrier_code, commissions| %>
   <h2 id="<%= carrier_code %>"><%= "(#{carrier_code})" %> <%= Carrier[carrier_code].name  rescue '' %></h2>
-  <% commissions.each_with_index do |commission, idx| %>
-    <%= render 'commission', :commission => commission, :number => idx+1 %>
+  <% commissions.each do |commission| %>
+    <%= render 'commission', :commission => commission %>
   <% end %>
   <hr>
 <% end %>

@@ -2,7 +2,7 @@
 <table>
   <tr style="<%= strype %>">
     <td width="4%">
-      <%= link_to "#{commission.carrier} ##{number}", admin_commissions_path(:anchor => "#{commission.carrier}_#{number}"), :id => "#{commission.carrier}_#{number}" %>
+      <%= link_to "#{commission.carrier} ##{commission.number}", admin_commissions_path(:anchor => "#{commission.carrier}_#{commission.number}"), :id => "#{commission.carrier}_#{commission.number}" %>
     </td>
     <th width="48%">агентский договор</th>
     <th width="48%">субагентский договор</th>

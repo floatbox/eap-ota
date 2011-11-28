@@ -242,5 +242,16 @@ describe Commission::Rules do
       end
     end
 
+    describe "#number" do
+      it "should auto number commissions for every carrier according to source position from 1" do
+        commission_class.all.every.number.should == [1, 1, 2, 3, 4]
+      end
+
+      it "should apply commissions according to importance" do
+        commission_class.all_with_reasons_for(recommendation).every.first.every.number.should == [3, 1, 2, 4]
+      end
+
+    end
+
   end
 end

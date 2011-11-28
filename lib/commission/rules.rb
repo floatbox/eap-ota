@@ -18,7 +18,7 @@ module Commission::Rules
     :departure, :departure_country, :important,
     :check, :examples, :agent_comments, :subagent_comments, :source,
     :expr_date, :strt_date,
-    :system, :ticketing_method, :corrector
+    :system, :ticketing_method, :corrector, :number
 
   def disabled?
     disabled || not_implemented || no_commission
@@ -149,6 +149,7 @@ module Commission::Rules
         @carrier_name = carrier_name
         self.opts={}
         self.carrier_default_opts={}
+        @last_commission_number = 1
       else
         raise ArgumentError, "strange carrier: #{carrier}"
       end
@@ -189,6 +190,8 @@ module Commission::Rules
 
     def register commission
       commissions[@carrier] ||= []
+      commission.number = @last_commission_number
+      @last_commission_number += 1
       if commission.important
         commissions[@carrier].unshift commission
       else
