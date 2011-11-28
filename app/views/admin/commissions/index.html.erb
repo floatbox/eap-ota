@@ -1,99 +1,21 @@
+<h2>Комиссии</h2>
+<p>
+<%= link_to_unless_current 'подробно', admin_commissions_url %> /
+<%= link_to_unless_current 'кратко', table_admin_commissions_url %>
+</p>
+<p>
+<% @commissions.every.carrier.uniq.sort.each do |carrier_code| %>
+  <a href="#<%= carrier_code %>"><%= carrier_code %></a>
+<% end %>
+</p>
+<hr>
+
+<%= render 'form' %>
+
 <% @commissions.group_by(&:carrier).each do |carrier_code, commissions| %>
-  <h2><%= "(#{carrier_code})" %> <%= Carrier[carrier_code].name  rescue '' %></h2>
-  <% commissions.each_with_index do |commission, idx| %>
-    <% strype = cycle('background-color: #fff', 'background-color: #ddd') %>
-    <table>
-      <tr style="<%= strype %>">
-        <td width="4%"><%= carrier_code %> #<%= idx + 1 %></td>
-        <th width="48%">агентский договор</th>
-        <th width="48%">субагентский договор</th>
-      </tr>
-      <tr style="<%= strype %>">
-        <td></td>
-        <th> <%= commission.agent %> </li>
-        <th> <%= commission.subagent %> </li>
-      </tr>
-      <tr style="<%= strype %>">
-        <td></td>
-        <td> <%= raw (commission.agent_comments || '--').gsub("\n", "<br>") %> </td>
-        <td> <%= raw (commission.subagent_comments || '--').gsub("\n", "<br>") %> </td>
-      </tr>
-      <tr style="<%= strype %>">
-        <td></td>
-        <td>
-          <% if commission.no_commission %>
-            <h3>прячем из поиска</h3>
-          <% else %>
-            <h3>правила</h3>
-            <ul>
-              <% if commission.disabled? %>
-                <li style="color:red">продажа отключена
-                  <%= "(#{ commission.disabled })" if !(commission.disabled == true) && !commission.disabled.blank? %>
-                  <%= "(не умеем надежно определять правило)" if commission.not_implemented %>
-                  <%= "(#{ commission.not_implemented })" if !(commission.not_implemented == true) && !commission.not_implemented.blank? %>
-                </li>
-              <% end %>
-              <li> выписка <strong><%= commission.ticketing_method %></strong> (<%= commission.system %>) </li>
-              <% unless commission.consolidator.try(:zero?) %>
-                <li> авиацентр <strong><%= commission.consolidator %></strong> </li>
-              <% end %>
-              <% unless commission.blanks.try(:zero?) %>
-                <li> за бланки <strong><%= commission.blanks %></strong> </li>
-              <% end %>
-              <% unless commission.discount.try(:zero?) %>
-                <li> скидка <strong><%= commission.discount %></strong> </li>
-              <% end %>
-              <% if commission.classes.present? %>
-                <li> классы <%= commission.classes.join(' ') %> </li>
-              <% end %>
-              <% if commission.subclasses %>
-                <li> подклассы <%= commission.subclasses.join(' ') %> </li>
-              <% end %>
-              <% if commission.interline && !commission.interline == :no %>
-                <li> интерлайн: <%= commission.interline.inspect %></li>
-              <% end %>
-              <% if commission.routes.present? %>
-                <li> маршруты <%= commission.routes.join(' ') %> </li>
-              <% end %>
-              <% if commission.domestic %>
-                <li> только внутренние авиаперевозки </li>
-              <% end %>
-              <% if commission.international %>
-                <li> только международные авиаперевозки </li>
-              <% end %>
-              <% if commission.strt_date %>
-                <li> работает c <%= commission.strt_date %></li>
-              <% end %>
-              <% if commission.expr_date %>
-                <li> работает по <%= commission.expr_date %></li>
-              <% end %>
-              <% if commission.check %>
-                <li>дополнительная сложная проверка предложения</li>
-              <% end %>
-
-              <% if commission.important %>
-                <li> пытаемся применить раньше других комиссионных правил</li>
-              <% end %>
-              </ul>
-            <% end %>
-
-
-          <br>
-          <br>
-
-        </td>
-        <td>
-          <% if commission.examples.present? %>
-            <h3>примеры</h3>
-            <ul>
-              <% commission.examples.each do |code, source| %>
-                <li><%= code %></li>
-              <% end %>
-            </ul>
-          <% end %>
-        </td>
-      </tr>
-    </table>
+  <h2 id="<%= carrier_code %>"><%= "(#{carrier_code})" %> <%= Carrier[carrier_code].name  rescue '' %></h2>
+  <% commissions.each do |commission| %>
+    <%= render 'commission', :commission => commission, :as_table => @as_table %>
   <% end %>
   <hr>
 <% end %>

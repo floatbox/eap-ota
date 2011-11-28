@@ -47,8 +47,14 @@ update: function(key, value) {
     var current = this[key];
     if (current != value) {
         this[key] = value;
-        if (key == 'search') delete this.booking;
-        if (key == 'booking') delete this.payment;
+        if (key == 'search') {
+            this.tab = 'featured';
+            results.selectedTab = 'featured';
+            delete this.booking;
+        }
+        if (key == 'booking') {
+            delete this.payment;
+        }
         this.show();
     }
 },

@@ -1,0 +1,22 @@
+<p>
+<%= link_to 'Все комиссии', admin_commissions_path %>
+</p>
+<%= render 'form' %>
+<% if @commissions_with_reasons.blank? %>
+<p>
+  нет комиссий для авиакомпании
+<p>
+<% end %>
+<% @commissions_with_reasons.each do |commission,status,reason| %>
+  <% case status %>
+  <% when :fail %>
+    <h2 style="color:red">не подошло (<%= reason %>):</h2>
+  <% when :success %>
+    <h2 style="color:green">подошло!</h2>
+  <% when :skipped %>
+    <h2 style="color:gray">не проверяли<% if reason %> (но был бы "<%= reason %>")<% end %>:</h2>
+  <% end %>
+
+  <%= render 'commission', :commission => commission %>
+<hr>
+<% end %>

@@ -173,15 +173,25 @@
 }
 #results-filters.disabled {
     overflow: hidden;
-    color: #999;
+    color: #E7ECEE;
+}
+#results-filters.disabled .control,
+#results-filters.disabled .vlist dd {
+    text-decoration: none;
 }
 #results-filters.disabled .rf-overlay {
     display: block;
 }
 #results-filters.disabled .vlist dd.selected {
-    background: #AAA;
+    background: #E7ECEE;
 } 
 #results-filters.disabled th,
 #results-filters.disabled .link {
-    color: #999;
+    color: #E7ECEE;
+}
+#results-filters.disabled .rf-stroke {
+    border-color: #E7ECEE;
+}
+#results-filters.disabled .lf-icon {
+    display: none;
 }

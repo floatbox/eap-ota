@@ -5,7 +5,7 @@ class Commission
     attr_accessor :formula
 
     def initialize formula
-      @formula = formula.to_s
+      @formula = formula.to_s.strip
     end
 
     def complex?
@@ -20,6 +20,8 @@ class Commission
     def zero?
       rate.zero?
     end
+
+    delegate :blank?, :to => :formula
 
     def euro?
       raise ArgumentError, "#{formula} contains several parts" if complex?

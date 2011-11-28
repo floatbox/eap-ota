@@ -1,0 +1,9 @@
+<h2>Проверить маршрут</h2>
+<form action="<%= check_admin_commissions_url %>" method="GET">
+  перевозчик <input name="carrier" size=2 value="<%= params[:carrier] %>">,
+  краткое <input name="example" size=40 value="<%= params[:example] %>"><br><br>
+  или полное
+  <input name="code" size=120 value="<%= params[:code] %>"> кодированное представление рекомендации<br><br>
+  <input type="submit" value="Проверить">
+</form>
+<hr>

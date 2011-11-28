@@ -1,7 +1,7 @@
 # encoding: utf-8
 class Sirena::Commission
   include KeyValueInit
-  include Commission::Fx
+  include ::Commission::Fx
   cattr_accessor :commissions, :opts
   self.commissions = {}
   self.opts = {}
@@ -53,11 +53,14 @@ class Sirena::Commission
   def blanks; Fx(50) end
 
   def agent; Fx(0) end
-  def subagent; Fx(0) end
+  def subagent; Fx('') end
   def discount; Fx(0) end
 
   def agent_comments; '' end
   def subagent_comments; '' end
+
+  def ticketing_method; 'aviacenter' end
+  def system; :sirena; end
 
 doc "1.2. На БСО ЗАО «Транспортная Клиринговая Палата»:
     1.2.1. При продаже и оформлении авиаперевозок на БСО и электронных билетах

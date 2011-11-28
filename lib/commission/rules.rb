@@ -1,5 +1,5 @@
 # encoding: utf-8
-module CommissionRules
+module Commission::Rules
 
   def self.included base
     create_class_attrs base
@@ -18,23 +18,28 @@ module CommissionRules
     :departure, :departure_country, :important,
     :check, :examples, :agent_comments, :subagent_comments, :source,
     :expr_date, :strt_date,
-    :system, :ticketing_method, :corrector
+    :system, :ticketing_method, :corrector, :number
 
   def disabled?
     disabled || not_implemented || no_commission
   end
 
   def applicable? recommendation
-    not disabled? and
+    !turndown_reason(recommendation)
+  end
+
+  def turndown_reason recommendation
+    disabled? and return "правило отключено"
     # carrier == recommendation.validating_carrier_iata and
-    applicable_date? and
-    applicable_interline?(recommendation) and
-    valid_interline?(recommendation) and
-    applicable_classes?(recommendation) and
-    applicable_subclasses?(recommendation) and
-    applicable_custom_check?(recommendation) and
-    applicable_routes?(recommendation) and
-    applicable_geo?(recommendation)
+    applicable_date? or return "прошел/не наступил период действия"
+    applicable_interline?(recommendation) or return "интерлайн/не интерлайн"
+    valid_interline?(recommendation) or return "нет интерлайн договора между авиакомпаниями"
+    applicable_classes?(recommendation) or return "не подходит класс бронирования"
+    applicable_subclasses?(recommendation) or return "не подходит подкласс бронирования"
+    applicable_custom_check?(recommendation) or return "не прошло дополнительную проверку"
+    applicable_routes?(recommendation) or return "маршрут не в списке применимых"
+    applicable_geo?(recommendation) or return "не тот тип МВЛ/ВВЛ"
+    nil
   end
 
   def applicable_interline? recommendation
@@ -144,6 +149,7 @@ module CommissionRules
         @carrier_name = carrier_name
         self.opts={}
         self.carrier_default_opts={}
+        @last_commission_number = 1
       else
         raise ArgumentError, "strange carrier: #{carrier}"
       end
@@ -151,9 +157,9 @@ module CommissionRules
 
     # один аргумент, разделенный пробелами или /; или два аргумента
     def commission arg
-      vals = arg.split(/[ \/]+/)
+      vals = arg.strip.split(/[ \/]+/, -1)
       if vals.size != 2
-        raise ArgumentError, "strange commission: #{arg.join(' ')}"
+        raise ArgumentError, "strange commission: #{arg}"
       end
 
       commission = new({
@@ -184,6 +190,8 @@ module CommissionRules
 
     def register commission
       commissions[@carrier] ||= []
+      commission.number = @last_commission_number
+      @last_commission_number += 1
       if commission.important
         commissions[@carrier].unshift commission
       else
@@ -292,21 +300,42 @@ module CommissionRules
     # метод поиска рекомендации
 
     def find_for(recommendation)
-      (commissions[recommendation.validating_carrier_iata] || return).find do |c|
+      all_for(recommendation).find do |c|
         c.applicable?(recommendation)
       end
     end
 
-    def all
-      commissions.values.flatten.sort_by {|c| c.source.to_i }
+    def all_for(recommendation)
+      for_carrier(recommendation.validating_carrier_iata) || []
+    end
+
+    def exists_for?(recommendation)
+      for_carrier(recommendation.validating_carrier_iata).present?
     end
 
     def for_carrier(validating_carrier_iata)
       commissions[validating_carrier_iata]
     end
 
-    def exists_for?(recommendation)
-      for_carrier(recommendation.validating_carrier_iata).present?
+    def all
+      commissions.values.flatten.sort_by {|c| c.source.to_i }
+    end
+
+    def all_with_reasons_for(recommendation)
+      found = nil
+      all_for(recommendation).map do |c|
+        reason = c.turndown_reason(recommendation)
+        status =
+          if !found && reason
+            :fail
+          elsif !found && !reason
+            :success
+          else
+            :skipped
+          end
+        found = c unless reason
+        [c, status, reason]
+      end
     end
 
     # test methods
@@ -317,9 +346,9 @@ module CommissionRules
           rec = Recommendation.example(code, :carrier => commission.carrier)
           proposed = find_for(rec)
           if commission.expr_date && commission.expr_date.to_date.past? && !commission.disabled?
-            error "#{commission.carrier} (line #{source}): - expiration date passed!"
+            pending "#{commission.carrier} (line #{source}): - expiration date passed already."
           elsif commission.strt_date && commission.strt_date.to_date.future? && !commission.disabled?
-            error "#{commission.carrier} (line #{source}): - start date doesn't come!"
+            pending "#{commission.carrier} (line #{source}): - start date didn't come yet."
           elsif proposed == commission ||
                 proposed.nil? && commission.disabled?
             ok "#{commission.carrier} (line #{source}): #{code} - OK"
@@ -355,6 +384,10 @@ module CommissionRules
     private
     def error msg
       puts "\e[31m" + msg + "\e[0m"
+    end
+
+    def pending msg
+      puts "\e[33m" + msg + "\e[0m"
     end
 
     def ok msg

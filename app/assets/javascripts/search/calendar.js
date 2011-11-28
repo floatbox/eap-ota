@@ -30,6 +30,7 @@ makeDates: function() {
     if (Math.abs(today.getTime() - stoday.getTime()) > 172800000) {
         today.setTime(stoday.getTime()); // используем серверное время, если разница с клиентским больше 2 суток
     }
+    this.currentYear = today.getFullYear();
     var tt = today.getTime();
     var curd = today.clone().shiftDays(1 - (today.getDay() || 7));
     var curt = curd.getTime();

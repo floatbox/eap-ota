@@ -38,7 +38,7 @@ common_carriers = ac.every.first & sc.every.first
 
 
 puts "class Commission"
-puts "include CommissionRules"
+puts "include Commission::Rules"
 puts
 
 output = CSV.open 'result.csv','w', ?;

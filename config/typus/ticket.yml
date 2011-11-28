@@ -121,7 +121,7 @@ Ticket:
     edit: show
   order_by: -created_at
   filters: ticketed_date, source, validator, office_id, status
-  relationships: order
+  relationships: order, other_tickets
   application: Orders, 1
   export: csv
   scopes: uncomplete

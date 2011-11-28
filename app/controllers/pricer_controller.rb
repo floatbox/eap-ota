@@ -15,6 +15,8 @@ class PricerController < ApplicationController
       end
     end
     render :partial => 'recommendations'
+  ensure
+    StatCounters.inc %W[search.pricer.total]
   end
 
   def hot_offers
@@ -29,6 +31,8 @@ class PricerController < ApplicationController
       end
     end
     render :partial => 'matrix'
+  ensure
+    StatCounters.inc %W[search.calendar.total]
   end
 
   def validate
@@ -38,6 +42,7 @@ class PricerController < ApplicationController
       fragment_exist =
         fragment_exist?([:pricer, @query_key]) &&
         fragment_exist?([:calendar, @query_key])
+      StatCounters.inc %W[validate.cached] if fragment_exist
       render :json => {
         :search => @search,
         :valid => @search.present? && @search.valid?,
@@ -48,6 +53,7 @@ class PricerController < ApplicationController
       @search = PricerForm.new(params[:search])
       set_search_context_for_airbrake
       if @search.valid?
+        StatCounters.inc %W[validate.success]
         @search.save_to_cache
       end
       render :json => {
@@ -59,6 +65,8 @@ class PricerController < ApplicationController
         :query_key => @search.query_key
       }
     end
+  ensure
+    StatCounters.inc %W[validate.total]
   end
 
   # FIXME попытаться вынести общие методы или объединить с pricer/validate

@@ -2,14 +2,14 @@
 
 require 'spec_helper'
 
-describe CommissionRules do
+describe Commission::Rules do
 
   include Commission::Fx
 
   context "just one commission" do
     let :commission_class do
       Class.new do
-        include CommissionRules
+        include Commission::Rules
 
         carrier 'FV'
         commission '2%/3'
@@ -29,7 +29,7 @@ describe CommissionRules do
   context "two carriers, three simple commissions" do
     let :commission_class do
       Class.new do
-        include CommissionRules
+        include Commission::Rules
 
         carrier 'FV'
         commission '2%/3'
@@ -64,7 +64,7 @@ describe CommissionRules do
   context "all the rules" do
     let :commission_class do
       Class.new do
-        include CommissionRules
+        include Commission::Rules
 
         carrier 'FV'
         consolidator '1%'
@@ -90,7 +90,7 @@ describe CommissionRules do
 
     let :commission_class do
       Class.new do
-        include CommissionRules
+        include Commission::Rules
         defaults :system => :amadeus,
           :ticketing_method => :aviacenter,
           :consolidator => '2%',
@@ -126,7 +126,7 @@ describe CommissionRules do
         it "should raise error" do
           expect {
             Class.new do
-              include CommissionRules
+              include Commission::Rules
               defaults :wrongkey => :wrongvalue
             end
           }.to raise_error(ArgumentError)
@@ -149,7 +149,7 @@ describe CommissionRules do
         it "should raise error" do
           expect {
             Class.new do
-              include CommissionRules
+              include Commission::Rules
               carrier 'FV'
               carrier_defaults :wrongkey => :wrongvalue
             end
@@ -170,6 +170,122 @@ describe CommissionRules do
       it {should be_an(Array)}
       its(:size) { should == 3 }
       its(:first) { should be_an(commission_class) }
+    end
+  end
+
+  context "several commissions for a company" do
+
+    let :commission_class do
+      Class.new do
+        include Commission::Rules
+
+        carrier 'FV'
+        commission '2%/3'
+
+        carrier 'AB'
+
+        agent "first"
+        interline :first
+        commission '1%/1%'
+
+        agent "second"
+        interline :yes
+        commission '2%/2%'
+
+        agent "third"
+        interline :no
+        important!
+        commission '3%/3%'
+
+        agent "fourth"
+        interline :possible
+        disabled "just because"
+        commission "4%/4%"
+      end
+    end
+
+    let :recommendation do
+      Recommendation.example('SVOCDG/SU CDGSVO', :carrier => 'AB')
+    end
+
+    specify {
+      commission_class.exists_for?(recommendation).should be_true
+    }
+
+    specify {
+      commission_class.find_for(recommendation).should be_a(commission_class)
+    }
+
+    specify {
+      commission_class.all_for(recommendation).should have(4).items
+    }
+
+    describe ".all_with_reasons_for" do
+      subject { commission_class.all_with_reasons_for(recommendation) }
+
+      it {should have(4).items}
+
+      it "should display all commissions in order of importance" do
+        subject.map {|row| row[0].agent_comments.strip}.should == %W[third first second fourth]
+      end
+
+      it "should have correct statuses" do
+        subject.map {|row| row[1]}.should == [:fail, :fail, :success, :skipped]
+      end
+
+      it "should have no reason for success" do
+        subject[2][2].should be_nil
+      end
+
+      it "should display as successful really applied commission" do
+        subject.find {|row| row[1] == :success}[0].should == commission_class.find_for(recommendation)
+      end
+    end
+
+    describe "#number" do
+      it "should auto number commissions for every carrier according to source position from 1" do
+        commission_class.all.every.number.should == [1, 1, 2, 3, 4]
+      end
+
+      it "should apply commissions according to importance" do
+        commission_class.all_with_reasons_for(recommendation).every.first.every.number.should == [3, 1, 2, 4]
+      end
+
+    end
+
+  end
+
+  describe "commission definitions" do
+    context "unknown agent commission" do
+      let :commission_class do
+        Class.new do
+          include Commission::Rules
+
+          carrier 'FV'
+          commission '/2%'
+        end
+      end
+
+      subject { commission_class.all.first }
+
+      its(:agent) { should be_blank }
+      its(:subagent) { should == Fx('2%') }
+    end
+
+    context "unknown subagent commission" do
+      let :commission_class do
+        Class.new do
+          include Commission::Rules
+
+          carrier 'FV'
+          commission '2%/'
+        end
+      end
+
+      subject { commission_class.all.first }
+
+      its(:agent) { should == Fx('2%') }
+      its(:subagent) { should be_blank }
     end
   end
 end
