@@ -12,8 +12,6 @@ class Destination
   field :average_time_delta, :type => Integer
   field :hot_offers_counter, :type => Integer, :default => 0
 
-  belongs_to :from, :class_name => "City"
-  belongs_to :to, :class_name => "City"
 
   has_many :hot_offers, :dependent => :destroy
 
@@ -23,7 +21,15 @@ class Destination
 
   def name
     "#{from.name} #{RT.invert[rt]} #{to.name}"
-    end
+  end
+
+  def from
+    City.find_by_id from_id
+  end
+
+  def to
+    City.find_by_id to_id
+  end
 
   def self.table_name
       collection_name

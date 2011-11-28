@@ -120,7 +120,7 @@ class PricerController < ApplicationController
     return if ([segment.to_as_object.class, segment.from_as_object.class] - [City, Airport]).present? || @search.complex_route?
     to = segment.to_as_object.class == Airport ? segment.to_as_object.city : segment.to_as_object
     from = segment.from_as_object.class == Airport ? segment.from_as_object.city : segment.from_as_object
-    Destination.find_or_create_by_from_id_and_to_id_and_rt(from.id, to.id, @search.rt)
+    Destination.find_or_create_by(:from_id => from.id, :to_id => to.id , :rt => @search.rt)
   end
 
 
