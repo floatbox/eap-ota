@@ -2,7 +2,7 @@
 <% strype = cycle('background-color: #fff', 'background-color: #ddd') %>
 <% if as_table %>
 <table>
-  <tr style="<%= strype %>; text-align:right">
+  <tr style="<%= strype %>; text-align:right; <%= 'background-color: #fdd' if commission.disabled? %>">
     <td width="4%">
       <%= link_to "#{commission.carrier} ##{commission.number}", admin_commissions_path(:anchor => "#{commission.carrier}_#{commission.number}"), :id => "#{commission.carrier}_#{commission.number}" %>
     </td>
@@ -12,13 +12,13 @@
     <td width="10%" style="<%= 'color: blue' if commission.ticketing_method == 'aviacenter' %>" title="<%= commission.subagent_comments %>"> <%= commission.subagent %> </td>
     <td width="10%" title="сбор агента 1%/2%"> <%= commission.consolidator %> </td>
     <td width="10%" style="<%= 'color:green' unless commission.discount.try(:zero?) %>" title="скидка"> <%= commission.discount %> </td>
-    <td width="30%" style="color:red"> <%= 'отключено' if commission.disabled? %> </td>
+    <td width="30%" style="color:red"> <%= "отключено #{reason_of_disability(commission)}" if commission.disabled? %> </td>
   </tr>
 </table>
 <% else %>
 <table>
   <tr style="<%= strype %>">
-    <td width="4%">
+    <td width="4%" style="<%= 'color: red' if commission.disabled? %>">
       <%= link_to "#{commission.carrier} ##{commission.number}", admin_commissions_path(:anchor => "#{commission.carrier}_#{commission.number}"), :id => "#{commission.carrier}_#{commission.number}" %>
     </td>
     <th width="48%">агентский договор</th>
@@ -43,11 +43,7 @@
         <h3>правила</h3>
         <ul>
           <% if commission.disabled? %>
-            <li style="color:red">продажа отключена
-              <%= "(#{ commission.disabled })" if !(commission.disabled == true) && !commission.disabled.blank? %>
-              <%= "(не умеем надежно определять правило)" if commission.not_implemented %>
-              <%= "(#{ commission.not_implemented })" if !(commission.not_implemented == true) && !commission.not_implemented.blank? %>
-            </li>
+            <li style="color:red">продажа отключена <%= reason_of_disability(commission) %> </li>
           <% end %>
           <li> выписка <strong><%= commission.ticketing_method %></strong> (<%= commission.system %>) </li>
           <% unless commission.consolidator.try(:zero?) %>
