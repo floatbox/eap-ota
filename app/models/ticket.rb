@@ -19,6 +19,12 @@ class Ticket < ActiveRecord::Base
   belongs_to :parent, :class_name => 'Ticket'
   has_one :refund, :class_name => 'Ticket', :foreign_key => 'parent_id'
 
+  # для отображения в админке билетов. Не очень понятно,
+  # как запретить добавление новых, впрочем.
+  has_many :other_tickets, :readonly => true,
+    :through => :order, :source => :tickets, :order => 'tickets.number asc',
+    :conditions => lambda {|_| ["tickets.id <> ?", id] }
+
   delegate :need_attention, :paid_by, :to => :order
 
   delegate :commission_carrier, :to => :order, :allow_nil => true
