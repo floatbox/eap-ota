@@ -254,4 +254,38 @@ describe Commission::Rules do
     end
 
   end
+
+  describe "commission definitions" do
+    context "unknown agent commission" do
+      let :commission_class do
+        Class.new do
+          include Commission::Rules
+
+          carrier 'FV'
+          commission '/2%'
+        end
+      end
+
+      subject { commission_class.all.first }
+
+      its(:agent) { should be_blank }
+      its(:subagent) { should == Fx('2%') }
+    end
+
+    context "unknown subagent commission" do
+      let :commission_class do
+        Class.new do
+          include Commission::Rules
+
+          carrier 'FV'
+          commission '2%/'
+        end
+      end
+
+      subject { commission_class.all.first }
+
+      its(:agent) { should == Fx('2%') }
+      its(:subagent) { should be_blank }
+    end
+  end
 end

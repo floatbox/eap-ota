@@ -157,9 +157,9 @@ module Commission::Rules
 
     # один аргумент, разделенный пробелами или /; или два аргумента
     def commission arg
-      vals = arg.split(/[ \/]+/)
+      vals = arg.strip.split(/[ \/]+/, -1)
       if vals.size != 2
-        raise ArgumentError, "strange commission: #{arg.join(' ')}"
+        raise ArgumentError, "strange commission: #{arg}"
       end
 
       commission = new({

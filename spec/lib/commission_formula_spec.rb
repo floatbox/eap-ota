@@ -64,6 +64,14 @@ describe Commission::Formula do
     specify { Fx(nil).should be_zero }
   end
 
+  describe "#blank?" do
+    specify { Fx('').should be_blank }
+    specify { Fx(' ').should be_blank }
+    specify { Fx(nil).should be_blank }
+    specify { Fx(0).should_not be_blank }
+    specify { Fx('0%').should_not be_blank }
+  end
+
   context "formula with sums" do
     subject {Fx("2.5% + 4")}
 
