@@ -1,4 +1,21 @@
+<% as_table ||= false %>
 <% strype = cycle('background-color: #fff', 'background-color: #ddd') %>
+<% if as_table %>
+<table>
+  <tr style="<%= strype %>; text-align:right">
+    <td width="4%">
+      <%= link_to "#{commission.carrier} ##{commission.number}", admin_commissions_path(:anchor => "#{commission.carrier}_#{commission.number}"), :id => "#{commission.carrier}_#{commission.number}" %>
+    </td>
+    <td width="10%"> <%= commission.system %> </td>
+    <td width="10%"> <%= commission.ticketing_method %> </td>
+    <td width="10%" style="<%= 'color: blue' if commission.ticketing_method == 'direct' %>"     title="<%= commission.agent_comments %>"> <%= commission.agent %> </td>
+    <td width="10%" style="<%= 'color: blue' if commission.ticketing_method == 'aviacenter' %>" title="<%= commission.subagent_comments %>"> <%= commission.subagent %> </td>
+    <td width="10%" title="сбор агента 1%/2%"> <%= commission.consolidator %> </td>
+    <td width="10%" style="<%= 'color:green' unless commission.discount.try(:zero?) %>" title="скидка"> <%= commission.discount %> </td>
+    <td width="30%" style="color:red"> <%= 'отключено' if commission.disabled? %> </td>
+  </tr>
+</table>
+<% else %>
 <table>
   <tr style="<%= strype %>">
     <td width="4%">
@@ -9,8 +26,8 @@
   </tr>
   <tr style="<%= strype %>">
     <td></td>
-    <th> <%= commission.agent %> </li>
-    <th> <%= commission.subagent %> </li>
+    <th> <%= commission.agent %> </td>
+    <th> <%= commission.subagent %> </td>
   </tr>
   <tr style="<%= strype %>">
     <td></td>
@@ -93,3 +110,4 @@
     </td>
   </tr>
 </table>
+<% end %>

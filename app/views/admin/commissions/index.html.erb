@@ -1,3 +1,8 @@
+<h2>Комиссии</h2>
+<p>
+<%= link_to_unless_current 'подробно', admin_commissions_url %> /
+<%= link_to_unless_current 'кратко', table_admin_commissions_url %>
+</p>
 <p>
 <% @commissions.every.carrier.uniq.sort.each do |carrier_code| %>
   <a href="#<%= carrier_code %>"><%= carrier_code %></a>
@@ -10,7 +15,7 @@
 <% @commissions.group_by(&:carrier).each do |carrier_code, commissions| %>
   <h2 id="<%= carrier_code %>"><%= "(#{carrier_code})" %> <%= Carrier[carrier_code].name  rescue '' %></h2>
   <% commissions.each do |commission| %>
-    <%= render 'commission', :commission => commission %>
+    <%= render 'commission', :commission => commission, :as_table => @as_table %>
   <% end %>
   <hr>
 <% end %>

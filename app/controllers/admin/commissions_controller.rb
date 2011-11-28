@@ -4,6 +4,12 @@ class Admin::CommissionsController < Admin::BaseController
     @commissions = Commission.all
   end
 
+  def table
+    @commissions = Commission.all
+    @as_table = true
+    render :index
+  end
+
   def check
     @recommendation =
       if params[:example].present?
