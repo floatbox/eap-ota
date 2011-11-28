@@ -1,3 +1,6 @@
+<% for date_str in @tabs %>
+  <%= link_to_unless_current date_str, url_for(:date => date_str) %> ::
+<% end %>
 <pre>
 <%=raw @data %>
 <pre>

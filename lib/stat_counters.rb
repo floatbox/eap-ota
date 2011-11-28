@@ -2,12 +2,17 @@ require 'mongo'
 
 class StatCounters
 
+  DATE_FORMAT = '%Y/%m/%d'
+  DATE_HOUR_FORMAT = '%Y/%m/%d %H'
+
   def self.date_key(time=Time.now)
-    key = {:_id => time.strftime('%Y/%m/%d')}
+    key = time.is_a?(String) ? time : time.strftime(DATE_FORMAT)
+    {:_id => key}
   end
 
   def self.hour_key(time=Time.now)
-    key = {:_id => time.strftime('%Y/%m/%d %H')}
+    key = time.is_a?(String) ? time : time.strftime(DATE_HOUR_FORMAT)
+    {:_id => key}
   end
 
   def self.connection
