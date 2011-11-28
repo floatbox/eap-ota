@@ -17,7 +17,7 @@ agent "-за продажу пассажирских перевозок в эк�
 subagent ""
 routes %W(MRV-EVN-MRV EVN-MRV-EVN EVN-MRV MRV-EVN MRV-BAK-MRV BAK-MRV-BAK MRV-BAK BAK-MRV MRV-TAS-MRV TAS-MRV-TAS MRV-TAS TAS-MRV ROV-EVN-ROV EVN-ROV-EVN ROV-EVN EVN-ROV ROV-LBD-ROV LBD-ROV-LBD ROV-LBD LBD-ROV ROV-FRU-ROV FRU-ROV-FRU ROV-FRU FRU-ROV ROV-PRG-ROV PRG-ROV-PRG ROV-PRG PRG-ROV ROV-MUK-ROV MUK-ROV-MUK ROV-MUK MUK-ROV ROV-MOW-ROV MOW-ROV-MOW ROV-MOW MOW-ROV ROV-KBP-ROV KBP-ROV-KBP ROV-KBP KBP-ROV)
 discount "4%"
-commission "9%/0%"
+commission "9%/5%"
 
 strt_date "01.11.2011"
 expr_date "31.12.2011"
@@ -25,7 +25,7 @@ agent "за продажу пассажирских перевозок в биз
 subagent ""
 classes :business
 discount "6%"
-commission "12%/0%"
+commission "12%/7%"
 
 example "svocdg"
 example "svocdg/business cdgsvo/economy"
