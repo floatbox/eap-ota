@@ -37,7 +37,7 @@ class StatCounters
 
   # FIXME UGLY пытаемся выводить данные в человекочитабельном виде
   def self.debug_yml(bson)
-    bson.to_yaml.gsub(' !ruby/hash:BSON::OrderedHash', '')
+    bson.to_yaml.gsub(' !ruby/hash:BSON::OrderedHash', '').gsub(' !map:BSON::OrderedHash', '')
   end
 
 end
