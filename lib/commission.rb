@@ -2768,7 +2768,12 @@ carrier "RJ", "Royal Jordanian Airline"
 ########################################
 
 agent "5 (пять) % от всех опубл. тарифов на собств. рейсы RJ"
-no_commission
+subagent "3% от опубл. тарифов на собств. рейсы RJ"
+commission "5%/3%"
+
+interline :yes
+disabled "interline нет в договоре"
+commission "/"
 
 carrier "TU", "TUNIS AIR"
 ########################################
