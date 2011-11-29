@@ -1679,7 +1679,7 @@ example 'DMEVDA/V VDADME/V'
 agent    "7% от опубл. тарифов по маршрутам DME-BSL-DME; DME-VDA-DME на собств.рейсы NN"
 subagent "5% от опубл. тарифов по маршрутам DME-BSL-DME; DME-VDA-DME на собств.рейсы NN"
 routes %W(MOW-BSL-MOW MOW-VDA-MOW MOW-BSL BSL-MOW MOW-VDA VDA-MOW)
-discount "3%"
+discount "4%"
 commission "7%/5%"
 
 example 'SVXDME/W'
@@ -1691,14 +1691,14 @@ example 'KRRDME/W DMEKRR/W'
 agent    "C 29.11.2010г. 7% от опубл. тарифов по маршрутам SVX-DME-SVX; KRR-DME-KRR на собств.рейсы NN"
 subagent "5% от опубл.тарифов по маршрутам SVX-DME-SVX; KRR-DME-KRR на собств.рейсы NN"
 routes %W(SVX-MOW-SVX KRR-MOW-KRR SVX-MOW MOW-SVX KRR-MOW MOW-KRR)
-discount "3%"
+discount "4%"
 commission "7%/5%"
 
 example 'DMEBCN/Q BCNDME/Q'
 agent    "5% от всех опубл. тарифов по другим маршрутам на собств.рейсы NN"
 agent    "(В договоре Interline не прописан.)"
 subagent "3,5% от всех опубл. тарифов по другим маршрутам на собств.рейсы NN"
-discount "2%"
+discount "3%"
 commission "5%/3.5%"
 
 #example 'DMEKRR/W KRRDME'
