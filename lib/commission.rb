@@ -41,7 +41,7 @@ subagent "• на собственные рейсы (в т.ч. по согла�
 subagent "5 % от тарифов Эконом класса (в т.ч. при комбинации Эконом и Бизнес классов),   при переоформлении с доплатой по тарифам Эконом класса (в т.ч. при комбинации Эконом и Бизнес классов);"
 # применится только к этому правилу
 # ticketing_method "direct"
-discount "4%"
+discount "4.5%"
 commission "7%/5%"
 
 #subagent "5 (пять) руб. с авиабилета по специальным тарифам (субсидийным перевозкам) на рейсы авиакомпании SU и необходимым пакетом документов (в т.ч. при переоформлении авиабилета с доплатой по тарифу)."
@@ -1756,7 +1756,7 @@ subagent "4% по выписанным билетам с 14.11.2011г. по 31.0
 subclasses "JCDYMBHKTALXQUVN"
 important!
 check { country_iatas.first == 'RU' }
-discount "2%"
+discount "333333333333333333333333333333333%"
 commission "6%/4%"
 
 example 'cdgsvo/ab'
@@ -2054,14 +2054,14 @@ carrier "TK", "TURKISH AIRLINES"
 agent    "7% от полного опубл. тарифа IATA на рейсы TK;"
 subagent "5% от полного опубл. тарифа IATA на рейсы TK;"
 not_implemented "что такое полный опубликованный тариф?"
-discount "3%"
+discount "4%"
 commission "7%/5%"
 
 example 'istsvo svoist'
 agent    "7% от тарифа эконом класса на рейсы TK;"
 subagent "5% от тарифа экономического класса на рейсы TK;"
 classes :economy
-discount "3%"
+discount "4%"
 commission "7%/5%"
 
 example 'svoist/business istsvo/business'
@@ -2071,7 +2071,7 @@ important!
 classes :business
 expr_date '14.10.2011'
 check { country_iatas.first == 'RU' }
-discount "7%"
+discount "8%"
 commission "12%/10%"
 
 example 'istsvo/business svoist/business'
@@ -2080,8 +2080,8 @@ subagent "10% от тарифа бизнес класса на рейсы TK. (�
 important!
 check { country_iatas.first != 'RU' }
 classes :business
-discount "3%"
-commission "7%/5%"
+discount "4%"
+commission "7%/10%"
 
 example 'istank'
 example 'istank/business'
@@ -2118,7 +2118,7 @@ strt_date '14.10.2011'
 expr_date '16.03.2012'
 check { country_iatas.first == 'RU' }
 important!
-discount "6%"
+discount "7%"
 commission "10%/8%"
 
 example "svoist/business"
@@ -2131,7 +2131,7 @@ strt_date '14.10.2011'
 expr_date '16.03.2012'
 check { country_iatas.first == 'RU' }
 important!
-discount "10%"
+discount "12%"
 commission "17%/15%"
 
 carrier "TP", "TAP PORTUGAL"
