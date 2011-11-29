@@ -13,5 +13,10 @@ class Destination < ActiveRecord::Base
     "#{from.name} #{Destination.rts.invert[rt]} #{to.name}"
   end
 
+  def nullify
+    hot_offers.delete_all
+    update_attributes :average_price => nil, :average_time_delta => nil, :hot_offers_counter => 0
+  end
+
 end
 
