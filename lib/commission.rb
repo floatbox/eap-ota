@@ -1756,7 +1756,7 @@ subagent "4% по выписанным билетам с 14.11.2011г. по 31.0
 subclasses "JCDYMBHKTALXQUVN"
 important!
 check { country_iatas.first == 'RU' }
-discount "333333333333333333333333333333333%"
+discount "3%"
 commission "6%/4%"
 
 example 'cdgsvo/ab'
