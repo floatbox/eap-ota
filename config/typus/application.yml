@@ -224,8 +224,8 @@ Notification:
   options:
     action_after_save: show
     default_action_on_item: show
-  order_by: -created_at
-  search: ^order_id, pnr_number, comment
+  order_by: -notifications.created_at
+  search: ^order_id, pnr_number, destination, comment
   filters: created_at, status
   relationships: order, typus_user
   application: Misc, 2
