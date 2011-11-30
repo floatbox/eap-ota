@@ -18,7 +18,7 @@ module RamblerApi
     end
     direct_segments = Segment.new(:flights => direct_flights)
 
-    if (params[:ret] && params[:ret] != {})
+    unless params[:ret].blank?
       return_flights = []
       params[:ret].each do |k, flight|
         return_flights << Flight.new(
