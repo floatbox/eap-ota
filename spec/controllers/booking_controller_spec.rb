@@ -41,10 +41,12 @@ describe BookingController do
         :to => 'MOW',
         :date1 => '280911',
         :adults => 1,
-        :cabin => 'C')).and_return(pricer_form)
+        :cabin => 'C',
+        :partner => 'rambler')).and_return(pricer_form)
       pricer_form.stub(:valid?).and_return('true')
       pricer_form.stub(:save_to_cache).and_return('true')
-      pricer_form.stub(:query_key).and_return('7dd6jv')
+      pricer_form.stub(:query_key)
+      pricer_form.stub(:partner).and_return('rambler')
       get :api_rambler_booking, request_params
     end
 

@@ -67,7 +67,7 @@ module RamblerApi
     recommendation = recommendation.serialize
     if search.valid?
       search.save_to_cache
-      uri = {:action => 'preliminary_booking', :recommendation => recommendation, :controller => 'booking', :query_key => search.query_key}
+      uri = "#{Conf.api.url_base}/api/booking/#{search.query_key}#recommendation=#{recommendation}&type=api&partner=#{search.partner}"
     elsif search.segments.first.errors.messages.first
       raise ArgumentError, "#{ search.segments.first.errors.messages.first[1][0] }"
     else
