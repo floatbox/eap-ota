@@ -18,7 +18,7 @@ module RamblerApi
     end
     direct_segments = Segment.new(:flights => direct_flights)
 
-    unless params[:ret].blank?
+    if params[:ret].present?
       return_flights = []
       params[:ret].each do |k, flight|
         return_flights << Flight.new(
@@ -42,9 +42,11 @@ module RamblerApi
       booking_classes << segment[:bcl]
       cabins << CABINS_MAPPING[segment[:cls]]
     end
-    params[:ret].each do |k, segment|
-      booking_classes << segment[:bcl]
-      cabins << CABINS_MAPPING[segment[:cls]]
+    if params[:ret].present?
+      params[:ret].each do |k, segment|
+        booking_classes << segment[:bcl]
+        cabins << CABINS_MAPPING[segment[:cls]]
+      end
     end
 
     recommendation = Recommendation.new(
