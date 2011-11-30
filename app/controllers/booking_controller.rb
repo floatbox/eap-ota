@@ -13,6 +13,10 @@ class BookingController < ApplicationController
     set_search_context_for_airbrake
     recommendation = Recommendation.deserialize(params[:recommendation])
     strategy = Strategy.new( :rec => recommendation, :search => @search )
+    
+    StatCounters.inc %W[enter.preliminary_booking.total]
+    StatCounters.inc %W[enter.preliminary_booking.#{@search.partner}.total] if @search.partner
+    
     unless strategy.check_price_and_availability
       render :json => {:success => false}
     else
@@ -25,6 +29,8 @@ class BookingController < ApplicationController
       )
       order_form.save_to_cache
       render :json => {:success => true, :number => order_form.number}
+      StatCounters.inc %W[enter.preliminary_booking.success]
+      StatCounters.inc %W[enter.preliminary_booking.#{@search.partner}.success] if @search.partner
     end
   end
 
