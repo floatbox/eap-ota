@@ -105,6 +105,7 @@ class BookingController < ApplicationController
     strategy = Strategy.new( :rec => @order_form.recommendation, :order_form => @order_form )
 
     unless strategy.create_booking
+      StatCounters.inc %W[pay.errors.booking]
       render :partial => 'failed_booking'
       return
     end
