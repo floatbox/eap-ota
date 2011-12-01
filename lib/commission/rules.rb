@@ -131,7 +131,7 @@ module Commission::Rules
 
   module ClassMethods
 
-    ALLOWED_KEYS_FOR_DEFS = %W[ system ticketing_method consolidator blanks discount corrector ].map(&:to_sym)
+    ALLOWED_KEYS_FOR_DEFS = %W[ system ticketing_method consolidator blanks discount corrector disabled].map(&:to_sym)
 
     def defaults def_opts={}
       def_opts.to_options!.assert_valid_keys(ALLOWED_KEYS_FOR_DEFS)
