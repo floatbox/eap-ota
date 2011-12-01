@@ -34,6 +34,9 @@
 .prebooking .cost-tip {
     display: inline;
 }
+.prebooking-state .pbf-reload {
+    color: #ED1192;
+}
 
 /* Бронирование в корпоративном режиме */
 .booking-corporate {

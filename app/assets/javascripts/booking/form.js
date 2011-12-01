@@ -73,7 +73,7 @@ prebook: function(variant) {
     }
 },
 failed: function() {
-    var content = '<h4>К сожалению, по этому тарифу места закончились.<br><span class="link pbf-reload">Повторите</span> поиск или выберите другой вариант.</h4><p><span class="link pbf-hint">Почему так бывает?</span></p>';
+    var content = '<h4>К сожалению, по этому тарифу места закончились.<br><span class="link pbf-reload">Повторите поиск</span> или выберите другой вариант.</h4><p><span class="link pbf-hint">Почему так бывает?</span></p>';
     var message = 'Так иногда бывает, потому что авиакомпания не&nbsp;может подтвердить наличие мест на&nbsp;этот рейс по&nbsp;этому тарифу. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.';
     this.prebooking.html(content);
     this.prebooking.find('.pbf-hint').click(function(event) {
