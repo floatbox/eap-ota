@@ -48,7 +48,7 @@ describe RamblerApi do
   let(:recommendation) do
     Recommendation.new(
         :variants => [variant],
-        :cabins => ['Y', 'Y', 'Y'],
+        :cabins => ['W', 'W', 'W'],
         :source => 'amadeus',
         :booking_classes => ['M', 'N', 'K'],
         :validating_carrier_iata => 'SU',
@@ -111,7 +111,7 @@ describe RamblerApi do
 
   it 'should generate correct url' do
     uri = described_class.redirecting_uri request_params
-    uri.should include("amadeus.SU.MNK.YYY..SU:UN100SVOLED131211-UN200LEDYXU131211.BP:UN300YXUSVO141211")
+    uri.should include("amadeus.SU.MNK.EEE..SU:UN100SVOLED131211-UN200LEDYXU131211.BP:UN300YXUSVO141211")
   end
 
   it 'should generate correct hash' do
