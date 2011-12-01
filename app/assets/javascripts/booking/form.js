@@ -48,7 +48,7 @@ prebook: function(variant) {
     var vid = '&variant_id=' + results.selectedTab + '-' + variant.attr('data-index');
     this.abort();
     this.variant = variant;
-    this.prebooking = $('<div class="prebooking-state"><h4 class="progress">Проверяем доступность</h4></div>');
+    this.prebooking = $('<div class="prebooking-state"><h4 class="progress">Проверяем доступность мест</h4></div>');
     this.prebooking.appendTo(variant.closest('.offer').addClass('prebooking'));
     this.request = $.ajax({
         url: '/booking/preliminary_booking?' + variant.attr('data-booking') + vid,
@@ -73,7 +73,7 @@ prebook: function(variant) {
     }
 },
 failed: function() {
-    var content = '<h4>В данный момент невозможно выбрать этот вариант</h4><p><span class="link">Почему?</span></p>';
+    var content = '<h4>К сожалению, по этому тарифу места закончились.<br>Выберите другой вариант.</h4><p><span class="link">Почему так бывает?</span></p>';
     var message = 'Так иногда бывает, потому что авиакомпания не&nbsp;может подтвердить наличие мест на&nbsp;этот рейс по&nbsp;этому тарифу. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.';
     this.prebooking.html(content).find('.link').click(function(event) {
         hint.show(event, message);
