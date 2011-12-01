@@ -1175,6 +1175,7 @@ commission "7%/5%"
 
 carrier "HY", "UZBEKISTAN AIRWAYS (Узбекистон Хаво Йуллари) (НЕ BSP!!!)"
 ########################################
+carrier_defaults :disabled => "не BSP"
 
 example 'svocdg'
 agent    "7% от опубл. тарифов на собств. рейсы HY"
