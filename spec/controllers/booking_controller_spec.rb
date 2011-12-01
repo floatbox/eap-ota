@@ -8,7 +8,7 @@ describe BookingController do
       { :va  => 'SU',                                   #Validating airline (авиакомпания, на бланке которой выписывается билет)
         :dir => { 0=> {                                      #Cегменты прямого перелета
           :bcl => 'M',                                  #Booking_class
-          :cls => 'P',                                  #Cabin
+          :cls => 'B',                                  #Cabin
           :oa  => 'SU',                                 #Перевозчик, владелец самолета (IATA код Operating Airline)
           :n   => '840',                                #Номер рейса
           :ma  => 'SU',                                 #Авиакомпания, которую пишут в номере рейса (IATA код Marketing Airline)
@@ -41,7 +41,7 @@ describe BookingController do
         :to => 'MOW',
         :date1 => '280911',
         :adults => 1,
-        :cabin => 'C',
+        :cabin => 'B',
         :partner => 'rambler')).and_return(pricer_form)
       pricer_form.stub(:valid?).and_return('true')
       pricer_form.stub(:save_to_cache).and_return('true')
@@ -58,7 +58,7 @@ describe BookingController do
       flights.stub_chain(:departure, :city, :iata).and_return('LED')
       flights.stub_chain(:arrival, :city, :iata).and_return('SVO')
       flights.stub(:departure_date).and_return('280911')
-      recommendation.stub_chain(:cabins, :first).and_return('P')
+      recommendation.stub_chain(:cabins, :first).and_return('B')
 
 
       Flight.should_receive(:new).with(hash_including(
@@ -72,9 +72,9 @@ describe BookingController do
         :source => 'amadeus',
         :validating_carrier_iata => 'SU',
         :booking_classes => ['M'],
-        :cabins => ['C']
+        :cabins => ['B']
         )).and_return(recommendation)
-      recommendation.should_receive(:serialize).and_return("amadeus.SU.N.P..SU840LEDMOW280911" )
+      recommendation.should_receive(:serialize).and_return("amadeus.SU.N.B..SU840LEDMOW280911" )
       get :api_rambler_booking, request_params
     end
   end

@@ -1,8 +1,7 @@
 # encoding: utf-8
 
 module RamblerApi
-  CABINS_MAPPING = {'E' => 'Y', 'A' => '', 'P' => 'C', 'B' => 'C', 'F' => 'F', 'Y' => 'Y', 'C' => 'C'}
-  REV_CABINS_MAPPING = {'Y' => 'E', 'C' => 'B', 'F' => 'F', '' => 'A'}
+  CABINS_MAPPING = {'M' => 'E', 'W' => 'E', 'Y' => 'E', 'C' => 'B', 'F' => 'F'}
   include KeyValueInit
 
   def self.redirecting_uri params
@@ -40,12 +39,12 @@ module RamblerApi
 
     params[:dir].each do |k, segment|
       booking_classes << segment[:bcl]
-      cabins << CABINS_MAPPING[segment[:cls]]
+      cabins << segment[:cls]
     end
     if params[:ret].present?
       params[:ret].each do |k, segment|
         booking_classes << segment[:bcl]
-        cabins << CABINS_MAPPING[segment[:cls]]
+        cabins << segment[:cls]
       end
     end
 
@@ -93,11 +92,15 @@ module RamblerApi
 
     key = 0
     recommendation.segments.first.flights.collect do |flight|
-     hash[:dir][key]= {:oa => flight.operating_carrier_iata,
+      cabin = CABINS_MAPPING[recommendation.cabin_for_flight(flight)]
+      unless cabin
+        raise ArgumentError, "Got unexpected cabin : #{ recommendation.cabin_for_flight(flight)}"
+      end
+      hash[:dir][key]= {:oa => flight.operating_carrier_iata,
        :n  => flight.flight_number,
        :ma => flight.marketing_carrier_iata,
        :bcl =>recommendation.booking_class_for_flight(flight),
-       :cls =>REV_CABINS_MAPPING[recommendation.cabin_for_flight(flight)],
+       :cls => cabin,
        :dep => {
           :p => flight.departure_iata,
           :dt => flight.departure_date
@@ -111,10 +114,14 @@ module RamblerApi
     if recommendation.segments.second
       key = 0
       recommendation.segments.second.flights.collect do |flight|
-      hash[:ret][key] = {:oa => flight.operating_carrier_iata,
+        cabin = CABINS_MAPPING[recommendation.cabin_for_flight(flight)]
+        unless cabin
+          raise ArgumentError, "Got unexpected cabin : #{ recommendation.cabin_for_flight(flight)}"
+        end
+        hash[:ret][key] = {:oa => flight.operating_carrier_iata,
          :n  => flight.flight_number,
          :bcl =>recommendation.booking_class_for_flight(flight),
-         :cls =>REV_CABINS_MAPPING[recommendation.cabin_for_flight(flight)],
+         :cls =>cabin,
          :ma => flight.marketing_carrier_iata,
          :dep => {
             :p => flight.departure_iata,
@@ -127,8 +134,6 @@ module RamblerApi
         key +=1
       end
     end
-
     hash
   end
-
 end
