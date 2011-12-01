@@ -158,6 +158,18 @@ selectTab: function(tab) {
     $('#offers-' + tab).removeClass('latent');
     pageurl.update('tab', tab);
 },
+reload: function() {
+    search.onValid = function() {
+        results.load();
+        results.show();
+        search.onValid = undefined;
+    };
+    delete pageurl.tab;
+    setTimeout(function() {
+        search.preventValidation = false;
+        search.validate();
+    }, 100);
+},
 load: function() {
     var self = this;
     if (!this.nextUpdate) {

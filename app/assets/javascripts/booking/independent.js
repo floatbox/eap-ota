@@ -78,7 +78,7 @@ booking.load = function(number) {
     });
 };
 booking.failed = function() {
-    window.location = '/#' + this.query_key;
+    window.location = '/#' + this.query_key + '/reload';
     //$('#results-loading').addClass('latent');
     //$('#results-empty').removeClass('latent');
 };

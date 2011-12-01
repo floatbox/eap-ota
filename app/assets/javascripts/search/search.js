@@ -312,7 +312,9 @@ validate: function(qkey) {
                     query_key: result.query_key || data.query_key
                 };
                 self.smessage.stop().hide();
-                if (restoreResults) {
+                if (pageurl.tab === 'reload') {
+                    results.reload();
+                } else if (restoreResults) {
                     self.calendar.scroller.scrollToSelected();
                     if (result.fragment_exist) {
                         results.nextUpdate.params.restore_results = true;
@@ -406,6 +408,7 @@ autoFrom: function() {
 abort: function() {
     var r = this.request;
     if (r && r.abort) r.abort();
+    delete this.request;
 },
 apply: function(data) {
     this.parsed = data;
