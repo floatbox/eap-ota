@@ -23,12 +23,12 @@ module Pricing
     # price_penalty
 
     def price_total
-      price_fare + price_tax
+      price_fare + price_tax + price_penalty
     end
 
     def price_refund
       if kind == 'refund'
-        -(price_tax + price_fare + price_penalty)
+        price_tax + price_fare + price_penalty
       else
         0
       end
@@ -57,13 +57,21 @@ module Pricing
     def recalculate_commissions
 
       # FIXME вынести отсюда обратно в модель
-      copy_commissions_from_order if new_record?
+      copy_commissions_from_order if new_record? && (kind != 'refund')
 
-      self.price_agent = commission_agent.call(price_fare)
-      self.price_subagent = commission_subagent.call(price_fare)
-      self.price_consolidator = commission_consolidator.call(price_fare)
-      self.price_blanks = commission_blanks.call(price_fare)
-      self.price_discount = commission_discount.call(price_fare)
+      case kind
+      when 'ticket'
+        self.price_agent = commission_agent.call(price_fare)
+        self.price_subagent = commission_subagent.call(price_fare)
+        self.price_consolidator = commission_consolidator.call(price_fare)
+        self.price_blanks = commission_blanks.call(price_fare)
+        self.price_discount = commission_discount.call(price_fare)
+      when 'refund'
+        self.price_agent = commission_agent.percentage? ? commission_agent.call(price_fare) : -commission_agent.call(price_fare)
+        self.price_subagent = commission_subagent.percentage? ? commission_subagent.call(price_fare) : -commission_subagent.call(price_fare)
+      else
+        raise ArgumentError, 'Unknown kind of ticket'
+      end
       true
     end
 

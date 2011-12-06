@@ -14,6 +14,7 @@ class Admin::TicketsController < Admin::EviterraResourceController
 
   def new_refund
     @item = @resource.new(params[:resource])
+    @item.route = @item.parent.route
     render :action => :new
   end
 

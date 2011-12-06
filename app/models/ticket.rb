@@ -17,7 +17,8 @@ class Ticket < ActiveRecord::Base
 
   belongs_to :order
   belongs_to :parent, :class_name => 'Ticket'
-  has_one :refund, :class_name => 'Ticket', :foreign_key => 'parent_id'
+  has_many :refunds, :class_name => 'Ticket', :foreign_key => 'parent_id'
+
 
   # для отображения в админке билетов. Не очень понятно,
   # как запретить добавление новых, впрочем.
@@ -42,14 +43,17 @@ class Ticket < ActiveRecord::Base
 
   scope :uncomplete, where(:ticketed_date => nil)
 
-  before_create :set_refund_data, :if => lambda {kind == "refund"}
-  validate :check_uniqueness_of_refund
+  before_validation :set_refund_data, :if => lambda {kind == "refund"}
   validates_presence_of :comment, :if => lambda {kind == "refund"}
   after_save :update_prices_in_order
 
   # FIXME сделать перечисление прямо из базы, через uniq
   def self.office_ids
     ['MOWR2233B', 'MOWR228FA', 'MOWR2219U']
+  end
+
+  def refund
+    refunds.last
   end
 
   def commission_ticketing_method
@@ -84,10 +88,6 @@ class Ticket < ActiveRecord::Base
     order.update_prices_from_tickets if order
   end
 
-  def check_uniqueness_of_refund
-    errors.add :refund, 'для данного билета уже существует' if kind == 'refund' && new_record? && Ticket.where(:parent_id => parent.id).count > 0
-  end
-
   def set_refund_data
     copy_attrs parent, self,
       :validator,
@@ -95,11 +95,19 @@ class Ticket < ActiveRecord::Base
       :first_name,
       :last_name,
       :passport,
+      :commission_subagent,
+      :commission_agent,
       :pnr_number,
       :order,
       :code,
       :number,
       :source
+    self.price_penalty *= -1 if price_penalty < 0
+    self.price_tax *= -1 if price_tax > 0
+    self.price_fare *= -1 if price_fare > 0
+    self.price_consolidator *= -1 if price_consolidator > 0
+    self.commission_subagent = 0 if price_fare != -parent.price_fare && !parent.commission_subagent.percentage?
+    self.commission_agent = 0 if price_fare != -parent.price_fare && !parent.commission_agent.percentage?
   end
 
   def copy_commissions_from_order
@@ -148,10 +156,9 @@ class Ticket < ActiveRecord::Base
       (
       "Билет  № #{link_to_show} <br>" +
         if self.refund
-          "есть #{!refund.processed ? 'неподтвержденный клиентом' : ''} возврат "
-        else
-          "<a href='/admin/tickets/new_refund?_popup=true&&resource[kind]=refund&resource[parent_id]=#{id}' class='iframe'>Добавить возврат</a>"
-        end
+          "есть #{!refund.processed ? 'неподтвержденный клиентом' : ''} возврат <br>"
+        end.to_s +
+        "<a href='/admin/tickets/new_refund?_popup=true&&resource[kind]=refund&resource[parent_id]=#{id}' class='iframe'>Добавить возврат</a>"
 
       ).html_safe
     elsif kind == 'refund'
@@ -169,7 +176,7 @@ class Ticket < ActiveRecord::Base
 
   def link_to_show
     url = url_for(:controller => 'admin/tickets', :action => :show, :id => id, :only_path => true)
-    "<a href=#{url}>#{number_with_code}".html_safe
+    "<a href=#{url}>#{number_with_code}</a>".html_safe
   end
 
   def itinerary_receipt

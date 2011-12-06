@@ -83,7 +83,7 @@ Ticket:
       - office_id
       - validator
       - comment
-    new_refund: price_fare, price_tax, price_penalty, ticketed_date, comment
+    new_refund: price_fare, price_tax, price_penalty, price_consolidator, ticketed_date, route, comment
     csv:
       - source
       - number_with_code
@@ -100,6 +100,7 @@ Ticket:
       - price_agent
       - commission_subagent
       - price_subagent
+      - price_penalty
       - pnr_number
       - need_attention
       - validating_carrier

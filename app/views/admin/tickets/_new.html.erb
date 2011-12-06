@@ -3,8 +3,11 @@
   Номер: <%= ticket.number_with_code %><br>
   Price fare <%= ticket.price_fare %><br>
   Price tax <%= ticket.price_tax  %><br>
-  Price consolidator <%= ticket.price_consolidator %><br>
-  Price consolidator <%= ticket.price_blanks %><br>
+  Сбор авиацентра <%= ticket.price_consolidator %><br>
+  Цена за бланки <%= ticket.price_blanks %><br>
+  Эквайринг <%= ticket.price_payment_commission %><br>
+  Скидка <%= ticket.price_discount %><br>
+  Полная цена <%= ticket.price_with_payment_commission %><br>
   Маршрут: <%= ticket.route %><br>
   Авиакомпания: <%= ticket.carrier %>
 <% end %>
