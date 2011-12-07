@@ -11,6 +11,7 @@ class PnrMailer < ActionMailer::Base
     @pnr = PNR.get_by_number(notification.pnr_number)
     @prices = @pnr.order
     @passengers = @pnr.passengers
+    @pnr.email = @prices.email if @prices.source == 'sirena' && @pnr.email.blank?
     @last_pay_time = @pnr.order.last_pay_time
     @comment = notification.comment
     
