@@ -24,7 +24,9 @@ init: function(table) {
             selected.removeClass('selected').addClass('active');
             selected = $(this).addClass('selected').removeClass('active');
             results.showVariant(variant);
-            self.changeTitle(variant);
+            if (self.el.is(':visible')) {
+                self.changeTitle(variant);
+            }
         }
     });
     cells.each(function() {
