@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sirena>
+  <answer pult="ГРФ364">
+    <order agency="36МОС">
+      <pnr bdate="15:23 14.11.2011" fop="НА" curr="РУБ" sum="10337.00" tick_ser="ЭБМ" paytype="  " ffp_price="">
+        <passengers>
+          <passenger id="11" lead_pass="true">
+            <name>VLADIMIR 03МАР85</name>
+            <surname>DEGTYAREV</surname>
+            <sex>male</sex>
+            <birthdate>03.03.1985</birthdate>
+            <age>26</age>
+            <doccode>ПСП</doccode>
+            <doc>123456789</doc>
+            <category rbm="0">ААА</category>
+          </passenger>
+        </passengers>
+        <segments>
+          <segment id="12">
+            <company>SU</company>
+            <flight>119</flight>
+            <class>L</class>
+            <seatcount>1</seatcount>
+            <departure>
+              <city>МОВ</city>
+              <airport>ШРМ</airport>
+              <date>15.11.11</date>
+              <time>08:55</time>
+            </departure>
+            <arrival>
+              <city>МЮН</city>
+              <airport>MUC</airport>
+              <date>15.11.11</date>
+              <time>09:15</time>
+            </arrival>
+            <status>confirmed</status>
+            <airplane>319</airplane>
+          </segment>
+          <segment id="14">
+            <company>SU</company>
+            <flight>124</flight>
+            <class>L</class>
+            <seatcount>1</seatcount>
+            <departure>
+              <city>МЮН</city>
+              <airport>MUC</airport>
+              <date>21.12.11</date>
+              <time>22:50</time>
+            </departure>
+            <arrival>
+              <city>МОВ</city>
+              <airport>ШРМ</airport>
+              <date>22.12.11</date>
+              <time>04:45</time>
+            </arrival>
+            <status>confirmed</status>
+            <airplane>321</airplane>
+          </segment>
+        </segments>
+        <prices fop="НА"/>
+        <timelimit>15.11.11 08:55</timelimit>
+        <regnum>ВШХ3Г2</regnum>
+        <common_status>ticket</common_status>
+        <possible_action_list/>
+        <utc_timelimit>04:55 15.11.2011</utc_timelimit>
+      </pnr>
+      <contacts>
+        <email>TICKET@EVITERRA.COM</email>
+        <contact>89037531832</contact>
+        <customer>
+          <firstname></firstname>
+          <lastname></lastname>
+        </customer>
+      </contacts>
+      <latin_registration>true</latin_registration>
+      <tickinfo ticknum="5556121529368" tick_ser="ЭБМ" accode="555" is_etick="true" tkt_ppr="92390476" seg_id="14" pass_id="11">ticket</tickinfo>
+      <tickinfo ticknum="5556120796705" tick_ser="ЭБМ" accode="555" is_etick="true" tkt_ppr="92390476" seg_id="12" pass_id="11">ticket</tickinfo>
+      <agent_comissions/>
+    </order>
+  </answer>
+</sirena>
