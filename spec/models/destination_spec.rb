@@ -3,8 +3,8 @@ require 'spec_helper'
 
 describe Destination do
   let(:destination_attributes) do
-   { "to_id"=> 1578,
-     "from_id"=> 1899,
+   { "to_iata"=> 'MOW',
+     "from_iata"=> 'LIS',
      "rt" =>true,
      "average_price"=> 8629,
      "average_time_delta"=> 16,

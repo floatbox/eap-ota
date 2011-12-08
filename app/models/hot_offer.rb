@@ -2,8 +2,13 @@
 class HotOffer
 
   include Mongoid::Document
+  include Mongoid::Timestamps
   field :code, :type => String
   field :url, :type => String
+  field :to_iata, :type => String
+  field :from_iata, :type => String
+  field :date1, :type => String
+  field :rt, :type => Boolean
   field :description, :type => String
   field :price, :type => Integer
   field :for_stats_only, :type => Boolean
@@ -25,10 +30,10 @@ class HotOffer
 
   def self.featured code=nil
     # FIXME SQL group_by не был бы лучше?
-    offers = HotOffer.where("for_stats_only" => false ).and(:price_variation.gt => 0).order_by(:created_at => :desc).limit(30)
+    offers = HotOffer.where(:for_stats_only => false ).and(:price_variation.gt => 0).order_by(:created_at => :desc).limit(30)
     # эта строчка, видимо, не используется
     offers = offers.where(:code.ne => code) if code
-    offers.all.group_by(&:destination_id).values.every.first
+    offers.all.group_by{|h| h.from_iata && h.to_iata && h.rt}.values.every.first
   end
 
   def clickable_url
@@ -45,21 +50,24 @@ class HotOffer
 
   def set_some_vars
     if @search and @recommendation
-        self.price = @recommendation.price_with_payment_commission / @search.people_count.values.sum
+        self.from_iata = @search.segments[0].from_as_object.iata
+        self.to_iata = @search.segments[0].to_as_object.iata
+        self.rt = @search.rt
+        self.date1 = Date.strptime(@search.segments[0].date, '%d%m%y')
+        self.price_variation =  price - destination.average_price
+        self.price_variation_percent = ((price / destination.average_price.to_f - 1)*100)
+        self.destination = Destination.find_or_create_by(:from_iata => @search.segments[0].from_as_object.iata, :to_iata => @search.segments[0].to_as_object.iata, :rt => @search.rt)
         self.time_delta = (Date.strptime(@search.segments[0].date, '%d%m%y') - Date.today).to_i
-        self.destination = Destination.find_or_create_by(:from_id => @search.segments[0].from_as_object.id, :to_id => @search.segments[0].to_as_object.id, :rt => @search.rt)
-      unless destination.new_record?
+        unless destination.new_record?
           destination.average_price = (destination.hot_offers.every.price.sum + price) / (destination.hot_offers.count + 1)
           destination.average_time_delta = (destination.hot_offers.every.time_delta.sum + time_delta) / (destination.hot_offers.count + 1)
-      else
-        destination.average_price = price
-        destination.average_time_delta = time_delta
-      end
-      destination.hot_offers_counter += 1
-      destination.save
-      self.price_variation =  price - destination.average_price
-      self.price_variation_percent = ((price / destination.average_price.to_f - 1)*100).to_i
+        else
+          destination.average_price = price
+          destination.average_time_delta = time_delta
+        end
+        destination.hot_offers_counter += 1
+        destination.save
     end
-end
+  end
 
 end

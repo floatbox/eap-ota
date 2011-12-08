@@ -110,8 +110,8 @@ class PricerController < ApplicationController
           :code => @query_key,
           :search => @search,
           :recommendation => @recommendations.first,
-          :url => (url_for(:action => :index, :controller => :home) + '#' + @query_key )
-        )
+          :url => (url_for(:action => :index, :controller => :home) + '#' + @query_key),
+          :price => @recommendations.first.price_with_payment_commission / @search.people_count.values.sum)
     end
   end
 
@@ -120,7 +120,7 @@ class PricerController < ApplicationController
     return if ([segment.to_as_object.class, segment.from_as_object.class] - [City, Airport]).present? || @search.complex_route?
     to = segment.to_as_object.class == Airport ? segment.to_as_object.city : segment.to_as_object
     from = segment.from_as_object.class == Airport ? segment.from_as_object.city : segment.from_as_object
-    Destination.find_or_create_by(:from_id => from.id, :to_id => to.id , :rt => @search.rt)
+    Destination.find_or_create_by(:from_iata => from.iata, :to_iata => to.iata , :rt => @search.rt)
   end
 
 

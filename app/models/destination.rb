@@ -5,8 +5,8 @@ class Destination
 
   extend Typus::Orm::Base
 
-  field :to_id, :type => Integer
-  field :from_id, :type => Integer
+  field :to_iata, :type => String
+  field :from_iata, :type => String
   field :rt, :type => Boolean
   field :average_price, :type => Integer
   field :average_time_delta, :type => Integer
@@ -20,15 +20,15 @@ class Destination
   end
 
   def name
-    "#{from.name} #{RT.invert[rt]} #{to.name}"
+    "#{from.name} #{Destination.rts.invert[rt]} #{to.name}"
   end
 
   def from
-    City.find_by_id from_id
+    City.find_by_iata from_iata
   end
 
   def to
-    City.find_by_id to_id
+    City.find_by_iata to_iata
   end
 
   def self.table_name
@@ -37,13 +37,6 @@ class Destination
 
   def self.build_conditions (*)
 
-  end
-
-
-  ActiveRecord::Base.instance_eval do
-    def using_object_ids?
-       false
-    end
   end
 
   def nullify
