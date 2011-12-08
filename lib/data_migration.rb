@@ -131,8 +131,8 @@ module DataMigration
 
   def self.fill_up_mongo_base
     Destination.limit(20).each do |d|
-      attr_hash = {:to_iata => (City.find(d.to_id)).iata,
-                   :from_iata => (City.find(d.from_id)).iata,
+      attr_hash = {:to_iata => d.to_iata,
+                  :from_iata => d.from_iata,
                    :rt => d.rt,
                    :average_price => d.average_price,
                    :average_time_delta => d.average_time_delta,
