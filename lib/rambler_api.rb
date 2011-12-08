@@ -55,7 +55,7 @@ module RamblerApi
       :cabins => cabins,
       :variants => [variants])
 
-    date2 = return_flights.first.departure_date if return_flights =! []
+    date2 = return_flights.first.departure_date if return_flights.present?
     pricer_form_hash = {
         :from => direct_flights.first.departure.city.iata,
         :to => direct_flights.last.arrival.city.iata,
