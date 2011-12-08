@@ -1,4 +1,6 @@
 # encoding: utf-8
+require 'spec_helper'
+
 describe Amadeus::Macros do
   describe "#cmd_full" do
     # надо проверить, что не обвалим обычное добавление документов, и проч.
