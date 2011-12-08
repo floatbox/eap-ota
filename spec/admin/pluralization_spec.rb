@@ -14,8 +14,6 @@ describe "russian pluralization" do
     specify { pluralize_model(OrderComment).should == 'Комментарии к заказу' }
     specify { pluralize_model(Payment).should == 'Платежи' }
     specify { pluralize_model(FlightGroup).should == 'Подборки рейсов' }
-    specify { pluralize_model(Destination).should == 'Направления' }
-    specify { pluralize_model(HotOffer).should == 'Горячие предложения' }
     specify { pluralize_model(GeoTag).should == 'Геотаги' }
     specify { pluralize_model(Airport).should == 'Аэропорты' }
     specify { pluralize_model(City).should == 'Города' }

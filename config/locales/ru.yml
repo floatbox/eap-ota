@@ -10,8 +10,6 @@ ru:
       order_comment: 'Комментарий к заказу'
       payment: 'Платеж'
       flight_group: 'Подборка рейсов'
-      destination: 'Направление'
-      hot_offer: 'Горячее предложение'
       subscription: 'Подписка'
       geo_tag: 'Геотаг'
       airport: 'Аэропорт'
