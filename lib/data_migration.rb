@@ -130,17 +130,16 @@ module DataMigration
   end
 
   def self.fill_up_mongo_base
-    Destination.find_each do |d|
-      attr_hash = {:to_id => d.to_id,
-                   :from_id => d.from_id,
+    Destination.limit(20).each do |d|
+      attr_hash = {:to_iata => (City.find(d.to_id)).iata,
+                   :from_iata => (City.find(d.from_id)).iata,
                    :rt => d.rt,
                    :average_price => d.average_price,
                    :average_time_delta => d.average_time_delta,
                    :hot_offers_counter => d.hot_offers_counter}
-      dest = DestinationMongo.new(attr_hash)
-      dest.save
+      dest = DestinationMongo.create(attr_hash)
     end
-    HotOffer.find_each do |h|
+    HotOffer.limit(20).each do |h|
       attr_hash = {:code => h.code,
                    :url => h.url,
                    :description => h.description,
@@ -150,8 +149,7 @@ module DataMigration
                    :time_delta => h.time_delta,
                    :price_variation => h.price_variation,
                    :price_variation_percent => h.price_variation_percent}
-      hot_offer = HotOfferMongo.new(attr_hash)
-      hot_offer.save
+      hot_offer = HotOfferMongo.create(attr_hash)
     end
   end
 
