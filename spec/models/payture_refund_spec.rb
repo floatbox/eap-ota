@@ -6,7 +6,7 @@ describe PaytureRefund do
     order = Order.new
     charge = PaytureCharge.create
     order.payments << charge
-    charge.reload!
+    charge.reload
     refund = charge.refunds.create
 
     refund.ref.should.should == charge.ref

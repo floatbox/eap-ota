@@ -65,7 +65,7 @@ class Order < ActiveRecord::Base
 
   has_paper_trail
 
-  has_many :payments, :class_name => 'PaytureCharge'
+  has_many :payments #, :class_name => 'PaytureCharge'
   has_many :tickets
   has_many :order_comments
   has_many :notifications
@@ -414,7 +414,7 @@ class Order < ActiveRecord::Base
   end
 
   def create_cash_payment
-    Payment.create(:price => price_with_payment_commission, :order => self, :system => 'cash')
+    CashCharge.create(:price => price_with_payment_commission, :order => self)
   end
 
   def no_money_received!

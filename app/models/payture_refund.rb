@@ -1,6 +1,6 @@
 class PaytureRefund < Payment
 
-  belongs_to :charge, :class_name => 'PaytureCharge'
+  belongs_to :charge, :class_name => 'PaytureCharge', :foreign_key => 'charge_id'
 
   before_create :set_ref
 

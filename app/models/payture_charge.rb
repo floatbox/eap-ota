@@ -3,6 +3,7 @@ class PaytureCharge < Payment
   after_create :set_ref
 
   attr_reader :card
+  has_many :refunds, :class_name => 'PaytureRefund', :foreign_key => 'charge_id'
 
   def set_ref
     update_attribute(:ref, Conf.payment.order_id_prefix + id.to_s)
