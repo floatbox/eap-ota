@@ -3,8 +3,11 @@ class Payment < ActiveRecord::Base
   belongs_to :order
   attr_accessor :custom_fields
 
-  scope :payments, where(:type => ['PaytureCharge', 'CashCharge'])
-  scope :refunds, where(:type => ['PaytureRefund', 'CashRefund'])
+  CHARGES = ['PaytureCharge', 'CashCharge']
+  REFUNDS = ['PaytureRefund', 'CashRefund']
+
+  scope :charges, where(:type => CHARGES)
+  scope :refunds, where(:type => REFUNDS)
 
   def self.[] id
     find id

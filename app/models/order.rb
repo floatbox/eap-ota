@@ -65,7 +65,13 @@ class Order < ActiveRecord::Base
 
   has_paper_trail
 
-  has_many :payments #, :class_name => 'PaytureCharge'
+  has_many :payments
+
+  # не_рефанды
+  def last_payment
+    payments.charges.last
+  end
+
   has_many :tickets
   has_many :order_comments
   has_many :notifications
@@ -127,7 +133,7 @@ class Order < ActiveRecord::Base
   end
 
   def order_id
-    payments.last ? payments.last.ref : ''
+    last_payment.try(:ref)
   end
 
   def need_attention
@@ -347,34 +353,25 @@ class Order < ActiveRecord::Base
       end
   end
 
-  def payture_state
-    payments.last ? payments.last.payture_state : ''
-  end
-
-  def charged_on
-    payments.last && payments.last.charged_on
-  end
-
   def created_date
     created_at.to_date
   end
 
-  def payture_amount
-    payments.last ?  payments.last.payture_amount : nil
-  end
+  delegate :payture_state, :charged_on, :payture_amount,
+    :to => :last_payment, :allow_nil => true
 
   def confirm_3ds pa_res, md
-    payments.last.confirm_3ds pa_res, md
+    last_payment.confirm_3ds pa_res, md
   end
 
   def charge!
-    res = payments.last.charge!
+    res = last_payment.charge!
     update_attribute(:payment_status, 'charged') if res
     res
   end
 
   def unblock!
-    res = payments.last.unblock!
+    res = last_payment.unblock!
     update_attribute(:payment_status, 'unblocked') if res
     res
   end
