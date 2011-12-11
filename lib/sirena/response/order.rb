@@ -58,7 +58,7 @@ module Sirena
           price_element = xpath("//price[@segment-id=#{seg_id}][@passenger-id=#{pass_id}]")
           price_fare = price_element.xpath("fare/value").text.to_f
           price_tax = price_element.xpath("taxes/tax/value").map{|v| v.text.to_f}.sum
-          cabin = price_element.at_xpath("fare/code")['base_code']
+          cabin = price_element.at_xpath("fare/code/@base_code").to_s
           flight_element = xpath("//segments/segment[@id=#{seg_id}]")
           departure_iata = flight_element.xpath("departure/airport").text.presence ||
             flight_element.xpath("departure/city").text

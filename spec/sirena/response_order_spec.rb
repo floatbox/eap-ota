@@ -61,12 +61,13 @@ describe Sirena::Response::Order do
     specify { subject.flights.first.arrival.city.name.should == 'Воронеж' }
   end
 
-  describe 'adult and child, ticketed' do
+  describe 'tickets after reissue' do
 
     let(:response) { 'spec/sirena/xml/order_with_broken_tickets.xml' }
     subject_once! { described_class.new( File.read(response) ) }
 
     it { should be_success }
+    pending "should be ok for storage and display"
   end
 end
 
