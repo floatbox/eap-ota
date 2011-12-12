@@ -40,11 +40,15 @@ class RamblerCache
     res
   end
 
-  def self.from_form_and_recs(form, recommendations)
-    data = recommendations.each_with_object([]) do |rec, res|
-      res.concat(rec.variants.map { |v| variant_hash(v, rec, form)})
+  def self.create_from_form_and_recs(form, recommendations)
+    if form.adults == 1 && form.children == 0 && form.infants == 0
+      data = recommendations.each_with_object([]) do |rec, res|
+        res.concat(rec.variants.map { |v| variant_hash(v, rec, form)})
+      end
+      res = self.new(:data => data, :pricer_form => form)
+      res.save
+      res
     end
-    self.new(:data => data, :pricer_form => form)
   end
 
   def self.variant_hash(variant, recommendation, form)

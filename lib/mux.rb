@@ -15,7 +15,7 @@ class Mux
   attr_accessor :lite, :admin_user
 
   def save_to_mongo(form, recommendations)
-    RamblerCache.from_form_and_recs(form, recommendations).save
+    RamblerCache.create_from_form_and_recs(form, recommendations)
   end
 
   def pricer(form)
