@@ -20,7 +20,7 @@ admin:
   AirlineAlliance: create, read, update, delete
   Consolidator: create, read, update, delete
   GlobalDistributionSystem: create, read, update, delete
-  Payment: read, update
+  Payment: read, update, bulk, bulk_charge, show_versions, payment_raw
   FlightGroup: create, read, update, delete
   Commissions: read
   Counters: read

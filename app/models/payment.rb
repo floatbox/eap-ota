@@ -1,5 +1,8 @@
 # encoding: utf-8
 class Payment < ActiveRecord::Base
+
+  has_paper_trail
+
   belongs_to :order
   attr_accessor :custom_fields
 
@@ -20,6 +23,11 @@ class Payment < ActiveRecord::Base
 
   def self.systems
     ['payture', 'cash']
+  end
+
+  # TODO override in subclasses
+  def payment_state_raw
+    "--"
   end
 
 end
