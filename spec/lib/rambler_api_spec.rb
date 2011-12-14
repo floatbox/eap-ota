@@ -8,9 +8,9 @@ describe RamblerApi do
       :marketing_carrier_iata => 'UN',
       :flight_number => '100',
       :departure_iata => 'SVO',
-      :departure_date => '131211',
+      :departure_date => future_date,
       :departure_time => '900',
-      :arrival_date => '131211',
+      :arrival_date => future_date,
       :arrival_time => '1130',
       :arrival_iata => 'LED',
       :departure_term => 'F',
@@ -21,9 +21,9 @@ describe RamblerApi do
       :marketing_carrier_iata => 'UN',
       :flight_number => '200',
       :departure_iata => 'LED',
-      :departure_date => '131211',
+      :departure_date => future_date,
       :departure_time => '1400',
-      :arrival_date => '131211',
+      :arrival_date => future_date,
       :arrival_time => '1700',
       :arrival_iata => 'YXU',
       :departure_term => '1',
@@ -34,9 +34,9 @@ describe RamblerApi do
       :marketing_carrier_iata => 'UN',
       :flight_number => '300',
       :departure_iata => 'YXU',
-      :departure_date => '141211',
+      :departure_date => future_date(2),
       :departure_time => '1400',
-      :arrival_date => '141211',
+      :arrival_date => future_date(2),
       :arrival_time => '1700',
       :arrival_iata => 'SVO',
       :departure_term => '1',
@@ -56,7 +56,7 @@ describe RamblerApi do
         :price_tax => 2000
     )
   end
-  let(:yamled_params){"dir%5B0%5D%5Barr%5D%5Bp%5D=LED&dir%5B0%5D%5Bbcl%5D=M&dir%5B0%5D%5Bcls%5D=E&dir%5B0%5D%5Bdep%5D%5Bdt%5D=131211&dir%5B0%5D%5Bdep%5D%5Bp%5D=SVO&dir%5B0%5D%5Bma%5D=UN&dir%5B0%5D%5Bn%5D=100&dir%5B0%5D%5Boa%5D=SU&dir%5B1%5D%5Barr%5D%5Bp%5D=YXU&dir%5B1%5D%5Bbcl%5D=N&dir%5B1%5D%5Bcls%5D=E&dir%5B1%5D%5Bdep%5D%5Bdt%5D=131211&dir%5B1%5D%5Bdep%5D%5Bp%5D=LED&dir%5B1%5D%5Bma%5D=UN&dir%5B1%5D%5Bn%5D=200&dir%5B1%5D%5Boa%5D=UN&ret%5B0%5D%5Barr%5D%5Bp%5D=SVO&ret%5B0%5D%5Bbcl%5D=K&ret%5B0%5D%5Bcls%5D=E&ret%5B0%5D%5Bdep%5D%5Bdt%5D=141211&ret%5B0%5D%5Bdep%5D%5Bp%5D=YXU&ret%5B0%5D%5Bma%5D=UN&ret%5B0%5D%5Bn%5D=300&ret%5B0%5D%5Boa%5D=BP&va=SU"}
+  let(:yamled_params){"dir%5B0%5D%5Barr%5D%5Bp%5D=LED&dir%5B0%5D%5Bbcl%5D=M&dir%5B0%5D%5Bcls%5D=E&dir%5B0%5D%5Bdep%5D%5Bdt%5D=#{future_date}&dir%5B0%5D%5Bdep%5D%5Bp%5D=SVO&dir%5B0%5D%5Bma%5D=UN&dir%5B0%5D%5Bn%5D=100&dir%5B0%5D%5Boa%5D=SU&dir%5B1%5D%5Barr%5D%5Bp%5D=YXU&dir%5B1%5D%5Bbcl%5D=N&dir%5B1%5D%5Bcls%5D=E&dir%5B1%5D%5Bdep%5D%5Bdt%5D=#{future_date}&dir%5B1%5D%5Bdep%5D%5Bp%5D=LED&dir%5B1%5D%5Bma%5D=UN&dir%5B1%5D%5Bn%5D=200&dir%5B1%5D%5Boa%5D=UN&ret%5B0%5D%5Barr%5D%5Bp%5D=SVO&ret%5B0%5D%5Bbcl%5D=K&ret%5B0%5D%5Bcls%5D=E&ret%5B0%5D%5Bdep%5D%5Bdt%5D=#{future_date(2)}&ret%5B0%5D%5Bdep%5D%5Bp%5D=YXU&ret%5B0%5D%5Bma%5D=UN&ret%5B0%5D%5Bn%5D=300&ret%5B0%5D%5Boa%5D=BP&va=SU"}
   let(:request_params) do
     {
       :va  => 'SU',
@@ -69,7 +69,7 @@ describe RamblerApi do
           :ma  => 'UN',
           :dep => {
             :p  => 'SVO',
-            :dt => '131211'
+            :dt => future_date
           },
           :arr => {
             :p => 'LED'
@@ -83,7 +83,7 @@ describe RamblerApi do
           :ma  => 'UN',
           :dep => {
             :p  => 'LED',
-            :dt => '131211'
+            :dt => future_date
           },
           :arr => {
             :p => 'YXU'
@@ -99,7 +99,7 @@ describe RamblerApi do
           :ma  => 'UN',
           :dep => {
             :p  => 'YXU',
-            :dt => '141211'
+            :dt => future_date(2)
           },
           :arr => {
             :p => 'SVO'
@@ -111,7 +111,7 @@ describe RamblerApi do
 
   it 'should generate correct url' do
     uri = described_class.redirecting_uri request_params
-    uri.should include("amadeus.SU.MNK.EEE..SU:UN100SVOLED131211-UN200LEDYXU131211.BP:UN300YXUSVO141211")
+    uri.should include("amadeus.SU.MNK.EEE..SU:UN100SVOLED#{future_date}-UN200LEDYXU#{future_date}.BP:UN300YXUSVO#{future_date(2)}")
   end
 
   it 'should generate correct hash' do
@@ -120,6 +120,10 @@ describe RamblerApi do
 
   it 'should generate correct hash for rambler' do
     described_class.uri_for_rambler(request_params).should == "http://eviterra.com/api/rambler_booking.xml?#{yamled_params}"
+  end
+
+  def future_date(ccn=0)
+    date = PricerForm.convert_api_date((Date.today + 30.days + ccn.days).to_s)
   end
 
 end
