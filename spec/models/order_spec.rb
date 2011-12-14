@@ -3,6 +3,12 @@ require 'spec_helper'
 
 describe Order do
 
+  it "should be correctly faked by factory" do
+    order = Factory.build(:order)
+    order.save!
+    order.errors.should be_empty
+  end
+
   it "should not allow to create two orders with the same pnr number" do
     order1 = Order.new :pnr_number => 'foobar'
     order2 = Order.new :pnr_number => 'FOObar'
