@@ -6,11 +6,13 @@ class PricerDump
   def self.create_dump
     FileUtils.touch 'log/pricer_dump.txt'
     File.open('log/pricer_dump.txt', 'w') do |f|
-       PricerForm.all.each_with_index do |pf, i|
-         from = pf.from_iata + ' '*(4-pf.from_iata.scan(/./u).length)
-         to = pf.to_iata + ' '*(4-pf.to_iata.scan(/./u).length)
-         f.puts ".\n" if i % 1000 == 0
-         f.puts "#{from} #{to} #{pf.segments.first.date} #{pf.rt ? 'rt':'ow'}\n"
+       PricerForm.all.desc(:created_at).each_with_index do |pf, i|
+         if pf.from_iata.present? && pf.to_iata.present?
+           from = pf.from_iata + ' '*(4-pf.from_iata.scan(/./u).length)
+           to = pf.to_iata + ' '*(4-pf.to_iata.scan(/./u).length)
+           puts "." if i % 1000 == 0
+           f.puts "#{from} #{to} #{pf.segments.first.date_as_date.to_s} #{pf.rt ? 'rt':'ow'} #{pf.adults} #{pf.children} #{pf.infants} #{pf.created_at.to_date.to_s} #{pf.partner}"
+         end
     end end
   end
 end
