@@ -143,8 +143,8 @@ HotOffer:
   
 Subscription:
   fields:
-    default: destination, email, status, created_at, updated_at
-    form: destination, email, status
+    default: name, email, status, created_at, updated_at
+    form: from_iata, to_iata, rt, email, status
     options:
       read_only: destination
       selectors: status
@@ -154,7 +154,7 @@ Subscription:
   options:
     default_action_on_item: show
   relationships: destination
-  search: email,
+  search: from_iata, to_iata, email,
   scopes: active, frozen, disabled
   filters: status, created_at
   application: Hot Offers, 3

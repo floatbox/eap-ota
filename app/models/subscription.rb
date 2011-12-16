@@ -14,6 +14,11 @@ class Subscription < ActiveRecord::Base
       .where("updated_at < ?", 11.hours.ago)
   }
 
+
+  def name
+    "#{from_iata} #{Destination.rts.invert[rt]} #{to_iata}"
+  end
+
   def self.statuses
     ['frozen', 'disable']
   end
