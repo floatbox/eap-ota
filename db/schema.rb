@@ -324,7 +324,10 @@ ActiveRecord::Schema.define(:version => 20120127130355) do
     t.string   "pan"
     t.string   "type"
     t.integer  "charge_id"
+    t.string   "status"
   end
+
+  add_index "payments", ["status"], :name => "index_payments_on_status"
 
   create_table "regions", :force => true do |t|
     t.string   "name_en"

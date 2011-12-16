@@ -30,5 +30,9 @@ class Payment < ActiveRecord::Base
     "--"
   end
 
+  def control_links
+    ''
+  end
+
 end
 

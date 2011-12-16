@@ -1,28 +1,50 @@
+# encoding: utf-8
 class PaytureRefund < Payment
 
   belongs_to :charge, :class_name => 'PaytureCharge', :foreign_key => 'charge_id'
 
+  validates_presence_of :charge
   before_create :set_ref
 
+  before_validation :fix_price_sign
+
   def set_ref
-    self.ref = charge.ref if charge
+    self.ref = charge.ref
+    self.order_id = charge.order_id
+    self.name_in_card = charge.name_in_card
+    self.pan = charge.pan
   end
 
-  def refund!
-    return unless status == 'New'
-    res = Payture.new.refund(:order_id => ref)
-    update_attribute(:charged_at, Time.now) if res.success?
-    res.success?
+  def fix_price_sign
+    if price && price > 0
+      self.price = -price
+    end
   end
 
-  # # надо указать текущую сумму. чтобы нечаянно не рефанднуть дважды
-  # def refund(original_amount, refund_amount)
-  #   ref = {:order_id => payments.last.ref}
-  #   reported_amount = Payture.new.state(ref).amount
-  #   if original_amount != reported_amount
-  #     raise "it should have been #{original_amount} charged, got #{reported_amount} instead"
-  #   end
-  #   Payture.new.refund(refund_amount, ref)
-  # end
+  def charge!
+    return unless status == 'new'
+    self.status = 'refunding'
+    save
+    res = Payture.new.refund( -price, :order_id => ref)
+    if res.success?
+      self.charged_at = Time.now
+      self.status = 'charged'
+      self.save
+      return true
+    else
+      self.reject_reason = res.err_code
+      self.save
+    end
+  rescue => e
+    self.reject_reason = e.message
+    save
+    raise
+  end
+
+  def cancel!
+    return if status == 'charged'
+    self.status = 'canceled'
+    self.save
+  end
 
 end

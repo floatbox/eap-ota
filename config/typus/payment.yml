@@ -1,9 +1,10 @@
 Payment: &PAYMENT_CONFIG
   fields:
-    default: type, ref, price, charged_on, name_in_card, last_digits_in_card, reject_reason
-    list: type, ref, price, created_at, charged_on, name_in_card, last_digits_in_card, payment_status, reject_reason
-    show: order, type, ref, price, created_at, charged_on, name_in_card, last_digits_in_card, reject_reason
-    edit: price, charged_on
+    default: type, ref, price, charged_on, name_in_card, pan, payment_status, reject_reason, control_links
+    list: type, ref, price, created_at, charged_on, name_in_card, pan, payment_status, reject_reason, control_links
+    show: order, type, ref, price, created_at, charged_on, name_in_card, pan, reject_reason
+    new: type, price
+    edit: type, price, charged_at
     options:
       date_formats:
         created_at: long

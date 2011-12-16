@@ -1,6 +1,15 @@
 # Typus Roles Configuration File
 #
 # Use the README file as a reference to customize settings.
+#
+# Shortcuts:
+#
+# create: new, create
+# read: index, show
+# update: edit, update, position, toggle, relate, unrelate
+# delete: destroy, trash
+#
+# all: everything
 
 admin:
   Carrier: create, read, update, delete, decode_amadeus, decode_sirena, show_versions
@@ -20,10 +29,15 @@ admin:
   AirlineAlliance: create, read, update, delete
   Consolidator: create, read, update, delete
   GlobalDistributionSystem: create, read, update, delete
-  Payment: read, update, bulk, bulk_charge, show_versions, payment_raw
   FlightGroup: create, read, update, delete
   Commissions: read
   Counters: read
+
+  Payment: read, update, bulk, bulk_charge, show_versions, payment_raw, new_refund, create
+  PaytureCharge: create, read
+  PaytureRefund: create, update, read
+  CashCharge: create, read
+  CashRefund: create, update, read
 
 hoteditor:
   HotOffer: read, delete

@@ -11,11 +11,6 @@ class Admin::PaymentsController < Admin::EviterraResourceController
     render :text => @item.payment_state_raw
   end
 
-  def new_refund
-    @item = @resource.new(params[:resource])
-    render :action => :new
-  end
-
   def set_bulk_action
     add_bulk_action("Charge", "bulk_charge")
   end

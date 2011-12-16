@@ -1,4 +1,14 @@
+# encoding: utf-8
 class PaytureCharge < Payment
+
+  # payment_status:
+  # Authorized
+  # Charged
+  # New
+  # PreAuthorized3DS
+  # Refunded
+  # Rejected
+  # Voided
 
   after_create :set_ref
 
@@ -48,6 +58,15 @@ class PaytureCharge < Payment
   def unblock!
     res = Payture.new.unblock(price, :order_id => ref)
     res.success?
+  end
+
+  # для админки
+  def control_links
+    refund_link
+  end
+
+  def refund_link
+    "<a href='/admin/payture_refunds/new?_popup=true&resource[charge_id]=#{id}' class='iframe_with_page_reload'>Добавить возврат</a>".html_safe
   end
 
 end
