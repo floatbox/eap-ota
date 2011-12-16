@@ -123,7 +123,7 @@ describe RamblerApi do
   end
 
   def future_date(ccn=0)
-    date = PricerForm.convert_api_date((Date.today + 30.days + ccn.days).to_s)
+    date = PricerForm.convert_api_date((Date.today + 1.month + ccn.days).to_s)
   end
 
 end

@@ -30,7 +30,6 @@ module RamblerApi
         end
       return_segments = Segment.new(:flights => return_flights)
     end
-    return_segments ||= nil
     segments = [direct_segments, return_segments]
     segments.compact!
     variants = Variant.new(:segments => segments)
