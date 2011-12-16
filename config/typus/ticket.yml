@@ -6,9 +6,10 @@ Ticket:
      - carrier
      - name
      - route
+     - price_with_payment_commission
      - price_fare
      - price_tax
-     - price_refund
+     - price_discount
      - office_id
      - validator
      - status
@@ -16,7 +17,7 @@ Ticket:
      - ticketed_date
      - itinerary_receipt
      - parent
-     - processed
+     - confirm_refund_url
     list:
       - link_to_show
       - order
@@ -34,7 +35,7 @@ Ticket:
       - itinerary_receipt
       - parent
       - processed
-    new:  price_fare, price_tax, price_penalty, ticketed_date, comment
+    new:  price_fare, price_tax, price_penalty, price_discount, ticketed_date, comment
     show:
       - old_booking
       - order
@@ -83,7 +84,8 @@ Ticket:
       - office_id
       - validator
       - comment
-    new_refund: price_fare, price_tax, price_penalty, price_consolidator, ticketed_date, route, comment
+    new_refund: price_fare, price_tax, price_penalty, price_consolidator, price_discount, route, comment
+    confirm_refund: ticketed_date, processed
     csv:
       - source
       - number_with_code

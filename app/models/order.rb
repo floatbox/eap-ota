@@ -266,20 +266,23 @@ class Order < ActiveRecord::Base
 
   end
 
+  def sold_tickets
+    @sold_tickets ||= tickets.where(:status => 'ticketed').delete_if{|t| t.refunds.where(:processed => true).present?}
+  end
+
   def update_prices_from_tickets # FIXME перенести в strategy
     # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
     return if old_booking
     price_total_old = self.price_total
-    sold_tickets = tickets.where(:status => 'ticketed')
 
-    self.price_fare = sold_tickets.sum(:price_fare)
-    self.price_tax = sold_tickets.sum(:price_tax)
+    self.price_fare = sold_tickets.every.price_fare.sum
+    self.price_tax = sold_tickets.every.price_tax.sum
 
-    self.price_consolidator = sold_tickets.sum(:price_consolidator)
-    self.price_agent = sold_tickets.sum(:price_agent)
-    self.price_subagent = sold_tickets.sum(:price_subagent)
-    self.price_blanks = sold_tickets.sum(:price_blanks)
-    self.price_discount = sold_tickets.sum(:price_discount)
+    self.price_consolidator = sold_tickets.every.price_consolidator.sum
+    self.price_agent = sold_tickets.every.price_agent.sum
+    self.price_subagent = sold_tickets.every.price_subagent.sum
+    self.price_blanks = sold_tickets.every.price_blanks.sum
+    self.price_discount = sold_tickets.every.price_discount.sum
 
     self.price_difference = price_total - price_total_old if price_difference == 0
     save
@@ -401,6 +404,14 @@ class Order < ActiveRecord::Base
     end
     payment = Payment.create(:price => price_with_payment_commission, :card => card, :order => self, :custom_fields => custom_fields, :system => 'payture')
     payment.payture_block
+  end
+
+  def recalculated_price_with_payment_commission
+    if tickets.present?
+      sold_tickets.every.price_with_payment_commission.sum
+    else
+      price_with_payment_commission
+    end
   end
 
   def money_blocked!
