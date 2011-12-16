@@ -9,8 +9,8 @@ class PricerDump
        PricerForm.all.each_with_index do |pf, i|
          from = pf.from_iata + ' '*(4-pf.from_iata.scan(/./u).length)
          to = pf.to_iata + ' '*(4-pf.to_iata.scan(/./u).length)
-         f.puts "#{from} #{to} #{pf.segments.first.date} #{pf.rt ? 'rt':'ow'}\n"
          f.puts ".\n" if i % 1000 == 0
+         f.puts "#{from} #{to} #{pf.segments.first.date} #{pf.rt ? 'rt':'ow'}\n"
     end end
   end
 end
