@@ -56,6 +56,10 @@ class Ticket < ActiveRecord::Base
     refunds.last
   end
 
+  def recalculated_price_with_payment_commission
+    price_with_payment_commission
+  end
+
   def commission_ticketing_method
     if source == 'amadeus' && office_id == 'MOWR228FA'
       'direct'
@@ -101,8 +105,10 @@ class Ticket < ActiveRecord::Base
       :order,
       :code,
       :number,
-      :source
+      :source,
+      :validating_carrier
     self.price_penalty *= -1 if price_penalty < 0
+    self.price_discount *= -1 if price_discount > 0
     self.price_tax *= -1 if price_tax > 0
     self.price_fare *= -1 if price_fare > 0
     self.price_consolidator *= -1 if price_consolidator > 0
@@ -133,8 +139,14 @@ class Ticket < ActiveRecord::Base
   end
 
   def refund_url
-    if kind == 'ticket' && refund.blank?
+    if kind == 'ticket'
       "<a href='/admin/tickets/new_refund?_popup=true&&resource[kind]=refund&resource[parent_id]=#{id}' class='iframe'>Add refund</a>".html_safe
+    end
+  end
+
+  def confirm_refund_url
+    if kind == 'refund'
+      "<a href='/admin/tickets/confirm_refund/#{id}?_popup=true' class='iframe'>#{processed ? 'Отменить подтверждение' : 'Подтвердить'}</a>".html_safe
     end
   end
 

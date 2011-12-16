@@ -27,7 +27,7 @@ module Pricing
     # cash_payment_markup содержит доставку, и нигде потом не используется
 
     def price_tax_and_markup_and_payment
-      price_with_payment_commission - price_fare + price_declared_discount
+      recalculated_price_with_payment_commission - price_fare + price_declared_discount
     end
 
     def price_declared_discount

@@ -15,7 +15,14 @@ class Admin::TicketsController < Admin::EviterraResourceController
   def new_refund
     @item = @resource.new(params[:resource])
     @item.route = @item.parent.route
+    @item.price_discount = @item.parent.price_discount
     render :action => :new
+  end
+
+  def confirm_refund
+    @item = @resource.find(params[:id])
+    @item.processed = !@item.processed
+    render :action => :edit
   end
 
   def set_bulk_action

@@ -22,8 +22,12 @@ module Pricing
     #
     # price_penalty
 
+    def price_markup
+      price_consolidator + price_blanks - price_discount
+    end
+
     def price_total
-      price_fare + price_tax + price_penalty
+      price_fare + price_tax + price_penalty + price_markup
     end
 
     def price_refund
@@ -36,13 +40,23 @@ module Pricing
 
     # FIXME брать реальную долю платежа
     def price_payment_commission
-      price_with_payment_commission * acquiring_percentage
+      case kind
+      when 'ticket'
+        price_with_payment_commission * acquiring_percentage
+      when 'refund'
+        0
+      end
     end
 
     #FIXME это костыль, работает не всегда, нужно сделать нормально
     def price_with_payment_commission
-      k = (price_tax + price_fare).to_f / (order.price_fare + order.price_tax)
-      order.price_with_payment_commission * k
+      case kind
+      when 'ticket'
+        k = (price_tax + price_fare).to_f / (order.price_fare + order.price_tax)
+        order.price_with_payment_commission * k
+      when 'refund'
+        price_total + price_payment_commission
+      end
     end
 
     def price_tax_and_markup_and_payment

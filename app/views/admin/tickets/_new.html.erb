@@ -1,13 +1,13 @@
 <% if @item.kind == 'refund' %>
   <% ticket = @item.parent %>
-  Номер: <%= ticket.number_with_code %><br>
-  Price fare <%= ticket.price_fare %><br>
-  Price tax <%= ticket.price_tax  %><br>
-  Сбор авиацентра <%= ticket.price_consolidator %><br>
-  Цена за бланки <%= ticket.price_blanks %><br>
-  Эквайринг <%= ticket.price_payment_commission %><br>
-  Скидка <%= ticket.price_discount %><br>
-  Полная цена <%= ticket.price_with_payment_commission %><br>
-  Маршрут: <%= ticket.route %><br>
-  Авиакомпания: <%= ticket.carrier %>
+  Серия-номер <%= ticket.number_with_code %><br>
+  Тариф, р. <%= ticket.price_fare %><br>
+  Таксы, р. <%= ticket.price_tax  %><br>
+  Сбор 1%/2% авиацентра, р. <%= ticket.price_consolidator %><br>
+  Сбор за бланки, р. <%= ticket.price_blanks %><br>
+  Эквайринг, р. <%= ticket.price_payment_commission %><br>
+  Скидка от тарифа, р. <%= ticket.price_discount %><br>
+  Итого к оплате / Оплачено, р. <%= ticket.price_with_payment_commission %><br>
+  Маршрут <%= ticket.route %><br>
+  Перевозчик <%= ticket.carrier %>
 <% end %>
