@@ -50,8 +50,11 @@ class PaytureCharge < Payment
 
   def charge!
     res = Payture.new.charge(:order_id => ref)
-    # touch собьет таймзону
-    update_attribute(:charged_on, Date.today) if res.success?
+    if res.success?
+      self.charged_on = Date.today
+      self.status = 'charged'
+      save
+    end
     res.success?
   end
 

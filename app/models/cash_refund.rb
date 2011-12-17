@@ -20,7 +20,7 @@ class CashRefund < Payment
 
   def charge!
     return unless status == 'new'
-    self.charged_at = Time.now
+    self.charged_on = Date.today
     self.status = 'charged'
     self.save
     return true

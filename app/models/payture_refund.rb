@@ -27,7 +27,7 @@ class PaytureRefund < Payment
     save
     res = Payture.new.refund( -price, :order_id => ref)
     if res.success?
-      self.charged_at = Time.now
+      self.charged_on = Date.today
       self.status = 'charged'
       self.save
       return true

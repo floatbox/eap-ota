@@ -9,6 +9,10 @@ ru:
       ticket: 'Билет'
       order_comment: 'Комментарий к заказу'
       payment: 'Платеж'
+      payture_charge: 'Платеж Payture'
+      payture_refund: 'Возврат Payture'
+      cash_charge: 'Платеж наличными'
+      cash_refund: 'Возврат наличными'
       flight_group: 'Подборка рейсов'
       subscription: 'Подписка'
       geo_tag: 'Геотаг'
@@ -120,6 +124,11 @@ ru:
   Assigned To Me: Назначенo мне
 
   Uncomplete: Неполные данные
+
+  Charges: Платежи
+  Refunds: Возвраты
+  Payture: Payture
+  Cash: Кэш
 
   # buttons
   Save and add another: Сохранить и добавить еще один

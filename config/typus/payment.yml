@@ -1,24 +1,45 @@
 Payment: &PAYMENT_CONFIG
   fields:
-    default: type, ref, price, charged_on, name_in_card, pan, payment_status, reject_reason, control_links
-    list: type, ref, price, created_at, charged_on, name_in_card, pan, payment_status, reject_reason, control_links
-    show: order, type, ref, price, created_at, charged_on, name_in_card, pan, reject_reason
+    default: show_link, status, price, charged_on, name_in_card, pan, payment_status, reject_reason, control_links
+    list: show_link, status, price, created_at, charged_on, name_in_card, pan, payment_status, reject_reason, control_links
+    show: show_link, order, ref, price, created_at, charged_on, name_in_card, pan, reject_reason
     new: type, price
-    edit: type, price, charged_at
+    edit: type, price, charged_on
     options:
       date_formats:
         created_at: long
         charged_on: long
-  options:
-    default_action_on_item: show
-  search: =ref, name_in_card, pan
+  #options:
+  #  default_action_on_item: show
+  scopes: payture, cash, charges, refunds
+  search: =ref, =id, name_in_card
   relationships: order
+  #, refunds
   order_by: -created_at
-  filters: created_at
+  filters: created_at, charged_on, type, status
   application: Orders, 1
 
 # Typus не умеет отображать таблицы для Single table inheritance
-PaytureCharge: *PAYMENT_CONFIG
-PaytureRefund: *PAYMENT_CONFIG
-CashCharge: *PAYMENT_CONFIG
-CashRefund: *PAYMENT_CONFIG
+PaytureCharge:
+  <<: *PAYMENT_CONFIG
+  application: Misc, 2
+  options:
+    hide_from_dashboard: yes
+
+PaytureRefund:
+  <<: *PAYMENT_CONFIG
+  application: Misc, 2
+  options:
+    hide_from_dashboard: yes
+
+CashCharge:
+  <<: *PAYMENT_CONFIG
+  application: Misc, 2
+  options:
+    hide_from_dashboard: yes
+
+CashRefund:
+  <<: *PAYMENT_CONFIG
+  application: Misc, 2
+  options:
+    hide_from_dashboard: yes
