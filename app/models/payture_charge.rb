@@ -72,4 +72,8 @@ class PaytureCharge < Payment
     "<a href='/admin/payture_refunds/new?_popup=true&resource[charge_id]=#{id}' class='iframe_with_page_reload'>Добавить возврат</a>".html_safe
   end
 
+  def error_explanation
+    Payture::ERRORS_EXPLAINED[reject_reason] || reject_reason
+  end
+
 end

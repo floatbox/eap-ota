@@ -39,6 +39,9 @@ class Payment < ActiveRecord::Base
     "--"
   end
 
+  def error_explanation
+  end
+
   def show_link
     title = "#{type} ##{id}"
     "<a href='/admin/payments/show/#{id}'>#{title}</a>".html_safe
