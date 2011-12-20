@@ -174,5 +174,13 @@ module DataMigration
     end
   end
 
+  def self.fill_iata_destination_for_subscritions
+    Subscription.find(:all).each do |sub|
+      sub.update_attributes(:from_iata => sub.destination.from.iata,
+                          :to_iata => sub.destination.to.iata,
+                          :rt => sub.destination.rt)
+    end
+  end
+
 end
 

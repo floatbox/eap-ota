@@ -62,7 +62,7 @@ module PricerHelper
   end
 
   def human_price price
-    rounded = price.round.to_i
+    rounded = price.to_f.round.to_i
     "#{ rounded }&nbsp;#{ Russian.pluralize(rounded, 'рубль', 'рубля', 'рублей') }".html_safe
   end
 

@@ -808,7 +808,7 @@ subagent "???"
 example 'svocdg cdgsvo/ab'
 example 'svocdg/business cdgsvo/ab/business'
 interline :half
-commission "0/0"
+commission "1/0.05"
 
 example 'svocdg cdgled/ab ledsvo/ab'
 example 'svocdg/ab cdgsvo/ab'

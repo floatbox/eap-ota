@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111116085223) do
+ActiveRecord::Schema.define(:version => 20111212142933) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -344,6 +344,9 @@ ActiveRecord::Schema.define(:version => 20111116085223) do
     t.string   "status",         :default => "", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "from_iata"
+    t.string   "to_iata"
+    t.boolean  "rt"
   end
 
   add_index "subscriptions", ["destination_id"], :name => "index_subscriptions_on_destination_id"

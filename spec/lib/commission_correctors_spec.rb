@@ -15,6 +15,10 @@ describe Commission::Correctors do
         commission '0 3%'
 
         # авиацентр берет доп комиссию если в рублях и меньше или равно 5
+        carrier 'EK'
+        commission '0% 0%'
+
+        # авиацентр берет доп комиссию если в рублях и меньше или равно 5
         carrier 'AB'
         commission '0 5'
 
@@ -36,6 +40,10 @@ describe Commission::Correctors do
 
     it "should remove consolidator commission if agent's commission is percentage" do
       commission_class.for_carrier('FV').first.consolidator.should == Fx(0)
+    end
+
+    it "should not remove consolidator commission if agent's commission is 0%" do
+      commission_class.for_carrier('EK').first.consolidator.should == Fx('2%')
     end
 
     it "should not remove consolidator commission if agent's commission is lower or equal than 5" do
