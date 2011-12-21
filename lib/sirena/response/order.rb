@@ -43,7 +43,7 @@ module Sirena
             :technical_stops => []
           })
         end
-        @phone = xpath("//contacts/contact|//contacts/phone").first.text
+        @phone = xpath("//contacts/contact[1]|//contacts/phone[1]").text
         # передаем в сирену наш email, поэтому здесь его ловить бессмысленно
         # @email = xpath("//contacts/email").text
         parse_tickets
