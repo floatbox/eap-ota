@@ -267,7 +267,7 @@ class Order < ActiveRecord::Base
   end
 
   def sold_tickets
-    @sold_tickets ||= tickets.where(:status => 'ticketed').delete_if{|t| t.refunds.where(:processed => true).present?}
+    tickets.where(:status => 'ticketed').delete_if{|t| t.refunds.where(:processed => true).present?}
   end
 
   def update_prices_from_tickets # FIXME перенести в strategy
