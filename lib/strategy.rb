@@ -1,4 +1,4 @@
-  # encoding: utf-8
+# encoding: utf-8
 # TODO изменить имя на что-то менее generic
 class Strategy
 
@@ -153,13 +153,14 @@ class Strategy
           end
           return
         end
+
         unless @order_form.pnr_number = add_multi_elements.pnr_number
           # при сохранении случилась какая-то ошибка, номер брони не выдан.
           logger.error "Strategy::Amadeus: Не получили номер брони"
           amadeus.pnr_ignore
           return
         end
-        @order_form.save_to_order
+
         logger.info "Strategy::Amadeus: processing booking: #{add_multi_elements.pnr_number}"
 
         set_people_numbers(add_multi_elements.passengers)
