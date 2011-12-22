@@ -134,7 +134,8 @@ class OrderForm
   end
 
   def save_to_order
-    self.order = Order.create(:order_form => self)
+    self.order ||= Order.create(:order_form => self)
+    order.save
   end
 
   def variant
