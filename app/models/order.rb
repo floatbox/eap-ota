@@ -363,16 +363,12 @@ class Order < ActiveRecord::Base
     payments.last ? payments.last.payture_state : ''
   end
 
-  def charge_date
-    (payments.last && payments.last.charged_at) ? payments.last.charged_at.to_date : nil
+  def charged_on
+    payments.last && payments.last.charged_on
   end
 
   def created_date
     created_at.to_date
-  end
-
-  def charge_time
-    (payments.last && payments.last.charged_at) ? payments.last.charged_at.strftime('%H:%m') : nil
   end
 
   def payture_amount

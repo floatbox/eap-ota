@@ -53,7 +53,8 @@ class Payment < ActiveRecord::Base
 
   def charge!
     res = Payture.new.charge(:order_id => ref)
-    update_attribute(:charged_at, Time.now) if res.success?
+    # touch собьет таймзону
+    update_attribute(:charged_on, Date.today) if res.success?
     res.success?
   end
 

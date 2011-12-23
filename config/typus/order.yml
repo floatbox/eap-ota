@@ -26,7 +26,7 @@ Order:
       - description
       - route
       - payment_status
-      - charge_date
+      - charged_on
       - ticket_status
       - contact
       - name_in_card
@@ -98,7 +98,7 @@ Order:
       - needs_update_from_gds
     csv:
       - pnr_number
-      - charge_date
+      - charged_on
       - created_date
       - tickets_count
       - route
