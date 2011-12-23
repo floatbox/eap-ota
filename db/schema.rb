@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -325,6 +326,8 @@ ActiveRecord::Schema.define(:version => 20120127130355) do
     t.string   "type"
     t.integer  "charge_id"
     t.string   "status"
+    t.string   "commission"
+    t.decimal  "earnings",              :precision => 9, :scale => 2, :default => 0.0, :null => false
   end
 
   add_index "payments", ["status"], :name => "index_payments_on_status"

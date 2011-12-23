@@ -2,6 +2,7 @@
 class CashCharge < Payment
 
   after_create :set_ref
+  before_save :recalculate_earnings
 
   has_many :refunds, :class_name => 'CashRefund', :foreign_key => 'charge_id'
 
@@ -15,6 +16,11 @@ class CashCharge < Payment
     self.charged_on = Date.today
     self.status = 'charged'
     self.save
+  end
+
+  # распределение дохода
+  def set_defaults
+    self.commission = Conf.cash.commission if commission.blank?
   end
 
   # для админки

@@ -11,6 +11,7 @@ class PaytureCharge < Payment
   # Voided
 
   after_create :set_ref
+  before_save :recalculate_earnings
 
   attr_reader :card
   has_many :refunds, :class_name => 'PaytureRefund', :foreign_key => 'charge_id'
@@ -61,6 +62,15 @@ class PaytureCharge < Payment
   def unblock!
     res = Payture.new.unblock(price, :order_id => ref)
     res.success?
+  end
+
+  # распределение дохода
+  def set_defaults
+    self.commission = Conf.payture.commission if commission.blank?
+  end
+
+  def income_payment_gateways
+    commission.call(price)
   end
 
   # для админки

@@ -16,7 +16,7 @@ describe PaytureRefund do
     refund.name_in_card.should == charge.name_in_card
   end
 
-  it "should not allow to save refund with positive price" do
+  it "should change sign of refund with positive price" do
     order = Factory(:order)
     charge = PaytureCharge.new :name_in_card => 'vasya', :pan => '123456xxxxxx1234'
     order.payments << charge
@@ -36,4 +36,16 @@ describe PaytureRefund do
   end
 
   pending "should not allow to create refund for more than charged"
+
+  it 'should recalculate earnings on save' do
+    order = Factory(:order)
+    charge = PaytureCharge.new :name_in_card => 'vasya', :pan => '123456xxxxxx1234'
+    order.payments << charge
+    charge.reload
+    refund = charge.refunds.create :price => -23.5
+
+    refund.reload
+    refund.earnings.should == -23.5
+  end
+
 end

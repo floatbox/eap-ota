@@ -2,9 +2,15 @@
 class Payment < ActiveRecord::Base
 
   has_paper_trail
+  extend Commission::Columns
+
+  # порядок важен!
+  before_save :set_defaults
+  before_save :recalculate_earnings
 
   belongs_to :order
   attr_accessor :custom_fields
+  has_commission_columns :commission
 
   CHARGES = ['PaytureCharge', 'CashCharge']
   REFUNDS = ['PaytureRefund', 'CashRefund']
@@ -32,6 +38,19 @@ class Payment < ActiveRecord::Base
 
   def self.systems
     ['payture', 'cash']
+  end
+
+  # распределение дохода
+  def set_defaults
+    # to be overriden in subclasses
+  end
+
+  def income_payment_gateways
+    0
+  end
+
+  def recalculate_earnings
+    self.earnings = price - income_payment_gateways
   end
 
   # TODO override in subclasses

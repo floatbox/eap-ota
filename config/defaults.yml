@@ -37,7 +37,10 @@ payment:
   order_id_prefix: o
   production:
     skip_checksum_validation: no
+cash:
+  commission: 2.85%
 payture:
+  commission: 2.85%
   enabled: yes
   key: MerchantETerra
   host: sandbox.payture.com
