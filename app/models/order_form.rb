@@ -50,7 +50,7 @@ class OrderForm
     if dept_datetime_mow.to_date <= last_ticket_date
       dept_datetime_mow
     else
-      last_ticket_date.to_time + 1.day
+      last_pay_time || (last_ticket_date.to_time + 1.day)
     end
   end
 
