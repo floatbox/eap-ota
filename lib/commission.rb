@@ -2152,7 +2152,7 @@ carrier_defaults :ticketing_method => "direct"
 # FIXME использую приоритет чтобы закрыть эти субклассы!
 agent "До 31.12.11г. 7% от опубл. тарифов по классам бронирования: M, H, Q, V, W, S, L  на собств. рейсы UA из России в США с  обяз. уч. трансатлантич. рейсов UA965/UA964."
 subagent "До 31.12.11г. 5% от опубл. тарифов по классам бронирования: M, H, Q, V, W, S, L на собств. рейсы UA из России в США с обяз. уч. трансатлантич. рейсов UA965/UA964."
-#subclasses 'MHQVWSL'
+subclasses 'MHQVWSL'
 check { (flights.every.full_flight_number & %W(UA965 UA964)).any? }
 discount "3%"
 commission "7%/5%"
@@ -2165,19 +2165,16 @@ check { (flights.every.full_flight_number & %W(UA965 UA964)).any? }
 discount "5%"
 commission "9%/7%"
 
+example 'svocdg/K'
 agent    "0% - на продажу рейсов UA без участия трансатлант. рейса "
 subagent "0% от тарифа на продажу рейсов UA без участия трансатл. рейса."
 interline :no
-disabled #сложное правило, рейсы без участия трансатлантического рейса
-#unknown
-#flightnumber
-not_implemented
+check { (flights.every.full_flight_number & %W(UA965 UA964)).none? }
 commission "0%/0%"
 
 agent    "1% - от всех остальных опубл. тарифов на собств. рейсы UA"
 subagent "5 рублей от всех остальных опубл. тарифов на собственные рейсы UA"
 interline :no
-not_implemented
 commission "1%/5"
 
 carrier "UL", "SRI LANKAN AIRLINES"
