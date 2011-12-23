@@ -38,8 +38,8 @@ class OrderForm
     return Time.now + 24.hours if Conf.amadeus.env != 'production' # так как тестовый Амадеус в прошлом
     return if recommendation.flights.first.departure_datetime_utc - 72.hours < Time.now
     return unless last_tkt_date
-    return if last_tkt_date <= Date.today + 2.days
-    #return Time.now + 24.hours - Time.now.min.minutes if last_tkt_date == Date.today + 1.day
+    return if last_tkt_date <= Date.today
+    return Time.now + 24.hours - Time.now.min.minutes if last_tkt_date == Date.today + 1.day
     return last_tkt_date.to_time
   end
 
