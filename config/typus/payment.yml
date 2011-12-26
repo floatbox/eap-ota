@@ -1,8 +1,8 @@
 Payment:
   fields:
-    default: ref, price, charged_on, name_in_card, last_digits_in_card, reject_reason
-    list: ref, price, created_at, charged_on, name_in_card, last_digits_in_card, payment_status, reject_reason, system
-    show: ref, price, created_at, charged_on, payture_state, last_digits_in_card, name_in_card, reject_reason, order, system
+    default: ref, price, charged_on, name_in_card, pan, reject_reason
+    list: ref, price, created_at, charged_on, name_in_card, pan, payment_status, reject_reason, system
+    show: ref, price, created_at, charged_on, payture_state, pan, name_in_card, reject_reason, order, system
     edit: price, charged_on
     options:
       date_formats:
@@ -10,7 +10,7 @@ Payment:
         charged_on: long
   options:
     default_action_on_item: show
-  search: =ref, name_in_card
+  search: =ref, name_in_card, pan
   relationships: order
   order_by: -created_at
   filters: created_at

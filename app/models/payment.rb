@@ -24,7 +24,7 @@ class Payment < ActiveRecord::Base
 
   def card= card
     @card = card
-    self.last_digits_in_card = card.number4
+    self.pan = card.pan
     self.name_in_card = card.name
   end
 

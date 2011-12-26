@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111223152516) do
+ActiveRecord::Schema.define(:version => 20111226075229) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -300,6 +300,7 @@ ActiveRecord::Schema.define(:version => 20111223152516) do
     t.string   "commission_ticketing_method",                                 :default => "",       :null => false
     t.boolean  "fix_price",                                                   :default => false,    :null => false
     t.boolean  "old_booking",                                                 :default => false,    :null => false
+    t.string   "pan"
   end
 
   create_table "payments", :force => true do |t|
@@ -319,6 +320,7 @@ ActiveRecord::Schema.define(:version => 20111223152516) do
     t.string   "threeds_key"
     t.string   "system"
     t.date     "charged_on"
+    t.string   "pan"
   end
 
   create_table "regions", :force => true do |t|

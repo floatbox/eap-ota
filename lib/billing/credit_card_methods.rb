@@ -37,6 +37,10 @@ module Billing #:nodoc:
       number.to_s =~ /^\d{1,2}$/
     end
 
+    def pan
+      number.to_s[0..5] + 'xxxxxx' + number.to_s[-4..-1]
+    end
+
     module ClassMethods
       # Returns true if it validates. Optionally, you can pass a card type as an argument and
       # make sure it is of the correct type.

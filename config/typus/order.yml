@@ -30,7 +30,7 @@ Order:
       - ticket_status
       - contact
       - name_in_card
-      - last_digits_in_card
+      - pan
       - full_info
       - commission_ticketing_method
       - blank_count

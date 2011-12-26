@@ -206,7 +206,7 @@ class Order < ActiveRecord::Base
     end
     self.ticket_status = 'booked'
     self.name_in_card = order_form.card.name
-    self.last_digits_in_card = order_form.card.number4
+    self.pan = order_form.card.pan
   end
 
   def raw # FIXME тоже в стратегию?

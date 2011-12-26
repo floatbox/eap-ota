@@ -3,6 +3,7 @@
 require 'time'
 require 'date'
 require 'billing/expiry_date'
+require 'billing/credit_card_methods'
 
 # == Description
 # This credit card object can be used as a stand alone object. It acts just like an ActiveRecord object
