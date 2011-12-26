@@ -159,8 +159,8 @@ class Strategy
           amadeus.pnr_ignore
           return
         end
-        @order_form.save_to_order
         logger.info "Strategy::Amadeus: processing booking: #{add_multi_elements.pnr_number}"
+        @order_form.save_to_order
 
         set_people_numbers(add_multi_elements.passengers)
 
