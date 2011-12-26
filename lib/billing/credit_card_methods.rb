@@ -38,7 +38,7 @@ module Billing #:nodoc:
     end
 
     def pan
-      number.to_s[0..5] + 'xxxxxx' + number.to_s[-4..-1]
+      "#{number.to_s[0..5]}xxxxxx#{number.to_s[-4..-1]}" if number
     end
 
     module ClassMethods
