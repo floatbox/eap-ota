@@ -64,6 +64,7 @@ Ticket:
       - status
       - ticketed_date
       - itinerary_receipt
+      - mso_number
     edit:
       - code
       - number
@@ -83,6 +84,7 @@ Ticket:
       - price_penalty
       - office_id
       - validator
+      - mso_number
       - comment
     new_refund: price_fare, price_tax, price_penalty, price_consolidator, price_discount, route, comment
     confirm_refund: ticketed_date, processed
@@ -111,6 +113,7 @@ Ticket:
       - status
       - ticketed_date
       - kind
+      - mso_number
     options:
       selectors: status, source, office_id, validator
       date_formats:
