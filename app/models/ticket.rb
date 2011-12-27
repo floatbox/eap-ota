@@ -142,13 +142,13 @@ class Ticket < ActiveRecord::Base
 
   def refund_url
     if kind == 'ticket'
-      "<a href='/admin/tickets/new_refund?_popup=true&&resource[kind]=refund&resource[parent_id]=#{id}' class='iframe'>Add refund</a>".html_safe
+      "<a href='/admin/tickets/new_refund?_popup=true&&resource[kind]=refund&resource[parent_id]=#{id}' class='iframe_with_page_reload'>Add refund</a>".html_safe
     end
   end
 
   def confirm_refund_url
     if kind == 'refund'
-      "<a href='/admin/tickets/confirm_refund/#{id}?_popup=true' class='iframe'>#{processed ? 'Отменить подтверждение' : 'Подтвердить'}</a>".html_safe
+      "<a href='/admin/tickets/confirm_refund/#{id}?_popup=true' class='iframe_with_page_reload'>#{processed ? 'Отменить подтверждение' : 'Подтвердить'}</a>".html_safe
     end
   end
 
@@ -172,7 +172,7 @@ class Ticket < ActiveRecord::Base
         if self.refund
           "есть #{!refund.processed ? 'неподтвержденный клиентом' : ''} возврат <br>"
         end.to_s +
-        "<a href='/admin/tickets/new_refund?_popup=true&&resource[kind]=refund&resource[parent_id]=#{id}' class='iframe'>Добавить возврат</a>"
+        "<a href='/admin/tickets/new_refund?_popup=true&&resource[kind]=refund&resource[parent_id]=#{id}' class='iframe_with_page_reload'>Добавить возврат</a>"
 
       ).html_safe
     elsif kind == 'refund'
