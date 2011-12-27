@@ -45,12 +45,23 @@ module Amadeus
                          :last_name => surname,
                          :passenger_ref => passenger_ref,
                          :passport => passport(passenger_ref, need_infant),
-                         :tickets => tickets_array.map{|t| "#{t[:code]}-#{t[:number]}"},
+                         :tickets => correct_passenger_tickets(tickets_array),
                          :number_in_amadeus => (ti / '../../r:elementManagementPassenger/r:lineNumber').to_s,
                          :infant_or_child => need_infant ? 'i' : nil
                          )
           end
         end.flatten
+      end
+
+      def correct_passenger_tickets(tickets_array)
+        tickets_array.map do |ticket_hash|
+          t = Ticket.find_or_initialize_by_code_and_number_and_kind(ticket_hash[:code],
+                                                            ticket_hash[:number],
+                                                            'ticket')
+          t.status ||= 'ticketed'
+          t
+        end.delete_if {|t| t.status != 'ticketed'}
+
       end
 
       def passport(passenger_ref, need_infant=false)
@@ -72,6 +83,13 @@ module Amadeus
         ).each_with_object([]) do |fa, memo|
           res = parsed_ticket_string(fa.to_s)
           memo << res if res && need_infant == (res[:inf] == 'INF')
+        end
+      end
+
+      def parsed_exchange_string(s)
+        m = s.to_s.match(/(PAX|INF) (\d+)-([\d-]+)/)
+        if m
+          return({:number => m[3], :code => m[2], :inf => m[1]})
         end
       end
 
@@ -143,6 +161,19 @@ module Amadeus
               :route => route,
               :cabins => cabins
             })})
+        end
+      end
+
+      def exchanged_tickets
+        xpath( "//r:dataElementsIndiv[r:elementManagementData/r:reference[r:qualifier='OT']]/r:otherDataFreetext[r:freetextDetail/r:type='45']/r:longFreetext"
+        ).inject({}) do |res, fa|
+          passenger_ref = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='PT']/r:number").to_i
+          segments_refs = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='ST']/r:number").every.to_i.sort
+          passenger_elem = xpath("//r:travellerInfo[r:elementManagementPassenger/r:reference[r:qualifier='PT'][r:number=#{passenger_ref}]]")
+          passenger_last_name = passenger_elem.xpath('r:passengerData/r:travellerInformation/r:traveller/r:surname').to_s
+          ticket_hash = parsed_exchange_string(fa.to_s)
+          infant_flag = ticket_hash.delete(:inf) == 'INF' ? 'i': 'a'
+          res.merge({[[passenger_ref, infant_flag], segments_refs] => ticket_hash})
         end
       end
 

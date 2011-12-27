@@ -2,6 +2,24 @@
 require 'spec_helper'
 
 describe Amadeus::Response::PNRRetrieve do
+
+  describe 'with complex exchange' do
+
+    let_once! :response do
+      body = File.read('spec/amadeus/xml/PNR_Retrieve_with_complex_exchange.xml')
+      doc = Amadeus::Service.parse_string(body)
+      Amadeus::Response::PNRRetrieve.new(doc)
+    end
+
+    subject {response}
+
+    specify { subject.parsed_exchange_string('PAX 258-2963040411MOW13SEP11/92223412/258-29630404111E1').should == {:code => '258', :number => '2963040411', :inf => 'PAX'} }
+    it {should have(4).exchanged_tickets}
+    specify { subject.exchanged_tickets.should have_key([[1, "a"], [13, 14]])}
+    specify { subject.exchanged_tickets[[[1, "a"], [13, 14]]].should == {:code => '169', :number => '2963040413'} }
+
+  end
+
   describe 'with two adults, children and infant' do
 
     let_once! :response do
@@ -14,7 +32,7 @@ describe Amadeus::Response::PNRRetrieve do
 
     it { should be_success }
     it { should have(4).passengers }
-    specify { subject.passengers.collect(&:tickets).should ==  [['220-2791248713'], ['220-2791248714'], ['220-2791248716-17'], ['220-2791248715']]  }
+    specify { subject.passengers.collect{|p| p.tickets.every.number_with_code}.should ==  [['220-2791248713'], ['220-2791248714'], ['220-2791248716-17'], ['220-2791248715']]  }
     specify { subject.passengers.collect(&:last_name).should == ['MITROFANOV', 'MITROFANOVA', 'MITROFANOVA', 'MITROFANOVA'] }
     specify { subject.passengers.collect(&:first_name).should == ['PAVEL MR', 'VALENTINA MRS', 'MARIA', 'ARINA'] }
     specify { subject.passengers.collect(&:passport).should == ['111116818', '222228156', '333335276', '444442618'] }
@@ -39,7 +57,7 @@ describe Amadeus::Response::PNRRetrieve do
 
     it { should be_success }
     it { should have(3).passengers }
-    specify { subject.passengers.collect(&:tickets).should == [['006-2791485245'], ['006-2791485244'], []]  }
+    specify { subject.passengers.collect{|p| p.tickets.every.number_with_code}.should == [['006-2791485245'], ['006-2791485244'], []]  }
 
   end
 
@@ -155,7 +173,7 @@ describe Amadeus::Response::PNRRetrieve do
 
       subject { response }
 
-      its("passengers.every.tickets") {should ==  [["074-2962537981", "047-2962537982"], ["074-2962537980", "047-2962537983"]]}
+      specify { subject.passengers.collect{|p| p.tickets.every.number_with_code}.should ==  [["074-2962537981", "047-2962537982"], ["074-2962537980", "047-2962537983"]]}
 
       its("tickets.present?"){should be_true}
       its('tickets.keys.length'){should == 4}

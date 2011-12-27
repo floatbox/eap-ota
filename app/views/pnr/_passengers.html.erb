@@ -25,7 +25,12 @@
     <% if passenger.tickets.present? %>
         <font family="Arial" size="2">
           <% for ticket in passenger.tickets %>
-            <%= ticket %><br>
+            <%= ticket.number_with_code %>
+            <% if ticket.parent %>
+              <br>
+              получен в обмен билета <%= ticket.parent.number_with_code %>
+            <% end %>
+            <br>
           <% end %>
           <br>
         </font>

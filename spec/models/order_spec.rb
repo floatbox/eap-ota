@@ -109,6 +109,7 @@ describe Order do
       pnr_resp = stub('Amadeus::Response::PNRRetrieve')
       pnr_resp.should_receive(:tickets).and_return(new_ticket_hash)
       pnr_resp.stub(:flights).and_return(nil)
+      pnr_resp.stub(:exchanged_tickets).and_return({})
       tst_resp = stub('Amadeus::Response::TicketDisplayTST')
       tst_resp.stub(:prices_with_refs).and_return({})
       @order.stub_chain(:tickets, :where, :every, :update_attribute)

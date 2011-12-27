@@ -234,10 +234,16 @@ class Order < ActiveRecord::Base
         amadeus.pnr_ignore
       end
       prices = tst_resp.prices_with_refs
-      pnr_resp.tickets.deep_merge(tst_resp.prices_with_refs).each do |k, ticket_hash|
+      exchanged_tickets = pnr_resp.exchanged_tickets
+      pnr_resp.tickets.deep_merge(prices).each do |k, ticket_hash|
         if ticket_hash[:number]
           t = tickets.ensure_exists(ticket_hash[:number])
           ticket_hash.delete(:ticketed_date) if t.ticketed_date
+          if exchanged_tickets[k] && (exchanged_ticket = Ticket.find_by_code_and_number(exchanged_tickets[k][:code], exchanged_tickets[k][:number]))
+            ticket_hash[:parent] = exchanged_ticket
+            exchanged_ticket.update_attribute(:status, 'exchanged')
+          end
+
           if Ticket.office_ids.include? ticket_hash[:office_id]
             t.update_attributes(ticket_hash.merge({
               :processed => true,
@@ -267,7 +273,7 @@ class Order < ActiveRecord::Base
   end
 
   def sold_tickets
-    tickets.where(:status => 'ticketed').delete_if{|t| t.refunds.where(:processed => true).present?}
+    tickets.where(:status => 'ticketed').delete_if{|t| t.children.where(:processed => true).present?}
   end
 
   def update_prices_from_tickets # FIXME перенести в strategy

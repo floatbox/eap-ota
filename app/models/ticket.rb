@@ -17,7 +17,9 @@ class Ticket < ActiveRecord::Base
 
   belongs_to :order
   belongs_to :parent, :class_name => 'Ticket'
-  has_many :refunds, :class_name => 'Ticket', :foreign_key => 'parent_id'
+  has_many :refunds, :class_name => 'Ticket', :foreign_key => 'parent_id', :conditions => 'kind = "refund"'
+  has_one :replacement, :class_name => 'Ticket', :foreign_key => 'parent_id', :conditions => 'kind ="ticket"'
+  has_many :children, :class_name => 'Ticket', :foreign_key => 'parent_id'
 
 
   # для отображения в админке билетов. Не очень понятно,
@@ -77,7 +79,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def self.statuses
-    ['ticketed', 'voided', 'pending']
+    ['ticketed', 'voided', 'pending', 'exchanged']
   end
 
   def self.ensure_exists number
