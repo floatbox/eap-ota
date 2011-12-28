@@ -264,7 +264,9 @@ class Order < ActiveRecord::Base
       order_resp.ticket_hashes.each do |t|
         ticket = tickets.ensure_exists(t[:number])
         t['ticketed_date'] = ticket_dates[t[:number]] if ticket_dates[t[:number]]
-        ticket.update_attributes(t.merge({:processed => true}))
+        ticket.update_attributes(t.merge({:processed => true,
+              :validating_carrier => commission_carrier
+        }))
       end
       tickets.reload
       update_attribute(:departure_date, order_resp.flights.first.dept_date)

@@ -161,7 +161,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def carrier
-    validating_carrier || commission_carrier
+    validating_carrier.present? ? validating_carrier : commission_carrier
   end
 
   # для тайпуса
