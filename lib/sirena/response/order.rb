@@ -6,15 +6,12 @@ module Sirena
       def parse
         @number = xpath("//regnum").text
         @passengers = xpath("//passengers/passenger").map do |p|
-          ticket_numbers = xpath("//tickinfo[@pass_id=#{p["id"]}][.='ticket']").map{|tickinfo|
-                      tickinfo["ticknum"]
-                    }.uniq
           Person.new({
             :first_name => p.xpath("name").text.split(' ')[0...-1].join(' '),#тк последнее слово - дата рождения
             :last_name => p.xpath("surname").text,
             :passport => p.xpath("doc").text,
             :sex => p.xpath("sex").text,
-            :tickets => ticket_numbers,
+            :tickets => passenger_tickets(p["id"]),
             :birthdate => Date.parse(p.xpath("birthdate").text)
           })
         end
@@ -47,6 +44,21 @@ module Sirena
         # передаем в сирену наш email, поэтому здесь его ловить бессмысленно
         # @email = xpath("//contacts/email").text
         parse_tickets
+      end
+
+      def passenger_tickets(passenger_id)
+          xpath("//tickinfo[@pass_id=#{passenger_id}][.='ticket']").map{|tickinfo|
+                      tickinfo["ticknum"]
+          }.uniq.map do |ticknum|
+            t = Ticket.find_or_initialize_by_code_and_number_and_kind(
+              (ticknum.match(/([\d\w]+)-?(\d{10}-?\d*)/).to_a)[1],
+              (ticknum.match(/([\d\w]+)-?(\d{10}-?\d*)/).to_a)[2],
+              'ticket'
+            )
+            t.status ||= 'ticketed'
+            t
+          end.delete_if {|t| t.status != 'ticketed'}
+
       end
 
       def parse_tickets
