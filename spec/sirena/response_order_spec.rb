@@ -35,6 +35,7 @@ describe Sirena::Response::Order do
     its("passengers.every.last_name") { should == ['IVANOV', 'IVANOVA'] }
     its("passengers.every.passport") { should == ["6555555555", "VВГ123456"] }
     its ("passengers.every.tickets") { should == [ ['2626150600213'], ['2626150600214']] }
+    specify {subject.ticket_hashes.every[:status].should == ['ticketed', 'ticketed']}
     # теперь там контакт евитерры
     #its(:email) { should == 'USER@EXAMPLE.COM' }
     its(:phone) { should == '+79265555555' }

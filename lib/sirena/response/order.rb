@@ -86,7 +86,8 @@ module Sirena
             :route => v[:flights].join('; '),
             :first_name => v[:first_name],
             :last_name => v[:last_name],
-            :passport => v[:passport]
+            :passport => v[:passport],
+            :status => 'ticketed'
           }
         end
 
