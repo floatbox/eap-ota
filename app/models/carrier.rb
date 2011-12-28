@@ -2,6 +2,8 @@
 class Carrier < ActiveRecord::Base
   extend IataStash
 
+  has_paper_trail
+
   has_many :amadeus_commissions
   belongs_to :alliance, :foreign_key => 'airline_alliance_id', :class_name => 'AirlineAlliance'
 

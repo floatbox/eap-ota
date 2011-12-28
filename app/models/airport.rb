@@ -3,6 +3,8 @@ class Airport < ActiveRecord::Base
   include HasSynonyms
   extend IataStash
 
+  has_paper_trail
+
   belongs_to :city
   has_one :country, :through => :city
   has_many :geo_taggings, :as => :location, :dependent => :destroy

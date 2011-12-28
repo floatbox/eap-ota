@@ -8,4 +8,8 @@ class Admin::AirportsController < Admin::EviterraResourceController
     Completer.regen
     redirect_to :action => :list
   end
+
+  def show_versions
+    get_object
+  end
 end

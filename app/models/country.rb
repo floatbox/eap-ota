@@ -2,6 +2,8 @@
 class Country < ActiveRecord::Base
   include HasSynonyms
 
+  has_paper_trail
+
   has_many :cities, :order => 'cities.name_ru'
 
   has_many :airports, :through => :cities

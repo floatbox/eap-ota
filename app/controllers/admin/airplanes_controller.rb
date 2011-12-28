@@ -3,4 +3,8 @@ class Admin::AirplanesController < Admin::EviterraResourceController
   include Admin::DecodingController
   self.sirena_dictionary = :vehicle
   self.amadeus_dictionary = :dne
+
+  def show_versions
+    get_object
+  end
 end

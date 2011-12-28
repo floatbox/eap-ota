@@ -3,15 +3,15 @@
 # Use the README file as a reference to customize settings.
 
 admin:
-  Carrier: create, read, update, delete, decode_amadeus, decode_sirena
-  Airplane: create, read, update, delete, decode_amadeus, decode_sirena
-  Airport: create, read, update, delete, update_completer, decode_amadeus, decode_sirena
-  City: create, read, update, delete, update_completer, decode_amadeus, decode_sirena
+  Carrier: create, read, update, delete, decode_amadeus, decode_sirena, show_versions
+  Airplane: create, read, update, delete, decode_amadeus, decode_sirena, show_versions
+  Airport: create, read, update, delete, update_completer, decode_amadeus, decode_sirena, show_versions
+  City: create, read, update, delete, update_completer, decode_amadeus, decode_sirena, show_versions
   Order: create, read, update, unblock, charge, ticket, reload_tickets, cancel, show_pnr, money_received, no_money_received, resend_email, send_offline_email, bulk_charge, bulk, pnr_raw, payment_raw, void, make_payable_by_card, show_versions
   OrderComment: create, read, update, delete
   Notification: create, read, update, delete
   Ticket: create, read, update, ticket_raw, bulk_set_ticketed_date, bulk, new_refund, confirm_refund, show_versions
-  Country: create, read, update, delete
+  Country: create, read, update, delete, show_versions
   GeoTag: create, read, update, delete
   Region: create, read, update, delete
   HotOffer: read, delete

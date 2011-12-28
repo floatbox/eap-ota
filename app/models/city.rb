@@ -3,6 +3,8 @@ class City < ActiveRecord::Base
   include HasSynonyms
   extend IataStash
 
+  has_paper_trail
+
   def self.timezones
     TZInfo::Timezone.all_identifiers
   end

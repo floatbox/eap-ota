@@ -2,6 +2,8 @@
 class Airplane < ActiveRecord::Base
   extend IataStash
 
+  has_paper_trail
+
   def self.engine_types
     { 'Реактивный' => 'jet','Турбовинтовой' => 'prop', 'Поезд' => 'train', 'Автобус' => 'bus' }
   end
