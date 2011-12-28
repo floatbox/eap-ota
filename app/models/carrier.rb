@@ -63,13 +63,20 @@ class Carrier < ActiveRecord::Base
     else
       []
     end
+  rescue Curl::Err::HostResolutionError
+    retries ||= 3
+    retries -= 1
+    retry unless retries.zero?
+    []
   rescue Amadeus::Macros::CommandCrypticError
     []
   end
 
   def update_interlines!(session=Amadeus.booking)
-    self.interlines = fetch_interlines.join(' ')
+    self.interlines = fetch_interlines(session).join(' ')
+    has_changed = changed?
     save
+    has_changed
   end
 
   def interline_with?(carrier)
@@ -84,9 +91,9 @@ class Carrier < ActiveRecord::Base
   # для кронтаска
   def self.update_interlines!
     Amadeus.booking do |session|
-      all.each do |carrier|
+      all.map do |carrier|
         carrier.update_interlines!(session)
-      end
+      end.count(&:present?)
     end
   end
 end
