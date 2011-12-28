@@ -57,9 +57,9 @@ class Carrier < ActiveRecord::Base
     ru_shortname.presence || en_shortname
   end
 
-  def fetch_interlines
+  def fetch_interlines(session=Amadeus.booking)
     if iata.present?
-      Amadeus::Service.interline_iatas(iata)
+      session.interline_iatas(iata)
     else
       []
     end
@@ -67,7 +67,7 @@ class Carrier < ActiveRecord::Base
     []
   end
 
-  def update_interlines!
+  def update_interlines!(session=Amadeus.booking)
     self.interlines = fetch_interlines.join(' ')
     save
   end
@@ -83,8 +83,10 @@ class Carrier < ActiveRecord::Base
 
   # для кронтаска
   def self.update_interlines!
-    all.each do |carrier|
-      carrier.update_interlines!
+    Amadeus.booking do |session|
+      all.each do |carrier|
+        carrier.update_interlines!(session)
+      end
     end
   end
 end
