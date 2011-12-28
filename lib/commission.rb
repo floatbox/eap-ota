@@ -371,25 +371,6 @@ subagent "5 руб. с билета по опубл. тарифам на рей�
 interline :first
 commission "1eur/5"
 
-example 'svocdg/economy'
-strt_date "01.09.2011"
-expr_date "31.12.2011"
-agent "5%"
-subagent "3%"
-classes :economy
-check { not country_iatas.include?('IT') }
-commission "5%/3%"
-
-example 'svocdg/business cdgsvo/business'
-strt_date "01.09.2011"
-expr_date "31.12.2011"
-agent "7%"
-subagent "5%"
-classes :business
-check { not country_iatas.include?('IT') }
-# discount "4%"
-commission "7%/5%"
-
 example 'vceflu/economy fluvce/economy'
 strt_date "06.10.2011"
 expr_date "31.12.2011"
@@ -409,12 +390,12 @@ expr_date "31.12.2011"
 agent "Строго по направлениям:
 Северная Америка: Нью-Йорк, Лос-Анджелес, Майами, Чикаго, Бостон, Торонто;
 Южная Америка: Сан-Пауло, Рио-Де-Жанейро, Каракас, Буэнос-Айрес.
-10% для билетов эконом-класса."
-subagent "8% для билетов эконом-класса"
+9% для билетов эконом-класса."
+subagent "7% для билетов эконом-класса"
 classes :business
 check { (city_iatas && %W(FLU LAX MIA MDW BOS YTZ VCP GIG CCS EZE)).present? }
 # discount "4%"
-commission "7%/5%"
+commission "9%/7%"
 
 example 'svocdg/ab cdgsvo'
 no_commission
@@ -985,7 +966,7 @@ carrier "HU", "HAINAN AIRLINES"
 
 example 'svopek/c'
 example 'svopek/c/ab peksvo/c'
-strt_date "10.11.2011"
+strt_date "12.12.2011"
 agent "20% от опубл.тарифов по классу С на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subagent "18% от опубл.тарифов по классу С на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subclasses "C"
@@ -996,10 +977,11 @@ commission "20%/18%"
 
 example 'svopek/d'
 example 'svopek/d/ab persvo/d'
-strt_date "10.11.2011"
+example 'svopek/i/ab peksvo/i'
+strt_date "12.12.2011"
 agent "15% от опубл.тарифов по классу D на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subagent "13% от опубл.тарифов по классу D на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
-subclasses "D"
+subclasses "DI"
 interline :possible
 check { city_iatas.first == 'MOW' && country_iatas.include?('CN') }
 discount "10%"
@@ -1007,11 +989,10 @@ commission "15%/13%"
 
 example 'svopek/z'
 example 'svopek/z/ab peksvo/z'
-example 'svopek/i/ab peksvo/i'
-strt_date "10.11.2011"
+strt_date "12.12.2011"
 agent "9% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subagent "7% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
-subclasses "IZ" 
+subclasses "Z" 
 interline :possible
 check { city_iatas.first == 'MOW' && country_iatas.include?('CN') }
 discount "4%"
@@ -1021,7 +1002,7 @@ commission "9%/7%"
 example 'svopek'
 example 'svopek/ab peksvo'
 example 'svopek/ab peksvo'
-strt_date "10.11.2011"
+strt_date "12.12.2011"
 agent "9% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subagent "7% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 interline :possible
@@ -1032,34 +1013,22 @@ commission "9%/7%"
 example 'ledpek/c pekled/c'
 example 'ledpek/c/ab pekled/c'
 example 'ledpek/d/ab pekled/d'
-strt_date "10.11.2011"
-agent "15% от опубл.тарифов по классу С,D на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
-subagent "13% от опубл.тарифов по классу С,D на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
-subclasses "CD"
+example 'ledpek/i/ab pekled/i'
+example 'ledpek/z/ab pekled/z'
+strt_date "12.12.2011"
+agent "15% от опубл.тарифов по классу С,D,I,Z на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
+subagent "13% от опубл.тарифов по классу С,D,I,Z на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
+subclasses "CDIZ"
 interline :possible
 check { city_iatas.first == 'LED' && country_iatas.include?('CN') }
 discount "10%"
 commission "15%/13%"
 
-example 'ledpek/i pekled/i'
-example 'ledpek/i/ab pekled/i'
-example 'ledpek/z/ab pekled/z'
-strt_date "10.11.2011"
-agent "9% от опубл.тарифов по классам I, Z, а также на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
-subagent "7% от опубл.тарифов по классам I, Z, а также на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
-subclasses "IZ"
-interline :possible
-check { city_iatas.first == 'LED' && country_iatas.include?('CN') }
-discount "4%"
-commission "9%/7%"
-
-# копия для эконом класса
 example 'ledpek pekled'
 example 'ledpek/ab pekled'
-example 'ledpek/ab pekled'
-strt_date "10.11.2011"
-agent "9% от опубл.тарифов по классам I, Z, а также на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
-subagent "7% от опубл.тарифов по классам I, Z, а также на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
+strt_date "12.12.2011"
+agent "9% от на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
+subagent "7% на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
 interline :possible
 check { city_iatas.first == 'LED' && country_iatas.include?('CN') }
 discount "4%"
