@@ -167,9 +167,9 @@ module Amadeus
       def exchanged_tickets
         @exchanged_tickets ||= xpath( "//r:dataElementsIndiv[r:elementManagementData/r:reference[r:qualifier='OT']]/r:otherDataFreetext[r:freetextDetail/r:type='45']/r:longFreetext"
         ).inject({}) do |res, fa|
-          passenger_ref = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='PT']/r:number").to_i || (tickets.keys.length == 1 && tickets.keys[0][0][0])
-          segments_refs = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='ST']/r:number").every.to_i.sort || (tickets.keys.length == 1 && tickets.keys[0][1])
-          segments_refs = tickets.keys.length == 1 && tickets.keys[0][1] if segments_refs.blank?
+          passenger_ref = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='PT']/r:number").to_i || tickets.keys[0][0][0]
+          segments_refs = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='ST']/r:number").every.to_i.sort
+          segments_refs = tickets.keys[0][1] if segments_refs.blank?
           passenger_elem = xpath("//r:travellerInfo[r:elementManagementPassenger/r:reference[r:qualifier='PT'][r:number=#{passenger_ref}]]")
           passenger_last_name = passenger_elem.xpath('r:passengerData/r:travellerInformation/r:traveller/r:surname').to_s
           ticket_hash = parsed_exchange_string(fa.to_s)
