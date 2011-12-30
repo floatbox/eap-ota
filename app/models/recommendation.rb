@@ -381,32 +381,28 @@ class Recommendation
     fragments.each do |fragment|
       flight = Flight.new
       # defaults
-      carrier, operating_carrier, subclass, cabin = default_carrier, nil, 'Y', 'M'
+      carrier, operating_carrier, flight_number, subclass, cabin = default_carrier, nil, nil, 'Y', 'M'
       fragment.upcase.split('/').each do |code|
-        case code.length
-        when 6
-          flight.departure_iata, flight.arrival_iata = code[0,3], code[3,3]
-        when 2
-          carrier = code
-        when 1
+        case code
+        when /^.$/
           subclass = code
+        when /^(..):(..)(\d*)$/, /^()(..)(\d*)$/
+          operating_carrier, carrier, flight_number = $1, $2, $3
+        when /^(...)(...)$/
+          flight.departure_iata, flight.arrival_iata = $1, $2
+        when 'ECONOMY'
+          cabin = 'M'
+        when 'BUSINESS'
+          cabin = 'C'
+        when 'FIRST'
+          cabin = 'F'
         else
-          case code
-          when /^(..):(..)$/
-            operating_carrier, carrier = $1, $2
-          when 'ECONOMY'
-            cabin = 'M'
-          when 'BUSINESS'
-            cabin = 'C'
-          when 'FIRST'
-            cabin = 'F'
-          else
-            raise ArgumentError, 'should consist of itinerary (SVOCDG), carrier(AB), cabin subclass (Y) or class (economy). example "mowaer/s7 aermow/y'
-          end
+          raise ArgumentError, 'should consist of itinerary (SVOCDG), carrier(AB), cabin subclass (Y) or class (economy). example "mowaer/s7 aermow/y'
         end
       end
       flight.marketing_carrier_iata = carrier
-      flight.operating_carrier_iata = operating_carrier || carrier
+      flight.operating_carrier_iata = operating_carrier.presence || carrier
+      flight.flight_number = flight_number.presence
       segments << Segment.new(:flights => [flight])
       subclasses << subclass
       cabins << cabin

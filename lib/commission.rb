@@ -2119,7 +2119,7 @@ carrier "UA", "UNITED AIRLINES (ГЛОНАСС)"
 
 carrier_defaults :ticketing_method => "direct"
 
-# FIXME использую приоритет чтобы закрыть эти субклассы!
+example 'SVOIAD/UA965/H'
 agent "До 31.12.11г. 7% от опубл. тарифов по классам бронирования: M, H, Q, V, W, S, L  на собств. рейсы UA из России в США с  обяз. уч. трансатлантич. рейсов UA965/UA964."
 subagent "До 31.12.11г. 5% от опубл. тарифов по классам бронирования: M, H, Q, V, W, S, L на собств. рейсы UA из России в США с обяз. уч. трансатлантич. рейсов UA965/UA964."
 subclasses 'MHQVWSL'
@@ -2127,6 +2127,7 @@ check { (flights.every.full_flight_number & %W(UA965 UA964)).any? }
 discount "3%"
 commission "7%/5%"
 
+example 'SVOIAD/UA965/F'
 agent "До 31.12.11г. 9% от опубл.тарифов по классам бронирования: F, A, J, C, D, Z, Y, B на собств. рейсы UA из России в США с обязат. уч. трансатлантич. рейсов UA965/UA964."
 subagent "До 31.12.11г. 7% от опубл. тарифов по классам бронирования: F, A, J, C, D, Z, Y, B на собств. рейсы UA из России в США с обязат. уч. трансатлантич. рейсов UA965/UA964."
 important!
@@ -2142,6 +2143,8 @@ interline :no
 check { (flights.every.full_flight_number & %W(UA965 UA964)).none? }
 commission "0%/0%"
 
+example 'SVOIAD/UA965/R'
+example 'IADSVO/UA964/R'
 agent    "1% - от всех остальных опубл. тарифов на собств. рейсы UA"
 subagent "5 рублей от всех остальных опубл. тарифов на собственные рейсы UA"
 interline :no
