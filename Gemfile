@@ -63,7 +63,7 @@ gem 'passenger', :group => :production
 
 group :test do
   gem 'rspec-rails'
-  gem 'cucumber-rails'
+  gem 'cucumber-rails', :require => false
   gem 'webrat'
   gem 'factory_girl_rails'
 
