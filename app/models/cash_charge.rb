@@ -12,10 +12,14 @@ class CashCharge < Payment
   end
 
   def charge!
-    return unless status == 'new'
-    self.charged_on = Date.today
-    self.status = 'charged'
-    self.save
+    return unless blocked?
+    update_attributes :status => 'charged', :charged_on => Date.today
+  end
+
+  def cancel!
+    return unless blocked?
+    update_attributes :status => 'canceled'
+    return true
   end
 
   # распределение дохода

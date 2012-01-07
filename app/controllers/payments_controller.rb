@@ -32,7 +32,7 @@ class PaymentsController < ApplicationController
     if card.valid?
       payture_response = @order.block_money(card, nil, request.remote_ip)
       if payture_response.success?
-        @order.money_blocked!
+        logger.info "Pay: payment succesful"
         render :partial => 'success'
       elsif payture_response.threeds?
         logger.info "Pay: payment system requested 3D-Secure authorization"

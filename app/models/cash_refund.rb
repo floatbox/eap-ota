@@ -19,17 +19,15 @@ class CashRefund < Payment
   end
 
   def charge!
-    return unless status == 'new'
-    self.charged_on = Date.today
-    self.status = 'charged'
-    self.save
+    return unless blocked?
+    update_attributes :status => 'charged', :charged_on => Date.today
     return true
   end
 
   def cancel!
-    return if status == 'charged'
-    self.status = 'canceled'
-    self.save
+    return unless blocked?
+    update_attributes :status => 'canceled'
+    return true
   end
 
 end

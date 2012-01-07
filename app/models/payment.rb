@@ -4,6 +4,7 @@ class Payment < ActiveRecord::Base
   has_paper_trail
   extend Commission::Columns
 
+  after_initialize :set_initial_status
   # порядок важен!
   before_save :set_defaults
   before_save :recalculate_earnings
@@ -25,7 +26,7 @@ class Payment < ActiveRecord::Base
   scope :cash, where(:type => CASH)
   def self.types; PAYTURE + CASH end
 
-  def self.statuses; %W[ pending threeds blocked charged rejected unblocked canceled ] end
+  def self.statuses; %W[ pending threeds blocked charged rejected canceled ] end
 
   # Payment.blocked, payment.blocked?.., and so on.
   statuses.each do |status|
@@ -49,6 +50,11 @@ class Payment < ActiveRecord::Base
 
   def self.systems
     ['payture', 'cash']
+  end
+
+  # вызывается и после считывания из базы
+  def set_initial_status
+    self.status ||= 'blocked'
   end
 
   # распределение дохода

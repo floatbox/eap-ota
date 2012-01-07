@@ -1,23 +1,19 @@
 # encoding: utf-8
 class PaytureCharge < Payment
 
-  # payment_status:
-  # Authorized
-  # Charged
-  # New
-  # PreAuthorized3DS
-  # Refunded
-  # Rejected
-  # Voided
-
   after_create :set_ref
   before_save :recalculate_earnings
 
   attr_reader :card
   has_many :refunds, :class_name => 'PaytureRefund', :foreign_key => 'charge_id'
 
+  # вызывается и после считывания из базы
+  def set_initial_status
+    self.status ||= 'pending'
+  end
+
   def set_ref
-    update_attribute(:ref, Conf.payment.order_id_prefix + id.to_s)
+    update_attributes(:ref => Conf.payment.order_id_prefix + id.to_s)
   end
 
   def card= card
@@ -26,42 +22,89 @@ class PaytureCharge < Payment
     self.name_in_card = card.name
   end
 
-  def payture_block
-    response = Payture.new.block(price, @card, :order_id => ref, :custom_fields => custom_fields)
-    update_attribute(:reject_reason, response.err_code) if !response.success? && !response.threeds?
-    update_attribute(:threeds_key, response.threeds_key) if response.threeds?
+  # TODO интеллектуальный retry при проблемах со связью
+  def block!
+    return unless pending?
+    raise ArgumentError, 'order_id is not set yet' unless ref
+    raise ArgumentError, 'price is 0' unless price && !price.zero?
+    raise ArgumentError, 'specify card data, please' unless @card
+    update_attributes :status => 'processing_block'
+    response = gateway.block(price, @card, :order_id => ref, :custom_fields => custom_fields)
+    if response.threeds?
+      update_attributes :status => 'threeds', :threeds_key => response.threeds_key
+    elsif response.success?
+      update_attributes :status => 'blocked'
+    elsif response.error?
+      update_attributes :status => 'rejected', :reject_reason => response.err_code
+    else
+      # FIXME оставляем status == 'processing_block' ???
+    end
     response
   end
 
-  def payture_state
-    state = Payture.new.state(:order_id => ref).state
-    update_attribute(:payment_status, state)
-    state
-  end
-
-  def payture_amount
-    Payture.new.state(:order_id => ref).amount
-  end
-
-  def confirm_3ds pa_res, md
-    res = Payture.new.block_3ds(:order_id => ref, :pa_res => pa_res)
-    update_attribute(:reject_reason, res.err_code) unless res.success?
-    res.success?
-  end
-
-  def charge!
-    res = Payture.new.charge(:order_id => ref)
+  def confirm_3ds! pa_res, md
+    return unless threeds?
+    update_attributes :status => 'processing_threeds'
+    res = gateway.block_3ds(:order_id => ref, :pa_res => pa_res)
     if res.success?
-      self.charged_on = Date.today
-      self.status = 'charged'
-      save
+      update_attributes :status => 'blocked'
+    else
+      update_attributes :status => 'rejected', :reject_reason => res.err_code
     end
     res.success?
   end
 
-  def unblock!
-    res = Payture.new.unblock(price, :order_id => ref)
+  def charge!
+    return unless blocked?
+    update_attributes :status => 'processing_charge'
+    res = gateway.charge(:order_id => ref)
+    if res.success?
+      update_attributes :status => 'charged', :charged_on => Date.today
+    else
+      update_attributes :status => 'blocked', :reject_reason => res.err_code
+    end
     res.success?
+  end
+
+  def cancel!
+    return unless blocked?
+    update_attributes :status => 'processing_cancel'
+    res = gateway.unblock(price, :order_id => ref)
+    if res.success?
+      update_attributes :status => 'canceled'
+    else
+      update_attributes :status => 'blocked', :reject_reason => res.err_code
+    end
+    res.success?
+  end
+
+  def gateway
+    Payture.new
+  end
+
+  def payture_state
+    state = gateway.state(:order_id => ref).state
+    update_attributes(:payment_status => state)
+    state
+  end
+
+  def payture_amount
+    gateway.state(:order_id => ref).amount
+  end
+
+  STATUS_MAPPING = {
+    'Authorized' => 'blocked',
+    'Charged' => 'charged',
+    'Refunded' => 'charged',
+    'New' => 'pending',
+    'PreAuthorized3DS' => 'threeds',
+    'Rejected' => 'rejected',
+    'Voided' => 'canceled'
+  }
+
+  def sync_state!
+    state = STATUS_MAPPING[payture_state] or raise 'Unknown state reported'
+    update_attributes :status => state
   end
 
   # распределение дохода

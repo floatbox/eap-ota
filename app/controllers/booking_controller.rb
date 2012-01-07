@@ -122,7 +122,6 @@ class BookingController < ApplicationController
     payture_response = @order_form.block_money(request.remote_ip)
 
     if payture_response.success?
-      @order_form.order.money_blocked!
       logger.info "Pay: payment and booking successful"
 
       unless strategy.delayed_ticketing?
@@ -156,12 +155,7 @@ class BookingController < ApplicationController
 
   def confirm_3ds
     pa_res, md = params['PaRes'], params['MD']
-    # Payment::Payture::Charge ?
-    @payment = Payment.find_by_threeds_key(md)
-    unless @payment
-      render :status => :not_found
-      return
-    end
+    @payment = PaytureCharge.find_by_threeds_key!(md.presence || 'no key given')
 
     @order = @payment.order
     if @order.ticket_status == 'canceled'
@@ -177,7 +171,6 @@ class BookingController < ApplicationController
         logger.info "Pay: problem confirming 3ds"
         @error_message = :payment
       else
-        @order.money_blocked!
         strategy = Strategy.select(:order => @order)
 
         unless strategy.delayed_ticketing?

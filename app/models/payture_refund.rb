@@ -22,29 +22,27 @@ class PaytureRefund < Payment
   end
 
   def charge!
-    return unless status == 'new'
-    self.status = 'refunding'
-    save
-    res = Payture.new.refund( -price, :order_id => ref)
+    return unless blocked?
+    update_attributes :status => 'processing_refund'
+    res = gateway.refund( -price, :order_id => ref)
     if res.success?
-      self.charged_on = Date.today
-      self.status = 'charged'
-      self.save
+      update_attributes :status => 'charged', :charged_on => Date.today
       return true
     else
-      self.reject_reason = res.err_code
-      self.save
+      update_attributes :status => 'processing_error', :reject_reason => res.err_code
     end
   rescue => e
-    self.reject_reason = e.message
-    save
+    update_attributes :status => 'processing_error', :reject_reason => e
     raise
   end
 
   def cancel!
-    return if status == 'charged'
-    self.status = 'canceled'
-    self.save
+    return unless blocked?
+    update_attributes :status => 'canceled'
+  end
+
+  def gateway
+    Payture.new
   end
 
 end

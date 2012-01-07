@@ -361,7 +361,10 @@ class Order < ActiveRecord::Base
     :to => :last_payment, :allow_nil => true
 
   def confirm_3ds pa_res, md
-    last_payment.confirm_3ds pa_res, md
+    if result = last_payment.confirm_3ds!(pa_res, md)
+      money_blocked!
+    end
+    result
   end
 
   def charge!
@@ -371,20 +374,17 @@ class Order < ActiveRecord::Base
   end
 
   def unblock!
-    res = last_payment.unblock!
+    res = last_payment.cancel!
     update_attribute(:payment_status, 'unblocked') if res
     res
   end
 
   def block_money card, order_form = nil, ip = nil
-    custom_fields = PaymentCustomFields.new(:ip => ip)
-    if order_form
-      custom_fields.order_form = order_form
-    else
-      custom_fields.order = self
-    end
+    custom_fields = PaymentCustomFields.new(:ip => ip, :order_form => order_form, :order => self)
     payment = PaytureCharge.create(:price => price_with_payment_commission, :card => card, :custom_fields => custom_fields, :order => self)
-    payment.payture_block
+    response = payment.block!
+    money_blocked! if response.success?
+    response
   end
 
   def recalculated_price_with_payment_commission
@@ -432,7 +432,7 @@ class Order < ActiveRecord::Base
   def cancel!
     update_attribute(:ticket_status, 'canceled')
   end
-  
+
   def email_ready!
     update_attribute(:email_status, '')
   end
