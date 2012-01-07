@@ -25,7 +25,18 @@ class Payment < ActiveRecord::Base
   scope :cash, where(:type => CASH)
   def self.types; PAYTURE + CASH end
 
-  def self.statuses; %W[ pending threeds blocked charged rejected voided ] end
+  def self.statuses; %W[ pending threeds blocked charged rejected unblocked canceled ] end
+
+  # Payment.blocked, payment.blocked?.., and so on.
+  statuses.each do |status|
+    scope status, where(:status => status)
+
+    eval <<-"end_of_method"
+      def #{status}?
+        status == '#{status}'
+      end
+    end_of_method
+  end
 
   def self.[] id
     find id
