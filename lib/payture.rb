@@ -204,27 +204,24 @@ class Payture
   end
 
   def add_custom_fields(post, opts)
-    custom_fields = opts[:custom_fields]
-    if custom_fields
-      res = {
-        :IP => custom_fields.ip,
-        :FirstName => custom_fields.first_name,
-        :LastName => custom_fields.last_name,
-        :Phone => custom_fields.phone,
-        :Email => custom_fields.email,
-        :Date => custom_fields.date ? custom_fields.date.strftime('%Y.%m.%d') : nil,
-        :Segments => custom_fields.segments,
-        :Description => custom_fields.description
-      }
-      if custom_fields.points
-        res[:From] = custom_fields.points[0]
-        custom_fields.points[1..-1].each_with_index do |p, i|
-          res[("To#{i + 1}").to_sym] = p
-        end
+    custom_fields = opts[:custom_fields] or return
+    res = {
+      :IP => custom_fields.ip,
+      :FirstName => custom_fields.first_name,
+      :LastName => custom_fields.last_name,
+      :Phone => custom_fields.phone,
+      :Email => custom_fields.email,
+      :Date => custom_fields.date.try(:strftime, '%Y.%m.%d'),
+      :Segments => custom_fields.segments,
+      :Description => custom_fields.description
+    }
+    if custom_fields.points
+      res[:From] = custom_fields.points.first
+      1.upto(custom_fields.segments) do |i|
+        res[:"To#{i}"] = custom_fields.points[i]
       end
-      res.keys.each { |k| res.delete(k) unless res[k] }
-      post[:CustomFields] = res.collect {|k, v| "#{k}=#{v}"}.join(';')
     end
+    post[:CustomFields] = res.delete_if {|k, v| !v }.collect {|k, v| "#{k}=#{v}"}.join(';')
   end
 
   def encrypt(string)
