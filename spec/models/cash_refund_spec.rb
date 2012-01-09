@@ -8,7 +8,8 @@ describe CashRefund do
     charge = CashCharge.new
     order.payments << charge
     charge.reload
-    refund = charge.refunds.create :price => -23.5
+    #refund = charge.refunds.create :price => -23.5
+    refund = CashRefund.create :price => -23.5, :order => order
 
     refund.reload
     refund.earnings.should == -23.5
