@@ -106,6 +106,10 @@ class Payment < ActiveRecord::Base
   def external_gateway_link
   end
 
+  def payment_info
+    "#{pan} #{name_in_card}" if pan.present? || name_in_card.present?
+  end
+
   def control_links
     ''
   end
