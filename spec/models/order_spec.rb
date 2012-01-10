@@ -32,8 +32,8 @@ describe Order do
       @order.create_cash_payment
     end
 
-    it 'should create payment with system: cash' do
-      @order.payments.last.system.should == 'cash'
+    it 'should create CashCharge' do
+      @order.payments.last.should be_a(CashCharge)
     end
 
     it 'should create payment with correct price' do
