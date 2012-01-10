@@ -31,19 +31,26 @@ describe Order do
   end
 
   describe "#create_cash_payment" do
+
+    include Commission::Fx
+
+    subject { order.payments.last }
     before(:each) do
-      @order = Order.new(:pnr_number => 'XXX')
-      @order.save
-      @order.price_with_payment_commission = 20.2
-      @order.create_cash_payment
+      order.create_cash_payment
     end
 
-    it 'should create CashCharge' do
-      @order.payments.last.should be_a(CashCharge)
+    context "normal cash or payture order" do
+      let(:order) { Factory(:order, :price_with_payment_commission => 20.2) }
+      it {should be_a(CashCharge)}
+      its(:price) {should == order.price_with_payment_commission}
+      its(:commission) {should == Fx(Conf.payture.commission)}
     end
 
-    it 'should create payment with correct price' do
-      @order.payments.last.price.should == 20.2
+    context "normal cash or payture order" do
+      let(:order) { Factory(:order, :price_with_payment_commission => 20.2, :pricing_method => 'corporate_0001') }
+      it {should be_a(CashCharge)}
+      its(:price) {should == order.price_with_payment_commission}
+      its(:commission) {should == Fx(0)}
     end
 
   end

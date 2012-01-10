@@ -411,7 +411,7 @@ class Order < ActiveRecord::Base
   end
 
   def create_cash_payment
-    CashCharge.create(:price => price_with_payment_commission, :order => self)
+    CashCharge.create(:price => price_with_payment_commission, :commission => acquiring_commission, :order => self)
   end
 
   def no_money_received!

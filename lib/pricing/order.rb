@@ -47,12 +47,22 @@ module Pricing
       price_consolidator + price_blanks + price_our_markup - price_discount
     end
 
+    # FIXME сломается, если там не проценты!
     def acquiring_percentage
-      if pricing_method =~ /corporate/
-        0
-      else
-        Payture.pcnt
-      end
+      acquiring_commission.rate / 100
+    end
+
+    # FIXME отдать это на совесть подклассов Payment
+    def acquiring_commission
+      commission =
+        if pricing_method =~ /corporate/
+          Conf.cash.corporate_commission
+        elsif payment_type == 'cash'
+          Conf.cash.commission
+        else
+          Conf.payture.commission
+        end
+      Commission::Formula.new(commission)
     end
 
     def calculate_price_with_payment_commission

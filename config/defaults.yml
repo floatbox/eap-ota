@@ -39,6 +39,7 @@ payment:
     skip_checksum_validation: no
 cash:
   commission: 2.85%
+  corporate_commission: 0
 payture:
   commission: 2.85%
   enabled: yes
