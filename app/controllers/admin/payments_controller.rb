@@ -2,6 +2,10 @@
 class Admin::PaymentsController < Admin::EviterraResourceController
   include Typus::Controller::Bulk
 
+  def new
+    redirect_to params.merge(:controller => 'admin/cash_charges')
+  end
+
   def show_versions
     get_object
   end
