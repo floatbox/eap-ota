@@ -1,8 +1,8 @@
 Payment: &PAYMENT_CONFIG
   fields:
-    default: show_link, status, price, created_at, name_in_card, pan, payment_status, error_explanation, control_links
-    list: show_link, order, status, price, commission, earnings, created_at, charged_on, name_in_card, pan, payment_status, error_explanation, control_links
-    show: show_link, order, charge_link, ref, status, price, commission, earnings, created_at, charged_on, name_in_card, pan, reject_reason, error_explanation
+    default: show_link, status_decorated, price, created_at, name_in_card, pan, payment_status, error_explanation, control_links
+    list: show_link, order, status_decorated, price, commission, earnings, created_at, charged_on, name_in_card, pan, payment_status, error_explanation, control_links
+    show: show_link, order, charge_link, ref, status_decorated, price, commission, earnings, created_at, charged_on, name_in_card, pan, reject_reason, error_explanation
     new: type, price
     edit: type, price, commission, charged_on
     options:
@@ -11,7 +11,7 @@ Payment: &PAYMENT_CONFIG
         charged_on: long
   #options:
   #  default_action_on_item: show
-  scopes: payture, cash, charges, refunds
+  scopes: secured, not_secured, payture, cash, charges, refunds
   search: =ref, =id, name_in_card
   relationships: order
   #, refunds

@@ -39,6 +39,22 @@ class Payment < ActiveRecord::Base
     end_of_method
   end
 
+  STATUS_GROUPS = {
+    :secured => %W[ blocked charged processing_charge ],
+    :not_secured => %W[ pending threeds rejected unblocked canceled ]
+  }
+
+  # Payment.secured, payment.secured?, Payment.not_secured, Payment.not_secured?.., and so on.
+  STATUS_GROUPS.each do |status_group, statuses|
+    scope status_group, where(:status => statuses)
+
+    eval <<-"end_of_method"
+      def #{status_group}?
+        STATUS_GROUPS[:#{status_group}].include? status
+      end
+    end_of_method
+  end
+
   def self.[] id
     find id
   end
@@ -90,6 +106,14 @@ class Payment < ActiveRecord::Base
 
   def control_links
     ''
+  end
+
+  def status_decorated
+    if secured?
+      "<span style='color:green; font-weight:bold'>#{status}</span>".html_safe
+    else
+      "<span style='color:gray;'>#{status}</span>".html_safe
+    end
   end
 
 end
