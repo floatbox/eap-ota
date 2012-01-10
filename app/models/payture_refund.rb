@@ -45,4 +45,10 @@ class PaytureRefund < Payment
     Payture.new
   end
 
+  # для админки
+
+  def charge_link
+    charge.show_link
+  end
+
 end

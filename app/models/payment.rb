@@ -83,6 +83,11 @@ class Payment < ActiveRecord::Base
     "<a href='/admin/payments/show/#{id}'>#{title}</a>".html_safe
   end
 
+  # оверрайдить в субклассах-рефандах
+  def charge_link
+  end
+
+
   def control_links
     ''
   end

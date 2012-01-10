@@ -2,7 +2,6 @@
 class CashRefund < Payment
 
   #belongs_to :charge, :class_name => 'CashCharge', :foreign_key => 'charge_id'
-  def charge; nil; end
 
   validates_presence_of :order
   before_create :set_ref
