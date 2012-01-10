@@ -125,6 +125,11 @@ class PaytureCharge < Payment
     "<a href='/admin/payture_refunds/new?_popup=true&resource[charge_id]=#{id}' class='iframe_with_page_reload'>Возврат на карту</a>".html_safe
   end
 
+  def external_gateway_link
+    url = "https://backend.payture.com/Payture/order.html?mid=55&pid=&id=#{ref}"
+    "<a href='#{url}' target='_blank'>#{ref}</a>".html_safe
+  end
+
   def error_explanation
     Payture::ERRORS_EXPLAINED[reject_reason] || reject_reason
   end

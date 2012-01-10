@@ -2,7 +2,7 @@
 <div id="term">Терминал:
   <pre data-replace-with="<%= url_for :action => :pnr_raw, :id => @item.id %>"></pre>
 </div>
-<div id="payture"><%= link_to_if payture_backend_url(@item), 'Платежная система', payture_backend_url(@item) %>:
+<div id="payture">Платежная система:
   <pre data-replace-with="<%= url_for :action => :payment_raw, :id => @item.id %>"></pre>
 </div>
 <% if @item.code && @item.payment_status == 'not blocked' && @item.offline_booking? %>

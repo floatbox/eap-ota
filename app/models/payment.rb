@@ -103,6 +103,8 @@ class Payment < ActiveRecord::Base
   def charge_link
   end
 
+  def external_gateway_link
+  end
 
   def control_links
     ''

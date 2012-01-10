@@ -51,4 +51,9 @@ class PaytureRefund < Payment
     charge.show_link
   end
 
+  def external_gateway_link
+    url = "https://backend.payture.com/Payture/order.html?mid=55&pid=&id=#{ref}"
+    "<a href='#{url}' target='_blank'>#{ref}</a>".html_safe
+  end
+
 end
