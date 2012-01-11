@@ -77,7 +77,7 @@ group :test do
   gem 'guard-rspec'
   # gem 'guard-rails-assets'
   gem 'capybara'
-  gem 'spork'
+  gem 'spork', '0.9.0.rc9'
   gem 'database_cleaner'
 
   gem 'vcr'

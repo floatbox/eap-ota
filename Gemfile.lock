@@ -281,7 +281,7 @@ GEM
       json_pure
       rubyzip
     spoon (0.0.1)
-    spork (0.8.5)
+    spork (0.9.0.rc9)
     sprockets (2.0.3)
       hike (~> 1.2)
       rack (~> 1.0)
@@ -377,7 +377,7 @@ DEPENDENCIES
   ruby-prof
   russian!
   sass-rails (~> 3.1.4)
-  spork
+  spork (= 0.9.0.rc9)
   therubyracer
   trashed!
   typhoeus
