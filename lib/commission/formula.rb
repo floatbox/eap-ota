@@ -65,6 +65,25 @@ class Commission
 
     alias [] call
 
+    # fx#reverse_call считает надбавку к числу, такую, что
+    # fx#call на сумму числа и надбавки вернет как раз эту надбавку.
+    # сейчас служит для рассчета компенсации за эквайринг
+    #
+    # TODO euro? usd? multiplier? complex?
+    def reverse_call(base=nil)
+      raise ArgumentError, "formula '#{@formula}' is not valid" unless valid?
+      if complex?
+        # TODO write something? for cases like "2.34% + 0.1usd". it should be possible
+        raise TypeError, "complex formulas aren't reversible for now"
+      elsif euro?
+        raise TypeError, "euro formulas aren't reversible for now"
+      elsif percentage?
+        rate * base / (100 - rate)
+      else
+        rate
+      end.round(2)
+    end
+
     def valid?
       formula.blank? ||
       !!( formula.strip =~ /^ \d+ (?: \.\d+ )? (?: % | eur )?

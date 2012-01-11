@@ -110,4 +110,20 @@ describe Commission::Formula do
     }
 
   end
+
+  describe "#reverse_call" do
+
+    for fx_string, price_with_commission_string in %W[ 1.28% 50 2.83% ].product %W[ 100, 500, 123451.12]
+
+      it "should give correct result for Fx(#{fx_string}) and #{price_with_commission_string}" do
+        fx = Fx(fx_string)
+        price_with_commission = BigDecimal.new(price_with_commission_string)
+        price = price_with_commission - fx.call(price_with_commission)
+        fx.reverse_call(price).should == (price_with_commission - price).round(2)
+      end
+
+    end
+
+  end
+
 end

@@ -18,7 +18,7 @@ module Pricing
 
     # комиссия платежного шлюза
     def price_payment
-      Payture.commission(price_total)
+      Payture.commission.reverse_call(price_total)
     end
 
     # "налоги и сборы" для отображения клиенту

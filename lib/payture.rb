@@ -6,16 +6,8 @@ require 'httparty'
 class Payture
 
   # комиссионные за транзакцию
-  def self.pcnt
-    Commission::Formula.new(Conf.payture.commission).rate / 100
-  end
-
-  def self.commission(price)
-    (pcnt * price / ( 1 - pcnt)).round(2)
-  end
-
-  def self.sans_commission(price_with_commission)
-    (price_with_commission * (1 - pcnt)).round(2)
+  def self.commission
+    @commission ||= Commission::Formula.new(Conf.payture.commission)
   end
 
   class Response
