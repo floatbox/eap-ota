@@ -1,6 +1,15 @@
 module Admin::FormHelper
   include Admin::Resources::FormHelper
 
+  # кнопка "И добавить новый" всем только мешает
+  # "сохранить" - теперь первая (и дефолтная) кнопка
+  def save_options
+    { # "_addanother" => "Save and add another",
+      "_save" => "Save",
+      "_continue" => "Save and continue editing"
+    }
+  end
+
   def typus_template_field(attribute, template, form)
     options = { :start_year => @resource.typus_options_for(:start_year),
                 :end_year => @resource.typus_options_for(:end_year),
