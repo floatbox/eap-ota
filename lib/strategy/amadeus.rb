@@ -52,4 +52,26 @@ class Strategy::Amadeus < Strategy::Base
     Amadeus::Service.air_flight_info(:date => date, :number => m[2], :carrier => m[1], :departure_iata => m[5], :arrival_iata => m[6]).flight
   end
 
+  def booking_attributes
+    Amadeus.booking do |amadeus|
+      pnr_resp = amadeus.pnr_retrieve(:number => @order.pnr_number)
+      departure_date = pnr_resp.flights.first.dept_date
+      tst_resp = amadeus.ticket_display_tst(:number => @order.pnr_number)
+      amadeus.pnr_ignore
+
+      if tst_resp.success?
+        {
+          :departure_date => departure_date,
+          :price_fare => tst_resp.total_fare,
+          :price_tax => tst_resp.total_tax,
+          :commission_carrier => tst_resp.validating_carrier_code,
+          :blank_count => tst_resp.blank_count
+        }
+      else
+        { :departure_date => departure_date }
+      end
+
+    end
+  end
+
 end

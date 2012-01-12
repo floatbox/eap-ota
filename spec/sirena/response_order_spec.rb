@@ -3,6 +3,7 @@ require 'spec_helper'
 
 describe Sirena::Response::Order do
 
+  pending "#recommendation"
 
   describe 'with one adult, unpaid' do
 
