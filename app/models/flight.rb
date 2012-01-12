@@ -33,20 +33,9 @@ class Flight
     Airplane[equipment_type_iata]
   end
 
-  #используем Air_FlightInfo для получения fligh-а из кода pnr, скопиписченого из терминала
+  # flight по копипасте из gds
   def self.from_gds_code(code, source)
-    if source == 'amadeus'
-      if m = code.match(/(\w{2})\s?(\d+)\s(\w)\s(\d{2}\w{3})\s\d.(\w{3})(\w{3})/)
-        date = Date.strptime(m[4], '%d%h')
-        date += 1.year if date < Date.today
-        flight = Amadeus::Service.air_flight_info(:date => date, :number => m[2], :carrier => m[1], :departure_iata => m[5], :arrival_iata => m[6]).flight
-      end
-    elsif source == 'sirena'
-      if m = code.match(/(\w{2})-(\d+) \w (\d{2}\w{3}\d{2})/)
-        date = Date.parse(m[3])
-        flight = Sirena::Service.new.raceinfo(:date => date, :flight => m[2], :carrier => m[1]).flight
-      end
-    end
+    Strategy.select(:source => source).flight_from_gds_code(code)
   end
 
   delegate :name, :prefix => true, :allow_nil => true, :to => :departure

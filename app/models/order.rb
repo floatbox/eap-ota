@@ -210,7 +210,7 @@ class Order < ActiveRecord::Base
   end
 
   def raw # FIXME тоже в стратегию?
-    Strategy.new(:order => self).raw_pnr
+    Strategy.select(:order => self).raw_pnr
   rescue => e
     e.message
   end
@@ -309,34 +309,8 @@ class Order < ActiveRecord::Base
   #  errors.add(:needs_update_from_gds, e.message)
   end
 
-  # злая временная копипаста из load_from_tickets
   def update_from_gds
-    if source == 'amadeus'
-      pnr_resp = tst_resp = nil
-      Amadeus.booking do |amadeus|
-        pnr_resp = amadeus.pnr_retrieve(:number => pnr_number)
-        tst_resp = amadeus.ticket_display_tst(:number => pnr_number)
-        amadeus.pnr_ignore
-      end
-      self.departure_date = pnr_resp.flights.first.dept_date
-      if tst_resp.success?
-        self.price_fare = tst_resp.total_fare
-        self.price_tax = tst_resp.total_tax
-        self.commission_carrier = tst_resp.validating_carrier_code
-        self.blank_count = tst_resp.blank_count
-      end
-
-    elsif source == 'sirena'
-      order_resp = Sirena::Service.new.order(pnr_number, sirena_lead_pass)
-      self.departure_date = order_resp.flights.first.dept_date
-      hash = pricing_hash_for_sirena(order_resp)
-      pricing_resp = Sirena::Service.new.pricing_variant(hash)
-      recommendation_resp = pricing_resp.recommendations.first #по замыслу всегда 1 рек-я
-      self.price_fare = recommendation_resp.total_fare
-      self.price_tax = recommendation_resp.total_tax
-
-    end
-
+    assign_attributes Strategy.select(:order => self).booking_attributes
   end
 
   # пересчет тарифов и такс
@@ -475,7 +449,7 @@ class Order < ActiveRecord::Base
   def self.cancel_stale!
     stale.each do |order|
       puts "Automatic cancel of pnr #{order.pnr_number}"
-      Strategy.new(:order => order).cancel
+      Strategy.select(:order => order).cancel
     end
   end
 
@@ -501,26 +475,6 @@ class Order < ActiveRecord::Base
   def to_label
     "#{source} #{pnr_number}"
   end
-
-  def pricing_hash_for_sirena(order)
-
-    variants = Variant.new(
-      :segments => order.flights.collect do |flight|
-
-      Segment.new( :flights => [flight])
-      end )
-
-    recommendation =  Recommendation.new(
-      :source => 'sirena',
-      :booking_classes => order.booking_classes,
-      :variants => [variants]
-    )
-
-    passengers = order.passengers
-    hash = {:recommendation => recommendation, :given_passengers => passengers}
-  end
-
-
 
 end
 
