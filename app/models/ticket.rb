@@ -200,8 +200,8 @@ class Ticket < ActiveRecord::Base
     end
   end
 
-  def raw # FIXME в стратегию
-    Strategy.new(:source => 'amadeus', :ticket => self).raw_ticket
+  def raw
+    Strategy.select(:ticket => self).raw_ticket
   rescue => e
     e.message
   end

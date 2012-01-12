@@ -210,7 +210,7 @@ class Order < ActiveRecord::Base
   end
 
   def raw # FIXME тоже в стратегию?
-    Strategy.new(:order => self).raw_pnr
+    Strategy.select(:order => self).raw_pnr
   rescue => e
     e.message
   end
@@ -475,7 +475,7 @@ class Order < ActiveRecord::Base
   def self.cancel_stale!
     stale.each do |order|
       puts "Automatic cancel of pnr #{order.pnr_number}"
-      Strategy.new(:order => order).cancel
+      Strategy.select(:order => order).cancel
     end
   end
 

@@ -85,7 +85,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
 
   def cancel
     # может упасть и не изменить статус?
-    Strategy.new(:order => @order).cancel
+    Strategy.select(:order => @order).cancel
     redirect_to :action => :show, :id => @order.id
   end
 
@@ -113,7 +113,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
   end
 
   def void
-    Strategy.new(:order => @order).void
+    Strategy.select(:order => @order).void
     redirect_to :action => :show, :id => @order.id
   end
 

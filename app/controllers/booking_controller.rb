@@ -12,7 +12,7 @@ class BookingController < ApplicationController
     @search = PricerForm.load_from_cache(params[:query_key])
     set_search_context_for_airbrake
     recommendation = Recommendation.deserialize(params[:recommendation])
-    strategy = Strategy.new( :rec => recommendation, :search => @search )
+    strategy = Strategy.select( :rec => recommendation, :search => @search )
     
     StatCounters.inc %W[enter.preliminary_booking.total]
     StatCounters.inc %W[enter.preliminary_booking.#{@search.partner}.total] if @search.partner
@@ -102,7 +102,7 @@ class BookingController < ApplicationController
       return
     end
 
-    strategy = Strategy.new( :rec => @order_form.recommendation, :order_form => @order_form )
+    strategy = Strategy.select( :rec => @order_form.recommendation, :order_form => @order_form )
 
     unless strategy.create_booking
       StatCounters.inc %W[pay.errors.booking]
@@ -175,7 +175,7 @@ class BookingController < ApplicationController
         @error_message = :payment
       else
         @order.money_blocked!
-        strategy = Strategy.new(:order => @order)
+        strategy = Strategy.select(:order => @order)
 
         unless strategy.delayed_ticketing?
           logger.info "Pay: ticketing"
