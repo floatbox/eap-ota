@@ -11,7 +11,7 @@ module Strategy::Amadeus::PreliminaryBooking
       logger.error 'Strategy: forbidden by Hahn Air'
       return
     end
-    Amadeus.booking do |amadeus|
+    ::Amadeus.booking do |amadeus|
       @rec.price_fare, @rec.price_tax =
         amadeus.fare_informative_pricing_without_pnr(
           :recommendation => @rec,

@@ -16,7 +16,7 @@ class Strategy::Amadeus < Strategy::Base
   # FIXME обработать ошибки?
 
   def cancel
-    Amadeus.booking do |amadeus|
+    ::Amadeus.booking do |amadeus|
       logger.error "Strategy::Amadeus: canceling #{@order.pnr_number}"
       amadeus.pnr_cancel(:number => @order.pnr_number)
       @order.cancel!
@@ -34,13 +34,13 @@ class Strategy::Amadeus < Strategy::Base
   ############
 
   def raw_pnr
-    Amadeus.booking do |amadeus|
+    ::Amadeus.booking do |amadeus|
       amadeus.pnr_raw(@order.pnr_number)
     end
   end
 
   def raw_ticket
-    Amadeus.booking do |amadeus|
+    ::Amadeus.booking do |amadeus|
       amadeus.ticket_raw(@ticket.first_number_with_code)
     end
   end
@@ -49,11 +49,11 @@ class Strategy::Amadeus < Strategy::Base
     return unless m = code.match(/(\w{2})\s?(\d+)\s(\w)\s(\d{2}\w{3})\s\d.(\w{3})(\w{3})/)
     date = Date.strptime(m[4], '%d%h')
     date += 1.year if date < Date.today
-    Amadeus::Service.air_flight_info(:date => date, :number => m[2], :carrier => m[1], :departure_iata => m[5], :arrival_iata => m[6]).flight
+    ::Amadeus::Service.air_flight_info(:date => date, :number => m[2], :carrier => m[1], :departure_iata => m[5], :arrival_iata => m[6]).flight
   end
 
   def booking_attributes
-    Amadeus.booking do |amadeus|
+    ::Amadeus.booking do |amadeus|
       pnr_resp = amadeus.pnr_retrieve(:number => @order.pnr_number)
       departure_date = pnr_resp.flights.first.dept_date
       tst_resp = amadeus.ticket_display_tst(:number => @order.pnr_number)

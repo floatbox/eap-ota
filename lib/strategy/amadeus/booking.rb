@@ -2,7 +2,7 @@
 module Strategy::Amadeus::Booking
 
   def create_booking
-    Amadeus.booking do |amadeus|
+    ::Amadeus.booking do |amadeus|
       # FIXME могут ли остаться частичные резервирования сегментов, если одно из них не прошло?
       # может быть, при ошибке канселить бронирование на всякий случай?
       # лучше сделать IG
@@ -73,8 +73,8 @@ module Strategy::Amadeus::Booking
         #)
         #Передача прав из одного офиса в другой
         #FIXME надо как-то согласовать с предыдущей частью
-        amadeus.cmd("es#{Amadeus::Session::BOOKING}-B")
-        amadeus.cmd("rp/#{Amadeus::Session::WORKING}/all")
+        amadeus.cmd("es#{::Amadeus::Session::BOOKING}-B")
+        amadeus.cmd("rp/#{::Amadeus::Session::WORKING}/all")
         # FIXME надо ли архивировать в самом конце?
         amadeus.pnr_archive(@order_form.seat_total)
         # FIXME перенести ремарку поближе к началу.
