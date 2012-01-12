@@ -5,7 +5,7 @@ class Strategy::Sirena < Strategy::Base
 
   attr_writer :sirena
   def sirena
-    @sirena ||= Sirena::Service.new
+    @sirena ||= ::Sirena::Service.new
   end
 
   # preliminary booking
