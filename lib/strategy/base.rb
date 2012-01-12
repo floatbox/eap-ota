@@ -64,5 +64,9 @@ class Strategy::Base
   def raw_ticket
     raise NotImplementedError
   end
+
+  def flight_from_gds_code *args
+    raise NotImplementedError
+  end
 end
 

@@ -45,4 +45,11 @@ class Strategy::Amadeus < Strategy::Base
     end
   end
 
+  def flight_from_gds_code(code)
+    return unless m = code.match(/(\w{2})\s?(\d+)\s(\w)\s(\d{2}\w{3})\s\d.(\w{3})(\w{3})/)
+    date = Date.strptime(m[4], '%d%h')
+    date += 1.year if date < Date.today
+    Amadeus::Service.air_flight_info(:date => date, :number => m[2], :carrier => m[1], :departure_iata => m[5], :arrival_iata => m[6]).flight
+  end
+
 end

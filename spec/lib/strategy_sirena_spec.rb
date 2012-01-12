@@ -21,4 +21,5 @@ describe Strategy::Sirena do
   pending "#ticket"
   pending "#raw_pnr"
   pending "#raw_ticket"
+  pending "#flight_from_gds_code"
 end

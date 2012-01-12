@@ -61,5 +61,11 @@ class Strategy::Sirena < Strategy::Base
   def raw_pnr
     sirena.pnr_history(:number => @order.pnr_number).history
   end
+
+  def flight_from_gds_code(code)
+    return unless m = code.match(/(\w{2})-(\d+) \w (\d{2}\w{3}\d{2})/)
+    date = Date.parse(m[3])
+    sirena.raceinfo(:date => date, :flight => m[2], :carrier => m[1]).flight
+  end
 end
 
