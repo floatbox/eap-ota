@@ -101,13 +101,17 @@ module Commission::Rules
   end
 
   def applicable_date?
-    if expr_date
-      return true unless expr_date.to_date.past?
-    elsif strt_date
-      return true unless strt_date.to_date.future?
-    elsif !(expr_date && strt_date)
-      return true
-    end
+    !expired? && !future?
+  end
+
+  def expired?
+    return unless expr_date
+    expr_date.to_date.past?
+  end
+
+  def future?
+    return unless strt_date
+    strt_date.to_date.future?
   end
 
   def correct!
@@ -338,39 +342,6 @@ module Commission::Rules
       end
     end
 
-    # test methods
-    def test
-      self.skip_interline_validity_check = true
-      all.each do |commission|
-        (commission.examples || next).each do |code, source|
-          rec = Recommendation.example(code, :carrier => commission.carrier)
-          proposed = find_for(rec)
-          if commission.expr_date && commission.expr_date.to_date.past? && !commission.disabled?
-            pending "#{commission.carrier} (line #{source}): - expiration date passed already."
-          elsif commission.strt_date && commission.strt_date.to_date.future? && !commission.disabled?
-            pending "#{commission.carrier} (line #{source}): - start date didn't come yet."
-          elsif proposed == commission ||
-                proposed.nil? && commission.disabled?
-            ok "#{commission.carrier} (line #{source}): #{code} - OK"
-          elsif proposed.nil?
-            error "#{commission.carrier} (line #{source}): #{code} - no applicable commission!"
-          else
-            if commission.disabled?
-              error "#{commission.carrier} (line #{source}): #{code} - commission non applicable, but got line #{proposed.source}:"
-            else
-              error "#{commission.carrier} (line #{source}): #{code} - wrong commission applied. Should be:"
-              error "agent:    #{commission.agent_comments.chomp}"
-              error "subagent: #{commission.subagent_comments.chomp}"
-              error " got line #{proposed.source}:"
-            end
-            error "agent: #{proposed.agent_comments.chomp}"
-            error "subagent: #{proposed.subagent_comments.chomp}"
-          end
-        end
-      end
-      self.skip_interline_validity_check = false
-    end
-
     def stats
       puts "#{commissions.keys.size} carriers"
       puts "#{commissions.values.sum(&:size)} rules total"
@@ -382,17 +353,6 @@ module Commission::Rules
     end
 
     private
-    def error msg
-      puts "\e[31m" + msg + "\e[0m"
-    end
-
-    def pending msg
-      puts "\e[33m" + msg + "\e[0m"
-    end
-
-    def ok msg
-      puts "\e[32m" + msg + "\e[0m"
-    end
 
     def caller_address level=1
       caller[level] =~ /:(\d+)/
