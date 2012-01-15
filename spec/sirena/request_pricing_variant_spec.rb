@@ -3,14 +3,10 @@ require 'spec_helper'
 
 describe Sirena::Request::PricingVariant do
 
-  describe 'проверяем правильность работы конструктора' do
+  describe '#initialize' do
 
-    let(:form){PricerForm.simple(:from => "MOV", :to => "LED", :date1 => "290912", :date2 => "300912", :infants => 1, :children => 1, :cabin => "Y")}
-    let(:order){Sirena::Response::Order.new( File.read(response) )}
-    let(:recommendation){Order.new.pricing_hash_for_sirena(order)}
-    let(:response) { 'spec/sirena/xml/order_for_pricing.xml' }
-
-    context "#priceform_given" do
+    context "with pricer form" do
+      let(:form){PricerForm.simple(:from => "MOV", :to => "LED", :date1 => "290912", :date2 => "300912", :infants => 1, :children => 1, :cabin => "Y")}
       subject {described_class.new form}
 
       it{should have(3).passengers}
@@ -18,8 +14,11 @@ describe Sirena::Request::PricingVariant do
       specify { subject.passengers[0][:count].should == 1 }
     end
 
-    context "#recommendation_given" do
-      subject {described_class.new recommendation}
+    context "with recommendation and passengers" do
+      let(:response) { 'spec/sirena/xml/order_for_pricing.xml' }
+      let(:order_response){Sirena::Response::Order.new( File.read(response) )}
+
+      subject { described_class.new :recommendation => order_response.recommendation, :given_passengers => order_response.passengers }
 
       it{should have(3).passengers}
       specify { subject.passengers[0][:code].should == 'ААА'  }
