@@ -19,16 +19,23 @@ class CashRefund < Payment
     end
   end
 
+  def can_block?; canceled? end
+  def can_charge?; blocked? end
+  def can_cancel?; blocked? end
+
   def charge!
-    return unless blocked?
+    return unless can_charge?
     update_attributes :status => 'charged', :charged_on => Date.today
-    return true
   end
 
   def cancel!
-    return unless blocked?
+    return unless can_cancel?
     update_attributes :status => 'canceled'
-    return true
+  end
+
+  def block!
+    return unless can_block?
+    update_attributes :status => 'blocked'
   end
 
   # для админки

@@ -21,23 +21,32 @@ class PaytureRefund < Payment
     end
   end
 
+  def can_block?; canceled? end
+  def can_cancel?; blocked? end
+  def can_charge?; blocked? end
+
+  def block!
+    return unless can_block?
+    update_attributes :status => 'blocked'
+  end
+
   def charge!
-    return unless blocked?
-    update_attributes :status => 'processing_refund'
+    return unless can_charge?
+    update_attributes :status => 'processing_charge'
     res = gateway.refund( -price, :order_id => ref)
     if res.success?
       update_attributes :status => 'charged', :charged_on => Date.today
       return true
     else
-      update_attributes :status => 'processing_error', :reject_reason => res.err_code
+      update_attributes :status => 'processing_charge', :reject_reason => res.err_code
     end
   rescue => e
-    update_attributes :status => 'processing_error', :reject_reason => e
+    update_attributes :status => 'processing_charge', :reject_reason => e
     raise
   end
 
   def cancel!
-    return unless blocked?
+    return unless can_cancel?
     update_attributes :status => 'canceled'
   end
 

@@ -26,6 +26,12 @@ class Payment < ActiveRecord::Base
   scope :cash, where(:type => CASH)
   def self.types; PAYTURE + CASH end
 
+  # состояния, для оверрайда в подкласах и чтоб кнопки работали
+  def can_block?;       false end
+  def can_confirm_3ds?; false end
+  def can_cancel?;      false end
+  def can_charge?;      false end
+
   def self.statuses; %W[ pending threeds blocked charged rejected canceled ] end
 
   # Payment.blocked, payment.blocked?.., and so on.

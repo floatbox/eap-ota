@@ -22,9 +22,14 @@ class PaytureCharge < Payment
     self.name_in_card = card.name
   end
 
+  def can_block?; pending? end
+  def can_confirm_3ds?; threeds? end
+  def can_cancel?; blocked? end
+  def can_charge?; blocked? end
+
   # TODO интеллектуальный retry при проблемах со связью
   def block!
-    return unless pending?
+    return unless can_block?
     raise ArgumentError, 'order_id is not set yet' unless ref
     raise ArgumentError, 'price is 0' unless price && !price.zero?
     raise ArgumentError, 'specify card data, please' unless @card
@@ -43,7 +48,7 @@ class PaytureCharge < Payment
   end
 
   def confirm_3ds! pa_res, md
-    return unless threeds?
+    return unless can_confirm_3ds?
     update_attributes :status => 'processing_threeds'
     res = gateway.block_3ds(:order_id => ref, :pa_res => pa_res)
     if res.success?
@@ -55,7 +60,7 @@ class PaytureCharge < Payment
   end
 
   def charge!
-    return unless blocked?
+    return unless can_charge?
     update_attributes :status => 'processing_charge'
     res = gateway.charge(:order_id => ref)
     if res.success?
@@ -67,7 +72,7 @@ class PaytureCharge < Payment
   end
 
   def cancel!
-    return unless blocked?
+    return unless can_cancel?
     update_attributes :status => 'processing_cancel'
     res = gateway.unblock(price, :order_id => ref)
     if res.success?

@@ -18,4 +18,63 @@ describe PaytureCharge do
     p.commission.should == Fx('3.45%')
     p.earnings.should == 1000 - 34.5
   end
+
+  describe "state" do
+    subject {PaytureCharge.new(:status => current_state)}
+
+    context "pending" do
+      let(:current_state) { 'pending' }
+
+      its(:can_block?)       { should be_true }
+      its(:can_confirm_3ds?) { should be_false }
+      its(:can_cancel?)      { should be_false }
+      its(:can_charge?)      { should be_false }
+    end
+
+    context "blocked" do
+      let(:current_state) { 'blocked' }
+
+      its(:can_block?)       { should be_false }
+      its(:can_confirm_3ds?) { should be_false }
+      its(:can_cancel?)      { should be_true }
+      its(:can_charge?)      { should be_true }
+    end
+
+    context "threeds" do
+      let(:current_state) { 'threeds' }
+
+      its(:can_block?)       { should be_false }
+      its(:can_confirm_3ds?) { should be_true }
+      its(:can_cancel?)      { should be_false }
+      its(:can_charge?)      { should be_false }
+    end
+
+    context "charged" do
+      let(:current_state) { 'charged' }
+
+      its(:can_block?)       { should be_false }
+      its(:can_confirm_3ds?) { should be_false }
+      its(:can_cancel?)      { should be_false }
+      its(:can_charge?)      { should be_false }
+    end
+
+    context "canceled" do
+      let(:current_state) { 'canceled' }
+
+      its(:can_block?)       { should be_false }
+      its(:can_confirm_3ds?) { should be_false }
+      its(:can_cancel?)      { should be_false }
+      its(:can_charge?)      { should be_false }
+    end
+
+    context "rejected" do
+      let(:current_state) { 'rejected' }
+
+      its(:can_block?)       { should be_false }
+      its(:can_confirm_3ds?) { should be_false }
+      its(:can_cancel?)      { should be_false }
+      its(:can_charge?)      { should be_false }
+    end
+
+  end
 end
