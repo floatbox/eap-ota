@@ -2,3 +2,18 @@
 <div id="term">Терминал:
   <pre data-replace-with="<%= url_for :action => :payment_raw, :id => @item.id %>"></pre>
 </div>
+
+<table><tr>
+<% if @item.can_charge?  %>
+  <td><%= button_to 'Charge', {:action => 'charge', :id => @item.id}, {:confirm => 'точно?' } %></td>
+<% end %>
+<% if @item.can_block?  %>
+  <td><%= button_to 'Block',  {:action => 'block',  :id => @item.id}, {:confirm => 'точно?'} %></td>
+<% end %>
+<% if @item.can_cancel?  %>
+  <td><%= button_to 'Cancel', {:action => 'cancel', :id => @item.id}, {:confirm => 'точно?'} %></td>
+<% end %>
+<td>
+  <div><strong> <%= @item.class.model_name.human %>: <%= @item.status %></strong> </div>
+</td>
+</tr></table>

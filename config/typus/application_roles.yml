@@ -33,7 +33,7 @@ admin:
   Commissions: read
   Counters: read
 
-  Payment: read, update, bulk, bulk_charge, show_versions, payment_raw, new_refund, create
+  Payment: read, update, bulk, bulk_charge, show_versions, payment_raw, create,  charge, block, cancel
   PaytureCharge: create, read
   PaytureRefund: create, update, read
   CashCharge: create, update, read

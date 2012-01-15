@@ -15,6 +15,24 @@ class Admin::PaymentsController < Admin::EviterraResourceController
     render :text => @item.payment_state_raw
   end
 
+  def charge
+    get_object
+    @item.charge!
+    redirect_to :back
+  end
+
+  def block
+    get_object
+    @item.block!
+    redirect_to :back
+  end
+
+  def cancel
+    get_object
+    @item.cancel!
+    redirect_to :back
+  end
+
   def set_bulk_action
     add_bulk_action("Charge", "bulk_charge")
   end
