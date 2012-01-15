@@ -1,29 +1,28 @@
 # encoding: utf-8
 class PaymentsController < ApplicationController
 
-  before_filter :find_order
+  before_filter :find_and_check_order
 
-  def find_order
-    @order = Order.find_by_code!( params[:code].presence )
+  protected
+
+  def find_and_check_order
+    if ( params[:code].blank? ||
+        !(@order = Order.find_by_code( params[:code] )) ||
+        @order.last_pay_time.nil? ||
+        @order.last_pay_time.past? )
+      render "expired_pay_time", :status => 404
+    end
   end
 
-  def edit
-    if !@order.last_pay_time || @order.last_pay_time.past?
-      render "expired_pay_time", :status => 404
-      return
-    end
+  public
 
+  def edit
     if @order.payment_status == 'not blocked'
        @card = CreditCard.new
     end
   end
 
   def update
-    if !@order.last_pay_time || @order.last_pay_time.past?
-      render "expired_pay_time", :status => 404
-      return
-    end
-
     unless @order.payment_status == 'not blocked'
       render :partial => 'success'
       return
