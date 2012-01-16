@@ -1,7 +1,5 @@
 # encoding: utf-8
 class Subscription < ActiveRecord::Base
-  belongs_to :destination
-
   validates :email, :presence => true,
                     :length => {:minimum => 3, :maximum => 254},
                     :format => {:with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i}
@@ -14,11 +12,16 @@ class Subscription < ActiveRecord::Base
       .where("updated_at < ?", 11.hours.ago)
   }
 
+  before_save :set_destination_id_to_null
+
+  def set_destination_id_to_null
+    self.destination_id = 0
+  end
 
   def name
     "#{from_iata} #{Destination.rts.invert[rt]} #{to_iata}"
   end
-  
+
   def city_from
     City.find_by_iata(from_iata)
   end

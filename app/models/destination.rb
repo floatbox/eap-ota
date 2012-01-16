@@ -3,7 +3,6 @@ class Destination < ActiveRecord::Base
   belongs_to :from, :class_name => "City"
   belongs_to :to, :class_name => "City"
   has_many :hot_offers, :dependent => :destroy
-  has_many :subscriptions
 
   def self.rts
     { ' → ' => false, ' ⇄ ' => true}
