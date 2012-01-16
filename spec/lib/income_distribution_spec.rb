@@ -2,6 +2,7 @@
 
 require 'spec_helper'
 
+# TODO постабить income_earnings, оттестировать их отдельно
 describe IncomeDistribution do
 
   before do
@@ -17,9 +18,7 @@ describe IncomeDistribution do
       :price_subagent => 1000,
       :price_blanks => 50,
       :price_discount => 260,
-      :price_our_markup => 60,
-
-      :price_with_payment_commission => 30000
+      :price_our_markup => 60
     }
   end
 
@@ -28,8 +27,12 @@ describe IncomeDistribution do
   end
 
   let :order do
-    Order.new( base_order_attrs.merge(order_attrs) ).tap do |o|
+    Order.new().tap do |o|
       # вызывать какие-то колбэки?
+      o.payments = payments
+      o.save!
+      o.assign_attributes base_order_attrs
+      o.assign_attributes order_attrs
     end
   end
 
@@ -38,11 +41,14 @@ describe IncomeDistribution do
   context "payture, aviacenter" do
     let :order_attrs do
       {
-        :commission_ticketing_method => 'aviacenter',
-        :payment_type => 'card'
+        :commission_ticketing_method => 'aviacenter'
       }
     end
+    let :payments do
+      [ PaytureCharge.new(:status => 'charged', :price => 30000, :commission => '2.85%') ]
+    end
     its(:income) {should == 8695 }
+    its(:income_earnings) {should == 29145}
     its(:income_suppliers) {should == 20450}
     its(:income_payment_gateways) {should == 855}
   end
@@ -50,11 +56,14 @@ describe IncomeDistribution do
   context "payture, direct" do
     let :order_attrs do
       {
-        :commission_ticketing_method => 'direct',
-        :payment_type => 'card'
+        :commission_ticketing_method => 'direct'
       }
     end
+    let :payments do
+      [ PaytureCharge.new(:status => 'charged', :price => 30000, :commission => '2.85%') ]
+    end
     its(:income) {should == 10545}
+    its(:income_earnings) {should == 29145}
     its(:income_suppliers) {should == 18600}
     its(:income_payment_gateways) {should == 855}
   end
@@ -62,11 +71,14 @@ describe IncomeDistribution do
   context "cash, aviacenter" do
     let :order_attrs do
       {
-        :commission_ticketing_method => 'aviacenter',
-        :payment_type => 'cash'
+        :commission_ticketing_method => 'aviacenter'
       }
     end
+    let :payments do
+      [ CashCharge.new(:status => 'charged', :price => 30000, :commission => '2.85%') ]
+    end
     its(:income) {should == 9550}
+    its(:income_earnings) {should == 30000}
     its(:income_suppliers) {should == 20450}
     its(:income_payment_gateways) {should == 0}
   end
@@ -74,11 +86,14 @@ describe IncomeDistribution do
   context "cash, direct" do
     let :order_attrs do
       {
-        :commission_ticketing_method => 'direct',
-        :payment_type => 'cash'
+        :commission_ticketing_method => 'direct'
       }
     end
+    let :payments do
+      [ CashCharge.new(:status => 'charged', :price => 30000, :commission => '2.85%') ]
+    end
     its(:income) {should == 11400}
+    its(:income_earnings) {should == 30000}
     its(:income_suppliers) {should == 18600}
     its(:income_payment_gateways) {should == 0}
   end
