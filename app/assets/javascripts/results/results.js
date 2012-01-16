@@ -872,9 +872,6 @@ send: function() {
         return false;
     }
     this.button.get(0).disabled = true;
-    console.log({from_iata: this.el.attr('data-from-iata'),
-        to_iata: this.el.attr('data-to-iata'),
-        rt: this.el.attr('data-rt')});
     $.ajax({
         url: '/subscribe/',
         data: {

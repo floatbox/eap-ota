@@ -3,8 +3,8 @@ class SubscriptionController < ApplicationController
 
   def subscribe
    # s = Subscription.find_or_initialize_by_destination_id_and_email(params[:destination_id], params[:email])
-    s = Subscription.find_or_init(:email => params[:email], :from_iata=> params[:from_iata], :to_iata=> params[:to_iata], :rt=> params[:rt] )
-    
+    s = Subscription.find_or_init(:email => params[:email], :from_iata => params[:from_iata], :to_iata => params[:to_iata], :rt => params[:rt] )
+
     if s.save
       render :json => {:success => true}
     else
