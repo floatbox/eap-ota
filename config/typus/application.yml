@@ -153,7 +153,6 @@ Subscription:
         updated_at: long
   options:
     default_action_on_item: show
-  relationships: destination
   search: from_iata, to_iata, email,
   scopes: active, frozen, disabled
   filters: status, created_at
