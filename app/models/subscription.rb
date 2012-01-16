@@ -18,6 +18,14 @@ class Subscription < ActiveRecord::Base
   def name
     "#{from_iata} #{Destination.rts.invert[rt]} #{to_iata}"
   end
+  
+  def city_from
+    City.find_by_iata(from_iata)
+  end
+
+  def city_to
+    City.find_by_iata(to_iata)
+  end
 
   def self.statuses
     ['frozen', 'disable']
@@ -39,14 +47,13 @@ class Subscription < ActiveRecord::Base
     rt_date = human_date(hot_offer.date2) if hot_offer.date2
     notice_info = {
       :id => id,
-      :destination_id => destination_id,
       :email => email,
-      :city_from => City.find(destination.from_id).case_from,
+      :city_from => city_from.case_from,
       :from_date => human_date(hot_offer.date1),
-      :city_to => City.find(destination.to_id).case_to,
-      :city_rt_from => City.find(destination.to_id).case_from,
+      :city_to => city_to.case_to,
+      :city_rt_from => city_to.case_from,
       :rt_date => rt_date,
-      :rt => destination.rt,
+      :rt => rt,
       :description => hot_offer.description,
       :price => human_price(hot_offer.price),
       :query_key => hot_offer.code
@@ -70,6 +77,11 @@ class Subscription < ActiveRecord::Base
 
   def self.defrost_frozen!
       Subscription.to_defrost.every.defrost
+  end
+  
+  def self.find_or_init(hash)
+    obj = where(hash).first
+    obj || Subscription.new(hash) 
   end
 
 end
