@@ -20,4 +20,4 @@ www.twitter.com/eviterra
 www.vkontakte.ru/eviterra
 
 Вы получили это письмо потому что подписались на уведомления о появлении выгодных тарифов на сайте Eviterra.com. 
-Чтобы отписаться от уведомлений по направлению <%= @notice['description'].html_safe%>, перейдите по ссылке https://eviterra.com/unsubscribe/<%= @notice['destination_id']%>?email=<%= @notice['email']%>
+Чтобы отписаться от уведомлений по направлению <%= @notice['description'].html_safe%>, перейдите по ссылке https://eviterra.com/unsubscribe/?subscription=<%= @notice['id']%>&email=<%= @notice['email']%>

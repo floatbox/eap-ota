@@ -19,7 +19,7 @@ class SubscriptionMailer < ActionMailer::Base
   end
 
   def self.perform(notice_info)
-    logger.info 'Subscription: sending email' + notice_info['email']
+    logger.info 'Subscription: sending email ' + notice_info['email']
     SubscriptionMailer.notice(notice_info).deliver
     puts "Subscription email #{notice_info['email']} to #{notice_info['description']} SENT on #{Time.now}"
     rescue
