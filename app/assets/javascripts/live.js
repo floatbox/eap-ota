@@ -65,10 +65,10 @@ update: function() {
     });
 },
 process: function(data) {
-    var items = [], template = '<li><a href="/#{code}/featured" data-key="{code}">{description} от {Math.round(hprice)}</a></li>';
+    var items = [], template = '<li><a href="/#{code}/featured" data-key="{code}">{description} от {hprice}</a></li>';
     for (var i = 0, im = data.length; i < im; i++) {
         var d = data[i];
-        d.hprice = d.price.inflect('рубля', 'рублей', 'рублей')
+        d.hprice = Math.round(d.price).inflect('рубля', 'рублей', 'рублей')
         items.push(template.supplant(d));
     }
     this.actual = '<ul>' + items.join('') + '</ul>';
