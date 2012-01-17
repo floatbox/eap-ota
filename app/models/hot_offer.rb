@@ -8,6 +8,7 @@ class HotOffer
   field :to_iata, :type => String
   field :from_iata, :type => String
   field :date1, :type => String
+  field :date2, :type => String
   field :rt, :type => Boolean
   field :description, :type => String
   field :price, :type => Integer
@@ -54,7 +55,8 @@ class HotOffer
         self.to_iata = @search.segments[0].to_as_object.iata
         self.rt = @search.rt
         self.date1 = Date.strptime(@search.segments[0].date, '%d%m%y')
-        self.time_delta = (Date.strptime(@search.segments[0].date, '%d%m%y') - Date.today).to_i
+        self.date2 = Date.strptime(@search.segments[1].date, '%d%m%y') if @search.segments[1]
+	self.time_delta = (Date.strptime(@search.segments[0].date, '%d%m%y') - Date.today).to_i
         self.destination = Destination.find_or_create_by(:from_iata => @search.segments[0].from_as_object.iata, :to_iata => @search.segments[0].to_as_object.iata, :rt => @search.rt)
         unless destination.new_record?
                  destination.average_price = (destination.hot_offers.every.price.sum + price) / (destination.hot_offers.count + 1)
