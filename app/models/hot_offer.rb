@@ -31,9 +31,8 @@ class HotOffer
   def self.featured code=nil
     # FIXME SQL group_by не был бы лучше?
     offers = HotOffer.where(:for_stats_only => false ).and(:price_variation.gt => 0).order_by(:created_at => :desc).limit(30)
-    # эта строчка, видимо, не используется
     offers = offers.where(:code.ne => code) if code
-    offers.all.group_by{|h| h.from_iata && h.to_iata && h.rt}.values.every.first
+    offers.to_a.uniq_by {|h| [h.from_iata, h.to_iata, h.rt]}
   end
 
   def clickable_url
