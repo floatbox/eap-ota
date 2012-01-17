@@ -401,7 +401,7 @@ commission "1eur/5"
 carrier "BD", "BMI"
 ########################################
 
-carrier_defaults :ticketing_method => "direct"
+carrier_defaults :ticketing_method => "direct", :consolidator => '1%'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -700,6 +700,8 @@ commission "8%/5%" #+5 рублей мы еще должны получить
 carrier "EK", "EMIRATES"
 ########################################
 
+carrier_defaults :consolidator => '1%'
+
 example 'svocdg/first cdgsvo/business'
 example 'svocdg/first cdgsvo/first'
 agent    "5% от тарифов Первого и Бизнес классов на рейсы EK;"
@@ -760,7 +762,8 @@ commission "0%/0%"
 carrier "EY", "ETIHAD AIRWAYS"
 ########################################
 
-carrier_defaults :ticketing_method => "direct"
+carrier_defaults :ticketing_method => "direct", :consolidator => '1%'
+
 
 example 'svocdg'
 agent   "5% от опубл. тарифов на собств. рейсы EY (В договоре Interline не прописан.)"
@@ -1098,7 +1101,7 @@ commission "0%/0%"
 carrier "IB", "IBERIA"
 ########################################
 
-carrier_defaults :ticketing_method => "direct"
+carrier_defaults :ticketing_method => "direct", :consolidator => '1%'
 
 example 'svocdg cdgsvo/ab'
 agent    "1 руб. с билета на рейсы IB. (Билеты Interline под кодом IB могут быть выписаны только в случае существования опубл. тарифов и только при условии, что IB выполняет первый рейс маршрута."
@@ -1384,7 +1387,7 @@ no_commission
 carrier "LO", "LOT"
 ########################################
 
-carrier_defaults :ticketing_method => "direct"
+carrier_defaults :ticketing_method => "direct", :consolidator => '1%'
 
 example 'svocdg'
 agent    "1 ЕВРО от продаж опубликованных или ИАТА тарифов. Interline - как минимум один международный сегмент выполняется Перевозчиком."
@@ -1433,6 +1436,8 @@ no_commission
 
 carrier "MA", "MALEV"
 ########################################
+
+carrier_defaults :consolidator => '1%'
 
 example "svobud budsvo/ab"
 agent    "1 руб. с билета от опубл., конфиде.тарифов Эконом и Бизнес класса и при комбинации классов; от опубл.тарифа в случае применения совместного тарифа авиакомпаний при условии, что не менее 50 процентов маршрута должно быть закрыто на авиакомпанию МАЛЕВ (запрещается оформлять перевозку на билетах Авиакомпании без хотя бы одного участка Авиакомпании)"
@@ -1607,6 +1612,8 @@ commission "1%/0.5%"
 
 carrier "OK", "CZECH AIRLINES"
 ########################################
+
+carrier_defaults :consolidator => '1%'
 
 example 'cdgsvo'
 agent    "1% от опубл. тарифов на собств.рейсы OK;"
@@ -1818,6 +1825,8 @@ commission "1%/0.5%"
 carrier "SK", "SAS"
 ########################################
 
+carrier_defaults :consolidator => '1%'
+
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
 agent    "1 руб. с билета на рейсы SAS. (Билеты «Интерлайн» под кодом Авиакомпании могут быть выписаны только в случае существования опубл. тарифов и только при условии, если Авиакомпания выполняет хотя бы один рейс.)"
@@ -1827,6 +1836,8 @@ commission "1/0.5"
 
 carrier "SN", "BRUSSELS AIRLINES"
 ########################################
+
+carrier_defaults :consolidator => '1%'
 
 example 'svocdg'
 example 'DMEBRU'
@@ -2228,6 +2239,8 @@ commission "1/0"
 
 carrier "J2", "Azerbaijan Hava Yollari"
 ########################################
+
+carrier_defaults :consolidator => '1%'
 
 example 'svocdg'
 agent    "1 рубль за 1 выписанный билет на стоке 771"
