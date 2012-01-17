@@ -19,6 +19,7 @@ class HotOffer
 
   belongs_to :destination
   before_create :set_some_vars
+  after_create :create_notifications
 
   validates_presence_of :code, :url, :description, :price
 
