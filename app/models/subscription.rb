@@ -63,6 +63,8 @@ class Subscription < ActiveRecord::Base
     }
     Qu.enqueue SubscriptionMailer, notice_info
     freeze
+
+    StatCounters.inc %W[subscription.create_notice]
   end
 
   def human_date(d)

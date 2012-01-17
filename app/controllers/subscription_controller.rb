@@ -10,6 +10,8 @@ class SubscriptionController < ApplicationController
     else
       render :json => {:success => false}
     end
+
+    StatCounters.inc %W[subscription.subscribe]
   end
 
   def unsubscribe
@@ -19,7 +21,9 @@ class SubscriptionController < ApplicationController
       @subscription = subscription
     else
       render "unsubscribe_not_found"
-    end  
+    end
+
+    StatCounters.inc %W[subscription.unsubscribe]
   end
 
   def unsubscribe_by_destination

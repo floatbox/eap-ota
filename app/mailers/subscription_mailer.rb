@@ -16,6 +16,8 @@ class SubscriptionMailer < ActionMailer::Base
     mail :to => notice_info['email'], :subject => subject do |format|
       format.text
     end
+
+    StatCounters.inc %W[subscription.sent]
   end
 
   def self.perform(notice_info)
