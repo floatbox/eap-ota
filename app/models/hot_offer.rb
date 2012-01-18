@@ -41,6 +41,14 @@ class HotOffer
     "<a href=#{url}>#{url}</a>".html_safe
   end
 
+  def date1_as_date
+    Date.parse date1
+  end
+
+  def date2_as_date
+    Date.parse date2 if date2
+  end
+
   def search= val
     @search = val
     self.for_stats_only = @search.people_count.values.sum > 1
