@@ -7,8 +7,8 @@
           <td width="10%"> <%= City.find_by_iata(hot_offer.from_iata).name %> </td>
           <td width="10%"> <%= City.find_by_iata(hot_offer.to_iata).name %> </td>
           <td width="10%"> <%= hot_offer.date1 %> </td>
-          <td width="10%"> <%= hot_offer.price.round(2) %> </td>
-          <td width="10%"> <%= hot_offer.price_variation.round(2) %> </td>
+          <td width="10%"> <%= hot_offer.price.round %> </td>
+          <td width="10%"> <%= hot_offer.price_variation.round %> </td>
       </table>
 
 
