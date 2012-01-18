@@ -47,12 +47,12 @@ class Subscription < ActiveRecord::Base
   end
 
   def create_notice(hot_offer)
-    rt_date = human_date(hot_offer.date2) if hot_offer.date2
+    rt_date = human_date(hot_offer.date2_as_date) if hot_offer.date2
     notice_info = {
       :id => id,
       :email => email,
       :city_from => city_from.case_from,
-      :from_date => human_date(hot_offer.date1),
+      :from_date => human_date(hot_offer.date1_as_date),
       :city_to => city_to.case_to,
       :city_rt_from => city_to.case_from,
       :rt_date => rt_date,
