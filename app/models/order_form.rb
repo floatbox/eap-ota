@@ -34,6 +34,7 @@ class OrderForm
   end
 
   def last_pay_time
+    return if Conf.site.forbidden_cash
     return if recommendation.source == 'sirena'
     return Time.now + 24.hours if Conf.amadeus.env != 'production' && !Rails.env.test? # так как тестовый Амадеус в прошлом
     return if recommendation.flights.first.departure_datetime_utc - 72.hours < Time.now
