@@ -60,7 +60,7 @@ module Amadeus
                                                             'ticket')
           t.status ||= 'ticketed'
           t
-        end.delete_if {|t| t.status != 'ticketed'}
+        end.delete_if {|t| t.status != 'ticketed'}.uniq
 
       end
 
