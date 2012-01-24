@@ -14,6 +14,8 @@
   <td><%= button_to 'Cancel', {:action => 'cancel', :id => @item.id}, {:confirm => 'точно?'} %></td>
 <% end %>
 <td>
-  <div><strong> <%= @item.class.model_name.human %>: <%= @item.status %></strong> </div>
+  <div><strong> <%= @item.class.model_name.human %>: <%= @item.status %></strong>
+  <%= @item.control_links %>
+</div>
 </td>
 </tr></table>
