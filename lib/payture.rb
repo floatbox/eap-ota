@@ -6,13 +6,14 @@ require 'httparty'
 class Payture
 
   # комиссионные за транзакцию
-  PCNT = 0.0285
+  def self.pcnt; 0.0280 end
+
   def self.commission(price)
-    (PCNT * price / ( 1 - PCNT)).round(2)
+    (pcnt * price / ( 1 - pcnt)).round(2)
   end
 
   def self.sans_commission(price_with_commission)
-    (price_with_commission * (1 - PCNT)).round(2)
+    (price_with_commission * (1 - pcnt)).round(2)
   end
 
   class Response

@@ -1770,6 +1770,46 @@ commission "1%/0.5%"
 carrier "SA", "South African Airways"
 ########################################
 
+example 'svocdg'
+example 'svocdg cdgsvo/ab'
+agent    "1% от опубл. тарифов на собств. рейсы. SA и рейсы Interline"
+subagent "0,5% от опубл. тарифа на собств. рейсы SA и рейсы Interline"
+interline :possible
+commission "1%/0.5%"
+
+carrier "SK", "SAS"
+########################################
+
+carrier_defaults :consolidator => '1%'
+
+example 'svocdg'
+example 'svocdg cdgsvo/ab'
+agent    "1 руб. с билета на рейсы SAS. (Билеты «Интерлайн» под кодом Авиакомпании могут быть выписаны только в случае существования опубл. тарифов и только при условии, если Авиакомпания выполняет хотя бы один рейс.)"
+subagent "50 коп. с билета на рейсы SAS"
+interline :possible
+commission "1/0.5"
+
+carrier "SN", "BRUSSELS AIRLINES"
+########################################
+
+carrier_defaults :consolidator => '1%'
+
+example 'svocdg'
+example 'DMEBRU'
+example 'BRULBA'
+agent    "0,5% от опубл. тарифам на собств. рейсы SN;"
+subagent "5 руб. с билета по опубл. тарифам на собств. рейсы SN;"
+commission "0.5%/5"
+
+example 'svocdg cdgsvo/ab'
+agent    "0,5% от опубл. тарифам в случае применения совмещенного тарифа авиакомпаний;"
+subagent "5 руб. с билета по опубл. тарифам в случае применения совмещенного тарифа авиакомпаний;"
+interline :yes
+commission "0.5%/5"
+
+carrier "SQ", "SINGAPORE AIRLINES (Авиарепс)"
+########################################
+
 example 'svosin'
 agent    "3% от опубл.тарифов (вкл.промотарифы в V и Q классах) на собств.рейсы SQ/Silk Air с началом от пунктов РФ;"
 subagent "2% от опубл.тарифов (вкл.промотарифы в V и Q классах) на собств.рейсы SQ/Silk Air с началом от пунктов РФ;"

@@ -50,7 +50,7 @@ module Pricing
       if pricing_method =~ /corporate/
         0
       else
-        Payture::PCNT
+        Payture.pcnt
       end
     end
 

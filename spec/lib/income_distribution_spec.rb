@@ -3,6 +3,11 @@
 require 'spec_helper'
 
 describe IncomeDistribution do
+
+  before do
+    Payture.stub(:pcnt).and_return(0.0285)
+  end
+
   let :base_order_attrs do
     {
       :price_fare => 20000,
