@@ -1862,7 +1862,7 @@ important!
 check { country_iatas.first != 'RU' }
 classes :business
 discount "4%"
-commission "7%/10%"
+commission "7%/5%"
 
 example 'istank'
 example 'istank/business'
