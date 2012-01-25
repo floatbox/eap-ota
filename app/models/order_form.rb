@@ -18,6 +18,7 @@ class OrderForm
   attr_accessor :people_count
   attr_accessor :query_key
   attr_accessor :partner
+  attr_accessor :marker
   attr_accessor :number
   attr_accessor :sirena_lead_pass
   attr_accessor :order # то, что сохраняется в базу
@@ -116,7 +117,7 @@ class OrderForm
 
   def save_to_cache
     cache = OrderFormCache.new
-    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner
+    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker
     cache.save
     self.number = cache.id.to_s
   end
@@ -126,7 +127,7 @@ class OrderForm
     def load_from_cache(cache_number)
       cache = OrderFormCache.find(cache_number) or raise(NotFound, "#{cache_number} not found")
       order = new
-      copy_attrs cache, order, :recommendation, :people_count, :variant_id, :query_key, :partner
+      copy_attrs cache, order, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker
       order.number = cache.id.to_s
       order
     end

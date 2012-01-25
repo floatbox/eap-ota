@@ -169,7 +169,8 @@ class Order < ActiveRecord::Base
       :payment_type,
       :delivery,
       :last_pay_time,
-      :partner
+      :partner,
+      :marker
 
     copy_attrs recommendation, self,
       :source,

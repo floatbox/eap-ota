@@ -10,6 +10,7 @@ class OrderFormCache
   field :variant_id, :type => String
   field :query_key, :type => String
   field :partner, :type => String
+  field :marker, :type => String
 
   def recommendation= rec
     rec = rec.dup
