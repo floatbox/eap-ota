@@ -86,36 +86,36 @@ describe BookingController do
         :marker => 'ffdghg'
       }
     end
-    let :partner_presents do
+    let :partner_present do
       {
         :query_key => 'f45g6h',
         :partner => 'momondo',
       }
     end
-    let :marker_presents do
+    let :marker_present do
       {
         :query_key => 'f45g6h',
         :marker => 'rebkloi'
       }
     end
 
-    describe '#api_booking' do
+    describe '#preliminary_booking' do
       it 'saves both partner and marker if they present' do
         cookies = mock('cookies')
         cookies.stub(:[])
         controller.stub(:cookies).and_return(cookies)
 
         cookies.should_receive(:[]=).at_least(:twice)
-        get :api_booking, partner_and_marker_present
+        get :preliminary_booking, partner_and_marker_present
       end
 
-      it 'saves partner if it presents' do
+      it 'saves partner if it is present' do
         cookies = mock('cookies')
         cookies.stub(:[])
         controller.stub(:cookies).and_return(cookies)
 
         cookies.should_receive(:[]=).at_least(:once)
-        get :api_booking, partner_presents
+        get :preliminary_booking, partner_present
       end
 
       it "doesn't touch cookie if there's no partner"  do
@@ -127,12 +127,12 @@ describe BookingController do
         pricer.stub(:partner)
 
         cookies.should_not_receive(:[]=)
-        get :api_booking, marker_presents
+        get :preliminary_booking, marker_present
       end
     end
 
     describe '#api_redirect' do
-      it 'saves both partner and marker if they present' do
+      it 'saves both partner and marker if they are present' do
         cookies = mock('cookies')
         cookies.stub(:[])
         controller.stub(:cookies).and_return(cookies)
@@ -144,7 +144,7 @@ describe BookingController do
         get :api_redirect, partner_and_marker_present
       end
 
-      it 'saves partner if it presents' do
+      it 'saves partner if it is present' do
         cookies = mock('cookies')
         cookies.stub(:[])
         controller.stub(:cookies).and_return(cookies)
@@ -166,12 +166,12 @@ describe BookingController do
         pricer.stub(:partner)
 
         cookies.should_not_receive(:[]=)
-        get :api_redirect, marker_presents
+        get :api_redirect, marker_present
       end
     end
 
     describe '#preliminary_booking' do
-      it 'uses cookies if they present' do
+      it 'uses cookies if they are present' do
         cookies = mock('cookies')
         controller.stub(:cookies).and_return(cookies)
         strategy = mock('strategy')

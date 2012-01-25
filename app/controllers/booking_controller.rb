@@ -12,10 +12,12 @@ class BookingController < ApplicationController
     @search = PricerForm.load_from_cache(params[:query_key])
     set_search_context_for_airbrake
     recommendation = Recommendation.deserialize(params[:recommendation])
+    # FIXME эти параметры пока не передаются из жаваскрипта. починить. @search.partner пусть останется пока
+    # track_partner(params[:partner] || @search.partner, params[:marker])
     strategy = Strategy.select( :rec => recommendation, :search => @search )
     
     StatCounters.inc %W[enter.preliminary_booking.total]
-    StatCounters.inc %W[enter.preliminary_booking.#{get_partner}.total] if get_partner
+    StatCounters.inc %W[enter.preliminary_booking.#{partner}.total] if partner
     
     unless strategy.check_price_and_availability
       render :json => {:success => false}
@@ -25,26 +27,26 @@ class BookingController < ApplicationController
         :people_count => @search.real_people_count,
         :variant_id => params[:variant_id],
         :query_key => @search.query_key,
-        :partner => get_partner || @search.partner,
-        :marker => get_marker
+        # FIXME подумать, надо ли сделать трэкинг и в случае отсутствия партнера в куки?
+        :partner => partner || @search.partner,
+        :marker => marker
       )
       order_form.save_to_cache
       render :json => {:success => true, :number => order_form.number}
       StatCounters.inc %W[enter.preliminary_booking.success]
-      StatCounters.inc %W[enter.preliminary_booking.#{get_partner}.success] if get_partner
+      StatCounters.inc %W[enter.preliminary_booking.#{partner}.success] if partner
     end
   end
 
   def api_booking
     @query_key = params[:query_key]
     @search = PricerForm.load_from_cache(params[:query_key])
-    track_partner(@partner, params[:marker]) if @partner = (params[:partner] || @search.partner)
     render 'variant'
     StatCounters.inc %W[enter.api.success]
-    StatCounters.inc %W[enter.api.#{@partner}.success] if @partner
+    StatCounters.inc %W[enter.api.#{partner}.success] if partner
   ensure
     StatCounters.inc %W[enter.api.total]
-    StatCounters.inc %W[enter.api.#{@partner}.total] if @partner
+    StatCounters.inc %W[enter.api.#{partner}.total] if partner
   end
 
   def api_rambler_booking
@@ -62,7 +64,7 @@ class BookingController < ApplicationController
 
   def api_redirect
     @search = PricerForm.simple(params.slice( :from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner ))
-    track_partner(@partner, params[:marker]) if @partner = (params[:partner] || @search.partner)
+    track_partner(params[:partner] || @search.partner, params[:marker])
     if @search.valid?
       @search.save_to_cache
       StatCounters.inc %W[enter.momondo_redirect.success]

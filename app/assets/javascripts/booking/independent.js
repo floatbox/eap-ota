@@ -18,7 +18,7 @@ booking.initFixedHeader = function() {
 };
 
 /* Booking form */
-booking.init = function(partner) {
+booking.init = function() {
     var that = this;
     this.el = $('#booking');
     this.header = this.el.find('.booking-header');
@@ -28,7 +28,6 @@ booking.init = function(partner) {
     if (hash.indexOf('recommendation') !== -1) {
         //window.location.hash = '';
         this.prebook(this.query_key, hash.match(/recommendation=([^&]+)/)[1]);
-        this.partner = partner;
     } else if (hash.length !== 0) {
         this.load(hash);
     } else {
