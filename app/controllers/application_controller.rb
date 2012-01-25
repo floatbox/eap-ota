@@ -2,7 +2,7 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
-  include Typus::Authentication::Session, PartnerModule
+  include Typus::Authentication::Session, PartnerTracking
 
   protected
 
@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :set_locale
 
-  after_filter :log_partner, :log_marker
+  after_filter :log_partner
 
   ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
     html_tag

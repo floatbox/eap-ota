@@ -15,7 +15,7 @@ class BookingController < ApplicationController
     strategy = Strategy.select( :rec => recommendation, :search => @search )
     
     StatCounters.inc %W[enter.preliminary_booking.total]
-    StatCounters.inc %W[enter.preliminary_booking.#{check_partner}.total] if check_partner
+    StatCounters.inc %W[enter.preliminary_booking.#{get_partner}.total] if get_partner
     
     unless strategy.check_price_and_availability
       render :json => {:success => false}
@@ -25,13 +25,13 @@ class BookingController < ApplicationController
         :people_count => @search.real_people_count,
         :variant_id => params[:variant_id],
         :query_key => @search.query_key,
-        :partner => check_partner || @search.partner,
-        :marker => check_marker
+        :partner => get_partner || @search.partner,
+        :marker => get_marker
       )
       order_form.save_to_cache
       render :json => {:success => true, :number => order_form.number}
       StatCounters.inc %W[enter.preliminary_booking.success]
-      StatCounters.inc %W[enter.preliminary_booking.#{check_partner}.success] if check_partner
+      StatCounters.inc %W[enter.preliminary_booking.#{get_partner}.success] if get_partner
     end
   end
 
