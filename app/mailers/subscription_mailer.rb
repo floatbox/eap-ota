@@ -10,7 +10,7 @@ class SubscriptionMailer < ActionMailer::Base
     @notice = notice_info
     logger.info 'Subscription: sending email' + notice_info['email']
 
-    subject = "#{@notice['description']} за #{@notice['price']}"
+    subject = "#{@notice['description']} за #{@notice['price']}, вылет #{@notice['from_date']}"
 
     mail :to => notice_info['email'], :subject => subject do |format|
       format.text
