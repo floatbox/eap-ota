@@ -105,7 +105,7 @@ describe BookingController do
         cookies.stub!(:[])
         controller.stub!(:cookies).and_return(cookies)
 
-        cookies.should_receive(:[]=).at_least(:once)
+        cookies.should_receive(:[]=).at_least(:twice)
         get :api_booking, partner_and_marker_present
       end
 
@@ -140,7 +140,7 @@ describe BookingController do
         PricerForm.stub!(:simple).and_return(pricer)
         pricer.stub!(:valid?)
 
-        cookies.should_receive(:[]=).at_least(:once)
+        cookies.should_receive(:[]=).at_least(:twice)
         get :api_redirect, partner_and_marker_present
       end
 
