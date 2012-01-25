@@ -1,5 +1,5 @@
 source 'http://rubygems.org'
-gem 'rails', '3.1.1'
+gem 'rails', '3.1.3'
 
 gem 'jquery-rails'
 group :assets do
@@ -50,8 +50,7 @@ gem 'mongo-rails-instrumentation'
 
 gem 'haml'
 
-gem 'typus'
-#gem 'typus', :git => 'https://github.com/typus/typus.git' #, :branch => "3-1-stable"
+gem 'typus', :git => 'https://github.com/Eviterra/typus.git', :branch => "wip/date_filters"
 gem 'fastercsv', :platforms => :ruby_18
 
 gem 'trashed', :git => 'https://github.com/codesnik/trashed.git'
