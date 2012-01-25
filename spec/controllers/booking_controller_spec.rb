@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe BookingController do
-
   describe '#api_rambler_booking' do
 
     let :request_params do
@@ -123,7 +122,9 @@ describe BookingController do
         cookies = mock('cookies')
         cookies.stub!(:[])
         controller.stub!(:cookies).and_return(cookies)
-        @search.stub(:partner)
+        pricer = mock('pricer')
+        PricerForm.stub!(:load_from_cache).and_return(pricer)
+        pricer.stub(:partner)
 
         cookies.should_not_receive(:[]=)
         get :api_booking, marker_presents
@@ -135,8 +136,9 @@ describe BookingController do
         cookies = mock('cookies')
         cookies.stub!(:[])
         controller.stub!(:cookies).and_return(cookies)
-        PricerForm.stub!(:simple)
-        @search.stub!(:valid?)
+        pricer = mock('pricer')
+        PricerForm.stub!(:simple).and_return(pricer)
+        pricer.stub!(:valid?)
 
         cookies.should_receive(:[]=).at_least(:once)
         get :api_redirect, partner_and_marker_present
@@ -146,8 +148,9 @@ describe BookingController do
         cookies = mock('cookies')
         cookies.stub!(:[])
         controller.stub!(:cookies).and_return(cookies)
-        PricerForm.stub!(:simple)
-        @search.stub!(:valid?)
+        pricer = mock('pricer')
+        PricerForm.stub!(:simple).and_return(pricer)
+        pricer.stub!(:valid?)
 
         cookies.should_receive(:[]=).at_least(:once)
         get :api_redirect, partner_and_marker_present
@@ -157,9 +160,10 @@ describe BookingController do
         cookies = mock('cookies')
         cookies.stub!(:[])
         controller.stub!(:cookies).and_return(cookies)
-        PricerForm.stub!(:simple)
-        @search.stub!(:valid?)
-        @search.stub(:partner)
+        pricer = mock('pricer')
+        PricerForm.stub!(:simple).and_return(pricer)
+        pricer.stub!(:valid?)
+        pricer.stub(:partner)
 
         cookies.should_not_receive(:[]=)
         get :api_redirect, marker_presents
@@ -173,11 +177,13 @@ describe BookingController do
         strategy = mock('strategy')
         Strategy.stub!(:select).and_return(strategy)
         strategy.stub!(:check_price_and_availability).and_return(true)
-        PricerForm.stub!(:load_from_cache)
+        pricer = mock('pricer')
+        PricerForm.stub!(:load_from_cache).and_return(pricer)
+        pricer.stub!(:real_people_count)
+        pricer.stub!(:query_key)
+        pricer.stub(:partner)
+        pricer.stub(:human_lite)
         Recommendation.stub!(:deserialize)
-        @search.stub!(:real_people_count)
-        @search.stub!(:query_key)
-        @search.stub(:partner)
         order = mock('order')
         order.stub!(:save_to_cache)
         order.stub!(:number)
