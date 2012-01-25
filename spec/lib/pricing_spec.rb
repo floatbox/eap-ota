@@ -25,6 +25,11 @@ describe Pricing::Order do
   end
 
   describe "#recalculation" do
+
+    before do
+      Payture.stub(:pcnt).and_return(0.0285)
+    end
+
     # делать обычный save?
     let :order do
       Order.new( base_order_attrs.merge(order_attrs) ).tap do |o|

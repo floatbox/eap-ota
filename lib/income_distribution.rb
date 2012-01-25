@@ -3,11 +3,11 @@ module IncomeDistribution
 
   # метод платежа
   def scheme_payture
-    price_with_payment_commission * Payture::PCNT
+    price_with_payment_commission * Payture.pcnt
   end
 
   def scheme_cache
-    price_with_payment_commission * Payture::PCNT
+    price_with_payment_commission * Payture.pcnt
   end
 
   # метод обилечивания

@@ -449,8 +449,12 @@ class Order < ActiveRecord::Base
   # FIXME надо какой-то логгинг
   def self.cancel_stale!
     stale.each do |order|
-      puts "Automatic cancel of pnr #{order.pnr_number}"
-      Strategy.select(:order => order).cancel
+      begin
+        puts "Automatic cancel of pnr #{order.pnr_number}"
+        Strategy.select(:order => order).cancel
+      rescue
+        puts "error: #{$!}"
+      end
     end
   end
 
