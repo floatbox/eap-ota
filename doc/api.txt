@@ -1,23 +1,30 @@
 Yandex:
 
-По ссылке вида /api/search.xml?from=MOW&to=LON&date1=120212&date2=130512&partner=yandex получаем XML с массивом элементов variant.
+По ссылке вида /api/search.xml?from=MOW&to=LON&date1=120212&date2=130512&partner=yandex
+получаем XML с массивом элементов variant.
 У варианта есть атрибут url со значением вида /api/booking/206f4c#recommendation=amadeus.AB.EEPO.MMMM.9999.AB8395DMEDUS120212-AB8342DUSSTN120212.AB8677STNDUS130512-AB8414DUSDME130512&type=api&partner=yandex
 Это соответствует методу api_booking в booking_controller
-Причем все, что дальше первого элемента(query_key), этим методом игнорируется (начиная с сейчас я буду использовать еще партнера и маркер из этой ссылки).
+Причем все, что дальше первого элемента(query_key), этим методом игнорируется
+(начиная с сейчас я буду использовать еще партнера и маркер из этой ссылки).
 При переходе по этой ссылке рендерится вариант
 
 Momondo:
 
-По ссылке вида /api/redirection.xml?from=MOW&to=LON&date1=120212&date2=130512&partner=momondo, которой соответствует метод api_redirect в booking_controller,
+По ссылке вида /api/redirection.xml?from=MOW&to=LON&date1=120212&date2=130512&partner=momondo,
+которой соответствует метод api_redirect в booking_controller,
 сразу начинает рендериться вариант.
 
 Rambler:
 
-Каждый поиск с массивом вариантов кэшируется в монгоидном классе RamblerCache. Каждую минуту в рамблер уходят десять порций по тридцать(по умолчанию) поисков.
-В поисках для каждого варианта лежит своя ссылка вида /api/rambler_booking.xml?#{string}, где string - это строка длиной примерно в 800 символов.
-Ссылка ведет на бронирование конкретно этого перелета, она формируется методом uri_for_rambler модуля RamblerApi и соответствует методу api_rambler_booking в booking_controller.
+Каждый поиск с массивом вариантов кэшируется в монгоидном классе RamblerCache.
+Каждую минуту в рамблер уходят десять порций по тридцать(по умолчанию) поисков.
+В поисках для каждого варианта лежит своя ссылка вида /api/rambler_booking.xml?#{string},
+где string - это строка длиной примерно в 800 символов.
+Ссылка ведет на бронирование конкретно этого перелета, она формируется методом uri_for_rambler модуля RamblerApi
+и соответствует методу api_rambler_booking в booking_controller.
 Этот метод обрабатывает эту огромную строку и формирует ссылку-редирект вида /api/booking/#{search.query_key}#recommendation=#{recommendation}&type=api&partner=#{search.partner}
-с помощью метода redirecting_uri модуля RamblerApi. Редирект происходит на метод api_booking и дальше см.абзац про яндекс (с измененением значения "партнер")
+с помощью метода redirecting_uri модуля RamblerApi.
+Редирект происходит на метод api_booking и дальше см.абзац про яндекс (с измененением значения "партнер")
 
 
 
