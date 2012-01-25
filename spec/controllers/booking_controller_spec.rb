@@ -78,4 +78,116 @@ describe BookingController do
       get :api_rambler_booking, request_params
     end
   end
+
+  context 'how do we deal with partners and markers' do
+    let :partner_and_marker_present do
+      {
+        :query_key => 'f45g6h',
+        :partner => 'yandex',
+        :marker => 'ffdghg'
+      }
+    end
+    let :partner_presents do
+      {
+        :query_key => 'f45g6h',
+        :partner => 'momondo',
+      }
+    end
+    let :marker_presents do
+      {
+        :query_key => 'f45g6h',
+        :marker => 'rebkloi'
+      }
+    end
+
+    describe '#api_booking' do
+      it 'saves both partner and marker if they present' do
+        cookies = mock('cookies')
+        cookies.stub!(:[])
+        controller.stub!(:cookies).and_return(cookies)
+
+        cookies.should_receive(:[]=).at_least(:once)
+        get :api_booking, partner_and_marker_present
+      end
+
+      it 'saves partner if it presents' do
+        cookies = mock('cookies')
+        cookies.stub!(:[])
+        controller.stub!(:cookies).and_return(cookies)
+
+        cookies.should_receive(:[]=).at_least(:once)
+        get :api_booking, partner_presents
+      end
+
+      it "doesn't touch cookie if there's no partner"  do
+        cookies = mock('cookies')
+        cookies.stub!(:[])
+        controller.stub!(:cookies).and_return(cookies)
+        @search.stub(:partner)
+
+        cookies.should_not_receive(:[]=)
+        get :api_booking, marker_presents
+      end
+    end
+
+    describe '#api_redirect' do
+      it 'saves both partner and marker if they present' do
+        cookies = mock('cookies')
+        cookies.stub!(:[])
+        controller.stub!(:cookies).and_return(cookies)
+        PricerForm.stub!(:simple)
+        @search.stub!(:valid?)
+
+        cookies.should_receive(:[]=).at_least(:once)
+        get :api_redirect, partner_and_marker_present
+      end
+
+      it 'saves partner if it presents' do
+        cookies = mock('cookies')
+        cookies.stub!(:[])
+        controller.stub!(:cookies).and_return(cookies)
+        PricerForm.stub!(:simple)
+        @search.stub!(:valid?)
+
+        cookies.should_receive(:[]=).at_least(:once)
+        get :api_redirect, partner_and_marker_present
+      end
+
+      it "doesn't touch cookie if there's no partner"  do
+        cookies = mock('cookies')
+        cookies.stub!(:[])
+        controller.stub!(:cookies).and_return(cookies)
+        PricerForm.stub!(:simple)
+        @search.stub!(:valid?)
+        @search.stub(:partner)
+
+        cookies.should_not_receive(:[]=)
+        get :api_redirect, marker_presents
+      end
+    end
+
+    describe '#preliminary_booking' do
+      it 'uses cookies if they present' do
+        cookies = mock('cookies')
+        controller.stub!(:cookies).and_return(cookies)
+        strategy = mock('strategy')
+        Strategy.stub!(:select).and_return(strategy)
+        strategy.stub!(:check_price_and_availability).and_return(true)
+        PricerForm.stub!(:load_from_cache)
+        Recommendation.stub!(:deserialize)
+        @search.stub!(:real_people_count)
+        @search.stub!(:query_key)
+        @search.stub(:partner)
+        order = mock('order')
+        order.stub!(:save_to_cache)
+        order.stub!(:number)
+
+        OrderForm.should_receive(:new).and_return(order)
+        cookies.should_receive(:[]).with(:partner).at_least(:once)
+        cookies.should_receive(:[]).with(:marker).at_least(:once)
+        get :preliminary_booking
+      end
+
+    end
+  end
 end
