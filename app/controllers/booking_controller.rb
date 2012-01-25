@@ -38,7 +38,7 @@ class BookingController < ApplicationController
   def api_booking
     @query_key = params[:query_key]
     @search = PricerForm.load_from_cache(params[:query_key])
-    track_partner(params[:partner], params[:marker]) if @partner = (params[:partner] || @search.partner)
+    track_partner(@partner, params[:marker]) if @partner = (params[:partner] || @search.partner)
     render 'variant'
     StatCounters.inc %W[enter.api.success]
     StatCounters.inc %W[enter.api.#{@partner}.success] if @partner
@@ -62,7 +62,7 @@ class BookingController < ApplicationController
 
   def api_redirect
     @search = PricerForm.simple(params.slice( :from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner ))
-    track_partner(params[:partner], params[:marker]) if @partner = (params[:partner] || @search.partner)
+    track_partner(@partner, params[:marker]) if @partner = (params[:partner] || @search.partner)
     if @search.valid?
       @search.save_to_cache
       StatCounters.inc %W[enter.momondo_redirect.success]
