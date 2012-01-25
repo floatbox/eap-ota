@@ -13,18 +13,18 @@ module PartnerModule
   end
 
   def check_partner
-    cookies[:partner]
+    cookies[:partner][:value]
   end
 
   def check_marker
-    cookies[:marker]
+    cookies[:marker][:value]
   end
 
   def log_partner
-    logger.info "API::Partner: #{cookies[:partner]}" if cookies[:partner]
+    logger.info "API::Partner: #{cookies[:partner][:value]}" if cookies[:partner]
   end
 
   def log_marker
-    logger.info "API::Marker: #{cookies[:marker]}" if cookies[:marker]
+    logger.info "API::Marker: #{cookies[:marker][:value]}" if cookies[:marker]
   end
 end
