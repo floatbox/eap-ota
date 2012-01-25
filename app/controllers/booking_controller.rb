@@ -15,7 +15,7 @@ class BookingController < ApplicationController
     strategy = Strategy.select( :rec => recommendation, :search => @search )
     
     StatCounters.inc %W[enter.preliminary_booking.total]
-    StatCounters.inc %W[enter.preliminary_booking.#{@search.partner}.total] if @search.partner
+    StatCounters.inc %W[enter.preliminary_booking.#{check_partner}.total] if check_partner
     
     unless strategy.check_price_and_availability
       render :json => {:success => false}
@@ -25,19 +25,20 @@ class BookingController < ApplicationController
         :people_count => @search.real_people_count,
         :variant_id => params[:variant_id],
         :query_key => @search.query_key,
-        :partner => @search.partner
+        :partner => check_partner || @search.partner,
+        :marker => check_marker
       )
       order_form.save_to_cache
       render :json => {:success => true, :number => order_form.number}
       StatCounters.inc %W[enter.preliminary_booking.success]
-      StatCounters.inc %W[enter.preliminary_booking.#{@search.partner}.success] if @search.partner
+      StatCounters.inc %W[enter.preliminary_booking.#{check_partner}.success] if check_partner
     end
   end
 
   def api_booking
     @query_key = params[:query_key]
     @search = PricerForm.load_from_cache(params[:query_key])
-    save_partner if @partner = @search.partner
+    track_partner(params[:partner], params[:marker]) if @partner = (params[:partner] || @search.partner)
     render 'variant'
     StatCounters.inc %W[enter.api.success]
     StatCounters.inc %W[enter.api.#{@partner}.success] if @partner
@@ -61,7 +62,7 @@ class BookingController < ApplicationController
 
   def api_redirect
     @search = PricerForm.simple(params.slice( :from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner ))
-    save_partner if @partner = @search.partner
+    track_partner(params[:partner], params[:marker]) if @partner = (params[:partner] || @search.partner)
     if @search.valid?
       @search.save_to_cache
       StatCounters.inc %W[enter.momondo_redirect.success]
@@ -196,15 +197,6 @@ class BookingController < ApplicationController
     end
   ensure
     StatCounters.inc %W[pay.total pay.3ds.confirmations]
-  end
-
-  private
-
-  def save_partner
-    session[:partner] = @partner
-    cookies[:partner] = { :value => @partner, :expires => Time.now + 3600*24*30}
-    StatCounters.inc %W[enter.api.first_time enter.api.#{@partner}.first_time]
-    logger.info "API::Partner::Enter: #{@partner} #{Time.now}"
   end
 
 end
