@@ -3,6 +3,7 @@ gem 'rails', '3.1.1'
 
 gem 'jquery-rails'
 group :assets do
+  gem 'therubyracer'
   gem "uglifier", ">= 1.0.3"
   gem 'sass-rails', "~> 3.1.4"
   gem 'coffee-rails', "~> 3.1.1"
@@ -34,7 +35,6 @@ gem 'mysql2'
 gem 'paper_trail'
 gem 'tzinfo'
 gem 'geo_ip'
-gem 'therubyracer'
 gem 'airbrake'
 gem 'newrelic_rpm'
 gem 'mongoid'

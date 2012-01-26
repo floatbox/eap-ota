@@ -50,7 +50,7 @@ module Eviterra
 
     config.assets.enabled = true
     # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-    config.assets.precompile += %w( home.js home.css )
+    config.assets.precompile += %w( home.js home.css typus/application.css typus/application.js )
   end
 end
 
