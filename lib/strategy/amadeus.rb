@@ -56,7 +56,7 @@ class Strategy::Amadeus < Strategy::Base
     ::Amadeus.booking do |amadeus|
       pnr_resp = amadeus.pnr_retrieve(:number => @order.pnr_number)
       departure_date = pnr_resp.flights.first.dept_date
-      tst_resp = amadeus.ticket_display_tst(:number => @order.pnr_number)
+      tst_resp = amadeus.ticket_display_tst
       amadeus.pnr_ignore
 
       if tst_resp.success?

@@ -231,7 +231,7 @@ class Order < ActiveRecord::Base
       pnr_resp = tst_resp = nil
       Amadeus.booking do |amadeus|
         pnr_resp = amadeus.pnr_retrieve(:number => pnr_number)
-        tst_resp = amadeus.ticket_display_tst(:number => pnr_number)
+        tst_resp = amadeus.ticket_display_tst
         amadeus.pnr_ignore
       end
       prices = tst_resp.prices_with_refs
