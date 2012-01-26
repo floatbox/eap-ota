@@ -12,8 +12,8 @@ class BookingController < ApplicationController
     @search = PricerForm.load_from_cache(params[:query_key])
     set_search_context_for_airbrake
     recommendation = Recommendation.deserialize(params[:recommendation])
-    # FIXME эти параметры пока не передаются из жаваскрипта. починить. @search.partner пусть останется пока
-    # track_partner(params[:partner] || @search.partner, params[:marker])
+    # FIXME @search.partner пусть останется пока
+    track_partner(params[:partner] || @search.partner, params[:marker])
     strategy = Strategy.select( :rec => recommendation, :search => @search )
     
     StatCounters.inc %W[enter.preliminary_booking.total]

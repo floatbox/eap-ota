@@ -27,7 +27,7 @@ booking.init = function() {
     this.query_key = path.split('/').last();
     if (hash.indexOf('recommendation') !== -1) {
         //window.location.hash = '';
-        this.prebook(this.query_key, hash.match(/recommendation=([^&]+)/)[1]);
+        this.prebook(this.query_key, hash.match(/recommendation=([^&]+)/)[1], hash.match(/partner=([^&]+)/)[1], hash.match(/marker=([^&]+)/)[1]);
     } else if (hash.length !== 0) {
         this.load(hash);
     } else {
@@ -36,10 +36,10 @@ booking.init = function() {
     this.updateLinks();
     this.el.find('.bh-title .stop-booking').addClass('latent');
 };
-booking.prebook = function(query_key, hash) {
+booking.prebook = function(query_key, hash, partner, marker) {
     var that = this;
     this.request = $.ajax({
-        url: '/booking/preliminary_booking?query_key=' + query_key + '&recommendation=' + hash + '&variant_id=1',
+        url: '/booking/preliminary_booking?query_key=' + query_key + '&recommendation=' + hash + '&partner=' + partner + '&marker=' + marker + '&variant_id=1',
         success: function(result) {
             if (result && result.success) {
                 that.load(result.number);

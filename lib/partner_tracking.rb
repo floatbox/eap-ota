@@ -14,11 +14,11 @@ module PartnerTracking
   end
 
   def partner
-    cookies[:partner][:value] if cookies[:partner]
+    cookies[:partner]
   end
 
   def marker
-    cookies[:marker][:value] if cookies[:marker]
+    cookies[:marker]
   end
 
   def log_partner
