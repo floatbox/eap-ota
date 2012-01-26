@@ -101,9 +101,6 @@ describe BookingController do
 
     describe '#preliminary_booking' do
       it 'saves both partner and marker if they present' do
-        cookies = mock('cookies')
-        cookies.stub(:[])
-        controller.stub(:cookies).and_return(cookies)
         Recommendation.stub(:deserialize)
         strategy = mock('strategy')
         Strategy.stub(:select).and_return(strategy)
@@ -119,14 +116,12 @@ describe BookingController do
  	      order.stub(:number)
 
         OrderForm.should_receive(:new).and_return(order)
-        cookies.should_receive(:[]=).at_least(:twice)
         get :preliminary_booking, partner_and_marker_present
+        response.cookies['partner'].should == 'yandex'
+        response.cookies['marker'].should == 'ffdghg'
       end
 
       it 'saves partner if it is present' do
-        cookies = mock('cookies')
-        cookies.stub(:[])
-        controller.stub(:cookies).and_return(cookies)
         Recommendation.stub(:deserialize)
         strategy = mock('strategy')
         Strategy.stub(:select).and_return(strategy)
@@ -137,102 +132,69 @@ describe BookingController do
         pricer.stub(:real_people_count)
         pricer.stub(:human_lite)
         pricer.stub(:query_key)
-        order = mock('order')
- 	      order.stub(:save_to_cache)
- 	      order.stub(:number)
-
-        OrderForm.should_receive(:new).and_return(order)
-        cookies.should_receive(:[]=).at_least(:once)
-        get :preliminary_booking, partner_present
-      end
-
-      it "doesn't touch cookie if there's no partner"  do
-        cookies = mock('cookies')
-        cookies.stub(:[])
-        controller.stub(:cookies).and_return(cookies)
-        Recommendation.stub(:deserialize)
-        strategy = mock('strategy')
-        Strategy.stub(:select).and_return(strategy)
-        strategy.stub(:check_price_and_availability).and_return(true)
-        pricer = mock('pricer')
-        PricerForm.stub(:load_from_cache).and_return(pricer)
-        pricer.stub(:partner)
-        pricer.stub(:real_people_count)
-        pricer.stub(:human_lite)
-        pricer.stub(:query_key)
-        order = mock('order')
- 	      order.stub(:save_to_cache)
- 	      order.stub(:number)
-
-        OrderForm.should_receive(:new).and_return(order)
-        cookies.should_not_receive(:[]=)
-        get :preliminary_booking, marker_present
-      end
-    end
-
-    describe '#api_redirect' do
-      it 'saves both partner and marker if they are present' do
-        cookies = mock('cookies')
-        cookies.stub(:[])
-        controller.stub(:cookies).and_return(cookies)
-        pricer = mock('pricer')
-        PricerForm.stub(:simple).and_return(pricer)
-        pricer.stub(:valid?)
-
-        cookies.should_receive(:[]=).at_least(:twice)
-        get :api_redirect, partner_and_marker_present
-      end
-
-      it 'saves partner if it is present' do
-        cookies = mock('cookies')
-        cookies.stub(:[])
-        controller.stub(:cookies).and_return(cookies)
-        pricer = mock('pricer')
-        PricerForm.stub(:simple).and_return(pricer)
-        pricer.stub(:valid?)
-
-        cookies.should_receive(:[]=).at_least(:once)
-        get :api_redirect, partner_and_marker_present
-      end
-
-      it "doesn't touch cookie if there's no partner"  do
-        cookies = mock('cookies')
-        cookies.stub(:[])
-        controller.stub(:cookies).and_return(cookies)
-        pricer = mock('pricer')
-        PricerForm.stub(:simple).and_return(pricer)
-        pricer.stub(:valid?)
-        pricer.stub(:partner)
-
-        cookies.should_not_receive(:[]=)
-        get :api_redirect, marker_present
-      end
-    end
-
-    describe '#preliminary_booking' do
-      it 'uses cookies if they are present' do
-        cookies = mock('cookies')
-        controller.stub(:cookies).and_return(cookies)
-        strategy = mock('strategy')
-        Strategy.stub(:select).and_return(strategy)
-        strategy.stub(:check_price_and_availability).and_return(true)
-        pricer = mock('pricer')
-        PricerForm.stub(:load_from_cache).and_return(pricer)
-        pricer.stub(:real_people_count)
-        pricer.stub(:query_key)
-        pricer.stub(:partner)
-        pricer.stub(:human_lite)
-        Recommendation.stub(:deserialize)
         order = mock('order')
         order.stub(:save_to_cache)
         order.stub(:number)
 
         OrderForm.should_receive(:new).and_return(order)
-        cookies.should_receive(:[]).with(:partner).at_least(:once)
-        cookies.should_receive(:[]).with(:marker).at_least(:once)
-        get :preliminary_booking
+        get :preliminary_booking, partner_present
+        response.cookies['partner'].should == 'momondo'
+        response.cookies['marker'].should == nil
       end
 
+      it "doesn't touch cookie if there's no partner"  do
+        Recommendation.stub(:deserialize)
+        strategy = mock('strategy')
+        Strategy.stub(:select).and_return(strategy)
+        strategy.stub(:check_price_and_availability).and_return(true)
+        pricer = mock('pricer')
+        PricerForm.stub(:load_from_cache).and_return(pricer)
+        pricer.stub(:partner)
+        pricer.stub(:real_people_count)
+        pricer.stub(:human_lite)
+        pricer.stub(:query_key)
+        order = mock('order')
+ 	      order.stub(:save_to_cache)
+ 	      order.stub(:number)
+
+        OrderForm.should_receive(:new).and_return(order)
+        get :preliminary_booking, marker_present
+        response.cookies['partner'].should == nil
+        response.cookies['marker'].should == nil
+      end
+    end
+
+    describe '#api_redirect' do
+      it 'saves both partner and marker if they are present' do
+        pricer = mock('pricer')
+        PricerForm.stub(:simple).and_return(pricer)
+        pricer.stub(:valid?)
+
+        get :api_redirect, partner_and_marker_present
+        response.cookies['partner'].should == 'yandex'
+        response.cookies['marker'].should == 'ffdghg'
+      end
+
+      it 'saves partner if it is present' do
+        pricer = mock('pricer')
+        PricerForm.stub(:simple).and_return(pricer)
+        pricer.stub(:valid?)
+
+        get :api_redirect, partner_present
+        response.cookies['partner'].should == 'momondo'
+        response.cookies['marker'].should == nil
+      end
+
+      it "doesn't touch cookie if there's no partner"  do
+        pricer = mock('pricer')
+        PricerForm.stub(:simple).and_return(pricer)
+        pricer.stub(:valid?)
+        pricer.stub(:partner)
+
+        get :api_redirect, marker_present
+        response.cookies['partner'].should == nil
+        response.cookies['marker'].should == nil
+      end
     end
   end
 end

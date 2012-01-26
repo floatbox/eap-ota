@@ -27,8 +27,7 @@ class BookingController < ApplicationController
         :people_count => @search.real_people_count,
         :variant_id => params[:variant_id],
         :query_key => @search.query_key,
-        # FIXME подумать, надо ли сделать трэкинг и в случае отсутствия партнера в куки?
-        :partner => partner || @search.partner,
+        :partner => partner,
         :marker => marker
       )
       order_form.save_to_cache
