@@ -52,8 +52,9 @@ module Pricing
     def price_with_payment_commission
       case kind
       when 'ticket'
+        return 0 if order.price_fare + order.price_tax == 0 && !corrected_price
         k = (price_tax + price_fare).to_f / (order.price_fare + order.price_tax)
-        order.price_with_payment_commission * k
+        corrected_price || order.price_with_payment_commission * k
       when 'refund'
         price_total + price_payment_commission
       end

@@ -86,6 +86,7 @@ Ticket:
       - validator
       - mso_number
       - comment
+      - corrected_price
     new_refund: price_fare, price_tax, price_penalty, price_consolidator, price_discount, route, comment
     confirm_refund: ticketed_date, processed
     csv:
