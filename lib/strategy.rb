@@ -10,7 +10,7 @@ module Strategy
     when 'sirena'
       Strategy::Sirena.new args
     else
-      raise ArgumentError, (source ? 'unknown source #{source.inspect}' : 'source not specified')
+      raise ArgumentError, (source ? "unknown source #{source.inspect}" : 'source not specified')
     end
 
   end
