@@ -16,7 +16,8 @@ describe IncomeDistribution do
       :price_agent => 2400,
       :price_subagent => 1000,
       :price_blanks => 50,
-      :price_discount => 200,
+      :price_discount => 260,
+      :price_our_markup => 60,
 
       :price_with_payment_commission => 30000
     }

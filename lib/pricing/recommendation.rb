@@ -3,7 +3,7 @@ module Pricing
 
     attr_accessor :price_fare, :price_tax, :blank_count
 
-    delegate :subagent, :agent, :consolidator, :blanks, :discount, :ticketing,
+    delegate :subagent, :agent, :consolidator, :blanks, :discount, :our_markup, :ticketing,
       :to => :commission, :prefix => :commission, :allow_nil => true
 
     # сумма, которая придет нам от платежного шлюза
@@ -61,13 +61,18 @@ module Pricing
       commission_discount.call(price_fare, :multiplier => blank_count)
     end
 
+    def price_our_markup
+      return 0 unless commission
+      commission_our_markup.call(price_fare, :multiplier => blank_count)
+    end
+
     def price_declared_discount
       price_discount
     end
 
     # надбавка к цене амадеуса
     def price_markup
-      price_consolidator + price_blanks - price_discount
+      price_consolidator + price_blanks + price_our_markup - price_discount
     end
 
     def commission

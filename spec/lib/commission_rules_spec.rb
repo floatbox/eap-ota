@@ -70,6 +70,7 @@ describe Commission::Rules do
         consolidator '1%'
         blanks 50
         discount '2%'
+        our_markup '1%'
         commission '2%/3'
       end
     end
@@ -95,7 +96,8 @@ describe Commission::Rules do
           :ticketing_method => :aviacenter,
           :consolidator => '2%',
           :blanks => 23,
-          :discount => '5%'
+          :discount => '5%',
+          :our_markup => 0
 
         carrier 'FV'
         commission '2%/3'
@@ -105,7 +107,8 @@ describe Commission::Rules do
           :ticketing_method => :direct,
           :consolidator => '1%',
           :blanks => 0,
-          :discount => '1%'
+          :discount => '1%',
+          :our_markup => '1%'
         commission '1%/1%'
         commission '2%/2%'
       end
@@ -120,6 +123,7 @@ describe Commission::Rules do
         its(:consolidator) { should eq(Fx('2%')) }
         its(:blanks) { should eq(Fx(23)) }
         its(:discount) { should eq(Fx('5%')) }
+        its(:our_markup) { should eq(Fx('0')) }
       end
 
       context "called with wrong key" do
@@ -143,6 +147,7 @@ describe Commission::Rules do
         its(:consolidator) { should eq(Fx('1%')) }
         its(:blanks) { should eq(Fx(0)) }
         its(:discount) { should eq(Fx('1%')) }
+        its(:our_markup) { should eq(Fx('1%')) }
       end
 
       context "called with wrong key" do

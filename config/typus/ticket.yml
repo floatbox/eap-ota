@@ -10,6 +10,7 @@ Ticket:
      - price_fare
      - price_tax
      - price_discount
+     - price_our_markup
      - office_id
      - validator
      - status
@@ -35,7 +36,7 @@ Ticket:
       - itinerary_receipt
       - parent
       - processed
-    new:  price_fare, price_tax, price_penalty, price_discount, ticketed_date, comment
+    new:  price_fare, price_tax, price_penalty, price_discount, price_our_markup, ticketed_date, comment
     show:
       - old_booking
       - order
@@ -55,6 +56,8 @@ Ticket:
       - price_subagent
       - commission_discount
       - price_discount
+      - commission_our_markup
+      - price_our_markup
       - price_penalty
       - price_payment_commission
       - price_with_payment_commission
@@ -81,13 +84,14 @@ Ticket:
       - commission_agent
       - commission_subagent
       - commission_discount
+      - commission_our_markup
       - price_penalty
       - office_id
       - validator
       - mso_number
       - comment
       - corrected_price
-    new_refund: price_fare, price_tax, price_penalty, price_consolidator, price_discount, route, comment
+    new_refund: price_fare, price_tax, price_penalty, price_consolidator, price_discount, price_our_markup, route, comment
     confirm_refund: ticketed_date, processed
     csv:
       - source

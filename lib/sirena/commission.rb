@@ -8,7 +8,7 @@ class Sirena::Commission
 
   attr_accessor :carrier, :twopcnt, :carrier_name, :doc, :code, :consolidator, :subagent,
     :interline, :subclasses, :routes, :expire, :fares, :directions,
-    :discount # совместимость с амадеусовскими
+    :discount, :our_markup # совместимость с амадеусовскими
 
   class << self
     [:doc, :code, :consolidator, :interline, :subclasses,
@@ -55,6 +55,7 @@ class Sirena::Commission
   def agent; Fx(0) end
   def subagent; Fx('') end
   def discount; Fx(0) end
+  def our_markup; Fx(0) end
 
   def agent_comments; '' end
   def subagent_comments; '' end

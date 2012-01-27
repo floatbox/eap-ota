@@ -12,7 +12,8 @@
     <td width="10%" style="<%= 'color: blue' if commission.ticketing_method == 'aviacenter' %>" title="<%= commission.subagent_comments %>"> <%= commission.subagent %> </td>
     <td width="10%" title="сбор агента 1%/2%"> <%= commission.consolidator %> </td>
     <td width="10%" style="<%= 'color:green' unless commission.discount.try(:zero?) %>" title="скидка"> <%= commission.discount %> </td>
-    <td width="30%" style="color:red"> <%= "отключено #{reason_of_disability(commission)}" if commission.disabled? %> </td>
+    <td width="10%" style="<%= 'color:green' unless commission.our_markup.try(:zero?) %>" title="надбавка"> <%= commission.our_markup %> </td>
+    <td width="26%" style="color:red"> <%= "отключено #{reason_of_disability(commission)}" if commission.disabled? %> </td>
   </tr>
 </table>
 <% else %>
@@ -54,6 +55,9 @@
           <% end %>
           <% unless commission.discount.try(:zero?) %>
             <li> скидка <strong><%= commission.discount %></strong> </li>
+          <% end %>
+          <% unless commission.our_markup.try(:zero?) %>
+            <li> надбавка <strong><%= commission.our_markup %></strong> </li>
           <% end %>
           <% if commission.classes.present? %>
             <li> классы <%= commission.classes.join(' ') %> </li>

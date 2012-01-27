@@ -9,7 +9,7 @@ module Commission::Rules
   include KeyValueInit
   include Commission::Fx
   extend Commission::Attrs
-  has_commission_attrs :agent, :subagent, :consolidator, :blanks, :discount
+  has_commission_attrs :agent, :subagent, :consolidator, :blanks, :discount, :our_markup
 
   attr_accessor :carrier,
     :disabled, :not_implemented, :no_commission,
@@ -135,7 +135,7 @@ module Commission::Rules
 
   module ClassMethods
 
-    ALLOWED_KEYS_FOR_DEFS = %W[ system ticketing_method consolidator blanks discount corrector disabled].map(&:to_sym)
+    ALLOWED_KEYS_FOR_DEFS = %W[ system ticketing_method consolidator blanks discount our_markup corrector disabled].map(&:to_sym)
 
     def defaults def_opts={}
       def_opts.to_options!.assert_valid_keys(ALLOWED_KEYS_FOR_DEFS)
@@ -299,6 +299,10 @@ module Commission::Rules
 
     def discount value
       opts[:discount] = value
+    end
+
+    def our_markup value
+      opts[:our_markup] = value
     end
 
     # метод поиска рекомендации

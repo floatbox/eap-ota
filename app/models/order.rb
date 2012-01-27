@@ -52,8 +52,8 @@ class Order < ActiveRecord::Base
   attr_writer :itinerary_receipt_view
 
   extend Commission::Columns
-  has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount
-  has_percentage_only_commissions :commission_consolidator, :commission_discount
+  has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount, :commission_our_markup
+  has_percentage_only_commissions :commission_consolidator, :commission_discount, :commission_our_markup
 
   def self.[] number
     find_by_pnr_number number
@@ -195,6 +195,7 @@ class Order < ActiveRecord::Base
         :consolidator,
         :blanks,
         :discount,
+        :our_markup,
         :agent_comments,
         :subagent_comments
 
@@ -203,7 +204,8 @@ class Order < ActiveRecord::Base
         :price_subagent,
         :price_consolidator,
         :price_blanks,
-        :price_discount
+        :price_discount,
+        :price_our_markup
     end
     self.ticket_status = 'booked'
     self.name_in_card = order_form.card.name
@@ -293,6 +295,7 @@ class Order < ActiveRecord::Base
     self.price_subagent = pure_tickets.every.price_subagent.sum
     self.price_blanks = pure_tickets.every.price_blanks.sum
     self.price_discount = pure_tickets.every.price_discount.sum
+    self.price_our_markup = pure_tickets.every.price_our_markup.sum
 
     self.price_difference = price_total - price_total_old if price_difference == 0
     save

@@ -26,6 +26,7 @@ module Pricing
 
     # cash_payment_markup содержит доставку, и нигде потом не используется
 
+    # подгнанные "налоги и сборы c комиссией" для отображения клиенту
     def price_tax_and_markup_and_payment
       recalculated_price_with_payment_commission - price_fare + price_declared_discount
     end
@@ -43,7 +44,7 @@ module Pricing
     end
 
     def price_markup
-      price_consolidator + price_blanks - price_discount
+      price_consolidator + price_blanks + price_our_markup - price_discount
     end
 
     def acquiring_percentage
@@ -85,6 +86,7 @@ module Pricing
       self.price_consolidator = commission_consolidator.call(price_fare, :multiplier => blank_count)
       self.price_blanks = commission_blanks.call(price_fare, :multiplier => blank_count)
       self.price_discount = commission_discount.call(price_fare, :multiplier => blank_count)
+      self.price_our_markup = commission_our_markup.call(price_fare, :multiplier => blank_count)
     end
   end
 end

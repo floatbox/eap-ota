@@ -13,7 +13,8 @@ describe Pricing::Order do
       :commission_consolidator => '2%',
       :commission_blanks => 0,
       # commission_our_markup
-      :commission_discount => '1%',
+      :commission_discount => '2%',
+      :commission_our_markup => '1%',
       :payment_type => 'card',
       :blank_count => 1
       # commission payment
@@ -43,7 +44,8 @@ describe Pricing::Order do
     context "base scenario with percentages" do
       its(:price_subagent) {should == 1000}
       its(:price_consolidator) {should == 400}
-      its(:price_discount) {should == 200}
+      its(:price_discount) {should == 400}
+      its(:price_our_markup) {should == 200}
       its(:price_with_payment_commission) {should == 21821.92}
     end
 
@@ -54,7 +56,8 @@ describe Pricing::Order do
 
       its(:price_subagent) {should == 1000}
       its(:price_consolidator) {should == 400}
-      its(:price_discount) {should == 200}
+      its(:price_discount) {should == 400}
+      its(:price_our_markup) {should == 200}
       its(:price_with_payment_commission) {should == 21821.92}
     end
 

@@ -183,7 +183,9 @@ module PricerHelper
         concat %( +#{recommendation.commission.consolidator})
         #concat %(, конс: #{recommendation.price_consolidator} р.)
       end
-      # FIXME, убрать нулевую комиссию?
+      unless recommendation.commission.our_markup.zero?
+        concat %( #{recommendation.commission.our_markup})
+      end
       unless recommendation.commission.discount.zero?
         concat %( -#{recommendation.commission.discount})
       end

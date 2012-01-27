@@ -38,7 +38,7 @@ class Ticket < ActiveRecord::Base
   delegate :acquiring_percentage, :to => :order
 
   extend Commission::Columns
-  has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount
+  has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount, :commission_our_markup
   include Pricing::Ticket
 
   before_save :recalculate_commissions
@@ -111,6 +111,7 @@ class Ticket < ActiveRecord::Base
       :validating_carrier
     self.price_penalty *= -1 if price_penalty < 0
     self.price_discount *= -1 if price_discount > 0
+    self.price_our_markup *= -1 if price_our_markup > 0
     self.price_tax *= -1 if price_tax > 0
     self.price_fare *= -1 if price_fare > 0
     self.price_consolidator *= -1 if price_consolidator > 0
@@ -120,7 +121,8 @@ class Ticket < ActiveRecord::Base
 
   def copy_commissions_from_order
     return unless order
-    for attr in [ :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount ]
+    # FIXME почему не copy_attrs?
+    for attr in [ :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount, :commission_our_markup ]
       #if send(attr).nil?
         send("#{attr}=", order.send(attr))
       #end

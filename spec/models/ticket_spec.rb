@@ -20,7 +20,8 @@ describe Ticket do
           :commission_subagent => '4',
           :commission_consolidator => '2%',
           :commission_blanks => '50',
-          :commission_discount => '1%'
+          :commission_discount => '2%',
+          :commission_our_markup => '1%'
         )
       }
       let (:ticket) {
@@ -35,7 +36,8 @@ describe Ticket do
       its(:price_subagent) {should == 4}
       its(:price_consolidator) {should == fare * 0.02 }
       its(:price_blanks ) {should == 50 }
-      its(:price_discount) {should == fare * 0.01 }
+      its(:price_discount) {should == fare * 0.02 }
+      its(:price_our_markup) {should == fare * 0.01 }
     end
 
     context "without commission_subagent" do

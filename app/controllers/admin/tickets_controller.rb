@@ -15,6 +15,7 @@ class Admin::TicketsController < Admin::EviterraResourceController
   def new_refund
     @item = @resource.new(params[:resource])
     @item.route = @item.parent.route
+    # callback же пересчитает цену?
     @item.price_discount = @item.parent.price_discount
     render :action => :new
   end

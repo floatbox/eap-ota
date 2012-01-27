@@ -10,6 +10,7 @@ module Pricing
     # commission_consolidator
     # commission_blanks
     # commission_discount
+    # commission_our_markup
     #
     ### prices:
     # price_fare
@@ -19,6 +20,7 @@ module Pricing
     # price_consolidator
     # price_blanks
     # price_discount
+    # price_our_markup
     #
     # price_penalty
 
@@ -81,6 +83,7 @@ module Pricing
         self.price_consolidator = commission_consolidator.call(price_fare)
         self.price_blanks = commission_blanks.call(price_fare)
         self.price_discount = commission_discount.call(price_fare)
+        self.price_our_markup = commission_our_markup.call(price_fare)
       when 'refund'
         self.price_agent = commission_agent.percentage? ? commission_agent.call(price_fare) : -commission_agent.call(price_fare)
         self.price_subagent = commission_subagent.percentage? ? commission_subagent.call(price_fare) : -commission_subagent.call(price_fare)
