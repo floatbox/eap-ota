@@ -15,6 +15,10 @@ api:
    - momondo
    - buruki
    - airego
+  passwords: {}
+  test:
+    passwords:
+      testpartner: testpass
 amadeus:
   endpoint: "https://test.webservices.amadeus.com"
   enabled: yes
