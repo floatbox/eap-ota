@@ -5,16 +5,18 @@ class ApiOrderStatController < ApplicationController
 
   def index
     orders = Order.where(:created_at=>Date.parse(params[:start_date])..Date.parse(params[:end_date]), :partner => USER_ID)
-    orders_to_send = {}
+    order_to_send = {}
+    orders_to_send = []
     orders.each do |order|
-      orders_to_send[:marker] = order.marker
-      orders_to_send[:price] = order.price_with_payment_commission
-      orders_to_send[:income] = order.income
-      orders_to_send[:created_at] = order.created_at
-      orders_to_send[:route] = order.route
-      orders_to_send[:partner] = order.partner #для теста!!! убрать
-      orders_to_send = orders_to_send.to_json
+      order_to_send[:marker] = order.marker
+      order_to_send[:price] = order.price_with_payment_commission
+      order_to_send[:income] = order.income
+      order_to_send[:created_at] = order.created_at
+      order_to_send[:route] = order.route
+      order_to_send[:partner] = order.partner #для теста!!! убрать
+      orders_to_send << order_to_send
     end
+    orders_to_send = orders_to_send.to_json
     render :json => orders_to_send
   end
 
