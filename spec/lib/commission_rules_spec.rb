@@ -85,6 +85,8 @@ describe Commission::Rules do
     its(:subagent) {should == Fx(3)}
     its(:consolidator) {should == Fx('1%')}
     its(:blanks) {should == Fx('50')}
+    its(:our_markup) {should == Fx('1%')}
+    its(:discount) {should == Fx('2%')}
   end
 
   context "setting defaults" do
@@ -292,5 +294,45 @@ describe Commission::Rules do
       its(:agent) { should == Fx('2%') }
       its(:subagent) { should be_blank }
     end
+  end
+
+  describe "interline rules" do
+
+    # ugly. можно что-то сделать?
+    def reason(recommendation, &block)
+      # FIXME сделать другой выключатель интерлайнов
+      old, Commission.skip_interline_validity_check = Commission.skip_interline_validity_check, false
+
+      Class.new do
+        include Commission::Rules
+        carrier 'SU'
+
+        # втыкаем сюда interline ...
+        instance_eval &block
+
+        commission '/'
+      end.all.first.turndown_reason(recommendation)
+
+    ensure
+      Commission.skip_interline_validity_check = old
+    end
+
+    let(:no_interline)             { Recommendation.example('SVOCDG CDGSVO') }
+    let(:interline)                { Recommendation.example('SVOCDG/AB CDGSVO') }
+    let(:interline_but_first)      { Recommendation.example('SVOCDG CDGSVO/AB') }
+    let(:interline_absent)         { Recommendation.example('SVOCDG/AB CDGSVO/AB') }
+    let(:interline_half)           { Recommendation.example('SVOCDG/AB CDGSVO') }
+    let(:interline_less_than_half) { Recommendation.example('SVOCDG/AB CDGNCE NCESVO/AB') }
+
+    specify { reason( no_interline )             { "no interline rules here" }.should_not be}
+    specify { reason( interline )                { "no interline rules here" }.should be }
+    specify { reason( no_interline )             { interline :no }.should_not be }
+    specify { reason( no_interline )             { interline :possible }.should_not be }
+    specify { reason( interline )                { interline }.should_not be }
+    specify { reason( interline )                { interline :yes }.should_not be }
+    specify { reason( interline )                { interline :absent }.should be }
+    specify { reason( interline_absent )         { interline :absent }.should_not be }
+    specify { reason( interline_but_first )      { interline :first }.should_not be }
+    specify { reason( interline_half )           { interline :half }.should_not be }
   end
 end

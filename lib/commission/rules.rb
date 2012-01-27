@@ -66,6 +66,7 @@ module Commission::Rules
     end
   end
 
+  # надо использовать self.class.skip..., наверное
   def valid_interline? recommendation
     Commission.skip_interline_validity_check || recommendation.valid_interline?
   end
