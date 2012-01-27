@@ -43,27 +43,31 @@ module Commission::Rules
   end
 
   def applicable_interline? recommendation
-    case interline
-    when :possible
-      not recommendation.interline? or
-      recommendation.validating_carrier_participates?
-    when nil, :no
-      not recommendation.interline?
-    when :yes
-      recommendation.interline? and
-      recommendation.validating_carrier_participates?
-    when :absent
-      recommendation.interline? and
-      not recommendation.validating_carrier_participates?
-    when :first
-      recommendation.interline? and
-      recommendation.validating_carrier_starts_itinerary?
-    when :half, :unconfirmed
-      recommendation.interline? and
-      recommendation.validating_carrier_makes_half_of_itinerary?
-    else
-      raise ArgumentError, "неизвестный тип interline у #{carrier}: '#{interline}' (line #{source})"
+    interline.any? do |definition|
+      case definition
+      when :no
+        not recommendation.interline?
+      when :yes
+        recommendation.interline? and
+        recommendation.validating_carrier_participates?
+      when :absent
+        recommendation.interline? and
+        not recommendation.validating_carrier_participates?
+      when :first
+        recommendation.interline? and
+        recommendation.validating_carrier_starts_itinerary?
+      when :half, :unconfirmed
+        recommendation.interline? and
+        recommendation.validating_carrier_makes_half_of_itinerary?
+      else
+        raise ArgumentError, "неизвестный тип interline у #{carrier}: '#{interline}' (line #{source})"
+      end
     end
+  end
+
+  # чуточку расширенный аксессор
+  def interline
+    @interline.presence || [:no]
   end
 
   # надо использовать self.class.skip..., наверное
@@ -221,8 +225,10 @@ module Commission::Rules
     end
 
     # правило интерлайна
-    def interline value=:yes
-      opts[:interline] = value
+    def interline *values
+      # шорткат для interline без параметров
+      values = [:yes] if values.empty?
+      opts[:interline] = values
     end
 
     # строчки из агентского договора (FM, комиссии, указываемые в бронировании)

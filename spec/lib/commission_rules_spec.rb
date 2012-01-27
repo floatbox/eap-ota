@@ -327,12 +327,15 @@ describe Commission::Rules do
     specify { reason( no_interline )             { "no interline rules here" }.should_not be}
     specify { reason( interline )                { "no interline rules here" }.should be }
     specify { reason( no_interline )             { interline :no }.should_not be }
-    specify { reason( no_interline )             { interline :possible }.should_not be }
+    specify { reason( no_interline )             { interline :yes, :no }.should_not be }
     specify { reason( interline )                { interline }.should_not be }
     specify { reason( interline )                { interline :yes }.should_not be }
+    specify { reason( interline )                { interline :yes, :no }.should_not be }
     specify { reason( interline )                { interline :absent }.should be }
     specify { reason( interline_absent )         { interline :absent }.should_not be }
+    specify { reason( interline_absent )         { interline :yes, :absent }.should_not be }
     specify { reason( interline_but_first )      { interline :first }.should_not be }
+    specify { reason( interline_but_first )      { interline :no, :first }.should_not be }
     specify { reason( interline_half )           { interline :half }.should_not be }
   end
 end
