@@ -274,7 +274,7 @@ commission "0%/0%"
 carrier "AF", "AIR FRANCE"
 ########################################
 
-carrier_defaults :consolidator => '1%'
+carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -314,9 +314,7 @@ no_commission
 
 carrier "AZ", "ALITALIA"
 ########################################
-#Поставьте на ВСЕ билеты AZ сервисный сбор 2% в независимости от наличия дополнительной комиссии.
-#А мы вручную будем исправлять ( в случае ошибки) комиссию, т.к. у Вас , к сожалению, все равно не получается правильно сортировать комиссионные и не комиссионные авиабилеты
-carrier_defaults :corrector => nil
+carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'dmetrn/economy'
 example 'dmetrn/business'
@@ -391,11 +389,10 @@ commission "1eur/5"
 carrier "BD", "BMI"
 ########################################
 
-carrier_defaults :consolidator => '1%'
+carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
-strt_date "01.02.2011"
 agent    "1 руб. с билета по опубл.тарифам"
 subagent "5 коп. с билета по опубл. тарифам на собств. рейсы BD и рейсы Interline с участком BD"
 interline :possible
@@ -676,7 +673,7 @@ commission "8%/5%" #+5 рублей мы еще должны получить
 carrier "EK", "EMIRATES"
 ########################################
 
-carrier_defaults :consolidator => '1%'
+carrier_defaults :consolidator => 0
 
 example 'svocdg/first cdgsvo/business'
 example 'svocdg/first cdgsvo/first'
@@ -698,6 +695,7 @@ important!
 agent    "1 руб. с билета по опубл.тарифам Эконом класса на рейсы EK."
 subagent "5 коп. с билета по опубл.тарифам Эконом класса на собств. рейсы EK."
 classes :economy
+our_markup '1%'
 commission "1/0.05"
 
 agent    "(Билеты «Интерлайн» могут быть выписаны, если на долю перевозчика приходится более 50% маршрута.)"
@@ -705,6 +703,7 @@ subagent "???"
 example 'svocdg cdgsvo/ab'
 example 'svocdg/business cdgsvo/ab/business'
 interline :half
+our_markup '1%'
 commission "1/0.05"
 
 example 'svocdg cdgled/ab ledsvo/ab'
@@ -735,9 +734,6 @@ commission "0%/0%"
 
 carrier "EY", "ETIHAD AIRWAYS"
 ########################################
-
-carrier_defaults :consolidator => '1%'
-
 
 example 'svocdg'
 agent   "5% от опубл. тарифов на собств. рейсы EY (В договоре Interline не прописан.)"
@@ -1069,7 +1065,7 @@ commission "0%/0%"
 carrier "IB", "IBERIA"
 ########################################
 
-carrier_defaults :consolidator => '1%'
+carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'svocdg cdgsvo'
 agent    "1 руб. с билета на рейсы IB. (Билеты Interline под кодом IB могут быть выписаны только в случае существования опубл. тарифов и только при условии, что IB выполняет первый рейс маршрута."
@@ -1287,7 +1283,7 @@ commission "0%/0%"
 carrier "KL", "KLM"
 ########################################
 
-carrier_defaults :consolidator => '1%'
+carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'svocdg'
 agent    "1 euro с билета на рейсы KL. Вознаграждение не выплачивается за любые тарифы net. (Билеты Interline могут быть выписаны на бланках KLM только в случае существования действующего интерлайн соглашения, официально опубл. тарифов и только при условии, если КЛМ или авиакомпания Эр Франс участвуют в одном из сегментов перевозки.)"
@@ -1333,7 +1329,7 @@ commission "1/0.05"
 carrier "LH", "LUFTHANSA"
 ########################################
 
-carrier_defaults :consolidator => '1%'
+carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -1392,7 +1388,7 @@ no_commission
 carrier "LO", "LOT"
 ########################################
 
-carrier_defaults :consolidator => '1%'
+carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'svocdg'
 agent    "1 ЕВРО от продаж опубликованных или ИАТА тарифов. Interline - как минимум один международный сегмент выполняется Перевозчиком."
@@ -1408,7 +1404,7 @@ commission "1eur/5"
 carrier "LX", "SWISS"
 ########################################
 
-carrier_defaults :consolidator => '1%'
+carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'svocdg cdgsvo/ab'
 agent    "1 руб. с билета по опубл. тарифам на собств. рейсы LX и рейсы Interline с уч. LX.
@@ -1442,7 +1438,7 @@ no_commission
 carrier "MA", "MALEV"
 ########################################
 
-carrier_defaults :consolidator => '1%'
+carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example "svobud budsvo/ab"
 agent    "1 руб. с билета от опубл., конфиде.тарифов Эконом и Бизнес класса и при комбинации классов; от опубл.тарифа в случае применения совместного тарифа авиакомпаний при условии, что не менее 50 процентов маршрута должно быть закрыто на авиакомпанию МАЛЕВ (запрещается оформлять перевозку на билетах Авиакомпании без хотя бы одного участка Авиакомпании)"
@@ -1613,8 +1609,6 @@ commission "1%/0.5%"
 carrier "OK", "CZECH AIRLINES"
 ########################################
 
-carrier_defaults :consolidator => '1%'
-
 example 'cdgsvo'
 agent    "1% от опубл. тарифов на собств.рейсы OK;"
 subagent "0,5% от опубл. тарифа на рейсы OK;"
@@ -1659,7 +1653,7 @@ commission "9%/6.3%"
 carrier "OS", "AUSTRIAN AIRLINES"
 ########################################
 
-carrier_defaults :consolidator => '1%'
+carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -1821,7 +1815,7 @@ commission "1%/0.5%"
 carrier "SK", "SAS"
 ########################################
 
-carrier_defaults :consolidator => '1%'
+carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -1833,7 +1827,7 @@ commission "1/0.5"
 carrier "SN", "BRUSSELS AIRLINES"
 ########################################
 
-carrier_defaults :consolidator => '1%'
+carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'svocdg'
 example 'DMEBRU'
