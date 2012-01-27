@@ -229,6 +229,7 @@ class Order < ActiveRecord::Base
   end
 
   def load_tickets
+    @tickets_are_loading = true
     if source == 'amadeus'
       pnr_resp = tst_resp = nil
       Amadeus.booking do |amadeus|
@@ -274,6 +275,7 @@ class Order < ActiveRecord::Base
       tickets.reload
       update_attribute(:departure_date, order_resp.flights.first.dept_date)
     end
+    @tickets_are_loading = false
 
   end
 
@@ -283,7 +285,7 @@ class Order < ActiveRecord::Base
 
   def update_prices_from_tickets # FIXME перенести в strategy
     # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
-    return if old_booking
+    return if old_booking || @tickets_are_loading
     price_total_old = self.price_total
     pure_tickets = tickets.where(:processed => true)
 
