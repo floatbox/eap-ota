@@ -1,5 +1,5 @@
 # encoding: utf-8
-class ApiOrderStatController < ApplicationController
+class ApiOrderStatsController < ApplicationController
   before_filter :authenticate
 
   def index

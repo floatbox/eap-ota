@@ -10,7 +10,7 @@ Eviterra::Application.routes.draw do
   match 'api/booking/:query_key(.:format)' => 'booking#api_booking', :via => :get, :as => :api_booking
   match 'api/rambler_booking(.:format)' => 'booking#api_rambler_booking', :via => :get, :as => :api_rambler_booking
   match 'api/form' => 'booking#api_form'
-  match 'api/order_stat' => 'api_order_stat#index'
+  match 'api/order_stats' => 'api_order_stats#index'
 
   match 'booking' => 'booking#index', :as => :booking
   match 'hot_offers' => 'pricer#hot_offers', :as => :hot_offers
