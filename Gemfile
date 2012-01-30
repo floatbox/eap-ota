@@ -4,9 +4,9 @@ gem 'rails', '3.1.3'
 gem 'jquery-rails'
 group :assets do
   gem 'therubyracer'
-  gem "uglifier", ">= 1.0.3"
-  gem 'sass-rails', "~> 3.1.4"
-  gem 'coffee-rails', "~> 3.1.1"
+  gem "uglifier"
+  gem 'sass-rails'
+  gem 'coffee-rails'
 end
 
 
@@ -76,7 +76,7 @@ group :test do
   gem 'guard-rspec'
   # gem 'guard-rails-assets'
   gem 'capybara'
-  gem 'spork', '0.9.0.rc9'
+  gem 'spork'
   gem 'database_cleaner'
 
   gem 'vcr'
