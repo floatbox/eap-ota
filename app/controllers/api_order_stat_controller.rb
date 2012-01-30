@@ -20,7 +20,7 @@ class ApiOrderStatController < ApplicationController
     def authenticate
       authenticate_or_request_with_http_basic do |id, password|
         @id = id
-        @id.present? && password == Conf.api.passwords[@id]
+        password && Conf.api.passwords[id] == password
       end
     end
 end
