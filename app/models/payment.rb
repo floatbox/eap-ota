@@ -13,6 +13,9 @@ class Payment < ActiveRecord::Base
   attr_accessor :custom_fields
   has_commission_columns :commission
 
+  # не секьюрити ради, а read_only тайпуса для
+  attr_protected :type
+
   CHARGES = ['PaytureCharge', 'CashCharge']
   REFUNDS = ['PaytureRefund', 'CashRefund']
 
