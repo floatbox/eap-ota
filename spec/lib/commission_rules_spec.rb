@@ -298,44 +298,188 @@ describe Commission::Rules do
 
   describe "interline rules" do
 
-    # ugly. можно что-то сделать?
-    def reason(recommendation, &block)
-      # FIXME сделать другой выключатель интерлайнов
-      old, Commission.skip_interline_validity_check = Commission.skip_interline_validity_check, false
+    RSpec::Matchers.define(:match_recommendation) do |recommendation|
+      match do |subject_commission|
+        begin
+          # FIXME сделать другой выключатель проверки интерлайнов
+          old, Commission.skip_interline_validity_check = Commission.skip_interline_validity_check, false
+          @reason = subject_commission.turndown_reason(recommendation)
+        ensure
+          Commission.skip_interline_validity_check = old
+        end
+        ! @reason
+      end
+
+      failure_message_for_should do |subject_commission|
+        "expected that '#{recommendation.short}' would match commission, but failed with reason #{@reason.inspect}."
+      end
+
+      failure_message_for_should_not do |subject_commission|
+        "expected that '#{recommendation.short}' would not match commission."
+      end
+
+      description do
+        "'#{recommendation.short}' matches commission."
+      end
+    end
+
+    # определяет класс комиссий с единственным правилом и возвращает это правило
+    def commission(&block)
 
       Class.new do
         include Commission::Rules
+        # FIXME дефолт для Recommendation.example
         carrier 'SU'
-
-        # втыкаем сюда interline ...
+        # здесь как бы выполняется блок определения комиссии
         instance_eval &block
-
+        # неопределенная агентская/субагентская комиссия
         commission '/'
-      end.all.first.turndown_reason(recommendation)
+      end.all.first
 
-    ensure
-      Commission.skip_interline_validity_check = old
     end
 
     let(:no_interline)             { Recommendation.example('SVOCDG CDGSVO') }
     let(:interline)                { Recommendation.example('SVOCDG/AB CDGSVO') }
+    let(:interline_first)          { Recommendation.example('SVOCDG/AB CDGSVO') }
     let(:interline_but_first)      { Recommendation.example('SVOCDG CDGSVO/AB') }
     let(:interline_absent)         { Recommendation.example('SVOCDG/AB CDGSVO/AB') }
     let(:interline_half)           { Recommendation.example('SVOCDG/AB CDGSVO') }
     let(:interline_less_than_half) { Recommendation.example('SVOCDG/AB CDGNCE NCESVO/AB') }
 
-    specify { reason( no_interline )             { "no interline rules here" }.should_not be}
-    specify { reason( interline )                { "no interline rules here" }.should be }
-    specify { reason( no_interline )             { interline :no }.should_not be }
-    specify { reason( no_interline )             { interline :yes, :no }.should_not be }
-    specify { reason( interline )                { interline }.should_not be }
-    specify { reason( interline )                { interline :yes }.should_not be }
-    specify { reason( interline )                { interline :yes, :no }.should_not be }
-    specify { reason( interline )                { interline :absent }.should be }
-    specify { reason( interline_absent )         { interline :absent }.should_not be }
-    specify { reason( interline_absent )         { interline :yes, :absent }.should_not be }
-    specify { reason( interline_but_first )      { interline :first }.should_not be }
-    specify { reason( interline_but_first )      { interline :no, :first }.should_not be }
-    specify { reason( interline_half )           { interline :half }.should_not be }
+    describe "no interline rules specified (defaults to no interline allowed)" do
+      subject do
+        commission do
+          # nothing here
+        end
+      end
+      it {should match_recommendation( no_interline ) }
+      it {should_not match_recommendation( interline ) }
+      it {should_not match_recommendation( interline_but_first ) }
+      it {should_not match_recommendation( interline_half ) }
+      it {should_not match_recommendation( interline_absent ) }
+    end
+
+    describe "interline :no" do
+      subject do
+        commission do
+          interline :no
+        end
+      end
+      it {should match_recommendation( no_interline ) }
+      it {should_not match_recommendation( interline ) }
+      it {should_not match_recommendation( interline_but_first ) }
+      it {should_not match_recommendation( interline_half ) }
+      it {should_not match_recommendation( interline_absent ) }
+    end
+
+    describe "interline :yes" do
+      subject do
+        commission do
+          interline :yes
+        end
+      end
+      it {should_not match_recommendation( no_interline ) }
+      it {should match_recommendation( interline ) }
+      it {should match_recommendation( interline_but_first ) }
+      it {should match_recommendation( interline_half ) }
+      it {should_not match_recommendation( interline_absent ) }
+    end
+
+    describe "interline :first" do
+      subject do
+        commission do
+          interline :first
+        end
+      end
+      it {should_not match_recommendation( no_interline ) }
+      it {should match_recommendation( interline_but_first ) }
+      it {should_not match_recommendation( interline_first ) }
+      it {should_not match_recommendation( interline_absent ) }
+    end
+
+    describe "interline :half" do
+      subject do
+        commission do
+          interline :half
+        end
+      end
+      it {should_not match_recommendation( no_interline ) }
+      it {should match_recommendation( interline_half ) }
+      it {should_not match_recommendation( interline_less_than_half ) }
+      it {should_not match_recommendation( interline_absent ) }
+    end
+
+    describe "interline :absent" do
+      subject do
+        commission do
+          interline :absent
+        end
+      end
+      it {should_not match_recommendation( no_interline ) }
+      it {should_not match_recommendation( interline ) }
+      it {should match_recommendation( interline_absent ) }
+    end
+
+    describe "interline :unconfirmed" do
+      # на текущий момент, считаем что неподтвержденный интерлайн - работает только при половине собственных рейсов
+      subject do
+        commission do
+          interline :unconfirmed
+        end
+      end
+      it {should_not match_recommendation( no_interline ) }
+      it {should match_recommendation( interline_half ) }
+      it {should_not match_recommendation( interline_less_than_half ) }
+      it {should_not match_recommendation( interline_absent ) }
+    end
+
+
+    context "combinations of" do
+      describe "interline :no, :yes" do
+        subject do
+          commission do
+            interline :no, :yes
+          end
+        end
+        it {should match_recommendation( no_interline ) }
+        it {should match_recommendation( interline ) }
+        it {should_not match_recommendation( interline_absent ) }
+      end
+
+      describe "interline :no, :first" do
+        subject do
+          commission do
+            interline :no, :first
+          end
+        end
+        it {should match_recommendation( no_interline ) }
+        it {should match_recommendation( interline_but_first ) }
+        it {should_not match_recommendation( interline_first ) }
+        it {should_not match_recommendation( interline_absent ) }
+      end
+
+      describe "interline :yes, :absent" do
+        subject do
+          commission do
+            interline :yes, :absent
+          end
+        end
+        it {should_not match_recommendation( no_interline ) }
+        it {should match_recommendation( interline ) }
+        it {should match_recommendation( interline_absent ) }
+      end
+
+      describe "interline :no, :unconfirmed" do
+        subject do
+          commission do
+            interline :no, :unconfirmed
+          end
+        end
+        it {should match_recommendation( no_interline ) }
+        it {should match_recommendation( interline_half ) }
+        it {should_not match_recommendation( interline_less_than_half ) }
+        it {should_not match_recommendation( interline_absent ) }
+      end
+    end
   end
 end
