@@ -8,7 +8,7 @@ defaults :system => :amadeus, :ticketing_method => "aviacenter", :consolidator =
 carrier "SU", "Aeroflot"
 ########################################
 # будут действовать на все правила в авиакомпании.
-carrier_defaults :discount => 0, :disabled => 'какие-то проблемы с Аэрофлотом'
+carrier_defaults :discount => 0
 
 example "svocdg"
 example "svocdg/business cdgsvo/economy"
