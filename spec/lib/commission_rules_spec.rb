@@ -429,7 +429,7 @@ describe Commission::Rules do
       end
       it {should_not match_recommendation( no_interline ) }
       it {should match_recommendation( interline_half ) }
-      it {should_not match_recommendation( interline_less_than_half ) }
+      it {should match_recommendation( interline_less_than_half ) }
       it {should_not match_recommendation( interline_absent ) }
     end
 
@@ -477,7 +477,7 @@ describe Commission::Rules do
         end
         it {should match_recommendation( no_interline ) }
         it {should match_recommendation( interline_half ) }
-        it {should_not match_recommendation( interline_less_than_half ) }
+        it {should match_recommendation( interline_less_than_half ) }
         it {should_not match_recommendation( interline_absent ) }
       end
     end

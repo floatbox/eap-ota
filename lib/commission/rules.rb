@@ -47,7 +47,7 @@ module Commission::Rules
       case definition
       when :no
         not recommendation.interline?
-      when :yes
+      when :yes, :unconfirmed
         recommendation.interline? and
         recommendation.validating_carrier_participates?
       when :absent
@@ -56,7 +56,7 @@ module Commission::Rules
       when :first
         recommendation.interline? and
         recommendation.validating_carrier_starts_itinerary?
-      when :half, :unconfirmed
+      when :half
         recommendation.interline? and
         recommendation.validating_carrier_makes_half_of_itinerary?
       else
