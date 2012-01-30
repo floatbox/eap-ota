@@ -64,6 +64,12 @@ module Pricing
     end
     private :acquiring_compensation
 
+    def vat
+      if sold_tickets.present?
+        sold_tickets.every.vat.sum
+      end
+    end
+
     # реальная _ожидаемая_ комиссия на эквайринг (от объявленной суммы)
     def price_payment_commission
       price_with_payment_commission * acquiring_percentage
