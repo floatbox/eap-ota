@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120127034058) do
+ActiveRecord::Schema.define(:version => 20120127130355) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -397,6 +397,7 @@ ActiveRecord::Schema.define(:version => 20120127034058) do
     t.decimal  "corrected_price",           :precision => 9, :scale => 2
     t.string   "commission_our_markup"
     t.decimal  "price_our_markup",          :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.boolean  "vat_included"
   end
 
   create_table "typus_users", :force => true do |t|

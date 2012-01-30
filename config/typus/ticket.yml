@@ -19,6 +19,7 @@ Ticket:
      - itinerary_receipt
      - parent
      - confirm_refund_url
+     - vat_included
     list:
       - link_to_show
       - order
@@ -126,6 +127,7 @@ Ticket:
       booleans:
         processed: ["подтвержден", "не подтвержден"]
         old_booking: ["пересчет запрещен", "пересчет разрешен"]
+        vat_included: ['да', 'нет']
   options:
     default_action_on_item: edit
   actions:

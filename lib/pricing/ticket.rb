@@ -40,6 +40,14 @@ module Pricing
       end
     end
 
+    def vat
+      if vat_included?
+        ((price_fare + price_tax)*18/118).round(2)
+      else
+        0
+      end
+    end
+
     # FIXME брать реальную долю платежа
     def price_payment_commission
       case kind
