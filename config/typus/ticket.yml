@@ -11,6 +11,7 @@ Ticket:
      - price_tax
      - price_discount
      - price_our_markup
+     - price_penalty
      - office_id
      - validator
      - status
