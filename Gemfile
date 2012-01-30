@@ -16,16 +16,12 @@ group :deployment do
   gem 'capistrano_colors'
 end
 
-gem 'dynamic_form'
 gem 'yajl-ruby'
-gem 'rake'
 gem 'whenever', :require => false
-gem 'i18n'
 gem 'cucumber'
 gem 'handsoap', :git => 'git://github.com/codesnik/handsoap.git', :branch => 'fixing_async_again'
 gem 'curb'
 gem 'typhoeus'
-gem 'nokogiri'
 gem 'crack'
 gem "every"
 gem "memoize"
@@ -34,7 +30,6 @@ gem 'russian', :git => 'https://github.com/codesnik/russian.git'
 #gem 'graticule'
 gem 'mysql2'
 gem 'paper_trail'
-gem 'tzinfo'
 gem 'geo_ip'
 gem 'airbrake'
 gem 'newrelic_rpm'
@@ -52,7 +47,6 @@ gem 'mongo-rails-instrumentation'
 gem 'haml'
 
 gem 'typus', :git => 'https://github.com/Eviterra/typus.git', :branch => "wip/date_filters"
-gem 'fastercsv', :platforms => :ruby_18
 
 gem 'trashed', :git => 'https://github.com/codesnik/trashed.git'
 

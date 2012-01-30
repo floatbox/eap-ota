@@ -6,7 +6,7 @@ module CustomCSV
     fields = @resource.typus_fields_for(:csv)
     filename = Rails.root.join("tmp", "export-#{@resource.to_resource}-#{Time.zone.now.to_s(:number)}.csv")
     options = { :conditions => @conditions, :batch_size => 1000 }
-    ::FasterCSV.open(filename, 'w', :col_sep => ';') do |csv|
+    ::CSV.open(filename, 'w', :col_sep => ';') do |csv|
       csv << fields.keys
       @resource.find_in_batches(options) do |records|
         records.each do |record|

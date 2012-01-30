@@ -121,7 +121,6 @@ GEM
     daemons (1.1.6)
     database_cleaner (0.7.1)
     diff-lcs (1.1.3)
-    dynamic_form (1.1.4)
     erubis (2.7.0)
     every (1.1)
     execjs (1.3.0)
@@ -131,7 +130,6 @@ GEM
     factory_girl_rails (1.6.0)
       factory_girl (~> 2.5.0)
       railties (>= 3.0.0)
-    fastercsv (1.5.4)
     fastthread (1.0.7)
     ffi (1.0.11)
     gem_plugin (0.2.3)
@@ -347,11 +345,9 @@ DEPENDENCIES
   cucumber-rails
   curb
   database_cleaner
-  dynamic_form
   every
   eviterra-instrumentation!
   factory_girl_rails
-  fastercsv
   geo_ip
   growl
   guard
@@ -359,7 +355,6 @@ DEPENDENCIES
   guard-spork
   haml
   handsoap!
-  i18n
   interactive_editor
   jquery-rails
   libnotify
@@ -371,12 +366,10 @@ DEPENDENCIES
   morpher_inflect
   mysql2
   newrelic_rpm
-  nokogiri
   paper_trail
   passenger
   qu-mongo
   rails (= 3.1.3)
-  rake
   rb-fchange
   rb-fsevent
   rb-inotify
@@ -391,7 +384,6 @@ DEPENDENCIES
   trashed!
   typhoeus
   typus!
-  tzinfo
   uglifier
   vcr
   webmock
