@@ -81,59 +81,40 @@ module RamblerApi
     uri = "http://eviterra.com/api/rambler_booking.xml?#{string}"
   end
 
-  def self.generate_hash recommendation
-
-    hash = {}
-
-
+  def self.recommendation_hash recommendation
+    hash, hash[:dir], hash[:ret] = {}, {}, {}
     hash[:va] = recommendation.validating_carrier_iata
-    hash[:dir] = {}
-    hash[:ret] = {}
+    hash[:dir], hash[:ret] = recommendation.segments.map do |segment|
+      segment_hash(segment, recommendation)
+    end
+    hash
+  end
 
-    key = 0
-    recommendation.segments.first.flights.collect do |flight|
-      cabin = CABINS_MAPPING[recommendation.cabin_for_flight(flight)]
-      unless cabin
-        raise ArgumentError, "Got unexpected cabin : #{ recommendation.cabin_for_flight(flight)}"
-      end
-      hash[:dir][key.to_s]= {:oa => flight.operating_carrier_iata,
+  def self.flight_hash flight, recommendation
+    cabin = CABINS_MAPPING[recommendation.cabin_for_flight(flight)]
+    unless cabin
+      raise ArgumentError, "Got unexpected cabin : #{ recommendation.cabin_for_flight(flight)}"
+    end
+    {:oa => flight.operating_carrier_iata,
        :n  => flight.flight_number,
-       :ma => flight.marketing_carrier_iata,
        :bcl =>recommendation.booking_class_for_flight(flight),
-       :cls => cabin,
+       :cls =>cabin,
+       :ma => flight.marketing_carrier_iata,
        :dep => {
           :p => flight.departure_iata,
           :dt => flight.departure_date
         },
        :arr => {
           :p => flight.arrival_iata
-        }
-      }
-      key += 1
+       }
+    }
+  end
+
+  def self.segment_hash segment, recommendation
+    temp = {}
+    segment.flights.each.with_index do |flight, index|
+      temp[index.to_s] = flight_hash(flight, recommendation)
     end
-    if recommendation.segments.second
-      key = 0
-      recommendation.segments.second.flights.collect do |flight|
-        cabin = CABINS_MAPPING[recommendation.cabin_for_flight(flight)]
-        unless cabin
-          raise ArgumentError, "Got unexpected cabin : #{ recommendation.cabin_for_flight(flight)}"
-        end
-        hash[:ret][key.to_s] = {:oa => flight.operating_carrier_iata,
-         :n  => flight.flight_number,
-         :bcl =>recommendation.booking_class_for_flight(flight),
-         :cls =>cabin,
-         :ma => flight.marketing_carrier_iata,
-         :dep => {
-            :p => flight.departure_iata,
-            :dt => flight.departure_date
-          },
-         :arr => {
-            :p => flight.arrival_iata
-          }
-        }
-        key +=1
-      end
-    end
-    hash
+    temp
   end
 end

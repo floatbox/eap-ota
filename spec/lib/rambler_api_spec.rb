@@ -118,7 +118,7 @@ describe RamblerApi do
   end
 
   it 'should generate correct hash' do
-    described_class.generate_hash(recommendation).should == request_params
+    described_class.recommendation_hash(recommendation).should == request_params
   end
 
   it 'should generate correct hash for rambler' do
