@@ -224,16 +224,6 @@ class Order < ActiveRecord::Base
     e.message
   end
 
-  def payment_state_raw
-    if payment_type == 'card'
-       "#{payture_state} #{payture_amount}"
-    else
-      "не использовалась"
-    end
-  rescue => e
-    "ошибка получения состояния: #{e.message}"
-  end
-
   def load_tickets
     @tickets_are_loading = true
     if source == 'amadeus'

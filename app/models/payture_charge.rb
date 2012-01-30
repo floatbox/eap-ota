@@ -122,6 +122,13 @@ class PaytureCharge < Payment
   end
 
   # для админки
+  def payment_state_raw
+    response = gateway.state(:order_id => ref)
+    response.err_code || "#{response.state}: #{response.amount}"
+  rescue
+    $!.message
+  end
+
   def control_links
     refund_link + ' ' + CashRefund.refund_link(order_id) if charged?
   end
