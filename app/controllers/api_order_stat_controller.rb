@@ -19,9 +19,9 @@ class ApiOrderStatController < ApplicationController
   private
     def authenticate
       authenticate_or_request_with_http_basic do |id, password|
-        (Conf.api.passwords.include? id) && (password == Conf.api.passwords[id])
+        @id = id
+        @id.present? && password == Conf.api.passwords[@id]
       end
-      @id = id
     end
 end
 
