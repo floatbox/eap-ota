@@ -2,6 +2,7 @@
 
 module RamblerApi
   CABINS_MAPPING = {'M' => 'E', 'W' => 'E', 'Y' => 'E', 'C' => 'B', 'F' => 'F'}
+  INCOMING_CABINS_MAPPING = {'E' => 'Y', 'B' => 'C', 'F' => 'F'}
   include KeyValueInit
 
   def self.redirecting_uri params
@@ -38,12 +39,12 @@ module RamblerApi
 
     params[:dir].each do |k, segment|
       booking_classes << segment[:bcl]
-      cabins << segment[:cls]
+      cabins << INCOMING_CABINS_MAPPING[segment[:cls]]
     end
     if params[:ret].present?
       params[:ret].each do |k, segment|
         booking_classes << segment[:bcl]
-        cabins << segment[:cls]
+        cabins << INCOMING_CABINS_MAPPING[segment[:cls]]
       end
     end
 
@@ -95,7 +96,7 @@ module RamblerApi
       unless cabin
         raise ArgumentError, "Got unexpected cabin : #{ recommendation.cabin_for_flight(flight)}"
       end
-      hash[:dir][key]= {:oa => flight.operating_carrier_iata,
+      hash[:dir][key.to_s]= {:oa => flight.operating_carrier_iata,
        :n  => flight.flight_number,
        :ma => flight.marketing_carrier_iata,
        :bcl =>recommendation.booking_class_for_flight(flight),
@@ -117,7 +118,7 @@ module RamblerApi
         unless cabin
           raise ArgumentError, "Got unexpected cabin : #{ recommendation.cabin_for_flight(flight)}"
         end
-        hash[:ret][key] = {:oa => flight.operating_carrier_iata,
+        hash[:ret][key.to_s] = {:oa => flight.operating_carrier_iata,
          :n  => flight.flight_number,
          :bcl =>recommendation.booking_class_for_flight(flight),
          :cls =>cabin,

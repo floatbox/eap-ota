@@ -5,7 +5,7 @@ describe BookingController do
 
     let :request_params do
       { :va  => 'SU',                                   #Validating airline (авиакомпания, на бланке которой выписывается билет)
-        :dir => { 0=> {                                      #Cегменты прямого перелета
+        :dir => { '0' => {                                      #Cегменты прямого перелета
           :bcl => 'M',                                  #Booking_class
           :cls => 'B',                                  #Cabin
           :oa  => 'SU',                                 #Перевозчик, владелец самолета (IATA код Operating Airline)
@@ -40,7 +40,7 @@ describe BookingController do
         :to => 'MOW',
         :date1 => '280911',
         :adults => 1,
-        :cabin => 'B',
+        :cabin => 'C',
         :partner => 'rambler')).and_return(pricer_form)
       pricer_form.stub(:valid?).and_return('true')
       pricer_form.stub(:save_to_cache).and_return('true')
@@ -57,7 +57,7 @@ describe BookingController do
       flights.stub_chain(:departure, :city, :iata).and_return('LED')
       flights.stub_chain(:arrival, :city, :iata).and_return('SVO')
       flights.stub(:departure_date).and_return('280911')
-      recommendation.stub_chain(:cabins, :first).and_return('B')
+      recommendation.stub_chain(:cabins, :first).and_return('C')
 
 
       Flight.should_receive(:new).with(hash_including(
@@ -71,9 +71,9 @@ describe BookingController do
         :source => 'amadeus',
         :validating_carrier_iata => 'SU',
         :booking_classes => ['M'],
-        :cabins => ['B']
+        :cabins => ['C']
         )).and_return(recommendation)
-      recommendation.should_receive(:serialize).and_return("amadeus.SU.N.B..SU840LEDMOW280911" )
+      recommendation.should_receive(:serialize).and_return("amadeus.SU.N.C..SU840LEDMOW280911" )
       get :api_rambler_booking, request_params
     end
   end
@@ -112,8 +112,8 @@ describe BookingController do
         pricer.stub(:human_lite)
         pricer.stub(:query_key)
         order = mock('order')
- 	      order.stub(:save_to_cache)
- 	      order.stub(:number)
+        order.stub(:save_to_cache)
+        order.stub(:number)
 
         OrderForm.should_receive(:new).and_return(order)
         get :preliminary_booking, partner_and_marker_present
@@ -154,8 +154,8 @@ describe BookingController do
         pricer.stub(:human_lite)
         pricer.stub(:query_key)
         order = mock('order')
- 	      order.stub(:save_to_cache)
- 	      order.stub(:number)
+        order.stub(:save_to_cache)
+        order.stub(:number)
 
         OrderForm.should_receive(:new).and_return(order)
         get :preliminary_booking, marker_present

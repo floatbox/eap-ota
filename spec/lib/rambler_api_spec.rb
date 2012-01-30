@@ -4,7 +4,8 @@ require 'spec_helper'
 
 describe RamblerApi do
   let(:flight1) do
-    Flight.new(:operating_carrier_iata => 'SU',
+    Flight.new(
+      :operating_carrier_iata => 'SU',
       :marketing_carrier_iata => 'UN',
       :flight_number => '100',
       :departure_iata => 'SVO',
@@ -17,7 +18,8 @@ describe RamblerApi do
       :equipment_type_iata => '747')
   end
   let(:flight2) do
-    Flight.new(:operating_carrier_iata => 'UN',
+    Flight.new(
+      :operating_carrier_iata => 'UN',
       :marketing_carrier_iata => 'UN',
       :flight_number => '200',
       :departure_iata => 'LED',
@@ -30,7 +32,8 @@ describe RamblerApi do
       :equipment_type_iata => 'TU3')
   end
   let(:flight3) do
-    Flight.new(:operating_carrier_iata => 'BP',
+    Flight.new(
+      :operating_carrier_iata => 'BP',
       :marketing_carrier_iata => 'UN',
       :flight_number => '300',
       :departure_iata => 'YXU',
@@ -60,8 +63,8 @@ describe RamblerApi do
   let(:request_params) do
     {
       :va  => 'SU',
-      :dir => { 0 =>
-        {
+      :dir => {
+        '0' => {
           :bcl => 'M',
           :cls => 'E',
           :oa  => 'SU',
@@ -74,8 +77,8 @@ describe RamblerApi do
           :arr => {
             :p => 'LED'
           }
-      }, 1 =>
-      {
+        },
+        '1' => {
           :bcl => 'N',
           :cls => 'E',
           :oa  => 'UN',
@@ -90,8 +93,8 @@ describe RamblerApi do
           }
         }
       },
-    :ret => {0 =>
-        {
+      :ret => {
+        '0' => {
           :bcl => 'K',
           :cls => 'E',
           :oa  => 'BP',
@@ -104,14 +107,14 @@ describe RamblerApi do
           :arr => {
             :p => 'SVO'
           }
-        }}
-
+        }
+      }
     }
   end
 
   it 'should generate correct url' do
     uri = described_class.redirecting_uri request_params
-    uri.should include("amadeus.SU.MNK.EEE..SU:UN100SVOLED#{future_date}-UN200LEDYXU#{future_date}.BP:UN300YXUSVO#{future_date(2)}")
+    uri.should include("amadeus.SU.MNK.YYY..SU:UN100SVOLED#{future_date}-UN200LEDYXU#{future_date}.BP:UN300YXUSVO#{future_date(2)}")
   end
 
   it 'should generate correct hash' do
