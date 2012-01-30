@@ -2,6 +2,13 @@
 <div id="term">Терминал:
   <pre data-replace-with="<%= url_for :action => :pnr_raw, :id => @item.id %>"></pre>
 </div>
+<div>
+  <strong>
+    <%= @item.payment_status %> / <%= @item.ticket_status %>
+    <br>
+    <br>
+  </strong>
+</div>
 <% if @item.code && @item.payment_status == 'not blocked' && @item.offline_booking? %>
 <div id="pay_url">
 URL для оплаты: <%= link_to edit_payment_url(:code => @item.code), edit_payment_url(:code => @item.code)%>
