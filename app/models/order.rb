@@ -287,17 +287,16 @@ class Order < ActiveRecord::Base
     # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
     return if old_booking || @tickets_are_loading
     price_total_old = self.price_total
-    pure_tickets = tickets.where('processed = 1 AND status != "voided"')
 
-    self.price_fare = pure_tickets.every.price_fare.sum
-    self.price_tax = pure_tickets.every.price_tax.sum
+    self.price_fare = sold_tickets.every.price_fare.sum
+    self.price_tax = sold_tickets.every.price_tax.sum
 
-    self.price_consolidator = pure_tickets.every.price_consolidator.sum
-    self.price_agent = pure_tickets.every.price_agent.sum
-    self.price_subagent = pure_tickets.every.price_subagent.sum
-    self.price_blanks = pure_tickets.every.price_blanks.sum
-    self.price_discount = pure_tickets.every.price_discount.sum
-    self.price_our_markup = pure_tickets.every.price_our_markup.sum
+    self.price_consolidator = sold_tickets.every.price_consolidator.sum
+    self.price_agent = sold_tickets.every.price_agent.sum
+    self.price_subagent = sold_tickets.every.price_subagent.sum
+    self.price_blanks = sold_tickets.every.price_blanks.sum
+    self.price_discount = sold_tickets.every.price_discount.sum
+    self.price_our_markup = sold_tickets.every.price_our_markup.sum
 
     self.price_difference = price_total - price_total_old if price_difference == 0
     save
