@@ -42,9 +42,6 @@
             Скидка / Discount<br>
           <% end %>
           Итоговая стоимость / Total<br>
-          <% if @prices.vat %>
-            В том числе НДС <br>
-          <% end %>
           Форма оплаты / Paid by<br>
           Дата оформления / Issue date
           </font>
@@ -57,9 +54,6 @@
             <%= exact_price(@prices.price_declared_discount) %> RUB<br>
           <% end %>
           <%= exact_price(@prices.price_with_payment_commission) %> RUB<br>
-          <% if @prices.vat %>
-            <%= exact_price(@prices.vat) %> RUB<br>
-          <% end %>
           <%= @prices.paid_by %><br>
           <%= @prices.created_at.strftime('%d.%m.%y') %>
           </font>
