@@ -486,5 +486,16 @@ class Order < ActiveRecord::Base
     "#{source} #{pnr_number}"
   end
 
+  def self.api_stats_hash orders
+    orders.map do |order|
+      {
+      :marker => order.marker,
+      :price => order.price_with_payment_commission,
+      :income => '%.2f' % order.income,
+      :created_at => order.created_at,
+      :route => order.route
+      }
+    end
+  end
 end
 
