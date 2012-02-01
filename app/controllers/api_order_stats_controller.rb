@@ -3,16 +3,8 @@ class ApiOrderStatsController < ApplicationController
   before_filter :authenticate
 
   def index
-    orders = Order.where(:created_at=>Date.parse(params[:date_start])..Date.parse(params[:date_end]), :partner => @id)
-    orders_to_send = orders.map do |order|
-      {
-      :marker => order.marker,
-      :price => order.price_with_payment_commission,
-      :income => order.income,
-      :created_at => order.created_at,
-      :route => order.route
-      }
-    end
+    orders = Order.where(:created_at=>Date.parse(params[:date_start])..Date.parse(params[:date_end] || Date.today.strftime('%Y/%m/%d')), :partner => @id)
+    orders_to_send = Order.api_stats_hash orders
     render :json => orders_to_send.to_json
   end
 
