@@ -489,6 +489,7 @@ class Order < ActiveRecord::Base
   def self.api_stats_hash orders
     orders.map do |order|
       {
+      :id => order.id.to_s,
       :marker => order.marker,
       :price => order.price_with_payment_commission,
       :income => '%.2f' % order.income,
