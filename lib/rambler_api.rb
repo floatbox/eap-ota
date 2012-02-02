@@ -7,7 +7,7 @@ module RamblerApi
 
   def self.redirecting_uri params
     direct_flights = []
-      params[:dir].each do |k , flight|
+    params[:dir].sort.map.each do |k , flight|
       direct_flights << Flight.new(
         :operating_carrier_iata => flight[:oa],
         :marketing_carrier_iata => flight[:ma],
@@ -20,7 +20,7 @@ module RamblerApi
 
     if params[:ret].present?
       return_flights = []
-      params[:ret].each do |k, flight|
+      params[:ret].sort.map.each do |k, flight|
         return_flights << Flight.new(
           :operating_carrier_iata => flight[:oa],
           :marketing_carrier_iata => flight[:ma],
@@ -37,12 +37,12 @@ module RamblerApi
 
     booking_classes, cabins = [],[]
 
-    params[:dir].each do |k, segment|
+    params[:dir].sort.map.each do |k, segment|
       booking_classes << segment[:bcl]
       cabins << INCOMING_CABINS_MAPPING[segment[:cls]]
     end
     if params[:ret].present?
-      params[:ret].each do |k, segment|
+      params[:ret].sort.map.each do |k, segment|
         booking_classes << segment[:bcl]
         cabins << INCOMING_CABINS_MAPPING[segment[:cls]]
       end
