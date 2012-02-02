@@ -2137,8 +2137,6 @@ commission "1/0"
 carrier "J2", "Azerbaijan Hava Yollari"
 ########################################
 
-carrier_defaults :consolidator => '1%'
-
 example 'svocdg'
 agent    "1 рубль за 1 выписанный билет на стоке 771"
 subagent "5 коп. с билета по опубл тарифам на собств. рейсы J2"
