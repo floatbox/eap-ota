@@ -120,6 +120,15 @@ ru:
       payment:
         show_link: "Платеж"
         status_decorated: "Состояние"
+        price: "Сумма, р."
+        order: "Заказ"
+        commission: "Эквайринг, %"
+        earnings: "Поступления, р."
+        charged_on: "Проведен"
+        payment_info: "Карта"
+        error_explanation: "Ошибка"
+        control_links: "Управление"
+        created_at: "Создан"
         <<: *PRICING_ATTRIBUTES
 
 
