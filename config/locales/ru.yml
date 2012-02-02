@@ -11,7 +11,7 @@ ru:
         unit: "руб."
         # These three are to override number.format and are optional
         separator: "."
-        delimiter: "\_"
+        delimiter: " "
         precision: 2
   activerecord:
     models:
@@ -166,6 +166,7 @@ ru:
   Geo: Геосправочники
   Admin: Администрирование
   Orders: Заказы
+  Hot Offers: Маркетинг
 
   'Show by %{attribute}': '-- %{attribute} --'
   'View all %{attribute}': '-- %{attribute} --'
