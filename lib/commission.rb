@@ -318,16 +318,14 @@ carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'dmetrn/economy'
 example 'dmetrn/business'
-strt_date "01.01.2012"
-expr_date "31.01.2012"
+strt_date "01.02.2012"
 agent "5% на тарифы Эконом и Бизнес класса на направление: ТУРИН"
 subagent "3% турин"
 check { city_iatas.last == 'TRN' }
 commission "5%/3%"
 
 example 'vceflu/economy fluvce/economy'
-strt_date "01.01.2012"
-expr_date "31.01.2012"
+strt_date "01.02.2012"
 agent "Строго по направлениям:
 Северная Америка: Нью-Йорк, Лос-Анджелес, Майами, Чикаго, Бостон, Торонто;
 Южная Америка: Сан-Пауло, Рио-Де-Жанейро, Каракас, Буэнос-Айрес.
@@ -341,8 +339,7 @@ check { (city_iatas && %W(FLU EWR LGA JFK LAX SMO VNY WHP MIA ТNT OPF TMB MDW O
 commission "7%/5%"
 
 example 'vceflu/business fluvce/business'
-strt_date "01.01.2012"
-expr_date "31.01.2012"
+strt_date "01.02.2012"
 agent "Строго по направлениям:
 Северная Америка: Нью-Йорк, Лос-Анджелес, Майами, Чикаго, Бостон, Торонто;
 Южная Америка: Сан-Пауло, Рио-Де-Жанейро, Каракас, Буэнос-Айрес.
@@ -1401,6 +1398,24 @@ carrier "MA", "MALEV"
 
 carrier_defaults :consolidator => 0, :our_markup => '1%'
 
+example "svobud/c budsvo/c"
+strt_date "01.02.2012"
+expr_date "30.04.2012"
+agent "12% от тарифа по классам J,C,D,I,Y,B;"
+subagent ""
+subclasses "JCDIYB"
+disabled "no subagent"
+commission "12%/0%"
+
+example "svobud/k budsvo/k"
+strt_date "01.02.2012"
+expr_date "30.04.2012"
+agent "6% от тарифа по классам K,M,L,V,S,Z, N."
+subagent ""
+subclasses "KMLVSZN"
+disabled "no subagent"
+commission "6%/0%"
+
 example "svobud budsvo/ab"
 agent    "1 руб. с билета от опубл., конфиде.тарифов Эконом и Бизнес класса и при комбинации классов; от опубл.тарифа в случае применения совместного тарифа авиакомпаний при условии, что не менее 50 процентов маршрута должно быть закрыто на авиакомпанию МАЛЕВ (запрещается оформлять перевозку на билетах Авиакомпании без хотя бы одного участка Авиакомпании)"
 subagent "5 коп. с билета от опубл., конфиде.тарифов Экономического и Бизнес класса и при комбинации классов; от опубл.тарифа в случае применения совместного тарифа авиакомпаний при условии, что не менее 50 процентов маршрута должно быть закрыто на авиакомпанию МАЛЕВ (запрещается оформлять перевозку на билетах Авиакомпании без хотя бы одного участка Авиакомпании)"
@@ -1677,10 +1692,10 @@ discount "2%"
 commission "5%/3%"
 
 example 'cdgsvo/ab'
-agent "0% от опубл. тарифов на рейсы Interline без участка PS"
+agent "5% от опубл. тарифов на рейсы Interline без участка PS"
 subagent "0% от опубл. тарифов на рейсы Interline без участка PS"
 interline :absent
-commission "0%/0%"
+commission "5%/0%"
 
 carrier "QF", "QANTAS AIRWAYS\n(не BSP!!!)"
 ########################################
@@ -2464,5 +2479,118 @@ carrier "TU", "TUNIS AIR"
 agent "3 (три) % от всех опубл. тарифов на собств. рейсы TU"
 subagent "2% от всех опубл. тарифов на собств. рейсы TU"
 commission "3%/2%"
+
+carrier "CM", "COPA AIRLINES"
+########################################
+
+agent "1 (один) % от всех опубл. и спец. тарифов на собств. рейсы CM. (Interliтe без участка CM запрещен)."
+subagent ""
+disabled "no subagent"
+commission "1%/0"
+
+carrier "R3", "Авиакомпания «Якутия»"
+########################################
+
+agent "6 % от всех опубл. тарифов на все собств.рейсы Авиакомпании;"
+subagent ""
+disabled "no subagent"
+commission "6%/0"
+
+agent "4 % от всех опубл. тарифов на все рейсы, выполняемые Интерлайн-партнерами Авиакомпании."
+subagent ""
+interline :yes
+disabled "no subagent"
+commission "4%/0"
+
+carrier "S3", "SANTA BARBARA AIRLINES"
+########################################
+
+agent "1 (один) % от всех опубл. тарифов на собств. рейсы S3"
+subagent ""
+disabled "no subagent"
+commission "1%/0"
+
+carrier "GA", "GARUDA INDONESIA"
+########################################
+
+agent "5% (Пять) от всех опубл. тарифов на собств.рейсы GA на местные перелёты;"
+subagent ""
+domestic
+disabled "no subagent"
+commission "5%/0"
+
+example "jogjed"
+example "jogruh"
+agent "от всех опубл. тарифов на собств. рейсы GA на международные перелёты зависит от пункта отправления (см. таблицу ниже):
+ИНДОНЕЗИЯ: 1 РУБ  - если пункт назначения JED/RUH"
+subagent ""
+check { country_iatas.first == 'ID' && (city_iatas.last == 'JED' || city_iatas.last == 'RUH') }
+disabled "no subagent"
+commission "1/0"
+
+agent "ИНДОНЕЗИЯ: 7% - если пункт назначения любой город, кроме JED/RUH"
+subagent ""
+disabled "no subagent"
+commission "7%/0"
+
+example "joghkg"
+example "jogkul"
+example "jogsin"
+agent "1 РУБ - SIN, 1 РУБ - HKG, 1 РУБ - KUL"
+subagent ""
+check { country_iatas.first == 'ID' && (city_iatas.last == 'SIN' || city_iatas.last == 'KUL' || city_iatas.last == 'HKG') }
+disabled "no subagent"
+commission "1/0"
+
+example "okojog"
+agent "ЯПОНИЯ: 1 РУБ - все тарифы, кроме GA FLEX/PEX FARES"
+subagent ""
+check { country_iatas.first == 'JP' }
+disabled "no subagent"
+commission "1/0"
+
+example "okojog"
+agent "ЯПОНИЯ: 7% - GA FLEX/PEX FARES"
+subagent""
+check { country_iatas.first == 'JP' }
+disabled "no subagent... FLEX PEX?"
+commission "7%/0"
+
+example "okoams"
+agent "1%  - AMS"
+subagent ""
+check { country_iatas.first = 'JP' && city_iatas.last == 'AMS' }
+disabled "no subagent"
+commission "1%/0"
+
+example "okoswp"
+example "okomel"
+example "okoper"
+example "okosyd"
+agent "5%  - SWP, 5%  - MEL/PER/SYD"
+subagent ""
+check { country_iatas.first == 'JP' && (city_iatas.last == 'SWP' || city_iatas.last == 'MEL' || city_iatas.last == 'PER' || city_iatas.last == 'SYD') }
+disabled "no subagent"
+commission "5%/0"
+
+
+example "okossn"
+example "okojed"
+example "okoruh"
+example "okodxb"
+agent "7% - SEL, 7% - JED/RUH, 7% - DXB"
+subagent ""
+check { country_iatas.first == 'JP' && (city_iatas.last == 'SSN' || city_iatas.last == 'JED' || city_iatas.last == 'RUH' || city_iatas.last == 'DXB') }
+disabled "no subagent"
+commission "7%/0"
+
+example "okobkk"
+example "okopek"
+example "okosha"
+agent "9% - BKK, 9% - BJS/CAN/SHA"
+subagent ""
+check { country_iatas.first == 'JP' && (city_iatas.last == 'BKK' || city_iatas.last == 'PEK' || city_iatas.last == 'SHA') }
+disabled "no subagent"
+commission "9%/0"
 
 end
