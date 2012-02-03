@@ -20,7 +20,7 @@ describe Amadeus::Response::PNRRetrieve do
 
   end
 
-  describe 'with another complex' do
+  describe 'with another complex exchange' do
 
     let_once! :response do
       body = File.read('spec/amadeus/xml/PNR_Retrieve_with_another_exchange.xml')
@@ -31,9 +31,9 @@ describe Amadeus::Response::PNRRetrieve do
     subject {response}
 
     it {should have(1).exchanged_tickets}
-    specify { subject.parsed_exchange_string('603-2962817528-29MOW28AUG11/92223412/603-29628175286E1-294').should == {:code => '603', :number => '2962817528-29', :inf => nil} }
+    specify { subject.parsed_exchange_string('603-2962817528-29MOW28AUG11/92223412/603-29628175286E1-294').should == {:code => '603', :number => '2962817528', :inf => nil} }
     specify { subject.exchanged_tickets.should have_key([[1, "a"], [1, 3]])}
-    specify { subject.exchanged_tickets[[[1, "a"], [1, 3]]].should == {:code => '603', :number => '2962817528-29'} }
+    specify { subject.exchanged_tickets[[[1, "a"], [1, 3]]].should == {:code => '603', :number => '2962817528'} }
 
   end
 
