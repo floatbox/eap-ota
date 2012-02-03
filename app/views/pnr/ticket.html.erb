@@ -56,7 +56,7 @@
           <% unless @prices.price_declared_discount.zero? %>
             <%= exact_price(@prices.price_declared_discount) %> RUB<br>
           <% end %>
-          <%= exact_price(@prices.price_with_payment_commission) %> RUB<br>
+          <%= exact_price(@prices.recalculated_price_with_payment_commission) %> RUB<br>
           <% if @prices.show_vat? %>
             <%= exact_price(@prices.vat) %> RUB<br>
           <% end %>
