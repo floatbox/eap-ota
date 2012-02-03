@@ -27,6 +27,7 @@ describe PaytureRefund do
     refund.price.should == -23.5
   end
 
+  # FIXME кривой тест
   it "should not allow to save refund without charge" do
     order = Factory(:order)
     refund = PaytureRefund.new :price => -5, :order => order

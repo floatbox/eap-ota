@@ -5,14 +5,22 @@ describe CashRefund do
 
   it 'should recalculate earnings on save' do
     order = Factory(:order)
-    charge = CashCharge.new
+    charge = CashCharge.new :price => 23.5
     order.payments << charge
     charge.reload
-    #refund = charge.refunds.create :price => -23.5
-    refund = CashRefund.create :price => -23.5, :order => order
+    refund = charge.refunds.create :price => -23.5
 
     refund.reload
     refund.earnings.should == -23.5
+  end
+
+  # FIXME кривой тест
+  it "should not allow to save refund without charge" do
+    order = Factory(:order)
+    refund = CashRefund.new :price => -5, :order => order
+
+    refund.save.should == false
+    refund.errors[:charge].should_not be_empty
   end
 
   describe "state" do

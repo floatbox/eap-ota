@@ -129,6 +129,7 @@ ru:
         error_explanation: "Ошибка"
         control_links: "Управление"
         created_at: "Создан"
+        external_gateway_link: "Детальная история"
         <<: *PRICING_ATTRIBUTES
 
 

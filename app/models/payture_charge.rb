@@ -130,11 +130,11 @@ class PaytureCharge < Payment
   end
 
   def control_links
-    refund_link + ' ' + CashRefund.refund_link(order_id) if charged?
+    refund_link if charged?
   end
 
   def refund_link
-    "<a href='/admin/payture_refunds/new?_popup=true&resource[charge_id]=#{id}' class='iframe_with_page_reload'>Возврат на карту</a>".html_safe
+    "<a href='/admin/payture_refunds/new?_popup=true&resource[charge_id]=#{id}' class='iframe_with_page_reload'>добавить возврат</a>".html_safe
   end
 
   def external_gateway_link
