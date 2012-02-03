@@ -77,8 +77,8 @@ class Strategy::Sirena < Strategy::Base
 
     {
       :departure_date => order_resp.flights.first.dept_date,
-      :price_fare => pricing_resp.recommendation.total_fare,
-      :price_tax => pricing_resp.recommendation.total_tax
+      :price_fare => pricing_resp.recommendation.price_fare,
+      :price_tax => pricing_resp.recommendation.price_tax
     }
   end
 
