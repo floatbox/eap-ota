@@ -16,6 +16,10 @@ class Strategy::Sirena < Strategy::Base
   # #######
   include Strategy::Sirena::Booking
 
+  # get tickets hashes
+  # ##################
+  include Strategy::Sirena::Tickets
+
   # canceling
   # ########
   # FIXME обработать ошибки?
