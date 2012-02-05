@@ -17,7 +17,6 @@ Order:
       - urgent
       - email_status
     show:
-      - old_booking
       - order_id
       - has_refunds
       - source
@@ -68,7 +67,6 @@ Order:
       - income_payment_gateways
       - income
     form:
-      - old_booking
       - section_general_info
       - description
       - has_refunds
