@@ -28,7 +28,7 @@ class Ticket < ActiveRecord::Base
     :through => :order, :source => :tickets, :order => 'tickets.number asc',
     :conditions => lambda {|_| ["tickets.id <> ?", id] }
 
-  delegate :need_attention, :paid_by, :to => :order
+  delegate :need_attention, :paid_by, :show_vat?, :to => :order
 
   delegate :commission_carrier, :to => :order, :allow_nil => true
 
