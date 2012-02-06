@@ -2,6 +2,7 @@
 class PaytureRefund < Payment
 
   belongs_to :charge, :class_name => 'PaytureCharge', :foreign_key => 'charge_id'
+  has_many :refunds, :through => :charge
 
   validates_presence_of :charge
   before_create :set_ref

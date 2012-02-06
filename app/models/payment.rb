@@ -13,6 +13,10 @@ class Payment < ActiveRecord::Base
   attr_accessor :custom_fields
   has_commission_columns :commission
 
+  # для вьюшек тайпуса. оверрайдим в субклассах.
+  belongs_to :charge, :class_name => 'Payment', :foreign_key => 'charge_id'
+  has_many :refunds, :class_name => 'Payment', :foreign_key => 'charge_id'
+
   # не секьюрити ради, а read_only тайпуса для
   attr_protected :type
 

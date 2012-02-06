@@ -13,8 +13,7 @@ Payment: &PAYMENT_CONFIG
   #  default_action_on_item: show
   scopes: secured, not_secured, payture, cash, charges, refunds
   search: =ref, =id, name_in_card
-  relationships: order
-  #, refunds
+  relationships: order, refunds
   order_by: -created_at
   filters: created_at, charged_on, type, status
   application: Orders, 1
