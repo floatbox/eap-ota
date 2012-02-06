@@ -1,1 +1,0 @@
-require "av_hack"
