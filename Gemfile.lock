@@ -366,6 +366,7 @@ DEPENDENCIES
   morpher_inflect
   mysql2
   newrelic_rpm
+  nokogiri
   paper_trail
   passenger
   qu-mongo
