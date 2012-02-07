@@ -63,6 +63,111 @@ describe Order do
     end
   end
 
+
+  describe '#reload_tickets with exchange' do
+
+    context 'with one non-zero ticket' do
+      before(:all) do
+        @old_ticket = Ticket.new(:price_fare => 21590, :price_tax => 9878, :kind => 'ticket', :status => 'ticketed', :code => '123', :number => '123456789')
+        @order = Order.new(:pnr_number => '', :price_fare => 21590, :price_tax => 9878, :price_with_payment_commission => BigDecimal('31946.68'), :source => 'amadeus')
+        @order.save
+        @old_ticket.order = @order
+        @old_ticket.save
+        @new_ticket_hashes = [
+          {:number => '123456787', :code => '123', :processed => true, :source => 'amadeus', :parent_id => @old_ticket.id, :status => 'ticketed', :price_fare => 0, :price_tax => 6075},
+          {:number => '123456789', :code => '123', :status => 'exchanged'}
+        ]
+        Strategy.stub_chain(:select, :get_tickets).and_return(@new_ticket_hashes)
+        @order.reload_tickets
+        @old_ticket.reload
+        @new_ticket = @order.tickets.find_by_number('123456787')
+      end
+
+      describe 'order' do
+        subject { @order }
+
+        its(:price_fare) {should == 0}
+        its(:price_tax_and_markup_and_payment) {should == 6250}
+        its(:price_tax) {should == 6075}
+        its(:recalculated_price_with_payment_commission) {should == 6250}
+
+      end
+
+      describe 'old_ticket' do
+        subject { @old_ticket }
+
+        its(:price_fare) {should == 21590}
+        its(:price_tax_and_markup_and_payment) {should == 10356.68}
+        its(:price_tax) {should == 9878}
+        its(:recalculated_price_with_payment_commission) {should == 31946.68}
+        its(:status) {should == 'exchanged'}
+
+      end
+
+      describe 'new ticket' do
+        subject { @new_ticket }
+
+        its(:price_fare) {should == 0}
+        its(:price_tax_and_markup_and_payment) {should == 6250}
+        its(:price_tax) {should == 6075}
+        its(:recalculated_price_with_payment_commission) {should == 6250}
+        its(:status) {should == 'ticketed'}
+        its(:parent) {should == @old_ticket}
+
+      end
+    end
+
+    context 'of two tickets with zero price' do
+      before(:all) do
+        @order = Order.new(:pnr_number => '', :price_fare => 20010, :price_tax => 10860, :price_with_payment_commission => BigDecimal('30729.94'), :source => 'amadeus', :price_discount => 1000.5)
+        @order.save
+        @old_tickets = [1,2].map {|n| Ticket.new(:price_fare => 10005, :price_tax => 5430, :price_discount => 500.25, :kind => 'ticket', :status => 'ticketed', :code => '123', :number => "123456789#{n}", :order => @order)}
+        @old_tickets.every.save
+        @new_ticket_hashes = [
+          {:number => '1234567871', :code => '123', :price_fare => 0, :price_tax => 0, :processed => true, :source => 'amadeus', :parent_id => @old_tickets[0].id, :status => 'ticketed'},
+          {:number => '1234567891', :code => '123', :status => 'exchanged'},
+          {:number => '1234567872', :code => '123', :price_fare => 0, :price_tax => 0, :processed => true, :source => 'amadeus', :parent_id => @old_tickets[1].id, :status => 'ticketed'},
+          {:number => '1234567892', :code => '123', :status => 'exchanged'}
+        ]
+        Strategy.stub_chain(:select, :get_tickets).and_return(@new_ticket_hashes)
+        @order.reload_tickets
+        @old_ticket = @old_tickets[0]
+        @old_ticket.reload
+        @new_ticket = @order.tickets.find_by_number('1234567871')
+      end
+
+      describe 'order' do
+        subject { @order }
+
+        its(:price_fare) {should == 0}
+        its(:price_tax_and_markup_and_payment) {should == 0}
+        its(:price_tax) {should == 0}
+        its(:recalculated_price_with_payment_commission) {should == 0}
+
+      end
+
+      describe 'old_ticket' do
+        subject { @old_ticket }
+
+        its(:price_fare) {should == 10005}
+        its(:price_tax_and_markup_and_payment) {should == 15364.97 - 10005}
+        its(:price_tax) {should == 5430}
+        its(:recalculated_price_with_payment_commission) {should == 15364.97}
+
+      end
+
+      describe 'new ticket' do
+        subject { @new_ticket }
+
+        its(:price_fare) {should == 0}
+        its(:price_tax_and_markup_and_payment) {should == 0}
+        its(:price_tax) {should == 0}
+        its(:recalculated_price_with_payment_commission) {should == 0}
+
+      end
+    end
+  end
+
   describe '#load_tickets' do
 
     before(:each) do
