@@ -95,6 +95,7 @@ ru:
         delivery: "Адрес доставки"
         partner: "Партнер"
         fix_price: "Закрепить итоговую цену / деньги уже взяты"
+        show_vat: "Показывать НДС"
         recalculation_alert: "Подсказка к перерассчету комиссий, сборов и цен"
         section_general_info: "Информация о заказе"
         section_recalculation: "Рассчет цены"
