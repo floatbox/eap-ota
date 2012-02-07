@@ -87,7 +87,8 @@ module Sirena
           res[:cabins] << cabin
           res[:flights] << "#{departure_iata} - #{arrival_iata} (#{carrier})"
         }
-        @ticket_hashes = result.map do |k, v| {
+        @ticket_hashes = result.sort.map do |k, v|
+          {
             :source => 'sirena',
             :pnr_number => @number,
             :number => (k.match(/([\d\w]+)-?(\d{10}-?\d*)/).to_a)[2],
