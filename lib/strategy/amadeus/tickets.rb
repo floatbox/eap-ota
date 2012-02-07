@@ -1,7 +1,7 @@
 # encoding: utf-8
 module Strategy::Amadeus::Tickets
 
-  def get_tickets_and_dept_date
+  def get_tickets
     pnr_resp = prices = nil
     ::Amadeus.booking do |amadeus|
       pnr_resp = amadeus.pnr_retrieve(:number => @order.pnr_number)
@@ -28,7 +28,7 @@ module Strategy::Amadeus::Tickets
       end
     end
 
-    [tickets, pnr_resp.flights.present? && pnr_resp.flights.first.dept_date]
+    tickets
   end
 
 end

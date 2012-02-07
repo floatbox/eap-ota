@@ -46,7 +46,7 @@ class Strategy::Base
   # get tickets hashes
   # ########
 
-  def get_tickets_and_dept_date
+  def get_tickets
     raise NotImplementedError
   end
 
