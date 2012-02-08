@@ -27,6 +27,27 @@ describe Strategy::Amadeus do
   pending "#raw_pnr"
   pending "#raw_ticket"
 
+  describe "#get_tickets" do
+    it 'returns correct price_fare for ticket with fare upgrade' do
+      pnr_resp = mock('PNRRetrieve')
+      tickets_hash = {[1, 'a'] => {:number => '123', :code => '456', :price_fare => 1000, :price_tax => 500}}
+      exchanged_tickets = {[1, 'a'] => {:number => '234', :code => '456', :status => 'exchanged'}}
+      tst_resp = mock('TicketDisplayTST')
+      pnr_resp.stub_chain(:tickets, :deep_merge).and_return(tickets_hash)
+      pnr_resp.should_receive(:exchanged_tickets).and_return(exchanged_tickets)
+      amadeus = mock('Amadeus')
+      amadeus.stub(:pnr_retrieve).and_return(pnr_resp)
+      amadeus.stub(:pnr_ignore)
+      amadeus.stub_chain(:ticket_display_tst, :prices_with_refs).and_return({})
+      Amadeus.should_receive(:booking).once.and_yield(amadeus)
+      old_ticket = mock('Ticket', :price_fare => 800, :code => '456', :number => '234', :id => 10)
+      Ticket.stub_chain(:where, :first).and_return(old_ticket)
+      Ticket.stub_chain(:office_ids, :include?).and_return(true)
+      result_tickets = Strategy::Amadeus.new(:order => mock('Order', :pnr_number => '', :commission_subagent => 0)).get_tickets
+      result_tickets.map{|th| th[:price_fare]}.compact.first.should == 200
+    end
+  end
+
   describe "#flight_from_gds_code" do
     let (:flight) { double(Flight) }
     let (:stubbed_air_flight_info) {

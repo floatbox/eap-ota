@@ -14,6 +14,7 @@ module Strategy::Amadeus::Tickets
       if ticket_hash[:number]
         if exchanged_tickets[k] && (exchanged_ticket = Ticket.where('code = ? AND number like ?', exchanged_tickets[k][:code], exchanged_tickets[k][:number] + '%').first)
           ticket_hash[:parent_id] = exchanged_ticket.id
+          ticket_hash[:price_fare] -= exchanged_ticket.price_fare if ticket_hash[:price_fare] != 0
           tickets << {:code => exchanged_ticket.code, :number => exchanged_ticket.number, :status => 'exchanged'}
         end
 
