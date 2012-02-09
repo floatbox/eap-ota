@@ -27,9 +27,10 @@ booking.init = function() {
     this.query_key = path.split('/').last();
     if (hash.indexOf('recommendation') !== -1) {
         //window.location.hash = '';
-        var partner = hash.match(/partner=([^&]+)/);
-        var marker = hash.match(/marker=([^&]+)/);
-        this.prebook(this.query_key, hash.match(/recommendation=([^&]+)/)[1], partner ? partner[1] : '', marker ? marker[1] : '');
+        // авиасейлз зачем-то дорисовывает вопросик после partner=
+        var partner = hash.match(/partner=([^&?]+)/);
+        var marker = hash.match(/marker=([^&?]+)/);
+        this.prebook(this.query_key, hash.match(/recommendation=([^&?]+)/)[1], partner ? partner[1] : '', marker ? marker[1] : '');
     } else if (hash.length !== 0) {
         this.load(hash);
     } else {
