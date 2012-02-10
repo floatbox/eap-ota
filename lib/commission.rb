@@ -323,7 +323,8 @@ example 'dmetrn/business'
 strt_date "01.02.2012"
 agent "5% на тарифы Эконом и Бизнес класса на направление: ТУРИН"
 subagent "3% турин"
-check { city_iatas.last == 'TRN' }
+# направление - это и в турин, и в турин и обратно
+check { city_iatas.include?('TRN') }
 commission "5%/3%"
 
 example 'vceflu/economy fluvce/economy'
@@ -336,7 +337,8 @@ agent "Строго по направлениям:
 7% для билетов эконом-класса."
 subagent "5% для билетов эконом-класса"
 classes :economy
-check { (city_iatas && %W(FLU EWR LGA JFK LAX SMO VNY WHP MIA ТNT OPF TMB MDW ORD PWK CGX DPA RFD BOS YTZ YKZ YYZ VCP GRU CGH GIG SDU CCS EZE AEP ALG CAI CAS CMN KYE TIP TUN AMM ADJ TLV SDV BEY DAM IKA THR)).present? }
+# нахрена было иаты аэропортов выписывать? городов меньше
+check { (airport_iatas & %W(FLU EWR LGA JFK LAX SMO VNY WHP MIA ТNT OPF TMB MDW ORD PWK CGX DPA RFD BOS YTZ YKZ YYZ VCP GRU CGH GIG SDU CCS EZE AEP ALG CAI CAS CMN KYE TIP TUN AMM ADJ TLV SDV BEY DAM IKA THR)).present? }
 # discount "4%"
 commission "7%/5%"
 
@@ -350,8 +352,18 @@ agent "Строго по направлениям:
 9% для билетов бизнес-класса."
 subagent "7% для билетов бизнес-класса"
 classes :business
-check { (city_iatas && %W(FLU EWR LGA JFK LAX SMO VNY WHP MIA ТNT OPF TMB MDW ORD PWK CGX DPA RFD BOS YTZ YKZ YYZ VCP GRU CGH GIG SDU CCS EZE AEP ALG CAI CAS CMN KYE TIP TUN AMM ADJ TLV SDV BEY DAM IKA THR)).present? }# discount "4%"
+# нахрена было иаты аэропортов выписывать? городов меньше
+check { (airport_iatas & %W(FLU EWR LGA JFK LAX SMO VNY WHP MIA ТNT OPF TMB MDW ORD PWK CGX DPA RFD BOS YTZ YKZ YYZ VCP GRU CGH GIG SDU CCS EZE AEP ALG CAI CAS CMN KYE TIP TUN AMM ADJ TLV SDV BEY DAM IKA THR)).present? }# discount "4%"
 commission "9%/7%"
+
+example 'svocdg cdgsvo'
+agent    "Если у вас не соблюдаются данные условия или же если у вас направление, не указанное в данном
+списке, то вы применяете стандартную комиссию в 5 руб.
+1 euro. с билета по опубл. тарифам на все остальные рейсы AZ (включая code-share);"
+subagent "Если у вас не соблюдаются данные условия или же если у вас направление, не указанное в данном
+списке, то вы применяете стандартную комиссию в 5 руб.
+5 руб. с билета по опубл. тарифам на все остальные рейсы AZ (включая code-share);"
+commission "1eur/5"
 
 example 'svocdg cdgsvo/ab'
 agent    "1 euro с билета по опубл. тарифам на рейсы Interline, если 1-ый сегмент выполнен под кодом AZ."
