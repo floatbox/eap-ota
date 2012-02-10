@@ -228,9 +228,11 @@ class Order < ActiveRecord::Base
     @tickets_are_loading = true
     ticket_hashes = Strategy.select(:order => self).get_tickets
     ticket_hashes.each do |th|
-      t = tickets.ensure_exists(th[:number])
-      th.delete(:ticketed_date) if t.ticketed_date # Видимо нужно было для случаев, когда авиакомпания переписывала билет, но точно не помню
-      t.update_attributes th
+      if th[:office_id].blank? || Ticket.office_ids.include?(th[:office_id])
+        t = tickets.ensure_exists(th[:number])
+        th.delete(:ticketed_date) if t.ticketed_date # Видимо нужно было для случаев, когда авиакомпания переписывала билет, но точно не помню
+        t.update_attributes th
+      end
     end
 
     #Необходимо, тк t.update_attributes глючит при создании билетов (не обновляет self.tickets)

@@ -12,20 +12,17 @@ module Strategy::Amadeus::Tickets
     exchanged_tickets = pnr_resp.exchanged_tickets
     pnr_resp.tickets.deep_merge(prices).each do |k, ticket_hash|
       if ticket_hash[:number]
-        if exchanged_tickets[k] && (exchanged_ticket = Ticket.where('code = ? AND number like ?', exchanged_tickets[k][:code], exchanged_tickets[k][:number] + '%').first)
-          ticket_hash[:parent_id] = exchanged_ticket.id
-          ticket_hash[:price_fare] -= exchanged_ticket.price_fare if ticket_hash[:price_fare] != 0
-          tickets << {:code => exchanged_ticket.code, :number => exchanged_ticket.number, :status => 'exchanged'}
+        if exchanged_tickets[k]
+          ticket_hash[:parent_number] = exchanged_tickets[k]
+          ticket_hash[:parent_code] = exchanged_tickets[k]
         end
 
-        if Ticket.office_ids.include? ticket_hash[:office_id]
-          tickets << ticket_hash.merge({
-            :processed => true,
-            :source => 'amadeus',
-            :pnr_number => @order.pnr_number,
-            :commission_subagent => @order.commission_subagent.to_s
-          })
-        end
+        tickets << ticket_hash.merge({
+          :processed => true,
+          :source => 'amadeus',
+          :pnr_number => @order.pnr_number,
+          :commission_subagent => @order.commission_subagent.to_s
+        })
       end
     end
 
