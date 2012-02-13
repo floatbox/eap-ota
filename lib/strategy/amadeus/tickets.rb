@@ -13,8 +13,8 @@ module Strategy::Amadeus::Tickets
     pnr_resp.tickets.deep_merge(prices).each do |k, ticket_hash|
       if ticket_hash[:number]
         if exchanged_tickets[k]
-          ticket_hash[:parent_number] = exchanged_tickets[k]
-          ticket_hash[:parent_code] = exchanged_tickets[k]
+          ticket_hash[:parent_number] = exchanged_tickets[k][:number]
+          ticket_hash[:parent_code] = exchanged_tickets[k][:code]
         end
 
         tickets << ticket_hash.merge({
