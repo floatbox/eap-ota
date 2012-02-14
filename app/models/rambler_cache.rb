@@ -55,8 +55,7 @@ class RamblerCache
 
   def self.variant_hash(variant, recommendation, form)
     people_count = form.people_count
-    hash = RamblerApi.recommendation_hash(recommendation)
-    uri = RamblerApi.uri_for_rambler(hash)
+    uri = recommendation.rambler_uri
     res = {
       'va' => recommendation.validating_carrier_iata,
       'c'  => recommendation.price_with_payment_commission,
