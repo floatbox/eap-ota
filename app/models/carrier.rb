@@ -19,6 +19,11 @@ class Carrier < ActiveRecord::Base
       iata
   end
 
+  def name_en
+      en_longname.presence ||
+      en_shortname.presence ||
+      iata
+  end
 
   def available_bonus_programms
     #бонусные программы авиакомпаний, входящие в тот же альянс, что и данная

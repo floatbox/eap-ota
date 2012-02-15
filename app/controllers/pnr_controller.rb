@@ -10,6 +10,7 @@ class PNRController < ApplicationController
     @pnr.email = @prices.email if @prices.source == 'sirena' && @pnr.email.blank?
     @passengers = @pnr.passengers
     @last_pay_time = @pnr.order.last_pay_time
+    @lang = params[:lang]
   end
 
   def show

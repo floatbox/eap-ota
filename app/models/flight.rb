@@ -39,10 +39,15 @@ class Flight
   end
 
   delegate :name, :prefix => true, :allow_nil => true, :to => :departure
+  delegate :name_en, :prefix => true, :allow_nil => true, :to => :departure
   delegate :name, :prefix => true, :allow_nil => true, :to => :arrival
+  delegate :name_en, :prefix => true, :allow_nil => true, :to => :arrival
   delegate :name, :prefix => true, :allow_nil => true, :to => :operating_carrier
+  delegate :name_en, :prefix => true, :allow_nil => true, :to => :operating_carrier
   delegate :name, :prefix => true, :allow_nil => true, :to => :marketing_carrier
+  delegate :name_en, :prefix => true, :allow_nil => true, :to => :marketing_carrier
   delegate :name, :prefix => true, :allow_nil => true, :to => :equipment_type
+  delegate :name_en, :prefix => true, :allow_nil => true, :to => :equipment_type
 
   def arrival_datetime_utc
     @arrival_datetime_utc ||=

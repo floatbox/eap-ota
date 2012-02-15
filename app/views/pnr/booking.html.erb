@@ -2,8 +2,7 @@
 <tr>
     <td class="pad_null"><img src="https://eviterra.com/img/booking/eviterra.png" alt="eviterra" width="210" height="30"></td>
     <td class="pad_null" colspan="2">
-      <font size="3" family="Arial" style="font-size: 15px;"><strong>Бронирование<br>Booking</strong></font>
-    </td>
+      <font size="3" family="Arial" style="font-size: 15px;"><strong><% unless @lang %>Бронирование<br><%end%>Booking</strong></font></td>
     
     <%= render :partial => 'pnr/numbers' %>
 
@@ -17,7 +16,7 @@
 </tr>
 <tr>
     <td class="pad_null" colspan="6">
-        <font size="3" family="Arial" style="font-size: 15px;"><strong>Действительно до<br>Valid until</strong></font><br>
+        <font size="3" family="Arial" style="font-size: 15px;"><strong><% unless @lang %>Действительно до<br><%end%>Valid until</strong></font><br>
         <font size="3" family="Arial" color="#ED1192" style="font-size: 18px; color: #ED1192;"><strong><%= @prices.last_pay_time.strftime('%H:%M %d.%m.%Y') %></strong></font><br>
         <br>
     </td>
@@ -31,7 +30,7 @@
   <tbody valign="top">
   <tr>
       <td class="pad_null">
-          <font family="Arial" size="3" style="font-size: 18px;"><strong>Информация для оплаты<br>Information for payment</strong></font><br>
+          <font family="Arial" size="3" style="font-size: 18px;"><strong><% unless @lang %>Информация для оплаты<br><%end%>Information for payment</strong></font><br>
           <font size="1" style="line-height: 8px;"><br></font>
       </td>
       <td class="pad_null" colspan="5"><br></td>
@@ -39,15 +38,15 @@
   <tr>
       <td class="pad_null">
           <font family="Arial" size="2">
-          Тариф / Fare<br>
-          Налоги и сборы / Taxes<br>
+          <% unless @lang %>Тариф /<%end%> Fare<br>
+          <% unless @lang %>Налоги и сборы /<%end%> Taxes<br>
           <% unless @prices.price_declared_discount.zero? %>
-            Скидка / Discount<br>
+            <% unless @lang %>Скидка /<%end%> Discount<br>
           <% end %>
           <% if @prices.payment_type == 'delivery' %>
-              Доставка / Delivery<br>
+              <% unless @lang %>Доставка /<%end%> Delivery<br>
           <% end %>
-          Итоговая стоимость / Total<br>
+          <% unless @lang %>Итоговая стоимость /<%end%> Total<br>
           </font>
       </td>
       <td class="pad_null" colspan="2">
@@ -66,7 +65,7 @@
           </font>
       </td>
       <td class="pad_null" colspan="3">
-          <font family="Arial" size="2">Адрес и телефон</font><br>
+          <font family="Arial" size="2"><% unless @lang %>Адрес и телефон<br><%end%>Email and phone number</font><br>
           <font family="Arial" size="1" style="font-size: 6px;"><br></font>
           <font family="Arial" size="2">
           <% if @pnr.email %>
@@ -84,7 +83,7 @@
     <font size="5"><br></font>
     <center>
 
-      <font family="Arial" size="5"><strong>Спасибо за то, что забронировали на <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
+      <% unless @lang %><font family="Arial" size="5"><strong>Спасибо за то, что забронировали на <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br><%end%>
       <font family="Arial" size="5"><strong>Thank you for booking at <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
 
     </center>
