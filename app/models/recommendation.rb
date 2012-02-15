@@ -37,10 +37,6 @@ class Recommendation
     marketing_carrier_iatas.include?(validating_carrier_iata)
   end
 
-  def rambler_uri
-    @rambler_uri ||= RamblerApi.uri_for_rambler(RamblerApi.recommendation_hash(self))
-  end
-
   # предполагается, что у всех вариантов одинаковый набор marketing carrier-ов
   def validating_carrier_makes_half_of_itinerary?
     validating, other =
