@@ -81,10 +81,10 @@ module RamblerApi
     uri = "http://eviterra.com/api/rambler_booking.xml?#{string}"
   end
 
-  def self.recommendation_hash recommendation
+  def self.recommendation_hash recommendation, variant
     hash, hash[:dir], hash[:ret] = {}, {}, {}
     hash[:va] = recommendation.validating_carrier_iata
-    hash[:dir], hash[:ret] = recommendation.segments.map do |segment|
+    hash[:dir], hash[:ret] = variant.segments.map do |segment|
       segment_hash(segment, recommendation)
     end
     hash

@@ -23,6 +23,10 @@ class Strategy::Amadeus < Strategy::Base
     end
   end
 
+  # get tickets hashes
+  # ########
+  include Strategy::Amadeus::Tickets
+
   # ticketing
   # #########
 

@@ -226,51 +226,17 @@ class Order < ActiveRecord::Base
 
   def load_tickets
     @tickets_are_loading = true
-    if source == 'amadeus'
-      pnr_resp = tst_resp = nil
-      Amadeus.booking do |amadeus|
-        pnr_resp = amadeus.pnr_retrieve(:number => pnr_number)
-        tst_resp = amadeus.ticket_display_tst
-        amadeus.pnr_ignore
+    ticket_hashes = Strategy.select(:order => self).get_tickets
+    ticket_hashes.each do |th|
+      if th[:office_id].blank? || Ticket.office_ids.include?(th[:office_id])
+        t = tickets.ensure_exists(th[:number])
+        th.delete(:ticketed_date) if t.ticketed_date # Видимо нужно было для случаев, когда авиакомпания переписывала билет, но точно не помню
+        t.update_attributes th
       end
-      prices = tst_resp.prices_with_refs
-      exchanged_tickets = pnr_resp.exchanged_tickets
-      pnr_resp.tickets.deep_merge(prices).each do |k, ticket_hash|
-        if ticket_hash[:number]
-          t = tickets.ensure_exists(ticket_hash[:number])
-          ticket_hash.delete(:ticketed_date) if t.ticketed_date
-          if exchanged_tickets[k] && (exchanged_ticket = Ticket.find_by_code_and_number(exchanged_tickets[k][:code], exchanged_tickets[k][:number]))
-            ticket_hash[:parent] = exchanged_ticket
-            exchanged_ticket.update_attribute(:status, 'exchanged')
-          end
-
-          if Ticket.office_ids.include? ticket_hash[:office_id]
-            t.update_attributes(ticket_hash.merge({
-              :processed => true,
-              :source => 'amadeus',
-              :pnr_number => pnr_number,
-              :commission_subagent => commission_subagent.to_s
-            })
-            )
-          end
-        end
-      end
-      #Необходимо, тк t.update_attributes глючит при создании билетов (не обновляет self.tickets)
-      tickets.reload
-      update_attribute(:departure_date, pnr_resp.flights.first.dept_date) if pnr_resp.flights.present?
-    elsif source == 'sirena'
-      order_resp = Sirena::Service.new.order(pnr_number, sirena_lead_pass)
-      ticket_dates = Sirena::Service.new.pnr_status(pnr_number).tickets_with_dates
-      order_resp.ticket_hashes.each do |t|
-        ticket = tickets.ensure_exists(t[:number])
-        t['ticketed_date'] = ticket_dates[t[:number]] if ticket_dates[t[:number]]
-        ticket.update_attributes(t.merge({:processed => true,
-              :validating_carrier => commission_carrier
-        }))
-      end
-      tickets.reload
-      update_attribute(:departure_date, order_resp.flights.first.dept_date)
     end
+
+    #Необходимо, тк t.update_attributes глючит при создании билетов (не обновляет self.tickets)
+    tickets.reload
     @tickets_are_loading = false
 
   end

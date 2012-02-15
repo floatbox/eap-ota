@@ -12,8 +12,8 @@ describe Amadeus::Response::TicketDisplayTST do
 
     it { should be_success }
     specify { subject.prices_with_refs.should have(2).keys }
-    specify { subject.prices_with_refs[[[7, 'a'], [1]]].should == {:price_fare => 5985, :price_tax => 656}}
-    specify { subject.prices_with_refs[[[7, 'i'], [1]]].should == {:price_fare => 600, :price_tax => 171}}
+    specify { subject.prices_with_refs[[[7, 'a'], [1]]].should == {:price_fare_base => 5985, :price_fare => 5985, :price_tax => 656}}
+    specify { subject.prices_with_refs[[[7, 'i'], [1]]].should == {:price_fare_base => 600, :price_fare => 600, :price_tax => 171}}
     its(:total_fare) { should == 6585 }
     its(:total_tax) { should == 827 }
     its(:validating_carrier_code) { should == 'FV' }
@@ -31,7 +31,7 @@ describe Amadeus::Response::TicketDisplayTST do
 
     it { should be_success }
     specify { subject.prices_with_refs.should have(2).keys }
-    specify { subject.prices_with_refs.values[0].should == {:price_fare => 3825, :price_tax => 3905} }
+    specify { subject.prices_with_refs.values[0].should == {:price_fare_base => 3825, :price_fare => 3825, :price_tax => 3905} }
     its(:total_fare) { should == 7650 }
     its(:total_tax) { should == 7810 }
     its(:validating_carrier_code) { should == 'LH' }

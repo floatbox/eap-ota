@@ -46,12 +46,32 @@ class Ticket < ActiveRecord::Base
   scope :uncomplete, where(:ticketed_date => nil)
 
   before_validation :set_refund_data, :if => lambda {kind == "refund"}
+  before_validation :update_price_fare_and_add_parent, :if => lambda {parent_number}
   validates_presence_of :comment, :if => lambda {kind == "refund"}
   after_save :update_prices_in_order
+  attr_accessor :parent_number, :parent_code
+  attr_writer :price_fare_base
+
+  def price_fare_base
+    @price_fare_base = BigDecimal(@price_fare_base) if @price_fare_base && @price_fare_base.class == String
+    @price_fare_base ||= if parent
+      price_fare + parent.price_fare_base
+    else
+      price_fare
+    end
+  end
 
   # FIXME сделать перечисление прямо из базы, через uniq
   def self.office_ids
     ['MOWR2233B', 'MOWR228FA', 'MOWR2219U']
+  end
+
+  def update_price_fare_and_add_parent
+    if exchanged_ticket = Ticket.where('code = ? AND number like ?', parent_code, parent_number.to_s + '%').first
+      self.parent = exchanged_ticket
+      exchanged_ticket.update_attribute(:status, 'exchanged')
+      self.price_fare = price_fare_base - parent.price_fare_base if price_fare_base && price_fare_base != 0
+    end
   end
 
   def refund

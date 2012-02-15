@@ -59,6 +59,17 @@ describe Ticket do
     end
   end
 
+  describe "#update_price_fare_and_add_parent" do
+    it 'sets correct price_fare for ticket with fare upgrade' do
+      new_ticket_hash = {:number => '123', :code => '456', :price_fare => 1000, :price_tax => 500, :parent_number => '234', :parent_code => '456', :price_fare_base => 1000}
+      old_ticket = Ticket.new(:price_fare => 800, :code => '456', :number => '234', :id => 10)
+      Ticket.stub_chain(:where, :first).and_return(old_ticket)
+      ticket = Ticket.new(new_ticket_hash)
+      ticket.valid?
+      ticket.price_fare.should == 200
+    end
+  end
+
   describe "#commission_ticketing_method" do
 
     specify {

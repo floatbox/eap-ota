@@ -63,88 +63,224 @@ describe Order do
     end
   end
 
+
+  describe '#reload_tickets with exchange' do
+
+    context 'with one non-zero ticket' do
+      before(:all) do
+        Conf.payture.stub(:commission).and_return('2.8%')
+        @old_ticket = Ticket.new(:price_fare => 21590, :price_tax => 9878, :kind => 'ticket', :status => 'ticketed', :code => '123', :number => '123456789')
+        @order = Order.new(:pnr_number => '', :price_fare => 21590, :price_tax => 9878, :price_with_payment_commission => BigDecimal('31946.68'), :source => 'amadeus', :fix_price => true)
+        @order.save
+        @old_ticket.order = @order
+        @old_ticket.save
+        @new_ticket_hashes = [
+          {:number => '123456787', :code => '123', :processed => true, :source => 'amadeus', :parent_id => @old_ticket.id, :status => 'ticketed', :price_fare => 0, :price_tax => 6075},
+          {:number => '123456789', :code => '123', :status => 'exchanged'}
+        ]
+        Strategy.stub_chain(:select, :get_tickets).and_return(@new_ticket_hashes)
+        @order.reload_tickets
+        @old_ticket.reload
+        @new_ticket = @order.tickets.find_by_number('123456787')
+      end
+
+      describe 'order' do
+        subject { @order }
+        its(:price_fare) {should == 0}
+        its(:price_tax) {should == 6075}
+
+        pending do
+          its(:recalculated_price_with_payment_commission) {should == 6250}
+          its(:price_tax_and_markup_and_payment) {should == 6250}
+        end
+
+      end
+
+      describe 'old_ticket' do
+        subject { @old_ticket }
+
+        its(:price_fare) {should == 21590}
+        its(:price_tax) {should == 9878}
+        its(:status) {should == 'exchanged'}
+
+        pending do
+          its(:price_tax_and_markup_and_payment) {should == 10356.68}
+          its(:recalculated_price_with_payment_commission) {should == 31946.68}
+        end
+
+      end
+
+      describe 'new ticket' do
+        subject { @new_ticket }
+
+        its(:price_fare) {should == 0}
+        its(:price_tax) {should == 6075}
+        its(:status) {should == 'ticketed'}
+        its(:parent) {should == @old_ticket}
+
+        pending do
+          its(:recalculated_price_with_payment_commission) {should == 6250}
+          its(:price_tax_and_markup_and_payment) {should == 6250}
+        end
+
+      end
+    end
+
+    context 'of two tickets with zero price' do
+      before(:all) do
+        Conf.payture.stub(:commission).and_return('2.8%')
+        @order = Order.new(:pnr_number => '', :price_fare => 20010, :price_tax => 10860, :price_with_payment_commission => BigDecimal('30729.94'), :source => 'amadeus', :price_discount => 1000.5, :fix_price => true)
+        @order.save
+        @old_tickets = [1,2].map {|n| Ticket.new(:price_fare => 10005, :price_tax => 5430, :price_discount => 500.25, :kind => 'ticket', :status => 'ticketed', :code => '123', :number => "123456789#{n}", :order => @order)}
+        @old_tickets.every.save
+        @new_ticket_hashes = [
+          {:number => '1234567871', :code => '123', :price_fare => 0, :price_tax => 0, :processed => true, :source => 'amadeus', :parent_id => @old_tickets[0].id, :status => 'ticketed'},
+          {:number => '1234567891', :code => '123', :status => 'exchanged'},
+          {:number => '1234567872', :code => '123', :price_fare => 0, :price_tax => 0, :processed => true, :source => 'amadeus', :parent_id => @old_tickets[1].id, :status => 'ticketed'},
+          {:number => '1234567892', :code => '123', :status => 'exchanged'}
+        ]
+        Strategy.stub_chain(:select, :get_tickets).and_return(@new_ticket_hashes)
+        @order.reload_tickets
+        @old_ticket = @old_tickets[0]
+        @old_ticket.reload
+        @new_ticket = @order.tickets.find_by_number('1234567871')
+      end
+
+      describe 'order' do
+        subject { @order }
+
+        its(:price_fare) {should == 0}
+        its(:price_tax_and_markup_and_payment) {should == 0}
+        its(:price_tax) {should == 0}
+        its(:recalculated_price_with_payment_commission) {should == 0}
+
+      end
+
+      describe 'old_ticket' do
+        subject { @old_ticket }
+
+        its(:price_fare) {should == 10005}
+        its(:price_tax) {should == 5430}
+
+        pending do
+          its(:price_tax_and_markup_and_payment) {should == 15364.97 - 10005}
+          its(:recalculated_price_with_payment_commission) {should == 15364.97}
+        end
+
+      end
+
+      describe 'new ticket' do
+        subject { @new_ticket }
+
+        its(:price_fare) {should == 0}
+        its(:price_tax_and_markup_and_payment) {should == 0}
+        its(:price_tax) {should == 0}
+        its(:recalculated_price_with_payment_commission) {should == 0}
+
+      end
+    end
+  end
+
   describe '#load_tickets' do
 
-    before(:each) do
-      @order = Order.new(:source => 'amadeus', :commission_subagent => '1%', :pnr_number => '123456')
-      @amadeus = mock('Amadeus')
+    context "for sirena order" do
 
-      body = File.read('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml')
-      doc = Amadeus::Service.parse_string(body)
-      @amadeus.stub(:pnr_retrieve).and_return(Amadeus::Response::PNRRetrieve.new(doc))
+      it 'loads tickets correctly' do
+        Sirena::Service.stub_chain(:new, :order).and_return(Sirena::Response::Order.new(File.read('spec/sirena/xml/order_with_tickets.xml')))
+        Sirena::Service.stub_chain(:new, :pnr_status, :tickets_with_dates).and_return({})
+        @order = Order.new(:source => 'sirena', :commission_subagent => '1%', :pnr_number => '123456')
+        @order.stub_chain(:tickets, :reload)
+        ticket = stub_model(Ticket)
+        @order.stub_chain(:tickets, :ensure_exists).and_return(ticket)
+        ticket.should_receive(:update_attributes).twice.with(hash_including({:code=>"262"}))
+        @order.load_tickets
+      end
 
-
-      body = File.read('spec/amadeus/xml/Ticket_DisplayTST_with_ticket.xml')
-      doc = Amadeus::Service.parse_string(body)
-      @amadeus.stub(:ticket_display_tst).and_return(Amadeus::Response::TicketDisplayTST.new(doc))
-      @amadeus.stub(:pnr_ignore)
     end
 
-    it 'loads tickets correctly from amadeus' do
-      Amadeus.should_receive(:booking).once.and_yield(@amadeus)
-      @order.stub_chain(:tickets, :where, :every, :update_attribute)
-      @order.stub_chain(:tickets, :reload)
-      ticket = stub_model(Ticket)
-      @order.stub_chain(:tickets, :ensure_exists).and_return(ticket)
-      ticket.should_receive(:update_attributes).with(hash_including(
-        :code => "555",
-        :number => "2962867063",
-        :last_name => 'BEDAREVA',
-        :first_name => 'ALEXANDRA MRS',
-        :passport => '4510108712',
-        :ticketed_date => Date.new(2011, 8, 30),
-        :price_tax => 1281,
-        :price_fare => 1400,
-        :validating_carrier => 'SU',
-        :status => 'ticketed',
-        :office_id => 'MOWR2219U',
-        :validator => '92223412'
-      ))
-      @order.load_tickets
-    end
+    context "for amadeus order" do
 
-    it "shouldn't update tickets updated by airline" do
-      Amadeus.should_receive(:booking).once.and_yield(@amadeus)
-      new_ticket_hash = {[1, [2, 3]] => {
-        :code => "555",
-        :number => "2962867063",
-        :last_name => 'BEDAREVA',
-        :first_name => 'ALEXANDRA MRS',
-        :passport => '4510108712',
-        :ticketed_date => Date.new(2011, 8, 30),
-        :price_tax => 1281,
-        :price_fare => 1400,
-        :validating_carrier => 'SU',
-        :status => 'ticketed',
-        :office_id => 'LONR2219U',
-        :validator => '87823412'
-      }}
-      pnr_resp = stub('Amadeus::Response::PNRRetrieve')
-      pnr_resp.should_receive(:tickets).and_return(new_ticket_hash)
-      pnr_resp.stub(:flights).and_return(nil)
-      pnr_resp.stub(:exchanged_tickets).and_return({})
-      tst_resp = stub('Amadeus::Response::TicketDisplayTST')
-      tst_resp.stub(:prices_with_refs).and_return({})
-      @order.stub_chain(:tickets, :where, :every, :update_attribute)
-      @order.stub_chain(:tickets, :reload)
-      ticket = Ticket.new
-      ticket.stub(:new_record?).and_return(false)
-      @order.stub_chain(:tickets, :ensure_exists).and_return(ticket)
+      before(:each) do
+        @order = Order.new(:source => 'amadeus', :commission_subagent => '1%', :pnr_number => '123456')
+        @amadeus = mock('Amadeus')
 
-      @amadeus.stub(:pnr_retrieve).and_return(pnr_resp)
-      @amadeus.stub(:ticket_display_tst).and_return(tst_resp)
-
-      ticket.should_not_receive(:update_attributes)
-      @order.load_tickets
-    end
+        body = File.read('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml')
+        doc = Amadeus::Service.parse_string(body)
+        @amadeus.stub(:pnr_retrieve).and_return(Amadeus::Response::PNRRetrieve.new(doc))
 
 
-    it "doesn't create empty tickets" do
-      Amadeus.should_receive(:booking).once.and_yield(@amadeus)
-      @order.stub(:create_notification)
-      @order.save
-      @order.load_tickets
-      @order.tickets.length.should == 1
+        body = File.read('spec/amadeus/xml/Ticket_DisplayTST_with_ticket.xml')
+        doc = Amadeus::Service.parse_string(body)
+        @amadeus.stub(:ticket_display_tst).and_return(Amadeus::Response::TicketDisplayTST.new(doc))
+        @amadeus.stub(:pnr_ignore)
+      end
+
+      it 'loads tickets correctly' do
+        Amadeus.should_receive(:booking).once.and_yield(@amadeus)
+        @order.stub_chain(:tickets, :where, :every, :update_attribute)
+        @order.stub_chain(:tickets, :reload)
+        ticket = stub_model(Ticket)
+        @order.stub_chain(:tickets, :ensure_exists).and_return(ticket)
+        ticket.should_receive(:update_attributes).with(hash_including(
+          :code => "555",
+          :number => "2962867063",
+          :last_name => 'BEDAREVA',
+          :first_name => 'ALEXANDRA MRS',
+          :passport => '4510108712',
+          :ticketed_date => Date.new(2011, 8, 30),
+          :price_tax => 1281,
+          :price_fare => 1400,
+          :validating_carrier => 'SU',
+          :status => 'ticketed',
+          :office_id => 'MOWR2219U',
+          :validator => '92223412'
+        ))
+        @order.load_tickets
+      end
+
+      it "shouldn't update tickets updated by airline" do
+        Amadeus.should_receive(:booking).once.and_yield(@amadeus)
+        new_ticket_hash = {[1, [2, 3]] => {
+          :code => "555",
+          :number => "2962867063",
+          :last_name => 'BEDAREVA',
+          :first_name => 'ALEXANDRA MRS',
+          :passport => '4510108712',
+          :ticketed_date => Date.new(2011, 8, 30),
+          :price_tax => 1281,
+          :price_fare => 1400,
+          :validating_carrier => 'SU',
+          :status => 'ticketed',
+          :office_id => 'LONR2219U',
+          :validator => '87823412'
+        }}
+        pnr_resp = stub('Amadeus::Response::PNRRetrieve')
+        pnr_resp.should_receive(:tickets).and_return(new_ticket_hash)
+        pnr_resp.stub(:flights).and_return(nil)
+        pnr_resp.stub(:exchanged_tickets).and_return({})
+        tst_resp = stub('Amadeus::Response::TicketDisplayTST')
+        tst_resp.stub(:prices_with_refs).and_return({})
+        @order.stub_chain(:tickets, :where, :every, :update_attribute)
+        @order.stub_chain(:tickets, :reload)
+        ticket = Ticket.new
+        ticket.stub(:new_record?).and_return(false)
+        @order.stub_chain(:tickets, :ensure_exists).and_return(ticket)
+
+        @amadeus.stub(:pnr_retrieve).and_return(pnr_resp)
+        @amadeus.stub(:ticket_display_tst).and_return(tst_resp)
+
+        ticket.should_not_receive(:update_attributes)
+        @order.load_tickets
+      end
+
+
+      it "doesn't create empty tickets" do
+        Amadeus.should_receive(:booking).once.and_yield(@amadeus)
+        @order.stub(:create_notification)
+        @order.save
+        @order.load_tickets
+        @order.tickets.length.should == 1
+      end
     end
   end
 

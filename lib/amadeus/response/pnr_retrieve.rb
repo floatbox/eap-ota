@@ -87,7 +87,7 @@ module Amadeus
       end
 
       def parsed_exchange_string(s)
-        m = s.to_s.match(/(PAX|INF)? ?(\d+)-([\d-]+)/)
+        m = s.to_s.match(/(PAX|INF)?.*\/(\d+)-([\d-]+).{3}(-\d{3})?$/)
         if m
           return({:number => m[3], :code => m[2], :inf => m[1]})
         end
@@ -154,7 +154,8 @@ module Amadeus
           cabins = segments_refs.map do |sr|
             flights_hash[sr][:cabin] if flights_hash[sr]
           end.compact.join(' + ')
-          res.merge({[[passenger_ref, infant_flag], segments_refs] => ticket_hash.merge({
+          ticket_key = [[passenger_ref, infant_flag], segments_refs]
+          res.merge({ticket_key => ticket_hash.merge({
               :first_name => passenger_first_name,
               :passport => passport(passenger_ref, infant_flag == 'i'),
               :last_name => passenger_last_name,
