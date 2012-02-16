@@ -5,7 +5,7 @@ require "rvm/capistrano"
 require "capistrano_colors"
 
 # закрепил версию, чтобы не прыгала в продакшне
-set :rvm_ruby_string, 'ree-1.8.7-2011.03'
+set :rvm_ruby_string, 'ruby-1.9.3-p0-falcon'
 
 require 'bundler/capistrano'
 
