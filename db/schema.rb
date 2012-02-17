@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120206131832) do
+ActiveRecord::Schema.define(:version => 20120217155509) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -232,6 +232,7 @@ ActiveRecord::Schema.define(:version => 20120206131832) do
     t.string   "subject"
     t.string   "format"
     t.text     "rendered_message"
+    t.string   "lang"
   end
 
   create_table "order_comments", :force => true do |t|
@@ -321,13 +322,13 @@ ActiveRecord::Schema.define(:version => 20120206131832) do
     t.datetime "charged_at"
     t.string   "threeds_key"
     t.string   "system"
-    t.date     "charged_on"
-    t.string   "pan"
     t.string   "type"
     t.integer  "charge_id"
     t.string   "status"
     t.string   "commission"
     t.decimal  "earnings",              :precision => 9, :scale => 2, :default => 0.0, :null => false
+    t.date     "charged_on"
+    t.string   "pan"
   end
 
   add_index "payments", ["status"], :name => "index_payments_on_status"

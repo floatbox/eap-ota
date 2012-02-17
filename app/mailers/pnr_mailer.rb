@@ -14,6 +14,7 @@ class PnrMailer < ActionMailer::Base
     @pnr.email = @prices.email if @prices.source == 'sirena' && @pnr.email.blank?
     @last_pay_time = @pnr.order.last_pay_time
     @comment = notification.comment
+    @lang = notification.lang unless notification.lang.blank?
     
     if notification.format.blank?
       notification.format = @pnr.order.show_as_ticketed? ? "ticket" : "booking"
@@ -24,10 +25,14 @@ class PnrMailer < ActionMailer::Base
     case notification.format
       when 'ticket'
         notification.rendered_message = render 'pnr/ticket' if notification.attach_pnr
-        notification.subject = "Ваш электронный билет" if notification.subject.blank?
+        if notification.subject.blank?
+          notification.subject = @lang ? "Your E-ticket" : "Ваш электронный билет" 
+        end
       when 'booking'
         notification.rendered_message = render 'pnr/booking' if notification.attach_pnr
-        notification.subject = "Ваше бронирование" if notification.subject.blank?
+        if notification.subject.blank?
+          notification.subject = @lang ? "Your Booking" : "Ваше бронирование"
+        end
     end
 
     mail :to => notification.email, :subject => notification.subject do |format|

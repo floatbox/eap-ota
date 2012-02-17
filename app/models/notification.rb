@@ -23,6 +23,7 @@ class Notification < ActiveRecord::Base
 
   def self.statuses; ["sent", "error", "delayed"] end
   def self.formats; ["booking", "ticket"] end
+  def self.langs; ["EN"] end
 
   def set_order_data
     self.pnr_number = order.pnr_number
