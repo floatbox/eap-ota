@@ -34,6 +34,18 @@ class OrderForm
     @card || CreditCard.new
   end
 
+  def show_vat
+    vat_included != nil
+  end
+
+  def vat_included
+    return false if recommendation.flights[0].departure.country.iata != 'RU'
+    return false if recommendation.flights.last.arrival.country.iata != 'RU'
+    return true if recommendation.flights.map{|f| [f.departure.country.iata, f.arrival.country.iata]}.flatten.uniq == ['RU']
+    return false if recommendation.flights.map{|f| [f.departure, f.arrival]}.flatten.uniq.map{|ap| ap.country.iata}.count('RU') < 2
+    nil
+  end
+
   def last_pay_time
     return if Conf.site.forbidden_cash
     return if recommendation.source == 'sirena'
