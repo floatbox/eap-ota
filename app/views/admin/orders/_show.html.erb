@@ -21,7 +21,7 @@ URL для оплаты: <%= link_to edit_payment_url(:code => @item.code), edit
 <% end %>
 
 <table><tr>
-  <td><%= button_to 'показать pnr', {:action => 'show_pnr', :id => @item.id} %></td>
+  <td><%= button_to 'Показать PNR', {:action => 'show_pnr', :id => @item.id} %> <%= link_to 'PNR EN', {:action => 'show_pnr', :id => @item.id, :lang => "EN"} %></td>
 <% if @item.payment_status == 'blocked'  %>
   <td><%= button_to 'Charge', {:action => 'charge', :id => @item.id}, {:confirm => 'Списать деньги с карты? (возврат до двух месяцев!)'} %></td>
   <td><%= button_to 'Unblock', {:action => 'unblock', :id => @item.id}, {:confirm => 'разблокировать средства? (заблокировать их обратно уже не выйдет!)'} %></td>
