@@ -24,7 +24,9 @@
 <% for flight, booking_class in @flights.zip(booking_classes) %>
 <tr>
     <td class="pad_null" align="right" valign="top" style="text-align: right; vertical-align: top;">
-        <font size="2" family="Arial"><%= full_human_date( flight.departure_date ) %></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <% unless @lang %><font size="2" family="Arial"><%= full_human_date( flight.departure_date ) %></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <%else%><font size="2" family="Arial"><%= full_human_date_en( flight.departure_date ) %></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <%end%>
     </td>
     <td class="pad_null" valign="top" style="vertical-align: top;">
         <font size="2" family="Arial">
