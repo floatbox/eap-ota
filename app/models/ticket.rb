@@ -218,7 +218,7 @@ class Ticket < ActiveRecord::Base
   def itinerary_receipt
     if order && !new_record?
       url = show_order_for_ticket_path(order.pnr_number, self)
-      "<a href=#{url}>билет</a>".html_safe
+      "<a href=#{url}>PNR</a><br/><br/><a href=#{url}?lang=EN>PNR EN</a>".html_safe
     end
   end
 
