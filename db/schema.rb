@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120217155509) do
+ActiveRecord::Schema.define(:version => 20120220153417) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -304,6 +305,7 @@ ActiveRecord::Schema.define(:version => 20120217155509) do
     t.string   "marker"
     t.string   "commission_our_markup"
     t.boolean  "show_vat",                                                    :default => false
+    t.boolean  "vat_included",                                                :default => false,    :null => false
   end
 
   create_table "payments", :force => true do |t|

@@ -165,6 +165,7 @@ class Order < ActiveRecord::Base
 
   def order_form= order_form
     recommendation = order_form.recommendation
+    order_form.set_vat_attrs
     copy_attrs order_form, self,
       :email,
       :phone,
@@ -176,7 +177,9 @@ class Order < ActiveRecord::Base
       :delivery,
       :last_pay_time,
       :partner,
-      :marker
+      :marker,
+      :show_vat,
+      :vat_included
 
     copy_attrs recommendation, self,
       :source,
@@ -230,6 +233,7 @@ class Order < ActiveRecord::Base
     ticket_hashes.each do |th|
       if th[:office_id].blank? || Ticket.office_ids.include?(th[:office_id])
         t = tickets.ensure_exists(th[:number])
+        th[:vat_included] = vat_included unless t.vat_included
         th.delete(:ticketed_date) if t.ticketed_date # Видимо нужно было для случаев, когда авиакомпания переписывала билет, но точно не помню
         t.update_attributes th
       end

@@ -52,6 +52,11 @@ class Ticket < ActiveRecord::Base
   attr_accessor :parent_number, :parent_code
   attr_writer :price_fare_base
 
+  def sold_tickets
+    # нужно для МК
+    [self]
+  end
+
   def price_fare_base
     @price_fare_base = BigDecimal(@price_fare_base) if @price_fare_base && @price_fare_base.class == String
     @price_fare_base ||= if parent

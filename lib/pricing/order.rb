@@ -77,6 +77,10 @@ module Pricing
     def vat
       if sold_tickets.present?
         sold_tickets.every.vat.sum
+      elsif vat_included?
+        ((price_fare + price_tax)*18/118).round(2)
+      else
+        0
       end
     end
 

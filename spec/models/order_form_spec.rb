@@ -6,6 +6,8 @@ describe OrderForm do
   context 'vat methods' do
     subject do
       @order_form = OrderForm.new(:recommendation => recommendation)
+      @order_form.set_vat_attrs
+      @order_form
     end
 
     context 'one way route' do

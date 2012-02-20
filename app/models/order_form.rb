@@ -1,6 +1,8 @@
 # encoding: utf-8
 class OrderForm
   include ActiveModel::Validations
+  extend ActiveModel::Callbacks
+  define_model_callbacks :validation
   include KeyValueInit
   include CopyAttrs
   extend CopyAttrs
@@ -23,6 +25,8 @@ class OrderForm
   attr_accessor :sirena_lead_pass
   attr_accessor :order # то, что сохраняется в базу
   attr_accessor :variant_id #нужен при восстановлении формы по урлу
+  attr_reader :show_vat, :vat_included
+  before_validation :set_vat_attrs
 
   delegate :last_tkt_date, :to => :recommendation
   validates_format_of :email, :with =>
@@ -34,16 +38,17 @@ class OrderForm
     @card || CreditCard.new
   end
 
-  def show_vat
-    vat_included != nil
-  end
-
-  def vat_included
-    return false if recommendation.flights[0].departure.country.iata != 'RU'
-    return false if recommendation.flights.last.arrival.country.iata != 'RU'
-    return true if recommendation.flights.map{|f| [f.departure.country.iata, f.arrival.country.iata]}.flatten.uniq == ['RU']
-    return false if recommendation.flights.map{|f| [f.departure, f.arrival]}.flatten.uniq.map{|ap| ap.country.iata}.count('RU') < 2
-    nil
+  def set_vat_attrs
+    return unless recommendation
+    if recommendation.flights[0].departure.country.iata != 'RU' ||
+        recommendation.flights.last.arrival.country.iata != 'RU' ||
+        recommendation.flights.map{|f| [f.departure, f.arrival]}.flatten.uniq.map{|ap| ap.country.iata}.count('RU') < 2
+      @show_vat, @vat_included = true, false
+    elsif recommendation.flights.map{|f| [f.departure.country.iata, f.arrival.country.iata]}.flatten.uniq == ['RU']
+      @show_vat, @vat_included = true, true
+    else
+      @show_vat, @vat_included = false, false
+    end
   end
 
   def last_pay_time
