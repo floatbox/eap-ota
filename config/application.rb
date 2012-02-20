@@ -56,6 +56,8 @@ module Eviterra
 
     # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
     config.assets.precompile += %w( home.js home.css typus/application.css typus/application.js )
+
+    # config.action_dispatch.rescue_responses.update 'Mongoid::NotFound' => :not_found, ...
   end
 end
 
