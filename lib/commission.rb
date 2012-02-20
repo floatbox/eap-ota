@@ -1491,36 +1491,26 @@ commission "0%/0%"
 carrier "MU", "CHINA EASTERN"
 ########################################
 
-example 'svohkg hkgsvo/ab'
-example 'svomfm hkgsvo/ab'
-example 'hkgsvo svohkg/ab'
-agent "1 EUR на международные рейсы MU; на рейсы MU до Гонконга, Макао; при выписке международного перелета MU и перелета по территории КНР MU на одном бланке; на внутренние рейсы MU по территории КНР; на рейсы MU и рейсы других авиакомпаний на бланке MU или на  рейсы других  авиакомпаний на бланке MU на любые участки."
-subagent "5 руб. на международные рейсы MU; на рейсы MU до Гонконга, Макао; при выписке международного перелета MU и перелета по территории КНР MU на одном бланке; на внутренние рейсы MU по территории КНР; на рейсы MU и рейсы других авиакомпаний на бланке MU или на рейсы других авиакомпаний на бланке MU на любые участки."
-interline :yes
-commission "1eur/5"
-
 example 'svohkg/business'
 example 'svohkg/business hkgmfm/business'
-example 'svomfm/business'
-example 'svomfm/business mfmhkg/business'
 example 'svotsa/business'
 example 'svotsa/business tsahkg/business'
 example 'svotpe/business'
+strt_date "15.09.2011"
 agent "MU междунар или регион-ные* рейсы Бизнес класс, вылет из Москвы – 9%"
 subagent "MU междунар или регион-ные* рейсы Бизнес класс, вылет из Москвы – 7%"
 classes :business
-check { city_iatas.include?('HKG') || city_iatas.include?('MFM') || city_iatas.include?('TSA') || city_iatas.include?('TPE') }
+check { (country_iatas & %W(TW HK MO)).present? }
 discount "5%"
 commission "9%/7%"
 
 example 'ledhkg/economy'
-example 'ledmfm/economy'
 example 'ledtsa/economy'
 example 'ledtpe/economy'
 agent "MU междунар или регион-ные* рейсы Экономический  класс – 7%"
 subagent "MU междунар или регион-ные* рейсы Экономический класс – 5%"
 classes :economy
-check { city_iatas.include?('HKG') || city_iatas.include?('MFM') || city_iatas.include?('TSA') || city_iatas.include?('TPE') }
+check { (country_iatas & %W(TW HK MO)).present? }
 discount "4.5%"
 commission "7%/5%"
 
@@ -1528,9 +1518,28 @@ example 'ledhkg/economy hkgled/business'
 agent "MU междунар или регион-ные* рейсы Бизнес + Эконом класс – 7%"
 subagent "MU междунар или регион-ные* рейсы Бизнес + Эконом класс – 5%"
 classes :economy, :business
-check { city_iatas.include?('HKG') || city_iatas.include?('MFM') || city_iatas.include?('TSA') || city_iatas.include?('TPE') }
+check { (country_iatas & %W(TW HK MO)).present? }
 discount "4.5%"
 commission "7%/5%"
+
+example 'svohkg hkgsvo/ab'
+example 'svomfm/ab mfmsvo'
+agent "MU междунар или регион-ные* рейсы + рейсы Других авиакомпаний на одном бланке – 5%"
+subagent "MU междунар или регион-ные* рейсы + рейсы Других авиакомпаний на одном бланке – 3%"
+interline :yes
+commission "5%/3%"
+
+example 'shacan'
+agent "MU только внутр. перелет по территории КНР – 1 EUR"
+subagent "MU только внутр. перелет по территории КНР – 5 руб"
+domestic
+commission "1eur/5"
+
+example 'svohkg/ab'
+agent "Рейсы Других авиакомпаний  – 1 EUR"
+subagent "Рейсы Других авиакомпаний – 5 руб"
+interline :absent
+commission "1eur/5"
 
 carrier "NN", "VIM-Airlines"
 ########################################
