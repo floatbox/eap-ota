@@ -2002,10 +2002,10 @@ carrier "VN", "VIETNAM AIRLINES"
 
 example 'svohan hansvo'
 agent    "5% от опубл. тарифов на междунар.рейсах VN;"
-subagent "5% от опубликованных тарифов на международных рейсах VN;"
+subagent "3.5% от опубликованных тарифов на международных рейсах VN;"
 international
-discount "4.5%"
-commission "5%/5%"
+discount "2.5%"
+commission "5%/3.5%"
 
 example 'hansgn'
 agent    "5% от опубликованных тарифов VN на всех внутренних рейсах VN во Вьетнаме;"
