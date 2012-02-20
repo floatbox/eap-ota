@@ -243,15 +243,18 @@ commission "0%/0%"
 carrier "AB", "AIR BERLIN"
 ########################################
 
+example 'cdgsvo svocdg/lh'
 example 'svocdg'
 agent    "1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
 subagent "5 коп с билета по опубл. тарифам на рейсы AB"
+interline :no, :unconfirmed
 commission "1/0.05"
 
-example 'cdgsvo svocdg/lh'
-agent "1р Interline не прописан"
-subagent "0р Interline не прописан"
-interline :unconfirmed
+example 'cdgsvo/hg svocdg/hg'
+agent    "1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
+subagent "5 коп с билета по опубл. тарифам на рейсы AB"
+interline :yes, :absent
+check { (marketing_carrier_iatas - %W[AB HG]).empty? }
 commission "1/0.05"
 
 example 'svocdg/s7'
