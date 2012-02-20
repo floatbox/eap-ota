@@ -105,16 +105,17 @@ Order:
       - tickets_count
       - route
       - commission_carrier
-      - price_tax
       - price_fare
+      - price_tax
       - price_consolidator
       - price_blanks
-      - commission_subagent
       - price_agent
+      - commission_subagent
       - price_subagent
+      - price_discount
       - price_with_payment_commission
       - price_total
-      - need_attention
+      - income
       - partner
     options:
       selectors: payment_type, source, ticket_status, pricing_method, commission_ticketing_method

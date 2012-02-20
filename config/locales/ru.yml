@@ -91,6 +91,8 @@ ru:
         pan: "Номер карты"
         full_info: "Данные пассажиров"
         created_at: "Создан"
+        created_date: "Создан"
+        tickets_count: "Бланков"
         updated_at: "Последнее изменение"
         delivery: "Адрес доставки"
         partner: "Партнер"
