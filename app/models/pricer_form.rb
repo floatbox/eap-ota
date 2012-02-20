@@ -78,7 +78,7 @@ class PricerForm
       errors.add :date, 'Первый вылет слишком рано' if date_as_date.present? && !TimeChecker.ok_to_show(date_as_date + 1.day)
     end
 
-    def as_json(args)
+    def as_json(args = nil)
       args ||= {}
       args[:methods] = (args[:methods].to_a + [:to_as_object, :from_as_object]).uniq
       super(args)
