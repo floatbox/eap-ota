@@ -85,12 +85,14 @@ module Pricing
       price_with_payment_commission * acquiring_percentage
     end
 
+    # Касса: Режим 1 или 3  (скорректированная доля поставщика, для пробивания НДС в кассе)
     def price_original
-      price_tax + price_fare
+      price_tax + price_fare - price_discount
     end
 
+    # Касса: Режим 2 (не облагается НДС)
     def price_tax_extra
-      price_tax_and_markup + price_payment_commission
+      price_with_payment_commission - price_original
     end
 
     def recalculation
