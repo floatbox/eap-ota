@@ -324,13 +324,13 @@ ActiveRecord::Schema.define(:version => 20120220153417) do
     t.datetime "charged_at"
     t.string   "threeds_key"
     t.string   "system"
+    t.date     "charged_on"
+    t.string   "pan"
     t.string   "type"
     t.integer  "charge_id"
     t.string   "status"
     t.string   "commission"
     t.decimal  "earnings",              :precision => 9, :scale => 2, :default => 0.0, :null => false
-    t.date     "charged_on"
-    t.string   "pan"
   end
 
   add_index "payments", ["status"], :name => "index_payments_on_status"
