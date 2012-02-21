@@ -1,5 +1,6 @@
 # encoding: utf-8
 class Admin::PaymentsController < Admin::EviterraResourceController
+  include CustomCSV
   include Typus::Controller::Bulk
 
   def new
