@@ -319,7 +319,7 @@ no_commission
 
 carrier "AZ", "ALITALIA"
 ########################################
-carrier_defaults :consolidator => 0, :our_markup => '1%'
+carrier_defaults :consolidator => 0
 
 example 'dmetrn/economy'
 example 'dmetrn/business'
@@ -368,12 +368,14 @@ agent    "Если у вас не соблюдаются данные услов
 subagent "Если у вас не соблюдаются данные условия или же если у вас направление, не указанное в данном
 списке, то вы применяете стандартную комиссию в 5 руб.
 5 руб. с билета по опубл. тарифам на все остальные рейсы AZ (включая code-share);"
+our_markup "1%"
 commission "1eur/5"
 
 example 'svocdg cdgsvo/ab'
 agent    "1 euro с билета по опубл. тарифам на рейсы Interline, если 1-ый сегмент выполнен под кодом AZ."
 subagent "5 руб. с билета по опубл. тарифам на рейсы Interline, если 1-ый сегмент выполнен под кодом AZ."
 interline :first
+our_markup "1%"
 commission "1eur/5"
 
 example 'svocdg/ab cdgsvo'
