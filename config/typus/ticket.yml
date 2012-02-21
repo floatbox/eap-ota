@@ -124,6 +124,8 @@ Ticket:
       - ticketed_date
       - kind
       - mso_number
+      - last_name
+      - order.pricing_method
     options:
       selectors: status, source, office_id, validator
       date_formats:
