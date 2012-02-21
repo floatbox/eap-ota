@@ -20,8 +20,9 @@ class Admin::OrdersController < Admin::EviterraResourceController
   def index
     # так тоже можно. просто выставляет параметры обычных фильтров
     add_predefined_filter 'Unticketed', Order.unticketed.scope_attributes, 'unticketed'
-    add_predefined_filter 'Today', {:created_at => Date.today.to_s(:db)}
-    add_predefined_filter 'Yesterday', {:created_at => Date.yesterday.to_s(:db)}
+    # FIXME для наших дейт-фильтров нужен формат 2012/2/21 вместо 2012-02-21
+    #add_predefined_filter 'Today', {:created_at => Date.today.to_s(:db)}
+    #add_predefined_filter 'Yesterday', {:created_at => Date.yesterday.to_s(:db)}
     super
   end
 
