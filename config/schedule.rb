@@ -7,9 +7,9 @@ every :day do
   rake 'completer:regen'
 end
 
-every 1.minute do
+every 10.minutes do
   # слишком болшие запросы рамблер не принимает, чаще, чем раз в минуту отправить не получится
-  runner '10.times {RamblerCache.send_to_rambler}'
+  runner '100.times {RamblerCache.send_to_rambler}'
 end
 
 every 5.minutes do
