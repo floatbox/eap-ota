@@ -216,8 +216,6 @@ class Mux
       end
       short_logger.info r.short
     end
-    cryptic_logger.flush
-    short_logger.flush
   end
 
   # report error and continue
