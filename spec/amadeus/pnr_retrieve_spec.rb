@@ -78,6 +78,20 @@ describe Amadeus::Response::PNRRetrieve do
 
   end
 
+  describe 'with exchange of flwn ticket' do
+
+    let_once! :response do
+      body = File.read('spec/amadeus/xml/PNR_Retrieve_with_broken_lt.xml')
+      doc = Amadeus::Service.parse_string(body)
+      Amadeus::Response::PNRRetrieve.new(doc)
+    end
+
+    subject { response }
+    its('exchanged_tickets.keys') {should == [[[1, "a"], [6, 7]]]}
+
+
+  end
+
   describe 'with cancelled by airline segments' do
     let_once! :response do
       body = File.read('spec/amadeus/xml/PNR_Retrieve_with_cancelled_by_airline_segments.xml')
