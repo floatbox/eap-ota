@@ -38,8 +38,7 @@ gem 'mongoid'
 gem 'bson_ext'
 gem 'qu-mongo'
 gem 'SystemTimer', :platforms => :ruby_18
-
-gem 'ya2yaml'
+gem 'ya2yaml', :platforms => :ruby_18
 
 #gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
 gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'
