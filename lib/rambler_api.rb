@@ -7,7 +7,7 @@ module RamblerApi
 
   def self.redirecting_uri params
     # array of array of flight_params
-    params_for_segments = params.values_at(:dir, :ret).compact.map do |params_with_idx_for_flights|
+    params_for_segments = params.values_at(:dir, :ret).reject(&:blank?).map do |params_with_idx_for_flights|
       params_with_idx_for_flights.sort.map {|idx, flight_params| flight_params}
     end
 
