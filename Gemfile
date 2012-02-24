@@ -51,7 +51,7 @@ gem 'typus', :git => 'https://github.com/Eviterra/typus.git', :branch => "wip/da
 gem 'trashed', :git => 'https://github.com/codesnik/trashed.git'
 
 group :development do
-  gem 'mongrel', :platforms => :ruby_18
+  gem 'thin'
 end
 gem 'passenger', :group => :production
 

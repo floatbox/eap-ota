@@ -36,7 +36,11 @@ Eviterra::Application.configure do
   config.assets.compress = false
 
   # Expands the lines which load the assets
-  config.assets.debug = true
+  # для правок жаваскрипта и css можно поставить true
+  config.assets.debug = false
+
+  # закомментировать, если будет проблема с ассетами.
+  config.assets.logger = false
 
   # перечитываем конфиг перед каждым реквестом.
   # не все опции работают без рестарта!
