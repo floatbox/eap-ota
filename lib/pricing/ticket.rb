@@ -33,7 +33,11 @@ module Pricing
     end
 
     def price_supplier
-      price_fare + price_tax + price_blanks + price_consolidator + price_penalty - price_subagent
+      if status != 'voided'
+        price_fare + price_tax + price_blanks + price_consolidator + price_penalty - price_subagent
+      else
+        0
+      end
     end
 
     def price_refund
