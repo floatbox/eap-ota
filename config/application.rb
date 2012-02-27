@@ -41,6 +41,14 @@ module Eviterra
       g.orm :active_record
     end
 
+    initializer 'action_dispatch.eviterra_exceptions', :before => 'action_dispatch.configure' do
+    # config.action_dispatch.rescue_responses.update 'Mongoid::NotFound' => :not_found, ...
+    # config.action_dispatch.rescue_responses.update 'ArgumentError' => :bad_request
+      config.action_dispatch.rescue_responses.update 'BSON::InvalidObjectId' => :not_found
+    end
+
+    # Settings in config/environments/* take precedence over those specified here.
+
     # Enforce whitelist mode for mass assignment.
     # This will create an empty whitelist of attributes available for mass-assignment for all models
     # in your app. As such, your models will need to explicitly whitelist or blacklist accessible
@@ -57,7 +65,6 @@ module Eviterra
     # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
     config.assets.precompile += %w( home.js home.css typus/application.css typus/application.js )
 
-    # config.action_dispatch.rescue_responses.update 'Mongoid::NotFound' => :not_found, ...
   end
 end
 
