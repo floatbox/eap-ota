@@ -4,7 +4,6 @@ class Admin::OrdersController < Admin::EviterraResourceController
   include Typus::Controller::Bulk
 
   before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel, :reload_tickets, :update, :resend_email, :send_offline_email, :pnr_raw, :void, :make_payable_by_card]
-  before_filter :update_offline_booking_flag, :only => :create
 
   # def set_scope
   #   # добавлять фильтры лучше в def index и т.п., но так тоже работает (пока?)
@@ -26,14 +25,23 @@ class Admin::OrdersController < Admin::EviterraResourceController
     super
   end
 
-  def update
-    super
+  # FIXME копипаста из тайпуса, чтобы добавить вызов set_attributes_on_new.
+  # надеюсь, в будущих версиях тайпуса - выковыряем
+  def new
+    @item = @resource.new(params[:resource])
+
+    set_attributes_on_new
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render :json => @item }
+    end
   end
 
   def show_versions
     get_object
   end
-  
+
   def show_pnr
     if params[:lang]
       redirect_to show_order_path(:id => @order.pnr_number, :lang => "EN")
@@ -109,10 +117,6 @@ class Admin::OrdersController < Admin::EviterraResourceController
     @order = Order.find(params[:id])
   end
 
-  def update_offline_booking_flag
-    params[:order][:offline_booking] = '1'
-  end
-
   def void
     Strategy.select(:order => @order).void
     redirect_to :action => :show, :id => @order.id
@@ -130,5 +134,10 @@ class Admin::OrdersController < Admin::EviterraResourceController
     redirect_to :back, :notice => notice
   end
   private :bulk_charge
+
+  def set_attributes_on_new
+    @item.offline_booking = true
+  end
+  private :set_attributes_on_new
 end
 
