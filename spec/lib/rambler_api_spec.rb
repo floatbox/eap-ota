@@ -117,11 +117,11 @@ describe RamblerApi do
     uri.should include("amadeus.SU.MNK.YYY..SU:UN100SVOLED#{future_date}-UN200LEDYXU#{future_date}.BP:UN300YXUSVO#{future_date(2)}")
   end
 
-  let (:other_encoded_params) { 'dir%5B0%5D%5Barr%5D%5Bp%5D=DME&dir%5B0%5D%5Bbcl%5D=N&dir%5B0%5D%5Bcls%5D=E&dir%5B0%5D%5Bdep%5D%5Bdt%5D=270212&dir%5B0%5D%5Bdep%5D%5Bp%5D=KUF&dir%5B0%5D%5Bma%5D=PS&dir%5B0%5D%5Bn%5D=9032&dir%5B0%5D%5Boa%5D=S7&dir%5B1%5D%5Barr%5D%5Bp%5D=KBP&dir%5B1%5D%5Bbcl%5D=N&dir%5B1%5D%5Bcls%5D=E&dir%5B1%5D%5Bdep%5D%5Bdt%5D=270212&dir%5B1%5D%5Bdep%5D%5Bp%5D=DME&dir%5B1%5D%5Bma%5D=PS&dir%5B1%5D%5Bn%5D=574&dir%5B1%5D%5Boa%5D=PS&ret=&va=PS' }
+  let (:other_encoded_params) { "dir%5B0%5D%5Barr%5D%5Bp%5D=DME&dir%5B0%5D%5Bbcl%5D=N&dir%5B0%5D%5Bcls%5D=E&dir%5B0%5D%5Bdep%5D%5Bdt%5D=#{future_date}&dir%5B0%5D%5Bdep%5D%5Bp%5D=KUF&dir%5B0%5D%5Bma%5D=PS&dir%5B0%5D%5Bn%5D=9032&dir%5B0%5D%5Boa%5D=S7&dir%5B1%5D%5Barr%5D%5Bp%5D=KBP&dir%5B1%5D%5Bbcl%5D=N&dir%5B1%5D%5Bcls%5D=E&dir%5B1%5D%5Bdep%5D%5Bdt%5D=#{future_date}&dir%5B1%5D%5Bdep%5D%5Bp%5D=DME&dir%5B1%5D%5Bma%5D=PS&dir%5B1%5D%5Bn%5D=574&dir%5B1%5D%5Boa%5D=PS&ret=&va=PS" }
 
   it 'should generate correct redirect again' do
     uri = described_class.redirecting_uri(parse_params(other_encoded_params))
-    uri.should include("amadeus.PS.NN.YY..S7:PS9032KUFDME270212-PS574DMEKBP270212")
+    uri.should include("amadeus.PS.NN.YY..S7:PS9032KUFDME#{future_date}-PS574DMEKBP#{future_date}")
   end
 
   it 'should generate correct hash' do

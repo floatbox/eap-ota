@@ -46,7 +46,7 @@ describe BookingController do
       pricer_form.stub(:save_to_cache).and_return('true')
       pricer_form.stub(:query_key)
       pricer_form.stub(:partner).and_return('rambler')
-      get :api_rambler_booking, request_params
+      get :api_rambler_booking, request_params.merge(:format => 'xml')
     end
 
     it 'creates appropriate recommendation' do
@@ -74,7 +74,7 @@ describe BookingController do
         :cabins => ['C']
         )).and_return(recommendation)
       recommendation.should_receive(:serialize).and_return("amadeus.SU.N.C..SU840LEDMOW280911" )
-      get :api_rambler_booking, request_params
+      get :api_rambler_booking, request_params.merge(:format => 'xml')
     end
   end
 

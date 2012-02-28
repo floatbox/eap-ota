@@ -53,10 +53,11 @@ class BookingController < ApplicationController
     StatCounters.inc %W[enter.rambler_cache.success]
     redirect_to uri
 
+  # FIXME можно указать :formats => [:xml], но я задал дефолтный формат в роутинге
   rescue IataStash::NotFound => iata_error
-    render 'api/rambler_failure.xml', :status => :not_found, :locals => { :message => iata_error.message }
+    render 'api/rambler_failure', :status => :not_found, :locals => { :message => iata_error.message }
   rescue ArgumentError => argument_error
-    render 'api/rambler_failure.xml', :status => :bad_request, :locals => { :message => argument_error.message }
+    render 'api/rambler_failure', :status => :bad_request, :locals => { :message => argument_error.class }
   ensure
     StatCounters.inc %W[enter.rambler_cache.total]
   end
