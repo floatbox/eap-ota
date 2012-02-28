@@ -56,6 +56,32 @@ class Strategy::Amadeus < Strategy::Base
     ::Amadeus::Service.air_flight_info(:date => date, :number => m[2], :carrier => m[1], :departure_iata => m[5], :arrival_iata => m[6]).flight
   end
 
+  def recommendation_from_booking
+
+    ::Amadeus.booking do |amadeus|
+      pnr_resp = amadeus.pnr_retrieve(:number => @order.pnr_number)
+      tst_resp = amadeus.ticket_display_tst
+      amadeus.pnr_ignore
+      rec_params = {
+        :booking_classes => pnr_resp.booking_classes,
+        :source => 'amadeus',
+        :variants => [
+          Variant.new(
+            :segments => pnr_resp.flights.collect { |flight|
+              Segment.new( :flights => [flight] )
+            }
+          )
+        ]}
+      rec_params.merge!(
+        :price_fare => tst_resp.total_fare,
+        :price_tax => tst_resp.total_tax,
+        :validating_carrier_iata => tst_resp.validating_carrier_code
+      ) if tst_resp.success?
+
+      Recommendation.new(rec_params)
+    end
+  end
+
   def booking_attributes
     ::Amadeus.booking do |amadeus|
       pnr_resp = amadeus.pnr_retrieve(:number => @order.pnr_number)
