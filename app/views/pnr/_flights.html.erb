@@ -45,7 +45,7 @@
 
         <%= flight.departure.city.name_en %><br>
         <strong style="font-weight: bold;"><%= flight.departure_name_en %><% if flight.departure_term %>, terminal&nbsp;<%= flight.departure_term %><% end %> — <%= flight.departure.iata %><% if flight.departure_term %>(<%= flight.departure_term %>)<% end %></strong><br>
-        <% if flight.operating_carrier_name %>
+        <% if flight.operating_carrier_name_en %>
           <%= flight.operating_carrier_name_en %>
         <% else %>
           <%= flight.marketing_carrier_name_en %>

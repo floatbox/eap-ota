@@ -1,0 +1,92 @@
+Выставить счет по заказу
+
+Номер PNR: <%= @order.pnr_number %>
+
+МАРШРУТ (<%= @order.route %>)
+
+<% @pnr.flights.each do |flight| %>
+  <%= full_human_date( flight.departure_date ) %>    <%= flight.departure.city.name %> - <%= flight.arrival.city.name %>
+  <% if flight.operating_carrier_name %>
+    Авиакомпания: <%= flight.operating_carrier_name %>
+  <% else %>
+    Авиакомпания: <%= flight.marketing_carrier_name %>
+  <% end %>
+  
+<% end %>
+- - - - - 
+<% if @order.tickets.blank? %>
+ЗАКАЗ
+
+Данные пассажиров: <%= @order.full_info %>
+
+Тариф: <%= @order.price_fare %> р.
+Таксы: <%= @order.price_tax %> р. 
+
+Сбор 1%/2% авиацентра: <%= @order.commission_consolidator %>%
+Сбор 1%/2% авиацентра: <%= @order.price_consolidator %> р.
+
+Сбор за бланки: <%= @order.commission_blanks %> р. c билета
+Сбор за бланки: <%= @order.price_blanks %> р.
+
+Скидка от тарифа: <%= @order.commission_discount %>%
+Скидка от тарифа: <%= @order.price_discount %> р.
+
+Надбавка к тарифу: <%= @order.commission_our_markup %>
+Надбавка к тарифу: <%= @order.price_our_markup %> р.
+
+Cтоимость билета до эквайринга: <%= @order.price_total %> р.
+Эквайринг: <%= @order.price_payment_commission.round 2 %> р.
+
+Итого к оплате / Оплачено: <%= @order.price_with_payment_commission %> р.
+
+Агентская комиссия: <%= @order.commission_agent %> %/р.
+Агентская комиссия: <%= @order.price_agent %> р.
+
+Субагентская комиссия: <%= @order.commission_subagent %> %/р.
+Субагентская комиссия: <%= @order.price_subagent %> р.
+
+<% else %>
+
+БИЛЕТЫ
+
+<% @order.tickets.each do |ticket|%>
+  - - - - -
+  Серия-номер: <%= ticket.number_with_code %>
+  Данные пассажира: <%= ticket.first_name %> <%= ticket.last_name %>
+  Маршрут: <%= ticket.route %>
+  Тариф: <%= ticket.price_fare %> р.
+  Таксы: <%= ticket.price_tax %> р.
+  
+  Сбор 1%/2% авиацентра: <%= ticket.commission_consolidator %>%
+  Сбор 1%/2% авиацентра: <%= ticket.price_consolidator %> р.
+
+  Сбор за бланки: <%= ticket.price_blanks %> р.
+
+  Скидка от тарифа: <%= ticket.commission_discount %>%
+  Скидка от тарифа: <%= ticket.price_discount %> р.
+
+  Надбавка к тарифу: <%= ticket.commission_our_markup %>
+  Надбавка к тарифу: <%= ticket.price_our_markup %> р.
+
+  Штраф: <%= ticket.price_penalty %> р.
+  Эквайринг: <%= ticket.price_payment_commission.round 2 %> р.
+
+  Итого к оплате / Оплачено: <%= ticket.price_with_payment_commission %> р.
+
+  Агентская комиссия: <%= ticket.commission_agent %> %/р.
+  Агентская комиссия: <%= ticket.price_agent %> р.
+
+  Субагентская комиссия: <%= ticket.commission_subagent %> %/р.
+  Субагентская комиссия: <%= ticket.price_subagent %> р.
+
+  - - - - -
+<% end %>
+
+<% end %>
+
+Касса Режим 1 или 3: <%= @order.price_original %> р.
+Касса Режим 2: <%= @order.price_tax_extra %> р.
+Способ оплаты: <%= @order.payment_type %>
+
+Создан: <%= @order.created_at %> 
+Последнее изменение: <%= @order.updated_at %>

@@ -16,7 +16,7 @@ admin:
   Airplane: create, read, update, delete, decode_amadeus, decode_sirena, show_versions
   Airport: create, read, update, delete, update_completer, decode_amadeus, decode_sirena, show_versions
   City: create, read, update, delete, update_completer, decode_amadeus, decode_sirena, show_versions
-  Order: create, read, update, unblock, charge, ticket, reload_tickets, cancel, show_pnr, money_received, no_money_received, resend_email, send_offline_email, bulk_charge, bulk, pnr_raw, void, make_payable_by_card, show_versions
+  Order: create, read, update, unblock, charge, ticket, reload_tickets, cancel, show_pnr, money_received, no_money_received, resend_email, send_offline_email, bulk_charge, bulk, pnr_raw, void, make_payable_by_card, show_versions, send_invoice
   OrderComment: create, read, update, delete
   Notification: create, read, update, delete
   Ticket: create, read, update, ticket_raw, bulk_set_ticketed_date, bulk, new_refund, confirm_refund, show_versions

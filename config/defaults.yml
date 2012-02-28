@@ -83,5 +83,6 @@ geolocation:
 mail:
   ticket_cc: ~
   subscription_cc: subscription@eviterra.com
+  invoice_to: a.spekhova@eviterra.com
 
 

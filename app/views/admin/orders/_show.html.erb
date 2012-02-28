@@ -1,4 +1,22 @@
-<p style="text-align:right"><a href='/admin/orders/show_versions/<%=@item.id %>?_popup=true' class='iframe'>История изменений</a></p>
+
+<p style="text-align:right"><a href='/admin/orders/show_versions/<%=@item.id %>?_popup=true' class='iframe'>История изменений</a>
+ | <a href="#" onclick="$('#send_invoice_form').toggle();return false">Invoice</a></p>
+
+ <script type="text/javascript">
+ jQuery(function($) {
+   $("#send_invoice_form").bind("ajax:success", function(data, status, xhr) {
+     $(this).fadeOut();
+   });
+ });
+ </script>
+
+ <div id="send_invoice_form" style="display: none; text-align:right">
+ <%= form_tag url_for(:action => 'send_invoice', :id => @item.id), :method => :post, :remote => true do %>
+ Комментарий: <%= text_field_tag :comment %>
+ <%= submit_tag "Send", :class => :submit %>
+ <% end %>
+ </div>
+
 <div id="term">Терминал:
   <pre data-replace-with="<%= url_for :action => :pnr_raw, :id => @item.id %>"></pre>
 </div>
