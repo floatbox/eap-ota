@@ -109,13 +109,7 @@ module Sirena
       # для загона в pricing_variant
       def recommendation
         Recommendation.new(
-          :variants => [
-            Variant.new(
-              :segments => flights.collect { |flight|
-                Segment.new( :flights => [flight] )
-              }
-            )
-          ],
+          :flights => flights,
           :booking_classes => booking_classes,
           :source => 'sirena'
         )

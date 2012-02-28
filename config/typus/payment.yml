@@ -5,6 +5,7 @@ Payment: &PAYMENT_CONFIG
     show: show_link, order, status_decorated, charge_link, external_gateway_link, price, commission, earnings, created_at, charged_on, name_in_card, pan, reject_reason, error_explanation
     new: type, price
     edit: type, price, commission, charged_on
+    csv: type, price, charged_on
     options:
       date_formats:
         created_at: long
@@ -17,6 +18,7 @@ Payment: &PAYMENT_CONFIG
   order_by: -created_at
   filters: created_at, charged_on, type, status
   application: Orders, 1
+  export: csv
 
 # Typus не умеет отображать таблицы для Single table inheritance
 PaytureCharge:

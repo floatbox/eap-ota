@@ -106,12 +106,15 @@ Ticket:
       - price_tax
       - price_total
       - price_consolidator
+      - price_discount
+      - price_our_markup
       - price_blanks
       - commission_agent
       - price_agent
       - commission_subagent
       - price_subagent
       - price_penalty
+      - price_with_payment_commission
       - pnr_number
       - need_attention
       - validating_carrier

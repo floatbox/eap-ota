@@ -6,8 +6,8 @@ describe Strategy::Amadeus do
 
   before do
     # safeguard
-    Amadeus.stub(:booking).and_yield(amadeus).and_return(amadeus)
-    Amadeus.stub(:ticketing).and_yield(amadeus).and_return(amadeus)
+    Amadeus.stub(:booking).and_yield(amadeus)
+    Amadeus.stub(:ticketing).and_yield(amadeus)
   end
 
   it "not yet implements #void" do
@@ -26,6 +26,69 @@ describe Strategy::Amadeus do
   pending "#ticket"
   pending "#raw_pnr"
   pending "#raw_ticket"
+
+  describe "#booking_attributes" do
+
+    before(:each) do
+      amadeus.stub(:pnr_retrieve).and_return(pnr_resp)
+      amadeus.stub(:ticket_display_tst).and_return(tst_resp)
+      amadeus.stub(:pnr_ignore)
+    end
+
+    let :pnr_resp do
+      body = File.read('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml')
+      doc = Amadeus::Service.parse_string(body)
+      Amadeus::Response::PNRRetrieve.new(doc)
+    end
+
+    let :tst_resp do
+      body = File.read('spec/amadeus/xml/Ticket_DisplayTST_with_ticket.xml')
+      doc = Amadeus::Service.parse_string(body)
+      Amadeus::Response::TicketDisplayTST.new(doc)
+    end
+
+    subject do
+      Strategy::Amadeus.new(:order => Factory(:order)).booking_attributes
+    end
+
+    it {should include(:blank_count => 1)}
+    it {should include(:commission_carrier => "SU")}
+    it {should include(:departure_date => Date.new(2011, 9, 8))}
+    it {should include(:price_fare => 1400)}
+    it {should include(:price_tax => 1281)}
+
+  end
+
+  describe "#recommendation_from_booking" do
+
+    before(:each) do
+      amadeus.stub(:pnr_retrieve).and_return(pnr_resp)
+      amadeus.stub(:ticket_display_tst).and_return(tst_resp)
+      amadeus.stub(:pnr_ignore)
+    end
+
+    let :pnr_resp do
+      body = File.read('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml')
+      doc = Amadeus::Service.parse_string(body)
+      Amadeus::Response::PNRRetrieve.new(doc)
+    end
+
+    let :tst_resp do
+      body = File.read('spec/amadeus/xml/Ticket_DisplayTST_with_ticket.xml')
+      doc = Amadeus::Service.parse_string(body)
+      Amadeus::Response::TicketDisplayTST.new(doc)
+    end
+
+    subject do
+      Strategy::Amadeus.new(:order => Factory(:order)).recommendation_from_booking
+    end
+
+    its(:validating_carrier_iata) {should == "SU"}
+    its(:price_fare) {should == 1400}
+    its(:price_tax) {should == 1281}
+    its('flights.first.flight_code') {should == ':SU788MRVSVO080911'}
+
+  end
 
   describe "#flight_from_gds_code" do
     let (:flight) { double(Flight) }

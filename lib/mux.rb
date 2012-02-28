@@ -4,9 +4,7 @@
 class Mux
 
   cattr_accessor :cryptic_logger do ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_cryptic.log') end
-  cryptic_logger.auto_flushing = nil
   cattr_accessor :short_logger do ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_short.log') end
-  short_logger.auto_flushing = nil
   cattr_accessor :logger do Rails.logger end
 
   include ActiveSupport::Benchmarkable
@@ -218,8 +216,6 @@ class Mux
       end
       short_logger.info r.short
     end
-    cryptic_logger.flush
-    short_logger.flush
   end
 
   # report error and continue

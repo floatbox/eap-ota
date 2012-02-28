@@ -6,9 +6,6 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  # 404 на старые урлы
-  ActionDispatch::ShowExceptions.rescue_responses.update 'Cache::NotFound' => :not_found
-
   before_filter :set_admin_user_for_airbrake
   def set_admin_user_for_airbrake
     request.env['eviterra.admin_user'] = admin_user.email if admin_user

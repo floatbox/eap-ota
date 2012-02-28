@@ -3,10 +3,10 @@ module Amadeus::Request
 
   SOAP_ACTIONS = YAML.load_file(File.expand_path("../soap_actions.yml",  __FILE__))
   # 'AirMultiAvailability' => 'Air_MultiAvailability'
-  SOAP_ACTIONS_FOR_CLASS = Hash[ SOAP_ACTIONS.keys.map {|action| [action.camelize, action] }]
+  SOAP_ACTIONS_FOR_CLASS = Hash[ SOAP_ACTIONS.keys.map {|action| [action.sub('_',''), action] }]
 
   def self.for action
-    "::Amadeus::Request::#{action.camelize}".constantize
+    "::Amadeus::Request::#{action.sub('_','')}".constantize
   # rescue NameError
   #  Amadeus::Request::Base
   end

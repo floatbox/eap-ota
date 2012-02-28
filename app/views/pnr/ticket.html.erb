@@ -44,7 +44,7 @@
           <% unless @lang %>Итоговая стоимость /<%end%> Total<br>
           <% if @prices.show_vat? && @prices.sold_tickets.present? %>
 
-            <% unless @lang %>В том числе НДС <br><%end%>
+            <% unless @lang %>В том числе НДС /<%end%> Including VAT<br>
           <% end %>
           <% unless @lang %>Форма оплаты /<%end%> Paid by<br>
           <% unless @lang %>Дата оформления /<%end%> Issue date

@@ -6,64 +6,47 @@ module RamblerApi
   include KeyValueInit
 
   def self.redirecting_uri params
-    direct_flights = []
-    params[:dir].sort.each do |k, flight|
-      direct_flights << Flight.new(
-        :operating_carrier_iata => flight[:oa],
-        :marketing_carrier_iata => flight[:ma],
-        :flight_number => flight[:n],
-        :departure_iata => flight[:dep][:p],
-        :arrival_iata => flight[:arr][:p],
-        :departure_date => flight[:dep][:dt] )
+    # array of array of flight_params
+    params_for_segments = params.values_at(:dir, :ret).reject(&:blank?).map do |params_with_idx_for_flights|
+      params_with_idx_for_flights.sort.map {|idx, flight_params| flight_params}
     end
-    direct_segments = Segment.new(:flights => direct_flights)
 
-    if params[:ret].present?
-      return_flights = []
-      params[:ret].sort.each do |k, flight|
-        return_flights << Flight.new(
+    segments = params_for_segments.map do |params_for_segment|
+      flights = params_for_segment.map do |flight|
+        Flight.new(
           :operating_carrier_iata => flight[:oa],
           :marketing_carrier_iata => flight[:ma],
           :flight_number => flight[:n],
           :departure_iata => flight[:dep][:p],
           :arrival_iata => flight[:arr][:p],
-          :departure_date => flight[:dep][:dt])
-        end
-      return_segments = Segment.new(:flights => return_flights)
-    end
-    segments = [direct_segments, return_segments]
-    segments.compact!
-    variants = Variant.new(:segments => segments)
-
-    booking_classes, cabins = [],[]
-
-    params[:dir].sort.each do |k, segment|
-      booking_classes << segment[:bcl]
-      cabins << INCOMING_CABINS_MAPPING[segment[:cls]]
-    end
-    if params[:ret].present?
-      params[:ret].sort.each do |k, segment|
-        booking_classes << segment[:bcl]
-        cabins << INCOMING_CABINS_MAPPING[segment[:cls]]
+          :departure_date => flight[:dep][:dt]
+        )
       end
+      Segment.new(:flights => flights)
     end
+
+    booking_classes, cabins =
+      params_for_segments.flatten.map do |flight_params|
+        [ flight_params[:bcl], INCOMING_CABINS_MAPPING[flight_params[:cls]] ]
+      end.transpose
 
     recommendation = Recommendation.new(
       :source => 'amadeus',
       :validating_carrier_iata => params[:va],
       :booking_classes => booking_classes,
       :cabins => cabins,
-      :variants => [variants])
+      :variants => [ Variant.new(:segments => segments) ]
+    )
 
-    date2 = return_flights.first.departure_date if return_flights.present?
     pricer_form_hash = {
-        :from => direct_flights.first.departure.city.iata,
-        :to => direct_flights.last.arrival.city.iata,
-        :date1 => direct_flights.first.departure_date,
-        :date2 => date2,
+        :from => segments.first.departure.city.iata,
+        :to => segments.first.arrival.city.iata,
+        :date1 => segments[0].departure_date,
+        :date2 => segments[1].try(:departure_date),
         :adults => 1,
         :cabin => recommendation.cabins.first,
         :partner => 'rambler'}
+
     search = PricerForm.simple(pricer_form_hash)
     recommendation = recommendation.serialize
     if search.valid?
@@ -82,7 +65,7 @@ module RamblerApi
   end
 
   def self.recommendation_hash recommendation, variant
-    hash, hash[:dir], hash[:ret] = {}, {}, {}
+    hash = {}
     hash[:va] = recommendation.validating_carrier_iata
     hash[:dir], hash[:ret] = variant.segments.map do |segment|
       segment_hash(segment, recommendation)

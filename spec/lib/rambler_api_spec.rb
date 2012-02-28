@@ -59,7 +59,7 @@ describe RamblerApi do
         :price_tax => 2000
     )
   end
-  let(:yamled_params){"dir%5B0%5D%5Barr%5D%5Bp%5D=LED&dir%5B0%5D%5Bbcl%5D=M&dir%5B0%5D%5Bcls%5D=E&dir%5B0%5D%5Bdep%5D%5Bdt%5D=#{future_date}&dir%5B0%5D%5Bdep%5D%5Bp%5D=SVO&dir%5B0%5D%5Bma%5D=UN&dir%5B0%5D%5Bn%5D=100&dir%5B0%5D%5Boa%5D=SU&dir%5B1%5D%5Barr%5D%5Bp%5D=YXU&dir%5B1%5D%5Bbcl%5D=N&dir%5B1%5D%5Bcls%5D=E&dir%5B1%5D%5Bdep%5D%5Bdt%5D=#{future_date}&dir%5B1%5D%5Bdep%5D%5Bp%5D=LED&dir%5B1%5D%5Bma%5D=UN&dir%5B1%5D%5Bn%5D=200&dir%5B1%5D%5Boa%5D=UN&ret%5B0%5D%5Barr%5D%5Bp%5D=SVO&ret%5B0%5D%5Bbcl%5D=K&ret%5B0%5D%5Bcls%5D=E&ret%5B0%5D%5Bdep%5D%5Bdt%5D=#{future_date(2)}&ret%5B0%5D%5Bdep%5D%5Bp%5D=YXU&ret%5B0%5D%5Bma%5D=UN&ret%5B0%5D%5Bn%5D=300&ret%5B0%5D%5Boa%5D=BP&va=SU"}
+  let(:encoded_params){"dir%5B0%5D%5Barr%5D%5Bp%5D=LED&dir%5B0%5D%5Bbcl%5D=M&dir%5B0%5D%5Bcls%5D=E&dir%5B0%5D%5Bdep%5D%5Bdt%5D=#{future_date}&dir%5B0%5D%5Bdep%5D%5Bp%5D=SVO&dir%5B0%5D%5Bma%5D=UN&dir%5B0%5D%5Bn%5D=100&dir%5B0%5D%5Boa%5D=SU&dir%5B1%5D%5Barr%5D%5Bp%5D=YXU&dir%5B1%5D%5Bbcl%5D=N&dir%5B1%5D%5Bcls%5D=E&dir%5B1%5D%5Bdep%5D%5Bdt%5D=#{future_date}&dir%5B1%5D%5Bdep%5D%5Bp%5D=LED&dir%5B1%5D%5Bma%5D=UN&dir%5B1%5D%5Bn%5D=200&dir%5B1%5D%5Boa%5D=UN&ret%5B0%5D%5Barr%5D%5Bp%5D=SVO&ret%5B0%5D%5Bbcl%5D=K&ret%5B0%5D%5Bcls%5D=E&ret%5B0%5D%5Bdep%5D%5Bdt%5D=#{future_date(2)}&ret%5B0%5D%5Bdep%5D%5Bp%5D=YXU&ret%5B0%5D%5Bma%5D=UN&ret%5B0%5D%5Bn%5D=300&ret%5B0%5D%5Boa%5D=BP&va=SU"}
   let(:request_params) do
     {
       :va  => 'SU',
@@ -117,16 +117,42 @@ describe RamblerApi do
     uri.should include("amadeus.SU.MNK.YYY..SU:UN100SVOLED#{future_date}-UN200LEDYXU#{future_date}.BP:UN300YXUSVO#{future_date(2)}")
   end
 
+  let (:other_encoded_params) { 'dir%5B0%5D%5Barr%5D%5Bp%5D=DME&dir%5B0%5D%5Bbcl%5D=N&dir%5B0%5D%5Bcls%5D=E&dir%5B0%5D%5Bdep%5D%5Bdt%5D=270212&dir%5B0%5D%5Bdep%5D%5Bp%5D=KUF&dir%5B0%5D%5Bma%5D=PS&dir%5B0%5D%5Bn%5D=9032&dir%5B0%5D%5Boa%5D=S7&dir%5B1%5D%5Barr%5D%5Bp%5D=KBP&dir%5B1%5D%5Bbcl%5D=N&dir%5B1%5D%5Bcls%5D=E&dir%5B1%5D%5Bdep%5D%5Bdt%5D=270212&dir%5B1%5D%5Bdep%5D%5Bp%5D=DME&dir%5B1%5D%5Bma%5D=PS&dir%5B1%5D%5Bn%5D=574&dir%5B1%5D%5Boa%5D=PS&ret=&va=PS' }
+
+  it 'should generate correct redirect again' do
+    uri = described_class.redirecting_uri(parse_params(other_encoded_params))
+    uri.should include("amadeus.PS.NN.YY..S7:PS9032KUFDME270212-PS574DMEKBP270212")
+  end
+
   it 'should generate correct hash' do
     described_class.recommendation_hash(recommendation, variant).should == request_params
   end
 
   it 'should generate correct hash for rambler' do
-    described_class.uri_for_rambler(request_params).should == "http://eviterra.com/api/rambler_booking.xml?#{yamled_params}"
+    described_class.uri_for_rambler(request_params).should == "http://eviterra.com/api/rambler_booking.xml?#{encoded_params}"
   end
 
   def future_date(ccn=0)
     date = PricerForm.convert_api_date((Date.today + 1.month + ccn.days).to_s)
+  end
+
+  def parse_params(query_string)
+    normalize_parameters(Rack::Utils.parse_nested_query(query_string))
+  end
+
+  # Convert nested Hash to HashWithIndifferentAccess
+  # копипаста из rails actionpack/lib/action_dispatch/http/parameters.rb
+  def normalize_parameters(value)
+    case value
+    when Hash
+      h = {}
+      value.each { |k, v| h[k] = normalize_parameters(v) }
+      h.with_indifferent_access
+    when Array
+      value.map { |e| normalize_parameters(e) }
+    else
+      value
+    end
   end
 
 end

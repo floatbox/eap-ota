@@ -10,7 +10,7 @@ module Amadeus
   # только для передачи прав доступа
   WORKING = 'MOWR2233B'
 
-  set_table_name 'amadeus_sessions'
+  self.table_name = 'amadeus_sessions'
 
   cattr_accessor :logger do
     Rails.logger

@@ -6,6 +6,24 @@ describe Recommendation do
     expect { Recommendation.deserialize('sirena.ЮТ.ЦС.YY..ЮТ369ВНКПЛК060711.ЮТ370ПЛКВНК270711') }.to_not raise_error
   end
 
+  describe "#flight=" do
+    subject do
+      Recommendation.new
+    end
+    let(:fl1) {Flight.new}
+    let(:fl2) {Flight.new}
+    let(:fl3) {Flight.new}
+    let(:flights) {[fl1,fl2,fl3]}
+
+    before do
+      subject.flights = flights
+    end
+
+    its(:flights) { should == flights }
+    its('variants.size') { should == 1 }
+
+  end
+
   describe "#example" do
     context "should allow to specify flight details" do
 

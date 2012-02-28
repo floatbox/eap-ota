@@ -54,9 +54,9 @@ class BookingController < ApplicationController
     redirect_to uri
 
   rescue IataStash::NotFound => iata_error
-    redirect_to 'api/rambler_failure', :status => 404, :locals => { :message => iata_error.message }
+    render 'api/rambler_failure.xml', :status => :not_found, :locals => { :message => iata_error.message }
   rescue ArgumentError => argument_error
-    redirect_to 'api/rambler_failure', :status => 400, :locals => { :message => argument_error.message }
+    render 'api/rambler_failure.xml', :status => :bad_request, :locals => { :message => argument_error.message }
   ensure
     StatCounters.inc %W[enter.rambler_cache.total]
   end

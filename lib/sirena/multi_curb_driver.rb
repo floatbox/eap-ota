@@ -25,6 +25,9 @@ module Sirena
     def send_request(*args)
       req = make_request(*args)
       req.perform
+      # WTF it isn't automatic?
+      raise Curl::Err::HTTPError, req.response_code unless (200..299) === req.response_code
+
       fix_encoding!(req.body_str)
       req.body_str
     ensure
