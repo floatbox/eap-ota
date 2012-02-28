@@ -90,6 +90,10 @@ class Recommendation
     variants.sum(&:segments)
   end
 
+  def flights=(flights_array)
+    self.variants = [Variant.new(:flights => flights_array)]
+  end
+
   def flights
     segments.sum(&:flights)
   end

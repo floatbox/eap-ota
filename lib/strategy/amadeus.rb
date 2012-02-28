@@ -65,13 +65,8 @@ class Strategy::Amadeus < Strategy::Base
       rec_params = {
         :booking_classes => pnr_resp.booking_classes,
         :source => 'amadeus',
-        :variants => [
-          Variant.new(
-            :segments => pnr_resp.flights.collect { |flight|
-              Segment.new( :flights => [flight] )
-            }
-          )
-        ]}
+        :flights => pnr_resp.flights
+        }
       rec_params.merge!(
         :price_fare => tst_resp.total_fare,
         :price_tax => tst_resp.total_tax,

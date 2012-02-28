@@ -6,6 +6,13 @@ class Variant
   attr_accessor :segments
   delegate :departure_datetime_utc, :to => 'segments.first', :allow_nil => true
 
+  def flights=(flights_array)
+    self.segments =[]
+    flights_array.each do |fl|
+      segments << Segment.new(:flights => [fl])
+    end
+  end
+
   def flights
     segments.sum(&:flights)
   end
