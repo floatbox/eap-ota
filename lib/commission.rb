@@ -80,14 +80,14 @@ example 'AERDME/W DMEAER/W'
 agent "3% МВЛ. ВВЛ L, V, X, T, N, I, G, W, U"
 subagent "2 % от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWU"
-discount "1.5%"
+discount "1.9%"
 commission "3%/2%"
 
 example 'aerdme dmeaer/ab'
 agent "4% Interline с участком Трансаэро. Без участка UN запрещено."
 subagent "2 (два) % от тарифа на рейсы Interline c участком UN. Запрещена продажа на рейсы interline без участка UN."
 interline :yes
-# discount "1%"
+discount "1%"
 commission "4%/2%"
 
 example 'TLVDME/T DMEJFK/T JFKDME/T DMETLV/T'
@@ -824,7 +824,7 @@ example 'svocdg cdgsvo/ab'
 agent "7% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 subagent "5% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 interline :no, :yes
-discount "4.5%"
+discount "4.9%"
 commission '7%/5%'
 
 example 'ledsvo/business svoled/business'
