@@ -89,7 +89,7 @@ OrderComment:
   fields:
     default: text, created_at, typus_user, assigned_to, status, priority
     list: order, text, created_at, typus_user, assigned_to, status, priority
-    form: order, text, assigned_to, status, priority
+    form: text, assigned_to, status, priority
     show: order, text, created_at, typus_user, assigned_to, status, priority
     options:
       selectors: status, priority
