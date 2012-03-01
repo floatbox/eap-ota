@@ -8,7 +8,6 @@ class Notification < ActiveRecord::Base
   validates :destination, :presence => true
 
   before_validation :set_order_data
-  after_create :set_order_email_status
 
   scope :email_queue, where(
     :method => 'email',
@@ -24,6 +23,20 @@ class Notification < ActiveRecord::Base
   def self.statuses; ["sent", "error", "delayed"] end
   def self.formats; ["booking", "ticket"] end
   def self.langs; ["EN"] end
+
+  def create_pnr
+    self.attach_pnr = true
+    save
+    set_order_email_status
+  end
+
+  def create_visa_notice
+    self.attach_pnr = false
+    self.subject = 'уведомление о визовых данных'
+    self.comment = 'уведомление о визовых данных'
+    self.status = 'delayed'
+    save
+  end
 
   def set_order_data
     self.pnr_number = order.pnr_number

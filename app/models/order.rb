@@ -87,17 +87,19 @@ class Order < ActiveRecord::Base
       case self.source
       when 'amadeus'
         if self.ticket_status == 'booked' && (self.payment_status == 'blocked' || self.payment_status == 'pending')
-          self.notifications.create
+          self.notifications.new.create_pnr
         end
       when 'sirena'
         if self.ticket_status == 'ticketed'
-          self.notifications.create
+          self.notifications.new.create_pnr
         end
       end
     end
   end
 
-
+  def queued_email!
+    update_attribute(:email_status, 'queued') if self.email_status == ''
+  end
 
   # FIXME сломается на ruby1.9
   def capitalize_pnr
