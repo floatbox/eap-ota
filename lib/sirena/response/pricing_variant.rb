@@ -1,7 +1,7 @@
 # encoding: utf-8
 module Sirena
   module Response
-    class PricingVariant < Pricing
+    class PricingVariant < Sirena::Response::Pricing
 
     end
   end
