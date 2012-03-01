@@ -397,15 +397,6 @@ class Order < ActiveRecord::Base
     update_attribute(:email_status, '')
   end
 
-  def resend_email!
-    update_attribute(:email_status, '')
-  end
-
-  def queued_email!
-    update_attribute(:email_status, 'queued')
-  end
-
-
 # class methods
 
   # FIXME надо какой-то логгинг
@@ -423,7 +414,7 @@ class Order < ActiveRecord::Base
   def set_payment_status
     self.payment_status = (payment_type == 'card') ? 'not blocked' : 'pending'
   end
-  
+
   def set_email_status
     self.email_status = (source == 'amadeus') ? 'not ready' : ''
   end

@@ -3,7 +3,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
   include CustomCSV
   include Typus::Controller::Bulk
 
-  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel, :reload_tickets, :update, :resend_email, :send_offline_email, :pnr_raw, :void, :make_payable_by_card, :send_invoice]
+  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel, :reload_tickets, :update, :pnr_raw, :void, :make_payable_by_card, :send_invoice]
 
   # def set_scope
   #   # добавлять фильтры лучше в def index и т.п., но так тоже работает (пока?)
@@ -111,16 +111,6 @@ class Admin::OrdersController < Admin::EviterraResourceController
     redirect_to :action => :show, :id => @order.id
   end
 
-  def resend_email
-    @order.resend_email!
-    redirect_to :action => :show, :id => @order.id
-  end
-
-  def send_offline_email
-    @order.send_email
-    redirect_to :action => :show, :id => @order.id
-  end
-
   def find_order
     @order = Order.find(params[:id])
   end
@@ -130,10 +120,10 @@ class Admin::OrdersController < Admin::EviterraResourceController
     redirect_to :action => :show, :id => @order.id
   end
 
-
   def set_bulk_action
     add_bulk_action("Charge", "bulk_charge")
   end
+
   private :set_bulk_action
 
   def bulk_charge(ids)

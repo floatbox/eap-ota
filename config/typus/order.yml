@@ -15,7 +15,6 @@ Order:
       - has_refunds
       - partner
       - urgent
-      - email_status
     show:
       - order_id
       - has_refunds
