@@ -30,6 +30,10 @@ class Order < ActiveRecord::Base
     [ 'booked', 'canceled', 'ticketed']
   end
 
+  def self.partners
+    Conf.api.partners
+  end
+
   def self.sources
     [ 'amadeus', 'sirena', 'other']
   end
