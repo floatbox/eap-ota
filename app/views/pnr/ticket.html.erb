@@ -42,7 +42,7 @@
             <% unless @lang %>Скидка /<%end%> Discount<br>
           <% end %>
           <% unless @lang %>Итоговая стоимость /<%end%> Total<br>
-          <% if @prices.show_vat? && @prices.sold_tickets.present? %>
+          <% if @prices.show_vat %>
 
             <% unless @lang %>В том числе НДС /<%end%> Including VAT<br>
           <% end %>
@@ -58,7 +58,7 @@
             <%= exact_price(@prices.price_declared_discount) %> RUB<br>
           <% end %>
           <%= exact_price(@prices.recalculated_price_with_payment_commission) %> RUB<br>
-          <% if @prices.show_vat?  && @prices.sold_tickets.present? %>
+          <% if @prices.show_vat %>
             <%= exact_price(@prices.vat) %> RUB<br>
           <% end %>
           <%= @prices.paid_by %><br>

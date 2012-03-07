@@ -214,8 +214,8 @@ describe Amadeus::Response::PNRRetrieve do
       its('tickets.keys'){should include([[2, 'a'], [11, 12]])}
       specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:first_name].should == 'GENNADY MR'}
       specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:last_name].should == 'NEDELKO'}
-      specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:route].should == 'SVO - MXP (AZ); MXP - LIS (AZ); LIS - AMS (KL); AMS - SVO (KL)'}
-      specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:cabins].should == 'S + S + R + R'}
+      specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:flights].every.marketing_carrier_iata.should == ['AZ','AZ','KL','KL']}
+      specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:flights].every.cabin.should == ['S', 'S', 'R', 'R']}
       specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:passport].should == '714512085'}
 
     end

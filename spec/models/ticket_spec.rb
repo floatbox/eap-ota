@@ -1,6 +1,71 @@
 require 'spec_helper'
 
 describe Ticket do
+  describe "#vat_included" do
+    let(:cabins) {[]}
+    subject do
+      flights = Recommendation.example(flight_string).flights
+      flights.each_with_index {|fl, i| fl.cabin = cabins[i]} if cabins.present?
+      Ticket.new(:flights => flights)
+    end
+
+    context 'one way route' do
+      context 'with non RF departure' do
+        let_once!(:flight_string) {'cdgsvo svopee'}
+
+        its(:vat_status) {should == '0'}
+      end
+
+      context 'with non RF arrival' do
+        let_once!(:flight_string) {'ledsvo svocdg'}
+
+        its(:vat_status) {should == '0'}
+      end
+
+      context 'with all flights inside RF' do
+        let_once!(:flight_string) {'ledsvo svopee'}
+
+        its(:vat_status) {should == '18%'}
+      end
+
+      context 'form MOW to LED thru CDG' do
+        let_once!(:flight_string) {'svocdg cdgled'}
+
+        its(:vat_status) {should == 'unknown'}
+      end
+    end
+
+    context 'with return flight' do
+      context 'with non RF departure' do
+        let_once!(:flight_string) {'cdgsvo/su svopee/su peecdg/s7'}
+        let_once!(:cabins) {['Y', 'C', 'F']}
+
+        its(:vat_status) {should == '0'}
+        its(:route) {should == 'CDG - SVO (SU); SVO - PEE (SU); PEE - CDG (S7)'}
+        its(:cabins) {should == 'Y + C + F'}
+      end
+
+
+      context 'all but departure are outside RF' do
+        let_once!(:flight_string) {'ledcdg cdgrix rixled'}
+
+        its(:vat_status) {should == '0'}
+      end
+
+      context 'with all flights inside RF' do
+        let_once!(:flight_string) {'ledpee peesvo svoled'}
+
+        its(:vat_status) {should == '18%'}
+      end
+
+      context 'with one airport outside RF' do
+        let_once!(:flight_string) {'ledpee peerix rixled'}
+
+        its(:vat_status) {should == 'unknown'}
+      end
+    end
+  end
+
   subject {ticket}
 
   context "#number_with_code" do

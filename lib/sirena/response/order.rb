@@ -81,11 +81,14 @@ module Sirena
           last_name = xpath("//passenger[@id=#{pass_id}]/surname").text
           passport = xpath("//passenger[@id=#{pass_id}]/doc").text
 
-          res = result[number] ||= {:flights => [], :price_fare => 0, :price_tax => 0, :cabins => [], :flights => [], :first_name => first_name, :last_name => last_name, :passport => passport}
+          res = result[number] ||= {:price_fare => 0, :price_tax => 0, :flights_array => [], :first_name => first_name, :last_name => last_name, :passport => passport}
           res[:price_fare] += price_fare
           res[:price_tax] += price_tax
-          res[:cabins] << cabin
-          res[:flights] << "#{departure_iata} - #{arrival_iata} (#{carrier})"
+          res[:flights_array] << Flight.new(
+              :departure_iata => departure_iata,
+              :arrival_iata => arrival_iata,
+              :marketing_carrier_iata => carrier,
+              :cabin => cabin)
         }
         @ticket_hashes = result.sort.map do |k, v|
           {
@@ -95,8 +98,7 @@ module Sirena
             :code => (k.match(/([\d\w]+)-?(\d{10}-?\d*)/).to_a)[1],
             :price_fare => v[:price_fare],
             :price_tax => v[:price_tax],
-            :cabins => v[:cabins].uniq.join(' + '),
-            :route => v[:flights].join('; '),
+            :flights => v[:flights_array],
             :first_name => v[:first_name],
             :last_name => v[:last_name],
             :passport => v[:passport],

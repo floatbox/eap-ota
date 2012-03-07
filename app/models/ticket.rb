@@ -28,7 +28,7 @@ class Ticket < ActiveRecord::Base
     :through => :order, :source => :tickets, :order => 'tickets.number asc',
     :conditions => lambda {|_| ["tickets.id <> ?", id] }
 
-  delegate :need_attention, :paid_by, :show_vat?, :to => :order
+  delegate :need_attention, :paid_by, :to => :order
 
   delegate :commission_carrier, :to => :order, :allow_nil => true
 
@@ -52,9 +52,24 @@ class Ticket < ActiveRecord::Base
   attr_accessor :parent_number, :parent_code
   attr_writer :price_fare_base
 
-  def sold_tickets
-    # нужно для МК
-    [self]
+  def show_vat
+    vat_status != 'unknown'
+  end
+
+  def flights=(flights_array)
+    if [nil, '', 'unknown'].include? vat_status
+      if flights_array[0].departure.country.iata != 'RU' ||
+          flights_array.last.arrival.country.iata != 'RU' ||
+          flights_array.map{|f| [f.departure, f.arrival]}.flatten.uniq.map{|ap| ap.country.iata}.count('RU') < 2
+        self.vat_status = '0'
+      elsif flights_array.map{|f| [f.departure.country.iata, f.arrival.country.iata]}.flatten.uniq == ['RU']
+        self.vat_status = '18%'
+      else
+        self.vat_status = 'unknown'
+      end
+    end
+    self.route = flights_array.map{|fl| "#{fl.departure_iata} \- #{fl.arrival_iata} (#{fl.marketing_carrier_iata})"}.uniq.join('; ')
+    self.cabins = flights_array.every.cabin.compact.join(' + ')
   end
 
   def price_fare_base

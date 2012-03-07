@@ -49,7 +49,7 @@ module Pricing
     end
 
     def vat
-      if vat_included?
+      if vat_status == '18%'
         ((price_fare + price_tax)*18/118).round(2)
       else
         0
