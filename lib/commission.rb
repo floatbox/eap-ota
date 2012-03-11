@@ -409,7 +409,7 @@ commission "1eur/5"
 carrier "BD", "BMI"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.5%'
+carrier_defaults :consolidator => 0, :our_markup => '0.2%'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -1341,7 +1341,7 @@ commission "1/0.05"
 carrier "LH", "LUFTHANSA"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.5%'
+carrier_defaults :consolidator => 0, :our_markup => '0.2%'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -1385,7 +1385,7 @@ commission "1eur/5"
 carrier "LX", "SWISS"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.5%'
+carrier_defaults :consolidator => 0, :our_markup => '0.2%'
 
 example 'svocdg cdgsvo/ab'
 agent    "1 руб. с билета по опубл. тарифам на собств. рейсы LX и рейсы Interline с уч. LX.
@@ -1658,7 +1658,7 @@ commission "9%/6.3%"
 carrier "OS", "AUSTRIAN AIRLINES"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.5%'
+carrier_defaults :consolidator => 0, :our_markup => '0.2%'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
