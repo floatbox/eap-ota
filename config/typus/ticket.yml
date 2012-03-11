@@ -20,7 +20,7 @@ Ticket:
      - itinerary_receipt
      - parent
      - confirm_refund_url
-     - vat_included
+     - vat_selector
     list:
       - link_to_show
       - order

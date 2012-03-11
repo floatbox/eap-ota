@@ -185,6 +185,16 @@ class Ticket < ActiveRecord::Base
     number.sub /-.*/, '' if number.present?
   end
 
+  def vat_selector
+    ['0', '18%', 'unknown'].map do |vat_st|
+      if vat_status == vat_st
+        "<span class='selected_vat'> #{vat_status} </span>"
+      else
+        "<a href='/admin/tickets/change_vat/#{id}?vat_status=#{CGI::escape(vat_st)}' class='unselected_vat'><span class='unselected_vat'> #{vat_st} </span></a>"
+      end
+    end.join(' <br> ').html_safe
+  end
+
   def refund_url
     if kind == 'ticket'
       "<a href='/admin/tickets/new_refund?_popup=true&&resource[kind]=refund&resource[parent_id]=#{id}' class='iframe_with_page_reload'>Add refund</a>".html_safe

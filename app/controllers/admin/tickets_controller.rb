@@ -12,6 +12,14 @@ class Admin::TicketsController < Admin::EviterraResourceController
     render :text => @item.raw
   end
 
+  def change_vat
+    get_object
+    @item.update_attribute(:vat_status, params[:vat_status])
+    redirect_to :action => 'show',
+                :controller => 'orders',
+                :id => @item.order.id
+  end
+
   def new_refund
     @item = @resource.new(params[:resource])
     @item.route = @item.parent.route
