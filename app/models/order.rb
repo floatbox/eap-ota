@@ -35,7 +35,7 @@ class Order < ActiveRecord::Base
   end
 
   def show_vat
-    sold_tickets.present? && sold_tickets.every.show_vat.all?{|t| t}
+    sold_tickets.present? && sold_tickets.all?(&:show_vat)
   end
 
   def self.sources
