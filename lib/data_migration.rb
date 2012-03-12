@@ -6,14 +6,6 @@ require 'csv'
 
 module DataMigration
 
-  def self.set_vat_status_in_tickets
-    Order.where(:show_vat => true).each do |o|
-      Ticket.update_all('vat_status = "18%"', ['order_id = ? AND vat_included = 1', o.id])
-      Ticket.update_all('vat_status = "0"', ['order_id = ? AND vat_included = 0', o.id])
-    end
-    1
-  end
-
   def self.update_blank_count
     Order.where('created_at >= ? AND pnr_number is not null AND blank_count is NULL and ticket_status = "ticketed"', Date.parse('01.06.2011')).map do |o|
       count = o.tickets.count
