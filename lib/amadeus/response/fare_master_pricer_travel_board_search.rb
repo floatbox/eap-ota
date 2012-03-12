@@ -24,9 +24,7 @@ module Amadeus
             rec.xpath("r:paxFareProduct/r:paxFareDetail/r:codeShareDetails/r:company").every.to_s
 
           variants = rec.xpath("r:segmentFlightRef").map {|sf|
-            segments = sf.xpath("r:referencingDetail").each_with_index.collect { |rd, i|
-              # TODO проверить что:
-              # rd["refQualifier"] == "S"
+            segments = sf.xpath("r:referencingDetail[r:refQualifier='S']").each_with_index.collect { |rd, i|
               flight_indexes[i][ rd.xpath("r:refNumber").to_i - 1 ]
             }
             Variant.new( :segments => segments )
