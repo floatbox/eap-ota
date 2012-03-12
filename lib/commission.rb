@@ -73,21 +73,21 @@ example 'AERDME/Y DMEAER/M'
 agent "7% МВЛ. ВВЛ Y, H, M, Q, B, K, O, R, E"
 subagent "5  (пять) % от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, M, Q, B, K, O, R, E."
 subclasses "YHMQBKORE"
-discount "4.5%"
+discount "4.8%"
 commission "7%/5%"
 
 example 'AERDME/W DMEAER/W'
 agent "3% МВЛ. ВВЛ L, V, X, T, N, I, G, W, U"
 subagent "2 % от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWU"
-discount "1.7%"
+discount "1.9%"
 commission "3%/2%"
 
 example 'aerdme dmeaer/ab'
 agent "4% Interline с участком Трансаэро. Без участка UN запрещено."
 subagent "2 (два) % от тарифа на рейсы Interline c участком UN. Запрещена продажа на рейсы interline без участка UN."
 interline :yes
-discount "1%"
+discount "1.5%"
 commission "4%/2%"
 
 example 'TLVDME/T DMEJFK/T JFKDME/T DMETLV/T'
@@ -97,7 +97,7 @@ agent "12% Oт всех применяемых опубликованных та
 subagent "9 % от всех применяемых опубликованных тарифов между Москвой и Пекином/Майами/Нью-Йорком (OW.RT) и на сквозные перевозки между пунктами полетов АК «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW.RT). (Через АСБ «GABRIEL»: установлен специальный «Код тура» NEWDE10 при продаже перевозок с полетными сегментами между Москвой-Майами/Нью-Йорком (OW/RT). СУБАГЕНТ обязан внести «Код тура» NEWDE10 для автоматического начисления комиссии.)"
 important!
 check { (city_iatas & %W(NYC MIA BJS)).present? && (country_iatas & %W(RU UA KZ UZ)).present? }
-discount "8%"
+discount "8.7%"
 commission "12%/9%"
 
 example 'svocdg/lh cdgmad/lh'
