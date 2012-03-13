@@ -101,6 +101,14 @@ class Ticket < ActiveRecord::Base
     end
   end
 
+  def replacement_number_with_code
+    replacement.number_with_code if replacement
+  end
+
+  def parent_number_with_code
+    parent.number_with_code if parent
+  end
+
   def refund
     refunds.last
   end

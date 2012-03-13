@@ -126,6 +126,8 @@ Ticket:
       - mso_number
       - last_name
       - order.pricing_method
+      - parent_number_with_code
+      - replacement_number_with_code
     options:
       selectors: status, source, office_id, validator
       date_formats:

@@ -51,7 +51,7 @@ class Order < ActiveRecord::Base
   end
 
   def self.commission_ticketing_methods
-    [['Авиацентр (Сирена, MOWR2233B)', 'aviacenter'], ['Прямой договор (MOWR228FA)', 'direct']]
+    [['Авиацентр (Сирена, MOWR2233B)', 'aviacenter'], ['Прямой договор (MOWR228FA)', 'direct'], ['Downtown Travel (FLL1S212V)', 'downtown']]
   end
 
   # фейковый текст для маршрут-квитанций. может быть, вынести в хелпер?
