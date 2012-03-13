@@ -1755,16 +1755,16 @@ commission "5%/3.5%"
 example 'ledpek/economy pekled/economy'
 example 'ledpek/business pekled/economy'
 expr_date "31.03.2012"
-agent    "1% Эконом класса, а также при различной комбинации Бизнес/Эконом;" 
+agent    "5% Эконом класса, а также при различной комбинации Бизнес/Эконом;" 
 subagent "0,5% от опубл. тарифов на собственные рейсы QR"
-commission "1%/0.5%"
+commission "5%/3.5%"
 
 example 'svocdg cdgsvo/ab'
 expr_date "31.03.2012"
-agent    "1% на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
+agent    "5% на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 subagent "0,5% от опубл. тарифов на рейсы Interline (только при обязательном пролете первого сектора на рейсах QR)"
 interline :first
-commission "1%/0.5%"
+commission "5%/3.5%"
 
 example 'ledpek/business pekled/business'
 strt_date "01.04.2012"
