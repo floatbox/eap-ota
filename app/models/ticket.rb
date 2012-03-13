@@ -86,6 +86,10 @@ class Ticket < ActiveRecord::Base
     ['MOWR2233B', 'MOWR228FA', 'MOWR2219U']
   end
 
+  def self.validating_carriers
+    Carrier.uniq.pluck(:iata).sort
+  end
+
   def update_price_fare_and_add_parent
     if exchanged_ticket = Ticket.where('code = ? AND number like ?', parent_code, parent_number.to_s + '%').first
       self.parent = exchanged_ticket

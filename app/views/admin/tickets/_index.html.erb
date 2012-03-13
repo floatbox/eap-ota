@@ -1,0 +1,4 @@
+<%= render 'admin/resources/index' %>
+(в выборке <%= @resource.count %> записей;
+всего <%= number_to_currency @resource.sum(:price_fare) %> /
+в среднем <%= number_to_currency @resource.average(:price_fare) %>)
