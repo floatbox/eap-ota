@@ -305,4 +305,29 @@ describe Order do
       orders_to_send.first[:income].should == "123.46"
     end
   end
+
+  describe '#show_vat' do
+    let(:ticket_with_vat) {Ticket.new(:vat_status => '18%')}
+    let(:ticket_with_unknown_vat) {Ticket.new(:vat_status => 'unknown')}
+    subject do
+      order = Order.new
+      order.stub(:sold_tickets).and_return(tickets)
+      order
+    end
+
+    context 'when vat_status of all tickets != "unknown"' do
+      let(:tickets) {[ticket_with_vat, ticket_with_vat]}
+      its(:show_vat) {should be_true}
+    end
+
+    context 'when vat_status of one ticket == "unknown"' do
+      let(:tickets) {[ticket_with_vat, ticket_with_unknown_vat]}
+      its(:show_vat) {should be_false}
+    end
+
+    context 'without sold_tickets' do
+      let(:tickets) {[]}
+      its(:show_vat) {should be_false}
+    end
+  end
 end

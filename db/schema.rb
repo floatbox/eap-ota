@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120220153417) do
+ActiveRecord::Schema.define(:version => 20120312133408) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -304,8 +304,6 @@ ActiveRecord::Schema.define(:version => 20120220153417) do
     t.string   "pan"
     t.string   "marker"
     t.string   "commission_our_markup"
-    t.boolean  "show_vat",                                                    :default => false
-    t.boolean  "vat_included",                                                :default => false,    :null => false
   end
 
   create_table "payments", :force => true do |t|
@@ -371,11 +369,11 @@ ActiveRecord::Schema.define(:version => 20120220153417) do
     t.string   "source"
     t.string   "pnr_number"
     t.string   "number"
-    t.decimal  "price_fare",                :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_fare",                :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "commission_subagent"
-    t.decimal  "price_tax",                 :precision => 9, :scale => 2, :default => 0.0,      :null => false
-    t.decimal  "price_share",               :precision => 9, :scale => 2, :default => 0.0,      :null => false
-    t.decimal  "price_consolidator_markup", :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_tax",                 :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_share",               :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_consolidator_markup", :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.integer  "order_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -393,22 +391,22 @@ ActiveRecord::Schema.define(:version => 20120220153417) do
     t.string   "kind",                                                    :default => "ticket"
     t.boolean  "processed",                                               :default => false
     t.integer  "parent_id"
-    t.decimal  "price_penalty",             :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_penalty",             :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.text     "comment"
     t.string   "commission_agent"
     t.string   "commission_consolidator"
     t.string   "commission_blanks"
-    t.decimal  "price_consolidator",        :precision => 9, :scale => 2, :default => 0.0,      :null => false
-    t.decimal  "price_blanks",              :precision => 9, :scale => 2, :default => 0.0,      :null => false
-    t.decimal  "price_agent",               :precision => 9, :scale => 2, :default => 0.0,      :null => false
-    t.decimal  "price_subagent",            :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_consolidator",        :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_blanks",              :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_agent",               :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_subagent",            :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "commission_discount"
-    t.decimal  "price_discount",            :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "price_discount",            :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "mso_number"
     t.decimal  "corrected_price",           :precision => 9, :scale => 2
     t.string   "commission_our_markup"
-    t.decimal  "price_our_markup",          :precision => 9, :scale => 2, :default => 0.0,      :null => false
-    t.boolean  "vat_included"
+    t.decimal  "price_our_markup",          :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.string   "vat_status",                                              :default => "unknown", :null => false
   end
 
   create_table "typus_users", :force => true do |t|

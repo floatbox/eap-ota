@@ -96,7 +96,6 @@ Order:
       - offline_booking
       - last_pay_time
       - needs_update_from_gds
-      - show_vat
     csv:
       - pnr_number
       - charged_on
