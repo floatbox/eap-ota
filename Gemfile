@@ -16,6 +16,7 @@ group :deployment do
   gem 'capistrano_colors'
 end
 
+gem 'kaminari'
 gem 'nokogiri'
 gem 'yajl-ruby'
 gem 'whenever', :require => false
