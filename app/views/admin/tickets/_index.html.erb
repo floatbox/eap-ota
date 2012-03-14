@@ -2,3 +2,14 @@
 (в выборке <%= @resource.count %> записей;
 всего <%= number_to_currency @resource.sum(:price_fare) %> /
 в среднем <%= number_to_currency @resource.average(:price_fare) %>)
+
+<div style="display: none">
+  <div id="top_carriers" style="margin-top: 25px; line-height: 1.4; font-size: 1.1em; color: #444">
+<%= top_carriers @resource %>
+  </div>
+</div>
+<script type="text/javascript">
+jQuery(function($) {
+  $("#sidebar").append($("#top_carriers").parent().html());
+});
+</script>
