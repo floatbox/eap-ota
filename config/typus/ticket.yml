@@ -137,13 +137,13 @@ Ticket:
         old_booking: ["пересчет запрещен", "пересчет разрешен"]
   options:
     default_action_on_item: edit
+    export: csv
   actions:
     edit: show
   order_by: -created_at
   filters: ticketed_date, validating_carrier, source, validator, office_id, status, kind
   relationships: order, other_tickets
   application: Orders, 1
-  export: csv
   scopes: uncomplete
   search: ^number, last_name, first_name, ^pnr_number
 

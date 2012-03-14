@@ -18,7 +18,8 @@ Payment: &PAYMENT_CONFIG
   order_by: -created_at
   filters: created_at, charged_on, type, status
   application: Orders, 1
-  export: csv
+  options:
+    export: csv
 
 # Typus не умеет отображать таблицы для Single table inheritance
 PaytureCharge:
