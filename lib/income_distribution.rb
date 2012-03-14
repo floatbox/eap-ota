@@ -2,7 +2,7 @@
 module IncomeDistribution
 
   def income
-    income_earnings - income_suppliers
+    @income ||= income_earnings - income_suppliers
   end
 
   def income_payment_gateways
