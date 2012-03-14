@@ -135,6 +135,7 @@ Order:
   search: ^pnr_number, email, phone, =order_id
   options:
     default_action_on_item: show
+    export: csv
     #action_after_save: show
   actions:
     show: edit
@@ -144,4 +145,3 @@ Order:
   filters:  created_at, source, payment_status, ticket_status, payment_type, has_refunds, partner
   relationships: payments, tickets, order_comments, notifications
   application: Orders, 1
-  export: csv
