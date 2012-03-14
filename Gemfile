@@ -27,7 +27,7 @@ gem 'crack'
 gem "every"
 gem "memoize"
 gem 'morpher_inflect'
-gem 'russian', :git => 'https://github.com/codesnik/russian.git'
+gem 'russian'
 #gem 'graticule'
 gem 'mysql2'
 gem 'paper_trail'
