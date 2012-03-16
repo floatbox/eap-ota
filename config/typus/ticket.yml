@@ -144,6 +144,6 @@ Ticket:
   filters: ticketed_date, validating_carrier, source, validator, office_id, status, kind
   relationships: order, other_tickets
   application: Orders, 1
-  scopes: uncomplete
+  scopes: uncomplete, sold
   search: ^number, last_name, first_name, ^pnr_number
 

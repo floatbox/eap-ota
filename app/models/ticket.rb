@@ -44,6 +44,7 @@ class Ticket < ActiveRecord::Base
   before_save :recalculate_commissions
 
   scope :uncomplete, where(:ticketed_date => nil)
+  scope :sold, where(:status => ['ticketed', 'exchanged', 'returned'])
 
   before_validation :set_refund_data, :if => lambda {kind == "refund"}
   before_validation :update_price_fare_and_add_parent, :if => lambda {parent_number}
@@ -134,7 +135,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def self.statuses
-    ['ticketed', 'voided', 'pending', 'exchanged']
+    ['ticketed', 'voided', 'pending', 'exchanged', 'returned']
   end
 
   def self.kinds
