@@ -430,17 +430,22 @@ class Order < ActiveRecord::Base
     "#{source} #{pnr_number}"
   end
 
-  def self.api_stats_hash orders
-    orders.map do |order|
-      {
-      :id => order.id.to_s,
-      :marker => order.marker,
-      :price => order.price_with_payment_commission,
-      :income => '%.2f' % order.income,
-      :created_at => order.created_at,
-      :route => order.route
-      }
-    end
+  def settled?
+    income > 0 && tickets.all?{|t| t.status == 'ticketed'}
   end
+
+  def api_stats_hash
+    settled = settled?
+    {
+    :id => id.to_s,
+    :marker => marker,
+    :price => price_with_payment_commission,
+    :income => '%.2f' % (settled ? income : '0'),
+    :created_at => created_at,
+    :route => route,
+    :settled => settled
+    }
+  end
+
 end
 
