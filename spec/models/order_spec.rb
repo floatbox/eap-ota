@@ -301,7 +301,7 @@ describe Order do
     let(:order1){Order.new(:price_with_payment_commission=>12345.65,:route=>"SVO - KBP; KBP - LGW; LGW - KBP; KBP - SVO")}
     it 'creates correct hash' do
       order1.stub(:income).and_return(123.456798)
-      orders_to_send = Order.api_stats_hash [order1]
+      orders_to_send = [order1.api_stats_hash]
       orders_to_send.first[:income].should == "123.46"
     end
   end
