@@ -1779,14 +1779,16 @@ example 'ledpek/economy pekled/economy'
 example 'ledpek/business pekled/economy'
 expr_date "31.03.2012"
 agent    "5% Эконом класса, а также при различной комбинации Бизнес/Эконом;" 
-subagent "0,5% от опубл. тарифов на собственные рейсы QR"
+subagent "3,5% от опубл. тарифов на собственные рейсы QR"
+discount "3.2%"
 commission "5%/3.5%"
 
 example 'svocdg cdgsvo/ab'
 expr_date "31.03.2012"
 agent    "5% на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
-subagent "0,5% от опубл. тарифов на рейсы Interline (только при обязательном пролете первого сектора на рейсах QR)"
+subagent "3,5% от опубл. тарифов на рейсы Interline (только при обязательном пролете первого сектора на рейсах QR)"
 interline :first
+discount "3.2%"
 commission "5%/3.5%"
 
 example 'ledpek/business pekled/business'
