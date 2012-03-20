@@ -2106,12 +2106,12 @@ no_commission
 carrier "VV", "AEROSVIT"
 ########################################
 
-example 'svodok'
-example 'svocdg'
+example 'leddok'
+example 'ledcdg'
 strt_date "21.03.2012"
 agent "9% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории РФ до любого п.п. VV"
 subagent "8,5% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории РФ до любого п.п. VV."
-check { country.iatas.first == 'RU' && (city_iatas.first != 'MOW' && city_iatas.last != 'IEV') }
+check { country_iatas.first == 'RU' && (city_iatas.first != 'MOW' && city_iatas.last != 'IEV') }
 discount "7%"
 commission "9%/8.5%"
 
@@ -2119,28 +2119,31 @@ example 'ledkbp kbpled'
 strt_date "21.03.2012"
 agent "8% от тарифа при продаже перевозок на рейсы Санкт-Петербург-Киев (LED-IEV), Санкт-Петербург-Киев-Санкт-Петербург (LED-IEV-LED)"
 subagent "7,5% от тарифа при продаже перевозок на рейсы Санкт-Петербург-Киев (LED-IEV), Санкт-Петербург- Киев-Санкт-Петербург (LED-IEV-LED);"
-check { (city_iatas.first == 'LED' && city_iatas.last == 'IEV') || (city_iatas.first == 'LED' && city_iatas.last == 'LED' && city_iatas.include('IEV')) }
+check { (city_iatas.first == 'LED' && city_iatas.last == 'IEV') || (city_iatas.first == 'LED' && city_iatas.last == 'LED' && city_iatas.include?('IEV')) }
 discount "6.5%"
+important!
 commission "8%/7.5%"
 
-example 'ledtlv'
-example 'leddok'
-example 'ledtbs'
+example 'ledkbp kbptlv'
+example 'ledkbp kbpcdg'
+example 'ledkbp kbptbs'
 strt_date "21.03.2012"
 expr_date "01.11.2012"
 agent "10% от тарифа при продаже перевозок с началом перевозки от Санкт-Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
 subagent "9,5% от тарифа при продаже перевозок с началом перевозки от Санкт- Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
-check { city_iatas.first == 'LED' && city_iatas.include('IEV') && country_iatas.last != 'UA' && country_iatas.last != 'RU' }
+check { city_iatas.first == 'LED' && city_iatas.include?('IEV') && country_iatas.last != 'UA' && country_iatas.last != 'RU' }
+important!
 discount "8.5%"
 commission "10%/9.5%"
 
-example 'ledtlv'
-example 'leddok'
-example 'ledtbs'
+example 'ledkbp kbptlv'
+example 'ledkbp kbpcdg'
+example 'ledkbp kbptbs'
 strt_date "01.11.2012"
 agent "9% от тарифа при продаже перевозок с началом перевозки от Санкт-Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
 subagent "8,5% от тарифа при продаже перевозок с началом перевозки от Санкт- Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
-check { city_iatas.first == 'LED' && city_iatas.include('IEV') && country_iatas.last != 'UA' && country_iatas.last != 'RU' }
+check { city_iatas.first == 'LED' && city_iatas.include?('IEV') && country_iatas.last != 'UA' && country_iatas.last != 'RU' }
+important!
 discount "7.5%"
 commission "9%/8.5%"
 
@@ -2148,14 +2151,14 @@ example 'svokbp kbpsvo'
 strt_date "21.03.2012"
 agent "5% от тарифа при продаже перевозок на рейсы Москва-Киев (MOW-IEV), Москва-Киев-Москва (MOW -IEV- MOW);"
 subagent "4,5% от тарифа при продаже перевозок на рейсы Москва-Киев (MOW-IEV), Москва-Киев-Москва (MOW -IEV- MOW);"
-check { (city_iatas.first == 'MOW' && city_iatas.last == 'IEV') || (city_iatas.first == 'MOW' && city_iatas.last == 'MOW' && city_iatas.include('IEV')) }
+check { (city_iatas.first == 'MOW' && city_iatas.last == 'IEV') || (city_iatas.first == 'MOW' && city_iatas.last == 'MOW' && city_iatas.include?('IEV')) }
 discount "4%"
 commission "5%/4.5%"
 
 example 'kbpdok'
 example 'kbptbs'
 example 'tbstlv'
-strt_date "21.03.2012"
+strt_date "21.02.2012"
 agent "1% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории Украины или третьих стран;"
 subagent "0,5% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории Украины или третьих стран;"
 check { country_iatas.first != 'RU' }
@@ -2166,14 +2169,14 @@ example 'kbpsvo/ab svokbp'
 strt_date "21.03.2012"
 agent "5% от тарифа при продаже перевозок на рейсы Interline с участием VV;"
 subagent "4,5% от тарифа при продаже перевозок на рейсы Interline с участием VV;"
-interline :absent
+interline :yes
 commission "5%/4.5%"
 
 example 'kbpsvo/ab svokbp/ab'
 strt_date "21.03.2012"
 agent "0% от тарифа при продаже перевозок на рейсы Interline без участия VV;"
 subagent "0% от тарифа при продаже перевозок на рейсы Interline без участия VV;"
-interline :yes
+interline :absent
 commission "0%/0%"
 
 carrier "WY", "OMAN AIR"
