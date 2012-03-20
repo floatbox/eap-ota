@@ -49,6 +49,10 @@ describe Sirena::Response::Order do
     specify{(subject.ticket_hashes[0][:flights].every.marketing_carrier_iata).should == [ "U6", "U6"]}
     specify{(subject.ticket_hashes[1][:flights].every.departure_iata).should == ["ДМД", "ПЛК"]}
     specify{(subject.ticket_hashes[1][:flights].every.cabin).should == ["Y", "Y"]}
+    specify{(subject.ticket_hashes[1][:flights].every.arrival_date).should == ["150411", "300411"]}
+    specify{(subject.ticket_hashes[1][:flights].every.arrival_time).should == ["0030", "0915"]}
+    specify{(subject.ticket_hashes[1][:flights].every.departure_date).should == ["140411", "300411"]}
+    specify{(subject.ticket_hashes[1][:flights].every.departure_time).should == ["2315", "0700"]}
     specify{(subject.ticket_hashes.every[:first_name]).should == ["ALEKSEY", "MASHA"]}
     specify{(subject.ticket_hashes.every[:last_name]).should == ["IVANOV", "IVANOVA"]}
     specify{(subject.ticket_hashes.every[:passport]).should == ["6555555555", "VВГ123456"]}

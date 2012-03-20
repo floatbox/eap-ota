@@ -408,6 +408,7 @@ ActiveRecord::Schema.define(:version => 20120319165358) do
     t.string   "commission_our_markup"
     t.decimal  "price_our_markup",          :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "vat_status",                                              :default => "unknown", :null => false
+    t.date     "dept_date"
   end
 
   create_table "typus_users", :force => true do |t|

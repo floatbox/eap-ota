@@ -88,7 +88,12 @@ module Sirena
               :departure_iata => departure_iata,
               :arrival_iata => arrival_iata,
               :marketing_carrier_iata => carrier,
-              :cabin => cabin)
+              :cabin => cabin,
+              :arrival_date =>           flight_element.xpath("arrival/date").text.gsub(".", ""),
+              :arrival_time =>           to_amadeus_time(flight_element.xpath("arrival/time").text),
+              :departure_date =>         flight_element.xpath("departure/date").text.gsub(".", ""),
+              :departure_time =>         to_amadeus_time(flight_element.xpath("departure/time").text)
+              )
         }
         @ticket_hashes = result.sort.map do |k, v|
           {
