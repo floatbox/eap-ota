@@ -69,7 +69,6 @@ important!
 discount "7%"
 commission "9%/8%"
 
-
 carrier "UN", "TRANSAERO"
 ########################################
 
@@ -107,7 +106,7 @@ example 'DMEMIA/FIRST/F MIADME/FIRST/F'
 agent "12% Oт всех применяемых опубликованных тарифов на собственные  регулярные рейсы между Москвой и Пекином/Майами/Нью-Йорком (OW,RT)  и на сквозные перевозки между пунктами полетов АК  «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW,RT)."
 subagent "9 % от всех применяемых опубликованных тарифов между Москвой и Пекином/Майами/Нью-Йорком (OW.RT) и на сквозные перевозки между пунктами полетов АК «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW.RT). (Через АСБ «GABRIEL»: установлен специальный «Код тура» NEWDE10 при продаже перевозок с полетными сегментами между Москвой-Майами/Нью-Йорком (OW/RT). СУБАГЕНТ обязан внести «Код тура» NEWDE10 для автоматического начисления комиссии.)"
 important!
-check { (city_iatas & %W(NYC MIA BJS)).present? && (country_iatas & %W(RU UA KZ UZ)).present? }
+check { (city_iatas & %W(NYC MIA BJS LAX)).present? && (country_iatas & %W(RU UA KZ UZ)).present? }
 discount "8.7%"
 commission "12%/9%"
 
@@ -1969,7 +1968,7 @@ commission "7%/5%"
 
 example 'istsvo/business svoist/business'
 agent    "7% от тарифа бизнес класса на рейсы TK только при вылете не из РФ"
-subagent "10% от тарифа бизнес класса на рейсы TK. (только при вылете из РФ. При вылете из других пунктов 5%);"
+subagent "5% от тарифа бизнес класса на рейсы TK. только при вылете не из РФ"
 important!
 check { country_iatas.first != 'RU' }
 classes :business
@@ -1982,6 +1981,7 @@ agent    "5% от тарифа эконом и бизнес класса при 
 subagent "3,5% от тарифа эконом и бизнес класса при перелетах внутри Турции на рейсы TK."
 important!
 domestic
+classes :business, :economy
 discount "2%"
 commission "5%/3.5%"
 
@@ -1992,31 +1992,15 @@ interline :first
 disabled "нет субагентской комиссии"
 commission "0%/0%"
 
-example "svoist/economy"
-agent "В период выписки с 14.10.2011 по 16.03.2012г. с началом перелета из пунктов РФ: "
-agent "10% от опубл.  тарифа Эконом класса;"
-subagent "В период выписки с 14.10.2011 по 16.03.2012г. с началом перелета из пунктов РФ:"
-subagent "8% от опубл. тарифа Эконом класса;"
-classes :economy
-strt_date '14.10.2011'
-expr_date '16.03.2012'
-check { country_iatas.first == 'RU' }
-important!
-discount "7%"
-commission "10%/8%"
-
 example "svoist/business"
-agent "В период выписки с 14.10.2011 по 16.03.2012г. с началом перелета из пунктов РФ: "
-agent "17% от опубл.  тарифа Бизнес класса;"
-subagent "В период выписки с 14.10.2011 по 16.03.2012г. с началом перелета из пунктов РФ:"
-subagent "15% от опубл. тарифа Бизнес класса;"
+agent "12% от тарифа Бизнес класса на рейсы TK только при вылете из РФ."
+subagent "10% от тарифа бизнес класса на рейсы TK. (только при вылете из РФ. При вылете из других пунктов 5%)"
 classes :business
-strt_date '14.10.2011'
-expr_date '16.03.2012'
+strt_date '17.03.2012'
 check { country_iatas.first == 'RU' }
 important!
-discount "14%"
-commission "17%/15%"
+discount "9%"
+commission "12%/10%"
 
 carrier "TP", "TAP PORTUGAL"
 ########################################
@@ -2122,24 +2106,75 @@ no_commission
 carrier "VV", "AEROSVIT"
 ########################################
 
+example 'svodok'
 example 'svocdg'
-agent    "5% от опубл. тарифов на рейсы VV;"
-subagent "3,5% от опубл. тарифов на рейсы VV;"
-discount "2.8%"
-commission "5%/3.5%"
+strt_date "21.03.2012"
+agent "9% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории РФ до любого п.п. VV"
+subagent "8,5% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории РФ до любого п.п. VV."
+check { country.iatas.first == 'RU' && (city_iatas.first != 'MOW' && city_iatas.last != 'IEV') }
+discount "7%"
+commission "9%/8.5%"
 
-example 'svocdg cdgsvo/ab'
-agent    "5% от опубл. тарифов на рейсы VV в комбинации с рейсами Interline"
-subagent "2% от опубл. тарифов на рейсы VV в комбинации с рейсами Interline"
-interline :yes
-discount "1%"
-commission "3%/2%"
+example 'ledkbp kbpled'
+strt_date "21.03.2012"
+agent "8% от тарифа при продаже перевозок на рейсы Санкт-Петербург-Киев (LED-IEV), Санкт-Петербург-Киев-Санкт-Петербург (LED-IEV-LED)"
+subagent "7,5% от тарифа при продаже перевозок на рейсы Санкт-Петербург-Киев (LED-IEV), Санкт-Петербург- Киев-Санкт-Петербург (LED-IEV-LED);"
+check { (city_iatas.first == 'LED' && city_iatas.last == 'IEV') || (city_iatas.first == 'LED' && city_iatas.last == 'LED' && city_iatas.include('IEV')) }
+discount "6.5%"
+commission "8%/7.5%"
 
-example 'cdgsvo/ab'
-agent    "5% от тарифа на рейсы Interline без участка VV"
-subagent "0,5% от опубл. тарифа на рейсы Interline без участка VV"
-interline :absent
+example 'ledtlv'
+example 'leddok'
+example 'ledtbs'
+strt_date "21.03.2012"
+expr_date "01.11.2012"
+agent "10% от тарифа при продаже перевозок с началом перевозки от Санкт-Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
+subagent "9,5% от тарифа при продаже перевозок с началом перевозки от Санкт- Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
+check { city_iatas.first == 'LED' && city_iatas.include('IEV') && country_iatas.last != 'UA' && country_iatas.last != 'RU' }
+discount "8.5%"
+commission "10%/9.5%"
+
+example 'ledtlv'
+example 'leddok'
+example 'ledtbs'
+strt_date "01.11.2012"
+agent "9% от тарифа при продаже перевозок с началом перевозки от Санкт-Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
+subagent "8,5% от тарифа при продаже перевозок с началом перевозки от Санкт- Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
+check { city_iatas.first == 'LED' && city_iatas.include('IEV') && country_iatas.last != 'UA' && country_iatas.last != 'RU' }
+discount "7.5%"
+commission "9%/8.5%"
+
+example 'svokbp kbpsvo'
+strt_date "21.03.2012"
+agent "5% от тарифа при продаже перевозок на рейсы Москва-Киев (MOW-IEV), Москва-Киев-Москва (MOW -IEV- MOW);"
+subagent "4,5% от тарифа при продаже перевозок на рейсы Москва-Киев (MOW-IEV), Москва-Киев-Москва (MOW -IEV- MOW);"
+check { (city_iatas.first == 'MOW' && city_iatas.last == 'IEV') || (city_iatas.first == 'MOW' && city_iatas.last == 'MOW' && city_iatas.include('IEV')) }
+discount "4%"
+commission "5%/4.5%"
+
+example 'kbpdok'
+example 'kbptbs'
+example 'tbstlv'
+strt_date "21.03.2012"
+agent "1% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории Украины или третьих стран;"
+subagent "0,5% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории Украины или третьих стран;"
+check { country_iatas.first != 'RU' }
+discount "0.2%"
 commission "1%/0.5%"
+
+example 'kbpsvo/ab svokbp'
+strt_date "21.03.2012"
+agent "5% от тарифа при продаже перевозок на рейсы Interline с участием VV;"
+subagent "4,5% от тарифа при продаже перевозок на рейсы Interline с участием VV;"
+interline :absent
+commission "5%/4.5%"
+
+example 'kbpsvo/ab svokbp/ab'
+strt_date "21.03.2012"
+agent "0% от тарифа при продаже перевозок на рейсы Interline без участия VV;"
+subagent "0% от тарифа при продаже перевозок на рейсы Interline без участия VV;"
+interline :yes
+commission "0%/0%"
 
 carrier "WY", "OMAN AIR"
 ########################################
