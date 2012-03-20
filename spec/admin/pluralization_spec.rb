@@ -4,6 +4,9 @@ require 'spec_helper'
 
 describe "russian pluralization" do
   context "should pluralize properly" do
+    before(:all) do
+      I18n.locale = :ru
+    end
 
     def pluralize_model(klass)
       klass.model_name.human.pluralize
