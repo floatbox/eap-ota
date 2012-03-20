@@ -14,7 +14,7 @@
   </thead>
   <% @item.versions.each do |version| %>
   <tr class="<%= cycle("even", "odd") %>">
-    <td><%= I18n.l(version.created_at, :format => 'long') %></td>
+    <td><%= I18n.l(version.created_at, :format => :long) %></td>
     <td><%= version.whodunnit || '--' %></td>
     <td>
     <% version.changeset.each do |attribute, (before, after)| %>
