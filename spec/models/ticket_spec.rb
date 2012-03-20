@@ -1,11 +1,13 @@
 require 'spec_helper'
 
 describe Ticket do
-  describe "#vat_included" do
+  describe "#flights=" do
     let(:cabins) {[]}
+    let(:dept_dates) {['121011']}
     subject do
       flights = Recommendation.example(flight_string).flights
       flights.each_with_index {|fl, i| fl.cabin = cabins[i]} if cabins.present?
+      flights.each_with_index {|fl, i| fl.departure_date = dept_dates[i]} if dept_dates.present?
       Ticket.new(:flights => flights)
     end
 
@@ -39,10 +41,12 @@ describe Ticket do
       context 'with non RF departure' do
         let_once!(:flight_string) {'cdgsvo/su svopee/su peecdg/s7'}
         let_once!(:cabins) {['Y', 'C', 'F']}
+        let_once!(:dept_dates) {['211012', '231012', '281012']}
 
         its(:vat_status) {should == '0'}
         its(:route) {should == 'CDG - SVO (SU); SVO - PEE (SU); PEE - CDG (S7)'}
         its(:cabins) {should == 'Y + C + F'}
+        its(:dept_date) {should == Date.new(2012, 10, 21)}
       end
 
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120312133408) do
+ActiveRecord::Schema.define(:version => 20120319161657) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -407,6 +407,7 @@ ActiveRecord::Schema.define(:version => 20120312133408) do
     t.string   "commission_our_markup"
     t.decimal  "price_our_markup",          :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "vat_status",                                              :default => "unknown", :null => false
+    t.date     "dept_date"
   end
 
   create_table "typus_users", :force => true do |t|

@@ -71,6 +71,7 @@ class Ticket < ActiveRecord::Base
     end
     self.route = flights_array.map{|fl| "#{fl.departure_iata} \- #{fl.arrival_iata} (#{fl.marketing_carrier_iata})"}.uniq.join('; ')
     self.cabins = flights_array.every.cabin.compact.join(' + ')
+    self.dept_date = flights_array.first.dept_date
   end
 
   def price_fare_base
