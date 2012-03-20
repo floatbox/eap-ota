@@ -6,11 +6,11 @@ module IncomeDistribution
   end
 
   def income_payment_gateways
-    payments.secured.to_a.sum(&:income_payment_gateways)
+    secured_payments.to_a.sum(&:income_payment_gateways)
   end
 
   def income_earnings
-    payments.secured.to_a.sum(&:earnings)
+    secured_payments.to_a.sum(&:earnings)
   end
 
   def income_suppliers
