@@ -65,5 +65,23 @@ module DataMigration
     end
   end
 
+  def self.fill_code_for_carriers
+    Carrier.find(:all).each do |crr|
+      tt = Ticket.where("code IS NOT NULL AND validating_carrier = ? ", crr.iata ).first
+      if tt
+        crr.update_attributes(:code => tt.code)
+      end
+    end
+  end
+  
+  def self.fill_validating_carrier_for_tickets
+    Ticket.where("validating_carrier IS NULL OR validating_carrier = ''").each do |ticket|
+      tt = Carrier.where(:code => ticket.code).first
+      if tt
+        ticket.update_attributes(:validating_carrier => tt.iata)
+      end
+    end
+  end
+
 end
 
