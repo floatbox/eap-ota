@@ -271,5 +271,31 @@ class OrderForm
     order.valid?
     order.create_booking
   end
+
+  def associate_infants
+    orphans = infants
+    infants.each do |infant|
+      adults.each do |adult|
+        unless adult.associated_infant
+          array = [infant.last_name, adult.last_name]
+          array.sort_by!(&:length)
+          coincidence = array[0].scan(/./) & array[1].scan(/./)
+          if coincidence.count.to_f/array[1].length.to_f > 0.5
+            adult.associated_infant = infant
+            orphans = orphans - [infant]
+            break
+          end
+        end
+      end
+    end
+    orphans.each do |orphan|
+      adults.each do |adult|
+        unless adult.associated_infant
+          adult.associated_infant = orphan
+          break
+        end
+      end
+    end
+  end
 end
 

@@ -16,7 +16,6 @@ module Sirena
         # ЗА - загранпаспорт не РФ
         # НП - национальный паспорт (я так понимаю, что это паспорт не РФ)
         infant_num = 0
-        order.people_count[:infants] - order.people_count[:adults]
         @passengers = order.people.collect{|person|
           expire_date = person.document_noexpiration ? nil : person.document_expiration_date.strftime('%d.%m.%y')
           doccode = person.doccode_sirena
