@@ -14,7 +14,7 @@ class Person
   field :bonuscard_number, :type => String
   field :number_in_amadeus, :type => Integer
 
-  attr_accessor :passenger_ref, :tickets
+  attr_accessor :passenger_ref, :tickets, :associated_infant
 
   validates_presence_of :first_name, :last_name, :sex, :nationality_id, :birthday, :passport
   validates_presence_of :document_expiration_date, :unless => :document_noexpiration

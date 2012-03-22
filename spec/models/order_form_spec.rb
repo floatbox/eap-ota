@@ -127,5 +127,35 @@ describe OrderForm do
       order.people.second.should be_valid
     end
   end
+
+  describe '#associate_infants' do
+    let(:ivanova){Person.new(:last_name => 'IVANOVA')}
+    let(:ivanov){Person.new(:last_name => 'IVANOV')}
+    let(:mitrofanov){Person.new(:last_name => 'MITROFANOV')}
+    let(:cucaev){Person.new(:last_name => 'CUCAEV')}
+    let(:shmidt){Person.new(:last_name => 'SHMIDT')}
+
+    let(:ivanova_i){Person.new(:last_name => 'IVANOVA')}
+    let(:ivanov_i){Person.new(:last_name => 'IVANOV')}
+    let(:mitrofanova_i){Person.new(:last_name => 'MITROFANOVA')}
+    let(:petrov_i){Person.new(:last_name => 'PETROV')}
+
+    let(:order_form){OrderForm.new(:people_count => {:adults => 4, :infants => 4, :children => 0}, :people => [ivanova, ivanov, mitrofanov, cucaev, ivanova_i, ivanov_i, mitrofanova_i, petrov_i])}
+
+    it 'associates correct' do
+      order_form.associate_infants
+
+      flag = ivanova.associated_infant == ivanova_i || ivanova.associated_infant == ivanov_i
+      flag1 = ivanov.associated_infant == ivanova_i || ivanov.associated_infant == ivanov_i
+
+      flag.should == true
+      flag1.should == true
+
+      mitrofanov.associated_infant.should == mitrofanova_i
+      cucaev.associated_infant.should == petrov_i
+      shmidt.associated_infant.should == nil
+    end
+  end
+
 end
 

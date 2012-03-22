@@ -15,6 +15,7 @@ module Strategy::Amadeus::Booking
         logger.error 'Strategy::Amadeus: segments aren\'t confirmed in create_booking method'
         return
       end
+      @order_form.associate_infants
       add_multi_elements = amadeus.pnr_add_multi_elements(@order_form)
       unless add_multi_elements.success?
         if add_multi_elements.pnr_number
