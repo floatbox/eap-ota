@@ -12,6 +12,7 @@ class Recommendation
       :to => 'variants.first'
 
   include Pricing::Recommendation
+  include Commission::Includesonly
 
   def availability
     availabilities.compact.min.to_i if availabilities
