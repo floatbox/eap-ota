@@ -104,7 +104,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def set_validating_carrier
-    self.validating_carrier = Carrier.where(:code => code).first.iata if validating_carrier.blank?
+    self.validating_carrier = Carrier.where(:code => code).first.try(:iata) if validating_carrier.blank?
   end
 
   def replacement_number_with_code
