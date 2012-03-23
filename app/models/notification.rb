@@ -31,9 +31,10 @@ class Notification < ActiveRecord::Base
   end
 
   def create_visa_notice
+    message = PnrMailer.visa_notice()
     self.attach_pnr = false
-    self.subject = 'уведомление о визовых данных'
-    self.comment = 'уведомление о визовых данных'
+    self.subject = message.subject
+    self.comment = message.body.to_s
     self.status = 'delayed'
     save
   end

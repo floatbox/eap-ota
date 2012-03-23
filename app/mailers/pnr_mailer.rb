@@ -40,6 +40,12 @@ class PnrMailer < ActionMailer::Base
     end
   end
 
+  def visa_notice
+    mail :to => 'a@a.com', :subject => 'Информация о визе и адресе проживания в США' do |format|
+      format.text { render 'notifications/visa_notice' }
+    end
+  end
+
   def sirena_receipt(email, number)
     @pnr = PNR.get_by_number(number)
     attachments['eticket.pdf'] = @pnr.sirena_receipt
