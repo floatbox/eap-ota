@@ -241,8 +241,13 @@ example 'miaiad'
 agent    "0% от опубл. тарифов по маршрутам из 50 штатов США (включая Пуэрто Рико/Виргинские острова (США) и Канады;"
 subagent "0% от опубл. тарифов по маршрутам из 50 штатов США (включая Пуэрто Рико/Виргинские острова (США) и Канады;"
 important!
-interline :no, :unconfirmed #Решили с Любой включить интерлайн, хотя он и не прописан
 check { %W(US CA PR VI).include?(country_iatas.first) }
+commission "0%/0%"
+
+example 'miaiad iadmia/ab'
+agent "Решили с Любой включить интерлайн, хотя он и не прописан"
+subagent "Решили с Любой включить интерлайн, хотя он и не прописан"
+interline :unconfirmed
 commission "0%/0%"
 
 agent    "0% от тарифов VUSA, N1VISIT и N2VISIT."
