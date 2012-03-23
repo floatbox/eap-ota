@@ -74,6 +74,7 @@ class Notification < ActiveRecord::Base
   # а оно сейчас еще используется? по одному письму в пять минут?
   # FIXME вынесите если больше не нужно
   def self.process_queued_emails!
+    I18n.locale = :ru
     counter = 0
     while (to_send = Notification.email_queue.first) && counter < 50
       to_send.send_email
