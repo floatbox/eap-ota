@@ -41,7 +41,7 @@ class Ticket < ActiveRecord::Base
   has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount, :commission_our_markup
   include Pricing::Ticket
 
-  before_save :recalculate_commissions
+  before_save :recalculate_commissions, :set_validating_carrier
 
   scope :uncomplete, where(:ticketed_date => nil)
   scope :sold, where(:status => ['ticketed', 'exchanged', 'returned'])
@@ -101,6 +101,10 @@ class Ticket < ActiveRecord::Base
         self.price_fare = price_fare_base - parent.price_fare_base
       end
     end
+  end
+
+  def set_validating_carrier
+    self.validating_carrier = Carrier.where(:code => code).first.iata if validating_carrier.blank?
   end
 
   def replacement_number_with_code
