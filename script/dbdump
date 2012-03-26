@@ -9,7 +9,6 @@ SKIP_TABLES = %W(
   versions
   subscriptions
   notifications
-
   hot_offers
   destinations
 )
@@ -25,6 +24,6 @@ cmd_pass += " -u #{cfg['username']}" if cfg['username']
 cmd_pass += " -p#{cfg['password']}" if cfg['password']
 
 ignore_tables_cmd = SKIP_TABLES.map { |t| "--ignore-table=#{cfg['database']}.#{t}"}.join(' ')
-only_tables_cmd = SKIP_TABLES.map.join(' ') + ' --no-data'
+only_tables_cmd = SKIP_TABLES.join(' ') + ' --no-data'
 system "#{cmd_pass} #{cfg['database']} #{ignore_tables_cmd}"
 system "#{cmd_pass} #{cfg['database']} #{only_tables_cmd}"
