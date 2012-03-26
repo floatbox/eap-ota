@@ -6,6 +6,9 @@ SKIP_TABLES = %W(
   orders
   payments
   tickets
+  versions
+  subscriptions
+  notifications
 
   hot_offers
   destinations
