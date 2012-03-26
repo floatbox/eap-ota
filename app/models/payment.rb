@@ -31,7 +31,9 @@ class Payment < ActiveRecord::Base
 
   scope :payture, where(:type => PAYTURE)
   scope :cash, where(:type => CASH)
-  def self.types; PAYTURE + CASH end
+  def self.types
+    (PAYTURE + CASH).map {|type| [I18n.t(type), type] }
+  end
 
   # состояния, для оверрайда в подкласах и чтоб кнопки работали
   def can_block?;       false end
@@ -74,7 +76,7 @@ class Payment < ActiveRecord::Base
 
   # для админки
   def to_label
-    "#{type} ##{id} #{'%.2f' % price} р. #{payment_status}"
+    "#{I18n.t type} ##{id} #{'%.2f' % price} р. #{payment_status}"
   end
 
   def self.systems
@@ -108,7 +110,7 @@ class Payment < ActiveRecord::Base
   end
 
   def show_link
-    title = "#{type} ##{id}"
+    title = "#{I18n.t type} ##{id}"
     "<a href='/admin/payments/show/#{id}'>#{title}</a>".html_safe
   end
 

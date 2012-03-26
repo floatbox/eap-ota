@@ -20,10 +20,10 @@ ru:
       ticket: 'Билет'
       order_comment: 'Комментарий к заказу'
       payment: 'Платеж'
-      payture_charge: 'Платеж Payture'
-      payture_refund: 'Возврат Payture'
-      cash_charge: 'Платеж наличными'
-      cash_refund: 'Возврат наличными'
+      payture_charge: 'Карта, платеж'
+      payture_refund: 'Карта, возврат'
+      cash_charge: 'Наличные, платеж'
+      cash_refund: 'Наличные, возврат'
       flight_group: 'Подборка рейсов'
       subscription: 'Подписка'
       geo_tag: 'Геотаг'
@@ -129,6 +129,8 @@ ru:
         earnings: "Поступления, р."
         charged_on: "Проведен"
         payment_info: "Карта"
+        name_in_card: "ФИО на кредитной карте"
+        pan: "Номер карты"
         error_explanation: "Ошибка"
         control_links: "Управление"
         created_at: "Создан"
@@ -156,11 +158,15 @@ ru:
 
   Charges: Платежи
   Refunds: Возвраты
-  Payture: Payture
-  Cash: Кэш
+  Payture: Карта
+  Cash: Наличные
+  PaytureCharge: Карта, платеж
+  PaytureRefund: Карта, возврат
+  CashCharge: Наличные, платеж
+  CashRefund: Наличные, возврат
 
-  Secured: Авторизованы
-  Not secured: Не авторизованы
+  Secured: Подтверждены
+  Not secured: Не подтверждены
 
   # buttons
   Save and add another: Сохранить и добавить еще один
@@ -188,7 +194,7 @@ ru:
   Trash: Удалить
 
   # bulk actions
-  Charge: Списать с карты
+  Charge: Провести платеж
   Apply: Применить
 
   'yes': да
