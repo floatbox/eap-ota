@@ -3,7 +3,7 @@ gem 'rails', '3.2.1'
 
 gem 'jquery-rails'
 group :assets do
-  gem 'therubyracer'
+  #gem 'therubyracer'
   gem "uglifier"
   gem 'sass-rails'
   gem 'coffee-rails'
