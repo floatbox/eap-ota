@@ -20,6 +20,8 @@ class Payment < ActiveRecord::Base
   # не секьюрити ради, а read_only тайпуса для
   attr_protected :type
 
+  validates :price, decimal: true
+
   CHARGES = ['PaytureCharge', 'CashCharge']
   REFUNDS = ['PaytureRefund', 'CashRefund']
 
