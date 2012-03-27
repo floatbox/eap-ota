@@ -16,6 +16,7 @@ class OrderForm
 
   attr_writer :card
   attr_accessor :recommendation
+  attr_writer :price_with_payment_commission
   attr_accessor :pnr_number
   attr_accessor :people_count
   attr_accessor :query_key
@@ -119,16 +120,21 @@ class OrderForm
     [recommendation, people_count, people, card].hash
   end
 
+  def price_with_payment_commission
+    @price_with_payment_commission ||= recommendation.price_with_payment_commission
+    BigDecimal(@price_with_payment_commission)
+  end
+
   def save_to_cache
     cache = OrderFormCache.new
-    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker
+    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
     cache.save
     self.number = cache.id.to_s
   end
 
   def update_in_cache
     cache = OrderFormCache.find(number) or raise(NotFound, "#{number} not found")
-    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker
+    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
     cache.save
   end
 
@@ -137,7 +143,7 @@ class OrderForm
     def load_from_cache(cache_number)
       cache = OrderFormCache.find(cache_number) or raise(NotFound, "#{cache_number} not found")
       order = new
-      copy_attrs cache, order, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker
+      copy_attrs cache, order, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
       order.number = cache.id.to_s
       order
     end
