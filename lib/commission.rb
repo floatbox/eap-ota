@@ -2162,10 +2162,11 @@ commission "5%/4.5%"
 
 example 'kbpdok'
 example 'kbptbs'
+example 'tvstlv'
 strt_date "21.03.2012"
 agent "1% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории Украины или третьих стран;"
 subagent "0,5% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории Украины или третьих стран;"
-check { includes(country_iatas.first, 'RU UA') }
+check { not includes(country_iatas.first, 'RU') }
 discount "0.2%"
 commission "1%/0.5%"
 
