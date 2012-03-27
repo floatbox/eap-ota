@@ -1,4 +1,4 @@
 <%= render 'admin/resources/index' %>
 (в выборке <%= @resource.count %> записей;
-всего <%= number_to_currency @resource.sum(:price_with_payment_commission) %> /
-в среднем <%= number_to_currency @resource.average(:price_with_payment_commission) %>)
+всего <%= number_to_currency @resource.sum(:price_with_payment_commission), :locale => :ru %> /
+в среднем <%= number_to_currency @resource.average(:price_with_payment_commission), :locale => :ru %>)

@@ -1,8 +1,8 @@
 <%= render 'admin/resources/index' %>
 (в выборке <%= @resource.count %> записей;
 Уплачено:
-всего <%= number_to_currency @resource.sum(:price) %> /
-в среднем <%= number_to_currency @resource.average(:price) %>;
+всего <%= number_to_currency @resource.sum(:price), :locale => :ru %> /
+в среднем <%= number_to_currency @resource.average(:price), :locale => :ru %>;
 Поступлений:
-всего <%= number_to_currency @resource.sum(:earnings) %> /
-в среднем <%= number_to_currency @resource.average(:earnings) %>)
+всего <%= number_to_currency @resource.sum(:earnings), :locale => :ru %> /
+в среднем <%= number_to_currency @resource.average(:earnings), :locale => :ru %>)
