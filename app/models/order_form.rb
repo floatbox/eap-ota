@@ -126,6 +126,12 @@ class OrderForm
     self.number = cache.id.to_s
   end
 
+  def update_in_cache
+    cache = OrderFormCache.find(number) or raise(NotFound, "#{number} not found")
+    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker
+    cache.save
+  end
+
   class NotFound < StandardError; end
   class << self
     def load_from_cache(cache_number)
