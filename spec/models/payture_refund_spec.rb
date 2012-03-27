@@ -27,6 +27,39 @@ describe PaytureRefund do
     refund.price.should == -23.5
   end
 
+  it 'should prevent entering commas in price' do
+    order = Factory(:order)
+    charge = PaytureCharge.new
+    order.payments << charge
+    refund = charge.refunds.new :price => '-23,5'
+    refund.should_not be_valid
+  end
+
+  it 'should prevent entering spaces in price' do
+    order = Factory(:order)
+    charge = PaytureCharge.new
+    order.payments << charge
+    refund = charge.refunds.new :price => '23 345.10'
+    refund.should_not be_valid
+  end
+
+  it 'should prevent entering commas even if sign converted' do
+    order = Factory(:order)
+    charge = PaytureCharge.new
+    order.payments << charge
+    refund = charge.refunds.new :price => '23,5'
+    refund.should_not be_valid
+  end
+
+  it 'should accept price otherwise' do
+    order = Factory(:order)
+    charge = PaytureCharge.new
+    order.payments << charge
+    refund = charge.refunds.new :price => ' 23.50руб'
+    refund.should be_valid
+  end
+
+
   # FIXME кривой тест
   it "should not allow to save refund without charge" do
     order = Factory(:order)

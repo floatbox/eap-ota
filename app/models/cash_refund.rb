@@ -15,7 +15,7 @@ class CashRefund < Payment
 
   def fix_price_sign
     if price && price > 0
-      self.price = -price
+      self.price = "-#{price_before_type_cast.to_s.strip}"
     end
   end
 
