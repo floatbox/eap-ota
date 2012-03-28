@@ -28,5 +28,9 @@ module ApplicationHelper
   def exact_price(price)
     sprintf("%.2f", price).sub('.', ',')
   end
+
+  def display_rt_arrow rt
+    Destination.rts.invert[rt]
+  end
 end
 

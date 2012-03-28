@@ -10,6 +10,10 @@ class StatCounters
     {:_id => key}
   end
 
+  def self.date_index(time=Time.now)
+    time.is_a?(String) ? time : time.strftime(DATE_FORMAT)
+  end
+
   def self.hour_key(time=Time.now)
     key = time.is_a?(String) ? time : time.strftime(DATE_HOUR_FORMAT)
     {:_id => key}
@@ -32,12 +36,20 @@ class StatCounters
     connection['counters_hourly'].update(hour_key, {'$inc' => value(keys)}, :upsert => true)
   end
 
+  def self.d_inc destination, keys
+    connection['d_daily'].update({'date' => date_index, 'from' => destination.from_iata, 'to' => destination.to_iata, 'rt'=> destination.rt}, {'$inc' => value(keys)}, :upsert => true)
+  end
+
   def self.on_date(time=Time.now)
     connection['counters_daily'].find_one(date_key(time))
   end
 
   def self.on_hour(time=Time.now)
     connection['counters_hourly'].find_one(hour_key(time))
+  end
+
+  def self.search_on_date(time=Time.now)
+    connection['d_daily'].find({'date' => date_index(time)}, :sort => [['search.pricer.total', -1]], :limit => 10)
   end
 
   # FIXME UGLY пытаемся выводить данные в человекочитабельном виде

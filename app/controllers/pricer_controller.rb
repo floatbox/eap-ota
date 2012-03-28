@@ -17,6 +17,7 @@ class PricerController < ApplicationController
     render :partial => 'recommendations'
   ensure
     StatCounters.inc %W[search.pricer.total]
+    StatCounters.d_inc @destination, %W[search.pricer.total]
   end
 
   def hot_offers
