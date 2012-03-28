@@ -45,11 +45,13 @@ module Strategy::Amadeus::Booking
       amadeus.pnr_commit_really_hard do
         pricing = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).or_fail!
         @rec.last_tkt_date = pricing.last_tkt_date
-        unless [@rec.price_fare, @rec.price_tax] == pricing.prices
-          logger.error "Strategy::Amadeus: Изменилась цена при тарифицировании: #{@rec.price_fare}, #{@rec.price_tax} -> #{pricing.prices}"
+        new_rec = @rec.dup_with_new_prices(pricing.prices)
+        unless @order_form.price_with_payment_commission == new_rec.price_with_payment_commission
+          logger.error "Strategy::Amadeus: Изменилась цена при тарифицировании: #{@order_form.price_with_payment_commission} -> #{new_rec.price_with_payment_commission}"
           # не попытается ли сохранить бронь после выхода из блока?
           amadeus.pnr_cancel
-          @rec.price_fare, @rec.price_tax = prices
+          @order_form.price_with_payment_commission = new_rec.price_with_payment_commission
+          @order_form.recommendation = new_rec
           @order_form.update_in_cache
           return :price_changed
         end

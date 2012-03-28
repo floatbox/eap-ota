@@ -122,7 +122,6 @@ class OrderForm
 
   def price_with_payment_commission
     @price_with_payment_commission ||= recommendation.price_with_payment_commission
-    BigDecimal(@price_with_payment_commission)
   end
 
   def save_to_cache

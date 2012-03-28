@@ -18,10 +18,13 @@ module Strategy::Sirena::Booking
     end
 
     logger.info "Strategy::Sirena: processing booking: #{response.pnr_number}"
-    unless [@rec.price_fare, @rec.price_tax] == [response.price_fare, response.price_tax]
-      logger.error "Strategy::Sirena: price changed on booking: #{@rec.price_fare}, #{@rec.price_tax} -> #{response.price_fare}, #{response.price_tax}"
+
+    new_rec = @rec.dup_with_new_prices([response.price_fare, response.price_tax])
+    unless @order_form.price_with_payment_commission == new_rec.price_with_payment_commission
+      logger.error "Strategy::Sirena: price changed on booking: #{@order_form.price_with_payment_commission} -> #{new_rec.price_with_payment_commission}"
       sirena.booking_cancel(response.pnr_number, response.lead_family)
-      @rec.price_fare, @rec.price_tax = response.price_fare, response.price_tax
+      @order_form.price_with_payment_commission = new_rec.price_with_payment_commission
+      @order_form.recommendation = new_rec
       @order_form.update_in_cache
       return :price_changed
     end
