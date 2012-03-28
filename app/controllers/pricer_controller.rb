@@ -17,7 +17,7 @@ class PricerController < ApplicationController
     render :partial => 'recommendations'
   ensure
     StatCounters.inc %W[search.pricer.total]
-    StatCounters.d_inc @destination, %W[search.pricer.total]
+    StatCounters.d_inc @destination, %W[search.total search.pricer.total]
   end
 
   def hot_offers
@@ -81,6 +81,8 @@ class PricerController < ApplicationController
     @search = PricerForm.simple(pricer_form_hash)
     
     StatCounters.inc %W[search.api.total search.api.#{partner}.total]
+    @destination = get_destination
+    StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner}.total]
     
     if @search.valid?
       @search.save_to_cache

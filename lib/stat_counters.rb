@@ -49,7 +49,7 @@ class StatCounters
   end
 
   def self.search_on_date(time=Time.now)
-    connection['d_daily'].find({'date' => date_index(time)}, :sort => [['search.pricer.total', -1]], :limit => 10)
+    connection['d_daily'].find({'date' => date_index(time)}, :sort => [['search.total', -1]], :limit => 10)
   end
 
   # FIXME UGLY пытаемся выводить данные в человекочитабельном виде
