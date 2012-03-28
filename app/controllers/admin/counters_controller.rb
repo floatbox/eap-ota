@@ -6,11 +6,12 @@ class Admin::CountersController < Admin::BaseController
   end
 
   def destinations
+    count = 500
     @tabs = (0..6).to_a.reverse.map {|t| t.days.ago.strftime(StatCounters::DATE_FORMAT) }
     @data = []
     @tabs.each do |date|
       day_data = []
-      StatCounters.search_on_date(date).each {|i| day_data << i}
+      StatCounters.search_on_date(date, count).each {|i| day_data << i}
       @data << { :title => date, :day_data => day_data }
     end
   end
