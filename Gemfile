@@ -9,6 +9,8 @@ group :assets do
   gem 'coffee-rails'
 end
 
+# консолька вместо IRB
+gem 'pry-rails'
 
 # Deploy with Capistrano
 group :deployment do
