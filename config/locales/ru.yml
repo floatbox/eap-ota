@@ -62,8 +62,8 @@ ru:
         commission_blanks: "Сбор за бланки, р. c билета"
         commission_agent: "Агентская комиссия, %/р. с билета"
         commission_subagent: "Субагентская комиссия, %/р. c билета"
-        commission_discount: "Скидка от тарифа, %"
-        commission_our_markup: "Надбавка к тарифу, %"
+        commission_discount: "Скидка от тарифа, %/р. с билета"
+        commission_our_markup: "Надбавка к тарифу, %/р. c билета"
         commission_carrier: "Валидирующий перевозчик"
         commission_ticketing_method: "Тип договора/Office ID"
       order:
