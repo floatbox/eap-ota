@@ -6,15 +6,17 @@
   <div style='float: left; width: 200px'>
     <h3><%= day[:title]%></h3>
     <% day[:day_data].each do |dest| %>
-      <%= dest['from'] %> <%= display_rt_arrow(dest['rt']) %> <%= dest['to'] %>
-      ; <%= dest['search']['api']['total'] %>
-      <% if !dest['enter'].blank? %>
-      ; <%= dest['enter']['api']['total'] %>
-      ; <%= dest['enter']['api']['total'] / dest['search']['api']['total'] * 100 %>%
-      <% else %>
-      ; - ; -
-      <% end %>
+      <% if !dest['search'].blank? %>
+        <%= dest['from'] %> <%= display_rt_arrow(dest['rt']) %> <%= dest['to'] %>
+        ; <%= dest['search']['api']['total'] %>
+        <% if !dest['enter'].blank? %>
+        ; <%= dest['enter']['api']['total'] %>
+        ; <%= dest['enter']['api']['total'] / dest['search']['api']['total'] * 100 %>%
+        <% else %>
+        ; - ; -
+        <% end %>
       <br>
+      <% end %>
     <% end %>
   </div>
   <% end %>
