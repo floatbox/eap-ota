@@ -11,7 +11,7 @@
         ; <%= dest['search']['api']['total'] %>
         <% if !dest['enter'].blank? %>
         ; <%= dest['enter']['api']['total'] %>
-        ; <%= dest['enter']['api']['total'] / dest['search']['api']['total'] * 100 %>%
+        ; <%= (dest['enter']['api']['total'].to_f / dest['search']['api']['total'] * 100).round(2) %>%
         <% else %>
         ; - ; -
         <% end %>
