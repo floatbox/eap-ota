@@ -7,11 +7,11 @@ class PricerController < ApplicationController
   def pricer
     unless params[:restore_results]
       if @search.valid?
+        @destination = get_destination
         @recommendations = Mux.new(:admin_user => admin_user).async_pricer(@search)
         @locations = @search.human_locations
         hot_offer = create_hot_offer
         @average_price = hot_offer.destination.average_price * @search.people_count[:adults] if hot_offer
-        @destination = get_destination
         StatCounters.d_inc @destination, %W[search.total search.pricer.total]
       end
     end
@@ -84,9 +84,9 @@ class PricerController < ApplicationController
     
     if @search.valid?
       @search.save_to_cache
+      @destination = get_destination
       @recommendations = Mux.new(:lite => true).async_pricer(@search)
       StatCounters.inc %W[search.api.success search.api.#{partner}.success]
-      @destination = get_destination
       StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner}.total]
       render 'api/yandex'
     else
