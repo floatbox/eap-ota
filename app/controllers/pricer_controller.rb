@@ -126,7 +126,6 @@ class PricerController < ApplicationController
     Destination.find_or_create_by(:from_iata => from.iata, :to_iata => to.iata , :rt => @search.rt)
   end
 
-
   def load_form_from_cache
     @query_key = params[:query_key] or raise 'no query_key provided'
     @search = PricerForm.load_from_cache(params[:query_key])

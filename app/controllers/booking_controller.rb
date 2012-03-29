@@ -13,7 +13,8 @@ class BookingController < ApplicationController
     set_search_context_for_airbrake
     recommendation = Recommendation.deserialize(params[:recommendation])
     # FIXME @search.partner пусть останется пока
-    track_partner(params[:partner] || @search.partner, params[:marker])
+    # track_partner(params[:partner] || @search.partner, params[:marker])
+    # перенес пока в api_booking
     strategy = Strategy.select( :rec => recommendation, :search => @search )
     
     StatCounters.inc %W[enter.preliminary_booking.total]
@@ -40,9 +41,13 @@ class BookingController < ApplicationController
   def api_booking
     @query_key = params[:query_key]
     @search = PricerForm.load_from_cache(params[:query_key])
+    track_partner(params[:partner] || @search.partner, params[:marker])
     render 'variant'
     StatCounters.inc %W[enter.api.success]
     StatCounters.inc %W[enter.api.#{partner}.success] if partner
+    @destination = get_destination
+    StatCounters.d_inc @destination, %W[enter.api.total]
+    StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if partner
   ensure
     StatCounters.inc %W[enter.api.total]
     StatCounters.inc %W[enter.api.#{partner}.total] if partner
@@ -193,6 +198,14 @@ class BookingController < ApplicationController
     end
   ensure
     StatCounters.inc %W[pay.total pay.3ds.confirmations]
+  end
+
+  def get_destination
+    segment = @search.segments[0]
+    return if ([segment.to_as_object.class, segment.from_as_object.class] - [City, Airport]).present? || @search.complex_route?
+    to = segment.to_as_object.class == Airport ? segment.to_as_object.city : segment.to_as_object
+    from = segment.from_as_object.class == Airport ? segment.from_as_object.city : segment.from_as_object
+    Destination.find_or_create_by(:from_iata => from.iata, :to_iata => to.iata , :rt => @search.rt)
   end
 
 end
