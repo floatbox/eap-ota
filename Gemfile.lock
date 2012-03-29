@@ -204,6 +204,9 @@ GEM
       coderay (~> 1.0.5)
       method_source (~> 0.7.1)
       slop (>= 2.4.4, < 3)
+    pry-doc (0.4.1)
+      pry (>= 0.9.0)
+      yard (~> 0.7.4)
     pry-rails (0.1.6)
       pry
     qu (0.1.4)
@@ -325,6 +328,7 @@ GEM
       nokogiri (~> 1.3)
     ya2yaml (0.31)
     yajl-ruby (1.1.0)
+    yard (0.7.5)
 
 PLATFORMS
   ruby
@@ -367,6 +371,7 @@ DEPENDENCIES
   nokogiri
   paper_trail
   passenger
+  pry-doc
   pry-rails
   qu-mongo
   rails (= 3.2.1)
