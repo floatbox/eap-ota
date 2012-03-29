@@ -12,7 +12,7 @@ class PricerController < ApplicationController
         @locations = @search.human_locations
         hot_offer = create_hot_offer
         @average_price = hot_offer.destination.average_price * @search.people_count[:adults] if hot_offer
-        StatCounters.d_inc @destination, %W[search.total search.pricer.total]
+        StatCounters.d_inc @destination, %W[search.total search.pricer.total] if @destination
       end
     end
     render :partial => 'recommendations'
@@ -87,7 +87,7 @@ class PricerController < ApplicationController
       @destination = get_destination
       @recommendations = Mux.new(:lite => true).async_pricer(@search)
       StatCounters.inc %W[search.api.success search.api.#{partner}.success]
-      StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner}.total]
+      StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner}.total] if @destination
       render 'api/yandex'
     else
       @recommendations = []
