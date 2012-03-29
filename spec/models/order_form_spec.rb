@@ -129,33 +129,55 @@ describe OrderForm do
   end
 
   describe '#associate_infants' do
-    let(:ivanova){Person.new(:last_name => 'IVANOVA')}
-    let(:ivanov){Person.new(:last_name => 'IVANOV')}
-    let(:mitrofanov){Person.new(:last_name => 'MITROFANOV')}
-    let(:cucaev){Person.new(:last_name => 'CUCAEV')}
-    let(:shmidt){Person.new(:last_name => 'SHMIDT')}
+    let(:person_attrs) {
+      [
+       ['ivanova'],
+       ['ivanova', :infant],
+       ['ivanov'],
+       ['ivanov', :infant],
+       ['mitrofanov'],
+       ['mitrofanova', :infant],
+       ['petrov', :infant],
+       ['cucaev'],
+       ['shmidt']
 
-    let(:ivanova_i){Person.new(:last_name => 'IVANOVA')}
-    let(:ivanov_i){Person.new(:last_name => 'IVANOV')}
-    let(:mitrofanova_i){Person.new(:last_name => 'MITROFANOVA')}
-    let(:petrov_i){Person.new(:last_name => 'PETROV')}
-
-    let(:order_form){OrderForm.new(:people_count => {:adults => 4, :infants => 4, :children => 0}, :people => [ivanova, ivanov, mitrofanov, cucaev, ivanova_i, ivanov_i, mitrofanova_i, petrov_i])}
+      ]
+    }
+    let(:order_form) {OrderForm.new(:people_count => {:adults => (person_attrs.count - person_attrs.count(&:second)), :infants => person_attrs.count(&:second), :children => 0 }, :people => create_bunch_of_people(person_attrs))}
 
     it 'associates correct' do
+
       order_form.associate_infants
 
-      flag = ivanova.associated_infant == ivanova_i || ivanova.associated_infant == ivanov_i
-      flag1 = ivanov.associated_infant == ivanova_i || ivanov.associated_infant == ivanov_i
+      order_form.infants.all?(&:associated_infant).should == false
 
-      flag.should == true
-      flag1.should == true
+      get_associated_for('ivanova').should ==  'ivanova'
+      get_associated_for('ivanov').should == 'ivanov'
+      get_associated_for('mitrofanov').should == 'mitrofanova'
+      get_associated_for('cucaev').should == nil
+      get_associated_for('shmidt').should == 'petrov'
+    end
 
-      mitrofanov.associated_infant.should == mitrofanova_i
-      cucaev.associated_infant.should == petrov_i
-      shmidt.associated_infant.should == nil
+    def create_bunch_of_people arr
+      res = []
+      arr.each do |attr_arr|
+        p = Person.new
+        p[:last_name] = attr_arr[0]
+        p.infant_or_child = attr_arr[1][0..0] if attr_arr[1]
+        if attr_arr[1]
+          p[:birthday] = 2.months.ago
+        else
+          p[:birthday] = 20.years.ago
+        end
+        res << p
+      end
+      res
+    end
+
+    def get_associated_for parent
+      parent_obj = (order_form.adults.select{|a| a.last_name == parent}).first
+      parent_obj.associated_infant.last_name if parent_obj.associated_infant
     end
   end
-
 end
 

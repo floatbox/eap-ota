@@ -274,6 +274,14 @@ class OrderForm
 
   def associate_infants
     orphans = infants
+    people.each_cons(2) do |pair|
+      unless pair.first.associated_infant
+        if pair.first.infant_or_child == nil && pair.second.infant_or_child == 'i'
+          pair.first.associated_infant = pair.second
+          orphans = orphans - [pair.second]
+        end
+      end
+    end
     infants.each do |infant|
       adults.each do |adult|
         unless adult.associated_infant
