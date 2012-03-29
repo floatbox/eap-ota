@@ -444,7 +444,7 @@ class Order < ActiveRecord::Base
     :income => '%.2f' % (settled ? income : '0'),
     :created_at => created_at,
     :route => route,
-    :settled => settled
+    :settled => settled && (payment_status == 'charged')
     }
   end
 
