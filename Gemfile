@@ -11,6 +11,7 @@ end
 
 # консолька вместо IRB
 gem 'pry-rails'
+gem 'pry-doc'
 
 # Deploy with Capistrano
 group :deployment do
