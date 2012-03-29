@@ -5,6 +5,7 @@
   <% if !day[:day_data].blank? %>
   <div style='float: left; width: 200px'>
     <h3><%= day[:title]%></h3>
+    <p>Всего: <%= day[:total_s] %> ; <%= day[:total_e] %><p>
     <% day[:day_data].each do |dest| %>
       <% if !dest['search'].blank? %>
         <%= dest['from'] %> <%= display_rt_arrow(dest['rt']) %> <%= dest['to'] %>
