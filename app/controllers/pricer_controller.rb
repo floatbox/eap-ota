@@ -12,12 +12,12 @@ class PricerController < ApplicationController
         hot_offer = create_hot_offer
         @average_price = hot_offer.destination.average_price * @search.people_count[:adults] if hot_offer
         @destination = get_destination
+        StatCounters.d_inc @destination, %W[search.total search.pricer.total]
       end
     end
     render :partial => 'recommendations'
   ensure
     StatCounters.inc %W[search.pricer.total]
-    StatCounters.d_inc @destination, %W[search.total search.pricer.total]
   end
 
   def hot_offers
@@ -81,13 +81,13 @@ class PricerController < ApplicationController
     @search = PricerForm.simple(pricer_form_hash)
     
     StatCounters.inc %W[search.api.total search.api.#{partner}.total]
-    @destination = get_destination
-    StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner}.total]
     
     if @search.valid?
       @search.save_to_cache
       @recommendations = Mux.new(:lite => true).async_pricer(@search)
       StatCounters.inc %W[search.api.success search.api.#{partner}.success]
+      @destination = get_destination
+      StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner}.total]
       render 'api/yandex'
     else
       @recommendations = []
@@ -125,7 +125,6 @@ class PricerController < ApplicationController
     from = segment.from_as_object.class == Airport ? segment.from_as_object.city : segment.from_as_object
     Destination.find_or_create_by(:from_iata => from.iata, :to_iata => to.iata , :rt => @search.rt)
   end
-
 
   def load_form_from_cache
     @query_key = params[:query_key] or raise 'no query_key provided'
