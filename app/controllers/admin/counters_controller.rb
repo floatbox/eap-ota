@@ -6,7 +6,7 @@ class Admin::CountersController < Admin::BaseController
   end
 
   def destinations
-    count = 500
+    count = 1000
     @tabs = (0..6).to_a.reverse.map {|t| t.days.ago.strftime(StatCounters::DATE_FORMAT) }
     @data = []
     @tabs.each do |date|
