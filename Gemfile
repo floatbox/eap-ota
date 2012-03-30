@@ -12,6 +12,8 @@ end
 # консолька вместо IRB
 gem 'pry-rails'
 gem 'pry-doc'
+#gem 'pry-coolline', :git => 'https://github.com/pry/pry-coolline.git'
+gem 'pry-editline'
 
 # Deploy with Capistrano
 group :deployment do

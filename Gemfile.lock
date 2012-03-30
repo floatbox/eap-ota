@@ -207,6 +207,7 @@ GEM
     pry-doc (0.4.1)
       pry (>= 0.9.0)
       yard (~> 0.7.4)
+    pry-editline (1.1.1)
     pry-rails (0.1.6)
       pry
     qu (0.1.4)
@@ -372,6 +373,7 @@ DEPENDENCIES
   paper_trail
   passenger
   pry-doc
+  pry-editline
   pry-rails
   qu-mongo
   rails (= 3.2.1)
