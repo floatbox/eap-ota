@@ -8,7 +8,7 @@ defaults :system => :amadeus, :ticketing_method => "aviacenter", :consolidator =
 carrier "SU", "Aeroflot"
 ########################################
 # будут действовать на все правила в авиакомпании.
-carrier_defaults :discount => 0, :our_markup => 150
+carrier_defaults :discount => 0, :our_markup => 100
 
 example "svocdg"
 example "svocdg/business cdgsvo/economy"
@@ -91,7 +91,7 @@ example 'AERDME/W DMEAER/W'
 agent "3% МВЛ. ВВЛ L, V, X, T, N, I, G, W, U"
 subagent "2 % от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWU"
-discount "1.9%"
+discount "1%"
 commission "3%/2%"
 
 example 'aerdme dmeaer/ab'
@@ -841,7 +841,7 @@ commission "1%/0.5%"
 carrier "FV", "RUSSIA"
 ########################################
 
-carrier_defaults our_markup: 150
+carrier_defaults our_markup: 120
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -1239,7 +1239,7 @@ carrier "JU", "JAT AIRWAYS"
 example 'svocdg'
 agent "С 15.02.2011г. 7% от опубл. тарифов на собств. рейсы JU"
 subagent "JU  С 21.02.2011г. 5% от опубл. тарифов на собств. рейсы JU"
-discount "4%"
+discount "3%"
 commission "7%/5%"
 
 example 'svocdg cdgsvo/ab'
