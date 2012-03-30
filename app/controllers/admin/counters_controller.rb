@@ -13,10 +13,11 @@ class Admin::CountersController < Admin::BaseController
       day_data = []
       total_s = 0
       total_e = 0
+      # FIXME WTF is i? daily_counters? or what?
       StatCounters.search_on_date(date, count).each do |i|
         day_data << i
-        total_s = total_s + i['search']['api']['total'] if i['search']['api']
-        total_e = total_e + i['enter']['api']['total'] if i['enter']
+        total_s += i.nested('search.api.total') || 0
+        total_e += i.nested('enter.api.total') || 0
       end
       @data << { :title => date, :day_data => day_data, :total_s => total_s, :total_e => total_e }
     end

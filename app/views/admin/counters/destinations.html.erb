@@ -1,28 +1,18 @@
 <br>
 
-<% @data.each do |day| %>
-
-  <% if !day[:day_data].blank? %>
-  <% counter = 0 %>
+<% @data.select {|day| day[:day_data].present? }.each do |day| %>
   <div style='float: left; width: 250px'>
     <h3><%= day[:title]%></h3>
     <p>Всего: <%= day[:total_s] %> ; <%= day[:total_e] %> ; <%= (day[:total_e].to_f / day[:total_s] * 100).round(2) %>%</p>
-    <% day[:day_data].each do |dest| %>
-      <% if !dest['search']['api'].blank? %>
-      <% counter = counter + 1 %>
+    <% day[:day_data].select {|dest| dest['search']['api'].present? }.each_with_index do |dest, index| %>
       <div style='color: #444; padding: 2px 2px;'>
-        <%= counter%>. <%= dest['from'] %> <%= display_rt_arrow(dest['rt']) %> <%= dest['to'] %>
-        ; <%= dest['search']['api']['total'] %>
-        <% if !dest['enter'].blank? %>
-        ; <%= dest['enter']['api']['total'] %>
-        ; <%= (dest['enter']['api']['total'].to_f / dest['search']['api']['total'] * 100).round(2) %>%
-        <% else %>
-        ; - ; -
+        <%= index + 1 %>. <%= dest['from'] %> <%= display_rt_arrow(dest['rt']) %> <%= dest['to'] %>
+        ; <%= dest.nested('search.api.total') %>
+        ; <%= dest.nested('enter.api.total', '-') %>
+        <% if dest.nested('enter.api.total') %>
+          ; <%= (dest.nested('enter.api.total').to_f / dest.nested('search.api.total') * 100).round(2) %>%
         <% end %>
       </div>
-      <% end %>
     <% end %>
   </div>
-  <% end %>
-  
 <% end %>
