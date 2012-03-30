@@ -2,26 +2,7 @@
 
 require 'spec_helper'
 
-describe "Hash#nested" do
-  before do
-    class Hash
-      # Fetches deep nested hash value by its dot-separated path
-      #
-      # hash = {'foo' => {'bar' => {'baz' => 3}}}
-      # hash.nested('foo.bar.baz')
-      # => 3
-      # hash.nested('foo.key')
-      # => nil
-      # hash.nested('foo.key', 5)
-      # => 5
-      def nested(path, default_value=nil)
-        path.split('.').reduce(self) do |hash, partial_key|
-          hash[partial_key] or return default_value
-        end
-      end
-    end
-  end
-
+describe "FetchNested#nested" do
   it "should return value for a simple string key" do
     {'foo' => 3}.nested('foo').should == 3
   end
@@ -49,5 +30,4 @@ describe "Hash#nested" do
   pending "should work with arrays too!" do
     {'foo' => [1, {'bar' =>2}]}.nested('foo.1.bar').should == 2
   end
-
 end
