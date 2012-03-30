@@ -21,6 +21,8 @@ group :deployment do
   gem 'capistrano_colors'
 end
 
+gem 'evergreen', :require => 'evergreen/rails', :group => :development
+
 gem 'kaminari'
 gem 'nokogiri'
 gem 'yajl-ruby'

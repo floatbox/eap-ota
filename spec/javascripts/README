@@ -1,0 +1,19 @@
+тесты для жаваскрипта!
+----------------------
+
+Запуск:
+
+  http://localhost:3000/evergreen/
+
+Документация по матчерам и синтаксису:
+
+  http://pivotal.github.com/jasmine/
+  https://github.com/pivotal/jasmine/wiki
+
+Матчеры:
+
+  https://github.com/pivotal/jasmine/wiki/Matchers
+
+Тестовые шаблоны для загрузки в #test
+
+  spec/javascript/templates/*.html
