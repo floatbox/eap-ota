@@ -19,11 +19,11 @@ describe "FetchNested#nested" do
     {'foo' => {'bar' => {'baz' => 3}}}.nested('foo.key', 5).should == 5
   end
 
-  pending "should return value if it is false, instead of default_value" do
+  it "should return value if it is false, instead of default_value" do
     {'foo' => false}.nested('foo').should == false
   end
 
-  pending "should react somehow, if partial path is not pointing to a hash" do
+  it "should react somehow, if partial path is not pointing to a hash" do
     {'foo' => 2}.nested('foo.bar').should be_nil
   end
 

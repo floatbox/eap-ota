@@ -10,8 +10,11 @@ module FetchNested
   # hash.nested('foo.key', 5)
   # => 5
   def nested(path, default_value=nil)
-    path.split('.').reduce(self) do |hash, partial_key|
-      hash[partial_key] or return default_value
+    path.split('.').inject(self) do |hash, partial_key|
+      unless hash.respond_to?(:has_key?) && hash.has_key?(partial_key)
+        return default_value
+      end
+      hash[partial_key]
     end
   end
 end
