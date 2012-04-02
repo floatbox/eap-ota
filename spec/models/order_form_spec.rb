@@ -143,7 +143,17 @@ describe OrderForm do
 
       ]
     }
-    let(:order_form) {OrderForm.new(:people_count => {:adults => (person_attrs.count - person_attrs.count(&:second)), :infants => person_attrs.count(&:second), :children => 0 }, :people => create_bunch_of_people(person_attrs))}
+
+    let(:order_form) do
+      OrderForm.new(
+        :people => create_bunch_of_people(person_attrs),
+        :people_count => {
+          :adults => (person_attrs.count - person_attrs.count(&:second)),
+           :infants => person_attrs.count(&:second),
+           :children => 0
+        }
+      )
+    end
 
     it 'associates correct' do
 
@@ -159,19 +169,13 @@ describe OrderForm do
     end
 
     def create_bunch_of_people arr
-      res = []
-      arr.each do |attr_arr|
+      arr.map do |last_name, infant_sign|
         p = Person.new
-        p[:last_name] = attr_arr[0]
-        p.infant_or_child = attr_arr[1][0..0] if attr_arr[1]
-        if attr_arr[1]
-          p[:birthday] = 2.months.ago
-        else
-          p[:birthday] = 20.years.ago
-        end
-        res << p
+        p.last_name = last_name
+        p.infant_or_child = 'i' if infant_sign
+        p.birthday = infant_sign ? 2.months.ago : 20.years.ago
+        p
       end
-      res
     end
 
     def get_associated_for parent
