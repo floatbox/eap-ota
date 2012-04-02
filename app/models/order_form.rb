@@ -65,6 +65,14 @@ class OrderForm
     people && (people.sort_by(&:birthday)[0..(people_count[:adults]-1)])
   end
 
+  def childfree_adults
+    adults.reject(&:associated_infant)
+  end
+
+  def orphans
+    infants - adults.map(&:associated_infant).compact
+  end
+
   def children
     s_pos = people_count[:adults]
     e_pos = people_count[:adults] + people_count[:children]-1
@@ -273,37 +281,33 @@ class OrderForm
   end
 
   def associate_infants
-    orphans = infants
-    people.each_cons(2) do |pair|
-      unless pair.first.associated_infant
-        if pair.first.infant_or_child == nil && pair.second.infant_or_child == 'i'
-          pair.first.associated_infant = pair.second
-          orphans = orphans - [pair.second]
-        end
+    # идем по порядку, привязываем каждого младенца к предшествующему по порядку взрослому
+    people.each_cons(2) do |person, next_person|
+      next if person.associated_infant
+      if person.adult? && next_person.infant?
+        person.associated_infant = next_person
       end
     end
+
+    # пытаемся идентифицировать схожесть фамилий
     orphans.each do |infant|
-      adults.each do |adult|
-        unless adult.associated_infant
-          array = [infant.last_name, adult.last_name]
-          array.sort_by!(&:length)
-          coincidence = array[0].scan(/./) & array[1].scan(/./)
-          if coincidence.count.to_f/array[1].length.to_f > 0.5
-            adult.associated_infant = infant
-            orphans = orphans - [infant]
-            break
-          end
-        end
+      if adult = childfree_adults.find { |adult| similar_last_names? infant.last_name, adult.last_name }
+        adult.associated_infant = infant
       end
     end
+
+    # распихиваем оставшихся
     orphans.each do |orphan|
-      adults.each do |adult|
-        unless adult.associated_infant
-          adult.associated_infant = orphan
-          break
-        end
-      end
+      childfree_adults.first.associated_infant = orphan if childfree_adults.present?
     end
+  end
+
+  private
+
+  def similar_last_names? first_name, second_name
+    min_length = [first_name, second_name].map(&:length).min
+    coincidence = (first_name.chars.to_set & second_name.chars.to_set).size
+    (coincidence / min_length.to_f) >= 0.5
   end
 end
 

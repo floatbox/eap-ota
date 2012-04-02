@@ -29,6 +29,18 @@ class Person
   before_validation :set_document_expiration_date
   before_validation :clear_first_name_and_last_name
 
+  def infant?
+    infant_or_child == 'i'
+  end
+
+  def child?
+    infant_or_child == 'c'
+  end
+
+  def adult?
+    !child? && !infant?
+  end
+
   def clear_first_name_and_last_name
     first_name.gsub!(/[^\w]+/, '')
     last_name.gsub!(/[^\w]+/, '')

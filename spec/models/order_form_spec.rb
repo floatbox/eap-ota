@@ -219,4 +219,9 @@ describe OrderForm do
       end
     end
   end
+
+  describe '#similar_last_names?' do
+    pending { subject.send(:similar_last_names?, 'IVANOVA', 'LIKOV').should be_false }
+    specify { subject.send(:similar_last_names?, 'IVANOVA', 'IVANOV').should be_true }
+  end
 end
