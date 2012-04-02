@@ -5,6 +5,8 @@ class PaytureRefund < Payment
   has_many :refunds, :through => :charge
 
   validates_presence_of :charge
+  validates :price, not_changed: true, :if => :charged?
+
   before_create :set_ref
 
   before_validation :fix_price_sign

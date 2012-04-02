@@ -19,6 +19,30 @@ describe PaytureCharge do
     p.earnings.should == 1000 - 34.5
   end
 
+  it 'should not allow to update price on charged payment' do
+    order = Factory(:order)
+    charge = PaytureCharge.new :price => 1000
+    order.payments << charge
+    charge.update_attribute :status, 'charged'
+    charge.reload
+    charge.should be_charged
+
+    charge.attributes = {:price => '1050'}
+    charge.should have_errors_on(:price)
+  end
+
+  it 'should still allow to update price on charged payment if entered price is technically the same' do
+    order = Factory(:order)
+    charge = PaytureCharge.new :price => 1000
+    order.payments << charge
+    charge.update_attribute :status, 'charged'
+    charge.reload
+    charge.should be_charged
+
+    charge.attributes = {:price => '1000'}
+    charge.should_not have_errors_on(:price)
+  end
+
   describe "state" do
     subject {PaytureCharge.new(:status => current_state)}
 

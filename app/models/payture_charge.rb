@@ -7,6 +7,8 @@ class PaytureCharge < Payment
   attr_reader :card
   has_many :refunds, :class_name => 'PaytureRefund', :foreign_key => 'charge_id'
 
+  validates :price, not_changed: true, :if => :charged?
+
   # вызывается и после считывания из базы
   def set_initial_status
     self.status ||= 'pending'

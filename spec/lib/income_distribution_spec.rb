@@ -45,7 +45,7 @@ describe IncomeDistribution do
       }
     end
     let :payments do
-      [ PaytureCharge.new(:status => 'charged', :price => 30000, :commission => '2.85%') ]
+      [ PaytureCharge.new(:status => 'blocked', :price => 30000, :commission => '2.85%') ]
     end
     its(:income) {should == 8695 }
     its(:income_earnings) {should == 29145}
@@ -60,7 +60,7 @@ describe IncomeDistribution do
       }
     end
     let :payments do
-      [ PaytureCharge.new(:status => 'charged', :price => 30000, :commission => '2.85%') ]
+      [ PaytureCharge.new(:status => 'blocked', :price => 30000, :commission => '2.85%') ]
     end
     its(:income) {should == 10545}
     its(:income_earnings) {should == 29145}
@@ -75,7 +75,7 @@ describe IncomeDistribution do
       }
     end
     let :payments do
-      [ CashCharge.new(:status => 'charged', :price => 30000, :commission => '2.85%') ]
+      [ CashCharge.new(:status => 'blocked', :price => 30000, :commission => '2.85%') ]
     end
     its(:income) {should == 9550}
     its(:income_earnings) {should == 30000}
@@ -90,7 +90,7 @@ describe IncomeDistribution do
       }
     end
     let :payments do
-      [ CashCharge.new(:status => 'charged', :price => 30000, :commission => '2.85%') ]
+      [ CashCharge.new(:status => 'blocked', :price => 30000, :commission => '2.85%') ]
     end
     its(:income) {should == 11400}
     its(:income_earnings) {should == 30000}

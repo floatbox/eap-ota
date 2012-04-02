@@ -81,6 +81,36 @@ describe PaytureRefund do
     refund.earnings.should == -23.5
   end
 
+  it 'should not allow to update price on charged refund' do
+    order = Factory(:order)
+    charge = PaytureCharge.new :name_in_card => 'vasya', :pan => '123456xxxxxx1234'
+    order.payments << charge
+    charge.reload
+    refund = charge.refunds.create :price => -23.5
+
+    refund.update_attribute :status, 'charged'
+    refund.reload
+    refund.should be_charged
+
+    refund.attributes = {:price => '-23.40'}
+    refund.should have_errors_on(:price)
+  end
+
+  it 'should still allow to update price on charged refund if entered price is technically the same' do
+    order = Factory(:order)
+    charge = PaytureCharge.new :name_in_card => 'vasya', :pan => '123456xxxxxx1234'
+    order.payments << charge
+    charge.reload
+    refund = charge.refunds.create :price => -23.5
+
+    refund.update_attribute :status, 'charged'
+    refund.reload
+    refund.should be_charged
+
+    refund.attributes = {:price => '-23.50'}
+    refund.should be_valid
+  end
+
   describe "state" do
     subject {PaytureRefund.new(:status => current_state)}
 
