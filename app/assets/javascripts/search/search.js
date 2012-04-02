@@ -1,439 +1,289 @@
+/* Form */
 var search = {
 init: function() {
-    var self = this;
-
-    /* Режим (по умолчанию туда и обратно) */
-    this.mode = 'rt';
-    $('#search-fields .segment1 .sicon').click(function() {
-        self.toggleMode();
-    });
-    $('#search-mode li').click(function() {
-        self.toggleMode($(this).attr('data-mode'));
-    });
-    $('#search-fields .add-segment').click(function() {
-        self.toggleMode('tw');
-    });
-    $('#search-fields .segment2 .remove-segment').click(function() {
-        self.segments[1].from.trigger('set', self.segments[2].from.val());
-        self.segments[1].to.trigger('set', self.segments[2].to.val());
-        self.segments[2].from.trigger('set', '');
-        self.segments[2].to.trigger('set', '');
-        self.toggleMode('dw');
-    });
-    $('#search-fields .segment3 .remove-segment').click(function() {
-        self.segments[2].from.trigger('set', '');
-        self.segments[2].to.trigger('set', '');
-        self.toggleMode('dw');
-    });
-
-    /* Поля */
-    var searchField = function(selector) {
-        var el = $(selector);
-        return el.autocomplete({
-            cls: 'autocomplete',
-            url: '/complete.json',
-            root: 'data',
-            width: 340,
-            height: 374,
-            loader: el.closest('td').find('.loader'),
-            params: {
-                limit: 30
-            }
-        }).change(function() {
-            var el = $(this), v = el.val();
-            if (v === '') el.trigger('iata', '');
-            if (v !== el.data('pval')) {
-                self.update(this);
-                if (window._gaq && v) {
-                    _gaq.push(['_trackEvent', 'Search', el.attr('data-label'), v]);
-                }
-            }
-            el.data('pval', v);
-        });
-    };
-    this.segments = [{
-        from: searchField('#search-s1-from'),
-        to: searchField('#search-s1-to')
-    }, {
-        from: searchField('#search-s2-from'),
-        to: searchField('#search-s2-to')
-    }, {
-        from: searchField('#search-s3-from'),
-        to: searchField('#search-s3-to')
-    }];
-    this.toValues = [];
-
-    // IATA в первом поле «Откуда»
-    var fdata = this.segments[0].from.get(0).onclick();
-    if (fdata && fdata.iata) {
-        this.segments[0].from.trigger('iata', fdata.iata);
-    }
-
-    // Календарь
-    this.calendar = new app.Calendar("#search-calendar");
-
-    // Селекты
-    $('#search-define .filter').each(function() {
-        self[$(this).attr('data-name')] = new controls.Filter(this, {radio: true, preserve: true});
-    });
-    this.persons.el.bind('change', function(e, values) {
-        self.update(self.persons);
-        fixedBlocks.update();
-    });
-    this.cabin.el.bind('change', function(e, values) {
-        self.update(self.cabin);
-        fixedBlocks.update();
-    });
-
-    // Модификация списка пассажиров
-    this.persons.click = function(el) {
-        var group = el.parent().attr('data-group');
-        if (el.hasClass('selected')) {
-            this.selected[group] = (group == 'adults') ? 1 : 0;
-        } else {
-            var value = el.attr('data-value');
-            this.selected[group] = value ? parseInt(value, 10) : 0;
-        }
-        this.update();
-    };
-    this.persons.update = function() {
-        var d = this.dropdown, s = this.selected;
-        var manyinf = s.infants > s.adults;
-        var manyall = s.adults + s.children + s.infants > 8;
-        this.items.removeClass('selected');
-        this.empty.removeClass('selected');
-        $('.pg-adults dd', d).eq(s.adults - 1).addClass('selected');
-        $('.pg-children dd', d).eq(s.children).addClass('selected').end().slice(1).each(function(i) {
-            $(this).toggleClass('disabled', i > 7 - s.adults);
-        });
-        $('.pg-infants dd', d).eq(s.infants).addClass('selected').end().slice(1).each(function(i) {
-            $(this).toggleClass('disabled', i > 7 - s.adults - s.children || i > s.adults - 1);
-        });
-        $('.excess', d).toggle(manyall);
-        $('.infants', d).toggle(manyinf && !manyall);
-        $('.a-button', d).toggle(!manyall && !manyinf);
-        this.el.trigger('update');
-        if (!manyall && !manyinf) {
-            var template = '<span class="value">{nt}{gt}</span>';
-            var nc = constants.numbers.collective;
-            var result = [template.supplant({
-                nt: nc[s.adults],
-                gt: (s.children || s.infants) ? s.adults.inflect(' взрослый', ' взрослых', ' взрослых', false) : ''
-            })];
-            if (s.children) result.push(template.supplant({
-                nt: nc[s.children] + ' ',
-                gt: s.children.inflect('ребёнок', 'детей', 'детей', false)
-            }));
-            if (s.infants) result.push(template.supplant({
-                nt: nc[s.infants] + ' ',
-                gt: s.infants.inflect('младенец', 'младенцев', 'младенцев', false)
-            }));
-            this.values.html(' (' + result.enumeration() + ')').show();
-            this.lastCorrect = $.extend({}, this.selected);
+    this.el = $('#search');
+    this.mode.init();
+    this.locations.init();
+    this.options.init();
+    this.dates.init();
+    this.map.init();
+    this.defaultValues = {
+        segments: [{dpt: 'Москва'}],
+        options: {
+            adults: 1,
+            children: 0,
+            infants: 0,
+            cabin: 'Y'
         }
     };
-    this.persons.select = function(data) {
-        this.selected = data;
-        this.update();
-    },
-    this.persons.hide = function() {
-        if ($('.excess', this.dropdown).is(':visible')) {
-            this.selected = $.extend({}, this.lastCorrect);
-        }
-        $('body').unbind('click keydown', this.selfhide);
-        this.dropdown.fadeOut(150);
-        this.el.trigger('change', this.selected);
-    };
-    $('.a-button', this.persons.dropdown).click(function() {
-        self.persons.hide();
-    });
-
-    // Кнопка
-    this.submit = $('#search-submit').attr('data-required', 'to');
-    this.smessage = this.submit.find('.message');
-    this.sprogress = this.submit.find('.progress');
-    this.submit.find('.b-submit').click(function(event) {
-        event.preventDefault();
-        if (results.nextUpdate && !self.submit.hasClass('disabled')) {
-            results.selectedTab = 'featured';
-            results.load();
-            results.show();
-        }
-    }).mouseover(function() {
-        if (self.submit.is('.disabled:not(.current)')) {
-            self.smessage.fadeIn(150);
-        }
-    }).mouseout(function() {
-        if (self.smessage.is(':visible')) {
-            self.smessage.fadeOut(150);
-        }
-    });
-    this.persons.el.bind('update', function() {
-        self.submit.addClass('disabled');
-        self.smessage.find('.ssm-content').html('Выберите, пожалуйста, количество пассажиров');
-    });
-
-    // Поиск по энтеру
-    $('#search-fields .autocomplete').bind('enter', function(e) {
-        if (!self.submit.hasClass('disabled')) {
-            self.submit.find('.b-submit').click();
-        }
-    });
-
 },
-toggleMode: function(mode) {
-    var context = $('#search-fields');
-    if (mode === undefined) {
-        mode = {rt: 'ow', ow: 'rt'}[this.mode] || this.mode;
-    } else if (mode === 'mw') {
-        mode = this.segments[2].from.val() || this.segments[2].to.val() ? 'tw' : 'dw';
-    }
-    if (mode !== this.mode) {
-        context.removeClass(this.mode + 'mode').addClass(mode + 'mode');
-        context.find('tr.segment2').toggleClass('g-none', mode !== 'dw' && mode !== 'tw');
-        context.find('tr.segment3').toggleClass('g-none', mode !== 'tw');
-        this.calendar.toggleMode(mode);
-        this.mode = mode;
-        this.autoFrom();
-        context.find('.autocomplete:visible[value=""]').eq(0).focus();
-        fixedBlocks.update();
-    }
+waitRequests: function() {
+    var that = this, ls = search.locations.segments;
+    $.when(ls[0].dpt.request, ls[0].arv.request).then(function() {
+        that.active = true;
+        that.process();
+    });
 },
-values: function() {
-    var s = this.segments;
-    var d = this.calendar.values || [];
-    var data = {
-        segments: [],
-        people_count: this.persons.selected,
-        cabin: this.cabin.value[0]
-    };
-    for (var i = {rt: 1, ow: 1, dw: 2, tw: 3}[this.mode]; i--;) {
-        data.segments[i] = {
-            from: s[i].from.val(),
-            to: s[i].to.val(),
-            date: d[i]
+getValues: function() {
+    var mode = this.mode.selected;
+    var lw = local.swarnings;
+    var warnings = [];
+    var segments = [];
+    for (var i = 0; i < this.locations.used; i++) {
+        var segment = this.locations.segments[i];
+        var dpt = segment.dpt.selected;
+        var arv = segment.arv.selected;
+        var title = mode === 'mw' ? lw.mwsegments[i] : '';
+        var s = {
+            from: dpt ? dpt.name : '',
+            to: arv ? arv.name : ''
         };
+        if (!s.from) {
+            warnings.push(lw.dpt.absorb(title));
+        }
+        if (!s.to) {
+            warnings.push(lw.arv.absorb(title));
+        }
+        segments[i] = s;
     }
-    if (this.mode === 'rt') {
-        data.segments[1] = {
-            from: '',
-            to: data.segments[0].from,
-            date: d[1]
-        };
+    if (mode === 'rt') {
+        segments[1] = {from: segments[0].to, to: segments[0].from};
     }
-    return data;
+    for (var i = 0; i < segments.length; i++) {
+        var sdate = this.dates.selected[i];
+        var title = lw[mode === 'mw' ? 'mwsegments' : 'rtsegments'][i];
+        if (sdate === undefined) warnings.push(lw.date.absorb(title));
+        segments[i].date = this.dates.getDate(sdate);
+    }
+    if (this.mode.values.is(':visible')) {
+        this.mode.hide();
+    }
+    var persons = {
+        adults: this.options.adults.selected || 1,
+        children: this.options.children.selected || 0,
+        infants: this.options.infants.selected || 0
+    };
+    if (persons.adults + persons.children + persons.infants > 8) {
+        warnings.push(lw.persons);
+    }
+    if (persons.infants > persons.adults) {
+        warnings.push(lw.infants);
+    }
+    return {
+        warnings: warnings,
+        segments: segments,
+        people_count: persons,
+        cabin: this.options.cabin.selected
+    };
 },
-restore: function(data) {
-    var segments = data.segments || [], dates = [];
-    this.toggleMode(data.rt ? 'rt' : ['rt', 'ow', 'dw', 'tw'][segments.length]);
-    for (var i = 0, im = this.segments.length; i < im; i++) {
-        var segment = segments[i];
-        this.segments[i].from.trigger('set', segment && segment.from || '').trigger('iata', '');
-        this.segments[i].to.trigger('set', segment && segment.to || '').trigger('iata', '');
-        if (segment && segment.date) {
-            dates.push(segment.date);
+setValues: function(data) {
+    for (var i = this.locations.segments.length; i--;) {
+        var segment = data.segments[i];
+        if (!segment || segment.rt) {
+            segment = {};
+        }
+        with (this.locations.segments[i]) {
+            dpt.set(segment.dpt || '');
+            arv.set(segment.arv || '');
         }
     }
-    this.persons.select($.extend({}, data.people_count));
-    this.cabin.select(data.cabin || []);
-    this.calendar.selected = [];
-    if (dates.length) {
-        this.calendar.select(dates);
-    } else {
-        this.calendar.update();
+    var dates = [], dateError = false;
+    for (var i = data.segments.length; i--;) {
+        var index = this.dates.dmyIndex[data.segments[i].date];
+        if (index === undefined) {
+            dateError = true;
+            break;
+        }
+        dates[i] = index;
+    }
+    if (dateError) {
+        dates = [];    
+    }
+    this.dates.setSelected(dates);
+    with (this.options) {
+        children.select(data.options.children);
+        infants.select(data.options.infants);
+        adults.select(data.options.adults);
+        cabin.select(data.options.cabin);
+    }
+    return !dateError;
+},
+process: function() {
+    clearTimeout(this.vtimer);
+    if (this.active) {
+        var that = this;
+        this.vtimer = setTimeout(function() {
+            that.validate();
+        }, 100);
     }
 },
-update: function(source) {
-    clearTimeout(this.timer);
-    var self = this;
-    if (this.parsed) {
-        var current = this.segments[0].to.val(), result = current, pattern;
-        if (source == this.calendar && this.parsed.dates) {
-            var pd =  this.parsed.dates, improper = [];
-            for (var i = pd.length; i--;) {
-                if (pd[i].value != this.calendar.values[i]) improper.push($.trim(pd[i].str));
-            }
-            if (improper.length) {
-                pattern = new RegExp(improper.join('|'), 'i');
-                result = result.replace(pattern, '');
-            }
-        }
-        if (source == this.persons && this.parsed.people_count) {
-            pattern = new RegExp($.trim(this.parsed.people_count.str), 'i');
-            result = result.replace(pattern, '');
-        }
-        if (result != current) {
-            result = result.replace(/\s(?=\s)|$\s/g, '');
-            this.segments[0].to.trigger('set', result);
-        }
+validate: function() {
+    var values = this.getValues();
+    // Сбрасываем текущий поиск
+    if (page.location.search) {
+        page.location.set('search');
+        page.title.set();
     }
-    this.timer = setTimeout(function() {
-        self.validate();
-    }, 500);
+    results.header.hide();
+    if (values.warnings.length) {
+        results.header.show(values.warnings[0], false);
+    }
+    delete values.warnings;
+    this.loadSummary({
+        search: values
+    });
 },
-validate: function(qkey) {
-    clearTimeout(this.timer);
-    clearTimeout(this.loadTimer);
-    if (this.preventValidation) return;
-    var data = qkey ? {query_key: qkey} : {search: this.values()};
-    this.toggle(false);
-    this.abort();
-    var self = this;
-    var restoreResults = Boolean(qkey);
-    this.submit.addClass('validating');
-    this.smessage.find('.ssm-content').html('Проверка введенных данных…');
+loadSummary: function(values, process) {
+    var that = this;
     this.request = $.ajax({
         method: 'GET',
         url: '/pricer/validate/',
-        data: data,
-        success: function(result, status, request) {
-            if (request != self.request) {
-                return;
+        data: values,
+        success: function(data, status, request) {
+            if (data.valid) {
+                results.update(data);
             }
-            if (data.query_key && result.search) {
-                self.preventValidation = true;
-                self.restore(result.search);
-                setTimeout(function() {
-                    self.preventValidation = false;
-                }, 1000);
-                self.apply(result.search.complex_to_parse_results || {});
-            } else {
-                self.apply(result.complex_to_parse_results || {});
-            }
-            self.submit.removeClass('current validating');
-            if (restoreResults && self.calendar.selected.length === 0) {
-                $('#promo').removeClass('latent');
-                self.live.toggle(true);
-            } else if (result.valid) {
-                results.nextUpdate = {
-                    title: result.human
-                };
-                results.nextUpdate.params = {
-                    query_key: result.query_key || data.query_key
-                };
-                self.smessage.stop().hide();
-                if (pageurl.tab === 'reload') {
-                    results.reload();
-                } else if (restoreResults) {
-                    self.calendar.scroller.scrollToSelected();
-                    if (result.fragment_exist) {
-                        results.nextUpdate.params.restore_results = true;
-                    }
+            if (values.query_key) {
+                that.restoreValues(data);
+                if (process !== false && results.data) {
                     results.load();
-                    results.show();
-                } else {
-                    self.toggle(true);
-                    if (typeof self.onValid === 'function') {
-                        self.onValid();
-                    }
                 }
+            }
+            that.locations.toggleLeave(data.map_segments[0].leave);
+            if (that.map.api) {
+                that.map.show(data.map_segments);
             } else {
-                delete results.nextUpdate;
-                if (result.errors) {
-                    for (var i = 0, im = result.errors.length; i < im; i++) {
-                        var text, error = result.errors[i][0];
-                        if (error) {
-                            switch (error.split('_')[0]) {
-                            case 'date':
-                                text = 'Выберите, пожалуйста, дату вылета';
-                                if (self.mode === 'rt' && i === 1) {
-                                    text = 'Выберите, пожалуйста, дату обратного вылета';
-                                } else if (self.mode === 'dw' || self.mode === 'tw') {
-                                    var segment = result.search.segments[i];
-                                    var sf = segment.from_as_object && (segment.from_as_object.proper_from || segment.from_as_object.morpher_from);
-                                    var st = segment.to_as_object && (segment.to_as_object.proper_to || segment.to_as_object.morpher_to);
-                                    if (sf) text += ' ' + sf.replace(/ /, '&nbsp;');
-                                    if (st) text += ' ' + st.replace(/ /, '&nbsp;');
-                                }
-                                break;
-                            case 'from':
-                                text = 'Введите, пожалуйста, пункт отправления';
-                                break;
-                            case 'to':
-                                text = 'Введите, пожалуйста, пункт назначения';
-                                break;
-                            }
-                            self.smessage.find('.ssm-content').html(text);
-                            break;
-                        }
-                    }
-                }
+                that.map.deferred = data.map_segments;
             }
-            this.toValues = [];
-            if (result.search && result.search.segments) {
-                self.applySegments(result.search.segments);
-            }
-            delete self.request;
         },
         error: function() {
-            self.submit.removeClass('validating');
+            results.header.show('Не удалось соединиться с сервером', false);
         },
         timeout: 15000
     });
 },
-applySegments: function(segments) {
-    var items = [];
-    for (var i = 0, im = segments.length; i < im; i++) {
-        var sf = segments[i].from_as_object;
-        var st = segments[i].to_as_object;
-        if (sf) sf.code = sf.iata || sf.alpha2;
-        if (st) st.code = st.iata || st.alpha2;
-        this.segments[i].from.trigger('iata', sf && this.segments[i].from.val() ? sf.code : '');
-        this.segments[i].to.trigger('iata', st && this.segments[i].to.val() ? st.code : '');
-        this.toValues[i] = st && st.name_ru;
-        items[i] = {from: sf, to: st};
+restoreValues: function(data) {
+    this.setValues(data);
+    this.mode.select(data.segments.length === 1 ? 'ow' : (data.segments[1].rt ? 'rt' : 'mw'));
+    if (!this.dates.selected.length) {
+        delete results.data;
+        this.validate();
     }
-    for (var i = 1; i < 3; i++) {
-        this.segments[i].to.closest('td').find('label').toggleClass('highlight', Boolean(segments[i] && segments[i].to_as_object));
-    }
-    this.autoFrom();
-    if (this.map.active) {
-        this.map.show(items);
-    } else {
-        this.map.deferred = items;
-    }
-},
-autoFrom: function() {
-    if (this.mode === 'rt') {
-        this.segments[1].from.trigger('set', this.toValues[0]);
-    } else if (this.mode !== 'ow') {
-        for (var i = 1, im = this.mode === 'tw' ? 3 : 2; i < im; i++) {
-            var field = this.segments[i].from;
-            if (!field.val() && this.toValues[i - 1] && !field.hasClass('autocomplete-focus')) {
-                field.trigger('set', this.toValues[i - 1]);
-            }
-        }
-    }
-},
-abort: function() {
-    var r = this.request;
-    if (r && r.abort) r.abort();
-    delete this.request;
-},
-apply: function(data) {
-    this.parsed = data;
-    $('#search-s1-to').closest('td').find('label span').each(function() {
-        var fragment = $(this);
-        fragment.toggleClass('highlight', data[fragment.attr('data-key')] !== undefined);
+}
+};
+
+/* Options */
+search.options = {
+init: function() {
+    var that = this;
+    this.el = $('#search-options');
+    this.el.find('.so-persons').each(function() {
+        that[$(this).attr('data-name')] = new search.Option(this, true);
     });
-    if (data.dates) {
-        var dates = [];
-        for (var i = data.dates.length; i--;) {
-            dates[i] = data.dates[i].value;
+    this.cabin = new search.Option(this.el.find('.so-cabin'));
+}
+};
+
+/* Option constructor */
+search.Option = function(selector, integer) {
+    this.el = $(selector);
+    this.integer = integer;
+    this.init();
+    return this;
+};
+search.Option.prototype = {
+init: function() {
+    var that = this;
+    this.items = this.el.find('.so-values li');
+    this.index = {};
+    this.items.each(function(i) {
+        var item = $(this);
+        var value = item.attr('data-value');
+        if (value === undefined) {
+            value = item.text();
+            item.attr('data-value', value);
         }
-        this.calendar.select(dates);
-    }
-    if (data.people_count) {
-        var pcv = data.people_count.value;
-        this.persons.select({
-            adults: pcv.adults || 1,
-            children: pcv.children || 0,
-            infants: pcv.infants || 0
-        });
-    }
+        that.index[value] = i;
+    });
+    this.el.delegate('.so-values li', 'click', function() {
+        that.select($(this).attr('data-value'));
+    });
 },
-toggle: function(mode) {
-    this.submit.toggleClass('disabled', !mode);
+select: function(val) {
+    var value = this.integer ? parseInt(val, 10) : val;
+    if (value !== this.selected) {
+        this.items.removeClass('selected').eq(this.index[val.toString()]).addClass('selected');
+        this.selected = value;
+        search.process();
+    }
+
+}
+};
+
+/* Mode */
+search.mode = {
+init: function() {
+    this.el = $('#search-mode');
+    this.initList();
+    this.initIcon();
+    this.activate();
+},
+initList: function() {
+    var that = this;
+    this.control = this.el.find('.sm-control').click(function() {
+        that.show();
+    });
+    this.values = this.el.find('.sm-values').mousedown(function(event) {
+        event.stopPropagation();
+    });
+    this.values.find('li').click(function() {
+        that.select($(this).attr('data-mode'), true);
+    });
+},
+initIcon: function() {
+    var that = this;
+    $('#search-locations .sl-segment1 .sl-icon').click(function() {
+        var current = that.selected;
+        if (current === 'ow') that.select('rt', true);
+        if (current === 'rt') that.select('ow', true);
+    });
+},
+activate: function() {
+    var that = this;
+    var hide = function(event) {
+        if (event.type === 'mousedown' || event.which === 27) that.hide();
+    };
+    this.hide = function() {
+        that.values.fadeOut(200);
+        $(document).unbind('keydown mousedown', hide);
+    };
+    this.show = function() {
+        that.values.fadeIn(200);
+        setTimeout(function() {
+            $(document).bind('keydown mousedown', hide);
+        }, 10);
+    };
+},
+select: function(mode, focus) {
+    if (mode !== this.mode) {
+        var sv = this.values.find('li[data-mode="' + mode + '"]');
+        this.values.find('.selected').removeClass('selected');
+        this.control.html(sv.addClass('selected').html());
+        this.selected = mode;
+        search.locations.toggleSegments(mode === 'mw' ? search.locations.countUsed() : 1);
+        search.process();
+    }
+    if (this.values.is(':visible')) {
+        var that = this;
+        setTimeout(function() {
+            that.hide();
+        }, 300);
+    } else {
+        this.values.hide();
+    }
+    if (focus) {
+        search.locations.focusEmpty();
+    }
 }
 };
 
@@ -450,7 +300,7 @@ init: function() {
             type: 'link',
             linkIcon: false,
             border: false,
-            quickServices: ['facebook', 'twitter', 'friendfeed', 'lj', 'vkontakte', 'odnoklassniki']
+            quickServices: ['facebook', 'twitter', 'friendfeed', 'lj', 'vkontakte', 'odnoklassniki', 'yaru']
         },
         popupStyle: {
             copyPasteField: true,

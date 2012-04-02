@@ -1,0 +1,100 @@
+/* Container */
+.rh-wrapper {
+    background: url(/images/common/dark.jpg) repeat 0 100% #373941;
+}
+.rh-content {
+    width: 960px;
+    height: 70px;
+    margin: 0 auto;
+}
+.rh-left {
+    width: 80%;
+    padding-bottom: 2px;
+    vertical-align: middle;
+}
+.rh-right {
+    vertical-align: middle;
+}
+
+/* Button */
+#results-button {
+    position: relative;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 36px;
+    letter-spacing: -0.03em;
+    cursor: default;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.rb-side {
+    background: url(/images/results/find.png) no-repeat;
+    text-align: center;
+}
+.rb-disabled {
+    background-position: 100% -45px;
+    color: #73757A;
+}
+.rb-disabled .rb-side {
+    height: 36px;
+    margin-right: 20px;
+    padding: 0 15px 0 35px;
+    background-position: 0 -45px;
+}
+.rb-enabled {
+    display: none;
+    position: absolute;
+    top: -1px; left: -1px;
+    width: 100%;
+    padding-right: 6px;
+    background-position: 100% 0;
+}
+.rb-enabled .rb-side {
+    height: 42px;
+    margin-right: 19px;
+}
+.rb-active {
+    position: absolute;
+    left: 1px; top: 1px;
+    height: 36px;
+    padding: 0 35px;
+    border-radius: 18px;
+    color: #FFF;
+    text-shadow: rgba(0, 0, 0, 0.3) 1px 1px 0;
+    cursor: pointer;
+}
+
+/* Message */
+.rh-summary {
+    margin-right: 20px;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 22px;
+    letter-spacing: -0.03em;
+    color: #96989e;
+}
+.rh-ready {
+    color: #FFF;
+}
+
+/* Edit and select */
+.rh-edit,
+.rh-select {
+    display: none;
+    text-align: right;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 18px;
+}
+.rhe-link,
+.rhs-link {
+    color: #cecba1;
+    cursor: pointer;
+}
+
+/* Fixed */
+#results-header.fixed .rh-wrapper {
+    position: fixed;
+    top: 36px; left: 0;
+    z-index: 14;
+    width: 100%;
+}

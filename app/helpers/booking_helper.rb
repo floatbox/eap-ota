@@ -9,7 +9,7 @@ module BookingHelper
     tz.local_to_utc(DateTime.strptime(date + time, '%d%m%y%H%M'))
   end
 
-  def order_event_params order
+  def order_event order
     segments = order.recommendation.segments
     cities = uniq_cities(segments)
     fs = segments.first
@@ -25,7 +25,7 @@ module BookingHelper
     ""
   end
 
-  def order_summary order
+  def order_tweet order
     segments = order.recommendation.segments
     cities = uniq_cities(segments)
     parts = [order.people.size == 1 ? 'Лечу' : 'Летим']

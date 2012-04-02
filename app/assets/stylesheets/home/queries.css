@@ -1,0 +1,83 @@
+/* Queries panel */
+#queries,
+.qh-tab,
+.ql-title,
+.qht-remove {
+    background: url(/images/home/history.png) repeat-x #858585;
+}
+#queries {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 15;
+    width: 100%;
+    height: 28px;
+    overflow: hidden;
+    border-top: 2px solid #373941;
+    font-size: 12px;
+    line-height: 14px;
+    color: #FFF;
+}
+.q-content {
+    position: relative;
+    left: 0;
+    width: 200%;
+}
+
+/* History */
+.q-history {
+    float: left;
+}
+.qh-tab {
+    position: relative;
+    z-index: 2;
+    float: left;
+    height: 30px;
+    background-position: 0 -30px;
+    background-color: #757575;
+    cursor: default;
+}
+.qh-selected {
+    background: url(/images/common/dark.jpg) repeat 0 100% #373941;    
+}
+.qht-content {
+    margin: 7px 28px 0 12px;
+}
+.qht-period {
+    margin: 0 2px;
+}
+.qht-remove {
+    position: absolute;
+    top: 6px;
+    left: 100%;
+    width: 15px;
+    height: 16px;
+    margin-left: -22px;
+    background-color: transparent;
+    background-position: 0 -60px;
+    cursor: pointer;
+}
+.qh-selected .qht-remove {
+    background-position: -20px -60px;
+}
+
+/* Live */
+.q-live {
+    width: 120%;
+    height: 28px;
+}
+.ql-title {
+    float: left;
+    position: relative;
+    z-index: 2;
+    padding: 7px 5px 7px 15px;
+}
+.ql-item {
+    float: left;
+    padding: 7px 5px;
+    /*color: #cecba1;*/
+    cursor: pointer;
+}
+.ql-item:hover {
+    text-decoration: underline;
+}

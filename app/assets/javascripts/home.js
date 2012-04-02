@@ -1,21 +1,19 @@
-//= require lib/json2
-//= require lib/pushup
-//= require main
-//= require pageurl
-//= require controls/autocomplete
-//= require controls/filters
-//= require search/search
-//= require search/map
-//= require search/calendar
-//= require search/history
-//= require results/results
-//= require results/filters
-//= require results/matrix
-//= require results/diagram
-//= require live
-//= require controls/hint
-//= require booking/form
-//= require booking/validation
-//= require booking/names
+//= require home/page.js
+//= require home/queries.js
 
-//= require onready
+//= require search/search.js
+//= require search/locations.js
+//= require search/dates.js
+//= require search/map.js
+
+//= require results/results.js
+//= require results/header.js
+//= require results/filters.js
+//= require results/content.js
+//= require results/collections.js
+//= require results/offer.js
+
+//= require booking/booking.js
+//= require booking/validation.js
+//= require booking/form.js
+//= require booking/names.js

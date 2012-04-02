@@ -11,55 +11,171 @@
 </div>
 <% end %>
 
-<% nearby_list = nearby_cities_list(@search.rt ? @search.segments[0, 1] : @search.segments) %>
-<% unless nearby_list.empty? %>
-<div class="offers-nearby latent">
-    <h3 class="offers-title">Соседние города</h3>
-    <% nearby_list.each do |ncgroup| %>
-        <% ncgroup_fields = ncgroup['fields'].join(' ') %>
-        <p class="cities"><strong><%= ncgroup['title'] %>:</strong> <% ncgroup['cities'].each_with_index do |city, city_index| %><%= ', ' if city_index != 0 %><span class="city" data-fields="<%= ncgroup_fields %>"><%= raw city %></span><% end %></p>
-    <% end %>
-</div>
-<% end %>
-
 <% if @recommendations.present? %>
-<div id="offers-options"
-    data-filters='<%= raw Recommendation.summary(@recommendations, @locations).to_json.gsub("'", '&rsquo;') %>'
-    data-query_key="<%= @query_key %>"
-    data-people="<%= @search.people_total %>"
-    data-aveprice="<%= @average_price %>"
-    data-segments="<%= @search.segments.map{|fs| {
-      :from => fs.from_as_object.name,
-      :to => fs.to_as_object.name,
-      :date => date_with_dow(fs.date),
-      :human => "#{fs.from_as_object.case_from} #{fs.to_as_object.case_to}",
-      :from_iata => fs.from_as_object_iata,
-      :to_iata => fs.to_as_object_iata
-    } }.to_json %>"
-    data-mode="<%= @search.segments.length > 1 ? (@search.rt ? 'rt' : 'mw') : 'ow' %>">
-<% if @search.segments.length == 1 %>
-    <% fs1 = @search.segments[0] %>
-    <div class="ht-content"><span class="segment1"><%= fs1.from_as_object.name %></span> &rarr; <span class="segment2"><%= fs1.to_as_object.name %></span>, <%= fmt_date_short(fs1.date) %></div>
-<% elsif @search.rt %>
-    <% fs1 = @search.segments[0] %>
-    <% fs2 = @search.segments[1] %>
-    <div class="ht-content"><span class="segment1"><%= fs1.from_as_object.name %></span> &#8644; <span class="segment2"><%= fs1.to_as_object.name %></span>, <%= fmt_date_short(fs1.date) %><% if fs2.date != fs1.date %> — <%= fmt_date_short(fs2.date) %><% end %></div>
-<% else %>
-    <div class="ht-content"><% @search.segments.each_with_index do |fs, fs_counter| %><% if fs_counter > 0 %> <span class="separator">&bull;</span> <% end %><span class="segment<%= fs_counter + 1 %>"><%= fs.from_as_object.name %></span> &rarr; <span class="segment<%= fs_counter + 1 %>"><%= fs.to_as_object.name %></span>, <%= fmt_date_short(fs.date) %><% end %></div>
-<% end %>
-</div>
-<% @recommendations.each do |recommendation| %>
-<div class="offer collapsed<%= ' multiple' if recommendation.variants.length > 1 %>" data-summary='<%= recommendation.summary.to_json %>'>
-    <% different_cabins = recommendation.cabins_except(@search.cabin) %>
-    <% recommendation.variants.each_with_index do |variant, variant_index| %>
-        <%= render :partial => 'variant', :locals => {:variant => variant, :recommendation => recommendation, :variant_cabins => different_cabins, :variant_summary => nil} %>
+<% data = Recommendation.filters_data(@recommendations) %>
+
+<div class="rf-data" id="rfg-time">
+<% time_titles = ['ночью', 'утром', 'днем', 'вечером'] %>
+<% data[:time].each_with_index do |times, i| %>
+<% if times.length > 1 %>
+<% sindex = i / 2 %>
+<% is_dpt = i % 2 == 0 %>
+<div class="rfg-column rf-list" data-key="<%= is_dpt ? 'dpt' : 'arv' %><%= sindex + 1 %>t">
+    <h6 class="rfgc-title rfgct-segment<%= sindex + 1 %>"><%= raw( is_dpt ? "Вылет<br>#{ @search.segments[sindex].from_as_object.case_from }" : "Прилет<br>#{ @search.segments[sindex].to_as_object.case_to }" ) %></h6>    
+    <ul class="rf-values">
+    <li class="rfv-empty rfv-selected">в любое время</li>
+    <% times.each do |time| %>
+        <li class="rfv-item" data-value="<%= time %>"><%= time_titles[time] %></li>
     <% end %>
-    <div class="aux">
-      <% # для меток %>
-    </div>
+    </ul>
 </div>
 <% end %>
 <% end %>
+</div>
 
+<div class="rf-data" id="rfg-locations">
+<% data[:locations].each_with_index do |segment, i| %>
+<% if segment[:airports].length > 1 || segment[:cities].length > 1 %>
+<% sindex = i / 2 %>
+<% is_dpt = i % 2 == 0 %>
+<div class="rfg-column rf-list" data-key="<%= is_dpt ? 'dpt' : 'arv' %><%= sindex + 1 %>">
+<h6 class="rfgc-title rfgct-segment<%= sindex + 1 %>"><%= raw( is_dpt ? "Вылет<br>#{ @search.segments[sindex].from_as_object.case_from }" : "Прилет<br>#{ @search.segments[sindex].to_as_object.case_to }" ) %></h6>    
+<% if segment[:airports].length > 1 %>
+    <ul class="rf-values">
+    <li class="rfv-empty rfv-selected"><%= is_dpt ? 'из любого аэропорта' : 'в любой аэропорт' %></li>
+    <% segment[:airports].each do |airport| %>
+        <li class="rfv-item" data-value="<%= airport.iata %>"><%= is_dpt ? airport.case_from : airport.case_to %></li>
+    <% end %>
+    </ul>
+<% end %>
+<% if segment[:cities].length > 1 %>
+    <ul class="rf-values">
+    <% segment[:cities].each do |city| %>
+        <li class="rfv-item" data-value="<%= city.iata %>"><%= city.name %></li>
+    <% end %>
+    </ul>
+<% end %>
+</div>
+<% end %>
+<% end %>
+</div>
+
+<div class="rf-data" id="rfg-carriers">
+<% if data[:alliances].length > 1 %>
+<div class="rfg-column rf-list" data-key="alliance">
+    <h6 class="rfgc-title">Альянс</h6>
+    <ul class="rf-values">
+    <li class="rfv-empty rfv-selected">любой</li>
+    <% data[:alliances].each do |alliance| %>
+        <li class="rfv-item" data-value="<%= alliance.id %>"><%= alliance.name %></li>
+    <% end %>
+    </ul>
+</div>
+<% end %>
+<% if data[:carriers].length > 1 %>
+<div class="rfg-column rf-list" data-key="carrier">
+    <h6 class="rfgc-title">Авиакомпания</h6>
+    <ul class="rf-values">
+    <li class="rfv-empty rfv-selected">любая</li>
+    <% data[:carriers].each do |carrier| %>
+        <li class="rfv-item" data-value="<%= carrier.iata %>"><%= carrier.name %></li>
+    <% end %>
+    </ul>
+</div>    
+<% end %>
+<% if data[:planes].length > 1 %>
+<div class="rfg-column rf-list" data-key="plane">
+    <h6 class="rfgc-title">Самолет</h6>
+    <ul class="rf-values">
+    <li class="rfv-empty rfv-selected">любой</li>
+    <% data[:planes].each do |plane| %>
+        <li class="rfv-item" data-value="<%= plane.iata %>"><%= plane.name %></li>
+    <% end %>
+    </ul>
+</div>
+<% end %>
+</div>
+
+<div class="rf-data" id="rfg-layovers">
+<% if data[:few_layovers] || data[:min_layover_duration] != data[:max_layover_duration]%>
+<div class="rfg-column">
+<% if data[:few_layovers] %>
+    <h6 class="rfgc-title">Количество</h6>
+    <div class="rf-lcount">
+        <input type="checkbox" id="rf-onestop">
+        <label for="rf-onestop">Максимум одна пересадка</label>
+    </div>
+<% end %>
+<% if data[:min_layover_duration] != data[:max_layover_duration] %>
+    <h6 class="rfgc-title">Длительность</h6>
+    <div class="rf-duration" data-min="<%= data[:min_layover_duration] %>" data-max="<%= data[:max_layover_duration] %>">
+        <div class="rfd-control">
+            <div class="rfd-selected"></div>
+            <div class="rfd-enabled"></div>
+            <div class="rfd-left"></div>
+            <div class="rfd-right"></div>
+            <div class="rfd-marks"></div>
+            <div class="rfd-slider" data-name="min"></div>
+            <div class="rfd-slider" data-name="max"></div>
+        </div>
+        <div class="rfd-value"></div>
+    </div>
+<% end %>
+</div>
+<% end %>
+<% if data[:layover_cities].length > 0 %>
+<div class="rfg-column rf-list" data-key="lcity">
+    <h6 class="rfgc-title">Город пересадки</h6>
+    <ul class="rf-values">
+    <li class="rfv-empty rfv-selected">любой</li>    
+    <% data[:layover_cities].each do |city| %>
+        <li class="rfv-item" data-value="<%= city.iata %>"><%= city.name %></li>
+    <% end %>
+    </ul>
+</div>
+<% end %>
+</div>
+
+<% duration_scale = 98.0 / @recommendations.collect(&:segments).flatten.collect(&:total_duration).push(600).max %>
+<% @recommendations.each do |recommendation| %>
+<div class="offer" data-prices='<%= raw recommendation_prices(recommendation) %>'>
+    <ul class="o-variants">
+    <% recommendation.variants_by_duration.each do |variant| %>
+        <li data-duration="<%= variant.total_duration %>" data-layover="<%= longest_layover(variant) %>" data-features="<%= variant_features(variant, recommendation.validating_carrier.alliance) %>"><%= raw recommendation.serialize(variant) %></li>
+    <% end %>
+    </ul>
+    <div class="o-segments">
+    <% different_cabins = recommendation.cabins_except(@search.cabin) %>
+    <% group_segments(recommendation.variants).each_with_index do |segments, scounter| %>
+    <div class="o-segment segment<%= scounter + 1 %>">
+        <% segment_rt = scounter == 1 && @search.rt %>
+        <% segments.each do |segment| %>
+            <%= render :partial => 'summary', :locals => {
+                :segment => segment,
+                :segment_rt => segment_rt,
+                :duration_scale => duration_scale
+            } %>
+            <%= render :partial => 'details', :locals => {
+                :segment => segment,
+                :segment_rt => segment_rt,
+            } %>
+        <% end %>
+    </div>
+    <% end %>
+    </div>
+    <div class="o-validating">
+        <p class="od-comment">Билет оформляет авиакомпания <%= recommendation.validating_carrier.name %>.<% if recommendation.validating_carrier.alliance %> Применяются бонусные программы альянса <span class="od-alliance" data-carriers="<%= recommendation.validating_carrier.available_bonus_programms.map{|bp| bp.name}.to_sentence %>"><%= nbsp(recommendation.validating_carrier.alliance.name) %></span>.<% end %></p>
+    </div>
+    <% comments = recommendation_comments(recommendation) %>
+    <% unless comments.empty? %>
+    <div class="o-comments">
+        <% comments.each do |comment| %>
+        <p class="od-comment" data-carrier="<%= comment[:carrier] %>"><%= raw comment[:content] %></p>
+        <% end %>
+    </div>
+    <% end %>
+</div>
 <% end %>
 
+<% end %>
+<% end %>

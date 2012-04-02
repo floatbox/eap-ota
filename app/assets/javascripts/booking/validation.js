@@ -1,442 +1,568 @@
+/* Controls namespace */
 var validator = {
-control: function(el, messages) {
-    var that = this;
-    this.el = el;
-    this.messages = messages;
-    this.selfvalidate = function() {
-        that.validate()
-    };
-    this.important = {};
-    return this;
+update: function(error) {
+    if (error === this.error) return false;
+    this.el.toggleClass('bf-error', error !== undefined && error !== 'empty' && error !== 'short');
+    this.el.toggleClass('bf-valid', error === undefined);
+    if (this.error = error) {
+        this.message = this.messages[error].replace('{', '<span class="bffr-link" data-field="' + this.fid + '">').replace('}', '</span>');
+    } else {
+        delete this.message;
+    }
+    return true;
 },
-text: function(el, messages) {
-    var item = new this.control(el, messages);
-    el.change(function() {
-        el.val($.trim(el.val()));
-        item.validate();
-    }).bind('keyup propertychange input', function() {
-        item.change();
-    });
-    return item;
-},
-name: function(el, messages) {
-    var item = new this.control(el, messages);
-    item.important = {
-        latin: true,
-        space: true
-    };
-    item.check = function() {
-        var value = $.trim(this.el.val());
-        if (!value) {
-            return 'empty';
-        }
-        if (value.search(/[^a-z\- ]/i) !== -1) {
-            return 'latin';
-        }
-        if (value.search(/ /) !== -1) {
-            return 'space';
-        }
-        if (value.length < 2) {
-            return 'short';
-        }
-        return undefined;
-    };
-    el.change(function() {
-        el.val($.trim(el.val().toUpperCase()));
-        item.validate();
-    }).bind('keyup propertychange input', function() {
-        item.change();
-    });
-    return item;
-},
-gender: function(radio, messages) {
-    var item = new this.control(radio, messages);
-    var m = radio.get(0);
-    var f = radio.get(1);
-    item.invalid = radio.eq(0).closest('.bp-sex');
-    item.check = function() {
-        return (m.checked || f.checked) ? undefined : 'empty';
-    };
-    radio.click(function() {
-        $(this).closest('.bp-sex').find('.selected').removeClass('selected');
-        $(this).closest('label').addClass('selected');
-        item.validate();
-    }).focus(function() {
-        $(this).closest('label').addClass('focus');
-    }).blur(function() {
-        $(this).closest('label').removeClass('focus');
-    });
-    return item;
-},
-number: function(el, messages) {
-    var item = new this.control(el, messages);
-    item.important = {
-        latin: true
-    };
-    item.check = function() {
-        var value = this.el.val();
-        if (!value) {
-            return 'empty';
-        }
-        return undefined;
-    };
-    el.change(function() {
-        el.val($.trim(el.val().toUpperCase()));
-        item.validate();
-    }).bind('keyup propertychange input', function() {
-        item.change();
-    });
-    return item;
-},
-date: function(parts, messages) {
-    var item = new this.control(parts, messages);
-    var today = new Date();
-    item.check = function() {
-        var values = [];
-        for (var i = 0; i < 3; i++) {
-            var f = parts.eq(i), v = f.val();
-            this.invalid = f;
-            if (v.length === 0) return 'empty';
-            if (v.search(/[^\d]/) !== -1) return 'letters';
-            values[i] = parseInt(v, 10);
-        }
-        if (values[2] < 1000) {
-            return 'shortyear';
-        }
-        var parsed = new Date(values[2], values[1] - 1, values[0], 12);
-        if (parsed.getDate() !== values[0] || parsed.getMonth() + 1 !== values[1] || parsed.getFullYear() !== values[2]) {
-            return 'unreal';
-        }
-        if (messages.future && parsed.getTime() > today.getTime()) {
-            return 'future';
-        }
-        if (messages.past && parsed.getTime() < today.getTime()) {
-            return 'past';
-        }
-        return undefined;
-    };
-    item.important = {
-        letters: true,
-        future: true,
-        past: true,
-        unreal: true
-    };
-    parts.focus(function() {
-        $(this).prev('.placeholder').hide();
-        ignoreTab = true;
-    }).blur(function() {
-        var f = $(this);
-        f.prev('.placeholder').toggle(f.val().length === 0);
-    }).bind('keyup propertychange input', function() {
-        item.change();
-    });
-    var ignoreTab = false;
-    parts.slice(0, 2).change(function() {
-        var f = $(this), v = f.val();
-        if (v && v.length < 2 && v.search(/\D/) === -1) f.val('0' + v);
-        item.validate();
-    }).keypress(function(e) {
-        if (this.value && String.fromCharCode(e.which).search(/[ .,\-\/]/) === 0) {
-            $(this).change().parent().next().find('input').focus();
-            e.preventDefault();
-        }
-    }).keyup(function(e) {
-        var code = e.which;
-        var digit = (code > 47 && code < 58) || (code > 95 && code < 106);
-        if (this.value.length === 2 && digit) {
-            $(this).change().parent().next().find('input').focus();
-            ignoreTab = true;
-        }
-    });
-    parts.slice(1).keydown(function(e) {
-        if (e.which === 8 && this.value.length === 0) {
-            $(this).blur().change().parent().prev().find('input').focus();
-        } else if (ignoreTab && e.which === 9 && !e.shiftKey) {
-            e.preventDefault();
-        }
-        ignoreTab = false;
-    });
-    parts.eq(2).change(function() {
-        var f = $(this), v = f.val();
-        if (v && v.length < 4 && v.search(/\D/) === -1) {
-            var y = parseInt(f.val(), 10);
-            if (messages.past && y < 100) y += 2000;
-            if (y <= today.getFullYear() % 100) y += 2000;
-            if (y < 1000) y = 1900 + y % 100;
-            f.val(y);
-        }
-        item.validate();
-    });
-    return item;
-},
-email: function(el, messages) {
-    var item = new this.control(el, messages);
-    var mask = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i;
-    item.check = function() {
-        var value = $.trim(this.el.val());
-        if (value.length < 5 || value.indexOf('@') < 0 || value.indexOf('.') < 0 || value.indexOf('.') === value.length - 1) {
-            return 'empty';
-        }
-        if (!mask.test(value)) {
-            return 'wrong';
-        }
-        return undefined;
-    };
-    el.change(function() {
-        el.val($.trim(el.val()));
-        item.validate();
-    }).bind('keyup propertychange input', function() {
-        item.change();
-    });
-    return item;
-},
-phone: function(el, messages) {
-    var item = new this.control(el, messages);
-    item.important = {
-        letters: true
-    };
-    item.check = function() {
-        var value = this.el.val();
-        if (!value) {
-            return 'empty';
-        }
-        if (value.search(/[^\d() \-+]/i) !== -1) {
-            return 'letters';
-        }
-        var digits = value.replace(/\D/g, '');
-        if (digits.length < 7) {
-            return 'short';
-        }
-        return undefined;
-    };
-    el.change(function() {
-        var v = $.trim(el.val());
-        v = v.replace(/(\d)\(/, '$1 (');
-        v = v.replace(/\)(\d)/, ') $1');
-        v = v.replace(/(\D)(\d{2,3})(\d{2})(\d{2})$/, '$1$2-$3-$4');
-        el.val(v);
-        item.validate();
-    }).bind('keyup propertychange input', function() {
-        item.change();
-    });
-    return item;
-},
-cardnumber: function(parts, messages) {
-    var item = new this.control(parts, messages);
-    item.important = {
-        letters: true
-    };
-    item.check = function() {
-        for (var i = 0; i < 4; i++) {
-            var f = parts.eq(i), v = f.val();
-            this.invalid = f;
-            if (v.length === 0) return 'empty';
-            if (v.search(/[^\d]/) !== -1) return 'letters';
-            if (v.length < 4) return 'empty';
-        }
-        return undefined;
-    };
-    parts.bind('paste', function() {
-        var field = $(this);
-        var el = $(this).attr('maxlength', 50);
-        setTimeout(function() {
-            var v = el.val().replace(/\D/g, '');
-            while (el.length && v.length) {
-                el.val(v.substring(0, 4));
-                if (v.length > 3) {
-                    el = el.next('input');
-                    v = v.substring(4);
-                } else {
-                    break;
-                }
-            }
-            el.focus();
-            field.attr('maxlength', 4);
-        }, 10);
-    }).focus(function() {
-        ignoreTab = true;
-    });
-    var ignoreTab = false;
-    parts.slice(0, 3).keyup(function(e) {
-        var code = e.which;
-        var digit = (code > 47 && code < 58) || (code > 95 && code < 106);
-        if (this.value.length === 4 && digit) {
-            $(this).trigger('change').next('input').select();
-            ignoreTab = true;
-        }
-    });
-    parts.slice(1).keydown(function(e) {
-        if (this.value.length === 0 && e.which === 8) {
-            $(this).trigger('change').prev('input').focus();
-        } else if (ignoreTab && e.which === 9 && !e.shiftKey) {
-            e.preventDefault();
-        }
-        ignoreTab = false;
-    });
-    parts.bind('keyup propertychange input', function() {
-        item.change();
-    });
-    return item;
-},
-cardexp: function(parts, messages) {
-    var item = new this.control(parts, messages);
-    var mf = parts.eq(0);
-    var yf = parts.eq(1);
-    var today = new Date();
-    item.important = {
-        month: true,
-        past: true,
-        letters: true
-    };
-    item.check = function() {
-        var mv = mf.val();
-        var yv = yf.val();
-        this.invalid = mf;
-        if (mv.length === 0) {
-            return 'empty';
-        }
-        if (mv.search(/\D/) !== -1) {
-            return 'letters';
-        }
-        var m = parseInt(mv, 10);
-        if (m < 1 || m > 12) {
-            return 'month';
-        }
-        if (yv.length < 2) {
-            this.invalid = yf;
-            return 'empty';
-        }
-        if (yv.search(/\D/) !== -1) {
-            this.invalid = yf;
-            return 'letters';
-        }
-        var y = parseInt(yv, 10);
-        if (y * 12 + m < today.getFullYear() % 100 * 12 + today.getMonth() + 1) {
-            return 'past';
-        }
-        return undefined;
-    };
-    var ignoreTab = false;
-    mf.change(function() {
-        var f = $(this), v = f.val();
-        if (v && v.length < 2) f.val('0' + v);
-    }).keypress(function(e) {
-        if (this.value && String.fromCharCode(e.which).search(/[ .,\-\/]/) === 0) {
-            e.preventDefault();
-            mf.change();
-            yf.focus();
-        }
-    }).keyup(function(e) {
-        var code = e.which;
-        var digit = (code > 47 && code < 58) || (code > 95 && code < 106);
-        if (this.value.length === 2 && digit) {
-            mf.change();
-            yf.focus();
-            ignoreTab = true;
-        }
-    });
-    yf.slice(1).keydown(function(e) {
-        if (e.which === 8 && this.value.length === 0) {
-            yf.change();
-            mf.focus();
-        } else if (ignoreTab && e.which === 9 && !e.shiftKey) {
-            e.preventDefault();
-        }
-        ignoreTab = false;
-    });
-    parts.focus(function() {
-        $(this).prev('.placeholder').hide();
-        ignoreTab = false;
-    }).blur(function() {
-        var f = $(this);
-        f.prev('.placeholder').toggle(f.val().length === 0);
-    }).bind('keyup propertychange input', function() {
-        item.change();
-    }).change(function() {
-        item.validate();
-    });
-    return item;
-},
-cardcvv: function(el, messages) {
-    var item = new this.control(el, messages);
-    item.important = {
-        letters: true,
-    };
-    item.check = function() {
-        var value = this.el.val();
-        if (value.length < 3) {
-            return 'empty';
-        }
-        if (value.search(/\D/) !== -1) {
-            return 'letters';
-        }
-        return undefined;
-    };
-    el.change(function() {
-        item.validate();
-    }).bind('keyup propertychange input', function() {
-        item.change();
-    });
-    return item;
-},
-cardname: function(el, messages) {
-    var item = new this.control(el, messages);
-    item.important = {
-        latin: true,
-        space: true
-    };
-    item.check = function() {
-        var value = $.trim(this.el.val());
-        if (!value) {
-            return 'empty';
-        }
-        if (value.search(/[^a-z.\- ]/i) !== -1) {
-            return 'latin';
-        }
-        return undefined;
-    };
-    el.change(function() {
-        el.val($.trim(el.val().toUpperCase()));
-        item.validate();
-    }).bind('keyup propertychange input', function() {
-        item.change();
-    });
-    return item;
+getGender: function(name) {
+    var sample = ' ' + name.toLowerCase() + ',';
+    if (this.names.m.contains(sample)) return 'm';
+    if (this.names.f.contains(sample)) return 'f';    
 }
 };
 
-validator.control.prototype = {
-validate: function() {
-    clearTimeout(this.vtimer);
-    var error = this.disabled ? undefined : this.check();
-    if (error !== this.error || this.invalid) {
-        if (error) {
-            var message = this.messages[error], el = this.invalid || this.el;
-            message = message.replace('{', '<span class="link" data-field="' + el.attr('id') + '">');
-            message = message.replace('}', '</span>');
-            this.message = message;
-        } else {
-            this.message = undefined;
+/* Section */
+validator.Section = function(el, options) {
+    this.el = el;
+    $.extend(this, options);
+    this.controls = [];
+    this.init();
+};
+validator.Section.prototype = {
+init: function() {
+    return;
+},
+bind: function(apply) {
+    for (var i = this.controls.length; i--;) {
+        this.controls[i].apply = apply;
+    }
+},
+validate: function(forced) {
+    var wrong = [], empty = [];
+    for (var i = 0, l = this.controls.length; i < l; i++) {
+        var control = this.controls[i];
+        if (forced && control.validate) {
+            control.validate();
         }
-        this.error = error;
-        this.update();
-        this.onchange();
+        if (control.error && !control.disabled) {
+            (control.error === 'empty' ? empty : wrong).push(control.message);
+        }
+    }
+    this.toggle(wrong.length + empty.length === 0);
+    this.wrong = wrong;
+    this.empty = empty;
+},
+toggle: function(ready) {
+    this.el.toggleClass('bfs-ready', ready);
+},
+set: function(data) {
+    for (var i = 0, l = this.controls.length; i < l; i++) {
+        this.controls[i].set(data[i]);
+    }
+}
+};
+
+/* Text control */
+validator.Text = function(el, messages, check) {
+    this.el = el;
+    this.messages = messages;
+    this.update = validator.update;
+    this.check = check || $.noop;
+    this.error = null;
+    this.init();
+};
+validator.Text.prototype = {
+init: function() {
+    var that = this;
+    this.el.bind('keyup propertychange input', function() {
+        that.change();
+    }).focus(function() {
+        that.el.addClass('bf-focus');
+    }).blur(function() {
+        that.el.removeClass('bf-focus');
+    }).change(function() {
+        var ov = that.el.val();
+        var nv = that.format(ov);
+        that.el.val(nv);
+    });
+    this.fid = this.el.attr('id');
+    this.$validate = function() {
+        that.validate(true);
+    };
+    var placeholder = this.el.prev('.bf-placeholder');
+    if (placeholder.length) {
+        placeholder.toggle(!this.el.val());
+        this.placeholder = placeholder;
     }
 },
 change: function() {
-    clearTimeout(this.vtimer);
-    this.vtimer = setTimeout(this.selfvalidate, 200);
+    clearTimeout(this.timer);
+    this.timer = setTimeout(this.$validate, 150);
+    if (this.placeholder) {
+        this.placeholder.toggle(!this.el.val());
+    }
 },
-update: function() {
-    var e = this.error;
-    this.el.toggleClass('valid', e === undefined);
-    this.el.toggleClass('invalid', Boolean(e && this.important[e]));
+validate: function(self) {
+    clearTimeout(this.timer);
+    var value = $.trim(this.el.val());
+    var error = value ? this.check(value) : 'empty';
+    if (this.update(error) && self) {
+        this.apply();
+    }
 },
-check: function() {
-    var v = this.el.val();
-    return v.length ? undefined : 'empty';
-},
-onchange: function() {
+apply: function() {
     booking.form.validate();
+},
+format: function(value) {
+    return $.trim(value);
+},
+set: function(value) {
+    this.el.val(this.format(value || ''));
+    this.validate();
+}
+};
+
+/* Select control */
+validator.Select = function(el) {
+    this.el = el;
+    this.disabled = true;
+    this.init();
+};
+validator.Select.prototype = {
+init: function() {
+    var that = this;
+    var field = this.el.find('input').addClass('bf-valid');
+    var value = field.val();
+    field.val('');
+    this.select = this.el.find('select');
+    if (value) {
+        this.select.val(value);
+    }
+    this.select.focus(function() {
+        field.addClass('bf-focus');
+    }).blur(function() {
+        field.removeClass('bf-focus');
+    }).bind('change keyup click', function() {
+        var title = this.options[this.selectedIndex].text;
+        that.el.attr('title', title);
+        field.val(title);
+    }).change();
+},
+validate: function() {
+    delete this.error;
+},
+set: function(value) {
+    if (value) {
+        this.select.val(value);
+    } else {
+        this.select.get(0).selectedIndex = 0;
+    }
+}
+};
+
+/* Date control */
+validator.Date = function(el, messages, check) {
+    this.el = el;
+    this.messages = messages;
+    this.update = validator.update;
+    this.check = check || $.noop;
+    this.error = null;
+    this.year = search.dates.csnow.getFullYear() % 100;
+    this.time = search.dates.csnow.getTime();
+    this.init();
+};
+validator.Date.prototype = {
+init: function() {
+    var that = this;
+    this.parts = this.el.find('input');
+    this.parts.bind('keyup propertychange input', function() {
+        that.change();
+    }).focus(function() {
+        that.el.addClass('bf-focus');
+    }).blur(function() {
+        that.el.removeClass('bf-focus');
+    });
+    this.$validate = function() {
+        that.validate(true);
+    };
+    this.initParts();
+    this.initFormat();
+    this.initTab();
+},
+initParts: function() {
+    this.dpart = this.parts.eq(0);
+    this.dfid = this.dpart.attr('id');
+    this.mpart = this.parts.eq(1);
+    this.mfid = this.mpart.attr('id');
+    this.ypart = this.parts.eq(2);
+    this.yfid = this.ypart.attr('id');
+    this.fid = this.dfid;
+},
+initFormat: function() {
+    var that = this;
+    this.parts.slice(0, 2).change(function() {
+        var field = $(this), value = $.trim(field.val());
+        if (value && value.search(/^[1-9]$/) === 0) {
+            field.val('0' + value);
+            that.validate();
+        }
+    });
+    this.ypart.change(function() {
+        var field = $(this), value = $.trim(field.val());
+        if (value && value.search(/^\d{1,3}$/) === 0) {
+            var y = parseInt(value, 10);
+            if ((that.future && y < 100) || y <= that.cyear) {
+                y += 2000;
+            } else if (y < 1000) {
+                y = 1900 + y % 100;
+            }
+            field.val(y);
+            that.validate(true);
+        }
+    });
+},
+initTab: function() {
+    var that = this, spacers = '., -/', ignoreTab;
+    this.dpart.data('next', this.mpart);
+    this.mpart.data('prev', this.dpart);
+    this.mpart.data('next', this.ypart);
+    this.ypart.data('prev', this.mpart);
+    this.parts.keypress(function(e) {
+        ignoreTab = false;
+        if (spacers.indexOf(String.fromCharCode(e.which)) !== -1) {
+            e.preventDefault();
+            var field = $(this), next = field.data('next');
+            if (this.value && next) {
+                field.change();
+                next.select();
+            }
+        }
+    });
+    this.parts.slice(0, 2).keyup(function(e) {
+        var code = e.which;
+        var digit = (code > 47 && code < 58) || (code > 95 && code < 106);
+        if (this.value.length === 2 && digit && !ignoreTab) {
+            $(this).change().data('next').select();
+            that.el.addClass('bf-focus');
+            ignoreTab = true;
+        }
+    });
+    this.parts.slice(1).keydown(function(e) {
+        if (e.which === 8 && this.value.length === 0) {
+            $(this).blur().change().data('prev').focus();
+        } else if (ignoreTab && e.which === 9 && !e.shiftKey) {
+            e.preventDefault();
+        }
+    });
+},
+change: function() {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(this.$validate, 150);
+},
+validate: function(self) {
+    clearTimeout(this.timer);
+    var value = this.parse(this.dpart.val(), this.mpart.val(), this.ypart.val());
+    var error = typeof value === 'string' ? value : this.check(value);
+    if (this.update(error) && self) {
+        this.apply();
+    }
+},
+apply: function() {
+    booking.form.validate();
+},
+parse: function(d, m, y) {
+    var dn, mn, yn, digits = /\D/;
+    if (d) {
+        this.fid = this.dfid;
+        if (digits.test(d)) return 'letters';
+        if (d === '00' || (dn = parseInt(d, 10)) > 31) return 'wrong';
+    }
+    if (m) {
+        this.fid = this.mfid;
+        if (digits.test(m)) return 'letters';
+        if (m === '00' || (mn = parseInt(m, 10)) > 12) return 'wrong';
+    }
+    if (y) {
+        this.fid = this.yfid;
+        if (digits.test(y)) return 'letters';
+        yn = parseInt(y, 10);
+    }
+    if (!dn) {
+        this.fid = this.dfid;
+        return 'empty';
+    }
+    if (!mn) {
+        this.fid = this.mfid;
+        return 'empty';
+    }
+    if (y.length < 4) {
+        this.fid = this.yfid;
+        return 'empty';
+    }    
+    var date = new Date(yn, mn - 1, dn, 12);    
+    if (date.getDate() !== dn || date.getMonth() !== mn - 1 || date.getFullYear() !== yn) {
+        this.fid = this.dfid;
+        return 'wrong';
+    }
+    return date;
+},
+set: function(value) {
+    var vparts = value ? value.split('.') : [];
+    this.parts.val(function(i) {
+        return vparts[i] || '';
+    });
+    this.validate();
+}
+};
+
+/* Gender control */
+validator.Gender = function(el) {
+    this.el = el;
+    this.init();
+};
+validator.Gender.prototype = {
+init: function() {
+    var that = this;
+    this.checkboxes = this.el.find('input');
+    this.checkboxes.focus(function() {
+        $(this).parent().addClass('bfp-sex-hover');
+        that.el.addClass('bf-focus');
+    }).blur(function() {
+        $(this).parent().removeClass('bfp-sex-hover');
+        that.el.removeClass('bf-focus');
+    }).bind('click set', function(event) {
+        $(this).parent().addClass('bfp-sex-selected').siblings().removeClass('bfp-sex-selected');
+        that.change(true);
+        if (event.type !== 'set') {
+            that.apply();
+        }
+    });
+    this.el.find('label').mousedown(function() {
+        var input = $(this).find('input');
+        setTimeout(function() {
+            input.focus();
+        }, 10);
+    });
+    this.fid = this.el.attr('id');    
+    this.change(false);
+},
+set: function(value) {
+    this.checkboxes.prop('checked', false);
+    this.el.find('bfp-sex-selected').removeClass('bfp-sex-selected');
+    if (value) {
+        this.el.find('.bfp-sex-' + value + ' input').prop('checked', true).trigger('set');
+    }
+    this.change(Boolean(value));
+},
+change: function(checked) {
+    if (checked) {
+        delete this.message;
+        delete this.error;
+    } else {
+        this.message = '<span class="bffr-link" data-field="' + this.fid + '">пол пассажира</span>';
+        this.error = 'empty';
+    }
+},
+validate: function() {
+    return;
+},
+apply: function() {
+    booking.form.validate();
+}
+};
+
+/* Card number control */
+validator.CardNumber = function(el, messages) {
+    this.el = el;
+    this.messages = messages;
+    this.update = validator.update;    
+    this.error = null;
+    this.init();
+};
+validator.CardNumber.prototype = {
+init: function() {
+    var that = this;
+    this.parts = this.el.find('input');
+    this.parts.bind('keyup propertychange input', function() {
+        that.change();
+    }).focus(function() {
+        that.el.addClass('bf-focus');
+    }).blur(function() {
+        that.el.removeClass('bf-focus');
+    });
+    this.$validate = function() {
+        that.validate(true);
+    };
+    this.fake = Boolean(this.el.attr('data-fake'));
+    this.fid = 'bfcn-part1';
+    this.initAutoTab();
+},
+initAutoTab: function() {
+    var that = this, ignoreTab;
+    this.parts.slice(0, 3).keyup(function(e) {
+        var code = e.which;
+        var digit = (code > 47 && code < 58) || (code > 95 && code < 106);
+        if (this.value.length === 4 && digit && !ignoreTab) {
+            $(this).change().next().select();
+            that.el.addClass('bf-focus');
+            ignoreTab = true;
+        }
+    });
+    var spacers = '., -/';
+    this.parts.keypress(function(e) {
+        ignoreTab = false;
+        if (spacers.indexOf(String.fromCharCode(e.which)) !== -1) {
+            e.preventDefault();
+        }
+    });
+    this.parts.slice(1).keydown(function(e) {
+        if (e.which === 8 && this.value.length === 0) {
+            $(this).blur().change().prev().focus();
+        } else if (ignoreTab && e.which === 9 && !e.shiftKey) {
+            e.preventDefault();
+        }
+    });
+},
+change: function() {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(this.$validate, 150);
+},
+validate: function(self) {
+    clearTimeout(this.timer);
+    var values = [];
+    for (var i = 4; i--;) {
+        values[i] = this.parts.eq(i).val();
+    }
+    var error = this.check(values);
+    if (this.update(error) && self) {
+        this.apply();
+    }
+},
+check: function(values) {
+    for (var i = 0; i < 4; i++) {
+        var s = values[i];
+        this.fid = 'bfcn-part' + (i + 1);
+        if (/\D/.test(s)) return 'letters';
+        if (s.length < 4) return 'empty';
+    }
+    if (this.fake) return undefined;
+    var s = values.join(''), sum = 0;
+    for (var i = 0; i < 16; i += 2) {
+        var n1 = Number(s.charAt(i)) * 2;
+        var n2 = Number(s.charAt(i + 1));
+        if (n1 > 9) n1 -= 9;
+        sum += n1 + n2;
+    }
+    if (sum % 10 !== 0) {
+        return 'wrong';
+    }
+},
+apply: function() {
+    booking.form.validate();
+}
+};
+
+/* Card date control */
+validator.CardDate = function(el, messages) {
+    this.el = el;
+    this.messages = messages;
+    this.update = validator.update;
+    this.error = null;
+    var dmy = search.dates.csnow.DMY();
+    this.time = dmy.substring(4, 6) + dmy.substring(2, 4);
+    this.init();
+};
+validator.CardDate.prototype = {
+init: function() {
+    var that = this;
+    this.parts = this.el.find('input');
+    this.parts.bind('keyup propertychange input', function() {
+        that.change();
+    }).focus(function() {
+        that.el.addClass('bf-focus');
+    }).blur(function() {
+        that.el.removeClass('bf-focus');
+    });
+    this.$validate = function() {
+        that.validate(true);
+    };
+    this.initFormat();
+    this.initAutoTab();
+},
+initFormat: function() {
+    var that = this;
+    this.parts.first().change(function() {
+        var field = $(this), value = $.trim(field.val());
+        if (value && value.search(/^[1-9]$/) === 0) {
+            field.val('0' + value);
+            that.validate();
+        }
+    });
+},
+initAutoTab: function() {
+    var that = this, ignoreTab;
+    var spacers = '., -/';
+    this.parts.first().keyup(function(e) {
+        var code = e.which;
+        var digit = (code > 47 && code < 58) || (code > 95 && code < 106);
+        if (this.value.length === 2 && digit && !ignoreTab) {
+            that.parts.eq(0).change();
+            that.parts.eq(1).select();
+            that.el.addClass('bf-focus');
+            ignoreTab = true;
+        }
+    }).keypress(function(e) {
+        ignoreTab = false;
+        if (spacers.indexOf(String.fromCharCode(e.which)) !== -1) {
+            e.preventDefault();
+            if (this.value) {
+                that.parts.eq(0).change();
+                that.parts.eq(1).select();
+            }
+        }
+    });
+    this.parts.eq(1).keypress(function(e) {
+        ignoreTab = false;
+        if (spacers.indexOf(String.fromCharCode(e.which)) !== -1) {
+            e.preventDefault();
+        }
+    }).keydown(function(e) {
+        if (e.which === 8 && this.value.length === 0) {
+            that.parts.eq(1).blur().change();
+            that.parts.eq(0).focus();
+        } else if (ignoreTab && e.which === 9 && !e.shiftKey) {
+            e.preventDefault();
+        }
+    });
+},
+change: function() {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(this.$validate, 150);
+},
+validate: function(self) {
+    clearTimeout(this.timer);
+    var m = $.trim(this.parts.eq(0).val());
+    var y = $.trim(this.parts.eq(1).val());
+    var error = this.check(m, y);
+    if (this.update(error) && self) {
+        this.apply();
+    }
+},
+apply: function() {
+    booking.form.validate();
+},
+check: function(m, y) {
+    this.fid = 'bc-exp-month';
+    if (!m || m === '0') return 'empty';
+    if (/\D/.test(m)) return 'letters';
+    if (Number(m) > 12) return 'wrong';
+    this.fid = 'bc-exp-year';
+    if (/\D/.test(y)) return 'letters';    
+    if (y.length < 2) return 'empty';
+    if (y + m < this.time) return 'improper';
+},
+set: function(value) {
+    var vparts = value ? value.split('.') : [];
+    this.parts.val(function(i) {
+        return vparts[i] || '';
+    });
+    this.validate();
 }
 };

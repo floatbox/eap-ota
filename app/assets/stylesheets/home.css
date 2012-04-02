@@ -1,22 +1,15 @@
- /*
-  *= require promo
-  *= require pushup
-  *= require atoms/button
-  *= require controls/filter
-  *= require controls/autocomplete
-  *= require controls/hint
-  *= require controls/history
-  *= require search/form
-  *= require search/fields
-  *= require search/panel
-  *= require search/calendar
-  *= require search/live
-  *= require results/results
-  *= require results/filters
-  *= require results/message
-  *= require results/offer
-  *= require results/matrix
-  *= require results/diagram
-  *= require booking/booking
-  *= require booking/sections
-  */
+/*= require home/queries.css */
+
+/*= require search/locations.css */
+/*= require search/dates.css */
+/*= require search/options.css */
+
+/*= require results/content.css */
+/*= require results/header.css */
+/*= require results/filters.css */
+/*= require results/message.css */
+/*= require results/matrix.css */
+/*= require results/offer.css */
+
+/*= require booking/booking.css */
+/*= require booking/sections.css */

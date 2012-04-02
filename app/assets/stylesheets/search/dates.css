@@ -1,0 +1,280 @@
+/* Timeline */
+.sd-timeline {
+    position: relative;
+    height: 44px;
+    border-bottom: 3px solid #2c3036;
+    background: url(/images/common/dark.jpg) repeat 0 100% #373941;    
+    cursor: pointer;    
+}
+.sdt-content {
+    position: relative;
+    width: 960px;
+    margin: 0 auto;
+}
+
+/* Timeline monthes */
+.sdt-monthes {
+    position: relative;
+    width: 960px;
+    color: #FFF;
+    z-index: 1; 
+    cursor: default;
+}
+.sdt-spacer {
+    width: 2%;
+}
+.sdt-monthes .title {
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 16px;
+}
+.sdt-monthes .year {
+    font-size: 10px;
+    line-height: 12px;
+    opacity: 0.7;
+}
+
+/* Scrollbars */
+.sdt-tab,
+.sdt-hover {
+    position: absolute;
+    top: 0;
+}
+.sdt-hover {
+    display: none;
+    height: 44px;
+    border-bottom: 3px solid #3a4047;
+    background: #535d66;
+}
+.sdt-tab {
+    height: 48px;
+    background: #80a2b4;
+}
+.sdt-ftab {
+    display: none;
+}
+
+/* Active area */
+.sdt-area {
+    position: absolute;
+    top: 0;
+    z-index: 2;
+    height: 47px;
+}
+.sdt-left,
+.sdt-right {
+    z-index: 1;
+    width: 50%;
+}
+.sdt-left {
+    left: 0;
+}
+.sdt-right {
+    left: 50%;
+}
+
+/* Calendar */
+.sd-calendar,
+.sdc-overlay {
+    background: url(/images/search/calendar.png) repeat-x #80a2b4;
+}
+.sdc-content {
+    position: relative;
+    top: 1px;
+    width: 960px;
+    height: 299px;
+    margin: 0 auto;
+    overflow: hidden;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);    
+}
+.sdc-slider {
+    width: 5976px;
+    position: relative;
+}
+
+/* Month */
+.sdc-month {
+    float: left;
+    width: 498px;
+}
+
+/* Fixed month */
+.sdc-overlay {
+    display: none;
+    position: absolute;
+    top: -1px; left: 0;
+    width: 480px;
+    height: 100%;
+    border-bottom: 1px solid #383838;
+}
+.sdc-splitter {
+    position: absolute;
+    top: 0; left: 476px;
+    width: 6px;
+    height: 100%;
+    background: url(/images/search/splitter.png) repeat-y;
+}
+.sdc-month.fixed {
+    position: relative;
+    z-index: 1;
+}
+
+
+/* Week */
+.sdc-week {
+    height: 29px;
+    margin-bottom: -1px;
+    border-bottom: 1px solid #a6becb;
+    cursor: default;
+}
+.sdcw-day {
+    float: left;
+    width: 66px;
+    padding-top: 10px;
+    font-size: 11px;
+    line-height: 11px;
+    text-align: center;
+    color: #c0d1da;
+}
+.sdcw-day .dayoff {
+    color: #b56e77;
+}
+
+/* Days */
+.sdc-days {
+    color: #FFF;
+    float: left;
+}
+.sdc-day {
+    float: left;
+    width: 66px;
+    height: 45px;
+    text-align: center;
+    cursor: pointer;
+}
+.sdc-day .date {
+    padding: 13px 0 0 1px;
+    font-weight: bold;
+    font-size: 17px;
+    line-height: 17px;
+    letter-spacing: -0.03em;
+}
+.sdc-day .month {
+    display: none;
+    font-size: 11px;
+    line-height: 11px;
+}
+.sdc-days .disabled {
+    color: #a6becb;
+    cursor: default;
+}
+.sdc-days .today .title {
+    padding-top: 2px;
+    font-size: 11px;
+    line-height: 11px;
+}
+.sdc-days .today .date {
+    padding-top: 0;
+}
+.sdc-days .today .month,
+.sdc-days .first .month {
+    display: block;
+}
+
+/* Hover dates */
+.sdc-hover .month {
+    display: block;
+}
+.sdc-hover1 {
+    background-color: #81aa00;
+}
+.sdc-hover2 {
+    background-color: #db7100;
+}
+.sdc-hover3 {
+    background-color: #0aa0c6;
+}
+
+/* Selected days */
+.sdc-selected {
+    background: url(/images/search/dates.png) no-repeat;
+}
+.sdc-selected1 {
+    background-color: #81aa00;
+}
+.sdc-selected2 {
+    background-color: #db7100;
+    background-position: 0 -50px;
+}
+.sdc-selected3 {
+    background-color: #0aa0c6;
+    background-position: 0 -150px;
+}
+.sdc-selected1.sdc-hover2 {
+    background-position: 0 -200px;
+}
+.sdc-selected2.sdc-hover3 {
+    background-position: 0 -350px;
+}
+.sdc-selected1.sdc-selected2 {
+    background-position: 0 -250px;
+}
+.sdc-selected2.sdc-selected3 {
+    background-position: 0 -400px;
+}
+.sdc-selected1.sdc-selected2.sdc-hover3 {
+    background-position: 0 -450px;
+}
+.sdc-selected1.sdc-selected2.sdc-selected3 {
+    background-position: 0 -500px;
+}
+.sdc-rtmode .sdc-selected2 {
+    background-position: 0 -100px;
+}
+.sdc-rtmode .sdc-selected1.sdc-selected2 {
+    background-position: 0 -300px;
+}
+.sdc-selected .month {
+    display: block;
+}
+.sdc-selected .title {
+    visibility: hidden;
+}
+
+/* Selected days in timeline */
+.sdt-day {
+    position: absolute;
+    top: 2px;
+    width: 15px;
+    font-size: 10px;
+    line-height: 13px;
+    text-align: center;
+    color: #FFF;
+}
+.sdt-segment1 {
+    background-color: #81aa00;
+}
+.sdt-segment2 {
+    background-color: #db7100;
+}
+.sdt-segment3 {
+    background-color: #0aa0c6;
+}
+
+/* Hidden calendar */
+.sd-hidden {
+    position: relative;
+    border-bottom: 1px solid #4b4e59;
+}
+.sd-hidden .sd-timeline {
+    height: 45px;
+    border-bottom: 1px solid #202126;
+}
+.sd-hidden .sdt-hover {
+    height: 45px;
+    border-bottom: 1px solid #3d4b52;
+}
+.sd-hidden .sd-calendar {
+    display: none;
+}

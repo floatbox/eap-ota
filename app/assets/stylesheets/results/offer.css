@@ -1,489 +1,545 @@
-/* Предложение */
-#results .offer {
-    margin: 0 0 15px;
-    color: #333;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    background: #fff;
-    font-size: 16px;
-    line-height: 19px;
-    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+/* Offer */
+.offer {
+    margin: 0 0 25px;
+}
+.o-variants,
+.o-comments,
+.o-validating {
+    display: none;
 }
 
-.offer-variant  {
-    width: 100%;
-    font-size: 81.25%;
-    line-height: 1.23;
-}
-
-.offer .aux {
-    padding: 0 10px;
-    font-size: 11px;
-    text-align: right;
-    color: #999;
-}
-
-.offer-variant th,
-.offer-variant td {
-    padding: 8px 10px 8px 0;
-    vertical-align: top;
-}
-
-/* Заголовок предложения */
-.offer thead td.cost {
-    padding: 11px 10px 10px 0;
-}
-.offer thead .cost dt {
-    display: inline;
-    margin-right: 4px;
-    font-weight: bold;
-    font-size: 30px;
-    line-height: 28px;
-    letter-spacing: -0.045em;
-    color: #ed1192;
-}
-.offer thead .cost .usual {
+/* Book */
+.o-book {
     position: relative;
-    color: #C0C0C0;
+    background: #FFF;
+    margin-left: 16px;    
+    padding: 8px 20px 8px 8px;
+    font-size: 20px;
+    line-height: 20px;
+    letter-spacing: -0.03em;
 }
-.offer thead .cost .usual:after {
-    content: ' ';
+.ob-button {
+    float: left;
+    position: relative;
+    margin-right: 12px;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.obb-side {
+    height: 42px;
+    background: url(/images/results/book.png) no-repeat;
+}
+.obb-left {
     position: absolute;
-    top: 17px;
-    left: -1px;
+    top: -2px;
+    left: -2px;
     width: 100%;
-    height: 1px;
-    overflow: hidden;
-    border-top: 2px solid #909090;
-    padding: 0 1px;
-    -webkit-transform: rotate(-15deg);
-    -moz-transform: rotate(-15deg);
+    padding-right: 6px;
+    background-position: 100% 0;    
 }
-
-.offer thead .cost dd {
-    display: inline;
-    margin-right: 2px;
-    font-size: 16px;
-    vertical-align: 5px;
-    color: #828282;
+.obb-right {
+    margin-right: 19px;
 }
-.offer .digit {
-    margin-left: 0.15em;
-}
-.offer .cost-tip {
-    display: none;
-}
-.cheap-offer .cost-tip {
-    display: inline;
-}
-
-/* Кнопка */
-.offer thead th.book {
-    padding: 10px;
-    width: 88px;
-}
-.offer .book a.a-button {
-    display: block;
-    border-color: #7b8e12;
-    padding: 3px 6px;
-    font-size: 16px;
-    font-weight: bold;
-}
-.offer a.a-button:active {
-    padding: 3px 6px;
-}
-
-/* Класс */
-.offer .cabin {
-    background: #fff8d2;
-    border-radius: 3px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -o-border-radius: 3px;
-}
-
-/* Обзор предложения */
-.offer .summary p.note {
-    font-size: 84.62%;
-    line-height: 118.18%;
-    color: #777777;
-}
-.offer .controls td {
-    border-top: none;
-}
-.offer .bars {
-    display: none;
-}
-
-/* Авиакомпания и пересадки */
-.offer .summary .carrier,
-.offer .summary .changes {
-    font-size: 84.62%;
-    line-height: 109.09%;
-    padding-left: 10px;
-}
-.offer .summary .carrier {
-    vertical-align: middle;
-    width: 98px;
-}
-.offer .summary .changes {
-    width: 89px;
-}
-.offer .summary .common {
-    padding-bottom: 0;
-    vertical-align: bottom;
-}
-.offer .shift {
+.obb-title {
     position: relative;
-    top: 35px;
-    width: 100%;
-    height: 70px;
-}
-.offer .shift td {
-    padding: 0;
-    border-top: none;
-    vertical-align: middle;
-}
-.offer .summary .carrier p {
-    margin: 0 0 4px;
-    text-align: center;
-}
-.offer .summary .changes p {
-    margin: 0 0 4px;
-}
-
-/* Вылет и прилет */
-.offer .summary h5 {
-    margin: 0 0 1px;
-    font-size: 22px;
+    z-index: 1;
+    padding: 8px 17px 8px 18px;
+    border-radius: 18px;
     font-weight: bold;
-    line-height: 1;
-    letter-spacing: -0.04em;
+    color: #FFF;
+    text-shadow: rgba(0, 0, 0, 0.3) 1px 1px 0;    
+    cursor: pointer;
 }
-.offer .summary .direction,
-.offer .summary .arvdate {
-    position: relative;
-    top: -3px;
-    font-size: 50%;
-    font-weight: normal;
-    letter-spacing: 0;
-    color: #777;
+.ob-state {
+    margin-right: 200px;
+    padding: 8px 0;
 }
-.offer .summary .direction {
-    padding-left: 2px;
-    visibility: hidden;
-}
-.hover .summary .direction {
-    visibility: inherit;
-}
-.offer .summary td.dpt,
-.offer .summary td.arv {
-    width: 130px;
-}
-.offer .summary .dpt p,
-.offer .summary .arv p {
-    line-height: 115.385%;
-    color: #777;
+.ob-sum {
+    font-weight: bold;
+    color: #f90a6f;
 }
 
-/* Перелёт */
-.offer .summary .trip {
-    width: 149px;
-    padding-top: 8px;
-    padding-right: 20px;
+/* Prebooking */
+.ob-progress {
+    padding-right: 26px;
+    background: url(/images/booking/progress.gif) no-repeat 100% 5px;
 }
-.offer .trip h6 {
-    font-size: 84.62%;
-    line-height: 118.18%;
+.ob-disabled .obb-left {
+    background-position: 100% -45px;
 }
-.offer .trip .parts {
-    height: 22px;
-    margin: 0 0 3px;
-    text-align: center;
+.ob-disabled .obb-right {
+    background-position: 0 -45px;
+}
+.ob-disabled .obb-title {
+    color: #b8b8b8;
+    text-shadow: none;
     cursor: default;
 }
-.offer .trip .parts li {
-    float: left;
-    width: 23px; height: 22px;
-    margin-right: 3px;
-    background: url(/img/offers/trip.png) no-repeat;
-    cursor: help;
-}
-.offer .segment-2 .trip li.flight {
-    background-position: 0 -50px;
-}
-.offer .segment-3 .trip li.flight {
-    background-position: 0 -25px;
-}
-.offer .trip .parts li.layover {
-    background-position: 0 -75px;
-}
-.offer .trip .parts li.lovs {
-    background-position: 0 -100px;
-}
-.offer .trip .parts li.lovl {
-    background-position: 0 -125px;
-}
 
-/* Класс */
-.offer .summary p.cnote {
-    padding-top: 2px;
+/* Fixed price */
+.ob-placeholder {
+    display: none;
+    height: 52px;
+    margin-left: 16px;
+    background: #F8F8F6;
 }
-.offer .summary .cabin {
-    padding: 2px 4px;
+.ob-shadow {
+    display: none;
+    position: absolute;
+    top: -12px;
+    left: 0; 
+    width: 988px;
+    height: 12px;
+    background: url(/images/results/pshadow.png) no-repeat;
 }
+.fixed-book .o-book {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    width: 960px;
+    margin-left: -494px;
+    z-index: 1;
+}
+.fixed-book .ob-placeholder,
+.fixed-book .ob-shadow {
+    display: block;
+} 
 
-/* Варианты вылета */
-.offer .summary td.variants {
-    padding: 0;
-    border-top: none;
+/* Details control */
+.od-control {
+    float: right;
+    margin-top: 13px;
+    font-size: 12px;
+    line-height: 12px;
+    letter-spacing: 0;
     color: #777;
+    cursor: pointer;
 }
-.offer .variants h6 {
+.od-hide {
+    display: none;
+}
+
+/* Segments */
+.o-segments {
+    overflow: hidden;
+}
+.o-segment {
     position: relative;
-    left: -20px;
-    margin-bottom: 3px;
-    padding-left: 20px;
-    background: url(/img/offers/i-variants.png) no-repeat 0 1px;
-    font-size: 107.7%;
+    padding: 0 0 2px;
 }
-.offer .variants p {
+.o-complex .o-segment {
     margin: 0 0 10px;
 }
-.offer .variants .link {
-    font-weight: bold;
-}
-.offer .segment-1 h5,
-.offer .segment-1 .variants .link {
-    color: #6F7C26;
-}
-.offer .segment-2 h5,
-.offer .segment-2 .variants .link {
-    color: #C46F26;
-}
-.offer .segment-3 h5,
-.offer .segment-3 .variants .link {
-    color: #0aa0c6;
-}
-.offer .summary .variants .link:hover {
-    color: #ED1192;
-}
 
-/* Правила тарифа */
-.offer .rules {
-    padding-top: 9px;
-    font-size: 84.62%;
-    text-align: right;
-    color: #777;
-}
-.offer .rules a {
-    font-weight: bold;
-    color: #1F64BE;
-}
-
-/* Показать подробности */
-.offer .toggle {
-    padding: 0;
-}
-.offer .toggle-tab {
-    float: left;
-    margin-left: -15px;
-    padding: 8px 10px;
-    /* background: #F7F7F7; */
-    font-size: 14px;
-}
-.offer .expand,
-.offer.collapsed .collapse {
-    display: none;
-}
-.offer.collapsed .expand {
-    display: inline;
-}
-.offer .toggle .link {
-    font-weight: normal;
-    color: #4b4b4b;
-    padding: 2px 5px;
-    background: #f5eec9;
-    border-radius: 3px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-}
-
-/* Подробности */
-.offer .details tr {
-    background: #f7f7f7;
-}
-.offer.collapsed .details {
-    display: none;
-}
-.offer .details th {
-    font-size: 16px;
-    font-weight: bold;
-    padding: 12px 15px 10px 0;
-    color: #777;
-}
-.offer .details .ret th {
-    padding-top: 0;
-}
-.offer .details .segment-1 .direction {
-    color: #6F7C26;
-}
-.offer .details .segment-2 .direction {
-    color: #C46F26;
-}
-.offer .details .segment-3 .direction {
-    color: #0aa0c6;
-}
-
-/* Комментарии */
-.offer .details tr.comments {
-    background: #f5eec9;
-}
-.offer-variant .comments td {
-    padding: 6px 15px 6px 0;
-}
-.offer .details .comment {
-    margin: 5px 0;
-}
-
-/* Класс */
-.offer .details th .cabin {
-    margin: 0 -2px;
-    padding: 0 3px;
-}
-.offer .details .info .cabin {
-    margin: 0 -4px;
-    padding: 1px 3px;
-    border: 1px solid #b8b396;
-}
-
-/* Время рейса */
-.offer .details .time {
+/* Segment title */
+.os-title {
     position: relative;
-    left: -90px;
-    float: left;
-    width: 80px;
-    margin-right: -80px;
-    font-size: 11px;
-    line-height: 13px;
-}
-.offer .details .time h5,
-.offer .details .time p {
-    text-align: right;
-}
-.offer .details .time h5 {
-    margin: 0 0 2px;
-    font-weight: bold;
-    font-size: 22px;
-    line-height: 22px;
-    letter-spacing: -0.04em;
-    color: #777;
-}
-.offer .details .segment-1 .arv .time h5,
-.offer .details .segment-1 .dpt .time h5 {
-    color: #6F7C26;
-}
-.offer .details .segment-2 .arv .time h5,
-.offer .details .segment-2 .dpt .time h5 {
-    color: #C46F26;
-}
-.offer .details .segment-3 .arv .time h5,
-.offer .details .segment-3 .dpt .time h5 {
-    color: #0aa0c6;
-}
-
-/* Описание рейса */
-.offer .details .point {
-    padding-top: 0;
-    padding-bottom: 10px;
-    font-size: 92.3%;
-    line-height: 133.33%;
-}
-.offer .details .lpoint {
-    width: 214px;
-}
-.offer .details .rpoint {
-    width: 238px;
-}
-.offer .details .last .point {
-    padding-bottom: 12px;
-}
-.offer .details .point h6 {
-    margin: 0 0 3px;
-    font-size: 116.667%;
-    font-weight: bold;
-}
-.offer .details .tstops {
-    margin: 10px 0 0;
-    line-height: 108.33%;
-    color: #777;
-}
-.offer .details .warnings {
-    clear: left;
-    margin: 7px 0 0 -30px;
-    line-height: 108.33%;
-    color: #777;
-}
-.offer .details .warnings li {
-    margin: 0 0 2px;
-    padding: 5px 0 5px 30px;
-    background: url(/img/offers/trip.png) no-repeat -25px 0;
-}
-.offer .details li.schange {
-    background-position: 0 -100px;
-}
-.offer .details li.lchange {
-    background-position: 0 -125px;
-}
-.offer .details li.diffad {
-    background-position: 0 -150px;
-}
-
-/* Сумма и кнопка */
-.offer .details .book {
-    background: none;
-}
-.offer .details .book th,
-.offer .details .book td {
-    padding: 10px;
-    vertical-align: top;
-}
-.offer .details .book td {
-    padding-left: 0;
-    padding-top: 9px;
-}
-.offer .details .book .sum {
-    margin-right: 225px;
-}
-.offer .details .book .sum dt {
-    margin: 0 0 2px;
-    font-size: 14px;
-    line-height: 15px;
-    color: #000;
-}
-.offer .details .book .sum strong {
-    font-weight: bold;
-}
-.offer .details .book .sum dd {
-    font-size: 11px;
-    color: #777;
-}
-.offer .details .valcarrier {
-    float: right;
-    position: relative;
-    top: 1px;
-    width: 205px;
-    font-size: 11px;
+    top: 8px;
+    height: 14px;
+    margin: 0 370px 6px 30px;
+    border-top: 1px solid #b7bcc0;
+    font-size: 12px;
     line-height: 14px;
     color: #777;
 }
-.offer .alliance {
-    color: #333;
+.ost-item {
+    position: absolute;
+    top: -8px;
+    padding: 0 5px;
+    background: #d5dbe0;
 }
-.offer .alliance:hover {
-    color: #ED1192;
+.ost-name {
+    left: -5px;
+    font-weight: bold;
+}
+.ost-dpt {
+    left: 171px;
+}
+.ost-duration {
+    left: 366px;
+}
+.ost-arv {
+    left: 571px;
+}
+
+/* Segment summary */
+.os-summary {
+    position: relative;
+    margin-left: 16px;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 13px;    
+}
+.oss-wrap {
+    margin-left: 190px;
+    padding: 4px 0 8px;
+}
+.oss-dpt,
+.oss-arv {
+    float: left;
+    width: 180px;
+}
+
+/* Carrier */
+.oss-carrier {
+    position: absolute;
+    top: 12px;
+    left: 44px;
+    width: 130px;
+}
+.ossc-icon {
+    position: absolute;
+    top: -6px;
+    left: -32px;
+    width: 27px;
+    height: 23px;
+    opacity: 0.4;
+}
+.ossc-title {
+    display: none;
+}
+
+/* Price */
+.oss-price {
+    position: absolute;
+    top: 12px; left: 46px;
+    padding-right: 11px;
+    background: url(/images/results/parrows.png) no-repeat;
+}
+.ossp-same {
+    background: none;
+}
+.ossp-rise {
+    background-position: 100% -26px;
+}
+.ossp-fall {
+    background-position: 100% -86px;
+}
+
+/* Time and airport */
+.oss-time {
+    float: left;
+    padding: 4px 6px 0 0;    
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 19px;
+}
+.segment1 .oss-time,
+.segment1 .os-summary:hover .oss-time {
+    color: #81aa00;
+}
+.segment2 .oss-time,
+.segment2 .os-summary:hover .oss-time {
+    color: #db7100;
+}
+.segment3 .oss-time,
+.segment3 .os-summary:hover .oss-time {
+    color: #0aa0c6;
+}
+.osst-date {
+    float: left;
+    margin: 8px 0 0 5px;
+    font-size: 11px;
+    line-height: 13px;
+}
+.oss-airport {
+    float: left;
+    padding-top: 8px;
+}
+
+/* Parts */
+.oss-parts {
+    float: left;
+    width: 190px;
+    padding: 8px 15px 0;
+}
+.oss-bar {
+    float: left;
+    padding: 3px 8px 0 0;
+}
+.ossb-flight,
+.ossb-layover {
+    float: left;
+    overflow: hidden;
+    height: 4px;
+    border-bottom: 4px solid #e7e7e7;    
+}
+.segment1 .ossb-flight {
+    background: #86a900;
+    border-color: #9db930;
+}
+.segment2 .ossb-flight {
+    background: #cc6900;
+    border-color: #e58217;
+}
+.segment3 .ossb-flight {
+    background: #0aa0c6;
+    background: #0498bd;
+    border-color: #11abd1;
+}
+.ossb-layover {
+    background: #e0e0e0;
+}
+
+/* Layovers */
+.oss-layovers {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 778px;
+    z-index: 1;
+    width: 190px;
+    padding: 12px 10px 12px;
+    background: url(/images/results/layovers.png) repeat-x 0 100%;
+    color: #777;
+}
+.ossl-durations {
+    display: none;
+    padding-top: 12px;
+    font-size: 11px;
+    line-height: 13px;
+}
+.ossl-more {
+    display: none;
+    margin-top: 6px;
+    font-size: 11px;
+    line-height: 13px;
+}
+.ossl-link {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.o-complex .ossl-durations,
+.o-complex .ossl-more {
+    display: block;
+}
+
+/* Different segments */
+.os-summary .other-segments {
+    display: none;
+    position: absolute;
+    top: 10px; left: 795px;
+    width: 170px;
+    font-size: 11px;
+    line-height: 12px;
+    color: #AAA;
+}
+
+/* Hover */
+.os-summary:hover {
+    background: #dee2e6;
+}
+.os-disabled:hover {
+    color: #606060;
+}
+.os-summary:hover .ossp-rise {
+    background-position: 100% 4px;
+}
+.os-summary:hover .ossp-fall {
+    background-position: 100% -56px;
+}
+.os-summary:hover .ossc-icon {
+    opacity: 0.6;
+}
+.os-summary:hover .other-segments {
+    display: block;
+}
+
+/* Selected */
+.os-selected {
+    cursor: default;
+    background: #FFF;
+    border-left: 1px solid #afb3b7;
+    margin-left: 15px;
+}
+.os-selected:hover {
+    background: #FFF;
+}
+.os-selected .ossc-icon,
+.os-selected:hover .ossc-icon {
+    opacity: 1;
+}
+.os-selected .oss-price {
+    display: none;
+}
+.os-selected .oss-tip,
+.os-selected .ossc-title,
+.os-selected .oss-layovers {
+    display: block;
+}
+
+/* Hidden */
+.os-hidden {
+    display: none;
+}
+
+/* Disabled */
+.os-disabled {
+    color: #777;
+}
+.os-disabled .oss-time {
+    color: #999;
+}
+.os-disabled .ossb-flight {
+    background: #C0C0C0;
+    border-color: #D0D0D0;
+}
+
+/* Lines */
+.oss-line {
+    display: none;
+}
+.os-selected .oss-line {
+    display: block;
+    position: absolute;
+    top: 18px;
+    left: -16px;
+    width: 15px;
+    height: 2000px;
+    border: 1px solid #afb3b7;
+    border-width: 1px 0 0 1px;
+}
+.ob-line {
+    position: absolute;
+    top: 0;
+    left: -16px;
+    width: 15px;
+    height: 26px;
+    border: 1px solid #afb3b7;
+    border-width: 0 0 1px 1px;
+}
+.ob-overlay {
+    position: absolute;
+    top: 27px;
+    left: -16px;
+    width: 15px;
+    height: 26px;
+    background: url(/images/common/grey.png) #d5dbe0;    
+}
+
+/* Excess variants */
+.os-more {
+    display: none;
+    margin-left: 206px;
+    padding: 5px 0 8px;
+}
+.hide-excess .os-excess {
+    display: none;
+}
+.hide-excess .os-more {
+    display: block;
+}
+.segment1 .os-more .link {
+    color: #81aa00;
+}
+.segment2 .os-more .link {
+    color: #db7100;
+}
+.segment3 .os-more .link {
+    color: #0aa0c6;
+}
+
+/* Segment details */
+.os-details {
+    display: none;
+    font-size: 12px;
+    line-height: 14px;
+}
+.osd-title {
+    margin: 0 14px 12px 190px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 17px;
+    color: #777;
+}
+.osd-flight {
+    padding: 10px 0 0;
+}
+.osd-carrier {
+    float: left;
+    margin: -4px 0 0 12px;
+    width: 35px;
+}
+.osdc-icon {
+    vertical-align: middle;
+}
+
+.osd-dpt,
+.osd-arv {
+    position: relative;
+    float: left;
+    width: 370px;
+}
+.osd-dpt {
+    margin-right: 30px;
+    margin-left: 64px;
+}
+.osd-time,
+.osd-date {
+    position: absolute;
+    left: 0;
+    width: 68px;
+    text-align: right;
+}
+.osd-time {
+    top: -1px;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 18px;
+}
+.osd-date {
+    top: 20px;
+    font-size: 11px;
+    line-height: 11px;
+    color: #777;
+}
+.osd-action {
+    margin: 0 0 4px 80px;
+    font-weight: bold;
+    font-size: 14px;
+}
+.osd-features {
+    margin-left: 60px;
+}
+.osd-features li {
+    margin: 3px 0 0 20px;
+}
+
+/* Segment colors */
+.segment1 .osd-time,
+.segment1 .osdt-main {
+    color: #81aa00;
+}
+.segment2 .osd-time,
+.segment2 .osdt-main {
+    color: #db7100;
+}
+.segment3 .osd-time,
+.segment3 .osdt-main {
+    color: #0aa0c6;
+}
+
+/* Offer details */
+.o-details {
+    margin-left: 16px;
+    background: #F8F8F6;
+}
+.od-segments {
+    border-top: 1px solid #ecece8;
+    padding: 2px 0;
+}
+.od-segments .os-details {
+    margin: 18px 0;
+    display: block;
+}
+.od-comments {
+    padding: 0 0 16px;
+    font-size: 12px;
+    line-height: 14px;
+}
+.od-comment {
+    margin: 0 150px 8px 190px;
+}
+.od-alliance {
+    text-decoration: underline;
+    cursor: pointer;
 }

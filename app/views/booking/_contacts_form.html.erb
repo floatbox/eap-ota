@@ -1,25 +1,20 @@
-<div class="section booking-contacts">
+<div class="bf-section" data-type="contacts">
+<div class="bfs-title">
+    <h4 class="bfst-text">Контактные данные покупателя</h4>
+    <div class="bfst-tip">Чтобы мы знали куда прислать электронный билет и куда звонить в случае каких-либо изменений</div>
+    <div class="bfst-line"></div>
+</div>
 <%= fields_for :order, @order_form do |o| %>
 <%= o.hidden_field :number %>
-<table>
-<tr>
-    <td>
-        <h6 class="blabel"><label for="bcontacts-email">Адрес электронной почты</label></h6>
-        <%= o.text_field :email, :id => "bcontacts-email", :class => "bfield" %>
-        <div class="bdescription">
-            <span class="link hint">Для чего он нужен?</span>
-            <p class="htext">Адрес должен быть реально существующим, чтобы вы&nbsp;смогли получить <%= @order_form.people.one? ? 'ваш электронный билет' : 'ваши электронные билеты' %> и&nbsp;другие полезные инструкции.</p>        
-        </div>
-    </td>
-    <td>
-        <h6 class="blabel"><label for="bcontacts-phone">Номер телефона</label></h6>
-        <%= o.text_field :phone, :id => "bcontacts-phone", :class => "bfield" %>
-        <div class="bdescription">
-            <span class="link hint">Для чего он нужен?</span>
-            <p class="htext">Телефон нужен для связи в&nbsp;экстренных случаях, например, чтобы уладить затруднения с&nbsp;оплатой или сообщить об&nbsp;изменении расписания.</p>        </div>
-        </div>
-    </td>
-</tr>
-</table>
+<div class="clearfix">
+    <div class="bfc-control">
+        <h6 class="bf-label"><label for="bfc-email">Адрес электронной почты</label></h6>
+        <%= o.text_field :email, :id => "bfc-email", :class => "bf-field" %>
+    </div>
+    <div class="bfc-control">
+        <h6 class="bf-label"><label for="bfc-phone">Номер телефона</label> <span class="bfl-tip">(не забудьте код города)</span></h6>
+        <%= o.text_field :phone, :id => "bfc-phone", :class => "bf-field" %>
+    </div>
+</div>
 <% end %>
 </div>

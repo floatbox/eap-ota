@@ -1,193 +1,133 @@
-<div id="results" class="latent">
-    
-    <!-- Заголовок и фильтры -->
-    <div id="results-header">
-    <div class="rh-content">
-        <h1 class="results-title"></h1>
-        <div id="results-filters">
-            <div class="rf-control">
-                <span class="link rfreset latent">Все варианты</span>
-                <span class="link rfshow">Уточнить</span> количество пересадок, время, аэропорты и прочее
+<div id="results-header">
+<div class="rh-wrapper">
+    <table class="rh-content">
+    <tr>
+        <td class="rh-left"><h3 class="rh-summary"></h3></td>
+        <td class="rh-right">
+            <div id="results-button">
+                <div class="rb-side rb-disabled"><div class="rb-side">Найти&nbsp;билеты</div></div>
+                <div class="rb-side rb-enabled"><div class="rb-side"><div class="rb-active">Найти&nbsp;билеты</div></div></div>
             </div>
-            <table class="rf-content">
-            <tr>
-                <th>
-                    <div class="rfleft">
-                        <span class="rf-stroke"></span>
-                        <span class="bar">
-                            <span class="rftitle">Уточнить</span>
-                            <span class="link rfreset latent">Все&nbsp;варианты</span>
-                        </span>
-                    </div>
-                </th>
-                <td rowspan="2">
-                    <h5><span class="bar">Пересадки</span></h5>
-                    <div class="filters">
-                        <div class="filter" id="layovers-filter" data-name="layovers"><span class="control">количество и длительность пересадок</span><span class="values"></span><div class="dropdown"><dl><dt>количество пересадок</dt><dd class="empty">всё равно</dd></dl></div></div>
-                        <div class="filter" data-name="cities"><span class="control">город пересадки</span><span class="values">…</span><div class="dropdown"><dl><dt>город пересадки</dt><dd class="empty">любой</dd></dl></div></div>
-                    </div>
-                </td>
-                <td rowspan="2">
-                    <h5><span class="bar">Время</span></h5>
-                    <div class="filters">
-                        <div class="filter" data-name="dpt_time_0" data-location="dpt_0"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>время вылета</dt><dd class="empty">любое</dd></dl></div></div>
-                        <div class="filter" data-name="arv_time_0" data-location="arv_0"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>время прилёта</dt><dd class="empty">любое</dd></dl></div></div>
-                        <div class="filter" data-name="dpt_time_1" data-location="dpt_1"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>время вылета</dt><dd class="empty">любое</dd></dl></div></div>
-                        <div class="filter" data-name="arv_time_1" data-location="arv_1"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>время прилёта</dt><dd class="empty">любое</dd></dl></div></div>
-                        <div class="filter" data-name="dpt_time_2" data-location="dpt_2"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>время вылета</dt><dd class="empty">любое</dd></dl></div></div>
-                        <div class="filter" data-name="arv_time_2" data-location="arv_2"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>время прилёта</dt><dd class="empty">любое</dd></dl></div></div>
-                    </div>
-                </td>
-                <td rowspan="2">
-                    <h5><span class="bar">Города и аэропорты</span></h5>
-                    <div class="filters">
-                        <div class="filter" data-name="dpt_city_0" data-location="dpt_0"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>город вылета</dt><dd class="empty">любой</dd></dl></div></div>
-                        <div class="filter" data-name="dpt_airport_0" data-location="dpt_0"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>аэропорт вылета</dt><dd class="empty">любой</dd></dl></div></div>
-                        <div class="filter" data-name="arv_city_0" data-location="arv_0"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>город прилёта</dt><dd class="empty">любой</dd></dl></div></div>
-                        <div class="filter" data-name="arv_airport_0" data-location="arv_0"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>аэропорт прилёта</dt><dd class="empty">любой</dd></dl></div></div>
-                        <div class="filter" data-name="dpt_city_1" data-location="dpt_1"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>город вылета</dt><dd class="empty">любой</dd></dl></div></div>
-                        <div class="filter" data-name="dpt_airport_1" data-location="dpt_1"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>аэропорт вылета</dt><dd class="empty">любой</dd></dl></div></div>
-                        <div class="filter" data-name="arv_city_1" data-location="arv_1"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>город прилёта</dt><dd class="empty">любой</dd></dl></div></div>
-                        <div class="filter" data-name="arv_airport_1" data-location="arv_1"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>аэропорт прилёта</dt><dd class="empty">любой</dd></dl></div></div>
-                        <div class="filter" data-name="dpt_city_2" data-location="dpt_2"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>город вылета</dt><dd class="empty">любой</dd></dl></div></div>
-                        <div class="filter" data-name="dpt_airport_2" data-location="dpt_2"><span class="control">вылет</span><span class="values">…</span><div class="dropdown"><dl><dt>аэропорт вылета</dt><dd class="empty">любой</dd></dl></div></div>
-                        <div class="filter" data-name="arv_city_2" data-location="arv_2"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>город прилёта</dt><dd class="empty">любой</dd></dl></div></div>
-                        <div class="filter" data-name="arv_airport_2" data-location="arv_2"><span class="control">прилёт</span><span class="values">…</span><div class="dropdown"><dl><dt>аэропорт прилёта</dt><dd class="empty">любой</dd></dl></div></div>
-                    </div>
-                </td>
-                <td rowspan="2">
-                    <h5><span class="bar">Другие детали</span></h5>
-                    <div class="filters">
-                        <div class="filter" data-name="carriers"><span class="control">авиакомпания</span><span class="values">…</span><div class="dropdown"><dl><dt>авиакомпания</dt><dd class="empty">любая</dd></dl></div></div>                
-                        <div class="filter" data-name="alliance"><span class="control">альянс</span><span class="values">…</span><div class="dropdown"><dl><dt>альянс</dt><dd class="empty">любой</dd></dl></div></div>
-                        <div class="filter" data-name="planes"><span class="control">самолёт</span><span class="values">…</span><div class="dropdown"><dl><dt>самолёт</dt><dd class="empty">любой</dd></dl></div></div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <th class="rfhide-cell">
-                    <span class="rfhide">Свернуть &uarr;</span>
-                </th>
-            </tr>
-            </table>
-            <div class="rf-overlay"></div>
-        </div>
-        <div class="hshadow"></div>
-    </div>
-    <div class="rh-clone">
-        <h1 class="results-title"></h1>
-        <div class="hshadow"></div>
-    </div>
-    </div>
+            <div class="rh-edit"><span class="rhe-link">Новый&nbsp;поиск</span></div>
+            <div class="rh-select"><span class="rhs-link">Другой&nbsp;вариант</span></div>            
+        </td>
+    </tr>
+    </table>
+</div>
+</div>
 
-    <!-- Панель ожидания результатов -->
-    <div id="results-loading" class="rmessage rcontent latent">
-    <noindex>
-    <div class="rmphoto">
-        <p>Вы всегда можете проконсультироваться по&nbsp;всем вопросам или&nbsp;сделать заказ по&nbsp;телефону <strong><nobr>+7 495 660-35-20</nobr></strong> или&nbsp;по&nbsp;почте <a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a></p>
+<div id="results-filters">
+<div class="rf-content">
+    <div class="rf-group" data-id="time">
+        <div class="rfg-control">Время вылета и прилета<span class="rfg-counter"></span></div>
+        <div class="rfg-content"></div>
     </div>
-    <div class="rmtext">
-        <div class="progress"><span class="timer">0.0</span></div>
-        <h3>Ищем для вас лучшие предложения</h3>
-        <div style="font-size: 12px; line-height: 14px; text-align: center; margin-top: 5px;">Поиск займет от пяти до тридцати секунд</div>
+    <div class="rf-group" data-id="locations">
+        <div class="rfg-control">Города и аэропорты<span class="rfg-counter"></span></div>
+        <div class="rfg-content"></div>
     </div>
-    </noindex>
+    <div class="rf-group" data-id="carriers">
+        <div class="rfg-control">Авиакомпании и самолеты<span class="rfg-counter"></span></div>
+        <div class="rfg-content"></div>
     </div>
+    <div class="rf-group" data-id="layovers">
+        <div class="rfg-control">Пересадки<span class="rfg-counter"></span></div>
+        <div class="rfg-content"></div>
+    </div>                        
+</div>
+<div class="rf-shadow"></div>
+</div>
 
-    <!-- Ничего не найдено -->
-    <div id="results-empty" class="rcontent rmessage latent">
-    <noindex>
-        <div class="rmphoto">
-            <p>Вы всегда можете проконсультироваться по&nbsp;всем вопросам или&nbsp;сделать заказ по&nbsp;телефону <strong><nobr>+7 495 660-35-20</nobr></strong> или&nbsp;по&nbsp;почте <a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a></p>
+<div id="results-message">
+<div class="rm-half"></div>
+<div class="rm-content">
+    <div id="rm-loading">
+        <h3 class="rm-title"><span class="rmt-text">Ищем для вас лучшие предложения</span></h3>
+        <h6 class="rml-progress">Это займёт от пяти до тридцати секунд</h6>
+        <ul class="rml-features">
+            <li>Поиск осуществляется по 200 авиакомпаниям.</li>
+            <li>Средняя цена на этом направлении — 14800 рублей за билет на одного человека.</li>
+            <li>Цены будут показаны в рублях.</li>
+            <li>Можно будет сразу оплатить банковской картой или оформить доставку.</li>
+        </ul>
+        <div class="rml-advice">
+            <p><strong class="rmla-prefix">Совет:</strong> чем раньше от момента вылета вы покупаете авиабилеты, тем они, как правило, дешевле.</p>
         </div>
-        <div class="rmtext">
-            <h3>Мы не смогли ничего найти. Возможные причины:</h3>
-            <ul class="re-reasons">
-                <li>Нет перелётов именно в выбранные дни. Попробуйте указать другие даты.</li>
-                <li>Возможно, у нас не представлены авиакомпании, выполняющие рейсы на этом направлении. Мы постоянно подключаем новые, попробуйте проверить искомое направление позже.</li>
-                <li>На этом маршруте не существует постоянного авиасообщения. Попробуйте выбрать <span class="re-cities">другой город</span>.</li>
-            </ul>
-        </div>
-    </noindex>
     </div>
+    <div id="rm-empty">
+        <h3 class="rm-title">Мы не смогли ничего найти</h3>
+        <h6 class="rme-title">Возможные причины:</h6>
+        <ul class="rme-reasons">
+            <li>Нет перелётов именно в выбранные дни. Попробуйте указать другие даты.</li>
+            <li>Возможно, у нас не представлены авиакомпании, выполняющие рейсы на этом направлении. Мы постоянно подключаем новые, попробуйте проверить искомое направление позже.</li>
+            <li>На этом маршруте не существует постоянного авиасообщения. Попробуйте выбрать другой город.</li>
+        </ul>
+    </div>
+</div>
+</div>
 
-    <!-- Вкладки -->
-    <div id="rtabs" class="wrap" style="display: none;">
-    <noindex>
-    <ul class="primary">
-        <li id="rtab-featured" class="selected"><span class="link" data-tab="featured">Мы рекомендуем</span></li>
-        <li id="rtab-all"><span class="link" data-tab="all">Всего 42 варианта</span></li>
-        <li id="rtab-diagram"><span class="link" data-tab="diagram">Наглядно</span></li>
-        <li id="rtab-matrix"><span class="link" data-tab="matrix">&plusmn; 3 дня</span></li>
+<div id="results-content">
+
+    <div id="results-tabs">
+    <ul class="rt-content wrap">
+        <li class="rt-item" data-tab="cheap">Дешевые</li>
+        <li class="rt-item" data-tab="optimal">Оптимальные</li>
+        <li class="rt-item" data-tab="nonstop">Прямые</li>
+        <li class="rt-item" data-tab="all">Все</li>
+        <li class="rt-item rt-matrix" data-tab="matrix">± 3 дня</li>
     </ul>
-    </noindex>
     </div>
-    <div id="offers" style="display: none;">
-    <div class="rcontent clearfix">
-        
-        <!-- Правая колонка -->
-        <div id="offers-context">
-            <div class="offers-nearby"></div>
-        </div>
-    
-        <!-- Рекомендации -->
-        <div id="offers-featured" class="latent"></div>
-        
-        <!-- Все варианты -->
-        <div id="offers-all" class="latent">
-            <div class="offers-sort">
-                <h3 class="offers-title">Все варианты, отсортированные <span id="offers-sortedby">по цене</span></h3>
-                <p class="sort-items">можно 
-                    <span class="link sortedby" data-sort="price">по&nbsp;цене</span>,
-                    <span class="link" data-sort="duration">по&nbsp;времени в&nbsp;пути</span>,
-                    <span class="link" data-sort="departures">по&nbsp;времени вылета</span>
-                    или&nbsp;<span class="link" data-sort="carrier">по&nbsp;авиакомпании</span>
-                </p>
-            </div>
-            <div class="offers-improper rmessage latent">
-                <div class="rmphoto"><br></div>
-                <div class="rmtext">
-                <noindex>
-                    <h3>Таких вариантов нет</h3>
-                    <p>Нужно сбросить один или <span class="link rfreset">все фильтры</span></p>
-                </noindex>
-                </div>
-            </div>
-            <div id="offers-pcollection"></div>
-        </div>
-        
-        <!-- Диаграмма -->
-        <div id="offers-diagram" class="latent">
-            <div class="odheader">
-                <table class="odhsegments"><tr><td></td></tr></table>
-            </div>
-            <div class="odcontent"></div>
-            <div class="offer latent"></div>
-        </div>
 
-        <!-- Матрица цен -->
-        <div id="offers-matrix" class="latent">
-            <h3 class="imprecise offers-title latent">Мы не смогли ничего найти в&nbsp;выбранные дни, но есть предложения на&nbsp;другие&nbsp;даты</h3>
-            <div class="offer">
-                <table class="offer-prices">
-                <col width="115">
-                <col width="80" span="7">
-                <tr>
-                    <th class="direction"><h6 class="segment1">Туда</h6><h6 class="segment2">Обратно</h6></th>
-                    <th class="first"></th><th></th><th></th><th></th><th></th><th></th><th class="last"></th>
-                </tr>
-                <tr class="diffret"><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
-                <tr class="diffret"><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
-                <tr class="diffret"><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
-                <tr><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
-                <tr class="diffret"><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
-                <tr class="diffret"><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
-                <tr class="diffret"><th class="ret"></th><td></td><td></td><td></td><td></td><td></td><td></td><td class="last"></td></tr>
-                </table>
-                <div id="offers-mcollection"></div>
+    <div class="o-book" id="ob-template">
+        <div class="ob-button">
+            <div class="obb-title">Купить</div>
+            <div class="obb-side obb-left"><div class="obb-side obb-right"></div></div>
+        </div>
+        <div class="od-control od-show">Показать подробности</div>
+        <div class="od-control od-hide">Скрыть подробности</div>
+        <div class="ob-state"></div>
+        <div class="ob-line"></div>
+    </div>
+    
+    <div id="ost-template">
+    <ul class="os-title">
+        <li class="ost-item ost-name">Перелет {0}</li>
+        <li class="ost-item ost-dpt">Вылет</li>
+        <li class="ost-item ost-duration">В пути</li>
+        <li class="ost-item ost-arv">Прибытие</li>
+    </ul>
+    </div>
+    
+    <div class="ob-price-change" id="ob-price-change">
+        <h5 class="obpc-title">Цена этого варианта изменилась: стало {0} на {1}</h5>
+        <p class="obpc-tip">Так иногда бывает, потому что авиакомпания изменяет цену на&nbsp;этот тариф. Цена может меняться как в&nbsp;большую, так и&nbsp;в&nbsp;меньшую сторону. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.</p>
+        <div class="obpc-controls">
+            <div class="ob-button">
+                <div class="obb-title">Продолжить бронирование</div>
+                <div class="obb-side obb-left"><div class="obb-side obb-right"></div></div>
             </div>
-        </div>        
-        
+            <div class="obpc-alternate">или <span class="obpc-cancel">выбрать другой вариант<span></div>
+        </div>
+    </div>
+    
+    <div id="results-cheap" class="offers-list"></div>
+    <div id="results-optimal" class="offers-list"></div>
+    <div id="results-nonstop" class="offers-list"></div>    
+    <div id="results-all" class="offers-list"></div>
+    <div id="results-matrix" class="offers-list">
+        <div class="offer">
+        <div class="rm-prices">
+        <table class="rmp-table">
+            <tr><td></td><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+            <tr><th></th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><th></th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><th></th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><th></th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><th></th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><th></th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><th></th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        </table>
+        </div>
         </div>
     </div>
     

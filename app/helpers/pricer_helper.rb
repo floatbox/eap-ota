@@ -34,6 +34,192 @@ module PricerHelper
     time ? (time[0,2].to_i * 60 + time[2,2].to_i) : 0
   end
 
+  def short_human_duration duration
+    hours, minutes = duration.divmod(60)
+    unless hours.zero?
+      human_hours =
+        "#{ hours }&nbsp;ч"
+    end
+    unless minutes.zero?
+      human_minutes =
+        "#{ minutes }&nbsp;мин"
+    end
+    [human_hours, human_minutes].compact.join(' ').html_safe
+  end  
+  
+  def airport_and_term location, term
+    if term
+      "#{ location.name } (#{ term })"
+    else
+      location.name
+    end
+  end
+  
+  def full_airport_and_term location, term
+    result = ["Аэропорт #{ location.name }"]
+    if term
+      result << "терминал&nbsp;#{ term }"
+    end
+    result.join(', ').html_safe
+  end    
+
+  def recommendation_prices r
+    prices = {
+      :RUR => r.price_with_payment_commission.to_i
+    }
+    prices.to_json
+  end
+  
+  def recommendation_comments r
+    comments = []
+    r.variants.every.flights.flatten.every.operating_carrier.uniq.each do |carrier|
+      if carrier.comment
+        comments << {
+          :carrier => carrier.iata,
+          :content => carrier.comment
+        }
+      end
+    end
+    availability = r.availability
+    if availability && availability > 0 && availability < 9
+      comments << {
+        :carrier => '',
+        :content => 'По этому тарифу осталось мало мест. Не откладывайте покупку.'
+      }
+    end    
+    comments
+  end
+  
+  # группируем сегменты из нескольких вариантов
+  def group_segments variants
+    segments = []
+    used = {}
+    variants.each do |variant|
+      variant.segments.each_with_index do |segment, scounter|
+        sid = flight_codes(segment)
+        unless used[sid]
+          used[sid] = true
+          segments[scounter] ||= []
+          segments[scounter] << segment
+        end
+      end
+    end
+    segments.map do |segment|
+      segment.sort_by {|s| [s.departure_time, s.total_duration] }
+    end
+  end
+
+  # набор данных для работы фильтров
+  def variant_features v, alliance
+    features = []
+    maxflights = v.segments.map{|s| s.flights.size }.max
+    if maxflights == 1
+      features << 'nonstop'
+    elsif maxflights == 2
+      features << 'onestop'
+    end
+    if alliance
+      features << "alliance#{ alliance.id }"
+    end
+    features += v.flights.every.operating_carrier.map{|carrier| 
+      'carrier' + carrier.iata
+    }
+    features += v.flights.every.equipment_type.map{|plane|
+      'plane' + plane.iata 
+    }
+    v.segments.each_with_index do |s, i|
+      features << "dpt#{ i + 1 }t#{ s.departure_day_part }"
+      features << "dpt#{ i + 1 }#{ s.departure.city.iata }"
+      features << "dpt#{ i + 1 }#{ s.departure.iata }"
+      features << "arv#{ i + 1 }t#{ s.arrival_day_part }"
+      features << "arv#{ i + 1 }#{ s.arrival.city.iata }"
+      features << "arv#{ i + 1 }#{ s.arrival.iata }"
+      if s.flights.size > 1
+        features += s.flights[1..-1].map{|f| 
+          'lcity' + f.departure.city.iata
+        }
+      end 
+    end
+    features.uniq.join(' ')
+  end
+  
+  # максимальная длительность пересадки
+  def longest_layover v
+      durations = v.segments.collect(&:layover_durations).flatten.compact  
+      durations.max unless durations.empty?
+  end
+
+  # самый долгий перевозчик в сегменте
+  def primary_carrier segment
+    segment.flights.group_by(&:operating_carrier_name).max_by{|carrier, flights| flights.sum(&:duration) }[1].first.operating_carrier
+  end
+  
+  def segment_title segment
+    "Перелет #{ nbsp(segment.departure.city.case_from) } #{ nbsp(segment.arrival.city.case_to) }".html_safe
+  end
+
+  def flight_codes segment
+    segment.flights.collect(&:flight_code).join('-').html_safe
+  end
+
+  # данные для мини-диаграмм
+  def segment_parts segment
+    parts = []
+    for flight, layover in segment.flights.zip(segment.layover_durations)
+      parts << {
+        :type => 'flight',
+        :title => "Перелёт #{ flight.departure.city.case_from } #{ flight.arrival.city.case_to }, #{ human_duration(flight.duration) }",
+        :duration => flight.duration
+      }
+      if layover
+        parts << {
+          :type => 'layover',
+          :title => "Пересадка #{ flight.arrival.city.case_in }, #{ human_duration(layover) }",
+          :duration => layover
+        }
+      end
+    end
+    parts
+  end  
+  
+  def human_layover_durations segment
+    if segment.layovers?
+      segment.layover_durations.map{|ld| human_duration(ld) }.to_sentence.gsub(/ (?!и )/, '&nbsp;') + ' между рейсами'
+    else
+      segment.flights.first.equipment_type_name
+    end
+  end
+
+  def human_layovers segment
+    if segment.layovers?
+      'через ' + segment.layovers.map{|layover| layover.city.case_to.gsub(/^\S+ /, '')}.to_sentence.gsub(/ (?!и )/, '&nbsp;')
+    else
+      'без пересадок'
+    end
+  end  
+
+  def with_layovers segment
+    counts = ['пересадкой', 'двумя пересадками', 'тремя пересадками']
+    layovers = segment.flights[0..-2].map {|flight| flight.arrival.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;')
+    "c #{ counts[segment.layover_count - 1] } #{ layovers }".html_safe
+  end
+
+  def with_technical_stops flight
+    prefix = flight.technical_stop_count == 1 ? 'промежуточной посадкой' : 'промежуточными посадками'
+    stops = flight.technical_stops.map {|tstop| tstop.airport.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;')
+    "c #{ prefix} #{ stops }".html_safe
+  end
+
+  def human_cabin_nom cabin
+    titles = {'Y' => 'Эконом-класс', 'C' => 'Бизнес-класс', 'F' => 'Первый класс'}
+    titles[cabin]
+  end
+
+  def human_cabin_ins cabin
+    titles = {'Y' => 'эконом-классом', 'C' => 'бизнес-классом', 'F' => 'первым классом'}
+    titles[cabin]
+  end    
+
   # отжирало 15% cpu time! теперь не отжирает
   def bar_options segment
     dpt = time_in_minutes(segment.departure_time)
@@ -60,23 +246,15 @@ module PricerHelper
   def fmt_duration duration
     "(%d:%02d)" % duration.divmod(60)
   end
+  
+  def rubles sum
+    Russian.pluralize(sum, 'рубль', 'рубля', 'рублей')
+  end
 
   def human_price price
-    rounded = price.to_f.round.to_i
-    "#{ rounded }&nbsp;#{ Russian.pluralize(rounded, 'рубль', 'рубля', 'рублей') }".html_safe
-  end
-
-  def decorated_price price, price_tag='u', currency_tag='i'
     rounded = price.round.to_i
-    (
-      "<#{price_tag}>" +
-      rounded.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') +
-      "</#{price_tag}>" +
-      "<#{currency_tag}>" +
-      '&nbsp;' + Russian.pluralize(rounded, 'рубль', 'рубля', 'рублей') +
-      "</#{currency_tag}>"
-    ).html_safe
-  end
+    "#{ rounded }&nbsp;#{ rubles(rounded) }".html_safe
+  end  
 
   def human_date date
     I18n.l(Date.strptime(date, '%d%m%y'), :format => '%e %B')
@@ -101,28 +279,6 @@ module PricerHelper
 
   def segments_departure variant
     variant.segments.map {|segment| segment.departure_time }.join(' ')
-  end
-
-  def variant_summary recommendation, excluded_variant=nil
-    dept_segments = []
-    recommendation.variants.each do |variant|
-      variant.segments.each_with_index do |segment, i|
-        if dept_segments[i].blank?
-          dept_segments[i] = {'times' => [], 'city' => segment.departure.city}
-        end
-        dept_segments[i]['times'] << segment.dept_time
-      end
-    end
-    result = []
-    dept_segments.each_with_index do |segment, i|
-      stimes = segment['times']
-      stimes.delete(excluded_variant.segments[i].dept_time) if excluded_variant
-      if stimes.length > 0
-        time_links = stimes.uniq.sort.map {|t| "<a href=\"#\" data-segment=\"#{i}\"><u>#{t}</u></a>" }
-        result << "<strong>#{segment['city'].case_from}</strong> — в #{time_links.to_sentence}"
-      end
-    end
-    result.join(', ').html_safe
   end
 
   def human_cabin_nom cabin

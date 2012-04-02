@@ -1,219 +1,158 @@
 <div id="search">
 
-<!-- Откуда и куда -->
-<div id="search-fields" class="rtmode">
-<table class="scontent">
-<tr class="segment1">
-    <td class="from">
-        <h6><label for="search-s1-from"><span class="highlight">Откуда</span></label><span class="loader"></span></h6>
-        <div class="autocomplete-box">
-            <input type="text" id="search-s1-from" data-label="From" class="autocomplete" tabindex="1"
-             value="<%= nearest_city.try(:name) || 'Москва' %>"
-             onclick="return <%= h nearest_city.to_json %>"
-             title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом">
-        </div>
-    </td>
-    <td>
-        <div class="sicon"></div>
-    </td>
-    <td class="to">
-        <h6><label for="search-s1-to"><span data-key="to">Куда</span>, <span data-key="dates">когда</span>, <span data-key="people_count">сколько человек</span></label><span class="loader"></span></h6>
-        <div class="autocomplete-box">
-            <input type="text" id="search-s1-to" data-label="To" class="autocomplete" tabindex="2" value="" title="Город, страна или IATA-код">
-        </div>
-    </td>
-    <td class="search-mode">
-        <ul id="search-mode">
-            <li class="rttab active" data-mode="rt" title="Билет до пункта назначения и обратно. Самый популярный вариант путешествия.">Туда и обратно</li>
-            <li class="owtab" data-mode="ow" title="Билет только до пункта назначения, в одну сторону.">Только туда</li>
-            <li class="mwtab" data-mode="mw" title="Транзит через несколько городов. Остановки на желаемый срок.">Сложный маршрут</li>
+<!-- Locations -->
+<div id="search-locations">
+<div class="sl-content">
+    <div id="search-mode">
+        <div class="sm-control">Туда и обратно</div>
+        <ul class="sm-values">
+            <li data-mode="rt">Туда и обратно</li>
+            <li data-mode="ow">Только туда</li>
+            <li data-mode="mw">Сложный маршрут</li>    
         </ul>
-    </td>
-</tr>
-<tr class="segment2 g-none">
-    <td class="from">
-        <h6><label for="search-s2-from">Откуда</label><span class="loader"></span></h6>
-        <div class="autocomplete-box">
-            <input type="text" id="search-s2-from" data-label="From" class="autocomplete" tabindex="3" value="" title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом">
-        </div>
-    </td>
-    <td>
-        <div class="sicon"></div>
-    </td>
-    <td class="to">
-        <h6><label for="search-s2-to">Куда</label><span class="loader"></span></h6>
-        <div class="autocomplete-box">
-            <input type="text" id="search-s2-to" data-label="To" class="autocomplete" tabindex="4" value="" title="Город, страна или IATA-код">
-        </div>
-    </td>
-    <td class="toggle-segment">
-        <span class="link add-segment">Добавить перелёт</span>
-        <span class="link remove-segment">Убрать перелёт</span>
-    </td>
-</tr>
-<tr class="segment3 g-none">
-    <td class="from">
-        <h6><label for="search-s3-from">Откуда</label><span class="loader"></span></h6>
-        <div class="autocomplete-box">
-            <input type="text" id="search-s3-from" data-label="From" class="autocomplete" tabindex="5" value="" title="Город или аэропорт вылета &mdash; по-русски, по-английски или IATA-кодом">
-        </div>
-    </td>
-    <td>
-        <div class="sicon"></div>
-    </td>
-    <td class="to">
-        <h6><label for="search-s3-to">Куда</label><span class="loader"></span></h6>
-        <div class="autocomplete-box">
-            <input type="text" id="search-s3-to" data-label="To" class="autocomplete" tabindex="6" value="" title="Город, страна или IATA-код">
-        </div>
-    </td>
-    <td class="toggle-segment">
-        <span class="link remove-segment">Убрать перелёт</span>
-    </td>
-</tr>
-</table>
-</div>
-
-<!-- Карта и календарь -->
-<div id="search-panel" class="wrap scontent">
-<div id="search-where">
-    <h2>Карта</h2>
-    <div id="where-map">
-        <div id="map-canvas" style="position: relative; width: 350px; height: 339px;"></div>
     </div>
-</div>
-<div id="search-when" onselectstart="return false;">
-    <div class="calendar" id="search-calendar">
-        <h2>Выберите даты</h2>
-        <div class="scroller-bgr">
-        <div class="scroller">
-            <div class="scrollbar"><div class="overlay"></div></div>
-            <div class="preview"></div>
-            <ul class="timeline"></ul>
-            <div class="before"></div>
-            <div class="after"></div>
+    <div class="sl-segment sl-segment1" data-segment="1">
+        <div class="sl-field dpt">
+            <label for="sl-segment1-dpt">Откуда?</label>
+            <input type="text" id="sl-segment1-dpt" value="Москва">
         </div>
-        </div>
-        <div class="scrollfw">
-            <div class="arrow"></div>
-        </div>
-        <div class="scrollbw">
-            <div class="arrow"></div>
-        </div>
-        <div class="viewport">
-            <ul class="week"><li>пн</li><li>вт</li><li>ср</li><li>чт</li><li>пт</li><li class="dayoff">сб</li><li class="dayoff">вс</li></ul>
-            <div class="dates rtmode" data-current="<%= Time.now.strftime('%d %b %Y %R') %>">
-                <div class="reset-button"></div>
-                <div class="week-offset"></div>
-            </div>
-            <div class="shadow"></div>
+        <div class="sl-icon sl-return"></div>
+        <div class="sl-field arv">
+            <label for="sl-segment1-arv">Куда?</label>
+            <input type="text" id="sl-segment1-arv">
         </div>
     </div>
-    <div class="calendar-message">
-        <p class="cm-content"></p>
-        <p class="cm-close"><span class="link">Продолжить</span></p>
+    <div class="sl-segment sl-segment2 latent" data-segment="2">
+        <div class="sl-field dpt">
+            <label for="s2-segment1-dpt">Откуда?</label>
+            <input type="text" id="s2-segment1-dpt">
+        </div>
+        <div class="sl-icon"></div>
+        <div class="sl-field arv">
+            <label for="sl-segment2-arv">Куда?</label>
+            <input type="text" id="sl-segment2-arv">
+        </div>
+        <div class="sl-toggle">
+            <span class="sl-add">Добавить перелёт</span>
+            <span class="sl-remove latent">Убрать перелёт</span>
+        </div>
+    </div>
+    <div class="sl-segment sl-segment3 latent" data-segment="3">
+        <div class="sl-field dpt">
+            <label for="sl-segment3-dpt">Откуда?</label>
+            <input type="text" id="sl-segment3-dpt">
+        </div>
+        <div class="sl-icon"></div>
+        <div class="sl-field arv">
+            <label for="sl-segment3-arv">Куда?</label>
+            <input type="text" id="sl-segment3-arv">
+        </div>
+        <div class="sl-toggle">
+            <span class="sl-remove latent">Убрать перелёт</span>
+        </div>
     </div>
 </div>
 </div>
 
-<!-- Количество пассажиров, класс и кнопка поиска-->
-<div id="search-define">
-<table class="scontent">
-<tr>
-    <th>Выберите</th>
-    <td>
-        <div class="filters">
+<div id="search-wrapper">
 
-        <div class="filter persons" data-name="persons">
-            <span class="control">количество пассажиров</span><span class="values"></span>
-            <div class="dropdown">
-                <div class="wrap">
-                <dl class="pg-adults" data-group="adults">
-                    <dt>взрослые</dt>
-                    <dt class="tip"><br></dt>
-                    <dd data-value="1" class="one">один</dd>
-                    <dd data-value="2">двое</dd>
-                    <dd data-value="3">трое</dd>
-                    <dd data-value="4">четверо</dd>
-                    <dd data-value="5">пятеро</dd>
-                    <dd data-value="6">шестеро</dd>
-                    <dd data-value="7">семеро</dd>
-                    <dd data-value="8">восьмеро</dd>
-                </dl>
-                <dl class="pg-children" data-group="children">
-                    <dt>дети</dt>
-                    <dt class="tip">до 12 лет, с местом</dt>
-                    <dd class="empty selected">нет</dd>
-                    <dd data-value="1">один</dd>
-                    <dd data-value="2">двое</dd>
-                    <dd data-value="3">трое</dd>
-                    <dd data-value="4">четверо</dd>
-                    <dd data-value="5">пятеро</dd>
-                    <dd data-value="6">шестеро</dd>
-                    <dd data-value="7">семеро</dd>
-                </dl>
-                <dl class="pg-infants" data-group="infants">
-                    <dt>младенцы</dt>
-                    <dt class="tip">до 2 лет, без места</dt>
-                    <dd class="empty selected">нет</dd>
-                    <dd data-value="1">один</dd>
-                    <dd data-value="2">двое</dd>
-                    <dd data-value="3">трое</dd>
-                    <dd data-value="4">четверо</dd>
-                </dl>
-                </div>
-                <div class="excess">Общее количество пассажиров не может быть больше 8</div>
-                <div class="infants">Количество младенцев без места не может быть больше количества взрослых</div>
-                <div class="a-button a-button-ready">Готово</div>
-            </div>
-        </div>
-
-        <div class="filter" data-name="cabin">
-            и&nbsp;<span class="control">класс</span><span class="values"></span>
-            <div class="dropdown">
-            <dl>
-                <dt>класс</dt>
-                <dd class="empty selected">любой</dd>
-                <dd data-value="Y">эконом</dd>
-                <dd data-value="C">бизнес</dd>
-                <dd data-value="F">первый</dd>
-            </dl>
-            </div>
-        </div>
-
-        <% if admin_user %>
-        <span id="search-debug">
-          Amadeus:&nbsp;<%= Conf.amadeus.enabled ? Conf.amadeus.env : 'no' %>
-          Сирена:&nbsp;<%= Conf.sirena.enabled ? Conf.sirena.env : 'no' %>
-          Payture:&nbsp;<%= Conf.payture.enabled ? Conf.payture.env : 'no' %>
-        </span>
-        <% end %>
-
-        </div>
-    </td>
-    <td id="search-submit" class="disabled">
-        <div class="progress"></div>
-        <div class="message">
-            <div class="ssm-arrow"></div>
-            <div class="ssm-content">Введите, пожалуйста, пункт назначения</div>
-        </div>
-        <a href="#" class="b-submit">Найти</a>
-    </td>
-</tr>
-</table>
-</div>
+	<!-- Map -->
+	<div id="search-map">
+	    <div class="smap-control">Развернуть карту</div>
+	    <div class="smap-content"></div>
+	</div>
+	
+	<!-- Dates -->
+	<div id="search-dates" data-now="<%= Time.now.to_s %>">
+	<div class="sd-timeline">
+	    <div class="sdt-content">
+	        <div class="sdt-hover sdt-fhover"></div>
+	        <div class="sdt-hover sdt-shover"></div>
+	        <div class="sdt-tab sdt-ftab"></div>
+	        <div class="sdt-tab sdt-stab"></div>        
+	        <div class="sdt-selected"></div>
+	    </div>
+	</div>
+	<div class="sd-calendar">
+	    <div class="sdc-content">
+	    <div class="sdc-slider">
+	        <div class="sdc-month">
+	        <ul class="sdc-week">
+	            <li class="sdcw-day"><span class="sdcw-title">ПН</li>
+	            <li class="sdcw-day"><span class="sdcw-title">ВТ</li>
+	            <li class="sdcw-day"><span class="sdcw-title">СР</li>
+	            <li class="sdcw-day"><span class="sdcw-title">ЧТ</li>
+	            <li class="sdcw-day"><span class="sdcw-title">ПТ</li>
+	            <li class="sdcw-day"><span class="sdcw-title dayoff">СБ</li>
+	            <li class="sdcw-day"><span class="sdcw-title dayoff">ВС</li>
+	        </ul>
+	        </div>
+	        <div class="sdc-reset"></div>
+	    </div>
+	    <div class="sdc-overlay">
+	        <div class="sdc-splitter"></div>
+	    </div>
+	    </div>
+	</div>
+	</div>
 
 </div>
 
-<% unless corporate_mode? %>
-<div id="live" class="latent">
-<div class="live-content">
-    <h5>Что находят и покупают:</h5>
-    <div class="live-stator">
-        <div class="live-slider"></div>
-        <div class="live-left"></div>
-        <div class="live-right"></div>
+<!-- Options -->
+<div id="search-options">
+<div class="so-content wrap">
+    <div class="so-persons" data-name="adults">
+        <h6 class="so-title">Взрослых</h6>
+        <ul class="so-values">
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+            <li>6</li>
+            <li>7</li>
+            <li>8</li>
+        </ul>
+    </div>
+    <div class="so-persons" data-name="children">
+        <h6 class="so-title">Детей <em>от 2 до 12 лет</em></h6>
+        <ul class="so-values">
+            <li>0</li>
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+            <li>6</li>
+        </ul>
+    </div>
+    <div class="so-persons" data-name="infants">
+        <h6 class="so-title">Младенцев <em>до 2 лет</em></h6>
+        <ul class="so-values">
+            <li>0</li>
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+        </ul>
+    </div>    
+    <div class="so-cabin">
+        <h6 class="so-title">Класс обслуживания</h6>
+        <ul class="so-values">
+            <li data-value="Y">эконом</li>
+            <li data-value="C">бизнес</li>
+            <li data-value="F">первый</li>
+        </ul>
     </div>
 </div>
+</div>
+
+<% if admin_user %>
+<div id="search-debug">
+    Amadeus:&nbsp;<%= Conf.amadeus.enabled ? Conf.amadeus.env : 'no' %>
+    Сирена:&nbsp;<%= Conf.sirena.enabled ? Conf.sirena.env : 'no' %>
+    Payture:&nbsp;<%= Conf.payture.enabled ? Conf.payture.env : 'no' %>
 </div>
 <% end %>
+
+</div>

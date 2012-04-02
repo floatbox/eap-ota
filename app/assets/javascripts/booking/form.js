@@ -1,682 +1,533 @@
-/* Booking */
-var booking = {
-init: function() {
-    var that = this;
-    this.el = $('#booking');
-    this.header = this.el.find('.booking-header');
-    this.el.delegate('.stop-booking', 'click', function() {
-        that.hide();
-    });
-},
-show: function() {
-    var offset = this.variant ? (this.variant.offset().top - $(window).scrollTop()) : 0;
-    $('#header, #wrapper, #footer').hide();
-    this.el.removeClass('latent');
-    this.el.find('.bh-title').html(results.title.html());
-    this.el.find('.bh-placeholder').height(this.header.height());
-    search.history.toggle(false);
-    fixedBlocks.disabled = true;
-    $(window).scrollTop(offset ? (this.el.find('.booking-frame').offset().top - offset) : 0);
-    pageurl.update('booking', this.key);
-    pageurl.title('бронирование авиабилета ' + results.title.attr('data-title'));
-    this.abort();
-},
-hide: function() {
-    var offset = this.el.find('.booking-frame').offset().top - $(window).scrollTop();
-    this.el.addClass('latent');
-    $('#header, #wrapper, #footer').show();
-    $(window).scrollTop(this.variant ? (this.variant.offset().top - offset) : 0);
-    pageurl.update('booking', undefined);
-    pageurl.title('авиабилеты ' + results.title.attr('data-title'));
-    fixedBlocks.disabled = false;
-    fixedBlocks.toggle(true);    
-    search.history.toggle(search.history.active);
-},
-abort: function() {
-    if (this.request && this.request.abort) {
-        this.request.abort();
-        delete this.request;
-    }
-    if (this.prebooking) {
-        this.prebooking.closest('.offer').removeClass('prebooking')
-        this.prebooking.remove();
-        delete this.prebooking;
-    }
-},
-prebook: function(variant) {
-    var that = this;
-    var vid = '&variant_id=' + results.selectedTab + '-' + variant.attr('data-index');
-    this.abort();
-    this.variant = variant;
-    this.prebooking = $('<div class="prebooking-state"><h4 class="progress">Проверяем доступность мест</h4></div>');
-    this.prebooking.appendTo(variant.closest('.offer').addClass('prebooking'));
-    this.request = $.ajax({
-        url: '/booking/preliminary_booking?' + variant.attr('data-booking') + vid,
-        success: function(result) {
-            if (result && result.success) {
-                that.load(result.number);
-            } else {
-                that.failed();
-            }
-        },
-        error: function() {
-            that.failed();
-        },
-        timeout: 60000
-    });
-    if (variant.closest('.offer').hasClass('collapsed')) {
-        $('.expand', variant).click();
-    }
-    var st = variant.offset().top + variant.height() - Math.round($(window).height() / 2);
-    if (st > $(window).scrollTop()) {
-        $.animateScrollTop(st);
-    }
-},
-failed: function() {
-    var content = '<h4>К сожалению, по этому тарифу места закончились.<br><span class="link pbf-reload">Повторите поиск</span> или выберите другой вариант.</h4><p><span class="link pbf-hint">Почему так бывает?</span></p>';
-    var message = 'Так иногда бывает, потому что авиакомпания не&nbsp;может подтвердить наличие мест на&nbsp;этот рейс по&nbsp;этому тарифу. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.';
-    this.prebooking.html(content);
-    this.prebooking.find('.pbf-hint').click(function(event) {
-        hint.show(event, message);
-    });
-    this.prebooking.find('.pbf-reload').click(function(event) {
-        results.reload();
-    });
-    if (window._gaq) {
-        _gaq.push(['_trackEvent', 'Бронирование', 'Невозможно выбрать вариант']);
-    }
-},
-getVariant: function() {
-    this.variant.closest('.offer').removeClass('collapsed').addClass('expanded');
-    this.el.find('.booking-variant').html('').append(this.variant.clone());
-},
-load: function(number) {
-    var that = this;
-    this.request = $.ajax({
-        url: '/booking/',
-        method: 'GET',
-        data: {number: number},
-        success: function(result) {
-            that.key = number;
-            that.el.find('.booking-content').html(result);
-            if (that.variant && that.prebooking) {
-                if (that.compare()) {
-                    that.show();
-                }
-            } else {
-                that.waiting = true;
-            }
-            if (that.el.find('.booking-corporate').length === 0) {
-                that.activate();
-            } else {
-                that.form.el = that.el.find('.booking-corporate');
-            }
-        },
-        error: function() {
-            that.failed();
-        }
-    });
-},
-compare: function() {
-    var source = this.el.find('.booking-price');
-    var bp = parseInt(source.find('.sum').attr('data-value'), 10);
-    var vp = parseInt(this.variant.find('.book .sum').attr('data-value'), 10);
-    if (bp != vp) {
-        var offer = this.variant.closest('.offer');
-        offer.find('.offer-variant').each(function() {
-            $(this).find('.book .sum').replaceWith(source.find('.sum').clone());
-            $(this).find('.cost dl').replaceWith(source.find('.cost dl').clone());
-        });
-        if (offer.hasClass('cheap-offer')) {
-            offer.find('.cost dl').prepend('<dd>Всего </dd>');
-        }
-        var self = this;
-        var template = '<h5>Цена этого варианта изменилась: стало <strong>{type} на {value}</strong> (<span class="link">почему?</span>)</h5>';
-        this.prebooking.addClass('changed-price').html(template.supplant({
-            type: bp > vp ? 'дороже' : 'дешевле',
-            value: Math.abs(bp - vp).inflect('рубль', 'рубля',  'рублей')
-        }));
-        this.prebooking.append('<p><a class="a-button continue" href="#">Продолжить бронировать</a> или <span class="link cancel">выбрать другой вариант</span></p>');
-        this.prebooking.find('h5 .link').click(function(event) {
-            hint.show(event, 'Так иногда бывает, потому что авиакомпания изменяет цену на&nbsp;этот тариф. Цена может меняться как в&nbsp;большую, так и&nbsp;в&nbsp;меньшую сторону. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.');
-        });
-        this.prebooking.find('.cancel').click(function(event) {
-            self.abort();
-        });
-        this.prebooking.find('.continue').click(function(event) {
-            event.preventDefault();
-            self.show();
-        });
-        this.getVariant();
-        return false;
-    } else {
-        this.getVariant();    
-        return true;
-    }
-},
-activate: function() {
-    var context = this.el.find('.booking-content');
-    this.form.init(context);
-    this.farerules.init(context);
-}
-};
-
 /* Booking form */
 booking.form = {
-init: function(context) {
+init: function() {
     var that = this;
-    this.el = context.find('.booking-form');
-
-    // Всплывающие подсказки
-    this.el.delegate('.hint', 'click', function(event) {
-        event.preventDefault();
-        hint.show(event, $(this).parent().find('.htext').html());
-    });
-    
-    // Список неправильно заполненных полей
-    this.el.find('.be-list').delegate('.link', 'click', function() {
-        var control = $('#' + $(this).attr('data-field'));
-        var st = control.closest(':visible').offset().top - booking.header.height() - 35;
-        $.animateScrollTop(Math.min(st, $(window).scrollTop()), function() {
-            control.focus();
-        });
-    });
-    
-    // 3DSecure
-    this.el.delegate('.tds-submit .a-button', 'click', function(event) {
-        event.preventDefault();
-        $(this).closest('.result').find('form').submit();
-    });
-    
-    // Кнопка
-    this.submit = this.el.find('.booking-submit');
-    this.button = this.submit.find('.a-button');
-
-    // Отправка формы
-    this.el.children('form').submit(function(event) {
-        event.preventDefault();
-        if (that.button.hasClass('a-button-ready')) {
-            that.send($(this).attr('action'), $(this).serialize());
-        }
-    });
-
-    // Имена
-    if (constants.names === undefined) {
-        constants.names = {m: '', f: ''};
-    } else if (!constants.names.ready) {
-        constants.names['m'] = ' ' + constants.names['m'].toLowerCase() + ',';
-        constants.names['f'] = ' ' + constants.names['f'].toLowerCase() + ',';
-        constants.names.ready = true;
-    }
-    
-    // Проверка формы
     this.sections = [];
-    this.el.find('.booking-person').each(function() {
-        that.initPerson($(this));
+    this.el = $('#booking-form');
+    this.el.find('.bf-section').each(function() {
+        var el = $(this);
+        var options = booking[el.attr('data-type') + 'Options'];
+        var section = new validator.Section(el, options);
+        that.sections.push(section);
     });
-    var card = this.el.find('.booking-card');
-    var cash = this.el.find('.booking-cash');
-    var cardSection = this.initCard(card);
-    if (cash.length) {
-        var cashSection = this.initCash(cash);
-        var toggleCash = function(mode) {
-            card.toggleClass('latent', mode);
-            cash.toggleClass('latent', !mode);
-            card.find('input').each(function() {
-                this.disabled = mode;
-            });
-            cash.find('input, textarea').each(function() {
-                this.disabled = !mode;
-            });
-            cardSection.disabled = mode;
-            cashSection.disabled = !mode;
-            that.validate();
-            $('#booking-payment-type').val(mode ? cash.find('.bc-delivery input:checked').attr('value') : 'card');
-            that.el.find('.payment-card').toggleClass('latent', mode);
-            that.el.find('.payment-cash').toggleClass('latent', !mode);
-        };
-        card.find('.section-tabs .link').click(function() {
-            toggleCash(true);
-        });
-        cash.find('.section-tabs .link').click(function() {
-            toggleCash(false);
-        });
-        toggleCash(false);
-    } else {
-        card.find('.section-tabs .link').closest('li').addClass('disabled').html('Этот билет возможно оплатить только банковской картой');
-    }
-    this.initContacts(this.el.find('.booking-contacts'));    
+    this.el.submit(function(event) {
+        event.preventDefault();
+        if (!that.button.hasClass('bfb-disabled')) {
+            that.submit();
+        }        
+    });
+    this.footer = this.el.find('.bf-footer');    
+    this.footer.find('.bffc-link').click(function() {
+        booking.cancel();
+    });
+    this.button = this.footer.find('.bf-button');
+    var btitle = this.button.find('.bfb-title').click(function() {
+        that.el.submit();
+    });
+    this.footer.css('margin-left', 20 + 325 + 7 - Math.round(btitle.width() / 2));
+    this.required = this.el.find('.bff-required');
+    this.required.delegate('.bffr-link', 'click', function() {
+        that.focus($('#' + $(this).attr('data-field')));
+    });
+    
+    this.sections[0].set(['mszakharov@gmail.com', '+79161234567']);
+    this.sections[1].rows[0].set(['MAXIM', 'ZAKHAROV', 'm', '03.05.1983', 170, '1234567890', '', true]);
+    
     this.validate(true);
-
 },
-send: function(url, data) {
-    var that = this;
-    this.el.find('.result').remove();
-    this.el.find('.booking-disclaimer').hide();
-    this.el.find('.booking-errors').hide();
-    $.ajax({
-        url: url,
-        data: data,
-        type: 'POST',
-        success: function(result) {
-            if (typeof result === 'string' && result.length) {
-                that.el.append(result);
-                that.process();
-            } else if (result && result.errors) {
-                var items = that.parse(result.errors);
-                that.el.find('.be-list').html(items.join(''));
-                that.el.find('.booking-errors').show();            
-            } else {
-                that.error(result && result.exception && result.exception.message);
-            }
-            that.button.addClass('a-button-ready').attr('value', that.button.attr('data-text'));
-            that.submit.removeClass('sending');
-        },
-        error: function() {
-            that.error();
-            that.button.addClass('a-button-ready').attr('value', that.button.attr('data-text'));
-            that.submit.removeClass('sending');
-        },
-        timeout: 90000
+position: function() {
+    return this.el.position().top - 36 - results.header.height;
+},
+focus: function(control) {
+    var st = control.offset().top - results.header.height - 71;
+    $w.smoothScrollTo(Math.min(st, $w.scrollTop()), function() {
+        if (control.is('input, textarea')) {
+            control.select();
+        } else if (control.hasClass('bfp-sex')) {
+            control.find('input').eq(0).focus();
+        }
     });
-    this.button.removeClass('a-button-ready').attr('value', 'Секундочку…');
-    this.submit.addClass('sending');
 },
-process: function() {
-    var result = this.el.find('.result');
-    switch (result.attr('data-type')) {
-    case 'success':
-        this.submit.addClass('latent');
-        this.track(result);
-        break;
-    case '3dsecure':
-        this.submit.addClass('latent');
-        break;
-    case 'fail':    
-        this.button.addClass('a-button-ready');
-        break;
+validate: function(forced) {
+    var wrong = [], empty = [];
+    for (var i = 0, l = this.sections.length; i < l; i++) {
+        var section = this.sections[i];
+        if (forced) section.validate(true);
+        wrong = wrong.concat(section.wrong);
+        empty = empty.concat(section.empty);
     }
+    if (empty.length > 4) {
+        empty[3] = 'еще ' + (empty.length - 3).decline('поле', 'поля', 'полей');
+        empty.length = 4;
+    }
+    if (empty.length > 0) {
+        wrong.push('Осталось заполнить ' + empty.enumeration(' и&nbsp;') + '.');
+    }
+    var disabled = wrong.length !== 0;
+    this.required.html(wrong.join(' ')).toggle(disabled);
+    this.button.toggleClass('bfb-disabled', disabled);
 },
-track: function(result) {
-    if (window._gaq) {
-        var price = booking.el.find('.booking-content .booking-price .sum').attr('data-value');
-        _gaq.push(['_trackPageview', '/booking/success']);
-        _gaq.push(['_addTrans', result.find('.pnr').text(), '', price]);
-        _gaq.push(['_trackTrans']);
+submit: function() {
+    var that = this;
+    this.button.addClass('bfb-disabled');
+    this.footer.find('.bff-cancel').hide();
+    this.footer.find('.bff-progress').show();
+    if (this.result) {
+        this.result.remove();
+        delete this.result;
     }
-    if (window.yaCounter5324671) {
-        yaCounter5324671.hit('/booking/success');
-    }
-},
-parse: function(errors) {
-    var items = [];
-    var carderror = false;
-    for (var eid in errors) {
-        var ftitle = eid;
-        if (ftitle.search(/card\[(?:number|type)\]/i) !== -1) {
-            carderror = true;
-        } else if (ftitle.search('birthday') !== -1) {
-            ftitle = ftitle.replace(/person\[(\d)\]\[birthday\]/i, function(s, n) {
-                var num = constants.numbers.ordinaldat[parseInt(n, 10)];
-                var ptitle = this.el.find('.booking-person').length > 1 ? (num.charAt(0).toUpperCase() + num.substring(1) + ' пассажиру') : 'Пассажиру';
-                return '<span class="link" data-field="bp-' + n + '-byear">' + ptitle + '</span>';
-            });
-            items.push('<li>' + ftitle + ' ' + errors[eid] + '</li>');
-        } else if (ftitle.search('passport') !== -1) {
-            var index = parseInt(ftitle.match(/person\[(\d)\]\[passport\]/)[1], 10);
-            var str = 'Введён неправильный <span class="link" data-field="booking-person-' + index + '-passport">номер документа</span>';
-            if (this.el.find('.booking-person').length > 1) {
-                str += ' ' + constants.numbers.ordinalgen[index] + ' пассажира';
-            }
-            items.push('<li>' + str + '</li>');
-        } else {
-            items.push('<li>' + ftitle + ' ' + errors[eid] + '</li>');
+    $.ajax({
+        type: 'POST',
+        url: this.el.attr('action'),
+        data: this.el.serialize(),
+        success: function(s) {
+            that.process(s);
         }
-    }
-    if (carderror) {
-        items.push('<li>Введён неправильный <span class="link" data-field="bc-num1">номер банковской карты</span></li>');
-    }
-    return items;
+    });
 },
-error: function(text) {
-    var block = $('<div class="result"></div>');
-    block.append('<p class="fail"><strong>Упс…</strong> ' + (text || 'Что-то пошло не так.') + '</p>');
-    block.append('<p class="tip">Попробуйте снова или узнайте, <a target="_blank" href="/about/#payment">какими ещё способами</a> можно купить у нас билет.</p>');
-    this.el.append(block);
-},
-validate: function(full) {
-    clearTimeout(this.vtimer);
-    var errors = [];
-    for (var s = 0, sm = this.sections.length; s < sm; s++) {
-        var section = this.sections[s];
-        if (section.disabled) {
-            continue;
-        }
-        var valid = true;
-        for (var i = 0, im = section.items.length; i < im; i++) {
-            var item = section.items[i];
-            if (full) {
-                item.validate();
-            }
-            if (item.message) {
-                errors.push(item.message);
-                valid = false;
-            }
-        }
-        section.el.toggleClass('ready', valid);
-    }
-    this.button.toggleClass('a-button-ready', errors.length === 0);
-    if (errors.length) {
-        this.el.find('.be-list').html('<li>' + errors.slice(0, 3).join('</li><li>') + '</li>');
-        this.el.find('.booking-errors').show();
-    } else {
-        this.el.find('.booking-errors').hide();
-        this.el.find('.be-list').html('');
-    }
+process: function(s) {
+    this.footer.hide();
+    this.footer.find('.bff-progress').hide();
+    this.footer.find('.bff-cancel').show();
+    this.button.removeClass('bfb-disabled');
+    var that = this;
+    this.result = $(s).insertAfter(this.el);
+    this.result.find('.bfr-back').click(function() {
+        that.result.hide();
+        that.footer.show();
+    });
+    this.result.find('.bfr-cancel').click(function() {
+        booking.cancel();
+    });
+    this.result.find('.bfrt-controls .obb-title').click(function() {
+        $(this).closest('.bf-result').find('form').submit();
+    });    
 }
 };
 
-/* Person fields */
-booking.form.initPerson = function(el) {
-    var fname = validator.name(el.find('input[id$="first_name"]'), {
-        empty: 'Не указано {имя пассажира}',
-        short: '{Имя пассажира} нужно ввести полностью',
-        latin: '{Имя пассажира} нужно ввести латинскими буквами',
-        space: '{Имя пассажира} нужно ввести без пробелов'
+/* Contacts section */
+booking.contactsOptions = {
+init: function() {
+    var that = this;
+    this.initEmail();
+    this.initPhone();
+    this.bind(function() {
+        that.validate();
+        booking.form.validate();    
     });
-    var lname = validator.name(el.find('input[id$="last_name"]'), {
-        empty: 'Не указана {фамилия пассажира}',
-        short: '{Фамилию пассажира} нужно ввести полностью',
-        latin: '{Фамилию пассажира} нужно ввести латинскими буквами',
-        space: '{Фамилию пассажира} нужно ввести без пробелов'
+},
+initEmail: function() {
+    var email = new validator.Text($('#bfc-email'), {
+        empty: '{адрес электронной почты}',
+        wrong: 'Неправильно введен {адрес электронной почты}.'
+    }, function(value) {
+        if (/^[@.\-]|[^\w\-.@]|@.*[^\w.\-]/.test(value)) return 'wrong';
+        if (!/^\S*?@[\w.\-]*?\.\w{2,3}$/.test(value)) return 'empty';
     });
-    var gender = validator.gender(el.find('.bp-sex-radio'), {
-        empty: 'Не выбран {пол пассажира}'
+    this.controls.push(email);
+},
+initPhone: function() {
+    var phone = new validator.Text($('#bfc-phone'), {
+        empty: '{номер телефона}',
+        letters: 'В {номере телефона} можно использовать только цифры.',
+        short: 'Короткий {номер телефона}, не забудьте ввести код города.'
+    }, function(value) {
+        if (/[^\d() \-+]/.test(value)) return 'letters';
+        var digits = value.replace(/\D/g, '').length;
+        if (digits < 5) return 'empty';
+        if (digits < 8) return 'short';
     });
-    var getGender = function(name) {
-        var pattern = ' ' + name.toLowerCase() + ',';
-        if (constants.names['m'].indexOf(pattern) !== -1) return 'm';
-        if (constants.names['f'].indexOf(pattern) !== -1) return 'f';
-        return undefined;
+    phone.format = function(value) {
+        var v = $.trim(value);
+        v = v.replace(/(\d)\(/, '$1 (');
+        v = v.replace(/\)(\d)/, ') $1');
+        v = v.replace(/(\D)(\d{2,3}) ?(\d{2}) ?(\d{2})$/, '$1$2-$3-$4');
+        return v;
     };
-    fname.el.change(function() {
-        var selected = gender.el.filter(':checked');
-        if (selected.length === 0) {
-            var auto = getGender($(this).val().toLowerCase());
-            var radio = auto && gender.el.filter('[value="' + auto + '"]');
-            if (radio) {
-                radio.get(0).checked = true;
-                radio.click();
-                gender.validate();
-            }
-        }
-    });
-    fname.el.add(lname.el).change(function() {
-        var fn = fname.el.val();
-        var ln = lname.el.val();
-        if (fn && ln && getGender(ln) && !getGender(fn)) {
-            orderWarning.fadeIn(150);
-        } else {
-            orderWarning.fadeOut(150);
-        }
-    });
-    var orderWarning = el.find('.nameorder-warning');
-    orderWarning.find('.link').click(function() {
-        orderWarning.fadeOut(150);
-        if ($(this).hasClass('nameorder-replace')) {
-            var fn = fname.el.val();
-            var ln = lname.el.val();
-            fname.el.val(ln).change();
-            lname.el.val(fn).change();
-        }
-    });
-    var bdate = validator.date(el.find('.bp-birthday input'), {
-        empty: 'Не указана {дата рождения} пассажира',
-        letters: '{Дату рождения} нужно ввести цифрами в формате дд/мм/гггг',
-        incomplete: '{Дата рождения} не введена полностью',
-        shortyear: '{Год рождения} нужно ввести полностью',
-        unreal: 'Указана несуществующая {дата рождения}',
-        future: '{Дата рождения} не может быть позднее сегодняшней'
-    });
-    var passport = validator.number(el.find('input[id$="passport"]'), {
-        empty: 'Не указан {номер документа}',
-        latin: 'В {номере документа} можно использовать только латинские буквы'
-    });
-    var pdate = validator.date(el.find('.bp-docexp .date-item input'), {
-        empty: 'Не указан {срок действия} документа',
-        letters: '{Срок действия} документа нужно ввести цифрами в формате дд/мм/гггг',
-        incomplete: '{Срок действия} документа не введен полностью',
-        shortyear: 'Год в {сроке действия} документа нужно ввести полностью',
-        unreal: 'Указана несуществующая дата в {сроке действия} документа',
-        past: 'Указан истекший {срок действия} документа'
-    });
-    var toggleExp = function() {
-        pdate.disabled = docexp.get(0).checked;
-        docexp.closest('td').toggleClass('disabled', pdate.disabled);
-        pdate.el.each(function() {
-            this.disabled = pdate.disabled;
-        });
-        pdate.validate();
-    };
-    var docexp = el.find('.bp-docexp input:checkbox').click(toggleExp);
-    var nationality = el.find('.nationality').change(function() {
-        passport.russian = $(this).val() === '170';
-    }).trigger('change');
-    passport.el.bind('keyup propertychange input', function() {
-        var value = $(this).val().replace(/\D/g, '');
-        var noexp = docexp.get(0);
-        if (passport.russian && !noexp.checked && value.length === 10) {
-            noexp.checked = true;
-            toggleExp();
-        }
-    });
-    var bonus = validator.number(el.find('input[id^="bonus-num"]'), {
-        empty: 'Не указан {номер бонусной карты}',
-        latin: 'В {номере бонусной карты} можно использовать только латинские буквы'
-    });
-    var toggleBonus = function(mode) {
-        var items = el.find('.bp-bonus');
-        items.css('visibility', mode ? 'inherit': 'hidden');
-        items.eq(0).find('select').get(0).disabled = !mode;
-        items.eq(1).find('input').get(0).disabled = !mode;
-        bonus.disabled = !mode;
-    };
-    toggleBonus(el.find('input:checkbox[id^="bonus"]').click(function() {
-        toggleBonus(this.checked);
-        if (!bonus.disabled) {
-            bonus.el.focus();
-        }
-        bonus.validate();
-    }).get(0).checked);
-    this.sections.push({
-        el: el,
-        items: [fname, lname, gender, bdate, passport, pdate, bonus]
-    });
+    this.controls.push(phone);    
+}
 };
 
-/* Card fields */
-booking.form.initCard = function(el) {
-    var cardnumber = validator.cardnumber(el.find('.bcn-fields input'), {
-        empty: 'Не указан {номер банковской карты}',
-        letters: 'В {номере банковской карты} можно использовать только цифры'
+/* Persons section */
+booking.personsOptions = {
+init: function() {
+    var that = this;
+    this.latinWarning = $('#bfw-name-latin');
+    this.orderWarning = $('#bfw-name-order');
+    this.rows = this.el.find('.bfp-row').map(function() {
+        return new validator.Person($(this), that);
     });
-    var numsample = $('#bc-num-sample');
-    cardnumber.el.last().bind('keyup propertychange input change', function() {
-        var v = $(this).val(), s = [], digits = /\d/;
-        for (var i = 0; i < 4; i++) {
-            var c = v.charAt(i);
-            s[i] = digits.test(c) ? c : '<span class="empty">#</span>';
+    this.orderWarning.find('.bfwno-replace').click(function() {
+        var person = that.orderWarning.person;
+        var fn = person.firstname.el.val();
+        var ln = person.lastname.el.val();
+        person.firstname.set(ln);
+        person.lastname.set(fn);
+        that.orderWarning.fadeOut(50);
+    });
+    this.orderWarning.find('.bfwno-leave').click(function() {
+        that.orderWarning.fadeOut(50);
+    });
+},
+validate: function(forced) {
+    var wrong = [], empty = [];
+    for (var i = 0, l = this.rows.length; i < l; i++) {
+        var person = this.rows[i];
+        if (forced) person.validate(true);
+        wrong = wrong.concat(person.wrong);
+        empty = empty.concat(person.empty);
+    }
+    this.toggle(wrong.length + empty.length === 0);
+    this.wrong = wrong;
+    this.empty = empty;
+}
+};
+
+/* Person constructor */
+validator.Person = function(el, section) {
+    this.el = el;
+    this.section = section;
+    this.controls = [];
+    this.init();
+};
+validator.Person.prototype = $.extend({}, validator.Section.prototype, {
+init: function() {
+    var that = this;
+    this.initNames();
+    this.initSex();
+    this.initBirthday();
+    this.initNationality();    
+    this.initPassport();
+    this.initExpiration();    
+    this.initBonus();
+    this.bind(function() {
+        that.validate();
+        that.section.validate();
+        booking.form.validate();        
+    });
+},
+initNames: function() {
+    var that = this;
+    var lwarning = this.section.latinWarning;
+    var owarning = this.section.orderWarning;    
+    var check = function(value) {
+        if (/[а-яё]/.test(value)) {
+            lwarning.css('top', this.el.offset().top + 34);
+            if (owarning.is(':visible')) {
+                owarning.hide();
+                lwarning.show();
+            } else {
+                lwarning.fadeIn(100);
+            }
+            return 'letters';
+        } else {
+            lwarning.fadeOut(50);
         }
-        numsample.html(s.join(''));
-    });
-    var typeor = el.find('.bc-type-or');
-    var toggleCardType = function(type) {
-        visa.toggle(type !== 'mastercard');
-        mastercard.toggle(type !== 'visa');
-        typeor.toggle(type === undefined);
+        if (/[^A-Za-z\- ']/.test(value)) return 'letters';
+        if (value.length < 2) return 'short';
     };
-    var types = {
+    this.firstname = new validator.Text(this.el.find('.bfp-fname'), {
+        empty: '{имя пассажира}',
+        short: '{Имя пассажира} нужно ввести полностью.',
+        letters: '{Имя пассажира} нужно ввести латинскими буквами.'
+    }, check);
+    this.lastname = new validator.Text(this.el.find('.bfp-lname'), {
+        empty: '{фамилию пассажира}',
+        short: '{Фамилию пассажира} нужно ввести полностью.',
+        letters: '{Фамилию пассажира} нужно ввести латинскими буквами.'
+    }, check);
+    this.firstname.format = this.lastname.format = function(value) {
+        var name = $.trim(value);
+        this.gender = name && validator.getGender(name);
+        that.processNames();
+        return name.toUpperCase();
+    };
+    this.controls.push(this.firstname, this.lastname);
+},
+processNames: function() {
+    var fng = this.firstname.gender;
+    var lng = this.lastname.gender;
+    if (fng && this.gender.error) {
+        this.gender.set(fng);
+    }
+    if (lng && !fng) {
+        var top = this.firstname.el.offset().top + 34;
+        var lwarning = this.section.latinWarning;
+        var owarning = this.section.orderWarning.css('top', top);
+        if (lwarning.is(':visible')) {
+            lwarning.hide();
+            owarning.show();
+        } else {
+            owarning.fadeIn(100);
+        }
+        owarning.person = this;
+    }
+},
+initSex: function() {
+    this.gender = new validator.Gender(this.el.find('.bfp-sex'));
+    this.controls.push(this.gender);
+},
+initBirthday: function() {
+    var date = this.el.find('.bfp-date').eq(0);
+    var birthday = new validator.Date(date, {
+        empty: '{дату рождения} пассажира',
+        wrong: 'Указана несуществующая {дата рождения} пассажира.',
+        letters: '{Дату рождения} пассажира нужно ввести цифрами в формате дд/мм/гггг.',
+        improper: '{Дата рождения} пассажира не может быть позднее сегодняшней.'
+    }, function(date) {
+        if (date.getTime() > this.ctime) return 'improper';
+    });
+    this.controls.push(birthday);
+},
+initNationality: function() {
+    var nationality = new validator.Select(this.el.find('.bfp-nationality'));
+    this.controls.push(nationality);
+},
+initPassport: function() {
+    var that = this;
+    var passport = new validator.Text(this.el.find('.bfp-passport'), {
+        empty: '{номер документа} пассажира',
+        letters: 'В {номере документа} нужно использовать только буквы и цифры.'
+    }, function(value) {
+        if (/[^\wА-Яа-я. \-№#]/.test(value)) return 'letters';
+        if (value.length < 5) return 'empty';
+    });
+    passport.format = function(value) {
+        return $.trim(value.toUpperCase().replace(/[^A-ZА-Я\d]/g, ''));
+    };
+    this.controls.push(passport);
+},
+initExpiration: function() {
+    var expiration = new validator.Date(this.el.find('.bfp-date').eq(1), {
+        empty: '{срок действия документа} пассажира',
+        wrong: 'Указана несуществующая дата в {сроке действия документа} пассажира.',
+        letters: '{Срок действия документа} нужно ввести цифрами в формате дд/мм/гггг.',
+        improper: '{Срок действия документа} уже истёк.'
+    }, function(date) {
+        if (date.getTime() < this.ctime) return 'improper';
+    });
+    expiration.future = true;
+    var permanent = {
+        disabled: true,
+        el: this.el.find('input[id$="permanent"]'),
+    };
+    permanent.set = function(value) {
+        this.el.prop('checked', Boolean(value)).trigger('set');
+    };
+    permanent.el.bind('click set', function(event) {
+        expiration.disabled = this.checked;
+        with (expiration) {
+            el.toggleClass('bf-disabled', disabled);
+            parts.toggleClass('bf-disabled', disabled)
+            parts.prop('disabled', disabled);
+            validate();
+        }
+        if (event.type !== 'set') {
+            expiration.parts.eq(0).select();
+            expiration.apply();
+        }
+    });
+    this.controls.push(expiration, permanent);
+},
+initBonus: function() {
+    var checkbox = this.el.find('input[id$="bonus"]');
+    if (checkbox.length === 0) return;
+    var row = this.el.find('.bfp-bonus-fields');
+    var program = new validator.Select(this.el.find('.bfp-bonus-type'));
+    this.controls.push(program);
+    var number = new validator.Text(row.find('.bfp-bonus-number'), {
+        empty: '{номер бонусной карты} пассажира',
+        letters: '{Номер бонусной карты} нужно ввести латинскими буквами и цифрами.',
+    }, function(value) {
+        if (/[^\w \-№#]/.test(value)) return 'letters';
+        if (value.length < 5) return 'empty';
+    });
+    number.disabled = true;
+    number.format = function(value) {
+        return $.trim(value.toUpperCase().replace(/[^A-Z\d]/g, ''));
+    };
+    checkbox.click(function() {
+        var disabled = !this.checked;
+        row.find('select').prop('disabled', disabled);
+        row.toggleClass('latent', disabled);
+        number.el.prop('disabled', disabled);
+        number.disabled = disabled;
+        number.validate();
+        number.apply();
+        if (this.checked) {
+            number.el.focus();
+        }
+    });
+    this.controls.push(number);
+},
+toggle: function(ready) {
+    this.el.toggleClass('.bfp-ready', ready);
+}
+});
+
+/* Payment section */
+booking.paymentOptions = {
+init: function() {
+    var that = this;
+    this.initCard();
+    this.initCash();
+    this.bind(function() {
+        that.validate();
+        booking.form.validate();    
+    });
+    if (this.cash) {
+        $('#bfcd-yes').trigger('set');
+        this.initSelector();
+        this.select('card');
+    }
+},
+initCard: function() {
+    var context = this.el.find('.bf-card');
+    
+    // Тип карты
+    var sample = $('#bfcn-sample');
+    var type, types = {
         '4': 'visa',
         '3': 'mastercard',
         '5': 'mastercard',
         '6': 'mastercard'
     };
-    var visa = el.find('.bc-visa').click(function() {
-        toggleCardType('visa');
-        cardnumber.el.first().focus();
-    });
-    var mastercard = el.find('.bc-master').click(function() {
-        toggleCardType('mastercard');
-        cardnumber.el.first().focus();
-    });
-    cardnumber.el.first().bind('keyup propertychange input', function() {
-        toggleCardType(this.value ? types[this.value.charAt(0)] : undefined);
-    });
-    var cardcvv = validator.cardcvv($('#bc-cvv'), {
-        empty: 'Не указан трёхзначный {CVV/CVC код} банковской карты',
-        letters: '{CVV/CVC код} банковской карты нужно ввести цифрами',
-    });
-    var cardname = validator.cardname($('#bc-name'), {
-        empty: 'Не указано {имя владельца} банковской карты',
-        latin: '{Имя владельца} банковской карты нужно ввести латинскими буквами'
-    });
-    var cardexp = validator.cardexp(el.find('.bc-exp input'), {
-        empty: 'Не указан {срок действия} банковской карты',
-        letters: '{Cрок действия} банковской карты нужно ввести цифрами в формате дд/гг',
-        month: 'Месяц в {сроке действия} банковской карты должене быть числом от 1 до 12',
-        past: 'Указан истекший {срок действия} банковской карты'
-    });
-    return this.sections[this.sections.push({
-        el: el,
-        items: [cardnumber, cardname, cardexp, cardcvv]
-    }) - 1];
-};
-
-/* Cash fields */
-booking.form.initCash = function(el) {
-    var address = validator.text($('#bc-address'), {
-        empty: 'Не указан {адрес доставки}'
-    });
-    var toggleDelivery = function(mode) {
-        el.find('.bc-address, .bcb-delivery').toggle(mode);
-        el.find('.bc-contacts, .bcb-nodelivery').toggle(!mode);
-        address.el.get(0).disabled = !mode;
-        address.disabled = !mode;
+    var typeParts = {
+        visa: context.find('.bfct-visa'),
+        mastercard:  context.find('.bfct-mastercard'),
+        or: context.find('.bfct-or')
     };
-    this.el.find('.bc-delivery input').click(function() {
-        var value = $(this).attr('value');
-        $('#booking-payment-type').val(value);
-        toggleDelivery(value == 'delivery');
-        address.validate();
-    }).get(0).checked = true;
-    toggleDelivery(true);
-    address.validate();
-    return this.sections[this.sections.push({
-        el: el,
-        items: [address]
-    }) - 1];
-};
-
-/* Contacts fields */
-booking.form.initContacts = function(el) {
-    var email = validator.email(el.find('input[id$=email]'), {
-        empty: 'Не указан {адрес электронной почты}',
-        wrong: 'Неправильно введен {адрес электронной почты}'
-    });
-    var phone = validator.phone(el.find('input[id$=phone]'), {
-        empty: 'Не указан {номер телефона}',
-        letters: 'В {номере телефона} можно использовать только цифры',
-        short: 'В {номере телефона} должно быть больше цифр (не забудьте ввести код города)'
-    });
-    this.sections.push({
-        el: el,
-        items: [email, phone]
-    });
-};
-
-/* Farerules */
-booking.farerules = {
-init: function(context) {
-    var that = this;
-    this.selfhide = function(event) {
-        if (event.type == 'click' || event.which == 27) {
-            that.popup.hide();
-            $('body').unbind('click keydown', that.selfhide);
-        }
+    var toggleType = function(t) {
+        if (t === type) return;
+        typeParts.visa.toggle(t !== 'mastercard');
+        typeParts.mastercard.toggle(t !== 'visa');
+        typeParts.or.toggle(t === undefined);            
+        type = t;
     };
-    this.popup = context.find('.farerules').click(function(event) {
-        event.stopPropagation();
+    typeParts.visa.click(function() {
+        toggleType('visa');
+        number.parts.first().focus();
     });
-    this.popup.find('.close').click(this.selfhide);
-    this.popup.find('.fgrus').click(function() {
-        var rus = $(this).addClass('g-none');
-        var eng = rus.siblings('.fgeng');
-        that.translate(rus, eng);
+    typeParts.mastercard.click(function() {
+        toggleType('mastercard');
+        number.parts.first().focus();
+    });    
+    
+    // Номер карты
+    var number = new validator.CardNumber(context.find('.bfcn-parts'), {
+        empty: '{номер банковской карты}',
+        letters: '{Номер банковской карты} нужно ввести цифрами.',
+        wrong: '{Номер банковской карты} введён неправильно.'
     });
-    this.popup.find('.fgeng').click(function() {
-        var eng = $(this).addClass('g-none');
-        var rus = eng.siblings('.fgrus').removeClass('g-none');
-        rus.closest('.fgroup').find('pre').html(eng.data('text'));
+    number.parts.last().bind('keyup propertychange input change', function() {
+        var value = ($(this).val() + '----').substring(0, 4);
+        sample.html(value.replace(/\D/g, '<span class="bfcn-empty">#</span>'));
     });
-    context.find('.farerules-link').click(function(event) {
-        event.preventDefault();
-        that.show();
+    number.parts.first().bind('keyup propertychange input', function() {
+        var v = this.value;
+        toggleType(v ? types[v.charAt(0)] : undefined);
+    });    
+
+    // CVV
+    var cvv = new validator.Text($('#bc-cvv'), {
+        empty: '{CVV/CVC код банковской карты}',
+        letters: '{CVV/CVC код банковской карты} нужно ввести цифрами.',
+    }, function(value) {
+        if (/\D/.test(value)) return 'letters';
+        if (value.length < 3) return 'empty';
     });
+
+    // Имя владельца
+    var name = new validator.Text($('#bfc-name'), {
+        empty: '{имя владельца банковской карты}',
+        letters: '{Имя владельца банковской карты} нужно ввести латинскими буквами.',
+    }, function(value) {
+        if (/[^A-Za-z\- .']/.test(value)) return 'letters';
+    });
+    name.format = function(value) {
+        return $.trim(value).toUpperCase();    
+    };
+    
+    // Срок действтия
+    var date = new validator.CardDate(context.find('.bfc-date'), {
+        empty: '{срок действия банковской карты}',
+        letters: '{Срок действия банковской карты} нужно ввести цифрами в формате мм/гг.',
+        wrong: 'Месяц в {сроке действия банковской карты} не может быть больше 12.',
+        improper: '{Срок действия банковской карты} уже истёк.'
+    }, function(value) {
+        if (/[^A-Za-z\- .']/.test(value)) return 'letters';
+    });
+   
+    // Меняем отступы полей, чтобы цифры выравнивались по центру
+    var npw = number.parts.first().outerWidth() - 1;
+    var npp = Math.floor((npw - sample.width()) / 2) - 1;
+    number.parts.width(npw - npp * 2).css('padding-left', npp).css('padding-right', npp);
+    cvv.el.width(Math.ceil((npw - npp * 2) * 0.75));    
+
+    this.controls.push(number, cvv, name, date);
+    this.card = {
+        el: context,
+        controls: [number, cvv, name, date]
+    };
 },
-show: function() {
-    var self = this;
-    this.popup.css('top', 0).show();
-    var fh = this.popup.outerHeight();
-    var ft = this.popup.offset().top;
-    var ws = $(window).scrollTop();
-    var wh = $(window).height();
-    this.popup.css('top', Math.min(ws + (wh - fh) / 2, ws + wh - fh - 50) - ft);
-    setTimeout(function() {
-        $('body').bind('click keydown', self.selfhide);
-    }, 20);
-},
-translate: function(rus, eng) {
-    var text = rus.closest('.fgroup').find('pre');
-    var loading = rus.siblings('.fgloading');
-    if (!eng.data('text')) {
-        eng.data('text', text.html());
+initCash: function() {
+    var context = this.el.find('.bf-cash');
+    if (context.length === 0) {
+        return false;
     }
-    if (rus.data('text')) {
-        text.html(rus.data('text'));
-        eng.removeClass('g-none');
-    } else {
-        loading.removeClass('g-none');
-        var s = text.text();
-        if (s.length > 1838) {
-            s = s.substring(0, 1835);
-            s = s.substring(0, s.lastIndexOf('\n') + 1) + '…';
+    
+    // Доставка иди оплата в офисе
+    context.find('.bfcd-radio').bind('click set', function(event) {
+        var value = $(this).attr('value');
+        context.find('.bfc-address').toggle(value === 'delivery');
+        context.find('.bfc-contacts').toggle(value === 'cash');
+        address.disabled = (value === 'cash');
+        $('#bfpt-cash').attr('value', value);
+        if (event.type === 'click') {
+            address.apply();
+            if (!address.disabled) {
+                address.el.focus();
+            }
         }
-        $.ajax({
-            url: 'https://ajax.googleapis.com/ajax/services/language/translate',
-            dataType: 'jsonp',
-            data: {
-                q: s,
-                v: '1.0',
-                langpair: 'en|ru',
-                format: 'text'
-            },
-            success: function(response) {
-                var data = response.responseData;
-                loading.addClass('g-none');
-                if (data && data.translatedText) {
-                    text.html(data.translatedText);
-                    eng.removeClass('g-none');
-                    rus.data('text', data.translatedText);
-                } else {
-                    rus.removeClass('g-none');
-                }
-            },
-            error: function() {
-                loading.addClass('g-none');
-                rus.removeClass('g-none');
-            },
-            timeout: 20000
-        });
+        var price = booking.form.el.find('.bffp-content');
+        price.find('.bffp-wd').toggle(value === 'delivery');
+        price.find('.bffp-nd').toggle(value !== 'delivery');
+    });
+
+    // Адрес доставки
+    var address = new validator.Text($('#bc-address'), {
+        empty: '{адрес доставки}'
+    }, function(value) {
+        if (value.length < 5 || !/\d/.test(value)) return 'empty';
+    });
+
+    this.controls.push(address);
+    this.cash = {
+        el: context,
+        controls: [address]
+    };    
+},
+initSelector: function() {
+    var that = this;
+    this.el.find('.bfpt-radio').click(function() {
+        that.select($(this).attr('value') === 'card' ? 'card' : 'cash', true);
+    });
+},
+select: function(type, validate) {
+    this.card.el.toggle(type === 'card');
+    this.cash.el.toggle(type === 'cash');
+    this.card.el.find('input').prop('disabled', type !== 'card');
+    this.cash.el.find('input').prop('disabled', type !== 'cash');    
+    this.controls = this[type].controls;
+    var context = booking.form.footer || booking.form.el;
+    var wd = (type === 'cash' && $('#bfcd-yes').is(':checked'));
+    context.find('.bffd-card').toggleClass('latent', type !== 'card');
+    context.find('.bffd-cash').toggleClass('latent', type !== 'cash');
+    context.find('.bffp-wd').toggle(wd);
+    context.find('.bffp-nd').toggle(!wd);
+    if (validate) {
+        this.validate(true);
+        booking.form.validate();
     }
 }
 };

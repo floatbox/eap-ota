@@ -1,0 +1,38 @@
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" href="/favicon.png">
+<%= stylesheet_link_tag "common/elements", "common/header", "common/footer", "/ruble/arial.css" %>
+<%= javascript_include_tag "common/jquery-1.7.1.min", "common/common" %>
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+var _yam = {hit: function() {}};
+<% if Rails.env.production? %>
+_gaq.push(['_setAccount', 'UA-19832395-1']);
+<% else %>
+_gaq.push(['_setAccount', 'UA-19832395-2']);
+_gaq.push(['_setDomainName', '.team.eviterra.ru']);
+<% end %>
+(function() {
+
+    return; // отключаем статистику на время разработки
+
+    var d = document, https = d.location.protocol == 'https:', fs = d.getElementsByTagName('script')[0];
+    var createScript = function(src) {
+        var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = src;
+        fs.parentNode.insertBefore(s, fs);
+    };
+    var w = window, c = 'yandex_metrika_callbacks';
+    (w[c] = w[c] || []).push(function() {
+        try { _yam = new Ya.Metrika({id: 5324671, enableAll: true, ut: 'noindex', defer: true}); } catch(e) {}
+    });
+    createScript((https ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js');
+    createScript((https ? 'https:' : 'http:') + '//mc.yandex.ru/metrika/watch.js');
+})();
+var trackPage = function(url) {
+    _gaq.push(['_trackPageview', url]);
+    _yam.hit(url);    
+};
+var trackEvent = function(category, action, label) {
+    _gaq.push(['_trackEvent', category, action, label]);
+};
+</script>

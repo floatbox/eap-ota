@@ -1,0 +1,132 @@
+/* Page */
+var page = {
+init: function() {
+    this.header = $('#page-header');
+    this.location.init();
+    this.title.init();
+
+    Queries.init();
+    search.init();
+    results.init();
+    booking.init();
+
+    preloadImages('/images/search/dates.png');
+    preloadImages('/images/results/progress.gif', '/images/results/fshadow.png', '/images/results/slider.png');
+    preloadImages('/images/booking/progress.gif');
+    
+    if (this.location.booking) {
+        this.restoreBooking(this.location.search, this.location.booking);
+    } else if (this.location.search) {
+        this.restoreResults(this.location.search);
+    } else {
+        search.map.resize();
+        this.reset();
+    }
+    
+    $(function() {
+        $w.scrollTop(0);
+        if (search.map.el.is(':visible')) {
+            search.map.load();
+        }
+    });
+    
+    /*results.message.toggle('loading');
+    results.content.el.show();
+    results.show();*/
+
+},
+innerHeight: function() {
+    return $w.height() - 36 - Queries.height;
+},
+restoreResults: function(key) {
+    search.el.hide();
+    search.loadSummary({query_key: key});
+    results.message.toggle('loading');          
+    results.show(true);
+},
+restoreBooking: function(rkey, bkey) {
+    search.el.hide();
+    search.loadSummary({query_key: rkey}, false);
+    if (!browser.ios) {
+        results.header.el.addClass('fixed');
+        page.header.addClass('fixed');    
+        Queries.live.active = false;
+        Queries.el.hide();
+    }    
+    results.header.button.hide();
+    results.header.select.show();
+    booking.key = bkey;
+    booking.load();    
+},
+reset: function() {
+    search.setValues(search.defaultValues);
+    search.mode.select('rt');
+    setTimeout(function() {
+        search.waitRequests();
+    }, 350);
+    search.mode.values.show();
+    search.locations.focusEmpty();
+},
+showData: function(data) {
+    var that = this;
+    setTimeout(function() { // задержка, чтобы синхронизировать появление таба с прокруткой окна
+        Queries.history.add(data.query_key, data.short);
+    }, 300);
+    this.title.set(local.title.search.absorb(data.titles.window));
+    this.location.set('search', data.query_key);
+}
+};
+
+/* Location */
+page.location = {
+init: function() {
+    var that = this;
+    /*setInterval(function() {
+        that.compare();
+    }, 1000);*/
+    this.hash = window.location.hash;
+    this.parse();
+},
+set: function(key, value) {
+    this[key] = value;
+    if (key === 'search') {
+        delete this.booking;
+    }
+    this.update();
+},
+compare: function() {
+    var hash = window.location.hash;
+    if (hash !== this.hash) {
+        this.hash = hash;
+        this.parse();
+    }
+},
+parse: function() {
+    var parts = this.hash.substring(1).split('/');
+    this.search = parts[0];
+    this.booking = parts[1];
+},
+update: function() {
+    var parts = [];
+    var st = $w.scrollTop();
+    if (this.search) {
+        parts.push(this.search);
+    }
+    if (this.booking) {
+        parts.push(this.booking);
+    }
+    this.hash = window.location.hash = parts.join('/');
+    $w.scrollTop(st);
+    //search.share.obj.updateShareLink(window.location.href, document.title);
+}
+};
+
+/* Title */
+page.title = {
+init: function() {
+    this.empty = document.title;
+},
+set: function(title) {
+    document.title = title || this.empty;
+}
+};
