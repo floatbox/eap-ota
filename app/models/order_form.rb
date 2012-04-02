@@ -188,6 +188,7 @@ class OrderForm
     people.each(&:set_birthday)
     people.each(&:set_document_expiration_date)
     set_flight_date_for_childen_and_infants
+    associate_infants
     unless people.all?(&:valid?)
       errors.add :people, 'Проверьте данные пассажиров'
     end
