@@ -17,7 +17,7 @@ describe OrderForm do
 
   context "stored to cache" do
     let :recommendation do
-      YAML.load_file(Rails.root + 'spec/fixtures/recommendation.yml')
+      Recommendation.from_yml(File.read(Rails.root + 'spec/fixtures/recommendation.yml'))
     end
 
     let :original_order do
