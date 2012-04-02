@@ -130,6 +130,21 @@ describe OrderForm do
 
   describe '#associate_infants' do
 
+    # order_form.should have_associated( parent_last_name, infant_last_name)
+
+    matcher :have_associated do |parent_last_name, infant_last_name|
+      match do |order_form|
+        parent = order_form.adults.find{|a| a.last_name == parent_last_name}
+        parent.associated_infant && (parent.associated_infant.last_name == infant_last_name)
+      end
+    end
+
+    matcher :have_no_infants_associated do |parent_last_name|
+      match do |order_form|
+        parent = order_form.adults.find{|a| a.last_name == parent_last_name}
+        !parent.associated_infant
+      end
+    end
 
     let(:order_form) do
       OrderForm.new(
@@ -141,8 +156,6 @@ describe OrderForm do
         }
       )
     end
-
-
 
     context 'standart_case' do
       let(:person_attrs) {
@@ -162,11 +175,11 @@ describe OrderForm do
       it 'associates correct' do
         order_form.associate_infants
         order_form.infants.all?(&:associated_infant).should == false
-        get_associated_for('ivanova').should ==  'ivanova'
-        get_associated_for('ivanov').should == 'ivanov'
-        get_associated_for('mitrofanov').should == 'mitrofanova'
-        get_associated_for('cucaev').should == nil
-        get_associated_for('shmidt').should == 'petrov'
+        order_form.should have_associated('ivanova', 'ivanova')
+        order_form.should have_associated('ivanov', 'ivanov')
+        order_form.should have_associated('mitrofanov', 'mitrofanova')
+        order_form.should have_no_infants_associated('cucaev')
+        order_form.should have_associated('shmidt', 'petrov')
       end
     end
 
@@ -182,8 +195,8 @@ describe OrderForm do
       it 'associates correct' do
         order_form.associate_infants
         order_form.infants.all?(&:associated_infant).should == false
-        get_associated_for('ivanov').should == 'ivanova'
-        get_associated_for('ivanova').should == nil
+        order_form.should have_associated('ivanov', 'ivanova')
+        order_form.should have_no_infants_associated('ivanova')
       end
     end
 
@@ -196,11 +209,5 @@ describe OrderForm do
         p
       end
     end
-
-    def get_associated_for parent
-      parent_obj = (order_form.adults.select{|a| a.last_name == parent}).first
-      parent_obj.associated_infant.last_name if parent_obj.associated_infant
-    end
   end
 end
-
