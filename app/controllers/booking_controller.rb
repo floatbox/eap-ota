@@ -46,8 +46,8 @@ class BookingController < ApplicationController
     StatCounters.inc %W[enter.api.success]
     StatCounters.inc %W[enter.api.#{partner}.success] if partner
     @destination = get_destination
-    StatCounters.d_inc @destination, %W[enter.api.total]
-    StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if partner
+    StatCounters.d_inc @destination, %W[enter.api.total] if @destination
+    StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if @destination && partner
   ensure
     StatCounters.inc %W[enter.api.total]
     StatCounters.inc %W[enter.api.#{partner}.total] if partner
@@ -201,6 +201,7 @@ class BookingController < ApplicationController
   end
 
   def get_destination
+    return if !@search.segments
     segment = @search.segments[0]
     return if ([segment.to_as_object.class, segment.from_as_object.class] - [City, Airport]).present? || @search.complex_route?
     to = segment.to_as_object.class == Airport ? segment.to_as_object.city : segment.to_as_object

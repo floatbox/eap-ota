@@ -99,7 +99,7 @@ describe BookingController do
       }
     end
 
-    describe '#preliminary_booking' do
+    describe '#api_booking' do
       it 'saves both partner and marker if they present' do
         Recommendation.stub(:deserialize)
         strategy = mock('strategy')
@@ -111,12 +111,12 @@ describe BookingController do
         pricer.stub(:real_people_count)
         pricer.stub(:human_lite)
         pricer.stub(:query_key)
+        pricer.stub(:segments)
         order = mock('order')
         order.stub(:save_to_cache)
         order.stub(:number)
 
-        OrderForm.should_receive(:new).and_return(order)
-        get :preliminary_booking, partner_and_marker_present
+        get :api_booking, partner_and_marker_present
         response.cookies['partner'].should == 'yandex'
         response.cookies['marker'].should == 'ffdghg'
       end
@@ -132,12 +132,12 @@ describe BookingController do
         pricer.stub(:real_people_count)
         pricer.stub(:human_lite)
         pricer.stub(:query_key)
+        pricer.stub(:segments)
         order = mock('order')
         order.stub(:save_to_cache)
         order.stub(:number)
 
-        OrderForm.should_receive(:new).and_return(order)
-        get :preliminary_booking, partner_present
+        get :api_booking, partner_present
         response.cookies['partner'].should == 'momondo'
         response.cookies['marker'].should == nil
       end
@@ -153,12 +153,12 @@ describe BookingController do
         pricer.stub(:real_people_count)
         pricer.stub(:human_lite)
         pricer.stub(:query_key)
+        pricer.stub(:segments)
         order = mock('order')
         order.stub(:save_to_cache)
         order.stub(:number)
 
-        OrderForm.should_receive(:new).and_return(order)
-        get :preliminary_booking, marker_present
+        get :api_booking, marker_present
         response.cookies['partner'].should == nil
         response.cookies['marker'].should == nil
       end
