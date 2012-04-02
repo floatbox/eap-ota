@@ -29,7 +29,7 @@ module Pricing
     end
 
     def price_total
-      price_fare + price_tax + price_penalty + price_markup
+      price_fare + price_tax + price_penalty + price_markup + price_extra_penalty
     end
 
     def price_supplier
@@ -42,7 +42,7 @@ module Pricing
 
     def price_refund
       if kind == 'refund'
-        price_tax + price_fare + price_penalty
+        price_tax + price_fare + price_penalty - price_discount + price_extra_penalty
       else
         0
       end

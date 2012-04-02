@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120319165358) do
+ActiveRecord::Schema.define(:version => 20120402120040) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -323,13 +323,13 @@ ActiveRecord::Schema.define(:version => 20120319165358) do
     t.datetime "charged_at"
     t.string   "threeds_key"
     t.string   "system"
+    t.date     "charged_on"
+    t.string   "pan"
     t.string   "type"
     t.integer  "charge_id"
     t.string   "status"
     t.string   "commission"
     t.decimal  "earnings",              :precision => 9, :scale => 2, :default => 0.0, :null => false
-    t.date     "charged_on"
-    t.string   "pan"
   end
 
   add_index "payments", ["status"], :name => "index_payments_on_status"
@@ -409,6 +409,7 @@ ActiveRecord::Schema.define(:version => 20120319165358) do
     t.decimal  "price_our_markup",          :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "vat_status",                                              :default => "unknown", :null => false
     t.date     "dept_date"
+    t.decimal  "price_extra_penalty",       :precision => 9, :scale => 2, :default => 0.0,       :null => false
   end
 
   create_table "typus_users", :force => true do |t|
