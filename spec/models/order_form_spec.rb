@@ -129,20 +129,7 @@ describe OrderForm do
   end
 
   describe '#associate_infants' do
-    let(:person_attrs) {
-      [
-       ['ivanova'],
-       ['ivanova', :infant],
-       ['ivanov'],
-       ['ivanov', :infant],
-       ['mitrofanov'],
-       ['mitrofanova', :infant],
-       ['petrov', :infant],
-       ['cucaev'],
-       ['shmidt']
 
-      ]
-    }
 
     let(:order_form) do
       OrderForm.new(
@@ -155,17 +142,49 @@ describe OrderForm do
       )
     end
 
-    it 'associates correct' do
 
-      order_form.associate_infants
 
-      order_form.infants.all?(&:associated_infant).should == false
+    context 'standart_case' do
+      let(:person_attrs) {
+        [
+         ['ivanova'],
+         ['ivanova', :infant],
+         ['ivanov'],
+         ['ivanov', :infant],
+         ['mitrofanov'],
+         ['mitrofanova', :infant],
+         ['petrov', :infant],
+         ['cucaev'],
+         ['shmidt']
+        ]
+      }
 
-      get_associated_for('ivanova').should ==  'ivanova'
-      get_associated_for('ivanov').should == 'ivanov'
-      get_associated_for('mitrofanov').should == 'mitrofanova'
-      get_associated_for('cucaev').should == nil
-      get_associated_for('shmidt').should == 'petrov'
+      it 'associates correct' do
+        order_form.associate_infants
+        order_form.infants.all?(&:associated_infant).should == false
+        get_associated_for('ivanova').should ==  'ivanova'
+        get_associated_for('ivanov').should == 'ivanov'
+        get_associated_for('mitrofanov').should == 'mitrofanova'
+        get_associated_for('cucaev').should == nil
+        get_associated_for('shmidt').should == 'petrov'
+      end
+    end
+
+    context 'two adults and infant' do
+      let(:person_attrs) {
+        [
+         ['ivanova'],
+         ['ivanov'],
+         ['ivanova', :infant]
+        ]
+      }
+
+      it 'associates correct' do
+        order_form.associate_infants
+        order_form.infants.all?(&:associated_infant).should == false
+        get_associated_for('ivanov').should == 'ivanova'
+        get_associated_for('ivanova').should == nil
+      end
     end
 
     def create_bunch_of_people arr

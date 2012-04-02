@@ -282,7 +282,7 @@ class OrderForm
         end
       end
     end
-    infants.each do |infant|
+    orphans.each do |infant|
       adults.each do |adult|
         unless adult.associated_infant
           array = [infant.last_name, adult.last_name]
