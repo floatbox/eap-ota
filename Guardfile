@@ -12,6 +12,7 @@ guard 'spork', :wait => 30, :cucumber => false, :cucumber_env => { 'RAILS_ENV' =
   watch('spec/spec_helper.rb')
   watch('test/test_helper.rb')
   watch('spec/factories.rb')
+  watch(%r{^spec/support/.+\.rb$})
   watch(%r{^spec/factories/.+\.rb$})
   watch(%r{^lib/(.+)\.rb$})
 end

@@ -19,8 +19,7 @@ describe CashRefund do
     order = Factory(:order)
     refund = CashRefund.new :price => -5, :order => order
 
-    refund.save.should == false
-    refund.errors[:charge].should_not be_empty
+    refund.should have_errors_on(:charge)
   end
 
   describe "state" do

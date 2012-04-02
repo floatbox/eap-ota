@@ -65,8 +65,7 @@ describe PaytureRefund do
     order = Factory(:order)
     refund = PaytureRefund.new :price => -5, :order => order
 
-    refund.save.should == false
-    refund.errors[:charge].should_not be_empty
+    refund.should have_errors_on(:charge)
   end
 
   pending "should not allow to create refund for more than charged"
