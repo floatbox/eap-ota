@@ -3,7 +3,7 @@ module Strategy::Sirena::Booking
 
   def create_booking
     # FIXME обработать ошибку cancel бронирования
-    unless TimeChecker.ok_to_sell_sirena(@rec.variants[0].departure_datetime_utc, @rec.last_tkt_date)
+    unless TimeChecker.ok_to_sell_sirena(@rec.journey.departure_datetime_utc, @rec.last_tkt_date)
       logger.error 'Strategy: time criteria missed'
       dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
       return

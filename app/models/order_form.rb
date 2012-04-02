@@ -50,7 +50,7 @@ class OrderForm
   end
 
   def tk_xl
-    dept_datetime_mow = Location.default.tz.utc_to_local(recommendation.variants[0].departure_datetime_utc) - 1.hour
+    dept_datetime_mow = Location.default.tz.utc_to_local(recommendation.journey.departure_datetime_utc) - 1.hour
     last_ticket_date = self.last_tkt_date || (Date.today + 2.days)
     #эта херня нужна, просто .min не подходит тк dept_datetime_mow
     if dept_datetime_mow.to_date <= last_ticket_date
@@ -145,7 +145,7 @@ class OrderForm
   end
 
   def variant
-    recommendation && recommendation.variants.first
+    recommendation.try(:journey)
   end
 
   def init_people
@@ -162,9 +162,9 @@ class OrderForm
 
   def validate_dept_date
     if recommendation.source == 'amadeus'
-      errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell(recommendation.variants[0].departure_datetime_utc, recommendation.last_tkt_date)
+      errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell(recommendation.journey.departure_datetime_utc, recommendation.last_tkt_date)
     elsif recommendation.source == 'sirena'
-      errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell_sirena(recommendation.variants[0].departure_datetime_utc)
+      errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell_sirena(recommendation.journey.departure_datetime_utc)
     end
   end
 

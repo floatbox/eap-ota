@@ -7,7 +7,7 @@ module Strategy::Amadeus::Booking
       # может быть, при ошибке канселить бронирование на всякий случай?
       # лучше сделать IG
       unless amadeus.air_sell_from_recommendation(
-            :segments => @rec.variants[0].segments,
+            :segments => @rec.journey.segments,
             :seat_total => @order_form.seat_total,
             :recommendation => @rec
           ).segments_confirmed?
@@ -52,7 +52,7 @@ module Strategy::Amadeus::Booking
           return
         end
 
-        unless TimeChecker.ok_to_sell(@rec.variants[0].departure_datetime_utc, @rec.last_tkt_date)
+        unless TimeChecker.ok_to_sell(@rec.journey.departure_datetime_utc, @rec.last_tkt_date)
           logger.error "Strategy: time criteria for last tkt date missed: #{@rec.last_tkt_date}"
           dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
           amadeus.pnr_cancel

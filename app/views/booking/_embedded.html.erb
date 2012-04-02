@@ -46,7 +46,7 @@
 </div>
 <% if params[:load_variant] %>
     <%= render :partial => 'pricer/variant', :locals => {
-      :variant => @order_form.recommendation.variants.first,
+      :variant => @order_form.recommendation.journey,
       :recommendation => @order_form.recommendation,
       :variant_cabins => @order_form.recommendation.cabins_except(@search.cabin),
       :variant_summary => nil

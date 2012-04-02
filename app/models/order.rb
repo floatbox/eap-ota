@@ -196,9 +196,9 @@ class Order < ActiveRecord::Base
       :price_fare,
       :price_with_payment_commission
 
-    self.route = recommendation.variants[0].flights.every.destination.join('; ')
+    self.route = recommendation.journey.flights.every.destination.join('; ')
     self.cabins = recommendation.cabins.join(',')
-    self.departure_date = recommendation.variants[0].flights[0].dept_date
+    self.departure_date = recommendation.journey.flights[0].dept_date
     # FIXME вынести рассчет доставки отсюда
     if order_form.payment_type != 'card'
       self.cash_payment_markup = recommendation.price_payment + (order_form.payment_type == 'delivery' ? 350 : 0)

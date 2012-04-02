@@ -12,7 +12,7 @@ class PaymentCustomFields
 
   def order_form= order_form
     return unless order_form
-    self.flights = order_form.recommendation.variants[0].flights
+    self.flights = order_form.recommendation.journey.flights
     self.email = order_form.email
     self.phone = order_form.phone.try(:gsub, /\D/, '')
     self.first_name = order_form.people.first.first_name

@@ -14,6 +14,15 @@ class Recommendation
   include Pricing::Recommendation
   include Commission::Includesonly
 
+  # текущий маршрут. Использовать только при предварительном бронировании и далее.
+  # Когда рекомендация обязана содержать только один вариант.
+  def journey
+    unless variants.size == 1
+      raise TypeError, "can't ask for 'journey' when recommendation contains #{variants.size} variants"
+    end
+    variants.first
+  end
+
   def availability
     availabilities.compact.min.to_i if availabilities
   end

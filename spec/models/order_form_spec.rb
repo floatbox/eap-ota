@@ -8,7 +8,7 @@ describe OrderForm do
     order_form.stub_chain(:recommendation, :last_tkt_date).and_return(Date.new(2011, 06, 21))
     order_form.stub_chain(:recommendation, :source).and_return('amadeus')
     #order_form.stub(:last_tkt_date).and_return(Date.new(2011, 06, 21))
-    order_form.stub_chain(:recommendation, :variants, :'[]', :departure_datetime_utc).and_return(Time.utc(2011, 06, 22, 12, 30))
+    order_form.stub_chain(:recommendation, :journey, :departure_datetime_utc).and_return(Time.utc(2011, 06, 22, 12, 30))
     order_form.stub_chain(:recommendation, :flights, :first, :departure_datetime_utc).and_return(Time.utc(2011, 06, 22, 12, 30))
     Time.stub(:now).and_return(Time.local(2011, 06, 21, 21, 29))
     Date.stub(:today).and_return(Date.new(2011, 06, 21))
