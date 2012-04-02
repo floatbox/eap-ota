@@ -146,6 +146,13 @@ describe OrderForm do
       end
     end
 
+    matcher :have_only_one_mommy do |infant_last_name|
+      match do |order_form|
+        parents = order_form.adults.select{|a| a.associated_infant.try(&:last_name) == infant_last_name}
+        parents.size == 1
+      end
+    end
+
     let(:order_form) do
       OrderForm.new(
         :people => create_bunch_of_people(person_attrs),
@@ -197,6 +204,7 @@ describe OrderForm do
         order_form.infants.all?(&:associated_infant).should == false
         order_form.should have_associated('ivanov', 'ivanova')
         order_form.should have_no_infants_associated('ivanova')
+        order_form.should have_only_one_mommy('ivanova')
       end
     end
 
