@@ -153,7 +153,13 @@ describe OrderForm do
       end
     end
 
-    let(:order_form) do
+    matcher :have_no_infants_associated_to_infants do
+      match do |order_form|
+        order_form.infants.none?(&:associated_infant)
+      end
+    end
+
+    subject do
       OrderForm.new(
         :people => create_bunch_of_people(person_attrs),
         :people_count => {
@@ -163,6 +169,8 @@ describe OrderForm do
         }
       )
     end
+
+    before { subject.associate_infants }
 
     context 'standart_case' do
       let(:person_attrs) {
@@ -179,15 +187,12 @@ describe OrderForm do
         ]
       }
 
-      it 'associates correct' do
-        order_form.associate_infants
-        order_form.infants.all?(&:associated_infant).should == false
-        order_form.should have_associated('ivanova', 'ivanova')
-        order_form.should have_associated('ivanov', 'ivanov')
-        order_form.should have_associated('mitrofanov', 'mitrofanova')
-        order_form.should have_no_infants_associated('cucaev')
-        order_form.should have_associated('shmidt', 'petrov')
-      end
+      it { should have_no_infants_associated_to_infants }
+      it { should have_associated('ivanova', 'ivanova') }
+      it { should have_associated('ivanov', 'ivanov') }
+      it { should have_associated('mitrofanov', 'mitrofanova') }
+      it { should have_no_infants_associated('cucaev') }
+      it { should have_associated('shmidt', 'petrov') }
     end
 
     context 'two adults and infant' do
@@ -199,13 +204,9 @@ describe OrderForm do
         ]
       }
 
-      it 'associates correct' do
-        order_form.associate_infants
-        order_form.infants.all?(&:associated_infant).should == false
-        order_form.should have_associated('ivanov', 'ivanova')
-        order_form.should have_no_infants_associated('ivanova')
-        order_form.should have_only_one_mommy('ivanova')
-      end
+      it { should have_associated('ivanov', 'ivanova') }
+      it { should have_no_infants_associated('ivanova') }
+      it { should have_only_one_mommy('ivanova')}
     end
 
     def create_bunch_of_people arr
