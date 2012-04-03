@@ -35,7 +35,7 @@ module BookingHelper
       segments_summary = "#{parts.join(' ')}, потом #{cities[1..-1]}"
     elsif segments.length == 2
       days = Date.strptime(segments.last.arrival_date, '%d%m%y') - Date.strptime(segments.first.departure_date, '%d%m%y')
-      parts << "на #{days} #{Russian.pluralize(days, 'день', 'дня', 'дней')}"
+      parts << "на #{days.to_i} #{Russian.pluralize(days, 'день', 'дня', 'дней')}"
       segments_summary = parts.join(' ')
     end
     price = order.recommendation.price_with_payment_commission.round.to_i
