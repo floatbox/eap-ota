@@ -298,8 +298,8 @@ class OrderForm
     end
 
     # распихиваем оставшихся
-    orphans.each do |orphan|
-      childfree_adults.first.associated_infant = orphan if childfree_adults.present?
+    orphans.zip( childfree_adults ).each do |orphan, adult|
+      adult.associated_infant = orphan
     end
   end
 
