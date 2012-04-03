@@ -20,6 +20,24 @@ describe Amadeus::Response::PNRRetrieve do
 
   end
 
+  context 'with double partly flown exchange' do
+
+    let_once! :response do
+      body = File.read('spec/amadeus/xml/PNR_Retrieve_with_double_exchange.xml')
+      doc = Amadeus::Service.parse_string(body)
+      Amadeus::Response::PNRRetrieve.new(doc)
+    end
+
+    subject {response}
+
+    its(:exchanged_tickets) {should == {[[7, "a"], [3, 4, 6, 7]] =>
+                  {:number=>"9460734984", :code=>"784"},
+                                        [[6, "a"], [3, 4, 6, 7]] =>
+                  {:number=>"9460734985", :code=>"784"}}
+      }
+
+  end
+
   describe 'with another complex exchange' do
 
     let_once! :response do
