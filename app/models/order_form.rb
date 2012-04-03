@@ -65,6 +65,14 @@ class OrderForm
     people && (people.sort_by(&:birthday)[0..(people_count[:adults]-1)])
   end
 
+  def childfree_adults
+    adults.reject(&:associated_infant)
+  end
+
+  def orphans
+    infants - adults.map(&:associated_infant).compact
+  end
+
   def children
     s_pos = people_count[:adults]
     e_pos = people_count[:adults] + people_count[:children]-1
@@ -180,6 +188,7 @@ class OrderForm
     people.each(&:set_birthday)
     people.each(&:set_document_expiration_date)
     set_flight_date_for_childen_and_infants
+    associate_infants
     unless people.all?(&:valid?)
       errors.add :people, 'Проверьте данные пассажиров'
     end
@@ -270,6 +279,36 @@ class OrderForm
     order.card = Payture.test_card
     order.valid?
     order.create_booking
+  end
+
+  def associate_infants
+    # идем по порядку, привязываем каждого младенца к предшествующему по порядку взрослому
+    people.each_cons(2) do |person, next_person|
+      next if person.associated_infant
+      if person.adult? && next_person.infant?
+        person.associated_infant = next_person
+      end
+    end
+
+    # пытаемся идентифицировать схожесть фамилий
+    orphans.each do |infant|
+      if adult = childfree_adults.find { |adult| similar_last_names? infant.last_name, adult.last_name }
+        adult.associated_infant = infant
+      end
+    end
+
+    # распихиваем оставшихся
+    orphans.each do |orphan|
+      childfree_adults.first.associated_infant = orphan if childfree_adults.present?
+    end
+  end
+
+  private
+
+  def similar_last_names? first_name, second_name
+    min_length = [first_name, second_name].map(&:length).min
+    coincidence = (first_name.chars.to_set & second_name.chars.to_set).size
+    (coincidence / min_length.to_f) >= 0.5
   end
 end
 

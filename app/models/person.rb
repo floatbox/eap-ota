@@ -14,7 +14,7 @@ class Person
   field :bonuscard_number, :type => String
   field :number_in_amadeus, :type => Integer
 
-  attr_accessor :passenger_ref, :tickets
+  attr_accessor :passenger_ref, :tickets, :associated_infant
 
   validates_presence_of :first_name, :last_name, :sex, :nationality_id, :birthday, :passport
   validates_presence_of :document_expiration_date, :unless => :document_noexpiration
@@ -28,6 +28,18 @@ class Person
   before_validation :set_birthday
   before_validation :set_document_expiration_date
   before_validation :clear_first_name_and_last_name
+
+  def infant?
+    infant_or_child == 'i'
+  end
+
+  def child?
+    infant_or_child == 'c'
+  end
+
+  def adult?
+    !child? && !infant?
+  end
 
   def clear_first_name_and_last_name
     first_name.gsub!(/[^\w]+/, '')

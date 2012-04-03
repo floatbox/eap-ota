@@ -23,6 +23,13 @@ class Recommendation
     variants.first
   end
 
+  def self.from_yml str
+    #триггеринг автолоад
+    Recommendation; Variant; Flight; Segment; TechnicalStop
+    YAML.load(str)
+  end
+
+
   def availability
     availabilities.compact.min.to_i if availabilities
   end
