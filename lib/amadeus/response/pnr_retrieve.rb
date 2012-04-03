@@ -166,17 +166,13 @@ module Amadeus
         ).inject({}) do |res, fa|
           ticket_hash = parsed_exchange_string(fa.to_s)
           passenger_ref = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='PT']/r:number").to_i || tickets.keys[0][0][0]
+          passenger_elem = xpath("//r:travellerInfo[r:elementManagementPassenger/r:reference[r:qualifier='PT'][r:number=#{passenger_ref}]]")
+          infant_flag = ticket_hash.delete(:inf) == 'INF' ? 'i': 'a'
+
           segments_refs = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='ST']/r:number").every.to_i.sort
           if segments_refs.blank?
-            segments_refs = if tickets.values[0][:number] != ticket_hash[:number]
-              tickets.keys[0][1]
-            else
-              tickets.keys[1][1]
-            end
+            segments_refs = tickets.find{|k, v| k[0] == [passenger_ref, infant_flag] && v[:number] != ticket_hash[:number]}[0][1]
           end
-          passenger_elem = xpath("//r:travellerInfo[r:elementManagementPassenger/r:reference[r:qualifier='PT'][r:number=#{passenger_ref}]]")
-          passenger_last_name = passenger_elem.xpath('r:passengerData/r:travellerInformation/r:traveller/r:surname').to_s
-          infant_flag = ticket_hash.delete(:inf) == 'INF' ? 'i': 'a'
           res.merge({[[passenger_ref, infant_flag], segments_refs] => ticket_hash})
         end
       end

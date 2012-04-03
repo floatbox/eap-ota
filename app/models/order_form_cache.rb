@@ -19,12 +19,7 @@ class OrderFormCache
   end
 
   def recommendation
-    Recommendation
-    Variant
-    Flight
-    Segment
-    TechnicalStop
-    recommendation_yml? && YAML.load(recommendation_yml)
+    recommendation_yml && Recommendation.from_yml(recommendation_yml)
   end
 
   def people_count

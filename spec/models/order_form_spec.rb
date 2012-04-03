@@ -17,7 +17,7 @@ describe OrderForm do
 
   context "stored to cache" do
     let :recommendation do
-      YAML.load_file(Rails.root + 'spec/fixtures/recommendation.yml')
+      Recommendation.from_yml(File.read(Rails.root + 'spec/fixtures/recommendation.yml'))
     end
 
     let :original_order do
@@ -127,5 +127,101 @@ describe OrderForm do
       order.people.second.should be_valid
     end
   end
-end
 
+  describe '#associate_infants' do
+
+    # order_form.should have_associated( parent_last_name, infant_last_name)
+
+    matcher :have_associated do |parent_last_name, infant_last_name|
+      match do |order_form|
+        parent = order_form.adults.find{|a| a.last_name == parent_last_name}
+        parent.associated_infant && (parent.associated_infant.last_name == infant_last_name)
+      end
+    end
+
+    matcher :have_no_infants_associated do |parent_last_name|
+      match do |order_form|
+        parent = order_form.adults.find{|a| a.last_name == parent_last_name}
+        !parent.associated_infant
+      end
+    end
+
+    matcher :have_only_one_mommy do |infant_last_name|
+      match do |order_form|
+        parents = order_form.adults.select{|a| a.associated_infant.try(&:last_name) == infant_last_name}
+        parents.size == 1
+      end
+    end
+
+    matcher :have_no_infants_associated_to_infants do
+      match do |order_form|
+        order_form.infants.none?(&:associated_infant)
+      end
+    end
+
+    subject do
+      OrderForm.new(
+        :people => create_bunch_of_people(person_attrs),
+        :people_count => {
+          :adults => (person_attrs.count - person_attrs.count(&:second)),
+           :infants => person_attrs.count(&:second),
+           :children => 0
+        }
+      )
+    end
+
+    before { subject.associate_infants }
+
+    context 'standart_case' do
+      let(:person_attrs) {
+        [
+         ['ivanova'],
+         ['ivanova', :infant],
+         ['ivanov'],
+         ['ivanov', :infant],
+         ['mitrofanov'],
+         ['mitrofanova', :infant],
+         ['petrov', :infant],
+         ['cucaev'],
+         ['shmidt']
+        ]
+      }
+
+      it { should have_no_infants_associated_to_infants }
+      it { should have_associated('ivanova', 'ivanova') }
+      it { should have_associated('ivanov', 'ivanov') }
+      it { should have_associated('mitrofanov', 'mitrofanova') }
+      it { should have_no_infants_associated('cucaev') }
+      it { should have_associated('shmidt', 'petrov') }
+    end
+
+    context 'two adults and infant' do
+      let(:person_attrs) {
+        [
+         ['ivanova'],
+         ['ivanov'],
+         ['ivanova', :infant]
+        ]
+      }
+
+      it { should have_associated('ivanov', 'ivanova') }
+      it { should have_no_infants_associated('ivanova') }
+      it { should have_only_one_mommy('ivanova')}
+    end
+
+    def create_bunch_of_people arr
+      arr.map do |last_name, infant_sign|
+        p = Person.new
+        p.last_name = last_name
+        p.infant_or_child = 'i' if infant_sign
+        p.birthday = infant_sign ? 2.months.ago : 20.years.ago
+        p
+      end
+    end
+  end
+
+  describe '#similar_last_names?' do
+    pending { subject.send(:similar_last_names?, 'IVANOVA', 'LIKOV').should be_false }
+    specify { subject.send(:similar_last_names?, 'IVANOVA', 'IVANOV').should be_true }
+  end
+end
