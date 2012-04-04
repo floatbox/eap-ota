@@ -112,12 +112,13 @@ class BookingController < ApplicationController
 
     strategy = Strategy.select( :rec => @order_form.recommendation, :order_form => @order_form )
     booking_status = strategy.create_booking
+
     if booking_status == :failed
       StatCounters.inc %W[pay.errors.booking]
       render :partial => :failed_booking
       return
     elsif booking_status == :price_changed
-      render :json => {:errors => {:new_price => @order_form.recommendation.price_with_payment_commission}}
+      render :partial => 'newprice'
       return
     end
 

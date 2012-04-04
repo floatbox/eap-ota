@@ -1,0 +1,42 @@
+<% total_price = @order_form.recommendation.price_with_payment_commission.round.to_i %>
+<div class="result latent" data-type="newprice" data-price="<%= total_price %>">
+<div class="booking-newprice">
+    <h5>Авиакомпания изменила стоимость этого предложения. Так иногда бывает. Новая стоимость — <%= decorated_price total_price, 'strong', 'span' %> (стало <span class="bnp-diff"></span>).</h5>
+    <p><a class="a-button continue" href="#">Продолжить покупку</a> или <span class="link cancel">выбрать другой вариант</span></p>
+</div>
+<div class="bc-bill-short">
+    <span style="padding-right: 2px;">Стоимость&nbsp;<%= @order_form.people.one? ? 'билета' : 'билетов' %>&nbsp;—</span> <span style="white-space: nowrap;"><%= decorated_price total_price, 'strong', 'span' %><%= ' за всех пассажиров' if @order_form.people.many? %> со&nbsp;всеми налогами и&nbsp;сборами</span>
+</div>
+<table class="bc-bill">
+<tr>
+    <td>
+        <h6>Стоимость <%= @order_form.people.one? ? 'билета' : 'билетов' %></h6>
+        <div class="price"><%= decorated_price total_price, 'strong', 'em' %>&nbsp;</div>
+    </td>
+    <td class="sign">+</td>
+    <td>
+        <div class="bcb-delivery">
+            <h6>Доставка курьером</h6>
+            <div class="price"><%= decorated_price 350, 'strong', 'em' %>&nbsp;</div>
+        </div>
+        <div class="bcb-nodelivery">
+            <h6>Оплата в&nbsp;офисе</h6>
+            <div class="price"><%= decorated_price 0, 'strong', 'em' %>&nbsp;</div>
+        </div>
+    </td>
+    <td class="sign">=</td>
+    <td>
+        <h6>Итого к&nbsp;оплате</h6>
+        <div class="price price-total bcb-delivery"><%= decorated_price total_price + 350, 'strong', 'em' %>&nbsp;</div>
+        <div class="price price-total bcb-nodelivery"><%= decorated_price total_price, 'strong', 'em' %>&nbsp;</div>
+    </td>
+</tr>
+<tr>
+    <td colspan="2">
+        <p class="hint" style="margin-right: 10px;">стоимость <%= @order_form.people.one? ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами (не&nbsp;гарантируется до&nbsp;момента выписки билета)</p>    
+    </td>
+    <td colspan="3"></td>
+</tr>
+</table>
+
+</div>
