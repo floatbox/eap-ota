@@ -136,19 +136,19 @@ commission "5%/3.5%"
 carrier "5N", "Нордавиа-РА"
 ########################################
 
-carrier_defaults :discount=> "3%"
-
 example 'svocdg'
 agent    "7% от всех опубл. тарифов на рейсы 5N (В договоре Interline отдельно не прописан.)"
 subagent "5% от опубл. тарифов на собств.рейсы 5N"
-discount "4.8%"
+discount "5%"
+our_markup 120
 commission "7%/5%"
 
 example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :yes
-discount "4.8%"
+discount "5%"
+our_markup 120
 commission "7%/5%"
 
 carrier "6H", "ISRAIR AIRLINE"
@@ -302,7 +302,7 @@ commission "0%/0%"
 carrier "AF", "AIR FRANCE"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.5%'
+carrier_defaults :consolidator => 0, :our_markup => '1.5%'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -1436,7 +1436,7 @@ example 'svocdg'
 agent    "5% от опубл. тарифов Эконом класса на рейсы LY"
 subagent "3,5% от опубл. тарифов Эконом класса на рейсы LY"
 classes :economy
-discount "3%"
+discount "2%"
 commission "5%/3.5%"
 
 example 'svocdg/business cdgsvo/business'
@@ -1731,6 +1731,8 @@ example 'cdgsvo svocdg/ab'
 agent    "1% от всех опубл. тарифов на рейсы OV (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на рейсы OV"
 interline :no, :unconfirmed
+discount "0.5%"
+our_markup 120
 commission "1%/0.5%"
 
 carrier "PG", "BANGKOK AIRWAYS (Тальавиэйшн)"
@@ -2119,7 +2121,7 @@ no_commission
 carrier "VV", "AEROSVIT"
 ########################################
 
-carrier_defaults our_markup: 200
+carrier_defaults our_markup: 0
 
 example 'leddok'
 example 'ledcdg'
@@ -2127,7 +2129,6 @@ strt_date "21.03.2012"
 agent "9% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории РФ до любого п.п. VV"
 subagent "8,5% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории РФ до любого п.п. VV."
 check { includes(country_iatas.first, 'RU') and not includes(city_iatas.first, 'MOW') and not includes(city_iatas.last, 'IEV') }
-discount "8.5%"
 commission "9%/8.5%"
 
 example 'ledkbp kbpled'
@@ -2135,7 +2136,6 @@ strt_date "21.03.2012"
 agent "8% от тарифа при продаже перевозок на рейсы Санкт-Петербург-Киев (LED-IEV), Санкт-Петербург-Киев-Санкт-Петербург (LED-IEV-LED)"
 subagent "7,5% от тарифа при продаже перевозок на рейсы Санкт-Петербург-Киев (LED-IEV), Санкт-Петербург- Киев-Санкт-Петербург (LED-IEV-LED);"
 check { (includes(city_iatas.first, 'LED') and includes(city_iatas.last, 'IEV')) or (includes(city_iatas.first, 'LED') and includes(city_iatas.last, 'LED') and includes(city_iatas, 'IEV')) }
-discount "7.5%"
 important!
 commission "8%/7.5%"
 
@@ -2148,7 +2148,6 @@ agent "10% от тарифа при продаже перевозок с нач�
 subagent "9,5% от тарифа при продаже перевозок с началом перевозки от Санкт- Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
 check { includes(city_iatas.first, 'LED') and includes(city_iatas, 'IEV') and not includes(country_iatas.last, 'UA') and not includes(country_iatas.last, 'RU') }
 important!
-discount "9.5%"
 commission "10%/9.5%"
 
 example 'ledkbp kbptlv'
@@ -2159,7 +2158,6 @@ agent "9% от тарифа при продаже перевозок с нача
 subagent "8,5% от тарифа при продаже перевозок с началом перевозки от Санкт- Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
 check { includes(city_iatas.first, 'LED') and includes(city_iatas, 'IEV') and not includes(country_iatas.last, 'UA') and not includes(country_iatas.last, 'RU') }
 important!
-discount "8.5%"
 commission "9%/8.5%"
 
 example 'svokbp kbpsvo'
@@ -2167,7 +2165,6 @@ strt_date "21.03.2012"
 agent "5% от тарифа при продаже перевозок на рейсы Москва-Киев (MOW-IEV), Москва-Киев-Москва (MOW -IEV- MOW);"
 subagent "4,5% от тарифа при продаже перевозок на рейсы Москва-Киев (MOW-IEV), Москва-Киев-Москва (MOW -IEV- MOW);"
 check { (includes(city_iatas.first, 'MOW') and includes(city_iatas.last, 'IEV')) or (includes(city_iatas.first, 'MOW') and includes(city_iatas.last, 'MOW') and includes(city_iatas, 'IEV')) }
-discount "4.5%"
 commission "5%/4.5%"
 
 example 'kbpdok'
@@ -2177,7 +2174,6 @@ strt_date "21.03.2012"
 agent "1% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории Украины или третьих стран;"
 subagent "0,5% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории Украины или третьих стран;"
 check { not includes(country_iatas.first, 'RU') }
-discount "0.5%"
 commission "1%/0.5%"
 
 example 'kbpsvo/ab svokbp'
@@ -2185,7 +2181,6 @@ strt_date "21.03.2012"
 agent "5% от тарифа при продаже перевозок на рейсы Interline с участием VV;"
 subagent "4,5% от тарифа при продаже перевозок на рейсы Interline с участием VV;"
 interline :yes
-discount "4.5%"
 commission "5%/4.5%"
 
 example 'kbpsvo/ab svokbp/ab'
