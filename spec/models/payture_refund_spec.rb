@@ -3,66 +3,45 @@ require 'spec_helper'
 
 describe PaytureRefund do
   it "should copy attrs from payture_charge" do
-    order = Factory(:order)
-    charge = PaytureCharge.new :name_in_card => 'vasya', :pan => '123456xxxxxx1234'
-    order.payments << charge
-    charge.reload
+    charge = create(:payture_charge, :name_in_card => 'vasya', :pan => '123456xxxxxx1234')
     refund = charge.refunds.create
 
     refund.order.should be
     refund.order_id.should == charge.order_id
-    refund.ref.should.should == charge.ref
+    refund.ref.should == charge.ref
     refund.pan.should == charge.pan
     refund.name_in_card.should == charge.name_in_card
   end
 
-  it "should change sign of refund with positive price" do
-    order = Factory(:order)
-    charge = PaytureCharge.new :name_in_card => 'vasya', :pan => '123456xxxxxx1234'
-    order.payments << charge
-    charge.reload
-    refund = charge.refunds.create :price => 23.5
-
-    refund.reload
+  it "should change sign of refund with positive price on save" do
+    refund = create(:payture_refund, :price => 23.5)
     refund.price.should == -23.5
   end
 
   it 'should prevent entering commas in price' do
-    order = Factory(:order)
-    charge = PaytureCharge.new
-    order.payments << charge
-    refund = charge.refunds.new :price => '-23,5'
-    refund.should_not be_valid
+    refund = build(:payture_refund, :price => '-23,5')
+    refund.should have_errors_on(:price)
   end
 
   it 'should prevent entering spaces in price' do
-    order = Factory(:order)
-    charge = PaytureCharge.new
-    order.payments << charge
-    refund = charge.refunds.new :price => '23 345.10'
-    refund.should_not be_valid
+    refund = build(:payture_refund, :price => '23 345.10')
+    refund.should have_errors_on(:price)
   end
 
   it 'should prevent entering commas even if sign converted' do
-    order = Factory(:order)
-    charge = PaytureCharge.new
-    order.payments << charge
-    refund = charge.refunds.new :price => '23,5'
-    refund.should_not be_valid
+    refund = build(:payture_refund, :price => '23,5')
+    refund.should have_errors_on(:price)
   end
 
   it 'should accept price otherwise' do
-    order = Factory(:order)
-    charge = PaytureCharge.new
-    order.payments << charge
-    refund = charge.refunds.new :price => ' 23.50руб'
+    refund = build(:payture_refund, :price => ' 23.50руб')
     refund.should be_valid
   end
 
 
   # FIXME кривой тест
   it "should not allow to save refund without charge" do
-    order = Factory(:order)
+    order = create(:order)
     refund = PaytureRefund.new :price => -5, :order => order
 
     refund.should have_errors_on(:charge)
@@ -71,43 +50,25 @@ describe PaytureRefund do
   pending "should not allow to create refund for more than charged"
 
   it 'should recalculate earnings on save' do
-    order = Factory(:order)
-    charge = PaytureCharge.new :name_in_card => 'vasya', :pan => '123456xxxxxx1234'
-    order.payments << charge
-    charge.reload
-    refund = charge.refunds.create :price => -23.5
-
-    refund.reload
+    refund = create(:payture_refund, :price => -23.5)
     refund.earnings.should == -23.5
   end
 
   it 'should not allow to update price on charged refund' do
-    order = Factory(:order)
-    charge = PaytureCharge.new :name_in_card => 'vasya', :pan => '123456xxxxxx1234'
-    order.payments << charge
-    charge.reload
-    refund = charge.refunds.create :price => -23.5
-
-    refund.update_attribute :status, 'charged'
-    refund.reload
+    refund = create(:payture_charge, :price => -23.5)
+    refund.update_attributes :status => 'charged'
     refund.should be_charged
 
-    refund.attributes = {:price => '-23.40'}
+    refund.assign_attributes :price => '-23.40'
     refund.should have_errors_on(:price)
   end
 
   it 'should still allow to update price on charged refund if entered price is technically the same' do
-    order = Factory(:order)
-    charge = PaytureCharge.new :name_in_card => 'vasya', :pan => '123456xxxxxx1234'
-    order.payments << charge
-    charge.reload
-    refund = charge.refunds.create :price => -23.5
-
-    refund.update_attribute :status, 'charged'
-    refund.reload
+    refund = create(:payture_charge, :price => -23.5)
+    refund.update_attributes :status => 'charged'
     refund.should be_charged
 
-    refund.attributes = {:price => '-23.50'}
+    refund.assign_attributes :price => '-23.50'
     refund.should be_valid
   end
 
