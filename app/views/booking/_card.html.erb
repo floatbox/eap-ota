@@ -6,10 +6,10 @@
     <div class="bc-number">
         <h6 class="blabel"><label for="bc-num1" title="Шестнадцатизначный номер карты">Номер карты</label></h6>
         <div class="bcn-fields">
-        <%= f.text_field :number1, :id => "bc-num1", :class => "bfield ClickTaleSensitive", :maxlength => "4" %>
-        <%= f.text_field :number2, :id => "bc-num2", :class => "bfield ClickTaleSensitive", :maxlength => "4" %> 
-        <%= f.text_field :number3, :id => "bc-num3", :class => "bfield ClickTaleSensitive", :maxlength => "4" %>
-        <%= f.text_field :number4, :id => "bc-num4", :class => "bfield ClickTaleSensitive", :maxlength => "4" %>
+        <%= f.text_field :number1, :id => "bc-num1", :class => "bfield ClickTaleSensitive -metrika-nokeys", :maxlength => "4" %>
+        <%= f.text_field :number2, :id => "bc-num2", :class => "bfield ClickTaleSensitive -metrika-nokeys", :maxlength => "4" %> 
+        <%= f.text_field :number3, :id => "bc-num3", :class => "bfield ClickTaleSensitive -metrika-nokeys", :maxlength => "4" %>
+        <%= f.text_field :number4, :id => "bc-num4", :class => "bfield ClickTaleSensitive -metrika-nokeys", :maxlength => "4" %>
         </div>
     </div>
     <div class="bc-name">
@@ -30,7 +30,7 @@
     <div class="bc-cvv">
         <h6 class="blabel"><label for="bc-cvv" title="Трёхзначный CVV (CVC) код карты. Карта без этого кода не подходит для оплаты услуг через интернет.">CVV/CVC</label></h6>
         <div id="bc-num-sample" title="Последние четыре цифры номера карты"><span class="empty">####</span></div>
-        <%= f.text_field :verification_value, :id => "bc-cvv", :class => "bfield ClickTaleSensitive", :maxlength => "3" %>
+        <%= f.text_field :verification_value, :id => "bc-cvv", :class => "bfield ClickTaleSensitive -metrika-nokeys", :maxlength => "3" %>
     </div>
 </div>
 </div>
