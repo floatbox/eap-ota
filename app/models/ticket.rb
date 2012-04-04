@@ -85,7 +85,7 @@ class Ticket < ActiveRecord::Base
 
   # FIXME сделать перечисление прямо из базы, через uniq
   def self.office_ids
-    ['MOWR2233B', 'MOWR228FA', 'MOWR2219U']
+    ['MOWR2233B', 'MOWR228FA', 'MOWR2219U', 'NYC1S21HX', 'FLL1S212V']
   end
 
   def self.validating_carriers
