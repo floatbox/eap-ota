@@ -295,6 +295,9 @@ process: function() {
     case 'fail':    
         this.button.addClass('a-button-ready');
         break;
+    case 'newprice':
+        this.newprice(result);
+        break;
     }
 },
 track: function(result) {
@@ -307,6 +310,31 @@ track: function(result) {
     if (window.yaCounter5324671) {
         yaCounter5324671.hit('/booking/success');
     }
+},
+newprice: function(context) {
+    var that = this;
+    var cp = Number(this.el.parent().find('.booking-price .sum').attr('data-value'));
+    var np = Number(context.attr('data-price'));
+    var template = '{type} на {value}';
+    context.find('.bnp-diff').html(template.supplant({
+        type: np > cp ? 'дороже' : 'дешевле',
+        value: Math.abs(np - cp).inflect('рубль', 'рубля',  'рублей')
+    }));
+    var delivery = $('#bcpt-delivery').prop('checked');
+    context.find('.bc-address, .bcb-delivery').toggle(delivery);
+    context.find('.bc-contacts, .bcb-nodelivery').toggle(!delivery);
+    this.el.find('.booking-card .bc-bill-short').after(context.find('.bc-bill-short')).remove();
+    this.el.find('.booking-cash .bc-bill').after(context.find('.bc-bill')).remove();
+    this.submit.addClass('latent');
+    context.removeClass('latent');
+    context.find('.continue').click(function(event) {
+        event.preventDefault();
+        that.el.children('form').submit();
+        that.submit.removeClass('latent');
+    });
+    context.find('.cancel').click(function() {
+        booking.hide();
+    });
 },
 parse: function(errors) {
     var items = [];
