@@ -13,9 +13,11 @@ module IncomeDistribution
     secured_payments.to_a.sum(&:earnings)
   end
 
+  # FIXME применяется для order-а, что неверно. Билеты могут быть выписаны в разных офисах
   def income_suppliers
-    if commission_ticketing_method == 'aviacenter'
-      scheme_aviacenter
+    case commission_ticketing_method
+    when 'aviacenter', 'downtown'
+      scheme_subagent
     else
       scheme_direct
     end
@@ -23,7 +25,7 @@ module IncomeDistribution
 
   # метод обилечивания
   # 'тариф+таксы' -cумма субагентской комиссии +сбор авиацентра в рублях +cбор за бланки
-  def scheme_aviacenter
+  def scheme_subagent
     price_fare + price_tax - price_subagent + price_consolidator + price_blanks
   end
 
