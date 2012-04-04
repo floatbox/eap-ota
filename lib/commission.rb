@@ -85,34 +85,36 @@ subclasses "FJCD"
 discount "8%"
 commission "11%/9%"
 
-example 'AERDME/W DMEAER/W'
+#example 'AERDME/W DMEAER/W'
 agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWU"
 discount "6.5%"
+disabled "выключили временно"
 commission "12%/10%"
 
-example 'AERDME/Y DMEAER/M'
+#example 'AERDME/Y DMEAER/M'
 agent "12% американский office-id"
 subagent "10  (пять) % от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, M, Q, B, K, O, R, E."
 subclasses "YHMQBKORE"
 discount "6.5%"
+disabled "выключили временно"
 commission "12%/10%"
 
-#example 'AERDME/Y DMEAER/M'
+example 'AERDME/Y DMEAER/M'
 agent "7% МВЛ. ВВЛ Y, H, M, Q, B, K, O, R, E"
 subagent "5  (пять) % от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, M, Q, B, K, O, R, E."
 subclasses "YHMQBKORE"
 discount "4%"
-disabled "замена"
+#disabled "замена"
 commission "7%/5%"
 
-#example 'AERDME/W DMEAER/W'
+example 'AERDME/W DMEAER/W'
 agent "3% МВЛ. ВВЛ L, V, X, T, N, I, G, W, U"
 subagent "2 % от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWU"
 discount "0%"
-disabled "замена"
+#disabled "замена"
 commission "3%/2%"
 
 example 'aerdme dmeaer/ab'
