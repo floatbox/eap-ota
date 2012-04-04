@@ -85,18 +85,34 @@ subclasses "FJCD"
 discount "8%"
 commission "11%/9%"
 
+example 'AERDME/W DMEAER/W'
+agent "12% американский office-id"
+subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
+subclasses "LVXTNIGWU"
+discount "6%"
+commission "12%/10%"
+
 example 'AERDME/Y DMEAER/M'
+agent "12% американский office-id"
+subagent "10  (пять) % от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, M, Q, B, K, O, R, E."
+subclasses "YHMQBKORE"
+discount "6%"
+commission "12%/10%"
+
+#example 'AERDME/Y DMEAER/M'
 agent "7% МВЛ. ВВЛ Y, H, M, Q, B, K, O, R, E"
 subagent "5  (пять) % от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, M, Q, B, K, O, R, E."
 subclasses "YHMQBKORE"
 discount "4%"
+disabled "замена"
 commission "7%/5%"
 
-example 'AERDME/W DMEAER/W'
+#example 'AERDME/W DMEAER/W'
 agent "3% МВЛ. ВВЛ L, V, X, T, N, I, G, W, U"
 subagent "2 % от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWU"
 discount "0%"
+disabled "замена"
 commission "3%/2%"
 
 example 'aerdme dmeaer/ab'
@@ -158,7 +174,7 @@ example 'svocdg'
 strt_date "01.07.2011"
 agent    "С 01.07.11г. 5% от всех опубл. тарифов на рейсы 6H (В договоре Interline отдельно не прописан.)"
 subagent "С 01.07.11г. 3% от опубл. тарифов на собств.рейсы 6H"
-discount "2.7%"
+discount "2%"
 commission "5%/3%"
 
 example 'cdgsvo svocdg/ab'
@@ -269,7 +285,7 @@ example 'svocdg'
 agent    "1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
 subagent "5 коп с билета по опубл. тарифам на рейсы AB"
 interline :no, :unconfirmed
-our_markup "0.2%"
+our_markup "1%"
 commission "1/0.05"
 
 example 'cdgsvo/hg svocdg/hg'
@@ -277,7 +293,7 @@ agent    "1 руб с билета по опубл. тарифам на рейс
 subagent "5 коп с билета по опубл. тарифам на рейсы AB"
 interline :yes, :absent
 check { includes_only(marketing_carrier_iatas, %W[AB HG]) }
-our_markup "0.2%"
+our_markup "1%"
 commission "1/0.05"
 
 example 'svocdg/s7'
@@ -464,6 +480,7 @@ example 'svocdg cdgsvo/ab'
 agent    "1 руб. с билета по всем опубл. тарифам на собств. рейсы BT и рейсы Interline с участком BT"
 subagent "50 коп с билета на рейсы BT"
 interline :no, :yes
+our_markup "150"
 commission "1/0.5"
 
 example 'cdgsvo/ab'
@@ -1701,6 +1718,7 @@ agent    "1 руб. с билета по опубл. тарифам на соб�
 (Билеты Interline под кодом OS могут быть выписаны только в случае существования опубликованных тарифов и только при условии, что OS выполняет как минимум один рейс. В противном случае по билету должна быть сделана доплата до полного опублик. IATA тарифа)"
 subagent "5 коп. с билета по опубл. тарифам на собств.рейсы OS и рейсы Interline с участком OS."
 interline :no, :yes
+our_markup "1%"
 commission "1/0.05"
 
 example 'cdgsvo/ab'
@@ -1978,7 +1996,7 @@ example 'istsvo svoist'
 agent    "7% от тарифа эконом класса на рейсы TK;"
 subagent "5% от тарифа экономического класса на рейсы TK;"
 classes :economy
-discount "4.5%"
+discount "2%"
 commission "7%/5%"
 
 example 'istsvo/business svoist/business'
@@ -1987,7 +2005,7 @@ subagent "5% от тарифа бизнес класса на рейсы TK. т�
 important!
 check { not includes(country_iatas.first, 'RU') }
 classes :business
-discount "4.5%"
+discount "2%"
 commission "7%/5%"
 
 example 'istank'
