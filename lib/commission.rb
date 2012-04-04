@@ -25,7 +25,7 @@ subagent "5 % от тарифов Эконом класса (в т.ч. при к
 # применится только к этому правилу
 # ticketing_method "direct"
 discount "6%"
-our_markup 120
+our_markup 130
 commission "7%/6%"
 
 #subagent "5 (пять) руб. с авиабилета по специальным тарифам (субсидийным перевозкам) на рейсы авиакомпании SU и необходимым пакетом документов (в т.ч. при переоформлении авиабилета с доплатой по тарифу)."
@@ -862,7 +862,7 @@ commission "1%/0.5%"
 carrier "FV", "RUSSIA"
 ########################################
 
-carrier_defaults our_markup: 120
+carrier_defaults our_markup: 150
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
