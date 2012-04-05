@@ -131,14 +131,15 @@ describe Ticket do
   describe "#update_price_fare_and_add_parent" do
 
     before(:each) do
-      old_ticket = Ticket.new(:price_fare => 1000, :code => '456', :number => '234', :id => 10)
-      Ticket.stub_chain(:where, :first).and_return(old_ticket)
+      @old_ticket = Ticket.new(:price_fare => 1000, :code => '456', :number => '234', :id => 10)
       subject.valid?
     end
 
     subject do
       new_ticket_hash = {:number => '123', :code => '456', :price_fare => price_fare, :price_tax => 500, :parent_number => '234', :parent_code => '456', :price_fare_base => price_fare}
-      Ticket.new(new_ticket_hash)
+      ticket = Ticket.new(new_ticket_hash)
+      ticket.stub_chain(:order, :tickets, :where).and_return([@old_ticket])
+      ticket
     end
 
     context 'sets correct price_fare for ticket with fare upgrade' do

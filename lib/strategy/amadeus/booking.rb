@@ -13,7 +13,7 @@ module Strategy::Amadeus::Booking
           ).segments_confirmed?
 
         logger.error 'Strategy::Amadeus: segments aren\'t confirmed in create_booking method'
-        return
+        return :failed
       end
       add_multi_elements = amadeus.pnr_add_multi_elements(@order_form)
       unless add_multi_elements.success?
@@ -24,13 +24,13 @@ module Strategy::Amadeus::Booking
           logger.error "Strategy::Amadeus: Не получили номер брони"
           amadeus.pnr_ignore
         end
-        return
+        return :failed
       end
       unless @order_form.pnr_number = add_multi_elements.pnr_number
         # при сохранении случилась какая-то ошибка, номер брони не выдан.
         logger.error "Strategy::Amadeus: Не получили номер брони"
         amadeus.pnr_ignore
-        return
+        return :failed
       end
       logger.info "Strategy::Amadeus: processing booking: #{add_multi_elements.pnr_number}"
       @order_form.save_to_order
@@ -45,18 +45,22 @@ module Strategy::Amadeus::Booking
       amadeus.pnr_commit_really_hard do
         pricing = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).or_fail!
         @rec.last_tkt_date = pricing.last_tkt_date
-        unless [@rec.price_fare, @rec.price_tax] == pricing.prices
-          logger.error "Strategy::Amadeus: Изменилась цена при тарифицировании: #{@rec.price_fare}, #{@rec.price_tax} -> #{pricing.prices}"
+        new_rec = @rec.dup_with_new_prices(pricing.prices)
+        unless @order_form.price_with_payment_commission == new_rec.price_with_payment_commission
+          logger.error "Strategy::Amadeus: Изменилась цена при тарифицировании: #{@order_form.price_with_payment_commission} -> #{new_rec.price_with_payment_commission}"
           # не попытается ли сохранить бронь после выхода из блока?
           amadeus.pnr_cancel
-          return
+          @order_form.price_with_payment_commission = new_rec.price_with_payment_commission
+          @order_form.recommendation = new_rec
+          @order_form.update_in_cache
+          return :price_changed
         end
 
         unless TimeChecker.ok_to_sell(@rec.journey.departure_datetime_utc, @rec.last_tkt_date)
           logger.error "Strategy: time criteria for last tkt date missed: #{@rec.last_tkt_date}"
           dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
           amadeus.pnr_cancel
-          return
+          return :failed
         end
 
         # FIXME среагировать на отсутствие маски
@@ -94,7 +98,7 @@ module Strategy::Amadeus::Booking
       unless amadeus.pnr_retrieve(:number => @order_form.pnr_number).all_segments_available?
         logger.error "Strategy::Amadeus: Не подтверждены места"
         cancel
-        return
+        return :failed
       end
 
       # если не было cancel можно посылать нотификацию
@@ -104,7 +108,7 @@ module Strategy::Amadeus::Booking
       #Amadeus::Service.issue_ticket(@order_form.pnr_number)
 
       # success!!
-      return @order_form.pnr_number
+      return :success
     end
   end
 

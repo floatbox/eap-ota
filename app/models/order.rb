@@ -241,8 +241,7 @@ class Order < ActiveRecord::Base
     ticket_hashes.each do |th|
       if th[:office_id].blank? || Ticket.office_ids.include?(th[:office_id])
         t = tickets.ensure_exists(th[:number])
-        th.delete(:ticketed_date) if t.ticketed_date # Видимо нужно было для случаев, когда авиакомпания переписывала билет, но точно не помню
-        t.update_attributes th
+        t.update_attributes th if t.new_record?
       end
     end
 

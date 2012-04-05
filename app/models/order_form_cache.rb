@@ -11,6 +11,7 @@ class OrderFormCache
   field :query_key, :type => String
   field :partner, :type => String
   field :marker, :type => String
+  field :price_with_payment_commission, :type => Float
 
   def recommendation= rec
     rec = rec.dup
