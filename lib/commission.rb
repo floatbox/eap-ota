@@ -289,8 +289,8 @@ interline :no, :unconfirmed
 discount "2%"
 commission "5%/3%"
 
-example 'cdgsvo svocdg/lh'
-example 'svocdg'
+#example 'cdgsvo svocdg/lh'
+#example 'svocdg'
 agent    "1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
 subagent "5 коп с билета по опубл. тарифам на рейсы AB"
 interline :no, :unconfirmed
