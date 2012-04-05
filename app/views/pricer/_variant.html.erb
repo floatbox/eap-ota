@@ -21,7 +21,7 @@
 </thead>
 
 <tbody class="summary">
-<% variant_carriers = primary_operating_carriers(variant) %>
+<% variant_carriers = primary_marketing_carriers(variant) %>
 <% common_carrier = variant_carriers.first if variant.segments.length > 1 && variant_carriers.uniq.one? %>
 <% variant.segments.each_with_index do |segment, segment_counter| %>
 <tr class="segment-<%= segment_counter + 1 %>">
@@ -130,7 +130,7 @@
     </div>
     </td>
     <td class="rules" colspan="3">
-      <% if admin_user  %>
+      <% if admin_user %>
         <% variant_debug_info recommendation, variant %>
         <span style="color:green">
            <%= recommendation.source %>
@@ -142,7 +142,13 @@
 
 <tbody class="details">
 <% variant.segments.each_with_index do |segment, segment_counter| %>
-    <%= render :partial => 'pricer/segment_details', :locals => {:segment => segment, :variant => variant, :segment_counter => segment_counter, :segment_cabins => variant_cabins[segment_counter]} %>
+    <%= render :partial => 'pricer/segment_details', :locals => {
+      :segment => segment,
+      :variant => variant,
+      :segment_counter => segment_counter,
+      :segment_cabins => variant_cabins[segment_counter],
+      :segment_carrier => variant_carriers[segment_counter]
+    } %>
 <% end %>
 <% unless variant.carrier_comments.empty? %>
 <tr class="comments">
