@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120402120040) do
+ActiveRecord::Schema.define(:version => 20120405134523) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -236,6 +236,8 @@ ActiveRecord::Schema.define(:version => 20120402120040) do
     t.text     "rendered_message"
     t.string   "lang"
   end
+
+  add_index "notifications", ["method", "status"], :name => "index_notifications_on_method_and_status"
 
   create_table "order_comments", :force => true do |t|
     t.integer  "order_id"
