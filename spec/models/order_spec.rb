@@ -74,8 +74,7 @@ describe Order do
         @old_ticket.order = @order
         @old_ticket.save
         @new_ticket_hashes = [
-          {:number => '123456787', :code => '123', :processed => true, :source => 'amadeus', :parent_id => @old_ticket.id, :status => 'ticketed', :price_fare => 0, :price_tax => 6075},
-          {:number => '123456789', :code => '123', :status => 'exchanged'}
+          {:number => '123456787', :code => '123', :processed => true, :source => 'amadeus', :status => 'ticketed', :price_fare => 0, :price_fare_base => 0, :price_tax => '6075', :parent_number => '123456789', :parent_code => '123'}
         ]
         Strategy.stub_chain(:select, :get_tickets).and_return(@new_ticket_hashes)
         @order.reload_tickets
@@ -189,7 +188,7 @@ describe Order do
         Sirena::Service.stub_chain(:new, :pnr_status, :tickets_with_dates).and_return({})
         @order = Order.new(:source => 'sirena', :commission_subagent => '1%', :pnr_number => '123456')
         @order.stub_chain(:tickets, :reload)
-        ticket = stub_model(Ticket)
+        ticket = stub_model(Ticket, :new_record? => true)
         @order.stub_chain(:tickets, :ensure_exists).and_return(ticket)
         ticket.should_receive(:update_attributes).twice.with(hash_including({:code=>"262"}))
         @order.load_tickets
@@ -218,7 +217,7 @@ describe Order do
         Amadeus.should_receive(:booking).once.and_yield(@amadeus)
         @order.stub_chain(:tickets, :where, :every, :update_attribute)
         @order.stub_chain(:tickets, :reload)
-        ticket = stub_model(Ticket)
+        ticket = stub_model(Ticket, :new_record? => true)
         @order.stub_chain(:tickets, :ensure_exists).and_return(ticket)
         ticket.should_receive(:update_attributes).with(hash_including(
           :code => "555",

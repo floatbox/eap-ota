@@ -17,7 +17,7 @@
         <div class="info">
             <h6>Вылет <%=nbsp flight.departure.city.case_from %></h6>
             <p>Аэропорт <%= flight.departure_name %><% if flight.departure_term %>, терминал&nbsp;<%= flight.departure_term %><% end %></p>
-            <p>Авиакомпания <%= flight.operating_carrier_name %></p>
+            <p>Авиакомпания <% if flight.operating_carrier_name != segment_carrier.name %><span class="other-carrier"><%= flight.operating_carrier_name %></span><% else %><%= flight.operating_carrier_name %><% end %></p>
             <p>Рейс <%= flight.marketing_carrier_iata %>&nbsp;<%= flight.flight_number %> <%= flight.departure.city.name %> — <%= flight.arrival.city.name %></p>
             <p>Самолёт <%= flight.equipment_type_name %></p>
             <p><%= human_duration(flight.duration) %> в&nbsp;пути</p>

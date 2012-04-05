@@ -93,7 +93,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def update_price_fare_and_add_parent
-    if exchanged_ticket = Ticket.where('code = ? AND number like ?', parent_code, parent_number.to_s + '%').first
+    if exchanged_ticket = order.tickets.where('code = ? AND number like ?', parent_code, parent_number.to_s + '%').first
       self.parent = exchanged_ticket
       exchanged_ticket.update_attribute(:status, 'exchanged')
       if price_fare_base && price_fare_base > 0
