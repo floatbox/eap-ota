@@ -9,9 +9,9 @@ Ticket:
      - price_with_payment_commission
      - price_fare
      - price_tax
+     - price_penalty
      - price_discount
      - price_our_markup
-     - price_penalty
      - office_id
      - validator
      - status
@@ -49,6 +49,7 @@ Ticket:
       - route
       - price_fare
       - price_tax
+      - price_penalty
       - commission_consolidator
       - price_consolidator
       - price_blanks
@@ -60,7 +61,6 @@ Ticket:
       - price_discount
       - commission_our_markup
       - price_our_markup
-      - price_penalty
       - price_payment_commission
       - price_with_payment_commission
       - office_id
@@ -81,13 +81,13 @@ Ticket:
       - route
       - price_fare
       - price_tax
+      - price_penalty
       - commission_consolidator
       - commission_blanks
       - commission_agent
       - commission_subagent
       - commission_discount
       - commission_our_markup
-      - price_penalty
       - office_id
       - validator
       - mso_number
@@ -105,6 +105,7 @@ Ticket:
       - cabins
       - price_fare
       - price_tax
+      - price_penalty
       - price_total
       - price_consolidator
       - price_discount
@@ -114,7 +115,6 @@ Ticket:
       - price_agent
       - commission_subagent
       - price_subagent
-      - price_penalty
       - price_with_payment_commission
       - pnr_number
       - need_attention
