@@ -61,28 +61,41 @@ class OrderForm
     end
   end
 
-
-  def adults
-    people && (people.sort_by(&:birthday)[0..(people_count[:adults]-1)])
+  # пассажиры, отсортированные по возрасту
+  def people_by_age
+    (people || []).sort_by(&:birthday)
   end
 
+  # пассажиры, летящие по взрослому тарифу
+  def adults
+    people_by_age.first(people_count[:adults])
+  end
+
+  # пассажиры (в том числе младенцы), летящие по детскому тарифу с выделенным местом
+  def children
+    people_by_age[ people_count[:adults], people_count[:children] ]
+  end
+
+  # дети до двух лет, которым не предоставляется места
+  def infants
+    people_by_age.last(people_count[:infants])
+  end
+
+  # взрослые без детей на коленях
   def childfree_adults
     adults.reject(&:associated_infant)
   end
 
+  # младенцы, которых уже распределили по коленям взрослых пассажиров
+  def associated_infants
+    adults.map(&:associated_infant).compact
+  end
+
+  # младенцы, которых еще не распределили по коленям взрослых пассажиров
+  # на текущий момент младенцы с местом должны попадать в категорию children
+  # FIXME - проверять ли в valid orphans.empty?
   def orphans
-    infants - adults.map(&:associated_infant).compact
-  end
-
-  def children
-    s_pos = people_count[:adults]
-    e_pos = people_count[:adults] + people_count[:children]-1
-    (people && (people_count[:children] > 0) && (people.sort_by(&:birthday)[s_pos..e_pos])) || []
-  end
-
-  def infants
-    s_pos = people_count[:adults] + people_count[:children]
-    (people && (people_count[:infants] > 0) && (people.sort_by(&:birthday)[s_pos..-1])) || []
+    infants - associated_infants
   end
 
   def people_attributes= attrs
