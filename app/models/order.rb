@@ -354,7 +354,7 @@ class Order < ActiveRecord::Base
   end
 
   def recalculated_price_with_payment_commission
-    if tickets.present?
+    if tickets.present? && sold_tickets.every.office_id.uniq != ['FLL1S212V']
       sold_tickets.every.price_with_payment_commission.sum
     else
       price_with_payment_commission
