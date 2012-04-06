@@ -35,7 +35,7 @@ class Order < ActiveRecord::Base
   end
 
   def show_vat
-    sold_tickets.present? && sold_tickets.all?(&:show_vat)
+    sold_tickets.present? && sold_tickets.all?(&:show_vat) && sold_tickets.every.office_id.uniq != ['FLL1S212V']
   end
 
   def self.sources
