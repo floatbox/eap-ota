@@ -28,16 +28,23 @@ FactoryGirl.define do
   factory :payture_charge do
     order
 
-    # не работает! попробовать сделать его с помощью
-    # after_create do |payture_charge, proxy| ...
-
-    #factory :charged_payture_charge do
-    #  status 'charged'
-    #end
+    # пока не годится для build - не проставляет status
+    factory :charged_payture_charge do
+      after_create do |payture_charge, proxy|
+        payture_charge.update_attributes status: 'charged'
+      end
+    end
   end
 
   factory :payture_refund do
-    association :charge, :factory => :payture_charge
+    association :charge, :factory => :charged_payture_charge
+
+    # пока не годится для build - не проставляет status
+    factory :charged_payture_refund do
+      after_create do |payture_refund, proxy|
+        payture_refund.update_attributes status: 'charged'
+      end
+    end
   end
 
   factory :cash_charge do

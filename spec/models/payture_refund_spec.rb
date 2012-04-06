@@ -55,19 +55,13 @@ describe PaytureRefund do
   end
 
   it 'should not allow to update price on charged refund' do
-    refund = create(:payture_charge, :price => -23.5)
-    refund.update_attributes :status => 'charged'
-    refund.should be_charged
-
+    refund = create(:charged_payture_refund, :price => -23.5)
     refund.assign_attributes :price => '-23.40'
     refund.should have_errors_on(:price)
   end
 
   it 'should still allow to update price on charged refund if entered price is technically the same' do
-    refund = create(:payture_charge, :price => -23.5)
-    refund.update_attributes :status => 'charged'
-    refund.should be_charged
-
+    refund = create(:charged_payture_refund, :price => -23.5)
     refund.assign_attributes :price => '-23.50'
     refund.should be_valid
   end
