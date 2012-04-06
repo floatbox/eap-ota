@@ -85,6 +85,7 @@ Order:
       - commission_agent
       - commission_subagent
       - commission_consolidator
+      - price_consolidator
       - commission_blanks
       - commission_discount
       - price_discount
