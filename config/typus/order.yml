@@ -87,7 +87,9 @@ Order:
       - commission_consolidator
       - commission_blanks
       - commission_discount
+      - price_discount
       - commission_our_markup
+      - price_our_markup
       - pricing_method
       - price_with_payment_commission
       - fix_price
