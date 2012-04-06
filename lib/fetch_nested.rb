@@ -17,13 +17,9 @@ module FetchNested
   # => {'baz' => 3}
   def nested(path=nil, default_value=nil)
     return FetchNested::Proxy.new(self) if path.nil?
-
-    path.split('.').inject(self) do |hash, partial_key|
-      unless hash.respond_to?(:has_key?) && hash.has_key?(partial_key)
-        return default_value
-      end
-      hash[partial_key]
-    end
+    path.split('.').inject(self, :fetch)
+  rescue KeyError, NoMethodError
+    default_value
   end
 
   def nested_assign(path, value)
