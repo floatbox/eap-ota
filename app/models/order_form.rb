@@ -306,9 +306,8 @@ class OrderForm
   private
 
   def similar_last_names? first_name, second_name
-    min_length = [first_name, second_name].map(&:length).min
-    coincidence = (first_name.chars.to_set & second_name.chars.to_set).size
-    (coincidence / min_length.to_f) >= 0.5
+    shorter, longer = [first_name.chars, second_name.chars].minmax_by(&:count)
+    longer.zip(shorter).drop_while {|a,b| a==b}.size <= 3
   end
 end
 

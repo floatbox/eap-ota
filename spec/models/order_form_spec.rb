@@ -221,7 +221,11 @@ describe OrderForm do
   end
 
   describe '#similar_last_names?' do
-    pending { subject.send(:similar_last_names?, 'IVANOVA', 'LIKOV').should be_false }
+    specify  { subject.send(:similar_last_names?, 'IVANOVA', 'LIKOV').should be_false }
     specify { subject.send(:similar_last_names?, 'IVANOVA', 'IVANOV').should be_true }
+    specify { subject.send(:similar_last_names?, 'LIZINOV', 'LIZINOVA').should be_true }
+    specify { subject.send(:similar_last_names?, 'IJIN', 'IJINA').should be_true }
+    specify { subject.send(:similar_last_names?, 'IJIN', 'ABRAMOV').should be_false }
+    specify { subject.send(:similar_last_names?, 'ZAYARNYI', 'ZAYARNAYA').should be_true }
   end
 end
