@@ -16,6 +16,7 @@ class OrderForm
 
   attr_writer :card
   attr_accessor :recommendation
+  attr_writer :price_with_payment_commission
   attr_accessor :pnr_number
   attr_accessor :people_count
   attr_accessor :query_key
@@ -60,28 +61,41 @@ class OrderForm
     end
   end
 
-
-  def adults
-    people && (people.sort_by(&:birthday)[0..(people_count[:adults]-1)])
+  # пассажиры, отсортированные по возрасту
+  def people_by_age
+    (people || []).sort_by(&:birthday)
   end
 
+  # пассажиры, летящие по взрослому тарифу
+  def adults
+    people_by_age.first(people_count[:adults])
+  end
+
+  # пассажиры (в том числе младенцы), летящие по детскому тарифу с выделенным местом
+  def children
+    people_by_age[ people_count[:adults], people_count[:children] ]
+  end
+
+  # дети до двух лет, которым не предоставляется места
+  def infants
+    people_by_age.last(people_count[:infants])
+  end
+
+  # взрослые без детей на коленях
   def childfree_adults
     adults.reject(&:associated_infant)
   end
 
+  # младенцы, которых уже распределили по коленям взрослых пассажиров
+  def associated_infants
+    adults.map(&:associated_infant).compact
+  end
+
+  # младенцы, которых еще не распределили по коленям взрослых пассажиров
+  # на текущий момент младенцы с местом должны попадать в категорию children
+  # FIXME - проверять ли в valid orphans.empty?
   def orphans
-    infants - adults.map(&:associated_infant).compact
-  end
-
-  def children
-    s_pos = people_count[:adults]
-    e_pos = people_count[:adults] + people_count[:children]-1
-    (people && (people_count[:children] > 0) && (people.sort_by(&:birthday)[s_pos..e_pos])) || []
-  end
-
-  def infants
-    s_pos = people_count[:adults] + people_count[:children]
-    (people && (people_count[:infants] > 0) && (people.sort_by(&:birthday)[s_pos..-1])) || []
+    infants - associated_infants
   end
 
   def people_attributes= attrs
@@ -127,11 +141,21 @@ class OrderForm
     [recommendation, people_count, people, card].hash
   end
 
+  def price_with_payment_commission
+    @price_with_payment_commission ||= recommendation.price_with_payment_commission
+  end
+
   def save_to_cache
     cache = OrderFormCache.new
-    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker
+    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
     cache.save
     self.number = cache.id.to_s
+  end
+
+  def update_in_cache
+    cache = OrderFormCache.find(number) or raise(NotFound, "#{number} not found")
+    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
+    cache.save
   end
 
   class NotFound < StandardError; end
@@ -139,7 +163,7 @@ class OrderForm
     def load_from_cache(cache_number)
       cache = OrderFormCache.find(cache_number) or raise(NotFound, "#{cache_number} not found")
       order = new
-      copy_attrs cache, order, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker
+      copy_attrs cache, order, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
       order.number = cache.id.to_s
       order
     end

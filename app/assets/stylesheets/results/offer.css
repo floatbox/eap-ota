@@ -417,6 +417,12 @@
     font-size: 116.667%;
     font-weight: bold;
 }
+.offer .details .other-carrier {
+    border-radius: 2px;
+    background: #FFF8D2;
+    margin: 0 -1px;
+    padding: 1px 2px;
+}
 .offer .details .tstops {
     margin: 10px 0 0;
     line-height: 108.33%;

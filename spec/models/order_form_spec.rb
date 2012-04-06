@@ -3,6 +3,24 @@ require 'spec_helper'
 
 describe OrderForm do
 
+  describe "#price_with_payment_commission" do
+    context "when @pwpc is null" do
+      it 'is taken from recommendation' do
+        order_form = OrderForm.new(:price_with_payment_commission => nil)
+        order_form.stub(:recommendation).and_return(mock('recommendation', :price_with_payment_commission => 100))
+        order_form.price_with_payment_commission.should == 100
+      end
+    end
+
+    context "when @pwpc is not null" do
+      it 'is not taken from recommendation' do
+        order_form = OrderForm.new(:price_with_payment_commission => 1000)
+        order_form.stub(:recommendation).and_return(mock('recommendation', :price_with_payment_commission => 100))
+        order_form.price_with_payment_commission.should == 1000
+      end
+    end
+  end
+
   it 'defines tk_xl correctly' do
     order_form = OrderForm.new()
     order_form.stub_chain(:recommendation, :last_tkt_date).and_return(Date.new(2011, 06, 21))
@@ -26,6 +44,7 @@ describe OrderForm do
         :people_count => {:adults => 1, :children => 0, :infants => 0},
         :variant_id => "2",
         :query_key => 'abcde',
+        :price_with_payment_commission => 1000,
         :partner => 'sample_partner'
       ).tap(&:save_to_cache)
     end
@@ -47,6 +66,7 @@ describe OrderForm do
       its(:variant_id) {should == "2"}
       its(:query_key) {should == 'abcde'}
       its(:partner) {should == 'sample_partner'}
+      its(:price_with_payment_commission) {should == 1000}
 
       context "with sample order_form attributes" do
         let(:order_attributes) do
@@ -211,11 +231,9 @@ describe OrderForm do
 
     def create_bunch_of_people arr
       arr.map do |last_name, infant_sign|
-        p = Person.new
-        p.last_name = last_name
-        p.infant_or_child = 'i' if infant_sign
-        p.birthday = infant_sign ? 2.months.ago : 20.years.ago
-        p
+        person = infant_sign ? build(:infant_person) : build(:adult_person)
+        person.last_name = last_name
+        person
       end
     end
   end

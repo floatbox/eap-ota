@@ -148,6 +148,14 @@ module PricerHelper
     end
   end
 
+  def primary_marketing_carriers variant
+    variant.segments.map do |segment|
+      segment.flights.group_by(&:marketing_carrier).max_by do |op_carrier, flights|
+        flights.sum(&:duration)
+      end.first
+    end
+  end
+
   def nearby_cities_list segments
     result = []
     index = {}
