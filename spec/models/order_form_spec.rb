@@ -231,11 +231,9 @@ describe OrderForm do
 
     def create_bunch_of_people arr
       arr.map do |last_name, infant_sign|
-        p = Person.new
-        p.last_name = last_name
-        p.infant_or_child = 'i' if infant_sign
-        p.birthday = infant_sign ? 2.months.ago : 20.years.ago
-        p
+        person = infant_sign ? build(:infant_person) : build(:adult_person)
+        person.last_name = last_name
+        person
       end
     end
   end

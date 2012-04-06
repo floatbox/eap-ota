@@ -11,7 +11,7 @@ FactoryGirl.define do
   end
 
   # если сделать другое их количество, то они пересекаться не будут!
-  sequence :last_name do |x|
+  sequence :last_name do |n|
     last_names = ["IVANOV", "PETROV", "SKRIPCHENKO", "AVDEEV", "BARANOV"]
     last_names[n % last_names.size]
   end
@@ -23,6 +23,18 @@ FactoryGirl.define do
   factory :person do
     first_name
     last_name
+
+    factory :adult_person do
+      birthday {20.years.ago}
+    end
+    factory :child_person do
+      birthday {8.years.ago}
+      infant_or_child 'c'
+    end
+    factory :infant_person do
+      birthday {2.months.ago}
+      infant_or_child 'i'
+    end
   end
 
   factory :payture_charge do
