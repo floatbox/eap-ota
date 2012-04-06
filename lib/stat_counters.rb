@@ -64,13 +64,8 @@ class StatCounters
   def self.build_datetime_conditions(key, value)
     firstdate, lastdate = value.strip.split('-')
     lastdate ||= firstdate
-    if (lastdate == firstdate)
-      date = firstdate.to_date
-      { key => {'$gte' => date.strftime(DATE_FORMAT), '$lt' => date.strftime(DATE_FORMAT)}}
-    else
-      interval = firstdate.to_date..lastdate.to_date
-      { key => {'$gte' => interval.first.strftime(DATE_FORMAT), '$lte' => interval.last.strftime(DATE_FORMAT)}}
-    end
+    interval = firstdate.to_date..lastdate.to_date
+    { key => {'$gte' => interval.first.strftime(DATE_FORMAT), '$lte' => interval.last.strftime(DATE_FORMAT)}}
   end
 
   def self.deep_merge_sum(hash1, hash2)
