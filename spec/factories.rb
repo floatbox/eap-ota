@@ -37,6 +37,26 @@ FactoryGirl.define do
     end
   end
 
+  factory :ticket do
+    sequence :number do |n|
+      "2345#{n}"
+    end
+    code '123'
+    price_fare 1000
+    price_tax 100
+    processed true
+    kind 'ticket'
+    status 'ticketed'
+  end
+
+  factory :refund, :class => Ticket do
+    price_fare 1000
+    price_tax 100
+    processed false
+    comment 'blablabla'
+    kind 'refund'
+  end
+
   factory :payture_charge do
     order
 
