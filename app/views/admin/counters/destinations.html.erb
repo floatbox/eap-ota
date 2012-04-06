@@ -11,12 +11,10 @@
   </form>
 </div>
 
-<br>
 
-
-  <div style=''>
-    <h3><%= @data[:title]%></h3>
-    <p>Всего: <%= @data[:total_s] %> ; <%= @data[:total_e] %> ; <%= (@data[:total_e].to_f / @data[:total_s] * 100).round(2) %>%</p>
+<div style=''>
+  <h3><%= @data[:title]%></h3>
+  <p>Всего: <%= @data[:total_s] %> ; <%= @data[:total_e] %> ; <%= (@data[:total_e].to_f / @data[:total_s] * 100).round(2) %>%</p>
     <table>
         <thead>
         <tr>
@@ -34,7 +32,7 @@
           <td>
           <%= dest[1].nested('search.api.total') %>
         / <%= dest[1].nested('enter.api.total', '-') %>
-        <% if dest[1].nested('enter.api.total') %>
+        <% if dest[1].nested('search.api.total') %>
           : <%= (dest[1].nested('enter.api.total').to_f / dest[1].nested('search.api.total') * 100).round(2) %>%
         <% end %>
           </td>
@@ -42,11 +40,11 @@
         <% @partners.each do |partner|%>
           <td>
           <%= dest[1].nested('search.api.'+partner+'.total', '-') %>/<%= dest[1].nested('enter.api.'+partner+'.total', '-') %>
-          <% if dest[1].nested('enter.api.'+partner+'.total') %>
+          <% if dest[1].nested('search.api.'+partner+'.total') %>
            : <%= (dest[1].nested('enter.api.'+partner+'.total').to_f / dest[1].nested('search.api.'+partner+'.total') * 100).round(2) %>%
           <% end %>
           </td>
         <% end %>
       </tr>
     <% end %>
-  </div>
+</div>
