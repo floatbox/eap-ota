@@ -257,7 +257,7 @@ class Order < ActiveRecord::Base
 
   def update_prices_from_tickets # FIXME перенести в strategy
     # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
-    return if old_booking || @tickets_are_loading
+    return if old_booking || @tickets_are_loading || sold_tickets.every.office_id.uniq == ['FLL1S212V']
     price_total_old = self.price_total
 
     self.price_fare = sold_tickets.every.price_fare.sum
