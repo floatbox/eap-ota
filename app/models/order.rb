@@ -35,7 +35,7 @@ class Order < ActiveRecord::Base
   end
 
   def show_vat
-    sold_tickets.present? && sold_tickets.all?(&:show_vat)
+    sold_tickets.present? && sold_tickets.all?(&:show_vat) && sold_tickets.every.office_id.uniq != ['FLL1S212V']
   end
 
   def self.sources
@@ -257,7 +257,7 @@ class Order < ActiveRecord::Base
 
   def update_prices_from_tickets # FIXME перенести в strategy
     # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
-    return if old_booking || @tickets_are_loading
+    return if old_booking || @tickets_are_loading || sold_tickets.every.office_id.uniq == ['FLL1S212V']
     price_total_old = self.price_total
 
     self.price_fare = sold_tickets.every.price_fare.sum
@@ -354,7 +354,7 @@ class Order < ActiveRecord::Base
   end
 
   def recalculated_price_with_payment_commission
-    if tickets.present?
+    if tickets.present? && sold_tickets.every.office_id.uniq != ['FLL1S212V']
       sold_tickets.every.price_with_payment_commission.sum
     else
       price_with_payment_commission

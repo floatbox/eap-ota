@@ -52,9 +52,37 @@ class StatCounters
     connection['d_daily'].find({'date' => date_index(time)}, :sort => [['search.api.total', -1]], :limit => count)
   end
 
+  def self.search_on_daterange(date, count=100)
+    connection['d_daily'].find(date, :sort => [['search.api.total', -1]], :limit => count)
+  end
+
   # FIXME UGLY пытаемся выводить данные в человекочитабельном виде
   def self.debug_yml(bson)
     bson.to_yaml.gsub(' !ruby/hash:BSON::OrderedHash', '').gsub(' !map:BSON::OrderedHash', '')
+  end
+  
+  def self.build_datetime_conditions(key, value)
+    firstdate, lastdate = value.strip.split('-')
+    lastdate ||= firstdate
+    interval = firstdate.to_date..lastdate.to_date
+    { key => {'$gte' => interval.first.strftime(DATE_FORMAT), '$lte' => interval.last.strftime(DATE_FORMAT)}}
+  end
+
+  def self.deep_merge_sum(hash1, hash2)
+    hash1 ||= {}
+    hash2 ||= {}
+    sum = hash1
+    hash2.each_pair do |k,v|
+      tv = hash1[k]
+      if tv.is_a?(Hash) && v.is_a?(Hash)
+        sum[k] = deep_merge_sum(tv, v)
+      elsif v.is_a?(Hash)
+        sum[k] = v
+      else
+        sum[k] = tv.to_i + v.to_i
+      end
+    end
+    sum
   end
 
 end
