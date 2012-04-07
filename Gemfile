@@ -18,6 +18,7 @@ gem 'pry-editline'
 # Deploy with Capistrano
 group :deployment do
   gem 'capistrano'
+  gem 'rvm-capistrano'
   gem 'capistrano_colors'
 end
 
