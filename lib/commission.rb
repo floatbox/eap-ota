@@ -35,8 +35,8 @@ important!
 agent "- за продажу в Бизнес классе  9 % от тарифа;"
 subagent "7 % от тарифов Бизнес класса, при переоформлении с доплатой по тарифам Бизнес класса;"
 classes :business
-discount "8%"
-our_markup 350
+discount "4%"
+our_markup 0
 commission "9%/8%"
 
 example "svocdg/su cdgsvo/ab"
