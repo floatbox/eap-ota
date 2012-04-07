@@ -25,7 +25,7 @@ subagent "5 % от тарифов Эконом класса (в т.ч. при к
 # применится только к этому правилу
 # ticketing_method "direct"
 discount "6%"
-our_markup 130
+our_markup 50
 commission "7%/6%"
 
 #subagent "5 (пять) руб. с авиабилета по специальным тарифам (субсидийным перевозкам) на рейсы авиакомпании SU и необходимым пакетом документов (в т.ч. при переоформлении авиабилета с доплатой по тарифу)."
@@ -47,7 +47,7 @@ subagent "• на рейсы Interline в комбинации с рейсом 
 subagent "(три) % от сквозных или участковых тарифов (в т.ч. при переоформлении авиабилета с       доплатой по тарифу)"
 interline :yes
 discount "3%"
-our_markup 150
+our_markup 100
 commission "5%/3%"
 
 agent "- за оформление бесплатных  пассажирских перевозок комиссия не начисляется."
@@ -72,7 +72,7 @@ subagent "В целях активизации продаж на рейсы со
 check { includes_only( flights.every.flight_number,  %W(4604 4605 4610 4611 4612 4613 4614 4615 4616 4617 4620 4626 4627 4630 4631 4632 4633 4634 4635 4636 4637 4638 4639 4640 4641 4642 4643 4644 4645 4646 4647 4648 4649 4650 4651 4652 4653 4656 4657 4658 4659 4662 4663 4664 4665 4668 4669 4670 4671 4672 4673 4674 4675 4676 4677 4678 4679 4682 4683 4690 4691)) }
 important!
 discount "8%"
-our_markup 200
+our_markup 150
 commission "9%/8%"
 
 carrier "UN", "TRANSAERO"
@@ -873,7 +873,7 @@ commission "1%/0.5%"
 carrier "FV", "RUSSIA"
 ########################################
 
-carrier_defaults our_markup: 150
+carrier_defaults our_markup: 100
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -2000,14 +2000,14 @@ carrier "TK", "TURKISH AIRLINES"
 agent    "7% от полного опубл. тарифа IATA на рейсы TK;"
 subagent "5% от полного опубл. тарифа IATA на рейсы TK;"
 not_implemented "что такое полный опубликованный тариф?"
-discount "4.5%"
+discount "3%"
 commission "7%/5%"
 
 example 'istsvo svoist'
 agent    "7% от тарифа эконом класса на рейсы TK;"
 subagent "5% от тарифа экономического класса на рейсы TK;"
 classes :economy
-discount "2%"
+discount "3%"
 commission "7%/5%"
 
 example 'istsvo/business svoist/business'
@@ -2097,7 +2097,7 @@ example 'cdgsvo svocdg/ab'
 agent    "5% от всех опубл. тарифов на рейсы UX (В договоре Interline отдельно не прописан.)"
 subagent "3,5% от опубл. тарифов на собств. рейсы UX"
 interline :no, :unconfirmed
-discount "3%"
+discount "2%"
 commission "5%/3.5%"
 
 carrier "VN", "VIETNAM AIRLINES"
