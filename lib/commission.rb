@@ -425,7 +425,7 @@ example 'svocdg cdgsvo/ab'
 agent    "1 euro с билета по опубл. тарифам на рейсы Interline, если 1-ый сегмент выполнен под кодом AZ."
 subagent "5 руб. с билета по опубл. тарифам на рейсы Interline, если 1-ый сегмент выполнен под кодом AZ."
 interline :first
-our_markup "0.2%"
+our_markup "0.5%"
 commission "1eur/5"
 
 example 'svocdg/ab cdgsvo'
