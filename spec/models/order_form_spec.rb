@@ -239,7 +239,9 @@ describe OrderForm do
   end
 
   describe '#similar_last_names?' do
-    specify  { subject.send(:similar_last_names?, 'IVANOVA', 'LIKOV').should be_false }
+    specify { subject.send(:similar_last_names?, 'KIM', 'KIM').should be_true }
+    specify { subject.send(:similar_last_names?, 'KIM', 'KAY').should be_false }
+    specify { subject.send(:similar_last_names?, 'IVANOVA', 'LIKOV').should be_false }
     specify { subject.send(:similar_last_names?, 'IVANOVA', 'IVANOV').should be_true }
     specify { subject.send(:similar_last_names?, 'LIZINOV', 'LIZINOVA').should be_true }
     specify { subject.send(:similar_last_names?, 'IJIN', 'IJINA').should be_true }

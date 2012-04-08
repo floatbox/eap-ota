@@ -329,9 +329,13 @@ class OrderForm
 
   private
 
+  LONGEST_ENDING = 3
+  SHORTEST_STEM = 3
+  # похожесть фамилий без учета мужских и женских окончаний
   def similar_last_names? first_name, second_name
-    shorter, longer = [first_name.chars, second_name.chars].minmax_by(&:count)
-    longer.zip(shorter).drop_while {|a,b| a==b}.size <= 3
+    max_length = [first_name.length, second_name.length].max
+    stem_length = [max_length - LONGEST_ENDING, SHORTEST_STEM].max
+    first_name[0, stem_length] == second_name[0, stem_length]
   end
 end
 
