@@ -12,16 +12,40 @@
       <th>Изменения</th>
     </tr>
   </thead>
-  <% @item.versions.each do |version| %>
+  <% @item.versions.reverse_each do |version| %>
   <tr class="<%= cycle("even", "odd") %>">
-    <td><%= I18n.l(version.created_at, :format => :long) %></td>
-    <td><%= version.whodunnit || '--' %></td>
+    <td><%= I18n.l(version.created_at, :format => :long) %>
+      <% if version.previous %>
+        <% duration = (version.created_at - version.previous.created_at).to_i / 60 %>
+        <% if duration > 0 %>
+          <br><span style="color:gray; font-size:smaller">...<%= human_duration( duration ) %>...</span>
+        <% end %>
+      <% end %>
+    </td>
+    <td><%= version.terminator || '--' %></td>
     <td>
-    <% version.changeset.each do |attribute, (before, after)| %>
-      <strong><%= @resource.human_attribute_name(attribute) %></strong>:
-      <%= before %> → <%= after %>
-      <br><br>
+
+    <%# FIXME может сломаться. вынести в какой-то хелпер? %>
+    <% if version.event == 'create' %>
+      <% attrs = version.next ? YAML::load(version.next.object) : @item.attributes %>
+      <% attrs.each do |attribute, value| %>
+        <% next if value.blank? || value == 0 %>
+        <strong><%= @resource.human_attribute_name(attribute) %></strong>:
+         <%= value.inspect %>
+        <br><br>
+      <% end %>
+
+    <% else %>
+      <% version.changeset.each do |attribute, (before, after)| %>
+        <strong><%= @resource.human_attribute_name(attribute) %></strong>:
+        <% unless before.nil? %>
+          <%= before.inspect %> →
+        <% end %>
+          <%= after.inspect %>
+        <br><br>
+      <% end %>
     <% end %>
+
   </td>
   <% end %>
 </table>
