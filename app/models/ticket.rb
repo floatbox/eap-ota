@@ -212,6 +212,14 @@ class Ticket < ActiveRecord::Base
     "#{code}-#{number}" if number.present?
   end
 
+  def self.find_by_number_with_code(number_with_code)
+    code, number = number_with_code.split('-',2)
+    find_by_code_and_number(code, number)
+  end
+  class << self
+    alias_method :[], :find_by_number_with_code
+  end
+
   # номер первого билета для conjunction
   def first_number
     number.sub /-.*/, '' if number.present?
