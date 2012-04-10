@@ -10,7 +10,7 @@ class BookingController < ApplicationController
     end
     
     @search = PricerForm.load_from_cache(params[:query_key])
-    set_search_context_for_airbrake
+    #set_search_context_for_airbrake
     recommendation = Recommendation.deserialize(params[:recommendation])
     # FIXME @search.partner пусть останется пока
     # track_partner(params[:partner] || @search.partner, params[:marker])
