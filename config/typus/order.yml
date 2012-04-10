@@ -141,7 +141,7 @@ Order:
     export: csv
     #action_after_save: show
   actions:
-    show: edit
+    edit: show
   # тут не ввернешь конфирмации. временно убрал
   # actions:
   #   show: cancel, ticket, charge, unblock, show_pnr
