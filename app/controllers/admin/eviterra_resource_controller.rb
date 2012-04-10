@@ -5,6 +5,10 @@ class Admin::EviterraResourceController < Admin::ResourcesController
     admin_user && admin_user.email
   end
 
+  def info_for_paper_trail
+    { :action => "#{params[:controller]}/#{params[:action]}" }
+  end
+
   # копия из application_controller, для хоптода
   # TODO вынести в отдельный модуль?
   before_filter :set_admin_user_for_airbrake

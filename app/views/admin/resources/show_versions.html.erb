@@ -22,7 +22,11 @@
         <% end %>
       <% end %>
     </td>
-    <td><%= version.terminator || '--' %></td>
+    <td><%= version.terminator || '--' %>
+      <% if version.action %>
+        <br><span style="color:gray; font-size:smaller"><%= version.action %></span>
+      <% end %>
+    </td>
     <td>
 
     <%# FIXME может сломаться. вынести в какой-то хелпер? %>
