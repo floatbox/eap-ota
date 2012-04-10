@@ -9,11 +9,9 @@ class Admin::EviterraResourceController < Admin::ResourcesController
     { :action => "#{params[:controller]}/#{params[:action]}" }
   end
 
-  # копия из application_controller, для хоптода
-  # TODO вынести в отдельный модуль?
-  before_filter :set_admin_user_for_airbrake
-  def set_admin_user_for_airbrake
-    request.env['eviterra.admin_user'] = admin_user.email if admin_user
+  before_filter :log_admin_user
+  def log_admin_user
+    logger.info "AdminUser: #{admin_user.email}"
   end
 
   # патчим редирект после сохранения на show
