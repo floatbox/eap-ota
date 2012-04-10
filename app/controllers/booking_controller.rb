@@ -115,7 +115,7 @@ class BookingController < ApplicationController
 
     if booking_status == :failed
       StatCounters.inc %W[pay.errors.booking]
-      render :partial => :failed_booking
+      render :partial => 'failed_booking'
       return
     elsif booking_status == :price_changed
       render :partial => 'newprice'
