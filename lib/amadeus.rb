@@ -35,8 +35,8 @@ module Amadeus
     end
 
     # еще копипаста!
-    def working
-      amadeus = Amadeus::Service.new(:book => true, :office => Amadeus::Session::WORKING)
+    def testing
+      amadeus = Amadeus::Service.new(:book => true, :office => Amadeus::Session::TESTING)
       if block_given?
         begin
           return yield(amadeus)

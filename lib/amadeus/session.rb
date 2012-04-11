@@ -5,10 +5,9 @@ module Amadeus
   class Session < ActiveRecord::Base
 
   BOOKING = 'MOWR228FA'
-  TICKETING = 'MOWR2290Q'
-  # логин сюда не работает
-  # только для передачи прав доступа
-  WORKING = 'MOWR2233B'
+  TICKETING = 'MOWR2233B'
+  # старый тестовый офис-айди
+  TESTING = 'MOWR2290Q'
 
   self.table_name = 'amadeus_sessions'
 
@@ -67,7 +66,7 @@ module Amadeus
         raise "somehow can't get new session"
       end
     else
-      logger.info "Amadeus::Session: #{session.token} reused (#{session.seq})"
+      logger.info "Amadeus::Session: #{session.token} reused (#{session.seq}) for #{session.office}"
     end
     session
   end
@@ -79,7 +78,7 @@ module Amadeus
     session = from_token(token)
     session.booking = booking if booking
     session.office = office
-    logger.info "Amadeus::Session: #{session.token} signed in"
+    logger.info "Amadeus::Session: #{session.token} signed into #{office}"
     session.save
     session
   end
