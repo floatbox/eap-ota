@@ -30,25 +30,17 @@ describe Strategy::Amadeus do
   describe "#booking_attributes" do
 
     before(:each) do
-      amadeus.stub(:pnr_retrieve).and_return(pnr_resp)
-      amadeus.stub(:ticket_display_tst).and_return(tst_resp)
-      amadeus.stub(:pnr_ignore)
-    end
-
-    let :pnr_resp do
-      body = File.read('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::PNRRetrieve.new(doc)
-    end
-
-    let :tst_resp do
-      body = File.read('spec/amadeus/xml/Ticket_DisplayTST_with_ticket.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::TicketDisplayTST.new(doc)
+      amadeus.stub(
+        pnr_retrieve:
+          amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml'),
+        ticket_display_tst:
+          amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_with_ticket.xml'),
+        pnr_ignore: nil
+      )
     end
 
     subject do
-      Strategy::Amadeus.new(:order => Factory(:order)).booking_attributes
+      Strategy::Amadeus.new(:order => build(:order)).booking_attributes
     end
 
     it {should include(:blank_count => 1)}
@@ -62,25 +54,17 @@ describe Strategy::Amadeus do
   describe "#recommendation_from_booking" do
 
     before(:each) do
-      amadeus.stub(:pnr_retrieve).and_return(pnr_resp)
-      amadeus.stub(:ticket_display_tst).and_return(tst_resp)
-      amadeus.stub(:pnr_ignore)
-    end
-
-    let :pnr_resp do
-      body = File.read('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::PNRRetrieve.new(doc)
-    end
-
-    let :tst_resp do
-      body = File.read('spec/amadeus/xml/Ticket_DisplayTST_with_ticket.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::TicketDisplayTST.new(doc)
+      amadeus.stub(
+        pnr_retrieve:
+          amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml'),
+        ticket_display_tst:
+          amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_with_ticket.xml'),
+        pnr_ignore: nil
+      )
     end
 
     subject do
-      Strategy::Amadeus.new(:order => Factory(:order)).recommendation_from_booking
+      Strategy::Amadeus.new(:order => build(:order)).recommendation_from_booking
     end
 
     its(:validating_carrier_iata) {should == "SU"}
