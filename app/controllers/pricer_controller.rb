@@ -127,8 +127,11 @@ class PricerController < ApplicationController
   end
 
   def load_form_from_cache
-    @query_key = params[:query_key] or raise 'no query_key provided'
-    @search = PricerForm.load_from_cache(params[:query_key])
+    StatCounters.inc %W[search.total]
+    unless (@query_key = params[:query_key]) && (@search = PricerForm.load_from_cache(@query_key))
+      StatCounters.inc %W[search.errors.pricer_form_not_found]
+      render :text => "404 Not found", :status => :not_found
+    end
     #set_search_context_for_airbrake
   end
 
