@@ -21,9 +21,10 @@ describe Strategy::Amadeus do
   pending "#check_price_and_availability"
   pending "#create_booking"
   pending "#cancel"
-  pending "#delayed_ticketing?"
   pending "#raw_pnr"
   pending "#raw_ticket"
+
+  its(:delayed_ticketing?) {should be_true}
 
   describe "#booking_attributes" do
 
