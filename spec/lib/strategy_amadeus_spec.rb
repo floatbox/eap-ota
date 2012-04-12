@@ -27,7 +27,39 @@ describe Strategy::Amadeus do
   pending "#create_booking"
   pending "#cancel"
   pending "#raw_pnr"
-  pending "#raw_ticket"
+
+  # FIXME ясностью не блещет
+  describe "#raw_ticket" do
+    let(:ticket) { mock(Ticket, office: office, first_number_with_code: '123-23456789') }
+    subject { Strategy::Amadeus.new(:ticket => ticket) }
+
+    context "on whitelisted office_id" do
+      before do
+        service = mock(Amadeus::Service)
+        service.stub_chain(:session, :release)
+        Amadeus::Service.should_receive(:new).with( hash_including(:office => office) ) \
+          .and_return(service)
+        service.stub(:ticket_raw => expected_result)
+      end
+      let(:expected_result) {'raw tickets result'}
+
+      context "MOWR2233B" do
+        let(:office) {'MOWR2233B'}
+        its(:raw_ticket) {should == expected_result}
+      end
+      context "MOWR228FA" do
+        let(:office) {'MOWR228FA'}
+        its(:raw_ticket) {should == expected_result}
+      end
+    end
+
+    context "on other office_ids" do
+      context "FLL1S212V" do
+        let(:office) {"FLL1S212V"}
+        its(:raw_ticket) {should include("not supported")}
+      end
+    end
+  end
 
   its(:delayed_ticketing?) {should be_true}
 
