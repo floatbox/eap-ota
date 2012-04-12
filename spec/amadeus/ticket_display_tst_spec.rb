@@ -70,5 +70,13 @@ describe Amadeus::Response::TicketDisplayTST do
     its('prices_with_refs.keys.every.second.flatten.uniq') {should_not include(2)}
     its('prices_with_refs.keys.every.second.flatten.uniq') {should include(1)}
   end
+
+  describe 'with no tst on order' do
+    subject_once! { amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_no_tst.xml') }
+
+    it {should_not be_success}
+    its(:error_message) {should == "NO TST RECORD EXISTS :"}
+  end
+
 end
 

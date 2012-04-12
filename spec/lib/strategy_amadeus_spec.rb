@@ -18,6 +18,11 @@ describe Strategy::Amadeus do
     expect { described_class.new.ticket }.to raise_error(NotImplementedError)
   end
 
+  describe "#get_tickets" do
+    pending "with tst_resp"
+    pending "without tst_resp"
+  end
+
   pending "#check_price_and_availability"
   pending "#create_booking"
   pending "#cancel"
