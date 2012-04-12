@@ -22,6 +22,7 @@ module Amadeus
   scope :busy, where("booking is not null")
   scope :free,
     lambda { where("updated_at >= ? AND booking is null", INACTIVITY_TIMEOUT.seconds.ago)}
+  scope :for_office, lambda { |office_id| where( office: office_id ) }
 
   def self.from_token(auth_token)
     session = new
@@ -56,9 +57,7 @@ module Amadeus
     logger.info { "Amadeus::Session: free sessions count: #{free.count}" }
     booking = SecureRandom.random_number(2**31)
 
-    # FIXME fucking awesome! AREL simply ignores "limit 1" from some version above
-    # free.limit(1).update_all(:booking => booking)
-    update_all( "booking = #{booking} WHERE #{free.where_values.join(' AND ')} AND office = '#{office}' LIMIT 1" )
+    free.for_office(office).limit(1).update_all(:booking => booking)
 
     session = find_by_booking(booking)
     unless session
