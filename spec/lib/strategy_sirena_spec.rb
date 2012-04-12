@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe Strategy::Sirena do
-  let (:sirena) { double(Sirena::Service) }
+  let (:sirena) { mock(Sirena::Service) }
 
   # safeguard
   before do
