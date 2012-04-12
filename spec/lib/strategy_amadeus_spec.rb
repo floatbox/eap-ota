@@ -30,7 +30,7 @@ describe Strategy::Amadeus do
 
   # FIXME ясностью не блещет
   describe "#raw_ticket" do
-    let(:ticket) { mock(Ticket, office: office, first_number_with_code: '123-23456789') }
+    let(:ticket) { mock(Ticket, office_id: office, first_number_with_code: '123-23456789') }
     subject { Strategy::Amadeus.new(:ticket => ticket) }
 
     context "on whitelisted office_id" do
