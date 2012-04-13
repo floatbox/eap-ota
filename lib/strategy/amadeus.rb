@@ -44,8 +44,14 @@ class Strategy::Amadeus < Strategy::Base
   end
 
   def raw_ticket
-    ::Amadeus.booking do |amadeus|
-      amadeus.ticket_raw(@ticket.first_number_with_code)
+    case office = @ticket.office_id
+    when 'MOWR2233B', 'MOWR228FA'
+      amadeus = Amadeus::Service.new(book: true, office: office)
+      raw_ticket = amadeus.ticket_raw(@ticket.first_number_with_code)
+      amadeus.session.release
+      raw_ticket
+    else
+      "not supported for office id #{office}"
     end
   end
 

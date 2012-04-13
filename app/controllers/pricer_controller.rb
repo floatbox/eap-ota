@@ -39,7 +39,7 @@ class PricerController < ApplicationController
   def validate
     if @query_key = params[:query_key]
       @search = PricerForm.load_from_cache(@query_key)
-      set_search_context_for_airbrake
+      #set_search_context_for_airbrake
       fragment_exist =
         fragment_exist?([:pricer, @query_key]) &&
         fragment_exist?([:calendar, @query_key])
@@ -52,7 +52,7 @@ class PricerController < ApplicationController
       }
     else
       @search = PricerForm.new(params[:search])
-      set_search_context_for_airbrake
+      #set_search_context_for_airbrake
       if @search.valid?
         StatCounters.inc %W[validate.success]
         @search.save_to_cache
@@ -127,9 +127,12 @@ class PricerController < ApplicationController
   end
 
   def load_form_from_cache
-    @query_key = params[:query_key] or raise 'no query_key provided'
-    @search = PricerForm.load_from_cache(params[:query_key])
-    set_search_context_for_airbrake
+    StatCounters.inc %W[search.total]
+    unless (@query_key = params[:query_key]) && (@search = PricerForm.load_from_cache(@query_key))
+      StatCounters.inc %W[search.errors.pricer_form_not_found]
+      render :text => "404 Not found", :status => :not_found
+    end
+    #set_search_context_for_airbrake
   end
 
 end

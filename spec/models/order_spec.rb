@@ -196,21 +196,19 @@ describe Order do
 
     end
 
+    # FIXME это все в стратегии должно быть
     context "for amadeus order" do
 
       before(:each) do
         @order = Order.new(:source => 'amadeus', :commission_subagent => '1%', :pnr_number => '123456')
         @amadeus = mock('Amadeus')
-
-        body = File.read('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml')
-        doc = Amadeus::Service.parse_string(body)
-        @amadeus.stub(:pnr_retrieve).and_return(Amadeus::Response::PNRRetrieve.new(doc))
-
-
-        body = File.read('spec/amadeus/xml/Ticket_DisplayTST_with_ticket.xml')
-        doc = Amadeus::Service.parse_string(body)
-        @amadeus.stub(:ticket_display_tst).and_return(Amadeus::Response::TicketDisplayTST.new(doc))
-        @amadeus.stub(:pnr_ignore)
+        @amadeus.stub(
+          pnr_retrieve:
+            amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml'),
+          ticket_display_tst:
+            amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_with_ticket.xml'),
+          pnr_ignore: nil
+        )
       end
 
       it 'loads tickets correctly' do

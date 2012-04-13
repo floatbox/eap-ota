@@ -282,7 +282,8 @@ class Order < ActiveRecord::Base
   validate :needs_update_from_gds_filter, :if => :needs_update_from_gds
 
   def needs_update_from_gds_filter
-    update_from_gds
+    # молча не считываю, если операторы забыли ввести PNR или если это доплата
+    update_from_gds if pnr_number.present?
   # rescue => e
   #  errors.add(:needs_update_from_gds, e.message)
   end

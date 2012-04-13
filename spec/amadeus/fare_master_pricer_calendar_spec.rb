@@ -5,9 +5,7 @@ describe Amadeus::Response::FareMasterPricerCalendar do
   context 'with avaliability contexts from slice and dice' do
 
     let_once! :response do
-      body = File.read('spec/amadeus/xml/Fare_MasterPricerCalendar_slice_and_dice.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::FareMasterPricerCalendar.new(doc)
+      amadeus_response('spec/amadeus/xml/Fare_MasterPricerCalendar_slice_and_dice.xml')
     end
 
     describe "response" do

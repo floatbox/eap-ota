@@ -70,10 +70,12 @@ describe OrderForm do
 
       context "with sample order_form attributes" do
         let(:order_attributes) do
-          {"number"=>"abcdef",
-           "phone"=>"81234567890",
-           "email"=>"super@example.com",
-           "payment_type"=>"cash"}
+          {
+            "number" => "abcdef",
+            "phone" => "81234567890",
+            "email" => "super@example.com",
+            "payment_type" => "cash"
+          }
         end
 
         # triggers validation?
@@ -87,10 +89,12 @@ describe OrderForm do
 
   context "with sample order_form attributes" do
       let(:order_attributes) do
-        {"number"=>"abcdef",
-         "phone"=>"81234567890",
-         "email"=>"super@example.com",
-         "payment_type"=>"cash"}
+        {
+          "number" => "abcdef",
+          "phone" => "81234567890",
+          "email" => "super@example.com",
+          "payment_type" => "cash"
+        }
       end
 
       it "should accept them in initializer" do
@@ -102,33 +106,35 @@ describe OrderForm do
     # FIXME поправить параметры в соответствии с текущими контроллерами и т.п.
     # или перенести в контроллер-спек, а здесь работать только с конкретными хэшами
     let(:person_attributes) do
-      {"0"=>
-        {"document_noexpiration"=>"0",
-         "birthday(1i)"=>"1984",
-         "birthday(2i)"=>"06",
-         "birthday(3i)"=>"16",
-         "nationality_id"=>"170",
-         #"bonuscard_type"=>"[FILTERED]",
-         #"bonuscard_number"=>"[FILTERED]",
-         "document_expiration_date(1i)"=>"2014",
-         "document_expiration_date(2i)"=>"09",
-         "document_expiration_date(3i)"=>"08",
-         "sex"=>"m",
-         "last_name"=>"IVASHKIN",
-         "bonus_present"=>"0",
-         "passport"=>"123456789",
-         "first_name"=>"ALEKSEY"},
-       "1"=>
-        {"document_noexpiration"=>"1",
-         "birthday(1i)"=>"1985",
-         "birthday(2i)"=>"09",
-         "birthday(3i)"=>"04",
-         "nationality_id"=>"170",
-         "sex"=>"f",
-         "last_name"=>"IVASHKINA",
-         "bonus_present"=>"0",
-         "passport"=>"1234567890",
-         "first_name"=>"MARIA"}
+      {
+        "0" => {
+          "document_noexpiration" => "0",
+          "birthday(1i)" => "1984",
+          "birthday(2i)" => "06",
+          "birthday(3i)" => "16",
+          "nationality_id" => "170",
+          #"bonuscard_type" => "[FILTERED]",
+          #"bonuscard_number" => "[FILTERED]",
+          "document_expiration_date(1i)" => "2014",
+          "document_expiration_date(2i)" => "09",
+          "document_expiration_date(3i)" => "08",
+          "sex" => "m",
+          "last_name" => "IVASHKIN",
+          "bonus_present" => "0",
+          "passport" => "123456789",
+          "first_name" => "ALEKSEY"
+        },
+        "1" => {
+          "document_noexpiration" => "1",
+          "birthday(1i)" => "1985",
+          "birthday(2i)" => "09",
+          "birthday(3i)" => "04",
+          "nationality_id" => "170",
+          "sex" => "f",
+          "last_name" => "IVASHKINA",
+          "bonus_present" => "0",
+          "passport" => "1234567890",
+          "first_name" => "MARIA"}
         }
       end
 
@@ -239,7 +245,9 @@ describe OrderForm do
   end
 
   describe '#similar_last_names?' do
-    specify  { subject.send(:similar_last_names?, 'IVANOVA', 'LIKOV').should be_false }
+    specify { subject.send(:similar_last_names?, 'KIM', 'KIM').should be_true }
+    specify { subject.send(:similar_last_names?, 'KIM', 'KAY').should be_false }
+    specify { subject.send(:similar_last_names?, 'IVANOVA', 'LIKOV').should be_false }
     specify { subject.send(:similar_last_names?, 'IVANOVA', 'IVANOV').should be_true }
     specify { subject.send(:similar_last_names?, 'LIZINOV', 'LIZINOVA').should be_true }
     specify { subject.send(:similar_last_names?, 'IJIN', 'IJINA').should be_true }

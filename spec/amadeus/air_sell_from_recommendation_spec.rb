@@ -21,9 +21,7 @@ describe Amadeus::Response::AirSellFromRecommendation do
   describe 'when arrival is "before" departure because of timezones' do
 
     let_once! :response do
-      body = File.read('spec/amadeus/xml/Air_SellFromRecommendation_back_in_time.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::AirSellFromRecommendation.new(doc)
+      amadeus_response('spec/amadeus/xml/Air_SellFromRecommendation_back_in_time.xml')
     end
 
     subject {response}
@@ -67,9 +65,7 @@ describe Amadeus::Response::AirSellFromRecommendation do
   describe 'with arrival in after tomorrow' do
 
     let_once! :response do
-      body = File.read('spec/amadeus/xml/Air_SellFromRecommendation_two_days_flight.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::AirSellFromRecommendation.new(doc)
+      amadeus_response('spec/amadeus/xml/Air_SellFromRecommendation_two_days_flight.xml')
     end
 
     subject {response}

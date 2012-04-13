@@ -5,10 +5,9 @@ module Amadeus
   class Session < ActiveRecord::Base
 
   BOOKING = 'MOWR228FA'
-  TICKETING = 'MOWR2290Q'
-  # логин сюда не работает
-  # только для передачи прав доступа
-  WORKING = 'MOWR2233B'
+  TICKETING = 'MOWR2233B'
+  # старый тестовый офис-айди
+  TESTING = 'MOWR2290Q'
 
   self.table_name = 'amadeus_sessions'
 
@@ -23,6 +22,7 @@ module Amadeus
   scope :busy, where("booking is not null")
   scope :free,
     lambda { where("updated_at >= ? AND booking is null", INACTIVITY_TIMEOUT.seconds.ago)}
+  scope :for_office, lambda { |office_id| where( office: office_id ) }
 
   def self.from_token(auth_token)
     session = new
@@ -57,9 +57,7 @@ module Amadeus
     logger.info { "Amadeus::Session: free sessions count: #{free.count}" }
     booking = SecureRandom.random_number(2**31)
 
-    # FIXME fucking awesome! AREL simply ignores "limit 1" from some version above
-    # free.limit(1).update_all(:booking => booking)
-    update_all( "booking = #{booking} WHERE #{free.where_values.join ' AND '} LIMIT 1" )
+    free.for_office(office).limit(1).update_all(:booking => booking)
 
     session = find_by_booking(booking)
     unless session
@@ -67,7 +65,7 @@ module Amadeus
         raise "somehow can't get new session"
       end
     else
-      logger.info "Amadeus::Session: #{session.token} reused (#{session.seq})"
+      logger.info "Amadeus::Session: #{session.token} reused (#{session.seq}) for #{session.office}"
     end
     session
   end
@@ -79,7 +77,7 @@ module Amadeus
     session = from_token(token)
     session.booking = booking if booking
     session.office = office
-    logger.info "Amadeus::Session: #{session.token} signed in"
+    logger.info "Amadeus::Session: #{session.token} signed into #{office}"
     session.save
     session
   end

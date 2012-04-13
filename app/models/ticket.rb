@@ -48,6 +48,7 @@ class Ticket < ActiveRecord::Base
 
   before_validation :set_refund_data, :if => lambda {kind == "refund"}
   before_validation :update_price_fare_and_add_parent, :if => lambda {parent_number}
+  before_save :update_parent_status, :if => lambda {parent.present?}
   validates_presence_of :comment, :if => lambda {kind == "refund"}
   after_save :update_prices_in_order
   attr_accessor :parent_number, :parent_code
@@ -95,10 +96,19 @@ class Ticket < ActiveRecord::Base
   def update_price_fare_and_add_parent
     if exchanged_ticket = order.tickets.where('code = ? AND number like ?', parent_code, parent_number.to_s + '%').first
       self.parent = exchanged_ticket
-      exchanged_ticket.update_attribute(:status, 'exchanged')
       if price_fare_base && price_fare_base > 0
         self.price_tax += parent.price_fare_base #в противном случае tax может получиться отрицательным
         self.price_fare = price_fare_base - parent.price_fare_base
+      end
+    end
+  end
+
+  def update_parent_status
+    if parent && processed
+      if kind == 'refund'
+        parent.update_attribute(:status, 'returned')
+      elsif kind == 'ticket'
+        parent.update_attribute(:status, 'exchanged')
       end
     end
   end
@@ -200,6 +210,14 @@ class Ticket < ActiveRecord::Base
 
   def number_with_code
     "#{code}-#{number}" if number.present?
+  end
+
+  def self.find_by_number_with_code(number_with_code)
+    code, number = number_with_code.split('-',2)
+    find_by_code_and_number(code, number)
+  end
+  class << self
+    alias_method :[], :find_by_number_with_code
   end
 
   # номер первого билета для conjunction

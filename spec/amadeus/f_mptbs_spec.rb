@@ -5,9 +5,7 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
   context 'with NO ITINERARY FOUND' do
 
     let_once! :response do
-      body = File.read('spec/amadeus/xml/Fare_MasterPricerTravelBoardSearch_NoItineraryFoundError.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::FareMasterPricerTravelBoardSearch.new(doc)
+      amadeus_response('spec/amadeus/xml/Fare_MasterPricerTravelBoardSearch_NoItineraryFoundError.xml')
     end
 
     subject { response }
@@ -22,9 +20,7 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
   context 'with some crazy passengers and itinerary' do
 
     let_once! :response do
-      body = File.read('spec/amadeus/xml/Fare_MasterPricerTravelBoardSearch_Pathological.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::FareMasterPricerTravelBoardSearch.new(doc)
+      amadeus_response('spec/amadeus/xml/Fare_MasterPricerTravelBoardSearch_Pathological.xml')
     end
 
     describe "response" do
@@ -108,9 +104,7 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
   context 'with two technical stops' do
 
     let_once! :response do
-      body = File.read('spec/amadeus/xml/Fare_MasterPricerTravelBoardSearch_with_stops.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::FareMasterPricerTravelBoardSearch.new(doc)
+      amadeus_response('spec/amadeus/xml/Fare_MasterPricerTravelBoardSearch_with_stops.xml')
     end
 
     describe "response" do

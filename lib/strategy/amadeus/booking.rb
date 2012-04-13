@@ -72,13 +72,13 @@ module Strategy::Amadeus::Booking
         add_passport_data(amadeus)
         # делается автоматически, настройками booking office_id
         #amadeus.give_permission_to_offices(
+        #  Amadeus::Session::BOOKING
         #  Amadeus::Session::TICKETING,
-        #  Amadeus::Session::WORKING
         #)
         #Передача прав из одного офиса в другой
         #FIXME надо как-то согласовать с предыдущей частью
         amadeus.cmd("es#{::Amadeus::Session::BOOKING}-B")
-        amadeus.cmd("rp/#{::Amadeus::Session::WORKING}/all")
+        amadeus.cmd("rp/#{::Amadeus::Session::TICKETING}/all")
         # FIXME надо ли архивировать в самом конце?
         amadeus.pnr_archive(@order_form.seat_total)
         # FIXME перенести ремарку поближе к началу.

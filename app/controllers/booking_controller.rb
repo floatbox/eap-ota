@@ -10,7 +10,7 @@ class BookingController < ApplicationController
     end
     
     @search = PricerForm.load_from_cache(params[:query_key])
-    set_search_context_for_airbrake
+    #set_search_context_for_airbrake
     recommendation = Recommendation.deserialize(params[:recommendation])
     # FIXME @search.partner пусть останется пока
     # track_partner(params[:partner] || @search.partner, params[:marker])
@@ -115,7 +115,7 @@ class BookingController < ApplicationController
 
     if booking_status == :failed
       StatCounters.inc %W[pay.errors.booking]
-      render :partial => :failed_booking
+      render :partial => 'failed_booking'
       return
     elsif booking_status == :price_changed
       render :partial => 'newprice'

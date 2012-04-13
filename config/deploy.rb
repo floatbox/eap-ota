@@ -1,11 +1,10 @@
-# Add RVM's lib directory to the load path.
-$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 # Load RVM's capistrano plugin.
 require "rvm/capistrano"
 require "capistrano_colors"
 
+set :rvm_type, :system
 # закрепил версию, чтобы не прыгала в продакшне
-set :rvm_ruby_string, 'ruby-1.9.3-p125'
+set :rvm_ruby_string, 'ruby-1.9.3-head'
 
 require 'bundler/capistrano'
 

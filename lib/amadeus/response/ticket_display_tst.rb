@@ -47,6 +47,10 @@ module Amadeus
       def blank_count
         xpath('//r:fareList/r:paxSegReference/r:refDetails[r:refQualifier="PT" or r:refQualifier="P" or r:refQualifier="PA" or r:refQualifier="PI"]').size
       end
+
+      def error_message
+        xpath('//r:applicationError/r:errorText/r:errorFreeText').to_s
+      end
     end
   end
 end

@@ -1,6 +1,45 @@
 require 'spec_helper'
 
 describe Ticket do
+
+  describe "#update_parent_status" do
+
+    it "is not called  when parent is not set" do
+      old_ticket = build(:ticket)
+      old_ticket.should_not_receive(:update_parent_status)
+      old_ticket.save
+    end
+
+    it "is doesn't try to update parent when !processed" do
+      old_ticket = create(:ticket)
+      refund = create(:refund, :parent => old_ticket)
+      old_ticket.reload
+      old_ticket.status.should == 'ticketed'
+    end
+
+    it "updates parent status to 'exchanged' when needed" do
+      old_ticket = create(:ticket)
+      new_ticket = create(:ticket, :parent => old_ticket)
+      old_ticket.reload
+      old_ticket.status.should == 'exchanged'
+    end
+
+    it "is called when refund is marked processed" do
+      old_ticket = create(:ticket)
+      refund = build(:refund, :parent => old_ticket, :processed => true)
+      refund.should_receive(:update_parent_status)
+      refund.save
+    end
+
+    it "updates parent status to 'refunded' when needed" do
+      old_ticket = create(:ticket)
+      refund = create(:refund, :parent => old_ticket, :processed => true)
+      old_ticket.reload
+      old_ticket.status.should == 'returned'
+    end
+
+  end
+
   describe "#flights=" do
     let(:cabins) {[]}
     let(:dept_dates) {['121011']}

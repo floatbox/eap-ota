@@ -1,11 +1,13 @@
 # encoding: utf-8
 module Strategy::Amadeus::Tickets
 
+  # FIXME обработать tst_resp.success? == false
   def get_tickets
-    pnr_resp = prices = nil
+    pnr_resp, tst_resp, prices = ()
     ::Amadeus.booking do |amadeus|
       pnr_resp = amadeus.pnr_retrieve(:number => @order.pnr_number)
-      prices = amadeus.ticket_display_tst.prices_with_refs
+      tst_resp = amadeus.ticket_display_tst
+      prices = tst_resp.prices_with_refs
       amadeus.pnr_ignore
     end
     tickets = []
