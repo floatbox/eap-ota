@@ -202,7 +202,8 @@ module Amadeus
       # end
 
       def fm
-        xpath('//r:dataElementsIndiv[r:elementManagementData/r:segmentName="FM"]/r:otherDataFreetext/r:longFreetext').to_s
+        fm = xpath('//r:dataElementsIndiv[r:elementManagementData/r:segmentName="FM"]/r:otherDataFreetext/r:longFreetext').to_s
+        fm =~ /(\d+)/; value = $1;  if fm['A']; value; else value +'%' end if fm
       end
     end
   end
