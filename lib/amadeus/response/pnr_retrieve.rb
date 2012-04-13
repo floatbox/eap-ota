@@ -201,6 +201,9 @@ module Amadeus
         # можно вытащить аналогично fare_price_pnr_with_booking_class.rb
       # end
 
+      def fm
+        xpath('//r:dataElementsIndiv[r:elementManagementData/r:segmentName="FM"]/r:otherDataFreetext/r:longFreetext').to_s
+      end
     end
   end
 end

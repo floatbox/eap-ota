@@ -257,5 +257,11 @@ describe Amadeus::Response::PNRRetrieve do
 
   end
 
+  describe "#fm" do
+    body = File.read('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml')
+    doc = Amadeus::Service.parse_string(body)
+    specify{Amadeus::Response::PNRRetrieve.new(doc).fm.should == "*M*7"}
+  end
+
 end
 
