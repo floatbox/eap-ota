@@ -26,6 +26,37 @@ module Pricing
 
     # cash_payment_markup содержит доставку, и нигде потом не используется
 
+    # рассчет прибыли
+    #####################################
+
+    # #income_suppliers()
+    include IncomeDistribution
+
+    def income
+      @income ||= income_earnings - income_suppliers
+    end
+
+    def income_payment_gateways
+      secured_payments.to_a.sum(&:income_payment_gateways)
+    end
+
+    def income_earnings
+      secured_payments.to_a.sum(&:earnings)
+    end
+
+    # есть ли расход-приход с поставщиком по заказу?
+    # используется для подведения счета с поставщиком
+    # FIXME наверное, надо учитывать только ticketed
+    def supplier_billed?
+      ticket_status != 'canceled'
+    end
+
+    # для совместимости с рассчетом поставщиковой прибыли по билетам
+    # FIXME аггрегировать в заказе штрафы по возвратам тоже?
+    def price_penalty
+      0
+    end
+
     # подгнанные "налоги и сборы c комиссией" для отображения клиенту
     def price_tax_and_markup_and_payment
       recalculated_price_with_payment_commission - price_fare + price_declared_discount

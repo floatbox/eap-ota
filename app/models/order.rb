@@ -3,7 +3,6 @@ class Order < ActiveRecord::Base
 
   include CopyAttrs
   include Pricing::Order
-  include IncomeDistribution
 
   # FIXME сделать модуль или фикс для typus, этим оверрайдам место в typus/application.yml
   def self.model_fields
@@ -151,6 +150,7 @@ class Order < ActiveRecord::Base
     1 if price_difference != 0
   end
 
+  # FIXME не используется. учитывает ли подтвержденность возврата?
   def price_refund
     tickets.where(:kind => 'refund').every.price_refund.sum
   end

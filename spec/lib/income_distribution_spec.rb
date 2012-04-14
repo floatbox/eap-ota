@@ -29,6 +29,7 @@ describe IncomeDistribution do
   let :order do
     Order.new().tap do |o|
       # вызывать какие-то колбэки?
+      o.ticket_status = 'ticketed'
       o.payments = payments
       o.save!
       o.assign_attributes base_order_attrs

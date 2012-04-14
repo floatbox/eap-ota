@@ -32,6 +32,7 @@ Ticket:
       - price_refund
       - office_id
       - validator
+      - income_suppliers
       - status
       - kind
       - ticketed_date
@@ -66,6 +67,7 @@ Ticket:
       - office_id
       - validator
       - commission_ticketing_method
+      - income_suppliers
       - status
       - ticketed_date
       - itinerary_receipt
@@ -121,6 +123,7 @@ Ticket:
       - validating_carrier
       - office_id
       - validator
+      - income_suppliers
       - status
       - ticketed_date
       - kind

@@ -23,6 +23,15 @@ module Pricing
     # price_our_markup
     #
     # price_penalty
+    # price_extra_penalty
+
+    include IncomeDistribution
+
+    # есть ли расход-приход с поставщиком по билету?
+    # используется для подведения счета с поставщиком
+    def supplier_billed?
+      status != 'voided'
+    end
 
     def price_markup
       price_consolidator + price_blanks - price_discount
@@ -30,14 +39,6 @@ module Pricing
 
     def price_total
       price_fare + price_tax + price_penalty + price_markup + price_extra_penalty
-    end
-
-    def price_supplier
-      if status != 'voided'
-        price_fare + price_tax + price_blanks + price_consolidator + price_penalty - price_subagent
-      else
-        0
-      end
     end
 
     def price_refund
