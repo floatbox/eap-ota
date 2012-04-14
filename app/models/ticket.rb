@@ -143,7 +143,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def self.validators
-    ['92223412', '92228065']
+    uniq.pluck(:validator).compact.sort
   end
 
   def self.sources
