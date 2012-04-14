@@ -135,8 +135,11 @@ class Ticket < ActiveRecord::Base
   end
 
   def commission_ticketing_method
-    if source == 'amadeus' && office_id == 'MOWR228FA'
+    case office_id
+    when 'MOWR228FA'
       'direct'
+    when 'FLL1S212V'
+      'downtown'
     else
       'aviacenter'
     end
