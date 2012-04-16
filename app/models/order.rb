@@ -30,7 +30,7 @@ class Order < ActiveRecord::Base
   end
 
   def self.partners
-    Conf.api.partners
+    Partner.pluck :token
   end
 
   def show_vat

@@ -83,5 +83,13 @@ module DataMigration
     end
   end
 
+  def self.migrate_partners
+    Conf.api.partners.each do |name|
+      Partner.find_or_initialize_by_token(name).update_attributes(:enabled => true, :password => '')
+    end
+    Conf.api.passwords.each do |name, pass|
+      Partner.find_or_initialize_by_token(name).update_attributes(:password => pass, :enabled => true)
+    end
+  end
 end
 

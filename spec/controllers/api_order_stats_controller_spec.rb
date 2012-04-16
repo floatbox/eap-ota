@@ -9,21 +9,25 @@ describe ApiOrderStatsController do
     end
 
     it "should authorize with correct identifiers" do
-      Conf.api.stub(:passwords).and_return({'rambler'=>'33'})
+      partner = mock('Partner')
+      Partner.stub(:find_by_token).with('rambler').and_return(partner)
+      partner.stub(:password).and_return('33')
       request.env["HTTP_AUTHORIZATION"] = "Basic " + Base64::encode64('rambler:33')
       get :index, date_params
       response.should be_success
     end
 
     it "should not authorize with wrong password" do
-      Conf.api.stub(:passwords).and_return({'rambler'=>'33'})
+      partner = mock('Partner')
+      Partner.stub(:find_by_token).with('rambler').and_return(partner)
+      partner.stub(:password).and_return('33')
       request.env["HTTP_AUTHORIZATION"] = "Basic " + Base64::encode64('rambler:556')
       get :index, date_params
       response.should_not be_success
     end
 
     it "should not authorize with wrong username" do
-      Conf.api.stub(:passwords).and_return({'rambler'=>'33'})
+      Partner.stub(:find_by_token).with('wakawakawa').and_return(nil)
       request.env["HTTP_AUTHORIZATION"] = "Basic " + Base64::encode64('wakawakawa:33')
       get :index, date_params
       response.should_not be_success
