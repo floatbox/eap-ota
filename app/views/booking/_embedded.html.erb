@@ -14,7 +14,7 @@
     <% end %>
     <%= render :partial => 'person_form', :collection => @order_form.people %>
 
-    <h3 class="bstitle">Выберите способ оплаты и введите платёжные данные</h3>
+    <h3 class="bstitle">Введите данные для оплаты</h3>
     <input type="hidden" name="order[payment_type]" id="booking-payment-type" value="card">
     <%= render 'card_form', :f => f %>
     <%= render 'cash_form' if @order_form.last_pay_time %>
