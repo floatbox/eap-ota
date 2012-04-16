@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120410000623) do
+ActiveRecord::Schema.define(:version => 20120413161514) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -307,6 +307,14 @@ ActiveRecord::Schema.define(:version => 20120410000623) do
     t.string   "pan"
     t.string   "marker"
     t.string   "commission_our_markup"
+  end
+
+  create_table "partners", :force => true do |t|
+    t.string   "token",      :null => false
+    t.string   "password",   :null => false
+    t.boolean  "enabled",    :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "payments", :force => true do |t|
