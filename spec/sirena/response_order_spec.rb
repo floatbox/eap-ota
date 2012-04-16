@@ -79,7 +79,7 @@ describe Sirena::Response::Order do
 
   describe 'new name format' do
 
-    let(:response) { 'spec/sirena/xml/new_name_format.xml' }
+    let(:response) { 'spec/sirena/xml/order_new_name_format.xml' }
     subject_once! { described_class.new( File.read(response) ) }
 
     it { should be_success }
