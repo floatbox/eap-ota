@@ -123,6 +123,13 @@ Subscription:
   filters: status, created_at
   application: Hot Offers, 3
 
+HotOffer:
+  fields:
+    default: description, clickable_url, date1, date2, time_delta, price, price_variation_percent
+  filters: created_at
+  search: from_iata, to_iata, description, code
+  application: Hot Offers, 3
+
 Region:
   fields:
     default: name_ru, name_en, country

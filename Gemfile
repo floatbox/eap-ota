@@ -55,7 +55,7 @@ gem 'mongo-rails-instrumentation'
 
 gem 'haml'
 
-gem 'typus', :git => 'https://github.com/Eviterra/typus.git', :branch => "wip/date_filters"
+gem 'typus', :git => 'https://github.com/Eviterra/typus.git'
 
 gem 'trashed', :git => 'https://github.com/codesnik/trashed.git'
 

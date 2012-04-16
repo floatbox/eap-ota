@@ -52,7 +52,7 @@ Eviterra::Application.routes.draw do
   match "admin/commissions/check" => 'admin/commissions#check', :as => 'check_admin_commissions'
   match "admin/commissions/table" => 'admin/commissions#table', :as => 'table_admin_commissions'
   match "admin/commissions" => 'admin/commissions#index', :as => 'admin_commissions'
-  match "admin/hot_offers" => 'admin/hot_offers#best_of_the_week', :as => 'show_best_offers'
+  match "admin/new_hot_offers" => 'admin/hot_offers#best_of_the_week', :as => 'show_best_offers'
   root :to => 'home#index'
 
   # The priority is based upon order of creation:
