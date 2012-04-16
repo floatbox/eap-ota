@@ -76,5 +76,14 @@ describe Sirena::Response::Order do
     it { should be_success }
     pending "should be ok for storage and display"
   end
+
+  describe 'new name format' do
+
+    let(:response) { 'spec/sirena/xml/new_name_format.xml' }
+    subject_once! { described_class.new( File.read(response) ) }
+
+    it { should be_success }
+    its("passengers.every.first_name") { should == ['СЕРГЕЙ'] }
+  end
 end
 

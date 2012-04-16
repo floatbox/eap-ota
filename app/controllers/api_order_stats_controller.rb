@@ -14,7 +14,7 @@ class ApiOrderStatsController < ApplicationController
     def authenticate
       authenticate_or_request_with_http_basic do |id, password|
         @id = id
-        password && Conf.api.passwords[id] == password
+        password && Partner.authenticate(id, password)
       end
     end
 end
