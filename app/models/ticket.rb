@@ -277,7 +277,7 @@ class Ticket < ActiveRecord::Base
     elsif kind == 'refund'
       (
       "Возврат для билета № #{link_to_show} <br>" +
-      "Сумма к возварату: #{price_refund} рублей"
+      "Сумма к возврату: #{price_total} рублей"
       ).html_safe
     end
   end

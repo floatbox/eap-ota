@@ -41,14 +41,6 @@ module Pricing
       price_fare + price_tax + price_penalty + price_markup + price_extra_penalty
     end
 
-    def price_refund
-      if kind == 'refund'
-        price_tax + price_fare + price_penalty - price_discount + price_extra_penalty
-      else
-        0
-      end
-    end
-
     def vat
       if vat_status == '18%'
         ((price_fare + price_tax)*18/118).round(2)

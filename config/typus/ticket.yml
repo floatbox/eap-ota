@@ -29,7 +29,6 @@ Ticket:
       - route
       - price_fare
       - price_tax
-      - price_refund
       - office_id
       - validator
       - income_suppliers

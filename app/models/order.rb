@@ -150,11 +150,6 @@ class Order < ActiveRecord::Base
     1 if price_difference != 0
   end
 
-  # FIXME не используется. учитывает ли подтвержденность возврата?
-  def price_refund
-    tickets.where(:kind => 'refund').every.price_refund.sum
-  end
-
   def generate_code
     self.code = ShortUrl.random_hash
   end
