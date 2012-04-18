@@ -295,10 +295,20 @@ describe Order do
 
   describe '#api_stats_hash' do
     let(:order1){Order.new(:price_with_payment_commission=>12345.65,:route=>"SVO - KBP; KBP - LGW; LGW - KBP; KBP - SVO")}
+
     it 'creates correct hash' do
       order1.stub(:income).and_return(123.456798)
       orders_to_send = [order1.api_stats_hash]
       orders_to_send.first[:income].should == "123.46"
+    end
+
+    it "doesn't include income if such flag was set" do
+      partner = mock('Partner')
+      order1[:partner] = partner
+      Partner.stub(:find_by_token).and_return(partner)
+      partner.stub(:hide_income).and_return(true)
+      orders_to_send = [order1.api_stats_hash]
+      orders_to_send.first.should_not include(:income)
     end
   end
 

@@ -433,7 +433,7 @@ class Order < ActiveRecord::Base
 
   def api_stats_hash
     settled = settled?
-    {
+    hash_to_send = {
     :id => id.to_s,
     :marker => marker,
     :price => price_with_payment_commission,
@@ -442,7 +442,7 @@ class Order < ActiveRecord::Base
     :route => route,
     :settled => settled && (payment_status == 'charged')
     }
+    hash_to_send.delete(:income) if Partner.find_by_token(partner) && Partner.find_by_token(partner).hide_income
+    hash_to_send
   end
-
 end
-
