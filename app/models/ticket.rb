@@ -44,7 +44,7 @@ class Ticket < ActiveRecord::Base
   before_save :recalculate_commissions, :set_validating_carrier
 
   scope :uncomplete, where(:ticketed_date => nil)
-  scope :sold, where(:status => ['ticketed', 'exchanged', 'returned'])
+  scope :sold, where(:status => ['ticketed', 'exchanged', 'returned', 'processed'])
 
   before_validation :set_refund_data, :if => lambda {kind == "refund"}
   before_validation :update_price_fare_and_add_parent, :if => lambda {parent_number}
