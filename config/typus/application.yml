@@ -201,3 +201,17 @@ Notification:
   relationships: order, typus_user
   application: Misc, 2
 
+Partner:
+  fields:
+    default: token, password, enabled, hide_income
+    list: token, password, enabled, hide_income
+    form: password, enabled, hide_income
+    show: token, password, enabled, hide_income
+    options:
+      booleans:
+        enabled: ["да", "нет"]
+        hide_income: ["да", "нет"]
+  options:
+    action_after_save: show
+    default_action_on_item: show
+  application: Misc, 2
