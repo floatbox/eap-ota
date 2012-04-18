@@ -44,7 +44,6 @@ FactoryGirl.define do
     code '123'
     price_fare 1000
     price_tax 100
-    processed true
     kind 'ticket'
     status 'ticketed'
   end
@@ -52,7 +51,7 @@ FactoryGirl.define do
   factory :refund, :class => Ticket do
     price_fare 1000
     price_tax 100
-    processed false
+    status 'processed'
     comment 'blablabla'
     kind 'refund'
   end

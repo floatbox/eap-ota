@@ -154,7 +154,11 @@ class Ticket < ActiveRecord::Base
   end
 
   def self.statuses
-    ['ticketed', 'voided', 'pending', 'exchanged', 'returned']
+    ['ticketed', 'voided', 'pending', 'exchanged', 'returned', 'processed']
+  end
+
+  def processed
+    (kind == 'ticket') || (status == 'processed')
   end
 
   def self.kinds
@@ -174,20 +178,23 @@ class Ticket < ActiveRecord::Base
   end
 
   def set_refund_data
-    copy_attrs parent, self,
-      :validator,
-      :office_id,
-      :first_name,
-      :last_name,
-      :passport,
-      :commission_subagent,
-      :commission_agent,
-      :pnr_number,
-      :order,
-      :code,
-      :number,
-      :source,
-      :validating_carrier
+    if new_record?
+      copy_attrs parent, self,
+        :validator,
+        :office_id,
+        :first_name,
+        :last_name,
+        :passport,
+        :commission_subagent,
+        :commission_agent,
+        :pnr_number,
+        :order,
+        :code,
+        :number,
+        :source,
+        :validating_carrier
+      self.status = 'pending' if status.blank?
+    end
     self.price_penalty *= -1 if price_penalty < 0
     self.price_discount *= -1 if price_discount > 0
     self.price_our_markup *= -1 if price_our_markup > 0

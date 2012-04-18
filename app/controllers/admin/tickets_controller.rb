@@ -30,7 +30,12 @@ class Admin::TicketsController < Admin::EviterraResourceController
 
   def confirm_refund
     @item = @resource.find(params[:id])
-    @item.processed = !@item.processed
+    if @item.status != 'processed'
+      @item.status = 'processed'
+    else
+      @item.status = 'pending'
+      @item.ticketed_date = nil
+    end
     render :action => :edit
   end
 

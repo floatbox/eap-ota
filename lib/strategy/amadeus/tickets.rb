@@ -20,7 +20,6 @@ module Strategy::Amadeus::Tickets
         end
 
         tickets << ticket_hash.merge({
-          :processed => true,
           :source => 'amadeus',
           :pnr_number => @order.pnr_number,
           :commission_subagent => @order.commission_subagent.to_s

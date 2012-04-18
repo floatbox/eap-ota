@@ -37,7 +37,6 @@ Ticket:
       - ticketed_date
       - itinerary_receipt
       - parent
-      - processed
     new:  price_fare, price_tax, price_penalty, price_discount, price_our_markup, price_extra_penalty, ticketed_date, comment,
     show:
       - old_booking
@@ -50,6 +49,7 @@ Ticket:
       - price_fare
       - price_tax
       - price_penalty
+      - price_extra_penalty
       - commission_consolidator
       - price_consolidator
       - price_blanks
@@ -83,6 +83,7 @@ Ticket:
       - price_fare
       - price_tax
       - price_penalty
+      - price_extra_penalty
       - commission_consolidator
       - commission_blanks
       - commission_agent
@@ -96,7 +97,7 @@ Ticket:
       - corrected_price
       - price_extra_penalty
     new_refund: price_fare, price_tax, price_penalty, price_consolidator, price_discount, price_our_markup, price_extra_penalty, route, comment
-    confirm_refund: ticketed_date, processed
+    confirm_refund: ticketed_date, status
     csv:
       - source
       - number_with_code
@@ -136,7 +137,6 @@ Ticket:
       date_formats:
         created_at: long
       booleans:
-        processed: ["подтвержден", "не подтвержден"]
         old_booking: ["пересчет запрещен", "пересчет разрешен"]
   options:
     default_action_on_item: edit
