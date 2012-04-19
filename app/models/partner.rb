@@ -1,6 +1,11 @@
 # encoding: utf-8
 class Partner < ActiveRecord::Base
 
+  def initialize(*)
+    super
+    self.hide_income ||= false
+  end
+
   def self.authenticate id, pass
     self.find_by_token(id).password == pass if self.find_by_token(id) && pass.present?
   end
