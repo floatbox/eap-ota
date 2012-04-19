@@ -43,6 +43,22 @@ describe Ticket do
         old_ticket.reload
         old_ticket.status.should == 'returned'
       end
+
+      it 'restores parent status to "ticketed" when refund is canceled' do
+        old_ticket.update_attribute(:status, 'returned')
+        refund.status = 'pending'
+        refund.save
+        old_ticket.reload
+        old_ticket.status.should == 'ticketed'
+      end
+
+      it 'restores parent status to "ticketed" when refund is deleted' do
+        refund.save
+        refund.destroy
+        old_ticket.reload
+        old_ticket.status.should == 'ticketed'
+      end
+
     end
   end
 

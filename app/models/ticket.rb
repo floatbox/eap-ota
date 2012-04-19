@@ -48,7 +48,8 @@ class Ticket < ActiveRecord::Base
 
   before_validation :set_refund_data, :if => lambda {kind == "refund"}
   before_validation :update_price_fare_and_add_parent, :if => lambda {parent_number}
-  before_save :update_parent_status, :if => lambda {parent.present?}
+  after_save :update_parent_status, :if => lambda {parent}
+  after_destroy :update_parent_status, :if => lambda {parent}
   validates_presence_of :comment, :if => lambda {kind == "refund"}
   after_save :update_prices_in_order
   attr_accessor :parent_number, :parent_code
@@ -105,11 +106,17 @@ class Ticket < ActiveRecord::Base
   end
 
   def update_parent_status
-    if parent && processed
-      if kind == 'refund'
-        parent.update_attribute(:status, 'returned')
-      elsif kind == 'ticket'
-        parent.update_attribute(:status, 'exchanged')
+    parent.update_status
+  end
+
+  def update_status
+    if kind == 'ticket'
+      if replacement.present?
+        update_attribute(:status, 'exchanged')
+      elsif refunds.sold.present?
+        update_attribute(:status, 'returned')
+      else
+        update_attribute(:status, 'ticketed')
       end
     end
   end
