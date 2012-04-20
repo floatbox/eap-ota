@@ -81,6 +81,7 @@ describe Strategy::Amadeus do
 
     it {should include(:blank_count => 1)}
     it {should include(:commission_carrier => "SU")}
+    it {should include(:commission_agent => '7%')}
     it {should include(:departure_date => Date.new(2011, 9, 8))}
     it {should include(:price_fare => 1400)}
     it {should include(:price_tax => 1281)}

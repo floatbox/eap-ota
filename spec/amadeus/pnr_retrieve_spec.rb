@@ -233,16 +233,14 @@ describe Amadeus::Response::PNRRetrieve do
 
   end
 
-  describe "#fm" do
+  describe "#agent_commission" do
     context "percents" do
-      body = File.read('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml')
-      doc = Amadeus::Service.parse_string(body)
-      specify{Amadeus::Response::PNRRetrieve.new(doc).fm.should == "7%"}
+      subject {amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml')}
+      its(:agent_commission) {should == "7%"}
     end
     context "rubles" do
-      body = File.read('spec/amadeus/xml/PNR_Retrieve_TwoAdultsWithChildren.xml')
-      doc = Amadeus::Service.parse_string(body)
-      specify{Amadeus::Response::PNRRetrieve.new(doc).fm.should == "1"}
+      subject {amadeus_response('spec/amadeus/xml/PNR_Retrieve_TwoAdultsWithChildren.xml')}
+      its(:agent_commission) {should == "1"}
     end
   end
 

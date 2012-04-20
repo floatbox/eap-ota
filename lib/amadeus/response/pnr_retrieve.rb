@@ -201,15 +201,11 @@ module Amadeus
         # можно вытащить аналогично fare_price_pnr_with_booking_class.rb
       # end
 
-      def fm
+      def agent_commission
         fm = xpath('//r:dataElementsIndiv[r:elementManagementData/r:segmentName="FM"]/r:otherDataFreetext/r:longFreetext').to_s
-        return if !fm
-        fm =~ /(\d+)/
-        value = $1
-        if fm['A']
-          value
-        else
-          value +'%'
+        return unless fm
+        if m = fm.match(/(\d+)(A)?/)
+          m[2] ? m[1] : m[1] + '%'
         end
       end
     end

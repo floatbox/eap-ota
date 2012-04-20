@@ -90,18 +90,18 @@ class Strategy::Amadeus < Strategy::Base
       tst_resp = amadeus.ticket_display_tst
       amadeus.pnr_ignore
 
-      if tst_resp.success?
-        {
-          :departure_date => departure_date,
-          :price_fare => tst_resp.total_fare,
-          :price_tax => tst_resp.total_tax,
-          :commission_carrier => tst_resp.validating_carrier_code,
-          :blank_count => tst_resp.blank_count
-        }
-      else
-        { :departure_date => departure_date }
-      end
+      result = {
+        :departure_date => departure_date,
+        :commission_agent => pnr_resp.agent_commission
+      }.compact
+      result.merge!(
+        :price_fare => tst_resp.total_fare,
+        :price_tax => tst_resp.total_tax,
+        :commission_carrier => tst_resp.validating_carrier_code,
+        :blank_count => tst_resp.blank_count
+      ) if tst_resp.success?
 
+      result
     end
   end
 
