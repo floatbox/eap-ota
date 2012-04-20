@@ -47,9 +47,9 @@ class Ticket < ActiveRecord::Base
   scope :sold, where(:status => ['ticketed', 'exchanged', 'returned', 'processed'])
 
   before_validation :set_refund_data, :if => lambda {kind == "refund"}
-  before_validation :update_price_fare_and_add_parent, :if => lambda {parent_number}
-  after_save :update_parent_status, :if => lambda {parent}
-  after_destroy :update_parent_status, :if => lambda {parent}
+  before_validation :update_price_fare_and_add_parent, :if => :parent_number
+  after_save :update_parent_status, :if => :parent
+  after_destroy :update_parent_status, :if => :parent
   validates_presence_of :comment, :if => lambda {kind == "refund"}
   after_save :update_prices_in_order
   attr_accessor :parent_number, :parent_code
@@ -111,7 +111,7 @@ class Ticket < ActiveRecord::Base
 
   def update_status
     if kind == 'ticket'
-      if replacement.present?
+      if replacement
         update_attribute(:status, 'exchanged')
       elsif refunds.sold.present?
         update_attribute(:status, 'returned')
