@@ -285,7 +285,7 @@ example 'svocdg'
 agent    "5% по всем направлениям через DTT"
 subagent "0 по всем направлениям через DTT"
 interline :no, :unconfirmed
-our_markup "25usd"
+# our_markup "25usd"
 # Исправление Кати 20.04.2012
 commission "5%/0"
 
