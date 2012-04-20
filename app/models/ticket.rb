@@ -261,7 +261,7 @@ class Ticket < ActiveRecord::Base
 
   def confirm_refund_url
     if kind == 'refund'
-      "<a href='/admin/tickets/confirm_refund/#{id}?_popup=true' class='iframe_with_page_reload'>#{processed ? 'Отменить подтверждение' : 'Подтвердить'}</a>".html_safe
+      CustomTemplate.new.render(:partial => "admin/tickets/refund_actions", :locals => {:ticket => self}).html_safe
     end
   end
 

@@ -28,6 +28,15 @@ class Admin::TicketsController < Admin::EviterraResourceController
     render :action => :new
   end
 
+  def delete
+    get_object
+    @item.destroy unless @item.processed
+    redirect_to :action => 'show',
+                :controller => 'orders',
+                :id => @item.order.id
+
+  end
+
   def confirm_refund
     @item = @resource.find(params[:id])
     if @item.status != 'processed'

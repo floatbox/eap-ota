@@ -1,0 +1,7 @@
+<% if ticket.kind == 'refund' %>
+  <%= link_to (ticket.processed ? 'Отменить подтверждение' : 'Подтвердить'), {:controller => 'admin/tickets', :action => :confirm_refund, :id => ticket.id, :_popup => 'true'}, :class => 'iframe_with_page_reload'%>
+  <% unless ticket.processed? %>
+    <br>
+      <%= link_to 'Удалить', {:controller => 'admin/tickets', :action => :delete, :id => ticket.id, :method => :delete}, :confirm => 'Удалить неподтвержденный возврат?'%>
+  <% end %>
+<% end %>
