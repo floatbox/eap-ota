@@ -28,9 +28,9 @@ class Admin::TicketsController < Admin::EviterraResourceController
     render :action => :new
   end
 
-  def delete
+  def delete_refund
     get_object
-    @item.destroy unless @item.processed
+    @item.destroy if @item.processed && @item.kind == 'refund'
     redirect_to :action => 'show',
                 :controller => 'orders',
                 :id => @item.order.id
