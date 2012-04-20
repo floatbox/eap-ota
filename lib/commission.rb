@@ -283,11 +283,11 @@ carrier "AB", "AIR BERLIN"
 example 'cdgsvo svocdg/lh'
 example 'svocdg'
 agent    "5% по всем направлениям через DTT"
-subagent "3% по всем направлениям через DTT"
+subagent "0 по всем направлениям через DTT"
 interline :no, :unconfirmed
-#our_markup "1%"
-discount "2.5%"
-commission "5%/3%"
+our_markup "25usd"
+# Исправление Кати 20.04.2012
+commission "5%/0"
 
 #example 'cdgsvo svocdg/lh'
 #example 'svocdg'
