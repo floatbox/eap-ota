@@ -5,6 +5,17 @@ describe Amadeus::Request::PNRAddMultiElements do
   context "FM record" do
     subject { described_class.new(:agent_commission => agent_commission) }
 
+    context "#agent_commisison?" do
+      context "with nil agent_commission" do
+        let(:agent_commission) { nil }
+        its(:agent_commission?) { should be_false }
+      end
+      context "with empty agent_commission" do
+        let(:agent_commission) { Commission::Formula.new('') }
+        its(:agent_commission?) { should be_false }
+      end
+    end
+
     context "with percentage agent_commission" do
       let(:agent_commission) { Commission::Formula.new('2.23%') }
       specify { subject.agent_commission_percentage.to_s.should == '2.23' }
