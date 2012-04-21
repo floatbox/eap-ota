@@ -29,19 +29,26 @@ class HotOffer
   class << self
     # алиас, чтобы тайпус видел, что ресурс умеет сортировку
     alias :order :order_by
-  end
-  # FIXME сделать модуль или фикс для typus, этим оверрайдам место в typus/application.yml
-  def self.model_fields
-    super.merge(
-      :price => :decimal,
-      :price_variation_percent => :decimal
-    )
+
+    # FIXME сделать модуль или фикс для typus, этим оверрайдам место в typus/application.yml
+    def model_fields
+      super.merge(
+        :price => :decimal,
+        :price_variation_percent => :decimal
+      )
+    end
+
+    # рейс еще не улетел
+    def actual
+      where(:date1.gt => Date.today)
+    end
   end
 
   def create_notifications
     Subscription.where(:from_iata => destination.from.iata, :to_iata => destination.to.iata, :rt => destination.rt).active.every.create_notice(self) if !for_stats_only && destination.hot_offers_counter >= 20 && price_variation_percent <= -20
   end
 
+  # не воткнуть ли сюда #actual в цепочку? а то, потенциально, может показать старые предложения
   def self.featured code=nil
     # FIXME SQL group_by не был бы лучше?
     offers = HotOffer.where(:for_stats_only => false ).and(:price_variation.gt => 0).order_by(:created_at => :desc).limit(30)
