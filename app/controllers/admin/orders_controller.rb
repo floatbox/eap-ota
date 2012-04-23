@@ -120,22 +120,20 @@ class Admin::OrdersController < Admin::EviterraResourceController
     redirect_to :action => :show, :id => @order.id
   end
 
+  private
+
   def set_bulk_action
     add_bulk_action("Charge", "bulk_charge")
   end
-
-  private :set_bulk_action
 
   def bulk_charge(ids)
     ids.each { |id| @resource.find(id).charge! }
     notice = Typus::I18n.t("Tried to charge #{ids.count} entries. Probably successfully")
     redirect_to :back, :notice => notice
   end
-  private :bulk_charge
 
   def set_attributes_on_new
     @item.offline_booking = true
   end
-  private :set_attributes_on_new
 end
 
