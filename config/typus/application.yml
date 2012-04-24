@@ -207,10 +207,10 @@ Notification:
 
 Partner:
   fields:
-    default: token, password, enabled, hide_income
-    list: token, password, enabled, hide_income
-    form: password, enabled, hide_income
-    show: token, password, enabled, hide_income
+    default: token, password, enabled, hide_income, cookies_expiry_time
+    list: token, password, enabled, hide_income, cookies_expiry_time
+    form: password, enabled, hide_income, cookies_expiry_time
+    show: token, password, enabled, hide_income, cookies_expiry_time
     options:
       booleans:
         enabled: ["да", "нет"]
