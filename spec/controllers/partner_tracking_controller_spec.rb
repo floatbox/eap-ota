@@ -15,9 +15,7 @@ describe PartnerTrackingController do
     subject{PartnerTrackingController.new}
 
     it "creates cookies with correct exp time if such was specified in its partner" do
-      partner = Partner.create(:token => 'wobwobwirrr', :enabled => true, :password => 1, :cookies_expiry_time => 10)
-      partner.stub(:cookies_expiry_time).and_return(10)
-
+      Partner.create(:token => 'wobwobwirrr', :enabled => true, :password => 1, :cookies_expiry_time => 10)
       stub_cookie_jar = HashWithIndifferentAccess.new
       controller.stub(:cookies) { stub_cookie_jar }
 
@@ -25,7 +23,6 @@ describe PartnerTrackingController do
 
       expiring_cookie = stub_cookie_jar['partner']
       expiring_cookie[:expires].should be_between 9.days.from_now, 11.days.from_now
-
     end
 
     it "doesn't create cookie if there's no such partner" do

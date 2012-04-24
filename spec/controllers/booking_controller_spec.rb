@@ -98,8 +98,6 @@ describe BookingController do
         :marker => 'rebkloi'
       }
     end
-    let(:partner1){Partner.create(:token => 'momondo', :cookies_expiry_time => 10, :enabled => true,  :password => 1)}
-    let(:partner2){Partner.create(:token => 'yandex', :cookies_expiry_time => 10, :enabled => true, :password => 1)}
 
     describe '#api_booking' do
       it 'saves both partner and marker if they present' do
