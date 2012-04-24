@@ -442,7 +442,7 @@ class Order < ActiveRecord::Base
     :route => route,
     :settled => settled && (payment_status == 'charged')
     }
-    hash_to_send.delete(:income) if Partner.find_by_token(partner) && Partner.find_by_token(partner).hide_income
+    hash_to_send.delete(:income) if Partner[partner] && Partner[partner].hide_income
     hash_to_send
   end
 end
