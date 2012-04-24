@@ -37,7 +37,32 @@ Ticket:
       - ticketed_date
       - itinerary_receipt
       - parent
-    new:  price_fare, price_tax, price_penalty, price_discount, price_our_markup, price_extra_penalty, ticketed_date, comment,
+    new: 
+      - price_fare
+      - price_tax
+      - price_penalty
+      - price_discount
+      - price_our_markup
+      - price_extra_penalty
+      - ticketed_date
+      - comment
+      - code
+      - number
+      - status
+      - ticketed_date
+      - validating_carrier
+      - last_name
+      - first_name
+      - route
+      - commission_consolidator
+      - commission_blanks
+      - commission_agent
+      - commission_subagent
+      - commission_discount
+      - commission_our_markup
+      - office_id
+      - validator
+      - mso_number
     show:
       - old_booking
       - order
@@ -95,7 +120,6 @@ Ticket:
       - mso_number
       - comment
       - corrected_price
-      - price_extra_penalty
     new_refund: price_fare, price_tax, price_penalty, price_consolidator, price_discount, price_our_markup, price_extra_penalty, route, comment
     confirm_refund: ticketed_date, status
     csv:
