@@ -248,7 +248,7 @@ class Order < ActiveRecord::Base
 
   # Нужен для Маршрут квитанции (список билетов, подсчет цен)
   def sold_tickets
-    tickets.where(:status => 'ticketed').reject {|t| t.children.where('status = "processed"').present?}
+    tickets.where(:status => 'ticketed')
   end
 
   def update_prices_from_tickets # FIXME перенести в strategy
