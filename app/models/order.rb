@@ -4,6 +4,16 @@ class Order < ActiveRecord::Base
   include CopyAttrs
   include Pricing::Order
 
+  scope :MOWR228FA, lambda { by_office_id 'MOWR228FA' }
+  scope :MOWR2233B, lambda { by_office_id 'MOWR2233B' }
+  scope :MOWR221F9, lambda { by_office_id 'MOWR221F9' }
+  scope :MOWR2219U, lambda { by_office_id 'MOWR2219U' }
+  scope :FLL1S212V, lambda { by_office_id 'FLL1S212V' }
+
+  def self.by_office_id office_id
+    joins(:tickets).where('tickets.office_id' => office_id)
+  end
+
   # FIXME сделать модуль или фикс для typus, этим оверрайдам место в typus/application.yml
   def self.model_fields
     super.merge(
@@ -27,6 +37,10 @@ class Order < ActiveRecord::Base
 
   def self.ticket_statuses
     [ 'booked', 'canceled', 'ticketed']
+  end
+
+  def self.ticket_office_ids
+    Ticket.uniq.pluck(:office_id).compact.sort
   end
 
   def self.partners
@@ -140,6 +154,14 @@ class Order < ActiveRecord::Base
 
   def tickets_count
     tickets.count
+  end
+
+  def tickets_office_ids_array
+    tickets.collect{|t| t.office_id}.uniq
+  end
+
+  def tickets_office_ids
+    tickets_office_ids_array.join(',')
   end
 
   def order_id
