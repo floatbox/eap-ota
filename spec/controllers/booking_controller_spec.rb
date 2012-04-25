@@ -115,6 +115,7 @@ describe BookingController do
         order = mock('order')
         order.stub(:save_to_cache)
         order.stub(:number)
+        Partner.create(:token => 'yandex', :cookies_expiry_time => 10, :enabled => true,  :password => 1)
 
         get :api_booking, partner_and_marker_present
         response.cookies['partner'].should == 'yandex'
@@ -136,6 +137,7 @@ describe BookingController do
         order = mock('order')
         order.stub(:save_to_cache)
         order.stub(:number)
+        Partner.create(:token => 'momondo', :cookies_expiry_time => 10, :enabled => true,  :password => 1)
 
         get :api_booking, partner_present
         response.cookies['partner'].should == 'momondo'
@@ -169,6 +171,7 @@ describe BookingController do
         pricer = mock('pricer')
         PricerForm.stub(:simple).and_return(pricer)
         pricer.stub(:valid?)
+        Partner.create(:token => 'yandex', :cookies_expiry_time => 10, :enabled => true,  :password => 1)
 
         get :api_redirect, partner_and_marker_present
         response.cookies['partner'].should == 'yandex'
@@ -179,6 +182,7 @@ describe BookingController do
         pricer = mock('pricer')
         PricerForm.stub(:simple).and_return(pricer)
         pricer.stub(:valid?)
+        Partner.create(:token => 'momondo', :cookies_expiry_time => 10, :enabled => true,  :password => 1)
 
         get :api_redirect, partner_present
         response.cookies['partner'].should == 'momondo'
@@ -190,6 +194,7 @@ describe BookingController do
         PricerForm.stub(:simple).and_return(pricer)
         pricer.stub(:valid?)
         pricer.stub(:partner)
+        Partner.create(:token => 'momondo', :cookies_expiry_time => 10, :enabled => true,  :password => 1)
 
         get :api_redirect, marker_present
         response.cookies['partner'].should == nil

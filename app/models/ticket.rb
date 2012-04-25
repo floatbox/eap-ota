@@ -279,21 +279,7 @@ class Ticket < ActiveRecord::Base
 
   # для тайпуса
   def description
-    if kind == 'ticket'
-      (
-      "Билет  № #{link_to_show} <br>" +
-        if self.refund
-          "есть #{!refund.processed ? 'неподтвержденный клиентом' : ''} возврат <br>"
-        end.to_s +
-        "<a href='/admin/tickets/new_refund?_popup=true&&resource[kind]=refund&resource[parent_id]=#{id}' class='iframe_with_page_reload'>Добавить возврат</a>"
-
-      ).html_safe
-    elsif kind == 'refund'
-      (
-      "Возврат для билета № #{link_to_show} <br>" +
-      "Сумма к возврату: #{price_total} рублей"
-      ).html_safe
-    end
+    CustomTemplate.new.render(:partial => "admin/tickets/description", :locals => {:ticket => self}).html_safe
   end
 
   # для админки

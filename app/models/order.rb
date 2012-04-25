@@ -270,7 +270,7 @@ class Order < ActiveRecord::Base
 
   # Нужен для Маршрут квитанции (список билетов, подсчет цен)
   def sold_tickets
-    tickets.where(:status => 'ticketed').reject {|t| t.children.where('status = "processed"').present?}
+    tickets.where(:status => 'ticketed')
   end
 
   def update_prices_from_tickets # FIXME перенести в strategy
@@ -464,7 +464,7 @@ class Order < ActiveRecord::Base
     :route => route,
     :settled => settled && (payment_status == 'charged')
     }
-    hash_to_send.delete(:income) if Partner.find_by_token(partner) && Partner.find_by_token(partner).hide_income
+    hash_to_send.delete(:income) if Partner[partner] && Partner[partner].hide_income
     hash_to_send
   end
 end

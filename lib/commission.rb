@@ -85,17 +85,26 @@ subclasses "FJCD"
 discount "8%"
 commission "11%/9%"
 
+#example 'AERDME/W DMEAER/W'
+#agent "12% американский office-id"
+#subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
+#subclasses "LVXTNIGWU"
+#discount "7.5%"
+#commission "12%/10%"
+
+#example 'AERDME/Y DMEAER/M'
+#agent "12% американский office-id"
+#subagent "10 % от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, M, Q, B, K, O, R, E."
+#subclasses "YHMQBKORE"
+#discount "7.5%"
+#commission "12%/10%"
+
+example 'AERDME/W DMEAER/E'
+example 'AERDME/Y DMEAER/M'
 example 'AERDME/W DMEAER/W'
 agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
-subclasses "LVXTNIGWU"
-discount "7.5%"
-commission "12%/10%"
-
-example 'AERDME/Y DMEAER/M'
-agent "12% американский office-id"
-subagent "10 % от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, M, Q, B, K, O, R, E."
-subclasses "YHMQBKORE"
+subclasses "LVXTNIGWUYHMQBKORE"
 discount "7.5%"
 commission "12%/10%"
 

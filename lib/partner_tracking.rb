@@ -8,9 +8,11 @@ module PartnerTracking
       StatCounters.inc %W[enter.api.first_time enter.api.#{new_partner}.first_time]
       logger.info "API::Partner::Enter: #{new_partner} #{new_marker}"
     end
-    cookies[:partner] = { :value => new_partner, :expires => 1.month.from_now}
-    # маркер надо перезатирать, даже если его не указали
-    cookies[:marker] = { :value => new_marker, :expires => 1.month.from_now}
+    if Partner[new_partner] && Partner[new_partner].cookies_expiry_time
+      cookies[:partner] = { :value => new_partner, :expires => Partner[new_partner].cookies_expiry_time.days.from_now}
+      # маркер надо перезатирать, даже если его не указали
+      cookies[:marker] = { :value => new_marker, :expires => Partner[new_partner].cookies_expiry_time.days.from_now}
+    end
   end
 
   def partner

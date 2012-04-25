@@ -44,6 +44,7 @@ describe Amadeus::Response::PNRRetrieve do
 
     it {should have(1).exchanged_tickets}
     specify { subject.parsed_exchange_string('603-2962817528-29MOW28AUG11/92223412/603-29628175286E1-294').should == {:code => '603', :number => '2962817528', :inf => nil} }
+    specify {  subject.parsed_exchange_string('670-7037258098NYC17APR12/10729143/670-70372580985E1*B113.00/X55.05/C39.00').should == {:code => '670', :number => '7037258098', :inf => nil}}
     specify { subject.exchanged_tickets.should have_key([[1, "a"], [1, 3]])}
     specify { subject.exchanged_tickets[[[1, "a"], [1, 3]]].should == {:code => '603', :number => '2962817528'} }
 
