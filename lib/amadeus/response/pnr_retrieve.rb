@@ -87,7 +87,7 @@ module Amadeus
       end
 
       def parsed_exchange_string(s)
-        m = s.to_s.match(/(PAX|INF)?.*\/(\d+)-([\d-]+).{3}(-\d{3})?$/)
+        m = s.to_s.match(/(PAX|INF)?.*\/(\d{3})-([\d-]{10,14})(\w){3}([-\*]\w{3})?/)
         if m
           return({:number => m[3], :code => m[2], :inf => m[1]})
         end
