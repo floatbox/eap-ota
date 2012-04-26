@@ -153,6 +153,11 @@ class Recommendation
     left | right
   end
 
+  def self.remove_unprofitable!(recommendations, income_at_least)
+    recommendations.reject! {|r| r.income < income_at_least} if income_at_least
+    recommendations
+  end
+
   def variants_by_duration
     variants.sort_by(&:total_duration)
   end

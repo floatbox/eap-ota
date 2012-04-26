@@ -53,4 +53,8 @@ describe Recommendation do
       end
     end
   end
+
+  describe "class methods" do
+    pending ".remove_unprofitable!"
+  end
 end

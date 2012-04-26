@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120424144746) do
+ActiveRecord::Schema.define(:version => 20120426135743) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -317,6 +317,7 @@ ActiveRecord::Schema.define(:version => 20120424144746) do
     t.datetime "updated_at",          :null => false
     t.boolean  "hide_income",         :null => false
     t.integer  "cookies_expiry_time"
+    t.integer  "income_at_least"
   end
 
   create_table "payments", :force => true do |t|
