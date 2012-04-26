@@ -15,10 +15,10 @@ ActiveSupport::Inflector.inflections do |inflect|
     inflect.plural(/^Билет$/i,  'Билеты' )
     inflect.plural(/^Комментарий к заказу$/i, 'Комментарии к заказу' )
     inflect.plural(/^Платеж$/i,  'Платежи' )
-    inflect.plural(/^Платеж Payture$/i,  'Платежи Payture' )
-    inflect.plural(/^Платеж наличными$/i,  'Платежи наличными' )
-    inflect.plural(/^Возврат Payture$/i,  'Возвраты Payture' )
-    inflect.plural(/^Возврат наличными$/i,  'Возвраты наличными' )
+    inflect.plural(/^Карта, платеж$/i,  'Карта, платежи' )
+    inflect.plural(/^Наличные, платеж$/i,  'Наличные, платежи' )
+    inflect.plural(/^Карта, возврат$/i,  'Карта, возвраты' )
+    inflect.plural(/^Наличные, возврат$/i,  'Наличные, возвраты' )
 
     inflect.plural(/^Подборка рейсов$/i,  'Подборки рейсов' )
     inflect.plural(/^Подписка$/i,  'Подписки' )
@@ -35,6 +35,5 @@ ActiveSupport::Inflector.inflections do |inflect|
     inflect.plural(/^Пользователь Typus$/i,  'Пользователи Typus' )
     inflect.plural(/^Оповещение$/i,  'Оповещения' )
     inflect.plural(/^Партнер$/i,  'Партнеры' )
-
 end
 
