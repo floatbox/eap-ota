@@ -199,13 +199,13 @@ module PricerHelper
       end
       concat ' '
       concat recommendation.commission.ticketing_method
-      # concat %( #{recommendation.price_subagent} р.)
+      concat %( = #{recommendation.income.round(2) } р.) unless recommendation.income.zero?
       concat ' '
       concat link_to('комиссия', check_admin_commissions_url(:code => recommendation.serialize(variant)), :target => '_blank')
     elsif Commission.exists_for?(recommendation)
       concat link_to('не подходят правила', check_admin_commissions_url(:code => recommendation.serialize(variant)), :target => '_blank')
     else
-      concat link_to('нет правил для авиакомпании)', admin_commissions_url, :target => '_blank')
+      concat link_to('нет правил для авиакомпании', admin_commissions_url, :target => '_blank')
     end
     concat " #{recommendation.blank_count} бл." if recommendation.blank_count && recommendation.blank_count > 1
     concat ' (' + recommendation.booking_classes.join(',') + ')'
