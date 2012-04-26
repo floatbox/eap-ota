@@ -403,7 +403,6 @@ ActiveRecord::Schema.define(:version => 20120426135743) do
     t.date     "ticketed_date"
     t.string   "validating_carrier"
     t.string   "kind",                                                    :default => "ticket"
-    t.boolean  "processed",                                               :default => false
     t.integer  "parent_id"
     t.decimal  "price_penalty",             :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.text     "comment"

@@ -74,7 +74,7 @@ describe Order do
         @old_ticket.order = @order
         @old_ticket.save
         @new_ticket_hashes = [
-          {:number => '123456787', :code => '123', :processed => true, :source => 'amadeus', :status => 'ticketed', :price_fare => 0, :price_fare_base => 0, :price_tax => '6075', :parent_number => '123456789', :parent_code => '123'}
+          {:number => '123456787', :code => '123', :source => 'amadeus', :status => 'ticketed', :price_fare => 0, :price_fare_base => 0, :price_tax => '6075', :parent_number => '123456789', :parent_code => '123'}
         ]
         Strategy.stub_chain(:select, :get_tickets).and_return(@new_ticket_hashes)
         @order.reload_tickets
@@ -132,9 +132,9 @@ describe Order do
         @old_tickets = [1,2].map {|n| Ticket.new(:price_fare => 10005, :price_tax => 5430, :price_discount => 500.25, :kind => 'ticket', :status => 'ticketed', :code => '123', :number => "123456789#{n}", :order => @order)}
         @old_tickets.every.save
         @new_ticket_hashes = [
-          {:number => '1234567871', :code => '123', :price_fare => 0, :price_tax => 0, :processed => true, :source => 'amadeus', :parent_id => @old_tickets[0].id, :status => 'ticketed'},
+          {:number => '1234567871', :code => '123', :price_fare => 0, :price_tax => 0, :source => 'amadeus', :parent_id => @old_tickets[0].id, :status => 'ticketed'},
           {:number => '1234567891', :code => '123', :status => 'exchanged'},
-          {:number => '1234567872', :code => '123', :price_fare => 0, :price_tax => 0, :processed => true, :source => 'amadeus', :parent_id => @old_tickets[1].id, :status => 'ticketed'},
+          {:number => '1234567872', :code => '123', :price_fare => 0, :price_tax => 0, :source => 'amadeus', :parent_id => @old_tickets[1].id, :status => 'ticketed'},
           {:number => '1234567892', :code => '123', :status => 'exchanged'}
         ]
         Strategy.stub_chain(:select, :get_tickets).and_return(@new_ticket_hashes)
