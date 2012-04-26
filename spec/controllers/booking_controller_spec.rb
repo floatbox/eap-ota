@@ -102,19 +102,8 @@ describe BookingController do
     describe '#api_booking' do
       it 'saves both partner and marker if they present' do
         Recommendation.stub(:deserialize)
-        strategy = mock('strategy')
-        Strategy.stub(:select).and_return(strategy)
-        strategy.stub(:check_price_and_availability).and_return(true)
-        pricer = mock('pricer')
-        PricerForm.stub(:load_from_cache).and_return(pricer)
-        pricer.stub(:partner)
-        pricer.stub(:real_people_count)
-        pricer.stub(:human_lite)
-        pricer.stub(:query_key)
-        pricer.stub(:segments)
-        order = mock('order')
-        order.stub(:save_to_cache)
-        order.stub(:number)
+        Strategy.stub(:select).and_return(mock('strategy').as_null_object)
+        PricerForm.stub(:load_from_cache).and_return(mock('pricer').as_null_object)
         Partner.create(:token => 'yandex', :cookies_expiry_time => 10, :enabled => true,  :password => 1)
 
         get :api_booking, partner_and_marker_present
@@ -124,19 +113,8 @@ describe BookingController do
 
       it 'saves partner if it is present' do
         Recommendation.stub(:deserialize)
-        strategy = mock('strategy')
-        Strategy.stub(:select).and_return(strategy)
-        strategy.stub(:check_price_and_availability).and_return(true)
-        pricer = mock('pricer')
-        PricerForm.stub(:load_from_cache).and_return(pricer)
-        pricer.stub(:partner)
-        pricer.stub(:real_people_count)
-        pricer.stub(:human_lite)
-        pricer.stub(:query_key)
-        pricer.stub(:segments)
-        order = mock('order')
-        order.stub(:save_to_cache)
-        order.stub(:number)
+        Strategy.stub(:select).and_return(mock('strategy').as_null_object)
+        PricerForm.stub(:load_from_cache).and_return(mock('pricer').as_null_object)
         Partner.create(:token => 'momondo', :cookies_expiry_time => 10, :enabled => true,  :password => 1)
 
         get :api_booking, partner_present
@@ -146,19 +124,9 @@ describe BookingController do
 
       it "doesn't touch cookie if there's no partner"  do
         Recommendation.stub(:deserialize)
-        strategy = mock('strategy')
-        Strategy.stub(:select).and_return(strategy)
-        strategy.stub(:check_price_and_availability).and_return(true)
-        pricer = mock('pricer')
-        PricerForm.stub(:load_from_cache).and_return(pricer)
-        pricer.stub(:partner)
-        pricer.stub(:real_people_count)
-        pricer.stub(:human_lite)
-        pricer.stub(:query_key)
-        pricer.stub(:segments)
-        order = mock('order')
-        order.stub(:save_to_cache)
-        order.stub(:number)
+        Strategy.stub(:select).and_return(mock('strategy').as_null_object)
+        PricerForm.stub(:load_from_cache).and_return(mock('pricer').as_null_object)
+        Partner.stub(:find_by_token)
 
         get :api_booking, marker_present
         response.cookies['partner'].should == nil
@@ -168,9 +136,7 @@ describe BookingController do
 
     describe '#api_redirect' do
       it 'saves both partner and marker if they are present' do
-        pricer = mock('pricer')
-        PricerForm.stub(:simple).and_return(pricer)
-        pricer.stub(:valid?)
+        PricerForm.stub(:simple).and_return(mock('pricer').as_null_object)
         Partner.create(:token => 'yandex', :cookies_expiry_time => 10, :enabled => true,  :password => 1)
 
         get :api_redirect, partner_and_marker_present
@@ -179,9 +145,7 @@ describe BookingController do
       end
 
       it 'saves partner if it is present' do
-        pricer = mock('pricer')
-        PricerForm.stub(:simple).and_return(pricer)
-        pricer.stub(:valid?)
+        PricerForm.stub(:simple).and_return(mock('pricer').as_null_object)
         Partner.create(:token => 'momondo', :cookies_expiry_time => 10, :enabled => true,  :password => 1)
 
         get :api_redirect, partner_present
@@ -190,11 +154,8 @@ describe BookingController do
       end
 
       it "doesn't touch cookie if there's no partner"  do
-        pricer = mock('pricer')
-        PricerForm.stub(:simple).and_return(pricer)
-        pricer.stub(:valid?)
-        pricer.stub(:partner)
-        Partner.create(:token => 'momondo', :cookies_expiry_time => 10, :enabled => true,  :password => 1)
+        PricerForm.stub(:simple).and_return(mock('pricer').as_null_object)
+        Partner.stub(:find_by_token)
 
         get :api_redirect, marker_present
         response.cookies['partner'].should == nil
