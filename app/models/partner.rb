@@ -1,6 +1,8 @@
 # encoding: utf-8
 class Partner < ActiveRecord::Base
 
+  has_paper_trail
+
   def initialize(*)
     super
     self.hide_income ||= false
