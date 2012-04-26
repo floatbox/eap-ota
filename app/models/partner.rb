@@ -4,7 +4,8 @@ class Partner < ActiveRecord::Base
   def initialize(*)
     super
     self.hide_income ||= false
-    end
+    self.cookies_expiry_time ||= 1
+  end
 
   def self.[] token
     find_by_token token

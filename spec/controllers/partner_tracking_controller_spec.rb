@@ -31,10 +31,15 @@ describe PartnerTrackingController do
       response.cookies['partner'].should == nil
     end
 
-    it "doesn't create cookie if exp time is nil" do
+    it "creates default cookie even if exp_time is nil" do
       Partner.create(:token => 'wobwobwirrr', :enabled => true, :password => 1, :cookies_expiry_time => nil)
+      stub_cookie_jar = HashWithIndifferentAccess.new
+      controller.stub(:cookies) { stub_cookie_jar }
+
       get :track_partner, hash
-      response.cookies['partner'].should == nil
+
+      expiring_cookie = stub_cookie_jar['partner']
+      expiring_cookie[:expires].should be_future
     end
   end
 end
