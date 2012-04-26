@@ -57,4 +57,55 @@ describe Recommendation do
   describe "class methods" do
     pending ".remove_unprofitable!"
   end
+
+  describe '#income' do
+
+    subject do
+      Recommendation.new(
+        :price_fare => 10_000,
+        :price_tax => 5000,
+        :blank_count => 2
+      )
+    end
+
+    before do
+      subject.stub(:commission => commission)
+    end
+
+    context "no commission" do
+      let(:commission) {nil}
+      its(:income) {should == 0}
+    end
+
+    context "with all the prices and direct commission" do
+      let :commission do
+        Commission.new(
+          :agent => '4%',
+          :subagent => '1%',
+          :our_markup => '20',
+          :discount => '3%',
+          :consolidator => '0',
+          :blanks => '0',
+          :ticketing_method => 'direct'
+        )
+      end
+      its(:income) {should == 140}
+    end
+
+    context "with all the prices and aviacenter commission" do
+      let :commission do
+        Commission.new(
+          :agent => '4%',
+          :subagent => '1%',
+          :our_markup => '20',
+          :discount => '1%',
+          :consolidator => '2%',
+          :blanks => '0',
+          :ticketing_method => 'aviacenter'
+        )
+      end
+      its(:income) {should == 40}
+    end
+
+  end
 end
