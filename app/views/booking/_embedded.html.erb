@@ -54,15 +54,15 @@
     
     <div class="bf-section" data-type="payment">
         <div class="bfs-title">
-            <h4 class="bfst-text"><%= @order_form.last_pay_time ? 'Способ оплаты и платёжные' : 'Платёжные' %> данные</h4>
+            <h4 class="bfst-text"><%= @order_form.last_pay_time ? 'Способ оплаты и платежные' : 'Платежные' %> данные</h4>
             <div class="bfst-tip">Сайт защищен ключом безопасности и&nbsp;в&nbsp;полной мере соответствет стандартам PCI&nbsp;DSS Compliance.</div>
             <div class="bfst-line"></div>
         </div>
         <% if @order_form.last_pay_time %>
         <div class="bfp-type clearfix">
             <div class="bfpt-item bfpt-selected">
-                <h5 class="bfpt-title"><label for="bfpt-card" class="bfpt-label">Банковской картой онлайн</label></h5>
-                <p class="bfpt-tip"><label for="bfpt-card">Билет выпишется автоматически и будет<br>выслан вам на электронную почту</label></p>
+                <h5 class="bfpt-title"><label for="bfpt-card" class="bfpt-label">Банковской картой на сайте</label></h5>
+                <p class="bfpt-tip"><label for="bfpt-card">Билет будет выписан автоматически <br>и&nbsp;выслан вам на&nbsp;электронную почту</label></p>
                 <input type="radio" name="order[payment_type]" class="bfpt-radio" id="bfpt-card" value="card" checked="checked">
             </div>
             <div class="bfpt-item">
@@ -73,7 +73,7 @@
         </div>
         <% else %>
         <div class="bfp-type">
-            <p>Этот билет можно оплатить только банковской картой. Билет выпишется автоматически и&nbsp;будет выслан вам на&nbsp;электронную почту.</p>
+            <p>Этот билет можно оплатить только банковской картой. Билет будет выписан автоматически <br>и&nbsp;выслан вам на&nbsp;электронную почту.</p>
         </div>
         <% end %>
         <%= render 'payment_cash_form' if @order_form.last_pay_time %>
@@ -101,7 +101,7 @@
                 <div class="bfb-side bfb-left"><div class="bfb-side bfb-right"></div></div>
             </div>
             <div class="bff-cancel">или <span class="link bffc-link">вернуться к выбору вариантов</span></div>
-            <div class="bff-progress">секундочку</div>
+            <div class="bff-progress">секундочку...</div>
         </div>
         <div class="bff-required"></div>
         <div class="bff-disclaimer">
@@ -117,6 +117,7 @@
 <div class="bff-content">
     <h3 class="bff-title">Правила тарифов</h3>
     <p>Внимание! Возврат средств в&nbsp;случае отказа при получении визы, болезни и&nbsp;прочих обстоятельств без штрафных санкций невозможен. Возврат билета производится строго по&nbsp;правилам авиакомпании. В&nbsp;случае комбинации в&nbsp;билете тарифов с&nbsp;различными правилами, наиболее строгие ограничения применяются ко&nbsp;всему маршруту.</p>
+    <br>
     <p>Билеты не&nbsp;передаваемые. В&nbsp;случае неявки на&nbsp;рейс, авиакомпания может аннулировать все&nbsp;последующие участки маршрута.</p>
     <% @order_form.recommendation.rules.each do |(airline, fare) ,rule| %>
     <div class="bff-group">
