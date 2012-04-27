@@ -76,12 +76,16 @@
 
 /* Fixed price */
 .ob-placeholder {
+    position: relative;
     height: 52px;
     margin-left: 16px;
     background: #F8F8F6;
 }
 .ob-placeholder .o-book {
     margin-left: 0;
+}
+.ob-placeholder .o-book .ob-line {
+    display: none;
 }
 .ob-shadow {
     display: none;
@@ -156,13 +160,13 @@
     padding: 2px 0;
 }
 .ost-name {
-    width: 190px;
+    width: 200px;
 }
 .ost-dpt {
     width: 190px;
 }
 .ost-duration {
-    width: 376px;
+    width: 366px;
     padding: 0 14px 4px;
 }
 .ostn-text {
@@ -187,7 +191,7 @@
     line-height: 13px;    
 }
 .oss-wrap {
-    margin-left: 190px;
+    margin-left: 200px;
     padding: 4px 0 8px;
 }
 .oss-dpt,
@@ -212,7 +216,6 @@
     opacity: 0.4;
 }
 .ossc-title {
-    display: none;
     height: 13px;
     overflow: hidden;
 }
@@ -226,6 +229,9 @@
     height: 13px;
     margin: -13px 0 0 -18px;
     background: url(/images/results/coverlay.png) no-repeat 100% 0;
+}
+.oss-different .ossc-title {
+    display: none;
 }
 
 /* Price */
@@ -272,11 +278,14 @@
     float: left;
     padding-top: 8px;
 }
+.ossa-term {
+    color: #777;
+}
 
 /* Parts */
 .oss-parts {
     float: left;
-    width: 376px;
+    width: 366px;
     height: 13px;
     overflow: hidden;
     margin: 8px 14px 0;
@@ -360,14 +369,16 @@
 }
 
 /* Different segments */
-.os-summary .other-segments {
+.oss-incompatible {
     display: none;
-    position: absolute;
-    top: 10px; left: 795px;
-    width: 170px;
-    font-size: 11px;
-    line-height: 12px;
-    color: #AAA;
+    float: left;
+    color: #777;
+}
+.segment1 .ossi-segment {
+    color: #db7100;
+}
+.segment2 .ossi-segment {
+    color: #81aa00;
 }
 
 /* Hover */
@@ -411,9 +422,6 @@
 .os-selected:hover .ossc-icon {
     opacity: 1;
 }
-.os-selected .oss-price {
-    display: none;
-}
 .os-selected .oss-tip,
 .os-selected .ossc-title,
 .os-selected .oss-layovers {
@@ -442,6 +450,13 @@
 .os-disabled .ossb-flight {
     background: #C0C0C0;
     border-color: #D0D0D0;
+}
+.os-disabled:hover .ossi-m,
+.os-disabled:hover .ossi-l {
+    display: none;
+}
+.os-disabled:hover .oss-incompatible {
+    display: block;
 }
 
 /* Lines */
@@ -479,8 +494,11 @@
 /* Excess variants */
 .os-more {
     display: none;
-    margin-left: 190px;
-    padding: 5px 0 8px;
+    padding: 5px 0 8px 200px;
+    background: #dcdfe1;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
 }
 .hide-excess .os-excess {
     display: none;
@@ -505,7 +523,7 @@
     line-height: 14px;
 }
 .osd-title {
-    margin: 0 14px 5px 190px;
+    margin: 0 14px 5px 200px;
     font-weight: bold;
     font-size: 18px;
     line-height: 18px;
@@ -519,11 +537,11 @@
 .osd-arv {
     position: relative;
     float: left;
-    width: 440px;
+    width: 435px;
 }
 .osd-dpt {
     margin-right: 30px;
-    margin-left: 58px;
+    margin-left: 68px;
 }
 .osd-time {
     float: left;
@@ -597,12 +615,13 @@
     display: block;
 }
 .od-comments {
+    margin: 0 20px 0 200px;
     padding: 0 0 16px;
     font-size: 12px;
     line-height: 14px;
 }
 .od-comment {
-    margin: 0 20px 8px 190px;
+    margin: 0 0 8px;
 }
 .od-alliance {
     text-decoration: underline;

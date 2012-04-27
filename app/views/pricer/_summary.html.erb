@@ -15,7 +15,7 @@
 <div class="wrap oss-wrap">
     <div class="oss-dpt">
         <h5 class="oss-time"><%= fmt_time(segment.departure_time) %></h5>
-        <p class="oss-airport"><%= airport_and_term(segment.departure, segment.departure_term) %></p>
+        <p class="oss-airport"><%= segment.departure.name %><% if segment.departure_term %>&nbsp;<span class="ossa-term"><%= segment.departure_term %></span><% end %></p>
     </div>
     <div class="oss-parts">
         <ul class="oss-bar">
@@ -28,12 +28,14 @@
             <p class="ossi-m"><%= raw human_layovers_medium(segment) %></p>
             <p class="ossi-l"><%= raw human_layovers_large(segment) %></p>
         <% else %>
-            <p class="ossi-m">прямой, <%= segment.flights.first.equipment_type_name %></p>
+            <% flight = segment.flights.first %>
+            <p class="ossi-m">прямой, <%= flight.equipment_type_name %></p>
+            <p class="ossi-l">прямой, <%= flight.marketing_carrier_iata %>&nbsp;<%= flight.flight_number %>, <%= flight.equipment_type_name %></p>
         <% end %>
     </div>
     <div class="oss-arv">
         <h5 class="oss-time"><%= fmt_time(segment.arrival_time) %></h5>
-        <p class="oss-airport"><%= airport_and_term(segment.arrival, segment.arrival_term) %></p>
+        <p class="oss-airport"><%= segment.arrival.name %><% if segment.arrival_term %>&nbsp;<span class="ossa-term"><%= segment.arrival_term %></span><% end %></p>
     </div>
 </div>
 <div class="oss-line"></div>

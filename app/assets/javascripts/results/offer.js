@@ -148,11 +148,11 @@ sortSegments: function() {
     });
 },
 otherSegments: function() {
-    this.el.find('.other-segments').remove();
+    this.el.find('.oss-incompatible').remove();
     this.el.find('.o-segment').each(function(i) {
-        var title, disabled = $(this).find('.os-disabled');
+        var disabled = $(this).find('.os-disabled');
         if (disabled.length) {
-            disabled.append('<div class="other-segments">' + results.data.ostitles[i] + '</div>');
+            disabled.find('.oss-parts').append('<p class="oss-incompatible">' + results.data.ostitles[i] + '</p>');
         }
     });
 },
@@ -199,6 +199,7 @@ otherPrices: function() {
     var ss = this.selected.segments
     var sp = this.selected.price;
     this.el.find('.oss-price').remove();
+    this.el.find('.oss-different').removeClass('oss-different');
     this.el.find('.o-segment').each(function(s) {
         var segments = [].concat(ss);
         $(this).find('.os-summary').each(function() {
@@ -210,16 +211,14 @@ otherPrices: function() {
                 segments[s] = flights;
                 value = prices[segments.join(' ')];
             }
-            var price = $('<div class="oss-price"></div>');
             if (value !== sp) {
+                var price = $('<div class="oss-price"></div>');
                 var key = value > sp ? 'rise' : 'fall';
                 var text = results.currencies['RUR'].absorb(Math.abs(value - sp));
                 price.html(local.offers.price[key].absorb(text));
                 price.addClass('ossp-' + key);
-            } else {
-                price.html('такая же цена').addClass('ossp-same');
+                el.addClass('oss-different').append(price);
             }
-            el.append(price);
         });
     });
 },
@@ -247,7 +246,7 @@ hideExcess: function(limit) {
             var simple = results.data.segments.length === 1 || results.data.segments[1].rt;
             var title = simple ? local.offers.segments[i] : results.data.segments[i].arvto;
             var text = local.offers.more.absorb(excess.decline.apply(excess, local.offers.variants), title);
-            var more = '<div class="os-more"><span class="link">' + text + '</span></div>'
+            var more = '<div class="os-more">' + text + '</div>'
             this.toggleExcess(segment.el.addClass('hide-excess').append(more), excess);
         }
         used += excess;

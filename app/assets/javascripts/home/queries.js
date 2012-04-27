@@ -63,7 +63,7 @@ remove: function(tab) {
     delete this.index[tab.attr('data-key')];
     tab.width('+=0').html('').removeClass('qh-selected');
     tab.animate({width: 0}, 350, function() {
-        that.searches.toggle(tab.siblings().length !== 0);
+        that.el.toggle(tab.siblings().length !== 0);
         tab.remove();
     });
 },

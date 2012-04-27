@@ -299,7 +299,7 @@ update: function(variants, lid) {
         var book = this.offer.el.find('.o-book');
         book.wrap('<div class="ob-placeholder"></div>');
         book.append('<div class="ob-shadow"></div>');
-        book.append('<div class="ob-overlay"></div>');        
+        book.after('<div class="ob-line"></div>');
         this.offer.el.find('.od-hide').remove();
     } else {
         this.clear(labels);

@@ -241,7 +241,7 @@ extendData: function() {
         } else {
             var parts = [];
             for (var i = 0; i < sl; i++) {
-                if (i !== s) parts.push(segments[i].title);
+                if (i !== s) parts.push(segments[i].arvto);
             }
             titles[s] = os[parts.length === 1 ? 'one' : 'many'].absorb(parts.enumeration());
         }
