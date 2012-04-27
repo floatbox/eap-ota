@@ -122,10 +122,10 @@ init: function() {
 },
 focus: function() {
     this.active = true;
-    this.label.hide();
     this.value = this.field.val();
     this.clonePrev();
     if (this.value !== '') {
+        this.label.hide();
     	this.field.select();
        	this.toggleVariants();
     }
@@ -158,6 +158,7 @@ change: function(selected) {
     clearTimeout(this.timer);
     var value = this.field.val();
     if (value !== this.value) {
+        this.label.toggle(value === '');
         this.value = value;
         if (!selected && this.selected) {
             this.select();

@@ -15,7 +15,7 @@ show: function(instant) {
     this.header.buttonEnabled.hide();
     if (this.ready) {
         this.content.el.show();
-        this.filters.el.show();
+        this.filters.show();
     } else {
         this.message.show();
     }
@@ -38,10 +38,9 @@ show: function(instant) {
     }
     context.queue(function(next) {
         that.visible = true;
-        that.header.el.addClass('fixed');
+        that.header.el.addClass('rh-fixed');
         that.header.button.hide();
         that.header.edit.show();
-        that.filters.el.addClass('rf-fixed');
         that.fixed.update();
         that.queue.resume();
         next();
@@ -55,7 +54,6 @@ hide: function() {
     this.header.buttonEnabled.hide();
     this.header.button.show();
     this.visible = false;
-    this.filters.el.removeClass('rf-fixed');    
     this.fixed.update();
     if (browser.ios) {
         context = search.el.delay(100).slideDown(600);
@@ -65,14 +63,14 @@ hide: function() {
         search.map.load();
         context = $w.scrollTop(this.header.position());
         context.delay(100).smoothScrollTo(0, 450);
-        this.header.el.removeClass('fixed');
+        this.header.el.removeClass('rh-fixed');
     }
     context.delay(100).queue(function(next) {
         page.header.removeClass('fixed');
         that.header.buttonEnabled.fadeIn(150);
-        that.filters.el.hide();
         that.message.el.hide();
         that.content.el.hide();
+        that.filters.hide();
         search.active = true;
         next();
     });
@@ -90,6 +88,9 @@ update: function(data) {
     this.updateTitles();
     this.header.show(this.data.titles.header, data.valid);
     this.data.fresh = true;
+    if (page.location.booking) {
+        page.title.set(local.title.booking.absorb(results.data.titles.window));    
+    }
 },
 load: function() {
     var that = this;
@@ -334,19 +335,30 @@ show: function() {
 /* Fixed book button */
 results.fixed = {
 init: function() {
-    var that = this, state, edge;
+    var that = this, state, tedge, bedge;
     if (browser.ios) {
         this.update = function() {};
         this.move = function() {};
         return false;
     }
     this.toggle = function() {
-        var fixed = $w.scrollTop() < edge;
-        if (fixed !== state) that.el.toggleClass('fixed-book', state = fixed);
+        var st = $w.scrollTop(), s = 1
+        if (st > tedge) {
+            s = 2;
+        } else if (st < bedge) {
+            s = 0;
+        }
+        if (s !== state) {
+            that.el.toggleClass('ob-fixed', s !== 1);
+            that.el.toggleClass('ob-tfixed', s === 2);
+            that.el.toggleClass('ob-bfixed', s === 0);
+            state = s;
+        }
     };
     this.count = function() {
         var offset = that.el.find('.o-details').offset().top;
-        edge = offset - $w.height() + Queries.height;
+        tedge = offset - 128 - 52;
+        bedge = offset - $w.height() + Queries.height;
         that.toggle();
     };
     this.reset = function() {
@@ -364,7 +376,7 @@ bind: function() {
 },
 unbind: function() {
     $w.unbind('scroll', this.toggle).unbind('resize', this.count);
-    this.el.removeClass('fixed-book');
+    this.el.removeClass('ob-fixed ob-tfixed ob-bfixed');
     this.reset();
 },
 update: function() {

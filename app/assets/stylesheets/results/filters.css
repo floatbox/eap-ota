@@ -1,31 +1,10 @@
 /* Filters */
 #results-filters {
     display: none;
-    position: absolute;
-    width: 100%;
-    margin-top: -12px;
-    background: url(/images/common/dark.jpg) repeat 0 100% #373941;
-    color: #FFF;
-}
-#results-filters.rf-fixed {
-    position: fixed;
-    top: 94px;
-    left: 0;
-    z-index: 14;    
-    margin-top: 0;
-}
-.rf-content {
     width: 988px;
     height: 34px;
-    margin: 0 auto;
-}
-.rf-shadow {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    height: 10px;
-    background: url(/images/results/fshadow.png) repeat-x;
+    margin: -12px auto;
+    color: #FFF;
 }
 
 /* Filters data */

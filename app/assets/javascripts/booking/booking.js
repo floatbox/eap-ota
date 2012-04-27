@@ -4,6 +4,7 @@ init: function() {
     var that = this;
     this.el = $('#booking');
     this.content = this.el.find('.b-content');
+    this.loading = this.el.find('.b-loading');
     validator.names = {
         m: ' ' + genderNames.m.toLowerCase() + ',',
         f: ' ' + genderNames.f.toLowerCase() + ','
@@ -47,7 +48,7 @@ prebook: function(offer) {
     });
     offer.book.addClass('ob-disabled');
     offer.state.html('<span class="ob-progress">Проверяем доступность мест</span>');
-    if (offer.el.hasClass('fixed-book')) {
+    if (offer.el.hasClass('ob-fixed')) {
         var ph = offer.el.find('.ob-placeholder');
         $w.smoothScrollTo(ph.position().top + ph.height() + 30 + 33 - $w.height());
     }
@@ -93,7 +94,9 @@ load: function() {
     var that = this;
     this.request = $.get('/booking/?number=' + this.key, function(content) {
         page.location.set('booking', that.key);
-        page.title.set(local.title.booking.absorb(results.data.titles.window));
+        if (results.data) {
+            page.title.set(local.title.booking.absorb(results.data.titles.window));
+        }
         results.header.edit.hide();
         results.header.select.show();
         if (that.offer) {
@@ -108,7 +111,8 @@ view: function(content) {
     this.content.find('.os-details').addClass(function(i) {
         return 'segment' + (i + 1);
     });
-    this.el.show();
+    this.loading.hide();
+    this.el.removeClass('b-processing').show();
     this.form.init();
     this.farerules.init();    
     $('#bfc-email').focus();
@@ -141,7 +145,7 @@ preview: function(content) {
     $w.delay(100).queue(function(next) {
         that.substitute(preview);
         that.farerules.init();
-        results.filters.hidePanel();
+        results.filters.hide(true);
         Queries.hide();
         next();
     });
@@ -158,7 +162,7 @@ substitute: function(preview) {
 },
 cancel: function() {
     Queries.show();
-    results.filters.showPanel();
+    results.filters.show(true);
     results.header.select.hide();
     if (results.ready) {
         var that = this;
@@ -179,8 +183,9 @@ cancel: function() {
 },
 hide: function() {
     var offset = this.content.position().top - $w.scrollTop();
-    this.el.hide();
+    this.el.hide().removeClass('b-processing');
     this.content.html('');
+    this.loading.hide();
     results.header.edit.show();
     results.content.el.show();
     $w.scrollTop(this.offer.details.position().top - offset);

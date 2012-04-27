@@ -3,7 +3,6 @@ results.filters = {
 init: function() {
     var that = this;    
     this.el = $('#results-filters');
-    this.content = this.el.find('.rf-content');
     this.groups = [];
     this.el.find('.rf-group').mousedown(function(event) {
         event.stopPropagation();
@@ -11,10 +10,10 @@ init: function() {
         var group = new filtersGroup(this);
         that.groups.push(group);
     });
-    this.content.on('click', '.rfv-item', function() {
+    this.el.on('click', '.rfv-item', function() {
         that.select($(this));
     });
-    this.content.on('click', '.rfv-empty:not(.rfv-selected)', function() {
+    this.el.on('click', '.rfv-empty:not(.rfv-selected)', function() {
         that.reset($(this));
     });
     this.observe = function(event) {
@@ -33,25 +32,27 @@ init: function() {
         that.lists.push(checkbox);    
     };
 },
-showPanel: function() {
-    var that = this;
-    this.content.css('visibility', '');    
-    this.content.animate({height: 34}, 250, function() {
-        that.content.css('overflow', '');
-        that.content.height('');
-    });
-},
-hidePanel: function(instant) {
-    var content = this.content.css('overflow', 'hidden');
-    if (instant) {
-        content.height(3);
+show: function(smooth) {
+    if (smooth) {
+        var el = this.el;
+        el.css('overflow', 'hidden').height(12).show();
+        el.animate({height: 34}, 250, function() {
+            el.css('overflow', '').height('');
+        });
     } else {
-        content.animate({height: 12}, 250);
+        this.el.show();
     }
-    content.queue(function(next) {
-        content.css('visibility', 'hidden');
-        next();
-    });
+},
+hide: function(smooth) {
+    if (smooth) {
+        var el = this.el;
+        el.css('overflow', 'hidden');
+        el.animate({height: 12}, 250, function() {
+            el.hide().css('overflow', '').height('');
+        });
+    } else {
+        this.el.hide();
+    }
 },
 getVariants: function() {
     var features = [];
@@ -141,6 +142,7 @@ apply: function() {
     this.htimer = setTimeout(function() {
         that.hideGroup();
     }, 750);
+    $w.delay(100).smoothScrollTo(0, 300);
 },
 toggle: function() {
     var cached = {};
@@ -248,7 +250,7 @@ resize: function() {
     if (width < tw + 14) {
         width = tw + 14;
     }
-    var offset = this.control.offset().left - this.control.closest('.rf-content').offset().left;
+    var offset = this.control.offset().left - results.filters.el.offset().left;
     if (offset + width > 982) {
         var shift = offset + width - 982;
         this.content.css('left', -shift);

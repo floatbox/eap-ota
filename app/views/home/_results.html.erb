@@ -13,29 +13,26 @@
         </td>
     </tr>
     </table>
-</div>
-</div>
-
-<div id="results-filters">
-<div class="rf-content">
-    <div class="rf-group" data-id="time">
-        <div class="rfg-control">Время вылета и прилета<span class="rfg-counter"></span></div>
-        <div class="rfg-content"></div>
+    <div id="results-filters">
+        <div class="rf-group" data-id="time">
+            <div class="rfg-control">Время вылета и прилета<span class="rfg-counter"></span></div>
+            <div class="rfg-content"></div>
+        </div>
+        <div class="rf-group" data-id="locations">
+            <div class="rfg-control">Города и аэропорты<span class="rfg-counter"></span></div>
+            <div class="rfg-content"></div>
+        </div>
+        <div class="rf-group" data-id="carriers">
+            <div class="rfg-control">Авиакомпании и самолеты<span class="rfg-counter"></span></div>
+            <div class="rfg-content"></div>
+        </div>
+        <div class="rf-group" data-id="layovers">
+            <div class="rfg-control">Пересадки<span class="rfg-counter"></span></div>
+            <div class="rfg-content"></div>
+        </div>                        
     </div>
-    <div class="rf-group" data-id="locations">
-        <div class="rfg-control">Города и аэропорты<span class="rfg-counter"></span></div>
-        <div class="rfg-content"></div>
-    </div>
-    <div class="rf-group" data-id="carriers">
-        <div class="rfg-control">Авиакомпании и самолеты<span class="rfg-counter"></span></div>
-        <div class="rfg-content"></div>
-    </div>
-    <div class="rf-group" data-id="layovers">
-        <div class="rfg-control">Пересадки<span class="rfg-counter"></span></div>
-        <div class="rfg-content"></div>
-    </div>                        
+    <div class="rh-shadow"></div>
 </div>
-<div class="rf-shadow"></div>
 </div>
 
 <div id="results-message">
@@ -69,6 +66,7 @@
 <div id="results-content">
 
     <div id="results-tabs">
+    <div id="rf-placeholder"></div>
     <ul class="rt-content wrap">
         <li class="rt-item" data-tab="cheap">Дешевые</li>
         <li class="rt-item" data-tab="optimal">Оптимальные</li>
@@ -90,8 +88,8 @@
     </div>
     
     <div id="ost-template">
-    <ul class="os-title">
-        <li class="ost-item ost-name">Перелет {0}</li>
+    <ul class="os-title wrap">
+        <li class="ost-item ost-name"><span class="ostn-text">Перелет {0}</span></li>
         <li class="ost-item ost-dpt">Вылет</li>
         <li class="ost-item ost-duration">В пути</li>
         <li class="ost-item ost-arv">Прибытие</li>

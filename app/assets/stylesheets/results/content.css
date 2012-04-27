@@ -22,7 +22,7 @@
 /* Tabs */
 #results-tabs {
     margin-bottom: 20px;
-    padding-top: 32px;
+    padding-top: 22px;
     background: url(/images/common/dark.jpg) #373941;    
     font-weight: bold;
     font-size: 18px;
@@ -36,12 +36,13 @@
 }
 .rt-item {
     float: left;
+    height: 20px;
     margin-bottom: -1px;
     padding: 12px 14px 13px;    
     cursor: pointer;
 }
 .rt-selected {
-    background: url(/images/common/grey.png) #d5dbe0;    
+    background: url(/images/common/dgrey.png) #bfc4c8;
     color: #333;
     cursor: default;
 }
@@ -55,9 +56,4 @@
 .rt-matrix {
     float: right;
     margin-right: 0;
-}
-
-/* Ruble sign */
-.ruble {
-  font-family: 'ALSRubl-Arial', Arial, sans-serif;
 }

@@ -1,6 +1,18 @@
 /* Container */
+#results-header {
+    height: 70px;
+}
 .rh-wrapper {
-    background: url(/images/common/dark.jpg) repeat 0 100% #373941;
+    background: url(/images/common/dark.jpg) #373941;
+}
+.rh-shadow {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: url(/images/results/fshadow.png) repeat-x;
 }
 .rh-content {
     width: 960px;
@@ -71,9 +83,13 @@
     line-height: 22px;
     letter-spacing: -0.03em;
     color: #96989e;
+    cursor: default;
 }
 .rh-ready {
     color: #FFF;
+}
+.rhs-text {
+    cursor: pointer;
 }
 
 /* Edit and select */
@@ -92,9 +108,12 @@
 }
 
 /* Fixed */
-#results-header.fixed .rh-wrapper {
+.rh-fixed .rh-wrapper {
     position: fixed;
     top: 36px; left: 0;
     z-index: 14;
     width: 100%;
+}
+.rh-fixed .rh-shadow {
+    display: block;
 }

@@ -3,8 +3,7 @@
     margin: 0 0 25px;
 }
 .o-variants,
-.o-comments,
-.o-validating {
+.o-comments {
     display: none;
 }
 
@@ -61,7 +60,7 @@
 /* Prebooking */
 .ob-progress {
     padding-right: 26px;
-    background: url(/images/booking/progress.gif) no-repeat 100% 5px;
+    background: url(/images/booking/progress-w.gif) no-repeat 100% 5px;
 }
 .ob-disabled .obb-left {
     background-position: 100% -45px;
@@ -77,10 +76,12 @@
 
 /* Fixed price */
 .ob-placeholder {
-    display: none;
     height: 52px;
     margin-left: 16px;
     background: #F8F8F6;
+}
+.ob-placeholder .o-book {
+    margin-left: 0;
 }
 .ob-shadow {
     display: none;
@@ -91,17 +92,26 @@
     height: 12px;
     background: url(/images/results/pshadow.png) no-repeat;
 }
-.fixed-book .o-book {
+.ob-fixed .o-book {
     position: fixed;
-    bottom: 30px;
     left: 50%;
     width: 960px;
     margin-left: -494px;
     z-index: 1;
 }
-.fixed-book .ob-placeholder,
-.fixed-book .ob-shadow {
+.ob-tfixed .o-book {
+    top: 128px;
+}
+.ob-bfixed .o-book {
+    bottom: 30px;
+}
+.ob-fixed .ob-shadow, 
+.ob-fixed .ob-shadow {
     display: block;
+}
+.ob-tfixed .ob-shadow {
+    top: 52px;
+    background-position: 0 -13px;
 } 
 
 /* Details control */
@@ -124,47 +134,54 @@
 }
 .o-segment {
     position: relative;
-    padding: 0 0 2px;
+    margin-left: 16px;
+    border-top: 1px solid #bec2c8;
+    padding: 0 0 5px;
 }
 .o-complex .o-segment {
-    margin: 0 0 10px;
+    border-top: none;
+    margin-bottom: 20px;
+    padding: 0;
 }
 
 /* Segment title */
 .os-title {
-    position: relative;
-    top: 8px;
-    height: 14px;
-    margin: 0 370px 6px 30px;
-    border-top: 1px solid #b7bcc0;
+    margin: 0 0 2px;
     font-size: 12px;
     line-height: 14px;
-    color: #777;
+    color: #5A5A5A;
 }
 .ost-item {
-    position: absolute;
-    top: -8px;
-    padding: 0 5px;
-    background: #d5dbe0;
+    float: left;
+    padding: 2px 0;
 }
 .ost-name {
-    left: -5px;
-    font-weight: bold;
+    width: 190px;
 }
 .ost-dpt {
-    left: 171px;
+    width: 190px;
 }
 .ost-duration {
-    left: 366px;
+    width: 376px;
+    padding: 0 14px 4px;
 }
-.ost-arv {
-    left: 571px;
+.ostn-text {
+    padding: 2px 14px;
+    font-weight: bold;
+    color: #FFF;
+}
+.segment1 .ostn-text {
+    background: #81AA00;
+}
+.segment2 .ostn-text {
+    background: #DB7100;
 }
 
 /* Segment summary */
 .os-summary {
     position: relative;
-    margin-left: 16px;
+    margin: 0 0 1px;
+    background: #dcdfe1;
     cursor: pointer;
     font-size: 13px;
     line-height: 13px;    
@@ -176,7 +193,7 @@
 .oss-dpt,
 .oss-arv {
     float: left;
-    width: 180px;
+    width: 190px;
 }
 
 /* Carrier */
@@ -184,7 +201,7 @@
     position: absolute;
     top: 12px;
     left: 44px;
-    width: 130px;
+    width: 135px;
 }
 .ossc-icon {
     position: absolute;
@@ -196,6 +213,19 @@
 }
 .ossc-title {
     display: none;
+    height: 13px;
+    overflow: hidden;
+}
+.ossct-text {
+    float: left;
+    white-space: nowrap;
+}
+.ossct-overlay {
+    float: right;
+    width: 20px;
+    height: 13px;
+    margin: -13px 0 0 -18px;
+    background: url(/images/results/coverlay.png) no-repeat 100% 0;
 }
 
 /* Price */
@@ -223,16 +253,13 @@
     font-size: 18px;
     line-height: 19px;
 }
-.segment1 .oss-time,
-.segment1 .os-summary:hover .oss-time {
+.segment1 .oss-time {
     color: #81aa00;
 }
-.segment2 .oss-time,
-.segment2 .os-summary:hover .oss-time {
+.segment2 .oss-time {
     color: #db7100;
 }
-.segment3 .oss-time,
-.segment3 .os-summary:hover .oss-time {
+.segment3 .oss-time {
     color: #0aa0c6;
 }
 .osst-date {
@@ -249,8 +276,10 @@
 /* Parts */
 .oss-parts {
     float: left;
-    width: 190px;
-    padding: 8px 15px 0;
+    width: 376px;
+    height: 13px;
+    overflow: hidden;
+    margin: 8px 14px 0;
 }
 .oss-bar {
     float: left;
@@ -278,6 +307,23 @@
 }
 .ossb-layover {
     background: #e0e0e0;
+}
+.oss-duration {
+    margin-right: 10px;
+    margin-bottom: 4px;
+    float: left;
+}
+.ossi-m {
+    float: left;
+    margin-bottom: -13px;
+    color: #777;
+}
+.ossi-l {
+    float: left;
+    color: #777;
+    padding-right: 20px;
+    margin-right: -20px;
+    background: #dcdfe1;
 }
 
 /* Layovers */
@@ -326,10 +372,13 @@
 
 /* Hover */
 .os-summary:hover {
-    background: #dee2e6;
+    background: #e9eaec;
 }
 .os-disabled:hover {
     color: #606060;
+}
+.os-disabled:hover .oss-time {
+    color: #8A8A8A;
 }
 .os-summary:hover .ossp-rise {
     background-position: 100% 4px;
@@ -343,13 +392,17 @@
 .os-summary:hover .other-segments {
     display: block;
 }
+.os-summary:hover .ossct-overlay {
+    background-position: 0 -20px;
+}
+.os-summary:hover .ossi-l {
+    background: #e9eaec;
+}
 
 /* Selected */
 .os-selected {
     cursor: default;
     background: #FFF;
-    border-left: 1px solid #afb3b7;
-    margin-left: 15px;
 }
 .os-selected:hover {
     background: #FFF;
@@ -365,6 +418,13 @@
 .os-selected .ossc-title,
 .os-selected .oss-layovers {
     display: block;
+}
+.os-selected .ossc-title .ossct-overlay {
+    background-position: 0 -40px;
+}
+.os-selected .ossi-l,
+.os-selected:hover .ossi-l {
+    background: #FFF;
 }
 
 /* Hidden */
@@ -395,7 +455,7 @@
     left: -16px;
     width: 15px;
     height: 2000px;
-    border: 1px solid #afb3b7;
+    border: 1px solid #FFF;
     border-width: 1px 0 0 1px;
 }
 .ob-line {
@@ -404,22 +464,22 @@
     left: -16px;
     width: 15px;
     height: 26px;
-    border: 1px solid #afb3b7;
+    border: 1px solid #FFF;
     border-width: 0 0 1px 1px;
 }
 .ob-overlay {
     position: absolute;
     top: 27px;
     left: -16px;
-    width: 15px;
+    width: 16px;
     height: 26px;
-    background: url(/images/common/grey.png) #d5dbe0;    
+    background: url(/images/common/dgrey.png) #bfc4c8;  
 }
 
 /* Excess variants */
 .os-more {
     display: none;
-    margin-left: 206px;
+    margin-left: 190px;
     padding: 5px 0 8px;
 }
 .hide-excess .os-excess {
@@ -445,64 +505,69 @@
     line-height: 14px;
 }
 .osd-title {
-    margin: 0 14px 12px 190px;
+    margin: 0 14px 5px 190px;
     font-weight: bold;
-    font-size: 16px;
-    line-height: 17px;
+    font-size: 18px;
+    line-height: 18px;
+    letter-spacing: -0.03em;    
     color: #777;
 }
 .osd-flight {
     padding: 10px 0 0;
 }
-.osd-carrier {
-    float: left;
-    margin: -4px 0 0 12px;
-    width: 35px;
-}
-.osdc-icon {
-    vertical-align: middle;
-}
-
 .osd-dpt,
 .osd-arv {
     position: relative;
     float: left;
-    width: 370px;
+    width: 440px;
 }
 .osd-dpt {
     margin-right: 30px;
-    margin-left: 64px;
-}
-.osd-time,
-.osd-date {
-    position: absolute;
-    left: 0;
-    width: 68px;
-    text-align: right;
+    margin-left: 58px;
 }
 .osd-time {
-    top: -1px;
+    float: left;
+    width: 120px;
+    text-align: right;
     font-weight: bold;
-    font-size: 18px;
-    line-height: 18px;
-}
-.osd-date {
-    top: 20px;
-    font-size: 11px;
-    line-height: 11px;
-    color: #777;
+    font-size: 26px;
+    line-height: 26px;
+    letter-spacing: -0.03em;    
 }
 .osd-action {
-    margin: 0 0 4px 80px;
+    margin: 5px 0 11px 132px;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 16px;
+    line-height: 16px;
+    letter-spacing: -0.03em;
 }
-.osd-features {
-    margin-left: 60px;
+.osd-features dt {
+    float: left;
+    width: 120px;
+    text-align: right;
+    color: #777;
 }
-.osd-features li {
-    margin: 3px 0 0 20px;
+.osd-features dd {
+    margin: 0 0 3px 132px;
 }
+.osd-carrier {
+    position: relative;
+}
+.osdc-icon {
+    position: absolute;
+    left: -178px;
+    top: -5px;
+}
+.osd-notice {
+    margin: 10px 0 0 128px; 
+}
+.osdn-item {
+    margin-top: 6px;
+}
+.osdn-hl {
+    padding: 2px 4px;
+    background: #e2ea5f;
+} 
 
 /* Segment colors */
 .segment1 .osd-time,
@@ -524,8 +589,8 @@
     background: #F8F8F6;
 }
 .od-segments {
-    border-top: 1px solid #ecece8;
-    padding: 2px 0;
+    border-top: 1px solid #EDEDED;
+    padding: 6px 0 2px;
 }
 .od-segments .os-details {
     margin: 18px 0;
@@ -537,9 +602,14 @@
     line-height: 14px;
 }
 .od-comment {
-    margin: 0 150px 8px 190px;
+    margin: 0 20px 8px 190px;
 }
 .od-alliance {
     text-decoration: underline;
     cursor: pointer;
+}
+.odc-hl {
+    margin-left: -4px;
+    padding: 2px 4px;
+    background: #e2ea5f;
 }

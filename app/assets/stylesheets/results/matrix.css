@@ -1,10 +1,6 @@
 /* Matrix */
 .rm-prices {
-    border-top: 1px solid #D8D8D8;
-    padding: 10px 6px 12px;
-}
-.rmp-table {
-    width: 973px;
+    padding: 0 22px 12px;
 }
 .rmp-table th {
     height: 25px;
@@ -16,11 +12,11 @@
     line-height: 13px;
 }
 .rmp-date1 {
-    width: 100px;
+    width: 105px;
     color: #81AA00;
 }
 .rmp-date2 {
-    width: 145px;
+    width: 119px;
     color: #DB7100;
 }
 .rmp-weekday {
@@ -34,7 +30,7 @@
 
 /* Matrix item */
 .rmp-item {
-    padding: 7px 8px;
+    padding: 7px 14px 7px 8px;
     cursor: pointer;
 }
 .rmp-cost {
@@ -50,43 +46,36 @@
 /* Matrix bars */
 .rmv-bar {
     margin: 2px 0 0;
-    height: 1px;
+    height: 2px;
 }
 .rmvb-flight,
 .rmvb-layover {
     float: left;
     height: 1px;
+    border-bottom: 1px solid #e7e7e7;
     overflow: hidden;
 }
 .segment1 .rmvb-flight {
-    background: #81aa00;
+    background: #86a900;
+    border-color: #9db930;
 }
 .segment2 .rmvb-flight {
-    background: #db7100;
+    background: #cc6900;
+    border-color: #e58217;
+}
+.segment3 .rmvb-flight {
+    background: #0498bd;
+    border-color: #11abd1;
 }
 .rmvb-layover {
-    background: #D0D0D0;
+    background: #e0e0e0;
 }
 
 /* Selected price */
-.rmp-selected {
-    padding: 5px 6px;
-    border: 2px solid #F90A6F;
-    border-color: #950643 #FB4793 #FB60A1 #AE074D;    
-    background: #F90A6F;
-}
 .rmp-item:hover {
-    background: #F90A6F;
+    background: #dee2e6;
 }
-.rmp-selected .rmp-cost,
-.rmp-item:hover .rmp-cost {
-    color: #FFF;
-}
-.rmp-selected .rmvb-flight,
-.rmp-item:hover .rmvb-flight {
-    background: #fdcee2;
-}
-.rmp-selected .rmvb-layover,
-.rmp-item:hover .rmvb-layover {
-    background: #fc9dc5;
+.rmp-selected,
+.rmp-selected:hover {
+    background: #FFF;
 }

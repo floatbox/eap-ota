@@ -7,7 +7,10 @@
 >
 <div class="oss-carrier">
     <img class="ossc-icon" src="<%= carrier.icon_url %>">
-    <span class="ossc-title"><%= carrier.name %></span>
+    <div class="ossc-title">
+        <span class="ossct-text" title="<%= carrier.name %>"><%= carrier.name %></span>
+        <span class="ossct-overlay"></span>
+    </div>
 </div>
 <div class="wrap oss-wrap">
     <div class="oss-dpt">
@@ -21,17 +24,17 @@
         <% end %>
         </ul>
         <p class="oss-duration"><%= short_human_duration(segment.total_duration) %></p>
+        <% if segment.layovers? %>
+            <p class="ossi-m"><%= raw human_layovers_medium(segment) %></p>
+            <p class="ossi-l"><%= raw human_layovers_large(segment) %></p>
+        <% else %>
+            <p class="ossi-m">прямой, <%= segment.flights.first.equipment_type_name %></p>
+        <% end %>
     </div>
     <div class="oss-arv">
         <h5 class="oss-time"><%= fmt_time(segment.arrival_time) %></h5>
         <p class="oss-airport"><%= airport_and_term(segment.arrival, segment.arrival_term) %></p>
     </div>
-    <div class="oss-layovers">
-        <p class="ossl-cities"><%= raw human_layovers(segment) %></p>
-        <p class="ossl-durations"><%= raw human_layover_durations(segment) %></p>
-        <p class="ossl-more"><span class="ossl-link">Подробнее о перелёте</span></p>
-    </div>
-    <%#= human_date(segment.arrival_date) if segment.departure_date != segment.arrival_date %>
 </div>
 <div class="oss-line"></div>
 </div>

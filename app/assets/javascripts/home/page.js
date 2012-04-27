@@ -12,7 +12,7 @@ init: function() {
 
     preloadImages('/images/search/dates.png');
     preloadImages('/images/results/progress.gif', '/images/results/fshadow.png', '/images/results/slider.png');
-    preloadImages('/images/booking/progress.gif');
+    preloadImages('/images/booking/progress-w.gif', '/images/booking/progress-b.gif');
     
     if (this.location.booking) {
         this.restoreBooking(this.location.search, this.location.booking);
@@ -55,8 +55,11 @@ restoreBooking: function(rkey, bkey) {
     }    
     results.header.button.hide();
     results.header.select.show();
+    results.filters.el.addClass('rf-fixed').show();    
     booking.key = bkey;
-    booking.load();    
+    booking.loading.show();
+    booking.el.addClass('b-processing').show();
+    booking.load();
 },
 reset: function() {
     search.setValues(search.defaultValues);

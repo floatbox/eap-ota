@@ -25,6 +25,12 @@
     display: none;
     padding: 20px 0;
 }
+#booking.b-processing {
+    position: relative;
+    min-height: 100%;
+    margin-top: -106px;
+    padding: 0;
+}
 .b-content {
     width: 988px;
     margin: 0 auto;
@@ -39,6 +45,25 @@
 #booking .ob-line {
     display: none;
 }
+.b-loading {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 400px;
+    margin: 20px 0 0 -200px;
+    text-align: center;
+}
+.bl-title {
+    font-size: 20px;
+    line-height: 20px;
+    letter-spacing: -0.03em;
+}
+.bl-progress {
+    padding-right: 26px;
+    background: url(/images/booking/progress-g.gif) no-repeat 100% 5px;
+}
+
 
 /* Подробности */
 .b-details {
@@ -150,7 +175,7 @@
 .bff-progress {
     display: none;
     padding-right: 26px;
-    background: url(/images/booking/progress.gif) no-repeat 100% 1px;
+    background: url(/images/booking/progress-b.gif) no-repeat 100% 1px;
 }
 
 /* Проверка полей и соглашение */

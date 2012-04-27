@@ -15,6 +15,13 @@ init: function() {
     this.edit.find('.rhe-link').click(function() {
         results.hide();
     });
+    this.summary.on('click', '.rhs-text', function() {
+        if (that.edit.is(':visible')) {
+            results.hide();
+        } else {
+            that.apply();
+        }
+    });
     this.height = this.el.height();
     this.el.height(this.height);
     this.el.find('.rh-left').width('+=0');
@@ -26,12 +33,14 @@ hide: function() {
 show: function(message, ready) {
     var that = this;
     this.summary.queue(function(next) {
-        that.summary.toggleClass('rh-ready', ready).html(message);
         that.summary.css('font-size', '');
         that.summary.css('line-height', '');
         if (ready) {
+            that.summary.addClass('rh-ready').html('<span class="rhs-text">' + message + '</span>');
             that.adjust();
             that.buttonEnabled.fadeIn(150);
+        } else {
+            that.summary.removeClass('rh-ready').html(message);
         }
         next();
     }).fadeIn(150);

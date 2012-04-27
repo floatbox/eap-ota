@@ -298,7 +298,6 @@ updateDetails: function() {
         content.addClass('segment' + (s + 1)).appendTo(odSegments);
     }
     var odComments = $('<div class="od-comments"></div>');
-    odComments.html(offer.el.find('.o-validating').html());
     offer.el.find('.o-comments .od-comment').each(function() {
         var comment = $(this), carrier = comment.attr('data-carrier');
         if (!carrier || features['carrier' + carrier]) {

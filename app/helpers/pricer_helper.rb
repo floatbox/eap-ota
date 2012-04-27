@@ -56,7 +56,7 @@ module PricerHelper
   end
   
   def full_airport_and_term location, term
-    result = ["Аэропорт #{ location.name }"]
+    result = ["#{ location.name }"]
     if term
       result << "терминал&nbsp;#{ term }"
     end
@@ -80,14 +80,12 @@ module PricerHelper
         }
       end
     end
-    availability = r.availability
-    if availability && availability > 0 && availability < 9
-      comments << {
-        :carrier => '',
-        :content => 'По этому тарифу осталось мало мест. Не откладывайте покупку.'
-      }
-    end    
     comments
+  end
+  
+  def recommendation_deficit r
+    availability = r.availability  
+    availability && availability > 0 && availability < 9
   end
   
   # группируем сегменты из нескольких вариантов
@@ -182,21 +180,18 @@ module PricerHelper
     parts
   end  
   
-  def human_layover_durations segment
-    if segment.layovers?
-      segment.layover_durations.map{|ld| human_duration(ld) }.to_sentence.gsub(/ (?!и )/, '&nbsp;') + ' между рейсами'
-    else
-      segment.flights.first.equipment_type_name
-    end
-  end
-
-  def human_layovers segment
-    if segment.layovers?
-      'через ' + segment.layovers.map{|layover| layover.city.case_to.gsub(/^\S+ /, '')}.to_sentence.gsub(/ (?!и )/, '&nbsp;')
-    else
-      'без пересадок'
-    end
+  def human_layovers_large segment
+    result = []
+    durations = segment.layover_durations
+    segment.layovers.each_with_index{|layover, i|
+      result << "#{ short_human_duration(durations[i]) } #{ layover.city.case_in }"
+    }
+    result.to_sentence
   end  
+
+  def human_layovers_medium segment
+    'через ' + segment.layovers.map{|layover| layover.city.case_to.gsub(/^\S+ /, '') }.to_sentence
+  end
 
   def with_layovers segment
     counts = ['пересадкой', 'двумя пересадками', 'тремя пересадками']
@@ -260,8 +255,10 @@ module PricerHelper
     I18n.l(Date.strptime(date, '%d%m%y'), :format => '%e %B')
   end
 
-  def date_with_dow date
-    I18n.l(Date.strptime(date, '%d%m%y'), :format => '%e %B, %A')
+  def date_with_dow dmy
+    date = Date.strptime(dmy, '%d%m%y')
+    days = ['в понедельник', 'во вторник', 'в среду', 'в четверг', 'в пятницу', 'в субботу' , 'в воскресенье']
+    I18n.l(date, :format => '%e %B') + ', ' + days[date.days_to_week_start]
   end
 
   def human_layovers_count count

@@ -188,7 +188,7 @@ upgradeOffer: function() {
     this.offer.details = $('<div class="o-details">').appendTo(this.offer.el);    
     this.offer.addBook();
     var book = this.offer.el.find('.o-book');
-    book.before('<div class="ob-placeholder"></div>');
+    book.wrap('<div class="ob-placeholder"></div>');
     book.append('<div class="ob-shadow"></div>');
     this.offer.el.find('.od-control').remove();    
 },
@@ -214,11 +214,11 @@ showPrices: function() {
         var c = this.cols[variant.dates[0]];
         var r = this.rows[variant.dates[1]];
         var item = $('<div class="rmp-item"></div>').attr('data-index', i);
-        item.html('<h6 class="rmp-cost"><span class="rmp-sum">' + variant.price + '</span>&nbsp;<span class="ruble">ла</span></h6>');
+        item.html('<h6 class="rmp-cost"><span class="rmp-sum">' + variant.price + '</span>&nbsp;<span class="ruble">Р</span></h6>');
         item.append(variant.el.find('.rmv-bars').clone());
         $(this.table.get(0).rows[r].cells[c]).append(item);
     }
-    this.updateLabel();   
+    this.updateLabel(local.offers.matrix);   
 },
 humanDate: function(date, segment) {
     var day = date.getDate();
@@ -297,7 +297,7 @@ update: function(variants, lid) {
         this.merge(variants);
         this.updateLabel(labels);
         var book = this.offer.el.find('.o-book');
-        book.before('<div class="ob-placeholder"></div>');
+        book.wrap('<div class="ob-placeholder"></div>');
         book.append('<div class="ob-shadow"></div>');
         book.append('<div class="ob-overlay"></div>');        
         this.offer.el.find('.od-hide').remove();

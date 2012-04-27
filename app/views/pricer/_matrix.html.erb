@@ -1,20 +1,46 @@
 <% cache [:calendar, @query_key] do %>
 <% if @recommendations.present? %>
-<div class="matrix-origin g-none" data-dates="<%= @search.segments.map{|fs| fs.date }.join(' ') %>" data-query_key="<%= @query_key %>">
-<% if @search.rt %>
-    <h6 class="segment1">Туда</h6><h6 class="segment2">Обратно</h6>
-<% else %>
-<% @search.segments[0, 2].each_with_index do |fs, index| %>
-    <h6 class="segment<%= index + 1 %>"><%= fs.from_as_object.iata || fs.from_as_object.alpha2 %> &rarr; <%= fs.to_as_object.iata || fs.to_as_object.alpha2 %></h6>
-<% end %>
-<% end %>
-</div>
+
+<div class="rm-source" data-dates="<%= @search.segments.map{|fs| fs.date }.join(' ') %>">
+<% duration_scale = 88.0 / @recommendations.collect(&:segments).flatten.collect(&:total_duration).push(600).max %>
 <% @recommendations.each do |recommendation| %>
+<div class="rm-variants" data-prices='<%= raw recommendation_prices(recommendation) %>'>
     <% different_cabins = recommendation.cabins_except(@search.cabin) %>
-    <% recommendation.variants.each_with_index do |variant, variant_index| %>
-        <% variant_summary = {:price => recommendation.price_with_payment_commission.ceil.to_i, :dates => variant.segments.map{|s| s.flights[0].departure_date }} %>
-        <%= render :partial => 'variant', :locals => {:variant => variant, :recommendation => recommendation, :variant_cabins => different_cabins, :variant_summary => variant_summary.to_json} %>
-    <% end %>    
+    <% recommendation.variants.each do |variant| %>
+    <div class="rm-variant" data-dates="<%= variant.segments.map{|s| s.flights[0].departure_date }.join(' ') %>">
+        <div class="rmv-data" data-features="<%= variant_features(variant, recommendation.validating_carrier.alliance) %>"><%= raw recommendation.serialize(variant) %></div>
+        <div class="rmv-bars">
+            <% variant.segments.each_with_index do |segment, scounter| %>
+            <ul class="rmv-bar segment<%= scounter + 1 %>">
+            <% for part in segment_parts(segment) %>
+                <li class="rmvb-<%= part[:type] %>" style="width: <%= (part[:duration] * duration_scale).to_i %>px;">
+            <% end %>
+            </ul>
+            <% end %>
+        </div>
+        <div class="rmv-details">
+        <div class="od-segments">
+        <% variant.segments.each_with_index do |segment, scounter| %>
+        <%= render :partial => 'details', :locals => {
+            :segment => segment,
+            :segment_rt => scounter == 1 && @search.rt
+        } %>
+        <% end %>
+        </div>
+        <div class="od-comments">
+            <p class="od-comment">Билет оформляет авиакомпания <%= recommendation.validating_carrier.name %>.<% if recommendation.validating_carrier.alliance %> Применяются бонусные программы альянса <span class="od-alliance" data-carriers="<%= recommendation.validating_carrier.available_bonus_programms.map{|bp| bp.name}.to_sentence %>"><%= nbsp(recommendation.validating_carrier.alliance.name) %></span>.<% end %></p>
+            <% recommendation_comments(recommendation).each do |comment| %>
+                <p class="od-comment" data-carrier="<%= comment[:carrier] %>"><%= raw comment[:content] %></p>
+            <% end %>
+            <% if recommendation_deficit(recommendation) %>
+                <p class="od-comment"><span class="odc-hl">По этому тарифу осталось мало мест. Не откладывайте покупку.</span></p>
+            <% end %>
+        </div>        
+        </div>
+    </div>
+    <% end %>
+</div>
 <% end %>
+
 <% end %>
 <% end %>
