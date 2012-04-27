@@ -105,7 +105,7 @@ example 'AERDME/W DMEAER/W'
 agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWUYHMQBKORE"
-discount "7.5%"
+discount "8.5%"
 commission "12%/10%"
 
 #example 'AERDME/Y DMEAER/M'
@@ -128,7 +128,7 @@ example 'aerdme dmeaer/ab'
 agent "4% Interline с участком Трансаэро. Без участка UN запрещено."
 subagent "2 (два) % от тарифа на рейсы Interline c участком UN. Запрещена продажа на рейсы interline без участка UN."
 interline :yes
-discount "0%"
+discount "1%"
 commission "4%/2%"
 
 example 'TLVDME/T DMEJFK/T JFKDME/T DMETLV/T'
@@ -138,8 +138,8 @@ agent "12% Oт всех применяемых опубликованных та
 subagent "9 % от всех применяемых опубликованных тарифов между Москвой и Пекином/Майами/Нью-Йорком (OW.RT) и на сквозные перевозки между пунктами полетов АК «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW.RT). (Через АСБ «GABRIEL»: установлен специальный «Код тура» NEWDE10 при продаже перевозок с полетными сегментами между Москвой-Майами/Нью-Йорком (OW/RT). СУБАГЕНТ обязан внести «Код тура» NEWDE10 для автоматического начисления комиссии.)"
 important!
 check { includes(city_iatas, %W(NYC MIA BJS LAX)) and includes(country_iatas, %W(RU UA KZ UZ)) }
-discount "8%"
-commission "12%/9%"
+discount "8.5%"
+commission "12%/10%"
 
 example 'svocdg/lh cdgmad/lh'
 no_commission
@@ -1147,7 +1147,7 @@ commission "0%/0%"
 carrier "IB", "IBERIA"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.5%'
+carrier_defaults :consolidator => 0, :our_markup => '0.1%'
 
 example 'svocdg cdgsvo'
 agent    "1 руб. с билета на рейсы IB. (Билеты Interline под кодом IB могут быть выписаны только в случае существования опубл. тарифов и только при условии, что IB выполняет первый рейс маршрута."
