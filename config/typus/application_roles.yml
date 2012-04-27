@@ -32,7 +32,7 @@ admin:
   FlightGroup: create, read, update, delete
   Commissions: read
   Counters: read
-  Partner: create, read, update, delete
+  Partner: create, read, update, delete, show_versions
 
   Payment: read, update, bulk, bulk_charge, show_versions, payment_raw, create,  charge, block, cancel
   PaytureCharge: create, read
