@@ -884,7 +884,7 @@ commission "1%/0.5%"
 carrier "FV", "RUSSIA"
 ########################################
 
-carrier_defaults our_markup: 100
+carrier_defaults our_markup: 30
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
