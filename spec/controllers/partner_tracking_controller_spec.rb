@@ -41,5 +41,17 @@ describe PartnerTrackingController do
       expiring_cookie = stub_cookie_jar['partner']
       expiring_cookie[:expires].should be_future
     end
+
+    it "sets expiry_timy to default 1 if given is nil" do
+      partner = Partner.create(:token => 'wobwobwirrr', :enabled => true, :password => 1, :cookies_expiry_time => 10)
+      partner.update_attributes(:cookies_expiry_time => nil)
+      stub_cookie_jar = HashWithIndifferentAccess.new
+      controller.stub(:cookies) { stub_cookie_jar }
+
+      get :track_partner, hash
+
+      expiring_cookie = stub_cookie_jar['partner']
+      expiring_cookie[:expires].should be_future
+    end
   end
 end
