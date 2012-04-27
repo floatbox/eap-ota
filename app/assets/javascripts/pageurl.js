@@ -89,6 +89,6 @@ show: function() {
     $(window).scrollTop(cst);
 },
 title: function(t) {
-    document.title = 'Eviterra — ' + (t || 'авиабилеты по всему миру онлайн');
+    document.title = 'Eviterra — ' + (t || 'самые дешевые авиабилеты по всему миру онлайн');
 }
 };
