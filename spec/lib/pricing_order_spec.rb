@@ -3,7 +3,11 @@
 require 'spec_helper'
 
 # TODO постабить income_earnings, оттестировать их отдельно
-describe IncomeDistribution do
+describe Pricing::Order do
+
+  pending '#balance'
+  pending '#expected_income'
+  pending '#expected_earnings'
 
   before do
     Payture.stub(:pcnt).and_return(0.0285)
@@ -26,8 +30,8 @@ describe IncomeDistribution do
     {}
   end
 
-  let :order do
-    Order.new().tap do |o|
+  subject do
+    Order.new.tap do |o|
       # вызывать какие-то колбэки?
       o.ticket_status = 'ticketed'
       o.payments = payments
@@ -36,8 +40,6 @@ describe IncomeDistribution do
       o.assign_attributes order_attrs
     end
   end
-
-  subject {order}
 
   context "payture, aviacenter" do
     let :order_attrs do
@@ -98,5 +100,4 @@ describe IncomeDistribution do
     its(:income_suppliers) {should == 18600}
     its(:income_payment_gateways) {should == 0}
   end
-
 end
