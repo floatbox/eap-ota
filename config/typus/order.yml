@@ -67,7 +67,7 @@ Order:
       - income
       - expected_income
       - balance
-      - settled
+      - settled?
     form:
       - section_general_info
       - description
