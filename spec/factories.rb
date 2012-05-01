@@ -80,6 +80,13 @@ FactoryGirl.define do
 
   factory :cash_charge do
     order
+
+    # пока не годится для build - не проставляет status
+    factory :charged_cash_charge do
+      after_create do |payture_charge, proxy|
+        payture_charge.update_attributes status: 'charged'
+      end
+    end
   end
 
   factory :cash_refund do
