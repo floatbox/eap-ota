@@ -450,7 +450,7 @@ class Order < ActiveRecord::Base
   end
 
   def settled?
-    income > 0 && tickets.all?{|t| t.status == 'ticketed'}
+    !(ticket_status == 'canceled') && !has_refunds? && income > 0 && tickets.all?{|t| t.status == 'ticketed'}
   end
 
   def api_stats_hash
