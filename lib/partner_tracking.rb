@@ -4,9 +4,9 @@ module PartnerTracking
 
   protected
 
-  def track_partner new_partner, new_marker
+  def track_partner new_partner, new_marker=nil
     return unless new_partner.present?
-    unless partner
+    if partner != new_partner
       StatCounters.inc %W[enter.api.first_time enter.api.#{new_partner}.first_time]
       logger.info "API::Partner::Enter: #{new_partner} #{new_marker}"
     end

@@ -2,6 +2,13 @@
 class BookingController < ApplicationController
   protect_from_forgery :except => :confirm_3ds
 
+  # вызывается аяксом со страницы api_booking и с морды
+  # Parameters:
+  #   "query_key"=>"ki1kri",
+  #   "recommendation"=>"amadeus.SU.V.M.4.SU2074SVOLCA040512",
+  #   "partner"=>"yandex",
+  #   "marker"=>"",
+  #   "variant_id"=>"1"
   def preliminary_booking
     
     if Conf.site.forbidden_booking
@@ -12,9 +19,7 @@ class BookingController < ApplicationController
     @search = PricerForm.load_from_cache(params[:query_key])
     #set_search_context_for_airbrake
     recommendation = Recommendation.deserialize(params[:recommendation])
-    # FIXME @search.partner пусть останется пока
-    # track_partner(params[:partner] || @search.partner, params[:marker])
-    # перенес пока в api_booking
+    track_partner(params[:partner], params[:marker])
     strategy = Strategy.select( :rec => recommendation, :search => @search )
     
     StatCounters.inc %W[enter.preliminary_booking.total]
@@ -38,11 +43,17 @@ class BookingController < ApplicationController
     end
   end
 
+  # landing страничка для большинства партнеров (кроме момондо?)
+  # Parameters:
+  #   "query_key"=>"ki1kri"
   def api_booking
     @query_key = params[:query_key]
     @search = PricerForm.load_from_cache(params[:query_key])
-    track_partner(params[:partner] || @search.partner, params[:marker])
+    # FIXME на этот момент у нас есть только partner из pricer_form.
+    # стоит ли его трэкать?
+    # track_partner(@search.partner)
     render 'variant'
+    # FIXME перенести счетчики на вход в preliminary_booking? partner еще не проставлен
     StatCounters.inc %W[enter.api.success]
     StatCounters.inc %W[enter.api.#{partner}.success] if partner
     @destination = get_destination
@@ -69,7 +80,7 @@ class BookingController < ApplicationController
 
   def api_redirect
     @search = PricerForm.simple(params.slice( :from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner ))
-    track_partner(params[:partner] || @search.partner, params[:marker])
+    track_partner(params[:partner] || @search.partner)
     if @search.valid?
       @search.save_to_cache
       StatCounters.inc %W[enter.momondo_redirect.success]
