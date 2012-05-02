@@ -6,22 +6,28 @@ class Partner < ActiveRecord::Base
   def initialize(*)
     super
     self.hide_income ||= false
-    self.cookies_expiry_time ||= 1
+    self.enabled ||= false
+    self.password ||= ''
   end
 
+  # ставить ли куку?
+  # у анонимуса нет токена
+  def track?
+    token != ''
+  end
+
+  # сколько дней помнить партнера, если не проставлено в базе
+  def self.default_expiry_time; 1; end
+
   def self.[] token
-    find_by_token token
+    find_by_token(token) || anonymous
+  end
+
+  def self.anonymous
+    find_or_create_by_token('')
   end
 
   def self.authenticate id, pass
-    self[id].password == pass if self[id] && pass.present?
-  end
-
-  def self.this_name_is_off? name
-    !self[name] || !self[name].enabled
-  end
-
-  def self.this_name_is_on? name
-    self[name] && self[name].enabled
+    self[id].password == pass if pass.present?
   end
 end
