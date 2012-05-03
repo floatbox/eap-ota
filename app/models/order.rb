@@ -246,15 +246,19 @@ class Order < ActiveRecord::Base
     self.pan = order_form.card.pan
   end
 
+  def strategy
+    Strategy.select(:order => self)
+  end
+
   def raw # FIXME тоже в стратегию?
-    Strategy.select(:order => self).raw_pnr
+    strategy.raw_pnr
   rescue => e
     e.message
   end
 
   def load_tickets
     @tickets_are_loading = true
-    ticket_hashes = Strategy.select(:order => self).get_tickets
+    ticket_hashes = strategy.get_tickets
     ticket_hashes.each do |th|
       if th[:office_id].blank? || Ticket.office_ids.include?(th[:office_id])
         t = tickets.ensure_exists(th[:number])
@@ -307,7 +311,7 @@ class Order < ActiveRecord::Base
   end
 
   def update_from_gds
-    assign_attributes Strategy.select(:order => self).booking_attributes
+    assign_attributes strategy.booking_attributes
   end
 
   # пересчет тарифов и такс
@@ -429,7 +433,7 @@ class Order < ActiveRecord::Base
     stale.each do |order|
       begin
         puts "Automatic cancel of pnr #{order.pnr_number}"
-        Strategy.select(:order => order).cancel
+        order.strategy.cancel
       rescue
         puts "error: #{$!}"
       end
