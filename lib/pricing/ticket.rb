@@ -25,12 +25,11 @@ module Pricing
     # price_penalty
     # price_extra_penalty
 
-    include IncomeDistribution
-
+    include IncomeSuppliers
     # есть ли расход-приход с поставщиком по билету?
     # используется для подведения счета с поставщиком
-    def supplier_billed?
-      status != 'voided'
+    def income_suppliers
+      status == 'voided' ? 0 : super
     end
 
     def price_markup

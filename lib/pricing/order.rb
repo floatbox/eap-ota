@@ -29,8 +29,8 @@ module Pricing
     # рассчет прибыли
     #####################################
 
-    # #income_suppliers()
-    include IncomeDistribution
+    # FIXME аггрегировать в заказе price_penalty по возвратам тоже?
+    include IncomeSuppliers
 
     def income
       @income ||= income_earnings - income_suppliers
@@ -58,19 +58,6 @@ module Pricing
 
     def income_earnings
       secured_payments.to_a.sum(&:earnings)
-    end
-
-    # есть ли расход-приход с поставщиком по заказу?
-    # используется для подведения счета с поставщиком
-    # FIXME наверное, надо учитывать только ticketed
-    def supplier_billed?
-      ticket_status != 'canceled'
-    end
-
-    # для совместимости с рассчетом поставщиковой прибыли по билетам
-    # FIXME аггрегировать в заказе штрафы по возвратам тоже?
-    def price_penalty
-      0
     end
 
     # подгнанные "налоги и сборы c комиссией" для отображения клиенту

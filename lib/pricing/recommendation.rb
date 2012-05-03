@@ -6,13 +6,7 @@ module Pricing
     delegate :subagent, :agent, :consolidator, :blanks, :discount, :our_markup, :ticketing_method,
       :to => :commission, :prefix => :commission, :allow_nil => true
 
-    # вкручиваем шурупами income и в рекомендации
-    # FIXME убрать лишние методы
-    include IncomeDistribution
-
-    # для совместимости с рассчетом income_suppliers
-    def price_penalty; 0 end
-    def supplier_billed?; true end
+    include IncomeSuppliers
 
     # FIXME работает для текущей схемы, считает что мы эквайринг не берем себе в общем случае
     def income
