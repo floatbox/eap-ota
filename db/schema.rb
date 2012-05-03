@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120426135743) do
+ActiveRecord::Schema.define(:version => 20120503141906) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -309,6 +309,13 @@ ActiveRecord::Schema.define(:version => 20120426135743) do
     t.string   "commission_our_markup"
   end
 
+  add_index "orders", ["partner"], :name => "index_orders_on_partner"
+  add_index "orders", ["payment_status", "ticket_status"], :name => "index_orders_on_payment_status_and_ticket_status"
+  add_index "orders", ["payment_status"], :name => "index_orders_on_payment_status"
+  add_index "orders", ["payment_type"], :name => "index_orders_on_payment_type"
+  add_index "orders", ["pnr_number"], :name => "index_orders_on_pnr_number"
+  add_index "orders", ["ticket_status"], :name => "index_orders_on_ticket_status"
+
   create_table "partners", :force => true do |t|
     t.string   "token",               :null => false
     t.string   "password",            :null => false
@@ -423,6 +430,13 @@ ActiveRecord::Schema.define(:version => 20120426135743) do
     t.date     "dept_date"
     t.decimal  "price_extra_penalty",       :precision => 9, :scale => 2, :default => 0.0,       :null => false
   end
+
+  add_index "tickets", ["kind"], :name => "index_tickets_on_kind"
+  add_index "tickets", ["office_id"], :name => "index_tickets_on_office_id"
+  add_index "tickets", ["order_id"], :name => "index_tickets_on_order_id"
+  add_index "tickets", ["parent_id"], :name => "index_tickets_on_parent_id"
+  add_index "tickets", ["pnr_number"], :name => "index_tickets_on_pnr_number"
+  add_index "tickets", ["status"], :name => "index_tickets_on_status"
 
   create_table "typus_users", :force => true do |t|
     t.string   "first_name",       :default => "",    :null => false
