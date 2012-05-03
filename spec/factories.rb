@@ -46,6 +46,13 @@ FactoryGirl.define do
     price_tax 100
     kind 'ticket'
     status 'ticketed'
+
+    factory :direct_ticket do
+      office_id 'MOWR228FA'
+    end
+    factory :aviacenter_ticket do
+      office_id 'MOWR2233B'
+    end
   end
 
   factory :refund, :class => Ticket do

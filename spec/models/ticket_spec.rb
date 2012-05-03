@@ -218,6 +218,12 @@ describe Ticket do
 
   describe "#commission_ticketing_method" do
 
+    describe "factories" do
+      specify { create(:direct_ticket).commission_ticketing_method.should == 'direct' }
+      specify { create(:aviacenter_ticket).commission_ticketing_method.should == 'aviacenter' }
+      specify { create(:refund, parent: create(:direct_ticket)).commission_ticketing_method.should == 'direct' }
+    end
+
     specify {
       Ticket.new(:source => 'amadeus', :office_id => 'MOWR2233B').commission_ticketing_method.should == 'aviacenter'
     }
@@ -225,6 +231,11 @@ describe Ticket do
     specify {
       Ticket.new(:source => 'amadeus', :office_id => 'MOWR228FA').commission_ticketing_method.should == 'direct'
     }
+
+    specify {
+      Ticket.new(:source => 'amadeus', :office_id => 'FLL1S212V').commission_ticketing_method.should == 'downtown'
+    }
+
     specify {
       Ticket.new(:source => 'sirena').commission_ticketing_method.should == 'aviacenter'
     }
