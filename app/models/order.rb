@@ -11,7 +11,7 @@ class Order < ActiveRecord::Base
   scope :FLL1S212V, lambda { by_office_id 'FLL1S212V' }
 
   def self.by_office_id office_id
-    joins(:tickets).where('tickets.office_id' => office_id)
+    joins(:tickets).where('tickets.office_id' => office_id).uniq
   end
 
   # FIXME сделать модуль или фикс для typus, этим оверрайдам место в typus/application.yml
