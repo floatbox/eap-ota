@@ -63,6 +63,7 @@ Order:
       - last_pay_time
       - partner
       - income_suppliers
+      - aggregated_income_suppliers
       - income_payment_gateways
       - income
       - expected_income
