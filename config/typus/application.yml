@@ -209,7 +209,7 @@ Partner:
   fields:
     default: token, password, enabled, hide_income, cookies_expiry_time, income_at_least
     list: token, password, enabled, hide_income, cookies_expiry_time, income_at_least
-    form: password, enabled, hide_income, cookies_expiry_time, income_at_least
+    form: token, password, enabled, hide_income, cookies_expiry_time, income_at_least
     show: token, password, enabled, hide_income, cookies_expiry_time, income_at_least
     options:
       booleans:
