@@ -14,35 +14,36 @@
 
 <div style=''>
   <h3><%= @data[:title]%></h3>
-  <p>Всего: <%= @data[:total_s] %> ; <%= @data[:total_e] %> ; <%= (@data[:total_e].to_f / @data[:total_s] * 100).round(2) %>%</p>
+  <p>Всего: <%= @total_search %>/<%= @total_enter %>  <%= (@total_enter.to_f / @total_search * 100).round(2) %>%</p>
+
     <table>
         <thead>
         <tr>
             <th>Направление</th>
             <th>Всего</th>
             <% @partners.each do |partner|%>
-            <th><%= partner %></th>
+            <th><%= partner %><br>
+              <p><%= @total_partner[partner]['search'] %>/<%= @total_partner[partner]['enter'] %>
+              <%= (@total_partner[partner]['enter'].to_f / @total_partner[partner]['search'] * 100).round(2) if @total_partner[partner]['search'] %>%</p>
+            </th>
             <% end %>
         </tr>
-        <% @data[:day_data].each_with_index do |dest, index| %>
+        <% @data[:day_data].each_with_index do |(description, counters), index| %>
         <tr style='color: #444; padding: 2px 2px;' class="<%= cycle("even", "odd") %>">
           <td>
-          <%= index + 1 %>. <%= dest[0] %>
+          <%= index + 1 %>. <%= description %>
           </td>
           <td>
-          <%= dest[1].nested('search.api.total') %>
-        / <%= dest[1].nested('enter.api.total', '-') %>
-        <% if dest[1].nested('search.api.total') %>
-          : <%= (dest[1].nested('enter.api.total').to_f / dest[1].nested('search.api.total') * 100).round(2) %>%
+          <%= counters.nested('search.api.total') %>
+        / <%= counters.nested('enter.api.total', '-') %>
+        <% if counters.nested('search.api.total') %>
+          : <%= (counters.nested('enter.api.total').to_f / counters.nested('search.api.total') * 100).round(2) %>%
         <% end %>
           </td>
 
         <% @partners.each do |partner|%>
           <td>
-          <%= dest[1].nested('search.api.'+partner+'.total', '-') %>/<%= dest[1].nested('enter.api.'+partner+'.total', '-') %>
-          <% if dest[1].nested('search.api.'+partner+'.total') %>
-           : <%= (dest[1].nested('enter.api.'+partner+'.total').to_f / dest[1].nested('search.api.'+partner+'.total') * 100).round(2) %>%
-          <% end %>
+            <%= counter_ratio counters.nested('search.api.'+partner+'.total'), counters.nested('enter.api.'+partner+'.total') %>
           </td>
         <% end %>
       </tr>
