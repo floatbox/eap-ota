@@ -30,7 +30,7 @@ class Admin::TicketsController < Admin::EviterraResourceController
 
   def delete_refund
     get_object
-    @item.destroy if @item.processed && @item.kind == 'refund'
+    @item.destroy if !@item.processed && @item.kind == 'refund'
     redirect_to :action => 'show',
                 :controller => 'orders',
                 :id => @item.order.id
