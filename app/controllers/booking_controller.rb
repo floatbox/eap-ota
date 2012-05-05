@@ -10,21 +10,25 @@ class BookingController < ApplicationController
   #   "marker"=>"",
   #   "variant_id"=>"1"
   def preliminary_booking
-    
+
     if Conf.site.forbidden_booking
       render :json => {:success => false}
       return
     end
-    
+
     @search = PricerForm.load_from_cache(params[:query_key])
     #set_search_context_for_airbrake
     recommendation = Recommendation.deserialize(params[:recommendation])
     track_partner(params[:partner], params[:marker])
     strategy = Strategy.select( :rec => recommendation, :search => @search )
-    
+
     StatCounters.inc %W[enter.preliminary_booking.total]
     StatCounters.inc %W[enter.preliminary_booking.#{partner}.total] if partner
-    
+
+    @destination = get_destination
+    StatCounters.d_inc @destination, %W[enter.api.total] if partner
+    StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if @destination && partner
+
     unless strategy.check_price_and_availability
       render :json => {:success => false}
     else
@@ -38,6 +42,7 @@ class BookingController < ApplicationController
       )
       order_form.save_to_cache
       render :json => {:success => true, :number => order_form.number}
+
       StatCounters.inc %W[enter.preliminary_booking.success]
       StatCounters.inc %W[enter.preliminary_booking.#{partner}.success] if partner
     end
@@ -49,19 +54,10 @@ class BookingController < ApplicationController
   def api_booking
     @query_key = params[:query_key]
     @search = PricerForm.load_from_cache(params[:query_key])
-    # FIXME на этот момент у нас есть только partner из pricer_form.
-    # стоит ли его трэкать?
-    # track_partner(@search.partner)
     render 'variant'
-    # FIXME перенести счетчики на вход в preliminary_booking? partner еще не проставлен
     StatCounters.inc %W[enter.api.success]
-    StatCounters.inc %W[enter.api.#{partner}.success] if partner
-    @destination = get_destination
-    StatCounters.d_inc @destination, %W[enter.api.total] if @destination
-    StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if @destination && partner
   ensure
     StatCounters.inc %W[enter.api.total]
-    StatCounters.inc %W[enter.api.#{partner}.total] if partner
   end
 
   def api_rambler_booking
@@ -109,7 +105,7 @@ class BookingController < ApplicationController
       render :partial => 'forbidden_sale'
       return
     end
-    
+
     @order_form = OrderForm.load_from_cache(params[:order][:number])
     @order_form.people_attributes = params[:person_attributes]
     @order_form.update_attributes(params[:order])
