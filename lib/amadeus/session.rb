@@ -59,13 +59,12 @@ module Amadeus
 
     free.for_office(office).limit(1).update_all(:booking => booking)
 
-    session = find_by_booking(booking)
-    unless session
-      unless session = increase_pool(booking, office)
-        raise "somehow can't get new session"
-      end
-    else
+    if session = find_by_booking(booking)
       logger.info "Amadeus::Session: #{session.token} reused (#{session.seq}) for #{session.office}"
+    elsif session = increase_pool(booking, office)
+      # all's ok
+    else
+      raise "somehow can't get new session"
     end
     session
   end
