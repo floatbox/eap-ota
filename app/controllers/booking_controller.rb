@@ -1,7 +1,7 @@
 # encoding: utf-8
 class BookingController < ApplicationController
   protect_from_forgery :except => :confirm_3ds
-
+  before_filter :log_referrer, :only => [:api_redirect, :api_booking, :rambler_booking]
   # вызывается аяксом со страницы api_booking и с морды
   # Parameters:
   #   "query_key"=>"ki1kri",
@@ -220,5 +220,10 @@ class BookingController < ApplicationController
     Destination.find_or_create_by(:from_iata => from.iata, :to_iata => to.iata , :rt => @search.rt)
   end
 
+  def log_referrer
+    if request.referrer && (URI(request.referrer).host != request.host)
+      logger.info "Referrer: #{URI(request.referrer).host}, host: #{request.host}"
+    end
+  end
 end
 

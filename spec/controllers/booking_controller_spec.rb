@@ -155,4 +155,29 @@ describe BookingController do
       end
     end
   end
+  describe '#log_referrer' do
+    it "doesn't log if source and target hosts are the same" do
+      PricerForm.stub(:simple).and_return(mock('pricer').as_null_object)
+      logger = mock('logger')
+      controller.stub(:logger).and_return(logger)
+
+      request.stub(:referrer).and_return("http://eviterra.com")
+      request.stub(:host).and_return("eviterra.com")
+      logger.should_not_receive(:info)
+
+      get :api_redirect
+    end
+
+    it "logs if source and target hosts are the same" do
+      PricerForm.stub(:simple).and_return(mock('pricer').as_null_object)
+      logger = mock('logger')
+      controller.stub(:logger).and_return(logger)
+
+      request.stub(:referrer).and_return("http://yandex.ru/blah")
+      request.stub(:host).and_return("eviterra.com")
+      logger.should_receive(:info)
+
+      get :api_redirect
+    end
+  end
 end
