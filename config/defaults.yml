@@ -9,6 +9,7 @@ api:
   url_base: 'https://eviterra.com'
   rambler_url: 'http://in.avia.rambler.ru/eviterra/'
   send_to_rambler: no
+  rambler_hash_size: 30
   partners:
    - yandex
    - volmy
