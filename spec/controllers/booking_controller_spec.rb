@@ -98,6 +98,7 @@ describe BookingController do
         :marker => 'rebkloi'
       }
     end
+    let(:pricer){PricerForm.simple(:from => 'MOW', :to => 'PAR', :date1 => DateTime.tomorrow.strftime("%d.%m.%Y"))}
 
     describe '#preliminary_booking' do
 
@@ -106,7 +107,7 @@ describe BookingController do
         Recommendation.stub(:deserialize)
         strategy = mock('Strategy', check_price_and_availability: nil).as_null_object
         Strategy.stub(:select).and_return(strategy)
-        PricerForm.stub(:load_from_cache).and_return(mock('PricerForm'))
+        PricerForm.stub(:load_from_cache).and_return(pricer)
       end
 
       it 'saves both partner and marker if they present' do
