@@ -36,7 +36,7 @@ init: function() {
     this.validate(true);
 },
 position: function() {
-    return this.el.position().top - 36 - results.header.height;
+    return this.el.offset().top - 36 - results.header.height;
 },
 focus: function(control) {
     var st = control.offset().top - results.header.height - 71;

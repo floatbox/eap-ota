@@ -56,7 +56,7 @@
 
 #corporate {
     padding: 15px 0;
-    background: #555555;
+    background: #edede3;
 }
 .corporate-content {
     width: 960px;
@@ -66,10 +66,8 @@
     margin-right: 200px;
     font-size: 18px;
     line-height: 20px;
-    color: #FFF;
 }
 a.corporate-exit {
     margin-top: 1px;
     float: right;
-    color: #CCC;
 }

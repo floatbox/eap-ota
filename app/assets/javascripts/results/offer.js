@@ -246,7 +246,7 @@ hideExcess: function(limit) {
             var simple = results.data.segments.length === 1 || results.data.segments[1].rt;
             var title = simple ? local.offers.segments[i] : results.data.segments[i].arvto;
             var text = local.offers.more.absorb(excess.decline.apply(excess, local.offers.variants), title);
-            var more = '<div class="os-more">' + text + '</div>'
+            var more = '<div class="os-more">' + text + '</div>';
             this.toggleExcess(segment.el.addClass('hide-excess').append(more), excess);
         }
         used += excess;

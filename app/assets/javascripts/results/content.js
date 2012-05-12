@@ -75,6 +75,7 @@ select: function(id) {
         nt.control.addClass('rt-selected');
         nt.content.show();
         results.fixed.update();
+        page.location.set('offer', id === 'all' ? '' : id);
     }, 20);
 },
 selectFirst: function() {

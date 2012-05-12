@@ -23,7 +23,7 @@
 /* Основной блок */
 #booking {
     display: none;
-    padding: 20px 0;
+    padding: 22px 0;
 }
 #booking.b-processing {
     position: relative;
@@ -64,6 +64,14 @@
     background: url(/images/booking/progress-g.gif) no-repeat 100% 5px;
 }
 
+/* Заголовок */
+.b-header {
+    padding: 16px 20px;
+    background: #FFF;
+    font-size: 20px;
+    line-height: 20px;    
+    letter-spacing: -0.03em;
+}
 
 /* Подробности */
 .b-details {

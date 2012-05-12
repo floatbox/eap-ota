@@ -41,21 +41,23 @@ innerHeight: function() {
 restoreResults: function(key) {
     search.el.hide();
     search.loadSummary({query_key: key});
+    results.ready = false;
     results.message.toggle('loading');          
+    results.filters.hide();
     results.show(true);
 },
 restoreBooking: function(rkey, bkey) {
     search.el.hide();
     search.loadSummary({query_key: rkey}, false);
     if (!browser.ios) {
-        results.header.el.addClass('fixed');
+        results.header.el.addClass('rh-fixed');
         page.header.addClass('fixed');    
         Queries.live.active = false;
         Queries.el.hide();
     }    
     results.header.button.hide();
     results.header.select.show();
-    results.filters.el.addClass('rf-fixed').show();    
+    results.filters.hide();    
     booking.key = bkey;
     booking.loading.show();
     booking.el.addClass('b-processing').show();
@@ -74,6 +76,7 @@ showData: function(data) {
     var that = this;
     setTimeout(function() { // задержка, чтобы синхронизировать появление таба с прокруткой окна
         Queries.history.add(data.query_key, data.short);
+        Queries.history.select(data.query_key);
     }, 300);
     this.title.set(local.title.search.absorb(data.titles.window));
     this.location.set('search', data.query_key);
@@ -93,6 +96,7 @@ init: function() {
 set: function(key, value) {
     this[key] = value;
     if (key === 'search') {
+        delete this.offer;
         delete this.booking;
     }
     this.update();
@@ -101,13 +105,32 @@ compare: function() {
     var hash = window.location.hash;
     if (hash !== this.hash) {
         this.hash = hash;
-        this.parse();
+        this.process();
     }
 },
 parse: function() {
-    var parts = this.hash.substring(1).split('/');
+    var parts = this.hash.substring(1).split('/'), p1 = parts[1];
     this.search = parts[0];
-    this.booking = parts[1];
+    if (p1 && p1.length === 24) {
+        delete this.offer;
+        this.booking = p1;
+    } else {
+        delete this.booking;
+        this.offer = p1;
+    }
+},
+process: function() {
+    var s = this.search;
+    var o = this.offer;
+    var b = this.booking;
+    this.parse();
+    if (!this.search) {
+        page.reset();
+    } else if (this.search !== s) {
+        page.restoreResults(this.search);
+    } else if (this.offer !== o) {
+        results.content.select(this.offer || 'all');
+    }    
 },
 update: function() {
     var parts = [];
@@ -117,6 +140,8 @@ update: function() {
     }
     if (this.booking) {
         parts.push(this.booking);
+    } else if (this.offer) {
+        parts.push(this.offer);
     }
     this.hash = window.location.hash = parts.join('/');
     $w.scrollTop(st);

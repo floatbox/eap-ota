@@ -16,7 +16,9 @@ init: function() {
         results.hide();
     });
     this.summary.on('click', '.rhs-text', function() {
-        if (that.edit.is(':visible')) {
+        if (booking.el.is(':visible')) {
+            booking.cancel();
+        } else if (that.edit.is(':visible')) {
             results.hide();
         } else {
             that.apply();

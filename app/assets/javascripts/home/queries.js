@@ -37,26 +37,42 @@ init: function(el) {
     var that = this;
     this.el = el;
     this.el.delegate('.qht-content', 'click', function() {
-        
+        var tab = $(this).closest('.qh-tab');
+        if (true || !tab.hasClass('qh-selected')) {
+            results.header.summary.hide();
+            page.restoreResults(tab.attr('data-key'));
+            that.el.find('.qh-selected').removeClass('qh-selected');
+            tab.addClass('qh-selected');
+        }
     });
     this.el.delegate('.qht-remove', 'click', function() {
         that.remove($(this).closest('.qh-tab'));
     });
-    this.content    
     this.index = {};
+    var saved = Cookie('searches');
+    if (saved) {
+        var tabs = saved.split('|');
+        for (var i = 0; i < tabs.length; i++) {
+            var key = tabs[i].split(' ', 1)[0];
+            this.add(key, tabs[i].substring(key.length), true);
+        }
+    }
 },
-add: function(key, content) {
-    var tab = $('<div class="qh-tab qh-selected"></div>');
+add: function(key, content, saved) {
+    if (this.index[key]) return;
+    var tab = $('<div class="qh-tab"></div>');
     tab.append('<div class="qht-content">' + this.format(content) + '</div>');
     tab.append('<div class="qht-remove" title="Удалить вкладку"></div>');
     tab.attr('data-content', content);
     tab.attr('data-key', key);
     tab.attr('id', 'hs-' + key);
-    this.el.find('.qh-selected').removeClass('qh-selected');
     this.el.prepend(tab).show();
     Queries.content.css('left', -tab.width());
     Queries.content.animate({'left': 0}, 350);
     this.index[key] = tab;
+    if (!saved) {
+        this.save();
+    }
 },
 remove: function(tab) {
     var that = this;
@@ -66,9 +82,24 @@ remove: function(tab) {
         that.el.toggle(tab.siblings().length !== 0);
         tab.remove();
     });
+    this.save();
+},
+select: function(key) {
+    this.el.find('.qh-selected').removeClass('qh-selected');
+    if (this.index[key]) {
+        this.index[key].addClass('qh-selected');
+    }
 },
 format: function(content) {
     return content.replace(' — ', '<span class="hst-period">&ndash;</span>');
+},
+save: function() {
+    var result = [];
+    this.el.find('.qh-tab').each(function() {
+        var tab = $(this);
+        result.push(tab.attr('data-key') + ' ' + tab.attr('data-content'));
+    });
+    Cookie('searches', result.length ? result.join('|') : undefined, new Date().shift(3));
 }
 };
 

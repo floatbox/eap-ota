@@ -48,10 +48,10 @@ prebook: function(offer) {
     });
     offer.book.addClass('ob-disabled');
     offer.state.html('<span class="ob-progress">Проверяем доступность мест</span>');
-    if (offer.el.hasClass('ob-fixed')) {
-        var ph = offer.el.find('.ob-placeholder');
-        $w.smoothScrollTo(ph.position().top + ph.height() + 30 + 33 - $w.height());
+    if (!offer.details || offer.details.is(':hidden')) {
+        offer.showDetails();
     }
+    $w.smoothScrollTo(offer.details.offset().top - 52 - 36 - 92);
     trackEvent('Бронирование', 'Предварительное бронирование');    
     this.variant = offer.selected;
     this.offer = offer;
@@ -114,51 +114,31 @@ view: function(content) {
     this.loading.hide();
     this.el.removeClass('b-processing').show();
     this.form.init();
-    this.farerules.init();    
-    $('#bfc-email').focus();
+    this.farerules.init();  
+    $w.scrollTop(0);      
 },
 preview: function(content) {
     var that = this;
-    var preview = $('<div class="ob-preview"></div>');
-    preview.html(content);
-    preview.find('.os-details').addClass(function(i) {
+    this.content.html(content);
+    this.content.find('.os-details').addClass(function(i) {
         return 'segment' + (i + 1);
     });
-    if (this.offer.details) {
-        var comments = preview.find('.od-comments');
-        if (comments.length) {
-            this.offer.details.find('.od-comments').remove();
-            this.offer.details.append(comments.clone());
-        }
-        if (this.offer.details.is(':visible')) {
-            preview.find('.b-details').hide();
-        }
-    }
+    results.content.el.hide();    
+    this.offer.book.removeClass('ob-disabled');
+    this.offer.updateBook();
     if (this.temporary) {
         delete this.temporary.remove();
-    } else {
-        this.offer.book.hide();
     }
-    this.offer.el.append(preview);
-    this.form.init();
-    $w.delay(350).smoothScrollTo(this.form.position() + 1);
+    this.el.show();
+    $w.scrollTop(0);
+    this.form.init();    
+    this.farerules.init();
     $w.delay(100).queue(function(next) {
-        that.substitute(preview);
-        that.farerules.init();
         results.filters.hide(true);
         Queries.hide();
         next();
     });
-},
-substitute: function(preview) {
-    results.content.el.hide();
-    this.offer.book.removeClass('ob-disabled').show();
-    this.offer.updateBook();
-    this.content.html('').append(preview);
-    this.content.find('.b-details').show();
-    this.el.show();
-    $w.scrollTop(this.form.position() + 1);
-    $('#bfc-email').focus();
+    $w.delay(400).smoothScrollTo(this.form.position());
 },
 cancel: function() {
     Queries.show();
@@ -182,13 +162,13 @@ cancel: function() {
     trackEvent('Бронирование', 'Отмена бронирования');    
 },
 hide: function() {
-    var offset = this.content.position().top - $w.scrollTop();
+    var offset = this.content.find('.b-details').offset().top - $w.scrollTop();
     this.el.hide().removeClass('b-processing');
     this.content.html('');
     this.loading.hide();
     results.header.edit.show();
     results.content.el.show();
-    $w.scrollTop(this.offer.details.position().top - offset);
+    $w.scrollTop(this.offer.details.offset().top - offset);
     page.title.set(local.title.results.absorb(results.data.titles.window));
     page.location.set('booking');
     delete this.offer;

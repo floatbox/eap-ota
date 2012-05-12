@@ -180,6 +180,9 @@
 .segment2 .ostn-text {
     background: #DB7100;
 }
+.segment3 .ostn-text {
+    background: #0AA0C6;
+}
 
 /* Segment summary */
 .os-summary {
@@ -238,17 +241,17 @@
 .oss-price {
     position: absolute;
     top: 12px; left: 46px;
-    padding-right: 11px;
+    padding-left: 12px;
     background: url(/images/results/parrows.png) no-repeat;
 }
 .ossp-same {
     background: none;
 }
 .ossp-rise {
-    background-position: 100% -26px;
+    background-position: 0 -26px;
 }
 .ossp-fall {
-    background-position: 100% -86px;
+    background-position: 0 -86px;
 }
 
 /* Time and airport */
@@ -373,6 +376,7 @@
     display: none;
     float: left;
     color: #777;
+    margin-right: -150px;
 }
 .segment1 .ossi-segment {
     color: #db7100;
@@ -392,10 +396,10 @@
     color: #8A8A8A;
 }
 .os-summary:hover .ossp-rise {
-    background-position: 100% 4px;
+    background-position: 0 4px;
 }
 .os-summary:hover .ossp-fall {
-    background-position: 100% -56px;
+    background-position: 0 -56px;
 }
 .os-summary:hover .ossc-icon {
     opacity: 0.6;
@@ -500,19 +504,22 @@
     text-decoration: underline;
     cursor: pointer;
 }
+.os-more:hover {
+    background: #e9eaec;
+}
 .hide-excess .os-excess {
     display: none;
 }
 .hide-excess .os-more {
     display: block;
 }
-.segment1 .os-more .link {
+.segment1 .os-more {
     color: #81aa00;
 }
-.segment2 .os-more .link {
+.segment2 .os-more {
     color: #db7100;
 }
-.segment3 .os-more .link {
+.segment3 .os-more {
     color: #0aa0c6;
 }
 

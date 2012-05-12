@@ -121,6 +121,7 @@ validate: function() {
     var values = this.getValues();
     // Сбрасываем текущий поиск
     if (page.location.search) {
+        Queries.history.select();
         page.location.set('search');
         page.title.set();
     }
