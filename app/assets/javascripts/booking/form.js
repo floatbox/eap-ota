@@ -99,7 +99,7 @@ process: function(s) {
     this.result.find('.bfr-cancel').click(function() {
         booking.cancel();
     });
-    this.result.find('.bfrt-controls .obb-title').click(function() {
+    this.result.find('.bfr-continue').click(function() {
         $(this).closest('.bf-result').find('form').submit();
     });    
 }

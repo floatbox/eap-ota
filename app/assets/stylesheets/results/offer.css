@@ -201,6 +201,7 @@
 .oss-arv {
     float: left;
     width: 190px;
+    overflow: hidden;
 }
 
 /* Carrier */
@@ -279,6 +280,7 @@
 }
 .oss-airport {
     float: left;
+    margin-right: -100px;
     padding-top: 8px;
 }
 .ossa-term {

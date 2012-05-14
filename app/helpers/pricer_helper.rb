@@ -119,7 +119,7 @@ module PricerHelper
     if alliance
       features << "alliance#{ alliance.id }"
     end
-    features += v.flights.every.operating_carrier.map{|carrier| 
+    features += v.flights.every.marketing_carrier.map{|carrier| 
       'carrier' + carrier.iata
     }
     features += v.flights.every.equipment_type.map{|plane|
@@ -149,7 +149,8 @@ module PricerHelper
 
   # самый долгий перевозчик в сегменте
   def primary_carrier segment
-    segment.flights.group_by(&:operating_carrier_name).max_by{|carrier, flights| flights.sum(&:duration) }[1].first.operating_carrier
+    #segment.flights.group_by(&:operating_carrier_name).max_by{|carrier, flights| flights.sum(&:duration) }[1].first.operating_carrier
+    segment.flights.group_by(&:marketing_carrier_name).max_by{|carrier, flights| flights.sum(&:duration) }[1].first.marketing_carrier
   end
   
   def segment_title segment
@@ -290,15 +291,6 @@ module PricerHelper
 
   def segment_flight_numbers segment
     segment.flights.map{|f| "#{f.marketing_carrier.iata}#{f.flight_number}" }.join('-')
-  end
-
-  # самый долгий перевозчик на каждом сегменте
-  def primary_operating_carriers variant
-    variant.segments.map do |segment|
-      segment.flights.group_by(&:operating_carrier).max_by do |op_carrier, flights|
-        flights.sum(&:duration)
-      end.first
-    end
   end
 
   def nearby_cities_list segments
