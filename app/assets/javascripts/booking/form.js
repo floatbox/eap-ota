@@ -30,8 +30,8 @@ init: function() {
         that.focus($('#' + $(this).attr('data-field')));
     });
     
-    //this.sections[0].set(['mszakharov@gmail.com', '+79161234567']);
-    //this.sections[1].rows[0].set(['MAXIM', 'ZAKHAROV', 'm', '03.05.1983', 170, '1234567890', '', true]);
+    this.sections[0].set(['mszakharov@gmail.com', '+79161234567']);
+    this.sections[1].rows[0].set(['MAXIM', 'ZAKHAROV', 'm', '03.05.1983', 170, '1234567890', '', true]);
     
     this.validate(true);
 },
@@ -63,6 +63,11 @@ validate: function(forced) {
     if (empty.length > 0) {
         wrong.push('Осталось заполнить ' + empty.enumeration(' и&nbsp;') + '.');
     }
+    if (this.back) {
+        this.result.hide();
+        this.footer.show();
+        delete this.back;    
+    }
     var disabled = wrong.length !== 0;
     this.required.html(wrong.join(' ')).toggle(disabled);
     this.button.toggleClass('bfb-disabled', disabled);
@@ -92,16 +97,27 @@ process: function(s) {
     this.button.removeClass('bfb-disabled');
     var that = this;
     this.result = $(s).insertAfter(this.el);
-    this.result.find('.bfr-back').click(function() {
-        that.result.hide();
-        that.footer.show();
-    });
     this.result.find('.bfr-cancel').click(function() {
         booking.cancel();
     });
     this.result.find('.bfr-continue').click(function() {
         $(this).closest('.bf-result').find('form').submit();
-    });    
+    });
+    var back = this.result.find('.bfr-back');
+    if (back.length) {  
+        that.back = true;
+        back.click(function() {
+            that.result.hide();
+            that.footer.show();
+            delete that.back;
+        });
+    }
+    if (this.result.attr('data-type') === 'forbidden') {
+        setTimeout(function() {
+            that.result.hide();
+            that.footer.show();
+        }, 6000);
+    }
 }
 };
 
@@ -519,7 +535,7 @@ select: function(type, validate) {
     this.card.el.find('input').prop('disabled', type !== 'card');
     this.cash.el.find('input').prop('disabled', type !== 'cash');    
     this.controls = this[type].controls;
-    var context = booking.form.footer || booking.form.el;
+    var context = booking.form.el;
     var wd = (type === 'cash' && $('#bfcd-yes').is(':checked'));
     context.find('.bffd-card').toggleClass('latent', type !== 'card');
     context.find('.bffd-cash').toggleClass('latent', type !== 'cash');

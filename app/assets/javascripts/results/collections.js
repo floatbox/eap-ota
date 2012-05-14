@@ -168,7 +168,8 @@ parse: function() {
     this.upgradeOffer();
     this.countDates();
     this.showPrices();
-    this.offer.select(0);
+    var cindex = Number($(table.rows[3].cells[3]).attr('data-index'));
+    this.offer.select(cindex);
 },
 upgradeOffer: function() {
     var that = this;
