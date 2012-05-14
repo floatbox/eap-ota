@@ -2,99 +2,102 @@
 module Amadeus
   # простой, но надежный как rand(2**31) != rand(2**31) аллокатор сессий
   # обошелся без блокировки таблиц
-  class Session < ActiveRecord::Base
+  class Session
 
   BOOKING = 'MOWR228FA'
   TICKETING = 'MOWR2233B'
   # старый тестовый офис-айди
   TESTING = 'MOWR2290Q'
 
-  self.table_name = 'amadeus_sessions'
-
   cattr_accessor :logger do
     Rails.logger
+  end
+
+  cattr_accessor :storage do
+    Amadeus::Session::ARStore
+  end
+
+  cattr_accessor :default_office do
+    BOOKING
   end
 
   INACTIVITY_TIMEOUT = 10*60
   MAX_SESSIONS = 10
 
-  scope :stale, lambda { where("updated_at < ?", INACTIVITY_TIMEOUT.seconds.ago)}
-  scope :busy, where("booking is not null")
-  scope :free,
-    lambda { where("updated_at >= ? AND booking is null", INACTIVITY_TIMEOUT.seconds.ago)}
-  scope :for_office, lambda { |office_id| where( office: office_id ) }
+  class << self
 
-  def self.from_token(auth_token)
-    session = new
-    session.token, session.seq = auth_token.split('|')
-    session.seq += 1
-    session
-  end
-
-  # для продолжения использования сессии между реквестами
-  def self.from_booking(booking)
-    busy.find_by_booking(booking) or raise("Amadeus session not found or expired")
-  end
-
-  def increment
-    return if destroyed?
-    self.seq += 1
-  end
-
-  def session_id
-    "#{token}|#{seq}"
-  end
-
-  def release
-    return if destroyed?
-    logger.info "Amadeus::Session: #{token} released"
-    self.booking = nil
-    save
-  end
-
-  def self.book(office=nil)
-    office ||= Amadeus::Session::BOOKING
-    logger.info { "Amadeus::Session: free sessions count: #{free.count}" }
-    booking = SecureRandom.random_number(2**31)
-
-    free.for_office(office).limit(1).update_all(:booking => booking)
-
-    if session = find_by_booking(booking)
-      logger.info "Amadeus::Session: #{session.token} reused (#{session.seq}) for #{session.office}"
-    elsif session = increase_pool(booking, office)
-      # all's ok
-    else
-      raise "somehow can't get new session"
+    # public
+    # вызывается с параметром и без (для класс-методов амадеуса)
+    def book(office=nil)
+      office ||= default_office
+      logger.info { "Amadeus::Session: free sessions count: #{storage.free_count(office)}" }
+      find_free_and_book(office) || sign_in(office, true)
     end
-    session
+
+    def find_free_and_book(office)
+      if record = storage.find_free_and_book(office: office)
+        logger.info "Amadeus::Session: #{record.token} reused (#{record.seq}) for #{record.office}"
+        from_record(record)
+      end
+    end
+
+    # без параметра создает незарезервированную сессию
+    def sign_in(office, booked=false)
+      office ||= default_office
+      session_id = Amadeus::Service.security_authenticate(office: office).or_fail!.session_id
+      session = new(session_id: session_id, office: office)
+      logger.info "Amadeus::Session: #{session.token} signed into #{office}"
+      session.increment
+      # saves session
+      session.booked = booked
+      session
+    end
+
+    # для кронтасков, скоростью не блещет
+    def housekeep
+      storage.each_stale(default_office) do |record|
+        from_record(record).destroy
+      end
+      (Conf.amadeus.session_pool_size - storage.free_count(default_office)).times do
+        sign_in(default_office)
+      end
+    end
+
+    def from_record(record)
+      session = allocate
+      session.record = record
+      session
+    end
+
   end
 
-  # без параметра создает незарезервированную сессию
-  def self.increase_pool(booking=nil, office=nil)
-    office ||= Amadeus::Session::BOOKING
-    token = Amadeus::Service.security_authenticate(:office => office).or_fail!.session_id
-    session = from_token(token)
-    session.booking = booking if booking
-    session.office = office
-    logger.info "Amadeus::Session: #{session.token} signed into #{office}"
-    session.save
-    session
+  # instance methods
+
+  def initialize(args={})
+    self.record = storage.new(args)
   end
 
-  # для кронтасков, скоростью не блещет
-  def self.housekeep
-    stale.destroy_all
-    (Conf.amadeus.session_pool_size - count).times { increase_pool }
+  attr_accessor :record
+
+  delegate :increment,
+           :office, :office=,
+           :session_id, :session_id=,
+           :token, :token=,
+           :seq, :seq=,
+           :booked?, :booked=,
+    to: :record
+
+  # public
+  # освобождение сессии (только в поиске?)
+  def release
+    logger.info "Amadeus::Session: #{token} released"
+    record.release
   end
 
-  # тоже для кронтасков, не разлогинивает, не создает новые
-  def self.dirty_housekeep
-    stale.delete_all
-  end
-
+  # public
   def destroy
     logger.info "Amadeus::Session: #{token} signing out (#{seq})"
-    super
+    record.destroy
     Amadeus::Service.new(:session => self).security_sign_out
   rescue Handsoap::Fault
     # it's ok
