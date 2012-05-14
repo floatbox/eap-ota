@@ -186,7 +186,7 @@ describe Order do
       it 'loads tickets correctly' do
         Sirena::Service.stub_chain(:new, :order).and_return(Sirena::Response::Order.new(File.read('spec/sirena/xml/order_with_tickets.xml')))
         Sirena::Service.stub_chain(:new, :pnr_status, :tickets_with_dates).and_return({})
-        @order = Order.new(:source => 'sirena', :commission_subagent => '1%', :pnr_number => '123456')
+        @order = Order.new(:source => 'sirena', :commission_subagent => '1%', :pnr_number => '123456', :created_at => (Time.now - 1.day))
         @order.stub_chain(:tickets, :reload)
         ticket = stub_model(Ticket, :new_record? => true)
         @order.stub_chain(:tickets, :ensure_exists).and_return(ticket)
