@@ -179,8 +179,6 @@ class Ticket < ActiveRecord::Base
 
   def update_prices_in_order
     # FIXME убить или оставить только ради тестов?
-    return unless order
-    order.tickets.reload if order
     order.update_prices_from_tickets if order
   end
 
