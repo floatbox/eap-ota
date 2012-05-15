@@ -25,6 +25,7 @@ end
 gem 'evergreen', :require => 'evergreen/rails', :group => :development
 
 gem 'kaminari'
+gem 'daemons'
 gem 'nokogiri'
 gem 'yajl-ruby'
 gem 'whenever', :require => false
