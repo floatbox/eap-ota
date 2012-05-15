@@ -1,0 +1,14 @@
+<% if ticket.kind == 'ticket' %>
+  Билет  № <%= ticket.link_to_show %> <br>
+  <% if ticket.refund %>
+    есть <%if !ticket.refund.processed %> неподтвержденный клиентом <% end %> возврат <br>
+  <% end %>
+
+    <%= link_to 'Добавить возврат', {:controller => 'admin/tickets', :action => :new_refund, 'resource[parent_id]' => ticket.id, 'resource[kind]' => 'refund', 'resource[order_id]' => ticket.order.id, :_popup => 'true'}, :class => 'iframe_with_page_reload' %>
+    <% unless ticket.replacement %>
+      <%= link_to 'Добавить обмен', {:controller => 'admin/tickets', :action => :new, 'resource[parent_id]' => ticket.id, 'resource[order_id]' => ticket.order.id, 'resource[status]' => 'ticketed', 'resource[kind]' => 'ticket', :_popup => 'true'}, :class => 'iframe_with_page_reload' %>
+    <% end %>
+<% elsif ticket.kind == 'refund' %>
+  Возврат для билета № <%=ticket.link_to_show %> <br>
+  Сумма к возврату: <%= ticket.price_total %> рублей
+<% end %>

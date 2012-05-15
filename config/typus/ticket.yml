@@ -9,9 +9,9 @@ Ticket:
      - price_with_payment_commission
      - price_fare
      - price_tax
+     - price_penalty
      - price_discount
      - price_our_markup
-     - price_penalty
      - office_id
      - validator
      - status
@@ -29,16 +29,40 @@ Ticket:
       - route
       - price_fare
       - price_tax
-      - price_refund
       - office_id
       - validator
+      - income_suppliers
       - status
       - kind
       - ticketed_date
       - itinerary_receipt
       - parent
-      - processed
-    new:  price_fare, price_tax, price_penalty, price_discount, price_our_markup, ticketed_date, comment
+    new: 
+      - price_fare
+      - price_tax
+      - price_penalty
+      - price_discount
+      - price_our_markup
+      - price_extra_penalty
+      - ticketed_date
+      - comment
+      - code
+      - number
+      - status
+      - ticketed_date
+      - validating_carrier
+      - last_name
+      - first_name
+      - route
+      - commission_consolidator
+      - commission_blanks
+      - commission_agent
+      - commission_subagent
+      - commission_discount
+      - commission_our_markup
+      - office_id
+      - validator
+      - mso_number
     show:
       - old_booking
       - order
@@ -49,6 +73,8 @@ Ticket:
       - route
       - price_fare
       - price_tax
+      - price_penalty
+      - price_extra_penalty
       - commission_consolidator
       - price_consolidator
       - price_blanks
@@ -60,12 +86,12 @@ Ticket:
       - price_discount
       - commission_our_markup
       - price_our_markup
-      - price_penalty
       - price_payment_commission
       - price_with_payment_commission
       - office_id
       - validator
       - commission_ticketing_method
+      - income_suppliers
       - status
       - ticketed_date
       - itinerary_receipt
@@ -81,20 +107,21 @@ Ticket:
       - route
       - price_fare
       - price_tax
+      - price_penalty
+      - price_extra_penalty
       - commission_consolidator
       - commission_blanks
       - commission_agent
       - commission_subagent
       - commission_discount
       - commission_our_markup
-      - price_penalty
       - office_id
       - validator
       - mso_number
       - comment
       - corrected_price
-    new_refund: price_fare, price_tax, price_penalty, price_consolidator, price_discount, price_our_markup, route, comment
-    confirm_refund: ticketed_date, processed
+    new_refund: price_fare, price_tax, price_penalty, price_consolidator, price_discount, price_our_markup, price_extra_penalty, route, comment
+    confirm_refund: ticketed_date, status
     csv:
       - source
       - number_with_code
@@ -104,6 +131,7 @@ Ticket:
       - cabins
       - price_fare
       - price_tax
+      - price_penalty
       - price_total
       - price_consolidator
       - price_discount
@@ -113,13 +141,13 @@ Ticket:
       - price_agent
       - commission_subagent
       - price_subagent
-      - price_penalty
       - price_with_payment_commission
       - pnr_number
       - need_attention
       - validating_carrier
       - office_id
       - validator
+      - income_suppliers
       - status
       - ticketed_date
       - kind
@@ -133,7 +161,6 @@ Ticket:
       date_formats:
         created_at: long
       booleans:
-        processed: ["подтвержден", "не подтвержден"]
         old_booking: ["пересчет запрещен", "пересчет разрешен"]
   options:
     default_action_on_item: edit

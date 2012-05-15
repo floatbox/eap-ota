@@ -7,7 +7,7 @@ module Sirena
         @number = xpath("//regnum").text
         @passengers = xpath("//passengers/passenger").map do |p|
           Person.new({
-            :first_name => p.xpath("name").text.split(' ')[0...-1].join(' '),#тк последнее слово - дата рождения
+            :first_name => p.xpath("name").text.split.first,#тк последнее слово - дата рождения
             :last_name => p.xpath("surname").text,
             :passport => p.xpath("doc").text,
             :sex => p.xpath("sex").text,

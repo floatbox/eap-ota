@@ -63,8 +63,12 @@ Order:
       - last_pay_time
       - partner
       - income_suppliers
+      - aggregated_income_suppliers
       - income_payment_gateways
       - income
+      - expected_income
+      - balance
+      - settled?
     form:
       - section_general_info
       - description
@@ -85,9 +89,12 @@ Order:
       - commission_agent
       - commission_subagent
       - commission_consolidator
+      - price_consolidator
       - commission_blanks
       - commission_discount
+      - price_discount
       - commission_our_markup
+      - price_our_markup
       - pricing_method
       - price_with_payment_commission
       - fix_price
@@ -114,6 +121,8 @@ Order:
       - price_with_payment_commission
       - price_total
       - income
+      - expected_income
+      - balance
       - partner
     options:
       selectors: payment_type, source, ticket_status, pricing_method, commission_ticketing_method
@@ -138,7 +147,7 @@ Order:
     export: csv
     #action_after_save: show
   actions:
-    show: edit
+    edit: show
   # тут не ввернешь конфирмации. временно убрал
   # actions:
   #   show: cancel, ticket, charge, unblock, show_pnr

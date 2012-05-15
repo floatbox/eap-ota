@@ -29,7 +29,7 @@ module Sirena
         request = Sirena::Request.for(name).new(*params)
         request_body = request.render
         if Conf.sirena.fake
-          response_body = read_latest_xml(name)
+          response_body = read_latest_log_file(name)
         else
           log_request(name, request_body)
           response_body = driver.send_request(
@@ -49,7 +49,7 @@ module Sirena
         request_body = request.render
 
         if Conf.sirena.fake
-          response_body = read_latest_xml(name)
+          response_body = read_latest_log_file(name)
           on_success.call( request.process_response(response_body) )
 
         else
@@ -95,7 +95,7 @@ module Sirena
           f.puts "---------------"
           f << response
         }
-        save_xml(name, response)
+        log_file(name, response)
       end
       add_method_tracer :log_response, 'Custom/Sirena/log'
 

@@ -1,6 +1,67 @@
 require 'spec_helper'
 
 describe Ticket do
+
+  describe "#update_parent_status" do
+
+    let (:old_ticket) {build(:ticket)}
+
+    it "is not called  when parent is not set" do
+      old_ticket.should_not_receive(:update_parent_status)
+      old_ticket.save
+    end
+
+    it "updates parent status to 'exchanged' when needed" do
+      old_ticket.save
+      new_ticket = create(:ticket, :parent => old_ticket)
+      old_ticket.reload
+      old_ticket.status.should == 'exchanged'
+    end
+
+    context "when refund" do
+
+      before do
+        old_ticket.save
+      end
+
+      let(:refund) {build(:refund, :parent => old_ticket)}
+
+      it "is doesn't try to update parent when !processed" do
+        refund.status = 'pending'
+        refund.save
+        old_ticket.reload
+        old_ticket.status.should == 'ticketed'
+      end
+
+      it "is called when refund is marked processed" do
+        refund.should_receive(:update_parent_status)
+        refund.save
+      end
+
+      it "updates parent status to 'refunded' when needed" do
+        refund.save
+        old_ticket.reload
+        old_ticket.status.should == 'returned'
+      end
+
+      it 'restores parent status to "ticketed" when refund is canceled' do
+        old_ticket.update_attribute(:status, 'returned')
+        refund.status = 'pending'
+        refund.save
+        old_ticket.reload
+        old_ticket.status.should == 'ticketed'
+      end
+
+      it 'restores parent status to "ticketed" when refund is deleted' do
+        refund.save
+        refund.destroy
+        old_ticket.reload
+        old_ticket.status.should == 'ticketed'
+      end
+
+    end
+  end
+
   describe "#flights=" do
     let(:cabins) {[]}
     let(:dept_dates) {['121011']}
@@ -131,14 +192,15 @@ describe Ticket do
   describe "#update_price_fare_and_add_parent" do
 
     before(:each) do
-      old_ticket = Ticket.new(:price_fare => 1000, :code => '456', :number => '234', :id => 10)
-      Ticket.stub_chain(:where, :first).and_return(old_ticket)
+      @old_ticket = Ticket.new(:price_fare => 1000, :code => '456', :number => '234', :id => 10)
       subject.valid?
     end
 
     subject do
       new_ticket_hash = {:number => '123', :code => '456', :price_fare => price_fare, :price_tax => 500, :parent_number => '234', :parent_code => '456', :price_fare_base => price_fare}
-      Ticket.new(new_ticket_hash)
+      ticket = Ticket.new(new_ticket_hash)
+      ticket.stub_chain(:order, :tickets, :where).and_return([@old_ticket])
+      ticket
     end
 
     context 'sets correct price_fare for ticket with fare upgrade' do
@@ -156,6 +218,12 @@ describe Ticket do
 
   describe "#commission_ticketing_method" do
 
+    describe "factories" do
+      specify { create(:direct_ticket).commission_ticketing_method.should == 'direct' }
+      specify { create(:aviacenter_ticket).commission_ticketing_method.should == 'aviacenter' }
+      specify { create(:refund, parent: create(:direct_ticket)).commission_ticketing_method.should == 'direct' }
+    end
+
     specify {
       Ticket.new(:source => 'amadeus', :office_id => 'MOWR2233B').commission_ticketing_method.should == 'aviacenter'
     }
@@ -163,6 +231,11 @@ describe Ticket do
     specify {
       Ticket.new(:source => 'amadeus', :office_id => 'MOWR228FA').commission_ticketing_method.should == 'direct'
     }
+
+    specify {
+      Ticket.new(:source => 'amadeus', :office_id => 'FLL1S212V').commission_ticketing_method.should == 'downtown'
+    }
+
     specify {
       Ticket.new(:source => 'sirena').commission_ticketing_method.should == 'aviacenter'
     }

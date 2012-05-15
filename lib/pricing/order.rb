@@ -26,6 +26,40 @@ module Pricing
 
     # cash_payment_markup содержит доставку, и нигде потом не используется
 
+    # рассчет прибыли
+    #####################################
+
+    # FIXME аггрегировать в заказе price_penalty по возвратам тоже?
+    include IncomeSuppliers
+
+    def income
+      @income ||= income_earnings - income_suppliers
+    end
+
+    # реальный баланс по выписке и платежам
+    # FIXME заменить этим income
+    def balance
+      @balance ||= income_earnings - aggregated_income_suppliers
+    end
+
+    def expected_income
+      expected_earnings - income_suppliers
+    end
+
+    # сумма данных по билетам. по идее, более точная информация, нежели сохраненная в заказе
+    # FIXME заменить этим income_suppliers
+    def aggregated_income_suppliers
+       tickets.sold.to_a.sum(&:income_suppliers)
+    end
+
+    def income_payment_gateways
+      secured_payments.to_a.sum(&:income_payment_gateways)
+    end
+
+    def income_earnings
+      secured_payments.to_a.sum(&:earnings)
+    end
+
     # подгнанные "налоги и сборы c комиссией" для отображения клиенту
     def price_tax_and_markup_and_payment
       recalculated_price_with_payment_commission - price_fare + price_declared_discount
@@ -63,6 +97,15 @@ module Pricing
           Conf.payture.commission
         end
       Commission::Formula.new(commission)
+    end
+
+    # FIXME отдать это на совесть подклассов Payment
+    def expected_earnings
+      if payment_type == 'card'
+        price_total
+      else # cash, delivery, invoice..
+        price_with_payment_commission
+      end
     end
 
     def calculate_price_with_payment_commission

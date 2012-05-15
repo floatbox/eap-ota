@@ -3,8 +3,17 @@ module Pricing
 
     attr_accessor :price_fare, :price_tax, :blank_count
 
-    delegate :subagent, :agent, :consolidator, :blanks, :discount, :our_markup, :ticketing,
+    delegate :subagent, :agent, :consolidator, :blanks, :discount, :our_markup, :ticketing_method,
       :to => :commission, :prefix => :commission, :allow_nil => true
+
+    include IncomeSuppliers
+
+    # FIXME работает для текущей схемы, считает что мы эквайринг не берем себе в общем случае
+    def income
+      @income ||= price_total - income_suppliers
+    end
+
+    # составные части стоимости
 
     # сумма, которая придет нам от платежного шлюза
     def price_total

@@ -3,9 +3,6 @@ config/mongoid.yml
 log/*
 log/**/*.xml
 !log/**/.gitkeep
-!log/xmls
-!log/amadeus
-!log/sirena
 tmp
 db/*.sqlite3
 public/assets

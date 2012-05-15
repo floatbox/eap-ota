@@ -44,10 +44,12 @@ class Ticket < ActiveRecord::Base
   before_save :recalculate_commissions, :set_validating_carrier
 
   scope :uncomplete, where(:ticketed_date => nil)
-  scope :sold, where(:status => ['ticketed', 'exchanged', 'returned'])
+  scope :sold, where(:status => ['ticketed', 'exchanged', 'returned', 'processed'])
 
   before_validation :set_refund_data, :if => lambda {kind == "refund"}
-  before_validation :update_price_fare_and_add_parent, :if => lambda {parent_number}
+  before_validation :update_price_fare_and_add_parent, :if => :parent_number
+  after_save :update_parent_status, :if => :parent
+  after_destroy :update_parent_status, :if => :parent
   validates_presence_of :comment, :if => lambda {kind == "refund"}
   after_save :update_prices_in_order
   attr_accessor :parent_number, :parent_code
@@ -83,22 +85,38 @@ class Ticket < ActiveRecord::Base
     end
   end
 
-  # FIXME сделать перечисление прямо из базы, через uniq
-  def self.office_ids
-    ['MOWR2233B', 'MOWR228FA', 'MOWR2219U']
-  end
+   # whitelist офис-айди, имеющих к нам отношение. В брони иногда попадают "не наши" билеты
+   # для всех айди в базе можно использовать: Ticket.uniq.pluck(:office_id).compact.sort
+   def self.office_ids
+     ['MOWR2233B', 'MOWR228FA', 'MOWR2219U', 'NYC1S21HX', 'FLL1S212V']
+   end
 
   def self.validating_carriers
     Carrier.uniq.pluck(:iata).sort
   end
 
   def update_price_fare_and_add_parent
-    if exchanged_ticket = Ticket.where('code = ? AND number like ?', parent_code, parent_number.to_s + '%').first
+    if exchanged_ticket = order.tickets.where('code = ? AND number like ?', parent_code, parent_number.to_s + '%').first
       self.parent = exchanged_ticket
-      exchanged_ticket.update_attribute(:status, 'exchanged')
       if price_fare_base && price_fare_base > 0
         self.price_tax += parent.price_fare_base #в противном случае tax может получиться отрицательным
         self.price_fare = price_fare_base - parent.price_fare_base
+      end
+    end
+  end
+
+  def update_parent_status
+    parent.update_status
+  end
+
+  def update_status
+    if kind == 'ticket'
+      if replacement
+        update_attribute(:status, 'exchanged')
+      elsif refunds.sold.present?
+        update_attribute(:status, 'returned')
+      else
+        update_attribute(:status, 'ticketed')
       end
     end
   end
@@ -124,15 +142,18 @@ class Ticket < ActiveRecord::Base
   end
 
   def commission_ticketing_method
-    if source == 'amadeus' && office_id == 'MOWR228FA'
+    case office_id
+    when 'MOWR228FA'
       'direct'
+    when 'FLL1S212V'
+      'downtown'
     else
       'aviacenter'
     end
   end
 
   def self.validators
-    ['92223412', '92228065']
+    uniq.pluck(:validator).compact.sort
   end
 
   def self.sources
@@ -140,7 +161,11 @@ class Ticket < ActiveRecord::Base
   end
 
   def self.statuses
-    ['ticketed', 'voided', 'pending', 'exchanged', 'returned']
+    ['ticketed', 'voided', 'pending', 'exchanged', 'returned', 'processed']
+  end
+
+  def processed
+    (kind == 'ticket') || (status == 'processed')
   end
 
   def self.kinds
@@ -154,26 +179,27 @@ class Ticket < ActiveRecord::Base
 
   def update_prices_in_order
     # FIXME убить или оставить только ради тестов?
-    return unless order
-    order.tickets.reload if order
     order.update_prices_from_tickets if order
   end
 
   def set_refund_data
-    copy_attrs parent, self,
-      :validator,
-      :office_id,
-      :first_name,
-      :last_name,
-      :passport,
-      :commission_subagent,
-      :commission_agent,
-      :pnr_number,
-      :order,
-      :code,
-      :number,
-      :source,
-      :validating_carrier
+    if new_record?
+      copy_attrs parent, self,
+        :validator,
+        :office_id,
+        :first_name,
+        :last_name,
+        :passport,
+        :commission_subagent,
+        :commission_agent,
+        :pnr_number,
+        :order,
+        :code,
+        :number,
+        :source,
+        :validating_carrier
+      self.status = 'pending' if status.blank?
+    end
     self.price_penalty *= -1 if price_penalty < 0
     self.price_discount *= -1 if price_discount > 0
     self.price_our_markup *= -1 if price_our_markup > 0
@@ -202,6 +228,14 @@ class Ticket < ActiveRecord::Base
     "#{code}-#{number}" if number.present?
   end
 
+  def self.find_by_number_with_code(number_with_code)
+    code, number = number_with_code.split('-',2)
+    find_by_code_and_number(code, number)
+  end
+  class << self
+    alias_method :[], :find_by_number_with_code
+  end
+
   # номер первого билета для conjunction
   def first_number
     number.sub /-.*/, '' if number.present?
@@ -225,7 +259,7 @@ class Ticket < ActiveRecord::Base
 
   def confirm_refund_url
     if kind == 'refund'
-      "<a href='/admin/tickets/confirm_refund/#{id}?_popup=true' class='iframe_with_page_reload'>#{processed ? 'Отменить подтверждение' : 'Подтвердить'}</a>".html_safe
+      CustomTemplate.new.render(:partial => "admin/tickets/refund_actions", :locals => {:ticket => self}).html_safe
     end
   end
 
@@ -243,21 +277,7 @@ class Ticket < ActiveRecord::Base
 
   # для тайпуса
   def description
-    if kind == 'ticket'
-      (
-      "Билет  № #{link_to_show} <br>" +
-        if self.refund
-          "есть #{!refund.processed ? 'неподтвержденный клиентом' : ''} возврат <br>"
-        end.to_s +
-        "<a href='/admin/tickets/new_refund?_popup=true&&resource[kind]=refund&resource[parent_id]=#{id}' class='iframe_with_page_reload'>Добавить возврат</a>"
-
-      ).html_safe
-    elsif kind == 'refund'
-      (
-      "Возврат для билета № #{link_to_show} <br>" +
-      "Сумма к возварату: #{price_refund} рублей"
-      ).html_safe
-    end
+    CustomTemplate.new.render(:partial => "admin/tickets/description", :locals => {:ticket => self}).html_safe
   end
 
   # для админки

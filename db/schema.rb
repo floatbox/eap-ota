@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120319165358) do
+ActiveRecord::Schema.define(:version => 20120503141906) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -237,6 +237,8 @@ ActiveRecord::Schema.define(:version => 20120319165358) do
     t.string   "lang"
   end
 
+  add_index "notifications", ["method", "status"], :name => "index_notifications_on_method_and_status"
+
   create_table "order_comments", :force => true do |t|
     t.integer  "order_id"
     t.integer  "typus_user_id"
@@ -307,6 +309,24 @@ ActiveRecord::Schema.define(:version => 20120319165358) do
     t.string   "commission_our_markup"
   end
 
+  add_index "orders", ["partner"], :name => "index_orders_on_partner"
+  add_index "orders", ["payment_status", "ticket_status"], :name => "index_orders_on_payment_status_and_ticket_status"
+  add_index "orders", ["payment_status"], :name => "index_orders_on_payment_status"
+  add_index "orders", ["payment_type"], :name => "index_orders_on_payment_type"
+  add_index "orders", ["pnr_number"], :name => "index_orders_on_pnr_number"
+  add_index "orders", ["ticket_status"], :name => "index_orders_on_ticket_status"
+
+  create_table "partners", :force => true do |t|
+    t.string   "token",               :null => false
+    t.string   "password",            :null => false
+    t.boolean  "enabled",             :null => false
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+    t.boolean  "hide_income",         :null => false
+    t.integer  "cookies_expiry_time"
+    t.integer  "income_at_least"
+  end
+
   create_table "payments", :force => true do |t|
     t.decimal  "price",                 :precision => 9, :scale => 2, :default => 0.0, :null => false
     t.string   "last_digits_in_card"
@@ -323,13 +343,13 @@ ActiveRecord::Schema.define(:version => 20120319165358) do
     t.datetime "charged_at"
     t.string   "threeds_key"
     t.string   "system"
+    t.date     "charged_on"
+    t.string   "pan"
     t.string   "type"
     t.integer  "charge_id"
     t.string   "status"
     t.string   "commission"
     t.decimal  "earnings",              :precision => 9, :scale => 2, :default => 0.0, :null => false
-    t.date     "charged_on"
-    t.string   "pan"
   end
 
   add_index "payments", ["status"], :name => "index_payments_on_status"
@@ -390,7 +410,6 @@ ActiveRecord::Schema.define(:version => 20120319165358) do
     t.date     "ticketed_date"
     t.string   "validating_carrier"
     t.string   "kind",                                                    :default => "ticket"
-    t.boolean  "processed",                                               :default => false
     t.integer  "parent_id"
     t.decimal  "price_penalty",             :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.text     "comment"
@@ -409,7 +428,15 @@ ActiveRecord::Schema.define(:version => 20120319165358) do
     t.decimal  "price_our_markup",          :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "vat_status",                                              :default => "unknown", :null => false
     t.date     "dept_date"
+    t.decimal  "price_extra_penalty",       :precision => 9, :scale => 2, :default => 0.0,       :null => false
   end
+
+  add_index "tickets", ["kind"], :name => "index_tickets_on_kind"
+  add_index "tickets", ["office_id"], :name => "index_tickets_on_office_id"
+  add_index "tickets", ["order_id"], :name => "index_tickets_on_order_id"
+  add_index "tickets", ["parent_id"], :name => "index_tickets_on_parent_id"
+  add_index "tickets", ["pnr_number"], :name => "index_tickets_on_pnr_number"
+  add_index "tickets", ["status"], :name => "index_tickets_on_status"
 
   create_table "typus_users", :force => true do |t|
     t.string   "first_name",       :default => "",    :null => false
@@ -433,6 +460,7 @@ ActiveRecord::Schema.define(:version => 20120319165358) do
     t.text     "object"
     t.datetime "created_at"
     t.text     "object_changes"
+    t.string   "action"
   end
 
   add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"

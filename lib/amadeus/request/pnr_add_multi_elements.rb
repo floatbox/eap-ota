@@ -34,15 +34,16 @@ module Amadeus
       end
 
       def tk_xl_date
-        (tk_xl).strftime("%d%m%y") if tk_xl
+        tk_xl.strftime("%d%m%y") if tk_xl
       end
 
       def tk_xl_time
-        (tk_xl).strftime("%H%M") if tk_xl
+        tk_xl.strftime("%H%M") if tk_xl
       end
 
+      # не подставляет пустые комиссии
       def agent_commission?
-        !!agent_commission
+        agent_commission.present?
       end
 
       def agent_commission_percentage

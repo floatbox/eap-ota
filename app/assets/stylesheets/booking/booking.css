@@ -325,6 +325,19 @@
     font-size: 12px;
 }
 
+/* Изменение цены */
+.booking-newprice h5 {
+    margin: 0 0 10px;
+}
+.booking-newprice .a-button {
+    margin: 0;
+    border-color: #7b8e12;
+    margin-right: 2px;
+    padding: 3px 10px;
+    font-weight: bold;    
+    color: #333;
+}
+
 /* Ссылки для добавления в социальные сети */
 .booking-social {
     margin: 15px 0 15px;

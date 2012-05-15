@@ -2,45 +2,41 @@
 require 'spec_helper'
 
 describe PaytureCharge do
-  include Commission::Fx
 
-  it 'should recalculate earnings on save' do
-    p = PaytureCharge.new :commission => '1.23%', :price => 1000
-    p.save!
-    p.commission.should == Fx('1.23%')
-    p.earnings.should == 1000 - 12.3
+  describe "factories" do
+    specify { build(:payture_charge).should be_valid }
+    specify { build(:charged_payture_charge).should be_valid }
+    specify { create(:charged_payture_charge).should be_charged }
+    specify { create(:charged_payture_charge).should_not be_new_record }
   end
 
-  it 'probably should get commission from Conf, if unset' do
-    Conf.payture.stub(:commission).and_return('3.45%')
-    p = PaytureCharge.new :price => 1000
-    p.save!
-    p.commission.should == Fx('3.45%')
-    p.earnings.should == 1000 - 34.5
+  describe "commission" do
+    include Commission::Fx
+
+    it 'should recalculate earnings on save' do
+      p = PaytureCharge.create! :commission => '1.23%', :price => 1000
+      p.commission.should == Fx('1.23%')
+      p.earnings.should == 1000 - 12.3
+    end
+
+    it 'probably should get commission from Conf, if unset' do
+      Conf.payture.stub(:commission).and_return('3.45%')
+      p = PaytureCharge.create! :price => 1000
+      p.commission.should == Fx('3.45%')
+      p.earnings.should == 1000 - 34.5
+    end
   end
 
   it 'should not allow to update price on charged payment' do
-    order = Factory(:order)
-    charge = PaytureCharge.new :price => 1000
-    order.payments << charge
-    charge.update_attribute :status, 'charged'
-    charge.reload
-    charge.should be_charged
-
-    charge.attributes = {:price => '1050'}
+    charge = create(:charged_payture_charge, :price => 1000)
+    charge.assign_attributes :price => '1050'
     charge.should have_errors_on(:price)
   end
 
   it 'should still allow to update price on charged payment if entered price is technically the same' do
-    order = Factory(:order)
-    charge = PaytureCharge.new :price => 1000
-    order.payments << charge
-    charge.update_attribute :status, 'charged'
-    charge.reload
-    charge.should be_charged
-
-    charge.attributes = {:price => '1000'}
-    charge.should_not have_errors_on(:price)
+    charge = create(:charged_payture_charge, :price => 1000)
+    charge.assign_attributes :price => '1000'
+    charge.should be_valid
   end
 
   describe "state" do

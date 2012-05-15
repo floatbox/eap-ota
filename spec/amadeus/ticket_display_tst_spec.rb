@@ -5,9 +5,7 @@ describe Amadeus::Response::TicketDisplayTST do
   describe 'adult with infant' do
 
     subject_once! {
-      body = File.read('spec/amadeus/xml/Ticket_DisplayTST_With_Infant.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::TicketDisplayTST.new(doc)
+      amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_With_Infant.xml')
     }
 
     it { should be_success }
@@ -24,9 +22,7 @@ describe Amadeus::Response::TicketDisplayTST do
   describe 'two adults' do
 
     subject_once! {
-      body = File.read('spec/amadeus/xml/Ticket_DisplayTST_for_two.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::TicketDisplayTST.new(doc)
+      amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_for_two.xml')
     }
 
     it { should be_success }
@@ -42,9 +38,7 @@ describe Amadeus::Response::TicketDisplayTST do
 
   describe 'complex tickets' do
       subject_once! {
-        body = File.read('spec/amadeus/xml/Ticket_DisplayTST_complex_tickets.xml')
-        doc = Amadeus::Service.parse_string(body)
-        Amadeus::Response::TicketDisplayTST.new(doc)
+        amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_complex_tickets.xml')
       }
       its('prices_with_refs.keys.length'){should == 4}
       its('prices_with_refs.keys'){should include([[2, 'a'], [5, 6, 7, 8]])}
@@ -60,9 +54,7 @@ describe Amadeus::Response::TicketDisplayTST do
   describe 'tst from booking' do
 
     subject_once! {
-      body = File.read('spec/amadeus/xml/Ticket_DisplayTST_without_tickets.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::TicketDisplayTST.new(doc)
+      amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_without_tickets.xml')
     }
     its(:total_fare) { should == 39860}
     its(:total_tax) { should == 15879 }
@@ -71,14 +63,20 @@ describe Amadeus::Response::TicketDisplayTST do
 
   describe 'with ticketingStatus NO' do
 
-    subject {
-      body = File.read('spec/amadeus/xml/Ticket_DisplayTST_with_ticketingStatus_no.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::TicketDisplayTST.new(doc)
+    subject_once! {
+      amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_with_ticketingStatus_no.xml')
     }
 
     its('prices_with_refs.keys.every.second.flatten.uniq') {should_not include(2)}
     its('prices_with_refs.keys.every.second.flatten.uniq') {should include(1)}
   end
+
+  describe 'with no tst on order' do
+    subject_once! { amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_no_tst.xml') }
+
+    it {should_not be_success}
+    its(:error_message) {should == "NO TST RECORD EXISTS :"}
+  end
+
 end
 

@@ -49,7 +49,7 @@ module Strategy::Amadeus::PreliminaryBooking
       # не нужно, booking {...} убьет бронирование
       # amadeus.pnr_ignore
 
-      unless TimeChecker.ok_to_book(@rec.variants[0].departure_datetime_utc, @rec.last_tkt_date)
+      unless TimeChecker.ok_to_book(@rec.journey.departure_datetime_utc, @rec.last_tkt_date)
         logger.error "Strategy: time criteria for last tkt date missed: #{@rec.last_tkt_date}"
         dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
         return

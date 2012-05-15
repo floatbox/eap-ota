@@ -16,10 +16,10 @@ module Strategy::Sirena::PreliminaryBooking
     @rec.rules = sirena_rules(repriced_rec)
     @rec.price_fare = repriced_rec.price_fare
     @rec.price_tax = repriced_rec.price_tax
-    @rec.variants[0].segments = repriced_rec.segments
+    @rec.journey.segments = repriced_rec.segments
     @rec.blank_count = repriced_rec.blank_count
 
-    unless TimeChecker.ok_to_book_sirena(@rec.variants[0].departure_datetime_utc)
+    unless TimeChecker.ok_to_book_sirena(@rec.journey.departure_datetime_utc)
       logger.error 'Strategy: time criteria missed'
       dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
       return
