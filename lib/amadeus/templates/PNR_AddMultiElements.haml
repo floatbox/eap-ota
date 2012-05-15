@@ -19,23 +19,23 @@
         %travellerInformation
           %traveller
             %surname= person.last_name
-            %quantity= (index < people_count[:infants]) ? 2 : 1
+            %quantity= person.associated_infant ? 2 : 1
           %passenger
             %firstName= person.first_name_with_code
-            - if index < people_count[:infants]
+            - if person.associated_infant
               %type ADT
               %infantIndicator 3
-      -if index < people_count[:infants]
+      -if person.associated_infant
         %passengerData
           %travellerInformation
             %traveller
-              %surname= infants[index].last_name
+              %surname= person.associated_infant.last_name
             %passenger
-              %firstName= infants[index].first_name
+              %firstName= person.associated_infant.first_name
               %type INF
           %dateOfBirth
             %dateAndTimeDetails
-              %date= infants[index].birthday.strftime('%d%b%y').upcase
+              %date= person.associated_infant.birthday.strftime('%d%b%y').upcase
   - children.each_with_index do |person, index|
     %travellerInfo
       %elementManagementPassenger

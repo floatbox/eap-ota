@@ -16,6 +16,7 @@ class OrderForm
 
   attr_writer :card
   attr_accessor :recommendation
+  attr_writer :price_with_payment_commission
   attr_accessor :pnr_number
   attr_accessor :people_count
   attr_accessor :query_key
@@ -50,7 +51,7 @@ class OrderForm
   end
 
   def tk_xl
-    dept_datetime_mow = Location.default.tz.utc_to_local(recommendation.variants[0].departure_datetime_utc) - 1.hour
+    dept_datetime_mow = Location.default.tz.utc_to_local(recommendation.journey.departure_datetime_utc) - 1.hour
     last_ticket_date = self.last_tkt_date || (Date.today + 2.days)
     #эта херня нужна, просто .min не подходит тк dept_datetime_mow
     if dept_datetime_mow.to_date <= last_ticket_date
@@ -60,20 +61,41 @@ class OrderForm
     end
   end
 
+  # пассажиры, отсортированные по возрасту
+  def people_by_age
+    (people || []).sort_by(&:birthday)
+  end
 
+  # пассажиры, летящие по взрослому тарифу
   def adults
-    people && (people.sort_by(&:birthday)[0..(people_count[:adults]-1)])
+    people_by_age.first(people_count[:adults])
   end
 
+  # пассажиры (в том числе младенцы), летящие по детскому тарифу с выделенным местом
   def children
-    s_pos = people_count[:adults]
-    e_pos = people_count[:adults] + people_count[:children]-1
-    (people && (people_count[:children] > 0) && (people.sort_by(&:birthday)[s_pos..e_pos])) || []
+    people_by_age[ people_count[:adults], people_count[:children] ]
   end
 
+  # дети до двух лет, которым не предоставляется места
   def infants
-    s_pos = people_count[:adults] + people_count[:children]
-    (people && (people_count[:infants] > 0) && (people.sort_by(&:birthday)[s_pos..-1])) || []
+    people_by_age.last(people_count[:infants])
+  end
+
+  # взрослые без детей на коленях
+  def childfree_adults
+    adults.reject(&:associated_infant)
+  end
+
+  # младенцы, которых уже распределили по коленям взрослых пассажиров
+  def associated_infants
+    adults.map(&:associated_infant).compact
+  end
+
+  # младенцы, которых еще не распределили по коленям взрослых пассажиров
+  # на текущий момент младенцы с местом должны попадать в категорию children
+  # FIXME - проверять ли в valid orphans.empty?
+  def orphans
+    infants - associated_infants
   end
 
   def people_attributes= attrs
@@ -119,11 +141,21 @@ class OrderForm
     [recommendation, people_count, people, card].hash
   end
 
+  def price_with_payment_commission
+    @price_with_payment_commission ||= recommendation.price_with_payment_commission
+  end
+
   def save_to_cache
     cache = OrderFormCache.new
-    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker
+    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
     cache.save
     self.number = cache.id.to_s
+  end
+
+  def update_in_cache
+    cache = OrderFormCache.find(number) or raise(NotFound, "#{number} not found")
+    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
+    cache.save
   end
 
   class NotFound < StandardError; end
@@ -131,7 +163,7 @@ class OrderForm
     def load_from_cache(cache_number)
       cache = OrderFormCache.find(cache_number) or raise(NotFound, "#{cache_number} not found")
       order = new
-      copy_attrs cache, order, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker
+      copy_attrs cache, order, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
       order.number = cache.id.to_s
       order
     end
@@ -145,7 +177,7 @@ class OrderForm
   end
 
   def variant
-    recommendation && recommendation.variants.first
+    recommendation.try(:journey)
   end
 
   def init_people
@@ -162,9 +194,9 @@ class OrderForm
 
   def validate_dept_date
     if recommendation.source == 'amadeus'
-      errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell(recommendation.variants[0].departure_datetime_utc, recommendation.last_tkt_date)
+      errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell(recommendation.journey.departure_datetime_utc, recommendation.last_tkt_date)
     elsif recommendation.source == 'sirena'
-      errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell_sirena(recommendation.variants[0].departure_datetime_utc)
+      errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell_sirena(recommendation.journey.departure_datetime_utc)
     end
   end
 
@@ -180,6 +212,7 @@ class OrderForm
     people.each(&:set_birthday)
     people.each(&:set_document_expiration_date)
     set_flight_date_for_childen_and_infants
+    associate_infants
     unless people.all?(&:valid?)
       errors.add :people, 'Проверьте данные пассажиров'
     end
@@ -270,6 +303,39 @@ class OrderForm
     order.card = Payture.test_card
     order.valid?
     order.create_booking
+  end
+
+  def associate_infants
+    # идем по порядку, привязываем каждого младенца к предшествующему по порядку взрослому
+    people.each_cons(2) do |person, next_person|
+      next if person.associated_infant
+      if person.adult? && next_person.infant?
+        person.associated_infant = next_person
+      end
+    end
+
+    # пытаемся идентифицировать схожесть фамилий
+    orphans.each do |infant|
+      if adult = childfree_adults.find { |adult| similar_last_names? infant.last_name, adult.last_name }
+        adult.associated_infant = infant
+      end
+    end
+
+    # распихиваем оставшихся
+    orphans.zip( childfree_adults ).each do |orphan, adult|
+      adult.associated_infant = orphan
+    end
+  end
+
+  private
+
+  LONGEST_ENDING = 3
+  SHORTEST_STEM = 3
+  # похожесть фамилий без учета мужских и женских окончаний
+  def similar_last_names? first_name, second_name
+    max_length = [first_name.length, second_name.length].max
+    stem_length = [max_length - LONGEST_ENDING, SHORTEST_STEM].max
+    first_name[0, stem_length] == second_name[0, stem_length]
   end
 end
 

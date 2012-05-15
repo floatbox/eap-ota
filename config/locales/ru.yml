@@ -38,6 +38,7 @@ ru:
       airplane: 'Самолет'
       typus_user: 'Пользователь Typus'
       notification: 'Оповещение'
+      partner: 'Партнер'
     attributes:
       # общие атрибуты в заказах и билетах
       PRICING_ATTRIBUTES: &PRICING_ATTRIBUTES
@@ -98,6 +99,9 @@ ru:
         partner: "Партнер"
         fix_price: "Закрепить итоговую цену / деньги уже взяты"
         show_vat: "Показывать НДС"
+        'settled?': "Показывать партнерам прибыль"
+        income_suppliers: 'Ожидаемый доход поставщика, р.'
+        aggregated_income_suppliers: 'Доход поставщика, сумма по билетам р.'
         recalculation_alert: "Подсказка к перерассчету комиссий, сборов и цен"
         section_general_info: "Информация о заказе"
         section_recalculation: "Рассчет цены"
@@ -167,6 +171,8 @@ ru:
 
   Secured: Подтверждены
   Not secured: Не подтверждены
+
+  Actual: Актуальные
 
   # buttons
   Save and add another: Сохранить и добавить еще один

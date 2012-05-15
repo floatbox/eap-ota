@@ -4,7 +4,7 @@ describe Strategy do
   describe "#select" do
 
     context "for amadeus" do
-      let( :object ) { Object.new.tap {|obj| obj.stub(:source).and_return('amadeus') } }
+      let( :object ) { mock('argument', source: 'amadeus') }
       specify { Strategy.select(:source => 'amadeus').should be_a(Strategy::Amadeus) }
       specify { Strategy.select(:order => object).should be_a(Strategy::Amadeus) }
       specify { Strategy.select(:ticket => object).should be_a(Strategy::Amadeus) }
@@ -12,7 +12,7 @@ describe Strategy do
     end
 
     context "for sirena" do
-      let( :object ) { Object.new.tap {|obj| obj.stub(:source).and_return('sirena') } }
+      let( :object ) { mock('argument', source: 'sirena') }
       specify { Strategy.select(:source => 'sirena').should be_a(Strategy::Sirena) }
       specify { Strategy.select(:order => object).should be_a(Strategy::Sirena) }
       specify { Strategy.select(:ticket => object).should be_a(Strategy::Sirena) }

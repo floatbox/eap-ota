@@ -33,6 +33,20 @@ module Amadeus
         return amadeus
       end
     end
+
+    # еще копипаста!
+    def testing
+      amadeus = Amadeus::Service.new(:book => true, :office => Amadeus::Session::TESTING)
+      if block_given?
+        begin
+          return yield(amadeus)
+        ensure
+          amadeus.session.destroy
+        end
+      else
+        return amadeus
+      end
+    end
   end
 
   extend Shortcuts

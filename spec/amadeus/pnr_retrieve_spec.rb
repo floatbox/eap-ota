@@ -6,9 +6,7 @@ describe Amadeus::Response::PNRRetrieve do
   describe 'with complex exchange' do
 
     let_once! :response do
-      body = File.read('spec/amadeus/xml/PNR_Retrieve_with_complex_exchange.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::PNRRetrieve.new(doc)
+      amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_complex_exchange.xml')
     end
 
     subject {response}
@@ -20,18 +18,33 @@ describe Amadeus::Response::PNRRetrieve do
 
   end
 
+  context 'with double partly flown exchange' do
+
+    let_once! :response do
+      amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_double_exchange.xml')
+    end
+
+    subject {response}
+
+    its(:exchanged_tickets) {should == {[[7, "a"], [3, 4, 6, 7]] =>
+                  {:number=>"9460734984", :code=>"784"},
+                                        [[6, "a"], [3, 4, 6, 7]] =>
+                  {:number=>"9460734985", :code=>"784"}}
+      }
+
+  end
+
   describe 'with another complex exchange' do
 
     let_once! :response do
-      body = File.read('spec/amadeus/xml/PNR_Retrieve_with_another_exchange.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::PNRRetrieve.new(doc)
+      amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_another_exchange.xml')
     end
 
     subject {response}
 
     it {should have(1).exchanged_tickets}
     specify { subject.parsed_exchange_string('603-2962817528-29MOW28AUG11/92223412/603-29628175286E1-294').should == {:code => '603', :number => '2962817528', :inf => nil} }
+    specify {  subject.parsed_exchange_string('670-7037258098NYC17APR12/10729143/670-70372580985E1*B113.00/X55.05/C39.00').should == {:code => '670', :number => '7037258098', :inf => nil}}
     specify { subject.exchanged_tickets.should have_key([[1, "a"], [1, 3]])}
     specify { subject.exchanged_tickets[[[1, "a"], [1, 3]]].should == {:code => '603', :number => '2962817528'} }
 
@@ -40,9 +53,7 @@ describe Amadeus::Response::PNRRetrieve do
   describe 'with two adults, children and infant' do
 
     let_once! :response do
-      body = File.read('spec/amadeus/xml/PNR_Retrieve_TwoAdultsWithChildren.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::PNRRetrieve.new(doc)
+      amadeus_response('spec/amadeus/xml/PNR_Retrieve_TwoAdultsWithChildren.xml')
     end
 
     subject { response }
@@ -65,9 +76,7 @@ describe Amadeus::Response::PNRRetrieve do
   describe 'three passengers, but only two tickets' do
 
     let_once! :response do
-      body = File.read('spec/amadeus/xml/PNR_Retrieve_Strange_Ticket_Number.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::PNRRetrieve.new(doc)
+      amadeus_response('spec/amadeus/xml/PNR_Retrieve_Strange_Ticket_Number.xml')
     end
 
     subject { response }
@@ -81,9 +90,7 @@ describe Amadeus::Response::PNRRetrieve do
   describe 'with exchange of flwn ticket' do
 
     let_once! :response do
-      body = File.read('spec/amadeus/xml/PNR_Retrieve_with_broken_lt.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::PNRRetrieve.new(doc)
+      amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_broken_lt.xml')
     end
 
     subject { response }
@@ -94,9 +101,7 @@ describe Amadeus::Response::PNRRetrieve do
 
   describe 'with cancelled by airline segments' do
     let_once! :response do
-      body = File.read('spec/amadeus/xml/PNR_Retrieve_with_cancelled_by_airline_segments.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::PNRRetrieve.new(doc)
+      amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_cancelled_by_airline_segments.xml')
     end
 
     subject { response }
@@ -107,9 +112,7 @@ describe Amadeus::Response::PNRRetrieve do
 
   describe 'with additional pnr numbers' do
     let_once! :response do
-      body = File.read('spec/amadeus/xml/PNR_Retrieve_with_cancelled_by_airline_segments.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::PNRRetrieve.new(doc)
+      amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_cancelled_by_airline_segments.xml')
     end
 
     subject { response }
@@ -121,9 +124,7 @@ describe Amadeus::Response::PNRRetrieve do
 
   describe "#complex_tickets" do
     let_once! :response do
-      body = File.read('spec/amadeus/xml/PNR_Retrieve_complex_tickets.xml')
-      doc = Amadeus::Service.parse_string(body)
-      Amadeus::Response::PNRRetrieve.new(doc)
+      amadeus_response('spec/amadeus/xml/PNR_Retrieve_complex_tickets.xml')
     end
 
     subject { response }
@@ -186,9 +187,7 @@ describe Amadeus::Response::PNRRetrieve do
     context "with service tickets" do
 
       subject {
-        body = File.read('spec/amadeus/xml/PNR_Retrieve_with_service_tickets.xml')
-        doc = Amadeus::Service.parse_string(body)
-        Amadeus::Response::PNRRetrieve.new(doc)
+        amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_service_tickets.xml')
       }
 
       its(:tickets) {should be_present}
@@ -197,9 +196,7 @@ describe Amadeus::Response::PNRRetrieve do
     context "two tickets for one passenger" do
 
       let_once! :response do
-        body = File.read('spec/amadeus/xml/PNR_Retrieve_complex_tickets.xml')
-        doc = Amadeus::Service.parse_string(body)
-        Amadeus::Response::PNRRetrieve.new(doc)
+        amadeus_response('spec/amadeus/xml/PNR_Retrieve_complex_tickets.xml')
       end
 
       subject { response }
@@ -222,12 +219,10 @@ describe Amadeus::Response::PNRRetrieve do
 
     context "with infant" do
       let_once! :response do
-        body = File.read('spec/amadeus/xml/PNR_Retrieve_TwoAdultsWithChildren.xml')
-        doc = Amadeus::Service.parse_string(body)
-        Amadeus::Response::PNRRetrieve.new(doc).tickets
+        amadeus_response('spec/amadeus/xml/PNR_Retrieve_TwoAdultsWithChildren.xml')
       end
 
-      subject { response }
+      subject { response.tickets }
 
       specify{subject[[[14, 'a'], [1, 2]]][:first_name].should == 'VALENTINA MRS'}
       specify{subject[[[14, 'i'], [1, 2]]][:first_name].should == 'MARIA'}
@@ -237,6 +232,17 @@ describe Amadeus::Response::PNRRetrieve do
       specify{subject[[[14, 'i'], [1, 2]]][:last_name].should == 'MITROFANOVA'}
     end
 
+  end
+
+  describe "#agent_commission" do
+    context "percents" do
+      subject {amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml')}
+      its(:agent_commission) {should == "7%"}
+    end
+    context "rubles" do
+      subject {amadeus_response('spec/amadeus/xml/PNR_Retrieve_TwoAdultsWithChildren.xml')}
+      its(:agent_commission) {should == "1"}
+    end
   end
 
 end

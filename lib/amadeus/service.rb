@@ -68,7 +68,7 @@ module Amadeus
 
     xml_response = nil
     if Conf.amadeus.fake
-      xml_string = read_latest_xml(request.action)
+      xml_string = read_latest_log_file(request.action)
       xml_response = parse_string(xml_string)
     else
       req_session = self.session || (booked_session = Amadeus::Session.book) if request.needs_session?
@@ -82,7 +82,7 @@ module Amadeus
       req_session.increment if req_session
       # возвращаем только свежезалогиненную сессию
       booked_session.release if booked_session
-      save_xml(request.action, xml_response.to_xml)
+      log_file(request.action, xml_response.to_xml)
     end
 
     request.process_response(xml_response)
@@ -95,7 +95,7 @@ module Amadeus
     invoke_opts[:soap_header] = {'SessionId' => session.session_id}
 
     if Conf.amadeus.fake
-      xml_string = read_latest_xml(request.action)
+      xml_string = read_latest_log_file(request.action)
       xml_response = parse_string(xml_string)
       on_success.call( request.process_response(xml_response) )
 
@@ -134,7 +134,7 @@ module Amadeus
 # метрика
 
   include NewRelic::Agent::MethodTracer
-  add_method_tracer :save_xml, 'Custom/Amadeus/log'
+  add_method_tracer :log_file, 'Custom/Amadeus/log'
   add_method_tracer :debug, 'Custom/Amadeus/log'
   add_method_tracer :parse_soap_response_document, 'Custom/Amadeus/xmlparse'
 # debugging
@@ -147,12 +147,12 @@ module Amadeus
   end
 
   def read_latest_doc(action)
-    xml_string = read_latest_xml(action)
+    xml_string = read_latest_log_file(action)
     parse_string(xml_string)
   end
 
   def read_each_doc(action)
-    read_each_xml(action) do |xml, path|
+    read_each_log_file(action) do |xml, path|
       yield parse_string(xml), path
     end
   end

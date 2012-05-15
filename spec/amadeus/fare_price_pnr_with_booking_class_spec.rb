@@ -5,9 +5,7 @@ describe Amadeus::Response::FarePricePNRWithBookingClass do
   describe 'adult with infant' do
 
     let_once! :response do
-      body = File.read('spec/amadeus/xml/Fare_PricePNRWithBookingClass.xml')
-      doc = Amadeus::Service.parse_string(body)
-      described_class.new(doc)
+      amadeus_response('spec/amadeus/xml/Fare_PricePNRWithBookingClass.xml')
     end
 
     subject { response }

@@ -1,25 +1,34 @@
 # encoding: utf-8
 class BookingController < ApplicationController
   protect_from_forgery :except => :confirm_3ds
-
+  before_filter :log_referrer, :only => [:api_redirect, :api_booking, :rambler_booking]
+  # вызывается аяксом со страницы api_booking и с морды
+  # Parameters:
+  #   "query_key"=>"ki1kri",
+  #   "recommendation"=>"amadeus.SU.V.M.4.SU2074SVOLCA040512",
+  #   "partner"=>"yandex",
+  #   "marker"=>"",
+  #   "variant_id"=>"1"
   def preliminary_booking
-    
+
     if Conf.site.forbidden_booking
       render :json => {:success => false}
       return
     end
-    
+
     @search = PricerForm.load_from_cache(params[:query_key])
-    set_search_context_for_airbrake
+    #set_search_context_for_airbrake
     recommendation = Recommendation.deserialize(params[:recommendation])
-    # FIXME @search.partner пусть останется пока
-    # track_partner(params[:partner] || @search.partner, params[:marker])
-    # перенес пока в api_booking
+    track_partner(params[:partner], params[:marker])
     strategy = Strategy.select( :rec => recommendation, :search => @search )
-    
+
     StatCounters.inc %W[enter.preliminary_booking.total]
     StatCounters.inc %W[enter.preliminary_booking.#{partner}.total] if partner
-    
+
+    @destination = get_destination
+    StatCounters.d_inc @destination, %W[enter.api.total] if partner
+    StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if @destination && partner
+
     unless strategy.check_price_and_availability
       render :json => {:success => false}
     else
@@ -33,24 +42,22 @@ class BookingController < ApplicationController
       )
       order_form.save_to_cache
       render :json => {:success => true, :number => order_form.number}
+
       StatCounters.inc %W[enter.preliminary_booking.success]
       StatCounters.inc %W[enter.preliminary_booking.#{partner}.success] if partner
     end
   end
 
+  # landing страничка для большинства партнеров (кроме момондо?)
+  # Parameters:
+  #   "query_key"=>"ki1kri"
   def api_booking
     @query_key = params[:query_key]
     @search = PricerForm.load_from_cache(params[:query_key])
-    track_partner(params[:partner] || @search.partner, params[:marker])
     render 'variant'
     StatCounters.inc %W[enter.api.success]
-    StatCounters.inc %W[enter.api.#{partner}.success] if partner
-    @destination = get_destination
-    StatCounters.d_inc @destination, %W[enter.api.total] if @destination
-    StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if @destination && partner
   ensure
     StatCounters.inc %W[enter.api.total]
-    StatCounters.inc %W[enter.api.#{partner}.total] if partner
   end
 
   def api_rambler_booking
@@ -69,7 +76,7 @@ class BookingController < ApplicationController
 
   def api_redirect
     @search = PricerForm.simple(params.slice( :from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner ))
-    track_partner(params[:partner] || @search.partner, params[:marker])
+    track_partner(params[:partner] || @search.partner)
     if @search.valid?
       @search.save_to_cache
       StatCounters.inc %W[enter.momondo_redirect.success]
@@ -98,7 +105,7 @@ class BookingController < ApplicationController
       render :partial => 'forbidden_sale'
       return
     end
-    
+
     @order_form = OrderForm.load_from_cache(params[:order][:number])
     @order_form.people_attributes = params[:person_attributes]
     @order_form.update_attributes(params[:order])
@@ -111,10 +118,14 @@ class BookingController < ApplicationController
     end
 
     strategy = Strategy.select( :rec => @order_form.recommendation, :order_form => @order_form )
+    booking_status = strategy.create_booking
 
-    unless strategy.create_booking
+    if booking_status == :failed
       StatCounters.inc %W[pay.errors.booking]
       render :partial => 'failed_booking'
+      return
+    elsif booking_status == :price_changed
+      render :partial => 'newprice'
       return
     end
 
@@ -209,5 +220,10 @@ class BookingController < ApplicationController
     Destination.find_or_create_by(:from_iata => from.iata, :to_iata => to.iata , :rt => @search.rt)
   end
 
+  def log_referrer
+    if request.referrer && (URI(request.referrer).host != request.host)
+      logger.info "Referrer: #{URI(request.referrer).host}, host: #{request.host}"
+    end
+  end
 end
 

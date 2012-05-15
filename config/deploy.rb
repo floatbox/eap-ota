@@ -1,18 +1,17 @@
-# Add RVM's lib directory to the load path.
-$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 # Load RVM's capistrano plugin.
 require "rvm/capistrano"
 require "capistrano_colors"
 
+set :rvm_type, :system
 # закрепил версию, чтобы не прыгала в продакшне
-set :rvm_ruby_string, 'ruby-1.9.3-p0-falcon'
+set :rvm_ruby_string, 'ruby-1.9.3-head'
 
 require 'bundler/capistrano'
 
 # cron tasks
 set :whenever_command, "bundle exec whenever"
 set :whenever_environment do rails_env end
-require "whenever/capistrano"
+
 set :scm, :git
 
 set :user, "rack"
@@ -54,6 +53,7 @@ task :delta do
   set :application, "delta"
   set :rails_env, 'delta'
   set :deploy_to, "/home/#{user}/#{application}"
+  require "whenever/capistrano"
 end
 
 task :eviterra do
@@ -62,6 +62,18 @@ task :eviterra do
   set :application, "eviterra"
   set :rails_env, 'production'
   set :deploy_to, "/home/#{user}/#{application}"
+  require "whenever/capistrano"
+end
+
+task :newiterra do
+  server 'new.eviterra.com', :app, :web
+  role :db, 'new.eviterra.com', :primary => true
+  set :application, "newiterra"
+  set :rails_env, 'production'
+  set :deploy_to, "/home/#{user}/#{application}"
+  set :branch, 'redesign2'
+  # выключаю кронтаски, потому что сервер делим вместе с продакшновым
+  # require "whenever/capistrano"
 end
 
 

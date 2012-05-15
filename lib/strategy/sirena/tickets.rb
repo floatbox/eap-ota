@@ -6,7 +6,8 @@ module Strategy::Sirena::Tickets
     ticket_dates = sirena.pnr_status(@order.pnr_number).tickets_with_dates
     tickets = (order_resp.ticket_hashes.map do |t|
       t['ticketed_date'] = ticket_dates[t[:number]] if ticket_dates[t[:number]]
-      t.merge!({:processed => true, :validating_carrier => @order.commission_carrier})
+      t['ticketed_date'] ||= @order.created_at.to_date
+      t.merge!({:validating_carrier => @order.commission_carrier})
       t
     end)
     tickets

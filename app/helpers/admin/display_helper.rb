@@ -10,4 +10,7 @@ module Admin::DisplayHelper
     end
   end
 
+  def display_password(item, attribute)
+    item.send(attribute)
+  end
 end

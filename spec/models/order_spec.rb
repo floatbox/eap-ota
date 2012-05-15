@@ -74,8 +74,7 @@ describe Order do
         @old_ticket.order = @order
         @old_ticket.save
         @new_ticket_hashes = [
-          {:number => '123456787', :code => '123', :processed => true, :source => 'amadeus', :parent_id => @old_ticket.id, :status => 'ticketed', :price_fare => 0, :price_tax => 6075},
-          {:number => '123456789', :code => '123', :status => 'exchanged'}
+          {:number => '123456787', :code => '123', :source => 'amadeus', :status => 'ticketed', :price_fare => 0, :price_fare_base => 0, :price_tax => '6075', :parent_number => '123456789', :parent_code => '123'}
         ]
         Strategy.stub_chain(:select, :get_tickets).and_return(@new_ticket_hashes)
         @order.reload_tickets
@@ -133,9 +132,9 @@ describe Order do
         @old_tickets = [1,2].map {|n| Ticket.new(:price_fare => 10005, :price_tax => 5430, :price_discount => 500.25, :kind => 'ticket', :status => 'ticketed', :code => '123', :number => "123456789#{n}", :order => @order)}
         @old_tickets.every.save
         @new_ticket_hashes = [
-          {:number => '1234567871', :code => '123', :price_fare => 0, :price_tax => 0, :processed => true, :source => 'amadeus', :parent_id => @old_tickets[0].id, :status => 'ticketed'},
+          {:number => '1234567871', :code => '123', :price_fare => 0, :price_tax => 0, :source => 'amadeus', :parent_id => @old_tickets[0].id, :status => 'ticketed'},
           {:number => '1234567891', :code => '123', :status => 'exchanged'},
-          {:number => '1234567872', :code => '123', :price_fare => 0, :price_tax => 0, :processed => true, :source => 'amadeus', :parent_id => @old_tickets[1].id, :status => 'ticketed'},
+          {:number => '1234567872', :code => '123', :price_fare => 0, :price_tax => 0, :source => 'amadeus', :parent_id => @old_tickets[1].id, :status => 'ticketed'},
           {:number => '1234567892', :code => '123', :status => 'exchanged'}
         ]
         Strategy.stub_chain(:select, :get_tickets).and_return(@new_ticket_hashes)
@@ -187,9 +186,9 @@ describe Order do
       it 'loads tickets correctly' do
         Sirena::Service.stub_chain(:new, :order).and_return(Sirena::Response::Order.new(File.read('spec/sirena/xml/order_with_tickets.xml')))
         Sirena::Service.stub_chain(:new, :pnr_status, :tickets_with_dates).and_return({})
-        @order = Order.new(:source => 'sirena', :commission_subagent => '1%', :pnr_number => '123456')
+        @order = Order.new(:source => 'sirena', :commission_subagent => '1%', :pnr_number => '123456', :created_at => (Time.now - 1.day))
         @order.stub_chain(:tickets, :reload)
-        ticket = stub_model(Ticket)
+        ticket = stub_model(Ticket, :new_record? => true)
         @order.stub_chain(:tickets, :ensure_exists).and_return(ticket)
         ticket.should_receive(:update_attributes).twice.with(hash_including({:code=>"262"}))
         @order.load_tickets
@@ -197,28 +196,26 @@ describe Order do
 
     end
 
+    # FIXME это все в стратегии должно быть
     context "for amadeus order" do
 
       before(:each) do
         @order = Order.new(:source => 'amadeus', :commission_subagent => '1%', :pnr_number => '123456')
         @amadeus = mock('Amadeus')
-
-        body = File.read('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml')
-        doc = Amadeus::Service.parse_string(body)
-        @amadeus.stub(:pnr_retrieve).and_return(Amadeus::Response::PNRRetrieve.new(doc))
-
-
-        body = File.read('spec/amadeus/xml/Ticket_DisplayTST_with_ticket.xml')
-        doc = Amadeus::Service.parse_string(body)
-        @amadeus.stub(:ticket_display_tst).and_return(Amadeus::Response::TicketDisplayTST.new(doc))
-        @amadeus.stub(:pnr_ignore)
+        @amadeus.stub(
+          pnr_retrieve:
+            amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml'),
+          ticket_display_tst:
+            amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_with_ticket.xml'),
+          pnr_ignore: nil
+        )
       end
 
       it 'loads tickets correctly' do
         Amadeus.should_receive(:booking).once.and_yield(@amadeus)
         @order.stub_chain(:tickets, :where, :every, :update_attribute)
         @order.stub_chain(:tickets, :reload)
-        ticket = stub_model(Ticket)
+        ticket = stub_model(Ticket, :new_record? => true)
         @order.stub_chain(:tickets, :ensure_exists).and_return(ticket)
         ticket.should_receive(:update_attributes).with(hash_including(
           :code => "555",
@@ -298,10 +295,20 @@ describe Order do
 
   describe '#api_stats_hash' do
     let(:order1){Order.new(:price_with_payment_commission=>12345.65,:route=>"SVO - KBP; KBP - LGW; LGW - KBP; KBP - SVO")}
+
     it 'creates correct hash' do
       order1.stub(:income).and_return(123.456798)
       orders_to_send = [order1.api_stats_hash]
       orders_to_send.first[:income].should == "123.46"
+    end
+
+    it "doesn't include income if such flag was set" do
+      partner = mock('Partner')
+      order1[:partner] = partner
+      Partner.stub(:find_by_token).and_return(partner)
+      partner.stub(:hide_income).and_return(true)
+      orders_to_send = [order1.api_stats_hash]
+      orders_to_send.first.should_not include(:income)
     end
   end
 
@@ -329,4 +336,5 @@ describe Order do
       its(:show_vat) {should be_false}
     end
   end
+
 end

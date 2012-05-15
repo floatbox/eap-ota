@@ -47,7 +47,7 @@ class PricerController < ApplicationController
       StatCounters.inc %W[validate.cached] if fragment_exist
     else
       @search = PricerForm.new(params[:search])
-      set_search_context_for_airbrake
+      #set_search_context_for_airbrake
       if @search.valid?
         StatCounters.inc %W[validate.success]      
         @search.save_to_cache
@@ -72,7 +72,7 @@ class PricerController < ApplicationController
   # FIXME попытаться вынести общие методы или объединить с pricer/validate
   def api
     partner = params['partner'].to_s
-    if !Conf.api.enabled || !(Conf.api.partners.include? partner)
+    if !Conf.api.enabled || !Partner[partner].enabled?
       render 'api/yandex_failure', :status => 503, :locals => {:message => 'service disabled by administrator'}
       return
     end
@@ -85,6 +85,7 @@ class PricerController < ApplicationController
       @search.save_to_cache
       @destination = get_destination
       @recommendations = Mux.new(:lite => true).async_pricer(@search)
+      Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))
       StatCounters.inc %W[search.api.success search.api.#{partner}.success]
       StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner}.total] if @destination
       render 'api/yandex'
@@ -126,9 +127,12 @@ class PricerController < ApplicationController
   end
 
   def load_form_from_cache
-    @query_key = params[:query_key] or raise 'no query_key provided'
-    @search = PricerForm.load_from_cache(params[:query_key])
-    set_search_context_for_airbrake
+    StatCounters.inc %W[search.total]
+    unless (@query_key = params[:query_key]) && (@search = PricerForm.load_from_cache(@query_key))
+      StatCounters.inc %W[search.errors.pricer_form_not_found]
+      render :text => "404 Not found", :status => :not_found
+    end
+    #set_search_context_for_airbrake
   end
 
 end

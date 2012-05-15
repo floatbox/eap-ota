@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sirena>
+  <answer pult="ГРФ365">
+    <order agency="36МОС">
+      <pnr bdate="03:25 16.04.2012">
+        <passengers>
+          <passenger id="13" lead_pass="true">
+            <name>СЕРГЕЙ</name>
+            <surname>ЛОГВИНЕНКО</surname>
+            <sex>male</sex>
+            <birthdate>04.06.1974</birthdate>
+            <age>37</age>
+            <doccode>ПС</doccode>
+            <doc>5000599898</doc>
+            <category rbm="0">ААА</category>
+          </passenger>
+        </passengers>
+        <segments>
+          <segment id="10">
+            <company>Y7</company>
+            <flight>20</flight>
+            <class>L</class>
+            <seatcount>1</seatcount>
+            <departure>0<city>ОВБ</city><airport>ТЛЧ</airport><date>17.04.12</date><time>17:40</time></departure>
+            <arrival>0<city>КЯА</city><airport>ЕМВ</airport><date>17.04.12</date><time>20:25</time></arrival>
+            <status>confirmed</status>
+            <airplane>АТ5</airplane>
+          </segment>
+          <segment id="11">
+            <company>Y7</company>
+            <flight>19</flight>
+            <class>L</class>
+            <seatcount>1</seatcount>
+            <departure>0<city>КЯА</city><airport>ЕМВ</airport><date>19.04.12</date><time>16:10</time></departure>
+            <arrival>0<city>ОВБ</city><airport>ТЛЧ</airport><date>19.04.12</date><time>16:40</time></arrival>
+            <status>confirmed</status>
+            <airplane>АТ5</airplane>
+          </segment>
+        </segments>
+        <prices tick_ser="ЭБМ" fop="НА">
+          <price segment-id="10" passenger-id="13" accode="476">
+            <fare>
+              <code base_code="LRT">LRT</code>
+              <value currency="РУБ">3400.00</value>
+            </fare>
+            <taxes>
+              <tax owner="aircompany">
+                <code>ZZ</code>
+                <value>125.00</value>
+              </tax>
+            </taxes>
+          </price>
+          <price segment-id="11" passenger-id="13" accode="476">
+            <fare>
+              <code base_code="LRT">LRT</code>
+              <value currency="РУБ">3400.00</value>
+            </fare>
+            <taxes>
+              <tax owner="aircompany">
+                <code>ZZ</code>
+                <value>125.00</value>
+              </tax>
+            </taxes>
+          </price>
+          <variant_total currency="РУБ">7050.00</variant_total>
+        </prices>
+        <timelimit>16.04.12 14:40</timelimit>
+        <regnum>ГС0РДФ</regnum>
+        <common_status>not sold</common_status>
+        <possible_action_list>
+          <action>cancel_pnr</action>
+          <action>pay_for_pnr</action>
+        </possible_action_list>
+        <utc_timelimit>10:40 16.04.2012</utc_timelimit>
+      </pnr>
+      <contacts>
+        <contact>74956205971</contact>
+        <customer>
+          <firstname></firstname>
+          <lastname></lastname>
+          <doc></doc>
+          <doc_num></doc_num>
+        </customer>
+      </contacts>
+    </order>
+  </answer>
+</sirena>

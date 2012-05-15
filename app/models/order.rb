@@ -3,7 +3,16 @@ class Order < ActiveRecord::Base
 
   include CopyAttrs
   include Pricing::Order
-  include IncomeDistribution
+
+  scope :MOWR228FA, lambda { by_office_id 'MOWR228FA' }
+  scope :MOWR2233B, lambda { by_office_id 'MOWR2233B' }
+  scope :MOWR221F9, lambda { by_office_id 'MOWR221F9' }
+  scope :MOWR2219U, lambda { by_office_id 'MOWR2219U' }
+  scope :FLL1S212V, lambda { by_office_id 'FLL1S212V' }
+
+  def self.by_office_id office_id
+    joins(:tickets).where('tickets.office_id' => office_id).uniq
+  end
 
   # FIXME сделать модуль или фикс для typus, этим оверрайдам место в typus/application.yml
   def self.model_fields
@@ -30,12 +39,16 @@ class Order < ActiveRecord::Base
     [ 'booked', 'canceled', 'ticketed']
   end
 
+  def self.ticket_office_ids
+    Ticket.uniq.pluck(:office_id).compact.sort
+  end
+
   def self.partners
-    Conf.api.partners
+    Partner.pluck :token
   end
 
   def show_vat
-    sold_tickets.present? && sold_tickets.all?(&:show_vat)
+    sold_tickets.present? && sold_tickets.all?(&:show_vat) && sold_tickets.every.office_id.uniq != ['FLL1S212V']
   end
 
   def self.sources
@@ -143,16 +156,20 @@ class Order < ActiveRecord::Base
     tickets.count
   end
 
+  def tickets_office_ids_array
+    tickets.collect{|t| t.office_id}.uniq
+  end
+
+  def tickets_office_ids
+    tickets_office_ids_array.join(',')
+  end
+
   def order_id
     last_payment.try(:ref)
   end
 
   def need_attention
     1 if price_difference != 0
-  end
-
-  def price_refund
-    tickets.where(:kind => 'refund').every.price_refund.sum
   end
 
   def generate_code
@@ -196,9 +213,9 @@ class Order < ActiveRecord::Base
       :price_fare,
       :price_with_payment_commission
 
-    self.route = recommendation.variants[0].flights.every.destination.join('; ')
+    self.route = recommendation.journey.flights.every.destination.join('; ')
     self.cabins = recommendation.cabins.join(',')
-    self.departure_date = recommendation.variants[0].flights[0].dept_date
+    self.departure_date = recommendation.journey.flights[0].dept_date
     # FIXME вынести рассчет доставки отсюда
     if order_form.payment_type != 'card'
       self.cash_payment_markup = recommendation.price_payment + (order_form.payment_type == 'delivery' ? 350 : 0)
@@ -229,20 +246,23 @@ class Order < ActiveRecord::Base
     self.pan = order_form.card.pan
   end
 
+  def strategy
+    Strategy.select(:order => self)
+  end
+
   def raw # FIXME тоже в стратегию?
-    Strategy.select(:order => self).raw_pnr
+    strategy.raw_pnr
   rescue => e
     e.message
   end
 
   def load_tickets
     @tickets_are_loading = true
-    ticket_hashes = Strategy.select(:order => self).get_tickets
+    ticket_hashes = strategy.get_tickets
     ticket_hashes.each do |th|
       if th[:office_id].blank? || Ticket.office_ids.include?(th[:office_id])
         t = tickets.ensure_exists(th[:number])
-        th.delete(:ticketed_date) if t.ticketed_date # Видимо нужно было для случаев, когда авиакомпания переписывала билет, но точно не помню
-        t.update_attributes th
+        t.update_attributes th if t.new_record?
       end
     end
 
@@ -252,13 +272,15 @@ class Order < ActiveRecord::Base
 
   end
 
+  # Нужен для Маршрут квитанции (список билетов, подсчет цен)
   def sold_tickets
-    tickets.where(:status => 'ticketed').reject {|t| t.children.where(:processed => true).present?}
+    tickets.where(:status => 'ticketed')
   end
 
   def update_prices_from_tickets # FIXME перенести в strategy
     # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
-    return if old_booking || @tickets_are_loading
+    return if old_booking || @tickets_are_loading || sold_tickets.every.office_id.uniq == ['FLL1S212V']
+    tickets.reload
     price_total_old = self.price_total
 
     self.price_fare = sold_tickets.every.price_fare.sum
@@ -283,13 +305,14 @@ class Order < ActiveRecord::Base
   validate :needs_update_from_gds_filter, :if => :needs_update_from_gds
 
   def needs_update_from_gds_filter
-    update_from_gds
+    # молча не считываю, если операторы забыли ввести PNR или если это доплата
+    update_from_gds if pnr_number.present?
   # rescue => e
   #  errors.add(:needs_update_from_gds, e.message)
   end
 
   def update_from_gds
-    assign_attributes Strategy.select(:order => self).booking_attributes
+    assign_attributes strategy.booking_attributes
   end
 
   # пересчет тарифов и такс
@@ -355,7 +378,7 @@ class Order < ActiveRecord::Base
   end
 
   def recalculated_price_with_payment_commission
-    if tickets.present?
+    if tickets.present? && sold_tickets.every.office_id.uniq != ['FLL1S212V']
       sold_tickets.every.price_with_payment_commission.sum
     else
       price_with_payment_commission
@@ -411,7 +434,7 @@ class Order < ActiveRecord::Base
     stale.each do |order|
       begin
         puts "Automatic cancel of pnr #{order.pnr_number}"
-        Strategy.select(:order => order).cancel
+        order.strategy.cancel
       rescue
         puts "error: #{$!}"
       end
@@ -432,12 +455,12 @@ class Order < ActiveRecord::Base
   end
 
   def settled?
-    income > 0 && tickets.all?{|t| t.status == 'ticketed'}
+    !(ticket_status == 'canceled') && !has_refunds? && income > 0 && tickets.all?{|t| t.status == 'ticketed'}
   end
 
   def api_stats_hash
     settled = settled?
-    {
+    hash_to_send = {
     :id => id.to_s,
     :marker => marker,
     :price => price_with_payment_commission,
@@ -446,7 +469,7 @@ class Order < ActiveRecord::Base
     :route => route,
     :settled => settled && (payment_status == 'charged')
     }
+    hash_to_send.delete(:income) if Partner[partner] && Partner[partner].hide_income
+    hash_to_send
   end
-
 end
-

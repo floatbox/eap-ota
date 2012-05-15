@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header xmlns="http://webservices.amadeus.com/definitions">
+    <SessionId>01G99VCKE3|109</SessionId>
+  </soap:Header>
+  <soap:Body>
+    <Ticket_DisplayTSTReply xmlns="http://xml.amadeus.com/TTSTRR_07_1_1A">
+      <applicationError>
+        <applicationErrorInfo>
+          <applicationErrorDetail>
+            <applicationErrorCode>2090</applicationErrorCode>
+            <codeListQualifier>EC</codeListQualifier>
+          </applicationErrorDetail>
+        </applicationErrorInfo>
+        <errorText>
+          <errorFreeText>NO TST RECORD EXISTS :</errorFreeText>
+        </errorText>
+      </applicationError>
+    </Ticket_DisplayTSTReply>
+  </soap:Body>
+</soap:Envelope>

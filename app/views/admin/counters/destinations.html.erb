@@ -1,18 +1,51 @@
-<br>
+<div class="filters">
+  <form accept-charset="UTF-8" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
 
-<% @data.select {|day| day[:day_data].present? }.each do |day| %>
-  <div style='float: left; width: 250px'>
-    <h3><%= day[:title]%></h3>
-    <p>Всего: <%= day[:total_s] %> ; <%= day[:total_e] %> ; <%= (day[:total_e].to_f / day[:total_s] * 100).round(2) %>%</p>
-    <% day[:day_data].select {|dest| dest['search']['api'].present? }.each_with_index do |dest, index| %>
-      <div style='color: #444; padding: 2px 2px;'>
-        <%= index + 1 %>. <%= dest['from'] %> <%= display_rt_arrow(dest['rt']) %> <%= dest['to'] %>
-        ; <%= dest.nested('search.api.total') %>
-        ; <%= dest.nested('enter.api.total', '-') %>
-        <% if dest.nested('enter.api.total') %>
-          ; <%= (dest.nested('enter.api.total').to_f / dest.nested('search.api.total') * 100).round(2) %>%
-        <% end %>
-      </div>
-    <% end %>
+  <div id="filters">
+    <ul>
+      <li><input autocomplete="off" class="daterangepicker" id="date" name="date" title="Создан" type="text" value="<%= params[:date]%>" /></li>
+      <li><input data-disable-with="Sending data ..." type="submit" value="фильтр" /></li>
+    </ul>
   </div>
-<% end %>
+
+  </form>
+</div>
+
+
+<div style=''>
+  <h3><%= @data[:title]%></h3>
+  <p>Всего: <%= @total_search %>/<%= @total_enter %>  <%= (@total_enter.to_f / @total_search * 100).round(2) %>%</p>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Направление</th>
+            <th>Всего</th>
+            <% @partners.each do |partner|%>
+            <th><%= partner %><br>
+              <p><%= @total_partner[partner]['search'] %>/<%= @total_partner[partner]['enter'] %>
+              <%= (@total_partner[partner]['enter'].to_f / @total_partner[partner]['search'] * 100).round(2) if @total_partner[partner]['search'] %>%</p>
+            </th>
+            <% end %>
+        </tr>
+        <% @data[:day_data].each_with_index do |(description, counters), index| %>
+        <tr style='color: #444; padding: 2px 2px;' class="<%= cycle("even", "odd") %>">
+          <td>
+          <%= index + 1 %>. <%= description %>
+          </td>
+          <td>
+          <%= counters.nested('search.api.total') %>
+        / <%= counters.nested('enter.api.total', '-') %>
+        <% if counters.nested('search.api.total') %>
+          : <%= (counters.nested('enter.api.total').to_f / counters.nested('search.api.total') * 100).round(2) %>%
+        <% end %>
+          </td>
+
+        <% @partners.each do |partner|%>
+          <td>
+            <%= counter_ratio counters.nested('search.api.'+partner+'.total'), counters.nested('enter.api.'+partner+'.total') %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+</div>

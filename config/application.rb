@@ -65,6 +65,13 @@ module Eviterra
     # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
     config.assets.precompile += %w( home.js home.css typus/application.css typus/application.js )
 
+    # Не знаю, как это вопхать в инициализатор
+    console do
+      # помечаем изменения, сделанные из консоли:
+      PaperTrail.whodunnit = 'dev@eviterra.com'
+      PaperTrail.controller_info = {:action => 'console'}
+    end
+
   end
 end
 

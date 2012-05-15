@@ -44,8 +44,14 @@ class Strategy::Amadeus < Strategy::Base
   end
 
   def raw_ticket
-    ::Amadeus.booking do |amadeus|
-      amadeus.ticket_raw(@ticket.first_number_with_code)
+    case office = @ticket.office_id
+    when 'MOWR2233B', 'MOWR228FA'
+      amadeus = Amadeus::Service.new(book: true, office: office)
+      raw_ticket = amadeus.ticket_raw(@ticket.first_number_with_code)
+      amadeus.session.release
+      raw_ticket
+    else
+      "not supported for office id #{office}"
     end
   end
 
@@ -84,18 +90,18 @@ class Strategy::Amadeus < Strategy::Base
       tst_resp = amadeus.ticket_display_tst
       amadeus.pnr_ignore
 
-      if tst_resp.success?
-        {
-          :departure_date => departure_date,
-          :price_fare => tst_resp.total_fare,
-          :price_tax => tst_resp.total_tax,
-          :commission_carrier => tst_resp.validating_carrier_code,
-          :blank_count => tst_resp.blank_count
-        }
-      else
-        { :departure_date => departure_date }
-      end
+      result = {
+        :departure_date => departure_date,
+        :commission_agent => pnr_resp.agent_commission
+      }.compact
+      result.merge!(
+        :price_fare => tst_resp.total_fare,
+        :price_tax => tst_resp.total_tax,
+        :commission_carrier => tst_resp.validating_carrier_code,
+        :blank_count => tst_resp.blank_count
+      ) if tst_resp.success?
 
+      result
     end
   end
 

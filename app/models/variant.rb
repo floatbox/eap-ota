@@ -33,7 +33,7 @@ class Variant
     return @summary if @summary
     # FIXME carriers для фильтров - operating carrier. ok?
     @summary = {
-      :carriers => flights.every.operating_carrier.uniq.every.iata,
+      :carriers => flights.every.marketing_carrier.uniq.every.iata,
       :planes => flights.every.equipment_type.uniq.every.iata,
       :departures => segments.every.departure_time,
       :duration => segments.sum(&:total_duration),

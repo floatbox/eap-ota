@@ -12,12 +12,13 @@ end
 # консолька вместо IRB
 gem 'pry-rails'
 gem 'pry-doc'
-#gem 'pry-coolline', :git => 'https://github.com/pry/pry-coolline.git'
+gem 'pry-coolline' #, :git => 'https://github.com/pry/pry-coolline.git'
 gem 'pry-editline'
 
 # Deploy with Capistrano
 group :deployment do
   gem 'capistrano'
+  gem 'rvm-capistrano'
   gem 'capistrano_colors'
 end
 
@@ -54,7 +55,7 @@ gem 'mongo-rails-instrumentation'
 
 gem 'haml'
 
-gem 'typus', :git => 'https://github.com/Eviterra/typus.git', :branch => "wip/date_filters"
+gem 'typus', :git => 'https://github.com/Eviterra/typus.git'
 
 gem 'trashed', :git => 'https://github.com/codesnik/trashed.git'
 
