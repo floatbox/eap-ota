@@ -3,6 +3,7 @@
     <strong class="osdt-main"><%= segment_rt ? 'Обратный перелет' : segment_title(segment) %><% if false && common_cabin %> <span class="cabin"><%= human_cabin_ins(common_cabin) %></span><% end %></strong> <%= date_with_dow segment.flights.first.departure_date %><% if segment.layovers? %>, <%= with_layovers(segment) %><% end %>
 </h4>
 <% segment_cabins = false %>
+<% segment_carrier = primary_carrier(segment) %>
 <% segment.flights.each_with_index do |flight, fcounter| %>
 <div class="osd-flight wrap">
     <div class="osd-dpt">
@@ -12,7 +13,7 @@
             <dt>аэропорт</dt>
             <dd><%= full_airport_and_term(flight.departure, flight.departure_term) %></dd>
             <dt>авиакомпания</dt>
-            <dd class="osd-carrier"><img class="osdc-icon" src="<%= flight.operating_carrier.icon_url %>" alt=""><%= flight.operating_carrier_name %></dd>
+            <dd class="osd-carrier"><img class="osdc-icon" src="<%= flight.operating_carrier.icon_url %>" alt=""><% if flight.operating_carrier_name != segment_carrier.name %><span class="ossdc-hl"><%= flight.operating_carrier_name %></span><% else %><%= flight.operating_carrier_name %><% end %></dd>
             <dt>рейс</dt>
             <dd><%= flight.marketing_carrier_iata %>&nbsp;<%= flight.flight_number %> <%= flight.departure.city.name %> — <%= flight.arrival.city.name %></dd>
             <dt>самолет</dt>
