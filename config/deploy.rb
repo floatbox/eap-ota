@@ -110,10 +110,15 @@ namespace :deploy do
     run "cd #{directory}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} db:abort_if_pending_migrations || echo PLEASE DON\\\'T FORGET TO cap deploy:migrate!"
   end
 
+  task :restart_rambler_daemon do
+    run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec rails runner 'RamblerDaemon.daemon' restart"
+  end
+
 
   after "deploy:finalize_update", "deploy:symlink_shared_configs"
   after "deploy:finalize_update", "deploy:symlink_persistent_cache"
   after "deploy:finalize_update", "deploy:symlink_completer"
+  after "deploy", "deploy:restart_rambler_daemon"
   after "deploy:update_code", "deploy:check_for_pending_migrations"
 end
 
