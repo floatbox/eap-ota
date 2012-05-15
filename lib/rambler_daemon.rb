@@ -19,7 +19,7 @@ module RamblerDaemon
             if data_to_send.size >= Conf.api.rambler_hash_size
               json_string = Yajl::Encoder.encode(data_to_send)
               begin
-                #response = HTTParty.post(Conf.api.rambler_url, :body => json_string, :format => :json)
+                response = HTTParty.post(Conf.api.rambler_url, :body => json_string, :format => :json)
                 logger.info "Rambler api: request with #{data_to_send.count} searches sent"
               rescue Exception => e
                 logger.error "Problem sending rambler hash: #{e.message}"
