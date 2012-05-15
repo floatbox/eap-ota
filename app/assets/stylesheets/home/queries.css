@@ -75,9 +75,12 @@
 .ql-item {
     float: left;
     padding: 7px 5px;
-    /*color: #cecba1;*/
-    cursor: pointer;
 }
-.ql-item:hover {
+.ql-link {
+    color: #FFF;
+    text-decoration: none;
+}
+.ql-link:hover {
+    color: #FFF;
     text-decoration: underline;
 }

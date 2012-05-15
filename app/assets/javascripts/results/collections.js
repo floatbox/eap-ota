@@ -168,8 +168,9 @@ parse: function() {
     this.upgradeOffer();
     this.countDates();
     this.showPrices();
-    var cindex = Number($(table.rows[3].cells[3]).attr('data-index'));
-    this.offer.select(cindex);
+    var table = this.table.get(0);    
+    var index = Number($(table.rows[4].cells[4]).find('.rmp-item').attr('data-index'));
+    this.offer.select(isNaN(index) ? 0 : index);
 },
 upgradeOffer: function() {
     var that = this;

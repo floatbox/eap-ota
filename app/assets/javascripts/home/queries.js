@@ -11,7 +11,7 @@ init: function() {
         this.height = this.el.show().outerHeight();
         this.content = this.el.find('.q-content');        
         this.history.init(this.el.find('.q-history'));
-        //this.live.init(this.el.find('.q-live'));
+        this.live.init(this.el.find('.q-live'));
     }
 },
 show: function() {
@@ -52,7 +52,7 @@ init: function(el) {
     var saved = Cookie('searches');
     if (saved) {
         var tabs = saved.split('|');
-        for (var i = 0; i < tabs.length; i++) {
+        for (var i = tabs.length; i--;) {
             var key = tabs[i].split(' ', 1)[0];
             this.add(key, tabs[i].substring(key.length), true);
         }
@@ -106,18 +106,23 @@ save: function() {
 /* Live */
 Queries.live = {
 init: function(el) {
-    this.el = el;
-    this.items = this.el.find('.ql-items');
-    this.last = this.el.find('.ql-item').last();
     var that = this;
-    setInterval(function() {
-        if (that.active && !that.hover) that.slide();
-    }, 5000);
+    this.el = el;
     this.el.hover(function() {
         that.hover = true;
     }, function() {
         that.hover = false;
     });;
+    this.items = this.el.find('.ql-items');
+    $.get('/hot_offers', function(s) {
+        if (s && s.length) that.update(s);
+    });    
+},
+start: function() {
+    var that = this;
+    setInterval(function() {
+        if (that.active && !that.hover) that.slide();
+    }, 5000);
     this.active = true;
 },
 slide: function() {
@@ -127,6 +132,18 @@ slide: function() {
     item.animate({'margin-left': 0}, 500);
 },
 update: function(data) {
-    var template = '<li><a href="/#{code}/featured" data-key="{code}">{description} от {hprice}</a></li>';
+    var items = [];
+    var template = '<li class="ql-item"><a class="ql-link" href="/#{code}" data-key="{code}">{description} от {price} <span class="ruble">Р</span></a></li>';
+    for (var i = data.length; i--;) {
+        var item = data[i];
+        items[i] = template.absorb({
+            code: item.code,
+            price: Math.round(item.price),
+            description: item.description
+        });
+    }
+    this.items.html(items.join(''));
+    this.last = this.el.find('.ql-item').last();
+    this.start();
 }
 };
