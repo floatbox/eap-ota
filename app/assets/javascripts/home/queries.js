@@ -81,8 +81,8 @@ remove: function(tab) {
     tab.animate({width: 0}, 350, function() {
         that.el.toggle(tab.siblings().length !== 0);
         tab.remove();
+        that.save();
     });
-    this.save();
 },
 select: function(key) {
     this.el.find('.qh-selected').removeClass('qh-selected');

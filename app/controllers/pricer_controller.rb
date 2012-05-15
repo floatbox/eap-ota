@@ -40,9 +40,8 @@ class PricerController < ApplicationController
     result = {}
     if @query_key = params[:query_key]
       @search = PricerForm.load_from_cache(@query_key)
-      set_search_context_for_airbrake
-      #fragment_exist = fragment_exist?([:pricer, @query_key]) && fragment_exist?([:calendar, @query_key])
-      fragment_exist = fragment_exist?([:pricer, @query_key])
+      #set_search_context_for_airbrake
+      fragment_exist = fragment_exist?([:pricer, @query_key]) && fragment_exist?([:calendar, @query_key])
       result[:fragment_exist] = fragment_exist
       StatCounters.inc %W[validate.cached] if fragment_exist
     else
