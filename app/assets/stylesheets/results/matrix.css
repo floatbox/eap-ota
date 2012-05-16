@@ -27,6 +27,9 @@
 .rm-source {
     display: none;
 }
+.rmpt-ow .rmpt-rt {
+    display: none;
+}
 
 /* Matrix item */
 .rmp-item {

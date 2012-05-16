@@ -1,5 +1,5 @@
 <% cache [:calendar, @query_key] do %>
-<% if @recommendations.present? && @search.segments.length == 2 %>
+<% if @recommendations.present? %>
 
 <div class="rm-source" data-dates="<%= @search.segments.map{|fs| fs.date }.join(' ') %>">
 <% duration_scale = 88.0 / @recommendations.collect(&:segments).flatten.collect(&:total_duration).push(600).max %>

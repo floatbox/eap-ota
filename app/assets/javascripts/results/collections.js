@@ -136,7 +136,7 @@ init: function() {
 update: function(data) {
     var that = this;
     results.queue.add(function() {
-        that.content.find('.rm-source').remove();
+        that.content.find('.rm-prices').nextAll().remove();
         that.content.find('.offer').append(data);
         if (that.content.find('.rm-source').length) {
             that.control.show();
@@ -187,25 +187,33 @@ upgradeOffer: function() {
         var details = this.selected.el.find('.rmv-details');
         this.details.html(details.html());
     };
-    this.offer.details = $('<div class="o-details">').appendTo(this.offer.el);    
     this.offer.addBook();
     var book = this.offer.el.find('.o-book');
     book.wrap('<div class="ob-placeholder"></div>');
     book.append('<div class="ob-shadow"></div>');
+    this.offer.details = $('<div class="o-details">').appendTo(this.offer.el);
     this.offer.el.find('.od-control').remove();    
 },
 countDates: function() {
     var table = this.table.get(0);
     var dates = this.content.find('.rm-source').attr('data-dates').split(' ');
-    var cd = Date.parseDMY(dates[0]).shift(-4);
-    var rd = Date.parseDMY(dates[1]).shift(-4);
-    this.rows = {};
     this.cols = {};
+    this.rows = {};
+    var cd = Date.parseDMY(dates[0]).shift(-4);
     for (var i = 1; i < 8; i++) {
         $(table.rows[0].cells[i]).html(this.humanDate(cd.shift(1), 1));
-        $(table.rows[i].cells[0]).html(this.humanDate(rd.shift(1), 2));
-        this.rows[rd.DMY()] = i;
         this.cols[cd.DMY()] = i;
+    }
+    if (dates.length === 2) {
+        this.table.removeClass('rmpt-ow');
+        var rd = Date.parseDMY(dates[1]).shift(-4);
+        for (var i = 1; i < 8; i++) {
+            $(table.rows[i].cells[0]).html(this.humanDate(rd.shift(1), 2));
+            this.rows[rd.DMY()] = i;
+        }
+    } else {
+        this.table.addClass('rmpt-ow');
+        this.rows.middle = 4;
     }
 },
 showPrices: function() {
@@ -214,7 +222,7 @@ showPrices: function() {
     for (var i = variants.length; i--;) {
         var variant = variants[i];
         var c = this.cols[variant.dates[0]];
-        var r = this.rows[variant.dates[1]];
+        var r = this.rows[variant.dates[1] || 'middle'];
         var item = $('<div class="rmp-item"></div>').attr('data-index', i);
         item.html('<h6 class="rmp-cost"><span class="rmp-sum">' + variant.price + '</span>&nbsp;<span class="ruble">Р</span></h6>');
         item.append(variant.el.find('.rmv-bars').clone());
@@ -231,7 +239,7 @@ humanDate: function(date, segment) {
 },
 selectDates: function(dates) {
     var c = this.cols[dates[0]];
-    var r = this.rows[dates[1]];
+    var r = this.rows[dates[1] || 'middle'];
     var cell = this.table.get(0).rows[r].cells[c];
     this.table.find('.rmp-selected').removeClass('rmp-selected');
     $(cell).find('.rmp-item').addClass('rmp-selected');
