@@ -44,7 +44,7 @@ Eviterra::Application.routes.draw do
   match 'contacts' => 'about#contacts', :as => :about
   match 'about/:action' => 'about', :as => :about
 
-  match "geo" => 'home#geo', :as => :geo
+  match "whereami" => 'home#whereami', :as => :whereami
   match "subscribe" => 'subscription#subscribe', :as => 'subscribe'
   match "unsubscribe" => 'subscription#unsubscribe', :as => 'unsubscribe'
   match "unsubscribe/:destination_id" => 'subscription#unsubscribe_by_destination', :as => 'unsubscribe_by_destination'
