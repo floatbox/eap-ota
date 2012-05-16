@@ -1,4 +1,3 @@
-#require File.expand_path('../config/environment', File.dirname(__FILE__))
 require 'yajl'
 
 module RamblerDaemon
@@ -14,8 +13,13 @@ module RamblerDaemon
         data_to_send = []
         loop do
           if doc = cursor.next_document
-            pricer_form = PricerForm.find doc['pricer_form_id']
-            data_to_send << {:request => pricer_form.hash_for_rambler, :variants => doc['data']}
+            data_to_send << {:request => doc['pricer_form_hash'], :variants => doc['data']}
+            r = doc['pricer_form_hash']
+            if !r || !r['src'] || !r['dst']
+              logger.info "request without src: #{r}"
+            else
+              logger.info "good request: #{r}"
+            end
             if data_to_send.size >= Conf.api.rambler_hash_size
               json_string = Yajl::Encoder.encode(data_to_send)
               begin
