@@ -4,7 +4,7 @@ require 'yajl'
 
 Dir.chdir(Rails.root)
 
-Daemons.run_proc('/tmp/rambler_daemon') do
+Daemons.run_proc('/tmp/pids/rambler_daemon') do
   if Conf.api.send_to_rambler
     logger = ActiveSupport::BufferedLogger.new(Rails.root + 'log/rambler.log')
     db = Mongoid.master

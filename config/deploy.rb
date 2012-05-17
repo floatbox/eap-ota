@@ -111,7 +111,7 @@ namespace :deploy do
   end
 
   task :restart_rambler_daemon do
-    run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec rails runner 'RamblerDaemon.daemon' restart"
+    run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec script/rambler_daemon restart"
   end
 
 
