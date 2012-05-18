@@ -164,16 +164,16 @@ carrier "5N", "Нордавиа-РА"
 example 'svocdg'
 agent    "7% от всех опубл. тарифов на рейсы 5N (В договоре Interline отдельно не прописан.)"
 subagent "5% от опубл. тарифов на собств.рейсы 5N"
-## discount "5%"
-our_markup 120
+discount "2.5%"
+# our_markup 120
 commission "7%/5%"
 
 example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :yes
-## discount "5%"
-our_markup 120
+discount "2.5%"
+# our_markup 120
 commission "7%/5%"
 
 carrier "6H", "ISRAIR AIRLINE"
@@ -448,7 +448,7 @@ carrier "B2", "Belavia"
 example 'svocdg'
 agent    "5% от всех опубл. тарифов на собств. рейсы B2;"
 subagent "3,5% от всех опубл. тарифов на собств. рейсы B2;"
-#discount "2.5%"
+discount "1.5%"
 commission "5%/3.5%"
 
 carrier "BA", "BRITISH AIRWAYS (См. в конце таблицы продолжение в 4-х частях)"
