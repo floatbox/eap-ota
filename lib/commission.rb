@@ -2628,7 +2628,7 @@ example 'svocdg/economy svocdg/economy'
 agent "7% от опубл. тарифов на собств. рейсы U9 Эконом класса;"
 subagent "5% от опубл. тарифов на собств. рейсы U9 Эконом класса"
 classes :economy
-## discount "3.3%"
+discount "3%"
 commission "7%/5%"
 
 example 'svocdg/ab cdgsvo'
