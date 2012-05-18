@@ -1412,7 +1412,7 @@ commission "1/0.05"
 carrier "LH", "LUFTHANSA"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => 150
+carrier_defaults :consolidator => 0, :our_markup => 100
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
