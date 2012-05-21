@@ -1637,7 +1637,7 @@ example 'DMEBSL/Q BSLDME/W'
 example 'DMEVDA/V VDADME/V'
 agent    "7% от опубл. тарифов по маршрутам DME-BSL-DME; DME-VDA-DME на собств.рейсы NN"
 subagent "5% от опубл. тарифов по маршрутам DME-BSL-DME; DME-VDA-DME на собств.рейсы NN"
-routes %W(MOW-BSL-MOW MOW-VDA-MOW MOW-BSL BSL-MOW MOW-VDA VDA-MOW)
+routes %W(MOW-BSL-MOW BSL-MOW-BSL MOW-VDA-MOW VDA-MOW-VDA MOW-BSL BSL-MOW MOW-VDA VDA-MOW)
 ## discount "4.5%"
 commission "7%/5%"
 
@@ -1649,7 +1649,7 @@ example 'SVXDME/W DMESVX/T'
 example 'KRRDME/W DMEKRR/W'
 agent    "C 29.11.2010г. 7% от опубл. тарифов по маршрутам SVX-DME-SVX; KRR-DME-KRR на собств.рейсы NN"
 subagent "5% от опубл.тарифов по маршрутам SVX-DME-SVX; KRR-DME-KRR на собств.рейсы NN"
-routes %W(SVX-MOW-SVX KRR-MOW-KRR SVX-MOW MOW-SVX KRR-MOW MOW-KRR)
+routes %W(SVX-MOW-SVX MOW-SVX-MOW KRR-MOW-KRR MOW-KRR-MOW SVX-MOW MOW-SVX KRR-MOW MOW-KRR)
 ## discount "4.5%"
 commission "7%/5%"
 
