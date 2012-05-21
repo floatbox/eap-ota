@@ -2699,6 +2699,7 @@ commission "1%/5"
 
 carrier "UT", "UTAIR"
 ########################################
+carrier_defaults :consolidator => 0
 
 agent "0% DTT"
 subagent "0% DTT, 10$ с билета"
