@@ -523,7 +523,7 @@ agent   "20% от опубл. тарифов по классу F на собст
 subagent "18,5% от опубл. тарифов по классу F на собств. рейсы CA"
 subclasses "F"
 check { includes(city_iatas.first, 'MOW') and includes(city_iatas, 'BJS') }
-## discount "15%"
+discount "10%"
 commission "20%/18.5%"
 
 example 'svopek/c'
@@ -532,7 +532,7 @@ agent   "15% от опубл. тарифов по классам C, D на со�
 subagent "13,5% от опубл. тарифов по классам C, D на собств. рейсы СА;"
 subclasses "CD"
 check { includes(city_iatas.first, 'MOW') and includes(city_iatas, 'BJS') }
-## discount "12%"
+discount "8%"
 commission "15%/13.5%"
 
 example 'svopek/economy'
@@ -541,7 +541,7 @@ agent   "9%   от опубл. тарифов по классам Q и выше 
 subagent "7,5%  от опубл. тарифов по классам Q и выше на собств. рейсы СА."
 subagent "YBMHNGKLOQ"
 check { includes(city_iatas.first, 'MOW') and includes(city_iatas, 'BJS') }
-## discount "6%"
+discount "4%"
 commission "9%/7.5%"
 
 #другие маршруы
@@ -2698,6 +2698,16 @@ subagent "5 руб. от всех опубл. тарифов на собств. 
 commission "1%/5"
 
 carrier "UT", "UTAIR"
+########################################
+carrier_defaults :consolidator => 0
+
+agent "0% DTT"
+subagent "0% DTT, 10$ с билета"
+our_markup 400
+##disabled "до времени"
+commission "0%/0%"
+
+carrier "S7", "S7 AIRLINES"
 ########################################
 carrier_defaults :consolidator => 0
 
