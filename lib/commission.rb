@@ -2702,8 +2702,8 @@ carrier "UT", "UTAIR"
 
 agent "0% DTT"
 subagent "0% DTT, 10$ с билета"
-our_markup 100
-disabled "до времени"
+our_markup 400
+##disabled "до времени"
 commission "0%/0%"
 
 carrier "GA", "GARUDA INDONESIA"
