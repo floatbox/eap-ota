@@ -624,14 +624,14 @@ carrier "CZ", "CHINA SOUTHERN"
 example 'svocdg'
 agent    "9% от тарифа на рейсы, полностью выполняемые CZ;"
 subagent "6,3% от тарифа на рейсы, полностью выполняемые CZ;"
-## discount "5%"
+discount "3.5%"
 commission "9%/6.3%"
 
 example 'cdgsvo svocdg/ab'
 agent    "7% от тарифа на рейсы CZ с участием других перевозчиков;"
 subagent "5% от тарифа на рейсы CZ с участием других перевозчиков;"
 interline :yes
-## discount "4%"
+discount "3%"
 commission "7%/5%"
 
 example 'cdgsvo/ab'
