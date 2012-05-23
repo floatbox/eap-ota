@@ -260,9 +260,9 @@ class Order < ActiveRecord::Base
     @tickets_are_loading = true
     ticket_hashes = strategy.get_tickets
     ticket_hashes.each do |th|
-      if th[:office_id].blank? || Ticket.office_ids.include?(th[:office_id])
-        t = tickets.ensure_exists(th[:number])
-        t.update_attributes th if t.new_record?
+      if (th[:office_id].blank? || Ticket.office_ids.include?(th[:office_id])) &&
+          !tickets.find_by_number(th[:number])
+        tickets.create(th)
       end
     end
 

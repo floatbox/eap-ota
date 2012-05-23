@@ -96,7 +96,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def update_price_fare_and_add_parent
-    if exchanged_ticket = order.tickets.where('code = ? AND number like ?', parent_code, parent_number.to_s + '%').first
+    if exchanged_ticket = order.tickets.select{|t| t.code == parent_code.to_i && t.number.to_s[1..9] == parent_number}.first
       self.parent = exchanged_ticket
       if price_fare_base && price_fare_base > 0
         self.price_tax += parent.price_fare_base #в противном случае tax может получиться отрицательным
