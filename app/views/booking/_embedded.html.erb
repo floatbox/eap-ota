@@ -82,6 +82,8 @@
     
     <% price_total = @order_form.recommendation.price_with_payment_commission.round.to_i %>
     <% price_fare = @order_form.recommendation.price_fare.round.to_i %>
+    <% price_tax = @order_form.recommendation.price_tax.round.to_i %>
+    <% fee = @order_form.recommendation.fee.round.to_i %>
     <div class="bf-footer">
         <div class="bff-price">
             <div class="bffp-content">
@@ -90,7 +92,8 @@
                 <p class="bffp-tip"><%= 'за всех пассажиров' if @order_form.people.many? %></p>
                 <ul class="bffp-details">
                     <li class="bffpd-item">Тариф — <%= price_fare %> <span class="ruble">Р</span></li>
-                    <li class="bffpd-item">Налоги и сборы — <%= price_total - price_fare %> <span class="ruble">Р</span></li>
+                    <li class="bffpd-item">Таксы — <%= price_tax %> <span class="ruble">Р</span></li>
+                    <li class="bffpd-item">Сбор — <%= fee %> <span class="ruble">Р</span></li>
                     <li class="bffpd-item bffp-wd">Доставка — 350 <span class="ruble">Р</span></li>
                 </ul>
             </div>
