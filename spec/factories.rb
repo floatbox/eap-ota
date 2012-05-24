@@ -38,6 +38,7 @@ FactoryGirl.define do
   end
 
   factory :ticket do
+    order
     sequence :number do |n|
       "2345#{n}"
     end

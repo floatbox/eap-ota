@@ -96,7 +96,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def update_price_fare_and_add_parent
-    if exchanged_ticket = order.tickets.select{|t| t.code == parent_code.to_i && t.number.to_s[1..9] == parent_number}.first
+    if exchanged_ticket = order.tickets.select{|t| t.code.to_s == parent_code.to_s && t.number.to_s[0..9] == parent_number.to_s}.first
       self.parent = exchanged_ticket
       if price_fare_base && price_fare_base > 0
         self.price_tax += parent.price_fare_base #в противном случае tax может получиться отрицательным
@@ -111,9 +111,9 @@ class Ticket < ActiveRecord::Base
 
   def update_status
     if kind == 'ticket'
-      if replacement
+      if order.tickets.select{|t| t.parent_id == id && t.kind == 'ticket'}.present?
         update_attribute(:status, 'exchanged')
-      elsif refunds.sold.present?
+      elsif order.tickets.select{|t| t.parent_id == id && t.kind == 'refund' && t.status == 'processed'}.present?
         update_attribute(:status, 'returned')
       else
         update_attribute(:status, 'ticketed')
