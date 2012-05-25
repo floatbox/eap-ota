@@ -57,6 +57,7 @@ FactoryGirl.define do
   end
 
   factory :refund, :class => Ticket do
+    order
     price_fare 1000
     price_tax 100
     status 'processed'

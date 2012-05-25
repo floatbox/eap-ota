@@ -22,6 +22,7 @@ describe Ticket do
 
       before do
         old_ticket.save
+        old_ticket.reload
       end
 
       let(:refund) {build(:refund, :parent => old_ticket, :order => old_ticket.order)}
@@ -29,7 +30,6 @@ describe Ticket do
       it "is doesn't try to update parent when !processed" do
         refund.status = 'pending'
         refund.save
-        old_ticket.reload
         old_ticket.status.should == 'ticketed'
       end
 
@@ -39,7 +39,6 @@ describe Ticket do
       end
 
       it "updates parent status to 'refunded' when needed" do
-        old_ticket.reload
         refund.save
         old_ticket.status.should == 'returned'
       end
@@ -48,12 +47,12 @@ describe Ticket do
         old_ticket.update_attribute(:status, 'returned')
         refund.status = 'pending'
         refund.save
-        old_ticket.reload
         old_ticket.status.should == 'ticketed'
       end
 
       it 'restores parent status to "ticketed" when refund is deleted' do
         refund.save
+        old_ticket.status.should == 'returned'
         old_ticket.reload
         refund.destroy
         old_ticket.status.should == 'ticketed'
