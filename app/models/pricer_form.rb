@@ -29,8 +29,8 @@ class PricerForm
   def hash_for_rambler
     return if complex_route?
     res = {
-      :src => segments[0].from_iata,
-      :dst => segments[0].to_iata,
+      :src => from_iata,
+      :dst => to_iata,
       :dir => segments[0].date_as_date.strftime('%Y-%m-%d'),
       :cls => RamblerCache::CABINS_MAPPING[cabin] || 'E',
       :adt => adults,

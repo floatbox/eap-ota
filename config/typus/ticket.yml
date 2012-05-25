@@ -156,6 +156,7 @@ Ticket:
       - order.pricing_method
       - parent_number_with_code
       - replacement_number_with_code
+      - vat_status
     options:
       selectors: status, source, office_id, validator
       date_formats:
