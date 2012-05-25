@@ -13,8 +13,8 @@ describe Ticket do
 
     it "updates parent status to 'exchanged' when needed" do
       old_ticket.save
-      new_ticket = create(:ticket, :parent => old_ticket)
       old_ticket.reload
+      new_ticket = create(:ticket, :parent => old_ticket, :order => old_ticket.order)
       old_ticket.status.should == 'exchanged'
     end
 
@@ -22,14 +22,14 @@ describe Ticket do
 
       before do
         old_ticket.save
+        old_ticket.reload
       end
 
-      let(:refund) {build(:refund, :parent => old_ticket)}
+      let(:refund) {build(:refund, :parent => old_ticket, :order => old_ticket.order)}
 
       it "is doesn't try to update parent when !processed" do
         refund.status = 'pending'
         refund.save
-        old_ticket.reload
         old_ticket.status.should == 'ticketed'
       end
 
@@ -40,7 +40,6 @@ describe Ticket do
 
       it "updates parent status to 'refunded' when needed" do
         refund.save
-        old_ticket.reload
         old_ticket.status.should == 'returned'
       end
 
@@ -48,14 +47,14 @@ describe Ticket do
         old_ticket.update_attribute(:status, 'returned')
         refund.status = 'pending'
         refund.save
-        old_ticket.reload
         old_ticket.status.should == 'ticketed'
       end
 
       it 'restores parent status to "ticketed" when refund is deleted' do
         refund.save
-        refund.destroy
+        old_ticket.status.should == 'returned'
         old_ticket.reload
+        refund.destroy
         old_ticket.status.should == 'ticketed'
       end
 
@@ -192,14 +191,14 @@ describe Ticket do
   describe "#update_price_fare_and_add_parent" do
 
     before(:each) do
-      @old_ticket = Ticket.new(:price_fare => 1000, :code => '456', :number => '234', :id => 10)
+      @old_ticket = Ticket.new(:price_fare => 1000, :code => '456', :number => '2341111111', :id => 10)
       subject.valid?
     end
 
     subject do
-      new_ticket_hash = {:number => '123', :code => '456', :price_fare => price_fare, :price_tax => 500, :parent_number => '234', :parent_code => '456', :price_fare_base => price_fare}
+      new_ticket_hash = {:number => '123', :code => '456', :price_fare => price_fare, :price_tax => 500, :parent_number => '2341111111', :parent_code => '456', :price_fare_base => price_fare}
       ticket = Ticket.new(new_ticket_hash)
-      ticket.stub_chain(:order, :tickets, :where).and_return([@old_ticket])
+      ticket.stub_chain(:order, :tickets).and_return([@old_ticket])
       ticket
     end
 
@@ -221,7 +220,8 @@ describe Ticket do
     describe "factories" do
       specify { create(:direct_ticket).commission_ticketing_method.should == 'direct' }
       specify { create(:aviacenter_ticket).commission_ticketing_method.should == 'aviacenter' }
-      specify { create(:refund, parent: create(:direct_ticket)).commission_ticketing_method.should == 'direct' }
+      let(:direct_ticket) {create(:direct_ticket)}
+      specify { create(:refund, parent: direct_ticket, order: direct_ticket.order).commission_ticketing_method.should == 'direct' }
     end
 
     specify {

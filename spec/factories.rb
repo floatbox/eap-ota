@@ -38,6 +38,7 @@ FactoryGirl.define do
   end
 
   factory :ticket do
+    order
     sequence :number do |n|
       "2345#{n}"
     end
@@ -56,6 +57,7 @@ FactoryGirl.define do
   end
 
   factory :refund, :class => Ticket do
+    order
     price_fare 1000
     price_tax 100
     status 'processed'

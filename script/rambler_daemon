@@ -12,7 +12,14 @@ Daemons.run_proc('/tmp/pids/rambler_daemon') do
     cursor = Mongo::Cursor.new(coll, :tailable => true)
     data_to_send = []
     loop do
-      if doc = cursor.next_document
+      begin
+        doc = cursor.next_document
+      rescue Mongo::OperationFailure
+        logger.error "Mongo::OperationFailure"
+        cursor = Mongo::Cursor.new(coll, :tailable => true)
+        retry
+      end
+      if doc
         data_to_send << {:request => doc['pricer_form_hash'], :variants => doc['data']}
         if data_to_send.size >= Conf.api.rambler_hash_size
           json_string = Yajl::Encoder.encode(data_to_send)

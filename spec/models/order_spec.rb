@@ -187,10 +187,10 @@ describe Order do
         Sirena::Service.stub_chain(:new, :order).and_return(Sirena::Response::Order.new(File.read('spec/sirena/xml/order_with_tickets.xml')))
         Sirena::Service.stub_chain(:new, :pnr_status, :tickets_with_dates).and_return({})
         @order = Order.new(:source => 'sirena', :commission_subagent => '1%', :pnr_number => '123456', :created_at => (Time.now - 1.day))
-        @order.stub_chain(:tickets, :reload)
         ticket = stub_model(Ticket, :new_record? => true)
-        @order.stub_chain(:tickets, :ensure_exists).and_return(ticket)
-        ticket.should_receive(:update_attributes).twice.with(hash_including({:code=>"262"}))
+        order_tickets = stub('order_tickets', :find_by_number => nil, :reload => nil)
+        @order.stub(:tickets).and_return(order_tickets)
+        order_tickets.should_receive(:create).twice.with(hash_including({:code=>"262"}))
         @order.load_tickets
       end
 
@@ -214,10 +214,10 @@ describe Order do
       it 'loads tickets correctly' do
         Amadeus.should_receive(:booking).once.and_yield(@amadeus)
         @order.stub_chain(:tickets, :where, :every, :update_attribute)
-        @order.stub_chain(:tickets, :reload)
         ticket = stub_model(Ticket, :new_record? => true)
-        @order.stub_chain(:tickets, :ensure_exists).and_return(ticket)
-        ticket.should_receive(:update_attributes).with(hash_including(
+        order_tickets = stub('order_tickets', :find_by_number => nil, :reload => nil)
+        @order.stub(:tickets).and_return(order_tickets)
+        order_tickets.should_receive(:create).with(hash_including(
           :code => "555",
           :number => "2962867063",
           :last_name => 'BEDAREVA',
