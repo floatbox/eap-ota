@@ -53,6 +53,11 @@
     %cabinId
       %cabinQualifier MC
       %cabin= cabin
+  -#Хотели сделать через Mandatory validating carrier list(V), но не влезли в ограничение в 99 нод
+  -#%companyIdentity
+    %carrierQualifier V
+    - Carrier.commissioned_iatas.each do |iata|
+      %carrierId= iata
   - if nonstop
     %flightDetail
       %flightType N
