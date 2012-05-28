@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+require File.expand_path('../../config/environment',  __FILE__)
+
+form = PricerForm.simple(:from => 'MOW', :to => 'PAR', :date1 => '120812', :date2 => '250812')
+amadeus = Amadeus.booking
+content = amadeus.fare_master_pricer_travel_board_search(form)
+puts content.doc.to_xml
+#File.open('script_pricer', 'w') {|f| f << content}
+      
