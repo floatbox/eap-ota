@@ -127,10 +127,12 @@ initScrolling: function() {
     var that = this;
     var areas = this.el.find('.sdt-area');
     areas.mousedown(function(event) {
-        if (event.button) return
+        if (event.button) return;
         event.preventDefault();
-        that.scrollTo(that.getTarget($(this)).pos, that.hidden);
-        that.dragging = !that.hidden;
+        if (!that.hidden) {
+            that.scrollTo(that.getTarget($(this)).pos, that.hidden);
+            that.dragging = true;
+        }
     });
     areas.mouseup(function() {
         that.dragging = false;
@@ -164,6 +166,7 @@ getTarget: function(el) {
     return {pos: dp};
 },
 hoverTabs: function(target) {
+    if (this.hidden) return;
     if (target.fix !== undefined) {
         this.fhover.css(this.tabs[target.fix].single).show();
         this.phover.css(this.tabs[target.pos + 1].single).show();

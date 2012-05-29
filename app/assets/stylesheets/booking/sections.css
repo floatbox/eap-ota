@@ -173,6 +173,10 @@
     line-height: 13px;
     color: #777;
 }
+.bfph-link {
+    text-decoration: underline;
+    cursor: pointer;
+}
 .bfp-control {
     padding-right: 10px;
 }

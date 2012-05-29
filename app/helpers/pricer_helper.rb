@@ -88,6 +88,21 @@ module PricerHelper
     availability && availability > 0 && availability < 9
   end
   
+  # классы, отличающиеся от выбранного
+  def different_cabins r, except
+    except = 'Y' if except.nil?
+    cabins = r.cabins.map {|c|
+      mc = (c == 'F' || c == 'C') ? c : 'Y' # превращаем разные варианты эконома в Y
+      mc == except ? nil : mc
+    }
+    counter = 0;
+    r.variants.first.segments.map {|s|
+      sc = cabins[counter, s.flights.length]
+      counter += s.flights.length
+      sc.uniq.length == 1 ? sc.uniq : sc
+    }
+  end  
+  
   # группируем сегменты из нескольких вариантов
   def group_segments variants
     segments = []

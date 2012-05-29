@@ -243,9 +243,15 @@ hideExcess: function(limit) {
         var segment = segments[i];
         var excess = i === 0 ? (need - used) : Math.round(need * segment.part / total);
         if (excess > 1) {
-            var simple = results.data.segments.length === 1 || results.data.segments[1].rt;
-            var title = simple ? local.offers.segments[i] : results.data.segments[i].arvto;
-            var text = local.offers.more.absorb(excess.decline.apply(excess, local.offers.variants), title);
+            var title, amount = excess.decline.apply(excess, local.offers.variants);
+            if (results.data.segments.length === 1) {
+                title = '';
+            } else if (results.data.segments[1].rt) {
+                title = local.offers.directions[i];
+            } else {
+                title = results.data.segments[i].arvto;
+            }
+            var text = local.offers.more.absorb(amount, title).replace(/ $/, '');
             var more = '<div class="os-more">' + text + '</div>';
             this.toggleExcess(segment.el.addClass('hide-excess').append(more), excess);
         }

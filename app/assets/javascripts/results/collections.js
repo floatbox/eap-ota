@@ -10,16 +10,21 @@ abort: function() {
 },
 load: function(url, data, timeout) {
     var that = this;
+    this.loading = true;
     this.request = $.ajax({
         url: url,
         data: data,
         success: function(s, status, request) {
+            delete that.loading;
             if (that.request !== request) return;
             that.update(s);
+            results.updated();
         },
         error: function(request, status) {
+            delete that.loading;
             if (that.request !== request) return;
             that.update('');
+            results.updated();
         },
         timeout: timeout
     });
@@ -275,9 +280,12 @@ merge: function(variants) {
             }
         }
         items = items.sort(sorting);
-        var simple = results.data.segments.length === 1 || results.data.segments[1].rt;
-        var title = simple ? local.offers.segments[s] : results.data.segments[s].arvto;
-        segment.append($('#ost-template').html().absorb(title));
+        var rt = results.data.segments.length === 2 && results.data.segments[1].rt;
+        var st = rt ? local.offers.stitle.absorb(local.offers.directions[s]) : results.data.segments[s].short
+        segment.append($('#ost-template').html().absorb(st));
+        if (results.data.segments.length === 1) {
+            segment.find('.ostn-text').hide();
+        }
         for (var i = 0, im = items.length; i < im; i++) {
             segment.append(items[i].el);
         }

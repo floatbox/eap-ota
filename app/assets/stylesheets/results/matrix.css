@@ -1,10 +1,15 @@
 /* Matrix */
 .rm-prices {
-    padding: 0 22px 12px;
+    padding: 0 0 12px 15px;
 }
+.rmp-table td,
+.rmp-table th {
+    border: 1px solid #bfc4c8;
+    background: #cbcfd2;
+} 
 .rmp-table th {
     height: 25px;
-    padding: 7px 8px;
+    padding: 7px 10px;
 }
 .rmp-date1,
 .rmp-date2 {
@@ -12,11 +17,11 @@
     line-height: 13px;
 }
 .rmp-date1 {
-    width: 105px;
+    width: 104px;
     color: #81AA00;
 }
 .rmp-date2 {
-    width: 119px;
+    width: 93px;
     color: #DB7100;
 }
 .rmp-weekday {
@@ -33,7 +38,8 @@
 
 /* Matrix item */
 .rmp-item {
-    padding: 7px 14px 7px 8px;
+    padding: 7px 14px 7px 10px;
+    background: #DCDFE1;
     cursor: pointer;
 }
 .rmp-cost {
@@ -44,6 +50,9 @@
 }
 .rmp-sum {
     font-weight: bold;
+}
+.rmp-cost .ruble {
+    color: #AAA;
 }
 
 /* Matrix bars */
@@ -76,7 +85,7 @@
 
 /* Selected price */
 .rmp-item:hover {
-    background: #dee2e6;
+    background: #e9eaec;
 }
 .rmp-selected,
 .rmp-selected:hover {

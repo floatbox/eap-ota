@@ -5,7 +5,7 @@
 <% duration_scale = 88.0 / @recommendations.collect(&:segments).flatten.collect(&:total_duration).push(600).max %>
 <% @recommendations.each do |recommendation| %>
 <div class="rm-variants" data-prices='<%= raw recommendation_prices(recommendation) %>'>
-    <% different_cabins = recommendation.cabins_except(@search.cabin) %>
+    <% cabins = different_cabins(recommendation, @search.cabin) %>
     <% recommendation.variants.each do |variant| %>
     <div class="rm-variant" data-dates="<%= variant.segments.map{|s| s.flights[0].departure_date }.join(' ') %>">
         <div class="rmv-data" data-features="<%= variant_features(variant, recommendation.validating_carrier.alliance) %>"><%= raw recommendation.serialize(variant) %></div>
@@ -23,7 +23,8 @@
         <% variant.segments.each_with_index do |segment, scounter| %>
         <%= render :partial => 'details', :locals => {
             :segment => segment,
-            :segment_rt => scounter == 1 && @search.rt
+            :segment_rt => scounter == 1 && @search.rt,
+            :segment_cabins => cabins[scounter]
         } %>
         <% end %>
         </div>

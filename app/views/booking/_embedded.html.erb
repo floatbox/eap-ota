@@ -34,8 +34,8 @@
             <th><h6 class="bf-label">Пол</h6></th>
             <th><h6 class="bf-label">Дата рождения</h6></th>
             <th><h6 class="bf-label">Гражданство</h6></th>
-            <th><h6 class="bf-label">Номер документа</h6> <p class="bfp-hint" data-hint="bfh-passport">Какие документы<br>нужны?</p></th>
-            <th><h6 class="bf-label">Срок действия</h6> <p class="bfp-hint" data-hint="bfh-expiration">Подробнее<br>о сроках действия</p></th>    
+            <th><h6 class="bf-label">Номер документа</h6> <p class="bfp-hint"><span class="bfph-link bf-hint" data-hint="bfh-passport">Какие документы<br>нужны?</span></p></th>
+            <th><h6 class="bf-label">Срок действия</h6> <p class="bfp-hint"><span class="bfph-link bf-hint" data-hint="bfh-expiration">Подробнее<br>о сроках действия</span></p></th>    
             </tr>
         </thead>        
         <%= render :partial => 'person_form', :collection => @order_form.people, :locals => {:people_count => @order_form.people.length} %>

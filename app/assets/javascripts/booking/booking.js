@@ -87,7 +87,10 @@ updatePrice: function(price) {
 },
 failed: function() {
     var tip = 'Так иногда бывает, потому что авиакомпания не&nbsp;может подтвердить наличие мест на&nbsp;этот рейс по&nbsp;этому тарифу. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.';
-    this.offer.state.html('В данный момент невозможно выбрать этот вариант');
+    this.offer.state.html('В данный момент невозможно выбрать этот вариант <span class="link obs-hint">Почему?</span>');
+    this.offer.state.find('.obs-hint').click(function(event) {
+        hint.show(event, tip);
+    });
     trackEvent('Бронирование', 'Невозможно выбрать вариант');
 },
 load: function() {
@@ -196,6 +199,7 @@ init: function() {
     }
 },
 show: function() {
+    trackEvent('Бронирование', 'Просмотр правил тарифа');
     this.el.slideDown(350);
 },
 hide: function() {

@@ -1,3 +1,5 @@
+//= require common/hint.js
+
 //= require home/page.js
 //= require home/queries.js
 

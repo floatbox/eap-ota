@@ -234,21 +234,6 @@ class Recommendation
     return
   end
 
-  def cabins_except selected_cabin
-    selected_cabin = 'Y' if selected_cabin.nil?
-    dcabins = cabins.map {|c|
-      cabin = (c == 'F' || c == 'C') ? c : 'Y'
-      cabin == selected_cabin ? nil : cabin
-    }
-    fcounter = 0
-    variants.first.segments.map {|s|
-        fcabins = dcabins[fcounter, s.flights.length]
-        fcounter += s.flights.length
-        common = fcabins.uniq
-        common.length == 1 ? common : fcabins
-    }
-  end
-
   # попытка сделать код для script/amadeus
   def cryptic(variant=variants.first)
     ( [ "FV #{validating_carrier_iata}", "RMCABS #{cabins.join}"] +

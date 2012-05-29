@@ -13,7 +13,7 @@
     margin: 0 auto;
     font-size: 13px;    
     line-height: 16px;
-    color: #777;
+    color: #606060;
 }
 .rm-title {
     margin: 0 0 5px;
@@ -45,7 +45,7 @@
     margin: 0 0 3px;
 }
 .rml-advice {
-    border-top: 1px solid #DADADA;
+    border-top: 1px solid #AAA;
     padding-top: 18px;
 }
 .rmla-prefix {

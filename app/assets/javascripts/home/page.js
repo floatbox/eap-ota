@@ -32,7 +32,7 @@ init: function() {
     
     /*results.message.toggle('loading');
     results.content.el.show();
-    results.show();*/
+    re sults.show();*/
 
 },
 innerHeight: function() {

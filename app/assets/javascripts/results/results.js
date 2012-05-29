@@ -101,15 +101,17 @@ load: function() {
     this.getPriceTemplate();
     this.all.load('/pricer/', data, 150000);
     this.matrix.load('/calendar/', data, 75000);
-    $.when(this.all.request, this.matrix.request).then(function() {
-        that.queue.add(function() {
-            that.processCollections();
-        });
-    });
     page.showData(this.data);
     this.data.fresh = false;
     this.ready = false;
     this.message.toggle('loading');
+},
+updated: function() {
+    var that = this;
+    if (this.all.loading || this.matrix.loading) return;
+    this.queue.add(function() {
+        that.processCollections();
+    });
 },
 changeDates: function(dates) {
     this.updateTitles(dates);

@@ -392,6 +392,7 @@ class PricerForm
       arv = segment.to_as_object 
       {
         :title => "#{ dpt.case_from } #{ arv.case_to }",
+        :short => "#{ dpt.iata } &rarr; #{ arv.iata }",
         :arvto => "#{ arv.case_to }",
         :date => segment.date,
         :dpt => {:name => dpt.name},
@@ -408,8 +409,13 @@ class PricerForm
       "#{segments[0].from_as_object.name} &harr; #{segments[0].to_as_object.name}, #{short_date(segments[0].date)} — #{short_date(segments[1].date)}"
     else
       parts = []
+      complex = segments.length > 1
       segments.each do |segment|
-        parts << "#{segment.from_as_object.name} &rarr; #{segment.to_as_object.name} #{short_date(segment.date)}"
+        if complex
+            parts << "#{segment.from_as_object.iata} &rarr; #{segment.to_as_object.iata} #{short_date(segment.date)}"        
+        else 
+          parts << "#{segment.from_as_object.name} &rarr; #{segment.to_as_object.name} #{short_date(segment.date)}"
+        end
       end      
       parts.join(', ')
     end  

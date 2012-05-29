@@ -145,7 +145,7 @@
     <% end %>
     </ul>
     <div class="o-segments">
-    <% different_cabins = recommendation.cabins_except(@search.cabin) %>
+    <% cabins = different_cabins(recommendation, @search.cabin) %>
     <% group_segments(recommendation.variants).each_with_index do |segments, scounter| %>
     <div class="o-segment segment<%= scounter + 1 %>">
         <% segment_rt = scounter == 1 && @search.rt %>
@@ -158,6 +158,7 @@
             <%= render :partial => 'details', :locals => {
                 :segment => segment,
                 :segment_rt => segment_rt,
+                :segment_cabins => cabins[scounter]
             } %>
         <% end %>
     </div>

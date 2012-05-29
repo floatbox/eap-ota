@@ -126,7 +126,8 @@ validate: function() {
         page.title.set();
     }
     results.header.hide();
-    if (values.warnings.length) {
+    this.valid = values.warnings.length === 0;
+    if (!this.valid) {
         results.header.show(values.warnings[0], false);
     }
     delete values.warnings;
@@ -136,12 +137,15 @@ validate: function() {
 },
 loadSummary: function(values, process) {
     var that = this;
+    if (values.query_key) {
+        this.valid = true;
+    }
     this.request = $.ajax({
         method: 'GET',
         url: '/pricer/validate/',
         data: values,
         success: function(data, status, request) {
-            if (data.valid) {
+            if (that.valid && data.valid) {
                 results.update(data);
             }
             if (values.query_key) {

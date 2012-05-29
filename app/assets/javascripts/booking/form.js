@@ -29,6 +29,10 @@ init: function() {
     this.required.delegate('.bffr-link', 'click', function() {
         that.focus($('#' + $(this).attr('data-field')));
     });
+    this.el.delegate('.bf-hint', 'click', function(event) {
+        var content = $('#' + $(this).attr('data-hint')).html();
+        hint.show(event, content);
+    }); 
     
     //this.sections[0].set(['mszakharov@gmail.com', '+79161234567']);
     //this.sections[1].rows[0].set(['MAXIM', 'ZAKHAROV', 'm', '03.05.1983', 170, '1234567890', '', true]);
@@ -87,6 +91,9 @@ submit: function() {
         data: this.el.serialize(),
         success: function(s) {
             that.process(s);
+        },
+        error: function() {
+            that.process('<div class="bf-result bfr-fail"><h5 class="bfr-title">Что-то пошло не так.</h5><p class="bfr-content">Возникла техническая проблема. Попробуйте нажать на кнопку «Купить» ещё раз или позвоните нам <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p><p class="bfr-content"><span class="link bfr-back">Попробовать ещё раз</span></p></div>');
         }
     });
 },

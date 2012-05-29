@@ -76,6 +76,7 @@ select: function(id) {
         nt.content.show();
         results.fixed.update();
         page.location.set('offer', id === 'all' ? '' : id);
+        results.filters.toggleDisabled(id === 'matrix');
     }, 20);
 },
 selectFirst: function() {

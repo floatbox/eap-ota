@@ -161,6 +161,12 @@ toggle: function() {
         }
     }
 },
+toggleDisabled: function(disabled) {
+    for (var i = this.groups.length; i--;) {
+        var group = this.groups[i];
+        group.control.toggleClass('rfg-disabled', disabled || this.columns === 0);
+    }
+},
 select: function(item) {
     if (item.hasClass('rfv-disabled')) {
         results.filters.resetAll();

@@ -4,7 +4,7 @@ init: function() {
     this.el = $('#hint').click(function(event) {
         event.stopPropagation();
     });
-    this.content = this.el.find('.content');
+    this.content = this.el.find('.h-content');
     this.el.find('.h-close').click(function() {
         that.hide();
     });    
@@ -34,3 +34,7 @@ hide: function() {
     $('body').unbind('click keydown', this.selfhide);
 }
 };
+
+$(function() {
+    hint.init();
+});

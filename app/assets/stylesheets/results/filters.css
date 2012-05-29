@@ -62,6 +62,9 @@
 .rfg-counter:hover {
     background-position: 0 0 !important;
 }
+.rfg-disabled .rfg-counter {
+    visibility: hidden;
+}
 
 /* Columns */
 .rfg-column {

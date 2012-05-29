@@ -52,6 +52,11 @@
     margin-right: 200px;
     padding: 8px 0;
 }
+.obs-hint {
+    position: absolute;
+    margin: 1px 0 0 10px;
+    font-size: 12px;
+}
 .ob-sum {
     font-weight: bold;
     color: #f90a6f;
@@ -291,13 +296,13 @@
 .oss-parts {
     float: left;
     width: 366px;
-    height: 13px;
+    height: 16px;
     overflow: hidden;
     margin: 8px 14px 0;
 }
 .oss-bar {
     float: left;
-    padding: 3px 8px 0 0;
+    padding: 3px 8px 4px 0;
 }
 .ossb-flight,
 .ossb-layover {
@@ -329,7 +334,8 @@
 }
 .ossi-m {
     float: left;
-    margin-bottom: -13px;
+    height: 16px;
+    margin-bottom: -16px;
     color: #777;
 }
 .ossi-l {
@@ -532,7 +538,7 @@
     line-height: 14px;
 }
 .osd-title {
-    margin: 0 14px 5px 200px;
+    margin: 0 14px 7px 200px;
     font-weight: bold;
     font-size: 18px;
     line-height: 18px;
@@ -540,7 +546,7 @@
     color: #777;
 }
 .osd-flight {
-    padding: 10px 0 0;
+    padding: 8px 0 2px;
 }
 .osd-dpt,
 .osd-arv {

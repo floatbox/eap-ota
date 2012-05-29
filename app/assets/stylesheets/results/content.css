@@ -1,8 +1,8 @@
 /* Results content */
 #results-content {
     display: none;
-    min-height: 600px;    
-    padding: 0 0 15px;
+    min-height: 100%;
+    margin: 0 0 -136px;
 }
 #results-content .offers-list {
     position: relative;
@@ -10,6 +10,9 @@
     display: none;
     width: 1004px;
     margin: 0 auto;
+}
+.rc-placeholder {
+    height: 151px;
 }
 
 /* Templates */
