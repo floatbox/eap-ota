@@ -11,43 +11,14 @@ class RamblerCache
   include Mongoid::Document
   include Mongoid::Timestamps
   field :data, :type => Array
-  field :sent_to_rambler, :type => Boolean, :default => false
-  belongs_to :pricer_form
-
-  def self.send_to_rambler(count = 30)
-    if Conf.api.send_to_rambler
-      data_to_send = self.where(:sent_to_rambler => false).order_by([:created_at, :asc]).limit(count).to_a
-      if data_to_send.count > 0
-        json_string = Yajl::Encoder.encode(data_to_send.map{|rc| {:request => rc.pricer_form_hash , :variants => rc.data}   })
-        data_to_send.every.update_attribute(:sent_to_rambler, true)
-        response = HTTParty.post(Conf.api.rambler_url, :body => json_string, :format => :json)
-        Rails.logger.info "Rambler api: request with #{data_to_send.count} searches sent"
-      end
-    end
-  end
-
-  def pricer_form_hash
-    return if pricer_form.complex_route?
-    res = {
-      :src => pricer_form.segments[0].from_iata,
-      :dst => pricer_form.segments[0].to_iata,
-      :dir => pricer_form.segments[0].date_as_date.strftime('%Y-%m-%d'),
-      :cls => CABINS_MAPPING[pricer_form.cabin] || 'E',
-      :adt => pricer_form.adults,
-      :cnn => pricer_form.children,
-      :inf => pricer_form.infants,
-      :wtf => 0
-    }
-    res.merge!({:ret => pricer_form.segments[1].date_as_date.strftime('%Y-%m-%d')}) if pricer_form.segments[1]
-    res
-  end
+  field :pricer_form_hash, :type => Hash
 
   def self.create_from_form_and_recs(form, recommendations)
     if form.adults == 1 && form.children == 0 && form.infants == 0
       data = recommendations.each_with_object([]) do |rec, res|
         res.concat(rec.variants.map { |v| variant_hash(v, rec, form)})
       end
-      res = self.new(:data => data, :pricer_form => form)
+      res = self.new(:data => data, :pricer_form_hash => form.hash_for_rambler)
       res.save
       res
     end

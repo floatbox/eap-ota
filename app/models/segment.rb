@@ -23,14 +23,14 @@ class Segment
   attr_writer :total_duration
 
   def time_to_day_part(time) #в данном случае time - строка
-    case time
-    when ('0000'...'0500')
+    case
+    when ('0000' <= time && time < '0500')
       0 #'night'
-    when ('0500'...'1200')
+    when ('0500' <= time && time < '1200')
       1 #'morning'
-    when ('1200'...'1700')
+    when ('1200' <= time && time < '1700')
       2 #'day'
-    when ('1700'...'2400')
+    else
       3 #'evening'
     end
   end

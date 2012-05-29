@@ -367,6 +367,7 @@ DEPENDENCIES
   cucumber
   cucumber-rails
   curb
+  daemons
   database_cleaner
   evergreen
   every

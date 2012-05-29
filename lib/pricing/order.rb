@@ -65,6 +65,11 @@ module Pricing
       recalculated_price_with_payment_commission - price_fare + price_declared_discount
     end
 
+    # подгнанный "сбор" для отображения клиенту
+    def fee
+      recalculated_price_with_payment_commission - price_tax - price_fare + price_declared_discount
+    end
+
     def price_declared_discount
       price_discount
     end
