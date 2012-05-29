@@ -109,6 +109,8 @@ Ticket:
       - price_tax
       - price_penalty
       - price_extra_penalty
+      - price_consolidator
+      - price_discount
       - commission_consolidator
       - commission_blanks
       - commission_agent
