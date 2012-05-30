@@ -56,7 +56,7 @@ ru:
         price_with_payment_commission: "Итого к оплате / Оплачено, р."
         price_original: "Касса: Режим 1 или 3"
         price_tax_extra: "Касса: Режим 2"
-        income: 'Доход Eviterra, р.'
+        expected_income: 'Доход Eviterra, р.'
         income_payment_gateways: 'Доход платежного шлюза, р.'
         income_suppliers: 'Доход поставщика, р.'
         commission_consolidator: "Сбор 1%/2% авиацентра, %"
