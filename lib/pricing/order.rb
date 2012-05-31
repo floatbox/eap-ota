@@ -67,7 +67,11 @@ module Pricing
 
     # подгнанный "сбор" для отображения клиенту
     def fee
-      recalculated_price_with_payment_commission - price_tax - price_fare + price_declared_discount
+      if sold_tickets.present?
+        sold_tickets.to_a.sum(&:fee)
+      else
+        recalculated_price_with_payment_commission - price_tax - price_fare + price_declared_discount
+      end
     end
 
     def price_declared_discount

@@ -72,6 +72,10 @@ module Pricing
 
     def price_tax_and_markup_and_payment
       price_with_payment_commission - price_fare + price_declared_discount
+      end
+
+    def fee
+      price_with_payment_commission - price_tax - price_fare + price_declared_discount
     end
 
     def price_declared_discount
