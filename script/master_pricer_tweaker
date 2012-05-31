@@ -41,9 +41,9 @@ def complete_date(datestr)
   month, year = Time.now.strftime('%m %y').split
   case datestr.length
   when 1, 2
-    "%02d%s%s" % [datestr, month, year]
+    "%02d%s%s" % [datestr.to_i, month, year]
   when 3, 4
-    "%04d%s" % [datestr, year]
+    "%04d%s" % [datestr.to_i, year]
   else
     datestr
   end
