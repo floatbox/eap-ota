@@ -99,9 +99,9 @@ commission "11%/9%"
 #discount "7.5%"
 #commission "12%/10%"
 
-example 'AERDME/W DMEAER/E'
-example 'AERDME/Y DMEAER/M'
-example 'AERDME/W DMEAER/W'
+#example 'AERDME/W DMEAER/E'
+#example 'AERDME/Y DMEAER/M'
+#example 'AERDME/W DMEAER/W'
 agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWUYHMQBKORE"
