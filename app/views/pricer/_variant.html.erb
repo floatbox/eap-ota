@@ -171,7 +171,7 @@
     <div class="valcarrier">Билет оформляет авиакомпания <%= recommendation.validating_carrier.name %>.<% if recommendation.validating_carrier.alliance %> Применяются бонусные программы альянса <span class="link alliance" data-details="<%= bonus_programs.map{|bp| bp.name}.to_sentence %>"><%= recommendation.validating_carrier.alliance.name %></span>.<% end %></div>
     <dl class="sum" data-value="<%= price %>">
         <dt>Итого <strong><%= human_price(price) %></strong><%= ' за всех' if @search.people_total > 1 %> со всеми сборами</dt>
-        <dd>Тариф — <%= human_price(recommendation.price_fare) %>, таксы — <%= human_price(recommendation.price_tax) %>, сбор — <%= human_price(corporate_mode? ? recommendation.fee_but_no_payment : recommendation.fee) %><% unless recommendation.price_declared_discount.zero? %>, скидка — <%= human_price(recommendation.price_declared_discount) %><% end %> </dd>
+        <dd>Тариф — <%= human_price(recommendation.price_fare) %>,  таксы и сборы — <%= human_price(recommendation.price_tax_and_markup) %>&nbsp;(в том числе сервисный сбор&nbsp;— <%= human_price(corporate_mode? ? recommendation.fee_but_no_payment : recommendation.fee) %>)<% unless recommendation.price_declared_discount.zero? %>, скидка — <%= human_price(recommendation.price_declared_discount) %><% end %> </dd>
     </dl>
     </td>
 </tr>

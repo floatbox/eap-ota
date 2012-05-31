@@ -39,8 +39,8 @@
       <td class="pad_null">
           <font family="Arial" size="2">
           <% unless @lang %>Тариф /<%end%> Fare<br>
-          <% unless @lang %>Таксы /<%end%> Taxes<br>
-          <% unless @lang %>Сбор /<%end%> Fee<br>
+          <% unless @lang %>Таксы и сборы/<%end%> Taxes<br>
+          <span style="position: absolute;"><% unless @lang %>В том числе сервисный сбор /<%end%> Including fee</span><br>
           <% unless @prices.price_declared_discount.zero? %>
             <% unless @lang %>Скидка /<%end%> Discount<br>
           <% end %>
@@ -51,9 +51,10 @@
           </font>
       </td>
       <td class="pad_null" colspan="2">
+        <div style="position: relative; left: 70px;">
           <font family="Arial" size="2">
           <%= exact_price(@prices.price_fare) %> RUB<br>
-          <%= exact_price(@prices.price_tax) %> RUB<br>
+          <%= exact_price(@prices.price_tax_and_markup_and_payment) %> RUB<br>
           <%= exact_price(@prices.fee) %> RUB<br>
           <% unless @prices.price_declared_discount.zero? %>
             <%= exact_price(@prices.price_declared_discount) %> RUB<br>
@@ -65,6 +66,7 @@
               <%= exact_price(@prices.price_with_payment_commission) %> RUB<br>
           <% end %>
           </font>
+        </div>
       </td>
       <td class="pad_null" colspan="3">
           <font family="Arial" size="2"><% unless @lang %>Адрес и телефон<br><%end%>Email and phone number</font><br>
