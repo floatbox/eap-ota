@@ -1,9 +1,62 @@
 #!/usr/bin/env ruby
+
+require 'optparse'
+
+# defaults
+options  = {
+  :office => 'MOWR228FA',
+  :env => 'production',
+
+  :adults => 1,
+  :children => 0,
+  :infants => 0
+}
+
+OptionParser.new do |opts|
+  opts.banner = "#{$0} [opts] from_iata to_iata [departure_date [return_flight_date]]: run master pricer search query with given args."
+
+  opts.on("-o", "--office OFFICEID", "Office id, e.g. NYC1S21HX")    { |id| options[:office] = id }
+  opts.on("-e", "--env RAILS_ENV")                                   { |env| options[:env] = env }
+
+  opts.on("-a", "--adults COUNT", Integer, "Adult passengers")       { |adults| options[:adults] = adults }
+  opts.on("-c", "--children COUNT", Integer, "Children passengers")  { |children| options[:children] = children }
+  opts.on("-i", "--infants COUNT", Integer, "Infant passengers")     { |infants| options[:infants] = infants }
+
+  opts.on_tail("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+end.parse!
+
+unless (2..4).include?(ARGV.size)
+  abort "wrong amount of arguments (#{ARGV}), see --help"
+end
+
+options[:from], options[:to], options[:date1], options[:date2] = ARGV
+
+def complete_date(datestr)
+  month, year = Time.now.strftime('%m %y').split
+  case datestr.length
+  when 1, 2
+    "%02d%s%s" % [datestr, month, year]
+  when 3, 4
+    "%04d%s" % [datestr, year]
+  else
+    datestr
+  end
+end
+
+options[:date1] ||= Time.now.strftime('%d%m%y')
+options[:date1] = complete_date(options[:date1])
+options[:date2] &&= complete_date(options[:date2])
+
+# deferring environment loading for fast --help display
+ENV['RAILS_ENV'] = options[:env]
 require File.expand_path('../../config/environment',  __FILE__)
 
-form = PricerForm.simple(:from => 'MOW', :to => 'PAR', :date1 => '120812', :date2 => '250812')
-amadeus = Amadeus.booking
-content = amadeus.fare_master_pricer_travel_board_search(form)
-puts content.doc.to_xml
-#File.open('script_pricer', 'w') {|f| f << content}
-      
+form = PricerForm.simple(options.extract!(:from, :to, :date1, :date2, :adults, :children, :infants))
+
+amadeus = Amadeus::Service.new(office: options[:office], book: true)
+response = amadeus.fare_master_pricer_travel_board_search(form)
+puts response.doc.to_xml
+amadeus.session.release
