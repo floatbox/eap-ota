@@ -22,6 +22,9 @@ OptionParser.new do |opts|
   opts.on("-c", "--children COUNT", Integer, "Children passengers")  { |children| options[:children] = children }
   opts.on("-i", "--infants COUNT", Integer, "Infant passengers")     { |infants| options[:infants] = infants }
 
+  opts.on("-b", "--benchmark [runs]", Integer, "")                   { |runs| options[:benchmark] = runs || 1 }
+  opts.on("-n", "--null", "Don't output anything")                   { |null| options[:null] = true }
+
   opts.on_tail("-h", "--help", "Show this message") do
     puts opts
     exit
@@ -54,9 +57,26 @@ options[:date2] &&= complete_date(options[:date2])
 ENV['RAILS_ENV'] = options[:env]
 require File.expand_path('../../config/environment',  __FILE__)
 
-form = PricerForm.simple(options.extract!(:from, :to, :date1, :date2, :adults, :children, :infants))
+pricer_attrs = options.extract!(:from, :to, :date1, :date2, :adults, :children, :infants)
+
+def response(service, attrs)
+  form = PricerForm.simple(attrs)
+  service.fare_master_pricer_travel_board_search(form)
+end
 
 amadeus = Amadeus::Service.new(office: options[:office], book: true)
-response = amadeus.fare_master_pricer_travel_board_search(form)
-puts response.doc.to_xml
+
+# брешет!
+if runs = options[:benchmark]
+  require 'benchmark'
+  Benchmark.bm(15) do |bm|
+    bm.report("#{runs} times") { runs.times { response( amadeus, pricer_attrs) } }
+  end
+else
+
+  puts response( amadeus, pricer_attrs).doc.to_xml unless options[:null]
+
+end
+
 amadeus.session.release
+
