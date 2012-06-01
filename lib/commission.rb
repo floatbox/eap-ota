@@ -1169,13 +1169,13 @@ carrier "IG", "MERIDIANA (РИНГ-АВИА)"
 example 'svocdg'
 agent    "5% от опубл. тарифов на собств.рейсы IG (В договоре Interline не прописан.)"
 subagent "3,5% от опубл. тарифов на собств.рейсы IG"
-## discount "2%"
+discount "1.5%"
 commission "5%/3.5%"
 
 example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
-## discount "2%"
+discount "1.5%"
 interline :unconfirmed
 commission "5%/3.5%"
 
