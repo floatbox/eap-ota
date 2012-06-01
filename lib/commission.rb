@@ -2016,14 +2016,14 @@ carrier "TK", "TURKISH AIRLINES"
 agent    "7% от полного опубл. тарифа IATA на рейсы TK;"
 subagent "5% от полного опубл. тарифа IATA на рейсы TK;"
 not_implemented "что такое полный опубликованный тариф?"
-discount "3%"
+discount "4.2%"
 commission "7%/5%"
 
 example 'istsvo svoist'
 agent    "7% от тарифа эконом класса на рейсы TK;"
 subagent "5% от тарифа экономического класса на рейсы TK;"
 classes :economy
-discount "3%"
+discount "4%"
 commission "7%/5%"
 
 example 'istsvo/business svoist/business'
@@ -2032,7 +2032,7 @@ subagent "5% от тарифа бизнес класса на рейсы TK. т�
 important!
 check { not includes(country_iatas.first, 'RU') }
 classes :business
-discount "3%"
+discount "4%"
 commission "7%/5%"
 
 example 'istank'
@@ -2042,7 +2042,7 @@ subagent "3,5% от тарифа эконом и бизнес класса пр�
 important!
 domestic
 classes :business, :economy
-discount "2%"
+discount "2.5%"
 commission "5%/3.5%"
 
 example 'svoist istsvo/ab'
@@ -2059,7 +2059,7 @@ classes :business
 strt_date '17.03.2012'
 check { includes(country_iatas.first, 'RU') }
 important!
-discount "7%"
+discount "8%"
 commission "12%/10%"
 
 carrier "TP", "TAP PORTUGAL"
@@ -2083,7 +2083,7 @@ subagent "С 03.02.12г. по 31.12.12г. 6% от опубл. тарифов н�
 на собств.рейсы UA с обяз. наличием в маршруте трансатлант. рейса Москва-Вашингтон UA	UA965 или Вашингтон-Москва UA964.Начало путешествия возможно как в России,
 так и за рубежом."
 check { includes(flights.every.full_flight_number, %W(UA965 UA964)) }
-discount "3.5%"
+discount "4.5%"
 commission "8%/6%"
 
 example 'svocdg/K'
