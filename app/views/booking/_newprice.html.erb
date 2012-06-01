@@ -10,16 +10,16 @@
         </div> или <span class="link bfr-cancel">выбрать другой вариант</span>
     </div>
     <% price_fare = @order_form.recommendation.price_fare.round.to_i %>
-    <% price_tax = @order_form.recommendation.price_tax.round.to_i %>    
+    <% price_tax_and_markup = @order_form.recommendation.price_tax_and_markup.round.to_i %>
     <div class="bfnp-data">
         <p class="bffp-nd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total %></span>&nbsp;<%= rubles(price_total) %></p>
         <p class="bffp-wd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total + 350 %></span>&nbsp;<%= rubles(price_total + 350) %></p>
         <p class="bffp-tip"><%= 'за всех пассажиров' if @order_form.people.many? %></p>
         <ul class="bffp-details">
             <li class="bffpd-item">Тариф — <%= price_fare %> <span class="ruble">Р</span></li>
-            <li class="bffpd-item">Таксы — <%= price_tax %> <span class="ruble">Р</span></li>
-            <li class="bffpd-item">Сбор — <%= price_total - price_fare - price_tax %> <span class="ruble">Р</span></li>
+            <li class="bffpd-item">Таксы и сборы — <%= price_total - price_fare %> <span class="ruble">Р</span></li>
+            <li class="bffpd-item">В том числе сервисный сбор — <%= @order_form.recommendation.fee.round.to_i %> <span class="ruble">Р</span></li>
             <li class="bffpd-item bffp-wd">Доставка — 350 <span class="ruble">Р</span></li>
         </ul>
-    </data>
+    </div>
 </div>
