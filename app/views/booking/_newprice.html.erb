@@ -1,42 +1,25 @@
-<% total_price = @order_form.recommendation.price_with_payment_commission.round.to_i %>
-<div class="result latent" data-type="newprice" data-price="<%= total_price %>">
-<div class="booking-newprice">
-    <h5>Авиакомпания изменила стоимость этого предложения. Так иногда бывает. Новая стоимость — <%= decorated_price total_price, 'strong', 'span' %> (стало <span class="bnp-diff"></span>).</h5>
-    <p><a class="a-button continue" href="#">Продолжить покупку</a> или <span class="link cancel">выбрать другой вариант</span></p>
-</div>
-<div class="bc-bill-short">
-    <span style="padding-right: 2px;">Стоимость&nbsp;<%= @order_form.people.one? ? 'билета' : 'билетов' %>&nbsp;—</span> <span style="white-space: nowrap;"><%= decorated_price total_price, 'strong', 'span' %><%= ' за всех пассажиров' if @order_form.people.many? %> со&nbsp;всеми налогами и&nbsp;сборами</span>
-</div>
-<table class="bc-bill">
-<tr>
-    <td>
-        <h6>Стоимость <%= @order_form.people.one? ? 'билета' : 'билетов' %></h6>
-        <div class="price"><%= decorated_price total_price, 'strong', 'em' %>&nbsp;</div>
-    </td>
-    <td class="sign">+</td>
-    <td>
-        <div class="bcb-delivery">
-            <h6>Доставка курьером</h6>
-            <div class="price"><%= decorated_price 350, 'strong', 'em' %>&nbsp;</div>
-        </div>
-        <div class="bcb-nodelivery">
-            <h6>Оплата в&nbsp;офисе</h6>
-            <div class="price"><%= decorated_price 0, 'strong', 'em' %>&nbsp;</div>
-        </div>
-    </td>
-    <td class="sign">=</td>
-    <td>
-        <h6>Итого к&nbsp;оплате</h6>
-        <div class="price price-total bcb-delivery"><%= decorated_price total_price + 350, 'strong', 'em' %>&nbsp;</div>
-        <div class="price price-total bcb-nodelivery"><%= decorated_price total_price, 'strong', 'em' %>&nbsp;</div>
-    </td>
-</tr>
-<tr>
-    <td colspan="2">
-        <p class="hint" style="margin-right: 10px;">стоимость <%= @order_form.people.one? ? 'билета' : 'билетов' %> со&nbsp;всеми налогами и&nbsp;сборами (не&nbsp;гарантируется до&nbsp;момента выписки билета)</p>    
-    </td>
-    <td colspan="3"></td>
-</tr>
-</table>
-
+<% price_total = @order_form.recommendation.price_with_payment_commission.round.to_i %>
+<div class="bf-result" data-type="newprice" data-price="<%= price_total %>">
+    <h5 class="bfnp-title">Авиакомпания изменила стоимость этого предложения</h5>
+    <h6 class="bfnp-content">Новая стоимость — <%= price_total %>&nbsp;<%= rubles(price_total) %> (на {1} {0})</h6>
+    <p class="bfnp-tip">Так иногда бывает. Цена может меняться как в&nbsp;большую, так и&nbsp;в&nbsp;меньшую сторону. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.</p>
+    <div class="bfr-controls">
+        <div class="ob-button">
+            <div class="obb-title">Продолжить покупку</div>
+            <div class="obb-side obb-left"><div class="obb-side obb-right"></div></div>
+        </div> или <span class="link bfr-cancel">выбрать другой вариант</span>
+    </div>
+    <% price_fare = @order_form.recommendation.price_fare.round.to_i %>
+    <% price_tax = @order_form.recommendation.price_tax.round.to_i %>    
+    <div class="bfnp-data">
+        <p class="bffp-nd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total %></span>&nbsp;<%= rubles(price_total) %></p>
+        <p class="bffp-wd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total + 350 %></span>&nbsp;<%= rubles(price_total + 350) %></p>
+        <p class="bffp-tip"><%= 'за всех пассажиров' if @order_form.people.many? %></p>
+        <ul class="bffp-details">
+            <li class="bffpd-item">Тариф — <%= price_fare %> <span class="ruble">Р</span></li>
+            <li class="bffpd-item">Таксы — <%= price_tax %> <span class="ruble">Р</span></li>
+            <li class="bffpd-item">Сбор — <%= price_total - price_fare - price_tax %> <span class="ruble">Р</span></li>
+            <li class="bffpd-item bffp-wd">Доставка — 350 <span class="ruble">Р</span></li>
+        </ul>
+    </data>
 </div>

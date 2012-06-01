@@ -105,7 +105,7 @@ class BookingController < ApplicationController
       render :partial => 'forbidden_sale'
       return
     end
-
+    
     @order_form = OrderForm.load_from_cache(params[:order][:number])
     @order_form.people_attributes = params[:person_attributes]
     @order_form.update_attributes(params[:order])

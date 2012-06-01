@@ -19,7 +19,14 @@
 </div>
 </div>
 
+<% price_total = @order_form.recommendation.price_with_payment_commission.round.to_i %>
 <%= form_for @order_form.card, :as => :card, :url => booking_pay_path, :html => { :id => 'booking-form', :autocomplete => 'off' } do |f| %>
+
+    <div class="bf-newprice" data-price="<%= price_total %>">
+        <h5 class="bfnp-title">Авиакомпания изменила стоимость этого предложения</h5>
+        <h6 class="bfnp-content">Новая стоимость — <%= price_total %>&nbsp;<%= rubles(price_total) %> (на {1} {0})</h6>
+        <p class="bfnp-tip">Так иногда бывает. Цена может меняться как в&nbsp;большую, так и&nbsp;в&nbsp;меньшую сторону. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.</p>
+    </div>
 
     <%= render 'contacts_form' %>
       
@@ -82,10 +89,8 @@
         <%= render 'payment_card_form', :f => f %>
     </div>
     
-    <% price_total = @order_form.recommendation.price_with_payment_commission.round.to_i %>
     <% price_fare = @order_form.recommendation.price_fare.round.to_i %>
     <% price_tax = @order_form.recommendation.price_tax.round.to_i %>
-    <% fee = @order_form.recommendation.fee.round.to_i %>
     <div class="bf-footer">
         <div class="bff-price">
             <div class="bffp-content">
@@ -95,7 +100,7 @@
                 <ul class="bffp-details">
                     <li class="bffpd-item">Тариф — <%= price_fare %> <span class="ruble">Р</span></li>
                     <li class="bffpd-item">Таксы — <%= price_tax %> <span class="ruble">Р</span></li>
-                    <li class="bffpd-item">Сбор — <%= fee %> <span class="ruble">Р</span></li>
+                    <li class="bffpd-item">Сбор — <%= price_total - price_fare - price_tax %> <span class="ruble">Р</span></li>
                     <li class="bffpd-item bffp-wd">Доставка — 350 <span class="ruble">Р</span></li>
                 </ul>
             </div>

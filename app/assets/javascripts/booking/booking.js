@@ -12,6 +12,10 @@ init: function() {
     results.header.select.find('.rhs-link').click(function() {
         that.cancel();
     });
+    this.content.delegate('.bf-hint', 'click', function(event) {
+        var content = $('#' + $(this).attr('data-hint')).html();
+        hint.show(event, content);
+    });     
 },
 abort: function() {
     if (this.request && this.request.abort) {
@@ -59,30 +63,9 @@ prebook: function(offer) {
 process: function(result) {
     if (result && result.success) {
         this.key = result.number;
-        if (false && result.price !== this.variant.price) {
-            this.offer.book.hide();
-            this.updatePrice(result.price);
-        } else {
-            this.load();
-        }
+        this.load();
     } else {
         this.failed();
-    }
-},
-updatePrice: function(price) {
-    var dp = price - this.variant.price;
-    var sum = results.currencies['RUR'].absorb('<span class="ob-sum">' + Math.abs(dp) + '</span>');
-    this.temporary = $('#ob-price-change').clone().removeAttr('id');
-    this.temporary.find('.obpc-title').html(function(i, template) {
-        return template.absorb(dp > 0 ? 'дороже' : 'дешевле', sum);
-    });
-    trackEvent('Бронирование', 'Изменилась цена', dp > 0 ? 'Стало дороже' : 'Стало дешевле');
-    this.offer.el.append(this.temporary);
-    this.variant.price = price;
-    if (this.offer.complex) {
-        this.variant.offer.updateBook();
-        this.offer.countPrices();
-        this.offer.otherPrices();
     }
 },
 failed: function() {
@@ -129,9 +112,7 @@ preview: function(content) {
     results.content.el.hide();    
     this.offer.book.removeClass('ob-disabled');
     this.offer.updateBook();
-    if (this.temporary) {
-        delete this.temporary.remove();
-    }
+    this.comparePrices();
     this.el.show();
     $w.scrollTop(0);
     this.form.init();    
@@ -142,6 +123,21 @@ preview: function(content) {
         next();
     });
     $w.delay(400).smoothScrollTo(this.form.position());
+},
+comparePrices: function() {
+    var context = this.content.find('.bf-newprice');
+    var dp = Number(context.attr('data-price')) - this.variant.price;
+    if (dp !== 0) {
+        trackEvent('Бронирование', 'Изменилась цена', dp > 0 ? 'Стало дороже' : 'Стало дешевле');
+        this.processPrice(context, dp);
+        context.show();
+    }
+},
+processPrice: function(context, dp) {
+    var cur = local.currencies['RUR'];
+    var sum = Math.abs(dp).decline(cur[0], cur[1], cur[2]);
+    var content = context.find('.bfnp-content');
+    content.html(content.html().absorb(local.booking.newprice[dp > 0 ? 'rise' : 'fall'], sum));
 },
 cancel: function() {
     Queries.show();

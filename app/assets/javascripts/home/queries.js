@@ -122,7 +122,7 @@ start: function() {
     var that = this;
     setInterval(function() {
         if (that.active && !that.hover) that.slide();
-    }, 5000);
+    }, 20000);
     this.active = true;
 },
 slide: function() {

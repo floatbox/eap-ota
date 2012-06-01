@@ -173,6 +173,11 @@
             <p class="od-comment"><span class="odc-hl">По этому тарифу осталось мало мест. Не откладывайте покупку.</span></p>
         <% end %>
     </div>
+    <% if admin_user %>
+        <% recommendation.variants_by_duration.each do |variant| %>
+            <p class="o-debug" data-code="<%= raw recommendation.serialize(variant) %>"><% variant_debug_info recommendation, variant %></p>
+        <% end %>
+    <% end %>
 </div>
 <% end %>
 

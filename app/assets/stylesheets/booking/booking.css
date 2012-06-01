@@ -1,23 +1,24 @@
 /* Изменение цены */
-.ob-price-change {
-    background: #edede3;
-    padding: 12px 14px 8px;
+.bf-newprice {
+    display: none;
+    padding: 18px 20px;
 }
-.obpc-title {
-    margin: 0 0 5px;
+.bfnp-title,
+.bfnp-content {
     font-size: 20px;
-    line-height: 20px;
+    line-height: 22px;
     letter-spacing: -0.03em;
 }
-.obpc-controls {
-    position: relative;
-    left: -6px;
-    height: 36px;
-    margin-top: 8px;
+.bfnp-title {
+    font-weight: bold;
+    color: #bf2a1d;
 }
-.obpc-tip {
-    font-size: 12px;
-    line-height: 14px;
+.bfnp-content {
+    margin: 5px 0;
+}
+.bfnp-tip {
+    font-size: 14px;
+    line-height: 16px;
 }
 
 /* Основной блок */
@@ -230,26 +231,26 @@
     font-weight: bold;
     color: #f90a6f;
 }
+.bfnp-data {
+    display: none;
+}
+
+/* Кнопки */
+.bfr-controls {
+    height: 36px;
+    margin: 15px 0 0;
+    line-height: 38px;
+}
+.bf-result .ob-button {
+    font-size: 20px;
+    line-height: 20px;
+    letter-spacing: -0.03em;
+}
+.bf-result .obb-side {
+    background-image: url(/images/booking/continue.png);
+}
 
 /* 3DSecure */
-.bfr-tdsecure .bfr-title {
-    margin: 0 0 4px;
-}
-.bfr-tdsecure .bfr-content {
-    margin: 0;
-}
-.bfrt-controls {
-    margin-top: 10px;
-    position: relative;
-    top: 2px;
-    left: -6px;
-    height: 36px;
-    line-height: 20px;
-}
-.bfrt-cancel {
-    float: left;
-    margin-top: 8px;
-}
 .bfrt-form {
     position: absolute;
     height: 0;
@@ -260,7 +261,6 @@
 .bfr-fail .bfr-title {
     color: #bf2a1d;
 }
-
 
 /* Бронирование в корпоративном режиме */
 .booking-corporate {
@@ -323,41 +323,4 @@
     padding: 3px 8px;
     background: #fff;
     font-size: 12px;
-}
-
-/* Изменение цены */
-.booking-newprice h5 {
-    margin: 0 0 10px;
-}
-.booking-newprice .a-button {
-    margin: 0;
-    border-color: #7b8e12;
-    margin-right: 2px;
-    padding: 3px 10px;
-    font-weight: bold;    
-    color: #333;
-}
-
-/* Ссылки для добавления в социальные сети */
-.booking-social {
-    margin: 15px 0 15px;
-    padding: 12px 15px 0;
-    border-top: 1px solid #ddd;
-}
-.booking-form .booking-social h3 {
-    margin: 0 0 10px;
-    line-height: 22px;
-}
-.booking-form .booking-social li {
-    margin: 0 0 10px;
-    font-size: 14px;
-    line-height: 17px;
-}
-.booking-form .booking-social a {
-    padding: 5px 0 5px 32px;
-    background: url(/img/booking/social.png) no-repeat;
-    color: #777;
-}
-.booking-form .booking-social a:hover {
-    color: #ED1192;
 }

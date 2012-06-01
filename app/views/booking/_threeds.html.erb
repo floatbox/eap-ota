@@ -1,5 +1,5 @@
 <div class="bf-result" data-type="3dsecure">
-    <h5 class="bfr-title">Ваша банковская карта требует дополнительной авторизации 3DSecure.</h5>
+    <h5 class="bfr-title">Ваша банковская карта требует дополнительной авторизации 3DSecure</h5>
     <p class="bfr-content">Вы будете перенаправлены на сайт платёжного шлюза. После успешной авторизации вы получите подтверждение покупки.</p>
     <%= form_tag payture_response.acs_url, :class => 'tds-form' do %>
       <%= hidden_field_tag 'PaReq', payture_response.pa_req %>
@@ -7,8 +7,11 @@
       <%= hidden_field_tag 'MD', payture_response.threeds_key %>
       <%= submit_tag 'Перейти к авторизации' %>
     <% end %>
-    <div class="bfr-3ds">
-        <span class="link bfr-continue">Перейти к авторизации</span> или <span class="link bfr-back">выбрать другой способ оплаты</a>
-    </div>
+    <div class="bfr-controls">
+        <div class="ob-button">
+            <div class="obb-title">Перейти к авторизации</div>
+            <div class="obb-side obb-left"><div class="obb-side obb-right"></div></div>
+        </div> или <span class="link bfr-back">выбрать другой способ оплаты</span>
+    </div>    
 </div>
 

@@ -29,13 +29,9 @@ init: function() {
     this.required.delegate('.bffr-link', 'click', function() {
         that.focus($('#' + $(this).attr('data-field')));
     });
-    this.el.delegate('.bf-hint', 'click', function(event) {
-        var content = $('#' + $(this).attr('data-hint')).html();
-        hint.show(event, content);
-    }); 
     
-    //this.sections[0].set(['mszakharov@gmail.com', '+79161234567']);
-    //this.sections[1].rows[0].set(['MAXIM', 'ZAKHAROV', 'm', '03.05.1983', 170, '1234567890', '', true]);
+    this.sections[0].set(['mszakharov@gmail.com', '+79161234567']);
+    this.sections[1].rows[0].set(['MAXIM', 'ZAKHAROV', 'm', '03.05.1983', 170, '1234567890', '', true]);
     
     this.validate(true);
 },
@@ -112,18 +108,37 @@ process: function(s) {
     });
     var back = this.result.find('.bfr-back');
     if (back.length) {  
-        that.back = true;
+        this.back = true;
         back.click(function() {
             that.result.hide();
             that.footer.show();
             delete that.back;
         });
     }
-    if (this.result.attr('data-type') === 'forbidden') {
+    var type = this.result.attr('data-type');
+    if (type === 'newprice') {
+        var op = Number(this.el.find('.bf-newprice').attr('data-price'));
+        var np = Number(this.result.attr('data-price'));
+        booking.processPrice(this.result, np - op);
+        this.result.find('.obb-title').click(function() {
+            that.el.submit();
+            that.footer.show();
+        });
+        var wd = this.el.find('.bff-price .bffp-wd').is(':visible');
+        var context = this.el.find('.bff-price').html(this.result.find('.bfnp-data').html());
+        context.find('.bffp-wd').toggle(wd);
+        context.find('.bffp-nd').toggle(!wd);
+        this.back = true;
+    }
+    if (type === '3dsecure') {
+        this.result.find('.obb-title').click(function() {
+        });        
+    }
+    if (type === 'forbidden') {
         setTimeout(function() {
             that.result.hide();
             that.footer.show();
-        }, 6000);
+        }, 60000);
     }
 }
 };

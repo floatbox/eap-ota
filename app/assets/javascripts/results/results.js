@@ -24,6 +24,7 @@ show: function(instant) {
     }
     if (instant) {
         context = search.el.hide();
+        $w.scrollTop(0);
     } else if ($.support.fixedPosition) {
         that.fixed.preview();    
         context = $w.delay(300);

@@ -61,6 +61,12 @@ offers: {
     from: '{0} из {1}',
     all: 'Все {0}'
 },
+booking: {
+    newprice: {
+        rise: 'дороже',
+        fall: 'дешевле'
+    }
+},
 title: {
     search: 'Поиск авиабилетов {0}',
     results: 'Авиабилеты {0}',
