@@ -90,9 +90,7 @@ class PaytureCharge < Payment
   end
 
   def payture_state
-    state = gateway.state(:order_id => ref).state
-    update_attributes(:payment_status => state)
-    state
+    gateway.state(:order_id => ref).state
   end
 
   def payture_amount

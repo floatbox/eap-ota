@@ -348,8 +348,7 @@ class Order < ActiveRecord::Base
     created_at.to_date
   end
 
-  delegate :payture_state, :charged_on, :payture_amount,
-    :to => :last_payment, :allow_nil => true
+  delegate :charged_on, :to => :last_payment, :allow_nil => true
 
   def confirm_3ds pa_res, md
     if result = last_payment.confirm_3ds!(pa_res, md)
