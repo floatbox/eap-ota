@@ -290,8 +290,8 @@ commission "0%/0%"
 carrier "AB", "AIR BERLIN"
 ########################################
 
-example 'cdgsvo svocdg/lh'
-example 'svocdg'
+##example 'cdgsvo svocdg/lh'
+##example 'svocdg'
 agent    "5% по всем направлениям через DTT"
 subagent "3% по всем направлениям через DTT"
 interline :no, :unconfirmed
@@ -299,15 +299,16 @@ interline :no, :unconfirmed
 # Исправление Кати 20.04.2012
 # у нас через DTT 3%
 discount "1.7%"
+disabled "Обратно"
 commission "5%/3%"
 
-#example 'cdgsvo svocdg/lh'
-#example 'svocdg'
+example 'cdgsvo svocdg/lh'
+example 'svocdg'
 agent    "1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
 subagent "5 коп с билета по опубл. тарифам на рейсы AB"
 interline :no, :unconfirmed
 our_markup "1%"
-disabled "Обратно"
+#disabled "Обратно"
 commission "1/0.05"
 
 example 'cdgsvo/hg svocdg/hg'
