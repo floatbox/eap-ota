@@ -2624,14 +2624,14 @@ example 'svocdg/business cdgsvo/business'
 agent "9% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
 subagent "7% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
 classes :business
-## discount "6.3%"
+discount "6%"
 commission "9%/7%"
 
 example 'svocdg/economy svocdg/economy'
 agent "7% от опубл. тарифов на собств. рейсы U9 Эконом класса;"
 subagent "5% от опубл. тарифов на собств. рейсы U9 Эконом класса"
 classes :economy
-discount "3%"
+discount "4.2%"
 commission "7%/5%"
 
 example 'svocdg/ab cdgsvo'
