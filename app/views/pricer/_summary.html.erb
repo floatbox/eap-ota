@@ -1,7 +1,7 @@
 <% carrier = primary_carrier(segment) %>
 <div class="os-summary"
     data-carrier="<%= carrier.iata %>"
-    data-flights="<%= flight_codes(segment) %>"
+    data-flights="<%= segment_id(segment) %>"
     data-dpt="<%= time_in_minutes(segment.departure_time) %>"
     data-duration="<%= segment.total_duration %>"
 >

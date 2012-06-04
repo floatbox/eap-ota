@@ -162,8 +162,11 @@ module PricerHelper
     "Перелет #{ nbsp(segment.departure.city.case_from) } #{ nbsp(segment.arrival.city.case_to) }".html_safe
   end
 
-  def flight_codes segment
-    segment.flights.collect(&:flight_code).join('-').html_safe
+  # FIXME сломается, если делать мерж двух прайсеров с одинаковыми рекомендациями
+  # пофиксить мерж?
+  def segment_id segment
+    # segment.flights.collect(&:flight_code).join('-').html_safe
+    "seg_#{segment.object_id}"
   end
 
   # данные для мини-диаграмм
