@@ -42,6 +42,11 @@ class HotOffer
     def actual
       where(:date1.gt => Date.today)
     end
+
+    # спец скоуп для Вани
+    def superscoup
+      where(:from_iata => {'$in' => ['MSK', 'MOW', 'LED']})
+    end
   end
 
   def create_notifications
@@ -83,15 +88,16 @@ class HotOffer
         self.rt = @search.rt
         self.date1 = Date.strptime(@search.segments[0].date, '%d%m%y')
         self.date2 = Date.strptime(@search.segments[1].date, '%d%m%y') if @search.segments[1]
-	self.time_delta = (Date.strptime(@search.segments[0].date, '%d%m%y') - Date.today).to_i
+        self.time_delta = (Date.strptime(@search.segments[0].date, '%d%m%y') - Date.today).to_i
         self.destination = Destination.find_or_create_by(:from_iata => @search.segments[0].from_as_object.iata, :to_iata => @search.segments[0].to_as_object.iata, :rt => @search.rt)
-        unless destination.new_record?
-                 destination.average_price = (destination.hot_offers.every.price.sum + price) / (destination.hot_offers.count + 1)
-                 destination.average_time_delta = (destination.hot_offers.every.time_delta.sum + time_delta) / (destination.hot_offers.count + 1)
-               else
-                 destination.average_price = price
-                 destination.average_time_delta = time_delta
-               end
+        if destination.average_price
+          hot_offers_count = destination.hot_offers.count + 1
+          destination.average_price = destination.hot_offers.every.price.sum / hot_offers_count
+          destination.average_time_delta = destination.hot_offers.every.time_delta.sum / hot_offers_count
+        else
+          destination.average_price = price
+          destination.average_time_delta = time_delta
+        end
 
         self.price_variation =  price - destination.average_price
         self.price_variation_percent = ((price / destination.average_price.to_f - 1)*100)
