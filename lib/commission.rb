@@ -1151,7 +1151,7 @@ commission "0%/0%"
 carrier "IB", "IBERIA"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.1%'
+carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'svocdg cdgsvo'
 agent    "1 руб. с билета на рейсы IB. (Билеты Interline под кодом IB могут быть выписаны только в случае существования опубл. тарифов и только при условии, что IB выполняет первый рейс маршрута."
@@ -1366,7 +1366,7 @@ commission "0%/0%"
 carrier "KL", "KLM"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.5%'
+carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'svocdg'
 agent    "1 euro с билета на рейсы KL. Вознаграждение не выплачивается за любые тарифы net. (Билеты Interline могут быть выписаны на бланках KLM только в случае существования действующего интерлайн соглашения, официально опубл. тарифов и только при условии, если КЛМ или авиакомпания Эр Франс участвуют в одном из сегментов перевозки.)"
@@ -1414,7 +1414,7 @@ commission "1/0.05"
 carrier "LH", "LUFTHANSA"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => 100
+carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -1462,7 +1462,7 @@ commission "1eur/5"
 carrier "LX", "SWISS"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.2%'
+carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'svocdg cdgsvo/ab'
 agent    "1 руб. с билета по опубл. тарифам на собств. рейсы LX и рейсы Interline с уч. LX.
