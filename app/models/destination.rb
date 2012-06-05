@@ -11,6 +11,7 @@ class Destination
   field :average_price, :type => Integer
   field :average_time_delta, :type => Integer
   field :hot_offers_counter, :type => Integer, :default => 0
+  field :recalculated, :type => Boolean
 
 
   has_many :hot_offers, :dependent => :destroy
