@@ -4,6 +4,7 @@ Eviterra::Application.routes.draw do
   match 'pricer' => 'pricer#pricer', :as => :pricer
   match 'calendar' => 'pricer#calendar', :as => :calendar
   match 'pricer/validate' => 'pricer#validate', :as => :pricer_validate
+  match 'pricer/pricer_benchmark' => 'pricer#pricer_benchmark', :as => :pricer_pricer_benchmark
 
   match 'api/search(.:format)' => 'pricer#api', :format => :xml
   match 'api/redirection(.:format)' => 'booking#api_redirect'
