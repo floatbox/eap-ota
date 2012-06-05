@@ -91,9 +91,11 @@ class HotOffer
         self.time_delta = (Date.strptime(@search.segments[0].date, '%d%m%y') - Date.today).to_i
         self.destination = Destination.find_or_create_by(:from_iata => @search.segments[0].from_as_object.iata, :to_iata => @search.segments[0].to_as_object.iata, :rt => @search.rt)
         if destination.average_price
-          hot_offers_count = destination.hot_offers.count + 1
-          destination.average_price = destination.hot_offers.every.price.sum / hot_offers_count
-          destination.average_time_delta = destination.hot_offers.every.time_delta.sum / hot_offers_count
+#          hot_offers_count = destination.hot_offers.count + 1
+#          destination.average_price = destination.hot_offers.every.price.sum / hot_offers_count
+#          destination.average_time_delta = destination.hot_offers.every.time_delta.sum / hot_offers_count
+          destination.average_price = destination.hot_offers_counter.to_f/(destination.hot_offers_counter + 1)*destination.average_price + price/(destination.hot_offers_counter + 1)
+          destination.average_time_delta = destination.hot_offers_counter.to_f/(destination.hot_offers_counter + 1)*destination.average_time_delta + time_delta/(destination.hot_offers_counter + 1)
         else
           destination.average_price = price
           destination.average_time_delta = time_delta
@@ -104,6 +106,7 @@ class HotOffer
 
         destination.hot_offers_counter += 1
         destination.save
+#        self.price_variation_percent < -10
     end
   end
 
