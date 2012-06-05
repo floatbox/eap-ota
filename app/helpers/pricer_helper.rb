@@ -103,22 +103,12 @@ module PricerHelper
     }
   end  
   
-  # группируем сегменты из нескольких вариантов
+  # группируем сегменты из нескольких вариантов в массивы для каждой "ноги" отдельно
+  # может сломаться, если одинаковые сегменты пришли из двух разных запросов.
+  # тогда придется uniq_by, чоуж.
   def group_segments variants
-    segments = []
-    used = {}
-    variants.each do |variant|
-      variant.segments.each_with_index do |segment, scounter|
-        sid = flight_codes(segment)
-        unless used[sid]
-          used[sid] = true
-          segments[scounter] ||= []
-          segments[scounter] << segment
-        end
-      end
-    end
-    segments.map do |segment|
-      segment.sort_by {|s| [s.departure_time, s.total_duration] }
+    variants.map(&:segments).transpose.map do |segments|
+      segments.uniq.sort_by {|s| [s.departure_time, s.total_duration] }
     end
   end
 
