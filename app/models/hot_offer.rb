@@ -40,7 +40,7 @@ class HotOffer
 
     # рейс еще не улетел
     def actual
-      where(:date1.gt => Date.today)
+      where(:date1.gt => Date.today).order_by([:created_at, :desc])
     end
 
     # спец скоуп для Вани
