@@ -1416,13 +1416,14 @@ carrier "LH", "LUFTHANSA"
 
 carrier_defaults :consolidator => 0, :our_markup => '1%'
 
-example 'dmejfk'
-example 'dmejfk jfkdme/lh'
+example 'dmejfk/Q'
+example 'dmejfk/Q jfkdme/lh/Q'
 important!
 agent    "через DTT из России в США и наоборот - 10%"
 subagent "через DTT из России в США и наоборот - 8%"
-check { includes(country_iatas.first, 'RU UA PL RO') }
-check { includes(country_iatas, %W(US)) }
+#check { includes(country_iatas.first, 'RU UA PL RO') }
+#check { includes(country_iatas, %W(US)) }
+check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
 subclasses "FADZPQVWSTLK"
 our_markup "0"
 ##discount '5%'
@@ -1433,8 +1434,9 @@ example 'dmejfk jfkdme/lh'
 important!
 agent    "через DTT из России в США и наоборот - 10%"
 subagent "через DTT из России в США и наоборот - 8%"
-check { includes(country_iatas.first, 'RU UA PL RO') }
-check { includes(country_iatas, %W(US)) }
+#check { includes(country_iatas.first, 'RU UA PL RO') }
+#check { includes(country_iatas, %W(US)) }
+check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
 subclasses "YBMUH"
 our_markup "0"
 ##discount '1%'
