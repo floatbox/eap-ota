@@ -42,18 +42,15 @@
           <td class="pad_null" style="eifth: 240px;">
               <font family="Arial" size="2">
               <% unless @lang %>Тариф /<%end%> Fare<br>
-              <% unless @lang %>Таксы и сборы /<%end%> Taxes<br>
+              <% unless @lang %>Таксы и сборы/<%end%> Taxes<br>
               <nobr><% unless @lang %>В том числе сервисный сбор /<%end%> Including fee&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</nobr><br>
               <% unless @prices.price_declared_discount.zero? %>
                 <% unless @lang %>Скидка /<%end%> Discount<br>
               <% end %>
-              <% unless @lang %>Итоговая стоимость /<%end%> Total<br>
-              <% if @prices.show_vat %>
-    
-                <% unless @lang %>В том числе НДС /<%end%> Including VAT<br>
+              <% if @prices.payment_type == 'delivery' %>
+                  <% unless @lang %>Доставка /<%end%> Delivery<br>
               <% end %>
-              <% unless @lang %>Форма оплаты /<%end%> Paid by<br>
-              <% unless @lang %>Дата оформления /<%end%> Issue date
+              <% unless @lang %>Итоговая стоимость /<%end%> Total<br>
               </font>
           </td>
           <td class="pad_null">
@@ -64,12 +61,12 @@
               <% unless @prices.price_declared_discount.zero? %>
                 <%= exact_price(@prices.price_declared_discount) %> RUB<br>
               <% end %>
-              <%= exact_price(@prices.recalculated_price_with_payment_commission) %> RUB<br>
-              <% if @prices.show_vat %>
-                <%= exact_price(@prices.vat) %> RUB<br>
+              <% if @prices.payment_type == 'delivery' %>
+                  350 RUB<br>
+                  <%= exact_price(@prices.price_with_payment_commission + 350)  %> RUB<br>
+              <% else %>
+                  <%= exact_price(@prices.price_with_payment_commission) %> RUB<br>
               <% end %>
-              <%= @prices.paid_by %><br>
-              <%= @prices.created_at.strftime('%d.%m.%y') %>
               </font>
           </td>
       </tr>
