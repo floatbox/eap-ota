@@ -2018,6 +2018,28 @@ carrier "SN", "BRUSSELS AIRLINES"
 
 carrier_defaults :consolidator => 0, :our_markup => '0.5%'
 
+example 'dmejfk'
+example 'dmejfk jfkdme/lx'
+important!
+agent    "через DTT из России в США и наоборот - 10%"
+subagent "через DTT из России в США и наоборот - 8%"
+check {includes(city_iatas_first, 'NYC')}
+interline :no, :yes
+discount '5%'
+commission "10%/8%"
+
+example 'dmejfk'
+example 'dmejfk jfkdme/lx'
+important!
+agent    "через DTT из России в США и наоборот - 10%"
+subagent "через DTT из России в США и наоборот - 8%"
+check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
+subclasses "YBMUH"
+interline :no, :yes
+our_markup "0"
+discount '1%'
+commission "10%/8%"
+
 example 'dmence'
 important!
 agent    "через DTT - 5%"
