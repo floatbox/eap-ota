@@ -2018,13 +2018,15 @@ carrier "SN", "BRUSSELS AIRLINES"
 
 carrier_defaults :consolidator => 0, :our_markup => '0.5%'
 
-example 'dmejfk'
-example 'dmejfk jfkdme/lx'
+example 'dmejfk/Q'
+example 'dmejfk/Q jfkdme/lh/Q'
 important!
 agent    "через DTT из России в США и наоборот - 10%"
 subagent "через DTT из России в США и наоборот - 8%"
-check {includes(city_iatas_first, 'NYC')}
+check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
+subclasses "FADZPQVWSTLK"
 interline :no, :yes
+our_markup "0"
 discount '5%'
 commission "10%/8%"
 
@@ -2038,10 +2040,9 @@ subclasses "YBMUH"
 interline :no, :yes
 our_markup "0"
 discount '1%'
-commission "10%/8%"
+commission "5%/3%"
 
 example 'dmence'
-important!
 agent    "через DTT - 5%"
 subagent "через DTT - 3%"
 interline :no
