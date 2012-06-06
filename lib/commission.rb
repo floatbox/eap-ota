@@ -2003,6 +2003,30 @@ carrier "SK", "SAS"
 
 carrier_defaults :consolidator => 0, :our_markup => '0.5%'
 
+example 'svojfk'
+example 'svojfk jfksvo/sk'
+important!
+agent    "через DTT из России в США и наоборот - 10%"
+subagent "через DTT из России в США и наоборот - 8%"
+check {includes(country_iatas, 'US CA') }
+subclasses "CDYSEHM"
+interline :no, :yes
+our_markup "0"
+discount '8%'
+commission "12%/10%"
+
+example 'svojfk/Q'
+example 'svojfk/Q jfksvo/sk/Q'
+important!
+agent    "через DTT из России в США и наоборот - 10%"
+subagent "через DTT из России в США и наоборот - 8%"
+check {includes(country_iatas, 'US CA') }
+subclasses "JZBQVWKLT"
+interline :no, :yes
+our_markup "0"
+discount '4%'
+commission "8%/6%"
+
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
 agent    "1 руб. с билета на рейсы SAS. (Билеты «Интерлайн» под кодом Авиакомпании могут быть выписаны только в случае существования опубл. тарифов и только при условии, если Авиакомпания выполняет хотя бы один рейс.)"
