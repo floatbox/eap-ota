@@ -1416,6 +1416,30 @@ carrier "LH", "LUFTHANSA"
 
 carrier_defaults :consolidator => 0, :our_markup => '1%'
 
+example 'dmejfk'
+example 'dmejfk jfkdme/lh'
+important!
+agent    "через DTT из России в США и наоборот - 10%"
+subagent "через DTT из России в США и наоборот - 8%"
+check { includes(country_iatas.first, 'RU UA PL RO') }
+check { includes(country_iatas, %W(US)) }
+subclasses "FADZPQVWSTLK"
+our_markup "0"
+##discount '5%'
+commission "10%/8%"
+
+example 'dmejfk'
+example 'dmejfk jfkdme/lh'
+important!
+agent    "через DTT из России в США и наоборот - 10%"
+subagent "через DTT из России в США и наоборот - 8%"
+check { includes(country_iatas.first, 'RU UA PL RO') }
+check { includes(country_iatas, %W(US)) }
+subclasses "YBMUH"
+our_markup "0"
+##discount '1%'
+commission "5%/3%"
+
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
 agent    "1 руб. с билета по опубл. тарифам на собств. рейсы LH и рейсы Interline с участком LH. (Билеты Interline под кодом LH могут быть выписаны только в случае существования опубл. тарифов и только при условии, что LH выполняет как минимум один рейс. В противном случае по билету должна быть сделана доплата до полного опублик. IATA тарифа. Исключение составляют рейсы авиакомпаний-партнёров: LX, EW, CL, IQ, C3 и 4U (Germanwings), а также сегменты авиакомпаний STAR Alliance в случае оформления билетов по тарифам STAR Round the World и Star Airpass Fares)"
