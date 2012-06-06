@@ -302,18 +302,16 @@ discount "1.7%"
 #disabled "Обратно"
 commission "5%/3%"
 
-example 'dmevie viedme/hg'
-example 'dmevie'
-agent    "5% по всем направлениям через DTT"
-subagent "3% по всем направлениям через DTT"
+#example 'dmevie viedme/hg'
+#example 'dmevie'
+#agent    "5% по всем направлениям через DTT"
+#subagent "3% по всем направлениям через DTT"
 #interline :no, :unconfirmed
 # пишем ники на AB через DTT
-check { includes_only(marketing_carrier_iatas, %W[HG]) }
-discount "1.7%"
+#check { includes_only(marketing_carrier_iatas, %W[HG]) }
+#discount "1.7%"
 #disabled "Обратно"
-commission "5%/3%"
-
-
+#commission "5%/3%"
 
 #example 'cdgsvo svocdg/lh'
 #example 'svocdg'
