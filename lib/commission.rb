@@ -2152,7 +2152,6 @@ carrier "UA", "UNITED AIRLINES (ГЛОНАСС)"
 
 example 'dmejfk/Q'
 example 'dmejfk/Q jfkdme/lh/Q'
-important!
 agent    "через DTT из России в США и наоборот - 10%"
 subagent "через DTT из России в США и наоборот - 8%"
 check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
@@ -2164,7 +2163,6 @@ commission "10%/8%"
 
 example 'dmejfk'
 example 'dmejfk jfkdme/lh'
-important!
 agent    "через DTT из России в США и наоборот - 10%"
 subagent "через DTT из России в США и наоборот - 8%"
 check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
