@@ -99,30 +99,30 @@ commission "11%/9%"
 #discount "7.5%"
 #commission "12%/10%"
 
-##example 'AERDME/W DMEAER/E'
-##example 'AERDME/Y DMEAER/M'
-##example 'AERDME/W DMEAER/W'
+example 'AERDME/W DMEAER/E'
+example 'AERDME/Y DMEAER/M'
+example 'AERDME/W DMEAER/W'
 agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWUYHMQBKORE"
 discount "6.5%"
-disabled "Пишем через АЦ из-за курса доллара"
+#disabled "Пишем через АЦ из-за курса доллара"
 commission "12%/10%"
 
-example 'AERDME/Y DMEAER/M'
+#example 'AERDME/Y DMEAER/M'
 agent "7% МВЛ. ВВЛ Y, H, M, Q, B, K, O, R, E"
 subagent "5  (пять) % от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, M, Q, B, K, O, R, E."
 subclasses "YHMQBKORE"
 discount "3%"
-##disabled "Коля сказал"
+disabled "Коля сказал"
 commission "7%/5%"
 
-example 'AERDME/W DMEAER/W'
+#example 'AERDME/W DMEAER/W'
 agent "3% МВЛ. ВВЛ L, V, X, T, N, I, G, W, U"
 subagent "2 % от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWU"
 discount "0.5%"
-##disabled "Коля сказал"
+disabled "Коля сказал"
 commission "3%/2%"
 
 example 'aerdme dmeaer/ab'
@@ -290,8 +290,8 @@ commission "0%/0%"
 carrier "AB", "AIR BERLIN"
 ########################################
 
-##example 'cdgsvo svocdg/lh'
-##example 'svocdg'
+example 'cdgsvo svocdg/lh'
+example 'svocdg'
 agent    "5% по всем направлениям через DTT"
 subagent "3% по всем направлениям через DTT"
 interline :no, :unconfirmed
@@ -299,16 +299,16 @@ interline :no, :unconfirmed
 # Исправление Кати 20.04.2012
 # у нас через DTT 3%
 discount "1.7%"
-disabled "Обратно"
+#disabled "Обратно"
 commission "5%/3%"
 
-example 'cdgsvo svocdg/lh'
-example 'svocdg'
+#example 'cdgsvo svocdg/lh'
+#example 'svocdg'
 agent    "1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
 subagent "5 коп с билета по опубл. тарифам на рейсы AB"
 interline :no, :unconfirmed
 our_markup "1%"
-#disabled "Обратно"
+disabled "Обратно"
 commission "1/0.05"
 
 example 'cdgsvo/hg svocdg/hg'
