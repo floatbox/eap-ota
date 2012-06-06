@@ -39,6 +39,7 @@ admin:
   PaytureRefund: create, update, read
   CashCharge: create, update, read
   CashRefund: create, update, read
+  PromoCode: create, update, read
 
 hoteditor:
   HotOffer: read, delete
