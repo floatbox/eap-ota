@@ -1425,8 +1425,9 @@ subagent "через DTT из России в США и наоборот - 8%"
 #check { includes(country_iatas, %W(US)) }
 check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
 subclasses "FADZPQVWSTLK"
+interline :no, :yes
 our_markup "0"
-##discount '5%'
+discount '5%'
 commission "10%/8%"
 
 example 'dmejfk'
@@ -1438,8 +1439,9 @@ subagent "через DTT из России в США и наоборот - 8%"
 #check { includes(country_iatas, %W(US)) }
 check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
 subclasses "YBMUH"
+interline :no, :yes
 our_markup "0"
-##discount '1%'
+discount '1%'
 commission "5%/3%"
 
 example 'svocdg'
