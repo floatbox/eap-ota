@@ -1417,7 +1417,7 @@ carrier "LH", "LUFTHANSA"
 carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'dmejfk/Q'
-example 'dmejfk/Q jfkdme/lh/Q'
+example 'dmejfk/Q jfkdme/ua/Q'
 important!
 agent    "через DTT из России в США и наоборот - 10%"
 subagent "через DTT из России в США и наоборот - 8%"
@@ -1431,7 +1431,7 @@ discount '5%'
 commission "10%/8%"
 
 example 'dmejfk'
-example 'dmejfk jfkdme/lh'
+example 'dmejfk jfkdme/ua'
 important!
 agent    "через DTT из России в США и наоборот - 10%"
 subagent "через DTT из России в США и наоборот - 8%"
@@ -1491,6 +1491,30 @@ carrier "LX", "SWISS"
 ########################################
 
 carrier_defaults :consolidator => 0, :our_markup => '1%'
+
+example 'dmejfk/Q'
+example 'dmejfk/Q jfkdme/lh/Q'
+important!
+agent    "через DTT из России в США и наоборот - 10%"
+subagent "через DTT из России в США и наоборот - 8%"
+check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
+subclasses "FADZPQVWSTLK"
+interline :no, :yes
+our_markup "0"
+discount '5%'
+commission "10%/8%"
+
+example 'dmejfk'
+example 'dmejfk jfkdme/lh'
+important!
+agent    "через DTT из России в США и наоборот - 10%"
+subagent "через DTT из России в США и наоборот - 8%"
+check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
+subclasses "YBMUH"
+interline :no, :yes
+our_markup "0"
+discount '1%'
+commission "5%/3%"
 
 example 'svocdg cdgsvo/ab'
 agent    "1 руб. с билета по опубл. тарифам на собств. рейсы LX и рейсы Interline с уч. LX.
@@ -1765,6 +1789,30 @@ carrier "OS", "AUSTRIAN AIRLINES"
 ########################################
 
 carrier_defaults :consolidator => 0, :our_markup => '0.2%'
+
+example 'dmejfk/Q'
+example 'dmejfk/Q jfkdme/lh/Q'
+important!
+agent    "через DTT из России в США и наоборот - 10%"
+subagent "через DTT из России в США и наоборот - 8%"
+check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
+subclasses "FADZPQVWSTLK"
+interline :no, :yes
+our_markup "0"
+discount '5%'
+commission "10%/8%"
+
+example 'dmejfk'
+example 'dmejfk jfkdme/lh'
+important!
+agent    "через DTT из России в США и наоборот - 10%"
+subagent "через DTT из России в США и наоборот - 8%"
+check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
+subclasses "YBMUH"
+interline :no, :yes
+our_markup "0"
+discount '1%'
+commission "5%/3%"
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -2101,6 +2149,30 @@ commission "1%/0.5%"
 
 carrier "UA", "UNITED AIRLINES (ГЛОНАСС)"
 ########################################
+
+example 'dmejfk/Q'
+example 'dmejfk/Q jfkdme/lh/Q'
+important!
+agent    "через DTT из России в США и наоборот - 10%"
+subagent "через DTT из России в США и наоборот - 8%"
+check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
+subclasses "FADZPQVWSTLK"
+interline :no, :yes
+our_markup "0"
+discount '5%'
+commission "10%/8%"
+
+example 'dmejfk'
+example 'dmejfk jfkdme/lh'
+important!
+agent    "через DTT из России в США и наоборот - 10%"
+subagent "через DTT из России в США и наоборот - 8%"
+check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
+subclasses "YBMUH"
+interline :no, :yes
+our_markup "0"
+discount '1%'
+commission "5%/3%"
 
 example 'SVOIAD/UA965/H'
 example 'SVOIAD/UA965/F'
