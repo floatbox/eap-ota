@@ -2018,6 +2018,15 @@ carrier "SN", "BRUSSELS AIRLINES"
 
 carrier_defaults :consolidator => 0, :our_markup => '0.5%'
 
+example 'dmence'
+important!
+agent    "через DTT - 5%"
+subagent "через DTT - 3%"
+interline :no
+our_markup "0"
+discount '1.5%'
+commission "5%/3%"
+
 example 'svocdg'
 example 'DMEBRU'
 example 'BRULBA'
