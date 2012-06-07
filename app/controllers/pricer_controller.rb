@@ -101,9 +101,9 @@ class PricerController < ApplicationController
       @search.save_to_cache
       @destination = get_destination
       @recommendations = Mux.new(:lite => true).async_pricer(@search)
-      Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))
       @query_key = @search.query_key
       hot_offer = create_hot_offer
+      Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))
       StatCounters.inc %W[search.api.success search.api.#{partner}.success]
       StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner}.total] if @destination
       render 'api/yandex'
