@@ -1429,11 +1429,8 @@ carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'dmejfk/Q'
 example 'dmejfk/Q jfkdme/ua/Q'
-important!
 agent    "через DTT из России в США и наоборот - 10%"
 subagent "через DTT из России в США и наоборот - 8%"
-#check { includes(country_iatas.first, 'RU UA PL RO') }
-#check { includes(country_iatas, %W(US)) }
 check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
 subclasses "FADZPQVWSTLK"
 interline :no, :yes
@@ -1442,14 +1439,11 @@ discount '6%'
 commission "10%/8%"
 
 example 'dmejfk'
-example 'dmejfk jfkdme/ua'
-important!
+example 'dmejfk jfkdme/ua/L'
 agent    "через DTT из России в США и наоборот - 10%"
 subagent "через DTT из России в США и наоборот - 8%"
-#check { includes(country_iatas.first, 'RU UA PL RO') }
-#check { includes(country_iatas, %W(US)) }
 check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
-subclasses "YBMUH"
+#subclasses "YBMUH"
 interline :no, :yes
 our_markup "0"
 discount '1%'
@@ -1504,8 +1498,7 @@ carrier "LX", "SWISS"
 carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'dmejfk/Q'
-example 'dmejfk/Q jfkdme/lh/Q'
-important!
+example 'dmejfk/Q jfkdme/os/Q'
 agent    "через DTT из России в США и наоборот - 10%"
 subagent "через DTT из России в США и наоборот - 8%"
 check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
@@ -1516,12 +1509,11 @@ discount '6%'
 commission "10%/8%"
 
 example 'dmejfk'
-example 'dmejfk jfkdme/lh'
-important!
+example 'dmejfk jfkdme/os/L'
 agent    "через DTT из России в США и наоборот - 10%"
 subagent "через DTT из России в США и наоборот - 8%"
 check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
-subclasses "YBMUH"
+#subclasses "YBMUH"
 interline :no, :yes
 our_markup "0"
 discount '1%'
@@ -1802,8 +1794,7 @@ carrier "OS", "AUSTRIAN AIRLINES"
 carrier_defaults :consolidator => 0, :our_markup => '0.2%'
 
 example 'dmejfk/Q'
-example 'dmejfk/Q jfkdme/lh/Q'
-important!
+example 'dmejfk/Q jfkdme/lx/Q'
 agent    "через DTT из России в США и наоборот - 10%"
 subagent "через DTT из России в США и наоборот - 8%"
 check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
@@ -1814,12 +1805,11 @@ discount '6%'
 commission "10%/8%"
 
 example 'dmejfk'
-example 'dmejfk jfkdme/lh'
-important!
+example 'dmejfk jfkdme/lx/L'
 agent    "через DTT из России в США и наоборот - 10%"
 subagent "через DTT из России в США и наоборот - 8%"
 check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
-subclasses "YBMUH"
+#subclasses "YBMUH"
 interline :no, :yes
 our_markup "0"
 discount '1%'
@@ -2005,9 +1995,8 @@ carrier_defaults :consolidator => 0, :our_markup => '0.5%'
 
 example 'svojfk'
 example 'svojfk jfksvo/sk'
-important!
-agent    "через DTT из России в США и наоборот - 10%"
-subagent "через DTT из России в США и наоборот - 8%"
+agent    "через DTT из России в США и наоборот - 12%"
+subagent "через DTT из России в США и наоборот - 10%"
 check {includes(country_iatas, 'US CA') }
 subclasses "CDYSEHM"
 interline :no, :yes
@@ -2017,11 +2006,10 @@ commission "12%/10%"
 
 example 'svojfk/Q'
 example 'svojfk/Q jfksvo/sk/Q'
-important!
-agent    "через DTT из России в США и наоборот - 10%"
-subagent "через DTT из России в США и наоборот - 8%"
+agent    "через DTT из России в США и наоборот - 8%"
+subagent "через DTT из России в США и наоборот - 6%"
 check {includes(country_iatas, 'US CA') }
-subclasses "JZBQVWKLT"
+#subclasses "JZBQVWKLT"
 interline :no, :yes
 our_markup "0"
 discount '4%'
@@ -2042,7 +2030,6 @@ carrier_defaults :consolidator => 0, :our_markup => '0.5%'
 
 example 'dmejfk/Q'
 example 'dmejfk/Q jfkdme/lh/Q'
-important!
 agent    "через DTT из России в США и наоборот - 10%"
 subagent "через DTT из России в США и наоборот - 8%"
 check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
@@ -2053,12 +2040,11 @@ discount '6%'
 commission "10%/8%"
 
 example 'dmejfk'
-example 'dmejfk jfkdme/lx'
-important!
+example 'dmejfk jfkdme/lh/L'
 agent    "через DTT из России в США и наоборот - 10%"
 subagent "через DTT из России в США и наоборот - 8%"
 check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
-subclasses "YBMUH"
+#subclasses "YBMUH"
 interline :no, :yes
 our_markup "0"
 discount '1%'
@@ -2229,11 +2215,11 @@ discount '6%'
 commission "10%/8%"
 
 example 'dmejfk'
-example 'dmejfk jfkdme/lh'
+example 'dmejfk jfkdme/lh/L'
 agent    "через DTT из России в США и наоборот - 10%"
 subagent "через DTT из России в США и наоборот - 8%"
 check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
-subclasses "YBMUH"
+#subclasses "YBMUH"
 interline :no, :yes
 our_markup "0"
 discount '1%'
