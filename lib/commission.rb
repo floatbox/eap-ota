@@ -299,18 +299,17 @@ interline :no, :unconfirmed
 # Исправление Кати 20.04.2012
 # у нас через DTT 3%
 discount "1.7%"
-#disabled "Обратно"
+#disabled
 commission "5%/3%"
 
 example 'dmevie/hg viedme/hg'
 example 'dmevie/hg'
 agent    "5% по всем направлениям через DTT"
 subagent "3% по всем направлениям через DTT"
-interline :no, :unconfirmed
+interline :absent
 # пишем ники на AB через DTT
 check { includes_only(marketing_carrier_iatas, %W[HG]) }
 discount "1.7%"
-disabled "Обратно"
 commission "5%/3%"
 
 #example 'cdgsvo svocdg/lh'
@@ -319,15 +318,16 @@ agent    "1 руб с билета по опубл. тарифам на рейс
 subagent "5 коп с билета по опубл. тарифам на рейсы AB"
 interline :no, :unconfirmed
 our_markup "1%"
-disabled "Обратно"
+disabled
 commission "1/0.05"
 
-example 'cdgsvo/hg svocdg/hg'
+#example 'dmevie/hg viedme/hg'
 agent    "1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
 subagent "5 коп с билета по опубл. тарифам на рейсы AB"
 interline :yes, :absent
 check { includes_only(marketing_carrier_iatas, %W[AB HG]) }
 our_markup "1%"
+disabled "продаем все через американцев"
 commission "1/0.05"
 
 example 'svocdg/s7'
