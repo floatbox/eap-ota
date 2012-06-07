@@ -4,6 +4,11 @@ class Ticket < ActiveRecord::Base
   include CopyAttrs
   has_paper_trail
 
+  # FIXME вынести в ActiveRecord::Base
+  def in_identity_map?
+    id && self.equal?( ActiveRecord::IdentityMap.get(self.class, id) )
+  end
+
   # FIXME сделать модуль или фикс для typus, этим оверрайдам место в typus/application.yml
   def self.model_fields
     super.merge(
