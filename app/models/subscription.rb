@@ -9,7 +9,7 @@ class Subscription < ActiveRecord::Base
   scope :disabled, where(:status => 'disable')
   scope :to_defrost, lambda {
     where(:status => 'frozen')\
-      .where("updated_at < ?", 11.hours.ago)
+      .where("updated_at < ?", 23.hours.ago)
   }
 
   before_save :set_destination_id_to_null
