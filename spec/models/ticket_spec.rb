@@ -13,7 +13,6 @@ describe Ticket do
 
     it "updates parent status to 'exchanged' when needed" do
       old_ticket.save
-      old_ticket.reload
       new_ticket = create(:ticket, :parent => old_ticket, :order => old_ticket.order)
       old_ticket.status.should == 'exchanged'
     end
@@ -22,7 +21,6 @@ describe Ticket do
 
       before do
         old_ticket.save
-        old_ticket.reload
       end
 
       let(:refund) {build(:refund, :parent => old_ticket, :order => old_ticket.order)}
@@ -53,7 +51,6 @@ describe Ticket do
       it 'restores parent status to "ticketed" when refund is deleted' do
         refund.save
         old_ticket.status.should == 'returned'
-        old_ticket.reload
         refund.destroy
         old_ticket.status.should == 'ticketed'
       end

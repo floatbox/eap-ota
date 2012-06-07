@@ -116,9 +116,9 @@ class Ticket < ActiveRecord::Base
 
   def update_status
     if kind == 'ticket'
-      if order.tickets.select{|t| t.parent_id == id && t.kind == 'ticket'}.present?
+      if order.tickets.where(:kind => 'ticket', :parent_id => id).present? #select{|t| t.parent_id == id && t.kind == 'ticket'}.present?
         update_attribute(:status, 'exchanged')
-      elsif order.tickets.select{|t| t.parent_id == id && t.kind == 'refund' && t.status == 'processed'}.present?
+      elsif order.tickets.where(:parent_id => id, :kind => 'refund', :status => 'processed').present? #.select{|t| t.parent_id == id && t.kind == 'refund' && t.status == 'processed'}.present?
         update_attribute(:status, 'returned')
       else
         update_attribute(:status, 'ticketed')
