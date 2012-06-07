@@ -12,7 +12,7 @@
 <% end %>
 </div>
 <div class="od-comments">
-    <p class="od-comment">Билет оформляет авиакомпания <%= recommendation.validating_carrier.name %>.<% if recommendation.validating_carrier.alliance %> Применяются бонусные программы альянса <span class="od-alliance" data-carriers="<%= recommendation.validating_carrier.available_bonus_programms.map{|bp| bp.name}.to_sentence %>"><%= nbsp(recommendation.validating_carrier.alliance.name) %></span>.<% end %></p>
+    <p class="od-comment">Билет оформляет авиакомпания <%= recommendation.validating_carrier.name %>.<% if recommendation.validating_carrier.alliance %> Применяются бонусные программы альянса <span class="od-alliance" data-carriers="<%= recommendation.validating_carrier.available_bonus_programms.map{|bp| bp.name}.to_sentence %>"><%= nbsp(recommendation.validating_carrier.alliance.name) %></span>.<% end %> Время везде местное.</p>
     <% recommendation_comments(recommendation).each do |comment| %>
         <p class="od-comment" data-carrier="<%= comment[:carrier] %>"><%= raw comment[:content] %></p>
     <% end %>

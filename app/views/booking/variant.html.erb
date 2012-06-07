@@ -15,8 +15,7 @@
     </script>
     <%= render 'shared/head' %>
     <%= stylesheet_link_tag 'variant', :debug => true %>
-    <%= javascript_include_tag "local/ru", 'home', :debug => true %>
-    <%#= javascript_include_tag "main", "controls/hint", "booking/form", "booking/validation", "booking/names", "booking/independent" %>
+    <%= javascript_include_tag "local/ru", 'variant', :debug => true %>
 </head>
 <body>
 
@@ -36,43 +35,42 @@
 </div>
 </div>
 
-<div style="float: left; display: block; visibility: hidden; position: absolute; top: 0px; right: 0px; background: #c1f29e; width: 240px; padding: 10px 12px; font-size: 90%;">Вы
-оформляете авиабилеты в&nbsp;одном из&nbsp;самых современных и&nbsp;технологичных
-сервисов в&nbsp;мире. Сотни пассажиров ежедневно летают с&nbsp;нами и&nbsp;доверяют&nbsp;нам.
-<br><br>
-У нас не только низкие цены, но&nbsp;и&nbsp;отличное обслуживание. Мы&nbsp;очень любим наших клиентов и&nbsp;делаем все&nbsp;возможное для того, чтобы
-один раз воспользовавшись нашим сервисом, вы&nbsp;покупали авиабилеты
-только у&nbsp;нас.
-<br><br>
-Мы гарантируем абсолютную безопасность ваших платежей
-и&nbsp;предоставление услуг в&nbsp;полном объеме.<br><br>Спасибо за&nbsp;покупку и&nbsp;приятного полета!
+<div id="booking-disclaimer">
+    <h5>Вы оформляете авиабилеты в&nbsp;одном из&nbsp;самых современных и&nbsp;технологичных сервисов в&nbsp;мире</h5>
+    <p>Сотни пассажиров ежедневно летают с&nbsp;нами и&nbsp;доверяют&nbsp;нам. У нас не только низкие цены, но&nbsp;и&nbsp;отличное обслуживание. Мы&nbsp;очень любим наших клиентов и&nbsp;делаем все&nbsp;возможное для того, чтобы один раз воспользовавшись нашим сервисом, вы&nbsp;покупали авиабилеты только у&nbsp;нас. Мы гарантируем абсолютную безопасность ваших платежей и&nbsp;предоставление услуг в&nbsp;полном объеме.</p>
+    <p>Спасибо за&nbsp;покупку и&nbsp;приятного полета!</p>
 </div>
 
-
-<div id="booking-loading" class="b-message">
-<div class="bm-content">
-    <h3 class="bm-title"><span class="bmt-progress">Проверяем доступность мест</span></h3>
-    <p class="bm-tip">Это займет от пяти до двадцати секунд</p>
-</div>
-</div>
-
-<div id="booking-fail" class="b-message">
-<div class="bm-content">
-    <h3 class="bm-title">В данный момент невозможно выбрать этот вариант</h3>
-    <p class="bm-tip">Так иногда бывает, потому что авиакомпания не&nbsp;может подтвердить наличие мест на&nbsp;этот рейс по&nbsp;этому тарифу. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Выберите <span class="link stop-booking">другой вариант</span>.</p>
-</div>
+<div id="booking" class="b-processing">
+    <div class="b-content offer"></div>
+    <div class="b-loading">
+        <h3 class="bl-title"><span class="bl-progress">Проверяем доступность мест</span></h3>
+        <p class="bl-tip">Это займет от пяти до двадцати секунд</p>
+    </div>
 </div>
 
-
+<div id="hint">
+    <div class="h-close"></div>
+    <div class="h-content"></div>
+</div>
 
 <%= render 'shared/footer' %>
 
+<script src="//translate.google.com/translate_a/element.js?cb=googleSectionalElementInit&ug=section&hl=ru"></script>
 <script type="text/javascript">
-hint.init();
 $(function() {
+    search.dates = {csnow: new Date('<%= Time.now.to_s %>')};
+    results.data = $.parseJSON('<%= raw @search.details.to_json %>');
+    results.updateTitles();
+    results.header.init();
+    results.header.summary.addClass('rh-ready').html('<span class="rhs-text">' + results.data.titles.header + '</span>');
+    results.header.adjust();
+    results.header.summary.show();
+    results.header.select.show();
     booking.init();
+    booking.restore();    
+    hint.init();
 });
 </script>
 </body>
 </html>
-

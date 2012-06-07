@@ -1,31 +1,31 @@
-/* Message */
-.b-message {
-    position: relative;
-    height: 100%;
-    margin-top: -106px;
+/* Disclaimer */
+#booking-disclaimer {
+    display: none;
 }
-.bm-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+.b-disclaimer {
+    margin: 0 0 20px;
+    padding: 16px 20px;
+    background: #EDEDE3;
 }
-.bm-title {
-    margin: 0 0 5px;
+.b-disclaimer h5 {
+    margin: 0 0 8px;
     font-weight: bold;
-    font-size: 24px;
-    line-height: 26px;
-    letter-spacing: -0.03em;
+    font-size: 18px;
+    line-height: 20px;
 }
+.b-disclaimer p {
+    margin: 8px 0 0;
+} 
 
-/* Loading */
-#booking-loading .bm-content {
-    width: 400px;
-    margin: 0 0 0 -200px;
-    text-align: center;
+/* Booking */
+#booking {
+    display: block;
 }
-.bmt-progress {
-    padding-right: 28px;
-    background: url(/images/booking/progress-g.gif) no-repeat 100% 7px;
+.b-content {
+    display: none;
+}
+.b-loading {
+    display: block;
 }
 
 /* Fail */

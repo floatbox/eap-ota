@@ -1,32 +1,12 @@
-/* Fixed header */
-booking.initFixedHeader = function() {
-    if (browser.scanty) return;
-    var fixed = false;
-    var canvas = $(window).scroll(function() {
-        toggle();
-    });
-    var toggle = function() {
-        var st = canvas.scrollTop();
-        if (st > bhtop !== fixed) {
-            fixed = st > bhtop;
-            bheader.toggleClass('bh-static', !fixed);
-        }
-    };
-    var bheader = $('#booking .booking-header');
-    var bhtop = bheader.offset().top;
-    $('#booking .bh-placeholder').height(bheader.height());
-};
+/* Results */
+var search = {};
 
 /* Booking form */
-booking.init = function() {
-    var that = this;
-    this.el = $('#booking');
-    this.header = this.el.find('.booking-header');
+booking.restore = function() {
     var path = window.location.path || window.location.pathname;
     var hash = window.location.hash.substring(1);
     this.query_key = path.split('/').last();
     if (hash.indexOf('recommendation') !== -1) {
-        //window.location.hash = '';
         // авиасейлз зачем-то дорисовывает вопросик после partner=
         var partner = hash.match(/partner=([^&?]+)/);
         var marker = hash.match(/marker=([^&?]+)/);
@@ -36,9 +16,8 @@ booking.init = function() {
     } else {
         window.location = '/#' + this.query_key;
     }
-    this.updateLinks();
-    this.el.find('.bh-title .stop-booking').addClass('latent');
-};
+
+}
 booking.prebook = function(query_key, hash, partner, marker) {
     var that = this;
     this.request = $.ajax({
@@ -59,38 +38,19 @@ booking.prebook = function(query_key, hash, partner, marker) {
 booking.load = function(number) {
     var that = this;
     this.request = $.get('/booking/', {
-        number: number,
-        load_variant: 1
-    }, function(result) {
+        number: number
+    }, function(content) {
         window.location.hash = number;
-        that.key = number;
-        var bcontent = that.el.find('.booking-content').html(result);
-        var bvariant = that.el.find('.booking-variant').html('');
-        bvariant.append(bcontent.find('.offer-variant').removeClass('g-none'));
-        $('#results-loading').addClass('latent');
-        that.updateLinks('найти другой вариант');
-        that.el.find('.bh-title .stop-booking').removeClass('latent');
-        that.el.find('th.book .a-button').html('Купить').click(function(event) {
-            event.preventDefault();
-            $.animateScrollTop(bcontent.offset().top - $('#booking .booking-header').height());
-        }).css('display', 'block');
-        that.el.find('.booking-body').show();
-        that.initFixedHeader();
-        that.activate();
+        that.view(content);
+        that.content.find('.bffc-link').html('выбрать другой вариант');        
+        $('<div class="b-disclaimer"></div>').html($('#booking-disclaimer').html()).prependTo(that.content);
     });
 };
 booking.failed = function() {
-    window.location = '/#' + this.query_key + '/reload';
-    //$('#results-loading').addClass('latent');
-    //$('#results-empty').removeClass('latent');
+    this.cancel();
 };
-booking.updateLinks = function(rename) {
-    var url = '/#' + this.query_key + '/featured';
-    this.el.find('span.stop-booking').each(function() {
-        var title = rename || $(this).html();
-        var link = $('<a class="stop-booking"></a>').html(title).attr('href', url);
-        $(this).replaceWith(link);
-    });
+booking.cancel = function() {
+    window.location = '/#' + this.query_key;
 };
 booking.form.track = function(result) {
     var path = window.location.href;

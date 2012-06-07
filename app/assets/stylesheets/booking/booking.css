@@ -56,19 +56,23 @@
     text-align: center;
 }
 .bl-title {
-    font-size: 20px;
-    line-height: 20px;
+    margin: 0 0 5px;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 26px;
     letter-spacing: -0.03em;
 }
 .bl-progress {
-    padding-right: 26px;
-    background: url(/images/booking/progress-g.gif) no-repeat 100% 5px;
+    padding-right: 28px;
+    background: url(/images/booking/progress-g.gif) no-repeat 100% 7px;
 }
 
 /* Заголовок */
 .b-header {
     padding: 16px 20px;
     background: #FFF;
+    text-align: center;
+    font-weight: bold;
     font-size: 20px;
     line-height: 20px;    
     letter-spacing: -0.03em;
@@ -115,8 +119,8 @@
 .bffp-details {
     margin: 10px 0 0;
     font-weight: normal;
-    font-size: 14px;
-    line-height: 16px;
+    font-size: 11px;
+    line-height: 13px;
     color: #777;
 }
 .bffpd-item {

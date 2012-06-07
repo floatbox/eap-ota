@@ -98,6 +98,7 @@ view: function(content) {
         return 'segment' + (i + 1);
     });
     this.loading.hide();
+    this.content.show();    
     this.el.removeClass('b-processing').show();
     this.form.init();
     this.farerules.init();  
@@ -189,7 +190,7 @@ init: function() {
     booking.el.find('.bffd-farerules').click(function(event) {
         that.show();
     });
-    var translator = google && google.translate && google.translate.SectionalElement.getInstance();
+    var translator = typeof google !== 'undefined' && google.translate && google.translate.SectionalElement.getInstance();
     if (translator && translator.update) {
         translator.update();
     }

@@ -87,6 +87,13 @@ setValues: function(data) {
             arv.set(segment.arv || '');
         }
     }
+    if (data.segments.length === 1) {
+        this.mode.select('ow');
+    } else if (data.segments[1].rt) {
+        this.mode.select('rt');
+    } else {
+        this.mode.select('mw');
+    }
     var dates = [], dateError = false;
     for (var i = data.segments.length; i--;) {
         var index = this.dates.dmyIndex[data.segments[i].date];
@@ -101,10 +108,10 @@ setValues: function(data) {
     }
     this.dates.setSelected(dates);
     with (this.options) {
-        children.select(data.options.children);
-        infants.select(data.options.infants);
-        adults.select(data.options.adults);
-        cabin.select(data.options.cabin);
+        children.select(data.options.children || 0);
+        infants.select(data.options.infants || 0);
+        adults.select(data.options.adults || 1);
+        cabin.select(data.options.cabin || 'Y');
     }
     return !dateError;
 },
