@@ -225,10 +225,10 @@ Partner:
 
 PromoCode:
   fields:
-    default: code, used, value, order
-    list: code, used, value, order
-    form: code, used, value
-    show: code, used, value
+    default: code, used, value, order, valid_until
+    list: code, used, value, order, valid_until
+    form: code, used, value, valid_until
+    show: code, used, value, valid_until
     options:
       booleans:
         used: ["да", "нет"]

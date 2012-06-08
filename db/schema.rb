@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120606135526) do
+ActiveRecord::Schema.define(:version => 20120608120901) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -355,12 +355,13 @@ ActiveRecord::Schema.define(:version => 20120606135526) do
   add_index "payments", ["status"], :name => "index_payments_on_status"
 
   create_table "promo_codes", :force => true do |t|
-    t.string   "code",                          :null => false
-    t.boolean  "used",       :default => false
+    t.string   "code",                           :null => false
+    t.boolean  "used",        :default => false
     t.integer  "order_id"
     t.string   "value"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+    t.date     "valid_until",                    :null => false
   end
 
   create_table "regions", :force => true do |t|
