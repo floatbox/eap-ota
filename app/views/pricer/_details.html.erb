@@ -1,4 +1,4 @@
-<div class="os-details" data-flights="<%= flight_codes(segment) %>">
+<div class="os-details" data-flights="<%= segment_id(segment) %>">
 <h4 class="osd-title">
     <strong class="osdt-main"><%= segment_rt ? 'Обратный перелет' : segment_title(segment) %></strong><% if segment_cabins.length == 1 %> <span class="osdt-hl"><%= human_cabin_ins(segment_cabins.first) %></span><% end %> <%= date_with_dow segment.flights.first.departure_date %><% if segment.layovers? %>, <%= with_layovers(segment) %><% end %>
 </h4>
