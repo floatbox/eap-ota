@@ -115,11 +115,12 @@ process: function(s) {
             delete that.back;
         });
     }
-    var type = this.result.attr('data-type');
-    if (type === 'newprice') {
+    switch (this.result.attr('data-type')) {
+    case 'newprice':
         var op = Number(this.el.find('.bf-newprice').attr('data-price'));
         var np = Number(this.result.attr('data-price'));
         booking.processPrice(this.result, np - op);
+        trackEvent('Бронирование', 'Изменилась цена', np - op > 0 ? 'Стало дороже' : 'Стало дешевле');
         this.result.find('.obb-title').click(function() {
             that.el.submit();
             that.footer.show();
@@ -129,16 +130,20 @@ process: function(s) {
         context.find('.bffp-wd').toggle(wd);
         context.find('.bffp-nd').toggle(!wd);
         this.back = true;
-    }
-    if (type === '3dsecure') {
+        break;    
+    case '3dsecure':
         this.result.find('.obb-title').click(function() {
-        });        
-    }
-    if (type === 'forbidden') {
+        });   
+        break;
+    case 'forbidden':
         setTimeout(function() {
             that.result.hide();
             that.footer.show();
         }, 60000);
+        break;
+    case 'success':
+        trackPage('/booking/success');
+        break;
     }
 }
 };

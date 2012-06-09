@@ -90,6 +90,7 @@ load: function() {
         } else {
             that.view(content);
         }
+        trackPage('/booking');
     });
 },
 view: function(content) {

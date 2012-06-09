@@ -21,6 +21,7 @@ init: function() {
     } else {
         search.map.resize();
         this.reset();
+        trackPage();
     }
     
     $(function() {

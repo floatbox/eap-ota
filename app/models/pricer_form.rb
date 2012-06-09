@@ -394,6 +394,7 @@ class PricerForm
         :title => "#{ dpt.case_from } #{ arv.case_to }",
         :short => "#{ dpt.iata } &rarr; #{ arv.iata }",
         :arvto => "#{ arv.case_to }",
+        :arvto_short => "в #{ arv.iata }",
         :date => segment.date,
         :dpt => {:name => dpt.name},
         :arv => {:name => arv.name},

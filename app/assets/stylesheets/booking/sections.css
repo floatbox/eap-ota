@@ -335,7 +335,7 @@
 /* Card section */
 .bf-card {
     position: relative;
-    height: 208px;
+    height: 254px;
 }
 .bfc-tip {
     background: none;
@@ -493,10 +493,16 @@
 .bfcn-empty {
     color: #CCC;
 }
+.bfc-warning {
+    clear: left;
+    width: 664px;
+    padding: 14px 0 0;
+    line-height: 16px;
+}
 
 /* Cash section */
 .bf-cash {
-    height: 208px;
+    height: 254px;
 }
 .bfc-deadline {
     width: 664px;

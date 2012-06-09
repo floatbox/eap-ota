@@ -242,11 +242,12 @@ extendData: function() {
         if (s === 0 && sl > 1 && segments[1].rt) {
             titles[s] = os.rt;
         } else {
+            var mw = sl > 2;
             var parts = [];
             for (var i = 0; i < sl; i++) {
-                if (i !== s) parts.push(segments[i].arvto);
+                if (i !== s) parts.push(segments[i][mw ? 'arvto_short' : 'arvto']);
             }
-            titles[s] = os[parts.length === 1 ? 'one' : 'many'].absorb(parts.enumeration());
+            titles[s] = os[mw ? 'many' : 'one'].absorb(parts.enumeration());
         }
     }
     this.data.ostitles = titles;

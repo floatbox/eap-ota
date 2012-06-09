@@ -86,7 +86,7 @@ remove: function(tab) {
 },
 select: function(key) {
     this.el.find('.qh-selected').removeClass('qh-selected');
-    if (this.index[key]) {
+    if (key && this.index[key]) {
         this.index[key].addClass('qh-selected');
     }
 },
@@ -112,7 +112,12 @@ init: function(el) {
         that.hover = true;
     }, function() {
         that.hover = false;
-    });;
+    });
+    this.el.on('click', '.ql-link', function() {
+        Queries.history.select();
+        results.header.summary.hide();
+        page.restoreResults($(this).attr('data-key'));
+    });
     this.items = this.el.find('.ql-items');
     $.get('/hot_offers', function(s) {
         if (s && s.length) that.update(s);
