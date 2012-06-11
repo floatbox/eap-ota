@@ -14,15 +14,25 @@ Eviterra::Application.configure do
   config.action_controller.perform_caching = true
 
   config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.smtp_settings = {
+  #   :enable_starttls_auto => true,
+  #   :address => 'smtp.gmail.com',
+  #   :port => 587,
+  #   :domain => "eviterra.com",
+  #   :authentication => :plain,
+  #   :user_name => "no-reply@eviterra.com",
+  #   :password => "production_mailer"
+  # }
   config.action_mailer.smtp_settings = {
     :enable_starttls_auto => true,
-    :address => 'smtp.gmail.com',
+    :address => 'smtp.sendgrid.net',
     :port => 587,
     :domain => "eviterra.com",
     :authentication => :plain,
-    :user_name => "no-reply@eviterra.com",
-    :password => "production_mailer"
+    :user_name => "eviterra",
+    :password => "flywithme"
   }
+
 
   config.action_controller.perform_caching = true
   config.cache_store = :file_store, Rails.root + "tmp/cache/"
