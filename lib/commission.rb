@@ -2865,11 +2865,11 @@ carrier "S7", "S7 AIRLINES"
 ########################################
 carrier_defaults :consolidator => 0
 
-agent "0% DTT"
+agent "3% BSP"
 subagent "0% DTT, 10$ с билета"
-our_markup 400
+#our_markup 400
 ##disabled "до времени"
-commission "0%/0%"
+commission "3%/3%"
 
 carrier "GA", "GARUDA INDONESIA"
 ########################################
