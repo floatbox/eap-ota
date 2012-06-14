@@ -10,6 +10,15 @@ carrier "SU", "Aeroflot"
 # будут действовать на все правила в авиакомпании.
 carrier_defaults :discount => 0
 
+example 'svosip'
+example 'svoods'
+agent ""
+subagent ""
+check { includes(city_iatas, 'SIP ODS') }
+important!
+disabled "Катя просила выключить срочно от 14.06.12"
+commission "0/0"
+
 example "svocdg"
 example "svocdg/business cdgsvo/economy"
 agent "1.1.На рейсы под кодом «SU», включая рейсы по соглашению «Код-шеринг» (в том числе по тарифам ИАТА):"
@@ -2318,6 +2327,15 @@ carrier "VV", "AEROSVIT"
 ########################################
 
 carrier_defaults our_markup: 0
+
+example 'svosip'
+example 'svoods'
+agent ""
+subagent ""
+check { includes(city_iatas, 'SIP ODS') }
+important!
+disabled "Катя просила выключить срочно от 14.06.12"
+commission "0/0"
 
 example 'leddok'
 example 'ledcdg'
