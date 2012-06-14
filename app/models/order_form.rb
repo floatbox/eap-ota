@@ -255,56 +255,6 @@ class OrderForm
     people.every.coded.join("\n")
   end
 
-  def self.create_sample_booking(cache_key)
-    order = OrderForm.load_from_cache(cache_key)
-    order.email = 'email@example.com'
-    order.phone = '12345678'
-    order.people_count = {:infants => 1, :children => 1, :adults => 2}
-    order.people = [Person.new(
-      :first_name => 'Anna',
-      :last_name => 'Adult',
-      :birthday => Date.today - 19.years,
-      :document_expiration_date => Date.today + 1.year,
-      :passport => '999999343',
-      :nationality_id => 1,
-      :sex => 'f',
-      :bonus_present => false
-    ),
-      Person.new(
-      :first_name => 'Ivan',
-      :last_name => 'Adult',
-      :birthday => Date.today - 20.years,
-      :document_expiration_date => Date.today + 1.year,
-      :passport => '999999999',
-      :nationality_id => 1,
-      :sex => 'm',
-      :bonus_present => true,
-      :bonuscard_type => 'SU',
-      :bonuscard_number => '345643'
-    ),
-    Person.new(
-      :first_name => 'Masha',
-      :last_name => 'Infant',
-      :birthday => Date.today - 1.years,
-      :document_expiration_date => Date.today + 1.year,
-      :passport => '88888888',
-      :nationality_id => 1,
-      :sex => 'f'
-    ),
-    Person.new(
-      :first_name => 'Masha',
-      :last_name => 'Child',
-      :birthday => Date.today - 10.years,
-      :document_expiration_date => Date.today + 1.year,
-      :passport => '77777777',
-      :nationality_id => 1,
-      :sex => 'f'
-    )]
-    order.card = Payture.test_card
-    order.valid?
-    order.create_booking
-  end
-
   def associate_infants
     # идем по порядку, привязываем каждого младенца к предшествующему по порядку взрослому
     people.each_cons(2) do |person, next_person|
