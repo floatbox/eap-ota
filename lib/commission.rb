@@ -10,15 +10,6 @@ carrier "SU", "Aeroflot"
 # будут действовать на все правила в авиакомпании.
 carrier_defaults :discount => 0
 
-example 'svosip'
-example 'svoods'
-agent ""
-subagent ""
-check { includes(city_iatas, 'SIP ODS') }
-important!
-disabled "Катя просила выключить срочно от 14.06.12"
-commission "0/0"
-
 example "svocdg"
 example "svocdg/business cdgsvo/economy"
 agent "1.1.На рейсы под кодом «SU», включая рейсы по соглашению «Код-шеринг» (в том числе по тарифам ИАТА):"
@@ -35,6 +26,7 @@ subagent "5 % от тарифов Эконом класса (в т.ч. при к
 # ticketing_method "direct"
 discount "4.7%"
 ## our_markup 100
+check {not includes(city_iatas, 'SIP ODS')}
 commission "7%/6%"
 
 #subagent "5 (пять) руб. с авиабилета по специальным тарифам (субсидийным перевозкам) на рейсы авиакомпании SU и необходимым пакетом документов (в т.ч. при переоформлении авиабилета с доплатой по тарифу)."
@@ -46,6 +38,7 @@ subagent "8 % от тарифов Бизнес класса, при переоф
 classes :business
 discount "6%"
 ## our_markup 0
+check {not includes(city_iatas, 'SIP ODS')}
 commission "9%/8%"
 
 example "svocdg/su cdgsvo/ab"
@@ -57,6 +50,7 @@ subagent "(три) % от сквозных или участковых тари�
 interline :yes
 discount "1%"
 ## our_markup 100
+check {not includes(city_iatas, 'SIP ODS')}
 commission "5%/3%"
 
 agent "- за оформление бесплатных  пассажирских перевозок комиссия не начисляется."
@@ -69,6 +63,7 @@ agent "- 1 евро по курсу GDS на день выписки авиаб�
 subagent "• на рейсы Interline без комбинации с рейсом под кодом «SU»:"
 subagent "5 (пять) руб. с авиабилета (в т.ч. при переоформлении авиабилета с доплатой по тарифу)."
 interline :absent
+check {not includes(city_iatas, 'SIP ODS')}
 #discount '5'
 ## our_markup 100
 commission "1eur/5"
@@ -78,11 +73,17 @@ strt_date "15.02.2012"
 expr_date "31.05.2012"
 agent "Информируем Вас, что в целях активизации продаж на рейсы совместной эксплуатации SU/XF (оператор «Владивосток Авиа») устанавливается комиссионное вознаграждение - 9%:"
 subagent "В целях активизации продаж на рейсы совместной эксплуатации SU/XF (оператор «Владивосток Авиа») устанавливается вознаграждение 8% от тарифа"
-check { includes_only( flights.every.flight_number,  %W(4604 4605 4610 4611 4612 4613 4614 4615 4616 4617 4620 4626 4627 4630 4631 4632 4633 4634 4635 4636 4637 4638 4639 4640 4641 4642 4643 4644 4645 4646 4647 4648 4649 4650 4651 4652 4653 4656 4657 4658 4659 4662 4663 4664 4665 4668 4669 4670 4671 4672 4673 4674 4675 4676 4677 4678 4679 4682 4683 4690 4691)) }
+check { not includes(city_iatas, 'SIP ODS') and includes_only( flights.every.flight_number,  %W(4604 4605 4610 4611 4612 4613 4614 4615 4616 4617 4620 4626 4627 4630 4631 4632 4633 4634 4635 4636 4637 4638 4639 4640 4641 4642 4643 4644 4645 4646 4647 4648 4649 4650 4651 4652 4653 4656 4657 4658 4659 4662 4663 4664 4665 4668 4669 4670 4671 4672 4673 4674 4675 4676 4677 4678 4679 4682 4683 4690 4691)) }
 important!
 discount "6%"
 ## our_markup 200
 commission "9%/8%"
+
+example 'svosip'
+example 'svoods'
+# "Катя просила выключить срочно от 14.06.12"
+no_commission
+
 
 carrier "UN", "TRANSAERO"
 ########################################
@@ -2328,21 +2329,12 @@ carrier "VV", "AEROSVIT"
 
 carrier_defaults our_markup: 0
 
-example 'svosip'
-example 'svoods'
-agent ""
-subagent ""
-check { includes(city_iatas, 'SIP ODS') }
-important!
-disabled "Катя просила выключить срочно от 14.06.12"
-commission "0/0"
-
 example 'leddok'
 example 'ledcdg'
 strt_date "21.03.2012"
 agent "9% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории РФ до любого п.п. VV"
 subagent "8,5% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории РФ до любого п.п. VV."
-check { includes(country_iatas.first, 'RU') and not includes(city_iatas.first, 'MOW') and not includes(city_iatas.last, 'IEV') }
+check { not includes(city_iatas, 'SIP ODS') and includes(country_iatas.first, 'RU') and not includes(city_iatas.first, 'MOW') and not includes(city_iatas.last, 'IEV') }
 discount "4%"
 commission "9%/8.5%"
 
@@ -2350,7 +2342,7 @@ example 'ledkbp kbpled'
 strt_date "21.03.2012"
 agent "8% от тарифа при продаже перевозок на рейсы Санкт-Петербург-Киев (LED-IEV), Санкт-Петербург-Киев-Санкт-Петербург (LED-IEV-LED)"
 subagent "7,5% от тарифа при продаже перевозок на рейсы Санкт-Петербург-Киев (LED-IEV), Санкт-Петербург- Киев-Санкт-Петербург (LED-IEV-LED);"
-check { (includes(city_iatas.first, 'LED') and includes(city_iatas.last, 'IEV')) or (includes(city_iatas.first, 'LED') and includes(city_iatas.last, 'LED') and includes(city_iatas, 'IEV')) }
+check { not includes(city_iatas, 'SIP ODS') and ((includes(city_iatas.first, 'LED') and includes(city_iatas.last, 'IEV')) or (includes(city_iatas.first, 'LED') and includes(city_iatas.last, 'LED') and includes(city_iatas, 'IEV'))) }
 important!
 discount "3%"
 commission "8%/7.5%"
@@ -2362,7 +2354,7 @@ strt_date "21.03.2012"
 expr_date "01.11.2012"
 agent "10% от тарифа при продаже перевозок с началом перевозки от Санкт-Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
 subagent "9,5% от тарифа при продаже перевозок с началом перевозки от Санкт- Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
-check { includes(city_iatas.first, 'LED') and includes(city_iatas, 'IEV') and not includes(country_iatas.last, 'UA') and not includes(country_iatas.last, 'RU') }
+check { not includes(city_iatas, 'SIP ODS') and includes(city_iatas.first, 'LED') and includes(city_iatas, 'IEV') and not includes(country_iatas.last, 'UA') and not includes(country_iatas.last, 'RU') }
 important!
 discount "5.5%"
 commission "10%/9.5%"
@@ -2373,7 +2365,7 @@ example 'ledkbp kbptbs'
 strt_date "01.11.2012"
 agent "9% от тарифа при продаже перевозок с началом перевозки от Санкт-Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
 subagent "8,5% от тарифа при продаже перевозок с началом перевозки от Санкт- Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
-check { includes(city_iatas.first, 'LED') and includes(city_iatas, 'IEV') and not includes(country_iatas.last, 'UA') and not includes(country_iatas.last, 'RU') }
+check { not includes(city_iatas, 'SIP ODS') and includes(city_iatas.first, 'LED') and includes(city_iatas, 'IEV') and not includes(country_iatas.last, 'UA') and not includes(country_iatas.last, 'RU') }
 important!
 discount "4%"
 commission "9%/8.5%"
@@ -2382,7 +2374,7 @@ example 'svokbp kbpsvo'
 strt_date "21.03.2012"
 agent "5% от тарифа при продаже перевозок на рейсы Москва-Киев (MOW-IEV), Москва-Киев-Москва (MOW -IEV- MOW);"
 subagent "4,5% от тарифа при продаже перевозок на рейсы Москва-Киев (MOW-IEV), Москва-Киев-Москва (MOW -IEV- MOW);"
-check { (includes(city_iatas.first, 'MOW') and includes(city_iatas.last, 'IEV')) or (includes(city_iatas.first, 'MOW') and includes(city_iatas.last, 'MOW') and includes(city_iatas, 'IEV')) }
+check { not includes(city_iatas, 'SIP ODS') and ((includes(city_iatas.first, 'MOW') and includes(city_iatas.last, 'IEV')) or (includes(city_iatas.first, 'MOW') and includes(city_iatas.last, 'MOW') and includes(city_iatas, 'IEV'))) }
 discount "1.5%"
 commission "5%/4.5%"
 
@@ -2392,7 +2384,7 @@ example 'tbstlv'
 strt_date "21.03.2012"
 agent "1% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории Украины или третьих стран;"
 subagent "0,5% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории Украины или третьих стран;"
-check { not includes(country_iatas.first, 'RU') }
+check { not includes(city_iatas, 'SIP ODS') and not includes(country_iatas.first, 'RU') }
 our_markup "250"
 commission "1%/0.5%"
 
@@ -2402,6 +2394,7 @@ agent "5% от тарифа при продаже перевозок на рей
 subagent "4,5% от тарифа при продаже перевозок на рейсы Interline с участием VV;"
 interline :yes
 discount "1%"
+check {not includes(city_iatas, 'SIP ODS')}
 commission "5%/4.5%"
 
 example 'kbpsvo/ab svokbp/ab'
@@ -2409,7 +2402,13 @@ strt_date "21.03.2012"
 agent "0% от тарифа при продаже перевозок на рейсы Interline без участия VV;"
 subagent "0% от тарифа при продаже перевозок на рейсы Interline без участия VV;"
 interline :absent
+check {not includes(city_iatas, 'SIP ODS')}
 commission "0%/0%"
+
+example 'svosip'
+example 'svoods'
+# "Катя просила выключить срочно от 14.06.12"
+no_commission
 
 carrier "WY", "OMAN AIR"
 ########################################
