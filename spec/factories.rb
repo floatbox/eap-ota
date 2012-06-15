@@ -18,6 +18,8 @@ FactoryGirl.define do
 
   factory :order do
     pnr_number
+    fix_price true
+    price_with_payment_commission 3000
   end
 
   factory :person do

@@ -281,18 +281,17 @@ class Order < ActiveRecord::Base
     # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
     return if old_booking || @tickets_are_loading || sold_tickets.every.office_id.uniq == ['FLL1S212V']
     tickets.reload
-    useful_tickets = tickets.where('status = "ticketed" OR status = "returned"').to_a #костыль до тех пор, пока не будем корректно считать итоговую цену билета
     price_total_old = self.price_total
 
-    self.price_fare = useful_tickets.every.price_fare.sum
-    self.price_tax = useful_tickets.every.price_tax.sum
+    self.price_fare = sold_tickets.every.price_fare.sum
+    self.price_tax = sold_tickets.every.price_tax.sum
 
-    self.price_consolidator = useful_tickets.every.price_consolidator.sum
-    self.price_agent = useful_tickets.every.price_agent.sum
-    self.price_subagent = useful_tickets.every.price_subagent.sum
-    self.price_blanks = useful_tickets.every.price_blanks.sum
-    self.price_discount = useful_tickets.every.price_discount.sum
-    self.price_our_markup = useful_tickets.every.price_our_markup.sum
+    self.price_consolidator = sold_tickets.every.price_consolidator.sum
+    self.price_agent = sold_tickets.every.price_agent.sum
+    self.price_subagent = sold_tickets.every.price_subagent.sum
+    self.price_blanks = sold_tickets.every.price_blanks.sum
+    self.price_discount = sold_tickets.every.price_discount.sum
+    self.price_our_markup = sold_tickets.every.price_our_markup.sum
 
     self.price_difference = price_total - price_total_old if price_difference == 0
     save
