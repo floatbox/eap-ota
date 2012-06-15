@@ -96,7 +96,6 @@ GEM
       execjs
     coffee-script-source (1.2.0)
     columnize (0.3.6)
-    coolline (0.2.0)
     crack (0.3.1)
     cucumber (1.1.8)
       builder (>= 2.1.2)
@@ -154,7 +153,6 @@ GEM
     i18n (0.6.0)
     interactive_editor (0.0.10)
       spoon (>= 0.0.1)
-    io-console (0.3)
     journey (1.0.3)
     jquery-rails (2.0.2)
       railties (>= 3.2.0, < 5.0)
@@ -213,9 +211,6 @@ GEM
       coderay (~> 1.0.5)
       method_source (~> 0.7.1)
       slop (>= 2.4.4, < 3)
-    pry-coolline (0.1.4)
-      coolline (~> 0.2.0)
-      io-console (~> 0.3.0)
     pry-doc (0.4.1)
       pry (>= 0.9.0)
       yard (~> 0.7.4)
@@ -394,7 +389,6 @@ DEPENDENCIES
   nokogiri
   paper_trail
   passenger
-  pry-coolline
   pry-doc
   pry-editline
   pry-rails
