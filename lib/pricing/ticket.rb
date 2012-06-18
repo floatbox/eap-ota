@@ -62,9 +62,10 @@ module Pricing
     def price_with_payment_commission
       case kind
       when 'ticket'
+        return corrected_price if corrected_price
         all_tickets = order.tickets.where('kind = "ticket"')
         corrected_total = all_tickets.sum(:price_fare) + all_tickets.sum(:price_tax)
-        return 0 if corrected_total == 0 && !corrected_price
+        return 0 if corrected_total == 0
         k = (price_tax + price_fare).to_f / corrected_total
         order.price_with_payment_commission * k
       when 'refund'
