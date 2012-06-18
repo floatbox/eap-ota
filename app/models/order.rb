@@ -409,8 +409,7 @@ class Order < ActiveRecord::Base
 
   def ticket!
     update_attributes(:ticket_status =>'ticketed', :ticketed_date => Date.today)
-
-    load_tickets
+    reload_tickets
   end
 
   def reload_tickets
