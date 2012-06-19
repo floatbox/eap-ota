@@ -59,6 +59,7 @@
     %originDestination
       -# %origin LGW
       -# %destination FCO
+    -# CC "RU1AHK#{seats}MOW1#{monthplus10}", amadeus.pnr_archive
     %itineraryInfo
       %elementManagementItinerary
         %segmentName RU
@@ -153,7 +154,7 @@
             %subjectQualifier 3
             %type 3
           %longFreetext= phone
-
+      -# CC "OSYYCTCP#{@order_form.phone.gsub(/\D/, '' )}-M"
       %dataElementsIndiv
         %elementManagementData
           %segmentName OS
@@ -173,6 +174,8 @@
           %type 6
         %longFreetext= '+7(495)6603520'#наш телефон
     - (adults + children).each_with_index do |person, index|
+
+      -# CC 'SRDOCSYYHK1-P-...'
       %dataElementsIndiv
         %elementManagementData
           %segmentName SSR
@@ -188,6 +191,7 @@
             %qualifier PR
             %number= index+1
 
+      -# CC 'SR FOID...'
       %dataElementsIndiv
         %elementManagementData
           %segmentName SSR
@@ -203,21 +207,20 @@
             %qualifier PR
             %number= index+1
 
-      -#%dataElementsIndiv
+      -# CC FE
+      %dataElementsIndiv
         %elementManagementData
           %segmentName FE
-        %freetextData
-          %freetextDetail
-            %subjectQualifier 3
-            %type 10
-            %companyId= validating_carrier
-          %longFreetext= "ONLY PSPT #{person.cleared_passport}"
+        %fareElement
+          %generalIndicator E
+          %freetextLong= "#{validating_carrier} ONLY PSPT #{person.cleared_passport}"
         %referenceForDataElement
           %reference
             %qualifier PR
             %number= index+1
 
       - if infant = person.associated_infant
+        -# CC 'SRDOCSYYHK1-P-...'
         %dataElementsIndiv
           %elementManagementData
             %segmentName SSR
@@ -233,7 +236,21 @@
               %qualifier PR
               %number= index+1
 
+        -# CC FE
+        %dataElementsIndiv
+          %elementManagementData
+            %segmentName FE
+          %fareElement
+            %generalIndicator E
+            %passengerType INF
+            %freetextLong= "#{validating_carrier} ONLY PSPT #{infant.cleared_passport}"
+          %referenceForDataElement
+            %reference
+              %qualifier PR
+              %number= index+1
+
       - if person.bonus_present
+        -# CC 'FFN...'
         %dataElementsIndiv
           %elementManagementData
             %segmentName SSR
@@ -272,6 +289,7 @@
             -else
               %amount= agent_commission_value
 
+    -# CC 'OSYYCTCP74956603520 EVITERRA TRAVEL-A'
     %dataElementsIndiv
       %elementManagementData
         %segmentName OS
@@ -282,6 +300,7 @@
           %companyId YY
         %longFreetext CTCP74956603520 EVITERRA TRAVEL-A
 
+    -# CC "es#{::Amadeus::Session::BOOKING}-B"
     %dataElementsIndiv
       %elementManagementData
         %segmentName ES
@@ -290,6 +309,7 @@
           %identification= es_office_id
           %accessMode B
 
+    -# CC 'RM INTERNET BOOKING'
     %dataElementsIndiv
       %elementManagementData
         %segmentName RM
