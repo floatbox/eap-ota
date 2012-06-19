@@ -112,6 +112,10 @@ module PricerHelper
     end
   end
 
+  def segment_ids variant
+    variant.segments.map{|s| segment_id(s) }.join(' ')
+  end
+
   # набор данных для работы фильтров
   def variant_features v, alliance
     features = []

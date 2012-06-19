@@ -59,3 +59,38 @@
     float: right;
     margin-right: 0;
 }
+
+/* Subscription */
+.r-subscription {
+    margin: 20px 0 10px 16px;
+    padding: 16px 20px;
+    background: #EDEDE3;   
+}
+.rs-title {
+    margin: 0 0 5px;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 18px;
+    letter-spacing: -0.03em;
+}
+.rs-form {
+    margin: 10px 0 0;
+}
+.rsf-label {
+    margin-right: 10px;
+}
+.rsf-field {
+    width: 250px;
+}
+.rsf-error {
+    display: none;
+    margin: 10px 0 0;
+    color: #bf2a1d;
+}
+.rs-success {
+    margin: 10px 0 0;
+}
+.rs-like {
+    margin: 10px 0 0;
+    height: 21px;
+}

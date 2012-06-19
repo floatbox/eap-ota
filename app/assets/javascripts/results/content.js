@@ -40,6 +40,10 @@ initOffers: function() {
         $(this).closest('.o-segment').removeClass('hide-excess');
         results.fixed.move();
     });
+    this.el.delegate('.od-alliance', 'click', function(event) {
+        var el = $(this);
+        hint.show(event, 'В альянс ' + el.html() + ' входят авиакомпании: ' + el.attr('data-carriers') + '.');
+    });    
     this.el.delegate('.os-summary:not(.os-selected)', 'click', function() {
         var el = $(this);
         var offer = that.getOffer(el);

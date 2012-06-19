@@ -306,7 +306,8 @@ merge: function(variants) {
     }
     offer.el.addClass('o-complex');
     offer.otherSegments();
-    this.content.html('').append(offer.el);
+    this.content.find('.offer').remove();
+    this.content.prepend(offer.el);
     this.offer = offer;
 },
 update: function(variants, lid) {

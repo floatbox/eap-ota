@@ -9,7 +9,6 @@ parseVariants: function(selector) {
     this.variants = [];
     this.el.find(selector).each(function(i) {
         var el = $(this);
-        var id = el.text();
         var fstr = el.attr('data-features');
         var features = fstr.split(' ').toIndex();
         if (!features.nonstop) {
@@ -23,9 +22,9 @@ parseVariants: function(selector) {
         that.variants[i] = {
             offer: that,
             price: price,
-            id: id,
+            id: el.text(),
             duration: Number(el.attr('data-duration')),
-            segments: id.split('.').slice(5),
+            segments: el.attr('data-segments').split(' '),
             features: features
         };
     });

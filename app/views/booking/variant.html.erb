@@ -35,11 +35,22 @@
 </div>
 </div>
 
-<div id="booking-disclaimer">
+<div id="booking-disclaimer" class="b-disclaimer">
     <h5>Вы оформляете авиабилеты в&nbsp;одном из&nbsp;самых современных и&nbsp;технологичных сервисов в&nbsp;мире</h5>
     <p>Сотни пассажиров ежедневно летают с&nbsp;нами и&nbsp;доверяют&nbsp;нам. У нас не только низкие цены, но&nbsp;и&nbsp;отличное обслуживание. Мы&nbsp;очень любим наших клиентов и&nbsp;делаем все&nbsp;возможное для того, чтобы один раз воспользовавшись нашим сервисом, вы&nbsp;покупали авиабилеты только у&nbsp;нас. Мы гарантируем абсолютную безопасность ваших платежей и&nbsp;предоставление услуг в&nbsp;полном объеме.</p>
     <p>Спасибо за&nbsp;покупку и&nbsp;приятного полета!</p>
 </div>
+
+<% if @destination.present? %>
+<div id="booking-subscription" class="r-subscription">
+    <h3 class="rs-title">Подпишитесь на тариф</h3>
+    <p class="rs-description">Если вам не&nbsp;важно когда лететь, мы&nbsp;сообщим вам о&nbsp;появлении выгодных тарифов на&nbsp;билеты <%= nbsp @destination.from.case_from %> <%= nbsp @destination.to.case_to %><%= ' и обратно' if @destination.rt %> по&nbsp;электронной почте.</p>
+    <form class="rs-form" action="/subscribe/" data-destination="<%= @destination.id %>" data-from-iata="<%= @destination.from.iata %>" data-to-iata="<%= @destination.to.iata %>" data-rt="<%= @destination.rt %>">
+        <div><label class="rsf-label" for="rsf-email">Ваш адрес</label><input name="email" class="rsf-field" id="rsf-email" maxlength="50">&nbsp;<input class="rsf-submit" type="submit" value="Хочу"></div>
+        <p class="rsf-error"></p>
+    </form>
+</div>
+<% end %>
 
 <div id="booking" class="b-processing">
     <div class="b-content offer"></div>

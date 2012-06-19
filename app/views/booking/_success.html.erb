@@ -1,4 +1,4 @@
-<div class="bf-result bfr-success">
+<div class="bf-result bfr-success" data-type="success">
     <% paid = @order_form.payment_type == 'card' %>
     <% tweet = order_tweet(@order_form) %>
     <h5 class="bfr-title">Всё отлично! Ваш билет <%= paid ? 'оплачен, забронирован и выслан' : 'забронирован, подтверждение выслано' %> на&nbsp;ваш электронный адрес. Номер&nbsp;брони&nbsp;— <strong class="bfr-pnr"><%= pnr_number %></strong>.</h5>

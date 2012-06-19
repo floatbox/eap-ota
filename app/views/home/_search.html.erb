@@ -63,7 +63,7 @@
 	</div>
 	
 	<!-- Dates -->
-	<div id="search-dates" data-now="<%= Time.now.to_s %>">
+	<div id="search-dates" data-now="<%= Time.now.to_formatted_s(:rfc822) %>">
 	<div class="sd-timeline">
 	    <div class="sdt-content">
 	        <div class="sdt-hover sdt-fhover"></div>

@@ -32,3 +32,9 @@
 #booking-fail {
     display: none;
 }
+
+/* Subscription */
+#booking-subscription {
+    display: none;
+    margin-left: 0;
+}

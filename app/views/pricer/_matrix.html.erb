@@ -8,7 +8,7 @@
     <% cabins = different_cabins(recommendation, @search.cabin) %>
     <% recommendation.variants.each do |variant| %>
     <div class="rm-variant" data-dates="<%= variant.segments.map{|s| s.flights[0].departure_date }.join(' ') %>">
-        <div class="rmv-data" data-features="<%= variant_features(variant, recommendation.validating_carrier.alliance) %>"><%= raw recommendation.serialize(variant) %></div>
+        <div class="rmv-data" data-segments="<%= segment_ids(variant) %>" data-features="<%= variant_features(variant, recommendation.validating_carrier.alliance) %>"><%= raw recommendation.serialize(variant) %></div>
         <div class="rmv-bars">
             <% variant.segments.each_with_index do |segment, scounter| %>
             <ul class="rmv-bar segment<%= scounter + 1 %>">

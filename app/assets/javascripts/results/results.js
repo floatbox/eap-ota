@@ -141,10 +141,17 @@ updateTitles: function(dates) {
         window: wparts.join(', ')
     };
 },
+processSubscription: function() {
+    var form = this.all.content.find('.r-subscription');
+    this.cheap.content.find('.r-subscription').remove();
+    this.cheap.content.append(form);
+    this.subscription.init(form);
+},
 processCollections: function() {
     var that = this;
     if (this.all.offers.length) {
         this.content.selectFirst();
+        this.processSubscription();
         setTimeout(function() {
             that.ready = true;
             if (that.visible) {
@@ -427,17 +434,9 @@ results.subscription = {
 init: function(el) {
     var that = this;
     this.el = el.find('form');
-    this.button = this.el.find('.osf-submit');
-    this.field = this.el.find('.osf-field');
-    this.label = this.el.find('.osf-label');
-    this.field.keydown(function() {
-        that.label.hide();
-    }).bind('keyup propertychange input', function() {
-        if (this.value === '') that.label.show();
-    }).focus(function() {
-        that.like = $('<div class="os-like"></div>').hide().insertAfter(that.el);
-        that.like.html('<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Feviterra&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>');    
-    }).change();
+    this.button = this.el.find('.rsf-submit');
+    this.field = this.el.find('.rsf-field');
+    this.error = this.el.find('.rsf-error');
     this.el.submit(function(event) {
         event.preventDefault();
         that.send();
@@ -447,10 +446,15 @@ send: function() {
     var that = this;
     var value = this.field.val();
     if (!value || !/^([^@\s]+)@((?:[-A-Za-z0-9]+\.)+[a-z]{2,})$/.test(value)) {
-        this.error('Введите правильный адрес электронной почты.');
+        this.showError('Введите правильный адрес электронной почты.');
         return false;
     }
+    if (!this.like) {
+        this.like = $('<div class="rs-like"></div>').hide().insertAfter(that.el);
+        this.like.html('<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Feviterra&amp;send=false&amp;layout=button_count&amp;width=400&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>');    
+    }
     this.button.get(0).disabled = true;
+    this.error.hide();
     $.ajax({
         url: '/subscribe/',
         data: {
@@ -464,7 +468,7 @@ send: function() {
             that.process(s);
         },
         error: function() {
-            that.error();
+            that.showError();
         },
         timeout: 30000
     });
@@ -472,14 +476,14 @@ send: function() {
 process: function(s) {
     if (s && s.success) {
         this.el.hide();
-        this.el.after('<div class="os-success">Спасибо, подписка создана. Отписаться можно будет по ссылке в письме.</div>');
+        this.el.after('<div class="rs-success">Спасибо, подписка создана. Отписаться можно будет по ссылке в письме.</div>');
         this.like.show();
     } else {
         this.error();
     }
 },
-error: function(text) {
+showError: function(text) {
     this.button.get(0).disabled = false;
-    this.el.find('.osf-error').html(text || 'Не удалось подписаться, попробуйте ещё раз.').show();
+    this.error.html(text || 'Не удалось подписаться, попробуйте ещё раз.').show();
 }
 };

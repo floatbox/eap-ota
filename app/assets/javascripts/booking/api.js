@@ -42,8 +42,13 @@ booking.load = function(number) {
     }, function(content) {
         window.location.hash = number;
         that.view(content);
-        that.content.find('.bffc-link').html('выбрать другой вариант');        
-        $('<div class="b-disclaimer"></div>').html($('#booking-disclaimer').html()).prependTo(that.content);
+        that.content.find('.bffc-link').html('выбрать другой вариант');
+        that.content.delegate('.od-alliance', 'click', function(event) {
+            var el = $(this);
+            hint.show(event, 'В альянс ' + el.html() + ' входят авиакомпании: ' + el.attr('data-carriers') + '.');
+        });            
+        results.subscription.init($('#booking-subscription').appendTo(that.content).show());
+        $('#booking-disclaimer').prependTo(that.content).show();
     });
 };
 booking.failed = function() {

@@ -54,6 +54,7 @@ class BookingController < ApplicationController
   def api_booking
     @query_key = params[:query_key]
     @search = PricerForm.load_from_cache(params[:query_key])
+    @destination = get_destination    
     render 'variant'
     StatCounters.inc %W[enter.api.success]
   ensure
