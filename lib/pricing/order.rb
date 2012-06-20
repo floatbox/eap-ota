@@ -111,7 +111,7 @@ module Pricing
     # FIXME отдать это на совесть подклассов Payment
     def expected_earnings
       if payment_type == 'card'
-        price_total
+        price_with_payment_commission - price_payment_commission #price_total
       else # cash, delivery, invoice..
         price_with_payment_commission
       end
