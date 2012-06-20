@@ -646,9 +646,9 @@ carrier "CZ", "CHINA SOUTHERN"
 
 example 'svocdg'
 agent    "9% от тарифа на рейсы, полностью выполняемые CZ;"
-subagent "6,3% от тарифа на рейсы, полностью выполняемые CZ;"
+subagent "7% от тарифа на рейсы, полностью выполняемые CZ;"
 discount "3.5%"
-commission "9%/6.3%"
+commission "9%/7%"
 
 example 'cdgsvo svocdg/ab'
 agent    "7% от тарифа на рейсы CZ с участием других перевозчиков;"
