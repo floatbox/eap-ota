@@ -32,7 +32,7 @@ class Order < ActiveRecord::Base
   # charged - списание денег с карты или приход наличных
   # pending - ожидание оплаты наличныии или курьером
   def self.payment_statuses
-    ['not blocked', 'blocked', 'charged', 'new', 'pending']
+    ['not blocked', 'blocked', 'charged', 'new', 'pending', 'unblocked']
   end
 
   def self.ticket_statuses
