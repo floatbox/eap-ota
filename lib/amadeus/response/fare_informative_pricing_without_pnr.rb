@@ -34,8 +34,8 @@ module Amadeus
           #считаем тотал для каждой из групп пассажиров
           adult_price_fare, adult_price_tax = prices adult
           child_price_fare, child_price_tax, infant_price_fare, infant_price_tax = 0,0,0,0
-          child_price_fare, child_price_tax = prices children.pop if children.present?
-          infant_price_fare, infant_price_tax = prices infants.pop if infants.present?
+          child_price_fare, child_price_tax = prices children.shift if children.present?
+          infant_price_fare, infant_price_tax = prices infants.shift if infants.present?
 
           new_rec.price_fare = adult_price_fare + child_price_fare + infant_price_fare
           new_rec.price_tax = adult_price_tax + child_price_tax + infant_price_tax
