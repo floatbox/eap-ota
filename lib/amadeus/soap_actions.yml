@@ -40,9 +40,6 @@ PNR_Cancel:
 Fare_PricePNRWithBookingClass: 
   soap_action: http://webservices.amadeus.com/1ASIWOABEVI/TPCBRQ_07_3_1A
   r: http://xml.amadeus.com/TPCBRR_07_3_1A
-Fare_PricePNRWithLowerFares:
-  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/TPLFRQ_07_3_1A
-  r: http://xml.amadeus.com/TPLFRR_07_3_1A
 Air_RetrieveSeatMap: 
   soap_action: http://webservices.amadeus.com/1ASIWOABEVI/SMPREQ_97_1_IA
   r: http://xml.amadeus.com/SMPRES_97_1_IA

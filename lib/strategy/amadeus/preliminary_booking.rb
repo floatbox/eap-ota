@@ -16,7 +16,7 @@ module Strategy::Amadeus::PreliminaryBooking
         amadeus.fare_informative_pricing_without_pnr(
           :recommendation => @rec,
           :people_count => @search.real_people_count
-        ).all_prices.first
+        ).prices
 
       # FIXME не очень надежный признак
       if @rec.price_fare.to_i == 0
