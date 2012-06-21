@@ -12,11 +12,11 @@ module Strategy::Amadeus::PreliminaryBooking
       return
     end
     ::Amadeus.booking do |amadeus|
-      @rec.price_fare, @rec.price_tax =
+      @rec =
         amadeus.fare_informative_pricing_without_pnr(
           :recommendation => @rec,
           :people_count => @search.real_people_count
-        ).all_prices.first
+        ).recommendations.first
 
       # FIXME не очень надежный признак
       if @rec.price_fare.to_i == 0
