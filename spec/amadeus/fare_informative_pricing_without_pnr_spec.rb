@@ -27,14 +27,4 @@ describe Amadeus::Response::FareInformativePricingWithoutPNR do
     specify { subject.recommendations(recommendation).first.price_fare.should == 99640}
     specify { subject.recommendations(recommendation).first.booking_classes.should == ["Y", "Y", "Y", "Y"]}
   end
-
-  describe 'two adults' do
-      let_once! :response do
-        amadeus_response('spec/amadeus/xml/Fare_InformativePricingWithoutPNR_two_adults.xml')
-      end
-
-      subject {response}
-      specify { subject.recommendations(recommendation).count.should == 1}
-      specify { subject.recommendations(recommendation).first.price_fare.should == 112560}
-    end
 end
