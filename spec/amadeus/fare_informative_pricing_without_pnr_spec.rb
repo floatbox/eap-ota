@@ -13,7 +13,7 @@ describe Amadeus::Response::FareInformativePricingWithoutPNR do
 
     subject {response}
     specify { subject.recommendations(recommendation).count.should == 4}
-    specify { subject.recommendations(recommendation).first.price_fare.should == 64280}
+    specify { subject.recommendations(recommendation).first.price_fare.should == 146400}
     specify { subject.recommendations(recommendation).first.booking_classes.should == ["Y", "Y", "Y", "Y"]}
   end
 
