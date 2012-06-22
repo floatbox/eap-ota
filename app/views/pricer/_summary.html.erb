@@ -1,4 +1,4 @@
-<% carrier = primary_carrier(segment) %>
+<% carrier = segment.main_marketing_carrier %>
 <div class="os-summary"
     data-carrier="<%= carrier.iata %>"
     data-flights="<%= segment_id(segment) %>"

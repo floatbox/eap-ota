@@ -4,8 +4,8 @@
 	<meta charset="utf-8">
     <title>Eviterra — <%= @order.description || 'оплата заказа' %></title>
     <%= render 'shared/head' %>
-    <%= stylesheet_link_tag 'static/all', 'variant', :debug => true %>
-    <%= javascript_include_tag "local/ru", 'payment', :debug => true %>
+    <%= stylesheet_link_tag 'static/all', 'variant', 'booking/payment' %>
+    <%= javascript_include_tag "local/ru", 'payment' %>
 </head>
 <body>
 <div class="page-wrapper">
@@ -57,8 +57,9 @@
 </div>
 </div>
 <% else %>
-    <h3><%= @order.description %></h3>
-    <h3>Платеж уже обработан.</h3>
+<div class="p-message">
+    <h3 class="pm-title">Платеж уже обработан.</h3>
+</div>
 <% end %>
 
 <div id="hint">

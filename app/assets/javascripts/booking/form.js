@@ -30,9 +30,6 @@ init: function() {
         that.focus($('#' + $(this).attr('data-field')));
     });
     
-    //this.sections[0].set(['mszakharov@gmail.com', '+79161234567']);
-    //this.sections[1].rows[0].set(['MAXIM', 'ZAKHAROV', 'm', '03.05.1983', 170, '1234567890', '', true]);
-    
     this.validate(true);
 },
 position: function() {

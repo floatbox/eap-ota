@@ -34,7 +34,12 @@
         <div class="bfs-title">
             <h4 class="bfst-text">Данные <%= @order_form.people.one? ? 'пассажира' : 'пассажиров' %></h4>
             <div class="bfst-line"></div>
+            <p class="bfp-hint" id="bfph-passport"><span class="bfph-link bf-hint" data-hint="bfh-passport">Какие документы<br>нужны?</span></p>
+            <p class="bfp-hint" id="bfph-expiration"><span class="bfph-link bf-hint" data-hint="bfh-expiration">Подробнее<br>о сроках действия</span></p>                        
         </div>
+        <% if @order_form.infants.length > 0 && @order_form.adults.length > 1 %> 
+            <p class="bfp-order">Обратите внимание, что данные о младенце нужно вводить после данных того взрослого пассажира, на&nbsp;руках у&nbsp;которого он полетит.</p>        
+        <% end %>     
         <table class="bfp-table">
         <thead>
             <tr>
@@ -43,10 +48,10 @@
             <th><h6 class="bf-label">Пол</h6></th>
             <th><h6 class="bf-label">Дата рождения</h6></th>
             <th><h6 class="bf-label">Гражданство</h6></th>
-            <th><h6 class="bf-label">Номер документа</h6> <p class="bfp-hint"><span class="bfph-link bf-hint" data-hint="bfh-passport">Какие документы<br>нужны?</span></p></th>
-            <th><h6 class="bf-label">Срок действия</h6> <p class="bfp-hint"><span class="bfph-link bf-hint" data-hint="bfh-expiration">Подробнее<br>о сроках действия</span></p></th>    
+            <th><h6 class="bf-label">Номер документа</h6></th>
+            <th><h6 class="bf-label">Срок действия</h6></th>    
             </tr>
-        </thead>        
+        </thead>
         <%= render :partial => 'person_form', :collection => @order_form.people, :locals => {:people_count => @order_form.people.length} %>
         </table>
         <div class="bf-warning" id="bfw-name-latin">
@@ -91,6 +96,7 @@
     
     <% price_fare = @order_form.recommendation.price_fare.round.to_i %>
     <% price_tax_and_markup = @order_form.recommendation.price_tax_and_markup.round.to_i %>
+    <% price_discount = @order_form.recommendation.price_discount.round.to_i %>
     <div class="bf-footer">
         <div class="bff-price">
             <div class="bffp-content">
@@ -102,6 +108,9 @@
                     <li class="bffpd-item">Таксы и сборы — <%= price_total - price_fare %> <span class="ruble">Р</span></li>
                     <li class="bffpd-item">В том числе сервисный сбор — <%= @order_form.recommendation.fee.round.to_i %> <span class="ruble">Р</span></li>
                     <li class="bffpd-item bffp-wd">Доставка — 350 <span class="ruble">Р</span></li>
+                    <% if price_discount > 0 %>
+                        <li class="bffpd-item">Скидка — <%= price_discount %> <span class="ruble">Р</span></li>
+                    <% end %>
                 </ul>
             </div>
         </div>

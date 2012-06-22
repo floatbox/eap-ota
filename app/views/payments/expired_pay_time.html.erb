@@ -4,23 +4,33 @@
 	<meta charset="utf-8">
     <title>Eviterra — истек срок оплаты</title>
     <%= render 'shared/head' %>
-    <%= stylesheet_link_tag 'static/all', 'booking/booking', :debug => true %>
-    <%= javascript_include_tag "local/ru", 'static', :debug => true %>
+    <%= stylesheet_link_tag 'static/all', 'results/header', 'booking/payment' %>
+    <%= javascript_include_tag "local/ru", 'static' %>
 </head>
 <body>
+<div class="page-wrapper">
 
 <%= render 'shared/header' %>
-<div id="back2search">
-    <div class="bs-content"><a class="bs-link" href="/">Поиск авиабилетов</a></div>
+
+<div id="results-header">
+<div class="rh-wrapper">
+    <table class="rh-content">
+    <tr>
+        <td class="rh-left"><h3 class="rh-summary rh-ready"><%= @order.description || 'Оплата заказа' %></h3></td>
+        <td class="rh-right"></td>
+    </tr>
+    </table>
+    <div class="rh-shadow"></div>
+</div>
 </div>
 
-<div id="booking" class="b-processing" style="display: block;">
-<div class="b-loading" style="display: block; width: 700px; margin-left: -350px;">
-    <h3 class="bl-title">К сожалению, срок оплаты для этой брони истек.</span></h3>
-    <p class="bl-tip">Если вы уверены, что здесь все-таки должна быть форма оплаты, позвоните нам.</p>
-</div>
+<div class="p-message">
+    <h3 class="pm-title">К сожалению, срок оплаты для этой брони истек.</h3>
+    <p class="pm-tip">Если вы уверены, что здесь все-таки должна быть форма оплаты, позвоните нам.</p>
 </div>
 
+<div class="page-buffer"></div>
+</div>
 <%= render 'shared/footer' %>
 </body>
 </html>

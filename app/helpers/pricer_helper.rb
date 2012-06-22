@@ -65,7 +65,7 @@ module PricerHelper
 
   def recommendation_prices r
     prices = {
-      :RUR => r.price_with_payment_commission.to_i
+      :RUR => r.price_with_payment_commission.round.to_i
     }
     prices.to_json
   end
@@ -128,8 +128,11 @@ module PricerHelper
     if alliance
       features << "alliance#{ alliance.id }"
     end
-    features += v.flights.every.marketing_carrier.map{|carrier| 
-      'carrier' + carrier.iata
+    features += v.segments.map{|segment|
+      'carrier' + segment.main_marketing_carrier.iata
+    }    
+    features += v.flights.map{|flight|
+      'opcarr' + flight.operating_carrier.iata
     }
     features += v.flights.every.equipment_type.map{|plane|
       'plane' + plane.iata 

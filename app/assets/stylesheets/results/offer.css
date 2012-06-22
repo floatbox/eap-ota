@@ -126,7 +126,7 @@
 /* Details control */
 .od-control {
     position: absolute;
-    top: 20px;
+    top: 21px;
     left: 785px;
     font-size: 12px;
     line-height: 12px;
@@ -136,6 +136,9 @@
 }
 .od-hide {
     display: none;
+}
+.ob-disabled .od-control {
+    visibility: hidden;
 }
 
 /* Segments */

@@ -424,7 +424,7 @@ class Recommendation
 
     flights = variants.collect(&:flights).flatten
     data[:alliances] = recs.every.validating_carrier.map{|vc| vc.alliance || nil}.compact.uniq.sort_by(&:name)
-    data[:carriers] = flights.every.operating_carrier.uniq.sort_by(&:name)
+    data[:carriers] = all_segments.flatten.every.main_marketing_carrier.uniq.sort_by(&:name)
     data[:planes] = flights.every.equipment_type.uniq.sort_by(&:name)
     
     data

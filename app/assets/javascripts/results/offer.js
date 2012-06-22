@@ -304,7 +304,7 @@ updateDetails: function() {
     var odComments = $('<div class="od-comments"></div>');
     offer.el.find('.o-comments .od-comment').each(function() {
         var comment = $(this), carrier = comment.attr('data-carrier');
-        if (!carrier || features['carrier' + carrier]) {
+        if (!carrier || features['opcarr' + carrier]) {
             comment.clone().appendTo(odComments);
         }
     });
