@@ -2221,7 +2221,7 @@ check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') 
 subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
-discount '7%'
+discount '5.5%'
 commission "10%/8%"
 
 example 'dmejfk'
