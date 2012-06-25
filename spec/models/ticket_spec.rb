@@ -212,6 +212,19 @@ describe Ticket do
 
   end
 
+  describe 'price_with_payment_commission' do
+    context('with voided ticket') do
+      let(:order) {create(:order)}
+      subject do
+        ticket = create(:ticket, :order => order)
+        voided_ticket = create(:ticket, :order => order, :status => 'voided')
+        ticket
+      end
+
+      its(:price_with_payment_commission) {should == order.price_with_payment_commission}
+    end
+  end
+
   describe "#commission_ticketing_method" do
 
     describe "factories" do
