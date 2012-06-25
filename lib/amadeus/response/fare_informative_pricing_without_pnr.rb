@@ -39,19 +39,20 @@ module Amadeus
       end
 
       def recommendations rec
-        adults.map do |adult|
+        good_for_transposing = []
+        max_count = [adults, infants, children].max(&:count).count
+
+        [adults, infants, children].each do |age_group|
+          age_group.fill( age_group.first, (age_group.count...max_count)) if age_group.count < max_count
+          good_for_transposing << age_group if age_group.present?
+        end
+
+        good_for_transposing.transpose.map do |complex_group|
+          complex_group.compact!
           new_rec = Recommendation.new(:variants => rec.variants)
-          new_rec.booking_classes = adult.xpath('r:fareInfoGroup/r:segmentLevelGroup/r:cabinGroup/r:cabinSegment/r:bookingClassDetails/r:designator').map(&:to_s)
-          new_rec.cabins = adult.xpath('r:fareInfoGroup/r:segmentLevelGroup/r:cabinGroup/r:cabinSegment/r:bookingClassDetails/r:option').map(&:to_s)
-
-          #считаем тотал для каждой из групп пассажиров
-          adult_price_fare, adult_price_tax = local_prices adult
-          child_price_fare, child_price_tax, infant_price_fare, infant_price_tax = 0,0,0,0
-          child_price_fare, child_price_tax = local_prices children.shift if children.present?
-          infant_price_fare, infant_price_tax = local_prices infants.shift if infants.present?
-
-          new_rec.price_fare = adult_price_fare + child_price_fare + infant_price_fare
-          new_rec.price_tax = adult_price_tax + child_price_tax + infant_price_tax
+          new_rec.booking_classes = complex_group.first.xpath('r:fareInfoGroup/r:segmentLevelGroup/r:cabinGroup/r:cabinSegment/r:bookingClassDetails/r:designator').map(&:to_s)
+          new_rec.cabins = complex_group.first.xpath('r:fareInfoGroup/r:segmentLevelGroup/r:cabinGroup/r:cabinSegment/r:bookingClassDetails/r:option').map(&:to_s)
+          new_rec.price_fare, new_rec.price_tax = complex_group.map{|cg|local_prices cg}.transpose.map{|x| x.reduce(:+)}
           new_rec
         end
       end
