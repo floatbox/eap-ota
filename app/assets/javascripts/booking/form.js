@@ -29,7 +29,6 @@ init: function() {
     this.required.delegate('.bffr-link', 'click', function() {
         that.focus($('#' + $(this).attr('data-field')));
     });
-    
     this.validate(true);
 },
 position: function() {
@@ -83,12 +82,39 @@ submit: function() {
         url: this.el.attr('action'),
         data: this.el.serialize(),
         success: function(s) {
-            that.process(s);
+            if (typeof s === 'string' && s.length) {
+                that.process(s);
+            } else if (s && s.errors) {
+                that.showErrors(s.errors);
+            } else if (s && s.exception && s.exception.message) {
+                that.showErrors({'exception': s.exception.message});
+            }        
         },
         error: function() {
             that.process('<div class="bf-result bfr-fail"><h5 class="bfr-title">Что-то пошло не так.</h5><p class="bfr-content">Возникла техническая проблема. Попробуйте нажать на кнопку «Купить» ещё раз или позвоните нам <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p><p class="bfr-content"><span class="link bfr-back">Попробовать ещё раз</span></p></div>');
         }
     });
+},
+showErrors: function(errors) {
+    var wrong = [], cardused = false;
+    for (var id in errors) {
+        if (id.search('birthday') !== -1) {
+            var n = Number(id.charAt(7));
+            wrong.push('<span class="bffr-link" data-field="bfp' + (n + 1) + '-byear">Пассажиру</span> ' + errors[id] + '.');
+        } else if (id.search('passport') !== -1) {
+            var n = Number(id.charAt(7));
+            wrong.push('<span class="bffr-link" data-field="bfp' + (n + 1) + '-passport">Номер документа</span> введен неправильно.');
+        } else if (id.search('card') !== -1 && !cardused) {
+            wrong.push('<span class="bffr-link" data-field="bfcn-part4">Номер банковской карты</span> введён неправильно.');
+            cardused = true;
+        } else {
+            wrong.push(errors[id]);
+        }
+    }
+    this.required.html(wrong.join(' ')).show();
+    this.button.removeClass('bfb-disabled');
+    this.footer.find('.bff-progress').hide();
+    this.footer.find('.bff-cancel').show();    
 },
 process: function(s) {
     this.footer.hide();

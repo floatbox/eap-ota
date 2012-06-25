@@ -15,7 +15,11 @@ init: function() {
     this.content.delegate('.bf-hint', 'click', function(event) {
         var content = $('#' + $(this).attr('data-hint')).html();
         hint.show(event, content);
-    });     
+    });
+    this.content.delegate('.od-alliance', 'click', function(event) {
+        var el = $(this);
+        hint.show(event, 'В альянс ' + el.html() + ' входят авиакомпании: ' + el.attr('data-carriers') + '.');
+    });
 },
 abort: function() {
     if (this.request && this.request.abort) {

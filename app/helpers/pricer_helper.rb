@@ -108,7 +108,7 @@ module PricerHelper
   # тогда придется uniq_by, чоуж.
   def group_segments variants
     variants.map(&:segments).transpose.map do |segments|
-      segments.uniq.sort_by {|s| [s.departure_time, s.total_duration] }
+      segments.uniq_by(&:object_id).sort_by {|s| [s.departure_time, s.total_duration] }
     end
   end
 
@@ -161,8 +161,7 @@ module PricerHelper
 
   # самый долгий перевозчик в сегменте
   def primary_carrier segment
-    #segment.flights.group_by(&:operating_carrier_name).max_by{|carrier, flights| flights.sum(&:duration) }[1].first.operating_carrier
-    segment.flights.group_by(&:marketing_carrier_name).max_by{|carrier, flights| flights.sum(&:duration) }[1].first.marketing_carrier
+    segment.flights.group_by(&:operating_carrier_name).max_by{|carrier, flights| flights.sum(&:duration) }[1].first.operating_carrier
   end
   
   def segment_title segment

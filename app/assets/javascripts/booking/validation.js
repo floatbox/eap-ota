@@ -386,11 +386,27 @@ init: function() {
         that.el.addClass('bf-focus');
     }).blur(function() {
         that.el.removeClass('bf-focus');
-    });
+    }).bind('paste', function() {
+        var field = $(this);
+        var el = $(this).attr('maxlength', 50);
+        setTimeout(function() {
+            var v = el.val().replace(/\D/g, '');
+            while (el.length && v.length) {
+                el.val(v.substring(0, 4));
+                if (v.length > 3) {
+                    el = el.next('input');
+                    v = v.substring(4);
+                } else {
+                    break;
+                }
+            }
+            el.focus();
+            field.attr('maxlength', 4);
+        }, 10);
+    });    
     this.$validate = function() {
         that.validate(true);
     };
-    this.fake = Boolean(this.el.attr('data-fake'));
     this.fid = 'bfcn-part1';
     this.initAutoTab();
 },
@@ -442,7 +458,6 @@ check: function(values) {
         if (/\D/.test(s)) return 'letters';
         if (s.length < 4) return 'empty';
     }
-    if (this.fake) return undefined;
     var s = values.join(''), sum = 0;
     for (var i = 0; i < 16; i += 2) {
         var n1 = Number(s.charAt(i)) * 2;
