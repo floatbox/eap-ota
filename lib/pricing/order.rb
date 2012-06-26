@@ -43,7 +43,7 @@ module Pricing
     end
 
     def expected_income
-      expected_earnings - income_suppliers
+      (expected_earnings - income_suppliers).round(2)
     end
 
     # сумма данных по билетам. по идее, более точная информация, нежели сохраненная в заказе
@@ -111,7 +111,7 @@ module Pricing
     # FIXME отдать это на совесть подклассов Payment
     def expected_earnings
       if payment_type == 'card'
-        price_total
+        price_with_payment_commission - price_payment_commission #price_total
       else # cash, delivery, invoice..
         price_with_payment_commission
       end
