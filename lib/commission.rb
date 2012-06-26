@@ -1174,6 +1174,16 @@ carrier "IB", "IBERIA"
 
 carrier_defaults :consolidator => 0, :our_markup => '1%'
 
+example 'dmebcn'
+example 'dmebcn/VY'
+agent    "1 руб. с билета на рейсы IB. (Билеты Interline под кодом IB могут быть выписаны только в случае существования опубл. тарифов и только при условии, что IB выполняет первый рейс маршрута."
+subagent "50 коп. с билета на рейсы IB"
+check {includes(country_iatas, 'ES') }
+interline :no, :yes
+our_markup "150"
+## discount '5%'
+commission "1/0.5"
+
 example 'svocdg cdgsvo'
 agent    "1 руб. с билета на рейсы IB. (Билеты Interline под кодом IB могут быть выписаны только в случае существования опубл. тарифов и только при условии, что IB выполняет первый рейс маршрута."
 subagent "50 коп. с билета на рейсы IB"
@@ -1834,6 +1844,17 @@ interline :no, :yes
 our_markup "0"
 discount '1%'
 commission "5%/3%"
+
+example 'dmebcn'
+example 'dmebcn/lh'
+agent    "1 руб. с билета по опубл. тарифам на собств.рейсы OS и рейсы Interline с участком OS.
+(Билеты Interline под кодом OS могут быть выписаны только в случае существования опубликованных тарифов и только при условии, что OS выполняет как минимум один рейс. В противном случае по билету должна быть сделана доплата до полного опублик. IATA тарифа)"
+subagent "5 коп. с билета по опубл. тарифам на собств.рейсы OS и рейсы Interline с участком OS."
+check {includes(country_iatas, 'ES') }
+interline :no, :yes
+our_markup "150"
+## discount '5%'
+commission "1/0.05"
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
