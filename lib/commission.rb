@@ -300,7 +300,7 @@ commission "0%/0%"
 carrier "AB", "AIR BERLIN"
 ########################################
 
-example 'cdgsvo svocdg/lh'
+example 'cdgsvo svocdg'
 example 'svocdg'
 agent    "5% по всем направлениям через DTT"
 subagent "3% по всем направлениям через DTT"
