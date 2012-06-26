@@ -115,7 +115,7 @@ example 'AERDME/W DMEAER/W'
 agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWUYHMQBKORE"
-discount "6.5%"
+discount "6.7%"
 #disabled "Пишем через АЦ из-за курса доллара"
 commission "12%/10%"
 
@@ -1174,14 +1174,15 @@ carrier "IB", "IBERIA"
 
 carrier_defaults :consolidator => 0, :our_markup => '1%'
 
-example 'dmebcn'
-example 'dmebcn/VY'
+#example 'dmebcn'
+#example 'dmebcn/VY'
 agent    "1 руб. с билета на рейсы IB. (Билеты Interline под кодом IB могут быть выписаны только в случае существования опубл. тарифов и только при условии, что IB выполняет первый рейс маршрута."
 subagent "50 коп. с билета на рейсы IB"
 check {includes(country_iatas, 'ES') }
 interline :no, :yes
 our_markup "150"
 ## discount '5%'
+disabled "чото не работает пока"
 commission "1/0.5"
 
 example 'svocdg cdgsvo'
@@ -1460,8 +1461,8 @@ commission "10%/8%"
 
 example 'dmejfk'
 example 'dmejfk jfkdme/ua/L'
-agent    "через DTT из России в США и наоборот - 10%"
-subagent "через DTT из России в США и наоборот - 8%"
+agent    "через DTT из России в США и наоборот - 5%"
+subagent "через DTT из России в США и наоборот - 3%"
 check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
 #subclasses "YBMUH"
 interline :no, :yes
@@ -1469,14 +1470,15 @@ our_markup "0"
 discount '1%'
 commission "5%/3%"
 
-example 'dmebcn'
-example 'dmebcn/OS'
+#example 'dmebcn'
+#example 'dmebcn/OS'
 agent    "1 руб. с билета по опубл. тарифам на собств. рейсы LH и рейсы Interline с участком LH. (Билеты Interline под кодом LH могут быть выписаны только в случае существования опубл. тарифов и только при условии, что LH выполняет как минимум один рейс. В противном случае по билету должна быть сделана доплата до полного опублик. IATA тарифа. Исключение составляют рейсы авиакомпаний-партнёров: LX, EW, CL, IQ, C3 и 4U (Germanwings), а также сегменты авиакомпаний STAR Alliance в случае оформления билетов по тарифам STAR Round the World и Star Airpass Fares)"
 subagent "5 коп. с билета по опубл. тарифам на собственные рейсы LH и рейсы Interline с участком LH."
 check {includes(city_iatas, 'BCN') }
 interline :no, :yes
 our_markup "150"
 ## discount '5%'
+disabled "чото не работает пока"
 commission "1/0.05"
 
 example 'svocdg'
@@ -1845,8 +1847,8 @@ our_markup "0"
 discount '1%'
 commission "5%/3%"
 
-example 'dmebcn'
-example 'dmebcn/lh'
+#example 'dmebcn'
+#example 'dmebcn/lh'
 agent    "1 руб. с билета по опубл. тарифам на собств.рейсы OS и рейсы Interline с участком OS.
 (Билеты Interline под кодом OS могут быть выписаны только в случае существования опубликованных тарифов и только при условии, что OS выполняет как минимум один рейс. В противном случае по билету должна быть сделана доплата до полного опублик. IATA тарифа)"
 subagent "5 коп. с билета по опубл. тарифам на собств.рейсы OS и рейсы Interline с участком OS."
@@ -1854,6 +1856,7 @@ check {includes(country_iatas, 'ES') }
 interline :no, :yes
 our_markup "150"
 ## discount '5%'
+disabled "чото не работает пока"
 commission "1/0.05"
 
 example 'svocdg'
