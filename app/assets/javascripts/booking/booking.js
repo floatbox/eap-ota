@@ -26,10 +26,6 @@ abort: function() {
         this.request.abort();
         delete this.request;
     }
-    if (this.temporary) {
-        this.temporary.remove();
-        delete this.temporary;
-    }
     if (this.offer) {
         this.offer.book.removeClass('ob-disabled').show();
         this.offer.updateBook();
@@ -60,7 +56,7 @@ prebook: function(offer) {
         offer.showDetails();
     }
     $w.smoothScrollTo(offer.details.offset().top - 52 - 36 - 92);
-    trackEvent('Бронирование', 'Предварительное бронирование');    
+    trackEvent('Бронирование', 'Выбор варианта');
     this.variant = offer.selected;
     this.offer = offer;
 },
@@ -176,6 +172,7 @@ hide: function() {
     $w.scrollTop(this.offer.details.offset().top - offset);
     page.title.set(local.title.results.absorb(results.data.titles.window));
     page.location.set('booking');
+    trackPage('/' + page.location.hash);    
     delete this.offer;
 }
 };

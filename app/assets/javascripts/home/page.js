@@ -30,10 +30,6 @@ init: function() {
             search.map.load();
         }
     });
-    
-    /*results.message.toggle('loading');
-    results.content.el.show();
-    re sults.show();*/
 
 },
 innerHeight: function() {
@@ -80,7 +76,9 @@ showData: function(data) {
         Queries.history.select(data.query_key);
     }, 300);
     this.title.set(local.title.search.absorb(data.titles.window));
-    this.location.set('search', data.query_key);
+    if (this.location.search !== data.query_key) {
+        this.location.set('search', data.query_key);
+    }
 }
 };
 

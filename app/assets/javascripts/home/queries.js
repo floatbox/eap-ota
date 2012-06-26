@@ -97,7 +97,9 @@ save: function() {
     var result = [];
     this.el.find('.qh-tab').each(function() {
         var tab = $(this);
-        result.push(tab.attr('data-key') + ' ' + tab.attr('data-content'));
+        if (results.length < 5 || tab.hasClass('qh-selected')) {
+            result.push(tab.attr('data-key') + ' ' + tab.attr('data-content'));
+        }
     });
     Cookie('searches', result.length ? result.join('|') : undefined, new Date().shift(3));
 }

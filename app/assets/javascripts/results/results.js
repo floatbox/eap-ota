@@ -150,7 +150,12 @@ processSubscription: function() {
 processCollections: function() {
     var that = this;
     if (this.all.offers.length) {
-        this.content.selectFirst();
+        var tab = page.location.offer;
+        if (tab && results[tab] && !results[tab].control.hasClass('rt-disabled')) {
+            this.content.select(tab);
+        } else {
+            this.content.selectFirst();
+        }
         this.processSubscription();
         setTimeout(function() {
             that.ready = true;
