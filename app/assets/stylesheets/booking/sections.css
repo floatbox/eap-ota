@@ -161,7 +161,7 @@
     margin: 0 0 8px;
 }
 .bf-persons .bfs-title {
-    position: 
+    position: relative;
     margin-right: 20px;
 }
 .bfp-order {
