@@ -322,13 +322,13 @@ check { includes_only(marketing_carrier_iatas, %W[HG]) }
 discount "1.7%"
 commission "5%/3%"
 
-example 'cdgsvo svocdg/lh'
-example 'svocdg'
+#example 'cdgsvo svocdg/lh'
+#example 'svocdg'
 agent    "1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
 subagent "5 коп с билета по опубл. тарифам на рейсы AB"
 interline :no, :unconfirmed
-important!
 our_markup "1%"
+disabled "продаем все через американцев"
 commission "1/0.05"
 
 #example 'dmevie/hg viedme/hg'
