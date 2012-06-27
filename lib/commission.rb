@@ -1918,7 +1918,7 @@ example 'svocdg'
 agent    "9% от опубл. тарифов на собств.рейсы PS"
 subagent "7% от опубл. тарифов на собств.рейсы PS"
 discount "4%"
-commission "9%/7%"
+commission "9%/9%"
 
 example 'cdgsvo svocdg/ab'
 agent "5% от опубл. тарифов на рейсы Interline c обязательным участком PS"
