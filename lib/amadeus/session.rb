@@ -13,7 +13,7 @@ module Amadeus
     Rails.logger
   end
 
-  cattr_accessor :storage do
+  cattr_accessor :pool do
     Amadeus::Session::MongoStore
     #Amadeus::Session::ARStore
   end
@@ -31,12 +31,12 @@ module Amadeus
     # вызывается с параметром и без (для класс-методов амадеуса)
     def book(office=nil)
       office ||= default_office
-      logger.info { "Amadeus::Session: free sessions count: #{storage.free_count(office)}" }
+      logger.info { "Amadeus::Session: free sessions count: #{pool.free_count(office)}" }
       find_free_and_book(office) || sign_in(office, true)
     end
 
     def find_free_and_book(office)
-      if record = storage.find_free_and_book(office: office)
+      if record = pool.find_free_and_book(office: office)
         logger.info "Amadeus::Session: #{record.token} reused (#{record.seq}) for #{record.office}"
         from_record(record)
       end
@@ -56,10 +56,10 @@ module Amadeus
 
     # для кронтасков, скоростью не блещет
     def housekeep
-      storage.each_stale(default_office) do |record|
+      pool.each_stale(default_office) do |record|
         from_record(record).destroy
       end
-      (Conf.amadeus.session_pool_size - storage.free_count(default_office)).times do
+      (Conf.amadeus.session_pool_size - pool.free_count(default_office)).times do
         sign_in(default_office)
       end
     end
@@ -75,7 +75,7 @@ module Amadeus
   # instance methods
 
   def initialize(args={})
-    self.record = storage.new(args)
+    self.record = pool.new(args)
   end
 
   attr_accessor :record
