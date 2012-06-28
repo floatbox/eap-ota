@@ -50,6 +50,7 @@ Eviterra::Application.routes.draw do
   match 'iata' => 'about#iata', :as => :about
   match 'faq' => 'about#faq', :as => :about
   match 'agreement' => 'about#agreement', :as => :about
+  match 'agreement/old' => 'about#agreement_old', :as => :about
   match 'contacts' => 'about#contacts', :as => :about
   match 'about/:action' => 'about', :as => :about
 
