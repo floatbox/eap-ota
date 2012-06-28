@@ -1,24 +1,25 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE HTML>
+<html lang="ru-RU">
 <head>
-    <%= render 'shared/head_common', {:title => 'отказ от подписки'} %>
-    <%= stylesheet_link_tag "static" %>
-    <%= javascript_include_tag "static" %>
+	<meta charset="utf-8">
+    <title>Eviterra — отказ от подписки</title>
+    <%= render 'shared/head' %>
+    <%= stylesheet_link_tag 'static/all', 'booking/payment' %>
+    <%= javascript_include_tag "local/ru", 'static' %>
 </head>
 <body>
+<div class="page-wrapper">
 <%= render 'shared/header' %>
-<div id="wrapper">
-<div id="content">
-    <div id="back2search">
-        <div class="bscontent"><a href="/">Перейти к поиску</a></div>
-    </div>
-    <div class="article">
-    
-    <h2>Отказ от подписки</h2>
-    <p>Подписка отменена. Спасибо, что пользуетесь нашими услугами.</p>
-    
-    </div>
+<div id="back2search">
+    <div class="bs-content"><a class="bs-link" href="/">Поиск авиабилетов</a></div>
 </div>
+
+<div class="p-message">
+    <h3 class="pm-title">Отказ от подписки</h3>
+    <p class="pm-tip">Подписка отменена. Спасибо, что пользуетесь нашими услугами.</p>
+</div>
+   
+<div class="page-buffer"></div>
 </div>
 <%= render 'shared/footer' %>
 </body>
