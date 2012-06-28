@@ -70,7 +70,7 @@
 <script src="//translate.google.com/translate_a/element.js?cb=googleSectionalElementInit&ug=section&hl=ru"></script>
 <script type="text/javascript">
 $(function() {
-    search.dates = {csnow: new Date('<%= Time.now.to_s %>')};
+    search.dates = {csnow: new Date('<%= Time.now.to_formatted_s(:rfc822) %>')};
     results.data = $.parseJSON('<%= raw @search.details.to_json %>');
     results.updateTitles();
     results.header.init();
