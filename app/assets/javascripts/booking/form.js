@@ -14,9 +14,9 @@ init: function() {
         event.preventDefault();
         if (!that.button.hasClass('bfb-disabled')) {
             that.submit();
-        }        
+        }
     });
-    this.footer = this.el.find('.bf-footer');    
+    this.footer = this.el.find('.bf-footer');
     this.footer.find('.bffc-link').click(function() {
         booking.cancel();
     });
@@ -62,7 +62,7 @@ validate: function(forced) {
     if (this.back) {
         this.result.hide();
         this.footer.show();
-        delete this.back;    
+        delete this.back;
     }
     var disabled = wrong.length !== 0;
     this.required.html(wrong.join(' ')).toggle(disabled);
@@ -88,7 +88,7 @@ submit: function() {
                 that.showErrors(s.errors);
             } else if (s && s.exception && s.exception.message) {
                 that.showErrors({'exception': s.exception.message});
-            }        
+            }
         },
         error: function() {
             that.process('<div class="bf-result bfr-fail"><h5 class="bfr-title">Что-то пошло не так.</h5><p class="bfr-content">Возникла техническая проблема. Попробуйте нажать на кнопку «Купить» ещё раз или позвоните нам <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p><p class="bfr-content"><span class="link bfr-back">Попробовать ещё раз</span></p></div>');
@@ -114,7 +114,7 @@ showErrors: function(errors) {
     this.required.html(wrong.join(' ')).show();
     this.button.removeClass('bfb-disabled');
     this.footer.find('.bff-progress').hide();
-    this.footer.find('.bff-cancel').show();    
+    this.footer.find('.bff-cancel').show();
 },
 process: function(s) {
     this.footer.hide();
@@ -130,7 +130,7 @@ process: function(s) {
         $(this).closest('.bf-result').find('form').submit();
     });
     var back = this.result.find('.bfr-back');
-    if (back.length) {  
+    if (back.length) {
         this.back = true;
         back.click(function() {
             that.result.hide();
@@ -152,11 +152,12 @@ process: function(s) {
         var context = this.el.find('.bff-price').html(this.result.find('.bfnp-data').html());
         context.find('.bffp-wd').toggle(wd);
         context.find('.bffp-nd').toggle(!wd);
+        this.el.find('.bf-newprice').attr('data-price', np);
         this.back = true;
-        break;    
+        break;
     case '3dsecure':
         this.result.find('.obb-title').click(function() {
-        });   
+        });
         break;
     case 'forbidden':
         setTimeout(function() {
@@ -166,6 +167,11 @@ process: function(s) {
         break;
     case 'success':
         trackPage('/booking/success');
+        if (window._gaq) {
+            var price = this.el.find('.bf-newprice').attr('data-price');
+            _gaq.push(['_addTrans', this.result.find('.bfr-pnr').text(), '', price]);
+            _gaq.push(['_trackTrans']);
+        }
         break;
     }
 }
@@ -179,7 +185,7 @@ init: function() {
     this.initPhone();
     this.bind(function() {
         that.validate();
-        booking.form.validate();    
+        booking.form.validate();
     });
 },
 initEmail: function() {
@@ -210,7 +216,7 @@ initPhone: function() {
         v = v.replace(/(\D)(\d{2,3}) ?(\d{2}) ?(\d{2})$/, '$1$2-$3-$4');
         return v;
     };
-    this.controls.push(phone);    
+    this.controls.push(phone);
 }
 };
 
@@ -262,20 +268,20 @@ init: function() {
     this.initNames();
     this.initSex();
     this.initBirthday();
-    this.initNationality();    
+    this.initNationality();
     this.initPassport();
-    this.initExpiration();    
+    this.initExpiration();
     this.initBonus();
     this.bind(function() {
         that.validate();
         that.section.validate();
-        booking.form.validate();        
+        booking.form.validate();
     });
 },
 initNames: function() {
     var that = this;
     var lwarning = this.section.latinWarning;
-    var owarning = this.section.orderWarning;    
+    var owarning = this.section.orderWarning;
     var check = function(value) {
         if (/[а-яё]/.test(value)) {
             lwarning.css('top', this.el.offset().top + 34);
@@ -439,7 +445,7 @@ init: function() {
     this.initCash();
     this.bind(function() {
         that.validate();
-        booking.form.validate();    
+        booking.form.validate();
     });
     if (this.cash) {
         $('#bfcd-yes').trigger('set');
@@ -449,7 +455,7 @@ init: function() {
 },
 initCard: function() {
     var context = this.el.find('.bf-card');
-    
+
     // Тип карты
     var sample = $('#bfcn-sample');
     var type, types = {
@@ -467,7 +473,7 @@ initCard: function() {
         if (t === type) return;
         typeParts.visa.toggle(t !== 'mastercard');
         typeParts.mastercard.toggle(t !== 'visa');
-        typeParts.or.toggle(t === undefined);            
+        typeParts.or.toggle(t === undefined);
         type = t;
     };
     typeParts.visa.click(function() {
@@ -477,8 +483,8 @@ initCard: function() {
     typeParts.mastercard.click(function() {
         toggleType('mastercard');
         number.parts.first().focus();
-    });    
-    
+    });
+
     // Номер карты
     var number = new validator.CardNumber(context.find('.bfcn-parts'), {
         empty: '{номер банковской карты}',
@@ -492,7 +498,7 @@ initCard: function() {
     number.parts.first().bind('keyup propertychange input', function() {
         var v = this.value;
         toggleType(v ? types[v.charAt(0)] : undefined);
-    });    
+    });
 
     // CVV
     var cvv = new validator.Text($('#bc-cvv'), {
@@ -511,9 +517,9 @@ initCard: function() {
         if (/[^A-Za-z\- .']/.test(value)) return 'letters';
     });
     name.format = function(value) {
-        return $.trim(value).toUpperCase();    
+        return $.trim(value).toUpperCase();
     };
-    
+
     // Срок действтия
     var date = new validator.CardDate(context.find('.bfc-date'), {
         empty: '{срок действия банковской карты}',
@@ -523,12 +529,12 @@ initCard: function() {
     }, function(value) {
         if (/[^A-Za-z\- .']/.test(value)) return 'letters';
     });
-   
+
     // Меняем отступы полей, чтобы цифры выравнивались по центру
     var npw = number.parts.first().outerWidth() - 1;
     var npp = Math.floor((npw - sample.width()) / 2) - 1;
     number.parts.width(npw - npp * 2).css('padding-left', npp).css('padding-right', npp);
-    cvv.el.width(Math.ceil((npw - npp * 2) * 0.75));    
+    cvv.el.width(Math.ceil((npw - npp * 2) * 0.75));
 
     this.controls.push(number, cvv, name, date);
     this.card = {
@@ -541,7 +547,7 @@ initCash: function() {
     if (context.length === 0) {
         return false;
     }
-    
+
     // Доставка иди оплата в офисе
     context.find('.bfcd-radio').bind('click set', function(event) {
         var value = $(this).attr('value');
@@ -571,7 +577,7 @@ initCash: function() {
     this.cash = {
         el: context,
         controls: [address]
-    };    
+    };
 },
 initSelector: function() {
     var that = this;
@@ -583,7 +589,7 @@ select: function(type, validate) {
     this.card.el.toggle(type === 'card');
     this.cash.el.toggle(type === 'cash');
     this.card.el.find('input').prop('disabled', type !== 'card');
-    this.cash.el.find('input').prop('disabled', type !== 'cash');    
+    this.cash.el.find('input').prop('disabled', type !== 'cash');
     this.controls = this[type].controls;
     var context = booking.form.el;
     var wd = (type === 'cash' && $('#bfcd-yes').is(':checked'));
