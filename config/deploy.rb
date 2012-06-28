@@ -131,8 +131,7 @@ namespace :deploy do
   after "deploy:finalize_update", "deploy:symlink_shared_configs"
   after "deploy:finalize_update", "deploy:symlink_persistent_cache"
   after "deploy:finalize_update", "deploy:symlink_completer"
-  # временно выключаем рамблеркэш
-  # after "deploy", "deploy:restart_rambler_daemon"
+  after "deploy", "deploy:restart_rambler_daemon"
   after "deploy:update_code", "deploy:check_for_pending_migrations"
 end
 
