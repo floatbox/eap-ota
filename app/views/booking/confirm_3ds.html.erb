@@ -6,53 +6,53 @@
     <%= javascript_include_tag "main", "static", "controls/hint" %>
 </head>
 <body>
+
+
+<!DOCTYPE HTML>
+<html lang="ru-RU">
+<head>
+	<meta charset="utf-8">
+    <title>Eviterra — <%= @error_message ? 'не удалось оплатить билет' : 'ваш билет оплачен и забронирован' %></title>
+    <meta name="description" content="Eviterra.com — простой, удобный и красивый способ найти и купить авиабилет. Поиск, выбор рейса и бронирование онлайн. Цены на авиабилеты. +7 (495) 660-35-20">
+    <meta name="keywords" content="авиабилет, авиакасса, авиабилеты купить, бронирование, выбрать рейс, авиарейс, перелет, дешевые авиабилеты, цены на билеты, онлайн бронирование, эвитерра, eviterra, спецпредложения, авиакомпании, расписание рейсов, маршрут, агентство, турагентство, путешествия">
+    <%= render 'shared/head' %>
+    <%= stylesheet_link_tag 'static/all' %>
+    <%= javascript_include_tag "local/ru", 'static' %>
+</head>
+<body>
+<div class="page-wrapper">
+
 <%= render 'shared/header' %>
-<div id="wrapper">
-<div id="content">
-    <div id="back2search">
-        <div class="bscontent"><a href="/">Вернуться к поиску</a></div>
-    </div>
-    <div class="article tds-result">
+<div id="back2search">
+    <div class="bs-content"><a class="bs-link" href="/">Поиск авиабилетов</a></div>
+</div>
 
-    <% if @error_message == :ticketing %>
-        <p class="fail"><strong>Упс…</strong> Не удалось забронировать этот вариант.</p>
-        <p class="tip">Так иногда бывает, потому что авиакомпания не&nbsp;может подтвердить наличие мест на&nbsp;этот рейс по&nbsp;этому тарифу. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Выберите <a href="/">другой вариант</a>.</p>
-    <% elsif @error_message %>
-        <p class="fail"><strong>Упс…</strong> Что-то пошло не так. Скорее всего, банк отклонил попытку платежа по&nbsp;вашей карте.</p>
-        <p class="tip"><strong>Это могло произойти по одной из нескольких причин:</strong> вы неверно ввели данные карты, либо на счете карты нет достаточной суммы, либо банк запретил для вашей карты транзакции в интернете или установил лимит на такие транзакции.</p>
-        <p class="tip"><strong>Что можно сделать:</strong> еще раз проверить, правильно ли введены данные, использовать другую карту или связаться с банком, выдавшим карту.</p>
-        <p class="tip">Если это невозможно, узнайте <a target="_blank" href="/about/#payment">какими ещё способами</a> можно купить у нас билет. Если вы абсолютно уверены, что отказ произошел не по вышеуказнным причинам и это у нас что-то не работает, свяжитесь с нами по электронной почте <a href="mailto:support@eviterra.com">support@eviterra.com</a>.</p>
-    <% elsif @order.pnr_number.present? %>
-        <p class="success"><strong>Всё отлично!</strong> Ваш билет оплачен, забронирован и выслан на&nbsp;ваш электронный адрес. Номер брони&nbsp;— <%= @order.pnr_number %>. Если хотите, можете <a target="_blank" href="<%= show_order_path(@order.pnr_number) %>">распечатать</a> ваш билет.</p>
-        <p class="tip"><span class="link" onclick="hint.show(event, $(this).parent().next('.htext').html());">Что делать, если на почту ничего не пришло?</span></p>
-        <p class="htext latent">Если вы&nbsp;не&nbsp;получили письмо с&nbsp;электронным билетом в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, то&nbsp;напишите нам (<a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a>) или позвоните <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p>
-        <script type="text/javascript">
-        if (window._gaq) {
-            _gaq.push(['_trackPageview', '/booking/success']);
-            _gaq.push(['_addTrans', '<%= @order.pnr_number %>', '', '<%= @order.price_with_payment_commission.round.to_i %>']);
-            _gaq.push(['_trackTrans']);
-        }
-        if (window.yaCounter5324671) {
-            yaCounter5324671.hit('/#3ds/success');
-        }
-        </script>
-    <% else %>
-        <p class="success"><strong>Всё отлично!</strong> Ваша оплата принята.</p>
-    <% end %>
+<% if @error_message == :ticketing %>
+    <p class="fail">Не удалось забронировать этот вариант.</p>
+    <p class="tip">Так иногда бывает, потому что авиакомпания не&nbsp;может подтвердить наличие мест на&nbsp;этот рейс по&nbsp;этому тарифу. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Выберите <a href="/">другой вариант</a>.</p>
+<% elsif @error_message %>
+    <p class="fail">Что-то пошло не так. Скорее всего, банк отклонил попытку платежа по&nbsp;вашей карте.</p>
+    <p class="tip"><strong>Это могло произойти по одной из нескольких причин:</strong> вы неверно ввели данные карты, либо на счете карты нет достаточной суммы, либо банк запретил для вашей карты транзакции в интернете или установил лимит на такие транзакции.</p>
+    <p class="tip"><strong>Что можно сделать:</strong> еще раз проверить, правильно ли введены данные, использовать другую карту или связаться с банком, выдавшим карту.</p>
+    <p class="tip">Если это невозможно, узнайте <a target="_blank" href="/about/#payment">какими ещё способами</a> можно купить у нас билет. Если вы абсолютно уверены, что отказ произошел не по вышеуказнным причинам и это у нас что-то не работает, свяжитесь с нами по электронной почте <a href="mailto:support@eviterra.com">support@eviterra.com</a>.</p>
+<% elsif @order.pnr_number.present? %>
+    <p class="success"><strong>Всё отлично!</strong> Ваш билет оплачен, забронирован и выслан на&nbsp;ваш электронный адрес. Номер брони&nbsp;— <%= @order.pnr_number %>. Если хотите, можете <a target="_blank" href="<%= show_order_path(@order.pnr_number) %>">распечатать</a> ваш билет.</p>
+    <p class="tip"><span class="link" onclick="hint.show(event, $(this).parent().next('.htext').html());">Что делать, если на почту ничего не пришло?</span></p>
+    <p class="htext latent">Если вы&nbsp;не&nbsp;получили письмо с&nbsp;электронным билетом в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, то&nbsp;напишите нам (<a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a>) или позвоните <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p>
+    <script type="text/javascript">
+    trackPage('/booking/success');
+    if (window._gaq) {
+        _gaq.push(['_addTrans', '<%= @order.pnr_number %>', '', '<%= @order.price_with_payment_commission.round.to_i %>']);
+        _gaq.push(['_trackTrans']);
+    }
+    </script>
+<% else %>
+    <p class="success"><strong>Всё отлично!</strong> Ваша оплата принята.</p>
+<% end %>
 
-    </div>
+<div class="page-buffer"></div>
 </div>
-<div id="footer">
-    <%= render 'shared/footer' %>
-</div>
-</div>
-<div id="hint">
-    <div class="close"></div>
-    <div class="content"></div>
-</div>
-<script type="text/javascript">
-hint.init();
-</script>
+<%= render 'shared/footer' %>
 </body>
 </html>
 
