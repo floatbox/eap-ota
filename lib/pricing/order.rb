@@ -67,7 +67,7 @@ module Pricing
 
     # подгнанный "сбор" для отображения клиенту
     def fee
-      if sold_tickets.present? && sold_tickets.all?{|ticket| ticket.price_tax >= 0 } #мы ебанулись! иначе глючит с трансаэровскими отрицательными таксами
+      if sold_tickets.present? && sold_tickets.all?{|ticket| ticket.price_tax >= 0 && ticket.office_id != 'FLL1S212V' } #мы ебанулись! иначе глючит с трансаэровскими отрицательными таксами
         sold_tickets.to_a.sum(&:fee)
       else
         recalculated_price_with_payment_commission - price_tax - price_fare + price_declared_discount
