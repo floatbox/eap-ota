@@ -72,6 +72,14 @@ module Amadeus
         !! booking
       end
 
+      def free?
+        ! booked?
+      end
+
+      def stale?
+        updated_at <= ::Amadeus::Session::INACTIVITY_TIMEOUT.seconds.ago
+      end
+
       module BadUID
         # sufficiently random. or not?
         private

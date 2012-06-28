@@ -31,8 +31,13 @@ module Amadeus
         end
       end
 
+      def self.delete_all(args={})
+        args.assert_valid_keys :office
+        collection.remove(args)
+      end
+
       include KeyValueInit
-      def initialize(args)
+      def initialize(args={})
         @doc = args.delete(:doc) || {"booked" => false}
         super
       end
@@ -97,12 +102,42 @@ module Amadeus
         @doc["booked"]
       end
 
-    private
+      def free?
+        ! booked?
+      end
 
-      def save
-        @doc["updated_at"] = Time.now
+      def updated_at
+        @doc["updated_at"]
+      end
+
+      def updated_at=(time)
+        @doc["updated_at"] = time.utc
+      end
+
+      def stale?
+        updated_at <= Amadeus::Session::INACTIVITY_TIMEOUT.seconds.ago.utc
+      end
+
+      # для FactoryGirl
+      def save!
+        save
+      end
+
+      # тоже для FactoryGirl. не проставляет timestamp
+      def save_without_touching
         collection.save( @doc )
       end
+
+      def save
+        self.updated_at = Time.now.utc
+        save_without_touching
+      end
+
+    protected
+
+      attr_reader :doc
+
+    private
 
       def self.free_condition
         {
