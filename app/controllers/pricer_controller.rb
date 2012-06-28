@@ -20,6 +20,21 @@ class PricerController < ApplicationController
     StatCounters.inc %W[search.pricer.total]
   end
 
+  def pricer_benchmark
+    Recommendation.class
+    Variant.class
+    Segment.class
+    Flight.class
+    file_name = Rails.root + 'data/recommendations/rec.dump'
+    file = File.open(file_name, 'r')
+    @search = PricerForm.load_from_cache('pcu8mn')
+
+    @recommendations = Marshal.load(file.read)
+    @locations = @search.human_locations
+
+    render :partial => 'recommendations'
+  end
+
   def hot_offers
     # FIXME а когда здесь параметр должен был случаться?
     render :json => HotOffer.featured(params[:query_key])
@@ -84,6 +99,8 @@ class PricerController < ApplicationController
       @search.save_to_cache
       @destination = get_destination
       @recommendations = Mux.new(:lite => true).async_pricer(@search)
+      @query_key = @search.query_key
+      hot_offer = create_hot_offer
       Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))
       StatCounters.inc %W[search.api.success search.api.#{partner}.success]
       StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner}.total] if @destination

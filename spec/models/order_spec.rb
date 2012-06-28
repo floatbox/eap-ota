@@ -133,9 +133,7 @@ describe Order do
         @old_tickets.every.save
         @new_ticket_hashes = [
           {:number => '1234567871', :code => '123', :price_fare => 0, :price_tax => 0, :source => 'amadeus', :parent_id => @old_tickets[0].id, :status => 'ticketed'},
-          {:number => '1234567891', :code => '123', :status => 'exchanged'},
           {:number => '1234567872', :code => '123', :price_fare => 0, :price_tax => 0, :source => 'amadeus', :parent_id => @old_tickets[1].id, :status => 'ticketed'},
-          {:number => '1234567892', :code => '123', :status => 'exchanged'}
         ]
         Strategy.stub_chain(:select, :get_tickets).and_return(@new_ticket_hashes)
         @order.reload_tickets
@@ -160,10 +158,8 @@ describe Order do
         its(:price_fare) {should == 10005}
         its(:price_tax) {should == 5430}
 
-        pending do
-          its(:price_tax_and_markup_and_payment) {should == 15364.97 - 10005}
-          its(:recalculated_price_with_payment_commission) {should == 15364.97}
-        end
+        its(:recalculated_price_with_payment_commission) {should == 15364.97}
+        its(:price_tax_and_markup_and_payment) {should == 15364.97 - 10005}
 
       end
 
@@ -187,10 +183,10 @@ describe Order do
         Sirena::Service.stub_chain(:new, :order).and_return(Sirena::Response::Order.new(File.read('spec/sirena/xml/order_with_tickets.xml')))
         Sirena::Service.stub_chain(:new, :pnr_status, :tickets_with_dates).and_return({})
         @order = Order.new(:source => 'sirena', :commission_subagent => '1%', :pnr_number => '123456', :created_at => (Time.now - 1.day))
-        @order.stub_chain(:tickets, :reload)
         ticket = stub_model(Ticket, :new_record? => true)
-        @order.stub_chain(:tickets, :ensure_exists).and_return(ticket)
-        ticket.should_receive(:update_attributes).twice.with(hash_including({:code=>"262"}))
+        order_tickets = stub('order_tickets', :find_by_number => nil, :reload => nil)
+        @order.stub(:tickets).and_return(order_tickets)
+        order_tickets.should_receive(:create).twice.with(hash_including({:code=>"262"}))
         @order.load_tickets
       end
 
@@ -214,10 +210,10 @@ describe Order do
       it 'loads tickets correctly' do
         Amadeus.should_receive(:booking).once.and_yield(@amadeus)
         @order.stub_chain(:tickets, :where, :every, :update_attribute)
-        @order.stub_chain(:tickets, :reload)
         ticket = stub_model(Ticket, :new_record? => true)
-        @order.stub_chain(:tickets, :ensure_exists).and_return(ticket)
-        ticket.should_receive(:update_attributes).with(hash_including(
+        order_tickets = stub('order_tickets', :find_by_number => nil, :reload => nil)
+        @order.stub(:tickets).and_return(order_tickets)
+        order_tickets.should_receive(:create).with(hash_including(
           :code => "555",
           :number => "2962867063",
           :last_name => 'BEDAREVA',
@@ -335,6 +331,26 @@ describe Order do
       let(:tickets) {[]}
       its(:show_vat) {should be_false}
     end
+  end
+
+  describe "prices after refund" do
+    let(:order) do
+      order = create(:order, :price_with_payment_commission => 3000)
+      t1 = create(:ticket, :order => order)
+      t2 = create(:ticket, :order => order)
+      t3 = create(:refund, :order => order, :parent => t2)
+      order
+    end
+
+    let(:active_ticket) {order.tickets.where(:status => 'ticketed').first}
+
+    subject {order}
+
+    its(:price_fare) {should == active_ticket.price_fare}
+    its(:price_tax_and_markup_and_payment) {should == active_ticket.price_tax_and_markup_and_payment}
+    its(:fee) {should == active_ticket.fee}
+    its(:recalculated_price_with_payment_commission) {should == 1500}
+
   end
 
 end

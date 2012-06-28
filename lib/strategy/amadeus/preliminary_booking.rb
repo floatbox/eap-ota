@@ -15,9 +15,7 @@ module Strategy::Amadeus::PreliminaryBooking
       @rec.price_fare, @rec.price_tax =
         amadeus.fare_informative_pricing_without_pnr(
           :recommendation => @rec,
-          :flights => @rec.flights,
-          :people_count => @search.real_people_count,
-          :validating_carrier => @rec.validating_carrier_iata
+          :people_count => @search.real_people_count
         ).prices
 
       # FIXME не очень надежный признак

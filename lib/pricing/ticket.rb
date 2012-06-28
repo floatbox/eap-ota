@@ -62,9 +62,12 @@ module Pricing
     def price_with_payment_commission
       case kind
       when 'ticket'
-        return 0 if order.price_fare + order.price_tax == 0 && !corrected_price
-        k = (price_tax + price_fare).to_f / (order.price_fare + order.price_tax)
-        corrected_price || order.price_with_payment_commission * k
+        return corrected_price if corrected_price
+        all_tickets = order.tickets.where('kind = "ticket" AND status != "voided"')
+        corrected_total = all_tickets.sum(:price_fare) + all_tickets.sum(:price_tax)
+        return 0 if corrected_total == 0
+        k = (price_tax + price_fare).to_f / corrected_total
+        order.price_with_payment_commission * k
       when 'refund'
         price_total + price_payment_commission
       end
@@ -72,6 +75,10 @@ module Pricing
 
     def price_tax_and_markup_and_payment
       price_with_payment_commission - price_fare + price_declared_discount
+      end
+
+    def fee
+      price_with_payment_commission - price_tax - price_fare + price_declared_discount
     end
 
     def price_declared_discount

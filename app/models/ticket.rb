@@ -4,6 +4,11 @@ class Ticket < ActiveRecord::Base
   include CopyAttrs
   has_paper_trail
 
+  # FIXME вынести в ActiveRecord::Base
+  def in_identity_map?
+    id && self.equal?( ActiveRecord::IdentityMap.get(self.class, id) )
+  end
+
   # FIXME сделать модуль или фикс для typus, этим оверрайдам место в typus/application.yml
   def self.model_fields
     super.merge(
@@ -96,7 +101,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def update_price_fare_and_add_parent
-    if exchanged_ticket = order.tickets.where('code = ? AND number like ?', parent_code, parent_number.to_s + '%').first
+    if exchanged_ticket = order.tickets.select{|t| t.code.to_s == parent_code.to_s && t.number.to_s[0..9] == parent_number.to_s}.first
       self.parent = exchanged_ticket
       if price_fare_base && price_fare_base > 0
         self.price_tax += parent.price_fare_base #в противном случае tax может получиться отрицательным
@@ -111,9 +116,9 @@ class Ticket < ActiveRecord::Base
 
   def update_status
     if kind == 'ticket'
-      if replacement
+      if order.tickets.where(:kind => 'ticket', :parent_id => id).present? #select{|t| t.parent_id == id && t.kind == 'ticket'}.present?
         update_attribute(:status, 'exchanged')
-      elsif refunds.sold.present?
+      elsif order.tickets.where(:parent_id => id, :kind => 'refund', :status => 'processed').present? #.select{|t| t.parent_id == id && t.kind == 'refund' && t.status == 'processed'}.present?
         update_attribute(:status, 'returned')
       else
         update_attribute(:status, 'ticketed')

@@ -4,6 +4,15 @@ Eviterra::Application.routes.draw do
   match 'pricer' => 'pricer#pricer', :as => :pricer
   match 'calendar' => 'pricer#calendar', :as => :calendar
   match 'pricer/validate' => 'pricer#validate', :as => :pricer_validate
+  match 'pricer/pricer_benchmark' => 'pricer#pricer_benchmark', :as => :pricer_pricer_benchmark
+
+  # in development: use 'api.lvh.me:3000' or modify your /etc/hosts
+  constraints subdomain: 'api' do
+    root to: 'api_home#index'
+    match 'avia/v1/variants(.:format)' => 'pricer#api', :format => :xml
+    match 'partner/v1/orders(.:format)' => 'api_order_stats#index', :format => :json
+    match '*anything' => redirect('/')
+  end
 
   match 'api/search(.:format)' => 'pricer#api', :format => :xml
   match 'api/redirection(.:format)' => 'booking#api_redirect'

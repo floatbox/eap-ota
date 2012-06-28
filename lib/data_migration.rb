@@ -96,5 +96,28 @@ module DataMigration
       Partner.find_or_initialize_by_token(name).update_attributes(:password => pass, :enabled => true)
     end
   end
+
+  def self.recalculate_destination_false
+    Destination.all.each do |d|
+      d.recalculated = false
+      d.save
+    end
+  end
+
+  def self.recalculate_destination_average_price
+    Destination.where(:recalculated => false).order_by([:hot_offers_counter, :desc]).limit(10).each do |d|
+      hot_offers_count = d.hot_offers.count
+      if hot_offers_count > 0
+        d.average_price = d.hot_offers.every.price.sum / hot_offers_count
+        d.average_time_delta = d.hot_offers.every.time_delta.sum / hot_offers_count
+        d.hot_offers_counter = hot_offers_count
+        d.recalculated = true
+        d.save
+        puts hot_offers_count
+      else
+        d.remove
+      end
+    end
+  end
 end
 

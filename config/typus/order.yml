@@ -65,7 +65,6 @@ Order:
       - income_suppliers
       - aggregated_income_suppliers
       - income_payment_gateways
-      - income
       - expected_income
       - balance
       - settled?
@@ -120,7 +119,6 @@ Order:
       - price_discount
       - price_with_payment_commission
       - price_total
-      - income
       - expected_income
       - balance
       - partner

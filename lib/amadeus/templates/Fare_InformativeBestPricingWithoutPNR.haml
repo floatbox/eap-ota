@@ -1,0 +1,71 @@
+%messageDetails
+  %messageFunctionDetails
+    %businessFunction 1
+    %messageFunction 741
+    %additionalMessageFunction 170
+    %responsibleAgency 1A
+%currencyOverride
+  %conversionRateDetails
+    %currency RUB
+-# Non corporate Unifares and Public fares
+%corporateFares
+  %corporateFareIdentifiers
+    %fareQualifier UP
+%passengersGroup
+  %segmentRepetitionControl
+    %segmentControlDetails
+      %quantity= 1
+      %numberOfUnits= people_count[:adults]
+  %travellersID
+    - 1.upto(people_count[:adults]) do |n|
+      %travellerDetails
+        %measurementValue= n
+  %ptcGroup
+    %discountPtc
+      %valueQualifier ADT
+- if people_count[:children] > 0
+  %passengersGroup
+    %segmentRepetitionControl
+      %segmentControlDetails
+        %quantity= 2
+        %numberOfUnits= people_count[:children]
+    %travellersID
+      - 1.upto(people_count[:children]) do |n|
+        %travellerDetails
+          %measurementValue= n + people_count[:adults]
+    %ptcGroup
+      %discountPtc
+        %valueQualifier CH
+- if people_count[:infants] > 0
+  %passengersGroup
+    %segmentRepetitionControl
+      %segmentControlDetails
+        %quantity= 3
+        %numberOfUnits= people_count[:infants]
+    %travellersID
+      - 1.upto(people_count[:infants]) do |n|
+        %travellerDetails
+          %measurementValue= n + people_count[:adults] + people_count[:children]
+    %ptcGroup
+      %discountPtc
+        %valueQualifier INF
+%pricingOptionsGroup
+  %pricingDetails
+    %companyDetails
+      %marketingCompany= validating_carrier
+%tripsGroup
+  %originDestination
+  -flights.each do |fl|
+    %segmentGroup
+      %segmentInformation
+        %flightDate
+          %departureDate= fl.departure_date
+        %boardPointDetails
+          %trueLocationId= fl.departure_iata
+        %offpointDetails
+          %trueLocationId= fl.arrival_iata
+        %companyDetails
+          %marketingCompany= fl.marketing_carrier_iata
+        %flightIdentification
+          %flightNumber= fl.flight_number
+          %bookingClass= recommendation.booking_class_for_flight fl
