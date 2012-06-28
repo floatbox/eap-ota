@@ -353,6 +353,10 @@ module Commission::Rules
       end
     end
 
+    def all_carriers
+      commissions.keys.uniq
+    end
+
     def stats
       puts "#{commissions.keys.size} carriers"
       puts "#{commissions.values.sum(&:size)} rules total"

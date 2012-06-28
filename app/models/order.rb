@@ -32,7 +32,7 @@ class Order < ActiveRecord::Base
   # charged - списание денег с карты или приход наличных
   # pending - ожидание оплаты наличныии или курьером
   def self.payment_statuses
-    ['not blocked', 'blocked', 'charged', 'new', 'pending']
+    ['not blocked', 'blocked', 'charged', 'new', 'pending', 'unblocked']
   end
 
   def self.ticket_statuses
@@ -260,9 +260,9 @@ class Order < ActiveRecord::Base
     @tickets_are_loading = true
     ticket_hashes = strategy.get_tickets
     ticket_hashes.each do |th|
-      if th[:office_id].blank? || Ticket.office_ids.include?(th[:office_id])
-        t = tickets.ensure_exists(th[:number])
-        t.update_attributes th if t.new_record?
+      if (th[:office_id].blank? || Ticket.office_ids.include?(th[:office_id])) &&
+          !tickets.find_by_number(th[:number])
+        tickets.create(th)
       end
     end
 
@@ -347,8 +347,7 @@ class Order < ActiveRecord::Base
     created_at.to_date
   end
 
-  delegate :payture_state, :charged_on, :payture_amount,
-    :to => :last_payment, :allow_nil => true
+  delegate :charged_on, :to => :last_payment, :allow_nil => true
 
   def confirm_3ds pa_res, md
     if result = last_payment.confirm_3ds!(pa_res, md)
@@ -410,8 +409,7 @@ class Order < ActiveRecord::Base
 
   def ticket!
     update_attributes(:ticket_status =>'ticketed', :ticketed_date => Date.today)
-
-    load_tickets
+    reload_tickets
   end
 
   def reload_tickets

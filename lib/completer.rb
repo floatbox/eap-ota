@@ -212,8 +212,8 @@ class Completer
     read_regions
     #read_geotags
 
-    read_dates
-    read_months
+    #read_dates
+    #read_months
     read_passengers
     #read_comforts
     #read_airplane_families

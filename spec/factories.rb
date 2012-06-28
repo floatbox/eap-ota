@@ -18,6 +18,8 @@ FactoryGirl.define do
 
   factory :order do
     pnr_number
+    fix_price true
+    price_with_payment_commission 3000
   end
 
   factory :person do
@@ -38,6 +40,7 @@ FactoryGirl.define do
   end
 
   factory :ticket do
+    order
     sequence :number do |n|
       "2345#{n}"
     end
@@ -56,6 +59,7 @@ FactoryGirl.define do
   end
 
   factory :refund, :class => Ticket do
+    order
     price_fare 1000
     price_tax 100
     status 'processed'

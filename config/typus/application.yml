@@ -125,10 +125,13 @@ Subscription:
 
 HotOffer:
   fields:
-    default: description, clickable_url, date1, date2, time_delta, price, price_variation_percent
+    default: description, clickable_url, date1, date2, time_delta, price, price_variation_percent, created_at
     options:
+      date_formats:
+        created_at: long
       booleans:
         rt: ['roundtrip', 'oneway']
+  order_by: -created_at
   filters: created_at, rt
   search: from_iata, to_iata, code
   scopes: actual

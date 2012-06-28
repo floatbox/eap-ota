@@ -39,6 +39,10 @@
       %priceType RU
       -# no slice and dice (we don't know how to book it yet)
       %priceType NSD
+      -# ticket-ability check
+      %priceType TAC
+      -# Multiple ticket
+      -# %priceType MTK
   %feeIdDescription
     %feeId
       %feeType SORT
@@ -53,6 +57,11 @@
     %cabinId
       %cabinQualifier MC
       %cabin= cabin
+  -#Хотели сделать через Mandatory validating carrier list(V), но не влезли в ограничение в 99 нод
+  -#%companyIdentity
+    %carrierQualifier V
+    - Carrier.commissioned_iatas.each do |iata|
+      %carrierId= iata
   - if nonstop
     %flightDetail
       %flightType N
@@ -87,3 +96,8 @@
       %firstDateTimeDetail
         %date= segment.date
 
+-# additional Office Ids
+-# %officeIdDetails
+  %officeIdInformation
+    %officeIdentification
+      %agentSignin NYC1S21HX

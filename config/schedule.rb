@@ -3,9 +3,9 @@ set :output, "log/cron.log"
 
 job_type :command_at_current, "cd :path && :task :output"
 
-every :day do
-  rake 'completer:regen'
-end
+#every :day do
+#  rake 'completer:regen'
+#end
 
 every 5.minutes do
   runner 'Order.cancel_stale!'

@@ -39,6 +39,10 @@ class Carrier < ActiveRecord::Base
 
   def self.non_commissioned_iatas
     (where('consolidator_id is NULL AND iata != ""').find_all{|a| Commission.commissions[a.iata]}).to_a[0..98].collect(&:iata)
+    end
+
+  def self.commissioned_iatas
+    Commission.all_carriers
   end
 
   def icon_url

@@ -18,6 +18,9 @@
         <dt>Итого <strong><%= human_price(@order_form.recommendation.price_total) %></strong><%= ' за всех' unless @order_form.people.one? %> со всеми сборами</dt>
         <dd>Тариф — <%= human_price(@order_form.recommendation.price_fare) %></dd>
         <dd>Таксы и сборы — <%= human_price(@order_form.recommendation.price_tax_and_markup) %></dd>
-        <dd>В том числе сервисный сбор — <%= human_price(@order_form.recommendation.fee) %></dd>
+        <dd>В том числе сервисный сбор — <%= human_price(corporate_mode? ? @order_form.recommendation.fee_but_no_payment : @order_form.recommendation.fee) %></dd>
+        <% unless @order_form.recommendation.price_declared_discount.zero? %>
+          <dd>Скидка — <%= human_price(@order_form.recommendation.price_declared_discount) %></dd>
+        <% end %>
     </dl>
 </div>
