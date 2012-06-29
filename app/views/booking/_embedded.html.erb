@@ -88,6 +88,7 @@
         <% else %>
         <div class="bfp-type">
             <p>Этот билет можно оплатить только банковской картой. Билет будет выписан автоматически <br>и&nbsp;выслан вам на&nbsp;электронную почту.</p>
+            <input type="hidden" name="order[payment_type]" value="card">
         </div>
         <% end %>
         <%= render 'payment_cash_form' if @order_form.last_pay_time %>
