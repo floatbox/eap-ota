@@ -18,6 +18,10 @@ class Segment
   def layovers
     flights[0...-1].map(&:arrival)
   end
+  
+  def main_marketing_carrier
+    flights.group_by(&:marketing_carrier_name).max_by{|carrier, flights| flights.sum(&:duration) }[1].first.marketing_carrier
+  end
 
   attr_accessor :flights
   attr_writer :total_duration

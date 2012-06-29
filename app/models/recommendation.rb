@@ -234,21 +234,6 @@ class Recommendation
     return
   end
 
-  def cabins_except selected_cabin
-    selected_cabin = 'Y' if selected_cabin.nil?
-    dcabins = cabins.map {|c|
-      cabin = (c == 'F' || c == 'C') ? c : 'Y'
-      cabin == selected_cabin ? nil : cabin
-    }
-    fcounter = 0
-    variants.first.segments.map {|s|
-        fcabins = dcabins[fcounter, s.flights.length]
-        fcounter += s.flights.length
-        common = fcabins.uniq
-        common.length == 1 ? common : fcabins
-    }
-  end
-
   # попытка сделать код для script/amadeus
   def cryptic(variant=variants.first)
     ( [ "FV #{validating_carrier_iata}", "RMCABS #{cabins.join}"] +
@@ -398,6 +383,52 @@ class Recommendation
     }
     result
   end
+  
+  def self.filters_data recs
+    data = {}
+    variants = recs.collect(&:variants).flatten 
+
+    data[:time] = []
+    data[:locations] = []
+    layover_cities = []
+    all_segments = variants.collect(&:segments)
+    variants.first.segments.length.times {|i|
+      dpt_index = i * 2
+      arv_index = i * 2 + 1
+      segments = all_segments.every.at(i)
+      departures = segments.every.departure
+      data[:locations][dpt_index] = {
+        :cities => departures.every.city.uniq.sort_by(&:name),
+        :airports => departures.uniq.sort_by(&:name)
+      }
+      arrivals = segments.every.arrival
+      data[:locations][arv_index] = {
+        :cities => arrivals.every.city.uniq.sort_by(&:name),
+        :airports => arrivals.uniq.sort_by(&:name)
+      }
+      data[:time][dpt_index] = segments.every.departure_day_part.uniq.sort
+      data[:time][arv_index] = segments.every.arrival_day_part.uniq.sort      
+      layover_cities += segments.map{|s| s.flights[1..-1]}.flatten.map{|f| f.departure.city}
+    }
+    flights_count = variants.map{|v|
+      v.segments.map{|s| s.flights.size}.max
+    }.uniq
+    data[:layover_cities] = layover_cities.uniq.sort_by(&:name)
+    data[:few_layovers] = flights_count.min < 3 && flights_count.max > 2
+    
+    durations = all_segments.flatten.collect(&:layover_durations).flatten.compact
+    unless durations.empty?
+      data[:min_layover_duration] = durations.min / 60
+      data[:max_layover_duration] = (durations.max.to_f / 60).ceil
+    end
+
+    flights = variants.collect(&:flights).flatten
+    data[:alliances] = recs.every.validating_carrier.map{|vc| vc.alliance || nil}.compact.uniq.sort_by(&:name)
+    data[:carriers] = all_segments.flatten.every.main_marketing_carrier.uniq.sort_by(&:name)
+    data[:planes] = flights.every.equipment_type.uniq.sort_by(&:name)
+    
+    data
+  end  
 
   # фабрика для тестовых целей
   # Recommendation.example 'mowaer aermow/s7/c'

@@ -1,0 +1,24 @@
+<div class="bf-cash">
+<div class="bfc-deadline">Бронирование необходимо оплатить до <strong><%= I18n.l(@order_form.last_pay_time, :format => '%H:%M %e %B') %></strong>, иначе оно будет автоматически аннулировано.</div>
+<div class="bfc-delivery">
+    <div class="bfc-delivery-item">
+        <input type="radio" name="ptype" class="bfcd-radio" value="delivery" id="bfcd-yes" checked="checked">
+        <label for="bfcd-yes">Хочу оплатить курьеру при доставке (+350&nbsp;рублей)</label>
+    </div>
+    <div class="bfc-delivery-item">
+        <input type="radio" name="ptype" class="bfcd-radio" value="cash" id="bfcd-no">
+        <label for="bfcd-no">Хочу самостоятельно приехать в офис и оплатить</label>
+    </div>
+</div>
+<div class="bfc-address">
+    <h6 class="bf-label">Адрес доставки <span class="bfl-tip">(если есть код домофона или другие тонкости — укажите, пожалуйста)</span></h6>
+    <div class="bfca-content">
+        <textarea class="bf-field" id="bc-address" name="order[delivery]" rows="5" cols="32"></textarea>
+        <div class="bfst-tip bfc-tip">Желаемое время доставки тоже можно указать. Обратите внимание, что доставка возможна только по&nbsp;Москве с&nbsp;10:00 до&nbsp;19:00 в&nbsp;будние&nbsp;дни.</div>
+    </div>
+</div>
+<div class="bfc-contacts">
+    <p>К&nbsp;нам можно приехать в&nbsp;будние дни с&nbsp;10:00 до&nbsp;20:00. Офис находится на&nbsp;территории «Трехгорной мануфактуры» по&nbsp;адресу улица Рочдельская, дом&nbsp;15. Пожалуйста, возьмите с&nbsp;собой документ, удостоверяющий личность, и&nbsp;позвоните нам по&nbsp;телефону <nobr class="phone">+7 495 660-35-20,</nobr> чтобы вас встретили.</p>
+    <p class="bfcc-text"><a href="/contacts/" target="_blank">Контактная информация и карта</a></p>
+</div>
+</div>

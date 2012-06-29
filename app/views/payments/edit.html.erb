@@ -1,70 +1,83 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE HTML>
+<html lang="ru-RU">
 <head>
-    <%= render 'shared/head_common', {:title => @order.description} %>
-    <%= stylesheet_link_tag "static", "atoms/button", "atoms/pseudo", "controls/hint", "booking/booking", "booking/sections" %>
-    <%= javascript_include_tag "static", "main", "booking/form", "booking/validation", "payment", "controls/hint" %>
+	<meta charset="utf-8">
+    <title>Eviterra — <%= @order.description || 'оплата заказа' %></title>
+    <%= render 'shared/head' %>
+    <%= stylesheet_link_tag 'static/all', 'variant', 'booking/payment' %>
+    <%= javascript_include_tag "local/ru", 'payment' %>
 </head>
 <body>
+<div class="page-wrapper">
+
 <%= render 'shared/header' %>
-<div id="wrapper">
-<div id="content">
-    <div id="back2search">
-        <div class="bscontent"><a href="/">Вернуться к поиску</a></div>
-    </div>
-    <div class="payment">
 
-<div class="booking-form">
+<div id="results-header">
+<div class="rh-wrapper">
+    <table class="rh-content">
+    <tr>
+        <td class="rh-left"><h3 class="rh-summary rh-ready"><%= @order.description || 'Оплата заказа' %></h3></td>
+        <td class="rh-right"></td>
+    </tr>
+    </table>
+    <div class="rh-shadow"></div>
+</div>
+</div>
+
 <% if @card %>
-<%= form_for @card, :as => :card, :url => edit_payment_url(:code=> @order.code), :html => { :autocomplete => "off" } do |f| %>
-    <h3><%= @order.description %></h3>
-    <div class="section booking-card">
-        <div class="bc-payments">
-            <p>Данные вашей банковской карты обрабатываются платежным центром <a target="_blank" href="http://www.alfabank.ru/">Альфа-Банка</a> и защищены 256-битным шифрованием, обеспеченным компанией <a target="_blank" href="http://www.thawte.com/">Thawte</a></p>
-            <img class="alfa" src="/img/booking/alfabank.png" alt="Альфа-Банк">
-            <img class="thawte" src="/img/booking/thawte.png" alt="Thawte">
+<div id="booking" style="display: block;">
+<div class="b-content" style="display: block;">
+<%= form_for @card, :as => :card, :url => edit_payment_url(:code=> @order.code), :html => { :id => 'booking-form', :autocomplete => "off" } do |f| %>
+
+    <div class="bf-section" data-type="payment">
+        <div class="bfs-title">
+            <h4 class="bfst-text">Платежные данные</h4>
         </div>
-        <%= render 'booking/card', :f => f %>
-        <div class="bc-bill-short">
-            <span style="padding-right: 2px;">С&nbsp;карты будет списано</span> <span style="white-space: nowrap;"><%= decorated_price @order.price_with_payment_commission, 'strong', 'span' %></span>
-        </div>        
+        <%= render 'booking/payment_card_form', :f => f %>
     </div>
-    <div class="booking-submit">
-        <table>
-        <tr>
-            <td class="bs-left">Всё правильно?</td>
-            <td class="bs-button"><input type="submit" class="a-button" value="Оплатить" data-text="Оплатить"></th>
-            <td class="bs-right">
-                <div class="loading"><br></div>
-            </td>
-        </tr>
-        </table>
-        <div class="booking-errors">
-            <div class="be-triangle"></div>
-            <h6>Пока невозможно. И вот почему:</h6>
-            <ul class="be-list"></ul>
+
+    <% price_total = @order.price_with_payment_commission.round.to_i %>
+    <div class="bf-footer" style="padding-bottom: 15px;">
+        <div class="bff-price">
+            <div class="bffp-content">
+                <p class="bffp-nd">С&nbsp;карты будет списано —<br><span class="bffp-sum"><%= price_total %></span>&nbsp;<%= rubles(price_total) %></p>
+            </div>
         </div>
+        <div class="bff-submit">
+            <div class="bf-button">
+                <div class="bfb-title">Оплатить</div>
+                <div class="bfb-side bfb-left"><div class="bfb-side bfb-right"></div></div>
+            </div>
+            <div class="bff-progress">секундочку...</div>
+        </div>
+        <div class="bff-required"></div>
     </div>
+    
 <% end %>
+</div>
+</div>
 <% else %>
-    <h3><%= @order.description %></h3>
-    <h3>Платеж уже обработан.</h3>
+<div class="p-message">
+    <h3 class="pm-title">Платеж уже обработан.</h3>
+</div>
 <% end %>
+
+<div id="hint">
+    <div class="h-close"></div>
+    <div class="h-content"></div>
 </div>
 
-    </div>
+<div class="page-buffer"></div>
 </div>
-<div id="footer">
-    <%= render 'shared/footer' %>
-</div>
-</div>
-<div id="hint">
-    <div class="close"></div>
-    <div class="content"></div>
-</div>
+<%= render 'shared/footer' %>
+
 <script type="text/javascript">
-booking.form.init();
-hint.init();
+var search = {};
+$(function() {
+    search.dates = {csnow: new Date('<%= Time.now.to_formatted_s(:rfc822) %>')};
+    booking.form.init();
+    hint.init();
+});
 </script>
 </body>
 </html>

@@ -46,9 +46,9 @@ class Carrier < ActiveRecord::Base
   end
 
   def icon_url
-    url = "/img/carriers/#{iata}.gif"
+    url = "/images/carriers/#{iata}.png"
     unless File.exist?("#{Rails.root}/public#{url}")
-      url = "/img/carriers/default.gif"
+      url = "/images/carriers/default.gif"
     end
     url
   end

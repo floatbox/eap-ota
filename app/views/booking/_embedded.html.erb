@@ -1,89 +1,152 @@
-<div class="booking-form" data-variant="<%= @order_form.variant_id %>">
-<%= form_for @order_form.card, :as => :card, :url => booking_pay_path, :html => { :autocomplete => "off" } do |f| %>
-
-    <% availability = @order_form.recommendation.availability %>
-    <% if availability && availability > 0 && availability < 9 %>
-    <div class="availability">
-        По этому тарифу осталось <strong><%= availability %>&nbsp;<%= Russian.pluralize(availability, 'место', 'места', 'мест') %></strong>. Не&nbsp;откладывайте покупку.
-    </div>
-    <% end %>
-
-    <h3 class="bstitle">Введите данные <%= @order_form.people.one? ? 'пассажира' : 'пассажиров' %></h3>
-    <% if @order_form.infants.length > 0 && @order_form.adults.length > 1 %> 
-        <p class="persons-order"><b>Обратите внимание</b>, что данные о младенце нужно вводить после данных того взрослого пассажира, на руках у которого он полетит.</p>        
-    <% end %>
-    <%= render :partial => 'person_form', :collection => @order_form.people %>
-
-    <h3 class="bstitle">Введите данные для оплаты</h3>
-    <input type="hidden" name="order[payment_type]" id="booking-payment-type" value="card">
-    <%= render 'card_form', :f => f %>
-    <%= render 'cash_form' if @order_form.last_pay_time %>
-
-    <h3 class="bstitle">Введите данные покупателя</h3>
-    <%= render 'contacts_form' %>
-
-    <div class="booking-submit">
-        <table>
-        <tr>
-            <td class="bs-left">Всё правильно?</td>
-            <td class="bs-button"><input type="submit" class="a-button" value="Купить" data-text="Купить"></th>
-            <td class="bs-right">
-                <div class="cancel">или <span class="link stop-booking">вернуться к выбору вариантов</span></div>
-                <div class="loading"><br></div>
-            </td>
-        </tr>
-        </table>
-        <div class="booking-errors">
-            <div class="be-triangle"></div>
-            <h6>Пока невозможно. И вот почему:</h6>
-            <ul class="be-list"></ul>
-        </div>
-    </div>
-
-    <div class="booking-disclaimer">
-        <p class="payment-card">После нажатия кнопки «Купить» данные пассажиров попадут в&nbsp;систему бронирования, билет будет оформлен и&nbsp;выслан вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="/agreement/" target="_blank">условиями использования</a>, <a href="/iata/" target="_blank">правилами IATA</a> и&nbsp;<a class="farerules-link" href="#">правилами тарифов</a></p>
-        <p class="payment-cash latent">После нажатия кнопки «Купить» подтверждение бронирования будет выслано вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Мы свяжемся с&nbsp;вами по&nbsp;телефону для уточнения деталей доставки. Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="/agreement/" target="_blank">условиями использования</a>, <a href="/iata/" target="_blank">правилами IATA</a> и&nbsp;<a class="farerules-link" href="#">правилами тарифов</a></p>
-    </div>
-
-<% end %>
-</div>
-<% if params[:load_variant] %>
-    <%= render :partial => 'pricer/variant', :locals => {
-      :variant => @order_form.recommendation.journey,
-      :recommendation => @order_form.recommendation,
-      :variant_cabins => @order_form.recommendation.cabins_except(@search.cabin),
-      :variant_summary => nil
+<% recommendation = @order_form.recommendation %>
+<h3 class="b-header">Ваш билет</h3>
+<div class="b-details">
+<div class="od-segments">
+<% cabins = different_cabins(recommendation, @search.cabin) %>
+<% recommendation.variants.first.segments.each_with_index do |segment, scounter| %>
+    <%= render :partial => '/pricer/details', :locals => {
+        :segment => segment,
+        :segment_rt => scounter == 1 && @search.rt,
+        :segment_cabins => cabins[scounter]
     } %>
 <% end %>
-<div class="booking-price latent">
-    <div class="cost"><dl>
-        <% price = @order_form.recommendation.price_with_payment_commission.round.to_i %>
-        <dt><%= raw price.to_s.sub(/(\d)(\d{3})$/, '\1<span class="digit">\2</span>') %></dt>
-        <dd><%= Russian.pluralize(price, 'рубль', 'рубля', 'рублей') %><span class="cost-tip"><%= ' за всех' if @search.people_total != 1 %>, включая налоги и сборы</span></dd>
-    </dl></div>
-    <dl class="sum" data-value="<%= @order_form.recommendation.price_with_payment_commission.round.to_i %>">
-        <dt>Итого <strong><%= human_price(@order_form.recommendation.price_with_payment_commission) %></strong><%= ' за всех' unless @order_form.people.one? %> со всеми сборами</dt>
-        <dd>Тариф — <%= human_price(@order_form.recommendation.price_fare) %>, таксы и сборы — <%= human_price(@order_form.recommendation.price_tax_and_markup) %>&nbsp;(в том числе сервисный сбор&nbsp;— <%= human_price(corporate_mode? ? @order_form.recommendation.fee_but_no_payment : @order_form.recommendation.fee) %>)% <% unless @order_form.recommendation.price_declared_discount.zero? %>, скидка — <%= human_price(@order_form.recommendation.price_declared_discount) %><% end %> </dd>
-    </dl>
 </div>
-<div class="farerules">
-    <div class="close"></div>
-    <h3>Правила тарифов</h3>
-    <p>Обратите внимание, что возврат средств в&nbsp;случае отказа при получении визы, болезни и&nbsp;прочих обстоятельств без штрафных санкций невозможен. Возврат билета производится строго по&nbsp;правилам авиакомпании. В&nbsp;случае комбинации в&nbsp;билете тарифов с&nbsp;различными правилами, наиболее строгие ограничения применяются ко&nbsp;всему маршруту.</p><br>
+<div class="od-comments">
+    <p class="od-comment">Билет оформляет авиакомпания <%= recommendation.validating_carrier.name %>.<% if recommendation.validating_carrier.alliance %> Применяются бонусные программы альянса <span class="od-alliance" data-carriers="<%= recommendation.validating_carrier.available_bonus_programms.map{|bp| bp.name}.to_sentence %>"><%= nbsp(recommendation.validating_carrier.alliance.name) %></span>.<% end %> Время везде местное.</p>
+    <% recommendation_comments(recommendation).each do |comment| %>
+        <p class="od-comment" data-carrier="<%= comment[:carrier] %>"><%= raw comment[:content] %></p>
+    <% end %>
+</div>
+</div>
+
+<% price_total = @order_form.recommendation.price_with_payment_commission.round.to_i %>
+<%= form_for @order_form.card, :as => :card, :url => booking_pay_path, :html => { :id => 'booking-form', :autocomplete => 'off' } do |f| %>
+
+    <div class="bf-newprice" data-price="<%= price_total %>">
+        <h5 class="bfnp-title">Авиакомпания изменила стоимость этого предложения</h5>
+        <h6 class="bfnp-content">Новая стоимость — <%= price_total %>&nbsp;<%= rubles(price_total) %> (на {1} {0})</h6>
+        <p class="bfnp-tip">Так иногда бывает. Цена может меняться как в&nbsp;большую, так и&nbsp;в&nbsp;меньшую сторону. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.</p>
+    </div>
+
+    <%= render 'contacts_form' %>
+      
+    <div class="bf-section bf-persons" data-type="persons">
+        <div class="bfs-title">
+            <h4 class="bfst-text">Данные <%= @order_form.people.one? ? 'пассажира' : 'пассажиров' %></h4>
+            <div class="bfst-line"></div>
+            <p class="bfp-hint" id="bfph-passport"><span class="bfph-link bf-hint" data-hint="bfh-passport">Какие документы<br>нужны?</span></p>
+            <p class="bfp-hint" id="bfph-expiration"><span class="bfph-link bf-hint" data-hint="bfh-expiration">Подробнее<br>о сроках действия</span></p>                        
+        </div>
+        <% if @order_form.infants.length > 0 && @order_form.adults.length > 1 %> 
+            <p class="bfp-order">Обратите внимание, что данные о младенце нужно вводить после данных того взрослого пассажира, на&nbsp;руках у&nbsp;которого он полетит.</p>        
+        <% end %>     
+        <table class="bfp-table">
+        <thead>
+            <tr>
+            <th><h6 class="bf-label">Имя</h6></th>
+            <th><h6 class="bf-label">Фамилия</h6></th>
+            <th><h6 class="bf-label">Пол</h6></th>
+            <th><h6 class="bf-label">Дата рождения</h6></th>
+            <th><h6 class="bf-label">Гражданство</h6></th>
+            <th><h6 class="bf-label">Номер документа</h6></th>
+            <th><h6 class="bf-label">Срок действия</h6></th>    
+            </tr>
+        </thead>
+        <%= render :partial => 'person_form', :collection => @order_form.people, :locals => {:people_count => @order_form.people.length} %>
+        </table>
+        <div class="bf-warning" id="bfw-name-latin">
+        	<p>Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры.</p>
+        	<p class="bfw-tip">Имя&nbsp;и&nbsp;фамилию нужно вводить латинскими буквами, точно как в&nbsp;документе, по&nbsp;которому будет выполняться полёт.</p>
+        </div>
+        <div class="bf-warning" id="bfw-name-order">
+        	<p>Пожалуйста, проверьте, что вы не перепутали поля для имени и фамилии.</p>
+        	<p class="bfw-tip"><span class="link bfwno-replace">Поменять&nbsp;местами</span> или <span class="link bfwno-leave">оставить</span> как есть?</p>
+        </div>
+        <div class="latent" id="bfh-passport">Для полетов внутри России подходит российский паспорт (для детей&nbsp;&mdash; свидетельство о&nbsp;рождении). Для полетов за&nbsp;рубежом нужен загранпаспорт. Обратите внимание, что помимо загранпаспорта, для въезда во&nbsp;многие страны требуется соответствующая виза (<a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%B7%D0%BE%D0%B2%D1%8B%D0%B5_%D1%82%D1%80%D0%B5%D0%B1%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_%D0%B4%D0%BB%D1%8F_%D0%B3%D1%80%D0%B0%D0%B6%D0%B4%D0%B0%D0%BD_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8">подробнее в&nbsp;Википедии</a>)</div>
+        <div class="latent" id="bfh-expiration">Если вы&nbsp;путешествуете с&nbsp;российским паспортом или свидетельством о&nbsp;рождении, то&nbsp;срок действия указывать не&nbsp;нужно, так как эти документы его не&nbsp;имеют. В&nbsp;загранпаспорте&nbsp;же проставлена дата окончания его действия&nbsp;&mdash; ее&nbsp;необходимо указать.</div>        
+    </div>
+    
+    <div class="bf-section" data-type="payment">
+        <div class="bfs-title">
+            <h4 class="bfst-text"><%= @order_form.last_pay_time ? 'Способ оплаты и платежные' : 'Платежные' %> данные</h4>
+            <div class="bfst-tip">Сайт защищен ключом безопасности и&nbsp;в&nbsp;полной мере соответствет стандартам PCI&nbsp;DSS Compliance.</div>
+            <div class="bfst-line"></div>
+        </div>
+        <% if @order_form.last_pay_time %>
+        <div class="bfp-type clearfix">
+            <div class="bfpt-item bfpt-selected">
+                <h5 class="bfpt-title"><label for="bfpt-card" class="bfpt-label">Банковской картой на сайте</label></h5>
+                <p class="bfpt-tip"><label for="bfpt-card">Билет будет выписан автоматически <br>и&nbsp;выслан вам на&nbsp;электронную почту</label></p>
+                <input type="radio" name="order[payment_type]" class="bfpt-radio" id="bfpt-card" value="card" checked="checked">
+            </div>
+            <div class="bfpt-item">
+                <h5 class="bfpt-title"><label for="bfpt-cash" class="bfpt-label">Наличными в Москве</label></h5>
+                <p class="bfpt-tip"><label for="bfpt-cash">У нас в офисе или курьеру при доставке</label></p>
+                <input type="radio" name="order[payment_type]" class="bfpt-radio" id="bfpt-cash" value="cash">
+            </div>
+        </div>
+        <% else %>
+        <div class="bfp-type">
+            <p>Этот билет можно оплатить только банковской картой. Билет будет выписан автоматически <br>и&nbsp;выслан вам на&nbsp;электронную почту.</p>
+            <input type="hidden" name="order[payment_type]" value="card">
+        </div>
+        <% end %>
+        <%= render 'payment_cash_form' if @order_form.last_pay_time %>
+        <%= render 'payment_card_form', :f => f %>
+    </div>
+    
+    <% price_fare = @order_form.recommendation.price_fare.round.to_i %>
+    <% price_tax_and_markup = @order_form.recommendation.price_tax_and_markup.round.to_i %>
+    <% price_discount = @order_form.recommendation.price_discount.round.to_i %>
+    <div class="bf-footer">
+        <div class="bff-price">
+            <div class="bffp-content">
+                <p class="bffp-nd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total %></span>&nbsp;<%= rubles(price_total) %></p>
+                <p class="bffp-wd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total + 350 %></span>&nbsp;<%= rubles(price_total + 350) %></p>
+                <p class="bffp-tip"><%= 'за всех пассажиров' if @order_form.people.many? %></p>
+                <ul class="bffp-details">
+                    <li class="bffpd-item">Тариф — <%= price_fare %> <span class="ruble">Р</span></li>
+                    <li class="bffpd-item">Таксы и сборы — <%= price_total - price_fare %> <span class="ruble">Р</span></li>
+                    <li class="bffpd-item">В том числе сервисный сбор — <%= @order_form.recommendation.fee.round.to_i %> <span class="ruble">Р</span></li>
+                    <li class="bffpd-item bffp-wd">Доставка — 350 <span class="ruble">Р</span></li>
+                    <% if price_discount > 0 %>
+                        <li class="bffpd-item">Скидка — <%= price_discount %> <span class="ruble">Р</span></li>
+                    <% end %>
+                </ul>
+            </div>
+        </div>
+        <div class="bff-submit">
+            <div class="bf-button">
+                <div class="bfb-title">Купить</div>
+                <div class="bfb-side bfb-left"><div class="bfb-side bfb-right"></div></div>
+            </div>
+            <div class="bff-cancel">или <span class="link bffc-link">вернуться к выбору вариантов</span></div>
+            <div class="bff-progress">секундочку...</div>
+        </div>
+        <div class="bff-required"></div>
+        <div class="bff-disclaimer">
+            <p class="bffd-card">После нажатия кнопки «Купить» данные пассажиров попадут в&nbsp;систему бронирования, билет будет оформлен и&nbsp;выслан вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="/agreement/" target="_blank" class="bffd-link">условиями использования</a>, <a href="/iata/" target="_blank" class="bffd-link">правилами IATA</a> и&nbsp;<span class="link bffd-link bffd-farerules">правилами тарифов</span>.</p>
+            <p class="bffd-cash latent">После нажатия кнопки «Купить» подтверждение бронирования будет выслано вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Мы свяжемся с&nbsp;вами по&nbsp;телефону для уточнения деталей доставки. Нажимая «Купить», вы соглашаетесь с&nbsp;<a class="bffd-link" href="/agreement/" target="_blank">условиями использования</a>, <a class="bffd-link" href="/iata/" target="_blank">правилами IATA</a> и&nbsp;<span class="link bffd-link bffd-farerules">правилами тарифов</span>.</p>
+        </div>
+    </div>
+    
+<% end %>
+
+<div class="bf-farerules">
+<div class="bff-close"></div>
+<div class="bff-content">
+    <h3 class="bff-title">Правила тарифов</h3>
+    <p>Внимание! Возврат средств в&nbsp;случае отказа при получении визы, болезни и&nbsp;прочих обстоятельств без штрафных санкций невозможен. Возврат билета производится строго по&nbsp;правилам авиакомпании. В&nbsp;случае комбинации в&nbsp;билете тарифов с&nbsp;различными правилами, наиболее строгие ограничения применяются ко&nbsp;всему маршруту.</p>
+    <br>
     <p>Билеты не&nbsp;передаваемые. В&nbsp;случае неявки на&nbsp;рейс, авиакомпания может аннулировать все&nbsp;последующие участки маршрута.</p>
     <% @order_form.recommendation.rules.each do |(airline, fare) ,rule| %>
-    <div class="fgroup">
+    <div class="bff-group">
         <% if @order_form.recommendation.source != 'sirena' %>
-          <div class="fgtranslate">
-              <span class="link fgrus">Перевести с помощью</span>
-              <span class="link fgeng g-none">Оригинальный текст</span>
-              <span class="fgloading g-none">Переводится…</span>
-          </div>
+            <div class="bffg-translate"></div>
         <% end %>
-        <div class="fgheader">
-        <p class="clofs">Тариф <%= fare %></p><h5>&nbsp;</h5>
-        </div>
-        <pre><%= raw(rule) %></pre>
+        <h5 class="bffg-title">Тариф <%= fare %></h5>
+        <pre class="bffg-content"><%= raw(rule) %></pre>
     </div>
     <% end %>
+</div>
 </div>

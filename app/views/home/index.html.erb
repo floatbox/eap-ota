@@ -1,69 +1,62 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE HTML>
+<html lang="ru-RU">
 <head>
-    <%= render 'shared/head_common', {:title => 'самые дешевые авиабилеты по всему миру онлайн'} %>
+	<meta charset="utf-8">
+    <title>Eviterra — самые дешевые авиабилеты по всему миру онлайн</title>
+    <meta name="description" content="Eviterra.com — простой, удобный и красивый способ найти и купить авиабилет. Поиск, выбор рейса и бронирование онлайн. Цены на авиабилеты. +7 (495) 660-35-20">
+    <meta name="keywords" content="авиабилет, авиакасса, авиабилеты купить, бронирование, выбрать рейс, авиарейс, перелет, дешевые авиабилеты, цены на билеты, онлайн бронирование, эвитерра, eviterra, спецпредложения, авиакомпании, расписание рейсов, маршрут, агентство, турагентство, путешествия">
+    <%= render 'shared/head' %>
     <%= stylesheet_link_tag 'home' %>
-    <%= javascript_include_tag 'home' %>
+    <%= javascript_include_tag "local/ru", 'home' %>
 </head>
 <body>
+
 <%= render 'shared/header' %>
-<div id="wrapper">
-<div class="wcontent">
-    <% if corporate_mode? %>
-        <div id="corporate">
-        <div class="corporate-content">
-            <a class="corporate-exit" href="<%= stop_corporate_url %>">Выйти</a>
-            <p class="corporate-message">Вы находитесь в корпоративном режиме.</p>
-        </div>
-        </div>
-    <% end %>
-    <%= render 'search' %>
-    <%= render 'results' %>
-    <div id="promo" class="wrap latent">
-        <div class="facebook">
-            <iframe src="https://www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Feviterra&amp;width=240&amp;colorscheme=light&amp;show_faces=true&amp;stream=true&amp;header=false&amp;height=556" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:240px; height:556px;" allowTransparency="true"></iframe>
-        </div>
-        <div class="description">
-            <h2>Это Eviterra.</h2>
-            <h5>Здесь можно найти, сравнить, выбрать&nbsp;и&nbsp;купить билеты на&nbsp;рейсы более 200&nbsp;авиакомпаний всего мира по&nbsp;низкой цене.</h5>
-            <p>Просто введите пункт назначения (город, аэропорт или страну), выберите нужный вариант и оплатите банковской картой прямо на сайте.</p>
-        </div>
-        <div class="airlines">
-            <p><img src="/img/promo/airlines.png" alt="" width="628" height="239"></p>
-            <h6>Покупать у нас — это просто и очень удобно, быстро и безопасно.<br>Убедитесь сами.</h6>
-        </div>
-    </div>
-</div>
-</div>
-<%= render 'shared/footer' %>
-<div id="booking" class="latent">
-    <div class="booking-header">
-        <h3 class="bh-title"></h3>
-        <div class="bh-content"><span class="link stop-booking">Вернуться к выбору вариантов</span></div>
-        <div class="hshadow"></div>
-    </div>
-    <div class="bh-placeholder"></div>
-    <div class="booking-body">
-    <div class="booking-frame">
-        <div class="booking-variant offer"></div>
-        <div class="booking-content"></div>
+<%= render 'search' %>
+<%= render 'results' %>
+
+<% if corporate_mode? %>
+    <div id="corporate">
+    <div class="corporate-content">
+        <a class="corporate-exit" href="<%= stop_corporate_url %>">Выйти</a>
+        <p class="corporate-message">Вы находитесь в корпоративном режиме.</p>
     </div>
     </div>
-</div>
-<div id="history"></div>
-<div id="hint">
-    <div class="close"></div>
-    <div class="content"></div>
+<% end %>
+
+<div id="booking">
+    <div class="b-content offer"></div>
+    <div class="b-loading">
+        <h5 class="bl-title"><span class="bl-progress">Проверяем доступность мест</span><h5>
+    </div>
 </div>
 
+<div id="queries">
+<div class="q-content">
+    <div class="q-history"></div>
+    <div class="q-live">
+        <h5 class="ql-title">Что находят и покупают:</h5>
+        <ul class="ql-items"></ul>
+    </div>
+</div>
+</div>
+
+<div id="hint">
+    <div class="h-close"></div>
+    <div class="h-content"></div>
+</div>
+
+<%= render 'shared/footer' %>
+
 <script type="text/javascript">
-initHome();
+page.init();
 </script>
-<script type="text/javascript" src="https://yandex.st/share/share.js" charset="utf-8"></script>
+
+<script src="//translate.google.com/translate_a/element.js?cb=googleSectionalElementInit&ug=section&hl=ru"></script>
 <script type="text/javascript" src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false&language=ru"></script>
-<script type="text/javascript">
-search.share.init();
-search.map.init();
-</script>
+<!--
+<script src="//mc.yandex.ru/metrika/watch_visor.js" type="text/javascript" defer="defer"></script>
+<script type="text/javascript" src="https://yandex.st/share/share.js" charset="utf-8"></script>
+-->
 </body>
 </html>

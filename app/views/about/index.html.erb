@@ -1,22 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE HTML>
+<html lang="ru-RU">
 <head>
-    <%= render 'shared/head_common', {:title => 'о проекте'} %>
-    <%= stylesheet_link_tag "static" %>
-    <%= javascript_include_tag "static" %>
+	<meta charset="utf-8">
+    <title>Eviterra — о проекте</title>
+    <meta name="description" content="Eviterra.com — простой, удобный и красивый способ найти и купить авиабилет. Поиск, выбор рейса и бронирование онлайн. Цены на авиабилеты. +7 (495) 660-35-20">
+    <meta name="keywords" content="авиабилет, авиакасса, авиабилеты купить, бронирование, выбрать рейс, авиарейс, перелет, дешевые авиабилеты, цены на билеты, онлайн бронирование, эвитерра, eviterra, спецпредложения, авиакомпании, расписание рейсов, маршрут, агентство, турагентство, путешествия">
+    <%= render 'shared/head' %>
+    <%= stylesheet_link_tag 'static/all', :debug => true %>
+    <%= javascript_include_tag "local/ru", 'static', :debug => true %>
 </head>
 <body>
-<%= render 'shared/header' %>
-<div id="wrapper">
-<div id="content">
-    <div id="back2search">
-        <div class="bscontent"><a href="/">Вернуться к поиску</a></div>
-    </div>
-    <div class="article">
+<div class="page-wrapper">
 
-<div class="asection" style="height: 540px;">
-    <iframe title="Как правильно покупать авиабилеты в интернете" src="http://player.vimeo.com/video/20245105?byline=0&amp;portrait=0&amp;color=ffffff" width="960" height="540" frameborder="0"></iframe>
+<%= render 'shared/header' %>
+<div id="back2search">
+    <div class="bs-content"><a class="bs-link" href="/">Поиск авиабилетов</a></div>
 </div>
+
+<div class="article">
+
+<!--<div class="asection" style="height: 540px;">
+    <iframe title="Как правильно покупать авиабилеты в интернете" src="http://player.vimeo.com/video/20245105?byline=0&amp;portrait=0&amp;color=ffffff" width="960" height="540" frameborder="0"></iframe>
+</div>-->
 <div class="asection">
     <h2>Пара слов о проекте</h2>
     <p>Eviterra.com&nbsp;&mdash; это самый простой, удобный и&nbsp;современный способ поиска и&nbsp;покупки авиабилетов (а&nbsp;в&nbsp;будущем появятся отели, прокат авто, билеты на&nbsp;поезд, страховки и&nbsp;так далее). Мы&nbsp;постоянно работаем над развитием и&nbsp;улучшением сервиса.</p>
@@ -44,8 +49,8 @@
     <p>Летайте с&nbsp;нами!</p>
 </div>
 
-    </div>
 </div>
+<div class="page-buffer"></div>
 </div>
 <%= render 'shared/footer' %>
 </body>

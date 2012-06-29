@@ -54,6 +54,7 @@ class BookingController < ApplicationController
   def api_booking
     @query_key = params[:query_key]
     @search = PricerForm.load_from_cache(params[:query_key])
+    @destination = get_destination    
     render 'variant'
     StatCounters.inc %W[enter.api.success]
   ensure
@@ -105,7 +106,7 @@ class BookingController < ApplicationController
       render :partial => 'forbidden_sale'
       return
     end
-
+    
     @order_form = OrderForm.load_from_cache(params[:order][:number])
     @order_form.people_attributes = params[:person_attributes]
     @order_form.update_attributes(params[:order])

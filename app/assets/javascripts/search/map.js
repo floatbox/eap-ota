@@ -1,76 +1,171 @@
+/* Map */
 search.map = {
 init: function() {
-    this.parent = search;
-    this.colors = ['#81aa00', '#C46F26', '#0aa0c6'];
+    this.el = $('#search-map');
+    this.control = this.el.find('.smap-control');
+    this.content = this.el.find('.smap-content');
+    this.content.css('top', -Math.round(this.margin / 2));
+    this.wrapper = $('#search-wrapper');
+    if (!browser.ios) {
+        this.bindResize();
+    }
     var that = this;
+    this.control.click(function() {
+        if (search.dates.el.hasClass('sd-hidden')) {
+            that.slideUp();
+        } else {
+            that.slideDown();
+        }
+    });
+    this.colors = ['#81aa00', '#db7100', '#0aa0c6'];
+    this.items = [];
+},
+bindResize: function() {
+    var that = this;
+    $w.bind('resize', function() {
+        if (that.el.is(':visible')) that.resize();
+    });
+},
+resize: function(instant) {
+    var dh = 36; // Page header
+    dh += search.locations.el.height();
+    dh += search.dates.el.height() + 2;
+    dh += search.options.el.height();
+    dh += results.header.height;
+    if (Queries.height) {
+        dh += Queries.height - 2;
+    }
+    var mh = $w.height() - dh;
+    if (mh < 63 != this.collapsed) {
+        this.collapsed = mh < 63;
+        this.control.toggleClass('smc-collapsed', this.collapsed);
+    }
+    this.content.height(Math.max(30, mh));
+    if (this.api && this.bounds) {
+        this.fitBounds();
+    }
+},
+load: function() {
     if (typeof google !== 'undefined' && google.maps) {
-        var f = search.segments[0].from.get(0).onclick();
         this.defpoint = new google.maps.LatLng(55.751463, 37.621651);
-        this.obj = new google.maps.Map($('#map-canvas').get(0), {
-            zoom: 5,
-            center: (f && f.lat && f.lng) ? new google.maps.LatLng(f.lat, f.lng) : that.defpoint,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            streetViewControl: false,
-            mapTypeControl: false,
-            scrollwheel: false
+        this.api = new google.maps.Map(this.content.get(0), {
+            zoom: 4,
+            center: this.defpoint,
+            backgroundColor: '#ccd8b1',
+            mapTypeId: google.maps.MapTypeId.TERRAIN,
+            disableDefaultUI: true,
+            scrollwheel: false,
+            minZoom: 2
         });
-        this.lines = [];
+        this.bounds = this.defpoint;
         if (this.deferred) {
             this.show(this.deferred);
             delete this.deferred;
         }
-        this.active = true;
+        this.load = $.noop;
     }
+},
+slideDown: function() {
+    var that = this;
+    var wh = this.wrapper.height();
+    var ch = this.content.height();
+    var dh = wh - ch - search.dates.tlheight;
+    this.wrapper.height(wh).css('overflow', 'hidden');
+    this.control.removeClass('smc-collapsed');
+    this.content.animate({
+        height: ch + dh
+    }, 300, function() {
+        search.dates.toggleHidden(true);
+        google.maps.event.trigger(that.api, 'resize');
+        that.wrapper.height('').css('overflow', '');
+        that.control.html('Свернуть карту');
+        //that.api.panBy(0, -Math.round(dh / 2));
+        that.fitBounds();
+    });
+    search.dates.el.find('.sdt-tab').delay(150).fadeOut(150);
+},
+slideUp: function() {
+    var that = this;
+    var wh = this.wrapper.height();
+    this.wrapper.height(wh).css('overflow', 'hidden');
+    search.dates.toggleHidden(false);
+    var ch = search.dates.el.height();
+    var dh = ch - search.dates.tlheight;
+    this.content.animate({
+        height: wh - ch
+    }, 300, function() {
+        google.maps.event.trigger(that.api, 'resize');
+        that.wrapper.height('').css('overflow', '');
+        that.control.toggleClass('smc-collapsed', that.collapsed);
+        that.control.html('Развернуть карту');
+        //that.api.panBy(0, Math.round(dh / 2));
+        that.fitBounds();
+    });
+    search.dates.el.find('.sdt-tab').fadeIn(150);
 },
 show: function(segments) {
     this.clean();
-    var lines = [], pins = [], pindex = {};
+    var points = [];
+    var pindex = {};
+    var processPoint = function(p, s, t) {
+        if (!p) return;
+        if (!pindex[p.name]) {
+            p.type = t;
+            p.segment = s;
+            p.latlng = new google.maps.LatLng(p.lat, p.lng);
+            pindex[p.name] = p;
+            points.push(p);
+        } else if (pindex[p.name].type = 'arv') {
+            pindex[p.name].segment = s;
+        }
+        return pindex[p.name].latlng;
+    };
     for (var i = 0, im = segments.length; i < im; i++) {
-        var f = segments[i].from, t = segments[i].to;
-        var fp = f && f.lat && f.lng && new google.maps.LatLng(f.lat, f.lng);
-        var tp = t && t.lat && t.lng && new google.maps.LatLng(t.lat, t.lng);
-        if (fp && !pindex[f.code]) {
-            pindex[f.code] = true;
-            pins.push(fp);
-        }
-        if (tp && !pindex[t.code]) {
-            pindex[t.code] = true;
-            pins.push(tp);
-        }
-        if (fp && tp) {
-            lines.push({
-                points: [fp, tp],
-                color: this.colors[i]
+        var s = segments[i];
+        var dpt = processPoint(s.dpt, i + 1, 'dpt');
+        var arv = processPoint(s.arv, i + 1, 'arv');
+        if (dpt && arv) {
+            var route = new google.maps.Polyline({
+                geodesic: true,
+                path: [dpt, arv],
+                strokeColor: this.colors[i],
+                strokeOpacity: 0.85,
+                strokeWeight: 2,
+                map: this.api
             });
+            this.items.push(route);
         }
     }
-    var isrt = (this.parent.mode === 'rt');
-    for (var i = 0, im = lines.length; i < im; i++) {
-        var route = new google.maps.Polyline({
-            geodesic: true,
-            path: lines[i].points,
-            strokeColor: lines[i].color,
-            strokeOpacity: (isrt && i === 1) ? 0.5 : 0.9,
-            strokeWeight: 3
+    var bounds = new google.maps.LatLngBounds();
+    for (var i = 0, im = points.length; i < im; i++) {
+        var point = points[i];
+        var marker = new google.maps.Marker({
+            position: point.latlng,
+            title: point.name,
+            map: this.api
         });
-        this.lines.push(route);
-        route.setMap(this.obj);
+        bounds.extend(point.latlng);
+        this.items.push(marker);
     }
-    if (pins.length > 1) {
-        var bounds = new google.maps.LatLngBounds();
-        for (var i = pins.length; i--;) {
-            bounds.extend(pins[i]);
-        }
-        this.obj.fitBounds(bounds);
+    if (points.length > 1) {
+        this.bounds = bounds;
     } else {
-        this.obj.setCenter(pins[0] || this.defpoint);
-        this.obj.setZoom(5);
+        this.bounds = points[0].latlng || this.defpoint;
+    }
+    this.fitBounds();
+},
+fitBounds: function() {
+    if (this.bounds.getCenter) {
+        this.api.fitBounds(this.bounds);
+    } else {
+        this.api.setCenter(this.bounds);
+        this.api.setZoom(5);
     }
 },
 clean: function() {
-    for (var i = this.lines.length; i--;) {
-        this.lines[i].setMap(null);
+    for (var i = this.items.length; i--;) {
+        this.items[i].setMap(null);
     }
-    this.lines.length = 0;
+    this.items.length = 0;
 }
 };

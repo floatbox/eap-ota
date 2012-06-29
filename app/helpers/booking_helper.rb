@@ -9,7 +9,7 @@ module BookingHelper
     tz.local_to_utc(DateTime.strptime(date + time, '%d%m%y%H%M'))
   end
 
-  def order_event_params order
+  def order_event order
     segments = order.recommendation.segments
     cities = uniq_cities(segments)
     fs = segments.first
@@ -25,7 +25,7 @@ module BookingHelper
     ""
   end
 
-  def order_summary order
+  def order_tweet order
     segments = order.recommendation.segments
     cities = uniq_cities(segments)
     parts = [order.people.size == 1 ? 'Лечу' : 'Летим']
@@ -36,8 +36,6 @@ module BookingHelper
     elsif segments.length == 2
       days = Date.strptime(segments.last.arrival_date, '%d%m%y') - Date.strptime(segments.first.departure_date, '%d%m%y')
       parts << "на #{days.to_i} #{Russian.pluralize(days, 'день', 'дня', 'дней')}"
-      segments_summary = parts.join(' ')
-    else
       segments_summary = parts.join(' ')
     end
     price = order.recommendation.price_with_payment_commission.round.to_i

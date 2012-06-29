@@ -1,0 +1,116 @@
+/* Reset */
+html, body {
+	height: 100%;
+}
+html, body, td, th, form,
+h1, h2, h3, h4, h5, h6, p,
+ul, ol, li, dl, dt, dd, pre {
+	margin: 0;
+	padding: 0;
+}
+table {
+	border: none;
+    border-spacing: 0;	
+	border-collapse: collapse;
+}
+caption, th, td {
+    text-align: left;
+    font-weight: normal;
+}
+th, td {
+    vertical-align: top;
+}
+ul {
+	list-style: none;
+}
+img	{
+	border: none;
+}
+:focus {
+    outline: 0;
+}
+
+/* Clear */
+.clearfix:after {
+	display: block;
+	clear: both;
+	overflow: hidden;
+	height: 0;
+	content: ' ';
+	font-size: 0;
+}
+.wrap {
+	overflow: hidden;
+}
+* html .wrap,
+* html .clearfix,
+*+html .wrap,
+*+html .clearfix {
+	zoom: 1;
+}
+
+/* Links */
+a {
+    outline: none;
+    color: #3270A6;
+}
+a:hover {
+    color: #f90a6f;
+}
+.link {
+    text-decoration: underline;
+    color: #3270A6;
+    cursor: pointer;
+}
+.link:hover {
+    color: #f90a6f;
+}
+.pseudo {
+    position: relative;
+    top: -0.14em;
+    border-bottom: 1px dotted #333;
+    text-decoration: none;
+    cursor: pointer;
+}
+.pseudo em {
+    position: relative;
+    top: 0.14em;
+    font-style: normal;
+}
+.pseudo:hover {
+    color: #f90a6f;
+    border-color: #f90a6f;
+}
+
+/* Text */
+body,
+input,
+select,
+textarea {
+    font: 14px/1.357 Arial, Helvetica, sans-serif;
+    color: #333;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-weight: normal;
+}
+
+/* Shortcuts */
+.latent {
+    display: none;
+}
+
+/* Page */
+body {
+    min-width: 1002px;
+    background: url(/images/common/grey.png) #d5dbe0;
+    background: url(/images/common/dgrey.png) #bfc4c8;
+}
+.ipad body {
+    min-width: 1024px;
+}
+
+/* Ruble sign */
+.ruble {
+    font-family: 'ALSRubl-Arial', Arial, sans-serif;
+}

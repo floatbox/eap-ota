@@ -1,0 +1,76 @@
+/* Search options */
+#search {
+    border-bottom: 1px solid #4b4e59;
+}
+#search-options {
+    border-bottom: 1px solid #202126;
+    background: url(/images/common/dark.jpg) repeat 0 100% #373941;    
+    color: #FFF;
+}
+.so-content {
+    width: 960px;
+    margin: 0 auto;
+    padding: 11px 0 12px;
+}
+
+/* Titles */
+.so-title {
+    margin: 0 0 6px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 18px;
+}
+.so-title em {
+    position: relative;
+    top: -1px;
+    left: 2px;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 11px;
+    line-height: 11px;
+    color: #C0C0C0;
+}
+
+/* Values */
+.so-values {
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 18px;
+    color: #d9d9d9;
+}
+.so-values li {
+    float: left;
+    padding: 4px 9px;
+    background: #454752;    
+    cursor: pointer;
+}
+.so-values li:hover,
+.so-values li.selected {
+    background: #f90a6f;
+    color: #FFF;    
+}
+.so-values li.selected {
+    padding: 3px 8px;
+    border: 1px solid #ae074d;
+    border-top-color: #950643;
+    border-right-color: #fb4793;
+    border-bottom-color: #fb60a1;
+    cursor: default;
+}
+
+/* Persons */
+.so-persons {
+    float: left;
+    margin-right: 20px;
+}
+
+/* Cabin */
+.so-cabin {
+    float: right;
+}
+.so-cabin .so-values li {
+    padding: 3px 9px 5px;
+}
+.so-cabin .so-values li.selected {
+    padding: 2px 8px 4px;
+}

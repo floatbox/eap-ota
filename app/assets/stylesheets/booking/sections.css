@@ -1,557 +1,605 @@
-/* Разметка страницы бронирования на шаги */
-.booking-form h3 {
-    margin: 15px 15px 8px;
-    font-weight: bold;
-    font-size: 22px;
-    line-height: 26px;
-    color: #333;
+/* Section */
+.bf-section {
+    padding: 15px 20px 18px;
+    background: #fbf4cb;
 }
-.booking-form .section {
-    margin: 0 0 2px;
-    padding: 5px 0 15px;
-    background: #fff8ce;
-}
-.booking-form .ready {
-    background: #e5ffd2;
-}
-
-/* Поля */
-.booking-form td {
-    vertical-align: top;
-}
-.booking-form .blabel {
-    margin: 8px 0 4px;
-    font-weight: bold;
-    font-size: 14px;
-    line-height: 18px;
-}
-.booking-form .bfield {
-    padding: 3px 5px;
-    border: 1px solid #909090;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    background: #FFF;
+.bfs-title {
+    position: relative;
+    margin: 0 0 10px;
     font-size: 20px;
-    line-height: 24px;
-    color: #333;
+    line-height: 22px;
 }
-.booking-form input.bfield {
-    height: 24px;
+.bfst-text {
+    position: relative;
+    z-index: 1;
+    display: inline;
+    padding-right: 10px;
+    background: #fbf4cb;
+    font-weight: bold;
+    letter-spacing: -0.03em;
 }
-.booking-form .bfield:focus {
-    outline: none;
-}
-.booking-form .valid {
-    border-color: #4eb700;
-}
-.booking-form .invalid {
-    border-color: #F02020;
-}
-.booking-form .bfield:disabled {
-    border-color: #CCC;
-    background: #f0f0f0;
-    background: rgba(248, 248, 248, 0.5);
-    color: #CCC;
-}
-.booking-form .placeholder {
+.bfst-line {
     position: absolute;
-    margin: 4px 6px;
-    font-size: 20px;
-    line-height: 24px;
-    color: #C0C0C0;
+    top: 12px;
+    left: 0;
+    width: 850px;
+    height: 0;
+    border-top: 1px solid #dcd6b2;
 }
-.booking-form .disabled .placeholder {
-    visibility: hidden;
-}
-
-/* Подсказки */
-.bdescription {
-    margin-top: 5px;
+.bfst-tip {
+    position: absolute;
+    top: 4px;
+    left: 680px;
+    z-index: 1;
+    width: 260px;
+    padding-left: 10px;
+    background: #fbf4cb;
     font-size: 12px;
     line-height: 15px;
     color: #777;
 }
-.bdescription .htext {
-    display: none;
-}
-.bdescription label {
-    color: #333;
-}
 
-/* Сообщения */
-.bwarning {
+/* Warning */
+.bf-warning {
     display: none;
     position: absolute;
     z-index: 3;
-    width: 413px;
-    margin-top: 3px;
+    width: 312px;
     padding: 10px 15px;
+    -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
+    -o-border-radius: 5px;
     border-radius: 5px;
     background: #ffc4c4;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 16px;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
-    -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
-    -o-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    -o-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+    background: #fdfbea;    
+    border: 1px solid #debf14;    
 }
-.booking-form .nameorder-warning .link {
-    color: #333;
-}
-.booking-form .nameorder-warning .link:hover {
-    color: #ED1192;
+.bfw-tip {
+    margin: 5px 0 0;
+    font-size: 12px;
+    line-height: 14px;
+    color: #777;    
 }
 
-/* Данные пассажира */
-.booking-person {
-    padding: 7px 0 15px;
-}
-.booking-person td {
-    padding-left: 15px;
-}
-.booking-person input.bfield {
-    width: 202px;
-}
-.booking-person select.bfield {
-    width: 214px;
-    padding: 2px;
-}
-.booking-person select.bfield {
-    height: 32px;
-}
-
-/* Даты */
-.booking-person .date-item {
-    float: left;
-    margin-right: -1px;
-}
-.booking-person input.date-day,
-.booking-person input.date-month {
-    width: 50px;
-}
-.booking-person .date-day {
-    -moz-border-radius: 3px 0 0 3px;
-    border-radius: 3px 0 0 3px;
-}
-.booking-person .date-month {
-    -moz-border-radius: 0;
-    border-radius: 0;
-}
-.booking-person input.date-year {
-    width: 80px;
-    -moz-border-radius: 0 3px 3px 0;
-    border-radius: 0 3px 3px 0;
-}
-
-/* Пол */
-.bp-sex {
-    position: relative;
-    overflow: hidden;
-}
-.bp-sex-m,
-.bp-sex-f {
-    float: left;
-    display: inline-block;
-    position: relative;
-    width: 50px;
-    height: 24px;
-    padding: 4px 5px 2px;
-    border: 1px solid #909090;
-    background: #f8f8f8;
-    text-align: center;
-    font-size: 18px;
-    line-height: 24px;
-    color: #909090;
-    cursor: pointer;
-}
-.bp-sex-m {
-    margin-right: -1px;
-    -moz-border-radius: 3px 0 0 3px;
-    border-radius: 3px 0 0 3px;
-}
-.bp-sex-f {
-    -moz-border-radius: 0 3px 3px 0;
-    border-radius: 0 3px 3px 0;
-}
-.bp-sex-m:hover,
-.bp-sex-f:hover,
-.bp-sex .focus {
-    z-index: 2;
-    background: #FFF;
-    color: #666;
-}
-.bp-sex .selected {
-    position: relative;
-    z-index: 3;
-    -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
-    background: #f8f8f8;
+/* Field */
+.bf-label {
+    margin: 0 0 6px;
     font-weight: bold;
-    color: green;
-    cursor: default;
+    font-size: 14px;
+    line-height: 16px;
 }
-.bp-sex-radio {
-    position: absolute;
-    top: -30px;
+.bfl-tip {
+    font-weight: normal;
+}
+.bf-field {
+    height: 22px;
+    margin: 0;
+    padding: 3px 5px;
+    border: 1px solid #ebe2b2;
+    background: #FFF;    
+    font-size: 16px;
+    line-height: 22px;
+}
+.bf-field:focus {
+    outline: none;
 }
 
-/* Чекбоксы */
-.booking-person .checkbox {
+/* Placeholder */
+.bf-placeholder {
+    display: none;
+    position: absolute;
+    margin: 7px 6px;
+    font-size: 14px;
+    line-height: 16px;
+    color: #B0B0B0;
+}
+.bf-disabled .bf-placeholder {
+    display: none;
+}
+
+/* Select */
+.bf-select {
+    position: relative;
+}
+.bf-select-arrow {
+    position: absolute;
+    top: 1px;
+    bottom: 1px;
+    left: 100%;
+    width: 32px;
+    margin-left: -33px;
+    background: url(/images/booking/select.png) no-repeat 100% 0;
+}
+.bf-select-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: none;
+    opacity: 0;
+}
+
+/* Checkbox */
+.bf-checkbox {
     position: relative;
     margin-left: 18px;
 }
-.booking-person .checkbox input {
+.bf-checkbox input {
     position: absolute;
-    top: 1px;
+    top: -1px;
     left: -18px;
     margin: 0;
     padding: 0;
 }
 
-/* Бонусная программа */
-.bp-bonus input.bfield {
-    width: 175px;
+/* Contacts */
+.bfc-control {
+    float: left;
+    margin-right: 10px;
 }
-.bp-bonus select.bfield {
-    width: 187px;
+#bfc-email {
+    width: 332px;
 }
-.booking-form .external {
-    position: relative;
-    top: 0;
-    left: 3px;
-    display: inline-block;
-    width: 10px; height: 10px;
-    background: url(/img/booking/external.png) no-repeat;
-    vertical-align: baseline;
-    text-decoration: none;
-}
-.mac.firefox .booking-form .external {
-    top: 2px;
+#bfc-phone {
+    width: 185px;
 }
 
-/* Способы оплаты */
-.booking-form .section-tabs {
-    position: relative;
-    top: -6px;
-    background: #FFF;
-    font-weight: bold;
+/* Persons */
+.bf-persons {
+    padding-right: 0;
 }
-.booking-form .section-tabs li {
+.bf-persons .bf-label {
+    margin: 0 0 8px;
+}
+.bf-persons .bfs-title {
     position: relative;
-    top: 1px;
-    float: left;
-    padding: 12px 15px;
-    font-size: 14px;
+    margin-right: 20px;
+}
+.bfp-order {
+    position: relative;
+    top: -5px;
+    width: 664px;
+    margin-bottom: 5px;
     line-height: 16px;
 }
-.booking-form .section-tabs .link {
-    color: #333;
-}
-.booking-form .section-tabs .selected {
-    background: #fff8ce;
-}
-.booking-form .ready .section-tabs .selected {
-    background: #e5ffd2;
-}
-.booking-form .section-tabs .disabled {
-    padding-top: 13px;
+.bfp-hint {
+    position: absolute;
+    top: 0;
+    margin-left: -10px;
+    padding: 0 10px;
+    background: #fbf4cb;    
     font-weight: normal;
     font-size: 12px;
+    line-height: 13px;
     color: #777;
 }
+#bfph-passport {
+    left: 690px;
+}
+#bfph-expiration {
+    left: 830px;
+}
+.bfph-link {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.bfp-control {
+    padding-right: 10px;
+}
+.bfp-spacer {
+    height: 20px;
+}
 
-/* Данные карты */
-.bc-sides {
-    margin: 0 15px;
-    height: 194px;
+/* Person fields */
+.bfp-fname {
+    width: 125px;
 }
-.bc-front,
-.bc-back {
-    position: relative;
-    width: 318px;
-    height: 192px;
-    padding: 1px 0;
-    background: url(/img/booking/cardbgr.png) no-repeat;
+.bfp-lname {
+    width: 185px;
 }
-.bc-front {
+.bfp-nationality .bf-field {
+    width: 107px;
+}
+.bfp-passport {
+    width: 118px;
+}
+
+/* Person sex */
+.bfp-sex {
     float: left;
 }
-.bc-back {
-    float: right;
+.bfp-sex-m,
+.bfp-sex-f {
+    float: left;
+    position: relative;
+    width: 22px;
+    height: 22px;
+    overflow: hidden;
+    padding: 3px 5px;
+    border: 1px solid #ebe2b2;
+    background: #FFF;
+    text-align: center;
+    font-size: 12px;
+    line-height: 23px;
+    color: #AAA;
+    cursor: pointer;
 }
-.booking-card .blabel {
-    margin-bottom: 3px;
-    font-size: 13px;
-    line-height: 16px;
+.bfp-sex-m {
+    margin-right: -1px;
 }
-.booking-card .bfield {
-    background: #F8F8F8;
+.bfp-sex-radio {
+    position: absolute;
+    top: -30px;
+    left: 0;
+}
+.bfp-sex label.bfp-sex-m:hover,
+.bfp-sex label.bfp-sex-f:hover, 
+.bfp-sex label.bfp-sex-hover {
+    z-index: 2;
+    border-color: #debf14;
+    font-size: 16px;
+    line-height: 22px;
+}
+.bfp-sex label.bfp-sex-selected,
+.bfp-sex label.bfp-sex-selected:hover {
+    z-index: 1;
+    border-color: #81aa00;
+    font-size: 16px;
+    line-height: 22px;
+    color: #333;
+    cursor: default;
 }
 
-/* Информация о платежах */
-.bc-payments {
-    position: relative;
-    margin: 8px 175px 15px 15px;
+/* Person dates */
+.bfp-date {
+    float: left;
+    border: 1px solid #ebe2b2;   
+}
+.bfpd-item {
+    float: left;
+}
+.bfpd-day,
+.bfpd-month {
+    width: 22px;
+    margin: 0; 
+    border-width: 0 1px 0 0;
+}
+.bfpd-year {
+    width: 42px;
+    border: none;
+}
+
+/* Person options */
+.bfp-option {
+    padding: 8px 10px 0 0;
+    font-size: 12px;
+    line-height: 14px;
+    color: #777;
+}
+
+/* Person bonus */
+.bfpb-control {
+    float: left;
+    padding: 6px 10px 0 0;
+}
+.bfp-bonus-fields .bf-field {
+    height: 16px;
     font-size: 12px;
     line-height: 16px;
-    color: #777;
 }
-.bc-payments .alfa {
-    position: absolute;
-    top: 0; left: 504px;
+.bfp-bonus-fields .bfp-control {
+    padding-top: 5px;
 }
-.bc-payments .thawte {
-    position: absolute;
-    top: 1px; left: 539px;
+.bfp-bonus-type .bf-field {
+    width: 170px;
 }
-.booking-form .bc-payments a {
-    color: #777;
+.bfp-bonus-type .bf-select-arrow {
+    background: url(/images/booking/select.png) no-repeat 100% -30px;
+}
+.bfp-bonus-number {
+    width: 140px;
+}
+.bfpb-placeholder {
+    margin: 4px 7px;
+    font-size: 12px;
+    line-height: 16px;    
 }
 
-/* Тип карты */
-.bc-type {
-    padding: 0;
-    margin: 10px 0 0;
-    height: 54px;
-    line-height: 54px;
+/* Payment type */
+.bfp-type {
+    width: 664px;
+    margin: 0 0 20px;
+    font-size: 14px;
+    line-height: 16px;    
+}
+.bfpt-item {
+    position: relative;
+    float: left;
+    width: 240px;
+    padding-right: 20px;
+}
+.bfpt-title {
+    margin: 0 0 2px 20px;
+    font-weight: bold;
+}
+.bfpt-tip {
+    margin-left: 20px;
+    font-size: 11px;
+    line-height: 13px;
+    color: #777;
+}
+.bfpt-radio {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    margin: 0;
+}
+.bfpt-label {
+    cursor: pointer;
+}
+
+/* Card section */
+.bf-card {
+    position: relative;
+    height: 254px;
+}
+.bfc-tip {
+    background: none;
+}
+.bfc-link {
+    color: #777;
+}
+.bfc-link:hover {
+    color: #f90a6f;
+}
+.bf-card .bf-label {
+    margin: 0 0 5px;
+}
+
+/* Card sides */
+.bfc-side {
+    position: relative;
+    float: left;
+    margin-right: 14px;
+    border-radius: 10px;
+    background: #b3b3b3;
+    background-image: -o-linear-gradient(top, #D1D1D1 0%, #B3B3B3 100%);
+    background-image: -moz-linear-gradient(top, #D1D1D1 0%, #B3B3B3 100%);
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#D1D1D1), to(#B3B3B3));
+    background-image: -webkit-linear-gradient(top, #D1D1D1 0%, #B3B3B3 100%);
+    background-image: -ms-linear-gradient(top, #D1D1D1 0%, #B3B3B3 100%);    
+    background-image: linear-gradient(top, #D1D1D1 0%, #B3B3B3 100%);
+    -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    -o-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+}
+.bfcs-inner {
+    width: 323px;
+    height: 206px;
+    margin: 1px;
+    border-radius: 9px;
+    background: url(/images/booking/card.png) repeat-x #cecece;
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    -o-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* Card type */
+.bfc-type {
+    padding: 18px 0 0;
+    height: 40px;
+    line-height: 40px;
     text-align: center;
     color: #777;
 }
-.bc-visa,
-.bc-master,
-.bc-type-or {
+.bfct-visa,
+.bfct-mastercard {
     vertical-align: middle;
 }
-.bc-type-or {
+.bfct-or {
     padding: 0 10px;
     font-size: 14px;
+    vertical-align: middle;
 }
 
-/* Номер карты */
-.bc-number {
-    position: absolute;
-    top: 65px;
-    left: 11px;
-}
-.bcn-fields {
-    position: relative;
-}
-.bcn-fields .bfield {
-    position: absolute;
-    top: 0;
-    width: 63px;
-}
-#bc-num1 {
-    left: 0;
-    -moz-border-radius: 3px 0 0 3px;
-    border-radius: 3px 0 0 3px;
-}
-#bc-num2 {
-    left: 74px;
-    -moz-border-radius: 0;
-    border-radius: 0;
-}
-#bc-num3 {
-    left: 148px;
-    -moz-border-radius: 0;
-    border-radius: 0;
-}
-#bc-num4 {
-    left: 222px;
-    width: 62px;
-    -moz-border-radius: 0 3px 3px 0;
-    border-radius: 0 3px 3px 0;
+/* Card fields */
+.bfc-field {
+    border-color: #C0C0C0;    
 }
 
-/* Имя на карте */
-.bc-name {
+/* Card number */
+.bfc-number {
     position: absolute;
-    bottom: 11px;
-    left: 11px;
+    left: 10px;
+    top: 76px;
 }
-.bc-name .bfield {
-    width: 170px;
-    height: 23px;
+.bfcn-parts {
+    border: 1px solid #C0C0C0;
+}
+.bfcn-parts .bf-field {
+    float: left;
+    width: 65px;
+    height: 29px;
+    border-width: 0 1px 0 0;
     padding: 2px 5px;
-    font-size: 18px;
-    line-height: 23px;
+    font-size: 24px;
+    line-height: 29px;
+}
+.bfcn-parts #bfcn-part4 {
+    border: none;
+}
+.bfc-name {
+    position: absolute;
+    left: 10px;
+    top: 147px;    
+}
+#bfc-name {
+    width: 180px;
 }
 
-/* Срок действия */
-.bc-exp {
+/* Card expiration */
+.bfc-expiration {
     position: absolute;
-    bottom: 11px;
-    right: 11px;
+    top: 147px;
+    right: 10px;
 }
-.bc-exp .bfield {
-    width: 40px;
-    height: 23px;
-    padding: 2px 5px;
-    font-size: 18px;
-    line-height: 23px;
+.bfc-date {
+    float: right;
+    border: 1px solid #C0C0C0;   
 }
-.bc-exp .date-item {
+.bfcd-item {
     float: left;
 }
-.bc-exp .placeholder {
-    margin: 4px 6px;
-    font-size: 18px;
-    line-height: 23px;
+.bfcd-month {
+    width: 30px;
+    margin: 0; 
+    border-width: 0 1px 0 0;
 }
-.bc-exp .date-month {
-    margin-right: -1px;
-    -moz-border-radius: 3px 0 0 3px;
-    border-radius: 3px 0 0 3px;
-}
-.bc-exp .date-year {
-    -moz-border-radius: 0 3px 3px 0;
-    border-radius: 0 3px 3px 0;
+.bfcd-year {
+    width: 30px;
+    border: none;
 }
 
-/* Полоса */
-.bc-stripe {
-    height: 42px;
-    margin: 15px 0 0 0;
-    background: #2b2b2b;
+/* Card back */
+.bfc-stripe {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: #333;    
 }
-
-/* Код */
-.bc-cvv {
+.bfc-cvv {
     position: absolute;
     top: 65px;
-    right: 11px;
+    left: 5px;
+    width: 285px;
+    padding: 11px 15px 14px;
+    border-radius: 3px;
+    background: #e5e5e5;
     text-align: right;
 }
-.bc-cvv .bfield {
-    width: 45px;
-}
-#bc-num-sample {
-    display: inline;
-    margin: 0 8px 0 0;
-    font-size: 22px;
-    line-height: 25px;
-}
-#bc-num-sample .empty {
-    color: #A8A8A8;
-}
-
-/* Оплата наличными */
-.bc-pay-warning {
-    margin: 0 15px;
-    padding-top: 8px;
-}
-.bc-delivery {
-    margin: 12px 15px;
-}
-.bc-delivery .radio {
-    position: relative;
-    margin: 0 0 8px 16px;
-    font-size: 16px;
-    line-height: 16px;
-}
-.bc-delivery .radio input {
-    position: absolute;
-    top: 1px;
-    left: -16px;
-    margin: 0;
-    padding: 0;
-}
-.bc-address {
-    margin: 0 15px;
-}
-.bc-address .bfield {
-    width: 368px;
-    height: 120px;
-    min-height: 120px;
-    padding-right: 3px;
-    font-size: 16px;
-    line-height: 21px;
-    resize: vertical;
-}
-.bca-description {
+#bc-cvv,
+#bfcn-sample {
     float: right;
-    width: 252px;
-    font-size: 12px;
-    line-height: 15px;
-    color: #777;
+    font-size: 24px;
+    line-height: 29px;
 }
-.bca-description p {
-    margin: 0 0 10px;
+#bc-cvv {
+    width: 50px;
+    height: 29px;
+    padding: 2px 6px;
 }
-.bc-contacts {
-    margin: 0 15px;
-    font-size: 13px;
+#bfcn-sample {
+    padding: 3px 10px 0 0;
+    color: #8E8E8E;
+}
+.bfcn-empty {
+    color: #CCC;
+}
+.bfc-warning {
+    clear: left;
+    width: 664px;
+    padding: 14px 0 0;
     line-height: 16px;
 }
 
-/* Раскладка цены */
-.bc-bill {
-    width: 645px;
-    margin: 12px 0 0 15px;
+/* Cash section */
+.bf-cash {
+    height: 254px;
 }
-.bc-bill td {
-    width: 173px;
-    font-size: 12px;
-    line-height: 15px;
-}
-.bc-bill td.sign {
-    width: 63px;
-    font: bold 60px/1 Arial, sans-serif;
-    text-align: center;
-    color: #6e6e6e;
-}
-.bc-bill h6 {
-    margin: 0 0 3px;
-    font-weight: bold;
-    font-size: 13px;
-    color: #333;
-}
-.bc-bill .price {
-    font-size: 32px;
-    line-height: 32px;
-}
-.bc-bill .price strong {
-    margin-right: 3px;
-    font-size: 26px;
-    letter-spacing: -0.045em;
-    color: #ed1192;
-}
-.bc-bill .price-total strong {
-    margin-right: 4px;
-    font-size: 100%;
-    color: #6F7C26;
-}
-.bc-bill .price em {
-    font-style: normal;
-    font-size: 12px;
-    color: #6e6e6e;
-}
-.bc-bill .hint {
-    color: #777;
-}
-
-/* Цена с включенной комиссией */
-.bc-bill-short {
-    margin: 20px 15px 7px;
-    font-size: 14px;
+.bfc-deadline {
+    width: 664px;
+    margin: 0 0 10px;
+    font-size: 16px;
     line-height: 18px;
 }
-.bc-bill-short strong {
+.bfc-delivery {
+    margin: 15px 0;
+}
+.bfc-delivery-item {
+    margin: 0 0 3px 20px;
     position: relative;
+}
+.bfcd-radio {
+    left: -20px;
+    margin: 0;
+    position: absolute;
     top: 4px;
-    padding-right: 2px;
-    font-size: 28px;
-    letter-spacing: -0.045em;
-    color: #ed1192;
+}
+.bfca-content {
+    position: relative;
+}
+#bc-address {
+    width: 654px;
+    height: 66px;
+    padding-right: 3px;
+    min-height: 66px;
+    resize: none;
+}
+.bfc-contacts {
+    width: 664px;
+}
+.bfcc-text {
+    margin: 10px 0 0;
 }
 
-/* Данные покупателя */
-.booking-contacts td {
-    padding-left: 15px;
-    vertical-align: top;
+/* Highlighting */
+.bf-focus {
+    border: 1px solid #debf14;
+    -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.22);
+    -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.22);
+    -o-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.22);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.22);
 }
-.booking-contacts .bfield {
-    width: 303px;
+.bfp-sex {
+    border: none;
 }
+.bf-valid {
+    border-color: #4eb700;
+}
+.bf-error {
+    border-color: #F02020;
+}
+.bf-disabled {
+    border-color: #fbf4cb;
+    background: #fdfbea;
+    color: #dcd6b2;
+}
+.bf-valid .bf-field {
+    border-color: #cee3a6;
+}
+.bf-error .bf-field {
+    border-color: #eac6bf;
+}
+
+/* Ready sections */
+.bfs-ready,
+.bfs-ready .bfst-text,
+.bfs-ready .bfst-tip,
+.bfs-ready .bfp-hint {
+    background-color: #d8e5a2;
+}
+.bfs-ready .bfst-line {
+    border-color: #c2ce91;
+}
+.bfs-ready .bf-disabled {
+    border-color: #d8e5a2;
+    background: #ecf2d1;
+}
+.bfs-ready .bfp-sex-m,
+.bfs-ready .bfp-sex-f {
+    border-color: #c2ce92;
+}
+

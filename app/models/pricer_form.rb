@@ -351,54 +351,105 @@ class PricerForm
     segments.length > 1 && !rt
   end
 
-  def human
-    return "запрос не полон" unless valid?
-    r = []
-
-    fs = segments[0];
-    if fs.from_as_object && fs.to_as_object
-      r << "<span class=\"locations\" data-short=\"#{fs.from_as_object.name} — #{fs.to_as_object.name}\">#{fs.from_as_object.case_from} #{fs.to_as_object.case_to}</span>"
-    end
-    if complex_route?
-      r << "<span class=\"date\" data-date=\"#{[dates[0][0,2],dates[0][2,2]].join('.')}\">#{human_date(date1)}</span>,"
-      segments[1..-1].each do |fs|
-        if fs.from_as_object && fs.to_as_object
-          r << " <span class=\"locations\" data-short=\"#{fs.from_as_object.name} — #{fs.to_as_object.name}\">#{fs.from_as_object.case_from} #{fs.to_as_object.case_to}</span>"
-          r << "<span class='date' data-date='#{[fs.date[0,2], fs.date[2,2]].join('.')}'>#{human_date(fs.date)}</span>,"
-        end
-      end
-      r[-1].chop!
-    end
-
+  def details
+    return {} unless valid?
+    result = {}
+    
+    human_parts = []
+    person_parts = []
     if adults > 1
-      r << ['вдвоем', 'втроем', 'вчетвером', 'впятером', 'вшестером', 'всемером', 'ввосьмером'][adults-2]
+      person_parts << ['вдвоем', 'втроем', 'вчетвером', 'впятером', 'вшестером', 'всемером', 'ввосьмером'][adults-2]
     end
     if children > 0
-      r << ['с&nbsp;ребенком', 'с&nbsp;двумя детьми', 'с&nbsp;тремя детьми', 'с&nbsp;четырьмя детьми', 'с&nbsp;пятью детьми', 'с&nbsp;шестью детьми', 'с&nbsp;семью детьми'][children-1]
+      person_parts << ['с&nbsp;ребенком', 'с&nbsp;двумя детьми', 'с&nbsp;тремя детьми', 'с&nbsp;четырьмя детьми', 'с&nbsp;пятью детьми', 'с&nbsp;шестью детьми', 'с&nbsp;семью детьми'][children-1]
     end
-    r << 'и' if infants > 0 && children > 0
+    person_parts << 'и' if infants > 0 && children > 0
     if infants > 0
-      r << ['с&nbsp;младенцем', 'с&nbsp;двумя младенцами', 'с&nbsp;тремя младенцами', 'с&nbsp;четырьмя младенцами', 'с&nbsp;пятью младенцами', 'с&nbsp;шестью младенцами', '7 младенцев'][infants-1]
+      person_parts << ['с&nbsp;младенцем', 'с&nbsp;двумя младенцами', 'с&nbsp;тремя младенцами', 'с&nbsp;четырьмя младенцами', 'с&nbsp;пятью младенцами', 'с&nbsp;шестью младенцами', '7 младенцев'][infants-1]
+    end
+    unless person_parts.empty?
+      human_parts << person_parts.join(' ')
     end
 
-    if cabin
-      case cabin
-      when 'C'
-        r << 'бизнес-классом'
-      when 'F'
-        r << 'первым классом'
-      end
+    case cabin
+    when 'C'
+      human_parts << 'бизнес-классом'
+    when 'F'
+      human_parts << 'первым классом'
     end
 
-    unless complex_route?
-      r << "<span class=\"date\" data-date=\"#{[date1[0,2],date1[2,2]].join('.')}\">#{human_date(date1)}</span>"
-      if rt
-        r << 'и&nbsp;обратно'
-        r << "<span class=\"date\" data-date=\"#{[date2[0,2],date2[2,2]].join('.')}\">#{human_date(date2)}</span>"
-      end
-    end
-    r.join(' ')
+    result[:options] = {
+      :adults => adults,
+      :children => children,
+      :infants => infants,
+      :total => adults + children + infants,
+      :cabin => cabin,
+      :human => human_parts.join(', ')
+    }
+
+    result[:segments] = segments.map{|segment|
+      dpt = segment.from_as_object
+      arv = segment.to_as_object 
+      {
+        :title => "#{ dpt.case_from } #{ arv.case_to }",
+        :short => "#{ dpt.iata } &rarr; #{ arv.iata }",
+        :arvto => "#{ arv.case_to }",
+        :arvto_short => "в #{ arv.iata }",
+        :date => segment.date,
+        :dpt => {:name => dpt.name},
+        :arv => {:name => arv.name},
+      }
+    }
+    result[:segments][1][:rt] = true if rt
+
+    result
   end
+  
+  def human_short
+    if rt
+      "#{segments[0].from_as_object.name} &harr; #{segments[0].to_as_object.name}, #{short_date(segments[0].date)} — #{short_date(segments[1].date)}"
+    else
+      parts = []
+      complex = segments.length > 1
+      segments.each do |segment|
+        if complex
+            parts << "#{segment.from_as_object.iata} &rarr; #{segment.to_as_object.iata} #{short_date(segment.date)}"        
+        else 
+          parts << "#{segment.from_as_object.name} &rarr; #{segment.to_as_object.name} #{short_date(segment.date)}"
+        end
+      end      
+      parts.join(', ')
+    end  
+  end  
+  
+  def map_segments
+    result = segments.map{|s|
+      { 
+        :dpt => map_point(s.from_as_object),
+        :arv => map_point(s.to_as_object)
+      }
+    }
+    if result.length == 1
+      dpt = segments.first.from_as_object
+      arv = segments.first.to_as_object
+      if dpt && arv
+        dpt_alpha2 = dpt.class == Country ? dpt.alpha2 : dpt.country.alpha2
+        arv_alpha2 = arv.class == Country ? arv.alpha2 : arv.country.alpha2
+        if dpt_alpha2 == 'RU' && (arv_alpha2 == 'US' || arv_alpha2 == 'IL' || arv_alpha2 == 'GB')
+          result.first[:leave] = true
+        end
+      end
+    end
+    result
+  end
+  
+  def map_point obj
+    obj && {
+      :name => obj.name,
+      :lat => obj.lat,
+      :lng => obj.lng
+    }
+  end      
 
   def human_lite
     segments[0].from_as_object.name + (rt ? ' ⇄ ' : ' → ') + segments[0].to_as_object.name
@@ -428,6 +479,9 @@ class PricerForm
       return I18n.l(d, :format => '%e&nbsp;%B %Y')
     end
   end
-
+  
+  def short_date(ds)
+    ds[0,2] + '.' + ds[2,2]
+  end  
+  
 end
-
