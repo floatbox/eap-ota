@@ -84,7 +84,7 @@
     display: none;
     position: relative;
     float: right;
-    width: 294px;
+    width: 276px;
 }
 .phs-item {
     position: absolute;
@@ -97,5 +97,5 @@
     left: 99px;
 }
 #phs-google {
-    left: 223px;
+    left: 205px;
 }
