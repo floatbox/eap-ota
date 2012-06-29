@@ -80,27 +80,12 @@
 }
 
 /* Share icons */
-#ya-share {
-    display: inline;
+.ph-share {
+    display: none;
     float: left;
-    margin: 7px 0 0 40px;
-    font-size: 14px;
-    letter-spacing: -0.015em;
+    margin-left: 50px;
+    padding-top: 7px;
 }
-#ya-share .b-share {
-    font-size: 100%;
-    line-height: 18px;
+.phs-item {
+    float: left;
 }
-#ya-share .b-share__text {
-	position: relative;
-	top: -1px;
-	margin-right: 3px;
-    letter-spacing: -0.015em;	
-}
-#ya-share .b-share__handle:hover .b-share__text {
-    color: #ED1192;
-}
-.b-share-popup-wrap .b-share-popup__item {
-    padding: 3px 15px !important;
-    font-size: 14px;
-    line-height: 20
