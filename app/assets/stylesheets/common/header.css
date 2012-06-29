@@ -82,10 +82,20 @@
 /* Share icons */
 .ph-share {
     display: none;
-    float: left;
-    margin-left: 50px;
-    padding-top: 7px;
+    position: relative;
+    float: right;
+    width: 294px;
 }
 .phs-item {
-    float: left;
+    position: absolute;
+    top: 7px;
+}
+#phs-facebook {
+    left: 0;
+}
+#phs-twitter {
+    left: 99px;
+}
+#phs-google {
+    left: 223px;
 }
