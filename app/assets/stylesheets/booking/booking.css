@@ -69,13 +69,17 @@
 
 /* Заголовок */
 .b-header {
-    padding: 16px 20px;
+    padding: 8px;
     background: #FFF;
-    text-align: center;
     font-weight: bold;
     font-size: 20px;
     line-height: 20px;    
     letter-spacing: -0.03em;
+}
+.bh-text {
+    margin: 0 300px;
+    padding: 8px 0;
+    text-align: center;
 }
 
 /* Подробности */

@@ -42,6 +42,17 @@ booking.load = function(number) {
     }, function(content) {
         window.location.hash = number;
         that.view(content);
+        var units = local.currencies.RUR;
+        var price = Number(that.content.find('.bf-newprice').attr('data-price')).decline(units[0], units[1], units[2]);
+        var button = $('#obb-template');
+        button.find('.obb-title').html(local.offers.price.buy.absorb(price)).click(function() {
+            $w.smoothScrollTo(that.form.el.offset().top);
+            $w.queue(function(next) {
+                $('#bfc-email').focus();
+                next();
+            });
+        });
+        that.content.find('.b-header').prepend(button);
         that.content.find('.bffc-link').html('выбрать другой вариант');
         that.content.delegate('.od-alliance', 'click', function(event) {
             var el = $(this);
@@ -56,16 +67,4 @@ booking.failed = function() {
 };
 booking.cancel = function() {
     window.location = '/#' + this.query_key;
-};
-booking.form.track = function(result) {
-    var path = window.location.href;
-    if (window._gaq) {
-        var price = booking.el.find('.booking-content .booking-price .sum').attr('data-value');
-        _gaq.push(['_trackPageview', '/booking/success']);
-        _gaq.push(['_addTrans', result.find('.pnr').text(), '', price]);
-        _gaq.push(['_trackTrans']);
-    }
-    if (window.yaCounter5324671) {
-        yaCounter5324671.hit('/booking/success');
-    }
 };
