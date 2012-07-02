@@ -24,7 +24,7 @@ subagent "• на собственные рейсы (в т.ч. по согла�
 subagent "5 % от тарифов Эконом класса (в т.ч. при комбинации Эконом и Бизнес классов),   при переоформлении с доплатой по тарифам Эконом класса (в т.ч. при комбинации Эконом и Бизнес классов);"
 # применится только к этому правилу
 # ticketing_method "direct"
-discount "4.5%"
+discount "4.8%"
 ## our_markup 100
 commission "7%/6%"
 
@@ -113,7 +113,7 @@ example 'AERDME/W DMEAER/W'
 agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWUYHMQBKORE"
-discount "6%"
+discount "6.3%"
 #disabled "Пишем через АЦ из-за курса доллара"
 commission "12%/10%"
 
@@ -1913,7 +1913,7 @@ carrier "PS", "Ukraine International Airlines (ГЛОНАСС)"
 example 'svocdg'
 agent    "9% от опубл. тарифов на собств.рейсы PS"
 subagent "7% от опубл. тарифов на собств.рейсы PS"
-discount "5.5%"
+discount "6.5%"
 commission "9%/9%"
 
 example 'cdgsvo svocdg/ab'
@@ -2904,7 +2904,7 @@ carrier_defaults :consolidator => 0
 
 agent "0% DTT"
 subagent "0% DTT, 10$ с билета"
-our_markup 400
+our_markup 350
 ##disabled "до времени"
 commission "0%/0%"
 
@@ -2916,6 +2916,7 @@ agent "3% BSP"
 subagent "0% DTT, 10$ с билета"
 #our_markup 400
 ##disabled "до времени"
+discount "1.5%"
 commission "3%/3%"
 
 carrier "GA", "GARUDA INDONESIA"
