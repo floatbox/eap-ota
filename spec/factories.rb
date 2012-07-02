@@ -104,4 +104,42 @@ FactoryGirl.define do
     association :charge, :factory => :cash_charge
   end
 
+  # amadeus sessions
+  sequence :amadeus_session_token do |n|
+    token = 'TESTAAAAAA'
+    n.times { token.next! }
+    token
+  end
+
+  factory :amadeus_session_ar_store, class: 'Amadeus::Session::ARStore' do
+    token { FactoryGirl.generate(:amadeus_session_token) }
+    seq 2
+    office { 'TEST_DEFAULT_OFFICE' }
+
+    trait :booked do
+      booked true
+    end
+
+    trait :stale do
+      updated_at 30.minutes.ago
+    end
+  end
+
+  factory :amadeus_session_mongo_store, class: 'Amadeus::Session::MongoStore' do
+    token { FactoryGirl.generate(:amadeus_session_token) }
+    seq 2
+    office { 'TEST_DEFAULT_OFFICE' }
+
+    trait :booked do
+      booked true
+    end
+
+    trait :stale do
+      after_create do |session, proxy|
+        session.updated_at = 30.minutes.ago
+        session.save_without_touching
+      end
+    end
+  end
+
 end
