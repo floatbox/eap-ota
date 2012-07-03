@@ -403,12 +403,12 @@ initExpiration: function() {
             expiration.apply();
         }
     });
-    this.permanentCheckbox = permanent.el;
+    this.permanent = permanent;
     this.controls.push(expiration, permanent);
 },
 togglePermanent: function() {
     if (this.nationality.val() == 170) {
-        this.permanentCheckbox.prop('checked', true);
+        this.permanent.set(true);
     }
 },
 initBonus: function() {
