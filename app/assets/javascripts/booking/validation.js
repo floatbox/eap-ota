@@ -173,15 +173,23 @@ init: function() {
     var that = this;
     this.parts = this.el.find('input');
     this.parts.bind('keyup propertychange input', function() {
+        var f = $(this);
         that.change();
+        f.prev('label').toggle(!f.val());
     }).focus(function() {
         that.el.addClass('bf-focus');
     }).blur(function() {
+        var f = $(this);
         that.el.removeClass('bf-focus');
+        f.prev('label').toggle(!f.val());
     });
     this.$validate = function() {
         that.validate(true);
     };
+    this.parts.each(function() {
+        var f = $(this);
+        f.prev('label').toggle(!f.val());
+    });
     this.initParts();
     this.initFormat();
     this.initTab();

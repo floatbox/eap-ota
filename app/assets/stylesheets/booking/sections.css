@@ -96,12 +96,12 @@
     display: none;
     position: absolute;
     margin: 7px 6px;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 16px;
     color: #B0B0B0;
 }
 .bf-disabled .bf-placeholder {
-    display: none;
+    visibility: hidden;
 }
 
 /* Select */

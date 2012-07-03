@@ -353,6 +353,7 @@ initBirthday: function() {
 },
 initNationality: function() {
     var nationality = new validator.Select(this.el.find('.bfp-nationality'));
+    this.nationality = nationality.select;
     this.controls.push(nationality);
 },
 initPassport: function() {
@@ -363,6 +364,9 @@ initPassport: function() {
     }, function(value) {
         if (/[^\wА-Яа-я. \-№#]/.test(value)) return 'letters';
         if (value.length < 5) return 'empty';
+        if (value.length > 9 && value.replace(/[^A-ZА-Я\d]/g, '').length === 10) {
+            that.togglePermanent();
+        }
     });
     passport.format = function(value) {
         return $.trim(value.toUpperCase().replace(/[^A-ZА-Я\d]/g, ''));
@@ -399,7 +403,13 @@ initExpiration: function() {
             expiration.apply();
         }
     });
+    this.permanentCheckbox = permanent.el;
     this.controls.push(expiration, permanent);
+},
+togglePermanent: function() {
+    if (this.nationality.val() == 170) {
+        this.permanentCheckbox.prop('checked', true);
+    }
 },
 initBonus: function() {
     var checkbox = this.el.find('input[id$="bonus"]');
