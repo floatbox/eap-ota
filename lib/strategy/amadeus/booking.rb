@@ -23,6 +23,9 @@ module Strategy::Amadeus::Booking
         else
           logger.error "Strategy::Amadeus: Не получили номер брони"
           amadeus.pnr_ignore
+          if add_multi_elements.srfoid_errors.present?
+            add_multi_elements.or_fail!
+          end
         end
         return :failed
       end

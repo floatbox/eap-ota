@@ -192,20 +192,21 @@
             %number= index+1
 
       -# CC 'SR FOID...'
-      %dataElementsIndiv
-        %elementManagementData
-          %segmentName SSR
-        %serviceRequest
-          %ssr
-            %type FOID
-            %status HK
-            %quantity 1
-            %companyId= validating_carrier
-            %freetext= "PP#{person.passport}"
-        %referenceForDataElement
-          %reference
-            %qualifier PR
-            %number= index+1
+      - if srfoid_needed?
+        %dataElementsIndiv
+          %elementManagementData
+            %segmentName SSR
+          %serviceRequest
+            %ssr
+              %type FOID
+              %status HK
+              %quantity 1
+              %companyId= validating_carrier
+              %freetext= "PP#{person.passport}"
+          %referenceForDataElement
+            %reference
+              %qualifier PR
+              %number= index+1
 
       -# CC FE
       %dataElementsIndiv

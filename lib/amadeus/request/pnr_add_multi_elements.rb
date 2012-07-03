@@ -74,6 +74,10 @@ module Amadeus
         agent_commission.call.round
       end
 
+      def srfoid_needed?
+        ['UN', 'HR'].exclude? validating_carrier
+      end
+
     end
   end
 end
