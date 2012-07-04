@@ -109,11 +109,11 @@ class Order < ActiveRecord::Base
       case self.source
       when 'amadeus'
         if self.ticket_status == 'booked' && (self.payment_status == 'blocked' || self.payment_status == 'pending')
-          self.notifications.new.create_booking_notice
+          self.notifications.new.create_pnr
         end
       when 'sirena'
         if self.ticket_status == 'ticketed'
-          self.notifications.new.create_booking_notice
+          self.notifications.new.create_pnr
         end
       end
     end
@@ -410,7 +410,6 @@ class Order < ActiveRecord::Base
   def ticket!
     update_attributes(:ticket_status =>'ticketed', :ticketed_date => Date.today)
     reload_tickets
-    notifications.new.create_ticket_notice
   end
 
   def reload_tickets
