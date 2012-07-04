@@ -403,12 +403,14 @@ initExpiration: function() {
             expiration.apply();
         }
     });
+    this.expiration = expiration;
     this.permanent = permanent;
     this.controls.push(expiration, permanent);
 },
 togglePermanent: function() {
     if (this.nationality.val() == 170) {
         this.permanent.set(true);
+        this.expiration.apply();
     }
 },
 initBonus: function() {
