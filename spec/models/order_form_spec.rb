@@ -237,7 +237,7 @@ describe OrderForm do
 
     def create_bunch_of_people arr
       arr.map do |last_name, infant_sign|
-        person = infant_sign ? build(:infant_person) : build(:adult_person)
+        person = infant_sign ? build(:person, :infant) : build(:person)
         person.last_name = last_name
         person
       end

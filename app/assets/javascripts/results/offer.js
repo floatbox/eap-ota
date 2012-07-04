@@ -58,6 +58,7 @@ select: function(index) {
         this.summaries[variant.segments[i]].addClass('os-selected');
     }
     this.selected = variant;
+    this.book.removeClass('ob-disabled');    
     this.updateBook();
 },
 choose: function(segment, code) {

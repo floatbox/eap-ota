@@ -214,7 +214,8 @@ getCheap: function() {
 getNonstop: function() {
     var mp;
     return this.getVariants(function(v) {
-        return v.features.nonstop && v.price < (mp || (mp = Math.min(v.price * 1.5, v.price + 10000)));
+        //return v.features.nonstop && v.price < (mp || (mp = Math.min(v.price * 1.5, v.price + 10000)));
+        return v.features.nonstop;
     });
 },
 getOptimal: function(md, mp) {

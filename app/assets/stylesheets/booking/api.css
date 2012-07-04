@@ -28,13 +28,16 @@
     display: block;
 }
 
-/* Fail */
-#booking-fail {
-    display: none;
-}
-
 /* Subscription */
 #booking-subscription {
     display: none;
     margin-left: 0;
+}
+
+/* Button template */
+#obb-template {
+    display: none;
+}
+.b-header #obb-template {
+    display: block;
 }

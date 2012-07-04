@@ -5,17 +5,16 @@
     <title>Eviterra — бронирование авиабилета</title>
     <meta name="description" content="Eviterra.com — простой, удобный и красивый способ найти и купить авиабилет. Поиск, выбор рейса и бронирование онлайн. Цены на авиабилеты. +7 (495) 660-35-20">
     <meta name="keywords" content="авиабилет, авиакасса, авиабилеты купить, бронирование, выбрать рейс, авиарейс, перелет, дешевые авиабилеты, цены на билеты, онлайн бронирование, эвитерра, eviterra, спецпредложения, авиакомпании, расписание рейсов, маршрут, агентство, турагентство, путешествия">
-    <script type="text/javascript">
-        var customPageView = function() {
-            _gaq.push(['_setAllowAnchor', true]);
-            _gaq.push(['_setCampMediumKey', 'type']);
-            _gaq.push(['_setCampSourceKey', 'partner']);
-            _gaq.push(['_trackPageview']);
-        };
-    </script>
     <%= render 'shared/head' %>
     <%= stylesheet_link_tag 'variant' %>
     <%= javascript_include_tag "local/ru", 'variant' %>
+    <script type="text/javascript">
+    if (window._gaq) {
+        _gaq.push(['_setAllowAnchor', true]);
+        _gaq.push(['_setCampMediumKey', 'type']);
+        _gaq.push(['_setCampSourceKey', 'partner']);
+    }
+    </script>
 </head>
 <body>
 
@@ -60,6 +59,11 @@
     </div>
 </div>
 
+<div class="ob-button" id="obb-template">
+    <div class="obb-title">Купить</div>
+    <div class="obb-side obb-left"><div class="obb-side obb-right"></div></div>
+</div>
+
 <div id="hint">
     <div class="h-close"></div>
     <div class="h-content"></div>
@@ -70,6 +74,7 @@
 <script src="//translate.google.com/translate_a/element.js?cb=googleSectionalElementInit&ug=section&hl=ru"></script>
 <script type="text/javascript">
 $(function() {
+    trackPage();
     search.dates = {csnow: new Date('<%= Time.now.to_formatted_s(:rfc822) %>')};
     results.data = $.parseJSON('<%= raw @search.details.to_json %>');
     results.updateTitles();
@@ -82,6 +87,24 @@ $(function() {
     booking.restore();    
     hint.init();
 });
+</script>
+<script type="text/javascript">
+(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=429677207045748";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+(function(d,s,id) {
+    var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}
+}(document,"script","twitter-wjs"));
+(function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+})();
+$('#share-icons').show();
 </script>
 </body>
 </html>

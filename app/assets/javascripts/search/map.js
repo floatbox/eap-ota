@@ -41,8 +41,16 @@ resize: function(instant) {
         this.control.toggleClass('smc-collapsed', this.collapsed);
     }
     this.content.height(Math.max(30, mh));
+    this.toggleZoom(mh);
     if (this.api && this.bounds) {
         this.fitBounds();
+    }
+},
+toggleZoom: function(h) {
+    var zoomVisible = h > 80;
+    if (this.api && zoomVisible !== this.zoomVisible) {
+        this.api.setOptions({zoomControl: zoomVisible}); 
+        this.zoomVisible = zoomVisible;
     }
 },
 load: function() {
@@ -54,8 +62,13 @@ load: function() {
             backgroundColor: '#ccd8b1',
             mapTypeId: google.maps.MapTypeId.TERRAIN,
             disableDefaultUI: true,
+            zoomControl: this.content.height() > 80,
+            zoomControlOptions: {
+                style: google.maps.ZoomControlStyle.SMALL
+            },
             scrollwheel: false,
-            minZoom: 2
+            minZoom: 2,
+            maxZoom: 8
         });
         this.bounds = this.defpoint;
         if (this.deferred) {
@@ -79,7 +92,7 @@ slideDown: function() {
         google.maps.event.trigger(that.api, 'resize');
         that.wrapper.height('').css('overflow', '');
         that.control.html('Свернуть карту');
-        //that.api.panBy(0, -Math.round(dh / 2));
+        that.toggleZoom(ch + dh);
         that.fitBounds();
     });
     search.dates.el.find('.sdt-tab').delay(150).fadeOut(150);
@@ -91,6 +104,7 @@ slideUp: function() {
     search.dates.toggleHidden(false);
     var ch = search.dates.el.height();
     var dh = ch - search.dates.tlheight;
+    this.toggleZoom(wh - ch);
     this.content.animate({
         height: wh - ch
     }, 300, function() {
@@ -98,7 +112,6 @@ slideUp: function() {
         that.wrapper.height('').css('overflow', '');
         that.control.toggleClass('smc-collapsed', that.collapsed);
         that.control.html('Развернуть карту');
-        //that.api.panBy(0, Math.round(dh / 2));
         that.fitBounds();
     });
     search.dates.el.find('.sdt-tab').fadeIn(150);

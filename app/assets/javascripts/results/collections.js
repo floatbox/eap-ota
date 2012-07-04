@@ -187,6 +187,8 @@ upgradeOffer: function() {
             offer.updateDetails();
             offer.updateBook();
         }, 20);
+        offer.book.removeClass('ob-disabled');
+        booking.abort();
     };
     this.offer.updateDetails = function() {
         var details = this.selected.el.find('.rmv-details');

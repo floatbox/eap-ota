@@ -6,10 +6,8 @@ module Amadeus
 
   module Shortcuts
 
-    # FIXME как-то объединить бы код, что ли
-
-    def booking
-      amadeus = Amadeus::Service.new(:book => true, :office => Amadeus::Session::BOOKING)
+    def session(office)
+      amadeus = Amadeus::Service.new(:book => true, :office => office)
       if block_given?
         begin
           return yield(amadeus)
@@ -21,31 +19,16 @@ module Amadeus
       end
     end
 
-    def ticketing
-      amadeus = Amadeus::Service.new(:book => true, :office => Amadeus::Session::TICKETING)
-      if block_given?
-        begin
-          return yield(amadeus)
-        ensure
-          amadeus.session.destroy
-        end
-      else
-        return amadeus
-      end
+    def booking(&block)
+      session(Amadeus::Session::BOOKING, &block)
     end
 
-    # еще копипаста!
-    def testing
-      amadeus = Amadeus::Service.new(:book => true, :office => Amadeus::Session::TESTING)
-      if block_given?
-        begin
-          return yield(amadeus)
-        ensure
-          amadeus.session.destroy
-        end
-      else
-        return amadeus
-      end
+    def ticketing(&block)
+      session(Amadeus::Session::TICKETING, &block)
+    end
+
+    def testing(&block)
+      session(Amadeus::Session::TESTING, &block)
     end
   end
 

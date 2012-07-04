@@ -2,7 +2,7 @@
 # More info at https://github.com/guard/guard#readme
 
 # для кукумбера отдельный спорк. можно его включить
-guard 'spork', :wait => 30, :cucumber => false, :cucumber_env => { 'RAILS_ENV' => 'test' }, :rspec_env => { 'RAILS_ENV' => 'test' } do
+guard 'spork', :wait => 30, :cucumber => false, :test_unit => false, :cucumber_env => { 'RAILS_ENV' => 'test' }, :rspec_env => { 'RAILS_ENV' => 'test' } do
   watch('config/application.rb')
   watch('config/environment.rb')
   watch(%r{^config/environments/.+\.rb$})
