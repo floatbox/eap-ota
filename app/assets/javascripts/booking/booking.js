@@ -156,6 +156,7 @@ cancel: function() {
         this.el.hide();
         this.content.html('');        
         delete this.offer;
+        page.location.set('booking');
         results.message.toggle('loading');          
         results.show(true);
         results.load();
