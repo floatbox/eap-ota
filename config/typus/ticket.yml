@@ -167,6 +167,8 @@ Ticket:
         old_booking: ["пересчет запрещен", "пересчет разрешен"]
   options:
     default_action_on_item: edit
+    start_year: 2011
+    end_year: <%= (Date.today + 1.month).year %>
     export: csv
   actions:
     edit: show

@@ -18,20 +18,20 @@ FactoryGirl.define do
 
   factory :order do
     pnr_number
+    fix_price true
+    price_with_payment_commission 3000
   end
 
   factory :person do
     first_name
     last_name
+    birthday {20.years.ago}
 
-    factory :adult_person do
-      birthday {20.years.ago}
-    end
-    factory :child_person do
+    trait :child do
       birthday {8.years.ago}
       infant_or_child 'c'
     end
-    factory :infant_person do
+    trait :infant do
       birthday {2.months.ago}
       infant_or_child 'i'
     end
@@ -48,10 +48,10 @@ FactoryGirl.define do
     kind 'ticket'
     status 'ticketed'
 
-    factory :direct_ticket do
+    trait :direct do
       office_id 'MOWR228FA'
     end
-    factory :aviacenter_ticket do
+    trait :aviacenter do
       office_id 'MOWR2233B'
     end
   end
@@ -69,18 +69,19 @@ FactoryGirl.define do
     order
 
     # пока не годится для build - не проставляет status
-    factory :charged_payture_charge do
+    trait :charged do
       after_create do |payture_charge, proxy|
         payture_charge.update_attributes status: 'charged'
       end
     end
+    factory :charged_payture_charge, :traits => [:charged]
   end
 
   factory :payture_refund do
     association :charge, :factory => :charged_payture_charge
 
     # пока не годится для build - не проставляет status
-    factory :charged_payture_refund do
+    trait :charged do
       after_create do |payture_refund, proxy|
         payture_refund.update_attributes status: 'charged'
       end
@@ -91,7 +92,7 @@ FactoryGirl.define do
     order
 
     # пока не годится для build - не проставляет status
-    factory :charged_cash_charge do
+    trait :charged do
       after_create do |payture_charge, proxy|
         payture_charge.update_attributes status: 'charged'
       end
@@ -100,6 +101,44 @@ FactoryGirl.define do
 
   factory :cash_refund do
     association :charge, :factory => :cash_charge
+  end
+
+  # amadeus sessions
+  sequence :amadeus_session_token do |n|
+    token = 'TESTAAAAAA'
+    n.times { token.next! }
+    token
+  end
+
+  factory :amadeus_session_ar_store, class: 'Amadeus::Session::ARStore' do
+    token { FactoryGirl.generate(:amadeus_session_token) }
+    seq 2
+    office { 'TEST_DEFAULT_OFFICE' }
+
+    trait :booked do
+      booked true
+    end
+
+    trait :stale do
+      updated_at 30.minutes.ago
+    end
+  end
+
+  factory :amadeus_session_mongo_store, class: 'Amadeus::Session::MongoStore' do
+    token { FactoryGirl.generate(:amadeus_session_token) }
+    seq 2
+    office { 'TEST_DEFAULT_OFFICE' }
+
+    trait :booked do
+      booked true
+    end
+
+    trait :stale do
+      after_create do |session, proxy|
+        session.updated_at = 30.minutes.ago
+        session.save_without_touching
+      end
+    end
   end
 
 end

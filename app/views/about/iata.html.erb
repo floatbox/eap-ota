@@ -1,18 +1,23 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE HTML>
+<html lang="ru-RU">
 <head>
-    <%= render 'shared/head_common', {:title => 'правила IATA'} %>
-    <%= stylesheet_link_tag "static" %>
-    <%= javascript_include_tag "static" %>
+	<meta charset="utf-8">
+    <title>Eviterra — правила IATA</title>
+    <meta name="description" content="Eviterra.com — простой, удобный и красивый способ найти и купить авиабилет. Поиск, выбор рейса и бронирование онлайн. Цены на авиабилеты. +7 (495) 660-35-20">
+    <meta name="keywords" content="авиабилет, авиакасса, авиабилеты купить, бронирование, выбрать рейс, авиарейс, перелет, дешевые авиабилеты, цены на билеты, онлайн бронирование, эвитерра, eviterra, спецпредложения, авиакомпании, расписание рейсов, маршрут, агентство, турагентство, путешествия">
+    <%= render 'shared/head' %>
+    <%= stylesheet_link_tag 'static/all', :debug => true %>
+    <%= javascript_include_tag "local/ru", 'static', :debug => true %>
 </head>
 <body>
+<div class="page-wrapper">
+
 <%= render 'shared/header' %>
-<div id="wrapper">
-<div id="content">
-    <div id="back2search">
-        <div class="bscontent"><a href="/">Вернуться к поиску</a></div>
-    </div>
-    <div class="article">
+<div id="back2search">
+    <div class="bs-content"><a class="bs-link" href="/">Поиск авиабилетов</a></div>
+</div>
+
+<div class="article">
 
 <div class="asection">
     <h2>Условия договора и другие важные уведомления</h2>
@@ -83,8 +88,8 @@
     <p style="text-align: center;">Перевод и другая полезная информация доступны на сайте ИАТА: <a href="http://www.iatatravelcentre.com/tickets">www.iatatravelcentre.com/tickets</a></p>
 </div>
 
-    </div>
 </div>
+<div class="page-buffer"></div>
 </div>
 <%= render 'shared/footer' %>
 </body>

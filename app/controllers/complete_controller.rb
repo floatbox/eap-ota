@@ -6,9 +6,20 @@ class CompleteController < ApplicationController
     pos = params[:pos]
     limit = params[:limit]
     results = Completer.complete(val, pos, :limit => limit)
-
+    
+    results = results.map{|item|
+      entity = item[:entity]
+      {
+        :name => item[:name],
+        :type => entity[:type],
+        :iata => entity[:iata],
+        :area => entity[:hint],
+        :hint => entity[:info] || "#{ entity[:name] }, #{ entity[:hint] }",
+      }
+    }
+    
     struct = {
-      :stat => {:val => val, :pos => pos},
+      :query => val,
       :data => results
     }
 

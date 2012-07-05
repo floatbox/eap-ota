@@ -19,6 +19,8 @@ Payment: &PAYMENT_CONFIG
   filters: created_at, charged_on, type, status
   application: Orders, 1
   options:
+    start_year: 2011
+    end_year: <%= (Date.today + 1.month).year %>
     export: csv
 
 # Typus не умеет отображать таблицы для Single table inheritance

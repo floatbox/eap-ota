@@ -1,0 +1,58 @@
+<div class="os-details" data-flights="<%= segment_id(segment) %>">
+<h4 class="osd-title">
+    <strong class="osdt-main"><%= segment_rt ? 'Обратный перелет' : segment_title(segment) %></strong><% if segment_cabins.length == 1 %> <span class="osdt-hl"><%= human_cabin_ins(segment_cabins.first) %></span><% end %> <%= date_with_dow segment.flights.first.departure_date %><% if segment.layovers? %>, <%= with_layovers(segment) %><% end %>
+</h4>
+<% segment_cabins = [] if segment_cabins.length < 2 %>
+<% segment_carrier = primary_carrier(segment) %>
+<% segment.flights.each_with_index do |flight, fcounter| %>
+<div class="osd-flight wrap">
+    <div class="osd-dpt">
+        <h5 class="osd-time"><%= fmt_time flight.departure_time %></h5>
+        <h6 class="osd-action">Вылет <%= raw nbsp(flight.departure.city.case_from) %></h6>
+        <dl class="osd-features">
+            <dt>аэропорт</dt>
+            <dd><%= full_airport_and_term(flight.departure, flight.departure_term) %></dd>
+            <dt>авиакомпания</dt>
+            <dd class="osd-carrier"><img class="osdc-icon" src="<%= flight.operating_carrier.icon_url %>" alt=""><% if flight.operating_carrier_name != segment_carrier.name %><span class="odc-hl"><%= flight.operating_carrier_name %></span><% else %><%= flight.operating_carrier_name %><% end %></dd>
+            <dt>рейс</dt>
+            <dd><%= flight.marketing_carrier_iata %>&nbsp;<%= flight.flight_number %> <%= flight.departure.city.name %> — <%= flight.arrival.city.name %></dd>
+            <dt>самолет</dt>
+            <dd><%= flight.equipment_type_name %></dd>
+            <dt>в пути</dt>
+            <dd><%= human_duration(flight.duration) %></dd>
+         </dl>
+        <% if segment_cabins[fcounter] %>
+        <ul class="osd-notice">
+            <li class="osdn-item"><span class="osdn-hl"><%= human_cabin_nom(segment_cabins[fcounter]) %></span></li>
+        </ul>
+        <% end %>
+    </div>
+    <div class="osd-arv">
+        <h5 class="osd-time"><%= fmt_time flight.arrival_time %></h5>
+        <h6 class="osd-action">Прибытие <%= nbsp(flight.arrival.city.case_to) %><%= raw " #{ nbsp(human_date(flight.arrival_date)) }" if fcounter == segment.flights.length - 1 && flight.arrival_date != segment.flights[0].departure_date %></h6>
+        <% layover = segment.layover_durations[fcounter] %>
+        <dl class="osd-features">
+            <dt>аэропорт</dt>
+            <dd><%= full_airport_and_term(flight.arrival, flight.arrival_term) %></dd>
+            <% if layover %>
+                <dt>между рейсами</dt>
+                <dd><%= human_duration(layover) %></dd>
+            <% end %>            
+        </dl>
+        <ul class="osd-notice">
+            <% unless flight.technical_stop_count.zero? %>
+                <li class="osdn-item"><span class="osdn-hl">Рейс выполняется <%= with_technical_stops(flight) %></span></li>
+            <% end %>
+            <% if layover %>
+                <% next_flight = segment.flights[fcounter + 1] %>
+                <% if next_flight.departure_name != flight.arrival_name %>
+                    <li class="osdn-item"><span class="osdn-hl">Разные аэропорты прилёта и вылета</span></li>
+                <% elsif next_flight.departure_term != flight.arrival_term %>
+                    <li class="osdn-item"><span class="osdn-hl">Разные терминалы прилёта и вылета</span></li>
+                <% end %>
+            <% end %>
+        </ul>
+    </div>
+</div>
+<% end %>
+</div>

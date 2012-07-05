@@ -1,0 +1,42 @@
+<% carrier = segment.main_marketing_carrier %>
+<div class="os-summary"
+    data-carrier="<%= carrier.iata %>"
+    data-flights="<%= segment_id(segment) %>"
+    data-dpt="<%= time_in_minutes(segment.departure_time) %>"
+    data-duration="<%= segment.total_duration %>"
+>
+<div class="oss-carrier">
+    <img class="ossc-icon" src="<%= carrier.icon_url %>">
+    <div class="ossc-title">
+        <span class="ossct-text" title="<%= carrier.name %>"><%= carrier.name %></span>
+        <span class="ossct-overlay"></span>
+    </div>
+</div>
+<div class="wrap oss-wrap">
+    <div class="oss-dpt">
+        <h5 class="oss-time"><%= fmt_time(segment.departure_time) %></h5>
+        <p class="oss-airport"><%= segment.departure.name %><% if segment.departure_term %>&nbsp;<span class="ossa-term"><%= segment.departure_term %></span><% end %></p>
+    </div>
+    <div class="oss-parts">
+        <ul class="oss-bar">
+        <% for part in segment_parts(segment) %>
+            <li class="ossb-<%= part[:type] %>" title="<%= raw part[:title] %>" style="width: <%= (part[:duration] * duration_scale).to_i %>px;">
+        <% end %>
+        </ul>
+        <p class="oss-duration"><%= short_human_duration(segment.total_duration) %></p>
+        <% if segment.layovers? %>
+            <p class="ossi-m"><%= raw human_layovers_medium(segment) %></p>
+            <p class="ossi-l"><%= raw human_layovers_large(segment) %></p>
+        <% else %>
+            <% flight = segment.flights.first %>
+            <p class="ossi-m">прямой, <%= flight.equipment_type_name %></p>
+            <p class="ossi-l">прямой, <%= flight.marketing_carrier_iata %>&nbsp;<%= flight.flight_number %>, <%= flight.equipment_type_name %></p>
+        <% end %>
+    </div>
+    <div class="oss-arv">
+        <h5 class="oss-time"><%= fmt_time(segment.arrival_time) %></h5>
+        <p class="oss-airport"><%= segment.arrival.name %><% if segment.arrival_term %>&nbsp;<span class="ossa-term"><%= segment.arrival_term %></span><% end %></p>
+    </div>
+</div>
+<div class="oss-line"></div>
+</div>

@@ -3,9 +3,9 @@ class HomeController < ApplicationController
   def index
   end
 
-  def geo
+  def whereami
     loc = GeoIp.geolocation(request.remote_ip)
-    render :text => "ip #{request.ip}, remote_ip: #{request.remote_ip}, nearest_city: #{nearest_city.name} loc: #{loc[:latitude]} #{loc[:longitude]} #{loc[:city]}"
+    render :json => {:city_name => nearest_city.name, :lat => loc[:latitude], :lng => loc[:longitude]}
   end
 
   protected

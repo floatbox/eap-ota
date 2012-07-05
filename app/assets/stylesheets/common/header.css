@@ -1,0 +1,101 @@
+/* Header */
+#page-header {
+    position: absolute;
+    top: 0; left: 0;
+    z-index: 15;
+    width: 100%; height: 33px;
+    border-bottom: 3px solid #929292;
+    background: #f2f2f2;
+}
+.ipad #page-header {
+    position: absolute;
+    min-width: 1024px;
+}
+.ph-content {
+    position: relative;
+    width: 960px;
+    margin: 0 auto;
+}
+.ph-placeholder {
+    height: 36px;
+}
+#page-header.fixed {
+    position: fixed;
+}
+
+/* Logo */
+.ph-logo {
+    position: absolute;
+    top: 0; left: -900px;
+    width: 1000px; height: 33px;
+    border-bottom: 3px solid #961f51;
+    background: #f90a6f;
+    text-align: right;
+}
+
+/* Header tabs */
+.ph-tabs {
+    float: left;
+    display: inline;
+    margin-left: 100px;
+    border-bottom: 3px solid #8e8e8e;
+    background: #eaeaea;
+    font-size: 13px;
+    line-height: 15px;
+    cursor: pointer;
+}
+.ph-tabs li {
+    position: relative;
+    float: left;
+    border-right: 1px solid #dedede;
+}
+.ph-tabs .link {
+    display: block;
+    height: 23px;
+    padding: 10px 15px 0;
+    color: #555;
+    text-decoration: none;
+}
+.ph-tabs .link:hover {
+    color: #f90a6f;
+}
+.ph-tabs .active .link {
+    height: 26px;
+    margin-bottom: -3px;
+    background: url(/images/common/dark.jpg) repeat 0 100% #373941;
+    color: #FFF;
+    cursor: default;
+}
+
+/* Phone */
+.ph-phone {
+    float: left;
+    margin: 10px 0 0 15px;
+    font-size: 13px;
+    line-height: 15px;
+    color: #555;
+}
+.ph-phone .code {
+    color: #777;
+}
+
+/* Share icons */
+.ph-share {
+    display: none;
+    position: relative;
+    float: right;
+    width: 276px;
+}
+.phs-item {
+    position: absolute;
+    top: 7px;
+}
+#phs-facebook {
+    left: 0;
+}
+#phs-twitter {
+    left: 99px;
+}
+#phs-google {
+    left: 205px;
+}

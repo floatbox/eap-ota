@@ -1,41 +1,273 @@
-/* Предварительное бронирование */
-.prebooking .offer-variant th.book .a-button,
-.prebooking .offer-variant tr.book .a-button,
-.prebooking .offer-variant tr.book {
+/* Изменение цены */
+.bf-newprice {
     display: none;
+    padding: 18px 20px;
 }
-.prebooking-state {
-    display: none;
-    padding: 15px;
-    text-align: center;
+.bfnp-title,
+.bfnp-content {
+    font-size: 20px;
+    line-height: 22px;
+    letter-spacing: -0.03em;
+}
+.bfnp-title {
+    font-weight: bold;
+    color: #bf2a1d;
+}
+.bfnp-content {
+    margin: 5px 0;
+}
+.bfnp-tip {
     font-size: 14px;
     line-height: 16px;
 }
-.prebooking-state h4 {
-    margin: 0 0 10px;
+
+/* Основной блок */
+#booking {
+    display: none;
+    padding: 22px 0;
+}
+#booking.b-processing {
+    position: relative;
+    min-height: 100%;
+    margin-top: -106px;
+    padding: 0;
+}
+.b-content {
+    width: 988px;
+    margin: 0 auto;
+}
+.ob-preview {
+    position: relative;
+    margin-left: 16px;
+}
+#booking .ob-preview {
+    margin-left: 0;
+}
+#booking .ob-line {
+    display: none;
+}
+.b-loading {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 400px;
+    margin: 20px 0 0 -200px;
+    text-align: center;
+}
+.bl-title {
+    margin: 0 0 5px;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 26px;
+    letter-spacing: -0.03em;
+}
+.bl-progress {
+    padding-right: 28px;
+    background: url(/images/booking/progress-g.gif) no-repeat 100% 7px;
+}
+
+/* Заголовок */
+.b-header {
+    padding: 8px;
+    background: #FFF;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 20px;    
+    letter-spacing: -0.03em;
+}
+.bh-text {
+    margin: 0 300px;
+    padding: 8px 0;
+    text-align: center;
+}
+
+/* Подробности */
+.b-details {
+    background: #F8F8F6;
+}
+
+/* Форма */
+#booking-form {
+    border-top: 1px solid #E8E8E8;
+    background: #edede3;
+}
+
+/* Нижняя часть */
+.bf-footer {
+    position: relative;
+    margin: 25px 20px 0 315px;
+    padding-bottom: 30px;
+}
+.bff-price {
+    position: absolute;
+    top: 12px;
+    left: -300px;
+    width: 260px;
+}
+.bffp-content {
+    float: right;
     font-weight: bold;
     font-size: 18px;
     line-height: 20px;
 }
-.prebooking-state p {
-    margin: 6px 0 0;
+.bffp-sum {
+    color: #f90a6f;
 }
-.prebooking-state .progress {
-    margin: 0;
-    padding: 25px 0 0;
-    background: url(/img/offers/progress.gif) 50% 2px no-repeat;
+.bffp-tip {
+    color: #606060;
 }
-.prebooking-state .link {
-    color: #333;
+.bffp-wd {
+    display: none;
 }
-.prebooking .prebooking-state {
-    display: block;
+.bffp-details {
+    margin: 10px 0 0;
+    font-weight: normal;
+    font-size: 11px;
+    line-height: 13px;
+    color: #777;
 }
-.prebooking .cost-tip {
-    display: inline;
+.bffpd-item {
+    margin: 0 0 3px;
 }
-.prebooking-state .pbf-reload {
-    color: #ED1192;
+
+/* Кнопка отправки */
+.bff-submit {
+    position: relative;
+    left: -28px;
+    margin: 0 0 15px;
+    height: 48px;
+}
+.bf-button {
+    float: left;
+    position: relative;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.bfb-side {
+    height: 56px;
+    background: url(/images/booking/submit.png) no-repeat;
+}
+.bfb-left {
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    width: 100%;
+    padding-right: 8px;
+    background-position: 100% 0;
+}
+.bfb-right {
+    margin-right: 22px;
+}
+.bfb-title {
+    position: relative;
+    z-index: 1;
+    padding: 10px 27px 10px 28px;
+    border-radius: 24px;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 28px;
+    color: #FFF;
+    text-shadow: rgba(0, 0, 0, 0.3) 1px 1px 0;
+    cursor: pointer;
+}
+.bfb-disabled .bfb-left {
+    background-position: 100% -60px;
+}
+.bfb-disabled .bfb-right {
+    background-position: 0 -60px;
+}
+.bfb-disabled .bfb-title {
+    /*color: #b8b39c; для жёлтого фона */
+    color: #b8b8a5;
+    text-shadow: none;
+    cursor: default;
+}
+.bff-cancel,
+.bff-progress {
+    float: left;
+    margin: 15px 0 0 15px;
+    font-size: 15px;
+    line-height: 18px;
+}
+.bff-progress {
+    display: none;
+    padding-right: 26px;
+    background: url(/images/booking/progress-b.gif) no-repeat 100% 1px;
+}
+
+/* Проверка полей и соглашение */
+.bff-required {
+    margin: 0 0 10px;
+    font-size: 16px;
+    line-height: 18px;
+}
+.bffr-link {
+    cursor: pointer;
+}
+.bffr-link:hover {
+    background: none;
+    text-decoration: underline;
+    color: #f90a6f;
+}
+.bff-disclaimer {
+    font-size: 14px;
+    line-height: 16px;
+    color: #777;
+}
+.bffd-link {
+    color: #777;
+}
+
+/* Результат бронирования */
+.bf-result {
+    padding: 18px 20px 20px;
+    background: #edede3;
+}
+.bfr-title {
+    margin: 0 0 8px;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 22px;
+    letter-spacing: -0.03em;    
+}
+.bfr-content {
+    margin: 8px 0 0;
+    font-size: 14px;
+    line-height: 17px;
+}
+.bfr-pnr {
+    font-weight: bold;
+    color: #f90a6f;
+}
+.bfnp-data {
+    display: none;
+}
+
+/* Кнопки */
+.bfr-controls {
+    height: 36px;
+    margin: 15px 0 0;
+    line-height: 38px;
+}
+.bf-result .ob-button {
+    font-size: 20px;
+    line-height: 20px;
+    letter-spacing: -0.03em;
+}
+.bf-result .obb-side {
+    background-image: url(/images/booking/continue.png);
+}
+
+/* 3DSecure */
+.bfrt-form {
+    position: absolute;
+    height: 0;
+    overflow: hidden;
+}
+
+/* Ошибка бронирования */
+.bfr-fail .bfr-title {
+    color: #bf2a1d;
 }
 
 /* Бронирование в корпоративном режиме */
@@ -50,427 +282,53 @@
     color: #ED1192;
 }
 
-/* Изменение цены */
-.changed-price {
-    text-align: left;
-}
-.changed-price h5 {
-    font-size: 18px;
-    line-height: 20px;
-    margin: 0 0 8px;
-}
-.changed-price strong {
-    font-weight: bold;
-}
-.changed-price .cancel:hover {
-    color: #ED1192;
-}
-.offer .changed-price a.a-button {
-    float: none;
-    border-color: #7b8e12;
-    margin-right: 2px;
-    padding: 3px 10px;
-    font-weight: bold;
-}
 
-/* Форма бронирования */
-#booking {
-    min-height: 100%;
-    background: #E7ECEE;
-}
-.booking-body {
-    position: relative;
-    width: 960px;
-    margin: 0 auto;
-    padding: 15px 0 40px;
-}
-.booking-frame {
-    width: 675px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    padding: 0 0 1px;
-    background: #fff;
-    font-size: 16px;
-    line-height: 19px;
-    color: #333;
-    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-#booking .cost-tip {
-    display: inline;
-}
-
-/* Подсказки */
-.booking-form .hint {
-    color: #777;
-}
-
-/* Шапка */
-.booking-header {
-    position: fixed;
-    left: 0; top: 0;
-    z-index: 5;
-    width: 100%;
-    background: #FFF;
-}
-.bh-title {
-    width: 960px;
-    margin: 0 auto;
-    padding: 15px 0;
-    font-weight: bold;
-    font-size: 28px;
-    line-height: 1;
-    letter-spacing: -1px;
-}
-.bh-title:first-letter {
-    text-transform: uppercase;
-}
-.bh-content {
-    width: 960px;
-    height: 30px;
-    margin: 0 auto;
-    font-size: 14px;
-    line-height: 18px;
-    letter-spacing: -0.014em;
-}
-
-/* Прячем и дизейблим лишние элементы */
-#booking .offer-variant .summary .variants p,
-#booking .offer-variant .summary .variants .link {
-    color: #CCC;
-    cursor: default;
-    text-decoration: none;
-    cursor: default;
-}
-#booking .offer-variant th.book .a-button,
-#booking .offer-variant tr.book .a-button,
-#booking .offer-variant tr.book {
-    display: none;
-}
-#booking .offer-variant .toggle .link {
-    background: transparent;
-    text-decoration: none;
-    color: #CCC;
-    cursor: default;
-}
-
-/* Оставшиеся места */
-.booking-form .availability {
-    display: inline;
-    float: right;
-    position: relative;
-    top: -5px;
-    width: 233px;
-    margin-right: 15px;
-    font-size: 13px;
-    line-height: 15px;
-}
-.booking-form .availability strong {
-    color: #ED1192;
-}
-
-/* Данные о младенце */
-.persons-order {
-    margin: 0 15px 12px;
-}
-
-/* Результат бронирования */
-.booking-form .result {
-    margin: 12px 15px;
-}
-.booking-form .success,
-.booking-form .fail {
-    font-size: 125%;
-    line-height: 120%;
-}
 .booking-form .success strong {
     font-weight: bold;
     color: #447b00;
 }
-.booking-form .fail strong {
-    font-weight: bold;
-    color: #ea2535;
-}
-.booking-form .result .tip {
-    margin: 10px 0 0;
-    font-size: 75%;
-    line-height: 125%;
-}
-.booking-form .result .hint {
-    color: #333;
-}
-.booking-form .tds-form {
-    position: absolute;
-    height: 0;
-    overflow: hidden;
-}
-.booking-form .tds-submit {
-    margin-top: 8px;
-}
-.booking-form .tds-submit a.a-button {
-    float: none;
-    border-color: #7b8e12;
-    margin-right: 2px;
-    margin-left: 0;
-    padding: 3px 10px;
-    font-size: 16px;
-    line-height: 20px;
-    font-weight: bold;
-    color: #333;
-}
-.booking-form .tds-submit a.a-button:hover {
-    color: #FFF;
-}
-.booking-form .result .tds-submit a.stop-booking {
-    position: relative;
-    top: 8px;
-}
-
-/* Кнопки прекращения бронирования */
-.stop-booking {
-    color: #333;
-}
-.stop-booking:hover {
-    color: #ED1192;
-}
-.booking-form .result .stop-booking {
-    float: right;
-}
-
-/* Кнопки */
-.booking-form .a-button {
-    margin: 0 0 0 .25em;
-    padding: 4px 10px;
-    font-weight: bold;
-    color: #777;
-}
-.booking-form .a-button-ready {
-    color: #FFF;
-}
-
-/* Кнопка отправки */
-.booking-submit {
-    margin: 30px 15px 25px;
-}
-.booking-submit.sending {
-    margin-bottom: 30px;
-}
-.booking-submit table {
-    margin: 0 auto;
-}
-.booking-form .bs-left {
-    width: 250px;
-    font-weight: bold;
-    font-size: 20px;
-    text-align: right;
-    vertical-align: middle;
-}
-.booking-form .bs-right {
-    width: 250px;
-    color: #777;
-    font-size: 13px;
-    vertical-align: middle;
-}
-.bs-button {
-    padding: 0 15px 2px;
-    text-align: center;
-    vertical-align: middle;
-}
-.booking-submit .a-button {
-    margin: 0;
-    font-size: 20px;
-}
-.booking-submit .loading,
-.booking-form .sending .cancel {
-    display: none;
-}
-.booking-form .sending .loading {
-    display: block;
-    height: 16px;
-    background-position: 0 0;
-}
-.booking-form .sending .bs-left,
-.booking-form .sending .bs-right {
-    width: 200px;
-}
-.booking-form .sending .bs-left {
-    visibility: hidden;
-}
-
-/* Лоадер */
-.booking-form .loading {
-    padding-right: 28px;
-    background: transparent url(/img/loader/loader-white.gif) no-repeat 100% 1px;
-    background-image: url(data:image/gif;base64,R0lGODlhEAAQAPIAAP///+0RkvnG5PFOru0RkvNsu/WKyfaZ0CH+GkNyZWF0ZWQgd2l0aCBhamF4bG9hZC5pbmZvACH5BAAKAAAAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQACgABACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkEAAoAAgAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkEAAoAAwAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkEAAoABAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQACgAFACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQACgAGACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAAKAAcALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==);
-}
-
-/* Список ошибок */
-.booking-errors {
-    position: relative;
-    top: 5px;
-    width: 380px;
-    margin: 17px auto 0;
-    padding: 14px 20px 12px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    background: #ffc4c4;
-    font-size: 13px;
-    line-height: 16px;
-    color: #333;
-}
-.be-triangle {
-    display: block;
-    position: absolute;
-    top: -15px;
-    left: 194px;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-color: transparent transparent #ffc4c4;
-    border-width: 0 16px 16px;
-}
-.booking-errors h6 {
-    font-weight: bold;
-    font-size: 100%;
-    margin: 0 0 5px;
-}
-.be-list {
-    margin-left: 1.2em;
-    list-style: disc;
-}
-.be-list li {
-    margin: 3px 0 0;
-}
-.be-list .link {
-    color: #333333;
-}
-.be-list .link:hover {
-    color: #ED1192;
-}
-
-/* Предупреждение */
-.booking-disclaimer {
-    margin: 12px 15px;
-    font-size: 16px;
-    line-height: 19px;
-    color: #777;
-}
-.booking-disclaimer a {
-    color: #333;
-}
-.booking-disclaimer a:hover {
-    color: #ED1192;
-}
 
 /* Правила тарифов */
-.farerules {
+.bf-farerules {
     display: none;
-    border-radius: 10px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
     background: #FFF;
-    color: #000;
 }
-.farerules {
-    position: absolute;
-    top: 0; left: 119px;
-    width: 654px;
-    padding: 18px 20px 20px;
-    font-size: 14px;
-    line-height: 19px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
-    -moz-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
-    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
-    -o-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+.bff-content {
+    padding: 16px 20px 20px;
 }
-.farerules .close {
+.bff-close {
     float: right;
     position: relative;
-    top: -12px; left: 14px;
+    top: 18px; left: -18px;
     width: 18px; height: 18px;
     background: url(/img/booking/close.png) no-repeat;
     cursor: pointer;
 }
-.farerules h3 {
+.bff-title {
     margin: 0 0 12px;
     font-weight: bold;
-    font-size: 26px;
-    line-height: 1;
-    color: #333;
+    font-size: 20px;
+    line-height: 22px;
+    letter-spacing: -0.03em;
 }
-.farerules .fgroup {
+.bff-group {
     margin: 12px 0 0;
 }
-.fgtranslate {
+.bffg-translate {
     float: right;
-    margin-top: 2px;
     font-size: 12px;
 }
-.fgrus {
-    padding: 0 55px 2px 0;
-    background: url(/img/booking/google.png) no-repeat 100% 1px;
-}
-.fgheader {
-    margin: 0 200px 5px 0;
-}
-.fgheader h5 {
-    display: inline;
-    margin-right: 5px;
+.bffg-title {
+    margin: 0 200px 8px 0;
     font-weight: bold;
-    font-size: 18px;
-    line-height: 20px;
+    font-size: 14px;
+    line-height: 16px;    
 }
-.fgheader .clofs {
-    display: inline;
-    font-size: 12px;
-    color: #777;
-}
-.farerules pre {
-    max-height: 130px;
+.bffg-content {
+    max-height: 200px;
     overflow: auto;
-    border: 1px solid #999;
-    border-color: #757575 #999 #B0B0B0;
+    border: 1px solid #B0B0B0;
     padding: 3px 8px;
     background: #fff;
     font-size: 12px;
-}
-
-/* Изменение цены */
-.booking-newprice h5 {
-    margin: 0 0 10px;
-}
-.booking-newprice .a-button {
-    margin: 0;
-    border-color: #7b8e12;
-    margin-right: 2px;
-    padding: 3px 10px;
-    font-weight: bold;    
-    color: #333;
-}
-
-/* Ссылки для добавления в социальные сети */
-.booking-social {
-    margin: 15px 0 15px;
-    padding: 12px 15px 0;
-    border-top: 1px solid #ddd;
-}
-.booking-form .booking-social h3 {
-    margin: 0 0 10px;
-    line-height: 22px;
-}
-.booking-form .booking-social li {
-    margin: 0 0 10px;
-    font-size: 14px;
-    line-height: 17px;
-}
-.booking-form .booking-social a {
-    padding: 5px 0 5px 32px;
-    background: url(/img/booking/social.png) no-repeat;
-    color: #777;
-}
-.booking-form .booking-social a:hover {
-    color: #ED1192;
 }

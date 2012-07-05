@@ -1,155 +1,93 @@
-/* Заголовок */
-#offers-matrix .imprecise {
-    margin: 0 0 15px;
+/* Matrix */
+.rm-prices {
+    padding: 0 0 12px 15px;
 }
-
-/* Матрица цен */
-.offer-prices {
-    width: 100%;
-    margin-bottom: -1px;
+.rmp-table td,
+.rmp-table th {
+    border: 1px solid #bfc4c8;
+    background: #cbcfd2;
+} 
+.rmp-table th {
+    height: 25px;
+    padding: 7px 10px;
 }
-
-.offer-prices th,
-.offer-prices td {
-    padding: 5px;
-    border-bottom: 1px solid #ededed;
-    border-right: 1px solid #ededed;
-}
-
-.offer-prices th {
-    padding-bottom: 4px;
-}
-
-.offer-prices th.last,
-.offer-prices td.last {
-    border-right: none;
-}
-
-.offer-prices th {
-    background: #f3f7ef;
-    border-color: #e2e6de;
+.rmp-date1,
+.rmp-date2 {
     font-size: 13px;
-    line-height: 15px;
+    line-height: 13px;
 }
-
-.offer-prices th.current {
-    background: #e1ebd2;
+.rmp-date1 {
+    width: 104px;
+    color: #81AA00;
 }
-
-.offer-prices th.ret {
-    background: #faf4ed;
-    border-color: #e8e3dc;
-    border-width: 1px 1px 1px 0;
+.rmp-date2 {
+    width: 93px;
+    color: #DB7100;
 }
-
-.offer-prices tr.current th.ret {
-    background: #f2e4d3;
-}
-
-.offer-prices th.direction {
-    background: transparent;
-    border-bottom: 1px solid #e8e3dc;
-}
-
-.offer-prices th.last {
-    border-radius: 0 10px 0 0;
-    -moz-border-radius: 0 10px 0 0;
-    -webkit-border-radius: 0 10px 0 0;
-    -o-border-radius: 0 10px 0 0;
-}
-
-.offer-prices th h6 {
-    color: #629100;
-    letter-spacing: -0.015em;
-}
-
-.offer-prices th.current h6 {
-    color: #578000;
-}
-
-.offer-prices th.ret h6,
-.offer-prices th h6.ret,
-.offer-prices th h6.segment2 {
-    color: #b36100;
-}
-
-.offer-prices tr.current th.ret h6 {
-    color: #a65b00;
-}
-
-.offer-prices th p {
+.rmp-weekday {
     font-size: 11px;
-    color: #ADADAD;
+    line-height: 12px;
+    color: #777;
 }
-
-.offer-prices .current p {
-    color: #999;
-}
-
-.offer-prices th.direction h6,
-.offer-prices th.ret h6,
-.offer-prices th.ret p {
-    text-align: right;
-}
-
-.offer-prices th.direction h6 {
-    font-weight: bold;
-}
-
-.offer-prices td {
-    padding: 2px 0 0;
-    font-size: 14px;
-    text-align: center;
-    vertical-align: middle;
-    color: #ED1192;
-}
-
-.offer-prices td.active {
-    cursor: pointer;
-}
-.offer-prices td.active:hover {
-    background: #fef3f9;
-}
-
-.offer-prices td.selected,
-.active-booking .offer-prices td.selected {
-    background: #ED1192;
-    color: #FFF;    
-    cursor: default;
-}
-
-.offer-prices td.cheap {
-    font-size: 130%;
-}
-
-#offers-mcollection {
-    border-top: 1px solid #D0D0D0;
-    padding-top: 5px;
-}
-
-/* Матрица для одного сегмента */
-.owmatrix tr.diffret,
-.owmatrix th.direction,
-.owmatrix th.ret {
+.rm-source {
     display: none;
 }
-.owmatrix th {
-    width: 14.286%;
-}
-.owmatrix th.first {
-    border-radius: 10px 0 0 0;
-    -moz-border-radius: 10px 0 0 0;
-    -webkit-border-radius: 10px 0 0 0;
-    -o-border-radius: 10px 0 0 0;
-}
-.owmatrix td {
-    height: 36px;
+.rmpt-ow .rmpt-rt {
+    display: none;
 }
 
-/* Матрица во время бронирования */
-.active-booking .offer-prices td.active,
-.active-booking .offer-prices td.active:hover {
-    background: none;
-    color: #CCC;
-    cursor: default;
+/* Matrix item */
+.rmp-item {
+    padding: 7px 14px 7px 10px;
+    background: #DCDFE1;
+    cursor: pointer;
+}
+.rmp-cost {
+    margin: 0 0 3px;
+    font-size: 16px;
+    line-height: 18px;
+    color: #777;
+}
+.rmp-sum {
+    font-weight: bold;
+}
+.rmp-cost .ruble {
+    color: #AAA;
+}
+
+/* Matrix bars */
+.rmv-bar {
+    margin: 2px 0 0;
+    height: 2px;
+}
+.rmvb-flight,
+.rmvb-layover {
+    float: left;
+    height: 1px;
+    border-bottom: 1px solid #e7e7e7;
+    overflow: hidden;
+}
+.segment1 .rmvb-flight {
+    background: #86a900;
+    border-color: #9db930;
+}
+.segment2 .rmvb-flight {
+    background: #cc6900;
+    border-color: #e58217;
+}
+.segment3 .rmvb-flight {
+    background: #0498bd;
+    border-color: #11abd1;
+}
+.rmvb-layover {
+    background: #e0e0e0;
+}
+
+/* Selected price */
+.rmp-item:hover {
+    background: #e9eaec;
+}
+.rmp-selected,
+.rmp-selected:hover {
+    background: #FFF;
 }

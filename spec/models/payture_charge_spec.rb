@@ -5,9 +5,9 @@ describe PaytureCharge do
 
   describe "factories" do
     specify { build(:payture_charge).should be_valid }
-    specify { build(:charged_payture_charge).should be_valid }
-    specify { create(:charged_payture_charge).should be_charged }
-    specify { create(:charged_payture_charge).should_not be_new_record }
+    specify { build(:payture_charge, :charged).should be_valid }
+    specify { create(:payture_charge, :charged).should be_charged }
+    specify { create(:payture_charge, :charged).should_not be_new_record }
   end
 
   describe "commission" do
@@ -28,13 +28,13 @@ describe PaytureCharge do
   end
 
   it 'should not allow to update price on charged payment' do
-    charge = create(:charged_payture_charge, :price => 1000)
+    charge = create(:payture_charge, :charged, :price => 1000)
     charge.assign_attributes :price => '1050'
     charge.should have_errors_on(:price)
   end
 
   it 'should still allow to update price on charged payment if entered price is technically the same' do
-    charge = create(:charged_payture_charge, :price => 1000)
+    charge = create(:payture_charge, :charged, :price => 1000)
     charge.assign_attributes :price => '1000'
     charge.should be_valid
   end

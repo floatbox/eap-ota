@@ -1,77 +1,110 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE HTML>
+<html lang="ru-RU">
 <head>
+	<meta charset="utf-8">
+    <title>Eviterra — бронирование авиабилета</title>
+    <meta name="description" content="Eviterra.com — простой, удобный и красивый способ найти и купить авиабилет. Поиск, выбор рейса и бронирование онлайн. Цены на авиабилеты. +7 (495) 660-35-20">
+    <meta name="keywords" content="авиабилет, авиакасса, авиабилеты купить, бронирование, выбрать рейс, авиарейс, перелет, дешевые авиабилеты, цены на билеты, онлайн бронирование, эвитерра, eviterra, спецпредложения, авиакомпании, расписание рейсов, маршрут, агентство, турагентство, путешествия">
+    <%= render 'shared/head' %>
+    <%= stylesheet_link_tag 'variant' %>
+    <%= javascript_include_tag "local/ru", 'variant' %>
     <script type="text/javascript">
-        var customPageView = function() {
-            _gaq.push(['_setAllowAnchor', true]);
-            _gaq.push(['_setCampMediumKey', 'type']);
-            _gaq.push(['_setCampSourceKey', 'partner']);
-            _gaq.push(['_trackPageview']);
-        };
+    if (window._gaq) {
+        _gaq.push(['_setAllowAnchor', true]);
+        _gaq.push(['_setCampMediumKey', 'type']);
+        _gaq.push(['_setCampSourceKey', 'partner']);
+    }
     </script>
-    <%= render 'shared/head_common', {:title => 'бронирование авиабилета'} %>
-    <%= stylesheet_link_tag "atoms/button", "results/results", "results/message", "results/offer", "controls/hint", "booking/booking", "booking/sections", "booking/independent" %>
-    <%= javascript_include_tag "main", "controls/hint", "booking/form", "booking/validation", "booking/names", "booking/independent" %>
 </head>
 <body>
+
 <%= render 'shared/header' %>
-<div id="wrapper">
-<div id="booking">
-    <div class="bh-placeholder">
-    <div class="booking-header bh-static">
-        <h3 class="bh-title"><span style="margin-right: 5px;"><%= raw @search.human %></span> <span class="link stop-booking latent">Найти другой вариант</span></h3>
-        <div class="hshadow"></div>
-    </div>
-    </div>
-    <div class="booking-body">
-    <div class="booking-frame">
-        <div class="booking-variant offer"></div>
-        <div class="booking-content"></div>
-    </div>
-<div style="float: left; display: block; position: absolute; top: 0px; right: 0px; background: #c1f29e; width: 240px; padding: 10px 12px; font-size: 90%;">Вы
-оформляете авиабилеты в&nbsp;одном из&nbsp;самых современных и&nbsp;технологичных
-сервисов в&nbsp;мире. Сотни пассажиров ежедневно летают с&nbsp;нами и&nbsp;доверяют&nbsp;нам.
-<br><br>
-У нас не только низкие цены, но&nbsp;и&nbsp;отличное обслуживание. Мы&nbsp;очень любим наших клиентов и&nbsp;делаем все&nbsp;возможное для того, чтобы
-один раз воспользовавшись нашим сервисом, вы&nbsp;покупали авиабилеты
-только у&nbsp;нас.
-<br><br>
-Мы гарантируем абсолютную безопасность ваших платежей
-и&nbsp;предоставление услуг в&nbsp;полном объеме.<br><br>Спасибо за&nbsp;покупку и&nbsp;приятного полета!
-</div>
-    </div>
-    <div id="results-loading" class="rmessage rcontent">
-        <div class="rmphoto">
-            <p>Вы всегда можете проконсультироваться по&nbsp;всем вопросам или&nbsp;сделать заказ по&nbsp;телефону <strong><nobr>+7 495 660-35-20</nobr></strong> или&nbsp;по&nbsp;почте <a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a></p>
-        </div>
-        <div class="rmtext">
-            <div class="progress"></div>
-            <h3>Проверяем доступность мест</h3>
-            <div style="font-size: 12px; line-height: 14px; text-align: center; margin-top: 5px;">Это займет от пяти до двадцати секунд</div>
-        </div>
-    </div>
-    <div id="results-empty" class="rcontent rmessage latent">
-        <div class="rmphoto">
-            <p>Вы всегда можете проконсультироваться по&nbsp;всем вопросам или&nbsp;сделать заказ по&nbsp;телефону <strong><nobr>+7 495 660-35-20</nobr></strong> или&nbsp;по&nbsp;почте <a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a></p>
-        </div>
-        <div class="rmtext">
-            <h3>В данный момент невозможно выбрать этот вариант</h3>
-            <p style="text-align: left; font-size: 14px; line-height: 18px;">Так иногда бывает, потому что авиакомпания не&nbsp;может подтвердить наличие мест на&nbsp;этот рейс по&nbsp;этому тарифу. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Выберите <span class="link stop-booking">другой вариант</span>.</p>
-        </div>
-    </div>
+
+<div id="results-header">
+<div class="rh-wrapper">
+    <table class="rh-content">
+    <tr>
+        <td class="rh-left"><h3 class="rh-summary"></h3></td>
+        <td class="rh-right">
+            <div class="rh-select"><span class="rhs-link">Другой&nbsp;вариант</span></div>            
+        </td>
+    </tr>
+    </table>
+    <div class="rh-shadow"></div>
 </div>
 </div>
-<%= render 'shared/footer' %>
+
+<div id="booking-disclaimer" class="b-disclaimer">
+    <h5>Вы оформляете авиабилеты в&nbsp;одном из&nbsp;самых современных и&nbsp;технологичных сервисов в&nbsp;мире</h5>
+    <p>Сотни пассажиров ежедневно летают с&nbsp;нами и&nbsp;доверяют&nbsp;нам. У нас не только низкие цены, но&nbsp;и&nbsp;отличное обслуживание. Мы&nbsp;очень любим наших клиентов и&nbsp;делаем все&nbsp;возможное для того, чтобы один раз воспользовавшись нашим сервисом, вы&nbsp;покупали авиабилеты только у&nbsp;нас. Мы гарантируем абсолютную безопасность ваших платежей и&nbsp;предоставление услуг в&nbsp;полном объеме.</p>
+    <p>Спасибо за&nbsp;покупку и&nbsp;приятного полета!</p>
+</div>
+
+<% if @destination.present? %>
+<div id="booking-subscription" class="r-subscription">
+    <h3 class="rs-title">Подпишитесь на тариф</h3>
+    <p class="rs-description">Если вам не&nbsp;важно когда лететь, мы&nbsp;сообщим вам о&nbsp;появлении выгодных тарифов на&nbsp;билеты <%= nbsp @destination.from.case_from %> <%= nbsp @destination.to.case_to %><%= ' и обратно' if @destination.rt %> по&nbsp;электронной почте.</p>
+    <form class="rs-form" action="/subscribe/" data-destination="<%= @destination.id %>" data-from-iata="<%= @destination.from.iata %>" data-to-iata="<%= @destination.to.iata %>" data-rt="<%= @destination.rt %>">
+        <div><label class="rsf-label" for="rsf-email">Ваш адрес</label><input name="email" class="rsf-field" id="rsf-email" maxlength="50">&nbsp;<input class="rsf-submit" type="submit" value="Хочу"></div>
+        <p class="rsf-error"></p>
+    </form>
+</div>
+<% end %>
+
+<div id="booking" class="b-processing">
+    <div class="b-content offer"></div>
+    <div class="b-loading">
+        <h3 class="bl-title"><span class="bl-progress">Проверяем доступность мест</span></h3>
+        <p class="bl-tip">Это займет от пяти до двадцати секунд</p>
+    </div>
+</div>
+
+<div class="ob-button" id="obb-template">
+    <div class="obb-title">Купить</div>
+    <div class="obb-side obb-left"><div class="obb-side obb-right"></div></div>
+</div>
+
 <div id="hint">
-    <div class="close"></div>
-    <div class="content"></div>
+    <div class="h-close"></div>
+    <div class="h-content"></div>
 </div>
+
+<%= render 'shared/footer' %>
+
+<script src="//translate.google.com/translate_a/element.js?cb=googleSectionalElementInit&ug=section&hl=ru"></script>
 <script type="text/javascript">
-hint.init();
 $(function() {
+    trackPage();
+    search.dates = {csnow: new Date('<%= Time.now.to_formatted_s(:rfc822) %>')};
+    results.data = $.parseJSON('<%= raw @search.details.to_json %>');
+    results.updateTitles();
+    results.header.init();
+    results.header.summary.addClass('rh-ready').html('<span class="rhs-text">' + results.data.titles.header + '</span>');
+    results.header.adjust();
+    results.header.summary.show();
+    results.header.select.show();
     booking.init();
+    booking.restore();    
+    hint.init();
 });
+</script>
+<script type="text/javascript">
+(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=429677207045748";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+(function(d,s,id) {
+    var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}
+}(document,"script","twitter-wjs"));
+(function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+})();
+$('#share-icons').show();
 </script>
 </body>
 </html>
-

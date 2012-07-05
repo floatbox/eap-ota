@@ -1,93 +1,83 @@
 <%= fields_for "person_attributes", person_form, :index => person_form_counter do |person| %>
-<div class="section booking-person">
-<table>
-<colgroup>
-    <col width="224">
-    <col width="224">
-    <col width="217">
-</colgroup>
+<% id_prefix = "bfp#{ person_form_counter + 1 }" %>
+<tbody class="bfp-row">
 <tr>
-    <td>
-        <h6 class="blabel"><label for="person_attributes_<%= person_form_counter %>_first_name">Имя</label></h6>
-        <%= person.text_field :first_name, :class => "bfield" %>
+    <td class="bfp-control">
+        <%= person.text_field :first_name, :id => "#{ id_prefix }-first-name", :class => 'bf-field bfp-fname' %>
     </td>
-    <td>
-        <h6 class="blabel"><label for="person_attributes_<%= person_form_counter %>_last_name">Фамилия</label></h6>
-        <%= person.text_field :last_name, :class => "bfield" %>
+    <td class="bfp-control">
+        <%= person.text_field :last_name, :id => "#{ id_prefix }-last-name", :class => 'bf-field bfp-lname' %>
     </td>
-    <td rowspan="2">
-        <h6 class="blabel"><label>Пол</label></h6>
-        <div class="bp-sex" id="bp-<%= person_form_counter %>-sex">
-            <label class="bp-sex-m" title="Мужской" for="bp-<%= person_form_counter %>-sex-m">М<%= person.radio_button :sex, 'm', :class => "bp-sex-radio", :id => "bp-#{person_form_counter}-sex-m" %></label>
-            <label class="bp-sex-f" title="Женский" for="bp-<%= person_form_counter %>-sex-f">Ж<%= person.radio_button :sex, 'f', :class => "bp-sex-radio", :id => "bp-#{person_form_counter}-sex-f" %></label>
+    <td class="bfp-control">
+        <div class="bfp-sex" id="<%= id_prefix %>-sex">
+            <label class="bfp-sex-m" title="Мужской" for="<%= id_prefix %>-sex-m">М<%= person.radio_button :sex, 'm', :class => 'bfp-sex-radio', :id => "#{ id_prefix }-sex-m" %></label>
+            <label class="bfp-sex-f" title="Женский" for="<%= id_prefix %>-sex-f">Ж<%= person.radio_button :sex, 'f', :class => 'bfp-sex-radio', :id => "#{ id_prefix }-sex-f" %></label>
+        </div>    
+    </td>
+    <td class="bfp-control">
+        <div class="bfp-date">
+            <div class="bfpd-item"><label class="bf-placeholder" for="<%= id_prefix %>-bday">ДД</label><input type="text" class="bf-field bfpd-day" id="<%= id_prefix %>-bday" name="person_attributes[<%= person_form_counter %>][birthday(3i)]" maxlength="2" title="День рождения"></div>
+            <div class="bfpd-item"><label class="bf-placeholder" for="<%= id_prefix %>-bmonth">ММ</label><input type="text" class="bf-field bfpd-month" id="<%= id_prefix %>-bmonth" name="person_attributes[<%= person_form_counter %>][birthday(2i)]" maxlength="2" title="Месяц рождения"></div>
+            <div class="bfpd-item"><label class="bf-placeholder" for="<%= id_prefix %>-byear">ГГГГ</label><input type="text" class="bf-field bfpd-year" id="<%= id_prefix %>-byear" name="person_attributes[<%= person_form_counter %>][birthday(1i)]" maxlength="4" title="Год рождения" data-current="<%= Date.current.strftime('%Y') %>"></div>
+        </div>
+    </td>
+    <td class="bfp-control">
+        <div class="bf-select bfp-nationality">
+            <div class="bf-select-arrow"></div>
+            <input class="bf-field" value="" disabled="disabled">
+            <%= person.select :nationality_id, grouped_options_for_select(Country.options_for_nationality_select, person_form.nationality_id), {}, :id => "#{ id_prefix }-nationality", :class => 'bf-select-overlay' %>
+        </div>
+    </td>
+    <td class="bfp-control">
+        <%= person.text_field :passport, :id => "#{ id_prefix }-passport", :class => 'bf-field bfp-passport', :maxlength => '20' %>
+    </td>
+    <td class="bfp-control">
+        <div class="bfp-date">
+            <div class="bfpd-item"><label class="bf-placeholder" for="<%= id_prefix %>-exp-day">ДД</label><input type="text" class="bf-field bfpd-day" id="<%= id_prefix %>-exp-day" name="person_attributes[<%= person_form_counter %>][document_expiration_date(3i)]" maxlength="2" title="День окончания срока действия документа"></div>
+            <div class="bfpd-item"><label class="bf-placeholder" for="<%= id_prefix %>-exp-month">ММ</label><input type="text" class="bf-field bfpd-month" id="<%= id_prefix %>-exp-month" name="person_attributes[<%= person_form_counter %>][document_expiration_date(2i)]" maxlength="2" title="Месяц окончания срока действия документа"></div>
+            <div class="bfpd-item"><label class="bf-placeholder" for="<%= id_prefix %>-exp-year">ГГГГ</label><input type="text" class="bf-field bfpd-year" id="<%= id_prefix %>-exp-year" name="person_attributes[<%= person_form_counter %>][document_expiration_date(1i)]" maxlength="4" title="Год окончания срока действия документа" data-current="<%= Date.current.strftime('%Y') %>"></div>
         </div>
     </td>
 </tr>
 <tr>
-    <td colspan="2">
-        <div class="bwarning language-warning">Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры. Имя&nbsp;и&nbsp;фамилию нужно вводить латинскими буквами</div>
-        <div class="bwarning nameorder-warning">Проверьте пожалуйста, что вы не перепутали поля «Имя» и «Фамилия» <span class="link nameorder-replace">Поменять&nbsp;местами</span> или <span class="link">оставить</span> как есть</div>
-        <div class="bdescription">
-            Латинскими буквами, как в загранпаспорте или банковской карте&nbsp;(<span class="link hint">подробнее</span>)
-            <p class="htext">Имя и&nbsp;фамилия в авиабилете пишутся латинскими буквами. Написание должно быть точно как в&nbsp;документе, по&nbsp;которому будет выполняться полёт. Дефисы и&nbsp;другие знаки нужно пропустить&nbsp;&mdash;&nbsp;разрешены только буквы.</p>
+    <td colspan="6" class="bfp-option">
+    <% carrier = @order_form.recommendation.validating_carrier %>
+    <% programs = carrier.available_bonus_programms %>
+    <% unless programs.empty? %>
+        <div class="bf-checkbox">
+            <%= person.check_box :bonus_present, {:id => "#{ id_prefix }-bonus"} %>
+            <label for="<%= id_prefix %>-bonus">Есть бонусная карта <%= carrier.alliance ? "альянса #{ carrier.alliance.name }" : "авиакомпании #{ carrier.name }" %></label>
         </div>
+    <% end %>
+    </td>
+    <td class="bfp-option">
+        <div class="bf-checkbox">
+            <%= person.check_box :document_noexpiration, {:id => "#{ id_prefix }-permanent"} %>
+            <label for="<%= id_prefix %>-permanent">Без срока</label>
+        </div>    
     </td>
 </tr>
-<tr>
-    <td>
-        <h6 class="blabel"><label for="bp-<%= person_form_counter %>-nationality">Гражданство</label></h6>
-        <%= person.select :nationality_id, grouped_options_for_select(Country.options_for_nationality_select, person_form.nationality_id), {}, :id => "bp-#{person_form_counter+1}-nationality", :class => "bfield nationality" %>
-    </td>
-    <td class="bp-birthday">
-        <h6 class="blabel"><label for="bp-<%= person_form_counter %>-bday" title="Дата рождения в формате дд/мм/гггг">Дата рождения</label></h6>
-        <div class="wrap">
-            <div class="date-item"><label class="placeholder" for="bp-<%= person_form_counter %>-bday">ДД</label><input type="text" class="bfield date-day" id="bp-<%= person_form_counter %>-bday" name="person_attributes[<%= person_form_counter %>][birthday(3i)]" maxlength="2" title="День рождения"></div>
-            <div class="date-item"><label class="placeholder" for="bp-<%= person_form_counter %>-bmonth">ММ</label><input type="text" class="bfield date-month" id="bp-<%= person_form_counter %>-bmonth" name="person_attributes[<%= person_form_counter %>][birthday(2i)]" maxlength="2" title="Месяц рождения"></div>
-            <div class="date-item"><label class="placeholder" for="bp-<%= person_form_counter %>-byear">ГГГГ</label><input type="text" class="bfield date-year" id="bp-<%= person_form_counter %>-byear" name="person_attributes[<%= person_form_counter %>][birthday(1i)]" maxlength="4" title="Год рождения" data-current="<%= Date.current.strftime('%Y') %>"></div>
+<% unless programs.empty? %>
+<tr class="bfp-bonus-fields latent">
+    <td colspan="7">
+    <div class="bfpb-control">
+        <div class="bf-select bfp-bonus-type">
+            <div class="bf-select-arrow"></div>        
+            <input class="bf-field" value="<%= carrier.iata %>" disabled="disabled">        
+            <%= person.select :bonuscard_type, programs.map {|a| [ a.bonus_program_name, a.iata ] }, {}, :id => "#{ id_prefix}-bonus-type", :class => 'bf-select-overlay' %>
         </div>
-    </td>
-    <td>
-        <div class="bp-bonus">
-            <h6 class="blabel"><label for="bonus-type-<%= person_form_counter %>">Бонусная программа</label></h6>
-            <%= person.select :bonuscard_type, @order_form.recommendation.validating_carrier.available_bonus_programms.map {|a| [ a.bonus_program_name, a.iata ] }, {}, :id => "bonus-type-#{person_form_counter}", :class => 'bfield' %>
-        </div>
+    </div>
+    <div class="bfpb-control">
+        <label for="<%= id_prefix %>-bonus-num" class="bf-placeholder bfpb-placeholder">Номер карты</label>
+        <%= person.text_field :bonuscard_number, :id => "#{ id_prefix}-bonus-num", :class => 'bf-field bfp-bonus-number', :maxlength => '30' %>
+    </div>
     </td>
 </tr>
-<tr>
-    <td>
-        <h6 class="blabel"><label for="bp-<%= person_form_counter %>-passport" title="Номер документа, который будет предъявлен при посадке.">Номер документа</label></h6>
-        <%= person.text_field :passport, :id => "booking-person-#{person_form_counter}-passport", :class => "bfield", :maxlength => '100' %>
-        <div class="bdescription">
-            <span class="link hint">Какие нужны документы?</span>
-            <p class="htext">Для полетов внутри России подходит российский паспорт (для детей&nbsp;&mdash; свидетельство о&nbsp;рождении). Для полетов за&nbsp;рубежом нужен загранпаспорт. Обратите внимание, что помимо загранпаспорта, для въезда во&nbsp;многие страны требуется соответствующая виза (<a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%B7%D0%BE%D0%B2%D1%8B%D0%B5_%D1%82%D1%80%D0%B5%D0%B1%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_%D0%B4%D0%BB%D1%8F_%D0%B3%D1%80%D0%B0%D0%B6%D0%B4%D0%B0%D0%BD_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8">подробнее в&nbsp;Википедии</a>)</p>
-            <p class="latent">Введите номер паспорта или другого документа, по которому будет осуществляться перелёт. Обратите внимание, что помимо документа, для въезда во&nbsp;многие страны требуется соответствующая виза (<a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%B7%D0%BE%D0%B2%D1%8B%D0%B5_%D1%82%D1%80%D0%B5%D0%B1%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_%D0%B4%D0%BB%D1%8F_%D0%B3%D1%80%D0%B0%D0%B6%D0%B4%D0%B0%D0%BD_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8">подробнее в&nbsp;Википедии</a>)</p>
-        </div>
-    </td>
-    <td class="bp-docexp">
-        <h6 class="blabel"><label for="bp-<%= person_form_counter %>-eday" title="Срок действия документа в формате дд/мм/гггг. Если у документа нет срока действия, то поставьте отметку под полем.">Срок действия документа</label></h6>
-        <div class="wrap">
-            <div class="date-item"><label class="placeholder" for="bp-<%= person_form_counter %>-eday">ДД</label><input type="text" class="bfield date-day" id="bp-<%= person_form_counter %>-eday" name="person_attributes[<%= person_form_counter %>][document_expiration_date(3i)]" maxlength="2" title="День окончания срока действия документа"></div>
-            <div class="date-item"><label class="placeholder" for="bp-<%= person_form_counter %>-emonth">ММ</label><input type="text" class="bfield date-month" id="bp-<%= person_form_counter %>-emonth" name="person_attributes[<%= person_form_counter %>][document_expiration_date(2i)]" maxlength="2" title="Месяц окончания срока действия документа"></div>
-            <div class="date-item"><label class="placeholder" for="bp-<%= person_form_counter %>-eyear">ГГГГ</label><input type="text" class="bfield date-year" id="bp-<%= person_form_counter %>-eyear" name="person_attributes[<%= person_form_counter %>][document_expiration_date(1i)]" maxlength="4" title="Год окончания срока действия документа" data-current="<%= Date.current.strftime('%Y') %>"></div>
-        </div>
-        <div class="bdescription checkbox">
-            <%= person.check_box :document_noexpiration, {:id => "bp-#{person_form_counter}-noexpiration"} %>
-            <label for="bp-<%= person_form_counter %>-noexpiration">нет срока действия</label>&nbsp;(<span class="link hint">подробнее</span>)
-            <p class="htext">Если вы&nbsp;путешествуете с&nbsp;российским паспортом или свидетельством о&nbsp;рождении, то&nbsp;срок действия указывать не&nbsp;нужно, так как эти документы его не&nbsp;имеют. В&nbsp;загранпаспорте&nbsp;же проставлена дата окончания его действия&nbsp;&mdash; ее&nbsp;необходимо указать.</p>
-        </div>
-    </td>
-    <td>
-        <div class="bp-bonus">
-            <h6 class="blabel">Номер карты</h6>
-            <%= person.text_field :bonuscard_number, :id => "bonus-num-#{person_form_counter}", :class => 'bfield', :maxlength => '50' %>
-        </div>
-        <div class="bdescription checkbox<%= raw ' latent' if @order_form.recommendation.validating_carrier.available_bonus_programms.empty? || @order_form.recommendation.source == 'sirena'%>">
-            <%= person.check_box :bonus_present, {:id => "bonus-#{person_form_counter}"} %>
-            <label for="bonus-<%= person_form_counter %>" title="Карта участника программы премирования пассажиров (мильной программы или программы для&nbsp;часто летающих пассажиров, англ. frequent flyer program)">есть бонусная карта</label>&nbsp;<a class="external" href="http://ru.wikipedia.org/wiki/Бонусные_программы_авиакомпаний" target="_blank" title="Статья о бонусных программах авиакомпаний в Википедии (откроется в новом окне)">&nbsp;</a>
-        </div>
-    </td>
-</tr>
-</table>
-</div>
 <% end %>
-
+<% if person_form_counter < people_count - 1 %>
+<tr>
+    <td colspan="7"><div class="bfp-spacer"></div></td>
+</tr>
+<% end %>
+</tbody>
+<% end %>

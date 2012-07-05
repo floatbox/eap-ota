@@ -1,24 +1,28 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE HTML>
+<html lang="ru-RU">
 <head>
-    <%= render 'shared/head_common', {:title => 'контактная информация'} %>
-    <%= stylesheet_link_tag "static" %>
-    <%= javascript_include_tag "static" %>
+	<meta charset="utf-8">
+    <title>Eviterra — контактная информация</title>
+    <meta name="description" content="Eviterra.com — простой, удобный и красивый способ найти и купить авиабилет. Поиск, выбор рейса и бронирование онлайн. Цены на авиабилеты. +7 (495) 660-35-20">
+    <meta name="keywords" content="авиабилет, авиакасса, авиабилеты купить, бронирование, выбрать рейс, авиарейс, перелет, дешевые авиабилеты, цены на билеты, онлайн бронирование, эвитерра, eviterra, спецпредложения, авиакомпании, расписание рейсов, маршрут, агентство, турагентство, путешествия">
+    <%= render 'shared/head' %>
+    <%= stylesheet_link_tag 'static/all', :debug => true %>
+    <%= javascript_include_tag "local/ru", 'static', :debug => true %>
 </head>
 <body>
-<%= render 'shared/header' %>
-<div id="wrapper">
-<div id="content">
-    <div id="back2search">
-        <div class="bscontent"><a href="/">Вернуться к поиску</a></div>
-    </div>
-    <div class="article">
+<div class="page-wrapper">
 
+<%= render 'shared/header' %>
+<div id="back2search">
+    <div class="bs-content"><a class="bs-link" href="/">Поиск авиабилетов</a></div>
+</div>
+
+<div class="article">
 <h2>Контактная информация</h2>
 
 <div class="wrap">
 <div style="float: right;">
-    <div id="map-canvas" style="width: 450px; height: 350px; border: 1px solid #C0C0C0;"></div>
+    <div id="map-canvas" style="width: 450px; height: 350px; border: 1px solid #AAA;"></div>
 </div>
 <div style="margin-right: 480px;">
     <div class="asection">
@@ -27,7 +31,7 @@
     </div>
     <div class="asection">
         <h4>Электронная почта</h4>
-        <p><a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a><br>по всем вопросам бронирования, оплаты, обмена и&nbsp;возврата билетов<br><br>
+        <p><a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a><br>по всем вопросам бронирования, оплаты, обмена и&nbsp;возврата билетов (в&nbsp;случае обмена или&nbsp;возврата, указывайте, пожалуйста, номер бронирования в&nbsp;письме)<br><br>
         <a href="mailto:support@eviterra.com">support@eviterra.com</a><br>по вопросам работы сайта<br><br>
         <a href="mailto:hello@eviterra.com">hello@eviterra.com</a><br>по остальным вопросам</p>
     </div>
@@ -73,8 +77,8 @@ $(function() {
 });
 </script>
 
-    </div>
 </div>
+<div class="page-buffer"></div>
 </div>
 <%= render 'shared/footer' %>
 </body>

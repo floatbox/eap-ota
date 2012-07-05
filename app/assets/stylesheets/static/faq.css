@@ -1,0 +1,43 @@
+/* Faq */
+.faq {
+    margin-bottom: 30px;
+}
+.faq dt {
+    margin: 15px 0 5px;
+    font-weight: bold;
+}
+.faq dd {
+    margin: 0 0 5px 0;
+}
+.faq .asection {
+    margin: 0 285px 20px 0;
+    padding-top: 15px;
+    border-top: 1px solid #DDD;
+}
+.faq #service {
+    padding-top: 0;
+    border-top: none;
+}
+.faq-contents {
+    float: right;
+    width: 255px;
+    font-size: 14px;
+    line-height: 18px;
+    color: #333;
+}
+.fc-fixed {
+    position: fixed;
+    top: 134px;
+    width: 255px;
+}
+.fc-fixed ul {
+    margin: 0 0 15px;
+    border-bottom: 1px solid #AAA;
+    padding-left: 1em;
+    padding-bottom: 15px;
+    list-style: disc;
+    color: #ED1192;
+}
+.fc-fixed li {
+    margin: 0 0 5px;
+}

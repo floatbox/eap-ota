@@ -212,12 +212,25 @@ describe Ticket do
 
   end
 
+  describe 'price_with_payment_commission' do
+    context('with voided ticket') do
+      let(:order) {create(:order)}
+      subject do
+        ticket = create(:ticket, :order => order)
+        voided_ticket = create(:ticket, :order => order, :status => 'voided')
+        ticket
+      end
+
+      its(:price_with_payment_commission) {should == order.price_with_payment_commission}
+    end
+  end
+
   describe "#commission_ticketing_method" do
 
     describe "factories" do
-      specify { create(:direct_ticket).commission_ticketing_method.should == 'direct' }
-      specify { create(:aviacenter_ticket).commission_ticketing_method.should == 'aviacenter' }
-      let(:direct_ticket) {create(:direct_ticket)}
+      specify { create(:ticket, :direct).commission_ticketing_method.should == 'direct' }
+      specify { create(:ticket, :aviacenter).commission_ticketing_method.should == 'aviacenter' }
+      let(:direct_ticket) {create(:ticket, :direct)}
       specify { create(:refund, parent: direct_ticket, order: direct_ticket.order).commission_ticketing_method.should == 'direct' }
     end
 

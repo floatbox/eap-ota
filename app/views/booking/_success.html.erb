@@ -1,23 +1,8 @@
-<div class="result" data-type="success">
-<% if @order_form.payment_type == 'card' %>
-    <p class="success"><strong>Всё отлично!</strong> Ваш билет оплачен, забронирован и выслан на&nbsp;ваш электронный адрес. Номер брони&nbsp;— <span class="pnr"><%= pnr_number %></span>. Если хотите, можете <a target="_blank" href="<%= pnr_path %>">распечатать</a> ваш билет.</p>
-<% else %>
-    <p class="success"><strong>Всё отлично!</strong> Ваш билет забронирован, подтверждение выслано на&nbsp;ваш электронный адрес. Номер брони&nbsp;— <span class="pnr"><%= pnr_number %></span>. Если хотите, можете <a target="_blank" href="<%= pnr_path %>">распечатать</a> подтверждение.</p>
-    <p class="success" style="margin-top: 10px;">Обратите внимание, что в&nbsp;случае несвоевременной оплаты бронирование будет аннулировано.</p>
-<% end %>
-    <div class="tip">
-        <span class="link stop-booking">Вернуться к выбору вариантов</span>
-        <span class="link hint">Что делать, если на почту ничего не пришло?</span>
-        <p class="htext latent">Если вы&nbsp;не&nbsp;получили письмо с&nbsp;<% @order_form.payment_type == 'card' ? 'электронным билетом' : 'подтверждением бронирования' %> в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, то&nbsp;напишите нам (<a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a>) или позвоните <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p>
-    </div>
+<div class="bf-result bfr-success" data-type="success">
+    <% paid = @order_form.payment_type == 'card' %>
+    <% tweet = order_tweet(@order_form) %>
+    <h5 class="bfr-title">Всё отлично! Ваш билет <%= paid ? 'оплачен, забронирован и выслан' : 'забронирован, подтверждение выслано' %> на&nbsp;ваш электронный адрес. Номер&nbsp;брони&nbsp;— <strong class="bfr-pnr"><%= pnr_number %></strong>.</h5>
+    <p class="bfr-content"><% unless paid %>Обратите внимание, что в&nbsp;случае несвоевременной оплаты бронирование будет аннулировано. <% end %>Если хотите, можете <a target="_blank" href="<%= pnr_path %>">распечатать</a> <%= paid ? 'ваш билет' : 'подтверждение' %><% unless tweet.empty? %>, <a href="http://www.google.com/calendar/event?action=TEMPLATE&<%= order_event(@order_form) %>" target="_blank">добавить</a> поездку в Гугл-календарь или <a href="http://twitter.com/?status=<%= tweet %>" target="_blank">поделиться</a> с друзьями в Твиттере<% end %>.</p>
+    <p class="bfr-content"><span class="link bf-hint" data-hint="bfh-mail">Что делать, если на почту ничего не пришло?</span></p>
+    <p class="latent" id="bfh-mail">Если вы&nbsp;не&nbsp;получили письмо с&nbsp;<% @order_form.payment_type == 'card' ? 'электронным билетом' : 'подтверждением бронирования' %> в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, то&nbsp;напишите нам (<a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a>) или позвоните <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p>
 </div>
-<% summary = order_summary(@order_form) %>
-<% unless summary.empty? %>
-<div class="booking-social">
-<h3>Что ещё можно сделать</h3>
-<ul>
-    <li><a href="http://www.google.com/calendar/event?action=TEMPLATE&<%= order_event_params(@order_form) %>" target="_blank">Добавить поездку в Гугл-календарь</a></li>
-    <li><a style="background-position: 0 -60px;" href="http://twitter.com/?status=<%= summary %>" target="_blank">Поделиться с друзьями в Твиттере</a></li>
-</ul>
-</div>
-<% end %>

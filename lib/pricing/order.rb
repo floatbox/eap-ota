@@ -43,7 +43,7 @@ module Pricing
     end
 
     def expected_income
-      expected_earnings - income_suppliers
+      (expected_earnings - income_suppliers).round(2)
     end
 
     # сумма данных по билетам. по идее, более точная информация, нежели сохраненная в заказе
@@ -67,7 +67,7 @@ module Pricing
 
     # подгнанный "сбор" для отображения клиенту
     def fee
-      if sold_tickets.present? && sold_tickets.all?{|ticket| ticket.price_tax >= 0 } #мы ебанулись! иначе глючит с трансаэровскими отрицательными таксами
+      if sold_tickets.present? && sold_tickets.all?{|ticket| ticket.price_tax >= 0 && ticket.office_id != 'FLL1S212V' } #мы ебанулись! иначе глючит с трансаэровскими отрицательными таксами
         sold_tickets.to_a.sum(&:fee)
       else
         recalculated_price_with_payment_commission - price_tax - price_fare + price_declared_discount
@@ -111,7 +111,7 @@ module Pricing
     # FIXME отдать это на совесть подклассов Payment
     def expected_earnings
       if payment_type == 'card'
-        price_total
+        price_with_payment_commission - price_payment_commission #price_total
       else # cash, delivery, invoice..
         price_with_payment_commission
       end

@@ -52,35 +52,33 @@ class PricerController < ApplicationController
   end
 
   def validate
+    result = {}
     if @query_key = params[:query_key]
       @search = PricerForm.load_from_cache(@query_key)
       #set_search_context_for_airbrake
-      fragment_exist =
-        fragment_exist?([:pricer, @query_key]) &&
-        fragment_exist?([:calendar, @query_key])
+      fragment_exist = fragment_exist?([:pricer, @query_key]) && fragment_exist?([:calendar, @query_key])
+      result[:fragment_exist] = fragment_exist
       StatCounters.inc %W[validate.cached] if fragment_exist
-      render :json => {
-        :search => @search,
-        :valid => @search.present? && @search.valid?,
-        :human => @search && @search.human,
-        :fragment_exist => fragment_exist
-      }
     else
       @search = PricerForm.new(params[:search])
       #set_search_context_for_airbrake
       if @search.valid?
-        StatCounters.inc %W[validate.success]
+        StatCounters.inc %W[validate.success]      
         @search.save_to_cache
+      else
+        result[:errors] = @search.segments.map{|fs| fs.errors.keys}
       end
-      render :json => {
-        :valid => @search.valid?,
-        :errors => @search.segments.map{|fs| fs.errors.keys},
-        :human => @search.human,
-        :search => @search,
-        :complex_to_parse_results => @search.complex_to_parse_results,
-        :query_key => @search.query_key
-      }
     end
+    if @search.present?
+      result[:map_segments] = @search.map_segments
+    end
+    if @search.present? && @search.valid?
+      result.merge!(@search.details)
+      result[:query_key] = @search.query_key
+      result[:short] = @search.human_short
+      result[:valid] = true
+    end
+    render :json => result
   ensure
     StatCounters.inc %W[validate.total]
   end
