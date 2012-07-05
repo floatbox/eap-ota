@@ -304,3 +304,30 @@
     background: rgba(172, 179, 157, 0.75);    
 }
 */
+
+/* Label */
+.sm-label {
+    position: absolute;
+    padding: 2px 6px;
+    background: #FFF;
+    box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);  
+}
+.sml-arrow,
+.smla-shadow {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 0;
+    height: 0;
+    border-width: 16px 0 0 12px; 
+    border-style: solid;
+    border-color: transparent;
+}
+.sml-arrow {
+    margin: 0 0 0 -6px;
+    border-top-color: #FFF;
+}
+.smla-shadow {
+    margin: 1px 0 0 -5px;
+    border-top-color: rgba(0, 0, 0, 0.3);
+} 
