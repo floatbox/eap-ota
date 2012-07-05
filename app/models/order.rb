@@ -97,6 +97,7 @@ class Order < ActiveRecord::Base
   has_many :tickets
   has_many :order_comments
   has_many :notifications
+  has_one :promo_code
   validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
 
   before_validation :capitalize_pnr

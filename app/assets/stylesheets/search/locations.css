@@ -361,6 +361,9 @@
     margin: 1px 0 0 -5px;
     border-top-color: rgba(0, 0, 0, 0.3);
 }
+.sml-city {
+    white-space: nowrap;
+}
 .sml-price,
 .sml-dates {
     font-size: 11px;

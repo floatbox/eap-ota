@@ -155,7 +155,7 @@ showSegments: function(segments) {
             this.items.push(route);
         }
     }
-    if (segments[0] && segments[0].dpt) {
+    if (segments[0] && segments[0].dpt && search.mode.selected !== 'mw' && $('#search-debug').length) {
         this.prices.html(local.search.prices.absorb(segments[0].dpt.from.nowrap()));
         this.prices.attr('data-from', segments[0].dpt.iata);
         this.prices.show();
@@ -181,11 +181,13 @@ showSegments: function(segments) {
         this.bounds = this.defpoint;
     }
     this.fitBounds();
+    this.pricesMode = false;    
 },
 loadPrices: function() {
     var that = this;
     $.get('/price_map', {
-        from: this.prices.attr('data-from')
+        from: this.prices.attr('data-from'),
+        rt: search.mode.selected === 'rt' ? 1 : 0
     }, function(data) {
         that.showPrices(data);
     });
@@ -223,7 +225,8 @@ showPrices: function(items) {
     if (items.length > 1) {
         this.bounds = bounds;    
         this.fitBounds();
-    }    
+    }
+    this.pricesMode = true;
 },
 applyPrice: function(el) {
     search.locations.segments[0].arv.set(el.data('city'));

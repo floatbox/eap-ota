@@ -10,6 +10,7 @@ Eviterra::Application.routes.draw do
   constraints subdomain: 'api' do
     root to: 'api_home#index'
     match 'avia/v1/variants(.:format)' => 'pricer#api', :format => :xml
+    match 'avia/v1/searches' => 'booking#api_redirect'
     match 'partner/v1/orders(.:format)' => 'api_order_stats#index', :format => :json
     match '*anything' => redirect('/')
   end
