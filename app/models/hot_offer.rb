@@ -56,9 +56,28 @@ class HotOffer
   # не воткнуть ли сюда #actual в цепочку? а то, потенциально, может показать старые предложения
   def self.featured code=nil
     # FIXME SQL group_by не был бы лучше?
-    offers = HotOffer.where(:for_stats_only => false ).and(:price_variation.gt => 0).order_by(:created_at => :desc).limit(30)
+    offers = HotOffer.where(:for_stats_only => false ).and(:price_variation.lt => 0).order_by(:created_at => :desc).limit(30)
     offers = offers.where(:code.ne => code) if code
     offers.to_a.uniq_by {|h| [h.from_iata, h.to_iata, h.rt]}
+  end
+
+  def self.price_map from_iata=nil
+    offers = HotOffer.where(
+      :for_stats_only => false,
+      :date1.lte => Date.today.months_since(1),
+      :created_at.gte => Date.today - 20
+      ).and(:price_variation.lt => 0).order_by(:created_at => :desc).limit(30)
+    offers = offers.where(:from_iata => from_iata) if from_iata
+    offers = offers.to_a.uniq_by {|h| [h.from_iata, h.to_iata, h.rt]}
+
+    iatas = offers.collect{|h| [h.to_iata, h.from_iata]}.flatten.uniq
+    cities = City.where(:iata => iatas)
+    city_hash = Hash[ *cities.to_a.collect { |v| [ v.iata, v ] }.flatten ]
+    offers.each { |h|
+      h[:from] = city_hash[h.from_iata]
+      h[:to] = city_hash[h.to_iata]
+      h
+    }
   end
 
   def clickable_url

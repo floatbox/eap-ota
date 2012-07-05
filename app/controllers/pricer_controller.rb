@@ -40,6 +40,10 @@ class PricerController < ApplicationController
     render :json => HotOffer.featured(params[:query_key])
   end
 
+  def price_map
+    render :json => HotOffer.price_map(params[:from])
+  end
+
   def calendar
     unless params[:restore_results]
       if @search.valid? && @search.segments.size < 3
