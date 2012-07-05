@@ -275,6 +275,8 @@
 .smap-content {
     height: 49px;
 }
+
+/* Expand control */
 .smap-control {
     position: absolute;
     left: 50%;
@@ -305,12 +307,40 @@
 }
 */
 
+/* Prices control */
+.smap-prices {
+    display: none;
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    z-index: 5;
+    width: 170px;
+    padding: 3px 9px;
+    margin-left: 290px;
+    background: #FFF;
+    border: 1px solid #7f7f7f;
+    border-right-color: #C1C1C1;    
+    border-bottom-color: #C1C1C1;
+    font-size: 13px;
+    line-height: 15px;
+    cursor: pointer;
+}
+.smp-hidden {
+    visibility: hidden;
+}
+
 /* Label */
-.sm-label {
+.smap-label {
     position: absolute;
     padding: 2px 6px;
     background: #FFF;
     box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);  
+}
+.sml-active {
+    cursor: pointer;
+}
+.sml-active:hover {
+    z-index: 1;
 }
 .sml-arrow,
 .smla-shadow {
@@ -330,4 +360,13 @@
 .smla-shadow {
     margin: 1px 0 0 -5px;
     border-top-color: rgba(0, 0, 0, 0.3);
-} 
+}
+.sml-city {
+    white-space: nowrap;
+}
+.sml-price,
+.sml-dates {
+    font-size: 11px;
+    color: #777;
+    white-space: nowrap;
+}

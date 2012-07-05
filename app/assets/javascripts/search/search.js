@@ -163,7 +163,7 @@ loadSummary: function(values, process) {
             }
             that.locations.toggleLeave(data.map_segments[0].leave);
             if (that.map.api) {
-                that.map.show(data.map_segments);
+                that.map.showSegments(data.map_segments);
             } else {
                 that.map.deferred = data.map_segments;
             }
@@ -282,8 +282,12 @@ select: function(mode, focus) {
         this.values.find('.selected').removeClass('selected');
         this.control.html(sv.addClass('selected').html());
         this.selected = mode;
-        search.locations.toggleSegments(mode === 'mw' ? search.locations.countUsed() : 1);
-        search.process();
+        if (mode !== 'mw' && search.map.pricesMode) {
+            search.map.loadPrices();
+        } else {
+            search.locations.toggleSegments(mode === 'mw' ? search.locations.countUsed() : 1);
+            search.process();
+        }
     }
     if (this.values.is(':visible')) {
         var that = this;

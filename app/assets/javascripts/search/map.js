@@ -17,6 +17,10 @@ init: function() {
             that.slideDown();
         }
     });
+    this.prices = this.el.find('.smap-prices');
+    this.prices.click(function() {
+        that.loadPrices();
+    });
     this.colors = ['#81aa00', '#db7100', '#0aa0c6'];
     this.items = [];
 },
@@ -49,7 +53,8 @@ resize: function(instant) {
 toggleZoom: function(h) {
     var zoomVisible = h > 80;
     if (this.api && zoomVisible !== this.zoomVisible) {
-        this.api.setOptions({zoomControl: zoomVisible}); 
+        this.api.setOptions({zoomControl: zoomVisible});
+        this.prices.toggleClass('smp-hidden', !zoomVisible);
         this.zoomVisible = zoomVisible;
     }
 },
@@ -63,7 +68,6 @@ load: function() {
             backgroundColor: '#ccd8b1',
             mapTypeId: google.maps.MapTypeId.TERRAIN,
             disableDefaultUI: true,
-            zoomControl: this.content.height() > 80,
             zoomControlOptions: {
                 style: google.maps.ZoomControlStyle.SMALL
             },
@@ -73,10 +77,11 @@ load: function() {
         });
         this.bounds = this.defpoint;
         if (this.deferred) {
-            this.show(this.deferred);
+            this.showSegments(this.deferred);
             delete this.deferred;
         }
         this.load = $.noop;
+        this.toggleZoom(this.content.height());
     }
 },
 slideDown: function() {
@@ -117,7 +122,7 @@ slideUp: function() {
     });
     search.dates.el.find('.sdt-tab').fadeIn(150);
 },
-show: function(segments) {
+showSegments: function(segments) {
     this.clean();
     var points = [];
     var pindex = {};
@@ -150,14 +155,16 @@ show: function(segments) {
             this.items.push(route);
         }
     }
+    if (segments[0] && segments[0].dpt && search.mode.selected !== 'mw' && $('#search-debug').length) {
+        this.prices.html(local.search.prices.absorb(segments[0].dpt.from.nowrap()));
+        this.prices.attr('data-from', segments[0].dpt.iata);
+        this.prices.show();
+    } else {
+        this.prices.hide();
+    }
     var bounds = new google.maps.LatLngBounds();
     for (var i = 0, im = points.length; i < im; i++) {
         var point = points[i];
-        /*var marker = new google.maps.Marker({
-            position: point.latlng,
-            title: point.name,
-            map: this.api
-        });*/
         var label = new mapLabel({
             position: point.latlng,
             title: point.name,
@@ -168,10 +175,62 @@ show: function(segments) {
     }
     if (points.length > 1) {
         this.bounds = bounds;
-    } else {
+    } else if (points[0]) {
         this.bounds = points[0].latlng || this.defpoint;
+    } else {
+        this.bounds = this.defpoint;
     }
     this.fitBounds();
+    this.pricesMode = false;    
+},
+loadPrices: function() {
+    var that = this;
+    $.get('/price_map', {
+        from: this.prices.attr('data-from'),
+        rt: search.mode.selected === 'rt' ? 1 : 0
+    }, function(data) {
+        that.showPrices(data);
+    });
+},
+showPrices: function(items) {
+    var that = this;
+    this.prices.hide();
+    this.clean();
+    var template = '<p class="sml-city">{0}</p><p class="sml-price">{1}&nbsp;<span class="ruble">Р</span></p><p class="sml-dates">{2}</p>';
+    var bounds = new google.maps.LatLngBounds();    
+    for (var i = 0, im = items.length; i < im; i++) {
+        var item = items[i];
+        var dates = [item.date1.substring(8, 10) + '.' + item.date1.substring(5, 7)];
+        var indexes = [search.dates.dmyIndex[item.date1.substring(8, 10) + item.date1.substring(5, 7) + item.date1.substring(2, 4)]];
+        if (item.date2) {
+            dates[1] = item.date2.substring(8, 10) + '.' + item.date2.substring(5, 7);
+            indexes[1] = search.dates.dmyIndex[item.date2.substring(8, 10) + item.date2.substring(5, 7) + item.date2.substring(2, 4)];
+        }
+        var content = template.absorb(item.to.name_ru, Math.round(item.price), dates.join('—'));
+        var latlng = new google.maps.LatLng(item.to.lat, item.to.lng);
+        var label = new mapLabel({
+            position: latlng,
+            title: content,
+            map: this.api
+        });
+        label.$el.addClass('sml-active');
+        label.$el.data('city', {name: item.to.name_ru, iata: item.to.iata, type: 'city'});
+        label.$el.data('dates', indexes);
+        label.$el.click(function() {
+            that.applyPrice($(this));
+        });
+        bounds.extend(latlng);
+        this.items.push(label);
+    }
+    if (items.length > 1) {
+        this.bounds = bounds;    
+        this.fitBounds();
+    }
+    this.pricesMode = true;
+},
+applyPrice: function(el) {
+    search.locations.segments[0].arv.set(el.data('city'));
+    search.dates.setSelected(el.data('dates'));
 },
 fitBounds: function() {
     if (this.bounds.getCenter) {
@@ -191,7 +250,7 @@ clean: function() {
 
 /* Custom marker */
 function mapLabel(opts) {
-    this.$el = $('<div class="sm-label"></div>');
+    this.$el = $('<div class="smap-label"></div>');
     this.$el.html(opts.title + '<div class="smla-shadow"></div><div class="sml-arrow"></div>');
     this.setValues(opts);
     this.setMap(opts.map);
