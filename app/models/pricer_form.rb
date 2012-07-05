@@ -446,6 +446,7 @@ class PricerForm
   def map_point obj
     obj && {
       :name => obj.name,
+      :from => obj.case_from,
       :lat => obj.lat,
       :lng => obj.lng
     }

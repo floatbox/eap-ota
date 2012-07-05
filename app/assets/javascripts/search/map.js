@@ -17,6 +17,7 @@ init: function() {
             that.slideDown();
         }
     });
+    this.prices = this.el.find('.smap-prices');
     this.colors = ['#81aa00', '#db7100', '#0aa0c6'];
     this.items = [];
 },
@@ -49,7 +50,8 @@ resize: function(instant) {
 toggleZoom: function(h) {
     var zoomVisible = h > 80;
     if (this.api && zoomVisible !== this.zoomVisible) {
-        this.api.setOptions({zoomControl: zoomVisible}); 
+        this.api.setOptions({zoomControl: zoomVisible});
+        this.prices.toggleClass('smp-hidden', !zoomVisible);
         this.zoomVisible = zoomVisible;
     }
 },
@@ -63,7 +65,6 @@ load: function() {
             backgroundColor: '#ccd8b1',
             mapTypeId: google.maps.MapTypeId.TERRAIN,
             disableDefaultUI: true,
-            zoomControl: this.content.height() > 80,
             zoomControlOptions: {
                 style: google.maps.ZoomControlStyle.SMALL
             },
@@ -73,10 +74,11 @@ load: function() {
         });
         this.bounds = this.defpoint;
         if (this.deferred) {
-            this.show(this.deferred);
+            this.showSegments(this.deferred);
             delete this.deferred;
         }
         this.load = $.noop;
+        this.toggleZoom(this.content.height());
     }
 },
 slideDown: function() {
@@ -117,7 +119,7 @@ slideUp: function() {
     });
     search.dates.el.find('.sdt-tab').fadeIn(150);
 },
-show: function(segments) {
+showSegments: function(segments) {
     this.clean();
     var points = [];
     var pindex = {};
@@ -150,14 +152,14 @@ show: function(segments) {
             this.items.push(route);
         }
     }
+    if (segments[0] && segments[0].dpt) {
+        this.prices.html(local.search.prices.absorb(segments[0].dpt.from.nowrap())).show();
+    } else {
+        this.prices.hide();
+    }
     var bounds = new google.maps.LatLngBounds();
     for (var i = 0, im = points.length; i < im; i++) {
         var point = points[i];
-        /*var marker = new google.maps.Marker({
-            position: point.latlng,
-            title: point.name,
-            map: this.api
-        });*/
         var label = new mapLabel({
             position: point.latlng,
             title: point.name,
@@ -172,6 +174,23 @@ show: function(segments) {
         this.bounds = points[0].latlng || this.defpoint;
     }
     this.fitBounds();
+},
+loadPrices: function() {
+
+},
+showPrices: function(items) {
+    this.prices.hide();
+    this.clean();
+    for (var i = 0, im = items.length; i < im; i++) {
+        var item = items[i];
+        var content = item.name;
+        var label = new mapLabel({
+            position: new google.maps.LatLng(item.lat, item.lng),
+            title: content,
+            map: this.api
+        });        
+        this.items.push(label);
+    }    
 },
 fitBounds: function() {
     if (this.bounds.getCenter) {
@@ -191,7 +210,7 @@ clean: function() {
 
 /* Custom marker */
 function mapLabel(opts) {
-    this.$el = $('<div class="sm-label"></div>');
+    this.$el = $('<div class="smap-label"></div>');
     this.$el.html(opts.title + '<div class="smla-shadow"></div><div class="sml-arrow"></div>');
     this.setValues(opts);
     this.setMap(opts.map);

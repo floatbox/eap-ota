@@ -360,7 +360,7 @@ clonePrev: function() {
 },
 focusNext: function() {
     if (this.next && !this.next.field.prop('disabled')) {
-        this.next.field.focus();
+        this.next.field.select();
     } else {
         this.field.blur();
     }
