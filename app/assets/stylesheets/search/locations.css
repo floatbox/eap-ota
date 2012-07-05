@@ -336,6 +336,12 @@
     background: #FFF;
     box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);  
 }
+.sml-active {
+    cursor: pointer;
+}
+.sml-active:hover {
+    z-index: 1;
+}
 .sml-arrow,
 .smla-shadow {
     position: absolute;
@@ -354,4 +360,10 @@
 .smla-shadow {
     margin: 1px 0 0 -5px;
     border-top-color: rgba(0, 0, 0, 0.3);
-} 
+}
+.sml-price,
+.sml-dates {
+    font-size: 11px;
+    color: #777;
+    white-space: nowrap;
+}

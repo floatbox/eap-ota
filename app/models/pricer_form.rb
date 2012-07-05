@@ -447,6 +447,7 @@ class PricerForm
     obj && {
       :name => obj.name,
       :from => obj.case_from,
+      :iata => obj.iata,
       :lat => obj.lat,
       :lng => obj.lng
     }

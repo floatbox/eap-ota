@@ -18,6 +18,9 @@ init: function() {
         }
     });
     this.prices = this.el.find('.smap-prices');
+    this.prices.click(function() {
+        that.loadPrices();
+    });
     this.colors = ['#81aa00', '#db7100', '#0aa0c6'];
     this.items = [];
 },
@@ -153,7 +156,9 @@ showSegments: function(segments) {
         }
     }
     if (segments[0] && segments[0].dpt) {
-        this.prices.html(local.search.prices.absorb(segments[0].dpt.from.nowrap())).show();
+        this.prices.html(local.search.prices.absorb(segments[0].dpt.from.nowrap()));
+        this.prices.attr('data-from', segments[0].dpt.iata);
+        this.prices.show();
     } else {
         this.prices.hide();
     }
@@ -170,27 +175,59 @@ showSegments: function(segments) {
     }
     if (points.length > 1) {
         this.bounds = bounds;
-    } else {
+    } else if (points[0]) {
         this.bounds = points[0].latlng || this.defpoint;
+    } else {
+        this.bounds = this.defpoint;
     }
     this.fitBounds();
 },
 loadPrices: function() {
-
+    var that = this;
+    $.get('/price_map', {
+        from: this.prices.attr('data-from')
+    }, function(data) {
+        that.showPrices(data);
+    });
 },
 showPrices: function(items) {
+    var that = this;
     this.prices.hide();
     this.clean();
+    var template = '<p class="sml-city">{0}</p><p class="sml-price">{1}&nbsp;<span class="ruble">Р</span></p><p class="sml-dates">{2}</p>';
+    var bounds = new google.maps.LatLngBounds();    
     for (var i = 0, im = items.length; i < im; i++) {
         var item = items[i];
-        var content = item.name;
+        var dates = [item.date1.substring(8, 10) + '.' + item.date1.substring(5, 7)];
+        var indexes = [search.dates.dmyIndex[item.date1.substring(8, 10) + item.date1.substring(5, 7) + item.date1.substring(2, 4)]];
+        if (item.date2) {
+            dates[1] = item.date2.substring(8, 10) + '.' + item.date2.substring(5, 7);
+            indexes[1] = search.dates.dmyIndex[item.date2.substring(8, 10) + item.date2.substring(5, 7) + item.date2.substring(2, 4)];
+        }
+        var content = template.absorb(item.to.name_ru, Math.round(item.price), dates.join('—'));
+        var latlng = new google.maps.LatLng(item.to.lat, item.to.lng);
         var label = new mapLabel({
-            position: new google.maps.LatLng(item.lat, item.lng),
+            position: latlng,
             title: content,
             map: this.api
-        });        
+        });
+        label.$el.addClass('sml-active');
+        label.$el.data('city', {name: item.to.name_ru, iata: item.to.iata, type: 'city'});
+        label.$el.data('dates', indexes);
+        label.$el.click(function() {
+            that.applyPrice($(this));
+        });
+        bounds.extend(latlng);
         this.items.push(label);
+    }
+    if (items.length > 1) {
+        this.bounds = bounds;    
+        this.fitBounds();
     }    
+},
+applyPrice: function(el) {
+    search.locations.segments[0].arv.set(el.data('city'));
+    search.dates.setSelected(el.data('dates'));
 },
 fitBounds: function() {
     if (this.bounds.getCenter) {

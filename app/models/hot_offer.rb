@@ -65,7 +65,7 @@ class HotOffer
     offers = HotOffer.where(
       :for_stats_only => false,
       :date1.lte => Date.today.months_since(1),
-      :created_at.gte => Date.today - 20
+      :created_at.gte => Date.today - 2
       ).and(:price_variation.lt => 0).order_by(:created_at => :desc).limit(30)
     offers = offers.where(:from_iata => from_iata) if from_iata
     offers = offers.to_a.uniq_by {|h| [h.from_iata, h.to_iata, h.rt]}

@@ -338,6 +338,7 @@ confirm: function() {
 },
 set: function(value) {
     if (typeof value === 'string') {
+        delete this.value;
         this.field.val(value);
         this.select();
         this.change();
