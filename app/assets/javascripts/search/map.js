@@ -55,6 +55,7 @@ toggleZoom: function(h) {
 },
 load: function() {
     if (typeof google !== 'undefined' && google.maps) {
+        extendOverlayPrototype();
         this.defpoint = new google.maps.LatLng(55.751463, 37.621651);
         this.api = new google.maps.Map(this.content.get(0), {
             zoom: 4,
@@ -142,8 +143,8 @@ show: function(segments) {
                 geodesic: true,
                 path: [dpt, arv],
                 strokeColor: this.colors[i],
-                strokeOpacity: 0.85,
-                strokeWeight: 2,
+                strokeOpacity: 0.9,
+                strokeWeight: 1,
                 map: this.api
             });
             this.items.push(route);
@@ -152,13 +153,18 @@ show: function(segments) {
     var bounds = new google.maps.LatLngBounds();
     for (var i = 0, im = points.length; i < im; i++) {
         var point = points[i];
-        var marker = new google.maps.Marker({
+        /*var marker = new google.maps.Marker({
             position: point.latlng,
             title: point.name,
             map: this.api
-        });
+        });*/
+        var label = new mapLabel({
+            position: point.latlng,
+            title: point.name,
+            map: this.api
+        });        
         bounds.extend(point.latlng);
-        this.items.push(marker);
+        this.items.push(label);
     }
     if (points.length > 1) {
         this.bounds = bounds;
@@ -182,3 +188,29 @@ clean: function() {
     this.items.length = 0;
 }
 };
+
+/* Custom marker */
+function mapLabel(opts) {
+    this.$el = $('<div class="sm-label"></div>');
+    this.$el.html(opts.title + '<div class="smla-shadow"></div><div class="sml-arrow"></div>');
+    this.setValues(opts);
+    this.setMap(opts.map);
+}
+
+function extendOverlayPrototype() {
+    mapLabel.prototype = new google.maps.OverlayView();
+    mapLabel.prototype.onAdd = function() {
+        this.getPanes().floatPane.appendChild(this.$el.get(0));        
+    };
+    mapLabel.prototype.draw = function() {
+        var projection = this.getProjection();
+        var position = projection.fromLatLngToDivPixel(this.get('position'));
+        this.$el.css({
+            left: position.x - Math.round(this.$el.outerWidth() / 2) - 6,
+            top: position.y - this.$el.outerHeight() - 16
+        });
+    };    
+    mapLabel.prototype.onRemove = function() {
+        this.$el.remove();
+    };    
+}
