@@ -80,13 +80,13 @@ class BookingController < ApplicationController
     track_partner(params[:partner] || @search.partner)
     if @search.valid?
       @search.save_to_cache
-      StatCounters.inc %W[enter.momondo_redirect.success]
-      redirect_to "/##{@search.query_key}"
+      StatCounters.inc %W[enter.api_redirect.success]
+      redirect_to "#{Conf.api.url_base}/##{@search.query_key}"
     else
-      redirect_to '/'
+      redirect_to "#{Conf.api.url_base}/"
     end
   ensure
-    StatCounters.inc %W[enter.momondo_redirect.total]
+    StatCounters.inc %W[enter.api_redirect.total]
   end
 
   def api_form
