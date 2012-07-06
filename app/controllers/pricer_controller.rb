@@ -41,7 +41,7 @@ class PricerController < ApplicationController
   end
 
   def price_map
-    render :json => HotOffer.price_map(params[:from], params[:rt])
+    render :json => HotOffer.price_map(params[:from], params[:rt], params[:date])
   end
 
   def calendar
