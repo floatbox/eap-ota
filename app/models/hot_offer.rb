@@ -76,7 +76,7 @@ class HotOffer
     offers = offers.where(:from_iata => from_iata) if from_iata
     offers = offers.where(:to_iata.ne => from_iata) if from_iata
     offers = offers.where(:rt => rt) if rt
-    offers = offers.where(:date2.lt => todate) if rt == 1
+    offers = offers.where(:date2.lt => todate) if rt.to_i == 1
 
     offers = offers.to_a.uniq_by {|h| [h.from_iata, h.to_iata, h.rt]}[0..150]
 
