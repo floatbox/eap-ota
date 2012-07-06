@@ -179,7 +179,7 @@ showSegments: function(segments) {
     this.pricesMode = false;
 },
 updatePrices: function(segments, stealth) {
-    if (segments[0] && segments[0].dpt && search.mode.selected !== 'mw' && $('#search-debug').length) {
+    if (segments[0] && segments[0].dpt && search.mode.selected !== 'mw') {
         var sd = search.dates;
         var dates = sd.monthes[sd.position].ptitle + '—' + sd.monthes[sd.position + 1].ptitle;
         this.prices.html(local.search.prices.absorb(segments[0].dpt.from.nowrap(), dates));
@@ -206,6 +206,7 @@ loadPrices: function() {
 showPrices: function(items) {
     var that = this;
     this.prices.hide();
+    if (!items || items.length === 0) return;
     this.clean();
     var template = '<p class="sml-city">{0}</p><p class="sml-price">{1}&nbsp;<span class="ruble">Р</span></p><p class="sml-dates">{2}</p>';
     var bounds = new google.maps.LatLngBounds();    
