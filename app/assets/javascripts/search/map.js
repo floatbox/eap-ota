@@ -19,7 +19,7 @@ init: function() {
     });
     this.prices = this.el.find('.smap-prices');
     this.prices.click(function() {
-        that.loadPrices();
+        if (!that.prices.hasClass('smp-pressed')) that.loadPrices();
     });
     this.colors = ['#81aa00', '#db7100', '#0aa0c6'];
     this.items = [];
@@ -155,13 +155,7 @@ showSegments: function(segments) {
             this.items.push(route);
         }
     }
-    if (segments[0] && segments[0].dpt && search.mode.selected !== 'mw' && $('#search-debug').length) {
-        this.prices.html(local.search.prices.absorb(segments[0].dpt.from.nowrap()));
-        this.prices.attr('data-from', segments[0].dpt.iata);
-        this.prices.show();
-    } else {
-        this.prices.hide();
-    }
+    this.updatePrices(segments);
     var bounds = new google.maps.LatLngBounds();
     for (var i = 0, im = points.length; i < im; i++) {
         var point = points[i];
@@ -181,12 +175,29 @@ showSegments: function(segments) {
         this.bounds = this.defpoint;
     }
     this.fitBounds();
-    this.pricesMode = false;    
+    this.cachedSegments = segments;
+    this.pricesMode = false;
+},
+updatePrices: function(segments, stealth) {
+    if (segments[0] && segments[0].dpt && search.mode.selected !== 'mw' && $('#search-debug').length) {
+        var sd = search.dates;
+        var dates = sd.monthes[sd.position].ptitle + '—' + sd.monthes[sd.position + 1].ptitle;
+        this.prices.html(local.search.prices.absorb(segments[0].dpt.from.nowrap(), dates));
+        this.prices.attr('data-from', segments[0].dpt.iata);
+        this.prices.attr('data-date', sd.monthes[sd.position].el.find('.first').attr('data-dmy'));
+        if (!stealth) {
+            this.prices.removeClass('smp-pressed').show();
+        }
+    } else {
+        this.prices.hide();
+    }
 },
 loadPrices: function() {
     var that = this;
+    this.prices.addClass('smp-pressed');
     $.get('/price_map', {
         from: this.prices.attr('data-from'),
+        date: this.prices.attr('data-date'),
         rt: search.mode.selected === 'rt' ? 1 : 0
     }, function(data) {
         that.showPrices(data);
@@ -222,7 +233,7 @@ showPrices: function(items) {
         bounds.extend(latlng);
         this.items.push(label);
     }
-    if (items.length > 1) {
+    if (items.length > 1 && !this.pricesMode) {
         this.bounds = bounds;    
         this.fitBounds();
     }
