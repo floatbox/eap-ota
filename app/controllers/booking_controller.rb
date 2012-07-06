@@ -227,8 +227,11 @@ class BookingController < ApplicationController
 
   def log_referrer
     if request.referrer && (URI(request.referrer).host != request.host)
-      logger.info "Referrer: #{URI(request.referrer).host}, host: #{request.host}"
+      logger.info "Referrer: #{URI(request.referrer).host}"
     end
+  # приходят черти откуда.
+  rescue # URI::InvalidURIError
+    logger.info "Referrer not parsed: #{request.referrer}"
   end
 end
 
