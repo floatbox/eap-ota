@@ -206,8 +206,8 @@ loadPrices: function() {
 showPrices: function(items) {
     var that = this;
     this.prices.hide();
-    if (!items || items.length === 0) return;
     this.clean();
+    if (!items || items.length === 0) return;
     var template = '<p class="sml-city">{0}</p><p class="sml-price">{1}&nbsp;<span class="ruble">Р</span></p><p class="sml-dates">{2}</p>';
     var bounds = new google.maps.LatLngBounds();    
     for (var i = 0, im = items.length; i < im; i++) {
