@@ -70,12 +70,13 @@ class HotOffer
     offers = HotOffer.where(
       :for_stats_only => false,
       :date1.gte => fromdate,
-      :date2.lt => todate,
+      :date1.lt => todate,
       :created_at.gte => Date.today - 2
-      ).and(:price_variation_percent.lt => -15).order_by(:created_at => :desc)
+      ).and(:price_variation_percent.lt => - 15).order_by(:created_at => :desc)
     offers = offers.where(:from_iata => from_iata) if from_iata
     offers = offers.where(:to_iata.ne => from_iata) if from_iata
     offers = offers.where(:rt => rt) if rt
+    offers = offers.where(:date2.lt => todate) if rt == 1
 
     offers = offers.to_a.uniq_by {|h| [h.from_iata, h.to_iata, h.rt]}
 
