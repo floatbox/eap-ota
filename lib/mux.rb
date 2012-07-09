@@ -98,7 +98,7 @@ class Mux
     return [] unless Conf.amadeus.enabled
     request_ws = {:lite => lite}
     request_ns = {:lite => lite, :nonstop => true}
-    reqs = lite ? [request_ws] : [request_ns, request_ws]
+    reqs = (lite || !Conf.amadeus.nonstop_search) ? [request_ws] : [request_ns, request_ws]
     amadeus_driver = async_amadeus_driver
     reqs.each do |req|
       session = Amadeus::Session.book
