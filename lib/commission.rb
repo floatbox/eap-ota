@@ -1472,7 +1472,7 @@ example 'dmebcn'
 example 'bcndme dmebcn/OS'
 agent    "1 руб. с билета по опубл. тарифам на собств. рейсы LH и рейсы Interline с участком LH. (Билеты Interline под кодом LH могут быть выписаны только в случае существования опубл. тарифов и только при условии, что LH выполняет как минимум один рейс. В противном случае по билету должна быть сделана доплата до полного опублик. IATA тарифа. Исключение составляют рейсы авиакомпаний-партнёров: LX, EW, CL, IQ, C3 и 4U (Germanwings), а также сегменты авиакомпаний STAR Alliance в случае оформления билетов по тарифам STAR Round the World и Star Airpass Fares)"
 subagent "5 коп. с билета по опубл. тарифам на собственные рейсы LH и рейсы Interline с участком LH."
-check {includes(country_iatas, 'ES') }
+check {includes(country_iatas, 'ES FR IT CZ PT NL CH') }
 interline :no, :yes
 our_markup "150"
 ## discount '5%'
@@ -1547,6 +1547,17 @@ interline :no, :yes
 our_markup "0"
 discount '1%'
 commission "5%/3%"
+
+example 'dmebcn'
+example 'bcndme dmebcn/lh'
+agent    "1 руб. с билета по опубл. тарифам на собств. рейсы LX и рейсы Interline с уч. LX.
+(Билеты Interline под кодом LX могут быть выписаны только в случае существования опубл. тарифов и только при условии, что LX выполняет как минимум один рейс. В противном случае по билету должна быть сделана доплата до полного опублик. IATA тарифа)"
+subagent "5 коп. с билета по опубл. тарифам на собств.рейсы LX и рейсы Interline с уч. LX."
+check {includes(country_iatas, 'ES FR IT CZ PT NL CH') }
+interline :no, :yes
+our_markup "150"
+## discount '5%'
+commission "1/0.05"
 
 example 'svocdg cdgsvo/ab'
 agent    "1 руб. с билета по опубл. тарифам на собств. рейсы LX и рейсы Interline с уч. LX.
@@ -1849,7 +1860,7 @@ example 'bcndme dmebcn/lh'
 agent    "1 руб. с билета по опубл. тарифам на собств.рейсы OS и рейсы Interline с участком OS.
 (Билеты Interline под кодом OS могут быть выписаны только в случае существования опубликованных тарифов и только при условии, что OS выполняет как минимум один рейс. В противном случае по билету должна быть сделана доплата до полного опублик. IATA тарифа)"
 subagent "5 коп. с билета по опубл. тарифам на собств.рейсы OS и рейсы Interline с участком OS."
-check {includes(country_iatas, 'ES') }
+check {includes(country_iatas, 'ES FR IT CZ PT NL CH') }
 interline :no, :yes
 our_markup "150"
 ## discount '5%'
