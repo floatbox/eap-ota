@@ -39,7 +39,7 @@ module Amadeus
 
       def recommendations rec
         good_for_transposing = []
-        max_count = [adults, infants, children].max(&:count).count
+        max_count = [adults, infants, children].map(&:count).max
 
         [adults, infants, children].each do |age_group|
           age_group.fill( age_group.first, (age_group.count...max_count)) if age_group.count < max_count
@@ -58,29 +58,17 @@ module Amadeus
 
       #массив pricing_groups, соответствующих только взрослым
       def adults
-        xpath('//r:pricingGroupLevelGroup').map do |pr|
-          if pr.xpath('r:fareInfoGroup/r:segmentLevelGroup/r:ptcSegment/r:quantityDetails/r:unitQualifier').to_s == "ADT"
-            pr
-          end
-        end.compact
+        xpath("//r:pricingGroupLevelGroup[r:fareInfoGroup/r:segmentLevelGroup/r:ptcSegment/r:quantityDetails/r:unitQualifier='ADT']")
       end
 
       #массив pricing_groups, соответствующих только детям
       def children
-        xpath('//r:pricingGroupLevelGroup').map do |pr|
-          if pr.xpath('r:fareInfoGroup/r:segmentLevelGroup/r:ptcSegment/r:quantityDetails/r:unitQualifier').to_s == "CH"
-            pr
-          end
-        end.compact
+        xpath("//r:pricingGroupLevelGroup[r:fareInfoGroup/r:segmentLevelGroup/r:ptcSegment/r:quantityDetails/r:unitQualifier='CH']")
       end
 
       #массив pricing_groups, соответствующих только младенцам без места
       def infants
-        xpath('//r:pricingGroupLevelGroup').map do |pr|
-          if pr.xpath('r:fareInfoGroup/r:segmentLevelGroup/r:ptcSegment/r:quantityDetails/r:unitQualifier').to_s == "IN"
-            pr
-          end
-        end.compact
+        xpath("//r:pricingGroupLevelGroup[r:fareInfoGroup/r:segmentLevelGroup/r:ptcSegment/r:quantityDetails/r:unitQualifier='I']")
       end
     end
   end
