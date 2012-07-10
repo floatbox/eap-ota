@@ -2101,21 +2101,21 @@ our_markup "0"
 discount '1%'
 commission "5%/3%"
 
-example 'dmence'
-agent    "через DTT - 5%"
-subagent "через DTT - 3%"
-interline :no
-our_markup "0"
-discount '1.5%'
-commission "5%/3%"
+#example 'dmence'
+#agent    "через DTT - 5%"
+#subagent "через DTT - 3%"
+#interline :no
+#our_markup "0"
+#discount '1.5%'
+#commission "5%/3%"
 
-#example 'svocdg'
-#example 'DMEBRU'
-#example 'BRULBA'
-#agent    "0,5% от опубл. тарифам на собств. рейсы SN;"
-#subagent "5 руб. с билета по опубл. тарифам на собств. рейсы SN;"
-#our_markup "0.2%"
-#commission "0.5%/5"
+example 'svocdg'
+example 'DMEBRU'
+example 'BRULBA'
+agent    "0,5% от опубл. тарифам на собств. рейсы SN;"
+subagent "5 руб. с билета по опубл. тарифам на собств. рейсы SN;"
+our_markup "0.2%"
+commission "0.5%/5"
 
 example 'svocdg cdgsvo/ab'
 agent    "0,5% от опубл. тарифам в случае применения совмещенного тарифа авиакомпаний;"
