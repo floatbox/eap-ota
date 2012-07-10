@@ -33,7 +33,6 @@ module Amadeus
             pricing_group.xpath('r:fareInfoGroup/r:fareAmount/r:otherMonetaryDetails[r:typeQualifier="E"][r:currency="RUB"]/r:amount').to_f ||
             pricing_group.xpath('r:fareInfoGroup/r:fareAmount/r:monetaryDetails[r:typeQualifier="B"][r:currency="RUB"]/r:amount').to_f
           ) * passengers_in_group
-          return if price_total == 0 || price_fare == 0
           price_tax = price_total - price_fare
           [price_fare, price_tax]
       end
