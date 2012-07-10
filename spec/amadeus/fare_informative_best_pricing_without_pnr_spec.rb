@@ -10,7 +10,7 @@ describe Amadeus::Response::FareInformativeBestPricingWithoutPNR do
     describe "response" do
       subject { response }
       it { should be_success }
-      its(:all_prices) { should  == [[4240.0, 4918.0]]}
+      its(:prices) { should  == [4240.0, 4918.0]}
     end
   end
 end
