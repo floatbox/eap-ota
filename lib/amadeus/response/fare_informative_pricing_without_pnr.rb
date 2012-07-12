@@ -68,7 +68,7 @@ module Amadeus
 
       #массив pricing_groups, соответствующих только младенцам без места
       def infants
-        xpath("//r:pricingGroupLevelGroup[r:fareInfoGroup/r:segmentLevelGroup/r:ptcSegment/r:quantityDetails/r:unitQualifier='I']")
+        xpath("//r:pricingGroupLevelGroup[r:fareInfoGroup/r:segmentLevelGroup/r:ptcSegment/r:quantityDetails/r:unitQualifier='IN']")
       end
     end
   end
