@@ -69,14 +69,14 @@ module Strategy::Amadeus::Booking
         # FIXME среагировать на отсутствие маски
         amadeus.ticket_create_tst_from_pricing(:fares_count => pricing.fares_count).or_fail!
 
-        amadeus.pnr_transfer_ownership(:number => @order_form.pnr_number, :office_id => ::Amadeus::Session::TICKETING)
+#        amadeus.pnr_transfer_ownership(:number => @order_form.pnr_number, :office_id => ::Amadeus::Session::TICKETING)
       end
-=begin
+
       # повторяем в случае прихода ремарок
       amadeus.pnr_commit_really_hard do
         amadeus.cmd("rp/#{::Amadeus::Session::TICKETING}/all")
       end
-=end
+
       #amadeus.queue_place_pnr(:number => @order_form.pnr_number)
       # FIXME вынести в контроллер
       @order_form.save_to_order
