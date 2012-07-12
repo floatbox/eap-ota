@@ -80,13 +80,17 @@ class BookingController < ApplicationController
     track_partner(params[:partner] || @search.partner)
     if @search.valid?
       @search.save_to_cache
-      StatCounters.inc %W[enter.momondo_redirect.success]
-      redirect_to "/##{@search.query_key}"
+      StatCounters.inc %W[enter.api_redirect.success]
+      redirect_to "#{Conf.api.url_base}/##{@search.query_key}"
     else
-      redirect_to '/'
+      redirect_to "#{Conf.api.url_base}/"
     end
+  rescue IataStash::NotFound => iata_error
+    render 'api/yandex_failure', :status => 404, :locals => {:message => iata_error.message}
+  rescue ArgumentError => argument_error
+    render 'api/yandex_failure', :status => 400, :locals => {:message => argument_error.message}
   ensure
-    StatCounters.inc %W[enter.momondo_redirect.total]
+    StatCounters.inc %W[enter.api_redirect.total]
   end
 
   def api_form
@@ -223,8 +227,11 @@ class BookingController < ApplicationController
 
   def log_referrer
     if request.referrer && (URI(request.referrer).host != request.host)
-      logger.info "Referrer: #{URI(request.referrer).host}, host: #{request.host}"
+      logger.info "Referrer: #{URI(request.referrer).host}"
     end
+  # приходят черти откуда.
+  rescue # URI::InvalidURIError
+    logger.info "Referrer not parsed: #{request.referrer}"
   end
 end
 

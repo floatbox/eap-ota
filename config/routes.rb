@@ -10,6 +10,7 @@ Eviterra::Application.routes.draw do
   constraints subdomain: 'api' do
     root to: 'api_home#index'
     match 'avia/v1/variants(.:format)' => 'pricer#api', :format => :xml
+    match 'avia/v1/searches' => 'booking#api_redirect'
     match 'partner/v1/orders(.:format)' => 'api_order_stats#index', :format => :json
     match '*anything' => redirect('/')
   end
@@ -23,6 +24,7 @@ Eviterra::Application.routes.draw do
 
   match 'booking' => 'booking#index', :as => :booking
   match 'hot_offers' => 'pricer#hot_offers', :as => :hot_offers
+  match 'price_map' => 'pricer#price_map', :as => :price_map
   match 'booking/form' => 'booking#form', :as => :booking_form
   post 'booking/pay' => 'booking#pay', :as => :booking_pay
   # FIXME сделать POST однажды

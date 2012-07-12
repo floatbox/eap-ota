@@ -40,6 +40,13 @@ class PricerController < ApplicationController
     render :json => HotOffer.featured(params[:query_key])
   end
 
+  def price_map
+    hot_offers = Rails.cache.fetch("price_map_#{params[:from]}_#{params[:date]}_rt#{params[:rt]}", :expires_in => 3.minutes) do
+        HotOffer.price_map(params[:from], params[:rt], params[:date])
+    end
+    render :json => hot_offers
+  end
+
   def calendar
     unless params[:restore_results]
       if @search.valid? && @search.segments.size < 3

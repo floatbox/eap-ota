@@ -32,6 +32,7 @@ makeMonthes: function() {
             year: date.getFullYear(),
             ntitle: local.date.nmonthes[date.getMonth()],
             gtitle: local.date.gmonthes[date.getMonth()],
+            ptitle: local.date.pmonthes[date.getMonth()],
             length: date.getDate()
         };
         var MY = date.DMY().substring(2);
@@ -138,6 +139,8 @@ initScrolling: function() {
         that.dragging = false;
         if (that.hidden) {
             search.map.slideUp();
+        } else {
+            that.applyPosition();
         }
     });
     if (!browser.touchscreen) {
@@ -372,5 +375,13 @@ showPreview: function() {
 toggleHidden: function(mode) {
     this.el.toggleClass('sd-hidden', mode);
     this.hidden = mode;
+},
+applyPosition: function() {
+    if (search.map.cachedSegments) {
+        search.map.updatePrices(search.map.cachedSegments, true);
+        if (search.map.pricesMode) {
+            search.map.loadPrices();
+        }
+    }
 }
 };

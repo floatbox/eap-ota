@@ -97,6 +97,7 @@ class Order < ActiveRecord::Base
   has_many :tickets
   has_many :order_comments
   has_many :notifications
+  has_one :promo_code
   validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
 
   before_validation :capitalize_pnr
@@ -278,20 +279,20 @@ class Order < ActiveRecord::Base
   end
 
   def update_prices_from_tickets # FIXME перенести в strategy
-    # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
-    return if old_booking || @tickets_are_loading || sold_tickets.every.office_id.uniq == ['FLL1S212V']
     tickets.reload
+    # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
+    return if old_booking || @tickets_are_loading || sold_tickets.blank? || sold_tickets.any?{|t| t.office_id == 'FLL1S212V'}
     price_total_old = self.price_total
 
-    self.price_fare = sold_tickets.every.price_fare.sum
-    self.price_tax = sold_tickets.every.price_tax.sum
+    self.price_fare = sold_tickets.sum(:price_fare)
+    self.price_tax = sold_tickets.sum(:price_tax)
 
-    self.price_consolidator = sold_tickets.every.price_consolidator.sum
-    self.price_agent = sold_tickets.every.price_agent.sum
-    self.price_subagent = sold_tickets.every.price_subagent.sum
-    self.price_blanks = sold_tickets.every.price_blanks.sum
-    self.price_discount = sold_tickets.every.price_discount.sum
-    self.price_our_markup = sold_tickets.every.price_our_markup.sum
+    self.price_consolidator = sold_tickets.sum(:price_consolidator)
+    self.price_agent = sold_tickets.sum(:price_agent)
+    self.price_subagent = sold_tickets.sum(:price_subagent)
+    self.price_blanks = sold_tickets.sum(:price_blanks)
+    self.price_discount = sold_tickets.sum(:price_discount)
+    self.price_our_markup = sold_tickets.sum(:price_our_markup)
 
     self.price_difference = price_total - price_total_old if price_difference == 0
     save

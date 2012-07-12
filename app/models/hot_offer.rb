@@ -56,9 +56,37 @@ class HotOffer
   # не воткнуть ли сюда #actual в цепочку? а то, потенциально, может показать старые предложения
   def self.featured code=nil
     # FIXME SQL group_by не был бы лучше?
-    offers = HotOffer.where(:for_stats_only => false ).and(:price_variation.gt => 0).order_by(:created_at => :desc).limit(30)
+    offers = HotOffer.where(:for_stats_only => false ).and(:price_variation.lt => 0).order_by(:created_at => :desc).limit(30)
     offers = offers.where(:code.ne => code) if code
     offers.to_a.uniq_by {|h| [h.from_iata, h.to_iata, h.rt]}
+  end
+
+  def self.price_map from_iata=nil, rt=nil, date=nil
+    fromdate = Date.strptime(date, '%d%m%y')
+    todate = fromdate.months_since(2)
+    tomorrow = Date.tomorrow
+    fromdate = tomorrow if fromdate < tomorrow
+    
+    offers = HotOffer.where(
+      :for_stats_only => false,
+      :date1.gte => fromdate,
+      :date1.lt => todate,
+      :created_at.gte => Date.today - 2
+      ).and(:price_variation_percent.lt => - 15).order_by(:price_variation_percent => :asc)
+    offers = offers.where(:from_iata => from_iata) if from_iata
+    offers = offers.where(:rt => rt) if rt
+    offers = offers.where(:date2.lt => todate) if rt.to_i == 1
+
+    offers = offers.to_a.uniq_by {|h| [h.from_iata, h.to_iata, h.rt]}[0..150]
+
+    iatas = offers.collect{|h| [h.to_iata, h.from_iata]}.flatten.uniq
+    cities = City.where(:iata => iatas)
+    city_hash = Hash[ *cities.to_a.collect { |v| [ v.iata, v ] }.flatten ]
+    offers.each { |h|
+      h[:from] = city_hash[h.from_iata]
+      h[:to] = city_hash[h.to_iata]
+      h
+    }
   end
 
   def clickable_url

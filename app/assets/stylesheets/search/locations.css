@@ -275,6 +275,8 @@
 .smap-content {
     height: 49px;
 }
+
+/* Expand control */
 .smap-control {
     position: absolute;
     left: 50%;
@@ -304,3 +306,84 @@
     background: rgba(172, 179, 157, 0.75);    
 }
 */
+
+/* Prices control */
+.smap-prices {
+    display: none;
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    z-index: 5;
+    width: 170px;
+    padding: 4px 9px;
+    margin-left: 290px;
+    background: #F4F4F4;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F8F8F8', endColorstr='#F0F0F0');
+    background: -webkit-gradient(linear, left top, left bottom, from(#F8F8F8), to(#E8E8E8));
+    background: -moz-linear-gradient(top,  #F8F8F8,  #E8E8E8);
+    border: 1px solid #7f7f7f;
+    border-top-color: #C1C1C1;
+    border-left-color: #C1C1C1;    
+    font-size: 14px;
+    line-height: 16px;
+    cursor: pointer;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+.smp-hidden {
+    visibility: hidden;
+}
+.smp-pressed {
+    color: #777;
+    box-shadow: none;
+    cursor: default;    
+}
+
+/* Label */
+.smap-label {
+    position: absolute;
+    padding: 3px 6px;
+    background: #FFF;
+    font-size: 12px;
+    line-height: 14px;
+    box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);  
+}
+.sml-active {
+    cursor: pointer;
+}
+.sml-arrow,
+.smla-shadow {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 0;
+    height: 0;
+    border-width: 16px 0 0 12px; 
+    border-style: solid;
+    border-color: transparent;
+}
+.sml-arrow {
+    margin: 0 0 0 -6px;
+    border-top-color: #FFF;
+}
+.smla-shadow {
+    margin: 1px 0 0 -5px;
+    border-top-color: rgba(0, 0, 0, 0.3);
+}
+.sml-city {
+    white-space: nowrap;
+}
+.sml-price,
+.sml-dates {
+    font-size: 10px;
+    line-height: 12px;
+    color: #777;
+    white-space: nowrap;
+}
+.sml-active:hover {
+    z-index: 1;
+    background: #FFFFDB;
+}
+.sml-active:hover .sml-arrow {
+    border-top-color: #FFFFDB;
+}
+

@@ -222,3 +222,19 @@ Partner:
     action_after_save: show
     default_action_on_item: show
   application: Misc, 2
+
+PromoCode:
+  fields:
+    default: code, used, value, order, valid_until
+    list: code, used, value, order, valid_until
+    form: code, used, value, valid_until
+    show: code, used, value, valid_until
+    options:
+      booleans:
+        used: ["да", "нет"]
+  options:
+    action_after_save: show
+    default_action_on_item: show
+  relationships: order
+  search: code
+  application: Misc, 2

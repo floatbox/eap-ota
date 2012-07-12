@@ -9,12 +9,17 @@ Yandex:
 TODO передавать в preliminary_booking еще и marker из входящего урла.
 
 
-Momondo:
+api_redirect:
+Momondo(сейчас не используется), возможно другие партнеры (хочет Skyscanner):
 
-запрашивают наше обычное апи (api/search.xml...), но игнорируют урлы. Создают собственные урлы, вида:
-/api/redirection.xml?from=MOW&to=LON&date1=120212&date2=130512&partner=momondo,
-которой соответствует BookingController#api_redirect. Он создает новый pricer_form, помеченный партнером, сам рисует обертку, а потом как и в первом случае - аяксом вызывается
+запрашивают наше обычное апи (api/search?...), но игнорируют урлы. Создают собственные урлы, вида:
+/api/redirection.xml?from=MOW&to=LON&date1=120212&date2=130512&partner=momondo
+или на субдомене:
+http://api.eviterra/avia/v1/searches?from=MOW&to=LON&date1=120912&partner=scyscanner),
+которой соответствует BookingController#api_redirect.
+Он создает новый pricer_form, помеченный партнером, сам рисует обертку, а потом как и в первом случае - аяксом вызывается
 BookingController#preliminary_booking(query_key)
+партнер кладется в куку из урла, инкрементится счетчик api_redirect
 (уточнить детали)
 маркер (пока) не требуется
 
