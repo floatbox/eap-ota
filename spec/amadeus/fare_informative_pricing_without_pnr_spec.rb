@@ -38,11 +38,23 @@ describe Amadeus::Response::FareInformativePricingWithoutPNR do
     end
     subject {response}
 
-    #so now we just sum pretty everything. and this is incorrect
     specify {response.prices.should == [29600.0, 492.0]}
 
     #and these are perfectly believable
     specify {response.recommendations(recommendation).first.price_fare.should == 29600.0}
     specify {response.recommendations(recommendation).first.price_tax.should == 492.0}
+  end
+
+  describe 'when children priced as adults' do
+    let_once! :response do
+      amadeus_response('spec/amadeus/xml/Fare_InformativePricingWithoutPNR_ch_as_adt.xml')
+    end
+    subject {response}
+
+    specify {response.prices.should == [9900.0, 3705.0]}
+
+    specify {response.recommendations(recommendation).should have(1).item}
+    specify {response.recommendations(recommendation).first.price_fare.should == 9900.0}
+    specify {response.recommendations(recommendation).first.price_tax.should == 3705.0}
   end
 end
