@@ -39,6 +39,13 @@ module Sirena
         error.blank? && xpath('sirena')
       end
 
+      def or_fail!
+        unless success?
+          raise Sirena::Error, "#{self.class.name}: #{error}"
+        end
+        self
+      end
+
       def to_amadeus_time(str)
         if str.length < 5
           str="0"+str

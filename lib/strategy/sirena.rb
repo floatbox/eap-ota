@@ -73,7 +73,7 @@ class Strategy::Sirena < Strategy::Base
   end
 
   def booking_attributes
-    order_resp = sirena.order(@order.pnr_number, @order.sirena_lead_pass)
+    order_resp = sirena.order(@order.pnr_number, @order.sirena_lead_pass).or_fail!
     pricing_resp = sirena.pricing_variant(
       :recommendation => order_resp.recommendation,
       :given_passengers => order_resp.passengers
