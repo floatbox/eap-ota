@@ -55,30 +55,11 @@
           %dateAndTimeDetails
             %date= person.birthday.strftime('%d%b%y').upcase
 
-  %originDestinationDetails
-    %originDestination
-      -# %origin LGW
-      -# %destination FCO
-    -# CC "RU1AHK#{seats}MOW1#{monthplus10}", amadeus.pnr_archive
-    %itineraryInfo
-      %elementManagementItinerary
-        %segmentName RU
-      %airAuxItinerary
-        %travelProduct
-          %product
-            %depDate= archive_date
-          %boardpointDetail
-            %cityCode MOW
-          %company
-            %identification 1A
-        %messageAction
-          %business
-            %function 32
-        %relatedProduct
-          %quantity= seat_total
-          %status HK
-
-    -if recommendation.present?
+  -if recommendation.present?
+    %originDestinationDetails
+      %originDestination
+        -# %origin LGW
+        -# %destination FCO
       - recommendation.flights.each_with_index do |flight, index|
         %itineraryInfo
           %elementManagementItinerary
@@ -108,20 +89,24 @@
             %selectionDetailsAir
               %selection
                 %option P10
-
   %dataElementsMaster
     %marker1
     %dataElementsIndiv
       %elementManagementData
+        %reference
+          %qualifier OT
+          %number 2
         %segmentName RF
       %freetextData
         %freetextDetail
           %subjectQualifier 3
           %type P22
         %longFreetext LAH44
-
     %dataElementsIndiv
       %elementManagementData
+        %reference
+          %qualifier OT
+          %number 3
         %segmentName TK
       %ticketElement
         %passengerType PAX
@@ -129,159 +114,66 @@
           %indicator XL
           %date= tk_xl_date
           %time= tk_xl_time
-
     %dataElementsIndiv
       %elementManagementData
+        %reference
+          %qualifier OT
+          %number 4
         %segmentName FP
       %formOfPayment
         %fop
           %identification CA
-
     - if validating_carrier
       %dataElementsIndiv
         %elementManagementData
+          %reference
+            %qualifier OT
+            %number 5
           %segmentName FV
         %ticketingCarrier
           %carrier
             %airlineCode= validating_carrier
-
     -if phone.present?
       %dataElementsIndiv
         %elementManagementData
+          %reference
+            %qualifier OT
+            %number 5
           %segmentName AP
         %freetextData
           %freetextDetail
             %subjectQualifier 3
             %type 3
           %longFreetext= phone
-      -# CC "OSYYCTCP#{@order_form.phone.gsub(/\D/, '' )}-M"
-      %dataElementsIndiv
-        %elementManagementData
-          %segmentName OS
-        %freetextData
-          %freetextDetail
-            %subjectQualifier 3
-            %type 28
-            %companyId YY
-          %longFreetext= "#{phone.gsub(/\D/, '' )}-M"
-
     %dataElementsIndiv
       %elementManagementData
+        %reference
+          %qualifier OT
+          %number 6
         %segmentName AP
       %freetextData
         %freetextDetail
           %subjectQualifier 3
           %type 6
         %longFreetext= '+7(495)6603520'#наш телефон
-    - (adults + children).each_with_index do |person, index|
-
-      -# CC 'SRDOCSYYHK1-P-...'
-      %dataElementsIndiv
-        %elementManagementData
-          %segmentName SSR
-        %serviceRequest
-          %ssr
-            %type DOCS
-            %status HK
-            %quantity 1
-            %companyId YY
-            %freetext= ssr_docs_text(person)
-        %referenceForDataElement
-          %reference
-            %qualifier PR
-            %number= index+1
-
-      -# CC 'SR FOID...'
-      - if srfoid_needed?
-        %dataElementsIndiv
-          %elementManagementData
-            %segmentName SSR
-          %serviceRequest
-            %ssr
-              %type FOID
-              %status HK
-              %quantity 1
-              %companyId= validating_carrier
-              %freetext= "PP#{person.passport}"
-          %referenceForDataElement
-            %reference
-              %qualifier PR
-              %number= index+1
-
-      -# CC FE
-      %dataElementsIndiv
-        %elementManagementData
-          %segmentName FE
-        %fareElement
-          %generalIndicator E
-          %freetextLong= "#{validating_carrier} ONLY PSPT #{person.cleared_passport}"
-        %referenceForDataElement
-          %reference
-            %qualifier PR
-            %number= index+1
-
-      - if infant = person.associated_infant
-        -# CC 'SRDOCSYYHK1-P-...'
-        %dataElementsIndiv
-          %elementManagementData
-            %segmentName SSR
-          %serviceRequest
-            %ssr
-              %type DOCS
-              %status HK
-              %quantity 1
-              %companyId YY
-              %freetext= ssr_docs_text(person.associated_infant)
-          %referenceForDataElement
-            %reference
-              %qualifier PR
-              %number= index+1
-
-        -# CC FE
-        %dataElementsIndiv
-          %elementManagementData
-            %segmentName FE
-          %fareElement
-            %generalIndicator E
-            %passengerType INF
-            %freetextLong= "#{validating_carrier} ONLY PSPT #{infant.cleared_passport}"
-          %referenceForDataElement
-            %reference
-              %qualifier PR
-              %number= index+1
-
-      - if person.bonus_present
-        -# CC 'FFN...'
-        %dataElementsIndiv
-          %elementManagementData
-            %segmentName SSR
-          %serviceRequest
-            %ssr
-              %type FQTV
-              %companyId= person.bonuscard_type
-              %indicator P01
-          %frequentTravellerData
-            %frequentTraveller
-              %companyId= person.bonuscard_type
-              %membershipNumber= person.bonuscard_type + person.bonuscard_number
-          %referenceForDataElement
-            %reference
-              %qualifier PR
-              %number= index+1
-
     - if email.present?
       %dataElementsIndiv
         %elementManagementData
+          %reference
+            %qualifier OT
+            %number 7
           %segmentName AP
         %freetextData
           %freetextDetail
             %subjectQualifier 3
             %type P02
           %longFreetext= email
-
     - if agent_commission?
       %dataElementsIndiv
         %elementManagementData
+          %reference
+            %qualifier OT
+            %number 8
           %segmentName FM
         %commission
           %commissionInfo
@@ -289,32 +181,3 @@
               %percentage= agent_commission_percentage
             -else
               %amount= agent_commission_value
-
-    -# CC 'OSYYCTCP74956603520 EVITERRA TRAVEL-A'
-    %dataElementsIndiv
-      %elementManagementData
-        %segmentName OS
-      %freetextData
-        %freetextDetail
-          %subjectQualifier 3
-          %type 28
-          %companyId YY
-        %longFreetext CTCP74956603520 EVITERRA TRAVEL-A
-
-    -# CC "es#{::Amadeus::Session::BOOKING}-B"
-    %dataElementsIndiv
-      %elementManagementData
-        %segmentName ES
-      %pnrSecurity
-        %security
-          %identification= es_office_id
-          %accessMode B
-
-    -# CC 'RM INTERNET BOOKING'
-    %dataElementsIndiv
-      %elementManagementData
-        %segmentName RM
-      %miscellaneousRemark
-        %remarks
-          %type RM
-          %freetext INTERNET BOOKING

@@ -23,9 +23,6 @@ module Strategy::Amadeus::Booking
         else
           logger.error "Strategy::Amadeus: Не получили номер брони"
           amadeus.pnr_ignore
-          if add_multi_elements.srfoid_errors.present?
-            add_multi_elements.or_fail!
-          end
         end
         return :failed
       end
@@ -68,13 +65,24 @@ module Strategy::Amadeus::Booking
 
         # FIXME среагировать на отсутствие маски
         amadeus.ticket_create_tst_from_pricing(:fares_count => pricing.fares_count).or_fail!
-
-#        amadeus.pnr_transfer_ownership(:number => @order_form.pnr_number, :office_id => ::Amadeus::Session::TICKETING)
       end
 
       # повторяем в случае прихода ремарок
       amadeus.pnr_commit_really_hard do
+        add_passport_data(amadeus)
+        # делается автоматически, настройками booking office_id
+        #amadeus.give_permission_to_offices(
+        #  Amadeus::Session::BOOKING
+        #  Amadeus::Session::TICKETING,
+        #)
+        #Передача прав из одного офиса в другой
+        #FIXME надо как-то согласовать с предыдущей частью
+        amadeus.cmd("es#{::Amadeus::Session::BOOKING}-B")
         amadeus.cmd("rp/#{::Amadeus::Session::TICKETING}/all")
+        # FIXME надо ли архивировать в самом конце?
+        amadeus.pnr_archive(@order_form.seat_total)
+        # FIXME перенести ремарку поближе к началу.
+        amadeus.pnr_add_remark
       end
 
       #amadeus.queue_place_pnr(:number => @order_form.pnr_number)
@@ -104,6 +112,25 @@ module Strategy::Amadeus::Booking
 
 
   private
+
+  # FIXME нужна же какая-то обработка ошибок?
+  def add_passport_data(amadeus)
+    validating_carrier_code = @rec.validating_carrier.iata
+    (@order_form.adults + @order_form.children).each do |person|
+      # YY = для всех перевозчиков в бронировании
+      amadeus.cmd( "SRDOCSYYHK1-P-#{person.nationality.alpha3}-#{person.cleared_passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{person.number_in_amadeus}")
+      amadeus.cmd("SR FOID #{validating_carrier_code} HK1-PP#{person.cleared_passport}/P#{person.number_in_amadeus}")
+      amadeus.cmd("FE #{validating_carrier_code} ONLY PSPT #{person.cleared_passport}/P#{person.number_in_amadeus}")
+      amadeus.cmd("FFN#{person.bonuscard_type}-#{person.bonuscard_number}/P#{person.number_in_amadeus}") if person.bonus_present
+    end
+    @order_form.infants.each_with_index do |person, i|
+      # YY = для всех перевозчиков в бронировании
+      amadeus.cmd( "SRDOCSYYHK1-P-#{person.nationality.alpha3}-#{person.cleared_passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}I-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H/P#{person.number_in_amadeus}")
+      amadeus.cmd("FE INF #{validating_carrier_code} ONLY PSPT #{person.cleared_passport}/P#{person.number_in_amadeus}")
+    end
+    amadeus.cmd('OSYYCTCP74956603520 EVITERRA TRAVEL-A')
+    amadeus.cmd("OSYYCTCP#{@order_form.phone.gsub(/\D/, '' )}-M")
+  end
 
   # FIXME наверное испортится, если совпадают имена у двух пассажиров, или если будем делать транслитерацию
   def set_people_numbers(returned_people)

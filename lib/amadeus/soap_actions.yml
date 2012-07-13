@@ -73,6 +73,3 @@ Ticket_DisplayTST:
 Air_FlightInfo: 
   soap_action: http://webservices.amadeus.com/1ASIWOABEVI/FLIREQ_07_1_1A
   r: http://xml.amadeus.com/FLIRES_07_1_1A
-PNR_TransferOwnership:
-  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/POWNUQ_04_1_1A
-  r: http://xml.amadeus.com/POWNUQ_04_1_1A

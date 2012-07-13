@@ -61,10 +61,21 @@ module Amadeus
       # если и сейчас не вышло - не судьба!
     end
 
+    def pnr_archive(seats)
+      # 11 месяцев по каким-то причинам не сработало. +10
+      monthplus10 =
+        %W(JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC)[(Time.now.month-1 + 10) % 12]
+      cmd("RU1AHK#{seats}MOW1#{monthplus10}")
+    end
+
     # FIXME спросить как на самом деле надо
     def pnr_carrier_locator
       cmd('RL').lines.to_a[2] =~ /^..\/([A-Z\d]{6})/
       $1
+    end
+
+    def pnr_add_remark
+      cmd('RM INTERNET BOOKING')
     end
 
     def cmd(command)
