@@ -123,6 +123,10 @@ module Commission::Rules
     Commission::Correctors.apply(self, corrector)
   end
 
+  def inspect
+    "<commission #{carrier}##{number} :#{source}>"
+  end
+
   def self.create_class_attrs klass
     klass.instance_eval do
       cattr_accessor :opts

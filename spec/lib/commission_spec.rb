@@ -4,45 +4,85 @@ require 'spec_helper'
 # TODO написать rspec_matcher для комиссий, с более внятным выводом причин
 describe Commission do
 
+  RSpec::Matchers.define(:match_example) do |example, source|
+
+    match_for_should do |commission|
+      @recommendation = Recommendation.example(example, :carrier => commission.carrier)
+      @proposed = Commission.find_for(@recommendation)
+      if @proposed != commission
+        @reason = commission.turndown_reason(@recommendation)
+        false
+      else
+        true
+      end
+    end
+
+    match_for_should_not do |commission|
+      @recommendation = Recommendation.example(example, :carrier => commission.carrier)
+      @proposed = Commission.find_for(@recommendation)
+      !@proposed
+    end
+
+    failure_message_for_should do |commission|
+      if @proposed
+        message = "it matched #{@proposed.inspect} instead\n"
+      else
+        message = "it didn't match anything\n"
+      end
+      message += "failed to match with reason #{@reason.inspect}\n" if @reason
+      message
+    end
+
+    failure_message_for_should_not do |commission|
+      "it matched #{@proposed.inspect}\n"
+    end
+
+    description do
+      "example '#{example}' matches correctly."
+    end
+  end
+
   before do
     Commission.stub(:skip_interline_validity_check).and_return(true)
   end
 
+
   Commission.all.each do |commission|
 
-    context "##{commission.number} for carrier #{commission.carrier} on line #{commission.source}" do
+
+    describe commission.inspect do
+
+      subject {commission}
+
       if commission.expired?
 
-        pending "expired on #{commission.expr_date}."
+        specify {
+          pending "expired on #{commission.expr_date}."
+        }
 
       elsif commission.future?
 
-        pending "will apply only starting #{commission.strt_date}."
+        specify {
+          pending "will apply only starting #{commission.strt_date}."
+        }
 
       else
 
         next if commission.examples.blank?
         commission.examples.each do |code, source|
 
-          context "example '#{code}'" do
-
-            let (:rec) { Recommendation.example(code, :carrier => commission.carrier) }
-            let (:proposed) { Commission.find_for(rec) }
+          context "example:#{source} '#{code}'" do
 
             if commission.disabled?
-
-              it "is disabled and should not match anything" do
-                proposed.should be_nil
-              end
-
+              it {
+                should_not match_example(code, source)
+              }
             else
-
-              it "should match" do
-                commission.turndown_reason(rec).should be_nil
-                proposed.should == commission
-              end
-
+              it {
+                should match_example(code, source)
+              }
             end
+
           end
         end
       end
