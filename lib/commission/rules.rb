@@ -16,9 +16,11 @@ module Commission::Rules
     :interline, :domestic, :international, :classes, :subclasses,
     :routes,
     :departure, :departure_country, :important,
-    :check, :examples, :agent_comments, :subagent_comments, :source,
+    :check, :agent_comments, :subagent_comments, :source,
     :expr_date, :strt_date,
     :system, :ticketing_method, :corrector, :number
+
+  attr_reader :examples
 
   def disabled?
     disabled || not_implemented || no_commission
@@ -121,6 +123,12 @@ module Commission::Rules
 
   def correct!
     Commission::Correctors.apply(self, corrector)
+  end
+
+  def examples=(example_array)
+    @examples = example_array.collect do |code, source|
+      Commission::Example.new( code: code, source: source, commission: self )
+    end
   end
 
   def inspect

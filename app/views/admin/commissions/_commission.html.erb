@@ -102,8 +102,8 @@
       <% if commission.examples.present? %>
         <h3>примеры</h3>
         <ul>
-          <% commission.examples.each do |code, source| %>
-            <li><%= code %></li>
+          <% commission.examples.each do |example| %>
+            <li><%= example.code %></li>
           <% end %>
         </ul>
       <% end %>
