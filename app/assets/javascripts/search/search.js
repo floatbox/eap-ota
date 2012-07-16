@@ -8,7 +8,7 @@ init: function() {
     this.dates.init();
     this.map.init();
     this.defaultValues = {
-        segments: [{dpt: 'Москва'}],
+        segments: [],
         options: {
             adults: 1,
             children: 0,
@@ -87,7 +87,7 @@ setValues: function(data) {
             arv.set(segment.arv || '');
         }
     }
-    if (data.segments.length === 1) {
+    if (data.segments.length < 2) {
         this.mode.select('ow');
     } else if (data.segments[1].rt) {
         this.mode.select('rt');
