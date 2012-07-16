@@ -148,15 +148,15 @@ example 'svober/lh/f bersvo'
 example 'svovie/os/j viesvo'
 example 'svozrh/lx/j zrhsvo'
 example 'svolhr/bd lhrsvo'
-agent "5% до особых указаний на продажу Interline от применяемых опубликованных тарифов первого, бизнес, премиального экономического
+agent "9% до особых указаний на продажу Interline от применяемых опубликованных тарифов первого, бизнес, премиального экономического
 и туристического экономического классов на рейсы авиакомпаний Lufthansa (LH), Austrian Airlines (OS), Swiss International Airlines (LX), British Midland Airways (BD) 
 от Москвы и/или через Москву с участком перевозки на рейсы ТРАНСАЭРО. Дополнительное вознаграждение не выплачивается в случае остальных Interline продаж, 
 а также с сумм произведенных возвратов. (Т.е. комиссия по этим Interline будет 9%)"
-subagent "??? ставлю как и другой интерлайн 2%"
+subagent "Ставлю 7%, Катя обещает с них требовать"
 interline :yes
 classes :first, :business, :economy
 check { includes(marketing_carrier_iatas, %W[LH OS LX BD]) and includes(city_iatas, 'MOW') } 
-commission "5%/2%"
+commission "9%/7%"
 
 example 'aerdme dmeaer/ab'
 agent "4% Interline с участком Трансаэро. Без участка UN запрещено."
@@ -1523,8 +1523,6 @@ carrier "MA", "MALEV"
 carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example "svobud/c budsvo/c"
-strt_date "01.02.2012"
-expr_date "30.04.2012"
 agent "12% от тарифа по классам J,C,D,I,Y,B;"
 subagent ""
 subclasses "JCDIYB"
@@ -1532,8 +1530,6 @@ disabled "no subagent"
 commission "12%/0%"
 
 example "svobud/k budsvo/k"
-strt_date "01.02.2012"
-expr_date "30.04.2012"
 agent "6% от тарифа по классам K,M,L,V,S,Z, N."
 subagent ""
 subclasses "KMLVSZN"
@@ -1878,17 +1874,19 @@ no_commission
 carrier "RB", "SYRIAN ARAB AIRLINES"
 ########################################
 
-example 'svocdg'
+#example 'svocdg'
 agent    "7% от всех опубл. тарифов на рейсы RB (В договоре Interline не прописан.)"
 subagent "5% от опубл. тарифов на рейсы RB"
 ## discount "4%"
+disabled "Катя сказала выключить, потому что война"
 commission "7%/5%"
 
-example 'cdgsvo svocdg/ab'
+#example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
 ## discount "4%"
+disabled "Катя сказала выключить, потому что война"
 commission "7%/5%"
 
 carrier "S4", "SATA INTERNACIONAL (РИНГ АВИА)"
@@ -2098,11 +2096,10 @@ discount "2.5%"
 commission "5%/3.5%"
 
 example 'svoist istsvo/ab'
-agent    "(Билеты «Интерлайн» под кодом TK могут быть выписаны только в случае существования опубл. тарифов и только при условии, если TK выполняет первый рейс)"
-subagent "???"
+agent    "Как обычная 7% (Билеты «Интерлайн» под кодом TK могут быть выписаны только в случае существования опубл. тарифов и только при условии, если TK выполняет первый рейс)"
+subagent "Как обычная 5%"
 interline :first
-disabled "нет субагентской комиссии"
-commission "0%/0%"
+commission "7%/5%"
 
 example "svoist/business"
 agent "12% от тарифа Бизнес класса на рейсы TK только при вылете из РФ."
@@ -2572,6 +2569,7 @@ agent "6% от всех опубликованных тарифов; (Interline 
 subagent "4% от всех опубл. тарифов на собств. рейсы CQ"
 interline :no, :unconfirmed
 ## discount "3.5%"
+disabled "Перестали летать"
 commission "6%/4%" #первомайский апдейт
 
 carrier "W5", "Airline «MAHAN AIR» (АВИАРЕПС)"
