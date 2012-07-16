@@ -155,9 +155,9 @@ initDropdown: function() {
     });
 },
 change: function(selected) {
-    clearTimeout(this.timer);
     var value = this.field.val();
     if (value !== this.value) {
+        clearTimeout(this.timer);
         this.label.toggle(value === '');
         this.value = value;
         if (!selected && this.selected) {
