@@ -95,6 +95,9 @@ search.Location.prototype = {
 init: function() {
     var that = this;
     this.field = this.el.find('input');
+    this.value = this.field.val('').val();
+    this.label = this.el.find('label').toggle(this.value === '');
+    this.sign = $('<span class="sl-sign"></span>').appendTo(this.el);
     this.field.data('location', this);
     this.field.bind('keyup propertychange input', function() {
         if (this.value !== that.value) {
@@ -108,9 +111,6 @@ init: function() {
         that.blur();
     });
     this.field.mouseup(false);
-    this.value = this.field.val('').val();
-    this.label = this.el.find('label').toggle(this.value === '');
-    this.sign = $('<span class="sl-sign"></span>').appendTo(this.el);
     this.variants = [];
     this.$load = function() {
     	that.load();
