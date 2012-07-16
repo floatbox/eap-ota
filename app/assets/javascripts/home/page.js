@@ -21,6 +21,7 @@ init: function() {
     } else {
         search.map.resize();
         this.reset();
+        this.loadLocation();
         trackPage();
     }
     
@@ -34,6 +35,13 @@ init: function() {
 },
 innerHeight: function() {
     return $w.height() - 36 - Queries.height;
+},
+loadLocation: function() {
+    $.get('/whereami', function(data) {
+        var city = (data && data.city_name) || 'Москва';
+        search.defaultValues.segments = [{dpt: city}];
+        search.locations.segments[0].dpt.set(city);
+    });
 },
 restoreResults: function(key) {
     search.el.hide();

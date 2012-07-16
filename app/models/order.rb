@@ -21,7 +21,8 @@ class Order < ActiveRecord::Base
       :price_tax_extra => :decimal,
       :income => :decimal,
       :income_suppliers => :decimal,
-      :income_payment_gateways => :decimal
+      :income_payment_gateways => :decimal,
+      :expected_income => :decimal
     )
   end
 

@@ -4,9 +4,9 @@ require 'spec_helper'
 # TODO написать rspec_matcher для комиссий, с более внятным выводом причин
 describe Commission do
 
-  RSpec::Matchers.define(:match_example) do |example|
+  RSpec::Matchers.define(:match_commission) do |commission|
 
-    match_for_should do |commission|
+    match_for_should do |example|
       @recommendation = example.recommendation
       @proposed = Commission.find_for(@recommendation)
       if @proposed != commission
@@ -17,13 +17,13 @@ describe Commission do
       end
     end
 
-    match_for_should_not do |commission|
+    match_for_should_not do |example|
       @recommendation = example.recommendation
       @proposed = Commission.find_for(@recommendation)
       !@proposed
     end
 
-    failure_message_for_should do |commission|
+    failure_message_for_should do |example|
       if @proposed
         message = "it matched #{@proposed.inspect} instead\n"
       else
@@ -33,12 +33,12 @@ describe Commission do
       message
     end
 
-    failure_message_for_should_not do |commission|
+    failure_message_for_should_not do |example|
       "it matched #{@proposed.inspect}\n"
     end
 
     description do
-      "example #{example.inspect} matches correctly."
+      "match commission"
     end
   end
 
@@ -51,8 +51,6 @@ describe Commission do
 
 
     describe commission.inspect do
-
-      subject {commission}
 
       if commission.expired?
 
@@ -73,13 +71,15 @@ describe Commission do
 
           context example.inspect do
 
+            subject {example}
+
             if commission.disabled?
               it {
-                should_not match_example(example)
+                should_not match_commission
               }
             else
               it {
-                should match_example(example)
+                should match_commission(commission)
               }
             end
 
