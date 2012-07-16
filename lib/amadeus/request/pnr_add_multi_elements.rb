@@ -37,6 +37,22 @@ module Amadeus
         tk_xl.strftime("%d%m%y") if tk_xl
       end
 
+      def archive_date
+        (Date.today + 10.months).strftime("%d%m%y")
+      end
+
+      def seat_total
+        people_count[:adults] + people_count[:children]
+      end
+
+      def ssr_docs_text(person)
+        "P-#{person.nationality.alpha3}-#{person.passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}#{person.infant? ? 'I' : ''}-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H"
+      end
+
+      def es_office_id
+        ::Amadeus::Session::BOOKING
+      end
+
       def tk_xl_time
         tk_xl.strftime("%H%M") if tk_xl
       end
@@ -56,6 +72,10 @@ module Amadeus
         # рублевая комиссия округляется до ближайшего целого
         # евро подставляются в дефолтных параметрах формулы из конфига (зря?)
         agent_commission.call.round
+      end
+
+      def srfoid_needed?
+        ["AB", "UN", "HR", "B2", "PS", "AZ", "CY", "LX", "KK", "OS", "KM", "SQ"].exclude? validating_carrier
       end
 
     end
