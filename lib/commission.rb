@@ -82,37 +82,17 @@ subclasses "FPRJCADSM"
 discount "6.5%"
 commission "11%/9%"
 
-#example 'AERDME/W DMEAER/W'
-#agent "12% американский office-id"
-#subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
-#subclasses "LVXTNIGWU"
-#discount "7.5%"
-#commission "12%/10%"
-
-#example 'AERDME/Y DMEAER/M'
-#agent "12% американский office-id"
-#subagent "10 % от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, M, Q, B, K, O, R, E."
-#subclasses "YHMQBKORE"
-#discount "7.5%"
-#commission "12%/10%"
-
+example 'AERDME/W DMEAER/W'
+example 'AERDME/Y DMEAER/M'
+example 'AERDME/Y DMEAER/M'
 example 'AERDME/W DMEAER/I'
 example 'AERDME/N DMEAER/T'
 example 'AERDME/W DMEAER/W'
-agent "3% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U"
-subagent "2 % от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
-subclasses "LVXTNIGWU"
-discount "0.5%"
-#disabled "Пишем через АЦ из-за курса доллара" CHECKME
-commission "3%/2%"
-
-example 'AERDME/Y DMEAER/O'
-agent "7% от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, Q, B, K, O;"
-subagent "5 % от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, Q, B, K, O;"
-subclasses "YHQBKO"
-discount "3%"
-#disabled "Коля сказал" #CHECKME
-commission "7%/5%"
+agent "12% американский office-id"
+subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
+subclasses "LVXTNIGWUYHMQBKORE"
+discount "7.5%"
+commission "12%/10%"
 
 example 'svoiws/UN7061'
 example 'svoaap/UN7061 aapsvo/UN7061'
@@ -335,27 +315,15 @@ check { includes_only(marketing_carrier_iatas, %W[HG]) }
 discount "1.7%"
 commission "5%/3%"
 
-#example 'cdgsvo svocdg/lh'
-#example 'svocdg'
+example 'cdgsvo svocdg/lh'
 agent    "1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
 subagent "5 коп с билета по опубл. тарифам на рейсы AB"
 interline :no, :unconfirmed
 our_markup "1%"
-disabled "продаем все через американцев"
-commission "1/0.05"
-
-#example 'dmevie/hg viedme/hg'
-agent    "1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
-subagent "5 коп с билета по опубл. тарифам на рейсы AB"
-interline :yes, :absent
-check { includes_only(marketing_carrier_iatas, %W[AB HG]) }
-our_markup "1%"
-disabled "продаем все через американцев"
 commission "1/0.05"
 
 example 'svocdg/s7'
 no_commission
-
 
 carrier "AC", "AIR CANADA (НЕ BSP!!!)"
 ########################################
@@ -1281,16 +1249,14 @@ example 'svoala alasvo'
 strt_date "11.06.2012"
 agent    "С 11.06.12г. 1 евро с билета по опубл. тарифа на собств. рейсы КС по всем международным маршрутам"
 subagent "С 11.06.12г. 5 руб. с билета по опубл. тарифа на собств. рейсы КС по всем международным маршрутам;"
-discount "3%"
-commission "7eur/5"
+commission "1eur/5"
 
 example 'svoala/ab alasvo'
 strt_date "11.06.2012"
 agent    "С 11.06.12г. 1 евро с билета по опубл. тарифа на рейсы Interline c наличием сегмента КС;"
 subagent "С 11.06.12г. 5 руб. с билета по опубл. тарифа на рейсы Interline c наличием сегмента КС;"
 interline :yes
-discount "3%"
-commission "7eur/5"
+commission "1eur/5"
 
 example 'svoala/qr alasvo/qr'
 strt_date "11.06.2012"
