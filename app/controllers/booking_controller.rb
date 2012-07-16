@@ -85,10 +85,8 @@ class BookingController < ApplicationController
     else
       redirect_to "#{Conf.api.url_base}/"
     end
-  rescue IataStash::NotFound => iata_error
-    render 'api/yandex_failure', :status => 404, :locals => {:message => iata_error.message}
-  rescue ArgumentError => argument_error
-    render 'api/yandex_failure', :status => 400, :locals => {:message => argument_error.message}
+  rescue # IataStash::NotFound, ArgumentError, etc
+    redirect_to "#{Conf.api.url_base}/"
   ensure
     StatCounters.inc %W[enter.api_redirect.total]
   end
