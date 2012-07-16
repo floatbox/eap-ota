@@ -4,10 +4,10 @@ require 'spec_helper'
 # TODO написать rspec_matcher для комиссий, с более внятным выводом причин
 describe Commission do
 
-  RSpec::Matchers.define(:match_example) do |example, source|
+  RSpec::Matchers.define(:match_example) do |example|
 
     match_for_should do |commission|
-      @recommendation = Recommendation.example(example, :carrier => commission.carrier)
+      @recommendation = example.recommendation
       @proposed = Commission.find_for(@recommendation)
       if @proposed != commission
         @reason = commission.turndown_reason(@recommendation)
@@ -18,7 +18,7 @@ describe Commission do
     end
 
     match_for_should_not do |commission|
-      @recommendation = Recommendation.example(example, :carrier => commission.carrier)
+      @recommendation = example.recommendation
       @proposed = Commission.find_for(@recommendation)
       !@proposed
     end
@@ -38,7 +38,7 @@ describe Commission do
     end
 
     description do
-      "example '#{example}' matches correctly."
+      "example #{example.inspect} matches correctly."
     end
   end
 
@@ -69,17 +69,17 @@ describe Commission do
       else
 
         next if commission.examples.blank?
-        commission.examples.each do |code, source|
+        commission.examples.each do |example|
 
-          context "example:#{source} '#{code}'" do
+          context example.inspect do
 
             if commission.disabled?
               it {
-                should_not match_example(code, source)
+                should_not match_example(example)
               }
             else
               it {
-                should match_example(code, source)
+                should match_example(example)
               }
             end
 
