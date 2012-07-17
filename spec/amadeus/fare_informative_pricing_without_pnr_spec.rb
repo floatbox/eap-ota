@@ -12,8 +12,8 @@ describe Amadeus::Response::FareInformativePricingWithoutPNR do
     end
     subject {response}
 
-    #Sic! They are the same!
     specify {response.prices.should == [99640, 18086]}
+
     specify {response.recommendations(recommendation).first.price_fare.should == 99640}
     specify {response.recommendations(recommendation).first.price_tax.should == 18086}
   end
@@ -24,10 +24,8 @@ describe Amadeus::Response::FareInformativePricingWithoutPNR do
     end
     subject {response}
 
-    #so now we just sum pretty everything. and this is incorrect
-    specify {response.prices.should == [557920, 51008]}
+    specify {response.prices.should == [64280, 11752]}
 
-    #and these are perfectly believable
     specify {response.recommendations(recommendation).first.price_fare.should == 64280}
     specify {response.recommendations(recommendation).first.price_tax.should == 11752}
   end
@@ -40,7 +38,6 @@ describe Amadeus::Response::FareInformativePricingWithoutPNR do
 
     specify {response.prices.should == [29600.0, 492.0]}
 
-    #and these are perfectly believable
     specify {response.recommendations(recommendation).first.price_fare.should == 29600.0}
     specify {response.recommendations(recommendation).first.price_tax.should == 492.0}
   end
