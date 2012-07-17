@@ -43,7 +43,7 @@ module Pricing
     end
 
     def expected_income
-      (expected_earnings - income_suppliers).round(2)
+      (expected_earnings - income_suppliers).round(2).to_d
     end
 
     # сумма данных по билетам. по идее, более точная информация, нежели сохраненная в заказе
