@@ -33,16 +33,14 @@ module Amadeus
 
       def recommendations rec
         xml_recommendations = xpath("//r:pricingGroupLevelGroup").group_by do |pr|
-          pr.xpath("r:passengersID/r:travellerDetails/r:measurementValue").to_s
+          pr.xpath("r:passengersID/r:travellerDetails/r:measurementValue").map(&:to_s)
         end.values
-        min_count = xml_recommendations.map(&:count).min
-        xml_recommendations = xml_recommendations.each{|values| values[min_count..-1] = []}
 
         xml_recommendations.transpose.map do |xml_recommendation|
           new_rec = Recommendation.new(:variants => rec.variants)
           new_rec.booking_classes = xml_recommendation.first.xpath('r:fareInfoGroup/r:segmentLevelGroup/r:cabinGroup/r:cabinSegment/r:bookingClassDetails/r:designator').map(&:to_s)
           new_rec.cabins = xml_recommendation.first.xpath('r:fareInfoGroup/r:segmentLevelGroup/r:cabinGroup/r:cabinSegment/r:bookingClassDetails/r:option').map(&:to_s)
-          new_rec.price_fare, new_rec.price_tax = xml_recommendation.map{|cg|local_prices cg}.transpose.map{|x| x.reduce(:+)}
+          new_rec.price_fare, new_rec.price_tax = xml_recommendation.map{|cg|local_prices cg}.transpose.map(&:sum)
           new_rec
         end
       end
