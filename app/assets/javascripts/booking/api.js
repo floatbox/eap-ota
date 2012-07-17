@@ -58,7 +58,7 @@ booking.load = function(number) {
             var el = $(this);
             hint.show(event, 'В альянс ' + el.html() + ' входят авиакомпании: ' + el.attr('data-carriers') + '.');
         });            
-        results.subscription.init($('#booking-subscription').appendTo(that.content).show());
+        results.subscription.init($('#booking-subscription'));
         $('#booking-disclaimer').prependTo(that.content).show();
     });
 };

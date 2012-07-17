@@ -3,23 +3,36 @@
     display: none;
 }
 .b-disclaimer {
-    margin: 0 0 20px;
-    padding: 16px 20px;
-    background: #EDEDE3;
+    margin: 0 14px 20px;
+    font-size: 13px;
+    line-height: 17px;
 }
-.b-disclaimer h5 {
+.bd-column {
+    position: relative;
+    float: left;
+    width: 290px;
+    margin-right: 40px;
+}
+.bd-border {
+    position: absolute;
+    top: 0;
+    left: -21px;
+    width: 1px;
+    height: 200px;
+    background: #D8D8D8;
+    border-left: 1px solid #A0A0A0;
+}
+.bd-title {
     margin: 0 0 8px;
     font-weight: bold;
     font-size: 18px;
     line-height: 20px;
 }
-.b-disclaimer p {
-    margin: 8px 0 0;
-} 
 
 /* Booking */
 #booking {
     display: block;
+    padding-top: 18px;
 }
 .b-content {
     display: none;
@@ -30,8 +43,13 @@
 
 /* Subscription */
 #booking-subscription {
+    margin-right: 0;
+}
+#booking-subscription .rsf-field {
+    width: 200px;
+}
+#booking-subscription .rsf-label {
     display: none;
-    margin-left: 0;
 }
 
 /* Button template */

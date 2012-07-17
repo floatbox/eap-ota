@@ -440,7 +440,7 @@ results.subscription = {
 init: function(el) {
     var that = this;
     this.el = el.find('form');
-    this.button = this.el.find('.rsf-submit');
+    this.button = this.el.find('.rsf-submit').prop('disabled', false);
     this.field = this.el.find('.rsf-field');
     this.error = this.el.find('.rsf-error');
     this.el.submit(function(event) {
