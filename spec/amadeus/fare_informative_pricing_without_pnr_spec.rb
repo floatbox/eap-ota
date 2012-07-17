@@ -57,4 +57,14 @@ describe Amadeus::Response::FareInformativePricingWithoutPNR do
     specify {response.recommendations(recommendation).first.price_fare.should == 9900.0}
     specify {response.recommendations(recommendation).first.price_tax.should == 3705.0}
   end
+
+  describe 'no fares returned' do
+    let_once! :response do
+      amadeus_response('spec/amadeus/xml/Fare_InformativePricingWithoutPNR_no_fares.xml')
+    end
+    subject {response}
+
+    specify {response.should_not be_success}
+
+  end
 end

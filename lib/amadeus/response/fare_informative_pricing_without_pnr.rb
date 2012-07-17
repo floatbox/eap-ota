@@ -46,6 +46,10 @@ module Amadeus
           new_rec
         end
       end
+
+      def error_message
+        xpath('//r:errorGroup/r:errorMessage/r:freeText').to_s.try(:strip)
+      end
     end
   end
 end

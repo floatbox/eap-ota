@@ -12,6 +12,7 @@ module Strategy::Amadeus::PreliminaryBooking
       return
     end
     ::Amadeus.booking do |amadeus|
+      # FIXME может вернуть error. обработать.
       @rec =
         amadeus.fare_informative_pricing_without_pnr(
           :recommendation => @rec,
