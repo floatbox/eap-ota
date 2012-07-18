@@ -91,7 +91,7 @@ example 'AERDME/W DMEAER/W'
 agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWUYHMQBKORE"
-discount "7%"
+discount "6.5%"
 commission "12%/10%"
 
 example 'svoiws/UN7061'
