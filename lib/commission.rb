@@ -2814,6 +2814,7 @@ carrier "S7", "S7 AIRLINES"
 carrier_defaults :consolidator => 0
 
 agent "3% BSP"
+subagent ""
 #our_markup 400
 ##disabled "до времени"
 discount "1.5%"
