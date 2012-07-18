@@ -117,16 +117,27 @@ class Admin::OrdersController < Admin::EviterraResourceController
   end
 
   def ticket_in_ticketing_office
-    tick_response = ::Amadeus.ticketing do |amadeus|
-      amadeus.pnr_retrieve(:number => @order.pnr_number)
-      amadeus.doc_issuance_issue_ticket
+    tick_response = nil
+    case @order.commission_ticketing_method
+    when 'aviacenter'
+      tick_response = ::Amadeus.ticketing do |amadeus|
+        amadeus.pnr_retrieve(:number => @order.pnr_number)
+        amadeus.doc_issuance_issue_ticket
+      end
+    when 'direct'
+      tick_response = ::Amadeus.booking do |amadeus|
+        amadeus.pnr_retrieve(:number => @order.pnr_number)
+        amadeus.doc_issuance_issue_ticket
+      end
+    else
+      flash[:error] = 'Недоступный офис обилечивания'
     end
-    if tick_response.success?
+    if tick_response && tick_response.success?
       @order.ticket!
       @order.reload_tickets
       flash[:message] = "Билеты выписаны"
     else
-      flash[:error] = "Произошла ошибка: #{tick_response.error_message}"
+      flash[:error] ||= "Произошла ошибка: #{tick_response.error_message}"
     end
     redirect_to :action => :show, :id => @order.id
   end
