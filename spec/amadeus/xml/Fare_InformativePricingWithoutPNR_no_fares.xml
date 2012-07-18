@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header xmlns="http://webservices.amadeus.com/definitions">
+    <SessionId>05GR18C7C1|176</SessionId>
+  </soap:Header>
+  <soap:Body>
+    <Fare_InformativePricingWithoutPNRReply xmlns="http://xml.amadeus.com/TIPNRR_08_1_1A">
+      <messageDetails>
+        <messageFunctionDetails>
+          <businessFunction>1</businessFunction>
+          <messageFunction>741</messageFunction>
+          <responsibleAgency>1A</responsibleAgency>
+        </messageFunctionDetails>
+        <responseType>8</responseType>
+      </messageDetails>
+      <errorGroup>
+        <errorCode>
+          <errorDetails>
+            <errorCode>911</errorCode>
+            <errorCategory>EC</errorCategory>
+          </errorDetails>
+        </errorCode>
+        <errorMessage>
+          <freeTextQualification>
+            <textSubjectQualifier>3</textSubjectQualifier>
+          </freeTextQualification>
+          <freeText>NO FARE FOR BOOKING CODE-TRY OTHER PRICING OPTIONS</freeText>
+        </errorMessage>
+      </errorGroup>
+    </Fare_InformativePricingWithoutPNRReply>
+  </soap:Body>
+</soap:Envelope>
