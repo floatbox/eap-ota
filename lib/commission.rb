@@ -92,8 +92,8 @@ example 'AERDME/W DMEAER/W'
 agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWUYHMQBKORE"
-discount "7%"
 ticketing_method "downtown"
+discount "6.5%"
 commission "12%/10%"
 
 example 'svoiws/UN7061'
@@ -1300,7 +1300,7 @@ example 'svocdg'
 agent    "1руб за билет, выписанный по опубл. тарифам, в случае перевозки с вылетом из стран СНГ; 1руб за билет, выписанный по опубл. тарифам,  в случае вылета вне стран СНГ;"
 subagent "5 коп. за билет, выписанный по опубл. тарифам, в случае перевозки с вылетом из стран СНГ; 5 коп. за билет, выписанный по опубл. тарифам, в случае вылета вне стран СНГ;"
 interline :no, :yes
-commission "1eur/5"
+commission "1/0.05"
 
 carrier "KM", "AIR MALTA  (Авиарепс)"
 ########################################
