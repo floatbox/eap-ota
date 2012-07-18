@@ -80,6 +80,7 @@ agent "11% от тарифа на рейсы Перевозчика по все�
 subagent "9 % от тарифа на рейсы Перевозчика по всем тарифам классов F, P, R, J, C, A, D, S, M;"
 subclasses "FPRJCADSM"
 discount "7%"
+ticketing_method "downtown"
 commission "11%/9%"
 
 example 'AERDME/W DMEAER/W'
@@ -92,6 +93,7 @@ agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWUYHMQBKORE"
 discount "7%"
+ticketing_method "downtown"
 commission "12%/10%"
 
 example 'svoiws/UN7061'
@@ -303,6 +305,7 @@ interline :no
 # Исправление Кати 20.04.2012
 # у нас через DTT 3%
 discount "1.7%"
+ticketing_method "downtown"
 #disabled
 commission "5%/3%"
 
@@ -314,6 +317,7 @@ interline :absent
 # пишем ники на AB через DTT
 check { includes_only(marketing_carrier_iatas, %W[HG]) }
 discount "1.7%"
+ticketing_method "downtown"
 commission "5%/3%"
 
 example 'cdgsvo svocdg/lh'
@@ -1344,6 +1348,7 @@ subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
 discount '5%'
+ticketing_method "downtown"
 commission "10%/8%"
 
 example 'dmejfk'
@@ -1355,6 +1360,7 @@ check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US')
 interline :no, :yes
 our_markup "0"
 discount '1%'
+ticketing_method "downtown"
 commission "5%/3%"
 
 example 'dmebcn'
@@ -1423,6 +1429,7 @@ subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
 discount '5%'
+ticketing_method "downtown"
 commission "10%/8%"
 
 example 'dmejfk'
@@ -1434,6 +1441,7 @@ check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') 
 interline :no, :yes
 our_markup "0"
 discount '1%'
+ticketing_method "downtown"
 commission "5%/3%"
 
 example 'dmebcn'
@@ -1701,6 +1709,7 @@ subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
 discount '5%'
+ticketing_method "downtown"
 commission "10%/8%"
 
 example 'dmejfk'
@@ -1712,6 +1721,7 @@ check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US')
 interline :no, :yes
 our_markup "0"
 discount '1%'
+ticketing_method "downtown"
 commission "5%/3%"
 
 example 'dmebcn'
@@ -1890,6 +1900,7 @@ subclasses "CDYSEHM"
 interline :no, :yes
 our_markup "0"
 discount '8%'
+ticketing_method "downtown"
 commission "12%/10%"
 
 example 'svojfk/Q'
@@ -1901,6 +1912,7 @@ check {includes(country_iatas, 'US CA') }
 interline :no, :yes
 our_markup "0"
 discount '4%'
+ticketing_method "downtown"
 commission "8%/6%"
 
 example 'svocdg'
@@ -1925,6 +1937,7 @@ subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
 discount '6%'
+ticketing_method "downtown"
 commission "10%/8%"
 
 example 'dmejfk'
@@ -1936,6 +1949,7 @@ check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') 
 interline :no, :yes
 our_markup "0"
 discount '1%'
+ticketing_method "downtown"
 commission "5%/3%"
 
 #example 'dmence'
@@ -2099,6 +2113,7 @@ subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
 discount '5.5%'
+ticketing_method "downtown"
 commission "10%/8%"
 
 example 'dmejfk'
@@ -2110,6 +2125,7 @@ check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US')
 interline :no, :yes
 our_markup "0"
 discount '1%'
+ticketing_method "downtown"
 commission "5%/3%"
 
 #example 'SVOIAD/UA965/H'
@@ -2803,6 +2819,7 @@ subagent "0% DTT, 10$ с билета"
 #our_markup 400
 ##disabled "до времени"
 discount "1.5%"
+ticketing_method "downtown"
 commission "3%/3%"
 
 carrier "GA", "GARUDA INDONESIA"
