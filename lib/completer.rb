@@ -209,7 +209,8 @@ class Completer
     #read_carriers
     #read_airplanes
     read_airports
-    read_regions
+    # FIXME выключил, пока не исправим баг с распознаванием регионов
+    #read_regions
     #read_geotags
 
     #read_dates
