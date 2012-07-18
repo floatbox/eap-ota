@@ -80,7 +80,6 @@ agent "11% от тарифа на рейсы Перевозчика по все�
 subagent "9 % от тарифа на рейсы Перевозчика по всем тарифам классов F, P, R, J, C, A, D, S, M;"
 subclasses "FPRJCADSM"
 discount "7%"
-ticketing_method "downtown"
 commission "11%/9%"
 
 example 'AERDME/W DMEAER/W'
@@ -2815,11 +2814,10 @@ carrier "S7", "S7 AIRLINES"
 carrier_defaults :consolidator => 0
 
 agent "3% BSP"
-subagent "0% DTT, 10$ с билета"
 #our_markup 400
 ##disabled "до времени"
 discount "1.5%"
-ticketing_method "downtown"
+ticketing_method "direct"
 commission "3%/3%"
 
 carrier "GA", "GARUDA INDONESIA"
