@@ -35,9 +35,10 @@ module Strategy::Amadeus::PreliminaryBooking
         )
         if resp.success?
           #дебажный вывод цен
-          logger.info "Best_informative_pricing: old price: #{@rec.price_fare+@rec.price_tax} new prices: #{resp.recommendations.map{|rec| rec.price_fare+rec.price_tax}}"
+          logger.info "Strategy: Best_informative_pricing: old price: #{@rec.price_fare+@rec.price_tax} (#{@rec.booking_classes.join(' ')}) " +
+            "new prices: #{resp.recommendations.map{|rec| rec.price_fare+rec.price_tax}} (#{resp.recommendations.map{|rec| rec.booking_classes.join(' ')}.join(', ')})"
         else
-          logger.error "Strategy: Best_informative_pricing error:#{resp.error_message}"
+          logger.error "Strategy: Best_informative_pricing error: #{resp.error_message}"
         end
       rescue
         logger.error "Strategy: Best_informative_pricing exception:#{$!.class}: #{$!.message}"
