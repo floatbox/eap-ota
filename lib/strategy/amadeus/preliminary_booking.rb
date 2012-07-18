@@ -17,11 +17,6 @@ module Strategy::Amadeus::PreliminaryBooking
           :recommendation => @rec,
           :people_count => @search.real_people_count
         ).prices
-      # FIXME не очень надежный признак
-      if @rec.price_fare.to_i == 0
-        logger.error 'Strategy: price_fare is 0?'
-        return
-      end
 
       # считаем что в амадеусе всегда один билет на человека
       @rec.blank_count = @search.people_total
@@ -42,6 +37,12 @@ module Strategy::Amadeus::PreliminaryBooking
         end
       rescue
         logger.error "Strategy: Best_informative_pricing exception:#{$!.class}: #{$!.message}"
+      end
+
+      # FIXME не очень надежный признак
+      if @rec.price_fare.to_i == 0
+        logger.error 'Strategy: price_fare is 0?'
+        return
       end
       # FIXME точно здесь нельзя нечаянно заморозить места?
       air_sfr = amadeus.air_sell_from_recommendation(
