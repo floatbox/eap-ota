@@ -114,11 +114,16 @@ namespace :deploy do
     run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec script/rambler_daemon restart"
   end
 
+  tast :restart_delayed_job do
+    run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec script/delayed_job restart"
+  end
+
 
   after "deploy:finalize_update", "deploy:symlink_shared_configs"
   after "deploy:finalize_update", "deploy:symlink_persistent_cache"
   after "deploy:finalize_update", "deploy:symlink_completer"
   after "deploy", "deploy:restart_rambler_daemon"
+  after "deploy", "deploy:restart_delayed_job"
   after "deploy:update_code", "deploy:check_for_pending_migrations"
 end
 
