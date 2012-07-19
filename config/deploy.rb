@@ -114,7 +114,7 @@ namespace :deploy do
     run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec script/rambler_daemon restart"
   end
 
-  tast :restart_delayed_job do
+  task :restart_delayed_job do
     run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec script/delayed_job restart"
   end
 
