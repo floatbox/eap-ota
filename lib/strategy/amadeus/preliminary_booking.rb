@@ -67,7 +67,7 @@ module Strategy::Amadeus::PreliminaryBooking
         dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
         return
       end
-      logger.debug "Strategy::Amadeus::Check: Success!"
+      logger.info "Strategy::Amadeus::Check: Success!"
       @rec
     end
   end
