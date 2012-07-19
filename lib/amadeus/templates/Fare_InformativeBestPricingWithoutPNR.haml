@@ -59,6 +59,15 @@
   %pricingDetails
     %companyDetails
       %marketingCompany= validating_carrier
+%pricingOptionsGroup
+  %pricingDetails
+    %priceTicketDetails
+      -# list of lower fares
+      %indicators M
+      -# Request Electronic ticket fares
+      %indicators E
+      -# No split PNR (we can't use multi-ticketing yet)
+      %indicators NS
 %tripsGroup
   %originDestination
   -flights.each do |fl|
