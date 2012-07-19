@@ -3,12 +3,12 @@ module Strategy::Amadeus::PreliminaryBooking
 
   def check_price_and_availability
     unless TimeChecker.ok_to_book(@search.segments[0].date_as_date + 1.day)
-      logger.error 'Strategy: time criteria missed'
+      logger.error 'Strategy::Amadeus::Check: time criteria missed'
       return
     end
 
     unless hahn_air_allows?(@rec)
-      logger.error 'Strategy: forbidden by Hahn Air'
+      logger.error 'Strategy::Amadeus::Check: forbidden by Hahn Air'
       return
     end
     ::Amadeus.booking do |amadeus|
@@ -30,18 +30,18 @@ module Strategy::Amadeus::PreliminaryBooking
         )
         if resp.success?
           #дебажный вывод цен
-          logger.info "Strategy: Best_informative_pricing: old price: #{@rec.price_fare+@rec.price_tax} (#{@rec.booking_classes.join(' ')}) " +
+          logger.info "Strategy::Amadeus::Best: best_informative_pricing: old price: #{@rec.price_fare+@rec.price_tax} (#{@rec.booking_classes.join(' ')}) " +
             "new prices: #{resp.recommendations.map{|rec| rec.price_fare+rec.price_tax}} (#{resp.recommendations.map{|rec| rec.booking_classes.join(' ')}.join(', ')})"
         else
-          logger.error "Strategy: Best_informative_pricing error: #{resp.error_message}"
+          logger.error "Strategy::Amadeus::Best: best_informative_pricing error: #{resp.error_message}"
         end
       rescue
-        logger.error "Strategy: Best_informative_pricing exception:#{$!.class}: #{$!.message}"
+        logger.error "Strategy::Amadeus::Best: best_informative_pricing exception: #{$!.class}: #{$!.message}"
       end
 
       # FIXME не очень надежный признак
       if @rec.price_fare.to_i == 0
-        logger.error 'Strategy: price_fare is 0?'
+        logger.error 'Strategy::Amadeus::Check: price_fare is 0?'
         return
       end
       # FIXME точно здесь нельзя нечаянно заморозить места?
@@ -51,7 +51,7 @@ module Strategy::Amadeus::PreliminaryBooking
         :seat_total => @search.seat_total
       )
       unless air_sfr.segments_confirmed?
-        logger.error "Strategy: segments aren't confirmed: recommendation: #{@rec.serialize} segments: #{air_sfr.segments_status_codes.join(', ')} #{Time.now.strftime('%H:%M %d.%m.%Y')}"
+        logger.error "Strategy::Amadeus::Check: segments aren't confirmed: recommendation: #{@rec.serialize} segments: #{air_sfr.segments_status_codes.join(', ')} #{Time.now.strftime('%H:%M %d.%m.%Y')}"
         return
       end
       # FIXME не будет ли надежнее использовать дополнительный pnr_retrieve вместо fill_itinerary?
@@ -63,10 +63,11 @@ module Strategy::Amadeus::PreliminaryBooking
       # amadeus.pnr_ignore
 
       unless TimeChecker.ok_to_book(@rec.journey.departure_datetime_utc, @rec.last_tkt_date)
-        logger.error "Strategy: time criteria for last tkt date missed: #{@rec.last_tkt_date}"
+        logger.error "Strategy::Amadeus::Check: time criteria for last tkt date missed: #{@rec.last_tkt_date}"
         dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
         return
       end
+      logger.debug "Strategy::Amadeus::Check: Success!"
       @rec
     end
   end
