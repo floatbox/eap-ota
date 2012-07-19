@@ -37,7 +37,15 @@ class SampleJob
 
   # максимальное количество попыток
   # дефолт выставляется в config/initializers/delayed_job.rb
+  #
   # def max_attempts
+  # end
+
+  # когда попытаться запуститься еще раз, в случае ошибки
+  # дефолтная реализация
+  #
+  # def reschedule_at(now, attempts)
+  #   now + (attempts**4) + 5 # seconds
   # end
 
   # вызывается перед сохранением в очередь. можно какие-то флаги поставить
