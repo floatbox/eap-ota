@@ -18,8 +18,8 @@ module Amadeus
         variants = original_rec.try(:variants) || []
         xml_recommendations.transpose.map do |xml_recommendation|
           rec = Recommendation.new( :variants => variants )
-          rec.booking_classes = xml_recommendation.map{|xml| xml.xpath('r:fareInfoGroup/r:segmentLevelGroup/r:cabinGroup/r:cabinSegment/r:bookingClassDetails/r:designator').map(&:to_s)}.sum
-          rec.cabins = xml_recommendation.map{|xml| xml.xpath('r:fareInfoGroup/r:segmentLevelGroup/r:cabinGroup/r:cabinSegment/r:bookingClassDetails/r:option').map(&:to_s)}.sum
+          rec.booking_classes = xml_recommendation.first.xpath('r:fareInfoGroup/r:segmentLevelGroup/r:cabinGroup/r:cabinSegment/r:bookingClassDetails/r:designator').map(&:to_s)
+          rec.cabins = xml_recommendation.first.xpath('r:fareInfoGroup/r:segmentLevelGroup/r:cabinGroup/r:cabinSegment/r:bookingClassDetails/r:option').map(&:to_s)
           rec.price_fare, rec.price_tax = xml_recommendation.map{|cg|local_prices cg}.transpose.map(&:sum)
           rec
         end
