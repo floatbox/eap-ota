@@ -26,8 +26,8 @@ module  FileLogger
     base_name = prefix + '.' + Time.now.strftime("%H-%M-%S-%3N") + '.' + debug_ext
     name = path + base_name
     # FIXME возможно, это медленно. перехватывать эксепшн и ретраить?
-    #FileUtils.makedirs(path)
-    File.open!(name, 'w') {|f| f << content}
+    FileUtils.mkdir_p(path) unless File.directory?(path)
+    File.open(name, 'w') {|f| f << content}
     name
   end
 
