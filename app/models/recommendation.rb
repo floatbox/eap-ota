@@ -308,82 +308,6 @@ class Recommendation
     )
   end
 
-  # FIXME порнография какая-то. чего так сложно?
-  def self.summary recs, locations
-    carriers = []
-    planes = []
-    cities = []
-    departure_cities = []
-    arrival_cities = []
-    departure_airports = []
-    arrival_airports = []
-    departure_times = []
-    arrival_times = []
-    layovers = []
-    segments_amount = recs[0].variants[0].segments.length
-    segments_amount.times {|i|
-      departure_cities[i] = []
-      arrival_cities[i] = []
-      departure_airports[i] = []
-      arrival_airports[i] = []
-      departure_times[i] = []
-      arrival_times[i] = []
-    }
-    alliances = []
-    recs.each {|r|
-      r.variants.each{|v|
-        summary = v.summary
-        carriers += summary[:carriers]
-        planes += summary[:planes]
-        cities += summary[:cities]
-        layovers << summary['layovers']
-        v.segments.length.times {|i|
-          departure_cities[i] << summary['dpt_city_' + i.to_s]
-          arrival_cities[i] << summary['arv_city_' + i.to_s]
-          departure_airports[i] << summary['dpt_airport_' + i.to_s]
-          arrival_airports[i] << summary['arv_airport_' + i.to_s]
-          departure_times[i] << summary['dpt_time_' + i.to_s]
-          arrival_times[i] << summary['arv_time_' + i.to_s]
-        }
-      }
-      alliances << r.summary['alliance']
-    }
-    layover_titles = ['без пересадок', 'только короткие пересадки', 'с одной пересадкой']
-    result = {
-      :carriers => carriers.uniq.map{|a| {:v => a, :t => Carrier[a].name}}.sort_by{|a| a[:t] },
-      :planes => planes.uniq.map{|a| {:v => a, :t => Airplane[a].name}}.sort_by{|a| a[:t] },
-      :cities => cities.uniq.map{|c| {:v => c, :t => City[c].name}}.sort_by{|a| a[:t] },
-      :segments => segments_amount,
-      :locations => locations,
-      :layovers => layovers.flatten.uniq.sort.map{|l| {:v => l, :t => layover_titles[l] || ''}},
-      :alliance => alliances.compact.uniq.map{|a| {:v => a, :t => AirlineAlliance.find(a).name}}.sort_by{|a| a[:t] }
-    }
-    departure_cities.each_with_index {|cities, i|
-      result['dpt_city_' + i.to_s] = cities.uniq.map{|city| {:v => city, :t => City[city].case_from} }.sort_by{|a| a[:t] }
-    }
-    arrival_cities.each_with_index {|cities, i|
-      result['arv_city_' + i.to_s] = cities.uniq.map{|city| {:v => city, :t => City[city].case_to} }.sort_by{|a| a[:t] }
-    }
-    departure_airports.each_with_index {|airports, i|
-      if result['dpt_city_' + i.to_s].size < 2
-        result['dpt_airport_' + i.to_s] = airports.uniq.map{|airport| {:v => airport, :t => Airport[airport].case_from} }.sort_by{|a| a[:t] }
-      end
-    }
-    arrival_airports.each_with_index {|airports, i|
-      if result['arv_city_' + i.to_s].size < 2
-        result['arv_airport_' + i.to_s] = airports.uniq.map{|airport| {:v => airport, :t => Airport[airport].case_to} }.sort_by{|a| a[:t] }
-      end
-    }
-    time_titles = ['ночь', 'утро', 'день', 'вечер']
-    departure_times.each_with_index {|dpt_times, i|
-      result['dpt_time_' + i.to_s] = dpt_times.uniq.sort.map{|dt| {:v => dt, :t => time_titles[dt]} }
-    }
-    arrival_times.each_with_index {|arv_times, i|
-      result['arv_time_' + i.to_s] = arv_times.uniq.sort.map{|at| {:v => at, :t => time_titles[at]} }
-    }
-    result
-  end
-  
   def self.filters_data recs
     data = {}
     variants = recs.collect(&:variants).flatten 
@@ -393,21 +317,23 @@ class Recommendation
     layover_cities = []
     all_segments = variants.collect(&:segments)
     variants.first.segments.length.times {|i|
-      dpt_index = i * 2
-      arv_index = i * 2 + 1
       segments = all_segments.every.at(i)
       departures = segments.every.departure
-      data[:locations][dpt_index] = {
-        :cities => departures.every.city.uniq.sort_by(&:name),
-        :airports => departures.uniq.sort_by(&:name)
-      }
       arrivals = segments.every.arrival
-      data[:locations][arv_index] = {
-        :cities => arrivals.every.city.uniq.sort_by(&:name),
-        :airports => arrivals.uniq.sort_by(&:name)
+      data[:locations][i] = {
+        :dpt => {
+          :cities => departures.every.city.uniq.sort_by(&:name),
+          :airports => departures.uniq.sort_by(&:name)
+        },
+        :arv => {
+          :cities => arrivals.every.city.uniq.sort_by(&:name),
+          :airports => arrivals.uniq.sort_by(&:name)
+        }
       }
-      data[:time][dpt_index] = segments.every.departure_day_part.uniq.sort
-      data[:time][arv_index] = segments.every.arrival_day_part.uniq.sort      
+      data[:time][i] = {
+        :dpt => segments.every.departure_day_part.uniq.sort,
+        :arv => segments.every.arrival_day_part.uniq.sort
+      }
       layover_cities += segments.map{|s| s.flights[1..-1]}.flatten.map{|f| f.departure.city}
     }
     flights_count = variants.map{|v|

@@ -32,7 +32,7 @@ init: function() {
         that.addSegment();
     });
 },
-toggleSegments: function(used, focus) {
+toggleSegments: function(used) {
     this.used = used;
     for (var i = this.segments.length; i--;) {
         var active = i < used, segment = this.segments[i];
@@ -44,38 +44,46 @@ toggleSegments: function(used, focus) {
     search.dates.setLimit(rt ? 2 : used);
     search.dates.calendar.toggleClass('sdc-rtmode', rt);
     this.segments[0].icon.toggleClass('sl-return', rt);
-    this.addControls.toggle(used === 2);
-    this.remControls.toggle(used === 3);
+    this.addControls.hide();
+    this.remControls.show();
+    if (used < this.segments.length) {
+        this.remControls.eq(used - 2).hide();
+        this.addControls.eq(used - 2).show();
+    }
 },
 countUsed: function() {
-    var dpt = this.segments[2].dpt.value;
-    var arv = this.segments[2].arv.value;
-    return dpt || arv ? 3 : 2;
+    for (var i = this.segments.length - 1; i > 1; i--) {
+        var dpt = this.segments[i].dpt.value;
+        var arv = this.segments[i].arv.value;
+        if (dpt || arv) {
+            return i + 1;
+        }
+    }
+    return 2;
 },
 addSegment: function() {
-    this.toggleSegments(3);
+    this.toggleSegments(this.used + 1);
     this.focusEmpty();
 },
 removeSegment: function(index) {
     var segment = this.segments[2];
-    if (index === 2) {
-        this.segments[1].dpt.set(segment.dpt.selected || segment.dpt.value);
-        this.segments[1].arv.set(segment.arv.selected || segment.arv.value);
+    for (var i = index - 1; i < this.used - 1; i++) {
+        var next = this.segments[i + 1];
+        this.segments[i].dpt.set(next.dpt.selected || next.dpt.value);
+        this.segments[i].arv.set(next.arv.selected || next.arv.value);
     }
-    segment.dpt.set('');
-    segment.arv.set('');
-    this.toggleSegments(2);
+    this.segments[this.used - 1].dpt.set('');
+    this.segments[this.used - 1].arv.set('');
+    this.toggleSegments(this.used - 1);
     this.focusEmpty();
 },
 focusEmpty: function() {
     for (var i = 0, im = this.items.length; i < im; i++) {
         var item = this.items[i];
         if (!item.value && !item.field.prop('disabled')) {
+            item.field.select();
             item.clonePrev();
-            if (!item.selected) {
-                item.field.focus();
-                return item;
-            }
+            return item;
         }
     }
 },
@@ -123,7 +131,6 @@ init: function() {
 focus: function() {
     this.active = true;
     this.value = this.field.val();
-    this.clonePrev();
     if (this.value !== '') {
         this.label.hide();
     	this.field.select();
@@ -317,7 +324,10 @@ hotkey: function(event) {
             this.pass(1);
             break;
         case 9:
-            this.confirm();
+            if (this.preferred) {
+                event.preventDefault();
+                this.confirm();
+            }
             break;
         case 13:
             event.preventDefault();
@@ -362,6 +372,7 @@ clonePrev: function() {
 focusNext: function() {
     if (this.next && !this.next.field.prop('disabled')) {
         this.next.field.select();
+        this.next.clonePrev();
     } else {
         this.field.blur();
     }

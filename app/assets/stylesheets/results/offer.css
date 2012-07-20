@@ -113,6 +113,7 @@
 }
 .ob-bfixed .o-book {
     bottom: 30px;
+    bottom: 0;    
 }
 .ob-fixed .ob-shadow, 
 .ob-fixed .ob-shadow {
@@ -191,6 +192,15 @@
 }
 .segment3 .ostn-text {
     background: #0AA0C6;
+}
+.segment4 .ostn-text {
+    background: #bf00db;
+}
+.segment5 .ostn-text {
+    background: #db0048;
+}
+.segment6 .ostn-text {
+    background: #9a5000;
 }
 
 /* Segment summary */
@@ -281,6 +291,15 @@
 .segment3 .oss-time {
     color: #0aa0c6;
 }
+.segment4 .oss-time {
+    color: #bf00db;
+}
+.segment5 .oss-time {
+    color: #db0048;
+}
+.segment6 .oss-time {
+    color: #9a5000;
+}
 .osst-date {
     float: left;
     margin: 8px 0 0 5px;
@@ -324,9 +343,20 @@
     border-color: #e58217;
 }
 .segment3 .ossb-flight {
-    background: #0aa0c6;
     background: #0498bd;
     border-color: #11abd1;
+}
+.segment4 .ossb-flight {
+    background: #b100cc;
+    border-color: #cb22e5;
+}
+.segment5 .ossb-flight {
+    background: #cc0044;
+    border-color: #e52263;
+}
+.segment6 .ossb-flight {
+    background: #8c4800;
+    border-color: #ad6211;
 }
 .ossb-layover {
     background: #e0e0e0;
@@ -534,6 +564,15 @@
 .segment3 .os-more {
     color: #0aa0c6;
 }
+.segment4 .os-more {
+    color: #bf00db;
+}
+.segment5 .os-more {
+    color: #db0048;
+}
+.segment6 .os-more {
+    color: #9a5000;
+}
 
 /* Segment details */
 .os-details {
@@ -618,6 +657,18 @@
 .segment3 .osd-time,
 .segment3 .osdt-main {
     color: #0aa0c6;
+}
+.segment4 .osd-time,
+.segment4 .osdt-main {
+    color: #bf00db;
+}
+.segment5 .osd-time,
+.segment5 .osdt-main {
+    color: #db0048;
+}
+.segment6 .osd-time,
+.segment6 .osdt-main {
+    color: #9a5000;
 }
 
 /* Offer details */

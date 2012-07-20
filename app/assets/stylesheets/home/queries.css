@@ -6,6 +6,7 @@
     background: url(/images/home/history.png) repeat-x #858585;
 }
 #queries {
+    display: none;
     position: fixed;
     bottom: 0;
     left: 0;

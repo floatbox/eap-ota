@@ -35,7 +35,7 @@
     border-right-color: #fb4793;
     border-bottom-color: #fb60a1;
     background-color: #f90a6f;    
-    background-position: 158px -195px;
+    background-position: 158px -285px;
     cursor: pointer;
 }
 .sm-values {
@@ -236,11 +236,20 @@
 .sl-segment3 .sl-icon {
     background-position: 0 -90px;
 }
+.sl-segment4 .sl-icon {
+    background-position: 0 -120px;
+}
+.sl-segment5 .sl-icon {
+    background-position: 0 -150px;
+}
+.sl-segment6 .sl-icon {
+    background-position: 0 -180px;
+}
 .sl-segment1 .sl-return {
     background-position: 0 0;
 }
 .sl-segment1 .sl-leave {
-    background-position: 0 -240px;
+    background-position: 0 -330px;
 }
 
 /* Add and remove */
@@ -260,10 +269,10 @@
     color: #FFF;
 }
 .sl-add {
-    background-position: 0 -130px;
+    background-position: 0 -220px;
 }
 .sl-remove {
-    background-position: 0 -170px;
+    background-position: 0 -260px;
 }
 
 

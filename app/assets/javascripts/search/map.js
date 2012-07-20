@@ -21,7 +21,7 @@ init: function() {
     this.prices.click(function() {
         if (!that.prices.hasClass('smp-pressed')) that.loadPrices();
     });
-    this.colors = ['#81aa00', '#db7100', '#0aa0c6'];
+    this.colors = ['#81aa00', '#db7100', '#0aa0c6', '#bf00db', '#db0048', '#9a5000'];
     this.items = [];
 },
 bindResize: function() {

@@ -260,7 +260,7 @@ initDays: function() {
         this.calendar.delegate(selector, 'mouseover', function() {
             that.hoverDay($(this));
         }).delegate(selector, 'mouseout', function() {
-            $(this).removeClass('sdc-hover sdc-hover1 sdc-hover2 sdc-hover3');
+            $(this).removeClass('sdc-hover sdc-hover1 sdc-hover2 sdc-hover3 sdc-hover4 sdc-hover5 sdc-hover6');
         });
     }
     this.selected = [];
@@ -292,6 +292,13 @@ getDate: function(index) {
 },
 selectDay: function(day) {
     var index = Number(day.attr('data-index'));
+    var same = 0;
+    for (var i = this.selected.length; i--;) {
+        if (this.selected[i] === index) same++;
+    }
+    if (same > 1) {
+        return false;
+    }
     if (this.selected.length < this.limit) {
         this.selected.push(index);
         this.selected.sort(Array.sortInt);
@@ -325,7 +332,7 @@ setFixed: function() {
     }
 },
 showSelected: function() {
-    this.calendar.find('.sdc-selected').removeClass('sdc-selected sdc-selected1 sdc-selected2 sdc-selected3');
+    this.calendar.find('.sdc-selected').removeClass('sdc-selected sdc-selected1 sdc-selected2 sdc-selected3 sdc-selected4 sdc-selected5 sdc-selected6');
     for (var i = this.selected.length; i--;) {
         this.days.eq(this.selected[i]).addClass('sdc-selected sdc-selected' + (i + 1));
     }
@@ -333,22 +340,18 @@ showSelected: function() {
 },
 showPreview: function() {
     var context = this.el.find('.sdt-selected').html('');
-    var items = [], used = {};
+    var items = [];
     for (var i = 0, im = this.selected.length; i < im; i++) {
         var index = this.selected[i];
-        var item = used[index];
-        if (!item) {
-            var item = {};
-            var date = this.days.eq(index).find('.date').text();
-            item.el = $('<div class="sdt-day"></div>').html(date).appendTo(context),
-            item.width = item.el.outerWidth();
-            var mindex = this.days.eq(index).closest('.sdc-month').data('index');
-            item.minleft = this.tabs[mindex].single.left;
-            item.maxleft = item.minleft + this.tabs[mindex].single.width - item.width;
-            item.left = item.minleft + Math.round((Number(date) - 1) / (this.monthes[mindex].length - 1) * (item.maxleft - item.minleft));
-            used[index] = item;
-            items.push(item);
-        }
+        var item = {};
+        var date = this.days.eq(index).find('.date').text();
+        item.el = $('<div class="sdt-day"></div>').html(date).appendTo(context),
+        item.width = item.el.outerWidth();
+        var mindex = this.days.eq(index).closest('.sdc-month').data('index');
+        item.minleft = this.tabs[mindex].single.left;
+        item.maxleft = item.minleft + this.tabs[mindex].single.width - item.width;
+        item.left = item.minleft + Math.round((Number(date) - 1) / (this.monthes[mindex].length - 1) * (item.maxleft - item.minleft));
+        items.push(item);
         item.el.addClass('sdt-segment' + (i + 1));
     }
     if (items.length > 1) {

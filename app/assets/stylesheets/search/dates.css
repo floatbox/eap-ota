@@ -195,6 +195,15 @@
 .sdc-hover3 {
     background-color: #0aa0c6;
 }
+.sdc-hover4 {
+    background-color: #bf00db;
+}
+.sdc-hover5 {
+    background-color: #db0048;
+}
+.sdc-hover6 {
+    background-color: #9a5000;
+}
 
 /* Selected days */
 .sdc-selected {
@@ -203,37 +212,61 @@
 .sdc-selected1 {
     background-color: #81aa00;
 }
-.sdc-selected2 {
-    background-color: #db7100;
+.sdc-selected1.sdc-hover2 {
     background-position: 0 -50px;
 }
-.sdc-selected3 {
-    background-color: #0aa0c6;
-    background-position: 0 -150px;
-}
-.sdc-selected1.sdc-hover2 {
-    background-position: 0 -200px;
-}
-.sdc-selected2.sdc-hover3 {
-    background-position: 0 -350px;
-}
 .sdc-selected1.sdc-selected2 {
-    background-position: 0 -250px;
-}
-.sdc-selected2.sdc-selected3 {
-    background-position: 0 -400px;
-}
-.sdc-selected1.sdc-selected2.sdc-hover3 {
-    background-position: 0 -450px;
-}
-.sdc-selected1.sdc-selected2.sdc-selected3 {
-    background-position: 0 -500px;
-}
-.sdc-rtmode .sdc-selected2 {
     background-position: 0 -100px;
 }
 .sdc-rtmode .sdc-selected1.sdc-selected2 {
+    background-position: 0 -150px;
+}
+.sdc-selected2 {
+    background-color: #db7100;
+    background-position: 0 -200px;
+}
+.sdc-rtmode .sdc-selected2 {
+    background-position: 0 -250px;
+}
+.sdc-selected2.sdc-hover3 {
     background-position: 0 -300px;
+}
+.sdc-selected2.sdc-selected3 {
+    background-position: 0 -350px;
+}
+.sdc-selected3 {
+    background-color: #0aa0c6;
+    background-position: 0 -400px;
+}
+.sdc-selected3.sdc-hover4 {
+    background-position: 0 -450px;
+}
+.sdc-selected3.sdc-selected4 {
+    background-position: 0 -500px;
+}
+.sdc-selected4 {
+    background-color: #bf00db;
+    background-position: 0 -550px;
+}
+.sdc-selected4.sdc-hover5 {
+    background-position: 0 -600px;
+}
+.sdc-selected4.sdc-selected5 {
+    background-position: 0 -650px;
+}
+.sdc-selected5 {
+    background-color: #db0048;
+    background-position: 0 -700px;
+}
+.sdc-selected5.sdc-hover6 {
+    background-position: 0 -750px;
+}
+.sdc-selected5.sdc-selected6 {
+    background-position: 0 -800px;
+}
+.sdc-selected6 {
+    background-color: #9a5000;
+    background-position: 0 -850px;
 }
 .sdc-selected .month {
     display: block;
@@ -261,6 +294,16 @@
 .sdt-segment3 {
     background-color: #0aa0c6;
 }
+.sdt-segment4 {
+    background-color: #bf00db;
+}
+.sdt-segment5 {
+    background-color: #db0048;
+}
+.sdt-segment6 {
+    background-color: #9a5000;
+}
+
 
 /* Hidden calendar */
 .sd-hidden {

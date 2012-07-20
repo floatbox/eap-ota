@@ -70,7 +70,10 @@
 .rfg-column {
     float: left;
     width: 184px;
-    padding: 10px 6px 10px 0;
+    padding: 6px 6px 0 0;
+}
+.rf-list {
+    padding: 4px 0 10px;
 }
 .rfgc-title {
     margin: 0 8px 6px;
@@ -83,10 +86,18 @@
 }
 .rfgct-segment2 {
     color: #db7100;
-    color: #cb8100;    
 }
 .rfgct-segment3 {
     color: #0aa0c6;
+}
+.rfgct-segment4 {
+    color: #bf00db;
+}
+.rfgct-segment5 {
+    color: #db0048;
+}
+.rfgct-segment6 {
+    color: #9a5000;
 }
 
 /* Values list */

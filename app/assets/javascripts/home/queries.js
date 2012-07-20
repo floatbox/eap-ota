@@ -2,10 +2,11 @@
 Queries = {
 init: function() {
     this.el = $('#queries');
-    if (browser.ios) {
+    if (true || browser.ios) {
         this.history.add = $.noop;
+        this.history.select = $.noop;
         this.show = $.noop;
-        this.hide = $.noop;        
+        this.hide = $.noop;
         this.height = 0;
     } else {
         this.height = this.el.show().outerHeight();

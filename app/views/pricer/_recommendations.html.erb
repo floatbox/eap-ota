@@ -17,44 +17,79 @@
 <div class="rf-data" id="rfg-time">
 <% time_titles = ['ночью', 'утром', 'днем', 'вечером'] %>
 <% data[:time].each_with_index do |times, i| %>
-<% if times.length > 1 %>
-<% sindex = i / 2 %>
-<% is_dpt = i % 2 == 0 %>
-<div class="rfg-column rf-list" data-key="<%= is_dpt ? 'dpt' : 'arv' %><%= sindex + 1 %>t">
-    <h6 class="rfgc-title rfgct-segment<%= sindex + 1 %>"><%= raw( is_dpt ? "Вылет<br>#{ @search.segments[sindex].from_as_object.case_from }" : "Прилет<br>#{ @search.segments[sindex].to_as_object.case_to }" ) %></h6>    
-    <ul class="rf-values">
-    <li class="rfv-empty rfv-selected">в любое время</li>
-    <% times.each do |time| %>
-        <li class="rfv-item" data-value="<%= time %>"><%= time_titles[time] %></li>
+<% if times[:dpt].length > 1 || times[:arv].length > 1 %>
+<div class="rfg-column">
+    <% if times[:dpt].length > 1 %>
+    <div class="rf-list" data-key="dpt<%= i + 1 %>t">
+        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>">Вылет <%= raw @search.segments[i].from_as_object.case_from %></h6>    
+        <ul class="rf-values">
+            <li class="rfv-empty rfv-selected">в любое время</li>
+            <% times[:dpt].each do |time| %>
+                <li class="rfv-item" data-value="<%= time %>"><%= time_titles[time] %></li>
+            <% end %>
+        </ul>
+    </div>
     <% end %>
-    </ul>
-</div>
+    <% if times[:arv].length > 1 %>
+    <div class="rf-list" data-key="arv<%= i + 1 %>t">
+        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>">Прилет <%= raw @search.segments[i].to_as_object.case_to %></h6>    
+        <ul class="rf-values">
+            <li class="rfv-empty rfv-selected">в любое время</li>
+            <% times[:arv].each do |time| %>
+                <li class="rfv-item" data-value="<%= time %>"><%= time_titles[time] %></li>
+            <% end %>
+        </ul>
+    </div>
+    <% end %>
+</div>   
 <% end %>
 <% end %>
 </div>
 
 <div class="rf-data" id="rfg-locations">
 <% data[:locations].each_with_index do |segment, i| %>
-<% if segment[:airports].length > 1 || segment[:cities].length > 1 %>
-<% sindex = i / 2 %>
-<% is_dpt = i % 2 == 0 %>
-<div class="rfg-column rf-list" data-key="<%= is_dpt ? 'dpt' : 'arv' %><%= sindex + 1 %>">
-<h6 class="rfgc-title rfgct-segment<%= sindex + 1 %>"><%= raw( is_dpt ? "Вылет<br>#{ @search.segments[sindex].from_as_object.case_from }" : "Прилет<br>#{ @search.segments[sindex].to_as_object.case_to }" ) %></h6>    
-<% if segment[:cities].length > 1 %>
-    <ul class="rf-values">
-    <li class="rfv-empty rfv-selected"><%= is_dpt ? 'из любого города' : 'в любой город' %></li>
-    <% segment[:cities].each do |city| %>
-        <li class="rfv-item" data-value="<%= city.iata %>"><%= is_dpt ? city.case_from : city.case_to %></li>
+<% if segment[:dpt][:airports].length > 1 || segment[:dpt][:cities].length > 1 || segment[:arv][:airports].length > 1 || segment[:arv][:cities].length > 1 %>
+<div class="rfg-column">
+    <% if segment[:dpt][:airports].length > 1 || segment[:dpt][:cities].length > 1 %>
+    <div class="rf-list" data-key="dpt<%= i + 1 %>">    
+        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>">Вылет <%= raw @search.segments[i].from_as_object.case_from %></h6>        
+        <% if segment[:dpt][:cities].length > 1 %>
+            <ul class="rf-values">
+            <li class="rfv-empty rfv-selected">из любого города</li>
+            <% segment[:dpt][:cities].each do |city| %>
+                <li class="rfv-item" data-value="<%= city.iata %>"><%= city.case_from %></li>
+            <% end %>
+            </ul>
+        <% elsif segment[:dpt][:airports].length > 1 %>
+            <ul class="rf-values">
+            <li class="rfv-empty rfv-selected">из любого аэропорта</li>
+            <% segment[:dpt][:airports].each do |airport| %>
+                <li class="rfv-item" data-value="<%= airport.iata %>"><%= airport.case_from %></li>
+            <% end %>
+            </ul>
+        <% end %>    
+    </div>
     <% end %>
-    </ul>
-<% elsif segment[:airports].length > 1 %>
-    <ul class="rf-values">
-    <li class="rfv-empty rfv-selected"><%= is_dpt ? 'из любого аэропорта' : 'в любой аэропорт' %></li>
-    <% segment[:airports].each do |airport| %>
-        <li class="rfv-item" data-value="<%= airport.iata %>"><%= is_dpt ? airport.case_from : airport.case_to %></li>
+    <% if segment[:arv][:airports].length > 1 || segment[:arv][:cities].length > 1 %>
+    <div class="rf-list" data-key="arv<%= i + 1 %>">    
+        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>">Прилет <%= raw @search.segments[i].to_as_object.case_to %></h6>        
+        <% if segment[:arv][:cities].length > 1 %>
+            <ul class="rf-values">
+            <li class="rfv-empty rfv-selected">в любой город</li>
+            <% segment[:arv][:cities].each do |city| %>
+                <li class="rfv-item" data-value="<%= city.iata %>"><%= city.case_to %></li>
+            <% end %>
+            </ul>
+        <% elsif segment[:arv][:airports].length > 1 %>
+            <ul class="rf-values">
+            <li class="rfv-empty rfv-selected">в любой аэропорт</li>
+            <% segment[:arv][:airports].each do |airport| %>
+                <li class="rfv-item" data-value="<%= airport.iata %>"><%= airport.case_to %></li>
+            <% end %>
+            </ul>
+        <% end %>    
+    </div>
     <% end %>
-    </ul>
-<% end %>
 </div>
 <% end %>
 <% end %>

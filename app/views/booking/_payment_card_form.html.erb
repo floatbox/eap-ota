@@ -11,22 +11,22 @@
     <div class="bfc-number">
         <h6 class="bf-label"><label for="bfcn-part1">Номер карты</label> <span class="bfl-tip">(16&nbsp;цифр)</span></h6>
         <div class="bfcn-parts wrap">
-            <%= f.text_field :number1, :id => "bfcn-part1", :class => "bf-field bfc-field", :maxlength => "4" %>
-            <%= f.text_field :number2, :id => "bfcn-part2", :class => "bf-field bfc-field", :maxlength => "4" %> 
-            <%= f.text_field :number3, :id => "bfcn-part3", :class => "bf-field bfc-field", :maxlength => "4" %>
-            <%= f.text_field :number4, :id => "bfcn-part4", :class => "bf-field bfc-field", :maxlength => "4" %>
+            <%= f.text_field :number1, :id => "bfcn-part1", :class => "bf-field bfc-field -metrika-nokeys", :maxlength => "4" %>
+            <%= f.text_field :number2, :id => "bfcn-part2", :class => "bf-field bfc-field -metrika-nokeys", :maxlength => "4" %> 
+            <%= f.text_field :number3, :id => "bfcn-part3", :class => "bf-field bfc-field -metrika-nokeys" , :maxlength => "4" %>
+            <%= f.text_field :number4, :id => "bfcn-part4", :class => "bf-field bfc-field -metrika-nokeys", :maxlength => "4" %>
         </div>
     </div>
     <div class="bfc-name">
         <h6 class="bf-label"><label for="bfc-name" title="Имя и фамилия латинскими буквами, как на карте">Имя на&nbsp;карте</label></h6>    
-        <%= f.text_field :name, :id => 'bfc-name', :class => "bf-field bfc-field" %>
+        <%= f.text_field :name, :id => 'bfc-name', :class => "bf-field bfc-field -metrika-nokeys" %>
         <div class="bwarning language-warning latent">Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры. Имя нужно вводить латинскими буквами</div>
     </div>
     <div class="bfc-expiration">
         <h6 class="bf-label"><label for="bc-exp-month" title="На карте обозначен как &laquo;VALID THRU&raquo;">Срок действия</label></h6>
         <div class="bfc-date">
-            <div class="bfcd-item"><label class="bf-placeholder" for="bc-exp-month">ММ</label><%= f.text_field :month, :id => "bc-exp-month", :class => "bf-field bfc-field bfcd-month", :maxlength => "2" %></div>
-            <div class="bfcd-item"><label class="bf-placeholder" for="bc-exp-year">ГГ</label><%= f.text_field :year_short, :id => "bc-exp-year", :class => "bf-field bfc-field bfcd-year", :maxlength => "2" %></div>
+            <div class="bfcd-item"><label class="bf-placeholder" for="bc-exp-month">ММ</label><%= f.text_field :month, :id => "bc-exp-month", :class => "bf-field bfc-field bfcd-month -metrika-nokeys", :maxlength => "2" %></div>
+            <div class="bfcd-item"><label class="bf-placeholder" for="bc-exp-year">ГГ</label><%= f.text_field :year_short, :id => "bc-exp-year", :class => "bf-field bfc-field bfcd-year -metrika-nokeys", :maxlength => "2" %></div>
         </div>        
     </div>
 </div>
@@ -36,7 +36,7 @@
     <div class="bfc-stripe">&nbsp;</div>
     <div class="bfc-cvv">
         <h6 class="bf-label"><label for="bc-cvv" id="bc-cvv-label">CVV</label>&nbsp;<span class="bfl-tip">(3&nbsp;цифры)</span></h6>
-        <%= f.text_field :verification_value, :id => "bc-cvv", :class => "bf-field bfc-field", :maxlength => "3" %>
+        <%= f.text_field :verification_value, :id => "bc-cvv", :class => "bf-field bfc-field -metrika-nokeys", :maxlength => "3" %>
         <div id="bfcn-sample" title="Последние четыре цифры номера карты"><span class="bfcn-empty">####</span></div>
     </div>
 </div>

@@ -90,6 +90,11 @@ load: function() {
         } else {
             that.view(content);
         }
+        $w.delay(400).smoothScrollTo(that.form.position());
+        $w.queue(function(next) {
+            $('#bfc-email').focus();
+            next();
+        });
         trackPage('/booking');
     });
 },
@@ -103,7 +108,7 @@ view: function(content) {
     this.el.removeClass('b-processing').show();
     this.form.init();
     this.farerules.init();  
-    $w.scrollTop(0);      
+    $w.scrollTop(0);  
 },
 preview: function(content) {
     var that = this;
@@ -124,7 +129,6 @@ preview: function(content) {
         Queries.hide();
         next();
     });
-    $w.delay(400).smoothScrollTo(this.form.position());
 },
 comparePrices: function() {
     var context = this.content.find('.bf-newprice');
