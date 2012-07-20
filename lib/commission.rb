@@ -908,6 +908,8 @@ commission "1%/0.5%"
 carrier "HR", "HAHN AIR  (Авиарепс)"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 # включено с дополнительной проверкой
 agent    "1 руб. от тарифов, опубликованных в системе бронирования, для авиакомпании Hahn Air и интерлайн-партнеров Hahn Air, указанных на сайте www.HR-ticketing.com;"
 agent    "1 руб. от тарифов Allairpass, расчитываемых на сайте www.allairpass.com, для авиакомпании Hahn Air и интерлайн-партнеров Hahn Air, указанных на сайте www.HR-ticketing.com"
@@ -2811,15 +2813,15 @@ commission "0%/0%"
 
 carrier "S7", "S7 AIRLINES"
 ########################################
-carrier_defaults :consolidator => 0
+carrier_defaults :consolidator => 0, :ticketing_method => "direct"
 
 agent "3% BSP"
 subagent ""
 #our_markup 400
 ##disabled "до времени"
 discount "1.5%"
-ticketing_method "direct"
-commission "3%/3%"
+interline :no, :yes
+commission "3%/0%"
 
 carrier "GA", "GARUDA INDONESIA"
 ########################################
