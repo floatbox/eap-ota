@@ -13,4 +13,24 @@ module Strategy::Sirena::Tickets
     tickets
   end
 
+  def delayed_ticketing?
+    # временная затычка, чтоб 3ds не пытался обилетить "ручное бронирование" и обломаться
+    return true if @order.offline_booking?
+    false
+  end
+
+  def ticket
+    payment_confirm = sirena.payment_ext_auth(:confirm, @order.pnr_number, @order.sirena_lead_pass,
+                                      :cost => (@order.price_fare + @order.price_tax))
+    if payment_confirm.success?
+      logger.info "Strategy::Sirena: ticketed succesfully"
+      @order.ticket!
+      return true
+    else
+      logger.error "Strategy::Sirena: ticketing error: #{payment_confirm.error}"
+      cancel
+      return false
+    end
+  end
+
 end
