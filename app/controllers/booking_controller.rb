@@ -26,7 +26,7 @@ class BookingController < ApplicationController
     StatCounters.inc %W[enter.preliminary_booking.#{partner}.total] if partner
 
     @destination = get_destination
-    StatCounters.d_inc @destination, %W[enter.api.total] if partner
+    StatCounters.d_inc @destination, %W[enter.api.total] if @destination
     StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if @destination && partner
 
     unless strategy.check_price_and_availability
