@@ -3,7 +3,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
   include CustomCSV
   include Typus::Controller::Bulk
 
-  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel, :reload_tickets, :update, :pnr_raw, :void, :make_payable_by_card, :send_invoice]
+  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel, :reload_tickets, :update, :pnr_raw, :void, :make_payable_by_card, :send_invoice, :ticket_in_ticketing_office]
 
   # def set_scope
   #   # добавлять фильтры лучше в def index и т.п., но так тоже работает (пока?)
@@ -113,6 +113,32 @@ class Admin::OrdersController < Admin::EviterraResourceController
 
   def reload_tickets
     @order.reload_tickets
+    redirect_to :action => :show, :id => @order.id
+  end
+
+  def ticket_in_ticketing_office
+    tick_response = nil
+    case @order.commission_ticketing_method
+    when 'aviacenter'
+      tick_response = ::Amadeus.ticketing do |amadeus|
+        amadeus.pnr_retrieve(:number => @order.pnr_number)
+        amadeus.doc_issuance_issue_ticket
+      end
+    when 'direct'
+      tick_response = ::Amadeus.booking do |amadeus|
+        amadeus.pnr_retrieve(:number => @order.pnr_number)
+        amadeus.doc_issuance_issue_ticket
+      end
+    else
+      flash[:error] = 'Недоступный офис обилечивания'
+    end
+    if tick_response && tick_response.success?
+      @order.ticket!
+      @order.reload_tickets
+      flash[:message] = "Билеты выписаны"
+    else
+      flash[:error] ||= "Произошла ошибка: #{tick_response.error_message}"
+    end
     redirect_to :action => :show, :id => @order.id
   end
 

@@ -22,6 +22,9 @@ module Amadeus
           # иногда не все. возможно, только основного перевозчика на маршруте
           marketing_carrier_iatas =
             rec.xpath("r:paxFareProduct/r:paxFareDetail/r:codeShareDetails/r:company").every.to_s
+          last_tkt_date =
+            rec.xpath("r:paxFareProduct/r:fare/r:pricingMessage[r:freeTextQualification/r:textSubjectQualifier = 'LTD']/r:description").every.to_s.find{|str| str.scan(/\d/).present?}
+          last_tkt_date = Date.parse(last_tkt_date) if last_tkt_date
 
           variants = rec.xpath("r:segmentFlightRef").map {|sf|
             segments = sf.xpath("r:referencingDetail[r:refQualifier='S']").each_with_index.collect { |rd, i|
@@ -50,7 +53,8 @@ module Amadeus
             :additional_info => additional_info,
             :cabins => cabins,
             :booking_classes => booking_classes,
-            :availabilities => availabilities
+            :availabilities => availabilities,
+            :last_tkt_date => last_tkt_date
           )
         end
       end

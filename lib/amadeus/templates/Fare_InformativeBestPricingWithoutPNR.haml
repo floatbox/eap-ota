@@ -2,13 +2,13 @@
   %messageFunctionDetails
     %businessFunction 1
     %messageFunction 741
-    %additionalMessageFunction 170
     %responsibleAgency 1A
+    %additionalMessageFunction 170
 %currencyOverride
   %conversionRateDetails
     %currency RUB
 -# Non corporate Unifares and Public fares
-%corporateFares
+%corporateFareInfo
   %corporateFareIdentifiers
     %fareQualifier UP
 %passengersGroup
@@ -49,10 +49,25 @@
     %ptcGroup
       %discountPtc
         %valueQualifier INF
+-#%cabinPreferenceOption
+  %preferenceLevel
+    %productDetailsQualifier FC
+  %cabinPreference
+    %genericDetails
+      %cabinClass 1
 %pricingOptionsGroup
   %pricingDetails
     %companyDetails
       %marketingCompany= validating_carrier
+%pricingOptionsGroup
+  %pricingDetails
+    %priceTicketDetails
+      -# list of lower fares
+      %indicators M
+      -# Request Electronic ticket fares
+      %indicators E
+      -# No split PNR (we can't use multi-ticketing yet)
+      %indicators NS
 %tripsGroup
   %originDestination
   -flights.each do |fl|

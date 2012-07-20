@@ -91,7 +91,8 @@ example 'AERDME/W DMEAER/W'
 agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWUYHMQBKORE"
-discount "7%"
+ticketing_method "downtown"
+discount "6.5%"
 commission "12%/10%"
 
 example 'svoiws/UN7061'
@@ -303,6 +304,7 @@ interline :no
 # Исправление Кати 20.04.2012
 # у нас через DTT 3%
 discount "1.7%"
+ticketing_method "downtown"
 #disabled
 commission "5%/3%"
 
@@ -314,6 +316,7 @@ interline :absent
 # пишем ники на AB через DTT
 check { includes_only(marketing_carrier_iatas, %W[HG]) }
 discount "1.7%"
+ticketing_method "downtown"
 commission "5%/3%"
 
 example 'cdgsvo svocdg/lh'
@@ -905,6 +908,8 @@ commission "1%/0.5%"
 carrier "HR", "HAHN AIR  (Авиарепс)"
 ########################################
 
+carrier_defaults :ticketing_method => "direct"
+
 # включено с дополнительной проверкой
 agent    "1 руб. от тарифов, опубликованных в системе бронирования, для авиакомпании Hahn Air и интерлайн-партнеров Hahn Air, указанных на сайте www.HR-ticketing.com;"
 agent    "1 руб. от тарифов Allairpass, расчитываемых на сайте www.allairpass.com, для авиакомпании Hahn Air и интерлайн-партнеров Hahn Air, указанных на сайте www.HR-ticketing.com"
@@ -1296,7 +1301,7 @@ example 'svocdg'
 agent    "1руб за билет, выписанный по опубл. тарифам, в случае перевозки с вылетом из стран СНГ; 1руб за билет, выписанный по опубл. тарифам,  в случае вылета вне стран СНГ;"
 subagent "5 коп. за билет, выписанный по опубл. тарифам, в случае перевозки с вылетом из стран СНГ; 5 коп. за билет, выписанный по опубл. тарифам, в случае вылета вне стран СНГ;"
 interline :no, :yes
-commission "1eur/5"
+commission "1/0.05"
 
 carrier "KM", "AIR MALTA  (Авиарепс)"
 ########################################
@@ -1344,6 +1349,7 @@ subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
 discount '5%'
+ticketing_method "downtown"
 commission "10%/8%"
 
 example 'dmejfk'
@@ -1355,6 +1361,7 @@ check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US')
 interline :no, :yes
 our_markup "0"
 discount '1%'
+ticketing_method "downtown"
 commission "5%/3%"
 
 example 'dmebcn'
@@ -1423,6 +1430,7 @@ subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
 discount '5%'
+ticketing_method "downtown"
 commission "10%/8%"
 
 example 'dmejfk'
@@ -1434,6 +1442,7 @@ check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') 
 interline :no, :yes
 our_markup "0"
 discount '1%'
+ticketing_method "downtown"
 commission "5%/3%"
 
 example 'dmebcn'
@@ -1701,6 +1710,7 @@ subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
 discount '5%'
+ticketing_method "downtown"
 commission "10%/8%"
 
 example 'dmejfk'
@@ -1712,6 +1722,7 @@ check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US')
 interline :no, :yes
 our_markup "0"
 discount '1%'
+ticketing_method "downtown"
 commission "5%/3%"
 
 example 'dmebcn'
@@ -1890,6 +1901,7 @@ subclasses "CDYSEHM"
 interline :no, :yes
 our_markup "0"
 discount '8%'
+ticketing_method "downtown"
 commission "12%/10%"
 
 example 'svojfk/Q'
@@ -1901,6 +1913,7 @@ check {includes(country_iatas, 'US CA') }
 interline :no, :yes
 our_markup "0"
 discount '4%'
+ticketing_method "downtown"
 commission "8%/6%"
 
 example 'svocdg'
@@ -1925,6 +1938,7 @@ subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
 discount '6%'
+ticketing_method "downtown"
 commission "10%/8%"
 
 example 'dmejfk'
@@ -1936,6 +1950,7 @@ check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') 
 interline :no, :yes
 our_markup "0"
 discount '1%'
+ticketing_method "downtown"
 commission "5%/3%"
 
 #example 'dmence'
@@ -2099,6 +2114,7 @@ subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
 discount '5.5%'
+ticketing_method "downtown"
 commission "10%/8%"
 
 example 'dmejfk'
@@ -2110,6 +2126,7 @@ check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US')
 interline :no, :yes
 our_markup "0"
 discount '1%'
+ticketing_method "downtown"
 commission "5%/3%"
 
 #example 'SVOIAD/UA965/H'
@@ -2796,14 +2813,15 @@ commission "0%/0%"
 
 carrier "S7", "S7 AIRLINES"
 ########################################
-carrier_defaults :consolidator => 0
+carrier_defaults :consolidator => 0, :ticketing_method => "direct"
 
 agent "3% BSP"
-subagent "0% DTT, 10$ с билета"
+subagent ""
 #our_markup 400
 ##disabled "до времени"
 discount "1.5%"
-commission "3%/3%"
+interline :no, :yes
+commission "3%/0%"
 
 carrier "GA", "GARUDA INDONESIA"
 ########################################
