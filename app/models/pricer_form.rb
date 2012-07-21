@@ -255,6 +255,7 @@ class PricerForm
   # в этом порядке!
   before_validation :parse_complex_to
   before_validation :fix_segments
+  validates_presence_of :segments
 
   # заполняет невведенные from во втором и далее сегментах
   def fix_segments
@@ -266,6 +267,7 @@ class PricerForm
   end
 
   def parse_complex_to
+    return unless segments.present?
     self.complex_to ||= segments[0].to.gsub(',', ' ')
     res = {}
     str = self.complex_to.mb_chars
