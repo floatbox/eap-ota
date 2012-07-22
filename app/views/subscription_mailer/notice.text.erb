@@ -1,13 +1,13 @@
 Здравствуйте!
 
-Есть выгодный тариф <%= @notice['city_from']%> <%= @notice['city_to']%><% if @notice['rt']%> и обратно<%end%>:
+Есть выгодный тариф <%= @notice[:city_from]%> <%= @notice[:city_to]%><% if @notice[:rt]%> и обратно<%end%>:
 
-Стоимость — <%= @notice['price']%>
-Вылет <%= @notice['city_from']%> — <%= @notice['from_date']%>
-<% if @notice['rt']%>
-Вылет <%= @notice['city_rt_from']%> — <%= @notice['rt_date']%>
+Стоимость — <%= @notice[:price]%>
+Вылет <%= @notice[:city_from]%> — <%= @notice[:from_date]%>
+<% if @notice[:rt]%>
+Вылет <%= @notice[:city_rt_from]%> — <%= @notice[:rt_date]%>
 <%end%>
-Купить: https://eviterra.com/#<%= @notice['query_key']%>
+Купить: https://eviterra.com/#<%= @notice[:query_key]%>
 
 Если это предложение вам подходит, рекомендуем поторопиться с покупкой, поскольку выгодные тарифы очень популярны и быстро заканчиваются.
 
@@ -19,5 +19,6 @@ www.facebook.com/eviterra
 www.twitter.com/eviterra
 www.vkontakte.ru/eviterra
 
-Вы получили это письмо потому что подписались на уведомления о появлении выгодных тарифов на сайте Eviterra.com. 
-Чтобы отписаться от уведомлений по направлению <%= @notice['description'].html_safe%>, перейдите по ссылке https://eviterra.com/unsubscribe/?subscription=<%= @notice['id']%>&email=<%= @notice['email']%>
+Вы получили это письмо потому что подписались на уведомления о появлении выгодных тарифов на сайте Eviterra.com.
+Чтобы отписаться от уведомлений по направлению <%= @notice[:description].html_safe%>,
+перейдите по ссылке https://eviterra.com/unsubscribe/?subscription=<%= @notice[:id]%>&email=<%= @notice[:email']%>
