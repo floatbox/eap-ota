@@ -10,4 +10,4 @@ delayed_job
 
 дебажим примерно так:
 
-    bundle exec rails runner 'puts Delayed::Backend::Mongoid::Job.last.last_error'
+    bundle exec rails runner 'puts Delayed::Job.last.last_error'
