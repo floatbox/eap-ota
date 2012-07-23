@@ -2180,7 +2180,7 @@ expr_date "31.08.2012"
 agent    "По 31.08.12г. 5% от опубл. тарифов на междунар.рейсах VN;"
 subagent "По 31.08.12г. 2% от опубл. тарифов на междунар.рейсах VN;"
 international
-discount "2%"
+discount "0.5%"
 commission "5%/2%"
 
 #example 'svohan hansvo'
@@ -2188,7 +2188,7 @@ strt_date "01.09.2012"
 agent    "C 01.09.12г. 3% от опубл. тарифов на междунар.рейсах VN;"
 subagent "2% от опубл. тарифов на междунар.рейсах VN;"
 international
-discount "2%"
+discount "0.5%"
 commission "3%/2%"
 
 example 'hansgn'
@@ -2204,7 +2204,7 @@ strt_date "01.09.2012"
 agent    "3% от опубликованных тарифов VN на всех внутренних рейсах VN во Вьетнаме;"
 subagent "2% от опубликованных тарифов VN на всех внутренних рейсах VN во Вьетнаме;"
 domestic
-discount "2%"
+discount "0.5%"
 commission "3%/2%"
 
 example 'svohan hansvo/su'

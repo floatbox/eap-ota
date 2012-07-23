@@ -11,10 +11,10 @@ end
 
 # консолька вместо IRB
 gem 'pry-rails'
-gem 'pry-doc'
+gem 'pry-doc', require: false
 # расцветка строки ввода. убрал, ибо глушат полезные хоткеи
 # gem 'pry-coolline' #, :git => 'https://github.com/pry/pry-coolline.git'
-gem 'pry-editline'
+gem 'pry-editline', require: false
 
 # Deploy with Capistrano
 group :deployment do
@@ -47,7 +47,6 @@ gem 'airbrake'
 gem 'newrelic_rpm'
 gem 'mongoid'
 gem 'bson_ext'
-gem 'qu-mongo'
 gem 'SystemTimer', :platforms => :ruby_18
 gem 'ya2yaml', :platforms => :ruby_18
 

@@ -8,15 +8,14 @@ describe Strategy::Amadeus do
     # safeguard
     Amadeus.stub(:booking).and_yield(amadeus)
     Amadeus.stub(:ticketing).and_yield(amadeus)
+    Amadeus.stub(:downtown).and_yield(amadeus)
   end
 
   it "not yet implements #void" do
     expect { described_class.new.void }.to raise_error(NotImplementedError)
   end
 
-  it "not yet implements #ticket" do
-    expect { described_class.new.ticket }.to raise_error(NotImplementedError)
-  end
+  pending "#ticket"
 
   describe "#get_tickets" do
     pending "with tst_resp"

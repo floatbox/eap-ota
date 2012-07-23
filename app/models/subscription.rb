@@ -61,8 +61,9 @@ class Subscription < ActiveRecord::Base
       :price => human_price(hot_offer.price),
       :query_key => hot_offer.code
     }
-    Qu.enqueue SubscriptionMailer, notice_info
     freeze
+    # TODO вынести delay с параметрами прямо в Subscription
+    SubscriptionMailer.delay(queue: 'subscription', priority: 5).notice(notice_info)
 
     StatCounters.inc %W[subscription.create_notice]
   end

@@ -222,11 +222,6 @@ GEM
     pry-editline (1.1.1)
     pry-rails (0.1.6)
       pry
-    qu (0.1.4)
-      multi_json
-    qu-mongo (0.1.4)
-      mongo
-      qu (= 0.1.4)
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -398,7 +393,6 @@ DEPENDENCIES
   pry-doc
   pry-editline
   pry-rails
-  qu-mongo
   rails (= 3.2.1)
   rb-fchange
   rb-fsevent

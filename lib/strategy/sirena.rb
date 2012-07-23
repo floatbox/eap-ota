@@ -16,7 +16,7 @@ class Strategy::Sirena < Strategy::Base
   # #######
   include Strategy::Sirena::Booking
 
-  # get tickets hashes
+  # ticketing
   # ##################
   include Strategy::Sirena::Tickets
 
@@ -34,29 +34,6 @@ class Strategy::Sirena < Strategy::Base
     logger.error "Strategy::Sirena: voiding #{@order.pnr_number}"
     sirena.return_ticket(@order.pnr_number, @order.sirena_lead_pass)
     #TODO: пометить заказ как войдрованный
-  end
-
-  # ticketing
-  # #########
-
-  def delayed_ticketing?
-    # временная затычка, чтоб 3ds не пытался обилетить "ручное бронирование" и обломаться
-    return true if @order.offline_booking?
-    false
-  end
-
-  def ticket
-    payment_confirm = sirena.payment_ext_auth(:confirm, @order.pnr_number, @order.sirena_lead_pass,
-                                      :cost => (@order.price_fare + @order.price_tax))
-    if payment_confirm.success?
-      logger.info "Strategy::Sirena: ticketed succesfully"
-      @order.ticket!
-      return true
-    else
-      logger.error "Strategy::Sirena: ticketing error: #{payment_confirm.error}"
-      cancel
-      return false
-    end
   end
 
   # debug view

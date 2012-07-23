@@ -19,6 +19,8 @@ module Amadeus
       end
     end
 
+    # TODO переименовать это все в соответствии с назначением
+
     def booking(&block)
       session(Amadeus::Session::BOOKING, &block)
     end
@@ -27,8 +29,8 @@ module Amadeus
       session(Amadeus::Session::TICKETING, &block)
     end
 
-    def testing(&block)
-      session(Amadeus::Session::TESTING, &block)
+    def downtown(&block)
+      session(Amadeus::Session::DOWNTOWN, &block)
     end
   end
 

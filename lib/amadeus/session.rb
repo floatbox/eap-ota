@@ -6,8 +6,7 @@ module Amadeus
 
   BOOKING = 'MOWR228FA'
   TICKETING = 'MOWR2233B'
-  # старый тестовый офис-айди
-  TESTING = 'MOWR2290Q'
+  DOWNTOWN = 'NYC1S21HX'
 
   cattr_accessor :logger do
     Rails.logger
