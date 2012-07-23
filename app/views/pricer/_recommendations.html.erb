@@ -210,7 +210,7 @@
     </div>
     <% if admin_user %>
         <% recommendation.variants_by_duration.each do |variant| %>
-            <p class="o-debug" data-code="<%= raw recommendation.serialize(variant) %>"><% variant_debug_info recommendation, variant %></p>
+            <p class="o-debug" data-segments="<%= segment_ids(variant) %>"><% variant_debug_info recommendation, variant %></p>
         <% end %>
     <% end %>
 </div>

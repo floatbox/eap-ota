@@ -8,6 +8,7 @@ init: function() {
     this.queue.init();
     this.fixed.init();
     this.bookTemplate = $('#ob-template').clone().removeAttr('id');
+    this.debug = Boolean($('#search-debug').length);
 },
 show: function(instant) {
     var that = this, context;

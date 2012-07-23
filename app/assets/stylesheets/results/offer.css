@@ -702,3 +702,11 @@
     padding: 2px 4px;
     background: #e2ea5f;
 }
+
+/* Debug */
+.o-debug {
+    display: none;
+}
+.od-debug {
+    margin: 12px 14px 0 200px;
+}

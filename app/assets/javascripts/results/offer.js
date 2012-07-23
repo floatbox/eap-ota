@@ -315,6 +315,12 @@ updateDetails: function() {
     var temp = $('<div></div>');
     temp.append(odSegments);
     temp.append(odComments);
+    if (results.debug) {
+        var debug = offer.el.find('.o-debug[data-segments="' + segments.join(' ') + '"]');
+        if (debug.length) {
+            odSegments.prepend('<div class="od-debug">' + debug.html() + '</div>');
+        }
+    }
     if (!this.details) {
         this.details = $('<div class="o-details">').hide().appendTo(this.el);
     }
