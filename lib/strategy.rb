@@ -2,6 +2,12 @@
 # TODO изменить имя на что-то менее generic
 module Strategy
 
+  class Error < StandardError
+  end
+
+  class TicketError < Error
+  end
+
   def self.select args={}
     source = args.delete(:source) || (args[:rec] || args[:order] || args[:ticket]).try(:source)
     case source

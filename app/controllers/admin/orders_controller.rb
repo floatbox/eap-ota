@@ -101,7 +101,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
   end
 
   def ticket
-    res = @order.ticket!
+    flash[:error] = 'не удалось загрузить все билеты' unless @order.ticket!
     redirect_to :action => :show, :id => @order.id
   end
 
@@ -117,28 +117,16 @@ class Admin::OrdersController < Admin::EviterraResourceController
   end
 
   def ticket_in_ticketing_office
-    tick_response = nil
-    case @order.commission_ticketing_method
-    when 'aviacenter'
-      tick_response = ::Amadeus.ticketing do |amadeus|
-        amadeus.pnr_retrieve(:number => @order.pnr_number)
-        amadeus.doc_issuance_issue_ticket
-      end
-    when 'direct'
-      tick_response = ::Amadeus.booking do |amadeus|
-        amadeus.pnr_retrieve(:number => @order.pnr_number)
-        amadeus.doc_issuance_issue_ticket
-      end
+    @order.strategy.ticket
+    if @order.ticket!
+      flash[:message] = 'Билеты загружены'
     else
-      flash[:error] = 'Недоступный офис обилечивания'
+      LoadTicketsJob.new(:order_id => @order.id).delay
+      flash[:message] = 'Билеты в процессе выписки. Они будут загружены в ближайшее время'
     end
-    if tick_response && tick_response.success?
-      @order.ticket!
-      @order.reload_tickets
-      flash[:message] = "Билеты выписаны"
-    else
-      flash[:error] ||= "Произошла ошибка: #{tick_response.error_message}"
-    end
+    redirect_to :action => :show, :id => @order.id
+  rescue Strategy::TicketError => e
+    flash[:error] = e.message
     redirect_to :action => :show, :id => @order.id
   end
 
