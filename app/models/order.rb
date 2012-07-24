@@ -10,6 +10,7 @@ class Order < ActiveRecord::Base
   scope :MOWR2219U, lambda { by_office_id 'MOWR2219U' }
   scope :FLL1S212V, lambda { by_office_id 'FLL1S212V' }
 
+
   def self.by_office_id office_id
     joins(:tickets).where('tickets.office_id' => office_id).uniq
   end
@@ -131,6 +132,8 @@ class Order < ActiveRecord::Base
   end
 
   scope :unticketed, where(:payment_status => 'blocked', :ticket_status => 'booked')
+  scope :processing_ticket, where(:ticket_status => 'processing_ticket')
+  scope :error_ticket, where(:ticket_status => 'error_ticket')
   scope :ticketed, where(:payment_status => ['blocked', 'charged'], :ticket_status => 'ticketed')
 
   scope :stale, lambda {
