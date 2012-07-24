@@ -7,7 +7,7 @@ class LoadTicketsJob
 
   def perform
     order = Order.find(@order_id)
-    raise 'Не загрузились билеты' if order.ticket_status == 'ticketing' && !order.ticket!
+    raise 'Не загрузились билеты' if order.ticket_status == 'processing_ticket' && !order.ticket!
   end
 
   def delay(args={})
