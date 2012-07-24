@@ -7,7 +7,8 @@ module Amadeus
       end
 
       def error_message
-        xpath('//r:errorGroup/r:errorWarningDescription/r:freeText').to_s.try(:strip)
+        # В случае успешного обилечивания в error вылезает OK Eticket
+        !success? && xpath('//r:errorGroup/r:errorWarningDescription/r:freeText').to_s.try(:strip)
       end
     end
   end

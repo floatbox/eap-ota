@@ -11,7 +11,7 @@ every 5.minutes do
   runner 'Order.cancel_stale!'
 end
 
-every 5.minutes do
+every 10.minutes do
   runner 'Notification.process_queued_emails!'
 end
 

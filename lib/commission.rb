@@ -445,7 +445,7 @@ carrier "B2", "Belavia"
 example 'svocdg'
 agent    "5% от всех опубл. тарифов на собств. рейсы B2;"
 subagent "3,5% от всех опубл. тарифов на собств. рейсы B2;"
-discount "1.5%"
+#discount "1.5%"
 commission "5%/3.5%"
 
 carrier "BA", "BRITISH AIRWAYS (См. в конце таблицы продолжение в 4-х частях)"
@@ -2692,7 +2692,7 @@ carrier "A9", "GEORGIAN AIRWAYS"
 example 'tbsdme'
 agent "8 (восемь) % от опубл. тарифа на собств. рейсы авиакомпании А9;"
 subagent "6 % от опубл. тарифа на собств. рейсы А9;"
-discount "3%"
+#discount "3%"
 commission "8%/6%"
 
 example 'tbsdme dmetbs/ab'

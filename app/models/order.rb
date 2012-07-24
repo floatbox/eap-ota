@@ -37,7 +37,7 @@ class Order < ActiveRecord::Base
   end
 
   def self.ticket_statuses
-    [ 'booked', 'canceled', 'ticketed']
+    [ 'booked', 'canceled', 'ticketed', 'processing_ticket', 'error_ticket']
   end
 
   def self.ticket_office_ids
@@ -258,20 +258,24 @@ class Order < ActiveRecord::Base
     e.message
   end
 
-  def load_tickets
-    @tickets_are_loading = true
+  def load_tickets(check_count = false)
     ticket_hashes = strategy.get_tickets
-    ticket_hashes.each do |th|
-      if (th[:office_id].blank? || Ticket.office_ids.include?(th[:office_id])) &&
-          !tickets.find_by_number(th[:number])
-        tickets.create(th)
+    if !check_count || ticket_hashes.length >= blank_count
+      @tickets_are_loading = true
+      ticket_hashes.each do |th|
+        if (th[:office_id].blank? || Ticket.office_ids.include?(th[:office_id])) &&
+            !tickets.find_by_number(th[:number])
+          tickets.create(th)
+        end
       end
+
+      #Необходимо, тк t.update_attributes глючит при создании билетов (не обновляет self.tickets)
+      tickets.reload
+      @tickets_are_loading = false
+      true
+    else
+      false
     end
-
-    #Необходимо, тк t.update_attributes глючит при создании билетов (не обновляет self.tickets)
-    tickets.reload
-    @tickets_are_loading = false
-
   end
 
   # Нужен для Маршрут квитанции (список билетов, подсчет цен)
@@ -410,8 +414,10 @@ class Order < ActiveRecord::Base
   end
 
   def ticket!
-    update_attributes(:ticket_status =>'ticketed', :ticketed_date => Date.today)
-    reload_tickets
+    if (['booked', 'processing_ticket', 'error_ticket'].include? ticket_status) && load_tickets(true)
+      update_attributes(:ticket_status =>'ticketed', :ticketed_date => Date.today)
+      update_prices_from_tickets
+    end
   end
 
   def reload_tickets
