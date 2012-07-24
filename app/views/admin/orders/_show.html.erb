@@ -52,7 +52,7 @@ URL для оплаты: <%= link_to edit_payment_url(:code => @item.code), edit
 <% if ['booked', 'processing_ticket', 'error_ticket'].include? @item.ticket_status %>
   <td><%= button_to 'Ticket', {:action => 'ticket', :id => @item.id}, {:confirm => 'сменить состояние на "ticketed"? (реальная выписка пока делается из терминала)'}%></td>
   <% if @item.source == 'amadeus' && @item.ticket_status == 'booked' %>
-  <td><%= button_to 'Выписать (эксперементально)', {:action => 'ticket_in_ticketing_office', :id => @item.id}, {:confirm => "Эксперементальная выписка в офисе #{@item.commission_ticketing_method}"}%></td>
+  <td><%= button_to 'Выписать (экспериментально)', {:action => 'ticket_in_ticketing_office', :id => @item.id}, {:confirm => "Экспериментальная выписка в офисе #{@item.commission_ticketing_method}"}%></td>
   <% end %>
 <% end %>
 <% if @item.ticket_status == 'ticketed' && @item.source == 'sirena' %>
