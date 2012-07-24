@@ -2,4 +2,25 @@
 
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
 require 'delayed/command'
+
+# вынуждены манкипатчить Worker, чтобы переоткрывать соединение с mysql
+# Mongo перероткрывается бэкендом Mongoid-а
+class Delayed::Worker
+  class << self
+
+    def before_fork_with_eviterra_addons
+      before_fork_without_eviterra_addons
+      ::ActiveRecord::Base.clear_all_connections!
+    end
+    alias_method_chain :before_fork, :eviterra_addons
+
+    def after_fork_with_eviterra_addons
+      after_fork_without_eviterra_addons
+      ::ActiveRecord::Base.establish_connection
+    end
+    alias_method_chain :after_fork, :eviterra_addons
+
+  end
+end
+
 Delayed::Command.new(ARGV).daemonize
