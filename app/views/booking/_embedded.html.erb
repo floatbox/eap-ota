@@ -1,5 +1,5 @@
 <% recommendation = @order_form.recommendation %>
-<div class="b-header"><h3 class="bh-text">Ваш билет</h3></div>
+<div class="b-header"><h3 class="bh-text"><%= @order_form.people.one? ? 'Ваш билет' : 'Ваши билеты' %></h3></div>
 <div class="b-details">
 <div class="od-segments">
 <% cabins = different_cabins(recommendation, @search.cabin) %>

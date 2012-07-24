@@ -69,8 +69,9 @@ process: function(result) {
     }
 },
 failed: function() {
-    var tip = 'Так иногда бывает, потому что авиакомпания не&nbsp;может подтвердить наличие мест на&nbsp;этот рейс по&nbsp;этому тарифу. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.';
-    this.offer.state.html('В данный момент невозможно выбрать этот вариант <span class="link obs-hint">Почему?</span>');
+    var tip = 'Так бывает вследствие несвоевременного или&nbsp;некорректного обновления авиакомпанией информации о&nbsp;наличии мест в&nbsp;системах бронирования. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.';
+    this.offer.book.addClass('ob-failed');
+    this.offer.state.html('Авиакомпания не подтвердила наличие мест по этому тарифу. Выберите другой вариант. <span class="link obs-hint">Почему так бывает?</span>');
     this.offer.state.find('.obs-hint').click(function(event) {
         hint.show(event, tip);
     });

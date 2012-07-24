@@ -52,13 +52,10 @@ select: function(index) {
     this.summaries.all.removeClass('os-selected');
     var variant = this.variants[index];
     for (var i = variant.segments.length; i--;) {
-        if (!this.summaries[variant.segments[i]]) {
-            console.log(this);
-        }
         this.summaries[variant.segments[i]].addClass('os-selected');
     }
     this.selected = variant;
-    this.book.removeClass('ob-disabled');    
+    this.book.removeClass('ob-disabled ob-failed');
     this.updateBook();
 },
 choose: function(segment, code) {

@@ -62,23 +62,6 @@
     color: #f90a6f;
 }
 
-/* Prebooking */
-.ob-progress {
-    padding-right: 26px;
-    background: url(/images/booking/progress-w.gif) no-repeat 100% 5px;
-}
-.ob-disabled .obb-left {
-    background-position: 100% -45px;
-}
-.ob-disabled .obb-right {
-    background-position: 0 -45px;
-}
-.ob-disabled .obb-title {
-    color: #b8b8b8;
-    text-shadow: none;
-    cursor: default;
-}
-
 /* Fixed price */
 .ob-placeholder {
     position: relative;
@@ -138,7 +121,34 @@
 .od-hide {
     display: none;
 }
-.ob-disabled .od-control {
+
+/* Prebooking */
+.ob-progress {
+    padding-right: 26px;
+    background: url(/images/booking/progress-w.gif) no-repeat 100% 5px;
+}
+.ob-disabled .obb-left {
+    background-position: 100% -45px;
+}
+.ob-disabled .obb-right {
+    background-position: 0 -45px;
+}
+.ob-disabled .obb-title {
+    color: #b8b8b8;
+    text-shadow: none;
+    cursor: default;
+}
+
+/* Failed booking */
+.ob-failed .ob-button {
+    display: none;
+}
+.ob-failed .ob-state {
+    margin-right: 0;
+    margin-left: 6px;
+    font-size: 18px;
+}
+.ob-failed .od-control {
     visibility: hidden;
 }
 
