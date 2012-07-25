@@ -52,21 +52,27 @@ validate: function(forced) {
         wrong = wrong.concat(section.wrong);
         empty = empty.concat(section.empty);
     }
+    var disabled = false;
+    this.required.html('');
+    if (wrong.length) {
+        this.required.append('<p class="bffr-wrong">' + wrong.join(' ') + '</p>');
+        disabled = true;
+    }
     if (empty.length > 4) {
         empty[3] = 'еще ' + (empty.length - 3).decline('поле', 'поля', 'полей');
         empty.length = 4;
     }
     if (empty.length > 0) {
-        wrong.push('Осталось заполнить ' + empty.enumeration(' и&nbsp;') + '.');
+        this.required.append('<p class="bffr-empty">Осталось заполнить ' + empty.enumeration(' и&nbsp;') + '.</p>');
+        disabled = true;
     }
     if (this.back) {
         this.result.hide();
         this.footer.show();
         delete this.back;
     }
-    var disabled = wrong.length !== 0;
-    this.required.html(wrong.join(' ')).toggle(disabled);
     this.button.toggleClass('bfb-disabled', disabled);
+    this.required.toggle(disabled);
 },
 submit: function() {
     var that = this;
@@ -149,7 +155,7 @@ process: function(s) {
             that.footer.show();
         });
         var wd = this.el.find('.bff-price .bffp-wd').is(':visible');
-        var context = this.el.find('.bff-price').html(this.result.find('.bfnp-data').html());
+        var context = this.el.find('.bffp-content').html(this.result.find('.bfnp-data').html());
         context.find('.bffp-wd').toggle(wd);
         context.find('.bffp-nd').toggle(!wd);
         this.el.find('.bf-newprice').attr('data-price', np);

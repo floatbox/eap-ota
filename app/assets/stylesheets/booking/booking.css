@@ -202,6 +202,10 @@
     font-size: 16px;
     line-height: 18px;
 }
+.bffr-wrong {
+    margin: 0 0 10px;
+    color: #F02020;
+}
 .bffr-link {
     cursor: pointer;
 }

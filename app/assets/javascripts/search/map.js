@@ -218,7 +218,7 @@ showPrices: function(items) {
             dates[1] = item.date2.substring(8, 10) + '.' + item.date2.substring(5, 7);
             indexes[1] = search.dates.dmyIndex[item.date2.substring(8, 10) + item.date2.substring(5, 7) + item.date2.substring(2, 4)];
         }
-        var content = template.absorb(item.to.name_ru, Math.round(item.price), dates.join('—'));
+        var content = template.absorb(item.to.name_ru, Math.round(item.price).separate(), dates.join('—'));
         var latlng = new google.maps.LatLng(item.to.lat, item.to.lng);
         var label = new mapLabel({
             position: latlng,

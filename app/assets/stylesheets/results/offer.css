@@ -274,14 +274,14 @@
     padding-left: 12px;
     background: url(/images/results/parrows.png) no-repeat;
 }
-.ossp-same {
-    background: none;
-}
 .ossp-rise {
     background-position: 0 -26px;
 }
 .ossp-fall {
     background-position: 0 -86px;
+}
+.ossp-abs {
+    display: none;
 }
 
 /* Time and airport */
@@ -452,6 +452,12 @@
 }
 .os-summary:hover .ossp-fall {
     background-position: 0 -56px;
+}
+.os-summary:hover .ossp-rel {
+    display: none;
+}
+.os-summary:hover .ossp-abs {
+    display: block;
 }
 .os-summary:hover .ossc-icon {
     opacity: 0.6;

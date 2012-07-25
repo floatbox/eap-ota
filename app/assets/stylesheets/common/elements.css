@@ -114,3 +114,8 @@ body {
 .ruble {
     font-family: 'ALSRubl-Arial', Arial, sans-serif;
 }
+
+/* Thousands separator */
+.thousand {
+    margin-left: 0.15em;
+}

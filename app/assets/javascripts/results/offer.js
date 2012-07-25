@@ -43,8 +43,8 @@ addBook: function() {
     this.state = this.book.find('.ob-state');
 },
 updateBook: function() {
-    var units = local.currencies.RUR;
-    var price = this.selected.price.decline(units[0], units[1], units[2]);
+    var u = local.currencies.RUR, p = this.selected.price;
+    var price = p.separate() + '&nbsp;' + p.decline(u[0], u[1], u[2], false);
     this.btitle.html(results.priceTemplate.absorb(price));
     this.state.html(results.stateTemplate);
 },
@@ -91,7 +91,7 @@ selectSegment: function(segment, flights) {
     this.otherSegments();
     this.otherCarriers();
     if (this.prices && this.prices.different) {
-        this.otherPrices();                
+        this.otherPrices();
     }
     if (this.details && this.details.is(':visible')) {
         this.updateDetails();
@@ -124,7 +124,7 @@ showCompatible: function() {
         var el = $(this);
         el.toggleClass('os-disabled', !compatible[el.attr('data-flights')]);
     });
-    //this.sortSegments();    
+    //this.sortSegments();
 },
 sortSegments: function() {
     this.el.find('.o-segment').each(function() {
@@ -144,7 +144,7 @@ sortSegments: function() {
         items = items.sort(sorting);
         for (var i = items.length; i--;) {
             items[i].el.prependTo(segment);
-        } 
+        }
     });
 },
 otherSegments: function() {
@@ -192,7 +192,7 @@ otherCarriers: function() {
                 el.find('.oss-carrier').addClass('other-carrier');
             }
         });
-    });   
+    });
 },
 otherPrices: function() {
     var prices = this.prices;
@@ -212,12 +212,18 @@ otherPrices: function() {
                 value = prices[segments.join(' ')];
             }
             if (value !== sp) {
-                var price = $('<div class="oss-price"></div>');
-                var key = value > sp ? 'rise' : 'fall';
-                var text = results.currencies['RUR'].absorb(Math.abs(value - sp));
-                price.html(local.offers.price[key].absorb(text));
-                price.addClass('ossp-' + key);
-                el.addClass('oss-different').append(price);
+                var type = value > sp ? 'rise' : 'fall';
+                var curr = results.currencies['RUR'];
+                var absp = curr.absorb(value.separate());
+                var sample = $('<div class="oss-price"></div>').addClass('ossp-' + type);
+                if (ss.length === 1) {
+                    el.append(sample.clone().html(absp));
+                } else {
+                    var relp = local.offers.price[type].absorb(curr.absorb(Math.abs(value - sp).separate()));
+                    el.append(sample.clone().addClass('ossp-rel').html(relp));
+                    el.append(sample.clone().addClass('ossp-abs').html(absp));
+                }
+                el.addClass('oss-different');
             }
         });
     });
@@ -291,7 +297,7 @@ toggleExcess: function(segment, amount) {
         prices.push(item.price);
     }
     var pmin = Math.min.apply(Math, prices);
-    var pmax = Math.min.apply(Math, prices);    
+    var pmax = Math.min.apply(Math, prices);
 },
 updateDetails: function() {
     var offer = this.selected.offer;

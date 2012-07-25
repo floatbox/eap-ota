@@ -8,6 +8,13 @@ prototype.decline = function(w1, w2, w3, complex) {
 prototype.constrain = function(min, max) {
     var n = this.valueOf();
 	return (n < min) ? min : ((n > max) ? max : n);
+};
+prototype.separate = function() {
+    var s = this.toString();
+    for (var i = s.length / 3; i > 1; i--) {
+        s = s.replace(/(\d+)(\d{3})/, '$1<span class="thousand">$2</span>');
+    }
+    return s;
 };}
 
 with (Array) {
