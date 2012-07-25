@@ -150,6 +150,13 @@ commission "4%/2%"
 example 'svocdg/lh cdgmad/lh'
 no_commission
 
+example 'SVOCDG CDGSVO/ZI:UN'
+interline :yes, :no, :absent
+important!
+check { includes(operating_carrier_iatas, 'ZI') }
+dont_sell "продают не на электронном стоке"
+commission "/"
+
 carrier "2U", "SUN D’OR International Airlines (РИНГ-АВИА)"
 ########################################
 
