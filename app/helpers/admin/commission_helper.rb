@@ -5,19 +5,11 @@ module Admin::CommissionHelper
     return unless commission.disabled?
 
     if reason = commission.not_implemented
-      if reason == true
-        reason = 'не умеем надежно определять правило'
-      end
+      reason = 'не умеем надежно определять правило' if reason == true
     elsif reason = commission.disabled
-      if reason == true
-        reason = 'причина не указана'
-      end
-    elsif reason = commission.dont_sell
-      if reason == true
-        reason = 'продажа по данному правилу запрещена'
-      end
-    elsif commission.no_commission
-      reason = 'заглушка для спорных предложений'
+      reason = 'причина не указана' if reason == true
+    elsif reason = commission.no_commission
+      reason = 'продажа по данному правилу запрещена' if reason == true
     end
     " (#{reason}) " if reason
   end

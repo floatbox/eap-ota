@@ -12,7 +12,7 @@ module Commission::Rules
   has_commission_attrs :agent, :subagent, :consolidator, :blanks, :discount, :our_markup
 
   attr_accessor :carrier,
-    :disabled, :not_implemented, :no_commission, :dont_sell,
+    :disabled, :not_implemented, :no_commission,
     :interline, :domestic, :international, :classes, :subclasses,
     :routes,
     :departure, :departure_country, :important,
@@ -23,8 +23,11 @@ module Commission::Rules
   attr_reader :examples
 
   def disabled?
-    # технически, dont_sell тоже "отключенное" правило, но оно должно проверяться в applicable?
     disabled || not_implemented || no_commission
+  end
+
+  def skipped?
+    disabled || not_implemented
   end
 
   def applicable? recommendation
@@ -32,7 +35,7 @@ module Commission::Rules
   end
 
   def turndown_reason recommendation
-    disabled? and return "правило отключено"
+    skipped? and return "правило не проверяется"
     # carrier == recommendation.validating_carrier_iata and
     applicable_date? or return "прошел/не наступил период действия"
     applicable_interline?(recommendation) or return "интерлайн/не интерлайн"
@@ -153,7 +156,10 @@ module Commission::Rules
 
   module ClassMethods
 
-    ALLOWED_KEYS_FOR_DEFS = %W[ system ticketing_method consolidator blanks discount our_markup corrector disabled dont_sell].map(&:to_sym)
+    ALLOWED_KEYS_FOR_DEFS = %W[
+      system ticketing_method consolidator blanks discount our_markup
+      corrector disabled not_implemented no_commission
+    ].map(&:to_sym)
 
     def defaults def_opts={}
       def_opts.to_options!.assert_valid_keys(ALLOWED_KEYS_FOR_DEFS)
@@ -198,13 +204,17 @@ module Commission::Rules
     end
 
     # заглушка для example который _не должны_ найти комиссию
-    def no_commission
+    def no_commission(reason=true)
       # opts здесь по идее содержит только examples
       commission = new({
         :carrier => @carrier,
         :source => caller_address,
-        :no_commission => true
-      }.merge(opts))
+        :no_commission => reason
+      }.merge(opts).reverse_merge(carrier_default_opts).reverse_merge(default_opts))
+
+      # FIXME временно выключаю, потому что корректоры у нас пока работают только с числами
+      # а их тут нет.
+      # commission.correct!
 
       self.opts = {}
       register commission
@@ -234,10 +244,6 @@ module Commission::Rules
 
     def not_implemented value=true
       opts[:not_implemented] = value
-    end
-
-    def dont_sell value=true
-      opts[:dont_sell] = value
     end
 
     # правило интерлайна
@@ -335,7 +341,7 @@ module Commission::Rules
         c.applicable?(recommendation)
       end
       return unless commission
-      return if commission.dont_sell
+      return if commission.disabled?
       commission
     end
 

@@ -154,8 +154,7 @@ example 'SVOCDG CDGSVO/ZI:UN'
 interline :yes, :no, :absent
 important!
 check { includes(operating_carrier_iatas, 'ZI') }
-dont_sell "продают не на электронном стоке"
-commission "/"
+no_commission "ZI продают не на электронном стоке"
 
 carrier "2U", "SUN D’OR International Airlines (РИНГ-АВИА)"
 ########################################
@@ -1282,10 +1281,6 @@ commission "4%/3%"
 carrier "KE", "KOREAN AIR"
 ########################################
 
-#example 'icnsvo'
-example 'svoicn icnsvo/ab'
-no_commission
-
 example 'svogmp'
 agent "С 01.04.2011г. 5% от опубл. тарифов на собств. рейсы KE с пунктом начала маршрута в России."
 subagent "С 01.04.2011г. 3% от опубл. тарифов на собств. рейсы KE с пунктом начала маршрута в России."
@@ -1298,6 +1293,9 @@ agent "С 01.04.2011г. 0% от опубл. тарифов на собств. р
 subagent "С 01.04.2011г. 0% от опубл. тарифов на собств. рейсы KE с пунктом начала маршрута вне России."
 check { not includes(country_iatas.first, 'RU') }
 commission "0%/0%"
+
+example 'svoicn icnsvo/ab'
+no_commission
 
 carrier "KL", "KLM"
 ########################################

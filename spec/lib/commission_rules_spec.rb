@@ -265,7 +265,7 @@ describe Commission::Rules do
 
   end
 
-  context "dont_sell commissions for a company" do
+  context "no_commission commissions for a company" do
 
     let :commission_class do
       Class.new do
@@ -279,8 +279,7 @@ describe Commission::Rules do
 
         agent "second"
         classes :business
-        dont_sell "forbidden to sale"
-        commission '2%/2%'
+        no_commission '2%/2% forbidden to sale'
 
         agent "third"
         classes :business
@@ -296,7 +295,7 @@ describe Commission::Rules do
       commission_class.exists_for?(recommendation).should be_true
     }
 
-    it "should not find dont_sell commission" do
+    it "should not find no_commission commission" do
       commission_class.find_for(recommendation).should be_nil
     end
 

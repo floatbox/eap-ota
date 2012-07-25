@@ -73,7 +73,7 @@ describe Commission do
 
             subject {example}
 
-            if commission.disabled? || commission.dont_sell
+            if commission.disabled?
               it {
                 should_not match_commission
               }
