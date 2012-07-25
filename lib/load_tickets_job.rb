@@ -25,7 +25,7 @@ class LoadTicketsJob
 
   def failure(job)
     order = Order.find @order_id
-    order.update_attribute :ticket_status, 'error_ticket'
+    order.update_attributes :ticket_status => 'error_ticket'
   end
 
 end
