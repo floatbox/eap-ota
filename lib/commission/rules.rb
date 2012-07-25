@@ -12,7 +12,7 @@ module Commission::Rules
   has_commission_attrs :agent, :subagent, :consolidator, :blanks, :discount, :our_markup
 
   attr_accessor :carrier,
-    :disabled, :not_implemented, :no_commission,
+    :disabled, :not_implemented, :no_commission, :dont_sell,
     :interline, :domestic, :international, :classes, :subclasses,
     :routes,
     :departure, :departure_country, :important,
@@ -23,6 +23,7 @@ module Commission::Rules
   attr_reader :examples
 
   def disabled?
+    # технически, dont_sell тоже "отключенное" правило, но оно должно проверяться в applicable?
     disabled || not_implemented || no_commission
   end
 
@@ -152,7 +153,7 @@ module Commission::Rules
 
   module ClassMethods
 
-    ALLOWED_KEYS_FOR_DEFS = %W[ system ticketing_method consolidator blanks discount our_markup corrector disabled].map(&:to_sym)
+    ALLOWED_KEYS_FOR_DEFS = %W[ system ticketing_method consolidator blanks discount our_markup corrector disabled dont_sell].map(&:to_sym)
 
     def defaults def_opts={}
       def_opts.to_options!.assert_valid_keys(ALLOWED_KEYS_FOR_DEFS)
@@ -230,10 +231,13 @@ module Commission::Rules
     def disabled reason=true
       opts[:disabled] = reason
     end
-    alias_method :vague, :disabled
 
     def not_implemented value=true
       opts[:not_implemented] = value
+    end
+
+    def dont_sell value=true
+      opts[:dont_sell] = value
     end
 
     # правило интерлайна
@@ -327,9 +331,12 @@ module Commission::Rules
     # метод поиска рекомендации
 
     def find_for(recommendation)
-      all_for(recommendation).find do |c|
+      commission = all_for(recommendation).find do |c|
         c.applicable?(recommendation)
       end
+      return unless commission
+      return if commission.dont_sell
+      commission
     end
 
     def all_for(recommendation)

@@ -35,7 +35,7 @@ module Strategy::Amadeus::Tickets
     # TODO сделать precheck на наличие и валидность комиссий в брони
     # Для выписки в американском офисе нужно убедится, что текуший офис - 2233
     raise Strategy::TicketError, 'Заказ не в состоянии booked' unless @order.ticket_status == 'booked'
-    @order.update_attribute(:ticket_status, 'processing_ticket')
+    @order.update_attributes :ticket_status => 'processing_ticket'
     case @order.commission_ticketing_method
     when 'aviacenter'
       amadeus_ticket('MOWR2233B')
@@ -47,7 +47,7 @@ module Strategy::Amadeus::Tickets
       raise Strategy::TicketError, "unsupported ticketing method: #{@order.ticketing_method.inspect}"
     end
   rescue ::Amadeus::Error => e
-    Airbrake.notify!(e)
+    Airbrake.notify(e)
     raise Strategy::TicketError, e.message
   end
 

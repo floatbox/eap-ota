@@ -10,6 +10,7 @@ class Order < ActiveRecord::Base
   scope :MOWR2219U, lambda { by_office_id 'MOWR2219U' }
   scope :FLL1S212V, lambda { by_office_id 'FLL1S212V' }
 
+
   def self.by_office_id office_id
     joins(:tickets).where('tickets.office_id' => office_id).uniq
   end
@@ -131,6 +132,8 @@ class Order < ActiveRecord::Base
   end
 
   scope :unticketed, where(:payment_status => 'blocked', :ticket_status => 'booked')
+  scope :processing_ticket, where(:ticket_status => 'processing_ticket')
+  scope :error_ticket, where(:ticket_status => 'error_ticket')
   scope :ticketed, where(:payment_status => ['blocked', 'charged'], :ticket_status => 'ticketed')
 
   scope :stale, lambda {
@@ -283,7 +286,8 @@ class Order < ActiveRecord::Base
     tickets.where(:status => 'ticketed')
   end
 
-  def update_prices_from_tickets # FIXME перенести в strategy
+  # возвращает boolean
+  def update_prices_from_tickets
     tickets.reload
     # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
     return if old_booking || @tickets_are_loading || sold_tickets.blank? || sold_tickets.any?{|t| t.office_id == 'FLL1S212V'}
@@ -413,11 +417,12 @@ class Order < ActiveRecord::Base
     update_attribute(:payment_status, 'not blocked') if payment_status == 'pending'
   end
 
+  # возвращает boolean
   def ticket!
-    if (['booked', 'processing_ticket', 'error_ticket'].include? ticket_status) && load_tickets(true)
-      update_attributes(:ticket_status =>'ticketed', :ticketed_date => Date.today)
-      update_prices_from_tickets
-    end
+    return false unless ticket_status.in? 'booked', 'processing_ticket', 'error_ticket'
+    return false unless load_tickets(true)
+    update_attributes(:ticket_status => 'ticketed', :ticketed_date => Date.today)
+    update_prices_from_tickets
   end
 
   def reload_tickets

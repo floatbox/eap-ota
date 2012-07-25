@@ -19,6 +19,8 @@ class Admin::OrdersController < Admin::EviterraResourceController
   def index
     # так тоже можно. просто выставляет параметры обычных фильтров
     add_predefined_filter 'Unticketed', Order.unticketed.scope_attributes, 'unticketed'
+    add_predefined_filter 'Processing Ticket', Order.processing_ticket.scope_attributes, 'processing_ticket'
+    add_predefined_filter 'Error Ticket', Order.error_ticket.scope_attributes, 'error_ticket'
     add_predefined_filter 'MOWR228FA', {:scope => 'MOWR228FA'}
     add_predefined_filter 'MOWR2233B', {:scope => 'MOWR2233B'}
     add_predefined_filter 'MOWR221F9', {:scope => 'MOWR221F9'}
@@ -126,7 +128,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
     end
     redirect_to :action => :show, :id => @order.id
   rescue Strategy::TicketError => e
-    flash[:error] = e.message
+    flash[:error] = e.message.presence || 'Странная ошибка. Скажите, если случится.'
     redirect_to :action => :show, :id => @order.id
   end
 

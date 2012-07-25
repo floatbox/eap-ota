@@ -12,6 +12,10 @@ module Admin::CommissionHelper
       if reason == true
         reason = 'причина не указана'
       end
+    elsif reason = commission.dont_sell
+      if reason == true
+        reason = 'продажа по данному правилу запрещена'
+      end
     elsif commission.no_commission
       reason = 'заглушка для спорных предложений'
     end
