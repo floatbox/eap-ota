@@ -71,6 +71,7 @@ describe Commission::Rules do
         blanks 50
         discount '2%'
         our_markup '1%'
+        disabled "because of Caturday, that's why"
         commission '2%/3'
       end
     end
@@ -87,6 +88,8 @@ describe Commission::Rules do
     its(:blanks) {should == Fx('50')}
     its(:our_markup) {should == Fx('1%')}
     its(:discount) {should == Fx('2%')}
+    its(:disabled) {should == "because of Caturday, that's why"}
+    its(:disabled?) {should be_true}
   end
 
   context "setting defaults" do
@@ -258,6 +261,65 @@ describe Commission::Rules do
         commission_class.all_with_reasons_for(recommendation).every.first.every.number.should == [3, 1, 2, 4]
       end
 
+    end
+
+  end
+
+  context "dont_sell commissions for a company" do
+
+    let :commission_class do
+      Class.new do
+        include Commission::Rules
+
+        carrier 'AB'
+
+        agent "first"
+        classes :economy
+        commission '1%/1%'
+
+        agent "second"
+        classes :business
+        dont_sell "forbidden to sale"
+        commission '2%/2%'
+
+        agent "third"
+        classes :business
+        commission '3%/3%'
+      end
+    end
+
+    let :recommendation do
+      Recommendation.example('SVOCDG/BUSINESS', :carrier => 'AB')
+    end
+
+    specify {
+      commission_class.exists_for?(recommendation).should be_true
+    }
+
+    it "should not find dont_sell commission" do
+      commission_class.find_for(recommendation).should be_nil
+    end
+
+    specify {
+      commission_class.all_for(recommendation).should have(3).items
+    }
+
+    describe ".all_with_reasons_for" do
+      subject { commission_class.all_with_reasons_for(recommendation) }
+
+      it {should have(3).items}
+
+      it "should have correct statuses" do
+        subject.map {|row| row[1]}.should == [:fail, :success, :skipped]
+      end
+
+      it "should have no reason for success" do
+        subject[1][2].should be_nil
+      end
+
+      it "should display as successful really applied commission" do
+        subject.find {|row| row[1] == :success}[0].agent_comments.strip.should == "second"
+      end
     end
 
   end

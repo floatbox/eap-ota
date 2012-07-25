@@ -43,7 +43,7 @@
       <% else %>
         <h3>правила</h3>
         <ul>
-          <% if commission.disabled? %>
+          <% if commission.disabled? || commission.dont_sell %>
             <li style="color:red">продажа отключена <%= reason_of_disability(commission) %> </li>
           <% end %>
           <li> выписка <strong><%= commission.ticketing_method %></strong> (<%= commission.system %>) </li>
