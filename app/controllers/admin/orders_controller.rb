@@ -128,7 +128,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
     end
     redirect_to :action => :show, :id => @order.id
   rescue Strategy::TicketError => e
-    flash[:error] = e.message
+    flash[:error] = e.message.presence || 'Странная ошибка. Скажите, если случится.'
     redirect_to :action => :show, :id => @order.id
   end
 
