@@ -66,8 +66,8 @@ class Person
     res = "#{first_name}/#{last_name}/#{sex}/#{nationality.alpha3}/#{birthday.strftime('%d%b%y').upcase}/#{passport}/"
     res += "expires:#{document_expiration_date.strftime('%d%b%y').upcase}/" unless document_noexpiration
     res += "bonus: #{bonuscard_type}#{bonuscard_number}/" if bonus_present
-    res += "child" if infant_or_child == 'c'
-    res += "infant" if infant_or_child == 'i'
+    res += "child" if child?
+    res += "infant" if infant?
     res
   end
 
@@ -97,10 +97,10 @@ class Person
   end
 
   def first_name_with_code
-    if infant_or_child
-      first_name
-    else
+    if adult?
       first_name + ' ' + (sex == 'f' ? 'MRS' : 'MR')
+    else
+      first_name
     end
   end
 
@@ -120,13 +120,13 @@ class Person
   end
 
   def check_age
-    check_infant_or_child_age(infant_or_child == 'i') if infant_or_child && flight_date
+    check_infant_or_child_age if !adult? && flight_date
   end
 
   # FIXME а если день рождения между рейсами?
-  def check_infant_or_child_age(infant=true)
-    if birthday && (birthday + (infant ? 2 : 12).years <= flight_date)
-      errors.add :birthday, "на момент вылета будет более #{infant ? '2 лет' : '12 лет'}"
+  def check_infant_or_child_age
+    if birthday && (birthday + (infant? ? 2 : 12).years <= flight_date)
+      errors.add :birthday, "на момент вылета будет более #{infant? ? '2 лет' : '12 лет'}"
     end
   end
 

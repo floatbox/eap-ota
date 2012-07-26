@@ -19,16 +19,18 @@ module Sirena
         @passengers = order.people.collect{|person|
           expire_date = person.document_noexpiration ? nil : person.document_expiration_date.strftime('%d.%m.%y')
           doccode = person.doccode_sirena
-          pass_code = case person.infant_or_child
-                      when 'i' then
+          pass_code = if person.infant?
                         infant_num+=1
                         if infant_num <= order.people_count[:adults]
                           "РМГ"
                         else
                           "РВГ"
                         end
-                      when 'c' then "РБГ"
-                      else "ААА" end
+                      elsif person.child?
+                        "РБГ"
+                      else
+                        "ААА"
+                      end
           {
             :family=>person.last_name,
             :name=>person.first_name_sirena,

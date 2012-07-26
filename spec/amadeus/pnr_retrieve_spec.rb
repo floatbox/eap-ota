@@ -64,7 +64,7 @@ describe Amadeus::Response::PNRRetrieve do
     specify { subject.passengers.collect(&:last_name).should == ['MITROFANOV', 'MITROFANOVA', 'MITROFANOVA', 'MITROFANOVA'] }
     specify { subject.passengers.collect(&:first_name).should == ['PAVEL MR', 'VALENTINA MRS', 'MARIA', 'ARINA'] }
     specify { subject.passengers.collect(&:passport).should == ['111116818', '222228156', '333335276', '444442618'] }
-    specify { subject.passengers.find_all{|p| p.infant_or_child == 'i'}.length.should == 1 }
+    specify { subject.passengers.find_all{|p| p.infant? }.length.should == 1 }
     specify {subject.all_segments_available?.should == true}
     its(:complex_tickets?) {should be_false}
     its(:email) { should == 'PAVEL@EXAMPLE.COM' }
