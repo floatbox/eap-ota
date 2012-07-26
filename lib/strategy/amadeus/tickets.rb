@@ -48,6 +48,7 @@ module Strategy::Amadeus::Tickets
     end
   rescue ::Amadeus::Error => e
     Airbrake.notify(e)
+    @order.update_attributes(:ticket_status => 'error_ticket')
     raise Strategy::TicketError, e.message
   end
 
