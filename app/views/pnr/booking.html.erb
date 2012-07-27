@@ -62,8 +62,8 @@
                 <%= exact_price(@prices.price_declared_discount) %> RUB<br>
               <% end %>
               <% if @prices.payment_type == 'delivery' %>
-                  350 RUB<br>
-                  <%= exact_price(@prices.price_with_payment_commission + 350)  %> RUB<br>
+                  400 RUB<br>
+                  <%= exact_price(@prices.price_with_payment_commission + 400)  %> RUB<br>
               <% else %>
                   <%= exact_price(@prices.price_with_payment_commission) %> RUB<br>
               <% end %>
