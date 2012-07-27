@@ -307,6 +307,11 @@ class Order < ActiveRecord::Base
     save
   end
 
+  # использовать для сравнения с TST
+  def prices
+    [price_fare, price_tax]
+  end
+
   # считывание offline брони из GDS
   ######################################
   extend CastingAccessors
