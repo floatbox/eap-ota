@@ -50,7 +50,7 @@ Eviterra::Application.configure do
   # Prepend all log lines with the following tags
   # config.log_tags = [ :subdomain, :uuid ]
 
-  config.logger = ActiveSupport::TaggedLogging.new(OldBufferedLogger.new('log/production.log'), OldBufferedLogger::INFO)
+  config.logger = ActiveSupport::TaggedLogging.new(OldBufferedLogger.new('log/production.log', OldBufferedLogger::INFO))
 
   # Use a different cache store in production
   # config.cache_store = :mem_cache_store
