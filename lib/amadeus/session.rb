@@ -13,8 +13,8 @@ module Amadeus
   end
 
   cattr_accessor :pool do
-    #Amadeus::Session::MongoStore
-    Amadeus::Session::ARStore
+    Amadeus::Session::MongoStore
+    #Amadeus::Session::ARStore
   end
 
   cattr_accessor :default_office do
