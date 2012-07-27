@@ -63,7 +63,7 @@ module Strategy::Amadeus::Tickets
         raise Strategy::TicketError, "тариф или таксы изменились, было #{@order.prices.inspect}, стало #{pricing.prices.inspect}"
       else
         amadeus.ticket_create_tst_from_pricing(:fares_count => pricing.fares_count).or_fail!
-        amadeus.pnr_commit.or_fail!
+        amadeus.pnr_commit_and_retrieve.or_fail!
       end
       amadeus.doc_issuance_issue_ticket.or_fail!
     end
