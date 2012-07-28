@@ -1,7 +1,7 @@
 # пусть валяются в таблице
 Delayed::Worker.destroy_failed_jobs = false
 # как часто дергать базу, если новых задач нет
-Delayed::Worker.sleep_delay = 60
+# Delayed::Worker.sleep_delay = 60
 # дефолтное количество повторов сфейлившихся задач
 # можно оверрайдить в конкретной задаче
 Delayed::Worker.max_attempts = 3

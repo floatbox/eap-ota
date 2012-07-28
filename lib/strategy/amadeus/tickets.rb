@@ -55,6 +55,16 @@ module Strategy::Amadeus::Tickets
   def amadeus_ticket(office_id)
     ::Amadeus.session(office_id) do |amadeus|
       amadeus.pnr_retrieve(:number => @order.pnr_number).or_fail!
+      # пересоздаем TST и сверяем цены
+      # не выписываем, если цены изменились
+      pricing = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @order.commission_carrier).or_fail!
+      if pricing.prices != @order.prices
+        amadeus.pnr_ignore
+        raise Strategy::TicketError, "тариф или таксы изменились, было #{@order.prices.inspect}, стало #{pricing.prices.inspect}"
+      else
+        amadeus.ticket_create_tst_from_pricing(:fares_count => pricing.fares_count).or_fail!
+        amadeus.pnr_commit_and_retrieve.or_fail!
+      end
       amadeus.doc_issuance_issue_ticket.or_fail!
     end
   end

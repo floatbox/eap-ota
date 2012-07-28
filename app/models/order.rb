@@ -223,7 +223,7 @@ class Order < ActiveRecord::Base
     self.departure_date = recommendation.journey.flights[0].dept_date
     # FIXME вынести рассчет доставки отсюда
     if order_form.payment_type != 'card'
-      self.cash_payment_markup = recommendation.price_payment + (order_form.payment_type == 'delivery' ? 350 : 0)
+      self.cash_payment_markup = recommendation.price_payment + (order_form.payment_type == 'delivery' ? 400 : 0)
     end
     if recommendation.commission
       copy_attrs recommendation.commission, self, {:prefix => :commission},
@@ -305,6 +305,11 @@ class Order < ActiveRecord::Base
 
     self.price_difference = price_total - price_total_old if price_difference == 0
     save
+  end
+
+  # использовать для сравнения с TST
+  def prices
+    [price_fare, price_tax]
   end
 
   # считывание offline брони из GDS

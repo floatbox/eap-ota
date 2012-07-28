@@ -14,13 +14,13 @@
     <% price_discount = @order_form.recommendation.price_discount.round.to_i %>    
     <div class="bfnp-data">
         <p class="bffp-nd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total %></span>&nbsp;<%= rubles(price_total) %></p>
-        <p class="bffp-wd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total + 350 %></span>&nbsp;<%= rubles(price_total + 350) %></p>
+        <p class="bffp-wd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total + 400 %></span>&nbsp;<%= rubles(price_total + 400) %></p>
         <p class="bffp-tip"><%= 'за всех пассажиров' if @order_form.people.many? %></p>
         <ul class="bffp-details">
             <li class="bffpd-item">Тариф — <%= price_fare %> <span class="ruble">Р</span></li>
             <li class="bffpd-item">Таксы и сборы — <%= price_total - price_fare %> <span class="ruble">Р</span></li>
             <li class="bffpd-item">В том числе сервисный сбор — <%= @order_form.recommendation.fee.round.to_i %> <span class="ruble">Р</span></li>
-            <li class="bffpd-item bffp-wd">Доставка — 350 <span class="ruble">Р</span></li>
+            <li class="bffpd-item bffp-wd">Доставка — 400 <span class="ruble">Р</span></li>
             <% if price_discount > 0 %>
                 <li class="bffpd-item">Скидка — <%= price_discount %> <span class="ruble">Р</span></li>
             <% end %>            
