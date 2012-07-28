@@ -71,18 +71,18 @@ class Admin::OrdersController < Admin::EviterraResourceController
 
   def unblock
     if @order.unblock!
-      flash[:message] = 'Деньги разблокированы'
+      flash[:notice] = 'Деньги разблокированы'
     else
-      flash[:error] = "Произошла ошибка"
+      flash[:alert] = "Произошла ошибка"
     end
     redirect_to :action => :show, :id => @order.id
   end
 
   def charge
     if @order.charge!
-      flash[:message] = 'Деньги списаны с карты'
+      flash[:notice] = 'Деньги списаны с карты'
     else
-      flash[:error] = "Произошла ошибка"
+      flash[:alert] = "Произошла ошибка"
     end
     redirect_to :action => :show, :id => @order.id
   end
@@ -103,7 +103,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
   end
 
   def ticket
-    flash[:error] = 'не удалось загрузить все билеты' unless @order.ticket!
+    flash[:alert] = 'не удалось загрузить все билеты' unless @order.ticket!
     redirect_to :action => :show, :id => @order.id
   end
 
@@ -121,14 +121,14 @@ class Admin::OrdersController < Admin::EviterraResourceController
   def ticket_in_ticketing_office
     @order.strategy.ticket
     if @order.ticket!
-      flash[:message] = 'Билеты загружены'
+      flash[:notice] = 'Билеты загружены'
     else
       LoadTicketsJob.new(:order_id => @order.id).delay
-      flash[:message] = 'Билеты в процессе выписки. Они будут загружены в ближайшее время'
+      flash[:notice] = 'Билеты в процессе выписки. Они будут загружены в ближайшее время'
     end
     redirect_to :action => :show, :id => @order.id
   rescue Strategy::TicketError => e
-    flash[:error] = e.message.presence || 'Странная ошибка. Скажите, если случится.'
+    flash[:alert] = e.message.presence || 'Странная ошибка. Скажите, если случится.'
     redirect_to :action => :show, :id => @order.id
   end
 
