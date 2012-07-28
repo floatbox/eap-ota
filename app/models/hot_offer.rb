@@ -63,15 +63,18 @@ class HotOffer
 
   def self.price_map from_iata=nil, rt=nil, date=nil
     fromdate = Date.strptime(date, '%d%m%y')
+    fromdate = Date.tomorrow if fromdate < Date.tomorrow
     todate = fromdate.months_since(2)
-    tomorrow = Date.tomorrow
-    fromdate = tomorrow if fromdate < tomorrow
-    
+
+    if Date.today.month + 2 >= todate.month then searchdays = 1
+    else searchdays = 2
+    end
+
     offers = HotOffer.where(
       :for_stats_only => false,
       :date1.gte => fromdate,
       :date1.lt => todate,
-      :created_at.gte => Date.today - 2
+      :created_at.gte => Date.today - searchdays
       ).and(:price_variation_percent.lt => - 15).order_by(:price_variation_percent => :asc)
     offers = offers.where(:from_iata => from_iata) if from_iata
     offers = offers.where(:rt => rt) if rt
