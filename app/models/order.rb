@@ -161,6 +161,10 @@ class Order < ActiveRecord::Base
     tickets.count
   end
 
+  def sold_tickets_numbers
+    sold_tickets.every.number_with_code.join('; ')
+  end
+
   def tickets_office_ids_array
     tickets.collect{|t| t.office_id}.uniq
   end

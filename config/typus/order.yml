@@ -113,14 +113,18 @@ Order:
       - price_tax
       - price_consolidator
       - price_blanks
+      - commission_ticketing_method
       - price_agent
+      - commission_agent
       - commission_subagent
+      - commission_discount
       - price_subagent
       - price_discount
       - price_with_payment_commission
       - price_total
       - expected_income
       - balance
+      - sold_tickets_numbers
       - partner
     options:
       selectors: payment_type, source, ticket_status, pricing_method, commission_ticketing_method
