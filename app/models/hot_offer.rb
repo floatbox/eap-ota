@@ -66,8 +66,10 @@ class HotOffer
     fromdate = Date.tomorrow if fromdate < Date.tomorrow
     todate = fromdate.months_since(2)
 
-    if Date.today.month + 2 >= todate.month then searchdays = 1
-    else searchdays = 2
+    if Date.today.month + 2 >= todate.month # FIXME в ноябре-декабре работать как надо не будет!
+      searchdays = 1
+    else
+      searchdays = 2
     end
 
     offers = HotOffer.where(
