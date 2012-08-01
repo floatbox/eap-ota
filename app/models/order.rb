@@ -170,7 +170,7 @@ class Order < ActiveRecord::Base
   end
 
   def tickets_office_ids
-    tickets_office_ids_array.join(',')
+    tickets_office_ids_array.join('; ')
   end
 
   def order_id

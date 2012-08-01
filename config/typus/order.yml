@@ -113,7 +113,7 @@ Order:
       - price_tax
       - price_consolidator
       - price_blanks
-      - commission_ticketing_method
+      - tickets_office_ids
       - price_agent
       - commission_agent
       - commission_subagent
