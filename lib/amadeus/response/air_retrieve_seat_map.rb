@@ -79,6 +79,10 @@ module Amadeus
         seats
       end
 
+      def error_message
+        xpath('//r:errorDetails/r:errorInformation/r:errorNumber').to_s.try(:strip)
+      end
+
     end
   end
 end
