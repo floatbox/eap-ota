@@ -70,6 +70,7 @@ describe Amadeus::Response::PNRRetrieve do
     its(:email) { should == 'PAVEL@EXAMPLE.COM' }
     its(:phone) { should == '+75557777555' }
     its(:validating_carrier_code) { should == 'LH' }
+    its('flights.every.amadeus_ref') { should == [1, 2] }
 
   end
 
