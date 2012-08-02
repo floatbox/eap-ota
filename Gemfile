@@ -45,6 +45,7 @@ gem 'paper_trail'
 gem 'geo_ip'
 gem 'airbrake'
 gem 'newrelic_rpm'
+gem 'rpm_contrib'
 gem 'mongoid'
 gem 'bson_ext'
 gem 'SystemTimer', :platforms => :ruby_18

@@ -17,15 +17,22 @@ class PNR
         :email
     else
       Amadeus.booking do |amadeus|
-        resp = amadeus.pnr_retrieve_and_ignore(:number => number)
-        copy_attrs resp, pnr,
+        pnr_resp = amadeus.pnr_retrieve(:number => number)
+        tst_resp = amadeus.ticket_display_tst
+        amadeus.pnr_ignore
+        copy_attrs pnr_resp, pnr,
           :flights,
           :booking_classes,
           :passengers,
           :phone,
           :email
-        add_number = resp.additional_pnr_numbers[pnr.order.commission_carrier]
+        add_number = pnr_resp.additional_pnr_numbers[pnr.order.commission_carrier]
         pnr.additional_number = add_number if add_number != pnr.order.pnr_number
+        pnr.flights.each do |fl|
+          puts fl.amadeus_ref
+          puts tst_resp.baggage_for_segments
+          fl.baggage_limit_for_adult = tst_resp.baggage_for_segments[fl.amadeus_ref]
+        end
       end
     end
     pnr

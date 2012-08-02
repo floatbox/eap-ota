@@ -106,6 +106,7 @@ Order:
       - pnr_number
       - charged_on
       - created_date
+      - ticketed_date
       - tickets_count
       - route
       - commission_carrier
@@ -113,14 +114,18 @@ Order:
       - price_tax
       - price_consolidator
       - price_blanks
+      - tickets_office_ids
       - price_agent
+      - commission_agent
       - commission_subagent
+      - commission_discount
       - price_subagent
       - price_discount
       - price_with_payment_commission
       - price_total
       - expected_income
       - balance
+      - sold_tickets_numbers
       - partner
     options:
       selectors: payment_type, source, ticket_status, pricing_method, commission_ticketing_method

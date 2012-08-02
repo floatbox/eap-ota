@@ -15,12 +15,16 @@ class LoadTicketsJob
     Delayed::Job.enqueue(self, {
       # queue: 'messaging',
       # priority: 0,  # самый высокий приоритет, дефолтный
-      run_at: 5.minutes.from_now#, # если надо отложить первый старт
+      run_at: 3.minutes.from_now#, # если надо отложить первый старт
     }.merge(args))
   end
 
+  def max_attempts
+    6
+  end
+
   def reschedule_at(now, attempts)
-    now + 300 # seconds
+    now + 180 # seconds
   end
 
   def failure(job)

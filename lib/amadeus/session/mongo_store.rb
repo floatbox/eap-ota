@@ -38,7 +38,7 @@ module Amadeus
 
       include KeyValueInit
       def initialize(args={})
-        @doc = args.delete(:doc) || {"booked" => false}
+        @doc = args.delete(:doc) || {"booked" => false, "env" => Conf.amadeus.env}
         super
       end
 
@@ -139,19 +139,27 @@ module Amadeus
 
     private
 
-      def self.free_condition
+      # прикрученная шурупами возможность держать в одной таблицы сессии для
+      # разных environments
+      def self.default_condition
         {
-          booked: false,
-          updated_at: { :$gt => Amadeus::Session::INACTIVITY_TIMEOUT.seconds.ago.utc }
+          env: Conf.amadeus.env
         }
       end
 
+      def self.free_condition
+        default_condition.merge({
+          booked: false,
+          updated_at: { :$gt => Amadeus::Session::INACTIVITY_TIMEOUT.seconds.ago.utc }
+        })
+      end
+
       def self.stale_condition
-        {
+        default_condition.merge({
           # FIXME сделать как в ARStore?..
           # booked: false,
           updated_at: { :$lte => Amadeus::Session::INACTIVITY_TIMEOUT.seconds.ago.utc }
-        }
+        })
       end
 
     end

@@ -161,12 +161,16 @@ class Order < ActiveRecord::Base
     tickets.count
   end
 
+  def sold_tickets_numbers
+    sold_tickets.every.number_with_code.join('; ')
+  end
+
   def tickets_office_ids_array
     tickets.collect{|t| t.office_id}.uniq
   end
 
   def tickets_office_ids
-    tickets_office_ids_array.join(',')
+    tickets_office_ids_array.join('; ')
   end
 
   def order_id
@@ -305,6 +309,11 @@ class Order < ActiveRecord::Base
 
     self.price_difference = price_total - price_total_old if price_difference == 0
     save
+  end
+
+  # использовать для сравнения с TST
+  def prices
+    [price_fare, price_tax]
   end
 
   # считывание offline брони из GDS

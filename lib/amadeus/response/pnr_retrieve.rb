@@ -111,6 +111,7 @@ module Amadeus
 
       def flights_hash
         @flights_hash ||= xpath("//r:itineraryInfo[r:elementManagementItinerary/r:segmentName='AIR']").inject( ActiveSupport::OrderedHash.new) do |res, fi|
+          ref = fi.xpath("r:elementManagementItinerary/r:reference/r:number").to_i
           fh = {
             :marketing_carrier_iata => fi.xpath("r:travelProduct/r:companyDetail/r:identification").to_s,
             :departure_iata =>         fi.xpath("r:travelProduct/r:boardpointDetail/r:cityCode").to_s,
@@ -123,9 +124,9 @@ module Amadeus
             :equipment_type_iata =>    fi.xpath("r:flightDetail/r:productDetails/r:equipment").to_s,
             :departure_term =>         fi.xpath("r:flightDetail/r:departureInformation/r:departTerminal").to_s,
             :cabin =>                  fi.xpath("r:travelProduct/r:productDetails/r:classOfService").to_s,
-            :warning =>                fi.xpath("r:errorInfo/r:errorfreeFormText/r:text").to_s
+            :warning =>                fi.xpath("r:errorInfo/r:errorfreeFormText/r:text").to_s,
+            :amadeus_ref => ref
           }
-          ref = fi.xpath("r:elementManagementItinerary/r:reference/r:number").to_i
           if fh[:marketing_carrier_iata] #для пустых перелетов (случай сложного маршрута)
             res.merge({ref => fh})
           else

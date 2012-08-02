@@ -2,6 +2,29 @@
 require 'spec_helper'
 
 describe Amadeus::Response::TicketDisplayTST do
+
+  describe '#baggage_with_refs' do
+    context 'with different baggage' do
+      subject_once! {
+        amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_with_different_baggage.xml')
+      }
+
+      its('baggage_with_refs.keys.sort') {should == [1, 2]}
+      specify {subject.baggage_with_refs[1].keys.sort.should == [[11, "a"], [12, "a"], [12, "i"]]}
+      specify {subject.baggage_with_refs[1][[12, 'i']].should == {:value => 10, :type => 'K'}}
+      specify {subject.baggage_with_refs[1][[11, 'a']].should == {:value => 1, :type => 'N'}}
+      its(:baggage_for_segments) {should == {1 => {:value => 1, :type => 'N'}, 2 => {:value => 1, :type => 'N'}}}
+    end
+
+    context 'with two simular persons' do
+
+      subject_once! {
+        amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_for_two.xml')
+      }
+      specify {subject.baggage_with_refs[1].keys.sort.should == [[12, "a"], [13, 'a']]}
+    end
+  end
+
   describe 'adult with infant' do
 
     subject_once! {
