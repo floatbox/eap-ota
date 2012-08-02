@@ -43,6 +43,7 @@ Eviterra::Application.routes.draw do
   match '/corporate/stop' => 'corporate#stop', :as => :stop_corporate
   match '/corporate' => 'corporate#index', :as => :corporate
   match '/flight_groups/:id' => 'flight_groups#show', :as => :show_flight_group
+  match '/seat_map/:flight' => 'seat_map#show', :as => :show_seat_map
 
   resources :geo_tags
 

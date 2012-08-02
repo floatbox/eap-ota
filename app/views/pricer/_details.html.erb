@@ -20,6 +20,9 @@
             <dd><%= flight.equipment_type_name %></dd>
             <dt>в пути</dt>
             <dd><%= human_duration(flight.duration) %></dd>
+            <% if admin_user%>
+                <p style="text-align:center"><a href='/seat_map/<%=flight.flight_code %>' class='iframe'>карта мест</a></p>
+            <% end %>
          </dl>
         <% if segment_cabins[fcounter] %>
         <ul class="osd-notice">
