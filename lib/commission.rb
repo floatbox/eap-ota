@@ -174,7 +174,7 @@ carrier "5N", "Нордавиа-РА"
 example 'svocdg'
 agent    "7% от всех опубл. тарифов на рейсы 5N (В договоре Interline отдельно не прописан.)"
 subagent "5% от опубл. тарифов на собств.рейсы 5N"
-discount "2.5%"
+discount "3.8%"
 # our_markup 120
 commission "7%/5%"
 
@@ -182,7 +182,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :yes
-discount "2.5%"
+discount "3.8%"
 # our_markup 120
 commission "7%/5%"
 
@@ -862,7 +862,7 @@ example 'svocdg cdgsvo/ab'
 agent "7% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 subagent "5% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 interline :no, :yes
-discount "3.5%"
+discount "4.1%"
 commission '7%/5%'
 
 example 'ledsvo/business svoled/business'
@@ -2825,7 +2825,7 @@ agent "3% BSP"
 subagent ""
 #our_markup 400
 ##disabled "до времени"
-discount "1.5%"
+discount "1.7%"
 interline :no, :yes
 commission "3%/0%"
 
