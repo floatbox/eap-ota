@@ -106,6 +106,7 @@ Order:
       - pnr_number
       - charged_on
       - created_date
+      - ticketed_date
       - tickets_count
       - route
       - commission_carrier
