@@ -54,6 +54,10 @@ module BookingHelper
     I18n.l(Date.strptime(date, '%d%m%y'), :format => '%e %B %Y')
   end
   
+  def human_week_day date
+    I18n.l(Date.strptime(date, '%d%m%y'), :format => ' %A')
+  end
+  
   def full_human_date_en date
     # Date.strptime(date, '%d%m%y').strftime('%e %B %Y')
     Date.strptime(date, '%d%m%y').to_s(:long)
