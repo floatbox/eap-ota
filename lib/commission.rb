@@ -2406,6 +2406,7 @@ carrier "J2", "Azerbaijan Hava Yollari"
 example 'svocdg'
 agent    "1 рубль за 1 выписанный билет на стоке 771"
 subagent "5 коп. с билета по опубл тарифам на собств. рейсы J2"
+disabled "Выключил азеров, т.к. их нет в BSP"
 commission "1/0.05"
 
 carrier "AT", "ROYAL AIR MAROC"
