@@ -29,8 +29,6 @@ class PNR
         add_number = pnr_resp.additional_pnr_numbers[pnr.order.commission_carrier]
         pnr.additional_number = add_number if add_number != pnr.order.pnr_number
         pnr.flights.each do |fl|
-          puts fl.amadeus_ref
-          puts tst_resp.baggage_for_segments
           fl.baggage_limit_for_adult = tst_resp.baggage_for_segments[fl.amadeus_ref]
         end
       end
