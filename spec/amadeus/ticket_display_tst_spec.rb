@@ -11,9 +11,11 @@ describe Amadeus::Response::TicketDisplayTST do
 
       its('baggage_with_refs.keys.sort') {should == [1, 2]}
       specify {subject.baggage_with_refs[1].keys.sort.should == [[11, "a"], [12, "a"], [12, "i"]]}
-      specify {subject.baggage_with_refs[1][[12, 'i']].should == {:value => 10, :type => 'K'}}
-      specify {subject.baggage_with_refs[1][[11, 'a']].should == {:value => 1, :type => 'N'}}
-      its(:baggage_for_segments) {should == {1 => {:value => 1, :type => 'N'}, 2 => {:value => 1, :type => 'N'}}}
+      specify {subject.baggage_with_refs[1][[12, 'i']].kilos.should == 10}
+      specify {subject.baggage_with_refs[1][[11, 'a']].units.should == 1}
+      specify {subject.baggage_with_refs[1][[11, 'a']].units?.should be_true}
+      specify {subject.baggage_for_segments[2].units?.should be_true}
+      specify {subject.baggage_for_segments[2].units.should == 1}
     end
 
     context 'with two simular persons' do

@@ -28,11 +28,7 @@ module Amadeus
           passenger_refs = bi.xpath('../../../r:paxSegReference/r:refDetails/r:refNumber').every.to_i
           infant_flag = bi.xpath('../../../r:statusInformation/r:firstStatusDetails[r:tstFlag="INF"]').present? ? 'i' : 'a'
           passenger_refs.each do |pax_ref|
-            if baggage_type == 'N' && baggage_quantity
-              memo[segment_ref][[pax_ref, infant_flag]] = {:value => baggage_quantity, :type => 'N'}
-            elsif baggage_type == 'W' && baggage_weight
-              memo[segment_ref][[pax_ref, infant_flag]] = {:value => baggage_weight, :type => measure_unit}
-            end
+              memo[segment_ref][[pax_ref, infant_flag]] = BaggageLimit.new(:baggage_quantity => baggage_quantity, :baggage_type => baggage_type, :baggage_weight => baggage_weight, :measure_unit => measure_unit)
           end
           memo
         end
