@@ -4,7 +4,7 @@
   %body
 
     - @seat_map.segments.each_with_index do |segment, seg_index|
-      %h1 aircraft #{segment.aircraft} #{Airplane[segment.aircraft].try(:name)}
+      %h1 aircraft #{segment.aircraft} #{Airplane[segment.aircraft].name rescue "not in database"}
       %h2
         segment #{seg_index+1}:
         #{segment.departure_iata} - #{segment.arrival_iata} (#{segment.departure_date})
