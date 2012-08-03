@@ -33,7 +33,7 @@ module Amadeus
 
       def self.delete_all(args={})
         args.assert_valid_keys :office
-        collection.remove(args)
+        collection.remove( default_condition.merge(args) )
       end
 
       include KeyValueInit

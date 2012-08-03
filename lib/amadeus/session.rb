@@ -63,6 +63,17 @@ module Amadeus
       end
     end
 
+    # удаляет из хранилища и сессии, используемые другими процессами прямо сейчас.
+    # не должно быть проблемой
+    # без параметра удаляет сессии во всех офисах
+    def delete_all(office=nil)
+      if office
+        pool.delete_all(office: office)
+      else
+        pool.delete_all
+      end
+    end
+
     def from_record(record)
       session = allocate
       session.record = record
