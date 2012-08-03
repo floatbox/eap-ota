@@ -5,29 +5,39 @@ class SeatMap
 
   class Segment
     include KeyValueInit
-    attr_accessor :aircraft, :departure_iata, :arrival_iata, :departure_date, :rows, :columns, :cabins_count
+    attr_accessor :aircraft, :departure_iata, :arrival_iata, :departure_date, :cabins
 
     def seats
-      rows.each(&:seats)
+      rows.values.map(&:seats).reduce(&:merge)
+    end
+
+    def rows
+      cabins.map(&:rows).reduce(&:merge)
     end
 
     def [] seat_id
-      row = rows[seat_id[0]]
+      row = rows[seat_id[0...-1]]
       row.seats[seat_id]
     end
 
   end
 
+  class Cabin
+    include KeyValueInit
+    attr_accessor :class, :rows, :columns, :occupation_default, :segment
+
+  end
+
   class Row
     include KeyValueInit
-    attr_accessor :number, :characteristics, :cabin, :seats, :segment
+    attr_accessor :number, :characteristics, :cabin, :seats, :overwing, :cabin
 
     def exit_row?
       characteristics['E']
     end
 
     def overwing_row?
-      characteristics['K']
+      characteristics['K'] || overwing
     end
 
     def lowerdeck_row?
@@ -41,11 +51,15 @@ class SeatMap
     def upperdeck_row?
       characteristics['U']
     end
+
+    def no_row?
+      characteristics['Z']
+    end
   end
 
   class Column
     include KeyValueInit
-    attr_accessor :name, :characteristics, :segment
+    attr_accessor :name, :characteristics, :cabin, :aisle_to_the_left, :aisle_to_the_right
 
     def window?
       characteristics['W']
@@ -66,20 +80,31 @@ class SeatMap
 
   class Seat
     include KeyValueInit
-    attr_accessor :segment, :column_name, :row, :characteristics, :available
+    attr_accessor :row, :characteristics, :available, :cabin, :column
     delegate :window?, :aisle?, :center?, :to => :column
-
-    def column
-      @column ||= segment.columns[column_name]
-    end
+    delegate :name, :to => :column, :prefix => true
+    delegate :number, :to => :row, :prefix => true
 
     def available?
-      available
+      available == 'F'
+    end
+
+    def name
+      row_number + column_name
+    end
+
+    def auto_created?
+      characteristics['0']
+    end
+
+    def no_seat?
+      characteristics['8'] || row.no_row?
     end
   end
 
 
   SEAT_PROPS= Hash[ <<-"END".lines.map {|l| l.strip.split(/\s+/, 2) } ]
+    0       Created automatically as default
     1       Restricted seat - General
     10      Seat designated for RBD "A"
     11      Seat designated for RBD "B"

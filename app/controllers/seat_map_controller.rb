@@ -2,14 +2,10 @@
 class SeatMapController < ApplicationController
 
   def show
-    amadeus = Amadeus.booking
     flight = Flight.from_flight_code params[:flight]
     booking_class = params[:booking_class]
-    if flight.is_a? Flight
-      resp = amadeus.air_retrieve_seat_map(:flight => flight, :booking_class => booking_class)
-    end
-    amadeus.release
-    if resp && resp.success?
+    resp = Amadeus.booking{|amadeus| amadeus.air_retrieve_seat_map(:flight => flight, :booking_class => booking_class)}
+    if resp.success?
       @seat_map = resp
       render 'seat_map'
     else

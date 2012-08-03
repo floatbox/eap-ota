@@ -13,15 +13,15 @@ describe Amadeus::Response::AirRetrieveSeatMap do
     describe "first segment" do
       subject { seat_map.segments.first }
 
-      it { should have(24).rows }
       its(:departure_date) { should == '140812' }
-      specify { subject.rows["7"].cabin.should == 'Y' }
-      specify { subject.rows["9"].seats["9A"].available?.should be_true }
-      specify { subject.rows["7"].seats["7A"].window?.should be_true }
-      specify { subject.rows["7"].seats["7A"].aisle?.should be_false }
-      specify { subject.columns["A"].window?.should be_true }
-      specify { subject.columns["A"].aisle?.should be_false }
-      specify { subject['7A'].should == subject.rows["7"].seats["7A"] }
+      specify { subject.cabins.first.rows.count.should == 24 }
+      specify { subject.cabins.first.occupation_default.should == 'F' }
+      specify { subject.cabins.first.rows["9"].seats["9A"].available?.should be_true }
+      specify { subject.cabins.first.rows["7"].seats["7A"].window?.should be_true }
+      specify { subject.cabins.first.rows["7"].seats["7A"].aisle?.should be_false }
+      specify { subject.cabins.first.columns["A"].window?.should be_true }
+      specify { subject.cabins.first.columns["A"].aisle?.should be_false }
+      specify { subject['7A'].should == subject.cabins.first.rows["7"].seats["7A"] }
     end
   end
 
@@ -30,11 +30,12 @@ describe Amadeus::Response::AirRetrieveSeatMap do
       amadeus_response('spec/amadeus/xml/Air_RetrieveSeatMap.747-400.xml').seat_map
     end
 
-    subject { seat_map }
+    subject { seat_map.segments.first }
 
-    it { should have(1).segments }
-    pending { should have(2).cabins }
-    pending "should return unoccupied seat on 31E"
+    it { should have(2).cabins }
+    specify { subject['31E'].should be_available }
+    specify { subject['31E'].should be_auto_created }
+    specify { subject.cabins.first.class.should == "M" }
     pending { subject.seats['28A'].should be_no_seat }
   end
 
@@ -43,8 +44,10 @@ describe Amadeus::Response::AirRetrieveSeatMap do
       amadeus_response('spec/amadeus/xml/Air_RetrieveSeatMap.first_class.xml').seat_map
     end
 
+    subject { seat_map.segments.first }
+
     it "should have only two aisles" do
-      pending
+      subject.cabins.first.columns.values.count(&:aisle_to_the_right).should == 2
     end
   end
 end

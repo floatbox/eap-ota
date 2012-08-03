@@ -2,33 +2,40 @@
   %head
 
   %body
-
     - @seat_map.segments.each_with_index do |segment, seg_index|
       %h1 aircraft #{segment.aircraft} #{Airplane[segment.aircraft].name rescue "not in database"}
       %h2
         segment #{seg_index+1}:
         #{segment.departure_iata} - #{segment.arrival_iata} (#{segment.departure_date})
-      - if segment.cabins_count > 1
-        %h2 whoa, #{segment.cabins_count} cabins returned
-      %table(border=1)
-        %tr
-          %th
-          - segment.columns.each do |column_name, column|
-            %th(width=30) #{column.name} <sub>#{debug_chars('column', column)}</sub>
-        - segment.rows.each do |row_number, row|
+      - segment.cabins.each_with_index do |cabin, cab_index|
+        %table(border=1)
+          %h3
+            cabin #{cab_index+1} : #{cabin.class}
           %tr
-            %th #{row.number} <sub>#{debug_chars('row', row)}</sub>
-            - segment.columns.keys.each do |column_name|
-              - seat = row.seats[row.number + column_name]
-              - if seat
-                - if seat.available?
-                  %td
+            %th
+            - cabin.columns.each do |column_name, column|
+              %th(width=30) #{column.name} <sub>#{debug_chars('column', column)}</sub>
+              - if column.aisle_to_the_right
+                %th aisle
+          - cabin.rows.each do |row_number, row|
+            %tr
+              - if row.overwing_row?
+                %th(bgcolor="gray") #{row.number} <sub>#{debug_chars('row', row)}</sub>
+              - else
+                %th #{row.number} <sub>#{debug_chars('row', row)}</sub>
+
+              - cabin.columns.each do |column_name, column|
+                - seat = row.seats[row.number + column_name]
+                - if column.aisle_to_the_left
+                  %td(style="border-width:0")
+                - if seat.no_seat?
+                  %td(style="border-width:0")
+                - elsif seat.available?
+                  %td(bgcolor="#ddffdd")
                     %sub= debug_chars('seat', seat)
                 - else
                   %td(bgcolor="#ffdddd")
                     %sub= debug_chars('seat', seat)
-              - else
-                %td(bgcolor="gray")
 
     %h2 Seat characteristics
     %table
