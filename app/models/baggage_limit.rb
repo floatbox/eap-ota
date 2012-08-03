@@ -7,7 +7,7 @@ class BaggageLimit
   end
 
   def no_baggage?
-    @baggage_quantity || @baggage_weight == 0
+    @baggage_quantity == 0 || @baggage_weight == 0
   end
 
   def units?
