@@ -32,7 +32,28 @@
 <br>
 <br>
 
+<table cellspacing="0" cellpadding="0" width="916" style="font-size: 14px; line-height: 17px; font-family: Arial, sans-serif; color: #333333;">
+<col width="320">
+<col width="20">
+<col width="190">
+<col width="20">
+<col width="190">
+<col width="20">
+<col width="156">
 <%= render :partial => 'pnr/flights' %>
+<tbody valign="top" style="font-size: 13px; line-height: 16px;">
+<tr>
+    <td colspan="7" style="font-size: 12px; line-height: 12px;"><br></td>
+</tr>
+<tr>
+    <td colspan="3">Окончательная стоимость авиабилетов фиксируется в&nbsp;день оплаты и&nbsp;может незначительно меняться относительно стоимости, по&nbsp;которой вы&nbsp;произвели бронирование, как в&nbsp;большую, так и&nbsp;в&nbsp;меньшую сторону.</td>
+    <td><br></td>
+    <td colspan="3">Если вы&nbsp;будете оплачивать бронирование в&nbsp;нашем офисе, пожалуйста, позвоните нам за&nbsp;час до&nbsp;приезда, чтобы мы&nbsp;заранее подготовили всё необходимое.</td>
+</tr>
+</tbody>
+</table>
+<br>
+<br>
 
 <table cellspacing="0" cellpadding="0" width="916" style="font-size: 14px; line-height: 17px; font-family: Arial, sans-serif; color: #333333;">
 <col width="550">
@@ -42,6 +63,7 @@
         <div style="font-weight: bold; font-size: 18px; line-height: 21px;"><% unless @lang %>Информация для оплаты<br><% end %>Information for payment</div>
         <div style="font-size: 10px; line-height: 10px;"><br></div>
         <table cellspacing="0" cellpadding="0" style="font-size: 13px; line-height: 18px;">
+        <tbody valign="top">
         <col width="340">
         <col width="190">
         <tr>
@@ -82,7 +104,8 @@
             <td><% unless @lang %>Итоговая стоимость <span style="color: #C0C0C0;">/</span> <% end %>Total price</td>
             <td><%= exact_price(@prices.recalculated_price_with_payment_commission) %> RUB</td>
         </tr>
-        <% end %>        
+        <% end %>
+        </tbody>
         </table>
     </td>
     <td>
@@ -98,13 +121,8 @@
 </tr>
 <tr valign="bottom">
     <td style="font-weight: bold; font-size: 16px; line-height: 20px; color: #F90A6F;">
-        Желаем приятного полета с <a href="https://www.eviterra.com/" style="text-decoration: none; color: #F90A6F;">eviterra.com</a><br>
-        Have a nice flight with <a href="https://www.eviterra.com/" style="text-decoration: none; color: #F90A6F;">eviterra.com</a>       
+        Спасибо за бронирование на <a href="https://www.eviterra.com/" style="text-decoration: none; color: #F90A6F;">eviterra.com</a><br>
+        Thank you for booking with <a href="https://www.eviterra.com/" style="text-decoration: none; color: #F90A6F;">eviterra.com</a>
     </td>
 </tr>
 </table>
-<br><br><br><br>
-<div style="width: 916px; font-size: 13px; line-height: 15px; font-family: Arial, sans-serif; color: #777777;">
-Согласно письму Министерства финансов России № 03–03–06/1/717 от 11.10.2007 данная маршрутная квитанция и посадочный талон
-являются достаточными документами для предоставления отчетности в бухгалтерию по месту работы, если это требуется. 
-</div>

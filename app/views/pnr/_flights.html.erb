@@ -1,14 +1,6 @@
 <% @flights ||= @pnr.flights %>
 <% booking_classes = @pnr ? @pnr.booking_classes : [] %>
 
-<table cellspacing="0" cellpadding="0" width="916" style="font-size: 14px; line-height: 17px; font-family: Arial, sans-serif; color: #333333;">
-<col width="320">
-<col width="20">
-<col width="190">
-<col width="20">
-<col width="190">
-<col width="20">
-<col width="156">
 <thead valign="bottom" style="font-size: 13px;">
 <tr>
     <td colspan="2" style="font-weight: bold; font-size: 18px; line-height: 21px;"><% unless @lang %>Маршрут<br><% end %>Itinerary</td>
@@ -26,6 +18,7 @@
     <td colspan="7" style="font-size: 12px; line-height: 12px;"><br></td>
 </tr>
 <tr>
+<% bl = flight.baggage_limit_for_adult %>
 <% if @lang %>
     <td>
         <div style="font-weight: bold; font-size: 16px; line-height: 19px; margin-bottom: 5px;"><%= flight.departure.city.name_en %> — <%= flight.arrival.city.name_en %></div>
@@ -54,9 +47,20 @@
             Terminal&nbsp;<%= flight.arrival_term %><br>
         <% end %>
     </td>
-    <td><br></td>    
+    <td><br></td>
     <td>
-        <%= booking_class %> (HK)
+        <%= booking_class %> (HK)<br>
+        <% if bl && !bl.unknown? %>
+        <div style="margin-top: 5px; font-size: 13px; line-height: 16px;">
+            <% if bl.kilos %>
+                <%= bl.kilos %>&nbsp;kg per&nbsp;passenger
+            <% elsif bl.pounds %>
+                <%= bl.pounds %>&nbsp;lb per&nbsp;passenger
+            <% elsif bl.units %>
+                <%= bl.units %>&nbsp;<%= bl.units > 1 ? 'bag' : 'bags' %> per&nbsp;passenger
+            <% end %>
+        </div>
+        <% end %>
     </td>
 <% else %>
     <td>
@@ -66,9 +70,9 @@
         Самолет <%= flight.equipment_type_name %><br>
         <% if flight.warning %>
             <%= flight.warning %><br>
-        <% end %>        
+        <% end %>
     </td>
-    <td><br></td>    
+    <td><br></td>
     <td>
         <div style="font-weight: bold;"><%= full_human_date( flight.departure_date ) %><br><%= human_week_day( flight.departure_date ) %></div>
         <div style="font-weight: bold; font-size: 18px; line-height: 24px;"><%= fmt_time(flight.departure_time) %></div>
@@ -77,19 +81,30 @@
             Терминал&nbsp;<%= flight.departure_term %><br>
         <% end %>
     </td>
-    <td><br></td>    
+    <td><br></td>
     <td>
         <div style="font-weight: bold;"><%= human_date( flight.arrival_date ) %><br><%= human_week_day( flight.departure_date ) %></div>
         <div style="font-weight: bold; font-size: 18px; line-height: 24px;"><%= fmt_time(flight.arrival_time) %></div>
         <%= flight.arrival_name %>&nbsp;<span style="color: #777777; font-size: 11px; line-height: 11px;"><%= flight.arrival_iata %></span><br>
         <% if flight.arrival_term %>
             Терминал&nbsp;<%= flight.arrival_term %><br>
-        <% end %>    
+        <% end %>
     </td>
-    <td><br></td>    
+    <td><br></td>
     <td>
-        <%= booking_class %> (HK)
-    </td>    
+        <%= booking_class %> (HK)<br>
+        <% if bl && !bl.unknown? %>
+        <div style="margin-top: 5px; font-size: 13px; line-height: 16px;">
+            <% if bl.kilos %>
+                <%= bl.kilos %>&nbsp;кг на&nbsp;пассажира
+            <% elsif bl.pounds %>
+                <%= bl.pounds %>&nbsp;lb на&nbsp;пассажира
+            <% elsif bl.units %>
+                <%= bl.units %>&nbsp;<%= Russian.pluralize(bl.units, 'место', 'места', 'мест') %> на&nbsp;пассажира
+            <% end %>
+        </div>
+        <% end %>
+    </td>
 <% end %>
 </tr>
 <tr>
@@ -97,24 +112,3 @@
 </tr>
 <% end %>
 </tbody>
-<tbody valign="top" style="font-size: 13px; line-height: 16px;">
-<tr>
-    <td colspan="7" style="font-size: 12px; line-height: 12px;"><br></td>
-</tr>
-<tr>
-    <td colspan="3">Проверяйте необходимость наличия у&nbsp;пассажиров виз и&nbsp;иных документов, требующихся согласно законодательству страны пункта назначения и&nbsp;пунктов пересадки.</td>
-    <td><br></td>
-    <td colspan="3">По всем вопросам возврата и&nbsp;обмена авиабилетов обращайтесь по&nbsp;электронному адресу <a style="color: #333333;" href="mailto:ticket@eviterra.com" target="_blank">ticket@eviterra.com</a> с&nbsp;указанием номера бронирования.</td>
-</tr>
-<tr>
-    <td colspan="7" style="font-size: 10px; line-height: 10px;"><br></td>
-</tr>
-<tr>
-    <td colspan="3">Please make sure that passengers possess all necessary travel documents and visas needed to&nbsp;enter the&nbsp;destination country or to&nbsp;complete connections during the&nbsp;flight.</td>
-    <td><br></td>
-    <td colspan="3">For refund and extchange issues please contact <a style="color: #333333;" href="mailto:ticket@eviterra.com" target="_blank">ticket@eviterra.com</a> and refer to&nbsp;your booking number.</td>
-</tr>
-</tbody>
-</table>
-<br>
-<br>
