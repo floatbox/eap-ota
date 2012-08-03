@@ -58,10 +58,11 @@ class Payment < ActiveRecord::Base
 
   STATUS_GROUPS = {
     :secured => %W[ blocked charged processing_charge ],
-    :not_secured => %W[ pending threeds rejected unblocked canceled ]
+    :not_secured => %W[ pending threeds rejected unblocked canceled ],
+    :processing => %W[ processing_block processing_threeds processing_charge processing_cancel ]
   }
 
-  # Payment.secured, payment.secured?, Payment.not_secured, Payment.not_secured?.., and so on.
+  # Payment.secured, payment.secured?, Payment.not_secured, payment.not_secured?.., and so on.
   STATUS_GROUPS.each do |status_group, statuses|
     scope status_group, where(:status => statuses)
 
@@ -71,6 +72,8 @@ class Payment < ActiveRecord::Base
       end
     end_of_method
   end
+
+  scope :processing_too_long, lambda { processing.where("updated_at < ?", 5.minutes.ago) }
 
   def self.[] id
     find id
