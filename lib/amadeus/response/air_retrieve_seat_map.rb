@@ -11,6 +11,8 @@ module Amadeus
         xpath('//r:segment').map do |xml_segment|
           segment = SeatMap::Segment.new(
             :aircraft => xml_segment.xpath('r:aircraftEquipementDetails/r:meansOfTransport').to_s,
+            # FIXME убить, когда появятся нормальные SeatMap::Cabin
+            :cabins_count => xml_segment.xpath('r:cabin').size,
             :departure_iata => xml_segment.xpath('r:flightDateInformation/r:boardpointDetail/r:departureCityCode').to_s,
             :arrival_iata => xml_segment.xpath('r:flightDateInformation/r:offPointDetail/r:arrivalCityCode').to_s,
             :departure_date => xml_segment.xpath('r:flightDateInformation/r:productDetails/r:departureDate').to_s
@@ -35,7 +37,7 @@ module Amadeus
           [r:cabinRangeOfRowsDetail/r:seatRowNumber[2]>='#{row.number}']/r:cabinClassDesignation/r:cabinClassDesignator").to_s
 
           #сохраняем разнообразные закодированные характеристики ряда, почти полный их список в доках амадеуса
-          xml_row.xpath('r:rowCharacteristicDetails/r:rowCharacteristic').each do |characteristic|
+          xml_row.xpath('r:rowCharacteristicsDetails/r:rowCharacteristic').each do |characteristic|
             row.characteristics[characteristic.to_s] = true
           end
           rows[row.number] = row

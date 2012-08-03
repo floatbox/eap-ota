@@ -1,6 +1,6 @@
 # encoding: utf-8
 class SeatMapController < ApplicationController
-  helper_method :view_hash
+
   def show
     amadeus = Amadeus.booking
     flight = Flight.from_flight_code params[:flight]
@@ -15,28 +15,14 @@ class SeatMapController < ApplicationController
       render :text => 'Sorry, no seat map available'
     end
   end
-  
-  def view_hash
-    view_hash = {}
-    @seat_map.segments.each do |segment|
-    segment.rows.each do |number, row|
-      view_hash[number] =
-        row.seats.values.map do |seat|
-           seat_string = ''
-           availability = seat.available? ? ' :F' : ' :O'
-           case
-           when seat.window?
-            seat_string += seat.column_name + availability + ' :Window' + ' '
-           when seat.aisle?
-            seat_string += seat.column_name + availability + ' :Aisle' + ' '
-           when seat.center?
-            seat_string += seat.column_name + availability + ' :Center' + ' '
-           else
-            seat_string += seat.column_name + availability  + ' :Unknown' + ' '
-           end
-        end
-      end
-    end
-    view_hash
+
+  private
+
+  helper_method :debug_chars
+  def debug_chars(type, object)
+    object.characteristics.keys.collect { |prop|
+      "<a href='##{type}_#{prop}'>#{prop}</a>"
+    }.join(' ').html_safe
   end
+
 end

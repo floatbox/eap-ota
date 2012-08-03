@@ -1,0 +1,47 @@
+%html
+  %head
+
+  %body
+
+    - @seat_map.segments.each_with_index do |segment, seg_index|
+      %h1 aircraft #{segment.aircraft} #{Airplane[segment.aircraft].try(:name)}
+      %h2
+        segment #{seg_index+1}:
+        #{segment.departure_iata} - #{segment.arrival_iata} (#{segment.departure_date})
+      - if segment.cabins_count > 1
+        %h2 whoa, #{segment.cabins_count} cabins returned
+      %table(border=1)
+        %tr
+          %th
+          - segment.columns.each do |column_name, column|
+            %th(width=30) #{column.name} <sub>#{debug_chars('column', column)}</sub>
+        - segment.rows.each do |row_number, row|
+          %tr
+            %th #{row.number} <sub>#{debug_chars('row', row)}</sub>
+            - segment.columns.keys.each do |column_name|
+              - seat = row.seats[row.number + column_name]
+              - if seat
+                - if seat.available?
+                  %td
+                    %sub= debug_chars('seat', seat)
+                - else
+                  %td(bgcolor="#ffdddd")
+                    %sub= debug_chars('seat', seat)
+              - else
+                %td(bgcolor="gray")
+
+    %h2 Seat characteristics
+    %table
+      - SeatMap::SEAT_PROPS.each do |prop, description|
+        %tr
+          %th
+            %a(name="seat_#{prop}")= prop
+          %td= description
+
+    %h2 Row characteristics
+    %table
+      - SeatMap::ROW_PROPS.each do |prop, description|
+        %tr
+          %th
+            %a(name="row_#{prop}")= prop
+          %td= description
