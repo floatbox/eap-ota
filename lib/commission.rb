@@ -396,8 +396,8 @@ carrier "AZ", "ALITALIA"
 carrier_defaults :consolidator => 0
 
 example 'vceflu/economy fluvce/economy'
-strt_date "01.07.2012"
-expr_date "31.07.2012"
+strt_date "01.08.2012"
+expr_date "31.08.2012"
 agent "Строго по направлениям:
 Северная Америка: Нью-Йорк, Лос-Анджелес, Майами, Чикаго, Бостон, Торонто;
 Южная Америка: Сан-Пауло, Рио-Де-Жанейро, Каракас, Буэнос-Айрес.
@@ -412,8 +412,8 @@ check { includes(airport_iatas, %W(FLU EWR LGA JFK LAX SMO VNY WHP MIA ТNT OPF 
 commission "7%/5%"
 
 example 'vceflu/business fluvce/business'
-strt_date "01.07.2012"
-expr_date "31.07.2012"
+strt_date "01.08.2012"
+expr_date "31.08.2012"
 agent "Строго по направлениям:
 Северная Америка: Нью-Йорк, Лос-Анджелес, Майами, Чикаго, Бостон, Торонто;
 Южная Америка: Сан-Пауло, Рио-Де-Жанейро, Каракас, Буэнос-Айрес.
@@ -2135,7 +2135,7 @@ commission "5%/3%"
 #example 'SVOIAD/UA965/H'
 #example 'SVOIAD/UA965/F'
 #strt_date "03.02.2012"
-#expr_date "31.12.2012"
+#expr_date "31.08.2012"
 #agent "С 03.02.12г. по 31.12.12г. 8% от опубл. тарифов на все классы бронирования на собств. рейсы UA с  обяз. наличием в маршруте трансатлантического рейса Москва-Вашингтон UA965 или Вашингтон-Москва UA964.Начало путешествия возможно как в России, так и за рубежом."
 #subagent "С 03.02.12г. по 31.12.12г. 6% от опубл. тарифов на все классы бронирования
 #на собств.рейсы UA с обяз. наличием в маршруте трансатлант. рейса Москва-Вашингтон UA	UA965 или Вашингтон-Москва UA964.Начало путешествия возможно как в России,
@@ -2147,11 +2147,17 @@ commission "5%/3%"
 
 example 'svocdg/K'
 strt_date "03.02.2012"
-expr_date "31.12.2012"
+expr_date "31.08.2012"
 agent "1% от всех остальных опубл. тарифов на собственные рейсы UA"
 subagent "0.5%  от всех остальных опубл. тарифов на собственные рейсы UA"
 ## discount "0.2%"
 commission "1%/0.5%"
+
+strt_date "01.09.2012"
+agent "0% от всех опубл. тарифов на собств.рейсы UA на внутренних маршрутах внутри Американского континента и международных маршрутах с началом путешествия в США или Канаде;"
+agent "1% от всех опубл. тарифов на собств.рейсы UA из России в США с обязательным участием авиакомпании UA на трансатлантических перелетах из Европейских городов в города США."
+disabled "нет субагентской"
+commission "/"
 
 carrier "UL", "SRI LANKAN AIRLINES"
 ########################################
@@ -2245,27 +2251,18 @@ carrier_defaults our_markup: 0
 
 example 'leddok'
 example 'ledcdg'
-strt_date "21.03.2012"
+strt_date "01.08.2012"
 agent "9% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории РФ до любого п.п. VV"
 subagent "8,5% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории РФ до любого п.п. VV."
 check { includes(country_iatas.first, 'RU') and not includes(city_iatas.first, 'MOW') and not includes(city_iatas.last, 'IEV') }
 discount "4%"
 commission "9%/8.5%"
 
-example 'ledkbp kbpled'
-strt_date "21.03.2012"
-agent "8% от тарифа при продаже перевозок на рейсы Санкт-Петербург-Киев (LED-IEV), Санкт-Петербург-Киев-Санкт-Петербург (LED-IEV-LED)"
-subagent "7,5% от тарифа при продаже перевозок на рейсы Санкт-Петербург-Киев (LED-IEV), Санкт-Петербург- Киев-Санкт-Петербург (LED-IEV-LED);"
-check { (includes(city_iatas.first, 'LED') and includes(city_iatas.last, 'IEV')) or (includes(city_iatas.first, 'LED') and includes(city_iatas.last, 'LED') and includes(city_iatas, 'IEV')) }
-important!
-discount "3%"
-commission "8%/7.5%"
-
 example 'ledkbp kbptlv'
 example 'ledkbp kbpcdg'
 example 'ledkbp kbptbs'
 strt_date "21.03.2012"
-expr_date "01.11.2012"
+expr_date "01.04.2013"
 agent "10% от тарифа при продаже перевозок с началом перевозки от Санкт-Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
 subagent "9,5% от тарифа при продаже перевозок с началом перевозки от Санкт- Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
 check { includes(city_iatas.first, 'LED') and includes(city_iatas, 'IEV') and not includes(country_iatas.last, 'UA') and not includes(country_iatas.last, 'RU') }
@@ -2273,20 +2270,18 @@ important!
 discount "5.5%"
 commission "10%/9.5%"
 
-example 'ledkbp kbptlv'
-example 'ledkbp kbpcdg'
-example 'ledkbp kbptbs'
-strt_date "01.11.2012"
-agent "9% от тарифа при продаже перевозок с началом перевозки от Санкт-Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
-subagent "8,5% от тарифа при продаже перевозок с началом перевозки от Санкт- Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
-check { includes(city_iatas.first, 'LED') and includes(city_iatas, 'IEV') and not includes(country_iatas.last, 'UA') and not includes(country_iatas.last, 'RU') }
-important!
-discount "4%"
-commission "9%/8.5%"
+example 'svokbp/business kbpsvo/business'
+strt_date "01.08.2012"
+agent "9% от тарифа при продаже перевозок на рейсы Москва-Киев (MOW-IEV), Москва-Киев-Москва (MOW -IEV- MOW);"
+subagent "4,5% от тарифа при продаже перевозок на рейсы Москва-Киев (MOW-IEV), Москва-Киев-Москва (MOW -IEV- MOW);"
+classes :business
+check { (includes(city_iatas.first, 'MOW') and includes(city_iatas.last, 'IEV')) or (includes(city_iatas.first, 'MOW') and includes(city_iatas.last, 'MOW') and includes(city_iatas, 'IEV')) }
+discount "1.5%"
+commission "5%/4.5%"
 
 example 'svokbp kbpsvo'
-strt_date "21.03.2012"
-agent "5% от тарифа при продаже перевозок на рейсы Москва-Киев (MOW-IEV), Москва-Киев-Москва (MOW -IEV- MOW);"
+strt_date "01.08.2012"
+agent "7% от тарифа при продаже перевозок на рейсы Москва-Киев (MOW-IEV), Москва-Киев-Москва (MOW -IEV- MOW);"
 subagent "4,5% от тарифа при продаже перевозок на рейсы Москва-Киев (MOW-IEV), Москва-Киев-Москва (MOW -IEV- MOW);"
 check { (includes(city_iatas.first, 'MOW') and includes(city_iatas.last, 'IEV')) or (includes(city_iatas.first, 'MOW') and includes(city_iatas.last, 'MOW') and includes(city_iatas, 'IEV')) }
 discount "1.5%"
@@ -2330,14 +2325,12 @@ carrier "WY", "OMAN AIR"
 example 'svocdg'
 agent    "5% от опубл. тарифов на собств. рейсы WY (В договоре Interline не прописан.)"
 subagent "3% от опубл. тарифа на собств.рейсы WY"
-disabled "не работают с BSP в России"
 commission "5%/3%"
 
 example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-disabled "не работают с BSP в России"
 commission "1%/0.5%"
 
 carrier "XW", "SkyExpress Limited"
