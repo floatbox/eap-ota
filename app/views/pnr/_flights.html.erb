@@ -52,12 +52,14 @@
         <%= booking_class %> (HK)<br>
         <% if bl && !bl.unknown? %>
         <div style="margin-top: 5px; font-size: 13px; line-height: 16px;">
-            <% if bl.kilos %>
+            <% if bl.no_baggage? %>
+                hand luggage only
+            <% elsif bl.units %>
+                <%= bl.units %>&nbsp;<%= bl.units > 1 ? 'bag' : 'bags' %> per&nbsp;passenger
+            <% elsif bl.kilos %>
                 <%= bl.kilos %>&nbsp;kg per&nbsp;passenger
             <% elsif bl.pounds %>
                 <%= bl.pounds %>&nbsp;lb per&nbsp;passenger
-            <% elsif bl.units %>
-                <%= bl.units %>&nbsp;<%= bl.units > 1 ? 'bag' : 'bags' %> per&nbsp;passenger
             <% end %>
         </div>
         <% end %>
@@ -95,12 +97,14 @@
         <%= booking_class %> (HK)<br>
         <% if bl && !bl.unknown? %>
         <div style="margin-top: 5px; font-size: 13px; line-height: 16px;">
-            <% if bl.kilos %>
+            <% if bl.no_baggage? %>
+                только ручная кладь
+            <% elsif bl.units %>
+                <%= bl.units %>&nbsp;<%= Russian.pluralize(bl.units, 'место', 'места', 'мест') %> на&nbsp;пассажира
+            <% elsif bl.kilos %>
                 <%= bl.kilos %>&nbsp;кг на&nbsp;пассажира
             <% elsif bl.pounds %>
                 <%= bl.pounds %>&nbsp;lb на&nbsp;пассажира
-            <% elsif bl.units %>
-                <%= bl.units %>&nbsp;<%= Russian.pluralize(bl.units, 'место', 'места', 'мест') %> на&nbsp;пассажира
             <% end %>
         </div>
         <% end %>
