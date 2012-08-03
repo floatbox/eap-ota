@@ -36,7 +36,7 @@ describe Amadeus::Response::AirRetrieveSeatMap do
     specify { subject['31E'].should be_available }
     specify { subject['31E'].should be_auto_created }
     specify { subject.cabins.first.class.should == "M" }
-    pending { subject.seats['28A'].should be_no_seat }
+    specify { subject.seats['28A'].should be_no_seat }
   end
 
   describe "first class salon" do
