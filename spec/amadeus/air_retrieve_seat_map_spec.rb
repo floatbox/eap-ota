@@ -37,6 +37,16 @@ describe Amadeus::Response::AirRetrieveSeatMap do
     pending "should return unoccupied seat on 31E"
     pending { subject.seats['28A'].should be_no_seat }
   end
+
+  describe "first class salon" do
+    let_once! :seat_map do
+      amadeus_response('spec/amadeus/xml/Air_RetrieveSeatMap.first_class.xml').seat_map
+    end
+
+    it "should have only two aisles" do
+      pending
+    end
+  end
 end
 
 
