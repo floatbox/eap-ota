@@ -1,101 +1,131 @@
+<table cellspacing="0" cellpadding="0" width="916" style="font-size: 14px; line-height: 17px; font-family: Arial, sans-serif; color: #333333;">
+<col width="340">
+<col width="160">
+<col width="206">
+<col width="210">
 <tbody valign="top">
 <tr>
-    <td class="pad_null"><img src="https://eviterra.com/img/booking/eviterra.png" alt="eviterra" width="210" height="30"></td>
-    <td class="pad_null" colspan="2">
-      <font size="3" family="Arial" style="font-size: 15px;"><strong><% unless @lang %>Электронный билет<br><%end%>E-ticket</strong></font>
-    </td>
-
+    <td style="font-weight: bold; font-size: 23px; line-height: 26px;"><% unless @lang %>Электронный билет<br><% end %>E-ticket</td>
     <%= render :partial => 'pnr/numbers' %>
+    <td rowspan="2">
+        <div style="font-weight: bold; font-size: 32px; line-height: 30px; color: #F90A6F;">
+            <img src="https://eviterra.com/images/booking/eviterra.png" alt="eviterra.com" width="210" height="30"><br>
+        </div><br>
+        <div style="font-size: 15px; line-height: 21px;">
+            +7 (495) 660-35-20<br>
+            <a style="color: #333333;" href="http://www.eviterra.com/" target="_blank">www.eviterra.com</a><br>
+            <a style="color: #333333;" href="mailto:ticket@eviterra.com" target="_blank">ticket@eviterra.com</a>
+        </div>
+        <br><br>
+    </td>
+</tr>
+<%= render :partial => 'pnr/passengers' %>
+</tbody>
+</table>
+<br>
+<br>
 
+<table cellspacing="0" cellpadding="0" width="916" style="font-size: 14px; line-height: 17px; font-family: Arial, sans-serif; color: #333333;">
+<col width="320">
+<col width="20">
+<col width="190">
+<col width="20">
+<col width="190">
+<col width="20">
+<col width="156">
+<%= render :partial => 'pnr/flights' %>
+<tbody valign="top" style="font-size: 13px; line-height: 16px;">
+<tr>
+    <td colspan="7" style="font-size: 12px; line-height: 12px;"><br></td>
+</tr>
+<tr>
+    <td colspan="3">Проверяйте необходимость наличия у&nbsp;пассажиров виз и&nbsp;иных документов, требующихся согласно законодательству страны пункта назначения и&nbsp;пунктов пересадки.</td>
+    <td><br></td>
+    <td colspan="3">По всем вопросам возврата и&nbsp;обмена авиабилетов обращайтесь по&nbsp;электронному адресу <a style="color: #333333;" href="mailto:ticket@eviterra.com" target="_blank">ticket@eviterra.com</a> с&nbsp;указанием номера бронирования.</td>
+</tr>
+<tr>
+    <td colspan="7" style="font-size: 10px; line-height: 10px;"><br></td>
+</tr>
+<tr>
+    <td colspan="3">Please make sure that passengers possess all necessary travel documents and visas needed to&nbsp;enter the&nbsp;destination country or to&nbsp;complete connections during the&nbsp;flight.</td>
+    <td><br></td>
+    <td colspan="3">For refund and extchange issues please contact <a style="color: #333333;" href="mailto:ticket@eviterra.com" target="_blank">ticket@eviterra.com</a> and refer to&nbsp;your booking number.</td>
 </tr>
 </tbody>
+</table>
+<br>
+<br>
 
-<%= render :partial => 'pnr/passengers' %>
-<%= render :partial => 'pnr/flights' %>
-
-  <tbody valign="top">
-  <tr>
-      <td colspan="6" class="pad_null">
-          <% unless @lang %><font size="2" family="Arial"><strong>Обратите внимание</strong>, что время отправления и прибытия указано местное. Регистрация на внутренние рейсы заканчивается как правило за 40 минут до отправления, на международные рейсы — за полтора часа до отправления.</font><br><%end%>
-          <font size="1" style="font-size: 6px;"><br></font>
-          <font size="2" family="Arial"><strong>Attention!</strong> Local departure and arrival time is indicated.</font>
-      </td>
-  </tr>
-  <tr>
-      <td colspan="6" class="pad_null"><font size="3">&nbsp;<br></font></td>
-  </tr>
-  </tbody>
-  <tbody valign="top">
-  <tr>
-      <td class="pad_null">
-          <font family="Arial" size="3" style="font-size: 18px;"><strong><% unless @lang %>Сведения об оплате<br><%end%>Payment Information</strong></font><br>
-          <font size="1" style="line-height: 8px;"><br></font>
-      </td>
-      <td class="pad_null" colspan="5"><br></td>
-  </tr>
-  <tr>
-      <td class="pad_null" colspan="3">
-      <table cellspacing="0" cellpadding="0">
-      <tr>
-          <td class="pad_null" style="eifth: 240px;">
-              <font family="Arial" size="2">
-              <% unless @lang %>Тариф /<%end%> Fare<br>
-              <% unless @lang %>Таксы и сборы /<%end%> Taxes<br>
-              <nobr><% unless @lang %>В том числе сервисный сбор /<%end%> Including fee&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</nobr><br>
-              <% unless @prices.price_declared_discount.zero? %>
-                <% unless @lang %>Скидка /<%end%> Discount<br>
-              <% end %>
-              <% unless @lang %>Итоговая стоимость /<%end%> Total<br>
-              <% if @prices.show_vat %>
-    
-                <% unless @lang %>В том числе НДС /<%end%> Including VAT<br>
-              <% end %>
-              <% unless @lang %>Форма оплаты /<%end%> Paid by<br>
-              <% unless @lang %>Дата оформления /<%end%> Issue date
-              </font>
-          </td>
-          <td class="pad_null">
-              <font family="Arial" size="2">
-              <%= exact_price(@prices.price_fare) %> RUB<br>
-              <%= exact_price(@prices.price_tax_and_markup_and_payment) %> RUB<br>
-              <%= exact_price(@prices.fee) %> RUB<br>
-              <% unless @prices.price_declared_discount.zero? %>
-                <%= exact_price(@prices.price_declared_discount) %> RUB<br>
-              <% end %>
-              <%= exact_price(@prices.recalculated_price_with_payment_commission) %> RUB<br>
-              <% if @prices.show_vat %>
-                <%= exact_price(@prices.vat) %> RUB<br>
-              <% end %>
-              <%= @prices.paid_by %><br>
-              <%= @prices.created_at.strftime('%d.%m.%y') %>
-              </font>
-          </td>
-      </tr>
-      </table>    
-      </td>
-      <td class="pad_null" colspan="3">
-          <font family="Arial" size="2"><% unless @lang %>Адрес и телефон покупателя<br><%end%>Email and phone number</font><br>
-          <font family="Arial" size="1" style="font-size: 6px;"><br></font>
-          <font family="Arial" size="2">
-          <% if @pnr.email %>
-              <a href="mailto:<%= @pnr.email %>" target="_blank" style="color: #ed1192;"><font color="#ed1192"><%= @pnr.email %></font></a><br>
-          <% end %>
-          <%= @pnr.phone %>
-          </font>
-      </td>
-  </tr>
-  </tbody>
-
-<tbody valign="top">
-<tr>
-    <td class="pad_null" style="text-align: center; font-size: 24px; line-height: 1.25; letter-spacing: -0.02em;" colspan="6">
-    <font size="5"><br></font>
-    <center>
-
-      <% unless @lang %><font family="Arial" size="5"><strong>Спасибо за покупку на <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br><%end%>
-      <font family="Arial" size="5"><strong>Thank you for purchase at <a href="http://www.eviterra.com/" style="color: #ED1192; text-decoration: none;"><font color="#ED1192">eviterra.com</font></a>!</strong></font><br>
-
-    </center>
+<table cellspacing="0" cellpadding="0" width="916" style="font-size: 14px; line-height: 17px; font-family: Arial, sans-serif; color: #333333;">
+<col width="550">
+<col width="366">
+<tr valign="top">
+    <td rowspan="2">
+        <div style="font-weight: bold; font-size: 18px; line-height: 21px;"><% unless @lang %>Сведения об оплате<br><% end %>Payment Information</div>
+        <div style="font-size: 10px; line-height: 10px;"><br></div>
+        <table cellspacing="0" cellpadding="0" style="font-size: 13px; line-height: 18px;">
+        <tbody valign="top">
+        <col width="340">
+        <col width="190">
+        <tr>
+            <td><% unless @lang %>Тариф <span style="color: #C0C0C0;">/</span> <% end %>Fare</td>
+            <td><%= exact_price(@prices.price_fare) %> RUB</td>
+        </tr>
+        <% unless @prices.price_declared_discount.zero? %>
+        <tr>
+            <td><% unless @lang %>Скидка <span style="color: #C0C0C0;">/</span> <% end %>Discount</td>
+            <td><%= exact_price(@prices.price_declared_discount) %> RUB</td>
+        </tr>
+        <% end %>
+        <tr>
+            <td><% unless @lang %>Таксы и сборы <span style="color: #C0C0C0;">/</span> <% end %>Taxes and fees</td>
+            <td><%= exact_price(@prices.price_tax_and_markup_and_payment) %> RUB</td>
+        </tr>
+        <tr>
+            <td><% unless @lang %>В том числе сервисный сбор <span style="color: #C0C0C0;">/</span> <% end %>Including service fee</td>
+            <td><%= exact_price(@prices.fee) %> RUB</td>
+        </tr>
+        <% if @prices.show_vat %>
+        <tr>
+            <td><% unless @lang %>В том числе НДС <span style="color: #C0C0C0;">/</span> <% end %>Including VAT</td>
+            <td><%= exact_price(@prices.vat) %> RUB</td>
+        </tr>
+        <% end %>
+        <tr>
+            <td><% unless @lang %>Итоговая стоимость <span style="color: #C0C0C0;">/</span> <% end %>Total price</td>
+            <td><%= exact_price(@prices.recalculated_price_with_payment_commission) %> RUB</td>
+        </tr>
+        <tr>
+            <td><% unless @lang %>Форма оплаты <span style="color: #C0C0C0;">/</span> <% end %>Paid by</td>
+            <td><%= @prices.paid_by %></td>
+        </tr>
+        <tr>
+            <td><% unless @lang %>Дата оформления <span style="color: #C0C0C0;">/</span> <% end %>Issue date</td>
+            <td><%= @prices.created_at.strftime('%d.%m.%y') %></td>
+        </tr>
+        </tbody>
+        </table>
     </td>
-</tbody>
-
+    <td>
+        <div style="font-weight: bold; font-size: 18px; line-height: 21px;"><% unless @lang %>Данные покупателя<br><% end %>Customer Details</div>
+        <div style="font-size: 10px; line-height: 10px;"><br></div>
+        <div style="font-size: 13px; line-height: 18px;">
+        <% if @pnr.email %>
+          <a href="mailto:<%= @pnr.email %>" target="_blank" style="color: #333333; text-decoration: none;"><%= @pnr.email %></a><br>
+        <% end %>
+        <%= @pnr.phone %>
+        </div>
+    </td>
+</tr>
+<tr valign="bottom">
+    <td style="font-weight: bold; font-size: 16px; line-height: 20px; color: #F90A6F;">
+        Желаем приятного полета с <a href="https://www.eviterra.com/" style="text-decoration: none; color: #F90A6F;">eviterra.com</a><br>
+        Have a nice flight with <a href="https://www.eviterra.com/" style="text-decoration: none; color: #F90A6F;">eviterra.com</a>
+    </td>
+</tr>
+</table>
+<br><br><br><br>
+<div style="width: 916px; font-size: 13px; line-height: 15px; font-family: Arial, sans-serif; color: #777777;">
+Согласно письму Министерства финансов России № 03–03–06/1/717 от 11.10.2007 данная маршрутная квитанция и посадочный талон
+являются достаточными документами для предоставления отчетности в бухгалтерию по месту работы, если это требуется.
+</div>

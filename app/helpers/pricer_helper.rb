@@ -359,8 +359,13 @@ module PricerHelper
       concat link_to('нет правил для авиакомпании', admin_commissions_url, :target => '_blank')
     end
     concat " #{recommendation.blank_count} бл." if recommendation.blank_count && recommendation.blank_count > 1
-    concat ' (' + recommendation.booking_classes.join(',') + ')'
+    # concat ' (' + recommendation.booking_classes.join(',') + ')'
     concat " Мест: #{recommendation.availability}"
+    concat "<br>".html_safe
+    variant.flights.zip(recommendation.booking_classes) do |flight, booking_class|
+      concat link_to("#{flight.flight_code}/#{booking_class}", show_seat_map_url(flight.flight_code, booking_class), target: '_blank')
+      concat ' '
+    end
   end
 
 end

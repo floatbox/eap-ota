@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+#
+# обновляет состояние заказов, у которых Amadeus мог снять бронирование по TK XL
+
+require File.expand_path('../../config/environment',  __FILE__)
+
+class SyncCanceledPnrsProcess
+
+  def update_states
+    # одну сессию на все, чтобы не опустошать pool
+    Amadeus.booking do |amadeus|
+      orders.each do |order|
+        logger.tagged("PNR:#{order.pnr_number}") do
+          begin
+            response = amadeus.pnr_retrieve(number: order.pnr_number).or_fail!
+            if response.flights_hash.blank?
+              logger.info "empty itinerary, setting ticket_status to canceled"
+              order.update_attributes! ticket_status: 'canceled'
+            else
+              logger.info "itinerary is not empty"
+            end
+          rescue
+            # будет проблема, если поймает network error, сессия станет неюзабельной
+            # для следующих запросов.
+            logger.info "error: #{$!}"
+          end
+        end
+      end
+    end
+  end
+
+  def orders
+    # FIXME использую last_pay_time потому, что он сейчас обновляется руками и актуальней last_tkt_date
+    # пустой pnr может быть, в частности, в случае доплаты, которую мы не трогаем
+    Order.
+      where(source: 'amadeus').
+      where(ticket_status: 'booked').
+      where("pnr_number != ''").
+      where("last_pay_time < ?", Time.now)
+  end
+
+  def logger
+    @logger ||= ActiveSupport::TaggedLogging.new(Logger.new('log/sync_canceled_pnrs.log'))
+  end
+
+end
+
+PaperTrail.whodunnit = 'dev@eviterra.com'
+PaperTrail.controller_info = {:action => 'sync_canceled_pnrs'}
+
+SyncCanceledPnrsProcess.new.update_states

@@ -17,6 +17,34 @@ module Amadeus
         end
       end
 
+      def baggage_with_refs
+        @baggage_with_refs ||= xpath('//r:fareList/r:segmentInformation/r:bagAllowanceInformation/r:bagAllowanceDetails').inject({}) do |memo, bi|
+          baggage_quantity = bi.xpath('r:baggageQuantity').to_i
+          baggage_weight = bi.xpath('r:baggageWeight').to_i
+          baggage_type = bi.xpath('r:baggageType').to_s
+          measure_unit = bi.xpath('r:measureUnit').to_s
+          segment_ref = bi.xpath('../../r:segmentReference/r:refDetails/r:refNumber').to_i
+          memo[segment_ref] ||= {}
+          passenger_refs = bi.xpath('../../../r:paxSegReference/r:refDetails/r:refNumber').every.to_i
+          infant_flag = bi.xpath('../../../r:statusInformation/r:firstStatusDetails[r:tstFlag="INF"]').present? ? 'i' : 'a'
+          passenger_refs.each do |pax_ref|
+              memo[segment_ref][[pax_ref, infant_flag]] = BaggageLimit.new(:baggage_quantity => baggage_quantity, :baggage_type => baggage_type, :baggage_weight => baggage_weight, :measure_unit => measure_unit)
+          end
+          memo
+        end
+      end
+
+      def baggage_for_segments
+        @baggage_for_segments ||=  baggage_with_refs.inject({}) do |memo, segment_ref|
+          segment_ref[1].each do |pax_key, baggage_limitations|
+            if pax_key[1] == 'a'
+              memo[segment_ref[0]] = baggage_limitations
+            end
+          end
+          memo
+        end
+      end
+
       def total_fare
         prices_with_refs.values.inject(0) do |fare, prices|
           fare += prices[:price_fare]

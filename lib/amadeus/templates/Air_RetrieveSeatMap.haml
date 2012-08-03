@@ -9,3 +9,5 @@
     %marketingAirlineCode= flight.marketing_carrier_iata
   %flightIdentification
     %flightNumber= flight.flight_number
+    - if booking_class
+      %classOfService= booking_class

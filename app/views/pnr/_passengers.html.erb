@@ -1,49 +1,41 @@
-<tbody valign="top">
-<tr>
-    <td colspan="6" class="pad_null">&nbsp;<br></td>
-</tr>
-<tr valign="bottom">
-    <td class="pad_null">
-        <font family="Arial" size="3" style="font-size: 18px;"><strong><% unless @lang %>Сведения о пассажирах<br><%end%>Traveler Information</strong></font>
-    </td>
-    <td class="pad_null" colspan="2"><br></td>
-    <td class="pad_null" colspan="3">
-        <font family="Arial" size="3" style="font-size: 15px;"><strong><% unless @lang %>Сведения об агенте<br><%end%>Agent Information</strong></font>
-    </td>
+<tr valign="bottom" style="font-size: 13px;">
+    <td style="font-weight: bold; font-size: 18px; line-height: 21px;"><% unless @lang %>Пассажиры<br><% end %>Passengers</td>
+    <td><% unless @lang %>Документ<br><% end %>Document</td>
+    <td><% if @passengers.map{|passenger| passenger.tickets.present? ? 1 : 0}.sum > 0 %><% unless @lang %>Номер билета<br><% end %>E-ticket number<% end %></td>
 </tr>
 <tr>
-    <td colspan="6" class="pad_null"><font size="2" style="font-size: 8px;">&nbsp;<br></font></td>
+    <td colspan="4" style="font-size: 8px; line-height: 10px;"><div style="border-bottom: 1px solid #d6d6d6;"><br></div></td>
 </tr>
 <% @passengers.each_with_index do |passenger, i| %>
-  <tr>
-    <td class="pad_null">
-        <font family="Arial" size="2">
-          <strong style="font-weight: bold;"><%= passenger.last_name %> <%= passenger.first_name %> &nbsp;</strong><br><%= passenger.passport %><br>
-        </font>
-    </td>
-    <td class="pad_null" colspan="2">
+<tr>
+    <td colspan="4" style="font-size: 8px; line-height: 10px;"><br></td>
+</tr>
+<tr style="font-size: 18px; line-height: 21px;">
+    <td style="font-weight: bold;"><%= passenger.last_name %> <%= passenger.first_name %></td>
+    <td><%= passenger.passport %></td>
+    <td colspan="2">
     <% if passenger.tickets.present? %>
-        <font family="Arial" size="2">
-          <% for ticket in passenger.tickets %>
-            <%= ticket.number_with_code %>
-            <% if ticket.parent %>
-              <br>
-              получен в обмен билета <%= ticket.parent.number_with_code %>
-            <% end %>
-            <br>
-          <% end %>
-          <br>
-        </font>
+        <table cellspacing="0" cellpadding="0" style="font-size: 13px; line-height: 15px;">
+        <col width="206">
+        <col width="210">
+        <% first_ticket = true %>
+        <% for ticket in passenger.tickets %>
+        <tr valign="top">
+            <td style="width: 206px; font-size: 18px; line-height: 21px;"><%= ticket.number_with_code %></td>
+            <td><% if ticket.parent %>получен в обмен билета <%= ticket.parent.number_with_code %><% end %></td>
+        </tr>
+        <% unless first_ticket %>
+        <tr>
+            <td colspan="2" style="font-size: 6px; line-height: 6px;"><br></td>
+        </tr>        
+        <% end %>
+        <% first_ticket = false %>
+        <% end %>
+        </table>
     <% end %>
     </td>
-    <td class="pad_null" rowspan="<%= @passengers.count %>">
-      <% if i == 0 %>
-        <font family="Arial" size="2">Eviterra Travel<br>+7 (495) 660-35-20<br>
-        <a href="http://www.eviterra.com/" target="_blank" style="color: #ed1192;"><font color="#ed1192">www.eviterra.com</font></a><br>
-        <a href="mailto:ticket@eviterra.com" target="_blank" style="color: #ed1192;"><font color="#ed1192">ticket@eviterra.com</font></a>
-        </font>
-      <% end %>
-    </td>
-  </tr>
+</tr>
+<tr>
+    <td colspan="4" style="font-size: 8px; line-height: 10px;"><div style="border-bottom: 1px solid #d6d6d6;"><br></div></td>
+</tr>
 <% end %>
-</tbody>

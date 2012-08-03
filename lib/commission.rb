@@ -24,7 +24,7 @@ subagent "• на собственные рейсы (в т.ч. по согла�
 subagent "5 % от тарифов Эконом класса (в т.ч. при комбинации Эконом и Бизнес классов),   при переоформлении с доплатой по тарифам Эконом класса (в т.ч. при комбинации Эконом и Бизнес классов);"
 # применится только к этому правилу
 # ticketing_method "direct"
-discount "4.8%"
+discount "4.9%"
 ## our_markup 100
 commission "7%/6%"
 
@@ -76,7 +76,7 @@ example 'AERDME/R DMEAER/M'
 agent "11% от тарифа на рейсы Перевозчика по всем тарифам классов F, P, R, J, C, A, D, S, M;"
 subagent "9 % от тарифа на рейсы Перевозчика по всем тарифам классов F, P, R, J, C, A, D, S, M;"
 subclasses "FPRJCADSM"
-discount "7%"
+discount "7.1%"
 commission "11%/9%"
 
 example 'AERDME/W DMEAER/W'
@@ -89,7 +89,7 @@ agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWUYHMQBKORE"
 ticketing_method "downtown"
-discount "6.9%"
+discount "7.1%"
 commission "12%/10%"
 
 example 'svoiws/UN7061'
@@ -119,7 +119,7 @@ agent "12% Oт всех применяемых опубликованных та
 subagent "10% от всех применяемых опубликованных тарифов между Москвой и Пекином/Майами/Нью-Йорком (OW.RT) и на сквозные перевозки между пунктами полетов АК «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW.RT). (Через АСБ «GABRIEL»: установлен специальный «Код тура» NEWDE10 при продаже перевозок с полетными сегментами между Москвой-Майами/Нью-Йорком (OW/RT). СУБАГЕНТ обязан внести «Код тура» NEWDE10 для автоматического начисления комиссии.)"
 important!
 check { includes(city_iatas, %W(NYC MIA BJS LAX)) and includes(country_iatas, %W(RU UA KZ UZ)) }
-discount "7%"
+discount "7.1%"
 commission "12%/10%"
 
 example 'svober/lh/f bersvo'
@@ -174,7 +174,7 @@ carrier "5N", "Нордавиа-РА"
 example 'svocdg'
 agent    "7% от всех опубл. тарифов на рейсы 5N (В договоре Interline отдельно не прописан.)"
 subagent "5% от опубл. тарифов на собств.рейсы 5N"
-discount "2.5%"
+discount "3.8%"
 # our_markup 120
 commission "7%/5%"
 
@@ -182,7 +182,7 @@ example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :yes
-discount "2.5%"
+discount "3.8%"
 # our_markup 120
 commission "7%/5%"
 
@@ -862,7 +862,7 @@ example 'svocdg cdgsvo/ab'
 agent "7% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 subagent "5% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 interline :no, :yes
-discount "3.5%"
+discount "4.1%"
 commission '7%/5%'
 
 example 'ledsvo/business svoled/business'
@@ -1351,7 +1351,7 @@ check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US')
 subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
-discount '5%'
+discount '5.5%'
 ticketing_method "downtown"
 commission "10%/8%"
 
@@ -1363,7 +1363,7 @@ check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US')
 #subclasses "YBMUH"
 interline :no, :yes
 our_markup "0"
-discount '1%'
+discount '1.5%'
 ticketing_method "downtown"
 commission "5%/3%"
 
@@ -1373,7 +1373,7 @@ agent    "1 руб. с билета по опубл. тарифам на соб�
 subagent "5 коп. с билета по опубл. тарифам на собственные рейсы LH и рейсы Interline с участком LH."
 check { includes(country_iatas, 'ES FR IT CZ PT NL CH') } 
 interline :no, :yes
-our_markup "150"
+our_markup "120"
 ## discount '5%'
 commission "1/0.05"
 
@@ -2373,7 +2373,7 @@ example 'cdgsvo svocdg/ab'
 agent    "8% от всех опубл. тарифов на рейсы YM (В договоре Interline не прописан.)"
 subagent "6% от всех опубл. тарифов на рейсы YM"
 interline :no, :unconfirmed
-discount "4%"
+discount "4.2%"
 commission "8%/6%"
 
 carrier "YO", "Heli air Monaco (РИНГ АВИА)"
@@ -2826,7 +2826,7 @@ agent "3% BSP"
 subagent ""
 #our_markup 400
 ##disabled "до времени"
-discount "1.5%"
+discount "1.7%"
 interline :no, :yes
 commission "3%/0%"
 

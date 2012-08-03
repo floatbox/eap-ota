@@ -20,8 +20,9 @@
             <dd><%= flight.equipment_type_name %></dd>
             <dt>в пути</dt>
             <dd><%= human_duration(flight.duration) %></dd>
-            <% if admin_user%>
-                <p style="text-align:center"><a href='/seat_map/<%=flight.flight_code %>' class='iframe'>карта мест</a></p>
+            <%# FIXME выключаю, пока что это в админской инфе %>
+            <% if false && admin_user%>
+                <p style="text-align:center"><a href='<%= show_seat_map_url(flight.flight_code) %>' target="_blank">карта мест</a></p>
             <% end %>
          </dl>
         <% if segment_cabins[fcounter] %>

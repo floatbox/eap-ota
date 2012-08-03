@@ -1,7 +1,10 @@
-<td class="pad_null" colspan="3">
-    <div><font family="Arial" size="2" style="font-size: 13px; line-height: 16px;"><strong><% unless @lang %>Номер брони<br><%end%>Booking Number</strong></font></div>
-    <div><font size="5" family="Arial" color="#ED1192" style="font-size: 30px; line-height: 30px; color: #ED1192;"><strong><%= @pnr.number %></strong></font></div>
-    <% if @pnr.additional_number %>
-      <div><font size="2" family="Arial" style="font-size: 13px; line-height: 16px;"><% unless @lang %>Номер подтверждения / <%end%>Confirmation Number &mdash; <%= @pnr.additional_number %></font></div>
-    <% end %>
+<td>
+    <div style="font-weight: bold; font-size: 12px; line-height: 15px; margin-top: 4px; margin-bottom: 3px;"><% unless @lang %>Номер брони<br><% end %>Booking Number</div>
+    <div style="font-weight: bold; font-size: 24px; line-height: 27px; color: #F90A6F;"><%= @pnr.number %></div>
+</td>
+<td>
+<% if @pnr.additional_number %>
+    <div style="font-weight: bold; font-size: 12px; line-height: 15px; margin-top: 4px; margin-bottom: 3px;"><% unless @lang %>Номер подтверждения<br><% end %>Confirmation Number</div>
+    <div style="font-weight: bold; font-size: 24px; line-height: 27px; color: #F90A6F;"><%= @pnr.additional_number %></div>
+<% end %>
 </td>
