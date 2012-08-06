@@ -15,6 +15,7 @@ Order:
       - has_refunds
       - partner
       - urgent
+      - ticket_time
     show:
       - order_id
       - has_refunds

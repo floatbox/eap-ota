@@ -186,7 +186,7 @@ FlightGroup:
 
 Notification:
   fields:
-    default: subject, comment, typus_user, created_at, sent_status
+    default: subject, format, comment, typus_user, created_at, sent_status
     list: subject, order, comment, typus_user, created_at, sent_status
     form: attach_pnr, lang, subject, comment, format, status
     show: order, typus_user, created_at, format, destination, attach_pnr, lang, subject, comment, sent_status

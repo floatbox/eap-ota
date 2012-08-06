@@ -21,6 +21,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
     add_predefined_filter 'Unticketed', Order.unticketed.scope_attributes, 'unticketed'
     add_predefined_filter 'Processing Ticket', Order.processing_ticket.scope_attributes, 'processing_ticket'
     add_predefined_filter 'Error Ticket', Order.error_ticket.scope_attributes, 'error_ticket'
+    add_predefined_filter 'Ticket Not Sent', Order.ticket_not_sent.scope_attributes, 'ticket_not_sent'
     add_predefined_filter 'MOWR228FA', {:scope => 'MOWR228FA'}
     add_predefined_filter 'MOWR2233B', {:scope => 'MOWR2233B'}
     add_predefined_filter 'MOWR221F9', {:scope => 'MOWR221F9'}
