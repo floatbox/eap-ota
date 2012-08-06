@@ -105,7 +105,19 @@ class Order < ActiveRecord::Base
   before_validation :capitalize_pnr
   before_save :calculate_price_with_payment_commission, :if => lambda { price_with_payment_commission.blank? || price_with_payment_commission.zero? || !fix_price? }
   before_create :generate_code, :set_payment_status, :set_email_status
-  after_save :create_notification
+  after_save :create_order_notice
+
+  def create_order_notice
+    if !offline_booking && email_status == ''
+      self.notifications.new.create_notice
+    end
+  end
+
+  def create_ticket_notice
+    if email_status != 'queued' && email_status != 'ticket_sent'
+      self.notifications.new.create_notice
+    end
+  end
 
   def create_notification
     if !self.offline_booking && self.email_status == ''
@@ -130,6 +142,10 @@ class Order < ActiveRecord::Base
 
   def queued_email!
     update_attribute(:email_status, 'queued') if self.email_status == ''
+  end
+
+  def update_email_status status
+    update_attribute(:email_status, status)
   end
 
   # FIXME сломается на ruby1.9
@@ -210,6 +226,16 @@ class Order < ActiveRecord::Base
   # FIXME добавить проверки на обилеченность, может быть? для ручных бронек
   def show_as_ticketed?
     ticket_status == 'ticketed' || payment_type == 'card'
+  end
+
+  def send_notice_as
+    if ticket_status == 'ticketed'
+      'ticket'
+    elsif payment_type == 'card'
+      'order'
+    else
+      'booking'
+    end
   end
 
   def paid?
@@ -452,6 +478,7 @@ class Order < ActiveRecord::Base
     return false unless load_tickets(true)
     update_attributes(:ticket_status => 'ticketed', :ticketed_date => Date.today)
     update_prices_from_tickets
+    create_ticket_notice
   end
 
   def reload_tickets
