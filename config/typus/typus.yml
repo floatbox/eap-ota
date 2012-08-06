@@ -6,7 +6,7 @@ TypusUser:
   fields:
     default: first_name, last_name, role, email, locale
     list: email, role, status
-    form: first_name, last_name, role, email, password, password_confirmation, locale
+    form: first_name, last_name, role, status, email, password, password_confirmation, locale
     options:
       selectors: role, locale
       booleans:
