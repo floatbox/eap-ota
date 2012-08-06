@@ -29,6 +29,10 @@ every :wednesday, :at => '12:30 am' do
   runner 'script/amadeus_rate'
 end
 
+every :day, :at => '2:00 am' do
+  runner 'script/sync_canceled_pnrs'
+end
+
 #every 1.day, :at => '18:00' do
 #  command_at_current 'script/cbrusd && touch tmp/restart.txt'
 #end
