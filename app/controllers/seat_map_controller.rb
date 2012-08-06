@@ -6,7 +6,7 @@ class SeatMapController < ApplicationController
     booking_class = params[:booking_class]
     resp = Amadeus.booking{|amadeus| amadeus.air_retrieve_seat_map(:flight => flight, :booking_class => booking_class)}
     if resp.success?
-      @seat_map = resp
+      @seat_map = resp.seat_map
       render 'seat_map'
     else
       render :text => 'Sorry, no seat map available'
