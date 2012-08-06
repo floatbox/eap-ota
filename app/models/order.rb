@@ -163,6 +163,20 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def ticket_time
+    if payment_status == 'blocked' && ticket_status == 'booked' && created_at > Date.yesterday + 20.5.hours
+      time = created_at.strftime('%H%M')
+      case
+        when time < '0600';  '11:00'
+        when time < '0800';  (created_at+4.hours).strftime('%H:%M')
+        when time < '2030';  (created_at+3.hours).strftime('%H:%M')
+        else                 '11:00'
+      end
+    else
+      '&nbsp;'.html_safe
+    end
+  end
+
   def tickets_count
     tickets.count
   end
