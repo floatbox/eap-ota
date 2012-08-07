@@ -15,7 +15,11 @@
 <div class="wrap oss-wrap">
     <div class="oss-dpt">
         <h5 class="oss-time"><%= fmt_time(segment.departure_time) %></h5>
-        <p class="oss-airport"><%= segment.departure.name %><% if segment.departure_term %>&nbsp;<span class="ossa-term"><%= segment.departure_term %></span><% end %></p>
+        <% if segment_country[:dpt] %>
+            <p class="oss-airport"><%= segment.departure.city.name %></p>
+        <% else %>
+            <p class="oss-airport"><%= segment.departure.name %><% if segment.departure_term %>&nbsp;<span class="ossa-term"><%= segment.departure_term %></span><% end %></p>
+        <% end %>
     </div>
     <div class="oss-parts">
         <ul class="oss-bar">
@@ -35,7 +39,11 @@
     </div>
     <div class="oss-arv">
         <h5 class="oss-time"><%= fmt_time(segment.arrival_time) %></h5>
-        <p class="oss-airport"><%= segment.arrival.name %><% if segment.arrival_term %>&nbsp;<span class="ossa-term"><%= segment.arrival_term %></span><% end %></p>
+        <% if segment_country[:arv] %>
+            <p class="oss-airport"><%= segment.arrival.city.name %></p>
+        <% else %>
+            <p class="oss-airport"><%= segment.arrival.name %><% if segment.arrival_term %>&nbsp;<span class="ossa-term"><%= segment.arrival_term %></span><% end %></p>
+        <% end %>        
     </div>
 </div>
 <div class="oss-line"></div>

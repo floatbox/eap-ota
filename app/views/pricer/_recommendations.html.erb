@@ -184,11 +184,16 @@
     <% group_segments(recommendation.variants).each_with_index do |segments, scounter| %>
     <div class="o-segment segment<%= scounter + 1 %>">
         <% segment_rt = scounter == 1 && @search.rt %>
+        <% segment_country = {
+          :dpt => @search.segments[scounter].from_as_object.class == Country,
+          :arv => @search.segments[scounter].to_as_object.class == Country          
+        } %>
         <% segments.each do |segment| %>
             <%= render :partial => 'summary', :locals => {
                 :segment => segment,
                 :segment_rt => segment_rt,
-                :duration_scale => duration_scale
+                :duration_scale => duration_scale,
+                :segment_country => segment_country
             } %>
             <%= render :partial => 'details', :locals => {
                 :segment => segment,
@@ -205,7 +210,7 @@
             <p class="od-comment" data-carrier="<%= comment[:carrier] %>"><%= raw comment[:content] %></p>
         <% end %>
         <% if recommendation_deficit(recommendation) %>
-            <p class="od-comment"><span class="odc-hl">По этому тарифу осталось мало мест. Не откладывайте покупку.</span></p>
+            <p class="od-comment"><span class="odc-hl">По этому тарифу осталось <%= recommendation.availability %>&nbsp;<%= Russian.pluralize(recommendation.availability, 'место', 'места', 'мест') %>. Не откладывайте покупку.</span></p>
         <% end %>
     </div>
     <% if admin_user %>

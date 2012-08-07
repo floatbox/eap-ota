@@ -321,6 +321,9 @@ update: function(variants, lid) {
         book.wrap('<div class="ob-placeholder"></div>');
         book.append('<div class="ob-shadow"></div>');
         book.after('<div class="ob-line"></div>');
+        this.offer.el.find('.od-show').show().removeClass('od-show').addClass('od-scroll').click(function() {
+            $w.smoothScrollTo(book.closest('.ob-placeholder').offset().top - 148);    
+        });
         this.offer.el.find('.od-hide').remove();
     } else {
         this.clear(labels);

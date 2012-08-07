@@ -121,6 +121,12 @@
 .od-hide {
     display: none;
 }
+.o-complex .od-scroll {
+    visibility: hidden;
+}
+.ob-bfixed .od-scroll {
+    visibility: inherit;
+}
 
 /* Prebooking */
 .ob-progress {

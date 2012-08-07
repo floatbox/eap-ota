@@ -34,8 +34,8 @@
                 <p class="od-comment" data-carrier="<%= comment[:carrier] %>"><%= raw comment[:content] %></p>
             <% end %>
             <% if recommendation_deficit(recommendation) %>
-                <p class="od-comment"><span class="odc-hl">По этому тарифу осталось мало мест. Не откладывайте покупку.</span></p>
-            <% end %>
+                <p class="od-comment"><span class="odc-hl">По этому тарифу осталось <%= recommendation.availability %>&nbsp;<%= Russian.pluralize(recommendation.availability, 'место', 'места', 'мест') %>. Не откладывайте покупку.</span></p>
+            <% end %>            
         </div>        
         </div>
     </div>
