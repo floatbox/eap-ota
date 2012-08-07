@@ -94,7 +94,7 @@ class PricerController < ApplicationController
   def api
     partner = params['partner'].to_s
     if !Conf.api.enabled || !Partner[partner].enabled?
-      render 'api/yandex_failure', :status => 503, :locals => {:message => 'service disabled by administrator'}
+      render 'api/error', :status => 503, :locals => {:message => 'service disabled by administrator'}
       return
     end
     pricer_form_hash = params.dup.delete_if {|key, value| %W[controller action format].include?(key)}
@@ -111,15 +111,15 @@ class PricerController < ApplicationController
       Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))
       StatCounters.inc %W[search.api.success search.api.#{partner}.success]
       StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner}.total] if @destination
-      render 'api/yandex'
+      render 'api/variants'
     else
       @recommendations = []
-      render 'api/yandex'
+      render 'api/variants'
     end
   rescue IataStash::NotFound => iata_error
-    render 'api/yandex_failure', :status => 404, :locals => {:message => iata_error.message}
+    render 'api/error', :status => 404, :locals => {:message => iata_error.message}
   rescue ArgumentError => argument_error
-    render 'api/yandex_failure', :status => 400, :locals => {:message => argument_error.message}
+    render 'api/error', :status => 400, :locals => {:message => argument_error.message}
   end
 
   protected
