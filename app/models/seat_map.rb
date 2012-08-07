@@ -98,7 +98,9 @@ class SeatMap
     end
 
     def no_seat?
-      characteristics['8'] || row.no_row?
+      characteristics['8'] || characteristics['CL'] || characteristics['BA'] || characteristics['D'] ||
+      characteristics['EX'] || characteristics['GN'] || characteristics['KN'] || characteristics['LG'] ||
+      characteristics['SO'] || characteristics['ST'] || characteristics['TA'] || row.no_row?
     end
   end
 
