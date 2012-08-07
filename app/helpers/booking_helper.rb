@@ -62,4 +62,9 @@ module BookingHelper
     # Date.strptime(date, '%d%m%y').strftime('%e %B %Y')
     Date.strptime(date, '%d%m%y').to_s(:long)
   end
+
+  def human_week_day_en date
+    Date.strptime(date, '%d%m%y').strftime(' %A')
+  end
+
 end
