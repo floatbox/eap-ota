@@ -21,7 +21,7 @@ describe InsuranceHelper do
         :last_name => 'Be',
         :birthday => Date.today - 2.years,
         :document_expiration_date => Date.today + 1.year,
-        :passport => '999999343',
+        :passport => '123999343',
         :sex => 'm') ]
     end
 
@@ -51,16 +51,16 @@ describe InsuranceHelper do
             'surname' => 'Grown',
             'dob' => (Date.today - 39.years).strftime('%d.%m.Y'),
             'sex' => '1',
-            'passport1' => '99',
-            'passport2' => '9999343'
+            'passport1' => '12',
+            'passport2' => '3999343'
           },
           '1' => {
             'name' => 'Be',
             'surname' => 'Wanna',
             'dob' => (Date.today - 2.years).strftime('%d.%m.Y'),
             'sex' => '0',
-            'passport1' => '99',
-            'passport2' => '9999343'
+            'passport1' => '12',
+            'passport2' => '3999343'
           }
         }
       }

@@ -11,7 +11,7 @@ module InsuranceHelper
   def params
     journey = @order_form.recommendation.journey
     { :start_date => convert_date(journey.flights.first.departure_date),
-      :end_date => convert_date(journey.flights.last.arrival_date),
+      :end_date => @order_form.recommendation.rt ? convert_date(journey.flights.last.arrival_date) : (Date.today + 6.months).strftime('%d.%m.%Y'),
       :country => journey.flights.first.arrival.country.alpha2,
       :email => @order_form.email,
       :phone => @order_form.phone,
@@ -30,8 +30,8 @@ module InsuranceHelper
         'name' => person.last_name,
         'dob' => person.birthday.strftime('%d.%m.%Y'),
         'sex' => (person.sex == 'f' ? 1 : 0),
-        'passport1' => person.passport[0..2],
-        'passport2' => person.passport[3..-1] }
+        'passport1' => person.passport[0..1],
+        'passport2' => person.passport[2..-1] }
     end
     buyers
   end
