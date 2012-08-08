@@ -121,6 +121,13 @@
 .od-hide {
     display: none;
 }
+.od-scroll {
+    top: 17px;
+    left: 777px;
+    padding: 4px 8px;
+    background: #EDEDE3;
+    color: #505050;
+}
 .o-complex .od-scroll {
     visibility: hidden;
 }

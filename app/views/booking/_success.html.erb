@@ -1,9 +1,33 @@
-<div class="bf-result bfr-success" data-type="success">
-    <% paid = @order_form.payment_type == 'card' %>
-    <% tweet = order_tweet(@order_form) %>
-    <h5 class="bfr-title">Всё отлично! <%= @order_form.people.one? ? "Ваш билет #{ paid ? 'оплачен' : 'забронирован' }" : "Ваши билеты #{ paid ? 'оплачены' : 'забронированы' }" %>. Подтверждение будет выслано на&nbsp;ваш электронный адрес в течение десяти минут. Номер&nbsp;брони&nbsp;— <strong class="bfr-pnr"><%= pnr_number %></strong>.</h5>
-    <p class="bfr-content"><% unless paid %>Обратите внимание, что в&nbsp;случае несвоевременной оплаты бронирование будет аннулировано. <% end %>Если хотите, можете <a target="_blank" href="<%= pnr_path %>">распечатать</a> <%= paid ? 'ваш билет' : 'подтверждение' %><% unless tweet.empty? %>, <a href="http://www.google.com/calendar/event?action=TEMPLATE&<%= order_event(@order_form) %>" target="_blank">добавить</a> поездку в Гугл-календарь или <a href="http://twitter.com/?status=<%= tweet %>" target="_blank">поделиться</a> с друзьями в Твиттере<% end %>.</p>
-    <p class="bfr-content" style="float: right; width: 200px; margin-top: 18px; font-size: 13px;"><span class="link bf-hint" data-hint="bfh-mail">Что делать, если на почту ничего не пришло?</span></p>
-    <p class="latent" id="bfh-mail">Если вы&nbsp;не&nbsp;получили письмо с&nbsp;<% @order_form.payment_type == 'card' ? 'электронным билетом' : 'подтверждением бронирования' %> в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, то&nbsp;напишите нам (<a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a>) или позвоните <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p>
-    <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Ffacebook.com%2Feviterra&amp;send=false&amp;layout=standard&amp;width=948&amp;show_faces=true&amp;action=recommend&amp;colorscheme=light&amp;font&amp;height=60&amp;appId=155739531227363" scrolling="no" frameborder="0" style="margin-top: 15px; border:none; overflow:hidden; width:728px; height:60px;" allowTransparency="true"></iframe>
+<% paid = @order_form.payment_type == 'card' %>
+<div class="bf-result bfr-success wrap" data-type="success">
+<div class="bfrs-message">
+    <p class="bfrsm-text"><strong>Все отлично!</strong> <%= @order_form.people.one? ? "Ваш билет #{ paid ? 'оплачен' : 'забронирован' }" : "Ваши билеты #{ paid ? 'оплачены' : 'забронированы' }" %>. Подтверждение будет отправлено на ваш электронный адрес в течение десяти минут. <span class="link bf-hint bfrsm-hint" data-hint="bfh-mail">Что делать, если ничего не пришло?</span</p>
+    <p class="bfrsm-text">Номер вашей брони — <span class="bfr-pnr"><%= pnr_number %></span></p>
+    <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Ffacebook.com%2Feviterra&amp;send=false&amp;layout=standard&amp;width=552&amp;show_faces=true&amp;action=recommend&amp;colorscheme=light&amp;font&amp;height=80&amp;appId=155739531227363" scrolling="no" frameborder="0" style="margin-top: 10px; border:none; overflow:hidden; width:552px; height:80px;" allowTransparency="true"></iframe>
 </div>
+<div class="bfrs-addition">
+    <div class="bfrs-actions">
+        <h5 class="bfrs-title">Что ещё можно сделать</h5>
+        <p class="bfrsa-item"><a target="_blank" href="<%= pnr_path %>">Распечатать подтверждение</a></p>
+        <% tweet = order_tweet(@order_form) %>
+        <% unless tweet.empty? %>
+            <p class="bfrsa-item"><a href="http://twitter.com/?status=<%= tweet %>" target="_blank">Поделиться в Твиттере</a></p>
+        <% end %>
+        <% gevent = order_event(@order_form) %>
+        <% unless gevent.empty? %>        
+            <p class="bfrsa-item"><a href="http://www.google.com/calendar/event?action=TEMPLATE&<%= gevent %>" target="_blank">Добавить поездку в Гугл-календарь</a></p>
+        <% end %>
+    </div>
+    <% unless Rails.env.production? %>
+    <div class="bfrs-insurance">    
+        <h5 class="bfrs-title">Туристическая страховка онлайн</h5>
+        <a class="bfrsi-link" herf="/">Узнать стоимость</a>
+        <p class="bfrsi-item">Для визы и не только</p>
+        <p class="bfrsi-item">От невыезда за границу</p>
+        <p class="bfrsi-item">Страхование багажа</p>
+        <p class="bfrsi-item">Гражданская ответственность</p>        
+    </div>
+    <% end %>
+</div>
+<p class="latent" id="bfh-mail">Если вы&nbsp;не&nbsp;получили письмо с&nbsp;<% @order_form.payment_type == 'card' ? 'электронным билетом' : 'подтверждением бронирования' %> в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, то&nbsp;напишите нам (<a href="mailto:ticket@eviterra.com">ticket@eviterra.com</a>) или позвоните <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p>
+</div>    

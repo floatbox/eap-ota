@@ -248,6 +248,64 @@
     display: none;
 }
 
+/* Успешное бронирование */
+.bfr-success {
+    padding: 0;
+}
+.bfrs-message {
+    float: left;
+    width: 552px;
+    margin: 18px 0 0 20px;
+}
+.bfrsm-text {
+    margin: 0 0 12px;
+    font-size: 20px;
+    line-height: 23px;
+    letter-spacing: -0.03em;    
+}
+.bfrsm-hint {
+    position: relative;
+    top: -2px;
+    left: 3px;
+    font-size: 12px;
+    color: #777;
+}
+.bfrs-addition {
+    margin-left: 592px;
+    margin-bottom: -200px;
+    padding: 18px 20px 220px;
+    background: #e2e2e2;    
+}
+.bfrs-title {
+    margin: 0 0 8px;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 23px;
+    letter-spacing: -0.03em;        
+}
+.bfrsa-item,
+.bfrsi-item {
+    margin: 3px 0 0; 
+}
+.bfrs-insurance {
+    margin: 20px 0 0;
+}
+.bfrsi-item {
+    margin-right: 150px;
+}
+.bfrsi-link {
+    float: right;
+    width: 140px;
+    padding: 8px 0 38px;
+    text-align: center;
+    font-size: 20px;
+    line-height: 20px;
+    letter-spacing: -0.03em;    
+    background: url(/images/booking/insurance.png) no-repeat 54% 56px #FFF;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 /* Кнопки */
 .bfr-controls {
     height: 36px;
