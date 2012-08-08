@@ -85,6 +85,9 @@ geolocation:
     enabled: yes
 mail:
   ticket_cc: ~
+  ticket_relpy_to: operator@eviterra.com
+  subscription_from: subscription@eviterra.com
+  subscription_relpy_to: operator@eviterra.com
   subscription_cc: subscription@eviterra.com
   invoice_to: bills@eviterra.com
 

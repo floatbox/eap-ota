@@ -3,7 +3,7 @@ class SubscriptionMailer < ActionMailer::Base
 
   add_template_helper(ApplicationHelper)
 
-  default :from => "Eviterra.com <ticket@eviterra.com>"#, :bcc => Conf.mail.subscription_cc
+  default :from => "Eviterra.com <subscription@eviterra.com>", :reply_to => Conf.mail.subscription_reply_to, :bcc => Conf.mail.subscription_cc
 
   # FIXME надо не городить notice_info в модели, надо сразу сюда передавать destination
   # и разбирать его на месте.

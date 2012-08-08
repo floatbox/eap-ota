@@ -3,7 +3,7 @@ class InvoiceMailer < ActionMailer::Base
   helper :booking
 
   add_template_helper(ApplicationHelper)
-  default :from => "Eviterra.com <ticket@eviterra.com>"
+  default :from => "Eviterra.com <operator@eviterra.com>"
 
   def notice(order_id, comment = '')
     @order = Order.find(order_id)
