@@ -31,7 +31,7 @@ class Notification < ActiveRecord::Base
     self.status = 'delayed'
     if save
       order.queued_email!
-      self.delay(queue: 'notification', run_at: 10  .minutes.from_now, priority: 5).send_notice
+      self.delay(queue: 'notification', run_at: 10.minutes.from_now, priority: 5).send_notice
     end
   end
 
