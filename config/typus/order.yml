@@ -125,6 +125,8 @@ Order:
       - price_total
       - expected_income
       - balance
+      - price_our_markup
+      - income_payment_gateways
       - sold_tickets_numbers
       - partner
     options:
