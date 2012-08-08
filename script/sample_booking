@@ -1,50 +1,46 @@
 #!/usr/bin/env ruby
 require File.expand_path('../../config/environment',  __FILE__)
 
-order = OrderForm.load_from_cache('4fd8aeb564047a0b08000018')
+factories!
+order = OrderForm.load_from_cache('50225c0364047a0aee00003e')
 order.email = 'email@example.com'
 order.phone = '12345678'
 #order.people_count = {:infants => 1, :children => 1, :adults => 2}
-order.people = [Person.new(
-  :first_name => 'Anna',
-  :last_name => 'Adult',
-  :birthday => Date.today - 19.years,
+order.people = [FactoryGirl.build(:person,
+  :first_name => 'ALEXANDERA',
+  :last_name => 'ROMANOVAKRYZHANOVSKAYA',
   :document_expiration_date => Date.today + 1.year,
   :passport => '999999343',
   :nationality_id => 1,
   :sex => 'f',
-  :bonus_present => false,
   :bonus_present => true,
   :bonuscard_type => 'SU',
   :bonuscard_number => '3456433'
 ),
-  Person.new(
-  :first_name => 'Ivan',
+FactoryGirl.build(:person,
   :last_name => 'Adult',
-  :birthday => Date.today - 20.years,
   :document_expiration_date => Date.today + 1.year,
   :passport => '999999999',
   :nationality_id => 1,
   :sex => 'm',
 ),
-Person.new(
-  :first_name => 'Masha',
+FactoryGirl.build(:person, :infant,
   :last_name => 'Infant',
-  :birthday => Date.today - 1.years,
   :document_expiration_date => Date.today + 1.year,
   :passport => '88888888',
   :nationality_id => 1,
   :sex => 'f'
-),
-Person.new(
-  :first_name => 'Masha',
+)#,
+=begin
+FactoryGirl.build(:person, :child,
   :last_name => 'Child',
-  :birthday => Date.today - 10.years,
   :document_expiration_date => Date.today + 1.year,
   :passport => '77777777',
   :nationality_id => 1,
   :sex => 'f'
-)]
+)
+=end
+]
 order.card = Payture.test_card
 order.valid?
 strategy = Strategy.select( :rec => order.recommendation, :order_form => order )
