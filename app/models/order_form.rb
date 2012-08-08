@@ -16,6 +16,7 @@ class OrderForm
 
   attr_writer :card
   attr_accessor :recommendation
+  attr_accessor :clean_route
   attr_writer :price_with_payment_commission
   attr_accessor :pnr_number
   attr_accessor :people_count
@@ -147,7 +148,7 @@ class OrderForm
 
   def save_to_cache
     cache = OrderFormCache.new
-    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
+    copy_attrs self, cache, :recommendation, :clean_route, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
     cache.save
     self.number = cache.id.to_s
   end
@@ -163,8 +164,9 @@ class OrderForm
     def load_from_cache(cache_number)
       cache = OrderFormCache.find(cache_number) or raise(NotFound, "#{cache_number} not found")
       order = new
-      copy_attrs cache, order, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
+      copy_attrs cache, order, :recommendation, :clean_route, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
       order.number = cache.id.to_s
+      order.clean_route = order.clean_route.split.map{|iata|Airport.find_by_iata(iata).city}
       order
     end
 

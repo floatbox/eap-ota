@@ -34,6 +34,7 @@ class BookingController < ApplicationController
     else
       order_form = OrderForm.new(
         :recommendation => recommendation,
+        :clean_route => recommendation.variants[params[:variant_id].to_i].segments.inject(''){|clean_route,s|clean_route+=(s.flights.first.departure_iata+' '+s.flights.last.arrival_iata+' ')},
         :people_count => @search.real_people_count,
         :variant_id => params[:variant_id],
         :query_key => @search.query_key,

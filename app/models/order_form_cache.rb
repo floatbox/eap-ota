@@ -7,6 +7,7 @@ class OrderFormCache
 
   field :recommendation_yml, :type => String
   field :people_count
+  field :clean_route
   field :variant_id, :type => String
   field :query_key, :type => String
   field :partner, :type => String
