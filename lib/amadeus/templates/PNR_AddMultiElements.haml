@@ -185,7 +185,9 @@
             %status HK
             %quantity 1
             %companyId YY
-            %freetext= ssr_docs_text(person)
+            %freetext= ssr_docs_text(person)[0...70]
+            - if ssr_docs_text(person).length > 70
+              %freetext= ssr_docs_text(person)[70...140]
         %referenceForDataElement
           %reference
             %qualifier PR
