@@ -267,7 +267,7 @@ class Order < ActiveRecord::Base
 
   def load_tickets(check_count = false)
     ticket_hashes = strategy.get_tickets
-    if !check_count || ticket_hashes.length >= blank_count
+    if !check_count || !blank_count || ticket_hashes.length >= blank_count
       @tickets_are_loading = true
       ticket_hashes.each do |th|
         if (th[:office_id].blank? || Ticket.office_ids.include?(th[:office_id])) &&
