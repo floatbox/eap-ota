@@ -3,28 +3,27 @@ module InsuranceHelper
 
   def smart_insurance_uri order_form
     @order_form = order_form
-    uri = "http://www.smart-ins.ru/vzr_iframe/light?#{params.to_query}" if params
+    uri = "https://www.smart-ins.ru/vzr_iframe/light?#{params.to_query}" if params
   end
 
   private
 
   def params
     journey = @order_form.recommendation.journey
-    { :start_date => convert_date(journey.flights.first.departure_date),
-      :end_date => @order_form.recommendation.rt ? convert_date(journey.flights.last.arrival_date) : (Date.today + 6.months).strftime('%d.%m.%Y'),
-      :country => journey.flights.first.arrival.country.alpha2,
+    start_date = convert_date(journey.flights.first.departure_date)
+    { :start_date => start_date,
+      :end_date => @order_form.recommendation.rt ? convert_date(journey.flights.last.arrival_date) : (Date.parse(start_date) + 30.days).strftime('%d.%m.%Y'),
+      :country => @order_form.clean_route.second.country.alpha2,
       :email => @order_form.email,
       :phone => @order_form.phone,
       :city => journey.flights.first.departure.city.name_ru,
       :buyers => buyers
     }
-  rescue
-    nil
   end
 
   def buyers
     buyers = {}
-    @order_form.people.each_with_index do |person, index|
+    @order_form.people_by_age.each_with_index do |person, index|
       buyers[index.to_s] = {
         'surname' => person.first_name,
         'name' => person.last_name,
