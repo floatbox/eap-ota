@@ -99,7 +99,10 @@ module Strategy::Amadeus::Tickets
 
       # пересоздаем маску
       # TODO проверить новый тариф и оборвать выписку, если он существенно отличается?
-      pricing = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @order.commission_carrier).or_fail!
+      pricing = amadeus.fare_price_pnr_with_booking_class(
+        validating_carrier: @order.commission_carrier,
+        unifares: false
+      ).or_fail!
       amadeus.ticket_create_tst_from_pricing(:fares_count => pricing.fares_count).or_fail!
 
       # для комиссионных билетов:
