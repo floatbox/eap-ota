@@ -50,6 +50,11 @@ Spork.each_run do
 
 end
 
+#ccn - поправка на количество дней, на тот случай, если в одном тесте нужно несколько разных дат
+def future_date(ccn=0)
+    date = PricerForm.convert_api_date((Date.today + 1.month + ccn.days).to_s)
+end
+
 # - Any code that is left outside of the blocks will be ran during preforking
 #   and during each_run!
 # - These instructions should self-destruct in 10 seconds.  If they don't,

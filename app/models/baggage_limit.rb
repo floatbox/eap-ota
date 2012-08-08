@@ -29,4 +29,16 @@ class BaggageLimit
   def pounds
     weight? && @measure_unit == 'L' && @baggage_weight
   end
+
+  def signature
+    [units, kilos, pounds]
+  end
+
+  def ==(other)
+    signature == other.signature
+  end
+
+  def hash
+    signature.hash
+  end
 end

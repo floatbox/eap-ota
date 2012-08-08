@@ -132,9 +132,6 @@ describe RamblerApi do
     described_class.uri_for_rambler(request_params).should == "http://eviterra.com/api/rambler_booking.xml?#{encoded_params}"
   end
 
-  def future_date(ccn=0)
-    date = PricerForm.convert_api_date((Date.today + 1.month + ccn.days).to_s)
-  end
 
   def parse_params(query_string)
     normalize_parameters(Rack::Utils.parse_nested_query(query_string))
