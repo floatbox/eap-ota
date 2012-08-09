@@ -163,6 +163,7 @@ process: function(s) {
         break;
     case '3dsecure':
         this.result.find('.obb-title').click(function() {
+            $(this).closest('.bf-result').find('form').submit();
         });
         break;
     case 'forbidden':
@@ -178,6 +179,9 @@ process: function(s) {
             _gaq.push(['_addTrans', this.result.find('.bfr-pnr').text(), '', price]);
             _gaq.push(['_trackTrans']);
         }
+        this.result.find('.bfrsi-link').click(function() {
+            trackEvent('Бронирование', 'Переход на страницу страховки');        
+        });
         break;
     }
 }
@@ -370,7 +374,7 @@ initPassport: function() {
     }, function(value) {
         if (/[^\wА-Яа-я. \-№#]/.test(value)) return 'letters';
         if (value.length < 5) return 'empty';
-        if (value.length > 9 && value.replace(/[^A-ZА-Я\d]/g, '').length === 10) {
+        if (value.length > 9 && value.replace(/\D/g, '').length === 10) {
             that.togglePermanent();
         }
     });

@@ -296,12 +296,12 @@
 .bfrsi-link {
     float: right;
     width: 140px;
-    padding: 8px 0 38px;
+    padding: 8px 0 40px;
     text-align: center;
-    font-size: 20px;
-    line-height: 20px;
+    font-size: 16px;
+    line-height: 18px;
     letter-spacing: -0.03em;    
-    background: url(/images/booking/insurance.png) no-repeat 54% 56px #FFF;
+    background: url(/images/booking/insurance.png) no-repeat 54% 54px #FFF;
     text-decoration: underline;
     cursor: pointer;
 }
