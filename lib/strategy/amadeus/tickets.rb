@@ -44,7 +44,7 @@ module Strategy::Amadeus::Tickets
     when 'downtown'
       downtown_ticket
     else
-      raise Strategy::TicketError, "unsupported ticketing method: #{@order.ticketing_method.inspect}"
+      raise Strategy::TicketError, "unsupported ticketing method: #{@order.commission_ticketing_method.inspect}"
     end
   rescue ::Amadeus::Error => e
     Airbrake.notify(e)
