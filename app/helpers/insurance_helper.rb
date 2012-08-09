@@ -10,11 +10,15 @@ module InsuranceHelper
 
   def uri_params
     journey = @order_form.recommendation.journey
-    route = @order_form.recommendation.variants.first.segments.inject([]){|route,s|route+=[s.flights.first.departure]+[s.flights.last.arrival]}
     start_date = convert_date(journey.flights.first.departure_date)
+    insurance_end_date = if journey.segments.count > 1
+      convert_date(journey.flights.last.arrival_date)
+    else
+      (Date.parse(start_date) + 30.days).strftime('%d.%m.%Y')
+    end
     { :start_date => start_date,
-      :end_date => (@order_form.recommendation.rt ? convert_date(journey.flights.last.arrival_date) : (Date.parse(start_date) + 30.days).strftime('%d.%m.%Y')),
-      :country => route.second.country.alpha2,
+      :end_date => insurance_end_date,
+      :country => @order_form.recommendation.variants.first.segments.first.flights.last.arrival.country.alpha2,
       :email => @order_form.email,
       :phone => @order_form.phone,
       :city => journey.flights.first.departure.city.name_ru,
