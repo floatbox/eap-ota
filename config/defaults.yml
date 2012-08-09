@@ -90,5 +90,6 @@ mail:
   subscription_relpy_to: operator@eviterra.com
   subscription_cc: subscription@eviterra.com
   invoice_to: bills@eviterra.com
+  subscription_reply_to: operator@eviterra.com
 
 
