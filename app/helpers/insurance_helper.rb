@@ -17,7 +17,8 @@ module InsuranceHelper
       :email => @order_form.email,
       :phone => @order_form.phone,
       :city => journey.flights.first.departure.city.name_ru,
-      :buyers => buyers
+      :buyers => buyers,
+      :partner => 'eviterra'
     }
   end
 
