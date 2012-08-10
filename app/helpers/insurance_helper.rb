@@ -29,8 +29,8 @@ module InsuranceHelper
     buyers = {}
     people.each_with_index do |person, index|
       buyers[index.to_s] = {
-        'surname' => person.first_name,
-        'name' => person.last_name,
+        'surname' => person.last_name,
+        'name' => person.first_name,
         'dob' => person.birthday.strftime('%d.%m.%Y'),
         'sex' => (person.sex == 'f' ? 1 : 0),
         'passport1' => person.cleared_passport[0..1],
