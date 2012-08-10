@@ -225,7 +225,8 @@ describe Order do
           :validating_carrier => 'SU',
           :status => 'ticketed',
           :office_id => 'MOWR2219U',
-          :validator => '92223412'
+          :validator => '92223412',
+          :baggage_info => '1N'
         ))
         @order.load_tickets
       end
@@ -252,6 +253,7 @@ describe Order do
         pnr_resp.stub(:exchanged_tickets).and_return({})
         tst_resp = stub('Amadeus::Response::TicketDisplayTST')
         tst_resp.stub(:prices_with_refs).and_return({})
+        tst_resp.stub(:coded_baggage_for_persons).and_return({})
         @order.stub_chain(:tickets, :where, :every, :update_attribute)
         @order.stub_chain(:tickets, :reload)
         ticket = Ticket.new

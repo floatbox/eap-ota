@@ -9,13 +9,15 @@ describe Amadeus::Response::TicketDisplayTST do
         amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_with_different_baggage.xml')
       }
 
-      its('baggage_with_refs.keys.sort') {should == [1, 2]}
-      specify {subject.baggage_with_refs[1].keys.sort.should == [[11, "a"], [12, "a"], [12, "i"]]}
-      specify {subject.baggage_with_refs[1][[12, 'i']].kilos.should == 10}
-      specify {subject.baggage_with_refs[1][[11, 'a']].units.should == 1}
-      specify {subject.baggage_with_refs[1][[11, 'a']].units?.should be_true}
+      its('baggage_with_refs.keys.sort') {should == [[11, "a"], [12, "a"], [12, "i"]]}
+      specify {subject.baggage_with_refs[[11, "a"]].keys.sort.should == [1, 2]}
+      specify {subject.baggage_with_refs[[12, 'i']][1].kilos.should == 10}
+      specify {subject.baggage_with_refs[[11, 'a']][1].units.should == 1}
+      specify {subject.baggage_with_refs[[11, 'a']][1].units?.should be_true}
       specify {subject.baggage_for_segments[2].units?.should be_true}
       specify {subject.baggage_for_segments[2].units.should == 1}
+      specify {subject.coded_baggage_for_persons[[11, 'a']].should == '1N 1N'}
+      specify {subject.coded_baggage_for_persons[[12, 'i']].should == '10K 10K'}
     end
 
     context 'with two simular persons' do
@@ -23,7 +25,7 @@ describe Amadeus::Response::TicketDisplayTST do
       subject_once! {
         amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_for_two.xml')
       }
-      specify {subject.baggage_with_refs[1].keys.sort.should == [[12, "a"], [13, 'a']]}
+      specify {subject.baggage_with_refs.keys.sort.should == [[12, "a"], [13, 'a']]}
     end
   end
 
