@@ -33,7 +33,8 @@ offers: {
         many: 'итоговая цена за всех',
         rise: 'на {0} дороже',
         fall: 'на {0} дешевле',
-        from: 'от {0}'
+        from: 'от {0}',
+        profit: ' <span class="obs-profit">на <strong>{0}%</strong> дешевле, чем в среднем</span>'
     },
     cheap: {
         one: 'Дешевый',

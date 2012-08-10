@@ -108,6 +108,8 @@ update: function(data) {
     var that = this;
     results.queue.add(function() {
         that.content.html(data);
+        var ap = that.content.find('.r-average').text();
+        results.data.averagePrice = ap ? Number(ap) : 0;
         that.parse();
     });
     results.queue.add(function() {

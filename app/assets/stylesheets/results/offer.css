@@ -53,6 +53,10 @@
     padding: 8px 0;
     font-size: 13px;
 }
+.obs-profit {
+    margin-left: 10px;
+    color: #777;
+}
 .obs-hint {
     position: absolute;
     margin: 1px 0 0 10px;

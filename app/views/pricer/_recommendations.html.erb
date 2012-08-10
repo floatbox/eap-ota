@@ -14,6 +14,8 @@
 <% if @recommendations.present? %>
 <% data = Recommendation.filters_data(@recommendations) %>
 
+<div class="r-average latent"><%= @average_price.round.to_i %></div>
+
 <div class="rf-data" id="rfg-time">
 <% time_titles = ['ночью', 'утром', 'днем', 'вечером'] %>
 <% data[:time].each_with_index do |times, i| %>
