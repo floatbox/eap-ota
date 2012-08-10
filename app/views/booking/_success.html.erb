@@ -18,18 +18,16 @@
             <p class="bfrsa-item"><a href="http://www.google.com/calendar/event?action=TEMPLATE&<%= gevent %>" target="_blank">Добавить поездку в Гугл-календарь</a></p>
         <% end %>
     </div>
-    <% unless Rails.env.production? %>
-        <% insurance_url = smart_insurance_uri(@order_form) %>
-        <% unless insurance_url.nil? %>
-        <div class="bfrs-insurance">    
-            <h5 class="bfrs-title">Туристическая страховка онлайн</h5>
-            <a class="bfrsi-link" href="<%= insurance_url %>" target="_blank">Узнать стоимость и&nbsp;купить</a>
-            <p class="bfrsi-item">Оплата картой</p>
-            <p class="bfrsi-item">Электронный полис</p>
-            <p class="bfrsi-item">Подходит для визы</p>
-            <p class="bfrsi-item">Страхование багажа</p>        
-        </div>
-        <% end %>
+    <% insurance_url = smart_insurance_uri(@order_form) %>
+    <% unless insurance_url.nil? %>
+    <div class="bfrs-insurance">    
+        <h5 class="bfrs-title">Туристическая страховка онлайн</h5>
+        <a class="bfrsi-link" href="<%= insurance_url %>" target="_blank">Узнать стоимость и&nbsp;купить</a>
+        <p class="bfrsi-item">Оплата картой</p>
+        <p class="bfrsi-item">Электронный полис</p>
+        <p class="bfrsi-item">Подходит для визы</p>
+        <p class="bfrsi-item">Страхование багажа</p>        
+    </div>
     <% end %>
 </div>
 <p class="latent" id="bfh-mail">Если вы&nbsp;не&nbsp;получили письмо с&nbsp;<% @order_form.payment_type == 'card' ? 'электронным билетом' : 'подтверждением бронирования' %> в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, то&nbsp;напишите нам (<a href="mailto:operator@eviterra.com">operator@eviterra.com</a>) или позвоните <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p>
