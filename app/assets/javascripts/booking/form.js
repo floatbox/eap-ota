@@ -184,6 +184,10 @@ process: function(s) {
         });
         break;
     }
+    var spos = $('#page-footer').offset().top - $w.height();
+    if ($w.scrollTop() < spos) {
+        $w.smoothScrollTo(spos);
+    }
 }
 };
 

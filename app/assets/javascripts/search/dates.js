@@ -128,7 +128,6 @@ initScrolling: function() {
     var that = this;
     var areas = this.el.find('.sdt-area');
     areas.mousedown(function(event) {
-        if (event.button) return;
         event.preventDefault();
         if (!that.hidden) {
             that.scrollTo(that.getTarget($(this)).pos, that.hidden);

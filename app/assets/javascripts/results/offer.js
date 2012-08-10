@@ -48,7 +48,7 @@ updateBook: function() {
     this.btitle.html(results.priceTemplate.absorb(price));
     this.state.html(results.stateTemplate);
 },
-select: function(index) {
+select: function(index, smooth) {
     this.summaries.all.removeClass('os-selected');
     var variant = this.variants[index];
     for (var i = variant.segments.length; i--;) {
@@ -56,7 +56,18 @@ select: function(index) {
     }
     this.selected = variant;
     this.book.removeClass('ob-disabled ob-failed');
-    this.updateBook();
+    if (smooth) {
+        var that = this;
+        var button = this.book.find('.ob-button');
+        button.animate({opacity: 0}, 150);
+        button.queue(function(next) {
+            that.updateBook();
+            next();
+        });
+        button.delay(100).animate({opacity: 1}, 150);    
+    } else {
+        this.updateBook();
+    }
 },
 choose: function(segment, code) {
     var matches = [];
@@ -79,11 +90,12 @@ choose: function(segment, code) {
             index: i
         });
     }
-    this.select(matches.sort(function(a, b) {
+    var index = matches.sort(function(a, b) {
         if (a.precision > b.precision) return -1;
         if (a.precision < b.precision) return 1;
         return a.index - b.index;
-    })[0].index);
+    })[0].index;
+    this.select(index, this.selected.price !== this.variants[index].price);
 },
 selectSegment: function(segment, flights) {
     this.choose(segment, flights);

@@ -15,13 +15,13 @@
     padding: 8px 20px 8px 8px;
     font-size: 20px;
     line-height: 20px;
-    letter-spacing: -0.03em;
 }
 .ob-button {
     float: left;
     position: relative;
-    margin-right: 12px;
+    margin-right: 14px;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    letter-spacing: -0.03em;
 }
 .obb-side {
     height: 42px;
@@ -51,6 +51,7 @@
 .ob-state {
     margin-right: 200px;
     padding: 8px 0;
+    font-size: 13px;
 }
 .obs-hint {
     position: absolute;
@@ -110,11 +111,10 @@
 /* Details control */
 .od-control {
     position: absolute;
-    top: 21px;
+    top: 19px;
     left: 785px;
-    font-size: 12px;
-    line-height: 12px;
-    letter-spacing: 0;
+    font-size: 13px;
+    line-height: 14px;
     color: #777;
     cursor: pointer;
 }
@@ -122,7 +122,7 @@
     display: none;
 }
 .od-scroll {
-    top: 17px;
+    top: 15px;
     left: 777px;
     padding: 4px 8px;
     background: #EDEDE3;
@@ -137,8 +137,8 @@
 
 /* Prebooking */
 .ob-progress {
-    padding-right: 26px;
-    background: url(/images/booking/progress-w.gif) no-repeat 100% 5px;
+    padding: 0 26px 1px 0;
+    background: url(/images/booking/progress-w.gif) no-repeat 100% 0;
 }
 .ob-disabled .obb-left {
     background-position: 100% -45px;
