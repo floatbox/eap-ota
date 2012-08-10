@@ -148,8 +148,10 @@ class Mux
       amadeus_recommendations = []
       sirena_recommendations = []
       amadeus_async_pricer(form) do |res|
-        logger.info "Mux: amadeus recs: #{res.recommendations.size}"
-        amadeus_recommendations += res.recommendations
+        benchmark "Amadeus::Recommendations: parsing" do
+          logger.info "Mux: amadeus recs: #{res.recommendations.size}"
+          amadeus_recommendations += res.recommendations
+        end
       end
       sirena_async_pricer(form) do |res|
         logger.info "Mux: sirena recs: #{res.recommendations.size}"
