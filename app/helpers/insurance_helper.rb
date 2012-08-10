@@ -19,7 +19,7 @@ module InsuranceHelper
       :country => journey.segments.first.flights.last.arrival.country.alpha2,
       :email => order_form.email,
       :phone => order_form.phone,
-      :city => journey.flights.first.departure.city.name_ru,
+      :city => journey.flights.first.departure.city.name_en,
       :buyers => insurance_buyers(order_form.people_by_age),
       :partner => 'eviterra'
     }
