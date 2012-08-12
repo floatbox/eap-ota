@@ -34,8 +34,8 @@ describe InsuranceHelper do
       let(:flight) do
         Flight.new(
           :departure_iata => 'SVO',
-          :departure_date => future_date,
-          :arrival_date => future_date,
+          :dept_date => Date.tomorrow,
+          :arrv_date => Date.tomorrow,
           :arrival_iata => 'MIA'
         )
       end
@@ -77,8 +77,8 @@ describe InsuranceHelper do
         let(:flight) do
           Flight.new(
             :departure_iata => 'SVO',
-            :departure_date => future_date,
-            :arrival_date => future_date,
+            :dept_date => Date.tomorrow,
+            :arrv_date => Date.tomorrow,
             :arrival_iata => 'ROV'
            )
          end

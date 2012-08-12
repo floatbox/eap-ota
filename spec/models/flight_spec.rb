@@ -31,5 +31,10 @@ describe Flight do
     end
 
   end
+
+  describe "date accessors" do
+    specify { Flight.new(:dept_date => Date.today).dept_date.should == Date.today }
+    specify { Flight.new(:arrv_date => Date.today).arrv_date.should == Date.today }
+  end
 end
 

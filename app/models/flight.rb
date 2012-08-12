@@ -75,8 +75,16 @@ class Flight
     Date.strptime(departure_date, '%d%m%y')
   end
 
+  def dept_date=(date)
+    self.departure_date= date.strftime('%d%m%y')
+  end
+
   def arrv_date
     Date.strptime(arrival_date, '%d%m%y')
+  end
+
+  def arrv_date=(date)
+    self.arrival_date = date.strftime('%d%m%y')
   end
 
   def dept_time
