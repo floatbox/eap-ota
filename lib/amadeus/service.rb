@@ -42,6 +42,19 @@ module Amadeus
     @driver || super
   end
 
+  include ActiveSupport::Benchmarkable
+
+  # не то же самое, что и self.logger=. используется для benchmark
+  def logger
+    Rails.logger
+  end
+
+  def parse_http_response(*)
+    benchmark 'Handsoap::Parser: parsing response' do
+      super
+    end
+  end
+
   delegate :release, :to => :session
 
 # generic helpers
