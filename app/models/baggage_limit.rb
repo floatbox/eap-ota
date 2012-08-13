@@ -59,9 +59,9 @@ class BaggageLimit
     if code == '?'
       self.new
     elsif code[-1] == 'N'
-      self.new(:baggage_quantity => code[0].to_i, :baggage_type => 'N')
+      self.new(:baggage_quantity => code.to_i, :baggage_type => 'N')
     elsif code[-1].in? ['L', 'K']
-      self.new(:baggage_weight => code[0].to_i, :baggage_type => 'W', :measure_unit => code[1])
+      self.new(:baggage_weight => code.to_i, :baggage_type => 'W', :measure_unit => code[-1])
     else
       raise ArgumentError, 'Некорректный код багажа'
     end

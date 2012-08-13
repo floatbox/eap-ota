@@ -30,7 +30,6 @@ class PNR
         pnr.additional_number = add_number if add_number != pnr.order.pnr_number
         pnr.flights.each do |fl|
           fl.baggage_limit_for_adult = tst_resp.baggage_for_segments[fl.amadeus_ref]
-          fl.baggage_limits = tst_resp.baggage_with_refs[fl.amadeus_ref]
         end
       end
     end

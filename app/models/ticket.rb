@@ -100,6 +100,10 @@ class Ticket < ActiveRecord::Base
     Carrier.uniq.pluck(:iata).sort
   end
 
+  def baggage_array
+    baggage_info.to_s.split.map{|code| [BaggageLimit.deserialize(code)]}
+  end
+
   def update_price_fare_and_add_parent
     if exchanged_ticket = order.tickets.select{|t| t.code.to_s == parent_code.to_s && t.number.to_s[0..9] == parent_number.to_s}.first
       self.parent = exchanged_ticket

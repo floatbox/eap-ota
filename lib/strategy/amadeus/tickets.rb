@@ -4,12 +4,12 @@ module Strategy::Amadeus::Tickets
 
   # FIXME обработать tst_resp.success? == false
   def get_tickets
-    pnr_resp, tst_resp, prices, coded_baggage = ()
+    pnr_resp, tst_resp, prices, baggage_with_refs = ()
     ::Amadeus.booking do |amadeus|
       pnr_resp = amadeus.pnr_retrieve(:number => @order.pnr_number)
       tst_resp = amadeus.ticket_display_tst
       prices = tst_resp.prices_with_refs
-      coded_baggage = tst_resp.coded_baggage_for_persons
+      baggage_with_refs = tst_resp.baggage_with_refs
       amadeus.pnr_ignore
     end
     tickets = []
@@ -20,9 +20,16 @@ module Strategy::Amadeus::Tickets
           ticket_hash[:parent_number] = exchanged_tickets[k][:number]
           ticket_hash[:parent_code] = exchanged_tickets[k][:code]
         end
+        baggage_info = k[1].map do |seg_ref|
+          if baggage_with_refs[k[0]]
+            baggage_with_refs[k[0]][seg_ref].serialize
+          else
+            BaggageLimit.new.serialize
+          end
+        end.join(' ')
         tickets << ticket_hash.merge({
           :source => 'amadeus',
-          :baggage_info => coded_baggage[k[0]],
+          :baggage_info => baggage_info,
           :pnr_number => @order.pnr_number,
           :commission_subagent => @order.commission_subagent.to_s
         })

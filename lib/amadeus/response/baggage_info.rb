@@ -24,12 +24,6 @@ module Amadeus
         @baggage_for_segments ||= baggage_with_refs.find{|k, v| k[1] == 'a'}[1]
       end
 
-      def coded_baggage_for_persons
-        @coded_baggage_for_persons ||= Hash[baggage_with_refs.map do |pax_ref, segment_ref|
-          [pax_ref,
-           segment_ref.sort_by{|k,v| k}.map{|k,v| v.serialize}.join(' ')]
-        end]
-      end
     end
   end
 end

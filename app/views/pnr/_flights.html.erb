@@ -13,7 +13,8 @@
 </tr>
 </thead>
 <tbody valign="top">
-<% for flight, booking_class in @flights.zip(booking_classes) %>
+<% for flight, booking_class, baggage_limitations in
+  (@flights.zip(booking_classes).zip(@prices.baggage_array).map {|(a,b), c| [a, b, c]}) %>
 <tr>
     <td colspan="7" style="font-size: 12px; line-height: 12px;"><br></td>
 </tr>
@@ -97,6 +98,7 @@
         <%= booking_class %> (HK)<br>
         <% if bl && !bl.unknown? %>
         <div style="margin-top: 5px; font-size: 13px; line-height: 16px;">
+            <%#= baggage_summary(baggage_limitations) %>
             <% if bl.no_baggage? %>
                 только ручная кладь
             <% elsif bl.units %>

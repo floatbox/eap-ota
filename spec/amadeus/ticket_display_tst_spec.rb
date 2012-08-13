@@ -16,8 +16,6 @@ describe Amadeus::Response::TicketDisplayTST do
       specify {subject.baggage_with_refs[[11, 'a']][1].units?.should be_true}
       specify {subject.baggage_for_segments[2].units?.should be_true}
       specify {subject.baggage_for_segments[2].units.should == 1}
-      specify {subject.coded_baggage_for_persons[[11, 'a']].should == '1N 1N'}
-      specify {subject.coded_baggage_for_persons[[12, 'i']].should == '10K 10K'}
     end
 
     context 'with two simular persons' do

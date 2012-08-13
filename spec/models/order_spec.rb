@@ -253,7 +253,7 @@ describe Order do
         pnr_resp.stub(:exchanged_tickets).and_return({})
         tst_resp = stub('Amadeus::Response::TicketDisplayTST')
         tst_resp.stub(:prices_with_refs).and_return({})
-        tst_resp.stub(:coded_baggage_for_persons).and_return({})
+        tst_resp.stub(:baggage_with_refs).and_return({})
         @order.stub_chain(:tickets, :where, :every, :update_attribute)
         @order.stub_chain(:tickets, :reload)
         ticket = Ticket.new
