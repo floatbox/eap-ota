@@ -28,6 +28,8 @@ class PaytureCharge < Payment
   def can_confirm_3ds?; threeds? end
   def can_cancel?; blocked? end
   def can_charge?; blocked? end
+  # FIXME ограничить processing_* статусами?
+  def can_sync_state?; true end
 
   # TODO интеллектуальный retry при проблемах со связью
   def block!
@@ -108,7 +110,9 @@ class PaytureCharge < Payment
   }
 
   def sync_state!
-    state = STATUS_MAPPING[payture_state] or raise 'Unknown state reported'
+    return unless can_sync_state?
+    state_code = payture_state
+    state = STATUS_MAPPING[state_code] or raise ArgumentError, "Unknown state reported by Payture: #{state_code.inspect}"
     update_attributes :status => state
   end
 

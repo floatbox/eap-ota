@@ -42,6 +42,7 @@ class Payment < ActiveRecord::Base
   def can_confirm_3ds?; false end
   def can_cancel?;      false end
   def can_charge?;      false end
+  def can_sync_state?;  false end
 
   def self.statuses; %W[ pending threeds blocked charged rejected canceled ] end
 

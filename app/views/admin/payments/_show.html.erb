@@ -13,6 +13,9 @@
 <% if @item.can_cancel?  %>
   <td><%= button_to 'Cancel', {:action => 'cancel', :id => @item.id}, {:confirm => 'точно?'} %></td>
 <% end %>
+<% if @item.can_sync_state?  %>
+  <td><%= button_to 'Sync state', {:action => 'sync_state', :id => @item.id}, {:confirm => 'точно?'} %></td>
+<% end %>
 <td>
   <div><strong> <%= @item.class.model_name.human %>: <%= @item.status %></strong>
   <%= @item.control_links %>

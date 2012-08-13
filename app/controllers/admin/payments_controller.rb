@@ -42,6 +42,17 @@ class Admin::PaymentsController < Admin::EviterraResourceController
     redirect_to :back
   end
 
+  def sync_state
+    get_object
+    @item.sync_state!
+    redirect_to :back
+  end
+
+  rescue_from ArgumentError do |e|
+    flash[:alert] = e.message
+    redirect_to :back
+  end
+
   private
 
   def set_bulk_action
