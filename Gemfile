@@ -91,13 +91,6 @@ group :test do
   gem 'webmock'
 end
 
-group :console do
-  gem 'wirble'
-  gem 'looksee'
-  gem 'awesome_print'
-  gem 'interactive_editor'
-end
-
 group :debug do
   gem 'ruby-debug', :platforms => :ruby_18
   gem 'ruby-debug19', :require => 'ruby-debug', :platforms => :ruby_19
