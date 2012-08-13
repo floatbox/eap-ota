@@ -92,7 +92,8 @@ class PaytureCharge < Payment
   end
 
   def payture_state
-    gateway.state(:order_id => ref).state
+    response = gateway.state(:order_id => ref)
+    response.state || response.err_code
   end
 
   def payture_amount
@@ -106,7 +107,8 @@ class PaytureCharge < Payment
     'New' => 'pending',
     'PreAuthorized3DS' => 'threeds',
     'Rejected' => 'rejected',
-    'Voided' => 'canceled'
+    'Voided' => 'canceled',
+    'ORDER_NOT_FOUND' => 'rejected'
   }
 
   def sync_state!
@@ -128,7 +130,7 @@ class PaytureCharge < Payment
   # для админки
   def payment_state_raw
     response = gateway.state(:order_id => ref)
-    response.err_code || "#{response.state}: #{response.amount}"
+    response.err_code || "#{response.state}: #{response.amount} (#{STATUS_MAPPING[response.state] || 'unknown'})"
   rescue
     $!.message
   end
