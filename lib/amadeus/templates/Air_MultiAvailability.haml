@@ -1,0 +1,18 @@
+%messageActionDetails
+  %functionDetails
+    %actionCode 44
+%requestSection
+  %availabilityProductInfo
+    %availabilityDetails
+      %departureDate= flight.departure_date
+    %departureLocationInfo
+      %cityAirport= flight.departure_iata
+    %arrivalLocationInfo
+      %cityAirport= flight.arrival_iata
+  %airlineOrFlightOption
+    %flightIdentification
+      %airlineCode= flight.marketing_carrier_iata
+      %number= flight.flight_number
+  %availabilityOptions
+    %productTypeDetails
+      %typeOfRequest TN
