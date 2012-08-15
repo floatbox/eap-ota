@@ -13,6 +13,11 @@
     %flightIdentification
       %airlineCode= flight.marketing_carrier_iata
       %number= flight.flight_number
+  - if cabin
+    %cabinOption
+      %cabinDesignation
+        %cabinClassOfServiceList= converted_cabin
+
   %availabilityOptions
     %productTypeDetails
       %typeOfRequest TN
