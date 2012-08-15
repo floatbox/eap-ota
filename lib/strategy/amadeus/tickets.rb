@@ -21,7 +21,7 @@ module Strategy::Amadeus::Tickets
           ticket_hash[:parent_code] = exchanged_tickets[k][:code]
         end
         baggage_info = k[1].map do |seg_ref|
-          if baggage_with_refs[k[0]]
+          if baggage_with_refs[k[0]] && baggage_with_refs[k[0]][seg_ref]
             baggage_with_refs[k[0]][seg_ref].serialize
           else
             BaggageLimit.new.serialize
