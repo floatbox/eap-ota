@@ -125,8 +125,11 @@ namespace :deploy do
   after "deploy", "deploy:restart_rambler_daemon"
   after "deploy", "deploy:restart_delayed_job"
   after "deploy:update_code", "deploy:check_for_pending_migrations"
+
+  after "deploy:update", "newrelic:notice_deployment"
 end
 
 # airbrake stuff
 require './config/boot'
 require 'airbrake/capistrano'
+require 'new_relic/recipes'
