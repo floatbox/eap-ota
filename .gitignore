@@ -17,8 +17,9 @@ rerun.txt
 .com.*
 config/local.yml
 config/local
-db/sphinx
 .DS_Store
 tags
 config/newrelic.yml
 public/javascripts/all.js
+mydoc
+problems
