@@ -1,3 +1,4 @@
+# encoding: utf-8
 class BaggageLimit
   include KeyValueInit
   attr_writer :baggage_weight, :baggage_type, :baggage_quantity, :measure_unit
@@ -41,4 +42,29 @@ class BaggageLimit
   def hash
     signature.hash
   end
+
+  def serialize
+    if units?
+      "#{units}N"
+    elsif kilos
+      "#{kilos}K"
+    elsif pounds
+      "#{pounds}L"
+    else
+      "?"
+    end
+  end
+
+  def self.deserialize(code)
+    if code == '?'
+      self.new
+    elsif code[-1] == 'N'
+      self.new(:baggage_quantity => code.to_i, :baggage_type => 'N')
+    elsif code[-1].in? ['L', 'K']
+      self.new(:baggage_weight => code.to_i, :baggage_type => 'W', :measure_unit => code[-1])
+    else
+      raise ArgumentError, 'Некорректный код багажа'
+    end
+  end
+
 end

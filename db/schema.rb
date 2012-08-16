@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120608120901) do
+ActiveRecord::Schema.define(:version => 20120809172439) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -439,6 +439,7 @@ ActiveRecord::Schema.define(:version => 20120608120901) do
     t.string   "vat_status",                                              :default => "unknown", :null => false
     t.date     "dept_date"
     t.decimal  "price_extra_penalty",       :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.string   "baggage_info"
   end
 
   add_index "tickets", ["kind"], :name => "index_tickets_on_kind"

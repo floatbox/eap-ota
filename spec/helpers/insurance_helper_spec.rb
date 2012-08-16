@@ -4,6 +4,11 @@ require 'spec_helper'
 describe InsuranceHelper do
 
   describe '#smart_insurance_uri' do
+
+    def smart_insurance_date(date)
+      date.strftime('%d.%m.%Y')
+    end
+
     subject do
       smart_insurance_uri(order_form)
     end
@@ -14,58 +19,73 @@ describe InsuranceHelper do
         :last_name => 'Up',
         :birthday => Date.today - 39.years,
         :document_expiration_date => Date.today + 1.year,
-        :passport => '999999343',
+        :passport => '123999343',
         :sex => 'f'),
       Person.new(
         :first_name => 'Wanna',
         :last_name => 'Be',
         :birthday => Date.today - 2.years,
         :document_expiration_date => Date.today + 1.year,
-        :passport => '123999343',
+        :passport => '999999342',
         :sex => 'm') ]
     end
 
     context "good order_form" do
       let(:flight) do
         Flight.new(
-        :departure_iata => 'SVO',
-        :departure_date => future_date,
-        :arrival_date => future_date,
-        :arrival_iata => 'MIA')
+          :departure_iata => 'SVO',
+          :dept_date => Date.tomorrow,
+          :arrv_date => Date.tomorrow,
+          :arrival_iata => 'MIA'
+        )
       end
-      let(:variant) { Variant.new(:segments => [segment]) }
-      let(:segment) {Segment.new(:flights => [flight])}
-      let(:recommendation) { Recommendation.new(:variants => [variant]) }
+      let(:recommendation) { Recommendation.new(:flights => [flight]) }
       let(:order_form) { OrderForm.new(:recommendation => recommendation, :people => people, :email => "dear_friend@bat.man", :phone => '1111111')}
 
       let(:params) do {
-        'start_date' => Date.parse(future_date.gsub(/^(\d\d)(\d\d?)(\d\d?)$/){"%02d.%02d.%02d" % [$1, $2, $3].map(&:to_i)}).strftime('%d.%m.%Y'),
-        'end_date' => Date.parse(future_date(1).gsub(/^(\d\d)(\d\d?)(\d\d?)$/){"%02d.%02d.%02d" % [$1, $2, $3].map(&:to_i)}).strftime('%d.%m.%Y'),
+        'start_date' => smart_insurance_date(flight.dept_date),
+        'end_date' => smart_insurance_date(flight.dept_date + 30.days),
+        'partner' => 'eviterra',
         'country' => 'US',
-        'city' => 'Москва',
+        'city' => 'Moscow',
         'phone' => '1111111',
         'email' => 'dear_friend@bat.man',
         'buyers' => {
           '0' => {
-            'name' => 'Up',
-            'surname' => 'Grown',
-            'dob' => (Date.today - 39.years).strftime('%d.%m.Y'),
+            'surname' => 'Up',
+            'name' => 'Grown',
+            'dob' => smart_insurance_date(Date.today - 39.years),
             'sex' => '1',
             'passport1' => '12',
             'passport2' => '3999343'
           },
           '1' => {
-            'name' => 'Be',
-            'surname' => 'Wanna',
-            'dob' => (Date.today - 2.years).strftime('%d.%m.Y'),
+            'surname' => 'Be',
+            'name' => 'Wanna',
+            'dob' => smart_insurance_date(Date.today - 2.years),
             'sex' => '0',
-            'passport1' => '12',
-            'passport2' => '3999343'
+            'passport1' => '99',
+            'passport2' => '9999342'
           }
         }
       }
       end
-      it {should == "http://www.smart-ins.ru/vzr_iframe/light?#{params.to_query}"}
+      specify { params.should == insurance_uri_params(order_form) }
+      it {should == "https://www.smart-ins.ru/vzr_iframe/light?#{params.to_query}"}
+
+      context "but in russia!" do
+        let(:flight) do
+          Flight.new(
+            :departure_iata => 'SVO',
+            :dept_date => Date.tomorrow,
+            :arrv_date => Date.tomorrow,
+            :arrival_iata => 'ROV'
+           )
+         end
+
+         it{ should be_nil }
+
+      end
     end
 
     context "bad order_form" do

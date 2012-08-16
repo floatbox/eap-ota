@@ -6,7 +6,7 @@ class Flight
   attr_accessor :operating_carrier_iata, :marketing_carrier_iata, :departure_iata,
    :departure_term, :arrival_iata, :arrival_term, :flight_number, :arrival_date,
    :arrival_time, :departure_date, :departure_time, :equipment_type_iata, :warning, :technical_stop_count,
-   :technical_stops, :cabin, :amadeus_ref, :baggage_limit_for_adult, :baggage_limits
+   :technical_stops, :cabin, :amadeus_ref, :baggage_limit_for_adult
 
   def initialize(*)
     @technical_stops = []
@@ -75,8 +75,16 @@ class Flight
     Date.strptime(departure_date, '%d%m%y')
   end
 
+  def dept_date=(date)
+    self.departure_date= date.strftime('%d%m%y')
+  end
+
   def arrv_date
     Date.strptime(arrival_date, '%d%m%y')
+  end
+
+  def arrv_date=(date)
+    self.arrival_date = date.strftime('%d%m%y')
   end
 
   def dept_time

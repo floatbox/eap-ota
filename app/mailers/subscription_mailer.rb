@@ -27,7 +27,8 @@ class SubscriptionMailer < ActionMailer::Base
   helper_method :buy_link, :unsubscribe_link
 
   def unsubscribe_link
-    "https://eviterra.com/unsubscribe/?subscription=#{@notice[:id]}&email=#{@notice[:email]}"
+    args = { subscription: @notice[:id], email: @notice[:email] }
+    "https://eviterra.com/unsubscribe/?#{args.to_query}"
   end
 
   def buy_link

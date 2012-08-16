@@ -18,8 +18,7 @@
             <p class="bfrsa-item"><a href="http://www.google.com/calendar/event?action=TEMPLATE&<%= gevent %>" target="_blank">Добавить поездку в Гугл-календарь</a></p>
         <% end %>
     </div>
-    <% insurance_url = smart_insurance_uri(@order_form) %>
-    <% unless insurance_url.nil? %>
+    <% if insurance_url = smart_insurance_uri(@order_form) %>
     <div class="bfrs-insurance">    
         <h5 class="bfrs-title">Туристическая страховка онлайн</h5>
         <a class="bfrsi-link" href="<%= insurance_url %>" target="_blank">Узнать стоимость и&nbsp;купить</a>

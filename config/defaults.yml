@@ -5,7 +5,7 @@ site:
   forbidden_cash: no
 api:
   enabled: yes
-  store_rambler_cache: yes
+  store_rambler_cache: no
   url_base: 'https://eviterra.com'
   rambler_url: 'http://in.avia.rambler.ru/eviterra/'
   send_to_rambler: no

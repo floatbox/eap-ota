@@ -21,9 +21,9 @@ module Amadeus
   def debug_dir; 'log/amadeus' end
 
   # handsoap logger
-  fh = open(Rails.root + 'log/amadeus.log', 'a')
-  fh.sync=true
-  self.logger = fh
+  # fh = open(Rails.root + 'log/amadeus.log', 'a')
+  # fh.sync=true
+  # self.logger = fh
 
   attr_accessor :session
 
@@ -41,6 +41,19 @@ module Amadeus
   def http_driver_instance
     @driver || super
   end
+
+  # include ActiveSupport::Benchmarkable
+
+  # # не то же самое, что и self.logger=. используется для benchmark
+  # def logger
+  #   Rails.logger
+  # end
+
+  # def parse_http_response(*)
+  #   benchmark 'Handsoap::Parser: parsing response' do
+  #     super
+  #   end
+  # end
 
   delegate :release, :to => :session
 

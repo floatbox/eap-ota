@@ -3,6 +3,8 @@ module Amadeus
   module Response
     class FarePricePNRWithBookingClass < Amadeus::Response::Base
 
+      include BaggageInfo
+
       # копипаста. для данного запроса - не работает. нужна?
       def prices
         xpath('//r:fareList/r:fareDataInformation').collect do |pg|

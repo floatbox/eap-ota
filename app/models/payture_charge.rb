@@ -28,6 +28,8 @@ class PaytureCharge < Payment
   def can_confirm_3ds?; threeds? end
   def can_cancel?; blocked? end
   def can_charge?; blocked? end
+  # FIXME ограничить processing_* статусами?
+  def can_sync_state?; true end
 
   # TODO интеллектуальный retry при проблемах со связью
   def block!
@@ -90,7 +92,8 @@ class PaytureCharge < Payment
   end
 
   def payture_state
-    gateway.state(:order_id => ref).state
+    response = gateway.state(:order_id => ref)
+    response.state || response.err_code
   end
 
   def payture_amount
@@ -104,11 +107,14 @@ class PaytureCharge < Payment
     'New' => 'pending',
     'PreAuthorized3DS' => 'threeds',
     'Rejected' => 'rejected',
-    'Voided' => 'canceled'
+    'Voided' => 'canceled',
+    'ORDER_NOT_FOUND' => 'rejected'
   }
 
   def sync_state!
-    state = STATUS_MAPPING[payture_state] or raise 'Unknown state reported'
+    return unless can_sync_state?
+    state_code = payture_state
+    state = STATUS_MAPPING[state_code] or raise ArgumentError, "Unknown state reported by Payture: #{state_code.inspect}"
     update_attributes :status => state
   end
 
@@ -124,7 +130,7 @@ class PaytureCharge < Payment
   # для админки
   def payment_state_raw
     response = gateway.state(:order_id => ref)
-    response.err_code || "#{response.state}: #{response.amount}"
+    response.err_code || "#{response.state}: #{response.amount} (#{STATUS_MAPPING[response.state] || 'unknown'})"
   rescue
     $!.message
   end

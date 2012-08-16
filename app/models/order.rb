@@ -122,6 +122,12 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def baggage_array
+    sold_tickets.map do |t|
+      t.baggage_info.to_s.split.map{|code| BaggageLimit.deserialize(code)}
+    end.transpose
+  end
+
   def queued_email!
     update_attribute(:email_status, 'queued') if self.email_status == ''
   end

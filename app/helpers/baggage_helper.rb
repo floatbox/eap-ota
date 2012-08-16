@@ -1,10 +1,11 @@
 # encoding: utf-8
 module BaggageHelper
-  def baggage_summary(baggage_limitations)#на вход подается хеш {[pax_id, infant_flag] => BaggageLimit}
-    return if baggage_limitations.values.any?(&:unknown?) || baggage_limitations.blank?
-    return 'только ручная кладь' if baggage_limitations.values.all?(&:no_baggage?)
+  def baggage_summary(baggage_limitations)
+    return unless baggage_limitations
+    return if baggage_limitations.any?(&:unknown?) || baggage_limitations.blank?
+    return 'только ручная кладь' if baggage_limitations.all?(&:no_baggage?)
 
-    baggage_limitations.values.find_all{|v| !v.no_baggage?}.group_by do |bl|
+    baggage_limitations.find_all{|v| !v.no_baggage?}.group_by do |bl|
       bl.signature
     end.values.partition{|v| v[0].units?}.flatten(1).map do |bl_array|
       c = bl_array.length
@@ -14,6 +15,7 @@ module BaggageHelper
   end
 
   def baggage_html(bl)
+    return unless bl
     if bl.no_baggage?
       'только ручная кладь'
     elsif bl.units
