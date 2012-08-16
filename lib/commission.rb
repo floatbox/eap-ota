@@ -301,35 +301,8 @@ commission "0%/0%"
 carrier "AB", "AIR BERLIN"
 ########################################
 
-example 'cdgsvo/j svocdg/c'
-example 'cdgsvo/d'
-strt_date "15.08.2012"
-expr_date "15.12.2012"
-agent "С 15.08.12г.по15.12.12г. 7% по опубл. тарифам по классам J, C, D, I  на рейсы AВ"
-subagent ""
-subclasses "JCDI"
-commission "7%/"
-
-example 'cdgsvo/y svocdg/b'
-example 'cdgsvo/h'
-strt_date "15.08.2012"
-expr_date "15.12.2012"
-agent "С 15.08.12г.по15.12.12г. 5% по опубл. тарифам по классам Y, B, H, K на рейсы AВ; "
-subagent ""
-subclasses "YBHK"
-commission "5%/"
-
-example 'cdgsvo/m svocdg/l'
-example 'cdgsvo/v'
-strt_date "15.08.2012"
-expr_date "15.12.2012"
-agent "С 15.08.12г.по15.12.12г. 3% по опубл. тарифам по классам M, L, V на рейсы AВ."
-subagent ""
-subclasses "MLV"
-commission "3%/"
-
-#example 'cdgsvo svocdg'
-#example 'svocdg'
+example 'cdgsvo svocdg'
+example 'svocdg'
 agent    "5% по всем направлениям через DTT"
 subagent "3% по всем направлениям через DTT"
 interline :no
@@ -338,11 +311,11 @@ interline :no
 # у нас через DTT 3%
 discount "1.7%"
 ticketing_method "downtown"
-disabled "Новый авиацентр пришел"
+#disabled
 commission "5%/3%"
 
-#example 'dmevie/hg viedme/hg'
-#example 'dmevie/hg'
+example 'dmevie/hg viedme/hg'
+example 'dmevie/hg'
 agent    "5% по всем направлениям через DTT"
 subagent "3% по всем направлениям через DTT"
 interline :absent
@@ -350,7 +323,6 @@ interline :absent
 check { includes_only(marketing_carrier_iatas, %W[HG]) }
 discount "1.7%"
 ticketing_method "downtown"
-disabled "Новый авиацентр пришел"
 commission "5%/3%"
 
 example 'cdgsvo svocdg/lh'
