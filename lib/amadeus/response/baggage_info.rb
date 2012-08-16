@@ -21,7 +21,11 @@ module Amadeus
       end
 
       def baggage_for_segments
-        @baggage_for_segments ||= baggage_with_refs.find{|k, v| k[1] == 'a'}[1]
+        if baggage_with_refs.present?
+          @baggage_for_segments ||= baggage_with_refs.find{|k, v| k[1] == 'a'}[1]
+        else
+          {}
+        end
       end
 
     end
