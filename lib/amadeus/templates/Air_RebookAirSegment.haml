@@ -1,0 +1,33 @@
+%bestPricerRecommendation
+  %selectionDetails
+    %option FXZ
+    %optionInformation 2
+%originDestinationDetails
+  %originDestination
+    %origin= flights.first.departure_iata
+    %destination= flights.last.arrival_iata
+  - [flights, old_booking_classes, new_booking_classes].transpose.each do |flight, old_class, new_class|
+    - if old_class != new_class
+      - [[old_class, 'OX'], [new_class, 'NN']].each do |booking_class, status_code|
+        %itineraryInfo
+          %flightDetails
+            %flightDate
+              %departureDate= flight.departure_date
+              %departureTime= flight.departure_time
+              - if flight.departure_date != flight.arrival_date
+                %arrivalDate flight.arrival_date
+              %arrivalTime= flight.arrival_time
+              - if flight.departure_date != flight.arrival_date
+                %dateVariation 1
+            %boardPointDetails
+              %trueLocationId= flight.departure_iata
+            %offpointDetails
+              %trueLocationId= flight.arrival_iata
+            %companyDetails
+              %marketingCompany= flight.marketing_carrier_iata
+            %flightIdentification
+              %flightNumber= flight.flight_number
+              %bookingClass= booking_class
+          %relatedFlightInfo
+            %quantity 01
+            %statusCode= status_code

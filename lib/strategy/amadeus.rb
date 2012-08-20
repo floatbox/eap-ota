@@ -105,4 +105,16 @@ class Strategy::Amadeus < Strategy::Base
     end
   end
 
+  def reprice_and_rebook
+    ::Amadeus.booking do |amadeus|
+      pnr_resp = amadeus.pnr_retrieve(:number => @order.pnr_number)
+      lower_pricing_resp = amadeus.fare_price_pnr_with_lower_fares
+      if pnr_resp.booking_classes != lower_pricing_resp.new_booking_classes
+        amadeus.air_rebook_air_segment(:flights => pnr_resp.flights,
+          :old_booking_classes => pnr_resp.booking_classes,
+          :new_booking_classes => lower_pricing_resp.new_booking_classes)
+      end
+    end
+  end
+
 end

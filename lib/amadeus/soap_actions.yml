@@ -2,6 +2,9 @@
 Air_MultiAvailability: 
   soap_action: http://webservices.amadeus.com/1ASIWOABEVI/SATRQT_07_1_1A
   r: http://xml.amadeus.com/SATRSP_07_1_1A
+Air_RebookAirSegment:
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/ARBKUQ_03_2_1A
+  r: http://xml.amadeus.com/ARBKUQ_03_2_1A
 Security_Authenticate: 
   soap_action: http://webservices.amadeus.com/1ASIWOABEVI/VLSSLQ_06_1_1A
   r: http://xml.amadeus.com/VLSSLR_06_1_1A
