@@ -604,7 +604,7 @@ init: function() {
         booking.form.validate();
     });
     if (this.cash) {
-        $('#bfcd-yes').trigger('set');
+        this.cash.el.find('.bfcd-radio:checked').trigger('set');
         this.initSelector();
         this.select('card');
     }

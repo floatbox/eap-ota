@@ -1,12 +1,12 @@
 <div class="bf-cash">
 <div class="bfc-deadline">Бронирование необходимо оплатить до <strong><%= I18n.l(@order_form.last_pay_time, :format => '%H:%M %e %B') %></strong>, иначе оно будет автоматически аннулировано.</div>
-<div class="bfc-delivery">
+<div class="bfc-delivery"<% if Conf.site.forbidden_delivery || Conf.site.forbidden_cash %> style="display: none;"<% end %>>
     <div class="bfc-delivery-item">
-        <input type="radio" name="ptype" class="bfcd-radio" value="delivery" id="bfcd-yes" checked="checked">
+        <input type="radio" name="ptype" class="bfcd-radio" value="delivery" id="bfcd-yes"<% unless Conf.site.forbidden_delivery %> checked="checked"<% end %>>
         <label for="bfcd-yes">Хочу оплатить курьеру при доставке (+400&nbsp;рублей)</label>
     </div>
     <div class="bfc-delivery-item">
-        <input type="radio" name="ptype" class="bfcd-radio" value="cash" id="bfcd-no">
+        <input type="radio" name="ptype" class="bfcd-radio" value="cash" id="bfcd-no"<% if Conf.site.forbidden_delivery %> checked="checked"<% end %>>
         <label for="bfcd-no">Хочу самостоятельно приехать в офис и оплатить</label>
     </div>
 </div>
