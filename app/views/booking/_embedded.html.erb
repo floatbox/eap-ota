@@ -75,7 +75,8 @@
             <div class="bfst-tip">Сайт защищен ключом безопасности и&nbsp;в&nbsp;полной мере соответствет стандартам PCI&nbsp;DSS Compliance.</div>
             <div class="bfst-line"></div>
         </div>
-        <% if @order_form.last_pay_time %>
+        <% enabled_cash = !(Conf.site.forbidden_delivery && Conf.site.forbidden_cash) && @order_form.last_pay_time %>
+        <% if enabled_cash %>
         <div class="bfp-type clearfix">
             <div class="bfpt-item bfpt-selected">
                 <h5 class="bfpt-title"><label for="bfpt-card" class="bfpt-label">Банковской картой на сайте</label></h5>
@@ -84,7 +85,7 @@
             </div>
             <div class="bfpt-item">
                 <h5 class="bfpt-title"><label for="bfpt-cash" class="bfpt-label">Наличными в Москве</label></h5>
-                <p class="bfpt-tip"><label for="bfpt-cash">У нас в офисе или курьеру при доставке (+400&nbsp;рублей)</label></p>
+                <p class="bfpt-tip"><label for="bfpt-cash"><% if Conf.site.forbidden_delivery %>У нас в офисе<% elsif Conf.site.forbidden_cash %>Курьеру при доставке (+400&nbsp;рублей)<% else %>У нас в офисе или курьеру при доставке (+400&nbsp;рублей)<% end %></label></p>
                 <input type="radio" name="order[payment_type]" class="bfpt-radio" id="bfpt-cash" value="cash">
             </div>
         </div>
@@ -94,7 +95,7 @@
             <input type="hidden" name="order[payment_type]" value="card">
         </div>
         <% end %>
-        <%= render 'payment_cash_form' if @order_form.last_pay_time %>
+        <%= render 'payment_cash_form' if enabled_cash %>
         <%= render 'payment_card_form', :f => f %>
     </div>
     
