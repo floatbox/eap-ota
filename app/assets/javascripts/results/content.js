@@ -44,13 +44,23 @@ initOffers: function() {
         var el = $(this);
         hint.show(event, 'В альянс ' + el.html() + ' входят авиакомпании: ' + el.attr('data-carriers') + '.');
     });    
-    this.el.delegate('.os-summary:not(.os-selected)', 'click', function() {
+    this.el.delegate('.os-summary', 'click', function() {
         var el = $(this);
         var offer = that.getOffer(el);
         var segment = el.closest('.o-segment').prevAll('.o-segment').length;
-        offer.selectSegment(segment, el.attr('data-flights'));
-        if (offer === booking.offer) {
-            booking.abort();
+        if (el.hasClass('os-selected')) {
+            if (!offer.details || offer.details.is(':hidden')) {
+                offer.showDetails();
+                $w.delay(100);
+            }
+            var offset = offer.details.find('.os-details').eq(segment).offset().top;
+            $w.smoothScrollTo(offset - (offer.complex ? 200 : 148));
+
+        } else {
+            offer.selectSegment(segment, el.attr('data-flights'));
+            if (offer === booking.offer) {
+                booking.abort();
+            }
         }
     });    
     this.el.delegate('.o-book .obb-title', 'click', function() {

@@ -49,6 +49,7 @@
     cursor: default;
 }
 .rt-disabled {
+    display: none;
     color: #73757A;
     cursor: default;
 }
