@@ -193,7 +193,7 @@ example 'svocdg'
 strt_date "01.07.2011"
 agent    "С 01.07.11г. 5% от всех опубл. тарифов на рейсы 6H (В договоре Interline отдельно не прописан.)"
 subagent "С 01.07.11г. 3% от опубл. тарифов на собств.рейсы 6H"
-## discount "2%"
+discount "1%"
 commission "5%/3%"
 
 example 'cdgsvo svocdg/ab'
@@ -2690,7 +2690,7 @@ carrier "9U", "Air Moldova"
 example 'dmekiv'
 agent "5 (пять) % от всех опубликованных тарифов."
 subagent "3% от опубл. тарифов на рейсы 9U"
-## discount "2.5%"
+discount "1.5%"
 commission "5%/3%"
 
 carrier "A9", "GEORGIAN AIRWAYS"
@@ -2732,7 +2732,7 @@ example 'svocdg/business cdgsvo/business'
 agent "9% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
 subagent "7% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
 classes :business
-discount "6%"
+discount "5%"
 commission "9%/7%"
 
 example 'svocdg/economy svocdg/economy'
@@ -2758,7 +2758,7 @@ carrier "RJ", "Royal Jordanian Airline"
 
 agent "5 (пять) % от всех опубл. тарифов на собств. рейсы RJ"
 subagent "3% от опубл. тарифов на собств. рейсы RJ"
-## discount "2.5%"
+discount "1.5%"
 commission "5%/3%"
 
 example 'svocdg/ab cdgsvo'
@@ -2796,7 +2796,7 @@ carrier "R3", "Авиакомпания «Якутия»"
 
 agent "6 % от всех опубл. тарифов на все собств.рейсы Авиакомпании;"
 subagent "4% от всех опубл. тарифов на все собств.рейсы Авиакомпании;"
-discount "2%"
+discount "2.5%"
 commission "6%/4%"
 
 agent "4 % от всех опубл. тарифов на все рейсы, выполняемые Интерлайн-партнерами Авиакомпании."
