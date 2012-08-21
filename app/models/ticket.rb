@@ -51,7 +51,8 @@ class Ticket < ActiveRecord::Base
   scope :uncomplete, where(:ticketed_date => nil)
   scope :sold, where(:status => ['ticketed', 'exchanged', 'returned', 'processed'])
 
-  before_validation :set_refund_data, :if => lambda {kind == "refund"}
+  before_save :set_refund_data, :if => lambda {kind == "refund"}
+  validates_presence_of :price_fare, :price_tax, :price_our_markup, :price_penalty, :price_discount, :price_consolidator, :if => lambda {kind = 'refund'}
   before_validation :update_price_fare_and_add_parent, :if => :parent_number
   after_save :update_parent_status, :if => :parent
   after_destroy :update_parent_status, :if => :parent
