@@ -2,7 +2,7 @@
 class PNRController < ApplicationController
 
   rescue_from RuntimeError, :with => :error
-  before_filter :get_data, :only => [:show, :show_as_booked, :show_as_ticketed, :show_for_ticket]
+  before_filter :get_data, :only => [:show, :show_as_booked, :show_as_order, :show_as_ticketed, :show_for_ticket, :show_notice]
 
   def get_data
     @pnr = PNR.get_by_number params[:id]
@@ -21,8 +21,17 @@ class PNRController < ApplicationController
     end
   end
 
+  def show_notice
+      format = params[:format] ? params[:format] : @pnr.order.send_notice_as
+      render format
+  end
+
   def show_as_booked
     render "booking"
+  end
+
+  def show_as_order
+    render "order"
   end
 
   def show_as_ticketed

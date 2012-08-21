@@ -51,11 +51,11 @@ class Admin::OrdersController < Admin::EviterraResourceController
   end
 
   def show_pnr
-    if params[:lang]
-      redirect_to show_order_path(:id => @order.pnr_number, :lang => "EN")
-    else
-      redirect_to show_order_path(:id => @order.pnr_number)
-    end
+    notice = {}
+    notice[:id] = @order.pnr_number
+    notice[:format] = params[:format] if params[:format]
+    notice[:lang] = "en" if params[:lang]
+    redirect_to show_notice_path(notice)
   end
 
   def pnr_raw
