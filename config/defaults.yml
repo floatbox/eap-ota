@@ -3,6 +3,7 @@ site:
   forbidden_booking: no
   forbidden_sale: no
   forbidden_cash: no
+  forbidden_delivery: no
 api:
   enabled: yes
   store_rambler_cache: no
