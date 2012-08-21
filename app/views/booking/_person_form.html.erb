@@ -1,41 +1,56 @@
-<%= fields_for "person_attributes", person_form, :index => person_form_counter do |person| %>
-<% id_prefix = "bfp#{ person_form_counter + 1 }" %>
+<table class="bfp-table" data-people="<%= @order_form.people.length %>">
+<thead>
+    <tr>
+    <th><h6 class="bf-label">Имя</h6></th>
+    <th><h6 class="bf-label">Фамилия</h6></th>
+    <th><h6 class="bf-label">Пол</h6></th>
+    <th><h6 class="bf-label">Дата рождения</h6></th>
+    <th><h6 class="bf-label">Гражданство</h6></th>
+    <th><h6 class="bf-label">Номер документа</h6></th>
+    <th><h6 class="bf-label">Срок действия</h6></th>    
+    </tr>
+</thead>
 <tbody class="bfp-row">
+<tr class="bfp-spacer-row">
+    <td colspan="7"><div class="bfp-spacer"></div></td>
+</tr>
 <tr>
     <td class="bfp-control">
-        <%= person.text_field :first_name, :id => "#{ id_prefix }-first-name", :class => 'bf-field bfp-fname' %>
+        <input type="text" size="30" name="person_attributes[$n][first_name]" id="bfp$n-first-name" class="bf-field bfp-fname">
     </td>
     <td class="bfp-control">
-        <%= person.text_field :last_name, :id => "#{ id_prefix }-last-name", :class => 'bf-field bfp-lname' %>
+        <input type="text" size="30" name="person_attributes[$n][last_name]" id="bfp$n-last-name" class="bf-field bfp-lname">
     </td>
     <td class="bfp-control">
-        <div class="bfp-sex" id="<%= id_prefix %>-sex">
-            <label class="bfp-sex-m" title="Мужской" for="<%= id_prefix %>-sex-m">М<%= person.radio_button :sex, 'm', :class => 'bfp-sex-radio', :id => "#{ id_prefix }-sex-m" %></label>
-            <label class="bfp-sex-f" title="Женский" for="<%= id_prefix %>-sex-f">Ж<%= person.radio_button :sex, 'f', :class => 'bfp-sex-radio', :id => "#{ id_prefix }-sex-f" %></label>
+        <div class="bfp-sex" id="bfp$n-sex">
+            <label class="bfp-sex-m" title="Мужской" for="bfp$n-sex-m">М<input type="radio" value="m" name="person_attributes[$n][sex]" id="bfp$n-sex-m" class="bfp-sex-radio"></label>
+            <label class="bfp-sex-f" title="Женский" for="bfp$n-sex-f">Ж<input type="radio" value="f" name="person_attributes[$n][sex]" id="bfp$n-sex-m" class="bfp-sex-radio"></label>
         </div>    
     </td>
     <td class="bfp-control">
         <div class="bfp-date">
-            <div class="bfpd-item"><label class="bf-placeholder" for="<%= id_prefix %>-bday">ДД</label><input type="text" class="bf-field bfpd-day" id="<%= id_prefix %>-bday" name="person_attributes[<%= person_form_counter %>][birthday(3i)]" maxlength="2" title="День рождения"></div>
-            <div class="bfpd-item"><label class="bf-placeholder" for="<%= id_prefix %>-bmonth">ММ</label><input type="text" class="bf-field bfpd-month" id="<%= id_prefix %>-bmonth" name="person_attributes[<%= person_form_counter %>][birthday(2i)]" maxlength="2" title="Месяц рождения"></div>
-            <div class="bfpd-item"><label class="bf-placeholder" for="<%= id_prefix %>-byear">ГГГГ</label><input type="text" class="bf-field bfpd-year" id="<%= id_prefix %>-byear" name="person_attributes[<%= person_form_counter %>][birthday(1i)]" maxlength="4" title="Год рождения" data-current="<%= Date.current.strftime('%Y') %>"></div>
+            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-bday">ДД</label><input type="text" class="bf-field bfpd-day" id="bfp$n-bday" name="person_attributes[$n][birthday(3i)]" maxlength="2" title="День рождения"></div>
+            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-bmonth">ММ</label><input type="text" class="bf-field bfpd-month" id="bfp$n-bmonth" name="person_attributes[$n][birthday(2i)]" maxlength="2" title="Месяц рождения"></div>
+            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-byear">ГГГГ</label><input type="text" class="bf-field bfpd-year" id="bfp$n-byear" name="person_attributes[$n][birthday(1i)]" maxlength="4" title="Год рождения" data-current="<%= Date.current.strftime('%Y') %>"></div>
         </div>
     </td>
     <td class="bfp-control">
         <div class="bf-select bfp-nationality">
             <div class="bf-select-arrow"></div>
             <input class="bf-field" value="" disabled="disabled">
-            <%= person.select :nationality_id, grouped_options_for_select(Country.options_for_nationality_select, person_form.nationality_id), {}, :id => "#{ id_prefix }-nationality", :class => 'bf-select-overlay' %>
+            <select name="person_attributes[$n][nationality_id]" id="bfp$n-nationality" class="bf-select-overlay">
+                <%= grouped_options_for_select(Country.options_for_nationality_select, 170) %>
+            </select>
         </div>
     </td>
     <td class="bfp-control">
-        <%= person.text_field :passport, :id => "#{ id_prefix }-passport", :class => 'bf-field bfp-passport', :maxlength => '20' %>
+        <input type="text" size="20" name="person_attributes[$n][passport]" maxlength="20" id="bfp$n-passport" class="bf-field bfp-passport">
     </td>
     <td class="bfp-control">
         <div class="bfp-date">
-            <div class="bfpd-item"><label class="bf-placeholder" for="<%= id_prefix %>-exp-day">ДД</label><input type="text" class="bf-field bfpd-day" id="<%= id_prefix %>-exp-day" name="person_attributes[<%= person_form_counter %>][document_expiration_date(3i)]" maxlength="2" title="День окончания срока действия документа"></div>
-            <div class="bfpd-item"><label class="bf-placeholder" for="<%= id_prefix %>-exp-month">ММ</label><input type="text" class="bf-field bfpd-month" id="<%= id_prefix %>-exp-month" name="person_attributes[<%= person_form_counter %>][document_expiration_date(2i)]" maxlength="2" title="Месяц окончания срока действия документа"></div>
-            <div class="bfpd-item"><label class="bf-placeholder" for="<%= id_prefix %>-exp-year">ГГГГ</label><input type="text" class="bf-field bfpd-year" id="<%= id_prefix %>-exp-year" name="person_attributes[<%= person_form_counter %>][document_expiration_date(1i)]" maxlength="4" title="Год окончания срока действия документа" data-current="<%= Date.current.strftime('%Y') %>"></div>
+            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-day">ДД</label><input type="text" class="bf-field bfpd-day" id="bfp$n-exp-day" name="person_attributes[$n][document_expiration_date(3i)]" maxlength="2" title="День окончания срока действия документа"></div>
+            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-month">ММ</label><input type="text" class="bf-field bfpd-month" id="bfp$n-exp-month" name="person_attributes[$n][document_expiration_date(2i)]" maxlength="2" title="Месяц окончания срока действия документа"></div>
+            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-year">ГГГГ</label><input type="text" class="bf-field bfpd-year" id="bfp$n-exp-year" name="person_attributes[$n][document_expiration_date(1i)]" maxlength="4" title="Год окончания срока действия документа" data-current="<%= Date.current.strftime('%Y') %>"></div>
         </div>
     </td>
 </tr>
@@ -45,15 +60,15 @@
     <% programs = carrier.available_bonus_programms %>
     <% unless programs.empty? %>
         <div class="bf-checkbox">
-            <%= person.check_box :bonus_present, {:id => "#{ id_prefix }-bonus"} %>
-            <label for="<%= id_prefix %>-bonus">Есть бонусная карта <%= carrier.alliance ? "альянса #{ carrier.alliance.name }" : "авиакомпании #{ carrier.name }" %></label>
+            <input type="checkbox" value="1" name="person_attributes[$n][bonus_present]" id="bfp$n-bonus">
+            <label for="bfp$n-bonus">Есть бонусная карта <%= carrier.alliance ? "альянса #{ carrier.alliance.name }" : "авиакомпании #{ carrier.name }" %></label>
         </div>
     <% end %>
     </td>
     <td class="bfp-option">
         <div class="bf-checkbox">
-            <%= person.check_box :document_noexpiration, {:id => "#{ id_prefix }-permanent"} %>
-            <label for="<%= id_prefix %>-permanent">Без срока</label>
+            <input type="checkbox" value="1" name="person_attributes[$n][document_noexpiration]" id="bfp$n-permanent">
+            <label for="bfp$n-permanent">Без срока</label>
         </div>    
     </td>
 </tr>
@@ -63,21 +78,18 @@
     <div class="bfpb-control">
         <div class="bf-select bfp-bonus-type">
             <div class="bf-select-arrow"></div>        
-            <input class="bf-field" value="<%= carrier.iata %>" disabled="disabled">        
-            <%= person.select :bonuscard_type, programs.map {|a| [ a.bonus_program_name, a.iata ] }, {}, :id => "#{ id_prefix}-bonus-type", :class => 'bf-select-overlay' %>
+            <input class="bf-field" value="<%= carrier.iata %>" disabled="disabled">
+            <select name="person_attributes[$n][bonuscard_type]" id="bfp$n-bonus-type" class="bf-select-overlay">
+                <%= options_for_select(programs.map {|a| [ a.bonus_program_name, a.iata ] }) %>
+            </select>        
         </div>
     </div>
     <div class="bfpb-control">
-        <label for="<%= id_prefix %>-bonus-num" class="bf-placeholder bfpb-placeholder">Номер карты</label>
-        <%= person.text_field :bonuscard_number, :id => "#{ id_prefix}-bonus-num", :class => 'bf-field bfp-bonus-number', :maxlength => '30' %>
+        <label for="bfp$n-bonus-num" class="bf-placeholder bfpb-placeholder">Номер карты</label>
+        <input type="text" size="30" name="person_attributes[$n][bonuscard_number]" maxlength="30" id="bfp$n-bonus-num" class="bf-field bfp-bonus-number">        
     </div>
     </td>
 </tr>
 <% end %>
-<% if person_form_counter < people_count - 1 %>
-<tr>
-    <td colspan="7"><div class="bfp-spacer"></div></td>
-</tr>
-<% end %>
 </tbody>
-<% end %>
+</table>

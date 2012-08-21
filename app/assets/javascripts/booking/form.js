@@ -240,9 +240,6 @@ init: function() {
     var that = this;
     this.latinWarning = $('#bfw-name-latin');
     this.orderWarning = $('#bfw-name-order');
-    this.rows = this.el.find('.bfp-row').map(function() {
-        return new validator.Person($(this), that);
-    });
     this.orderWarning.find('.bfwno-replace').click(function() {
         var person = that.orderWarning.person;
         var fn = person.firstname.el.val();
@@ -253,6 +250,27 @@ init: function() {
     });
     this.orderWarning.find('.bfwno-leave').click(function() {
         that.orderWarning.fadeOut(50);
+    });
+    this.table = this.el.find('.bfp-table');
+    this.sample = this.el.find('.bfp-row').remove();
+    var people = Number(this.table.attr('data-people'));
+    for (var i = 0; i < people; i++) {
+        this.addRow(i);
+    }
+    this.initRows();
+},
+addRow: function(index) {
+    var clone = this.sample.clone();
+    if (index === 0) {
+        clone.find('.bfp-spacer-row').remove();
+    }
+    clone.html(clone.html().replace(/\$n/g, index.toString()));
+    this.table.append(clone);
+},
+initRows: function() {
+    var that = this;
+    this.rows = this.el.find('.bfp-row').map(function() {
+        return new validator.Person($(this), that);
     });
 },
 validate: function(forced) {
