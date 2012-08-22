@@ -56,6 +56,14 @@ set: function(data) {
     for (var i = 0, l = this.controls.length; i < l; i++) {
         this.controls[i].set(data[i]);
     }
+},
+get: function() {
+    var data = [];
+    for (var i = 0, l = this.controls.length; i < l; i++) {
+        var control = this.controls[i];
+        data[i] = control.get ? control.get() : '';
+    }    
+    return '["' + data.join('", "') + '"]';    
 }
 };
 
@@ -116,6 +124,9 @@ format: function(value) {
 set: function(value) {
     this.el.val(this.format(value || ''));
     this.validate();
+},
+get: function() {
+    return this.el.val();
 }
 };
 
@@ -154,6 +165,9 @@ set: function(value) {
     } else {
         this.select.get(0).selectedIndex = 0;
     }
+},
+get: function() {
+    return this.select.val();
 }
 };
 
@@ -317,6 +331,14 @@ set: function(value) {
         return vparts[i] || '';
     });
     this.validate();
+},
+get: function() {
+    if (this.error) return '';
+    var parts = [];
+    this.parts.each(function(i) {
+        parts[i] = $(this).val();
+    });
+    return parts.join('.');
 }
 };
 
@@ -358,6 +380,9 @@ set: function(value) {
         this.el.find('.bfp-sex-' + value + ' input').prop('checked', true).trigger('set');
     }
     this.change(Boolean(value));
+},
+get: function() {
+    return this.el.find('input:checked').val() || '';
 },
 change: function(checked) {
     if (checked) {

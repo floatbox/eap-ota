@@ -29,6 +29,7 @@ init: function() {
     this.required.delegate('.bffr-link', 'click', function() {
         that.focus($('#' + $(this).attr('data-field')));
     });
+    this.sections[1].initStorage();
     this.validate(true);
 },
 position: function() {
@@ -258,6 +259,25 @@ init: function() {
         this.addRow(i);
     }
     this.initRows();
+},
+initStorage: function() {
+    var that = this;
+    if (typeof sessionStorage !== 'undefined') {
+        var data = $.parseJSON(sessionStorage.getItem('personsData')) || [];
+        for (var i = that.rows.length; i--;) {
+            var rd = data[i];
+            if (rd) {
+                that.rows[i].set(rd);
+            }
+        }
+        this.table.change(function() {
+            var data = [];
+            for (var i = that.rows.length; i--;) {
+                data[i] = that.rows[i].get();
+            }
+            sessionStorage.setItem('personsData', '[' + data.join(', ') + ']');
+        });
+    }
 },
 addRow: function(index) {
     var clone = this.sample.clone();
