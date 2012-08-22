@@ -1,6 +1,34 @@
 # encoding: utf-8
 module Strategy::Amadeus::PreliminaryBooking
 
+  def find_best_and_check
+    new_booking_classes = []
+    old_booking_classes = @rec.booking_classes
+    ::Amadeus.booking do |amadeus|
+      @rec.flights.zip(@rec.cabins).each do |fl, cabin|
+        new_booking_class = amadeus.air_multi_availability(:flight => fl, :cabin => cabin).lowest_avaliable_booking_class
+        if new_booking_class
+          new_booking_classes += [new_booking_class]
+        else
+          logger.info 'No booking class for flight ' + flight.to_s
+          return
+        end
+      end
+    end
+    @rec.booking_classes = new_booking_classes
+    puts 'new_classes', new_booking_classes
+    res = check_price_and_availability
+    return res if res
+    replacements = {}
+    updated_booking_classes = []
+    old_booking_classes.zip(new_booking_classes).map do |obc, nbc|
+      replacements[obc] = nbc if obc != nbc
+    end
+    @rec.booking_classes = old_booking_classes.map{|obc| replacements[obc] || obc}
+    puts 'new_classes', @rec.booking_classes
+    check_price_and_availability
+  end
+
   def check_price_and_availability
     unless TimeChecker.ok_to_book(@search.segments[0].date_as_date + 1.day)
       logger.error 'Strategy::Amadeus::Check: time criteria missed'
