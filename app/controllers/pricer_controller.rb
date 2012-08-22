@@ -105,7 +105,7 @@ class PricerController < ApplicationController
     if @search.valid?
       @search.save_to_cache
       @destination = get_destination
-      @recommendations = Mux.new(:lite => true).async_pricer(@search)
+      @recommendations = Mux.new(:lite => true).pricer(@search)
       @query_key = @search.query_key
       hot_offer = create_hot_offer
       Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))
