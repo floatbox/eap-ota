@@ -84,17 +84,17 @@ module Amadeus
       xml_string = read_latest_log_file(request.action)
       xml_response = parse_string(xml_string)
     else
-      req_session = self.session || (booked_session = Amadeus::Session.book) if request.needs_session?
+      if session.nil? && request.needs_session?
+        raise ArgumentError, 'called without session'
+      end
       invoke_opts = {}
       invoke_opts[:soap_action] = request.soap_action
-      invoke_opts[:soap_header] = {'SessionId' => req_session.session_id} if req_session
+      invoke_opts[:soap_header] = {'SessionId' => session.session_id} if session
       xml_response = invoke(request.action, invoke_opts) do |body|
         body.set_value request.soap_body, :raw => true
       end
       # FIXME среагировать на HTTP error
-      req_session.increment if req_session
-      # возвращаем только свежезалогиненную сессию
-      booked_session.release if booked_session
+      session.increment if session
       log_file(request.action, xml_response.to_xml)
     end
 
