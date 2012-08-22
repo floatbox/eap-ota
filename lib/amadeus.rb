@@ -12,7 +12,7 @@ module Amadeus
         begin
           return yield(amadeus)
         ensure
-          amadeus.session.destroy
+          amadeus.destroy
         end
       else
         return amadeus

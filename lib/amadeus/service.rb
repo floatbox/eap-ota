@@ -55,7 +55,7 @@ module Amadeus
   #   end
   # end
 
-  delegate :release, :to => :session
+  delegate :release, :destroy, :to => :session
 
 # generic helpers
 
