@@ -35,7 +35,7 @@ describe Strategy::Amadeus do
     context "on whitelisted office_id" do
       before do
         service = mock(Amadeus::Service)
-        service.stub_chain(:session, :release)
+        service.stub(:release)
         Amadeus::Service.should_receive(:new).with( hash_including(:office => office) ) \
           .and_return(service)
         service.stub(:ticket_raw => expected_result)
