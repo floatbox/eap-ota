@@ -480,6 +480,14 @@ class Order < ActiveRecord::Base
     "#{source} #{pnr_number}"
   end
 
+  def payment_type_decorated
+    if payment_type != 'card'
+      "<span style='color:firebrick; font-weight:bold'>#{payment_type}</span>".html_safe
+    else
+      "<span style='color:gray;'>#{payment_type}</span>".html_safe
+    end
+  end
+
   def settled?
     !(ticket_status == 'canceled') && !has_refunds? && income > 0 && tickets.all?{|t| t.status == 'ticketed'}
   end

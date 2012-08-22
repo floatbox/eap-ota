@@ -11,7 +11,7 @@ Order:
       - payment_status
       - ticket_status
       - last_tkt_date
-      - payment_type
+      - payment_type_decorated
       - has_refunds
       - partner
       - urgent
@@ -58,7 +58,7 @@ Order:
       - created_at
       - updated_at
       - last_tkt_date
-      - payment_type
+      - payment_type_decorated
       - delivery
       - last_pay_time
       - partner
