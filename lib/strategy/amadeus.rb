@@ -113,6 +113,9 @@ class Strategy::Amadeus < Strategy::Base
         amadeus.air_rebook_air_segment(:flights => pnr_resp.flights,
           :old_booking_classes => pnr_resp.booking_classes,
           :new_booking_classes => lower_pricing_resp.new_booking_classes)
+        amadeus.fare_price_pnr_with_booking_class
+        amadeus.ticket_create_tst_from_pricing(:fares_count => 1)
+        amadeus.pnr_commit
       end
     end
   end
