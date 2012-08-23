@@ -4,12 +4,15 @@
 <col width="206">
 <col width="210">
 <tbody valign="top">
-<tr>
+  <tr>
+    <td colspan="4">
+      <div style="border-top: 1px solid #dcd6b2; border-bottom: 1px solid #dcd6b2; background: #fbf4cb; padding: 15px 20px 17px 20px; margin: 0 0 20px 0; font-size: 17px;">
+        Ваш электронный билет оформляется и&nbsp;будет выслан&nbsp;вам <%= time_to_ticketing_delay(@prices.created_at) %></div>
+    </td>
+  </tr>
+  <tr>
     <td style="font-size: 12px; line-height: 12px;">
         <div style="font-weight: bold; font-size: 23px; line-height: 26px;"><% unless @lang %>Ваш заказ<br><% end %>Your Order</div><br>
-        <% if @last_pay_time.present? %>
-            <div style="font-weight: bold; font-size: 12px; line-height: 15px; margin-bottom: 3px;">Ваш билет оформляется и будет выслан вам <%= time_to_ticketing_delay(@prices.created_at) %></div>
-        <% end %>
         <br><br>
     </td>
     <%= render :partial => 'pnr/numbers' %>
@@ -54,7 +57,7 @@
 <col width="366">
 <tr valign="top">
     <td rowspan="2">
-        <div style="font-weight: bold; font-size: 18px; line-height: 21px;"><% unless @lang %>Информация для оплаты<br><% end %>Information for payment</div>
+        <div style="font-weight: bold; font-size: 18px; line-height: 21px;"><% unless @lang %>Информация об оплате<br><% end %>Information for payment</div>
         <div style="font-size: 10px; line-height: 10px;"><br></div>
         <table cellspacing="0" cellpadding="0" style="font-size: 13px; line-height: 18px;">
         <tbody valign="top">
@@ -99,6 +102,10 @@
             <td><%= exact_price(@prices.recalculated_price_with_payment_commission) %> RUB</td>
         </tr>
         <% end %>
+        <tr>
+            <td><% unless @lang %>Форма оплаты <span style="color: #C0C0C0;">/</span> <% end %>Paid by</td>
+            <td><%= @prices.paid_by %></td>
+        </tr>
         </tbody>
         </table>
     </td>
@@ -115,8 +122,8 @@
 </tr>
 <tr valign="bottom">
     <td style="font-weight: bold; font-size: 16px; line-height: 20px; color: #F90A6F;">
-        Спасибо за бронирование на <a href="https://www.eviterra.com/" style="text-decoration: none; color: #F90A6F;">eviterra.com</a><br>
-        Thank you for booking with <a href="https://www.eviterra.com/" style="text-decoration: none; color: #F90A6F;">eviterra.com</a>
+        Спасибо за заказ на <a href="https://www.eviterra.com/" style="text-decoration: none; color: #F90A6F;">eviterra.com</a><br>
+        Thank you for order with <a href="https://www.eviterra.com/" style="text-decoration: none; color: #F90A6F;">eviterra.com</a>
     </td>
 </tr>
 </table>

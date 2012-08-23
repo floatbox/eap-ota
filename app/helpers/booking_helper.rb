@@ -70,10 +70,10 @@ module BookingHelper
   def time_to_ticketing_delay date
     time = date.strftime('%H%M')
     case
-      when time < '0600';  'до 11 утра по московскому времени'
-      when time < '0800';  'в течение четырех часов'
-      when time < '2030';  'в течение трех часов'
-      else                 'до 11 утра по московскому времени'
+      when time < '0600';  'до&nbsp;11&nbsp;утра по&nbsp;московскому времени'.html_safe
+      when time < '0800';  'в&nbsp;течение четырех часов'.html_safe
+      when time < '2030';  'в&nbsp;течение трех часов'.html_safe
+      else                 'до&nbsp;11&nbsp;утра по&nbsp;московскому времени'.html_safe
     end
   end
 
