@@ -1355,7 +1355,7 @@ check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US')
 subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
-discount '5.5%'
+discount '5.7%'
 ticketing_method "downtown"
 commission "10%/8%"
 
@@ -1377,7 +1377,7 @@ agent    "1 руб. с билета по опубл. тарифам на соб�
 subagent "5 коп. с билета по опубл. тарифам на собственные рейсы LH и рейсы Interline с участком LH."
 check { includes(country_iatas, 'ES FR IT CZ PT NL CH') } 
 interline :no, :yes
-our_markup "120"
+our_markup "60"
 ## discount '5%'
 commission "1/0.05"
 
@@ -1413,14 +1413,14 @@ carrier_defaults :consolidator => 0, :our_markup => '0.5%'
 example 'svocdg'
 agent    "1 ЕВРО от продаж опубликованных или ИАТА тарифов. Interline - как минимум один международный сегмент выполняется Перевозчиком."
 subagent "5 руб. с билета по опубл. тарифам на рейсы LO;"
-our_markup "0.2%"
+our_markup "60"
 commission "1eur/5"
 
 example "svocdg cdgsvo/ab"
 agent "Interline - как минимум один международный сегмент выполняется Перевозчиком."
 subagent "5 руб. с билета по опубл. тарифам на рейсы Interline с участком LO."
 interline :yes
-our_markup "0.2%"
+our_markup "60%"
 commission "1eur/5"
 
 carrier "LX", "SWISS"
@@ -1436,7 +1436,7 @@ check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') 
 subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
-discount '5%'
+discount '6%'
 ticketing_method "downtown"
 commission "10%/8%"
 
@@ -1459,7 +1459,7 @@ agent    "1 руб. с билета по опубл. тарифам на соб�
 subagent "5 коп. с билета по опубл. тарифам на собств.рейсы LX и рейсы Interline с уч. LX."
 check {includes(country_iatas, 'ES FR IT CZ PT NL CH') } #CHECKME wtf?
 interline :no, :yes
-our_markup "150"
+our_markup "60"
 ## discount '5%'
 commission "1/0.05"
 
@@ -1717,7 +1717,7 @@ check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US')
 subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
-discount '5%'
+discount '6%'
 ticketing_method "downtown"
 commission "10%/8%"
 
@@ -1740,7 +1740,7 @@ agent    "1 руб. с билета по опубл. тарифам на соб�
 subagent "5 коп. с билета по опубл. тарифам на собств.рейсы OS и рейсы Interline с участком OS."
 check {includes(country_iatas, 'ES FR IT CZ PT NL CH') }
 interline :no, :yes
-our_markup "150"
+our_markup "60"
 ## discount '5%'
 commission "1/0.05"
 
@@ -1750,7 +1750,7 @@ agent    "1 руб. с билета по опубл. тарифам на соб�
 (Билеты Interline под кодом OS могут быть выписаны только в случае существования опубликованных тарифов и только при условии, что OS выполняет как минимум один рейс. В противном случае по билету должна быть сделана доплата до полного опублик. IATA тарифа)"
 subagent "5 коп. с билета по опубл. тарифам на собств.рейсы OS и рейсы Interline с участком OS."
 interline :no, :yes
-our_markup "1%"
+our_markup "60%"
 commission "1/0.05"
 
 example 'cdgsvo/ab'
@@ -1974,14 +1974,14 @@ example 'DMEBRU'
 example 'BRULBA'
 agent    "0,5% от опубл. тарифам на собств. рейсы SN;"
 subagent "5 руб. с билета по опубл. тарифам на собств. рейсы SN;"
-our_markup "0.2%"
+our_markup "60"
 commission "0.5%/5"
 
 example 'svocdg cdgsvo/ab'
 agent    "0,5% от опубл. тарифам в случае применения совмещенного тарифа авиакомпаний;"
 subagent "5 руб. с билета по опубл. тарифам в случае применения совмещенного тарифа авиакомпаний;"
 interline :yes
-our_markup "0.2%"
+our_markup "60%"
 commission "0.5%/5"
 
 carrier "SQ", "SINGAPORE AIRLINES (Авиарепс)"
