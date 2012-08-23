@@ -353,7 +353,7 @@ commission "0%/0%"
 carrier "AF", "AIR FRANCE"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '1.5%'
+carrier_defaults :consolidator => 0, :our_markup => '0.5%'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -387,7 +387,7 @@ example 'svocdg cdgsvo/ab'
 agent    "1 руб. с билета на рейсы AY (Билеты «Интерлайн» под кодом АY могут быть выписаны только в случае использования опубл. тарифов или тарифов ИАТА и только при условии, если АY выполняет хотя бы один рейс при наличии действующих «Интерлайн» соглашений с другими а/к, задействованными в перевозке.)"
 subagent "50 коп. с билета на рейсы AY"
 interline :no, :yes
-our_markup "1.5%"
+our_markup "0.5%"
 commission "1/0.5"
 
 example 'cdgsvo/ab'
@@ -1302,7 +1302,7 @@ no_commission
 carrier "KL", "KLM"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '1%'
+carrier_defaults :consolidator => 0, :our_markup => '0.5%'
 
 example 'svocdg'
 agent    "1руб за билет, выписанный по опубл. тарифам, в случае перевозки с вылетом из стран СНГ; 1руб за билет, выписанный по опубл. тарифам,  в случае вылета вне стран СНГ;"
