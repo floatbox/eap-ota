@@ -75,7 +75,7 @@ module Amadeus
       end
 
       def srfoid_needed?
-        ["AB", "UN", "HR", "B2", "PS", "AZ", "CY", "LX", "KK", "OS", "KM", "SQ" , "F7"].exclude? validating_carrier
+        ["AB", "UN", "HR", "B2", "PS", "AZ", "CY", "LX", "KK", "OS", "KM", "SQ" , "F7", 'ET'].exclude? validating_carrier
       end
 
     end
