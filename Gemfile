@@ -25,6 +25,7 @@ end
 
 gem 'evergreen', :require => 'evergreen/rails', :group => :development
 
+gem 'money'
 gem 'kaminari'
 gem 'daemons'
 gem 'nokogiri'
