@@ -1349,9 +1349,9 @@ carrier_defaults :consolidator => 0, :our_markup => '1%'
 
 example 'dmejfk/Q'
 example 'dmejfk/Q jfkdme/ua/Q'
-agent    "через DTT из России в США и наоборот - 10%"
+agent    "через DTT из России в США и наоборот - 10% (кроме участков US)"
 subagent "через DTT из России в США и наоборот - 8%"
-check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') and not includes(country_iatas, 'CA') }
+check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') and not includes(country_iatas, 'CA') and not includes(marketing_carrier_iatas, 'US')}
 subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
@@ -1361,9 +1361,9 @@ commission "10%/8%"
 
 example 'dmejfk'
 example 'dmejfk jfkdme/ua/L'
-agent    "через DTT из России в США и наоборот - 5%"
+agent    "через DTT из России в США и наоборот - 5% (кроме участков US)"
 subagent "через DTT из России в США и наоборот - 3%"
-check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') and not includes(country_iatas, 'CA') }
+check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') and not includes(country_iatas, 'CA') and not includes(marketing_carrier_iatas, 'US')}
 #subclasses "YBMUH"
 interline :no, :yes
 our_markup "0"
@@ -1383,6 +1383,7 @@ commission "1/0.05"
 
 example 'svooko'
 example 'svooko okosvo/ab'
+example 'dmejfk jfkdme/US'
 agent    "1 руб. с билета по опубл. тарифам на собств. рейсы LH и рейсы Interline с участком LH. (Билеты Interline под кодом LH могут быть выписаны только в случае существования опубл. тарифов и только при условии, что LH выполняет как минимум один рейс. В противном случае по билету должна быть сделана доплата до полного опублик. IATA тарифа. Исключение составляют рейсы авиакомпаний-партнёров: LX, EW, CL, IQ, C3 и 4U (Germanwings), а также сегменты авиакомпаний STAR Alliance в случае оформления билетов по тарифам STAR Round the World и Star Airpass Fares)"
 subagent "5 коп. с билета по опубл. тарифам на собственные рейсы LH и рейсы Interline с участком LH."
 interline :no, :yes
