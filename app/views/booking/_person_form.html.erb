@@ -7,7 +7,8 @@
     <th><h6 class="bf-label">Дата рождения</h6></th>
     <th><h6 class="bf-label">Гражданство</h6></th>
     <th><h6 class="bf-label">Номер документа</h6></th>
-    <th><h6 class="bf-label">Срок действия</h6></th>    
+    <th><h6 class="bf-label">Срок действия</h6></th>
+    <th></th>
     </tr>
 </thead>
 <tbody class="bfp-row">
@@ -53,6 +54,10 @@
             <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-year">ГГГГ</label><input type="text" class="bf-field bfpd-year" id="bfp$n-exp-year" name="person_attributes[$n][document_expiration_date(1i)]" maxlength="4" title="Год окончания срока действия документа" data-current="<%= Date.current.strftime('%Y') %>"></div>
         </div>
     </td>
+    <td class="bfp-remove">
+        <span class="bfpr-link">&times;</span>
+    </td>
+    </td>
 </tr>
 <tr>
     <td colspan="6" class="bfp-option">
@@ -65,7 +70,7 @@
         </div>
     <% end %>
     </td>
-    <td class="bfp-option">
+    <td colspan="2" class="bfp-option">
         <div class="bf-checkbox">
             <input type="checkbox" value="1" name="person_attributes[$n][document_noexpiration]" id="bfp$n-permanent">
             <label for="bfp$n-permanent">Без срока</label>
@@ -74,7 +79,7 @@
 </tr>
 <% unless programs.empty? %>
 <tr class="bfp-bonus-fields latent">
-    <td colspan="7">
+    <td colspan="8">
     <div class="bfpb-control">
         <div class="bf-select bfp-bonus-type">
             <div class="bf-select-arrow"></div>        
@@ -93,3 +98,7 @@
 <% end %>
 </tbody>
 </table>
+
+<div class="bfp-add">
+    <span class="link bfpa-link">Добавить ещё пассажира</span> (стоимость увеличится)
+</div>

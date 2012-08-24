@@ -29,7 +29,14 @@ init: function() {
     this.required.delegate('.bffr-link', 'click', function() {
         that.focus($('#' + $(this).attr('data-field')));
     });
-    this.sections[1].initStorage();
+    if (typeof sessionStorage !== 'undefined') {
+        for (var i = this.sections.length; i--;) {
+            var section = this.sections[i];
+            if (section.load) {
+                section.load();
+            }
+        }
+    }    
     this.validate(true);
 },
 position: function() {
@@ -232,6 +239,16 @@ initPhone: function() {
         return v;
     };
     this.controls.push(phone);
+},
+save: function() {
+    sessionStorage.setItem('contactsData', '["' + this.get().join('", "') + '"]');
+},
+load: function() {
+    var that = this;
+    this.set($.parseJSON(sessionStorage.getItem('contactsData')) || []);
+    this.el.change(function() {
+        that.save();
+    });    
 }
 };
 
@@ -252,46 +269,73 @@ init: function() {
     this.orderWarning.find('.bfwno-leave').click(function() {
         that.orderWarning.fadeOut(50);
     });
+    this.title = this.el.find('.bfst-text');
     this.table = this.el.find('.bfp-table');
-    this.sample = this.el.find('.bfp-row').remove();
+    this.add = this.el.find('.bfp-add');
+    this.add.find('.bfpa-link').click(function() {
+        that.addRow(that.rows.length);
+        that.applyRows();
+        that.validate(true);
+        booking.form.validate();
+    });
+    this.table.on('click', '.bfpr-link', function() {
+        that.removeRow(Number($(this).closest('tbody').attr('data-index')));
+    });
     var people = Number(this.table.attr('data-people'));
+    this.sample = this.el.find('.bfp-row').remove();
+    this.rows = [];
     for (var i = 0; i < people; i++) {
         this.addRow(i);
     }
-    this.initRows();
+    this.applyRows();
 },
-initStorage: function() {
-    var that = this;
-    if (typeof sessionStorage !== 'undefined') {
-        var data = $.parseJSON(sessionStorage.getItem('personsData')) || [];
-        for (var i = that.rows.length; i--;) {
-            var rd = data[i];
-            if (rd) {
-                that.rows[i].set(rd);
-            }
-        }
-        this.table.change(function() {
-            var data = [];
-            for (var i = that.rows.length; i--;) {
-                data[i] = that.rows[i].get();
-            }
-            sessionStorage.setItem('personsData', '[' + data.join(', ') + ']');
-        });
+save: function() {
+    var data = [];
+    for (var i = this.rows.length; i--;) {
+        data[i] = '["' + this.rows[i].get().join('", "') + '"]';
     }
+    sessionStorage.setItem('personsData', '[' + data.join(', ') + ']');
+},
+load: function() {
+    var that = this;
+    var data = $.parseJSON(sessionStorage.getItem('personsData')) || [];
+    for (var i = data.length; i--;) {
+        var rd = data[i];
+        if (!this.rows[i]) {
+            this.addRow(i);
+        }
+        this.rows[i].set(rd);
+    }
+    this.table.change(function() {
+        that.save();
+    });
 },
 addRow: function(index) {
-    var clone = this.sample.clone();
-    if (index === 0) {
-        clone.find('.bfp-spacer-row').remove();
-    }
-    clone.html(clone.html().replace(/\$n/g, index.toString()));
-    this.table.append(clone);
-},
-initRows: function() {
     var that = this;
-    this.rows = this.el.find('.bfp-row').map(function() {
-        return new validator.Person($(this), that);
-    });
+    var temp = $('<div><table></table></div>');
+    temp.find('table').append(this.sample.clone());
+    temp.html(temp.html().replace(/\$n/g, index.toString()));
+    var row = temp.find('tbody').appendTo(this.table).attr('data-index', index);
+    this.rows[index] = new validator.Person(row, that);
+},
+removeRow: function(index) {
+    for (var i = index, im = this.rows.length - 1; i < im; i++) {
+        this.rows[i].set(this.rows[i + 1].get());
+    }
+    this.rows[this.rows.length - 1].el.remove();
+    this.rows.length--;
+    if (this.rows.length === 0) {
+        this.addRow(0);
+    }
+    this.applyRows();
+    this.validate(true);
+    booking.form.validate();    
+},
+applyRows: function() {
+    var n = this.rows.length;
+    this.add.toggle(n < 8);
+    this.title.html(local.booking.passengers[n === 1 ? 'one' : 'many']);
+    this.rows[0].el.find('.bfp-spacer-row').remove();
 },
 validate: function(forced) {
     var wrong = [], empty = [];
@@ -435,14 +479,8 @@ initExpiration: function() {
         if (date.getTime() < this.ctime) return 'improper';
     });
     expiration.future = true;
-    var permanent = {
-        disabled: true,
-        el: this.el.find('input[id$="permanent"]'),
-    };
-    permanent.set = function(value) {
-        this.el.prop('checked', Boolean(value)).trigger('set');
-    };
-    permanent.el.bind('click set', function(event) {
+    var permanent = new validator.Checkbox(this.el.find('input[id$="permanent"]'));
+    permanent.el.on('click set', function(event) {
         expiration.disabled = this.checked;
         with (expiration) {
             el.toggleClass('bf-disabled', disabled);
@@ -468,9 +506,9 @@ togglePermanent: function() {
 initBonus: function() {
     var checkbox = this.el.find('input[id$="bonus"]');
     if (checkbox.length === 0) return;
+    var exist = new validator.Checkbox(checkbox);
     var row = this.el.find('.bfp-bonus-fields');
     var program = new validator.Select(this.el.find('.bfp-bonus-type'));
-    this.controls.push(program);
     var number = new validator.Text(row.find('.bfp-bonus-number'), {
         empty: '{номер бонусной карты} пассажира',
         letters: '{Номер бонусной карты} нужно ввести латинскими буквами и цифрами.',
@@ -482,7 +520,7 @@ initBonus: function() {
     number.format = function(value) {
         return $.trim(value.toUpperCase().replace(/[^A-Z\d]/g, ''));
     };
-    checkbox.click(function() {
+    exist.el.on('click set', function(event) {
         var disabled = !this.checked;
         row.find('select').prop('disabled', disabled);
         row.toggleClass('latent', disabled);
@@ -490,11 +528,11 @@ initBonus: function() {
         number.disabled = disabled;
         number.validate();
         number.apply();
-        if (this.checked) {
+        if (event.type !== 'set' && this.checked) {
             number.el.focus();
         }
     });
-    this.controls.push(number);
+    this.controls.push(exist, program, number);
 },
 toggle: function(ready) {
     this.el.toggleClass('.bfp-ready', ready);

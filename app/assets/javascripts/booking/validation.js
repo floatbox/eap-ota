@@ -63,7 +63,7 @@ get: function() {
         var control = this.controls[i];
         data[i] = control.get ? control.get() : '';
     }    
-    return '["' + data.join('", "') + '"]';    
+    return data;    
 }
 };
 
@@ -122,7 +122,7 @@ format: function(value) {
     return $.trim(value);
 },
 set: function(value) {
-    this.el.val(this.format(value || ''));
+    this.el.val(this.format(value || '')).trigger('input');
     this.validate();
 },
 get: function() {
@@ -161,13 +161,27 @@ validate: function() {
 },
 set: function(value) {
     if (value) {
-        this.select.val(value);
+        this.select.val(value).trigger('change');
     } else {
         this.select.get(0).selectedIndex = 0;
     }
 },
 get: function() {
     return this.select.val();
+}
+};
+
+/* Checkbox control */
+validator.Checkbox = function(el) {
+    this.el = el;
+    this.disabled = true;
+};
+validator.Checkbox.prototype = {
+set: function(value) {
+    this.el.prop('checked', Boolean(value)).trigger('set');
+},
+get: function() {
+    return this.el.prop('checked') ? 'true' : '';
 }
 };
 
@@ -329,7 +343,7 @@ set: function(value) {
     var vparts = value ? value.split('.') : [];
     this.parts.val(function(i) {
         return vparts[i] || '';
-    });
+    }).trigger('input');
     this.validate();
 },
 get: function() {
