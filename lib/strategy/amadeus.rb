@@ -47,19 +47,22 @@ class Strategy::Amadeus < Strategy::Base
     case office = @ticket.office_id
     when 'MOWR2233B', 'MOWR228FA'
       amadeus = Amadeus::Service.new(book: true, office: office)
-      raw_ticket = amadeus.ticket_raw(@ticket.first_number_with_code)
-      amadeus.release
-      raw_ticket
+      amadeus.ticket_raw(@ticket.first_number_with_code)
     else
       "not supported for office id #{office}"
     end
+  ensure
+    amadeus.release if amadeus
   end
 
   def flight_from_gds_code(code)
     return unless m = code.match(/(\w{2})\s?(\d+)\s(\w)\s(\d{2}\w{3})\s\d.(\w{3})(\w{3})/)
     date = Date.strptime(m[4], '%d%h')
     date += 1.year if date < Date.today
-    ::Amadeus::Service.air_flight_info(:date => date, :number => m[2], :carrier => m[1], :departure_iata => m[5], :arrival_iata => m[6]).flight
+    amadeus = Amadeus.booking
+    amadeus.air_flight_info(:date => date, :number => m[2], :carrier => m[1], :departure_iata => m[5], :arrival_iata => m[6]).flight
+  ensure
+    amadeus.release if amadeus
   end
 
   def recommendation_from_booking
