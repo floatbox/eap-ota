@@ -294,15 +294,21 @@ save: function() {
     for (var i = this.rows.length; i--;) {
         data[i] = '["' + this.rows[i].get().join('", "') + '"]';
     }
+    sessionStorage.setItem('personsAmount', this.rows.length);
     sessionStorage.setItem('personsData', '[' + data.join(', ') + ']');
 },
 load: function() {
     var that = this;
     var data = $.parseJSON(sessionStorage.getItem('personsData')) || [];
-    for (var i = data.length; i--;) {
+    var amount = Number(sessionStorage.getItem('personsAmount') || this.rows.length); 
+    for (var i = 0; i < amount; i++) {
         var rd = data[i];
-        if (!this.rows[i]) {
-            this.addRow(i);
+        var row = this.rows[i] || this.addRow(i);
+        if (row.programIndex && rd.length > row.programIndex && rd[row.programIndex]) {
+            var programs = row.controls[row.programIndex].values;
+            if (!programs[rd[row.programIndex]]) {
+                rd.length = row.programIndex - 1;
+            }
         }
         this.rows[i].set(rd);
     }
@@ -317,6 +323,7 @@ addRow: function(index) {
     temp.html(temp.html().replace(/\$n/g, index.toString()));
     var row = temp.find('tbody').appendTo(this.table).attr('data-index', index);
     this.rows[index] = new validator.Person(row, that);
+    return this.rows[index];
 },
 removeRow: function(index) {
     for (var i = index, im = this.rows.length - 1; i < im; i++) {
@@ -509,6 +516,11 @@ initBonus: function() {
     var exist = new validator.Checkbox(checkbox);
     var row = this.el.find('.bfp-bonus-fields');
     var program = new validator.Select(this.el.find('.bfp-bonus-type'));
+    var options = program.select.get(0).options;
+    program.values = {};
+    for (var i = options.length; i--;) {
+        program.values[options[i].value] = true;
+    }
     var number = new validator.Text(row.find('.bfp-bonus-number'), {
         empty: '{номер бонусной карты} пассажира',
         letters: '{Номер бонусной карты} нужно ввести латинскими буквами и цифрами.',
@@ -532,6 +544,7 @@ initBonus: function() {
             number.el.focus();
         }
     });
+    this.programIndex = this.controls.length + 1;
     this.controls.push(exist, program, number);
 },
 toggle: function(ready) {
