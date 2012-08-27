@@ -16,6 +16,8 @@ div#ui-datepicker-div {display: none;}
 pre {font-family: Monaco, monospace; line-height: 1.2}
 a:visited {color: gray }
 
+abbr.timeago {font-size: 10px; white-space: nowrap;}
+
 .inputs .section {
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;

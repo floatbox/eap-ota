@@ -174,23 +174,41 @@ class Order < ActiveRecord::Base
         ((last_tkt_date && last_tkt_date == Date.today) ||
          (departure_date && departure_date < Date.today + 3.days)
         )
-      '!'
+      '<b>~ ! ~</b><br/>'.html_safe + ticket_time_decorated
+    else
+      ticket_time_decorated
+    end
+  end
+
+  def ticket_time_decorated
+#    if payment_status == 'blocked' && ticket_status == 'booked' && created_at > Date.yesterday + 20.5.hours
+    if payment_status == 'blocked' && ticket_status == 'booked'
+      now = DateTime.now
+      date_to_ticket = ticket_datetime
+      time_diff = ((date_to_ticket - now)/60).to_i
+      if time_diff > 0
+        time_diff = 180 if time_diff > 180
+        time_diff_param = (time_diff.to_f*127/180).to_i
+        rcolor = (255 - time_diff_param)
+        gcolor = (time_diff_param)
+        bcolor = 127
+        color = "#%02X%02X%02X" % [rcolor, gcolor, gcolor]
+      else
+        color = "#ff0000; font-weight: bold";
+      end
+      "<span style='color:#{color};'>#{date_to_ticket.strftime('%H:%M')}</span><br/><abbr class='timeago' title='#{date_to_ticket}'>#{date_to_ticket}</abbr>".html_safe
     else
       '&nbsp;'.html_safe
     end
   end
 
-  def ticket_time
-    if payment_status == 'blocked' && ticket_status == 'booked' && created_at > Date.yesterday + 20.5.hours
-      time = created_at.strftime('%H%M')
-      case
-        when time < '0600';  '11:00'
-        when time < '0800';  (created_at+4.hours).strftime('%H:%M')
-        when time < '2030';  (created_at+3.hours).strftime('%H:%M')
-        else                 '11:00'
-      end
-    else
-      '&nbsp;'.html_safe
+  def ticket_datetime
+    time = created_at.strftime('%H%M')
+    case
+      when time < '0600';  Date.today + 11.hours
+      when time < '0800';  created_at + 4.hours
+      when time < '2030';  created_at + 3.hours
+      else                 Date.tomorrow + 11.hours
     end
   end
 

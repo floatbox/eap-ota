@@ -1,3 +1,10 @@
+<script type="text/javascript">
+ jQuery(document).ready(function() {
+   jQuery.timeago.settings.allowFuture = true;
+   jQuery("abbr.timeago").timeago();
+ });
+</script>
+
 <%= render 'admin/resources/index' %>
 (в выборке <%= @resource.count %> записей;
 всего <%= number_to_currency @resource.sum(:price_with_payment_commission), :locale => :ru %> /
