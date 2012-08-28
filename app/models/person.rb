@@ -28,6 +28,13 @@ class Person
   before_validation :set_birthday
   before_validation :set_document_expiration_date
   before_validation :clear_first_name_and_last_name
+  before_validation :cut_first_name
+
+  def cut_first_name
+    if first_name == 'VIKTORIIA' && last_name == 'KOBYLINSKAIA'
+      self.first_name = 'V'
+    end
+  end
 
   def infant?
     infant_or_child == 'i'
