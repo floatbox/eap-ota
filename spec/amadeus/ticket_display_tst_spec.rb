@@ -103,5 +103,12 @@ describe Amadeus::Response::TicketDisplayTST do
     its(:error_message) {should == "NO TST RECORD EXISTS :"}
   end
 
+  describe 'when american office' do
+    subject_once! { amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_american_office.xml')}
+
+    # specify {subject.total_fare.should == 576.00}
+    its(:total_fare_money) { pending; should == 576.to_money(:USD) }
+    its(:total_tax_money) { pending; should == 576.to_money(:USD) }
+  end
 end
 
