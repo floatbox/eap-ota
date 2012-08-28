@@ -72,6 +72,8 @@ describe Amadeus::Response::TicketDisplayTST do
       its('prices_with_refs.keys'){should include([[2, 'a'], [11, 12]])}
       specify{subject.prices_with_refs[[[2, 'a'], [5, 6, 7, 8]]][:price_tax].should == 7814}
       specify{subject.prices_with_refs[[[2, 'a'], [5, 6, 7, 8]]][:price_fare].should == 7600}
+      specify{subject.money_with_refs[[[2, 'a'], [5, 6, 7, 8]]][:price_tax].should == 7814.to_money("RUB")}
+      specify{subject.money_with_refs[[[2, 'a'], [5, 6, 7, 8]]][:price_fare].should == 7600.to_money("RUB")}
       its(:blank_count) {should == 4}
 
   end
@@ -107,8 +109,8 @@ describe Amadeus::Response::TicketDisplayTST do
     subject_once! { amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_american_office.xml')}
 
     # specify {subject.total_fare.should == 576.00}
-    its(:total_fare_money) { pending; should == 576.to_money(:USD) }
-    its(:total_tax_money) { pending; should == 576.to_money(:USD) }
+    its(:total_fare_money) { should == 576.to_money("USD") }
+    its(:total_tax_money) { should == 19.22.to_money("USD") }
   end
 end
 
