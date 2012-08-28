@@ -49,7 +49,6 @@ Ticket:
       - code
       - number
       - status
-      - ticketed_date
       - validating_carrier
       - last_name
       - first_name
@@ -127,7 +126,6 @@ Ticket:
     csv:
       - source
       - number_with_code
-      - ticket_date
       - carrier
       - route
       - cabins
