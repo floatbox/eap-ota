@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require File.expand_path('../../config/environment',  __FILE__)
+require_relative '../config/environment'
 
 factories!
 order = OrderForm.load_from_cache('50225c0364047a0aee00003e')

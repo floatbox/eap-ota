@@ -2,7 +2,7 @@
 #
 # обновляет состояние заказов, у которых Amadeus мог снять бронирование по TK XL
 
-require File.expand_path('../../config/environment',  __FILE__)
+require_relative '../config/environment'
 
 class SyncCanceledPnrsProcess
 
