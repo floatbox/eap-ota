@@ -7,7 +7,8 @@ module CBR
 
     # bank.exchange(money, "USD")
     def bank date
-      bank = VariableExchangeBank.new.add_rate("RUB", "USD", Conf.cbr.usd[date])
+      bank = VariableExchangeBank.new
+      bank.add_rate("RUB", "USD", Conf.cbr.usd[date])
       bank.add_rate("USD", "RUB", (1/Conf.cbr.usd[date]))
       bank
     end
