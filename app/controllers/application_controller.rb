@@ -17,6 +17,10 @@ class ApplicationController < ActionController::Base
     I18n.locale = :ru
   end
 
+  def log_user_agent
+    logger.info "UserAgent: #{request.user_agent}"
+  end
+
   before_filter :set_locale
 
   after_filter :log_partner
