@@ -27,11 +27,11 @@ class Notification < ActiveRecord::Base
 
   # создание разных типов нотификаций
   # дефолтный нотис при создании ордера
-  def create_notice
+  def create_delayed_notice delay=10
     self.status = 'delayed'
     if save
       order.queued_email!
-      self.delay(queue: 'notification', run_at: 10.minutes.from_now, priority: 5).send_notice
+      self.delay(queue: 'notification', run_at: delay.minutes.from_now, priority: 5).send_notice
     end
   end
 
@@ -41,6 +41,7 @@ class Notification < ActiveRecord::Base
   end
 
   def delayed_send
+    order.queued_email!
     self.delay(queue: 'notification', run_at: 2.minutes.from_now, priority: 5).send_notice if status.blank?
   end
 
