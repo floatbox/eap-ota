@@ -28,12 +28,22 @@ class Person
   before_validation :set_birthday
   before_validation :set_document_expiration_date
   before_validation :clear_first_name_and_last_name
-  before_validation :cut_first_name
+  after_validation :correct_long_name
 
-  def cut_first_name
-    if first_name == 'VIKTORIIA' && last_name == 'KOBYLINSKAIA'
-      self.first_name = 'V'
+
+  def too_long_names?
+    if associated_infant
+      name_str = first_name_with_code + last_name + associated_infant.first_name
+      name_str += associated_infant.last_name if associated_infant.last_name != last_name
+      name_str.length > 39
+    elsif !infant?
+      (first_name_with_code + last_name).length > 58
     end
+  end
+
+  def correct_long_name
+    self.first_name = first_name[0] if too_long_names?
+    associated_infant.first_name = associated_infant.first_name[0] if associated_infant && too_long_names?
   end
 
   def infant?
