@@ -6,22 +6,35 @@ module Amadeus
       include BaggageInfo
 
       def money_with_refs
-        xpath('//r:fareList/r:paxSegReference/r:refDetails[r:refQualifier="PT" or r:refQualifier="P" or r:refQualifier="PA" or r:refQualifier="PI"]').inject({}) do |memo, rd|
-          passenger_ref = rd.xpath('r:refNumber').to_i
-          infant_flag = rd.xpath('../../r:statusInformation/r:firstStatusDetails[r:tstFlag="INF"]').present?
-          segments_refs = rd.xpath('../../r:segmentInformation[r:segDetails/r:ticketingStatus!="NO"]/r:segmentReference/r:refDetails[r:refQualifier="S"]/r:refNumber').every.to_i.sort
-          fi = rd.xpath('../../r:fareDataInformation')
+        result = {}
+        xpath('//r:fareList').each do |fare_node|
+
           # исходим из того, что "712" (fare, tax and fees) всегда выводится в валюте офиса продажи
           # эквивалентная цена ("E") выдается только в том случае, если валюта "B" отличается от "712"
           # в маске присутствует еще и "TFT", который только fare and tax, но у нас он всегда совпадает с "712"
+          fi = fare_node.xpath('r:fareDataInformation')
           total_money = parse_money_element( fi.xpath('r:fareDataSupInformation[r:fareDataQualifier="712"]') )
           fare_money = parse_money_element(
             fi.xpath('r:fareDataSupInformation[r:fareDataQualifier="E"]').presence ||
             fi.xpath('r:fareDataSupInformation[r:fareDataQualifier="B"]')
           )
           tax_money = total_money - fare_money
-          memo.merge([[passenger_ref, infant_flag ? 'i' : 'a'], segments_refs] => {:price_fare => fare_money, :price_tax => tax_money, :price_fare_base => fare_money})
+          fare_details = {:price_fare => fare_money, :price_fare_base => fare_money, :price_tax => tax_money}
+
+          infant_flag = fare_node.xpath('r:statusInformation/r:firstStatusDetails[r:tstFlag="INF"]').present?
+          passenger_refs =
+            fare_node.xpath(
+              'r:paxSegReference/r:refDetails[r:refQualifier="PT" or r:refQualifier="P" or r:refQualifier="PA" or r:refQualifier="PI"]/r:refNumber'
+            ).map { |ref_number| [ ref_number.to_i, (infant_flag ? 'i' : 'a') ] }
+
+          segment_refs = fare_node.xpath('r:segmentInformation[r:segDetails/r:ticketingStatus!="NO"]/r:segmentReference/r:refDetails[r:refQualifier="S"]/r:refNumber').every.to_i.sort
+
+          passenger_refs.each do |passenger_ref|
+            result[[passenger_ref, segment_refs]] = fare_details
+          end
+
         end
+        result
       end
 
       def total_fare_money
