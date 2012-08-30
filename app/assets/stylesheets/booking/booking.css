@@ -100,7 +100,8 @@
     margin: 25px 20px 0 315px;
     padding-bottom: 30px;
 }
-.bff-price {
+.bff-price,
+.bff-passengers {
     position: absolute;
     top: 12px;
     left: -300px;
@@ -130,6 +131,18 @@
 }
 .bffpd-item {
     margin: 0 0 3px;
+}
+.bff-passengers {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 16px;
+}
+.bffp-hint {
+    margin: 10px 0 0;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 15px;
+    color: #777;
 }
 
 /* Кнопка отправки */

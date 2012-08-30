@@ -196,6 +196,16 @@ process: function(s) {
     if ($w.scrollTop() < spos) {
         $w.smoothScrollTo(spos);
     }
+},
+hidePrice: function() {
+    var content = '<div class="bffp-content"><p>Стоимость изменилась —</p><p class="bffp-hint">Заполните {0},<br> чтобы узнать новую стоимость.</p></div>';
+    var title = this.el.find('.bf-persons .bfst-text').html().toLowerCase();
+    var message = $('<div class="bff-passengers"></div>').html(content.absorb(title));
+    this.footer.find('.bff-price').hide().after(message);
+    this.wrongPrice = true;
+},
+updatePrice: function() {
+    console.log('Запрос новой стоимости');
 }
 };
 
@@ -273,13 +283,20 @@ init: function() {
     this.table = this.el.find('.bfp-table');
     this.add = this.el.find('.bfp-add');
     this.add.find('.bfpa-link').click(function() {
-        that.addRow(that.rows.length);
+        var data = that.savedRows && that.savedRows[that.rows.length];
+        var row = that.addRow(that.rows.length);
         that.applyRows();
+        if (data) {
+            row.set(data);
+        }
         that.validate(true);
         booking.form.validate();
+        booking.form.hidePrice();
     });
     this.table.on('click', '.bfpr-link', function() {
         that.removeRow(Number($(this).closest('tbody').attr('data-index')));
+        booking.form.validate();
+        booking.form.hidePrice();        
     });
     var people = Number(this.table.attr('data-people'));
     this.sample = this.el.find('.bfp-row').remove();
@@ -292,7 +309,10 @@ init: function() {
 save: function() {
     var data = [];
     for (var i = this.rows.length; i--;) {
-        data[i] = '["' + this.rows[i].get().join('", "') + '"]';
+        this.savedRows[i] = this.rows[i].get();
+    }
+    for (var i = 0, im = this.savedRows.length; i < im; i++) {
+        data.push('["' + this.savedRows[i].join('", "') + '"]');
     }
     sessionStorage.setItem('personsAmount', this.rows.length);
     sessionStorage.setItem('personsData', '[' + data.join(', ') + ']');
@@ -300,18 +320,25 @@ save: function() {
 load: function() {
     var that = this;
     var data = $.parseJSON(sessionStorage.getItem('personsData')) || [];
-    var amount = Number(sessionStorage.getItem('personsAmount') || this.rows.length); 
+    var amount = Number(sessionStorage.getItem('personsAmount') || this.rows.length);
+    if (amount !== this.rows.length) {
+        booking.form.hidePrice();
+    }
     for (var i = 0; i < amount; i++) {
         var rd = data[i];
         var row = this.rows[i] || this.addRow(i);
-        if (row.programIndex && rd.length > row.programIndex && rd[row.programIndex]) {
-            var programs = row.controls[row.programIndex].values;
-            if (!programs[rd[row.programIndex]]) {
-                rd.length = row.programIndex - 1;
+        if (rd) {
+            // Убираем бонусную карту, если нужной нет в списке
+            if (row.programIndex && rd.length > row.programIndex && rd[row.programIndex]) {
+                var programs = row.controls[row.programIndex].values;
+                if (!programs[rd[row.programIndex]]) {
+                    rd.length = row.programIndex - 1;
+                }
             }
+            this.rows[i].set(rd);
         }
-        this.rows[i].set(rd);
     }
+    this.savedRows = data;
     this.table.change(function() {
         that.save();
     });
@@ -331,12 +358,15 @@ removeRow: function(index) {
     }
     this.rows[this.rows.length - 1].el.remove();
     this.rows.length--;
+    if (this.savedRows) {
+        this.savedRows.splice(this.rows.length, 1);
+    }
     if (this.rows.length === 0) {
         this.addRow(0);
     }
+    this.table.trigger('change');
     this.applyRows();
     this.validate(true);
-    booking.form.validate();    
 },
 applyRows: function() {
     var n = this.rows.length;
@@ -352,7 +382,11 @@ validate: function(forced) {
         wrong = wrong.concat(person.wrong);
         empty = empty.concat(person.empty);
     }
-    this.toggle(wrong.length + empty.length === 0);
+    var valid = wrong.length + empty.length === 0;
+    this.toggle(valid);
+    if (valid && booking.form.wrongPrice) {
+        booking.form.updatePrice();
+    }
     this.wrong = wrong;
     this.empty = empty;
 }
