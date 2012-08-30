@@ -151,6 +151,7 @@ GEM
     haml (3.1.4)
     highline (1.6.11)
     hike (1.2.1)
+    hpricot (0.8.6)
     httparty (0.8.1)
       multi_json
       multi_xml
@@ -375,6 +376,7 @@ DEPENDENCIES
   guard-spork
   haml
   handsoap!
+  hpricot
   jquery-rails
   kaminari
   libnotify

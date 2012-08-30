@@ -57,6 +57,7 @@ gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-inst
 gem 'mongo-rails-instrumentation'
 
 gem 'haml'
+gem 'hpricot', require: false
 
 gem 'typus', :git => 'https://github.com/Eviterra/typus.git'
 
