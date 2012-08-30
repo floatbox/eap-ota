@@ -73,7 +73,13 @@ def process_file(filename, opts)
   count = 0
   nodes.each do |el|
     # response и el доступны внутри
-    eval_result = eval(opts.eval) if opts.eval
+    eval_result =
+      begin
+        eval(opts.eval) if opts.eval
+      rescue Exception
+        warn "..while evaling code for #{filename}:"
+        raise
+      end
 
     if (opts.files_with_matches || opts.files_without_match || opts.count)
       if eval_result || !opts.eval
