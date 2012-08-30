@@ -5,6 +5,36 @@ module Amadeus
 
       include BaggageInfo
 
+      # Всякие дебажные методы
+
+      # по всей видимости, (1 валюты "B") / (1 валюты "712" или "E")
+      # nil, если нет конверсии
+      # но тариф явно округляется при конверсии, в отличие от общей суммы
+      def bank_rate
+        xpath('//r:bankerRates/r:firstRateDetail/r:amount').to_f
+      end
+
+      def carrier_currency_code
+        xpath('//r:fareDataSupInformation[r:fareDataQualifier="B"]/r:fareCurrency').to_s
+      end
+
+      def bank_exchange
+        from = xpath('//r:fareDataSupInformation[r:fareDataQualifier="B"]/r:fareCurrency').to_s
+        to = xpath('//r:fareDataSupInformation[r:fareDataQualifier="E"]/r:fareCurrency').to_s
+        bank = Money::Bank::VariableExchange.new
+        if to && bank_rate
+          bank.add_rate(from, to, bank_rate)
+          bank.add_rate(to, from, 1/bank_rate)
+        end
+        bank
+      end
+
+      def point_of_sale_office
+        xpath('//r:contextualPointofSale/r:originIdentification/r:inHouseIdentification2').to_s
+      end
+
+      # Остальные, более полезные методы
+
       def money_with_refs
         result = {}
         xpath('//r:fareList').each do |fare_node|
@@ -73,9 +103,18 @@ module Amadeus
         xpath('//r:carrierCode').to_s
       end
 
-      # нужен LT. есть еще CRD - дата созания маски(?), LMD - дата модификации
       def last_tkt_date
         parse_date_element(xpath('//r:lastTktDate[r:businessSemantic="LT"]/r:dateTime'))
+      end
+
+      # дата создания маски
+      def created_on
+        parse_date_element(xpath('//r:lastTktDate[r:businessSemantic="CRD"]/r:dateTime'))
+      end
+
+      # дата модификации маски
+      def updated_on
+        parse_date_element(xpath('//r:lastTktDate[r:businessSemantic="LMD"]/r:dateTime'))
       end
 
       # количество бланков
