@@ -376,11 +376,18 @@ applyRows: function() {
 },
 validate: function(forced) {
     var wrong = [], empty = [];
-    for (var i = 0, l = this.rows.length; i < l; i++) {
+    for (var i = 0, im = this.rows.length; i < im; i++) {
         var person = this.rows[i];
         if (forced) person.validate(true);
         wrong = wrong.concat(person.wrong);
-        empty = empty.concat(person.empty);
+        if (im === 1) {
+            empty = empty.concat(person.empty);
+        } else if (person.empty) {
+            var num = local.numbers.ordinalgen[i];
+            for (var e = 0, em = person.empty.length; e < em; e++) {
+                empty.push(person.empty[e].replace('пассажира', num + ' пассажира'));
+            }
+        }
     }
     var valid = wrong.length + empty.length === 0;
     this.toggle(valid);
