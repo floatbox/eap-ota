@@ -29,6 +29,7 @@ amadeus:
   nonstop_search: yes
   calendar: yes
   fake: no
+  logging: no
   recommendations_lite: 20
   recommendations_full: 200
   euro_rate: 40

@@ -21,9 +21,9 @@ module Amadeus
   def debug_dir; 'log/amadeus' end
 
   # handsoap logger
-  # fh = open(Rails.root + 'log/amadeus.log', 'a')
-  # fh.sync=true
-  # self.logger = fh
+  if Conf.amadeus.logging
+    self.logger = open(Rails.root + 'log/amadeus.log', 'a').tap { |fh| fh.sync = true }
+  end
 
   attr_accessor :session
 
