@@ -452,7 +452,9 @@
 .bfc-expiration {
     position: absolute;
     top: 147px;
-    right: 10px;
+    left: 205px;
+    width: 110px;
+    text-align: right;
 }
 .bfc-date {
     float: right;
