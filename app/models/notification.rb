@@ -54,11 +54,11 @@ class Notification < ActiveRecord::Base
     if subject.blank?
       case format
         when 'ticket'
-          self.subject = eng ? "Your E-ticket (booking #{pnr_number})" : "Ваш электронный билет #{pnr_number}" 
+          self.subject = eng ? "Your E-ticket [#{pnr_number}]" : "Ваш электронный билет [#{pnr_number}]" 
         when 'order'
-          self.subject = eng ? "Your Order #{pnr_number})" : "Ваш заказ на Eviterra.com #{pnr_number}"
+          self.subject = eng ? "Your Order [#{pnr_number}]" : "Ваш заказ [#{pnr_number}]"
         when 'booking'
-          self.subject = eng ? "Your Booking #{pnr_number})" : "Ваше бронирование #{pnr_number}"
+          self.subject = eng ? "Your Booking [#{pnr_number}]" : "Ваше бронирование [#{pnr_number}]"
       end
     end
     save
