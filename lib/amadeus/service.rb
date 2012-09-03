@@ -95,7 +95,7 @@ module Amadeus
       end
       # FIXME среагировать на HTTP error
       session.increment if session
-      log_file(request.action, xml_response.to_xml)
+      log_file(request.action, xml_response.to_xml) unless request.action =~ /Pricer/
     end
 
     request.process_response(xml_response)
