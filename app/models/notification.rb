@@ -42,7 +42,7 @@ class Notification < ActiveRecord::Base
 
   def delayed_send
     order.queued_email!
-    self.delay(queue: 'notification', run_at: 2.minutes.from_now, priority: 5).send_notice if status.blank?
+    self.delay(queue: 'notification', run_at: 1.minutes.from_now, priority: 5).send_notice if status.blank?
   end
 
   def prepare_notice
@@ -78,12 +78,6 @@ class Notification < ActiveRecord::Base
     raise
   end
 
-  def create_pnr
-    self.attach_pnr = true
-    save
-    set_order_email_status
-  end
-
   def create_visa_notice
     message = PnrMailer.visa_notice()
     self.attach_pnr = false
@@ -96,10 +90,6 @@ class Notification < ActiveRecord::Base
   def set_order_data
     self.pnr_number = order.pnr_number
     self.destination = order.email
-  end
-
-  def set_order_email_status
-    order.queued_email!
   end
 
   def send_email

@@ -18,7 +18,7 @@ admin:
   City: create, read, update, delete, update_completer, decode_amadeus, decode_sirena, show_versions
   Order: create, read, update, unblock, charge, ticket, reload_tickets, cancel, show_pnr, money_received, no_money_received, bulk_charge, bulk, pnr_raw, void, make_payable_by_card, show_versions, send_invoice, ticket_in_ticketing_office
   OrderComment: create, read, update, delete
-  Notification: create, read, update, delete
+  Notification: create, read, update
   Ticket: create, read, update, ticket_raw, bulk_set_ticketed_date, bulk, new_refund, confirm_refund, show_versions, change_vat, delete_refund
   Country: create, read, update, delete, show_versions
   GeoTag: create, read, update, delete
@@ -34,7 +34,7 @@ admin:
   Counters: read
   Partner: create, read, update, delete, show_versions
 
-  Payment: read, update, bulk, bulk_charge, show_versions, payment_raw, create,  charge, block, cancel, sync_state
+  Payment: read, update, bulk, bulk_charge, show_versions, payment_raw, create, charge, block, cancel, sync_state
   PaytureCharge: create, read
   PaytureRefund: create, update, read
   CashCharge: create, update, read

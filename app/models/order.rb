@@ -119,21 +119,6 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def create_notification
-    if !self.offline_booking && self.email_status == ''
-      case self.source
-      when 'amadeus'
-        if self.ticket_status == 'booked' && (self.payment_status == 'blocked' || self.payment_status == 'pending')
-          self.notifications.new.create_pnr
-        end
-      when 'sirena'
-        if self.ticket_status == 'ticketed'
-          self.notifications.new.create_pnr
-        end
-      end
-    end
-  end
-
   def baggage_array
     sold_tickets.map do |t|
       t.baggage_info.to_s.split.map{|code| BaggageLimit.deserialize(code)}
@@ -141,7 +126,7 @@ class Order < ActiveRecord::Base
   end
 
   def queued_email!
-    update_attribute(:email_status, 'queued')
+    update_email_status :queued
   end
 
   def update_email_status status
