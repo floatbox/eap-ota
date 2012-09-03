@@ -5,7 +5,7 @@
 # bank = ExchangeWithFallback.new(
 #   ReverseRateIfFrom.new( 'RUB',
 #     RatesUpdatedWithFallback.new(
-#       ActiveRecordRates.new(CurrencyRates.where(date: date, bank: 'cbr'),
+#       ActiveRecordRates.new(CurrencyRate.where(date: date, bank: 'cbr')),
 #       LazyRates.new { CentralBankOfRussia.new.update_rates(date) }
 #     )
 #   )
@@ -14,7 +14,7 @@
 module LayeredExchange
 
   # наследуем ради exchange_with и прочего.
-  class ExchangeWithFallback < Money::VariableExchange
+  class ExchangeWithFallback < Money::Bank::VariableExchange
     def initialize(fallback_rates, &block)
       @fallback_rates = fallback_rates
       super &block
@@ -54,7 +54,7 @@ module LayeredExchange
   end
 
   class LazyRates
-    def initalize(&expensive_setup)
+    def initialize(&expensive_setup)
       @expensive_setup = expensive_setup
     end
 
@@ -84,7 +84,7 @@ module LayeredExchange
     end
 
     def add_rate(from, to, rate)
-      rec = @scope.where(from: from, to: to).find_or_initialize
+      rec = @scope.where(from: from, to: to).first_or_initialize
       rec.update_attributes rate: rate
       rate
     end
@@ -93,7 +93,7 @@ module LayeredExchange
   # read only
   class ReverseRateIfFrom
     def initialize(from, rates)
-      @from = Currency.wrap(from)
+      @from = Money::Currency.wrap(from)
       @rates = rates
     end
 
