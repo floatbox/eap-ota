@@ -26,6 +26,7 @@ end
 gem 'evergreen', :require => 'evergreen/rails', :group => :development
 
 gem 'money'
+gem 'central_bank_of_russia'
 gem 'kaminari'
 gem 'daemons'
 gem 'nokogiri'

@@ -83,6 +83,9 @@ GEM
       rack-test (>= 0.5.4)
       selenium-webdriver (~> 2.0)
       xpath (~> 0.1.4)
+    central_bank_of_russia (0.1.0)
+      money (>= 5.0.0)
+      nokogiri
     childprocess (0.3.1)
       ffi (~> 1.0.6)
     chronic (0.6.7)
@@ -357,6 +360,7 @@ DEPENDENCIES
   capistrano
   capistrano_colors
   capybara
+  central_bank_of_russia
   coffee-rails
   crack
   cucumber
