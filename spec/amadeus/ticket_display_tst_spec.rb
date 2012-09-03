@@ -112,5 +112,10 @@ describe Amadeus::Response::TicketDisplayTST do
     its(:total_fare_money) { should == 576.to_money("USD") }
     its(:total_tax_money) { should == 19.22.to_money("USD") }
   end
+
+  describe 'when loading exchange on a very old ticket' do
+    subject_once! { amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_old_with_empty_values.xml')}
+    pending "react sensibly"
+  end
 end
 
