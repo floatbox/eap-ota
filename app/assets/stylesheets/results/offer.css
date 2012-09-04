@@ -66,6 +66,10 @@
     font-weight: bold;
     color: #f90a6f;
 }
+.obs-cancel {
+    text-decoration: underline;
+    cursor: pointer;
+}
 
 /* Fixed price */
 .ob-placeholder {

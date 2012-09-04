@@ -69,6 +69,10 @@ initOffers: function() {
             booking.prebook(offer);
         }
     });
+    this.el.delegate('.o-book .obs-cancel', 'click', function() {
+        var offset = $(this).closest('.offer').offset().top;
+        $w.smoothScrollTo(offset - 148);
+    });
 },
 getOffer: function(el) {
     return el.closest('.offer').data('offer');

@@ -48,7 +48,7 @@ prebook: function(offer) {
         error: function() {
             that.failed();
         },
-        timeout: 60000
+        timeout: 6
     });
     offer.book.addClass('ob-disabled');
     offer.state.html('<span class="ob-progress">Проверяем доступность мест</span>');
@@ -71,7 +71,7 @@ process: function(result) {
 failed: function() {
     var tip = 'Так бывает вследствие несвоевременного или&nbsp;некорректного обновления авиакомпанией информации о&nbsp;наличии мест в&nbsp;системах бронирования. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.';
     this.offer.book.addClass('ob-failed');
-    this.offer.state.html('Авиакомпания не подтвердила наличие мест по этому тарифу. Выберите другой вариант. <span class="link obs-hint">Почему так бывает?</span>');
+    this.offer.state.html('Авиакомпания не подтвердила наличие мест по этому тарифу. Выберите <span class="obs-cancel">другой вариант</span>. <span class="link obs-hint">Почему так бывает?</span>');
     this.offer.state.find('.obs-hint').click(function(event) {
         hint.show(event, tip);
     });
