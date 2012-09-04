@@ -74,6 +74,8 @@ module Eviterra
       Object.send :include, AdminLink
     end
 
+    Money.default_currency = Money::Currency.new("RUB")
+
   end
 end
 

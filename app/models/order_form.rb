@@ -39,7 +39,6 @@ class OrderForm
   end
 
   def last_pay_time
-    return if Conf.site.forbidden_cash
     return if recommendation.source == 'sirena'
     return Time.now + 24.hours if Conf.amadeus.env != 'production' && !Rails.env.test? # так как тестовый Амадеус в прошлом
     return if recommendation.flights.first.departure_datetime_utc - 72.hours < Time.now
@@ -216,6 +215,19 @@ class OrderForm
     unless people.all?(&:valid?)
       errors.add :people, 'Проверьте данные пассажиров'
     end
+  end
+
+  def calculated_people_count
+    last_date = recommendation.segments.last.dept_date
+    adults_count = people.count{|p| p.birthday + 12.years <= last_date}
+    exact_infants_count = people.count{|p| p.birthday + 2.years > last_date}
+    infants_count = if exact_infants_count <= adults_count
+      exact_infants_count
+    else
+      adults_count
+    end
+    children_count = people.count - adults_count - infants_count
+    {:adults => adults_count, :children => children_count, :infants => infants_count}
   end
 
   def set_flight_date_for_childen_and_infants

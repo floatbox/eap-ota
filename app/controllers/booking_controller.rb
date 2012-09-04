@@ -2,6 +2,7 @@
 class BookingController < ApplicationController
   protect_from_forgery :except => :confirm_3ds
   before_filter :log_referrer, :only => [:api_redirect, :api_booking, :rambler_booking]
+  before_filter :log_user_agent
   # вызывается аяксом со страницы api_booking и с морды
   # Parameters:
   #   "query_key"=>"ki1kri",
@@ -114,7 +115,7 @@ class BookingController < ApplicationController
     @order_form.update_attributes(params[:order])
     @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
 
-    unless @order_form.valid?
+    if !@order_form.valid? || @order_form.calculated_people_count != @order_form.people_count
 
       if @order_form.calculated_people_count != @order_form.people_count
         @search = PricerForm.load_from_cache(@order_form.query_key)

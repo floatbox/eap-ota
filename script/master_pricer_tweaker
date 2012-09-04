@@ -55,7 +55,7 @@ options[:date2] &&= complete_date(options[:date2])
 
 # deferring environment loading for fast --help display
 ENV['RAILS_ENV'] = options[:env]
-require File.expand_path('../../config/environment',  __FILE__)
+require_relative '../config/environment'
 
 pricer_attrs = options.extract!(:from, :to, :date1, :date2, :adults, :children, :infants)
 
@@ -78,5 +78,5 @@ else
 
 end
 
-amadeus.session.release
+amadeus.release
 

@@ -164,7 +164,7 @@ describe BookingController do
 
       request.stub(:referrer).and_return("http://eviterra.com")
       request.stub(:host).and_return("eviterra.com")
-      logger.should_not_receive(:info)
+      logger.should_not_receive(:info).with('Referrer:')
 
       get :api_redirect
     end
@@ -176,7 +176,7 @@ describe BookingController do
 
       request.stub(:referrer).and_return("http://yandex.ru/blah")
       request.stub(:host).and_return("eviterra.com")
-      logger.should_receive(:info)
+      logger.should_receive(:info).at_least(1)
 
       get :api_redirect
     end

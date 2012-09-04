@@ -104,7 +104,7 @@ class Mux
       session = Amadeus::Session.book
       amadeus = Amadeus::Service.new(:session => session, :driver => amadeus_driver)
       amadeus.async_fare_master_pricer_travel_board_search(form, req) do |res|
-        session.release
+        amadeus.release
         block.call(res)
       end
     end

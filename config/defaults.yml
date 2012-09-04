@@ -3,6 +3,7 @@ site:
   forbidden_booking: no
   forbidden_sale: no
   forbidden_cash: no
+  forbidden_delivery: no
 api:
   enabled: yes
   store_rambler_cache: no
@@ -28,6 +29,7 @@ amadeus:
   nonstop_search: yes
   calendar: yes
   fake: no
+  logging: no
   recommendations_lite: 20
   recommendations_full: 200
   euro_rate: 40

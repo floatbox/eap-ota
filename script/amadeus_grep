@@ -1,0 +1,154 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'find'
+
+# defaults
+opts = Struct.new(
+  :xpath,
+  :eval,
+  :document_eval,
+  :haml,
+  :raw,
+  :string,
+  :inner,
+  :count,
+  :files_without_match,
+  :files_with_matches,
+  :recursive,
+  :supress_headers,
+  :progress
+).new
+
+OptionParser.new do |options|
+  options.banner = "#{$0} [options] file1 file2..."
+
+  options.on "-x", "--xpath XPATH", "XPath to display/check for presence/count", &opts.method(:xpath=)
+  options.on "-e", "--eval RUBYCODE", "Code to run on each node", &opts.method(:eval=)
+  options.on "-E", "--document-eval RUBYCODE", "Code to check before each document", &opts.method(:document_eval=)
+  options.on "-H", "--haml", "Haml output", &opts.method(:haml=)
+  #options.on "-R", "--raw", "Raw output", &opts.method(:raw=)
+  #options.on "-S", "--string", "to_s output", &opts.method(:string=)
+  options.on "-I", "--inner", "No root element", &opts.method(:inner=)
+  options.on "-l", "--files-with-matches", "Filenames only", &opts.method(:files_with_matches=)
+  options.on "-L", "--files-without-match", "Files without match", &opts.method(:files_without_match=)
+  options.on "-c", "--count", "Print a count of matching chunks", &opts.method(:count=)
+  options.on "-F", "--supress-headers", "Don't show filename", &opts.method(:supress_headers=)
+  options.on "-p", "--progress", "show progress on stderr", &opts.method(:progress=)
+
+  options.on_tail("-h", "--help", "Show this message") do
+    puts options
+    exit
+  end
+end.parse!
+
+if ARGV.empty?
+  warn "need at least one file/directory"
+  exit
+end
+
+require_relative '../config/environment'
+
+def haml_dump(xml_string)
+  require 'haml/html'
+  Haml::HTML.new(xml_string, xhtml: true).render
+end
+
+include Amadeus::Fixtures
+
+def process_file(filename, opts)
+  response = amadeus_response(filename)
+
+  if opts.document_eval
+    return unless response.instance_eval(opts.document_eval)
+  end
+
+  nodes =
+    if opts.xpath
+      response.xpath(opts.xpath)
+    else
+      [response]
+    end
+
+  count = 0
+  nodes.each do |el|
+    # response и el доступны внутри
+    eval_result =
+      begin
+        eval(opts.eval) if opts.eval
+      rescue Exception
+        warn "..while evaling code for #{filename}:"
+        raise
+      end
+
+    if (opts.files_with_matches || opts.files_without_match || opts.count)
+      if eval_result || !opts.eval
+        count += 1
+        break if opts.files_with_matches || opts.files_without_match
+      end
+      next
+    end
+
+    body =
+      if opts.eval
+        eval_result
+      elsif opts.inner
+         el.children.map(&:to_xml).join
+      else
+        el.to_xml
+      end
+
+    next if body.nil?
+
+    unless opts.supress_headers
+      if STDOUT.tty?
+        puts "\e[1;32m" + filename + ':' + "\e[0m"
+      else
+        puts filename + ':'
+      end
+      #puts 'path: ' + el.native_element.path
+    end
+
+    if opts.haml
+      puts haml_dump(body)
+    else
+      puts body
+    end
+
+  end
+
+  if opts.count
+    if !(opts.files_with_matches && count.zero?)
+      puts "#{filename}:#{count}"
+    end
+    return
+  end
+
+  if (opts.files_with_matches || !opts.files_without_match) ^ count.zero?
+    puts filename
+  end
+
+end
+
+begin
+  ARGV.each do |file_or_dir|
+    # обработка масок в приложении, not unix way, но все же
+    enum =
+      if file_or_dir['*']
+        Dir[file_or_dir]
+      else
+        Find.find(file_or_dir)
+      end
+
+    total_processed = 0
+    enum.each do |filename|
+      next if File.directory?(filename)
+      process_file(filename, opts)
+      total_processed += 1
+      STDERR.print "#{total_processed}\r" if opts.progress
+    end
+  end
+
+rescue Errno::EPIPE, Interrupt
+  exit
+end

@@ -2,13 +2,13 @@
 require 'spec_helper'
 
 describe Strategy::Amadeus do
-  let (:amadeus) { mock(Amadeus::Service) }
+  let (:amadeus) { mock(Amadeus::Service, release: nil, destroy: nil) }
 
   before do
-    # safeguard
-    Amadeus.stub(:booking).and_yield(amadeus)
-    Amadeus.stub(:ticketing).and_yield(amadeus)
-    Amadeus.stub(:downtown).and_yield(amadeus)
+    # "разогревает" handsoap настоящим инстансом Amadeus::Service
+    # перед тем, как заstubить фальшивкой. нужно для parse_string
+    Amadeus::Service.instance
+    Amadeus::Service.stub( new: amadeus)
   end
 
   it "not yet implements #void" do
@@ -34,11 +34,9 @@ describe Strategy::Amadeus do
 
     context "on whitelisted office_id" do
       before do
-        service = mock(Amadeus::Service)
-        service.stub_chain(:session, :release)
         Amadeus::Service.should_receive(:new).with( hash_including(:office => office) ) \
-          .and_return(service)
-        service.stub(:ticket_raw => expected_result)
+          .and_return(amadeus)
+        amadeus.stub(:ticket_raw => expected_result)
       end
       let(:expected_result) {'raw tickets result'}
 
@@ -116,7 +114,7 @@ describe Strategy::Amadeus do
     it "should call air_flight_info with correct params" do
       code = '3  BT 419 Z 01AUG 4 DMERIX HK1  1505 1600  01AUG  E  BT/22BFU3'
       flight_date = Date.today.month < 8 ? Date.new(Date.today.year, 8, 1) : Date.new(Date.today.year + 1, 8, 1)
-      Amadeus::Service.should_receive(:air_flight_info)\
+      amadeus.should_receive(:air_flight_info)\
         .with(:date => flight_date, :number => '419', :carrier => 'BT', :departure_iata => 'DME', :arrival_iata => 'RIX')\
         .and_return( mock(Amadeus::Response::AirFlightInfo, flight: flight) )
 
