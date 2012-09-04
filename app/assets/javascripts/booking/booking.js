@@ -48,7 +48,7 @@ prebook: function(offer) {
         error: function() {
             that.failed();
         },
-        timeout: 6
+        timeout: 60000
     });
     offer.book.addClass('ob-disabled');
     offer.state.html('<span class="ob-progress">Проверяем доступность мест</span>');
