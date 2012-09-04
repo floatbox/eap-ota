@@ -217,6 +217,19 @@ class OrderForm
     end
   end
 
+  def calculated_people_count
+    last_date = recommendation.segments.last.dept_date
+    adults_count = people.count{|p| p.birthday + 12.years <= last_date}
+    exact_infants_count = people.count{|p| p.birthday + 2.years > last_date}
+    infants_count = if exact_infants_count <= adults_count
+      exact_infants_count
+    else
+      adults_count
+    end
+    children_count = people.count - adults_count - infants_count
+    {:adults => adults_count, :children => children_count, :infants => infants_count}
+  end
+
   def set_flight_date_for_childen_and_infants
     last_date = recommendation.flights.last.dept_date
     children.each{|c|

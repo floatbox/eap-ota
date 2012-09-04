@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120809172439) do
+ActiveRecord::Schema.define(:version => 20120903143433) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -153,6 +153,16 @@ ActiveRecord::Schema.define(:version => 20120809172439) do
   add_index "countries", ["alpha2"], :name => "index_countries_on_alpha2"
   add_index "countries", ["name_en"], :name => "index_countries_on_name_en"
   add_index "countries", ["name_ru"], :name => "index_countries_on_name_ru"
+
+  create_table "currency_rates", :force => true do |t|
+    t.string   "from"
+    t.string   "to"
+    t.string   "bank"
+    t.float    "rate"
+    t.date     "date"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "destinations", :force => true do |t|
     t.integer  "to_id"

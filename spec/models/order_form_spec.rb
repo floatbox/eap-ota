@@ -254,4 +254,27 @@ describe OrderForm do
     specify { subject.send(:similar_last_names?, 'IJIN', 'ABRAMOV').should be_false }
     specify { subject.send(:similar_last_names?, 'ZAYARNYI', 'ZAYARNAYA').should be_true }
   end
+
+
+  describe '#calculated_people_count' do
+    subject do
+      last_date = Date.today + 11.months
+      people = [
+        build(:person),
+        build(:person, :child),
+        build(:person, :child, :birthday => (Date.today - 12.years + 1.month)),
+        build(:person, :infant),
+        build(:person, :infant),
+        build(:person, :infant)
+      ]
+      o = OrderForm.new(:people => people)
+      o.stub_chain(:recommendation, :segments, :last, :dept_date).and_return(last_date)
+      o
+    end
+
+    its(:calculated_people_count) {should == {:adults => 2, :children => 2, :infants => 2}}
+
+  end
+
+
 end
