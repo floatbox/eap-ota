@@ -115,7 +115,7 @@ class BookingController < ApplicationController
     @order_form.update_attributes(params[:order])
     @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
 
-    unless @order_form.valid?
+    if !@order_form.valid? || @order_form.calculated_people_count != @order_form.people_count
 
       if @order_form.calculated_people_count != @order_form.people_count
         @search = PricerForm.load_from_cache(@order_form.query_key)
