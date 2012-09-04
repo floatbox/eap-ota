@@ -1,17 +1,17 @@
 module CBR
   class << self
-    def usd(amount=1.0)
-      course = Conf.cbr.usd[Date.today] || Conf.cbr.usd.max[1]
-      (amount * course).round(2)
+    include LayeredExchange
+    def exchanges
+      @exchanges ||= {}
     end
 
-    # https://github.com/RubyMoney/money
-    # bank.exchange_with(money, "USD")
-    def bank date
-      bank =  Money::Bank::VariableExchange.new
-      bank.add_rate("RUB", "USD", Conf.cbr.usd[date])
-      bank.add_rate("USD", "RUB", (1/Conf.cbr.usd[date]))
-      bank
+    def exchange_on(date)
+      exchanges[date] ||=
+        ExchangeWithFallback.new(
+          ReverseRateIfFrom.new( 'RUB',
+            RatesUpdatedWithFallback.new(
+              ActiveRecordRates.new(CurrencyRate.where(date: date, bank: 'cbr')),
+              LazyRates.new { CentralBankOfRussia.new.update_rates(date) } )))
     end
   end
 end
