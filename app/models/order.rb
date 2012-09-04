@@ -114,7 +114,7 @@ class Order < ActiveRecord::Base
   end
 
   def create_ticket_notice
-    if email_status != 'queued' && email_status != 'ticket_sent'
+    if email_status != 'queued' && email_status != 'ticket_sent' && email_status != 'manual'
       self.notifications.new.create_delayed_notice 2
     end
   end
@@ -125,11 +125,19 @@ class Order < ActiveRecord::Base
     end.transpose
   end
 
+  def email_ready!
+    update_email_status
+  end
+
   def queued_email!
     update_email_status :queued
   end
 
-  def update_email_status status
+  def email_manual!
+    update_email_status :manual
+  end
+
+  def update_email_status status = ''
     update_attribute(:email_status, status)
   end
 
@@ -492,10 +500,6 @@ class Order < ActiveRecord::Base
 
   def cancel!
     update_attribute(:ticket_status, 'canceled')
-  end
-
-  def email_ready!
-    update_attribute(:email_status, '')
   end
 
 # class methods
