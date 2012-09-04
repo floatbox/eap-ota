@@ -24,7 +24,7 @@ module LayeredExchange
 
     def get_rate(from, to)
        unless rate = super
-         if rate = fallback_rates.get_rate(from, to)
+         if rate = fallback_rates.get_rate(Money::Currency.wrap(from), Money::Currency.wrap(to))
            add_rate(from, to, rate)
          end
        end
@@ -78,13 +78,13 @@ module LayeredExchange
     end
 
     def get_rate(from, to)
-      if rec = @scope.where(from: from, to: to).first
+      if rec = @scope.where(from: from.to_s, to: to.to_s).first
         rec.rate
       end
     end
 
     def add_rate(from, to, rate)
-      rec = @scope.where(from: from, to: to).first_or_initialize
+      rec = @scope.where(from: from.to_s, to: to.to_s).first_or_initialize
       rec.update_attributes rate: rate
       rate
     end
