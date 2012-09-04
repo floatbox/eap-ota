@@ -136,7 +136,7 @@ class BookingController < ApplicationController
     unless @order_form.payment_type == 'card'
       StatCounters.inc %W[pay.success.total pay.success.cash]
       logger.info "Pay: booking successful, payment: cash"
-      render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order_form.pnr_number), :pnr_number => @order_form.pnr_number}
+      render :partial => 'success', :locals => {:pnr_path => show_notice_path(:id => @order_form.pnr_number), :pnr_number => @order_form.pnr_number}
       return
     end
 
@@ -156,7 +156,7 @@ class BookingController < ApplicationController
         end
       end
       StatCounters.inc %W[pay.success.total pay.success.card]
-      render :partial => 'success', :locals => {:pnr_path => show_order_path(:id => @order_form.pnr_number), :pnr_number => @order_form.pnr_number}
+      render :partial => 'success', :locals => {:pnr_path => show_notice_path(:id => @order_form.pnr_number), :pnr_number => @order_form.pnr_number}
 
     elsif payture_response.threeds?
       StatCounters.inc %W[pay.3ds.requests]
