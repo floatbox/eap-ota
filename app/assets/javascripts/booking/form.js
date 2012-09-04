@@ -156,18 +156,24 @@ process: function(s) {
     case 'newprice':
         var op = Number(this.el.find('.bf-newprice').attr('data-price'));
         var np = Number(this.result.attr('data-price'));
-        booking.processPrice(this.result, np - op);
-        trackEvent('Бронирование', 'Изменилась цена', np - op > 0 ? 'Стало дороже' : 'Стало дешевле');
-        this.result.find('.obb-title').click(function() {
+        if (op === np) {
             that.el.submit();
             that.footer.show();
-        });
-        var wd = this.el.find('.bff-price .bffp-wd').is(':visible');
-        var context = this.el.find('.bffp-content').html(this.result.find('.bfnp-data').html());
-        context.find('.bffp-wd').toggle(wd);
-        context.find('.bffp-nd').toggle(!wd);
-        this.el.find('.bf-newprice').attr('data-price', np);
-        this.back = true;
+            return;
+        } else {
+            booking.processPrice(this.result, np - op);
+            trackEvent('Бронирование', 'Изменилась цена', np - op > 0 ? 'Стало дороже' : 'Стало дешевле');
+            this.result.find('.obb-title').click(function() {
+                that.el.submit();
+                that.footer.show();
+            });
+            var wd = this.el.find('.bff-price .bffp-wd').is(':visible');
+            var context = this.el.find('.bffp-content').html(this.result.find('.bfnp-data').html());
+            context.find('.bffp-wd').toggle(wd);
+            context.find('.bffp-nd').toggle(!wd);
+            this.el.find('.bf-newprice').attr('data-price', np);
+            this.back = true;
+        }
         break;
     case '3dsecure':
         this.result.find('.obb-title').click(function() {
@@ -206,6 +212,7 @@ hidePrice: function() {
 },
 updatePrice: function() {
     console.log('Запрос новой стоимости');
+    this.wrongPrice = false;
 }
 };
 
