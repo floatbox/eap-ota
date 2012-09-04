@@ -89,7 +89,7 @@ agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "LVXTNIGWUYHMQBKORE"
 ticketing_method "downtown"
-discount "3"
+discount "3%"
 commission "12%/10%"
 
 example 'svoiws/UN7061'
