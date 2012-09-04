@@ -113,7 +113,25 @@ class BookingController < ApplicationController
     @order_form.people_attributes = params[:person_attributes]
     @order_form.update_attributes(params[:order])
     @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
+
     unless @order_form.valid?
+
+      if @order_form.calculated_people_count != @order_form.people_count
+        @search = PricerForm.load_from_cache(@order_form.query_key)
+        @search.people_count = @order_form.calculated_people_count
+        strategy = Strategy.select( :rec => @order_form.recommendation, :search => @search )
+        if strategy.check_price_and_availability
+          @order_form.people_count = @search.people_count
+          @order_form.price_with_payment_commission = @order_form.recommendation.price_with_payment_commission
+          @order_form.update_in_cache
+          render :partial => 'newprice'
+          return
+        else
+          render :partial => 'failed_booking'
+          return
+        end
+      end
+
       StatCounters.inc %W[pay.errors.form]
       logger.info "Pay: invalid order: #{@order_form.errors_hash.inspect}"
       render :json => {:errors => @order_form.errors_hash}
