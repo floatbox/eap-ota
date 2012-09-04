@@ -172,9 +172,11 @@ module Amadeus
 
           segments_refs = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='ST']/r:number").every.to_i.sort
           if segments_refs.blank?
-            segments_refs = tickets.find{|k, v| k[0] == [passenger_ref, infant_flag] && v[:number] != ticket_hash[:number]}[0][1]
+            # Данные по обменяному билету бывают кривыми
+            new_ticket = tickets.find{|k, v| k[0] == [passenger_ref, infant_flag] && v[:number] != ticket_hash[:number]}
+            segments_refs = new_ticket[0][1] if new_ticket
           end
-          res.merge({[[passenger_ref, infant_flag], segments_refs] => ticket_hash})
+          res.merge({[[passenger_ref, infant_flag], segments_refs] => ticket_hash}) if segments_refs.present?
         end
       end
 
