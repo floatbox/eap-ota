@@ -2,11 +2,11 @@
 #   date = Date.today
 #   ExchangeWithFallback.new(
 #     SynchronizedRates.new(
-#       DoubleConvertThrough.new('RUB'),
-#         InverseRatesFor.new({from: 'RUB'},
+#       DoubleConvertThrough.new('RUB',
+#         InverseRatesFor.new( {from: 'RUB'},
 #           RatesUpdatedWithFallback.new(
 #             ActiveRecordRates.new(CurrencyRate.where(date: date, bank: 'cbr')),
-#             LazyRates.new { CentralBankOfRussia.new.update_rates(date) } )))
+#             LazyRates.new { CentralBankOfRussia.new.update_rates(date) } )))))
 
 module LayeredExchange
 
