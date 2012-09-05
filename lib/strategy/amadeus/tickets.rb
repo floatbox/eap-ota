@@ -153,7 +153,9 @@ module Strategy::Amadeus::Tickets
 
       # отправить в очередь на выписку
       # вроде бы как, это закрывает текущий PNR
-      # TODO заменить вызовом queue_place_pnr
+      # TODO заменить вызовом queue_place_pnr --->
+      # amadeus.queue_place_pnr(:office_id => 'NYC1S211F', :queue => '28', :category => '30', :number => @order.pnr_number)
+      # ^можно вызывать в "чистой" сессии
       amadeus.cmd('QE/NYC1S211F/28C30')
     end
   end
