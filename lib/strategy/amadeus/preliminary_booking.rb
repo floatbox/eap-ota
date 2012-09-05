@@ -1,34 +1,6 @@
 # encoding: utf-8
 module Strategy::Amadeus::PreliminaryBooking
 
-  def find_best_and_check
-    new_booking_classes = []
-    old_booking_classes = @rec.booking_classes
-    ::Amadeus.booking do |amadeus|
-      @rec.flights.zip(@rec.cabins).each do |fl, cabin|
-        new_booking_class = amadeus.air_multi_availability(:flight => fl, :cabin => cabin).lowest_avaliable_booking_class
-        if new_booking_class
-          new_booking_classes += [new_booking_class]
-        else
-          logger.info 'No booking class for flight ' + flight.to_s
-          return
-        end
-      end
-    end
-    @rec.booking_classes = new_booking_classes
-    puts 'new_classes', new_booking_classes
-    res = check_price_and_availability
-    return res if res
-    replacements = {}
-    updated_booking_classes = []
-    old_booking_classes.zip(new_booking_classes).map do |obc, nbc|
-      replacements[obc] = nbc if obc != nbc
-    end
-    @rec.booking_classes = old_booking_classes.map{|obc| replacements[obc] || obc}
-    puts 'new_classes', @rec.booking_classes
-    check_price_and_availability
-  end
-
   def check_price_and_availability
     unless TimeChecker.ok_to_book(@search.segments[0].date_as_date + 1.day)
       logger.error 'Strategy::Amadeus::Check: time criteria missed'
@@ -50,22 +22,6 @@ module Strategy::Amadeus::PreliminaryBooking
       @rec.blank_count = @search.people_total
 
       @rec.rules = amadeus.fare_check_rules.rules
-      #временно: собираем респонсы best_informative_pricing
-      begin
-        resp = amadeus.fare_informative_best_pricing_without_pnr(
-          :recommendation => @rec,
-          :people_count => @search.real_people_count
-        )
-        if resp.success?
-          #дебажный вывод цен
-          logger.info "Strategy::Amadeus::Best: best_informative_pricing: old price: #{@rec.price_fare+@rec.price_tax} (#{@rec.booking_classes.join(' ')}) " +
-            "new prices: #{resp.recommendations.map{|rec| rec.price_fare+rec.price_tax}} (#{resp.recommendations.map{|rec| rec.booking_classes.join(' ')}.join(', ')})"
-        else
-          logger.error "Strategy::Amadeus::Best: best_informative_pricing error: #{resp.error_message}"
-        end
-      rescue
-        logger.error "Strategy::Amadeus::Best: best_informative_pricing exception: #{$!.class}: #{$!.message}"
-      end
 
       # FIXME не очень надежный признак
       if @rec.price_fare.to_i == 0
@@ -80,6 +36,35 @@ module Strategy::Amadeus::PreliminaryBooking
       )
       unless air_sfr.segments_confirmed?
         logger.error "Strategy::Amadeus::Check: segments aren't confirmed: recommendation: #{@rec.serialize} segments: #{air_sfr.segments_status_codes.join(', ')} #{Time.now.strftime('%H:%M %d.%m.%Y')}"
+
+        #временно: собираем респонсы best_informative_pricing
+        begin
+          resp = amadeus.fare_informative_best_pricing_without_pnr(
+            :recommendation => @rec,
+            :people_count => @search.real_people_count
+          )
+          resp_y = amadeus.fare_informative_best_pricing_without_pnr(
+            :recommendation => @rec,
+            :people_count => @search.real_people_count,
+            :booking_class => 'Y'
+          )
+          if resp.success?
+            #дебажный вывод цен
+            logger.info "Strategy::Amadeus::Best: best_informative_pricing: old price: #{@rec.price_fare+@rec.price_tax} (#{@rec.booking_classes.join(' ')}) " +
+              "new prices: #{resp.recommendations.map{|rec| rec.price_fare+rec.price_tax}} (#{resp.recommendations.map{|rec| rec.booking_classes.join(' ')}.join(', ')})"
+          else
+            logger.error "Strategy::Amadeus::Best: best_informative_pricing error: #{resp.error_message}"
+          end
+          if resp_y.success?
+            logger.info "Strategy::Amadeus::Best: best_informative_pricing with y class: old price: #{@rec.price_fare+@rec.price_tax} (#{@rec.booking_classes.join(' ')})" +
+              "new prices: #{resp_y.recommendations.map{|rec| rec.price_fare+rec.price_tax}} (#{resp_y.recommendations.map{|rec| rec.booking_classes.join(' ')}.join(', ')})"
+          else
+            logger.error "Strategy::Amadeus::Best: best_informative_pricing with Y class error: #{resp.error_message}"
+          end
+        rescue
+          logger.error "Strategy::Amadeus::Best: best_informative_pricing exception: #{$!.class}: #{$!.message}"
+        end
+
         return
       end
       # FIXME не будет ли надежнее использовать дополнительный pnr_retrieve вместо fill_itinerary?
