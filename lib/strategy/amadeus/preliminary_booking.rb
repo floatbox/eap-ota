@@ -18,6 +18,11 @@ module Strategy::Amadeus::PreliminaryBooking
           :people_count => @search.real_people_count
         ).prices
 
+      # считаем что в амадеусе всегда один билет на человека
+      @rec.blank_count = @search.people_total
+
+      @rec.rules = amadeus.fare_check_rules.rules
+
       #временно: собираем респонсы best_informative_pricing
       begin
         resp = amadeus.fare_informative_best_pricing_without_pnr(
@@ -35,11 +40,6 @@ module Strategy::Amadeus::PreliminaryBooking
       rescue
         logger.error "Strategy::Amadeus::Best: best_informative_pricing exception: #{$!.class}: #{$!.message}"
       end
-
-      # считаем что в амадеусе всегда один билет на человека
-      @rec.blank_count = @search.people_total
-
-      @rec.rules = amadeus.fare_check_rules.rules
 
       # FIXME не очень надежный признак
       if @rec.price_fare.to_i == 0
