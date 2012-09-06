@@ -2,6 +2,7 @@
 class PnrMailer < ActionMailer::Base
   helper :pricer
   helper :booking
+  helper :baggage
   layout 'pnr'
 
   add_template_helper(ApplicationHelper)
