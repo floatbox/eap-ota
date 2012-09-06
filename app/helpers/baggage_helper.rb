@@ -34,7 +34,7 @@ module BaggageHelper
     if bl.no_baggage?
       'hand luggage only'
     elsif bl.units
-      "#{bl.units}&nbsp;#{bl.units > 1 ? 'bag' : 'bags'}".html_safe
+      "#{bl.units}&nbsp;#{bl.units > 1 ? 'bags' : 'bag'}".html_safe
     elsif bl.kilos
       "#{bl.kilos}&nbsp;kg".html_safe
     elsif bl.pounds
@@ -64,7 +64,7 @@ module BaggageHelper
     if bl.no_baggage?
       'hand luggage only'
     elsif bl.units
-      "#{bl.units}&nbsp;#{bl.units > 1 ? 'bag' : 'bags'} per&nbsp;passenger".html_safe
+      "#{bl.units}&nbsp;#{bl.units > 1 ? 'bags' : 'bag'} per&nbsp;passenger".html_safe
     elsif bl.kilos
       "#{bl.kilos}&nbsp;kg per&nbsp;passenger".html_safe
     elsif bl.pounds
