@@ -146,13 +146,4 @@ class Notification < ActiveRecord::Base
     "<a href=#{url} target=\"_blank\">&rarr;письмо</a>"
   end
 
-  def time_to_ticketing_delay(time)
-    case
-      when time < '0600';  'до 11 утра по московскому времени'
-      when time < '0800';  'в течение четырех часов'
-      when time < '2030';  'в течение трех часов'
-      else                 'до 11 утра по московскому времени'
-      end
-  end
-
 end
