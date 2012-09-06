@@ -19,7 +19,6 @@
     <td colspan="7" style="font-size: 12px; line-height: 12px;"><br></td>
 </tr>
 <tr>
-<% bl = flight.baggage_limit_for_adult %>
 <% if @lang %>
     <td>
         <div style="font-weight: bold; font-size: 16px; line-height: 19px; margin-bottom: 5px;"><%= flight.departure.city.name_en %> — <%= flight.arrival.city.name_en %></div>
@@ -51,19 +50,13 @@
     <td><br></td>
     <td>
         <%= booking_class %> (HK)<br>
-        <% if bl && !bl.unknown? %>
         <div style="margin-top: 5px; font-size: 13px; line-height: 16px;">
-            <% if bl.no_baggage? %>
-                hand luggage only
-            <% elsif bl.units %>
-                <%= bl.units %>&nbsp;<%= bl.units > 1 ? 'bag' : 'bags' %> per&nbsp;passenger
-            <% elsif bl.kilos %>
-                <%= bl.kilos %>&nbsp;kg per&nbsp;passenger
-            <% elsif bl.pounds %>
-                <%= bl.pounds %>&nbsp;lb per&nbsp;passenger
+            <% if baggage_limitations %>
+                <%= baggage_summary(baggage_limitations, true) %>
+            <% elsif flight.baggage_limit_for_adult %>
+                <%= baggage_html_simple_en(flight.baggage_limit_for_adult) %>
             <% end %>
         </div>
-        <% end %>
     </td>
 <% else %>
     <td>
@@ -96,20 +89,13 @@
     <td><br></td>
     <td>
         <%= booking_class %> (HK)<br>
-        <% if bl && !bl.unknown? %>
         <div style="margin-top: 5px; font-size: 13px; line-height: 16px;">
-            <%#= baggage_summary(baggage_limitations) %>
-            <% if bl.no_baggage? %>
-                только ручная кладь
-            <% elsif bl.units %>
-                <%= bl.units %>&nbsp;<%= Russian.pluralize(bl.units, 'место', 'места', 'мест') %> на&nbsp;пассажира
-            <% elsif bl.kilos %>
-                <%= bl.kilos %>&nbsp;кг на&nbsp;пассажира
-            <% elsif bl.pounds %>
-                <%= bl.pounds %>&nbsp;lb на&nbsp;пассажира
+            <% if baggage_limitations %>
+                <%= baggage_summary(baggage_limitations, false) %>
+            <% elsif flight.baggage_limit_for_adult %>
+                <%= baggage_html_simple(flight.baggage_limit_for_adult) %>
             <% end %>
         </div>
-        <% end %>
     </td>
 <% end %>
 </tr>
