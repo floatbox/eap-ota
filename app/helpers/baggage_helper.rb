@@ -1,6 +1,6 @@
 # encoding: utf-8
 module BaggageHelper
-  def baggage_summary(baggage_limitations, lang)
+  def baggage_summary(baggage_limitations, lang = nil)
     return unless baggage_limitations
     return if baggage_limitations.any?(&:unknown?) || baggage_limitations.blank?
     return (lang ? 'hand luggage only' : 'только ручная кладь') if baggage_limitations.all?(&:no_baggage?)

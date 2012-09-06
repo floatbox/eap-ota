@@ -91,7 +91,7 @@
         <%= booking_class %> (HK)<br>
         <div style="margin-top: 5px; font-size: 13px; line-height: 16px;">
             <% if baggage_limitations %>
-                <%= baggage_summary(baggage_limitations, false) %>
+                <%= baggage_summary(baggage_limitations) %>
             <% elsif flight.baggage_limit_for_adult %>
                 <%= baggage_html_simple(flight.baggage_limit_for_adult) %>
             <% end %>
