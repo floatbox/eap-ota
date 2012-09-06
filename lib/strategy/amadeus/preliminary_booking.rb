@@ -23,6 +23,24 @@ module Strategy::Amadeus::PreliminaryBooking
 
       @rec.rules = amadeus.fare_check_rules.rules
 
+      #временно: собираем респонсы best_informative_pricing
+      begin
+        resp = amadeus.fare_informative_best_pricing_without_pnr(
+          :recommendation => @rec,
+          :people_count => @search.real_people_count,
+          :booking_class => 'Y'
+        )
+        if resp.success?
+          #дебажный вывод цен
+          logger.info "Strategy::Amadeus::Best: best_informative_pricing updated before sale: old price: #{@rec.price_fare+@rec.price_tax} (#{@rec.booking_classes.join(' ')}) " +
+            "new prices: #{resp.recommendations.map{|rec| rec.price_fare+rec.price_tax}} (#{resp.recommendations.map{|rec| rec.booking_classes.join(' ')}.join(', ')})"
+        else
+          logger.error "Strategy::Amadeus::Best: best_informative_pricing updated before sale error: #{resp.error_message}"
+        end
+      rescue
+        logger.error "Strategy::Amadeus::Best: best_informative_pricing exception: #{$!.class}: #{$!.message}"
+      end
+
       # FIXME не очень надежный признак
       if @rec.price_fare.to_i == 0
         logger.error 'Strategy::Amadeus::Check: price_fare is 0?'
@@ -41,25 +59,15 @@ module Strategy::Amadeus::PreliminaryBooking
         begin
           resp = amadeus.fare_informative_best_pricing_without_pnr(
             :recommendation => @rec,
-            :people_count => @search.real_people_count
-          )
-          resp_y = amadeus.fare_informative_best_pricing_without_pnr(
-            :recommendation => @rec,
             :people_count => @search.real_people_count,
             :booking_class => 'Y'
           )
           if resp.success?
             #дебажный вывод цен
-            logger.info "Strategy::Amadeus::Best: best_informative_pricing: old price: #{@rec.price_fare+@rec.price_tax} (#{@rec.booking_classes.join(' ')}) " +
+            logger.info "Strategy::Amadeus::Best: best_informative_pricing updated after sale: old price: #{@rec.price_fare+@rec.price_tax} (#{@rec.booking_classes.join(' ')}) " +
               "new prices: #{resp.recommendations.map{|rec| rec.price_fare+rec.price_tax}} (#{resp.recommendations.map{|rec| rec.booking_classes.join(' ')}.join(', ')})"
           else
-            logger.error "Strategy::Amadeus::Best: best_informative_pricing error: #{resp.error_message}"
-          end
-          if resp_y.success?
-            logger.info "Strategy::Amadeus::Best: best_informative_pricing with y class: old price: #{@rec.price_fare+@rec.price_tax} (#{@rec.booking_classes.join(' ')})" +
-              "new prices: #{resp_y.recommendations.map{|rec| rec.price_fare+rec.price_tax}} (#{resp_y.recommendations.map{|rec| rec.booking_classes.join(' ')}.join(', ')})"
-          else
-            logger.error "Strategy::Amadeus::Best: best_informative_pricing with Y class error: #{resp.error_message}"
+            logger.error "Strategy::Amadeus::Best: best_informative_pricing updated after sale error: #{resp.error_message}"
           end
         rescue
           logger.error "Strategy::Amadeus::Best: best_informative_pricing exception: #{$!.class}: #{$!.message}"
