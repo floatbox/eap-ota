@@ -26,6 +26,7 @@ Eviterra::Application.routes.draw do
   match 'hot_offers' => 'pricer#hot_offers', :as => :hot_offers
   match 'price_map' => 'pricer#price_map', :as => :price_map
   match 'booking/form' => 'booking#form', :as => :booking_form
+  post 'booking/recalculate_price' => 'booking#recalculate_price', :as => :booking_recalculate_price
   post 'booking/pay' => 'booking#pay', :as => :booking_pay
   # FIXME сделать POST однажды
   match 'booking/preliminary_booking' => 'booking#preliminary_booking', :as => :preliminary_booking

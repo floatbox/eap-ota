@@ -217,6 +217,22 @@ class OrderForm
     end
   end
 
+  def update_price_and_counts
+    search = PricerForm.load_from_cache(query_key)
+    search.people_count = calculated_people_count
+    strategy = Strategy.select( :rec => recommendation, :search => search )
+    if strategy.check_price_and_availability
+      self.people_count = search.people_count
+      self.price_with_payment_commission = recommendation.price_with_payment_commission
+      update_in_cache
+      return true
+    end
+  end
+
+  def counts_contradiction
+    people_count != calculated_people_count
+  end
+
   def calculated_people_count
     last_date = recommendation.segments.last.dept_date
     adults_count = people.count{|p| p.birthday + 12.years <= last_date}
