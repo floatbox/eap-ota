@@ -155,7 +155,7 @@ process: function(s) {
     switch (this.result.attr('data-type')) {
     case 'newprice':
         var op = Number(this.el.find('.bf-newprice').attr('data-price'));
-        var np = Number(this.result.attr('data-price'));
+        var np = Number(this.result.find('.bfnp-data').attr('data-price'));
         if (op === np) {
             that.el.submit();
             that.footer.show();
@@ -167,11 +167,7 @@ process: function(s) {
                 that.el.submit();
                 that.footer.show();
             });
-            var wd = this.el.find('.bff-price .bffp-wd').is(':visible');
-            var context = this.el.find('.bffp-content').html(this.result.find('.bfnp-data').html());
-            context.find('.bffp-wd').toggle(wd);
-            context.find('.bffp-nd').toggle(!wd);
-            this.el.find('.bf-newprice').attr('data-price', np);
+            this.updatePrice(this.result.find('.bfnp-data'));
             this.back = true;
         }
         break;
@@ -204,15 +200,41 @@ process: function(s) {
     }
 },
 hidePrice: function() {
+    this.footer.find('.bff-passengers').remove();
     var content = '<div class="bffp-content"><p>Стоимость изменилась —</p><p class="bffp-hint">Заполните {0},<br> чтобы узнать новую стоимость.</p></div>';
     var title = this.el.find('.bf-persons .bfst-text').html().toLowerCase();
     var message = $('<div class="bff-passengers"></div>').html(content.absorb(title));
     this.footer.find('.bff-price').hide().after(message);
     this.wrongPrice = true;
 },
-updatePrice: function() {
-    console.log('Запрос новой стоимости');
+getPrice: function() {
+    var that = this;
+    $.ajax({
+        type: 'POST',
+        url: '/booking/recalculate_price',
+        data: this.el.serialize(),
+        success: function(s) {
+            if (typeof s === 'string' && s.length) {
+                that.updatePrice($(s).find('.bfnp-data'));
+            } else {
+                that.footer.find('.bff-passengers').remove();
+            }
+        },
+        error: function() {
+            that.footer.find('.bff-passengers').remove();
+        }
+    });
+    this.footer.find('.bff-passengers .bffp-content').html('<p class="bffp-progress">Обновляем стоимость &mdash;</p>');
     this.wrongPrice = false;
+},
+updatePrice: function(content) {
+    this.footer.find('.bff-passengers').remove();
+    this.footer.find('.bff-price').show();
+    var wd = this.footer.find('.bff-price .bffp-wd').is(':visible');
+    var context = this.footer.find('.bff-price .bffp-content').html(content.html());
+    context.find('.bffp-wd').toggle(wd);
+    context.find('.bffp-nd').toggle(!wd);
+    this.el.find('.bf-newprice').attr('data-price', content.attr('data-price'));
 }
 };
 
@@ -290,20 +312,23 @@ init: function() {
     this.table = this.el.find('.bfp-table');
     this.add = this.el.find('.bfp-add');
     this.add.find('.bfpa-link').click(function() {
+        booking.form.wrongPrice = false;
         var data = that.savedRows && that.savedRows[that.rows.length];
         var row = that.addRow(that.rows.length);
         that.applyRows();
         if (data) {
             row.set(data);
         }
+        booking.form.hidePrice();
         that.validate(true);
         booking.form.validate();
-        booking.form.hidePrice();
     });
     this.table.on('click', '.bfpr-link', function() {
+        booking.form.wrongPrice = false;
         that.removeRow(Number($(this).closest('tbody').attr('data-index')));
-        booking.form.validate();
         booking.form.hidePrice();        
+        that.validate(true);
+        booking.form.validate();
     });
     var people = Number(this.table.attr('data-people'));
     this.sample = this.el.find('.bfp-row').remove();
@@ -328,9 +353,7 @@ load: function() {
     var that = this;
     var data = $.parseJSON(sessionStorage.getItem('personsData')) || [];
     var amount = Number(sessionStorage.getItem('personsAmount') || this.rows.length);
-    if (amount !== this.rows.length) {
-        booking.form.hidePrice();
-    }
+    var wrongPrice = amount !== this.rows.length;
     for (var i = 0; i < amount; i++) {
         var rd = data[i];
         var row = this.rows[i] || this.addRow(i);
@@ -344,6 +367,9 @@ load: function() {
             }
             this.rows[i].set(rd);
         }
+    }
+    if (wrongPrice) {
+        booking.form.hidePrice();
     }
     this.savedRows = data;
     this.table.change(function() {
@@ -399,7 +425,7 @@ validate: function(forced) {
     var valid = wrong.length + empty.length === 0;
     this.toggle(valid);
     if (valid && booking.form.wrongPrice) {
-        booking.form.updatePrice();
+        booking.form.getPrice();
     }
     this.wrong = wrong;
     this.empty = empty;
