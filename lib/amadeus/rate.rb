@@ -1,16 +1,18 @@
 module Amadeus::Rate
- include LayeredExchange
-  def self.exchanges
-    @exchanges ||= {}
-  end
+  class << self
+    include LayeredExchange
+    def exchanges
+      @exchanges ||= {}
+    end
 
-  def self.exchange_on(date=Date.today)
-    exchanges[date] ||=
-      ExchangeWithFallback.new(
-        InverseRatesFor.new({from: 'RUB'},
-          RatesUpdatedWithFallback.new(
-            ActiveRecordRates.new(CurrencyRate.where(date: date, bank: 'amadeus')),
-            LazyRates.new { AmadeusBank.new.update_rates } )))
+    def exchange_on(date=Date.today)
+      exchanges[date] ||=
+        ExchangeWithFallback.new(
+          InverseRatesFor.new({from: 'RUB'},
+            RatesUpdatedWithFallback.new(
+              ActiveRecordRates.new(CurrencyRate.where(date: date, bank: 'amadeus')),
+              LazyRates.new { AmadeusBank.new.update_rates } )))
+    end
   end
 
   class AmadeusBank < Money::Bank::VariableExchange
