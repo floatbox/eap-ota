@@ -18,7 +18,6 @@ class PNR
     else
       Amadeus.booking do |amadeus|
         pnr_resp = amadeus.pnr_retrieve(:number => number)
-        amadeus.pnr_ignore
         copy_attrs pnr_resp, pnr,
           :flights,
           :booking_classes,
@@ -33,6 +32,7 @@ class PNR
             fl.baggage_limit_for_adult = tst_resp.baggage_for_segments[fl.amadeus_ref]
           end
         end
+        amadeus.pnr_ignore
       end
     end
     pnr
