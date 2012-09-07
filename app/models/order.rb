@@ -198,10 +198,10 @@ class Order < ActiveRecord::Base
   def ticket_datetime
     time = created_at.strftime('%H%M')
     case
-      when time < '0600';  Date.today + 11.hours
+      when time < '0600';  created_at.midnight + 11.hours
       when time < '0800';  created_at + 4.hours
       when time < '2030';  created_at + 3.hours
-      else                 Date.tomorrow + 11.hours
+      else                 created_at.tomorrow.midnight + 11.hours
     end
   end
 
