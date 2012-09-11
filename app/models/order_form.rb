@@ -72,7 +72,7 @@ class OrderForm
 
   # пассажиры (в том числе младенцы), летящие по детскому тарифу с выделенным местом
   def children
-    people_by_age[ people_count[:adults], people_count[:children] ]
+    people_by_age[ people_count[:adults], people_count[:children] ] || []
   end
 
   # дети до двух лет, которым не предоставляется места
