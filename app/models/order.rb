@@ -151,7 +151,9 @@ class Order < ActiveRecord::Base
   scope :processing_ticket, where(:ticket_status => 'processing_ticket')
   scope :error_ticket, where(:ticket_status => 'error_ticket')
   scope :ticketed, where(:payment_status => ['blocked', 'charged'], :ticket_status => 'ticketed')
-  scope :ticket_not_sent, where("email_status != 'ticket_sent'")
+  scope :ticket_not_sent, where("email_status != 'ticket_sent' AND ticket_status = 'ticketed'")
+  scope :sent_manual, where("email_status = 'manual'")
+
 
   scope :stale, lambda {
     where(:payment_status => 'not blocked', :ticket_status => 'booked', :offline_booking => false, :source => 'amadeus')\
