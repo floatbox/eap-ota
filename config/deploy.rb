@@ -47,12 +47,16 @@ set :normalize_asset_timestamps, false
 # в пользовательском .ssh/config почему-то не читается
 # ssh_options[:forward_agent] = true
 
-task :delta do
-  server 'delta.eviterra.com', :app, :web
-  role :db, 'delta.eviterra.com', :primary => true
-  set :application, "delta"
-  set :rails_env, 'delta'
+task :staging do
+  role :app, 'vm1.eviterra.com', 'vm2.eviterra.com'
+  role :web, 'vm1.eviterra.com'
+  role :db, 'vm1.eviterra.com', :primary => true
+  set :application, "eviterra"
+  set :rails_env, 'staging'
   set :deploy_to, "/home/#{user}/#{application}"
+  set :rvm_type, :user
+  set :rvm_ruby_string, 'ruby-1.9.3-p194'
+  set :branch, 'staging'
 end
 
 task :eviterra do
