@@ -473,7 +473,7 @@ commission "1eur/5"
 carrier "BD", "BMI"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.2%'
+carrier_defaults :consolidator => 0, :our_markup => '0.2%', :disabled => 'вышли из BSP'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
