@@ -57,6 +57,9 @@
     margin-left: 10px;
     color: #777;
 }
+.obs-profit strong {
+    color: #F90A6F;
+}
 .obs-hint {
     position: absolute;
     margin: 1px 0 0 10px;
