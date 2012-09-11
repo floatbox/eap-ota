@@ -46,7 +46,7 @@ class BookingController < ApplicationController
       render :json => {
         :success => true,
         :number => order_form.number,
-        :changed_booking_classes => (original_booking_classes == recommendation.booking_classes)
+        :changed_booking_classes => (original_booking_classes != recommendation.booking_classes)
         }
 
       StatCounters.inc %W[enter.preliminary_booking.success]
