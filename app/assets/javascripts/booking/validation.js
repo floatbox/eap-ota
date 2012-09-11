@@ -296,6 +296,7 @@ validate: function(self) {
     clearTimeout(this.timer);
     var value = this.parse(this.dpart.val(), this.mpart.val(), this.ypart.val());
     var error = typeof value === 'string' ? value : this.check(value);
+    this.el.trigger('validate', [error === undefined ? value : undefined]);
     if (this.update(error) && self) {
         this.apply();
     }

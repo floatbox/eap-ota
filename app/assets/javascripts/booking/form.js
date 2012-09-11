@@ -29,6 +29,7 @@ init: function() {
     this.required.delegate('.bffr-link', 'click', function() {
         that.focus($('#' + $(this).attr('data-field')));
     });
+    this.wrongPrice = false;    
     if (typeof sessionStorage !== 'undefined') {
         for (var i = this.sections.length; i--;) {
             var section = this.sections[i];
@@ -330,10 +331,13 @@ init: function() {
         that.validate(true);
         booking.form.validate();
     });
-    var people = Number(this.table.attr('data-people'));
+    this.lastFlightDate = Date.parseDMY(this.table.attr('data-date'));
     this.sample = this.el.find('.bfp-row').remove();
     this.rows = [];
-    for (var i = 0; i < people; i++) {
+    this.rowsLimit = Math.min(8, Number(this.table.attr('data-max')));
+    this.cachedPeople = this.table.attr('data-people');
+    var total = Number(this.table.attr('data-total'));
+    for (var i = 0; i < total; i++) {
         this.addRow(i);
     }
     this.applyRows();
@@ -352,7 +356,7 @@ save: function() {
 load: function() {
     var that = this;
     var data = $.parseJSON(sessionStorage.getItem('personsData')) || [];
-    var amount = Number(sessionStorage.getItem('personsAmount') || this.rows.length);
+    var amount = Math.min(Number(sessionStorage.getItem('personsAmount')) || this.rows.length, this.rowsLimit);
     var wrongPrice = amount !== this.rows.length;
     for (var i = 0; i < amount; i++) {
         var rd = data[i];
@@ -372,6 +376,7 @@ load: function() {
         booking.form.hidePrice();
     }
     this.savedRows = data;
+    this.applyRows();
     this.table.change(function() {
         that.save();
     });
@@ -403,12 +408,11 @@ removeRow: function(index) {
 },
 applyRows: function() {
     var n = this.rows.length;
-    this.add.toggle(n < 8);
+    this.add.toggle(n < this.rowsLimit);
     this.title.html(local.booking.passengers[n === 1 ? 'one' : 'many']);
-    this.rows[0].el.find('.bfp-spacer-row').remove();
 },
 validate: function(forced) {
-    var wrong = [], empty = [];
+    var wrong = [], empty = [], people = {a: 0, c: 0, i: 0};
     for (var i = 0, im = this.rows.length; i < im; i++) {
         var person = this.rows[i];
         if (forced) person.validate(true);
@@ -421,12 +425,28 @@ validate: function(forced) {
                 empty.push(person.empty[e].replace('пассажира', num + ' пассажира'));
             }
         }
+        if (person.type) {
+            people[person.type]++;
+        }
     }
+    if (people.a + people.c + people.i === this.rows.length) {
+        if (people.a === 0 && people.c + people.i > 0) {
+            wrong.push(local.swarnings.noadults + '.');
+        }
+        var merged = [people.a, people.c, people.i].join('');
+        if (merged !== this.cachedPeople) {
+            booking.form.hidePrice();
+            this.cachedPeople = merged;
+        }
+    }
+    clearTimeout(this.getPriceTimeout);
     var valid = wrong.length + empty.length === 0;
-    this.toggle(valid);
     if (valid && booking.form.wrongPrice) {
-        booking.form.getPrice();
-    }
+        this.getPriceTimeout = setTimeout(function() { 
+            booking.form.getPrice();
+        }, 100);
+    }    
+    this.toggle(valid);
     this.wrong = wrong;
     this.empty = empty;
 }
@@ -517,6 +537,7 @@ initSex: function() {
     this.controls.push(this.gender);
 },
 initBirthday: function() {
+    var that = this;
     var date = this.el.find('.bfp-date').eq(0);
     var birthday = new validator.Date(date, {
         empty: '{дату рождения} пассажира',
@@ -526,7 +547,27 @@ initBirthday: function() {
     }, function(date) {
         if (date.getTime() > this.ctime) return 'improper';
     });
-    this.controls.push(birthday);
+    var withseat = new validator.Checkbox(this.el.find('.bfpo-infant input'));
+    withseat.el.on('click set', function() {
+        that.type = this.checked ? 'c' : 'i';
+        that.section.validate();
+    });
+    birthday.el.on('validate', function(event, date) {
+        var type = undefined;
+        if (date) {
+            var age = that.section.lastFlightDate.age(date);
+            type = age < 12 ? (age < 2 ? 'i' : 'c') : 'a';
+        }
+        if (type !== that.type) {
+            /*that.type = type === 'i' ? (withseat.el.prop('checked') ? 'c' : 'i') : type;
+            that.el.find('.bfpo-adult').toggle(type !== 'i');
+            that.el.find('.bfpo-infant').toggle(type === 'i');*/
+            that.type = type;
+            that.section.validate();
+            booking.form.validate();
+        }
+    });
+    this.controls.push(birthday, withseat);
 },
 initNationality: function() {
     var nationality = new validator.Select(this.el.find('.bfp-nationality'));
@@ -622,7 +663,7 @@ initBonus: function() {
     this.controls.push(exist, program, number);
 },
 toggle: function(ready) {
-    this.el.toggleClass('.bfp-ready', ready);
+    this.el.toggleClass('bfp-ready', ready);
 }
 });
 
