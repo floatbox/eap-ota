@@ -6,7 +6,7 @@ class NotifierMailer < ActionMailer::Base
   layout 'pnr'
 
   add_template_helper(ApplicationHelper)
-  default :from => "Eviterra.com <ticket@eviterra.com>", :bcc => Conf.mail.ticket_cc
+  default :from => "Eviterra.com <operator@eviterra.com>", :bcc => Conf.mail.ticket_cc
 
   def notice(notification)
     @comment = notification.comment
