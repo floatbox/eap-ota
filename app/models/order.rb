@@ -109,7 +109,9 @@ class Order < ActiveRecord::Base
 
   def create_order_notice
     if !offline_booking && email_status == ''
-      self.notifications.new.create_delayed_notice
+      if ticket_status == 'booked' && (payment_status == 'blocked' || payment_status == 'pending')
+        self.notifications.new.create_delayed_notice
+      end
     end
   end
 
@@ -131,11 +133,11 @@ class Order < ActiveRecord::Base
   end
 
   def queued_email!
-    update_email_status :queued
+    update_email_status 'queued'
   end
 
   def email_manual!
-    update_email_status :manual
+    update_email_status 'manual'
   end
 
   def update_email_status status = ''
