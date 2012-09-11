@@ -20,6 +20,7 @@ class BookingController < ApplicationController
     @search = PricerForm.load_from_cache(params[:query_key])
     #set_search_context_for_airbrake
     recommendation = Recommendation.deserialize(params[:recommendation])
+    original_booking_classes = recommendation.booking_classes
     track_partner(params[:partner], params[:marker])
     strategy = Strategy.select( :rec => recommendation, :search => @search )
 
@@ -42,7 +43,11 @@ class BookingController < ApplicationController
         :marker => marker
       )
       order_form.save_to_cache
-      render :json => {:success => true, :number => order_form.number}
+      render :json => {
+        :success => true,
+        :number => order_form.number,
+        :changed_booking_classes => (original_booking_classes == recommendation.booking_classes)
+        }
 
       StatCounters.inc %W[enter.preliminary_booking.success]
       StatCounters.inc %W[enter.preliminary_booking.#{partner}.success] if partner
