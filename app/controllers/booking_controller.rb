@@ -108,18 +108,41 @@ class BookingController < ApplicationController
     render :partial => corporate_mode? ? 'corporate' : 'embedded'
   end
 
+  def recalculate_price
+    @order_form = OrderForm.load_from_cache(params[:order][:number])
+    @order_form.people_attributes = params[:person_attributes]
+    @order_form.valid?
+    if @order_form.update_price_and_counts
+      render :partial => 'newprice'
+    else
+      render :partial => 'failed_booking'
+    end
+  end
+
   def pay
     if Conf.site.forbidden_sale
       StatCounters.inc %W[pay.errors.forbidden]
       render :partial => 'forbidden_sale'
       return
     end
-    
+
     @order_form = OrderForm.load_from_cache(params[:order][:number])
     @order_form.people_attributes = params[:person_attributes]
     @order_form.update_attributes(params[:order])
     @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
-    unless @order_form.valid?
+
+    if !@order_form.valid? || @order_form.counts_contradiction
+
+      if @order_form.counts_contradiction
+        if @order_form.update_price_and_counts
+          render :partial => 'newprice'
+          return
+        else
+          render :partial => 'failed_booking'
+          return
+        end
+      end
+
       StatCounters.inc %W[pay.errors.form]
       logger.info "Pay: invalid order: #{@order_form.errors_hash.inspect}"
       render :json => {:errors => @order_form.errors_hash}

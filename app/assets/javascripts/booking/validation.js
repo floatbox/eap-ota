@@ -56,6 +56,14 @@ set: function(data) {
     for (var i = 0, l = this.controls.length; i < l; i++) {
         this.controls[i].set(data[i]);
     }
+},
+get: function() {
+    var data = [];
+    for (var i = 0, l = this.controls.length; i < l; i++) {
+        var control = this.controls[i];
+        data[i] = control.get ? control.get() : '';
+    }    
+    return data;    
 }
 };
 
@@ -114,8 +122,11 @@ format: function(value) {
     return $.trim(value);
 },
 set: function(value) {
-    this.el.val(this.format(value || ''));
+    this.el.val(this.format(value || '')).trigger('input');
     this.validate();
+},
+get: function() {
+    return this.el.val();
 }
 };
 
@@ -150,10 +161,27 @@ validate: function() {
 },
 set: function(value) {
     if (value) {
-        this.select.val(value);
+        this.select.val(value).trigger('change');
     } else {
         this.select.get(0).selectedIndex = 0;
     }
+},
+get: function() {
+    return this.select.val();
+}
+};
+
+/* Checkbox control */
+validator.Checkbox = function(el) {
+    this.el = el;
+    this.disabled = true;
+};
+validator.Checkbox.prototype = {
+set: function(value) {
+    this.el.prop('checked', Boolean(value)).trigger('set');
+},
+get: function() {
+    return this.el.prop('checked') ? 'true' : '';
 }
 };
 
@@ -268,6 +296,7 @@ validate: function(self) {
     clearTimeout(this.timer);
     var value = this.parse(this.dpart.val(), this.mpart.val(), this.ypart.val());
     var error = typeof value === 'string' ? value : this.check(value);
+    this.el.trigger('validate', [error === undefined ? value : undefined]);
     if (this.update(error) && self) {
         this.apply();
     }
@@ -315,8 +344,16 @@ set: function(value) {
     var vparts = value ? value.split('.') : [];
     this.parts.val(function(i) {
         return vparts[i] || '';
-    });
+    }).trigger('input');
     this.validate();
+},
+get: function() {
+    if (this.error) return '';
+    var parts = [];
+    this.parts.each(function(i) {
+        parts[i] = $(this).val();
+    });
+    return parts.join('.');
 }
 };
 
@@ -358,6 +395,9 @@ set: function(value) {
         this.el.find('.bfp-sex-' + value + ' input').prop('checked', true).trigger('set');
     }
     this.change(Boolean(value));
+},
+get: function() {
+    return this.el.find('input:checked').val() || '';
 },
 change: function(checked) {
     if (checked) {

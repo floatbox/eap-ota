@@ -1,5 +1,5 @@
 <% price_total = @order_form.recommendation.price_with_payment_commission.round.to_i %>
-<div class="bf-result" data-type="newprice" data-price="<%= price_total %>">
+<div class="bf-result" data-type="newprice">
     <h5 class="bfnp-title">Авиакомпания изменила стоимость этого предложения</h5>
     <h6 class="bfnp-content">Новая стоимость — <%= price_total %>&nbsp;<%= rubles(price_total) %> (на {1} {0})</h6>
     <p class="bfnp-tip">Так иногда бывает. Цена может меняться как в&nbsp;большую, так и&nbsp;в&nbsp;меньшую сторону. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.</p>
@@ -12,7 +12,7 @@
     <% price_fare = @order_form.recommendation.price_fare.round.to_i %>
     <% price_tax_and_markup = @order_form.recommendation.price_tax_and_markup.round.to_i %>
     <% price_discount = @order_form.recommendation.price_discount.round.to_i %>    
-    <div class="bfnp-data">
+    <div class="bfnp-data" data-price="<%= price_total %>">
         <p class="bffp-nd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total %></span>&nbsp;<%= rubles(price_total) %></p>
         <p class="bffp-wd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total + 400 %></span>&nbsp;<%= rubles(price_total + 400) %></p>
         <p class="bffp-tip"><%= 'за всех пассажиров' if @order_form.people.many? %></p>

@@ -147,7 +147,7 @@
     margin-right: 10px;
 }
 #bfc-email {
-    width: 332px;
+    width: 292px;
 }
 #bfc-phone {
     width: 185px;
@@ -157,8 +157,10 @@
 .bf-persons {
     padding-right: 0;
 }
-.bf-persons .bf-label {
-    margin: 0 0 8px;
+.bfp-label {
+    margin: 0 0 5px;
+    font-size: 11px;
+    text-transform: uppercase;
 }
 .bf-persons .bfs-title {
     position: relative;
@@ -183,10 +185,10 @@
     color: #777;
 }
 #bfph-passport {
-    left: 690px;
+    left: 645px;
 }
 #bfph-expiration {
-    left: 830px;
+    left: 805px;
 }
 .bfph-link {
     text-decoration: underline;
@@ -196,7 +198,31 @@
     padding-right: 10px;
 }
 .bfp-spacer {
-    height: 20px;
+    height: 14px;
+}
+
+/* Add/remove person */
+.bfp-add {
+    margin: 14px 0 0;
+    text-align: center;
+    color: #777;
+}
+.bfpa-link:before {
+    content: '+';
+    position: absolute;
+    margin: 0.1em 0 0 -1em;
+    color: #777;
+    font-weight: bold;
+}
+.bfp-remove {
+    width: 15px;
+    padding-top: 3px;
+    text-align: right;
+    font-size: 20px;
+}
+.bfpr-link {
+    color: #777;
+    cursor: pointer;
 }
 
 /* Person fields */
@@ -204,13 +230,13 @@
     width: 125px;
 }
 .bfp-lname {
-    width: 185px;
+    width: 145px; 
 }
 .bfp-nationality .bf-field {
-    width: 107px;
+    width: 102px;
 }
 .bfp-passport {
-    width: 118px;
+    width: 138px;
 }
 
 /* Person sex */
@@ -300,13 +326,13 @@
     padding-top: 5px;
 }
 .bfp-bonus-type .bf-field {
-    width: 170px;
+    width: 212px;
 }
 .bfp-bonus-type .bf-select-arrow {
     background: url(/images/booking/select.png) no-repeat 100% -30px;
 }
 .bfp-bonus-number {
-    width: 140px;
+    width: 135px;    
 }
 .bfpb-placeholder {
     margin: 4px 7px;

@@ -131,6 +131,9 @@ validate: function() {
         Queries.history.select();
         page.location.set('search');
         page.title.set();
+        if (typeof sessionStorage !== 'undefined') {
+            sessionStorage.removeItem('personsAmount');
+        }
     }
     results.header.hide();
     this.valid = values.warnings.length === 0;

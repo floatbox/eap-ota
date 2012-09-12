@@ -29,6 +29,15 @@ init: function() {
     this.required.delegate('.bffr-link', 'click', function() {
         that.focus($('#' + $(this).attr('data-field')));
     });
+    this.wrongPrice = false;    
+    if (typeof sessionStorage !== 'undefined') {
+        for (var i = this.sections.length; i--;) {
+            var section = this.sections[i];
+            if (section.load) {
+                section.load();
+            }
+        }
+    }    
     this.validate(true);
 },
 position: function() {
@@ -147,19 +156,21 @@ process: function(s) {
     switch (this.result.attr('data-type')) {
     case 'newprice':
         var op = Number(this.el.find('.bf-newprice').attr('data-price'));
-        var np = Number(this.result.attr('data-price'));
-        booking.processPrice(this.result, np - op);
-        trackEvent('Бронирование', 'Изменилась цена', np - op > 0 ? 'Стало дороже' : 'Стало дешевле');
-        this.result.find('.obb-title').click(function() {
+        var np = Number(this.result.find('.bfnp-data').attr('data-price'));
+        if (op === np) {
             that.el.submit();
             that.footer.show();
-        });
-        var wd = this.el.find('.bff-price .bffp-wd').is(':visible');
-        var context = this.el.find('.bffp-content').html(this.result.find('.bfnp-data').html());
-        context.find('.bffp-wd').toggle(wd);
-        context.find('.bffp-nd').toggle(!wd);
-        this.el.find('.bf-newprice').attr('data-price', np);
-        this.back = true;
+            return;
+        } else {
+            booking.processPrice(this.result, np - op);
+            trackEvent('Бронирование', 'Изменилась цена', np - op > 0 ? 'Стало дороже' : 'Стало дешевле');
+            this.result.find('.obb-title').click(function() {
+                that.el.submit();
+                that.footer.show();
+            });
+            this.updatePrice(this.result.find('.bfnp-data'));
+            this.back = true;
+        }
         break;
     case '3dsecure':
         this.result.find('.obb-title').click(function() {
@@ -188,6 +199,43 @@ process: function(s) {
     if ($w.scrollTop() < spos) {
         $w.smoothScrollTo(spos);
     }
+},
+hidePrice: function() {
+    this.footer.find('.bff-passengers').remove();
+    var content = '<div class="bffp-content"><p>Стоимость изменилась —</p><p class="bffp-hint">Заполните {0},<br> чтобы узнать новую стоимость.</p></div>';
+    var title = this.el.find('.bf-persons .bfst-text').html().toLowerCase();
+    var message = $('<div class="bff-passengers"></div>').html(content.absorb(title));
+    this.footer.find('.bff-price').hide().after(message);
+    this.wrongPrice = true;
+},
+getPrice: function() {
+    var that = this;
+    $.ajax({
+        type: 'POST',
+        url: '/booking/recalculate_price',
+        data: this.el.serialize(),
+        success: function(s) {
+            if (typeof s === 'string' && s.length) {
+                that.updatePrice($(s).find('.bfnp-data'));
+            } else {
+                that.footer.find('.bff-passengers').remove();
+            }
+        },
+        error: function() {
+            that.footer.find('.bff-passengers').remove();
+        }
+    });
+    this.footer.find('.bff-passengers .bffp-content').html('<p class="bffp-progress">Обновляем стоимость &mdash;</p>');
+    this.wrongPrice = false;
+},
+updatePrice: function(content) {
+    this.footer.find('.bff-passengers').remove();
+    this.footer.find('.bff-price').show();
+    var wd = this.footer.find('.bff-price .bffp-wd').is(':visible');
+    var context = this.footer.find('.bff-price .bffp-content').html(content.html());
+    context.find('.bffp-wd').toggle(wd);
+    context.find('.bffp-nd').toggle(!wd);
+    this.el.find('.bf-newprice').attr('data-price', content.attr('data-price'));
 }
 };
 
@@ -231,6 +279,16 @@ initPhone: function() {
         return v;
     };
     this.controls.push(phone);
+},
+save: function() {
+    sessionStorage.setItem('contactsData', '["' + this.get().join('", "') + '"]');
+},
+load: function() {
+    var that = this;
+    this.set($.parseJSON(sessionStorage.getItem('contactsData')) || []);
+    this.el.change(function() {
+        that.save();
+    });    
 }
 };
 
@@ -240,9 +298,6 @@ init: function() {
     var that = this;
     this.latinWarning = $('#bfw-name-latin');
     this.orderWarning = $('#bfw-name-order');
-    this.rows = this.el.find('.bfp-row').map(function() {
-        return new validator.Person($(this), that);
-    });
     this.orderWarning.find('.bfwno-replace').click(function() {
         var person = that.orderWarning.person;
         var fn = person.firstname.el.val();
@@ -254,16 +309,144 @@ init: function() {
     this.orderWarning.find('.bfwno-leave').click(function() {
         that.orderWarning.fadeOut(50);
     });
+    this.title = this.el.find('.bfst-text');
+    this.table = this.el.find('.bfp-table');
+    this.add = this.el.find('.bfp-add');
+    this.add.find('.bfpa-link').click(function() {
+        booking.form.wrongPrice = false;
+        var data = that.savedRows && that.savedRows[that.rows.length];
+        var row = that.addRow(that.rows.length);
+        that.applyRows();
+        if (data) {
+            row.set(data);
+        }
+        booking.form.hidePrice();
+        that.validate(true);
+        booking.form.validate();
+    });
+    this.table.on('click', '.bfpr-link', function() {
+        booking.form.wrongPrice = false;
+        that.removeRow(Number($(this).closest('tbody').attr('data-index')));
+        booking.form.hidePrice();        
+        that.validate(true);
+        booking.form.validate();
+    });
+    this.lastFlightDate = Date.parseDMY(this.table.attr('data-date'));
+    this.sample = this.el.find('.bfp-row').remove();
+    this.rows = [];
+    this.rowsLimit = Math.min(8, Number(this.table.attr('data-max')));
+    this.cachedPeople = this.table.attr('data-people');
+    var total = Number(this.table.attr('data-total'));
+    for (var i = 0; i < total; i++) {
+        this.addRow(i);
+    }
+    this.applyRows();
+},
+save: function() {
+    var data = [];
+    for (var i = this.rows.length; i--;) {
+        this.savedRows[i] = this.rows[i].get();
+    }
+    for (var i = 0, im = this.savedRows.length; i < im; i++) {
+        data.push('["' + this.savedRows[i].join('", "') + '"]');
+    }
+    sessionStorage.setItem('personsAmount', this.rows.length);
+    sessionStorage.setItem('personsData', '[' + data.join(', ') + ']');
+},
+load: function() {
+    var that = this;
+    var data = $.parseJSON(sessionStorage.getItem('personsData')) || [];
+    var amount = Math.min(Number(sessionStorage.getItem('personsAmount')) || this.rows.length, this.rowsLimit);
+    var wrongPrice = amount !== this.rows.length;
+    for (var i = 0; i < amount; i++) {
+        var rd = data[i];
+        var row = this.rows[i] || this.addRow(i);
+        if (rd) {
+            // Убираем бонусную карту, если нужной нет в списке
+            if (row.programIndex && rd.length > row.programIndex && rd[row.programIndex]) {
+                var programs = row.controls[row.programIndex].values;
+                if (!programs[rd[row.programIndex]]) {
+                    rd.length = row.programIndex - 1;
+                }
+            }
+            this.rows[i].set(rd);
+        }
+    }
+    if (wrongPrice) {
+        booking.form.hidePrice();
+    }
+    this.savedRows = data;
+    this.applyRows();
+    this.table.change(function() {
+        that.save();
+    });
+},
+addRow: function(index) {
+    var that = this;
+    var temp = $('<div><table></table></div>');
+    temp.find('table').append(this.sample.clone());
+    temp.html(temp.html().replace(/\$n/g, index.toString()));
+    var row = temp.find('tbody').appendTo(this.table).attr('data-index', index);
+    this.rows[index] = new validator.Person(row, that);
+    return this.rows[index];
+},
+removeRow: function(index) {
+    for (var i = index, im = this.rows.length - 1; i < im; i++) {
+        this.rows[i].set(this.rows[i + 1].get());
+    }
+    this.rows[this.rows.length - 1].el.remove();
+    this.rows.length--;
+    if (this.savedRows) {
+        this.savedRows.splice(this.rows.length, 1);
+    }
+    if (this.rows.length === 0) {
+        this.addRow(0);
+    }
+    this.table.trigger('change');
+    this.applyRows();
+    this.validate(true);
+},
+applyRows: function() {
+    var n = this.rows.length;
+    this.add.toggle(n < this.rowsLimit);
+    this.title.html(local.booking.passengers[n === 1 ? 'one' : 'many']);
 },
 validate: function(forced) {
-    var wrong = [], empty = [];
-    for (var i = 0, l = this.rows.length; i < l; i++) {
+    var wrong = [], empty = [], people = {a: 0, c: 0, i: 0};
+    for (var i = 0, im = this.rows.length; i < im; i++) {
         var person = this.rows[i];
         if (forced) person.validate(true);
         wrong = wrong.concat(person.wrong);
-        empty = empty.concat(person.empty);
+        if (im === 1) {
+            empty = empty.concat(person.empty);
+        } else if (person.empty) {
+            var num = local.numbers.ordinalgen[i];
+            for (var e = 0, em = person.empty.length; e < em; e++) {
+                empty.push(person.empty[e].replace('пассажира', num + ' пассажира'));
+            }
+        }
+        if (person.type) {
+            people[person.type]++;
+        }
     }
-    this.toggle(wrong.length + empty.length === 0);
+    if (people.a + people.c + people.i === this.rows.length) {
+        if (people.a === 0 && people.c + people.i > 0) {
+            wrong.push(local.swarnings.noadults + '.');
+        }
+        var merged = [people.a, people.c, people.i].join('');
+        if (merged !== this.cachedPeople) {
+            booking.form.hidePrice();
+            this.cachedPeople = merged;
+        }
+    }
+    clearTimeout(this.getPriceTimeout);
+    var valid = wrong.length + empty.length === 0;
+    if (valid && booking.form.wrongPrice) {
+        this.getPriceTimeout = setTimeout(function() { 
+            booking.form.getPrice();
+        }, 100);
+    }    
+    this.toggle(valid);
     this.wrong = wrong;
     this.empty = empty;
 }
@@ -354,6 +537,7 @@ initSex: function() {
     this.controls.push(this.gender);
 },
 initBirthday: function() {
+    var that = this;
     var date = this.el.find('.bfp-date').eq(0);
     var birthday = new validator.Date(date, {
         empty: '{дату рождения} пассажира',
@@ -363,7 +547,27 @@ initBirthday: function() {
     }, function(date) {
         if (date.getTime() > this.ctime) return 'improper';
     });
-    this.controls.push(birthday);
+    var withseat = new validator.Checkbox(this.el.find('.bfpo-infant input'));
+    withseat.el.on('click set', function() {
+        that.type = this.checked ? 'c' : 'i';
+        that.section.validate();
+    });
+    birthday.el.on('validate', function(event, date) {
+        var type = undefined;
+        if (date) {
+            var age = that.section.lastFlightDate.age(date);
+            type = age < 12 ? (age < 2 ? 'i' : 'c') : 'a';
+        }
+        if (type !== that.type) {
+            /*that.type = type === 'i' ? (withseat.el.prop('checked') ? 'c' : 'i') : type;
+            that.el.find('.bfpo-adult').toggle(type !== 'i');
+            that.el.find('.bfpo-infant').toggle(type === 'i');*/
+            that.type = type;
+            that.section.validate();
+            booking.form.validate();
+        }
+    });
+    this.controls.push(birthday, withseat);
 },
 initNationality: function() {
     var nationality = new validator.Select(this.el.find('.bfp-nationality'));
@@ -397,14 +601,8 @@ initExpiration: function() {
         if (date.getTime() < this.ctime) return 'improper';
     });
     expiration.future = true;
-    var permanent = {
-        disabled: true,
-        el: this.el.find('input[id$="permanent"]'),
-    };
-    permanent.set = function(value) {
-        this.el.prop('checked', Boolean(value)).trigger('set');
-    };
-    permanent.el.bind('click set', function(event) {
+    var permanent = new validator.Checkbox(this.el.find('input[id$="permanent"]'));
+    permanent.el.on('click set', function(event) {
         expiration.disabled = this.checked;
         with (expiration) {
             el.toggleClass('bf-disabled', disabled);
@@ -430,9 +628,14 @@ togglePermanent: function() {
 initBonus: function() {
     var checkbox = this.el.find('input[id$="bonus"]');
     if (checkbox.length === 0) return;
+    var exist = new validator.Checkbox(checkbox);
     var row = this.el.find('.bfp-bonus-fields');
     var program = new validator.Select(this.el.find('.bfp-bonus-type'));
-    this.controls.push(program);
+    var options = program.select.get(0).options;
+    program.values = {};
+    for (var i = options.length; i--;) {
+        program.values[options[i].value] = true;
+    }
     var number = new validator.Text(row.find('.bfp-bonus-number'), {
         empty: '{номер бонусной карты} пассажира',
         letters: '{Номер бонусной карты} нужно ввести латинскими буквами и цифрами.',
@@ -444,7 +647,7 @@ initBonus: function() {
     number.format = function(value) {
         return $.trim(value.toUpperCase().replace(/[^A-Z\d]/g, ''));
     };
-    checkbox.click(function() {
+    exist.el.on('click set', function(event) {
         var disabled = !this.checked;
         row.find('select').prop('disabled', disabled);
         row.toggleClass('latent', disabled);
@@ -452,14 +655,15 @@ initBonus: function() {
         number.disabled = disabled;
         number.validate();
         number.apply();
-        if (this.checked) {
+        if (event.type !== 'set' && this.checked) {
             number.el.focus();
         }
     });
-    this.controls.push(number);
+    this.programIndex = this.controls.length + 1;
+    this.controls.push(exist, program, number);
 },
 toggle: function(ready) {
-    this.el.toggleClass('.bfp-ready', ready);
+    this.el.toggleClass('bfp-ready', ready);
 }
 });
 
