@@ -126,6 +126,7 @@
     border: none;
     padding: none;
     opacity: 0;
+    filter: alpha(opacity=0);
 }
 
 /* Checkbox */
@@ -160,6 +161,7 @@
 .bfp-label {
     margin: 0 0 5px;
     font-size: 11px;
+    line-height: 15px;
     text-transform: uppercase;
 }
 .bf-persons .bfs-title {

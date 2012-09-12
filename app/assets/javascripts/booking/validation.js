@@ -14,7 +14,7 @@ update: function(error) {
 getGender: function(name) {
     var sample = ' ' + name.toLowerCase() + ',';
     if (this.names.m.contains(sample)) return 'm';
-    if (this.names.f.contains(sample)) return 'f';    
+    if (this.names.f.contains(sample)) return 'f';
 }
 };
 
@@ -23,6 +23,8 @@ validator.Section = function(el, options) {
     this.el = el;
     $.extend(this, options);
     this.controls = [];
+    this.empty = [];
+    this.wrong = [];
     this.init();
 };
 validator.Section.prototype = {
@@ -62,8 +64,8 @@ get: function() {
     for (var i = 0, l = this.controls.length; i < l; i++) {
         var control = this.controls[i];
         data[i] = control.get ? control.get() : '';
-    }    
-    return data;    
+    }
+    return data;
 }
 };
 
@@ -332,8 +334,8 @@ parse: function(d, m, y) {
     if (y.length < 4) {
         this.fid = this.yfid;
         return 'empty';
-    }    
-    var date = new Date(yn, mn - 1, dn, 12);    
+    }
+    var date = new Date(yn, mn - 1, dn, 12);
     if (date.getDate() !== dn || date.getMonth() !== mn - 1 || date.getFullYear() !== yn) {
         this.fid = this.dfid;
         return 'wrong';
@@ -385,7 +387,7 @@ init: function() {
             input.focus();
         }, 10);
     });
-    this.fid = this.el.attr('id');    
+    this.fid = this.el.attr('id');
     this.change(false);
 },
 set: function(value) {
@@ -420,7 +422,7 @@ apply: function() {
 validator.CardNumber = function(el, messages) {
     this.el = el;
     this.messages = messages;
-    this.update = validator.update;    
+    this.update = validator.update;
     this.error = null;
     this.init();
 };
@@ -451,7 +453,7 @@ init: function() {
             el.focus();
             field.attr('maxlength', 4);
         }, 10);
-    });    
+    });
     this.$validate = function() {
         that.validate(true);
     };
@@ -617,7 +619,7 @@ check: function(m, y) {
     if (/\D/.test(m)) return 'letters';
     if (Number(m) > 12) return 'wrong';
     this.fid = 'bc-exp-year';
-    if (/\D/.test(y)) return 'letters';    
+    if (/\D/.test(y)) return 'letters';
     if (y.length < 2) return 'empty';
     if (y + m < this.time) return 'improper';
 },

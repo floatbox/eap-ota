@@ -14,6 +14,8 @@ init: function() {
         event.preventDefault();
         if (!that.button.hasClass('bfb-disabled')) {
             that.submit();
+        } else {
+            trackEvent('Бронирование', 'Нажатие заблокированной кнопки', that.required.text() || 'Нет ошибок');
         }
     });
     this.footer = this.el.find('.bf-footer');
@@ -30,6 +32,7 @@ init: function() {
         that.focus($('#' + $(this).attr('data-field')));
     });
     this.wrongPrice = false;    
+    this.validate(true);
     if (typeof sessionStorage !== 'undefined') {
         for (var i = this.sections.length; i--;) {
             var section = this.sections[i];
@@ -37,8 +40,8 @@ init: function() {
                 section.load();
             }
         }
-    }    
-    this.validate(true);
+        this.validate(true);        
+    }
 },
 position: function() {
     return this.el.offset().top - 36 - results.header.height;
@@ -549,8 +552,10 @@ initBirthday: function() {
     });
     var withseat = new validator.Checkbox(this.el.find('.bfpo-infant input'));
     withseat.el.on('click set', function() {
-        that.type = this.checked ? 'c' : 'i';
-        that.section.validate();
+        if (that.type === 'c' || that.type === 'i') {
+            that.type = this.checked ? 'c' : 'i';
+            that.section.validate();
+        }
     });
     birthday.el.on('validate', function(event, date) {
         var type = undefined;
