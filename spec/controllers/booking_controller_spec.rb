@@ -104,7 +104,7 @@ describe BookingController do
 
       before do
         # stubbing preliminary_booking internal methods
-        Recommendation.stub(:deserialize)
+        Recommendation.stub(:deserialize).and_return(Recommendation.new(:booking_classes => ['Y']))
         strategy = mock('Strategy', check_price_and_availability: nil).as_null_object
         Strategy.stub(:select).and_return(strategy)
         PricerForm.stub(:load_from_cache).and_return(pricer)

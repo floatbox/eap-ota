@@ -20,6 +20,10 @@
     font-size: 14px;
     line-height: 16px;
 }
+.bf-newprice-top {
+    background: #EDEDE3;
+    padding: 14px 14px;
+}
 
 /* Основной блок */
 #booking {
