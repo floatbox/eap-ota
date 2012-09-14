@@ -46,6 +46,7 @@ class Ticket < ActiveRecord::Base
   has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount, :commission_our_markup
   include Pricing::Ticket
 
+  before_validation :check_currency
   before_save :recalculate_commissions, :set_validating_carrier
 
   scope :uncomplete, where(:ticketed_date => nil)
@@ -307,5 +308,18 @@ class Ticket < ActiveRecord::Base
     Strategy.select(:ticket => self).raw_ticket
   rescue => e
     e.message
+  end
+
+  def check_currency
+    if original_fare_currency && original_fare_currency != "RUB"
+      fare_money = Money.new(original_fare_cents, original_fare_currency)
+      rate = CBR.exchange_on(ticketed_date || Date.today).get_rate(original_fare_currency,"RUB")
+      self.price_fare = (fare_money*rate).to_f.to_i
+    end
+    if original_tax_currency && original_tax_currency != "RUB"
+      tax_money = Money.new(original_tax_cents,original_tax_currency )
+      rate = CBR.exchange_on(ticketed_date || Date.today).get_rate(original_fare_currency,"RUB")
+      self.price_tax = (tax_money*rate).to_f.to_i
+    end
   end
 end

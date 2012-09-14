@@ -49,7 +49,14 @@ module Amadeus
             fi.xpath('r:fareDataSupInformation[r:fareDataQualifier="B"]')
           )
           tax_money = total_money - fare_money
-          fare_details = {:price_fare => fare_money, :price_fare_base => fare_money, :price_tax => tax_money}
+          fare_details = {
+            :price_fare => fare_money,
+            :price_fare_base => fare_money,
+            :price_tax => tax_money,
+            :original_fare_cents => fare_money.cents,
+            :original_fare_currency => fare_money.currency_as_string,
+            :original_tax_cents => tax_money.cents,
+            :original_tax_currency => tax_money.currency_as_string }
 
           infant_flag = fare_node.xpath('r:statusInformation/r:firstStatusDetails[r:tstFlag="INF"]').present?
           passenger_refs =
@@ -84,10 +91,7 @@ module Amadeus
 
       def drop_currency money_prices
         Hash[ money_prices.map { |type, money|
-          unless money.currency_as_string == "RUB"
-            raise "used legacy #prices_with_refs on unsupported currency '#{money.currency_as_string}'"
-          end
-          [type, money.to_f.to_i]
+          [type, (money.is_a?(Money) ? money.to_f.to_i : money ) ]
         } ]
       end
 
