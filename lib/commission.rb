@@ -2403,6 +2403,7 @@ commission "1/0"
 
 carrier "J2", "Azerbaijan Hava Yollari"
 ########################################
+carrier_defaults :disabled => 'нет ETKT'
 
 example 'svocdg'
 agent    "1 рубль за 1 выписанный билет на стоке 771"
