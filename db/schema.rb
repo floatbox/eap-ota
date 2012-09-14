@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120903143433) do
+ActiveRecord::Schema.define(:version => 20120910164251) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -410,11 +410,11 @@ ActiveRecord::Schema.define(:version => 20120903143433) do
     t.string   "source"
     t.string   "pnr_number"
     t.string   "number"
-    t.decimal  "price_fare",                :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_fare",                             :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "commission_subagent"
-    t.decimal  "price_tax",                 :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.decimal  "price_share",               :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.decimal  "price_consolidator_markup", :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_tax",                              :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_share",                            :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_consolidator_markup",              :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.integer  "order_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -429,27 +429,31 @@ ActiveRecord::Schema.define(:version => 20120903143433) do
     t.string   "office_id"
     t.date     "ticketed_date"
     t.string   "validating_carrier"
-    t.string   "kind",                                                    :default => "ticket"
+    t.string   "kind",                                                                 :default => "ticket"
     t.integer  "parent_id"
-    t.decimal  "price_penalty",             :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_penalty",                          :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.text     "comment"
     t.string   "commission_agent"
     t.string   "commission_consolidator"
     t.string   "commission_blanks"
-    t.decimal  "price_consolidator",        :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.decimal  "price_blanks",              :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.decimal  "price_agent",               :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.decimal  "price_subagent",            :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_consolidator",                     :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_blanks",                           :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_agent",                            :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_subagent",                         :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "commission_discount"
-    t.decimal  "price_discount",            :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_discount",                         :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "mso_number"
-    t.decimal  "corrected_price",           :precision => 9, :scale => 2
+    t.decimal  "corrected_price",                        :precision => 9, :scale => 2
     t.string   "commission_our_markup"
-    t.decimal  "price_our_markup",          :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.string   "vat_status",                                              :default => "unknown", :null => false
+    t.decimal  "price_our_markup",                       :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.string   "vat_status",                                                           :default => "unknown", :null => false
     t.date     "dept_date"
-    t.decimal  "price_extra_penalty",       :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_extra_penalty",                    :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "baggage_info"
+    t.integer  "original_fare_cents"
+    t.string   "original_fare_currency",    :limit => 3
+    t.integer  "original_tax_cents"
+    t.string   "original_tax_currency",     :limit => 3
   end
 
   add_index "tickets", ["kind"], :name => "index_tickets_on_kind"
