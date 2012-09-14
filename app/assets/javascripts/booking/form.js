@@ -12,10 +12,14 @@ init: function() {
     });
     this.el.submit(function(event) {
         event.preventDefault();
-        if (!that.button.hasClass('bfb-disabled')) {
-            that.submit();
-        } else {
+        if (that.button.hasClass('bfb-disabled')) {
+            that.validate(true); // если вдруг не отследили изменение какого-то поля
+        }
+        if (that.button.hasClass('bfb-disabled')) {
             trackEvent('Бронирование', 'Нажатие заблокированной кнопки', that.required.text() || 'Нет ошибок');
+            that.required.find('.bffr-link').eq(0).click();
+        } else {
+            that.submit();
         }
     });
     this.footer = this.el.find('.bf-footer');

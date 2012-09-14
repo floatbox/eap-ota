@@ -39,8 +39,11 @@ innerHeight: function() {
 loadLocation: function() {
     $.get('/whereami', function(data) {
         var city = (data && data.city_name) || 'Москва';
+        var dpt = search.locations.segments[0].dpt;
+        if (dpt.field.val() === '') {
+            dpt.set(city);
+        }
         search.defaultValues.segments = [{dpt: city}];
-        search.locations.segments[0].dpt.set(city);
     });
 },
 restoreResults: function(key) {
