@@ -32,4 +32,7 @@ var trackPage = function(url) {
 var trackEvent = function(category, action, label) {
     _gaq.push(['_trackEvent', category, action, label]);
 };
+window.onerror = function(msg, url, line) {
+    _gaq.push(['_trackEvent', 'Ошибка JS', msg, url + ': ' + line]);
+};
 </script>

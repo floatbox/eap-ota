@@ -45,6 +45,9 @@ validate: function(forced) {
         }
         if (control.error && !control.disabled) {
             (control.error === 'empty' ? empty : wrong).push(control.message);
+            if (!control.message) {
+                trackEvent('Ошибка JS', 'Нет сообщения об ошибке «' + control.error + '» в поле ' + control.el.get(0).className);
+            }
         }
     }
     this.toggle(wrong.length + empty.length === 0);
@@ -81,7 +84,7 @@ validator.Text = function(el, messages, check) {
 validator.Text.prototype = {
 init: function() {
     var that = this;
-    this.el.bind('keyup propertychange input', function() {
+    this.el.bind('keyup propertychange input paste', function() {
         that.change();
     }).focus(function() {
         that.el.addClass('bf-focus');
@@ -452,6 +455,7 @@ init: function() {
             }
             el.focus();
             field.attr('maxlength', 4);
+            that.change();
         }, 10);
     });
     this.$validate = function() {
