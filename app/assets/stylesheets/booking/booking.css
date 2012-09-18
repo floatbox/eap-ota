@@ -189,14 +189,16 @@
     text-shadow: rgba(0, 0, 0, 0.3) 1px 1px 0;
     cursor: pointer;
 }
-.bfb-disabled .bfb-left {
+.bfb-disabled .bfb-left,
+.bfb-sending .bfb-left {
     background-position: 100% -60px;
 }
-.bfb-disabled .bfb-right {
+.bfb-disabled .bfb-right,
+.bfb-sending .bfb-right {
     background-position: 0 -60px;
 }
-.bfb-disabled .bfb-title {
-    /*color: #b8b39c; для жёлтого фона */
+.bfb-disabled .bfb-title,
+.bfb-sending .bfb-title {
     color: #b8b8a5;
     text-shadow: none;
     cursor: default;
