@@ -46,6 +46,7 @@ class Ticket < ActiveRecord::Base
   has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount, :commission_our_markup
   include Pricing::Ticket
 
+  before_validation :update_price_fare_and_add_parent, :if => :parent_number
   before_validation :check_currency
   before_save :recalculate_commissions, :set_validating_carrier
 
@@ -54,7 +55,6 @@ class Ticket < ActiveRecord::Base
 
   before_save :set_refund_data, :if => lambda {kind == "refund"}
   validates_presence_of :price_fare, :price_tax, :price_our_markup, :price_penalty, :price_discount, :price_consolidator, :if => lambda {kind = 'refund'}
-  before_validation :update_price_fare_and_add_parent, :if => :parent_number
   after_save :update_parent_status, :if => :parent
   after_destroy :update_parent_status, :if => :parent
   validates_presence_of :comment, :if => lambda {kind == "refund"}
@@ -86,12 +86,13 @@ class Ticket < ActiveRecord::Base
   def price_fare_base
     @price_fare_base = BigDecimal(@price_fare_base) if @price_fare_base && @price_fare_base.class == String
     @price_fare_base ||= if parent
-      price_fare + parent.price_fare_base
+      original_price_fare + parent.price_fare_base
     else
-      price_fare
+      original_price_fare
     end
+  rescue TypeError
+  #  TODO: придумать, что делать в случае несовпадения типов
   end
-
    # whitelist офис-айди, имеющих к нам отношение. В брони иногда попадают "не наши" билеты
    # для всех айди в базе можно использовать: Ticket.uniq.pluck(:office_id).compact.sort
    def self.office_ids
@@ -110,10 +111,12 @@ class Ticket < ActiveRecord::Base
     if exchanged_ticket = order.tickets.select{|t| t.code.to_s == parent_code.to_s && t.number.to_s[0..9] == parent_number.to_s}.first
       self.parent = exchanged_ticket
       if price_fare_base && price_fare_base > 0
-        self.price_tax += parent.price_fare_base #в противном случае tax может получиться отрицательным
-        self.price_fare = price_fare_base - parent.price_fare_base
+        self.original_price_tax += parent.price_fare_base #в противном случае tax может получиться отрицательным
+        self.original_price_fare = price_fare_base - parent.price_fare_base
       end
     end
+  rescue TypeError
+  #  TODO: придумать, что делать в случае несовпадения типов
   end
 
   def update_parent_status
@@ -312,14 +315,24 @@ class Ticket < ActiveRecord::Base
 
   def check_currency
     if original_fare_currency && original_fare_currency != "RUB"
-      fare_money = Money.new(original_fare_cents, original_fare_currency)
-      rate = CBR.exchange_on(ticketed_date || Date.today).get_rate(original_fare_currency,"RUB")
-      self.price_fare = (fare_money*rate).to_f.to_i
+      self.price_fare = CBR.exchange_on(ticketed_date).exchange_with(original_price_fare,"RUB").to_f
     end
     if original_tax_currency && original_tax_currency != "RUB"
-      tax_money = Money.new(original_tax_cents,original_tax_currency )
-      rate = CBR.exchange_on(ticketed_date || Date.today).get_rate(original_fare_currency,"RUB")
-      self.price_tax = (tax_money*rate).to_f.to_i
+      self.price_tax = CBR.exchange_on(ticketed_date).exchange_with(original_price_tax,"RUB").to_f
     end
+    self.price_fare = original_price_fare.to_f unless price_fare
+    self.price_tax = original_price_tax.to_f unless price_tax
   end
+
+  composed_of :original_price_fare,
+  :class_name => "Money",
+  :mapping => [%w(original_fare_cents cents), %w(original_fare_currency currency_as_string)],
+  :constructor => Proc.new { |original_fare_cents, original_fare_currency| original_fare_cents ? Money.new(original_fare_cents, original_fare_currency || Money.default_currency) : nil} ,
+  :converter => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
+
+  composed_of :original_price_tax,
+  :class_name => "Money",
+  :mapping => [%w(original_tax_cents cents), %w(original_tax_currency currency_as_string)],
+  :constructor => Proc.new { |original_tax_cents, original_tax_currency| original_tax_cents ? Money.new(original_tax_cents, original_tax_currency || Money.default_currency)  : nil},
+  :converter => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 end
