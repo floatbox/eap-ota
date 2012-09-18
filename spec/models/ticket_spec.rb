@@ -188,26 +188,34 @@ describe Ticket do
   describe "#update_price_fare_and_add_parent" do
 
     before(:each) do
-      @old_ticket = Ticket.new(:price_fare => 1000, :code => '456', :number => '2341111111', :id => 10)
+      @old_ticket = Ticket.new(:original_price_fare => 1000.to_money, :code => '456', :number => '2341111111', :id => 10)
       subject.valid?
     end
 
     subject do
-      new_ticket_hash = {:number => '123', :code => '456', :price_fare => price_fare, :price_tax => 500, :parent_number => '2341111111', :parent_code => '456', :price_fare_base => price_fare}
+      new_ticket_hash = {
+        :number => '123',
+        :code => '456',
+        :original_price_fare => original_price_fare,
+        :original_price_tax => 500.to_money,
+        :parent_number => '2341111111',
+        :parent_code => '456',
+        :price_fare_base => original_price_fare}
       ticket = Ticket.new(new_ticket_hash)
       ticket.stub_chain(:order, :tickets).and_return([@old_ticket])
       ticket
     end
 
     context 'sets correct price_fare for ticket with fare upgrade' do
-      let(:price_fare) {1200}
-      its(:price_fare){should == 200}
+      let(:original_price_fare) {1200.to_money}
+      its(:original_price_fare){should == 200.to_money}
     end
 
     context 'sets correct price_tax for ticket without fare upgrade but with nonzero price fare' do
-      let(:price_fare) {1000}
-      its(:price_fare) {should == 0}
-      its(:price_tax){should == 1500}
+      let(:original_price_fare) {1000.to_money}
+
+      its(:original_price_fare) {should == 0.to_money}
+      its(:original_price_tax){should == 1500.to_money}
     end
 
   end

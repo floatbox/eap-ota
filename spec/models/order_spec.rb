@@ -220,8 +220,8 @@ describe Order do
           :first_name => 'ALEXANDRA MRS',
           :passport => '4510108712',
           :ticketed_date => Date.new(2011, 8, 30),
-          :price_tax => 1281,
-          :price_fare => 1400,
+          :original_price_tax => 1281.to_money,
+          :original_price_fare => 1400.to_money,
           :validating_carrier => 'SU',
           :status => 'ticketed',
           :office_id => 'MOWR2219U',
@@ -252,7 +252,7 @@ describe Order do
         pnr_resp.stub(:flights).and_return(nil)
         pnr_resp.stub(:exchanged_tickets).and_return({})
         tst_resp = stub('Amadeus::Response::TicketDisplayTST')
-        tst_resp.stub(:prices_with_refs).and_return({})
+        tst_resp.stub(:money_with_refs).and_return({})
         tst_resp.stub(:baggage_with_refs).and_return({})
         @order.stub_chain(:tickets, :where, :every, :update_attribute)
         @order.stub_chain(:tickets, :reload)
