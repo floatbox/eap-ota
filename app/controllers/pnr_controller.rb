@@ -46,11 +46,6 @@ class PNRController < ApplicationController
     render "ticket"
   end
 
-  def show_sent_notice
-    notice = Notification.find(params[:id])
-    render :text => notice.rendered_message
-  end
-
   def error
     Airbrake.notify($!) rescue Rails.logger.error("  can't notify airbrake #{$!.class}: #{$!.message}")
     render 'error', :status => 500

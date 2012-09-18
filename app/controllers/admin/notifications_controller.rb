@@ -6,4 +6,9 @@ class Admin::NotificationsController < Admin::EviterraResourceController
     params[:notification][:typus_user_id] = session[:typus_user_id]
   end
 
+  def show_sent_notice
+    notice = Notification.find(params[:id])
+    render :text => notice.rendered_message
+  end
+
 end
