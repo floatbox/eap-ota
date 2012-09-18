@@ -1106,10 +1106,10 @@ subagent "1% начало перелета из третьей страны в �
 check { not includes(country_iatas.first, 'CN') and includes(country_iatas, 'CN') }
 commission "3%/1%"
 
-strt_date "01.09.2012"
+strt_date "01.01.2013"
 agent "9% от всех опубл. тарифов на рейсы HU (В договоре Interline не прописан.)"
 subagent "7% от опубл. тарифов на собств. рейсы HU"
-not_implemented
+commission "9%/7%"
 
 carrier "HX", "Hong Kong Airlines"
 ########################################
