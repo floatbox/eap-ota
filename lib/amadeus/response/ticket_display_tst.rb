@@ -50,13 +50,9 @@ module Amadeus
           )
           tax_money = total_money - fare_money
           fare_details = {
-            :price_fare => fare_money,
-            :price_fare_base => fare_money,
-            :price_tax => tax_money,
-            :original_fare_cents => fare_money.cents,
-            :original_fare_currency => fare_money.currency_as_string,
-            :original_tax_cents => tax_money.cents,
-            :original_tax_currency => tax_money.currency_as_string }
+            :original_price_fare => fare_money,
+            :original_price_tax => tax_money
+          }
 
           infant_flag = fare_node.xpath('r:statusInformation/r:firstStatusDetails[r:tstFlag="INF"]').present?
           passenger_refs =
@@ -75,11 +71,11 @@ module Amadeus
       end
 
       def total_fare_money
-        money_with_refs.values.every[:price_fare].sum
+        money_with_refs.values.every[:original_price_fare].sum
       end
 
       def total_tax_money
-        money_with_refs.values.every[:price_tax].sum
+        money_with_refs.values.every[:original_price_tax].sum
       end
 
       # временный метод для обеспечения совместимости c текущим кодом
@@ -96,11 +92,11 @@ module Amadeus
       end
 
       def total_fare
-        prices_with_refs.values.every[:price_fare].sum
+        prices_with_refs.values.every[:original_price_fare].sum
       end
 
       def total_tax
-        prices_with_refs.values.every[:price_tax].sum
+        prices_with_refs.values.every[:original_price_tax].sum
       end
 
       def validating_carrier_code
