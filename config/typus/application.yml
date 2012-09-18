@@ -72,7 +72,7 @@ City:
     default: iata, name_ru, name_en, synonym_list, importance, country, region
     list: iata, name_ru, name_en, synonym_list, importance, country, region
     form: iata, iata_ru, name_ru, name_en, synonym_list, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in, lat, lng, importance, country, region, timezone, disabled, search_around
-    csv: iata, name_ru
+    csv: iata, name_ru, name_en, synonym_list, importance, country, region, lat, lng
     options:
       selectors: timezone
   order_by: name_ru

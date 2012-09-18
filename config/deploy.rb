@@ -56,8 +56,8 @@ task :delta do
 end
 
 task :eviterra do
-  server 'eviterra.com', :app, :web
-  role :db, 'eviterra.com', :primary => true
+  server 'bender.eviterra.com', :app, :web
+  role :db, 'bender.eviterra.com', :primary => true
   set :application, "eviterra"
   set :rails_env, 'production'
   set :deploy_to, "/home/#{user}/#{application}"
@@ -118,16 +118,37 @@ namespace :deploy do
     run "cd #{current_path}; RAILS_ENV=#{rails_env} script/delayed_job restart"
   end
 
+  task :restart_services do
+    restart_rambler_daemon
+    restart_delayed_job
+  end
+
 
   after "deploy:finalize_update", "deploy:symlink_shared_configs"
   after "deploy:finalize_update", "deploy:symlink_persistent_cache"
   after "deploy:finalize_update", "deploy:symlink_completer"
-  after "deploy", "deploy:restart_rambler_daemon"
-  after "deploy", "deploy:restart_delayed_job"
+  after "deploy", "deploy:restart_services"
   after "deploy:update_code", "deploy:check_for_pending_migrations"
 
   after "deploy:update", "newrelic:notice_deployment"
 end
+
+desc "Edit local config on all servers and restart instances if updated"
+task :config do
+  require 'tmpdir'
+  remote_path = "#{current_path}/config/local/site.yml"
+  local_path = Dir.tmpdir + '/' + Dir::Tmpname.make_tmpname(['config-', '.yml'], Process.pid)
+  get remote_path, local_path
+  if system(ENV['EDITOR'], local_path)
+    upload local_path, remote_path
+    puts "restarting..."
+    deploy.restart
+    deploy.restart_services
+  else
+    puts "aborted."
+  end
+end
+
 
 # airbrake stuff
 require './config/boot'
