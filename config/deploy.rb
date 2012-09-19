@@ -56,8 +56,8 @@ task :delta do
 end
 
 task :eviterra do
-  server 'eviterra.com', :app, :web
-  role :db, 'eviterra.com', :primary => true
+  server 'bender.eviterra.com', :app, :web
+  role :db, 'bender.eviterra.com', :primary => true
   set :application, "eviterra"
   set :rails_env, 'production'
   set :deploy_to, "/home/#{user}/#{application}"

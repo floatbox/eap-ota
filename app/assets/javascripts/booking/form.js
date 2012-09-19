@@ -12,6 +12,9 @@ init: function() {
     });
     this.el.submit(function(event) {
         event.preventDefault();
+        if (that.button.hasClass('bfb-sending')) {
+            return false;
+        }
         if (that.button.hasClass('bfb-disabled')) {
             that.validate(true); // если вдруг не отследили изменение какого-то поля
         }
@@ -23,6 +26,9 @@ init: function() {
         }
     });
     this.footer = this.el.find('.bf-footer');
+    this.footer.on('mouseenter', function() {
+        that.validate(true);
+    });
     this.footer.find('.bffc-link').click(function() {
         booking.cancel();
     });
@@ -62,11 +68,15 @@ focus: function(control) {
 },
 validate: function(forced) {
     var wrong = [], empty = [];
-    for (var i = 0, l = this.sections.length; i < l; i++) {
+    for (var i = 0, im = this.sections.length; i < im; i++) {
         var section = this.sections[i];
         if (forced) section.validate(true);
-        wrong = wrong.concat(section.wrong);
-        empty = empty.concat(section.empty);
+        for (var l = 0, lm = section.wrong.length; l < lm; l++) {
+            if (section.wrong[l]) wrong.push(section.wrong[l]);
+        }
+        for (var l = 0, lm = section.empty.length; l < lm; l++) {
+            if (section.empty[l]) empty.push(section.empty[l]);
+        }
     }
     var disabled = false;
     this.required.html('');
@@ -92,7 +102,7 @@ validate: function(forced) {
 },
 submit: function() {
     var that = this;
-    this.button.addClass('bfb-disabled');
+    this.button.addClass('bfb-sending');
     this.footer.find('.bff-cancel').hide();
     this.footer.find('.bff-progress').show();
     if (this.result) {
@@ -134,7 +144,7 @@ showErrors: function(errors) {
         }
     }
     this.required.html(wrong.join(' ')).show();
-    this.button.removeClass('bfb-disabled');
+    this.button.removeClass('bfb-sending');
     this.footer.find('.bff-progress').hide();
     this.footer.find('.bff-cancel').show();
 },
@@ -142,7 +152,7 @@ process: function(s) {
     this.footer.hide();
     this.footer.find('.bff-progress').hide();
     this.footer.find('.bff-cancel').show();
-    this.button.removeClass('bfb-disabled');
+    this.button.removeClass('bfb-sending');
     var that = this;
     this.result = $(s).insertAfter(this.el);
     this.result.find('.bfr-cancel').click(function() {
