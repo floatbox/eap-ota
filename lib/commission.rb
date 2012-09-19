@@ -126,7 +126,7 @@ example 'svober/lh/f bersvo'
 example 'svovie/os/j viesvo'
 example 'svozrh/lx/j zrhsvo'
 example 'svolhr/bd lhrsvo'
-agent "9% до особых указаний на продажу Interline от применяемых опубликованных тарифов первого, бизнес, премиального экономического
+agent "5% до особых указаний на продажу Interline от применяемых опубликованных тарифов первого, бизнес, премиального экономического
 и туристического экономического классов на рейсы авиакомпаний Lufthansa (LH), Austrian Airlines (OS), Swiss International Airlines (LX), British Midland Airways (BD) 
 от Москвы и/или через Москву с участком перевозки на рейсы ТРАНСАЭРО. Дополнительное вознаграждение не выплачивается в случае остальных Interline продаж, 
 а также с сумм произведенных возвратов. (Т.е. комиссия по этим Interline будет 9%)"
@@ -135,7 +135,7 @@ interline :yes
 classes :first, :business, :economy
 check { includes(marketing_carrier_iatas, %W[LH OS LX BD]) and includes(city_iatas, 'MOW') }
 discount "5%"
-commission "9%/7%"
+commission "5%/7%"
 
 example 'aerdme dmeaer/ab'
 agent "4% Interline с участком Трансаэро. Без участка UN запрещено."
@@ -430,36 +430,60 @@ carrier "AZ", "ALITALIA"
 carrier_defaults :consolidator => 0
 
 example 'vceflu/economy fluvce/economy'
-strt_date "01.08.2012"
-expr_date "31.08.2012"
+strt_date "01.09.2012"
+expr_date "30.09.2012"
 agent "Строго по направлениям:
 Северная Америка: Нью-Йорк, Лос-Анджелес, Майами, Чикаго, Бостон, Торонто;
 Южная Америка: Сан-Пауло, Рио-Де-Жанейро, Каракас, Буэнос-Айрес.
 Северная Африка (Alitalia летает (Alitalia operating) – Алжир, Каир, Касабланка, Триполи, Тунис)
 Ближний Восток (Alitalia летает (Alitalia operating) - Амман, Тель-Авив, Бейрут, Дамаск, Тегеран)
-7% для билетов эконом-класса."
-subagent "5% для билетов эконом-класса"
+10% для билетов эконом-класса."
+subagent "8% для билетов эконом-класса"
 classes :economy
 # нахрена было иаты аэропортов выписывать? городов меньше
 check { includes(airport_iatas, %W(FLU EWR LGA JFK LAX SMO VNY WHP MIA ТNT OPF TMB MDW ORD PWK CGX DPA RFD BOS YTZ YKZ YYZ VCP GRU CGH GIG SDU CCS EZE AEP ALG CAI CAS CMN KYE TIP TUN AMM ADJ TLV SDV BEY DAM IKA THR)) }
 discount "3.5%"
-commission "7%/5%"
+commission "10%/8%"
 
 example 'vceflu/business fluvce/business'
-strt_date "01.08.2012"
-expr_date "31.08.2012"
+strt_date "01.09.2012"
+expr_date "30.09.2012"
 agent "Строго по направлениям:
 Северная Америка: Нью-Йорк, Лос-Анджелес, Майами, Чикаго, Бостон, Торонто;
 Южная Америка: Сан-Пауло, Рио-Де-Жанейро, Каракас, Буэнос-Айрес.
 Северная Африка (Alitalia летает (Alitalia operating) – Алжир, Каир, Касабланка, Триполи, Тунис)
 Ближний Восток (Alitalia летает (Alitalia operating) - Амман, Тель-Авив, Бейрут, Дамаск, Тегеран)
-9% для билетов бизнес-класса."
-subagent "7% для билетов бизнес-класса"
+10% для билетов бизнес-класса."
+subagent "8% для билетов бизнес-класса"
 classes :business
 # нахрена было иаты аэропортов выписывать? городов меньше
 check { includes(airport_iatas, %W(FLU EWR LGA JFK LAX SMO VNY WHP MIA ТNT OPF TMB MDW ORD PWK CGX DPA RFD BOS YTZ YKZ YYZ VCP GRU CGH GIG SDU CCS EZE AEP ALG CAI CAS CMN KYE TIP TUN AMM ADJ TLV SDV BEY DAM IKA THR)) }
 discount "5%"
-commission "9%/7%"
+commission "10%/8%"
+
+example 'svolin/economy linsvo/economy'
+example 'ledlin/economy'
+agent "Период путешествия с 01.11.12г.по 15.12.2012г. (последный день вылета) на направление ИТАЛИЯ с началом путешествия 
+из Москвы и Санкт-Петербурга в Италию и обратно, а также на тарифы в одну сторону, но с вылетами из Москвы или Санкт-Петербурга.
+Комиссия не применяется, если начало путешествия из Италии.
+Комиссия применяется на все рейсы AZ (включая AP/XM/VE/CTи рейсы code-share, выписанные под кодом AZ и на стоке AZ (055)."
+agent "10% на тарифы Эконом класса;"
+subagent "8% на тарифы Эконом класса;"
+classes :economy
+check { includes(city_iatas.first, 'MOW LED') and includes(country_iatas, 'IT') }
+commission "10%/8%"
+
+example 'svolin/business linsvo/business'
+example 'ledlin/business'
+agent "Период путешествия с 01.11.12г.по 15.12.2012г. (последный день вылета) на направление ИТАЛИЯ с началом путешествия 
+из Москвы и Санкт-Петербурга в Италию и обратно, а также на тарифы в одну сторону, но с вылетами из Москвы или Санкт-Петербурга.
+Комиссия не применяется, если начало путешествия из Италии.
+Комиссия применяется на все рейсы AZ (включая AP/XM/VE/CTи рейсы code-share, выписанные под кодом AZ и на стоке AZ (055)."
+agent "10% на тарифы Эконом класса;"
+subagent "8% на тарифы Эконом класса;"
+classes :business
+check { includes(city_iatas.first, 'MOW LED') and includes(country_iatas, 'IT') }
+commission "10%/8%"
 
 example 'svocdg cdgsvo'
 agent    "1 euro. с билета по опубл. тарифам на все остальные рейсы AZ (включая code-share);"
@@ -576,34 +600,24 @@ commission "10%/8.5%"
 example 'miapek'
 example 'cdgpek pekcdg'
 agent "9% Все международные перелеты  рейсами СА, за исключением вылетов из Москвы."
-subagent "7,5% Все международные перелеты рейсами СА, за исключением вылетов из Москвы."
+subagent "7% Все международные перелеты рейсами СА, за исключением вылетов из Москвы."
 important!
 check { not includes(city_iatas.first, 'MOW') }
 discount "5%"
-commission "9%/7.5%"
-
-example 'svohkg hkgsvo'
-example 'svomfm mfmsvo'
-example 'svotnn tnnsvo'
-agent " 9% Все перелёты выполняются рейсами CA и включают перелёты в Гонконг, Тайвань или Макао"
-subagent "7,5% Все перелёты выполняются рейсами CA и включают перелёты в Гонконг, Тайвань или Макао"
-important!
-check { includes(country_iatas, "HK TW MO") }
-discount "5%"
-commission "9%/7.5%"
+commission "9%/7%"
 
 example 'okopek/ab pekoko'
 agent   "3% интерлайн с участием  авиакомпании CA  или только внутренние перелеты"
-subagent "2,5% интерлайн с участием авиакомпании CA или только внутренние перелеты"
+subagent "2% интерлайн с участием авиакомпании CA или только внутренние перелеты"
 interline :no, :yes
-commission "3%/2.5%"
+commission "3%/2%"
 
 example 'bsdpek'
 agent   "3% интерлайн с участием  авиакомпании CA  или только внутренние перелеты"
-subagent "2,5% интерлайн с участием авиакомпании CA или только внутренние перелеты"
+subagent "2% интерлайн с участием авиакомпании CA или только внутренние перелеты"
 domestic
 important!
-commission "3%/2.5%"
+commission "3%/2%"
 
 example 'okopek/ab'
 agent "  0% интерлайн без участия авиакомпании  CA ."
@@ -2192,11 +2206,13 @@ subagent "0.5%  от всех остальных опубл. тарифов на
 ## discount "0.2%"
 commission "1%/0.5%"
 
+example 'yowjfk'
+example 'yowdme dmeyow'
 strt_date "01.09.2012"
 agent "0% от всех опубл. тарифов на собств.рейсы UA на внутренних маршрутах внутри Американского континента и международных маршрутах с началом путешествия в США или Канаде;"
 agent "1% от всех опубл. тарифов на собств.рейсы UA из России в США с обязательным участием авиакомпании UA на трансатлантических перелетах из Европейских городов в города США."
-disabled "нет субагентской"
-commission "/"
+check { includes_only(country_iatas.first, 'US CA') }
+commission "0%/0%"
 
 carrier "UL", "SRI LANKAN AIRLINES"
 ########################################
@@ -2421,17 +2437,29 @@ commission "1/0.5"
 carrier "ZI", "AIGLE AZUR (РИНГ-АВИА)"
 ########################################
 
-example 'svocdg'
-agent    "1 рубль от опубл. тарифов на собств. рейсы ZI (В договоре Interline отдельно не прописан.)"
-subagent "5 коп от опубл. тарифа на собств. рейсы ZI"
-commission "1/0.05" #первомайский апдейт
+example 'svocdg/i'
+agent    "11% от тарифа на собств. рейсы ZI по классам бронирования I/D/J/C;"
+subagent "9% от тарифа на собств. рейсы ZI по классам бронирования I/D/J/C;"
+subclasses "IDJC"
+commission "11%/9%"
+
+example 'svocdg/k'
+agent "7% от тарифа на собств. рейсы ZI по классам бронирования M/K/O/N/X/H/B/Y/S/W;"
+subagent "5% от тарифа на собств. рейсы ZI по классам бронирования M/K/O/N/X/H/B/Y/S/W;"
+subclasses "MKONXHBYSW"
+commission "7%/5%"
+
+example 'svocdg/q'
+agent "3% от тарифа на собств. рейсы ZI по классам бронирования T/Q/U/V/L"
+subagent "2% от тарифа на собств. рейсы ZI по классам бронирования T/Q/U/V/L"
+subclasses "TQUVL"
+commission "3%/2%"
 
 example 'cdgsvo svocdg/ab'
-agent "1р Interline не прописан"
-subagent "0р Interline не прописан"
-interline :unconfirmed
-disabled "разобрать"
-commission "1/0"
+agent "Interline запрещен"
+subagent "Interline запрещен"
+interline :yes
+not_implemented "запрещен"
 
 carrier "J2", "Azerbaijan Hava Yollari"
 ########################################
@@ -2952,5 +2980,19 @@ check { includes(country_iatas.first, 'JP') and includes(city_iatas.last, %W(BKK
 important!
 discount "2%"
 commission "9%/7%"
+
+carrier "W2", "FLEXFLIGHT"
+########################################
+
+agent "1% от всех опубл. Тарифов"
+subagent "5 руб. с билета от всех опубл. тарифов"
+commission "1%/5"
+
+carrier "AR", "AEROLINEAS ARGENTINAS (АВИАРЕПС)"
+########################################
+
+agent "1% от всех опубл. Тарифов"
+subagent "5 руб. с билета от всех опубл. тарифов"
+commission "1%/5"
 
 end
