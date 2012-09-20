@@ -37,7 +37,7 @@ describe Amadeus::Response::TicketDisplayTST do
     specify { subject.prices_with_refs.should have(2).keys }
     specify { subject.prices_with_refs[[[7, 'a'], [1]]].should == {:original_price_fare => 5985, :original_price_tax => 656}}
     specify { subject.prices_with_refs[[[7, 'i'], [1]]].should == {:original_price_fare => 600, :original_price_tax => 171}}
-    specify { subject.money_with_refs[[[7, 'i'], [1]]].should == {:original_price_fare => 600.to_money, :original_price_tax => 171.to_money}}
+    specify { subject.money_with_refs[[[7, 'i'], [1]]].should == {:original_price_fare => 600.to_money("RUB"), :original_price_tax => 171.to_money("RUB")}}
     its(:total_fare) { should == 6585 }
     its(:total_tax) { should == 827 }
     its(:validating_carrier_code) { should == 'FV' }

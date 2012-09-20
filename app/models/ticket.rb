@@ -84,7 +84,6 @@ class Ticket < ActiveRecord::Base
   end
 
   def price_fare_base
-    @price_fare_base = BigDecimal(@price_fare_base) if @price_fare_base && @price_fare_base.class == String
     @price_fare_base ||= if parent
       original_price_fare + parent.price_fare_base
     else
