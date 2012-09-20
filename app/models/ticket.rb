@@ -319,8 +319,8 @@ class Ticket < ActiveRecord::Base
     if original_tax_currency && original_tax_currency != "RUB"
       self.price_tax = CBR.exchange_on(ticketed_date).exchange_with(original_price_tax,"RUB").to_f
     end
-    self.price_fare = original_price_fare.to_f unless price_fare
-    self.price_tax = original_price_tax.to_f unless price_tax
+    self.price_fare = original_price_fare.to_f if new_record?
+    self.price_tax = original_price_tax.to_f if new_record?
   end
 
   composed_of :original_price_fare,
