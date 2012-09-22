@@ -126,7 +126,7 @@ example 'svober/lh/f bersvo'
 example 'svovie/os/j viesvo'
 example 'svozrh/lx/j zrhsvo'
 example 'svolhr/bd lhrsvo'
-agent "5% до особых указаний на продажу Interline от применяемых опубликованных тарифов первого, бизнес, премиального экономического
+agent "9% до особых указаний на продажу Interline от применяемых опубликованных тарифов первого, бизнес, премиального экономического
 и туристического экономического классов на рейсы авиакомпаний Lufthansa (LH), Austrian Airlines (OS), Swiss International Airlines (LX), British Midland Airways (BD) 
 от Москвы и/или через Москву с участком перевозки на рейсы ТРАНСАЭРО. Дополнительное вознаграждение не выплачивается в случае остальных Interline продаж, 
 а также с сумм произведенных возвратов. (Т.е. комиссия по этим Interline будет 9%)"
@@ -135,7 +135,7 @@ interline :yes
 classes :first, :business, :economy
 check { includes(marketing_carrier_iatas, %W[LH OS LX BD]) and includes(city_iatas, 'MOW') }
 discount "5%"
-commission "5%/7%"
+commission "9%/7%"
 
 example 'aerdme dmeaer/ab'
 agent "4% Interline с участком Трансаэро. Без участка UN запрещено."
