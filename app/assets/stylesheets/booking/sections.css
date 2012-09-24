@@ -83,6 +83,8 @@
     margin: 0;
     padding: 3px 5px;
     border: 1px solid #ebe2b2;
+    border-radius: 0;
+    -webkit-appearance: none;
     background: #FFF;    
     font-size: 16px;
     line-height: 22px;

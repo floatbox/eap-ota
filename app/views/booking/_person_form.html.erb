@@ -28,15 +28,15 @@
     </td>
     <td class="bfp-control">
         <div class="bfp-date">
-            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-bday">ДД</label><input type="text" class="bf-field bfpd-day" id="bfp$n-bday" name="person_attributes[$n][birthday(3i)]" maxlength="2" title="День рождения"></div>
-            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-bmonth">ММ</label><input type="text" class="bf-field bfpd-month" id="bfp$n-bmonth" name="person_attributes[$n][birthday(2i)]" maxlength="2" title="Месяц рождения"></div>
-            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-byear">ГГГГ</label><input type="text" class="bf-field bfpd-year" id="bfp$n-byear" name="person_attributes[$n][birthday(1i)]" maxlength="4" title="Год рождения" data-current="<%= Date.current.strftime('%Y') %>"></div>
+            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-bday">ДД</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-day" id="bfp$n-bday" name="person_attributes[$n][birthday(3i)]" maxlength="2" title="День рождения"></div>
+            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-bmonth">ММ</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-month" id="bfp$n-bmonth" name="person_attributes[$n][birthday(2i)]" maxlength="2" title="Месяц рождения"></div>
+            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-byear">ГГГГ</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-year" id="bfp$n-byear" name="person_attributes[$n][birthday(1i)]" maxlength="4" title="Год рождения" data-current="<%= Date.current.strftime('%Y') %>"></div>
         </div>
     </td>
     <td class="bfp-control">
         <div class="bf-select bfp-nationality">
             <div class="bf-select-arrow"></div>
-            <input class="bf-field" value="" disabled="disabled">
+            <input class="bf-field" value="" disabled="disabled" style="background: #FFF; opacity: 1;">
             <select name="person_attributes[$n][nationality_id]" id="bfp$n-nationality" class="bf-select-overlay">
                 <%= grouped_options_for_select(Country.options_for_nationality_select, 170) %>
             </select>
@@ -47,9 +47,9 @@
     </td>
     <td class="bfp-control">
         <div class="bfp-date">
-            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-day">ДД</label><input type="text" class="bf-field bfpd-day" id="bfp$n-exp-day" name="person_attributes[$n][document_expiration_date(3i)]" maxlength="2" title="День окончания срока действия документа"></div>
-            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-month">ММ</label><input type="text" class="bf-field bfpd-month" id="bfp$n-exp-month" name="person_attributes[$n][document_expiration_date(2i)]" maxlength="2" title="Месяц окончания срока действия документа"></div>
-            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-year">ГГГГ</label><input type="text" class="bf-field bfpd-year" id="bfp$n-exp-year" name="person_attributes[$n][document_expiration_date(1i)]" maxlength="4" title="Год окончания срока действия документа" data-current="<%= Date.current.strftime('%Y') %>"></div>
+            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-day">ДД</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-day" id="bfp$n-exp-day" name="person_attributes[$n][document_expiration_date(3i)]" maxlength="2" title="День окончания срока действия документа"></div>
+            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-month">ММ</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-month" id="bfp$n-exp-month" name="person_attributes[$n][document_expiration_date(2i)]" maxlength="2" title="Месяц окончания срока действия документа"></div>
+            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-year">ГГГГ</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-year" id="bfp$n-exp-year" name="person_attributes[$n][document_expiration_date(1i)]" maxlength="4" title="Год окончания срока действия документа" data-current="<%= Date.current.strftime('%Y') %>"></div>
         </div>
     </td>
     <td class="bfp-remove">
@@ -89,7 +89,7 @@
     <div class="bfpb-control">
         <div class="bf-select bfp-bonus-type">
             <div class="bf-select-arrow"></div>        
-            <input class="bf-field" value="<%= carrier.iata %>" disabled="disabled">
+            <input class="bf-field" value="<%= carrier.iata %>" disabled="disabled" style="background: #FFF; opacity: 1;">
             <select name="person_attributes[$n][bonuscard_type]" id="bfp$n-bonus-type" class="bf-select-overlay">
                 <%= options_for_select(programs.map {|a| [ a.bonus_program_name, a.iata ] }) %>
             </select>        
