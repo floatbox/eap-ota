@@ -15,7 +15,7 @@ class PaytureCharge < Payment
   end
 
   def set_ref
-    update_attributes(:ref => Conf.payment.order_id_prefix + id.to_s)
+    update_attributes(:ref => Conf.payture.order_id_prefix + id.to_s)
   end
 
   def card= card

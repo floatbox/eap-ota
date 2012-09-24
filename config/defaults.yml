@@ -38,8 +38,9 @@ amadeus:
 payment:
   # FIXME убить в локальных конфигах
   use_discount: no
-  skip_checksum_validation: yes
+  # FIXME убить в локальных конфигах
   order_id_prefix: o
+  skip_checksum_validation: yes
   production:
     skip_checksum_validation: no
 cash:
@@ -48,6 +49,7 @@ cash:
 payture:
   commission: 2.85%
   enabled: yes
+  order_id_prefix: o
   key: MerchantETerra
   host: sandbox.payture.com
   ssl: no

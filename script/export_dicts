@@ -17,12 +17,12 @@ def write_csv(filename, headers, collection)
   end
 end
 
-write_csv( 'countries.csv', %W[ iata name_en name_ru continent ], Country.where('alpha2 is not null').all);
+write_csv( 'countries.csv', %W[ iata name_en name_ru continent synonym_list case_from case_to case_in], Country.where('alpha2 is not null').all);
 
-write_csv( 'cities.csv', %W[ iata name_en name_ru lat lng importance country.iata region.name synonym_list case_from case_to case_in],
+write_csv( 'cities.csv', %W[ iata name_en name_ru lat lng importance country.iata region.name synonym_list case_from case_to case_in timezone],
           City.where("iata is not null and iata <> ''").includes(:region).all );
 
-write_csv( 'airports.csv', %W[ iata name_en name_ru lat lng importance city.iata country.iata synonym_list case_from case_to case_in],
+write_csv( 'airports.csv', %W[ iata name_en name_ru lat lng importance city.iata synonym_list case_from case_to case_in],
           Airport.where("iata is not null and iata <> ''").includes(:city, :country).all );
 
 write_csv( 'airlines.csv', %W[ iata name_en name_ru lat lng importance city.iata country.iata synonym_list],
