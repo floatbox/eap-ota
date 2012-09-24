@@ -243,6 +243,18 @@ ActiveRecord::Schema.define(:version => 20130219131821) do
   add_index "hot_offers", ["created_at"], :name => "index_hot_offers_on_created_at"
   add_index "hot_offers", ["destination_id"], :name => "index_hot_offers_on_destination_id"
 
+  create_table "imports", :force => true do |t|
+    t.string   "md5"
+    t.string   "kind"
+    t.integer  "pass"
+    t.string   "filename"
+    t.binary   "content"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "imports", ["md5"], :name => "index_imports_on_md5", :unique => true
+
   create_table "notifications", :force => true do |t|
     t.integer  "order_id"
     t.integer  "typus_user_id"
