@@ -221,6 +221,7 @@
     margin: 0 0 10px;
     font-size: 16px;
     line-height: 18px;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 .bffr-wrong {
     margin: 0 0 10px;
@@ -230,9 +231,13 @@
     cursor: pointer;
 }
 .bffr-link:hover {
-    background: none;
     text-decoration: underline;
     color: #f90a6f;
+}
+.ipad .bffr-link:hover,
+.iphone .bffr-link:hover {
+    text-decoration: none;
+    color: inherit;
 }
 .bff-disclaimer {
     font-size: 14px;

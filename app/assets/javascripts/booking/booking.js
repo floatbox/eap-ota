@@ -137,6 +137,9 @@ comparePrices: function() {
     if (dp !== 0) {
         trackEvent('Бронирование', 'Изменилась цена', dp > 0 ? 'Стало дороже' : 'Стало дешевле');
         this.processPrice(context, dp);
+        if (dp < 0) {
+            context.find('.bfnp-tip').hide();
+        }
         context.show();
     }
 },

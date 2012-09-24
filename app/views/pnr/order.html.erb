@@ -4,19 +4,19 @@
 <col width="206">
 <col width="210">
 <tbody valign="top">
-  <tr>
+<tr>
     <td colspan="4">
-      <div style="border-top: 1px solid #dcd6b2; border-bottom: 1px solid #dcd6b2; background: #fbf4cb; padding: 15px 20px 17px 20px; margin: 0 0 20px 0; font-size: 17px;">
+        <div style="border-top: 1px solid #dcd6b2; border-bottom: 1px solid #dcd6b2; background: #fbf4cb; padding: 15px 20px 17px 20px; margin: 0 0 20px 0; font-size: 17px;">
         Ваш электронный билет оформляется и&nbsp;будет выслан&nbsp;вам <%= time_to_ticketing_delay(@prices.created_at) %></div>
     </td>
-  </tr>
-  <tr>
-    <td style="font-size: 12px; line-height: 12px;">
+</tr>
+<tr>
+    <td width="340" style="font-size: 12px; line-height: 12px;">
         <div style="font-weight: bold; font-size: 23px; line-height: 26px;"><% unless @lang %>Ваш заказ<br><% end %>Your Order</div><br>
         <br><br>
     </td>
     <%= render :partial => 'pnr/numbers' %>
-    <td rowspan="2">
+    <td width="210" rowspan="2">
         <div style="font-weight: bold; font-size: 32px; line-height: 30px; color: #F90A6F;">
             <img src="https://eviterra.com/images/booking/eviterra.png" alt="eviterra.com" width="210" height="30"><br>
         </div><br>
@@ -56,7 +56,7 @@
 <col width="550">
 <col width="366">
 <tr valign="top">
-    <td rowspan="2">
+    <td rowspan="2" width="550">
         <div style="font-weight: bold; font-size: 18px; line-height: 21px;"><% unless @lang %>Информация об оплате<br><% end %>Payment Information</div>
         <div style="font-size: 10px; line-height: 10px;"><br></div>
         <table cellspacing="0" cellpadding="0" style="font-size: 13px; line-height: 18px;">
@@ -64,8 +64,8 @@
         <col width="340">
         <col width="190">
         <tr>
-            <td><% unless @lang %>Тариф <span style="color: #C0C0C0;">/</span> <% end %>Fare</td>
-            <td><%= exact_price(@prices.price_fare) %> RUB</td>
+            <td width="340"><% unless @lang %>Тариф <span style="color: #C0C0C0;">/</span> <% end %>Fare</td>
+            <td width="190"><%= exact_price(@prices.price_fare) %> RUB</td>
         </tr>
         <% unless @prices.price_declared_discount.zero? %>
         <tr>
@@ -109,7 +109,7 @@
         </tbody>
         </table>
     </td>
-    <td>
+    <td width="366">
         <div style="font-weight: bold; font-size: 18px; line-height: 21px;"><% unless @lang %>Данные покупателя<br><% end %>Customer Details</div>
         <div style="font-size: 10px; line-height: 10px;"><br></div>
         <div style="font-size: 13px; line-height: 18px;">

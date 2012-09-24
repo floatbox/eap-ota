@@ -163,7 +163,7 @@ var browser = (function() {
 		$d.addClass(signs[i]);
 	}
 	data.touchscreen = 'ontouchstart' in window;
-	data.ios = data.iphone;
+	data.ios = data.iphone || data.ipad;
 	return data;
 })();
 

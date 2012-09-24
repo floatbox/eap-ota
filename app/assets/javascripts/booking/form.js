@@ -26,9 +26,11 @@ init: function() {
         }
     });
     this.footer = this.el.find('.bf-footer');
-    this.footer.on('mouseenter', function() {
-        that.validate(true);
-    });
+    if (!browser.touchscreen) {
+        this.footer.on('mouseenter', function() {
+            that.validate(true);
+        });
+    }
     this.footer.find('.bffc-link').click(function() {
         booking.cancel();
     });
@@ -57,14 +59,18 @@ position: function() {
     return this.el.offset().top - 36 - results.header.height;
 },
 focus: function(control) {
-    var st = control.offset().top - results.header.height - 71;
-    $w.smoothScrollTo(Math.min(st, $w.scrollTop()), function() {
-        if (control.is('input, textarea')) {
-            control.select();
-        } else if (control.hasClass('bfp-sex')) {
-            control.find('input').eq(0).focus();
-        }
-    });
+    if (browser.ios) {
+        control.focus().select();
+    } else {
+        var st = control.offset().top - results.header.height - 71;
+        $w.smoothScrollTo(Math.min(st, $w.scrollTop()), function() {
+            if (control.is('input, textarea')) {
+                control.select();
+            } else if (control.hasClass('bfp-sex')) {
+                control.find('input').eq(0).focus();
+            }
+        });
+    }
 },
 validate: function(forced) {
     var wrong = [], empty = [];

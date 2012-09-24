@@ -225,7 +225,9 @@ init: function() {
     });
     this.initParts();
     this.initFormat();
-    this.initTab();
+    if (!browser.ios) {
+	    this.initTab();
+	}
 },
 initParts: function() {
     this.dpart = this.parts.eq(0);
@@ -280,7 +282,7 @@ initTab: function() {
         var code = e.which;
         var digit = (code > 47 && code < 58) || (code > 95 && code < 106);
         if (this.value.length === 2 && digit && !ignoreTab) {
-            $(this).change().data('next').select();
+            $(this).change().data('next').focus().select();
             that.el.addClass('bf-focus');
             ignoreTab = true;
         }
@@ -462,7 +464,9 @@ init: function() {
         that.validate(true);
     };
     this.fid = 'bfcn-part1';
-    this.initAutoTab();
+    if (!browser.ios) {
+	    this.initAutoTab();
+    }
 },
 initAutoTab: function() {
     var that = this, ignoreTab;
@@ -553,7 +557,9 @@ init: function() {
         that.validate(true);
     };
     this.initFormat();
-    this.initAutoTab();
+    if (!browser.ios) {    
+	    this.initAutoTab();
+    }
 },
 initFormat: function() {
     var that = this;
