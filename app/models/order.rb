@@ -180,7 +180,7 @@ class Order < ActiveRecord::Base
 
   def ticket_time_decorated
 #    if payment_status == 'blocked' && ticket_status == 'booked' && created_at > Date.yesterday + 20.5.hours
-    if payment_status == 'blocked' && ticket_status == 'booked'
+    if payment_status == 'blocked' && (ticket_status.in? 'booked', 'processing_ticket', 'error_ticket')
       now = DateTime.now
       date_to_ticket = ticket_datetime
       time_diff = ((date_to_ticket - now)/60).to_i
