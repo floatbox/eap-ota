@@ -31,7 +31,7 @@
 <div>
     статус платежа: <strong><%= @item.payment_status %></strong> /
     статус билетов: <strong><%= @item.ticket_status %></strong> / 
-    статус письма: <strong><%= @item.email_status %></strong> <% if @item.email_status != 'manual' %>[<%= link_to 'Ручной режим', {:action => 'manual_notice', :id => @item.id}, {:confirm => 'Включить ручной режим оповещений?'} %>]<% end %>
+    статус письма: <strong><%= @item.email_status %></strong> <% if @item.email_status != 'manual' %>[<%= link_to 'Переключить в Ручной режим', {:action => 'manual_notice', :id => @item.id}, {:confirm => 'Включить ручной режим оповещений?'} %>]<% end %>
     <br>
     <br>
 </div>
