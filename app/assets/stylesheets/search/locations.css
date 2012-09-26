@@ -323,13 +323,9 @@
     top: 5px;
     left: 50%;
     z-index: 5;
-    width: 170px;
-    padding: 4px 9px;
+    width: 188px;
     margin-left: 290px;
-    background: #F4F4F4;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F8F8F8', endColorstr='#F0F0F0');
-    background: -webkit-gradient(linear, left top, left bottom, from(#F8F8F8), to(#E8E8E8));
-    background: -moz-linear-gradient(top,  #F8F8F8,  #E8E8E8);
+    background: #FFF;
     border: 1px solid #7f7f7f;
     border-top-color: #C1C1C1;
     border-left-color: #C1C1C1;    
@@ -341,11 +337,30 @@
 .smp-hidden {
     visibility: hidden;
 }
-.smp-pressed {
-    color: #777;
-    box-shadow: none;
-    cursor: default;    
+.smp-text {
+    padding: 4px 9px;
 }
+.smp-pressed {
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+    cursor: default;
+}
+.smp-pressed .smp-text {
+    visibility: hidden;
+}
+.smp-loading {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    width: 168px;
+    margin-top: -8px;
+    color: #777;
+    text-align: center;
+}
+.smp-progress {
+    padding: 0 26px 1px 0;
+    background: url(/images/booking/progress-w.gif) no-repeat 100% 0;
+}
+
 
 /* Label */
 .smap-label {
