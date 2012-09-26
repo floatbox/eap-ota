@@ -74,7 +74,7 @@ describe Order do
         @old_ticket.order = @order
         @old_ticket.save
         @new_ticket_hashes = [
-          {:number => '123456787', :code => '123', :source => 'amadeus', :status => 'ticketed', :original_price_fare => 0.to_money("RUB"), :original_price_tax => 6075.to_money("RUB"), :parent_number => '123456789', :parent_code => '123', :price_fare_base => 0.to_money("RUB")}
+          {:number => '123456787', :code => '123', :source => 'amadeus', :status => 'ticketed', :original_price_fare => 21590.to_money("RUB"), :original_price_total => 6075.to_money("RUB"), :parent_number => '123456789', :parent_code => '123', :price_fare_base => 21590.to_money("RUB")}
         ]
         Strategy.stub_chain(:select, :get_tickets).and_return(@new_ticket_hashes)
         @order.reload_tickets
@@ -228,7 +228,7 @@ describe Order do
           :first_name => 'ALEXANDRA MRS',
           :passport => '4510108712',
           :ticketed_date => Date.new(2011, 8, 30),
-          :original_price_tax => 1281.to_money("RUB"),
+          :original_price_total => 2681.to_money("RUB"),
           :original_price_fare => 1400.to_money("RUB"),
           :validating_carrier => 'SU',
           :status => 'ticketed',

@@ -46,7 +46,7 @@ class Ticket < ActiveRecord::Base
   has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount, :commission_our_markup
   include Pricing::Ticket
 
-  before_validation :update_price_fare_and_add_parent, :if => :parent_number
+  before_validation :update_prices_and_add_parent, :if => :original_price_total
   before_validation :check_currency
   before_save :recalculate_commissions, :set_validating_carrier
 
@@ -59,7 +59,7 @@ class Ticket < ActiveRecord::Base
   after_destroy :update_parent_status, :if => :parent
   validates_presence_of :comment, :if => lambda {kind == "refund"}
   after_save :update_prices_in_order
-  attr_accessor :parent_number, :parent_code
+  attr_accessor :parent_number, :parent_code, :original_price_total
   attr_writer :price_fare_base
 
   def show_vat
@@ -106,13 +106,17 @@ class Ticket < ActiveRecord::Base
     baggage_info.to_s.split.map{|code| [BaggageLimit.deserialize(code)]}
   end
 
-  def update_price_fare_and_add_parent
-    if exchanged_ticket = order.tickets.select{|t| t.code.to_s == parent_code.to_s && t.number.to_s[0..9] == parent_number.to_s}.first
-      self.parent = exchanged_ticket
-      if price_fare_base && price_fare_base > 0
-        self.original_price_tax += parent.price_fare_base #в противном случае tax может получиться отрицательным
-        self.original_price_fare = price_fare_base - parent.price_fare_base
+  def update_prices_and_add_parent
+    if parent_number
+      if exchanged_ticket = order.tickets.select{|t| t.code.to_s == parent_code.to_s && t.number.to_s[0..9] == parent_number.to_s}.first
+        self.parent = exchanged_ticket
+        if price_fare_base && price_fare_base > 0
+          self.original_price_tax = original_price_total - price_fare_base + parent.price_fare_base #в противном случае tax может получиться отрицательным
+          self.original_price_fare = price_fare_base - parent.price_fare_base
+        end
       end
+    else
+      self.original_price_tax = original_price_total - original_price_fare
     end
   rescue TypeError
   #  TODO: придумать, что делать в случае несовпадения типов

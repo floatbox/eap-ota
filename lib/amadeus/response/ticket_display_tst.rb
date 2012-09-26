@@ -48,10 +48,9 @@ module Amadeus
             fi.xpath('r:fareDataSupInformation[r:fareDataQualifier="E"]').presence ||
             fi.xpath('r:fareDataSupInformation[r:fareDataQualifier="B"]')
           )
-          tax_money = total_money - fare_money
           fare_details = {
             :original_price_fare => fare_money,
-            :original_price_tax => tax_money
+            :original_price_total => total_money
           }
 
           infant_flag = fare_node.xpath('r:statusInformation/r:firstStatusDetails[r:tstFlag="INF"]').present?
@@ -75,7 +74,7 @@ module Amadeus
       end
 
       def total_tax_money
-        money_with_refs.values.every[:original_price_tax].sum
+        money_with_refs.values.every[:original_price_total].sum - money_with_refs.values.every[:original_price_fare].sum
       end
 
       # временный метод для обеспечения совместимости c текущим кодом
@@ -96,7 +95,7 @@ module Amadeus
       end
 
       def total_tax
-        prices_with_refs.values.every[:original_price_tax].sum
+        prices_with_refs.values.every[:original_price_total].sum - prices_with_refs.values.every[:original_price_fare].sum
       end
 
       def validating_carrier_code

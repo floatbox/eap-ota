@@ -35,9 +35,9 @@ describe Amadeus::Response::TicketDisplayTST do
 
     it { should be_success }
     specify { subject.prices_with_refs.should have(2).keys }
-    specify { subject.prices_with_refs[[[7, 'a'], [1]]].should == {:original_price_fare => 5985, :original_price_tax => 656}}
-    specify { subject.prices_with_refs[[[7, 'i'], [1]]].should == {:original_price_fare => 600, :original_price_tax => 171}}
-    specify { subject.money_with_refs[[[7, 'i'], [1]]].should == {:original_price_fare => 600.to_money("RUB"), :original_price_tax => 171.to_money("RUB")}}
+    specify { subject.prices_with_refs[[[7, 'a'], [1]]].should == {:original_price_fare => 5985, :original_price_total => 6641}}
+    specify { subject.prices_with_refs[[[7, 'i'], [1]]].should == {:original_price_fare => 600, :original_price_total => 771}}
+    specify { subject.money_with_refs[[[7, 'i'], [1]]].should == {:original_price_fare => 600.to_money("RUB"), :original_price_total => 771.to_money("RUB")}}
     its(:total_fare) { should == 6585 }
     its(:total_tax) { should == 827 }
     its(:validating_carrier_code) { should == 'FV' }
@@ -53,7 +53,7 @@ describe Amadeus::Response::TicketDisplayTST do
 
     it { should be_success }
     specify { subject.prices_with_refs.should have(2).keys }
-    specify { subject.prices_with_refs.values[0].should == {:original_price_fare => 3825, :original_price_tax => 3905} }
+    specify { subject.prices_with_refs.values[0].should == {:original_price_fare => 3825, :original_price_total => 7730} }
     its(:total_fare) { should == 7650 }
     its(:total_tax) { should == 7810 }
     its(:validating_carrier_code) { should == 'LH' }
@@ -71,9 +71,9 @@ describe Amadeus::Response::TicketDisplayTST do
       its('prices_with_refs.keys'){should include([[1, 'a'], [5, 6, 7, 8]])}
       its('prices_with_refs.keys'){should include([[1, 'a'], [11, 12]])}
       its('prices_with_refs.keys'){should include([[2, 'a'], [11, 12]])}
-      specify{subject.prices_with_refs[[[2, 'a'], [5, 6, 7, 8]]][:original_price_tax].should == 7814}
+      specify{subject.prices_with_refs[[[2, 'a'], [5, 6, 7, 8]]][:original_price_total].should == 15414}
       specify{subject.prices_with_refs[[[2, 'a'], [5, 6, 7, 8]]][:original_price_fare].should == 7600}
-      specify{subject.money_with_refs[[[2, 'a'], [5, 6, 7, 8]]][:original_price_tax].should == 7814.to_money("RUB")}
+      specify{subject.money_with_refs[[[2, 'a'], [5, 6, 7, 8]]][:original_price_total].should == 15414.to_money("RUB")}
       specify{subject.money_with_refs[[[2, 'a'], [5, 6, 7, 8]]][:original_price_fare].should == 7600.to_money("RUB")}
       its(:blank_count) {should == 4}
 
