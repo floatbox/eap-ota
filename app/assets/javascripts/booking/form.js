@@ -10,27 +10,27 @@ init: function() {
         var section = new validator.Section(el, options);
         that.sections.push(section);
     });
-    this.el.submit(function(event) {
+    this.el.on('submit', function(event) {
         event.preventDefault();
-        if (that.button.hasClass('bfb-sending')) {
-            return false;
-        }
-        if (that.button.hasClass('bfb-disabled')) {
-            that.validate(true); // если вдруг не отследили изменение какого-то поля
-        }
-        if (that.button.hasClass('bfb-disabled')) {
-            trackEvent('Бронирование', 'Нажатие заблокированной кнопки', that.required.text() || 'Нет ошибок');
-            that.required.find('.bffr-link').eq(0).click();
-        } else {
-            that.submit();
+        if (!that.sending) {
+            if (that.button.hasClass('bfb-disabled')) {
+                that.validate(true); // если вдруг не отследили изменение какого-то поля
+            }
+            if (that.button.hasClass('bfb-disabled')) {
+                trackEvent('Бронирование', 'Нажатие заблокированной кнопки', that.required.text() || 'Нет ошибок');
+                that.required.find('.bffr-link').eq(0).click();
+            } else {
+                that.submit();
+            }
         }
     });
-    this.footer = this.el.find('.bf-footer');
-    if (!browser.touchscreen) {
-        this.footer.on('mouseenter', function() {
+    this.el.on('change', function() {
+        clearTimeout(that.vtimer);
+        that.vtimer = setTimeout(function() {
             that.validate(true);
-        });
-    }
+        }, 100);
+    });
+    this.footer = this.el.find('.bf-footer');
     this.footer.find('.bffc-link').click(function() {
         booking.cancel();
     });
@@ -43,7 +43,8 @@ init: function() {
     this.required.delegate('.bffr-link', 'click', function() {
         that.focus($('#' + $(this).attr('data-field')));
     });
-    this.wrongPrice = false;    
+    this.wrongPrice = false;
+    this.sending = false;
     this.validate(true);
     if (typeof sessionStorage !== 'undefined') {
         for (var i = this.sections.length; i--;) {
@@ -103,12 +104,15 @@ validate: function(forced) {
         this.footer.show();
         delete this.back;
     }
-    this.button.toggleClass('bfb-disabled', disabled);
-    this.required.toggle(disabled);
+    if (!this.sending) {
+        this.button.toggleClass('bfb-disabled', disabled);
+        this.required.toggle(disabled);
+    }
 },
 submit: function() {
     var that = this;
-    this.button.addClass('bfb-sending');
+    this.sending = true;
+    this.button.addClass('bfb-disabled');
     this.footer.find('.bff-cancel').hide();
     this.footer.find('.bff-progress').show();
     if (this.result) {
@@ -150,15 +154,17 @@ showErrors: function(errors) {
         }
     }
     this.required.html(wrong.join(' ')).show();
-    this.button.removeClass('bfb-sending');
+    this.button.removeClass('bfb-disabled');
     this.footer.find('.bff-progress').hide();
     this.footer.find('.bff-cancel').show();
+    this.sending = false;
 },
 process: function(s) {
     this.footer.hide();
     this.footer.find('.bff-progress').hide();
     this.footer.find('.bff-cancel').show();
-    this.button.removeClass('bfb-sending');
+    this.button.removeClass('bfb-disabled');
+    this.sending = false;
     var that = this;
     this.result = $(s).insertAfter(this.el);
     this.result.find('.bfr-cancel').click(function() {

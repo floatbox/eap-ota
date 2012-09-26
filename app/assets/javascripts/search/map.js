@@ -182,7 +182,7 @@ updatePrices: function(segments, stealth) {
     if (segments[0] && segments[0].dpt && search.mode.selected !== 'mw') {
         var sd = search.dates;
         var dates = sd.monthes[sd.position].ptitle + '—' + sd.monthes[sd.position + 1].ptitle;
-        this.prices.html(local.search.prices.absorb(segments[0].dpt.from.nowrap(), dates));
+        this.prices.html('<div class="smp-text">' + local.search.prices.absorb(segments[0].dpt.from.nowrap(), dates) + '</div>');
         this.prices.attr('data-from', segments[0].dpt.iata);
         this.prices.attr('data-date', sd.monthes[sd.position].el.find('.first').attr('data-dmy'));
         if (!stealth) {
@@ -195,6 +195,7 @@ updatePrices: function(segments, stealth) {
 loadPrices: function() {
     var that = this;
     this.prices.addClass('smp-pressed');
+    this.prices.append('<div class="smp-loading"><span class="smp-progress">Ищем варианты</span></div>')
     $.get('/price_map', {
         from: this.prices.attr('data-from'),
         date: this.prices.attr('data-date'),
