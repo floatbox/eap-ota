@@ -4,6 +4,6 @@
   <input class="text" id="<%=attribute %>]" include_blank="true"
     name=ticket[<%=attribute %>] size="30" type="text"
     value="<%= form.object.send(attribute) ?
-      form.object.send(attribute).to_s + ' ' + form.object.send(attribute).currency_as_string : '0.0 RUB' %>">
+      form.object.send(attribute).with_currency : '0.0 RUB' %>">
 </li>
 

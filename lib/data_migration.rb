@@ -11,6 +11,32 @@ module DataMigration
     Ticket.update_all('status = "pending"', 'kind = "refund" AND processed = 0')
   end
 
+  def self.ticket_original_prices(order)
+    if order.sold_tickets.every.office_id.uniq.include?('FLL1S212V')
+      ticket_hashes = order.strategy.get_tickets
+      ticket_hashes.map do |th|
+        stored_ticket = order.tickets.select{|t| t.code.to_s == th[:code].to_s && t.number.to_s[0..9] == th[:number].to_s}.first
+        if stored_ticket && !stored_ticket.parent
+          {
+            :id => stored_ticket.id,
+            :original_price_fare => th[:original_price_fare],
+            :original_price_total => th[:original_price_total]
+          }
+        else
+          {}
+        end
+      end
+    else
+      order.sold_tickets.map do |t| {
+        :id => t.id,
+        :original_price_fare => t.price_fare.to_money('RUB').with_currency,
+        :original_price_tax => t.price_tax.to_money('RUB').with_currency
+        }
+      end
+    end
+
+  end
+
   def self.get_tz_from_lat_and_lng(lat, lng)
     xml = Net::HTTP.get URI.parse("http://ws.geonames.org/timezone?lat=#{lat}&lng=#{lng}&style=full")
     doc = REXML::Document.new xml

@@ -292,7 +292,7 @@ class Ticket < ActiveRecord::Base
     if original_fare_currency && original_fare_currency != "RUB"
       self.price_fare = CBR.exchange_on(ticketed_date).exchange_with(original_price_fare,"RUB").to_f
     end
-    if original_tax_currency && original_tax_currency != "R UB"
+    if original_tax_currency && original_tax_currency != "RUB"
       self.price_tax = CBR.exchange_on(ticketed_date).exchange_with(original_price_tax,"RUB").to_f
     end
     self.price_fare = original_price_fare.to_f if original_fare_currency == "RUB"
@@ -315,11 +315,11 @@ class Ticket < ActiveRecord::Base
   end
 
   def customized_original_fare
-    original_price_fare ? original_price_fare.to_s + ' ' + original_price_fare.currency_as_string : 'Unknown'
+    original_price_fare ? original_price_fare.with_currency : 'Unknown'
     end
 
   def customized_original_tax
-    original_price_tax ? original_price_tax.to_s + ' ' + original_price_tax .currency_as_string : 'Unknown'
+    original_price_tax ? original_price_tax.with_currency : 'Unknown'
   end
 
   def itinerary_receipt
