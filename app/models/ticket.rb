@@ -288,6 +288,17 @@ class Ticket < ActiveRecord::Base
     validating_carrier.present? ? validating_carrier : commission_carrier
   end
 
+  def check_currency
+    if original_fare_currency && original_fare_currency != "RUB"
+      self.price_fare = CBR.exchange_on(ticketed_date).exchange_with(original_price_fare,"RUB").to_f
+    end
+    if original_tax_currency && original_tax_currency != "R UB"
+      self.price_tax = CBR.exchange_on(ticketed_date).exchange_with(original_price_tax,"RUB").to_f
+    end
+    self.price_fare = original_price_fare.to_f if original_fare_currency == "RUB"
+    self.price_tax = original_price_tax.to_f if original_tax_currency == "RUB"
+  end
+
   # для тайпуса
   def description
     CustomTemplate.new.render(:partial => "admin/tickets/description", :locals => {:ticket => self}).html_safe
@@ -303,6 +314,14 @@ class Ticket < ActiveRecord::Base
     "<a href=#{url}>#{number_with_code}</a>".html_safe
   end
 
+  def customized_original_fare
+    original_price_fare ? original_price_fare.to_s + ' ' + original_price_fare.currency_as_string : 'Unknown'
+    end
+
+  def customized_original_tax
+    original_price_tax ? original_price_tax.to_s + ' ' + original_price_tax .currency_as_string : 'Unknown'
+  end
+
   def itinerary_receipt
     if order && !new_record?
       url = show_order_for_ticket_path(order.pnr_number, self)
@@ -314,17 +333,6 @@ class Ticket < ActiveRecord::Base
     Strategy.select(:ticket => self).raw_ticket
   rescue => e
     e.message
-  end
-
-  def check_currency
-    if original_fare_currency && original_fare_currency != "RUB"
-      self.price_fare = CBR.exchange_on(ticketed_date).exchange_with(original_price_fare,"RUB").to_f
-    end
-    if original_tax_currency && original_tax_currency != "R UB"
-      self.price_tax = CBR.exchange_on(ticketed_date).exchange_with(original_price_tax,"RUB").to_f
-    end
-    self.price_fare = original_price_fare.to_f if original_fare_currency == "RUB"
-    self.price_tax = original_price_tax.to_f if original_tax_currency == "RUB"
   end
 
   composed_of :original_price_fare,

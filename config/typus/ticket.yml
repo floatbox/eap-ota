@@ -9,6 +9,8 @@ Ticket:
      - price_with_payment_commission
      - price_fare
      - price_tax
+     - customized_original_fare
+     - customized_original_tax
      - price_penalty
      - price_discount
      - price_our_markup
@@ -29,6 +31,8 @@ Ticket:
       - route
       - price_fare
       - price_tax
+      - customized_original_fare
+      - customized_original_tax
       - office_id
       - validator
       - income_suppliers
@@ -40,6 +44,8 @@ Ticket:
     new: 
       - price_fare
       - price_tax
+      - customized_original_fare
+      - customized_original_fare
       - price_penalty
       - price_discount
       - price_our_markup
@@ -72,6 +78,8 @@ Ticket:
       - route
       - price_fare
       - price_tax
+      - customized_original_fare
+      - customized_original_tax
       - price_penalty
       - price_extra_penalty
       - commission_consolidator
@@ -106,6 +114,8 @@ Ticket:
       - route
       - price_fare
       - price_tax
+      - original_price_fare
+      - original_price_tax
       - price_penalty
       - price_extra_penalty
       - price_consolidator
@@ -131,6 +141,8 @@ Ticket:
       - cabins
       - price_fare
       - price_tax
+      - customized_original_fare
+      - customized_original_tax
       - price_penalty
       - price_total
       - price_consolidator
@@ -163,6 +175,9 @@ Ticket:
         created_at: long
       booleans:
         old_booking: ["пересчет запрещен", "пересчет разрешен"]
+      templates:
+        original_price_fare: money
+        original_price_tax: money
   options:
     default_action_on_item: edit
     start_year: 2011

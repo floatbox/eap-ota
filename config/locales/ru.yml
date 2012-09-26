@@ -44,7 +44,9 @@ ru:
       PRICING_ATTRIBUTES: &PRICING_ATTRIBUTES
         old_booking: "Бронирование сделано до введения скидок. Запретить пересчет."
         price_fare: "Тариф, р."
+        customized_original_fare: "Тариф в валюте офиса выписки"
         price_tax: "Таксы, р."
+        customized_original_tax: "Таксы в валюте офиса выписки"
         price_consolidator: "Сбор 1%/2% авиацентра, р."
         price_blanks: "Сбор за бланки, р."
         price_agent: "Агентская комиссия, р."
