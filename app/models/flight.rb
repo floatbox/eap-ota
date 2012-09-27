@@ -72,7 +72,7 @@ class Flight
   attr_accessor :classes, :distance
 
   def dept_date
-    Date.strptime(departure_date, '%d%m%y')
+    Date.strptime(departure_date, '%d%m%y') if departure_date
   end
 
   def dept_date=(date)
@@ -80,7 +80,7 @@ class Flight
   end
 
   def arrv_date
-    Date.strptime(arrival_date, '%d%m%y')
+    Date.strptime(arrival_date, '%d%m%y') if arrival_date
   end
 
   def arrv_date=(date)

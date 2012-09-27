@@ -3,15 +3,18 @@ class StoredFlight < ActiveRecord::Base
 
   has_and_belongs_to_many :tickets
 
-  COLUMNS = [
+  KEY_COLUMNS = [
+    :marketing_carrier_iata,
+    :flight_number,
     :departure_iata,
     :arrival_iata,
+    :dept_date
+  ]
+
+  COLUMNS = KEY_COLUMNS + [
     :departure_term,
     :arrival_term,
-    :marketing_carrier_iata,
     :operating_carrier_iata,
-    :flight_number,
-    :dept_date,
     :departure_time,
     :arrv_date,
     :arrival_time,
@@ -20,11 +23,13 @@ class StoredFlight < ActiveRecord::Base
     :duration
   ]
 
+  validates_presence_of KEY_COLUMNS
+
   # создает или обновляет stored flight по его главным ключам
   def self.from_flight(flight)
-    attrs = flight_attrs(flight, [:marketing_carrier_iata, :flight_number, :departure_iata, :arrival_iata, :dept_date])
+    attrs = flight_attrs(flight, KEY_COLUMNS)
     rec = where(attrs).first_or_initialize
-    rec.update_attributes! flight_attrs(flight)
+    rec.update_attributes! flight_attrs(flight).compact
     rec
   end
 
@@ -42,6 +47,5 @@ class StoredFlight < ActiveRecord::Base
   end
   extend FlightAttrs
   include FlightAttrs
-
 
 end
