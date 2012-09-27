@@ -17,8 +17,10 @@ class CreateStoredFlights < ActiveRecord::Migration
       
       t.string :equipment_type_iata, :limit => 4
       t.integer :technical_stop_count
+      t.integer :duration
       
       t.timestamps
     end
+    add_index :stored_flights, [:marketing_carrier_iata, :flight_number, :departure_iata, :arrival_iata, :dept_date], :unique => true, :name => :index_stored_flights
   end
 end
