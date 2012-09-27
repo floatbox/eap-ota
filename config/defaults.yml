@@ -63,6 +63,9 @@ payture:
     jEqhpDYkFUu0XMbGBYr0m6JcVXHGy3xV4J7YasVrvs0kqYJNiyaUhaHQYbAM2AWz
     IwIDAQAB
     -----END PUBLIC KEY-----
+payu:
+  seller_key: 'w7I2R8~V7=dm5H7[r1k5'
+  host: sandbox8ru.epayment.ro
 payonline:
   enabled: no
   merchant_id: '3925'
