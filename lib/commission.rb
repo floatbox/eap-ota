@@ -325,36 +325,39 @@ carrier "AB", "AIR BERLIN"
 # ticketing_method "downtown"
 # commission "5%/3%"
 
-# example 'cdgsvo/c svocdg/i'
+example 'cdgsvo/c svocdg/i'
 strt_date "15.08.2012"
 expr_date "15.12.2012"
 agent "С 15.08.12г.по15.12.12г. 7% по опубл. тарифам по классам J, C, D, I  на рейсы AВ;"
 subagent "С 15.08.12г.по15.12.12г. 5% по опубл. тарифам по классам J, C, D, I на рейсы AВ;"
 subclasses "JCDI"
 ticketing_method "direct"
-disabled "Выключил ради комбинаций"
 commission "7%/5%"
 
-# example 'cdgsvo/y svocdg/h'
+example 'cdgsvo/y svocdg/h'
+example 'cdgsvo/k svocdg/j'
 strt_date "15.08.2012"
 expr_date "15.12.2012"
 agent "С 15.08.12г.по15.12.12г. 5% по опубл. тарифам по классам Y, B, H, K на рейсы AВ;"
 subagent "С 15.08.12г.по15.12.12г. 3% по опубл. тарифам по классам Y, B, H, K на рейсы AВ;"
-subclasses "YBHK"
-disabled "Выключил ради комбинаций"
+subclasses "JCDIYBHK"
+ticketing_method "direct"
 commission "5%/3%"
 
-example 'cdgsvo svocdg'
+example 'cdgsvo/v svocdg/j'
 strt_date "15.08.2012"
 expr_date "15.12.2012"
 agent "С 15.08.12г.по15.12.12г. 3% по опубл. тарифам по классам M, L, V на рейсы AВ."
 subagent "С 15.08.12г.по15.12.12г. 2% по опубл. тарифам по классам M, L, V на рейсы AВ."
+subclasses "JCDIYBHKMLV"
+ticketing_method "direct"
 commission "3%/2%"
 
-# example 'cdgsvo svocdg'
+example 'cdgsvo svocdg'
 strt_date "16.12.2012"
 agent "С 16.12.12г. 1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
 subagent "С 16.12.12г. 5 коп с билета по опубл. тарифам на рейсы AB"
+ticketing_method "direct"
 commission "1/0.05"
 
 example 'cdgsvo svocdg/lh'
@@ -362,6 +365,7 @@ agent    "1 руб с билета по опубл. тарифам на рейс
 subagent "5 коп с билета по опубл. тарифам на рейсы AB"
 interline :no, :unconfirmed
 our_markup "1%"
+ticketing_method "direct"
 commission "1/0.05"
 
 example 'svocdg/s7'
