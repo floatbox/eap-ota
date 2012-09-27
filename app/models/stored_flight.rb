@@ -1,6 +1,8 @@
 # encoding: utf-8
 class StoredFlight < ActiveRecord::Base
 
+  has_and_belongs_to_many :tickets
+
   COLUMNS = [
     :departure_iata,
     :arrival_iata,
@@ -21,19 +23,25 @@ class StoredFlight < ActiveRecord::Base
   # создает или обновляет stored flight по его главным ключам
   def self.from_flight(flight)
     attrs = flight_attrs(flight, [:marketing_carrier_iata, :flight_number, :departure_iata, :arrival_iata, :dept_date])
-    where(attrs).first_or_initialize.update_attributes( flight_attrs(flight) )
+    rec = where(attrs).first_or_initialize
+    rec.update_attributes! flight_attrs(flight)
+    rec
   end
 
   def to_flight
     @flight ||= Flight.new(flight_attrs(self))
   end
 
-  private
 
-  # FIXME перенести во flight, может быть?
-  def flight_attrs(flight, columns=COLUMNS)
-    Hash[ columns.map { |column| [column, flight.send(column)] } ]
+  module FlightAttrs
+    # FIXME перенести во flight, может быть?
+    private
+    def flight_attrs(flight, columns=COLUMNS)
+      Hash[ columns.map { |column| [column, flight.send(column)] } ]
+    end
   end
+  extend FlightAttrs
+  include FlightAttrs
 
 
 end

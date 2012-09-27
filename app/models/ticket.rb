@@ -26,6 +26,8 @@ class Ticket < ActiveRecord::Base
   has_one :replacement, :class_name => 'Ticket', :foreign_key => 'parent_id', :conditions => 'kind ="ticket"'
   has_many :children, :class_name => 'Ticket', :foreign_key => 'parent_id'
 
+  has_and_belongs_to_many :stored_flights
+
 
   # для отображения в админке билетов. Не очень понятно,
   # как запретить добавление новых, впрочем.
