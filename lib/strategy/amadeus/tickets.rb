@@ -55,7 +55,7 @@ module Strategy::Amadeus::Tickets
       raise Strategy::TicketError, "unsupported ticketing method: #{@order.commission_ticketing_method.inspect}"
     end
   rescue ::Amadeus::Error => e
-    Airbrake.notify(e)
+    with_warning(e)
     @order.update_attributes(:ticket_status => 'error_ticket')
     raise Strategy::TicketError, e.message
   end

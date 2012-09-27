@@ -47,7 +47,7 @@ class PNRController < ApplicationController
   end
 
   def error
-    Airbrake.notify($!) rescue Rails.logger.error("  can't notify airbrake #{$!.class}: #{$!.message}")
+    with_warning
     render 'error', :status => 500
   end
 
