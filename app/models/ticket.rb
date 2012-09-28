@@ -26,6 +26,8 @@ class Ticket < ActiveRecord::Base
   has_one :replacement, :class_name => 'Ticket', :foreign_key => 'parent_id', :conditions => 'kind ="ticket"'
   has_many :children, :class_name => 'Ticket', :foreign_key => 'parent_id'
 
+  has_and_belongs_to_many :stored_flights
+
 
   # для отображения в админке билетов. Не очень понятно,
   # как запретить добавление новых, впрочем.
@@ -66,6 +68,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def flights=(flights_array)
+    # перенести в отдельный метод, вызывать в before_validate
     if [nil, '', 'unknown'].include? vat_status
       if flights_array[0].departure.country.iata != 'RU' ||
           flights_array.last.arrival.country.iata != 'RU' ||
@@ -80,6 +83,17 @@ class Ticket < ActiveRecord::Base
     self.route = flights_array.map{|fl| "#{fl.departure_iata} \- #{fl.arrival_iata} (#{fl.marketing_carrier_iata})"}.uniq.join('; ')
     self.cabins = flights_array.every.cabin.compact.join(' + ')
     self.dept_date = flights_array.first.dept_date
+
+    # и закидываем в базу
+    self.stored_flights = flights_array.map {|fl| StoredFlight.from_flight(fl) } if Conf.site.store_flights
+  end
+
+  def flights
+    stored_flights.map(&:to_flight).sort_by(&:departure_datetime_utc)
+  end
+
+  def booking_classes
+    cabins.split(' + ')
   end
 
   def price_fare_base

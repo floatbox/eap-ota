@@ -1,5 +1,6 @@
 # encoding: utf-8
 class PNR
+  include KeyValueInit
   extend CopyAttrs
   attr_accessor :number, :flights, :booking_classes, :passengers, :phone, :email, :raw, :additional_number
 

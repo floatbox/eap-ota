@@ -61,7 +61,7 @@ class Mux
       amadeus_merge_and_cleanup(recommendations_ws + recommendations_ns)
     end
   rescue
-    notify
+    with_warning
     []
   end
 
@@ -122,7 +122,7 @@ class Mux
 
     recommendations
   rescue
-    notify
+    with_warning
     []
   end
 
@@ -218,21 +218,6 @@ class Mux
       end
       short_logger.info r.short
     end
-  end
-
-  # report error and continue
-  # yanked from rails
-  # actionpack/lib/action_dispatch/middleware/show_exceptions.rb
-  def notify(exception = $!)
-    # до логгера, чтоб была видна вся инфа по эксепшну
-    ActiveSupport::Deprecation.silence do
-      # выяснить, что делает именно :silent?
-      backtrace = Rails.backtrace_cleaner.clean(exception.backtrace, :silent)
-      message = "\n#{exception.class} (#{exception.message}):\n"
-      message << "  " << backtrace.join("\n  ")
-      Rails.logger.error("#{message}\n  ...reported and continued\n")
-    end
-    Airbrake.notify(exception) rescue Rails.logger.error("  can't notify airbrake #{$!.class}: #{$!.message}")
   end
 
 end

@@ -364,6 +364,7 @@ class Recommendation
     segments = []
     subclasses = []
     cabins = []
+    date_seq = (Date.today..(Date.today + 10)).to_enum
     fragments = itinerary.split
     if fragments.first.size == 2
       default_carrier = fragments.shift
@@ -392,7 +393,8 @@ class Recommendation
       end
       flight.marketing_carrier_iata = carrier
       flight.operating_carrier_iata = operating_carrier.presence || carrier
-      flight.flight_number = flight_number.presence
+      flight.flight_number = flight_number.presence || '9999'
+      flight.dept_date = date_seq.next
       segments << Segment.new(:flights => [flight])
       subclasses << subclass
       cabins << cabin

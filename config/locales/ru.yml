@@ -25,6 +25,7 @@ ru:
       cash_charge: 'Наличные, платеж'
       cash_refund: 'Наличные, возврат'
       flight_group: 'Подборка рейсов'
+      stored_flight: 'Полетный сегмент'
       subscription: 'Подписка'
       geo_tag: 'Геотаг'
       airport: 'Аэропорт'
