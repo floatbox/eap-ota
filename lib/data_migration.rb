@@ -19,11 +19,11 @@ module DataMigration
         if stored_ticket && !stored_ticket.parent
           {
             :id => stored_ticket.id,
-            :original_price_fare => th[:original_price_fare],
-            :original_price_total => th[:original_price_total]
+            :original_price_fare => th[:original_price_fare].with_currency,
+            :original_price_total => th[:original_price_total].with_currency
           }
         else
-          {}
+          nil
         end
       end
     else
@@ -34,7 +34,18 @@ module DataMigration
         }
       end
     end
+  end
 
+  def self.create_price_migration_csv
+    ticket_hashes = Order.where(:ticket_status => 'ticketed').where('created_at >= ?', Date.new(2012,9,18)).inject([]) do |memo ,o|
+      memo + ticket_original_prices(o).compact
+    end
+    CSV.open("tickets.csv", "wb") do |csv|
+      csv << ticket_hashes[0].keys
+      ticket_hashes.each do |t|
+        csv << t.values
+      end
+    end
   end
 
   def self.get_tz_from_lat_and_lng(lat, lng)
@@ -52,30 +63,30 @@ module DataMigration
                    :average_time_delta => d.average_time_delta,
                    :hot_offers_counter => d.hot_offers_counter}
       dest = DestinationMongo.create(attr_hash)
-    end
-    HotOffer.limit(20).each do |h|
-      attr_hash = {:code => h.code,
-                   :url => h.url,
-                   :description => h.description,
-                   :price => h.price,
-                   :for_stats_only => h.for_stats_only,
-                   :destination_id => h.destination_id,
-                   :time_delta => h.time_delta,
-                   :price_variation => h.price_variation,
-                   :price_variation_percent => h.price_variation_percent}
-      hot_offer = HotOfferMongo.create(attr_hash)
-    end
+  end
+  HotOffer.limit(20).each do |h|
+  attr_hash = {:code => h.code,
+    :url => h.url,
+    :description => h.description,
+    :price => h.price,
+    :for_stats_only => h.for_stats_only,
+    :destination_id => h.destination_id,
+    :time_delta => h.time_delta,
+    :price_variation => h.price_variation,
+    :price_variation_percent => h.price_variation_percent}
+hot_offer = HotOfferMongo.create(attr_hash)
+  end
   end
 
   def self.fill_in_timezones_for_cities
-    City.find(:all, :conditions => 'timezone = "" and lat is not null and lng is not null and lat and lng').each do |c|
-      c.update_attribute :timezone, get_tz_from_lat_and_lng(c.lat, c.lng)
-      sleep 0.5
-    end
+  City.find(:all, :conditions => 'timezone = "" and lat is not null and lng is not null and lat and lng').each do |c|
+c.update_attribute :timezone, get_tz_from_lat_and_lng(c.lat, c.lng)
+  sleep 0.5
+  end
   end
 
 
-  def self.fill_in_morpher_fields(klass, first_id = 0)
+def self.fill_in_morpher_fields(klass, first_id = 0)
     klass.all(:conditions => ['((proper_to = "") or (proper_to is NULL)) and (morpher_to is NULL or morpher_to = "") and (name_ru != "") and (name_ru is not NULL) and (id >= ?)', first_id]).each do |c|
       c.save_guessed
     end
