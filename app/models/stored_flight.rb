@@ -29,14 +29,33 @@ class StoredFlight < ActiveRecord::Base
   def self.from_flight(flight)
     attrs = flight_attrs(flight, KEY_COLUMNS)
     rec = where(attrs).first_or_initialize
-    rec.update_attributes! flight_attrs(flight).compact
+    rec.flight = flight
     rec
+  end
+
+  def flight=(flight)
+    update_attributes! flight_attrs(flight).compact
   end
 
   def to_flight
     @flight ||= Flight.new(flight_attrs(self))
   end
 
+  # FIXME перенести код в стратегию, что ли
+  def update_from_gds!
+    flight =
+      Amadeus.booking do |amadeus|
+        amadeus.air_flight_info(
+          carrier: marketing_carrier_iata,
+          number: flight_number,
+          departure_iata: departure_iata,
+          arrival_iata: arrival_iata,
+          date: dept_date
+        ).flight
+      end
+
+    self.flight = flight if flight
+  end
 
   module FlightAttrs
     # FIXME перенести во flight, может быть?

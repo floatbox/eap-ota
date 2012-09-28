@@ -186,6 +186,7 @@ ru:
   Save and continue editing: Сохранить и продолжить редактирование
   'Add New %{resource}': 'Создание нового %{resource}'
   'Update Completer': 'Перегенерить комплитер'
+  'Update From Gds': 'Обновить из GDS'
 
   # Applications
   Applications: Разделы

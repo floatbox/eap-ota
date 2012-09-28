@@ -40,7 +40,7 @@ admin:
   CashCharge: create, update, read
   CashRefund: create, update, read
   PromoCode: create, update, read
-  StoredFlight: update, read
+  StoredFlight: create, update, read, update_from_gds
 
 hoteditor:
   HotOffer: read, delete

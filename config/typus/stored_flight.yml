@@ -36,4 +36,5 @@ StoredFlight:
   application: Misc, 2
   # scopes:
   search: =departure_iata, =arrival_iata, =flight_number, =marketing_carrier_iata
-
+  actions:
+    show: update_from_gds
