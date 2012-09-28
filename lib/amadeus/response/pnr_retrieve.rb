@@ -141,12 +141,14 @@ module Amadeus
           passenger_ref = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='PT']/r:number").to_i
           segments_refs = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='ST']/r:number").every.to_i.sort
           passenger_elem = xpath("//r:travellerInfo[r:elementManagementPassenger/r:reference[r:qualifier='PT'][r:number=#{passenger_ref}]]")
-          passenger_last_name = passenger_elem.xpath('r:passengerData/r:travellerInformation/r:traveller/r:surname').to_s
           ticket_hash = parsed_ticket_string(fa.to_s)
           infant_flag = ticket_hash.delete(:inf) == 'INF' ? 'i': 'a'
           if infant_flag != 'i'
+            passenger_last_name = passenger_elem.xpath('r:passengerData/r:travellerInformation/r:traveller/r:surname').to_s
             passenger_first_name = passenger_elem.xpath('r:passengerData/r:travellerInformation/r:passenger/r:firstName').to_s
           else
+            passenger_last_name = passenger_elem.xpath('r:passengerData/r:travellerInformation/r:passenger[r:type="INF"]/../r:traveller/r:surname').to_s ||
+              passenger_elem.xpath('r:passengerData/r:travellerInformation/r:traveller/r:surname').to_s
             passenger_first_name = passenger_elem.xpath('r:passengerData/r:travellerInformation/r:passenger[r:type="INF"]/r:firstName').to_s
           end
           flights_array = segments_refs.map do |sr|

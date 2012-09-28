@@ -125,8 +125,8 @@ class Notification < ActiveRecord::Base
       to_send.send_email
       counter += 1
     end
-    rescue
-      Airbrake.notify($!) rescue Rails.logger.error(" can't notify airbrake #{$!.class}: #{$!.message}")
+  rescue
+    with_warning
   end
 
   def sent_status

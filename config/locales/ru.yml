@@ -25,6 +25,7 @@ ru:
       cash_charge: 'Наличные, платеж'
       cash_refund: 'Наличные, возврат'
       flight_group: 'Подборка рейсов'
+      stored_flight: 'Полетный сегмент'
       subscription: 'Подписка'
       geo_tag: 'Геотаг'
       airport: 'Аэропорт'
@@ -185,6 +186,7 @@ ru:
   Save and continue editing: Сохранить и продолжить редактирование
   'Add New %{resource}': 'Создание нового %{resource}'
   'Update Completer': 'Перегенерить комплитер'
+  'Update From Gds': 'Обновить из GDS'
 
   # Applications
   Applications: Разделы

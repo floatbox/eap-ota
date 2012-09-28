@@ -2,7 +2,12 @@
 class PNRController < ApplicationController
 
   rescue_from RuntimeError, :with => :error
-  before_filter :get_data, :only => [:show, :show_as_booked, :show_as_order, :show_as_ticketed, :show_for_ticket, :show_notice]
+  before_filter :set_lang
+  before_filter :get_data, :only => [:show, :show_as_booked, :show_as_order, :show_as_ticketed, :show_notice]
+
+  def set_lang
+    @lang = params[:lang]
+  end
 
   def get_data
     @pnr = PNR.get_by_number params[:id]
@@ -10,7 +15,6 @@ class PNRController < ApplicationController
     @pnr.email = @prices.email if @prices.source == 'sirena' && @pnr.email.blank?
     @passengers = @pnr.passengers
     @last_pay_time = @pnr.order.last_pay_time
-    @lang = params[:lang]
   end
 
   def show
@@ -39,15 +43,21 @@ class PNRController < ApplicationController
   end
 
   def show_for_ticket
-    ticket = Ticket.find(params[:ticket_id])
-    raise 'ticket don\'t belong to order' if ticket.order != @pnr.order
+    order = Order.find_by_pnr_number!(params[:id])
+    ticket = order.tickets.find(params[:ticket_id])
+    @last_pay_time = order.last_pay_time
+    @pnr = PNR.new(:email => order.email, :phone => order.phone, :number => order.pnr_number, :booking_classes => ticket.booking_classes)
+    @flights = ticket.flights.presence
+
+    get_data unless @flights
+
     @prices = ticket
     @passengers = [Person.new(:first_name => ticket.first_name, :last_name => ticket.last_name, :passport => ticket.passport, :tickets => [ticket])]
     render "ticket"
   end
 
   def error
-    Airbrake.notify($!) rescue Rails.logger.error("  can't notify airbrake #{$!.class}: #{$!.message}")
+    with_warning
     render 'error', :status => 500
   end
 

@@ -25,5 +25,8 @@ write_csv( 'cities.csv', %W[ iata name_en name_ru lat lng importance country.iat
 write_csv( 'airports.csv', %W[ iata name_en name_ru lat lng importance city.iata synonym_list case_from case_to case_in],
           Airport.where("iata is not null and iata <> ''").includes(:city, :country).all );
 
-write_csv( 'airlines.csv', %W[ iata name_en name_ru lat lng importance city.iata country.iata synonym_list],
-          Airport.where("iata is not null and iata <> ''").includes(:city, :country).all );
+write_csv( 'carriers.csv', %W[ iata en_shortname en_longname ru_shortname ru_longname country.iata bonus_program_name alliance.name],
+          Carrier.where("iata is not null and iata <> ''").includes(:country, :alliance).all );
+
+write_csv( 'airplanes.csv', %W[ iata name_en name_ru engine_type],
+          Airplane.where("iata is not null and iata <> ''").all );
