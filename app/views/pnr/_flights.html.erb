@@ -1,5 +1,6 @@
+<%# FIXME ugly shit. избавиться от обоих %>
 <% @flights ||= @pnr.flights %>
-<% booking_classes = @pnr ? @pnr.booking_classes : [] %>
+<% booking_classes = @pnr.try(:booking_classes) || [] %>
 
 <thead valign="bottom" style="font-size: 13px;">
 <tr>
@@ -16,8 +17,7 @@
 </tr>
 </thead>
 <tbody valign="top">
-<% for flight, booking_class, baggage_limitations in
-  (@flights.zip(booking_classes).zip(@prices.baggage_array).map {|(a,b), c| [a, b, c]}) %>
+<% for flight, booking_class, baggage_limitations in @flights.zip( booking_classes, @prices.baggage_array) %>
 <tr>
     <td colspan="7" style="font-size: 12px; line-height: 12px;"><br></td>
 </tr>

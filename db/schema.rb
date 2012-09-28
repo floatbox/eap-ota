@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120926163049) do
+ActiveRecord::Schema.define(:version => 20120927023127) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -413,6 +413,13 @@ ActiveRecord::Schema.define(:version => 20120926163049) do
   end
 
   add_index "stored_flights", ["marketing_carrier_iata", "flight_number", "departure_iata", "arrival_iata", "dept_date"], :name => "index_stored_flights", :unique => true
+
+  create_table "stored_flights_tickets", :id => false, :force => true do |t|
+    t.integer "stored_flight_id"
+    t.integer "ticket_id"
+  end
+
+  add_index "stored_flights_tickets", ["stored_flight_id", "ticket_id"], :name => "index_stored_flights_tickets_on_stored_flight_id_and_ticket_id"
 
   create_table "subscriptions", :force => true do |t|
     t.integer  "destination_id",                 :null => false

@@ -60,7 +60,7 @@ describe Ticket do
 
   describe "#flights=" do
     let(:cabins) {[]}
-    let(:dept_dates) {['121011']}
+    let(:dept_dates) {[]}
     subject do
       flights = Recommendation.example(flight_string).flights
       flights.each_with_index {|fl, i| fl.cabin = cabins[i]} if cabins.present?
