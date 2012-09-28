@@ -34,6 +34,17 @@ describe Amadeus::Response::PNRRetrieve do
 
   end
 
+  context 'ticket for infant with different last name' do
+
+    let_once! :response do
+      amadeus_response('spec/amadeus/xml/PNR_Retrieve_infant_with_diff_last_name.xml')
+    end
+
+    subject {response.tickets[[[17, "i"], [1, 2]]]}
+    specify {subject[:last_name].should == "EFIMOVA"}
+
+  end
+
   describe 'with another complex exchange' do
 
     let_once! :response do
