@@ -46,7 +46,7 @@ class PNRController < ApplicationController
     order = Order.find_by_pnr_number!(params[:id])
     ticket = order.tickets.find(params[:ticket_id])
     @last_pay_time = order.last_pay_time
-    @pnr = PNR.new(:email => order.email, :phone => order.phone, :number => order.pnr_number)
+    @pnr = PNR.new(:email => order.email, :phone => order.phone, :number => order.pnr_number, :booking_classes => ticket.booking_classes)
     @flights = ticket.flights.presence
 
     get_data unless @flights
