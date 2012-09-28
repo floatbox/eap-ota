@@ -4,6 +4,7 @@ site:
   forbidden_sale: no
   forbidden_cash: no
   forbidden_delivery: no
+  store_flights: no
 api:
   enabled: yes
   store_rambler_cache: no

@@ -85,7 +85,7 @@ class Ticket < ActiveRecord::Base
     self.dept_date = flights_array.first.dept_date
 
     # и закидываем в базу
-    self.stored_flights = flights_array.map {|fl| StoredFlight.from_flight(fl) }
+    self.stored_flights = flights_array.map {|fl| StoredFlight.from_flight(fl) } if Conf.site.store_flights
   end
 
   def flights
