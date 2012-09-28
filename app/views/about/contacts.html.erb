@@ -22,7 +22,7 @@
 
 <div class="wrap">
 <div style="float: right;">
-    <div id="map-canvas" style="width: 450px; height: 350px; border: 1px solid #AAA;"></div>
+    <div id="map-canvas" style="width: 450px; height: 646px; border: 1px solid #AAA;"></div>
 </div>
 <div style="margin-right: 480px;">
     <div class="asection">
@@ -65,7 +65,7 @@
 <script type="text/javascript">
 $(function() {
     var map = new google.maps.Map($('#map-canvas').get(0), {
-        zoom: 14,
+        zoom: 12,
         center: new google.maps.LatLng(55.758594, 37.565955),
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         streetViewControl: false,
