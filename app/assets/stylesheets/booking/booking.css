@@ -100,16 +100,17 @@
 
 /* Нижняя часть */
 .bf-footer {
-    position: relative;
-    margin: 25px 20px 0 315px;
-    padding-bottom: 30px;
+    margin: 0 20px;
+    padding: 25px 0 30px;
+    overflow: hidden;
 }
-.bff-price,
-.bff-passengers {
-    position: absolute;
-    top: 12px;
-    left: -300px;
-    width: 260px;
+.bff-left {
+    float: left;
+    width: 255px;
+    padding-top: 12px;
+}
+.bff-right {
+    margin-left: 295px;
 }
 .bffp-content {
     float: right;

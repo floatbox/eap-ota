@@ -92,34 +92,38 @@
     <% price_tax_and_markup = @order_form.recommendation.price_tax_and_markup.round.to_i %>
     <% price_discount = @order_form.recommendation.price_discount.round.to_i %>
     <div class="bf-footer">
-        <div class="bff-price">
-            <div class="bffp-content">
-                <p class="bffp-nd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total %></span>&nbsp;<%= rubles(price_total) %></p>
-                <p class="bffp-wd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total + 400 %></span>&nbsp;<%= rubles(price_total + 400) %></p>
-                <p class="bffp-tip"><%= 'за всех пассажиров' if @order_form.people.many? %></p>
-                <ul class="bffp-details">
-                    <li class="bffpd-item">Тариф — <%= price_fare %> <span class="ruble">Р</span></li>
-                    <li class="bffpd-item">Таксы и сборы — <%= price_total - price_fare %> <span class="ruble">Р</span></li>
-                    <li class="bffpd-item">В том числе сервисный сбор — <%= @order_form.recommendation.fee.round.to_i %> <span class="ruble">Р</span></li>
-                    <li class="bffpd-item bffp-wd">Доставка — 400 <span class="ruble">Р</span></li>
-                    <% if price_discount > 0 %>
-                        <li class="bffpd-item">Скидка — <%= price_discount %> <span class="ruble">Р</span></li>
-                    <% end %>
-                </ul>
+        <div class="bff-left">
+            <div class="bff-price">
+                <div class="bffp-content">
+                    <p class="bffp-nd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total %></span>&nbsp;<%= rubles(price_total) %></p>
+                    <p class="bffp-wd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total + 400 %></span>&nbsp;<%= rubles(price_total + 400) %></p>
+                    <p class="bffp-tip"><%= 'за всех пассажиров' if @order_form.people.many? %></p>
+                    <ul class="bffp-details">
+                        <li class="bffpd-item">Тариф — <%= price_fare %> <span class="ruble">Р</span></li>
+                        <li class="bffpd-item">Таксы и сборы — <%= price_total - price_fare %> <span class="ruble">Р</span></li>
+                        <li class="bffpd-item">В том числе сервисный сбор — <%= @order_form.recommendation.fee.round.to_i %> <span class="ruble">Р</span></li>
+                        <li class="bffpd-item bffp-wd">Доставка — 400 <span class="ruble">Р</span></li>
+                        <% if price_discount > 0 %>
+                            <li class="bffpd-item">Скидка — <%= price_discount %> <span class="ruble">Р</span></li>
+                        <% end %>
+                    </ul>
+                </div>
             </div>
         </div>
-        <div class="bff-submit">
-            <div class="bf-button">
-                <div class="bfb-title">Купить</div>
-                <div class="bfb-side bfb-left"><div class="bfb-side bfb-right"></div></div>
+        <div class="bff-right">
+            <div class="bff-submit">
+                <div class="bf-button">
+                    <div class="bfb-title">Купить</div>
+                    <div class="bfb-side bfb-left"><div class="bfb-side bfb-right"></div></div>
+                </div>
+                <!--<div class="bff-cancel">или <span class="link bffc-link">вернуться к выбору вариантов</span></div>-->
+                <div class="bff-progress">секундочку...</div>
             </div>
-            <!--<div class="bff-cancel">или <span class="link bffc-link">вернуться к выбору вариантов</span></div>-->
-            <div class="bff-progress">секундочку...</div>
-        </div>
-        <div class="bff-required"></div>
-        <div class="bff-disclaimer">
-            <p class="bffd-card">После нажатия кнопки «Купить» данные пассажиров попадут в&nbsp;систему бронирования, билет будет оформлен и&nbsp;выслан вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="/agreement/" target="_blank" class="bffd-link">условиями использования</a>, <a href="/iata/" target="_blank" class="bffd-link">правилами IATA</a> и&nbsp;<span class="link bffd-link bffd-farerules">правилами тарифов</span>.</p>
-            <p class="bffd-cash latent">После нажатия кнопки «Купить» подтверждение бронирования будет выслано вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Мы свяжемся с&nbsp;вами по&nbsp;телефону для уточнения деталей доставки. Нажимая «Купить», вы соглашаетесь с&nbsp;<a class="bffd-link" href="/agreement/" target="_blank">условиями использования</a>, <a class="bffd-link" href="/iata/" target="_blank">правилами IATA</a> и&nbsp;<span class="link bffd-link bffd-farerules">правилами тарифов</span>.</p>
+            <div class="bff-required"></div>
+            <div class="bff-disclaimer">
+                <p class="bffd-card">После нажатия кнопки «Купить» данные пассажиров попадут в&nbsp;систему бронирования, билет будет оформлен и&nbsp;выслан вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="/agreement/" target="_blank" class="bffd-link">условиями использования</a>, <a href="/iata/" target="_blank" class="bffd-link">правилами IATA</a> и&nbsp;<span class="link bffd-link bffd-farerules">правилами тарифов</span>.</p>
+                <p class="bffd-cash latent">После нажатия кнопки «Купить» подтверждение бронирования будет выслано вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Мы свяжемся с&nbsp;вами по&nbsp;телефону для уточнения деталей доставки. Нажимая «Купить», вы соглашаетесь с&nbsp;<a class="bffd-link" href="/agreement/" target="_blank">условиями использования</a>, <a class="bffd-link" href="/iata/" target="_blank">правилами IATA</a> и&nbsp;<span class="link bffd-link bffd-farerules">правилами тарифов</span>.</p>
+            </div>
         </div>
     </div>
     

@@ -38,7 +38,9 @@ init: function() {
     var btitle = this.button.find('.bfb-title').click(function() {
         that.el.submit();
     });
-    this.footer.css('margin-left', 20 + 325 + 7 - Math.round(btitle.width() / 2));
+    var offset = 325 + 7 - Math.round(btitle.width() / 2);
+    this.footer.find('.bff-left').width(offset - 40);
+    this.footer.find('.bff-right').css('margin-left', offset);
     this.required = this.el.find('.bff-required');
     this.required.delegate('.bffr-link', 'click', function() {
         that.focus($('#' + $(this).attr('data-field')));
