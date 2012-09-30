@@ -26,7 +26,7 @@ module Strategy::Amadeus::Tickets
           else
             BaggageLimit.new.serialize
           end
-        end.join(' ')
+        end
         tickets << ticket_hash.merge({
           :source => 'amadeus',
           :baggage_info => baggage_info,
