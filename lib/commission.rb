@@ -314,6 +314,7 @@ carrier "AB", "AIR BERLIN"
 # #disabled
 # commission "5%/3%"
 # 
+# FIXME нужно ли это правило отдельно после добавления HG в not_interlines?
 # example 'dmevie/hg viedme/hg'
 # example 'dmevie/hg'
 # agent    "5% по всем направлениям через DTT"
@@ -354,6 +355,7 @@ ticketing_method "direct"
 commission "3%/2%"
 
 example 'cdgsvo svocdg'
+example 'cdgsvo/HG svocdg/HG'
 strt_date "16.12.2012"
 agent "С 16.12.12г. 1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
 subagent "С 16.12.12г. 5 коп с билета по опубл. тарифам на рейсы AB"
