@@ -66,7 +66,7 @@ class HotOffer
     fromdate = Date.tomorrow if fromdate < Date.tomorrow
     todate = fromdate.months_since(2)
 
-    if Date.today.month + 2 >= todate.month # FIXME в ноябре-декабре работать как надо не будет!
+    if Date.today.month == fromdate.month 
       searchdays = 1
     else
       searchdays = 2
