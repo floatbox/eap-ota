@@ -108,4 +108,41 @@ describe Recommendation do
     end
 
   end
+
+  describe "interline:" do
+
+    let (:not_interline) {Recommendation.example('SVOCDG/SU', :carrier => 'SU')}
+    let (:half_interline) {Recommendation.example('SVOCDG/AB CDGSVO/SU', :carrier => 'SU')}
+    let (:interline_but_first) {Recommendation.example('SVOCDG/SU CDGSVO/AB', :carrier => 'SU')}
+    let (:interline) {Recommendation.example('SVOCDG/AB CDGSVO/AB', :carrier => 'SU')}
+
+    it "#validating_carrier_participates?" do
+      not_interline.validating_carrier_participates?.should be_true
+      half_interline.validating_carrier_participates?.should be_true
+      interline_but_first.validating_carrier_participates?.should be_true
+      interline.validating_carrier_participates?.should be_false
+    end
+
+    it "#validating_carrier_makes_half_of_itinerary?" do
+      not_interline.validating_carrier_makes_half_of_itinerary?.should be_true
+      half_interline.validating_carrier_makes_half_of_itinerary?.should be_true
+      interline_but_first.validating_carrier_makes_half_of_itinerary?.should be_true
+      interline.validating_carrier_makes_half_of_itinerary?.should be_false
+    end
+
+    it "#validating_carrier_starts_itinerary?" do
+      not_interline.validating_carrier_starts_itinerary?.should be_true
+      half_interline.validating_carrier_starts_itinerary?.should be_false
+      interline_but_first.validating_carrier_starts_itinerary?.should be_true
+      interline.validating_carrier_starts_itinerary?.should be_false
+    end
+
+    it "#interline?" do
+      not_interline.interline?.should be_false
+      half_interline.interline?.should be_true
+      interline_but_first.interline?.should be_true
+      interline.interline?.should be_true
+    end
+
+  end
 end
