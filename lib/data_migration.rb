@@ -16,7 +16,7 @@ module DataMigration
       ticket_hashes = order.strategy.get_tickets
       ticket_hashes.map do |th|
         stored_ticket = order.tickets.select{|t| t.code.to_s == th[:code].to_s && t.number.to_s[0..9] == th[:number].to_s}.first
-        if stored_ticket && !stored_ticket.parent
+        if stored_ticket && !stored_ticket.parent && th[:original_price_fare] && th[:original_price_total]
           {
             :id => stored_ticket.id,
             :original_price_fare => th[:original_price_fare].with_currency,
@@ -36,9 +36,28 @@ module DataMigration
     end
   end
 
+  def self.price_migration_for_russian_offices
+    Ticket.update_all "original_fare_cents = (price_fare * 100),
+                       original_fare_currency = 'RUB',
+                       original_tax_cents = (price_tax * 100),
+                       original_tax_currency = 'RUB'", "office_id != 'FLL1S212V'"
+
+  end
+
+  def self.load_ticket_prices_form_csv
+    CSV.foreach('tickets.csv') do |id, fare, total|
+      Ticket.find(id).update_attributes(:original_price_total => total.to_money, :original_price_fare => fare.to_money)
+    end
+  end
+
   def self.create_price_migration_csv
-    ticket_hashes = Order.where(:ticket_status => 'ticketed').where('created_at >= ?', Date.new(2012,9,18)).inject([]) do |memo ,o|
-      memo + ticket_original_prices(o).compact
+    ticket_hashes = Order.by_office_id('FLL1S212V').where(:ticket_status => 'ticketed').where('orders.created_at >= ?', Date.today - 11.month).inject([]) do |memo ,o|
+      print o.id
+      begin
+        memo + ticket_original_prices(o).compact
+      rescue
+        memo
+      end
     end
     CSV.open("tickets.csv", "wb") do |csv|
       csv << ticket_hashes[0].keys

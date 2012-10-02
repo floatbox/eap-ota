@@ -42,10 +42,8 @@ Ticket:
       - itinerary_receipt
       - parent
     new: 
-      - price_fare
-      - price_tax
-      - customized_original_fare
-      - customized_original_fare
+      - original_price_fare
+      - original_price_tax
       - price_penalty
       - price_discount
       - price_our_markup
@@ -112,8 +110,6 @@ Ticket:
       - last_name
       - first_name
       - route
-      - price_fare
-      - price_tax
       - original_price_fare
       - original_price_tax
       - price_penalty
@@ -131,7 +127,7 @@ Ticket:
       - mso_number
       - comment
       - corrected_price
-    new_refund: price_fare, price_tax, price_penalty, price_consolidator, price_discount, price_our_markup, price_extra_penalty, route, comment
+    new_refund: original_price_fare, original_price_tax, price_penalty, price_consolidator, price_discount, price_our_markup, price_extra_penalty, route, comment
     confirm_refund: ticketed_date, status
     csv:
       - source

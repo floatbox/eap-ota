@@ -47,7 +47,7 @@ class Ticket < ActiveRecord::Base
   include Pricing::Ticket
 
   before_validation :update_prices_and_add_parent, :if => :original_price_total
-  before_validation :check_currency
+  before_validation :check_currency, :if => :ticketed_date
   before_save :recalculate_commissions, :set_validating_carrier
 
   scope :uncomplete, where(:ticketed_date => nil)
@@ -220,11 +220,11 @@ class Ticket < ActiveRecord::Base
     self.price_penalty *= -1 if price_penalty < 0
     self.price_discount *= -1 if price_discount > 0
     self.price_our_markup *= -1 if price_our_markup > 0
-    self.price_tax *= -1 if price_tax > 0
-    self.price_fare *= -1 if price_fare > 0
+    self.original_price_tax *= -1 if original_price_tax.cents > 0
+    self.original_price_fare *= -1 if original_price_fare.cents > 0
     self.price_consolidator *= -1 if price_consolidator > 0
-    self.commission_subagent = 0 if price_fare != -parent.price_fare && !parent.commission_subagent.percentage?
-    self.commission_agent = 0 if price_fare != -parent.price_fare && !parent.commission_agent.percentage?
+    self.commission_subagent = 0 if original_price_fare != -parent.original_price_fare && !parent.commission_subagent.percentage?
+    self.commission_agent = 0 if original_price_fare != -parent.original_price_fare && !parent.commission_agent.percentage?
   end
 
   def copy_commissions_from_order
