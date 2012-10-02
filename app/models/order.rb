@@ -124,7 +124,7 @@ class Order < ActiveRecord::Base
   def baggage_array
     return [] unless sold_tickets.all?{|t| t.baggage_info.present?}
     sold_tickets.map do |t|
-      t.baggage_info.to_s.split.map{|code| BaggageLimit.deserialize(code)}
+      t.baggage_info.map{|code| BaggageLimit.deserialize(code)}
     end.transpose
   end
 

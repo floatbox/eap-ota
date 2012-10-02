@@ -108,4 +108,77 @@ describe Recommendation do
     end
 
   end
+
+  describe "interline:" do
+
+    # FIXME модифицировать прямо в before do?
+    # прогнать, если фейлит
+    # rails runner -e test "Carrier['AB'].update_attributes not_interlines: ['HG']"
+    specify "following tests assumes that HG is in #not_interlines of Carrier['AB']" do
+      Carrier['AB'].not_interlines.should include('HG')
+    end
+
+    let :not_interline do
+      Recommendation.example('SVOCDG/AB', :carrier => 'AB')
+    end
+    let :partner_not_interline do
+      Recommendation.example('SVOCDG/HG', :carrier => 'AB')
+    end
+    let :half_interline do
+      Recommendation.example('SVOCDG/LH CDGSVO/AB', :carrier => 'AB')
+    end
+    let :partner_half_interline do
+      Recommendation.example('SVOCDG/LH CDGSVO/HG', :carrier => 'AB')
+    end
+    let :interline_but_first do
+      Recommendation.example('SVOCDG/AB CDGSVO/LH', :carrier => 'AB')
+    end
+    let :partner_interline_but_first do
+      Recommendation.example('SVOCDG/HG CDGSVO/LH', :carrier => 'AB')
+    end
+    let :interline do
+      Recommendation.example('SVOCDG/LH CDGSVO/LH', :carrier => 'AB')
+    end
+
+    # ugly
+    it "#validating_carrier_participates?" do
+      not_interline.validating_carrier_participates?.should be_true
+      partner_not_interline.validating_carrier_participates?.should be_true
+      half_interline.validating_carrier_participates?.should be_true
+      partner_half_interline.validating_carrier_participates?.should be_true
+      interline_but_first.validating_carrier_participates?.should be_true
+      partner_interline_but_first.validating_carrier_participates?.should be_true
+      interline.validating_carrier_participates?.should be_false
+    end
+
+    it "#validating_carrier_makes_half_of_itinerary?" do
+      not_interline.validating_carrier_makes_half_of_itinerary?.should be_true
+      partner_not_interline.validating_carrier_makes_half_of_itinerary?.should be_true
+      half_interline.validating_carrier_makes_half_of_itinerary?.should be_true
+      partner_half_interline.validating_carrier_makes_half_of_itinerary?.should be_true
+      interline_but_first.validating_carrier_makes_half_of_itinerary?.should be_true
+      partner_interline_but_first.validating_carrier_makes_half_of_itinerary?.should be_true
+      interline.validating_carrier_makes_half_of_itinerary?.should be_false
+    end
+
+    it "#validating_carrier_starts_itinerary?" do
+      not_interline.validating_carrier_starts_itinerary?.should be_true
+      partner_not_interline.validating_carrier_starts_itinerary?.should be_true
+      half_interline.validating_carrier_starts_itinerary?.should be_false
+      partner_half_interline.validating_carrier_starts_itinerary?.should be_false
+      interline_but_first.validating_carrier_starts_itinerary?.should be_true
+      partner_interline_but_first.validating_carrier_starts_itinerary?.should be_true
+      interline.validating_carrier_starts_itinerary?.should be_false
+    end
+
+    it "#interline?" do
+      not_interline.interline?.should be_false
+      partner_not_interline.interline?.should be_false
+      half_interline.interline?.should be_true
+      partner_half_interline.interline?.should be_true
+      interline_but_first.interline?.should be_true
+      interline.interline?.should be_true
+    end
+
+  end
 end

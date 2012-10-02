@@ -226,7 +226,7 @@ describe Order do
           :status => 'ticketed',
           :office_id => 'MOWR2219U',
           :validator => '92223412',
-          :baggage_info => '1N'
+          :baggage_info => ['1N']
         ))
         @order.load_tickets
       end

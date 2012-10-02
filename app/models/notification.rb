@@ -65,6 +65,7 @@ class Notification < ActiveRecord::Base
   end
 
   def send_notice
+    I18n.locale = :ru
     prepare_notice
     logger.info 'Notification: sending email'
     NotifierMailer.notice(self).deliver
@@ -114,19 +115,6 @@ class Notification < ActiveRecord::Base
       update_attribute(:status, 'error')
       puts "Reminder pnr #{pnr_number} to #{destination} ERROR on #{Time.now}"
     raise
-  end
-
-  # а оно сейчас еще используется? по одному письму в пять минут?
-  # FIXME вынесите если больше не нужно
-  def self.process_queued_emails!
-    I18n.locale = :ru
-    counter = 0
-    while (to_send = Notification.email_queue.first) && counter < 50
-      to_send.send_email
-      counter += 1
-    end
-  rescue
-    with_warning
   end
 
   def sent_status

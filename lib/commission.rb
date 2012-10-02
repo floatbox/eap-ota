@@ -314,6 +314,7 @@ carrier "AB", "AIR BERLIN"
 # #disabled
 # commission "5%/3%"
 # 
+# FIXME нужно ли это правило отдельно после добавления HG в not_interlines?
 # example 'dmevie/hg viedme/hg'
 # example 'dmevie/hg'
 # agent    "5% по всем направлениям через DTT"
@@ -329,7 +330,7 @@ example 'cdgsvo/c svocdg/i'
 strt_date "15.08.2012"
 expr_date "15.12.2012"
 agent "С 15.08.12г.по15.12.12г. 7% по опубл. тарифам по классам J, C, D, I  на рейсы AВ;"
-subagent "С 15.08.12г.по15.12.12г. 5% по опубл. тарифам по классам J, C, D, I на рейсы AВ;"
+subagent "С 15.08.12г.по15.12.12г. 5% по опубл. тарифам по классам J, C, D, I на рейсы AВ;"
 subclasses "JCDI"
 ticketing_method "direct"
 commission "7%/5%"
@@ -339,7 +340,7 @@ example 'cdgsvo/k svocdg/j'
 strt_date "15.08.2012"
 expr_date "15.12.2012"
 agent "С 15.08.12г.по15.12.12г. 5% по опубл. тарифам по классам Y, B, H, K на рейсы AВ;"
-subagent "С 15.08.12г.по15.12.12г. 3% по опубл. тарифам по классам Y, B, H, K на рейсы AВ;"
+subagent "С 15.08.12г.по15.12.12г. 3% по опубл. тарифам по классам Y, B, H, K на рейсы AВ;"
 subclasses "JCDIYBHK"
 ticketing_method "direct"
 commission "5%/3%"
@@ -348,15 +349,16 @@ example 'cdgsvo/v svocdg/j'
 strt_date "15.08.2012"
 expr_date "15.12.2012"
 agent "С 15.08.12г.по15.12.12г. 3% по опубл. тарифам по классам M, L, V на рейсы AВ."
-subagent "С 15.08.12г.по15.12.12г. 2% по опубл. тарифам по классам M, L, V на рейсы AВ."
+subagent "С 15.08.12г.по15.12.12г. 2% по опубл. тарифам по классам M, L, V на рейсы AВ."
 subclasses "JCDIYBHKMLV"
 ticketing_method "direct"
 commission "3%/2%"
 
 example 'cdgsvo svocdg'
+example 'cdgsvo/HG svocdg/HG'
 strt_date "16.12.2012"
 agent "С 16.12.12г. 1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
-subagent "С 16.12.12г. 5 коп с билета по опубл. тарифам на рейсы AB"
+subagent "С 16.12.12г. 5 коп с билета по опубл. тарифам на рейсы AB"
 ticketing_method "direct"
 commission "1/0.05"
 
@@ -446,7 +448,7 @@ subagent "8% для билетов эконом-класса"
 classes :economy
 # нахрена было иаты аэропортов выписывать? городов меньше
 check { includes(airport_iatas, %W(FLU EWR LGA JFK LAX SMO VNY WHP MIA ТNT OPF TMB MDW ORD PWK CGX DPA RFD BOS YTZ YKZ YYZ VCP GRU CGH GIG SDU CCS EZE AEP ALG CAI CAS CMN KYE TIP TUN AMM ADJ TLV SDV BEY DAM IKA THR)) }
-discount "3.5%"
+discount "5%"
 commission "10%/8%"
 
 example 'vceflu/business fluvce/business'
@@ -475,6 +477,7 @@ agent "10% на тарифы Эконом класса;"
 subagent "8% на тарифы Эконом класса;"
 classes :economy
 check { includes(city_iatas.first, 'MOW LED') and includes(country_iatas, 'IT') }
+discount "5%"
 commission "10%/8%"
 
 example 'svolin/business linsvo/business'
@@ -487,6 +490,7 @@ agent "10% на тарифы Эконом класса;"
 subagent "8% на тарифы Эконом класса;"
 classes :business
 check { includes(city_iatas.first, 'MOW LED') and includes(country_iatas, 'IT') }
+discount "5%"
 commission "10%/8%"
 
 example 'svocdg cdgsvo'
@@ -615,7 +619,7 @@ commission "9%/7%"
 
 example 'okopek/ab pekoko'
 agent   "3%  от опубл. тарифов на все остальные рейсы СА при обязательном наличии собств.сегмента СА;"
-subagent "2% от опубл. тарифов на все остальные рейсы СА при обязательном наличии собств.сегмента СА;"
+subagent "2% от опубл. тарифов на все остальные рейсы СА при обязательном наличии собств.сегмента СА;"
 interline :no, :yes
 commission "3%/2%"
 
@@ -2439,19 +2443,19 @@ carrier "ZI", "AIGLE AZUR (РИНГ-АВИА)"
 
 example 'svocdg/i'
 agent    "11% от тарифа на собств. рейсы ZI по классам бронирования I/D/J/C;"
-subagent "9% от тарифа на собств. рейсы ZI по классам бронирования I/D/J/C;"
+subagent "9% от тарифа на собств. рейсы ZI по классам бронирования I/D/J/C;"
 subclasses "IDJC"
 commission "11%/9%"
 
 example 'svocdg/k'
 agent "7% от тарифа на собств. рейсы ZI по классам бронирования M/K/O/N/X/H/B/Y/S/W;"
-subagent "5% от тарифа на собств. рейсы ZI по классам бронирования M/K/O/N/X/H/B/Y/S/W;"
+subagent "5% от тарифа на собств. рейсы ZI по классам бронирования M/K/O/N/X/H/B/Y/S/W;"
 subclasses "MKONXHBYSW"
 commission "7%/5%"
 
 example 'svocdg/q'
 agent "3% от тарифа на собств. рейсы ZI по классам бронирования T/Q/U/V/L"
-subagent "2% от тарифа на собств. рейсы ZI по классам бронирования T/Q/U/V/L"
+subagent "2% от тарифа на собств. рейсы ZI по классам бронирования T/Q/U/V/L"
 subclasses "TQUVL"
 commission "3%/2%"
 
