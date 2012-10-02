@@ -458,7 +458,7 @@ subagent "8% для билетов эконом-класса"
 classes :economy
 # нахрена было иаты аэропортов выписывать? городов меньше
 check { includes(airport_iatas, %W(FLU EWR LGA JFK LAX SMO VNY WHP MIA ТNT OPF TMB MDW ORD PWK CGX DPA RFD BOS YTZ YKZ YYZ VCP GRU CGH GIG SDU CCS EZE AEP ALG CAI CAS CMN KYE TIP TUN AMM ADJ TLV SDV BEY DAM IKA THR)) }
-discount "5%"
+# discount "5%"
 commission "10%/8%"
 
 example 'vceflu/business fluvce/business'
@@ -474,33 +474,7 @@ subagent "8% для билетов бизнес-класса"
 classes :business
 # нахрена было иаты аэропортов выписывать? городов меньше
 check { includes(airport_iatas, %W(FLU EWR LGA JFK LAX SMO VNY WHP MIA ТNT OPF TMB MDW ORD PWK CGX DPA RFD BOS YTZ YKZ YYZ VCP GRU CGH GIG SDU CCS EZE AEP ALG CAI CAS CMN KYE TIP TUN AMM ADJ TLV SDV BEY DAM IKA THR)) }
-discount "5%"
-commission "10%/8%"
-
-example 'svolin/economy linsvo/economy'
-example 'ledlin/economy'
-agent "Период путешествия с 01.11.12г.по 15.12.2012г. (последный день вылета) на направление ИТАЛИЯ с началом путешествия 
-из Москвы и Санкт-Петербурга в Италию и обратно, а также на тарифы в одну сторону, но с вылетами из Москвы или Санкт-Петербурга.
-Комиссия не применяется, если начало путешествия из Италии.
-Комиссия применяется на все рейсы AZ (включая AP/XM/VE/CTи рейсы code-share, выписанные под кодом AZ и на стоке AZ (055)."
-agent "10% на тарифы Эконом класса;"
-subagent "8% на тарифы Эконом класса;"
-classes :economy
-check { includes(city_iatas.first, 'MOW LED') and includes(country_iatas, 'IT') }
-discount "5%"
-commission "10%/8%"
-
-example 'svolin/business linsvo/business'
-example 'ledlin/business'
-agent "Период путешествия с 01.11.12г.по 15.12.2012г. (последный день вылета) на направление ИТАЛИЯ с началом путешествия 
-из Москвы и Санкт-Петербурга в Италию и обратно, а также на тарифы в одну сторону, но с вылетами из Москвы или Санкт-Петербурга.
-Комиссия не применяется, если начало путешествия из Италии.
-Комиссия применяется на все рейсы AZ (включая AP/XM/VE/CTи рейсы code-share, выписанные под кодом AZ и на стоке AZ (055)."
-agent "10% на тарифы Эконом класса;"
-subagent "8% на тарифы Эконом класса;"
-classes :business
-check { includes(city_iatas.first, 'MOW LED') and includes(country_iatas, 'IT') }
-discount "5%"
+# discount "5%"
 commission "10%/8%"
 
 example 'svocdg cdgsvo'
