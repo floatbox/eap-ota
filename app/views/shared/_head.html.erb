@@ -7,35 +7,20 @@
 var _gaq = _gaq || [];
 var _yam = {hit: function() {}};
 <% if Rails.env.production? %>
-_gaq.push(['_setAccount', window.location.hostname.indexOf('new') !== -1 ? 'UA-19832395-4' : 'UA-19832395-1']);
+_gaq.push(['_setAccount', 'UA-19832395-1']);
 <% else %>
 _gaq.push(['_setAccount', 'UA-19832395-2']);
 _gaq.push(['_setDomainName', '.team.eviterra.ru']);
 <% end %>
-(function() {
-    var d = document, https = d.location.protocol == 'https:', fs = d.getElementsByTagName('script')[0];
-    var createScript = function(src) {
-        var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = src;
-        fs.parentNode.insertBefore(s, fs);
-    };
-    /*var w = window, c = 'yandex_metrika_callbacks';
-    (w[c] = w[c] || []).push(function() {
-        try { _yam = new Ya.Metrika({id: 5324671, enableAll: true, ut: 'noindex', defer: true, trackHash: true, webvisor: true}); } catch(e) {}
-    });*/
-    createScript((https ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js');
-    //createScript((https ? 'https:' : 'http:') + '//mc.yandex.ru/metrika/watch.js');
-})();
 var trackPage = function(url) {
     _gaq.push(['_trackPageview', url]);
+    _yam.hit(url);
     if (window.yaCounter5324671) {
         window.yaCounter5324671.hit(url);
     }
-    //_yam.hit(url);
+    console.log(url);
 };
 var trackEvent = function(category, action, label) {
     _gaq.push(['_trackEvent', category, action, label]);
-};
-window.onerror = function(msg, url, line) {
-    _gaq.push(['_trackEvent', 'Ошибка JS', msg, url + ': ' + line]);
 };
 </script>

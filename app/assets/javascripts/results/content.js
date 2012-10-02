@@ -93,9 +93,9 @@ select: function(id) {
         nt.control.addClass('rt-selected');
         nt.content.show();
         results.fixed.update();
-        page.location.set('offer', id === 'all' ? '' : id);
+        page.location.set('offer', id);
         results.filters.toggleDisabled(id === 'matrix');
-        trackPage('/' + page.location.hash.replace('#', ''));
+        trackPage('/#' + page.location.hash.replace('#', ''));
     }, 20);
 },
 selectFirst: function() {

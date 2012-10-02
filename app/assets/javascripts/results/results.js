@@ -166,6 +166,7 @@ processCollections: function() {
         }, 30);
     } else {
         this.message.toggle('empty');
+        trackPage('/search/empty');
     }
 },
 updateFeatured: function() {
