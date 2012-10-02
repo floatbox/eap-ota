@@ -67,6 +67,7 @@ payture:
 payu:
   seller_key: 'w7I2R8~V7=dm5H7[r1k5'
   host: sandbox8ru.epayment.ro
+  merchant: EVITERRA
 payonline:
   enabled: no
   merchant_id: '3925'
