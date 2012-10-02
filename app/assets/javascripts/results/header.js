@@ -62,6 +62,7 @@ apply: function() {
     if (data && data.valid) {
         if (data.fresh) {
             results.load();
+            trackPage('/search?query=' + data.titles.header.replace(/&nbsp;/g, ' '));            
         }
         results.show();
     }

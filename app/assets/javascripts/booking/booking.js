@@ -181,7 +181,7 @@ hide: function() {
     $w.scrollTop(this.offer.details.offset().top - offset);
     page.title.set(local.title.results.absorb(results.data.titles.window));
     page.location.set('booking');
-    trackPage('/' + page.location.hash);    
+    trackPage('/#' + page.location.hash.replace('#', ''));
     delete this.offer;
 }
 };
