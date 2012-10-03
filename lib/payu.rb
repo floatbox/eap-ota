@@ -151,6 +151,7 @@ class Payu
 #    add_money(post, amount)
     add_merchant(post)
 #    add_creditcard(post, card)
+    add_testcard_as_hash(post, card)
 #    add_custom_fields(post, opts)
     encrypt_payinfo(post)
 
@@ -209,6 +210,15 @@ class Payu
     post[:EXP_YEAR] = "%02d" % (creditcard.year - 2000)
     post[:CC_OWNER] = creditcard.name
     post[:CC_CVV] = creditcard.verification_value
+  end
+
+  def add_testcard_as_hash(post, options={})
+    post[:CC_NUMBER] = options[:number]
+    post[:CC_TYPE] = options[:type]
+    post[:EXP_MONTH] = options[:month]
+    post[:EXP_YEAR] = options[:year]
+    post[:CC_OWNER] = options[:name]
+    post[:CC_CVV] = options[:verification_value]
   end
 
   def add_merchant(post)
@@ -298,6 +308,12 @@ class Payu
   def self.test_card(opts = {})
     CreditCard.new(
       {:number => '4111111111111111', :type => 'VISA', :verification_value => '123', :year => 2013, :month => 12, :name => 'card one'}.merge(opts)
+    )
+  end
+
+  def self.test_3dcard(opts = {})
+    CreditCard.new(
+      {:number => '5521756777242815', :type => 'MC', :verification_value => '926', :year => 2014, :month => 4, :name => 'nikolai zaiarnyi'}.merge(opts)
     )
   end
 

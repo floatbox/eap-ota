@@ -96,6 +96,28 @@ describe Payu do
 
     end
 
+    describe "success 3ds enrolled" do
+      let :body do
+        <<-"END"
+        <?xml version="1.0"?>
+        <EPAYMENT>
+          <REFNO>6372861</REFNO>
+          <ALIAS>3e1d8290af4191056fda5cf1d5fa9d79</ALIAS>
+          <STATUS>SUCCESS</STATUS>
+          <RETURN_CODE>3DS_ENROLLED</RETURN_CODE>
+          <RETURN_MESSAGE>3DS Enrolled Card.</RETURN_MESSAGE>
+          <DATE>2012-10-03 19:12:49</DATE>
+          <URL_3DS>https://sandbox8ru.epayment.ro/order/alu_return_3ds.php?request_id=2Xrl85eqobmBr3a%2FcbnGYQ%3D%3D</URL_3DS>
+          <HASH>8ed89c87509a640dc0637eeb12b3a467</HASH>
+        </EPAYMENT>
+        END
+      end
+
+      it {should_not be_success}
+      its(:ref) {should == "6372861"}
+
+    end
+
   end
 
   describe Payu::UnblockResponse do
