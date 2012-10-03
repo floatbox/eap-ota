@@ -168,3 +168,17 @@ set: function(title) {
     document.title = title || this.empty;
 }
 };
+
+
+/* Errors */
+window.onerror = function(text) {
+    var type;
+    if (page.location.booking) {
+        type = 'В форме бронирования';
+    } else if (page.location.search) {
+        type = 'В результатах поиска';
+    } else {
+        type = 'В форме поиска';
+    }
+    trackEvent('Ошибка JS', type, text);
+}
