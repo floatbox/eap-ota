@@ -1,8 +1,13 @@
 # encoding: utf-8
 require 'openssl'
 require 'httparty'
+require 'active_support/all'
 
 class Payu
+
+  cattr_accessor :logger do
+    Rails.logger
+  end
 
   PAY_PARAMS_ORDER = [
     :MERCHANT, :ORDER_REF, :ORDER_DATE, :ORDER_PNAME, :ORDER_PCODE, :ORDER_PINFO, :ORDER_PRICE, :ORDER_QTY,
@@ -74,63 +79,48 @@ class Payu
     end
 
     def success?
-      @doc["Success"].to_s.downcase == "true"
+      @doc["STATUS"] == "SUCCESS"
     end
 
     def err_code
-      @doc["ErrCode"]
     end
 
     # не !success? потому что может быть и "3DS"
     def error?
-      @doc["Success"].to_s.downcase == "false"
     end
 
-    def order_id
-      @doc["OrderId"]
-    end
-
-    def amount
-      @doc["Amount"].to_f / 100
-    end
-
-    def new_amount
-      @doc["NewAmount"].to_f / 100
+    def ref
+      @doc["REFNO"]
     end
 
     # 3-D Secure
 
     def threeds?
-      @doc["Success"].to_s.downcase == "3ds"
     end
 
     def acs_url
-      @doc["ACSUrl"]
     end
 
     def pa_req
-      @doc["PaReq"]
     end
 
     def threeds_key
-      @doc["ThreeDSKey"]
     end
 
     # GetState
     # 'PreAuthorized3DS', 'Voided', 'Rejected', какие еще?
     def state
-      @doc["State"]
     end
 
     # "11/12/2010 9:24:07 AM"
     def last_change
-      @doc["LastChange"]
     end
   end
 
   def initialize(opts={})
     @merchant = opts[:merchant] || Conf.payu.merchant
     @host = opts[:host] || Conf.payu.host
+    @seller_key = opts[:seller_key] || Conf.payu.seller_key
   end
 
   def pay amount, card, opts={}
@@ -153,9 +143,7 @@ class Payu
 #    add_creditcard(post, card)
 #    add_custom_fields(post, opts)
     encrypt_payinfo(post)
-    puts post.inspect
-  
-  
+
     post_request 'alu', post
   end
 
@@ -178,7 +166,7 @@ class Payu
 
   # разблокировка средств.
   # частичная блокировка не принимается
-  def unblock amount, opts={}
+  def unblock opts={}
     post = POST_PARAMS.dup
     add_order(post, opts)
     #add_merchant(post)
@@ -220,7 +208,7 @@ class Payu
   def post_request endpoint, args
     response = HTTParty.post("https://#{@host}//order/#{endpoint}.php", :body => args)
     puts response.body
-    debug response.inspect
+    logger.debug response.inspect
     Response.new( response.parsed_response.values.first )
   end
 
@@ -259,13 +247,13 @@ class Payu
   def encrypt_payinfo(post)
     update_date(post)
     post.select! {|key,value| PAY_PARAMS_ORDER.include? key}
-    post[:ORDER_HASH] = OpenSSL::HMAC.hexdigest('md5', Conf.payu.seller_key, get_hash(post, PAY_PARAMS_ORDER))
+    post[:ORDER_HASH] = OpenSSL::HMAC.hexdigest('md5', @seller_key, get_hash(post, PAY_PARAMS_ORDER))
   end
 
   def encrypt_refundinfo(post)
     update_date(post)
     post.select! {|key,value| REFUND_PARAMS_ORDER.include? key}
-    post[:ORDER_HASH] = OpenSSL::HMAC.hexdigest('md5', Conf.payu.seller_key, get_hash(post, REFUND_PARAMS_ORDER))
+    post[:ORDER_HASH] = OpenSSL::HMAC.hexdigest('md5', @seller_key, get_hash(post, REFUND_PARAMS_ORDER))
   end
 
   def add_custom_fields(post, opts)
@@ -293,11 +281,6 @@ class Payu
     @public.public_encrypt(string)
   end
 
-  def debug message
-    #puts "Payu: #{message}"
-    Rails.logger.info "Payu: #{message}"
-  end
-  
   def get_hash(post, params_order_array)
     hashString = ''
     params_order_array.each do |name|
