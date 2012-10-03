@@ -94,7 +94,7 @@ module Amadeus
       end
 
       def parsed_ticket_string(s)
-        m = s.to_s.match(/(PAX|INF) (\d+)-([\d-]+)\/\w([TRV])(\w{2})(?:\/[\w\.]+)?\/(\w+)\/(\w+)\/(\d+)/)
+        m = s.to_s.match(/(PAX|INF) (\d+)-([\d-]+)\/\w([TRV])(\w{2})\/{0,1}(?:[\/]+[\w\.]+)?\/(\w+)\/(\w+)\/(\d+)/)
         if m
           return({
             :number => m[3],

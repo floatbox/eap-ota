@@ -192,6 +192,21 @@ describe Amadeus::Response::PNRRetrieve do
       its([:office_id]) { should == 'MOWR2219U' }
       its([:validator]) { should == '92223412' }
     end
+
+    describe 'another strange example' do
+      subject {
+        Amadeus::Response::PNRRetrieve.new('').parsed_ticket_string('PAX 670-7160346265/ETUN//03OCT12/FLL1S212V/10729143')
+      }
+
+      it {should be_present}
+      its([:code]) { should == '670' }
+      its([:number]) { should == '7160346265' }
+      its([:status]) { should == 'ticketed' }
+      its([:ticketed_date]) { should == Date.new(2012, 10, 3) }
+      its([:validating_carrier]) { should == 'UN' }
+      its([:office_id]) { should == 'FLL1S212V' }
+      its([:validator]) { should == '10729143' }
+    end
   end
 
   describe "#tickets" do
