@@ -72,14 +72,14 @@ class Payu
     :DELIVERY_COUNTRYCODE  => 'RU',                      #delivery 2 letter country code
   }
 
-  class Response
+  class PaymentResponse
 
-    def initialize(doc)
-      @doc = doc
+    def initialize(parsed_response)
+      @doc = parsed_response['EPAYMENT']
     end
 
     def success?
-      @doc["STATUS"] == "SUCCESS"
+      @doc['STATUS'] == 'SUCCESS'
     end
 
     def err_code
@@ -117,6 +117,24 @@ class Payu
     end
   end
 
+  class UnblockResponse
+    def initialize(piped_string)
+      raise ArgumentError, "unexpected input" unless
+        m = piped_string.match(/<EPAYMENT>(.*)<\/EPAYMENT>/)
+      @ref, @code, @message, @date_str, _ = m[1].split('|')
+    end
+
+    # FIXME хз, верно ли. нарыть доку
+    def success?
+      @code == '1'
+    end
+
+    def ref
+      @ref
+    end
+
+  end
+
   def initialize(opts={})
     @merchant = opts[:merchant] || Conf.payu.merchant
     @host = opts[:host] || Conf.payu.host
@@ -124,14 +142,6 @@ class Payu
   end
 
   def pay amount, card, opts={}
-    post = {}
-    add_order(post, opts)
-    add_money(post, amount)
-    add_merchant(post)
-    add_creditcard(post, card)
-    encrypt_payinfo(post)
-
-    post_request 'Pay', post
   end
 
   # блокировка средств на карте пользователя
@@ -144,24 +154,15 @@ class Payu
 #    add_custom_fields(post, opts)
     encrypt_payinfo(post)
 
-    post_request 'alu', post
+    response = HTTParty.post("https://#{@host}/order/alu.php", :body => post)
+    logger.debug response.inspect
+    PaymentResponse.new( response.parsed_response )
   end
 
   def block_3ds opts={}
-    post = {}
-    add_order(post, opts)
-    add_merchant(post)
-    add_3ds_info(post, opts)
-
-    post_request 'Block3DS', post
   end
 
   def charge opts={}
-    post = {}
-    add_order(post, opts)
-    add_merchant(post)
-
-    post_request 'Charge', post
   end
 
   # разблокировка средств.
@@ -172,30 +173,20 @@ class Payu
     #add_merchant(post)
     #add_money(post, amount)
     encrypt_refundinfo(post)
-    
-    puts post.inspect
-    post_request 'irn', post
+
+    response = HTTParty.post("https://#{@host}/order/irn.php", :body => post)
+    logger.debug response.inspect
+    UnblockResponse.new( response.parsed_response )
   end
 
   # возврат средств (полный или частичный) на карту пользователя
   def refund amount, opts={}
-    post = {}
-    add_order(post, opts)
-    add_merchant(post)
-    add_money(post, amount)
-
-    post_request 'Refund', post
   end
 
   # уточнение текущего состояния платежа
   # {"Comment"=>"", "Tag"=>"", "LastChange"=>"11/12/2010 9:24:07 AM", "State"=>"Charged"}
   # "State"=>"Authorized", "Voided", "Charged"
   def state opts={}
-    post = {}
-    add_order(post, opts)
-    add_merchant(post)
-
-    post_request 'GetState', post
   end
 
   private
@@ -203,13 +194,6 @@ class Payu
     unless (required_keys & opts.keys) == required_keys
       raise ArgumentError, "#{(required_keys - opts.keys).join(', ')} opts are missing"
     end
-  end
-
-  def post_request endpoint, args
-    response = HTTParty.post("https://#{@host}//order/#{endpoint}.php", :body => args)
-    puts response.body
-    logger.debug response.inspect
-    Response.new( response.parsed_response.values.first )
   end
 
   # copied back from active_merchant alfa_bank_gateway
