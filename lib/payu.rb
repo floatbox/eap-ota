@@ -29,16 +29,21 @@ class Payu
     :MERCHANT, :ORDER_REF, :ORDER_AMOUNT, :ORDER_CURRENCY, :IRN_DATE
   ]
 
+  CHARGE_PARAMS_ORDER = [
+    :MERCHANT, :ORDER_REF, :ORDER_AMOUNT, :ORDER_CURRENCY, :IDN_DATE
+  ]
+
   POST_PARAMS = {
     :MERCHANT              => 'EVITERRA',                #your merchant code in PAYU system 
     :ORDER_REF             => 'EXT_' + Random.rand(1000).to_s,   #your internal reference number
     :ORDER_DATE            => Time.now.utc.strftime("%Y-%m-%d %H:%M:%S"),
     :IRN_DATE              => Time.now.utc.strftime("%Y-%m-%d %H:%M:%S"),
+    :IDN_DATE              => Time.now.utc.strftime("%Y-%m-%d %H:%M:%S"),
     :ORDER_PNAME           => ['1 x Ticket'],            #product name
     :ORDER_PCODE           => ['TCK1'],                  #product code
     :ORDER_PINFO           => ["{'departuredate':20120914, 'locationnumber':2, 'locationcode1':'BUH', 'locationcode2':'IBZ','passengername':'Fname Lname','reservationcode':'abcdef123456'}"],
     :ORDER_PRICE           => ['1'],                     #order price
-    :ORDER_AMOUNT          => '1',                       #order price
+    :ORDER_AMOUNT          => '1',                       #order amount
     :ORDER_VAT             => ['0'],                     #order vat
     :ORDER_QTY             => ['1'],                     #products quantity
     :PRICES_CURRENCY       => 'RUB',                     #currency
@@ -57,7 +62,7 @@ class Payu
     :BILL_CITY             => 'City',                    #billing customer city
     :BILL_STATE            => 'State',                   #billing customer State
     :BILL_ZIPCODE          => '123',                     #billing customer Zip
-    :BILL_EMAIL            => 'george.simion@payu.ro',   #billing customer email
+    :BILL_EMAIL            => 'testpayu@eviterra.com',   #billing customer email
     :BILL_PHONE            => '1234567890',              #billing customer phone
     :BILL_COUNTRYCODE      => 'RU',                      #billing customer 2 letter country code
     :CLIENT_IP             => '127.0.0.1',               #client IP used for antifraud purposes
@@ -90,12 +95,13 @@ class Payu
     end
 
     def ref
-      @doc["REFNO"]
+      @doc['REFNO']
     end
 
     # 3-D Secure
 
     def threeds?
+      @doc['RETURN_CODE'].to_s == "3DS_ENROLLED"
     end
 
     def acs_url
@@ -105,6 +111,10 @@ class Payu
     end
 
     def threeds_key
+    end
+
+    def threeds_url
+      @doc["URL_3DS"]
     end
 
     # GetState
@@ -118,6 +128,24 @@ class Payu
   end
 
   class UnblockResponse
+    def initialize(piped_string)
+      raise ArgumentError, "unexpected input" unless
+        m = piped_string.match(/<EPAYMENT>(.*)<\/EPAYMENT>/)
+      @ref, @code, @message, @date_str, _ = m[1].split('|')
+    end
+
+    # FIXME хз, верно ли. нарыть доку
+    def success?
+      @code == '1'
+    end
+
+    def ref
+      @ref
+    end
+
+  end
+
+  class ChargeResponse
     def initialize(piped_string)
       raise ArgumentError, "unexpected input" unless
         m = piped_string.match(/<EPAYMENT>(.*)<\/EPAYMENT>/)
@@ -151,9 +179,9 @@ class Payu
 #    add_money(post, amount)
     add_merchant(post)
 #    add_creditcard(post, card)
-    add_testcard_as_hash(post, card)
+    add_testcard_as_hash(post, card) if card
 #    add_custom_fields(post, opts)
-    encrypt_payinfo(post)
+    encrypt_postinfo(post, PAY_PARAMS_ORDER)
 
     response = HTTParty.post("https://#{@host}/order/alu.php", :body => post)
     logger.debug response.inspect
@@ -164,6 +192,15 @@ class Payu
   end
 
   def charge opts={}
+    post = POST_PARAMS.dup
+    add_order(post, opts)
+    #add_merchant(post)
+    #add_money(post, amount)
+    encrypt_postinfo(post, CHARGE_PARAMS_ORDER)
+
+    response = HTTParty.post("https://#{@host}/order/idn.php", :body => post)
+    logger.debug response.inspect
+    ChargeResponse.new( response.parsed_response )
   end
 
   # разблокировка средств.
@@ -173,7 +210,7 @@ class Payu
     add_order(post, opts)
     #add_merchant(post)
     #add_money(post, amount)
-    encrypt_refundinfo(post)
+    encrypt_postinfo(post, REFUND_PARAMS_ORDER)
 
     response = HTTParty.post("https://#{@host}/order/irn.php", :body => post)
     logger.debug response.inspect
@@ -236,18 +273,13 @@ class Payu
   def update_date(post)
     post[:ORDER_DATE] = Time.now.utc.strftime("%Y-%m-%d %H:%M:%S")
     post[:IRN_DATE] = Time.now.utc.strftime("%Y-%m-%d %H:%M:%S")
+    post[:IDN_DATE] = Time.now.utc.strftime("%Y-%m-%d %H:%M:%S")
   end
 
-  def encrypt_payinfo(post)
+  def encrypt_postinfo(post, params_order)
     update_date(post)
-    post.select! {|key,value| PAY_PARAMS_ORDER.include? key}
-    post[:ORDER_HASH] = OpenSSL::HMAC.hexdigest('md5', @seller_key, get_hash(post, PAY_PARAMS_ORDER))
-  end
-
-  def encrypt_refundinfo(post)
-    update_date(post)
-    post.select! {|key,value| REFUND_PARAMS_ORDER.include? key}
-    post[:ORDER_HASH] = OpenSSL::HMAC.hexdigest('md5', @seller_key, get_hash(post, REFUND_PARAMS_ORDER))
+    post.select! {|key,value| params_order.include? key}
+    post[:ORDER_HASH] = OpenSSL::HMAC.hexdigest('md5', @seller_key, get_hash(post, params_order))
   end
 
   def add_custom_fields(post, opts)
@@ -308,12 +340,6 @@ class Payu
   def self.test_card(opts = {})
     CreditCard.new(
       {:number => '4111111111111111', :type => 'VISA', :verification_value => '123', :year => 2013, :month => 12, :name => 'card one'}.merge(opts)
-    )
-  end
-
-  def self.test_3dcard(opts = {})
-    CreditCard.new(
-      {:number => '5521756777242815', :type => 'MC', :verification_value => '926', :year => 2014, :month => 4, :name => 'nikolai zaiarnyi'}.merge(opts)
     )
   end
 
