@@ -74,3 +74,8 @@ booking.failed = function() {
 booking.cancel = function() {
     window.location = '/#' + this.query_key;
 };
+
+/* Errors */
+window.onerror = function(text) {
+    trackEvent('Ошибка JS', 'При переходе с метапоиска', text);
+}

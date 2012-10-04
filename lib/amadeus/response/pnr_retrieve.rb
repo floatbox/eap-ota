@@ -94,17 +94,26 @@ module Amadeus
       end
 
       def parsed_ticket_string(s)
-        m = s.to_s.match(/(PAX|INF) (\d+)-([\d-]+)\/\w([TRV])(\w{2})\/{0,1}(?:[\/]+[\w\.]+)?\/(\w+)\/(\w+)\/(\d+)/)
+        m = s.to_s.match(
+          %r{
+            (?<inf>PAX|INF)\ (?<code> \d+ )-(?<number> [\d-]+ )
+            / [DE] (?<status> [TRV] ) (?<validating_carrier> \w{2} )
+            /? [^/]*
+            / (?<ticketed_date> \w+ )
+            / (?<office_id> \w+ )
+            / (?<validator> \d+ )
+          }x
+        )
         if m
           return({
-            :number => m[3],
-            :code => m[2],
-            :status => {'T' => 'ticketed', 'V' => 'voided', 'R' => 'returned'}[m[4]],
-            :ticketed_date => Date.strptime(m[6], '%d%h%y'),
-            :validating_carrier => m[5],
-            :office_id => m[7],
-            :validator => m[8],
-            :inf => m[1]
+            :number => m[:number],
+            :code => m[:code],
+            :status => {'T' => 'ticketed', 'V' => 'voided', 'R' => 'returned'}[m[:status]],
+            :ticketed_date => Date.strptime(m[:ticketed_date], '%d%h%y'),
+            :validating_carrier => m[:validating_carrier],
+            :office_id => m[:office_id],
+            :validator => m[:validator],
+            :inf => m[:inf]
             })
         end
       end

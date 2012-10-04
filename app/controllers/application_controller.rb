@@ -22,8 +22,12 @@ class ApplicationController < ActionController::Base
   end
 
   before_filter :set_locale
-
+  before_filter :save_partner_cookies
   after_filter :log_partner
+
+  def save_partner_cookies
+    track_partner params[:partner], params[:marker]
+  end
 
   ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
     html_tag
