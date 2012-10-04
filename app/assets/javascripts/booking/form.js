@@ -17,7 +17,12 @@ init: function() {
                 that.validate(true); // если вдруг не отследили изменение какого-то поля
             }
             if (that.button.hasClass('bfb-disabled')) {
-                trackEvent('Бронирование', 'Нажатие заблокированной кнопки', that.required.text() || 'Нет ошибок');
+                var rtext = that.required.text();
+                if (rtext) {
+                    trackEvent('Бронирование', 'Нажатие заблокированной кнопки', rtext);
+                } else {
+                    trackEvent('Бронирование', 'Заблокированная кнопка без ошибок', that.getValues());
+                }
                 that.required.find('.bffr-link').eq(0).click();
             } else {
                 that.submit();
@@ -267,6 +272,18 @@ updatePrice: function(content) {
     context.find('.bffp-wd').toggle(wd);
     context.find('.bffp-nd').toggle(!wd);
     this.el.find('.bf-newprice').attr('data-price', content.attr('data-price'));
+},
+getValues: function() {
+    var result = [];
+    var data = this.el.serializeArray();
+    for (var i = 3, im = data.length; i < im; i++) {
+        var value = data[i].value;
+        if (data[i].name.indexOf('card') !== -1) {
+            value = value.replace(/\d/g, 'X');
+        }
+        result.push('"' + value + '"');
+    }
+    return result.join(' ');
 }
 };
 
