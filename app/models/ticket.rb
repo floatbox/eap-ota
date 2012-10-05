@@ -61,31 +61,33 @@ class Ticket < ActiveRecord::Base
   validates_presence_of :comment, :if => lambda {kind == "refund"}
   after_save :update_prices_in_order
   attr_accessor :parent_number, :parent_code
-  attr_writer :price_fare_base
+  attr_writer :price_fare_base, :flights
+  before_validation :set_info_from_flights
 
   def show_vat
     vat_status != 'unknown'
   end
 
-  def flights=(flights_array)
-    # перенести в отдельный метод, вызывать в before_validate
-    if [nil, '', 'unknown'].include? vat_status
-      if flights_array[0].departure.country.iata != 'RU' ||
-          flights_array.last.arrival.country.iata != 'RU' ||
-          flights_array.map{|f| [f.departure, f.arrival]}.flatten.uniq.map{|ap| ap.country.iata}.count('RU') < 2
-        self.vat_status = '0'
-      elsif flights_array.map{|f| [f.departure.country.iata, f.arrival.country.iata]}.flatten.uniq == ['RU']
-        self.vat_status = '18%'
-      else
-        self.vat_status = 'unknown'
+  def set_info_from_flights
+    if @flights
+      if [nil, '', 'unknown'].include? vat_status
+        if @flights[0].departure.country.iata != 'RU' ||
+            @flights.last.arrival.country.iata != 'RU' ||
+            @flights.map{|f| [f.departure, f.arrival]}.flatten.uniq.map{|ap| ap.country.iata}.count('RU') < 2
+          self.vat_status = '0'
+        elsif @flights.map{|f| [f.departure.country.iata, f.arrival.country.iata]}.flatten.uniq == ['RU']
+          self.vat_status = '18%'
+        else
+          self.vat_status = 'unknown'
+        end
       end
-    end
-    self.route = flights_array.map{|fl| "#{fl.departure_iata} \- #{fl.arrival_iata} (#{fl.marketing_carrier_iata})"}.uniq.join('; ')
-    self.cabins = flights_array.every.cabin.compact.join(' + ')
-    self.dept_date = flights_array.first.dept_date
+      self.route = @flights.map{|fl| "#{fl.departure_iata} \- #{fl.arrival_iata} (#{fl.marketing_carrier_iata})"}.uniq.join('; ')
+      self.cabins = @flights.every.cabin.compact.join(' + ')
+      self.dept_date = @flights.first.dept_date
 
-    # и закидываем в базу
-    self.stored_flights = flights_array.map {|fl| StoredFlight.from_flight(fl) } if Conf.site.store_flights
+      # и закидываем в базу
+      self.stored_flights = @flights.map {|fl| StoredFlight.from_flight(fl) } if Conf.site.store_flights
+    end
   end
 
   def flights
