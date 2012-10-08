@@ -218,6 +218,30 @@ describe Payu do
 
     end
 
+    # принимающий урл должен принимать POST, и надо выключить на нем CSRF
+    describe "success from 3ds authorization via POST params" do
+
+      subject do
+        Payu::PaymentResponse.new(params)
+      end
+
+      let (:params) do
+        HashWithIndifferentAccess.new(
+          "REFNO" => "6626740",
+          "ALIAS" => "598cba51685645dea3a8ea43ff71cb96",
+          "STATUS" => "SUCCESS",
+          "RETURN_CODE" => "AUTHORIZED",
+          "RETURN_MESSAGE" => "Authorized.",
+          "DATE" => "2012-10-08 17:42:12",
+          "HASH" => "32b263656557bbf17532fb0f79fefba9"
+        )
+      end
+
+      it {should be_success}
+      it {should_not be_error}
+      it {should_not be_threeds}
+      its(:ref) {should == "6626740"}
+    end
   end
 
   describe Payu::UnblockResponse do
