@@ -14,7 +14,7 @@ update: function(error) {
 getGender: function(name) {
     var sample = ' ' + name.toLowerCase() + ',';
     if (this.names.m.contains(sample)) return 'm';
-    if (this.names.f.contains(sample)) return 'f';    
+    if (this.names.f.contains(sample)) return 'f';
 }
 };
 
@@ -23,6 +23,8 @@ validator.Section = function(el, options) {
     this.el = el;
     $.extend(this, options);
     this.controls = [];
+    this.empty = [];
+    this.wrong = [];
     this.init();
 };
 validator.Section.prototype = {
@@ -43,6 +45,9 @@ validate: function(forced) {
         }
         if (control.error && !control.disabled) {
             (control.error === 'empty' ? empty : wrong).push(control.message);
+            if (!control.message) {
+                trackEvent('Ошибка JS', 'Нет сообщения об ошибке «' + control.error + '» в поле ' + control.el.get(0).className);
+            }
         }
     }
     this.toggle(wrong.length + empty.length === 0);
@@ -56,6 +61,14 @@ set: function(data) {
     for (var i = 0, l = this.controls.length; i < l; i++) {
         this.controls[i].set(data[i]);
     }
+},
+get: function() {
+    var data = [];
+    for (var i = 0, l = this.controls.length; i < l; i++) {
+        var control = this.controls[i];
+        data[i] = control.get ? control.get() : '';
+    }
+    return data;
 }
 };
 
@@ -71,7 +84,7 @@ validator.Text = function(el, messages, check) {
 validator.Text.prototype = {
 init: function() {
     var that = this;
-    this.el.bind('keyup propertychange input', function() {
+    this.el.bind('keyup propertychange input paste', function() {
         that.change();
     }).focus(function() {
         that.el.addClass('bf-focus');
@@ -114,8 +127,11 @@ format: function(value) {
     return $.trim(value);
 },
 set: function(value) {
-    this.el.val(this.format(value || ''));
+    this.el.val(this.format(value || '')).trigger('input');
     this.validate();
+},
+get: function() {
+    return this.el.val();
 }
 };
 
@@ -150,10 +166,27 @@ validate: function() {
 },
 set: function(value) {
     if (value) {
-        this.select.val(value);
+        this.select.val(value).trigger('change');
     } else {
         this.select.get(0).selectedIndex = 0;
     }
+},
+get: function() {
+    return this.select.val();
+}
+};
+
+/* Checkbox control */
+validator.Checkbox = function(el) {
+    this.el = el;
+    this.disabled = true;
+};
+validator.Checkbox.prototype = {
+set: function(value) {
+    this.el.prop('checked', Boolean(value)).trigger('set');
+},
+get: function() {
+    return this.el.prop('checked') ? 'true' : '';
 }
 };
 
@@ -192,7 +225,9 @@ init: function() {
     });
     this.initParts();
     this.initFormat();
-    this.initTab();
+    if (!browser.ios) {
+	    this.initTab();
+	}
 },
 initParts: function() {
     this.dpart = this.parts.eq(0);
@@ -247,7 +282,7 @@ initTab: function() {
         var code = e.which;
         var digit = (code > 47 && code < 58) || (code > 95 && code < 106);
         if (this.value.length === 2 && digit && !ignoreTab) {
-            $(this).change().data('next').select();
+            $(this).change().data('next').focus().select();
             that.el.addClass('bf-focus');
             ignoreTab = true;
         }
@@ -268,6 +303,7 @@ validate: function(self) {
     clearTimeout(this.timer);
     var value = this.parse(this.dpart.val(), this.mpart.val(), this.ypart.val());
     var error = typeof value === 'string' ? value : this.check(value);
+    this.el.trigger('validate', [error === undefined ? value : undefined]);
     if (this.update(error) && self) {
         this.apply();
     }
@@ -303,8 +339,8 @@ parse: function(d, m, y) {
     if (y.length < 4) {
         this.fid = this.yfid;
         return 'empty';
-    }    
-    var date = new Date(yn, mn - 1, dn, 12);    
+    }
+    var date = new Date(yn, mn - 1, dn, 12);
     if (date.getDate() !== dn || date.getMonth() !== mn - 1 || date.getFullYear() !== yn) {
         this.fid = this.dfid;
         return 'wrong';
@@ -315,8 +351,16 @@ set: function(value) {
     var vparts = value ? value.split('.') : [];
     this.parts.val(function(i) {
         return vparts[i] || '';
-    });
+    }).trigger('input');
     this.validate();
+},
+get: function() {
+    if (this.error) return '';
+    var parts = [];
+    this.parts.each(function(i) {
+        parts[i] = $(this).val();
+    });
+    return parts.join('.');
 }
 };
 
@@ -348,7 +392,7 @@ init: function() {
             input.focus();
         }, 10);
     });
-    this.fid = this.el.attr('id');    
+    this.fid = this.el.attr('id');
     this.change(false);
 },
 set: function(value) {
@@ -358,6 +402,9 @@ set: function(value) {
         this.el.find('.bfp-sex-' + value + ' input').prop('checked', true).trigger('set');
     }
     this.change(Boolean(value));
+},
+get: function() {
+    return this.el.find('input:checked').val() || '';
 },
 change: function(checked) {
     if (checked) {
@@ -380,7 +427,7 @@ apply: function() {
 validator.CardNumber = function(el, messages) {
     this.el = el;
     this.messages = messages;
-    this.update = validator.update;    
+    this.update = validator.update;
     this.error = null;
     this.init();
 };
@@ -410,13 +457,16 @@ init: function() {
             }
             el.focus();
             field.attr('maxlength', 4);
+            that.change();
         }, 10);
-    });    
+    });
     this.$validate = function() {
         that.validate(true);
     };
     this.fid = 'bfcn-part1';
-    this.initAutoTab();
+    if (!browser.ios) {
+	    this.initAutoTab();
+    }
 },
 initAutoTab: function() {
     var that = this, ignoreTab;
@@ -507,7 +557,9 @@ init: function() {
         that.validate(true);
     };
     this.initFormat();
-    this.initAutoTab();
+    if (!browser.ios) {    
+	    this.initAutoTab();
+    }
 },
 initFormat: function() {
     var that = this;
@@ -577,7 +629,7 @@ check: function(m, y) {
     if (/\D/.test(m)) return 'letters';
     if (Number(m) > 12) return 'wrong';
     this.fid = 'bc-exp-year';
-    if (/\D/.test(y)) return 'letters';    
+    if (/\D/.test(y)) return 'letters';
     if (y.length < 2) return 'empty';
     if (y + m < this.time) return 'improper';
 },

@@ -105,31 +105,43 @@ class Order < ActiveRecord::Base
   before_validation :capitalize_pnr
   before_save :calculate_price_with_payment_commission, :if => lambda { price_with_payment_commission.blank? || price_with_payment_commission.zero? || !fix_price? }
   before_create :generate_code, :set_payment_status, :set_email_status
-  after_save :create_notification
+  after_save :create_order_notice
 
-  def create_notification
-    if !self.offline_booking && self.email_status == ''
-      case self.source
-      when 'amadeus'
-        if self.ticket_status == 'booked' && (self.payment_status == 'blocked' || self.payment_status == 'pending')
-          self.notifications.new.create_pnr
-        end
-      when 'sirena'
-        if self.ticket_status == 'ticketed'
-          self.notifications.new.create_pnr
-        end
+  def create_order_notice
+    if !offline_booking && email_status == ''
+      if ticket_status == 'booked' && (payment_status == 'blocked' || payment_status == 'pending')
+        self.notifications.new.create_delayed_notice
       end
     end
   end
 
+  def create_ticket_notice
+    if email_status != 'queued' && email_status != 'ticket_sent' && email_status != 'manual'
+      self.notifications.new.create_delayed_notice 2
+    end
+  end
+
   def baggage_array
+    return [] unless sold_tickets.all?{|t| t.baggage_info.present?}
     sold_tickets.map do |t|
-      t.baggage_info.to_s.split.map{|code| BaggageLimit.deserialize(code)}
+      t.baggage_info.map{|code| BaggageLimit.deserialize(code)}
     end.transpose
   end
 
+  def email_ready!
+    update_email_status
+  end
+
   def queued_email!
-    update_attribute(:email_status, 'queued') if self.email_status == ''
+    update_email_status 'queued'
+  end
+
+  def email_manual!
+    update_email_status 'manual'
+  end
+
+  def update_email_status status = ''
+    update_attribute(:email_status, status)
   end
 
   # FIXME сломается на ruby1.9
@@ -141,6 +153,9 @@ class Order < ActiveRecord::Base
   scope :processing_ticket, where(:ticket_status => 'processing_ticket')
   scope :error_ticket, where(:ticket_status => 'error_ticket')
   scope :ticketed, where(:payment_status => ['blocked', 'charged'], :ticket_status => 'ticketed')
+  scope :ticket_not_sent, where("email_status != 'ticket_sent' AND ticket_status = 'ticketed'")
+  scope :sent_manual, where(:email_status => 'manual')
+
 
   scope :stale, lambda {
     where(:payment_status => 'not blocked', :ticket_status => 'booked', :offline_booking => false, :source => 'amadeus')\
@@ -157,9 +172,41 @@ class Order < ActiveRecord::Base
         ((last_tkt_date && last_tkt_date == Date.today) ||
          (departure_date && departure_date < Date.today + 3.days)
         )
-      '!'
+      '<b>~ ! ~</b><br/>'.html_safe + ticket_time_decorated
+    else
+      ticket_time_decorated
+    end
+  end
+
+  def ticket_time_decorated
+#    if payment_status == 'blocked' && ticket_status == 'booked' && created_at > Date.yesterday + 20.5.hours
+    if payment_status == 'blocked' && (ticket_status.in? 'booked', 'processing_ticket', 'error_ticket')
+      now = DateTime.now
+      date_to_ticket = ticket_datetime
+      time_diff = ((date_to_ticket - now)/60).to_i
+      if time_diff > 0
+        time_diff = 180 if time_diff > 180
+        time_diff_param = (time_diff.to_f*127/180).to_i
+        rcolor = (255 - time_diff_param)
+        gcolor = (time_diff_param)
+        bcolor = 127
+        color = "#%02X%02X%02X" % [rcolor, gcolor, gcolor]
+      else
+        color = "#ff0000; font-weight: bold";
+      end
+      "<span style='color:#{color};'>#{date_to_ticket.strftime('%H:%M')}</span><br/><abbr class='timeago' title='#{date_to_ticket}'>#{date_to_ticket}</abbr>".html_safe
     else
       '&nbsp;'.html_safe
+    end
+  end
+
+  def ticket_datetime
+    time = created_at.strftime('%H%M')
+    case
+      when time < '0600';  created_at.midnight + 11.hours
+      when time < '0800';  created_at + 4.hours
+      when time < '2030';  created_at + 3.hours
+      else                 created_at.tomorrow.midnight + 11.hours
     end
   end
 
@@ -196,6 +243,16 @@ class Order < ActiveRecord::Base
   # FIXME добавить проверки на обилеченность, может быть? для ручных бронек
   def show_as_ticketed?
     ticket_status == 'ticketed' || payment_type == 'card'
+  end
+
+  def send_notice_as
+    if ticket_status == 'ticketed'
+      'ticket'
+    elsif payment_type == 'card'
+      'order'
+    else
+      'booking'
+    end
   end
 
   def paid?
@@ -438,6 +495,7 @@ class Order < ActiveRecord::Base
     return false unless load_tickets(true)
     update_attributes(:ticket_status => 'ticketed', :ticketed_date => Date.today)
     update_prices_from_tickets
+    create_ticket_notice
   end
 
   def reload_tickets
@@ -447,10 +505,6 @@ class Order < ActiveRecord::Base
 
   def cancel!
     update_attribute(:ticket_status, 'canceled')
-  end
-
-  def email_ready!
-    update_attribute(:email_status, '')
   end
 
 # class methods

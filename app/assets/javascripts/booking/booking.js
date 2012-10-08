@@ -71,7 +71,7 @@ process: function(result) {
 failed: function() {
     var tip = 'Так бывает вследствие несвоевременного или&nbsp;некорректного обновления авиакомпанией информации о&nbsp;наличии мест в&nbsp;системах бронирования. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.';
     this.offer.book.addClass('ob-failed');
-    this.offer.state.html('Авиакомпания не подтвердила наличие мест по этому тарифу. Выберите другой вариант. <span class="link obs-hint">Почему так бывает?</span>');
+    this.offer.state.html('Авиакомпания не подтвердила наличие мест по этому тарифу. Выберите <span class="obs-cancel">другой вариант</span>. <span class="link obs-hint">Почему так бывает?</span>');
     this.offer.state.find('.obs-hint').click(function(event) {
         hint.show(event, tip);
     });
@@ -137,6 +137,9 @@ comparePrices: function() {
     if (dp !== 0) {
         trackEvent('Бронирование', 'Изменилась цена', dp > 0 ? 'Стало дороже' : 'Стало дешевле');
         this.processPrice(context, dp);
+        if (dp < 0) {
+            context.find('.bfnp-tip').hide();
+        }
         context.show();
     }
 },
@@ -178,7 +181,7 @@ hide: function() {
     $w.scrollTop(this.offer.details.offset().top - offset);
     page.title.set(local.title.results.absorb(results.data.titles.window));
     page.location.set('booking');
-    trackPage('/' + page.location.hash);    
+    trackPage('/#' + page.location.hash.replace('#', ''));
     delete this.offer;
 }
 };

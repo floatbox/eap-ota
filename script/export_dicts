@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+require_relative '../config/environment'
+
+require 'csv'
+ActiveRecord::IdentityMap.enabled = true
+
+DIR = 'tmp/dicts/'
+FileUtils.mkpath(DIR)
+
+def write_csv(filename, headers, collection)
+  #CSV.open(DIR + filename, 'w', :col_sep => "\t") do |csv|
+  CSV.open(DIR + filename, 'w') do |csv|
+    csv << headers.map {|header| header.gsub('.', '_') }
+    collection.each do |row|
+      csv << headers.map {|header| header.split('.').inject(row, :send) rescue nil}
+    end
+  end
+end
+
+write_csv( 'countries.csv', %W[ iata name_en name_ru continent synonym_list case_from case_to case_in], Country.where('alpha2 is not null').all);
+
+write_csv( 'cities.csv', %W[ iata name_en name_ru lat lng importance country.iata region.name synonym_list case_from case_to case_in timezone],
+          City.where("iata is not null and iata <> ''").includes(:region).all );
+
+write_csv( 'airports.csv', %W[ iata name_en name_ru lat lng importance city.iata synonym_list case_from case_to case_in],
+          Airport.where("iata is not null and iata <> ''").includes(:city, :country).all );
+
+write_csv( 'carriers.csv', %W[ iata en_shortname en_longname ru_shortname ru_longname country.iata bonus_program_name alliance.name color font_color],
+          Carrier.where("iata is not null and iata <> ''").includes(:country, :alliance).all );
+
+write_csv( 'airplanes.csv', %W[ iata name_en name_ru engine_type],
+          Airplane.where("iata is not null and iata <> ''").all );

@@ -178,7 +178,8 @@
     padding-top: 0;
 }
 .sdc-days .today .month,
-.sdc-days .first .month {
+.sdc-days .first .month,
+.sdc-days .last .month {
     display: block;
 }
 

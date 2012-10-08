@@ -82,6 +82,11 @@ prototype.DMY = function() {
     var m = this.getMonth() + 1;
     var y = this.getFullYear().toString().substring(2);
     return [d < 10 ? '0' : '', d, m < 10 ? '0' : '', m, y].join('');
+};
+prototype.age = function(d) {
+    var dy = this.getFullYear() - d.getFullYear();
+    if (this.getMonth() * 100 + this.getDate() < d.getMonth() * 100 + d.getDate()) dy--;
+    return dy;
 };}
 Date.parseDMY = function(str) {
     var d = parseInt(str.substring(0,2), 10);
@@ -158,7 +163,7 @@ var browser = (function() {
 		$d.addClass(signs[i]);
 	}
 	data.touchscreen = 'ontouchstart' in window;
-	data.ios = data.iphone;
+	data.ios = data.iphone || data.ipad;
 	return data;
 })();
 

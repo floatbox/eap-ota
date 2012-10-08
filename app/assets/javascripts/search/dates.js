@@ -45,7 +45,9 @@ makeMonthes: function() {
             days.append(day);
         }
         date.setDate(1);
-        days.children().eq(0).addClass('first').css('margin-left', 66 * date.dow());
+        var items = days.children();
+        items.first().addClass('first').css('margin-left', 66 * date.dow());
+        items.last().addClass('last');
         month.el = sample.clone().data('index', m).append(days).appendTo(this.slider);
         this.monthes[m] = month;
     }

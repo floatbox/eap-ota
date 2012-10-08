@@ -39,8 +39,11 @@ innerHeight: function() {
 loadLocation: function() {
     $.get('/whereami', function(data) {
         var city = (data && data.city_name) || 'Москва';
+        var dpt = search.locations.segments[0].dpt;
+        if (dpt.field.val() === '') {
+            dpt.set(city);
+        }
         search.defaultValues.segments = [{dpt: city}];
-        search.locations.segments[0].dpt.set(city);
     });
 },
 restoreResults: function(key) {
@@ -165,3 +168,17 @@ set: function(title) {
     document.title = title || this.empty;
 }
 };
+
+
+/* Errors */
+window.onerror = function(text) {
+    var type;
+    if (page.location.booking) {
+        type = 'В форме бронирования';
+    } else if (page.location.search) {
+        type = 'В результатах поиска';
+    } else {
+        type = 'В форме поиска';
+    }
+    trackEvent('Ошибка JS', type, text);
+}

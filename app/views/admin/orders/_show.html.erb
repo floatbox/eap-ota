@@ -20,12 +20,20 @@
 <div id="term">Терминал:
   <pre data-replace-with="<%= url_for :action => :pnr_raw, :id => @item.id %>"></pre>
 </div>
+
+<div id="contentmenu"><ul>
+  <li><%= link_to 'Показать PNR', {:action => 'show_pnr', :id => @item.id} %> / <%= link_to 'Show PNR', {:action => 'show_pnr', :id => @item.id, :lang => "en"} %></li>
+  <li><%= link_to 'Бронирование', {:action => 'show_pnr', :id => @item.id, :format => 'booking'} %> / <%= link_to 'Booking', {:action => 'show_pnr', :id => @item.id, :format => 'booking', :lang => "en"} %></li>
+  <li><%= link_to 'Заказ', {:action => 'show_pnr', :id => @item.id, :format => 'order'} %> / <%= link_to 'Order', {:action => 'show_pnr', :id => @item.id, :format => 'order', :lang => "en"} %></li>
+  <li><%= link_to 'Билет', {:action => 'show_pnr', :id => @item.id, :format => 'ticket'} %> / <%= link_to 'Ticket', {:action => 'show_pnr', :id => @item.id, :format => 'ticket', :lang => "en"} %></li>
+</ul></div>
+<p></p>
 <div>
-  <strong>
-    <%= @item.payment_status %> / <%= @item.ticket_status %>
+    статус платежа: <strong><%= @item.payment_status %></strong> /
+    статус билетов: <strong><%= @item.ticket_status %></strong> / 
+    статус письма: <strong><%= @item.email_status %></strong> <% if @item.email_status != 'manual' %>[<%= link_to 'Переключить в Ручной режим', {:action => 'manual_notice', :id => @item.id}, {:confirm => 'Включить ручной режим оповещений?'} %>]<% end %>
     <br>
     <br>
-  </strong>
 </div>
 <% if @item.code && @item.payment_status == 'not blocked' && @item.offline_booking? %>
 <div id="pay_url">
@@ -39,7 +47,6 @@ URL для оплаты: <%= link_to edit_payment_url(:code => @item.code), edit
 <% end %>
 
 <table><tr>
-  <td><%= button_to 'Показать PNR', {:action => 'show_pnr', :id => @item.id} %> <%= link_to 'PNR EN', {:action => 'show_pnr', :id => @item.id, :lang => "EN"} %></td>
 <% if @item.payment_status == 'blocked'  %>
   <td><%= button_to 'Charge', {:action => 'charge', :id => @item.id}, {:confirm => 'Списать деньги с карты? (возврат до двух месяцев!)'} %></td>
   <td><%= button_to 'Unblock', {:action => 'unblock', :id => @item.id}, {:confirm => 'разблокировать средства? (заблокировать их обратно уже не выйдет!)'} %></td>
@@ -65,4 +72,3 @@ URL для оплаты: <%= link_to edit_payment_url(:code => @item.code), edit
   <td><%= button_to 'Обновить билеты', {:action => 'reload_tickets', :id => @item.id} %></td>
 <% end %>
 </tr> </table>
-

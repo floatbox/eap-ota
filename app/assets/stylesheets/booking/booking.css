@@ -20,6 +20,10 @@
     font-size: 14px;
     line-height: 16px;
 }
+.bf-newprice-top {
+    background: #EDEDE3;
+    padding: 14px 14px;
+}
 
 /* Основной блок */
 #booking {
@@ -96,15 +100,17 @@
 
 /* Нижняя часть */
 .bf-footer {
-    position: relative;
-    margin: 25px 20px 0 315px;
-    padding-bottom: 30px;
+    margin: 0 20px;
+    padding: 25px 0 30px;
+    overflow: hidden;
 }
-.bff-price {
-    position: absolute;
-    top: 12px;
-    left: -300px;
-    width: 260px;
+.bff-left {
+    float: left;
+    width: 255px;
+    padding-top: 12px;
+}
+.bff-right {
+    margin-left: 295px;
 }
 .bffp-content {
     float: right;
@@ -130,6 +136,19 @@
 }
 .bffpd-item {
     margin: 0 0 3px;
+}
+.bffp-hint {
+    margin: 10px 0 0;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 15px;
+    color: #777;
+}
+.bffp-progress {
+    font-size: 16px;
+    margin-top: 2px;
+    padding-left: 26px;
+    background: url(/images/booking/progress-b.gif) no-repeat 0 2px;    
 }
 
 /* Кнопка отправки */
@@ -178,7 +197,6 @@
     background-position: 0 -60px;
 }
 .bfb-disabled .bfb-title {
-    /*color: #b8b39c; для жёлтого фона */
     color: #b8b8a5;
     text-shadow: none;
     cursor: default;
@@ -201,6 +219,7 @@
     margin: 0 0 10px;
     font-size: 16px;
     line-height: 18px;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 .bffr-wrong {
     margin: 0 0 10px;
@@ -210,9 +229,13 @@
     cursor: pointer;
 }
 .bffr-link:hover {
-    background: none;
     text-decoration: underline;
     color: #f90a6f;
+}
+.ipad .bffr-link:hover,
+.iphone .bffr-link:hover {
+    text-decoration: none;
+    color: inherit;
 }
 .bff-disclaimer {
     font-size: 14px;

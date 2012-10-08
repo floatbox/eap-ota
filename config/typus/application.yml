@@ -31,7 +31,7 @@ Carrier:
   fields:
     default: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
     list: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
-    form: ru_shortname, ru_longname, en_shortname, en_longname, iata, iata_ru, country, bonus_program_name, alliance, gds, interlines, consolidator, color, font_color, comment
+    form: ru_shortname, ru_longname, en_shortname, en_longname, iata, iata_ru, country, bonus_program_name, alliance, gds, consolidator, color, font_color, comment
   order_by: en_shortname, ru_shortname
   relationships: country, alliance, gds, consolidator
   filters: country, gds, consolidator
@@ -72,7 +72,7 @@ City:
     default: iata, name_ru, name_en, synonym_list, importance, country, region
     list: iata, name_ru, name_en, synonym_list, importance, country, region
     form: iata, iata_ru, name_ru, name_en, synonym_list, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in, lat, lng, importance, country, region, timezone, disabled, search_around
-    csv: iata, name_ru
+    csv: iata, name_ru, name_en, synonym_list, importance, country, region, lat, lng
     options:
       selectors: timezone
   order_by: name_ru
@@ -186,9 +186,9 @@ FlightGroup:
 
 Notification:
   fields:
-    default: subject, comment, typus_user, created_at, sent_status
+    default: subject, format, comment, typus_user, created_at, sent_status
     list: subject, order, comment, typus_user, created_at, sent_status
-    form: attach_pnr, lang, subject, comment, format, status
+    form: attach_pnr, lang, subject, comment, format
     show: order, typus_user, created_at, format, destination, attach_pnr, lang, subject, comment, sent_status
     options:
       read_only: order

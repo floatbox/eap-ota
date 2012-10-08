@@ -75,7 +75,7 @@ class SampleJob
   # вызывется, если perform (или success) бросили эксепшн
   #
   def error(job, exception)
-    Airbrake.notify(exception)
+    with_warning(exception)
   end
 
   # вызвается после исчерпания attempts, перед удалением задачи из очереди

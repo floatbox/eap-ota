@@ -95,7 +95,7 @@ module Amadeus
       end
       # FIXME среагировать на HTTP error
       session.increment if session
-      log_file(request.action, xml_response.to_xml)
+      log_file(request.action, xml_response.to_xml) unless request.action =~ /Pricer/
     end
 
     request.process_response(xml_response)
@@ -132,16 +132,17 @@ module Amadeus
     end
   end
 
-  # fare_master_pricer_travel_board_search
+  # Amadeus::Service#pnr_add_multi_elements etc.
   Amadeus::Request::SOAP_ACTIONS.keys.each do |action|
-    # Amadeus::Service.pnr_add_multi_elements etc.
-    define_method action.underscore do |*args|
-      invoke_request Amadeus::Request.wrap(action, *args)
-    end
+    eval <<-"END", nil, __FILE__, __LINE__
+      def #{action.underscore} (*args)
+        invoke_request Amadeus::Request.wrap( #{action.inspect}, *args)
+      end
 
-    define_method "async_#{action.underscore}" do |*args, &block|
-      invoke_async_request Amadeus::Request.wrap(action, *args), &block
-    end
+      def async_#{action.underscore} (*args, &block)
+        invoke_async_request Amadeus::Request.wrap( #{action.inspect}, *args), &block
+      end
+    END
   end
 
 # метрика

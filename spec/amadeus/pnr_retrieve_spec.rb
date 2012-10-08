@@ -34,6 +34,17 @@ describe Amadeus::Response::PNRRetrieve do
 
   end
 
+  context 'ticket for infant with different last name' do
+
+    let_once! :response do
+      amadeus_response('spec/amadeus/xml/PNR_Retrieve_infant_with_diff_last_name.xml')
+    end
+
+    subject {response.tickets[[[17, "i"], [1, 2]]]}
+    specify {subject[:last_name].should == "EFIMOVA"}
+
+  end
+
   describe 'with another complex exchange' do
 
     let_once! :response do
@@ -171,15 +182,31 @@ describe Amadeus::Response::PNRRetrieve do
       subject {
         Amadeus::Response::PNRRetrieve.new('').parsed_ticket_string('PAX 566-2962622407/ETPS/09AUG11/MOWR2219U/92223412')
       }
+      pending do
+        it {should be_present}
+        its([:code]) { should == '566' }
+        its([:number]) { should == '2962622407' }
+        its([:status]) { should == 'ticketed' }
+        its([:ticketed_date]) { should == Date.new(2011, 8, 9) }
+        its([:validating_carrier]) { should == 'PS' }
+        its([:office_id]) { should == 'MOWR2219U' }
+        its([:validator]) { should == '92223412' }
+      end
+    end
+
+    describe 'another strange example' do
+      subject {
+        Amadeus::Response::PNRRetrieve.new('').parsed_ticket_string('PAX 670-7160346265/ETUN//03OCT12/FLL1S212V/10729143')
+      }
 
       it {should be_present}
-      its([:code]) { should == '566' }
-      its([:number]) { should == '2962622407' }
+      its([:code]) { should == '670' }
+      its([:number]) { should == '7160346265' }
       its([:status]) { should == 'ticketed' }
-      its([:ticketed_date]) { should == Date.new(2011, 8, 9) }
-      its([:validating_carrier]) { should == 'PS' }
-      its([:office_id]) { should == 'MOWR2219U' }
-      its([:validator]) { should == '92223412' }
+      its([:ticketed_date]) { should == Date.new(2012, 10, 3) }
+      its([:validating_carrier]) { should == 'UN' }
+      its([:office_id]) { should == 'FLL1S212V' }
+      its([:validator]) { should == '10729143' }
     end
   end
 

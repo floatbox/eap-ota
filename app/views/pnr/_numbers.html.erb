@@ -1,8 +1,8 @@
-<td>
+<td width="160">
     <div style="font-weight: bold; font-size: 12px; line-height: 15px; margin-top: 4px; margin-bottom: 3px;"><% unless @lang %>Номер брони<br><% end %>Booking Number</div>
     <div style="font-weight: bold; font-size: 24px; line-height: 27px; color: #F90A6F;"><%= @pnr.number %></div>
 </td>
-<td>
+<td width="206">
 <% if @pnr.additional_number %>
     <div style="font-weight: bold; font-size: 12px; line-height: 15px; margin-top: 4px; margin-bottom: 3px;"><% unless @lang %>Номер подтверждения<br><% end %>Confirmation Number</div>
     <div style="font-weight: bold; font-size: 24px; line-height: 27px; color: #F90A6F;"><%= @pnr.additional_number %></div>

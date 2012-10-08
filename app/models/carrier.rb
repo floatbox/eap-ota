@@ -10,6 +10,8 @@ class Carrier < ActiveRecord::Base
   belongs_to :country
   belongs_to :consolidator
   belongs_to :gds, :foreign_key => 'gds_id', :class_name =>'GlobalDistributionSystem'
+  serialize :interlines, JoinedArray.new
+  serialize :not_interlines, JoinedArray.new
 
   def name
     ru_longname.presence ||
@@ -37,6 +39,7 @@ class Carrier < ActiveRecord::Base
     end
   end
 
+  # FIXME грохнуть
   def self.non_commissioned_iatas
     (where('consolidator_id is NULL AND iata != ""').find_all{|a| Commission.commissions[a.iata]}).to_a[0..98].collect(&:iata)
     end
@@ -66,6 +69,10 @@ class Carrier < ActiveRecord::Base
     ru_shortname.presence || en_shortname
   end
 
+  def all_iatas
+    [iata] + not_interlines
+  end
+
   def fetch_interlines(session=Amadeus.booking)
     if iata.present?
       session.interline_iatas(iata)
@@ -82,19 +89,15 @@ class Carrier < ActiveRecord::Base
   end
 
   def update_interlines!(session=Amadeus.booking)
-    self.interlines = fetch_interlines(session).join(' ')
-    has_changed = changed?
+    self.interlines = fetch_interlines(session)
+    return changed?
+  ensure
     save
-    has_changed
   end
 
-  def interline_with?(carrier)
-    carrier = carrier.iata if carrier.is_a? Carrier
-    interlines.split.include?(carrier)
-  end
-
-  def interline_partners
-    interlines.split.map {|iata| Carrier[iata]}
+  def confirmed_interline_with?(carrier)
+    carrier = carrier.iata unless carrier.is_a? String
+    interlines.include?(carrier)
   end
 
   # для кронтаска

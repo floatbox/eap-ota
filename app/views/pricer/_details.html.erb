@@ -19,17 +19,12 @@
             <dt>самолет</dt>
             <dd><%= flight.equipment_type_name %></dd>
             <dt>в пути</dt>
-            <dd><%= human_duration(flight.duration) %></dd>
+            <dd><%= human_duration(flight.duration) %><% if segment_cabins[fcounter] %> <span class="osdn-hl"><%= human_cabin_nom(segment_cabins[fcounter]) %></span><% end %></dd>
             <%# FIXME выключаю, пока что это в админской инфе %>
             <% if false && admin_user%>
                 <p style="text-align:center"><a href='<%= show_seat_map_url(flight.flight_code) %>' target="_blank">карта мест</a></p>
             <% end %>
          </dl>
-        <% if segment_cabins[fcounter] %>
-        <ul class="osd-notice">
-            <li class="osdn-item"><span class="osdn-hl"><%= human_cabin_nom(segment_cabins[fcounter]) %></span></li>
-        </ul>
-        <% end %>
     </div>
     <div class="osd-arv">
         <h5 class="osd-time"><%= fmt_time flight.arrival_time %></h5>
@@ -40,7 +35,7 @@
             <dd><%= full_airport_and_term(flight.arrival, flight.arrival_term) %></dd>
             <% if layover %>
                 <dt>между рейсами</dt>
-                <dd><%= human_duration(layover) %></dd>
+                <dd><% if layover > 479 %><span class="odc-hl"><%= human_duration(layover) %></span><% else %><%= human_duration(layover) %><% end %></dd>
             <% end %>            
         </dl>
         <ul class="osd-notice">

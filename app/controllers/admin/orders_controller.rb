@@ -3,7 +3,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
   include CustomCSV
   include Typus::Controller::Bulk
 
-  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel, :reload_tickets, :update, :pnr_raw, :void, :make_payable_by_card, :send_invoice, :ticket_in_ticketing_office]
+  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel, :reload_tickets, :update, :pnr_raw, :void, :make_payable_by_card, :send_invoice, :ticket_in_ticketing_office, :manual_notice]
 
   # def set_scope
   #   # добавлять фильтры лучше в def index и т.п., но так тоже работает (пока?)
@@ -21,6 +21,8 @@ class Admin::OrdersController < Admin::EviterraResourceController
     add_predefined_filter 'Unticketed', Order.unticketed.scope_attributes, 'unticketed'
     add_predefined_filter 'Processing Ticket', Order.processing_ticket.scope_attributes, 'processing_ticket'
     add_predefined_filter 'Error Ticket', Order.error_ticket.scope_attributes, 'error_ticket'
+    add_predefined_filter 'Ticket Not Sent', {:scope => 'ticket_not_sent'}, 'ticket_not_sent'
+    add_predefined_filter 'Sent Manual', Order.sent_manual.scope_attributes, 'sent_manual'
     add_predefined_filter 'MOWR228FA', {:scope => 'MOWR228FA'}
     add_predefined_filter 'MOWR2233B', {:scope => 'MOWR2233B'}
     add_predefined_filter 'MOWR221F9', {:scope => 'MOWR221F9'}
@@ -50,11 +52,11 @@ class Admin::OrdersController < Admin::EviterraResourceController
   end
 
   def show_pnr
-    if params[:lang]
-      redirect_to show_order_path(:id => @order.pnr_number, :lang => "EN")
-    else
-      redirect_to show_order_path(:id => @order.pnr_number)
-    end
+    notice = {}
+    notice[:id] = @order.pnr_number
+    notice[:format] = params[:format] if params[:format]
+    notice[:lang] = "en" if params[:lang]
+    redirect_to show_notice_path(notice)
   end
 
   def pnr_raw
@@ -115,6 +117,11 @@ class Admin::OrdersController < Admin::EviterraResourceController
 
   def reload_tickets
     @order.reload_tickets
+    redirect_to :action => :show, :id => @order.id
+  end
+
+  def manual_notice
+    @order.email_manual!
     redirect_to :action => :show, :id => @order.id
   end
 

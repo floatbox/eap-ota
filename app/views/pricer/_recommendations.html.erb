@@ -99,7 +99,8 @@
 
 <div class="rf-data" id="rfg-carriers">
 <% if data[:alliances].length > 1 %>
-<div class="rfg-column rf-list" data-key="alliance">
+<div class="rfg-column">
+<div class="rf-list" data-key="alliance">
     <h6 class="rfgc-title">Альянс</h6>
     <ul class="rf-values">
     <li class="rfv-empty rfv-selected">любой</li>
@@ -108,9 +109,11 @@
     <% end %>
     </ul>
 </div>
+</div>
 <% end %>
 <% if data[:carriers].length > 1 %>
-<div class="rfg-column rf-list" data-key="carrier">
+<div class="rfg-column">
+<div class="rf-list" data-key="carrier">
     <h6 class="rfgc-title">Авиакомпания</h6>
     <ul class="rf-values">
     <li class="rfv-empty rfv-selected">любая</li>
@@ -118,10 +121,12 @@
         <li class="rfv-item" data-value="<%= carrier.iata %>"><%= carrier.name %></li>
     <% end %>
     </ul>
+</div>
 </div>    
 <% end %>
 <% if data[:planes].length > 1 %>
-<div class="rfg-column rf-list" data-key="plane">
+<div class="rfg-column">
+<div class="rf-list" data-key="plane">
     <h6 class="rfgc-title">Самолет</h6>
     <ul class="rf-values">
     <li class="rfv-empty rfv-selected">любой</li>
@@ -129,6 +134,7 @@
         <li class="rfv-item" data-value="<%= plane.iata %>"><%= plane.name %></li>
     <% end %>
     </ul>
+</div>
 </div>
 <% end %>
 </div>

@@ -46,9 +46,12 @@ updateBook: function() {
     var u = local.currencies.RUR, p = this.selected.price;
     var price = p.separate() + '&nbsp;' + p.decline(u[0], u[1], u[2], false);
     var state = results.stateTemplate;
-    var ap = results.data.averagePrice; 
+    var ap = results.data.averagePrice;
     if (p < ap) {
-        state += local.offers.price.profit.absorb(Math.round((ap - p) / ap * 100));
+        var percents = Math.round((ap - p) / ap * 100);
+        if (percents) {
+            state += local.offers.price.profit.absorb(percents);
+        }
     }
     this.btitle.html(results.priceTemplate.absorb(price));
     this.state.html(state);

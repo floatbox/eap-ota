@@ -42,7 +42,7 @@ class Recommendation
   # ##########
 
   def other_marketing_carrier_iatas
-    marketing_carrier_iatas - [validating_carrier_iata]
+    marketing_carrier_iatas - validating_carrier.all_iatas
   end
 
   # FIXME? правильно работает только для recommendation с одним вариантом
@@ -51,20 +51,20 @@ class Recommendation
   end
 
   def validating_carrier_participates?
-    marketing_carrier_iatas.include?(validating_carrier_iata)
+    (marketing_carrier_iatas & validating_carrier.all_iatas).present?
   end
 
   # предполагается, что у всех вариантов одинаковый набор marketing carrier-ов
   def validating_carrier_makes_half_of_itinerary?
     validating, other =
       variants.first.flights.every.marketing_carrier_iata.partition do |iata|
-        iata == validating_carrier_iata
+        iata.in?  validating_carrier.all_iatas
       end
     validating.size >= other.size
   end
 
   def validating_carrier_starts_itinerary?
-    variants.first.flights.first.marketing_carrier_iata == validating_carrier_iata
+    variants.first.flights.first.marketing_carrier_iata.in? validating_carrier.all_iatas
   end
 
   def interline?
@@ -105,7 +105,7 @@ class Recommendation
     validating_carrier_iata == 'HR' or
     not interline? or
     other_marketing_carrier_iatas.uniq.all? do |iata|
-      validating_carrier.interline_with?(iata)
+      validating_carrier.confirmed_interline_with?(iata)
     end
   end
 
@@ -364,6 +364,7 @@ class Recommendation
     segments = []
     subclasses = []
     cabins = []
+    date_seq = (Date.today..(Date.today + 10)).to_enum
     fragments = itinerary.split
     if fragments.first.size == 2
       default_carrier = fragments.shift
@@ -392,7 +393,8 @@ class Recommendation
       end
       flight.marketing_carrier_iata = carrier
       flight.operating_carrier_iata = operating_carrier.presence || carrier
-      flight.flight_number = flight_number.presence
+      flight.flight_number = flight_number.presence || '9999'
+      flight.dept_date = date_seq.next
       segments << Segment.new(:flights => [flight])
       subclasses << subclass
       cabins << cabin

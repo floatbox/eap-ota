@@ -24,7 +24,7 @@ booking.prebook = function(query_key, hash, partner, marker) {
         url: '/booking/preliminary_booking?query_key=' + query_key + '&recommendation=' + hash + '&partner=' + partner + '&marker=' + marker + '&variant_id=1',
         success: function(result) {
             if (result && result.success) {
-                that.load(result.number);
+                that.load(result.number, result.changed_booking_classes);
             } else {
                 that.failed();
             }
@@ -35,7 +35,7 @@ booking.prebook = function(query_key, hash, partner, marker) {
         timeout: 60000
     });
 },
-booking.load = function(number) {
+booking.load = function(number, price_changed) {
     var that = this;
     this.request = $.get('/booking/', {
         number: number
@@ -52,6 +52,12 @@ booking.load = function(number) {
                 next();
             });
         });
+        if (price_changed) {
+            var newprice = that.content.find('.bf-newprice').addClass('bf-newprice-top');
+            that.content.find('.b-header').before(newprice);
+            newprice.find('.bfnp-content').html('Новая стоимость — ' + price);
+            newprice.show();
+        }
         that.content.find('.b-header').prepend(button);
         that.content.find('.bffc-link').html('выбрать другой вариант');
         that.content.delegate('.od-alliance', 'click', function(event) {
@@ -68,3 +74,8 @@ booking.failed = function() {
 booking.cancel = function() {
     window.location = '/#' + this.query_key;
 };
+
+/* Errors */
+window.onerror = function(text) {
+    trackEvent('Ошибка JS', 'При переходе с метапоиска', text);
+}

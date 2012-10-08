@@ -53,11 +53,11 @@ module BookingHelper
   def full_human_date date
     I18n.l(Date.strptime(date, '%d%m%y'), :format => '%e %B %Y')
   end
-  
+
   def human_week_day date
     I18n.l(Date.strptime(date, '%d%m%y'), :format => ' %A')
   end
-  
+
   def full_human_date_en date
     # Date.strptime(date, '%d%m%y').strftime('%e %B %Y')
     Date.strptime(date, '%d%m%y').to_s(:long)
@@ -65,6 +65,16 @@ module BookingHelper
 
   def human_week_day_en date
     Date.strptime(date, '%d%m%y').strftime(' %A')
+  end
+
+  def time_to_ticketing_delay date
+    time = date.strftime('%H%M')
+    case
+      when time < '0600';  'до&nbsp;11&nbsp;утра по&nbsp;московскому времени'.html_safe
+      when time < '0800';  'в&nbsp;течение четырех часов'.html_safe
+      when time < '2030';  'в&nbsp;течение трех часов'.html_safe
+      else                 'до&nbsp;11&nbsp;утра по&nbsp;московскому времени'.html_safe
+    end
   end
 
 end

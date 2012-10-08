@@ -26,6 +26,8 @@ class Ticket < ActiveRecord::Base
   has_one :replacement, :class_name => 'Ticket', :foreign_key => 'parent_id', :conditions => 'kind ="ticket"'
   has_many :children, :class_name => 'Ticket', :foreign_key => 'parent_id'
 
+  has_and_belongs_to_many :stored_flights
+  serialize :baggage_info, JoinedArray.new
 
   # для отображения в админке билетов. Не очень понятно,
   # как запретить добавление новых, впрочем.
@@ -60,30 +62,44 @@ class Ticket < ActiveRecord::Base
   validates_presence_of :comment, :if => lambda {kind == "refund"}
   after_save :update_prices_in_order
   attr_accessor :parent_number, :parent_code, :original_price_total
-  attr_writer :price_fare_base
+  attr_writer :price_fare_base, :flights
+  before_validation :set_info_from_flights
 
   def show_vat
     vat_status != 'unknown'
   end
 
-  def flights=(flights_array)
-    if [nil, '', 'unknown'].include? vat_status
-      if flights_array[0].departure.country.iata != 'RU' ||
-          flights_array.last.arrival.country.iata != 'RU' ||
-          flights_array.map{|f| [f.departure, f.arrival]}.flatten.uniq.map{|ap| ap.country.iata}.count('RU') < 2
-        self.vat_status = '0'
-      elsif flights_array.map{|f| [f.departure.country.iata, f.arrival.country.iata]}.flatten.uniq == ['RU']
-        self.vat_status = '18%'
-      else
-        self.vat_status = 'unknown'
+  def set_info_from_flights
+    if @flights
+      if [nil, '', 'unknown'].include? vat_status
+        if @flights[0].departure.country.iata != 'RU' ||
+            @flights.last.arrival.country.iata != 'RU' ||
+            @flights.map{|f| [f.departure, f.arrival]}.flatten.uniq.map{|ap| ap.country.iata}.count('RU') < 2
+          self.vat_status = '0'
+        elsif @flights.map{|f| [f.departure.country.iata, f.arrival.country.iata]}.flatten.uniq == ['RU']
+          self.vat_status = '18%'
+        else
+          self.vat_status = 'unknown'
+        end
       end
+      self.route = @flights.map{|fl| "#{fl.departure_iata} \- #{fl.arrival_iata} (#{fl.marketing_carrier_iata})"}.uniq.join('; ')
+      self.cabins = @flights.every.cabin.compact.join(' + ')
+      self.dept_date = @flights.first.dept_date
+
+      # и закидываем в базу
+      self.stored_flights = @flights.map {|fl| StoredFlight.from_flight(fl) } if Conf.site.store_flights
     end
-    self.route = flights_array.map{|fl| "#{fl.departure_iata} \- #{fl.arrival_iata} (#{fl.marketing_carrier_iata})"}.uniq.join('; ')
-    self.cabins = flights_array.every.cabin.compact.join(' + ')
-    self.dept_date = flights_array.first.dept_date
   end
 
-  def price_fare_base
+  def flights
+    stored_flights.map(&:to_flight).sort_by(&:departure_datetime_utc)
+  end
+
+  def booking_classes
+    cabins.split(' + ')
+  end
+
+  def price_fare_base 
     @price_fare_base ||= if parent
       original_price_fare + parent.price_fare_base
     else
@@ -92,6 +108,7 @@ class Ticket < ActiveRecord::Base
   rescue TypeError
   #  TODO: придумать, что делать в случае несовпадения типов
   end
+
    # whitelist офис-айди, имеющих к нам отношение. В брони иногда попадают "не наши" билеты
    # для всех айди в базе можно использовать: Ticket.uniq.pluck(:office_id).compact.sort
    def self.office_ids
@@ -103,7 +120,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def baggage_array
-    baggage_info.to_s.split.map{|code| [BaggageLimit.deserialize(code)]}
+    baggage_info.map{|code| [BaggageLimit.deserialize(code)]}
   end
 
   def update_prices_and_add_parent
@@ -316,7 +333,7 @@ class Ticket < ActiveRecord::Base
 
   def customized_original_fare
     original_price_fare ? original_price_fare.with_currency : 'Unknown'
-    end
+  end
 
   def customized_original_tax
     original_price_tax ? original_price_tax.with_currency : 'Unknown'

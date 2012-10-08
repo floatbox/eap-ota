@@ -1,7 +1,7 @@
 booking.form.process = function(s) {
     this.footer.hide();
     this.footer.find('.bff-progress').hide();
-    this.button.removeClass('bfb-disabled');
+    this.button.removeClass('bfb-sending');
     var that = this;
     this.result = $(s).insertAfter(this.el);
     var back = this.result.find('.bfr-back');

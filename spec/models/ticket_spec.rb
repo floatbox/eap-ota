@@ -58,14 +58,16 @@ describe Ticket do
     end
   end
 
-  describe "#flights=" do
+  describe "#set_info_from_flights" do
     let(:cabins) {[]}
-    let(:dept_dates) {['121011']}
+    let(:dept_dates) {[]}
     subject do
       flights = Recommendation.example(flight_string).flights
       flights.each_with_index {|fl, i| fl.cabin = cabins[i]} if cabins.present?
       flights.each_with_index {|fl, i| fl.departure_date = dept_dates[i]} if dept_dates.present?
-      Ticket.new(:flights => flights)
+      t = Ticket.new(:flights => flights)
+      t.valid?
+      t
     end
 
     context 'one way route' do

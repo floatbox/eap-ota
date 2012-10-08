@@ -1,5 +1,6 @@
 # encoding: utf-8
 class PNR
+  include KeyValueInit
   extend CopyAttrs
   attr_accessor :number, :flights, :booking_classes, :passengers, :phone, :email, :raw, :additional_number
 
@@ -18,8 +19,6 @@ class PNR
     else
       Amadeus.booking do |amadeus|
         pnr_resp = amadeus.pnr_retrieve(:number => number)
-        tst_resp = amadeus.ticket_display_tst
-        amadeus.pnr_ignore
         copy_attrs pnr_resp, pnr,
           :flights,
           :booking_classes,
@@ -28,9 +27,13 @@ class PNR
           :email
         add_number = pnr_resp.additional_pnr_numbers[pnr.order.commission_carrier]
         pnr.additional_number = add_number if add_number != pnr.order.pnr_number
-        pnr.flights.each do |fl|
-          fl.baggage_limit_for_adult = tst_resp.baggage_for_segments[fl.amadeus_ref]
+        unless pnr.order.sold_tickets.present?
+          tst_resp = amadeus.ticket_display_tst
+          pnr.flights.each do |fl|
+            fl.baggage_limit_for_adult = tst_resp.baggage_for_segments[fl.amadeus_ref]
+          end
         end
+        amadeus.pnr_ignore
       end
     end
     pnr

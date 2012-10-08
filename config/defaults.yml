@@ -4,6 +4,7 @@ site:
   forbidden_sale: no
   forbidden_cash: no
   forbidden_delivery: no
+  store_flights: no
 api:
   enabled: yes
   store_rambler_cache: no
@@ -38,8 +39,9 @@ amadeus:
 payment:
   # FIXME убить в локальных конфигах
   use_discount: no
-  skip_checksum_validation: yes
+  # FIXME убить в локальных конфигах
   order_id_prefix: o
+  skip_checksum_validation: yes
   production:
     skip_checksum_validation: no
 cash:
@@ -48,6 +50,7 @@ cash:
 payture:
   commission: 2.85%
   enabled: yes
+  order_id_prefix: o
   key: MerchantETerra
   host: sandbox.payture.com
   ssl: no
@@ -61,6 +64,10 @@ payture:
     jEqhpDYkFUu0XMbGBYr0m6JcVXHGy3xV4J7YasVrvs0kqYJNiyaUhaHQYbAM2AWz
     IwIDAQAB
     -----END PUBLIC KEY-----
+payu:
+  seller_key: 'w7I2R8~V7=dm5H7[r1k5'
+  host: sandbox8ru.epayment.ro
+  merchant: EVITERRA
 payonline:
   enabled: no
   merchant_id: '3925'

@@ -166,6 +166,7 @@ processCollections: function() {
         }, 30);
     } else {
         this.message.toggle('empty');
+        trackPage('/search/empty');
     }
 },
 updateFeatured: function() {
@@ -451,7 +452,7 @@ init: function(el) {
 },
 send: function() {
     var that = this;
-    var value = this.field.val();
+    var value = $.trim(this.field.val());
     if (!value || !/^([^@\s]+)@((?:[-A-Za-z0-9]+\.)+[a-z]{2,})$/.test(value)) {
         this.showError('Введите правильный адрес электронной почты.');
         return false;

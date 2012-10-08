@@ -5,7 +5,7 @@
 <col width="210">
 <tbody valign="top">
 <tr>
-    <td style="font-size: 12px; line-height: 12px;">
+    <td width="340" style="font-size: 12px; line-height: 12px;">
         <div style="font-weight: bold; font-size: 23px; line-height: 26px;"><% unless @lang %>Бронирование<br><% end %>Booking</div><br>
         <% if @last_pay_time.present? %>
             <div style="font-weight: bold; font-size: 12px; line-height: 15px; margin-bottom: 3px;"><% unless @lang %>Действительно до<br><% end %>Valid until</div>
@@ -14,7 +14,7 @@
         <br><br>
     </td>
     <%= render :partial => 'pnr/numbers' %>
-    <td rowspan="2">
+    <td width="210" rowspan="2">
         <div style="font-weight: bold; font-size: 32px; line-height: 30px; color: #F90A6F;">
             <img src="https://eviterra.com/images/booking/eviterra.png" alt="eviterra.com" width="210" height="30"><br>
         </div><br>
@@ -59,7 +59,7 @@
 <col width="550">
 <col width="366">
 <tr valign="top">
-    <td rowspan="2">
+    <td width="550" rowspan="2">
         <div style="font-weight: bold; font-size: 18px; line-height: 21px;"><% unless @lang %>Информация для оплаты<br><% end %>Information for payment</div>
         <div style="font-size: 10px; line-height: 10px;"><br></div>
         <table cellspacing="0" cellpadding="0" style="font-size: 13px; line-height: 18px;">
@@ -67,8 +67,8 @@
         <col width="340">
         <col width="190">
         <tr>
-            <td><% unless @lang %>Тариф <span style="color: #C0C0C0;">/</span> <% end %>Fare</td>
-            <td><%= exact_price(@prices.price_fare) %> RUB</td>
+            <td width="340"><% unless @lang %>Тариф <span style="color: #C0C0C0;">/</span> <% end %>Fare</td>
+            <td width="190"><%= exact_price(@prices.price_fare) %> RUB</td>
         </tr>
         <% unless @prices.price_declared_discount.zero? %>
         <tr>
@@ -108,7 +108,7 @@
         </tbody>
         </table>
     </td>
-    <td>
+    <td width="366">
         <div style="font-weight: bold; font-size: 18px; line-height: 21px;"><% unless @lang %>Данные покупателя<br><% end %>Customer Details</div>
         <div style="font-size: 10px; line-height: 10px;"><br></div>
         <div style="font-size: 13px; line-height: 18px;">

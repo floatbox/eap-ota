@@ -57,6 +57,9 @@
     margin-left: 10px;
     color: #777;
 }
+.obs-profit strong {
+    color: #F90A6F;
+}
 .obs-hint {
     position: absolute;
     margin: 1px 0 0 10px;
@@ -65,6 +68,10 @@
 .ob-sum {
     font-weight: bold;
     color: #f90a6f;
+}
+.obs-cancel {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 /* Fixed price */
@@ -710,7 +717,7 @@
     background: #F8F8F6;
 }
 .od-segments {
-    border-top: 1px solid #EDEDED;
+    /*border-top: 1px solid #EDEDED;*/
     padding: 6px 0 2px;
 }
 .od-segments .os-details {

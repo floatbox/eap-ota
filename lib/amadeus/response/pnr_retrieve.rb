@@ -94,17 +94,26 @@ module Amadeus
       end
 
       def parsed_ticket_string(s)
-        m = s.to_s.match(/(PAX|INF) (\d+)-([\d-]+)\/\w([TRV])(\w{2})(?:\/[\w\.]+)?\/(\w+)\/(\w+)\/(\d+)/)
+        m = s.to_s.match(
+          %r{
+            (?<inf>PAX|INF)\ (?<code> \d+ )-(?<number> [\d-]+ )
+            / [DE] (?<status> [TRV] ) (?<validating_carrier> \w{2} )
+            /? [^/]*
+            / (?<ticketed_date> \w+ )
+            / (?<office_id> \w+ )
+            / (?<validator> \d+ )
+          }x
+        )
         if m
           return({
-            :number => m[3],
-            :code => m[2],
-            :status => {'T' => 'ticketed', 'V' => 'voided', 'R' => 'returned'}[m[4]],
-            :ticketed_date => Date.strptime(m[6], '%d%h%y'),
-            :validating_carrier => m[5],
-            :office_id => m[7],
-            :validator => m[8],
-            :inf => m[1]
+            :number => m[:number],
+            :code => m[:code],
+            :status => {'T' => 'ticketed', 'V' => 'voided', 'R' => 'returned'}[m[:status]],
+            :ticketed_date => Date.strptime(m[:ticketed_date], '%d%h%y'),
+            :validating_carrier => m[:validating_carrier],
+            :office_id => m[:office_id],
+            :validator => m[:validator],
+            :inf => m[:inf]
             })
         end
       end
@@ -141,12 +150,14 @@ module Amadeus
           passenger_ref = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='PT']/r:number").to_i
           segments_refs = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='ST']/r:number").every.to_i.sort
           passenger_elem = xpath("//r:travellerInfo[r:elementManagementPassenger/r:reference[r:qualifier='PT'][r:number=#{passenger_ref}]]")
-          passenger_last_name = passenger_elem.xpath('r:passengerData/r:travellerInformation/r:traveller/r:surname').to_s
           ticket_hash = parsed_ticket_string(fa.to_s)
           infant_flag = ticket_hash.delete(:inf) == 'INF' ? 'i': 'a'
           if infant_flag != 'i'
+            passenger_last_name = passenger_elem.xpath('r:passengerData/r:travellerInformation/r:traveller/r:surname').to_s
             passenger_first_name = passenger_elem.xpath('r:passengerData/r:travellerInformation/r:passenger/r:firstName').to_s
           else
+            passenger_last_name = passenger_elem.xpath('r:passengerData/r:travellerInformation/r:passenger[r:type="INF"]/../r:traveller/r:surname').to_s ||
+              passenger_elem.xpath('r:passengerData/r:travellerInformation/r:traveller/r:surname').to_s
             passenger_first_name = passenger_elem.xpath('r:passengerData/r:travellerInformation/r:passenger[r:type="INF"]/r:firstName').to_s
           end
           flights_array = segments_refs.map do |sr|
@@ -172,9 +183,11 @@ module Amadeus
 
           segments_refs = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='ST']/r:number").every.to_i.sort
           if segments_refs.blank?
-            segments_refs = tickets.find{|k, v| k[0] == [passenger_ref, infant_flag] && v[:number] != ticket_hash[:number]}[0][1]
+            # Данные по обменяному билету бывают кривыми
+            new_ticket = tickets.find{|k, v| k[0] == [passenger_ref, infant_flag] && v[:number] != ticket_hash[:number]}
+            segments_refs = new_ticket[0][1] if new_ticket
           end
-          res.merge({[[passenger_ref, infant_flag], segments_refs] => ticket_hash})
+          res.merge({[[passenger_ref, infant_flag], segments_refs] => ticket_hash}) if segments_refs.present?
         end
       end
 

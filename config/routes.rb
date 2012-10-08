@@ -26,16 +26,18 @@ Eviterra::Application.routes.draw do
   match 'hot_offers' => 'pricer#hot_offers', :as => :hot_offers
   match 'price_map' => 'pricer#price_map', :as => :price_map
   match 'booking/form' => 'booking#form', :as => :booking_form
+  post 'booking/recalculate_price' => 'booking#recalculate_price', :as => :booking_recalculate_price
   post 'booking/pay' => 'booking#pay', :as => :booking_pay
   # FIXME сделать POST однажды
   match 'booking/preliminary_booking' => 'booking#preliminary_booking', :as => :preliminary_booking
   match '/confirm_3ds/(:order_id)' => 'booking#confirm_3ds', :as => :confirm_3ds
   match 'order/:id' => 'PNR#show', :as => :show_order
+  match 'notice/:id' => 'PNR#show_notice', :as => :show_notice
   match 'order/:id/booked' => 'PNR#show_as_booked', :as => :show_booked_order
+  match 'order/:id/order' => 'PNR#show_as_order', :as => :show_order_order
   match 'order/:id/ticketed' => 'PNR#show_as_ticketed', :as => :show_ticketed_order
   match 'order/:id/for_ticket/:ticket_id' => 'PNR#show_for_ticket', :as => :show_order_for_ticket
   match 'order/:id/receipt' => 'PNR#receipt', :as => :show_order_receipt
-  match 'order/notice/:id' => 'PNR#show_sent_notice', :as => :show_sent_notice
   match '/pay/:code' => 'payments#edit', :via => :get, :as => :edit_payment
   match '/pay/:code' => 'payments#update', :via => :post, :as => :edit_payment
 
@@ -66,6 +68,8 @@ Eviterra::Application.routes.draw do
   match "admin/commissions/table" => 'admin/commissions#table', :as => 'table_admin_commissions'
   match "admin/commissions" => 'admin/commissions#index', :as => 'admin_commissions'
   match "admin/new_hot_offers" => 'admin/hot_offers#best_of_the_week', :as => 'show_best_offers'
+  match 'admin/notifications/show_sent_notice/:id' => 'admin/notifications#show_sent_notice', :as => :show_sent_notice
+
   root :to => 'home#index'
 
   # The priority is based upon order of creation:

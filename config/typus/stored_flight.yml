@@ -1,0 +1,40 @@
+StoredFlight:
+  fields:
+    default:
+      - marketing_carrier_iata
+      - flight_number
+      - departure_iata
+      - departure_term
+      - dept_date
+      - departure_time
+      - arrival_iata
+      - arrival_term
+      - arrv_date
+      - arrival_time
+      - equipment_type_iata
+      - operating_carrier_iata
+      - technical_stop_count
+      - duration
+    # list:
+    # new:
+    # show:
+    # edit:
+    # csv:
+    options:
+      #selectors: marketing_carrier_iata
+      #date_formats:
+      #  dept_date: long
+      #  arrv_date: long
+  options:
+    default_action_on_item: show
+    export: csv
+  actions:
+    edit: show
+  #order_by: -created_at
+  filters: dept_date
+  #relationships: tickets
+  application: Misc, 2
+  # scopes:
+  search: =departure_iata, =arrival_iata, =flight_number, =marketing_carrier_iata
+  actions:
+    show: update_from_gds

@@ -12,7 +12,7 @@ every 5.minutes do
 end
 
 every 10.minutes do
-  runner 'Notification.process_queued_emails!'
+#  runner 'Notification.process_queued_emails!'
 end
 
 every 10.minutes do

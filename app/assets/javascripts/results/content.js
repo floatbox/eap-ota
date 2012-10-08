@@ -69,6 +69,10 @@ initOffers: function() {
             booking.prebook(offer);
         }
     });
+    this.el.delegate('.o-book .obs-cancel', 'click', function() {
+        var offset = $(this).closest('.offer').offset().top;
+        $w.smoothScrollTo(offset - 148);
+    });
 },
 getOffer: function(el) {
     return el.closest('.offer').data('offer');
@@ -89,9 +93,9 @@ select: function(id) {
         nt.control.addClass('rt-selected');
         nt.content.show();
         results.fixed.update();
-        page.location.set('offer', id === 'all' ? '' : id);
+        page.location.set('offer', id);
         results.filters.toggleDisabled(id === 'matrix');
-        trackPage('/' + page.location.hash);
+        trackPage('/#' + page.location.hash.replace('#', ''));
     }, 20);
 },
 selectFirst: function() {

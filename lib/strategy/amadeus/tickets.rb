@@ -26,7 +26,7 @@ module Strategy::Amadeus::Tickets
           else
             BaggageLimit.new.serialize
           end
-        end.join(' ')
+        end
         tickets << ticket_hash.merge({
           :source => 'amadeus',
           :baggage_info => baggage_info,
@@ -55,7 +55,7 @@ module Strategy::Amadeus::Tickets
       raise Strategy::TicketError, "unsupported ticketing method: #{@order.commission_ticketing_method.inspect}"
     end
   rescue ::Amadeus::Error => e
-    Airbrake.notify(e)
+    with_warning(e)
     @order.update_attributes(:ticket_status => 'error_ticket')
     raise Strategy::TicketError, e.message
   end
@@ -153,7 +153,9 @@ module Strategy::Amadeus::Tickets
 
       # отправить в очередь на выписку
       # вроде бы как, это закрывает текущий PNR
-      # TODO заменить вызовом queue_place_pnr
+      # TODO заменить вызовом queue_place_pnr --->
+      # amadeus.queue_place_pnr(:office_id => 'NYC1S211F', :queue => '28', :category => '30', :number => @order.pnr_number)
+      # ^можно вызывать в "чистой" сессии
       amadeus.cmd('QE/NYC1S211F/28C30')
     end
   end
