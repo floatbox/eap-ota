@@ -233,8 +233,24 @@ class Payu
   end
 
   # уточнение текущего состояния платежа
-  # {"Comment"=>"", "Tag"=>"", "LastChange"=>"11/12/2010 9:24:07 AM", "State"=>"Charged"}
-  # "State"=>"Authorized", "Voided", "Charged"
+  # We have an API to get order status:
+  # https://secure.payu.ru/order/ios.php
+  #
+  # You should send through GET merchant code, external ref no, and hash:
+  # MERCHANT => Eviterra
+  # REFNOEXT => external ref no, for your order was "test_121004_192121"
+  # HASH:
+  # $str = strlen($MERCHANT) . $MERCHANT;
+  # $str .= strlen($REFNOEXT) . $REFNOEXT;
+  # $hash = hmac($EVITERRA_SECRET_KEY, $str);
+
+  # Order status can be:
+  # COMPLETE
+  # PAYMENT_AUTHORIZED
+  # REFUND
+  # REVERSED
+  # IN_PROGRESS (waiting)
+  # WAITING_PAYMENT
   def state opts={}
   end
 
