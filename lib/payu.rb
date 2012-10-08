@@ -47,6 +47,7 @@ class Payu
     :ORDER_VAT             => ['0'],                     #order vat
     :ORDER_QTY             => ['1'],                     #products quantity
     :PRICES_CURRENCY       => 'RUB',                     #currency
+    # FIXME откуда это? в php примере его нет:
     :ORDER_CURRENCY        => 'RUB',                     #currency
     :PAY_METHOD            => 'CCVISAMC',                #payment method used. You should always leave it CCVISAMC
     :CC_NUMBER             => '4111111111111111',        #cardholder number
@@ -296,6 +297,7 @@ class Payu
   def add_money(post, money)
     post[:ORDER_PRICE] = [money.to_s]
     post[:ORDER_AMOUNT] = money.to_s
+    # post[:PRICES_CURRENCY] = ...
   end
 
   def update_date(post)
