@@ -80,7 +80,11 @@ class Payu
   class PaymentResponse
 
     def initialize(parsed_response)
-      @doc = parsed_response['EPAYMENT']
+      if parsed_response.has_key? 'EPAYMENT'
+        @doc = parsed_response['EPAYMENT']
+      else
+        @doc = parsed_response
+      end
     end
 
     def success?
