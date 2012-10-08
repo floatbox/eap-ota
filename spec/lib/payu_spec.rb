@@ -23,6 +23,36 @@ describe Payu do
 
   end
 
+  describe "#add_credit_card" do
+    let :card do
+      CreditCard.new(
+        number: '5521756777242815',
+        verification_value: '912',
+        year: 2014,
+        month: 4,
+        name: 'mr owner'
+      ).tap(&:valid?)
+    end
+
+    subject { Hash.new }
+
+    before do
+      Payu.new.send :add_creditcard, subject, card
+    end
+
+    it do
+      should == {
+        CC_NUMBER: "5521756777242815",
+        CC_TYPE: "MasterCard",
+        EXP_MONTH: "04",
+        EXP_YEAR: "2014",
+        CC_OWNER: "mr owner",
+        CC_CVV: "912"
+      }
+    end
+
+  end
+
   describe Payu::PaymentResponse do
 
     subject do

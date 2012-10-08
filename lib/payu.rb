@@ -178,11 +178,11 @@ class Payu
     add_order(post, opts)
 #    add_money(post, amount)
     add_merchant(post)
-#    add_creditcard(post, card)
-    add_testcard_as_hash(post, card) if card
+    add_creditcard(post, card)
 #    add_custom_fields(post, opts)
     encrypt_postinfo(post, PAY_PARAMS_ORDER)
 
+    logger.debug post
     response = HTTParty.post("https://#{@host}/order/alu.php", :body => post)
     logger.debug response.inspect
     PaymentResponse.new( response.parsed_response )
@@ -238,24 +238,24 @@ class Payu
   def add_order(post, options={})
     validate! options, :order_id
     post[:ORDER_REF] = options[:order_id]
+    post[:BACK_REF] = 'http://localhost:3000/'
   end
 
   def add_creditcard(post, creditcard)
     post[:CC_NUMBER] = creditcard.number
-    post[:CC_TYPE] = creditcard.type
+    post[:CC_TYPE] =
+      case creditcard.type
+      when 'master'
+        'MasterCard'
+      when 'visa', 'bogus'
+        'VISA'
+      else
+        raise ArgumentError, "unsupported creditcard type: #{creditcard.type.inspect}"
+      end
     post[:EXP_MONTH] = "%02d" % creditcard.month
-    post[:EXP_YEAR] = "%02d" % (creditcard.year - 2000)
+    post[:EXP_YEAR] = "%04d" % creditcard.year
     post[:CC_OWNER] = creditcard.name
     post[:CC_CVV] = creditcard.verification_value
-  end
-
-  def add_testcard_as_hash(post, options={})
-    post[:CC_NUMBER] = options[:number]
-    post[:CC_TYPE] = options[:type]
-    post[:EXP_MONTH] = options[:month]
-    post[:EXP_YEAR] = options[:year]
-    post[:CC_OWNER] = options[:name]
-    post[:CC_CVV] = options[:verification_value]
   end
 
   def add_merchant(post)
@@ -339,14 +339,8 @@ class Payu
   # for testing purposes
   def self.test_card(opts = {})
     CreditCard.new(
-      {:number => '4111111111111111', :type => 'VISA', :verification_value => '123', :year => 2013, :month => 12, :name => 'card one'}.merge(opts)
-    )
-  end
-
-  def self.test_card2(opts = {})
-    CreditCard.new(
-      {:number => '5222230546300090', :verification_value => '123', :year => 2012, :month => 12, :name => 'card two'}.merge(opts)
-    )
+      {:number => '4111111111111111', :verification_value => '123', :year => 2013, :month => 12, :name => 'card one'}.merge(opts)
+    ).tap(&:valid?)
   end
 
   ERRORS_EXPLAINED = {
