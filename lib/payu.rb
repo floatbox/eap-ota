@@ -84,14 +84,14 @@ class Payu
     end
 
     def success?
-      @doc['STATUS'] == 'SUCCESS'
+      @doc['STATUS'] == 'SUCCESS' && !threeds?
     end
 
     def err_code
     end
 
-    # не !success? потому что может быть и "3DS"
     def error?
+      !success? && !threeds?
     end
 
     def ref
@@ -129,7 +129,7 @@ class Payu
 
   class UnblockResponse
     def initialize(piped_string)
-      raise ArgumentError, "unexpected input" unless
+      raise ArgumentError, "unexpected input: #{piped_string}" unless
         m = piped_string.match(/<EPAYMENT>(.*)<\/EPAYMENT>/)
       @ref, @code, @message, @date_str, _ = m[1].split('|')
     end
@@ -147,7 +147,7 @@ class Payu
 
   class ChargeResponse
     def initialize(piped_string)
-      raise ArgumentError, "unexpected input" unless
+      raise ArgumentError, "unexpected input: #{piped_string}" unless
         m = piped_string.match(/<EPAYMENT>(.*)<\/EPAYMENT>/)
       @ref, @code, @message, @date_str, _ = m[1].split('|')
     end

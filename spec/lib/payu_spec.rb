@@ -50,6 +50,8 @@ describe Payu do
       end
 
       it {should be_success}
+      it {should_not be_error}
+      it {should_not be_threeds}
       its(:ref) {should == "6471185"}
 
     end
@@ -71,6 +73,8 @@ describe Payu do
       end
 
       it {should_not be_success}
+      it {should be_error}
+      it {should_not be_threeds}
       its(:ref) {should == "6385847"}
 
     end
@@ -92,6 +96,8 @@ describe Payu do
       end
 
       it {should_not be_success}
+      it {should be_error}
+      it {should_not be_threeds}
       its(:ref) {should == "6132371"}
 
     end
@@ -114,6 +120,8 @@ describe Payu do
       end
 
       it {should_not be_success}
+      it {should_not be_error}
+      it {should be_threeds}
       its(:ref) {should == "6372861"}
 
     end
