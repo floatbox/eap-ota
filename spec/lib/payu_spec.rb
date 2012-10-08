@@ -6,6 +6,11 @@ describe Payu do
     before do
       Time.stub(:now => DateTime.parse("2012-10-08 15:12:18 +0400").to_time )
     end
+
+    subject do
+      Payu.new
+    end
+
     let :card do
       Payu.test_card
     end
@@ -63,15 +68,11 @@ describe Payu do
     it "should make request wit correct params" do
       #pending "need to stub date/time"
       parsed_response = stub(:parsed_response)
-      http_response = stub(HTTParty::Response, parsed_response: parsed_response)
 
-      HTTParty.should_receive(:post).with(
-        "https://sandbox8ru.epayment.ro/order/alu.php",
-        body: expected_request
-      ).and_return(http_response)
+      subject.should_receive(:post_alu).with( expected_request ).and_return(parsed_response)
       Payu::PaymentResponse.should_receive(:new).with(parsed_response)
 
-      Payu.new.block amount, card, :order_id => order_ref
+      subject.block amount, card, :order_id => order_ref
     end
 
   end

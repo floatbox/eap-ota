@@ -182,10 +182,17 @@ class Payu
 #    add_custom_fields(post, opts)
     encrypt_postinfo(post, PAY_PARAMS_ORDER)
 
+    parsed_response = post_alu(post)
+    PaymentResponse.new( parsed_response )
+  end
+
+  # внутренний метод для собственно HTTP вызова сервиса блокировки/платежа
+  # облегчает тестирование
+  def post_alu(post)
     logger.debug post
     response = HTTParty.post("https://#{@host}/order/alu.php", :body => post)
     logger.debug response.inspect
-    PaymentResponse.new( response.parsed_response )
+    response.parsed_response
   end
 
   def block_3ds opts={}
