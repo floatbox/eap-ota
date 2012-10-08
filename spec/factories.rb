@@ -43,10 +43,11 @@ FactoryGirl.define do
       "2345#{n}"
     end
     code '123'
-    price_fare 1000
-    price_tax 100
+    original_price_fare '1000 RUB'
+    original_price_tax '100 RUB'
     kind 'ticket'
     status 'ticketed'
+    ticketed_date (Date.today - 2.days)
 
     trait :direct do
       office_id 'MOWR228FA'
@@ -58,8 +59,9 @@ FactoryGirl.define do
 
   factory :refund, :class => Ticket do
     order
-    price_fare 1000
-    price_tax 100
+    original_price_fare '1000 RUB'
+    original_price_tax '100 RUB'
+    ticketed_date (Date.today - 1.days)
     status 'processed'
     comment 'blablabla'
     kind 'refund'

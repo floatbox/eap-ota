@@ -45,7 +45,8 @@ class Ticket < ActiveRecord::Base
   extend Commission::Columns
   has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount, :commission_our_markup
   include Pricing::Ticket
-
+# set_refund_data нужно запускать до check_currency
+  before_validation :set_refund_data, :if => lambda {kind == "refund"}
   before_validation :update_prices_and_add_parent, :if => :original_price_total
   before_validation :check_currency, :if => :ticketed_date
   before_save :recalculate_commissions, :set_validating_carrier
@@ -53,7 +54,6 @@ class Ticket < ActiveRecord::Base
   scope :uncomplete, where(:ticketed_date => nil)
   scope :sold, where(:status => ['ticketed', 'exchanged', 'returned', 'processed'])
 
-  before_save :set_refund_data, :if => lambda {kind == "refund"}
   validates_presence_of :price_fare, :price_tax, :price_our_markup, :price_penalty, :price_discount, :price_consolidator, :if => lambda {kind = 'refund'}
   after_save :update_parent_status, :if => :parent
   after_destroy :update_parent_status, :if => :parent
