@@ -27,7 +27,7 @@ payu = Payu.new(
 order_id = Time.now.strftime('test_%y%m%d_%H%M%S')
 
 card = Payu.test_card
-response = payu.block 123, card, :order_id => order_id
+response = payu.block 123.127, card, :order_id => order_id
 
 puts response.inspect
 if response.threeds?

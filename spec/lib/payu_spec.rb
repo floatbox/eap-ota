@@ -31,7 +31,7 @@ describe Payu do
         :ORDER_PNAME => ["1 x Ticket"],
         :ORDER_PCODE => ["TCK1"],
         :ORDER_PINFO => ["{'departuredate':20120914, 'locationnumber':2, 'locationcode1':'BUH', 'locationcode2':'IBZ','passengername':'Fname Lname','reservationcode':'abcdef123456'}"],
-        :ORDER_PRICE => ["1"],
+        :ORDER_PRICE => ["123"],
         :ORDER_VAT => ["0"],
         :ORDER_QTY => ["1"],
         :PRICES_CURRENCY => "RUB",
@@ -61,7 +61,7 @@ describe Payu do
         :DELIVERY_PHONE => "1234567890",
         :DELIVERY_COUNTRYCODE => "RU",
         :BACK_REF => "http://localhost:3000/",
-        :ORDER_HASH => "2228bebb70661dbcc030ef37c731e6d6"
+        :ORDER_HASH => "a374d2fcf937910c11c7967e365b6968"
       }
     end
 
@@ -110,6 +110,23 @@ describe Payu do
         EXP_YEAR: "2014",
         CC_OWNER: "mr owner",
         CC_CVV: "912"
+      }
+    end
+
+  end
+
+  describe "#add_money" do
+
+    subject { Hash.new }
+
+    before do
+      Payu.new.send :add_money, subject, '123.127'
+    end
+
+    it do
+      should == {
+        ORDER_PRICE: ['123.127'],
+        ORDER_AMOUNT: '123.127'
       }
     end
 

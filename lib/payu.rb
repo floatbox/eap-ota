@@ -180,7 +180,7 @@ class Payu
   def block amount, card, opts={}
     post = POST_PARAMS.dup
     add_order(post, opts)
-#    add_money(post, amount)
+    add_money(post, amount)
     add_merchant(post)
     add_creditcard(post, card)
 #    add_custom_fields(post, opts)
@@ -294,7 +294,8 @@ class Payu
   end
 
   def add_money(post, money)
-    post[:Amount] = (money.to_f * 100).round.to_i.to_s
+    post[:ORDER_PRICE] = [money.to_s]
+    post[:ORDER_AMOUNT] = money.to_s
   end
 
   def update_date(post)
