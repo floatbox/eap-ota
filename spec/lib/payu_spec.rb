@@ -3,14 +3,75 @@ require 'spec_helper'
 describe Payu do
 
   describe "#block" do
-    let :card do end
+    before do
+      Time.stub(:now => DateTime.parse("2012-10-08 15:12:18 +0400").to_time )
+    end
+    let :card do
+      Payu.test_card
+    end
+
+    let :amount do
+      123
+    end
+
+    let :order_ref do
+      "test_121008_151218"
+    end
+
+    let :expected_request do
+      {
+        :MERCHANT => "EVITERRA",
+        :ORDER_REF => "test_121008_151218",
+        :ORDER_DATE => "2012-10-08 11:12:18",
+        :ORDER_PNAME => ["1 x Ticket"],
+        :ORDER_PCODE => ["TCK1"],
+        :ORDER_PINFO => ["{'departuredate':20120914, 'locationnumber':2, 'locationcode1':'BUH', 'locationcode2':'IBZ','passengername':'Fname Lname','reservationcode':'abcdef123456'}"],
+        :ORDER_PRICE => ["1"],
+        :ORDER_VAT => ["0"],
+        :ORDER_QTY => ["1"],
+        :PRICES_CURRENCY => "RUB",
+        :PAY_METHOD => "CCVISAMC",
+        :CC_NUMBER => "4111111111111111",
+        :CC_OWNER => "card one",
+        :CC_TYPE => "VISA",
+        :CC_CVV => "123",
+        :EXP_MONTH => "12",
+        :EXP_YEAR => "2013",
+        :BILL_LNAME => "Eviterra",
+        :BILL_FNAME => "Test",
+        :BILL_ADDRESS => "Address Eviterra",
+        :BILL_CITY => "City",
+        :BILL_STATE => "State",
+        :BILL_ZIPCODE => "123",
+        :BILL_EMAIL => "testpayu@eviterra.com",
+        :BILL_PHONE => "1234567890",
+        :BILL_COUNTRYCODE => "RU",
+        :CLIENT_IP => "127.0.0.1",
+        :DELIVERY_LNAME => "Eviterra",
+        :DELIVERY_FNAME => "Test",
+        :DELIVERY_ADDRESS => "Address Eviterra",
+        :DELIVERY_CITY => "City",
+        :DELIVERY_STATE => "State",
+        :DELIVERY_ZIPCODE => "123",
+        :DELIVERY_PHONE => "1234567890",
+        :DELIVERY_COUNTRYCODE => "RU",
+        :BACK_REF => "http://localhost:3000/",
+        :ORDER_HASH => "2228bebb70661dbcc030ef37c731e6d6"
+      }
+    end
 
     it "should make request wit correct params" do
-      pending "need to stub date/time"
-      amount = 123
-      HTTParty.should receive(:post).with().and_return(stub(:payment_response))
-      Payu::PaymentResponse.should receive(:new)
-      Payu.new.block amount, card, :order_id => '123'
+      #pending "need to stub date/time"
+      parsed_response = stub(:parsed_response)
+      http_response = stub(HTTParty::Response, parsed_response: parsed_response)
+
+      HTTParty.should_receive(:post).with(
+        "https://sandbox8ru.epayment.ro/order/alu.php",
+        body: expected_request
+      ).and_return(http_response)
+      Payu::PaymentResponse.should_receive(:new).with(parsed_response)
+
+      Payu.new.block amount, card, :order_id => order_ref
     end
 
   end
