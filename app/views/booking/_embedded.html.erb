@@ -35,7 +35,7 @@
       
     <div class="bf-section bf-persons" data-type="persons">
         <div class="bfs-title">
-            <h4 class="bfst-text">Данные <%= @order_form.people.one? ? 'пассажира' : 'пассажиров' %></h4>
+            <h4 class="bfst-text"><%= @order_form.people.one? ? 'Пассажир' : 'Пассажиры' %></h4>
             <div class="bfst-line"></div>
             <p class="bfp-hint" id="bfph-passport"><span class="bfph-link bf-hint" data-hint="bfh-passport">Какие документы<br>нужны?</span></p>
             <p class="bfp-hint" id="bfph-expiration"><span class="bfph-link bf-hint" data-hint="bfh-expiration">Подробнее<br>о сроках действия</span></p>                        
@@ -60,7 +60,7 @@
     
     <div class="bf-section" data-type="payment">
         <div class="bfs-title">
-            <h4 class="bfst-text"><%= @order_form.last_pay_time ? 'Способ оплаты и платежные' : 'Платежные' %> данные</h4>
+            <h4 class="bfst-text"><%= @order_form.last_pay_time ? 'Оплата' : 'Оплата' %></h4>
             <div class="bfst-tip">Сайт защищен ключом безопасности и&nbsp;в&nbsp;полной мере соответствет стандартам PCI&nbsp;DSS Compliance.</div>
             <div class="bfst-line"></div>
         </div>
@@ -68,7 +68,7 @@
         <% if enabled_cash %>
         <div class="bfp-type clearfix">
             <div class="bfpt-item bfpt-selected">
-                <h5 class="bfpt-title"><label for="bfpt-card" class="bfpt-label">Банковской картой на сайте</label></h5>
+                <h5 class="bfpt-title"><label for="bfpt-card" class="bfpt-label">Банковской картой через Eviterra.com</label></h5>
                 <p class="bfpt-tip"><label for="bfpt-card">Билет будет выписан автоматически <br>и&nbsp;выслан вам на&nbsp;электронную почту</label></p>
                 <input type="radio" name="order[payment_type]" class="bfpt-radio" id="bfpt-card" value="card" checked="checked">
             </div>
