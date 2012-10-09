@@ -4,6 +4,11 @@ module PartnerTracking
 
   protected
 
+  # before filter
+  def save_partner_cookies
+    track_partner params[:partner], params[:marker]
+  end
+
   def track_partner new_partner, new_marker=nil
     return unless new_partner.present?
     if partner != new_partner

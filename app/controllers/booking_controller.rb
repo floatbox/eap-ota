@@ -3,6 +3,9 @@ class BookingController < ApplicationController
   protect_from_forgery :except => :confirm_3ds
   before_filter :log_referrer, :only => [:api_redirect, :api_booking, :rambler_booking]
   before_filter :log_user_agent
+
+  # before_filter :save_partner_cookies, :only => [:preliminary_booking, :api_redirect]
+
   # вызывается аяксом со страницы api_booking и с морды
   # Parameters:
   #   "query_key"=>"ki1kri",
@@ -83,6 +86,7 @@ class BookingController < ApplicationController
 
   def api_redirect
     @search = PricerForm.simple(params.slice( :from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner ))
+    # FIXME если partner из @search не берется больше - переделать на before_filter save_partner_cookies
     track_partner(params[:partner] || @search.partner)
     if @search.valid?
       @search.save_to_cache
