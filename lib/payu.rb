@@ -33,9 +33,14 @@ class Payu
     :MERCHANT, :ORDER_REF, :ORDER_AMOUNT, :ORDER_CURRENCY, :IDN_DATE
   ]
 
+  STATE_PARAMS_ORDER = [
+    :MERCHANT, :REFNOEXT
+  ]
+
   POST_PARAMS = {
     :MERCHANT              => 'EVITERRA',                #your merchant code in PAYU system 
     :ORDER_REF             => 'EXT_' + Random.rand(1000).to_s,   #your internal reference number
+    :REFNOEXT              => 'EXT_' + Random.rand(1000).to_s,   #your internal reference number
     :ORDER_DATE            => Time.now.utc.strftime("%Y-%m-%d %H:%M:%S"),
     :IRN_DATE              => Time.now.utc.strftime("%Y-%m-%d %H:%M:%S"),
     :IDN_DATE              => Time.now.utc.strftime("%Y-%m-%d %H:%M:%S"),
@@ -167,6 +172,38 @@ class Payu
 
   end
 
+  class StateResponse
+    def initialize(parsed_response)
+      if parsed_response.has_key? 'Order'
+        @doc = parsed_response['Order']
+      end
+    end
+
+    # Order status can be:
+    # COMPLETE
+    # PAYMENT_AUTHORIZED
+    # REFUND
+    # REVERSED
+    # IN_PROGRESS (waiting)
+    # WAITING_PAYMENT
+    def success?
+      @doc["ORDER_STATUS"] == 'PAYMENT_AUTHORIZED'
+    end
+
+    def complete?
+      @doc["ORDER_STATUS"] == 'COMPLETE'
+    end
+
+    def state
+      @doc["ORDER_STATUS"]
+    end
+
+    def ref
+      @doc['REFNO']
+    end
+
+  end
+
   def initialize(opts={})
     @merchant = opts[:merchant] || Conf.payu.merchant
     @host = opts[:host] || Conf.payu.host
@@ -244,14 +281,17 @@ class Payu
   # $str .= strlen($REFNOEXT) . $REFNOEXT;
   # $hash = hmac($EVITERRA_SECRET_KEY, $str);
 
-  # Order status can be:
-  # COMPLETE
-  # PAYMENT_AUTHORIZED
-  # REFUND
-  # REVERSED
-  # IN_PROGRESS (waiting)
-  # WAITING_PAYMENT
   def state opts={}
+    post = POST_PARAMS.dup
+    add_order(post, opts)
+    encrypt_postinfo(post, STATE_PARAMS_ORDER)
+
+    post[:HASH] = post[:ORDER_HASH]
+    post.delete(:ORDER_HASH)
+
+    response = HTTParty.get("https://#{@host}/order/ios.php", :query => post)
+    logger.debug response.inspect
+    StateResponse.new( response.parsed_response )
   end
 
   private
@@ -265,6 +305,7 @@ class Payu
   def add_order(post, options={})
     validate! options, :order_id
     post[:ORDER_REF] = options[:order_id]
+    post[:REFNOEXT] = options[:order_id]
     post[:BACK_REF] = 'http://localhost:3000/'
   end
 

@@ -29,13 +29,16 @@ order_id = Time.now.strftime('test_%y%m%d_%H%M%S')
 card = Payu.test_card
 response = payu.block 123.127, card, :order_id => order_id
 
-puts response.inspect
-if response.threeds?
-  puts response.threeds_url
-end
+#if response.threeds?
+#  puts response.threeds_url
+#end
 
 #  unblock_response = payu.unblock(:order_id => response.ref)
 
 #  charge_response = payu.charge(:order_id => response.ref)
+
+#  order_id = 'EXT_411349700322'
+#  state_response = payu.state(:order_id => order_id)
+#  puts state_response.state
 
 #end
