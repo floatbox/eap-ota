@@ -93,7 +93,7 @@ load: function() {
         }
         $w.delay(400).smoothScrollTo(that.form.position());
         $w.queue(function(next) {
-            $('#bfc-email').focus();
+            $('#bfp0-first-name').focus();
             next();
         });
         trackPage('/booking');
