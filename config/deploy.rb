@@ -50,6 +50,7 @@ set :normalize_asset_timestamps, false
 task :staging do
   role :app, 'vm1.eviterra.com', 'vm2.eviterra.com'
   role :web, 'vm1.eviterra.com'
+  role :daemons, 'vm2.eviterra.com'
   role :db, 'vm1.eviterra.com', :primary => true
   set :application, "eviterra"
   set :rails_env, 'staging'
@@ -114,11 +115,11 @@ namespace :deploy do
     run "cd #{directory}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} db:abort_if_pending_migrations || echo PLEASE DON\\\'T FORGET TO cap deploy:migrate!"
   end
 
-  task :restart_rambler_daemon do
+  task :restart_rambler_daemon, :roles => :daemons do
     run "cd #{current_path}; RAILS_ENV=#{rails_env} script/rambler_daemon restart"
   end
 
-  task :restart_delayed_job do
+  task :restart_delayed_job, :roles => :daemons do
     run "cd #{current_path}; RAILS_ENV=#{rails_env} script/delayed_job restart"
   end
 
