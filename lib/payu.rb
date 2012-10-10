@@ -360,8 +360,8 @@ class Payu
 
   def encrypt_postinfo(post, params_order)
     update_date(post)
-    post.select! {|key,value| params_order.include? key}
-    post[:ORDER_HASH] = OpenSSL::HMAC.hexdigest('md5', @seller_key, get_hash(post, params_order))
+    post.slice!(*params_order)
+    post[:ORDER_HASH] = OpenSSL::HMAC.hexdigest('md5', @seller_key, serialize_hash(post, params_order))
   end
 
   def add_custom_fields(post, opts)
@@ -385,37 +385,24 @@ class Payu
     post[:CustomFields] = res.delete_if {|k, v| !v }.collect {|k, v| "#{k}=#{v}"}.join(';')
   end
 
-  def encrypt(string)
-    @public.public_encrypt(string)
-  end
-
-  def get_hash(post, params_order_array)
-    hashString = ''
-    params_order_array.each do |name|
-      value = post[name]
-      if value
-        if value.is_a? Array 
-          hashString += serialize_array value
-        else
-          hashString += value.length.to_s + value
-        end
-      end
-    end
-    hashString
-  end
-  
-  def serialize_array myarray
-    retvalue = "";
-
-    myarray.each do |val|
-      if val.is_a? Array
-        retvalue += serialize_array(val)
+  def serialize_hash(hash, keys)
+    hash.values_at(*keys).compact.map do |value|
+      if value.is_a? Array
+        serialize_array value
       else
-        retvalue += val.length.to_s + val.to_s
+        value.length.to_s + value
       end
-    end
+    end.join
+  end
 
-    retvalue
+  def serialize_array(array)
+    array.map do |val|
+      if val.is_a? Array
+        serialize_array(val)
+      else
+        val.length.to_s + val.to_s
+      end
+    end.join
   end
 
   # for testing purposes
