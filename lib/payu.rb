@@ -225,7 +225,7 @@ class Payu
   # блокировка средств на карте пользователя
   def block amount, card, opts={}
     post = POST_PARAMS.dup
-    add_order(post, opts)
+    add_our_ref(post, opts)
     add_money(post, amount)
     add_merchant(post)
     add_creditcard(post, card)
@@ -250,7 +250,7 @@ class Payu
 
   def charge opts={}
     post = POST_PARAMS.dup
-    add_order(post, opts)
+    add_their_ref(post, opts)
     #add_merchant(post)
     #add_money(post, amount)
     encrypt_postinfo(post, CHARGE_PARAMS_ORDER)
@@ -292,7 +292,7 @@ class Payu
 
   def state opts={}
     post = POST_PARAMS.dup
-    add_order(post, opts)
+    add_our_ref(post, opts)
     encrypt_postinfo(post, STATE_PARAMS_ORDER)
 
     post[:HASH] = post[:ORDER_HASH]
@@ -310,12 +310,14 @@ class Payu
     end
   end
 
-  # copied back from active_merchant alfa_bank_gateway
-  def add_order(post, options={})
-    validate! options, :order_id
-    post[:ORDER_REF] = options[:order_id]
-    post[:REFNOEXT] = options[:order_id]
+  def add_our_ref(post, options={})
+    post[:ORDER_REF] = options[:our_ref]
+    post[:REFNOEXT] = options[:our_ref]
     post[:BACK_REF] = 'http://localhost:3000/'
+  end
+
+  def add_their_ref(post, options={})
+    post[:ORDER_REF] = options[:their_ref]
   end
 
   def add_creditcard(post, creditcard)

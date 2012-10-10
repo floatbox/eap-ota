@@ -72,7 +72,7 @@ describe Payu do
       subject.should_receive(:post_alu).with( expected_request ).and_return(parsed_response)
       Payu::PaymentResponse.should_receive(:new).with(parsed_response)
 
-      subject.block amount, card, :order_id => our_ref
+      subject.block amount, card, :our_ref => our_ref
     end
 
   end

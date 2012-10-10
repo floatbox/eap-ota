@@ -24,21 +24,21 @@ payu = Payu.new(
   seller_key: 'w7I2R8~V7=dm5H7[r1k5'
 )
 
-order_id = Time.now.strftime('test_%y%m%d_%H%M%S')
+our_ref = Time.now.strftime('test_%y%m%d_%H%M%S')
 
 card = Payu.test_card
-response = payu.block 123.127, card, :order_id => order_id
+response = payu.block 123.127, card, :our_ref => our_ref
 
 #if response.threeds?
 #  puts response.threeds_url
 #end
 
-#  unblock_response = payu.unblock(:order_id => response.ref)
+#  unblock_response = payu.unblock(:their_ref => response.ref)
 
-#  charge_response = payu.charge(:order_id => response.ref)
+#  charge_response = payu.charge(:their_ref => response.ref)
 
-#  order_id = 'EXT_411349700322'
-#  state_response = payu.state(:order_id => order_id)
+#  our_ref = 'EXT_411349700322'
+#  state_response = payu.state(:our_ref => our_ref)
 #  puts state_response.state
 
 #end
