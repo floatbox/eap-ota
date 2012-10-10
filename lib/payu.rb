@@ -248,11 +248,11 @@ class Payu
   def block_3ds opts={}
   end
 
-  def charge opts={}
+  def charge amount, opts={}
     post = POST_PARAMS.dup
     add_their_ref(post, opts)
-    #add_merchant(post)
-    #add_money(post, amount)
+    add_merchant(post)
+    add_money(post, amount)
     encrypt_postinfo(post, CHARGE_PARAMS_ORDER)
 
     response = HTTParty.post("https://#{@host}/order/idn.php", :body => post)
