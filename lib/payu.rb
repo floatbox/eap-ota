@@ -104,7 +104,7 @@ class Payu
       !success? && !threeds?
     end
 
-    def ref
+    def their_ref
       @doc['REFNO']
     end
 
@@ -141,7 +141,7 @@ class Payu
     def initialize(piped_string)
       raise ArgumentError, "unexpected input: #{piped_string}" unless
         m = piped_string.match(/<EPAYMENT>(.*)<\/EPAYMENT>/)
-      @ref, @code, @message, @date_str, _ = m[1].split('|')
+      @their_ref, @code, @message, @date_str, _ = m[1].split('|')
     end
 
     # FIXME хз, верно ли. нарыть доку
@@ -149,8 +149,8 @@ class Payu
       @code == '1'
     end
 
-    def ref
-      @ref
+    def their_ref
+      @their_ref
     end
 
   end
@@ -159,7 +159,7 @@ class Payu
     def initialize(piped_string)
       raise ArgumentError, "unexpected input: #{piped_string}" unless
         m = piped_string.match(/<EPAYMENT>(.*)<\/EPAYMENT>/)
-      @ref, @code, @message, @date_str, _ = m[1].split('|')
+      @their_ref, @code, @message, @date_str, _ = m[1].split('|')
     end
 
     # FIXME хз, верно ли. нарыть доку
@@ -167,8 +167,8 @@ class Payu
       @code == '1'
     end
 
-    def ref
-      @ref
+    def their_ref
+      @their_ref
     end
 
   end
@@ -191,16 +191,24 @@ class Payu
       @doc["ORDER_STATUS"] == 'PAYMENT_AUTHORIZED'
     end
 
+    def error?
+      !success?
+    end
+
     def complete?
       @doc["ORDER_STATUS"] == 'COMPLETE'
     end
 
-    def state
+    def status
       @doc["ORDER_STATUS"]
     end
 
-    def ref
+    def their_ref
       @doc['REFNO']
+    end
+
+    def our_ref
+      @doc['REFNOEXT']
     end
 
   end

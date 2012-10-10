@@ -19,7 +19,7 @@ describe Payu do
       123
     end
 
-    let :order_ref do
+    let :our_ref do
       "test_121008_151218"
     end
 
@@ -72,7 +72,7 @@ describe Payu do
       subject.should_receive(:post_alu).with( expected_request ).and_return(parsed_response)
       Payu::PaymentResponse.should_receive(:new).with(parsed_response)
 
-      subject.block amount, card, :order_id => order_ref
+      subject.block amount, card, :order_id => our_ref
     end
 
   end
@@ -161,7 +161,7 @@ describe Payu do
       it {should be_success}
       it {should_not be_error}
       it {should_not be_threeds}
-      its(:ref) {should == "6471185"}
+      its(:their_ref) {should == "6471185"}
 
     end
 
@@ -184,7 +184,7 @@ describe Payu do
       it {should_not be_success}
       it {should be_error}
       it {should_not be_threeds}
-      its(:ref) {should == "6385847"}
+      its(:their_ref) {should == "6385847"}
 
     end
 
@@ -207,7 +207,7 @@ describe Payu do
       it {should_not be_success}
       it {should be_error}
       it {should_not be_threeds}
-      its(:ref) {should == "6132371"}
+      its(:their_ref) {should == "6132371"}
 
     end
 
@@ -231,7 +231,7 @@ describe Payu do
       it {should_not be_success}
       it {should_not be_error}
       it {should be_threeds}
-      its(:ref) {should == "6372861"}
+      its(:their_ref) {should == "6372861"}
 
     end
 
@@ -257,7 +257,7 @@ describe Payu do
       it {should be_success}
       it {should_not be_error}
       it {should_not be_threeds}
-      its(:ref) {should == "6626740"}
+      its(:their_ref) {should == "6626740"}
     end
   end
 
@@ -289,4 +289,37 @@ describe Payu do
     end
 
   end
+
+  describe Payu::StateResponse do
+
+    subject do
+      Payu::StateResponse.new(parsed_response)
+    end
+
+    let :parsed_response do
+      HTTParty::Parser.call(body, :xml)
+    end
+
+    describe "successful" do
+      let :body do
+        <<-"END"
+        <?xml version="1.0"?>
+        <Order>
+          <ORDER_DATE>2012-10-08 22:48:41</ORDER_DATE>
+          <REFNO>6133909</REFNO>
+          <REFNOEXT>test_121008_234840</REFNOEXT>
+          <ORDER_STATUS>PAYMENT_AUTHORIZED</ORDER_STATUS>
+          <PAYMETHOD>Visa/MasterCard/Eurocard</PAYMETHOD>
+        </Order>
+        END
+      end
+
+      it { should be_success }
+      it { should_not be_error }
+      its(:their_ref) { should == "6133909" }
+      its(:our_ref) { should == "test_121008_234840" }
+      its(:status) { should == "PAYMENT_AUTHORIZED" }
+    end
+  end
+
 end
