@@ -42,7 +42,7 @@ class Payment < ActiveRecord::Base
   def can_confirm_3ds?; false end
   def can_cancel?;      false end
   def can_charge?;      false end
-  def can_sync_state?;  false end
+  def can_sync_status?; false end
 
   def self.statuses; %W[ pending threeds blocked charged rejected canceled ] end
 
@@ -108,7 +108,7 @@ class Payment < ActiveRecord::Base
   end
 
   # TODO override in subclasses
-  def payment_state_raw
+  def payment_status_raw
     "--"
   end
 

@@ -58,8 +58,8 @@ class PaytureRefund < Payment
   end
 
   # для админки
-  def payment_state_raw
-    charge.payment_state_raw
+  def payment_status_raw
+    charge.payment_status_raw
   end
 
   def charge_link

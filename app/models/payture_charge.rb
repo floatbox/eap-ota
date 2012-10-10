@@ -29,7 +29,7 @@ class PaytureCharge < Payment
   def can_cancel?; blocked? end
   def can_charge?; blocked? end
   # FIXME ограничить processing_* статусами?
-  def can_sync_state?; true end
+  def can_sync_status?; true end
 
   # TODO интеллектуальный retry при проблемах со связью
   def block!
@@ -91,13 +91,13 @@ class PaytureCharge < Payment
     Payture.new
   end
 
-  def payture_state
-    response = gateway.state(:order_id => ref)
-    response.state || response.err_code
+  def gateway_status
+    response = gateway.status(:order_id => ref)
+    response.status || response.err_code
   end
 
-  def payture_amount
-    gateway.state(:order_id => ref).amount
+  def gateway_amount
+    gateway.status(:order_id => ref).amount
   end
 
   STATUS_MAPPING = {
@@ -111,11 +111,11 @@ class PaytureCharge < Payment
     'ORDER_NOT_FOUND' => 'rejected'
   }
 
-  def sync_state!
-    return unless can_sync_state?
-    state_code = payture_state
-    state = STATUS_MAPPING[state_code] or raise ArgumentError, "Unknown state reported by Payture: #{state_code.inspect}"
-    update_attributes :status => state
+  def sync_status!
+    return unless can_sync_status?
+    status_code = gateway_status
+    status = STATUS_MAPPING[status_code] or raise ArgumentError, "Unknown status reported by Payture: #{status_code.inspect}"
+    update_attributes :status => status
   end
 
   # распределение дохода
@@ -128,9 +128,9 @@ class PaytureCharge < Payment
   end
 
   # для админки
-  def payment_state_raw
-    response = gateway.state(:order_id => ref)
-    response.err_code || "#{response.state}: #{response.amount} (#{STATUS_MAPPING[response.state] || 'unknown'})"
+  def payment_status_raw
+    response = gateway.status(:order_id => ref)
+    response.err_code || "#{response.status}: #{response.amount} (#{STATUS_MAPPING[response.status] || 'unknown'})"
   rescue
     $!.message
   end

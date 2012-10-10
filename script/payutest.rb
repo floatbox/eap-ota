@@ -65,7 +65,7 @@ card = Payu.test_card
 #  charge_response = payu.charge(:their_ref => response.ref)
 
 #  our_ref = 'EXT_411349700322'
-#  state_response = payu.state(:our_ref => our_ref)
-#  puts state_response.status
+#  status_response = payu.status(:our_Ref => our_ref)
+#  puts status_response.status
 
 #end

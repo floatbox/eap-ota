@@ -34,7 +34,7 @@ admin:
   Counters: read
   Partner: create, read, update, delete, show_versions
 
-  Payment: read, update, bulk, bulk_charge, show_versions, payment_raw, create, charge, block, cancel, sync_state
+  Payment: read, update, bulk, bulk_charge, show_versions, payment_raw, create, charge, block, cancel, sync_status
   PaytureCharge: create, read
   PaytureRefund: create, update, read
   CashCharge: create, update, read

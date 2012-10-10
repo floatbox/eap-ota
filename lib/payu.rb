@@ -291,7 +291,7 @@ class Payu
   # $str .= strlen($REFNOEXT) . $REFNOEXT;
   # $hash = hmac($EVITERRA_SECRET_KEY, $str);
 
-  def state opts={}
+  def status opts={}
     post = POST_PARAMS.dup
     add_our_ref(post, opts)
     encrypt_postinfo(post, STATE_PARAMS_ORDER)

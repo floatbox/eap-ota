@@ -53,7 +53,7 @@ class Payonline
     # new_amount отсутствует, т.к. void не поддерживает частичную разблокировку, а refund не возвращает оставшуюся часть суммы
 
     # PreAuthorized, Pending, Settled, Voided, Declined.
-    def state
+    def status
       @doc["Status"]
     end
 
@@ -155,7 +155,7 @@ class Payonline
   end
 
   # Уточнение текущего состояния платежа. Нужно указать либо order_id, либо transaction_id.
-  def state opts={}
+  def status opts={}
     post = {}
     add_merchant_id(post)
     add_order_id(post, opts) || add_transaction_id(post, opts)

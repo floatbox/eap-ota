@@ -60,7 +60,7 @@ class Payture
 
     # GetState
     # 'PreAuthorized3DS', 'Voided', 'Rejected', какие еще?
-    def state
+    def status
       @doc["State"]
     end
 
@@ -143,7 +143,7 @@ class Payture
   # уточнение текущего состояния платежа
   # {"Comment"=>"", "Tag"=>"", "LastChange"=>"11/12/2010 9:24:07 AM", "State"=>"Charged"}
   # "State"=>"Authorized", "Voided", "Charged"
-  def state opts={}
+  def status opts={}
     post = {}
     add_order(post, opts)
     add_merchant(post)
