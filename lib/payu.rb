@@ -276,6 +276,7 @@ class Payu
 
   # возврат средств (полный или частичный) на карту пользователя
   def refund amount, opts={}
+    unblock amount, opts
   end
 
   # уточнение текущего состояния платежа
