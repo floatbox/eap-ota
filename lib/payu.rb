@@ -262,11 +262,11 @@ class Payu
 
   # разблокировка средств.
   # частичная блокировка не принимается
-  def unblock opts={}
+  def unblock amount, opts={}
     post = POST_PARAMS.dup
-    add_order(post, opts)
-    #add_merchant(post)
-    #add_money(post, amount)
+    add_their_ref(post, opts)
+    add_merchant(post)
+    add_money(post, amount)
     encrypt_postinfo(post, REFUND_PARAMS_ORDER)
 
     response = HTTParty.post("https://#{@host}/order/irn.php", :body => post)
