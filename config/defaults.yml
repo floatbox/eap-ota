@@ -36,6 +36,7 @@ amadeus:
   euro_rate: 40
   session_pool_size: 10
   no_ltd_restrictions: no
+  ignored_carriers: []
 payment:
   # FIXME убить в локальных конфигах
   use_discount: no
