@@ -36,7 +36,7 @@ class PaytureRefund < Payment
   def charge!
     return unless can_charge?
     update_attributes :status => 'processing_charge'
-    res = gateway.refund( -price, :order_id => ref)
+    res = gateway.refund( -price, :our_ref => ref)
     if res.success?
       update_attributes :status => 'charged', :charged_on => Date.today
       return true

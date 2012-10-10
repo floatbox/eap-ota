@@ -15,7 +15,7 @@ class PaytureCharge < Payment
   end
 
   def set_ref
-    update_attributes(:ref => Conf.payture.order_id_prefix + id.to_s)
+    update_attributes(:ref => Conf.payture.ref_prefix + id.to_s)
   end
 
   def card= card
@@ -34,11 +34,11 @@ class PaytureCharge < Payment
   # TODO интеллектуальный retry при проблемах со связью
   def block!
     return unless can_block?
-    raise ArgumentError, 'order_id is not set yet' unless ref
+    raise ArgumentError, 'ref is not set yet' unless ref
     raise ArgumentError, 'price is 0' unless price && !price.zero?
     raise ArgumentError, 'specify card data, please' unless @card
     update_attributes :status => 'processing_block'
-    response = gateway.block(price, @card, :order_id => ref, :custom_fields => custom_fields)
+    response = gateway.block(price, @card, :our_ref => ref, :custom_fields => custom_fields)
     if response.threeds?
       update_attributes :status => 'threeds', :threeds_key => response.threeds_key
     elsif response.success?
@@ -54,7 +54,7 @@ class PaytureCharge < Payment
   def confirm_3ds! pa_res, md
     return unless can_confirm_3ds?
     update_attributes :status => 'processing_threeds'
-    res = gateway.block_3ds(:order_id => ref, :pa_res => pa_res)
+    res = gateway.block_3ds(:our_ref => ref, :pa_res => pa_res)
     if res.success?
       update_attributes :status => 'blocked'
     else
@@ -66,7 +66,7 @@ class PaytureCharge < Payment
   def charge!
     return unless can_charge?
     update_attributes :status => 'processing_charge'
-    res = gateway.charge(:order_id => ref)
+    res = gateway.charge(:our_ref => ref)
     if res.success?
       update_attributes :status => 'charged', :charged_on => Date.today
     else
@@ -78,7 +78,7 @@ class PaytureCharge < Payment
   def cancel!
     return unless can_cancel?
     update_attributes :status => 'processing_cancel'
-    res = gateway.unblock(price, :order_id => ref)
+    res = gateway.unblock(price, :our_ref => ref)
     if res.success?
       update_attributes :status => 'canceled'
     else
@@ -92,12 +92,12 @@ class PaytureCharge < Payment
   end
 
   def gateway_status
-    response = gateway.status(:order_id => ref)
+    response = gateway.status(:our_ref => ref)
     response.status || response.err_code
   end
 
   def gateway_amount
-    gateway.status(:order_id => ref).amount
+    gateway.status(:our_ref => ref).amount
   end
 
   STATUS_MAPPING = {
@@ -129,7 +129,7 @@ class PaytureCharge < Payment
 
   # для админки
   def payment_status_raw
-    response = gateway.status(:order_id => ref)
+    response = gateway.status(:our_ref => ref)
     response.err_code || "#{response.status}: #{response.amount} (#{STATUS_MAPPING[response.status] || 'unknown'})"
   rescue
     $!.message

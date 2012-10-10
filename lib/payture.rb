@@ -28,7 +28,7 @@ class Payture
       @doc["Success"].to_s.downcase == "false"
     end
 
-    def order_id
+    def our_ref
       @doc["OrderId"]
     end
 
@@ -166,8 +166,8 @@ class Payture
 
   # copied back from active_merchant alfa_bank_gateway
   def add_order(post, options={})
-    validate! options, :order_id
-    post[:OrderId] = options[:order_id]
+    validate! options, :our_ref
+    post[:OrderId] = options[:our_ref]
   end
 
   def add_creditcard(post, creditcard)

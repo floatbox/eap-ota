@@ -31,14 +31,14 @@ card = Payu.test_card
   response = payu.block 10, card, :our_ref => our_ref
 
 ### STATE
-  state_response = payu.state :our_ref => our_ref
-  puts state_response.status
+  status_response = payu.status :our_ref => our_ref
+  puts status_response.status
 
 ### UNBLOCK
 #  unblock_response = payu.unblock 5, :their_ref => response.their_ref
 
 ### STATE
-#  state_response = payu.state(:our_ref => our_ref)
+#  status_response = payu.status(:our_ref => our_ref)
 #  puts state_response.status
 
 ### CHARGE
@@ -54,18 +54,3 @@ card = Payu.test_card
 ### STATE
   state_response = payu.state(:our_ref => our_ref)
   puts state_response.status
-
-
-#if response.threeds?
-#  puts response.threeds_url
-#end
-
-#  unblock_response = payu.unblock(:their_ref => response.their_ref)
-
-#  charge_response = payu.charge(:their_ref => response.ref)
-
-#  our_ref = 'EXT_411349700322'
-#  status_response = payu.status(:our_Ref => our_ref)
-#  puts status_response.status
-
-#end

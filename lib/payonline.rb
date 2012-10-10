@@ -38,7 +38,7 @@ class Payonline
       @doc["Success"] != "Ok"
     end
 
-    def order_id
+    def our_ref
       @doc["OrderId"]
     end
 
@@ -72,10 +72,10 @@ class Payonline
   # Возможна передача валюты ("RUB", "EUR", "USD"), по умолчанию выбираются рубли.
   def pay amount, card, opts={}, currency = "RUB"
     return nil if @preauthorization
-    validate! opts, :order_id, :idata
+    validate! opts, :our_ref, :idata
     post = {}
     add_merchant_id(post)
-    add_order_id(post, opts)
+    add_ref(post, opts)
     add_money(post, amount)
     add_currency(post, currency)
     add_contacts_and_location(post, opts)
@@ -89,10 +89,10 @@ class Payonline
   # Блокировка средств на карте пользователя.
   def block amount, card, opts={}, currency = "RUB"
     return nil unless @preauthorization
-    validate! opts, :order_id
+    validate! opts, :our_ref
     post = {}
     add_merchant_id(post)
-    add_order_id(post, opts)
+    add_ref(post, opts)
     add_money(post, amount)
     add_currency(post, currency)
     add_contacts_and_location(post, opts)
@@ -130,11 +130,11 @@ class Payonline
 
   # Повторный платёж с указанием новой суммы. Предприятие должно отдельно подписаться на услугу повторных платежей.
   def rebill amount, opts={}, currency = "RUB"
-    validate! opts, :rebill_anchor, :order_id
+    validate! opts, :rebill_anchor, :our_ref
     post = {}
     add_merchant_id(post)
     add_rebill_anchor(post, opts)
-    add_order_id(post, opts)
+    add_our_ref(post, opts)
     add_money(post, amount)
     add_currency(post, currency)
     add_security_key(post)
@@ -154,11 +154,11 @@ class Payonline
     post_request 'transaction/refund', post
   end
 
-  # Уточнение текущего состояния платежа. Нужно указать либо order_id, либо transaction_id.
+  # Уточнение текущего состояния платежа. Нужно указать либо ref (order_id), либо transaction_id.
   def status opts={}
     post = {}
     add_merchant_id(post)
-    add_order_id(post, opts) || add_transaction_id(post, opts)
+    add_ref(post, opts) || add_transaction_id(post, opts)
     add_security_key(post)
 
     post_request 'search', post
@@ -202,8 +202,8 @@ class Payonline
     end
   end
 
-  def add_order_id(post, opts)
-    post[:OrderId] = opts[:order_id] if opts[:order_id]
+  def add_ref(post, opts)
+    post[:OrderId] = opts[:our_ref] if opts[:our_ref]
   end
 
   def add_transaction_id(post, opts)

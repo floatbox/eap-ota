@@ -11,11 +11,11 @@ describe Payture do
     let(:amount) { 100 }
     let(:card) { Payture.test_card }
 
-    it { subject.block(amount, card, :order_id => first_order).should be_success }
-    it { subject.unblock(amount, :order_id => first_order).should be_success }
+    it { subject.block(amount, card, :our_ref => first_order).should be_success }
+    it { subject.unblock(amount, :our_ref => first_order).should be_success }
 
-    it { subject.pay(amount, card, :order_id => second_order).should be_success }
-    it { subject.refund(amount, :order_id => second_order).should be_success }
+    it { subject.pay(amount, card, :our_ref => second_order).should be_success }
+    it { subject.refund(amount, :our_ref => second_order).should be_success }
   end
 
   describe "#add_custom_fields" do
