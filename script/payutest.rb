@@ -25,20 +25,47 @@ payu = Payu.new(
 )
 
 our_ref = Time.now.strftime('test_%y%m%d_%H%M%S')
-
 card = Payu.test_card
-response = payu.block 123.127, card, :our_ref => our_ref
+
+### BLOCK
+  response = payu.block 10, card, :our_ref => our_ref
+
+### STATE
+  state_response = payu.state :our_ref => our_ref
+  puts state_response.status
+
+### UNBLOCK
+#  unblock_response = payu.unblock 5, :their_ref => response.their_ref
+
+### STATE
+#  state_response = payu.state(:our_ref => our_ref)
+#  puts state_response.status
+
+### CHARGE
+  charge_response = payu.charge 10, :their_ref => response.their_ref
+
+### STATE
+  state_response = payu.state(:our_ref => our_ref)
+  puts state_response.status
+
+### REFUND
+  refund_response = payu.refund 5, :their_ref => response.their_ref
+
+### STATE
+  state_response = payu.state(:our_ref => our_ref)
+  puts state_response.status
+
 
 #if response.threeds?
 #  puts response.threeds_url
 #end
 
-#  unblock_response = payu.unblock(:their_ref => response.ref)
+#  unblock_response = payu.unblock(:their_ref => response.their_ref)
 
 #  charge_response = payu.charge(:their_ref => response.ref)
 
 #  our_ref = 'EXT_411349700322'
 #  state_response = payu.state(:our_ref => our_ref)
-#  puts state_response.state
+#  puts state_response.status
 
 #end
