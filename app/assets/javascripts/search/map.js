@@ -324,7 +324,7 @@ init: function(context) {
     this.slider = this.el.find('.smp-slider');
     this.slider.find('.smps-base').on('click', function(event) {
         var offset = event.pageX - $(this).offset().left;
-        that.apply(that.value = offset - 3);
+        that.apply(that.value = offset - 3, true);
     });
     this.selected = this.slider.find('.smps-selected');
     this.control = this.slider.find('.smps-control');
