@@ -323,8 +323,8 @@ init: function(context) {
     this.loading = this.el.find('.smp-loading');
     this.slider = this.el.find('.smp-slider');
     this.slider.find('.smps-base').on('click', function(event) {
-        var offset = event.pageX - $(this).offset().left;
-        that.apply(that.value = offset - 3, true);
+        var offset = event.pageX - $(this).offset().left - 3;
+        that.apply(that.offset = offset.constrain(0, that.width), true);
     });
     this.selected = this.slider.find('.smps-selected');
     this.control = this.slider.find('.smps-control');
@@ -337,7 +337,7 @@ init: function(context) {
     this.$drop = function(event) {
         that.drop();
     };
-    this.tip = this.slider.find('.smps-value');
+    this.value = this.slider.find('.smps-value');
 },
 update: function(options) {
     this.slider.hide();
@@ -349,37 +349,34 @@ process: function(min, max) {
     this.el.removeClass('smp-pressed');
     this.link.hide();
     this.slider.show();
-    this.range = [min, max];
+    this.values = {
+        min: min,
+        max: max,
+        range: max - min
+    };
     this.width = this.slider.find('.smps-base').width() - 7;
-    var scale = (max - min) / this.width;
-    var scales = [50, 100, 500, 1000], ds, dsmin = 500;
-    this.scale = 1000;
-    for (var i = scales.length; i--;) {
-        ds = Math.abs(scales[i] - scale);
-        if (ds < dsmin) {
-            this.scale = scales[i];
-            dsmin = ds; 
-        }
-    }
-    this.value = this.width;
-    this.apply(this.value);
+    this.scales = [100, 100, 500, 1000];
+    this.offset = this.width;
+    this.apply(this.offset);
 },
-apply: function(value, filter) {
-    var limit = Math.ceil(this.range[1]);
-    if (value < this.width) {
-        var mp = this.range[0] + value / this.width * (this.range[1] - this.range[0]);
-        limit = Math.min(limit, Math.ceil(mp / this.scale) * this.scale);
+apply: function(offset, filter) {
+    var limit = Math.ceil(this.values.max);
+    if (offset < this.width) {
+        var factor = offset / this.width;
+        var exact = this.values.min + Math.pow(factor, 2) * this.values.range;
+        var scale = this.scales[Math.floor(factor * this.scales.length)];
+        limit = Math.min(limit, Math.ceil(exact / scale) * scale);
     }
-    this.control.css('left', value);
-    this.selected.css('width', value);
-    this.tip.html('цена до {0} <span class="ruble">Р</span>'.absorb(limit));
+    this.control.css('left', offset);
+    this.selected.css('width', offset);
+    this.value.html('цена до {0} <span class="ruble">Р</span>'.absorb(limit.separate()));
     if (filter) {
         search.map.filterPrices(limit);    
     }
 },
 drag: function(event) {
     this.dragging = {
-        value: this.value,
+        offset: this.offset,
         x: event.pageX
     };
     $(document).on('mousemove', this.$move);
@@ -389,22 +386,21 @@ drag: function(event) {
 },
 move: function(x) {
     var d = this.dragging;
-    var offset = Math.round(x - d.x);
-    if (offset !== d.offset) {
-        var pos = this.value + offset;
-        d.value = pos.constrain(0, this.width);
-        d.offset = offset;
-        this.apply(d.value);
+    var dx = Math.round(x - d.x);
+    if (dx !== d.dx) {
+        var pos = this.offset + dx;
+        d.offset = pos.constrain(0, this.width);
+        d.dx = dx;
+        this.apply(d.offset);
     }
 },
 drop: function() {
-    var d = this.dragging;
-    if (d) {
-        this.apply(this.value = d.value, true);
-        delete this.dragging;
-    }
     $(document).off('mousemove', this.$move);
     $(document).off('mouseup', this.$drop);
+    if (this.dragging) {
+        this.apply(this.offset = this.dragging.offset, true);
+        delete this.dragging;
+    }
 },
 show: function() {
     this.el.show();
