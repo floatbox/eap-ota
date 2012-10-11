@@ -90,7 +90,7 @@ agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "FPRJCADSLVXTNIGWUYHMQBKOE"
 ticketing_method "downtown"
-discount "7.9%"
+discount "8.1%"
 commission "12%/10%"
 
 # example 'cdgsvo svocdg/f'
@@ -144,7 +144,7 @@ agent "12% Oт всех применяемых опубликованных та
 subagent "10% от всех применяемых опубликованных тарифов между Москвой и Пекином/Майами/Нью-Йорком (OW.RT) и на сквозные перевозки между пунктами полетов АК «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW.RT). (Через АСБ «GABRIEL»: установлен специальный «Код тура» NEWDE10 при продаже перевозок с полетными сегментами между Москвой-Майами/Нью-Йорком (OW/RT). СУБАГЕНТ обязан внести «Код тура» NEWDE10 для автоматического начисления комиссии.)"
 important!
 check { includes(city_iatas, %W(NYC MIA BJS LAX)) and includes(country_iatas, %W(RU UA KZ UZ)) }
-discount "7.5%"
+discount "8.1%"
 commission "12%/10%"
 
 example 'aerdme dmeaer/ab'
@@ -900,7 +900,7 @@ example 'svocdg cdgsvo/ab'
 agent "7% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 subagent "5% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 interline :no, :yes
-discount "4.1%"
+discount "4.2%"
 commission '7%/5%'
 
 example 'ledsvo/business svoled/business'
@@ -2277,7 +2277,7 @@ strt_date "01.08.2012"
 agent "9% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории РФ до любого п.п. VV"
 subagent "8,5% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории РФ до любого п.п. VV."
 check { includes(country_iatas.first, 'RU') and not includes(city_iatas.first, 'MOW') and not includes(city_iatas.last, 'IEV') }
-discount "6.5%"
+discount "7%"
 commission "9%/8.5%"
 
 example 'ledkbp kbptlv'
@@ -2289,7 +2289,7 @@ agent "10% от тарифа при продаже перевозок с нач�
 subagent "9,5% от тарифа при продаже перевозок с началом перевозки от Санкт- Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
 check { includes(city_iatas.first, 'LED') and includes(city_iatas, 'IEV') and not includes(country_iatas.last, 'UA') and not includes(country_iatas.last, 'RU') }
 important!
-discount "7.5%"
+discount "8%"
 commission "10%/9.5%"
 
 example 'svokbp/business kbpsvo/business'
@@ -2298,7 +2298,7 @@ agent "9% от тарифа при продаже перевозок на рей
 subagent "4,5% от тарифа при продаже перевозок на рейсы Москва-Киев (MOW-IEV), Москва-Киев-Москва (MOW -IEV- MOW);"
 classes :business
 check { (includes(city_iatas.first, 'MOW') and includes(city_iatas.last, 'IEV')) or (includes(city_iatas.first, 'MOW') and includes(city_iatas.last, 'MOW') and includes(city_iatas, 'IEV')) }
-discount "2.5%"
+discount "3%"
 commission "5%/4.5%"
 
 example 'svokbp kbpsvo'
@@ -2306,7 +2306,7 @@ strt_date "01.08.2012"
 agent "7% от тарифа при продаже перевозок на рейсы Москва-Киев (MOW-IEV), Москва-Киев-Москва (MOW -IEV- MOW);"
 subagent "4,5% от тарифа при продаже перевозок на рейсы Москва-Киев (MOW-IEV), Москва-Киев-Москва (MOW -IEV- MOW);"
 check { (includes(city_iatas.first, 'MOW') and includes(city_iatas.last, 'IEV')) or (includes(city_iatas.first, 'MOW') and includes(city_iatas.last, 'MOW') and includes(city_iatas, 'IEV')) }
-discount "2.5%"
+discount "3%"
 commission "5%/4.5%"
 
 example 'kbpdok'
@@ -2324,7 +2324,7 @@ strt_date "21.03.2012"
 agent "5% от тарифа при продаже перевозок на рейсы Interline с участием VV;"
 subagent "4,5% от тарифа при продаже перевозок на рейсы Interline с участием VV;"
 interline :yes
-discount "2.5%"
+discount "3%"
 commission "5%/4.5%"
 
 example 'kbpsvo/ab svokbp/ab'
@@ -2866,7 +2866,7 @@ agent "3% BSP"
 subagent ""
 #our_markup 400
 ##disabled "до времени"
-discount "1.8%"
+discount "1.9%"
 interline :no, :yes
 commission "3%/0%"
 
