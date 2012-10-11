@@ -37,22 +37,18 @@ bind: function(apply) {
     }
 },
 validate: function(forced) {
-    var wrong = [], empty = [];
+    this.wrong = [];
+    this.empty = [];
     for (var i = 0, l = this.controls.length; i < l; i++) {
         var control = this.controls[i];
         if (forced && control.validate) {
             control.validate();
         }
-        if (control.error && !control.disabled) {
-            (control.error === 'empty' ? empty : wrong).push(control.message);
-            if (!control.message) {
-                trackEvent('Ошибка JS', 'Нет сообщения об ошибке «' + control.error + '» в поле ' + control.el.get(0).className);
-            }
+        if (control.error && !control.disabled && control.message) {
+            this[control.error === 'empty' ? 'empty' : 'wrong'].push(control.message);
         }
     }
-    this.toggle(wrong.length + empty.length === 0);
-    this.wrong = wrong;
-    this.empty = empty;
+    this.toggle(this.wrong.length + this.empty.length === 0);
 },
 toggle: function(ready) {
     this.el.toggleClass('bfs-ready', ready);

@@ -331,23 +331,17 @@
     border-left-color: #C1C1C1;    
     font-size: 14px;
     line-height: 16px;
-    cursor: pointer;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 .smp-hidden {
     visibility: hidden;
 }
-.smp-text {
+.smp-link {
     padding: 4px 9px;
-}
-.smp-pressed {
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
-    cursor: default;
-}
-.smp-pressed .smp-text {
-    visibility: hidden;
+    cursor: pointer;
 }
 .smp-loading {
+    display: none;
     position: absolute;
     top: 50%;
     left: 10px;
@@ -360,7 +354,50 @@
     padding: 0 26px 1px 0;
     background: url(/images/booking/progress-w.gif) no-repeat 100% 0;
 }
+.smp-pressed {
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+    cursor: default;
+}
+.smp-pressed .smp-link {
+    visibility: hidden;
+}
+.smp-pressed .smp-loading {
+    display: block;
+}
 
+/* Slider */
+.smp-slider {
+    padding: 12px 9px 8px;
+}
+.smps-base,
+.smps-selected,
+.smps-control {
+    background: url(/images/search/pslider.png) no-repeat;
+}
+.smps-base {
+    position: relative;
+    background-position: 100% 0;
+}
+.smps-selected {
+    padding-left: 3px;
+    width: 50%;
+    height: 7px;
+    background-position: 0 -10px;
+}
+.smps-control {
+    position: absolute;
+    top: -4px;
+    left: 0;
+    margin-left: -4px;
+    width: 15px;
+    height: 20px;
+    background-position: 0 -20px;
+    cursor: pointer;
+}
+.smps-value {
+    margin-top: 8px;
+    height: 16px;
+}
 
 /* Label */
 .smap-label {

@@ -17,10 +17,7 @@ init: function() {
             that.slideDown();
         }
     });
-    this.prices = this.el.find('.smap-prices');
-    this.prices.click(function() {
-        if (!that.prices.hasClass('smp-pressed')) that.loadPrices();
-    });
+    this.prices.init(this.el.find('.smap-prices'));
     this.colors = ['#81aa00', '#db7100', '#0aa0c6', '#bf00db', '#db0048', '#9a5000'];
     this.items = [];
 },
@@ -54,7 +51,7 @@ toggleZoom: function(h) {
     var zoomVisible = h > 80;
     if (this.api && zoomVisible !== this.zoomVisible) {
         this.api.setOptions({zoomControl: zoomVisible});
-        this.prices.toggleClass('smp-hidden', !zoomVisible);
+        this.prices.el.toggleClass('smp-hidden', !zoomVisible);
         this.zoomVisible = zoomVisible;
     }
 },
@@ -182,11 +179,13 @@ updatePrices: function(segments, stealth) {
     if (segments[0] && segments[0].dpt && search.mode.selected !== 'mw') {
         var sd = search.dates;
         var dates = sd.monthes[sd.position].ptitle + '—' + sd.monthes[sd.position + 1].ptitle;
-        this.prices.html('<div class="smp-text">' + local.search.prices.absorb(segments[0].dpt.from.nowrap(), dates) + '</div>');
-        this.prices.attr('data-from', segments[0].dpt.iata);
-        this.prices.attr('data-date', sd.monthes[sd.position].el.find('.first').attr('data-dmy'));
+        this.prices.update({
+            title: local.search.prices.absorb(segments[0].dpt.from.nowrap(), dates),
+            from: segments[0].dpt.iata,
+            date: sd.monthes[sd.position].el.find('.first').attr('data-dmy')
+        });
         if (!stealth) {
-            this.prices.removeClass('smp-pressed').show();
+            this.prices.show();
         }
     } else {
         this.prices.hide();
@@ -194,23 +193,32 @@ updatePrices: function(segments, stealth) {
 },
 loadPrices: function() {
     var that = this;
-    this.prices.addClass('smp-pressed');
-    this.prices.append('<div class="smp-loading"><span class="smp-progress">Ищем варианты</span></div>')
-    $.get('/price_map', {
-        from: this.prices.attr('data-from'),
-        date: this.prices.attr('data-date'),
-        rt: search.mode.selected === 'rt' ? 1 : 0
-    }, function(data) {
-        that.showPrices(data);
+    $.ajax({
+        url: '/price_map', 
+        data: {
+            from: this.prices.el.attr('data-from'),
+            date: this.prices.el.attr('data-date'),
+            rt: search.mode.selected === 'rt' ? 1 : 0
+        },
+        success: function(data) {
+            that.showPrices(data || []);
+        },
+        error: function() {
+            that.showPrices([]);
+        },
+        timeout: 15000
     });
 },
 showPrices: function(items) {
     var that = this;
-    this.prices.hide();
     this.clean();
-    if (!items || items.length === 0) return;
+    if (items.length === 0) {
+        this.prices.hide();
+        return;
+    }
     var template = '<p class="sml-city">{0}</p><p class="sml-price">{1}&nbsp;<span class="ruble">Р</span></p><p class="sml-dates">{2}</p>';
-    var bounds = new google.maps.LatLngBounds();    
+    var bounds = new google.maps.LatLngBounds();
+    var pmin = items[0].price, pmax = items[0].price;
     for (var i = 0, im = items.length; i < im; i++) {
         var item = items[i];
         var dates = [item.date1.substring(8, 10) + '.' + item.date1.substring(5, 7)];
@@ -226,6 +234,7 @@ showPrices: function(items) {
             title: content,
             map: this.api
         });
+        label.price = item.price;
         label.$el.addClass('sml-active');
         label.$el.data('city', {name: item.to.name_ru, iata: item.to.iata, type: 'city'});
         label.$el.data('dates', indexes);
@@ -233,13 +242,27 @@ showPrices: function(items) {
             that.applyPrice($(this));
         });
         bounds.extend(latlng);
+        if (item.price < pmin) pmin = item.price;
+        if (item.price > pmax) pmax = item.price;
         this.items.push(label);
     }
     if (items.length > 1 && !this.pricesMode) {
         this.bounds = bounds;    
         this.fitBounds();
     }
+    if (items.length > 1 && pmin / pmax < 0.95) {
+        this.prices.show();
+        this.prices.process(pmin, pmax);
+    } else {
+        this.prices.hide();
+    }
     this.pricesMode = true;
+},
+filterPrices: function(limit) {
+    for (var i = this.items.length; i--;) {
+        var item = this.items[i];
+        item.$el.toggle(item.price <= limit);
+    }
 },
 applyPrice: function(el) {
     search.locations.segments[0].arv.set(el.data('city'));
@@ -286,3 +309,106 @@ function extendOverlayPrototype() {
         this.$el.remove();
     };    
 }
+
+/* Prices control */
+search.map.prices = {
+init: function(context) {
+    var that = this;
+    this.el = context;
+    this.link = this.el.find('.smp-link');
+    this.link.click(function() {
+        that.el.addClass('smp-pressed');
+        search.map.loadPrices();
+    });
+    this.loading = this.el.find('.smp-loading');
+    this.slider = this.el.find('.smp-slider');
+    this.slider.find('.smps-base').on('click', function(event) {
+        var offset = event.pageX - $(this).offset().left;
+        that.apply(that.value = offset - 3);
+    });
+    this.selected = this.slider.find('.smps-selected');
+    this.control = this.slider.find('.smps-control');
+    this.control.mousedown(function(event) {
+        that.drag(event);
+    });
+    this.$move = function(event) {
+        that.move(event.pageX);
+    };
+    this.$drop = function(event) {
+        that.drop();
+    };
+    this.tip = this.slider.find('.smps-value');
+},
+update: function(options) {
+    this.slider.hide();
+    this.link.html(options.title).show();
+    this.el.attr('data-from', options.from);
+    this.el.attr('data-date', options.date);
+},
+process: function(min, max) {
+    this.el.removeClass('smp-pressed');
+    this.link.hide();
+    this.slider.show();
+    this.range = [min, max];
+    this.width = this.slider.find('.smps-base').width() - 7;
+    var scale = (max - min) / this.width;
+    var scales = [50, 100, 500], ds, dsmin = 500;
+    for (var i = scales.length; i--;) {
+        ds = Math.abs(scales[i] - scale);
+        if (ds < dsmin) {
+            this.scale = scales[i];
+            dsmin = ds; 
+        }
+    }
+    this.value = this.width;
+    this.apply(this.value);
+},
+apply: function(value, filter) {
+    var limit = Math.ceil(this.range[1]);
+    if (value < this.width) {
+        var mp = this.range[0] + value / this.width * (this.range[1] - this.range[0]);
+        limit = Math.min(limit, Math.ceil(mp / this.scale) * this.scale);
+    }
+    this.control.css('left', value);
+    this.selected.css('width', value);
+    this.tip.html('цена до {0} <span class="ruble">Р</span>'.absorb(limit));
+    if (filter) {
+        search.map.filterPrices(limit);    
+    }
+},
+drag: function(event) {
+    this.dragging = {
+        value: this.value,
+        x: event.pageX
+    };
+    $(document).on('mousemove', this.$move);
+    $(document).on('mouseup', this.$drop);
+    event.stopPropagation();
+    event.preventDefault();
+},
+move: function(x) {
+    var d = this.dragging;
+    var offset = Math.round(x - d.x);
+    if (offset !== d.offset) {
+        var pos = this.value + offset;
+        d.value = pos.constrain(0, this.width);
+        d.offset = offset;
+        this.apply(d.value);
+    }
+},
+drop: function() {
+    var d = this.dragging;
+    if (d) {
+        this.apply(this.value = d.value, true);
+        delete this.dragging;
+    }
+    $(document).off('mousemove', this.$move);
+    $(document).off('mouseup', this.$drop);
+},
+show: function() {
+    this.el.show();
+},
+hide: function() {
+    this.el.hide();
+}
+};
