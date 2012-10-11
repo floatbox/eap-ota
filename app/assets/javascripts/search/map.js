@@ -352,7 +352,8 @@ process: function(min, max) {
     this.range = [min, max];
     this.width = this.slider.find('.smps-base').width() - 7;
     var scale = (max - min) / this.width;
-    var scales = [50, 100, 500], ds, dsmin = 500;
+    var scales = [50, 100, 500, 1000], ds, dsmin = 500;
+    this.scale = 1000;
     for (var i = scales.length; i--;) {
         ds = Math.abs(scales[i] - scale);
         if (ds < dsmin) {
