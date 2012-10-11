@@ -97,6 +97,10 @@ module Strategy::Amadeus::Booking
       # обилечивание
       #Amadeus::Service.issue_ticket(@order_form.pnr_number)
 
+      # Пишем в лог время, за которое пользователь заполнил форму
+      order_form_created_at = OrderFormCache.find(@order_form.number).created_at
+      logger.info "User filled out a form in #{((Time.now - order_form_created_at)/60.0).ceil} minutes"
+
       # success!!
       return :success
     end
