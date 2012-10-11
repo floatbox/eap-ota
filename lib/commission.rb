@@ -77,45 +77,43 @@ agent "11% от тарифа на рейсы Перевозчика по все�
 subagent "9 % от тарифа на рейсы Перевозчика по всем тарифам классов F, P, R, J, C, A, D, S, M;"
 subclasses "FPRJCADSM"
 discount "7.8%"
-disabled "должно быть в даунтауне"
+disabled "пришли субагентские по АЦ, выключили даунтаун"
 commission "11%/9%"
 
-example 'AERDME/W DMEAER/W'
-example 'AERDME/Y DMEAER/M'
-example 'AERDME/Y DMEAER/M'
-example 'AERDME/W DMEAER/I'
-example 'AERDME/N DMEAER/T'
-example 'AERDME/W DMEAER/W'
+# example 'AERDME/W DMEAER/W'
+# example 'AERDME/Y DMEAER/M'
+# example 'AERDME/Y DMEAER/M'
+# example 'AERDME/W DMEAER/I'
+# example 'AERDME/N DMEAER/T'
+# example 'AERDME/W DMEAER/W'
 agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "FPRJCADSLVXTNIGWUYHMQBKOE"
 ticketing_method "downtown"
 discount "8.1%"
+disabled "пришли субагентские по АЦ, выключили даунтаун"
 commission "12%/10%"
 
-# example 'cdgsvo svocdg/f'
+example 'cdgsvo/r svocdg/f'
 agent "9% от тарифа на рейсы Перевозчика по всем тарифам классов: Империал, Премиальный и Бизнес класс. FPRJCADSM"
-subagent ""
-subclasses "FPRJCADS"
+subagent "7 % от тарифа на рейсы Перевозчика по всем тарифам классов F, P, R, J, C, A, D, S, M"
+subclasses "FPRJCADSM"
 discount "5%"
-disabled "Нет субагентской"
-commission "9%/"
+commission "9%/7%"
 
-# example 'cdgsvo svocdg/y'
+example 'cdgsvo svocdg/y'
 agent "7% от тарифа на рейсы Перевозчика по всем тарифам Эконом классов;"
-subagent ""
+subagent "5% от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, Q, B, K, O;"
 subclasses "YHQBKO"
 discount "3%"
-disabled "Нет субагентской"
-commission "7%/"
+commission "7%/5%"
 
-# example 'cdgsvo svocdg/l'
+example 'cdgsvo/i svocdg/x'
 agent "2% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
-subagent ""
+subagent "1% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
 subclasses "LVXTNIGWU"
 discount "0%"
-disabled "Нет субагентской"
-commission "2%/"
+commission "2%/1%"
 
 example 'svoiws/UN7061'
 example 'svoaap/UN7061 aapsvo/UN7061'
@@ -149,7 +147,8 @@ commission "12%/10%"
 
 example 'aerdme dmeaer/ab'
 agent "5% Interline с участком Трансаэро. Без участка UN запрещено."
-subagent ""
+subagent "3% от тарифа на рейсы Interline c участком UN. Запрещена продажа на рейсы interline без
+участка UN"
 interline :yes
 discount "1%"
 commission "5%/3%"
@@ -1690,10 +1689,13 @@ subagent "0,5% от опубл. тарифа на собств.рейсы OA"
 commission "1%/0.5%"
 
 example 'cdgsvo svocdg/ab'
-agent "1р Interline не прописан"
+agent "1% Interline"
 subagent "0р Interline не прописан"
-interline :unconfirmed
+interline :yes
 commission "1%/0.5%"
+
+example 'cdgsvo/ab svocdg/ab'
+no_commission
 
 carrier "OK", "CZECH AIRLINES"
 ########################################
