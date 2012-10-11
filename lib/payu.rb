@@ -361,7 +361,7 @@ class Payu
   def encrypt_postinfo(post, params_order)
     update_date(post)
     post.slice!(*params_order)
-    post[:ORDER_HASH] = OpenSSL::HMAC.hexdigest('md5', @seller_key, serialize_hash(post, params_order))
+    post[:ORDER_HASH] = OpenSSL::HMAC.hexdigest('md5', @seller_key, serialize_array(post.values_at(*params_order)))
   end
 
   def add_custom_fields(post, opts)
@@ -385,24 +385,8 @@ class Payu
     post[:CustomFields] = res.delete_if {|k, v| !v }.collect {|k, v| "#{k}=#{v}"}.join(';')
   end
 
-  def serialize_hash(hash, keys)
-    hash.values_at(*keys).compact.map do |value|
-      if value.is_a? Array
-        serialize_array value
-      else
-        value.length.to_s + value
-      end
-    end.join
-  end
-
   def serialize_array(array)
-    array.map do |val|
-      if val.is_a? Array
-        serialize_array(val)
-      else
-        val.length.to_s + val.to_s
-      end
-    end.join
+    array.flatten.compact.map { |val| "#{val.length}#{val}" }.join
   end
 
   # for testing purposes
