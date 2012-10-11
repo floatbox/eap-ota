@@ -4,6 +4,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
   include Typus::Authentication::Session, PartnerTracking
 
+  before_filter :set_locale
+  after_filter :log_partner
+
   protected
 
   helper_method :admin_user
@@ -20,10 +23,6 @@ class ApplicationController < ActionController::Base
   def log_user_agent
     logger.info "UserAgent: #{request.user_agent}"
   end
-
-  before_filter :set_locale
-
-  after_filter :log_partner
 
   ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
     html_tag

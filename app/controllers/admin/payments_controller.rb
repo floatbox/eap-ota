@@ -21,7 +21,7 @@ class Admin::PaymentsController < Admin::EviterraResourceController
 
   def payment_raw
     get_object
-    render :text => @item.payment_state_raw
+    render :text => @item.payment_status_raw
   end
 
   def charge
@@ -42,9 +42,9 @@ class Admin::PaymentsController < Admin::EviterraResourceController
     redirect_to :back
   end
 
-  def sync_state
+  def sync_status
     get_object
-    @item.sync_state!
+    @item.sync_status!
     redirect_to :back
   end
 

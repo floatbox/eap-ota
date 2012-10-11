@@ -48,7 +48,7 @@ booking.load = function(number, price_changed) {
         button.find('.obb-title').html(local.offers.price.buy.absorb(price)).click(function() {
             $w.smoothScrollTo(that.form.el.offset().top);
             $w.queue(function(next) {
-                $('#bfc-email').focus();
+                $('#bfp0-first-name').focus();
                 next();
             });
         });

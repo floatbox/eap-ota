@@ -36,6 +36,7 @@ amadeus:
   euro_rate: 40
   session_pool_size: 10
   no_ltd_restrictions: no
+  ignored_carriers: []
 payment:
   # FIXME убить в локальных конфигах
   use_discount: no
@@ -50,6 +51,8 @@ cash:
 payture:
   commission: 2.85%
   enabled: yes
+  ref_prefix: o
+  # FIXME убить в локальных конфигах
   order_id_prefix: o
   key: MerchantETerra
   host: sandbox.payture.com

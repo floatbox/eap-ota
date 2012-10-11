@@ -226,7 +226,7 @@ class Order < ActiveRecord::Base
     tickets_office_ids_array.join('; ')
   end
 
-  def order_id
+  def payment_ref
     last_payment.try(:ref)
   end
 

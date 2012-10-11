@@ -3,14 +3,76 @@ require 'spec_helper'
 describe Payu do
 
   describe "#block" do
-    let :card do end
+    before do
+      Time.stub(:now => DateTime.parse("2012-10-08 15:12:18 +0400").to_time )
+    end
+
+    subject do
+      Payu.new
+    end
+
+    let :card do
+      Payu.test_card
+    end
+
+    let :amount do
+      123
+    end
+
+    let :our_ref do
+      "test_121008_151218"
+    end
+
+    let :expected_request do
+      {
+        :MERCHANT => "EVITERRA",
+        :ORDER_REF => "test_121008_151218",
+        :ORDER_DATE => "2012-10-08 11:12:18",
+        :ORDER_PNAME => ["1 x Ticket"],
+        :ORDER_PCODE => ["TCK1"],
+        :ORDER_PINFO => ["{'departuredate':20120914, 'locationnumber':2, 'locationcode1':'BUH', 'locationcode2':'IBZ','passengername':'Fname Lname','reservationcode':'abcdef123456'}"],
+        :ORDER_PRICE => ["123"],
+        :ORDER_VAT => ["0"],
+        :ORDER_QTY => ["1"],
+        :PRICES_CURRENCY => "RUB",
+        :PAY_METHOD => "CCVISAMC",
+        :CC_NUMBER => "4111111111111111",
+        :CC_OWNER => "card one",
+        :CC_TYPE => "VISA",
+        :CC_CVV => "123",
+        :EXP_MONTH => "12",
+        :EXP_YEAR => "2013",
+        :BILL_LNAME => "Eviterra",
+        :BILL_FNAME => "Test",
+        :BILL_ADDRESS => "Address Eviterra",
+        :BILL_CITY => "City",
+        :BILL_STATE => "State",
+        :BILL_ZIPCODE => "123",
+        :BILL_EMAIL => "testpayu@eviterra.com",
+        :BILL_PHONE => "1234567890",
+        :BILL_COUNTRYCODE => "RU",
+        :CLIENT_IP => "127.0.0.1",
+        :DELIVERY_LNAME => "Eviterra",
+        :DELIVERY_FNAME => "Test",
+        :DELIVERY_ADDRESS => "Address Eviterra",
+        :DELIVERY_CITY => "City",
+        :DELIVERY_STATE => "State",
+        :DELIVERY_ZIPCODE => "123",
+        :DELIVERY_PHONE => "1234567890",
+        :DELIVERY_COUNTRYCODE => "RU",
+        :BACK_REF => "http://localhost:3000/",
+        :ORDER_HASH => "a374d2fcf937910c11c7967e365b6968"
+      }
+    end
 
     it "should make request wit correct params" do
-      pending "need to stub date/time"
-      amount = 123
-      HTTParty.should receive(:post).with().and_return(stub(:payment_response))
-      Payu::PaymentResponse.should receive(:new)
-      Payu.new.block amount, card, :order_id => '123'
+      #pending "need to stub date/time"
+      parsed_response = stub(:parsed_response)
+
+      subject.should_receive(:post_alu).with( expected_request ).and_return(parsed_response)
+      Payu::PaymentResponse.should_receive(:new).with(parsed_response)
+
+      subject.block amount, card, :our_ref => our_ref
     end
 
   end
@@ -19,6 +81,53 @@ describe Payu do
 
     it "should make request wit correct params" do
       pending "need to stub date/time"
+    end
+
+  end
+
+  describe "#add_credit_card" do
+    let :card do
+      CreditCard.new(
+        number: '5521756777242815',
+        verification_value: '912',
+        year: 2014,
+        month: 4,
+        name: 'mr owner'
+      ).tap(&:valid?)
+    end
+
+    subject { Hash.new }
+
+    before do
+      Payu.new.send :add_creditcard, subject, card
+    end
+
+    it do
+      should == {
+        CC_NUMBER: "5521756777242815",
+        CC_TYPE: "MasterCard",
+        EXP_MONTH: "04",
+        EXP_YEAR: "2014",
+        CC_OWNER: "mr owner",
+        CC_CVV: "912"
+      }
+    end
+
+  end
+
+  describe "#add_money" do
+
+    subject { Hash.new }
+
+    before do
+      Payu.new.send :add_money, subject, '123.127'
+    end
+
+    it do
+      should == {
+        ORDER_PRICE: ['123.127'],
+        ORDER_AMOUNT: '123.127'
+      }
     end
 
   end
@@ -50,7 +159,9 @@ describe Payu do
       end
 
       it {should be_success}
-      its(:ref) {should == "6471185"}
+      it {should_not be_error}
+      it {should_not be_threeds}
+      its(:their_ref) {should == "6471185"}
 
     end
 
@@ -71,7 +182,9 @@ describe Payu do
       end
 
       it {should_not be_success}
-      its(:ref) {should == "6385847"}
+      it {should be_error}
+      it {should_not be_threeds}
+      its(:their_ref) {should == "6385847"}
 
     end
 
@@ -92,7 +205,9 @@ describe Payu do
       end
 
       it {should_not be_success}
-      its(:ref) {should == "6132371"}
+      it {should be_error}
+      it {should_not be_threeds}
+      its(:their_ref) {should == "6132371"}
 
     end
 
@@ -114,10 +229,36 @@ describe Payu do
       end
 
       it {should_not be_success}
-      its(:ref) {should == "6372861"}
+      it {should_not be_error}
+      it {should be_threeds}
+      its(:their_ref) {should == "6372861"}
 
     end
 
+    # принимающий урл должен принимать POST, и надо выключить на нем CSRF
+    describe "success from 3ds authorization via POST params" do
+
+      subject do
+        Payu::PaymentResponse.new(params)
+      end
+
+      let (:params) do
+        HashWithIndifferentAccess.new(
+          "REFNO" => "6626740",
+          "ALIAS" => "598cba51685645dea3a8ea43ff71cb96",
+          "STATUS" => "SUCCESS",
+          "RETURN_CODE" => "AUTHORIZED",
+          "RETURN_MESSAGE" => "Authorized.",
+          "DATE" => "2012-10-08 17:42:12",
+          "HASH" => "32b263656557bbf17532fb0f79fefba9"
+        )
+      end
+
+      it {should be_success}
+      it {should_not be_error}
+      it {should_not be_threeds}
+      its(:their_ref) {should == "6626740"}
+    end
   end
 
   describe Payu::UnblockResponse do
@@ -148,4 +289,37 @@ describe Payu do
     end
 
   end
+
+  describe Payu::StateResponse do
+
+    subject do
+      Payu::StateResponse.new(parsed_response)
+    end
+
+    let :parsed_response do
+      HTTParty::Parser.call(body, :xml)
+    end
+
+    describe "successful" do
+      let :body do
+        <<-"END"
+        <?xml version="1.0"?>
+        <Order>
+          <ORDER_DATE>2012-10-08 22:48:41</ORDER_DATE>
+          <REFNO>6133909</REFNO>
+          <REFNOEXT>test_121008_234840</REFNOEXT>
+          <ORDER_STATUS>PAYMENT_AUTHORIZED</ORDER_STATUS>
+          <PAYMETHOD>Visa/MasterCard/Eurocard</PAYMETHOD>
+        </Order>
+        END
+      end
+
+      it { should be_success }
+      it { should_not be_error }
+      its(:their_ref) { should == "6133909" }
+      its(:our_ref) { should == "test_121008_234840" }
+      its(:status) { should == "PAYMENT_AUTHORIZED" }
+    end
+  end
+
 end

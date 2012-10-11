@@ -1,5 +1,8 @@
 # encoding: utf-8
 class HomeController < ApplicationController
+
+  before_filter :save_partner_cookies, :only => :index
+
   def index
   end
 
