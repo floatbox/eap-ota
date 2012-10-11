@@ -13,7 +13,7 @@
 <% if @item.can_cancel?  %>
   <td><%= button_to 'Cancel', {:action => 'cancel', :id => @item.id}, {:confirm => 'точно?'} %></td>
 <% end %>
-<% if @item.can_sync_state?  %>
+<% if @item.can_sync_status?  %>
   <td><%= button_to 'Sync status', {:action => 'sync_status', :id => @item.id}, {:confirm => 'точно?'} %></td>
 <% end %>
 <td>

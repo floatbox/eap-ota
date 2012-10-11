@@ -20,7 +20,6 @@ payu = Payu.new(
   merchant: 'EVITERRA',
   host: 'sandbox8ru.epayment.ro',
   # host: 'secure.payu.ru',
-  # ssl: true,
   seller_key: 'w7I2R8~V7=dm5H7[r1k5'
 )
 
@@ -45,12 +44,12 @@ card = Payu.test_card
   charge_response = payu.charge 10, :their_ref => response.their_ref
 
 ### STATE
-  state_response = payu.state(:our_ref => our_ref)
-  puts state_response.status
+  status_response = payu.status :our_ref => our_ref
+  puts status_response.status
 
 ### REFUND
   refund_response = payu.refund 5, :their_ref => response.their_ref
 
 ### STATE
-  state_response = payu.state(:our_ref => our_ref)
-  puts state_response.status
+  status_response = payu.status :our_ref => our_ref
+  puts status_response.status
