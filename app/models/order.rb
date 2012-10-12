@@ -520,12 +520,14 @@ class Order < ActiveRecord::Base
 
   # FIXME надо какой-то логгинг
   def self.cancel_stale!
-    stale.each do |order|
-      begin
-        puts "Automatic cancel of pnr #{order.pnr_number}"
-        order.strategy.cancel
-      rescue
-        puts "error: #{$!}"
+    if Conf.amadeus.cancel_stale
+      stale.each do |order|
+        begin
+          puts "Automatic cancel of pnr #{order.pnr_number}"
+          order.strategy.cancel
+        rescue
+          puts "error: #{$!}"
+        end
       end
     end
   end
