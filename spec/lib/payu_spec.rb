@@ -126,7 +126,9 @@ describe Payu do
     it do
       should == {
         ORDER_PRICE: ['123.127'],
-        ORDER_AMOUNT: '123.127'
+        ORDER_AMOUNT: '123.127',
+        PRICES_CURRENCY: "RUB",
+        ORDER_CURRENCY: "RUB"
       }
     end
 
