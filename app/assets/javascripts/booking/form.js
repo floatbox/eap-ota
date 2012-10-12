@@ -238,8 +238,8 @@ process: function(s) {
 },
 hidePrice: function() {
     this.footer.find('.bff-passengers').remove();
-    var content = '<div class="bffp-content"><p>Стоимость изменилась —</p><p class="bffp-hint">Заполните {0},<br> чтобы узнать новую стоимость.</p></div>';
-    var title = this.el.find('.bf-persons .bfst-text').html().toLowerCase();
+    var content = '<div class="bffp-content"><p>Стоимость изменилась —</p><p class="bffp-hint">Заполните данные {0},<br> чтобы узнать новую стоимость.</p></div>';
+    var title = local.booking.passengersgen[this.el.find('.bf-persons .bfst-text').attr('data-amount')];
     var message = $('<div class="bff-passengers"></div>').html(content.absorb(title));
     this.footer.find('.bff-price').hide().after(message);
     this.wrongPrice = true;
@@ -455,9 +455,9 @@ removeRow: function(index) {
     this.validate(true);
 },
 applyRows: function() {
-    var n = this.rows.length;
+    var n = this.rows.length, key = n === 1 ? 'one' : 'many';
     this.add.toggle(n < this.rowsLimit);
-    this.title.html(local.booking.passengers[n === 1 ? 'one' : 'many']);
+    this.title.attr('data-amount', key).html(local.booking.passengers[key]);
 },
 validate: function(forced) {
     var wrong = [], empty = [], people = {a: 0, c: 0, i: 0};

@@ -76,6 +76,10 @@ booking: {
     passengers: {
         one: 'Пассажир',
         many: 'Пассажиры'
+    },
+    passengersgen: {
+        one: 'пассажира',
+        many: 'пассажиров'
     }
 },
 title: {

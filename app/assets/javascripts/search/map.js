@@ -160,7 +160,7 @@ showSegments: function(segments) {
             position: point.latlng,
             title: point.name,
             map: this.api
-        });        
+        });
         bounds.extend(point.latlng);
         this.items.push(label);
     }
@@ -194,7 +194,7 @@ updatePrices: function(segments, stealth) {
 loadPrices: function() {
     var that = this;
     $.ajax({
-        url: '/price_map', 
+        url: '/price_map',
         data: {
             from: this.prices.el.attr('data-from'),
             date: this.prices.el.attr('data-date'),
@@ -247,7 +247,7 @@ showPrices: function(items) {
         this.items.push(label);
     }
     if (items.length > 1 && !this.pricesMode) {
-        this.bounds = bounds;    
+        this.bounds = bounds;
         this.fitBounds();
     }
     if (items.length > 1 && pmin / pmax < 0.95) {
@@ -259,10 +259,18 @@ showPrices: function(items) {
     this.pricesMode = true;
 },
 filterPrices: function(limit) {
+    var bounds = new google.maps.LatLngBounds();
     for (var i = this.items.length; i--;) {
         var item = this.items[i];
-        item.$el.toggle(item.price <= limit);
+        if (item.price > limit) {
+            item.$el.hide();
+        } else {
+            bounds.extend(item.position);
+            item.$el.show();
+        }
     }
+    this.bounds = bounds;
+    this.fitBounds();
 },
 applyPrice: function(el) {
     search.locations.segments[0].arv.set(el.data('city'));
@@ -295,7 +303,7 @@ function mapLabel(opts) {
 function extendOverlayPrototype() {
     mapLabel.prototype = new google.maps.OverlayView();
     mapLabel.prototype.onAdd = function() {
-        this.getPanes().floatPane.appendChild(this.$el.get(0));        
+        this.getPanes().floatPane.appendChild(this.$el.get(0));
     };
     mapLabel.prototype.draw = function() {
         var projection = this.getProjection();
@@ -304,10 +312,10 @@ function extendOverlayPrototype() {
             left: position.x - Math.round(this.$el.outerWidth() / 2) - 6,
             top: position.y - this.$el.outerHeight() - 16
         });
-    };    
+    };
     mapLabel.prototype.onRemove = function() {
         this.$el.remove();
-    };    
+    };
 }
 
 /* Prices control */
@@ -371,7 +379,7 @@ apply: function(offset, filter) {
     this.selected.css('width', offset);
     this.value.html('цена до {0} <span class="ruble">Р</span>'.absorb(limit.separate()));
     if (filter) {
-        search.map.filterPrices(limit);    
+        search.map.filterPrices(limit);
     }
 },
 drag: function(event) {
