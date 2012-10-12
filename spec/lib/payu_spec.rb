@@ -69,7 +69,7 @@ describe Payu do
       #pending "need to stub date/time"
       parsed_response = stub(:parsed_response)
 
-      subject.should_receive(:post_alu).with( expected_request ).and_return(parsed_response)
+      subject.should_receive(:alu_post).with( expected_request ).and_return(parsed_response)
       Payu::PaymentResponse.should_receive(:new).with(parsed_response)
 
       subject.block amount, card, :our_ref => our_ref
@@ -115,20 +115,35 @@ describe Payu do
 
   end
 
-  describe "#add_money" do
+  describe "#alu_add_money" do
 
     subject { Hash.new }
 
     before do
-      Payu.new.send :add_money, subject, '123.127'
+      Payu.new.send :alu_add_money, subject, '123.127'
     end
 
     it do
       should == {
         ORDER_PRICE: ['123.127'],
-        ORDER_AMOUNT: '123.127',
         PRICES_CURRENCY: "RUB",
-        ORDER_CURRENCY: "RUB"
+      }
+    end
+
+  end
+
+  describe "#idn_add_money" do
+
+    subject { Hash.new }
+
+    before do
+      Payu.new.send :idn_add_money, subject, '123.127'
+    end
+
+    it do
+      should == {
+        ORDER_AMOUNT: '123.127',
+        ORDER_CURRENCY: "RUB",
       }
     end
 
@@ -263,10 +278,10 @@ describe Payu do
     end
   end
 
-  describe Payu::UnblockResponse do
+  describe Payu::ConfirmationResponse do
 
     subject do
-      Payu::UnblockResponse.new(parsed_response)
+      Payu::ConfirmationResponse.new(parsed_response)
     end
 
     let :parsed_response do
