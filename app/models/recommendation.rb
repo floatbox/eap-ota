@@ -133,8 +133,8 @@ class Recommendation
     commission
   end
 
-  def good_carriers
-    ((marketing_carrier_iatas + operating_carrier_iatas) & Conf.amadeus.ignored_carriers).blank?
+  def ignored_carriers
+    ((marketing_carrier_iatas + operating_carrier_iatas) & Conf.amadeus.ignored_carriers).present?
   end
 
   def without_full_information?

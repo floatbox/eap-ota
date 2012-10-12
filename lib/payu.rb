@@ -9,51 +9,17 @@ class Payu
     Rails.logger
   end
 
-  PAY_PARAMS_ORDER = [
-    :MERCHANT, :ORDER_REF, :ORDER_DATE, :ORDER_PNAME, :ORDER_PCODE, :ORDER_PINFO, :ORDER_PRICE, :ORDER_QTY,
-    :ORDER_VAT, :ORDER_VER, :ORDER_SHIPPING, :PRICES_CURRENCY, :DISCOUNT,
-    :DESTINATION_CITY, :DESTINATION_STATE, :DESTINATION_COUNTRY, :PAY_METHOD,
-    :CC_NUMBER, :EXP_MONTH, :EXP_YEAR, :CC_TYPE, :CC_CVV, :CC_OWNER, :ORDER_PGROUP,
-
-    :BACK_REF, :REFNO, :ALIAS, :CLIENT_IP,
-
-    :BILL_LNAME, :BILL_FNAME, :BILL_CISERIAL, :BILL_CINUMBER, :BILL_CIISSUER, :BILL_CNP, :BILL_COMPANY, :BILL_FISCALCODE,
-    :BILL_REGNUMBER, :BILL_BANK, :BILL_BANKACCOUNT, :BILL_EMAIL, :BILL_PHONE, :BILL_FAX, :BILL_ADDRESS, :BILL_ADDRESS2,
-    :BILL_ZIPCODE, :BILL_CITY, :BILL_STATE, :BILL_COUNTRYCODE,
-
-    :DELIVERY_LNAME, :DELIVERY_FNAME, :DELIVERY_COMPANY, :DELIVERY_PHONE, :DELIVERY_ADDRESS, :DELIVERY_ADDRESS2,
-    :DELIVERY_ZIPCODE, :DELIVERY_CITY, :DELIVERY_STATE, :DELIVERY_COUNTRYCODE, :DELIVERY_EMAIL
-  ]
-  
-  REFUND_PARAMS_ORDER = [
-    :MERCHANT, :ORDER_REF, :ORDER_AMOUNT, :ORDER_CURRENCY, :IRN_DATE
-  ]
-
-  CHARGE_PARAMS_ORDER = [
-    :MERCHANT, :ORDER_REF, :ORDER_AMOUNT, :ORDER_CURRENCY, :IDN_DATE
-  ]
-
-  STATE_PARAMS_ORDER = [
-    :MERCHANT, :REFNOEXT
-  ]
-
   POST_PARAMS = {
     :MERCHANT              => 'EVITERRA',                #your merchant code in PAYU system 
     :ORDER_REF             => 'EXT_' + Random.rand(1000).to_s,   #your internal reference number
-    :REFNOEXT              => 'EXT_' + Random.rand(1000).to_s,   #your internal reference number
     :ORDER_DATE            => Time.now.utc.strftime("%Y-%m-%d %H:%M:%S"),
-    :IRN_DATE              => Time.now.utc.strftime("%Y-%m-%d %H:%M:%S"),
-    :IDN_DATE              => Time.now.utc.strftime("%Y-%m-%d %H:%M:%S"),
     :ORDER_PNAME           => ['1 x Ticket'],            #product name
     :ORDER_PCODE           => ['TCK1'],                  #product code
     :ORDER_PINFO           => ["{'departuredate':20120914, 'locationnumber':2, 'locationcode1':'BUH', 'locationcode2':'IBZ','passengername':'Fname Lname','reservationcode':'abcdef123456'}"],
     :ORDER_PRICE           => ['1'],                     #order price
-    :ORDER_AMOUNT          => '1',                       #order amount
     :ORDER_VAT             => ['0'],                     #order vat
     :ORDER_QTY             => ['1'],                     #products quantity
     :PRICES_CURRENCY       => 'RUB',                     #currency
-    # FIXME откуда это? в php примере его нет:
-    :ORDER_CURRENCY        => 'RUB',                     #currency
     :PAY_METHOD            => 'CCVISAMC',                #payment method used. You should always leave it CCVISAMC
     :CC_NUMBER             => '4111111111111111',        #cardholder number
     :CC_OWNER              => 'Test Eviterra',           #cardholder full name
@@ -83,6 +49,16 @@ class Payu
     :DELIVERY_COUNTRYCODE  => 'RU',                      #delivery 2 letter country code
   }
 
+  module Hashing
+    def hash_string(key, hash, order=hash.keys)
+      OpenSSL::HMAC.hexdigest('md5', key, serialize_array(hash.values_at(*order)))
+    end
+
+    def serialize_array(array)
+      array.flatten.compact.map { |val| "#{val.length}#{val}" }.join
+    end
+  end
+
   class PaymentResponse
 
     def initialize(parsed_response)
@@ -95,9 +71,6 @@ class Payu
 
     def success?
       @doc['STATUS'] == 'SUCCESS' && !threeds?
-    end
-
-    def err_code
     end
 
     def error?
@@ -114,52 +87,17 @@ class Payu
       @doc['RETURN_CODE'].to_s == "3DS_ENROLLED"
     end
 
-    def acs_url
-    end
-
-    def pa_req
-    end
-
-    def threeds_key
-    end
-
     def threeds_url
       @doc["URL_3DS"]
     end
 
-    # GetState
-    # 'PreAuthorized3DS', 'Voided', 'Rejected', какие еще?
-    def state
-    end
-
-    # "11/12/2010 9:24:07 AM"
-    def last_change
-    end
   end
 
-  class UnblockResponse
+  class ConfirmationResponse
     def initialize(piped_string)
       raise ArgumentError, "unexpected input: #{piped_string}" unless
         m = piped_string.match(/<EPAYMENT>(.*)<\/EPAYMENT>/)
-      @their_ref, @code, @message, @date_str, _ = m[1].split('|')
-    end
-
-    # FIXME хз, верно ли. нарыть доку
-    def success?
-      @code == '1'
-    end
-
-    def their_ref
-      @their_ref
-    end
-
-  end
-
-  class ChargeResponse
-    def initialize(piped_string)
-      raise ArgumentError, "unexpected input: #{piped_string}" unless
-        m = piped_string.match(/<EPAYMENT>(.*)<\/EPAYMENT>/)
-      @their_ref, @code, @message, @date_str, _ = m[1].split('|')
+      @their_ref, @code, @message, @date_str, @hash = m[1].split('|')
     end
 
     # FIXME хз, верно ли. нарыть доку
@@ -213,94 +151,119 @@ class Payu
 
   end
 
+  include Hashing
+
   def initialize(opts={})
     @merchant = opts[:merchant] || Conf.payu.merchant
     @host = opts[:host] || Conf.payu.host
     @seller_key = opts[:seller_key] || Conf.payu.seller_key
   end
 
-  def pay amount, card, opts={}
-  end
+  BLOCK_PARAMS_ORDER = [
+    :MERCHANT, :ORDER_REF, :ORDER_DATE, :ORDER_PNAME, :ORDER_PCODE, :ORDER_PINFO, :ORDER_PRICE, :ORDER_QTY,
+    :ORDER_VAT, :ORDER_VER, :ORDER_SHIPPING, :PRICES_CURRENCY, :DISCOUNT,
+    :DESTINATION_CITY, :DESTINATION_STATE, :DESTINATION_COUNTRY, :PAY_METHOD,
+    :CC_NUMBER, :EXP_MONTH, :EXP_YEAR, :CC_TYPE, :CC_CVV, :CC_OWNER, :ORDER_PGROUP,
+
+    :BACK_REF, :REFNO, :ALIAS, :CLIENT_IP,
+
+    :BILL_LNAME, :BILL_FNAME, :BILL_CISERIAL, :BILL_CINUMBER, :BILL_CIISSUER, :BILL_CNP, :BILL_COMPANY, :BILL_FISCALCODE,
+    :BILL_REGNUMBER, :BILL_BANK, :BILL_BANKACCOUNT, :BILL_EMAIL, :BILL_PHONE, :BILL_FAX, :BILL_ADDRESS, :BILL_ADDRESS2,
+    :BILL_ZIPCODE, :BILL_CITY, :BILL_STATE, :BILL_COUNTRYCODE,
+
+    :DELIVERY_LNAME, :DELIVERY_FNAME, :DELIVERY_COMPANY, :DELIVERY_PHONE, :DELIVERY_ADDRESS, :DELIVERY_ADDRESS2,
+    :DELIVERY_ZIPCODE, :DELIVERY_CITY, :DELIVERY_STATE, :DELIVERY_COUNTRYCODE, :DELIVERY_EMAIL
+  ]
 
   # блокировка средств на карте пользователя
   def block amount, card, opts={}
     post = POST_PARAMS.dup
-    add_our_ref(post, opts)
-    add_money(post, amount)
+    post.merge!(
+      ORDER_REF: opts[:our_ref],
+      ORDER_DATE: time_now_string,
+      BACK_REF: 'http://localhost:3000/'
+    )
+    alu_add_money(post, amount)
     add_merchant(post)
     add_creditcard(post, card)
 #    add_custom_fields(post, opts)
-    encrypt_postinfo(post, PAY_PARAMS_ORDER)
+    post.slice!(*BLOCK_PARAMS_ORDER)
+    post[:ORDER_HASH] = hash_string(@seller_key, post)
 
-    parsed_response = post_alu(post)
+    parsed_response = alu_post(post)
     PaymentResponse.new( parsed_response )
   end
 
   # внутренний метод для собственно HTTP вызова сервиса блокировки/платежа
   # облегчает тестирование
-  def post_alu(post)
+  def alu_post(post)
     logger.debug post
     response = HTTParty.post("https://#{@host}/order/alu.php", :body => post)
-    logger.debug response.inspect
+    logger.debug response.parsed_response.inspect
     response.parsed_response
   end
 
-  def block_3ds opts={}
-  end
+  CHARGE_PARAMS_ORDER = [
+    :MERCHANT, :ORDER_REF, :ORDER_AMOUNT, :ORDER_CURRENCY, :IDN_DATE
+  ]
 
   def charge amount, opts={}
-    post = POST_PARAMS.dup
-    add_their_ref(post, opts)
+    post = {
+      ORDER_REF: opts[:their_ref],
+      IDN_DATE: time_now_string
+    }
     add_merchant(post)
-    add_money(post, amount)
-    encrypt_postinfo(post, CHARGE_PARAMS_ORDER)
+    idn_add_money(post, amount)
+    post.slice!(*CHARGE_PARAMS_ORDER)
+    post[:ORDER_HASH] = hash_string(@seller_key, post)
 
     response = HTTParty.post("https://#{@host}/order/idn.php", :body => post)
-    logger.debug response.inspect
-    ChargeResponse.new( response.parsed_response )
+    logger.debug response.parsed_response.inspect
+    ConfirmationResponse.new( response.parsed_response )
   end
+
+  UNBLOCK_PARAMS_ORDER = [
+    :MERCHANT, :ORDER_REF, :ORDER_AMOUNT, :ORDER_CURRENCY, :IRN_DATE
+  ]
 
   # разблокировка средств.
   # частичная блокировка не принимается
   def unblock amount, opts={}
-    post = POST_PARAMS.dup
-    add_their_ref(post, opts)
+    post = {}
+    post[:ORDER_REF] = opts[:their_ref]
     add_merchant(post)
-    add_money(post, amount)
-    encrypt_postinfo(post, REFUND_PARAMS_ORDER)
+    idn_add_money(post, amount)
+
+    post[:IRN_DATE] = time_now_string
+    post.slice!(*UNBLOCK_PARAMS_ORDER)
+    post[:ORDER_HASH] = hash_string(@seller_key, post)
 
     response = HTTParty.post("https://#{@host}/order/irn.php", :body => post)
-    logger.debug response.inspect
-    UnblockResponse.new( response.parsed_response )
+    logger.debug response.parsed_response.inspect
+    ConfirmationResponse.new( response.parsed_response )
   end
 
   # возврат средств (полный или частичный) на карту пользователя
+  # в PayU делается той же командой
   def refund amount, opts={}
     unblock amount, opts
   end
 
+  STATE_PARAMS_ORDER = [
+    :MERCHANT, :REFNOEXT
+  ]
+
   # уточнение текущего состояния платежа
-  # We have an API to get order status:
-  # https://secure.payu.ru/order/ios.php
-  #
-  # You should send through GET merchant code, external ref no, and hash:
-  # MERCHANT => Eviterra
-  # REFNOEXT => external ref no, for your order was "test_121004_192121"
-  # HASH:
-  # $str = strlen($MERCHANT) . $MERCHANT;
-  # $str .= strlen($REFNOEXT) . $REFNOEXT;
-  # $hash = hmac($EVITERRA_SECRET_KEY, $str);
-
   def status opts={}
-    post = POST_PARAMS.dup
-    add_our_ref(post, opts)
-    encrypt_postinfo(post, STATE_PARAMS_ORDER)
+    post = {}
+    post[:REFNOEXT] = opts[:our_ref]
+    add_merchant(post)
 
-    post[:HASH] = post[:ORDER_HASH]
-    post.delete(:ORDER_HASH)
+    post.slice!(*STATE_PARAMS_ORDER)
+    post[:HASH] = hash_string(@seller_key, post)
 
     response = HTTParty.get("https://#{@host}/order/ios.php", :query => post)
-    logger.debug response.inspect
+    logger.debug response.parsed_response.inspect
     StateResponse.new( response.parsed_response )
   end
 
@@ -309,16 +272,6 @@ class Payu
     unless (required_keys & opts.keys) == required_keys
       raise ArgumentError, "#{(required_keys - opts.keys).join(', ')} opts are missing"
     end
-  end
-
-  def add_our_ref(post, options={})
-    post[:ORDER_REF] = options[:our_ref]
-    post[:REFNOEXT] = options[:our_ref]
-    post[:BACK_REF] = 'http://localhost:3000/'
-  end
-
-  def add_their_ref(post, options={})
-    post[:ORDER_REF] = options[:their_ref]
   end
 
   def add_creditcard(post, creditcard)
@@ -342,26 +295,18 @@ class Payu
     post[:MERCHANT] = @merchant
   end
 
-  def add_3ds_info(post, opts)
-    post[:PaRes] = opts[:pa_res]
-  end
-
-  def add_money(post, money)
+  def alu_add_money(post, money)
     post[:ORDER_PRICE] = [money.to_s]
+    post[:PRICES_CURRENCY] = 'RUB'
+  end
+
+  def idn_add_money(post, money)
     post[:ORDER_AMOUNT] = money.to_s
-    # post[:PRICES_CURRENCY] = ...
+    post[:ORDER_CURRENCY] = 'RUB'
   end
 
-  def update_date(post)
-    post[:ORDER_DATE] = Time.now.utc.strftime("%Y-%m-%d %H:%M:%S")
-    post[:IRN_DATE] = Time.now.utc.strftime("%Y-%m-%d %H:%M:%S")
-    post[:IDN_DATE] = Time.now.utc.strftime("%Y-%m-%d %H:%M:%S")
-  end
-
-  def encrypt_postinfo(post, params_order)
-    update_date(post)
-    post.slice!(*params_order)
-    post[:ORDER_HASH] = OpenSSL::HMAC.hexdigest('md5', @seller_key, serialize_hash(post, params_order))
+  def time_now_string
+    Time.now.utc.strftime("%Y-%m-%d %H:%M:%S")
   end
 
   def add_custom_fields(post, opts)
@@ -385,58 +330,11 @@ class Payu
     post[:CustomFields] = res.delete_if {|k, v| !v }.collect {|k, v| "#{k}=#{v}"}.join(';')
   end
 
-  def serialize_hash(hash, keys)
-    hash.values_at(*keys).compact.map do |value|
-      if value.is_a? Array
-        serialize_array value
-      else
-        value.length.to_s + value
-      end
-    end.join
-  end
-
-  def serialize_array(array)
-    array.map do |val|
-      if val.is_a? Array
-        serialize_array(val)
-      else
-        val.length.to_s + val.to_s
-      end
-    end.join
-  end
-
   # for testing purposes
   def self.test_card(opts = {})
     CreditCard.new(
       {:number => '4111111111111111', :verification_value => '123', :year => 2013, :month => 12, :name => 'card one'}.merge(opts)
     ).tap(&:valid?)
   end
-
-  ERRORS_EXPLAINED = {
-    'NONE'                      => 'Операция выполнена без ошибок',
-    'ACCESS_DENIED'             => 'Доступ с текущего IP или по указанным параметрам запрещен',
-    'AMOUNT_ERROR'              => 'Неверно указана сумма транзакции',
-    'AMOUNT_EXCEED_BALANCE'     => 'Сумма транзакции превышает доступный остаток средств на карте',
-    'API_NOT_ALLOWED'           => 'Данный API не разрешен к использованию',
-    'DUPLICATE_ORDER_ID'        => 'Номер заказа уже использовался ранее',
-    'ISSUER_CARD_FAIL'          => 'Банк эмитент запретил интернет транзакции по карте',
-    'ISSUER_FAIL'               => 'Владелец карты пытается выполнить транзакцию, которая для него не разрешена эмитентом, либо внутренняя ошибка эмитента',
-    'ISSUER_LIMIT_FAIL'         => 'Предпринята попытка, превышающая ограничения эмитента на сумму или количество операций в определенный промежуток времени',
-    'FRAUD_ERROR'               => 'Транзакция отклонена фрод-мониторингом',
-    'ILLEGAL_ORDER_STATE'       => 'Попытка выполнения недопустимой операции для текущего состояния платежа',
-    'MERCHANT_RESTRICTION'      => 'Превышены ограничения Продавца',
-    'ORDER_NOT_FOUND'           => 'Платеж с указанным OrderId не найден',
-    'ORDER_TIME_OUT'            => 'Время платежа истекло',
-    'PROCESSING_ERROR'          => 'Отказ процессинга в выполнении операции',
-    'REAUTH_NOT_ALOWED'         => 'Заблокированная сумма не может быть изменена',
-    'REFUND_NOT_ALOWED'         => 'Возврат не может быть выполнен',
-    'REFUSAL_BY_GATE'           => 'Отказ шлюза в выполнении операции',
-    'THREE_DS_FAIL'             => 'Невозможно выполнить 3DS транзакцию',
-    'WRONG_CARD_INFO'           => 'Введены неправильные параметры карты',
-    'WRONG_CARD_PAN'            => 'Неверный номер карты',
-    'WRONG_CARDHOLDER_NAME'     => 'Недопустимое имя держателя карты',
-    'WRONG_PARAMS'              => 'Неверный набор или формат параметров',
-    'WRONG_PAY_INFO'            => 'Некорректный параметр PayInfo (неправильно сформирован или нарушена криптограмма)'
-  }
 
 end
