@@ -172,7 +172,7 @@ class BookingController < ApplicationController
       return
     end
 
-    payture_response = @order_form.block_money(request.remote_ip)
+    payture_response = @order_form.order.block_money(@order_form.card, @order_form, request.remote_ip)
 
     if payture_response.success?
       logger.info "Pay: payment and booking successful"
@@ -197,9 +197,9 @@ class BookingController < ApplicationController
 
     else # payture_response failed
       strategy.cancel
-      msg = @order_form.card.errors[:number]
       StatCounters.inc %W[pay.errors.payment]
-      logger.info "Pay: payment failed with error message #{msg}"
+      # FIXME ну и почему не сработало?
+      logger.info "Pay: payment failed"
       render :partial => 'failed_payment'
     end
   ensure
