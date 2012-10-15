@@ -4,6 +4,7 @@ require 'time'
 require 'date'
 require 'billing/expiry_date'
 require 'billing/credit_card_methods'
+require 'billing/credit_card_constructors'
 
 # == Description
 # This credit card object can be used as a stand alone object. It acts just like an ActiveRecord object
@@ -39,6 +40,7 @@ class CreditCard
   include Billing::CreditCardMethods
   include ActiveModel::Validations
   include KeyValueInit
+  extend Billing::CreditCardConstructors
 
   # FIXME before_validate по идее должен бы вызываться в недрах ActiveModel
   # FIXME заменить на ActiveModel колбэки или что там

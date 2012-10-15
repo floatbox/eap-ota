@@ -9,4 +9,15 @@ describe CreditCard do
     end
   end
 
+  describe ".example" do
+    subject { CreditCard.example("5486732058864471        123     12/15 no name") }
+
+    its(:number) { should == "5486732058864471" }
+    its(:verification_value) { should == "123" }
+    its(:month) { should == 12 }
+    its(:year) { should == 2015 }
+    its(:name) { should == "no name" }
+
+  end
+
 end
