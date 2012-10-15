@@ -38,7 +38,7 @@ module Strategy::Amadeus::PreliminaryBooking
   end
 
   def find_new_classes(amadeus)
-    return if Conf.amadaus.forbid_class_changing
+    return if Conf.amadeus.forbid_class_changing
     h = {'W' => 'Y', 'M' => 'Y'}
     cabins = @rec.cabins.map{|cabin| h[cabin] || cabin}
     return if cabins == @rec.booking_classes
