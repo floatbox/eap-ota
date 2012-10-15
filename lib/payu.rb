@@ -271,30 +271,36 @@ class Payu
   def add_custom_fields(post, opts)
     post[:ORDER_PNAME] = ['1 x Ticket']
     post[:ORDER_PCODE] = ['TCK1']
-    post[:ORDER_PINFO] = ["{'departuredate':20120914, 'locationnumber':2, 'locationcode1':'BUH', 'locationcode2':'IBZ','passengername':'Fname Lname','reservationcode':'abcdef123456'}"]
+    post[:ORDER_PINFO] = ["{
+      'departuredate':20120914,
+      'locationnumber':2,
+      'locationcode1':'BUH',
+      'locationcode2':'IBZ',
+      'passengername':'Fname Lname',
+      'reservationcode':'abcdef123456'}"]
     post[:ORDER_QTY] = ['1']
     post[:ORDER_VAT] = ['0']
     post[:PAY_METHOD] = 'CCVISAMC'
 
     post.merge!(
-    :BILL_LNAME            => 'Eviterra',                #billing customer last name
-    :BILL_FNAME            => 'Test',                    #billing customer first name
+    :BILL_LNAME            => custom_fields.last_name,
+    :BILL_FNAME            => custom_fields.first_name,
     :BILL_ADDRESS          => 'Address Eviterra',        #billing customer address
     :BILL_CITY             => 'City',                    #billing customer city
     :BILL_STATE            => 'State',                   #billing customer State
     :BILL_ZIPCODE          => '123',                     #billing customer Zip
-    :BILL_EMAIL            => 'testpayu@eviterra.com',   #billing customer email
-    :BILL_PHONE            => '1234567890',              #billing customer phone
+    :BILL_EMAIL            => custom_fields.email,
+    :BILL_PHONE            => custom_fields.phone,
     :BILL_COUNTRYCODE      => 'RU',                      #billing customer 2 letter country code
-    :CLIENT_IP             => '127.0.0.1',               #client IP used for antifraud purposes
+    :CLIENT_IP             => custom_fields.ip,
 
-    :DELIVERY_LNAME        => 'Eviterra',                #delivery last name
-    :DELIVERY_FNAME        => 'Test',                    #delivery first name 
+    :DELIVERY_LNAME        => custom_fields.last_name,
+    :DELIVERY_FNAME        => custom_fields.first_name,
     :DELIVERY_ADDRESS      => 'Address Eviterra',        #delivery address
     :DELIVERY_CITY         => 'City',                    #delivery city
     :DELIVERY_STATE        => 'State',                   #delivery state
     :DELIVERY_ZIPCODE      => '123',                     #delivery Zip
-    :DELIVERY_PHONE        => '1234567890',              #delivery phone
+    :DELIVERY_PHONE        => custom_fields.phone,
     :DELIVERY_COUNTRYCODE  => 'RU',                      #delivery 2 letter country code
     )
   end
