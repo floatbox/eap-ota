@@ -263,6 +263,10 @@ describe Payu do
       it {should be_signed}
       its(:their_ref) {should == "6372861"}
 
+      its(:threeds_url) { should == "https://sandbox8ru.epayment.ro/order/alu_return_3ds.php?request_id=2Xrl85eqobmBr3a%2FcbnGYQ%3D%3D" }
+      its(:threeds_params) { should == {} }
+
+
     end
 
     # принимающий урл должен принимать POST, и надо выключить на нем CSRF

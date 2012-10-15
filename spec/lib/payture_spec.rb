@@ -88,9 +88,17 @@ describe Payture do
       its(:amount) { should == 17164.87 }
       its(:our_ref) { should == "o48582" }
 
-      its(:acs_url) { should == "https://acs.sbrf.ru/acs/pa?id=324102223557086" }
+      its(:threeds_url) { should == "https://acs.sbrf.ru/acs/pa?id=324102223557086" }
       its(:pa_req) { should == "eJxtUlFzgj...+ULV3DGTA==" }
       its(:threeds_key) { should == "-877119-4120-110-10691094093124-38-52-72-99_p3" }
+      its(:threeds_params) {
+        should == {
+          'PaReq' => "eJxtUlFzgj...+ULV3DGTA==",
+          'MD' => "-877119-4120-110-10691094093124-38-52-72-99_p3",
+          'TermUrl' => "https://eviterra.com/confirm_3ds"
+        }
+      }
+
 
     end
   end

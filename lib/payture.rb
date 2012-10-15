@@ -46,8 +46,21 @@ class Payture
       @doc["Success"].to_s.downcase == "3ds"
     end
 
-    def acs_url
+    def threeds_url
       @doc["ACSUrl"]
+    end
+
+    # FIXME найти способ прокидывать сюда конфирмационный урл
+    def threeds_return_url
+      'https://eviterra.com/confirm_3ds'
+    end
+
+    def threeds_params
+      {
+        'PaReq' => pa_req,
+        'MD' => threeds_key,
+        'TermUrl' => threeds_return_url
+      }
     end
 
     def pa_req

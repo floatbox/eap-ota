@@ -54,6 +54,11 @@ class Payu
       @doc["URL_3DS"]
     end
 
+    # не требуются
+    def threeds_params
+      {}
+    end
+
     def hash
       @doc["HASH"]
     end

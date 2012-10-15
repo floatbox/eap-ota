@@ -36,7 +36,7 @@ class PaymentsController < ApplicationController
         render :partial => 'success'
       elsif payture_response.threeds?
         logger.info "Pay: payment system requested 3D-Secure authorization"
-        render :partial => 'booking/threeds', :locals => {:payture_response => payture_response}
+        render :partial => 'booking/threeds', :locals => {:payment => payture_response}
       else
         logger.info "Pay: payment failed"
         render :partial => 'fail'

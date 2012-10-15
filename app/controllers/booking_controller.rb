@@ -193,7 +193,7 @@ class BookingController < ApplicationController
     elsif payture_response.threeds?
       StatCounters.inc %W[pay.3ds.requests]
       logger.info "Pay: payment system requested 3D-Secure authorization"
-      render :partial => 'threeds', :locals => {:payture_response => payture_response}
+      render :partial => 'threeds', :locals => {:payment => payture_response}
 
     else # payture_response failed
       strategy.cancel
