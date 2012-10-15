@@ -4,6 +4,8 @@ class Ticket < ActiveRecord::Base
   include CopyAttrs
   has_paper_trail
 
+  MONEY_VALIDATION_REGEXP = / \d+ (?:.\d{2})? \s* (?:USD|EUR|RUB) $/x
+
   # FIXME вынести в ActiveRecord::Base
   def in_identity_map?
     id && self.equal?( ActiveRecord::IdentityMap.get(self.class, id) )
@@ -57,6 +59,8 @@ class Ticket < ActiveRecord::Base
   scope :sold, where(:status => ['ticketed', 'exchanged', 'returned', 'processed'])
 
   validates_presence_of :price_fare, :price_tax, :price_our_markup, :price_penalty, :price_discount, :price_consolidator, :if => lambda {kind = 'refund'}
+  validates_format_of :original_price_tax_as_string, :with => MONEY_VALIDATION_REGEXP, :if => lambda{ @original_price_tax_as_string.present? }
+  validates_format_of :original_price_fare_as_string, :with => MONEY_VALIDATION_REGEXP, :if => lambda{ @original_price_fare_as_string.present? }
   after_save :update_parent_status, :if => :parent
   after_destroy :update_parent_status, :if => :parent
   validates_presence_of :comment, :if => lambda {kind == "refund"}
@@ -337,6 +341,28 @@ class Ticket < ActiveRecord::Base
 
   def customized_original_tax
     original_price_tax ? original_price_tax.with_currency : 'Unknown'
+  end
+
+  def original_price_fare_as_string
+    @original_price_fare_as_string || (original_price_fare && original_price_fare.with_currency)
+  end
+
+  def original_price_tax_as_string
+    @original_price_tax_as_string || (original_price_tax && original_price_tax.with_currency)
+  end
+
+  def original_price_fare_as_string= value
+    @original_price_fare_as_string = value
+    if @original_price_fare_as_string.match(MONEY_VALIDATION_REGEXP)
+      self.original_price_fare = @original_price_fare_as_string.to_money
+    end
+  end
+
+  def original_price_tax_as_string= value
+    @original_price_tax_as_string = value
+    if @original_price_tax_as_string.match(MONEY_VALIDATION_REGEXP)
+      self.original_price_tax = @original_price_tax_as_string.to_money
+    end
   end
 
   def itinerary_receipt

@@ -311,4 +311,17 @@ describe Ticket do
     end
 
   end
+
+  context "should validate money fields" do
+   specify { ticket = Ticket.new(:original_price_fare_as_string => "10 USD")
+     ticket.original_price_fare.should == "10 USD".to_money }
+   specify { ticket = Ticket.new(:original_price_fare_as_string => "10 usd")
+     ticket.should have_errors_on(:original_price_fare_as_string)
+     ticket.original_price_fare.should be_nil }
+   specify { ticket = Ticket.new(:original_price_tax_as_string => "10 usd")
+     ticket.original_price_tax_as_string.should == "10 usd"
+     ticket.should have_errors_on(:original_price_tax_as_string)
+     ticket.original_price_fare.should be_nil }
+   end
+
 end
