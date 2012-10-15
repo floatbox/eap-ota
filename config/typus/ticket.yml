@@ -42,8 +42,8 @@ Ticket:
       - itinerary_receipt
       - parent
     new: 
-      - original_price_fare
-      - original_price_tax
+      - original_price_fare_as_string
+      - original_price_tax_as_string
       - price_penalty
       - price_discount
       - price_our_markup
@@ -110,8 +110,8 @@ Ticket:
       - last_name
       - first_name
       - route
-      - original_price_fare
-      - original_price_tax
+      - original_price_fare_as_string
+      - original_price_tax_as_string
       - price_penalty
       - price_extra_penalty
       - price_consolidator
