@@ -43,4 +43,55 @@ describe Payture do
     pending "should sanitize [;= ] from custom fields values"
   end
 
+
+  describe Payture::Response do
+
+    subject do
+      Payture::Response.new(doc)
+    end
+
+    let :doc do
+      parsed_response.values.first
+    end
+
+    describe "successful" do
+      let :parsed_response do
+        {
+          "Block" => {
+            "OrderId"=>"3codesnik46001", "Success"=>"True", "Amount"=>"537210"
+          }
+        }
+      end
+
+      it { should be_success }
+      it { should_not be_threeds }
+      it { should_not be_error }
+      its(:our_ref) { should == "3codesnik46001" }
+      its(:amount) { should == 5372.10 }
+    end
+
+    describe "3ds" do
+      let :parsed_response do
+        {
+          "Block" => {
+            "OrderId"=>"o48582", "Success"=>"3DS", "Amount"=>"1716487",
+            "ACSUrl"=>"https://acs.sbrf.ru/acs/pa?id=324102223557086",
+            "PaReq"=>"eJxtUlFzgj...+ULV3DGTA==",
+            "ThreeDSKey"=>"-877119-4120-110-10691094093124-38-52-72-99_p3"
+          }
+        }
+      end
+
+      it { should_not be_success }
+      it { should be_threeds }
+      it { should_not be_error }
+      its(:amount) { should == 17164.87 }
+      its(:our_ref) { should == "o48582" }
+
+      its(:acs_url) { should == "https://acs.sbrf.ru/acs/pa?id=324102223557086" }
+      its(:pa_req) { should == "eJxtUlFzgj...+ULV3DGTA==" }
+      its(:threeds_key) { should == "-877119-4120-110-10691094093124-38-52-72-99_p3" }
+
+    end
+  end
 end
