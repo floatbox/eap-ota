@@ -80,59 +80,63 @@ discount "7.8%"
 disabled "пришли субагентские по АЦ, выключили даунтаун"
 commission "11%/9%"
 
-# example 'AERDME/W DMEAER/W'
-# example 'AERDME/Y DMEAER/M'
-# example 'AERDME/Y DMEAER/M'
-# example 'AERDME/W DMEAER/I'
-# example 'AERDME/N DMEAER/T'
-# example 'AERDME/W DMEAER/W'
+example 'AERDME/W DMEAER/W'
+example 'AERDME/Y DMEAER/M'
+example 'AERDME/Y DMEAER/M'
+example 'AERDME/W DMEAER/I'
+example 'AERDME/N DMEAER/T'
+example 'AERDME/W DMEAER/W'
 agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "FPRJCADSLVXTNIGWUYHMQBKOE"
 ticketing_method "downtown"
 discount "8.1%"
-disabled "пришли субагентские по АЦ, выключили даунтаун"
 commission "12%/10%"
 
-example 'cdgsvo/r svocdg/f'
+# example 'cdgsvo/r svocdg/f'
 agent "9% от тарифа на рейсы Перевозчика по всем тарифам классов: Империал, Премиальный и Бизнес класс. FPRJCADSM"
 subagent "7 % от тарифа на рейсы Перевозчика по всем тарифам классов F, P, R, J, C, A, D, S, M"
 subclasses "FPRJCADSM"
 discount "5%"
+disabled "На DTT выгодней"
 commission "9%/7%"
 
-example 'cdgsvo svocdg/y'
+# example 'cdgsvo svocdg/y'
 agent "7% от тарифа на рейсы Перевозчика по всем тарифам Эконом классов;"
 subagent "5% от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, Q, B, K, O;"
 subclasses "YHQBKO"
 discount "3%"
+disabled "На DTT выгодней"
 commission "7%/5%"
 
-example 'cdgsvo/i svocdg/x'
+# example 'cdgsvo/i svocdg/x'
 agent "2% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
 subagent "1% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
 subclasses "LVXTNIGWU"
 discount "0%"
+disabled "На DTT выгодней"
 commission "2%/1%"
 
-example 'svoiws/UN7061'
-example 'svoaap/UN7061 aapsvo/UN7061'
-example 'dmesin/UN7062 sindme/UN7062'
+# example 'svoiws/UN7061'
+# example 'svoaap/UN7061 aapsvo/UN7061'
+# example 'dmesin/UN7062 sindme/UN7062'
 strt_date "11.09.2011"
 agent "9% до особых указаний от опубл. тарифов Эконом класса на собств. рейсы UN7061/7062 между Москвой и Хьюстоном/Сингапуром (OW, RT) и от опубл. сквозных тарифов для трансферных перевозок Эконом класса  между пунктами полетов ОАО «АК «ТРАНСАЭРО»  на территории России и Хьюстоном/Сингапуром (OW, RT)."
 subagent "1%" #CHECKME
 important!
 check { includes_only(city_iatas, "MOW SIN HOU") }
+disabled "На DTT выгодней"
 commission "9%/1%"
 
-example 'svomad madsvo'
-example 'dmemad'
+# example 'svomad madsvo'
+# example 'dmemad'
 strt_date "11.09.2011"
 agent "9% до особых указаний от всех опубл. тарифов премиального Эконом и туристического Эконом классов на собств. регулярные рейсы между Москвой и Мадридом (OW,RT)  и на сквозные перевозки премиального Эконом и туристического Эконом классов между пунктами полетов ОАО «АК  «ТРАНСАЭРО» на территориях России, Украины,
 Казахстана, Узбекистана  и Мадридом (OW,RT)."
 subagent "1%"
 important!
 check { includes_only(city_iatas, "MOW MAD") }
+disabled "На DTT выгодней"
 commission "9%/1%"
 
 example 'TLVDME/T DMEJFK/T JFKDME/T DMETLV/T'

@@ -9,46 +9,6 @@ class Payu
     Rails.logger
   end
 
-  POST_PARAMS = {
-    :MERCHANT              => 'EVITERRA',                #your merchant code in PAYU system 
-    :ORDER_REF             => 'EXT_' + Random.rand(1000).to_s,   #your internal reference number
-    :ORDER_DATE            => Time.now.utc.strftime("%Y-%m-%d %H:%M:%S"),
-    :ORDER_PNAME           => ['1 x Ticket'],            #product name
-    :ORDER_PCODE           => ['TCK1'],                  #product code
-    :ORDER_PINFO           => ["{'departuredate':20120914, 'locationnumber':2, 'locationcode1':'BUH', 'locationcode2':'IBZ','passengername':'Fname Lname','reservationcode':'abcdef123456'}"],
-    :ORDER_PRICE           => ['1'],                     #order price
-    :ORDER_VAT             => ['0'],                     #order vat
-    :ORDER_QTY             => ['1'],                     #products quantity
-    :PRICES_CURRENCY       => 'RUB',                     #currency
-    :PAY_METHOD            => 'CCVISAMC',                #payment method used. You should always leave it CCVISAMC
-    :CC_NUMBER             => '4111111111111111',        #cardholder number
-    :CC_OWNER              => 'Test Eviterra',           #cardholder full name
-    :CC_TYPE               => 'VISA',                    #card type
-    :CC_CVV                => '123',                     #card cvc/cvv
-    :EXP_MONTH             => '11',                      #card expiry month
-    :EXP_YEAR              => '2014',                    #card expiry yeaer
-
-    :BILL_LNAME            => 'Eviterra',                #billing customer last name
-    :BILL_FNAME            => 'Test',                    #billing customer first name
-    :BILL_ADDRESS          => 'Address Eviterra',        #billing customer address
-    :BILL_CITY             => 'City',                    #billing customer city
-    :BILL_STATE            => 'State',                   #billing customer State
-    :BILL_ZIPCODE          => '123',                     #billing customer Zip
-    :BILL_EMAIL            => 'testpayu@eviterra.com',   #billing customer email
-    :BILL_PHONE            => '1234567890',              #billing customer phone
-    :BILL_COUNTRYCODE      => 'RU',                      #billing customer 2 letter country code
-    :CLIENT_IP             => '127.0.0.1',               #client IP used for antifraud purposes
-
-    :DELIVERY_LNAME        => 'Eviterra',                #delivery last name
-    :DELIVERY_FNAME        => 'Test',                    #delivery first name 
-    :DELIVERY_ADDRESS      => 'Address Eviterra',        #delivery address
-    :DELIVERY_CITY         => 'City',                    #delivery city
-    :DELIVERY_STATE        => 'State',                   #delivery state
-    :DELIVERY_ZIPCODE      => '123',                     #delivery Zip
-    :DELIVERY_PHONE        => '1234567890',              #delivery phone
-    :DELIVERY_COUNTRYCODE  => 'RU',                      #delivery 2 letter country code
-  }
-
   module Hashing
     def hash_string(key, hash, order=hash.keys)
       OpenSSL::HMAC.hexdigest('md5', key, serialize_array(hash.values_at(*order)))
@@ -177,16 +137,15 @@ class Payu
 
   # блокировка средств на карте пользователя
   def block amount, card, opts={}
-    post = POST_PARAMS.dup
-    post.merge!(
+    post = {
       ORDER_REF: opts[:our_ref],
       ORDER_DATE: time_now_string,
       BACK_REF: 'http://localhost:3000/'
-    )
+    }
     alu_add_money(post, amount)
     add_merchant(post)
     add_creditcard(post, card)
-#    add_custom_fields(post, opts)
+    add_custom_fields(post, opts)
     post.slice!(*BLOCK_PARAMS_ORDER)
     post[:ORDER_HASH] = hash_string(@seller_key, post)
 
@@ -310,24 +269,40 @@ class Payu
   end
 
   def add_custom_fields(post, opts)
-    custom_fields = opts[:custom_fields] or return
-    res = {
-      :IP => custom_fields.ip,
-      :FirstName => custom_fields.first_name,
-      :LastName => custom_fields.last_name,
-      :Phone => custom_fields.phone,
-      :Email => custom_fields.email,
-      :Date => custom_fields.date.try(:strftime, '%Y.%m.%d'),
-      :Segments => custom_fields.segments,
-      :Description => custom_fields.description
-    }
-    if custom_fields.points
-      res[:From] = custom_fields.points.first
-      1.upto(custom_fields.segments) do |i|
-        res[:"To#{i}"] = custom_fields.points[i]
-      end
-    end
-    post[:CustomFields] = res.delete_if {|k, v| !v }.collect {|k, v| "#{k}=#{v}"}.join(';')
+    post[:ORDER_PNAME] = ['1 x Ticket']
+    post[:ORDER_PCODE] = ['TCK1']
+    post[:ORDER_PINFO] = ["{
+      'departuredate':20120914,
+      'locationnumber':2,
+      'locationcode1':'BUH',
+      'locationcode2':'IBZ',
+      'passengername':'Fname Lname',
+      'reservationcode':'abcdef123456'}"]
+    post[:ORDER_QTY] = ['1']
+    post[:ORDER_VAT] = ['0']
+    post[:PAY_METHOD] = 'CCVISAMC'
+
+    post.merge!(
+    :BILL_LNAME            => custom_fields.last_name,
+    :BILL_FNAME            => custom_fields.first_name,
+    :BILL_ADDRESS          => 'Address Eviterra',        #billing customer address
+    :BILL_CITY             => 'City',                    #billing customer city
+    :BILL_STATE            => 'State',                   #billing customer State
+    :BILL_ZIPCODE          => '123',                     #billing customer Zip
+    :BILL_EMAIL            => custom_fields.email,
+    :BILL_PHONE            => custom_fields.phone,
+    :BILL_COUNTRYCODE      => 'RU',                      #billing customer 2 letter country code
+    :CLIENT_IP             => custom_fields.ip,
+
+    :DELIVERY_LNAME        => custom_fields.last_name,
+    :DELIVERY_FNAME        => custom_fields.first_name,
+    :DELIVERY_ADDRESS      => 'Address Eviterra',        #delivery address
+    :DELIVERY_CITY         => 'City',                    #delivery city
+    :DELIVERY_STATE        => 'State',                   #delivery state
+    :DELIVERY_ZIPCODE      => '123',                     #delivery Zip
+    :DELIVERY_PHONE        => custom_fields.phone,
+    :DELIVERY_COUNTRYCODE  => 'RU',                      #delivery 2 letter country code
+    )
   end
 
   # for testing purposes

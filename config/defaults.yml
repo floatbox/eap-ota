@@ -37,6 +37,7 @@ amadeus:
   session_pool_size: 10
   no_ltd_restrictions: no
   ignored_carriers: []
+  forbid_class_changing: no
 payment:
   # FIXME убить в локальных конфигах
   use_discount: no
