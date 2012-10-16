@@ -21,7 +21,10 @@ class Payu
 
   class PaymentResponse
 
-    def initialize(parsed_response)
+    include Hashing
+
+    def initialize(parsed_response, seller_key=nil)
+      @seller_key = seller_key
       if parsed_response.has_key? 'EPAYMENT'
         @doc = parsed_response['EPAYMENT']
       else
@@ -50,6 +53,26 @@ class Payu
     def threeds_url
       @doc["URL_3DS"]
     end
+
+    def hash
+      @doc["HASH"]
+    end
+
+   def signed?
+     hash == computed_hash
+   end
+
+   def computed_hash
+     raise unless @seller_key
+     hash_string(
+       @seller_key, @doc,
+       %W[ REFNO ALIAS STATUS RETURN_CODE RETURN_MESSAGE DATE ]
+     )
+   end
+
+   def params
+     @doc.values_at(*%W[ REFNO ALIAS STATUS RETURN_CODE RETURN_MESSAGE DATE ]).join('/')
+   end
 
   end
 
@@ -150,7 +173,7 @@ class Payu
     post[:ORDER_HASH] = hash_string(@seller_key, post)
 
     parsed_response = alu_post(post)
-    PaymentResponse.new( parsed_response )
+    PaymentResponse.new( parsed_response, @seller_key )
   end
 
   # внутренний метод для собственно HTTP вызова сервиса блокировки/платежа
