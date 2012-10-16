@@ -127,6 +127,7 @@ ru:
         itinerary_receipt: "Ссылка на квитанцию"
         original_price_fare_as_string: "Тариф в валюте офиса выписки"
         original_price_tax_as_string: "Таксы в валюте офиса выписки"
+        rate: "Курс исходной валюты на момент выписки"
 
         <<: *PRICING_ATTRIBUTES
       payment:

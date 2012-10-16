@@ -33,6 +33,7 @@ Ticket:
       - price_tax
       - customized_original_fare
       - customized_original_tax
+      - rate
       - office_id
       - validator
       - income_suppliers
@@ -41,7 +42,7 @@ Ticket:
       - ticketed_date
       - itinerary_receipt
       - parent
-    new: 
+    new:
       - original_price_fare_as_string
       - original_price_tax_as_string
       - price_penalty
@@ -78,6 +79,7 @@ Ticket:
       - price_tax
       - customized_original_fare
       - customized_original_tax
+      - rate
       - price_penalty
       - price_extra_penalty
       - commission_consolidator

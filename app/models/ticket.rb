@@ -378,6 +378,10 @@ class Ticket < ActiveRecord::Base
     e.message
   end
 
+  def rate
+    CBR.exchange_on(ticketed_date).get_rate(original_fare_currency, "RUB").to_f if original_fare_currency && ticketed_date
+  end
+
   composed_of :original_price_fare,
   :class_name => "Money",
   :mapping => [%w(original_fare_cents cents), %w(original_fare_currency currency_as_string)],
