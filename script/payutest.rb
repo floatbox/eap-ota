@@ -28,6 +28,7 @@ card = Payu.test_card
 
 ### BLOCK
   response = payu.block 10, card, :our_ref => our_ref
+  puts response.signed?
 
 ### STATE
   status_response = payu.status :our_ref => our_ref

@@ -2,6 +2,9 @@ require 'spec_helper'
 
 describe Payu do
 
+  # TODO изменить ключ для продакшна
+  let (:seller_key) { 'w7I2R8~V7=dm5H7[r1k5' }
+
   describe "#block" do
     before do
       Time.stub(:now => DateTime.parse("2012-10-08 15:12:18 +0400").to_time )
@@ -70,7 +73,7 @@ describe Payu do
       parsed_response = stub(:parsed_response)
 
       subject.should_receive(:alu_post).with( expected_request ).and_return(parsed_response)
-      Payu::PaymentResponse.should_receive(:new).with(parsed_response)
+      Payu::PaymentResponse.should_receive(:new).with(parsed_response, seller_key)
 
       subject.block amount, card, :our_ref => our_ref
     end
@@ -152,7 +155,7 @@ describe Payu do
   describe Payu::PaymentResponse do
 
     subject do
-      Payu::PaymentResponse.new(parsed_response)
+      Payu::PaymentResponse.new(parsed_response, seller_key)
     end
 
     let :parsed_response do
@@ -178,6 +181,8 @@ describe Payu do
       it {should be_success}
       it {should_not be_error}
       it {should_not be_threeds}
+      # success!
+      it {should be_signed}
       its(:their_ref) {should == "6471185"}
 
     end
@@ -201,6 +206,9 @@ describe Payu do
       it {should_not be_success}
       it {should be_error}
       it {should_not be_threeds}
+      pending {should be_signed}
+      # its(:params) {should == ''}
+      specify { pending; subject.hash.should  == subject.computed_hash}
       its(:their_ref) {should == "6385847"}
 
     end
@@ -224,6 +232,9 @@ describe Payu do
       it {should_not be_success}
       it {should be_error}
       it {should_not be_threeds}
+      pending {should be_signed}
+      #its(:params) {should == ''}
+      specify { pending; subject.hash.should  == subject.computed_hash}
       its(:their_ref) {should == "6132371"}
 
     end
@@ -248,6 +259,8 @@ describe Payu do
       it {should_not be_success}
       it {should_not be_error}
       it {should be_threeds}
+      # success!
+      it {should be_signed}
       its(:their_ref) {should == "6372861"}
 
     end
@@ -256,9 +269,8 @@ describe Payu do
     describe "success from 3ds authorization via POST params" do
 
       subject do
-        Payu::PaymentResponse.new(params)
+        Payu::PaymentResponse.new(params, seller_key)
       end
-
       let (:params) do
         HashWithIndifferentAccess.new(
           "REFNO" => "6626740",
@@ -274,6 +286,9 @@ describe Payu do
       it {should be_success}
       it {should_not be_error}
       it {should_not be_threeds}
+      pending {should be_signed}
+      # its(:params) {should == ''}
+      specify { pending; subject.hash.should  == subject.computed_hash}
       its(:their_ref) {should == "6626740"}
     end
   end
