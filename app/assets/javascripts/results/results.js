@@ -126,16 +126,18 @@ updateTitles: function(dates) {
     var hparts = [];
     var year = search.dates.csnow.getFullYear();
     var yearUsed = false;
-    for (var i = 0, l = this.data.segments.length; i < l; i++) {
-        var segment = this.data.segments[i];
-        var date = Date.parseDMY(dates ? dates[i] : segment.date);
-        var title = segment.rt ? 'обратно' : segment.title;
-        var hdate = date.human(!yearUsed && date.getFullYear() !== year && (yearUsed = true));
-        hparts[i] = title.replace(/(^из| в) /g, '$1&nbsp;') + ' ' + hdate.nowrap();
-        wparts[i] = title + ' на ' + hdate;
-    }
-    if (this.data.options.human) {
-        hparts.push(this.data.options.human);
+    if (this.data && this.data.segments) {
+        for (var i = 0, l = this.data.segments.length; i < l; i++) {
+            var segment = this.data.segments[i];
+            var date = Date.parseDMY(dates ? dates[i] : segment.date);
+            var title = segment.rt ? 'обратно' : segment.title;
+            var hdate = date.human(!yearUsed && date.getFullYear() !== year && (yearUsed = true));
+            hparts[i] = title.replace(/(^из| в) /g, '$1&nbsp;') + ' ' + hdate.nowrap();
+            wparts[i] = title + ' на ' + hdate;
+        }
+        if (this.data.options.human) {
+            hparts.push(this.data.options.human);
+        }
     }
     this.data.titles = {
         header: hparts.join(', ').capitalize(),
@@ -251,6 +253,7 @@ getVariants: function(condition, limit) {
 },
 extendData: function() {
     var segments = this.data.segments;
+    if (!segments) return;
     var sl = segments.length;
     var titles = [], os = local.offers.othersegments;
     for (var s = sl; s--;) {
