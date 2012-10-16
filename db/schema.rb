@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121010180844) do
+ActiveRecord::Schema.define(:version => 20121016165859) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -512,6 +512,7 @@ ActiveRecord::Schema.define(:version => 20121010180844) do
     t.datetime "created_at"
     t.text     "object_changes"
     t.string   "action"
+    t.string   "done"
   end
 
   add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
