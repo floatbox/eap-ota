@@ -46,6 +46,6 @@ class SyncCanceledPnrsProcess
 end
 
 PaperTrail.whodunnit = 'dev@eviterra.com'
-PaperTrail.controller_info = {:action => 'sync_canceled_pnrs'}
+PaperTrail.controller_info = {:done => 'sync_canceled_pnrs'}
 
 SyncCanceledPnrsProcess.new.update_states

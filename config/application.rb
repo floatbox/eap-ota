@@ -69,7 +69,7 @@ module Eviterra
     console do
       # помечаем изменения, сделанные из консоли:
       PaperTrail.whodunnit = 'dev@eviterra.com'
-      PaperTrail.controller_info = {:action => 'console'}
+      PaperTrail.controller_info = {:done => 'console'}
 
       Object.send :include, AdminLink
     end
