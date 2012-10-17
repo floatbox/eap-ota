@@ -4,8 +4,6 @@ class Ticket < ActiveRecord::Base
   include CopyAttrs
   has_paper_trail
 
-  MONEY_VALIDATION_REGEXP = / \d+ (?:.\d{2})? \s* (?:USD|EUR|RUB) $/x
-
   # FIXME вынести в ActiveRecord::Base
   def in_identity_map?
     id && self.equal?( ActiveRecord::IdentityMap.get(self.class, id) )
@@ -45,7 +43,9 @@ class Ticket < ActiveRecord::Base
 
   # FIXME - временно, эквайринг должен браться из суммы пейментов
   delegate :acquiring_percentage, :to => :order
-
+  extend MoneyColumns
+  has_money_columns :original_price_fare, :original_price_tax
+  has_money_helpers :original_price_fare, :original_price_tax
   extend Commission::Columns
   has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount, :commission_our_markup
   include Pricing::Ticket
@@ -59,8 +59,6 @@ class Ticket < ActiveRecord::Base
   scope :sold, where(:status => ['ticketed', 'exchanged', 'returned', 'processed'])
 
   validates_presence_of :price_fare, :price_tax, :price_our_markup, :price_penalty, :price_discount, :price_consolidator, :if => lambda {kind = 'refund'}
-  validates_format_of :original_price_tax_as_string, :with => MONEY_VALIDATION_REGEXP, :if => lambda{ @original_price_tax_as_string.present? }
-  validates_format_of :original_price_fare_as_string, :with => MONEY_VALIDATION_REGEXP, :if => lambda{ @original_price_fare_as_string.present? }
   after_save :update_parent_status, :if => :parent
   after_destroy :update_parent_status, :if => :parent
   validates_presence_of :comment, :if => lambda {kind == "refund"}
@@ -351,20 +349,6 @@ class Ticket < ActiveRecord::Base
     @original_price_tax_as_string || (original_price_tax && original_price_tax.with_currency)
   end
 
-  def original_price_fare_as_string= value
-    @original_price_fare_as_string = value
-    if @original_price_fare_as_string.match(MONEY_VALIDATION_REGEXP)
-      self.original_price_fare = @original_price_fare_as_string.to_money
-    end
-  end
-
-  def original_price_tax_as_string= value
-    @original_price_tax_as_string = value
-    if @original_price_tax_as_string.match(MONEY_VALIDATION_REGEXP)
-      self.original_price_tax = @original_price_tax_as_string.to_money
-    end
-  end
-
   def itinerary_receipt
     if order && !new_record?
       url = show_order_for_ticket_path(order.pnr_number, self)
@@ -382,15 +366,4 @@ class Ticket < ActiveRecord::Base
     CBR.exchange_on(ticketed_date).get_rate(original_fare_currency, "RUB").to_f if original_fare_currency && ticketed_date
   end
 
-  composed_of :original_price_fare,
-  :class_name => "Money",
-  :mapping => [%w(original_fare_cents cents), %w(original_fare_currency currency_as_string)],
-  :constructor => Proc.new { |original_fare_cents, original_fare_currency| original_fare_cents ? Money.new(original_fare_cents, original_fare_currency || Money.default_currency) : nil} ,
-  :converter => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
-
-  composed_of :original_price_tax,
-  :class_name => "Money",
-  :mapping => [%w(original_tax_cents cents), %w(original_tax_currency currency_as_string)],
-  :constructor => Proc.new { |original_tax_cents, original_tax_currency| original_tax_cents ? Money.new(original_tax_cents, original_tax_currency || Money.default_currency)  : nil},
-  :converter => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 end
