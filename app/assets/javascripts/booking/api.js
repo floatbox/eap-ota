@@ -57,6 +57,7 @@ booking.load = function(number, price_changed) {
             that.content.find('.b-header').before(newprice);
             newprice.find('.bfnp-content').html('Новая стоимость — ' + price);
             newprice.show();
+            trackPage('/booking/price_rising');
         }
         that.content.find('.b-header').prepend(button);
         that.content.find('.bffc-link').html('выбрать другой вариант');
