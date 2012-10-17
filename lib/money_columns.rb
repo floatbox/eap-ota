@@ -18,7 +18,7 @@ module MoneyColumns
     attr_helpers = attrs.map{ |name|(name.to_s+'_as_string').to_sym }
     [attrs, attr_helpers].transpose.each do |attr, attr_helper|
       define_method "#{attr_helper}" do
-        method(attr.to_sym).call unless instance_variable_get"@#{attr_helper}"
+        instance_variable_get"@#{attr_helper}" || method(attr.to_sym).call.try(&:with_currency)
       end
       define_method "#{attr_helper}=" do |value|
         instance_variable_set "@#{attr_helper}", value

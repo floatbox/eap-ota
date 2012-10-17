@@ -341,14 +341,6 @@ class Ticket < ActiveRecord::Base
     original_price_tax ? original_price_tax.with_currency : 'Unknown'
   end
 
-  def original_price_fare_as_string
-    @original_price_fare_as_string || (original_price_fare && original_price_fare.with_currency)
-  end
-
-  def original_price_tax_as_string
-    @original_price_tax_as_string || (original_price_tax && original_price_tax.with_currency)
-  end
-
   def itinerary_receipt
     if order && !new_record?
       url = show_order_for_ticket_path(order.pnr_number, self)
