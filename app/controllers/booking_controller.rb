@@ -172,7 +172,12 @@ class BookingController < ApplicationController
       return
     end
 
-    payture_response = @order_form.order.block_money(@order_form.card, @order_form, request.remote_ip)
+    custom_fields = PaymentCustomFields.new(
+      ip: request.remote_ip,
+      order: @order_form.order,
+      order_form: @order_form
+    )
+    payture_response = @order_form.order.block_money(@order_form.card, custom_fields)
 
     if payture_response.success?
       logger.info "Pay: payment and booking successful"

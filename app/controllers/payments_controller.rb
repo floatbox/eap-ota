@@ -30,7 +30,11 @@ class PaymentsController < ApplicationController
 
     card = CreditCard.new(params[:card])
     if card.valid?
-      payture_response = @order.block_money(card, nil, request.remote_ip)
+      custom_fields = PaymentCustomFields.new(
+        ip: request.remote_ip,
+        order: @order
+      )
+      payture_response = @order.block_money(card, custom_fields)
       if payture_response.success?
         logger.info "Pay: payment succesful"
         render :partial => 'success'
