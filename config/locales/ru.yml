@@ -82,6 +82,7 @@ ru:
         description: "Комментарий к форме оплаты, для клиента"
         route: "Маршрут"
         pnr_number: "Номер PNR"
+        parent_pnr_number: "Номер родительского PNR"
         payment_status: "Состояние платежа"
         ticket_status: "Состояние брони/билетов"
         payment_type: "Способ оплаты"
