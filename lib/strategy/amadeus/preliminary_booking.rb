@@ -69,20 +69,20 @@ module Strategy::Amadeus::PreliminaryBooking
 
 
   def get_places_and_last_tkt_date(amadeus)
-    1.times do
-      bp_resp = amadeus.fare_informative_best_pricing_without_pnr(
-          :recommendation => @rec,
-          :people_count => @search.real_people_count
-        )
-      if bp_resp.success?
-        bp_rec = bp_resp.recommendations[0]
-        if bp_rec.booking_classes != rec.booking_classes
-          logger.info "Updated best pricing returned new classes (#{@rec.booking_classes}) -> (#{bp_rec.booking_classes})"
-        end
-      else
-        logger.info 'Updated best pricing failed'
+    bp_resp = amadeus.fare_informative_best_pricing_without_pnr(
+        :recommendation => @rec,
+        :people_count => @search.real_people_count
+      )
+    if bp_resp.success?
+      bp_rec = bp_resp.recommendations[0]
+      if bp_rec.booking_classes != rec.booking_classes
+        logger.info "Updated best pricing returned new classes (#{@rec.booking_classes}) -> (#{bp_rec.booking_classes})"
       end
+    else
+      logger.info "Updated best pricing failed: #{bp_resp.error_message}"
+    end
 
+    1.times do
       # FIXME точно здесь нельзя нечаянно заморозить места?
       air_sfr = amadeus.air_sell_from_recommendation(
         :recommendation => @rec,
