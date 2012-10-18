@@ -58,17 +58,10 @@ class PaytureRefund < Payment
   end
 
   # для админки
-  def payment_status_raw
-    charge.payment_status_raw
-  end
+  delegate :payment_status_raw, :external_gateway_link, :to => :charge
 
   def charge_link
     charge.show_link
-  end
-
-  def external_gateway_link
-    url = "https://backend.payture.com/Payture/order.html?mid=55&pid=&id=#{ref}"
-    "<a href='#{url}' target='_blank'>#{ref}</a>".html_safe
   end
 
 end
