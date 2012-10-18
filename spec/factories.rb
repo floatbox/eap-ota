@@ -65,6 +65,31 @@ FactoryGirl.define do
     kind 'refund'
   end
 
+  # FIXME вынести trait :charged, если это возможно
+
+  factory :payu_charge do
+    order
+
+    # пока не годится для build - не проставляет status
+    trait :charged do
+      after_create do |payu_charge, proxy|
+        payu_charge.update_attributes status: 'charged'
+      end
+    end
+    factory :charged_payu_charge, :traits => [:charged]
+  end
+
+  factory :payu_refund do
+    association :charge, :factory => :charged_payu_charge
+
+    # пока не годится для build - не проставляет status
+    trait :charged do
+      after_create do |payu_refund, proxy|
+        payu_refund.update_attributes status: 'charged'
+      end
+    end
+  end
+
   factory :payture_charge do
     order
 

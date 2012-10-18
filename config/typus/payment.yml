@@ -24,26 +24,24 @@ Payment: &PAYMENT_CONFIG
     export: csv
 
 # Typus не умеет отображать таблицы для Single table inheritance
-PaytureCharge:
+# пытаемся их спрятать по мере сил.
+PayuCharge: &HIDDEN_SECTION
   <<: *PAYMENT_CONFIG
   application: Misc, 2
   options:
     hide_from_dashboard: yes
+
+PayuRefund:
+  <<: *HIDDEN_SECTION
+
+PaytureCharge:
+  <<: *HIDDEN_SECTION
 
 PaytureRefund:
-  <<: *PAYMENT_CONFIG
-  application: Misc, 2
-  options:
-    hide_from_dashboard: yes
+  <<: *HIDDEN_SECTION
 
 CashCharge:
-  <<: *PAYMENT_CONFIG
-  application: Misc, 2
-  options:
-    hide_from_dashboard: yes
+  <<: *HIDDEN_SECTION
 
 CashRefund:
-  <<: *PAYMENT_CONFIG
-  application: Misc, 2
-  options:
-    hide_from_dashboard: yes
+  <<: *HIDDEN_SECTION

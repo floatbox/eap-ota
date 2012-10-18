@@ -22,19 +22,21 @@ class Payment < ActiveRecord::Base
 
   validates :price, decimal: true
 
-  CHARGES = ['PaytureCharge', 'CashCharge']
-  REFUNDS = ['PaytureRefund', 'CashRefund']
+  CHARGES = ['PayuCharge', 'PaytureCharge', 'CashCharge']
+  REFUNDS = ['PayuRefund', 'PaytureRefund', 'CashRefund']
 
   scope :charges, where(:type => CHARGES)
   scope :refunds, where(:type => REFUNDS)
 
+  PAYU =    ['PayuCharge', 'PayuRefund']
   PAYTURE = ['PaytureCharge', 'PaytureRefund']
   CASH =    ['CashCharge', 'CashRefund']
 
+  scope :payu, where(:type => PAYU)
   scope :payture, where(:type => PAYTURE)
   scope :cash, where(:type => CASH)
   def self.types
-    (PAYTURE + CASH).map {|type| [I18n.t(type), type] }
+    (PAYU + PAYTURE + CASH).map {|type| [I18n.t(type), type] }
   end
 
   # состояния, для оверрайда в подкласах и чтоб кнопки работали

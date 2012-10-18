@@ -168,10 +168,13 @@ ru:
 
   Charges: Платежи
   Refunds: Возвраты
-  Payture: Карта
+  Payu: Payu
+  Payture: Payture
   Cash: Наличные
-  PaytureCharge: Карта, платеж
-  PaytureRefund: Карта, возврат
+  PayuCharge: Payu, платеж
+  PayuRefund: Payu, возврат
+  PaytureCharge: Payture, платеж
+  PaytureRefund: Payture, возврат
   CashCharge: Наличные, платеж
   CashRefund: Наличные, возврат
 
