@@ -177,9 +177,9 @@ class BookingController < ApplicationController
       order: @order_form.order,
       order_form: @order_form
     )
-    payture_response = @order_form.order.block_money(@order_form.card, custom_fields)
+    payment_response = @order_form.order.block_money(@order_form.card, custom_fields)
 
-    if payture_response.success?
+    if payment_response.success?
       logger.info "Pay: payment and booking successful"
 
       unless strategy.delayed_ticketing?
@@ -195,12 +195,12 @@ class BookingController < ApplicationController
       StatCounters.inc %W[pay.success.total pay.success.card]
       render :partial => 'success', :locals => {:pnr_path => show_notice_path(:id => @order_form.pnr_number), :pnr_number => @order_form.pnr_number}
 
-    elsif payture_response.threeds?
+    elsif payment_response.threeds?
       StatCounters.inc %W[pay.3ds.requests]
       logger.info "Pay: payment system requested 3D-Secure authorization"
-      render :partial => 'threeds', :locals => {:payment => payture_response}
+      render :partial => 'threeds', :locals => {:payment => payment_response}
 
-    else # payture_response failed
+    else # payment_response failed
       strategy.cancel
       StatCounters.inc %W[pay.errors.payment]
       # FIXME ну и почему не сработало?

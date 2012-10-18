@@ -34,13 +34,13 @@ class PaymentsController < ApplicationController
         ip: request.remote_ip,
         order: @order
       )
-      payture_response = @order.block_money(card, custom_fields)
-      if payture_response.success?
+      payment_response = @order.block_money(card, custom_fields)
+      if payment_response.success?
         logger.info "Pay: payment succesful"
         render :partial => 'success'
-      elsif payture_response.threeds?
+      elsif payment_response.threeds?
         logger.info "Pay: payment system requested 3D-Secure authorization"
-        render :partial => 'booking/threeds', :locals => {:payment => payture_response}
+        render :partial => 'booking/threeds', :locals => {:payment => payment_response}
       else
         logger.info "Pay: payment failed"
         render :partial => 'fail'
