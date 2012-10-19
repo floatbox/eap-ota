@@ -20,6 +20,7 @@ Order:
       - has_refunds
       - source
       - pnr_number
+      - parent_pnr_number
       - offline_booking
       - description
       - route
@@ -76,6 +77,7 @@ Order:
       - phone
       - source
       - pnr_number
+      - parent_pnr_number
       - sirena_lead_pass
       - route
       - payment_type
@@ -146,7 +148,7 @@ Order:
         updated_at: long
         last_pay_time: long
   order_by: -created_at
-  search: ^pnr_number, email, phone, =order_id
+  search: ^pnr_number, ^parent_pnr_number, email, phone, =order_id
   options:
     default_action_on_item: show
     export: csv

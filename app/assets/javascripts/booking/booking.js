@@ -201,7 +201,7 @@ init: function() {
     booking.el.find('.bffd-farerules').click(function(event) {
         that.show();
     });
-    var translator = typeof google !== 'undefined' && google.translate && google.translate.SectionalElement.getInstance();
+    var translator = typeof google !== 'undefined' && google.translate && google.translate.SectionalElement && google.translate.SectionalElement.getInstance();
     if (translator && translator.update) {
         translator.update();
     }

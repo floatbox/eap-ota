@@ -54,9 +54,16 @@ booking.load = function(number, price_changed) {
         });
         if (price_changed) {
             var newprice = that.content.find('.bf-newprice').addClass('bf-newprice-top');
+            var tickets = that.content.find('.bfp-table').attr('data-total') === '1' ? 'билет' : 'билеты';
             that.content.find('.b-header').before(newprice);
-            newprice.find('.bfnp-content').html('Новая стоимость — ' + price);
+            newprice.find('.bfnp-title').html('Места по этой стоимости уже закончились. Остались места за ' + price);
+            newprice.find('.bfnp-content').html('Вы можете купить ' + tickets + ' по новой стоимости или выбрать <span class="link">другой вариант</span>');
+            newprice.find('.bfnp-content .link').click(function() {
+                that.cancel();
+            });
+            newprice.find('.bfnp-tip').hide();
             newprice.show();
+            trackPage('/booking/price_rising');
         }
         that.content.find('.b-header').prepend(button);
         that.content.find('.bffc-link').html('выбрать другой вариант');

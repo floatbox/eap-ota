@@ -62,3 +62,19 @@
     float: right;
     font-size: 11px;
 }
+
+.social-icons {
+    float: left;
+    width: 24px;
+    height: 24px;
+    margin: 0 8px 0 0;
+}
+
+#fb { background: url(/images/common/social-icons.png); }
+#fb:hover { background: url(/images/common/social-icons.png) 0 -24px no-repeat; }
+#vk { background: url(/images/common/social-icons.png) -30px 0 no-repeat; }
+#vk:hover { background: url(/images/common/social-icons.png) -30px -24px no-repeat; }
+#tw { background: url(/images/common/social-icons.png) -60px 0 no-repeat; }
+#tw:hover { background: url(/images/common/social-icons.png) -60px -24px no-repeat; }
+#rss{ background: url(/images/common/social-icons.png) -90px 0 no-repeat; }
+#rss:hover { background: url(/images/common/social-icons.png) -90px -24px no-repeat; }

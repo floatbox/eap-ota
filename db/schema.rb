@@ -318,6 +318,7 @@ ActiveRecord::Schema.define(:version => 20121016172233) do
     t.string   "pan"
     t.string   "marker"
     t.string   "commission_our_markup"
+    t.string   "parent_pnr_number"
   end
 
   add_index "orders", ["partner"], :name => "index_orders_on_partner"
