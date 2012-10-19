@@ -1,7 +1,7 @@
 <div class="bf-result" data-type="3dsecure">
     <h5 class="bfr-title">Ваша банковская карта требует дополнительной авторизации 3DSecure</h5>
     <p class="bfr-content">Вы будете перенаправлены на сайт платёжного шлюза. После успешной авторизации вы получите подтверждение покупки.</p>
-    <%= form_tag payment.threeds_url, :class => 'tds-form' do %>
+    <%= form_tag payment.threeds_url, :class => 'bfrt-form' do %>
       <% payment.threeds_params.each do |key, value| %>
         <%= hidden_field_tag key, value %>
       <% end %>

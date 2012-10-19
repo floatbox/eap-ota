@@ -40,6 +40,7 @@ ru:
       typus_user: 'Пользователь Typus'
       notification: 'Оповещение'
       partner: 'Партнер'
+      version: 'История изменений'
     attributes:
       # общие атрибуты в заказах и билетах
       PRICING_ATTRIBUTES: &PRICING_ATTRIBUTES
@@ -203,6 +204,7 @@ ru:
   Admin: Администрирование
   Orders: Заказы
   Hot Offers: Маркетинг
+  Versions: История изменений
 
   'Show by %{attribute}': '-- %{attribute} --'
   'View all %{attribute}': '-- %{attribute} --'

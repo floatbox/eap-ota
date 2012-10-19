@@ -52,6 +52,11 @@
     display: none;
 }
 
+/* Appstore */
+#booking-appstore {
+    margin-right: 0;
+}
+
 /* Button template */
 #obb-template {
     display: none;

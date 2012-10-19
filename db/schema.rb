@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121016165859) do
+ActiveRecord::Schema.define(:version => 20121016172233) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -512,7 +512,6 @@ ActiveRecord::Schema.define(:version => 20121016165859) do
     t.text     "object"
     t.datetime "created_at"
     t.text     "object_changes"
-    t.string   "action"
     t.string   "done"
   end
 
