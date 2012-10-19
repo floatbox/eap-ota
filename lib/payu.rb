@@ -191,11 +191,17 @@ class Payu
     response.parsed_response
   end
 
+  # просто парсит 3дс ответ от гейтвея
+  def parse_3ds params
+    PaymentResponse.new( params, @seller_key )
+  end
+
   CHARGE_PARAMS_ORDER = [
     :MERCHANT, :ORDER_REF, :ORDER_AMOUNT, :ORDER_CURRENCY, :IDN_DATE
   ]
 
   def charge amount, opts={}
+    validate! opts, :their_ref
     post = {
       ORDER_REF: opts[:their_ref],
       IDN_DATE: time_now_string
@@ -217,6 +223,7 @@ class Payu
   # разблокировка средств.
   # частичная блокировка не принимается
   def unblock amount, opts={}
+    validate! opts, :their_ref
     post = {}
     post[:ORDER_REF] = opts[:their_ref]
     add_merchant(post)
@@ -243,6 +250,7 @@ class Payu
 
   # уточнение текущего состояния платежа
   def status opts={}
+    validate! opts, :our_ref
     post = {}
     post[:REFNOEXT] = opts[:our_ref]
     add_merchant(post)

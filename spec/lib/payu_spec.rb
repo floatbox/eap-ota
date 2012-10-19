@@ -100,6 +100,10 @@ describe Payu do
 
   end
 
+  describe "#parse_3ds" do
+    pending
+  end
+
   describe "#unblock" do
 
     pending "should make request with correct params" do

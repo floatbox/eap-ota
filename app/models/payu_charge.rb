@@ -37,53 +37,58 @@ class PayuCharge < Payment
     raise ArgumentError, 'ref is not set yet' unless ref
     raise ArgumentError, 'price is 0' unless price && !price.zero?
     raise ArgumentError, 'specify card data, please' unless @card
+    raise ArgumentError, 'specify custom_fields, please' unless @custom_fields
     update_attributes :status => 'processing_block'
-    #response = gateway.block(price, @card, :our_ref => ref, :custom_fields => custom_fields)
-    #if response.threeds?
-    #  update_attributes :status => 'threeds', :threeds_key => response.threeds_key
-    #elsif response.success?
-    #  update_attributes :status => 'blocked'
-    #elsif response.error?
-    #  update_attributes :status => 'rejected', :reject_reason => response.err_code
-    #else
-    #  # FIXME оставляем status == 'processing_block' ???
-    #end
-    # return response
+    response = gateway.block(price, @card, :our_ref => ref, :custom_fields => custom_fields)
+    if response.threeds?
+       update_attributes :status => 'threeds', :their_ref => response.their_ref
+    elsif response.success?
+       update_attributes :status => 'blocked', :their_ref => response.their_ref
+    elsif response.error?
+      update_attributes :status => 'rejected' # , :reject_reason => response.err_code
+    else
+      # FIXME оставляем status == 'processing_block' ???
+    end
+    return response
   end
 
-  def confirm_3ds! pa_res, md
+  def confirm_3ds! params
     return unless can_confirm_3ds?
-    #res = gateway.block_3ds(:our_ref => ref, :pa_res => pa_res)
-    #if res.success?
-    #  update_attributes :status => 'blocked'
-    #else
-    #  update_attributes :status => 'rejected', :reject_reason => res.err_code
-    #end
-    #res.success?
+    # не делает запрос, просто парсит ответ от гейтвея
+    res = gateway.parse_3ds(params)
+    # FIXME что-то сделать более красивое? Оставляем в threeds состоянии
+    raise "response HASH is wrong, security problem?" unless res.signed?
+
+    if res.success?
+      update_attributes :status => 'blocked', :their_ref => res.their_ref
+    else
+      update_attributes :status => 'rejected' # , :reject_reason => res.err_code
+    end
+    res.success?
   end
 
   def charge!
     return unless can_charge?
     update_attributes :status => 'processing_charge'
-    #res = gateway.charge(:our_ref => ref)
-    #if res.success?
-    #  update_attributes :status => 'charged', :charged_on => Date.today
-    #else
-    #  update_attributes :status => 'blocked', :reject_reason => res.err_code
-    #end
+    res = gateway.charge(price, :their_ref => their_ref)
+    if res.success?
+      update_attributes :status => 'charged', :charged_on => Date.today
+    else
+      update_attributes :status => 'blocked' # , :reject_reason => res.err_code
+    end
     res.success?
   end
 
   def cancel!
     return unless can_cancel?
     update_attributes :status => 'processing_cancel'
-    #res = gateway.unblock(price, :our_ref => ref)
-    #if res.success?
-    #  update_attributes :status => 'canceled'
-    #else
-    #  update_attributes :status => 'blocked', :reject_reason => res.err_code
-    #end
-    #res.success?
+    res = gateway.unblock(price, :their_ref => their_ref)
+    if res.success?
+      update_attributes :status => 'canceled'
+    else
+      update_attributes :status => 'blocked' # , :reject_reason => res.err_code
+    end
+    res.success?
   end
 
   def gateway

@@ -13,6 +13,7 @@ class PayuRefund < Payment
 
   def set_ref
     self.ref = charge.ref
+    self.their_ref = charge.their_ref
     self.order_id = charge.order_id
     self.name_in_card = charge.name_in_card
     self.pan = charge.pan
@@ -36,13 +37,13 @@ class PayuRefund < Payment
   def charge!
     return unless can_charge?
     update_attributes :status => 'processing_charge'
-    # res = gateway.refund( -price, :order_id => ref)
-    # if res.success?
-    #   update_attributes :status => 'charged', :charged_on => Date.today
-    #   return true
-    # else
-    #   update_attributes :status => 'processing_charge', :reject_reason => res.err_code
-    # end
+    res = gateway.refund( -price, :their_ref => their_ref)
+    if res.success?
+      update_attributes :status => 'charged', :charged_on => Date.today
+    else
+      update_attributes :status => 'processing_charge' # , :reject_reason => res.err_code
+    end
+    res.success?
   rescue => e
     update_attributes :status => 'processing_charge', :reject_reason => e
     raise
