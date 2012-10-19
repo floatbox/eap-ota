@@ -5,6 +5,13 @@ site:
   forbidden_cash: no
   forbidden_delivery: no
   store_flights: no
+  host: 'http://localhost:3000'
+  production:
+    host: 'https://eviterra.com'
+  staging:
+    host: 'https://staging.eviterra.com'
+  test:
+    host: 'http://localhost:3000'
 api:
   enabled: yes
   store_rambler_cache: no

@@ -77,8 +77,8 @@ describe Payu do
         :DELIVERY_ZIPCODE => "123",
         :DELIVERY_PHONE => "1234567890",
         :DELIVERY_COUNTRYCODE => "RU",
-        :BACK_REF => "http://localhost:3000/",
-        :ORDER_HASH => "02923e03e71a7fd926ab76683c91fc3f"
+        :BACK_REF => "http://localhost:3000/confirm_3ds",
+        :ORDER_HASH => "e4e7c25af615ba77879aebfbdcd1e296"
       }
     end
 

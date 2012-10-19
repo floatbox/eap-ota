@@ -50,9 +50,9 @@ class Payture
       @doc["ACSUrl"]
     end
 
-    # FIXME найти способ прокидывать сюда конфирмационный урл
+    # FIXME найти более удачный способ прокидывать сюда конфирмационный урл
     def threeds_return_url
-      'https://eviterra.com/confirm_3ds'
+      "#{Conf.site.host}/confirm_3ds"
     end
 
     def threeds_params

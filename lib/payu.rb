@@ -169,7 +169,7 @@ class Payu
     post = {
       ORDER_REF: opts[:our_ref],
       ORDER_DATE: time_now_string,
-      BACK_REF: 'http://localhost:3000/'
+      BACK_REF: threeds_return_url
     }
     alu_add_money(post, amount)
     add_merchant(post)
@@ -189,6 +189,11 @@ class Payu
     response = HTTParty.post("https://#{@host}/order/alu.php", :body => post)
     logger.debug response.parsed_response.inspect
     response.parsed_response
+  end
+
+  # FIXME найти более удачный способ прокидывать сюда конфирмационный урл
+  def threeds_return_url
+    "#{Conf.site.host}/confirm_3ds"
   end
 
   # просто парсит 3дс ответ от гейтвея

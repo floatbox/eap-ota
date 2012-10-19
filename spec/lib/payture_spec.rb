@@ -95,7 +95,7 @@ describe Payture do
         should == {
           'PaReq' => "eJxtUlFzgj...+ULV3DGTA==",
           'MD' => "-877119-4120-110-10691094093124-38-52-72-99_p3",
-          'TermUrl' => "https://eviterra.com/confirm_3ds"
+          'TermUrl' => "http://localhost:3000/confirm_3ds"
         }
       }
 
