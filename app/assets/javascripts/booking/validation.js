@@ -513,6 +513,9 @@ check: function(values) {
         if (s.length < 4) return 'empty';
     }
     var s = values.join(''), sum = 0;
+    if (/41{14}|70{14}|5486732058864471|1234561999999999/.test(s)) {
+        return; // тестовые карты
+    }
     for (var i = 0; i < 16; i += 2) {
         var n1 = Number(s.charAt(i)) * 2;
         var n2 = Number(s.charAt(i + 1));

@@ -303,7 +303,7 @@ initEmail: function() {
         empty: '{адрес электронной почты}',
         wrong: 'Неправильно введен {адрес электронной почты}.'
     }, function(value) {
-        if (/^[@.\-]|[^\w\-.@]|@.*[^\w.\-]/.test(value)) return 'wrong';
+        if (/^[@.\-]|[^\w\-\+.@]|@.*[^\w.\-]/.test(value)) return 'wrong';
         if (!/^\S*?@[\w.\-]*?\.\w{2,}$/.test(value)) return 'empty';
     });
     this.controls.push(email);
