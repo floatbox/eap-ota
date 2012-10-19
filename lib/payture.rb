@@ -109,7 +109,7 @@ class Payture
     add_money(post, amount)
     add_merchant(post)
     add_creditcard(post, card)
-    add_custom_fields(post, opts)
+    add_custom_fields(post, opts[:custom_fields])
     encrypt_payinfo(post)
 
     post_request 'Block', post
@@ -211,8 +211,8 @@ class Payture
     [:PAN, :EMonth, :EYear, :CardHolder, :SecureCode].each {|key| post.delete(key) }
   end
 
-  def add_custom_fields(post, opts)
-    custom_fields = opts[:custom_fields] or return
+  def add_custom_fields(post, custom_fields)
+    return unless custom_fields
     res = {
       :IP => custom_fields.ip,
       :FirstName => custom_fields.first_name,

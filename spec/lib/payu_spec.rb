@@ -26,6 +26,19 @@ describe Payu do
       "test_121008_151218"
     end
 
+    let :custom_fields do
+      PaymentCustomFields.new(
+        :ip => '127.0.0.1',
+        :first_name => 'Test',
+        :last_name => 'Eviterra',
+        :phone => '1234567890',
+        :email => 'testpayu@eviterra.com',
+        :date => Date.new(2012,11,10),
+        :points => %W[SVO CDG SVO],
+        :description => 'blah'
+      )
+    end
+
     let :expected_request do
       {
         :MERCHANT => "EVITERRA",
@@ -33,7 +46,7 @@ describe Payu do
         :ORDER_DATE => "2012-10-08 11:12:18",
         :ORDER_PNAME => ["1 x Ticket"],
         :ORDER_PCODE => ["TCK1"],
-        :ORDER_PINFO => ["{'departuredate':20120914, 'locationnumber':2, 'locationcode1':'BUH', 'locationcode2':'IBZ','passengername':'Fname Lname','reservationcode':'abcdef123456'}"],
+        :ORDER_PINFO => ["{'departuredate':20120914, 'locationnumber':2, 'locationcode1':'BUH', 'locationcode2':'IBZ', 'passengername':'Fname Lname', 'reservationcode':'abcdef123456'}"],
         :ORDER_PRICE => ["123"],
         :ORDER_VAT => ["0"],
         :ORDER_QTY => ["1"],
@@ -64,26 +77,31 @@ describe Payu do
         :DELIVERY_PHONE => "1234567890",
         :DELIVERY_COUNTRYCODE => "RU",
         :BACK_REF => "http://localhost:3000/",
-        :ORDER_HASH => "a374d2fcf937910c11c7967e365b6968"
+        :ORDER_HASH => "eb2e5917271ff1891fb957df93b56f52"
       }
     end
 
-    it "should make request wit correct params" do
+    # should == делает красивый diff, без него следующий тест разобрать невозможно.
+    #
+    pending do
+      expected_request.should == {}
+    end
+
+    it "should make request with correct params" do
       #pending "need to stub date/time"
       parsed_response = stub(:parsed_response)
 
       subject.should_receive(:alu_post).with( expected_request ).and_return(parsed_response)
       Payu::PaymentResponse.should_receive(:new).with(parsed_response, seller_key)
 
-      subject.block amount, card, :our_ref => our_ref
+      subject.block amount, card, :our_ref => our_ref, :custom_fields => custom_fields
     end
 
   end
 
   describe "#unblock" do
 
-    it "should make request wit correct params" do
-      pending "need to stub date/time"
+    pending "should make request with correct params" do
     end
 
   end

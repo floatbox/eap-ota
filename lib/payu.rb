@@ -165,6 +165,7 @@ class Payu
 
   # блокировка средств на карте пользователя
   def block amount, card, opts={}
+    validate! opts, :our_ref, :custom_fields
     post = {
       ORDER_REF: opts[:our_ref],
       ORDER_DATE: time_now_string,
@@ -173,7 +174,7 @@ class Payu
     alu_add_money(post, amount)
     add_merchant(post)
     add_creditcard(post, card)
-    add_custom_fields(post, opts)
+    add_custom_fields(post, opts[:custom_fields])
     post.slice!(*BLOCK_PARAMS_ORDER)
     post[:ORDER_HASH] = hash_string(@seller_key, post)
 
@@ -296,41 +297,39 @@ class Payu
     Time.now.utc.strftime("%Y-%m-%d %H:%M:%S")
   end
 
-  def add_custom_fields(post, opts)
+  def add_custom_fields(post, custom_fields)
     post[:ORDER_PNAME] = ['1 x Ticket']
     post[:ORDER_PCODE] = ['TCK1']
-    post[:ORDER_PINFO] = ["{
-      'departuredate':20120914,
-      'locationnumber':2,
-      'locationcode1':'BUH',
-      'locationcode2':'IBZ',
-      'passengername':'Fname Lname',
-      'reservationcode':'abcdef123456'}"]
+    post[:ORDER_PINFO] = [serialize_payment_info(custom_fields)]
     post[:ORDER_QTY] = ['1']
     post[:ORDER_VAT] = ['0']
     post[:PAY_METHOD] = 'CCVISAMC'
 
     post.merge!(
-    :BILL_LNAME            => custom_fields.last_name,
-    :BILL_FNAME            => custom_fields.first_name,
-    :BILL_ADDRESS          => 'Address Eviterra',        #billing customer address
-    :BILL_CITY             => 'City',                    #billing customer city
-    :BILL_STATE            => 'State',                   #billing customer State
-    :BILL_ZIPCODE          => '123',                     #billing customer Zip
-    :BILL_EMAIL            => custom_fields.email,
-    :BILL_PHONE            => custom_fields.phone,
-    :BILL_COUNTRYCODE      => 'RU',                      #billing customer 2 letter country code
-    :CLIENT_IP             => custom_fields.ip,
+      :BILL_LNAME            => custom_fields.last_name,
+      :BILL_FNAME            => custom_fields.first_name,
+      :BILL_ADDRESS          => 'Address Eviterra',        #billing customer address
+      :BILL_CITY             => 'City',                    #billing customer city
+      :BILL_STATE            => 'State',                   #billing customer State
+      :BILL_ZIPCODE          => '123',                     #billing customer Zip
+      :BILL_EMAIL            => custom_fields.email,
+      :BILL_PHONE            => custom_fields.phone,
+      :BILL_COUNTRYCODE      => 'RU',                      #billing customer 2 letter country code
+      :CLIENT_IP             => custom_fields.ip,
 
-    :DELIVERY_LNAME        => custom_fields.last_name,
-    :DELIVERY_FNAME        => custom_fields.first_name,
-    :DELIVERY_ADDRESS      => 'Address Eviterra',        #delivery address
-    :DELIVERY_CITY         => 'City',                    #delivery city
-    :DELIVERY_STATE        => 'State',                   #delivery state
-    :DELIVERY_ZIPCODE      => '123',                     #delivery Zip
-    :DELIVERY_PHONE        => custom_fields.phone,
-    :DELIVERY_COUNTRYCODE  => 'RU',                      #delivery 2 letter country code
+      :DELIVERY_LNAME        => custom_fields.last_name,
+      :DELIVERY_FNAME        => custom_fields.first_name,
+      :DELIVERY_ADDRESS      => 'Address Eviterra',        #delivery address
+      :DELIVERY_CITY         => 'City',                    #delivery city
+      :DELIVERY_STATE        => 'State',                   #delivery state
+      :DELIVERY_ZIPCODE      => '123',                     #delivery Zip
+      :DELIVERY_PHONE        => custom_fields.phone,
+      :DELIVERY_COUNTRYCODE  => 'RU',                      #delivery 2 letter country code
     )
+  end
+
+  def serialize_payment_info(custom_fields)
+    "{'departuredate':20120914, 'locationnumber':2, 'locationcode1':'BUH', 'locationcode2':'IBZ', 'passengername':'Fname Lname', 'reservationcode':'abcdef123456'}"
   end
 
   # for testing purposes
