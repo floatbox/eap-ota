@@ -300,7 +300,7 @@ class Payu
   def add_custom_fields(post, custom_fields)
     post[:ORDER_PNAME] = ['1 x Ticket']
     post[:ORDER_PCODE] = ['TCK1']
-    post[:ORDER_PINFO] = [serialize_payment_info(custom_fields)]
+    post[:ORDER_PINFO] = [serialize_order_info(custom_fields)]
     post[:ORDER_QTY] = ['1']
     post[:ORDER_VAT] = ['0']
     post[:PAY_METHOD] = 'CCVISAMC'
@@ -328,8 +328,18 @@ class Payu
     )
   end
 
-  def serialize_payment_info(custom_fields)
-    "{'departuredate':20120914, 'locationnumber':2, 'locationcode1':'BUH', 'locationcode2':'IBZ', 'passengername':'Fname Lname', 'reservationcode':'abcdef123456'}"
+  def serialize_order_info(custom_fields)
+    info = {
+      'reservationcode' => custom_fields.pnr_number,
+      'passengername' => "#{custom_fields.first_name} #{custom_fields.last_name}",
+      # WTF integer? но так в их примерах.
+      'departuredate' => custom_fields.date.strftime('%Y%m%d').to_i,
+      'locationnumber' => custom_fields.points.size
+    }
+    custom_fields.points.each_with_index do |iata, index|
+      info["locationcode#{index + 1}"] = iata
+    end
+    info.to_json
   end
 
   # for testing purposes

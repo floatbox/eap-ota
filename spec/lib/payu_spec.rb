@@ -28,6 +28,7 @@ describe Payu do
 
     let :custom_fields do
       PaymentCustomFields.new(
+        :pnr_number => 'ABC456',
         :ip => '127.0.0.1',
         :first_name => 'Test',
         :last_name => 'Eviterra',
@@ -46,7 +47,7 @@ describe Payu do
         :ORDER_DATE => "2012-10-08 11:12:18",
         :ORDER_PNAME => ["1 x Ticket"],
         :ORDER_PCODE => ["TCK1"],
-        :ORDER_PINFO => ["{'departuredate':20120914, 'locationnumber':2, 'locationcode1':'BUH', 'locationcode2':'IBZ', 'passengername':'Fname Lname', 'reservationcode':'abcdef123456'}"],
+        :ORDER_PINFO => [ "{\"reservationcode\":\"ABC456\",\"passengername\":\"Test Eviterra\",\"departuredate\":20121110,\"locationnumber\":3,\"locationcode1\":\"SVO\",\"locationcode2\":\"CDG\",\"locationcode3\":\"SVO\"}"],
         :ORDER_PRICE => ["123"],
         :ORDER_VAT => ["0"],
         :ORDER_QTY => ["1"],
@@ -77,7 +78,7 @@ describe Payu do
         :DELIVERY_PHONE => "1234567890",
         :DELIVERY_COUNTRYCODE => "RU",
         :BACK_REF => "http://localhost:3000/",
-        :ORDER_HASH => "eb2e5917271ff1891fb957df93b56f52"
+        :ORDER_HASH => "02923e03e71a7fd926ab76683c91fc3f"
       }
     end
 
@@ -135,6 +136,27 @@ describe Payu do
     end
 
   end
+
+  describe "#serialize_order_info" do
+    let :custom_fields do
+      PaymentCustomFields.new(
+        :pnr_number => 'ABC456',
+        :first_name => 'Vasya',
+        :last_name => 'Petrov',
+        :date => Date.new(2012,11,10),
+        :points => %W[SVO CDG SVO]
+      )
+    end
+
+    subject do
+      Payu.new.send :serialize_order_info, custom_fields
+    end
+
+    it { should ==
+      "{\"reservationcode\":\"ABC456\",\"passengername\":\"Vasya Petrov\",\"departuredate\":20121110,\"locationnumber\":3,\"locationcode1\":\"SVO\",\"locationcode2\":\"CDG\",\"locationcode3\":\"SVO\"}"
+    }
+  end
+
 
   describe "#alu_add_money" do
 
