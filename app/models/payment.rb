@@ -1,6 +1,26 @@
 # encoding: utf-8
 class Payment < ActiveRecord::Base
 
+  # зачатки payment strategy
+  # сейчас создает только кредитнокарточковые платежи
+  def self.select_and_create(*args)
+    klass =
+      case processing_code = Conf.payment.card_processing
+      when 'payture'
+        PaytureCharge
+      when 'payu'
+        PayuCharge
+      when false
+        nil
+      else
+        raise ArgumentError, "unknown payment.card_processing: #{processing_code}"
+      end
+
+    return unless klass
+
+    klass.create(*args)
+  end
+
   has_paper_trail
   extend Commission::Columns
 

@@ -44,6 +44,8 @@ payment:
   # FIXME убить в локальных конфигах
   order_id_prefix: o
   skip_checksum_validation: yes
+  # payture, payu, or no
+  card_processing: payture
   production:
     skip_checksum_validation: no
 cash:
