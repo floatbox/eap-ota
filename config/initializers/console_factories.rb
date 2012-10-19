@@ -6,5 +6,5 @@
 def factories!
   require 'factory_girl'
   require './spec/factories'
-  extend Factory::Syntax::Methods
+  extend FactoryGirl::Syntax::Methods
 end
