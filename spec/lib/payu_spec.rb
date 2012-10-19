@@ -225,6 +225,7 @@ describe Payu do
       it {should be_success}
       it {should_not be_error}
       it {should_not be_threeds}
+      its(:err_code) {should_not be}
       # success!
       it {should be_signed}
       its(:their_ref) {should == "6471185"}
@@ -250,6 +251,7 @@ describe Payu do
       it {should_not be_success}
       it {should be_error}
       it {should_not be_threeds}
+      its(:err_code) {should == 'FRAUD_RISK'}
       pending {should be_signed}
       # its(:params) {should == ''}
       specify { pending; subject.hash.should  == subject.computed_hash}
@@ -276,6 +278,7 @@ describe Payu do
       it {should_not be_success}
       it {should be_error}
       it {should_not be_threeds}
+      its(:err_code) {should == 'AUTHORIZATION_FAILED'}
       pending {should be_signed}
       #its(:params) {should == ''}
       specify { pending; subject.hash.should  == subject.computed_hash}
@@ -303,6 +306,7 @@ describe Payu do
       it {should_not be_success}
       it {should_not be_error}
       it {should be_threeds}
+      its(:err_code) {should_not be}
       # success!
       it {should be_signed}
       its(:their_ref) {should == "6372861"}
@@ -358,14 +362,28 @@ describe Payu do
       end
 
       it {should be_success}
+      it {should_not be_error}
+      its(:err_code) { should_not be }
     end
 
-    describe "fail" do
+    describe "cancel fail" do
       let :body do
         "<EPAYMENT>6349369|7|Order already cancelled|2012-10-03 13:59:42|c49213a5531b2dad9b101de8b690ce36</EPAYMENT>"
       end
 
       it {should_not be_success}
+      it {should be_error}
+      its(:err_code) { should == "Order already cancelled"}
+    end
+
+    describe "refund fail" do
+      let :body do
+        "<EPAYMENT>6207104|10|Invalid ORDER_AMOUNT|2012-10-19 15:39:49|81d317031baee8d1abdf2ca39e35ca46</EPAYMENT>"
+      end
+
+      it {should_not be_success}
+      it {should be_error}
+      its(:err_code) { should == "Invalid ORDER_AMOUNT"}
     end
 
   end

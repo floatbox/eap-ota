@@ -45,7 +45,7 @@ class PayuCharge < Payment
     elsif response.success?
        update_attributes :status => 'blocked', :their_ref => response.their_ref
     elsif response.error?
-      update_attributes :status => 'rejected' # , :reject_reason => response.err_code
+      update_attributes :status => 'rejected', :reject_reason => response.err_code
     else
       # FIXME оставляем status == 'processing_block' ???
     end
@@ -62,7 +62,7 @@ class PayuCharge < Payment
     if res.success?
       update_attributes :status => 'blocked', :their_ref => res.their_ref
     else
-      update_attributes :status => 'rejected' # , :reject_reason => res.err_code
+      update_attributes :status => 'rejected', :reject_reason => res.err_code
     end
     res.success?
   end
@@ -74,7 +74,7 @@ class PayuCharge < Payment
     if res.success?
       update_attributes :status => 'charged', :charged_on => Date.today
     else
-      update_attributes :status => 'blocked' # , :reject_reason => res.err_code
+      update_attributes :status => 'blocked', :reject_reason => res.err_code
     end
     res.success?
   end
@@ -86,7 +86,7 @@ class PayuCharge < Payment
     if res.success?
       update_attributes :status => 'canceled'
     else
-      update_attributes :status => 'blocked' # , :reject_reason => res.err_code
+      update_attributes :status => 'blocked', :reject_reason => res.err_code
     end
     res.success?
   end
@@ -126,8 +126,8 @@ class PayuCharge < Payment
   end
 
   # для админки
-  def payment_state_raw
-    response = gateway.state(:our_ref => ref)
+  def payment_status_raw
+    response = gateway.status(:our_ref => ref)
     response.err_code || "#{response.status}: (#{STATUS_MAPPING[response.status] || 'unknown'})"
   rescue
     $!.message
@@ -142,7 +142,7 @@ class PayuCharge < Payment
   end
 
   def external_gateway_link
-    'not supported'
+    "not supported (id: #{their_ref})"
   end
 
   def error_explanation

@@ -40,6 +40,10 @@ class Payu
       !success? && !threeds?
     end
 
+    def err_code
+      error? && @doc['RETURN_CODE']
+    end
+
     def their_ref
       @doc['REFNO']
     end
@@ -93,6 +97,15 @@ class Payu
       @code == '1'
     end
 
+    def error?
+      !success?
+    end
+
+    def err_code
+      return if success?
+      @message
+    end
+
     def their_ref
       @their_ref
     end
@@ -120,6 +133,8 @@ class Payu
     def error?
       !success?
     end
+
+    def err_code; nil; end
 
     def complete?
       @doc["ORDER_STATUS"] == 'COMPLETE'
