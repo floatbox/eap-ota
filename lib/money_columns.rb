@@ -15,21 +15,21 @@ module MoneyColumns
   end
 
   def has_money_helpers *attrs
-    attr_helpers = attrs.map{ |name|(name.to_s+'_as_string').to_sym }
-    [attrs, attr_helpers].transpose.each do |attr, attr_helper|
-      define_method "#{attr_helper}" do
-        instance_variable_get"@#{attr_helper}" || method(attr).call.try(&:with_currency)
-      end
-      define_method "#{attr_helper}=" do |value|
-        instance_variable_set "@#{attr_helper}", value
-        if value.match MONEY_VALIDATION_REGEXP
-          method((attr.to_s+'=').to_sym).call(value.to_money)
-          save
-        end
-      end
-    end
-    validates_each attr_helpers, :allow_blank => true do |model, attr, fx|
-      model.errors.add(attr, ", некорректное значение: '#{fx}', валютные значения следует вводить в таком формате: '10 USD") unless fx.match(MONEY_VALIDATION_REGEXP)
-    end
+     attrs.each do |attr|
+       attr_as_string = "#{attr}_as_string"
+
+       class_eval <<-"END"
+       def #{attr_as_string}
+         @#{attr_as_string} || #{attr}.try(&:with_currency)
+       end
+       def #{attr_as_string}= (value)
+         @#{attr_as_string} = value
+         if value.match MONEY_VALIDATION_REGEXP
+           self.#{attr} = value.to_money
+         end
+       end
+       END
+       validates_format_of attr_as_string, :with => MONEY_VALIDATION_REGEXP, :allow_blank => true, :message =>  "некорректное значение: '#{attr_as_string}', валютные значения следует вводить в таком формате: '10 USD'"
+     end
   end
 end
