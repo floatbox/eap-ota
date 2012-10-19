@@ -56,6 +56,7 @@ payment:
   # глобальная комиссия для некорпоратов
   # использую ее при корректировке цен
   commission: 2.85%
+  test_multiplier: ~
   production:
     skip_checksum_validation: no
 cash:

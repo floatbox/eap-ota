@@ -452,7 +452,8 @@ class Order < ActiveRecord::Base
   end
 
   def block_money card, custom_fields
-    payment = Payment.select_and_create(:price => price_with_payment_commission, :card => card, :custom_fields => custom_fields, :order => self)
+    multiplier = Conf.payment.test_multiplier || 1
+    payment = Payment.select_and_create(:price => price_with_payment_commission * multiplier, :card => card, :custom_fields => custom_fields, :order => self)
     response = payment.block!
     money_blocked! if response.success?
     response
