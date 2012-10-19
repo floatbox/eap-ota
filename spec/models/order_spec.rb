@@ -42,7 +42,7 @@ describe Order do
       let(:order) { create(:order, :price_with_payment_commission => 20.2) }
       it {should be_a(CashCharge)}
       its(:price) {should == order.price_with_payment_commission}
-      its(:commission) {should == Fx(Conf.payture.commission)}
+      its(:commission) {should == Fx(Conf.payment.commission)}
     end
 
     context "normal cash or payture order" do

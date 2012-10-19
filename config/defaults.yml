@@ -53,6 +53,9 @@ payment:
   skip_checksum_validation: yes
   # payture, payu, or no
   card_processing: payture
+  # глобальная комиссия для некорпоратов
+  # использую ее при корректировке цен
+  commission: 2.85%
   production:
     skip_checksum_validation: no
 cash:
