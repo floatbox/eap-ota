@@ -80,8 +80,8 @@ payture:
 payu:
   commission: 2.85%
   ref_prefix: payu_
-  # FIXME сделать переключатель
-  # enabled: yes
+  # FIXME переключатель пока не используется
+  enabled: yes
   seller_key: 'w7I2R8~V7=dm5H7[r1k5'
   host: sandbox8ru.epayment.ro
   merchant: EVITERRA
