@@ -238,3 +238,15 @@ PromoCode:
   relationships: order
   search: code
   application: Misc, 2
+
+Version:
+  fields:
+    default: item_type, item_id, event, whodunnit, done, created_at
+    show: item_type, item_id, event, whodunnit, done, created_at, changeset
+    options:
+       default_action_on_item: show
+       date_formats:
+         created_at: long
+  order_by: -created_at
+  filters: created_at, item_type, event, whodunnit
+  application: Misc, 2

@@ -41,6 +41,7 @@ admin:
   CashRefund: create, update, read
   PromoCode: create, update, read
   StoredFlight: create, update, read, update_from_gds
+  Version: read
 
 hoteditor:
   HotOffer: read, delete
