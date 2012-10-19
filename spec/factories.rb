@@ -65,70 +65,49 @@ FactoryGirl.define do
     kind 'refund'
   end
 
-  # FIXME вынести trait :charged, если это возможно
+  #
+  # платежи
+  #
+
+  # FIXME как-то сделать неглобальным
+  trait :charged do
+    after_create do |payment, proxy|
+      payment.update_attributes status: 'charged'
+    end
+  end
 
   factory :payu_charge do
     order
 
-    # пока не годится для build - не проставляет status
-    trait :charged do
-      after_create do |payu_charge, proxy|
-        payu_charge.update_attributes status: 'charged'
-      end
-    end
     factory :charged_payu_charge, :traits => [:charged]
   end
 
   factory :payu_refund do
     association :charge, :factory => :charged_payu_charge
-
-    # пока не годится для build - не проставляет status
-    trait :charged do
-      after_create do |payu_refund, proxy|
-        payu_refund.update_attributes status: 'charged'
-      end
-    end
   end
 
   factory :payture_charge do
     order
 
-    # пока не годится для build - не проставляет status
-    trait :charged do
-      after_create do |payture_charge, proxy|
-        payture_charge.update_attributes status: 'charged'
-      end
-    end
     factory :charged_payture_charge, :traits => [:charged]
   end
 
   factory :payture_refund do
     association :charge, :factory => :charged_payture_charge
-
-    # пока не годится для build - не проставляет status
-    trait :charged do
-      after_create do |payture_refund, proxy|
-        payture_refund.update_attributes status: 'charged'
-      end
-    end
   end
 
   factory :cash_charge do
     order
-
-    # пока не годится для build - не проставляет status
-    trait :charged do
-      after_create do |payture_charge, proxy|
-        payture_charge.update_attributes status: 'charged'
-      end
-    end
   end
 
   factory :cash_refund do
     association :charge, :factory => :cash_charge
   end
 
+  #
   # amadeus sessions
+  #
+
   sequence :amadeus_session_token do |n|
     token = 'TESTAAAAAA'
     n.times { token.next! }
