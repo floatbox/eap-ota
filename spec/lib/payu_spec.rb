@@ -318,30 +318,57 @@ describe Payu do
     end
 
     # принимающий урл должен принимать POST, и надо выключить на нем CSRF
-    describe "success from 3ds authorization via POST params" do
+    describe "response from 3ds authorization via POST params" do
 
       subject do
         Payu::PaymentResponse.new(params, seller_key)
       end
-      let (:params) do
-        HashWithIndifferentAccess.new(
-          "REFNO" => "6626740",
-          "ALIAS" => "598cba51685645dea3a8ea43ff71cb96",
-          "STATUS" => "SUCCESS",
-          "RETURN_CODE" => "AUTHORIZED",
-          "RETURN_MESSAGE" => "Authorized.",
-          "DATE" => "2012-10-08 17:42:12",
-          "HASH" => "32b263656557bbf17532fb0f79fefba9"
-        )
+
+      describe "success" do
+        let (:params) do
+          HashWithIndifferentAccess.new(
+            "REFNO" => "6626740",
+            "ALIAS" => "598cba51685645dea3a8ea43ff71cb96",
+            "STATUS" => "SUCCESS",
+            "RETURN_CODE" => "AUTHORIZED",
+            "RETURN_MESSAGE" => "Authorized.",
+            "DATE" => "2012-10-08 17:42:12",
+            "HASH" => "32b263656557bbf17532fb0f79fefba9"
+          )
+        end
+
+        it {should be_success}
+        it {should_not be_error}
+        it {should_not be_threeds}
+        its(:err_code) {should_not be}
+        pending {should be_signed}
+        # its(:params) {should == ''}
+        specify { pending; subject.hash.should  == subject.computed_hash}
+        its(:their_ref) {should == "6626740"}
       end
 
-      it {should be_success}
-      it {should_not be_error}
-      it {should_not be_threeds}
-      pending {should be_signed}
-      # its(:params) {should == ''}
-      specify { pending; subject.hash.should  == subject.computed_hash}
-      its(:their_ref) {should == "6626740"}
+      describe "fail" do
+        let (:params) do
+          HashWithIndifferentAccess.new(
+            "REFNO"=>"164931",
+            "ALIAS"=>"",
+            "STATUS"=>"FAILED",
+            "RETURN_CODE"=>"INTERNAL_ERROR",
+            "RETURN_MESSAGE"=>"",
+            "DATE"=>"2012-10-19 21:01:08",
+            "HASH"=>"a220b9834a6e15d5f22425aeeb820e72"
+          )
+        end
+
+        it {should_not be_success}
+        it {should be_error}
+        it {should_not be_threeds}
+        its(:err_code) {should == "INTERNAL_ERROR"}
+        pending {should be_signed}
+        # its(:params) {should == ''}
+        specify { pending; subject.hash.should  == subject.computed_hash}
+        its(:their_ref) {should == "164931"}
+      end
     end
   end
 
