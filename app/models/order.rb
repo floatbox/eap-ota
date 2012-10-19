@@ -432,8 +432,8 @@ class Order < ActiveRecord::Base
 
   delegate :charged_on, :to => :last_payment, :allow_nil => true
 
-  def confirm_3ds pa_res, md
-    if result = last_payment.confirm_3ds!(pa_res, md)
+  def confirm_3ds! params
+    if result = last_payment.confirm_3ds!(params)
       money_blocked!
     end
     result

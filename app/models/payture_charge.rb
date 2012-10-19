@@ -51,10 +51,10 @@ class PaytureCharge < Payment
     response
   end
 
-  def confirm_3ds! pa_res, md
+  def confirm_3ds! params
     return unless can_confirm_3ds?
     update_attributes :status => 'processing_threeds'
-    res = gateway.block_3ds(:our_ref => ref, :pa_res => pa_res)
+    res = gateway.block_3ds(:our_ref => ref, :PaRes => params[:PaRes])
     if res.success?
       update_attributes :status => 'blocked'
     else

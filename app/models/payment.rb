@@ -21,6 +21,22 @@ class Payment < ActiveRecord::Base
     klass.create(*args)
   end
 
+  # эвристика для поиска 3дсовых платежей в разных системах
+  def self.find_3ds_by_backref!(params)
+    payment =
+      if params[:MD].present?
+        PaytureCharge.find_by_threeds_key(params[:MD])
+      elsif params[:REFNO].present?
+        PayuCharge.find_by_their_ref(params[:REFNO])
+      end
+
+    unless payment
+      raise ArgumentError, "strange params for confirm_3ds: #{params.inspect}"
+    end
+
+    payment
+  end
+
   has_paper_trail
   extend Commission::Columns
 

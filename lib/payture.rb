@@ -196,7 +196,7 @@ class Payture
   end
 
   def add_3ds_info(post, opts)
-    post[:PaRes] = opts[:pa_res]
+    post[:PaRes] = opts[:PaRes]
   end
 
   def add_money(post, money)
