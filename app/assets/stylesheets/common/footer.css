@@ -78,3 +78,6 @@
 #tw:hover { background: url(/images/common/social-icons.png) -60px -24px no-repeat; }
 #rss{ background: url(/images/common/social-icons.png) -90px 0 no-repeat; }
 #rss:hover { background: url(/images/common/social-icons.png) -90px -24px no-repeat; }
+
+
+.appstore { float: right; margin-right: 2px; }
