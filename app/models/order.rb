@@ -146,8 +146,8 @@ class Order < ActiveRecord::Base
 
   # FIXME сломается на ruby1.9
   def capitalize_pnr
-    self.pnr_number = pnr_number.to_s.mb_chars.strip.upcase
-    self.parent_pnr_number = parent_pnr_number.to_s.mb_chars.strip.upcase
+    self.pnr_number = pnr_number.to_s.mb_chars.strip.upcase.to_s
+    self.parent_pnr_number = parent_pnr_number.to_s.mb_chars.strip.upcase.to_s
   end
 
   scope :unticketed, where(:payment_status => 'blocked', :ticket_status => 'booked')

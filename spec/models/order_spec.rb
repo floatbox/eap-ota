@@ -27,6 +27,12 @@ describe Order do
       order.send :capitalize_pnr
       order.pnr_number.should == 'БХЦ45'
     end
+
+    it "should string class" do
+      order = Order.new :pnr_number => 'бхЦ45'
+      order.send :capitalize_pnr
+      order.pnr_number.class.should == String
+    end
   end
 
   describe "#create_cash_payment" do
