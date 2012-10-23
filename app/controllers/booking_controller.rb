@@ -135,18 +135,16 @@ class BookingController < ApplicationController
     @order_form.update_attributes(params[:order])
     @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
 
-    if !@order_form.valid? || @order_form.counts_contradiction
-
-      if @order_form.counts_contradiction
-        if @order_form.update_price_and_counts
-          render :partial => 'newprice'
-          return
-        else
-          render :partial => 'failed_booking'
-          return
-        end
+    if @order_form.counts_contradiction
+      if @order_form.update_price_and_counts
+        render :partial => 'newprice'
+      else
+        render :partial => 'failed_booking'
       end
+      return
+    end
 
+    if !@order_form.valid?
       StatCounters.inc %W[pay.errors.form]
       logger.info "Pay: invalid order: #{@order_form.errors_hash.inspect}"
       render :json => {:errors => @order_form.errors_hash}

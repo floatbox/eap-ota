@@ -236,6 +236,7 @@ class OrderForm
   end
 
   def counts_contradiction
+    valid?
     people_count != calculated_people_count
   end
 
