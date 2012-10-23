@@ -3,6 +3,24 @@ require 'spec_helper'
 
 describe OrderForm do
 
+  describe '#people_by_age_and_seat' do
+    subject do
+      OrderForm.new(:people => people)
+    end
+    let(:people) do
+      [
+        build(:person),
+        build(:person, :infant, :birthday => 3.months.ago, :with_seat => true),
+        build(:person, :infant, :birthday => 6.months.ago),
+        build(:person)
+      ]
+    end
+    its('people_by_age_and_seat.reverse.first.with_seat') {should be_false}
+    its('people_by_age_and_seat.reverse.second.with_seat') {should be_true}
+    its('people_by_age_and_seat.reverse.third.with_seat') {should be_false}
+    its('people_by_age_and_seat.reverse.fourth.with_seat') {should be_false}
+  end
+
   describe "#price_with_payment_commission" do
     context "when @pwpc is null" do
       it 'is taken from recommendation' do

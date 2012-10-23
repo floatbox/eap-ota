@@ -609,9 +609,9 @@ initBirthday: function() {
             type = age < 12 ? (age < 2 ? 'i' : 'c') : 'a';
         }
         if (type !== that.type) {
-            /*that.type = type === 'i' ? (withseat.el.prop('checked') ? 'c' : 'i') : type;
+            that.type = type === 'i' ? (withseat.el.prop('checked') ? 'c' : 'i') : type;
             that.el.find('.bfpo-adult').toggle(type !== 'i');
-            that.el.find('.bfpo-infant').toggle(type === 'i');*/
+            that.el.find('.bfpo-infant').toggle(type === 'i');
             that.type = type;
             that.section.validate();
             booking.form.validate();

@@ -13,6 +13,7 @@ class Person
   field :bonuscard_type, :type => String
   field :bonuscard_number, :type => String
   field :number_in_amadeus, :type => Integer
+  field :with_seat, :type => Boolean, :default => false
 
   attr_accessor :passenger_ref, :tickets, :associated_infant
 

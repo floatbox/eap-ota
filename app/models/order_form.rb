@@ -61,23 +61,29 @@ class OrderForm
   end
 
   # пассажиры, отсортированные по возрасту
-  def people_by_age
-    (people || []).sort_by(&:birthday)
+  def people_by_age_and_seat
+    (people || []).sort_by do |p|
+      if p.birthday && (p.birthday > Date.today - 2.years) && p.with_seat
+        p.birthday - 3.years
+      else
+        p.birthday
+      end
+    end
   end
 
   # пассажиры, летящие по взрослому тарифу
   def adults
-    people_by_age.first(people_count[:adults])
+    people_by_age_and_seat.first(people_count[:adults])
   end
 
   # пассажиры (в том числе младенцы), летящие по детскому тарифу с выделенным местом
   def children
-    people_by_age[ people_count[:adults], people_count[:children] ] || []
+    people_by_age_and_seat[ people_count[:adults], people_count[:children] ] || []
   end
 
   # дети до двух лет, которым не предоставляется места
   def infants
-    people_by_age.last(people_count[:infants])
+    people_by_age_and_seat.last(people_count[:infants])
   end
 
   # взрослые без детей на коленях
@@ -236,7 +242,7 @@ class OrderForm
   def calculated_people_count
     last_date = recommendation.segments.last.dept_date
     adults_count = people.count{|p| p.birthday + 12.years <= last_date}
-    exact_infants_count = people.count{|p| p.birthday + 2.years > last_date}
+    exact_infants_count = people.count{|p| (p.birthday + 2.years > last_date) && !p.with_seat }
     infants_count = if exact_infants_count <= adults_count
       exact_infants_count
     else
