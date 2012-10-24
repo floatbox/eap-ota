@@ -383,7 +383,7 @@ init: function() {
     this.sample = this.el.find('.bfp-row').remove();
     this.rows = [];
     this.rowsLimit = Math.min(8, Number(this.table.attr('data-max')));
-    this.cachedPeople = this.table.attr('data-people');
+    this.cachedPeople = this.table.attr('data-people') + '0';
     var total = Number(this.table.attr('data-total'));
     for (var i = 0; i < total; i++) {
         this.addRow(i);
@@ -460,7 +460,7 @@ applyRows: function() {
     this.title.attr('data-amount', key).html(local.booking.passengers[key]);
 },
 validate: function(forced) {
-    var wrong = [], empty = [], people = {a: 0, c: 0, i: 0};
+    var wrong = [], empty = [], people = {a: 0, c: 0, i: 0, is: 0};
     for (var i = 0, im = this.rows.length; i < im; i++) {
         var person = this.rows[i];
         if (forced) person.validate(true);
@@ -475,13 +475,16 @@ validate: function(forced) {
         }
         if (person.type) {
             people[person.type]++;
+            if (person.type === 'i' && person.seat) {
+                people['is']++;
+            }
         }
     }
     if (people.a + people.c + people.i === this.rows.length) {
         if (people.a === 0 && people.c + people.i > 0) {
             wrong.push(local.swarnings.noadults + '.');
         }
-        var merged = [people.a, people.c, people.i].join('');
+        var merged = [people.a, people.c, people.i, people.is].join('');
         if (merged !== this.cachedPeople) {
             booking.form.hidePrice();
             this.cachedPeople = merged;
@@ -597,8 +600,8 @@ initBirthday: function() {
     });
     var withseat = new validator.Checkbox(this.el.find('.bfpo-infant input'));
     withseat.el.on('click set', function() {
-        if (that.type === 'c' || that.type === 'i') {
-            that.type = this.checked ? 'c' : 'i';
+        if (that.type === 'i') {
+            that.seat = this.checked;
             that.section.validate();
         }
     });
@@ -609,10 +612,9 @@ initBirthday: function() {
             type = age < 12 ? (age < 2 ? 'i' : 'c') : 'a';
         }
         if (type !== that.type) {
-            that.type = type === 'i' ? (withseat.el.prop('checked') ? 'c' : 'i') : type;
+            that.type = type;
             that.el.find('.bfpo-adult').toggle(type !== 'i');
             that.el.find('.bfpo-infant').toggle(type === 'i');
-            that.type = type;
             that.section.validate();
             booking.form.validate();
         }
