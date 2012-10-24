@@ -333,7 +333,7 @@ describe Payu do
             "RETURN_CODE" => "AUTHORIZED",
             "RETURN_MESSAGE" => "Authorized.",
             "DATE" => "2012-10-08 17:42:12",
-            "HASH" => "32b263656557bbf17532fb0f79fefba9"
+            "HASH" => "e3915d79b0ae3a1c549b1b8d97810e75"
           )
         end
 
@@ -341,9 +341,8 @@ describe Payu do
         it {should_not be_error}
         it {should_not be_threeds}
         its(:err_code) {should_not be}
-        pending {should be_signed}
-        # its(:params) {should == ''}
-        specify { pending; subject.hash.should  == subject.computed_hash}
+        it {should be_signed}
+        specify { subject.hash.should  == subject.computed_hash}
         its(:their_ref) {should == "6626740"}
       end
 
@@ -356,7 +355,7 @@ describe Payu do
             "RETURN_CODE"=>"INTERNAL_ERROR",
             "RETURN_MESSAGE"=>"",
             "DATE"=>"2012-10-19 21:01:08",
-            "HASH"=>"a220b9834a6e15d5f22425aeeb820e72"
+            "HASH"=>"32a2150abbda01cfc480bf44d2435717"
           )
         end
 
@@ -364,9 +363,8 @@ describe Payu do
         it {should be_error}
         it {should_not be_threeds}
         its(:err_code) {should == "INTERNAL_ERROR"}
-        pending {should be_signed}
-        # its(:params) {should == ''}
-        specify { pending; subject.hash.should  == subject.computed_hash}
+        it {should be_signed}
+        specify { subject.hash.should  == subject.computed_hash}
         its(:their_ref) {should == "164931"}
       end
     end
