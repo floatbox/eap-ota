@@ -29,7 +29,7 @@ class PayuCharge < Payment
   def can_cancel?; blocked? end
   def can_charge?; blocked? end
   # FIXME ограничить processing_* статусами?
-  def can_sync_state?; true end
+  def can_sync_status?; true end
 
   def block!
     return unless can_block?
@@ -95,11 +95,6 @@ class PayuCharge < Payment
     Payu.new
   end
 
-  def gateway_state
-    response = gateway.state(:our_ref => ref)
-    response.state || response.err_code
-  end
-
   STATUS_MAPPING = {
     'COMPLETE' => 'charged',
     'PAYMENT_AUTHORIZED' => 'blocked',
@@ -109,11 +104,13 @@ class PayuCharge < Payment
     # 'WAITING_PAYMENT' => 'processing_block' ???
   }
 
-  def sync_state!
-    return unless can_sync_state?
-    state_code = gateway_state
-    state = STATUS_MAPPING[state_code] or raise ArgumentError, "Unknown state reported by Payu: #{state_code.inspect}"
-    update_attributes :status => state
+  def sync_status!
+    return unless can_sync_status?
+    response = gateway.status(:our_ref => ref)
+    status_code = response.status
+    their_ref = response.their_ref
+    status = STATUS_MAPPING[status_code] or raise ArgumentError, "Unknown state reported by Payu: #{status_code.inspect}"
+    update_attributes :status => status, :their_ref => their_ref
   end
 
   # распределение дохода
