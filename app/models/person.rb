@@ -22,8 +22,8 @@ class Person
   # FIXME WRONG! фамилии через дефис? два имени? сокращения?
   validates_format_of :first_name, :with => /^[a-zA-Z-]*$/, :message => "Некорректное имя"
   validates_format_of :last_name,  :with => /^[a-zA-Z-]*$/, :message => "Некорректная фамилия"
-  validate :check_age, :check_passport
-  attr_accessor :flight_date, :infant_or_child
+  validate :check_passport
+  attr_accessor :infant, :child
 
   # совместимость с "активрекордным" стилем
   before_validation :set_birthday
@@ -37,7 +37,7 @@ class Person
       name_str = first_name_with_code + last_name + associated_infant.first_name
       name_str += associated_infant.last_name if associated_infant.last_name != last_name
       name_str.length > 39
-    elsif !infant?
+    elsif !infant
       (first_name_with_code + last_name).length > 58
     end
   end
@@ -47,16 +47,17 @@ class Person
     associated_infant.first_name = associated_infant.first_name[0] if associated_infant && too_long_names?
   end
 
-  def infant?
-    infant_or_child == 'i'
+  # ребенок до 2-х лет без явно указанного места
+  def potential_infant?(last_flight_date)
+    (birthday + 2.years > last_flight_date) && !with_seat
   end
 
-  def child?
-    infant_or_child == 'c'
-  end
-
-  def adult?
-    !child? && !infant?
+  def adult?(last_flight_date=nil)
+    if last_flight_date && birthday
+      birthday + 12.years <= last_flight_date
+    else
+      !child && !infant
+    end
   end
 
   def clear_first_name_and_last_name
@@ -84,8 +85,8 @@ class Person
     res = "#{first_name}/#{last_name}/#{sex}/#{nationality.alpha3}/#{birthday.strftime('%d%b%y').upcase}/#{passport}/"
     res += "expires:#{document_expiration_date.strftime('%d%b%y').upcase}/" unless document_noexpiration
     res += "bonus: #{bonuscard_type}#{bonuscard_number}/" if bonus_present
-    res += "child" if child?
-    res += "infant" if infant?
+    res += "child" if child
+    res += "infant" if infant
     res
   end
 
@@ -136,17 +137,5 @@ class Person
   def nationality
     Country.find_by_id(nationality_id) if nationality_id
   end
-
-  def check_age
-    check_infant_or_child_age if !adult? && flight_date
-  end
-
-  # FIXME а если день рождения между рейсами?
-  def check_infant_or_child_age
-    if birthday && (birthday + (infant? ? 2 : 12).years <= flight_date)
-      errors.add :birthday, "на момент вылета будет более #{infant? ? '2 лет' : '12 лет'}"
-    end
-  end
-
 end
 

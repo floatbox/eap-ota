@@ -3,22 +3,36 @@ require 'spec_helper'
 
 describe OrderForm do
 
-  describe '#people_by_age_and_seat' do
+  describe '#infants' do
     subject do
-      OrderForm.new(:people => people)
+      o = OrderForm.new(:people => people)
+      o.stub(:last_flight_date).and_return(Date.today + 5.days)
+      o.associate_infants
+      o
     end
-    let(:people) do
-      [
-        build(:person),
-        build(:person, :infant, :birthday => 3.months.ago, :with_seat => true),
-        build(:person, :infant, :birthday => 6.months.ago),
-        build(:person)
-      ]
+
+    context 'infants after adults have priority' do
+      let(:people) do
+        [
+          build(:person, :infant, :first_name => 'Andrei'),
+          build(:person),
+          build(:person, :infant, :first_name => 'Ivan')
+        ]
+      end
+      its('infants.count') {should == 1}
+      its('infants.first.first_name') {should == 'Ivan'}
     end
-    its('people_by_age_and_seat.reverse.first.with_seat') {should be_false}
-    its('people_by_age_and_seat.reverse.second.with_seat') {should be_true}
-    its('people_by_age_and_seat.reverse.third.with_seat') {should be_false}
-    its('people_by_age_and_seat.reverse.fourth.with_seat') {should be_false}
+
+    context 'infant with seat is not considered as infant' do
+      let(:people) do
+        [
+          build(:person),
+          build(:person, :infant, :with_seat => true)
+        ]
+      end
+      its(:infants) {should be_blank}
+
+    end
   end
 
   describe "#price_with_payment_commission" do
@@ -204,7 +218,7 @@ describe OrderForm do
     end
 
     subject do
-      OrderForm.new(
+      o = OrderForm.new(
         :people => create_bunch_of_people(person_attrs),
         :people_count => {
           :adults => (person_attrs.count - person_attrs.count(&:second)),
@@ -212,6 +226,8 @@ describe OrderForm do
            :children => 0
         }
       )
+      o.stub(:last_flight_date).and_return(Date.today + 5.days)
+      o
     end
 
     before { subject.associate_infants }
@@ -235,8 +251,8 @@ describe OrderForm do
       it { should have_associated('ivanova', 'ivanova') }
       it { should have_associated('ivanov', 'ivanov') }
       it { should have_associated('mitrofanov', 'mitrofanova') }
-      it { should have_no_infants_associated('cucaev') }
-      it { should have_associated('shmidt', 'petrov') }
+      it { should have_no_infants_associated('shmidt') }
+      it { should have_associated('cucaev', 'petrov') }
     end
 
     context 'two adults and infant' do
@@ -286,7 +302,8 @@ describe OrderForm do
         build(:person, :infant)
       ]
       o = OrderForm.new(:people => people)
-      o.stub_chain(:recommendation, :segments, :last, :dept_date).and_return(last_date)
+      o.stub(:last_flight_date).and_return(last_date)
+      o.associate_infants
       o
     end
 

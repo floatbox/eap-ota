@@ -29,11 +29,11 @@ FactoryGirl.define do
 
     trait :child do
       birthday {8.years.ago}
-      infant_or_child 'c'
+      child true
     end
     trait :infant do
       birthday {6.months.ago}
-      infant_or_child 'i'
+      infant true
     end
   end
 

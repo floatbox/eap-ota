@@ -27,16 +27,16 @@ describe Person do
 
   describe '#correct_long_name' do
     subject do
-      p = build(:person, :associated_infant => associated_infant, :first_name => ('A'*10), :last_name => last_name, :sex => sex, :infant_or_child => infant_or_child)
+      p = build(:person, :associated_infant => associated_infant, :first_name => ('A'*10), :last_name => last_name, :sex => sex, :child => child)
       p.correct_long_name
       p
     end
+    let(:child) {nil}
 
     context 'adult with infant' do
       let(:associated_infant) do
         build :person, :infant, :first_name => infant_first_name, :last_name => infant_last_name
       end
-      let(:infant_or_child) {nil}
       let(:last_name) {'A' * 10}
 
       context 'with same last name' do
@@ -141,7 +141,6 @@ describe Person do
       context 'male' do
         #ограничение - 55 символов
         let(:sex) {'m'}
-        let(:infant_or_child) {nil}
         context 'with long name' do
           let(:last_name) {'A' * 46}
           its(:first_name) {should == 'A'}
@@ -156,7 +155,6 @@ describe Person do
       context 'female' do
         #ограничение - 54 символа
         let(:sex) {'f'}
-        let(:infant_or_child) {nil}
         context 'with long name' do
           let(:last_name) {'A' * 45}
           its(:first_name) {should == 'A'}
@@ -170,7 +168,7 @@ describe Person do
 
       context 'male child' do
         let(:sex) {'m'}
-        let(:infant_or_child) {'c'}
+        let(:child) {true}
 
         context 'with long name' do
           let(:last_name) {'A' * 49}
@@ -185,7 +183,7 @@ describe Person do
 
       context 'female child' do
         let(:sex) {'f'}
-        let(:infant_or_child) {'c'}
+        let(:child) {true}
 
         context 'with long name' do
           let(:last_name) {'A' * 49}
