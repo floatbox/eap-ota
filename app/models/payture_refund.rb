@@ -41,10 +41,10 @@ class PaytureRefund < Payment
       update_attributes :status => 'charged', :charged_on => Date.today
       return true
     else
-      update_attributes :status => 'processing_charge', :reject_reason => res.err_code
+      update_attributes :status => 'processing_charge', :error_code => res.err_code
     end
   rescue => e
-    update_attributes :status => 'processing_charge', :reject_reason => e
+    update_attributes :status => 'processing_charge', :error_code => e
     raise
   end
 

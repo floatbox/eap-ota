@@ -45,7 +45,7 @@ class PayuCharge < Payment
     elsif response.success?
        update_attributes :status => 'blocked', :their_ref => response.their_ref
     elsif response.error?
-      update_attributes :status => 'rejected', :reject_reason => response.err_code
+      update_attributes :status => 'rejected', :error_code => response.err_code
     else
       # FIXME оставляем status == 'processing_block' ???
     end
@@ -62,7 +62,7 @@ class PayuCharge < Payment
     if res.success?
       update_attributes :status => 'blocked', :their_ref => res.their_ref
     else
-      update_attributes :status => 'rejected', :reject_reason => res.err_code
+      update_attributes :status => 'rejected', :error_code => res.err_code
     end
     res.success?
   end
@@ -74,7 +74,7 @@ class PayuCharge < Payment
     if res.success?
       update_attributes :status => 'charged', :charged_on => Date.today
     else
-      update_attributes :status => 'blocked', :reject_reason => res.err_code
+      update_attributes :status => 'blocked', :error_code => res.err_code
     end
     res.success?
   end
@@ -86,7 +86,7 @@ class PayuCharge < Payment
     if res.success?
       update_attributes :status => 'canceled'
     else
-      update_attributes :status => 'blocked', :reject_reason => res.err_code
+      update_attributes :status => 'blocked', :error_code => res.err_code
     end
     res.success?
   end
@@ -146,7 +146,7 @@ class PayuCharge < Payment
   end
 
   def error_explanation
-    reject_reason
+    error_code
   end
 
 end
