@@ -44,6 +44,10 @@ class Payu
       error? && @doc['RETURN_CODE']
     end
 
+    def err_message
+      error? && @doc['RETURN_MESSAGE']
+    end
+
     def their_ref
       @doc['REFNO']
     end

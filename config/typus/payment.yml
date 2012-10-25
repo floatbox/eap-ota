@@ -2,7 +2,7 @@ Payment: &PAYMENT_CONFIG
   fields:
     default: show_link, status_decorated, price, created_at, payment_info, error_explanation, control_links
     list: show_link, order, status_decorated, price, commission, earnings, created_at, charged_on, payment_info, error_explanation, control_links
-    show: show_link, order, status_decorated, charge_link, external_gateway_link, price, commission, earnings, created_at, charged_on, name_in_card, pan, error_code, error_explanation
+    show: show_link, order, status_decorated, charge_link, external_gateway_link, price, commission, earnings, created_at, charged_on, name_in_card, pan, error_code, error_explanation, error_message
     new: type, price
     edit: type, price, commission, charged_on
     csv: type, price, charged_on

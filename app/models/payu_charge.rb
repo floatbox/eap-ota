@@ -45,7 +45,7 @@ class PayuCharge < Payment
     elsif response.success?
        update_attributes :status => 'blocked', :their_ref => response.their_ref
     elsif response.error?
-      update_attributes :status => 'rejected', :error_code => response.err_code
+      update_attributes :status => 'rejected', :error_code => response.err_code, :error_message => response.err_message
     else
       # FIXME оставляем status == 'processing_block' ???
     end
