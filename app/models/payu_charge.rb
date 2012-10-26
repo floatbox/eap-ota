@@ -99,7 +99,8 @@ class PayuCharge < Payment
     'COMPLETE' => 'charged',
     'PAYMENT_AUTHORIZED' => 'blocked',
     'REFUND' => 'charged',
-    'REVERSED' => 'canceled'
+    'REVERSED' => 'canceled',
+    'CARD_NOTAUTHORIZED' => 'rejected'
     # 'IN_PROGRESS' => 'processing_charge' ???
     # 'WAITING_PAYMENT' => 'processing_block' ???
   }
