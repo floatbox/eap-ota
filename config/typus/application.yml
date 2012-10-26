@@ -241,8 +241,8 @@ PromoCode:
 
 Version:
   fields:
-    default: item_type, item_id, event, whodunnit, done, created_at
-    show: item_type, item_id, event, whodunnit, done, created_at, changeset
+    default: show_link, event, whodunnit, done, created_at
+    show: show_link, item_type, item_id, event, whodunnit, done, created_at, changeset
     options:
        default_action_on_item: show
        date_formats:
