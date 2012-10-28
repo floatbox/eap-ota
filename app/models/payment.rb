@@ -1,6 +1,42 @@
 # encoding: utf-8
 class Payment < ActiveRecord::Base
 
+  # зачатки payment strategy
+  # сейчас создает только кредитнокарточковые платежи
+  def self.select_and_create(*args)
+    klass =
+      case processing_code = Conf.payment.card_processing
+      when 'payture'
+        PaytureCharge
+      when 'payu'
+        PayuCharge
+      when false
+        nil
+      else
+        raise ArgumentError, "unknown payment.card_processing: #{processing_code}"
+      end
+
+    return unless klass
+
+    klass.create(*args)
+  end
+
+  # эвристика для поиска 3дсовых платежей в разных системах
+  def self.find_3ds_by_backref!(params)
+    payment =
+      if params[:MD].present?
+        PaytureCharge.find_by_threeds_key(params[:MD])
+      elsif params[:REFNO].present?
+        PayuCharge.find_by_their_ref(params[:REFNO])
+      end
+
+    unless payment
+      raise ArgumentError, "strange params for confirm_3ds: #{params.inspect}"
+    end
+
+    payment
+  end
+
   has_paper_trail
   extend Commission::Columns
 
@@ -22,19 +58,21 @@ class Payment < ActiveRecord::Base
 
   validates :price, decimal: true
 
-  CHARGES = ['PaytureCharge', 'CashCharge']
-  REFUNDS = ['PaytureRefund', 'CashRefund']
+  CHARGES = ['PayuCharge', 'PaytureCharge', 'CashCharge']
+  REFUNDS = ['PayuRefund', 'PaytureRefund', 'CashRefund']
 
   scope :charges, where(:type => CHARGES)
   scope :refunds, where(:type => REFUNDS)
 
+  PAYU =    ['PayuCharge', 'PayuRefund']
   PAYTURE = ['PaytureCharge', 'PaytureRefund']
   CASH =    ['CashCharge', 'CashRefund']
 
+  scope :payu, where(:type => PAYU)
   scope :payture, where(:type => PAYTURE)
   scope :cash, where(:type => CASH)
   def self.types
-    (PAYTURE + CASH).map {|type| [I18n.t(type), type] }
+    (PAYU + PAYTURE + CASH).map {|type| [I18n.t(type), type] }
   end
 
   # состояния, для оверрайда в подкласах и чтоб кнопки работали

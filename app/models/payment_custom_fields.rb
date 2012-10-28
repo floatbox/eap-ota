@@ -1,9 +1,10 @@
 class PaymentCustomFields
   include KeyValueInit
-  attr_accessor :ip, :first_name, :last_name, :phone, :email, :date, :points, :segments, :description
+  attr_accessor :ip, :first_name, :last_name, :phone, :email, :date, :points, :segments, :description, :pnr_number
 
   def order= order
     return unless order
+    self.pnr_number = order.pnr_number
     self.date = order.departure_date
     self.email = order.email
     self.phone = order.phone.try(:gsub, /\D/, '')

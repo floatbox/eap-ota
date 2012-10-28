@@ -1,7 +1,7 @@
 # encoding: utf-8
-class PaytureRefund < Payment
+class PayuRefund < Payment
 
-  belongs_to :charge, :class_name => 'PaytureCharge', :foreign_key => 'charge_id'
+  belongs_to :charge, :class_name => 'PayuCharge', :foreign_key => 'charge_id'
   has_many :refunds, :through => :charge
 
   validates_presence_of :charge
@@ -13,6 +13,7 @@ class PaytureRefund < Payment
 
   def set_ref
     self.ref = charge.ref
+    self.their_ref = charge.their_ref
     self.order_id = charge.order_id
     self.name_in_card = charge.name_in_card
     self.pan = charge.pan
@@ -36,13 +37,13 @@ class PaytureRefund < Payment
   def charge!
     return unless can_charge?
     update_attributes :status => 'processing_charge'
-    res = gateway.refund( -price, :our_ref => ref)
+    res = gateway.refund( -price, :their_ref => their_ref)
     if res.success?
       update_attributes :status => 'charged', :charged_on => Date.today
-      return true
     else
       update_attributes :status => 'processing_charge', :error_code => res.err_code
     end
+    res.success?
   rescue => e
     update_attributes :status => 'processing_charge', :error_code => e
     raise
@@ -54,7 +55,7 @@ class PaytureRefund < Payment
   end
 
   def gateway
-    Payture.new
+    Payu.new
   end
 
   # для админки

@@ -253,17 +253,6 @@ class OrderForm
     }
   end
 
-  def block_money(ip = nil)
-    response = order.block_money(card, self, ip)
-
-    if response.error?
-      card.errors.add :number, "не удалось провести платеж"
-      errors.add :card, 'Платеж не прошел'
-    end
-
-    response
-  end
-
   def agent_commission
     recommendation.commission_agent
   end

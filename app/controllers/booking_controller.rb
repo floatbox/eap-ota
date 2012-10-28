@@ -170,9 +170,14 @@ class BookingController < ApplicationController
       return
     end
 
-    payture_response = @order_form.block_money(request.remote_ip)
+    custom_fields = PaymentCustomFields.new(
+      ip: request.remote_ip,
+      order: @order_form.order,
+      order_form: @order_form
+    )
+    payment_response = @order_form.order.block_money(@order_form.card, custom_fields)
 
-    if payture_response.success?
+    if payment_response.success?
       logger.info "Pay: payment and booking successful"
 
       unless strategy.delayed_ticketing?
@@ -188,25 +193,29 @@ class BookingController < ApplicationController
       StatCounters.inc %W[pay.success.total pay.success.card]
       render :partial => 'success', :locals => {:pnr_path => show_notice_path(:id => @order_form.pnr_number), :pnr_number => @order_form.pnr_number}
 
-    elsif payture_response.threeds?
+    elsif payment_response.threeds?
       StatCounters.inc %W[pay.3ds.requests]
       logger.info "Pay: payment system requested 3D-Secure authorization"
-      render :partial => 'threeds', :locals => {:payture_response => payture_response}
+      render :partial => 'threeds', :locals => {:payment => payment_response}
 
-    else # payture_response failed
+    else # payment_response failed
       strategy.cancel
-      msg = @order_form.card.errors[:number]
       StatCounters.inc %W[pay.errors.payment]
-      logger.info "Pay: payment failed with error message #{msg}"
+      # FIXME ну и почему не сработало?
+      logger.info "Pay: payment failed"
       render :partial => 'failed_payment'
     end
   ensure
     StatCounters.inc %W[pay.total]
   end
 
+  # Payture: params['PaRes'], params['MD']
+  # Payu: params['REFNO'], params['STATUS'] etc.
+  # FIXME отработать отмену проведенного Payu платежа, если бронь уже снята
+  # FIXME избежать возможности пересмотреть все заказы, возможно этим согрешит
+  # неподписанный респонс Payu
   def confirm_3ds
-    pa_res, md = params['PaRes'], params['MD']
-    @payment = PaytureCharge.find_by_threeds_key!(md.presence || 'no key given')
+    @payment = Payment.find_3ds_by_backref!(params)
 
     @order = @payment.order
     if @order.ticket_status == 'canceled'
@@ -217,7 +226,7 @@ class BookingController < ApplicationController
 
     case @order.payment_status
     when 'not blocked', 'new'
-      unless @order.confirm_3ds(pa_res, md)
+      unless @order.confirm_3ds!(params)
         StatCounters.inc %W[pay.errors.payment pay.errors.3ds pay.errors.3ds_payment]
         logger.info "Pay: problem confirming 3ds"
         @error_message = :payment

@@ -1,14 +1,14 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe PaytureRefund do
+describe PayuRefund do
 
   before do
     Conf.payture.stub(:commission).and_return('2.85%')
   end
 
-  it "should copy attrs from payture_charge" do
-    charge = create(:payture_charge, :name_in_card => 'vasya', :pan => '123456xxxxxx1234')
+  it "should copy attrs from payu_charge" do
+    charge = create(:payu_charge, :name_in_card => 'vasya', :pan => '123456xxxxxx1234')
     refund = charge.refunds.create
 
     refund.order.should be
@@ -19,27 +19,27 @@ describe PaytureRefund do
   end
 
   it "should change sign of refund with positive price on save" do
-    refund = create(:payture_refund, :price => 23.5)
+    refund = create(:payu_refund, :price => 23.5)
     refund.price.should == -23.5
   end
 
   it 'should prevent entering commas in price' do
-    refund = build(:payture_refund, :price => '-23,5')
+    refund = build(:payu_refund, :price => '-23,5')
     refund.should have_errors_on(:price)
   end
 
   it 'should prevent entering spaces in price' do
-    refund = build(:payture_refund, :price => '23 345.10')
+    refund = build(:payu_refund, :price => '23 345.10')
     refund.should have_errors_on(:price)
   end
 
   it 'should prevent entering commas even if sign converted' do
-    refund = build(:payture_refund, :price => '23,5')
+    refund = build(:payu_refund, :price => '23,5')
     refund.should have_errors_on(:price)
   end
 
   it 'should accept price otherwise' do
-    refund = build(:payture_refund, :price => ' 23.50руб')
+    refund = build(:payu_refund, :price => ' 23.50руб')
     refund.should be_valid
   end
 
@@ -47,7 +47,7 @@ describe PaytureRefund do
   # FIXME кривой тест
   it "should not allow to save refund without charge" do
     order = create(:order)
-    refund = PaytureRefund.new :price => -5, :order => order
+    refund = PayuRefund.new :price => -5, :order => order
 
     refund.should have_errors_on(:charge)
   end
@@ -55,24 +55,24 @@ describe PaytureRefund do
   pending "should not allow to create refund for more than charged"
 
   it 'should recalculate earnings on save' do
-    refund = create(:payture_refund, :price => -23.5)
+    refund = create(:payu_refund, :price => -23.5)
     refund.earnings.should == -23.5
   end
 
   it 'should not allow to update price on charged refund' do
-    refund = create(:payture_refund, :charged, :price => -23.5)
+    refund = create(:payu_refund, :charged, :price => -23.5)
     refund.assign_attributes :price => '-23.40'
     refund.should have_errors_on(:price)
   end
 
   it 'should still allow to update price on charged refund if entered price is technically the same' do
-    refund = create(:payture_refund, :charged, :price => -23.5)
+    refund = create(:payu_refund, :charged, :price => -23.5)
     refund.assign_attributes :price => '-23.50'
     refund.should be_valid
   end
 
   describe "state" do
-    subject {PaytureRefund.new(:status => current_state)}
+    subject {PayuRefund.new(:status => current_state)}
 
     context "blocked" do
       let(:current_state) { 'blocked' }

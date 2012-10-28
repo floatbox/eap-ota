@@ -26,6 +26,20 @@ describe Payu do
       "test_121008_151218"
     end
 
+    let :custom_fields do
+      PaymentCustomFields.new(
+        :pnr_number => 'ABC456',
+        :ip => '127.0.0.1',
+        :first_name => 'Test',
+        :last_name => 'Eviterra',
+        :phone => '1234567890',
+        :email => 'testpayu@eviterra.com',
+        :date => Date.new(2012,11,10),
+        :points => %W[SVO CDG SVO],
+        :description => 'blah'
+      )
+    end
+
     let :expected_request do
       {
         :MERCHANT => "EVITERRA",
@@ -33,7 +47,7 @@ describe Payu do
         :ORDER_DATE => "2012-10-08 11:12:18",
         :ORDER_PNAME => ["1 x Ticket"],
         :ORDER_PCODE => ["TCK1"],
-        :ORDER_PINFO => ["{'departuredate':20120914, 'locationnumber':2, 'locationcode1':'BUH', 'locationcode2':'IBZ','passengername':'Fname Lname','reservationcode':'abcdef123456'}"],
+        :ORDER_PINFO => [ "{\"reservationcode\":\"ABC456\",\"passengername\":\"Test Eviterra\",\"departuredate\":20121110,\"locationnumber\":3,\"locationcode1\":\"SVO\",\"locationcode2\":\"CDG\",\"locationcode3\":\"SVO\"}"],
         :ORDER_PRICE => ["123"],
         :ORDER_VAT => ["0"],
         :ORDER_QTY => ["1"],
@@ -63,27 +77,36 @@ describe Payu do
         :DELIVERY_ZIPCODE => "123",
         :DELIVERY_PHONE => "1234567890",
         :DELIVERY_COUNTRYCODE => "RU",
-        :BACK_REF => "http://localhost:3000/",
-        :ORDER_HASH => "a374d2fcf937910c11c7967e365b6968"
+        :BACK_REF => "http://localhost:3000/confirm_3ds",
+        :ORDER_HASH => "e4e7c25af615ba77879aebfbdcd1e296"
       }
     end
 
-    it "should make request wit correct params" do
+    # should == делает красивый diff, без него следующий тест разобрать невозможно.
+    #
+    pending do
+      expected_request.should == {}
+    end
+
+    it "should make request with correct params" do
       #pending "need to stub date/time"
       parsed_response = stub(:parsed_response)
 
       subject.should_receive(:alu_post).with( expected_request ).and_return(parsed_response)
       Payu::PaymentResponse.should_receive(:new).with(parsed_response, seller_key)
 
-      subject.block amount, card, :our_ref => our_ref
+      subject.block amount, card, :our_ref => our_ref, :custom_fields => custom_fields
     end
 
   end
 
+  describe "#parse_3ds" do
+    pending
+  end
+
   describe "#unblock" do
 
-    it "should make request wit correct params" do
-      pending "need to stub date/time"
+    pending "should make request with correct params" do
     end
 
   end
@@ -117,6 +140,27 @@ describe Payu do
     end
 
   end
+
+  describe "#serialize_order_info" do
+    let :custom_fields do
+      PaymentCustomFields.new(
+        :pnr_number => 'ABC456',
+        :first_name => 'Vasya',
+        :last_name => 'Petrov',
+        :date => Date.new(2012,11,10),
+        :points => %W[SVO CDG SVO]
+      )
+    end
+
+    subject do
+      Payu.new.send :serialize_order_info, custom_fields
+    end
+
+    it { should ==
+      "{\"reservationcode\":\"ABC456\",\"passengername\":\"Vasya Petrov\",\"departuredate\":20121110,\"locationnumber\":3,\"locationcode1\":\"SVO\",\"locationcode2\":\"CDG\",\"locationcode3\":\"SVO\"}"
+    }
+  end
+
 
   describe "#alu_add_money" do
 
@@ -181,6 +225,7 @@ describe Payu do
       it {should be_success}
       it {should_not be_error}
       it {should_not be_threeds}
+      its(:err_code) {should_not be}
       # success!
       it {should be_signed}
       its(:their_ref) {should == "6471185"}
@@ -206,6 +251,7 @@ describe Payu do
       it {should_not be_success}
       it {should be_error}
       it {should_not be_threeds}
+      its(:err_code) {should == 'FRAUD_RISK'}
       pending {should be_signed}
       # its(:params) {should == ''}
       specify { pending; subject.hash.should  == subject.computed_hash}
@@ -232,6 +278,7 @@ describe Payu do
       it {should_not be_success}
       it {should be_error}
       it {should_not be_threeds}
+      its(:err_code) {should == 'AUTHORIZATION_FAILED'}
       pending {should be_signed}
       #its(:params) {should == ''}
       specify { pending; subject.hash.should  == subject.computed_hash}
@@ -259,37 +306,67 @@ describe Payu do
       it {should_not be_success}
       it {should_not be_error}
       it {should be_threeds}
+      its(:err_code) {should_not be}
       # success!
       it {should be_signed}
       its(:their_ref) {should == "6372861"}
 
+      its(:threeds_url) { should == "https://sandbox8ru.epayment.ro/order/alu_return_3ds.php?request_id=2Xrl85eqobmBr3a%2FcbnGYQ%3D%3D" }
+      its(:threeds_params) { should == {} }
+
+
     end
 
     # принимающий урл должен принимать POST, и надо выключить на нем CSRF
-    describe "success from 3ds authorization via POST params" do
+    describe "response from 3ds authorization via POST params" do
 
       subject do
         Payu::PaymentResponse.new(params, seller_key)
       end
-      let (:params) do
-        HashWithIndifferentAccess.new(
-          "REFNO" => "6626740",
-          "ALIAS" => "598cba51685645dea3a8ea43ff71cb96",
-          "STATUS" => "SUCCESS",
-          "RETURN_CODE" => "AUTHORIZED",
-          "RETURN_MESSAGE" => "Authorized.",
-          "DATE" => "2012-10-08 17:42:12",
-          "HASH" => "32b263656557bbf17532fb0f79fefba9"
-        )
+
+      describe "success" do
+        let (:params) do
+          HashWithIndifferentAccess.new(
+            "REFNO" => "6626740",
+            "ALIAS" => "598cba51685645dea3a8ea43ff71cb96",
+            "STATUS" => "SUCCESS",
+            "RETURN_CODE" => "AUTHORIZED",
+            "RETURN_MESSAGE" => "Authorized.",
+            "DATE" => "2012-10-08 17:42:12",
+            "HASH" => "e3915d79b0ae3a1c549b1b8d97810e75"
+          )
+        end
+
+        it {should be_success}
+        it {should_not be_error}
+        it {should_not be_threeds}
+        its(:err_code) {should_not be}
+        it {should be_signed}
+        specify { subject.hash.should  == subject.computed_hash}
+        its(:their_ref) {should == "6626740"}
       end
 
-      it {should be_success}
-      it {should_not be_error}
-      it {should_not be_threeds}
-      pending {should be_signed}
-      # its(:params) {should == ''}
-      specify { pending; subject.hash.should  == subject.computed_hash}
-      its(:their_ref) {should == "6626740"}
+      describe "fail" do
+        let (:params) do
+          HashWithIndifferentAccess.new(
+            "REFNO"=>"164931",
+            "ALIAS"=>"",
+            "STATUS"=>"FAILED",
+            "RETURN_CODE"=>"INTERNAL_ERROR",
+            "RETURN_MESSAGE"=>"",
+            "DATE"=>"2012-10-19 21:01:08",
+            "HASH"=>"32a2150abbda01cfc480bf44d2435717"
+          )
+        end
+
+        it {should_not be_success}
+        it {should be_error}
+        it {should_not be_threeds}
+        its(:err_code) {should == "INTERNAL_ERROR"}
+        it {should be_signed}
+        specify { subject.hash.should  == subject.computed_hash}
+        its(:their_ref) {should == "164931"}
+      end
     end
   end
 
@@ -310,14 +387,28 @@ describe Payu do
       end
 
       it {should be_success}
+      it {should_not be_error}
+      its(:err_code) { should_not be }
     end
 
-    describe "fail" do
+    describe "cancel fail" do
       let :body do
         "<EPAYMENT>6349369|7|Order already cancelled|2012-10-03 13:59:42|c49213a5531b2dad9b101de8b690ce36</EPAYMENT>"
       end
 
       it {should_not be_success}
+      it {should be_error}
+      its(:err_code) { should == "Order already cancelled"}
+    end
+
+    describe "refund fail" do
+      let :body do
+        "<EPAYMENT>6207104|10|Invalid ORDER_AMOUNT|2012-10-19 15:39:49|81d317031baee8d1abdf2ca39e35ca46</EPAYMENT>"
+      end
+
+      it {should_not be_success}
+      it {should be_error}
+      its(:err_code) { should == "Invalid ORDER_AMOUNT"}
     end
 
   end

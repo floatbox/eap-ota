@@ -46,8 +46,21 @@ class Payture
       @doc["Success"].to_s.downcase == "3ds"
     end
 
-    def acs_url
+    def threeds_url
       @doc["ACSUrl"]
+    end
+
+    # FIXME найти более удачный способ прокидывать сюда конфирмационный урл
+    def threeds_return_url
+      "#{Conf.site.host}/confirm_3ds"
+    end
+
+    def threeds_params
+      {
+        'PaReq' => pa_req,
+        'MD' => threeds_key,
+        'TermUrl' => threeds_return_url
+      }
     end
 
     def pa_req
@@ -96,7 +109,7 @@ class Payture
     add_money(post, amount)
     add_merchant(post)
     add_creditcard(post, card)
-    add_custom_fields(post, opts)
+    add_custom_fields(post, opts[:custom_fields])
     encrypt_payinfo(post)
 
     post_request 'Block', post
@@ -183,7 +196,7 @@ class Payture
   end
 
   def add_3ds_info(post, opts)
-    post[:PaRes] = opts[:pa_res]
+    post[:PaRes] = opts[:PaRes]
   end
 
   def add_money(post, money)
@@ -198,8 +211,8 @@ class Payture
     [:PAN, :EMonth, :EYear, :CardHolder, :SecureCode].each {|key| post.delete(key) }
   end
 
-  def add_custom_fields(post, opts)
-    custom_fields = opts[:custom_fields] or return
+  def add_custom_fields(post, custom_fields)
+    return unless custom_fields
     res = {
       :IP => custom_fields.ip,
       :FirstName => custom_fields.first_name,

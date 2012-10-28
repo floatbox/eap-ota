@@ -40,6 +40,14 @@ class Payu
       !success? && !threeds?
     end
 
+    def err_code
+      error? && @doc['RETURN_CODE']
+    end
+
+    def err_message
+      error? && @doc['RETURN_MESSAGE']
+    end
+
     def their_ref
       @doc['REFNO']
     end
@@ -52,6 +60,11 @@ class Payu
 
     def threeds_url
       @doc["URL_3DS"]
+    end
+
+    # не требуются
+    def threeds_params
+      {}
     end
 
     def hash
@@ -88,6 +101,15 @@ class Payu
       @code == '1'
     end
 
+    def error?
+      !success?
+    end
+
+    def err_code
+      return if success?
+      @message
+    end
+
     def their_ref
       @their_ref
     end
@@ -115,6 +137,8 @@ class Payu
     def error?
       !success?
     end
+
+    def err_code; nil; end
 
     def complete?
       @doc["ORDER_STATUS"] == 'COMPLETE'
@@ -160,15 +184,16 @@ class Payu
 
   # блокировка средств на карте пользователя
   def block amount, card, opts={}
+    validate! opts, :our_ref, :custom_fields
     post = {
       ORDER_REF: opts[:our_ref],
       ORDER_DATE: time_now_string,
-      BACK_REF: 'http://localhost:3000/'
+      BACK_REF: threeds_return_url
     }
     alu_add_money(post, amount)
     add_merchant(post)
     add_creditcard(post, card)
-    add_custom_fields(post, opts)
+    add_custom_fields(post, opts[:custom_fields])
     post.slice!(*BLOCK_PARAMS_ORDER)
     post[:ORDER_HASH] = hash_string(@seller_key, post)
 
@@ -185,11 +210,22 @@ class Payu
     response.parsed_response
   end
 
+  # FIXME найти более удачный способ прокидывать сюда конфирмационный урл
+  def threeds_return_url
+    "#{Conf.site.host}/confirm_3ds"
+  end
+
+  # просто парсит 3дс ответ от гейтвея
+  def parse_3ds params
+    PaymentResponse.new( params, @seller_key )
+  end
+
   CHARGE_PARAMS_ORDER = [
     :MERCHANT, :ORDER_REF, :ORDER_AMOUNT, :ORDER_CURRENCY, :IDN_DATE
   ]
 
   def charge amount, opts={}
+    validate! opts, :their_ref
     post = {
       ORDER_REF: opts[:their_ref],
       IDN_DATE: time_now_string
@@ -211,6 +247,7 @@ class Payu
   # разблокировка средств.
   # частичная блокировка не принимается
   def unblock amount, opts={}
+    validate! opts, :their_ref
     post = {}
     post[:ORDER_REF] = opts[:their_ref]
     add_merchant(post)
@@ -237,6 +274,7 @@ class Payu
 
   # уточнение текущего состояния платежа
   def status opts={}
+    validate! opts, :our_ref
     post = {}
     post[:REFNOEXT] = opts[:our_ref]
     add_merchant(post)
@@ -291,41 +329,49 @@ class Payu
     Time.now.utc.strftime("%Y-%m-%d %H:%M:%S")
   end
 
-  def add_custom_fields(post, opts)
+  def add_custom_fields(post, custom_fields)
     post[:ORDER_PNAME] = ['1 x Ticket']
     post[:ORDER_PCODE] = ['TCK1']
-    post[:ORDER_PINFO] = ["{
-      'departuredate':20120914,
-      'locationnumber':2,
-      'locationcode1':'BUH',
-      'locationcode2':'IBZ',
-      'passengername':'Fname Lname',
-      'reservationcode':'abcdef123456'}"]
+    post[:ORDER_PINFO] = [serialize_order_info(custom_fields)]
     post[:ORDER_QTY] = ['1']
     post[:ORDER_VAT] = ['0']
     post[:PAY_METHOD] = 'CCVISAMC'
 
     post.merge!(
-    :BILL_LNAME            => custom_fields.last_name,
-    :BILL_FNAME            => custom_fields.first_name,
-    :BILL_ADDRESS          => 'Address Eviterra',        #billing customer address
-    :BILL_CITY             => 'City',                    #billing customer city
-    :BILL_STATE            => 'State',                   #billing customer State
-    :BILL_ZIPCODE          => '123',                     #billing customer Zip
-    :BILL_EMAIL            => custom_fields.email,
-    :BILL_PHONE            => custom_fields.phone,
-    :BILL_COUNTRYCODE      => 'RU',                      #billing customer 2 letter country code
-    :CLIENT_IP             => custom_fields.ip,
+      :BILL_LNAME            => custom_fields.last_name,
+      :BILL_FNAME            => custom_fields.first_name,
+      :BILL_ADDRESS          => 'Address Eviterra',        #billing customer address
+      :BILL_CITY             => 'City',                    #billing customer city
+      :BILL_STATE            => 'State',                   #billing customer State
+      :BILL_ZIPCODE          => '123',                     #billing customer Zip
+      :BILL_EMAIL            => custom_fields.email,
+      :BILL_PHONE            => custom_fields.phone,
+      :BILL_COUNTRYCODE      => 'RU',                      #billing customer 2 letter country code
+      :CLIENT_IP             => custom_fields.ip,
 
-    :DELIVERY_LNAME        => custom_fields.last_name,
-    :DELIVERY_FNAME        => custom_fields.first_name,
-    :DELIVERY_ADDRESS      => 'Address Eviterra',        #delivery address
-    :DELIVERY_CITY         => 'City',                    #delivery city
-    :DELIVERY_STATE        => 'State',                   #delivery state
-    :DELIVERY_ZIPCODE      => '123',                     #delivery Zip
-    :DELIVERY_PHONE        => custom_fields.phone,
-    :DELIVERY_COUNTRYCODE  => 'RU',                      #delivery 2 letter country code
+      :DELIVERY_LNAME        => custom_fields.last_name,
+      :DELIVERY_FNAME        => custom_fields.first_name,
+      :DELIVERY_ADDRESS      => 'Address Eviterra',        #delivery address
+      :DELIVERY_CITY         => 'City',                    #delivery city
+      :DELIVERY_STATE        => 'State',                   #delivery state
+      :DELIVERY_ZIPCODE      => '123',                     #delivery Zip
+      :DELIVERY_PHONE        => custom_fields.phone,
+      :DELIVERY_COUNTRYCODE  => 'RU',                      #delivery 2 letter country code
     )
+  end
+
+  def serialize_order_info(custom_fields)
+    info = {
+      'reservationcode' => custom_fields.pnr_number,
+      'passengername' => "#{custom_fields.first_name} #{custom_fields.last_name}",
+      # WTF integer? но так в их примерах.
+      'departuredate' => custom_fields.date.strftime('%Y%m%d').to_i,
+      'locationnumber' => custom_fields.points.size
+    }
+    custom_fields.points.each_with_index do |iata, index|
+      info["locationcode#{index + 1}"] = iata
+    end
+    info.to_json
   end
 
   # for testing purposes

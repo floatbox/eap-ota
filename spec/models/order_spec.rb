@@ -4,7 +4,7 @@ require 'spec_helper'
 describe Order do
 
   it "should be correctly faked by factory" do
-    order = Factory.build(:order)
+    order = build(:order)
     order.save!
   end
 
@@ -27,6 +27,12 @@ describe Order do
       order.send :capitalize_pnr
       order.pnr_number.should == 'БХЦ45'
     end
+
+    it "should string class" do
+      order = Order.new :pnr_number => 'бхЦ45'
+      order.send :capitalize_pnr
+      order.pnr_number.class.should == String
+    end
   end
 
   describe "#create_cash_payment" do
@@ -39,14 +45,14 @@ describe Order do
     end
 
     context "normal cash or payture order" do
-      let(:order) { Factory(:order, :price_with_payment_commission => 20.2) }
+      let(:order) { create(:order, :price_with_payment_commission => 20.2) }
       it {should be_a(CashCharge)}
       its(:price) {should == order.price_with_payment_commission}
-      its(:commission) {should == Fx(Conf.payture.commission)}
+      its(:commission) {should == Fx(Conf.payment.commission)}
     end
 
     context "normal cash or payture order" do
-      let(:order) { Factory(:order, :price_with_payment_commission => 20.2, :pricing_method => 'corporate_0001') }
+      let(:order) { create(:order, :price_with_payment_commission => 20.2, :pricing_method => 'corporate_0001') }
       it {should be_a(CashCharge)}
       its(:price) {should == order.price_with_payment_commission}
       its(:commission) {should == Fx(0)}

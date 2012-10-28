@@ -103,7 +103,7 @@ module Pricing
         elsif payment_type == 'cash'
           Conf.cash.commission
         else
-          Conf.payture.commission
+          Conf.payment.commission
         end
       Commission::Formula.new(commission)
     end

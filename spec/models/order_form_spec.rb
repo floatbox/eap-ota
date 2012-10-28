@@ -188,6 +188,9 @@ describe OrderForm do
 
   describe '#associate_infants' do
 
+    # FIXME extend нужен для синтаксиса matcher.. вынести повыше?
+    extend RSpec::Matchers::DSL
+
     # order_form.should have_associated( parent_last_name, infant_last_name)
 
     matcher :have_associated do |parent_last_name, infant_last_name|

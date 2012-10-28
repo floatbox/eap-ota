@@ -146,8 +146,8 @@ class Order < ActiveRecord::Base
 
   # FIXME сломается на ruby1.9
   def capitalize_pnr
-    self.pnr_number = pnr_number.to_s.mb_chars.strip.upcase
-    self.parent_pnr_number = parent_pnr_number.to_s.mb_chars.strip.upcase
+    self.pnr_number = pnr_number.to_s.mb_chars.strip.upcase.to_s
+    self.parent_pnr_number = parent_pnr_number.to_s.mb_chars.strip.upcase.to_s
   end
 
   scope :unticketed, where(:payment_status => 'blocked', :ticket_status => 'booked')
@@ -432,8 +432,8 @@ class Order < ActiveRecord::Base
 
   delegate :charged_on, :to => :last_payment, :allow_nil => true
 
-  def confirm_3ds pa_res, md
-    if result = last_payment.confirm_3ds!(pa_res, md)
+  def confirm_3ds! params
+    if result = last_payment.confirm_3ds!(params)
       money_blocked!
     end
     result
@@ -451,9 +451,9 @@ class Order < ActiveRecord::Base
     res
   end
 
-  def block_money card, order_form = nil, ip = nil
-    custom_fields = PaymentCustomFields.new(:ip => ip, :order_form => order_form, :order => self)
-    payment = PaytureCharge.create(:price => price_with_payment_commission, :card => card, :custom_fields => custom_fields, :order => self)
+  def block_money card, custom_fields
+    multiplier = Conf.payment.test_multiplier || 1
+    payment = Payment.select_and_create(:price => price_with_payment_commission * multiplier, :card => card, :custom_fields => custom_fields, :order => self)
     response = payment.block!
     money_blocked! if response.success?
     response
