@@ -206,11 +206,11 @@ class Payu
   # внутренний метод для собственно HTTP вызова сервиса блокировки/платежа
   # облегчает тестирование
   def alu_post(post)
-    logger.debug post
+    logger.info 'Payu: ' + post.inspect
     benchmark 'Payu ALU' do
     response = HTTParty.post("https://#{@host}/order/alu.php", :body => post)
     end
-    logger.debug response.parsed_response.inspect
+    logger.info 'Payu: ' + response.parsed_response.inspect
     response.parsed_response
   end
 
@@ -243,7 +243,7 @@ class Payu
     response = HTTParty.post("https://#{@host}/order/idn.php", :body => post)
     end
 
-    logger.debug response.parsed_response.inspect
+    logger.info 'Payu: ' + response.parsed_response.inspect
     ConfirmationResponse.new( response.parsed_response )
   end
 
@@ -267,7 +267,7 @@ class Payu
     benchmark 'Payu IRN' do
     response = HTTParty.post("https://#{@host}/order/irn.php", :body => post)
     end
-    logger.debug response.parsed_response.inspect
+    logger.info 'Payu: ' + response.parsed_response.inspect
     ConfirmationResponse.new( response.parsed_response )
   end
 
@@ -294,7 +294,7 @@ class Payu
     benchmark 'Payu IOS' do
     response = HTTParty.get("https://#{@host}/order/ios.php", :query => post)
     end
-    logger.debug response.parsed_response.inspect
+    logger.info 'Payu: ' + response.parsed_response.inspect
     StateResponse.new( response.parsed_response )
   end
 
