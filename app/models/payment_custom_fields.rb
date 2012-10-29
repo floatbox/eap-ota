@@ -33,4 +33,8 @@ class PaymentCustomFields
     points.size - 1 unless points.blank?
   end
 
+  def combined_name
+    "#{first_name} #{last_name}" if first_name
+  end
+
 end

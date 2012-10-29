@@ -361,17 +361,18 @@ class Payu
   end
 
   def serialize_order_info(custom_fields)
-    info = {
-      'reservationcode' => custom_fields.pnr_number,
-      'passengername' => "#{custom_fields.first_name} #{custom_fields.last_name}",
+    info = {}
+    info['reservationcode'] = custom_fields.pnr_number
+    info['passengername'] = custom_fields.combined_name
+    if custom_fields.date && custom_fields.points
       # WTF integer? но так в их примерах.
-      'departuredate' => custom_fields.date.strftime('%Y%m%d').to_i,
-      'locationnumber' => custom_fields.points.size
-    }
-    custom_fields.points.each_with_index do |iata, index|
-      info["locationcode#{index + 1}"] = iata
+      info['departuredate'] = custom_fields.date.strftime('%Y%m%d').to_i
+      info['locationnumber'] = custom_fields.points.size
+      custom_fields.points.each_with_index do |iata, index|
+        info["locationcode#{index + 1}"] = iata
+      end
     end
-    info.to_json
+    info.delete_if{ |k,v| v.nil? }.to_json
   end
 
   # for testing purposes
