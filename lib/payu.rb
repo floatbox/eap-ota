@@ -5,6 +5,8 @@ require 'active_support/all'
 
 class Payu
 
+  include ActiveSupport::Benchmarkable
+
   cattr_accessor :logger do
     Rails.logger
   end
@@ -205,7 +207,9 @@ class Payu
   # облегчает тестирование
   def alu_post(post)
     logger.debug post
+    benchmark 'Payu ALU' do
     response = HTTParty.post("https://#{@host}/order/alu.php", :body => post)
+    end
     logger.debug response.parsed_response.inspect
     response.parsed_response
   end
@@ -235,7 +239,10 @@ class Payu
     post.slice!(*CHARGE_PARAMS_ORDER)
     post[:ORDER_HASH] = hash_string(@seller_key, post)
 
+    benchmark 'Payu IDN' do
     response = HTTParty.post("https://#{@host}/order/idn.php", :body => post)
+    end
+
     logger.debug response.parsed_response.inspect
     ConfirmationResponse.new( response.parsed_response )
   end
@@ -257,7 +264,9 @@ class Payu
     post.slice!(*UNBLOCK_PARAMS_ORDER)
     post[:ORDER_HASH] = hash_string(@seller_key, post)
 
+    benchmark 'Payu IRN' do
     response = HTTParty.post("https://#{@host}/order/irn.php", :body => post)
+    end
     logger.debug response.parsed_response.inspect
     ConfirmationResponse.new( response.parsed_response )
   end
@@ -282,7 +291,9 @@ class Payu
     post.slice!(*STATE_PARAMS_ORDER)
     post[:HASH] = hash_string(@seller_key, post)
 
+    benchmark 'Payu IOS' do
     response = HTTParty.get("https://#{@host}/order/ios.php", :query => post)
+    end
     logger.debug response.parsed_response.inspect
     StateResponse.new( response.parsed_response )
   end
