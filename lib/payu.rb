@@ -109,6 +109,11 @@ class Payu
 
     def err_code
       return if success?
+      @code
+    end
+
+    def err_message
+      return if success?
       @message
     end
 
