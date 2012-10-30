@@ -40,7 +40,7 @@ makeMonthes: function() {
             ntitle: local.date.nmonthes[date.getMonth()],
             gtitle: local.date.gmonthes[date.getMonth()],
             ptitle: local.date.pmonthes[date.getMonth()],
-            length: date.getDate()
+            length: date.getDate(),
         };
         var MY = date.DMY().substring(2);
         var days = $('<div class="sdc-days"></div>');
@@ -52,8 +52,9 @@ makeMonthes: function() {
             days.append(day);
         }
         date.setDate(1);
+        month.offset = date.dow();
         var items = days.children();
-        items.first().addClass('first').css('margin-left', 66 * date.dow());
+        items.first().addClass('first').css('margin-left', 66 * month.offset);
         items.last().addClass('last');
         month.el = sample.clone().data('index', m).append(days).appendTo(this.slider);
         this.monthes[m] = month;
@@ -76,6 +77,12 @@ disableDays: function(delay) {
     var index = {};
     this.days = days.slice(d2).each(function(i) {
         index[$(this).attr('data-index', i).attr('data-dmy')] = i;
+    });
+    var that = this;
+    this.calendar.find('.last').each(function(i) {
+        var index = $(this).attr('data-index') || '0';
+        var month = that.monthes[i];
+        month.findex = Number(index) + 1 - month.length;
     });
     this.dmyIndex = index;
 },
@@ -238,6 +245,7 @@ scrollTo: function(np, instant) {
         this.pscrollbar.stop().animate(this.tabs[np].double, options.duration);
     }
     this.slider.stop().animate({left: this.mwidth * -np}, options);
+    this.curfixed = this.fixed;
     this.position = np;
     clearTimeout(this.sftimer);    
 },
@@ -273,10 +281,12 @@ setLimit: function(limit) {
 getDate: function(index) {
     return this.days.eq(index).attr('data-dmy');
 },
-hoverDay: function(day, drag) {
+hoverDay: function(day, segment) {
     var sl = this.selected.length;
-    if (sl < this.limit || drag) {
-        var hsegment = sl + (drag ? 0 : 1);
+    if (segment) {
+        day.addClass('sdc-hover sdc-hover'+ segment);
+    } else if (sl < this.limit) {
+        var hsegment = sl + 1;
         var index = Number(day.attr('data-index'));
         for (var i = sl; i--;) {
             if (index < this.selected[i]) hsegment = i + 1;
@@ -287,9 +297,13 @@ hoverDay: function(day, drag) {
     }
 },
 dragDay: function(day, event) {
-    var index = Number(day.attr('data-index'));
+    var segment, index = Number(day.attr('data-index'));
+    for (var i = this.selected.length; i--;) {
+        if (this.selected[i] === index) segment = i;
+    }
     var offset = day.offset();
     this.dayDragging = {
+        segment: segment,
         x: event.pageX,
         y: event.pageY,
         ox: event.pageX - offset.left,
@@ -317,11 +331,46 @@ moveDay: function(event) {
             left: x.constrain(0, d.pw - 66),
             top: y.constrain(d.cy - 24, d.cy + d.ch - 23)
         });
+        var month, col, dcx = x + 33;
+        if (dcx < d.pw / 2) {
+            month = this.monthes[this.curfixed !== undefined ? Math.min(this.curfixed, this.position) : this.position];
+            col = Math.floor((dcx - d.cx) / 66);
+        } else {
+            month = this.monthes[this.position + 1];
+            col = Math.floor((dcx - d.pw / 2 - 18) / 66);
+        }
+        if (col < 0 || col > 6) {
+            col = undefined;
+        }
+        var dindex;
+        var row = Math.floor((y - d.cy - 6) / 45);
+        if (row > -1 && col !== undefined) {
+            var index = row * 7 + col - month.offset;
+            if (index > -1 && index < month.length && month.findex + index > -1) {
+                dindex = month.findex + index;
+            }
+        }
+        if (dindex !== d.dindex) {
+            if (d.day) d.day.trigger('mouseout');
+            if (dindex !== undefined) {
+                this.hoverDay(d.day = this.days.eq(dindex), d.segment + 1);
+            } else {
+                d.day = undefined;
+            }
+            d.dindex = dindex;
+        }
     }
 },
 dropDay: function() {
     $(document).off('mousemove', this.$move);
     $(document).off('mouseup', this.$drop);
+    if (this.dayDragging && this.dayDragging.day) {
+        var index = Number(this.dayDragging.day.attr('data-index'));
+        this.selected[this.dayDragging.segment] = index;
+        this.selected.sort(Array.sortInt);
+        this.showSelected();        
+        this.backup = this.selected.concat();
+    }
     this.dayDragging = undefined;
     this.dragging.hide();
 },
