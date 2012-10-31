@@ -229,6 +229,9 @@ process: function(s) {
         this.result.find('.bfrsi-link').click(function() {
             trackEvent('Бронирование', 'Переход на страницу страховки');        
         });
+        this.sending = true; // не даём отправить форму второй раз
+        this.el.find('.bfp-add, .bfp-remove').css('visibility', 'hidden');
+        this.el.find('input, textarea, select').prop('disabled', true);
         break;
     }
     var spos = $('#page-footer').offset().top - $w.height();
