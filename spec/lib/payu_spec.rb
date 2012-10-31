@@ -161,6 +161,55 @@ describe Payu do
     }
   end
 
+  describe "#custom_fields_without_order_form" do
+    let :custom_fields do
+      PaymentCustomFields.new(
+        :pnr_number => 'ABC456',
+        :date => Date.new(2012,11,10),
+        :email => "test@mail.com",
+        :ip => "192.168.1.1",
+        :phone => "9101234567"
+      )
+    end
+
+    let :post do
+      Hash.new
+    end
+
+    subject do
+      Payu.new.send :add_custom_fields, post, custom_fields
+    end
+
+    it do
+      should == {
+        :ORDER_PNAME=>["1 x Ticket"],
+        :ORDER_PCODE=>["TCK1"],
+        :ORDER_PINFO=>["{\"reservationcode\":\"ABC456\"}"],
+        :ORDER_QTY=>["1"],
+        :ORDER_VAT=>["0"],
+        :PAY_METHOD=>"CCVISAMC",
+        :BILL_LNAME=>"",
+        :BILL_FNAME=>"",
+        :BILL_ADDRESS=>"Address Eviterra",
+        :BILL_CITY=>"City",
+        :BILL_STATE=>"State",
+        :BILL_ZIPCODE=>"123",
+        :BILL_EMAIL=>"test@mail.com",
+        :BILL_PHONE=>"9101234567",
+        :BILL_COUNTRYCODE=>"RU",
+        :CLIENT_IP=>"192.168.1.1",
+        :DELIVERY_LNAME=>"",
+        :DELIVERY_FNAME=>"",
+        :DELIVERY_ADDRESS=>"Address Eviterra",
+        :DELIVERY_CITY=>"City",
+        :DELIVERY_STATE=>"State",
+        :DELIVERY_ZIPCODE=>"123",
+        :DELIVERY_PHONE=>"9101234567",
+        :DELIVERY_COUNTRYCODE=>"RU"
+      }
+    end
+
+  end
 
   describe "#alu_add_money" do
 
