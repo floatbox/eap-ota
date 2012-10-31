@@ -109,6 +109,11 @@ class Payu
 
     def err_code
       return if success?
+      @code
+    end
+
+    def err_message
+      return if success?
       @message
     end
 
@@ -207,9 +212,10 @@ class Payu
   # облегчает тестирование
   def alu_post(post)
     logger.info 'Payu: ' + post.inspect
-    benchmark 'Payu ALU' do
-    response = HTTParty.post("https://#{@host}/order/alu.php", :body => post)
-    end
+    response =
+      benchmark 'Payu ALU' do
+        HTTParty.post("https://#{@host}/order/alu.php", :body => post)
+      end
     logger.info 'Payu: ' + response.parsed_response.inspect
     response.parsed_response
   end
@@ -239,9 +245,10 @@ class Payu
     post.slice!(*CHARGE_PARAMS_ORDER)
     post[:ORDER_HASH] = hash_string(@seller_key, post)
 
-    benchmark 'Payu IDN' do
-    response = HTTParty.post("https://#{@host}/order/idn.php", :body => post)
-    end
+    response =
+      benchmark 'Payu IDN' do
+        HTTParty.post("https://#{@host}/order/idn.php", :body => post)
+      end
 
     logger.info 'Payu: ' + response.parsed_response.inspect
     ConfirmationResponse.new( response.parsed_response )
@@ -264,9 +271,11 @@ class Payu
     post.slice!(*UNBLOCK_PARAMS_ORDER)
     post[:ORDER_HASH] = hash_string(@seller_key, post)
 
-    benchmark 'Payu IRN' do
-    response = HTTParty.post("https://#{@host}/order/irn.php", :body => post)
-    end
+    response =
+      benchmark 'Payu IRN' do
+        HTTParty.post("https://#{@host}/order/irn.php", :body => post)
+      end
+
     logger.info 'Payu: ' + response.parsed_response.inspect
     ConfirmationResponse.new( response.parsed_response )
   end
@@ -291,9 +300,11 @@ class Payu
     post.slice!(*STATE_PARAMS_ORDER)
     post[:HASH] = hash_string(@seller_key, post)
 
-    benchmark 'Payu IOS' do
-    response = HTTParty.get("https://#{@host}/order/ios.php", :query => post)
-    end
+    response =
+      benchmark 'Payu IOS' do
+        HTTParty.get("https://#{@host}/order/ios.php", :query => post)
+      end
+
     logger.info 'Payu: ' + response.parsed_response.inspect
     StateResponse.new( response.parsed_response )
   end

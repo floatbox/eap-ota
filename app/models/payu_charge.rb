@@ -74,7 +74,7 @@ class PayuCharge < Payment
     if res.success?
       update_attributes :status => 'charged', :charged_on => Date.today
     else
-      update_attributes :status => 'blocked', :error_code => res.err_code
+      update_attributes :status => 'blocked', :error_code => res.err_code, :error_message => res.err_message
     end
     res.success?
   end

@@ -398,7 +398,8 @@ describe Payu do
 
       it {should_not be_success}
       it {should be_error}
-      its(:err_code) { should == "Order already cancelled"}
+      its(:err_code) { should == "7"}
+      its(:err_message) { should == "Order already cancelled"}
     end
 
     describe "refund fail" do
@@ -408,7 +409,8 @@ describe Payu do
 
       it {should_not be_success}
       it {should be_error}
-      its(:err_code) { should == "Invalid ORDER_AMOUNT"}
+      its(:err_code) { should == "10"}
+      its(:err_message) { should == "Invalid ORDER_AMOUNT"}
     end
 
   end

@@ -75,7 +75,7 @@ module Amadeus
       end
 
       def srfoid_needed?
-        %W[AB UN HR B2 PS AZ CY LX KK OS KM SQ F7 ET 9W PG].exclude? validating_carrier
+        %W[AB UN HR B2 PS AZ CY LX KK OS KM SQ F7 ET 9W PG CI].exclude? validating_carrier
       end
 
     end
