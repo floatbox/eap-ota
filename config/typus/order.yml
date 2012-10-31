@@ -1,6 +1,6 @@
 Order:
   fields:
-    default: order_id, pnr_number, email, phone, updated_at
+    default: pnr_number, email, phone, updated_at
     list:
       - source
       - pnr_number
@@ -16,7 +16,6 @@ Order:
       - partner
       - urgent
     show:
-      - order_id
       - has_refunds
       - source
       - pnr_number
@@ -148,7 +147,7 @@ Order:
         updated_at: long
         last_pay_time: long
   order_by: -created_at
-  search: ^pnr_number, ^parent_pnr_number, email, phone, =order_id
+  search: ^pnr_number, ^parent_pnr_number, email, phone
   options:
     default_action_on_item: show
     export: csv

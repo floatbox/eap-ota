@@ -227,10 +227,6 @@ class Order < ActiveRecord::Base
     tickets_office_ids_array.join('; ')
   end
 
-  def payment_ref
-    last_payment.try(:ref)
-  end
-
   def need_attention
     1 if price_difference != 0
   end
