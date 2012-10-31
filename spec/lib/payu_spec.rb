@@ -161,7 +161,7 @@ describe Payu do
     }
   end
 
-  describe "#custom_fields_without_order_form" do
+  describe "#add_custom_fields without order form" do
     let :custom_fields do
       PaymentCustomFields.new(
         :pnr_number => 'ABC456',
