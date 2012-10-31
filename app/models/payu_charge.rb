@@ -144,7 +144,7 @@ class PayuCharge < Payment
   end
 
   def error_explanation
-    error_code
+    [error_code, error_message].compact.join(': ')
   end
 
 end
