@@ -226,8 +226,14 @@ countDates: function() {
     }
 },
 showPrices: function() {
-    var variants = this.offer.variants;
     this.content.find('.rmp-item').remove();
+    var min, max, variants = this.offer.variants;
+    for (var i = variants.length; i--;) {
+        var vp = variants[i].price;
+        if (!min || vp < min) min = vp;
+        if (!max || vp > max) max = vp;
+    }
+    console.log(min, max);
     for (var i = variants.length; i--;) {
         var variant = variants[i];
         var c = this.cols[variant.dates[0]];
@@ -235,6 +241,9 @@ showPrices: function() {
         var item = $('<div class="rmp-item"></div>').attr('data-index', i);
         item.html('<h6 class="rmp-cost"><span class="rmp-sum">' + variant.price + '</span>&nbsp;<span class="ruble">Р</span></h6>');
         item.append(variant.el.find('.rmv-bars').clone());
+        if (variant.price - min < (max - min) / 5) {
+            item.addClass('rmp-cheap');
+        }
         $(this.table.get(0).rows[r].cells[c]).append(item);
     }
     this.updateLabel(local.offers.matrix);   
