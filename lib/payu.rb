@@ -360,8 +360,8 @@ class Payu
     post[:PAY_METHOD] = 'CCVISAMC'
 
     post.merge!(
-      :BILL_LNAME            => custom_fields.last_name,
-      :BILL_FNAME            => custom_fields.first_name,
+      :BILL_LNAME            => custom_fields.last_name || "",
+      :BILL_FNAME            => custom_fields.first_name || "",
       :BILL_ADDRESS          => 'Address Eviterra',        #billing customer address
       :BILL_CITY             => 'City',                    #billing customer city
       :BILL_STATE            => 'State',                   #billing customer State
@@ -371,8 +371,8 @@ class Payu
       :BILL_COUNTRYCODE      => 'RU',                      #billing customer 2 letter country code
       :CLIENT_IP             => custom_fields.ip,
 
-      :DELIVERY_LNAME        => custom_fields.last_name,
-      :DELIVERY_FNAME        => custom_fields.first_name,
+      :DELIVERY_LNAME        => custom_fields.last_name || "",
+      :DELIVERY_FNAME        => custom_fields.first_name || "",
       :DELIVERY_ADDRESS      => 'Address Eviterra',        #delivery address
       :DELIVERY_CITY         => 'City',                    #delivery city
       :DELIVERY_STATE        => 'State',                   #delivery state
