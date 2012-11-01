@@ -140,11 +140,12 @@ class PayuCharge < Payment
   end
 
   def external_gateway_link
-    "not supported (id: #{their_ref})"
+    url = "https://secure.payu.ru/cpanel/reports.php?interval=lastYear&seekFor=#{ref}&seekIn=externalrefno&status=all&Submit=DoIT"
+    "<a href='#{url}' target='_blank'>Reference: #{their_ref}</a>".html_safe
   end
 
   def error_explanation
-    error_code
+    [error_code, error_message].compact.join(': ')
   end
 
 end

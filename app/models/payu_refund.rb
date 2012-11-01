@@ -65,4 +65,8 @@ class PayuRefund < Payment
     charge.show_link
   end
 
+  def error_explanation
+    [error_code, error_message].compact.join(': ')
+  end
+
 end

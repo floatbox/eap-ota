@@ -5,11 +5,6 @@ require 'httparty'
 
 class Payture
 
-  # комиссионные за транзакцию
-  def self.commission
-    @commission ||= Commission::Formula.new(Conf.payture.commission)
-  end
-
   class Response
     def initialize(doc)
       @doc = doc

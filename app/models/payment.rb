@@ -1,6 +1,11 @@
 # encoding: utf-8
 class Payment < ActiveRecord::Base
 
+  # дефолтные издержки на транзакцию
+  def self.commission
+    @commission ||= Commission::Formula.new(Conf.payment.commission)
+  end
+
   # зачатки payment strategy
   # сейчас создает только кредитнокарточковые платежи
   def self.select_and_create(*args)
@@ -67,10 +72,12 @@ class Payment < ActiveRecord::Base
   PAYU =    ['PayuCharge', 'PayuRefund']
   PAYTURE = ['PaytureCharge', 'PaytureRefund']
   CASH =    ['CashCharge', 'CashRefund']
+  CARDS =   PAYU + PAYTURE
 
   scope :payu, where(:type => PAYU)
   scope :payture, where(:type => PAYTURE)
   scope :cash, where(:type => CASH)
+  scope :cards, where(:type => CARDS)
   def self.types
     (PAYU + PAYTURE + CASH).map {|type| [I18n.t(type), type] }
   end
