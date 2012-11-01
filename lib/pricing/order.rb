@@ -100,8 +100,9 @@ module Pricing
       commission =
         if pricing_method =~ /corporate/
           Conf.cash.corporate_commission
-        elsif payment_type == 'cash'
-          Conf.cash.commission
+        # делаю комиссию по наличке такой же как и глобальная
+        # elsif payment_type == 'cash'
+        #  Conf.cash.commission
         else
           Conf.payment.commission
         end

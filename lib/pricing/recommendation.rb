@@ -27,7 +27,7 @@ module Pricing
 
     # комиссия платежного шлюза
     def price_payment
-      Payture.commission.reverse_call(price_total)
+      Payment.commission.reverse_call(price_total)
     end
 
     # "налоги и сборы" для отображения клиенту
@@ -43,7 +43,7 @@ module Pricing
     # "сбор" для отображения клиенту
     def fee
        price_markup + price_payment + price_declared_discount
-       end
+     end
 
     def fee_but_no_payment
        price_markup + price_declared_discount

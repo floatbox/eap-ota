@@ -1,6 +1,11 @@
 # encoding: utf-8
 class Payment < ActiveRecord::Base
 
+  # дефолтные издержки на транзакцию
+  def self.commission
+    @commission ||= Commission::Formula.new(Conf.payment.commission)
+  end
+
   # зачатки payment strategy
   # сейчас создает только кредитнокарточковые платежи
   def self.select_and_create(*args)
