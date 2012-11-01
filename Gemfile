@@ -61,7 +61,6 @@ gem 'hpricot', require: false
 
 gem 'typus', :git => 'https://github.com/Eviterra/typus.git'
 
-gem 'trashed', :git => 'https://github.com/codesnik/trashed.git'
 gem 'delayed_job_mongoid'
 
 group :development do
