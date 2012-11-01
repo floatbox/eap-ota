@@ -12,7 +12,7 @@ Payment: &PAYMENT_CONFIG
         charged_on: long
   #options:
   #  default_action_on_item: show
-  scopes: secured, not_secured, payture, cash, charges, refunds, processing_too_long
+  scopes: secured, not_secured, payu, payture, cards, cash, charges, refunds, processing_too_long
   search: =ref, =id, name_in_card, pan
   relationships: order, refunds
   order_by: -created_at
