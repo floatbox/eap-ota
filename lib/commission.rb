@@ -966,7 +966,7 @@ agent    "1 руб. от тарифов Allairpass, расчитываемых �
 agent    "Проверять интерлайн при бронировании и выписке через сайт www.hr-ticketing.com"
 subagent "5 коп. с билета по опубл. тарифам HR"
 interline :absent
-our_markup "0.5%"
+our_markup "30"
 commission "1/0.05"
 
 carrier "HU", "HAINAN AIRLINES"
