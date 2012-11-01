@@ -573,7 +573,8 @@ example 'svopek/c peksvo/d'
 agent   "15% от опубл. тарифов по классам F/A/C/D на собств. рейсы CA;"
 subagent "13,5% от опубл. тарифов по классам F/A/C/D на собств. рейсы CA;"
 subclasses "FACD"
-discount "8%" #CHECKME новый дискаунт наверное надо?
+discount "8%" 
+check { includes(city_iatas.first, 'MOW') }
 commission "15%/13.5%"
 
 example 'svopek/z'
@@ -582,7 +583,8 @@ example 'svopek/k peksvo/f'
 agent   "12% от опубл. тарифов по классам Z/W/Y/B/M/H/K/L на собств. рейсы СА;"
 subagent "11,5% от опубл. тарифов по классам Z/W/Y/B/M/H/K/L на собств. рейсы СА;"
 subclasses "FACDZWYBMHKL"
-discount "7%" #CHECKME и здесь
+discount "7%"
+check { includes(city_iatas.first, 'MOW') }
 commission "12%/11.5%"
 
 example 'svopek/q'
@@ -592,7 +594,8 @@ example 'svopek/s peksvo/a'
 agent   "10% от опубл. тарифов по классам Q/G/V/S/U на собств. рейсы СА."
 subagent "8,5% от опубл. тарифов по классам Q/G/V/S/U на собств. рейсы СА."
 subagent "FACDZWYBMHKLQGVSU"
-discount "4%" #CHEKME и здесь
+discount "4%"
+check { includes(city_iatas.first, 'MOW') }
 commission "10%/8.5%"
 
 example 'ledpek'
@@ -605,6 +608,8 @@ discount "5%"
 commission "9%/7%"
 
 example 'okopek/ab pekoko'
+example 'pekycu ycupek'
+example 'peksgn'
 agent   "3%  от опубл. тарифов на все остальные рейсы СА при обязательном наличии собств.сегмента СА;"
 subagent "2% от опубл. тарифов на все остальные рейсы СА при обязательном наличии собств.сегмента СА;"
 interline :no, :yes
