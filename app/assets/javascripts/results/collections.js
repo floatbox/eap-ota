@@ -233,7 +233,6 @@ showPrices: function() {
         if (!min || vp < min) min = vp;
         if (!max || vp > max) max = vp;
     }
-    console.log(min, max);
     for (var i = variants.length; i--;) {
         var variant = variants[i];
         var c = this.cols[variant.dates[0]];
