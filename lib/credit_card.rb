@@ -57,7 +57,7 @@ class CreditCard
   self.require_verification_value = true
 
   # Essential attributes for a valid, non-bogus creditcards
-  attr_accessor :month, :year, :type, :first_name, :last_name, :name
+  attr_accessor :month, :year, :type, :name
   attr_writer :number, :number1, :number2, :number3, :number4
 
   # Required for Switch / Solo cards
@@ -114,6 +114,14 @@ class CreditCard
 
   def last_name?
     !@last_name.blank?
+  end
+
+  def first_name
+    @name.split.first
+  end
+
+  def last_name
+    @name.split.last
   end
 
   def verification_value?

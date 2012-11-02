@@ -11,6 +11,12 @@ class PaymentCustomFields
     self.description = order.description.presence
   end
 
+  def card= card
+    return unless card
+    self.first_name = card.first_name
+    self.last_name = card.last_name
+  end
+
   def order_form= order_form
     return unless order_form
     self.flights = order_form.recommendation.journey.flights

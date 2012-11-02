@@ -28,11 +28,18 @@ class PaymentsController < ApplicationController
       return
     end
 
+    if @order.pnr_number.blank?
+      custom_field_order = Order.find_by_pnr_number(@order.parent_pnr_number)
+    else
+      custom_field_order = @order
+    end
+
     card = CreditCard.new(params[:card])
     if card.valid?
       custom_fields = PaymentCustomFields.new(
         ip: request.remote_ip,
-        order: @order
+        order: custom_field_order,
+        card: card
       )
       payment_response = @order.block_money(card, custom_fields)
       if payment_response.success?
