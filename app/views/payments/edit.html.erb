@@ -27,7 +27,7 @@
 <% if @card %>
 <div id="booking" style="display: block;">
 <div class="b-content" style="display: block;">
-<%= form_for @card, :as => :card, :url => edit_payment_url(:code=> @order.code), :html => { :id => 'booking-form', :autocomplete => "off" } do |f| %>
+  <%= form_for @card, :as => :card, :url => edit_payment_url(:code=> @order.code, :gateway => params[:gateway]), :html => { :id => 'booking-form', :autocomplete => "off" } do |f| %>
 
     <div class="bf-section" data-type="payment">
         <div class="bfs-title">

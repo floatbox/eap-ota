@@ -41,7 +41,7 @@ class PaymentsController < ApplicationController
         order: custom_field_order,
         card: card
       )
-      payment_response = @order.block_money(card, custom_fields)
+      payment_response = @order.block_money(card, custom_fields, gateway: params[:gateway])
       if payment_response.success?
         logger.info "Pay: payment succesful"
         render :partial => 'success'

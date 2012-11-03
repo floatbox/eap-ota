@@ -8,9 +8,11 @@ class Payment < ActiveRecord::Base
 
   # зачатки payment strategy
   # сейчас создает только кредитнокарточковые платежи
-  def self.select_and_create(*args)
+  def self.select_and_create(args)
+    processing_code = args.delete(:gateway).presence || Conf.payment.card_processing
+
     klass =
-      case processing_code = Conf.payment.card_processing
+      case processing_code
       when 'payture'
         PaytureCharge
       when 'payu'
@@ -23,7 +25,7 @@ class Payment < ActiveRecord::Base
 
     return unless klass
 
-    klass.create(*args)
+    klass.create(args)
   end
 
   # эвристика для поиска 3дсовых платежей в разных системах

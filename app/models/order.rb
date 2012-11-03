@@ -447,9 +447,9 @@ class Order < ActiveRecord::Base
     res
   end
 
-  def block_money card, custom_fields
+  def block_money card, custom_fields, opts={}
     multiplier = Conf.payment.test_multiplier || 1
-    payment = Payment.select_and_create(:price => price_with_payment_commission * multiplier, :card => card, :custom_fields => custom_fields, :order => self)
+    payment = Payment.select_and_create(:gateway => opts[:gateway], :price => price_with_payment_commission * multiplier, :card => card, :custom_fields => custom_fields, :order => self)
     response = payment.block!
     money_blocked! if response.success?
     response
