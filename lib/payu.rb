@@ -245,6 +245,7 @@ class Payu
     post.slice!(*CHARGE_PARAMS_ORDER)
     post[:ORDER_HASH] = hash_string(@seller_key, post)
 
+    logger.info 'Payu: ' + post.inspect
     response =
       benchmark 'Payu IDN' do
         HTTParty.post("https://#{@host}/order/idn.php", :body => post)
@@ -271,6 +272,7 @@ class Payu
     post.slice!(*UNBLOCK_PARAMS_ORDER)
     post[:ORDER_HASH] = hash_string(@seller_key, post)
 
+    logger.info 'Payu: ' + post.inspect
     response =
       benchmark 'Payu IRN' do
         HTTParty.post("https://#{@host}/order/irn.php", :body => post)
