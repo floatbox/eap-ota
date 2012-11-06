@@ -315,18 +315,22 @@ initPhone: function() {
     var phone = new validator.Text($('#bfc-phone'), {
         empty: '{номер телефона}',
         letters: 'В {номере телефона} можно использовать только цифры.',
-        short: 'Короткий {номер телефона}, не забудьте ввести код города.'
+        short: 'Короткий {номер телефона}, не забудьте ввести код страны и города.'
     }, function(value) {
         if (/[^\d() \-+]/.test(value)) return 'letters';
         var digits = value.replace(/\D/g, '').length;
         if (digits < 5) return 'empty';
-        if (digits < 8) return 'short';
+        if (digits < 9) return 'short';
+    });
+    if (!phone.el.val()) {
+        phone.el.val('+7');
+    }
+    phone.el.bind('keyup propertychange input paste', function() {
+        if (!this.value) this.value = '+';
     });
     phone.format = function(value) {
         var v = $.trim(value);
-        v = v.replace(/(\d)\(/, '$1 (');
-        v = v.replace(/\)(\d)/, ') $1');
-        v = v.replace(/(\D)(\d{2,3}) ?(\d{2}) ?(\d{2})$/, '$1$2-$3-$4');
+        v = v.replace(/[^+\d]/g, '');
         return v;
     };
     this.controls.push(phone);

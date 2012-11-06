@@ -55,7 +55,7 @@ toggle: function(ready) {
 },
 set: function(data) {
     for (var i = 0, l = this.controls.length; i < l; i++) {
-        this.controls[i].set(data[i]);
+        if (data[i] !== undefined) this.controls[i].set(data[i]);
     }
 },
 get: function() {
