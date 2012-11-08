@@ -25,7 +25,8 @@ parseVariants: function(selector) {
             id: el.text(),
             duration: Number(el.attr('data-duration')),
             segments: el.attr('data-segments').split(' '),
-            features: features
+            dpttimes: el.attr('data-dpttimes'),
+            features: features,
         };
     });
 },
