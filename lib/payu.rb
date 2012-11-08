@@ -324,6 +324,8 @@ class Payu
       case creditcard.type
       when 'master'
         'MasterCard'
+      when 'maestro'
+        'Maestro'
       when 'visa', 'bogus'
         'VISA'
       else
