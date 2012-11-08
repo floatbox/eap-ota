@@ -96,6 +96,7 @@ class PayuCharge < Payment
   end
 
   STATUS_MAPPING = {
+    'NOT_FOUND' => 'rejected',
     'COMPLETE' => 'charged',
     'PAYMENT_AUTHORIZED' => 'blocked',
     'REFUND' => 'charged',
