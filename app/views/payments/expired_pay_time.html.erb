@@ -16,7 +16,7 @@
 <div class="rh-wrapper">
     <table class="rh-content">
     <tr>
-        <td class="rh-left"><h3 class="rh-summary rh-ready"><%= @order.description || 'Оплата заказа' %></h3></td>
+        <td class="rh-left"><h3 class="rh-summary rh-ready"><%= @order.try(:description) || 'Оплата заказа' %></h3></td>
         <td class="rh-right"></td>
     </tr>
     </table>
