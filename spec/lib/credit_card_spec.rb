@@ -9,6 +9,13 @@ describe CreditCard do
     end
   end
 
+  describe "#split card holder name" do
+    subject { CreditCard.new(:name => "ANDREY AREFYEV") }
+
+    its(:first_name) { should == "ANDREY" }
+    its(:last_name) { should == "AREFYEV" }
+  end
+
   describe ".example" do
     subject { CreditCard.example("5486732058864471        123     12/15 no name") }
 
