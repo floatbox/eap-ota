@@ -184,7 +184,7 @@
 <div class="offer" data-prices='<%= raw recommendation_prices(recommendation) %>'>
     <ul class="o-variants">
     <% recommendation.variants_by_duration.each do |variant| %>
-        <li data-duration="<%= variant.total_duration %>" data-segments="<%= segment_ids(variant) %>" data-layover="<%= longest_layover(variant) %>" data-features="<%= variant_features(variant, recommendation.validating_carrier.alliance) %>"><%= raw recommendation.serialize(variant) %></li>
+        <li data-duration="<%= variant.total_duration %>" data-dpttimes="<%= variant.segments.map(&:departure_time).join('-') %>" data-segments="<%= segment_ids(variant) %>" data-layover="<%= longest_layover(variant) %>" data-features="<%= variant_features(variant, recommendation.validating_carrier.alliance) %>"><%= raw recommendation.serialize(variant) %></li>
     <% end %>
     </ul>
     <div class="o-segments">

@@ -235,14 +235,19 @@ getFastDuration: function() {
     return fd;
 },
 getVariants: function(condition, limit) {
-    var result = [];
+    var result = [], index = {};
     var offers = this.all.offers;
     for (var i = 0, im = offers.length; i < im; i++) {
         var offer = offers[i], variants = offer.variants;
         for (var v = 0, vm = variants.length; v < vm; v++) {
             var variant = variants[v];
             if (!variant.improper && condition(variant)) {
-                result.push(variant);
+                var dt = variant.dpttimes, rn = index[dt];
+                if (rn === undefined) {
+                    index[dt] = result.push(variant) - 1;
+                } else if (variant.duration < result[rn].duration) {
+                    result[rn] = variant; // Если время вылета одинаковое, оставляем самый быстрый вариант 
+                }
             }
         }
         if (limit && result.length > limit) {
