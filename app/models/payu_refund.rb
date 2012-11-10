@@ -69,4 +69,18 @@ class PayuRefund < Payment
     [error_code, error_message].compact.join(': ')
   end
 
+  ERRORS_EXPLAINED = {
+    '1' => 'Confirmed. (заказ подтвержден)',
+    '2' => 'ORDER_REF missing or incorrect (Неверный или пустой номер заказа)',
+    '3' => 'ORDER_AMOUNT missing or incorrect (Неверная или пустая итоговая сумма возврата)',
+    '4' => 'ORDER_CURRENCY is missing or incorrect (Неверная или пустая валюта возврата)',
+    '5' => 'IRN_DATE is not in the correct format (Некорректный формат IRN_DATE)',
+    '6' => 'Error cancelling order (Ошибка отмены заказа)',
+    '7' => 'Order already cancelled (Заказ уже был отменен)',
+    '8' => 'Unknown error (Неизвестная ошибка)',
+    '9' => 'Invalid ORDER_REF (Неверный номер заказа)',
+    '10' => 'Invalid ORDER_AMOUNT (Неверная итоговая сумма возврата)',
+    '11' => 'Invalid ORDER_CURRENCY (Неверная валюта возврата)'
+  }
+
 end
