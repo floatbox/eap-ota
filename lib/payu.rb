@@ -325,7 +325,7 @@ class Payu
       when 'master'
         'MasterCard'
       when 'maestro'
-        'Maestro'
+        'MAESTRO'
       when 'visa', 'bogus'
         'VISA'
       else
