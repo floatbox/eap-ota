@@ -51,6 +51,7 @@ class Payment < ActiveRecord::Base
   # порядок важен!
   before_save :set_defaults
   before_save :recalculate_earnings
+  after_save :update_incomes_in_order
 
   belongs_to :order
   attr_accessor :custom_fields
@@ -139,6 +140,13 @@ class Payment < ActiveRecord::Base
   # вызывается и после считывания из базы
   def set_initial_status
     self.status ||= 'blocked'
+  end
+
+  def update_incomes_in_order
+    if order
+      order.reload
+      order.update_incomes
+    end
   end
 
   # распределение дохода
