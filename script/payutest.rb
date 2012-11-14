@@ -43,22 +43,23 @@ custom_fields = PaymentCustomFields.new(
   status_response = payu.status :our_ref => our_ref
   puts status_response.status
 
-### UNBLOCK
-#  unblock_response = payu.unblock 10, :their_ref => response.their_ref
+## UNBLOCK
+#  unblock_response = payu.unblock :their_ref => response.their_ref, :payment_amount => 10
 
 ### STATE
 #  status_response = payu.status(:our_ref => our_ref)
-#  puts state_response.status
+#  puts status_response.status
 
+#  exit
 ### CHARGE
-  charge_response = payu.charge 10, :their_ref => response.their_ref
+  charge_response = payu.charge :their_ref => response.their_ref, :payment_amount => 10
 
 ### STATE
   status_response = payu.status :our_ref => our_ref
   puts status_response.status
 
 ### REFUND
-  refund_response = payu.refund 10, :their_ref => response.their_ref
+  refund_response = payu.refund 3, :their_ref => response.their_ref, :payment_amount => 10
 
 ### STATE
   status_response = payu.status :our_ref => our_ref
