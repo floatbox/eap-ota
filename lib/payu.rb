@@ -325,7 +325,7 @@ class Payu
       when 'master'
         'MasterCard'
       when 'maestro'
-        'Maestro'
+        'MAESTRO'
       when 'visa', 'bogus'
         'VISA'
       else
@@ -347,7 +347,7 @@ class Payu
   end
 
   def idn_add_money(post, money)
-    post[:ORDER_AMOUNT] = money.to_s
+    post[:ORDER_AMOUNT] = sprintf("%.2f", money)
     post[:ORDER_CURRENCY] = 'RUB'
   end
 

@@ -117,11 +117,11 @@ class CreditCard
   end
 
   def first_name
-    @name.split.first
+    @name.split(' ', 2).first
   end
 
   def last_name
-    @name.split.last
+    @name.split(' ', 2).last
   end
 
   def verification_value?

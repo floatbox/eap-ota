@@ -228,22 +228,39 @@ describe Payu do
 
   end
 
-  describe "#idn_add_money" do
+  describe "#idn_add_money rounding" do
 
     subject { Hash.new }
 
     before do
-      Payu.new.send :idn_add_money, subject, '123.127'
+      Payu.new.send :idn_add_money, subject, BigDecimal.new('123.127')
     end
 
     it do
       should == {
-        ORDER_AMOUNT: '123.127',
+        ORDER_AMOUNT: '123.13',
         ORDER_CURRENCY: "RUB",
       }
     end
 
   end
+
+  describe "#idn_add_money trailing zero" do
+
+     subject { Hash.new }
+
+     before do
+       Payu.new.send :idn_add_money, subject, BigDecimal.new('123')
+     end
+
+     it do
+       should == {
+         ORDER_AMOUNT: '123.00',
+         ORDER_CURRENCY: "RUB",
+       }
+     end
+
+   end
 
   describe Payu::PaymentResponse do
 
