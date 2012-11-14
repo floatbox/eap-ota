@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -Ilib
+#!/usr/bin/env ruby -Ilib -Iapp/models
 
 require_relative '../config/application'
 require 'conf'
@@ -11,6 +11,7 @@ require 'payu'
 require 'active_model'
 require 'key_value_init'
 require 'credit_card'
+require 'payment_custom_fields'
 
 
 require 'logger'
@@ -25,9 +26,17 @@ payu = Payu.new(
 
 our_ref = Time.now.strftime('test_%y%m%d_%H%M%S')
 card = Payu.test_card
+custom_fields = PaymentCustomFields.new(
+  :pnr_number => 'ABCDE12',
+  :ip => '46.4.115.116',
+  :first_name => 'vasya',
+  :last_name => 'petrov',
+  :email => 'mail@example.com',
+  :phone => '79261234567'
+)
 
 ### BLOCK
-  response = payu.block 10, card, :our_ref => our_ref
+  response = payu.block 10, card, :our_ref => our_ref, :custom_fields => custom_fields
   puts response.signed?
 
 ### STATE
@@ -35,7 +44,7 @@ card = Payu.test_card
   puts status_response.status
 
 ### UNBLOCK
-#  unblock_response = payu.unblock 5, :their_ref => response.their_ref
+#  unblock_response = payu.unblock 10, :their_ref => response.their_ref
 
 ### STATE
 #  status_response = payu.status(:our_ref => our_ref)
@@ -49,7 +58,7 @@ card = Payu.test_card
   puts status_response.status
 
 ### REFUND
-  refund_response = payu.refund 5, :their_ref => response.their_ref
+  refund_response = payu.refund 10, :their_ref => response.their_ref
 
 ### STATE
   status_response = payu.status :our_ref => our_ref
