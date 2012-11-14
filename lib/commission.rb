@@ -149,7 +149,7 @@ no_commission
 strt_date "21.10.2012"
 expr_date "31.03.2013"
 agent "12% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
-subagent "10% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
+subagent "10% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
 subclasses "FPRJCADSM"
 check { includes(operating_carrier_iatas, 'ZI') and includes(flights.every.full_flight_number, %W(UN7357 UN7358)) and includes(country_iatas, 'RU') and includes(city_iatas, "RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON") }
 discount "8.5%"
@@ -164,7 +164,7 @@ commission "12%/10%"
 strt_date "21.10.2012"
 expr_date "31.03.2013"
 agent "10% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
-subagent "8% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
+subagent "8% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
 subclasses "YHQBKO"
 important!
 check { includes(operating_carrier_iatas, 'ZI') and includes(flights.every.full_flight_number, %W(UN7357 UN7358)) and includes(country_iatas, 'RU') and includes(city_iatas, "RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON") }
@@ -180,7 +180,7 @@ commission "10%/8%"
 strt_date "21.10.2012"
 expr_date "31.03.2013"
 agent "5% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
-subagent "3% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
+subagent "3% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
 subclasses "LVXTNIGWU"
 important!
 check { includes(operating_carrier_iatas, 'ZI') and includes(flights.every.full_flight_number, %W(UN7357 UN7358)) and includes(country_iatas, 'RU') and includes(city_iatas, "RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON") }
@@ -216,7 +216,7 @@ commission "7%/5%"
 # example 'svocdg'
 strt_date "01.12.2012"
 agent " 4% от всех опубликованных тарифов на рейсы 5N"
-subagent "3% от всех опубликованных тарифов на рейсы 5N"
+subagent "3% от всех опубликованных тарифов на рейсы 5N"
 commission "4%/3%"
 
 example 'cdgsvo svocdg/ab'
@@ -497,7 +497,7 @@ expr_date "30.11.2012"
 agent "10% от тарифа на все направления Alitalia (Эконом и Бизнес класса) с началом путешествия из Москвы и Санкт-Петербурга (тарифы туда и обратно, а также тарифы в одну сторону, но с вылетом из Москвы или Санкт-Петербурга). Повышенная комиссия не применяется, если начало путешествия не из Москвы или Санкт-Петербурга.
 Период  путешествия с 01.11.12г.по 31.12.2012г. (последный день вылета) на следующие направления"
 subagent "8% от тарифа на все направления Alitalia (Эконом и Бизнес класса) с началом путешествия из Москвы и Санкт-Петербурга (тарифы туда и обратно, а также тарифы в одну сторону, но с вылетом из Москвы или Санкт-Петербурга). Повышенная комиссия не применяется, если начало путешествия не из Москвы или Санкт-Петербурга.
-Период путешествия с 01.11.12г.по 31.12.2012г. (последный день вылета) на следующие направления:"
+Период путешествия с 01.11.12г.по 31.12.2012г. (последный день вылета) на следующие направления:"
 classes :business, :economy
 check { includes(city_iatas.first, "MOW LED") }
 important!
@@ -568,7 +568,7 @@ example 'svocdg cdgsvo/ab'
 agent    "1 руб. с билета по всем опубл. тарифам на собств. рейсы BT и рейсы Interline с участком BT"
 subagent "50 коп с билета на рейсы BT"
 interline :no, :yes
-our_markup "150"
+our_markup "20"
 commission "1/0.5"
 
 example 'cdgsvo/ab'
@@ -924,7 +924,7 @@ commission '7%/5%'
 example 'ledsvo/business svoled/business'
 expr_date "30.03.2013"
 agent "9% от опубл.тарифов Бизнес класса на собств.рейсы FV, внутренние и международные, ИСКЛЮЧАЯ рейсы «CODE-Share»."
-subagent "7% от опубл.тарифов Бизнес класса на собственные рейсы FV, внутренние и международные, ИСКЛЮЧАЯ рейсы «CODE-Share»."
+subagent "7% от опубл.тарифов Бизнес класса на собственные рейсы FV, внутренние и международные, ИСКЛЮЧАЯ рейсы «CODE-Share»."
 important!
 classes :business
 domestic
@@ -1704,12 +1704,12 @@ carrier "OA", "OLYMPIC AIR (АВИАРЕПС)"
 
 example 'svocdg'
 agent    "1% от опубл. тарифов на собственные рейсы OA (В договоре Interline не прописан.)"
-subagent "5 руб. с билета по опубл. тарифам на собств.рейсы OA"
+subagent "5 руб. с билета по опубл. тарифам на собств.рейсы OA"
 commission "1%/5"
 
 example 'cdgsvo svocdg/ab'
 agent "1% от опубл. тарифов на рейсы Interline с обязательным участием OA.Выписка по Interline без участия OA не разрешается."
-subagent "5 руб. с билета по опубл. тарифам на рейсы Interline с обязательным участием OA.Выписка по Interline без участия OA не разрешается."
+subagent "5 руб. с билета по опубл. тарифам на рейсы Interline с обязательным участием OA.Выписка по Interline без участия OA не разрешается."
 interline :yes
 commission "1%/5"
 
@@ -1728,8 +1728,8 @@ agent "6% от тарифа на авиабилеты, выписанные по
 Повышенное вознаграждение НЕ применяется к билетам с конечным пунктом назначения Прага и Карловы Вары.
 Данное вознаграждение распространяется на авиабилеты, выписанные в период с 15.10.12г. по 31.03.2013г. (включая обе даты)"
 subagent "4% от тарифа на авиабилеты, выписанные по опубл. тарифам
-на все транзитные перевозки с вылетом из городов Российской Федерации
-и распространяется на рейсы совместной эксплуатации (код-шеринговые рейсы).
+на все транзитные перевозки с вылетом из городов Российской Федерации
+и распространяется на рейсы совместной эксплуатации (код-шеринговые рейсы).
 Повышенное вознаграждение НЕ применяется к билетам с конечным пунктом назначения Прага и Карловы Вары.
 Данное вознаграждение распространяется на авиабилеты, выписанные в период с 15.10.12г. по 31.03.2013г. (включая обе даты)"
 check { includes(country_iatas.first, 'RU') and not includes(city_iatas.last, "PRG KLV") }
@@ -1757,7 +1757,7 @@ example 'svocdg'
 example 'cdgsvo svocdg/ab'
 agent    "9% от всех опубл. тарифов на рейсы OM (В договоре Interline не прописан.)"
 important!
-subagent "2,5% от опубл. тарифов на собств.рейсы OM"
+subagent "2,5% от опубл. тарифов на собств.рейсы OM"
 interline :no, :unconfirmed
 ## discount "5%"
 commission "9%/2.5%"
@@ -2115,7 +2115,7 @@ example "svoist/economy"
 strt_date '15.10.2012'
 expr_date '16.03.2013'
 agent "10% от тарифа Эконом класса на рейсы TK с вылетом из РФ"
-subagent "8% от тарифа Эконом класса на рейсы TK с вылетом из РФ"
+subagent "8% от тарифа Эконом класса на рейсы TK с вылетом из РФ"
 classes :economy
 check { includes(country_iatas.first, 'RU') }
 important!
@@ -2126,7 +2126,7 @@ example "svoist/business"
 strt_date '15.10.2012'
 expr_date '16.03.2013'
 agent "17% от тарифа Бизнес класса на рейсы TK с вылетом из РФ"
-subagent "15% от тарифа Бизнес класса на рейсы TK с вылетом из РФ"
+subagent "15% от тарифа Бизнес класса на рейсы TK с вылетом из РФ"
 classes :business
 check { includes(country_iatas.first, 'RU') }
 important!
@@ -3023,14 +3023,14 @@ carrier "KR", "AIR BISHKEK"
 ########################################
 
 agent "5 % от всех опубл. тарифов на собств. рейсы KR"
-subagent "3% от всех опубл. тарифов на собств. рейсы KR"
+subagent "3% от всех опубл. тарифов на собств. рейсы KR"
 commission "5%/3%"
 
 carrier "DT", "TAAG ANGOLA AIRLINES"
 ########################################
 
 agent "1% от всех опубл. тарифов на собств. рейсы DT"
-subagent "5 руб. от всех опубл. тарифов на собств. рейсы DT"
+subagent "5 руб. от всех опубл. тарифов на собств. рейсы DT"
 commission "1%/5"
 
 end
