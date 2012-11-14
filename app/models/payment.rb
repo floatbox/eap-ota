@@ -144,7 +144,7 @@ class Payment < ActiveRecord::Base
 
   def update_incomes_in_order
     if order
-      order.reload
+      order.secured_payments.reload
       order.update_incomes
     end
   end
