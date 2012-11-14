@@ -26,7 +26,7 @@ show: function(instant) {
     if (instant) {
         context = search.el.hide();
         $w.scrollTop(0);
-    } else if ($.support.fixedPosition) {
+    } else if ($.support.fixedPosition && !browser.ios) {
         that.fixed.preview();    
         context = $w.delay(300);
         context.smoothScrollTo(this.header.position(), 450);
@@ -57,15 +57,15 @@ hide: function() {
     this.header.button.show();
     this.visible = false;
     this.fixed.update();
-    if (browser.ios) {
-        context = search.el.delay(100).slideDown(600);
-    } else {
+    if ($.support.fixedPosition && !browser.ios) {
         search.el.show();
         search.map.resize();
         search.map.load();
         context = $w.scrollTop(this.header.position());
         context.delay(100).smoothScrollTo(0, 450);
         this.header.el.removeClass('rh-fixed');
+    } else {
+        context = search.el.delay(100).slideDown(600);
     }
     context.delay(100).queue(function(next) {
         page.header.removeClass('fixed');
