@@ -236,6 +236,10 @@ update: function() {
     if (this.updateCustomLists) {
         this.updateCustomLists();
     }
+    var label = this.content.find('.rfg-label').html();
+    if (label) {
+        this.control.find('.rfg-label').html(label.capitalize());
+    }
     this.control.toggleClass('rfg-disabled', this.columns === 0);
     this.counter.hide();
     delete this.resized;

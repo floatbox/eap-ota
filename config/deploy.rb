@@ -129,6 +129,7 @@ namespace :deploy do
   after "deploy:finalize_update", "deploy:symlink_completer"
   after "deploy", "deploy:restart_services"
   after "deploy:update_code", "deploy:check_for_pending_migrations"
+  after "deploy:rollback", "deploy:restart_services"
 
   after "deploy:update", "newrelic:notice_deployment"
 end

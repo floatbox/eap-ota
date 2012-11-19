@@ -234,14 +234,14 @@ class Payu
     :MERCHANT, :ORDER_REF, :ORDER_AMOUNT, :ORDER_CURRENCY, :IDN_DATE
   ]
 
-  def charge amount, opts={}
-    validate! opts, :their_ref
+  def charge opts={}
+    validate! opts, :their_ref, :payment_amount
     post = {
       ORDER_REF: opts[:their_ref],
       IDN_DATE: time_now_string
     }
     add_merchant(post)
-    idn_add_money(post, amount)
+    idn_add_money(post, opts[:payment_amount])
     post.slice!(*CHARGE_PARAMS_ORDER)
     post[:ORDER_HASH] = hash_string(@seller_key, post)
 
@@ -256,17 +256,18 @@ class Payu
   end
 
   UNBLOCK_PARAMS_ORDER = [
-    :MERCHANT, :ORDER_REF, :ORDER_AMOUNT, :ORDER_CURRENCY, :IRN_DATE
+    :MERCHANT, :ORDER_REF, :ORDER_AMOUNT, :ORDER_CURRENCY, :IRN_DATE, :AMOUNT
   ]
 
-  # разблокировка средств.
-  # частичная блокировка не принимается
-  def unblock amount, opts={}
-    validate! opts, :their_ref
+  # возврат средств (полный или частичный) на карту пользователя
+  # в PayU делается той же командой что и unblock
+  def refund amount, opts={}
+    validate! opts, :their_ref, :payment_amount
     post = {}
     post[:ORDER_REF] = opts[:their_ref]
     add_merchant(post)
-    idn_add_money(post, amount)
+    idn_add_money(post, opts[:payment_amount])
+    post[:AMOUNT] = sprintf("%.2f", amount)
 
     post[:IRN_DATE] = time_now_string
     post.slice!(*UNBLOCK_PARAMS_ORDER)
@@ -282,10 +283,10 @@ class Payu
     ConfirmationResponse.new( response.parsed_response )
   end
 
-  # возврат средств (полный или частичный) на карту пользователя
-  # в PayU делается той же командой
-  def refund amount, opts={}
-    unblock amount, opts
+  # разблокировка средств.
+  # частичная разблокировка не принимается
+  def unblock opts={}
+    refund opts[:payment_amount], opts
   end
 
   STATE_PARAMS_ORDER = [
@@ -325,7 +326,7 @@ class Payu
       when 'master'
         'MasterCard'
       when 'maestro'
-        'Maestro'
+        'MAESTRO'
       when 'visa', 'bogus'
         'VISA'
       else
@@ -347,7 +348,7 @@ class Payu
   end
 
   def idn_add_money(post, money)
-    post[:ORDER_AMOUNT] = money.to_s
+    post[:ORDER_AMOUNT] = sprintf("%.2f", money)
     post[:ORDER_CURRENCY] = 'RUB'
   end
 
