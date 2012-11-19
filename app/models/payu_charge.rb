@@ -70,7 +70,7 @@ class PayuCharge < Payment
   def charge!
     return unless can_charge?
     update_attributes :status => 'processing_charge'
-    res = gateway.charge(price, :their_ref => their_ref)
+    res = gateway.charge(:their_ref => their_ref, :payment_amount => price)
     if res.success?
       update_attributes :status => 'charged', :charged_on => Date.today
     else
@@ -82,7 +82,7 @@ class PayuCharge < Payment
   def cancel!
     return unless can_cancel?
     update_attributes :status => 'processing_cancel'
-    res = gateway.unblock(price, :their_ref => their_ref)
+    res = gateway.unblock(:their_ref => their_ref, :payment_amount => price)
     if res.success?
       update_attributes :status => 'canceled'
     else

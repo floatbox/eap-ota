@@ -368,7 +368,13 @@ class Order < ActiveRecord::Base
     self.price_our_markup = sold_tickets.sum(:price_our_markup)
 
     self.price_difference = price_total - price_total_old if price_difference == 0
+    update_incomes
     save
+  end
+
+  def update_incomes
+    self.stored_income = income
+    self.stored_balance = balance
   end
 
   # использовать для сравнения с TST

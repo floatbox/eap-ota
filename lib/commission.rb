@@ -101,12 +101,12 @@ disabled "На DTT выгодней"
 commission "7%/5%"
 
 # example 'cdgsvo/i svocdg/x'
-agent "2% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
+agent "5% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
 subagent "1% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
 subclasses "LVXTNIGWU"
 discount "0%"
 disabled "На DTT выгодней"
-commission "2%/1%"
+commission "5%/1%"
 
 # example 'svoiws/UN7061'
 # example 'svoaap/UN7061 aapsvo/UN7061'
@@ -141,51 +141,114 @@ example 'svocdg/lh cdgmad/lh'
 interline :absent
 no_commission
 
-# example 'vkoory/zi:un/f oryvko/zi:un/f'
-# example 'svobcn/f bcnsvo/f'
-# example 'bcnvie/c viebcn/c'
-# example 'svobcn/s'
-# example 'bcnvie/m'
+example 'svxory/zi:un7358/f orysvx/zi:un7357/f'
+example 'svxbcn/zi:un7357/f bcnsvx/zi:un7358/f'
+example 'svxbcn/zi:un7357/s'
 strt_date "21.10.2012"
 expr_date "31.03.2013"
+agent " С 21.10.12г. по 31.03.13г. на собств. рейсы UN и рейсы совместной эксплаутации с кодом UN (UN7357/UN7358) и в рамках код-шер соглашения с АК Aigle Azur (ZI). 12% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M  *от СКВОЗНЫХ тарифов (OW/RT) для ТРАНСФЕРНЫХ перевозок между пунктами полетов UN на территории РФ и нижеуказанными городами Европы" 
+subagent "10% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
+subclasses "FPRJCADSM"
+check {
+  includes_only(operating_carrier_iatas, 'ZI') and
+  includes_only(country_iatas.first, 'RU') and
+  includes(city_iatas, 'RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON') and
+  includes_only(flights.every.full_flight_number, 'ZI:UN7357 ZI:UN7358')
+}
+important!
+discount "8.5%"
+commission "12%/10%"
+
+example 'dmeory/zi:un7358/f orydme/zi:un7357/f'
+example 'svobcn/zi:un7357/f bcnsvo/zi:un7358/f'
+example 'svobcn/zi:un7357/s'
+strt_date "21.10.2012"
+expr_date "31.03.2013"
+agent " С 21.10.12г. по 31.03.13г. на собств. рейсы UN и рейсы совместной эксплаутации с кодом UN (UN7357/UN7358) и в рамках код-шер соглашения с АК Aigle Azur (ZI). 12% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M  *от опубл. тарифов (OW/RT) для ПРЯМЫХ перевозок между Москвой/Санк-Петербургом и нижеуказанными городами Европы"
+subagent "10% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
 agent "12% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
 subagent "10% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
 subclasses "FPRJCADSM"
-check { includes(operating_carrier_iatas, 'ZI') and includes(flights.every.full_flight_number, %W(UN7357 UN7358)) and includes(country_iatas, 'RU') and includes(city_iatas, "RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON") }
+check {
+  includes(operating_carrier_iatas, 'ZI') and
+  includes_only(city_iatas.first, 'MOW LED') and
+  includes(city_iatas, "RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON") and
+  includes(flights.every.full_flight_number, 'ZI:UN7357 ZI:UN7358')
+}
+important!
 discount "8.5%"
-disabled "до выяснения условий"
 commission "12%/10%"
 
-# example 'svocdg/zi:un/y cdgsvo/zi:un/h'
-# example 'svobcn/h bcnsvo/h'
-# example 'bcnvie/q viebcn/q'
-# example 'svobcn/k'
-# example 'bcnvie/o'
+example 'svxcdg/zi:un7357/y cdgsvx/zi:un7358/h'
+example 'svxbcn/zi:un7357/h bcnsvx/zi:un7358/h'
+example 'svxbcn/zi:un7357/k'
+strt_date "21.10.2012"
+expr_date "31.03.2013"
+agent "10% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
+subagent "8% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
+subclasses "YHQBKO"
+check {
+  includes_only(operating_carrier_iatas, 'ZI') and
+  includes_only(country_iatas.first, 'RU') and
+  includes(city_iatas, 'RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON') and
+  includes_only(flights.every.full_flight_number, 'ZI:UN7357 ZI:UN7358')
+}
+important!
+discount "6.5%"
+commission "10%/8%"
+
+example 'ledcdg/zi:un7357/y cdgled/zi:un7358/h'
+example 'ledbcn/zi:un7357/h bcnled/zi:un7358/h'
+example 'svobcn/zi:un7357/k'
 strt_date "21.10.2012"
 expr_date "31.03.2013"
 agent "10% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
 subagent "8% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
 subclasses "YHQBKO"
+check {
+  includes_only(operating_carrier_iatas, 'ZI') and
+  includes_only(city_iatas.first, 'MOW LED') and
+  includes(city_iatas, 'RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON') and
+  includes_only(flights.every.full_flight_number, 'ZI:UN7357 ZI:UN7358')
+}
 important!
-check { includes(operating_carrier_iatas, 'ZI') and includes(flights.every.full_flight_number, %W(UN7357 UN7358)) and includes(country_iatas, 'RU') and includes(city_iatas, "RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON") }
 discount "6.5%"
-disabled "до выяснения условий"
 commission "10%/8%"
 
-# example 'svocdg/zi:un/l cdgsvo/zi:un/l'
-# example 'svobcn/i bcnsvo/i'
-# example 'bcnvie/g viebcn/g'
-# example 'svobcn/w'
-# example 'bcnvie/u'
+example 'svxcdg/zi:un7357/l cdgsvx/zi:un7358/l'
+example 'svxbcn/zi:un7357/i bcnsvx/zi:un7358/i'
+example 'svxbcn/zi:un7357/w'
+strt_date "21.10.2012"
+expr_date "31.03.2013"
+agent "5% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
+subagent "3% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
+subclasses "LVXTNIGWU"
+check {
+  includes_only(operating_carrier_iatas, 'ZI') and
+  includes_only(country_iatas.first, 'RU') and
+  includes(city_iatas, 'RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON') and
+  includes_only(flights.every.full_flight_number, 'ZI:UN7357 ZI:UN7358')
+}
+important!
+discount "1.5%"
+commission "5%/3%"
+
+example 'svocdg/zi:un7357/l cdgsvo/zi:un7358/l'
+example 'svobcn/zi:un7357/i bcnsvo/zi:un7358/i'
+example 'svobcn/zi:un7357/w'
 strt_date "21.10.2012"
 expr_date "31.03.2013"
 agent "5% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
 subagent "3% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
 subclasses "LVXTNIGWU"
+check {
+  includes_only(operating_carrier_iatas, 'ZI') and
+  includes_only(city_iatas.first, 'LED MOW') and
+  includes(city_iatas, 'RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON') and
+  includes_only(flights.every.full_flight_number, 'ZI:UN7357 ZI:UN7358')
+}
 important!
-check { includes(operating_carrier_iatas, 'ZI') and includes(flights.every.full_flight_number, %W(UN7357 UN7358)) and includes(country_iatas, 'RU') and includes(city_iatas, "RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON") }
 discount "1.5%"
-disabled "до выяснения условий"
 commission "5%/3%"
 
 carrier "2U", "SUN D’OR International Airlines (РИНГ-АВИА)"
@@ -2464,8 +2527,8 @@ subagent "2% от тарифа на собств. рейсы ZI по класс�
 subclasses "TQUVL"
 commission "3%/2%"
 
-# example 'cdgsvo/un'
-# example 'cdgsvo svocdg/un'
+example 'cdgsvo/un'
+example 'cdgsvo svocdg/un'
 agent "0% от тарифа на рейсы Interline (разрешен только с авиакомпанией Трансаэро (UN)."
 subagent "0% от тарифа на рейсы Interline (разрешен только с авиакомпанией Трансаэро (UN)."
 interline :yes
