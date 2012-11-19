@@ -219,6 +219,7 @@ init: function() {
         var f = $(this);
         f.prev('label').toggle(!f.val());
     });
+    this.ctime = ((search && search.dates && search.dates.csnow) ||  new Date()).getTime();
     this.initParts();
     this.initFormat();
     if (!browser.ios) {
