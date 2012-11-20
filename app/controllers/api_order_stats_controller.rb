@@ -11,7 +11,11 @@ class ApiOrderStatsController < ApplicationController
     orders = Order.where(:created_at=>Date.parse(params[:date_start])..end_date, :partner => @id)
       .where('payment_status IN ("charged", "blocked")')
       .includes(:secured_payments, :tickets)
-    render :json => orders.every.api_stats_hash.to_json
+    respond_to do |format|
+      format.json  { render :json => orders.every.api_stats_hash}
+      format.csv { render :csv => orders.every.api_stats_hash}
+      format.html { render :json => orders.every.api_stats_hash.to_json}
+    end
   end
 
   private
