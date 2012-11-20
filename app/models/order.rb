@@ -477,10 +477,10 @@ class Order < ActiveRecord::Base
 
   def money_received!
     if payment_status == 'pending'
-      update_attribute(:fix_price, true)
       self.fix_price = true
-      update_attribute(:payment_status, 'charged')
+      self.payment_status = 'charged'
       create_cash_payment
+      save
     end
   end
 
