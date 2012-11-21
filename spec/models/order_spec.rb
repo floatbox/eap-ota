@@ -75,8 +75,7 @@ describe Order do
       before(:all) do
         Conf.payture.stub(:commission).and_return('2.8%')
         @old_ticket = Ticket.new(:price_fare => 21590, :price_tax => 9878, :kind => 'ticket', :status => 'ticketed', :code => '123', :number => '123456789')
-        @order = Order.new(:pnr_number => '', :price_fare => 21590, :price_tax => 9878, :price_with_payment_commission => BigDecimal('31946.68'), :source => 'amadeus', :fix_price => true)
-        @order.save
+        @order = create(:order, :price_fare => 21590, :price_tax => 9878, :price_with_payment_commission => BigDecimal('31946.68'), :source => 'amadeus', :fix_price => true)
         @old_ticket.order = @order
         @old_ticket.save
         @new_ticket_hashes = [
@@ -133,8 +132,7 @@ describe Order do
     context 'of two tickets with zero price' do
       before(:all) do
         Conf.payture.stub(:commission).and_return('2.8%')
-        @order = Order.new(:pnr_number => '', :price_fare => 20010, :price_tax => 10860, :price_with_payment_commission => BigDecimal('30729.94'), :source => 'amadeus', :price_discount => 1000.5, :fix_price => true)
-        @order.save
+        @order = create(:order, :price_fare => 20010, :price_tax => 10860, :price_with_payment_commission => BigDecimal('30729.94'), :source => 'amadeus', :price_discount => 1000.5, :fix_price => true)
         @old_tickets = [1,2].map {|n| Ticket.new(:price_fare => 10005, :price_tax => 5430, :price_discount => 500.25, :kind => 'ticket', :status => 'ticketed', :code => '123', :number => "123456789#{n}", :order => @order)}
         @old_tickets.every.save
         @new_ticket_hashes = [
