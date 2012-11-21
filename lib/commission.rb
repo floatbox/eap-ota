@@ -141,6 +141,10 @@ example 'svocdg/lh cdgmad/lh'
 interline :absent
 no_commission
 
+#в порядке исключения для равного процентного вознаграждения на высоком классе включаю ац
+example 'svxory/f orysvx/f'
+example 'svxory/un7357/f svxory/un7358/f'
+example 'svxory/un7357/f'
 example 'svxory/zi:un7358/f orysvx/zi:un7357/f'
 example 'svxbcn/zi:un/f bcnsvx/zi:un/f'
 example 'svxbcn/zi:un/s'
@@ -149,11 +153,15 @@ expr_date "31.03.2013"
 agent " С 21.10.12г. по 31.03.13г. на собств. рейсы UN и рейсы совместной эксплаутации с кодом UN (UN7357/UN7358) и в рамках код-шер соглашения с АК Aigle Azur (ZI). 12% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M  *от СКВОЗНЫХ тарифов (OW/RT) для ТРАНСФЕРНЫХ перевозок между пунктами полетов UN на территории РФ и нижеуказанными городами Европы" 
 subagent "10% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
 subclasses "FPRJCADSM"
-check { includes_only(operating_carrier_iatas, 'ZI') and includes_only(country_iatas.first, 'RU') and includes(city_iatas, 'RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON') }
+check { includes_only(country_iatas.first, 'RU') and includes(city_iatas, 'RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON') }
 important!
 discount "8.5%"
 commission "12%/10%"
 
+#в порядке исключения для равного процентного вознаграждения на высоком классе включаю ац
+example 'dmeory/f orydme/f'
+example 'dmeory/un7357/f orydme/un7358/f'
+example 'dmeory/un7357/f'
 example 'dmeory/zi:un7358/f orydme/zi:un7357/f'
 example 'svobcn/zi:un/f bcnsvo/zi:un/f'
 example 'svobcn/zi:un/s'
@@ -164,7 +172,7 @@ subagent "10% от тарифа на рейсы UN по всем тарифа�
 agent "12% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
 subagent "10% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
 subclasses "FPRJCADSM"
-check { includes_only(operating_carrier_iatas, 'ZI') and includes_only(city_iatas.first, 'MOW LED') and includes(city_iatas, "RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON") }
+check { includes_only(city_iatas.first, 'MOW LED') and includes(city_iatas, "RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON") }
 important!
 discount "8.5%"
 commission "12%/10%"
