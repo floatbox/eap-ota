@@ -46,6 +46,8 @@ describe Pricing::Order do
   subject do
     Order.new.tap do |o|
       # вызывать какие-то колбэки?
+      o.pnr_number = ''
+      o.parent_pnr_number = 'xxx'
       o.ticket_status = 'ticketed'
       o.payments = payments
       o.save!
