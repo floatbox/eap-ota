@@ -83,7 +83,7 @@ class Order < ActiveRecord::Base
   end
 
   def make_payable_by_card
-    update_attributes(:payment_type => 'card', :payment_status => 'not blocked', :offline_booking => true) if payment_status == 'pending'
+    update_attributes(:payment_type => 'card', :payment_status => 'not blocked', :offline_booking => true) if payment_status == 'pending' && (pnr_number.present? || parent_pnr_number.present?)
   end
 
   has_paper_trail
@@ -101,6 +101,7 @@ class Order < ActiveRecord::Base
   has_many :notifications
   has_one :promo_code
   validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
+  validates_presence_of :pnr_number, :if => Proc.new { |o|  o.parent_pnr_number.blank? && (!o.created_at || o.created_at > 5.days.ago) }, :message => 'Необходимо указать номер PNR или номер родительского PNR'
 
   before_validation :capitalize_pnr
   before_save :calculate_price_with_payment_commission, :if => lambda { price_with_payment_commission.blank? || price_with_payment_commission.zero? || !fix_price? }
@@ -477,10 +478,10 @@ class Order < ActiveRecord::Base
 
   def money_received!
     if payment_status == 'pending'
-      update_attribute(:fix_price, true)
       self.fix_price = true
-      update_attribute(:payment_status, 'charged')
+      self.payment_status = 'charged'
       create_cash_payment
+      save
     end
   end
 
