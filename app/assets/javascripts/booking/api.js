@@ -14,9 +14,8 @@ booking.restore = function() {
     } else if (hash.length !== 0) {
         this.load(hash);
     } else {
-        window.location = '/#' + this.query_key;
+        this.cancel();
     }
-
 }
 booking.prebook = function(query_key, hash, partner, marker) {
     var that = this;

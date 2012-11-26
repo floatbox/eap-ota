@@ -43,11 +43,13 @@ init: function() {
     var btitle = this.button.find('.bfb-title').click(function() {
         that.el.submit();
     });
-    var offset = 325 + 7 - Math.round(btitle.width() / 2);
-    this.footer.find('.bff-left').width(offset - 40);
-    this.footer.find('.bff-right').css('margin-left', offset);
+    if (!this.iphoneLayout) {
+        var offset = 325 + 7 - Math.round(btitle.width() / 2);
+        this.footer.find('.bff-left').width(offset - 40);
+        this.footer.find('.bff-right').css('margin-left', offset);
+    }
     this.required = this.el.find('.bff-required');
-    this.required.delegate('.bffr-link', 'click', function() {
+    this.required.on('click', '.bffr-link', function() {
         that.focus($('#' + $(this).attr('data-field')));
     });
     this.wrongPrice = false;
@@ -70,7 +72,10 @@ focus: function(control) {
     if (browser.ios) {
         control.focus().select();
     } else {
-        var st = control.offset().top - results.header.height - 71;
+        var st = control.offset().top;
+        if (!this.iphoneLayout) {
+            st -= results.header.height + 71
+        }
         $w.smoothScrollTo(Math.min(st, $w.scrollTop()), function() {
             if (control.is('input, textarea')) {
                 control.select();
@@ -326,7 +331,14 @@ initPhone: function() {
         phone.el.val('+7');
     }
     phone.el.bind('keyup propertychange input paste', function() {
-        if (!this.value) this.value = '+';
+        if (!this.value) {
+            this.value = '+';
+            var field = this;
+            window.setTimeout(function() {
+                var pos = field.value.length;
+                field.setSelectionRange(pos, pos);
+            }, 10);            
+        }
     });
     phone.format = function(value) {
         var v = $.trim(value);
@@ -578,7 +590,7 @@ processNames: function() {
     if (fng && this.gender.error) {
         this.gender.set(fng);
     }
-    if (lng && !fng) {
+    if (lng && !fng && !this.firstname.error) {
         var top = this.firstname.el.offset().top + 34;
         var lwarning = this.section.latinWarning;
         var owarning = this.section.orderWarning.css('top', top);
@@ -604,7 +616,7 @@ initBirthday: function() {
         letters: '{Дату рождения} пассажира нужно ввести цифрами в формате дд/мм/гггг.',
         improper: '{Дата рождения} пассажира не может быть позднее сегодняшней.'
     }, function(date) {
-        if (date.getTime() > this.ctime) return 'improper';
+        if (date.getTime() > this.time) return 'improper';
     });
     var withseat = new validator.Checkbox(this.el.find('.bfpo-infant input'));
     withseat.el.on('click set', function() {
@@ -642,6 +654,9 @@ initPassport: function() {
     }, function(value) {
         if (/[^\wА-Яа-я. \-№#]/.test(value)) return 'letters';
         if (value.length < 5) return 'empty';
+    });
+    passport.el.bind('keyup propertychange input paste', function() {
+        var value = this.value;
         if (value.length > 9 && value.replace(/\D/g, '').length === 10) {
             that.togglePermanent();
         }
@@ -658,7 +673,7 @@ initExpiration: function() {
         letters: '{Срок действия документа} нужно ввести цифрами в формате дд/мм/гггг.',
         improper: '{Срок действия документа} уже истёк.'
     }, function(date) {
-        if (date.getTime() < this.ctime) return 'improper';
+        if (date.getTime() < this.time) return 'improper';
     });
     expiration.future = true;
     var permanent = new validator.Checkbox(this.el.find('input[id$="permanent"]'));
@@ -768,28 +783,53 @@ initCard: function() {
     };
     typeParts.visa.click(function() {
         toggleType('visa');
-        number.parts.first().focus();
+        number.el.focus();
     });
     typeParts.mastercard.click(function() {
         toggleType('mastercard');
-        number.parts.first().focus();
+        number.el.focus();
     });
 
-    // Номер карты
-    var number = new validator.CardNumber(context.find('.bfcn-parts'), {
+    var number = new validator.Text($('#bfc-number'), {
         empty: '{номер банковской карты}',
         letters: '{Номер банковской карты} нужно ввести цифрами.',
-        wrong: '{Номер банковской карты} введён неправильно.'
+        wrong: '{Номер банковской карты} введён неправильно.'    
+    }, function(value) {
+        if (/[^\d ]/.test(value)) return 'letters';
+        var digits = value.replace(/\D/g, '');
+        if (digits.length < 16) return 'empty';
+        if (/41{14}|70{14}|5486732058864471|1234561999999999/.test(digits)) {
+            return; // тестовые карты
+        }
+        var sum = 0;
+        for (var i = 0; i < 16; i += 2) {
+            var n1 = Number(digits.charAt(i)) * 2;
+            var n2 = Number(digits.charAt(i + 1));
+            if (n1 > 9) n1 -= 9;
+            sum += n1 + n2;
+        }
+        if (sum % 10 !== 0) {
+            return 'wrong';
+        }
     });
-    number.parts.last().bind('keyup propertychange input change', function() {
-        var value = ($(this).val() + '----').substring(0, 4);
-        sample.html(value.replace(/\D/g, '<span class="bfcn-empty">#</span>'));
+    number.el.bind('keyup propertychange input paste', function() {
+        var digits = this.value.replace(/ /g, '');
+        if (this.setSelectionRange && / $|\d{5}/.test(this.value)) {
+            this.value = digits.replace(/(\d{4})(?=\d)/g, '$1  ');
+            setTimeout(function() {
+                var field = number.el.get(0);
+                var pos = field.value.length;
+                field.setSelectionRange(pos, pos);
+            }, 0);
+        }
+        sample.html((digits + '----------------').substring(12, 16).replace(/\D/g, '<span class="bfcn-empty">#</span>'));        
+        toggleType(digits ? types[digits.charAt(0)] : undefined);
     });
-    number.parts.first().bind('keyup propertychange input', function() {
-        var v = this.value;
-        toggleType(v ? types[v.charAt(0)] : undefined);
-    });
-
+    number.format = function(value) {
+        var digits = $.trim(value).replace(/\D/g, '');
+        return digits.replace(/(\d{4})(?=\d)/g, '$1  ');
+    };    
+    
     // CVV
     var cvv = new validator.Text($('#bc-cvv'), {
         empty: '{CVV/CVC код банковской карты}',
@@ -819,12 +859,6 @@ initCard: function() {
     }, function(value) {
         if (/[^A-Za-z\- .']/.test(value)) return 'letters';
     });
-
-    // Меняем отступы полей, чтобы цифры выравнивались по центру
-    var npw = number.parts.first().outerWidth() - 1;
-    var npp = Math.floor((npw - sample.width()) / 2) - 1;
-    number.parts.width(npw - npp * 2).css('padding-left', npp).css('padding-right', npp);
-    cvv.el.width(Math.ceil((npw - npp * 2) * 0.75));
 
     this.controls.push(number, cvv, name, date);
     this.card = {

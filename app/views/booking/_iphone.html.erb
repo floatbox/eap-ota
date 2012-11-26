@@ -1,0 +1,299 @@
+<% recommendation = @order_form.recommendation %>
+<% price_total = @order_form.recommendation.price_with_payment_commission.round.to_i %>
+<%= form_for @order_form.card, :as => :card, :url => booking_pay_path, :html => { :id => 'booking-form', :autocomplete => 'off', :novalidate => 'novalidate' } do |f| %>
+
+<div class="bf-newprice" data-price="<%= price_total %>">
+    <h5 class="bfnp-title">Места по этой стоимости уже закончились. Остались места за <%= price_total %>&nbsp;<%= rubles(price_total) %></h5>
+    <h6 class="bfnp-content">Вы можете купить <%= @order_form.people.one? ? 'билет' : 'билеты' %> по новой стоимости или выбрать другой вариант</h6>
+</div>
+
+<div class="bf-section bf-persons" data-type="persons">
+    <div class="bfs-title">
+        <h4 class="bfst-text"><%= @order_form.people.one? ? 'Пассажир' : 'Пассажиры' %></h4>
+    </div>
+    <table class="bfp-table" data-people="<%= @order_form.adults.length %><%= @order_form.children.length %><%= @order_form.infants.length %>" data-total="<%= @order_form.people.length %>" data-max="<%= recommendation_deficit(@order_form.recommendation) ? @order_form.recommendation.availability : 8 %>" data-date="<%= @order_form.recommendation.variants.first.flights.last.departure_date %>">
+    <tbody class="bfp-row">
+    <tr class="bfp-spacer-row">
+        <td style="width: 87px;"><div class="bfp-spacer"></div></td>
+        <td style="width: 73px;"></td>
+        <td style="width: 120px;"></td>
+    </tr>
+    <tr>
+        <td class="bfp-control" colspan="3">
+            <h6 class="bf-label">Фамилия</h6>
+            <div class="bff-wrapper">
+                <input type="text" size="30" name="person_attributes[$n][last_name]" id="bfp$n-last-name" class="bf-field bfp-lname">
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" class="bfp-control">
+            <h6 class="bf-label">Имя</h6>
+            <div class="bff-wrapper">
+                <input type="text" size="30" name="person_attributes[$n][first_name]" id="bfp$n-first-name" class="bf-field bfp-fname">
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="bfp-control">
+            <h6 class="bf-label">Пол</h6>
+            <div class="bfp-sex" id="bfp$n-sex">
+                <label class="bfp-sex-m" title="Мужской" for="bfp$n-sex-m">М<input type="radio" value="m" name="person_attributes[$n][sex]" id="bfp$n-sex-m" class="bfp-sex-radio"></label>
+                <label class="bfp-sex-f" title="Женский" for="bfp$n-sex-f">Ж<input type="radio" value="f" name="person_attributes[$n][sex]" id="bfp$n-sex-f" class="bfp-sex-radio"></label>
+            </div>            
+        </td>
+        <td class="bfp-control" colspan="2">
+            <h6 class="bf-label">Дата рождения</h6>
+            <div class="bfp-date">
+                <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-bday">ДД</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-day" id="bfp$n-bday" name="person_attributes[$n][birthday(3i)]" maxlength="2" title="День рождения"></div>
+                <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-bmonth">ММ</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-month" id="bfp$n-bmonth" name="person_attributes[$n][birthday(2i)]" maxlength="2" title="Месяц рождения"></div>
+                <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-byear">ГГГГ</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-year" id="bfp$n-byear" name="person_attributes[$n][birthday(1i)]" maxlength="4" title="Год рождения" data-current="<%= Date.current.strftime('%Y') %>"></div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="bfp-control" colspan="3">
+            <h6 class="bf-label">Гражданство</h6>
+            <div class="bf-select bfp-nationality">
+                <div class="bf-select-arrow"></div>
+                <input class="bf-field" value="" disabled="disabled" style="background: #FFF; opacity: 1;">
+                <select name="person_attributes[$n][nationality_id]" id="bfp$n-nationality" class="bf-select-overlay">
+                    <%= grouped_options_for_select(Country.options_for_nationality_select, 170) %>
+                </select>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="bfp-control" colspan="2">
+            <h6 class="bf-label">Серия и № документа</h6>
+            <input type="text" size="20" name="person_attributes[$n][passport]" maxlength="20" id="bfp$n-passport" class="bf-field bfp-passport">
+            <p class="bfph-passport"><span class="bfph-link bf-hint" data-hint="bfh-passport">Какие документы<br>нужны?</span></p>
+        </td>
+        <td class="bfp-control">
+            <h6 class="bf-label">Срок действия</h6>
+            <div class="bfp-date wrap">
+                <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-day">ДД</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-day" id="bfp$n-exp-day" name="person_attributes[$n][document_expiration_date(3i)]" maxlength="2" title="День окончания срока действия документа"></div>
+                <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-month">ММ</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-month" id="bfp$n-exp-month" name="person_attributes[$n][document_expiration_date(2i)]" maxlength="2" title="Месяц окончания срока действия документа"></div>
+                <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-year">ГГГГ</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-year" id="bfp$n-exp-year" name="person_attributes[$n][document_expiration_date(1i)]" maxlength="4" title="Год окончания срока действия документа" data-current="<%= Date.current.strftime('%Y') %>"></div>
+            </div>
+            <div class="bf-checkbox">
+                <input type="checkbox" value="1" name="person_attributes[$n][document_noexpiration]" id="bfp$n-permanent">
+                <label for="bfp$n-permanent">Без срока</label>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="bfp-control" colspan="3">
+            <div class="bfpo-adult">
+            <% carrier = @order_form.recommendation.validating_carrier %>
+            <% programs = carrier.available_bonus_programms %>
+            <% unless programs.empty? %>
+                <div class="bf-checkbox">
+                    <input type="checkbox" value="1" name="person_attributes[$n][bonus_present]" id="bfp$n-bonus">
+                    <label for="bfp$n-bonus">Есть бонусная карта <%= carrier.alliance ? "альянса #{ carrier.alliance.name }" : "авиакомпании #{ carrier.name }" %></label>
+                </div>
+            <% end %>
+            </div>
+            <div class="bfpo-infant" style="display: none;">
+                <div class="bf-checkbox">
+                    <input type="checkbox" value="1" name="person_attributes[$n][with_seat]" id="bfp$n-seat">
+                    <label for="bfp$n-seat">С отдельным местом</label> <span class="bfph-link bf-hint" data-hint="bfh-withseat">?</span></span>
+                </div>    
+            </div>        
+        </td>
+    </tr>
+    <% unless programs.empty? %>
+    <tr class="bfp-bonus-fields latent">
+        <td class="bfp-control" colspan="3">
+        <div class="bfpbf-control<%= ' latent' if programs.length == 1 %>">
+            <div class="bf-select bfp-bonus-type">
+                <div class="bf-select-arrow"></div>        
+                <input class="bf-field" value="<%= carrier.iata %>" disabled="disabled" style="background: #FFF; opacity: 1;">
+                <select name="person_attributes[$n][bonuscard_type]" id="bfp$n-bonus-type" class="bf-select-overlay">
+                    <%= options_for_select(programs.map {|a| [ a.bonus_program_name, a.iata ] }) %>
+                </select>        
+            </div>
+        </div>
+        <div>
+            <h6 class="bf-label"><label for="bfp$n-bonus-num">Номер карты</label></h6>
+            <input type="text" size="30" name="person_attributes[$n][bonuscard_number]" maxlength="30" id="bfp$n-bonus-num" class="bf-field bfp-bonus-number">        
+        </div>
+        </td>
+    </tr>
+    <% end %>    
+    </tbody>
+    </table>
+    <div class="bf-warning" id="bfw-name-latin">
+    	<p>Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры.</p>
+    	<p class="bfw-tip">Имя&nbsp;и&nbsp;фамилию нужно вводить латинскими буквами. Если имя и&nbsp;фамилия в&nbsp;документе указаны не&nbsp;латиницей, то&nbsp;нужно ввести их&nbsp;транслитерацией (например, IVAN IVANOV).</p>
+    </div>
+    <div class="bf-warning" id="bfw-name-order">
+    	<p>Пожалуйста, проверьте, что вы не перепутали поля для имени и фамилии.</p>
+    	<p class="bfw-tip"><span class="link bfwno-replace">Поменять&nbsp;местами</span> или <span class="link bfwno-leave">оставить</span> как есть?</p>
+    </div>
+    <div class="latent" id="bfh-passport">Для полетов внутри России подходит российский паспорт или загранпаспорт (для детей и&nbsp;младенцев&nbsp;&mdash; свидетельство о&nbsp;рождении или&nbsp;загранпаспорт). Для полетов за&nbsp;рубежом нужен загранпаспорт. Обратите внимание, что помимо загранпаспорта, для въезда во&nbsp;многие страны требуется соответствующая виза.</div>    
+</div>
+
+<div class="bf-section" data-type="contacts">
+<div class="bfs-title">
+    <h4 class="bfst-text">Покупатель</h4>
+</div>
+<%= fields_for :order, @order_form do |o| %>
+<%= o.hidden_field :number %>
+<div class="bfc-control">
+    <h6 class="bf-label"><label for="bfc-email">Адрес электронной почты</label></h6>
+    <input type="email" size="30" name="order[email]" id="bfc-email" class="bf-field">
+    <p class="bff-hint">На этот адрес мы пришлем электронный билет</p>
+</div>
+<div class="bfc-control">
+    <h6 class="bf-label"><label for="bfc-phone">Номер телефона с кодом страны и города</label></h6>
+    <input type="tel" size="30" name="order[phone]" id="bfc-phone" class="bf-field">
+    <p class="bff-hint">Чтобы мы знали, куда звонить в случае каких-либо изменений</p>
+</div>
+<% end %>
+</div>
+
+
+<div class="bf-section" data-type="payment">
+    
+    <div class="bfs-title">
+        <h4 class="bfst-text"><%= @order_form.last_pay_time ? 'Оплата' : 'Оплата банковской картой' %></h4>
+    </div>
+
+    <% enabled_cash = false %>
+    <%# enabled_cash = !(Conf.site.forbidden_delivery && Conf.site.forbidden_cash) && @order_form.last_pay_time %>
+    
+    <% if enabled_cash %>
+    <div class="bfp-type">
+        <div class="bfpt-item bfpt-selected">
+            <h5 class="bfpt-title"><label for="bfpt-card" class="bfpt-label">Банковской картой</label></h5>
+            <p class="bfpt-tip"><label for="bfpt-card">Билет будет оформлен и&nbsp;выслан вам по&nbsp;электронной почте</label></p>
+            <input type="radio" name="order[payment_type]" class="bfpt-radio" id="bfpt-card" value="card" checked="checked">
+        </div>
+        <div class="bfpt-item">
+            <h5 class="bfpt-title"><label for="bfpt-cash" class="bfpt-label">Наличными в Москве</label></h5>
+            <p class="bfpt-tip"><label for="bfpt-cash"><% if Conf.site.forbidden_delivery %>У нас в офисе<% elsif Conf.site.forbidden_cash %>Курьеру при доставке (+400&nbsp;рублей)<% else %>У нас в офисе или курьеру при доставке (+400&nbsp;рублей)<% end %></label></p>
+            <input type="radio" name="order[payment_type]" class="bfpt-radio" id="bfpt-cash" value="cash">
+        </div>
+    </div>
+    <% else %>
+    <div class="bfp-type">
+        <p>Билет будет оформлен<br>и&nbsp;выслан вам по&nbsp;электронной почте</p>
+        <input type="hidden" name="order[payment_type]" value="card">
+    </div>
+    <% end %>
+
+    <div class="bf-card">
+        <div class="bfc-side">
+        <div class="bfcs-inner">
+            <div class="bfc-type">
+                <img class="bfct-visa" src="/images/booking/visa.png" alt="Visa"><span class="bfct-or">&nbsp;или&nbsp;</span><img class="bfct-mastercard" src="/images/booking/mastercard.png" alt="MasterCard">
+            </div>
+            <div class="bfc-number">
+                <h6 class="bf-label"><label for="bfc-number">Номер карты</label> <span class="bfl-tip">(16&nbsp;цифр)</span></h6>
+                <input type="text" pattern="[0-9]*" size="16" name="card[number]" maxlength="22" id="bfc-number" class="bf-field bfc-field">
+            </div>
+            <div class="bfc-name">
+                <h6 class="bf-label"><label for="bfc-name" title="Имя и фамилия латинскими буквами, как на карте">Имя на&nbsp;карте</label></h6>    
+                <input type="text" size="32" name="card[name]" id="bfc-name" class="bf-field bfc-field">    
+            </div>
+            <div class="bfc-expiration">
+                <h6 class="bf-label"><label for="bc-exp-month" title="На карте обозначен как &laquo;VALID THRU&raquo;">Срок действия</label></h6>
+                <div class="bfc-date">
+                    <div class="bfcd-item"><label class="bf-placeholder" for="bc-exp-month">ММ</label><input type="text" pattern="[0-9]*" size="2" name="card[month]" maxlength="2" id="bc-exp-month" class="bf-field bfc-field bfcd-month -metrika-nokeys"></div>
+                    <div class="bfcd-item"><label class="bf-placeholder" for="bc-exp-year">ГГ</label><input type="text" pattern="[0-9]*" size="2" name="card[year_short]" maxlength="2" id="bc-exp-year" class="bf-field bfc-field bfcd-year -metrika-nokeys"></div>
+                </div>
+            </div>
+        </div>
+        </div>        
+        <div class="bfc-cvv">
+            <h6 class="bf-label"><label for="bc-cvv" id="bc-cvv-label">CVV</label>&nbsp;<span class="bfl-tip">(3&nbsp;цифры)</span></h6>
+            <input type="text" pattern="[0-9]*" size="3" name="card[verification_value]" maxlength="3" id="bc-cvv" class="bf-field bfc-field -metrika-nokeys">
+            <div id="bfcn-sample" title="Последние четыре цифры номера карты"><span class="bfcn-empty">####</span></div>
+        </div>
+        <div class="bfc-hints">
+            <p class="bfch-item">Если счет вашей карты — не&nbsp;в&nbsp;рублях, то&nbsp;сумма будет списана в&nbsp;валюте вашего&nbsp;счета по&nbsp;внутреннему курсу банка, выпустившего вашу&nbsp;карту</p>
+        </div>
+    </div>
+    
+    <% if enabled_cash %>
+    <div class="bf-cash">
+        <div class="bfc-deadline">Бронирование необходимо оплатить до&nbsp;<strong><%= I18n.l(@order_form.last_pay_time, :format => '%H:%M %e %B') %></strong>, иначе оно будет автоматически аннулировано.</div>
+        <div class="bfc-delivery"<% if Conf.site.forbidden_delivery || Conf.site.forbidden_cash %> style="display: none;"<% end %>>
+            <div class="bfc-delivery-item">
+                <input type="radio" name="ptype" class="bfcd-radio" value="delivery" id="bfcd-yes"<% unless Conf.site.forbidden_delivery %> checked="checked"<% end %>>
+                <label for="bfcd-yes">Хочу оплатить курьеру при&nbsp;доставке (+400&nbsp;рублей)</label>
+            </div>
+            <div class="bfc-delivery-item">
+                <input type="radio" name="ptype" class="bfcd-radio" value="cash" id="bfcd-no"<% if Conf.site.forbidden_delivery %> checked="checked"<% end %>>
+                <label for="bfcd-no">Хочу самостоятельно приехать в&nbsp;офис и&nbsp;оплатить</label>
+            </div>
+        </div>
+        <div class="bfc-address latent">
+            <h6 class="bf-label">Адрес доставки <span class="bfl-tip">(если есть код домофона или другие тонкости — укажите, пожалуйста)</span></h6>
+            <div class="bfca-content">
+                <textarea class="bf-field" id="bc-address" name="order[delivery]" rows="5" cols="32"></textarea>
+                <p class="bff-hint">Желаемое время доставки тоже можно указать. Обратите внимание, что доставка возможна только по&nbsp;Москве с&nbsp;10:00 до&nbsp;19:00 в&nbsp;будние&nbsp;дни.</p>
+            </div>
+        </div>
+        <div class="bfc-contacts">
+            <p>К&nbsp;нам можно приехать в&nbsp;будние дни с&nbsp;11:00 до&nbsp;20:00. Офис находится на&nbsp;территории «Трехгорной мануфактуры» по&nbsp;адресу улица Рочдельская, дом&nbsp;15.</p>
+            <p class="bfcc-text">Пожалуйста, возьмите с&nbsp;собой документ, удостоверяющий личность, и&nbsp;позвоните нам по&nbsp;телефону <nobr class="phone"><a style="text-decoration: none; color: inherit;" href="tel:+74956603520">+7 495 660-35-20</a>,</nobr> за&nbsp;час до&nbsp;приезда, чтобы мы&nbsp;заранее подготовили для&nbsp;вас все необходимое.</p>
+            <p class="bfcc-text"><a href="http://maps.apple.com/maps?ll=55.755448,37.563382&z=15&t=1&q=Рочдельская+15" target="_blank">Посмотреть на карте</a></p>
+        </div>
+    </div>
+    <% end %>
+   
+</div>
+
+<% price_fare = @order_form.recommendation.price_fare.round.to_i %>
+<% price_tax_and_markup = @order_form.recommendation.price_tax_and_markup.round.to_i %>
+<% price_discount = @order_form.recommendation.price_discount.round.to_i %>
+<div class="bf-footer">
+    <div class="bff-left">
+        <div class="bff-price">
+            <div class="bffp-content">
+                <p class="bffp-nd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total %></span>&nbsp;<%= rubles(price_total) %></p>
+                <p class="bffp-wd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total + 400 %></span>&nbsp;<%= rubles(price_total + 400) %></p>
+                <p class="bffp-tip"><%= 'за всех пассажиров' if @order_form.people.many? %></p>
+                <ul class="bffp-details">
+                    <li class="bffpd-item">Тариф — <%= price_fare %> <span class="ruble">Р</span></li>
+                    <li class="bffpd-item">Таксы и сборы — <%= price_total - price_fare %> <span class="ruble">Р</span></li>
+                    <li class="bffpd-item">В том числе сервисный сбор — <%= @order_form.recommendation.fee.round.to_i %> <span class="ruble">Р</span></li>
+                    <li class="bffpd-item bffp-wd">Доставка — 400 <span class="ruble">Р</span></li>
+                    <% if price_discount > 0 %>
+                        <li class="bffpd-item">Скидка — <%= price_discount %> <span class="ruble">Р</span></li>
+                    <% end %>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="bff-right">
+        <div class="bff-submit">
+            <div class="bf-button">
+                <div class="bfb-title">Купить</div>
+                <div class="bfb-side bfb-left"><div class="bfb-side bfb-right"></div></div>
+            </div>
+            <!--<div class="bff-cancel">или <span class="link bffc-link">вернуться к выбору вариантов</span></div>-->
+            <div class="bff-progress">секундочку...</div>
+        </div>
+        <div class="bff-required"></div>
+        <div class="bff-disclaimer">
+            <p class="bffd-card">После нажатия кнопки «Купить» данные пассажиров попадут в&nbsp;систему бронирования, билет будет оформлен и&nbsp;выслан вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="/agreement/" target="_blank" class="bffd-link">условиями использования</a>, <a href="/iata/" target="_blank" class="bffd-link">правилами IATA</a> и&nbsp;правилами тарифов.</p>
+            <p class="bffd-cash latent">После нажатия кнопки «Купить» подтверждение бронирования будет выслано вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Мы свяжемся с&nbsp;вами по&nbsp;телефону для уточнения деталей доставки. Нажимая «Купить», вы соглашаетесь с&nbsp;<a class="bffd-link" href="/agreement/" target="_blank">условиями использования</a>, <a class="bffd-link" href="/iata/" target="_blank">правилами IATA</a> и&nbsp;правилами тарифов.</p>
+        </div>
+    </div>
+</div>
+
+<% end %>
+
+<div class="bf-result" data-type="3dsecure">
+    <h5 class="bfr-title">Ваша банковская карта требует дополнительной авторизации 3DSecure</h5>
+    <p class="bfr-content">Вы будете перенаправлены на сайт платёжного шлюза. После успешной авторизации вы получите подтверждение покупки.</p>
+    <div class="bfr-controls">
+        <div class="ob-button">
+            <div class="obb-title">Перейти к авторизации</div>
+            <div class="obb-side obb-left"><div class="obb-side obb-right"></div></div>
+        </div><span class="bfrc-addition"> или <span class="link bfr-back">выбрать другой способ оплаты</span></span>
+    </div>    
+</div>

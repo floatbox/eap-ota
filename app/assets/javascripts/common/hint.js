@@ -1,11 +1,11 @@
 var hint = {
 init: function() {
     var that = this;
-    this.el = $('#hint').click(function(event) {
+    this.el = $('#hint').on('click', function(event) {
         event.stopPropagation();
     });
     this.content = this.el.find('.h-content');
-    this.el.find('.h-close').click(function() {
+    this.el.find('.h-close').on('click', function() {
         that.hide();
     });    
     this.selfhide = function(event) {
@@ -16,7 +16,7 @@ show: function(event, content) {
     var that = this;
     var w = $(window), wst = w.scrollTop();
     if (this.el.is(':visible')) {
-        $('body').unbind('click keydown', this.selfhide);
+        $('body').off('click keydown', this.selfhide);
         this.el.hide();
     }
     this.content.html(content);
@@ -26,12 +26,12 @@ show: function(event, content) {
         top: (event.pageY - 15).constrain(wst + 15, wst + w.height() - this.el.outerHeight() - 15)
     }).fadeIn(150);
     setTimeout(function() {
-        $('body').bind('click keydown', that.selfhide);
+        $('body').on('click keydown', that.selfhide);
     }, 20);
 },
 hide: function() {
     this.el.fadeOut(80);
-    $('body').unbind('click keydown', this.selfhide);
+    $('body').off('click keydown', this.selfhide);
 }
 };
 

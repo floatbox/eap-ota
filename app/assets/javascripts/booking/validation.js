@@ -193,8 +193,9 @@ validator.Date = function(el, messages, check) {
     this.update = validator.update;
     this.check = check || $.noop;
     this.error = null;
-    this.year = search.dates.csnow.getFullYear() % 100;
-    this.time = search.dates.csnow.getTime();
+    var now = typeof search !== 'undefined' ? search.dates.csnow : new Date();
+    this.year = now.getFullYear() % 100;
+    this.time = now.getTime();
     this.init();
 };
 validator.Date.prototype = {
@@ -219,7 +220,6 @@ init: function() {
         var f = $(this);
         f.prev('label').toggle(!f.val());
     });
-    this.ctime = ((search && search.dates && search.dates.csnow) ||  new Date()).getTime();
     this.initParts();
     this.initFormat();
     if (!browser.ios) {
@@ -538,7 +538,8 @@ validator.CardDate = function(el, messages) {
     this.messages = messages;
     this.update = validator.update;
     this.error = null;
-    var dmy = search.dates.csnow.DMY();
+    var now = typeof search !== 'undefined' ? search.dates.csnow : new Date();
+    var dmy = now.DMY();
     this.time = dmy.substring(4, 6) + dmy.substring(2, 4);
     this.init();
 };

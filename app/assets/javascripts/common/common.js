@@ -112,7 +112,7 @@ function preloadImages() {
 var $w = $(window);
 
 /* Animated scrolling */
-$.fn.extend({
+$.extend($.fn, {
 smoothScrollTo: function(pos, dur) {
     var el = this, cur = el.scrollTop();
     if (typeof dur !== 'number') {
