@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
   include Typus::Authentication::Session, PartnerTracking
+  has_mobile_fu false
 
   before_filter :set_locale
   after_filter :log_partner
