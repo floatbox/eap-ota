@@ -89,7 +89,7 @@ class Order < ActiveRecord::Base
   has_paper_trail
 
   has_many :payments
-  has_many :secured_payments, :conditions => ['status IN (?)', %W[ blocked charged processing_charge ]], :class_name => 'Payment'
+  has_many :secured_payments, conditions: { status: %W[ blocked charged processing_charge ]}, class_name: 'Payment'
 
   # не_рефанды
   def last_payment
