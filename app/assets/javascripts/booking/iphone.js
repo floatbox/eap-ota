@@ -1,3 +1,8 @@
+var trackPage = function(url) {
+};
+var trackEvent = function(category, action, label) {
+};
+
 /* Search */
 var search = {};
 

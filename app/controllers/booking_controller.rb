@@ -64,14 +64,13 @@ class BookingController < ApplicationController
     @query_key = params[:query_key]
     @search = PricerForm.load_from_cache(params[:query_key])
     @destination = get_destination    
-=begin
+
     if is_mobile_device?
       render 'variant_iphone'
     else
       render 'variant'
     end
-=end
-    render 'variant'
+
     StatCounters.inc %W[enter.api.success]
   ensure
     StatCounters.inc %W[enter.api.total]
@@ -116,14 +115,13 @@ class BookingController < ApplicationController
     @order_form = OrderForm.load_from_cache(params[:number])
     @order_form.init_people
     @search = PricerForm.load_from_cache(@order_form.query_key)
-=begin
+
     if is_mobile_device?
       render :partial => 'iphone'
     else
       render :partial => corporate_mode? ? 'corporate' : 'embedded'
     end
-=end
-    render :partial => corporate_mode? ? 'corporate' : 'embedded'
+
   end
 
   def recalculate_price
