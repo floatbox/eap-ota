@@ -343,7 +343,8 @@ initPhone: function() {
     phone.format = function(value) {
         var v = $.trim(value);
         v = v.replace(/[^+\d]/g, '');
-        v = v.replace(/^8(\d+)/g, '+7$1');        
+        v = v.replace(/^8(\d+)/g, '+7$1');
+        v = v.replace(/^(\d)/g, '+$1');        
         return v;
     };
     this.controls.push(phone);
