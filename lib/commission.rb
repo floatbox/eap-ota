@@ -208,26 +208,26 @@ example 'svxbcn/zi:un/i bcnsvx/zi:un/i'
 example 'svxbcn/zi:un/w'
 strt_date "21.10.2012"
 expr_date "31.03.2013"
-agent "5% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
-subagent "3% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
+agent "С 11.11.2012г. 8% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
+subagent "3% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
 subclasses "LVXTNIGWU"
 check { includes_only(operating_carrier_iatas, 'ZI') and includes_only(country_iatas.first, 'RU') and includes(city_iatas, 'RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON') }
 important!
 discount "1.5%"
-commission "5%/3%"
+commission "8%/3%"
 
 example 'svobcn/zi:un7357/i bcnsvo/zi:un/i'
 example 'svobcn/zi:un/i bcnsvo/zi:un/i'
 example 'svobcn/zi:un7357/w'
 strt_date "21.10.2012"
 expr_date "31.03.2013"
-agent "5% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
+agent "С 11.11.2012г. 8% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
 subagent "3% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
 subclasses "LVXTNIGWU"
 check { includes_only(operating_carrier_iatas, 'ZI') and includes_only(city_iatas.first, 'LED MOW') and includes(city_iatas, 'RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON') }
 important!
 discount "1.5%"
-commission "5%/3%"
+commission "8%/3%"
 
 carrier "2U", "SUN D’OR International Airlines (РИНГ-АВИА)"
 ########################################
