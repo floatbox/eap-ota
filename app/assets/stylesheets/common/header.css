@@ -84,12 +84,15 @@
     display: none;
     position: relative;
     float: right;
-    width: 326px;
+    width: 426px;
 }
 .phs-item {
     position: absolute;
     top: 7px;
 }
+#phs-vk{
+    left: 0px;
+} 
 #phs-facebook {
     left: 42px;
 }

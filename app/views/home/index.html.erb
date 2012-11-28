@@ -58,6 +58,12 @@ page.init();
 <script src="//mc.yandex.ru/metrika/watch_visor.js" type="text/javascript" defer="defer"></script>
 <script type="text/javascript" src="https://yandex.st/share/share.js" charset="utf-8"></script>
 -->
+<!--
+<script type="text/javascript" src="//vk.com/js/api/openapi.js?68"></script>
+<script type="text/javascript">
+  VK.init({apiId: 3261549, onlyWidgets: true});
+</script>
+-->
 <script type="text/javascript">
 (function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
@@ -66,8 +72,12 @@ page.init();
     js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=429677207045748";
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
-(function(d,s,id) {
-    var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}
+(function(d, s, id) {
+    var js,fjs=d.getElementsByTagName(s)[0];
+    if(!d.getElementById(id)) {
+        js = d.createElement(s); js.id = id;
+        js.src="//platform.twitter.com/widgets.js";
+        fjs.parentNode.insertBefore(js,fjs);}
 }(document,"script","twitter-wjs"));
 (function() {
     var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
