@@ -84,18 +84,23 @@
     display: none;
     position: relative;
     float: right;
-    width: 326px;
+    /*width: 426px;*/
+    width: 426px;
 }
 .phs-item {
     position: absolute;
     top: 7px;
 }
+#phs-vk{
+    display: none;
+    left: 0px;
+} 
 #phs-facebook {
-    left: 42px;
+    left: 142px;
 }
 #phs-twitter {
-    left: 140px;
+    left: 240px;
 }
 #phs-google {
-    left: 255px;
+    left: 355px;
 }

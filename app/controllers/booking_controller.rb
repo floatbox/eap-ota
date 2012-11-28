@@ -63,9 +63,9 @@ class BookingController < ApplicationController
   def api_booking
     @query_key = params[:query_key]
     @search = PricerForm.load_from_cache(params[:query_key])
-    @destination = get_destination    
+    @destination = get_destination
 
-    if is_mobile_device?
+    if is_mobile_device? && !is_tablet_device?
       render 'variant_iphone'
     else
       render 'variant'
