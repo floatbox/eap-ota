@@ -330,14 +330,20 @@ initPhone: function() {
     if (!phone.el.val()) {
         phone.el.val('+7');
     }
-    phone.el.bind('keyup propertychange input paste', function() {
+    var phoneField = phone.el.get(0);
+    var moveFocus = function() {
+        var pos = phoneField.value.length;
+        phoneField.setSelectionRange(pos, pos);
+    };
+    phone.el.on('focus', function() {
+        if (this.value === '+7') {
+            window.setTimeout(moveFocus, 10);
+        }
+    });
+    phone.el.on('keyup propertychange input paste', function() {
         if (!this.value) {
             this.value = '+';
-            var field = this;
-            window.setTimeout(function() {
-                var pos = field.value.length;
-                field.setSelectionRange(pos, pos);
-            }, 10);            
+            window.setTimeout(moveFocus, 10);
         }
     });
     phone.format = function(value) {

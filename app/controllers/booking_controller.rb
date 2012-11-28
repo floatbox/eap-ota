@@ -116,10 +116,12 @@ class BookingController < ApplicationController
     @order_form.init_people
     @search = PricerForm.load_from_cache(@order_form.query_key)
 
-    if is_mobile_device?
+    if params[:iphone]
       render :partial => 'iphone'
+    elsif corporate_mode?
+      render :partial => 'corporate'
     else
-      render :partial => corporate_mode? ? 'corporate' : 'embedded'
+      render :partial => 'embedded'  
     end
 
   end
