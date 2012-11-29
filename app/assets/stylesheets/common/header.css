@@ -84,7 +84,6 @@
     display: none;
     position: relative;
     float: right;
-    /*width: 426px;*/
     width: 426px;
 }
 .phs-item {
@@ -92,11 +91,10 @@
     top: 7px;
 }
 #phs-vk{
-    display: none;
-    left: 0px;
+    left: 37px;
 } 
 #phs-facebook {
-    left: 142px;
+    left: 141px;
 }
 #phs-twitter {
     left: 240px;
