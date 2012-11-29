@@ -65,6 +65,21 @@
 }
 
 /* Persons */
+.bfp-table {
+    width: 280px;
+}
+.bfp-spacer {
+    height: 14px;
+}
+.bfp-row:first-child .bfp-spacer {
+    height: 1px;
+}
+.bfp-border {
+    border-top: 1px dashed rgba(0, 0, 0, 0.4);
+}
+.bfp-row:first-child .bfp-border-row {
+    display: none;
+}
 .bfp-control {
     padding: 0 0 8px;
 }

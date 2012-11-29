@@ -18,6 +18,9 @@
         <td style="width: 73px;"></td>
         <td style="width: 120px;"></td>
     </tr>
+    <tr class="bfp-border-row">
+        <td colspan="3" class="bfp-border"><div class="bfp-spacer"></div></td>
+    </tr>
     <tr>
         <td class="bfp-control" colspan="3">
             <h6 class="bf-label">Фамилия</h6>
@@ -40,7 +43,7 @@
             <div class="bfp-sex" id="bfp$n-sex">
                 <label class="bfp-sex-m" title="Мужской" for="bfp$n-sex-m">М<input type="radio" value="m" name="person_attributes[$n][sex]" id="bfp$n-sex-m" class="bfp-sex-radio"></label>
                 <label class="bfp-sex-f" title="Женский" for="bfp$n-sex-f">Ж<input type="radio" value="f" name="person_attributes[$n][sex]" id="bfp$n-sex-f" class="bfp-sex-radio"></label>
-            </div>            
+            </div>
         </td>
         <td class="bfp-control" colspan="2">
             <h6 class="bf-label">Дата рождения</h6>
@@ -98,8 +101,8 @@
                 <div class="bf-checkbox">
                     <input type="checkbox" value="1" name="person_attributes[$n][with_seat]" id="bfp$n-seat">
                     <label for="bfp$n-seat">С отдельным местом</label> <span class="bfph-link bf-hint" data-hint="bfh-withseat">?</span></span>
-                </div>    
-            </div>        
+                </div>
+            </div>
         </td>
     </tr>
     <% unless programs.empty? %>
@@ -107,20 +110,20 @@
         <td class="bfp-control" colspan="3">
         <div class="bfpbf-control<%= ' latent' if programs.length == 1 %>">
             <div class="bf-select bfp-bonus-type">
-                <div class="bf-select-arrow"></div>        
+                <div class="bf-select-arrow"></div>
                 <input class="bf-field" value="<%= carrier.iata %>" disabled="disabled" style="background: #FFF; opacity: 1;">
                 <select name="person_attributes[$n][bonuscard_type]" id="bfp$n-bonus-type" class="bf-select-overlay">
                     <%= options_for_select(programs.map {|a| [ a.bonus_program_name, a.iata ] }) %>
-                </select>        
+                </select>
             </div>
         </div>
         <div>
             <h6 class="bf-label"><label for="bfp$n-bonus-num">Номер карты</label></h6>
-            <input type="text" size="30" name="person_attributes[$n][bonuscard_number]" maxlength="30" id="bfp$n-bonus-num" class="bf-field bfp-bonus-number">        
+            <input type="text" size="30" name="person_attributes[$n][bonuscard_number]" maxlength="30" id="bfp$n-bonus-num" class="bf-field bfp-bonus-number">
         </div>
         </td>
     </tr>
-    <% end %>    
+    <% end %>
     </tbody>
     </table>
     <div class="bf-warning" id="bfw-name-latin">
@@ -131,7 +134,7 @@
     	<p>Пожалуйста, проверьте, что вы не перепутали поля для имени и фамилии.</p>
     	<p class="bfw-tip"><span class="link bfwno-replace">Поменять&nbsp;местами</span> или <span class="link bfwno-leave">оставить</span> как есть?</p>
     </div>
-    <div class="latent" id="bfh-passport">Для полетов внутри России подходит российский паспорт или загранпаспорт (для детей и&nbsp;младенцев&nbsp;&mdash; свидетельство о&nbsp;рождении или&nbsp;загранпаспорт). Для полетов за&nbsp;рубежом нужен загранпаспорт. Обратите внимание, что помимо загранпаспорта, для въезда во&nbsp;многие страны требуется соответствующая виза.</div>    
+    <div class="latent" id="bfh-passport">Для полетов внутри России подходит российский паспорт или загранпаспорт (для детей и&nbsp;младенцев&nbsp;&mdash; свидетельство о&nbsp;рождении или&nbsp;загранпаспорт). Для полетов за&nbsp;рубежом нужен загранпаспорт. Обратите внимание, что помимо загранпаспорта, для въезда во&nbsp;многие страны требуется соответствующая виза.</div>
 </div>
 
 <div class="bf-section" data-type="contacts">
@@ -155,14 +158,14 @@
 
 
 <div class="bf-section" data-type="payment">
-    
+
     <div class="bfs-title">
         <h4 class="bfst-text"><%= @order_form.last_pay_time ? 'Оплата' : 'Оплата банковской картой' %></h4>
     </div>
 
     <% enabled_cash = false %>
     <%# enabled_cash = !(Conf.site.forbidden_delivery && Conf.site.forbidden_cash) && @order_form.last_pay_time %>
-    
+
     <% if enabled_cash %>
     <div class="bfp-type">
         <div class="bfpt-item bfpt-selected">
@@ -194,8 +197,8 @@
                 <input type="text" pattern="[0-9]*" size="16" name="card[number]" maxlength="22" id="bfc-number" class="bf-field bfc-field">
             </div>
             <div class="bfc-name">
-                <h6 class="bf-label"><label for="bfc-name" title="Имя и фамилия латинскими буквами, как на карте">Имя на&nbsp;карте</label></h6>    
-                <input type="text" size="32" name="card[name]" id="bfc-name" class="bf-field bfc-field">    
+                <h6 class="bf-label"><label for="bfc-name" title="Имя и фамилия латинскими буквами, как на карте">Имя на&nbsp;карте</label></h6>
+                <input type="text" size="32" name="card[name]" id="bfc-name" class="bf-field bfc-field">
             </div>
             <div class="bfc-expiration">
                 <h6 class="bf-label"><label for="bc-exp-month" title="На карте обозначен как &laquo;VALID THRU&raquo;">Срок действия</label></h6>
@@ -205,7 +208,7 @@
                 </div>
             </div>
         </div>
-        </div>        
+        </div>
         <div class="bfc-cvv">
             <h6 class="bf-label"><label for="bc-cvv" id="bc-cvv-label">CVV</label>&nbsp;<span class="bfl-tip">(3&nbsp;цифры)</span></h6>
             <input type="text" pattern="[0-9]*" size="3" name="card[verification_value]" maxlength="3" id="bc-cvv" class="bf-field bfc-field -metrika-nokeys">
@@ -215,7 +218,7 @@
             <p class="bfch-item">Если счет вашей карты — не&nbsp;в&nbsp;рублях, то&nbsp;сумма будет списана в&nbsp;валюте вашего&nbsp;счета по&nbsp;внутреннему курсу банка, выпустившего вашу&nbsp;карту</p>
         </div>
     </div>
-    
+
     <% if enabled_cash %>
     <div class="bf-cash">
         <div class="bfc-deadline">Бронирование необходимо оплатить до&nbsp;<strong><%= I18n.l(@order_form.last_pay_time, :format => '%H:%M %e %B') %></strong>, иначе оно будет автоматически аннулировано.</div>
@@ -243,7 +246,7 @@
         </div>
     </div>
     <% end %>
-   
+
 </div>
 
 <% price_fare = @order_form.recommendation.price_fare.round.to_i %>
