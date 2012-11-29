@@ -445,3 +445,50 @@
     cursor: pointer;
 }
 
+/* Farerules */
+.bf-farerules {
+    display: none;
+    width: 100%;
+    background: #FFF;
+}
+.bff-close {
+    float: right;
+    position: relative;
+    top: 17px; left: -17px;
+    width: 18px; height: 18px;
+    background: url(/img/booking/close.png) no-repeat;
+    cursor: pointer;
+}
+.bff-content {
+    padding: 16px 0;
+}
+.bff-title {
+    margin: 0 20px 8px;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 20px;
+}
+.bff-text {
+    margin: 8px 20px 0;
+    font-size: 14px;
+    line-height: 18px;
+}
+.bff-group {
+    width: 100%;
+    padding: 16px 0;
+    border-top: 1px dashed #999;
+    overflow-x: auto;
+}
+.bffg-title {
+    margin: 0 20px 18px;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 18px;
+}
+.bffg-content {
+    float: left;
+    padding: 0 20px;
+    font-size: 14px;
+    line-height: 18px;
+}
+

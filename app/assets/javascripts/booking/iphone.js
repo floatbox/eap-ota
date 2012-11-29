@@ -97,7 +97,8 @@ load: function(number, price_changed) {
             that.loading.hide();
             that.content.html(content).show();
             that.el.removeClass('b-processing').show();
-            that.form.init();        
+            that.form.init();
+            that.farerules.init();
             if (price_changed) {
                 that.content.find('.bf-newprice').show();
             }
@@ -109,5 +110,27 @@ load: function(number, price_changed) {
     });
 },
 failed: function() {
+}
+};
+
+/* Farerules */
+booking.farerules = {
+init: function() {
+    var that = this;
+    this.el = booking.el.find('.bf-farerules');
+    this.el.find('.bff-close').click(function() {
+        that.hide();
+    });
+    booking.el.find('.bffd-farerules').click(function(event) {
+        that.show();
+    });
+},
+show: function() {
+    var st = $w.scrollTop();
+    this.el.show();
+    $w.scrollTop(st).smoothScrollTo(this.el.offset().top - 50);
+},
+hide: function() {
+    this.el.hide();
 }
 };
