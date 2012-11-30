@@ -38,11 +38,12 @@
 <noscript><div><img src="//mc.yandex.ru/watch/5324671?ut=noindex" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 
+<% if Conf.ohmystats.enabled %>
 <!-- Oh My Stats tracker -->
 <script type="text/javascript">
 //<![CDATA[
 var _oms = window._oms || [];
-_oms.push(["set_project_id", "qsxfvashjzioiwazcryxlgysgjuitwyfaasjvkiv"]);
+_oms.push(["set_project_id", "<%= Conf.ohmystats.project_id %>"]);
 (function() {
     var oms = document.createElement("script");
     oms.type = "text/javascript";
@@ -53,6 +54,7 @@ _oms.push(["set_project_id", "qsxfvashjzioiwazcryxlgysgjuitwyfaasjvkiv"]);
 })();
 //]]>
 </script>
+<% end %>
 
 <div id="page-header">
 <div class="ph-content">
