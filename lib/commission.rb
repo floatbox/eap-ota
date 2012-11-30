@@ -944,7 +944,7 @@ subagent "0,5% от опубл. тарифа на рейсы FI"
 commission "1%/0.5%"
 
 example 'cdgsvo svocdg/ab'
-agent "1р Interline не прописан"
+agent "1% от опубл. тарифов на рейсы Interline с обязательным участием FI."
 subagent "0р Interline не прописан"
 interline :unconfirmed
 commission "1%/0.5%"
@@ -2342,7 +2342,7 @@ agent    "7% от опубл. тарифов на рейсы Interline (до Л�
 subagent "5% от опубл. тарифов на рейсы Interline (до Лондона: BD, BA, SU), выписанные на ОДНОМ бланке. Первый трансатлантический перелет на Virgin Atlantic является обязательным."
 interline :yes
 # FIXME надо ли проверять трансатлантику?
-check { includes(%W(BD BA SU), marketing_carrier_iatas.first) and includes(marketing_carrier_iatas.second, 'VS') }
+check { includes(%W(UN BA SU), marketing_carrier_iatas.first) and includes(marketing_carrier_iatas.second, 'VS') }
 discount "3%"
 commission "7%/5%"
 
@@ -3072,6 +3072,20 @@ carrier "DT", "TAAG ANGOLA AIRLINES"
 
 agent "1% от всех опубл. тарифов на собств. рейсы DT"
 subagent "5 руб. от всех опубл. тарифов на собств. рейсы DT"
+commission "1%/5"
+
+carrier "OG", "Air Onix Airlines"
+########################################
+
+agent "5% от опубл. тарифов на рейсы OG"
+subagent "3% от опубл. тарифов на рейсы OG"
+commission "5%/3%"
+
+carrier "EN", "Air Dolomiti"
+########################################
+
+agent "1% от всех опубл. тарифов"
+subagent "5 руб. от всех опубл. тарифов"
 commission "1%/5"
 
 end
