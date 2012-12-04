@@ -340,7 +340,8 @@
     padding: 4px 9px;
     cursor: pointer;
 }
-.smp-loading {
+.smp-loading,
+.smp-empty {
     display: none;
     position: absolute;
     top: 50%;
@@ -350,6 +351,9 @@
     color: #777;
     text-align: center;
 }
+.smp-empty {
+    margin-top: -15px;
+}
 .smp-progress {
     padding: 0 26px 1px 0;
     background: url(/images/booking/progress-w.gif) no-repeat 100% 0;
@@ -358,10 +362,12 @@
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
     cursor: default;
 }
-.smp-pressed .smp-link {
+.smp-pressed .smp-link,
+.smp-failed .smp-link {
     visibility: hidden;
 }
-.smp-pressed .smp-loading {
+.smp-pressed .smp-loading,
+.smp-failed .smp-empty {
     display: block;
 }
 

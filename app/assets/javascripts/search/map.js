@@ -206,14 +206,17 @@ loadPrices: function() {
         error: function() {
             that.showPrices([]);
         },
-        timeout: 15000
+        timeout: 45000
     });
 },
 showPrices: function(items) {
     var that = this;
     this.clean();
     if (items.length === 0) {
-        this.prices.hide();
+        this.prices.el.removeClass('smp-pressed');
+        this.prices.el.addClass('smp-failed');
+        this.pricesMode = true;
+        this.prices.clicked = false;
         return;
     }
     var template = '<p class="sml-city">{0}</p><p class="sml-price">{1}&nbsp;<span class="ruble">Р</span></p><p class="sml-dates">{2}</p>';
@@ -256,6 +259,10 @@ showPrices: function(items) {
     } else {
         this.prices.hide();
     }
+    if (this.prices.clicked && !search.dates.el.hasClass('sd-hidden')) {
+        this.slideDown();
+    }
+    this.prices.clicked = false;
     this.pricesMode = true;
 },
 filterPrices: function(limit) {
@@ -325,9 +332,12 @@ init: function(context) {
     this.el = context;
     this.link = this.el.find('.smp-link');
     this.link.click(function() {
+        that.clicked = true;
+        that.el.removeClass('smp-failed');
         that.el.addClass('smp-pressed');
         search.map.loadPrices();
     });
+    this.empty = this.el.find('.smp-empty');
     this.loading = this.el.find('.smp-loading');
     this.slider = this.el.find('.smp-slider');
     this.slider.find('.smps-base').on('click', function(event) {
@@ -350,10 +360,12 @@ init: function(context) {
 update: function(options) {
     this.slider.hide();
     this.link.html(options.title).show();
+    this.el.removeClass('smp-failed');
     this.el.attr('data-from', options.from);
     this.el.attr('data-date', options.date);
 },
 process: function(min, max) {
+    this.el.removeClass('smp-failed');
     this.el.removeClass('smp-pressed');
     this.link.hide();
     this.slider.show();
