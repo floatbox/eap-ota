@@ -90,6 +90,7 @@ class Order < ActiveRecord::Base
 
   has_many :payments
   has_many :secured_payments, conditions: { status: %W[ blocked charged processing_charge ]}, class_name: 'Payment'
+  belongs_to :customer
 
   # не_рефанды
   def last_payment
@@ -105,7 +106,7 @@ class Order < ActiveRecord::Base
 
   before_validation :capitalize_pnr
   before_save :calculate_price_with_payment_commission, :if => lambda { price_with_payment_commission.blank? || price_with_payment_commission.zero? || !fix_price? }
-  before_create :generate_code, :set_payment_status, :set_email_status
+  before_create :generate_code, :set_customer, :set_payment_status, :set_email_status
   after_save :create_order_notice
 
   def create_order_notice
@@ -523,6 +524,10 @@ class Order < ActiveRecord::Base
         puts "error: #{$!}"
       end
     end
+  end
+
+  def set_customer
+    self.customer = Customer.find_or_create_by_email(email)
   end
 
   def set_payment_status

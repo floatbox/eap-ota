@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121113143836) do
+ActiveRecord::Schema.define(:version => 20121205135812) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -164,6 +164,17 @@ ActiveRecord::Schema.define(:version => 20121113143836) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "customers", :force => true do |t|
+    t.string   "email",      :null => false
+    t.string   "password"
+    t.string   "status"
+    t.boolean  "enabled",    :null => false, :default => 0
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "customers", ["email"], :name => "index_customers_on_email", :unique => true
 
   create_table "destinations", :force => true do |t|
     t.integer  "to_id"
@@ -321,8 +332,10 @@ ActiveRecord::Schema.define(:version => 20121113143836) do
     t.string   "parent_pnr_number"
     t.decimal  "stored_income",                 :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.decimal  "stored_balance",                :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.integer  "customer_id"
   end
 
+  add_index "orders", ["customer_id"], :name => "index_orders_on_customer_id"
   add_index "orders", ["partner"], :name => "index_orders_on_partner"
   add_index "orders", ["payment_status", "ticket_status"], :name => "index_orders_on_payment_status_and_ticket_status"
   add_index "orders", ["payment_status"], :name => "index_orders_on_payment_status"
