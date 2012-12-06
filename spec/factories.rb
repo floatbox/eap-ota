@@ -20,6 +20,7 @@ FactoryGirl.define do
     pnr_number
     fix_price true
     price_with_payment_commission 3000
+    email 'example@gmail.com'
   end
 
   factory :person do

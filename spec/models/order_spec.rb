@@ -9,9 +9,8 @@ describe Order do
   end
 
   it "should not allow to create two orders with the same pnr number" do
-    order1 = Order.new :pnr_number => 'foobar'
-    order2 = Order.new :pnr_number => 'FOObar'
-    order1.save!
+    order1 = create :order, :pnr_number => 'foobar'
+    order2 = build :order, :pnr_number => 'FOObar'
     order2.should have_errors_on(:pnr_number)
   end
 
@@ -200,7 +199,7 @@ describe Order do
     context "for amadeus order" do
 
       before(:each) do
-        @order = Order.new(:source => 'amadeus', :commission_subagent => '1%', :pnr_number => '123456')
+        @order = build(:order, :source => 'amadeus', :commission_subagent => '1%', :pnr_number => '123456')
         @amadeus = mock('Amadeus')
         @amadeus.stub(
           pnr_retrieve:
