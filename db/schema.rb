@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121205135812) do
+ActiveRecord::Schema.define(:version => 20121206181521) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -166,12 +166,12 @@ ActiveRecord::Schema.define(:version => 20121205135812) do
   end
 
   create_table "customers", :force => true do |t|
-    t.string   "email",      :null => false
+    t.string   "email",                         :null => false
     t.string   "password"
     t.string   "status"
-    t.boolean  "enabled",    :null => false, :default => 0
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.boolean  "enabled",    :default => false, :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
   end
 
   add_index "customers", ["email"], :name => "index_customers_on_email", :unique => true
@@ -260,6 +260,7 @@ ActiveRecord::Schema.define(:version => 20121205135812) do
   end
 
   add_index "notifications", ["method", "status"], :name => "index_notifications_on_method_and_status"
+  add_index "notifications", ["order_id"], :name => "index_notifications_on_order_id"
 
   create_table "order_comments", :force => true do |t|
     t.integer  "order_id"
