@@ -125,7 +125,7 @@ Order:
       - price_with_payment_commission
       - price_total
       - expected_income
-      - balance
+      - stored_balance
       - price_our_markup
       - income_payment_gateways
       - sold_tickets_numbers
