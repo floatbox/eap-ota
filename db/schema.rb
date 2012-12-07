@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121206181521) do
+ActiveRecord::Schema.define(:version => 20121207104447) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -383,6 +383,7 @@ ActiveRecord::Schema.define(:version => 20121206181521) do
     t.text     "error_message"
   end
 
+  add_index "payments", ["order_id"], :name => "index_payments_on_order_id"
   add_index "payments", ["status"], :name => "index_payments_on_status"
 
   create_table "promo_codes", :force => true do |t|
