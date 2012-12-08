@@ -4,7 +4,7 @@ module Admin::TicketsHelper
   def top_carriers tickets
     top_number = 10
     total = tickets.count
-    top = tickets.count(:all, :group => :validating_carrier)
+    top = tickets.count(:all, :group => 'tickets.validating_carrier')
     top = top.sort_by { |k,v| v }.last(top_number).reverse
     output = ''
     counter = 0

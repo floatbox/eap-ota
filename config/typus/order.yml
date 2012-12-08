@@ -146,7 +146,7 @@ Order:
         created_at: long
         updated_at: long
         last_pay_time: long
-  order_by: -created_at
+  order_by: -orders.created_at
   search: ^pnr_number, ^parent_pnr_number, email, phone
   options:
     default_action_on_item: show
