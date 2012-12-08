@@ -183,7 +183,7 @@ class Payment < ActiveRecord::Base
   end
 
   def payment_info
-    "#{pan} #{name_in_card}" if pan.present? || name_in_card.present?
+    "#{pan_searchable} #{name_in_card}".html_safe if pan.present? || name_in_card.present?
   end
 
   def control_links
@@ -196,6 +196,11 @@ class Payment < ActiveRecord::Base
     else
       "<span style='color:gray;'>#{status}</span>".html_safe
     end
+  end
+
+  # FIXME устранить XSS
+  def pan_searchable
+    "<a href='/admin/payments?search=#{pan}'>#{pan}</a>".html_safe
   end
 
 end

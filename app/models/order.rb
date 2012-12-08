@@ -166,7 +166,7 @@ class Order < ActiveRecord::Base
   }
 
   def contact
-    "#{email} #{phone}"
+    "#{email_searchable} #{phone}".html_safe
   end
 
   #флаг для админки
@@ -549,6 +549,11 @@ class Order < ActiveRecord::Base
     else
       "<span style='color:gray;'>#{payment_type}</span>".html_safe
     end
+  end
+
+  # FIXME отэскейпить емыл, воизбежание XSS
+  def email_searchable
+    "<a href='/admin/orders?search=#{email}'>#{email}</a>".html_safe
   end
 
   def settled?
