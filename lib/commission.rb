@@ -2657,6 +2657,7 @@ commission "0/0"
 
 carrier "GW", "AIR LINES OF KUBAN"
 ########################################
+carrier_defaults :disabled => "Банкрот"
 
 example 'svocdg'
 agent "5% от опубл. тарифов на собств. рейсы авиакомпании."
@@ -2782,7 +2783,7 @@ commission "1/0"
 carrier "BJ", "NOUVELAIR (Только с момента авторизации! ПРОВЕРЯТЬ!)"
 ########################################
 
-carrier_defaults disabled: "предательски отменяют сегменты"
+carrier_defaults :disabled => 'предательски отменяют сегменты'
 
 agent "6% от всех опубл. тарифов на рейсы BJ"
 subagent "4% от всех опубликованных тарифов на рейсы BJ"
