@@ -6,177 +6,177 @@ Date.prototype.human = function(year) {
 
 var lang = {
 errors: {
-    timeout: 'Не удалось соединиться с сервером'
+    timeout: 'Server is unreachable. Check your internet connection.'
 },
 ordinalNumbers: {
-    gen: ['первого', 'второго', 'третьего', 'четвертого', 'пятого', 'шестого', 'седьмого', 'восьмого'],
-    dat: ['первому', 'второму', 'третьему', 'четвертому', 'пятому', 'шестому', 'седьмому', 'восьмому']
+    gen: ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'],
+    dat: ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth']
 },
 time: {
-    hours: ['часа', 'часов', 'часов']
+    hours: ['hours', 'hours', 'hours']
 },
 days: {
-    today: 'сегодня',
-    week: ['понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота', 'воскресенье']
+    today: 'today',
+    week: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 },    
 monthes: {
-    nom: ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'],
-    gen: ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
-    pre: ['январе', 'феврале', 'марте', 'апреле', 'мае', 'июне', 'июле', 'августе', 'сентябре', 'октябре', 'ноябре', 'декабре'],
-    abb: ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек']
+    nom: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    gen: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    pre: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    abb: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 },
 pageTitle: {
-    search: 'Поиск авиабилетов {0}',
-    results: 'Авиабилеты {0}',
-    booking: 'Покупка авиабилетов {0}'
+    search: 'Airline tickets search {0}',
+    results: 'Airline tickets {0}',
+    booking: 'Booking airline tickets {0}'
 },
 searchRequests: {
-    dpt: 'Введите, пожалуйста, пункт отправления {0}',
-    arv: 'Введите, пожалуйста, пункт назначения {0}',
-    date: 'Выберите, пожалуйста, дату {0}',
-    rtsegments: ['вылета', 'обратного вылета'],
-    mwsegments: ['первого перелета', 'второго перелета', 'третьего перелета', 'четвертого перелета', 'пятого перелета', 'шестого перелета'],
-    persons: 'Количество пассажиров не должно быть больше восьми',
-    infants: 'Младенцев без места не должно быть больше, чем взрослых',
-    noadults: 'Дети не могут лететь без взрослых'
+    dpt: 'Please enter departure city or airport {0}',
+    arv: 'Please enter city or airport of destination {0}',
+    date: 'Please select date of {0}',
+    rtsegments: ['departure', 'return'],
+    mwsegments: ['first flight', 'second flight', 'third flight', 'fourth flight', 'fifth flight', 'sixth flight'],
+    persons: 'Number of passengers should be eight or less',
+    infants: 'Number of unseated infants snould not exceed number of adult passengers',
+    noadults: 'Children must be accompanied by adults'
 },
 mapControl: {
-    expand: 'Развернуть карту',
-    collapse: 'Свернуть карту'
+    expand: 'Expand map',
+    collapse: 'Collapse map'
 },
 priceMap: {
-    link: 'Куда дешево улететь<br>{0}<br>в&nbsp;{1}?',
-    limit: 'цена до {0} <span class="ruble">Р</span>'
+    link: 'Low-priced flights<br>{0}<br>in&nbsp;{1}?',
+    limit: 'price up to {0} <span class="ruble">Р</span>'
 },
 results: {
     cheap: {
-        one: 'Дешевый',
-        many: 'Дешевые'
+        one: 'Cheap',
+        many: 'Cheap'
     },
     optimal: {
-        one: 'Оптимальный',
-        many: 'Оптимальные'
+        one: 'Optimal',
+        many: 'Optimal'
     },
     nonstop: {
-        one: 'Прямой',
-        many: 'Прямые'
+        one: 'Direct',
+        many: 'Direct'
     },
     cheapNonstop: {
-        one: 'Дешевый прямой',
-        many: 'Дешевые прямые'
+        one: 'Cheap direct',
+        many: 'Cheap direct'
     },
     matrix: {
-        one: '± 3 дня',
-        many: '± 3 дня'
+        one: '± 3 days',
+        many: '± 3 days'
     },
-    some: '{0} из {1}',
-    all: 'Все {0}'    
+    some: '{0} of {1}',
+    all: 'All {0}'    
 },
 segment: {
-    title: 'Перелет {0}',
+    title: 'Flight {0}',
     directions: ['туда', 'обратно'],
-    more: 'и еще {0} перелета {1}',    
-    variants: ['вариант', 'варианта', 'вариантов'],
+    more: 'and {0} flight {1}',    
+    variants: ['option', 'options', 'options'],
     incompatible: {
-        rt: 'с другим <span class="ossi-segment">обратным перелётом</span>',
-        one: 'с другим <span class="ossi-segment">перелётом {0}</span>',
-        many: 'с другими перелётами {0}'
+        rt: 'with other <span class="ossi-segment">return flight</span>',
+        one: 'with other <span class="ossi-segment">flight {0}</span>',
+        many: 'with other flights {0}'
     }
 },
 price: {
-    buy: 'Купить за {0}',
-    one: 'итоговая цена',
-    many: 'итоговая цена за всех',
-    from: 'от {0}',    
-    rise: 'на {0} дороже',
-    fall: 'на {0} дешевле',
-    profit: ' <span class="obs-profit">на <strong>{0}%</strong> дешевле, чем в среднем</span>'
+    buy: 'Buy for {0}',
+    one: 'total price',
+    many: 'total price for all passengers',
+    from: 'from {0}',    
+    rise: '{0} more expensive',
+    fall: '{0} cheaper',
+    profit: ' <span class="obs-profit">на <strong>{0}%</strong> cheaper then average</span>'
 },
 currencies: {
-    RUR: ['рубль', 'рубля', 'рублей']
+    RUR: ['Rubles', 'Rubles', 'Rubles']
 },
 filters: {
-    reset: 'Сбросить {0}',
-    selected: ['выбранный фильтр', 'выбранных фильтра', 'выбранных фильтров'],
-    fromto: 'от {0} до {1}',
-    less: 'меньше {1}',
-    any: 'любая',
-    short: 'короткие',
-    long: 'длинные'
+    reset: 'Reset {0}',
+    selected: ['selected filter', 'selected filters', 'selected filters'],
+    fromto: 'from {0} to {1}',
+    less: 'less then {1}',
+    any: 'any',
+    short: 'short',
+    long: 'long'
 },
 passengers: {
-    one: 'Пассажир',
-    many: 'Пассажиры'
+    one: 'Passenger',
+    many: 'Passengers'
 },
 passengersData: {
-    one: 'данные пассажира',
-    many: 'данные пассажиров',
-    required: 'Заполните {0},<br> чтобы узнать новую стоимость.'
+    one: 'Passenger',
+    many: 'Passengers',
+    required: 'Fill in {0},<br> to recalculate price'
 },
 formValidation: {
     email: {
-        empty: '{адрес электронной почты}',
-        wrong: 'Неправильно введен {адрес электронной почты}.'
+        empty: '{email address}',
+        wrong: 'Incorrect {email address}.'
     },
     phone: {
-        empty: '{номер телефона}',
-        letters: 'В {номере телефона} можно использовать только цифры.',
-        short: 'Короткий {номер телефона}, не забудьте ввести код страны и города.'
+        empty: '{Phone number}',
+        letters: '{Phone number} must contain only numbers.',
+        short: 'Short {phone number}, enter country and area code.'
     },
     fname: {
-        empty: '{имя пассажира}',
-        short: '{Имя пассажира} нужно ввести полностью.',
-        letters: '{Имя пассажира} нужно ввести латинскими буквами.'
+        empty: '{passenger name}',
+        short: '{Passenger name} should be entered completely.',
+        letters: '{Passenger name} should be entered by latin letters.'
     },
     lname: {
-        empty: '{фамилию пассажира}',
-        short: '{Фамилию пассажира} нужно ввести полностью.',
-        letters: '{Фамилию пассажира} нужно ввести латинскими буквами.'
+        empty: '{passenger last name}',
+        short: '{Passenger last name} should be entered completely.',
+        letters: '{Passenger last name} should be entered by latin letters.'
     },
     gender: {
-        empty: '{пол пассажира}'
+        empty: '{passenger gender}'
     },
     birthday: {
-        empty: '{дату рождения} пассажира',
-        wrong: 'Указана несуществующая {дата рождения} пассажира.',
-        letters: '{Дату рождения} пассажира нужно ввести цифрами в формате дд/мм/гггг.',
-        improper: '{Дата рождения} пассажира не может быть позднее сегодняшней.'
+        empty: 'passenger {birthdate}',
+        wrong: 'Passenger {birthdate} doesn't exist.',
+        letters: 'Passenger {birthdate} should be entered in dd/mm/yyyy format.',
+        improper: 'Passenger {birthdate} should not be later than today.'
     },
     passport: {
-        empty: '{номер документа} пассажира',
-        letters: 'В {номере документа} нужно использовать только буквы и цифры.'
+        empty: 'passenger {document number}',
+        letters: 'Passenger {document number} must contain only letters and numbers.'
     },
     expiration: {
-        empty: '{срок действия документа} пассажира',
-        wrong: 'Указана несуществующая дата в {сроке действия документа} пассажира.',
-        letters: '{Срок действия документа} нужно ввести цифрами в формате дд/мм/гггг.',
-        improper: '{Срок действия документа} уже истёк.'
+        empty: 'Passenger {document expiry date}',
+        wrong: 'Passenger {document expiry date} is incorrect.',
+        letters: 'Passenger {document expiry date} should be entered in dd/mm/yyyy format.',
+        improper: 'Passenger document is expired'
     },
     bonus: {
-        empty: '{номер бонусной карты} пассажира',
-        letters: '{Номер бонусной карты} нужно ввести латинскими буквами и цифрами.',
+        empty: '{bonus card number}',
+        letters: '{Bonus card number} must contain only latin letters and numbers.',
     },
     cardnumber: {
-        empty: '{номер банковской карты}',
-        letters: '{Номер банковской карты} нужно ввести цифрами.',
-        wrong: '{Номер банковской карты} введён неправильно.'    
+        empty: '{card number}',
+        letters: '{Card number} must contain only numbers.',
+        wrong: '{Card number} is incorrect.'    
     },
     cvc: {
-        empty: '{CVV/CVC код банковской карты}',
-        letters: '{CVV/CVC код банковской карты} нужно ввести цифрами.',
+        empty: '{CVV/CVC code of bank card}',
+        letters: '{CVV/CVC code of bank card} must contain only numbers.',
     },
     cardholder: {
-        empty: '{имя владельца банковской карты}',
-        letters: '{Имя владельца банковской карты} нужно ввести латинскими буквами.',
+        empty: '{Cardholder name}',
+        letters: '{Cardholder name} must contain only latin letters.',
     },
     cardexp: {
-        empty: '{срок действия банковской карты}',
-        letters: '{Срок действия банковской карты} нужно ввести цифрами в формате мм/гг.',
-        wrong: 'Месяц в {сроке действия банковской карты} не может быть больше 12.',
-        improper: '{Срок действия банковской карты} уже истёк.'
+        empty: '{card expiry date}',
+        letters: '{Card expiry date} should be in mm/yy format.',
+        wrong: 'The month of {card expiry date} should not be more than 12.',
+        improper: 'Bank card is expired.'
     },
     address: {
-        empty: '{адрес доставки}'
+        empty: '{delivery address}'
     }
 }
 };
