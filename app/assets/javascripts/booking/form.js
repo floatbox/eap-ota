@@ -246,8 +246,8 @@ process: function(s) {
 },
 hidePrice: function() {
     this.footer.find('.bff-passengers').remove();
-    var content = '<div class="bffp-content"><p>Стоимость изменилась —</p><p class="bffp-hint">Заполните данные {0},<br> чтобы узнать новую стоимость.</p></div>';
-    var title = local.booking.passengersgen[this.el.find('.bf-persons .bfst-text').attr('data-amount')];
+    var content = '<div class="bffp-content"><p>Стоимость изменилась —</p><p class="bffp-hint">Заполните {0},<br> чтобы узнать новую стоимость.</p></div>';
+    var title = lang.passengersData[this.el.find('.bf-persons .bfst-text').attr('data-amount')];
     var message = $('<div class="bff-passengers"></div>').html(content.absorb(title));
     this.footer.find('.bff-price').hide().after(message);
     this.wrongPrice = true;
@@ -307,21 +307,14 @@ init: function() {
     });
 },
 initEmail: function() {
-    var email = new validator.Text($('#bfc-email'), {
-        empty: '{адрес электронной почты}',
-        wrong: 'Неправильно введен {адрес электронной почты}.'
-    }, function(value) {
+    var email = new validator.Text($('#bfc-email'), lang.formValidation.email, function(value) {
         if (/^[@.\-]|[^\w\-\+.@]|@.*[^\w.\-]/.test(value)) return 'wrong';
         if (!/^\S*?@[\w.\-]*?\.\w{2,}$/.test(value)) return 'empty';
     });
     this.controls.push(email);
 },
 initPhone: function() {
-    var phone = new validator.Text($('#bfc-phone'), {
-        empty: '{номер телефона}',
-        letters: 'В {номере телефона} можно использовать только цифры.',
-        short: 'Короткий {номер телефона}, не забудьте ввести код страны и города.'
-    }, function(value) {
+    var phone = new validator.Text($('#bfc-phone'), lang.formValidation.phone, function(value) {
         if (/[^\d() \-+]/.test(value)) return 'letters';
         var digits = value.replace(/\D/g, '').length;
         if (digits < 5) return 'empty';
@@ -484,7 +477,7 @@ removeRow: function(index) {
 applyRows: function() {
     var n = this.rows.length, key = n === 1 ? 'one' : 'many';
     this.add.toggle(n < this.rowsLimit);
-    this.title.attr('data-amount', key).html(local.booking.passengers[key]);
+    this.title.attr('data-amount', key).html(lang.passengers[key]);
 },
 validate: function(forced) {
     var wrong = [], empty = [], people = {a: 0, c: 0, i: 0, is: 0};
@@ -495,7 +488,7 @@ validate: function(forced) {
         if (im === 1) {
             empty = empty.concat(person.empty);
         } else if (person.empty) {
-            var num = local.numbers.ordinalgen[i];
+            var num = lang.ordinalNumbers.gen[i];
             for (var e = 0, em = person.empty.length; e < em; e++) {
                 empty.push(person.empty[e].replace('пассажира', num + ' пассажира'));
             }
@@ -509,7 +502,7 @@ validate: function(forced) {
     }
     if (people.a + people.c + people.i === this.rows.length) {
         if (people.a === 0 && people.c + people.i > 0) {
-            wrong.push(local.swarnings.noadults + '.');
+            wrong.push(lang.searchRequests.noadults + '.');
         }
         var merged = [people.a, people.c, people.i, people.is].join('');
         if (merged !== this.cachedPeople) {
@@ -573,16 +566,8 @@ initNames: function() {
         if (/[^A-Za-z\- ']/.test(value)) return 'letters';
         if (value.length < 2) return 'short';
     };
-    this.firstname = new validator.Text(this.el.find('.bfp-fname'), {
-        empty: '{имя пассажира}',
-        short: '{Имя пассажира} нужно ввести полностью.',
-        letters: '{Имя пассажира} нужно ввести латинскими буквами.'
-    }, check);
-    this.lastname = new validator.Text(this.el.find('.bfp-lname'), {
-        empty: '{фамилию пассажира}',
-        short: '{Фамилию пассажира} нужно ввести полностью.',
-        letters: '{Фамилию пассажира} нужно ввести латинскими буквами.'
-    }, check);
+    this.firstname = new validator.Text(this.el.find('.bfp-fname'), lang.formValidation.fname, check);
+    this.lastname = new validator.Text(this.el.find('.bfp-lname'), lang.formValidation.lname, check);
     this.firstname.format = this.lastname.format = function(value) {
         var name = $.trim(value);
         this.gender = name && validator.getGender(name);
@@ -617,12 +602,7 @@ initSex: function() {
 initBirthday: function() {
     var that = this;
     var date = this.el.find('.bfp-date').eq(0);
-    var birthday = new validator.Date(date, {
-        empty: '{дату рождения} пассажира',
-        wrong: 'Указана несуществующая {дата рождения} пассажира.',
-        letters: '{Дату рождения} пассажира нужно ввести цифрами в формате дд/мм/гггг.',
-        improper: '{Дата рождения} пассажира не может быть позднее сегодняшней.'
-    }, function(date) {
+    var birthday = new validator.Date(date, lang.formValidation.birthday, function(date) {
         if (date.getTime() > this.time) return 'improper';
     });
     var withseat = new validator.Checkbox(this.el.find('.bfpo-infant input'));
@@ -655,10 +635,7 @@ initNationality: function() {
 },
 initPassport: function() {
     var that = this;
-    var passport = new validator.Text(this.el.find('.bfp-passport'), {
-        empty: '{номер документа} пассажира',
-        letters: 'В {номере документа} нужно использовать только буквы и цифры.'
-    }, function(value) {
+    var passport = new validator.Text(this.el.find('.bfp-passport'), lang.formValidation.passport, function(value) {
         if (/[^\wА-Яа-я. \-№#]/.test(value)) return 'letters';
         if (value.length < 5) return 'empty';
     });
@@ -674,12 +651,7 @@ initPassport: function() {
     this.controls.push(passport);
 },
 initExpiration: function() {
-    var expiration = new validator.Date(this.el.find('.bfp-date').eq(1), {
-        empty: '{срок действия документа} пассажира',
-        wrong: 'Указана несуществующая дата в {сроке действия документа} пассажира.',
-        letters: '{Срок действия документа} нужно ввести цифрами в формате дд/мм/гггг.',
-        improper: '{Срок действия документа} уже истёк.'
-    }, function(date) {
+    var expiration = new validator.Date(this.el.find('.bfp-date').eq(1), lang.formValidation.expiration, function(date) {
         if (date.getTime() < this.time) return 'improper';
     });
     expiration.future = true;
@@ -718,10 +690,7 @@ initBonus: function() {
     for (var i = options.length; i--;) {
         program.values[options[i].value] = true;
     }
-    var number = new validator.Text(row.find('.bfp-bonus-number'), {
-        empty: '{номер бонусной карты} пассажира',
-        letters: '{Номер бонусной карты} нужно ввести латинскими буквами и цифрами.',
-    }, function(value) {
+    var number = new validator.Text(row.find('.bfp-bonus-number'), lang.formValidation.bonus, function(value) {
         if (/[^\w \-№#]/.test(value)) return 'letters';
         if (value.length < 5) return 'empty';
     });

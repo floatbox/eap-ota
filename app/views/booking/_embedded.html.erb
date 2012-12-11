@@ -26,9 +26,8 @@
 <%= form_for @order_form.card, :as => :card, :url => booking_pay_path, :html => { :id => 'booking-form', :autocomplete => 'off', :novalidate => 'novalidate' } do |f| %>
 
     <div class="bf-newprice" data-price="<%= price_total %>">
-        <h5 class="bfnp-title">Авиакомпания изменила стоимость этого предложения</h5>
-        <h6 class="bfnp-content">Новая стоимость — <%= price_total %>&nbsp;<%= rubles(price_total) %> (на {1} {0})</h6>
-        <p class="bfnp-tip">Так бывает, потому что места по более низкому тарифу уже закончились.</p>
+        <h5 class="bfnp-title">Места по этой стоимости уже закончились. Остались места за <%= price_total %>&nbsp;<%= rubles(price_total) %></h5>
+        <h6 class="bfnp-content">Вы можете купить <%= @order_form.people.one? ? 'билет' : 'билеты' %> по новой стоимости или выбрать <span class="link">другой вариант</span></h6>
     </div>
       
     <div class="bf-section bf-persons" data-type="persons">

@@ -30,7 +30,7 @@ updateTitles: function(dates) {
         header: hparts.join(', ').capitalize(),
         window: wparts.join(', ')
     };
-    document.title = local.title.booking.absorb(this.data.titles.window);
+    document.title = lang.pageTitle.booking.absorb(this.data.titles.window);
     $('#results-header .rh-summary').html(this.data.titles.header);
 }
 };
@@ -72,6 +72,8 @@ prebook: function(query_key, hash, partner, marker) {
         dataType: 'json',
         url: '/booking/preliminary_booking?query_key=' + query_key + '&recommendation=' + hash + '&partner=' + partner + '&marker=' + marker + '&variant_id=1',
         success: function(result) {
+            that.failed();
+            return;
             if (result && result.success) {
                 that.load(result.number, result.changed_booking_classes);
             } else {
@@ -110,6 +112,8 @@ load: function(number, price_changed) {
     });
 },
 failed: function() {
+    this.loading.find('.bl-title').html('Авиакомпания не подтвердила наличие мест по этому тарифу');
+    this.loading.find('.bl-tip').html('Выберите другой вариант');
 }
 };
 

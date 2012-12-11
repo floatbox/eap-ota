@@ -86,7 +86,7 @@ showData: function(data) {
         Queries.history.add(data.query_key, data.short);
         Queries.history.select(data.query_key);
     }, 300);
-    this.title.set(local.title.search.absorb(data.titles.window));
+    this.title.set(lang.pageTitle.search.absorb(data.titles.window));
     if (this.location.search !== data.query_key) {
         this.location.set('search', data.query_key);
     }

@@ -44,14 +44,14 @@ addBook: function() {
     this.state = this.book.find('.ob-state');
 },
 updateBook: function() {
-    var u = local.currencies.RUR, p = this.selected.price;
-    var price = p.separate() + '&nbsp;' + p.decline(u[0], u[1], u[2], false);
+    var p = this.selected.price;
+    var price = p.separate() + '&nbsp;' + p.declineArray(lang.currencies.RUR, false);
     var state = results.stateTemplate;
     var ap = results.data.averagePrice;
     if (p < ap) {
         var percents = Math.round((ap - p) / ap * 100);
         if (percents) {
-            state += local.offers.price.profit.absorb(percents);
+            state += lang.price.profit.absorb(percents);
         }
     }
     this.btitle.html(results.priceTemplate.absorb(price));
@@ -240,7 +240,7 @@ otherPrices: function() {
                 if (ss.length === 1) {
                     el.append(sample.clone().html(absp));
                 } else {
-                    var relp = local.offers.price[type].absorb(curr.absorb(Math.abs(value - sp).separate()));
+                    var relp = lang.price[type].absorb(curr.absorb(Math.abs(value - sp).separate()));
                     el.append(sample.clone().addClass('ossp-rel').html(relp));
                     el.append(sample.clone().addClass('ossp-abs').html(absp));
                 }
@@ -270,15 +270,15 @@ hideExcess: function(limit) {
         var segment = segments[i];
         var excess = i === 0 ? (need - used) : Math.round(need * segment.part / total);
         if (excess > 1) {
-            var title, amount = excess.decline.apply(excess, local.offers.variants);
+            var title, amount = excess.declineArray(lang.segment.variants);
             if (results.data.segments.length === 1) {
                 title = '';
             } else if (results.data.segments[1].rt) {
-                title = local.offers.directions[i];
+                title = lang.segment.directions[i];
             } else {
                 title = results.data.segments[i].arvto;
             }
-            var text = local.offers.more.absorb(amount, title).replace(/ $/, '');
+            var text = lang.segment.more.absorb(amount, title).replace(/ $/, '');
             var more = '<div class="os-more">' + text + '</div>';
             this.toggleExcess(segment.el.addClass('hide-excess').append(more), excess);
         }

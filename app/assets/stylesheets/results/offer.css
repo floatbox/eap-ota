@@ -477,16 +477,16 @@
 .os-summary:hover .ossp-fall {
     background-position: 0 -56px;
 }
-.os-summary:hover .ossp-rel {
+.no-touch .os-summary:hover .ossp-rel {
     display: none;
 }
-.os-summary:hover .ossp-abs {
+.no-touch .os-summary:hover .ossp-abs {
     display: block;
 }
 .os-summary:hover .ossc-icon {
     opacity: 0.6;
 }
-.os-summary:hover .other-segments {
+.no-touch .os-summary:hover .other-segments {
     display: block;
 }
 .os-summary:hover .ossct-overlay {

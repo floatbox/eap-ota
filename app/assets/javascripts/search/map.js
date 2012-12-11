@@ -94,7 +94,7 @@ slideDown: function() {
         search.dates.toggleHidden(true);
         google.maps.event.trigger(that.api, 'resize');
         that.wrapper.height('').css('overflow', '');
-        that.control.html('Свернуть карту');
+        that.control.html(lang.mapControl.collapse);
         that.toggleZoom(ch + dh);
         that.fitBounds();
     });
@@ -114,7 +114,7 @@ slideUp: function() {
         google.maps.event.trigger(that.api, 'resize');
         that.wrapper.height('').css('overflow', '');
         that.control.toggleClass('smc-collapsed', that.collapsed);
-        that.control.html('Развернуть карту');
+        that.control.html(lang.mapControl.expand);
         that.fitBounds();
     });
     search.dates.el.find('.sdt-tab').fadeIn(150);
@@ -180,7 +180,7 @@ updatePrices: function(segments, stealth) {
         var sd = search.dates;
         var dates = sd.monthes[sd.position].ptitle + '—' + sd.monthes[sd.position + 1].ptitle;
         this.prices.update({
-            title: local.search.prices.absorb(segments[0].dpt.from.nowrap(), dates),
+            title: lang.priceMap.link.absorb(segments[0].dpt.from.nowrap(), dates),
             from: segments[0].dpt.iata,
             date: sd.monthes[sd.position].el.find('.first').attr('data-dmy')
         });
@@ -389,7 +389,7 @@ apply: function(offset, filter) {
     }
     this.control.css('left', offset);
     this.selected.css('width', offset);
-    this.value.html('цена до {0} <span class="ruble">Р</span>'.absorb(limit.separate()));
+    this.value.html(lang.priceMap.limit.absorb(limit.separate()));
     if (filter) {
         search.map.filterPrices(limit);
     }

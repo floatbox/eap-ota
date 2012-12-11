@@ -37,9 +37,9 @@ makeMonthes: function() {
         date.setDate(0);
         var month = {
             year: date.getFullYear(),
-            ntitle: local.date.nmonthes[date.getMonth()],
-            gtitle: local.date.gmonthes[date.getMonth()],
-            ptitle: local.date.pmonthes[date.getMonth()],
+            ntitle: lang.monthes.nom[date.getMonth()],
+            gtitle: lang.monthes.gen[date.getMonth()],
+            ptitle: lang.monthes.pre[date.getMonth()],
             length: date.getDate(),
         };
         var MY = date.DMY().substring(2);

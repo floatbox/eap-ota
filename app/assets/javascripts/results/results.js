@@ -40,7 +40,9 @@ show: function(instant) {
     }
     context.queue(function(next) {
         that.visible = true;
-        that.header.el.addClass('rh-fixed');
+        if (!browser.ios) {
+            that.header.el.addClass('rh-fixed');
+        }
         that.header.button.hide();
         that.header.edit.show();
         that.fixed.update();
@@ -83,7 +85,7 @@ slide: function() {
     this.content.el.show();
     this.filters.el.show();
     this.fixed.update();
-    page.title.set(local.title.results.absorb(this.data.titles.window));
+    page.title.set(lang.pageTitle.results.absorb(this.data.titles.window));
 },
 update: function(data) {
     this.data = data;
@@ -91,7 +93,7 @@ update: function(data) {
     this.header.show(this.data.titles.header, data.valid);
     this.data.fresh = true;
     if (page.location.booking) {
-        page.title.set(local.title.booking.absorb(results.data.titles.window));    
+        page.title.set(lang.pageTitle.booking.absorb(results.data.titles.window));    
     }
 },
 load: function() {
@@ -119,7 +121,7 @@ changeDates: function(dates) {
     this.updateTitles(dates);
     var titles = this.data.titles;
     this.header.summary.html(titles.header);
-    page.title.set(local.title.results.absorb(titles.window));
+    page.title.set(lang.pageTitle.results.absorb(titles.window));
 },
 updateTitles: function(dates) {
     var wparts = [];
@@ -260,7 +262,7 @@ extendData: function() {
     var segments = this.data.segments;
     if (!segments) return;
     var sl = segments.length;
-    var titles = [], os = local.offers.othersegments;
+    var titles = [], os = lang.segment.incompatible;
     for (var s = sl; s--;) {
         if (s === 0 && sl > 1 && segments[1].rt) {
             titles[s] = os.rt;
@@ -293,8 +295,8 @@ getOfferTemplate: function() {
     this.offerTemplate = offer;
 },
 getPriceTemplate: function() {
-    this.stateTemplate = local.offers.price[this.data.options.total !== 1 ? 'many' : 'one'];
-    this.priceTemplate = local.offers.price.buy;
+    this.stateTemplate = lang.price[this.data.options.total !== 1 ? 'many' : 'one'];
+    this.priceTemplate = lang.price.buy;
 },
 currencies: {
     RUR: '{0} <span class="ruble">Р</span>',

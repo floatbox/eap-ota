@@ -26,7 +26,7 @@ waitRequests: function() {
 },
 getValues: function() {
     var mode = this.mode.selected;
-    var lw = local.swarnings;
+    var lw = lang.searchRequests;
     var warnings = [];
     var segments = [];
     for (var i = 0; i < this.locations.used; i++) {
@@ -172,7 +172,7 @@ loadSummary: function(values, process) {
             }
         },
         error: function() {
-            results.header.show('Не удалось соединиться с сервером', false);
+            results.header.show(lang.errors.timeout, false);
         },
         timeout: 15000
     });
@@ -303,30 +303,5 @@ select: function(mode, focus) {
     if (focus) {
         search.locations.focusEmpty();
     }
-}
-};
-
-/* Share */
-search.share = {
-init: function() {
-    if (typeof Ya === 'undefined') {
-        return false;
-    }
-    this.obj = new Ya.share({
-        element: 'ya-share',
-        description: 'Здесь можно найти, сравнить, выбрать и купить билеты на рейсы более 200 авиакомпаний всего мира по низкой цене.',
-        elementStyle: {
-            type: 'link',
-            linkIcon: false,
-            border: false,
-            quickServices: ['facebook', 'twitter', 'friendfeed', 'lj', 'vkontakte', 'odnoklassniki', 'yaru']
-        },
-        popupStyle: {
-            copyPasteField: true,
-            blocks: {
-               'Поделитесь с друзьями': ['facebook', 'twitter', 'friendfeed', 'lj', 'vkontakte', 'odnoklassniki', 'yaru', 'gbuzz', 'juick', 'moikrug', 'moimir', 'blogger', 'linkedin']
-            }
-        }
-    });
 }
 };

@@ -93,9 +93,9 @@ filter: function(check) {
     }
     var title;
     if (amount !== this.length) {
-        title = local.offers.from.absorb(amount, this.length);
+        title = lang.results.some.absorb(amount, this.length);
     } else {
-        title = local.offers.all.absorb(this.length);
+        title = lang.results.all.absorb(this.length);
     }
     this.control.html(title);
     results.filters.proper = features.join(' ');
@@ -116,7 +116,7 @@ update: function(data) {
         results.filters.update();
     });
     results.queue.add(function() {
-        that.control.html(local.offers.all.absorb(that.length));
+        that.control.html(lang.results.all.absorb(that.length));
         if (that.offers.length !== 0) {
             results.extendData();
             results.getOfferTemplate();
@@ -245,12 +245,12 @@ showPrices: function() {
         }
         $(this.table.get(0).rows[r].cells[c]).append(item);
     }
-    this.updateLabel(local.offers.matrix);   
+    this.updateLabel(lang.results.matrix);   
 },
 humanDate: function(date, segment) {
     var day = date.getDate();
-    var month = local.date.gmonthes[date.getMonth()];
-    var weekday = local.date.weekdays[(date.getDay() || 7) - 1];
+    var month = lang.monthes.gen[date.getMonth()];
+    var weekday = lang.days.week[(date.getDay() || 7) - 1];
     var pattern = '<h6 class="rmp-date{0}">{1}&nbsp;{2}</h6><p class="rmp-weekday">{3}</p>';
     return pattern.absorb(segment, day, month, weekday);
 },
@@ -293,7 +293,7 @@ merge: function(variants) {
         }
         items = items.sort(sorting);
         var rt = results.data.segments.length === 2 && results.data.segments[1].rt;
-        var st = rt ? local.offers.stitle.absorb(local.offers.directions[s]) : results.data.segments[s].short
+        var st = rt ? lang.segment.title.absorb(lang.segment.directions[s]) : results.data.segments[s].short
         segment.append($('#ost-template').html().absorb(st));
         if (results.data.segments.length === 1) {
             segment.find('.ostn-text').hide();
@@ -323,7 +323,7 @@ merge: function(variants) {
     this.offer = offer;
 },
 update: function(variants, lid) {
-    var labels = local.offers[lid || this.id];
+    var labels = lang.results[lid || this.id];
     if (variants && variants.length !== 0) {
         this.merge(variants);
         this.updateLabel(labels);
@@ -343,7 +343,7 @@ updateLabel: function(labels) {
     var minprice = this.offer.variants[0].price;
     var maxprice = this.offer.variants.last().price;
     var sum = results.currencies['RUR'].absorb('<span class="rt-sum">' + minprice.separate() + '</span>');
-    var price = minprice === maxprice ? sum : local.offers.price.from.absorb(sum);
+    var price = minprice === maxprice ? sum : lang.price.from.absorb(sum);
     var title = labels[this.offer.variants.length === 1 ? 'one' : 'many'];
     this.control.html('{0} <span class="rt-price">{1}</span>'.absorb(title, price));
     this.control.removeClass('rt-disabled');
