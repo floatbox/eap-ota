@@ -143,7 +143,7 @@ describe Ticket do
     context "with all the prices" do
       let (:fare) {2000}
       let (:order) {
-        Order.new(
+        build(:order,
           :commission_agent => '3%',
           :commission_subagent => '4',
           :commission_consolidator => '2%',
@@ -258,7 +258,7 @@ describe Ticket do
     include Commission::Fx
 
     before do
-      @order = Order.create! :pnr_number => 'abcdefgh', :commission_consolidator => '1%'
+      @order = create :order, :pnr_number => 'abcdefgh', :commission_consolidator => '1%'
       @ticket = @order.tickets.ensure_exists '1234'
       @ticket.save!
     end

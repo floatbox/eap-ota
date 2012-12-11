@@ -19,3 +19,5 @@ jQuery(function($) {
 (в выборке <%= @resource.count %> записей;
 всего <%= number_to_currency @resource.sum(:price_with_payment_commission), :locale => :ru %> /
 в среднем <%= number_to_currency @resource.average(:price_with_payment_commission), :locale => :ru %>)
+<br />
+Доход(income): <%= number_to_currency @resource.sum(:stored_income), :locale => :ru %>

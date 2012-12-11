@@ -44,7 +44,7 @@ describe Pricing::Order do
   end
 
   subject do
-    Order.new.tap do |o|
+    build(:order).tap do |o|
       # вызывать какие-то колбэки?
       o.pnr_number = ''
       o.parent_pnr_number = 'xxx'

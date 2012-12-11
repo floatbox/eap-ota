@@ -138,6 +138,7 @@ ru:
         payment_info: "Карта"
         name_in_card: "ФИО на кредитной карте"
         pan: "Номер карты"
+        pan_searchable: "Номер карты"
         error_explanation: "Ошибка"
         control_links: "Управление"
         created_at: "Создан"

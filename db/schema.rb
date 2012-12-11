@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121113143836) do
+ActiveRecord::Schema.define(:version => 20121207104447) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -165,6 +165,17 @@ ActiveRecord::Schema.define(:version => 20121113143836) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "customers", :force => true do |t|
+    t.string   "email",                         :null => false
+    t.string   "password"
+    t.string   "status"
+    t.boolean  "enabled",    :default => false, :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
+
+  add_index "customers", ["email"], :name => "index_customers_on_email", :unique => true
+
   create_table "destinations", :force => true do |t|
     t.integer  "to_id"
     t.integer  "from_id"
@@ -249,6 +260,7 @@ ActiveRecord::Schema.define(:version => 20121113143836) do
   end
 
   add_index "notifications", ["method", "status"], :name => "index_notifications_on_method_and_status"
+  add_index "notifications", ["order_id"], :name => "index_notifications_on_order_id"
 
   create_table "order_comments", :force => true do |t|
     t.integer  "order_id"
@@ -321,8 +333,10 @@ ActiveRecord::Schema.define(:version => 20121113143836) do
     t.string   "parent_pnr_number"
     t.decimal  "stored_income",                 :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.decimal  "stored_balance",                :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.integer  "customer_id"
   end
 
+  add_index "orders", ["customer_id"], :name => "index_orders_on_customer_id"
   add_index "orders", ["partner"], :name => "index_orders_on_partner"
   add_index "orders", ["payment_status", "ticket_status"], :name => "index_orders_on_payment_status_and_ticket_status"
   add_index "orders", ["payment_status"], :name => "index_orders_on_payment_status"
@@ -369,6 +383,7 @@ ActiveRecord::Schema.define(:version => 20121113143836) do
     t.text     "error_message"
   end
 
+  add_index "payments", ["order_id"], :name => "index_payments_on_order_id"
   add_index "payments", ["status"], :name => "index_payments_on_status"
 
   create_table "promo_codes", :force => true do |t|

@@ -2036,11 +2036,14 @@ carrier "SN", "BRUSSELS AIRLINES"
 
 carrier_defaults :consolidator => 0, :our_markup => '0.5%'
 
-example 'dmejfk/Q'
+example 'dmejfk/Q jfkdme/f'
 example 'dmejfk/Q jfkdme/lh/Q'
 agent    "через DTT из России в США и наоборот - 10%"
 subagent "через DTT из России в США и наоборот - 8%"
-check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
+check {
+  includes(country_iatas, 'RU UA PL RO') and includes_only(country_iatas.last, 'US') or
+  includes(country_iatas, 'US') and includes_only(country_iatas.last, 'RU UA PL RO')
+}
 subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
@@ -2048,12 +2051,15 @@ discount '6%'
 ticketing_method "downtown"
 commission "10%/8%"
 
-example 'dmejfk'
-example 'dmejfk jfkdme/lh/L'
-agent    "через DTT из России в США и наоборот - 10%"
-subagent "через DTT из России в США и наоборот - 8%"
-check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') }
-#subclasses "YBMUH"
+example 'dmejfk/y jfkdme/b'
+example 'dmejfk jfkdme/lh/b'
+agent    "через DTT из России в США и наоборот - 5%"
+subagent "через DTT из России в США и наоборот - 3%"
+check {
+  includes(country_iatas, 'RU UA PL RO') and includes_only(country_iatas.last, 'US') or
+  includes(country_iatas, 'US') and includes_only(country_iatas.last, 'RU UA PL RO')
+}
+subclasses "YBMUH"
 interline :no, :yes
 our_markup "0"
 discount '1%'
@@ -2651,6 +2657,7 @@ commission "0/0"
 
 carrier "GW", "AIR LINES OF KUBAN"
 ########################################
+carrier_defaults :disabled => "Банкрот"
 
 example 'svocdg'
 agent "5% от опубл. тарифов на собств. рейсы авиакомпании."
@@ -2776,7 +2783,7 @@ commission "1/0"
 carrier "BJ", "NOUVELAIR (Только с момента авторизации! ПРОВЕРЯТЬ!)"
 ########################################
 
-carrier_defaults disabled: "предательски отменяют сегменты"
+carrier_defaults :disabled => 'предательски отменяют сегменты'
 
 agent "6% от всех опубл. тарифов на рейсы BJ"
 subagent "4% от всех опубликованных тарифов на рейсы BJ"
