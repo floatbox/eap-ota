@@ -74,7 +74,7 @@ results: {
 },
 segment: {
     title: 'Flight {0}',
-    directions: ['туда', 'обратно'],
+    directions: ['depart', 'return'],
     more: 'and {0} flight {1}',    
     variants: ['option', 'options', 'options'],
     incompatible: {
