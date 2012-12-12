@@ -1,0 +1,25 @@
+<div class="selling">
+
+<h1>Сводная информация</h1>
+<form accept-charset="UTF-8" method="get"><input name="utf8" type="hidden" value="&#x2713;" />
+<table>
+  <tr valign="top">
+    <td style="width: 50%; padding: 0 0 15px 0;">
+      
+      <%= render :partial => 'summary', :locals => { :date => @date.first, :report => @report.first, :count => '1'}  %>
+      
+      <div class="hr"><!-- --></div>
+      
+    </td>
+    <td style="width: 50%; padding: 0 0 0 15px;">
+      
+      <%= render :partial => 'summary', :locals => { :date => @date.last, :report => @report.last, :count => '2'}  %>
+      
+      <div class="hr"><!-- --></div>
+      
+    </td>
+  </tr>
+</table>
+</form>
+</div>
+
