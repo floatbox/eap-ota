@@ -13,6 +13,6 @@
       %rules
         -@order_form.info_hash[:rules].each do |rule_header, rule_text|
           %rule{:carrier => rule_header[0], :fare_base => rule_header[1]}= rule_text
-    %booking_classes
-      -@order_form.info_hash[:booking_classes].each do |bc|
-        %booking_class= bc
+      %booking_classes
+        -@order_form.info_hash[:booking_classes].each do |bc|
+          %booking_class= bc
