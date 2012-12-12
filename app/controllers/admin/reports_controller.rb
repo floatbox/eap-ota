@@ -19,6 +19,7 @@ class Admin::ReportsController < Admin::BaseController
       data[:percent_total] = data[:orders].order_total ? (data[:orders].income_total / data[:orders].order_total) * 100 : 0
       data[:percent_fare] = data[:orders].fare_total ? (data[:orders].income_total / data[:orders].fare_total) * 100 : 0
       data[:tickets] = StatReports.get_tickets_data StatReports.build_datetime_conditions('created_at', d)
+      data[:ticket_average] = data[:tickets].ticket_count ? (data[:orders].order_total.to_f / data[:tickets].ticket_count.to_f) : 0
       
       mongo_date_condition = StatCounters.build_datetime_conditions '_id', d
       data[:searches] = 0
