@@ -79,7 +79,7 @@ class Order < ActiveRecord::Base
   has_percentage_only_commissions :commission_consolidator
 
   def self.[] number
-    find_by_pnr_number number
+    find_last_by_pnr_number number
   end
 
   def make_payable_by_card
