@@ -26,7 +26,7 @@ module ApplicationHelper
   end
 
   def display_price price
-    number_to_currency(price, :delimiter => " ", :separator => ",", :precision => 2)
+    number_to_currency(price, :delimiter => " ", :separator => ",", :precision => 2, :locale => :ru)
   end
 
   def exact_price(price)
