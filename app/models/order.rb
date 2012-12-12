@@ -101,7 +101,6 @@ class Order < ActiveRecord::Base
   has_many :order_comments
   has_many :notifications
   has_one :promo_code
-  validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
   validates_presence_of :pnr_number, :if => Proc.new { |o|  o.parent_pnr_number.blank? && (!o.created_at || o.created_at > 5.days.ago) }, :message => 'Необходимо указать номер PNR или номер родительского PNR'
 
   before_validation :capitalize_pnr
