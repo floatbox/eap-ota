@@ -13,7 +13,10 @@ class ApiBookingController < ApplicationController
   def preliminary_booking
 
     if Conf.site.forbidden_booking
-      render :json => {:success => false}
+      respond_to do |format|
+        format.json {render :json => {:success => false}}
+        format.xml {render 'api/preliminary_booking'}
+      end
       return
     end
 
@@ -22,7 +25,6 @@ class ApiBookingController < ApplicationController
     @search.children = params[:children] if params[:children]
     @search.infants = params[:infants] if params[:infants]
     recommendation = Recommendation.deserialize(params[:recommendation])
-    original_booking_classes = recommendation.booking_classes
     strategy = Strategy.select( :rec => recommendation, :search => @search )
 =begin
     StatCounters.inc %W[enter.preliminary_booking.total]
@@ -33,9 +35,12 @@ class ApiBookingController < ApplicationController
     StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if @destination && partner
 =end
     unless strategy.check_price_and_availability
-      render :json => {:success => false}
+      respond_to do |format|
+        format.json {render :json => {:success => false}}
+        format.xml {render 'api/preliminary_booking'}
+      end
     else
-      order_form = OrderForm.new(
+      @order_form = OrderForm.new(
         :recommendation => recommendation,
         :people_count => @search.real_people_count,
         :variant_id => params[:variant_id],
@@ -43,12 +48,15 @@ class ApiBookingController < ApplicationController
         :partner => partner,
         :marker => marker
       )
-      order_form.save_to_cache
-      render :json => {
+      @order_form.save_to_cache
+      respond_to do |format|
+        format.json {render :json => {
         :success => true,
-        :number => order_form.number,
-        :info => order_form.info_hash
-        }
+        :number => @order_form.number,
+        :info => @order_form.info_hash
+        }}
+        format.xml {render 'api/preliminary_booking'}
+      end
 
       #StatCounters.inc %W[enter.preliminary_booking.success]
       #StatCounters.inc %W[enter.preliminary_booking.#{partner}.success] if partner

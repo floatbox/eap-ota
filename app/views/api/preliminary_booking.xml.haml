@@ -1,0 +1,18 @@
+-# !!! xml
+<?xml version='1.0' encoding='utf-8' ?>
+%result
+  -unless @order_form
+    %success= false
+  -else
+    %success= true
+    %number= @order_form.number
+    %info
+      %prices
+        -@order_form.info_hash[:prices].each do |price_title, price_value|
+          %price{:name => price_title}= price_value
+      %rules
+        -@order_form.info_hash[:rules].each do |rule_header, rule_text|
+          %rule{:carrier => rule_header[0], :fare_base => rule_header[1]}= rule_text
+    %booking_classes
+      -@order_form.info_hash[:booking_classes].each do |bc|
+        %booking_class= bc
