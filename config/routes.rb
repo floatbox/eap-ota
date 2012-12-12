@@ -70,6 +70,7 @@ Eviterra::Application.routes.draw do
   match "admin/commissions" => 'admin/commissions#index', :as => 'admin_commissions'
   match "admin/new_hot_offers" => 'admin/hot_offers#best_of_the_week', :as => 'show_best_offers'
   match 'admin/notifications/show_sent_notice/:id' => 'admin/notifications#show_sent_notice', :as => :show_sent_notice
+  match 'admin/reports/selling' => 'admin/reports#selling', :as => :admin_reports_selling
 
   root :to => 'home#index'
 
