@@ -40,7 +40,7 @@ class PNR
   end
 
   def order
-    @order ||= Order.find_by_pnr_number(number)
+    @order ||= Order[number]
     raise ActiveRecord::RecordNotFound unless @order
     @order
   end
