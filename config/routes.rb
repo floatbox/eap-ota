@@ -30,6 +30,7 @@ Eviterra::Application.routes.draw do
   post 'booking/pay' => 'booking#pay', :as => :booking_pay
   # FIXME сделать POST однажды
   match 'booking/preliminary_booking' => 'booking#preliminary_booking', :as => :preliminary_booking
+  match 'api/preliminary_booking' => 'api_booking#preliminary_booking', :as => :api_preliminary_booking
   post 'confirm_3ds' => 'booking#confirm_3ds', :as => :confirm_3ds
   match 'order/:id' => 'PNR#show', :as => :show_order
   match 'notice/:id' => 'PNR#show_notice', :as => :show_notice
@@ -69,6 +70,7 @@ Eviterra::Application.routes.draw do
   match "admin/commissions" => 'admin/commissions#index', :as => 'admin_commissions'
   match "admin/new_hot_offers" => 'admin/hot_offers#best_of_the_week', :as => 'show_best_offers'
   match 'admin/notifications/show_sent_notice/:id' => 'admin/notifications#show_sent_notice', :as => :show_sent_notice
+  match 'admin/reports/selling' => 'admin/reports#selling', :as => :admin_reports_selling
 
   root :to => 'home#index'
 

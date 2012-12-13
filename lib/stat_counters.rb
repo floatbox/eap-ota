@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'mongo'
 
 class StatCounters
@@ -44,6 +45,10 @@ class StatCounters
     connection['counters_daily'].find_one(date_key(time))
   end
 
+  def self.on_daterange(date)
+    connection['counters_daily'].find(date)
+  end
+
   def self.on_hour(time=Time.now)
     connection['counters_hourly'].find_one(hour_key(time))
   end
@@ -60,7 +65,7 @@ class StatCounters
   def self.debug_yml(bson)
     bson.to_yaml.gsub(' !ruby/hash:BSON::OrderedHash', '').gsub(' !map:BSON::OrderedHash', '')
   end
-  
+
   def self.build_datetime_conditions(key, value)
     firstdate, lastdate = value.strip.split('-')
     lastdate ||= firstdate

@@ -1,0 +1,32 @@
+<input autocomplete="off" class="daterangepicker" id="date<%= count %>" name="date<%= count %>" title="Создан" type="text" value="<%= date %>" />
+<input data-disable-with="Sending data ..." type="submit" value="OK">
+<table>
+  <tr valign="top">
+    <td>
+      <table class="data">
+        <tr valign="top"><td class="dataName">Заказов</td><td><%= report[:orders].order_count%></td></tr>
+        <tr valign="top"><td class="dataName">Билетов</td><td><%= report[:tickets].ticket_count%></td></tr>
+        <tr valign="top"><td class="dataName">Оборот</td><td><%= display_price(report[:orders].order_total)%></td></tr>
+
+        <!-- <tr valign="top"><td class="dataName">Оборот по билетам</td><td><%= display_price(report[:tickets].ticket_total)%></td></tr> -->
+
+        <tr><td colspan="2">&nbsp;</td></tr>
+        <tr valign="top"><td class="dataName">Средний заказ</td><td><%= display_price(report[:orders].order_average)%></td></tr>
+        <tr valign="top"><td class="dataName">Средний билет</td><td><%= display_price(report[:ticket_average])%></td></tr>
+        <tr><td colspan="2">&nbsp;</td></tr>
+        <tr valign="top"><td class="dataName">Общий доход</td><td><%= display_price(report[:orders].income_total)%></td></tr>
+        <tr valign="top"><td class="dataName">С заказа</td><td><%= display_price(report[:orders].income_average)%></td></tr>
+        <tr valign="top"><td class="dataName">% от оборота</td><td><%= number_to_percentage(report[:percent_total])%></td></tr>
+        <tr valign="top"><td class="dataName">% от тарифа</td><td><%= number_to_percentage(report[:percent_fare])%></td></tr>
+        <tr><td colspan="2">&nbsp;</td></tr>
+        <tr valign="top"><td class="dataName">Поисков</td><td><%= report[:searches] %></td></tr>
+        <tr valign="top"><td class="dataName">Поиск/заказ</td><td><%= number_to_percentage(report[:searches_per_order]) %></td></tr>
+      </table>
+    </td>
+    <td style="width: 60%; text-align: center;">
+      <div style="width: 100px; text-align: left;">
+      <%= report[:top_carriers] %>
+      </div>
+    </td>
+  </tr>
+</table>

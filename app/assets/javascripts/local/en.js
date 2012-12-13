@@ -74,7 +74,7 @@ results: {
 },
 segment: {
     title: 'Flight {0}',
-    directions: ['туда', 'обратно'],
+    directions: ['depart', 'return'],
     more: 'and {0} flight {1}',    
     variants: ['option', 'options', 'options'],
     incompatible: {
@@ -130,9 +130,9 @@ formValidation: {
         short: 'Short {phone number}, enter country and area code.'
     },
     fname: {
-        empty: '{passenger name}',
-        short: '{Passenger name} should be entered completely.',
-        letters: '{Passenger name} should be entered by latin letters.'
+        empty: '{passenger first name}',
+        short: '{Passenger first name} should be entered completely.',
+        letters: '{Passenger first name} should be entered by latin letters.'
     },
     lname: {
         empty: '{passenger last name}',

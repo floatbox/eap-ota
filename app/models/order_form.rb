@@ -142,6 +142,19 @@ class OrderForm
     [recommendation, people_count, people, card].hash
   end
 
+  def info_hash
+    {:prices => {
+        :fare => recommendation.price_fare.round(2),
+        :tax_and_markup => (recommendation.price_with_payment_commission - recommendation.price_fare).round(2),
+        :total => recommendation.price_with_payment_commission.round(2),
+        :discount => recommendation.price_discount.round(2),
+        :fee => recommendation.fee.round(2)
+      },
+      :rules => recommendation.rules,
+      :booking_classes => recommendation.booking_classes
+    }
+  end
+
   def price_with_payment_commission
     @price_with_payment_commission ||= recommendation.price_with_payment_commission
   end

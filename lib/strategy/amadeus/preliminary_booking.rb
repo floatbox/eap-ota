@@ -2,7 +2,7 @@
 module Strategy::Amadeus::PreliminaryBooking
 
   def check_price_and_availability
-    unless TimeChecker.ok_to_book(@search.segments[0].date_as_date + 1.day)
+    unless TimeChecker.ok_to_book(@rec.dept_date + 1.day)
       logger.error 'Strategy::Amadeus::Check: time criteria missed'
       return
     end

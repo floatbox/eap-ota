@@ -79,7 +79,7 @@ class Order < ActiveRecord::Base
   has_percentage_only_commissions :commission_consolidator
 
   def self.[] number
-    find_by_pnr_number number
+    find_last_by_pnr_number number
   end
 
   def make_payable_by_card
@@ -101,7 +101,6 @@ class Order < ActiveRecord::Base
   has_many :order_comments
   has_many :notifications
   has_one :promo_code
-  validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
   validates_presence_of :pnr_number, :if => Proc.new { |o|  o.parent_pnr_number.blank? && (!o.created_at || o.created_at > 5.days.ago) }, :message => 'Необходимо указать номер PNR или номер родительского PNR'
 
   before_validation :capitalize_pnr
@@ -158,6 +157,7 @@ class Order < ActiveRecord::Base
   scope :ticketed, where(:payment_status => ['blocked', 'charged'], :ticket_status => 'ticketed')
   scope :ticket_not_sent, where("email_status != 'ticket_sent' AND ticket_status = 'ticketed'")
   scope :sent_manual, where(:email_status => 'manual')
+  scope :reported, where(:payment_status => ['blocked', 'charged'])
 
 
   scope :stale, lambda {

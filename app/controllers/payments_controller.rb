@@ -29,7 +29,7 @@ class PaymentsController < ApplicationController
     end
 
     if @order.pnr_number.blank?
-      custom_field_order = Order.find_by_pnr_number(@order.parent_pnr_number)
+      custom_field_order = Order[@order.parent_pnr_number]
     else
       custom_field_order = @order
     end
