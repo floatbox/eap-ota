@@ -7,8 +7,9 @@ class StatReports
       SUM(price_with_payment_commission) as order_total,
       AVG(price_with_payment_commission) as order_average,
       SUM(price_fare) as fare_total,
-      SUM(price_with_payment_commission - price_tax - price_fare) as income_total,
-      AVG(price_with_payment_commission - price_tax - price_fare) as income_average').reported.where(date_range).first
+      SUM(blank_count) as ticket_count,
+      SUM(stored_income) as income_total,
+      AVG(stored_income) as income_average').reported.where(date_range).first
   end
 
   def self.get_tickets_data date_range
