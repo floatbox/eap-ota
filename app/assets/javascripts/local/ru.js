@@ -114,6 +114,12 @@ passengersData: {
     required: 'Заполните {0},<br> чтобы узнать новую стоимость.'
 },
 formValidation: {
+    otherFields: function(n) {
+        return 'еще ' + n.decline('поле', 'поля', 'полей');
+    },
+    emptyFields: function(items) {
+        return 'Осталось заполнить ' + empty.enumeration(' и&nbsp;') + '.';
+    },
     email: {
         empty: '{адрес электронной почты}',
         wrong: 'Неправильно введен {адрес электронной почты}.'

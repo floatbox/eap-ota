@@ -90,7 +90,7 @@ price: {
     from: 'from {0}',    
     rise: '{0} more expensive',
     fall: '{0} cheaper',
-    profit: ' <span class="obs-profit">на <strong>{0}%</strong> cheaper then average</span>'
+    profit: ' <span class="obs-profit"><strong>{0}%</strong> cheaper then average</span>'
 },
 currencies: {
     RUR: ['Rubles', 'Rubles', 'Rubles']
@@ -114,6 +114,12 @@ passengersData: {
     required: 'Fill in {0},<br> to recalculate price'
 },
 formValidation: {
+    otherFields: function(n) {
+        return n.decline('other field', 'other fields', 'other fields');
+    },
+    emptyFields: function(items) {
+        return 'Please fill in ' + empty.enumeration(' and&nbsp;') + '.';
+    },
     email: {
         empty: '{email address}',
         wrong: 'Incorrect {email address}.'
@@ -138,7 +144,7 @@ formValidation: {
     },
     birthday: {
         empty: 'passenger {birthdate}',
-        wrong: 'Passenger {birthdate} doesn't exist.',
+        wrong: 'Passenger {birthdate} doesn\'t exist.',
         letters: 'Passenger {birthdate} should be entered in dd/mm/yyyy format.',
         improper: 'Passenger {birthdate} should not be later than today.'
     },

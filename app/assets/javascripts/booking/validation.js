@@ -5,11 +5,14 @@ update: function(error) {
     this.el.toggleClass('bf-error', error !== undefined && error !== 'empty' && error !== 'short');
     this.el.toggleClass('bf-valid', error === undefined);
     if (this.error = error) {
-        this.message = this.messages[error].replace('{', '<span class="bffr-link" data-field="' + this.fid + '">').replace('}', '</span>');
+        this.message = validator.processMessage(this.messages[error], this.fid);
     } else {
         delete this.message;
     }
     return true;
+},
+processNessage: function(message, fid) {
+    return message.replace('{', '<span class="bffr-link" data-field="' + fid + '">').replace('}', '</span>')
 },
 getGender: function(name) {
     var sample = ' ' + name.toLowerCase() + ',';
@@ -362,8 +365,9 @@ get: function() {
 };
 
 /* Gender control */
-validator.Gender = function(el) {
+validator.Gender = function(el, messages) {
     this.el = el;
+    this.messages = messages;
     this.init();
 };
 validator.Gender.prototype = {
@@ -408,7 +412,7 @@ change: function(checked) {
         delete this.message;
         delete this.error;
     } else {
-        this.message = '<span class="bffr-link" data-field="' + this.fid + '">пол пассажира</span>';
+        this.message = validator.processMessage(this.messages['empty'], this.fid);
         this.error = 'empty';
     }
 },
