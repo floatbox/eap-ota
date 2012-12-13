@@ -118,7 +118,7 @@ formValidation: {
         return n.decline('other field', 'other fields', 'other fields');
     },
     emptyFields: function(items) {
-        return 'Please fill in ' + empty.enumeration(' and&nbsp;') + '.';
+        return 'Fill in ' + empty.enumeration(' and&nbsp;') + '.';
     },
     email: {
         empty: '{email address}',

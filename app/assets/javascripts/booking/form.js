@@ -108,7 +108,7 @@ validate: function(forced) {
         empty.length = 4;
     }
     if (empty.length > 0) {
-        this.required.append('<p class="bffr-empty">' lang.formValidation.emptyFields(empty) + '</p>');
+        this.required.append('<p class="bffr-empty">' + lang.formValidation.emptyFields(empty) + '</p>');
         disabled = true;
     }
     if (this.back) {

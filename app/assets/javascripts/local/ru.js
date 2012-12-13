@@ -118,7 +118,7 @@ formValidation: {
         return 'еще ' + n.decline('поле', 'поля', 'полей');
     },
     emptyFields: function(items) {
-        return 'Осталось заполнить ' + empty.enumeration(' и&nbsp;') + '.';
+        return 'Осталось заполнить ' + items.enumeration(' и&nbsp;') + '.';
     },
     email: {
         empty: '{адрес электронной почты}',

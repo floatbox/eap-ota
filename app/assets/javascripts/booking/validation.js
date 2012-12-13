@@ -11,7 +11,7 @@ update: function(error) {
     }
     return true;
 },
-processNessage: function(message, fid) {
+processMessage: function(message, fid) {
     return message.replace('{', '<span class="bffr-link" data-field="' + fid + '">').replace('}', '</span>')
 },
 getGender: function(name) {
