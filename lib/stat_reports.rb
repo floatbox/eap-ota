@@ -20,7 +20,7 @@ class StatReports
   end
 
   def self.top_carriers date_range
-    tickets = Ticket.reported.where(date_range).count(:all, :group => 'tickets.validating_carrier')
+    tickets = Order.reported.where(date_range).sum(:blank_count, :group => 'commission_carrier')
     all_tickets = tickets.inject(0){|sum, (k,v)| sum+= v}
     top_number = 5
     top = tickets.sort_by { |k,v| v }.last(top_number).reverse
