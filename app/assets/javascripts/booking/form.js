@@ -104,11 +104,11 @@ validate: function(forced) {
         disabled = true;
     }
     if (empty.length > 4) {
-        empty[3] = 'еще ' + (empty.length - 3).decline('поле', 'поля', 'полей');
+        empty[3] = lang.formValidation.otherFields(empty.length - 3);
         empty.length = 4;
     }
     if (empty.length > 0) {
-        this.required.append('<p class="bffr-empty">Осталось заполнить ' + empty.enumeration(' и&nbsp;') + '.</p>');
+        this.required.append('<p class="bffr-empty">' + lang.formValidation.emptyFields(empty) + '</p>');
         disabled = true;
     }
     if (this.back) {
@@ -596,7 +596,7 @@ processNames: function() {
     }
 },
 initSex: function() {
-    this.gender = new validator.Gender(this.el.find('.bfp-sex'));
+    this.gender = new validator.Gender(this.el.find('.bfp-sex'), lang.formValidation.gender);
     this.controls.push(this.gender);
 },
 initBirthday: function() {
@@ -766,11 +766,7 @@ initCard: function() {
         number.el.focus();
     });
 
-    var number = new validator.Text($('#bfc-number'), {
-        empty: '{номер банковской карты}',
-        letters: '{Номер банковской карты} нужно ввести цифрами.',
-        wrong: '{Номер банковской карты} введён неправильно.'    
-    }, function(value) {
+    var number = new validator.Text($('#bfc-number'), lang.formValidation.cardnumber, function(value) {
         if (/[^\d ]/.test(value)) return 'letters';
         var digits = value.replace(/\D/g, '');
         if (digits.length < 16) return 'empty';
@@ -807,19 +803,13 @@ initCard: function() {
     };    
     
     // CVV
-    var cvv = new validator.Text($('#bc-cvv'), {
-        empty: '{CVV/CVC код банковской карты}',
-        letters: '{CVV/CVC код банковской карты} нужно ввести цифрами.',
-    }, function(value) {
+    var cvv = new validator.Text($('#bc-cvv'), lang.formValidation.cvc, function(value) {
         if (/\D/.test(value)) return 'letters';
         if (value.length < 3) return 'empty';
     });
 
     // Имя владельца
-    var name = new validator.Text($('#bfc-name'), {
-        empty: '{имя владельца банковской карты}',
-        letters: '{Имя владельца банковской карты} нужно ввести латинскими буквами.',
-    }, function(value) {
+    var name = new validator.Text($('#bfc-name'), lang.formValidation.cardholder, function(value) {
         if (/[^A-Za-z\- .']/.test(value)) return 'letters';
     });
     name.format = function(value) {
@@ -827,12 +817,7 @@ initCard: function() {
     };
 
     // Срок действтия
-    var date = new validator.CardDate(context.find('.bfc-date'), {
-        empty: '{срок действия банковской карты}',
-        letters: '{Срок действия банковской карты} нужно ввести цифрами в формате мм/гг.',
-        wrong: 'Месяц в {сроке действия банковской карты} не может быть больше 12.',
-        improper: '{Срок действия банковской карты} уже истёк.'
-    }, function(value) {
+    var date = new validator.CardDate(context.find('.bfc-date'), lang.formValidation.cardexp, function(value) {
         if (/[^A-Za-z\- .']/.test(value)) return 'letters';
     });
 
