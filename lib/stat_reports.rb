@@ -21,8 +21,10 @@ class StatReports
 
   def self.top_carriers date_range
     tickets = Ticket.reported.where(date_range).count(:all, :group => 'tickets.validating_carrier')
+    all_tickets = tickets.inject(0){|sum, (k,v)| sum+= v}
     top_number = 5
     top = tickets.sort_by { |k,v| v }.last(top_number).reverse
+    all_top = top.inject(0){|sum, v| sum+= v[1]}
     iatas = top.collect {|k,v| k}
     carriers = Carrier.select('iata, color').where(:iata => iatas)
     colors = {}
@@ -31,6 +33,7 @@ class StatReports
     top.each do |item|
       top_carriers << {:iata => item[0], :tickets => item[1], :color =>colors[item[0]]}
     end
+    top_carriers << {:iata => 'Other', :tickets => all_tickets - all_top, :color =>'ccc'}
     top_carriers
   end
 
