@@ -43,4 +43,10 @@ class StatReports
     ["#{key} BETWEEN ? AND ?", firstdate.to_date.beginning_of_day.to_s(:db), lastdate.to_date.end_of_day.to_s(:db)]
   end
 
+  def self.daterange_days(value)
+     firstdate, lastdate = value.strip.split('-')
+     lastdate ||= firstdate
+     (lastdate.to_date - firstdate.to_date).round.abs + 1
+  end
+
 end

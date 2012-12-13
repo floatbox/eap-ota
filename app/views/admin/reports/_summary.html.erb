@@ -16,6 +16,12 @@
         <tr valign="top"><td class="dataName">% от оборота</td><td><%= display_percent(report[:percent_total])%></td></tr>
         <tr valign="top"><td class="dataName">% от тарифа</td><td><%= display_percent(report[:percent_fare])%></td></tr>
         <tr><td colspan="2">&nbsp;</td></tr>
+
+        <tr valign="top" <% if report[:days] < 2 %>class="blank"<% end %>><td class="dataName">Дней</td><td><%= report[:days] %></td></tr>
+        <tr valign="top" <% if report[:days] < 2 %>class="blank"<% end %>><td class="dataName">Оборот за день</td><td><%= display_price(report[:day_total])%></td></tr>
+        <tr valign="top" <% if report[:days] < 2 %>class="blank"<% end %>><td class="dataName">Доход за день</td><td><%= display_price(report[:day_income])%></td></tr>
+        <tr><td colspan="2">&nbsp;</td></tr>
+
         <tr valign="top"><td class="dataName">Поисков</td><td><%= display_numbers(report[:searches]) %></td></tr>
         <tr valign="top"><td class="dataName">Поиск/заказ</td><td><%= number_to_percentage(report[:searches_per_order]) %></td></tr>
       </table>
@@ -24,7 +30,7 @@
       <div style="text-align: left;">
         <ul>
       <% report[:top_carriers].each do |carrier| %>
-      <li><%= carrier[:iata]%> - <%= carrier[:tickets]%></li>
+      <li><%= carrier[:iata]%> - <%= display_numbers(carrier[:tickets])%></li>
       <% end %>
         </ul>
       <div id="piechart<%= count %>" style="width:350px;height:220px"></div>

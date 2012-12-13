@@ -20,8 +20,11 @@ class Admin::ReportsController < Admin::BaseController
       data[:percent_fare] = data[:orders].fare_total ? (data[:orders].income_total / data[:orders].fare_total) * 100 : 0
       # data[:tickets] = StatReports.get_tickets_data StatReports.build_datetime_conditions('created_at', d)
       data[:ticket_average] = data[:orders].ticket_count ? (data[:orders].order_total.to_f / data[:orders].ticket_count.to_f) : 0
+      data[:days] = StatReports.daterange_days d
+      data[:day_total] = data[:orders].order_total ? (data[:orders].order_total / data[:days]) : 0
+      data[:day_income] = data[:orders].income_total ? (data[:orders].income_total / data[:days]): 0
 
-      mongo_date_condition = StatCounters.build_datetime_conditions '_id', d
+      mongo_date_condition = StatCounters.build_datetime_conditions('_id', d)
       data[:searches] = 0
       StatCounters.on_daterange(mongo_date_condition).each do |day_result|
         if day_result['search']
