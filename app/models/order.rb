@@ -157,7 +157,7 @@ class Order < ActiveRecord::Base
   scope :ticketed, where(:payment_status => ['blocked', 'charged'], :ticket_status => 'ticketed')
   scope :ticket_not_sent, where("email_status != 'ticket_sent' AND ticket_status = 'ticketed'")
   scope :sent_manual, where(:email_status => 'manual')
-  scope :reported, where(:payment_status => ['blocked', 'charged']).where("pnr_number != ''")
+  scope :reported, where(:payment_status => ['blocked', 'charged'], :offline_booking => false).where("pnr_number != ''")
 
 
   scope :stale, lambda {
