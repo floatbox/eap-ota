@@ -127,6 +127,8 @@ GEM
       railties (>= 3.0.0)
     fastthread (1.0.7)
     ffi (1.0.11)
+    flot-rails (0.0.2)
+      jquery-rails
     geo_ip (0.4.0)
       json (~> 1.4)
       rest-client (~> 1.6.1)
@@ -367,6 +369,7 @@ DEPENDENCIES
   every
   eviterra-instrumentation!
   factory_girl_rails
+  flot-rails
   geo_ip
   growl
   guard

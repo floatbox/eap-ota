@@ -61,7 +61,7 @@ gem 'haml'
 gem 'hpricot', require: false
 
 gem 'typus', :git => 'https://github.com/Eviterra/typus.git'
-
+gem "flot-rails"
 gem 'delayed_job_mongoid'
 
 group :development do

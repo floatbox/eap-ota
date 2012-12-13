@@ -25,7 +25,39 @@
     </td>
     <td style="width: 60%; text-align: center;">
       <div style="width: 100px; text-align: left;">
-      <%= report[:top_carriers] %>
+      <% report[:top_carriers].each do |carrier| %>
+      <%= carrier[0]%> - <%= carrier[1]%>
+      <% end %>
+      <div id="piechart" style="width:500px;height:300px"></div>
+      <script type="text/javascript">
+    $(function () {
+      // data
+      var carrier = [
+        <% report[:top_carriers].each do |carrier| %>
+        {label: '<%= carrier[0]%>', data: <%= carrier[1]%>},
+        <% end %>
+        ];
+
+      $.plot($("#piechart"), carrier,
+      {
+        series: {
+          pie: {
+            show: true,
+            radius: 1,
+            label: {
+              show: true,
+              radius: 3/4,
+              formatter: function(label, series){
+                return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+              },
+              background: { opacity: 0.5 }
+            }
+          }
+        }
+      });
+    })
+      </script>
+
       </div>
     </td>
   </tr>

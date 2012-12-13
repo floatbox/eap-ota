@@ -22,13 +22,7 @@ class StatReports
     total = Ticket.reported.where(date_range).count
     top = Ticket.reported.where(date_range).count(:all, :group => 'tickets.validating_carrier')
     top_number = 5
-    top = top.sort_by { |k,v| v }.last(top_number).reverse
-    output = ''
-    top.each do |t|
-      t << t[1]*100/total
-      output = output + t[0].to_s + ' ' + t[2].to_s + '% ( ' + t[1].to_s + ' )<br>'
-    end
-    output.html_safe
+    top.sort_by { |k,v| v }.last(top_number).reverse
   end
 
   def self.build_datetime_conditions(key, value)
