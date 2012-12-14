@@ -21,10 +21,10 @@ class StatReports
 
   def self.top_carriers date_range
     tickets = Order.reported.where(date_range).sum(:blank_count, :group => 'commission_carrier')
-    all_tickets = tickets.inject(0){|sum, (k,v)| sum+= v}
+    all_tickets = tickets.inject(0){|sum, (k,v)| sum + v}
     top_number = 5
     top = tickets.sort_by { |k,v| v }.last(top_number).reverse
-    all_top = top.inject(0){|sum, v| sum+= v[1]}
+    all_top = top.inject(0){|sum, v| sum + v[1]}
     iatas = top.collect {|k,v| k}
     carriers = Carrier.select('iata, color').where(:iata => iatas)
     colors = {}
