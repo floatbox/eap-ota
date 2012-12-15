@@ -8,13 +8,6 @@ describe Order do
     order.save!
   end
 
-  it "should not allow to create two orders with the same pnr number" do
-    pending
-    order1 = create :order, :pnr_number => 'foobar'
-    order2 = build :order, :pnr_number => 'FOObar'
-    order2.should have_errors_on(:pnr_number)
-  end
-
   describe "#capitalize_pnr" do
     it "should strip spaces" do
       order = Order.new :pnr_number => '  БХЦ45 '
