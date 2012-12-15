@@ -783,6 +783,15 @@ commission "1%/0.05"
 carrier "DL", "DELTA AIRLINES"
 ########################################
 
+example 'svojfk/s'
+example 'svojfk/i jfksvo/s'
+agent "10%"
+subagent "8%"
+subclasses "SIQKLUT"
+check { includes_only(country_iatas.first, "RU") and includes(country_iatas, "US") }
+ticketing_method "downtown"
+commission "10%/8%"
+
 example 'okocdg cdgoko/ab'
 example 'cdgoko'
 example 'okomia'
