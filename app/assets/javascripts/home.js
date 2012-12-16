@@ -1,3 +1,6 @@
+//= require i18n
+//= require i18n/translations
+
 //= require common/hint.js
 
 //= require home/page.js
