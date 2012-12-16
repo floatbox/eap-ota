@@ -1,5 +1,4 @@
-//= require i18n
-//= require i18n/translations
+//= require i18n_init
 
 //= require common/hint.js
 
