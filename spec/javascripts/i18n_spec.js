@@ -46,6 +46,66 @@ describe('russian i18n', function() {
         .toEqual('слишком большой длины (не может быть больше чем 2 символа)')
     })
 
+    it("should work using p() shortcut", function() {
+      expect(
+        I18n.p(2, 'foo.bar')
+      ).toEqual(
+        '2 фубары.'
+      )
+    })
+
+  })
+
+  describe('localization', function() {
+
+    // почему-то точка вместо запятой
+    it("should localize currency", function() {
+      I18n.locale = 'ru'
+      expect(
+        I18n.l('currency', 23024.45)
+      ).toEqual(
+        '23 024,45 руб.'
+      )
+    })
+
+    // не видит месяцы
+    it("should localize dates in long format", function() {
+      I18n.locale = 'ru'
+      expect(
+        I18n.l('date.formats.long', new Date(2012,5,9))
+      ).toEqual(
+        '9 июня 2012'
+      )
+    })
+
+    // не видит месяцы
+    it("should localize dates in short format", function() {
+      I18n.locale = 'ru'
+      expect(
+        I18n.l('date.formats.short', new Date(2012,5,9))
+      ).toEqual(
+        '9 июня 2012'
+      )
+    })
+
+    it("should localize english dates in long format", function() {
+      I18n.locale = 'en'
+      expect(
+        I18n.l('date.formats.long', new Date(2012,5,9))
+      ).toEqual(
+        '09 Jun 2012'
+      )
+    })
+
+    it("should localize english dates in short format", function() {
+      I18n.locale = 'en'
+      expect(
+        I18n.l('date.formats.short', new Date(2012,5,9))
+      ).toEqual(
+        'Jun 09'
+      )
+    })
+
   })
 
 })
