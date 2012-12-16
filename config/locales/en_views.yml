@@ -1,0 +1,10 @@
+en:
+  foo:
+    bar:
+      # count: 1, -1
+      one: 'One foobar.'
+      # count: 2,3,4, 0.23
+      # count: 0 if there's no "none:"
+      other: '%{count} foobars.'
+      # count: 0
+      none: 'No foobars.'

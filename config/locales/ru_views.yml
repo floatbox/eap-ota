@@ -1,0 +1,11 @@
+ru:
+  foo:
+    bar:
+      # count: 1, 21, -1
+      one: 'Фубара.'
+      # count: 2, 3, 4, 23
+      few: '%{count} фубары.'
+      # count: 0, 5, 11
+      many: '%{count} фубар.'
+      # 1.2, -3.45
+      other: '%{count} странных фубар.'
