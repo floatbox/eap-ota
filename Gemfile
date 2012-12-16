@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 gem 'rails', '3.2.1'
 
 gem 'jquery-rails'
-gem 'i18n-js'
+gem 'i18n-js', :git => 'https://github.com/fnando/i18n-js.git'
 group :assets do
   #gem 'therubyracer'
   gem "uglifier"
