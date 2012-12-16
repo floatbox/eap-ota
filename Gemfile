@@ -49,8 +49,6 @@ gem 'newrelic_rpm'
 gem 'rpm_contrib'
 gem 'mongoid'
 gem 'bson_ext'
-gem 'SystemTimer', :platforms => :ruby_18
-gem 'ya2yaml', :platforms => :ruby_18
 gem 'mobile-fu'
 
 #gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
@@ -94,7 +92,6 @@ group :test do
 end
 
 group :debug do
-  gem 'ruby-debug', :platforms => :ruby_18
   gem 'ruby-debug19', :require => 'ruby-debug', :platforms => :ruby_19
 end
 
