@@ -2368,7 +2368,7 @@ no_commission
 carrier "VV", "AEROSVIT"
 ########################################
 
-carrier_defaults our_markup: 0
+carrier_defaults our_markup: 0, :disabled => "Going to bankrupt"
 
 example 'leddok'
 example 'ledcdg'
