@@ -42,7 +42,7 @@ class StatReports
       COUNT(*) as order_count,
       SUM(price_with_payment_commission) as order_total,
       SUM(stored_income) as income_total,
-      partner').reported.where(date_range).group(:partner).order('partner, order_count DESC')
+      partner').reported.where(date_range).group(:partner).order('partner IS NULL DESC, order_count DESC')
   end
 
   def self.build_datetime_conditions(key, value)

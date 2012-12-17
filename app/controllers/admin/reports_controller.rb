@@ -40,11 +40,14 @@ class Admin::ReportsController < Admin::BaseController
 
       mongo_date_condition = StatCounters.build_datetime_conditions('_id', d)
       data[:searches] = 0
+      data[:eviterra_searches] = 0
       data[:enter] = 0
+      data[:api_enter] = 0
       StatCounters.on_daterange(mongo_date_condition).each do |day_result|
         if day_result['search']
           data[:searches] += day_result['search']['api']['total'] if day_result['search']['api']
           data[:searches] += day_result['search']['total'] if day_result['search']['total']
+          data[:eviterra_searches] += day_result['search']['total'] if day_result['search']['total']
         end
         if day_result['enter']
           data[:enter] += day_result['enter']['preliminary_booking']['total'] if day_result['enter']['preliminary_booking']
@@ -67,14 +70,15 @@ class Admin::ReportsController < Admin::BaseController
               data[:partners][partner] = {} if !data[:partners][partner]
               data[:partners][partner][:enter] = 0 if !data[:partners][partner][:enter]
               data[:partners][partner][:enter] += value['total'] if value['total']
+              data[:api_enter] += value['total'] if value['total']
             end
           end
         end
 
       end
 
-      data[:partners]['eviterra'][:search] = data[:searches] if data[:partners]['eviterra']
-      data[:partners]['eviterra'][:enter] = data[:enter] if data[:partners]['eviterra']
+      data[:partners]['eviterra'][:search] = data[:eviterra_searches] if data[:partners]['eviterra']
+      data[:partners]['eviterra'][:enter] = data[:enter] - data[:api_enter] if data[:partners]['eviterra']
       data[:partners].each do |name, partner|
         partner[:order_count] = partner[:orders] && partner[:orders].order_count ? partner[:orders].order_count : 0
         partner[:order_total] = partner[:orders] && partner[:orders].order_total ? partner[:orders].order_total : 0
