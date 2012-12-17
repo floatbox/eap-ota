@@ -34,7 +34,7 @@ class ApiBookingController < ApplicationController
     StatCounters.d_inc @destination, %W[enter.api.total] if @destination
     StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if @destination && partner
 =end
-    unless strategy.check_price_and_availability
+    unless strategy.check_price_and_availability(false)
       respond_to do |format|
         format.json {render :json => {:success => false}}
         format.xml {render 'api/preliminary_booking'}
