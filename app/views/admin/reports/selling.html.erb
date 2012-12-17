@@ -5,18 +5,22 @@
 <table>
   <tr valign="top">
     <td style="width: 50%; padding: 0 0 15px 0;">
-      
-      <%= render :partial => 'summary', :locals => { :date => @date.first, :report => @report.first, :count => '1'}  %>
-      
+
+      <%= render :partial => 'summary', :locals => { :date => @date.first, :report => @report.first, :count => '1' }  %>
+
       <div class="hr"><!-- --></div>
-      
+
+      <%= render :partial => 'partners', :locals => { :report => @report.first[:partners], :count => '1' }  %>
+
     </td>
     <td style="width: 50%; padding: 0 0 0 15px;">
-      
-      <%= render :partial => 'summary', :locals => { :date => @date.last, :report => @report.last, :count => '2'}  %>
-      
+
+      <%= render :partial => 'summary', :locals => { :date => @date.last, :report => @report.last, :count => '2' }  %>
+
       <div class="hr"><!-- --></div>
-      
+
+      <%= render :partial => 'partners', :locals => {:report => @report.last[:partners], :count => '2' }  %>
+
     </td>
   </tr>
 </table>

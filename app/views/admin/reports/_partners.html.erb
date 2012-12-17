@@ -1,0 +1,19 @@
+<h2>Партнеры</h2>
+
+<table class="pData">
+  <tr valign="top">
+    <th>поисков</th><th>переходов</th><th>заказов</th><th>конв.</th><th>оборот</th><th>доход</th><th>марж.</th>
+  </tr>
+  <% report.each do |name, partner|%>
+  <tr><td colspan="7"><h3><%= name.capitalize%></h3></td></tr>
+  <tr>
+    <td><%= display_numbers(partner[:search])%></td>
+    <td><%= display_numbers(partner[:enter])%></td>
+    <td><%= display_numbers(partner[:orders].order_count)%></td>
+    <td><%= display_percent(partner[:conv])%></td>
+    <td><%= display_price(partner[:orders].order_total)%></td>
+    <td><%= display_price(partner[:orders].income_total)%></td>
+    <td><%= display_percent(partner[:markup])%></td>
+  </tr>
+  <% end %>
+</table>
