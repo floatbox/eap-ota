@@ -4,8 +4,8 @@
   <tr valign="top">
     <td>
       <table class="data">
-        <tr valign="top"><td class="dataName">Заказов</td><td><%= report[:orders].order_count%></td></tr>
-        <tr valign="top"><td class="dataName">Билетов</td><td><%= report[:orders].ticket_count%></td></tr>
+        <tr valign="top"><td class="dataName">Заказов</td><td><%= display_numbers(report[:orders].order_count)%></td></tr>
+        <tr valign="top"><td class="dataName">Билетов</td><td><%= display_numbers(report[:orders].ticket_count)%></td></tr>
         <tr valign="top"><td class="dataName">Оборот</td><td><%= display_price(report[:orders].order_total)%></td></tr>
         <tr><td colspan="2">&nbsp;</td></tr>
         <tr valign="top"><td class="dataName">Средний заказ</td><td><%= display_price(report[:orders].order_average)%></td></tr>
@@ -13,29 +13,36 @@
         <tr><td colspan="2">&nbsp;</td></tr>
         <tr valign="top"><td class="dataName">Общий доход</td><td><%= display_price(report[:orders].income_total)%></td></tr>
         <tr valign="top"><td class="dataName">С заказа</td><td><%= display_price(report[:orders].income_average)%></td></tr>
-        <tr valign="top"><td class="dataName">% от оборота</td><td><%= number_to_percentage(report[:percent_total])%></td></tr>
-        <tr valign="top"><td class="dataName">% от тарифа</td><td><%= number_to_percentage(report[:percent_fare])%></td></tr>
+        <tr valign="top"><td class="dataName">% от оборота</td><td><%= display_percent(report[:percent_total])%></td></tr>
+        <tr valign="top"><td class="dataName">% от тарифа</td><td><%= display_percent(report[:percent_fare])%></td></tr>
         <tr><td colspan="2">&nbsp;</td></tr>
-        <tr valign="top"><td class="dataName">Поисков</td><td><%= report[:searches] %></td></tr>
+
+        <tr valign="top" <% if report[:days] < 2 %>class="blank"<% end %>><td class="dataName">Дней</td><td><%= report[:days] %></td></tr>
+        <tr valign="top" <% if report[:days] < 2 %>class="blank"<% end %>><td class="dataName">Оборот за день</td><td><%= display_price(report[:day_total])%></td></tr>
+        <tr valign="top" <% if report[:days] < 2 %>class="blank"<% end %>><td class="dataName">Доход за день</td><td><%= display_price(report[:day_income])%></td></tr>
+        <tr><td colspan="2">&nbsp;</td></tr>
+
+        <tr valign="top"><td class="dataName">Поисков</td><td><%= display_numbers(report[:searches]) %></td></tr>
         <tr valign="top"><td class="dataName">Поиск/заказ</td><td><%= number_to_percentage(report[:searches_per_order]) %></td></tr>
       </table>
     </td>
     <td style="width: 60%; text-align: center;">
-      <div style="width: 100px; text-align: left;">
+      <div style="text-align: left;">
+        <ul>
       <% report[:top_carriers].each do |carrier| %>
-      <%= carrier[0]%> - <%= carrier[1]%>
+      <li><%= carrier[:iata]%> - <%= display_numbers(carrier[:tickets])%></li>
       <% end %>
-      <div id="piechart" style="width:500px;height:300px"></div>
+        </ul>
+      <div id="piechart<%= count %>" style="width:350px;height:220px"></div>
       <script type="text/javascript">
     $(function () {
       // data
-      var carrier = [
-        <% report[:top_carriers].each do |carrier| %>
-        {label: '<%= carrier[0]%>', data: <%= carrier[1]%>},
-        <% end %>
-        ];
+      var carrier<%= count %> = [
+      <% report[:top_carriers].each do |carrier| %>
+      {label: '<%= carrier[:iata]%>', data: <%= carrier[:tickets]%> <% if carrier[:color]%>, color: '#<%= carrier[:color]%>'<%end%>},
+      <% end %>];
 
-      $.plot($("#piechart"), carrier,
+      $.plot($("#piechart<%= count %>"), carrier<%= count %>,
       {
         series: {
           pie: {
@@ -45,11 +52,15 @@
               show: true,
               radius: 3/4,
               formatter: function(label, series){
-                return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+                return '<div style="font-size:8pt;text-align:center;padding:2px;color:white; font-weight:bold">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
               },
               background: { opacity: 0.5 }
             }
           }
+        },
+        legend: {
+            show: true,
+            position: "sw"
         }
       });
     })

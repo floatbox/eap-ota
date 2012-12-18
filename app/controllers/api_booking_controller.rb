@@ -34,7 +34,7 @@ class ApiBookingController < ApplicationController
     StatCounters.d_inc @destination, %W[enter.api.total] if @destination
     StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if @destination && partner
 =end
-    unless strategy.check_price_and_availability
+    unless strategy.check_price_and_availability(false)
       respond_to do |format|
         format.json {render :json => {:success => false}}
         format.xml {render 'api/preliminary_booking'}
@@ -74,11 +74,12 @@ class ApiBookingController < ApplicationController
       render :json => {success: false}
     end
   end
+=end
 
   def pay
     if Conf.site.forbidden_sale
       #StatCounters.inc %W[pay.errors.forbidden]
-      render :json => {success: false}
+      render :json => {success: false, reason: 'unable_to_sell'}
       return
     end
 
@@ -89,9 +90,9 @@ class ApiBookingController < ApplicationController
 
     if @order_form.counts_contradiction
       if @order_form.update_price_and_counts
-        render :json => {success: false, info: order_form.info_hash}
+        render :json => {success: false, reason: 'price_changed', info: order_form.info_hash}
       else
-        render :json => {success: false}
+        render :json => {success: false, reason: 'unable_to_sell'}
       end
       return
     end
@@ -99,7 +100,7 @@ class ApiBookingController < ApplicationController
     if !@order_form.valid?
       StatCounters.inc %W[pay.errors.form]
       logger.info "Pay: invalid order: #{@order_form.errors_hash.inspect}"
-      render :json => {:success: false, errors: @order_form.errors_hash}
+      render :json => {success: false, reason: 'invalid_data', errors: @order_form.errors_hash}
       return
     end
 
@@ -108,10 +109,10 @@ class ApiBookingController < ApplicationController
 
     if booking_status == :failed
       StatCounters.inc %W[pay.errors.booking]
-      render :json => {success: false}
+      render :json => {success: false, reason: 'unable_to_sell'}
       return
     elsif booking_status == :price_changed
-      render :json => {success: false, info: order_form.info_hash}
+      render :json => {success: false, reason: 'price_changed', info: @order_form.info_hash}
       return
     end
 
@@ -138,7 +139,7 @@ class ApiBookingController < ApplicationController
           StatCounters.inc %W[pay.errors.ticketing]
           logger.info "Pay: ticketing failed"
           @order_form.order.unblock!
-          render :json => {success: false}
+          render :json => {success: false, reason: 'unable_to_sell'}
           return
         end
       end
@@ -148,19 +149,19 @@ class ApiBookingController < ApplicationController
       StatCounters.inc %W[pay.3ds.requests]
       logger.info "Pay: payment system requested 3D-Secure authorization"
       #FIXME придумать нормальный ответ
-      render :partial => 'threeds', :locals => {:payment => payment_response}
-
+      render :json => {:success => false, :reason => '3ds', :payment => payment_response.threeds_params}
     else # payment_response failed
       strategy.cancel
       StatCounters.inc %W[pay.errors.payment]
       # FIXME ну и почему не сработало?
       logger.info "Pay: payment failed"
-      render :json => {success: false}
+      render :json => {success: false, reason: 'payment_error'}
     end
   ensure
     StatCounters.inc %W[pay.total]
   end
 
+=begin
   # Payture: params['PaRes'], params['MD']
   # Payu: params['REFNO'], params['STATUS'] etc.
   # FIXME отработать отмену проведенного Payu платежа, если бронь уже снята

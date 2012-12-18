@@ -20,16 +20,41 @@ class StatReports
   end
 
   def self.top_carriers date_range
-    total = Ticket.reported.where(date_range).count
-    top = Ticket.reported.where(date_range).count(:all, :group => 'tickets.validating_carrier')
+    tickets = Order.reported.where(date_range).sum(:blank_count, :group => 'commission_carrier')
+    all_tickets = tickets.inject(0){|sum, (k,v)| sum + v}
     top_number = 5
-    top.sort_by { |k,v| v }.last(top_number).reverse
+    top = tickets.sort_by { |k,v| v }.last(top_number).reverse
+    all_top = top.inject(0){|sum, v| sum + v[1]}
+    iatas = top.collect {|k,v| k}
+    carriers = Carrier.select('iata, color').where(:iata => iatas)
+    colors = {}
+    carriers.collect {|c| colors[c.iata] = c.color}
+    top_carriers = []
+    top.each do |item|
+      top_carriers << {:iata => item[0], :tickets => item[1], :color =>colors[item[0]]}
+    end
+    top_carriers << {:iata => 'Other', :tickets => all_tickets - all_top, :color =>'ccc'}
+    top_carriers
+  end
+
+  def self.top_partners date_range
+    tickets = Order.select('
+      COUNT(*) as order_count,
+      SUM(price_with_payment_commission) as order_total,
+      SUM(stored_income) as income_total,
+      partner').reported.where(date_range).group(:partner).order('partner IS NULL DESC, order_count DESC')
   end
 
   def self.build_datetime_conditions(key, value)
     firstdate, lastdate = value.strip.split('-')
     lastdate ||= firstdate
     ["#{key} BETWEEN ? AND ?", firstdate.to_date.beginning_of_day.to_s(:db), lastdate.to_date.end_of_day.to_s(:db)]
+  end
+
+  def self.daterange_days(value)
+     firstdate, lastdate = value.strip.split('-')
+     lastdate ||= firstdate
+     (lastdate.to_date - firstdate.to_date).round.abs + 1
   end
 
 end

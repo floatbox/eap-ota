@@ -5,15 +5,13 @@ class PricerController < ApplicationController
   before_filter :load_form_from_cache, :only => [:pricer, :calendar]
 
   def pricer
-    unless params[:restore_results]
-      if @search.valid?
-        @destination = get_destination
-        @recommendations = Mux.new(:admin_user => admin_user).async_pricer(@search)
-        @locations = @search.human_locations
-        hot_offer = create_hot_offer
-        @average_price = hot_offer.destination.average_price * @search.people_count[:adults] if hot_offer
-        StatCounters.d_inc @destination, %W[search.total search.pricer.total] if @destination
-      end
+    if @search.valid?
+      @destination = get_destination
+      @recommendations = Mux.new(:admin_user => admin_user).async_pricer(@search)
+      @locations = @search.human_locations
+      hot_offer = create_hot_offer
+      @average_price = hot_offer.destination.average_price * @search.people_count[:adults] if hot_offer
+      StatCounters.d_inc @destination, %W[search.total search.pricer.total] if @destination
     end
     render :partial => 'recommendations'
   ensure
@@ -48,10 +46,8 @@ class PricerController < ApplicationController
   end
 
   def calendar
-    unless params[:restore_results]
-      if @search.valid? && @search.segments.size < 3
-        @recommendations = Mux.new(:admin_user => admin_user).calendar(@search)
-      end
+    if @search.valid? && @search.segments.size < 3
+      @recommendations = Mux.new(:admin_user => admin_user).calendar(@search)
     end
     render :partial => 'matrix'
   ensure
