@@ -465,9 +465,9 @@ toggleHidden: function(mode) {
 },
 applyPosition: function() {
     if (search.map.cachedSegments) {
-        search.map.updatePrices(search.map.cachedSegments, true);
+        search.map.updatePrices(search.map.cachedSegments);
         if (search.map.pricesMode) {
-            search.map.loadPrices();
+            search.map.showSegments(search.map.cachedSegments);
         }
     }
 }

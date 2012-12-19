@@ -45,8 +45,9 @@ mapControl: {
     collapse: 'Свернуть карту'
 },
 priceMap: {
-    link: 'Куда дешево улететь<br>{0}<br>в&nbsp;{1}?',
-    limit: 'цена до {0} <span class="ruble">Р</span>'
+    link: 'Куда дешево улететь {0} в&nbsp;{1}?',
+    title: 'Цены от {0}',
+    limit: 'до {0} <span class="ruble">Р</span>'
 },
 results: {
     cheap: {
