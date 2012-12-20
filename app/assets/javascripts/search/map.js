@@ -21,12 +21,11 @@ bindResize: function() {
 },
 resize: function(instant) {
     var dh = 36; // Page header
-    dh += this.prices.height;
     dh += search.locations.el.height();
     dh += search.dates.el.height() + 2;
     dh += search.options.el.height();
     dh += results.header.height;
-    var mh = Math.max(0, $w.height() - dh);
+    var mh = Math.max(36, $w.height() - dh);
     this.content.height(mh);
     this.toggleZoom(mh);
     if (this.api && this.bounds) {
@@ -34,7 +33,7 @@ resize: function(instant) {
     }
 },
 toggleZoom: function(h) {
-    var zoomVisible = h > 60;
+    var zoomVisible = h > 105;
     if (this.api && zoomVisible !== this.zoomVisible) {
         this.api.setOptions({zoomControl: zoomVisible});
         this.zoomVisible = zoomVisible;
@@ -51,12 +50,16 @@ load: function() {
             mapTypeId: google.maps.MapTypeId.TERRAIN,
             disableDefaultUI: true,
             zoomControlOptions: {
-                style: google.maps.ZoomControlStyle.SMALL
+                style: google.maps.ZoomControlStyle.SMALL,
+                position: google.maps.ControlPosition.LEFT_TOP
             },
             scrollwheel: false,
             minZoom: 2,
             maxZoom: 8
         });
+        var zoomOffset = document.createElement('div');
+        zoomOffset.style.height = '36px';
+        this.api.controls[google.maps.ControlPosition.TOP_LEFT].push(zoomOffset);
         this.bounds = this.defpoint;
         if (this.deferred) {
             this.showSegments(this.deferred);
@@ -70,10 +73,10 @@ slideDown: function() {
     var that = this;
     var wh = this.wrapper.height();
     var ch = this.content.height();
-    var dh = wh - ch - search.dates.tlheight - this.prices.height;
+    var dh = wh - ch - search.dates.tlheight;
     this.wrapper.height(wh).css('overflow', 'hidden');
     this.content.animate({
-        height: ch + dh
+        height: Math.max(36, ch + dh)
     }, 300, function() {
         search.dates.toggleHidden(true);
         google.maps.event.trigger(that.api, 'resize');
@@ -89,14 +92,14 @@ slideUp: function() {
     this.wrapper.height(wh).css('overflow', 'hidden');
     search.dates.toggleHidden(false);
     var ch = search.dates.el.height();
-    this.toggleZoom(wh - ch - this.prices.height);
+    this.toggleZoom(wh - ch);
     this.content.animate({
-        height: wh - ch - this.prices.height
+        height: Math.max(36, wh - ch)
     }, 300, function() {
         google.maps.event.trigger(that.api, 'resize');
         that.wrapper.height('').css('overflow', '');
         if (that.prices.el.find('.smp-collapse').length) {
-            that.prices.link.html(that.prices.expLink);
+            that.prices.showExpand();
         }
         that.fitBounds();
     });
@@ -167,13 +170,18 @@ updatePrices: function(segments) {
             from: segments[0].dpt.iata,
             date: sd.monthes[sd.position].el.find('.first').attr('data-dmy')
         });
+        if (this.pricesMode && search.dates.el.hasClass('sd-hidden')) {
+            this.loadPrices();
+        }
     } else {
         this.prices.slider.hide();
-        this.prices.link.html('<span class="smp-expand">Развернуть карту</span>').show();
+        this.prices[search.dates.el.hasClass('sd-hidden') ? 'showCollapse' : 'showExpand']();
     }
 },
 loadPrices: function() {
     var that = this;
+    this.prices.slider.hide();
+    this.prices.showLoading();
     $.ajax({
         url: '/price_map',
         data: {
@@ -194,7 +202,7 @@ showPrices: function(items) {
     var that = this;
     this.clean();
     if (items.length === 0) {
-        this.prices.link.html('Мы не смогли ничего найти');
+        this.prices.link.html('<div class="smpl-content">Мы не смогли ничего найти</div>');
         return;
     }
     var template = '<p class="sml-city">{0}</p><p class="sml-price">{1}&nbsp;<span class="ruble">Р</span></p><p class="sml-dates">{2}</p>';
@@ -309,18 +317,15 @@ init: function(context) {
     this.link = this.el.find('.smp-link');
     this.link.on('click', '.smp-load', function() {
         search.map.loadPrices();
-        that.link.html('<span class="smp-progress">Ищем варианты</span>');
     });
     this.link.on('click', '.smp-expand', function() {
-        that.link.html(that.colLink);
+        that.showCollapse();
         search.map.slideDown();
     });
     this.link.on('click', '.smp-collapse', function() {
         search.map.slideUp();
     });
-    this.expLink = '<span class="smp-expand">Развернуть карту</span>';
-    this.colLink = '<span class="smp-collapse">Свернуть карту</span>';
-    this.link.html(this.expLink);
+    this.showExpand();
     this.slider = this.el.find('.smp-slider');
     this.slider.find('.smps-base').on('click', function(event) {
         var offset = event.pageX - $(this).offset().left - 3;
@@ -340,9 +345,18 @@ init: function(context) {
     this.value = this.slider.find('.smps-value');
     this.height = this.el.outerHeight();
 },
+showExpand: function() {
+    this.link.html('<div class="smpl-content smp-expand">Развернуть карту</div>').show();
+},
+showCollapse: function() {
+    this.link.html('<div class="smpl-content smp-collapse">Свернуть карту</div>').show();
+},
+showLoading: function() {
+    this.link.html('<div class="smpl-content"><span class="smp-progress">Ищем варианты</span></div>').show();
+},
 update: function(options) {
     this.slider.hide();
-    this.link.html('<span class="smp-load">' + options.title + '</span>').show();
+    this.link.html('<div class="smpl-content smp-load">' + options.title + '</div>').show();
     this.el.attr('data-from', options.from);
     this.el.attr('data-date', options.date);
 },
