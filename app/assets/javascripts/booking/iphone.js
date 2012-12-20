@@ -72,8 +72,6 @@ prebook: function(query_key, hash, partner, marker) {
         dataType: 'json',
         url: '/booking/preliminary_booking?query_key=' + query_key + '&recommendation=' + hash + '&partner=' + partner + '&marker=' + marker + '&variant_id=1',
         success: function(result) {
-            that.failed();
-            return;
             if (result && result.success) {
                 that.load(result.number, result.changed_booking_classes);
             } else {

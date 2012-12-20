@@ -1,7 +1,8 @@
 # encoding: utf-8
 module Strategy::Amadeus::PreliminaryBooking
 
-  def check_price_and_availability
+  def check_price_and_availability(forbid_class_changing= Conf.amadeus.forbid_class_changing)
+    @forbid_class_changing = forbid_class_changing
     unless TimeChecker.ok_to_book(@rec.dept_date + 1.day)
       logger.error 'Strategy::Amadeus::Check: time criteria missed'
       return
@@ -38,7 +39,7 @@ module Strategy::Amadeus::PreliminaryBooking
   end
 
   def find_new_classes(amadeus)
-    return if Conf.amadeus.forbid_class_changing
+    return if @forbid_class_changing
     amadeus.pnr_ignore
     begin
       resp = amadeus.fare_informative_best_pricing_without_pnr(

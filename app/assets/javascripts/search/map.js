@@ -2,7 +2,6 @@
 search.map = {
 init: function() {
     this.el = $('#search-map');
-    this.control = this.el.find('.smap-control');
     this.content = this.el.find('.smap-content');
     this.content.css('top', -Math.round(this.margin / 2));
     this.wrapper = $('#search-wrapper');
@@ -10,13 +9,6 @@ init: function() {
         this.bindResize();
     }
     var that = this;
-    this.control.click(function() {
-        if (search.dates.el.hasClass('sd-hidden')) {
-            that.slideUp();
-        } else {
-            that.slideDown();
-        }
-    });
     this.prices.init(this.el.find('.smap-prices'));
     this.colors = ['#81aa00', '#db7100', '#0aa0c6', '#bf00db', '#db0048', '#9a5000'];
     this.items = [];
@@ -33,25 +25,17 @@ resize: function(instant) {
     dh += search.dates.el.height() + 2;
     dh += search.options.el.height();
     dh += results.header.height;
-    if (Queries.height) {
-        dh += Queries.height - 2;
-    }
-    var mh = $w.height() - dh;
-    if (mh < 63 != this.collapsed) {
-        this.collapsed = mh < 63;
-        this.control.toggleClass('smc-collapsed', this.collapsed);
-    }
-    this.content.height(Math.max(30, mh));
+    var mh = Math.max(36, $w.height() - dh);
+    this.content.height(mh);
     this.toggleZoom(mh);
     if (this.api && this.bounds) {
         this.fitBounds();
     }
 },
 toggleZoom: function(h) {
-    var zoomVisible = h > 80;
+    var zoomVisible = h > 105;
     if (this.api && zoomVisible !== this.zoomVisible) {
         this.api.setOptions({zoomControl: zoomVisible});
-        this.prices.el.toggleClass('smp-hidden', !zoomVisible);
         this.zoomVisible = zoomVisible;
     }
 },
@@ -66,12 +50,16 @@ load: function() {
             mapTypeId: google.maps.MapTypeId.TERRAIN,
             disableDefaultUI: true,
             zoomControlOptions: {
-                style: google.maps.ZoomControlStyle.SMALL
+                style: google.maps.ZoomControlStyle.SMALL,
+                position: google.maps.ControlPosition.LEFT_TOP
             },
             scrollwheel: false,
             minZoom: 2,
             maxZoom: 8
         });
+        var zoomOffset = document.createElement('div');
+        zoomOffset.style.height = '36px';
+        this.api.controls[google.maps.ControlPosition.TOP_LEFT].push(zoomOffset);
         this.bounds = this.defpoint;
         if (this.deferred) {
             this.showSegments(this.deferred);
@@ -87,14 +75,12 @@ slideDown: function() {
     var ch = this.content.height();
     var dh = wh - ch - search.dates.tlheight;
     this.wrapper.height(wh).css('overflow', 'hidden');
-    this.control.removeClass('smc-collapsed');
     this.content.animate({
-        height: ch + dh
+        height: Math.max(36, ch + dh)
     }, 300, function() {
         search.dates.toggleHidden(true);
         google.maps.event.trigger(that.api, 'resize');
         that.wrapper.height('').css('overflow', '');
-        that.control.html(lang.mapControl.collapse);
         that.toggleZoom(ch + dh);
         that.fitBounds();
     });
@@ -106,15 +92,15 @@ slideUp: function() {
     this.wrapper.height(wh).css('overflow', 'hidden');
     search.dates.toggleHidden(false);
     var ch = search.dates.el.height();
-    var dh = ch - search.dates.tlheight;
     this.toggleZoom(wh - ch);
     this.content.animate({
-        height: wh - ch
+        height: Math.max(36, wh - ch)
     }, 300, function() {
         google.maps.event.trigger(that.api, 'resize');
         that.wrapper.height('').css('overflow', '');
-        that.control.toggleClass('smc-collapsed', that.collapsed);
-        that.control.html(lang.mapControl.expand);
+        if (that.prices.el.find('.smp-collapse').length) {
+            that.prices.showExpand();
+        }
         that.fitBounds();
     });
     search.dates.el.find('.sdt-tab').fadeIn(150);
@@ -175,8 +161,8 @@ showSegments: function(segments) {
     this.cachedSegments = segments;
     this.pricesMode = false;
 },
-updatePrices: function(segments, stealth) {
-    if (segments[0] && segments[0].dpt && search.mode.selected !== 'mw') {
+updatePrices: function(segments) {
+    if (segments[0] && segments[0].dpt && !segments[0].arv && search.mode.selected !== 'mw') {
         var sd = search.dates;
         var dates = sd.monthes[sd.position].ptitle + '—' + sd.monthes[sd.position + 1].ptitle;
         this.prices.update({
@@ -184,15 +170,18 @@ updatePrices: function(segments, stealth) {
             from: segments[0].dpt.iata,
             date: sd.monthes[sd.position].el.find('.first').attr('data-dmy')
         });
-        if (!stealth) {
-            this.prices.show();
+        if (this.pricesMode && search.dates.el.hasClass('sd-hidden')) {
+            this.loadPrices();
         }
     } else {
-        this.prices.hide();
+        this.prices.slider.hide();
+        this.prices[search.dates.el.hasClass('sd-hidden') ? 'showCollapse' : 'showExpand']();
     }
 },
 loadPrices: function() {
     var that = this;
+    this.prices.slider.hide();
+    this.prices.showLoading();
     $.ajax({
         url: '/price_map',
         data: {
@@ -213,10 +202,7 @@ showPrices: function(items) {
     var that = this;
     this.clean();
     if (items.length === 0) {
-        this.prices.el.removeClass('smp-pressed');
-        this.prices.el.addClass('smp-failed');
-        this.pricesMode = true;
-        this.prices.clicked = false;
+        this.prices.link.html('<div class="smpl-content">Мы не смогли ничего найти</div>');
         return;
     }
     var template = '<p class="sml-city">{0}</p><p class="sml-price">{1}&nbsp;<span class="ruble">Р</span></p><p class="sml-dates">{2}</p>';
@@ -254,15 +240,13 @@ showPrices: function(items) {
         this.fitBounds();
     }
     if (items.length > 1 && pmin / pmax < 0.95) {
-        this.prices.show();
         this.prices.process(pmin, pmax);
     } else {
-        this.prices.hide();
+        this.prices.link.html('Авиабилеты из Москвы');
     }
-    if (this.prices.clicked && !search.dates.el.hasClass('sd-hidden')) {
+    if (this.prices.el.find('.smp-progress').length && !search.dates.el.hasClass('sd-hidden')) {
         this.slideDown();
     }
-    this.prices.clicked = false;
     this.pricesMode = true;
 },
 filterPrices: function(limit) {
@@ -331,14 +315,17 @@ init: function(context) {
     var that = this;
     this.el = context;
     this.link = this.el.find('.smp-link');
-    this.link.click(function() {
-        that.clicked = true;
-        that.el.removeClass('smp-failed');
-        that.el.addClass('smp-pressed');
+    this.link.on('click', '.smp-load', function() {
         search.map.loadPrices();
     });
-    this.empty = this.el.find('.smp-empty');
-    this.loading = this.el.find('.smp-loading');
+    this.link.on('click', '.smp-expand', function() {
+        that.showCollapse();
+        search.map.slideDown();
+    });
+    this.link.on('click', '.smp-collapse', function() {
+        search.map.slideUp();
+    });
+    this.showExpand();
     this.slider = this.el.find('.smp-slider');
     this.slider.find('.smps-base').on('click', function(event) {
         var offset = event.pageX - $(this).offset().left - 3;
@@ -356,17 +343,24 @@ init: function(context) {
         that.drop();
     };
     this.value = this.slider.find('.smps-value');
+    this.height = this.el.outerHeight();
+},
+showExpand: function() {
+    this.link.html('<div class="smpl-content smp-expand">Развернуть карту</div>').show();
+},
+showCollapse: function() {
+    this.link.html('<div class="smpl-content smp-collapse">Свернуть карту</div>').show();
+},
+showLoading: function() {
+    this.link.html('<div class="smpl-content"><span class="smp-progress">Ищем варианты</span></div>').show();
 },
 update: function(options) {
     this.slider.hide();
-    this.link.html(options.title).show();
-    this.el.removeClass('smp-failed');
+    this.link.html('<div class="smpl-content smp-load">' + options.title + '</div>').show();
     this.el.attr('data-from', options.from);
     this.el.attr('data-date', options.date);
 },
 process: function(min, max) {
-    this.el.removeClass('smp-failed');
-    this.el.removeClass('smp-pressed');
     this.link.hide();
     this.slider.show();
     this.values = {
@@ -374,6 +368,7 @@ process: function(min, max) {
         max: max,
         range: max - min
     };
+    this.slider.find('.smps-title').html(lang.priceMap.title.absorb(Math.floor(min).separate()));
     this.width = this.slider.find('.smps-base').width() - 7;
     this.scales = [100, 100, 500, 1000];
     this.offset = this.width;
@@ -421,11 +416,5 @@ drop: function() {
         this.apply(this.offset = this.dragging.offset, true);
         delete this.dragging;
     }
-},
-show: function() {
-    this.el.show();
-},
-hide: function() {
-    this.el.hide();
 }
 };

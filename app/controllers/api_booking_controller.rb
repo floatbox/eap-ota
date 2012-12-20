@@ -34,7 +34,7 @@ class ApiBookingController < ApplicationController
     StatCounters.d_inc @destination, %W[enter.api.total] if @destination
     StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if @destination && partner
 =end
-    unless strategy.check_price_and_availability
+    unless strategy.check_price_and_availability(false)
       respond_to do |format|
         format.json {render :json => {:success => false}}
         format.xml {render 'api/preliminary_booking'}
@@ -149,7 +149,7 @@ class ApiBookingController < ApplicationController
       StatCounters.inc %W[pay.3ds.requests]
       logger.info "Pay: payment system requested 3D-Secure authorization"
       #FIXME придумать нормальный ответ
-      render :json => {:success => false, :reason => '3ds', :payment => payment_response.threeds_params}
+      render :json => {:success => 'threeds', :threeds_params => payment_response.threeds_params, :threeds_url => payment_response.threeds_url}
     else # payment_response failed
       strategy.cancel
       StatCounters.inc %W[pay.errors.payment]

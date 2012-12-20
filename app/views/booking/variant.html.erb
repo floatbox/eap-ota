@@ -58,7 +58,7 @@
 <% if false && @destination.present? %>
 <div class="bd-column" id="booking-subscription">
     <div class="bd-border"></div>
-    <h5 class="bd-title">Подпишитесь на тариф</h5>
+    <h5 class="bd-title">Подпишитесь на направление</h5>
     <p>Если вы хотите быть в&nbsp;курсе появления выгодных тарифов по&nbsp;направлению <%= @destination.from.name %>&nbsp;— <%= @destination.to.name %>, введите ваш электронный адрес:</p>
     <form class="rs-form" action="/subscribe/" data-destination="<%= @destination.id %>" data-from-iata="<%= @destination.from.iata %>" data-to-iata="<%= @destination.to.iata %>" data-rt="<%= @destination.rt %>">
         <div><label class="rsf-label" for="rsf-email">Ваш адрес</label><input name="email" class="rsf-field" id="rsf-email" maxlength="50">&nbsp;<input class="rsf-submit" type="submit" value="Хочу"></div>

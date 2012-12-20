@@ -81,7 +81,7 @@ agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "FPRJCADSLVXTNIGWUYHMQBKOE"
 ticketing_method "downtown"
-discount "8.5%"
+discount "8%"
 commission "12%/10%"
 
 # example 'cdgsvo/r svocdg/f'
@@ -209,7 +209,7 @@ example 'svxbcn/zi:un/w'
 strt_date "21.10.2012"
 expr_date "31.03.2013"
 agent "С 11.11.2012г. 8% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
-subagent "3% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
+subagent "3% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
 subclasses "LVXTNIGWU"
 check { includes_only(operating_carrier_iatas, 'ZI') and includes_only(country_iatas.first, 'RU') and includes(city_iatas, 'RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON') }
 important!
@@ -2368,7 +2368,7 @@ no_commission
 carrier "VV", "AEROSVIT"
 ########################################
 
-carrier_defaults our_markup: 0
+carrier_defaults our_markup: 0, :disabled => "Going to bankrupt"
 
 example 'leddok'
 example 'ledcdg'
@@ -3095,7 +3095,7 @@ carrier "OG", "Air Onix Airlines"
 ########################################
 
 agent "5% от опубл. тарифов на рейсы OG"
-subagent "3% от опубл. тарифов на рейсы OG"
+subagent "3% от опубл. тарифов на рейсы OG"
 commission "5%/3%"
 
 carrier "EN", "Air Dolomiti"
