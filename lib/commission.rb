@@ -82,7 +82,7 @@ subagent "10% от тарифа на рейсы Перевозчика по вс
 subclasses "FPRJCADSLVXTNIGWUYHMQBKOE"
 ticketing_method "downtown"
 discount "8%"
-commission "12%/10%"
+no_commission "12%/10%"
 
 # example 'cdgsvo/r svocdg/f'
 agent "9% от тарифа на рейсы Перевозчика по всем тарифам классов: Империал, Премиальный и Бизнес класс. FPRJCADSM"
@@ -791,7 +791,7 @@ subclasses "SIQKLUT"
 check { includes_only(country_iatas.first, "RU") and includes(country_iatas, "US") }
 ticketing_method "downtown"
 discount "6%"
-commission "10%/8%"
+no_commission "10%/8%"
 
 example 'okocdg cdgoko/ab'
 example 'cdgoko'
@@ -1444,7 +1444,7 @@ interline :no, :yes
 our_markup "0"
 discount '6.5%'
 ticketing_method "downtown"
-commission "10%/8%"
+no_commission "10%/8%"
 
 example 'dmejfk'
 example 'dmejfk jfkdme/ua/L'
@@ -1456,7 +1456,7 @@ interline :no, :yes
 our_markup "0"
 discount '1.5%'
 ticketing_method "downtown"
-commission "5%/3%"
+no_commission "5%/3%"
 
 example 'dmebcn'
 example 'bcndme dmebcn/OS'
@@ -1525,7 +1525,7 @@ interline :no, :yes
 our_markup "0"
 discount '6%'
 ticketing_method "downtown"
-commission "10%/8%"
+no_commission "10%/8%"
 
 example 'dmejfk'
 example 'dmejfk jfkdme/os/L'
@@ -1537,7 +1537,7 @@ interline :no, :yes
 our_markup "0"
 discount '1%'
 ticketing_method "downtown"
-commission "5%/3%"
+no_commission "5%/3%"
 
 example 'dmebcn'
 example 'bcndme dmebcn/lh'
@@ -1828,7 +1828,7 @@ interline :no, :yes
 our_markup "0"
 discount '6.5%'
 ticketing_method "downtown"
-commission "10%/8%"
+no_commission "10%/8%"
 
 example 'dmejfk'
 example 'dmejfk jfkdme/lx/L'
@@ -1840,7 +1840,7 @@ interline :no, :yes
 our_markup "0"
 discount '1%'
 ticketing_method "downtown"
-commission "5%/3%"
+no_commission "5%/3%"
 
 example 'dmebcn'
 example 'bcndme dmebcn/lh'
@@ -2019,7 +2019,7 @@ interline :no, :yes
 our_markup "0"
 discount '8%'
 ticketing_method "downtown"
-commission "12%/10%"
+no_commission "12%/10%"
 
 example 'svojfk/Q'
 example 'svojfk/Q jfksvo/sk/Q'
@@ -2031,7 +2031,7 @@ interline :no, :yes
 our_markup "0"
 discount '4%'
 ticketing_method "downtown"
-commission "8%/6%"
+no_commission "8%/6%"
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -2059,7 +2059,7 @@ interline :no, :yes
 our_markup "0"
 discount '6%'
 ticketing_method "downtown"
-commission "10%/8%"
+no_commission "10%/8%"
 
 example 'dmejfk/y jfkdme/b'
 example 'dmejfk jfkdme/lh/b'
@@ -2074,7 +2074,7 @@ interline :no, :yes
 our_markup "0"
 discount '1%'
 ticketing_method "downtown"
-commission "5%/3%"
+no_commission "5%/3%"
 
 #example 'dmence'
 #agent    "через DTT - 5%"
@@ -2236,7 +2236,7 @@ interline :no, :yes
 our_markup "0"
 discount '6%'
 ticketing_method "downtown"
-commission "10%/8%"
+no_commission "10%/8%"
 
 example 'dmejfk'
 example 'dmejfk jfkdme/lh/L'
@@ -2248,7 +2248,7 @@ interline :no, :yes
 our_markup "0"
 discount '1%'
 ticketing_method "downtown"
-commission "5%/3%"
+no_commission "5%/3%"
 
 #example 'SVOIAD/UA965/H'
 #example 'SVOIAD/UA965/F'
