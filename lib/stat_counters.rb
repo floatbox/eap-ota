@@ -21,7 +21,7 @@ class StatCounters
   end
 
   def self.connection
-    Mongoid.master
+    Mongoid.default_session
   end
 
   def self.value keys
