@@ -88,24 +88,24 @@ no_commission "12%/10%"
 agent "9% от тарифа на рейсы Перевозчика по всем тарифам классов: Империал, Премиальный и Бизнес класс. FPRJCADSM"
 subagent "7 % от тарифа на рейсы Перевозчика по всем тарифам классов F, P, R, J, C, A, D, S, M"
 subclasses "FPRJCADSM"
-discount "5%"
-disabled "На DTT выгодней"
+discount "5.5%"
+#disabled "На DTT выгодней"
 commission "9%/7%"
 
 # example 'cdgsvo svocdg/y'
 agent "7% от тарифа на рейсы Перевозчика по всем тарифам Эконом классов;"
 subagent "5% от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, Q, B, K, O;"
 subclasses "YHQBKO"
-discount "3%"
-disabled "На DTT выгодней"
+discount "3.5%"
+#disabled "На DTT выгодней"
 commission "7%/5%"
 
 # example 'cdgsvo/i svocdg/x'
 agent "5% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
 subagent "1% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
 subclasses "LVXTNIGWU"
-discount "0%"
-disabled "На DTT выгодней"
+discount "0.5%"
+#disabled "На DTT выгодней"
 commission "5%/1%"
 
 # example 'svoiws/UN7061'
@@ -116,7 +116,7 @@ agent "9% до особых указаний от опубл. тарифов Э�
 subagent "1%" #CHECKME
 important!
 check { includes_only(city_iatas, "MOW SIN HOU") }
-disabled "На DTT выгодней"
+#disabled "На DTT выгодней"
 commission "9%/1%"
 
 example 'TLVDME/T DMEJFK/T JFKDME/T DMETLV/T'
@@ -134,7 +134,7 @@ agent "5% Interline с участком Трансаэро. Без участк�
 subagent "3% от тарифа на рейсы Interline c участком UN. Запрещена продажа на рейсы interline без
 участка UN"
 interline :yes
-discount "1%"
+discount "1.5%"
 commission "5%/3%"
 
 example 'svocdg/lh cdgmad/lh'
