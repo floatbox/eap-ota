@@ -22,7 +22,11 @@ module Pricing
 
     # сумма для списывания с карточки
     def price_with_payment_commission
-      price_total + price_payment
+      if price_fare && price_tax
+        price_total + price_payment
+      else
+        0
+      end
     end
 
     # комиссия платежного шлюза
