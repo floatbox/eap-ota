@@ -56,11 +56,15 @@ updateBook: function() {
             state.push(lang.price.profit.absorb(percents));
         }
     }
-    if (p !== pp) {
-        state.push('на <strong>{0}</strong> <span class="ruble">Р</span> {1}, чем на сайте авиакомпании'.absorb(Math.abs(pp - p), p > pp ? 'дороже' : 'дешевле'));
+    if (p < pp) {
+        state.push('на <strong>{0}</strong> <span class="ruble">Р</span> дешевле, чем на сайте авиакомпании'.absorb(pp - p));
     }
     this.btitle.html(results.priceTemplate.absorb(price));
-    this.state.html('<div class="obst-wrapper"><table class="obs-table"><tr><td>' + results.stateTemplate + '</td><td class="obs-profit">' +  state.join('<br>') + '</td></tr></table></div>');
+    if (state.length) {
+        this.state.html('<div class="obst-wrapper"><table class="obs-table"><tr><td>' + results.stateTemplate + '</td><td class="obs-profit">' +  state.join('<br>') + '</td></tr></table></div>');
+    } else {
+        this.state.html(results.stateTemplate.replace('<br>', ' '));
+    }
 },
 select: function(index, smooth) {
     this.summaries.all.removeClass('os-selected');
