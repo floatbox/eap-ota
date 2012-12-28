@@ -20,6 +20,10 @@ module Pricing
       price_fare + price_tax + price_markup
     end
 
+    def price_fare_and_tax
+      price_fare + price_tax
+    end
+
     # сумма для списывания с карточки
     def price_with_payment_commission
       if price_fare && price_tax
