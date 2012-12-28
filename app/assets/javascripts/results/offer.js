@@ -5,7 +5,7 @@ results.Offer = function(el) {
 results.Offer.prototype = {
 parseVariants: function(selector) {
     var that = this;
-    var price = $.parseJSON(this.el.attr('data-prices'))['RUR'];
+    var prices = $.parseJSON(this.el.attr('data-prices'));
     this.variants = [];
     this.el.find(selector).each(function(i) {
         var el = $(this);
@@ -21,7 +21,8 @@ parseVariants: function(selector) {
         }
         that.variants[i] = {
             offer: that,
-            price: price,
+            price: prices['RUR'],
+            price_pure: prices['RUR_pure'],
             id: el.text(),
             duration: Number(el.attr('data-duration')),
             segments: el.attr('data-segments').split(' '),
@@ -46,16 +47,20 @@ addBook: function() {
 updateBook: function() {
     var p = this.selected.price;
     var price = p.separate() + '&nbsp;' + p.declineArray(lang.currencies.RUR, false);
-    var state = results.stateTemplate;
     var ap = results.data.averagePrice;
+    var pp = this.selected.price_pure; 
+    var state = [];
     if (p < ap) {
         var percents = Math.round((ap - p) / ap * 100);
         if (percents) {
-            state += lang.price.profit.absorb(percents);
+            state.push(lang.price.profit.absorb(percents));
         }
     }
+    if (p !== pp) {
+        state.push('на <strong>{0}</strong> <span class="ruble">Р</span> {1}, чем на сайте авиакомпании'.absorb(Math.abs(pp - p), p > pp ? 'дороже' : 'дешевле'));
+    }
     this.btitle.html(results.priceTemplate.absorb(price));
-    this.state.html(state);
+    this.state.html('<div class="obst-wrapper"><table class="obs-table"><tr><td>' + results.stateTemplate + '</td><td class="obs-profit">' +  state.join('<br>') + '</td></tr></table></div>');
 },
 select: function(index, smooth) {
     this.summaries.all.removeClass('os-selected');

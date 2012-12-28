@@ -49,12 +49,28 @@
     cursor: pointer;
 }
 .ob-state {
-    margin-right: 200px;
+    margin-right: 190px;
     padding: 8px 0;
     font-size: 13px;
+    height: 20px;
+}
+.obst-wrapper {
+    float: left;
+    position: relative;
+    line-height: 15px;
+    width: 470px;
+}
+.obs-table {
+    position: absolute;
+    top: -5px;
+    left: 0;
+    height: 30px;
+}
+.obs-table td {
+    vertical-align: middle;
 }
 .obs-profit {
-    margin-left: 10px;
+    padding-left: 20px;
     color: #777;
 }
 .obs-profit strong {
