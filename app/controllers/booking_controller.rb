@@ -1,6 +1,6 @@
 # encoding: utf-8
 class BookingController < ApplicationController
-  include PayResult
+  include BookingEssentials
   protect_from_forgery :except => :confirm_3ds
   before_filter :log_referrer, :only => [:api_redirect, :api_booking, :rambler_booking]
   before_filter :log_user_agent

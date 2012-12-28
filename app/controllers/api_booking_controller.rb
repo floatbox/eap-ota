@@ -1,6 +1,6 @@
 # encoding: utf-8
 class ApiBookingController < ApplicationController
-  include PayResult
+  include BookingEssentials
 
   # before_filter :save_partner_cookies, :only => [:preliminary_booking, :api_redirect]
 
@@ -59,23 +59,10 @@ class ApiBookingController < ApplicationController
         format.xml {render 'api/preliminary_booking'}
       end
 
-      #StatCounters.inc %W[enter.preliminary_booking.success]
-      #StatCounters.inc %W[enter.preliminary_booking.#{partner}.success] if partner
+      StatCounters.inc %W[enter.preliminary_booking.success]
+      StatCounters.inc %W[enter.preliminary_booking.#{partner}.success] if partner
     end
   end
-
-=begin
-  def recalculate_price
-    @order_form = OrderForm.load_from_cache(params[:order][:number])
-    @order_form.people_attributes = params[:person_attributes]
-    @order_form.valid?
-    if @order_form.update_price_and_counts
-      render :json => {success: true, info: @order_form.info_hash}
-    else
-      render :json => {success: false}
-    end
-  end
-=end
 
   def pay
 
@@ -96,69 +83,5 @@ class ApiBookingController < ApplicationController
 
   end
 
-=begin
-  # Payture: params['PaRes'], params['MD']
-  # Payu: params['REFNO'], params['STATUS'] etc.
-  # FIXME отработать отмену проведенного Payu платежа, если бронь уже снята
-  # FIXME избежать возможности пересмотреть все заказы, возможно этим согрешит
-  # неподписанный респонс Payu
-  def confirm_3ds
-    @payment = Payment.find_3ds_by_backref!(params)
-
-    @order = @payment.order
-    if @order.ticket_status == 'canceled'
-      logger.info "Pay: booking canceled"
-      @error_message = :ticketing
-      return
-    end
-
-    case @order.payment_status
-    when 'not blocked', 'new'
-      unless @order.confirm_3ds!(params)
-        StatCounters.inc %W[pay.errors.payment pay.errors.3ds pay.errors.3ds_payment]
-        logger.info "Pay: problem confirming 3ds"
-        @error_message = :payment
-      else
-        strategy = Strategy.select(:order => @order)
-
-        unless strategy.delayed_ticketing?
-          logger.info "Pay: ticketing"
-
-          unless strategy.ticket
-            StatCounters.inc %W[pay.errors.ticketing pay.errors.3ds]
-            logger.info "Pay: ticketing failed"
-            @error_message = :ticketing
-            @order.unblock!
-          end
-        end
-      end
-    when 'blocked', 'charged'
-      # do nothing?
-    else
-      logger.info "Pay: money unblocked?"
-      @error_message = :ticketing
-    end
-  ensure
-    StatCounters.inc %W[pay.total pay.3ds.confirmations]
-  end
-
-  def get_destination
-    return if !@search.segments
-    segment = @search.segments[0]
-    return if ([segment.to_as_object.class, segment.from_as_object.class] - [City, Airport]).present? || @search.complex_route?
-    to = segment.to_as_object.class == Airport ? segment.to_as_object.city : segment.to_as_object
-    from = segment.from_as_object.class == Airport ? segment.from_as_object.city : segment.from_as_object
-    Destination.find_or_create_by(:from_iata => from.iata, :to_iata => to.iata , :rt => @search.rt)
-  end
-
-  def log_referrer
-    if request.referrer && (URI(request.referrer).host != request.host)
-      logger.info "Referrer: #{URI(request.referrer).host}"
-    end
-  # приходят черти откуда.
-  rescue # URI::InvalidURIError
-    logger.info "Referrer not parsed: #{request.referrer}"
-  end
-=end
 end
 

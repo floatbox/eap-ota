@@ -1,4 +1,4 @@
-module PayResult
+module BookingEssentials
 
   def pay_result
     if Conf.site.forbidden_sale
