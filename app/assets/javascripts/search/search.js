@@ -33,16 +33,16 @@ getValues: function() {
         var segment = this.locations.segments[i];
         var dpt = segment.dpt.selected;
         var arv = segment.arv.selected;
-        var title = mode === 'mw' ? lw.mwsegments[i] : '';
+        var title = mode === 'mw' ? I18n.t('search.messages.segments.mw', {number: I18n.t('search.messages.segments.numbers').split(' ')[i]}) : '';
         var s = {
             from: dpt ? dpt.name : '',
             to: arv ? arv.name : ''
         };
         if (!s.from) {
-            warnings.push(lw.dpt.absorb(title));
+            warnings.push(I18n.t('search.messages.dpt', {segment: title}));
         }
         if (!s.to) {
-            warnings.push(lw.arv.absorb(title));
+            warnings.push(I18n.t('search.messages.arv', {segment: title}));
         }
         segments[i] = s;
     }
@@ -51,8 +51,15 @@ getValues: function() {
     }
     for (var i = 0; i < segments.length; i++) {
         var sdate = this.dates.selected[i];
-        var title = lw[mode === 'mw' ? 'mwsegments' : 'rtsegments'][i];
-        if (sdate === undefined) warnings.push(lw.date.absorb(title));
+        if (sdate === undefined) {
+            var title;
+            if (mode === 'mw') {
+                title = I18n.t('search.messages.segments.mw', {number: I18n.t('search.messages.segments.numbers').split(' ')[i]});
+            } else {
+                title = I18n.t(i === 0 ? 'search.messages.segments.dpt' : 'search.messages.segments.rt');
+            }
+            warnings.push(I18n.t('search.messages.date', {segment: title}));
+        }
         segments[i].date = this.dates.getDate(sdate);
     }
     if (this.mode.values.is(':visible')) {

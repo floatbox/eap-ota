@@ -4,96 +4,96 @@
 <div id="search-locations">
 <div class="sl-content">
     <div id="search-mode">
-        <div class="sm-control">Туда и обратно</div>
+        <div class="sm-control"><%= t('search.locations.rt') %></div>
         <ul class="sm-values">
-            <li data-mode="rt">Туда и обратно</li>
-            <li data-mode="ow">Только туда</li>
-            <li data-mode="mw">Сложный маршрут</li>    
+            <li data-mode="rt"><%= t('search.locations.rt') %></li>
+            <li data-mode="ow"><%= t('search.locations.ow') %></li>
+            <li data-mode="mw"><%= t('search.locations.mw') %></li>    
         </ul>
     </div>
     <div class="sl-segment sl-segment1" data-segment="1">
         <div class="sl-field dpt">
-            <label for="sl-segment1-dpt">Откуда?</label>
+            <label for="sl-segment1-dpt"><%= t('search.locations.from') %></label>
             <input type="text" id="sl-segment1-dpt">
         </div>
         <div class="sl-icon sl-return"></div>
         <div class="sl-field arv">
-            <label for="sl-segment1-arv">Куда?</label>
+            <label for="sl-segment1-arv"><%= t('search.locations.to') %></label>
             <input type="text" id="sl-segment1-arv">
         </div>
     </div>
     <div class="sl-segment sl-segment2 latent" data-segment="2">
         <div class="sl-field dpt">
-            <label for="s2-segment1-dpt">Откуда?</label>
+            <label for="s2-segment1-dpt"><%= t('search.locations.from') %></label>
             <input type="text" id="s2-segment1-dpt">
         </div>
         <div class="sl-icon"></div>
         <div class="sl-field arv">
-            <label for="sl-segment2-arv">Куда?</label>
+            <label for="sl-segment2-arv"><%= t('search.locations.to') %></label>
             <input type="text" id="sl-segment2-arv">
         </div>
         <div class="sl-toggle">
-            <span class="sl-add">Добавить перелёт</span>
-            <span class="sl-remove latent">Убрать перелёт</span>
+            <span class="sl-add"><%= t('search.locations.add') %></span>
+            <span class="sl-remove latent"><%= t('search.locations.remove') %></span>
         </div>
     </div>
     <div class="sl-segment sl-segment3 latent" data-segment="3">
         <div class="sl-field dpt">
-            <label for="sl-segment3-dpt">Откуда?</label>
+            <label for="sl-segment3-dpt"><%= t('search.locations.from') %></label>
             <input type="text" id="sl-segment3-dpt">
         </div>
         <div class="sl-icon"></div>
         <div class="sl-field arv">
-            <label for="sl-segment3-arv">Куда?</label>
+            <label for="sl-segment3-arv"><%= t('search.locations.to') %></label>
             <input type="text" id="sl-segment3-arv">
         </div>
         <div class="sl-toggle">
-            <span class="sl-add">Добавить перелёт</span>
-            <span class="sl-remove latent">Убрать перелёт</span>
+            <span class="sl-add"><%= t('search.locations.add') %></span>
+            <span class="sl-remove latent"><%= t('search.locations.remove') %></span>
         </div>
     </div>
     <div class="sl-segment sl-segment4 latent" data-segment="4">
         <div class="sl-field dpt">
-            <label for="sl-segment4-dpt">Откуда?</label>
+            <label for="sl-segment4-dpt"><%= t('search.locations.from') %></label>
             <input type="text" id="sl-segment4-dpt">
         </div>
         <div class="sl-icon"></div>
         <div class="sl-field arv">
-            <label for="sl-segment4-arv">Куда?</label>
+            <label for="sl-segment4-arv"><%= t('search.locations.to') %></label>
             <input type="text" id="sl-segment4-arv">
         </div>
         <div class="sl-toggle">
-            <span class="sl-add">Добавить перелёт</span>
-            <span class="sl-remove latent">Убрать перелёт</span>
+            <span class="sl-add"><%= t('search.locations.add') %></span>
+            <span class="sl-remove latent"><%= t('search.locations.remove') %></span>
         </div>
     </div>
     <div class="sl-segment sl-segment5 latent" data-segment="5">
         <div class="sl-field dpt">
-            <label for="sl-segment5-dpt">Откуда?</label>
+            <label for="sl-segment5-dpt"><%= t('search.locations.from') %></label>
             <input type="text" id="sl-segment5-dpt">
         </div>
         <div class="sl-icon"></div>
         <div class="sl-field arv">
-            <label for="sl-segment5-arv">Куда?</label>
+            <label for="sl-segment5-arv"><%= t('search.locations.to') %></label>
             <input type="text" id="sl-segment5-arv">
         </div>
         <div class="sl-toggle">
-            <span class="sl-add">Добавить перелёт</span>        
-            <span class="sl-remove latent">Убрать перелёт</span>
+            <span class="sl-add"><%= t('search.locations.add') %></span>
+            <span class="sl-remove latent"><%= t('search.locations.remove') %></span>
         </div>
     </div>
     <div class="sl-segment sl-segment6 latent" data-segment="6">
         <div class="sl-field dpt">
-            <label for="sl-segment6-dpt">Откуда?</label>
+            <label for="sl-segment6-dpt"><%= t('search.locations.from') %></label>
             <input type="text" id="sl-segment6-dpt">
         </div>
         <div class="sl-icon"></div>
         <div class="sl-field arv">
-            <label for="sl-segment6-arv">Куда?</label>
+            <label for="sl-segment6-arv"><%= t('search.locations.to') %></label>
             <input type="text" id="sl-segment6-arv">
         </div>
         <div class="sl-toggle">
-            <span class="sl-remove latent">Убрать перелёт</span>
+            <span class="sl-remove latent"><%= t('search.locations.remove') %></span>
         </div>
     </div>
 </div>
@@ -104,11 +104,6 @@
 	<!-- Map -->
 	<div id="search-map">
 	    <div class="smap-prices">
-	    
-    	    <!--
-    	    <div class="smp-loading"><span class="smp-progress">Ищем варианты</span></div>
-    	    <div class="smp-empty">Мы не смогли ничего найти</div>
-    	    -->
     	    <div class="smp-link"><br></div>
             <div class="smp-slider">
                 <div class="smps-base">
@@ -140,13 +135,14 @@
 	    <div class="sdc-slider">
 	        <div class="sdc-month">
 	        <ul class="sdc-week">
-	            <li class="sdcw-day"><span class="sdcw-title">ПН</li>
-	            <li class="sdcw-day"><span class="sdcw-title">ВТ</li>
-	            <li class="sdcw-day"><span class="sdcw-title">СР</li>
-	            <li class="sdcw-day"><span class="sdcw-title">ЧТ</li>
-	            <li class="sdcw-day"><span class="sdcw-title">ПТ</li>
-	            <li class="sdcw-day"><span class="sdcw-title dayoff">СБ</li>
-	            <li class="sdcw-day"><span class="sdcw-title dayoff">ВС</li>
+    	        <% week = t('search.dates.week').split(' ') %>
+	            <li class="sdcw-day"><span class="sdcw-title"><%= week[0] %></li>
+	            <li class="sdcw-day"><span class="sdcw-title"><%= week[1] %></li>
+	            <li class="sdcw-day"><span class="sdcw-title"><%= week[2] %></li>
+	            <li class="sdcw-day"><span class="sdcw-title"><%= week[3] %></li>
+	            <li class="sdcw-day"><span class="sdcw-title"><%= week[4] %></li>
+	            <li class="sdcw-day"><span class="sdcw-title dayoff"><%= week[5] %></li>
+	            <li class="sdcw-day"><span class="sdcw-title dayoff"><%= week[6] %></li>
 	        </ul>
 	        </div>
 	        <div class="sdc-reset"></div>
@@ -165,7 +161,7 @@
 <div id="search-options">
 <div class="so-content wrap">
     <div class="so-persons" data-name="adults">
-        <h6 class="so-title">Взрослых <em>от 12 лет</em></h6>
+        <h6 class="so-title"><%= t('search.options.adults.title') %> <em><%= t('search.options.asults.hint') %></em></h6>
         <ul class="so-values">
             <li>1</li>
             <li>2</li>
@@ -178,7 +174,7 @@
         </ul>
     </div>
     <div class="so-persons" data-name="children">
-        <h6 class="so-title">Детей <em>до 12 лет, с местом</em></h6>
+        <h6 class="so-title"><%= t('search.options.children.title') %> <em><%= t('search.options.children.hint') %></em></h6>
         <ul class="so-values">
             <li>0</li>
             <li>1</li>
@@ -190,7 +186,7 @@
         </ul>
     </div>
     <div class="so-persons" data-name="infants">
-        <h6 class="so-title">Младенцев <em>до 2 лет, без места</em></h6>
+        <h6 class="so-title"><%= t('search.options.infants.title') %> <em><%= t('search.options.infants.hint') %></em></h6>
         <ul class="so-values">
             <li>0</li>
             <li>1</li>
@@ -200,11 +196,11 @@
         </ul>
     </div>    
     <div class="so-cabin">
-        <h6 class="so-title">Класс обслуживания</h6>
+        <h6 class="so-title"><%= t('search.options.cabin.title') %></h6>
         <ul class="so-values">
-            <li data-value="Y">эконом</li>
-            <li data-value="C">бизнес</li>
-            <li data-value="F">первый</li>
+            <li data-value="Y"><%= t('search.options.cabin.Y') %></li>
+            <li data-value="C"><%= t('search.options.cabin.C') %></li>
+            <li data-value="F"><%= t('search.options.cabin.F') %></li>
         </ul>
     </div>
 </div>

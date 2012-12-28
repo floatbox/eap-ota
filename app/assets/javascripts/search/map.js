@@ -166,7 +166,7 @@ updatePrices: function(segments) {
         var sd = search.dates;
         var dates = sd.monthes[sd.position].ptitle + '—' + sd.monthes[sd.position + 1].ptitle;
         this.prices.update({
-            title: lang.priceMap.link.absorb(segments[0].dpt.from.nowrap(), dates),
+            title: I18n.t('search.map.link', {from: segments[0].dpt.from.nowrap(), dates: dates}),
             from: segments[0].dpt.iata,
             date: sd.monthes[sd.position].el.find('.first').attr('data-dmy')
         });
@@ -202,7 +202,7 @@ showPrices: function(items) {
     var that = this;
     this.clean();
     if (items.length === 0) {
-        this.prices.link.html('<div class="smpl-content">Мы не смогли ничего найти</div>');
+        this.prices.link.html('<div class="smpl-content">' + I18n.t('search.map.empty') + '</div>');
         return;
     }
     var template = '<p class="sml-city">{0}</p><p class="sml-price">{1}&nbsp;<span class="ruble">Р</span></p><p class="sml-dates">{2}</p>';
@@ -346,13 +346,13 @@ init: function(context) {
     this.height = this.el.outerHeight();
 },
 showExpand: function() {
-    this.link.html('<div class="smpl-content smp-expand">Развернуть карту</div>').show();
+    this.link.html('<div class="smpl-content smp-expand">' + I18n.t('search.map.expand') + '</div>').show();
 },
 showCollapse: function() {
-    this.link.html('<div class="smpl-content smp-collapse">Свернуть карту</div>').show();
+    this.link.html('<div class="smpl-content smp-collapse">' + I18n.t('search.map.collapse') + '</div>').show();
 },
 showLoading: function() {
-    this.link.html('<div class="smpl-content"><span class="smp-progress">Ищем варианты</span></div>').show();
+    this.link.html('<div class="smpl-content"><span class="smp-progress">' + I18n.t('search.map.loading') + '</span></div>').show();
 },
 update: function(options) {
     this.slider.hide();

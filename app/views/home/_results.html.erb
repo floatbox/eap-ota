@@ -5,11 +5,11 @@
         <td class="rh-left"><h3 class="rh-summary"></h3></td>
         <td class="rh-right">
             <div id="results-button">
-                <div class="rb-side rb-disabled"><div class="rb-side">Найти&nbsp;билеты</div></div>
-                <div class="rb-side rb-enabled"><div class="rb-side"><div class="rb-active">Найти&nbsp;билеты</div></div></div>
+                <div class="rb-side rb-disabled"><div class="rb-side"><%= raw t('results.header.find') %></div></div>
+                <div class="rb-side rb-enabled"><div class="rb-side"><div class="rb-active"><%= raw t('results.header.find') %></div></div></div>
             </div>
-            <div class="rh-edit"><span class="rhe-link">Новый&nbsp;поиск</span></div>
-            <div class="rh-select"><span class="rhs-link">Все&nbsp;варианты перелета</span></div>            
+            <div class="rh-edit"><span class="rhe-link"><%= raw t('results.header.new') %></span></div>
+            <div class="rh-select"><span class="rhs-link"><%= raw t('results.header.all') %></span></div>            
         </td>
     </tr>
     </table>
@@ -39,13 +39,12 @@
 <div class="rm-half"></div>
 <div class="rm-content">
     <div id="rm-loading">
-        <h3 class="rm-title"><span class="rmt-text">Ищем для вас лучшие предложения</span></h3>
-        <h6 class="rml-progress">Это займет от пяти до тридцати секунд</h6>
+        <h3 class="rm-title"><span class="rmt-text"><%= t('results.loading.title') %></span></h3>
+        <h6 class="rml-progress"><%= t('results.loading.time') %></h6>
         <ul class="rml-features">
-            <li>Поиск осуществляется по предложениям около 500 авиакомпаний</li>
-            <li style="display: none;">Средняя цена на этом направлении — 14800 рублей за билет на одного человека.</li>
-            <li>Цены будут показаны в рублях</li>
-            <li>Можно будет сразу оплатить банковской картой Visa или MasterCard</li>
+            <li><%= t('results.loading.carriers') %></li>
+            <li><%= t('results.loading.currency') %></li>
+            <li><%= t('results.loading.payment') %></li>
         </ul>
         <div class="rml-advice">
             <p><strong class="rmla-prefix">Совет:</strong> чем раньше от&nbsp;момента вылета вы&nbsp;покупаете авиабилеты, тем&nbsp;они, как&nbsp;правило, дешевле.</p>
@@ -53,12 +52,12 @@
         <p class="appstore" style="margin-top: 15px;"><a target="_blank" href="https://itunes.apple.com/ru/app/eviterra/id569307779?mt=8&uo=4"><img alt "Available in App Store" src="images/common/appstore-available.png" /></a></p>
     </div>
     <div id="rm-empty">
-        <h3 class="rm-title">Мы не смогли ничего найти :-(</h3>
-        <h6 class="rme-title">Возможные причины:</h6>
+        <h3 class="rm-title"><%= t('results.empty.title') %></h3>
+        <h6 class="rme-title"><%= t('results.empty.reasons') %></h6>
         <ul class="rme-reasons">
-            <li>Нет перелетов именно в выбранные дни. Попробуйте указать другие даты</li>
-            <li>У нас не представлены авиакомпании, выполняющие рейсы на этом направлении. Мы постоянно подключаем новые, попробуйте проверить искомое направление позже</li>
-            <li>На этом маршруте не существует регулярного авиасообщения. Попробуйте выбрать другой город</li>
+            <li><%= t('results.empty.dates') %></li>
+            <li><%= t('results.empty.carriers') %></li>
+            <li><%= t('results.empty.city') %></li>
         </ul>
     </div>
 </div>
@@ -69,21 +68,21 @@
     <div id="results-tabs">
     <div id="rf-placeholder"></div>
     <ul class="rt-content wrap">
-        <li class="rt-item" data-tab="cheap">Дешевые</li>
-        <li class="rt-item" data-tab="optimal">Оптимальные</li>
-        <li class="rt-item" data-tab="nonstop">Прямые</li>
-        <li class="rt-item" data-tab="all">Все</li>
-        <li class="rt-item rt-matrix" data-tab="matrix">± 3 дня</li>
+        <li class="rt-item" data-tab="cheap"></li>
+        <li class="rt-item" data-tab="optimal"></li>
+        <li class="rt-item" data-tab="nonstop"></li>
+        <li class="rt-item" data-tab="all"></li>
+        <li class="rt-item rt-matrix" data-tab="matrix"></li>
     </ul>
     </div>
 
     <div class="o-book" id="ob-template">
         <div class="ob-button">
-            <div class="obb-title">Купить</div>
+            <div class="obb-title"></div>
             <div class="obb-side obb-left"><div class="obb-side obb-right"></div></div>
         </div>
-        <div class="od-control od-show">Показать подробности</div>
-        <div class="od-control od-hide">Скрыть подробности</div>
+        <div class="od-control od-show"><%= t('results.details.show') %></div>
+        <div class="od-control od-hide"><%= t('results.details.hide') %></div>
         <div class="ob-state"></div>
         <div class="ob-line"></div>
     </div>
@@ -91,9 +90,9 @@
     <div id="ost-template">
     <ul class="os-title wrap">
         <li class="ost-item ost-name"><span class="ostn-text">{0}</span></li>
-        <li class="ost-item ost-dpt">Вылет</li>
-        <li class="ost-item ost-duration">В пути</li>
-        <li class="ost-item ost-arv">Прибытие</li>
+        <li class="ost-item ost-dpt"><%= t('results.columns.dpt') %></li>
+        <li class="ost-item ost-duration"><%= t('results.columns.duration') %></li>
+        <li class="ost-item ost-arv"><%= t('results.columns.arv') %></li>
     </ul>
     </div>
     
