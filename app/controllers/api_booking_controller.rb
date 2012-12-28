@@ -1,5 +1,6 @@
 # encoding: utf-8
 class ApiBookingController < ApplicationController
+  include PayResult
 
   # before_filter :save_partner_cookies, :only => [:preliminary_booking, :api_redirect]
 
@@ -77,88 +78,22 @@ class ApiBookingController < ApplicationController
 =end
 
   def pay
-    if Conf.site.forbidden_sale
-      #StatCounters.inc %W[pay.errors.forbidden]
+
+    case pay_result
+    when :forbidden_sale, :failed_booking
       render :json => {success: false, reason: 'unable_to_sell'}
-      return
-    end
-
-    @order_form = OrderForm.load_from_cache(params[:order][:number])
-    @order_form.people_attributes = params[:person_attributes]
-    @order_form.update_attributes(params[:order])
-    @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
-
-    if @order_form.counts_contradiction
-      if @order_form.update_price_and_counts
-        render :json => {success: false, reason: 'price_changed', info: order_form.info_hash}
-      else
-        render :json => {success: false, reason: 'unable_to_sell'}
-      end
-      return
-    end
-
-    if !@order_form.valid?
-      StatCounters.inc %W[pay.errors.form]
-      logger.info "Pay: invalid order: #{@order_form.errors_hash.inspect}"
-      render :json => {success: false, reason: 'invalid_data', errors: @order_form.errors_hash}
-      return
-    end
-
-    strategy = Strategy.select( :rec => @order_form.recommendation, :order_form => @order_form )
-    booking_status = strategy.create_booking
-
-    if booking_status == :failed
-      StatCounters.inc %W[pay.errors.booking]
-      render :json => {success: false, reason: 'unable_to_sell'}
-      return
-    elsif booking_status == :price_changed
+    when :new_price
       render :json => {success: false, reason: 'price_changed', info: @order_form.info_hash}
-      return
-    end
-
-    unless @order_form.payment_type == 'card'
-      StatCounters.inc %W[pay.success.total pay.success.cash]
-      logger.info "Pay: booking successful, payment: cash"
+    when :invalid_data
+      render :json => {success: false, reason: 'invalid_data', errors: @order_form.errors_hash}
+    when :ok
       render :json => {success: true, pnr_number: @order_form.pnr_number}
-      return
-    end
-
-    custom_fields = PaymentCustomFields.new(
-      ip: request.remote_ip,
-      order: @order_form.order,
-      order_form: @order_form
-    )
-    payment_response = @order_form.order.block_money(@order_form.card, custom_fields)
-
-    if payment_response.success?
-      logger.info "Pay: payment and booking successful"
-
-      unless strategy.delayed_ticketing?
-        logger.info "Pay: ticketing"
-        unless strategy.ticket
-          StatCounters.inc %W[pay.errors.ticketing]
-          logger.info "Pay: ticketing failed"
-          @order_form.order.unblock!
-          render :json => {success: false, reason: 'unable_to_sell'}
-          return
-        end
-      end
-      StatCounters.inc %W[pay.success.total pay.success.card]
-      render :json => {success: true, pnr_number: @order_form.pnr_number}
-    elsif payment_response.threeds?
-      StatCounters.inc %W[pay.3ds.requests]
-      logger.info "Pay: payment system requested 3D-Secure authorization"
-      #FIXME придумать нормальный ответ
-      render :json => {:success => 'threeds', :threeds_params => payment_response.threeds_params, :threeds_url => payment_response.threeds_url}
-    else # payment_response failed
-      strategy.cancel
-      StatCounters.inc %W[pay.errors.payment]
-      # FIXME ну и почему не сработало?
-      logger.info "Pay: payment failed"
+    when :threeds
+      render :json => {:success => 'threeds', :threeds_params => @payment_response.threeds_params, :threeds_url => @payment_response.threeds_url}
+    when :failed_payment
       render :json => {success: false, reason: 'payment_error'}
     end
-  ensure
-    StatCounters.inc %W[pay.total]
+
   end
 
 =begin
