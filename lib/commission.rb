@@ -531,7 +531,7 @@ expr_date "15.12.2012"
 agent "С 15.08.12г.по15.12.12г. 7% по опубл. тарифам по классам J, C, D, I  на рейсы AВ;"
 subagent "С 15.08.12г.по15.12.12г. 5% по опубл. тарифам по классам J, C, D, I на рейсы AВ;"
 subclasses "JCDI"
-ticketing_method "direct"
+# ticketing_method "direct"
 commission "7%/5%"
 
 example 'cdgsvo/y svocdg/h'
@@ -541,7 +541,7 @@ expr_date "15.12.2012"
 agent "С 15.08.12г.по15.12.12г. 5% по опубл. тарифам по классам Y, B, H, K на рейсы AВ;"
 subagent "С 15.08.12г.по15.12.12г. 3% по опубл. тарифам по классам Y, B, H, K на рейсы AВ;"
 subclasses "JCDIYBHK"
-ticketing_method "direct"
+# ticketing_method "direct"
 commission "5%/3%"
 
 example 'cdgsvo/v svocdg/j'
@@ -550,7 +550,7 @@ expr_date "15.12.2012"
 agent "С 15.08.12г.по15.12.12г. 3% по опубл. тарифам по классам M, L, V на рейсы AВ."
 subagent "С 15.08.12г.по15.12.12г. 2% по опубл. тарифам по классам M, L, V на рейсы AВ."
 subclasses "JCDIYBHKMLV"
-ticketing_method "direct"
+# ticketing_method "direct"
 commission "3%/2%"
 
 example 'cdgsvo svocdg'
@@ -558,7 +558,7 @@ example 'cdgsvo/HG svocdg/HG'
 strt_date "16.12.2012"
 agent "С 16.12.12г. 1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
 subagent "С 16.12.12г. 5 коп с билета по опубл. тарифам на рейсы AB"
-ticketing_method "direct"
+# ticketing_method "direct"
 commission "1/0.05"
 
 example 'cdgsvo svocdg/lh'
@@ -566,7 +566,7 @@ agent    "1 руб с билета по опубл. тарифам на рейс
 subagent "5 коп с билета по опубл. тарифам на рейсы AB"
 interline :no, :unconfirmed
 our_markup "1%"
-ticketing_method "direct"
+# ticketing_method "direct"
 commission "1/0.05"
 
 example 'svocdg/s7'
@@ -1136,7 +1136,7 @@ commission "1%/0.5%"
 carrier "HR", "HAHN AIR  (Авиарепс)"
 ########################################
 
-carrier_defaults :ticketing_method => "direct"
+# carrier_defaults :ticketing_method => "direct"
 
 # включено с дополнительной проверкой
 agent    "1 руб. от тарифов, опубликованных в системе бронирования, для авиакомпании Hahn Air и интерлайн-партнеров Hahn Air, указанных на сайте www.HR-ticketing.com;"
@@ -3090,7 +3090,7 @@ subagent ""
 ##disabled "до времени"
 discount "1.9%"
 interline :no, :yes
-commission "3%/0%"
+no_commission "3%/0%"
 
 carrier "GA", "GARUDA INDONESIA"
 ########################################
