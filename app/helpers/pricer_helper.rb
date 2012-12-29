@@ -65,7 +65,8 @@ module PricerHelper
 
   def recommendation_prices r
     prices = {
-      :RUR => r.price_with_payment_commission.round.to_i
+      :RUR => r.price_with_payment_commission.round.to_i,
+      :RUR_pure => r.price_fare_and_tax.round.to_i
     }
     prices.to_json
   end
