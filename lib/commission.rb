@@ -3084,7 +3084,6 @@ example 'svocdg cdgsvo'
 agent "0% DTT"
 subagent "0% DTT, 10$ с билета"
 our_markup 320
-disabled "dtt lockout 24-31 dec"
 commission "0%/0%"
 
 carrier "S7", "S7 AIRLINES"
