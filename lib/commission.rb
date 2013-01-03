@@ -81,7 +81,7 @@ agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
 subclasses "FPRJCADSLVXTNIGWUYHMQBKOE"
 ticketing_method "downtown"
-disabled "срочно вырубаем DTT"
+# disabled "срочно вырубаем DTT"
 discount "8%"
 commission "12%/10%"
 
