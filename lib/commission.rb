@@ -82,7 +82,7 @@ subagent "10% от тарифа на рейсы Перевозчика по вс
 subclasses "FPRJCADSLVXTNIGWUYHMQBKOE"
 ticketing_method "downtown"
 # disabled "срочно вырубаем DTT"
-discount "8%"
+discount "8.8%"
 commission "12%/10%"
 
 # базовое вознаграждение ац
@@ -90,7 +90,7 @@ commission "12%/10%"
 agent "12% от тарифа на рейсы Перевозчика по всем тарифам классов: Империал, Премиальный и Бизнес класс. FPRJCADSM"
 subagent "9% от тарифа на рейсы Перевозчика по всем тарифам классов F, P, R, J, C, A, D, S, M"
 subclasses "FPRJCADSM"
-discount "8.5%"
+discount "8.8%"
 disabled "На DTT выгодней"
 commission "12%/9%"
 
@@ -1557,7 +1557,7 @@ commission "1/0.05"
 carrier "LH", "LUFTHANSA"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '1%'
+carrier_defaults :consolidator => 0, :our_markup => '0.5%'
 
 example 'dmejfk/Q'
 example 'dmejfk/Q jfkdme/ua/Q'
@@ -1567,7 +1567,7 @@ check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US')
 subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
-discount '6.5%'
+discount '6.9%'
 ticketing_method "downtown"
 commission "10%/8%"
 
@@ -2027,7 +2027,7 @@ example 'cdgsvo svocdg/ab'
 agent    "5% от всех опубл. тарифов на рейсы PG (В договоре Interline не прописан.)"
 subagent "3,5% от опубликованных тарифов на рейсы PG"
 interline :no, :unconfirmed
-discount "1.5%"
+discount "2.5%"
 commission "5%/3.5%"
 
 carrier "PS", "Ukraine International Airlines (ГЛОНАСС)"
@@ -2435,7 +2435,7 @@ expr_date "31.08.2012"
 agent    "По 31.08.12г. 5% от опубл. тарифов на междунар.рейсах VN;"
 subagent "По 31.08.12г. 2% от опубл. тарифов на междунар.рейсах VN;"
 international
-discount "0.8%"
+discount "1%"
 commission "5%/2%"
 
 #example 'svohan hansvo'
@@ -2613,7 +2613,7 @@ example 'cdgsvo svocdg/ab'
 agent    "8% от всех опубл. тарифов на рейсы YM (В договоре Interline не прописан.)"
 subagent "6% от всех опубл. тарифов на рейсы YM"
 interline :no, :unconfirmed
-discount "4.2%"
+discount "5.2%"
 commission "8%/6%"
 
 carrier "YO", "Heli air Monaco (РИНГ АВИА)"
