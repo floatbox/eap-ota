@@ -2359,7 +2359,7 @@ check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US')
 subclasses "FADZPQVWSTLK"
 interline :no, :yes
 our_markup "0"
-discount '6%'
+discount '6.9%'
 ticketing_method "downtown"
 commission "10%/8%"
 
@@ -2371,7 +2371,7 @@ check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US')
 #subclasses "YBMUH"
 interline :no, :yes
 our_markup "0"
-discount '1%'
+discount '1.8%'
 ticketing_method "downtown"
 commission "5%/3%"
 
