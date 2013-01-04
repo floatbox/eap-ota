@@ -2632,18 +2632,21 @@ example 'svocdg/i'
 agent    "11% от тарифа на собств. рейсы ZI по классам бронирования I/D/J/C;"
 subagent "9% от тарифа на собств. рейсы ZI по классам бронирования I/D/J/C;"
 subclasses "IDJC"
+discount "7.5%"
 commission "11%/9%"
 
 example 'svocdg/k'
 agent "7% от тарифа на собств. рейсы ZI по классам бронирования M/K/O/N/X/H/B/Y/S/W;"
 subagent "5% от тарифа на собств. рейсы ZI по классам бронирования M/K/O/N/X/H/B/Y/S/W;"
 subclasses "MKONXHBYSW"
+discount "3.8%"
 commission "7%/5%"
 
 example 'svocdg/q'
 agent "3% от тарифа на собств. рейсы ZI по классам бронирования T/Q/U/V/L"
 subagent "2% от тарифа на собств. рейсы ZI по классам бронирования T/Q/U/V/L"
 subclasses "TQUVL"
+discount "1%"
 commission "3%/2%"
 
 example 'cdgsvo/un'
