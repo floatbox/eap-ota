@@ -3091,16 +3091,16 @@ commission "5%/3%"
 
 carrier "S7", "S7 AIRLINES"
 ########################################
-carrier_defaults :consolidator => 0, :ticketing_method => "direct"
+carrier_defaults :consolidator => 0, :ticketing_method => "downtown"
 
 example 'svocdg cdgsvo'
-agent "3% BSP"
+agent ""
 subagent ""
 #our_markup 400
 ##disabled "до времени"
 discount "1.9%"
 interline :no, :yes
-no_commission "3%/0%"
+commission "0%/0%"
 
 carrier "GA", "GARUDA INDONESIA"
 ########################################
