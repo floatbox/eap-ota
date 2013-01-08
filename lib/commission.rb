@@ -915,7 +915,7 @@ subagent "8%"
 subclasses "SIQKLUT"
 check { includes_only(country_iatas.first, "RU") and includes(country_iatas, "US") }
 ticketing_method "downtown"
-discount "6%"
+discount "6.5%"
 commission "10%/8%"
 
 example 'okocdg cdgoko/ab'
@@ -3084,10 +3084,10 @@ carrier "UT", "UTAIR"
 carrier_defaults :consolidator => 0
 
 example 'svocdg cdgsvo'
-agent "0% DTT"
-subagent "0% DTT, 10$ с билета"
-our_markup 320
-commission "0%/0%"
+agent "5% DTT"
+subagent "3% DTT"
+discount "2%"
+commission "5%/3%"
 
 carrier "S7", "S7 AIRLINES"
 ########################################
