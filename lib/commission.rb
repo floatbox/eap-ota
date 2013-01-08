@@ -2502,7 +2502,7 @@ agent "9% от тарифа при продаже перевозок с нача
 subagent "8,5% от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории РФ до любого п.п. VV."
 check { includes(country_iatas.first, 'RU') and not includes(city_iatas.first, 'MOW') and not includes(city_iatas.last, 'IEV') }
 discount "7%"
-commission "9%/8.5%"
+no_commission "9%/8.5%"
 
 example 'ledkbp kbptlv'
 example 'ledkbp kbpcdg'
@@ -2514,7 +2514,7 @@ subagent "9,5% от тарифа при продаже перевозок с н�
 check { includes(city_iatas.first, 'LED') and includes(city_iatas, 'IEV') and not includes(country_iatas.last, 'UA') and not includes(country_iatas.last, 'RU') }
 important!
 discount "8%"
-commission "10%/9.5%"
+no_commission "10%/9.5%"
 
 example 'svokbp/business kbpsvo/business'
 strt_date "01.08.2012"
@@ -2523,7 +2523,7 @@ subagent "4,5% от тарифа при продаже перевозок на �
 classes :business
 check { (includes(city_iatas.first, 'MOW') and includes(city_iatas.last, 'IEV')) or (includes(city_iatas.first, 'MOW') and includes(city_iatas.last, 'MOW') and includes(city_iatas, 'IEV')) }
 discount "3%"
-commission "5%/4.5%"
+no_commission "5%/4.5%"
 
 example 'svokbp kbpsvo'
 strt_date "01.08.2012"
@@ -2531,7 +2531,7 @@ agent "7% от тарифа при продаже перевозок на рей
 subagent "4,5% от тарифа при продаже перевозок на рейсы Москва-Киев (MOW-IEV), Москва-Киев-Москва (MOW -IEV- MOW);"
 check { (includes(city_iatas.first, 'MOW') and includes(city_iatas.last, 'IEV')) or (includes(city_iatas.first, 'MOW') and includes(city_iatas.last, 'MOW') and includes(city_iatas, 'IEV')) }
 discount "3%"
-commission "5%/4.5%"
+no_commission "5%/4.5%"
 
 example 'kbpdok'
 example 'kbptbs'
@@ -2541,7 +2541,7 @@ agent "1% от тарифа при продаже перевозок с нача
 subagent "5 рублей от тарифа при продаже перевозок с началом перевозки от п.п. VV на территории Украины или третьих стран;"
 check { not includes(country_iatas.first, 'RU') }
 our_markup "60"
-commission "1%/5"
+no_commission "1%/5"
 
 example 'kbpsvo/ab svokbp'
 strt_date "21.03.2012"
@@ -2549,14 +2549,14 @@ agent "5% от тарифа при продаже перевозок на рей
 subagent "4,5% от тарифа при продаже перевозок на рейсы Interline с участием VV;"
 interline :yes
 discount "3%"
-commission "5%/4.5%"
+no_commission "5%/4.5%"
 
 example 'kbpsvo/ab svokbp/ab'
 strt_date "21.03.2012"
 agent "0% от тарифа при продаже перевозок на рейсы Interline без участия VV;"
 subagent "0% от тарифа при продаже перевозок на рейсы Interline без участия VV;"
 interline :absent
-commission "0%/0%"
+no_commission "0%/0%"
 
 example 'svosip'
 example 'svoods'
