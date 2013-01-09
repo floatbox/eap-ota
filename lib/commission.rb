@@ -3081,7 +3081,7 @@ commission "1%/5"
 
 carrier "UT", "UTAIR"
 ########################################
-carrier_defaults :consolidator => 0
+carrier_defaults :consolidator => 0, :ticketing_method => "downtown"
 
 example 'svocdg cdgsvo'
 agent "5% DTT"
