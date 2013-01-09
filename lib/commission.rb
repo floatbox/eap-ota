@@ -3094,11 +3094,11 @@ carrier "S7", "S7 AIRLINES"
 carrier_defaults :consolidator => 0, :ticketing_method => "downtown"
 
 example 'svocdg cdgsvo'
-agent ""
+agent "выписывать руками в даунтауне, пока не появилась прямая продажа"
 subagent ""
-#our_markup 400
+our_markup 300
 ##disabled "до времени"
-discount "1.9%"
+#discount "1.9%"
 interline :no, :yes
 commission "0%/0%"
 
