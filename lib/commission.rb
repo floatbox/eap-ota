@@ -82,7 +82,7 @@ subagent "10% от тарифа на рейсы Перевозчика по вс
 subclasses "FPRJCADSLVXTNIGWUYHMQBKOE"
 ticketing_method "downtown"
 # disabled "срочно вырубаем DTT"
-discount "8.8%"
+discount "9%"
 commission "12%/10%"
 
 # базовое вознаграждение ац
@@ -3086,7 +3086,7 @@ carrier_defaults :consolidator => 0
 example 'svocdg cdgsvo'
 agent "5% DTT"
 subagent "3% DTT"
-discount "2%"
+discount "2.5%"
 commission "5%/3%"
 
 carrier "S7", "S7 AIRLINES"
