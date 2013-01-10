@@ -1,5 +1,5 @@
 # encoding: utf-8
-class PNRController < ApplicationController
+class PnrController < ApplicationController
 
   rescue_from RuntimeError, :with => :error
   before_filter :set_lang
@@ -10,7 +10,7 @@ class PNRController < ApplicationController
   end
 
   def get_data
-    @pnr = PNR.get_by_number params[:id]
+    @pnr = Pnr.get_by_number params[:id]
     @prices = @pnr.order
     @pnr.email = @prices.email if @prices.source == 'sirena' && @pnr.email.blank?
     @passengers = @pnr.passengers
