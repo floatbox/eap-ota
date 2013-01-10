@@ -82,8 +82,6 @@ class Mux
       recommendations.delete_if {|r| r.flights.every.marketing_carrier_iata.include? "R3"}
       recommendations = recommendations.reject(&:ignored_carriers)
       recommendations = recommendations.select(&:sellable?) unless admin_user
-      #Временный костыль, тк из амадеуса по неясным причинам приходят закрытые тарифы аэрофлота
-      recommendations = recommendations.reject {|r| r.flights.any?{|f| r.booking_class_for_flight(f) == 'Z' && f.marketing_carrier_iata == 'SU' }}
       unless lite
         # sort
         recommendations = recommendations.sort_by(&:price_total)

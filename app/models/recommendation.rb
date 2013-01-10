@@ -130,6 +130,10 @@ class Recommendation
     # consolidator-а пока не проверяем.
     # FIXME перепровить после подключения новых договоров
     # validating_carrier.consolidator && commission
+
+    #FIXME Временный костыль, тк из амадеуса по неясным причинам приходят закрытые тарифы аэрофлота
+    return if (flights.any?{|f| booking_class_for_flight(f) == 'Z' && f.marketing_carrier_iata == 'SU' })
+
     commission
   end
 
