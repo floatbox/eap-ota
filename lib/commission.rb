@@ -82,7 +82,7 @@ subagent "10% от тарифа на рейсы Перевозчика по вс
 subclasses "FPRJCADSLVXTNIGWUYHMQBKOE"
 ticketing_method "downtown"
 # disabled "срочно вырубаем DTT"
-discount "9%"
+discount "9.5%"
 commission "12%/10%"
 
 # базовое вознаграждение ац
@@ -1450,7 +1450,7 @@ carrier "JU", "JAT AIRWAYS"
 example 'svocdg'
 agent "С 15.02.2011г. 7% от опубл. тарифов на собств. рейсы JU"
 subagent "JU  С 21.02.2011г. 5% от опубл. тарифов на собств. рейсы JU"
-discount "3%"
+discount "4%"
 commission "7%/5%"
 
 example 'svocdg cdgsvo/ab'
@@ -3086,7 +3086,7 @@ carrier_defaults :consolidator => 0, :ticketing_method => "downtown"
 example 'svocdg cdgsvo'
 agent "5% DTT"
 subagent "3% DTT"
-discount "2.5%"
+discount "2.8%"
 commission "5%/3%"
 
 carrier "S7", "S7 AIRLINES"
