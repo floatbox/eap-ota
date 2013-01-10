@@ -1849,7 +1849,7 @@ carrier "NN", "VIM-Airlines"
 example 'svocdg cdgsvo'
 agent "5% от всех опубл. тарифов по другим маршрутам на собств.рейсы NN"
 subagent "3,5% от всех опубл. тарифов по другим маршрутам на собств.рейсы NN"
-discount "1.8%"
+discount "2.8%"
 commission "5%/3.5%"
 
 example 'svocdg/ab cdgsvo'
