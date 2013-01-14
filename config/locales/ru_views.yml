@@ -92,16 +92,60 @@ ru:
         many: '± 3 дня'
       some: '%{amount} из %{total}'
       all: 'Все %{amount}'       
+  filters:
+    dpt: 'Вылет %{from}'
+    arv: 'Прилет %{to}'
+    and: ' и '
+    time:
+      any: 'в любое время'
+      t0: 'ночью'
+      t1: 'утром'
+      t2: 'днем'
+      t3: 'вечером'
+    cities:
+      title: 'города' 
+      dpt: 'из любого города'
+      arv: 'в любой город'
+    airports:
+      title: 'аэропорты'
+      dpt: 'из любого аэропорта'
+      arv: 'в любой аэропорт'
+    alliance: 
+      title: 'Альянс'
+      any: 'любой'
+    carrier: 
+      title: 'Авиакомпания'
+      any: 'любая'
+    plane:
+      title: 'Самолет'
+      any: 'любой'
+  subscription:
+    title: 'Подпишитесь на направление'
+    description: 'Если вам не&nbsp;важно когда лететь, мы&nbsp;сообщим вам о&nbsp;появлении выгодных тарифов на&nbsp;билеты %{cities} по&nbsp;электронной почте.'
+    email: 'Ваш адрес'
+    submit: 'Хочу'
+    warning: 'Введите правильный адрес электронной почты.'
+    success: 'Спасибо, подписка создана. Отписаться можно будет по ссылке в письме.'
+    failed: 'Не удалось подписаться, попробуйте ещё раз.'
+  offer:
+    comments:
+      carrier: 'Билет оформляет авиакомпания %{carrier_name}.'
+      alliance: 'Применяются бонусные программы альянса %{alliance_link}.'
+      time: 'Время везде местное.'
+    availability:
+      text: 'По этому тарифу осталось %{seats}. Не откладывайте покупку.'
+      one: '%{count} место'
+      few: '%{count} места'
+      many: '%{count} мест'
     columns:
       dpt: 'Вылет'
       arv: 'Прибытие'
       duration: 'В пути'
+    summary:
+      layovers: 'через %{cities}'
+      duration:
+        hours: '%{h}&nbsp;ч'
+        minutes: '%{m}&nbsp;мин'
     details:
       show: 'Показать подробности'
-      hide: 'Скрыть подробности'
-    
-    
-    
-    
-    
-      
+      hide: 'Скрыть подробности'      

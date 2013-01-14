@@ -37,12 +37,10 @@ module PricerHelper
   def short_human_duration duration
     hours, minutes = duration.divmod(60)
     unless hours.zero?
-      human_hours =
-        "#{ hours }&nbsp;ч"
+      human_hours = t('offer.summary.duration.hours', :h => hours)
     end
     unless minutes.zero?
-      human_minutes =
-        "#{ minutes }&nbsp;мин"
+      human_minutes =t('offer.summary.duration.minutes', :m => minutes)
     end
     [human_hours, human_minutes].compact.join(' ').html_safe
   end  

@@ -2,10 +2,12 @@
 
 <% if @destination.present? %>
 <div class="r-subscription">
-    <h3 class="rs-title">Подпишитесь на направление</h3>
-    <p class="rs-description">Если вам не&nbsp;важно когда лететь, мы&nbsp;сообщим вам о&nbsp;появлении выгодных тарифов на&nbsp;билеты <%= nbsp @destination.from.case_from %> <%= nbsp @destination.to.case_to %><%= ' и обратно' if @destination.rt %> по&nbsp;электронной почте.</p>
+    <h3 class="rs-title"><%= t 'subscription.title' %></h3>
+    <% subscription_cities = "#{ nbsp(@destination.from.case_from) } #{ nbsp(@destination.to.case_to) }" %>
+    <% subscription_cities += ' и обратно' if @destination.rt  %>
+    <p class="rs-description"><%= raw t('subscription.description', :cities => subscription_cities) %></p>
     <form class="rs-form" action="/subscribe/" data-destination="<%= @destination.id %>" data-from-iata="<%= @destination.from.iata %>" data-to-iata="<%= @destination.to.iata %>" data-rt="<%= @destination.rt %>">
-        <div><label class="rsf-label" for="rsf-email">Ваш адрес</label><input name="email" class="rsf-field" id="rsf-email" maxlength="50">&nbsp;<input class="rsf-submit" type="submit" value="Хочу"></div>
+        <div><label class="rsf-label" for="rsf-email"><%= t 'subscription.email' %></label><input name="email" class="rsf-field" id="rsf-email" maxlength="50">&nbsp;<input class="rsf-submit" type="submit" value="<%= t 'subscription.submit' %>"></div>
         <p class="rsf-error"></p>
     </form>
 </div>
@@ -17,28 +19,27 @@
 <div class="r-average latent"><%= @average_price.round.to_i if @average_price %></div>
 
 <div class="rf-data" id="rfg-time">
-<% time_titles = ['ночью', 'утром', 'днем', 'вечером'] %>
 <% data[:time].each_with_index do |times, i| %>
 <% if times[:dpt].length > 1 || times[:arv].length > 1 %>
 <div class="rfg-column">
     <% if times[:dpt].length > 1 %>
     <div class="rf-list" data-key="dpt<%= i + 1 %>t">
-        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>">Вылет <%= raw @search.segments[i].from_as_object.case_from %></h6>    
+        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.dpt', :from => @search.segments[i].from_as_object.case_from %></h6>    
         <ul class="rf-values">
-            <li class="rfv-empty rfv-selected">в любое время</li>
+            <li class="rfv-empty rfv-selected"><%= t('filters.time.any') %></li>
             <% times[:dpt].each do |time| %>
-                <li class="rfv-item" data-value="<%= time %>"><%= time_titles[time] %></li>
+                <li class="rfv-item" data-value="<%= time %>"><%= t('filters.time.t' + time.to_s) %></li>
             <% end %>
         </ul>
     </div>
     <% end %>
     <% if times[:arv].length > 1 %>
     <div class="rf-list" data-key="arv<%= i + 1 %>t">
-        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>">Прилет <%= raw @search.segments[i].to_as_object.case_to %></h6>    
+        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.arv', :to => @search.segments[i].to_as_object.case_to %></h6>
         <ul class="rf-values">
-            <li class="rfv-empty rfv-selected">в любое время</li>
+            <li class="rfv-empty rfv-selected"><%= t 'filters.time.any' %></li>
             <% times[:arv].each do |time| %>
-                <li class="rfv-item" data-value="<%= time %>"><%= time_titles[time] %></li>
+                <li class="rfv-item" data-value="<%= time %>"><%= t('filters.time.t' + time.to_s) %></li>
             <% end %>
         </ul>
     </div>
@@ -58,11 +59,11 @@
 <div class="rfg-column">
     <% if segment[:dpt][:airports].length > 1 || segment[:dpt][:cities].length > 1 %>
     <div class="rf-list" data-key="dpt<%= i + 1 %>">    
-        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>">Вылет <%= raw @search.segments[i].from_as_object.case_from %></h6>        
+        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.dpt', :from => @search.segments[i].from_as_object.case_from %></h6>        
         <% if segment[:dpt][:cities].length > 1 %>
             <% locations_title[:cities] = true %>
             <ul class="rf-values">
-            <li class="rfv-empty rfv-selected">из любого города</li>
+            <li class="rfv-empty rfv-selected"><%= t 'filters.cities.dpt' %></li>
             <% segment[:dpt][:cities].each do |city| %>
                 <li class="rfv-item" data-value="<%= city.iata %>"><%= city.case_from %></li>
             <% end %>
@@ -70,7 +71,7 @@
         <% elsif segment[:dpt][:airports].length > 1 %>
             <% locations_title[:airports] = true %>
             <ul class="rf-values">
-            <li class="rfv-empty rfv-selected">из любого аэропорта</li>
+            <li class="rfv-empty rfv-selected"><%= t 'filters.airports.dpt' %></li>
             <% segment[:dpt][:airports].each do |airport| %>
                 <li class="rfv-item" data-value="<%= airport.iata %>"><%= airport.case_from %></li>
             <% end %>
@@ -80,11 +81,11 @@
     <% end %>
     <% if segment[:arv][:airports].length > 1 || segment[:arv][:cities].length > 1 %>
     <div class="rf-list" data-key="arv<%= i + 1 %>">    
-        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>">Прилет <%= raw @search.segments[i].to_as_object.case_to %></h6>        
+        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.arv', :to => @search.segments[i].to_as_object.case_to %></h6>        
         <% if segment[:arv][:cities].length > 1 %>
             <% locations_title[:cities] = true %>        
             <ul class="rf-values">
-            <li class="rfv-empty rfv-selected">в любой город</li>
+            <li class="rfv-empty rfv-selected"><%= t 'filters.cities.arv' %></li>
             <% segment[:arv][:cities].each do |city| %>
                 <li class="rfv-item" data-value="<%= city.iata %>"><%= city.case_to %></li>
             <% end %>
@@ -92,7 +93,7 @@
         <% elsif segment[:arv][:airports].length > 1 %>
             <% locations_title[:airports] = true %>        
             <ul class="rf-values">
-            <li class="rfv-empty rfv-selected">в любой аэропорт</li>
+            <li class="rfv-empty rfv-selected"><%= t 'filters.airports.arv' %></li>
             <% segment[:arv][:airports].each do |airport| %>
                 <li class="rfv-item" data-value="<%= airport.iata %>"><%= airport.case_to %></li>
             <% end %>
@@ -104,18 +105,18 @@
 <% end %>
 <% end %>
 <% locations_title[:parts] = [] %>
-<% locations_title[:parts] << 'города' if locations_title[:cities] %>
-<% locations_title[:parts] << 'аэропорты' if locations_title[:airports] %>
-<p class="latent rfg-label"><%= locations_title[:parts].join(' и ') %></p>
+<% locations_title[:parts] << t('filters.cities.title') if locations_title[:cities] %>
+<% locations_title[:parts] << t('filters.airports.title') if locations_title[:airports] %>
+<p class="latent rfg-label"><%= locations_title[:parts].join(t('filters.and')) %></p>
 </div>
 
 <div class="rf-data" id="rfg-carriers">
 <% if data[:alliances].length > 1 %>
 <div class="rfg-column">
 <div class="rf-list" data-key="alliance">
-    <h6 class="rfgc-title">Альянс</h6>
+    <h6 class="rfgc-title"><%= t 'filters.alliance.title' %></h6>
     <ul class="rf-values">
-    <li class="rfv-empty rfv-selected">любой</li>
+    <li class="rfv-empty rfv-selected"><%= t 'filters.alliance.any' %></li>
     <% data[:alliances].each do |alliance| %>
         <li class="rfv-item" data-value="<%= alliance.id %>"><%= alliance.name %></li>
     <% end %>
@@ -126,9 +127,9 @@
 <% if data[:carriers].length > 1 %>
 <div class="rfg-column">
 <div class="rf-list" data-key="carrier">
-    <h6 class="rfgc-title">Авиакомпания</h6>
+    <h6 class="rfgc-title"><%= t 'filters.carrier.title' %></h6>
     <ul class="rf-values">
-    <li class="rfv-empty rfv-selected">любая</li>
+    <li class="rfv-empty rfv-selected"><%= t 'filters.carrier.any' %></li>
     <% data[:carriers].each do |carrier| %>
         <li class="rfv-item" data-value="<%= carrier.iata %>"><%= carrier.name %></li>
     <% end %>
@@ -139,9 +140,9 @@
 <% if data[:planes].length > 1 %>
 <div class="rfg-column">
 <div class="rf-list" data-key="plane">
-    <h6 class="rfgc-title">Самолет</h6>
+    <h6 class="rfgc-title"><%= t 'filters.plane.title' %></h6>
     <ul class="rf-values">
-    <li class="rfv-empty rfv-selected">любой</li>
+    <li class="rfv-empty rfv-selected"><%= t 'filters.plane.any' %></li>
     <% data[:planes].each do |plane| %>
         <li class="rfv-item" data-value="<%= plane.iata %>"><%= plane.name %></li>
     <% end %>
@@ -225,12 +226,12 @@
     <% end %>
     </div>
     <div class="o-comments">
-        <p class="od-comment">Билет оформляет авиакомпания <%= recommendation.validating_carrier.name %>.<% if recommendation.validating_carrier.alliance %> Применяются бонусные программы альянса <span class="od-alliance" data-carriers="<%= recommendation.validating_carrier.available_bonus_programms.map{|bp| bp.name}.to_sentence %>"><%= nbsp(recommendation.validating_carrier.alliance.name) %></span>.<% end %> Время везде местное.</p>
+        <p class="od-comment"><%= t 'offer.comments.carrier', :carrier_name => recommendation.validating_carrier.name %><% if recommendation.validating_carrier.alliance %> <%= raw t 'offer.comments.alliance', :alliance_link => content_tag('span', nbsp(recommendation.validating_carrier.alliance.name), :class => 'od-alliance', 'data-carriers' => recommendation.validating_carrier.available_bonus_programms.map{|bp| bp.name}.to_sentence) %><% end %> <%= t 'offer.comments.time' %></p>    
         <% recommendation_comments(recommendation).each do |comment| %>
             <p class="od-comment" data-carrier="<%= comment[:carrier] %>"><%= raw comment[:content] %></p>
         <% end %>
         <% if recommendation_deficit(recommendation) %>
-            <p class="od-comment"><span class="odc-hl">По этому тарифу осталось <%= recommendation.availability %>&nbsp;<%= Russian.pluralize(recommendation.availability, 'место', 'места', 'мест') %>. Не откладывайте покупку.</span></p>
+            <p class="od-comment"><span class="odc-hl"><%= t 'offer.availability.text', :seats => t('offer.availability', {count: recommendation.availability}) %></span></p>
         <% end %>
     </div>
     <% if admin_user %>
