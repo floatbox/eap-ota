@@ -136,10 +136,6 @@ comparePrices: function() {
     var dp = Number(context.attr('data-price')) - this.variant.price;
     if (dp !== 0) {
         trackEvent('Бронирование', 'Изменилась цена', dp > 0 ? 'Стало дороже' : 'Стало дешевле');
-        this.processPrice(context, dp);
-        if (dp < 0) {
-            context.find('.bfnp-tip').hide();
-        }
         context.show();
     }
 },
@@ -147,7 +143,7 @@ processPrice: function(context, dp) {
     var cur = lang.currencies['RUR'];
     var sum = Math.abs(dp).decline(cur[0], cur[1], cur[2]);
     var content = context.find('.bfnp-content');
-    content.html(content.html().absorb(local.booking.newprice[dp > 0 ? 'rise' : 'fall'], sum));
+    content.html(content.html().absorb(dp > 0 ? 'дороже' : 'дешевле', sum));
 },
 cancel: function() {
     Queries.show();
