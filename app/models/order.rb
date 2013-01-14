@@ -374,6 +374,10 @@ class Order < ActiveRecord::Base
     save
   end
 
+  def update_has_refunds
+    update_attributes(has_refunds: tickets.where(:kind => 'refund', :status => 'processed').present?)
+  end
+
   def update_incomes
     self.stored_income = income
     self.stored_balance = balance
