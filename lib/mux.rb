@@ -32,6 +32,7 @@ class Mux
     recommendations = amadeus.fare_master_pricer_calendar(form).recommendations
     amadeus.release
 
+    recommendations = recommendations.reject(&:ignored_carriers)
     recommendations = recommendations.select(&:sellable?) unless admin_user
     recommendations.delete_if(&:without_full_information?)
     recommendations.every.clear_variants
