@@ -78,8 +78,6 @@ class Mux
       recommendations.delete_if(&:without_full_information?)
       recommendations.delete_if(&:ground?)
 
-      #Временная заплатка, тк ночные бронирования R3 слетают через 3 часа #691
-      recommendations.delete_if {|r| r.flights.every.marketing_carrier_iata.include? "R3"}
       recommendations = recommendations.reject(&:ignored_carriers)
       recommendations = recommendations.select(&:sellable?) unless admin_user
       unless lite
