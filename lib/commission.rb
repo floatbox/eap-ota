@@ -1498,7 +1498,7 @@ example 'svogmp'
 agent "С 01.04.2011г. 5% от опубл. тарифов на собств. рейсы KE с пунктом начала маршрута в России."
 subagent "С 01.04.2011г. 3% от опубл. тарифов на собств. рейсы KE с пунктом начала маршрута в России."
 check { includes(country_iatas.first, 'RU') }
-## discount "2.5%"
+discount "2.5%"
 commission "5%/3%"
 
 example 'gmpsvo'
