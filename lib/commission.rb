@@ -3109,7 +3109,7 @@ example 'jogsoq soqjog'
 agent "5% (Пять) от всех опубл. тарифов на собств.рейсы GA на местные перелёты;"
 subagent "3% от всех опубл. тарифов на собств.рейсы GA на местные перелёты;"
 domestic
-discount "1.5%"
+discount "2%"
 commission "5%/3%"
 
 example "jogjed"
@@ -3147,7 +3147,7 @@ agent "ЯПОНИЯ: 7% - GA FLEX/PEX FARES"
 subagent "ЯПОНИЯ: 5% - GA FLEX/PEX FARES"
 check { includes(country_iatas.first, 'JP') }
 disabled "no subagent... FLEX PEX?"
-discount "3%"
+discount "4%"
 commission "7%/5%"
 
 example "okoams"
@@ -3175,7 +3175,7 @@ agent "7% - SEL, 7% - JED/RUH, 7% - DXB"
 subagent "5% - SEL 5% - JED/RUH 5% - DXB"
 check { includes(country_iatas.first, 'JP') and includes(city_iatas.last, %W(SEL JED RUH DXB)) }
 important!
-discount "2%"
+discount "4%"
 commission "7%/5%"
 
 example "okobkk"
@@ -3185,7 +3185,7 @@ agent "9% - BKK, 9% - BJS/CAN/SHA"
 subagent "7% - BKK 7% - BJS/CAN/SHA"
 check { includes(country_iatas.first, 'JP') and includes(city_iatas.last, %W(BKK BJS CAN SHA)) }
 important!
-discount "2%"
+discount "5%"
 commission "9%/7%"
 
 carrier "W2", "FLEXFLIGHT"
@@ -3209,6 +3209,7 @@ carrier "KR", "AIR BISHKEK"
 
 agent "5 % от всех опубл. тарифов на собств. рейсы KR"
 subagent "3% от всех опубл. тарифов на собств. рейсы KR"
+discount "2%"
 commission "5%/3%"
 
 carrier "DT", "TAAG ANGOLA AIRLINES"
@@ -3223,6 +3224,7 @@ carrier "OG", "Air Onix Airlines"
 
 agent "5% от опубл. тарифов на рейсы OG"
 subagent "3% от опубл. тарифов на рейсы OG"
+discount "2.5%"
 commission "5%/3%"
 
 carrier "EN", "Air Dolomiti"
