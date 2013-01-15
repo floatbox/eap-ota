@@ -140,9 +140,9 @@
 <% if data[:planes].length > 1 %>
 <div class="rfg-column">
 <div class="rf-list" data-key="plane">
-    <h6 class="rfgc-title"><%= t 'filters.plane.title' %></h6>
+    <h6 class="rfgc-title"><%= t 'filters.aircraft.title' %></h6>
     <ul class="rf-values">
-    <li class="rfv-empty rfv-selected"><%= t 'filters.plane.any' %></li>
+    <li class="rfv-empty rfv-selected"><%= t 'filters.aircraft.any' %></li>
     <% data[:planes].each do |plane| %>
         <li class="rfv-item" data-value="<%= plane.iata %>"><%= plane.name %></li>
     <% end %>

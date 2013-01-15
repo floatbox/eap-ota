@@ -8,12 +8,10 @@ module PricerHelper
   def human_duration(duration)
     hours, minutes = duration.divmod(60)
     unless hours.zero?
-      human_hours =
-        "#{ hours }&nbsp;#{ Russian.pluralize(hours, 'час', 'часа', 'часов') }"
+      human_hours = t('time.hours', :count => hours)
     end
     unless minutes.zero?
-      human_minutes =
-        "#{ minutes }&nbsp;#{ Russian.pluralize(minutes, 'минута', 'минуты', 'минут') }"
+      human_minutes = t('time.minutes', :count => minutes)
     end
     [human_hours, human_minutes].compact.join(' ').html_safe
   end
@@ -37,10 +35,10 @@ module PricerHelper
   def short_human_duration duration
     hours, minutes = duration.divmod(60)
     unless hours.zero?
-      human_hours = t('offer.summary.duration.hours', :h => hours)
+      human_hours = t('time.h', :h => hours)
     end
     unless minutes.zero?
-      human_minutes =t('offer.summary.duration.minutes', :m => minutes)
+      human_minutes =t('time.min', :m => minutes)
     end
     [human_hours, human_minutes].compact.join(' ').html_safe
   end  
@@ -164,7 +162,7 @@ module PricerHelper
   end
   
   def segment_title segment
-    "Перелет #{ nbsp(segment.departure.city.case_from) } #{ nbsp(segment.arrival.city.case_to) }".html_safe
+    t('offer.details.segment', :from => nbsp(segment.departure.city.case_from), :to => nbsp(segment.arrival.city.case_to)).html_safe
   end
 
   # FIXME сломается, если делать мерж двух прайсеров с одинаковыми рекомендациями

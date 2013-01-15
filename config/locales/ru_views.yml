@@ -4,6 +4,17 @@ ru:
       one: '%{count} рубль'
       few: '%{count} рубля'
       many: '%{count} рублей'
+  time:
+    h: '%{h}&nbsp;ч'
+    min: '%{m}&nbsp;мин'
+    hours:
+      one: '%{count}&nbsp;час'
+      few: '%{count}&nbsp;часа'
+      many: '%{count}&nbsp;часов'
+    minutes:
+      one: '%{count}&nbsp;минута'
+      few: '%{count}&nbsp;минуты'
+      many: '%{count}&nbsp;минут'
   search:
     locations:
       from: 'Откуда?'
@@ -116,7 +127,7 @@ ru:
     carrier: 
       title: 'Авиакомпания'
       any: 'любая'
-    plane:
+    aircraft:
       title: 'Самолет'
       any: 'любой'
   subscription:
@@ -128,15 +139,6 @@ ru:
     success: 'Спасибо, подписка создана. Отписаться можно будет по ссылке в письме.'
     failed: 'Не удалось подписаться, попробуйте ещё раз.'
   offer:
-    comments:
-      carrier: 'Билет оформляет авиакомпания %{carrier_name}.'
-      alliance: 'Применяются бонусные программы альянса %{alliance_link}.'
-      time: 'Время везде местное.'
-    availability:
-      text: 'По этому тарифу осталось %{seats}. Не откладывайте покупку.'
-      one: '%{count} место'
-      few: '%{count} места'
-      many: '%{count} мест'
     columns:
       dpt: 'Вылет'
       arv: 'Прибытие'
@@ -148,4 +150,25 @@ ru:
         minutes: '%{m}&nbsp;мин'
     details:
       show: 'Показать подробности'
-      hide: 'Скрыть подробности'      
+      hide: 'Скрыть подробности'
+      segment: 'Перелет %{from} %{to}'
+      segment_rt: 'Обратный перелет'
+      dpt: 'Вылет'
+      arv: 'Прибытие'      
+      airport: 'аэропорт'
+      carrier: 'авиакомпания'
+      flight: 'рейс'
+      aircraft: 'самолет'
+      duration: 'в пути'
+      layover: 'между рейсами'
+      different_airports: 'Разные аэропорты прилёта и вылета'
+      different_terminals: 'Разные терминалы прилёта и вылета'
+    comments:
+      carrier: 'Билет оформляет авиакомпания %{carrier_name}.'
+      alliance: 'Применяются бонусные программы альянса %{alliance_link}.'
+      time: 'Время везде местное.'
+    availability:
+      text: 'По этому тарифу осталось %{seats}. Не откладывайте покупку.'
+      one: '%{count} место'
+      few: '%{count} места'
+      many: '%{count} мест'
