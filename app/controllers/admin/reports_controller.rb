@@ -59,7 +59,7 @@ class Admin::ReportsController < Admin::BaseController
             if !partner.blank? && value.class == BSON::OrderedHash
               data[:partners][partner] = {} if !data[:partners][partner]
               data[:partners][partner][:search] = 0 if !data[:partners][partner][:search]
-              data[:partners][partner][:search] += value['total'] if value['total']
+              data[:partners][partner][:search] += value['success'] if value['success']
             end
           end
         end

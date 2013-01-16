@@ -107,6 +107,8 @@ class PricerController < ApplicationController
       Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))
       StatCounters.inc %W[search.api.success search.api.#{partner}.success]
       StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner}.total] if @destination
+      # поправка на неопределенный @destination что бы сходились счетчики
+      StatCounters.inc %W[search.api.#{partner}.bad_destination] if !@destination
       render 'api/variants'
     else
       @recommendations = []
