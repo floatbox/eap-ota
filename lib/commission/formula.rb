@@ -2,10 +2,11 @@
 class Commission
   class Formula
 
-    attr_accessor :formula
+    attr_accessor :formula, :compiled
 
     def initialize formula
       @formula = formula.to_s.strip
+      compile!
     end
 
     def complex?
@@ -41,26 +42,47 @@ class Commission
       "#<Fx #{formula} >"
     end
 
+    def compile!
+      return unless valid?
+      cached_rate = rate unless complex?
+
+      @compiled =
+        case
+
+        when complex?
+
+          formulas = formula.split('+').map do |f|
+            Commission::Formula.new(f)
+          end
+
+          lambda do |base, multiplier, params|
+            formulas.map { |f| f.call(base, params) }.inject(:+)
+          end
+
+        when percentage?
+
+          lambda do |base, multiplier, params|
+            cached_rate * base / 100
+          end
+
+        when euro?
+
+          lambda do |base, multiplier, params|
+            cached_rate * params[:eur].to_f * multiplier
+          end
+
+        else
+          lambda do |base, multiplier, params|
+            cached_rate * multiplier
+          end
+
+        end
+    end
+
     def call(base=nil, params={:eur => Conf.amadeus.euro_rate})
-      raise ArgumentError, "formula '#{@formula}' is not valid" unless valid?
+      raise ArgumentError, "formula '#{@formula}' is not valid" unless compiled
       multiplier = (params[:multiplier] || 1).to_i
-
-      if complex?
-        # FIXME horribly inefficcient
-        formula.split('+').map do |f|
-          Commission::Formula.new(f).call(base, params)
-        end.inject(:+)
-
-      elsif percentage?
-        rate * base / 100
-
-      elsif euro?
-        rate * params[:eur].to_f * multiplier
-
-      else
-        rate * multiplier
-
-      end.round(2)
+      compiled.call(base, multiplier, params).round(2)
     end
 
     alias [] call
