@@ -371,18 +371,11 @@ commission "5%/3.5%"
 carrier "5N", "Нордавиа-РА"
 ########################################
 
-example 'svocdg'
-expr_date "30.11.2012"
-agent    "7% от всех опубл. тарифов на рейсы 5N (В договоре Interline отдельно не прописан.)"
-subagent "5% от опубл. тарифов на собств.рейсы 5N"
-discount "3.8%"
-# our_markup 120
-commission "7%/5%"
-
 # example 'svocdg'
 strt_date "01.12.2012"
 agent " 4% от всех опубликованных тарифов на рейсы 5N"
 subagent "3% от всех опубликованных тарифов на рейсы 5N"
+discount "2%"
 commission "4%/3%"
 
 example 'cdgsvo svocdg/ab'
