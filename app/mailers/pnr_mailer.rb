@@ -1,5 +1,5 @@
 # encoding: utf-8
-class PnrMailer < ActionMailer::Base
+class PNRMailer < ActionMailer::Base
   helper :pricer
   helper :booking
   helper :baggage

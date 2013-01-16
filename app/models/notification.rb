@@ -80,7 +80,7 @@ class Notification < ActiveRecord::Base
   end
 
   def create_visa_notice
-    message = PnrMailer.visa_notice()
+    message = PNRMailer.visa_notice()
     self.attach_pnr = false
     self.subject = message.subject
     self.comment = message.body.to_s
@@ -95,7 +95,7 @@ class Notification < ActiveRecord::Base
 
   def send_email
     logger.info 'Notification: sending email'
-    PnrMailer.notice(self).deliver
+    PNRMailer.notice(self).deliver
     update_attributes({:status => 'sent', 'sent_at' => Time.now})
     puts "Email pnr #{pnr_number} to #{destination} SENT on #{Time.now}"
     rescue
@@ -107,7 +107,7 @@ class Notification < ActiveRecord::Base
 
   def send_reminder
     logger.info 'Notification: sending reminder'
-    PnrMailer.notice(self).deliver
+    PNRMailer.notice(self).deliver
     update_attribute(:status, 'sent')
     puts "Reminder pnr #{pnr_number} to #{destination} SENT on #{Time.now}"
     rescue
