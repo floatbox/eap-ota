@@ -37,10 +37,10 @@ module DataMigration
   end
 
   def self.price_migration_for_russian_offices
-    Ticket.update_all "original_fare_cents = (price_fare * 100),
-                       original_fare_currency = 'RUB',
-                       original_tax_cents = (price_tax * 100),
-                       original_tax_currency = 'RUB'", "office_id != 'FLL1S212V'"
+    Ticket.update_all "original_price_fare_cents = (price_fare * 100),
+                       original_price_fare_currency = 'RUB',
+                       original_prica_tax_cents = (price_tax * 100),
+                       original_price_tax_currency = 'RUB'", "office_id != 'FLL1S212V'"
 
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121001093339) do
+ActiveRecord::Schema.define(:version => 20130117134957) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -165,6 +165,17 @@ ActiveRecord::Schema.define(:version => 20121001093339) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "customers", :force => true do |t|
+    t.string   "email",                         :null => false
+    t.string   "password"
+    t.string   "status"
+    t.boolean  "enabled",    :default => false, :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
+
+  add_index "customers", ["email"], :name => "index_customers_on_email", :unique => true
+
   create_table "destinations", :force => true do |t|
     t.integer  "to_id"
     t.integer  "from_id"
@@ -249,6 +260,7 @@ ActiveRecord::Schema.define(:version => 20121001093339) do
   end
 
   add_index "notifications", ["method", "status"], :name => "index_notifications_on_method_and_status"
+  add_index "notifications", ["order_id"], :name => "index_notifications_on_order_id"
 
   create_table "order_comments", :force => true do |t|
     t.integer  "order_id"
@@ -318,8 +330,13 @@ ActiveRecord::Schema.define(:version => 20121001093339) do
     t.string   "pan"
     t.string   "marker"
     t.string   "commission_our_markup"
+    t.string   "parent_pnr_number"
+    t.decimal  "stored_income",                 :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.decimal  "stored_balance",                :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.integer  "customer_id"
   end
 
+  add_index "orders", ["customer_id"], :name => "index_orders_on_customer_id"
   add_index "orders", ["partner"], :name => "index_orders_on_partner"
   add_index "orders", ["payment_status", "ticket_status"], :name => "index_orders_on_payment_status_and_ticket_status"
   add_index "orders", ["payment_status"], :name => "index_orders_on_payment_status"
@@ -361,8 +378,12 @@ ActiveRecord::Schema.define(:version => 20121001093339) do
     t.string   "status"
     t.string   "commission"
     t.decimal  "earnings",              :precision => 9, :scale => 2, :default => 0.0, :null => false
+    t.string   "their_ref"
+    t.string   "error_code"
+    t.text     "error_message"
   end
 
+  add_index "payments", ["order_id"], :name => "index_payments_on_order_id"
   add_index "payments", ["status"], :name => "index_payments_on_status"
 
   create_table "promo_codes", :force => true do |t|
@@ -439,11 +460,11 @@ ActiveRecord::Schema.define(:version => 20121001093339) do
     t.string   "source"
     t.string   "pnr_number"
     t.string   "number"
-    t.decimal  "price_fare",                :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_fare",                                :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "commission_subagent"
-    t.decimal  "price_tax",                 :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.decimal  "price_share",               :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.decimal  "price_consolidator_markup", :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_tax",                                 :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_share",                               :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_consolidator_markup",                 :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.integer  "order_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -458,31 +479,31 @@ ActiveRecord::Schema.define(:version => 20121001093339) do
     t.string   "office_id"
     t.date     "ticketed_date"
     t.string   "validating_carrier"
-    t.string   "kind",                                                    :default => "ticket"
+    t.string   "kind",                                                                    :default => "ticket"
     t.integer  "parent_id"
-    t.decimal  "price_penalty",             :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_penalty",                             :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.text     "comment"
     t.string   "commission_agent"
     t.string   "commission_consolidator"
     t.string   "commission_blanks"
-    t.decimal  "price_consolidator",        :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.decimal  "price_blanks",              :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.decimal  "price_agent",               :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.decimal  "price_subagent",            :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_consolidator",                        :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_blanks",                              :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_agent",                               :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_subagent",                            :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "commission_discount"
-    t.decimal  "price_discount",            :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_discount",                            :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "mso_number"
-    t.decimal  "corrected_price",           :precision => 9, :scale => 2
+    t.decimal  "corrected_price",                           :precision => 9, :scale => 2
     t.string   "commission_our_markup"
-    t.decimal  "price_our_markup",          :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.string   "vat_status",                                              :default => "unknown", :null => false
+    t.decimal  "price_our_markup",                          :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.string   "vat_status",                                                              :default => "unknown", :null => false
     t.date     "dept_date"
-    t.decimal  "price_extra_penalty",       :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_extra_penalty",                       :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "baggage_info"
-    t.integer  "original_fare_cents"
-    t.string   "original_fare_currency",    :limit => 3
-    t.integer  "original_tax_cents"
-    t.string   "original_tax_currency",     :limit => 3
+    t.integer  "original_price_fare_cents"
+    t.string   "original_price_fare_currency", :limit => 3
+    t.integer  "original_price_tax_cents"
+    t.string   "original_price_tax_currency",  :limit => 3
   end
 
   add_index "tickets", ["kind"], :name => "index_tickets_on_kind"
@@ -514,7 +535,7 @@ ActiveRecord::Schema.define(:version => 20121001093339) do
     t.text     "object"
     t.datetime "created_at"
     t.text     "object_changes"
-    t.string   "action"
+    t.string   "done"
   end
 
   add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"

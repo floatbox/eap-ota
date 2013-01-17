@@ -8,7 +8,7 @@ module MoneyColumns
     money_columns.each do |column|
     composed_of column,
       :class_name => 'Money',
-      :mapping => [%w(original_tax_cents cents), %w(original_tax_currency currency_as_string)],
+      :mapping => [[column.to_s + '_cents', 'cents'], [column.to_s + '_currency', 'currency_as_string']],
       :constructor => Proc.new { |original_tax_cents, original_tax_currency| original_tax_cents ? Money.new(original_tax_cents, original_tax_currency || Money.default_currency)  : nil},
       :converter => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
     end
