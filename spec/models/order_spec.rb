@@ -67,10 +67,8 @@ describe Order do
     context 'with one non-zero ticket' do
       before(:all) do
         Conf.payture.stub(:commission).and_return('2.8%')
-        @old_ticket = Ticket.new(:price_fare => 21590, :price_tax => 9878, :kind => 'ticket', :status => 'ticketed', :code => '123', :number => '123456789')
         @order = create(:order, :price_fare => 21590, :price_tax => 9878, :price_with_payment_commission => BigDecimal('31946.68'), :source => 'amadeus', :fix_price => true)
-        @old_ticket.order = @order
-        @old_ticket.save
+        @old_ticket = create(:ticket, :original_price_fare => 21590.to_money("RUB"), :original_price_tax => 9878.to_money("RUB"), :kind => 'ticket', :status => 'ticketed', :code => '123', :number => '123456789', :order => @order)
         @new_ticket_hashes = [
           {:ticketed_date => Date.today - 2.days, :number => '123456787', :code => '123', :source => 'amadeus', :status => 'ticketed', :original_price_fare => 21590.to_money("RUB"), :original_price_total => 6075.to_money("RUB"), :parent_number => '123456789', :parent_code => '123', :price_fare_base => 21590.to_money("RUB")}
         ]
@@ -236,8 +234,7 @@ describe Order do
       end
 
       it 'loads tickets with bucks correctly' do
-        @order = Order.new
-        @order.save
+        @order = create :order
         @new_ticket_hashes = [
           {:number => '123456787',
            :code => '123',
