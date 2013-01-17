@@ -5,7 +5,7 @@ results.Offer = function(el) {
 results.Offer.prototype = {
 parseVariants: function(selector) {
     var that = this;
-    var price = $.parseJSON(this.el.attr('data-prices'))['RUR'];
+    var prices = $.parseJSON(this.el.attr('data-prices'));
     this.variants = [];
     this.el.find(selector).each(function(i) {
         var el = $(this);
@@ -21,11 +21,13 @@ parseVariants: function(selector) {
         }
         that.variants[i] = {
             offer: that,
-            price: price,
+            price: prices['RUR'],
+            price_pure: prices['RUR_pure'],
             id: el.text(),
             duration: Number(el.attr('data-duration')),
             segments: el.attr('data-segments').split(' '),
-            features: features
+            dpttimes: el.attr('data-dpttimes'),
+            features: features,
         };
     });
 },
@@ -43,18 +45,26 @@ addBook: function() {
     this.state = this.book.find('.ob-state');
 },
 updateBook: function() {
-    var u = local.currencies.RUR, p = this.selected.price;
-    var price = p.separate() + '&nbsp;' + p.decline(u[0], u[1], u[2], false);
-    var state = results.stateTemplate;
+    var p = this.selected.price;
+    var price = p.separate() + '&nbsp;' + p.declineArray(lang.currencies.RUR, false);
     var ap = results.data.averagePrice;
+    var pp = this.selected.price_pure; 
+    var state = [];
     if (p < ap) {
         var percents = Math.round((ap - p) / ap * 100);
         if (percents) {
-            state += local.offers.price.profit.absorb(percents);
+            state.push(lang.price.profit.absorb(percents));
         }
     }
+    if (p < pp) {
+        state.push('на <strong>{0}</strong> <span class="ruble">Р</span> дешевле, чем на сайте авиакомпании'.absorb(pp - p));
+    }
     this.btitle.html(results.priceTemplate.absorb(price));
-    this.state.html(state);
+    if (state.length) {
+        this.state.html('<div class="obst-wrapper"><table class="obs-table"><tr><td>' + results.stateTemplate + '</td><td class="obs-profit">' +  state.join('<br>') + '</td></tr></table></div>');
+    } else {
+        this.state.html(results.stateTemplate.replace('<br>', ' '));
+    }
 },
 select: function(index, smooth) {
     this.summaries.all.removeClass('os-selected');
@@ -239,7 +249,7 @@ otherPrices: function() {
                 if (ss.length === 1) {
                     el.append(sample.clone().html(absp));
                 } else {
-                    var relp = local.offers.price[type].absorb(curr.absorb(Math.abs(value - sp).separate()));
+                    var relp = lang.price[type].absorb(curr.absorb(Math.abs(value - sp).separate()));
                     el.append(sample.clone().addClass('ossp-rel').html(relp));
                     el.append(sample.clone().addClass('ossp-abs').html(absp));
                 }
@@ -269,15 +279,15 @@ hideExcess: function(limit) {
         var segment = segments[i];
         var excess = i === 0 ? (need - used) : Math.round(need * segment.part / total);
         if (excess > 1) {
-            var title, amount = excess.decline.apply(excess, local.offers.variants);
+            var title, amount = excess.declineArray(lang.segment.variants);
             if (results.data.segments.length === 1) {
                 title = '';
             } else if (results.data.segments[1].rt) {
-                title = local.offers.directions[i];
+                title = lang.segment.directions[i];
             } else {
                 title = results.data.segments[i].arvto;
             }
-            var text = local.offers.more.absorb(amount, title).replace(/ $/, '');
+            var text = lang.segment.more.absorb(amount, title).replace(/ $/, '');
             var more = '<div class="os-more">' + text + '</div>';
             this.toggleExcess(segment.el.addClass('hide-excess').append(more), excess);
         }

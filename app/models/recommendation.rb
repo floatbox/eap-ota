@@ -4,7 +4,7 @@ class Recommendation
   include KeyValueInit
 
   attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
-    :suggested_marketing_carrier_iatas, :availabilities, :upts, :last_tkt_date
+    :suggested_marketing_carrier_iatas, :availabilities, :upts, :last_tkt_date, :declared_price
 
   delegate :marketing_carriers, :marketing_carrier_iatas,
     :operating_carriers, :operating_carrier_iatas,
@@ -130,7 +130,15 @@ class Recommendation
     # consolidator-а пока не проверяем.
     # FIXME перепровить после подключения новых договоров
     # validating_carrier.consolidator && commission
+
+    #FIXME Временный костыль, тк из амадеуса по неясным причинам приходят закрытые тарифы аэрофлота
+    return if (flights.any?{|f| booking_class_for_flight(f) == 'Z' && f.marketing_carrier_iata == 'SU' })
+
     commission
+  end
+
+  def ignored_carriers
+    ((marketing_carrier_iatas + operating_carrier_iatas) & Conf.amadeus.ignored_carriers).present?
   end
 
   def without_full_information?
@@ -271,14 +279,19 @@ class Recommendation
       s.flights.collect(&:flight_code).join('-')
     }
 
-    ( [ source, validating_carrier_iata, booking_classes.join(''), cabins.join(''), (availabilities || []).join('') ] +
+    ( [ source, validating_carrier_iata, price_with_payment_commission.ceil, booking_classes.join(''), cabins.join(''), (availabilities || []).join('') ] +
       segment_codes ).join('.')
   end
 
   def self.deserialize(coded)
     # временная штука, пока не инвалидируем весь кэш старых рекомендаций
     coded = 'amadeus.' + coded unless coded =~ /^amadeus|^sirena/
-    source, fv, classes, cabins, availabilities, *segment_codes = coded.split('.')
+    unless coded.split('.')[2] =~ /^\d+$/
+      source, fv, classes, cabins, availabilities, *segment_codes = coded.split('.')
+      declared_price = 0
+    else
+      source, fv, declared_price, classes, cabins, availabilities, *segment_codes = coded.split('.')
+    end
     variant = Variant.new(
       :segments => segment_codes.collect { |segment_code|
         Segment.new( :flights => segment_code.split('-').collect { |flight_code|
@@ -290,6 +303,7 @@ class Recommendation
     new(
       :source => source,
       :validating_carrier_iata => fv,
+      :declared_price => declared_price.to_i,
       :booking_classes => classes.split(''),
       :cabins => cabins.split(''),
       :variants => [variant],

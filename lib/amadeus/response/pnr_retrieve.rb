@@ -47,7 +47,7 @@ module Amadeus
                          :passport => passport(passenger_ref, need_infant),
                          :tickets => correct_passenger_tickets(tickets_array),
                          :number_in_amadeus => (ti / '../../r:elementManagementPassenger/r:lineNumber').to_s,
-                         :infant_or_child => need_infant ? 'i' : nil
+                         :infant => need_infant
                          )
           end
         end.flatten
@@ -177,9 +177,9 @@ module Amadeus
         @exchanged_tickets ||= xpath( "//r:dataElementsIndiv[r:elementManagementData/r:reference[r:qualifier='OT']]/r:otherDataFreetext[r:freetextDetail/r:type='45']/r:longFreetext"
         ).inject({}) do |res, fa|
           ticket_hash = parsed_exchange_string(fa.to_s)
-          passenger_ref = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='PT']/r:number").to_i || tickets.keys[0][0][0]
-          passenger_elem = xpath("//r:travellerInfo[r:elementManagementPassenger/r:reference[r:qualifier='PT'][r:number=#{passenger_ref}]]")
           infant_flag = ticket_hash.delete(:inf) == 'INF' ? 'i': 'a'
+          passenger_ref = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='PT']/r:number").to_i || tickets.keys.find{|(_, flag), _| flag == infant_flag}[0][0]
+          passenger_elem = xpath("//r:travellerInfo[r:elementManagementPassenger/r:reference[r:qualifier='PT'][r:number=#{passenger_ref}]]")
 
           segments_refs = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='ST']/r:number").every.to_i.sort
           if segments_refs.blank?

@@ -4,15 +4,8 @@ require 'spec_helper'
 describe Order do
 
   it "should be correctly faked by factory" do
-    order = Factory.build(:order)
+    order = build(:order)
     order.save!
-  end
-
-  it "should not allow to create two orders with the same pnr number" do
-    order1 = Order.new :pnr_number => 'foobar'
-    order2 = Order.new :pnr_number => 'FOObar'
-    order1.save!
-    order2.should have_errors_on(:pnr_number)
   end
 
   describe "#capitalize_pnr" do
@@ -27,6 +20,12 @@ describe Order do
       order.send :capitalize_pnr
       order.pnr_number.should == 'БХЦ45'
     end
+
+    it "should string class" do
+      order = Order.new :pnr_number => 'бхЦ45'
+      order.send :capitalize_pnr
+      order.pnr_number.class.should == String
+    end
   end
 
   describe "#create_cash_payment" do
@@ -39,14 +38,14 @@ describe Order do
     end
 
     context "normal cash or payture order" do
-      let(:order) { Factory(:order, :price_with_payment_commission => 20.2) }
+      let(:order) { create(:order, :price_with_payment_commission => 20.2) }
       it {should be_a(CashCharge)}
       its(:price) {should == order.price_with_payment_commission}
-      its(:commission) {should == Fx(Conf.payture.commission)}
+      its(:commission) {should == Fx(Conf.payment.commission)}
     end
 
     context "normal cash or payture order" do
-      let(:order) { Factory(:order, :price_with_payment_commission => 20.2, :pricing_method => 'corporate_0001') }
+      let(:order) { create(:order, :price_with_payment_commission => 20.2, :pricing_method => 'corporate_0001') }
       it {should be_a(CashCharge)}
       its(:price) {should == order.price_with_payment_commission}
       its(:commission) {should == Fx(0)}
@@ -68,9 +67,8 @@ describe Order do
     context 'with one non-zero ticket' do
       before(:all) do
         Conf.payture.stub(:commission).and_return('2.8%')
-        @old_ticket = Ticket.new(:ticketed_date => Date.today - 5.days, :original_price_fare => 21590.to_money("RUB"), :original_price_tax => 9878.to_money("RUB"), :kind => 'ticket', :status => 'ticketed', :code => '123', :number => '123456789')
-        @order = Order.new(:pnr_number => '', :price_fare => 21590, :price_tax => 9878, :price_with_payment_commission => BigDecimal('31946.68'), :source => 'amadeus', :fix_price => true)
-        @order.save
+        @old_ticket = Ticket.new(:price_fare => 21590, :price_tax => 9878, :kind => 'ticket', :status => 'ticketed', :code => '123', :number => '123456789')
+        @order = create(:order, :price_fare => 21590, :price_tax => 9878, :price_with_payment_commission => BigDecimal('31946.68'), :source => 'amadeus', :fix_price => true)
         @old_ticket.order = @order
         @old_ticket.save
         @new_ticket_hashes = [
@@ -131,10 +129,8 @@ describe Order do
     context 'of two tickets with zero price' do
       before(:all) do
         Conf.payture.stub(:commission).and_return('2.8%')
-        @order = Order.new(:pnr_number => '', :price_fare => 20010, :price_tax => 10860, :price_with_payment_commission => BigDecimal('30729.94'), :source => 'amadeus', :price_discount => 1000.5, :fix_price => true)
-        @order.save
-        @old_tickets = [1,2].map {|n| Ticket.new(:ticketed_date => Date.today - 5.days, :original_price_fare => 10005.to_money("RUB"), :original_price_tax => 5430.to_money("RUB"), :price_discount => 500.25, :kind => 'ticket', :status => 'ticketed', :code => '123', :number => "123456789#{n}", :order => @order)}
-        @old_tickets.every.save
+        @order = create(:order, :price_fare => 20010, :price_tax => 10860, :price_with_payment_commission => BigDecimal('30729.94'), :source => 'amadeus', :price_discount => 1000.5, :fix_price => true)
+        @old_tickets = [1,2].map {|n| create(:ticket, :ticketed_date => Date.today - 5.days, :original_price_fare => 10005.to_money("RUB"), :original_price_tax => 5430.to_money("RUB"), :price_discount => 500.25, :kind => 'ticket', :status => 'ticketed', :code => '123', :number => "123456789#{n}", :order => @order)}
         @new_ticket_hashes = [
           {:number => '1234567871', :code => '123', :ticketed_date => Date.today - 2.days, :original_price_fare => 0.to_money("RUB"), :original_price_tax => 0.to_money("RUB"), :source => 'amadeus', :parent_id => @old_tickets[0].id, :status => 'ticketed'},
           {:number => '1234567872', :code => '123', :ticketed_date => Date.today - 2.days, :original_price_fare => 0.to_money("RUB"), :original_price_tax => 0.to_money("RUB"), :source => 'amadeus', :parent_id => @old_tickets[1].id, :status => 'ticketed'},
@@ -204,7 +200,7 @@ describe Order do
     context "for amadeus order" do
 
       before(:each) do
-        @order = Order.new(:source => 'amadeus', :commission_subagent => '1%', :pnr_number => '123456')
+        @order = build(:order, :source => 'amadeus', :commission_subagent => '1%', :pnr_number => '123456')
         @amadeus = mock('Amadeus')
         @amadeus.stub(
           pnr_retrieve:

@@ -144,6 +144,14 @@ def self.fill_in_morpher_fields(klass, first_id = 0)
     end
   end
 
+  def self.fill_customers_for_orders
+    Order.where("customer_id IS NULL").limit(20).each do |order|
+      customer_email = order.email.strip.split(/[,; ]/).first
+      order.customer = Customer.find_or_create_by_email(customer_email)
+      order.save
+    end
+  end
+
   def self.migrate_partners
     Conf.api.partners.each do |name|
       Partner.find_or_initialize_by_token(name).update_attributes(:enabled => true, :password => '')

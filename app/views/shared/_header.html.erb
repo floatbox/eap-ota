@@ -38,10 +38,28 @@
 <noscript><div><img src="//mc.yandex.ru/watch/5324671?ut=noindex" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 
+<% if Conf.ohmystats.enabled %>
+<!-- Oh My Stats tracker -->
+<script type="text/javascript">
+//<![CDATA[
+var _oms = window._oms || [];
+_oms.push(["set_project_id", "<%= Conf.ohmystats.project_id %>"]);
+(function() {
+    var oms = document.createElement("script");
+    oms.type = "text/javascript";
+    oms.async = true;
+    oms.src = "//ohmystats.com/oms.js";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(oms, s);
+})();
+//]]>
+</script>
+<% end %>
+
 <div id="page-header">
 <div class="ph-content">
     <div class="ph-logo">
-        <a href="/" title="Кликните, чтобы сбросить условия и результаты поиска"><img src="/images/common/eviterra.png" alt="Eviterra"></a>
+        <a href="/" title="Кликните, чтобы сбросить условия и результаты поиска"><img src="/images/common/eviterra-bg.png" alt="Eviterra"></a>
     </div>
     <ul class="ph-tabs">
         <li class="active"><span class="link" title="Простая покупка авиабилетов">Авиабилеты</span></li>
@@ -54,6 +72,7 @@
         <div class="phs-item" id="phs-facebook"><div class="fb-like" data-href="http://facebook.com/eviterra" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-font="arial"></div></div>
         <div class="phs-item" id="phs-twitter"><a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-url="https://eviterra.com" data-via="eviterra">Tweet</a></div>
         <div class="phs-item" id="phs-google"><g:plusone size="medium" href="https://eviterra.com"></g:plusone></div>
+        <div class="phs-item" id="phs-vk"><div id="vk-like"></div></div>
     </div>
     
 </div>

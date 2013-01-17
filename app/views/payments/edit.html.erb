@@ -27,7 +27,7 @@
 <% if @card %>
 <div id="booking" style="display: block;">
 <div class="b-content" style="display: block;">
-<%= form_for @card, :as => :card, :url => edit_payment_url(:code=> @order.code), :html => { :id => 'booking-form', :autocomplete => "off" } do |f| %>
+  <%= form_for @card, :as => :card, :url => edit_payment_url(:code=> @order.code, :gateway => params[:gateway]), :html => { :id => 'booking-form', :autocomplete => "off" } do |f| %>
 
     <div class="bf-section" data-type="payment">
         <div class="bfs-title">
@@ -38,11 +38,14 @@
 
     <% price_total = @order.price_with_payment_commission.round.to_i %>
     <div class="bf-footer" style="padding-bottom: 15px;">
+    <div class="bff-left">
         <div class="bff-price">
             <div class="bffp-content">
                 <p class="bffp-nd">С&nbsp;карты будет списано —<br><span class="bffp-sum"><%= price_total %></span>&nbsp;<%= rubles(price_total) %></p>
             </div>
         </div>
+    </div>
+    <div class="bff-right">
         <div class="bff-submit">
             <div class="bf-button">
                 <div class="bfb-title">Оплатить</div>
@@ -51,6 +54,7 @@
             <div class="bff-progress">секундочку...</div>
         </div>
         <div class="bff-required"></div>
+    </div>
     </div>
     
 <% end %>

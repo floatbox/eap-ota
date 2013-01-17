@@ -7,7 +7,7 @@ class CashCharge < Payment
   has_many :refunds, :class_name => 'CashRefund', :foreign_key => 'charge_id'
 
   def set_ref
-    #update_attribute(:ref, Conf.payment.order_id_prefix + id.to_s)
+    #update_attribute(:ref, Conf.payment.ref_prefix + id.to_s)
     #update_attribute(:system, 'cash')
   end
 

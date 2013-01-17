@@ -28,9 +28,11 @@ Eviterra::Application.routes.draw do
   match 'booking/form' => 'booking#form', :as => :booking_form
   post 'booking/recalculate_price' => 'booking#recalculate_price', :as => :booking_recalculate_price
   post 'booking/pay' => 'booking#pay', :as => :booking_pay
+  post 'api/pay' => 'api_booking#pay', :as => :api_booking_pay
   # FIXME сделать POST однажды
   match 'booking/preliminary_booking' => 'booking#preliminary_booking', :as => :preliminary_booking
-  match '/confirm_3ds/(:order_id)' => 'booking#confirm_3ds', :as => :confirm_3ds
+  match 'api/preliminary_booking' => 'api_booking#preliminary_booking', :as => :api_preliminary_booking
+  post 'confirm_3ds' => 'booking#confirm_3ds', :as => :confirm_3ds
   match 'order/:id' => 'PNR#show', :as => :show_order
   match 'notice/:id' => 'PNR#show_notice', :as => :show_notice
   match 'order/:id/booked' => 'PNR#show_as_booked', :as => :show_booked_order
@@ -38,8 +40,8 @@ Eviterra::Application.routes.draw do
   match 'order/:id/ticketed' => 'PNR#show_as_ticketed', :as => :show_ticketed_order
   match 'order/:id/for_ticket/:ticket_id' => 'PNR#show_for_ticket', :as => :show_order_for_ticket
   match 'order/:id/receipt' => 'PNR#receipt', :as => :show_order_receipt
-  match '/pay/:code' => 'payments#edit', :via => :get, :as => :edit_payment
-  match '/pay/:code' => 'payments#update', :via => :post, :as => :edit_payment
+  match '/pay/:code(/:gateway)' => 'payments#edit', :via => :get, :as => :edit_payment
+  match '/pay/:code(/:gateway)' => 'payments#update', :via => :post, :as => :edit_payment
 
   match '/corporate/start' => 'corporate#start', :as => :start_corporate
   match '/corporate/stop' => 'corporate#stop', :as => :stop_corporate
@@ -69,6 +71,7 @@ Eviterra::Application.routes.draw do
   match "admin/commissions" => 'admin/commissions#index', :as => 'admin_commissions'
   match "admin/new_hot_offers" => 'admin/hot_offers#best_of_the_week', :as => 'show_best_offers'
   match 'admin/notifications/show_sent_notice/:id' => 'admin/notifications#show_sent_notice', :as => :show_sent_notice
+  match 'admin/reports/selling' => 'admin/reports#selling', :as => :admin_reports_selling
 
   root :to => 'home#index'
 

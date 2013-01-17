@@ -2,7 +2,7 @@ Payment: &PAYMENT_CONFIG
   fields:
     default: show_link, status_decorated, price, created_at, payment_info, error_explanation, control_links
     list: show_link, order, status_decorated, price, commission, earnings, created_at, charged_on, payment_info, error_explanation, control_links
-    show: show_link, order, status_decorated, charge_link, external_gateway_link, price, commission, earnings, created_at, charged_on, name_in_card, pan, reject_reason, error_explanation
+    show: show_link, order, status_decorated, charge_link, external_gateway_link, price, commission, earnings, created_at, charged_on, name_in_card, pan_searchable, error_code, error_explanation, error_message
     new: type, price
     edit: type, price, commission, charged_on
     csv: type, price, charged_on
@@ -12,8 +12,8 @@ Payment: &PAYMENT_CONFIG
         charged_on: long
   #options:
   #  default_action_on_item: show
-  scopes: secured, not_secured, payture, cash, charges, refunds, processing_too_long
-  search: =ref, =id, name_in_card, pan
+  scopes: secured, not_secured, payu, payture, cards, cash, charges, refunds, processing_too_long
+  search: =ref, =their_ref, =id, name_in_card, pan
   relationships: order, refunds
   order_by: -created_at
   filters: created_at, charged_on, type, status
@@ -24,26 +24,24 @@ Payment: &PAYMENT_CONFIG
     export: csv
 
 # Typus не умеет отображать таблицы для Single table inheritance
-PaytureCharge:
+# пытаемся их спрятать по мере сил.
+PayuCharge: &HIDDEN_SECTION
   <<: *PAYMENT_CONFIG
   application: Misc, 2
   options:
     hide_from_dashboard: yes
+
+PayuRefund:
+  <<: *HIDDEN_SECTION
+
+PaytureCharge:
+  <<: *HIDDEN_SECTION
 
 PaytureRefund:
-  <<: *PAYMENT_CONFIG
-  application: Misc, 2
-  options:
-    hide_from_dashboard: yes
+  <<: *HIDDEN_SECTION
 
 CashCharge:
-  <<: *PAYMENT_CONFIG
-  application: Misc, 2
-  options:
-    hide_from_dashboard: yes
+  <<: *HIDDEN_SECTION
 
 CashRefund:
-  <<: *PAYMENT_CONFIG
-  application: Misc, 2
-  options:
-    hide_from_dashboard: yes
+  <<: *HIDDEN_SECTION

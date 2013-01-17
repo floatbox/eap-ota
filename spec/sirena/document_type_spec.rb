@@ -19,6 +19,8 @@ describe 'проверяем, правильно ли угадывается т�
   specify {convert('456#5018648', "GB", 20.years.ago.to_date, true).should == 'НП'}
   specify {convert('456#Ы5018648', "GB", 20.years.ago.to_date, false).should == 'ЗА'}
   specify {convert('456#Ы506489', "RU", 20.years.ago.to_date, true).should == nil}
+  specify {convert('IIIАК532098', "RU", 1.year.ago.to_date, true).should == 'СР'}
+  specify {convert('3АК532098', "RU", 1.year.ago.to_date, true).should == 'СР'}
 
 end
 

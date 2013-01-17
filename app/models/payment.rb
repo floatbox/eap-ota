@@ -1,6 +1,49 @@
 # encoding: utf-8
 class Payment < ActiveRecord::Base
 
+  # дефолтные издержки на транзакцию
+  def self.commission
+    @commission ||= Commission::Formula.new(Conf.payment.commission)
+  end
+
+  # зачатки payment strategy
+  # сейчас создает только кредитнокарточковые платежи
+  def self.select_and_create(args)
+    processing_code = args.delete(:gateway).presence || Conf.payment.card_processing
+
+    klass =
+      case processing_code
+      when 'payture'
+        PaytureCharge
+      when 'payu'
+        PayuCharge
+      when false
+        nil
+      else
+        raise ArgumentError, "unknown payment.card_processing: #{processing_code}"
+      end
+
+    return unless klass
+
+    klass.create(args)
+  end
+
+  # эвристика для поиска 3дсовых платежей в разных системах
+  def self.find_3ds_by_backref!(params)
+    payment =
+      if params[:MD].present?
+        PaytureCharge.find_by_threeds_key(params[:MD])
+      elsif params[:REFNO].present?
+        PayuCharge.find_by_their_ref(params[:REFNO])
+      end
+
+    unless payment
+      raise ArgumentError, "strange params for confirm_3ds: #{params.inspect}"
+    end
+
+    payment
+  end
+
   has_paper_trail
   extend Commission::Columns
 
@@ -8,6 +51,7 @@ class Payment < ActiveRecord::Base
   # порядок важен!
   before_save :set_defaults
   before_save :recalculate_earnings
+  after_save :update_incomes_in_order
 
   belongs_to :order
   attr_accessor :custom_fields
@@ -22,19 +66,23 @@ class Payment < ActiveRecord::Base
 
   validates :price, decimal: true
 
-  CHARGES = ['PaytureCharge', 'CashCharge']
-  REFUNDS = ['PaytureRefund', 'CashRefund']
+  CHARGES = ['PayuCharge', 'PaytureCharge', 'CashCharge']
+  REFUNDS = ['PayuRefund', 'PaytureRefund', 'CashRefund']
 
   scope :charges, where(:type => CHARGES)
   scope :refunds, where(:type => REFUNDS)
 
+  PAYU =    ['PayuCharge', 'PayuRefund']
   PAYTURE = ['PaytureCharge', 'PaytureRefund']
   CASH =    ['CashCharge', 'CashRefund']
+  CARDS =   PAYU + PAYTURE
 
+  scope :payu, where(:type => PAYU)
   scope :payture, where(:type => PAYTURE)
   scope :cash, where(:type => CASH)
+  scope :cards, where(:type => CARDS)
   def self.types
-    (PAYTURE + CASH).map {|type| [I18n.t(type), type] }
+    (PAYU + PAYTURE + CASH).map {|type| [I18n.t(type), type] }
   end
 
   # состояния, для оверрайда в подкласах и чтоб кнопки работали
@@ -42,7 +90,7 @@ class Payment < ActiveRecord::Base
   def can_confirm_3ds?; false end
   def can_cancel?;      false end
   def can_charge?;      false end
-  def can_sync_state?;  false end
+  def can_sync_status?; false end
 
   def self.statuses; %W[ pending threeds blocked charged rejected canceled ] end
 
@@ -94,6 +142,13 @@ class Payment < ActiveRecord::Base
     self.status ||= 'blocked'
   end
 
+  def update_incomes_in_order
+    if order
+      order.secured_payments.reload
+      order.update_incomes
+    end
+  end
+
   # распределение дохода
   def set_defaults
     # to be overriden in subclasses
@@ -108,7 +163,7 @@ class Payment < ActiveRecord::Base
   end
 
   # TODO override in subclasses
-  def payment_state_raw
+  def payment_status_raw
     "--"
   end
 
@@ -128,7 +183,7 @@ class Payment < ActiveRecord::Base
   end
 
   def payment_info
-    "#{pan} #{name_in_card}" if pan.present? || name_in_card.present?
+    "#{pan_searchable} #{name_in_card}".html_safe if pan.present? || name_in_card.present?
   end
 
   def control_links
@@ -141,6 +196,11 @@ class Payment < ActiveRecord::Base
     else
       "<span style='color:gray;'>#{status}</span>".html_safe
     end
+  end
+
+  # FIXME устранить XSS
+  def pan_searchable
+    "<a href='/admin/payments?search=#{pan}'>#{pan}</a>".html_safe
   end
 
 end

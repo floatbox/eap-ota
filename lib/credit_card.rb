@@ -4,6 +4,7 @@ require 'time'
 require 'date'
 require 'billing/expiry_date'
 require 'billing/credit_card_methods'
+require 'billing/credit_card_constructors'
 
 # == Description
 # This credit card object can be used as a stand alone object. It acts just like an ActiveRecord object
@@ -39,6 +40,7 @@ class CreditCard
   include Billing::CreditCardMethods
   include ActiveModel::Validations
   include KeyValueInit
+  extend Billing::CreditCardConstructors
 
   # FIXME before_validate по идее должен бы вызываться в недрах ActiveModel
   # FIXME заменить на ActiveModel колбэки или что там
@@ -55,7 +57,7 @@ class CreditCard
   self.require_verification_value = true
 
   # Essential attributes for a valid, non-bogus creditcards
-  attr_accessor :month, :year, :type, :first_name, :last_name, :name
+  attr_accessor :month, :year, :type, :name
   attr_writer :number, :number1, :number2, :number3, :number4
 
   # Required for Switch / Solo cards
@@ -112,6 +114,14 @@ class CreditCard
 
   def last_name?
     !@last_name.blank?
+  end
+
+  def first_name
+    @name.split(' ', 2).first
+  end
+
+  def last_name
+    @name.split(' ', 2).last
   end
 
   def verification_value?

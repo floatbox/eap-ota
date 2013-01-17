@@ -47,9 +47,9 @@ end
 # - Place the rest under Spork.each_run block
 Spork.each_run do
   # This code will be run each time you run your specs.
+  Order.delete_all
 
 end
-
 # - Any code that is left outside of the blocks will be ran during preforking
 #   and during each_run!
 # - These instructions should self-destruct in 10 seconds.  If they don't,

@@ -1,8 +1,9 @@
 # encoding: utf-8
 module Strategy::Amadeus::PreliminaryBooking
 
-  def check_price_and_availability
-    unless TimeChecker.ok_to_book(@search.segments[0].date_as_date + 1.day)
+  def check_price_and_availability(forbid_class_changing= Conf.amadeus.forbid_class_changing)
+    @forbid_class_changing = forbid_class_changing
+    unless TimeChecker.ok_to_book(@rec.dept_date + 1.day)
       logger.error 'Strategy::Amadeus::Check: time criteria missed'
       return
     end
@@ -38,15 +39,12 @@ module Strategy::Amadeus::PreliminaryBooking
   end
 
   def find_new_classes(amadeus)
-    h = {'W' => 'Y', 'M' => 'Y'}
-    cabins = @rec.cabins.map{|cabin| h[cabin] || cabin}
-    return if cabins == @rec.booking_classes
+    return if @forbid_class_changing
     amadeus.pnr_ignore
     begin
       resp = amadeus.fare_informative_best_pricing_without_pnr(
         :recommendation => @rec,
-        :people_count => @search.real_people_count,
-        :booking_classes => cabins)
+        :people_count => @search.real_people_count)
 
       if resp.success?
         #дебажный вывод цен

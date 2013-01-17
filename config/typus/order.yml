@@ -1,6 +1,6 @@
 Order:
   fields:
-    default: order_id, pnr_number, email, phone, updated_at
+    default: pnr_number, email, phone, updated_at
     list:
       - source
       - pnr_number
@@ -16,10 +16,10 @@ Order:
       - partner
       - urgent
     show:
-      - order_id
       - has_refunds
       - source
       - pnr_number
+      - parent_pnr_number
       - offline_booking
       - description
       - route
@@ -76,6 +76,7 @@ Order:
       - phone
       - source
       - pnr_number
+      - parent_pnr_number
       - sirena_lead_pass
       - route
       - payment_type
@@ -124,7 +125,7 @@ Order:
       - price_with_payment_commission
       - price_total
       - expected_income
-      - balance
+      - stored_balance
       - price_our_markup
       - income_payment_gateways
       - sold_tickets_numbers
@@ -145,8 +146,8 @@ Order:
         created_at: long
         updated_at: long
         last_pay_time: long
-  order_by: -created_at
-  search: ^pnr_number, email, phone, =order_id
+  order_by: -orders.created_at
+  search: ^pnr_number, ^parent_pnr_number, email, phone
   options:
     default_action_on_item: show
     export: csv

@@ -5,6 +5,9 @@ prototype.decline = function(w1, w2, w3, complex) {
 	var w = n > 4 || n === 0 || nn - n === 10 ? w3 : (n === 1 ? w1 : w2);
 	return complex === false ? w : (this.toString() + ' ' + w);
 };
+prototype.declineArray = function(w, complex) {
+    return this.decline(w[0], w[1], w[2], complex);
+};
 prototype.constrain = function(min, max) {
     var n = this.valueOf();
 	return (n < min) ? min : ((n > max) ? max : n);
@@ -68,11 +71,6 @@ prototype.shift = function(d) {
     this.setDate(this.getDate() + d);
     return this;
 };
-prototype.human = function(year) {
-    var parts = [this.getDate(), local.date.gmonthes[this.getMonth()]];
-    if (year) parts[2] = this.getFullYear();
-    return parts.join(' ');
-};
 prototype.dow = function() {
     var d = this.getDay();
     return d === 0 ? 6 : (d - 1);
@@ -112,7 +110,7 @@ function preloadImages() {
 var $w = $(window);
 
 /* Animated scrolling */
-$.fn.extend({
+$.extend($.fn, {
 smoothScrollTo: function(pos, dur) {
     var el = this, cur = el.scrollTop();
     if (typeof dur !== 'number') {
@@ -163,6 +161,9 @@ var browser = (function() {
 		$d.addClass(signs[i]);
 	}
 	data.touchscreen = 'ontouchstart' in window;
+	if (!data.touchscreen) {
+    	$d.addClass('no-touch');
+	}
 	data.ios = data.iphone || data.ipad;
 	return data;
 })();

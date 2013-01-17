@@ -16,6 +16,7 @@ class PricerForm
   accepts_nested_attributes_for :segments
   delegate :to, :from, :from_iata, :to_iata, :to => 'segments.first'
   attr_reader :complex_to_parse_results
+  validate :check_people_total
 
   # перенести в хелпер
   def self.convert_api_date(date_str)
@@ -24,6 +25,10 @@ class PricerForm
     else
       date_str
     end
+  end
+
+  def check_people_total
+    errors.add(:people_total, 'Количество пассажиров не должно быть больше восьми') if people_total > 8
   end
 
   def hash_for_rambler
@@ -195,6 +200,7 @@ class PricerForm
   class << self
     def load_from_cache(query_key)
       pricer_form = PricerForm.where(:query_key => query_key).last
+      raise Mongoid::Errors::DocumentNotFound.new(PricerForm, :query_key => query_key) if pricer_form.nil?
       if pricer_form
         pricer_form.inc(:use_count, 1)
       end

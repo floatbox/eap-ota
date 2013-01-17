@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
     <title>Eviterra — самые дешевые авиабилеты по всему миру онлайн. Все авиакомпании. Максимальные скидки.</title>
     <meta name="description" content="Eviterra — простой, удобный и быстрый способ найти и купить авиабилет. Поиск, выбор рейса и бронирование онлайн. Мгновенная оплата и оформление авиабилетов. Цены на авиабилеты.">
-    <meta name="keywords" content="авиабилет, авиабилеты, авиакасса, авиа билеты, авиакомпании, все авиакомпании, купить авиабилеты, куплю авиабилеты, авиабилеты дешево, дешевые авиабилеты, самые дешевые авиабилеты, стоимость авиабилетов, билеты на самолет, авиабилеты из москвы, забронировать авиабилеты, бронирование авиабилетов, выбрать рейс, авиарейс, перелет, дешевые авиаперелеты, цены на билеты, онлайн бронирование, эвитерра, авитерра, авитера, евитерра, eviterra, aviterra.ru, evitera, эвитера, эвиттера, эвиттерра, спецпредложения, акции, авиакомпании, расписание рейсов, сложный маршрут, агентство, турагентство, путешествия, аэрофлот, трансаэро, lufthansa, iberia, s7, сибирь, delta, ютэйр, гтк россия, пулково, аэросвит, air berlin, шереметьево, домодедово, внуково, авиабилеты по россии, авиабилеты в европу, авиабилеты в сша">
+    <meta name="keywords" content="авиабилет, авиабилеты, дешевые авиабилеты, авиабилеты онлайн, авиакасса, авиа билеты, авиакомпании, все авиакомпании, купить авиабилеты, куплю авиабилеты, авиабилеты дешево, самые дешевые авиабилеты, стоимость авиабилетов, билеты на самолет, авиабилеты из москвы, забронировать авиабилеты, бронирование авиабилетов, выбрать рейс, авиарейс, перелет, дешевые авиаперелеты, цены на билеты, онлайн бронирование, эвитерра, авитерра, авитера, евитерра, eviterra, aviterra.ru, evitera, эвитера, эвиттера, эвиттерра, спецпредложения, акции, авиакомпании, расписание рейсов, сложный маршрут, агентство, турагентство, путешествия, аэрофлот, трансаэро, lufthansa, iberia, s7, сибирь, delta, ютэйр, гтк россия, пулково, аэросвит, air berlin, шереметьево, домодедово, внуково, авиабилеты по россии, авиабилеты в европу, авиабилеты в сша">
     <%= render 'shared/head' %>
     <%= stylesheet_link_tag 'home' %>
     <%= javascript_include_tag "local/ru", 'home' %>
@@ -54,10 +54,8 @@ page.init();
 
 <script src="//translate.google.com/translate_a/element.js?cb=googleSectionalElementInit&ug=section&hl=ru"></script>
 <script type="text/javascript" src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false&language=ru"></script>
-<!--
-<script src="//mc.yandex.ru/metrika/watch_visor.js" type="text/javascript" defer="defer"></script>
-<script type="text/javascript" src="https://yandex.st/share/share.js" charset="utf-8"></script>
--->
+
+<script type="text/javascript" src="//vk.com/js/api/openapi.js?68"></script>
 <script type="text/javascript">
 (function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
@@ -66,13 +64,21 @@ page.init();
     js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=429677207045748";
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
-(function(d,s,id) {
-    var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}
+(function(d, s, id) {
+    var js,fjs=d.getElementsByTagName(s)[0];
+    if(!d.getElementById(id)) {
+        js = d.createElement(s); js.id = id;
+        js.src="//platform.twitter.com/widgets.js";
+        fjs.parentNode.insertBefore(js,fjs);}
 }(document,"script","twitter-wjs"));
 (function() {
     var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
     po.src = 'https://apis.google.com/js/plusone.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+})();
+(function() {
+    VK.init({apiId: 3261549, onlyWidgets: true});
+    VK.Widgets.Like('vk-like', {type: 'mini', height: 20, pageUrl: 'https://eviterra.com/'});
 })();
 $('#share-icons').show();
 </script>

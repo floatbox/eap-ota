@@ -2,7 +2,7 @@
 <div class="bf-result bfr-success wrap" data-type="success">
 <div class="bfrs-message">
     <p class="bfrsm-text"><strong>Все отлично!</strong> <%= @order_form.people.one? ? "Ваш билет #{ paid ? 'оплачен' : 'забронирован' }" : "Ваши билеты #{ paid ? 'оплачены' : 'забронированы' }" %>. Подтверждение будет отправлено на ваш электронный адрес в течение десяти минут. <span class="link bf-hint bfrsm-hint" data-hint="bfh-mail">Что делать, если ничего не пришло?</span</p>
-    <p class="bfrsm-text">Номер вашей брони — <span class="bfr-pnr"><%= pnr_number %></span></p>
+    <p class="bfrsm-text bfrsm-number">Номер вашей брони — <span class="bfr-pnr"><%= pnr_number %></span></p>
     <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Ffacebook.com%2Feviterra&amp;send=false&amp;layout=standard&amp;width=552&amp;show_faces=true&amp;action=recommend&amp;colorscheme=light&amp;font&amp;height=80&amp;appId=155739531227363" scrolling="no" frameborder="0" style="margin-top: 10px; border:none; overflow:hidden; width:552px; height:80px;" allowTransparency="true"></iframe>
 </div>
 <div class="bfrs-addition">

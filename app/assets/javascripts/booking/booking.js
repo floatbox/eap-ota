@@ -82,7 +82,7 @@ load: function() {
     this.request = $.get('/booking/?number=' + this.key, function(content) {
         page.location.set('booking', that.key);
         if (results.data) {
-            page.title.set(local.title.booking.absorb(results.data.titles.window));
+            page.title.set(lang.pageTitle.booking.absorb(results.data.titles.window));
         }
         results.header.edit.hide();
         results.header.select.show();
@@ -93,7 +93,7 @@ load: function() {
         }
         $w.delay(400).smoothScrollTo(that.form.position());
         $w.queue(function(next) {
-            $('#bfc-email').focus();
+            $('#bfp0-last-name').focus();
             next();
         });
         trackPage('/booking');
@@ -136,18 +136,14 @@ comparePrices: function() {
     var dp = Number(context.attr('data-price')) - this.variant.price;
     if (dp !== 0) {
         trackEvent('Бронирование', 'Изменилась цена', dp > 0 ? 'Стало дороже' : 'Стало дешевле');
-        this.processPrice(context, dp);
-        if (dp < 0) {
-            context.find('.bfnp-tip').hide();
-        }
         context.show();
     }
 },
 processPrice: function(context, dp) {
-    var cur = local.currencies['RUR'];
+    var cur = lang.currencies['RUR'];
     var sum = Math.abs(dp).decline(cur[0], cur[1], cur[2]);
     var content = context.find('.bfnp-content');
-    content.html(content.html().absorb(local.booking.newprice[dp > 0 ? 'rise' : 'fall'], sum));
+    content.html(content.html().absorb(dp > 0 ? 'дороже' : 'дешевле', sum));
 },
 cancel: function() {
     Queries.show();
@@ -179,7 +175,7 @@ hide: function() {
     results.header.edit.show();
     results.content.el.show();
     $w.scrollTop(this.offer.details.offset().top - offset);
-    page.title.set(local.title.results.absorb(results.data.titles.window));
+    page.title.set(lang.pageTitle.results.absorb(results.data.titles.window));
     page.location.set('booking');
     trackPage('/#' + page.location.hash.replace('#', ''));
     delete this.offer;
@@ -201,7 +197,7 @@ init: function() {
     booking.el.find('.bffd-farerules').click(function(event) {
         that.show();
     });
-    var translator = typeof google !== 'undefined' && google.translate && google.translate.SectionalElement.getInstance();
+    var translator = typeof google !== 'undefined' && google.translate && google.translate.SectionalElement && google.translate.SectionalElement.getInstance();
     if (translator && translator.update) {
         translator.update();
     }

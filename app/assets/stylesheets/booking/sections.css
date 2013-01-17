@@ -358,7 +358,7 @@
 .bfpt-item {
     position: relative;
     float: left;
-    width: 240px;
+    width: 300px;
     padding-right: 20px;
 }
 .bfpt-title {
@@ -456,23 +456,17 @@
 .bfc-number {
     position: absolute;
     left: 10px;
-    top: 76px;
+    top: 75px;
 }
-.bfcn-parts {
-    border: 1px solid #C0C0C0;
-}
-.bfcn-parts .bf-field {
-    float: left;
-    width: 65px;
-    height: 29px;
-    border-width: 0 1px 0 0;
+#bfc-number {
+    width: 293px;
+    height: 31px;    
     padding: 2px 5px;
-    font-size: 24px;
-    line-height: 29px;
+    font-size: 26px;
+    line-height: 31px;
 }
-.bfcn-parts #bfcn-part4 {
-    border: none;
-}
+
+/* Card name */
 .bfc-name {
     position: absolute;
     left: 10px;
@@ -521,7 +515,7 @@
     top: 65px;
     left: 5px;
     width: 285px;
-    padding: 11px 15px 14px;
+    padding: 10px 15px 14px;
     border-radius: 3px;
     background: #e5e5e5;
     text-align: right;
@@ -529,12 +523,12 @@
 #bc-cvv,
 #bfcn-sample {
     float: right;
-    font-size: 24px;
-    line-height: 29px;
+    font-size: 26px;
+    line-height: 31px;
 }
 #bc-cvv {
     width: 50px;
-    height: 29px;
+    height: 31px;
     padding: 2px 6px;
 }
 #bfcn-sample {

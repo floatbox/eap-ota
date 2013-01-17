@@ -50,8 +50,7 @@ gem 'newrelic_rpm'
 gem 'rpm_contrib'
 gem 'mongoid'
 gem 'bson_ext'
-gem 'SystemTimer', :platforms => :ruby_18
-gem 'ya2yaml', :platforms => :ruby_18
+gem 'mobile-fu'
 
 #gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
 gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'
@@ -61,8 +60,7 @@ gem 'haml'
 gem 'hpricot', require: false
 
 gem 'typus', :git => 'https://github.com/Eviterra/typus.git'
-
-gem 'trashed', :git => 'https://github.com/codesnik/trashed.git'
+gem "flot-rails"
 gem 'delayed_job_mongoid'
 
 group :development do
@@ -95,7 +93,6 @@ group :test do
 end
 
 group :debug do
-  gem 'ruby-debug', :platforms => :ruby_18
   gem 'ruby-debug19', :require => 'ruby-debug', :platforms => :ruby_19
 end
 

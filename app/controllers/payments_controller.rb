@@ -28,15 +28,26 @@ class PaymentsController < ApplicationController
       return
     end
 
+    if @order.pnr_number.blank?
+      custom_field_order = Order[@order.parent_pnr_number]
+    else
+      custom_field_order = @order
+    end
+
     card = CreditCard.new(params[:card])
     if card.valid?
-      payture_response = @order.block_money(card, nil, request.remote_ip)
-      if payture_response.success?
+      custom_fields = PaymentCustomFields.new(
+        ip: request.remote_ip,
+        order: custom_field_order,
+        card: card
+      )
+      payment_response = @order.block_money(card, custom_fields, gateway: params[:gateway])
+      if payment_response.success?
         logger.info "Pay: payment succesful"
         render :partial => 'success'
-      elsif payture_response.threeds?
+      elsif payment_response.threeds?
         logger.info "Pay: payment system requested 3D-Secure authorization"
-        render :partial => 'booking/threeds', :locals => {:payture_response => payture_response}
+        render :partial => 'booking/threeds', :locals => {:payment => payment_response}
       else
         logger.info "Pay: payment failed"
         render :partial => 'fail'

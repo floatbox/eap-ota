@@ -6,7 +6,7 @@ class Admin::EviterraResourceController < Admin::ResourcesController
   end
 
   def info_for_paper_trail
-    { :action => "#{params[:controller]}/#{params[:action]}" }
+    { :done => "#{params[:controller]}/#{params[:action]}" }
   end
 
   before_filter :log_admin_user

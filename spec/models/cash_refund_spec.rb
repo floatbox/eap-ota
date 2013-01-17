@@ -4,7 +4,7 @@ require 'spec_helper'
 describe CashRefund do
 
   it 'should recalculate earnings on save' do
-    order = Factory(:order)
+    order = create(:order)
     charge = CashCharge.new :price => 23.5
     order.payments << charge
     charge.reload
@@ -16,7 +16,7 @@ describe CashRefund do
 
   # FIXME кривой тест
   it "should not allow to save refund without charge" do
-    order = Factory(:order)
+    order = create(:order)
     refund = CashRefund.new :price => -5, :order => order
 
     refund.should have_errors_on(:charge)

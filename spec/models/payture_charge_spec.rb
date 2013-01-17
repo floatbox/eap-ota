@@ -3,6 +3,10 @@ require 'spec_helper'
 
 describe PaytureCharge do
 
+  before do
+    Conf.payture.stub(:commission).and_return('2.85%')
+  end
+
   describe "factories" do
     specify { build(:payture_charge).should be_valid }
     specify { build(:payture_charge, :charged).should be_valid }

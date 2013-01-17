@@ -40,6 +40,7 @@ ru:
       typus_user: 'Пользователь Typus'
       notification: 'Оповещение'
       partner: 'Партнер'
+      version: 'История изменений'
     attributes:
       # общие атрибуты в заказах и билетах
       PRICING_ATTRIBUTES: &PRICING_ATTRIBUTES
@@ -84,6 +85,7 @@ ru:
         description: "Комментарий к форме оплаты, для клиента"
         route: "Маршрут"
         pnr_number: "Номер PNR"
+        parent_pnr_number: "Номер родительского PNR"
         payment_status: "Состояние платежа"
         ticket_status: "Состояние брони/билетов"
         payment_type: "Способ оплаты"
@@ -141,6 +143,7 @@ ru:
         payment_info: "Карта"
         name_in_card: "ФИО на кредитной карте"
         pan: "Номер карты"
+        pan_searchable: "Номер карты"
         error_explanation: "Ошибка"
         control_links: "Управление"
         created_at: "Создан"
@@ -172,10 +175,14 @@ ru:
 
   Charges: Платежи
   Refunds: Возвраты
-  Payture: Карта
+  Payu: Payu
+  Payture: Payture
   Cash: Наличные
-  PaytureCharge: Карта, платеж
-  PaytureRefund: Карта, возврат
+  Cards: Карты
+  PayuCharge: Payu, платеж
+  PayuRefund: Payu, возврат
+  PaytureCharge: Payture, платеж
+  PaytureRefund: Payture, возврат
   CashCharge: Наличные, платеж
   CashRefund: Наличные, возврат
 
@@ -204,6 +211,7 @@ ru:
   Admin: Администрирование
   Orders: Заказы
   Hot Offers: Маркетинг
+  Versions: История изменений
 
   'Show by %{attribute}': '-- %{attribute} --'
   'View all %{attribute}': '-- %{attribute} --'

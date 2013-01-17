@@ -36,15 +36,15 @@ class PaytureRefund < Payment
   def charge!
     return unless can_charge?
     update_attributes :status => 'processing_charge'
-    res = gateway.refund( -price, :order_id => ref)
+    res = gateway.refund( -price, :our_ref => ref)
     if res.success?
       update_attributes :status => 'charged', :charged_on => Date.today
       return true
     else
-      update_attributes :status => 'processing_charge', :reject_reason => res.err_code
+      update_attributes :status => 'processing_charge', :error_code => res.err_code
     end
   rescue => e
-    update_attributes :status => 'processing_charge', :reject_reason => e
+    update_attributes :status => 'processing_charge', :error_code => e
     raise
   end
 
@@ -58,17 +58,10 @@ class PaytureRefund < Payment
   end
 
   # для админки
-  def payment_state_raw
-    charge.payment_state_raw
-  end
+  delegate :payment_status_raw, :external_gateway_link, :to => :charge
 
   def charge_link
     charge.show_link
-  end
-
-  def external_gateway_link
-    url = "https://backend.payture.com/Payture/order.html?mid=55&pid=&id=#{ref}"
-    "<a href='#{url}' target='_blank'>#{ref}</a>".html_safe
   end
 
 end

@@ -79,17 +79,18 @@ class Order < ActiveRecord::Base
   has_percentage_only_commissions :commission_consolidator
 
   def self.[] number
-    find_by_pnr_number number
+    find_last_by_pnr_number number
   end
 
   def make_payable_by_card
-    update_attributes(:payment_type => 'card', :payment_status => 'not blocked', :offline_booking => true) if payment_status == 'pending'
+    update_attributes(:payment_type => 'card', :payment_status => 'not blocked', :offline_booking => true) if payment_status == 'pending' && (pnr_number.present? || parent_pnr_number.present?)
   end
 
   has_paper_trail
 
   has_many :payments
-  has_many :secured_payments, :conditions => ['status IN (?)', %W[ blocked charged processing_charge ]], :class_name => 'Payment'
+  has_many :secured_payments, conditions: { status: %W[ blocked charged processing_charge ]}, class_name: 'Payment'
+  belongs_to :customer
 
   # не_рефанды
   def last_payment
@@ -100,11 +101,11 @@ class Order < ActiveRecord::Base
   has_many :order_comments
   has_many :notifications
   has_one :promo_code
-  validates_uniqueness_of :pnr_number, :if => :'pnr_number.present?'
+  validates_presence_of :pnr_number, :if => Proc.new { |o|  o.parent_pnr_number.blank? && (!o.created_at || o.created_at > 5.days.ago) }, :message => 'Необходимо указать номер PNR или номер родительского PNR'
 
   before_validation :capitalize_pnr
   before_save :calculate_price_with_payment_commission, :if => lambda { price_with_payment_commission.blank? || price_with_payment_commission.zero? || !fix_price? }
-  before_create :generate_code, :set_payment_status, :set_email_status
+  before_create :generate_code, :set_customer, :set_payment_status, :set_email_status
   after_save :create_order_notice
 
   def create_order_notice
@@ -146,7 +147,8 @@ class Order < ActiveRecord::Base
 
   # FIXME сломается на ruby1.9
   def capitalize_pnr
-    self.pnr_number = pnr_number.to_s.mb_chars.strip.upcase
+    self.pnr_number = pnr_number.to_s.mb_chars.strip.upcase.to_s
+    self.parent_pnr_number = parent_pnr_number.to_s.mb_chars.strip.upcase.to_s
   end
 
   scope :unticketed, where(:payment_status => 'blocked', :ticket_status => 'booked')
@@ -155,6 +157,7 @@ class Order < ActiveRecord::Base
   scope :ticketed, where(:payment_status => ['blocked', 'charged'], :ticket_status => 'ticketed')
   scope :ticket_not_sent, where("email_status != 'ticket_sent' AND ticket_status = 'ticketed'")
   scope :sent_manual, where(:email_status => 'manual')
+  scope :reported, where(:payment_status => ['blocked', 'charged'], :offline_booking => false).where("pnr_number != ''")
 
 
   scope :stale, lambda {
@@ -163,7 +166,7 @@ class Order < ActiveRecord::Base
   }
 
   def contact
-    "#{email} #{phone}"
+    "#{email_searchable} #{phone}".html_safe
   end
 
   #флаг для админки
@@ -224,10 +227,6 @@ class Order < ActiveRecord::Base
 
   def tickets_office_ids
     tickets_office_ids_array.join('; ')
-  end
-
-  def order_id
-    last_payment.try(:ref)
   end
 
   def need_attention
@@ -371,7 +370,17 @@ class Order < ActiveRecord::Base
     self.price_our_markup = sold_tickets.sum(:price_our_markup)
 
     self.price_difference = price_total - price_total_old if price_difference == 0
+    update_incomes
     save
+  end
+
+  def update_has_refunds
+    update_attributes(has_refunds: tickets.where(:kind => 'refund', :status => 'processed').present?)
+  end
+
+  def update_incomes
+    self.stored_income = income
+    self.stored_balance = balance
   end
 
   # использовать для сравнения с TST
@@ -431,8 +440,8 @@ class Order < ActiveRecord::Base
 
   delegate :charged_on, :to => :last_payment, :allow_nil => true
 
-  def confirm_3ds pa_res, md
-    if result = last_payment.confirm_3ds!(pa_res, md)
+  def confirm_3ds! params
+    if result = last_payment.confirm_3ds!(params)
       money_blocked!
     end
     result
@@ -450,9 +459,9 @@ class Order < ActiveRecord::Base
     res
   end
 
-  def block_money card, order_form = nil, ip = nil
-    custom_fields = PaymentCustomFields.new(:ip => ip, :order_form => order_form, :order => self)
-    payment = PaytureCharge.create(:price => price_with_payment_commission, :card => card, :custom_fields => custom_fields, :order => self)
+  def block_money card, custom_fields, opts={}
+    multiplier = Conf.payment.test_multiplier || 1
+    payment = Payment.select_and_create(:gateway => opts[:gateway], :price => price_with_payment_commission * multiplier, :card => card, :custom_fields => custom_fields, :order => self)
     response = payment.block!
     money_blocked! if response.success?
     response
@@ -474,10 +483,10 @@ class Order < ActiveRecord::Base
 
   def money_received!
     if payment_status == 'pending'
-      update_attribute(:fix_price, true)
       self.fix_price = true
-      update_attribute(:payment_status, 'charged')
+      self.payment_status = 'charged'
       create_cash_payment
+      save
     end
   end
 
@@ -521,6 +530,10 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def set_customer
+    self.customer = Customer.find_or_create_by_email(email)
+  end
+
   def set_payment_status
     self.payment_status = (payment_type == 'card') ? 'not blocked' : 'pending'
   end
@@ -540,6 +553,11 @@ class Order < ActiveRecord::Base
     else
       "<span style='color:gray;'>#{payment_type}</span>".html_safe
     end
+  end
+
+  # FIXME отэскейпить емыл, воизбежание XSS
+  def email_searchable
+    "<a href='/admin/orders?search=#{email}'>#{email}</a>".html_safe
   end
 
   def settled?

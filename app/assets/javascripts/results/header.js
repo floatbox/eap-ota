@@ -25,8 +25,6 @@ init: function() {
         }
     });
     this.height = this.el.height();
-    this.el.height(this.height);
-    this.el.find('.rh-left').width('+=0');
 },
 hide: function() {
     this.buttonEnabled.fadeOut(150);

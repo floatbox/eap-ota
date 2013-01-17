@@ -20,7 +20,7 @@
     margin: 0 auto;
 }
 .rh-left {
-    width: 80%;
+    width: 740px;
     padding-bottom: 2px;
     vertical-align: middle;
 }
@@ -30,6 +30,7 @@
 
 /* Button */
 #results-button {
+    float: right;
     position: relative;
     font-weight: bold;
     font-size: 20px;

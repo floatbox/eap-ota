@@ -60,24 +60,26 @@ class OrderForm
     end
   end
 
-  # пассажиры, отсортированные по возрасту
-  def people_by_age
-    (people || []).sort_by(&:birthday)
-  end
-
   # пассажиры, летящие по взрослому тарифу
   def adults
-    people_by_age.first(people_count[:adults])
+    people.find_all{|p| p.adult?(last_flight_date)}
   end
 
   # пассажиры (в том числе младенцы), летящие по детскому тарифу с выделенным местом
+  # работает после assosiate_infants
   def children
-    people_by_age[ people_count[:adults], people_count[:children] ] || []
+    people - adults - infants
   end
 
   # дети до двух лет, которым не предоставляется места
+  # работает только после associate_infants
   def infants
-    people_by_age.last(people_count[:infants])
+    associated_infants
+  end
+
+  #дети до 2-х лет, без явно указанного места
+  def  potential_infants
+    people.find_all{|p| p.potential_infant?(last_flight_date) }
   end
 
   # взрослые без детей на коленях
@@ -94,7 +96,7 @@ class OrderForm
   # на текущий момент младенцы с местом должны попадать в категорию children
   # FIXME - проверять ли в valid orphans.empty?
   def orphans
-    infants - associated_infants
+    potential_infants - associated_infants
   end
 
   def people_attributes= attrs
@@ -138,6 +140,19 @@ class OrderForm
 
   def hash
     [recommendation, people_count, people, card].hash
+  end
+
+  def info_hash
+    {:prices => {
+        :fare => recommendation.price_fare.round(2),
+        :tax_and_markup => (recommendation.price_with_payment_commission - recommendation.price_fare).round(2),
+        :total => recommendation.price_with_payment_commission.round(2),
+        :discount => recommendation.price_discount.round(2),
+        :fee => recommendation.fee.round(2)
+      },
+      :rules => recommendation.rules,
+      :booking_classes => recommendation.booking_classes
+    }
   end
 
   def price_with_payment_commission
@@ -210,8 +225,8 @@ class OrderForm
   def validate_people
     people.each(&:set_birthday)
     people.each(&:set_document_expiration_date)
-    set_flight_date_for_childen_and_infants
     associate_infants
+    set_childen_and_infants
     unless people.all?(&:valid?)
       errors.add :people, 'Проверьте данные пассажиров'
     end
@@ -230,43 +245,25 @@ class OrderForm
   end
 
   def counts_contradiction
+    valid?
     people_count != calculated_people_count
   end
 
-  def calculated_people_count
-    last_date = recommendation.segments.last.dept_date
-    adults_count = people.count{|p| p.birthday + 12.years <= last_date}
-    exact_infants_count = people.count{|p| p.birthday + 2.years > last_date}
-    infants_count = if exact_infants_count <= adults_count
-      exact_infants_count
-    else
-      adults_count
-    end
-    children_count = people.count - adults_count - infants_count
-    {:adults => adults_count, :children => children_count, :infants => infants_count}
+  def last_flight_date
+    recommendation.segments.last.dept_date
   end
 
-  def set_flight_date_for_childen_and_infants
-    last_date = recommendation.flights.last.dept_date
+  def calculated_people_count
+    {:adults => adults.count, :children => children.count, :infants => infants.count}
+  end
+
+  def set_childen_and_infants
     children.each{|c|
-      c.flight_date = last_date
-      c.infant_or_child = 'c'
+      c.child = true
     }
     infants.each{|i|
-      i.flight_date = last_date
-      i.infant_or_child = 'i'
+      i.infant = true
     }
-  end
-
-  def block_money(ip = nil)
-    response = order.block_money(card, self, ip)
-
-    if response.error?
-      card.errors.add :number, "не удалось провести платеж"
-      errors.add :card, 'Платеж не прошел'
-    end
-
-    response
   end
 
   def agent_commission
@@ -287,7 +284,7 @@ class OrderForm
     # идем по порядку, привязываем каждого младенца к предшествующему по порядку взрослому
     people.each_cons(2) do |person, next_person|
       next if person.associated_infant
-      if person.adult? && next_person.infant?
+      if person.adult?(last_flight_date) && next_person.potential_infant?(last_flight_date)
         person.associated_infant = next_person
       end
     end
@@ -301,7 +298,7 @@ class OrderForm
 
     # распихиваем оставшихся
     orphans.zip( childfree_adults ).each do |orphan, adult|
-      adult.associated_infant = orphan
+      adult.associated_infant = orphan if adult
     end
   end
 

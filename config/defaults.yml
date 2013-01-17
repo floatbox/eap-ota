@@ -5,6 +5,13 @@ site:
   forbidden_cash: no
   forbidden_delivery: no
   store_flights: no
+  host: 'http://localhost:3000'
+  production:
+    host: 'https://eviterra.com'
+  staging:
+    host: 'https://staging.eviterra.com'
+  test:
+    host: 'http://localhost:3000'
 api:
   enabled: yes
   store_rambler_cache: no
@@ -36,12 +43,20 @@ amadeus:
   euro_rate: 40
   session_pool_size: 10
   no_ltd_restrictions: no
+  ignored_carriers: []
+  forbid_class_changing: no
 payment:
   # FIXME убить в локальных конфигах
   use_discount: no
   # FIXME убить в локальных конфигах
   order_id_prefix: o
   skip_checksum_validation: yes
+  # payture, payu, or no
+  card_processing: payture
+  # глобальная комиссия для некорпоратов
+  # использую ее при корректировке цен
+  commission: 2.85%
+  test_multiplier: ~
   production:
     skip_checksum_validation: no
 cash:
@@ -50,6 +65,8 @@ cash:
 payture:
   commission: 2.85%
   enabled: yes
+  ref_prefix: o
+  # FIXME убить в локальных конфигах
   order_id_prefix: o
   key: MerchantETerra
   host: sandbox.payture.com
@@ -65,6 +82,10 @@ payture:
     IwIDAQAB
     -----END PUBLIC KEY-----
 payu:
+  commission: 2.85%
+  ref_prefix: payu_
+  # FIXME переключатель пока не используется
+  enabled: yes
   seller_key: 'w7I2R8~V7=dm5H7[r1k5'
   host: sandbox8ru.epayment.ro
   merchant: EVITERRA
@@ -99,3 +120,9 @@ mail:
   subscription_reply_to: operator@eviterra.com
   subscription_cc: subscription@eviterra.com
   invoice_to: bills@eviterra.com
+ohmystats:
+  enabled: yes
+  project_id: tyjrlhjuionhuxvojzbravinzfejcnsdgcoyjsks
+  production:
+    enabled: yes
+    project_id: qsxfvashjzioiwazcryxlgysgjuitwyfaasjvkiv

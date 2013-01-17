@@ -43,7 +43,7 @@ class PNRController < ApplicationController
   end
 
   def show_for_ticket
-    order = Order.find_by_pnr_number!(params[:id])
+    order = Order[params[:id]] or raise ActiveRecord::RecordNotFound
     ticket = order.tickets.find(params[:ticket_id])
     @last_pay_time = order.last_pay_time
     @pnr = PNR.new(:email => order.email, :phone => order.phone, :number => order.pnr_number, :booking_classes => ticket.booking_classes)

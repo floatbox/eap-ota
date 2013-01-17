@@ -14,9 +14,8 @@ booking.restore = function() {
     } else if (hash.length !== 0) {
         this.load(hash);
     } else {
-        window.location = '/#' + this.query_key;
+        this.cancel();
     }
-
 }
 booking.prebook = function(query_key, hash, partner, marker) {
     var that = this;
@@ -42,21 +41,25 @@ booking.load = function(number, price_changed) {
     }, function(content) {
         window.location.hash = number;
         that.view(content);
-        var units = local.currencies.RUR;
+        var units = lang.currencies.RUR;
         var price = Number(that.content.find('.bf-newprice').attr('data-price')).decline(units[0], units[1], units[2]);
         var button = $('#obb-template');
-        button.find('.obb-title').html(local.offers.price.buy.absorb(price)).click(function() {
+        button.find('.obb-title').html(lang.price.buy.absorb(price)).click(function() {
             $w.smoothScrollTo(that.form.el.offset().top);
             $w.queue(function(next) {
-                $('#bfc-email').focus();
+                $('#bfp0-first-name').focus();
                 next();
             });
         });
         if (price_changed) {
             var newprice = that.content.find('.bf-newprice').addClass('bf-newprice-top');
+            var tickets = that.content.find('.bfp-table').attr('data-total') === '1' ? 'билет' : 'билеты';
             that.content.find('.b-header').before(newprice);
-            newprice.find('.bfnp-content').html('Новая стоимость — ' + price);
+            newprice.find('.bfnp-content .link').click(function() {
+                that.cancel();
+            });
             newprice.show();
+            trackPage('/booking/price_rising');
         }
         that.content.find('.b-header').prepend(button);
         that.content.find('.bffc-link').html('выбрать другой вариант');

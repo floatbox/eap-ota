@@ -1,0 +1,138 @@
+/* Map */
+#search-map {
+    position: relative;
+    background: #ccd8b1;
+    overflow: hidden;
+}
+.smap-content {
+    height: 49px;
+}
+
+/* Prices control */
+.smap-prices {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 36px;
+    background: rgba(238,238,228,0.8);
+    font-size: 14px;
+    line-height: 16px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+}
+.smp-link {
+    color: #777;
+    text-align: center;
+}
+.smpl-content {
+    padding: 10px 0;
+}
+.smp-progress {
+    padding-right: 24px;
+    background: url(/images/booking/progress-g.gif) no-repeat 100% 0;
+}
+.smp-load,
+.smp-expand,
+.smp-collapse {
+    color: #333;
+    cursor: pointer;
+}
+
+/* Slider */
+.smp-slider {
+    display: none;
+    position: relative;
+    width: 200px;
+    margin: 0 auto;
+    padding: 10px 0;
+    height: 16px;
+}
+.smps-base,
+.smps-selected,
+.smps-control {
+    background: url(/images/search/pslider.png) no-repeat;
+}
+.smps-base {
+    position: relative;
+    top: 5px;
+    background-position: 100% 0;
+}
+.smps-selected {
+    padding-left: 3px;
+    width: 50%;
+    height: 7px;
+    background-position: 0 -10px;
+}
+.smps-control {
+    position: absolute;
+    top: -4px;
+    left: 0;
+    margin-left: -4px;
+    width: 15px;
+    height: 20px;
+    background-position: 0 -20px;
+    cursor: pointer;
+}
+.smps-title {
+    position: absolute;
+    top: 10px;
+    left: -160px;
+    width: 150px;
+    text-align: right;
+}
+.smps-value {
+    position: absolute;
+    top: 10px;
+    left: 210px;
+    width: 150px;
+}
+
+/* Label */
+.smap-label {
+    position: absolute;
+    padding: 3px 6px;
+    background: #FFF;
+    font-size: 12px;
+    line-height: 14px;
+    box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);  
+}
+.sml-active {
+    cursor: pointer;
+}
+.sml-arrow,
+.smla-shadow {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 0;
+    height: 0;
+    border-width: 16px 0 0 12px; 
+    border-style: solid;
+    border-color: transparent;
+}
+.sml-arrow {
+    margin: 0 0 0 -6px;
+    border-top-color: #FFF;
+}
+.smla-shadow {
+    margin: 1px 0 0 -5px;
+    border-top-color: rgba(0, 0, 0, 0.3);
+}
+.sml-city {
+    white-space: nowrap;
+}
+.sml-price,
+.sml-dates {
+    font-size: 10px;
+    line-height: 12px;
+    color: #777;
+    white-space: nowrap;
+}
+.sml-active:hover {
+    z-index: 1;
+    background: #FFFFDB;
+}
+.sml-active:hover .sml-arrow {
+    border-top-color: #FFFFDB;
+}

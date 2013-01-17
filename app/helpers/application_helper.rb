@@ -25,6 +25,18 @@ module ApplicationHelper
     display_string *attrs
   end
 
+  def display_price price
+    number_to_currency(price, :delimiter => " ", :separator => ",", :precision => 0, :locale => :ru)
+  end
+
+  def display_percent persent
+    number_to_percentage(persent, :delimiter => " ", :separator => ",", :precision => 2, :locale => :ru)
+  end
+
+  def display_numbers number
+    number_with_delimiter(number.to_i, :delimiter => " ", :separator => ",", :precision => 0, :locale => :ru)
+  end
+
   def exact_price(price)
     sprintf("%.2f", price).sub('.', ',')
   end

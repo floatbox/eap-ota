@@ -5,11 +5,14 @@ update: function(error) {
     this.el.toggleClass('bf-error', error !== undefined && error !== 'empty' && error !== 'short');
     this.el.toggleClass('bf-valid', error === undefined);
     if (this.error = error) {
-        this.message = this.messages[error].replace('{', '<span class="bffr-link" data-field="' + this.fid + '">').replace('}', '</span>');
+        this.message = validator.processMessage(this.messages[error], this.fid);
     } else {
         delete this.message;
     }
     return true;
+},
+processMessage: function(message, fid) {
+    return message.replace('{', '<span class="bffr-link" data-field="' + fid + '">').replace('}', '</span>')
 },
 getGender: function(name) {
     var sample = ' ' + name.toLowerCase() + ',';
@@ -37,29 +40,25 @@ bind: function(apply) {
     }
 },
 validate: function(forced) {
-    var wrong = [], empty = [];
+    this.wrong = [];
+    this.empty = [];
     for (var i = 0, l = this.controls.length; i < l; i++) {
         var control = this.controls[i];
         if (forced && control.validate) {
             control.validate();
         }
-        if (control.error && !control.disabled) {
-            (control.error === 'empty' ? empty : wrong).push(control.message);
-            if (!control.message) {
-                trackEvent('Ошибка JS', 'Нет сообщения об ошибке «' + control.error + '» в поле ' + control.el.get(0).className);
-            }
+        if (control.error && !control.disabled && control.message) {
+            this[control.error === 'empty' ? 'empty' : 'wrong'].push(control.message);
         }
     }
-    this.toggle(wrong.length + empty.length === 0);
-    this.wrong = wrong;
-    this.empty = empty;
+    this.toggle(this.wrong.length + this.empty.length === 0);
 },
 toggle: function(ready) {
     this.el.toggleClass('bfs-ready', ready);
 },
 set: function(data) {
     for (var i = 0, l = this.controls.length; i < l; i++) {
-        this.controls[i].set(data[i]);
+        if (data[i] !== undefined) this.controls[i].set(data[i]);
     }
 },
 get: function() {
@@ -197,8 +196,9 @@ validator.Date = function(el, messages, check) {
     this.update = validator.update;
     this.check = check || $.noop;
     this.error = null;
-    this.year = search.dates.csnow.getFullYear() % 100;
-    this.time = search.dates.csnow.getTime();
+    var now = typeof search !== 'undefined' ? search.dates.csnow : new Date();
+    this.year = now.getFullYear() % 100;
+    this.time = now.getTime();
     this.init();
 };
 validator.Date.prototype = {
@@ -365,8 +365,9 @@ get: function() {
 };
 
 /* Gender control */
-validator.Gender = function(el) {
+validator.Gender = function(el, messages) {
     this.el = el;
+    this.messages = messages;
     this.init();
 };
 validator.Gender.prototype = {
@@ -411,7 +412,7 @@ change: function(checked) {
         delete this.message;
         delete this.error;
     } else {
-        this.message = '<span class="bffr-link" data-field="' + this.fid + '">пол пассажира</span>';
+        this.message = validator.processMessage(this.messages['empty'], this.fid);
         this.error = 'empty';
     }
 },
@@ -517,6 +518,9 @@ check: function(values) {
         if (s.length < 4) return 'empty';
     }
     var s = values.join(''), sum = 0;
+    if (/41{14}|70{14}|5486732058864471|1234561999999999/.test(s)) {
+        return; // тестовые карты
+    }
     for (var i = 0; i < 16; i += 2) {
         var n1 = Number(s.charAt(i)) * 2;
         var n2 = Number(s.charAt(i + 1));
@@ -538,7 +542,8 @@ validator.CardDate = function(el, messages) {
     this.messages = messages;
     this.update = validator.update;
     this.error = null;
-    var dmy = search.dates.csnow.DMY();
+    var now = typeof search !== 'undefined' ? search.dates.csnow : new Date();
+    var dmy = now.DMY();
     this.time = dmy.substring(4, 6) + dmy.substring(2, 4);
     this.init();
 };

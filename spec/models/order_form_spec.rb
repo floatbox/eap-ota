@@ -3,6 +3,38 @@ require 'spec_helper'
 
 describe OrderForm do
 
+  describe '#infants' do
+    subject do
+      o = OrderForm.new(:people => people)
+      o.stub(:last_flight_date).and_return(Date.today + 5.days)
+      o.associate_infants
+      o
+    end
+
+    context 'infants after adults have priority' do
+      let(:people) do
+        [
+          build(:person, :infant, :first_name => 'Andrei'),
+          build(:person),
+          build(:person, :infant, :first_name => 'Ivan')
+        ]
+      end
+      its('infants.count') {should == 1}
+      its('infants.first.first_name') {should == 'Ivan'}
+    end
+
+    context 'infant with seat is not considered as infant' do
+      let(:people) do
+        [
+          build(:person),
+          build(:person, :infant, :with_seat => true)
+        ]
+      end
+      its(:infants) {should be_blank}
+
+    end
+  end
+
   describe "#price_with_payment_commission" do
     context "when @pwpc is null" do
       it 'is taken from recommendation' do
@@ -156,6 +188,9 @@ describe OrderForm do
 
   describe '#associate_infants' do
 
+    # FIXME extend нужен для синтаксиса matcher.. вынести повыше?
+    extend RSpec::Matchers::DSL
+
     # order_form.should have_associated( parent_last_name, infant_last_name)
 
     matcher :have_associated do |parent_last_name, infant_last_name|
@@ -186,7 +221,7 @@ describe OrderForm do
     end
 
     subject do
-      OrderForm.new(
+      o = OrderForm.new(
         :people => create_bunch_of_people(person_attrs),
         :people_count => {
           :adults => (person_attrs.count - person_attrs.count(&:second)),
@@ -194,6 +229,8 @@ describe OrderForm do
            :children => 0
         }
       )
+      o.stub(:last_flight_date).and_return(Date.today + 5.days)
+      o
     end
 
     before { subject.associate_infants }
@@ -217,8 +254,8 @@ describe OrderForm do
       it { should have_associated('ivanova', 'ivanova') }
       it { should have_associated('ivanov', 'ivanov') }
       it { should have_associated('mitrofanov', 'mitrofanova') }
-      it { should have_no_infants_associated('cucaev') }
-      it { should have_associated('shmidt', 'petrov') }
+      it { should have_no_infants_associated('shmidt') }
+      it { should have_associated('cucaev', 'petrov') }
     end
 
     context 'two adults and infant' do
@@ -268,7 +305,8 @@ describe OrderForm do
         build(:person, :infant)
       ]
       o = OrderForm.new(:people => people)
-      o.stub_chain(:recommendation, :segments, :last, :dept_date).and_return(last_date)
+      o.stub(:last_flight_date).and_return(last_date)
+      o.associate_infants
       o
     end
 

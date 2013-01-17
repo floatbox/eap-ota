@@ -33,13 +33,13 @@ module Pricing
     include IncomeSuppliers
 
     def income
-      @income ||= income_earnings - income_suppliers
+      income_earnings - income_suppliers
     end
 
     # реальный баланс по выписке и платежам
     # FIXME заменить этим income
     def balance
-      @balance ||= income_earnings - aggregated_income_suppliers
+      income_earnings - aggregated_income_suppliers
     end
 
     def expected_income
@@ -100,10 +100,11 @@ module Pricing
       commission =
         if pricing_method =~ /corporate/
           Conf.cash.corporate_commission
-        elsif payment_type == 'cash'
-          Conf.cash.commission
+        # делаю комиссию по наличке такой же как и глобальная
+        # elsif payment_type == 'cash'
+        #  Conf.cash.commission
         else
-          Conf.payture.commission
+          Conf.payment.commission
         end
       Commission::Formula.new(commission)
     end

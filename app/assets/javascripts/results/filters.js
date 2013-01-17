@@ -236,6 +236,10 @@ update: function() {
     if (this.updateCustomLists) {
         this.updateCustomLists();
     }
+    var label = this.content.find('.rfg-label').html();
+    if (label) {
+        this.control.find('.rfg-label').html(label.capitalize());
+    }
     this.control.toggleClass('rfg-disabled', this.columns === 0);
     this.counter.hide();
     delete this.resized;
@@ -270,8 +274,7 @@ apply: function() {
     for (var i = this.lists.length; i--;) {
         if (this.lists[i].conditions) counter++;
     }
-    var s = local.filters.selected;
-    this.counter.attr('title', counter ? local.filters.reset.absorb(counter.decline(s[0], s[1], s[2])) : '');
+    this.counter.attr('title', counter ? lang.filters.reset.absorb(counter.declineArray(lang.filters.selected)) : '');
     this.counter.css('background-position', '0 ' + (-counter * 20) + 'px');
     this.counter.toggle(counter !== 0);
 },
@@ -456,16 +459,15 @@ human: function(d1, d2) {
     var max = this.from + d2;
     if (max - min < this.size) {
         if (max < 3) {
-            parts.push('короткие,');
+            parts.push(lang.filters.short);
         } else if (min > 4) {
-            parts.push('длинные,');
+            parts.push(lang.filters.long);
         }
-        parts.push(min ? ('от ' + min + ' до') : 'меньше');
-        parts.push(max.decline('часа', 'часов', 'часов'));
+        parts.push(lamg.filters[min ? 'fromto' : 'less'].absorb(min, max.declineArray(lang.time.hours)));
     } else {
-        parts.push('любая');
+        parts.push(lang.filters.any);
     }
-    this.value.html(parts.join(' '));
+    this.value.html(parts.join(', '));
 },
 apply: function() {
     var conditions = [];

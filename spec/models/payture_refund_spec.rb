@@ -2,6 +2,11 @@
 require 'spec_helper'
 
 describe PaytureRefund do
+
+  before do
+    Conf.payture.stub(:commission).and_return('2.85%')
+  end
+
   it "should copy attrs from payture_charge" do
     charge = create(:payture_charge, :name_in_card => 'vasya', :pan => '123456xxxxxx1234')
     refund = charge.refunds.create

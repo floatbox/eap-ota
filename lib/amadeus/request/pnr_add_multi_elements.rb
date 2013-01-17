@@ -46,7 +46,18 @@ module Amadeus
       end
 
       def ssr_docs_text(person)
-        "P-#{person.nationality.alpha3}-#{person.cleared_passport}-#{person.nationality.alpha3}-#{person.birthday.strftime('%d%b%y').upcase}-#{person.sex.upcase}#{person.infant? ? 'I' : ''}-#{person.smart_document_expiration_date.strftime('%d%b%y').upcase}-#{person.last_name}-#{person.first_name}-H"
+        [
+          "P",
+          person.nationality.alpha3,
+          person.cleared_passport,
+          person.nationality.alpha3,
+          person.birthday.strftime('%d%b%y').upcase,
+          person.sex.upcase + (person.infant ? 'I' : ''),
+          person.smart_document_expiration_date.strftime('%d%b%y').upcase,
+          person.last_name,
+          person.first_name,
+          "H"
+        ].map(&:to_s).join('-')
       end
 
       def es_office_id
@@ -74,8 +85,10 @@ module Amadeus
         agent_commission.call.round
       end
 
+      # подавление ошибки
+      # SRFOID error: XX: INVALID REQUEST FOR ELEMENT
       def srfoid_needed?
-        ["AB", "UN", "HR", "B2", "PS", "AZ", "CY", "LX", "KK", "OS", "KM", "SQ" , "F7", 'ET', '9W'].exclude? validating_carrier
+        %W[AB UN HR B2 PS AZ CY LX KK OS KM SQ F7 ET 9W PG CI SW MU FJ].exclude? validating_carrier
       end
 
     end

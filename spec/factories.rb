@@ -20,6 +20,7 @@ FactoryGirl.define do
     pnr_number
     fix_price true
     price_with_payment_commission 3000
+    email 'example@gmail.com'
   end
 
   factory :person do
@@ -29,11 +30,11 @@ FactoryGirl.define do
 
     trait :child do
       birthday {8.years.ago}
-      infant_or_child 'c'
+      child true
     end
     trait :infant do
       birthday {6.months.ago}
-      infant_or_child 'i'
+      infant true
     end
   end
 
@@ -67,45 +68,45 @@ FactoryGirl.define do
     kind 'refund'
   end
 
+  #
+  # платежи
+  #
+
+  # FIXME как-то сделать неглобальным
+  trait :charged do
+    after :create do |payment|
+      payment.update_attributes status: 'charged'
+    end
+  end
+
+  factory :payu_charge do
+    order
+  end
+
+  factory :payu_refund do
+    association :charge, factory: [:payu_charge, :charged]
+  end
+
   factory :payture_charge do
     order
-
-    # пока не годится для build - не проставляет status
-    trait :charged do
-      after_create do |payture_charge, proxy|
-        payture_charge.update_attributes status: 'charged'
-      end
-    end
-    factory :charged_payture_charge, :traits => [:charged]
   end
 
   factory :payture_refund do
-    association :charge, :factory => :charged_payture_charge
-
-    # пока не годится для build - не проставляет status
-    trait :charged do
-      after_create do |payture_refund, proxy|
-        payture_refund.update_attributes status: 'charged'
-      end
-    end
+    association :charge, factory: [:payture_charge, :charged]
   end
 
   factory :cash_charge do
     order
-
-    # пока не годится для build - не проставляет status
-    trait :charged do
-      after_create do |payture_charge, proxy|
-        payture_charge.update_attributes status: 'charged'
-      end
-    end
   end
 
   factory :cash_refund do
-    association :charge, :factory => :cash_charge
+    association :charge, factory: :cash_charge
   end
 
+  #
   # amadeus sessions
+  #
+
   sequence :amadeus_session_token do |n|
     token = 'TESTAAAAAA'
     n.times { token.next! }
@@ -113,7 +114,7 @@ FactoryGirl.define do
   end
 
   factory :amadeus_session_ar_store, class: 'Amadeus::Session::ARStore' do
-    token { FactoryGirl.generate(:amadeus_session_token) }
+    token { generate(:amadeus_session_token) }
     seq 2
     office { 'TEST_DEFAULT_OFFICE' }
 
@@ -127,7 +128,7 @@ FactoryGirl.define do
   end
 
   factory :amadeus_session_mongo_store, class: 'Amadeus::Session::MongoStore' do
-    token { FactoryGirl.generate(:amadeus_session_token) }
+    token { generate(:amadeus_session_token) }
     seq 2
     office { 'TEST_DEFAULT_OFFICE' }
 
@@ -136,7 +137,7 @@ FactoryGirl.define do
     end
 
     trait :stale do
-      after_create do |session, proxy|
+      after :create do |session|
         session.updated_at = 30.minutes.ago
         session.save_without_touching
       end

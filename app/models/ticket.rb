@@ -57,12 +57,13 @@ class Ticket < ActiveRecord::Base
 
   scope :uncomplete, where(:ticketed_date => nil)
   scope :sold, where(:status => ['ticketed', 'exchanged', 'returned', 'processed'])
+  scope :reported, where(:status => ['ticketed'])
 
   validates_presence_of :price_fare, :price_tax, :price_our_markup, :price_penalty, :price_discount, :price_consolidator, :if => lambda {kind = 'refund'}
   after_save :update_parent_status, :if => :parent
   after_destroy :update_parent_status, :if => :parent
   validates_presence_of :comment, :if => lambda {kind == "refund"}
-  after_save :update_prices_in_order
+  after_save :update_data_in_order
   attr_accessor :parent_number, :parent_code, :original_price_total
   attr_writer :price_fare_base, :flights
   before_validation :set_info_from_flights
@@ -101,7 +102,7 @@ class Ticket < ActiveRecord::Base
     cabins.split(' + ')
   end
 
-  def price_fare_base 
+  def price_fare_base
     @price_fare_base ||= if parent
       original_price_fare + parent.price_fare_base
     else
@@ -213,9 +214,12 @@ class Ticket < ActiveRecord::Base
     find_or_initialize_by_number number
   end
 
-  def update_prices_in_order
-    # FIXME убить или оставить только ради тестов?
-    order.update_prices_from_tickets if order
+  def update_data_in_order
+    if order
+      # FIXME убить или оставить только ради тестов?
+      order.update_prices_from_tickets
+      order.update_has_refunds if kind == 'refund'
+    end
   end
 
   def set_refund_data

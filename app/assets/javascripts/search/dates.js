@@ -9,16 +9,23 @@ init: function() {
     this.initCalendar();
     this.initTimeline();
     this.initScrolling();
-    //this.initGestures();
     this.initDays();
 },
 initCalendar: function() {
+    var that = this;
     this.calendar = this.el.find('.sdc-content');
     this.slider = this.el.find('.sdc-slider');
     this.makeMonthes();
     this.disableDays();
     this.mwidth = this.monthes[0].el.width();
     this.overlay = this.el.find('.sdc-overlay');
+    this.dragging = this.el.find('.sdc-dragging');
+    this.$move = function(event) {
+        that.moveDay(event);
+    };
+    this.$drop = function(event) {
+        that.dropDay();
+    };    
 },
 makeMonthes: function() {
     this.slider.hide();
@@ -30,10 +37,10 @@ makeMonthes: function() {
         date.setDate(0);
         var month = {
             year: date.getFullYear(),
-            ntitle: local.date.nmonthes[date.getMonth()],
-            gtitle: local.date.gmonthes[date.getMonth()],
-            ptitle: local.date.pmonthes[date.getMonth()],
-            length: date.getDate()
+            ntitle: lang.monthes.nom[date.getMonth()],
+            gtitle: lang.monthes.gen[date.getMonth()],
+            ptitle: lang.monthes.pre[date.getMonth()],
+            length: date.getDate(),
         };
         var MY = date.DMY().substring(2);
         var days = $('<div class="sdc-days"></div>');
@@ -45,8 +52,9 @@ makeMonthes: function() {
             days.append(day);
         }
         date.setDate(1);
+        month.offset = date.dow();
         var items = days.children();
-        items.first().addClass('first').css('margin-left', 66 * date.dow());
+        items.first().addClass('first').css('margin-left', 66 * month.offset);
         items.last().addClass('last');
         month.el = sample.clone().data('index', m).append(days).appendTo(this.slider);
         this.monthes[m] = month;
@@ -69,6 +77,12 @@ disableDays: function(delay) {
     var index = {};
     this.days = days.slice(d2).each(function(i) {
         index[$(this).attr('data-index', i).attr('data-dmy')] = i;
+    });
+    var that = this;
+    this.calendar.find('.last').each(function(i) {
+        var index = $(this).attr('data-index') || '0';
+        var month = that.monthes[i];
+        month.findex = Number(index) + 1 - month.length;
     });
     this.dmyIndex = index;
 },
@@ -133,11 +147,11 @@ initScrolling: function() {
         event.preventDefault();
         if (!that.hidden) {
             that.scrollTo(that.getTarget($(this)).pos, that.hidden);
-            that.dragging = true;
+            that.tabDragging = true;
         }
     });
     areas.mouseup(function() {
-        that.dragging = false;
+        that.tabDragging = false;
         if (that.hidden) {
             search.map.slideUp();
         } else {
@@ -149,7 +163,7 @@ initScrolling: function() {
             that.hoverTabs(that.getTarget($(this)));
         });
         this.el.find('.sd-timeline').mouseleave(function() {
-            that.dragging = false;
+            that.tabDragging = false;
             that.phover.hide();
             that.fhover.hide();
         });
@@ -170,7 +184,7 @@ getTarget: function(el) {
     return {pos: dp};
 },
 hoverTabs: function(target) {
-    if (this.hidden) return;
+    if (this.hidden || this.dayDragging) return;
     if (target.fix !== undefined) {
         this.fhover.css(this.tabs[target.fix].single).show();
         this.phover.css(this.tabs[target.pos + 1].single).show();
@@ -178,25 +192,9 @@ hoverTabs: function(target) {
         this.phover.css(this.tabs[target.pos].double).show();
         this.fhover.hide();
     }
-    if (this.dragging && target.pos !== this.position) {
+    if (this.tabDragging && target.pos !== this.position) {
         this.scrollTo(target.pos);
     }
-},
-initGestures: function() {
-    var that = this, pdelta = 1;
-    this.el.bind('mousewheel DOMMouseScroll', function(event) {
-        var e = event.originalEvent, delta;
-        if (e.wheelDeltaX) {
-            delta = e.wheelDeltaX / -1200;
-        } else if (e.axis !== undefined && e.axis === e.HORIZONTAL_AXIS) {
-            delta = e.detail;
-        }
-        if (delta / pdelta < 1 || that.tstab.is(':animated')) {
-            pdelta = delta;
-        } else if (delta / pdelta > 5) {
-            that.scroll((that.position + (delta > 0 ? 1 : -1)).constrain(0, 10));
-        }
-    });
 },
 scrollTo: function(np, instant) {
     var that = this;
@@ -247,6 +245,7 @@ scrollTo: function(np, instant) {
         this.pscrollbar.stop().animate(this.tabs[np].double, options.duration);
     }
     this.slider.stop().animate({left: this.mwidth * -np}, options);
+    this.curfixed = this.fixed;
     this.position = np;
     clearTimeout(this.sftimer);    
 },
@@ -264,6 +263,10 @@ initDays: function() {
             $(this).removeClass('sdc-hover sdc-hover1 sdc-hover2 sdc-hover3 sdc-hover4 sdc-hover5 sdc-hover6');
         });
     }
+    this.calendar.delegate('.sdc-selected', 'mousedown', function(event) {
+        event.preventDefault();
+        that.dragDay($(this), event);
+    });
     this.selected = [];
     this.backup = [];
     this.limit = 2;
@@ -275,9 +278,14 @@ setLimit: function(limit) {
     this.showSelected();
     search.process();    
 },
-hoverDay: function(day) {
+getDate: function(index) {
+    return this.days.eq(index).attr('data-dmy');
+},
+hoverDay: function(day, segment) {
     var sl = this.selected.length;
-    if (sl < this.limit) {
+    if (segment) {
+        day.addClass('sdc-hover sdc-hover'+ segment);
+    } else if (sl < this.limit) {
         var hsegment = sl + 1;
         var index = Number(day.attr('data-index'));
         for (var i = sl; i--;) {
@@ -288,8 +296,83 @@ hoverDay: function(day) {
         day.addClass('sdc-hover sdc-hover1');
     }
 },
-getDate: function(index) {
-    return this.days.eq(index).attr('data-dmy');
+dragDay: function(day, event) {
+    var segment, index = Number(day.attr('data-index'));
+    for (var i = this.selected.length; i--;) {
+        if (this.selected[i] === index) segment = i;
+    }
+    var offset = day.offset();
+    this.dayDragging = {
+        segment: segment,
+        x: event.pageX,
+        y: event.pageY,
+        ox: event.pageX - offset.left,
+        oy: event.pageY - offset.top,
+        active: false
+    };
+    $(document).on('mousemove', this.$move);
+    $(document).on('mouseup', this.$drop);    
+},
+moveDay: function(event) {
+    var d = this.dayDragging;
+    if (d) {
+        if (!d.active) {
+            var offset = this.calendar.offset();
+            this.dragging.show();
+            d.ch = this.calendar.height();
+            d.cx = offset.left;
+            d.cy = offset.top;
+            d.pw = $(window).width();
+            d.active = true;
+        }
+        var x = event.pageX - d.ox;
+        var y = event.pageY - d.oy;
+        this.dragging.css({
+            left: x.constrain(0, d.pw - 66),
+            top: y.constrain(d.cy - 24, d.cy + d.ch - 23)
+        });
+        var month, col, dcx = x + 33;
+        if (dcx < d.pw / 2) {
+            month = this.monthes[this.curfixed !== undefined ? Math.min(this.curfixed, this.position) : this.position];
+            col = Math.floor((dcx - d.cx) / 66);
+        } else {
+            month = this.monthes[this.position + 1];
+            col = Math.floor((dcx - d.pw / 2 - 18) / 66);
+        }
+        if (col < 0 || col > 6) {
+            col = undefined;
+        }
+        var dindex;
+        var row = Math.floor((y - d.cy - 6) / 45);
+        if (row > -1 && col !== undefined) {
+            var index = row * 7 + col - month.offset;
+            if (index > -1 && index < month.length && month.findex + index > -1) {
+                dindex = month.findex + index;
+            }
+        }
+        if (dindex !== d.dindex) {
+            if (d.day) d.day.trigger('mouseout');
+            if (dindex !== undefined) {
+                this.hoverDay(d.day = this.days.eq(dindex), d.segment + 1);
+            } else {
+                d.day = undefined;
+            }
+            d.dindex = dindex;
+        }
+    }
+},
+dropDay: function() {
+    $(document).off('mousemove', this.$move);
+    $(document).off('mouseup', this.$drop);
+    if (this.dayDragging && this.dayDragging.day) {
+        var index = Number(this.dayDragging.day.attr('data-index'));
+        this.selected[this.dayDragging.segment] = index;
+        this.selected.sort(Array.sortInt);
+        this.showSelected();        
+        this.backup = this.selected.concat();
+    }
+    this.dayDragging = undefined;
+    this.dragging.hide();
 },
 selectDay: function(day) {
     var index = Number(day.attr('data-index'));
@@ -382,9 +465,9 @@ toggleHidden: function(mode) {
 },
 applyPosition: function() {
     if (search.map.cachedSegments) {
-        search.map.updatePrices(search.map.cachedSegments, true);
+        search.map.updatePrices(search.map.cachedSegments);
         if (search.map.pricesMode) {
-            search.map.loadPrices();
+            search.map.showSegments(search.map.cachedSegments);
         }
     }
 }

@@ -1,0 +1,18 @@
+<% resource = @item.item.class %>
+<div id="term">
+  <h3><%= @item.event %>:</h3>
+  <pre>
+    <% if @item.event == 'create' %>
+    <% attrs = @item.next ? YAML::load(@item.next.object) : @item.item.attributes %>
+    <% attrs.each do |attribute, value| %>
+      <% next if value.blank? || value == 0 %>
+<strong><%= resource.human_attribute_name(attribute) %></strong>: <%= value.inspect %>
+
+    <% end %>
+  <% else %>
+    <% @item.changeset.each do |attribute, (before, after)| %>
+<strong><%= resource.human_attribute_name(attribute) %></strong>: <%= before.inspect %> → <%= after.inspect %>
+
+    <% end %>
+  <% end %></pre>
+</div>

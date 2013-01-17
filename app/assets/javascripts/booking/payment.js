@@ -13,4 +13,17 @@ booking.form.process = function(s) {
             delete that.back;
         });
     }
+    switch (this.result.attr('data-type')) {
+    case '3dsecure':
+        this.result.find('.obb-title').click(function() {
+            $(this).closest('.bf-result').find('form').submit();
+        });
+        break;
+    case 'forbidden':
+        setTimeout(function() {
+            that.result.hide();
+            that.footer.show();
+        }, 60000);
+        break;
+    }
 };

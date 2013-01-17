@@ -47,8 +47,8 @@
     </div>
     <div class="asection">
         <h4>Адрес</h4>
-        <p>Территория Трёхгорной мануфактуры<br>
-        Улица Рочдельская, дом 15, строение 17-18, офис 5<br>
+        <p>Улица Рочдельская, дом 15, строение 43<br>
+        (второй этаж)<br>
         Москва, 123022<br>
         Россия</p>
     </div>
@@ -66,13 +66,13 @@
 $(function() {
     var map = new google.maps.Map($('#map-canvas').get(0), {
         zoom: 12,
-        center: new google.maps.LatLng(55.758594, 37.565955),
+        center: new google.maps.LatLng(55.755732, 37.56589),
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         streetViewControl: false,
     });
     var marker = new google.maps.Marker({
-        position: new google.maps.LatLng(55.755448, 37.563382),
-        title: 'Трёхгорная мануфактура, строение 17-18',
+        position: new google.maps.LatLng(55.755732, 37.56589),
+        title: 'Улица Рочдельская, дом 15, строение 43',
         map: map
     });
 });

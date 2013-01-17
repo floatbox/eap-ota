@@ -36,5 +36,6 @@ ActiveSupport::Inflector.inflections do |inflect|
     inflect.plural(/^Пользователь Typus$/i,  'Пользователи Typus' )
     inflect.plural(/^Оповещение$/i,  'Оповещения' )
     inflect.plural(/^Партнер$/i,  'Партнеры' )
+    inflect.plural(/^История изменений$/i,  'История изменений' )
 end
 

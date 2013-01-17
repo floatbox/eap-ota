@@ -1,8 +1,8 @@
-<% cache [:pricer, @query_key] do %>
+<%# cache [:pricer, @query_key] do %>
 
 <% if @destination.present? %>
 <div class="r-subscription">
-    <h3 class="rs-title">Подпишитесь на тариф</h3>
+    <h3 class="rs-title">Подпишитесь на направление</h3>
     <p class="rs-description">Если вам не&nbsp;важно когда лететь, мы&nbsp;сообщим вам о&nbsp;появлении выгодных тарифов на&nbsp;билеты <%= nbsp @destination.from.case_from %> <%= nbsp @destination.to.case_to %><%= ' и обратно' if @destination.rt %> по&nbsp;электронной почте.</p>
     <form class="rs-form" action="/subscribe/" data-destination="<%= @destination.id %>" data-from-iata="<%= @destination.from.iata %>" data-to-iata="<%= @destination.to.iata %>" data-rt="<%= @destination.rt %>">
         <div><label class="rsf-label" for="rsf-email">Ваш адрес</label><input name="email" class="rsf-field" id="rsf-email" maxlength="50">&nbsp;<input class="rsf-submit" type="submit" value="Хочу"></div>
@@ -49,6 +49,10 @@
 </div>
 
 <div class="rf-data" id="rfg-locations">
+<% locations_title = { 
+  :airports => false,
+  :cities => false
+} %>
 <% data[:locations].each_with_index do |segment, i| %>
 <% if segment[:dpt][:airports].length > 1 || segment[:dpt][:cities].length > 1 || segment[:arv][:airports].length > 1 || segment[:arv][:cities].length > 1 %>
 <div class="rfg-column">
@@ -56,6 +60,7 @@
     <div class="rf-list" data-key="dpt<%= i + 1 %>">    
         <h6 class="rfgc-title rfgct-segment<%= i + 1 %>">Вылет <%= raw @search.segments[i].from_as_object.case_from %></h6>        
         <% if segment[:dpt][:cities].length > 1 %>
+            <% locations_title[:cities] = true %>
             <ul class="rf-values">
             <li class="rfv-empty rfv-selected">из любого города</li>
             <% segment[:dpt][:cities].each do |city| %>
@@ -63,6 +68,7 @@
             <% end %>
             </ul>
         <% elsif segment[:dpt][:airports].length > 1 %>
+            <% locations_title[:airports] = true %>
             <ul class="rf-values">
             <li class="rfv-empty rfv-selected">из любого аэропорта</li>
             <% segment[:dpt][:airports].each do |airport| %>
@@ -76,6 +82,7 @@
     <div class="rf-list" data-key="arv<%= i + 1 %>">    
         <h6 class="rfgc-title rfgct-segment<%= i + 1 %>">Прилет <%= raw @search.segments[i].to_as_object.case_to %></h6>        
         <% if segment[:arv][:cities].length > 1 %>
+            <% locations_title[:cities] = true %>        
             <ul class="rf-values">
             <li class="rfv-empty rfv-selected">в любой город</li>
             <% segment[:arv][:cities].each do |city| %>
@@ -83,6 +90,7 @@
             <% end %>
             </ul>
         <% elsif segment[:arv][:airports].length > 1 %>
+            <% locations_title[:airports] = true %>        
             <ul class="rf-values">
             <li class="rfv-empty rfv-selected">в любой аэропорт</li>
             <% segment[:arv][:airports].each do |airport| %>
@@ -95,6 +103,10 @@
 </div>
 <% end %>
 <% end %>
+<% locations_title[:parts] = [] %>
+<% locations_title[:parts] << 'города' if locations_title[:cities] %>
+<% locations_title[:parts] << 'аэропорты' if locations_title[:airports] %>
+<p class="latent rfg-label"><%= locations_title[:parts].join(' и ') %></p>
 </div>
 
 <div class="rf-data" id="rfg-carriers">
@@ -184,7 +196,7 @@
 <div class="offer" data-prices='<%= raw recommendation_prices(recommendation) %>'>
     <ul class="o-variants">
     <% recommendation.variants_by_duration.each do |variant| %>
-        <li data-duration="<%= variant.total_duration %>" data-segments="<%= segment_ids(variant) %>" data-layover="<%= longest_layover(variant) %>" data-features="<%= variant_features(variant, recommendation.validating_carrier.alliance) %>"><%= raw recommendation.serialize(variant) %></li>
+        <li data-duration="<%= variant.total_duration %>" data-dpttimes="<%= variant.segments.map(&:departure_time).join('-') %>" data-segments="<%= segment_ids(variant) %>" data-layover="<%= longest_layover(variant) %>" data-features="<%= variant_features(variant, recommendation.validating_carrier.alliance) %>"><%= raw recommendation.serialize(variant) %></li>
     <% end %>
     </ul>
     <div class="o-segments">
@@ -230,4 +242,4 @@
 <% end %>
 
 <% end %>
-<% end %>
+<%# end %>

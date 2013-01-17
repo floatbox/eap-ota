@@ -5,11 +5,6 @@ require 'httparty'
 
 class Payture
 
-  # комиссионные за транзакцию
-  def self.commission
-    @commission ||= Commission::Formula.new(Conf.payture.commission)
-  end
-
   class Response
     def initialize(doc)
       @doc = doc
@@ -28,7 +23,7 @@ class Payture
       @doc["Success"].to_s.downcase == "false"
     end
 
-    def order_id
+    def our_ref
       @doc["OrderId"]
     end
 
@@ -46,8 +41,21 @@ class Payture
       @doc["Success"].to_s.downcase == "3ds"
     end
 
-    def acs_url
+    def threeds_url
       @doc["ACSUrl"]
+    end
+
+    # FIXME найти более удачный способ прокидывать сюда конфирмационный урл
+    def threeds_return_url
+      "#{Conf.site.host}/confirm_3ds"
+    end
+
+    def threeds_params
+      {
+        'PaReq' => pa_req,
+        'MD' => threeds_key,
+        'TermUrl' => threeds_return_url
+      }
     end
 
     def pa_req
@@ -60,7 +68,7 @@ class Payture
 
     # GetState
     # 'PreAuthorized3DS', 'Voided', 'Rejected', какие еще?
-    def state
+    def status
       @doc["State"]
     end
 
@@ -96,7 +104,7 @@ class Payture
     add_money(post, amount)
     add_merchant(post)
     add_creditcard(post, card)
-    add_custom_fields(post, opts)
+    add_custom_fields(post, opts[:custom_fields])
     encrypt_payinfo(post)
 
     post_request 'Block', post
@@ -143,7 +151,7 @@ class Payture
   # уточнение текущего состояния платежа
   # {"Comment"=>"", "Tag"=>"", "LastChange"=>"11/12/2010 9:24:07 AM", "State"=>"Charged"}
   # "State"=>"Authorized", "Voided", "Charged"
-  def state opts={}
+  def status opts={}
     post = {}
     add_order(post, opts)
     add_merchant(post)
@@ -166,8 +174,8 @@ class Payture
 
   # copied back from active_merchant alfa_bank_gateway
   def add_order(post, options={})
-    validate! options, :order_id
-    post[:OrderId] = options[:order_id]
+    validate! options, :our_ref
+    post[:OrderId] = options[:our_ref]
   end
 
   def add_creditcard(post, creditcard)
@@ -183,7 +191,7 @@ class Payture
   end
 
   def add_3ds_info(post, opts)
-    post[:PaRes] = opts[:pa_res]
+    post[:PaRes] = opts[:PaRes]
   end
 
   def add_money(post, money)
@@ -198,8 +206,8 @@ class Payture
     [:PAN, :EMonth, :EYear, :CardHolder, :SecureCode].each {|key| post.delete(key) }
   end
 
-  def add_custom_fields(post, opts)
-    custom_fields = opts[:custom_fields] or return
+  def add_custom_fields(post, custom_fields)
+    return unless custom_fields
     res = {
       :IP => custom_fields.ip,
       :FirstName => custom_fields.first_name,

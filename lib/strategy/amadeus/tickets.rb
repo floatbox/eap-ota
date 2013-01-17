@@ -54,7 +54,7 @@ module Strategy::Amadeus::Tickets
     else
       raise Strategy::TicketError, "unsupported ticketing method: #{@order.commission_ticketing_method.inspect}"
     end
-  rescue ::Amadeus::Error => e
+  rescue ::Amadeus::Error, Curl::Err::TimeoutError => e
     with_warning(e)
     @order.update_attributes(:ticket_status => 'error_ticket')
     raise Strategy::TicketError, e.message

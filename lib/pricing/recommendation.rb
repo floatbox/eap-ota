@@ -20,14 +20,22 @@ module Pricing
       price_fare + price_tax + price_markup
     end
 
+    def price_fare_and_tax
+      price_fare + price_tax
+    end
+
     # сумма для списывания с карточки
     def price_with_payment_commission
-      price_total + price_payment
+      if price_fare && price_tax
+        price_total + price_payment
+      else
+        declared_price || 0
+      end
     end
 
     # комиссия платежного шлюза
     def price_payment
-      Payture.commission.reverse_call(price_total)
+      Payment.commission.reverse_call(price_total)
     end
 
     # "налоги и сборы" для отображения клиенту
@@ -43,7 +51,7 @@ module Pricing
     # "сбор" для отображения клиенту
     def fee
        price_markup + price_payment + price_declared_discount
-       end
+     end
 
     def fee_but_no_payment
        price_markup + price_declared_discount

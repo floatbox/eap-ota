@@ -183,7 +183,7 @@ Ticket:
     export: csv
   actions:
     edit: show
-  order_by: -created_at
+  order_by: -tickets.created_at
   filters: ticketed_date, validating_carrier, source, validator, office_id, status, kind
   relationships: order, other_tickets
   application: Orders, 1

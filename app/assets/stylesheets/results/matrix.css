@@ -39,8 +39,11 @@
 /* Matrix item */
 .rmp-item {
     padding: 7px 14px 7px 10px;
-    background: #DCDFE1;
+    background: #d8dbdd;
     cursor: pointer;
+}
+.rmp-cheap {
+    background: #eaeced;
 }
 .rmp-cost {
     margin: 0 0 3px;
@@ -85,7 +88,7 @@
 
 /* Selected price */
 .rmp-item:hover {
-    background: #e9eaec;
+    background: #f2f3f4;
 }
 .rmp-selected,
 .rmp-selected:hover {
