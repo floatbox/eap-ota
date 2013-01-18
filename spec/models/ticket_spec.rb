@@ -319,11 +319,11 @@ describe Ticket do
      ticket.original_price_tax.should == "10 USD".to_money }
    specify { ticket = Ticket.new(:original_price_fare_as_string => "")
      ticket.should_not have_errors_on(:original_price_fare_as_string) }
-   specify { ticket = Ticket.new(:original_price_fare_as_string => "10 usd")
+   specify { ticket = Ticket.new(:original_price_fare_as_string => "10 RUR")
      ticket.should have_errors_on(:original_price_fare_as_string)
      ticket.original_price_fare.should be_nil }
-   specify { ticket = Ticket.new(:original_price_tax_as_string => "10 usd")
-     ticket.original_price_tax_as_string.should == "10 usd"
+   specify { ticket = Ticket.new(:original_price_tax_as_string => "10")
+     ticket.original_price_tax_as_string.should == "10"
      ticket.should have_errors_on(:original_price_tax_as_string)
      ticket.original_price_fare.should be_nil }
    end
