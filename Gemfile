@@ -66,7 +66,9 @@ gem 'delayed_job_mongoid'
 group :development do
   gem 'thin'
 end
-gem 'passenger', :group => :production
+#gem 'passenger', :group => :production
+
+gem 'unicorn', :group => :production
 
 group :test do
   gem 'rspec-rails'
