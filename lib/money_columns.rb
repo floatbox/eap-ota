@@ -23,6 +23,7 @@ module MoneyColumns
          @#{attr_as_string} || #{attr}.try(&:with_currency)
        end
        def #{attr_as_string}= (value)
+         value.upcase!
          @#{attr_as_string} = value
          if value.match MONEY_VALIDATION_REGEXP
            self.#{attr} = value.to_money
