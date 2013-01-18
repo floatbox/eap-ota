@@ -104,6 +104,7 @@ Order:
       - last_pay_time
       - needs_update_from_gds
     csv:
+      - id
       - pnr_number
       - charged_on
       - created_date
