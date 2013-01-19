@@ -24,17 +24,13 @@ class StatCounters
     Mongoid.default_session
   end
 
-  def self.value keys
-    {}.tap do |h| 
-      keys.each do |k|
-        h[k] = 1
-      end
-    end
+  def self.json_set keys
+    Hash[ keys.map { |k| [k, 1] } ]
   end
 
   def self.inc keys
-    connection['counters_daily'].find(date_key).upsert('$inc' => value(keys))
-    connection['counters_hourly'].find(hour_key).upsert('$inc' => value(keys))
+    connection['counters_daily'].find(date_key).upsert('$inc' => json_set(keys))
+    connection['counters_hourly'].find(hour_key).upsert('$inc' => json_set(keys))
   end
 
   def self.d_inc destination, keys
@@ -43,7 +39,7 @@ class StatCounters
       from: destination.from_iata,
       to: destination.to_iata,
       rt: destination.rt
-    ).upsert('$inc' => value(keys))
+    ).upsert('$inc' => json_set(keys))
   end
 
   def self.on_date(time=Time.now)
