@@ -33,16 +33,21 @@ class StatCounters
   end
 
   def self.inc keys
-    connection['counters_daily'].update(date_key, {'$inc' => value(keys)}, :upsert => true)
-    connection['counters_hourly'].update(hour_key, {'$inc' => value(keys)}, :upsert => true)
+    connection['counters_daily'].find(date_key).upsert('$inc' => value(keys))
+    connection['counters_hourly'].find(hour_key).upsert('$inc' => value(keys))
   end
 
   def self.d_inc destination, keys
-    connection['d_daily'].update({'date' => date_index, 'from' => destination.from_iata, 'to' => destination.to_iata, 'rt'=> destination.rt}, {'$inc' => value(keys)}, :upsert => true)
+    connection['d_daily'].find(
+      date: date_index,
+      from: destination.from_iata,
+      to: destination.to_iata,
+      rt: destination.rt
+    ).upsert('$inc' => value(keys))
   end
 
   def self.on_date(time=Time.now)
-    connection['counters_daily'].find_one(date_key(time))
+    connection['counters_daily'].find(date_key(time)).one
   end
 
   def self.on_daterange(date)
@@ -50,7 +55,7 @@ class StatCounters
   end
 
   def self.on_hour(time=Time.now)
-    connection['counters_hourly'].find_one(hour_key(time))
+    connection['counters_hourly'].find(hour_key(time)).one
   end
 
   def self.search_on_date(time=Time.now, count=100)
