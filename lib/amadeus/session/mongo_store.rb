@@ -13,27 +13,28 @@ module Amadeus
       def self.find_free_and_book(args)
         args.assert_valid_keys :office
         # FIXME: добавить sort:, чтобы равномерно использовать сессии
-        doc = collection.find_and_modify(
-          query: free_condition.merge(office: args[:office]),
-          update: {:$set => {booked: true}},
+        doc = collection.find(
+          free_condition.merge(office: args[:office])
+        ).modify(
+          {:$set => {booked: true}},
           new: true
         )
         new(doc: doc) if doc
       end
 
       def self.free_count(office)
-        collection.count(query: free_condition.merge(office: office))
+        collection.find( free_condition.merge(office: office) ).count
       end
 
       def self.each_stale(office)
-        collection.find( query: stale_condition.merge(office: office) ).each do |doc|
+        collection.find( stale_condition.merge(office: office) ).each do |doc|
           yield new(doc: doc)
         end
       end
 
       def self.delete_all(args={})
         args.assert_valid_keys :office
-        collection.remove( default_condition.merge(args) )
+        collection.find( default_condition.merge(args) ).remove_all
       end
 
       include KeyValueInit
@@ -91,7 +92,7 @@ module Amadeus
       end
 
       def destroy
-        collection.remove( _id: token )
+        collection.find( _id: token ).remove
       end
 
       def booked=(booking_state)
@@ -125,7 +126,7 @@ module Amadeus
 
       # тоже для FactoryGirl. не проставляет timestamp
       def save_without_touching
-        collection.save( @doc )
+        collection.find( _id: token).upsert( @doc )
       end
 
       def save
