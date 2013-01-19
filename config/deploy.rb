@@ -119,7 +119,8 @@ namespace :deploy do
   end
 
   task :restart_services do
-    restart_rambler_daemon
+    # уже полгода не используем
+    # restart_rambler_daemon
     restart_delayed_job
   end
 
