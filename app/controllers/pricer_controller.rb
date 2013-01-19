@@ -39,9 +39,9 @@ class PricerController < ApplicationController
   end
 
   def price_map
-    hot_offers = Rails.cache.fetch("price_map_#{params[:from]}_#{params[:date]}_rt#{params[:rt]}", :expires_in => 3.minutes) do
-        HotOffer.price_map(params[:from], params[:rt], params[:date])
-    end
+    hot_offers = []#Rails.cache.fetch("price_map_#{params[:from]}_#{params[:date]}_rt#{params[:rt]}", :expires_in => 3.minutes) do
+        #HotOffer.price_map(params[:from], params[:rt], params[:date])
+    #end
     render :json => hot_offers
   end
 
