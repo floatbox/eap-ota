@@ -132,7 +132,10 @@ class Recommendation
     # validating_carrier.consolidator && commission
 
     #FIXME Временный костыль, тк из амадеуса по неясным причинам приходят закрытые тарифы аэрофлота
-    return if (flights.any?{|f| booking_class_for_flight(f) == 'Z' && f.marketing_carrier_iata == 'SU' })
+    return if flights.any? do |f|
+      f.marketing_carrier_iata == 'SU' && booking_class_for_flight(f) == 'Z' ||
+      f.marketing_carrier_iata == 'PS' && booking_class_for_flight(f) == 'T'
+    end
 
     commission
   end
