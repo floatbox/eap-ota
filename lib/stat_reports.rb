@@ -19,19 +19,18 @@ class StatReports
       AVG(price_tax + price_fare) as ticket_average').reported.where(date_range).first
   end
 
-  def self.top_carriers date_range
+  def self.top_carriers date_range, top_number = 10
     tickets = Order.reported.where(date_range).sum(:blank_count, :group => 'commission_carrier')
     all_tickets = tickets.inject(0){|sum, (k,v)| sum + v}
-    top_number = 5
     top = tickets.sort_by { |k,v| v }.last(top_number).reverse
     all_top = top.inject(0){|sum, v| sum + v[1]}
     iatas = top.collect {|k,v| k}
-    carriers = Carrier.select('iata, color').where(:iata => iatas)
+    carriers = Carrier.select('iata, color, en_shortname AS title').where(:iata => iatas)
     colors = {}
-    carriers.collect {|c| colors[c.iata] = c.color}
+    carriers.collect {|c| colors[c.iata] = [c.color, c.title]}
     top_carriers = []
     top.each do |item|
-      top_carriers << {:iata => item[0], :tickets => item[1], :color =>colors[item[0]]}
+      top_carriers << {:iata => item[0], :tickets => item[1], :color =>colors[item[0]].first, :title =>colors[item[0]].last}
     end
     top_carriers << {:iata => 'Other', :tickets => all_tickets - all_top, :color =>'ccc'}
     top_carriers
