@@ -509,8 +509,7 @@ expr_date "28.02.2013"
 agent    "5% по всем направлениям через DTT"
 subagent "3% по всем направлениям через DTT"
 interline :no
-our_markup "25usd"
-discount "1.7%"
+discount "2.8%"
 ticketing_method "downtown"
 commission "5%/3%"
  
