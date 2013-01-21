@@ -2832,7 +2832,7 @@ example 'scocdg cdgsvo'
 agent " 7% для тарифов Экономического класса"
 subagent "Международные рейсы А3: 5% для тарифов Эконом класса"
 international
-discount "3%"
+discount "4.5%"
 commission "7%/5%"
 
 example 'svocdg/business cdgsvo/business'
@@ -2841,7 +2841,7 @@ subagent "7% для тарифов Бизнес класса"
 classes :business
 important!
 international
-discount "5%"
+discount "6.5%"
 commission "9%/7%"
 
 example 'skgath athskg/business'
@@ -2900,21 +2900,21 @@ carrier "A9", "GEORGIAN AIRWAYS"
 example 'tbsdme'
 agent "8 (восемь) % от опубл. тарифа на собств. рейсы авиакомпании А9;"
 subagent "6 % от опубл. тарифа на собств. рейсы А9;"
-discount "3%"
+discount "5.5%"
 commission "8%/6%"
 
 example 'tbsdme dmetbs/ab'
 agent "7 (семь)  % от опубл. тарифа по маршрутам со сквозными тарифами, включающими участок авиакомпании  А9 и авиакомпаний, с которыми А9 имеет Интерлайн-Соглашение;"
 subagent "5 % от опубл. тарифа по маршрутам со сквозными тарифами, включающими участок авиакомпании А9 и авиакомпаний, с которыми А9 имеет Интерлайн-Соглашение"
 interline :yes
-discount "2.5%"
+discount "4.5%"
 commission "7%/5%"
 
 example 'dmetbs/ab'
 agent "5 (пять)   % от опубл. тарифа на рейсы Interline без участка А9."
 subagent "3 % от опубл. тарифа на рейсы Interline без участка А9."
 interline :absent
-discount "1%"
+discount "2.5%"
 commission "5%/3%"
 
 carrier "5H", "Five Fourty Aviation Limited (Fly540)"
@@ -3177,7 +3177,7 @@ carrier "BE", "FLYBE (BE/267)"
 #######################################
 
 agent "0,1% от всех опубл. тарифов на собств. рейсы BE"
-subagent "5 коп. с билета по опубл. тарифам на собств. рейсы BE"
+subagent "5 коп. с билета по опубл. тарифам на собств. рейсы BE"
 commission "0.1%/0.05"
 
 end
