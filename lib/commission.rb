@@ -1969,17 +1969,20 @@ commission "5%/3.5%"
 carrier "PS", "Ukraine International Airlines (ГЛОНАСС)"
 ########################################
 
-example 'svocdg'
+example 'svocdg/PS566'
+example 'svocdg/PS566 cdgsvo/PS566'
 agent    "9% от опубл. тарифов на собств.рейсы PS"
 subagent "9% от опубл. тарифов на собств.рейсы PS"
 discount "8.5%"
+check { includes_only(flights.every.full_flight_number, 'PS566') }
 commission "9%/9%"
 
-example 'cdgsvo svocdg/ab'
+example 'cdgsvo/PS566 svocdg/PS566/ab'
 agent "5% от опубл. тарифов на рейсы Interline c обязательным участком PS"
 subagent "3% от опубл. тарифов на рейсы Interline c обязательным участком PS"
 interline :yes
 discount "2%"
+check { includes(flights.every.full_flight_number, 'PS566') }
 commission "5%/3%"
 
 example 'cdgsvo/ab'
@@ -1989,7 +1992,7 @@ subagent "0% от опубл. тарифов на рейсы Interline без у
 interline :absent
 commission "0%/0%"
 
-carrier "QF", "QANTAS AIRWAYS\n(не BSP!!!)"
+carrier "QF", "QANTAS AIRWAYS (не BSP!!!)"
 ########################################
 carrier_defaults :disabled => 'не bsp'
 
