@@ -111,6 +111,7 @@ class PricerController < ApplicationController
       StatCounters.inc %W[search.api.#{partner}.bad_destination] if !@destination
       render 'api/variants'
     else
+      StatCounters.inc %W[search.api.invalid search.api.#{partner}.invalid]
       @recommendations = []
       render 'api/variants'
     end
