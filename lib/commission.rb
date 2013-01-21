@@ -1263,28 +1263,11 @@ commission "9%/7%"
 carrier "HX", "Hong Kong Airlines"
 ########################################
 
-example 'dmehkg hkgdme/ab'
-agent "7% от всех опубликованных тарифов на собственные рейсы HX  и рейсы Interline с участком HX (в/из России). (Без участка HX    интерлайн выписывать запрещено!)"
-subagent "5% от опубл. тарифов на совбств. рейсы HX"
-check { includes(country_iatas, 'RU') }
-interline :yes
-discount "3%"
-commission "7%/5%"
-
-example 'SVOHKG/BUSINESS/J HKGSVO/BUSINESS/J'
-agent "C 15.06.11г. 15% от опубликованных тарифов Бизнес класса (RBD: C,D,J) на собственные рейсы HX (RT или OW)."
-subagent "C 15.06.11г. 12% от опубл. тарифов Бизнес класса (RBD: C,D,J) на собств. рейсы HX (RT или OW)."
-classes :business
-subclasses "CDJ"
-important!
-discount "8%"
-commission "15%/12%"
-
 example 'svocdg'
-agent    "7% от всех опубл. тарифов на собств.рейсы HX (В договоре Interline не прописан.)"
-subagent "5% от опубл. тарифов на собств.рейсы HX"
-discount "3%"
-commission "7%/5%"
+agent    "5% от всех опубл. тарифов на собств.рейсы HX (В договоре Interline не прописан.)"
+subagent "3% от опубл. тарифов на собств.рейсы HX"
+discount "1.5%"
+commission "5%/3%"
 
 carrier "HY", "UZBEKISTAN AIRWAYS (Узбекистон Хаво Йуллари) (НЕ BSP!!!)"
 ########################################
