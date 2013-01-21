@@ -54,11 +54,11 @@ class StatCounters
   end
 
   def self.search_on_date(time=Time.now, count=100)
-    connection['d_daily'].find({'date' => date_index(time)}, :sort => [['search.api.total', -1]], :limit => count)
+    connection['d_daily'].find('date' => date_index(time)).sort('search.api.total' => -1).limit(count)
   end
 
   def self.search_on_daterange(date, count=100)
-    connection['d_daily'].find(date, :sort => [['search.api.total', -1]], :limit => count)
+    connection['d_daily'].find(date).sort('search.api.total' => -1).limit(count)
   end
 
   # FIXME UGLY пытаемся выводить данные в человекочитабельном виде
