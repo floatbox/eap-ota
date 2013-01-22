@@ -356,7 +356,7 @@ class Order < ActiveRecord::Base
   def update_prices_from_tickets
     tickets.reload
     # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
-    return if old_booking || @tickets_are_loading || sold_tickets.blank? || sold_tickets.any?{|t| t.office_id == 'FLL1S212V'}
+    return if old_booking || @tickets_are_loading || sold_tickets.blank?
     price_total_old = self.price_total
 
     self.price_fare = sold_tickets.sum(:price_fare)

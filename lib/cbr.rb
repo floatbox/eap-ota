@@ -11,7 +11,8 @@ module CBR
           InverseRatesFor.new({from: 'RUB'},
             RatesUpdatedWithFallback.new(
               ActiveRecordRates.new(CurrencyRate.where(date: date, bank: 'cbr')),
-              LazyRates.new { CentralBankOfRussia.new.update_rates(date) } )))
+              # Параметр-блок у CentralBankOfRussia.new задает метод округления
+              LazyRates.new { CentralBankOfRussia.new{|p| p.round}.update_rates(date) } )))
     end
   end
 end
