@@ -79,7 +79,7 @@ example 'AERDME/N DMEAER/T'
 example 'AERDME/W DMEAER/W'
 agent "12% американский office-id"
 subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
-subclasses "LVXTNIGWUYHQBKOE"
+subclasses "FPRJCADSMLVXTNIGWUYHQBKOE"
 ticketing_method "downtown"
 # disabled "срочно вырубаем DTT"
 discount "9.5%"
@@ -90,8 +90,8 @@ example 'cdgsvo/r svocdg/f'
 agent "12% от тарифа на рейсы Перевозчика по всем тарифам классов: Империал, Премиальный и Бизнес класс. FPRJCADSM"
 subagent "11% от тарифа на рейсы Перевозчика по всем тарифам классов F, P, R, J, C, A, D, S, M"
 subclasses "FPRJCADSM"
-discount "9.8%"
-disabled "На DTT выгодней"
+discount "10.5%"
+important!
 commission "12%/11%"
 
 # базовое вознаграждение ац
@@ -174,9 +174,9 @@ expr_date "31.03.2013"
 agent " С 21.10.12г. по 31.03.13г. на собств. рейсы UN и рейсы совместной эксплаутации с кодом UN (UN7357/UN7358) и в рамках код-шер соглашения с АК Aigle Azur (ZI). 15% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M  *от СКВОЗНЫХ тарифов (OW/RT) для ТРАНСФЕРНЫХ перевозок между пунктами полетов UN на территории РФ и нижеуказанными городами Европы" 
 subagent "13% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
 subclasses "FPRJCADSM"
-check { includes_only(country_iatas.first, 'RU') and includes(city_iatas, 'RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON') }
+check { includes_only(country_iatas.first, 'RU') and includes(city_iatas, 'RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON LYS LIS') }
 important!
-discount "11.5%"
+discount "12.5%"
 commission "15%/13%"
 
 # код-шер с ZI прямые из столиц
@@ -193,9 +193,9 @@ subagent "13% от тарифа на рейсы UN по всем тарифам 
 agent "12% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
 subagent "10% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
 subclasses "FPRJCADSM"
-check { includes_only(city_iatas.first, 'MOW LED') and includes(city_iatas, "RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON") }
+check { includes_only(city_iatas.first, 'MOW LED') and includes(city_iatas, "RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON LYS LIS") }
 important!
-discount "11.5%"
+discount "12.5%"
 commission "15%/13%"
 
 # код-шер с ZI трансфер по России
@@ -277,21 +277,20 @@ check {
   (includes_only(city_iatas.first, 'SVX') and includes(city_iatas, 'BKK HKT'))
 }
 important!
-discount "11.5%"
+discount "12.5%"
 commission "15%/13%"
 
-# трансфер по России и в эти города (только через Москву) — не умеем
-# example 'hmasvo/s svobkk/s'
-# example 'hmasvo/s svobkk/s bkksvo/s svohma/s'
+# трансфер по России и в эти города (только через Москву) — не умеем, уточнять
+example 'hmasvo/s svobkk/s'
+example 'hmasvo/s svobkk/s bkksvo/s svohma/s'
 strt_date "21.11.2012"
 expr_date "31.03.2013"
 agent "15% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
 subagent "10% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
 subclasses "FPRJCADSM"
-check { includes_only(country_iatas.first, 'RU') and includes(city_iatas, 'MOW SSH HRG BKK HKT DPS SGN GOI PUJ VRA CUN SYX MLE AUH AMM') }
+check { includes_only(country_iatas.first, 'RU') and not includes_only(city_iatas.first, 'MOW') and includes(city_iatas, 'MOW') and includes(city_iatas, 'SSH HRG BKK HKT DPS SGN GOI PUJ VRA CUN SYX MLE AUH AMM') }
 important!
-discount "11.5%"
-disabled "не умеем обрабатывать трансфер пока"
+discount "12.5%"
 commission "15%/13%"
 
 # прямые из MOW, LED, OVB и SVX
