@@ -366,7 +366,7 @@ init: function() {
     var that = this;
     this.latinWarning = $('#bfw-name-latin');
     this.orderWarning = $('#bfw-name-order');
-    this.orderWarning.find('.bfwno-replace').click(function() {
+    this.orderWarning.find('.bfwno-swap').click(function() {
         var person = that.orderWarning.person;
         var fn = person.firstname.el.val();
         var ln = person.lastname.el.val();

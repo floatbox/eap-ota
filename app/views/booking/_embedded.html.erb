@@ -34,25 +34,26 @@
         <div class="bfs-title">
             <h4 class="bfst-text"><%= @order_form.people.one? ? 'Пассажир' : 'Пассажиры' %></h4>
             <div class="bfst-line"></div>
-            <p class="bfp-hint" id="bfph-passport"><span class="bfph-link bf-hint" data-hint="bfh-passport">Какие документы<br>нужны?</span></p>
-            <p class="bfp-hint" id="bfph-expiration"><span class="bfph-link bf-hint" data-hint="bfh-expiration">Подробнее<br>о сроках действия</span></p>                        
+            <p class="bfp-hint" id="bfph-passport"><span class="bfph-link bf-hint" data-hint="bfh-passport"><%= raw t('booking.passengers.document.hint') %></span></p>
+            <p class="bfp-hint" id="bfph-expiration"><span class="bfph-link bf-hint" data-hint="bfh-expiration"><%= raw t('booking.passengers.expiration.hint') %></span></p>                        
         </div>
         <% if @order_form.infants.length > 0 && @order_form.adults.length > 1 %> 
-            <p class="bfp-order">Обратите внимание, что данные о младенце нужно вводить после данных того взрослого пассажира, на&nbsp;руках у&nbsp;которого он полетит.</p>        
+            <p class="bfp-order"><%= t 'booking.passengers.order' %></p>
         <% end %>     
 
         <%= render 'person_form' %>
 
         <div class="bf-warning" id="bfw-name-latin">
-        	<p>Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры.</p>
-        	<p class="bfw-tip">Имя&nbsp;и&nbsp;фамилию нужно вводить латинскими буквами. Если имя и&nbsp;фамилия в&nbsp;документе указаны не&nbsp;латиницей, то&nbsp;нужно ввести их&nbsp;транслитерацией (например, IVAN IVANOV).</p>
+        	<p><%= t 'booking.passengers.names.keyboard' %></p>
+        	<p class="bfw-tip"><%= t 'booking.passengers.names.letters' %></p>
         </div>
         <div class="bf-warning" id="bfw-name-order">
-        	<p>Пожалуйста, проверьте, что вы не перепутали поля для имени и фамилии.</p>
-        	<p class="bfw-tip"><span class="link bfwno-replace">Поменять&nbsp;местами</span> или <span class="link bfwno-leave">оставить</span> как есть?</p>
+        	<p><%= t 'booking.passengers.names.check' %></p>
+        	<p class="bfw-tip"><%= t 'booking.passengers.names.controls', :swap => content_tag('span', t('booking.passengers.names.swap'), :class => 'link bfwno-swap'), :leave => content_tag('span', t('booking.passengers.names.leave'), :class => 'link bfwno-leave') %></p>
         </div>
-        <div class="latent" id="bfh-passport">Для полетов внутри России подходит российский паспорт или загранпаспорт (для детей и&nbsp;младенцев&nbsp;&mdash; свидетельство о&nbsp;рождении или&nbsp;загранпаспорт). Для полетов за&nbsp;рубежом нужен загранпаспорт. Обратите внимание, что помимо загранпаспорта, для въезда во&nbsp;многие страны требуется соответствующая виза (<a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%B7%D0%BE%D0%B2%D1%8B%D0%B5_%D1%82%D1%80%D0%B5%D0%B1%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_%D0%B4%D0%BB%D1%8F_%D0%B3%D1%80%D0%B0%D0%B6%D0%B4%D0%B0%D0%BD_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8" target="_blank">подробнее в&nbsp;Википедии</a>)</div>
-        <div class="latent" id="bfh-expiration">Если вы&nbsp;путешествуете с&nbsp;российским паспортом или свидетельством о&nbsp;рождении, то&nbsp;срок действия указывать не&nbsp;нужно, так как эти документы его не&nbsp;имеют. В&nbsp;загранпаспорте&nbsp;же проставлена дата окончания его действия&nbsp;&mdash; ее&nbsp;необходимо указать.</div>        
+        <div class="latent" id="bfh-withseat"><%= raw t('booking.passengers.with_seat.description') %></div>
+        <div class="latent" id="bfh-passport"><%= raw t('booking.passengers.document.description') %></div>
+        <div class="latent" id="bfh-expiration"><%= raw t('booking.passengers.expiration.description') %></div>        
     </div>
 
     <%= render 'contacts_form' %>

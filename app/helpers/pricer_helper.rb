@@ -54,7 +54,7 @@ module PricerHelper
   def full_airport_and_term location, term
     result = ["#{ location.name }"]
     if term
-      result << "терминал&nbsp;#{ term }"
+      result << t('offer.details.terminal', :term => term)
     end
     result.join(', ').html_safe
   end    
@@ -178,13 +178,13 @@ module PricerHelper
     for flight, layover in segment.flights.zip(segment.layover_durations)
       parts << {
         :type => 'flight',
-        :title => "Перелёт #{ flight.departure.city.case_from } #{ flight.arrival.city.case_to }, #{ human_duration(flight.duration) }",
+        :title => t('offer.summary.flight', :from => flight.departure.city.case_from, :to => flight.arrival.city.case_to, :duration => human_duration(flight.duration)),
         :duration => flight.duration
       }
       if layover
         parts << {
           :type => 'layover',
-          :title => "Пересадка #{ flight.arrival.city.case_in }, #{ human_duration(layover) }",
+          :title => t('offer.summary.layover', :city => flight.arrival.city.case_in, :duration => human_duration(layover)),
           :duration => layover
         }
       end
@@ -202,19 +202,17 @@ module PricerHelper
   end  
 
   def human_layovers_medium segment
-    'через ' + segment.layovers.map{|layover| layover.city.case_to.gsub(/^\S+ /, '') }.to_sentence
+    t('offer.summary.through', :cities => segment.layovers.map{|layover| layover.city.case_to.gsub(/^\S+ /, '') }.to_sentence)
   end
 
   def with_layovers segment
-    counts = ['пересадкой', 'двумя пересадками', 'тремя пересадками']
-    layovers = segment.flights[0..-2].map {|flight| flight.arrival.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;')
-    "c #{ counts[segment.layover_count - 1] } #{ layovers }".html_safe
+    layovers = segment.flights[0..-2].map {|flight| flight.arrival.city.case_in }.to_sentence(:last_word_connector => t('nbsp_and'))
+    t('offer.details.layovers', :count => segment.layover_count, :cities => layovers).html_safe
   end
 
-  def with_technical_stops flight
-    prefix = flight.technical_stop_count == 1 ? 'промежуточной посадкой' : 'промежуточными посадками'
-    stops = flight.technical_stops.map {|tstop| tstop.airport.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;')
-    "c #{ prefix} #{ stops }".html_safe
+  def technical_stops flight
+    stops = flight.technical_stops.map {|tstop| tstop.airport.city.case_in }.to_sentence(:last_word_connector => t('nbsp_and'))
+    t('offer.details.stopovers', :count => flight.technical_stop_count, :cities => stops).html_safe
   end
 
   def human_cabin_nom cabin
@@ -288,16 +286,6 @@ module PricerHelper
 
   def segments_departure variant
     variant.segments.map {|segment| segment.departure_time }.join(' ')
-  end
-
-  def human_cabin_nom cabin
-    titles = {'Y' => 'Эконом-класс', 'C' => 'Бизнес-класс', 'F' => 'Первый класс'}
-    titles[cabin]
-  end
-
-  def human_cabin_ins cabin
-    titles = {'Y' => 'эконом-классом', 'C' => 'бизнес-классом', 'F' => 'первым классом'}
-    titles[cabin]
   end
 
   def segment_flight_numbers segment

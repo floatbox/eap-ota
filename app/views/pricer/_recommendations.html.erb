@@ -226,7 +226,7 @@
     <% end %>
     </div>
     <div class="o-comments">
-        <p class="od-comment"><%= t 'offer.comments.carrier', :carrier_name => recommendation.validating_carrier.name %><% if recommendation.validating_carrier.alliance %> <%= raw t 'offer.comments.alliance', :alliance_link => content_tag('span', nbsp(recommendation.validating_carrier.alliance.name), :class => 'od-alliance', 'data-carriers' => recommendation.validating_carrier.available_bonus_programms.map{|bp| bp.name}.to_sentence) %><% end %> <%= t 'offer.comments.time' %></p>    
+        <p class="od-comment"><%= t 'offer.comments.carrier', :carrier_name => recommendation.validating_carrier.name %><% if recommendation.validating_carrier.alliance %> <%= raw t 'offer.comments.alliance', :alliance_link => content_tag('span', nbsp(recommendation.validating_carrier.alliance.name), :class => 'od-alliance', 'data-carriers' => recommendation.validating_carrier.available_bonus_programms.map{|bp| bp.name}.to_sentence(:last_word_connector => t('nbsp_and'))) %><% end %> <%= t 'offer.comments.time' %></p>    
         <% recommendation_comments(recommendation).each do |comment| %>
             <p class="od-comment" data-carrier="<%= comment[:carrier] %>"><%= raw comment[:content] %></p>
         <% end %>

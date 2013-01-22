@@ -34,13 +34,13 @@
             <dt><%= t 'offer.details.airport' %></dt>
             <dd><%= full_airport_and_term(flight.arrival, flight.arrival_term) %></dd>
             <% if layover %>
-                <dt><%= t 'offer.details.layover' %></dt>
+                <dt><%= t 'offer.details.between_flights' %></dt>
                 <dd><% if layover > 479 %><span class="odc-hl"><%= human_duration(layover) %></span><% else %><%= human_duration(layover) %><% end %></dd>
             <% end %>            
         </dl>
         <ul class="osd-notice">
             <% unless flight.technical_stop_count.zero? %>
-                <li class="osdn-item"><span class="osdn-hl">Рейс выполняется <%= with_technical_stops(flight) %></span></li>
+                <li class="osdn-item"><span class="osdn-hl"><%= technical_stops(flight) %></span></li>
             <% end %>
             <% if layover %>
                 <% next_flight = segment.flights[fcounter + 1] %>
