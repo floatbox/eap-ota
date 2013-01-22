@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# FIXME не переписан под moped
 require_relative '../config/environment'
 require 'yajl'
 
@@ -7,7 +8,7 @@ Dir.chdir(Rails.root)
 Daemons.run_proc('/tmp/pids/rambler_daemon') do
   if Conf.api.send_to_rambler
     logger = ActiveSupport::BufferedLogger.new(Rails.root + 'log/rambler.log')
-    db = Mongoid.master
+    db = Mongoid.default_session
     coll = db.collection('rambler_caches')
     cursor = Mongo::Cursor.new(coll, :tailable => true)
     data_to_send = []

@@ -56,7 +56,7 @@ class Admin::ReportsController < Admin::BaseController
         # Partners Counters
         if day_result['search'] && day_result['search']['api']
           day_result['search']['api'].each do |partner, value|
-            if !partner.blank? && value.class == BSON::OrderedHash
+            if !partner.blank? && value.class == Hash
               data[:partners][partner] = {} if !data[:partners][partner]
               data[:partners][partner][:search] = 0 if !data[:partners][partner][:search]
               data[:partners][partner][:search] += value['success'] if value['success']
@@ -66,7 +66,7 @@ class Admin::ReportsController < Admin::BaseController
 
         if day_result['enter'] && day_result['enter']['preliminary_booking']
           day_result['enter']['preliminary_booking'].each do |partner, value|
-            if !partner.blank? && value.class == BSON::OrderedHash
+            if !partner.blank? && value.class == Hash
               data[:partners][partner] = {} if !data[:partners][partner]
               data[:partners][partner][:enter] = 0 if !data[:partners][partner][:enter]
               data[:partners][partner][:enter] += value['total'] if value['total']

@@ -39,11 +39,11 @@ class Admin::CountersController < Admin::BaseController
       end
       day_data[direction_index]['search'] = StatCounters.deep_merge_sum(day_data[direction_index]['search'], day_direction['search'])
       day_data[direction_index]['enter'] = StatCounters.deep_merge_sum(day_data[direction_index]['enter'], day_direction['enter'])
-      @total_search += day_direction['search']['api']['total'] if day_direction['search']
+      @total_search += day_direction['search']['api']['total'] if day_direction['search'] && day_direction['search']['api']
       @total_enter += day_direction['enter']['api']['total'] if day_direction['enter']
 
       @partners.each do |partner|
-        @total_partner[partner]['search'] += day_direction['search']['api'][partner]['total'] if day_direction['search'] && day_direction['search']['api'][partner]
+        @total_partner[partner]['search'] += day_direction['search']['api'][partner]['total'] if day_direction['search'] && day_direction['search']['api'] && day_direction['search']['api'][partner]
         @total_partner[partner]['enter'] += day_direction['enter']['api'][partner]['total'] if day_direction['enter'] && day_direction['enter']['api'][partner]
       end
     end

@@ -56,7 +56,8 @@ dt small {font-size: 0.85em; font-weight: normal; margin: 0 0 0 0.5em;}
 }
 
 /* for reports */
-.legend table {width: 50px}
+.legend table {width: 120px}
+.legendLabel {line-height: 1.4}
 	table.data	{width: 50%; margin: 20px 0 0 0;}
 	table.data td	{font-size: 13px; width: 30%; white-space: nowrap; padding: 3px}
 	table.data tr.blank td	{color: #fff;}

@@ -28,18 +28,15 @@
     </td>
     <td style="width: 60%; text-align: center;">
       <div style="text-align: left;">
-        <ul>
-      <% report[:top_carriers].each do |carrier| %>
-      <li><%= carrier[:iata]%> - <%= display_numbers(carrier[:tickets])%></li>
-      <% end %>
-        </ul>
-      <div id="piechart<%= count %>" style="width:350px;height:220px"></div>
+        <div id="piechart<%= count %>" style="width:400px;height:250px"></div>
       <script type="text/javascript">
     $(function () {
       // data
       var carrier<%= count %> = [
       <% report[:top_carriers].each do |carrier| %>
-      {label: '<%= carrier[:iata]%>', data: <%= carrier[:tickets]%> <% if carrier[:color]%>, color: '#<%= carrier[:color]%>'<%end%>},
+      { label: '<%= carrier[:iata]%>:<%= carrier[:title]%>',
+        data: <%= carrier[:tickets]%>
+        <% if carrier[:color]%>, color: '#<%= carrier[:color]%>'<%end%>},
       <% end %>];
 
       $.plot($("#piechart<%= count %>"), carrier<%= count %>,
@@ -52,7 +49,7 @@
               show: true,
               radius: 3/4,
               formatter: function(label, series){
-                return '<div style="font-size:8pt;text-align:center;padding:2px;color:white; font-weight:bold">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+                return '<div style="font-size:8pt;text-align:center;padding:2px;color:white; font-weight:bold">'+label.split(' ')[0]+'<br/>'+Math.round(series.percent)+'%</div>';
               },
               background: { opacity: 0.5 }
             }
@@ -60,7 +57,10 @@
         },
         legend: {
             show: true,
-            position: "sw"
+            position: "ne",
+            labelFormatter: function(label, series){
+              return label.split(':')[0]+' - '+'<strong title="'+label.split(':')[1]+'">'+Math.round(series.percent)+'%</strong> ('+series.data[0][1]+')';
+            }
         }
       });
     })
