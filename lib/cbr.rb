@@ -6,13 +6,13 @@ module CBR
     end
 
     def exchange_on(date)
+      # Параметр-блок задает метод округления
       exchanges[date] ||=
         ExchangeWithFallback.new(
           InverseRatesFor.new({from: 'RUB'},
             RatesUpdatedWithFallback.new(
               ActiveRecordRates.new(CurrencyRate.where(date: date, bank: 'cbr')),
-              # Параметр-блок у CentralBankOfRussia.new задает метод округления
-              LazyRates.new { CentralBankOfRussia.new{|p| p.round}.update_rates(date) } )))
+              LazyRates.new { CentralBankOfRussia.update_rates(date) } ))){|p| p.round}
     end
   end
 end
