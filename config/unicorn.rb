@@ -25,6 +25,7 @@ before_fork do |server,worker|
   if defined?(ActiveRecord::Base)
     ActiveRecord::Base.connection.disconnect!
   end
+  Completer.load rescue nil
 end
 
 after_fork do |server,worker|
