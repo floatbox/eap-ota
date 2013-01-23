@@ -64,6 +64,7 @@ gem 'delayed_job_mongoid'
 
 group :development do
   gem 'thin'
+  gem 'unicorn'
 end
 gem 'passenger', :group => :production
 
