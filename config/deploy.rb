@@ -11,7 +11,9 @@ require 'bundler/capistrano'
 # cron tasks
 set :whenever_command, "bundle exec whenever"
 set :whenever_environment do rails_env end
+set :whenever_roles, :daemons
 require "whenever/capistrano"
+
 set :scm, :git
 
 set :user, "rack"
@@ -31,7 +33,7 @@ task :localgit do
   set :repository,  "."
 end
 
-
+# для shared/* папочки для deploy:setup
 set :shared_children, %w(log pids system config initializers cache)
 
 # для deploy:migrate
@@ -47,14 +49,15 @@ set :normalize_asset_timestamps, false
 # в пользовательском .ssh/config почему-то не читается
 # ssh_options[:forward_agent] = true
 
+set :application, "eviterra"
+
 task :staging do
+  set :rails_env, 'staging'
   role :app, 'vm1.eviterra.com', 'vm2.eviterra.com'
-  role :web, 'vm1.eviterra.com'
+  role :web, 'vm3.eviterra.com'
   role :daemons, 'vm2.eviterra.com'
   role :db, 'vm1.eviterra.com', :primary => true
-  set :application, "eviterra"
-  set :rails_env, 'staging'
-  set :deploy_to, "/home/#{user}/#{application}"
+
   set :rvm_type, :user
   set :rvm_ruby_string, 'ruby-1.9.3-p194'
   set :branch, 'staging'
@@ -63,11 +66,13 @@ end
 task :eviterra do
   server 'bender.eviterra.com', :app, :web
   role :db, 'bender.eviterra.com', :primary => true
+  role :daemons, 'bender.eviterra.com'
   set :application, "eviterra"
   set :rails_env, 'production'
-  set :deploy_to, "/home/#{user}/#{application}"
+  set :rvm_type, :system
 end
 
+set :deploy_to, "/home/#{user}/#{application}"
 
 namespace :deploy do
 
@@ -115,18 +120,46 @@ namespace :deploy do
     run "cd #{directory}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} db:abort_if_pending_migrations || echo PLEASE DON\\\'T FORGET TO cap deploy:migrate!"
   end
 
-  task :restart_rambler_daemon, :roles => :daemons do
+  # daemons
+
+  task :restart_rambler_daemon, :roles => :daemons, :on_no_matching_servers => :continue do
     run "cd #{current_path}; RAILS_ENV=#{rails_env} script/rambler_daemon restart"
   end
 
-  task :restart_delayed_job, :roles => :daemons do
+  task :start_rambler_daemon, :roles => :daemons, :on_no_matching_servers => :continue do
+    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/rambler_daemon start"
+  end
+
+  task :stop_rambler_daemon, :roles => :daemons, :on_no_matching_servers => :continue do
+    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/rambler_daemon stop"
+  end
+
+  task :restart_delayed_job, :roles => :daemons, :on_no_matching_servers => :continue do
     run "cd #{current_path}; RAILS_ENV=#{rails_env} script/delayed_job restart"
+  end
+
+  task :start_delayed_job, :roles => :daemons, :on_no_matching_servers => :continue do
+    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/delayed_job start"
+  end
+
+  task :stop_delayed_job, :roles => :daemons, :on_no_matching_servers => :continue do
+    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/delayed_job stop"
   end
 
   task :restart_services do
     # уже полгода не используем
     # restart_rambler_daemon
     restart_delayed_job
+  end
+
+  task :start_services do
+    start_rambler_daemon
+    start_delayed_job
+  end
+
+  task :stop_services do
+    stop_rambler_daemon
+    stop_delayed_job
   end
 
 
