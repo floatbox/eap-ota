@@ -62,11 +62,9 @@ gem 'typus', :git => 'https://github.com/Eviterra/typus.git'
 gem "flot-rails"
 gem 'delayed_job_mongoid'
 
-group :development do
-  gem 'thin'
-  gem 'unicorn'
-end
+gem 'thin', :group => :development
 gem 'passenger', :group => :production
+gem 'unicorn', :group => [:production, :staging]
 
 group :test do
   gem 'rspec-rails'

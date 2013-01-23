@@ -2,9 +2,9 @@
 require "rvm/capistrano"
 require "capistrano_colors"
 
-set :rvm_type, :system
+set :rvm_type, :user
 # закрепил версию, чтобы не прыгала в продакшне
-set :rvm_ruby_string, 'ruby-1.9.3-head'
+#set :rvm_ruby_string, 'ruby-1.9.3-p327-falcon'
 
 require 'bundler/capistrano'
 
@@ -52,6 +52,7 @@ set :normalize_asset_timestamps, false
 set :application, "eviterra"
 
 task :staging do
+  load 'lib/recipes/unicorn'
   set :rails_env, 'staging'
   role :app, 'vm1.eviterra.com', 'vm2.eviterra.com'
   role :web, 'vm3.eviterra.com'
@@ -59,18 +60,29 @@ task :staging do
   role :db, 'vm1.eviterra.com', :primary => true
 
   set :rvm_type, :user
-  set :rvm_ruby_string, 'ruby-1.9.3-p194'
+#  set :rvm_ruby_string, 'ruby-1.9.3-p327-falcon'
+
   set :branch, 'staging'
+end
+
+task :unicorn do
+  load 'lib/recipes/unicorn'
+  set :rails_env, 'production'
+  set :rvm_type, :user
+  role :app, 'flexo.eviterra.com', 'deck.eviterra.com'
+  role :web, 'hermes.eviterra.com'
+  role :db, 'flexo.eviterra.com', :primary => true
+  # role :daemons, 'flexo.eviterra.com'
 end
 
 task :eviterra do
   load 'lib/recipes/passenger'
+  set :rails_env, 'production'
+  set :rvm_type, :system
+
   server 'bender.eviterra.com', :app, :web
   role :db, 'bender.eviterra.com', :primary => true
   role :daemons, 'bender.eviterra.com'
-  set :application, "eviterra"
-  set :rails_env, 'production'
-  set :rvm_type, :system
 end
 
 set :deploy_to, "/home/#{user}/#{application}"
