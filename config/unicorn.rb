@@ -1,15 +1,15 @@
-listen  ENV['UNICORN_PORT'] || 8001, backlog:  ENV['UNICORN_BACKLOG'] || 100
+listen  (ENV['UNICORN_PORT'] || 8001).to_i, backlog: (ENV['UNICORN_BACKLOG'] || 100).to_i
 
 working_directory File.expand_path('../..', __FILE__)
 
 # What the timeout for killing busy workers is, in seconds
-timeout ENV['UNICORN_TIMEOUT'] || 60
+timeout (ENV['UNICORN_TIMEOUT'] || 60).to_i
 
 # Whether the app should be pre-loaded
 preload_app true
 
 # How many worker processes
-worker_processes ENV['UNICORN_WORKERS'] || 1
+worker_processes (ENV['UNICORN_WORKERS'] || 1).to_i
 
 # What to do before we fork a worker
 #before_fork do |server, worker|
