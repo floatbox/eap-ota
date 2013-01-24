@@ -1,5 +1,7 @@
 project_home = ENV['UNICORN_HOME'] || '.'
-working_directory project_dir
+working_directory project_home
+stderr_path project_home + "/log/unicorn.stderr.log"
+stdout_path project_home + "/log/unicorn.stdout.log"
 
 listen  (ENV['UNICORN_PORT'] || 8001).to_i, backlog: (ENV['UNICORN_BACKLOG'] || 100).to_i
 
@@ -15,9 +17,6 @@ worker_processes (ENV['UNICORN_WORKERS'] || 1).to_i
 
 # Where to drop a pidfile
 pid project_home + '/tmp/pids/unicorn.pid'
-
-stderr_path project_home + "/log/unicorn.stderr.log"
-stdout_path project_home + "/log/unicorn.stdout.log"
 
 before_fork do |server,worker|
   if defined?(ActiveRecord::Base)
