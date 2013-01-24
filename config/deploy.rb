@@ -64,6 +64,7 @@ task :staging do
 end
 
 task :eviterra do
+  load 'lib/recipes/passenger'
   server 'bender.eviterra.com', :app, :web
   role :db, 'bender.eviterra.com', :primary => true
   role :daemons, 'bender.eviterra.com'
