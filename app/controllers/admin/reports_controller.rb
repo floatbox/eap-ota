@@ -86,7 +86,7 @@ class Admin::ReportsController < Admin::BaseController
         partner[:income_total] = partner[:orders] && partner[:orders].income_total ? partner[:orders].income_total : 0
         partner[:income_share] = partner[:income_total] ? partner[:income_total].to_f / data[:orders].income_total.to_f * 100 : 0
         partner[:conv] = partner[:enter] && !partner[:enter].zero?  ? (partner[:order_count] / partner[:enter].to_f) * 100 : 0
-        partner[:searches_per_enter] = partner[:search] && !partner[:search].zero?  ? (partner[:enter] / partner[:search].to_f) * 100 : 0
+        partner[:searches_per_enter] = partner[:search] && !partner[:search].zero? && partner[:enter] ? (partner[:enter] / partner[:search].to_f) * 100 : 0
         partner[:markup] = !partner[:order_total].zero? ? (partner[:income_total] / partner[:order_total]) * 100 : 0
       end
 
