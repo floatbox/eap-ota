@@ -116,6 +116,12 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def refund_date
+    if refund = tickets.where(:kind => 'refund', :status => 'processed').first
+      refund.ticketed_date
+    end
+  end
+
   def create_ticket_notice
     if email_status != 'queued' && email_status != 'ticket_sent' && email_status != 'manual'
       self.notifications.new.create_delayed_notice 2

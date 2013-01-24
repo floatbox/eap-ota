@@ -130,6 +130,7 @@ Order:
       - price_our_markup
       - income_payment_gateways
       - sold_tickets_numbers
+      - refund_date
       - partner
     options:
       selectors: payment_type, source, ticket_status, pricing_method, commission_ticketing_method
@@ -147,6 +148,7 @@ Order:
         created_at: long
         updated_at: long
         last_pay_time: long
+        refund_date: long
   order_by: -orders.created_at
   search: ^pnr_number, ^parent_pnr_number, email, phone
   options:
