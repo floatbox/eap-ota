@@ -1,3 +1,5 @@
+# для дебага нестартующего юникорна:
+# RAILS_ENV=production UNICORN_HOME=/home/rack/eviterra/current UNICORN_BACKLOG=1000 UNICORN_WORKERS=80 HOME=/home/rack UNICORN_TIMEOUT=60 bundle exec unicorn -c /home/rack/current/config/unicorn.rb
 project_home = ENV['UNICORN_HOME'] || '.'
 working_directory project_home
 stderr_path project_home + "/log/unicorn.stderr.log"
