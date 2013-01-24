@@ -82,12 +82,16 @@ class Admin::ReportsController < Admin::BaseController
       data[:partners].each do |name, partner|
         partner[:order_count] = partner[:orders] && partner[:orders].order_count ? partner[:orders].order_count : 0
         partner[:order_total] = partner[:orders] && partner[:orders].order_total ? partner[:orders].order_total : 0
+        partner[:order_total_share] = partner[:order_total] ? partner[:order_total].to_f / data[:orders].order_total.to_f * 100 : 0
         partner[:income_total] = partner[:orders] && partner[:orders].income_total ? partner[:orders].income_total : 0
+        partner[:income_share] = partner[:income_total] ? partner[:income_total].to_f / data[:orders].income_total.to_f * 100 : 0
         partner[:conv] = partner[:enter] && !partner[:enter].zero?  ? (partner[:order_count] / partner[:enter].to_f) * 100 : 0
+        partner[:searches_per_enter] = partner[:search] && !partner[:search].zero?  ? (partner[:enter] / partner[:search].to_f) * 100 : 0
         partner[:markup] = !partner[:order_total].zero? ? (partner[:income_total] / partner[:order_total]) * 100 : 0
       end
 
       data[:searches_per_order] = !data[:searches].zero? ? data[:orders].order_count.to_f / data[:searches].to_f  * 100 : 0
+      data[:searches_per_enter] = !data[:searches].zero? ? data[:enter].to_f / data[:searches].to_f  * 100 : 0
 
       @report << data
     end

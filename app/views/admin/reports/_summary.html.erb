@@ -24,6 +24,7 @@
 
         <tr valign="top"><td class="dataName">Поисков</td><td><%= display_numbers(report[:searches]) %></td></tr>
         <tr valign="top"><td class="dataName">Поиск/заказ</td><td><%= number_to_percentage(report[:searches_per_order]) %></td></tr>
+        <tr valign="top"><td class="dataName">Поиск/переход</td><td><%= number_to_percentage(report[:searches_per_enter]) %></td></tr>
       </table>
     </td>
     <td style="width: 60%; text-align: center;">
