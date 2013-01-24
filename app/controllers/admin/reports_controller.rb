@@ -92,6 +92,7 @@ class Admin::ReportsController < Admin::BaseController
 
       data[:searches_per_order] = !data[:searches].zero? ? data[:orders].order_count.to_f / data[:searches].to_f  * 100 : 0
       data[:searches_per_enter] = !data[:searches].zero? ? data[:enter].to_f / data[:searches].to_f  * 100 : 0
+      data[:conv] = !data[:enter].zero? ? data[:orders].order_count.to_f / data[:enter].to_f  * 100 : 0
 
       @report << data
     end
