@@ -10,7 +10,7 @@ class Mux
   include ActiveSupport::Benchmarkable
 
   include KeyValueInit
-  attr_accessor :lite, :admin_user
+  attr_accessor :suggested_limit, :lite, :admin_user
 
   def save_to_mongo(form, recommendations)
     RamblerCache.create_from_form_and_recs(form, recommendations)
@@ -45,8 +45,8 @@ class Mux
   def amadeus_pricer(form)
     return [] unless Conf.amadeus.enabled
     benchmark 'Pricer amadeus, total' do
-      request_ws = {:lite => lite}
-      request_ns = {:lite => lite, :nonstop => true}
+      request_ws = {:suggested_limit => suggested_limit, :lite => lite}
+      request_ns = {:suggested_limit => suggested_limit, :lite => lite, :nonstop => true}
       amadeus = Amadeus.booking
       # non threaded variant
       recommendations_ws = benchmark 'Pricer amadeus, with stops' do
@@ -95,8 +95,8 @@ class Mux
 
   def amadeus_async_pricer(form, &block)
     return [] unless Conf.amadeus.enabled
-    request_ws = {:lite => lite}
-    request_ns = {:lite => lite, :nonstop => true}
+    request_ws = {:suggested_limit => suggested_limit, :lite => lite}
+    request_ns = {:suggested_limit => suggested_limit, :lite => lite, :nonstop => true}
     reqs = (lite || !Conf.amadeus.nonstop_search) ? [request_ws] : [request_ns, request_ws]
     amadeus_driver = async_amadeus_driver
     reqs.each do |req|
