@@ -13,15 +13,11 @@ preload_app true
 # How many worker processes
 worker_processes (ENV['UNICORN_WORKERS'] || 1).to_i
 
-# What to do before we fork a worker
-#before_fork do |server, worker|
-#  sleep 1
-#end
-
 # Where to drop a pidfile
-# pid '/home/rack/eviterra/shared/pids/unicorn.pid'
-# TODO
 pid project_home + '/tmp/pids/unicorn.pid'
+
+stderr_path project_home + "/log/unicorn.stderr.log"
+stdout_path project_home + "/log/unicorn.stdout.log"
 
 before_fork do |server,worker|
   if defined?(ActiveRecord::Base)
