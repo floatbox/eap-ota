@@ -2,7 +2,7 @@
 #
 # обновляет состояние заказов, у которых Amadeus мог снять бронирование по TK XL
 
-require_relative '../config/environment'
+require File.expand_path('../../config/environment',  __FILE__)
 
 class SyncCanceledPnrsProcess
 
@@ -48,4 +48,4 @@ end
 PaperTrail.whodunnit = 'dev@eviterra.com'
 PaperTrail.controller_info = {:done => 'sync_canceled_pnrs'}
 
-SyncCanceledPnrsProcess.new.update_states
+SyncCanceledPnrsProcess.new.update_states if Conf.amadeus.cancel_stale

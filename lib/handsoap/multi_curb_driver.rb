@@ -58,6 +58,8 @@ module Handsoap
       curl.enable_cookies  = @enable_cookies
       # enables both deflate and gzip responses
       curl.encoding = ''
+      # амадеус отказывается работать с '1', которая идет по умолчанию
+      curl.ssl_version = 3
 
       if follow_redirects
         curl.follow_location = true

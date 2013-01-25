@@ -56,17 +56,17 @@ class Admin::ReportsController < Admin::BaseController
         # Partners Counters
         if day_result['search'] && day_result['search']['api']
           day_result['search']['api'].each do |partner, value|
-            if !partner.blank? && value.class == BSON::OrderedHash
+            if !partner.blank? && value.class == Hash
               data[:partners][partner] = {} if !data[:partners][partner]
               data[:partners][partner][:search] = 0 if !data[:partners][partner][:search]
-              data[:partners][partner][:search] += value['total'] if value['total']
+              data[:partners][partner][:search] += value['success'] if value['success']
             end
           end
         end
 
         if day_result['enter'] && day_result['enter']['preliminary_booking']
           day_result['enter']['preliminary_booking'].each do |partner, value|
-            if !partner.blank? && value.class == BSON::OrderedHash
+            if !partner.blank? && value.class == Hash
               data[:partners][partner] = {} if !data[:partners][partner]
               data[:partners][partner][:enter] = 0 if !data[:partners][partner][:enter]
               data[:partners][partner][:enter] += value['total'] if value['total']
@@ -82,12 +82,17 @@ class Admin::ReportsController < Admin::BaseController
       data[:partners].each do |name, partner|
         partner[:order_count] = partner[:orders] && partner[:orders].order_count ? partner[:orders].order_count : 0
         partner[:order_total] = partner[:orders] && partner[:orders].order_total ? partner[:orders].order_total : 0
+        partner[:order_total_share] = partner[:order_total] ? partner[:order_total].to_f / data[:orders].order_total.to_f * 100 : 0
         partner[:income_total] = partner[:orders] && partner[:orders].income_total ? partner[:orders].income_total : 0
+        partner[:income_share] = partner[:income_total] ? partner[:income_total].to_f / data[:orders].income_total.to_f * 100 : 0
         partner[:conv] = partner[:enter] && !partner[:enter].zero?  ? (partner[:order_count] / partner[:enter].to_f) * 100 : 0
+        partner[:searches_per_enter] = partner[:search] && !partner[:search].zero? && partner[:enter] ? (partner[:enter] / partner[:search].to_f) * 100 : 0
         partner[:markup] = !partner[:order_total].zero? ? (partner[:income_total] / partner[:order_total]) * 100 : 0
       end
 
       data[:searches_per_order] = !data[:searches].zero? ? data[:orders].order_count.to_f / data[:searches].to_f  * 100 : 0
+      data[:searches_per_enter] = !data[:searches].zero? ? data[:enter].to_f / data[:searches].to_f  * 100 : 0
+      data[:conv] = !data[:enter].zero? ? data[:orders].order_count.to_f / data[:enter].to_f  * 100 : 0
 
       @report << data
     end

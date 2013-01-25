@@ -140,7 +140,7 @@ class Flight
 
   # comparison, uniquiness, etc.
   def signature
-    flight_code
+    @signature ||= flight_code
   end
 
   def hash

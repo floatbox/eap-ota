@@ -1,3 +1,4 @@
 load 'deploy' if respond_to?(:namespace) # cap2 differentiator
-Dir['vendor/plugins/*/recipes/*.rb','lib/recipes/*.rb'].each { |plugin| load(plugin) }
+# временно(?) выключаю автоматическую загрузку рецептов
+# Dir['lib/recipes/*.rb'].each { |plugin| load(plugin) }
 load 'config/deploy'
