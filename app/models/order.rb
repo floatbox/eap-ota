@@ -374,6 +374,7 @@ class Order < ActiveRecord::Base
     self.price_blanks = sold_tickets.sum(:price_blanks)
     self.price_discount = sold_tickets.sum(:price_discount)
     self.price_our_markup = sold_tickets.sum(:price_our_markup)
+    self.price_operational_fee = sold_tickets.sum(:price_operational_fee)
 
     self.price_difference = price_total - price_total_old if price_difference == 0
     update_incomes

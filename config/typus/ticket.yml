@@ -12,6 +12,7 @@ Ticket:
      - price_penalty
      - price_discount
      - price_our_markup
+     - price_operational_fee
      - office_id
      - validator
      - status
@@ -44,6 +45,7 @@ Ticket:
       - price_discount
       - price_our_markup
       - price_extra_penalty
+      - price_operational_fee
       - ticketed_date
       - comment
       - code
@@ -74,6 +76,7 @@ Ticket:
       - price_tax
       - price_penalty
       - price_extra_penalty
+      - price_operational_fee
       - commission_consolidator
       - price_consolidator
       - price_blanks
@@ -110,6 +113,7 @@ Ticket:
       - price_extra_penalty
       - price_consolidator
       - price_discount
+      - price_operational_fee
       - commission_consolidator
       - commission_blanks
       - commission_agent
@@ -121,7 +125,7 @@ Ticket:
       - mso_number
       - comment
       - corrected_price
-    new_refund: price_fare, price_tax, price_penalty, price_consolidator, price_discount, price_our_markup, price_extra_penalty, route, comment
+    new_refund: price_fare, price_tax, price_penalty, price_consolidator, price_discount, price_our_markup, price_extra_penalty, price_operational_fee, route, comment
     confirm_refund: ticketed_date, status
     csv:
       - source
@@ -137,6 +141,7 @@ Ticket:
       - price_discount
       - price_our_markup
       - price_blanks
+      - price_operational_fee
       - commission_agent
       - price_agent
       - commission_subagent
