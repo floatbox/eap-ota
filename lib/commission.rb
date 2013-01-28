@@ -146,6 +146,7 @@ subagent "10% от всех применяемых опубликованных 
 check { includes(city_iatas, %W(NYC MIA BJS LAX)) and includes(city_iatas, 'MOW') and includes(country_iatas, %W(RU UA KZ UZ AM)) }
 discount "9.5%"
 important! # ац вперед! 
+commission "12%/10%"
 
 example 'svocdg/lh cdgmad/lh'
 interline :absent
