@@ -91,7 +91,7 @@ Eviterra::Application.configure do
   config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   config.after_initialize do
-    file = File.open(Rails.root + "log/production.log", "w")
+    file = File.open(Rails.root + "log/production.log", "a")
     file.sync = false
     Rails.logger = ActiveSupport::BufferedLogger.new(file)
   end
