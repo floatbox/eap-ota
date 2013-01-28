@@ -211,7 +211,7 @@ class Payu
   # внутренний метод для собственно HTTP вызова сервиса блокировки/платежа
   # облегчает тестирование
   def alu_post(post)
-    logger.info 'Payu: ' + post.inspect
+    #logger.info 'Payu: ' + post.inspect
     response =
       benchmark 'Payu ALU' do
         HTTParty.post("https://#{@host}/order/alu.php", :body => post)

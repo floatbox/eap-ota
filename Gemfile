@@ -46,14 +46,14 @@ gem 'paper_trail'
 gem 'geo_ip'
 gem 'airbrake'
 gem 'newrelic_rpm'
-gem 'rpm_contrib'
+# gem 'rpm_contrib'
 gem 'mongoid'
 gem 'bson_ext'
 gem 'mobile-fu'
 
 #gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
 gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'
-gem 'mongo-rails-instrumentation'
+# gem 'mongo-rails-instrumentation'
 
 gem 'haml'
 gem 'hpricot', require: false
@@ -62,10 +62,9 @@ gem 'typus', :git => 'https://github.com/Eviterra/typus.git'
 gem "flot-rails"
 gem 'delayed_job_mongoid'
 
-group :development do
-  gem 'thin'
-end
+gem 'thin', :group => :development
 gem 'passenger', :group => :production
+gem 'unicorn', :group => [:production, :staging]
 
 group :test do
   gem 'rspec-rails'

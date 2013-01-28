@@ -116,6 +116,12 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def refund_date
+    if refund = tickets.where(:kind => 'refund', :status => 'processed').first
+      refund.ticketed_date
+    end
+  end
+
   def create_ticket_notice
     if email_status != 'queued' && email_status != 'ticket_sent' && email_status != 'manual'
       self.notifications.new.create_delayed_notice 2
@@ -520,12 +526,14 @@ class Order < ActiveRecord::Base
 
   # FIXME надо какой-то логгинг
   def self.cancel_stale!
-    stale.each do |order|
-      begin
-        puts "Automatic cancel of pnr #{order.pnr_number}"
-        order.strategy.cancel
-      rescue
-        puts "error: #{$!}"
+    if Conf.amadeus.cancel_stale
+      stale.each do |order|
+        begin
+          puts "Automatic cancel of pnr #{order.pnr_number}"
+          order.strategy.cancel
+        rescue
+          puts "error: #{$!}"
+        end
       end
     end
   end

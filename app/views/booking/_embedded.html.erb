@@ -68,7 +68,7 @@
         <div class="bfp-type clearfix">
             <div class="bfpt-item bfpt-selected">
                 <h5 class="bfpt-title"><label for="bfpt-card" class="bfpt-label">Банковской картой через Eviterra.com</label></h5>
-                <p class="bfpt-tip"><label for="bfpt-card">Билет будет оформлен <br>и&nbsp;выслан вам по&nbsp;электронной почте</label></p>
+                <p class="bfpt-tip"><label for="bfpt-card">Билет будет автоматически оформлен и&nbsp;выслан вам на&nbsp;указанный адрес электронной почты</label></p>
                 <input type="radio" name="order[payment_type]" class="bfpt-radio" id="bfpt-card" value="card" checked="checked">
             </div>
             <div class="bfpt-item">
@@ -79,7 +79,7 @@
         </div>
         <% else %>
         <div class="bfp-type">
-            <p>Билет будет оформлен<br>и&nbsp;выслан вам по&nbsp;электронной почте</p>
+            <p style="color: #777;">Билет будет автоматически оформлен и&nbsp;выслан вам на&nbsp;указанный адрес электронной почты</p>
             <input type="hidden" name="order[payment_type]" value="card">
         </div>
         <% end %>
@@ -120,8 +120,8 @@
             </div>
             <div class="bff-required"></div>
             <div class="bff-disclaimer">
-                <p class="bffd-card">После нажатия кнопки «Купить» данные пассажиров попадут в&nbsp;систему бронирования, билет будет оформлен и&nbsp;выслан вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="/agreement/" target="_blank" class="bffd-link">условиями использования</a>, <a href="/iata/" target="_blank" class="bffd-link">правилами IATA</a> и&nbsp;<span class="link bffd-link bffd-farerules">правилами тарифов</span>.</p>
-                <p class="bffd-cash latent">После нажатия кнопки «Купить» подтверждение бронирования будет выслано вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Мы свяжемся с&nbsp;вами по&nbsp;телефону для уточнения деталей доставки. Нажимая «Купить», вы соглашаетесь с&nbsp;<a class="bffd-link" href="/agreement/" target="_blank">условиями использования</a>, <a class="bffd-link" href="/iata/" target="_blank">правилами IATA</a> и&nbsp;<span class="link bffd-link bffd-farerules">правилами тарифов</span>.</p>
+                <p class="bffd-card">После нажатия кнопки «Купить» билет будет автоматически оформлен и&nbsp;выслан вам на&nbsp;указанный адрес электронной почты в&nbsp;течение нескольких минут. Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="/agreement/" target="_blank" class="bffd-link">условиями использования</a>, <a href="/iata/" target="_blank" class="bffd-link">правилами IATA</a> и&nbsp;<span class="link bffd-link bffd-farerules">тарифными правилами</span>.</p>
+                <p class="bffd-cash latent">После нажатия кнопки «Купить» подтверждение бронирования будет выслано вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Мы свяжемся с&nbsp;вами по&nbsp;телефону для уточнения деталей доставки. Нажимая «Купить», вы соглашаетесь с&nbsp;<a class="bffd-link" href="/agreement/" target="_blank">условиями использования</a>, <a class="bffd-link" href="/iata/" target="_blank">правилами IATA</a> и&nbsp;<span class="link bffd-link bffd-farerules">тарифными правилами</span>.</p>
             </div>
         </div>
     </div>
@@ -131,8 +131,8 @@
 <div class="bf-farerules">
 <div class="bff-close"></div>
 <div class="bff-content">
-    <h3 class="bff-title">Правила тарифов</h3>
-    <p>Внимание! Возврат средств в&nbsp;случае отказа при получении визы, болезни и&nbsp;прочих обстоятельств без штрафных санкций невозможен. Возврат билета производится строго по&nbsp;правилам авиакомпании. В&nbsp;случае комбинации в&nbsp;билете тарифов с&nbsp;различными правилами, наиболее строгие ограничения применяются ко&nbsp;всему маршруту.</p>
+    <h3 class="bff-title">Тарифные правила</h3>
+    <p>Внимание! Возврат средств в&nbsp;случае отказа при получении визы, болезни и&nbsp;прочих обстоятельств без штрафных санкций невозможен. Обмен/возврат билетов производится строго по&nbsp;правилам авиакомпании. В&nbsp;случае комбинации тарифов с&nbsp;различными правилами, при обмене/возврате применяются наиболее строгие правила.</p>
     <br>
     <p>Билеты не&nbsp;передаваемые. В&nbsp;случае неявки на&nbsp;рейс, авиакомпания может аннулировать все&nbsp;последующие участки маршрута.</p>
     <% @order_form.recommendation.rules.each do |(airline, fare) ,rule| %>

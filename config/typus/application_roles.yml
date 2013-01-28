@@ -23,7 +23,7 @@ admin:
   Country: create, read, update, delete, show_versions
   GeoTag: create, read, update, delete
   Region: create, read, update, delete
-  HotOffer: read, delete
+  #HotOffer: read, delete
   Subscription: create, read, update, delete
   Destination: read, delete
   AirlineAlliance: create, read, update, delete
@@ -46,4 +46,4 @@ admin:
   Version: read
 
 hoteditor:
-  HotOffer: read, delete
+  #HotOffer: read, delete
