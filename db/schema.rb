@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130124130334) do
+ActiveRecord::Schema.define(:version => 20130125145248) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -334,6 +334,7 @@ ActiveRecord::Schema.define(:version => 20130124130334) do
     t.decimal  "stored_income",                 :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.decimal  "stored_balance",                :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.integer  "customer_id"
+    t.decimal  "price_operational_fee",         :precision => 9, :scale => 2, :default => 0.0,      :null => false
   end
 
   add_index "orders", ["customer_id"], :name => "index_orders_on_customer_id"
@@ -503,6 +504,7 @@ ActiveRecord::Schema.define(:version => 20130124130334) do
     t.date     "dept_date"
     t.decimal  "price_extra_penalty",       :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "baggage_info"
+    t.decimal  "price_operational_fee",     :precision => 9, :scale => 2, :default => 0.0,       :null => false
   end
 
   add_index "tickets", ["kind"], :name => "index_tickets_on_kind"

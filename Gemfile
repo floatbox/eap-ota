@@ -1,5 +1,5 @@
 source 'http://rubygems.org'
-gem 'rails', '3.2.1'
+gem 'rails', '3.2.11'
 
 gem 'jquery-rails'
 group :assets do
@@ -62,9 +62,10 @@ gem 'typus', :git => 'https://github.com/Eviterra/typus.git'
 gem "flot-rails"
 gem 'delayed_job_mongoid'
 
-gem 'thin', :group => :development
-gem 'passenger', :group => :production
-gem 'unicorn', :group => [:production, :staging]
+# appservers
+gem 'thin', :require => false
+gem 'passenger', :require => false
+gem 'unicorn', :require => false
 
 group :test do
   gem 'rspec-rails'

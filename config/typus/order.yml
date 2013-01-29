@@ -42,6 +42,7 @@ Order:
       - price_discount
       - commission_our_markup
       - price_our_markup
+      - price_operational_fee
       - pricing_method
       - price_total
       - price_payment_commission
@@ -116,6 +117,7 @@ Order:
       - price_tax
       - price_consolidator
       - price_blanks
+      - price_operational_fee
       - tickets_office_ids
       - price_agent
       - commission_agent
