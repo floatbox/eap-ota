@@ -133,6 +133,8 @@ class Order < ActiveRecord::Base
     sold_tickets.map do |t|
       t.baggage_info.map{|code| BaggageLimit.deserialize(code)}
     end.transpose
+  rescue IndexError
+    []
   end
 
   def email_ready!

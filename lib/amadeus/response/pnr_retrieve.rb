@@ -160,7 +160,7 @@ module Amadeus
               passenger_elem.xpath('r:passengerData/r:travellerInformation/r:traveller/r:surname').to_s
             passenger_first_name = passenger_elem.xpath('r:passengerData/r:travellerInformation/r:passenger[r:type="INF"]/r:firstName').to_s
           end
-          flights_array = segments_refs.map do |sr|
+          flights_array = segments_refs.sort.map do |sr|
             Flight.new(flights_hash[sr]) if flights_hash[sr]
           end.compact
           ticket_key = [[passenger_ref, infant_flag], segments_refs]
