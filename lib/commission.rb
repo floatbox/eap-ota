@@ -597,6 +597,26 @@ carrier "AZ", "ALITALIA"
 ########################################
 carrier_defaults :consolidator => 0
 
+example 'svomil'
+example 'ledmil milled'
+example 'svxrmil'
+example 'ievrom'
+example 'ievmil'
+example 'tbsrom'
+example 'evnrom romevn'
+strt_date "01.02.2013"
+expr_date "28.02.2013"
+agent "10% на ЭКОНОМ /БИЗНЕС класс."
+subagent "8% от тарифа на все направления Alitalia (Эконом и Бизнес класса) с началом путешествия из Москвы и СанктPПетербурга, а также из Киева (из Киева Alitalia летает в Рим (AZ481) и Милан (AZ7469), Тбилиси (из Тбилиси Alitalia летает в Рим (AZ551), Еревана (из Еревана Alitalia летает в Рим (AZ557) (тарифы туда и обратно, а также тарифы в одну сторону, но с вылетом из Москвы или СанктPПетербурга, Киева, Тбилиси или Еревана). Повышенная комиссия не применяется, если начало путешествия не из этих городов."
+classes :economy, :business
+check { includes(city_iatas.first, 'MOW LED SVX') or
+  (includes(city_iatas.first, 'IEV') and includes_only(city_iatas, 'ROM MIL')) or
+  (includes(city_iatas.first, 'TBS') and includes_only(city_iatas, 'ROM')) or
+  (includes(city_iatas.first, 'EVN') and includes_only(city_iatas, 'ROM'))
+}
+discount "6.5%"
+commission "10%/8%"
+
 example 'mrucdg'
 example 'mrucdg cdgmru'
 agent    "1 euro. с билета по опубл. тарифам на все остальные рейсы AZ (включая code-share);"
