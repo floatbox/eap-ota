@@ -8,6 +8,8 @@ module AdminLink
     case object
     when Order
       base + "orders/show/#{object.id}"
+    when Ticket
+      base + "tickets/show/#{object.id}"
     when Payment
       base + "payments/show/#{object.id}"
     when Commission
@@ -21,5 +23,9 @@ module AdminLink
     when Carrier
       base + "carriers/show/#{object.id}"
     end
+  end
+
+  def admin_links(objects)
+    objects.map {|obj| admin_link(obj) }
   end
 end
