@@ -86,15 +86,6 @@ discount "9.5%"
 commission "12%/10%"
 
 # базовое вознаграждение ац
-example 'cdgsvo/r svocdg/f'
-agent "12% от тарифа на рейсы Перевозчика по всем тарифам классов: Империал, Премиальный и Бизнес класс. FPRJCADSM"
-subagent "11% от тарифа на рейсы Перевозчика по всем тарифам классов F, P, R, J, C, A, D, S, M"
-subclasses "FPRJCADSM"
-discount "10.5%"
-important!
-commission "12%/11%"
-
-# базовое вознаграждение ац
 # example 'cdgsvo svocdg/y'
 agent "7% от тарифа на рейсы Перевозчика по всем тарифам Эконом классов;"
 subagent "5% от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, Q, B, K, O;"
@@ -122,7 +113,6 @@ discount "1.5%"
 commission "5%/2%"
 
 # дополнительно:
-
 # Хьюстон-Сингапур
 # example 'svoiws/UN7061'
 # example 'svoaap/UN7061 aapsvo/UN7061'
@@ -147,6 +137,15 @@ check { includes(city_iatas, %W(NYC MIA BJS LAX)) and includes(city_iatas, 'MOW'
 discount "9.5%"
 important! # ац вперед! 
 commission "12%/10%"
+
+# базовое вознаграждение ац
+example 'cdgsvo/r svocdg/f'
+agent "12% от тарифа на рейсы Перевозчика по всем тарифам классов: Империал, Премиальный и Бизнес класс. FPRJCADSM"
+subagent "11% от тарифа на рейсы Перевозчика по всем тарифам классов F, P, R, J, C, A, D, S, M"
+subclasses "FPRJCADSM"
+discount "10.5%"
+important!
+commission "12%/11%"
 
 example 'svocdg/lh cdgmad/lh'
 interline :absent
