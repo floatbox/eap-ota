@@ -24,7 +24,7 @@ subagent "• на собственные рейсы (в т.ч. по согла�
 subagent "5 % от тарифов Эконом класса (в т.ч. при комбинации Эконом и Бизнес классов),   при переоформлении с доплатой по тарифам Эконом класса (в т.ч. при комбинации Эконом и Бизнес классов);"
 # применится только к этому правилу
 # ticketing_method "direct"
-discount "5.8%"
+discount "4%"
 ## our_markup 100
 commission "7%/6%"
 
@@ -82,7 +82,7 @@ subagent "10% от тарифа на рейсы Перевозчика по вс
 subclasses "FPRJCADSMLVXTNIGWUYHQBKOE"
 ticketing_method "downtown"
 # disabled "срочно вырубаем DTT"
-discount "9.5%"
+discount "7.5%"
 commission "12%/10%"
 
 # базовое вознаграждение ац
@@ -1064,7 +1064,7 @@ example 'svocdg cdgsvo/ab'
 agent "7% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 subagent "5% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 interline :no, :yes
-discount "4.8%"
+discount "7.5%"
 commission '7%/5%'
 
 example 'ledsvo/business svoled/business'
@@ -1992,7 +1992,7 @@ example 'svocdg'
 example 'svocdg cdgsvo'
 agent    "9% от опубл. тарифов на собств.рейсы PS"
 subagent "9% от опубл. тарифов на собств.рейсы PS"
-discount "8.5%"
+discount "6%"
 commission "9%/9%"
 
 example 'cdgsvo svocdg/ab'
@@ -2999,9 +2999,9 @@ carrier_defaults :consolidator => 0, :ticketing_method => "downtown"
 example 'svocdg cdgsvo'
 agent "выписывать руками в даунтауне, пока не появилась прямая продажа"
 subagent ""
-our_markup 300
+#our_markup 300
 ##disabled "до времени"
-#discount "1.9%"
+discount "4.5%"
 interline :no, :yes
 commission "0%/0%"
 
