@@ -205,6 +205,7 @@ class Payu
     post[:ORDER_HASH] = hash_string(@seller_key, post)
 
     parsed_response = alu_post(post)
+    logger.info "Payu: blocking #{opts[:our_ref]}"
     PaymentResponse.new( parsed_response, @seller_key )
   end
 
