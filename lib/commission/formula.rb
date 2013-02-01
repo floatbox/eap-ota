@@ -2,6 +2,8 @@
 class Commission
   class Formula
 
+    extend SimpleFlyweight
+
     attr_accessor :formula, :compiled
 
     def initialize formula
