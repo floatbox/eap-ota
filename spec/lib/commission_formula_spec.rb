@@ -43,17 +43,33 @@ describe Commission::Formula do
     Fx('3.34%').should == Fx('3.34%')
   end
 
-  pending "should be serializable by YAML" do
-    formula = Fx('3.34%')
-    YAML.load(YAML.dump(formula)).should == formula
-  end
-
   describe "#serialize" do
     specify { Fx('3.34%').inspect.should == '#<Fx 3.34% >' }
   end
 
-  pending "it should have exactly that serialization" do
-    # backward compatibility?
+  describe "YAML serialization" do
+    it "should be serializable by YAML" do
+      formula = Fx('3.34%')
+      YAML.load(YAML.dump(formula)).should == formula
+      # формула не всегда валидна!
+      formula.call(10).should == 0.33
+    end
+
+    it "should have exactly that serialization" do
+      YAML.dump( Fx('3.34%') ).should == %(--- !fx 3.34%\n...\n)
+    end
+
+    it "should have exactly that serialization for empty formula" do
+      YAML.dump( Fx(nil) ).should == %(--- !fx \n...\n)
+    end
+
+    it "should be backwards compatible with older serialization" do
+      serialization = "!ruby/object:Commission::Formula\nformula: 3.34%\n"
+      formula = YAML.load(serialization)
+      formula.should == Fx('3.34%')
+      # формула не всегда валидна!
+      formula.call(10).should == 0.33
+    end
   end
 
   describe "#zero?" do
