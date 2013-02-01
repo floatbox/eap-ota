@@ -1,27 +1,27 @@
 <div class="bf-card">
 <div class="bfst-tip bfc-tip">
-    <p style="margin: 0 0 12px">Данные вашей банковской карты обрабатываются платежным центром PayU и&nbsp;защищены 256-битным шифрованием, обеспеченным компанией DigiCert.</p>
-    <p>CVV или CVC&nbsp;&mdash; трехзначный код на&nbsp;обратной стороне карты. Как правило, находится на полосе для подписи после четырех последних цифр номера. Карта без этого кода не&nbsp;подходит для оплаты услуг через интернет.</p>
+    <p style="margin: 0 0 12px"><%= raw t 'booking.card.safety' %></p>
+    <p><%= raw t 'booking.card.cvv_description' %></p>
 </div>
 <div class="bfc-side">
 <div class="bfcs-inner">
     <div class="bfc-type">
-        <img class="bfct-visa" src="/images/booking/visa.png" alt="Visa"><span class="bfct-or">&nbsp;или&nbsp;</span><img class="bfct-mastercard" src="/images/booking/mastercard.png" alt="MasterCard">
+        <img class="bfct-visa" src="/images/booking/visa.png" alt="Visa"><span class="bfct-or">&nbsp;<%= t 'booking.card.or' %>&nbsp;</span><img class="bfct-mastercard" src="/images/booking/mastercard.png" alt="MasterCard">
     </div>
     <div class="bfc-number">
-        <h6 class="bf-label"><label for="bfcn-part1">Номер карты</label> <span class="bfl-tip">(16&nbsp;цифр)</span></h6>
+        <h6 class="bf-label"><label for="bfcn-part1"><%= t 'booking.card.number.label' %></label> <span class="bfl-tip">(<%= raw t 'booking.card.number.hint' %>)</span></h6>
         <input type="text" pattern="[0-9]*" size="16" name="card[number]" maxlength="22" id="bfc-number" class="bf-field bfc-field -metrika-nokeys">
     </div>
     <div class="bfc-name">
-        <h6 class="bf-label"><label for="bfc-name" title="Имя и фамилия латинскими буквами, как на карте">Имя на&nbsp;карте</label></h6>    
+        <h6 class="bf-label"><label for="bfc-name" title="Имя и фамилия латинскими буквами, как на карте"><%= raw t 'booking.card.name' %></label></h6>    
         <%= f.text_field :name, :id => 'bfc-name', :class => "bf-field bfc-field -metrika-nokeys" %>
-        <div class="bwarning language-warning latent">Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры. Имя нужно вводить латинскими буквами</div>
+        <div class="bwarning language-warning latent"><%= raw t 'booking.card.keyboard' %></div>
     </div>
     <div class="bfc-expiration">
-        <h6 class="bf-label"><label for="bc-exp-month" title="На карте обозначен как &laquo;VALID THRU&raquo;">Срок действия</label></h6>
+        <h6 class="bf-label"><label for="bc-exp-month" title="На карте обозначен как &laquo;VALID THRU&raquo;"><%= t 'booking.card.expires' %></label></h6>
         <div class="bfc-date">
-            <div class="bfcd-item"><label class="bf-placeholder" for="bc-exp-month">ММ</label><input type="text" pattern="[0-9]*" size="2" name="card[month]" maxlength="2" id="bc-exp-month" class="bf-field bfc-field bfcd-month -metrika-nokeys"></div>
-            <div class="bfcd-item"><label class="bf-placeholder" for="bc-exp-year">ГГ</label><input type="text" pattern="[0-9]*" size="2" name="card[year_short]" maxlength="2" id="bc-exp-year" class="bf-field bfc-field bfcd-year -metrika-nokeys"></div>
+            <div class="bfcd-item"><label class="bf-placeholder" for="bc-exp-month"><%= t 'booking.card.dates.m' %></label><input type="text" pattern="[0-9]*" size="2" name="card[month]" maxlength="2" id="bc-exp-month" class="bf-field bfc-field bfcd-month -metrika-nokeys"></div>
+            <div class="bfcd-item"><label class="bf-placeholder" for="bc-exp-year"><%= t 'booking.card.dates.y' %></label><input type="text" pattern="[0-9]*" size="2" name="card[year_short]" maxlength="2" id="bc-exp-year" class="bf-field bfc-field bfcd-year -metrika-nokeys"></div>
         </div>        
     </div>
 </div>
@@ -30,11 +30,11 @@
 <div class="bfcs-inner">
     <div class="bfc-stripe">&nbsp;</div>
     <div class="bfc-cvv">
-        <h6 class="bf-label"><label for="bc-cvv" id="bc-cvv-label">CVV</label>&nbsp;<span class="bfl-tip">(3&nbsp;цифры)</span></h6>
+        <h6 class="bf-label"><label for="bc-cvv" id="bc-cvv-label">CVV</label>&nbsp;<span class="bfl-tip">(<%= raw t 'booking.card.cvv_hint' %>)</span></h6>
         <input type="text" pattern="[0-9]*" size="3" name="card[verification_value]" maxlength="3" id="bc-cvv" class="bf-field bfc-field -metrika-nokeys">
         <div id="bfcn-sample" title="Последние четыре цифры номера карты"><span class="bfcn-empty">####</span></div>
     </div>
 </div>
 </div>
-<div class="bfc-warning">Если счет вашей карты — не&nbsp;в&nbsp;рублях, то&nbsp;сумма будет списана в&nbsp;валюте вашего&nbsp;счета по&nbsp;внутреннему курсу банка, выпустившего вашу&nbsp;карту</div>
+<div class="bfc-warning"><%= raw t 'booking.card.currency' %></div>
 </div>

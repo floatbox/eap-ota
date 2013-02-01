@@ -368,7 +368,7 @@ process: function(min, max) {
         max: max,
         range: max - min
     };
-    this.slider.find('.smps-title').html(lang.priceMap.title.absorb(Math.floor(min).separate()));
+    this.slider.find('.smps-title').html(I18n.t('search.map.title', {min: Math.floor(min).separate()}));
     this.width = this.slider.find('.smps-base').width() - 7;
     this.scales = [100, 100, 500, 1000];
     this.offset = this.width;
@@ -384,7 +384,7 @@ apply: function(offset, filter) {
     }
     this.control.css('left', offset);
     this.selected.css('width', offset);
-    this.value.html(lang.priceMap.limit.absorb(limit.separate()));
+    this.value.html(I18n.t('search.map.title', {max: limit.separate()}));
     if (filter) {
         search.map.filterPrices(limit);
     }

@@ -1,18 +1,18 @@
 <div class="bf-section" data-type="contacts">
 <div class="bfs-title">
-    <h4 class="bfst-text">Покупатель</h4>
-    <div class="bfst-tip">Чтобы мы знали куда прислать электронный билет и куда звонить в случае каких-либо изменений</div>
+    <h4 class="bfst-text"><%= t 'booking.contacts.title' %></h4>
+    <div class="bfst-tip"><%= t 'booking.contacts.hint' %></div>
     <div class="bfst-line"></div>
 </div>
 <%= fields_for :order, @order_form do |o| %>
 <%= o.hidden_field :number %>
 <div class="clearfix">
     <div class="bfc-control">
-        <h6 class="bf-label"><label for="bfc-email">Адрес электронной почты</label></h6>
+        <h6 class="bf-label"><label for="bfc-email"><%= t 'booking.contacts.email' %></label></h6>
         <input type="email" size="30" name="order[email]" id="bfc-email" class="bf-field">
     </div>
     <div class="bfc-control">
-        <h6 class="bf-label"><label for="bfc-phone">Номер телефона</label> <span class="bfl-tip">(с кодом страны и города)</span></h6>
+        <h6 class="bf-label"><label for="bfc-phone"><%= t 'booking.contacts.phone' %></label> <span class="bfl-tip">(<%= t 'booking.contacts.with_code' %>)</span></h6>
         <input type="tel" size="30" name="order[phone]" id="bfc-phone" class="bf-field">        
     </div>
 </div>

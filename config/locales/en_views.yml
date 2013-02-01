@@ -1,10 +1,373 @@
 en:
-  foo:
-    bar:
-      # count: 1, -1
-      one: 'One foobar.'
-      # count: 2,3,4, 0.23
-      # count: 0 if there's no "none:"
-      other: '%{count} foobars.'
-      # count: 0
-      none: 'No foobars.'
+  nbsp_and: ' and&nbsp;'
+  timeout: 'Server is unreachable. Check your internet connection.'  
+  currencies:
+    RUR:
+      one: '%{count}&nbsp;Ruble'
+      other: '%{count}&nbsp;Rubles'
+      sign: '%{sum}&nbsp;<span class="ruble">Р</span>'
+  time:
+    h: '%{h}&nbsp;h'
+    min: '%{m}&nbsp;min'
+    hours:
+      one: '%{count}&nbsp;hour'
+      other: '%{count}&nbsp;hours'
+    minutes:
+      one: '%{count}&nbsp;minute'
+      other: '%{count}&nbsp;minutes'
+  page:
+    search: 'Search for airline tickets %{title}'
+    results: 'Airline tickets %{title}'
+    booking: 'Booking airline tickets %{title}'    
+  search:
+    locations:
+      from: 'Откуда?'
+      to: 'Куда?'
+      ow: 'Только туда'
+      rt: 'Туда и обратно'
+      mw: 'Сложный маршрут'
+      add: 'Добавить перелет'
+      remove: 'Убрать перелет'
+    map:
+      link: 'Low-priced flights %{from} in&nbsp;%{dates}?'
+      title: 'Price from %{min}'
+      limit: 'up to %{max} <span class="ruble">Р</span>'
+      expand: 'Expand map'
+      collapse: 'Collapse map'
+      loading: 'Ищем варианты'
+      empty: 'Мы не смогли ничего найти'
+    dates:
+      week: 'ПН ВТ СР ЧТ ПТ СБ ВС'
+      today: 'сегодня'
+      monthes:
+        nom: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        gen: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        pre: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        abb: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    options:
+      adults:
+        title: 'Взрослых'
+        hint: 'от 12 лет'
+      children:
+        title: 'Детей'
+        hint: 'до 12 лет, с местом'
+      infants:
+        title: 'Младенцев'
+        hint: 'до 2 лет, без места'
+      cabin:
+        title: 'Класс обслуживания'
+        Y: 'эконом'
+        C: 'бизнес'
+        F: 'первый'
+    messages:
+      dpt: 'Please enter departure city or airport %{segment}'
+      arv: 'Please enter city or airport of destination %{segment}'
+      date: 'Please select date of %{segment}'
+      persons: 'Number of passengers should be eight or less'
+      infants: 'Number of unseated infants snould not exceed number of adult passengers'
+      noadults: 'Children must be accompanied by adults'
+      segments:
+        dpt: 'departure'
+        rt: 'return flight'
+        mw: '%{number} flight'
+        numbers: 'first second third fourth fifth sixth'
+  results:
+    header:
+      find: 'Найти&nbsp;билеты'
+      new: 'Новый&nbsp;поиск'
+      all: 'Все&nbsp;варианты перелета'
+    loading:
+      title: 'Ищем для вас лучшие предложения'
+      time: 'Это займет от пяти до тридцати секунд'
+      carriers: 'Поиск осуществляется по предложениям около 500 авиакомпаний'
+      average: 'Средняя цена на этом направлении — 14800 рублей за билет на одного человека'
+      currency: 'Цены будут показаны в рублях'
+      payment: 'Можно будет сразу оплатить банковской картой Visa или MasterCard'
+    empty:
+      title: 'Мы не смогли ничего найти :-('
+      reasons: 'Возможные причины:'
+      dates: 'Нет перелетов именно в выбранные дни. Попробуйте указать другие даты.'
+      carriers: 'У нас не представлены авиакомпании, выполняющие рейсы на этом направлении. Мы постоянно подключаем новые, попробуйте проверить искомое направление позже.'
+      city: 'На этом маршруте не существует регулярного авиасообщения. Попробуйте выбрать другой город.'
+    tabs:
+      cheap:
+        one: 'Cheap'
+        many: 'Cheap'
+      optimal:
+        one: 'Optimal'
+        many: 'Optimal'
+      nonstop:
+        one: 'Direct'
+        many: 'Direct'
+      cheapNonstop:
+        one: 'Cheap direct'
+        many: 'Cheap direct'
+      matrix:
+        one: '± 3 days'
+        many: '± 3 days'
+      some: '%{amount} of %{total}'
+      all: 'All %{amount}'
+  filters:
+    dpt: 'Вылет %{from}'
+    arv: 'Прилет %{to}'
+    and: ' и '
+    time:
+      any: 'в любое время'
+      t0: 'ночью'
+      t1: 'утром'
+      t2: 'днем'
+      t3: 'вечером'
+    cities:
+      title: 'города'
+      dpt: 'из любого города'
+      arv: 'в любой город'
+    airports:
+      title: 'аэропорты'
+      dpt: 'из любого аэропорта'
+      arv: 'в любой аэропорт'
+    alliance:
+      title: 'Альянс'
+      any: 'любой'
+    carrier:
+      title: 'Авиакомпания'
+      any: 'любая'
+    aircraft:
+      title: 'Самолет'
+      any: 'любой'
+  subscription:
+    title: 'Подпишитесь на направление'
+    description: 'Если вам не&nbsp;важно когда лететь, мы&nbsp;сообщим вам о&nbsp;появлении выгодных тарифов на&nbsp;билеты %{cities} по&nbsp;электронной почте.'
+    email: 'Ваш адрес'
+    submit: 'Хочу'
+    warning: 'Введите правильный адрес электронной почты.'
+    success: 'Спасибо, подписка создана. Отписаться можно будет по ссылке в письме.'
+    failed: 'Не удалось подписаться, попробуйте ещё раз.'
+  offer:
+    columns:
+      dpt: 'Departure'
+      arv: 'Arrival'
+      duration: 'В пути'
+    summary:
+      flight: 'Перелет %{from} %{to}, %{duration}'
+      layover: 'Пересадка %{city}, %{duration}'
+      through: 'через %{cities}'
+      duration:
+        hours: '%{h}&nbsp;ч'
+        minutes: '%{m}&nbsp;мин'
+    segment:
+      title: 'Перелет %{direction}'
+      direction:
+        there: 'туда'
+        back: 'обратно'
+      more: 'и еще %{amount} перелета %{direction}'
+      variants:
+        one: '%{count} вариант'
+        few: '%{count} варианта'
+        many: '%{count} вариантов'
+      incompatible:
+        rt: 'с другим <span class="ossi-segment">обратным перелётом</span>'
+        one: 'с другим <span class="ossi-segment">перелётом %{direction}</span>'
+        many: 'с другими перелётами %{direction}'        
+    details:
+      show: 'Показать подробности'
+      hide: 'Скрыть подробности'
+      segment: 'Перелет %{from} %{to}'
+      segment_rt: 'Обратный перелет'
+      layovers:
+        one: 'с пересадкой %{cities}'
+        few: 'с двумя пересадками %{cities}'
+        many: 'с тремя пересадками %{cities}'
+      stopovers:
+        one: 'Рейс выполняется с промежуточной посадкой %{cities}'
+        few: 'Рейс выполняется с промежуточными посадками %{cities}'
+        many: 'Рейс выполняется с промежуточными посадками %{cities}'
+      dpt: 'Вылет'
+      arv: 'Прибытие'
+      airport: 'аэропорт'
+      terminal: 'терминал&nbsp;%{term}'
+      carrier: 'авиакомпания'
+      flight: 'рейс'
+      aircraft: 'самолет'
+      duration: 'в пути'
+      between_flights: 'между рейсами'
+      different_airports: 'Разные аэропорты прилёта и вылета'
+      different_terminals: 'Разные терминалы прилёта и вылета'
+    comments:
+      carrier: 'Билет оформляет авиакомпания %{carrier_name}.'
+      alliance: 'Применяются бонусные программы альянса %{alliance_link}.'
+      time: 'Время везде местное.'
+    availability:
+      text: 'По этому тарифу осталось %{seats}. Не откладывайте покупку.'
+      one: '%{count} место'
+      few: '%{count} места'
+      many: '%{count} мест'
+  booking:
+    title: 'Ваш перелет'
+    passengers:
+      one: 'Пассажир'
+      few: 'Пассажиры'
+      add: 'Добавить еще одного пассажира'
+      names:
+        first: 'Имя'
+        last: 'Фаимлия'
+        check: 'Пожалуйста, проверьте, что вы не перепутали поля для имени и фамилии.'
+        controls: '%{swap} или %{leave} как есть?'
+        swap: 'Поменять местами'
+        leave: 'оставить'
+        keyboard: 'Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры.'
+        letters: 'Имя&nbsp;и&nbsp;фамилию нужно вводить латинскими буквами. Если имя и&nbsp;фамилия в&nbsp;документе указаны не&nbsp;латиницей, то&nbsp;нужно ввести их&nbsp;транслитерацией (например, IVAN IVANOV).'
+      gender:
+        label: 'Пол'
+        m: 'М'
+        f: 'Ж'
+      birthdate: 'Дата рождения'
+      dates:
+        d: 'ДД'
+        m: 'ММ'
+        y: 'ГГГГ'
+      nationality: 'Гражданство'
+      document:
+        label: 'Серия и № документа'
+        hint: 'Какие документы<br>нужны?'
+        description: 'Для полетов внутри России подходит российский паспорт или загранпаспорт (для детей и&nbsp;младенцев&nbsp;&mdash; свидетельство о&nbsp;рождении или&nbsp;загранпаспорт). Для полетов за&nbsp;рубежом нужен загранпаспорт. Обратите внимание, что помимо загранпаспорта, для въезда во&nbsp;многие страны требуется соответствующая виза (<a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%B7%D0%BE%D0%B2%D1%8B%D0%B5_%D1%82%D1%80%D0%B5%D0%B1%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_%D0%B4%D0%BB%D1%8F_%D0%B3%D1%80%D0%B0%D0%B6%D0%B4%D0%B0%D0%BD_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8" target="_blank">подробнее в&nbsp;Википедии</a>)'
+      expiration:
+        label: 'Срок действия'
+        without: 'без срока'
+        hint: 'Подробнее<br>о сроках действия'
+        description: 'Если вы&nbsp;путешествуете с&nbsp;российским паспортом или свидетельством о&nbsp;рождении, то&nbsp;срок действия указывать не&nbsp;нужно, так как эти документы его не&nbsp;имеют. В&nbsp;загранпаспорте&nbsp;же проставлена дата окончания его действия&nbsp;&mdash; ее&nbsp;необходимо указать.'
+      bonus:
+        alliance: 'Есть бонусная карта альянса %{name}'
+        carrier: 'Есть бонусная карта авиакомпании %{name}'
+        number: 'Номер карты'
+      with_seat:
+        label: 'С отдельным местом'
+        description: 'Если младенец летит на&nbsp;отдельном месте, то&nbsp;применяется более высокий, детский тариф. Если младенец летит без&nbsp;места, то&nbsp;его данные вводятся после того пассажира, на&nbsp;руках у&nbsp;которого он полетит.'
+      order: 'Обратите внимание, что данные о младенце нужно вводить после данных того взрослого пассажира, на&nbsp;руках у&nbsp;которого он полетит.'
+    update:
+      price: 'Стоимость изменилась'
+      progress: 'Обновляем стоимость'
+      required: 'Заполните %{passengers},<br> чтобы узнать новую стоимость.'
+      one: 'данные пассажира'
+      few: 'данные пассажиров'
+    contacts:
+      title: 'Покупатель'
+      hint: 'Чтобы мы знали куда прислать электронный билет и куда звонить в случае каких-либо изменений'
+      email: 'Адрес электронной почты'
+      phone: 'Номер телефона'
+      with_code: 'с кодом страны и города'
+    payment:
+      card_cash: 'Оплата'
+      only_card: 'Оплата банковской картой'
+      PCI_DSS: 'Сайт защищен ключом безопасности и&nbsp;в&nbsp;полной мере соответствет стандартам PCI&nbsp;DSS Compliance.'
+      by_card:
+        label: 'Банковской картой через Eviterra.com'
+        ticket: 'Билет будет оформлен <br>и&nbsp;выслан вам по&nbsp;электронной почте'
+      by_cash:
+        label: 'Наличными в Москве'
+        office: 'У нас в офисе'
+        delivery: 'Курьеру при доставке (+%{sum})'
+        both: 'У нас в офисе или курьеру при доставке (+%{sum})'
+    card:
+      safety: 'Данные вашей банковской карты обрабатываются платежным центром PayU и&nbsp;защищены 256-битным шифрованием, обеспеченным компанией DigiCert.'
+      cvv_description: 'CVV или CVC&nbsp;&mdash; трехзначный код на&nbsp;обратной стороне карты. Как правило, находится на полосе для подписи после четырех последних цифр номера. Карта без этого кода не&nbsp;подходит для оплаты услуг через интернет.'
+      or: 'или'
+      number:
+        label: 'Номер карты'
+        hint: '16&nbsp;цифр'
+        last: 'Последние четыре цифры номера карты'
+      cvv_hint: '3&nbsp;цифры'
+      expires: 'Срок действия'
+      dates:
+        m: 'ММ'
+        y: 'ГГ'
+      name: 'Имя на&nbsp;карте'
+      keyboard: 'Пожалуйста, переключитесь на&nbsp;английскую раскладку клавиатуры. Имя нужно вводить латинскими буквами'
+      currency: 'Если счет вашей карты — не&nbsp;в&nbsp;рублях, то&nbsp;сумма будет списана в&nbsp;валюте вашего&nbsp;счета по&nbsp;внутреннему курсу банка, выпустившего вашу&nbsp;карту'
+    cash:
+      due_date: 'Бронирование необходимо оплатить до <strong>%{date}</strong>, иначе оно будет автоматически аннулировано.'
+      delivery:
+        label: 'Хочу оплатить курьеру при доставке (%{sum})'
+        address: 'Адрес доставки'
+        details: 'если есть код домофона или другие тонкости — укажите, пожалуйста'
+        description: 'Желаемое время доставки тоже можно указать. Обратите внимание, что доставка возможна только по&nbsp;Москве с&nbsp;10:00 до&nbsp;19:00 в&nbsp;будние&nbsp;дни.'
+      office:
+        label: 'Хочу самостоятельно приехать в офис и оплатить'
+        description: 'К&nbsp;нам можно приехать в&nbsp;будние дни с&nbsp;11:00 до&nbsp;20:00. Офис находится на&nbsp;территории «Трехгорной мануфактуры» по&nbsp;адресу улица Рочдельская, дом&nbsp;15. Пожалуйста, возьмите с&nbsp;собой документ, удостоверяющий личность, и&nbsp;позвоните нам по&nbsp;телефону <nobr class="phone">+7 495 660-35-20,</nobr> за&nbsp;час до&nbsp;приезда, чтобы мы&nbsp;заранее подготовили для&nbsp;вас все необходимое.'
+        contacts: 'Контактная информация и карта'
+    price:
+      total: 'Итоговая стоимость'
+      for_all: 'за всех пассажиров'
+      fare: 'Тариф'
+      taxes_and_fees: 'Таксы и сборы'
+      including_fee: 'В том числе сервисный сбор'
+      delivery: 'Доставка'
+      discount: 'Скидка'
+    buy:
+      button: 'Купить'
+      progress: 'секундочку…'
+      card: 'После нажатия кнопки «Купить» данные пассажиров попадут в&nbsp;систему бронирования, билет будет оформлен и&nbsp;выслан вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут.'
+      cash: 'После нажатия кнопки «Купить» подтверждение бронирования будет выслано вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Мы свяжемся с&nbsp;вами по&nbsp;телефону для уточнения деталей доставки.'
+      agree: 'Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="/agreement/" target="_blank" class="bffd-link">условиями использования</a>, <a href="/iata/" target="_blank" class="bffd-link">правилами IATA</a> и&nbsp;<span class="link bffd-link bffd-farerules">правилами тарифов</span>.'
+    farerules:
+      title: 'Правила тарифов'
+      restrictions: 'Внимание! Возврат средств в&nbsp;случае отказа при получении визы, болезни и&nbsp;прочих обстоятельств без штрафных санкций невозможен. Возврат билета производится строго по&nbsp;правилам авиакомпании. В&nbsp;случае комбинации в&nbsp;билете тарифов с&nbsp;различными правилами, наиболее строгие ограничения применяются ко&nbsp;всему маршруту.'
+      cancellation: 'Билеты не&nbsp;передаваемые. В&nbsp;случае неявки на&nbsp;рейс, авиакомпания может аннулировать все&nbsp;последующие участки маршрута.'
+      fare: 'Тариф'
+    validation:
+      empty:
+        left: 'Fill in %{fields}.'
+        one: '%{count} other field'
+        other: '%{count} other fields'
+      passengers:
+        sample: 'пассажира'
+        numbers: ['первого', 'второго', 'третьего', 'четвертого', 'пятого', 'шестого', 'седьмого', 'восьмого']
+      email:
+        empty: '{email address}'
+        wrong: 'Incorrect {email address}.'
+      phone:
+        empty: '{Phone number}'
+        letters: '{Phone number} must contain only numbers.'
+        short: 'Short {phone number}, enter country and area code.'
+      fname:
+        empty: '{passenger first name}'
+        short: '{Passenger first name} should be entered completely.'
+        letters: '{Passenger first name} should be entered by latin letters.'
+      lname:
+        empty: '{passenger last name}'
+        short: '{Passenger last name} should be entered completely.'
+        letters: '{Passenger last name} should be entered by latin letters.'
+      gender:
+        empty: '{passenger gender}'
+      birthday:
+        empty: 'passenger {birthdate}'
+        wrong: 'Passenger {birthdate} doesn&#39;t exist.'
+        letters: 'Passenger {birthdate} should be entered in dd/mm/yyyy format.'
+        improper: 'Passenger {birthdate} should not be later than today.'
+      passport:
+        empty: 'passenger {document number}'
+        letters: 'Passenger {document number} must contain only letters and numbers.'
+      expiration:
+        empty: 'Passenger {document expiry date}'
+        wrong: 'Passenger {document expiry date} is incorrect.'
+        letters: 'Passenger {document expiry date} should be entered in dd/mm/yyyy format.'
+        improper: 'Passenger document is expired'
+      bonus:
+        empty: '{bonus card number}'
+        letters: '{Bonus card number} must contain only latin letters and numbers.'
+      cardnumber:
+        empty: '{card number}'
+        letters: '{Card number} must contain only numbers.'
+        wrong: '{Card number} is incorrect.'
+      cvc:
+        empty: '{CVV/CVC code of bank card}'
+        letters: '{CVV/CVC code of bank card} must contain only numbers.'
+      cardholder:
+        empty: '{Cardholder name}'
+        letters: '{Cardholder name} must contain only latin letters.'
+      cardexp:
+        empty: '{card expiry date}'
+        letters: '{Card expiry date} should be in mm/yy format.'
+        wrong: 'The month of {card expiry date} should not be more than 12.'
+        improper: 'Bank card is expired.'
+      address:
+        empty: '{delivery address}'

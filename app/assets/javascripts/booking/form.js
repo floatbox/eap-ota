@@ -104,11 +104,11 @@ validate: function(forced) {
         disabled = true;
     }
     if (empty.length > 4) {
-        empty[3] = lang.formValidation.otherFields(empty.length - 3);
+        empty[3] = I18n.t('booking.validation.empty', {count: empty.length - 3});
         empty.length = 4;
     }
     if (empty.length > 0) {
-        this.required.append('<p class="bffr-empty">' + lang.formValidation.emptyFields(empty) + '</p>');
+        this.required.append('<p class="bffr-empty">' + I18n.t('booking.validation.empty.left', {fields: empty.enumeration(I18n.t('nbsp_and'))}) + '</p>');
         disabled = true;
     }
     if (this.back) {
@@ -246,9 +246,10 @@ process: function(s) {
 },
 hidePrice: function() {
     this.footer.find('.bff-passengers').remove();
-    var content = '<div class="bffp-content"><p>Стоимость изменилась —</p><p class="bffp-hint">Заполните {0},<br> чтобы узнать новую стоимость.</p></div>';
-    var title = lang.passengersData[this.el.find('.bf-persons .bfst-text').attr('data-amount')];
-    var message = $('<div class="bff-passengers"></div>').html(content.absorb(title));
+    var template = '<div class="bffp-content"><p>{0} —</p><p class="bffp-hint">{1}</p></div>';
+    var passengers = I18n.t(this.el.find('.bf-persons .bfst-text').attr('data-amount'), {scope: 'booking.update'});
+    var content = template.absorb(I18n.t('booking.update.price'), I18n.t('booking.update.required', {passengers: passengers}));
+    var message = $('<div class="bff-passengers"></div>').html(content);
     this.footer.find('.bff-price').hide().after(message);
     this.wrongPrice = true;
 },
@@ -269,7 +270,8 @@ getPrice: function() {
             that.footer.find('.bff-passengers').remove();
         }
     });
-    this.footer.find('.bff-passengers .bffp-content').html('<p class="bffp-progress">Обновляем стоимость &mdash;</p>');
+    var content = '<p class="bffp-progress">' + I18n.t('booking.update.progress') + ' &mdash;</p>';
+    this.footer.find('.bff-passengers .bffp-content').html(content);
     this.wrongPrice = false;
 },
 updatePrice: function(content) {
@@ -307,14 +309,14 @@ init: function() {
     });
 },
 initEmail: function() {
-    var email = new validator.Text($('#bfc-email'), lang.formValidation.email, function(value) {
+    var email = new validator.Text($('#bfc-email'), I18n.t('booking.validation.email'), function(value) {
         if (/^[@.\-]|[^\w\-\+.@]|@.*[^\w.\-]/.test(value)) return 'wrong';
         if (!/^\S*?@[\w.\-]*?\.\w{2,}$/.test(value)) return 'empty';
     });
     this.controls.push(email);
 },
 initPhone: function() {
-    var phone = new validator.Text($('#bfc-phone'), lang.formValidation.phone, function(value) {
+    var phone = new validator.Text($('#bfc-phone'), I18n.t('booking.validation.phone'), function(value) {
         if (/[^\d() \-+]/.test(value)) return 'letters';
         var digits = value.replace(/\D/g, '').length;
         if (digits < 5) return 'empty';
@@ -475,9 +477,9 @@ removeRow: function(index) {
     this.validate(true);
 },
 applyRows: function() {
-    var n = this.rows.length, key = n === 1 ? 'one' : 'many';
+    var n = this.rows.length, key = n === 1 ? 'one' : 'few';
     this.add.toggle(n < this.rowsLimit);
-    this.title.attr('data-amount', key).html(lang.passengers[key]);
+    this.title.attr('data-amount', key).html(I18n.t(key, {scope: 'booking.passengers'}));
 },
 validate: function(forced) {
     var wrong = [], empty = [], people = {a: 0, c: 0, i: 0, is: 0};
@@ -488,9 +490,10 @@ validate: function(forced) {
         if (im === 1) {
             empty = empty.concat(person.empty);
         } else if (person.empty) {
-            var num = lang.ordinalNumbers.gen[i];
+            var sample = I18n.t('booking.validation.passengers.sample');
+            var number = I18n.t('booking.validation.passengers.numbers')[i];
             for (var e = 0, em = person.empty.length; e < em; e++) {
-                empty.push(person.empty[e].replace('пассажира', num + ' пассажира'));
+                empty.push(person.empty[e].replace(sample, number + ' ' + sample));
             }
         }
         if (person.type) {
@@ -502,7 +505,7 @@ validate: function(forced) {
     }
     if (people.a + people.c + people.i === this.rows.length) {
         if (people.a === 0 && people.c + people.i > 0) {
-            wrong.push(lang.searchRequests.noadults + '.');
+            wrong.push(I18n.t('search.messages.noadults') + '.');
         }
         var merged = [people.a, people.c, people.i, people.is].join('');
         if (merged !== this.cachedPeople) {
@@ -566,8 +569,8 @@ initNames: function() {
         if (/[^A-Za-z\- ']/.test(value)) return 'letters';
         if (value.length < 2) return 'short';
     };
-    this.firstname = new validator.Text(this.el.find('.bfp-fname'), lang.formValidation.fname, check);
-    this.lastname = new validator.Text(this.el.find('.bfp-lname'), lang.formValidation.lname, check);
+    this.firstname = new validator.Text(this.el.find('.bfp-fname'), I18n.t('booking.validation.fname'), check);
+    this.lastname = new validator.Text(this.el.find('.bfp-lname'), I18n.t('booking.validation.lname'), check);
     this.firstname.format = this.lastname.format = function(value) {
         var name = $.trim(value);
         this.gender = name && validator.getGender(name);
@@ -596,13 +599,13 @@ processNames: function() {
     }
 },
 initSex: function() {
-    this.gender = new validator.Gender(this.el.find('.bfp-sex'), lang.formValidation.gender);
+    this.gender = new validator.Gender(this.el.find('.bfp-sex'), I18n.t('booking.validation.gender'));
     this.controls.push(this.gender);
 },
 initBirthday: function() {
     var that = this;
     var date = this.el.find('.bfp-date').eq(0);
-    var birthday = new validator.Date(date, lang.formValidation.birthday, function(date) {
+    var birthday = new validator.Date(date, I18n.t('booking.validation.birthday'), function(date) {
         if (date.getTime() > this.time) return 'improper';
     });
     var withseat = new validator.Checkbox(this.el.find('.bfpo-infant input'));
@@ -635,7 +638,7 @@ initNationality: function() {
 },
 initPassport: function() {
     var that = this;
-    var passport = new validator.Text(this.el.find('.bfp-passport'), lang.formValidation.passport, function(value) {
+    var passport = new validator.Text(this.el.find('.bfp-passport'), I18n.t('booking.validation.passport'), function(value) {
         if (/[^\wА-Яа-я. \-№#]/.test(value)) return 'letters';
         if (value.length < 5) return 'empty';
     });
@@ -651,7 +654,7 @@ initPassport: function() {
     this.controls.push(passport);
 },
 initExpiration: function() {
-    var expiration = new validator.Date(this.el.find('.bfp-date').eq(1), lang.formValidation.expiration, function(date) {
+    var expiration = new validator.Date(this.el.find('.bfp-date').eq(1), I18n.t('booking.validation.expiration'), function(date) {
         if (date.getTime() < this.time) return 'improper';
     });
     expiration.future = true;
@@ -690,7 +693,7 @@ initBonus: function() {
     for (var i = options.length; i--;) {
         program.values[options[i].value] = true;
     }
-    var number = new validator.Text(row.find('.bfp-bonus-number'), lang.formValidation.bonus, function(value) {
+    var number = new validator.Text(row.find('.bfp-bonus-number'), I18n.t('booking.validation.bonus'), function(value) {
         if (/[^\w \-№#]/.test(value)) return 'letters';
         if (value.length < 5) return 'empty';
     });
@@ -766,7 +769,7 @@ initCard: function() {
         number.el.focus();
     });
 
-    var number = new validator.Text($('#bfc-number'), lang.formValidation.cardnumber, function(value) {
+    var number = new validator.Text($('#bfc-number'), I18n.t('booking.validation.cardnumber'), function(value) {
         if (/[^\d ]/.test(value)) return 'letters';
         var digits = value.replace(/\D/g, '');
         if (digits.length < 16) return 'empty';
@@ -803,13 +806,13 @@ initCard: function() {
     };    
     
     // CVV
-    var cvv = new validator.Text($('#bc-cvv'), lang.formValidation.cvc, function(value) {
+    var cvv = new validator.Text($('#bc-cvv'), I18n.t('booking.validation.cvc'), function(value) {
         if (/\D/.test(value)) return 'letters';
         if (value.length < 3) return 'empty';
     });
 
     // Имя владельца
-    var name = new validator.Text($('#bfc-name'), lang.formValidation.cardholder, function(value) {
+    var name = new validator.Text($('#bfc-name'), I18n.t('booking.validation.cardholder'), function(value) {
         if (/[^A-Za-z\- .']/.test(value)) return 'letters';
     });
     name.format = function(value) {
@@ -817,7 +820,7 @@ initCard: function() {
     };
 
     // Срок действтия
-    var date = new validator.CardDate(context.find('.bfc-date'), lang.formValidation.cardexp, function(value) {
+    var date = new validator.CardDate(context.find('.bfc-date'), I18n.t('booking.validation.cardexp'), function(value) {
         if (/[^A-Za-z\- .']/.test(value)) return 'letters';
     });
 

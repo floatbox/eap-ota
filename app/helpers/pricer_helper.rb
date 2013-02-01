@@ -256,10 +256,17 @@ module PricerHelper
     Russian.pluralize(sum, 'рубль', 'рубля', 'рублей')
   end
 
-  def human_price price
-    rounded = price.round.to_i
-    "#{ rounded }&nbsp;#{ rubles(rounded) }".html_safe
+  def short_price price
+    t('currencies.RUR.sign', :sum => price.round.to_i).html_safe
   end  
+
+  def human_price price
+    t('currencies.RUR', :count => price.round.to_i).html_safe
+  end  
+
+  def decorate_price price, before = '', after = ''
+    price.gsub(/(\d+)/){|sum| before + sum.gsub(/(\d+)(\d{3})/, '\1<span class="thousand">\2</span>') + after }.html_safe
+  end
 
   def human_date date
     I18n.l(Date.strptime(date, '%d%m%y'), :format => '%e %B').strip

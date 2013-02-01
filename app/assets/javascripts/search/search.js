@@ -26,7 +26,6 @@ waitRequests: function() {
 },
 getValues: function() {
     var mode = this.mode.selected;
-    var lw = lang.searchRequests;
     var warnings = [];
     var segments = [];
     for (var i = 0; i < this.locations.used; i++) {
@@ -179,7 +178,7 @@ loadSummary: function(values, process) {
             }
         },
         error: function() {
-            results.header.show(lang.errors.timeout, false);
+            results.header.show(I18n.t('timeout'), false);
         },
         timeout: 15000
     });
