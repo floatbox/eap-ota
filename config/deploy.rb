@@ -2,16 +2,18 @@
 require "rvm/capistrano"
 require "capistrano_colors"
 
-set :rvm_type, :system
+set :rvm_type, :user
 # закрепил версию, чтобы не прыгала в продакшне
-set :rvm_ruby_string, 'ruby-1.9.3-head'
+#set :rvm_ruby_string, 'ruby-1.9.3-p327-falcon'
 
 require 'bundler/capistrano'
 
 # cron tasks
 set :whenever_command, "bundle exec whenever"
 set :whenever_environment do rails_env end
+set :whenever_roles, :daemons
 require "whenever/capistrano"
+
 set :scm, :git
 
 set :user, "rack"
@@ -31,7 +33,7 @@ task :localgit do
   set :repository,  "."
 end
 
-
+# для shared/* папочки для deploy:setup
 set :shared_children, %w(log pids system config initializers cache)
 
 # для deploy:migrate
@@ -47,22 +49,43 @@ set :normalize_asset_timestamps, false
 # в пользовательском .ssh/config почему-то не читается
 # ssh_options[:forward_agent] = true
 
-task :delta do
-  server 'delta.eviterra.com', :app, :web
-  role :db, 'delta.eviterra.com', :primary => true
-  set :application, "delta"
-  set :rails_env, 'delta'
-  set :deploy_to, "/home/#{user}/#{application}"
+set :application, "eviterra"
+
+task :staging do
+  load 'lib/recipes/unicorn'
+  set :rails_env, 'staging'
+  role :app, 'vm1.eviterra.com', 'vm2.eviterra.com'
+  role :web, 'vm3.eviterra.com'
+  role :daemons, 'vm2.eviterra.com'
+  role :db, 'vm1.eviterra.com', :primary => true
+
+  set :rvm_type, :user
+#  set :rvm_ruby_string, 'ruby-1.9.3-p327-falcon'
+
+  set :branch, 'staging'
+end
+
+task :unicorn do
+  load 'lib/recipes/unicorn'
+  set :rails_env, 'production'
+  set :rvm_type, :user
+  role :app, 'flexo.eviterra.com', 'deck.eviterra.com'
+  role :web, 'hermes.eviterra.com'
+  role :db, 'flexo.eviterra.com', :primary => true
+  # role :daemons, 'flexo.eviterra.com'
 end
 
 task :eviterra do
+  load 'lib/recipes/passenger'
+  set :rails_env, 'production'
+  set :rvm_type, :system
+
   server 'bender.eviterra.com', :app, :web
   role :db, 'bender.eviterra.com', :primary => true
-  set :application, "eviterra"
-  set :rails_env, 'production'
-  set :deploy_to, "/home/#{user}/#{application}"
+  role :daemons, 'bender.eviterra.com'
 end
 
+set :deploy_to, "/home/#{user}/#{application}"
 
 namespace :deploy do
 
@@ -110,17 +133,46 @@ namespace :deploy do
     run "cd #{directory}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} db:abort_if_pending_migrations || echo PLEASE DON\\\'T FORGET TO cap deploy:migrate!"
   end
 
-  task :restart_rambler_daemon do
+  # daemons
+
+  task :restart_rambler_daemon, :roles => :daemons, :on_no_matching_servers => :continue do
     run "cd #{current_path}; RAILS_ENV=#{rails_env} script/rambler_daemon restart"
   end
 
-  task :restart_delayed_job do
+  task :start_rambler_daemon, :roles => :daemons, :on_no_matching_servers => :continue do
+    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/rambler_daemon start"
+  end
+
+  task :stop_rambler_daemon, :roles => :daemons, :on_no_matching_servers => :continue do
+    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/rambler_daemon stop"
+  end
+
+  task :restart_delayed_job, :roles => :daemons, :on_no_matching_servers => :continue do
     run "cd #{current_path}; RAILS_ENV=#{rails_env} script/delayed_job restart"
   end
 
+  task :start_delayed_job, :roles => :daemons, :on_no_matching_servers => :continue do
+    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/delayed_job start"
+  end
+
+  task :stop_delayed_job, :roles => :daemons, :on_no_matching_servers => :continue do
+    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/delayed_job stop"
+  end
+
   task :restart_services do
-    restart_rambler_daemon
+    # уже полгода не используем
+    # restart_rambler_daemon
     restart_delayed_job
+  end
+
+  task :start_services do
+    start_rambler_daemon
+    start_delayed_job
+  end
+
+  task :stop_services do
+    stop_rambler_daemon
+    stop_delayed_job
   end
 
 
@@ -128,7 +180,7 @@ namespace :deploy do
   after "deploy:finalize_update", "deploy:symlink_persistent_cache"
   after "deploy:finalize_update", "deploy:symlink_completer"
   after "deploy", "deploy:restart_services"
-  after "deploy:update_code", "deploy:check_for_pending_migrations"
+  # after "deploy:update_code", "deploy:check_for_pending_migrations"
   after "deploy:rollback", "deploy:restart_services"
 
   after "deploy:update", "newrelic:notice_deployment"

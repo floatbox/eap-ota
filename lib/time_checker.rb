@@ -1,6 +1,12 @@
 module TimeChecker
   WORK_START_HOUR = 9
-  WORK_END_HOUR = 20
+  WORK_END_HOUR = 3
+  WORK_HOURS = if WORK_START_HOUR < WORK_END_HOUR
+    (WORK_START_HOUR...WORK_END_HOUR)
+  else
+    (0...WORK_END_HOUR).to_a + (WORK_START_HOUR..23).to_a
+  end
+
 
 
 
@@ -20,8 +26,8 @@ module TimeChecker
     time_of_sell ||= Time.now
 
     return false if last_tkt_date < Date.today
-    return departure_datetime_utc.to_time > time_of_sell + 24.hours  if time_of_sell.hour < WORK_START_HOUR
-    return time_of_sell + 4.hours < departure_datetime_utc.to_time if (WORK_START_HOUR...WORK_END_HOUR).include? time_of_sell.hour
+    return time_of_sell + 4.hours < departure_datetime_utc.to_time if WORK_HOURS.include? time_of_sell.hour
+    return departure_datetime_utc.to_time > time_of_sell + 24.hours if time_of_sell.hour < WORK_HOURS.max
     return departure_datetime_utc.to_time > time_of_sell + 24.hours && last_tkt_date > Date.today
   end
 
@@ -52,9 +58,9 @@ module TimeChecker
   #сейчас не используется
   def self.nearest_ticketing_time time = nil
     time ||= Time.now
-    return time if (WORK_START_HOUR...WORK_END_HOUR).include? time.hour
+    return time if WORK_HOURS.include? time.hour
     return Date.today + WORK_START_HOUR.hours if time.hour < WORK_START_HOUR
-    return Date.today + 1.day + WORK_START_HOUR.hours if time.hour >= WORK_END_HOUR
+    return Date.today + 1.day + WORK_START_HOUR.hours
   end
 
 end

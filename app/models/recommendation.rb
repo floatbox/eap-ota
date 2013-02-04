@@ -131,8 +131,10 @@ class Recommendation
     # FIXME перепровить после подключения новых договоров
     # validating_carrier.consolidator && commission
 
-    #FIXME Временный костыль, тк из амадеуса по неясным причинам приходят закрытые тарифы аэрофлота
-    return if (flights.any?{|f| booking_class_for_flight(f) == 'Z' && f.marketing_carrier_iata == 'SU' })
+    #FIXME Временный костыль, приходят рейсы выполняемые аэросвитом
+    return if flights.any? do |f|
+      f.marketing_carrier_iata == 'PS' && booking_class_for_flight(f) == 'T'
+    end
 
     commission
   end
@@ -228,16 +230,18 @@ class Recommendation
 
   def booking_class_for_flight flight
     variants.each do |v|
-      i = v.flights.index flight
-      return booking_classes[i] if i
+      v.flights.zip(booking_classes) do |other_flight, booking_class|
+        return booking_class if flight.equal?(other_flight)
+      end
     end
     return
   end
 
   def cabin_for_flight flight
     variants.each do |v|
-      i = v.flights.index flight
-      return cabins[i] if i
+      v.flights.zip(cabins) do |other_flight, cabin|
+        return cabin if flight.equal?(other_flight)
+      end
     end
     return
   end

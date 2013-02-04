@@ -1,5 +1,4 @@
 # encoding: utf-8
-require 'mongo'
 
 class StatCounters
 
@@ -21,28 +20,29 @@ class StatCounters
   end
 
   def self.connection
-    Mongoid.master
+    Mongoid.default_session
   end
 
-  def self.value keys
-    {}.tap do |h| 
-      keys.each do |k|
-        h[k] = 1
-      end
-    end
+  def self.json_set keys
+    Hash[ keys.map { |k| [k, 1] } ]
   end
 
   def self.inc keys
-    connection['counters_daily'].update(date_key, {'$inc' => value(keys)}, :upsert => true)
-    connection['counters_hourly'].update(hour_key, {'$inc' => value(keys)}, :upsert => true)
+    connection['counters_daily'].find(date_key).upsert('$inc' => json_set(keys))
+    connection['counters_hourly'].find(hour_key).upsert('$inc' => json_set(keys))
   end
 
   def self.d_inc destination, keys
-    connection['d_daily'].update({'date' => date_index, 'from' => destination.from_iata, 'to' => destination.to_iata, 'rt'=> destination.rt}, {'$inc' => value(keys)}, :upsert => true)
+    connection['d_daily'].find(
+      date: date_index,
+      from: destination.from_iata,
+      to: destination.to_iata,
+      rt: destination.rt
+    ).upsert('$inc' => json_set(keys))
   end
 
   def self.on_date(time=Time.now)
-    connection['counters_daily'].find_one(date_key(time))
+    connection['counters_daily'].find(date_key(time)).one
   end
 
   def self.on_daterange(date)
@@ -50,15 +50,15 @@ class StatCounters
   end
 
   def self.on_hour(time=Time.now)
-    connection['counters_hourly'].find_one(hour_key(time))
+    connection['counters_hourly'].find(hour_key(time)).one
   end
 
   def self.search_on_date(time=Time.now, count=100)
-    connection['d_daily'].find({'date' => date_index(time)}, :sort => [['search.api.total', -1]], :limit => count)
+    connection['d_daily'].find('date' => date_index(time)).sort('search.api.total' => -1).limit(count)
   end
 
   def self.search_on_daterange(date, count=100)
-    connection['d_daily'].find(date, :sort => [['search.api.total', -1]], :limit => count)
+    connection['d_daily'].find(date).sort('search.api.total' => -1).limit(count)
   end
 
   # FIXME UGLY пытаемся выводить данные в человекочитабельном виде

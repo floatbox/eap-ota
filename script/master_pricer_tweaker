@@ -55,7 +55,7 @@ options[:date2] &&= complete_date(options[:date2])
 
 # deferring environment loading for fast --help display
 ENV['RAILS_ENV'] = options[:env]
-require_relative '../config/environment'
+require File.expand_path('../../config/environment',  __FILE__)
 
 pricer_attrs = options.extract!(:from, :to, :date1, :date2, :adults, :children, :infants)
 

@@ -1,6 +1,6 @@
 module Sirena
   module Request
-    class PnrStatus < Sirena::Request::Base
+    class PNRStatus < Sirena::Request::Base
       attr_accessor :number
 
       def initialize(number)
