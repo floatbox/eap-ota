@@ -107,5 +107,35 @@ describe Amadeus::Response::AirSellFromRecommendation do
 
   end
 
+
+  describe 'no departure time in itinerary' do
+
+    # departure time is unset on second flight
+    let_once! :response do
+      amadeus_response('spec/amadeus/xml/Air_SellFromRecommendation_fill_itinerary_bug.xml')
+    end
+
+    subject {response}
+
+    it {should be_success }
+
+    describe "#fill_itinerary!" do
+      let :segments do
+        Recommendation.deserialize("amadeus.AT.23556.TT.MM.99.AT221SVOCMN300713-AT559CMNCOO310713").segments
+      end
+
+      before { response.fill_itinerary!(segments) }
+
+      context "second flight" do
+        subject { segments[0].flights[1] }
+
+        pending "not sure what to do here" do
+          its(:departure_time) {should be_nil}
+        end
+      end
+
+    end
+
+  end
 end
 
