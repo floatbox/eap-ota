@@ -1574,7 +1574,7 @@ no_commission
 carrier "LO", "LOT"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.2%'
+carrier_defaults :consolidator => 0
 
 example 'svocdg'
 agent    "5% от опубл.тарифов (на все классы бронирования, кроме промо и групповых: L, O, U, G) на собств. рейсы LO по всем направлениям за исключением прямых перелетов из Москвы и Санкт Петербурга в Варшаву и из Варшавы в Москву и Санкт Петербург."
@@ -1584,6 +1584,7 @@ check {
   (not includes(city_iatas.first, 'PRG') and not includes(city_iatas.last, 'MOW LED'))
 }
 #our_markup "20"
+discount "2.5%"
 commission "5%/3%"
 
 example "svxcdg cdgsvx/ab"
@@ -1595,12 +1596,13 @@ check {
   (not includes(city_iatas.first, 'PRG') and not includes(city_iatas.last, 'MOW LED'))
 }
 interline :yes
-our_markup "20"
+our_markup "0.2%"
 commission "1%/5"
 
 example 'ledprg prgled'
 agent "1 euro с билета по опубл. тарифам на все остальные рейсы LO."
 subagent "5 рублей"
+our_markup "0.2%"
 commission "1eur/5"
 
 carrier "LX", "SWISS"
