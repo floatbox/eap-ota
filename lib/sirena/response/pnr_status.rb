@@ -1,6 +1,6 @@
 module Sirena
   module Response
-    class PnrStatus < Sirena::Response::Base
+    class PNRStatus < Sirena::Response::Base
       attr_accessor :tickets_with_dates
 
       def parse

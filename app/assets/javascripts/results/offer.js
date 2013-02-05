@@ -57,7 +57,7 @@ updateBook: function() {
         }
     }
     if (p < pp) {
-        state.push('на <strong>{0}</strong> <span class="ruble">Р</span> дешевле, чем на сайте авиакомпании'.absorb(pp - p));
+        state.push('на <strong>{0}</strong> <span class="ruble">Р</span> дешевле, чем у самой авиакомпании'.absorb(pp - p));
     }
     this.btitle.html(results.priceTemplate.absorb(price));
     if (state.length) {

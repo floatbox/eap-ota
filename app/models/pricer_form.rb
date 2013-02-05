@@ -11,8 +11,8 @@ class PricerForm
   field :query_key
   field :partner
   field :use_count, :type => Integer, :default => 1
-  embeds_many :segments, :class_name => 'PricerForm::Segment'
-  has_one :rambler_cache
+  embeds_many :segments, :class_name => 'PricerForm::Segment', :inverse_of => :form
+  #has_one :rambler_cache
   accepts_nested_attributes_for :segments
   delegate :to, :from, :from_iata, :to_iata, :to => 'segments.first'
   attr_reader :complex_to_parse_results
@@ -78,7 +78,7 @@ class PricerForm
 
   class Segment
     include Mongoid::Document
-    embedded_in :form, :class_name => 'PricerForm'
+    embedded_in :form, :class_name => 'PricerForm', :inverse_of => :segments
     field :from
     field :to
     field :date

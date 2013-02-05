@@ -28,7 +28,7 @@ describe Pricing::Order do
   describe "#recalculation" do
 
     before do
-      Payture.stub(:pcnt).and_return(0.0285)
+      Conf.payment.stub(:commission).and_return('3.85%')
     end
 
     # делать обычный save?
@@ -46,7 +46,7 @@ describe Pricing::Order do
       its(:price_consolidator) {should == 400}
       its(:price_discount) {should == 400}
       its(:price_our_markup) {should == 200}
-      its(:price_with_payment_commission) {should == 21821.92}
+      its(:price_with_payment_commission) {should == 22048.88}
     end
 
     context "with 3 blanks and percentages" do
@@ -58,7 +58,7 @@ describe Pricing::Order do
       its(:price_consolidator) {should == 400}
       its(:price_discount) {should == 400}
       its(:price_our_markup) {should == 200}
-      its(:price_with_payment_commission) {should == 21821.92}
+      its(:price_with_payment_commission) {should == 22048.88}
     end
 
     context "with 3 blanks and per-ticket commissions" do
@@ -71,7 +71,7 @@ describe Pricing::Order do
 
       its(:price_subagent) {should == 150}
       # а тут ничего не меняется
-      its(:price_with_payment_commission) {should == 21821.92}
+      its(:price_with_payment_commission) {should == 22048.88}
     end
 
   end

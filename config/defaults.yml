@@ -43,6 +43,7 @@ amadeus:
   euro_rate: 40
   session_pool_size: 10
   no_ltd_restrictions: no
+  cancel_stale: no
   ignored_carriers: []
   forbid_class_changing: no
 payment:

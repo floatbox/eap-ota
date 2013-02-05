@@ -39,9 +39,9 @@ class PricerController < ApplicationController
   end
 
   def price_map
-    hot_offers = Rails.cache.fetch("price_map_#{params[:from]}_#{params[:date]}_rt#{params[:rt]}", :expires_in => 3.minutes) do
-        HotOffer.price_map(params[:from], params[:rt], params[:date])
-    end
+    hot_offers = []#Rails.cache.fetch("price_map_#{params[:from]}_#{params[:date]}_rt#{params[:rt]}", :expires_in => 3.minutes) do
+        #HotOffer.price_map(params[:from], params[:rt], params[:date])
+    #end
     render :json => hot_offers
   end
 
@@ -101,14 +101,22 @@ class PricerController < ApplicationController
     if @search.valid?
       @search.save_to_cache
       @destination = get_destination
-      @recommendations = Mux.new(:lite => true).pricer(@search)
+      suggested_limit =
+        Partner[partner].suggested_limit ||
+        Partner.anonymous.suggested_limit ||
+        Conf.amadeus.recommendations_lite
+      logger.info "Suggested limit: #{suggested_limit}"
+      @recommendations = Mux.new(:lite => true, :suggested_limit => suggested_limit).pricer(@search)
       @query_key = @search.query_key
       hot_offer = create_hot_offer
       Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))
       StatCounters.inc %W[search.api.success search.api.#{partner}.success]
       StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner}.total] if @destination
+      # поправка на неопределенный @destination что бы сходились счетчики
+      StatCounters.inc %W[search.api.#{partner}.bad_destination] if !@destination
       render 'api/variants'
     else
+      StatCounters.inc %W[search.api.invalid search.api.#{partner}.invalid]
       @recommendations = []
       render 'api/variants'
     end

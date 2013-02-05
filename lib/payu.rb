@@ -205,13 +205,14 @@ class Payu
     post[:ORDER_HASH] = hash_string(@seller_key, post)
 
     parsed_response = alu_post(post)
+    logger.info "Payu: blocking #{opts[:our_ref]}"
     PaymentResponse.new( parsed_response, @seller_key )
   end
 
   # внутренний метод для собственно HTTP вызова сервиса блокировки/платежа
   # облегчает тестирование
   def alu_post(post)
-    logger.info 'Payu: ' + post.inspect
+    #logger.info 'Payu: ' + post.inspect
     response =
       benchmark 'Payu ALU' do
         HTTParty.post("https://#{@host}/order/alu.php", :body => post)

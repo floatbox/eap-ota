@@ -33,6 +33,8 @@ class BookingController < ApplicationController
     @destination = get_destination
     StatCounters.d_inc @destination, %W[enter.api.total] if @destination
     StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if @destination && partner
+    # поправка на неопределенный @destination что бы сходились счетчики
+    StatCounters.inc %W[enter.preliminary_booking.#{partner}.bad_destination] if !@destination && partner
 
     unless strategy.check_price_and_availability
       render :json => {:success => false}
