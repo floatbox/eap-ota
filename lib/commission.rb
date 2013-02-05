@@ -1050,8 +1050,9 @@ commission "1%/0.5%"
 
 example 'cdgsvo svocdg/ab'
 agent "1% от опубл. тарифов на рейсы Interline с обязательным участием FI."
-subagent "0р Interline не прописан"
-interline :unconfirmed
+subagent "0,5% от опубл. тарифов на рейсы Interline с обязательным участием FI."
+interline :yes
+check { includes(marketing_carrier_iatas, 'FI') }
 commission "1%/0.5%"
 
 carrier "FV", "RUSSIA"
