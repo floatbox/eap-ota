@@ -11,7 +11,7 @@ module TranslationHelper
         case object
         when City, Region, Airport, Airplane
           case format
-          when :short
+          when :name
             object.name_ru
           when :from, :to, :in
             object.send "case_#{format}"
@@ -29,7 +29,7 @@ module TranslationHelper
         case object
         when City, Region, Airport, Airplane
           case format
-          when :short
+          when :name
             object.name_en
           when :from, :to, :in
             "#{format} #{object.name_en}"
@@ -50,4 +50,14 @@ module TranslationHelper
 
     return translation
   end
+  
+  def sort_by_name(items)
+    case I18n.locale
+    when :ru
+    
+    when :en
+    
+    end
+  end
+  
 end

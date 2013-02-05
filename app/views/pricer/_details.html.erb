@@ -8,16 +8,16 @@
 <div class="osd-flight wrap">
     <div class="osd-dpt">
         <h5 class="osd-time"><%= fmt_time flight.departure_time %></h5>
-        <h6 class="osd-action"><%= t 'offer.details.dpt' %> <%= raw nbsp(flight.departure.city.case_from) %></h6>
+        <h6 class="osd-action"><%= t 'offer.details.dpt' %> <%= nbsp dict(flight.departure.city, :from) %></h6>
         <dl class="osd-features">
             <dt><%= t 'offer.details.airport' %></dt>
             <dd><%= full_airport_and_term(flight.departure, flight.departure_term) %></dd>
             <dt><%= t 'offer.details.carrier' %></dt>
-            <dd class="osd-carrier"><img class="osdc-icon" src="<%= flight.operating_carrier.icon_url %>" alt=""><% if flight.operating_carrier_name != segment_carrier.name %><span class="odc-hl"><%= flight.operating_carrier_name %></span><% else %><%= flight.operating_carrier_name %><% end %></dd>
+            <dd class="osd-carrier"><img class="osdc-icon" src="<%= flight.operating_carrier.icon_url %>" alt=""><% if flight.operating_carrier_name != segment_carrier.name %><span class="odc-hl"><%= dict(flight.operating_carrier, :short) %></span><% else %><%= dict(flight.operating_carrier, :short) %><% end %></dd>
             <dt><%= t 'offer.details.flight' %></dt>
-            <dd><%= flight.marketing_carrier_iata %>&nbsp;<%= flight.flight_number %> <%= flight.departure.city.name %> — <%= flight.arrival.city.name %></dd>
+            <dd><%= flight.marketing_carrier_iata %>&nbsp;<%= flight.flight_number %> <%= dict(flight.departure.city, :name) %> — <%= dict(flight.arrival.city, :name) %></dd>
             <dt><%= t 'offer.details.aircraft' %></dt>
-            <dd><%= flight.equipment_type_name %></dd>
+            <dd><%= dict(flight.equipment_type, :name) %></dd>
             <dt><%= t 'offer.details.duration' %></dt>
             <dd><%= human_duration(flight.duration) %><% if segment_cabins[fcounter] %> <span class="osdn-hl"><%= human_cabin_nom(segment_cabins[fcounter]) %></span><% end %></dd>
             <%# FIXME выключаю, пока что это в админской инфе %>
@@ -28,7 +28,7 @@
     </div>
     <div class="osd-arv">
         <h5 class="osd-time"><%= fmt_time flight.arrival_time %></h5>
-        <h6 class="osd-action"><%= t 'offer.details.arv' %> <%= nbsp(flight.arrival.city.case_to) %><%= raw " #{ nbsp(human_date(flight.arrival_date)) }" if fcounter == segment.flights.length - 1 && flight.arrival_date != segment.flights[0].departure_date %></h6>
+        <h6 class="osd-action"><%= t 'offer.details.arv' %> <%= nbsp dict(flight.arrival.city, :to) %><%= raw " #{ nbsp(human_date(flight.arrival_date)) }" if fcounter == segment.flights.length - 1 && flight.arrival_date != segment.flights[0].departure_date %></h6>
         <% layover = segment.layover_durations[fcounter] %>
         <dl class="osd-features">
             <dt><%= t 'offer.details.airport' %></dt>

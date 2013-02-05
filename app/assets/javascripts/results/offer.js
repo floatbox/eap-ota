@@ -56,11 +56,7 @@ updateBook: function() {
         }
     }
     if (p < pp) {
-<<<<<<< HEAD
         state.push(I18n.t('offer.price.carrier', {value: pp - p}));
-=======
-        state.push('на <strong>{0}</strong> <span class="ruble">Р</span> дешевле, чем у самой авиакомпании'.absorb(pp - p));
->>>>>>> master
     }
     var price = decoratePrice(I18n.t('currencies.RUR', {count: p}));    
     this.btitle.html(results.priceTemplate.absorb(price));

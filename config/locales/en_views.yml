@@ -5,7 +5,7 @@ en:
     RUR:
       one: '%{count}&nbsp;Ruble'
       other: '%{count}&nbsp;Rubles'
-      sign: '%{sum}&nbsp;<span class="ruble">Р</span>'
+      sign: '%{value}&nbsp;<span class="ruble">Р</span>'
   time:
     h: '%{h}&nbsp;h'
     min: '%{m}&nbsp;min'
@@ -46,13 +46,13 @@ en:
         abb: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     options:
       adults:
-        title: 'Взрослых'
+        title: 'Adults'
         hint: 'от 12 лет'
       children:
-        title: 'Детей'
+        title: 'Children'
         hint: 'до 12 лет, с местом'
       infants:
-        title: 'Младенцев'
+        title: 'Infants'
         hint: 'до 2 лет, без места'
       cabin:
         title: 'Класс обслуживания'
@@ -161,13 +161,21 @@ en:
         back: 'обратно'
       more: 'и еще %{amount} перелета %{direction}'
       variants:
-        one: '%{count} вариант'
-        few: '%{count} варианта'
-        many: '%{count} вариантов'
+        one: '%{count} variant'
+        other: '%{count} variants'
       incompatible:
         rt: 'с другим <span class="ossi-segment">обратным перелётом</span>'
         one: 'с другим <span class="ossi-segment">перелётом %{direction}</span>'
         many: 'с другими перелётами %{direction}'        
+    price:
+      buy: 'Buy for {0}'
+      one: 'total price'
+      few: 'total price for all passengers'
+      from: 'from {0}'
+      rise: '%{value} more expensive'
+      fall: '%{value} cheaper'
+      average: 'на <strong>%{value}</strong> cheaper then average'
+      carrier: 'на <strong>%{value}</strong> <span class="ruble">Р</span> дешевле, чем у самой авиакомпании'
     details:
       show: 'Показать подробности'
       hide: 'Скрыть подробности'
@@ -198,9 +206,8 @@ en:
       time: 'Время везде местное.'
     availability:
       text: 'По этому тарифу осталось %{seats}. Не откладывайте покупку.'
-      one: '%{count} место'
-      few: '%{count} места'
-      many: '%{count} мест'
+      one: '%{count} seat'
+      other: '%{count} seats'
   booking:
     title: 'Ваш перелет'
     passengers:

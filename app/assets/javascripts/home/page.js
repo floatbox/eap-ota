@@ -13,6 +13,11 @@ init: function() {
     preloadImages('/images/search/dates.png');
     preloadImages('/images/results/progress.gif', '/images/results/fshadow.png', '/images/results/slider.png');
     preloadImages('/images/booking/progress-w.gif', '/images/booking/progress-b.gif');
+
+    this.header.find('.ph-lang .link').on('click', function() {
+        Cookie('language', $(this).text() === 'English' ? 'en' : undefined, new Date(2015, 0, 1));
+        window.location.reload(true);
+    });
     
     if (this.location.booking) {
         this.restoreBooking(this.location.search, this.location.booking);
@@ -31,7 +36,7 @@ init: function() {
             search.map.load();
         }
     });
-
+    
 },
 innerHeight: function() {
     return $w.height() - 36 - Queries.height;

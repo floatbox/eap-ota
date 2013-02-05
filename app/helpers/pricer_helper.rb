@@ -52,7 +52,7 @@ module PricerHelper
   end
   
   def full_airport_and_term location, term
-    result = ["#{ location.name }"]
+    result = [dict(location, :name).to_s]
     if term
       result << t('offer.details.terminal', :term => term)
     end
@@ -196,7 +196,7 @@ module PricerHelper
     result = []
     durations = segment.layover_durations
     segment.layovers.each_with_index{|layover, i|
-      result << "#{ short_human_duration(durations[i]) } #{ layover.city.case_in }"
+      result << "#{ short_human_duration(durations[i]) } #{ dict(layover.city, :in) }"
     }
     result.to_sentence
   end  
