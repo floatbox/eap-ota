@@ -21,7 +21,7 @@ namespace :deploy do
   end
 
   task :restart, :roles => :app, :except => { :no_release => true } do
-    run "cd #{current_path} && sv restart unicorn"
+    run "cd #{current_path} && sv restart eviterra"
   end
 
 end
