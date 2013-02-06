@@ -162,7 +162,7 @@ module PricerHelper
   end
   
   def segment_title segment
-    t('offer.details.segment', :from => nbsp(segment.departure.city.case_from), :to => nbsp(segment.arrival.city.case_to)).html_safe
+    t('offer.details.segment', :from => nbsp(dict(segment.departure.city, :from)), :to => nbsp(dict(segment.arrival.city, :to))).html_safe
   end
 
   # FIXME сломается, если делать мерж двух прайсеров с одинаковыми рекомендациями
@@ -206,7 +206,7 @@ module PricerHelper
   end
 
   def with_layovers segment
-    layovers = segment.flights[0..-2].map {|flight| flight.arrival.city.case_in }.to_sentence(:last_word_connector => t('nbsp_and'))
+    layovers = segment.flights[0..-2].map {|flight| dict(flight.arrival.city, :in) }.to_sentence(:last_word_connector => t('nbsp_and'))
     t('offer.details.layovers', :count => segment.layover_count, :cities => layovers).html_safe
   end
 
@@ -257,7 +257,7 @@ module PricerHelper
   end
 
   def short_price price
-    t('currencies.RUR.sign', :sum => price.round.to_i).html_safe
+    t('currencies.RUR.sign', :value => price.round.to_i).html_safe
   end  
 
   def human_price price
@@ -284,11 +284,11 @@ module PricerHelper
   end
 
   def layovers_in flights
-    flights.map {|flight| flight.arrival.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;').html_safe
+    flights.map {|flight| dict(flight.arrival.city, :in) }.to_sentence(:last_word_connector => t('nbsp_and')).html_safe
   end
 
   def technical_stops_in tstops
-    tstops.map {|tstop| tstop.airport.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;').html_safe
+    tstops.map {|tstop| dict(tstop.airport.city, :in) }.to_sentence(:last_word_connector => t('nbsp_and')).html_safe
   end
 
   def segments_departure variant
