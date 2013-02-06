@@ -1,9 +1,8 @@
 <li id=<%= attribute%>>
-  <label for="<%=attribute %>"> <%=(attribute == "original_price_fare") ?
-    "Тариф в валюте офиса выписки" : "Таксы в валюте офиса выписки" %> <small> [<%=attribute %>] </small> </label>
+  <label for="<%=attribute %>"> <%= Ticket.human_attribute_name attribute %> <small> [<%=attribute %>] </small> </label>
   <input class="text" id="<%=attribute %>]" include_blank="true"
     name=ticket[<%=attribute %>] size="30" type="text"
     value="<%= form.object.send(attribute) ?
-      form.object.send(attribute).with_currency : '0.0 RUB' %>">
+      form.object.send(attribute) : '0.0 RUB' %>">
 </li>
 

@@ -44,15 +44,15 @@ class Ticket < ActiveRecord::Base
   # FIXME - временно, эквайринг должен браться из суммы пейментов
   delegate :acquiring_percentage, :to => :order
   extend MoneyColumns
-  has_money_columns :original_price_fare, :original_price_tax
-  has_money_helpers :original_price_fare, :original_price_tax
+  has_money_columns :original_price_fare, :original_price_tax, :original_price_penalty
+  has_money_helpers :original_price_fare, :original_price_tax, :original_price_penalty
   extend Commission::Columns
   has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount, :commission_our_markup
   include Pricing::Ticket
 # set_refund_data нужно запускать до check_currency
   before_validation :set_refund_data, :if => lambda {kind == "refund"}
   before_validation :update_prices_and_add_parent, :if => :original_price_total
-  before_validation :check_currency, :if => :ticketed_date
+  before_validation :check_currency
   before_save :recalculate_commissions, :set_validating_carrier
 
   scope :uncomplete, where(:ticketed_date => nil)
@@ -240,7 +240,7 @@ class Ticket < ActiveRecord::Base
         :validating_carrier
       self.status = 'pending' if status.blank?
     end
-    self.price_penalty *= -1 if price_penalty < 0
+    self.original_price_penalty *= -1 if original_price_penalty.cents < 0
     self.price_discount *= -1 if price_discount > 0
     self.price_our_markup *= -1 if price_our_markup > 0
     self.original_price_tax *= -1 if original_price_tax.cents > 0
@@ -313,13 +313,17 @@ class Ticket < ActiveRecord::Base
 
   def check_currency
     if original_price_fare_currency && original_price_fare_currency != "RUB"
-      self.price_fare = CBR.exchange_on(ticketed_date).exchange_with(original_price_fare,"RUB").to_f
+      self.price_fare = CBR.exchange_on(ticketed_date || Date.today).exchange_with(original_price_fare,"RUB").to_f
     end
     if original_price_tax_currency && original_price_tax_currency != "RUB"
-      self.price_tax = CBR.exchange_on(ticketed_date).exchange_with(original_price_tax,"RUB").to_f
+      self.price_tax = CBR.exchange_on(ticketed_date || Date.today).exchange_with(original_price_tax,"RUB").to_f
+    end
+    if original_price_penalty_currency && original_price_penalty_currency != "RUB"
+      self.price_penalty = CBR.exchange_on(ticketed_date || Date.today).exchange_with(original_price_penalty,"RUB").to_f
     end
     self.price_fare = original_price_fare.to_f if original_price_fare_currency == "RUB"
     self.price_tax = original_price_tax.to_f if original_price_tax_currency == "RUB"
+    self.price_penalty = original_price_penalty.to_f if original_price_penalty_currency == "RUB"
   end
 
   # для тайпуса
@@ -337,14 +341,6 @@ class Ticket < ActiveRecord::Base
     "<a href=#{url}>#{number_with_code}</a>".html_safe
   end
 
-  def customized_original_fare
-    original_price_fare ? original_price_fare.with_currency : 'Unknown'
-  end
-
-  def customized_original_tax
-    original_price_tax ? original_price_tax.with_currency : 'Unknown'
-  end
-
   def itinerary_receipt
     if order && !new_record?
       url = show_order_for_ticket_path(order.pnr_number, self)
@@ -359,7 +355,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def rate
-    CBR.exchange_on(ticketed_date).get_rate(original_price_fare_currency, "RUB").to_f if original_price_fare_currency && ticketed_date
+    CBR.exchange_on(ticketed_date || Date.today).get_rate(original_price_fare_currency, "RUB").to_f if original_price_fare_currency
   end
 
 end

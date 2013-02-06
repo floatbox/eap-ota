@@ -9,9 +9,10 @@ Ticket:
      - price_with_payment_commission
      - price_fare
      - price_tax
-     - customized_original_fare
-     - customized_original_tax
+     - customized_original_price_fare
+     - customized_original_price_tax
      - price_penalty
+     - customized_original_price_penalty
      - price_discount
      - price_our_markup
      - price_operational_fee
@@ -32,8 +33,8 @@ Ticket:
       - route
       - price_fare
       - price_tax
-      - customized_original_fare
-      - customized_original_tax
+      - customized_original_price_fare
+      - customized_original_price_tax
       - rate
       - office_id
       - validator
@@ -46,7 +47,7 @@ Ticket:
     new:
       - original_price_fare_as_string
       - original_price_tax_as_string
-      - price_penalty
+      - original_price_penalty_as_string
       - price_discount
       - price_our_markup
       - price_extra_penalty
@@ -79,10 +80,11 @@ Ticket:
       - route
       - price_fare
       - price_tax
-      - customized_original_fare
-      - customized_original_tax
+      - customized_original_price_fare
+      - customized_original_price_tax
       - rate
       - price_penalty
+      - customized_original_price_penalty
       - price_extra_penalty
       - price_operational_fee
       - commission_consolidator
@@ -117,7 +119,7 @@ Ticket:
       - route
       - original_price_fare_as_string
       - original_price_tax_as_string
-      - price_penalty
+      - original_price_penalty_as_string
       - price_extra_penalty
       - price_consolidator
       - price_discount
@@ -133,7 +135,7 @@ Ticket:
       - mso_number
       - comment
       - corrected_price
-    new_refund: original_price_fare, original_price_tax, price_penalty, price_consolidator, price_discount, price_our_markup, price_extra_penalty, price_operational_fee, route, comment
+    new_refund: original_price_fare_as_string, original_price_tax_as_string, original_price_penalty_as_string, price_consolidator, price_discount, price_our_markup, price_extra_penalty, price_operational_fee, route, comment
     confirm_refund: ticketed_date, status
     csv:
       - source
@@ -143,9 +145,10 @@ Ticket:
       - cabins
       - price_fare
       - price_tax
-      - customized_original_fare
-      - customized_original_tax
+      - customized_original_price_fare
+      - customized_original_price_tax
       - price_penalty
+      - customized_original_price_penalty
       - price_total
       - price_consolidator
       - price_discount
@@ -179,8 +182,9 @@ Ticket:
       booleans:
         old_booking: ["пересчет запрещен", "пересчет разрешен"]
       templates:
-        original_price_fare: money
-        original_price_tax: money
+        original_price_fare_as_string: money
+        original_price_tax_as_string: money
+        original_price_penalty_as_string: money
   options:
     default_action_on_item: edit
     start_year: 2011
