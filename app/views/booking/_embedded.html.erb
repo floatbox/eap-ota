@@ -94,9 +94,10 @@
         <div class="bff-left">
             <div class="bff-price">
                 <div class="bffp-content">
+                    <p class="bffp-card">С карты будет списано<br><span class="bffp-sum"><%= price_total %></span>&nbsp;<%= rubles(price_total) %></p>
                     <p class="bffp-nd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total %></span>&nbsp;<%= rubles(price_total) %></p>
                     <p class="bffp-wd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total + 400 %></span>&nbsp;<%= rubles(price_total + 400) %></p>
-                    <p class="bffp-tip"><%= 'за всех пассажиров' if @order_form.people.many? %></p>
+                    <p class="bffp-tip"><%= 'за всех пассажиров ' if @order_form.people.many? %> с учетом сервисного сбора</p>
                     <ul class="bffp-details">
                         <li class="bffpd-item">Тариф — <%= price_fare %> <span class="ruble">Р</span></li>
                         <li class="bffpd-item">Таксы и сборы — <%= price_total - price_fare %> <span class="ruble">Р</span></li>
