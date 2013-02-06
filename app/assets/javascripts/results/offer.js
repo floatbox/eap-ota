@@ -23,6 +23,7 @@ parseVariants: function(selector) {
             offer: that,
             price: prices['RUR'],
             price_pure: prices['RUR_pure'],
+            price_raw: prices['RUR_raw'],
             id: el.text(),
             duration: Number(el.attr('data-duration')),
             segments: el.attr('data-segments').split(' '),
@@ -45,7 +46,7 @@ addBook: function() {
     this.state = this.book.find('.ob-state');
 },
 updateBook: function() {
-    var p = this.selected.price;
+    var p = this.selected.price_raw;
     var price = p.separate() + '&nbsp;' + p.declineArray(lang.currencies.RUR, false);
     var ap = results.data.averagePrice;
     var pp = this.selected.price_pure; 
