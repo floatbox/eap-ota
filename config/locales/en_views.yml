@@ -5,7 +5,7 @@ en:
     RUR:
       one: '%{count}&nbsp;Ruble'
       other: '%{count}&nbsp;Rubles'
-      sign: '%{value}&nbsp;<span class="ruble">Р</span>'
+      sign: '%{sum}&nbsp;<span class="ruble">Р</span>'
   time:
     h: '%{h}&nbsp;h'
     min: '%{m}&nbsp;min'
@@ -87,7 +87,7 @@ en:
       title: 'Nothing found :-('
       reasons: 'Why this happened?'
       dates: 'No scheduled flights on chosen dates. Try other dates.'
-      carriers: "We don't work with airlines which operate this destination. We constantly connect new airlines — maybe in near future we'll have what you need."
+      carriers: 'We don't work with airlines which operate this destination. We constantly connect new airlines — maybe in near future we'll have what you need.'
       city: 'No scheduled flights at all on this destination. Find another destination.'
     tabs:
       cheap:
@@ -126,7 +126,7 @@ en:
       dpt: 'from any airport'
       arv: 'to any airport'
     alliance:
-      title: 'Airline alliance'
+      title: 'Airline allince'
       any: 'any'
     carrier:
       title: 'Airline'
@@ -136,7 +136,7 @@ en:
       any: 'any'
   subscription:
     title: 'Subscribe for fare alert'
-    description: "If you don't care about the dates, we will notify via email you when cheap flights %{cities} will be available."
+    description: 'If you don't care about the dates, we will notify via email you when cheap flights %{cities} will be available.'
     email: 'Email address'
     submit: 'Want it!'
     warning: 'Please enter correct email address.'
@@ -162,20 +162,12 @@ en:
       more: 'and %{amount} more flight options %{direction}'
       variants:
         one: '%{count} option'
-        other: '%{count} options'
+        few: '%{count} options'
+        many: '%{count} options'
       incompatible:
         rt: 'with another <span class="ossi-segment">return</span>'
         one: 'with another <span class="ossi-segment">flight %{direction}</span>'
-        many: 'with anothe flights %{direction}'     
-    price:
-      buy: 'Buy for {0}'
-      one: 'total price'
-      few: 'total price for all passengers'
-      from: 'from {0}'
-      rise: '%{value} more expensive'
-      fall: '%{value} cheaper'
-      average: 'на <strong>%{value}</strong> cheaper then average'
-      carrier: 'на <strong>%{value}</strong> <span class="ruble">Р</span> дешевле, чем у самой авиакомпании'
+        many: 'with anothe flights %{direction}'        
     details:
       show: 'Show flight details'
       hide: 'Hide flight details'
@@ -187,7 +179,8 @@ en:
         many: 'with three connections&nbsp;– %{cities}'
       stopovers:
         one: 'Operated with technical landing %{cities}'
-        other: 'Operated with technical landings %{cities}'
+        few: 'Operated with technical landings %{cities}'
+        many: 'Operated with technical landings %{cities}'
       dpt: 'Departure'
       arv: 'Arrival'
       airport: 'airport'
@@ -204,9 +197,10 @@ en:
       alliance: '%{alliance_link} bonus programmes are applied.'
       time: 'Local time is displayed everywhere.'
     availability:
-      text: "%{seats} available for this fare. Don't put off your booking."
+      text: '%{seats} available for this fare. Don't put off your booking.'
       one: '%{count} seat'
-      other: '%{count} seats'
+      few: '%{count} seats'
+      many: '%{count} seats'
   booking:
     title: 'Your flight'
     passengers:
@@ -216,12 +210,12 @@ en:
       names:
         first: 'First name'
         last: 'Last name'
-        check: "Please check you've entered first and last name in correct fields."
+        check: 'Please check you've entered first and last name in correct fields.'
         controls: '%{swap} or %{leave} as is?'
         swap: 'Swap'
         leave: 'leave'
         keyboard: 'Please select Latin keyboard layout.'
-        letters: "Only latin letters are required in first and last name. If the document doesn't contain latin spelling, use transliteration, e. g. JOHN SMITH."
+        letters: 'Only latin letters are required in first and last name. If the document doesn't contain latin spelling, use transliteration, e. g. JOHN SMITH.'
       gender:
         label: 'Gender'
         m: 'M'
@@ -247,8 +241,8 @@ en:
         number: 'Frequent flyer number'
       with_seat:
         label: 'With seat'
-        description: "If you wish the infant to be seated, higher child fare will be applied. If the infant is unseated, please enter infant details after the details of adult passenger on who's hands the infant will fly."
-      order: "Please note that infant details should be entered after the details of adult passenger on who's hands the infant will fly."
+        description: 'If you wish the infant to be seated, higher child fare will be applied. If the infant is unseated, please enter infant details after the details of adult passenger on who's hands the infant will fly.'
+      order: 'Please note that infant details should be entered after the details of adult passenger on who's hands the infant will fly.'
     update:
       price: 'Price changed'
       progress: 'Refreshing price'
@@ -288,7 +282,7 @@ en:
         y: 'YY'
       name: 'Cardholder name'
       keyboard: 'Please select the Latin keyboard layout. Cardholder name should be in Latin letters'
-      currency: "If your bank account isn't in Russian rubles, conversion will be made according to your bank rates"
+      currency: 'If your bank account isn't in Russian rubles, conversion will be made according to your bank rates'
     cash:
       due_date: 'Booking should be paid until <strong>%{date}</strong>, otherwise it will be cancelled.'
       delivery:
@@ -316,17 +310,17 @@ en:
       agree: 'When pressing the "Buy" button, you accept the <a href="/agreement/" target="_blank" class="bffd-link">User Agreement</a>, <a href="/iata/" target="_blank" class="bffd-link">IATA</a> rules and <span class="link bffd-link bffd-farerules">refund and exchange rules</span>.'
     farerules:
       title: 'Fare application rules'
-      restrictions: 'Внимание! Возврат средств в&nbsp;случае отказа при получении визы, болезни и&nbsp;прочих обстоятельств без штрафных санкций невозможен. Возврат билета производится строго по&nbsp;правилам авиакомпании. В&nbsp;случае комбинации в&nbsp;билете тарифов с&nbsp;различными правилами, наиболее строгие ограничения применяются ко&nbsp;всему маршруту.'
-      cancellation: 'Билеты не&nbsp;передаваемые. В&nbsp;случае неявки на&nbsp;рейс, авиакомпания может аннулировать все&nbsp;последующие участки маршрута.'
-      fare: 'Тариф'
+      restrictions: 'Attention! In case of passenger sickness, visa refusal or other circumstances, refund/exchange is impossible without penalties. Refund/exchange fees are calculated according to airline fare rules. When the ticket combines different fare classes, the most strict limitations are applied to the entire itinerary.'
+      cancellation: 'Tickets are non-transferable. In case of failure to appear on the flight, the airline can cancel all subsequent segments of the itinerary.'
+      fare: 'Fare'
     validation:
       empty:
         left: 'Fill in %{fields}.'
         one: '%{count} other field'
         other: '%{count} other fields'
       passengers:
-        sample: 'пассажира'
-        numbers: ['первого', 'второго', 'третьего', 'четвертого', 'пятого', 'шестого', 'седьмого', 'восьмого']
+        sample: 'passenger'
+        numbers: ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth']
       email:
         empty: '{email address}'
         wrong: 'Incorrect {email address}.'
@@ -346,7 +340,7 @@ en:
         empty: '{passenger gender}'
       birthday:
         empty: 'passenger {birthdate}'
-        wrong: "Passenger {birthdate} doesn't exist."
+        wrong: 'Passenger {birthdate} doesn&#39;t exist.'
         letters: 'Passenger {birthdate} should be entered in dd/mm/yyyy format.'
         improper: 'Passenger {birthdate} should not be later than today.'
       passport:
