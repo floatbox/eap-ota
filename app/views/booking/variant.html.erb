@@ -35,10 +35,12 @@
 </div>
 
 <div id="booking-disclaimer" class="b-disclaimer wrap">
+<% if @partner.present? %>
 <div style="background: #fff; " class="bd-column">
     <h5 class="bd-title" style="color: #777; font-weight: 500; font-size: 15px; text-align: center; padding-top: 10px;">Совместно с</h5>
-    <p align="center"><img src="partnerlogo.png"></p>
+    <p align="center"><img src="/images/metas/<%= @partner %>.png" alt="<%= @partner %>"></p>
 </div>
+<% end %>
 <div class="bd-column">
     <h5 class="bd-title">Всегда честные цены</h5>
     <p>В отличие от&nbsp;других сайтов мы&nbsp;показываем окончательную цену со&nbsp;всеми сборами и&nbsp;не&nbsp;взимаем никаких скрытых комиссий.</p>
