@@ -66,7 +66,8 @@ class BookingController < ApplicationController
   def api_booking
     @query_key = params[:query_key]
     @search = PricerForm.load_from_cache(params[:query_key])
-    @partner = partner
+    #FIXME берем партнера из сохраненной PricerForm - надежно, но некрасиво
+    @partner = @search.partner
     @destination = get_destination
 
     if is_mobile_device? && !is_tablet_device?
