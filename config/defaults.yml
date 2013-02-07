@@ -58,6 +58,12 @@ payment:
   # использую ее при корректировке цен
   commission: 2.85%
   test_multiplier: ~
+  # дефолтное значение штрафа за возврат
+  # писать хэшом вида
+  # refund_fees:
+  #   2013-02-12: 500
+  #   2013-03-05: 200
+  refund_fees: {}
   production:
     skip_checksum_validation: no
 cash:
