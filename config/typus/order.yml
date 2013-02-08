@@ -96,6 +96,7 @@ Order:
       - price_discount
       - commission_our_markup
       - price_our_markup
+      - price_operational_fee
       - pricing_method
       - price_with_payment_commission
       - fix_price
