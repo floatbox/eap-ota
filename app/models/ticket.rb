@@ -119,6 +119,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def self.default_refund_fee(order_creation_date)
+    order_creation_date = order_creation_date.to_date
     Conf.payment.refund_fees.sort_by {|date, value| date }.reverse.each do |date, value|
       return value if date <= order_creation_date
     end
