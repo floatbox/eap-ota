@@ -118,6 +118,13 @@ class Ticket < ActiveRecord::Base
     Carrier.uniq.pluck(:iata).sort
   end
 
+  def self.default_refund_fee(order_creation_date)
+    Conf.payment.refund_fees.sort_by {|date, value| date }.reverse.each do |date, value|
+      return value if date <= order_creation_date
+    end
+    return 0
+  end
+
   def baggage_array
     baggage_info.map{|code| [BaggageLimit.deserialize(code)]}
   end

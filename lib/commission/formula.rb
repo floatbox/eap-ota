@@ -118,26 +118,26 @@ class Commission
       formula == other_formula.formula
     end
 
+    # Сериализация
 
-    # FIXME не работает. хочется чтоб было
-    # -- eviterra.com,2011:commission/fx 2.3% + 50
-    # или что-то типа.
-    #
-    # def to_yaml_type; '!eviterra.com,2011/commission/fx' end
-    #
-    # yaml_as "tag:eviterra.com,2011:commission/fx"
-    # YAML.add_domain_type 'eviterra.com,2011', 'commission/fx' do |type, val|
-    #   Commission::Formula.new(val)
-    # end
+    # для YAML/Psych
 
-    # def to_yaml( opts = {} )
-    #   YAML.quick_emit( self, opts ) do |out|
-    #     out.scalar( taguri, formula.to_s)
-    #     # out.scalar( taguri ) do |sc|
-    #     #  sc.embed( formula.to_s )
-    #     #end
-    #   end
-    # end
+    # FIXME надо как-то быть уверенными что этот когд исполняется
+    # всегда, до любой десериализации.
+    YAML.add_domain_type 'eviterra.com,2011', 'fx' do |type, val|
+      Commission::Formula.new(val)
+    end
+
+    def encode_with(coder)
+      coder.represent_scalar '!fx', @formula
+    end
+
+    # для обратной совместимости со старой сериализацией.
+    # (ruby/object:Commission::Formula...)
+    def init_with(coder)
+      @formula = coder["formula"]
+      compile!
+    end
 
   end
 end

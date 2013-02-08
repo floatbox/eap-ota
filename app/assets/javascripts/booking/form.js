@@ -246,7 +246,7 @@ process: function(s) {
 },
 hidePrice: function() {
     this.footer.find('.bff-passengers').remove();
-    var template = '<div class="bffp-content"><p>{0} —</p><p class="bffp-hint">{1}</p></div>';
+    var template = '<div class="bffp-content"><p>{0}</p><p class="bffp-hint">{1}</p></div>';
     var passengers = I18n.t(this.el.find('.bf-persons .bfst-text').attr('data-amount'), {scope: 'booking.update'});
     var content = template.absorb(I18n.t('booking.update.price'), I18n.t('booking.update.required', {passengers: passengers}));
     var message = $('<div class="bff-passengers"></div>').html(content);
@@ -270,17 +270,19 @@ getPrice: function() {
             that.footer.find('.bff-passengers').remove();
         }
     });
-    var content = '<p class="bffp-progress">' + I18n.t('booking.update.progress') + ' &mdash;</p>';
+    var content = '<p class="bffp-progress">' + I18n.t('booking.update.progress') + '</p>';
     this.footer.find('.bff-passengers .bffp-content').html(content);
     this.wrongPrice = false;
 },
 updatePrice: function(content) {
     this.footer.find('.bff-passengers').remove();
     this.footer.find('.bff-price').show();
+    var card = this.footer.find('.bff-price .bffp-card').is(':visible');
     var wd = this.footer.find('.bff-price .bffp-wd').is(':visible');
     var context = this.footer.find('.bff-price .bffp-content').html(content.html());
+    context.find('.bffp-card').toggle(card);
     context.find('.bffp-wd').toggle(wd);
-    context.find('.bffp-nd').toggle(!wd);
+    context.find('.bffp-nd').toggle(!wd && !card);
     this.el.find('.bf-newprice').attr('data-price', content.attr('data-price'));
 },
 getValues: function() {
@@ -880,11 +882,12 @@ select: function(type, validate) {
     this.cash.el.find('input').prop('disabled', type !== 'cash');
     this.controls = this[type].controls;
     var context = booking.form.el;
-    var wd = (type === 'cash' && $('#bfcd-yes').is(':checked'));
+    var wd = $('#bfcd-yes').is(':checked');
     context.find('.bffd-card').toggleClass('latent', type !== 'card');
     context.find('.bffd-cash').toggleClass('latent', type !== 'cash');
-    context.find('.bffp-wd').toggle(wd);
-    context.find('.bffp-nd').toggle(!wd);
+    context.find('.bffp-card').toggle(type === 'card');
+    context.find('.bffp-wd').toggle(type === 'cash' && wd);
+    context.find('.bffp-nd').toggle(type === 'cash' && !wd);
     if (validate) {
         this.validate(true);
         booking.form.validate();

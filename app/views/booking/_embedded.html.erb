@@ -95,13 +95,14 @@
         <div class="bff-left">
             <div class="bff-price">
                 <div class="bffp-content">
-                    <p class="bffp-nd"><%= t 'booking.price.total' %> —<br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>
-                    <p class="bffp-wd"><%= t 'booking.price.total' %> —<br><%= decorate_price human_price(price_total + 400), '<span class="bffp-sum">', '</span>' %></p>
-                    <p class="bffp-tip"><%= t('booking.price.for_all') if @order_form.people.many? %></p>
+                    <p class="bffp-card"><%= t 'booking.price.total_card' %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>
+                    <p class="bffp-nd"><%= t 'booking.price.total_cash' %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>
+                    <p class="bffp-wd"><%= t 'booking.price.total_cash' %><br><%= decorate_price human_price(price_total + 400), '<span class="bffp-sum">', '</span>' %></p>
+                    <p class="bffp-tip"><%= t('booking.price.for_all') if @order_form.people.many? %> <%= t('booking.price.including_fee') %></p>
                     <ul class="bffp-details">
                         <li class="bffpd-item"><%= t 'booking.price.fare' %> — <%= short_price(price_fare) %></li>
                         <li class="bffpd-item"><%= t 'booking.price.taxes_and_fees' %> — <%= short_price(price_total - price_fare) %></li>
-                        <li class="bffpd-item"><%= t 'booking.price.including_fee' %> — <%= short_price(@order_form.recommendation.fee) %></li>
+                        <li class="bffpd-item"><%= t 'booking.price.fee' %> — <%= short_price(@order_form.recommendation.fee) %></li>
                         <li class="bffpd-item bffp-wd"><%= t 'booking.price.delivery' %> — <%= short_price(400) %></li>
                         <% if price_discount > 0 %>
                             <li class="bffpd-item"><%= t 'booking.price.discount' %> — <%= short_price(price_discount) %></li>

@@ -21,7 +21,7 @@
     line-height: 16px;
 }
 .bf-newprice-top {
-    background: #EDEDE3;
+    background: #fff;
     padding: 14px 14px;
 }
 
@@ -113,7 +113,7 @@
     margin-left: 295px;
 }
 .bffp-content {
-    float: right;
+    /*float: right;*/
     font-weight: bold;
     font-size: 18px;
     line-height: 20px;
@@ -122,6 +122,9 @@
     color: #f90a6f;
 }
 .bffp-tip {
+    margin: 5px 0 0;
+    font-size: 14px;
+    line-height: 16px;
     color: #606060;
 }
 .bffp-wd {
