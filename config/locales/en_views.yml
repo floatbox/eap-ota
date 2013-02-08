@@ -38,7 +38,7 @@ en:
       empty: 'Nothing found :-('
     dates:
       week: 'Mon Tue Wed Thu Fri Sat Sun'
-      today: 'сегодня'
+      today: 'today'
       monthes:
         nom: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
         gen: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -76,6 +76,18 @@ en:
       find: 'Find flights'
       new: 'New search'
       all: 'All flight options'
+      adults: ['вдвоем', 'втроем', 'вчетвером', 'впятером', 'вшестером', 'всемером', 'ввосьмером']
+      with: ['двумя', 'тремя', 'четырьмя', 'пятью', 'шестью', 'семью']
+      children:
+        one: 'с&nbsp;ребенком'
+        few: 'c&nbsp;%{with} детьми'
+      infants:
+        one: 'с&nbsp;младенцем'
+        few: 'c&nbsp;%{with} младенцами'
+      cabin:
+        Y: ''
+        C: 'бизнес-классом'
+        F: 'первым классом'      
     loading:
       title: 'Searching for best flight offers for you'
       time: 'Normally it takes 5—20 seconds'
@@ -105,6 +117,7 @@ en:
       matrix:
         one: '± 3 days'
         many: '± 3 days'
+      from: 'from %{value}'
       some: '%{amount} of %{total}'
       all: 'All %{amount}'
   filters:
@@ -171,10 +184,9 @@ en:
       buy: 'Buy for {0}'
       one: 'total price'
       few: 'total price for all passengers'
-      from: 'from {0}'
       rise: '%{value} more expensive'
       fall: '%{value} cheaper'
-      average: 'на <strong>%{value}</strong> cheaper then average'
+      average: '<strong>%{value}</strong> cheaper then average'
       carrier: 'на <strong>%{value}</strong> <span class="ruble">Р</span> дешевле, чем у самой авиакомпании'
     details:
       show: 'Show flight details'
@@ -276,7 +288,7 @@ en:
     card:
       safety: 'Your bank card data is processed by PayU payment center and is protected with the 256-bit security key, provided by Digicert.'
       cvv_description: 'CVV (or CVC) is the 3-digit code on the back side of the card. Normally it is located on the right of signature strip, after 4 digits of card number. If your card has no such code, it is not suitable for online payments.'
-      or: 'или'
+      or: 'or'
       number:
         label: 'Card number'
         hint: '16&nbsp;digits'

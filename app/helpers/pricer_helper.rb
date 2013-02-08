@@ -57,8 +57,8 @@ module PricerHelper
       result << t('offer.details.terminal', :term => term)
     end
     result.join(', ').html_safe
-  end    
-
+  end
+  
   def recommendation_prices r
     prices = {
       :RUR => r.price_with_payment_commission.round.to_i,

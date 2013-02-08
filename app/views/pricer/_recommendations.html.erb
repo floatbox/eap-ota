@@ -180,7 +180,8 @@
 </div>
 <% end %>
 <% if data[:layover_cities].length > 0 %>
-<div class="rfg-column rf-list" data-key="lcity">
+<div class="rfg-column">
+<div class="rf-list" data-key="lcity">
     <h6 class="rfgc-title">Город пересадки</h6>
     <ul class="rf-values">
     <li class="rfv-empty rfv-selected">любой</li>    
@@ -188,6 +189,7 @@
         <li class="rfv-item" data-value="<%= city.iata %>"><%= city.name %></li>
     <% end %>
     </ul>
+</div>
 </div>
 <% end %>
 </div>

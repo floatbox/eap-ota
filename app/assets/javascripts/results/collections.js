@@ -116,7 +116,7 @@ update: function(data) {
         results.filters.update();
     });
     results.queue.add(function() {
-        that.control.html(lang.results.all.absorb(that.length));
+        that.control.html(I18n.t('results.tabs.all', {amount: that.length}));
         if (that.offers.length !== 0) {
             results.extendData();
             results.getOfferTemplate();
@@ -245,7 +245,7 @@ showPrices: function() {
         }
         $(this.table.get(0).rows[r].cells[c]).append(item);
     }
-    this.updateLabel(lang.results.matrix);   
+    this.updateLabel(I18n.t('results.tabs.matrix'));   
 },
 humanDate: function(date, segment) {
     var day = date.getDate();
@@ -323,7 +323,7 @@ merge: function(variants) {
     this.offer = offer;
 },
 update: function(variants, lid) {
-    var labels = lang.results[lid || this.id];
+    var labels = I18n.t(lid || this.id, {scope: 'results.tabs'});
     if (variants && variants.length !== 0) {
         this.merge(variants);
         this.updateLabel(labels);
@@ -343,7 +343,7 @@ updateLabel: function(labels) {
     var minprice = this.offer.variants[0].price;
     var maxprice = this.offer.variants.last().price;
     var sum = results.currencies['RUR'].absorb('<span class="rt-sum">' + minprice.separate() + '</span>');
-    var price = minprice === maxprice ? sum : lang.price.from.absorb(sum);
+    var price = minprice === maxprice ? sum : I18n.t('results.tabs.from', {value: sum});
     var title = labels[this.offer.variants.length === 1 ? 'one' : 'many'];
     this.control.html('{0} <span class="rt-price">{1}</span>'.absorb(title, price));
     this.control.removeClass('rt-disabled');
