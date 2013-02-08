@@ -85,7 +85,7 @@ slide: function() {
     this.content.el.show();
     this.filters.el.show();
     this.fixed.update();
-    page.title.set(lang.pageTitle.results.absorb(this.data.titles.window));
+    page.title.set(I18n.t('page.results', {title: this.data.titles.window}));
 },
 update: function(data) {
     this.data = data;
@@ -93,7 +93,7 @@ update: function(data) {
     this.header.show(this.data.titles.header, data.valid);
     this.data.fresh = true;
     if (page.location.booking) {
-        page.title.set(lang.pageTitle.booking.absorb(results.data.titles.window));    
+        page.title.set(I18n.t('page.booking', {title: this.data.titles.window}));
     }
 },
 load: function() {
@@ -121,7 +121,7 @@ changeDates: function(dates) {
     this.updateTitles(dates);
     var titles = this.data.titles;
     this.header.summary.html(titles.header);
-    page.title.set(lang.pageTitle.results.absorb(titles.window));
+    page.title.set(I18n.t('page.results', {title: titles.window}));    
 },
 updateTitles: function(dates) {
     var wparts = [];
@@ -262,17 +262,18 @@ extendData: function() {
     var segments = this.data.segments;
     if (!segments) return;
     var sl = segments.length;
-    var titles = [], os = lang.segment.incompatible;
+    var titles = [];
     for (var s = sl; s--;) {
         if (s === 0 && sl > 1 && segments[1].rt) {
-            titles[s] = os.rt;
+            titles[s] = I18n.t('offer.segment.incompatible.rt');
         } else {
             var mw = sl > 2;
             var parts = [];
             for (var i = 0; i < sl; i++) {
                 if (i !== s) parts.push(segments[i][mw ? 'arvto_short' : 'arvto']);
             }
-            titles[s] = os[mw ? 'many' : 'one'].absorb(parts.enumeration());
+            var direction = parts.enumeration(I18n.t('nbsp_and'));
+            titles[s] = I18n.t(mw ? 'few' : 'one', {scope: 'offer.segment.incompatible', direction: direction});
         }
     }
     this.data.ostitles = titles;
@@ -295,8 +296,8 @@ getOfferTemplate: function() {
     this.offerTemplate = offer;
 },
 getPriceTemplate: function() {
-    this.stateTemplate = lang.price[this.data.options.total !== 1 ? 'many' : 'one'];
-    this.priceTemplate = lang.price.buy;
+    this.stateTemplate = I18n.t(this.data.options.total !== 1 ? 'few' : 'one', {scope: 'offer.price'});
+    this.priceTemplate = I18n.t('offer.price.buy');
 },
 currencies: {
     RUR: '{0} <span class="ruble">Р</span>',

@@ -79,6 +79,14 @@
     color: #777;
 }
 
+/* Language */
+.ph-lang {
+    float: left;
+    margin: 10px 0 0 30px;
+    font-size: 13px;
+    line-height: 15px;
+}
+
 /* Share icons */
 .ph-share {
     display: none;

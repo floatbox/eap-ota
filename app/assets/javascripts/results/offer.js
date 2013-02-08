@@ -47,19 +47,19 @@ addBook: function() {
 },
 updateBook: function() {
     var p = this.selected.price_raw;
-    var price = p.separate() + '&nbsp;' + p.declineArray(lang.currencies.RUR, false);
     var ap = results.data.averagePrice;
     var pp = this.selected.price_pure; 
     var state = [];
     if (p < ap) {
-        var percents = Math.round((ap - p) / ap * 100);
+        var percents = Math.round((ap - p) / ap * 100) + '%';
         if (percents) {
-            state.push(lang.price.profit.absorb(percents));
+            state.push(I18n.t('offer.price.average', {value: percents}));
         }
     }
     if (p < pp) {
-        state.push('на <strong>{0}</strong> <span class="ruble">Р</span> дешевле, чем у самой авиакомпании'.absorb(pp - p));
+        state.push(I18n.t('offer.price.carrier', {value: pp - p}));
     }
+    var price = decoratePrice(I18n.t('currencies.RUR', {count: p}));    
     this.btitle.html(results.priceTemplate.absorb(price));
     if (state.length) {
         this.state.html('<div class="obst-wrapper"><table class="obs-table"><tr><td>' + results.stateTemplate + '</td><td class="obs-profit">' +  state.join('<br>') + '</td></tr></table></div>');
@@ -192,7 +192,7 @@ countPrices: function() {
     var prices = {}, sample;
     for (var v = this.variants.length; v--;) {
         var variant = this.variants[v];
-        var price = variant.price;
+        var price = variant.price_raw;
         for (var s = sl; s--;) {
             var flights = variant.segments[s];
             var range = prices[flights];
@@ -228,7 +228,7 @@ otherCarriers: function() {
 otherPrices: function() {
     var prices = this.prices;
     var ss = this.selected.segments
-    var sp = this.selected.price;
+    var sp = this.selected.price_raw;
     this.el.find('.oss-price').remove();
     this.el.find('.oss-different').removeClass('oss-different');
     this.el.find('.o-segment').each(function(s) {
@@ -244,13 +244,12 @@ otherPrices: function() {
             }
             if (value !== sp) {
                 var type = value > sp ? 'rise' : 'fall';
-                var curr = results.currencies['RUR'];
-                var absp = curr.absorb(value.separate());
+                var absp = I18n.t('currencies.RUR.sign', {value: value.separate()});
                 var sample = $('<div class="oss-price"></div>').addClass('ossp-' + type);
                 if (ss.length === 1) {
                     el.append(sample.clone().html(absp));
                 } else {
-                    var relp = lang.price[type].absorb(curr.absorb(Math.abs(value - sp).separate()));
+                    var relp = I18n.t('offer.price.' + type, {value: I18n.t('currencies.RUR.sign', {value: Math.abs(value - sp).separate()})});
                     el.append(sample.clone().addClass('ossp-rel').html(relp));
                     el.append(sample.clone().addClass('ossp-abs').html(absp));
                 }
@@ -280,15 +279,15 @@ hideExcess: function(limit) {
         var segment = segments[i];
         var excess = i === 0 ? (need - used) : Math.round(need * segment.part / total);
         if (excess > 1) {
-            var title, amount = excess.declineArray(lang.segment.variants);
+            var title, amount = I18n.t('offer.segment.variants', {count: excess});
             if (results.data.segments.length === 1) {
                 title = '';
             } else if (results.data.segments[1].rt) {
-                title = lang.segment.directions[i];
+                title = I18n.t(i === 0 ? 'there' : 'back', {scope: 'offer.segment.direction'});
             } else {
                 title = results.data.segments[i].arvto;
             }
-            var text = lang.segment.more.absorb(amount, title).replace(/ $/, '');
+            var text = I18n.t('offer.segment.more', {amount: amount, direction: title}).replace(/ $/, '');
             var more = '<div class="os-more">' + text + '</div>';
             this.toggleExcess(segment.el.addClass('hide-excess').append(more), excess);
         }

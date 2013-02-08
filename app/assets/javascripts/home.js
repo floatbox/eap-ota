@@ -1,3 +1,5 @@
+//= require i18n_init
+
 //= require common/hint.js
 
 //= require home/page.js

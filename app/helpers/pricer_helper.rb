@@ -8,12 +8,10 @@ module PricerHelper
   def human_duration(duration)
     hours, minutes = duration.divmod(60)
     unless hours.zero?
-      human_hours =
-        "#{ hours }&nbsp;#{ Russian.pluralize(hours, 'час', 'часа', 'часов') }"
+      human_hours = t('time.hours', :count => hours)
     end
     unless minutes.zero?
-      human_minutes =
-        "#{ minutes }&nbsp;#{ Russian.pluralize(minutes, 'минута', 'минуты', 'минут') }"
+      human_minutes = t('time.minutes', :count => minutes)
     end
     [human_hours, human_minutes].compact.join(' ').html_safe
   end
@@ -37,12 +35,10 @@ module PricerHelper
   def short_human_duration duration
     hours, minutes = duration.divmod(60)
     unless hours.zero?
-      human_hours =
-        "#{ hours }&nbsp;ч"
+      human_hours = t('time.h', :h => hours)
     end
     unless minutes.zero?
-      human_minutes =
-        "#{ minutes }&nbsp;мин"
+      human_minutes =t('time.min', :m => minutes)
     end
     [human_hours, human_minutes].compact.join(' ').html_safe
   end  
@@ -56,13 +52,13 @@ module PricerHelper
   end
   
   def full_airport_and_term location, term
-    result = ["#{ location.name }"]
+    result = [dict(location, :name).to_s]
     if term
-      result << "терминал&nbsp;#{ term }"
+      result << t('offer.details.terminal', :term => term)
     end
     result.join(', ').html_safe
-  end    
-
+  end
+  
   def recommendation_prices r
     prices = {
       :RUR => r.price_with_payment_commission.round.to_i,
@@ -167,7 +163,7 @@ module PricerHelper
   end
   
   def segment_title segment
-    "Перелет #{ nbsp(segment.departure.city.case_from) } #{ nbsp(segment.arrival.city.case_to) }".html_safe
+    t('offer.details.segment', :from => nbsp(dict(segment.departure.city, :from)), :to => nbsp(dict(segment.arrival.city, :to))).html_safe
   end
 
   # FIXME сломается, если делать мерж двух прайсеров с одинаковыми рекомендациями
@@ -183,13 +179,13 @@ module PricerHelper
     for flight, layover in segment.flights.zip(segment.layover_durations)
       parts << {
         :type => 'flight',
-        :title => "Перелёт #{ flight.departure.city.case_from } #{ flight.arrival.city.case_to }, #{ human_duration(flight.duration) }",
+        :title => t('offer.summary.flight', :from => flight.departure.city.case_from, :to => flight.arrival.city.case_to, :duration => human_duration(flight.duration)),
         :duration => flight.duration
       }
       if layover
         parts << {
           :type => 'layover',
-          :title => "Пересадка #{ flight.arrival.city.case_in }, #{ human_duration(layover) }",
+          :title => t('offer.summary.layover', :city => flight.arrival.city.case_in, :duration => human_duration(layover)),
           :duration => layover
         }
       end
@@ -201,25 +197,23 @@ module PricerHelper
     result = []
     durations = segment.layover_durations
     segment.layovers.each_with_index{|layover, i|
-      result << "#{ short_human_duration(durations[i]) } #{ layover.city.case_in }"
+      result << "#{ short_human_duration(durations[i]) } #{ dict(layover.city, :in) }"
     }
     result.to_sentence
   end  
 
   def human_layovers_medium segment
-    'через ' + segment.layovers.map{|layover| layover.city.case_to.gsub(/^\S+ /, '') }.to_sentence
+    t('offer.summary.through', :cities => segment.layovers.map{|layover| layover.city.case_to.gsub(/^\S+ /, '') }.to_sentence)
   end
 
   def with_layovers segment
-    counts = ['пересадкой', 'двумя пересадками', 'тремя пересадками']
-    layovers = segment.flights[0..-2].map {|flight| flight.arrival.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;')
-    "c #{ counts[segment.layover_count - 1] } #{ layovers }".html_safe
+    layovers = segment.flights[0..-2].map {|flight| dict(flight.arrival.city, :in) }.to_sentence(:last_word_connector => t('nbsp_and'))
+    t('offer.details.layovers', :count => segment.layover_count, :cities => layovers).html_safe
   end
 
-  def with_technical_stops flight
-    prefix = flight.technical_stop_count == 1 ? 'промежуточной посадкой' : 'промежуточными посадками'
-    stops = flight.technical_stops.map {|tstop| tstop.airport.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;')
-    "c #{ prefix} #{ stops }".html_safe
+  def technical_stops flight
+    stops = flight.technical_stops.map {|tstop| tstop.airport.city.case_in }.to_sentence(:last_word_connector => t('nbsp_and'))
+    t('offer.details.stopovers', :count => flight.technical_stop_count, :cities => stops).html_safe
   end
 
   def human_cabin_nom cabin
@@ -263,10 +257,17 @@ module PricerHelper
     Russian.pluralize(sum, 'рубль', 'рубля', 'рублей')
   end
 
-  def human_price price
-    rounded = price.round.to_i
-    "#{ rounded }&nbsp;#{ rubles(rounded) }".html_safe
+  def short_price price
+    t('currencies.RUR.sign', :value => price.round.to_i).html_safe
   end  
+
+  def human_price price
+    t('currencies.RUR', :count => price.round.to_i).html_safe
+  end  
+
+  def decorate_price price, before = '', after = ''
+    price.gsub(/(\d+)/){|sum| before + sum.gsub(/(\d+)(\d{3})/, '\1<span class="thousand">\2</span>') + after }.html_safe
+  end
 
   def human_date date
     I18n.l(Date.strptime(date, '%d%m%y'), :format => '%e %B').strip
@@ -284,25 +285,15 @@ module PricerHelper
   end
 
   def layovers_in flights
-    flights.map {|flight| flight.arrival.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;').html_safe
+    flights.map {|flight| dict(flight.arrival.city, :in) }.to_sentence(:last_word_connector => t('nbsp_and')).html_safe
   end
 
   def technical_stops_in tstops
-    tstops.map {|tstop| tstop.airport.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;').html_safe
+    tstops.map {|tstop| dict(tstop.airport.city, :in) }.to_sentence(:last_word_connector => t('nbsp_and')).html_safe
   end
 
   def segments_departure variant
     variant.segments.map {|segment| segment.departure_time }.join(' ')
-  end
-
-  def human_cabin_nom cabin
-    titles = {'Y' => 'Эконом-класс', 'C' => 'Бизнес-класс', 'F' => 'Первый класс'}
-    titles[cabin]
-  end
-
-  def human_cabin_ins cabin
-    titles = {'Y' => 'эконом-классом', 'C' => 'бизнес-классом', 'F' => 'первым классом'}
-    titles[cabin]
   end
 
   def segment_flight_numbers segment
