@@ -21,7 +21,8 @@ module TranslationHelper
         when Carrier
           case format
           when :name
-            object.ru_shortname
+            # FIXME не очень круто
+            object.ru_shortname.presence || object.en_shortname
           when :long
             object.ru_longname
           end
