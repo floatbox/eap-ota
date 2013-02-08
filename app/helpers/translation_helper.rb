@@ -3,22 +3,24 @@ module TranslationHelper
   # Usage:
   #   <%= dict city %>
   #   dict airport, :from
-  def dict(object, format=:short)
+  def dict(object, format=:name)
     translation =
       case I18n.locale
       when :ru
 
         case object
-        when City, Region, Airport, Airplane
+        when Country, Region, City, Airport
           case format
           when :name
             object.name_ru
           when :from, :to, :in
             object.send "case_#{format}"
           end
+        when Airplane
+          object.name_ru
         when Carrier
           case format
-          when :short
+          when :name
             object.ru_shortname
           when :long
             object.ru_longname
@@ -27,16 +29,18 @@ module TranslationHelper
 
       when :en
         case object
-        when City, Region, Airport, Airplane
+        when Country, Region, City, Airport
           case format
           when :name
             object.name_en
           when :from, :to, :in
             "#{format} #{object.name_en}"
           end
+        when Airplane
+          object.name_en
         when Carrier
           case format
-          when :short
+          when :name
             object.en_shortname
           when :long
             object.en_longname
@@ -45,7 +49,7 @@ module TranslationHelper
       end
 
     unless translation
-      raise NotImplementedError, "no translation for #{I18n.locale} #{object.class} #{format}"
+      raise NotImplementedError, "no translation for #{I18n.locale} #{object.class}##{object.id} :#{format}"
     end
 
     return translation

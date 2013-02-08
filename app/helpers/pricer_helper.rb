@@ -52,7 +52,7 @@ module PricerHelper
   end
   
   def full_airport_and_term location, term
-    result = [dict(location, :name).to_s]
+    result = [dict(location)]
     if term
       result << t('offer.details.terminal', :term => term)
     end
