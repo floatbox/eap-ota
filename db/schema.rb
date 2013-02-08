@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130125145248) do
+ActiveRecord::Schema.define(:version => 20130208172414) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -346,15 +346,16 @@ ActiveRecord::Schema.define(:version => 20130125145248) do
   add_index "orders", ["ticket_status"], :name => "index_orders_on_ticket_status"
 
   create_table "partners", :force => true do |t|
-    t.string   "token",               :null => false
-    t.string   "password",            :null => false
-    t.boolean  "enabled",             :null => false
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
-    t.boolean  "hide_income",         :null => false
+    t.string   "token",                                  :null => false
+    t.string   "password",                               :null => false
+    t.boolean  "enabled",                                :null => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+    t.boolean  "hide_income",                            :null => false
     t.integer  "cookies_expiry_time"
     t.integer  "income_at_least"
     t.integer  "suggested_limit"
+    t.boolean  "cheat",               :default => false
   end
 
   add_index "partners", ["token"], :name => "index_partners_on_token"

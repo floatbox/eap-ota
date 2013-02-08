@@ -117,10 +117,12 @@ class PricerController < ApplicationController
       StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner}.total] if @destination
       # поправка на неопределенный @destination что бы сходились счетчики
       StatCounters.inc %W[search.api.#{partner}.bad_destination] if !@destination
+      @cheat_partner = Partner[partner] && Partner[partner].cheat
       render 'api/variants'
     else
       StatCounters.inc %W[search.api.invalid search.api.#{partner}.invalid]
       @recommendations = []
+
       render 'api/variants'
     end
   rescue IataStash::NotFound => iata_error
