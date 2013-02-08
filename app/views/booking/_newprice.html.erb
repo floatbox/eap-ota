@@ -13,17 +13,18 @@
     <% price_tax_and_markup = @order_form.recommendation.price_tax_and_markup.round.to_i %>
     <% price_discount = @order_form.recommendation.price_discount.round.to_i %>    
     <div class="bfnp-data" data-price="<%= price_total %>">
-        <p class="bffp-nd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total %></span>&nbsp;<%= rubles(price_total) %></p>
-        <p class="bffp-wd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total + 400 %></span>&nbsp;<%= rubles(price_total + 400) %></p>
-        <p class="bffp-tip"><%= 'за всех пассажиров' if @order_form.people.many? %></p>
+        <p class="bffp-card"><%= t 'booking.price.total_card' %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>
+        <p class="bffp-nd"><%= t 'booking.price.total_cash' %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>
+        <p class="bffp-wd"><%= t 'booking.price.total_cash' %><br><%= decorate_price human_price(price_total + 400), '<span class="bffp-sum">', '</span>' %></p>
+        <p class="bffp-tip"><%= t('booking.price.for_all') if @order_form.people.many? %> <%= t('booking.price.including_fee') %></p>
         <ul class="bffp-details">
-            <li class="bffpd-item">Тариф — <%= price_fare %> <span class="ruble">Р</span></li>
-            <li class="bffpd-item">Таксы и сборы — <%= price_total - price_fare %> <span class="ruble">Р</span></li>
-            <li class="bffpd-item">В том числе сервисный сбор — <%= @order_form.recommendation.fee.round.to_i %> <span class="ruble">Р</span></li>
-            <li class="bffpd-item bffp-wd">Доставка — 400 <span class="ruble">Р</span></li>
+            <li class="bffpd-item"><%= t 'booking.price.fare' %> — <%= short_price(price_fare) %></li>
+            <li class="bffpd-item"><%= t 'booking.price.taxes_and_fees' %> — <%= short_price(price_total - price_fare) %></li>
+            <li class="bffpd-item"><%= t 'booking.price.fee' %> — <%= short_price(@order_form.recommendation.fee) %></li>
+            <li class="bffpd-item bffp-wd"><%= t 'booking.price.delivery' %> — <%= short_price(400) %></li>
             <% if price_discount > 0 %>
-                <li class="bffpd-item">Скидка — <%= price_discount %> <span class="ruble">Р</span></li>
-            <% end %>            
+                <li class="bffpd-item"><%= t 'booking.price.discount' %> — <%= short_price(price_discount) %></li>
+            <% end %>        
         </ul>
     </div>
 </div>

@@ -192,7 +192,7 @@ countPrices: function() {
     var prices = {}, sample;
     for (var v = this.variants.length; v--;) {
         var variant = this.variants[v];
-        var price = variant.price;
+        var price = variant.price_raw;
         for (var s = sl; s--;) {
             var flights = variant.segments[s];
             var range = prices[flights];
@@ -228,7 +228,7 @@ otherCarriers: function() {
 otherPrices: function() {
     var prices = this.prices;
     var ss = this.selected.segments
-    var sp = this.selected.price;
+    var sp = this.selected.price_raw;
     this.el.find('.oss-price').remove();
     this.el.find('.oss-different').removeClass('oss-different');
     this.el.find('.o-segment').each(function(s) {
