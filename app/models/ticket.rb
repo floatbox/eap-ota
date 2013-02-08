@@ -240,11 +240,11 @@ class Ticket < ActiveRecord::Base
         :validating_carrier
       self.status = 'pending' if status.blank?
     end
-    self.original_price_penalty *= -1 if original_price_penalty.cents < 0
+    self.original_price_penalty *= -1 if original_price_penalty && original_price_penalty.cents < 0
     self.price_discount *= -1 if price_discount > 0
     self.price_our_markup *= -1 if price_our_markup > 0
-    self.original_price_tax *= -1 if original_price_tax.cents > 0
-    self.original_price_fare *= -1 if original_price_fare.cents > 0
+    self.original_price_tax *= -1 if original_price_tax && original_price_tax.cents > 0
+    self.original_price_fare *= -1 if original_price_fare && original_price_fare.cents > 0
     self.price_consolidator *= -1 if price_consolidator > 0
     self.commission_subagent = 0 if original_price_fare != -parent.original_price_fare && !parent.commission_subagent.percentage?
     self.commission_agent = 0 if original_price_fare != -parent.original_price_fare && !parent.commission_agent.percentage?
