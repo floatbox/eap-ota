@@ -130,7 +130,7 @@ class HotOffer
         logger.info "Create HotOffer (#{from_iata}-#{to_iata}) rt=#{rt} price = #{price}"
         logger.info "Get Destination: (#{destination.from_iata}-#{destination.to_iata}) rt=#{destination.rt} average_price = #{destination.average_price}"
 
-        if destination.average_price > 0
+        if destination.average_price && destination.average_price > 0
           logger.info "Exist Destination"
 #          hot_offers_count = destination.hot_offers.count + 1
 #          destination.average_price = destination.hot_offers.every.price.sum / hot_offers_count
@@ -150,7 +150,7 @@ class HotOffer
         self.price_variation_percent = ((price / destination.average_price.to_f - 1)*100)
 
         destination.hot_offers_counter += 1
-        destination.save
+        destination.save if destination.average_price > 0
 #        self.price_variation_percent < -10
     end
   end
