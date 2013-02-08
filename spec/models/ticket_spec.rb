@@ -27,6 +27,10 @@ describe Ticket do
       Ticket.default_refund_fee( Date.new(2013,5,1) ).should == 100
     end
 
+    it "should return correct fee for datetime of changing fee!" do
+      Ticket.default_refund_fee( Time.new(2013,5,1, 12,0) ).should == 100
+    end
+
     context "empty configuration" do
       before do
         Conf.payment.stub(:refund_fees).and_return({})
