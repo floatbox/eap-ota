@@ -1,0 +1,6 @@
+# документация: https://github.com/fnando/i18n-js
+# убираю тайпусовские бразильские и прочие трансляции
+# TODO вынести трансляции админки в отдельный файл
+translations:
+  - file: "app/assets/javascripts/i18n/translations.js"
+    only: ['ru.*', 'en.*']

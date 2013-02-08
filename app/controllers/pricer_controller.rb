@@ -53,7 +53,10 @@ class PricerController < ApplicationController
   ensure
     StatCounters.inc %W[search.calendar.total]
   end
-
+  
+  #FIXME сделать презентер
+  include TranslationHelper
+  include PricerFormHelper
   def validate
     result = {}
     if @query_key = params[:query_key]
@@ -76,7 +79,7 @@ class PricerController < ApplicationController
       result[:map_segments] = @search.map_segments
     end
     if @search.present? && @search.valid?
-      result.merge!(@search.details)
+      result.merge!(search_details(@search))
       result[:query_key] = @search.query_key
       result[:short] = @search.human_short
       result[:valid] = true

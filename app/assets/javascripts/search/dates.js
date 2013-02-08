@@ -32,14 +32,15 @@ makeMonthes: function() {
     var sample = this.el.find('.sdc-month');
     var date = new Date(this.csnow.getFullYear(), this.csnow.getMonth() - 1, 1);
     this.monthes = [];
+    var monthTitles = I18n.t('search.dates.monthes');
     for (var m = 0; m < 12; m++) {
         date.setMonth(date.getMonth() + 2);
         date.setDate(0);
         var month = {
             year: date.getFullYear(),
-            ntitle: lang.monthes.nom[date.getMonth()],
-            gtitle: lang.monthes.gen[date.getMonth()],
-            ptitle: lang.monthes.pre[date.getMonth()],
+            ntitle: monthTitles.nom[date.getMonth()],
+            gtitle: monthTitles.gen[date.getMonth()],
+            ptitle: monthTitles.pre[date.getMonth()],
             length: date.getDate(),
         };
         var MY = date.DMY().substring(2);

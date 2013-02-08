@@ -115,6 +115,9 @@ class HotOffer
   private
 
   def set_some_vars
+
+    logger.info "Create HotOffer: price = #{price}"
+
     if @search and @recommendation
         self.from_iata = @search.segments[0].from_as_object.iata
         self.to_iata = @search.segments[0].to_as_object.iata
@@ -123,16 +126,25 @@ class HotOffer
         self.date2 = Date.strptime(@search.segments[1].date, '%d%m%y') if @search.segments[1]
         self.time_delta = (Date.strptime(@search.segments[0].date, '%d%m%y') - Date.today).to_i
         self.destination = Destination.find_or_create_by(:from_iata => @search.segments[0].from_as_object.iata, :to_iata => @search.segments[0].to_as_object.iata, :rt => @search.rt)
-        if destination.average_price
+
+        logger.info "Create HotOffer (#{from_iata}-#{to_iata}) rt=#{rt} price = #{price}"
+        logger.info "Get Destination: (#{destination.from_iata}-#{destination.to_iata}) rt=#{destination.rt} average_price = #{destination.average_price}"
+
+        if destination.average_price > 0
+          logger.info "Exist Destination"
 #          hot_offers_count = destination.hot_offers.count + 1
 #          destination.average_price = destination.hot_offers.every.price.sum / hot_offers_count
 #          destination.average_time_delta = destination.hot_offers.every.time_delta.sum / hot_offers_count
           destination.average_price = destination.hot_offers_counter.to_f/(destination.hot_offers_counter + 1)*destination.average_price + price/(destination.hot_offers_counter + 1)
           destination.average_time_delta = destination.hot_offers_counter.to_f/(destination.hot_offers_counter + 1)*destination.average_time_delta + time_delta/(destination.hot_offers_counter + 1)
         else
+          logger.info "New Destination"
+
           destination.average_price = price
           destination.average_time_delta = time_delta
         end
+
+        logger.info "Save Destination average_price = #{destination.average_price}"
 
         self.price_variation =  price - destination.average_price
         self.price_variation_percent = ((price / destination.average_price.to_f - 1)*100)
