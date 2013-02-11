@@ -20,6 +20,7 @@ cfg = database_yml[ENV['RAILS_ENV'] || 'development' ]
 
 cmd_pass = 'mysqldump'
 
+cmd_pass += " -h #{cfg['host']}" if cfg['host']
 cmd_pass += " -u #{cfg['username']}" if cfg['username']
 cmd_pass += " -p#{cfg['password']}" if cfg['password']
 
