@@ -34,4 +34,11 @@ describe PaymentCustomFields do
     end
 
   end
+
+  describe "#cleanup_email" do
+    it "should return only first email out of two" do
+      PaymentCustomFields.new.send(
+        :cleanup_email, " foo@bar.com, test@example.com ").should == "foo@bar.com"
+    end
+  end
 end

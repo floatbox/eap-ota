@@ -48,7 +48,7 @@ class PaymentCustomFields
   # платежные системы нервно реагируют на двойные емейлы в заказах
   def cleanup_email(email)
     if email
-      email.strip.split(',').first
+      email.split(',').first.strip
     end
   end
 
