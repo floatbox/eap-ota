@@ -890,7 +890,7 @@ example 'svojfk/i jfksvo/s'
 agent "10%"
 subagent "8%"
 subclasses "SIQKLUT"
-check { includes_only(country_iatas.first, "RU") and includes(country_iatas, "US") }
+check { includes_only(country_iatas.first, 'RU') and includes_only(country_iatas, 'RU US') }
 ticketing_method "downtown"
 discount "7.5%"
 commission "10%/8%"
