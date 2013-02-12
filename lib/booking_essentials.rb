@@ -1,12 +1,12 @@
 module BookingEssentials
 
-  def preliminary_booking_result
+  def preliminary_booking_result(forbid_class_changing)
     return if Conf.site.forbidden_booking
     @recommendation = Recommendation.deserialize(params[:recommendation])
     recover_pricer_form
 
     track_partner(params[:partner], params[:marker])
-    strategy = Strategy.select( :rec => recommendation, :search => @search )
+    strategy = Strategy.select( :rec => @recommendation, :search => @search )
 
     StatCounters.inc %W[enter.preliminary_booking.total]
     StatCounters.inc %W[enter.preliminary_booking.#{partner}.total] if partner
@@ -15,7 +15,7 @@ module BookingEssentials
     StatCounters.d_inc @destination, %W[enter.api.total] if @destination
     StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if @destination && partner
 
-    if strategy.check_price_and_availability
+    if strategy.check_price_and_availability(forbid_class_changing)
       @order_form = OrderForm.new(
         :recommendation => @recommendation,
         :people_count => @search.real_people_count,
@@ -25,6 +25,8 @@ module BookingEssentials
         :marker => marker
       )
       @order_form.save_to_cache
+      StatCounters.inc %W[enter.preliminary_booking.success]
+      StatCounters.inc %W[enter.preliminary_booking.#{partner}.success] if partner
       return true
     else
       return
@@ -39,7 +41,9 @@ module BookingEssentials
       @search.adults = params[:adults] if params[:adults]
       @search.children = params[:children] if params[:children]
       @search.infants = params[:infants] if params[:infants]
-      @search.segments = @recommendation.segments.map{|s| PricerForm::Segment.new(from: s.departure.city.iata, to: s.arrival.city.iata, date: s.departure_date)}
+      @recommendation.segments.each do |s|
+        @search.segments.new(from: s.departure.city.iata, to: s.arrival.city.iata, date: s.departure_date)
+      end
     end
 
   end

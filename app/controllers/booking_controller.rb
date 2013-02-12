@@ -15,49 +15,14 @@ class BookingController < ApplicationController
   #   "marker"=>"",
   #   "variant_id"=>"1"
   def preliminary_booking
-
-    if Conf.site.forbidden_booking
-      render :json => {:success => false}
-      return
-    end
-
-    @search = PricerForm.load_from_cache(params[:query_key])
-    #set_search_context_for_airbrake
-    recommendation = Recommendation.deserialize(params[:recommendation])
-    original_booking_classes = recommendation.booking_classes
-    track_partner(params[:partner], params[:marker])
-    strategy = Strategy.select( :rec => recommendation, :search => @search )
-
-    StatCounters.inc %W[enter.preliminary_booking.total]
-    StatCounters.inc %W[enter.preliminary_booking.#{partner}.total] if partner
-
-    @destination = get_destination
-    StatCounters.d_inc @destination, %W[enter.api.total] if @destination
-    StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if @destination && partner
-    # поправка на неопределенный @destination что бы сходились счетчики
-    StatCounters.inc %W[enter.preliminary_booking.#{partner}.bad_destination] if !@destination && partner
-
-    unless strategy.check_price_and_availability
-      render :json => {:success => false}
-    else
-      order_form = OrderForm.new(
-        :recommendation => recommendation,
-        :people_count => @search.real_people_count,
-        :variant_id => params[:variant_id],
-        :query_key => @search.query_key,
-        :partner => partner,
-        :marker => marker
-      )
-      order_form.save_to_cache
+    if preliminary_booking_result(Conf.amadeus.forbid_class_changing)
       render :json => {
         :success => true,
-        :number => order_form.number,
-        :changed_booking_classes => (original_booking_classes != recommendation.booking_classes),
-        :declared_price => recommendation.declared_price
+        :number => @order_form.number,
+        :declared_price => @recommendation.declared_price
         }
-
-      StatCounters.inc %W[enter.preliminary_booking.success]
-      StatCounters.inc %W[enter.preliminary_booking.#{partner}.success] if partner
+    else
+      render :json => {:success => false}
     end
   end
 
@@ -71,13 +36,14 @@ class BookingController < ApplicationController
     @partner = @search.partner
     @destination = get_destination
 
+    StatCounters.inc %W[enter.api.success]
+
     if is_mobile_device? && !is_tablet_device?
       render 'variant_iphone'
     else
       render 'variant'
     end
 
-    StatCounters.inc %W[enter.api.success]
   ensure
     StatCounters.inc %W[enter.api.total]
   end
