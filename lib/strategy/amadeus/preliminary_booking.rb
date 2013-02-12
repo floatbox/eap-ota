@@ -2,7 +2,7 @@
 module Strategy::Amadeus::PreliminaryBooking
   CABINS_MAPPING = {'M' => 'E', 'W' => 'E', 'Y' => 'E', 'C' => 'B', 'F' => 'F'}
 
-  def check_price_and_availability(forbid_class_changing)
+  def check_price_and_availability(forbid_class_changing = Conf.amadeus.forbid_class_changing)
     @forbid_class_changing = forbid_class_changing
     unless TimeChecker.ok_to_book(@rec.dept_date + 1.day)
       logger.error 'Strategy::Amadeus::Check: time criteria missed'
