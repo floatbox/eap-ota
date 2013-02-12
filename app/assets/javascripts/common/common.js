@@ -106,6 +106,15 @@ function preloadImages() {
     }
 }
 
+/* Decorate price */
+function decoratePrice(price, before, after) {
+    if (!before) before = '';
+    if (!after) after = '';
+    return price.replace(/\d+/, function(s) {
+        return before + Number(s).separate() + after;
+    }); 
+}
+
 /* Window shortcut */
 var $w = $(window);
 

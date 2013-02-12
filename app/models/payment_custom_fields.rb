@@ -6,7 +6,7 @@ class PaymentCustomFields
     return unless order
     self.pnr_number = order.pnr_number
     self.date = order.departure_date
-    self.email = order.email
+    self.email = cleanup_email(order.email)
     self.phone = order.phone.try(:gsub, /\D/, '')
     self.description = order.description.presence
   end
@@ -20,7 +20,7 @@ class PaymentCustomFields
   def order_form= order_form
     return unless order_form
     self.flights = order_form.recommendation.journey.flights
-    self.email = order_form.email
+    self.email = cleanup_email(order_form.email)
     self.phone = order_form.phone.try(:gsub, /\D/, '')
     self.first_name = order_form.people.first.first_name
     self.last_name = order_form.people.first.last_name
@@ -41,6 +41,15 @@ class PaymentCustomFields
 
   def combined_name
     "#{first_name} #{last_name}" if first_name
+  end
+
+  private
+
+  # платежные системы нервно реагируют на двойные емейлы в заказах
+  def cleanup_email(email)
+    if email
+      email.split(',').first.strip
+    end
   end
 
 end

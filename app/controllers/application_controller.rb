@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   helper_method :corporate_mode?
 
   def set_locale
-    I18n.locale = :ru
+    I18n.locale = cookies[:language].presence || :ru
   end
 
   def log_user_agent

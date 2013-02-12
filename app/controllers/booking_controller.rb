@@ -34,6 +34,8 @@ class BookingController < ApplicationController
     @destination = get_destination
     StatCounters.d_inc @destination, %W[enter.api.total] if @destination
     StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if @destination && partner
+    # поправка на неопределенный @destination что бы сходились счетчики
+    StatCounters.inc %W[enter.preliminary_booking.#{partner}.bad_destination] if !@destination && partner
 
     unless strategy.check_price_and_availability
       render :json => {:success => false}
@@ -50,7 +52,8 @@ class BookingController < ApplicationController
       render :json => {
         :success => true,
         :number => order_form.number,
-        :changed_booking_classes => (original_booking_classes != recommendation.booking_classes)
+        :changed_booking_classes => (original_booking_classes != recommendation.booking_classes),
+        :declared_price => recommendation.declared_price
         }
 
       StatCounters.inc %W[enter.preliminary_booking.success]
@@ -64,6 +67,8 @@ class BookingController < ApplicationController
   def api_booking
     @query_key = params[:query_key]
     @search = PricerForm.load_from_cache(params[:query_key])
+    #FIXME берем партнера из сохраненной PricerForm - надежно, но некрасиво
+    @partner = @search.partner
     @destination = get_destination
 
     if is_mobile_device? && !is_tablet_device?
@@ -94,7 +99,7 @@ class BookingController < ApplicationController
   def api_redirect
     @search = PricerForm.simple(params.slice( :from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner ))
     # FIXME если partner из @search не берется больше - переделать на before_filter save_partner_cookies
-    track_partner(params[:partner] || @search.partner)
+    track_partner(params[:partner] || @search.partner, params[:marker])
     if @search.valid?
       @search.save_to_cache
       StatCounters.inc %W[enter.api_redirect.success]

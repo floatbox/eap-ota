@@ -19,4 +19,13 @@ class Version < ActiveRecord::Base
     TypusUser.pluck(:email).sort
   end
 
+  # костыль, устраняет проблему с методом changeset для записей, содержащих
+  # сериализованный Proc в формулах. Который нечем десериализовать. Чтобы убрать его,
+  # надо как-то выкусить в object_changes соответствующие строки yml за период
+  # 16 Jan 2013 - 2 Feb 2013.
+  def object_changes
+    oc = super
+    oc.gsub( /^.*ruby\/object:Proc.*?\n/, '') if oc
+  end
+
 end

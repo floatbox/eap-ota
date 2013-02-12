@@ -29,7 +29,7 @@ module Pricing
       if price_fare && price_tax
         price_total + price_payment
       else
-        0
+        declared_price || 0
       end
     end
 

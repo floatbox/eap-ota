@@ -2,6 +2,47 @@ require 'spec_helper'
 
 describe Ticket do
 
+  describe ".default_refund_fee" do
+    before do
+      Conf.payment.stub(:refund_fees).and_return(
+        Date.new(2013,2,10) => 200,
+        Date.new(2013,5,1) => 100,
+        Date.new(2013,10,20) => 300
+      )
+    end
+
+    it "should return 0 for old orders" do
+      Ticket.default_refund_fee( Date.new(2012,12,1) ).should == 0
+    end
+
+    it "should return latest fee for new orders" do
+      Ticket.default_refund_fee( Date.new(2015,1,1) ).should == 300
+    end
+
+    it "should return correct fee for inbetween orders" do
+      Ticket.default_refund_fee( Date.new(2013,3,1) ).should == 200
+    end
+
+    it "should return correct fee for date of changing fee" do
+      Ticket.default_refund_fee( Date.new(2013,5,1) ).should == 100
+    end
+
+    it "should return correct fee for datetime of changing fee!" do
+      Ticket.default_refund_fee( Time.new(2013,5,1, 12,0) ).should == 100
+    end
+
+    context "empty configuration" do
+      before do
+        Conf.payment.stub(:refund_fees).and_return({})
+      end
+
+      it "should return 0 for any order date" do
+        Ticket.default_refund_fee( Date.new(2015,1,1) ).should == 0
+      end
+    end
+
+  end
+
   describe "#update_parent_status" do
 
     let (:old_ticket) {build(:ticket)}

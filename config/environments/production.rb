@@ -1,5 +1,10 @@
 # encoding: utf-8
 Eviterra::Application.configure do
+  #config.after_initialize do
+  file = File.open(Rails.root + "log/production.log", "a")
+  file.sync = false
+  config.logger = ActiveSupport::BufferedLogger.new(file, Logger::INFO)
+
   # Settings specified here will take precedence over those in config/application.rb
 
   # здесь, а не в application.rb, для удобства дебага
@@ -89,4 +94,5 @@ Eviterra::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   config.active_record.auto_explain_threshold_in_seconds = 0.5
+
 end

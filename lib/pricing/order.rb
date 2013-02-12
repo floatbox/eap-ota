@@ -87,7 +87,7 @@ module Pricing
     end
 
     def price_markup
-      price_consolidator + price_blanks + price_our_markup - price_discount
+      price_consolidator + price_blanks + price_our_markup - price_discount + price_operational_fee
     end
 
     # FIXME сломается, если там не проценты!

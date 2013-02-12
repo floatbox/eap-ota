@@ -42,6 +42,7 @@ Order:
       - price_discount
       - commission_our_markup
       - price_our_markup
+      - price_operational_fee
       - pricing_method
       - price_total
       - price_payment_commission
@@ -95,6 +96,7 @@ Order:
       - price_discount
       - commission_our_markup
       - price_our_markup
+      - price_operational_fee
       - pricing_method
       - price_with_payment_commission
       - fix_price
@@ -104,6 +106,7 @@ Order:
       - last_pay_time
       - needs_update_from_gds
     csv:
+      - id
       - pnr_number
       - charged_on
       - created_date
@@ -115,6 +118,7 @@ Order:
       - price_tax
       - price_consolidator
       - price_blanks
+      - price_operational_fee
       - tickets_office_ids
       - price_agent
       - commission_agent
@@ -129,6 +133,7 @@ Order:
       - price_our_markup
       - income_payment_gateways
       - sold_tickets_numbers
+      - refund_date
       - partner
     options:
       selectors: payment_type, source, ticket_status, pricing_method, commission_ticketing_method
@@ -146,6 +151,7 @@ Order:
         created_at: long
         updated_at: long
         last_pay_time: long
+        refund_date: long
   order_by: -orders.created_at
   search: ^pnr_number, ^parent_pnr_number, email, phone
   options:

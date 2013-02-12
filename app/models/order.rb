@@ -116,6 +116,12 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def refund_date
+    if refund = tickets.where(:kind => 'refund', :status => 'processed').first
+      refund.ticketed_date
+    end
+  end
+
   def create_ticket_notice
     if email_status != 'queued' && email_status != 'ticket_sent' && email_status != 'manual'
       self.notifications.new.create_delayed_notice 2
@@ -127,6 +133,8 @@ class Order < ActiveRecord::Base
     sold_tickets.map do |t|
       t.baggage_info.map{|code| BaggageLimit.deserialize(code)}
     end.transpose
+  rescue IndexError
+    []
   end
 
   def email_ready!
@@ -368,10 +376,15 @@ class Order < ActiveRecord::Base
     self.price_blanks = sold_tickets.sum(:price_blanks)
     self.price_discount = sold_tickets.sum(:price_discount)
     self.price_our_markup = sold_tickets.sum(:price_our_markup)
+    self.price_operational_fee = sold_tickets.sum(:price_operational_fee)
 
     self.price_difference = price_total - price_total_old if price_difference == 0
     update_incomes
     save
+  end
+
+  def update_has_refunds
+    update_attributes(has_refunds: tickets.where(:kind => 'refund', :status => 'processed').present?)
   end
 
   def update_incomes
@@ -516,12 +529,14 @@ class Order < ActiveRecord::Base
 
   # FIXME надо какой-то логгинг
   def self.cancel_stale!
-    stale.each do |order|
-      begin
-        puts "Automatic cancel of pnr #{order.pnr_number}"
-        order.strategy.cancel
-      rescue
-        puts "error: #{$!}"
+    if Conf.amadeus.cancel_stale
+      stale.each do |order|
+        begin
+          puts "Automatic cancel of pnr #{order.pnr_number}"
+          order.strategy.cancel
+        rescue
+          puts "error: #{$!}"
+        end
       end
     end
   end

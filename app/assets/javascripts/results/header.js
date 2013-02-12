@@ -58,10 +58,9 @@ adjust: function() {
 apply: function() {
     var data = results.data;
     if (data && data.valid) {
-        if (data.fresh) {
-            results.load();
-            trackPage('/search?query=' + data.titles.header.replace(/&nbsp;/g, ' '));            
-        }
+        // if (data.fresh) { только для новых условий поиска }
+        trackPage('/search?query=' + data.titles.header.replace(/&nbsp;/g, ' '));
+        results.load();
         results.show();
     }
 },
