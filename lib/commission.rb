@@ -505,8 +505,18 @@ commission "0%/0%"
 carrier "AB", "AIR BERLIN"
 ########################################
 
-example 'cdgsvo svocdg'
-example 'svocdg'
+example 'cdgsvo/c svocdg/i'
+example 'cdgsvo/d svocdg/j'
+example 'cdgsvo/y svocdg/b'
+example 'cdgsvo/h svocdg/k'
+strt_date "01.02.2013"
+expr_date "30.04.2013"
+agent "С 01.02.13г.по 30.04.13г. 5% по опубл. тарифам по классам C, D, J, I  на рейсы AВ; + то же самое на YBHK "
+subagent "С 01.02.13г.по 30.04.13г. 3% по опубл. тарифам по классам C, D, J, I на рейсы AВ;"
+subclasses "CDJIYBHK"
+commission "5%/3%"
+
+example 'cdgfra/m fracdg/s'
 expr_date "28.02.2013"
 agent    "5% по всем направлениям через DTT"
 subagent "3% по всем направлениям через DTT"
@@ -517,9 +527,9 @@ commission "5%/3%"
  
 # example 'cdgsvo svocdg'
 # example 'cdgsvo/HG svocdg/HG'
-strt_date "16.12.2012"
-agent "С 16.12.12г. 1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
-subagent "С 16.12.12г. 5 коп с билета по опубл. тарифам на рейсы AB"
+strt_date "01.02.2012"
+agent "1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
+subagent "5 коп с билета по опубл. тарифам на рейсы AB"
 disabled "на dtt выгоднее"
 commission "1/0.05"
 
