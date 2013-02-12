@@ -999,17 +999,16 @@ carrier "EY", "ETIHAD AIRWAYS"
 ########################################
 
 example 'svocdg'
-agent   "5% от опубл. тарифов на собств. рейсы EY (В договоре Interline не прописан.)"
-subagent "3,5% от опубл. тарифов на собств. рейсы EY"
-discount "3%"
-commission "5%/3.5%"
+strt_date "11.02.2013"
+agent   "1 Евро с билета за продажи авиаперевозок на рейсы EY по веб-тарифам"
+subagent "Предположительно 5 рублей"
+commission "1eur/5"
 
 example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-discount "3%"
-commission "5%/3.5%"
+commission "1/0"
 
 carrier "F7", "FLY BABOO (РИНГ АВИА)"
 ########################################
