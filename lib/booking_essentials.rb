@@ -1,5 +1,49 @@
 module BookingEssentials
 
+  def preliminary_booking_result
+    return if Conf.site.forbidden_booking
+    @recommendation = Recommendation.deserialize(params[:recommendation])
+    recover_pricer_form
+
+    track_partner(params[:partner], params[:marker])
+    strategy = Strategy.select( :rec => recommendation, :search => @search )
+
+    StatCounters.inc %W[enter.preliminary_booking.total]
+    StatCounters.inc %W[enter.preliminary_booking.#{partner}.total] if partner
+
+    @destination = get_destination
+    StatCounters.d_inc @destination, %W[enter.api.total] if @destination
+    StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if @destination && partner
+
+    if strategy.check_price_and_availability
+      @order_form = OrderForm.new(
+        :recommendation => @recommendation,
+        :people_count => @search.real_people_count,
+        :variant_id => params[:variant_id],
+        :query_key => @search.query_key,
+        :partner => partner,
+        :marker => marker
+      )
+      @order_form.save_to_cache
+      return true
+    else
+      return
+    end
+  end
+
+  def recover_pricer_form
+    if params[:query_key]
+      @search = PricerForm.load_from_cache(params[:query_key])
+    else
+      @search = PricerForm.new
+      @search.adults = params[:adults] if params[:adults]
+      @search.children = params[:children] if params[:children]
+      @search.infants = params[:infants] if params[:infants]
+      @search.segments = @recommendation.segments.map{|s| PricerForm::Segment.new(from: s.departure.city.iata, to: s.arrival.city.iata, date: s.departure_date)}
+    end
+
+  end
+
   def pay_result
     if Conf.site.forbidden_sale
       StatCounters.inc %W[pay.errors.forbidden]
@@ -74,5 +118,23 @@ module BookingEssentials
     end
   ensure
     StatCounters.inc %W[pay.total]
+  end
+
+  def get_destination
+    return if !@search.segments
+    segment = @search.segments[0]
+    return if ([segment.to_as_object.class, segment.from_as_object.class] - [City, Airport]).present? || @search.complex_route?
+    to = segment.to_as_object.class == Airport ? segment.to_as_object.city : segment.to_as_object
+    from = segment.from_as_object.class == Airport ? segment.from_as_object.city : segment.from_as_object
+    Destination.find_or_create_by(:from_iata => from.iata, :to_iata => to.iata , :rt => @search.rt)
+  end
+
+  def log_referrer
+    if request.referrer && (URI(request.referrer).host != request.host)
+      logger.info "Referrer: #{URI(request.referrer).host}"
+    end
+  # приходят черти откуда.
+  rescue # URI::InvalidURIError
+    logger.info "Referrer not parsed: #{request.referrer}"
   end
 end
