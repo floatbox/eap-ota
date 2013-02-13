@@ -1,5 +1,5 @@
 source 'http://rubygems.org'
-gem 'rails', '3.2.11'
+gem 'rails', '3.2.12'
 
 gem 'jquery-rails'
 gem 'i18n-js', :git => 'https://github.com/fnando/i18n-js.git'

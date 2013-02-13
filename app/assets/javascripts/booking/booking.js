@@ -22,6 +22,7 @@ init: function() {
     });
 },
 abort: function() {
+    clearTimeout(this.ltimer);
     if (this.request && this.request.abort) {
         this.request.abort();
         delete this.request;
@@ -51,7 +52,7 @@ prebook: function(offer) {
         timeout: 60000
     });
     offer.book.addClass('ob-disabled');
-    offer.state.html('<span class="ob-progress">Проверяем доступность мест</span>');
+    offer.state.html('<span class="ob-progress">' + I18n.t('prebooking.progress') + '</span>');
     if (!offer.details || offer.details.is(':hidden')) {
         offer.showDetails();
     }
@@ -61,9 +62,13 @@ prebook: function(offer) {
     this.offer = offer;
 },
 process: function(result) {
+    var that = this;
     if (result && result.success) {
+        this.offer.state.html(I18n.t('prebooking.available'));
         this.key = result.number;
-        this.load();
+        this.ltimer = setTimeout(function() {
+            that.load();
+        }, 1000);
     } else {
         this.failed();
     }
