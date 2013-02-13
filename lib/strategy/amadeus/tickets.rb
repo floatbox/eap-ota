@@ -14,6 +14,7 @@ module Strategy::Amadeus::Tickets
     end
     tickets = []
     exchanged_tickets = pnr_resp.exchanged_tickets
+    # FIXME перенести обработку багажа в парсер ticket_display_tst или pnr_retrieve
     pnr_resp.tickets.deep_merge(prices).each do |k, ticket_hash|
       if ticket_hash[:number]
         if exchanged_tickets[k]
@@ -30,8 +31,7 @@ module Strategy::Amadeus::Tickets
         tickets << ticket_hash.merge({
           :source => 'amadeus',
           :baggage_info => baggage_info,
-          :pnr_number => @order.pnr_number,
-          :commission_subagent => @order.commission_subagent.to_s
+          :pnr_number => @order.pnr_number
         })
       end
     end
