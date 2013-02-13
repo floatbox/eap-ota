@@ -33,7 +33,9 @@ Order:
       - commission_ticketing_method
       - blank_count
       - price_fare
+      - customized_original_price_fare
       - price_tax
+      - customized_original_price_tax
       - commission_consolidator
       - price_consolidator
       - commission_blanks

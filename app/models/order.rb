@@ -3,6 +3,7 @@ class Order < ActiveRecord::Base
 
   include CopyAttrs
   include Pricing::Order
+  extend MoneyColumns
 
   scope :MOWR228FA, lambda { by_office_id 'MOWR228FA' }
   scope :MOWR2233B, lambda { by_office_id 'MOWR2233B' }
@@ -10,6 +11,7 @@ class Order < ActiveRecord::Base
   scope :MOWR2219U, lambda { by_office_id 'MOWR2219U' }
   scope :FLL1S212V, lambda { by_office_id 'FLL1S212V' }
 
+  has_money_helpers :original_price_fare, :original_price_tax
 
   def self.by_office_id office_id
     joins(:tickets).where('tickets.office_id' => office_id).uniq
