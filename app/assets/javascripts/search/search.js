@@ -70,10 +70,10 @@ getValues: function() {
         infants: this.options.infants.selected || 0
     };
     if (persons.adults + persons.children + persons.infants > 8) {
-        warnings.push(lw.persons);
+        warnings.push(I18n.t('search.messages.persons'));
     }
     if (persons.infants > persons.adults) {
-        warnings.push(lw.infants);
+        warnings.push(I18n.t('search.messages.infants'));
     }
     return {
         warnings: warnings,

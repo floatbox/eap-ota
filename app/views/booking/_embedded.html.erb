@@ -48,7 +48,7 @@
         	<p class="bfw-tip"><%= raw t 'booking.passengers.names.letters' %></p>
         </div>
         <div class="bf-warning" id="bfw-name-order">
-        	<p><%= t 'booking.passengers.names.check' %></p>
+        	<p><%= raw t 'booking.passengers.names.check' %></p>
         	<p class="bfw-tip"><%= raw t 'booking.passengers.names.controls', :swap => content_tag('span', t('booking.passengers.names.swap'), :class => 'link bfwno-swap'), :leave => content_tag('span', t('booking.passengers.names.leave'), :class => 'link bfwno-leave') %></p>
         </div>
         <div class="latent" id="bfh-withseat"><%= raw t 'booking.passengers.with_seat.description' %></div>

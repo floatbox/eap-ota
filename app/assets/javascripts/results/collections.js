@@ -93,9 +93,9 @@ filter: function(check) {
     }
     var title;
     if (amount !== this.length) {
-        title = lang.results.some.absorb(amount, this.length);
+        title = I18n.t('results.tabs.some', {amount: amount, total: this.length});
     } else {
-        title = lang.results.all.absorb(this.length);
+        title = I18n.t('results.tabs.all', {amount: this.length});
     }
     this.control.html(title);
     results.filters.proper = features.join(' ');
@@ -248,11 +248,10 @@ showPrices: function() {
     this.updateLabel(I18n.t('results.tabs.matrix'));   
 },
 humanDate: function(date, segment) {
-    var day = date.getDate();
-    var month = lang.monthes.gen[date.getMonth()];
-    var weekday = lang.days.week[(date.getDay() || 7) - 1];
-    var pattern = '<h6 class="rmp-date{0}">{1}&nbsp;{2}</h6><p class="rmp-weekday">{3}</p>';
-    return pattern.absorb(segment, day, month, weekday);
+    var d = I18n.l('date.formats.human', date);
+    var w = I18n.l('date.formats.dow', date);
+    var pattern = '<h6 class="rmp-date{0}">{1}</h6><p class="rmp-weekday">{2}</p>';
+    return pattern.absorb(segment, d, w);
 },
 selectDates: function(dates) {
     var c = this.cols[dates[0]];
@@ -274,7 +273,7 @@ merge: function(variants) {
     var sorting = function(a, b) {
         return a.dpt - b.dpt;
     };
-    var titles = ['туда', 'обратно'];
+    //var titles = ['туда', 'обратно'];
     offer.complex = true;    
     offer.variants = variants;
     offer.el.find('.o-segment').each(function(s) {
@@ -292,8 +291,11 @@ merge: function(variants) {
             }
         }
         items = items.sort(sorting);
-        var rt = results.data.segments.length === 2 && results.data.segments[1].rt;
-        var st = rt ? lang.segment.title.absorb(lang.segment.directions[s]) : results.data.segments[s].short
+        if (results.data.segments.length === 2 && results.data.segments[1].rt) {
+            var st = I18n.t('offer.segment.title', {direction: I18n.t(s === 0 ? 'there' : 'back', {scope: 'offer.segment.direction'}) });
+        } else {
+            var st = results.data.segments[s].short;
+        }
         segment.append($('#ost-template').html().absorb(st));
         if (results.data.segments.length === 1) {
             segment.find('.ostn-text').hide();

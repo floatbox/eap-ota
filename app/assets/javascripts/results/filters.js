@@ -274,7 +274,7 @@ apply: function() {
     for (var i = this.lists.length; i--;) {
         if (this.lists[i].conditions) counter++;
     }
-    this.counter.attr('title', counter ? lang.filters.reset.absorb(counter.declineArray(lang.filters.selected)) : '');
+    this.counter.attr('title', counter ? I18n.t('filters.reset', {count: counter}) : '');
     this.counter.css('background-position', '0 ' + (-counter * 20) + 'px');
     this.counter.toggle(counter !== 0);
 },
@@ -459,13 +459,13 @@ human: function(d1, d2) {
     var max = this.from + d2;
     if (max - min < this.size) {
         if (max < 3) {
-            parts.push(lang.filters.short);
+            parts.push('короткие');
         } else if (min > 4) {
-            parts.push(lang.filters.long);
+            parts.push('длинные');
         }
-        parts.push(lamg.filters[min ? 'fromto' : 'less'].absorb(min, max.declineArray(lang.time.hours)));
+        parts.push((min ? 'от {0} до {1}' : 'меньше {1}').absorb(min, I18n.t('time.hours', {count: max})));
     } else {
-        parts.push(lang.filters.any);
+        parts.push('любая');
     }
     this.value.html(parts.join(', '));
 },

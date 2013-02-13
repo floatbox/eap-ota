@@ -18,7 +18,7 @@ updateTitles: function(dates) {
             var segment = this.data.segments[i];
             var date = Date.parseDMY(dates ? dates[i] : segment.date);
             var title = segment.rt ? 'обратно' : segment.title;
-            var hdate = date.human(!yearUsed && date.getFullYear() !== year && (yearUsed = true));
+            var hdate = I18n.l((!yearUsed && date.getFullYear() !== year && (yearUsed = true)) ? 'date.formats.human_year' : 'date.formats.human', date);              
             hparts[i] = title.replace(/(^из| в) /g, '$1&nbsp;') + ' ' + hdate.nowrap();
             wparts[i] = title + ' на ' + hdate;
         }
@@ -30,7 +30,7 @@ updateTitles: function(dates) {
         header: hparts.join(', ').capitalize(),
         window: wparts.join(', ')
     };
-    document.title = lang.pageTitle.booking.absorb(this.data.titles.window);
+    document.title = 'Покупка авиабилетов ' + this.data.titles.window;
     $('#results-header .rh-summary').html(this.data.titles.header);
 }
 };

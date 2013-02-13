@@ -82,7 +82,7 @@ load: function() {
     this.request = $.get('/booking/?number=' + this.key, function(content) {
         page.location.set('booking', that.key);
         if (results.data) {
-            page.title.set(lang.pageTitle.booking.absorb(results.data.titles.window));
+            page.title.set(I18n.t('page.booking', {title: results.data.titles.window}));
         }
         results.header.edit.hide();
         results.header.select.show();
@@ -140,8 +140,7 @@ comparePrices: function() {
     }
 },
 processPrice: function(context, dp) {
-    var cur = lang.currencies['RUR'];
-    var sum = Math.abs(dp).decline(cur[0], cur[1], cur[2]);
+    var sum = I18n.t('currencies.RUR', {count: Math.abs(dp)});
     var content = context.find('.bfnp-content');
     content.html(content.html().absorb(dp > 0 ? 'дороже' : 'дешевле', sum));
 },
@@ -175,7 +174,7 @@ hide: function() {
     results.header.edit.show();
     results.content.el.show();
     $w.scrollTop(this.offer.details.offset().top - offset);
-    page.title.set(lang.pageTitle.results.absorb(results.data.titles.window));
+    page.title.set(I18n.t('page.results', {title: results.data.titles.window}));
     page.location.set('booking');
     trackPage('/#' + page.location.hash.replace('#', ''));
     delete this.offer;
