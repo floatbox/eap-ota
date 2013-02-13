@@ -107,7 +107,7 @@
 <% locations_title[:parts] = [] %>
 <% locations_title[:parts] << t('filters.cities.title') if locations_title[:cities] %>
 <% locations_title[:parts] << t('filters.airports.title') if locations_title[:airports] %>
-<p class="latent rfg-label"><%= locations_title[:parts].join(t('filters.and')) %></p>
+<p class="latent rfg-label"><%= locations_title[:parts].join(t('nbsp_and')) %></p>
 </div>
 
 <div class="rf-data" id="rfg-carriers">

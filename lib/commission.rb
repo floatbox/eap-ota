@@ -505,8 +505,18 @@ commission "0%/0%"
 carrier "AB", "AIR BERLIN"
 ########################################
 
-example 'cdgsvo svocdg'
-example 'svocdg'
+example 'cdgsvo/c svocdg/i'
+example 'cdgsvo/d svocdg/j'
+example 'cdgsvo/y svocdg/b'
+example 'cdgsvo/h svocdg/k'
+strt_date "01.02.2013"
+expr_date "30.04.2013"
+agent "С 01.02.13г.по 30.04.13г. 5% по опубл. тарифам по классам C, D, J, I  на рейсы AВ; + то же самое на YBHK "
+subagent "С 01.02.13г.по 30.04.13г. 3% по опубл. тарифам по классам C, D, J, I на рейсы AВ;"
+subclasses "CDJIYBHK"
+commission "5%/3%"
+
+example 'cdgfra/m fracdg/s'
 expr_date "28.02.2013"
 agent    "5% по всем направлениям через DTT"
 subagent "3% по всем направлениям через DTT"
@@ -517,9 +527,9 @@ commission "5%/3%"
  
 # example 'cdgsvo svocdg'
 # example 'cdgsvo/HG svocdg/HG'
-strt_date "16.12.2012"
-agent "С 16.12.12г. 1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
-subagent "С 16.12.12г. 5 коп с билета по опубл. тарифам на рейсы AB"
+strt_date "01.02.2012"
+agent "1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
+subagent "5 коп с билета по опубл. тарифам на рейсы AB"
 disabled "на dtt выгоднее"
 commission "1/0.05"
 
@@ -699,16 +709,23 @@ commission "1%/0.5%"
 carrier "BT", "AIR BALTIC"
 ########################################
 
-example 'svocdg'
-example 'svocdg cdgsvo/ab'
-agent    "1 руб. с билета по всем опубл. тарифам на собств. рейсы BT и рейсы Interline с участком BT"
-subagent "50 коп с билета на рейсы BT"
-interline :no, :yes
-our_markup "20"
-commission "1/0.5"
+example 'svocdg cdgsvo'
+strt_date "05.02.2013"
+expr_date "31.05.2013"
+agent "5% от суммы тарифа на собств.рейсы BT и на стоке Air Baltic (657) при условии:"
+agent "1. Тарифы «Бизнес» - все классы бронирования;
+2. Тарифы «Эконом Флекс» - все классы бронирования, основание тарифа имеет окончание «FLEX»;
+3. Тарифы «Эконом» - все классы бронирования, основание тарифа имеет окончание «PL»;
+4. Тарифы «Корпоративный Бизнес» и «Корпоративный Эконом» - все классы бронирования."
+subagent "3% от суммы тарифа на собств.рейсы BT и на стоке Air Baltic (657) при условии:"
+# не профилирую пока
+commission "5%/3%"
 
-example 'cdgsvo/ab'
-no_commission
+example 'svocdg cdgsvo/ab'
+agent "1 руб. с билета по всем опубл. тарифам на собств. рейсы BT и рейсы Interline с участком BT"
+subagent "50 КОП. с билета по всем опубл. тарифам на собств. рейсы BT и рейсы Interline с участком BT +2% сбор АЦ"
+interline :yes
+commission "1/0.5"
 
 carrier "CA", "AIR CHINA"
 ########################################
@@ -883,7 +900,7 @@ example 'svojfk/i jfksvo/s'
 agent "10%"
 subagent "8%"
 subclasses "SIQKLUT"
-check { includes_only(country_iatas.first, "RU") and includes(country_iatas, "US") }
+check { includes_only(country_iatas.first, 'RU') and includes_only(country_iatas, 'RU US') }
 ticketing_method "downtown"
 discount "7.5%"
 commission "10%/8%"
@@ -992,17 +1009,16 @@ carrier "EY", "ETIHAD AIRWAYS"
 ########################################
 
 example 'svocdg'
-agent   "5% от опубл. тарифов на собств. рейсы EY (В договоре Interline не прописан.)"
-subagent "3,5% от опубл. тарифов на собств. рейсы EY"
-discount "3%"
-commission "5%/3.5%"
+strt_date "11.02.2013"
+agent   "1 Евро с билета за продажи авиаперевозок на рейсы EY по веб-тарифам"
+subagent "Предположительно 5 рублей"
+commission "1eur/5"
 
 example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-discount "3%"
-commission "5%/3.5%"
+commission "1/0"
 
 carrier "F7", "FLY BABOO (РИНГ АВИА)"
 ########################################

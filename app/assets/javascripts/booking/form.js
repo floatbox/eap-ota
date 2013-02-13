@@ -579,7 +579,7 @@ initNames: function() {
         that.processNames();
         return name.toUpperCase();
     };
-    this.controls.push(this.firstname, this.lastname);
+    this.controls.push(this.lastname, this.firstname);
 },
 processNames: function() {
     var fng = this.firstname.gender;

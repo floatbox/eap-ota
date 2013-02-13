@@ -41,10 +41,9 @@ booking.load = function(number, price_changed) {
     }, function(content) {
         window.location.hash = number;
         that.view(content);
-        var units = lang.currencies.RUR;
-        var price = Number(that.content.find('.bf-newprice').attr('data-price')).decline(units[0], units[1], units[2]);
+        var price = I18n.t('currencies.RUR', {count: Number(that.content.find('.bf-newprice').attr('data-price'))});
         var button = $('#obb-template');
-        button.find('.obb-title').html(lang.price.buy.absorb(price)).click(function() {
+        button.find('.obb-title').html(I18n.t('offer.price.buy').absorb(price)).click(function() {
             $w.smoothScrollTo(that.form.el.offset().top);
             $w.queue(function(next) {
                 $('#bfp0-last-name').focus();

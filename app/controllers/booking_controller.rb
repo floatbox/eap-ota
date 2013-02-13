@@ -1,5 +1,6 @@
 # encoding: utf-8
 class BookingController < ApplicationController
+  include BookingEssentials
   protect_from_forgery :except => :confirm_3ds
   before_filter :log_referrer, :only => [:api_redirect, :api_booking, :rambler_booking]
   before_filter :log_user_agent
@@ -14,49 +15,14 @@ class BookingController < ApplicationController
   #   "marker"=>"",
   #   "variant_id"=>"1"
   def preliminary_booking
-
-    if Conf.site.forbidden_booking
-      render :json => {:success => false}
-      return
-    end
-
-    @search = PricerForm.load_from_cache(params[:query_key])
-    #set_search_context_for_airbrake
-    recommendation = Recommendation.deserialize(params[:recommendation])
-    original_booking_classes = recommendation.booking_classes
-    track_partner(params[:partner], params[:marker])
-    strategy = Strategy.select( :rec => recommendation, :search => @search )
-
-    StatCounters.inc %W[enter.preliminary_booking.total]
-    StatCounters.inc %W[enter.preliminary_booking.#{partner}.total] if partner
-
-    @destination = get_destination
-    StatCounters.d_inc @destination, %W[enter.api.total] if @destination
-    StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if @destination && partner
-    # поправка на неопределенный @destination что бы сходились счетчики
-    StatCounters.inc %W[enter.preliminary_booking.#{partner}.bad_destination] if !@destination && partner
-
-    unless strategy.check_price_and_availability
-      render :json => {:success => false}
-    else
-      order_form = OrderForm.new(
-        :recommendation => recommendation,
-        :people_count => @search.real_people_count,
-        :variant_id => params[:variant_id],
-        :query_key => @search.query_key,
-        :partner => partner,
-        :marker => marker
-      )
-      order_form.save_to_cache
+    if preliminary_booking_result(Conf.amadeus.forbid_class_changing)
       render :json => {
         :success => true,
-        :number => order_form.number,
-        :changed_booking_classes => (original_booking_classes != recommendation.booking_classes),
-        :declared_price => recommendation.declared_price
+        :number => @order_form.number,
+        :declared_price => @recommendation.declared_price
         }
-
-      StatCounters.inc %W[enter.preliminary_booking.success]
-      StatCounters.inc %W[enter.preliminary_booking.#{partner}.success] if partner
+    else
+      render :json => {:success => false}
     end
   end
 
@@ -70,13 +36,14 @@ class BookingController < ApplicationController
     @partner = @search.partner
     @destination = get_destination
 
+    StatCounters.inc %W[enter.api.success]
+
     if is_mobile_device? && !is_tablet_device?
       render 'variant_iphone'
     else
       render 'variant'
     end
 
-    StatCounters.inc %W[enter.api.success]
   ensure
     StatCounters.inc %W[enter.api.total]
   end
@@ -143,89 +110,23 @@ class BookingController < ApplicationController
   end
 
   def pay
-    if Conf.site.forbidden_sale
-      StatCounters.inc %W[pay.errors.forbidden]
+
+    case pay_result
+    when :forbidden_sale
       render :partial => 'forbidden_sale'
-      return
-    end
-
-    @order_form = OrderForm.load_from_cache(params[:order][:number])
-    @order_form.people_attributes = params[:person_attributes]
-    @order_form.update_attributes(params[:order])
-    @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
-
-    if @order_form.counts_contradiction
-      if @order_form.update_price_and_counts
-        render :partial => 'newprice'
-      else
-        render :partial => 'failed_booking'
-      end
-      return
-    end
-
-    if !@order_form.valid?
-      StatCounters.inc %W[pay.errors.form]
-      logger.info "Pay: invalid order: #{@order_form.errors_hash.inspect}"
-      render :json => {:errors => @order_form.errors_hash}
-      return
-    end
-
-    strategy = Strategy.select( :rec => @order_form.recommendation, :order_form => @order_form )
-    booking_status = strategy.create_booking
-
-    if booking_status == :failed
-      StatCounters.inc %W[pay.errors.booking]
-      render :partial => 'failed_booking'
-      return
-    elsif booking_status == :price_changed
+    when :new_price
       render :partial => 'newprice'
-      return
-    end
-
-    unless @order_form.payment_type == 'card'
-      StatCounters.inc %W[pay.success.total pay.success.cash]
-      logger.info "Pay: booking successful, payment: cash"
+    when :failed_booking
+      render :partial => 'failed_booking'
+    when :invalid_data
+      render :json => {:errors => @order_form.errors_hash}
+    when :ok
       render :partial => 'success', :locals => {:pnr_path => show_notice_path(:id => @order_form.pnr_number), :pnr_number => @order_form.pnr_number}
-      return
-    end
-
-    custom_fields = PaymentCustomFields.new(
-      ip: request.remote_ip,
-      order: @order_form.order,
-      order_form: @order_form
-    )
-    payment_response = @order_form.order.block_money(@order_form.card, custom_fields)
-
-    if payment_response.success?
-      logger.info "Pay: payment and booking successful"
-
-      unless strategy.delayed_ticketing?
-        logger.info "Pay: ticketing"
-        unless strategy.ticket
-          StatCounters.inc %W[pay.errors.ticketing]
-          logger.info "Pay: ticketing failed"
-          @order_form.order.unblock!
-          render :partial => 'failed_booking'
-          return
-        end
-      end
-      StatCounters.inc %W[pay.success.total pay.success.card]
-      render :partial => 'success', :locals => {:pnr_path => show_notice_path(:id => @order_form.pnr_number), :pnr_number => @order_form.pnr_number}
-
-    elsif payment_response.threeds?
-      StatCounters.inc %W[pay.3ds.requests]
-      logger.info "Pay: payment system requested 3D-Secure authorization"
-      render :partial => 'threeds', :locals => {:payment => payment_response}
-
-    else # payment_response failed
-      strategy.cancel
-      StatCounters.inc %W[pay.errors.payment]
-      # FIXME ну и почему не сработало?
-      logger.info "Pay: payment failed"
+    when :threeds
+      render :partial => 'threeds', :locals => {:payment => @payment_response}
+    when :failed_payment
       render :partial => 'failed_payment'
     end
-  ensure
-    StatCounters.inc %W[pay.total]
   end
 
   # Payture: params['PaRes'], params['MD']
