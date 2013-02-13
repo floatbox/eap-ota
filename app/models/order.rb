@@ -484,6 +484,26 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def original_price_fare
+    if sold_tickets.present?
+      sold_tickets.every.original_price_fare.sum
+    else
+      nil
+    end
+  rescue
+    nil
+  end
+
+  def original_price_tax
+    if sold_tickets.present?
+      sold_tickets.every.original_price_tax.sum
+    else
+      nil
+    end
+  rescue
+    nil
+  end
+
   def money_blocked!
     update_attribute(:fix_price, true)
     update_attribute(:payment_status, 'blocked')
