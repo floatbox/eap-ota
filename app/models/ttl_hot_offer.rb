@@ -109,7 +109,6 @@ class TtlHotOffer
   end
 
   def search= val
-    logger.info "Set @search for HotOffer"
     @search = val
     self.for_stats_only = @search.people_count.values.sum > 1
     self.description = @search.human_lite

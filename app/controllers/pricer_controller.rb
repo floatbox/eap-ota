@@ -6,11 +6,13 @@ class PricerController < ApplicationController
 
   def pricer
     if @search.valid?
-      @destination = get_destination
+      @destination = Destination.get_by_search @search
       @recommendations = Mux.new(:admin_user => admin_user).async_pricer(@search)
+      if (@destination && @recommendations.present? && !admin_user && !corporate_mode?)
+        @destination.move_average_price @search, @recommendations.first, @query_key
+      end
       @locations = @search.human_locations
-      hot_offer = create_hot_offer
-      @average_price = hot_offer.destination.average_price * @search.people_count[:adults] if hot_offer
+      @average_price = @destination.average_price * @search.people_count[:adults] if @destination
       StatCounters.d_inc @destination, %W[search.total search.pricer.total] if @destination
     end
     render :partial => 'recommendations'
@@ -39,9 +41,9 @@ class PricerController < ApplicationController
   end
 
   def price_map
-    hot_offers = []#Rails.cache.fetch("price_map_#{params[:from]}_#{params[:date]}_rt#{params[:rt]}", :expires_in => 3.minutes) do
-        #HotOffer.price_map(params[:from], params[:rt], params[:date])
-    #end
+    hot_offers = Rails.cache.fetch("price_map_#{params[:from]}_#{params[:date]}_rt#{params[:rt]}", :expires_in => 3.minutes) do
+        TtlHotOffer.price_map(params[:from], params[:rt], params[:date])
+    end
     render :json => hot_offers
   end
 
@@ -103,7 +105,7 @@ class PricerController < ApplicationController
     
     if @search.valid?
       @search.save_to_cache
-      @destination = get_destination
+      @destination = Destination.get_by_search @search
       suggested_limit =
         Partner[partner].suggested_limit ||
         Partner.anonymous.suggested_limit ||
@@ -111,7 +113,7 @@ class PricerController < ApplicationController
       logger.info "Suggested limit: #{suggested_limit}"
       @recommendations = Mux.new(:lite => true, :suggested_limit => suggested_limit).pricer(@search)
       @query_key = @search.query_key
-      hot_offer = create_hot_offer
+#      hot_offer = create_hot_offer
       Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))
       StatCounters.inc %W[search.api.success search.api.#{partner}.success]
       StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner}.total] if @destination
@@ -132,31 +134,6 @@ class PricerController < ApplicationController
   end
 
   protected
-
-  def create_hot_offer
-    if (@recommendations.present? && !@search.complex_route? &&
-        @search.people_count.values.sum == @search.people_count[:adults] &&
-        !admin_user &&
-        !corporate_mode? &&
-        ([nil, '', 'Y'].include? @search.cabin) &&
-        @search.segments[0].to_as_object.class == City && @search.segments[0].from_as_object.class == City
-      )
-       HotOffer.create(
-          :code => @query_key,
-          :search => @search,
-          :recommendation => @recommendations.first,
-          :url => (url_for(:action => :index, :controller => :home) + '#' + @query_key),
-          :price => @recommendations.first.price_with_payment_commission / @search.people_count.values.sum)
-    end
-  end
-
-  def get_destination
-    segment = @search.segments[0]
-    return if ([segment.to_as_object.class, segment.from_as_object.class] - [City, Airport]).present? || @search.complex_route?
-    to = segment.to_as_object.class == Airport ? segment.to_as_object.city : segment.to_as_object
-    from = segment.from_as_object.class == Airport ? segment.from_as_object.city : segment.from_as_object
-    Destination.find_or_create_by(:from_iata => from.iata, :to_iata => to.iata , :rt => @search.rt)
-  end
 
   def load_form_from_cache
     StatCounters.inc %W[search.total]
