@@ -113,7 +113,9 @@ class PricerController < ApplicationController
       logger.info "Suggested limit: #{suggested_limit}"
       @recommendations = Mux.new(:lite => true, :suggested_limit => suggested_limit).pricer(@search)
       @query_key = @search.query_key
-#      hot_offer = create_hot_offer
+      if (@destination && @recommendations.present? && !admin_user && !corporate_mode?)
+        @destination.move_average_price @search, @recommendations.first, @query_key
+      end
       Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))
       StatCounters.inc %W[search.api.success search.api.#{partner}.success]
       StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner}.total] if @destination

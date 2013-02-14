@@ -82,7 +82,7 @@ subagent "10% от тарифа на рейсы Перевозчика по вс
 subclasses "FPRJCADSMLVXTNIGWUYHQBKOE"
 ticketing_method "downtown"
 # disabled "срочно вырубаем DTT"
-discount "9.7%"
+discount "9%"
 commission "12%/10%"
 
 # базовое вознаграждение ац
@@ -1066,7 +1066,7 @@ commission "1%/0.5%"
 
 example 'cdgsvo svocdg/ab'
 agent "1% от опубл. тарифов на рейсы Interline с обязательным участием FI."
-subagent "0,5% от опубл. тарифов на рейсы Interline с обязательным участием FI."
+subagent "0,5% от опубл. тарифов на рейсы Interline с обязательным участием FI."
 interline :yes
 check { includes(marketing_carrier_iatas, 'FI') }
 commission "1%/0.5%"
