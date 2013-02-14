@@ -235,17 +235,21 @@ showPrices: function(items) {
         if (item.price > pmax) pmax = item.price;
         this.items.push(label);
     }
-    if (items.length > 1 && !this.pricesMode) {
-        this.bounds = bounds;
+    this.pricesOrigin = new google.maps.LatLng(items[0].from.lat, items[0].from.lng);
+    bounds.extend(this.pricesOrigin);
+    this.bounds = bounds;
+    if (!this.pricesMode) {
         this.fitBounds();
+    }
+    if (this.prices.el.find('.smp-progress').length && !search.dates.el.hasClass('sd-hidden')) {
+        setTimeout(function() {
+            that.slideDown();
+        }, 100);
     }
     if (items.length > 1 && pmin / pmax < 0.95) {
         this.prices.process(pmin, pmax);
     } else {
-        this.prices.link.html('Авиабилеты из Москвы');
-    }
-    if (this.prices.el.find('.smp-progress').length && !search.dates.el.hasClass('sd-hidden')) {
-        this.slideDown();
+        this.prices.link.html('<div class="smpl-content smp-simple">' + I18n.t('search.map.title', {min: Math.floor(pmin).separate()}) + '&nbsp;<span class=\"ruble\">Р</span></div>');
     }
     this.pricesMode = true;
 },
@@ -260,6 +264,7 @@ filterPrices: function(limit) {
             item.$el.show();
         }
     }
+    bounds.extend(this.pricesOrigin);
     this.bounds = bounds;
     this.fitBounds();
 },
@@ -384,7 +389,7 @@ apply: function(offset, filter) {
     }
     this.control.css('left', offset);
     this.selected.css('width', offset);
-    this.value.html(I18n.t('search.map.title', {max: limit.separate()}));
+    this.value.html(I18n.t('search.map.limit', {max: limit.separate()}));
     if (filter) {
         search.map.filterPrices(limit);
     }

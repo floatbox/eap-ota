@@ -32,6 +32,9 @@
     padding-right: 24px;
     background: url(/images/booking/progress-g.gif) no-repeat 100% 0;
 }
+.smp-simple {
+    color: #333;
+}
 .smp-load,
 .smp-expand,
 .smp-collapse {
