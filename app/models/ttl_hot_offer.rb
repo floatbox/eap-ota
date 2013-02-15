@@ -52,7 +52,7 @@ class TtlHotOffer
   end
 
   def create_notifications
-    Subscription.where(:from_iata => from_iata, :to_iata => to_iata, :rt => rt).active.every.create_notice(self) if !for_stats_only && destination.average_price_counter >= 50 && price_variation_percent <= -15
+    Subscription.where(:from_iata => from_iata, :to_iata => to_iata, :rt => rt).active.every.create_notice(self) if !for_stats_only && destination.average_price_counter >= 50 && price_variation_percent <= -20
   end
 
   # не воткнуть ли сюда #actual в цепочку? а то, потенциально, может показать старые предложения
