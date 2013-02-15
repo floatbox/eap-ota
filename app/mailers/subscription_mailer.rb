@@ -11,14 +11,12 @@ class SubscriptionMailer < ActionMailer::Base
   def notice(notice_info)
     @notice = notice_info
     logger.info 'Subscription: sending email ' + @notice[:email]
-
     subject = "#{@notice[:description]} за #{@notice[:price]}, вылет #{@notice[:from_date]}"
 
+    StatCounters.inc %W[subscription.sent]
     mail :to => @notice[:email], :subject => subject do |format|
       format.text
     end
-
-    StatCounters.inc %W[subscription.sent]
   end
 
   private
