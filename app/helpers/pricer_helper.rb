@@ -275,8 +275,8 @@ module PricerHelper
 
   def date_with_dow dmy
     date = Date.strptime(dmy, '%d%m%y')
-    days = ['в понедельник', 'во вторник', 'в среду', 'в четверг', 'в пятницу', 'в субботу' , 'в воскресенье']
-    I18n.l(date, :format => '%e %B') + ', ' + days[date.days_to_week_start]
+    days = t('date.pre_day_names')
+    l(date, :format => :human) + ', ' + days[date.days_to_week_start(start_day = :sunday)]
   end
 
   def human_layovers_count count

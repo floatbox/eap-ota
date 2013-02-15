@@ -31,7 +31,7 @@ makeMonthes: function() {
     this.slider.hide();
     var sample = this.el.find('.sdc-month');
     var date = new Date(this.csnow.getFullYear(), this.csnow.getMonth() - 1, 1);
-    var I18nDate = I18n.t('date');
+    var I18n_Date = I18n.t('date');
     this.monthes = [];
     for (var m = 0; m < 12; m++) {
         date.setMonth(date.getMonth() + 2);
@@ -39,9 +39,9 @@ makeMonthes: function() {
         var mindex = date.getMonth() + 1;
         var month = {
             year: date.getFullYear(),
-            gtitle: I18nDate.month_names[mindex],
-            ntitle: I18nDate.nom_month_names[mindex],
-            ptitle: I18nDate.pre_month_names[mindex],
+            gtitle: I18n_Date.month_names[mindex],
+            ntitle: I18n_Date.nom_month_names[mindex],
+            ptitle: I18n_Date.pre_month_names[mindex],
             length: date.getDate(),
         };
         var MY = date.DMY().substring(2);
@@ -74,7 +74,7 @@ disableDays: function(delay) {
     	d2 = d1 + 1;
     }
     days.slice(0, d2).addClass('disabled');
-    days.eq(d1).addClass('today').prepend('<div class="title">сегодня</div>');
+    days.eq(d1).addClass('today').prepend('<div class="title">' + I18n.t('date.today') + '</div>');
     days.eq(d2).addClass('first');
     var index = {};
     this.days = days.slice(d2).each(function(i) {

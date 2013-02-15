@@ -9,9 +9,9 @@ ru:
       sign: "%{value}\_<span class=\"ruble\">Р</span>"
   date:
     formats:
-      short: '%d %b'
-      human: '%d %B'
-      human_year: '%d %B %Y'
+      short: '%-d %b'
+      human: '%-d %B'
+      human_year: '%-d %B %Y'
       dow: '%A'
     today: 'сегодня'
     day_names: ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота']

@@ -1,6 +1,6 @@
 <div class="os-details" data-flights="<%= segment_id(segment) %>">
 <h4 class="osd-title">
-    <strong class="osdt-main"><%= segment_rt ? t('offer.details.segment_rt') : segment_title(segment) %></strong><% if segment_cabins.length == 1 %> <span class="osdt-hl"><%= human_cabin_ins(segment_cabins.first) %></span><% end %> <%= date_with_dow segment.flights.first.departure_date %><% if segment.layovers? %>, <%= with_layovers(segment) %><% end %>
+    <strong class="osdt-main"><%= segment_rt ? t('offer.details.segment_rt') : segment_title(segment) %></strong><% if segment_cabins.length == 1 %> <span class="osdt-hl"><%= human_cabin_ins(segment_cabins.first) %></span><% end %> <%= raw date_with_dow segment.flights.first.departure_date %><% if segment.layovers? %>, <%= with_layovers(segment) %><% end %>
 </h4>
 <% segment_cabins = [] if segment_cabins.length < 2 %>
 <% segment_carrier = primary_carrier(segment) %>

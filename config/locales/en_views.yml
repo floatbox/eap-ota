@@ -6,6 +6,17 @@ en:
       one: "%{count}\_Ruble"
       other: "%{count}\_Rubles"
       sign: "%{value}\_<span class=\"ruble\">Р</span>"
+  date:
+    formats:
+      short: '%-d %b'
+      human: '%B %-d'
+      human_year: '%-d %B, %Y'
+      dow: '%A'
+    today: "today"
+    pre_day_names: ['on&nbsp;Sunday', 'on&nbsp;Monday', 'on&nbsp;Tuesday', 'on&nbsp;Wednesday', 'on&nbsp;Thursday', 'on&nbsp;Friday', 'on&nbsp;Saturday']
+    nom_month_names: [~, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    pre_month_names: [~, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    abb: [~, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
   time:
     h: "%{h}\_h"
     min: "%{m}\_min"
@@ -36,14 +47,6 @@ en:
       collapse: "Collapse map"
       loading: "Searching..."
       empty: "Nothing found :-("
-    dates:
-      week: "Mon Tue Wed Thu Fri Sat Sun"
-      today: "today"
-      monthes:
-        nom: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-        gen: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-        pre: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-        abb: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     options:
       adults:
         title: "Adults"
