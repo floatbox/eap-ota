@@ -41,6 +41,10 @@ class Destination
 
   end
 
+  def average_interval
+    200
+  end
+
   def move_average_price search, recommendation, query_key
     if (!search.complex_route? &&
         search.people_count.values.sum == search.people_count[:adults] &&
@@ -51,7 +55,7 @@ class Destination
 
       if average_price && average_price > 0 && average_price_counter > 0
         logger.info "Exist Destination"
-        self.average_price = ((average_price_counter - 1)*average_price + price).to_f/average_price_counter
+        self.average_price = ((average_interval - 1)*average_price + price).to_f/average_interval.to_f
       else
         logger.info "New Destination"
         self.average_price = price
