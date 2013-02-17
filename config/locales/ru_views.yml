@@ -1,4 +1,12 @@
 ru:
+  support:
+    # Array#to_sentence
+    array:
+      # если слов два
+      two_words_connector: " и\_"
+      # если слов больше двух
+      words_connector: ", "
+      last_word_connector: " и\_"
   timeout: "Не удалось соединиться с сервером"
   nbsp_and: " и\_"
   currencies:

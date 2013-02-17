@@ -207,12 +207,12 @@ module PricerHelper
   end
 
   def with_layovers segment
-    layovers = segment.flights[0..-2].map {|flight| dict(flight.arrival.city, :in) }.to_sentence(:last_word_connector => t('nbsp_and'))
+    layovers = segment.flights[0..-2].map {|flight| dict(flight.arrival.city, :in) }.to_sentence
     t('offer.details.layovers', :count => segment.layover_count, :cities => layovers).html_safe
   end
 
   def technical_stops flight
-    stops = flight.technical_stops.map {|tstop| tstop.airport.city.case_in }.to_sentence(:last_word_connector => t('nbsp_and'))
+    stops = flight.technical_stops.map {|tstop| tstop.airport.city.case_in }.to_sentence
     t('offer.details.stopovers', :count => flight.technical_stop_count, :cities => stops).html_safe
   end
 
@@ -285,11 +285,11 @@ module PricerHelper
   end
 
   def layovers_in flights
-    flights.map {|flight| dict(flight.arrival.city, :in) }.to_sentence(:last_word_connector => t('nbsp_and')).html_safe
+    flights.map {|flight| dict(flight.arrival.city, :in) }.to_sentence.html_safe
   end
 
   def technical_stops_in tstops
-    tstops.map {|tstop| dict(tstop.airport.city, :in) }.to_sentence(:last_word_connector => t('nbsp_and')).html_safe
+    tstops.map {|tstop| dict(tstop.airport.city, :in) }.to_sentence.html_safe
   end
 
   def segments_departure variant
