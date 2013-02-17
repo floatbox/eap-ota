@@ -197,7 +197,7 @@ module PricerHelper
     result = []
     durations = segment.layover_durations
     segment.layovers.each_with_index{|layover, i|
-      result << "#{ short_human_duration(durations[i]) } #{ dict(layover.city, :in) }"
+      result << "#{ short_human_duration(durations[i]) } #{ dict(layover.city, :at) }"
     }
     result.to_sentence
   end  
@@ -207,7 +207,7 @@ module PricerHelper
   end
 
   def with_layovers segment
-    layovers = segment.flights[0..-2].map {|flight| dict(flight.arrival.city, :in) }.to_sentence
+    layovers = segment.flights[0..-2].map {|flight| dict(flight.arrival.city, :at) }.to_sentence
     t('offer.details.layovers', :count => segment.layover_count, :cities => layovers).html_safe
   end
 
@@ -285,11 +285,11 @@ module PricerHelper
   end
 
   def layovers_in flights
-    flights.map {|flight| dict(flight.arrival.city, :in) }.to_sentence.html_safe
+    flights.map {|flight| dict(flight.arrival.city, :at) }.to_sentence.html_safe
   end
 
   def technical_stops_in tstops
-    tstops.map {|tstop| dict(tstop.airport.city, :in) }.to_sentence.html_safe
+    tstops.map {|tstop| dict(tstop.airport.city, :at) }.to_sentence.html_safe
   end
 
   def segments_departure variant
