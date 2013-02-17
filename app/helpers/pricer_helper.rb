@@ -276,7 +276,7 @@ module PricerHelper
   def date_with_dow dmy
     date = Date.strptime(dmy, '%d%m%y')
     days = t('date.pre_day_names')
-    l(date, :format => :human) + ', ' + days[date.days_to_week_start(start_day = :sunday)]
+    l(date, :format => :human) + ', ' + days[date.wday]
   end
 
   def human_layovers_count count
