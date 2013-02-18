@@ -101,7 +101,7 @@ class Ticket < ActiveRecord::Base
 
   def price_fare_base
     @price_fare_base = BigDecimal(@price_fare_base) if @price_fare_base && @price_fare_base.class == String
-    @price_fare_base ||= if parent
+    @price_fare_base ||= if parent && parent.created_at && created_at  && parent.created_at < created_at
       price_fare + parent.price_fare_base
     else
       price_fare
@@ -141,7 +141,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def update_parent_status
-    parent.update_status
+    parent.update_status if parent.created_at && created_at && parent.created_at < created_at
   end
 
   def update_status
@@ -246,6 +246,7 @@ class Ticket < ActiveRecord::Base
     self.price_consolidator *= -1 if price_consolidator > 0
     self.commission_subagent = 0 if price_fare != -parent.price_fare && !parent.commission_subagent.percentage?
     self.commission_agent = 0 if price_fare != -parent.price_fare && !parent.commission_agent.percentage?
+    self.corrected_price = price_with_payment_commission
   end
 
   def copy_commissions_from_order

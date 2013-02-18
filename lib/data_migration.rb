@@ -6,6 +6,10 @@ require 'csv'
 
 module DataMigration
 
+  def self.set_price_with_payment_commission_in_tickets
+    Order.order('id DESC').every.update_price_with_payment_commission_in_tickets
+  end
+
   def self.set_status_in_refunds
     Ticket.update_all('status = "processed"', 'kind = "refund" AND processed = 1')
     Ticket.update_all('status = "pending"', 'kind = "refund" AND processed = 0')
