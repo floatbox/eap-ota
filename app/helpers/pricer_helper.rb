@@ -192,27 +192,24 @@ module PricerHelper
     end
     parts
   end  
-  
+
   def human_layovers_large segment
-    result = []
-    durations = segment.layover_durations
-    segment.layovers.each_with_index{|layover, i|
-      result << "#{ short_human_duration(durations[i]) } #{ dict(layover.city, :in) }"
-    }
-    result.to_sentence
-  end  
+    segment.layovers.zip( segment.layover_durations ).map do |layover, duration|
+      "#{ short_human_duration(duration) } #{ dict(layover.city, :in) }"
+    end.to_sentence
+  end
 
   def human_layovers_medium segment
     t('offer.summary.through', :cities => segment.layovers.map{|layover| layover.city.case_to.gsub(/^\S+ /, '') }.to_sentence)
   end
 
   def with_layovers segment
-    layovers = segment.flights[0..-2].map {|flight| dict(flight.arrival.city, :in) }.to_sentence
+    layovers = dict( segment.layovers.map(&:city), :in )
     t('offer.details.layovers', :count => segment.layover_count, :cities => layovers).html_safe
   end
 
   def technical_stops flight
-    stops = flight.technical_stops.map {|tstop| tstop.airport.city.case_in }.to_sentence
+    stops = dict( flight.technical_stops.map(&:city), :in )
     t('offer.details.stopovers', :count => flight.technical_stop_count, :cities => stops).html_safe
   end
 
@@ -284,12 +281,14 @@ module PricerHelper
     count == 1 ? 'пересадкой' : (numbers[count - 1] + ' пересадками —')
   end
 
+  # FIXME not used anymore
   def layovers_in flights
-    flights.map {|flight| dict(flight.arrival.city, :in) }.to_sentence.html_safe
+    dict( flights.map(&:arrival_city), :in )
   end
 
+  # FIXME not used anymore
   def technical_stops_in tstops
-    tstops.map {|tstop| dict(tstop.airport.city, :in) }.to_sentence.html_safe
+    dict( tstops.map(&:city), :in )
   end
 
   def segments_departure variant
