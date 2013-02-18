@@ -165,7 +165,7 @@ subagent "13% от тарифа на рейсы UN по всем тарифам 
 subclasses "FPRJCADSM"
 check { includes_only(country_iatas.first, 'RU') and includes(city_iatas, 'RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON LYS LIS') }
 important!
-discount "12.5%"
+discount "10%"
 commission "15%/13%"
 
 # код-шер с ZI прямые из столиц
