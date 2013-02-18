@@ -197,7 +197,7 @@ module PricerHelper
     result = []
     durations = segment.layover_durations
     segment.layovers.each_with_index{|layover, i|
-      result << "#{ short_human_duration(durations[i]) } #{ dict(layover.city, :in) }"
+      result << "#{ short_human_duration(durations[i]) } #{ dict(layover.city, :at) }"
     }
     result.to_sentence
   end  
@@ -207,12 +207,12 @@ module PricerHelper
   end
 
   def with_layovers segment
-    layovers = segment.flights[0..-2].map {|flight| dict(flight.arrival.city, :in) }.to_sentence(:last_word_connector => t('nbsp_and'))
+    layovers = segment.flights[0..-2].map {|flight| dict(flight.arrival.city, :at) }.to_sentence
     t('offer.details.layovers', :count => segment.layover_count, :cities => layovers).html_safe
   end
 
   def technical_stops flight
-    stops = flight.technical_stops.map {|tstop| tstop.airport.city.case_in }.to_sentence(:last_word_connector => t('nbsp_and'))
+    stops = flight.technical_stops.map {|tstop| tstop.airport.city.case_in }.to_sentence
     t('offer.details.stopovers', :count => flight.technical_stop_count, :cities => stops).html_safe
   end
 
@@ -276,7 +276,7 @@ module PricerHelper
   def date_with_dow dmy
     date = Date.strptime(dmy, '%d%m%y')
     days = t('date.pre_day_names')
-    l(date, :format => :human) + ', ' + days[date.days_to_week_start(start_day = :sunday)]
+    l(date, :format => :human) + ', ' + days[date.wday]
   end
 
   def human_layovers_count count
@@ -285,11 +285,11 @@ module PricerHelper
   end
 
   def layovers_in flights
-    flights.map {|flight| dict(flight.arrival.city, :in) }.to_sentence(:last_word_connector => t('nbsp_and')).html_safe
+    flights.map {|flight| dict(flight.arrival.city, :at) }.to_sentence.html_safe
   end
 
   def technical_stops_in tstops
-    tstops.map {|tstop| dict(tstop.airport.city, :in) }.to_sentence(:last_word_connector => t('nbsp_and')).html_safe
+    tstops.map {|tstop| dict(tstop.airport.city, :at) }.to_sentence.html_safe
   end
 
   def segments_departure variant

@@ -13,7 +13,7 @@ module TranslationHelper
           case format
           when :name
             object.name_ru
-          when :from, :to, :in
+          when :from, :to, :at
             object.send "case_#{format}"
           end
         when Airplane
@@ -34,7 +34,7 @@ module TranslationHelper
           case format
           when :name
             object.name_en
-          when :from, :to, :in
+          when :from, :to, :at
             "#{format} #{object.name_en}"
           end
         when Airplane
