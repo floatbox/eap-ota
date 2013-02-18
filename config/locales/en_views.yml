@@ -321,7 +321,7 @@ en:
         description: "Preferable delivery time will help us to plan better. We deliver only on Mon–Fri from 10AM till 7PM."
       office:
         label: "At our office"
-        description: "You can visit us from 11AM to 8PM, Monday to Friday. Our office is in Moscow, Rochdelskaya street, 15. Please take any identity document and call +7 495 660-35-20 one hour before your visit so we could prepare everything necessary for you."
+        description: "You can visit us from 11AM to 7PM, Monday to Friday. Our office is in Moscow, Rochdelskaya street, 15. Please take any identity document and call +7 495 660-35-20 one hour before your visit so we could prepare everything necessary for you."
         contacts: "Detailed contact information and map"
     price:
       total_card: "Total price —"
