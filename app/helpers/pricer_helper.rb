@@ -14,8 +14,6 @@ module PricerHelper
       human_minutes = t('time.minutes', :count => minutes)
     end
     [human_hours, human_minutes].compact.join(' ').html_safe
-  rescue I18n::InvalidPluralizationData
-    raise "invalid pluralization, again. locale: #{I18n.locale.inspect}. duration: #{duration.inspect}, #{hours.class}, #{minutes.class}"
   end
 
   def fmt_time time
