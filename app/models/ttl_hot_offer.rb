@@ -79,7 +79,7 @@ class TtlHotOffer
       :date1.gte => fromdate,
       :date1.lt => todate,
       :created_at.gte => Date.today - searchdays
-      ).and(:price_variation_percent.lt => - 10).order_by(:price_variation_percent => :asc)
+      ).and(:price_variation_percent.lt => - 20).order_by(:price_variation_percent => :asc)
     offers = offers.where(:from_iata => from_iata) if from_iata
     offers = offers.where(:rt => rt) if rt
     offers = offers.where(:date2.lt => todate) if rt.to_i == 1
