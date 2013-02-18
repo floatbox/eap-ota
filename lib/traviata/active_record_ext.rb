@@ -97,13 +97,8 @@ module Traviata
         proper_from.presence || morpher_from.presence || 'из ' + nominative
       end
 
-      # FIXME переименовать колонку. На самом деле, in -> at
       def case_in
         proper_in.presence || morpher_in.presence || 'в ' + nominative
-      end
-
-      def case_at
-        case_in
       end
 
       def case_to=(str)
