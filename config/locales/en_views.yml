@@ -131,6 +131,7 @@ en:
     arv: "Arrival %{to}"
     and: " and "
     time:
+      title: "Время вылета и прилета"
       any: "anytime"
       t0: "night"
       t1: "morning"
@@ -144,6 +145,7 @@ en:
       title: "airports"
       dpt: "from any airport"
       arv: "to any airport"
+    carriers_and_planes: "Авиакомпании и самолеты"
     alliance:
       title: "Airline allince"
       any: "any"
@@ -153,6 +155,7 @@ en:
     aircraft:
       title: "Plane type"
       any: "any"
+    layovers: "Пересадки"
     reset:
       one: 'Сбросить %{count} выбранный фильтр'
       other: 'Сбросить %{count} выбранных фильтров'
@@ -343,6 +346,7 @@ en:
     farerules:
       title: "Fare application rules"
       restrictions: "Attention! In case of passenger sickness, visa refusal or other circumstances, refund/exchange is impossible without penalties. Refund/exchange fees are calculated according to airline fare rules. When the ticket combines different fare classes, the most strict limitations are applied to the entire itinerary."
+      service: "При возврате в\_дополнение к\_возможным штрафным санкциям авиакомпании по\_правилам тарифа, взымается сервисный сбор — 600\_рублей за\_пассажира."
       cancellation: "Tickets are non-transferable. In case of failure to appear on the flight, the airline can cancel all subsequent segments of the itinerary."
       fare: "Fare"
     validation:
@@ -428,4 +432,4 @@ en:
       again: "Попробовать ещё раз"
     forbidden:
       title: "В связи с плановыми техническими работами мы не можем оформить вашу покупку прямо сейчас."
-      description: "Пожалуйста, не закрывайте страницу и нажмите на кнопку «Купить» через 10 минут. Приносим извинения за задержку."      
+      description: "Пожалуйста, не закрывайте страницу и нажмите на кнопку «Купить» через 10 минут. Приносим извинения за задержку."
