@@ -14,11 +14,6 @@ init: function() {
     preloadImages('/images/results/progress.gif', '/images/results/fshadow.png', '/images/results/slider.png');
     preloadImages('/images/booking/progress-w.gif', '/images/booking/progress-b.gif');
 
-    this.header.find('.ph-lang .link').on('click', function() {
-        Cookie('language', $(this).text() === 'English' ? 'en' : undefined, new Date(2015, 0, 1));
-        window.location.reload(true);
-    });
-    
     if (this.location.booking) {
         this.restoreBooking(this.location.search, this.location.booking);
     } else if (this.location.search) {

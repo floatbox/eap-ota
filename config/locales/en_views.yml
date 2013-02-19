@@ -87,14 +87,9 @@ en:
       find: "Find flights"
       new: "New search"
       all: "All flight options"
-      adults: ["вдвоем", "втроем", "вчетвером", "впятером", "вшестером", "всемером", "ввосьмером"]
-      with: ["двумя", "тремя", "четырьмя", "пятью", "шестью", "семью"]
-      children:
-        one: "с\_ребенком"
-        few: "c\_%{with} детьми"
-      infants:
-        one: "с\_младенцем"
-        few: "c\_%{with} младенцами"
+      adults: ["two adults", "three adults", "four adults", "five adults", "six adults", "seven adults", "eight adults"]
+      children: ["one child", "two children", "three children", "four children", "five children", "six children", "seven children", "eight children"]
+      infants: ["one infant", "two infants", "three infants", "four infants", "five infants", "six infants", "seven infants", "eight infants"]
       cabin:
         Y: ""
         C: "бизнес-классом"
@@ -158,6 +153,9 @@ en:
     aircraft:
       title: "Plane type"
       any: "any"
+    reset:
+      one: 'Сбросить %{count} выбранный фильтр'
+      other: 'Сбросить %{count} выбранных фильтров'
   subscription:
     title: "Subscribe for fare alert"
     description: "If you don't care about the dates, we will notify via email you when cheap flights %{cities} will be available."
@@ -230,6 +228,9 @@ en:
       text: "%{seats} available for this fare. Don't put off your booking."
       one: "%{count} seat"
       other: "%{count} seats"
+  prebooking:
+    progress: 'Проверяем доступность мест на вашем перелете'
+    available: 'Все отлично, места есть'
   booking:
     title: "Your flight"
     passengers:
@@ -402,3 +403,29 @@ en:
         improper: "Bank card is expired."
       address:
         empty: "{delivery address}"
+    success:
+      allright: "Все отлично!"
+      card:
+        one: "Ваш билет оплачен."
+        few: "Ваши билеты оплачены."
+      cash:
+        one: "Ваш билет забронирован."
+        few: "Ваши билеты забронированы."
+      confirmation: "Подтверждение будет отправлено на\_ваш электронный адрес в\_течение десяти минут."
+      whattodo:
+        link: "Что делать, если ничего не пришло?"
+        hint: "Если вы&nbsp;не&nbsp;получили письмо с&nbsp;подтверждением бронирования в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, то&nbsp;напишите нам (<a href=\"mailto:operator@eviterra.com\">operator@eviterra.com</a>) или позвоните <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся."
+      pnr: "Номер вашей брони — %{number}"
+    failed_booking:
+      title: "Не удалось забронировать этот вариант"
+      description: "Так иногда бывает, потому что авиакомпания не&nbsp;может подтвердить наличие мест на&nbsp;этот рейс по&nbsp;этому тарифу. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Выберите %{other}."
+      other: "другой вариант"
+    failed_payment:
+      title: "Что-то пошло не так. Скорее всего, банк отклонил попытку платежа по вашей карте."
+      reasons: "<strong>Это могло произойти по одной из нескольких причин:</strong> вы неверно ввели данные карты, либо на счете карты нет достаточной суммы, либо банк запретил для вашей карты транзакции в интернете или установил лимит на такие транзакции."
+      whattodo: "<strong>Что можно сделать:</strong> еще раз проверить, правильно ли введены данные, использовать другую карту или связаться с банком, выдавшим карту (обычно телефон банка указан на карте и работает круглосуточно)."
+      support: "Если вы абсолютно уверены, что отказ произошел не по вышеуказнным причинам и это у нас что-то не работает, свяжитесь с нами по электронной почте <a href=\"mailto:support@eviterra.com\">support@eviterra.com</a>."
+      again: "Попробовать ещё раз"
+    forbidden:
+      title: "В связи с плановыми техническими работами мы не можем оформить вашу покупку прямо сейчас."
+      description: "Пожалуйста, не закрывайте страницу и нажмите на кнопку «Купить» через 10 минут. Приносим извинения за задержку."      

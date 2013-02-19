@@ -62,13 +62,38 @@ module TranslationHelper
     return translation
   end
   
+  # Sort by localized name
   def sort_by_name(items)
     case I18n.locale
     when :ru
-    
+      case items.first
+      when Carrier
+        return items.sort_by(&:ru_shortname)
+      else
+        return items.sort_by(&:name)
+      end
     when :en
-    
+      case items.first
+      when Carrier
+        return items.sort_by(&:en_shortname)
+      else
+        return items.sort_by(&:name_en)
+      end
     end
+    return items
+  end
+  
+  # Amount of adults, children and infants
+  def human_people(adults, children, infants)
+    a = t('results.header.adults')[adults - 2] if adults > 1
+    c = t('results.header.children')[children - 1] if children > 0
+    i = t('results.header.infants')[infants - 1] if infants > 0
+    case I18n.locale
+    when :ru
+      return [a, c || i ? [c, i].compact.join(t('nbsp_and')) : nil].compact.join(' ')
+    when :en
+      return [a, c, i].compact.join(', ')
+    end  
   end
   
 end
