@@ -12,7 +12,7 @@ class PricerController < ApplicationController
         @destination.move_average_price @search, @recommendations.first, @query_key
       end
       @locations = @search.human_locations
-      @average_price = @destination.average_price * @search.people_count[:adults] if @destination
+      @average_price = @destination.average_price * @search.people_count[:adults] if @destination && @destination.average_price
       StatCounters.d_inc @destination, %W[search.total search.pricer.total] if @destination
     end
     render :partial => 'recommendations'
