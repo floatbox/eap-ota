@@ -28,6 +28,7 @@ class Admin::TicketsController < Admin::EviterraResourceController
     # с указанной даты начинаем проставлять сбор за возврат
     # FIXME не очень контроллеровая логика.
     @item.price_operational_fee = Ticket.default_refund_fee(@item.parent.order.created_at)
+    @item.stored_price_payment_commission = @item.parent.refund_payment_commission.round(2)
     render :action => :new
   end
 

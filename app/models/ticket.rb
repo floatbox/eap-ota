@@ -126,6 +126,15 @@ class Ticket < ActiveRecord::Base
     return 0
   end
 
+  def refund_payment_commission
+    #FIXME Пришлось захардкодить дату
+    if created_at < Date.parse('2013-02-20')
+      0
+    else
+      -price_payment_commission
+    end
+  end
+
   def baggage_array
     baggage_info.map{|code| [BaggageLimit.deserialize(code)]}
   end
@@ -246,6 +255,7 @@ class Ticket < ActiveRecord::Base
     self.price_consolidator *= -1 if price_consolidator > 0
     self.commission_subagent = 0 if price_fare != -parent.price_fare && !parent.commission_subagent.percentage?
     self.commission_agent = 0 if price_fare != -parent.price_fare && !parent.commission_agent.percentage?
+    self.stored_price_payment_commission *= -1 if stored_price_payment_commission > 0
     self.corrected_price = price_with_payment_commission
   end
 

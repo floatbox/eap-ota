@@ -54,7 +54,7 @@ module Pricing
       when 'ticket'
         price_with_payment_commission * acquiring_percentage
       when 'refund'
-        0
+        stored_price_payment_commission
       end
     end
 
