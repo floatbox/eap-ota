@@ -80,7 +80,7 @@
         </div>
         <% else %>
         <div class="bfp-type">
-            <p><%= 'booking.payment.by_card.ticket'%></p>
+            <p><%= raw t 'booking.payment.by_card.ticket'%></p>
             <input type="hidden" name="order[payment_type]" value="card">
         </div>
         <% end %>

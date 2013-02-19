@@ -66,7 +66,12 @@ module TranslationHelper
   def sort_by_name(items)
     case I18n.locale
     when :ru
-      return items.sort_by(&:name_ru)
+      case items.first
+      when Carrier
+        return items.sort_by(&:ru_shortname)
+      else
+        return items.sort_by(&:name)
+      end
     when :en
       case items.first
       when Carrier
