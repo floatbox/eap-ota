@@ -617,10 +617,13 @@ expr_date "28.02.2013"
 agent "10% на ЭКОНОМ /БИЗНЕС класс."
 subagent "8% от тарифа на все направления Alitalia (Эконом и Бизнес класса) с началом путешествия из Москвы и СанктPПетербурга, а также из Киева (из Киева Alitalia летает в Рим (AZ481) и Милан (AZ7469), Тбилиси (из Тбилиси Alitalia летает в Рим (AZ551), Еревана (из Еревана Alitalia летает в Рим (AZ557) (тарифы туда и обратно, а также тарифы в одну сторону, но с вылетом из Москвы или СанктPПетербурга, Киева, Тбилиси или Еревана). Повышенная комиссия не применяется, если начало путешествия не из этих городов."
 classes :economy, :business
-check { includes(city_iatas.first, 'MOW LED') or
-  (includes(city_iatas.first, 'IEV') and includes_only(city_iatas, 'IEV ROM MIL')) or
-  (includes(city_iatas.first, 'TBS') and includes_only(city_iatas, 'TBS ROM')) or
-  (includes(city_iatas.first, 'EVN') and includes_only(city_iatas, 'EVN ROM'))
+check {
+  includes_only(operating_carrier_iatas, 'AZ') and
+  ( includes(city_iatas.first, 'MOW LED') or
+    (includes(city_iatas.first, 'IEV') and includes_only(city_iatas, 'IEV ROM MIL')) or
+    (includes(city_iatas.first, 'TBS') and includes_only(city_iatas, 'TBS ROM')) or
+    (includes(city_iatas.first, 'EVN') and includes_only(city_iatas, 'EVN ROM'))
+  )
 }
 discount "7.5%"
 commission "10%/8%"
