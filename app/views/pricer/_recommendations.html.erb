@@ -24,7 +24,7 @@
 <div class="rfg-column">
     <% if times[:dpt].length > 1 %>
     <div class="rf-list" data-key="dpt<%= i + 1 %>t">
-        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.dpt', :from => @search.segments[i].from_as_object.case_from %></h6>    
+        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.dpt', :from => dict(@search.segments[i].from_as_object, :from) %></h6>    
         <ul class="rf-values">
             <li class="rfv-empty rfv-selected"><%= t('filters.time.any') %></li>
             <% times[:dpt].each do |time| %>
@@ -35,7 +35,7 @@
     <% end %>
     <% if times[:arv].length > 1 %>
     <div class="rf-list" data-key="arv<%= i + 1 %>t">
-        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.arv', :to => @search.segments[i].to_as_object.case_to %></h6>
+        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.arv', :to => dict(@search.segments[i].to_as_object, :to) %></h6>
         <ul class="rf-values">
             <li class="rfv-empty rfv-selected"><%= t 'filters.time.any' %></li>
             <% times[:arv].each do |time| %>
@@ -59,21 +59,21 @@
 <div class="rfg-column">
     <% if segment[:dpt][:airports].length > 1 || segment[:dpt][:cities].length > 1 %>
     <div class="rf-list" data-key="dpt<%= i + 1 %>">    
-        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.dpt', :from => @search.segments[i].from_as_object.case_from %></h6>        
+        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.dpt', :from => dict(@search.segments[i].from_as_object, :from) %></h6>        
         <% if segment[:dpt][:cities].length > 1 %>
             <% locations_title[:cities] = true %>
             <ul class="rf-values">
             <li class="rfv-empty rfv-selected"><%= t 'filters.cities.dpt' %></li>
-            <% segment[:dpt][:cities].each do |city| %>
-                <li class="rfv-item" data-value="<%= city.iata %>"><%= city.case_from %></li>
+            <% sort_by_name(segment[:dpt][:cities]).each do |city| %>
+                <li class="rfv-item" data-value="<%= city.iata %>"><%= dict(city, :from) %></li>
             <% end %>
             </ul>
         <% elsif segment[:dpt][:airports].length > 1 %>
             <% locations_title[:airports] = true %>
             <ul class="rf-values">
             <li class="rfv-empty rfv-selected"><%= t 'filters.airports.dpt' %></li>
-            <% segment[:dpt][:airports].each do |airport| %>
-                <li class="rfv-item" data-value="<%= airport.iata %>"><%= airport.case_from %></li>
+            <% sort_by_name(segment[:dpt][:airports]).each do |airport| %>
+                <li class="rfv-item" data-value="<%= airport.iata %>"><%= dict(airport, :from) %></li>
             <% end %>
             </ul>
         <% end %>    
@@ -81,21 +81,21 @@
     <% end %>
     <% if segment[:arv][:airports].length > 1 || segment[:arv][:cities].length > 1 %>
     <div class="rf-list" data-key="arv<%= i + 1 %>">    
-        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.arv', :to => @search.segments[i].to_as_object.case_to %></h6>        
+        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.arv', :to => dict(@search.segments[i].to_as_object, :to) %></h6>        
         <% if segment[:arv][:cities].length > 1 %>
             <% locations_title[:cities] = true %>        
             <ul class="rf-values">
             <li class="rfv-empty rfv-selected"><%= t 'filters.cities.arv' %></li>
-            <% segment[:arv][:cities].each do |city| %>
-                <li class="rfv-item" data-value="<%= city.iata %>"><%= city.case_to %></li>
+            <% sort_by_name(segment[:arv][:cities]).each do |city| %>
+                <li class="rfv-item" data-value="<%= city.iata %>"><%= dict(city, :to) %></li>
             <% end %>
             </ul>
         <% elsif segment[:arv][:airports].length > 1 %>
             <% locations_title[:airports] = true %>        
             <ul class="rf-values">
             <li class="rfv-empty rfv-selected"><%= t 'filters.airports.arv' %></li>
-            <% segment[:arv][:airports].each do |airport| %>
-                <li class="rfv-item" data-value="<%= airport.iata %>"><%= airport.case_to %></li>
+            <% sort_by_name(segment[:arv][:airports]).each do |airport| %>
+                <li class="rfv-item" data-value="<%= airport.iata %>"><%= dict(airport, :to) %></li>
             <% end %>
             </ul>
         <% end %>    
@@ -130,8 +130,8 @@
     <h6 class="rfgc-title"><%= t 'filters.carrier.title' %></h6>
     <ul class="rf-values">
     <li class="rfv-empty rfv-selected"><%= t 'filters.carrier.any' %></li>
-    <% data[:carriers].each do |carrier| %>
-        <li class="rfv-item" data-value="<%= carrier.iata %>"><%= carrier.name %></li>
+    <% sort_by_name(data[:carriers]).each do |carrier| %>
+        <li class="rfv-item" data-value="<%= carrier.iata %>"><%= dict(carrier) %></li>
     <% end %>
     </ul>
 </div>
@@ -143,8 +143,8 @@
     <h6 class="rfgc-title"><%= t 'filters.aircraft.title' %></h6>
     <ul class="rf-values">
     <li class="rfv-empty rfv-selected"><%= t 'filters.aircraft.any' %></li>
-    <% data[:planes].each do |plane| %>
-        <li class="rfv-item" data-value="<%= plane.iata %>"><%= plane.name %></li>
+    <% sort_by_name(data[:planes]).each do |plane| %>
+        <li class="rfv-item" data-value="<%= plane.iata %>"><%= dict(plane) %></li>
     <% end %>
     </ul>
 </div>

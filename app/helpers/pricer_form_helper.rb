@@ -4,13 +4,7 @@ module PricerFormHelper
   def search_details search
     return {} unless search.valid?
     result = {}
-    people = []
-    people << t('results.header.adults')[search.adults - 2] if search.adults > 1
-    people << t('results.header.children.one') if search.children == 1
-    people << t('results.header.children.few', :with => t('results.header.with')[search.children - 2]) if search.children > 1
-    people << t('results.header.infants.one') if search.infants == 1
-    people << t('results.header.infants.few', :with => t('results.header.with')[search.infants - 2]) if search.infants > 1
-    human = [people.join(' '), t(search.cabin, :scope => 'results.header.cabin')]
+    human = [human_people(search.adults, search.children, search.infants), t(search.cabin, :scope => 'results.header.cabin')]
     human.delete('');
     result[:options] = {
       :adults => search.adults,
