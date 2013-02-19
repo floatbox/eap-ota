@@ -513,7 +513,14 @@ class Order < ActiveRecord::Base
     return false unless load_tickets(true)
     update_attributes(:ticket_status => 'ticketed', :ticketed_date => Date.today)
     update_prices_from_tickets
+    update_price_with_payment_commission_in_tickets
     create_ticket_notice
+  end
+
+  def update_price_with_payment_commission_in_tickets
+    @tickets_are_loading = true
+    tickets.map{|t| t.update_attributes(corrected_price: t.price_with_payment_commission) unless t.corrected_price}
+    @tickets_are_loading = false
   end
 
   def reload_tickets

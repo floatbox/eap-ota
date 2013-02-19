@@ -617,10 +617,13 @@ expr_date "28.02.2013"
 agent "10% на ЭКОНОМ /БИЗНЕС класс."
 subagent "8% от тарифа на все направления Alitalia (Эконом и Бизнес класса) с началом путешествия из Москвы и СанктPПетербурга, а также из Киева (из Киева Alitalia летает в Рим (AZ481) и Милан (AZ7469), Тбилиси (из Тбилиси Alitalia летает в Рим (AZ551), Еревана (из Еревана Alitalia летает в Рим (AZ557) (тарифы туда и обратно, а также тарифы в одну сторону, но с вылетом из Москвы или СанктPПетербурга, Киева, Тбилиси или Еревана). Повышенная комиссия не применяется, если начало путешествия не из этих городов."
 classes :economy, :business
-check { includes(city_iatas.first, 'MOW LED') or
-  (includes(city_iatas.first, 'IEV') and includes_only(city_iatas, 'IEV ROM MIL')) or
-  (includes(city_iatas.first, 'TBS') and includes_only(city_iatas, 'TBS ROM')) or
-  (includes(city_iatas.first, 'EVN') and includes_only(city_iatas, 'EVN ROM'))
+check {
+  includes_only(operating_carrier_iatas, 'AZ') and
+  ( includes(city_iatas.first, 'MOW LED') or
+    (includes(city_iatas.first, 'IEV') and includes_only(city_iatas, 'IEV ROM MIL')) or
+    (includes(city_iatas.first, 'TBS') and includes_only(city_iatas, 'TBS ROM')) or
+    (includes(city_iatas.first, 'EVN') and includes_only(city_iatas, 'EVN ROM'))
+  )
 }
 discount "7.5%"
 commission "10%/8%"
@@ -1152,19 +1155,19 @@ agent "20% от опубл.тарифов по классу С на собств
 subagent "18% от опубл.тарифов по классу С на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subclasses "C"
 interline :no, :yes
-check { includes(city_iatas.first, 'MOW') and includes(country_iatas, 'CN') }
+check { includes(city_iatas.first, 'MOW') and includes_only(country_iatas, 'RU CN') }
 discount "15%"
 commission "20%/18%"
 
 example 'svopek/d'
-example 'svopek/d/ab persvo/d'
+example 'svopek/d/ab peksvo/d'
 example 'svopek/i/ab peksvo/i'
 strt_date "12.12.2011"
 agent "15% от опубл.тарифов по классу D на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subagent "13% от опубл.тарифов по классу D на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subclasses "DI"
 interline :no, :yes
-check { includes(city_iatas.first, 'MOW') and includes(country_iatas, 'CN') }
+check { includes(city_iatas.first, 'MOW') and includes_only(country_iatas, 'RU CN') }
 discount "10%"
 commission "15%/13%"
 
@@ -1175,7 +1178,7 @@ agent "9% от опубл.тарифов по классам I,Z, а также 
 subagent "7% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subclasses "Z" 
 interline :no, :yes
-check { includes(city_iatas.first, 'MOW') and includes(country_iatas, 'CN') }
+check { includes(city_iatas.first, 'MOW') and includes_only(country_iatas, 'RU CN') }
 discount "6.5%"
 commission "9%/7%"
 
@@ -1187,7 +1190,7 @@ strt_date "12.12.2011"
 agent "9% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subagent "7% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 interline :no, :yes
-check { includes(city_iatas.first, 'MOW') and includes(country_iatas, 'CN') }
+check { includes(city_iatas.first, 'MOW') and includes_only(country_iatas, 'RU CN') }
 discount "6.5%"
 commission "9%/7%"
 
@@ -1201,7 +1204,7 @@ agent "15% от опубл.тарифов по классу С,D,I,Z на соб
 subagent "13% от опубл.тарифов по классу С,D,I,Z на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
 subclasses "CDIZ"
 interline :no, :yes
-check { includes(city_iatas.first, 'LED') and includes(country_iatas, 'CN') }
+check { includes(city_iatas.first, 'LED') and includes_only(country_iatas, 'RU CN') }
 discount "11%"
 commission "15%/13%"
 
@@ -1211,7 +1214,7 @@ strt_date "12.12.2011"
 agent "9% от на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
 subagent "7% на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
 interline :no, :yes
-check { includes(city_iatas.first, 'LED') and includes(country_iatas, 'CN') }
+check { includes(city_iatas.first, 'LED') and includes_only(country_iatas, 'RU CN') }
 discount "6.5%"
 commission "9%/7%"
 
@@ -1228,7 +1231,7 @@ subagent "7% от опубл.тарифов по классу С,D,I,Z, а та�
 subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Красноярск-CHINA или Красноярск-CHINA-Красноярск"
 subclasses "CDIZ"
 interline :no, :yes
-check { includes(%W(KJA OVB IKT), city_iatas.first) }
+check { includes(%W(KJA OVB IKT), city_iatas.first) and includes_only(country_iatas, 'RU CN') }
 discount "6.5%"
 commission "9%/7%"
 
@@ -1245,7 +1248,7 @@ subagent "7% от опубл.тарифов по классу С,D,I,Z, а та�
 subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Иркутск-CHINA или Иркутск-CHINA-Иркутск"
 subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Красноярск-CHINA или Красноярск-CHINA-Красноярск"
 interline :no, :yes
-check { includes(%W(KJA OVB IKT), city_iatas.first) }
+check { includes(%W(KJA OVB IKT), city_iatas.first) and includes_only(country_iatas, 'RU CN') }
 discount "6.5%"
 commission "9%/7%"
 
@@ -1258,7 +1261,7 @@ agent "7% от опубл.тарифов по классу С,D,I,Z, а такж
 subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Алма-Ата-CHINA или Алма-Ата-CHINA-Алма-Ата"
 subclasses "CDIZ"
 interline :no, :yes
-check { includes(city_iatas.first, 'ALA') }
+check { includes(city_iatas.first, 'ALA') and includes_only(country_iatas, 'KZ CN') }
 discount "6.5%"
 commission "7%/7%"
 
@@ -1271,9 +1274,15 @@ strt_date "10.11.2011"
 agent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Алма-Ата-CHINA или Алма-Ата-CHINA-Алма-Ата"
 subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Алма-Ата-CHINA или Алма-Ата-CHINA-Алма-Ата"
 interline :no, :yes
-check { includes(city_iatas.first, 'ALA') }
+check { includes(city_iatas.first, 'ALA') and includes_only(country_iatas, 'KZ CN') }
 discount "6.5%"
 commission "7%/7%"
+
+example 'miapek'
+agent "3% начало перелета из третьей страны в Китай на все классы"
+subagent "1% начало перелета из третьей страны в Китай на все классы"
+check { not includes(country_iatas.first, 'CN') and includes(country_iatas, 'CN') }
+commission "3%/1%"
 
 example 'pekweh'
 example 'nayweh wehnay'
@@ -1283,10 +1292,12 @@ check { includes_only(country_iatas, 'CN') and includes(city_iatas.first, 'BJS')
 domestic
 commission "0%/0%"
 
-example 'miapek'
-agent "3% начало перелета из третьей страны в Китай на все классы"
-subagent "1% начало перелета из третьей страны в Китай на все классы"
-check { not includes(country_iatas.first, 'CN') and includes(country_iatas, 'CN') }
+example 'peksvo/m'
+example 'peksvo/m svopek/c'
+agent "3% перелет/ all class of the flight CHINA - RUSSIA или CHINA - RUSSIA - CHINA"
+subagent "1% перелет all class of the flight CHINA- RUSSIA или CHINA- RUSSIA - CHINA"
+check { includes(country_iatas.first, 'CN') and includes_only(country_iatas, 'CN RU') }
+classes :first, :business, :economy
 commission "3%/1%"
 
 strt_date "01.01.2013"

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130208172414) do
+ActiveRecord::Schema.define(:version => 20130218142343) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -28,6 +28,8 @@ ActiveRecord::Schema.define(:version => 20130208172414) do
     t.string   "engine_type", :default => "jet"
     t.string   "iata_ru"
   end
+
+  add_index "airplanes", ["iata"], :name => "index_airplanes_on_iata"
 
   create_table "airports", :force => true do |t|
     t.string   "icao"
@@ -92,6 +94,8 @@ ActiveRecord::Schema.define(:version => 20130208172414) do
     t.string   "code"
     t.string   "not_interlines"
   end
+
+  add_index "carriers", ["iata"], :name => "index_carriers_on_iata"
 
   create_table "cities", :force => true do |t|
     t.string   "iata"

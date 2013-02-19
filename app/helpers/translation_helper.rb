@@ -3,7 +3,13 @@ module TranslationHelper
   # Usage:
   #   <%= dict city %>
   #   dict airport, :from
+  #   dict [airport1, airport2, city3], :in
   def dict(object, format=:name)
+
+    if object.kind_of? Array
+      return object.map {|item| dict(item, format) }.to_sentence
+    end
+
     translation =
       case I18n.locale
       when :ru
@@ -13,7 +19,7 @@ module TranslationHelper
           case format
           when :name
             object.name_ru
-          when :from, :to, :at
+          when :from, :to, :in
             object.send "case_#{format}"
           end
         when Airplane
@@ -34,7 +40,7 @@ module TranslationHelper
           case format
           when :name
             object.name_en
-          when :from, :to, :at
+          when :from, :to, :in
             "#{format} #{object.name_en}"
           end
         when Airplane
