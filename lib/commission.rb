@@ -823,7 +823,7 @@ carrier "CY", "CYPRUS AIRWAYS"
 example 'svocdg'
 agent    "9% от всех опубл. тарифов на рейсы CY. (В договоре Interline не прописан.)"
 subagent "7% от опубликованных тарифов на рейсы CY."
-discount "6%"
+discount "5.5%"
 commission "9%/7%"
 
 example 'cdgsvo svocdg/ab'
@@ -905,7 +905,7 @@ subagent "8%"
 subclasses "SIQKLUT"
 check { includes_only(country_iatas.first, 'RU') and includes_only(country_iatas, 'RU US') }
 ticketing_method "downtown"
-discount "7.5%"
+discount "6.5%"
 commission "10%/8%"
 
 example 'okocdg cdgoko/ab'
@@ -1688,7 +1688,7 @@ example 'svocdg'
 agent    "5% от опубл. тарифов Эконом класса на рейсы LY"
 subagent "3,5% от опубл. тарифов Эконом класса на рейсы LY"
 classes :economy
-discount "3%"
+discount "2.5%"
 commission "5%/3.5%"
 
 example 'svocdg/j cdgsvo/j'
@@ -2840,7 +2840,7 @@ example 'scocdg cdgsvo'
 agent " 7% для тарифов Экономического класса"
 subagent "Международные рейсы А3: 5% для тарифов Эконом класса"
 international
-discount "4.5%"
+discount "3.5%"
 commission "7%/5%"
 
 example 'svocdg/business cdgsvo/business'
