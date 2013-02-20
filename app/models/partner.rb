@@ -43,4 +43,11 @@ class Partner < ActiveRecord::Base
     update_attributes suggested_limit: limit
   end
 
+  def logo_url
+    "/images/metas/#{token}.png"
+  end
+
+  def logo_exist?
+    FileTest.exist?(Rails.root.join("public#{logo_url}").to_s)
+  end
 end

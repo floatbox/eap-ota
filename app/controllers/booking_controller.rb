@@ -33,7 +33,7 @@ class BookingController < ApplicationController
     @query_key = params[:query_key]
     @search = PricerForm.load_from_cache(params[:query_key])
     #FIXME берем партнера из сохраненной PricerForm - надежно, но некрасиво
-    @partner = @search.partner
+    @partner = Partner[@search.partner]
     @destination = get_destination
 
     StatCounters.inc %W[enter.api.success]
