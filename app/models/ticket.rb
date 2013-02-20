@@ -221,6 +221,10 @@ class Ticket < ActiveRecord::Base
     find_or_initialize_by_number number
   end
 
+  def ticketed?
+    kind == 'ticketed'
+  end
+
   def update_data_in_order
     if order
       # FIXME убить или оставить только ради тестов?
@@ -340,6 +344,10 @@ class Ticket < ActiveRecord::Base
       url = show_order_for_ticket_path(order.pnr_number, self)
       "<a href=#{url}>PNR</a><br/><br/><a href=#{url}?lang=EN>PNR EN</a>".html_safe
     end
+  end
+
+  def processed_refund?
+    kind == 'refund' && status == 'processed'
   end
 
   def raw
