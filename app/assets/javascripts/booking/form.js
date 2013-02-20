@@ -97,7 +97,7 @@ validate: function(forced) {
             if (section.empty[l]) empty.push(section.empty[l]);
         }
     }
-    var disabled = false;
+    var disabled = !$('#bffa-check').prop('checked');
     this.required.html('');
     if (wrong.length) {
         this.required.append('<p class="bffr-wrong">' + wrong.join(' ') + '</p>');
@@ -125,7 +125,7 @@ submit: function() {
     var that = this;
     this.sending = true;
     this.button.addClass('bfb-disabled');
-    this.footer.find('.bff-cancel').hide();
+    this.footer.find('.bff-disclaimer').hide();
     this.footer.find('.bff-progress').show();
     if (this.result) {
         this.result.remove();
@@ -168,13 +168,13 @@ showErrors: function(errors) {
     this.required.html(wrong.join(' ')).show();
     this.button.removeClass('bfb-disabled');
     this.footer.find('.bff-progress').hide();
-    this.footer.find('.bff-cancel').show();
+    this.footer.find('.bff-disclaimer').show();
     this.sending = false;
 },
 process: function(s) {
     this.footer.hide();
     this.footer.find('.bff-progress').hide();
-    this.footer.find('.bff-cancel').show();
+    this.footer.find('.bff-disclaimer').show();
     this.button.removeClass('bfb-disabled');
     this.sending = false;
     var that = this;

@@ -68,19 +68,19 @@
         <% if enabled_cash %>
         <div class="bfp-type clearfix">
             <div class="bfpt-item bfpt-selected">
-                <h5 class="bfpt-title"><label for="bfpt-card" class="bfpt-label"><%= t 'booking.payment.by_card.label'%></label></h5>
-                <p class="bfpt-tip"><label for="bfpt-card"><%= raw t 'booking.payment.by_card.ticket'%></label></p>
+                <h5 class="bfpt-title"><label for="bfpt-card" class="bfpt-label"><%= t 'booking.payment.by_card.label' %></label></h5>
+                <p class="bfpt-tip"><label for="bfpt-card"><%= raw t 'booking.payment.by_card.ticket' %></label></p>
                 <input type="radio" name="order[payment_type]" class="bfpt-radio" id="bfpt-card" value="card" checked="checked">
             </div>
             <div class="bfpt-item">
-                <h5 class="bfpt-title"><label for="bfpt-cash" class="bfpt-label"><%= t 'booking.payment.by_cash.label'%></label></h5>
+                <h5 class="bfpt-title"><label for="bfpt-cash" class="bfpt-label"><%= t 'booking.payment.by_cash.label' %></label></h5>
                 <p class="bfpt-tip"><label for="bfpt-cash"><% if Conf.site.forbidden_delivery %><%= raw t 'booking.payment.by_cash.office' %><% else %><%= raw t Conf.site.forbidden_cash ? 'delivery' : 'both', :scope => 'booking.payment.by_cash', :sum => human_price(400) %><% end %></label></p>
                 <input type="radio" name="order[payment_type]" class="bfpt-radio" id="bfpt-cash" value="cash">
             </div>
         </div>
         <% else %>
         <div class="bfp-type">
-            <p><%= raw t 'booking.payment.by_card.ticket'%></p>
+            <p><%= raw t 'booking.payment.by_card.ticket' %></p>
             <input type="hidden" name="order[payment_type]" value="card">
         </div>
         <% end %>
@@ -95,7 +95,7 @@
         <div class="bff-left">
             <div class="bff-price">
                 <div class="bffp-content">
-                    <p class="bffp-card"><%= t 'booking.price.total_card' %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>
+                    <p class="bffp-card"><%= t 'booking.price.total_card', :count => price_total %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>
                     <p class="bffp-nd"><%= t 'booking.price.total_cash' %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>
                     <p class="bffp-wd"><%= t 'booking.price.total_cash' %><br><%= decorate_price human_price(price_total + 400), '<span class="bffp-sum">', '</span>' %></p>
                     <p class="bffp-tip"><%= t('booking.price.for_all') if @order_form.people.many? %> <%= t('booking.price.including_fee') %></p>
@@ -112,18 +112,22 @@
             </div>
         </div>
         <div class="bff-right">
+            <div class="bff-agree">
+                <input type="checkbox" id="bffa-check" checked="checked">
+                <%= raw t 'booking.buy.agree' %>
+            </div>
             <div class="bff-submit">
                 <div class="bf-button">
                     <div class="bfb-title"><%= t 'booking.buy.button' %></div>
                     <div class="bfb-side bfb-left"><div class="bfb-side bfb-right"></div></div>
                 </div>
+                <div class="bff-disclaimer">
+                    <p class="bffd-card"><%= raw t 'booking.buy.card' %></p>
+                    <p class="bffd-cash latent"><%= raw t 'booking.buy.cash' %></p>
+                </div>
                 <div class="bff-progress"><%= t 'booking.buy.progress' %></div>
             </div>
             <div class="bff-required"></div>
-            <div class="bff-disclaimer">
-                <p class="bffd-card"><%= raw t 'booking.buy.card' %> <%= raw t 'booking.buy.agree' %></p>
-                <p class="bffd-cash latent"><%= raw t 'booking.buy.cash' %> <%= raw t 'booking.buy.agree' %></p>
-            </div>
         </div>
     </div>
     
