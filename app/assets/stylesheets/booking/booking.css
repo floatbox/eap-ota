@@ -107,13 +107,11 @@
 .bff-left {
     float: left;
     width: 255px;
-    padding-top: 12px;
 }
 .bff-right {
     margin-left: 295px;
 }
 .bffp-content {
-    /*float: right;*/
     font-weight: bold;
     font-size: 18px;
     line-height: 20px;
@@ -127,6 +125,7 @@
     line-height: 16px;
     color: #606060;
 }
+.bffp-nd,
 .bffp-wd {
     display: none;
 }
@@ -158,11 +157,12 @@
 .bff-submit {
     position: relative;
     left: -28px;
-    margin: 0 0 15px;
+    margin: 0 0 20px;
     height: 48px;
 }
 .bf-button {
     float: left;
+    margin-right: 22px;
     position: relative;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -204,22 +204,18 @@
     text-shadow: none;
     cursor: default;
 }
-.bff-cancel,
-.bff-progress {
-    float: left;
-    margin: 15px 0 0 15px;
-    font-size: 15px;
-    line-height: 18px;
-}
 .bff-progress {
     display: none;
+    float: left;
+    margin: 15px 0 0 0;
     padding-right: 26px;
+    font-size: 15px;
+    line-height: 18px;
     background: url(/images/booking/progress-b.gif) no-repeat 100% 1px;
 }
 
-/* Проверка полей и соглашение */
+/* Проверка полей */
 .bff-required {
-    margin: 0 0 10px;
     font-size: 16px;
     line-height: 18px;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -240,12 +236,27 @@
     text-decoration: none;
     color: inherit;
 }
-.bff-disclaimer {
-    font-size: 14px;
-    line-height: 16px;
-    color: #777;
+
+/* Agree */
+.bff-agree {
+    position: relative;
+    margin: 0 0 20px 22px;
 }
 .bffd-link {
+    color: #333;
+}
+#bffa-check {
+    position: absolute;
+    top: 3px;
+    left: -22px;
+    margin: 0;
+}
+
+/* Disclaimer */
+.bff-disclaimer {
+    padding-top: 8px;
+    font-size: 13px;
+    line-height: 16px;
     color: #777;
 }
 
