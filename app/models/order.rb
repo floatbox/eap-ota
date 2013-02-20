@@ -94,7 +94,7 @@ class Order < ActiveRecord::Base
 
   # не_рефанды
   def last_payment
-    payments.charges.last
+    payments.to_a.select(&:is_charge?).last
   end
 
   has_many :tickets
@@ -117,7 +117,7 @@ class Order < ActiveRecord::Base
   end
 
   def refund_date
-    if refund = tickets.where(:kind => 'refund', :status => 'processed').first
+    if refund = tickets.to_a.find(&:processed_refund?)
       refund.ticketed_date
     end
   end
@@ -222,11 +222,11 @@ class Order < ActiveRecord::Base
   end
 
   def tickets_count
-    tickets.count
+    tickets.to_a.size
   end
 
   def sold_tickets_numbers
-    sold_tickets.every.number_with_code.join('; ')
+    tickets.to_a.select(&:ticketed?).every.number_with_code.join('; ')
   end
 
   def tickets_office_ids_array

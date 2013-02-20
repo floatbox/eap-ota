@@ -149,6 +149,10 @@ class Payment < ActiveRecord::Base
     end
   end
 
+  def is_charge?
+    type.in? Payment::CHARGES
+  end
+
   # распределение дохода
   def set_defaults
     # to be overriden in subclasses

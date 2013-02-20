@@ -160,6 +160,11 @@ class Admin::OrdersController < Admin::EviterraResourceController
     redirect_to :back, :notice => notice
   end
 
+  def set_eager_loading
+    super
+    @resource = @resource.includes(:tickets, :payments, :secured_payments)
+  end
+
   def set_attributes_on_new
     @item.offline_booking = true
   end
