@@ -110,11 +110,11 @@ view: function(content) {
         return 'segment' + (i + 1);
     });
     this.loading.hide();
-    this.content.show();    
+    this.content.show();
     this.el.removeClass('b-processing').show();
     this.form.init();
-    this.farerules.init();  
-    $w.scrollTop(0);  
+    this.farerules.init();
+    $w.scrollTop(0);
 },
 preview: function(content) {
     var that = this;
@@ -122,13 +122,13 @@ preview: function(content) {
     this.content.find('.os-details').addClass(function(i) {
         return 'segment' + (i + 1);
     });
-    results.content.el.hide();    
+    results.content.el.hide();
     this.offer.book.removeClass('ob-disabled');
     this.offer.updateBook();
     this.comparePrices();
     this.el.show();
     $w.scrollTop(0);
-    this.form.init();    
+    this.form.init();
     this.farerules.init();
     $w.delay(100).queue(function(next) {
         results.filters.hide(true);
@@ -137,11 +137,15 @@ preview: function(content) {
     });
 },
 comparePrices: function() {
+    var that = this;
     var context = this.content.find('.bf-newprice');
     var dp = Number(context.attr('data-price')) - this.variant.price;
     if (dp !== 0) {
         trackEvent('Бронирование', 'Изменилась цена', dp > 0 ? 'Стало дороже' : 'Стало дешевле');
         context.show();
+        context.find('.bfnp-content .link').click(function() {
+            that.cancel();
+        });
     }
 },
 processPrice: function(context, dp) {
@@ -162,14 +166,14 @@ cancel: function() {
         });
     } else {
         this.el.hide();
-        this.content.html('');        
+        this.content.html('');
         delete this.offer;
         page.location.set('booking');
-        results.message.toggle('loading');          
+        results.message.toggle('loading');
         results.show(true);
         results.load();
     }
-    trackEvent('Бронирование', 'Отмена бронирования');    
+    trackEvent('Бронирование', 'Отмена бронирования');
 },
 hide: function() {
     var offset = this.content.find('.b-details').offset().top - $w.scrollTop();

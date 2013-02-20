@@ -4,7 +4,7 @@ module PricerFormHelper
   def search_details search
     return {} unless search.valid?
     result = {}
-    human = [human_people(search.adults, search.children, search.infants), t(search.cabin, :scope => 'results.header.cabin')]
+    human = [human_people(search.adults, search.children, search.infants), t(search.cabin, :scope => 'results.header.cabin', :default => '')]
     human.delete('');
     result[:options] = {
       :adults => search.adults,

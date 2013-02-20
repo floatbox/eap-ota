@@ -13,7 +13,7 @@
     <% price_tax_and_markup = @order_form.recommendation.price_tax_and_markup.round.to_i %>
     <% price_discount = @order_form.recommendation.price_discount.round.to_i %>    
     <div class="bfnp-data" data-price="<%= price_total %>">
-        <p class="bffp-card"><%= t 'booking.price.total_card' %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>
+        <p class="bffp-card"><%= t 'booking.price.total_card', :count => price_total %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>    
         <p class="bffp-nd"><%= t 'booking.price.total_cash' %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>
         <p class="bffp-wd"><%= t 'booking.price.total_cash' %><br><%= decorate_price human_price(price_total + 400), '<span class="bffp-sum">', '</span>' %></p>
         <p class="bffp-tip"><%= t('booking.price.for_all') if @order_form.people.many? %> <%= t('booking.price.including_fee') %></p>
