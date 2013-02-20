@@ -15,7 +15,7 @@ class Destination
   field :average_price_counter, :type => Integer, :default => 0
 
 
-  has_many :ttl_hot_offers, :dependent => :destroy
+  has_many :hot_offers, :dependent => :destroy
 
   def self.rts
     { ' → ' => false, ' ⇄ ' => true}
@@ -64,11 +64,11 @@ class Destination
 
       if average_price > price
         logger.info "Create Hot Offer for Destination"
-        ttl_hot_offers.create(
-        :code => query_key,
-        :search => search,
-        :recommendation => recommendation,
-        :price => price)
+        hot_offers.create(
+          :code => query_key,
+          :search => search,
+          :recommendation => recommendation,
+          :price => price)
       end
 
       if average_price > 0
