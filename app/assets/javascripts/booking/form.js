@@ -97,8 +97,12 @@ validate: function(forced) {
             if (section.empty[l]) empty.push(section.empty[l]);
         }
     }
-    var disabled = !$('#bffa-check').prop('checked');
     this.required.html('');
+    var disabled = false;
+    var agree = $('#bffa-check');
+    if (agree.length && !agree.prop('checked')) {
+        wrong.push('Необходимо принять условия, правила и ограничения.');
+    }
     if (wrong.length) {
         this.required.append('<p class="bffr-wrong">' + wrong.join(' ') + '</p>');
         disabled = true;
