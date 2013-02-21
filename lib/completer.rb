@@ -21,7 +21,8 @@ class Completer
   include Normalizer
 
   def self.cached_or_new
-    if !@completer || (cache_loaded_at < cache_updated_at)
+    # "временно" выключил автозагрузку свежего комплитера
+    if !@completer # || (cache_loaded_at < cache_updated_at)
       @completer = Completer.load rescue nil
     end
     # временно выключил автоматическую перегенерацию

@@ -41,7 +41,7 @@
     <div class="bff-left">
         <div class="bff-price">
             <div class="bffp-content">
-                <p class="bffp-nd">С&nbsp;карты будет списано —<br><span class="bffp-sum"><%= price_total %></span>&nbsp;<%= rubles(price_total) %></p>
+                <p class="bffp-card"><%= t 'booking.price.total_card', :count => price_total %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>            
             </div>
         </div>
     </div>
