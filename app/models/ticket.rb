@@ -222,7 +222,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def ticketed?
-    kind == 'ticketed'
+    status == 'ticketed'
   end
 
   def update_data_in_order

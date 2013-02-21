@@ -625,7 +625,7 @@ check {
     (includes(city_iatas.first, 'EVN') and includes_only(city_iatas, 'EVN ROM'))
   )
 }
-discount "7.5%"
+discount "6.5%"
 commission "10%/8%"
 
 example 'mrucdg'
@@ -1571,7 +1571,7 @@ agent    "1 руб. с билета по опубл. тарифам на соб�
 subagent "5 коп. с билета по опубл. тарифам на собственные рейсы LH и рейсы Interline с участком LH."
 check { includes(country_iatas, 'ES FR IT CZ PT NL CH') } 
 interline :no, :yes
-our_markup "20"
+our_markup "120"
 ## discount '5%'
 commission "1/0.05"
 
@@ -1973,7 +1973,7 @@ agent    "1 руб. с билета по опубл. тарифам на соб�
 subagent "5 коп. с билета по опубл. тарифам на собств.рейсы OS и рейсы Interline с участком OS."
 check {includes(country_iatas, 'ES FR IT CZ PT NL CH') }
 interline :no, :yes
-our_markup "20"
+our_markup "150"
 ## discount '5%'
 commission "1/0.05"
 
@@ -2036,7 +2036,7 @@ example 'svocdg'
 example 'svocdg cdgsvo'
 agent    "9% от опубл. тарифов на собств.рейсы PS"
 subagent "9% от опубл. тарифов на собств.рейсы PS"
-discount "7.5%"
+discount "7%"
 commission "9%/9%"
 
 example 'cdgsvo svocdg/ab'
@@ -2907,7 +2907,7 @@ carrier "A9", "GEORGIAN AIRWAYS"
 example 'tbsdme'
 agent "8 (восемь) % от опубл. тарифа на собств. рейсы авиакомпании А9;"
 subagent "6 % от опубл. тарифа на собств. рейсы А9;"
-discount "5.5%"
+discount "4.5%"
 commission "8%/6%"
 
 example 'tbsdme dmetbs/ab'

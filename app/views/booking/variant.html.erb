@@ -35,10 +35,10 @@
 </div>
 
 <div id="booking-disclaimer" class="b-disclaimer wrap">
-<% if @partner.present? %>
+<% if @partner.logo_exist? %>
 <div style="background: #fff; -moz-border-radius: 12px; border-radius: 12px;" class="bd-column">
     <h5 class="bd-title" style="color: #777; font-weight: 500; font-size: 15px; text-align: center; padding-top: 10px;">Совместно с</h5>
-    <p align="center"><img src="/images/metas/<%= @partner %>.png" alt="<%= @partner %>"></p>
+    <p align="center"><img src="<%= @partner.logo_url %>" alt="<%= @partner.token %>" title="<%= @partner.token %>"></p>
 </div>
 <% end %>
 <div class="bd-column">

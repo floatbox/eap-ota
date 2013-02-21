@@ -219,6 +219,8 @@ Partner:
         enabled: ["да", "нет"]
         hide_income: ["да", "нет"]
         cheat: ["да", "нет"]
+      templates:
+        password: string
   options:
     action_after_save: show
     default_action_on_item: show
