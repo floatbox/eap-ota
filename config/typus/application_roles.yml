@@ -25,6 +25,7 @@ admin:
   Region: create, read, update, delete
   HotOffer: read, delete
   Subscription: create, read, update, delete
+  Customer: read
   Destination: read, delete
   AirlineAlliance: create, read, update, delete
   Consolidator: create, read, update, delete
