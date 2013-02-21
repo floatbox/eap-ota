@@ -47,6 +47,10 @@ class HotOffer
       where(:date1.gt => Date.today)
     end
 
+    def cheaper20
+      where(:price_variation_percent.lt => -20)
+    end
+
     # спец скоуп для Вани
     def superscoup
       where(:from_iata => {'$in' => ['MSK', 'MOW', 'LED']})
