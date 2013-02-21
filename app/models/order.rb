@@ -379,6 +379,8 @@ class Order < ActiveRecord::Base
     self.price_operational_fee = sold_tickets.sum(:price_operational_fee)
 
     self.price_difference = price_total - price_total_old if price_difference == 0
+    first_ticket = tickets.where(:kind => 'ticket').first
+    self.ticketed_date = first_ticket.ticketed_date if !ticketed_date && first_ticket # для тех случаев, когда билет переводят в состояние ticketed руками
     update_incomes
     save
   end
