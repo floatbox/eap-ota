@@ -10,7 +10,10 @@ module Pricing
 
     # FIXME работает для текущей схемы, считает что мы эквайринг не берем себе в общем случае
     def income
-      @income ||= price_total - income_suppliers
+      @income if @income
+      discount_correction = [0, price_payment - price_discount].max
+      price_our_share = commission && commission.ticketing_method == 'direct' ? price_agent : price_subagent
+      @income = price_our_share * 100.0/118.0 - price_discount - discount_correction * 0.18
     end
 
     # составные части стоимости
