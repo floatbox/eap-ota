@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130219131821) do
+ActiveRecord::Schema.define(:version => 20130222113418) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -254,6 +254,20 @@ ActiveRecord::Schema.define(:version => 20130219131821) do
   end
 
   add_index "imports", ["md5"], :name => "index_imports_on_md5", :unique => true
+
+  create_table "imports_payments", :id => false, :force => true do |t|
+    t.integer "import_id"
+    t.integer "payment_id"
+  end
+
+  add_index "imports_payments", ["import_id", "payment_id"], :name => "index_imports_payments_on_import_id_and_payment_id"
+
+  create_table "imports_tickets", :id => false, :force => true do |t|
+    t.integer "import_id"
+    t.integer "ticket_id"
+  end
+
+  add_index "imports_tickets", ["import_id", "ticket_id"], :name => "index_imports_tickets_on_import_id_and_ticket_id"
 
   create_table "notifications", :force => true do |t|
     t.integer  "order_id"

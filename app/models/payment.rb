@@ -62,6 +62,7 @@ class Payment < ActiveRecord::Base
   # для вьюшек тайпуса. оверрайдим в субклассах.
   belongs_to :charge, :class_name => 'Payment', :foreign_key => 'charge_id'
   has_many :refunds, :class_name => 'Payment', :foreign_key => 'charge_id'
+  has_and_belongs_to_many :imports
 
   # не секьюрити ради, а read_only тайпуса для
   attr_protected :type
