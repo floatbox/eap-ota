@@ -86,12 +86,13 @@ describe Recommendation do
     end
 
     before do
+      Conf.payment.stub(:commission).and_return("2.85%")
       subject.stub(:commission => commission)
     end
 
     context "no commission" do
       let(:commission) {nil}
-      its(:income) {should == 0}
+      its('income.round') {should ==  -79}
     end
 
     context "with all the prices and direct commission" do
@@ -106,7 +107,7 @@ describe Recommendation do
           :ticketing_method => 'direct'
         )
       end
-      its(:income) {should == 140}
+      its('income.round') {should == 15}
     end
 
     context "with all the prices and aviacenter commission" do
@@ -121,7 +122,7 @@ describe Recommendation do
           :ticketing_method => 'aviacenter'
         )
       end
-      its(:income) {should == 40}
+      its('income.round') {should == -77}
     end
 
   end

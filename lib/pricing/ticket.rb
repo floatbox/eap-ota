@@ -60,9 +60,9 @@ module Pricing
 
     #FIXME это костыль, работает не всегда, нужно сделать нормально
     def price_with_payment_commission
-      return corrected_price if corrected_price
       case kind
       when 'ticket'
+        return corrected_price if corrected_price
         all_tickets = order.tickets.where('kind = "ticket" AND status != "voided"')
         corrected_total = all_tickets.sum(:price_fare) + all_tickets.sum(:price_tax)
         return 0 if corrected_total == 0

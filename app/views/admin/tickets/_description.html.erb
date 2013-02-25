@@ -10,5 +10,5 @@
     <% end %>
 <% elsif ticket.kind == 'refund' %>
   Возврат для билета № <%=ticket.link_to_show %> <br>
-  Сумма к возврату: <%= ticket.price_total %> рублей
+  Сумма к возврату: <%= ticket.price_with_payment_commission %> рублей
 <% end %>

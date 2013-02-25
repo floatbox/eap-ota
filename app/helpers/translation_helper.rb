@@ -1,4 +1,12 @@
+# encoding: utf-8
 module TranslationHelper
+
+  NBSP = "\u00a0"
+  # меняет первый пробел на юникодный nbsp; для красоты предлогов
+  def nbsp_first string
+    string.sub(/ +/, NBSP)
+  end
+
   # localized places and objects from database
   # Usage:
   #   <%= dict city %>
@@ -20,7 +28,7 @@ module TranslationHelper
           when :name
             object.name_ru
           when :from, :to, :in
-            object.send "case_#{format}"
+            nbsp_first( object.send("case_#{format}") )
           end
         when Airplane
           object.name_ru
@@ -41,7 +49,7 @@ module TranslationHelper
           when :name
             object.name_en
           when :from, :to, :in
-            "#{format} #{object.name_en}"
+            nbsp_first("#{format} #{object.name_en}")
           end
         when Airplane
           object.name_en

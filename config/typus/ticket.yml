@@ -148,6 +148,7 @@ Ticket:
       - commission_agent
       - price_agent
       - commission_subagent
+      - commission_discount
       - price_subagent
       - price_with_payment_commission
       - pnr_number

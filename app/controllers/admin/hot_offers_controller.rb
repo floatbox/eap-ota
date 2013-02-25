@@ -12,9 +12,10 @@ class Admin::HotOffersController < Admin::EviterraResourceController
   # и принимают аргументы массивом, а не одной строкой
   def set_order
     params[:sort_order] ||= "desc"
-
-    if (order = params[:order_by] ? [params[:order_by], params[:sort_order]] : @resource.typus_order_by).present?
-      @resource = @resource.order_by(order)
+    if params[:order_by]
+      @resource = @resource.order_by([ params[:order_by], params[:sort_order] ])
+    else
+      @resource.typus_order_by
     end
   end
 end

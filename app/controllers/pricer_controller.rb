@@ -117,6 +117,7 @@ class PricerController < ApplicationController
         @destination.move_average_price @search, @recommendations.first, @query_key
       end
       Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))
+      logger.info "Recommendations left after removing unprofitable(#{partner}): #{@recommendations.count}"
       StatCounters.inc %W[search.api.success search.api.#{partner}.success]
       StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner}.total] if @destination
       # поправка на неопределенный @destination что бы сходились счетчики

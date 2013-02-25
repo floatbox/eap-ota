@@ -13,4 +13,8 @@ module Admin::DisplayHelper
   def display_password(item, attribute)
     item.send(attribute)
   end
+
+  def display_time(item, attribute)
+    I18n.l(item.send(attribute), :format => @resource.typus_date_format(attribute))
+  end
 end
