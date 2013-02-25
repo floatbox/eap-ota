@@ -2079,7 +2079,6 @@ example 'ledpek/business pekled/economy'
 strt_date "01.04.2012"
 agent    "1% Эконом класса, а также при различной комбинации Бизнес/Эконом;" 
 subagent "5 руб. с билета Эконом класса, а также при различной комбинации Бизнес/Эконом;"
-discount "1%"
 commission "1%/5"
 
 example 'svocdg cdgsvo/ab'
@@ -2087,7 +2086,6 @@ strt_date "01.04.2012"
 agent    "1% на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 subagent "5 руб. с билета на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 interline :first
-discount "1%"
 commission "1%/5"
 
 example 'cdgsvo/ab svocdg'
