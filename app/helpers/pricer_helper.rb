@@ -1,10 +1,6 @@
 # encoding: utf-8
 module PricerHelper
 
-  def nbsp(string)
-    html_escape(string).gsub(/ +/, '&nbsp;').html_safe
-  end
-
   def human_duration(duration)
     hours, minutes = duration.divmod(60)
     unless hours.zero?
@@ -162,10 +158,6 @@ module PricerHelper
     segment.flights.group_by(&:operating_carrier_name).max_by{|carrier, flights| flights.sum(&:duration) }[1].first.operating_carrier
   end
   
-  def segment_title segment
-    t('offer.details.segment', :from => nbsp(dict(segment.departure.city, :from)), :to => nbsp(dict(segment.arrival.city, :to))).html_safe
-  end
-
   # FIXME сломается, если делать мерж двух прайсеров с одинаковыми рекомендациями
   # пофиксить мерж?
   def segment_id segment
@@ -216,22 +208,6 @@ module PricerHelper
   def human_cabin_nom cabin
     titles = {'Y' => 'Эконом-класс', 'C' => 'Бизнес-класс', 'F' => 'Первый класс'}
     titles[cabin]
-  end
-
-  def human_cabin_ins cabin
-    titles = {'Y' => 'эконом-классом', 'C' => 'бизнес-классом', 'F' => 'первым классом'}
-    titles[cabin]
-  end    
-
-  # отжирало 15% cpu time! теперь не отжирает
-  def bar_options segment
-    dpt = time_in_minutes(segment.departure_time)
-    arv = time_in_minutes(segment.arrival_time)
-    {
-      :dpt => dpt, # местное время, минут
-      :arv => dpt + segment.total_duration, # местное время в точке вылета на момент прилета, минут
-      :shift => arv - (dpt + segment.total_duration) # для москвы-минска: -60
-    }
   end
 
   def fmt_departure flight

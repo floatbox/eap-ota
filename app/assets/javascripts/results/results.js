@@ -132,10 +132,9 @@ updateTitles: function(dates) {
         for (var i = 0, l = this.data.segments.length; i < l; i++) {
             var segment = this.data.segments[i];
             var date = Date.parseDMY(dates ? dates[i] : segment.date);
-            var title = segment.rt ? 'обратно' : segment.title;
-            var hdate = I18n.l((!yearUsed && date.getFullYear() !== year && (yearUsed = true)) ? 'date.formats.human_year' : 'date.formats.human', date);  
-            hparts[i] = title.replace(/(^из| в) /g, '$1&nbsp;') + ' ' + hdate.nowrap();
-            wparts[i] = title + ' на ' + hdate;
+            var hdate = I18n.l((!yearUsed && date.getFullYear() !== year && (yearUsed = true)) ? 'date.formats.human_year' : 'date.formats.human', date);
+            hparts[i] = I18n.t(segment.rt ? 'return' : 'segment', {scope: 'results.header', cities: segment.title, date: hdate.nowrap()});
+            wparts[i] = I18n.t(segment.rt ? 'return' : 'segment', {scope: 'page', cities: segment.title, date: hdate.nowrap()});;
         }
         if (this.data.options.human) {
             hparts.push(this.data.options.human);
@@ -143,7 +142,7 @@ updateTitles: function(dates) {
     }
     this.data.titles = {
         header: hparts.join(', ').capitalize(),
-        window: wparts.join(', ')
+        window: wparts.join(', ').replace(/&nbsp;/g, ' ')
     };
 },
 processSubscription: function() {
@@ -237,10 +236,12 @@ getFastDuration: function() {
     return fd;
 },
 getVariants: function(condition, limit) {
-    var result = [], index = {};
+    var result = [];
     var offers = this.all.offers;
     for (var i = 0, im = offers.length; i < im; i++) {
-        var offer = offers[i], variants = offer.variants;
+        var offer = offers[i];
+        var index = {};
+        var variants = offer.variants;
         for (var v = 0, vm = variants.length; v < vm; v++) {
             var variant = variants[v];
             if (!variant.improper && condition(variant)) {

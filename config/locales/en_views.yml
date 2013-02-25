@@ -21,7 +21,7 @@ en:
       human_year: '%-d %B, %Y'
       dow: '%A'
     today: "today"
-    pre_day_names: ['on&nbsp;Sunday', 'on&nbsp;Monday', 'on&nbsp;Tuesday', 'on&nbsp;Wednesday', 'on&nbsp;Thursday', 'on&nbsp;Friday', 'on&nbsp;Saturday']
+    pre_day_names: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     nom_month_names: [~, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     pre_month_names: [~, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     abb: [~, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]

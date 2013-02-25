@@ -273,7 +273,6 @@ merge: function(variants) {
     var sorting = function(a, b) {
         return a.dpt - b.dpt;
     };
-    //var titles = ['туда', 'обратно'];
     offer.complex = true;    
     offer.variants = variants;
     offer.el.find('.o-segment').each(function(s) {
