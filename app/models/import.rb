@@ -15,9 +15,47 @@ class Import < ActiveRecord::Base
   validates :content, :presence => true
   before_save :compute_md5
 
+  cattr_accessor :logger do
+    Rails.logger
+  end
+
   def compute_md5
     self.md5 = Digest::MD5.hexdigest(content) if content
     true
+  end
+
+  # пока без волшебства. не выбираем парсер по типу
+  def parser
+    Parsers::Alfabank.new(content, filename)
+  end
+
+  def parse
+    parser.parse
+  end
+
+  def process!
+    parse.each do |row|
+      kind, pan, amount, commission, charged_on = row.values_at(:kind, :pan, :amount, :commission, :charged_on)
+      klass =
+        case kind
+        when :charge
+          PaytureCharge
+        when :refund
+          PaytureRefund
+        end
+      condition = klass.where(pan: pan, amount: amount, charged_on: charged_on)
+      if condition.count > 1
+        logger.warn "several payments are matching for for pan: #{pan}, amount: #{amount}, charged_on: #{charged_on}"
+        next
+      end
+      payment = condition.first
+      if payment
+        logger.debug "found Payment##{payment.id}"
+        #self.payments << payment
+      else
+        logger.warn "not found any payment for pan: #{pan}, amount: #{amount}, charged_on: #{charged_on}"
+      end
+    end
   end
 
 end
