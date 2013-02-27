@@ -128,7 +128,9 @@ class Ticket < ActiveRecord::Base
 
   def refund_payment_commission
     #FIXME Пришлось захардкодить дату
-    if created_at < Date.parse('2013-02-20')
+    if parent && parent.created_at < created_at
+      parent.refund_payment_commission
+    elsif created_at < Date.parse('2013-02-20')
       0
     else
       -price_payment_commission
