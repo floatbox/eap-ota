@@ -1012,10 +1012,9 @@ carrier "EY", "ETIHAD AIRWAYS"
 ########################################
 
 example 'svocdg'
-strt_date "11.02.2013"
-agent   "1 Евро с билета за продажи авиаперевозок на рейсы EY по веб-тарифам"
-subagent "Предположительно 5 рублей"
-commission "1eur/5"
+agent   "5% от опубл. тарифов на собств. рейсы EY (В договоре Interline не прописан.)"
+subagent "3% от опубл. тарифов на собств. рейсы EY (В договоре Interline не прописан.)"
+commission "5%/3%"
 
 example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
