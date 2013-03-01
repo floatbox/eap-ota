@@ -956,6 +956,7 @@ example 'svocdg/first cdgsvo/first'
 agent    "5% от тарифов Первого и Бизнес классов на рейсы EK;"
 subagent "3,5% от тарифов Первого и Бизнес классов на рейсы EK;"
 classes :first, :business
+check { includes_only(country_iatas.first, 'RU') }
 discount "2%"
 commission "5%/3.5%"
 
@@ -963,6 +964,7 @@ example 'svocdg/business cdgsvo'
 example 'svocdg/first cdgsvo'
 agent    "5% от комб. тарифов Первого и/или Бизнес класса с тарифами Эконом класса на рейсы EK;"
 subagent "3,5% от комб. тарифов Первого и/или Бизнес класса с тарифами Эконом класса на рейсы EK;"
+check { includes_only(country_iatas.first, 'RU') }
 discount "2%"
 commission "5%/3.5%"
 
@@ -971,14 +973,16 @@ important!
 agent    "1 руб. с билета по опубл.тарифам Эконом класса на рейсы EK."
 subagent "5 коп. с билета по опубл.тарифам Эконом класса на собств. рейсы EK."
 classes :economy
+check { includes_only(country_iatas.first, 'RU') }
 our_markup '20'
 commission "1/0.05"
 
-agent    "(Билеты «Интерлайн» могут быть выписаны, если на долю перевозчика приходится более 50% маршрута.)"
-subagent "???"
 example 'svocdg cdgsvo/ab'
 example 'svocdg/business cdgsvo/ab/business'
+agent    "(Билеты «Интерлайн» могут быть выписаны, если на долю перевозчика приходится более 50% маршрута.)"
+subagent "???"
 interline :half
+check { includes_only(country_iatas.first, 'RU') }
 our_markup '20'
 commission "1/0.05"
 
