@@ -83,7 +83,7 @@ subclasses "FPRJCADSMLVXTNIGWUYHQBKOE"
 ticketing_method "downtown"
 # disabled "срочно вырубаем DTT"
 discount "7.5%"
-commission "12%/10%"
+commission "12%/10.5%"
 
 # базовое вознаграждение ац
 # example 'cdgsvo svocdg/y'
