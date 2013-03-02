@@ -82,7 +82,7 @@ subagent "10% от тарифа на рейсы Перевозчика по вс
 subclasses "FPRJCADSMLVXTNIGWUYHQBKOE"
 ticketing_method "downtown"
 # disabled "срочно вырубаем DTT"
-discount "7.5%"
+discount "3.75%"
 commission "12%/10.5%"
 
 # базовое вознаграждение ац
