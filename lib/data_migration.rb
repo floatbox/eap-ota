@@ -7,6 +7,7 @@ require 'csv'
 module DataMigration
 
   def self.fill_in_parent_pnr_number
+    PaperTrail.controller_info = {:done => 'fill_in_parent_pnr_number'}
     orders = Order.where('(pnr_number is null or pnr_number = "") and (parent_pnr_number is null or parent_pnr_number = "") and payment_type = "card" and payment_status = "charged"').includes(:order_comments)
     orders.each do |o|
       parent_pnr_from_desc = o.description.scan(/\b([A-ZА-Я\d]{6})\b/)
@@ -25,7 +26,7 @@ module DataMigration
       if parent_pnr.present?
         o.update_attributes(parent_pnr_number: parent_pnr)
       else
-        print "Got nothing #{o.id}: ", o.description, comment_text
+        print "** Got nothing #{o.id}: ", o.description, comment_text, "\n"
       end
     end
   end
