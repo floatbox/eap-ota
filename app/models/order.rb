@@ -222,7 +222,7 @@ class Order < ActiveRecord::Base
   end
 
   def tickets_count
-    tickets.to_a.size
+    tickets.to_a.select{|t| t.kind == 'ticket'}.size
   end
 
   def sold_tickets_numbers
