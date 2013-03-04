@@ -7,6 +7,8 @@ module Parsers
       @doc = doc.dup.force_encoding('windows-1251').encode('utf-8')
     end
 
+    TZ = ActiveSupport::TimeZone.new('Europe/Moscow')
+
     MAPPING = {
       # Дата
       date: 0..7,
@@ -18,7 +20,7 @@ module Parsers
       # Номер карты
       pan: 37..54,
       # Сумма операции
-      amount: 77..91,
+      price: 77..91,
       # Комиссия с фирмы
       commission: 100..116,
       # Карт. прогр.: 117..122,
@@ -46,15 +48,19 @@ module Parsers
     end
 
     def parse_line(line, charged_on)
-      row = {}
+      fields = {}
       MAPPING.each do |key, range|
-        row[key] = line[range].to_s.strip
+        fields[key] = line[range].to_s.strip
       end
-      row[:created_at] = parse_datetime(row[:date], row[:time])
-      row[:amount] = BigDecimal.new(row[:amount])
-      row[:commission] = BigDecimal.new(row[:commission])
+      row = {}
+      row[:charged_on] = charged_on
+      row[:created_at] = parse_datetime(fields[:date], fields[:time])
+      row[:price] = BigDecimal.new(fields[:price])
+      row[:commission] = BigDecimal.new(fields[:commission])
+      row[:earnings] = row[:price] - row[:commission]
+      row[:pan] = parse_pan( fields[:pan] )
       row[:kind] =
-        case row[:type]
+        case fields[:type]
         when '5', '50'
           :charge
         when '6', '60'
@@ -62,7 +68,6 @@ module Parsers
         else
           raise "unknown operation type #{row[:type].inspect}"
         end
-      row[:charged_on] = charged_on
       row
     end
 
@@ -76,11 +81,11 @@ module Parsers
       # строка "обработанных с 18.09.2012 по 18.09.2012"
       unless contents =~ /^\s+обработанных с ([\d\.]+) по ([\d\.]+)/
         return
-        raise "can't find charge date"
+        # raise "can't find charge date"
       end
       unless $1 == $2
         return
-        raise "don't know exact charge date for sure for #{$1}..#{$2}"
+        # raise "don't know exact charge date for sure for #{$1}..#{$2}"
       end
       date = $1
       dd, mm, yy = date.split(/\D/).map(&:to_i)
@@ -90,7 +95,23 @@ module Parsers
     def parse_datetime(date, time)
       dd, mm, yy = date.split(/\D/).map(&:to_i)
       hh, ss = time.split(':').map(&:to_i)
-      DateTime.new(2000+yy, mm, dd, hh, ss)
+      # рассчет на то, что это москва унас
+      TZ.local(2000+yy, mm, dd, hh, ss)
+    end
+
+    def parse_pan(maybe_broken_pan)
+      case maybe_broken_pan
+      when /^\d{6}X{6}\d{4}$/
+        return maybe_broken_pan
+      # таких много, убираю лишний знак
+      when /^\d{6}X{7}\d{4}$/
+        return maybe_broken_pan.sub('X', '')
+      # два таких документа, возвращаю маску для like
+      when /^(\d{6})\*X{6}(\d{3})$/
+        return "#{$1}XXXXXX_#{$2}"
+      else
+        raise "strange pan #{maybe_broken_pan.inspect}"
+      end
     end
 
   end
