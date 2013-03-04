@@ -389,7 +389,7 @@ init: function() {
     this.count = function() {
         var offset = that.el.find('.o-details').offset().top;
         tedge = offset - 128 - 52;
-        bedge = offset - $w.height() + Queries.height;
+        bedge = offset - $w.height();
         that.toggle();
     };
     this.reset = function() {

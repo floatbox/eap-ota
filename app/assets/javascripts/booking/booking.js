@@ -132,7 +132,6 @@ preview: function(content) {
     this.farerules.init();
     $w.delay(100).queue(function(next) {
         results.filters.hide(true);
-        Queries.hide();
         next();
     });
 },
@@ -154,7 +153,6 @@ processPrice: function(context, dp) {
     content.html(content.html().absorb(dp > 0 ? 'дороже' : 'дешевле', sum));
 },
 cancel: function() {
-    Queries.show();
     results.filters.show(true);
     results.header.select.hide();
     if (results.ready) {
