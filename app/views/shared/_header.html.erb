@@ -78,6 +78,34 @@ I18n.locale = '<%= I18n.locale %>';
     </div>
     <% end %>
     
+    <div class="ph-user" id="user">
+        <div class="phu-link">Личный кабинет<span class="phul-bar"></span></div>
+        <div class="phu-popup">
+            <form action="/" class="phu-section" style="border-bottom: 1px solid #ada977;">
+                <h6 class="phus-title">Вход с паролем</h6>
+                <div class="phu-field">
+                    <label class="phuf-placeholder" for="phu-email">электронный адрес</label>
+                    <input type="text" class="phuf-input" id="phu-email">
+                </div>
+                <div class="phu-field">
+                    <label class="phuf-placeholder">пароль</label>
+                    <input type="password" class="phuf-input" id="phu-password">
+                </div>
+                <div class="phu-submit">
+                    <span class="link phu-forgot">Забыли пароль?</span>
+                    <button class="phu-button" type="submit">Войти</button>
+                </div>
+            </form>
+            <div class="phu-section">
+                <h6 class="phus-title" style="margin-bottom: 5px;">Регистрация</h6>
+                <p>Нужна для того, чтобы хранить вашу историю заказов, данные пассажиров и разное другое. После первого заказа у нас вы будете зарегистрированы автоматически.</p>
+                <div class="phu-submit">
+                    <button class="phu-button">Зарегистрироваться сейчас</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div class="ph-share" id="share-icons">
         <div class="phs-item" id="phs-facebook"><div class="fb-like" data-href="http://facebook.com/eviterra" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-font="arial"></div></div>
         <div class="phs-item" id="phs-twitter"><a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-url="https://eviterra.com" data-via="eviterra">Tweet</a></div>
