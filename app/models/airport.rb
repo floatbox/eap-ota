@@ -1,6 +1,7 @@
 # encoding: utf-8
 class Airport < ActiveRecord::Base
   include HasSynonyms
+  include Cases
   extend IataStash
 
   has_paper_trail
@@ -15,7 +16,6 @@ class Airport < ActiveRecord::Base
   def longitude; lng end
 
   delegate :tz, :to => :city
-  has_cases_for :name
   scope :near, lambda {|other|
     radius = 10
     where(
