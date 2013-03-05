@@ -21,6 +21,7 @@ Eviterra::Application.configure do
   #config.action_mailer.default_content_type = "text/html"
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
+  config.action_mailer.default_url_options = { :host => '0.0.0.0:3000' }
 
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
