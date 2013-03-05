@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130219131821) do
+ActiveRecord::Schema.define(:version => 20130225143219) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -170,15 +170,29 @@ ActiveRecord::Schema.define(:version => 20130219131821) do
   end
 
   create_table "customers", :force => true do |t|
-    t.string   "email",                         :null => false
+    t.string   "email",                                                    :null => false
     t.string   "password"
     t.string   "status"
-    t.boolean  "enabled",    :default => false, :null => false
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.boolean  "enabled",                               :default => false, :null => false
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
+    t.string   "encrypted_password",     :limit => 128, :default => "",    :null => false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",                         :default => 0
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
   end
 
+  add_index "customers", ["confirmation_token"], :name => "index_customers_on_confirmation_token", :unique => true
   add_index "customers", ["email"], :name => "index_customers_on_email", :unique => true
+  add_index "customers", ["reset_password_token"], :name => "index_customers_on_reset_password_token", :unique => true
 
   create_table "destinations", :force => true do |t|
     t.integer  "to_id"
