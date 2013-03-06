@@ -1,4 +1,4 @@
-class AddParentPnrNumberToOrders < ActiveRecord::Migration
+class AddParentPNRNumberToOrders < ActiveRecord::Migration
   def change
     add_column :orders, :parent_pnr_number, :string
   end

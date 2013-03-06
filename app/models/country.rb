@@ -1,6 +1,7 @@
 # encoding: utf-8
 class Country < ActiveRecord::Base
   include HasSynonyms
+  include Cases
 
   has_paper_trail
 
@@ -21,8 +22,6 @@ class Country < ActiveRecord::Base
 
   scope :important, where("importance > 0")
   scope :not_important, where("importance = 0")
-
-  has_cases_for :name
 
   # синтаксис вместо iata_stash
   def self.[] arg

@@ -1,6 +1,8 @@
 # encoding: utf-8
 class CashCharge < Payment
 
+  include TypusCashCharge
+
   after_create :set_ref
   before_save :recalculate_earnings
 
@@ -33,15 +35,6 @@ class CashCharge < Payment
   # распределение дохода
   def set_defaults
     self.commission = Conf.cash.commission if commission.blank?
-  end
-
-  # для админки
-  def control_links
-    refund_link if charged?
-  end
-
-  def refund_link
-    "<a href='/admin/cash_refunds/new?_popup=true&resource[charge_id]=#{id}' class='iframe_with_page_reload'>добавить возврат</a>".html_safe
   end
 
 end

@@ -18,6 +18,11 @@ module Eviterra
     # Custom directories with classes and modules you want to be autoloadable.
     config.autoload_paths += %W(#{config.root}/lib)
 
+    # Rails 4 backport:
+    # убрать после миграции на rails 4
+    config.paths.add "app/controllers/concerns", eager_load: true
+    config.paths.add "app/models/concerns",      eager_load: true
+
     # Activate observers that should always be running.
     # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
 

@@ -116,18 +116,11 @@ module Strategy::Amadeus::Tickets
       # для комиссионных билетов:
 
       # 12P для 12%, 5.50A для 5.50 USD
-      commission = @order.commission_agent
-      encoded_commission =
-        if commission.percentage? && !commission.zero?
-          "#{commission.rate}P"
-        # if commission.usd?
-        #   "#{commission.rate}A"
-        else
-          raise "выписка с комиссией #{commission} пока не поддерживается!"
-        end
 
-      amadeus.cmd("RMCOM*** CLAIM #{encoded_commission}")
+      amadeus.cmd("RMCOM*** CLAIM #{ encode_downtown_commission(@order.commission_agent) }")
+      amadeus.cmd("RMCOM*** AGENT COM #{ encode_downtown_commission(@order.commission_subagent) }")
 
+      # amadeus.cmd("RM COM*** AGENT COM 0.00P")
       # если нужно не брать комиссию с детей или младенцев (зачем?)
       # RMCOM*** CLAIM 12P X/INF, CHD
 
@@ -157,6 +150,19 @@ module Strategy::Amadeus::Tickets
       # amadeus.queue_place_pnr(:office_id => 'NYC1S211F', :queue => '28', :category => '30', :number => @order.pnr_number)
       # ^можно вызывать в "чистой" сессии
       amadeus.cmd('QE/NYC1S211F/28C30')
+    end
+  end
+
+  private
+
+  # кодирует комиссии в формат ремарок для тикетирующего робота downtown-а
+  def encode_downtown_commission(commission)
+    if commission.percentage? && !commission.zero?
+      "#{commission.rate}P"
+    # if commission.usd?
+    #   "#{commission.rate}A"
+    else
+      raise "ticketing in downtown with commission '#{commission}' isn't supported yet"
     end
   end
 
