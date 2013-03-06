@@ -92,54 +92,22 @@ class Completer
   end
 
   def complete(string, position=nil, opts={})
-    string = string.mb_chars
-    position = (position || string.size).to_i
-    position = [position, string.size].min
     data = []
+    string = string.mb_chars
+    position = string.size
     limit = opts[:limit] && opts[:limit].to_i
-
-    unless string.empty?
-      prefix = string[0, position]
-
-      # конец слова, на котором находится курсор
-      postfix = string[position..-1]
-
-      end_poses = []
-      for word_ending_pattern in [ /^\S*/, /^\S*\s+\S+/, /^\S*\s+\S+\s+\S+/]
-        if m = postfix.match(word_ending_pattern)
-          end_poses << (position + m[0].mb_chars.length)
-        end
-      end
-      leftmost_start_pos = nil
-      for word_beginning_pattern in [ /\S+\s+\S+\s+\S+\s*$/, /\S+\s+\S+\s*$/, /\S+\s*$/ ]
-        if m = prefix.match(word_beginning_pattern)
-          word_part = m[0].mb_chars
-
-          start_pos = position - word_part.length
-
-          scan(word_part) do |record|
-
-            leftmost_start_pos ||= start_pos
-
-            end_pos = end_poses.reverse.detect {|pos|
-              record.matches?(string[start_pos...pos])
-            } || end_poses[0]
-
-            hl = normalize(word_part).to_s
-            data << {
-              :insert => record.word,
-              :start => leftmost_start_pos,
-              :end => end_pos,
-              :name => record.name,
-              :hl => hl,
-              :entity => record.entity
-            } unless record.entity[:type] == 'airport' && record.entity[:iata].downcase == word_part.to_s.downcase && data.find{|d| d[:entity][:type] == 'city' && d[:entity][:iata] == record.entity[:iata]} #fixes #249
-            break if data.size == limit
-          end
-        end
-      end
+    scan(string) do |record|
+      hl = normalize(string).to_s
+      data << {
+        :insert => record.word,
+        :start => 0,
+        :end => position,
+        :name => record.name,
+        :hl => hl,
+        :entity => record.entity
+      } unless record.entity[:type] == 'airport' && record.entity[:iata].downcase == string.downcase && data.find{|d| d[:entity][:type] == 'city' && d[:entity][:iata] == record.entity[:iata]} #fixes #249
+      break if data.size == limit
     end
-
 
     if data.blank? && (opts.delete(:jcuken) != false)
       complete(Qwerty.jcuken(string), position, opts.merge(:jcuken => false))
@@ -205,19 +173,9 @@ class Completer
     read_important_objects
     read_countries
     read_cities
-    #read_carriers
-    #read_airplanes
     read_airports
     # FIXME выключил, пока не исправим баг с распознаванием регионов
     #read_regions
-    #read_geotags
-
-    #read_dates
-    #read_months
-    read_passengers
-    #read_comforts
-    #read_airplane_families
-
     @updated_at = Time.now
   end
 
@@ -227,58 +185,6 @@ class Completer
 
   # generated dictionaries
 
-  WEEKDAY_NAMES = ['в воскресенье', 'в понедельник', 'во вторник', 'в среду', 'в четверг', 'в пятницу', 'в субботу']
-  def read_dates
-    days = (1..7).collect {|cnt| date = cnt.days.since(Date.today); [ WEEKDAY_NAMES[date.wday], date] }
-    days << ['сегодня', Date.today]
-    days << ['завтра', Date.today + 1.day]
-    days << ['послезавтра', Date.today + 2.days]
-    days << ['через неделю', Date.today + 7.days]
-    days << ['через месяц', Date.today + 1.month]
-
-    for name, date in days
-      add(:name => name, :type => 'date', :hint => Russian.strftime(date, '%e %B'), :info => Russian.strftime(date, '%A, %e %B %Y года'), :hidden_info => date.strftime('%d%m%y'))
-    end
-  end
-
-  # FIXME пока не возвращает числа
-  MONTHS = [['январь', ['января']],
-             ['февраль', ['февраля']],
-             ['март', ['марта']],
-             ['апрель', ['апреля']],
-             ['май', ['мая']],
-             ['июнь', ['июня']],
-             ['июль', ['июля']],
-             ['август', ['августа']],
-             ['сентябрь', ['сентября']],
-             ['октябрь', ['октября']],
-             ['ноябрь', ['ноября']],
-             ['декабрь', ['декабря']]
-           ]
-  def read_months
-    MONTHS.each_with_index do |month, i|
-      add(:name => month[0], :type => 'date', :aliases => month[1], :hidden_info => (i+1) )
-    end
-  end
-
-  PEOPLE = [['один', {:adults => 1}], ['вдвоем', {:adults => 2}], ['втроем', {:adults => 3}], ['вчетвером', {:adults => 4}], ['впятером', {:adults => 5}], ['с ребенком', {:children => 1}], ['с подругой', {:adults => 2}],['одна', {:adults => 1}], ['двое', {:adults => 2}], ['трое', {:adults => 3}], ['четверо', {:adults => 4}], ['пятеро', {:adults => 5}], ['с младенцем', {:infants => 1}]]
-  def read_passengers
-    PEOPLE.each do |pax, hidden_info|
-      add(:name => pax, :type => 'people', :hidden_info => hidden_info)
-    end
-  end
-
-  def read_comforts
-    ['бизнес-класс', 'эконом-класс'].each do |comfort|
-      add(:name => comfort, :type => 'comfort')
-    end
-  end
-
-  # аргх
-  def read_airplane_families
-    add(:name => 'на Boeing', :aliases => ['Boeing', 'Боинг', 'на Боинге'], :type => 'aircraft')
-    add(:name => 'на Airbus', :aliases => ['Airbus', 'Аирбас', 'Айрбас', 'Эйрбас', 'Эирбас', 'Аэробус'], :type => 'aircraft')
-  end
 
   # dictionaries from database
   def read_important_objects
@@ -344,24 +250,6 @@ class Completer
     end
   end
 
-  def read_carriers
-    Carrier.all.each do |c|
-      synonyms = []
-      synonyms << c.short_name unless c.short_name == c.name
-      synonyms.delete_if &:blank?
-      add(:name => c.name, :type => 'carrier', :code => c.iata, :aliases => synonyms)
-    end
-  end
-
-  def read_airplanes
-    Airplane.all.each do |c|
-      synonyms = []
-      synonyms << c.name_ru unless c.name_ru == c.name
-      synonyms.delete_if &:blank?
-      add(:name => c.name, :type => :aircraft, :code => c.iata, :aliases => synonyms)
-    end
-  end
-
   def add_airport(c)
     unless c.equal_to_city
       synonyms = []
@@ -376,12 +264,6 @@ class Completer
   def read_airports
     Airport.not_important.with_country.each do |c|
       add_airport(c)
-    end
-  end
-
-  def read_geotags
-    GeoTag.all.each do |c|
-      add(:name => c.name, :type => 'geo_tag', :aliases => c.synonyms)
     end
   end
 
