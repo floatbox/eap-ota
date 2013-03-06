@@ -1,14 +1,14 @@
 <div class="os-details" data-flights="<%= segment_id(segment) %>">
 <h4 class="osd-title">
-    <strong class="osdt-main"><%= segment_rt ? t('offer.details.segment_rt') : segment_title(segment) %></strong><% if segment_cabins.length == 1 %> <span class="osdt-hl"><%= human_cabin_ins(segment_cabins.first) %></span><% end %> <%= raw date_with_dow segment.flights.first.departure_date %><% if segment.layovers? %>, <%= with_layovers(segment) %><% end %>
+    <strong class="osdt-main"><%= t(segment_rt ? 'segment_rt' : 'segment', :scope => 'offer.details', :from => dict(segment.departure.city, :from), :to => dict(segment.arrival.city, :to)) %></strong><% if segment_cabins.length == 1 && segment_cabins.first %><%= ',' unless I18n.locale == :ru %> <span class="osdt-hl"><%= t(segment_cabins.first, :scope => 'offer.details.cabin_ins') %></span><% end %><%= ',' unless I18n.locale == :ru %> <%= raw date_with_dow segment.flights.first.departure_date %><% if segment.layovers? %>, <%= with_layovers(segment) %><% end %>
 </h4>
 <% segment_cabins = [] if segment_cabins.length < 2 %>
-<% segment_carrier = primary_carrier(segment) %>
+<% segment_carrier = segment.main_marketing_carrier %>
 <% segment.flights.each_with_index do |flight, fcounter| %>
 <div class="osd-flight wrap">
     <div class="osd-dpt">
         <h5 class="osd-time"><%= fmt_time flight.departure_time %></h5>
-        <h6 class="osd-action"><%= t 'offer.details.dpt' %> <%= nbsp dict(flight.departure.city, :from) %></h6>
+        <h6 class="osd-action"><%= t 'offer.details.dpt' %> <%= dict(flight.departure.city, :from) %></h6>
         <dl class="osd-features">
             <dt><%= t 'offer.details.airport' %></dt>
             <dd><%= full_airport_and_term(flight.departure, flight.departure_term) %></dd>
@@ -19,16 +19,16 @@
             <dt><%= t 'offer.details.aircraft' %></dt>
             <dd><%= dict(flight.equipment_type) %></dd>
             <dt><%= t 'offer.details.duration' %></dt>
-            <dd><%= human_duration(flight.duration) %><% if segment_cabins[fcounter] %> <span class="osdn-hl"><%= human_cabin_nom(segment_cabins[fcounter]) %></span><% end %></dd>
+            <dd><%= human_duration(flight.duration) %><% if segment_cabins[fcounter] %> <span class="osdn-hl"><%= t(segment_cabins[fcounter], :scope => 'offer.details.cabin_nom') %></span><% end %></dd>
             <%# FIXME выключаю, пока что это в админской инфе %>
-            <% if false && admin_user%>
+            <% if false && admin_user %>
                 <p style="text-align:center"><a href='<%= show_seat_map_url(flight.flight_code) %>' target="_blank">карта мест</a></p>
             <% end %>
          </dl>
     </div>
     <div class="osd-arv">
         <h5 class="osd-time"><%= fmt_time flight.arrival_time %></h5>
-        <h6 class="osd-action"><%= t 'offer.details.arv' %> <%= nbsp dict(flight.arrival.city, :to) %><%= raw " #{ nbsp(human_date(flight.arrival_date)) }" if fcounter == segment.flights.length - 1 && flight.arrival_date != segment.flights[0].departure_date %></h6>
+        <h6 class="osd-action"><%= t 'offer.details.arv' %> <%= dict(flight.arrival.city, :to) %><%= raw " #{ nbsp(human_date(flight.arrival_date)) }" if fcounter == segment.flights.length - 1 && flight.arrival_date != segment.flights[0].departure_date %></h6>
         <% layover = segment.layover_durations[fcounter] %>
         <dl class="osd-features">
             <dt><%= t 'offer.details.airport' %></dt>

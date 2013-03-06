@@ -1,4 +1,5 @@
 //= require i18n_init
+//= require common/user
 
 $(function() {
     var rhost = document.referrer && document.referrer.split('#')[0].replace(/https?:\/\/|\/$/g, ''); 

@@ -155,6 +155,7 @@
 <div class="rf-data" id="rfg-layovers">
 <% if data[:few_layovers] || data[:min_layover_duration] != data[:max_layover_duration]%>
 <div class="rfg-column">
+<div class="rf-list">
 <% if data[:few_layovers] %>
     <h6 class="rfgc-title">Количество</h6>
     <div class="rf-lcount">
@@ -178,6 +179,7 @@
     </div>
 <% end %>
 </div>
+</div>
 <% end %>
 <% if data[:layover_cities].length > 0 %>
 <div class="rfg-column">
@@ -186,7 +188,7 @@
     <ul class="rf-values">
     <li class="rfv-empty rfv-selected">любой</li>    
     <% data[:layover_cities].each do |city| %>
-        <li class="rfv-item" data-value="<%= city.iata %>"><%= city.name %></li>
+        <li class="rfv-item" data-value="<%= city.iata %>"><%= dict(city) %></li>
     <% end %>
     </ul>
 </div>

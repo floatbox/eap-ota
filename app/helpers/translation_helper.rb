@@ -82,10 +82,10 @@ module TranslationHelper
     i = t('results.header.infants')[infants - 1] if infants > 0
     case I18n.locale
     when :ru
-      return [a, c || i ? [c, i].compact.join(t('nbsp_and')) : nil].compact.join(' ')
-    when :en
+      return [a, c, i].compact.to_sentence(:words_connector => ' ', :two_words_connector => c && i ? t('nbsp_and') : ' ')
+    else
       return [a, c, i].compact.join(', ')
     end  
   end
-  
+
 end
