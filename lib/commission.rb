@@ -1644,6 +1644,7 @@ commission "1%/5"
 example 'ledprg prgled'
 agent "1 euro с билета по опубл. тарифам на все остальные рейсы LO."
 subagent "5 рублей"
+interline :no, :yes
 our_markup "0.2%"
 commission "1eur/5"
 
