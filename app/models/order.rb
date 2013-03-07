@@ -551,7 +551,10 @@ class Order < ActiveRecord::Base
   end
 
   def set_customer
-    self.customer = Customer.find_or_create_by_email(email)
+    self.customer = Customer.find_or_initialize_by_email(email)
+    # TODO этот вызов надо будет убрать при запуске ЛК
+    customer.skip_confirmation_notification!
+    customer.save unless customer.persisted?
   end
 
   def set_payment_status

@@ -3,7 +3,7 @@ class Customer < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable, :validatable
   devise :database_authenticatable, :registerable, :validatable,
-          :confirmable, # это надо отключать что бы приглашение не приходило автоматом при создании кастомера
+          :confirmable,
           :recoverable, :rememberable, :trackable
 
   # Setup accessible (or protected) attributes for your model
@@ -15,6 +15,17 @@ class Customer < ActiveRecord::Base
 
   def password_required?
     super if confirmed?
+  end
+
+  # TODO этот метод надо будет убрать при запуске ЛК
+  # он отключает отсылку приглашения при создании кастомера
+  def confirmation_required?
+    !@skip_confirmation_notification
+  end
+  # этот метод уже рализован в devise но еще не выложен в gem
+  # https://github.com/plataformatec/devise/commit/72cfaad6185332857cb5860a1d812f573efadaf7
+  def skip_confirmation_notification!
+    @skip_confirmation_notification = true
   end
 
   def password_match?
