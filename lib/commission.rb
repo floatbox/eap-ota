@@ -624,7 +624,9 @@ check {
     (includes(city_iatas.first, 'IEV') and includes_only(city_iatas, 'IEV ROM MIL')) or
     (includes(city_iatas.first, 'TBS') and includes_only(city_iatas, 'TBS ROM')) or
     (includes(city_iatas.first, 'EVN') and includes_only(city_iatas, 'EVN ROM'))
-  )
+  ) and
+  flights.first.dept_date >= Date.parse('1st Feb 2013') and flights.last.dept_date <= Date.parse('30th Sep 2013')
+  # аццки захардкодил период перелета у авиакомпании
 }
 discount "7.5%"
 commission "10%/8%"
@@ -1785,6 +1787,7 @@ discount "2.8%"
 commission "5%/3.5%"
 
 example 'cdgcai'
+example 'KULCAI'
 agent    "5% от тарифа для иных международных рейсов MS"
 subagent "3,5% от тарифа для иных международных рейсов MS"
 international
