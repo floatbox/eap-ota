@@ -106,8 +106,16 @@ class Order < ActiveRecord::Base
 
   before_validation :capitalize_pnr
   before_save :calculate_price_with_payment_commission, :if => lambda { price_with_payment_commission.blank? || price_with_payment_commission.zero? || !fix_price? }
-  before_create :generate_code, :set_customer, :set_payment_status, :set_email_status
+  before_create :generate_code, :set_customer, :set_payment_status, :set_email_status, :set_fee_scheme, :set_price_acquiring_compensation
   after_save :create_order_notice
+
+  def set_fee_scheme
+    self.fee_scheme = Conf.site.fee_scheme
+  end
+
+  def set_price_acquiring_compensation
+    self.price_acquiring_compensation = price_payment_commission
+  end
 
   def create_order_notice
     if !offline_booking && email_status == ''
@@ -188,10 +196,6 @@ class Order < ActiveRecord::Base
 
   def tickets_office_ids
     tickets_office_ids_array.join('; ')
-  end
-
-  def need_attention
-    1 if price_difference != 0
   end
 
   def generate_code
@@ -330,8 +334,8 @@ class Order < ActiveRecord::Base
     self.price_discount = sold_tickets.sum(:price_discount)
     self.price_our_markup = sold_tickets.sum(:price_our_markup)
     self.price_operational_fee = sold_tickets.sum(:price_operational_fee)
+    self.price_acquiring_compensation = sold_tickets.sum(:price_acquiring_compensation)
 
-    self.price_difference = price_total - price_total_old if price_difference == 0
     first_ticket = tickets.where(:kind => 'ticket').first
     self.ticketed_date = first_ticket.ticketed_date if !ticketed_date && first_ticket # для тех случаев, когда билет переводят в состояние ticketed руками
     update_incomes

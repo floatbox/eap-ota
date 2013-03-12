@@ -56,7 +56,7 @@ ru:
         price_operational_fee: "Сбор за операцию, р."
         price_total: "Cтоимость билета до эквайринга, р."
         price_payment_commission: "Эквайринг, р."
-        stored_price_payment_commission: "Эквайринг, р.(для возвратов)"
+        price_acquiring_compensation: "Эквайринг, р.(для возвратов)"
         price_with_payment_commission: "Итого к оплате / Оплачено, р."
         price_original: "Касса: Режим 1 или 3"
         price_tax_extra: "Касса: Режим 2"

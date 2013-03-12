@@ -35,7 +35,7 @@ class Ticket < ActiveRecord::Base
     :through => :order, :source => :tickets, :order => 'tickets.number asc',
     :conditions => lambda {|_| ["tickets.id <> ?", id] }
 
-  delegate :need_attention, :paid_by, :to => :order
+  delegate :paid_by, :to => :order
 
   delegate :commission_carrier, :to => :order, :allow_nil => true
 
@@ -64,6 +64,16 @@ class Ticket < ActiveRecord::Base
   attr_accessor :parent_number, :parent_code
   attr_writer :price_fare_base, :flights
   before_validation :set_info_from_flights
+  before_create :set_fee_scheme
+  before_save :set_price_acquiring_compensation, :if => lambda {corrected_price && (price_acquiring_compensation == 0)}
+
+  def set_price_acquiring_compensation
+    self.price_acquiring_compensation = price_payment_commission
+  end
+
+  def set_fee_scheme
+    self.fee_scheme = Conf.site.fee_scheme
+  end
 
   def show_vat
     vat_status != 'unknown'
@@ -261,7 +271,7 @@ class Ticket < ActiveRecord::Base
     self.price_consolidator *= -1 if price_consolidator > 0
     self.commission_subagent = 0 if price_fare != -parent.price_fare && !parent.commission_subagent.percentage?
     self.commission_agent = 0 if price_fare != -parent.price_fare && !parent.commission_agent.percentage?
-    self.stored_price_payment_commission *= -1 if stored_price_payment_commission > 0
+    self.price_acquiring_compensation *= -1 if price_acquiring_compensation > 0
     self.corrected_price = price_with_payment_commission
   end
 

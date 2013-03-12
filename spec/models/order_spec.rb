@@ -8,6 +8,14 @@ describe Order do
     order.save!
   end
 
+  describe "#update_prices_from_tickets" do
+    it 'updates price_acquiring_compensation' do
+      order = create(:order)
+      ticket = create(:ticket, :corrected_price => (order.price_with_payment_commission * 2), :order => order)
+      order.price_acquiring_compensation.round(2).should == (ticket.price_acquiring_compensation).round(2)
+    end
+  end
+
   describe "#capitalize_pnr" do
     it "should strip spaces" do
       order = Order.new :pnr_number => '  БХЦ45 '
@@ -26,6 +34,18 @@ describe Order do
       order.send :capitalize_pnr
       order.pnr_number.class.should == String
     end
+  end
+
+  it "should set fee_scheme from config" do
+    Conf.site.stub(:fee_scheme).and_return('v1')
+    order = build(:order)
+    order.save
+    order.fee_scheme.should == 'v1'
+  end
+
+  it "sets price_acquiring_compensation before create" do
+    order = create(:order)
+    order.price_acquiring_compensation.round(2).should == order.price_payment_commission.round(2)
   end
 
   describe "#create_cash_payment" do
