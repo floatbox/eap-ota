@@ -624,7 +624,9 @@ check {
     (includes(city_iatas.first, 'IEV') and includes_only(city_iatas, 'IEV ROM MIL')) or
     (includes(city_iatas.first, 'TBS') and includes_only(city_iatas, 'TBS ROM')) or
     (includes(city_iatas.first, 'EVN') and includes_only(city_iatas, 'EVN ROM'))
-  )
+  ) and
+  flights.first.dept_date >= Date.parse('1st Feb 2013') and flights.last.dept_date <= Date.parse('30th Sep 2013')
+  # аццки захардкодил период перелета у авиакомпании
 }
 discount "7.5%"
 commission "10%/8%"
@@ -1785,6 +1787,7 @@ discount "2.8%"
 commission "5%/3.5%"
 
 example 'cdgcai'
+example 'KULCAI'
 agent    "5% от тарифа для иных международных рейсов MS"
 subagent "3,5% от тарифа для иных международных рейсов MS"
 international
@@ -3060,16 +3063,41 @@ commission "5%/3%"
 
 carrier "S7", "S7 AIRLINES"
 ########################################
-carrier_defaults :consolidator => 0, :ticketing_method => "downtown"
+carrier_defaults :consolidator => 0, :ticketing_method => "direct"
+
+example 'svonoz'
+example 'svonoz/business nozsvo'
+example 'ovbhta'
+example 'ovbhta/business htaovb'
+example 'ovbuud'
+example 'ovbuud/business uudovb/business'
+agent "По отдельным направлениям: MOW-NOZ (только PtP), OVB-HTA (только PtP), OVB-UUD (только PtP) 3%"
+subagent "3%"
+classes :economy, :business
+check { includes_only(city_iatas, 'MOW NOZ') or includes_only(city_iatas, 'OVB HTA') or includes_only(city_iatas, 'OVB UUD') }
+discount "2%"
+commission "3%/3%"
+
+example 'svocdg/w cdgsvo/w'
+agent "При продаже перевозок по коду бронирования W, оформленных на ПД на рейсы Перевозчика, вознаграждение составляет 0,1%"
+subagent "0.1%"
+subclasses "W"
+commission "0.1%/0.1%"
 
 example 'svocdg cdgsvo'
-agent "выписывать руками в даунтауне, пока не появилась прямая продажа"
-subagent ""
-our_markup 300
-##disabled "до времени"
-#discount "4.5%"
-interline :no, :yes
-commission "0%/0%"
+example 'svoled ledsvo'
+agent "При продаже перевозок на внутренние воздушные линии, оформленные на ПД на рейсы Перевозчика, вознаграждение составляет 5%"
+agent "При продаже перевозок на международные воздушные линии и при продаже комбинированной перевозки на внутренние воздушные линии и международные воздушные линии, на которой установлен единый сквозной тариф, оформленных на ПД на рейсы  Перевозчика, вознаграждение составляет"
+subagent "5%"
+discount "4.2%"
+commission "5%/5%"
+
+example 'svocdg/ab cdgsvo'
+agent "При продаже перевозок на рейсы других авиакомпаний, с которыми Перевозчик имеет Соглашение INTERLINE и по специальным прорейтовым тарифам на рейсы, включающие участки Перевозчика и других авиакомпаний, с которыми Перевозчик имеет Соглашение INTERLINE, оформленных на ПД, вознаграждение составляет 5%"
+subagent "5%"
+interline :yes
+discount "4.2%"
+commission "5%/5%"
 
 carrier "GA", "GARUDA INDONESIA"
 ########################################
