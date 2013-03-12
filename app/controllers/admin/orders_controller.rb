@@ -31,7 +31,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
     # FIXME для наших дейт-фильтров нужен формат 2012/2/21 вместо 2012-02-21
     #add_predefined_filter 'Today', {:created_at => Date.today.to_s(:db)}
     #add_predefined_filter 'Yesterday', {:created_at => Date.yesterday.to_s(:db)}
-    params[:search] = params[:search].gsub(/\./, '_') if params[:search].include? '@'
+    params[:search] = params[:search].gsub(/\./, '_') if params[:search] && params[:search].include?('@')
     super
   end
 
