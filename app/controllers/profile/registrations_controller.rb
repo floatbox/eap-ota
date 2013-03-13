@@ -1,5 +1,7 @@
 class Profile::RegistrationsController < Devise::RegistrationsController
 
+  layout "profile"
+
   def create
     hash ||= params[resource_name] || {}
     self.resource = resource_class.find_by_email(hash[:email])

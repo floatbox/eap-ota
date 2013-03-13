@@ -1,6 +1,12 @@
 # Additional translations at https://github.com/plataformatec/devise/wiki/I18n
 
 ru:
+  time:
+    formats:
+      short: "%-d %b"
+      human: "%-d %B"
+      human_year: "%-d %B %Y"
+      dow: "%A"
   errors:
     messages:
       expired: "has expired, please request a new one"

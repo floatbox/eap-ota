@@ -1,76 +1,65 @@
-<!DOCTYPE HTML>
-<html lang="ru-RU">
-<head>
-	<meta charset="utf-8">
-    <title>Eviterra — самые дешевые авиабилеты по всему миру онлайн. Все авиакомпании. Максимальные скидки.</title>
-    <meta name="description" content="Eviterra — простой, удобный и быстрый способ найти и купить авиабилет. Поиск, выбор рейса и бронирование онлайн. Мгновенная оплата и оформление авиабилетов. Цены на авиабилеты.">
-    <meta name="keywords" content="авиабилет, авиабилеты, дешевые авиабилеты, авиабилеты онлайн, авиакасса, авиа билеты, авиакомпании, все авиакомпании, купить авиабилеты, куплю авиабилеты, авиабилеты дешево, самые дешевые авиабилеты, стоимость авиабилетов, билеты на самолет, авиабилеты из москвы, забронировать авиабилеты, бронирование авиабилетов, выбрать рейс, авиарейс, перелет, дешевые авиаперелеты, цены на билеты, онлайн бронирование, эвитерра, авитерра, авитера, евитерра, eviterra, aviterra.ru, evitera, эвитера, эвиттера, эвиттерра, спецпредложения, акции, авиакомпании, расписание рейсов, сложный маршрут, агентство, турагентство, путешествия, аэрофлот, трансаэро, lufthansa, iberia, s7, сибирь, delta, ютэйр, гтк россия, пулково, аэросвит, air berlin, шереметьево, домодедово, внуково, авиабилеты по россии, авиабилеты в европу, авиабилеты в сша">
-    <%= render 'shared/head' %>
-    <%= stylesheet_link_tag 'home' %>
-    <%= javascript_include_tag 'home' %>
-</head>
-<body>
+<% content_for :title do %>Личный кабинет<% end %>
 
-<%= render 'shared/header' %>
-
-<div id="corporate">
-<div class="corporate-content">
-		<%= button_to('ВЫХОД', destroy_customer_session_path, :method => :delete) %><br>
-		<%= link_to "Change your password", edit_customer_registration_path %>
-
-    <p class="corporate-message">Личный кабинет</p>
-		<p>
-			ID: <%= current_customer.id%><br>
-			Email: <%= current_customer.email%><br>
-			confirmed?: <%= current_customer.confirmed?%><br>
-		</p>
-		<hr>
-		<p>
-			<% @orders.each do |order| %>
-			<%= order.created_at%> --- <%= order.pnr_number%> --- <%= order.ticket_status%><br>
-			<% end %>
-		</p>
+<div style="float: right;">
+    <%= button_to('Выйти', destroy_customer_session_path, :method => :delete) %>
 </div>
-</div>
+<h2 class="page-title"><%= current_customer.email %><%#= current_customer.confirmed? %></h2>
 
+<%#= link_to "Change your password", edit_customer_registration_path %>
 
+<ul class="profile-menu">
+    <li class="pm-item">Заказы</li>
+    <li class="pm-item">Пассажиры</li>
+    <li class="pm-item">Подписки</li>
+</ul>
 
-<%= render 'shared/footer' %>
+<%#= debug @orders.first %>
 
+<table id="personal-orders">
+<thead class="po-header">
+<tr>
+    <th>дата</th>
+    <th>номер</th>
+    <th>маршрут</th>
+    <th>билетов</th>
+    <th style="text-align: right;">стоимость</th>
+    <th style="width: 100px;">статус</th>
+</tr>
+</thead>
+<% @orders.each do |order| %>
+<tbody class="po-row po-compact">
+<tr>
+    <td style="width: 90px;"><%= l(order.created_at, :format => :human) %></td>
+    <td><%= order.pnr_number %></td>
+    <td><%= order.route %></td>
+    <td><%= order.blank_count %></td>
+    <td style="text-align: right;"><%= decorate_price short_price(order.price_with_payment_commission.round.to_i) %></td>
+    <td><%= order.ticket_status %></td>
+</tr>
+<tr class="po-details">
+    <td colspan="2">
+        <h6 class="po-name">MAXIM ZAKHAROV</h6>
+    </td>
+    <td>
+        <p class="po-ticket">билет № 25763756723</p>
+    </td>
+    <td colspan="3">
+        <dl class="wrap">
+            <dt class="po-pnr">маршрут квитанция&nbsp;</dt>
+            <dd class="po-pnr-links">
+                <a href="/">на русском</a><br>
+                <a href="/">на английском</a>
+            </dd>
+        </dl>
+    </td>
+</tr>
+</tbody>
+<% end %>
+</table>
 <script type="text/javascript">
-page.init();
+var ordersTable = $('#personal-orders');
+ordersTable.on('click', '.po-compact', function() {
+    ordersTable.find('.po-detailed').addClass('po-compact').removeClass('po-detailed');
+    $(this).addClass('po-detailed').removeClass('po-compact');
+});
 </script>
-
-<script src="//translate.google.com/translate_a/element.js?cb=googleSectionalElementInit&ug=section&hl=ru"></script>
-<script type="text/javascript" src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false&language=ru"></script>
-
-<script type="text/javascript" src="//vk.com/js/api/openapi.js?68"></script>
-<script type="text/javascript">
-(function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=429677207045748";
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
-(function(d, s, id) {
-    var js,fjs=d.getElementsByTagName(s)[0];
-    if(!d.getElementById(id)) {
-        js = d.createElement(s); js.id = id;
-        js.src="//platform.twitter.com/widgets.js";
-        fjs.parentNode.insertBefore(js,fjs);}
-}(document,"script","twitter-wjs"));
-(function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/plusone.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-})();
-(function() {
-    VK.init({apiId: 3261549, onlyWidgets: true});
-    VK.Widgets.Like('vk-like', {type: 'mini', height: 20, pageUrl: 'https://eviterra.com/'});
-})();
-$('#share-icons').show();
-</script>
-
-</body>
-</html>

@@ -1,0 +1,60 @@
+/* Menu */
+.profile-menu {
+    margin: 20px 0 30px;
+    overflow: hidden;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 20px;
+}
+.pm-item {
+    margin-right: 30px;
+    float: left;
+}
+
+/* Table */
+#personal-orders {
+    margin-left: -14px;
+}
+
+/* Table head */
+.po-header th {
+    text-align: left;
+    color: #777;
+    padding: 0 10px 14px 14px;
+    font-size: 12px;
+}
+.po-row td {
+    padding: 10px 14px;
+    vertical-align: top;
+}
+.po-compact {
+    cursor: pointer;
+}
+.po-compact:hover {
+    background: #e9eaec;
+}
+
+/* Details */
+.po-compact .po-details {
+    display: none;
+}
+.po-details td {
+    padding-top: 0;
+    line-height: 15px;
+}
+.po-pnr,
+.po-pnr-links {
+    float: left;
+}
+.po-name {
+    margin: 0 0 8px;
+    font-weight: bold;
+}
+.personal-orders .po-ticket {
+    margin: 0 0 8px;
+}
+
+/* Selected row */
+.po-detailed {
+    background: #FFF;
+}

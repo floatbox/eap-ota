@@ -1,0 +1,24 @@
+<div class="ph-user" id="user">
+    <div class="phu-link">Личный кабинет<span class="phul-bar"></span></div>
+    <div class="phu-popup">
+        <%= form_for("customer", :url => customer_session_path, :html => {:class => 'phu-section', :style => 'border-bottom: 1px solid #ada977;'}) do |f| %>
+            <h6 class="phus-title">Вход с паролем</h6>
+            <div class="phu-field">
+                <%= f.label :email, 'электронный адрес', :class => 'phuf-placeholder' %>
+                <%= f.email_field :email, :class => 'phuf-input' %>
+            </div>
+            <div class="phu-field">
+                <%= f.label :password, 'пароль', :class => 'phuf-placeholder' %>
+                <%= f.password_field :password, :class => 'phuf-input' %>
+            </div>
+            <div class="phu-submit">
+                <%= link_to "Забыли пароль?", new_customer_password_path, :class => 'phu-forgot' %>
+                <%= f.submit "Войти", :class => 'phu-button' %>
+            </div>
+        <% end %>
+        <div class="phu-section">
+            <h6 class="phus-title" style="margin-bottom: 5px;"><%= link_to "Регистрация", new_customer_registration_path, :class => 'phust-link' %></h6>
+            <p>Нужна для того, чтобы хранить вашу историю заказов и данные пассажиров. После первого заказа у нас вы будете зарегистрированы автоматически.</p>
+        </div>
+    </div>
+</div>
