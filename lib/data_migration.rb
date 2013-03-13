@@ -6,6 +6,10 @@ require 'csv'
 
 module DataMigration
 
+  def self.set_price_acquiring_compensation_and_price_difference
+    Ticket.order('created_at DESC').every.save
+  end
+
   def self.fill_in_parent_pnr_number
     PaperTrail.controller_info = {:done => 'fill_in_parent_pnr_number'}
     orders = Order.where('(pnr_number is null or pnr_number = "") and (parent_pnr_number is null or parent_pnr_number = "") and payment_type = "card" and payment_status = "charged"').includes(:order_comments)
