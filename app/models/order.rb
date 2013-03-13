@@ -106,15 +106,16 @@ class Order < ActiveRecord::Base
 
   before_validation :capitalize_pnr
   before_save :calculate_price_with_payment_commission, :if => lambda { price_with_payment_commission.blank? || price_with_payment_commission.zero? || !fix_price? }
-  before_create :generate_code, :set_customer, :set_payment_status, :set_email_status, :set_fee_scheme, :set_price_acquiring_compensation
+  before_save :set_prices
+  before_create :generate_code, :set_customer, :set_payment_status, :set_email_status
   after_save :create_order_notice
 
-  def set_fee_scheme
-    self.fee_scheme = Conf.site.fee_scheme
-  end
-
-  def set_price_acquiring_compensation
-    self.price_acquiring_compensation = price_payment_commission
+  def set_prices
+    if new_record?
+      self.fee_scheme = Conf.site.fee_scheme
+      self.price_acquiring_compensation = price_payment_commission
+    end
+    self.price_difference = price_with_payment_commission - price_real
   end
 
   def create_order_notice

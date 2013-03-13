@@ -9,6 +9,11 @@ describe Ticket do
     ticket.fee_scheme.should == 'v1'
   end
 
+  it 'sets price_difference before save' do
+    ticket = create(:ticket, :corrected_price => 2000)
+    ticket.price_difference.should == (ticket.price_with_payment_commission - ticket.price_real)
+  end
+
   describe 'price_acquiring_compensation' do
     it 'is set after save if corrected_price is present' do
       ticket = create(:ticket, :corrected_price => 1200)

@@ -48,6 +48,11 @@ describe Order do
     order.price_acquiring_compensation.round(2).should == order.price_payment_commission.round(2)
   end
 
+  it 'set price_difference before save' do
+    order = create(:order)
+    order.price_difference.should == (order.price_with_payment_commission - order.price_real)
+  end
+
   describe "#create_cash_payment" do
 
     include Commission::Fx

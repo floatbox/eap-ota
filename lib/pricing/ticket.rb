@@ -75,7 +75,12 @@ module Pricing
 
     def price_tax_and_markup_and_payment
       price_with_payment_commission - price_fare + price_declared_discount
-      end
+    end
+
+
+    def price_real# сумма всех компонентов цены кроме корректировки
+      price_total + price_acquiring_compensation
+    end
 
     def fee
       price_with_payment_commission - price_tax - price_fare + price_declared_discount

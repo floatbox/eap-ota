@@ -64,15 +64,12 @@ class Ticket < ActiveRecord::Base
   attr_accessor :parent_number, :parent_code
   attr_writer :price_fare_base, :flights
   before_validation :set_info_from_flights
-  before_create :set_fee_scheme
-  before_save :set_price_acquiring_compensation, :if => lambda {corrected_price && (price_acquiring_compensation == 0)}
+  before_save :set_prices
 
-  def set_price_acquiring_compensation
-    self.price_acquiring_compensation = price_payment_commission
-  end
-
-  def set_fee_scheme
-    self.fee_scheme = Conf.site.fee_scheme
+  def set_prices
+    self.fee_scheme = Conf.site.fee_scheme if new_record?
+    self.price_acquiring_compensation = price_payment_commission if corrected_price && (price_acquiring_compensation == 0)
+    self.price_difference = price_with_payment_commission - price_real
   end
 
   def show_vat

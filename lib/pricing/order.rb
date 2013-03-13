@@ -82,6 +82,10 @@ module Pricing
       price_tax + price_markup
     end
 
+    def price_real# сумма всех компонентов цены кроме корректировки
+      price_total + price_acquiring_compensation
+    end
+
     def price_total
       price_fare + price_tax + price_markup
     end
