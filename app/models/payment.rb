@@ -23,7 +23,7 @@ class Payment < ActiveRecord::Base
   # зачатки payment strategy
   # сейчас создает только кредитнокарточковые платежи
   def self.select_and_create(args)
-    gateway = args.delete(:gateway).presence || Conf.payment.card_processing
+    gateway = args.delete(:gateway).presence || Conf.payment.card_processing.to_sym
 
     # можно false
     return unless gateway
