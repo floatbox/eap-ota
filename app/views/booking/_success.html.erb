@@ -13,14 +13,14 @@
             <p class="bfrsa-item"><a href="http://twitter.com/?status=<%= tweet %>" target="_blank">Поделиться в Твиттере</a></p>
         <% end %>
         <% gevent = order_event(@order_form) %>
-        <% unless gevent.empty? %>        
+        <% unless gevent.empty? %>
             <p class="bfrsa-item"><a href="http://www.google.com/calendar/event?action=TEMPLATE&<%= gevent %>" target="_blank">Добавить поездку в Гугл-календарь</a></p>
         <% end %>
     </div>
-    <% if insurance_url = smart_insurance_uri(@order_form) %>
-    <div class="bfrs-insurance">    
+    <% if insurance_url = sravnikupi_insurance_uri(@order_form) %>
+    <div class="bfrs-insurance">
         <h5 class="bfrs-title">Туристическая страховка онлайн</h5>
-        <a class="bfrsi-link" href="<%= insurance_url %>" target="_blank">Узнать стоимость и&nbsp;купить</a>
+        <a class="bfrsi-link-new" href="<%= insurance_url %>" target="_blank">Узнать стоимость и&nbsp;купить</a>
         <p class="bfrsi-item">Оплата картой</p>
         <p class="bfrsi-item">Электронный полис</p>
         <p class="bfrsi-item">Подходит для визы</p>
