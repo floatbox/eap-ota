@@ -74,7 +74,7 @@
         <% unless @prices.price_declared_discount.zero? %>
         <tr>
             <td><% unless @lang %>Скидка <span style="color: #C0C0C0;">/</span> <% end %>Discount</td>
-            <td><%= exact_price(@prices.price_declared_discount) %> RUB</td>
+            <td><%= exact_price(-@prices.price_declared_discount) %> RUB</td>
         </tr>
         <% end %>
         <tr>

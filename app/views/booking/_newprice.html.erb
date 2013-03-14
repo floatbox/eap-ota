@@ -11,7 +11,7 @@
     </div>
     <% price_fare = @order_form.recommendation.price_fare.round.to_i %>
     <% price_tax_and_markup = @order_form.recommendation.price_tax_and_markup.round.to_i %>
-    <% price_discount = @order_form.recommendation.price_discount.round.to_i %>    
+    <% price_discount = -@order_form.recommendation.price_discount.round.to_i %>
     <div class="bfnp-data" data-price="<%= price_total %>">
         <p class="bffp-card"><%= t 'booking.price.total_card', :count => price_total %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>    
         <p class="bffp-nd"><%= t 'booking.price.total_cash' %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>
@@ -24,7 +24,7 @@
             <li class="bffpd-item bffp-wd"><%= t 'booking.price.delivery' %> — <%= short_price(400) %></li>
             <% if price_discount > 0 %>
                 <li class="bffpd-item"><%= t 'booking.price.discount' %> — <%= short_price(price_discount) %></li>
-            <% end %>        
+            <% end %>
         </ul>
     </div>
 </div>

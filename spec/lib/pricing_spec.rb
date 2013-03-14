@@ -44,7 +44,7 @@ describe Pricing::Order do
     context "base scenario with percentages" do
       its(:price_subagent) {should == 1000}
       its(:price_consolidator) {should == 400}
-      its(:price_discount) {should == 400}
+      its(:price_discount) {should == -400}
       its(:price_our_markup) {should == 200}
       its(:price_with_payment_commission) {should == 22048.88}
     end
@@ -56,7 +56,7 @@ describe Pricing::Order do
 
       its(:price_subagent) {should == 1000}
       its(:price_consolidator) {should == 400}
-      its(:price_discount) {should == 400}
+      its(:price_discount) {should == -400}
       its(:price_our_markup) {should == 200}
       its(:price_with_payment_commission) {should == 22048.88}
     end

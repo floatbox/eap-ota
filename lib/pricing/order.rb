@@ -62,7 +62,7 @@ module Pricing
 
     # подгнанные "налоги и сборы c комиссией" для отображения клиенту
     def price_tax_and_markup_and_payment
-      recalculated_price_with_payment_commission - price_fare + price_declared_discount
+      recalculated_price_with_payment_commission - price_fare - price_declared_discount
     end
 
     # подгнанный "сбор" для отображения клиенту
@@ -70,7 +70,7 @@ module Pricing
       if sold_tickets.present? && sold_tickets.all?{|ticket| ticket.price_tax >= 0 && ticket.office_id != 'FLL1S212V' } #мы ебанулись! иначе глючит с трансаэровскими отрицательными таксами
         sold_tickets.to_a.sum(&:fee)
       else
-        recalculated_price_with_payment_commission - price_tax - price_fare + price_declared_discount
+        recalculated_price_with_payment_commission - price_tax - price_fare - price_declared_discount
       end
     end
 
@@ -91,7 +91,7 @@ module Pricing
     end
 
     def price_markup
-      price_consolidator + price_blanks + price_our_markup - price_discount + price_operational_fee
+      price_consolidator + price_blanks + price_our_markup + price_discount + price_operational_fee
     end
 
     # FIXME сломается, если там не проценты!
@@ -144,7 +144,7 @@ module Pricing
 
     # Касса: Режим 1 или 3  (скорректированная доля поставщика, для пробивания НДС в кассе)
     def price_original
-      price_tax + price_fare - price_discount
+      price_tax + price_fare + price_discount
     end
 
     # Касса: Режим 2 (не облагается НДС)
@@ -160,7 +160,7 @@ module Pricing
       self.price_subagent = commission_subagent.call(price_fare, :multiplier =>  blank_count)
       self.price_consolidator = commission_consolidator.call(price_fare, :multiplier => blank_count)
       self.price_blanks = commission_blanks.call(price_fare, :multiplier => blank_count)
-      self.price_discount = commission_discount.call(price_fare, :multiplier => blank_count)
+      self.price_discount = -commission_discount.call(price_fare, :multiplier => blank_count)
       self.price_our_markup = commission_our_markup.call(price_fare, :multiplier => blank_count)
     end
   end

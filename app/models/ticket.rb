@@ -261,7 +261,7 @@ class Ticket < ActiveRecord::Base
       self.status = 'pending' if status.blank?
     end
     self.price_penalty *= -1 if price_penalty < 0
-    self.price_discount *= -1 if price_discount > 0
+    self.price_discount *= -1 if price_discount < 0
     self.price_our_markup *= -1 if price_our_markup > 0
     self.price_tax *= -1 if price_tax > 0
     self.price_fare *= -1 if price_fare > 0

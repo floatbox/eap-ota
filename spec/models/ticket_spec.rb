@@ -232,7 +232,7 @@ describe Ticket do
       its(:price_subagent) {should == 4}
       its(:price_consolidator) {should == fare * 0.02 }
       its(:price_blanks ) {should == 50 }
-      its(:price_discount) {should == fare * 0.02 }
+      its(:price_discount) {should == -fare * 0.02 }
       its(:price_our_markup) {should == fare * 0.01 }
     end
 
