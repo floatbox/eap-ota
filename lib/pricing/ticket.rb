@@ -33,7 +33,7 @@ module Pricing
     end
 
     def price_markup
-      price_consolidator + price_blanks + price_discount + price_operational_fee
+      price_consolidator + price_our_markup + price_blanks + price_discount + price_operational_fee
     end
 
     def price_total
@@ -83,7 +83,11 @@ module Pricing
     end
 
     def fee
-      price_with_payment_commission - price_tax - price_fare - price_declared_discount
+      if fee_scheme == 'v2'
+        price_blanks + price_consolidator + price_our_markup + price_acquiring_compensation + price_operational_fee
+      else
+        price_with_payment_commission - price_tax - price_fare - price_declared_discount
+      end
     end
 
     def price_declared_discount

@@ -69,6 +69,8 @@ module Pricing
     def fee
       if sold_tickets.present? && sold_tickets.all?{|ticket| ticket.price_tax >= 0 && ticket.office_id != 'FLL1S212V' } #мы ебанулись! иначе глючит с трансаэровскими отрицательными таксами
         sold_tickets.to_a.sum(&:fee)
+      elsif fee_scheme == 'v2'
+        price_blanks + price_consolidator + price_our_markup + price_acquiring_compensation + price_operational_fee
       else
         recalculated_price_with_payment_commission - price_tax - price_fare - price_declared_discount
       end

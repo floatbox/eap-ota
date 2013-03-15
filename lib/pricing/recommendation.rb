@@ -51,10 +51,19 @@ module Pricing
       price_tax + price_markup + price_payment - price_declared_discount
     end
 
+    def fee_scheme
+      Conf.site.fee_scheme
+    end
+
     # "сбор" для отображения клиенту
     def fee
-       price_markup + price_payment - price_declared_discount
-     end
+       #price_markup + price_payment - price_declared_discount
+      if fee_scheme == 'v2'
+        price_blanks + price_consolidator + price_our_markup + price_acquiring_compensation
+      else
+        price_markup + price_payment - price_declared_discount
+      end
+    end
 
     def fee_but_no_payment
        price_markup - price_declared_discount
