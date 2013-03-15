@@ -71,6 +71,9 @@ ru:
         commission_our_markup: "Надбавка к тарифу, %/р. c билета"
         commission_carrier: "Валидирующий перевозчик"
         commission_ticketing_method: "Тип договора/Office ID"
+        price_acquiring_compensation: "Компенсация эквайринга"
+        price_difference: "Корректировка цены"
+        fee_scheme: "Схема расчета сервисного сбора"
       order:
         commission_agent_comments: "Текст договора по агентской комиссии"
         commission_subagent_comments: "Текст договора по субагентской комиссии"

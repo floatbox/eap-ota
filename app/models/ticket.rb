@@ -117,9 +117,13 @@ class Ticket < ActiveRecord::Base
 
    # whitelist офис-айди, имеющих к нам отношение. В брони иногда попадают "не наши" билеты
    # для всех айди в базе можно использовать: Ticket.uniq.pluck(:office_id).compact.sort
-   def self.office_ids
-     ['MOWR2233B', 'MOWR228FA', 'MOWR2219U', 'NYC1S21HX', 'FLL1S212V']
-   end
+  def self.office_ids
+    ['MOWR2233B', 'MOWR228FA', 'MOWR2219U', 'NYC1S21HX', 'FLL1S212V']
+  end
+
+  def self.fee_schemes
+    [ 'v2']
+  end
 
   def self.validating_carriers
     Carrier.uniq.pluck(:iata).sort

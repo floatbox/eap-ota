@@ -47,12 +47,15 @@ Order:
       - price_total
       - price_payment_commission
       - price_with_payment_commission
+      - price_acquiring_compensation
       - commission_agent
       - price_agent
       - commission_subagent
       - price_subagent
       - price_original
       - price_tax_extra
+      - price_difference
+      - fee_scheme
       - commission_carrier
       - commission_agent_comments
       - commission_subagent_comments
@@ -98,7 +101,10 @@ Order:
       - price_our_markup
       - price_operational_fee
       - pricing_method
+      - price_acquiring_compensation
       - price_with_payment_commission
+      - price_difference
+      - fee_scheme
       - fix_price
       - section_state_and_control
       - ticket_status
@@ -126,8 +132,11 @@ Order:
       - commission_discount
       - price_subagent
       - price_discount
+      - price_acquiring_compensation
       - price_with_payment_commission
+      - price_difference
       - price_total
+      - fee_scheme
       - expected_income
       - stored_balance
       - price_our_markup
@@ -136,7 +145,7 @@ Order:
       - refund_date
       - partner
     options:
-      selectors: payment_type, source, ticket_status, pricing_method, commission_ticketing_method
+      selectors: payment_type, source, ticket_status, pricing_method, commission_ticketing_method, fee_scheme
       booleans:
         has_refunds: ['да', 'нет']
         offline_booking: ['ручной', 'автоматический']

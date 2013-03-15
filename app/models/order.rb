@@ -42,6 +42,10 @@ class Order < ActiveRecord::Base
     [ 'booked', 'canceled', 'ticketed', 'processing_ticket', 'error_ticket']
   end
 
+  def self.fee_schemes
+    [ 'v2']
+  end
+
   def self.ticket_office_ids
     Ticket.uniq.pluck(:office_id).compact.sort
   end
