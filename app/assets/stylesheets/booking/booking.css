@@ -332,13 +332,13 @@
 }
 .bfrsi-link {
     float: right;
-    width: 160px;
-    padding: 10px 8px;
+    width: 100px;
+    padding: 16px 8px 16px 70px;
     text-align: center;
     font-size: 20px;
-    line-height: 20px;
-    letter-spacing: -0.03em;    
-    background-color: #FFF;
+    line-height: 23px;
+    letter-spacing: -0.03em;
+    background: url(/images/booking/sravnikupi-logo-60x60.png) no-repeat 12px 50% #FFF;
     text-decoration: underline;
     cursor: pointer;
 }
