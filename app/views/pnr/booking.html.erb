@@ -70,7 +70,7 @@
             <td width="340"><% unless @lang %>Тариф <span style="color: #C0C0C0;">/</span> <% end %>Fare</td>
             <td width="190"><%= exact_price(@prices.price_fare) %> RUB</td>
         </tr>
-        <% unless @prices.price_declared_discount.zero? %>
+        <% if !@prices.price_declared_discount.zero? && @prices.fee_scheme == 'v2'%>
         <tr>
             <td><% unless @lang %>Скидка <span style="color: #C0C0C0;">/</span> <% end %>Discount</td>
             <td><%= exact_price(-@prices.price_declared_discount) %> RUB</td>
