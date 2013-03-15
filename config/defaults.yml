@@ -6,7 +6,7 @@ site:
   forbidden_delivery: no
   store_flights: no
   host: 'http://localhost:3000'
-  fee_scheme: v1
+  fee_scheme: v2
   production:
     host: 'https://eviterra.com'
   staging:
