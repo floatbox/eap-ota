@@ -51,8 +51,9 @@ updateBook: function() {
     var pp = this.selected.price_pure; 
     var state = [];
     if (p < ap) {
-        var percents = Math.round((ap - p) / ap * 100) + '%';
-        if (percents) {
+        var percents_numb = Math.round((ap - p) / ap * 100);
+        var percents = percents_numb + '%';
+        if (percents && percents_numb > 0) {
             state.push(I18n.t('offer.price.average', {value: percents}));
         }
     }
