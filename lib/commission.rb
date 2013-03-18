@@ -1395,13 +1395,13 @@ carrier "JJ", "TAM Linhas Aereas S.A."
 example 'svocdg'
 agent    "1% от всех опубл. тарифов на собств. рейсы JJ (В договоре Interline не прописан.)"
 subagent "0,5% от опубл. тарифа на собств.рейсы JJ"
-commission "1%/0.5%"
+commission "1/0.05"
 
 example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 interline :unconfirmed
-commission "1%/0.5%"
+commission "1/0.05"
 
 carrier "JL", "JAPAN AIRLINES INTERNATIONAL"
 ########################################
