@@ -1,5 +1,13 @@
 <div class="ph-user" id="user">
-    <div class="phu-link">Личный кабинет<span class="phul-bar"></span></div>
+<% if customer_signed_in? %>
+    <div class="phu-link">
+        <a href="<%= profile_path %>"><%= current_customer.email %></a> <span class="phul-logout"><img class="phul-icon" src="/images/common/exit.png" alt="Выйти"></span>
+    </div>
+    <div class="phu-logout">
+        <%= button_to('Выйти', destroy_customer_session_path, :method => :delete) %>    
+    </div>
+<% else %>
+    <div class="phu-control">Личный кабинет<span class="phuc-bar"></span></div>
     <div class="phu-popup">
         <%= form_for("customer", :url => customer_session_path, :html => {:class => 'phu-section', :style => 'border-bottom: 1px solid #ada977;'}) do |f| %>
             <h6 class="phus-title">Вход с паролем</h6>
@@ -21,4 +29,5 @@
             <p>Нужна для того, чтобы хранить вашу историю заказов и данные пассажиров. После первого заказа у нас вы будете зарегистрированы автоматически.</p>
         </div>
     </div>
+<% end %>
 </div>

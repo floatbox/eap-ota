@@ -1,7 +1,17 @@
 var User = {
 init: function() {
-    var that = this;
     this.el = $('#user');
+    var logout = this.el.find('.phu-logout form');
+    if (logout.length) {
+        this.el.find('.phul-logout').on('click', function() {
+            logout.submit();
+        });
+    } else {
+        this.initPopup();
+    }
+},
+initPopup: function() {
+    var that = this;
     this.el.find('.phuf-input').on('input keyup propertychange paste', function() {
         var empty = this.value === '';
         if (empty !== this.empty) {
@@ -11,7 +21,7 @@ init: function() {
     this.el.on('click', function(event) {
         event.stopPropagation();
     });
-    this.el.find('.phu-link').on('click', function() {
+    this.el.find('.phu-control').on('click', function() {
         that[that.el.hasClass('phu-active') ? 'hide' : 'show']();
     });
     this._hide = function(event) {

@@ -93,7 +93,8 @@
     float: left;
     margin-left: 10px;
 }
-.phu-link {
+
+.phu-control {
     position: relative;
     padding: 10px 15px;
     font-size: 13px;
@@ -101,7 +102,7 @@
     text-decoration: underline;
     cursor: pointer;
 }
-.phul-bar {
+.phuc-bar {
     display: none;
     position: absolute;
     top: -10px;
@@ -113,6 +114,7 @@
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
     z-index: -1;
 }
+
 .phu-popup {
     display: none;
     position: absolute;
@@ -180,13 +182,29 @@
 .phu-forgot:hover {
     color: #FFF;
 }
-.phu-active .phu-link {
+.phu-active .phu-control {
     color: #FFF;
     text-decoration: none;
 }
-.phu-active .phul-bar,
+.phu-active .phuc-bar,
 .phu-active .phu-popup {
     display: block;
+}
+
+.phu-link {
+    padding: 10px 15px;
+    font-size: 13px;
+    line-height: 15px;
+}
+.phu-logout {
+    display: none;
+}
+.phul-logout {
+    padding: 0 3px;
+    cursor: pointer;
+}
+.phul-icon {
+    vertical-align: -2px;
 }
 
 

@@ -1,8 +1,5 @@
 <% content_for :title do %>Личный кабинет<% end %>
 
-<div style="float: right;">
-    <%= button_to('Выйти', destroy_customer_session_path, :method => :delete) %>
-</div>
 <h2 class="page-title"><%= current_customer.email %><%#= current_customer.confirmed? %></h2>
 
 <%#= link_to "Change your password", edit_customer_registration_path %>
