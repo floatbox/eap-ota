@@ -3064,7 +3064,7 @@ commission "5%/3%"
 
 carrier "S7", "S7 AIRLINES"
 ########################################
-carrier_defaults :consolidator => 0, :ticketing_method => "direct"
+carrier_defaults :consolidator => 0, :ticketing_method => "downtown"
 
 example 'svonoz'
 example 'svonoz/business nozsvo'
@@ -3076,7 +3076,8 @@ agent "По отдельным направлениям: MOW-NOZ (только P
 subagent "3%"
 classes :economy, :business
 check { includes_only(city_iatas, 'MOW NOZ') or includes_only(city_iatas, 'OVB HTA') or includes_only(city_iatas, 'OVB UUD') }
-discount "2%"
+#discount "4.2%"
+our_markup "400"
 commission "3%/3%"
 
 example 'svocdg/w cdgsvo/w'
@@ -3090,14 +3091,16 @@ example 'svoled ledsvo'
 agent "При продаже перевозок на внутренние воздушные линии, оформленные на ПД на рейсы Перевозчика, вознаграждение составляет 5%"
 agent "При продаже перевозок на международные воздушные линии и при продаже комбинированной перевозки на внутренние воздушные линии и международные воздушные линии, на которой установлен единый сквозной тариф, оформленных на ПД на рейсы  Перевозчика, вознаграждение составляет"
 subagent "5%"
-discount "4.2%"
+#discount "4.2%"
+our_markup "400"
 commission "5%/5%"
 
 example 'svocdg/ab cdgsvo'
 agent "При продаже перевозок на рейсы других авиакомпаний, с которыми Перевозчик имеет Соглашение INTERLINE и по специальным прорейтовым тарифам на рейсы, включающие участки Перевозчика и других авиакомпаний, с которыми Перевозчик имеет Соглашение INTERLINE, оформленных на ПД, вознаграждение составляет 5%"
 subagent "5%"
 interline :yes
-discount "4.2%"
+#discount "4.2%"
+our_markup "400"
 commission "5%/5%"
 
 carrier "GA", "GARUDA INDONESIA"
