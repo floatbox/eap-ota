@@ -1106,7 +1106,7 @@ discount "3%"
 commission '7%/5%'
 
 example 'ledsvo/business svoled/business'
-expr_date "30.03.2013"
+expr_date "26.10.2013"
 agent "9% от опубл.тарифов Бизнес класса на собств.рейсы FV, внутренние и международные, ИСКЛЮЧАЯ рейсы «CODE-Share»."
 subagent "7% от опубл.тарифов Бизнес класса на собственные рейсы FV, внутренние и международные, ИСКЛЮЧАЯ рейсы «CODE-Share»."
 important!
