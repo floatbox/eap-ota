@@ -72,6 +72,7 @@ Order:
       - expected_income
       - balance
       - settled?
+      - display_fee_details
     form:
       - section_general_info
       - description

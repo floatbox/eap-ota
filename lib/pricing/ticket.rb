@@ -26,6 +26,7 @@ module Pricing
     # price_extra_penalty
 
     include IncomeSuppliers
+    include FeeCalculationDetails
     # есть ли расход-приход с поставщиком по билету?
     # используется для подведения счета с поставщиком
     def income_suppliers

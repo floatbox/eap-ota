@@ -31,6 +31,7 @@ module Pricing
 
     # FIXME аггрегировать в заказе price_penalty по возвратам тоже?
     include IncomeSuppliers
+    include FeeCalculationDetails
 
     def income
       income_earnings - income_suppliers

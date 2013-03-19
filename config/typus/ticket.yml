@@ -105,6 +105,7 @@ Ticket:
       - ticketed_date
       - itinerary_receipt
       - mso_number
+      - display_fee_details
     edit:
       - code
       - number

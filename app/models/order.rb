@@ -115,11 +115,16 @@ class Order < ActiveRecord::Base
   after_save :create_order_notice
 
   def set_prices
-    if new_record?
+    if new_record? || fee_scheme.blank?
       self.fee_scheme = Conf.site.fee_scheme
       self.price_acquiring_compensation = price_payment_commission
     end
     self.price_difference = price_with_payment_commission - price_real
+    self.fee_calculation_details = fee_calculation_string if fee_calculation_details.blank?
+  end
+
+  def display_fee_details
+    fee_calculation_details.html_safe
   end
 
   def create_order_notice

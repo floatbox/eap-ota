@@ -40,6 +40,8 @@ class Ticket < ActiveRecord::Base
   delegate :commission_carrier, :to => :order, :allow_nil => true
 
   delegate :old_booking, :to => :order, :allow_nil => true
+  delegate :commission_agent_comments, :to => :order, :allow_nil => true
+  delegate :commission_subagent_comments, :to => :order, :allow_nil => true
 
   # FIXME - временно, эквайринг должен браться из суммы пейментов
   delegate :acquiring_percentage, :to => :order
@@ -67,9 +69,14 @@ class Ticket < ActiveRecord::Base
   before_save :set_prices
 
   def set_prices
-    self.fee_scheme = Conf.site.fee_scheme if new_record?
+    self.fee_scheme = Conf.site.fee_scheme if fee_scheme.blank?
     self.price_acquiring_compensation = price_payment_commission if corrected_price && (price_acquiring_compensation == 0)
     self.price_difference = price_with_payment_commission - price_real
+    self.fee_calculation_details = fee_calculation_string if fee_calculation_details.blank?
+  end
+
+  def display_fee_details
+    fee_calculation_details.html_safe
   end
 
   def show_vat
