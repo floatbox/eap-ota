@@ -26,7 +26,7 @@ module InsuranceHelper
       else
         insurance_start_date + 30.days
       end
-    { 'date_range=' => smart_insurance_date(insurance_start_date) + '-' + smart_insurance_date(insurance_end_date),
+    { 'date_range' => smart_insurance_date(insurance_start_date) + '-' + smart_insurance_date(insurance_end_date),
       'country_code' => journey.segments.first.arrival.country.alpha2,
       'email' => order_form.email,
       'phone' => order_form.phone,
