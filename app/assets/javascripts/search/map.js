@@ -205,7 +205,7 @@ showPrices: function(items) {
         this.prices.link.html('<div class="smpl-content">' + I18n.t('search.map.empty') + '</div>');
         return;
     }
-    var template = '<p class="sml-city">{0}</p><p class="sml-price">{1}&nbsp;<span class="ruble">Р</span></p><p class="sml-dates">{2}</p>';
+    var template = '<a class="sml-link" href="#{3}"><span class="sml-city">{0}</span><span class="sml-price">{1}&nbsp;<span class="ruble">Р</span></span><span class="sml-dates">{2}</span></a>';
     var bounds = new google.maps.LatLngBounds();
     var pmin = items[0].price, pmax = items[0].price;
     for (var i = 0, im = items.length; i < im; i++) {
@@ -216,7 +216,7 @@ showPrices: function(items) {
             dates[1] = item.date2.substring(8, 10) + '.' + item.date2.substring(5, 7);
             indexes[1] = search.dates.dmyIndex[item.date2.substring(8, 10) + item.date2.substring(5, 7) + item.date2.substring(2, 4)];
         }
-        var content = template.absorb(item.to.name_ru, Math.round(item.price).separate(), dates.join('—'));
+        var content = template.absorb(item.to.name_ru, Math.round(item.price).separate(), dates.join('—'), item.code);
         var latlng = new google.maps.LatLng(item.to.lat, item.to.lng);
         var label = new mapLabel({
             position: latlng,
@@ -227,8 +227,15 @@ showPrices: function(items) {
         label.$el.addClass('sml-active');
         label.$el.data('city', {name: item.to.name_ru, iata: item.to.iata, type: 'city'});
         label.$el.data('dates', indexes);
-        label.$el.click(function() {
-            that.applyPrice($(this));
+        label.$el.click(function(event) {
+            if (!(event.metaKey || event.ctrlKey || event.altKey)) {
+                that.applyPrice($(this));
+            }
+        });
+        label.$el.find('.sml-link').click(function(event) {
+            if (!(event.metaKey || event.ctrlKey || event.altKey)) {
+                event.preventDefault();
+            }
         });
         bounds.extend(latlng);
         if (item.price < pmin) pmin = item.price;
