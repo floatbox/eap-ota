@@ -104,16 +104,21 @@ module Pricing
 
     # FIXME отдать это на совесть подклассов Payment
     def acquiring_commission
-      commission =
-        if pricing_method =~ /corporate/
-          Conf.cash.corporate_commission
-        # делаю комиссию по наличке такой же как и глобальная
-        # elsif payment_type == 'cash'
-        #  Conf.cash.commission
-        else
-          Conf.payment.commission
-        end
-      Commission::Formula.new(commission)
+      if payments.to_a.blank?
+        commission =
+          if pricing_method =~ /corporate/
+            Conf.cash.corporate_commission
+          # делаю комиссию по наличке такой же как и глобальная
+          # elsif payment_type == 'cash'
+          #  Conf.cash.commission
+          else
+            Conf.payment.commission
+          end
+        Commission::Formula.new(commission)
+      else
+        #так сложно, чтобы не тормознуть генерацию csv
+        payments.to_a.select{|p| p.type.in? ['PaytureCharge', 'PayuCharge', 'CashCharge']}.sort_by{|p| p.created_at}.last.commission
+      end
     end
 
     # FIXME отдать это на совесть подклассов Payment
