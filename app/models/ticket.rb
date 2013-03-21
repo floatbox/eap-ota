@@ -72,7 +72,6 @@ class Ticket < ActiveRecord::Base
     self.fee_scheme = Conf.site.fee_scheme if fee_scheme.blank?
     self.price_acquiring_compensation = price_payment_commission if corrected_price && (price_acquiring_compensation == 0)
     self.price_difference = price_with_payment_commission - price_real
-    self.fee_calculation_details = fee_calculation_string if fee_calculation_details.blank?
   end
 
   def display_fee_details
