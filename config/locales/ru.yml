@@ -74,6 +74,7 @@ ru:
         price_acquiring_compensation: "Компенсация эквайринга"
         price_difference: "Корректировка цены"
         fee_scheme: "Схема расчета сервисного сбора"
+        fee: 'Сервисный сбор'
       order:
         commission_agent_comments: "Текст договора по агентской комиссии"
         commission_subagent_comments: "Текст договора по субагентской комиссии"

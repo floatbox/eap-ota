@@ -48,6 +48,7 @@ Order:
       - price_payment_commission
       - price_with_payment_commission
       - price_acquiring_compensation
+      - fee
       - commission_agent
       - price_agent
       - commission_subagent

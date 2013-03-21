@@ -95,6 +95,7 @@ Ticket:
       - price_payment_commission
       - price_acquiring_compensation
       - price_difference
+      - fee
       - fee_scheme
       - price_with_payment_commission
       - office_id
