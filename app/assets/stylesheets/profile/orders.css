@@ -27,34 +27,47 @@
     padding: 10px 14px;
     vertical-align: top;
 }
-.po-compact {
+.po-row {
     cursor: pointer;
 }
-.po-compact:hover {
+.po-row:hover {
     background: #e9eaec;
 }
+.po-previous {
+    background: #e9eaec;
+}
+.po-selected {
+    background: #FFF !important;
+    cursor: default;
+}
+
 
 /* Details */
-.po-compact .po-details {
+.pod-hidden {
     display: none;
 }
-.po-details td {
-    padding-top: 0;
-    line-height: 15px;
+.po-details .pod-cell {
+    padding: 0;
 }
-.po-pnr,
-.po-pnr-links {
+.pod-wrapper {
+    display: none;
+}
+.pod-content {
+    border-top: 1px dashed #CCC;
+    padding: 10px 14px;
+}
+.pod-passenger {
+    margin: 0 0 5px;
+    overflow: hidden;
+}
+.pod-name {
+    margin-right: 14px;
     float: left;
-}
-.po-name {
-    margin: 0 0 8px;
     font-weight: bold;
 }
-.personal-orders .po-ticket {
-    margin: 0 0 8px;
+.pod-ticket {
+    float: left;
 }
-
-/* Selected row */
-.po-detailed {
-    background: #FFF;
+.pod-pnr {
+    margin: 10px 0 0;
 }

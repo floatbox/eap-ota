@@ -15,48 +15,65 @@
 <table id="personal-orders">
 <thead class="po-header">
 <tr>
-    <th>дата</th>
     <th>номер</th>
+    <th>дата</th>
     <th>маршрут</th>
-    <th>билетов</th>
+    <th>вылет</th>
+    <th>статус</th>
     <th style="text-align: right;">стоимость</th>
-    <th style="width: 100px;">статус</th>
 </tr>
 </thead>
 <% @orders.each do |order| %>
-<tbody class="po-row po-compact">
+<tbody class="po-row">
 <tr>
-    <td style="width: 90px;"><%= l(order.created_at, :format => :human) %></td>
     <td><%= order.pnr_number %></td>
+    <td><%= l(order.created_at, :format => :human) %></td>
     <td><%= order.route %></td>
-    <td><%= order.blank_count %></td>
-    <td style="text-align: right;"><%= decorate_price short_price(order.price_with_payment_commission.round.to_i) %></td>
+    <td><%= order.departure_date %></td>
     <td><%= order.ticket_status %></td>
+    <td style="text-align: right;"><%= decorate_price short_price(order.price_with_payment_commission.round.to_i) %></td>
 </tr>
-<tr class="po-details">
-    <td colspan="2">
-        <h6 class="po-name">MAXIM ZAKHAROV</h6>
-    </td>
-    <td>
-        <p class="po-ticket">билет № 25763756723</p>
-    </td>
-    <td colspan="3">
-        <dl class="wrap">
-            <dt class="po-pnr">маршрут квитанция&nbsp;</dt>
-            <dd class="po-pnr-links">
-                <a href="/">на русском</a><br>
-                <a href="/">на английском</a>
-            </dd>
-        </dl>
+<tr class="po-details pod-hidden">
+    <td colspan="6" class="pod-cell">
+    <div class="pod-wrapper">
+        <div class="pod-content">
+            <div class="pod-passenger">
+                <h6 class="pod-name">MAXIM ZAKHAROV</h6>
+                <p class="pod-ticket">билет № 25763756723</p>
+            </div>
+            <div class="pod-pnr">Маршрут квитанция <a href="/">на русском</a> или <a href="/">на английском</a></div>
+        </div>
+    </div>    
     </td>
 </tr>
 </tbody>
 <% end %>
 </table>
 <script type="text/javascript">
-var ordersTable = $('#personal-orders');
-ordersTable.on('click', '.po-compact', function() {
-    ordersTable.find('.po-detailed').addClass('po-compact').removeClass('po-detailed');
-    $(this).addClass('po-detailed').removeClass('po-compact');
-});
+var ordersTable = {
+init: function() {
+    var that = this;
+    this.el = $('#personal-orders');
+    this.el.on('click', '.po-row:not(.po-selected)', function() {
+        var selected = that.el.find('.po-selected');
+        if (selected.length) {
+            that.hide(selected);
+        }
+        that.show($(this));
+    });
+},
+show: function(row) {
+    row.addClass('po-selected');
+    row.find('.po-details').removeClass('pod-hidden');
+    row.find('.pod-wrapper').slideDown(150);
+},
+hide: function(row) {
+    row.removeClass('po-selected').addClass('po-previous');
+    row.find('.pod-wrapper').slideUp(150, function() {
+        row.find('.po-details').addClass('pod-hidden');
+        row.removeClass('po-previous');
+    });
+}
+};
+ordersTable.init();
 </script>
