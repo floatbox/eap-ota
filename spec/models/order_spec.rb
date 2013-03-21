@@ -60,6 +60,7 @@ describe Order do
     subject { order.payments.last }
     before(:each) do
       order.create_cash_payment
+      order.payments.reload
     end
 
     context "normal cash or payture order" do
