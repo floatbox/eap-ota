@@ -128,7 +128,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def self.fee_schemes
-    [ 'v2']
+    ['v1', 'v2']
   end
 
   def self.validating_carriers
