@@ -7,7 +7,12 @@ require 'csv'
 module DataMigration
 
   def self.set_price_acquiring_compensation_and_price_difference
-    Ticket.order('created_at DESC').every.save
+    Order.order('created_at DESC').map do |o|
+      o.tickets_are_loading = true
+      o.tickets.every.save
+      o.tickets_are_loading = false
+      o.update_prices_from_tickets
+    end
   end
 
   def self.fill_in_parent_pnr_number

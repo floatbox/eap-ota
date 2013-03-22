@@ -11,6 +11,8 @@ class Order < ActiveRecord::Base
   scope :MOWR2219U, lambda { by_office_id 'MOWR2219U' }
   scope :FLL1S212V, lambda { by_office_id 'FLL1S212V' }
 
+  attr_writer :tickets_are_loading # нужен для DataMigrations
+
 
   def self.by_office_id office_id
     joins(:tickets).where('tickets.office_id' => office_id).uniq
@@ -115,10 +117,8 @@ class Order < ActiveRecord::Base
   after_save :create_order_notice
 
   def set_prices
-    if new_record? || fee_scheme.blank?
-      self.fee_scheme = Conf.site.fee_scheme
-      self.price_acquiring_compensation = price_payment_commission
-    end
+    self.fee_scheme = Conf.site.fee_scheme if new_record? || fee_scheme.blank?
+    self.price_acquiring_compensation = price_payment_commission if price_acquiring_compensation == 0
     self.price_difference = price_with_payment_commission - price_real
   end
 

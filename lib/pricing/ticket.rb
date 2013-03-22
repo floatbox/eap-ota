@@ -53,7 +53,7 @@ module Pricing
     def price_payment_commission
       case kind
       when 'ticket'
-        price_with_payment_commission * acquiring_percentage
+        (price_with_payment_commission * acquiring_percentage).round(2)
       when 'refund'
         price_acquiring_compensation
       end
