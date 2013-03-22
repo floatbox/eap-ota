@@ -15,7 +15,7 @@ module HotelsHelper
       if journey.segments.count > 1
         journey.segments.last.arrv_date
       else
-        insurance_start_date + 3.days
+        start_date + 3.days
       end
     { 'dates' => ostrovok_date(start_date) + '-' + ostrovok_date(end_date),
       'q' => journey.segments.first.arrival.city.name_en,
