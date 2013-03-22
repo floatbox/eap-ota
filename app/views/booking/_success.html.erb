@@ -2,7 +2,31 @@
 <div class="bfrs-message">
     <p class="bfrsm-text"><strong><%= t 'booking.success.allright' %></strong> <%= t @order_form.people.one? ? 'one' : 'few', :scope => [:booking, :success, @order_form.payment_type == 'card' ? 'card' : 'cash'] %> <%= t 'booking.success.confirmation' %> <span class="link bf-hint bfrsm-hint" data-hint="bfh-mail"><%= t 'booking.success.whattodo.link' %></span</p>
     <p class="bfrsm-text bfrsm-number"><%= raw t 'booking.success.pnr', :number => content_tag(:span, pnr_number, :class => 'bfr-pnr') %></p>
-    <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Ffacebook.com%2Feviterra&amp;send=false&amp;layout=standard&amp;width=552&amp;show_faces=true&amp;action=recommend&amp;colorscheme=light&amp;font&amp;height=80&amp;appId=155739531227363" scrolling="no" frameborder="0" style="margin-top: 10px; border:none; overflow:hidden; width:552px; height:80px;" allowTransparency="true"></iframe>
+    <!-- <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Ffacebook.com%2Feviterra&amp;send=false&amp;layout=standard&amp;width=552&amp;show_faces=true&amp;action=recommend&amp;colorscheme=light&amp;font&amp;height=80&amp;appId=155739531227363" scrolling="no" frameborder="0" style="margin-top: 10px; border:none; overflow:hidden; width:552px; height:80px;" allowTransparency="true"></iframe> -->
+
+    <% if ostrovok_url = ostrovok_uri(@order_form) %>
+    <div class="bfrs-insurance">
+        <h5 class="bfrs-title">Отели <%= ostrovok_city(@order_form) %></h5>
+        <a class="bfrsi-link" href="<%= ostrovok_url %>" target="_blank">Выбрать и&nbsp;забронировать отель</a>
+        <p class="bfrsi-item">&#151; Самые низкие цены</p>
+        <p class="bfrsi-item">&#151; Большой выбор разных отелей</p>
+        <p class="bfrsi-item">&#151; Мгновенная оплата</p>
+        <p class="bfrsi-item">&#151; Моментальное подтверждение</p>
+      </div>
+    <% end %>
+
+    <% if insurance_url = sravnikupi_insurance_uri(@order_form) %>
+    <div class="bfrs-insurance">
+        <h5 class="bfrs-title">Туристическая страховка</h5>
+        <a class="bfrsi-link" href="<%= insurance_url %>" target="_blank">Купить<br>полис онлайн</a>
+        <p class="bfrsi-item">&#151; Электронный полис</p>
+        <p class="bfrsi-item">&#151; Оплата банковской картой</p>
+        <p class="bfrsi-item">&#151; Страхование багажа</p>
+        <p class="bfrsi-item">&#151; Подходит для шенгенской визы</p>
+        <p class="bfrsi-item">&nbsp;</p>
+    </div>
+    <% end %>
+
 </div>
 <div class="bfrs-addition">
     <div class="bfrs-actions">
@@ -16,17 +40,12 @@
         <% unless gevent.empty? %>
             <p class="bfrsa-item"><a href="http://www.google.com/calendar/event?action=TEMPLATE&<%= gevent %>" target="_blank">Добавить поездку в Гугл-календарь</a></p>
         <% end %>
+        <p class="bfrsa-item">&nbsp;</p>
+
     </div>
-    <% if insurance_url = sravnikupi_insurance_uri(@order_form) %>
-    <div class="bfrs-insurance">
-        <h5 class="bfrs-title">Туристическая страховка</h5>
-        <a class="bfrsi-link" href="<%= insurance_url %>" target="_blank">Купить онлайн</a>
-        <p class="bfrsi-item">Оплата картой</p>
-        <p class="bfrsi-item">Электронный полис</p>
-        <p class="bfrsi-item">Подходит для визы</p>
-        <p class="bfrsi-item">Страхование багажа</p>        
-    </div>
-    <% end %>
+
+    <iframe src="//www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Feviterra&amp;width=356&amp;height=258&amp;show_faces=true&amp;colorscheme=light&amp;stream=false&amp;border_color&amp;header=false" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:356px; height:258px;" allowTransparency="true"></iframe>
+
 </div>
 <p class="latent" id="bfh-mail"><%= raw t 'booking.success.whattodo.hint' %></p>
-</div>    
+</div>
