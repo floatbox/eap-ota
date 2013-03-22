@@ -52,7 +52,7 @@ module InsuranceHelper
       'email' => order_form.email,
       'phone' => order_form.phone,
       'city' => journey.flights.first.departure.city.name_en,
-      'buyers' => insurance_buyers(order_form.people.sort_by(&:birthday)),
+      'buyers' => smart_insurance_buyers(order_form.people.sort_by(&:birthday)),
       'partner' => 'eviterra'
     }
   end
