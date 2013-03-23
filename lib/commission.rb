@@ -984,12 +984,18 @@ discount "2%"
 commission "5%/3.5%"
 
 example 'svocdg'
-important!
 agent    "1 руб. с билета по опубл.тарифам Эконом класса на рейсы EK."
 subagent "5 коп. с билета по опубл.тарифам Эконом класса на собств. рейсы EK."
 classes :economy
 check { includes_only(country_iatas.first, 'RU') }
+important!
 our_markup '20'
+commission "1/0.05"
+
+example 'jfkcdg'
+agent "1 руб. с билета по опубл.тарифам на рейсы EK с началом перевозки не в России."
+subagent "С 01.01.13г. 5 коп. с билета по опубл.тарифам на рейсы EK с началом перевозки не в России."
+check { not includes_only(country_iatas.first, 'RU') }
 commission "1/0.05"
 
 example 'svocdg cdgsvo/ab'
