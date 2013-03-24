@@ -68,7 +68,7 @@ end
 task :unicorn do
   load 'lib/recipes/unicorn'
   set :rails_env, 'production'
-  set :rvm_type, :user
+  set :rvm_type, :system
   role :app, 'flexo.eviterra.com', 'deck.eviterra.com'
   role :web, 'hermes.eviterra.com'
   role :db, 'flexo.eviterra.com', :primary => true
