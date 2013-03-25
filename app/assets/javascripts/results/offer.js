@@ -53,7 +53,7 @@ updateBook: function() {
     if (p < ap) {
         var percents = Math.round((ap - p) / ap * 100);
         if (percents > 3 && percents <= 20) {
-            state.push(I18n.t('offer.price.average', {value: percents.toFixed(1) + '%'}));
+            state.push(I18n.t('offer.price.average', {value: percents.toFixed(1).replace('.0', '') + '%'}));
         }
         if (percents > 20) {
             state.push(I18n.t('offer.price.average', {value: percents + '%'}));

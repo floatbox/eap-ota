@@ -53,6 +53,7 @@ set :application, "eviterra"
 
 task :staging do
   load 'lib/recipes/unicorn'
+  set :use_sudo, true
   set :rails_env, 'staging'
   role :app, 'vm1.eviterra.com', 'vm2.eviterra.com'
   role :web, 'vm3.eviterra.com'
@@ -65,24 +66,15 @@ task :staging do
   set :branch, 'staging'
 end
 
-task :unicorn do
+task :eviterra do
   load 'lib/recipes/unicorn'
+  set :use_sudo, true
   set :rails_env, 'production'
   set :rvm_type, :system
   role :app, 'flexo.eviterra.com', 'deck.eviterra.com'
   role :web, 'hermes.eviterra.com'
-  role :db, 'flexo.eviterra.com', :primary => true
-  # role :daemons, 'flexo.eviterra.com'
-end
-
-task :eviterra do
-  load 'lib/recipes/passenger'
-  set :rails_env, 'production'
-  set :rvm_type, :system
-
-  server 'bender.eviterra.com', :app, :web
-  role :db, 'bender.eviterra.com', :primary => true
-  role :daemons, 'bender.eviterra.com'
+  role :db, 'deck.eviterra.com', :primary => true
+  role :daemons, 'deck.eviterra.com'
 end
 
 set :deploy_to, "/home/#{user}/#{application}"
