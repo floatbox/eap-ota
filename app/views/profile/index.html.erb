@@ -27,21 +27,27 @@
 <tbody class="po-row">
 <tr>
     <td><%= order.pnr_number %></td>
-    <td><%= l(order.created_at, :format => :human) %></td>
-    <td><%= order.route %></td>
+    <td><%= l(order.created_at, :format => :human_year) %></td>
+    <td><%= order.profile_route %></td>
     <td><%= order.departure_date %></td>
-    <td><%= order.ticket_status %></td>
+    <td><%= order.profile_status %></td>
     <td style="text-align: right;"><%= decorate_price short_price(order.price_with_payment_commission.round.to_i) %></td>
 </tr>
 <tr class="po-details pod-hidden">
     <td colspan="6" class="pod-cell">
     <div class="pod-wrapper">
         <div class="pod-content">
+          <% order.profile_tickets.each do |ticket| %>
             <div class="pod-passenger">
-                <h6 class="pod-name">MAXIM ZAKHAROV</h6>
-                <p class="pod-ticket">билет № 25763756723</p>
+                <h6 class="pod-name"><%= ticket[:name] %></h6>
+                <% if order.ticketed? %>
+                <p class="pod-ticket">билет <%= ticket[:number] %></p>
+                <p class="pod-ticket">&nbsp;-&nbsp;</p> 
+                <p class="pod-ticket">статус <%= ticket[:status] %></p>
+                <% end %>
             </div>
-            <div class="pod-pnr">Маршрут квитанция <a href="/">на русском</a> или <a href="/">на английском</a></div>
+          <% end %>
+          <div class="pod-pnr">Маршрут квитанция <a href="/">на русском</a> или <a href="/">на английском</a></div>
         </div>
     </div>    
     </td>
