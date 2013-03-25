@@ -874,8 +874,8 @@ carrier "EY", "ETIHAD AIRWAYS"
 
 example 'svocdg'
 agent   "5% от опубл. тарифов на собств. рейсы EY (В договоре Interline не прописан.)"
-subagent "3% от опубл. тарифов на собств. рейсы EY (В договоре Interline не прописан.)"
-commission "5%/3%"
+subagent "3.5% от опубл. тарифов на собств. рейсы EY (В договоре Interline не прописан.)"
+commission "5%/3.5%"
 
 example 'cdgsvo svocdg/ab'
 agent "1р Interline не прописан"
