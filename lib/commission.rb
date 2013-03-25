@@ -71,6 +71,7 @@ no_commission "Катя просила выключить срочно от 14.0
 carrier "UN", "TRANSAERO"
 ########################################
 
+#dtt
 example 'AERDME/W DMEAER/W'
 example 'AERDME/Y DMEAER/L'
 example 'AERDME/Y DMEAER/L'
@@ -85,16 +86,59 @@ ticketing_method "downtown"
 discount "8.8%"
 commission "12%/10.5%"
 
-# базовое вознаграждение ац
-# example 'cdgsvo svocdg/y'
-agent "7% от тарифа на рейсы Перевозчика по всем тарифам Эконом классов;"
+# базовое вознаграждение ац для высоких классов
+example 'cdgsvo/r svocdg/f'
+expr_date "31.03.2013"
+agent "12% от тарифа на рейсы Перевозчика по всем тарифам классов: Империал, Премиальный и Бизнес класс. FPRJCADSM"
+subagent "11% от тарифа на рейсы Перевозчика по всем тарифам классов F, P, R, J, C, A, D, S, M"
+subclasses "FPRJCADSM"
+discount "9%"
+important!
+commission "12%/11%"
+
+# базовое вознаграждение ац для высоких c 01.04
+example 'cdgsvo/r svocdg/f'
+strt_date "01.04.2013"
+agent "9% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
+subagent "нет? ориентировочно 7"
+subclasses "FPRJCADSM"
+discount "5%"
+important!
+commission "9%/7%"
+
+# базовое вознаграждение ац — разделили эконом 
+# example 'cdgsvo/h svocdg/y'
+strt_date "21.02.2013"
+expr_date "20.04.2013"
+agent "На период с 21.02.13г. по 20.04.13г. 9% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K;"
+subagent "нет? ориентировочно 7"
+subclasses "YHQBK"
+discount "5%"
+disabled "На DTT выгодней"
+commission "9%/7%"
+
+# базовое вознаграждение ац - разделили эконом 
+# example 'cdgsvo/o svocdg/o'
+strt_date "21.02.2013"
+expr_date "20.04.2013"
+agent "7% от тарифа на рейсы UN по тарифам класса: O;"
 subagent "5% от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, Q, B, K, O;"
-subclasses "YHQBKO"
+subclasses "O"
 discount "4.5%"
 disabled "На DTT выгодней"
 commission "7%/5%"
 
-# базовое вознаграждение ац
+# базовое вознаграждение ац — мердж эконома с конца апреля 
+# example 'cdgsvo/o svocdg/y'
+strt_date "21.04.2013"
+agent "C 21.04.13г. 7% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
+subagent "нет? ориентировочно 5"
+subclasses "YHQBKO"
+discount "5%"
+disabled "На DTT выгодней"
+commission "7%/5%"
+
+# базовое вознаграждение ац для говноклассов
 # example 'cdgsvo/i svocdg/x'
 agent "5% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
 subagent "3% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
@@ -134,228 +178,15 @@ agent "12% Oт всех применяемых опубликованных та
 subagent "10% до особых указаний от всех опубл. тарифов (OW/RT) на собств. ПРЯМЫЕ рейсы UN между Москвой и городами:Нью-Йорк/ Майами/ Лос-Анджелес/ Пекин;"
 subagent "10% от всех применяемых опубликованных тарифов между Москвой и Пекином/Майами/Нью-Йорком (OW.RT) и на сквозные перевозки между пунктами полетов АК «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW.RT). (Через АСБ «GABRIEL»: установлен специальный «Код тура» NEWDE10 при продаже перевозок с полетными сегментами между Москвой-Майами/Нью-Йорком (OW/RT). СУБАГЕНТ обязан внести «Код тура» NEWDE10 для автоматического начисления комиссии.)"
 check { includes(city_iatas, %W(NYC MIA BJS LAX)) and includes(city_iatas, 'MOW') and includes(country_iatas, %W(RU UA KZ UZ AM)) }
+#FIX кривой и не полный чек
 discount "8.3%"
 important! # ац вперед! 
 disabled "dtt рулит"
 commission "12%/10%"
 
-# базовое вознаграждение ац
-example 'cdgsvo/r svocdg/f'
-agent "12% от тарифа на рейсы Перевозчика по всем тарифам классов: Империал, Премиальный и Бизнес класс. FPRJCADSM"
-subagent "11% от тарифа на рейсы Перевозчика по всем тарифам классов F, P, R, J, C, A, D, S, M"
-subclasses "FPRJCADSM"
-discount "9%"
-important!
-commission "12%/11%"
-
 example 'svocdg/lh cdgmad/lh'
 interline :absent
 no_commission
-
-# код-шер с ZI трансфер по России
-example 'svxory/f orysvx/f'
-example 'svxory/un7357/f svxory/un7358/f'
-example 'svxory/un7357/f'
-example 'svxory/zi:un7358/f orysvx/zi:un7357/f'
-example 'svxbcn/zi:un/f bcnsvx/zi:un/f'
-example 'svxbcn/zi:un/s'
-strt_date "21.10.2012"
-expr_date "31.03.2013"
-agent " С 21.10.12г. по 31.03.13г. на собств. рейсы UN и рейсы совместной эксплаутации с кодом UN (UN7357/UN7358) и в рамках код-шер соглашения с АК Aigle Azur (ZI). 15% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M  *от СКВОЗНЫХ тарифов (OW/RT) для ТРАНСФЕРНЫХ перевозок между пунктами полетов UN на территории РФ и нижеуказанными городами Европы" 
-subagent "13% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
-subclasses "FPRJCADSM"
-check { includes_only(country_iatas.first, 'RU') and includes(city_iatas, 'RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON LYS LIS') }
-important!
-discount "7.5%"
-commission "15%/13%"
-
-# код-шер с ZI прямые из столиц
-example 'dmeory/f orydme/f'
-example 'dmeory/un7357/f orydme/un7358/f'
-example 'dmeory/un7357/f'
-example 'dmeory/zi:un7358/f orydme/zi:un7357/f'
-example 'svobcn/zi:un/f bcnsvo/zi:un/f'
-example 'svobcn/zi:un/s'
-strt_date "21.10.2012"
-expr_date "31.03.2013"
-agent " С 21.10.12г. по 31.03.13г. на собств. рейсы UN и рейсы совместной эксплаутации с кодом UN (UN7357/UN7358) и в рамках код-шер соглашения с АК Aigle Azur (ZI). 15% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M  *от опубл. тарифов (OW/RT) для ПРЯМЫХ перевозок между Москвой/Санк-Петербургом и нижеуказанными городами Европы"
-subagent "13% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
-agent "12% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
-subagent "10% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
-subclasses "FPRJCADSM"
-check { includes_only(city_iatas.first, 'MOW LED') and includes(city_iatas, "RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON LYS LIS") }
-important!
-discount "8.25%"
-commission "15%/13%"
-
-# код-шер с ZI трансфер по России
-# example 'svxcdg/zi:un7357/y cdgsvx/zi:un7358/h'
-# example 'svxbcn/zi:un/h bcnsvx/zi:un/h'
-# example 'svxbcn/zi:un/k'
-strt_date "21.10.2012"
-expr_date "31.03.2013"
-agent "10% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
-subagent "8% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
-subclasses "YHQBKO"
-check { includes_only(operating_carrier_iatas, 'ZI') and includes_only(country_iatas.first, 'RU') and includes(city_iatas, 'RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON') }
-important!
-disabled "на dtt выгоднее"
-discount "7.5%"
-commission "10%/8%"
-
-# код-шер с ZI прямые из столиц
-# example 'ledcdg/zi:un7357/y cdgled/zi:un7358/h'
-# example 'ledbcn/zi:un/h bcnled/zi:un/h'
-# example 'svobcn/zi:un/k'
-strt_date "21.10.2012"
-expr_date "31.03.2013"
-agent "10% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
-subagent "8% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
-subclasses "YHQBKO"
-check { includes_only(operating_carrier_iatas, 'ZI') and includes_only(city_iatas.first, 'MOW LED') and includes(city_iatas, 'RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON') }
-important!
-disabled "на dtt выгоднее"
-discount "7.5%"
-commission "10%/8%"
-
-# код-шер с ZI трансфер по России
-# example 'svxcdg/zi:un7357/l cdgsvx/zi:un7358/l'
-# example 'svxbcn/zi:un/i bcnsvx/zi:un/i'
-# example 'svxbcn/zi:un/w'
-strt_date "21.10.2012"
-expr_date "31.03.2013"
-agent "С 11.11.2012г. 8% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
-subagent "3% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
-subclasses "LVXTNIGWU"
-check { includes_only(operating_carrier_iatas, 'ZI') and includes_only(country_iatas.first, 'RU') and includes(city_iatas, 'RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON') }
-important!
-disabled "на dtt выгоднее"
-discount "2.5%"
-commission "8%/6%"
-
-# код-шер с ZI прямые из столиц
-# example 'svobcn/zi:un7357/i bcnsvo/zi:un/i'
-# example 'svobcn/zi:un/i bcnsvo/zi:un/i'
-# example 'svobcn/zi:un7357/w'
-strt_date "21.10.2012"
-expr_date "31.03.2013"
-agent "С 11.11.2012г. 8% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
-subagent "3% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U;"
-subclasses "LVXTNIGWU"
-check { includes_only(operating_carrier_iatas, 'ZI') and includes_only(city_iatas.first, 'LED MOW') and includes(city_iatas, 'RIX VNO BER FRA VIE ALC BCN AGP MAD TCI PFO PED PAR VCE MIL ROM RMI LON') }
-important!
-disabled "на dtt выгоднее"
-discount "2.5%"
-commission "8%/6%"
-
-# прямые из MOW, LED, OVB и SVX
-example 'svobkk/c'
-example 'svobkk/c bkksvo/c'
-example 'ledhkt/m'
-example 'ledhkt/m hktled/m'
-example 'svxbkk/f'
-example 'svxbkk/f bkksvx/f'
-strt_date "21.11.2012"
-expr_date "31.03.2013"
-agent "15% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
-subagent "13% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
-subclasses "FPRJCADSM"
-check { 
-  (includes_only(city_iatas.first, 'MOW') and includes(city_iatas, 'SSH HRG BKK HKT DPS SGN GOI PUJ VRA CUN SYX MLE AUH AMM')) or
-  (includes_only(city_iatas.first, 'LED') and includes(city_iatas, 'BKK HKT PUJ VRA')) or
-  (includes_only(city_iatas.first, 'OVB') and includes(city_iatas, 'BKK HKT')) or
-  (includes_only(city_iatas.first, 'SVX') and includes(city_iatas, 'BKK HKT'))
-}
-important!
-discount "8.25%"
-commission "15%/13%"
-
-# трансфер по России и в эти города (только через Москву) — не умеем, уточнять
-example 'hmasvo/s svobkk/s'
-example 'hmasvo/s svobkk/s bkksvo/s svohma/s'
-strt_date "21.11.2012"
-expr_date "31.03.2013"
-agent "15% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
-subagent "10% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
-subclasses "FPRJCADSM"
-check { includes_only(country_iatas.first, 'RU') and not includes_only(city_iatas.first, 'MOW') and includes(city_iatas, 'MOW') and includes(city_iatas, 'SSH HRG BKK HKT DPS SGN GOI PUJ VRA CUN SYX MLE AUH AMM') }
-important!
-discount "8.25%"
-commission "15%/13%"
-
-# прямые из MOW, LED, OVB и SVX
-# example 'svobkk/y'
-# example 'svobkk/y bkksvo/y'
-# example 'ledhkt/q'
-# example 'ledhkt/q hktled/q'
-# example 'svxbkk/o'
-# example 'svxbkk/o bkksvx/o'
-strt_date "21.11.2012"
-expr_date "31.03.2013"
-agent "10% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
-subagent "8% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
-subclasses "YHQBKO"
-check { 
-  (includes_only(city_iatas.first, 'MOW') and includes(city_iatas, 'SSH HRG BKK HKT DPS SGN GOI PUJ VRA CUN SYX MLE AUH AMM')) or
-  (includes_only(city_iatas.first, 'LED') and includes(city_iatas, 'BKK HKT PUJ VRA')) or
-  (includes_only(city_iatas.first, 'OVB') and includes(city_iatas, 'BKK HKT')) or
-  (includes_only(city_iatas.first, 'SVX') and includes(city_iatas, 'BKK HKT'))
-}
-important!
-disabled "на dtt выгоднее"
-discount "7.5%"
-commission "10%/8%"
-
-# трансфер по России и в эти города (только через Москву)
-# example 'hmasvo/y svobkk/y'
-# example 'hmasvo/y svobkk/y bkksvo/y svohma/y'
-strt_date "21.11.2012"
-expr_date "31.03.2013"
-agent "10% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
-subagent "8% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
-subclasses "YHQBKO"
-check { includes_only(country_iatas.first, 'RU') and includes(city_iatas, 'MOW SSH HRG BKK HKT DPS SGN GOI PUJ VRA CUN SYX MLE AUH AMM') }
-important!
-disabled "на dtt выгоднее"
-discount "7.5%"
-commission "10%/8%"
-
-# прямые из MOW, LED, OVB и SVX
-# example 'svobkk/l'
-# example 'svobkk/v bkksvo/v'
-# example 'ledhkt/i'
-# example 'ledhkt/i hktled/i'
-# example 'svxbkk/g'
-# example 'svxbkk/g bkksvx/g'
-strt_date "21.11.2012"
-expr_date "31.03.2013"
-agent "8% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U"
-subagent "6% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U."
-subclasses "LVXTNIGWU"
-check { 
-  (includes_only(city_iatas.first, 'MOW') and includes(city_iatas, 'SSH HRG BKK HKT DPS SGN GOI PUJ VRA CUN SYX MLE AUH AMM')) or
-  (includes_only(city_iatas.first, 'LED') and includes(city_iatas, 'BKK HKT PUJ VRA')) or
-  (includes_only(city_iatas.first, 'OVB') and includes(city_iatas, 'BKK HKT')) or
-  (includes_only(city_iatas.first, 'SVX') and includes(city_iatas, 'BKK HKT'))
-}
-important!
-disabled "на dtt выгоднее"
-discount "5.5%"
-commission "8%/6%"
-
-# трансфер по России и в эти города (только через Москву)
-# example 'hmasvo/n svobkk/n'
-# example 'hmasvo/n svobkk/n bkksvo/n svohma/n'
-strt_date "21.11.2012"
-expr_date "31.03.2013"
-agent "8% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U"
-subagent "6% от тарифа на рейсы UN по всем тарифам классов: L, V, X, T, N, I, G, W, U."
-subclasses "LVXTNIGWU"
-check { includes_only(country_iatas.first, 'RU') and includes(city_iatas, 'MOW SSH HRG BKK HKT DPS SGN GOI PUJ VRA CUN SYX MLE AUH AMM') }
-important!
-disabled "на dtt выгоднее"
-discount "5.5%"
-commission "8%/6%"
 
 carrier "2U", "SUN D’OR International Airlines (РИНГ-АВИА)"
 ########################################
