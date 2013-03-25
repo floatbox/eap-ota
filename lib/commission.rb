@@ -2185,32 +2185,31 @@ commission "0%/0%"
 carrier "TK", "TURKISH AIRLINES"
 ########################################
 
-example "svoist/economy"
-strt_date '15.10.2012'
-expr_date '16.03.2013'
-agent "10% от тарифа Эконом класса на рейсы TK с вылетом из РФ"
-subagent "8% от тарифа Эконом класса на рейсы TK с вылетом из РФ"
-classes :economy
-check { includes(country_iatas.first, 'RU') }
-important!
-discount "6.5%"
-commission "10%/8%"
-
-example "svoist/business"
-strt_date '15.10.2012'
-expr_date '16.03.2013'
-agent "17% от тарифа Бизнес класса на рейсы TK с вылетом из РФ"
-subagent "15% от тарифа Бизнес класса на рейсы TK с вылетом из РФ"
-classes :business
-check { includes(country_iatas.first, 'RU') }
-important!
-discount "12.5%"
-commission "17%/15%"
-
 example 'istsvo svoist'
 agent    "7% от полного опубл. тарифа IATA на рейсы TK;"
+agent    "+ 7% от тарифа Эконом класса на рейсы TK;"
 subagent "5% от тарифа экономического класса на рейсы TK;"
 discount "4%"
+commission "7%/5%"
+
+example "svoist/business"
+strt_date '17.10.2012'
+agent "12% от тарифа Бизнес класса на рейсы TK с вылетом из РФ"
+subagent "нет? ставлю 10%"
+classes :business
+check { includes(country_iatas.first, 'RU') }
+discount "8%"
+important!
+commission "12%/10%"
+
+example "miaist/business"
+strt_date '17.10.2012'
+agent "7% от тарифа Бизнес класса на рейсы TK с вылетом не из РФ (кроме перелетов внутри Турции);"
+subagent "нет? ставлю 5%"
+classes :business
+check { not includes(country_iatas.first, 'RU') and not includes_only(country_iatas, 'TR') }
+discount "3%"
+important!
 commission "7%/5%"
 
 example 'istank'
