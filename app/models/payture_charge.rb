@@ -1,6 +1,8 @@
 # encoding: utf-8
 class PaytureCharge < Payment
 
+  include TypusPaytureCharge
+
   after_create :set_ref
   before_save :recalculate_earnings
 
@@ -125,31 +127,6 @@ class PaytureCharge < Payment
 
   def income_payment_gateways
     commission.call(price)
-  end
-
-  # для админки
-  def payment_status_raw
-    response = gateway.status(:our_ref => ref)
-    response.err_code || "#{response.status}: #{response.amount} (#{STATUS_MAPPING[response.status] || 'unknown'})"
-  rescue
-    $!.message
-  end
-
-  def control_links
-    refund_link if charged?
-  end
-
-  def refund_link
-    "<a href='/admin/payture_refunds/new?_popup=true&resource[charge_id]=#{id}' class='iframe_with_page_reload'>добавить возврат</a>".html_safe
-  end
-
-  def external_gateway_link
-    url = "https://backend.payture.com/Payture/order.html?mid=55&pid=&id=#{ref}"
-    "<a href='#{url}' target='_blank'>OrderId: #{ref}</a>".html_safe
-  end
-
-  def error_explanation
-    Payture::ERRORS_EXPLAINED[error_code] || error_code
   end
 
 end

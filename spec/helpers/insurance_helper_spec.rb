@@ -70,7 +70,7 @@ describe InsuranceHelper do
         }
       }
       end
-      specify { params.should == insurance_uri_params(order_form) }
+      specify { params.should == smart_insurance_uri_params(order_form) }
       it {should == "https://www.smart-ins.ru/vzr_iframe/light?#{params.to_query}"}
 
       context "but in russia!" do

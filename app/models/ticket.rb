@@ -27,6 +27,7 @@ class Ticket < ActiveRecord::Base
   has_many :children, :class_name => 'Ticket', :foreign_key => 'parent_id'
 
   has_and_belongs_to_many :stored_flights
+  has_and_belongs_to_many :imports
   serialize :baggage_info, JoinedArray.new
 
   # для отображения в админке билетов. Не очень понятно,
@@ -128,7 +129,9 @@ class Ticket < ActiveRecord::Base
 
   def refund_payment_commission
     #FIXME Пришлось захардкодить дату
-    if created_at < Date.parse('2013-02-20')
+    if parent && parent.created_at < created_at
+      parent.refund_payment_commission
+    elsif created_at < Date.parse('2013-02-20')
       0
     else
       -price_payment_commission

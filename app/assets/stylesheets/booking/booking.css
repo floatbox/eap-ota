@@ -332,13 +332,14 @@
 }
 .bfrsi-link {
     float: right;
-    width: 140px;
-    padding: 8px 0 40px;
+    width: 230px;
+    padding: 16px;
     text-align: center;
-    font-size: 16px;
-    line-height: 18px;
-    letter-spacing: -0.03em;    
-    background: url(/images/booking/insurance.png) no-repeat 54% 54px #FFF;
+    font-size: 20px;
+    line-height: 23px;
+    letter-spacing: -0.03em;
+    /* background: url(/images/booking/sravnikupi-logo-60x60.png) no-repeat 12px 50% #FFF; */
+    background: #fff;
     text-decoration: underline;
     cursor: pointer;
 }

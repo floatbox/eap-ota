@@ -96,11 +96,11 @@ load: function() {
         } else {
             that.view(content);
         }
-        $w.delay(400).smoothScrollTo(that.form.position());
+        /*$w.delay(400).smoothScrollTo(that.form.position());
         $w.queue(function(next) {
             $('#bfp0-last-name').focus();
             next();
-        });
+        });*/
         trackPage('/booking');
     });
 },
@@ -132,7 +132,6 @@ preview: function(content) {
     this.farerules.init();
     $w.delay(100).queue(function(next) {
         results.filters.hide(true);
-        Queries.hide();
         next();
     });
 },
@@ -154,16 +153,12 @@ processPrice: function(context, dp) {
     content.html(content.html().absorb(dp > 0 ? 'дороже' : 'дешевле', sum));
 },
 cancel: function() {
-    Queries.show();
     results.filters.show(true);
     results.header.select.hide();
     if (results.ready) {
         var that = this;
         this.offer.showDetails(true);
-        $w.smoothScrollTo(0).delay(50).queue(function(next) {
-            that.hide();
-            next();
-        });
+        this.hide();
     } else {
         this.el.hide();
         this.content.html('');
@@ -183,6 +178,7 @@ hide: function() {
     results.header.edit.show();
     results.content.el.show();
     $w.scrollTop(this.offer.details.offset().top - offset);
+    $w.delay(300).smoothScrollTo(this.offer.el.offset().top - 36 - results.header.height - 30);
     page.title.set(I18n.t('page.results', {title: results.data.titles.window}));
     page.location.set('booking');
     trackPage('/#' + page.location.hash.replace('#', ''));

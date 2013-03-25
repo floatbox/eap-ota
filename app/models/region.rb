@@ -1,9 +1,10 @@
 # encoding: utf-8
 class Region < ActiveRecord::Base
   include HasSynonyms
+  include Cases
+
   belongs_to :country
   has_many :cities
-  has_cases_for :name
   scope :important, where("importance > 0")
   scope :not_important, where("importance = 0")
   scope :with_country, includes(:country)

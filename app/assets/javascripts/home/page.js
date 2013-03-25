@@ -5,7 +5,6 @@ init: function() {
     this.location.init();
     this.title.init();
 
-    Queries.init();
     search.init();
     results.init();
     booking.init();
@@ -34,7 +33,7 @@ init: function() {
     
 },
 innerHeight: function() {
-    return $w.height() - 36 - Queries.height;
+    return $w.height() - 36;
 },
 loadLocation: function() {
     $.get('/whereami', function(data) {
@@ -60,8 +59,6 @@ restoreBooking: function(rkey, bkey) {
     if (!browser.ios) {
         results.header.el.addClass('rh-fixed');
         page.header.addClass('fixed');    
-        Queries.live.active = false;
-        Queries.el.hide();
     }    
     results.header.button.hide();
     results.header.select.show();
@@ -82,10 +79,6 @@ reset: function() {
 },
 showData: function(data) {
     var that = this;
-    setTimeout(function() { // задержка, чтобы синхронизировать появление таба с прокруткой окна
-        Queries.history.add(data.query_key, data.short);
-        Queries.history.select(data.query_key);
-    }, 300);
     this.title.set(I18n.t('page.search', {title: data.titles.window}));
     if (this.location.search !== data.query_key) {
         this.location.set('search', data.query_key);

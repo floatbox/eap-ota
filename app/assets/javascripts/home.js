@@ -4,7 +4,6 @@
 //= require common/profile
 
 //= require home/page.js
-//= require home/queries.js
 
 //= require search/search.js
 //= require search/locations.js

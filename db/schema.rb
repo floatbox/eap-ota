@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130225143219) do
+ActiveRecord::Schema.define(:version => 20130228150803) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -257,6 +257,32 @@ ActiveRecord::Schema.define(:version => 20130225143219) do
   add_index "hot_offers", ["created_at"], :name => "index_hot_offers_on_created_at"
   add_index "hot_offers", ["destination_id"], :name => "index_hot_offers_on_destination_id"
 
+  create_table "imports", :force => true do |t|
+    t.string   "md5"
+    t.string   "kind"
+    t.integer  "pass"
+    t.string   "filename"
+    t.binary   "content"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "imports", ["md5"], :name => "index_imports_on_md5", :unique => true
+
+  create_table "imports_payments", :id => false, :force => true do |t|
+    t.integer "import_id"
+    t.integer "payment_id"
+  end
+
+  add_index "imports_payments", ["import_id", "payment_id"], :name => "index_imports_payments_on_import_id_and_payment_id"
+
+  create_table "imports_tickets", :id => false, :force => true do |t|
+    t.integer "import_id"
+    t.integer "ticket_id"
+  end
+
+  add_index "imports_tickets", ["import_id", "ticket_id"], :name => "index_imports_tickets_on_import_id_and_ticket_id"
+
   create_table "notifications", :force => true do |t|
     t.integer  "order_id"
     t.integer  "typus_user_id"
@@ -407,6 +433,7 @@ ActiveRecord::Schema.define(:version => 20130225143219) do
   end
 
   add_index "payments", ["order_id"], :name => "index_payments_on_order_id"
+  add_index "payments", ["pan"], :name => "index_payments_on_pan"
   add_index "payments", ["status"], :name => "index_payments_on_status"
 
   create_table "promo_codes", :force => true do |t|
