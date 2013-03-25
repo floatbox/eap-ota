@@ -21,7 +21,7 @@ namespace :deploy do
   end
 
   task :restart, :roles => :app, :except => { :no_release => true } do
-    run "cd #{current_path} && sv restart eviterra"
+    run "cd #{current_path} && /usr/bin/sv restart /etc/service/unicorn_eviterra"
   end
 
 end
