@@ -7,7 +7,7 @@ class Admin::PaymentsController < Admin::EviterraResourceController
   # в девелопменте классы загружаются по требованию, так что мы вынуждены перечислять все названия сами.
   def get_model
     super
-    @object_name = %W[payture_charge payture_refund cash_charge cash_refund].detect {|name| params[name].present? } || 'payment'
+    @object_name = %W[payu_charge payu_refund payture_charge payture_refund cash_charge cash_refund].detect {|name| params[name].present? } || 'payment'
   end
   private :get_model
 
