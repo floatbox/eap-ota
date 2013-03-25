@@ -582,6 +582,7 @@ carrier "CA", "AIR CHINA"
 example 'svopek/f'
 example 'svopek/a peksvo/f'
 example 'svopek/c peksvo/d'
+expr_date "31.03.2013"
 agent   "15% от опубл. тарифов по классам F/A/C/D на собств. рейсы CA;"
 subagent "13,5% от опубл. тарифов по классам F/A/C/D на собств. рейсы CA;"
 subclasses "FACD"
@@ -592,6 +593,7 @@ commission "15%/13.5%"
 example 'svopek/z'
 example 'svopek/w peksvo/h'
 example 'svopek/k peksvo/f'
+expr_date "31.03.2013"
 agent   "12% от опубл. тарифов по классам Z/W/Y/B/M/H/K/L на собств. рейсы СА;"
 subagent "11,5% от опубл. тарифов по классам Z/W/Y/B/M/H/K/L на собств. рейсы СА;"
 subclasses "FACDZWYBMHKL"
@@ -603,6 +605,7 @@ example 'svopek/q'
 example 'svopek/g peksvo/s'
 example 'svopek/u peksvo/f'
 example 'svopek/s peksvo/a'
+expr_date "31.03.2013"
 agent   "10% от опубл. тарифов по классам Q/G/V/S/U на собств. рейсы СА."
 subagent "8,5% от опубл. тарифов по классам Q/G/V/S/U на собств. рейсы СА."
 subagent "FACDZWYBMHKLQGVSU"
@@ -616,9 +619,11 @@ agent "9% Все международные перелеты рейсами СА
 subagent "7% Все международные перелеты рейсами СА из России, за исключением вылетов из Москвы."
 important!
 check { includes(country_iatas.first, 'RU') and not includes(city_iatas.first, 'MOW') }
+interline :no
 discount "5.7%"
 commission "9%/7%"
 
+example 'ledpek/ab pekhta'
 example 'okopek/ab pekoko'
 example 'pekycu ycupek'
 example 'peksgn'
