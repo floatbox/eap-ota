@@ -180,9 +180,10 @@ subagent "10% от всех применяемых опубликованных 
 check { includes(city_iatas, %W(NYC MIA BJS LAX)) and includes(city_iatas, 'MOW') and includes(country_iatas, %W(RU UA KZ UZ AM)) }
 # FIX кривой и не полный чек
 discount "8.3%"
+ticketing "downtown"
 important! # ац вперед! 
 # disabled "dtt рулит"
-commission "12%/10%"
+commission "12%/11%"
 
 example 'svocdg/lh cdgmad/lh'
 interline :absent
