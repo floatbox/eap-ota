@@ -9,6 +9,11 @@ class Ticket < ActiveRecord::Base
     id && self.equal?( ActiveRecord::IdentityMap.get(self.class, id) )
   end
 
+  def payment_type
+    # заглушка для шаблона МК
+    'unknown'
+  end
+
   # FIXME сделать модуль или фикс для typus, этим оверрайдам место в typus/application.yml
   def self.model_fields
     super.merge(

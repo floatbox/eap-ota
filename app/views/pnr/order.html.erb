@@ -63,45 +63,7 @@
         <tbody valign="top">
         <col width="340">
         <col width="190">
-        <tr>
-            <td width="340"><% unless @lang %>Тариф <span style="color: #C0C0C0;">/</span> <% end %>Fare</td>
-            <td width="190"><%= exact_price(@prices.price_fare) %> RUB</td>
-        </tr>
-        <% if !@prices.price_declared_discount.zero? && @prices.fee_scheme != 'v1' %>
-        <tr>
-            <td><% unless @lang %>Скидка <span style="color: #C0C0C0;">/</span> <% end %>Discount</td>
-            <td><%= exact_price(-@prices.price_declared_discount) %> RUB</td>
-        </tr>
-        <% end %>
-        <tr>
-            <td><% unless @lang %>Таксы и сборы <span style="color: #C0C0C0;">/</span> <% end %>Taxes and fees</td>
-            <td><%= exact_price(@prices.price_tax_and_markup_and_payment) %> RUB</td>
-        </tr>
-        <tr>
-            <td><% unless @lang %>В том числе сервисный сбор <span style="color: #C0C0C0;">/</span> <% end %>Including service fee</td>
-            <td><%= exact_price(@prices.fee) %> RUB</td>
-        </tr>
-        <% if @prices.show_vat %>
-        <tr>
-            <td><% unless @lang %>В том числе НДС <span style="color: #C0C0C0;">/</span> <% end %>Including VAT</td>
-            <td><%= exact_price(@prices.vat) %> RUB</td>
-        </tr>
-        <% end %>
-        <% if @prices.payment_type == 'delivery' %>
-        <tr>
-            <td><% unless @lang %>Доставка <span style="color: #C0C0C0;">/</span> <% end %>Delivery</td>
-            <td>400 RUB</td>
-        </tr>
-        <tr>
-            <td><% unless @lang %>Итоговая стоимость <span style="color: #C0C0C0;">/</span> <% end %>Total price</td>
-            <td><%= exact_price(@prices.recalculated_price_with_payment_commission + 400) %> RUB</td>
-        </tr>
-        <% else %>
-        <tr>
-            <td><% unless @lang %>Итоговая стоимость <span style="color: #C0C0C0;">/</span> <% end %>Total price</td>
-            <td><%= exact_price(@prices.recalculated_price_with_payment_commission) %> RUB</td>
-        </tr>
-        <% end %>
+        <%= render :partial => 'main_prices' %>
         <tr>
             <td><% unless @lang %>Форма оплаты <span style="color: #C0C0C0;">/</span> <% end %>Paid by</td>
             <td><%= @prices.paid_by %></td>
