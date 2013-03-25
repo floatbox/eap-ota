@@ -289,10 +289,22 @@
 .bfr-success {
     padding: 0;
 }
+.bfrs-social {
+    float: right;
+    width: 287px;
+    margin-bottom: -400px;
+    padding: 18px 15px 420px;
+    background: #e2e2e2;    
+}
+.bfrss-actions {
+    margin: 0 0 15px;
+}
+.bfrss-action {
+    margin: 0 0 8px;
+}
 .bfrs-message {
-    float: left;
-    width: 552px;
-    margin: 18px 0 0 20px;
+    margin: 18px 337px 0 20px;
+    padding-bottom: 5px;
 }
 .bfrsm-text {
     margin: 0 0 12px;
@@ -300,48 +312,66 @@
     line-height: 23px;
     letter-spacing: -0.03em;    
 }
+.bfrsm-pnr {
+    float: right;
+    margin-top: 2px;
+   
+}
 .bfrsm-hint {
     position: relative;
     top: -2px;
-    left: 3px;
     font-size: 12px;
     color: #777;
+    white-space: nowrap;
 }
+
+/* Партнеры */
 .bfrs-addition {
-    margin-left: 592px;
-    margin-bottom: -200px;
-    padding: 18px 20px 220px;
-    background: #e2e2e2;    
+    border-top: 1px solid #cacac2;
 }
-.bfrs-title {
+.bfrs-hotels,
+.bfrs-insurance {
+    float: left;
+    width: 306px;
+    padding: 15px 0 12px;
+    margin-left: 20px;
+}
+.bfrsa-title {
     margin: 0 0 8px;
     font-weight: bold;
     font-size: 20px;
     line-height: 23px;
     letter-spacing: -0.03em;        
 }
-.bfrsa-item,
-.bfrsi-item {
-    margin: 3px 0 0; 
+.bfrsa-features {
+    margin: 0 0 10px;
+    font-size: 12px;
+    line-height: 15px;
+    color: #777;    
 }
-.bfrs-insurance {
-    margin: 20px 0 0;
+.bfrsa-feature {
+    margin: 0 0 3px;
 }
-.bfrsi-item {
-    margin-right: 150px;
+.bfrsa-feature:before {
+    content: '— ';
 }
-.bfrsi-link {
-    float: right;
-    width: 230px;
-    padding: 16px;
+.bfrsa-bar {
+    background: #FFF;
+    padding: 14px 0;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 17px;
     text-align: center;
-    font-size: 20px;
-    line-height: 23px;
-    letter-spacing: -0.03em;
-    /* background: url(/images/booking/sravnikupi-logo-60x60.png) no-repeat 12px 50% #FFF; */
-    background: #fff;
-    text-decoration: underline;
-    cursor: pointer;
+}
+.bfrsa-link {
+    color: #F90A6F;
+}
+.bfrsa-partner {
+    margin: 5px 0 0;
+    font-size: 11px;
+    line-height: 13px;
+    color: #777;
+    text-align: center;
 }
 
 /* Кнопки */
