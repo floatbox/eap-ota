@@ -948,6 +948,16 @@ interline :no, :yes
 discount "4%"
 commission '7%/5%'
 
+example 'ledsvo/business svoled/business'
+expr_date "26.10.2013"
+agent "9% от опубл.тарифов Бизнес класса на собств.рейсы FV, внутренние и международные, ИСКЛЮЧАЯ рейсы «CODE-Share»."
+subagent "7% от опубл.тарифов Бизнес класса на собственные рейсы FV, внутренние и международные, ИСКЛЮЧАЯ рейсы «CODE-Share»."
+important!
+classes :business
+domestic
+discount "5.7%"
+commission '9%/7%'
+
 example 'svocdg/ab'
 agent "1 euro с билета на рейсы Interline без участка FV."
 subagent "1 руб. с билета на рейсы Interline без участка FV."
