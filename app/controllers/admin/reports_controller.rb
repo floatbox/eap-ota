@@ -4,7 +4,7 @@ class Admin::ReportsController < Admin::BaseController
   def index
   end
 
-  def selling
+  def sales
     default_date = Time.now
     #default_date = '2012/04/22'.to_time
     #mongo_default_date = '2012/05/05'.to_time.strftime(StatCounters::DATE_FORMAT)
