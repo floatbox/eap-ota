@@ -23,7 +23,6 @@ parseVariants: function(selector) {
             offer: that,
             price: prices['RUR'],
             price_pure: prices['RUR_pure'],
-            price_raw: prices['RUR_raw'],
             id: el.text(),
             duration: Number(el.attr('data-duration')),
             segments: el.attr('data-segments').split(' '),
@@ -46,7 +45,7 @@ addBook: function() {
     this.state = this.book.find('.ob-state');
 },
 updateBook: function() {
-    var p = this.selected.price_raw;
+    var p = this.selected.price;
     var ap = results.data.averagePrice;
     var pp = this.selected.price_pure; 
     var state = [];
@@ -195,7 +194,7 @@ countPrices: function() {
     var prices = {}, sample;
     for (var v = this.variants.length; v--;) {
         var variant = this.variants[v];
-        var price = variant.price_raw;
+        var price = variant.price;
         for (var s = sl; s--;) {
             var flights = variant.segments[s];
             var range = prices[flights];
@@ -231,7 +230,7 @@ otherCarriers: function() {
 otherPrices: function() {
     var prices = this.prices;
     var ss = this.selected.segments
-    var sp = this.selected.price_raw;
+    var sp = this.selected.price;
     this.el.find('.oss-price').remove();
     this.el.find('.oss-different').removeClass('oss-different');
     this.el.find('.o-segment').each(function(s) {
