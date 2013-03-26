@@ -360,9 +360,10 @@ ru:
       including_fee: "с учетом сервисного сбора"
       fare: "Тариф"
       taxes_and_fees: "Таксы и сборы"
-      fee: "В том числе сервисный сбор"
+      fee: "Cервисный сбор"
       delivery: "Доставка"
       discount: "Скидка"
+      fare_compensation: 'Компенсация от тарифа'
     buy:
       button: "Купить"
       progress: "секундочку…"
