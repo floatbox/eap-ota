@@ -297,7 +297,7 @@ getOfferTemplate: function() {
     this.offerTemplate = offer;
 },
 getPriceTemplate: function() {
-    this.stateTemplate = I18n.t(this.data.options.total !== 1 ? 'few' : 'one', {scope: 'offer.price'});
+    this.stateTemplate = I18n.t(this.data.options.total !== 1 ? 'few_with_fee' : 'one_with_fee', {scope: 'offer.price'});
     this.priceTemplate = I18n.t('offer.price.buy');
 },
 currencies: {
