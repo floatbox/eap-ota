@@ -28,8 +28,8 @@
 <tr>
     <td><%= order.pnr_number %></td>
     <td><%= l(order.created_at, :format => :human_year) %></td>
-    <td><%= order.profile_route %></td>
-    <td><%= order.departure_date %></td>
+    <td><%= order.profile_route %> <small><%= order.route %></small></td>
+    <td><%= l(order.departure_date, :format => :human_year) %></td>
     <td><%= order.profile_status %></td>
     <td style="text-align: right;"><%= decorate_price short_price(order.price_with_payment_commission.round.to_i) %></td>
 </tr>
@@ -41,13 +41,13 @@
             <div class="pod-passenger">
                 <h6 class="pod-name"><%= ticket[:name] %></h6>
                 <% if order.ticketed? %>
-                <p class="pod-ticket">билет <%= ticket[:number] %></p>
+                <p class="pod-ticket">билет <%= ticket[:carrier]%> <%= ticket[:number] %></p>
                 <p class="pod-ticket">&nbsp;-&nbsp;</p> 
                 <p class="pod-ticket">статус <%= ticket[:status] %></p>
                 <% end %>
             </div>
           <% end %>
-          <div class="pod-pnr">Маршрут квитанция <a href="/">на русском</a> или <a href="/">на английском</a></div>
+          <div class="pod-pnr">Маршрут квитанция <a href="<%= show_notice_path(:id => order.pnr_number) %>">на русском</a> или <a href="<%= show_notice_path(:id => order.pnr_number, :lang=>'en') %>">на английском</a></div>
         </div>
     </div>    
     </td>

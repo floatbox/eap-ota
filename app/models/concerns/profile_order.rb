@@ -8,13 +8,17 @@ module ProfileOrder
   end
 
   def profile_route
-    route.blank? ? tickets.first.route : route
+    airports = []
+    route_string = route.blank? ? tickets.first.route : route
+    route_string.split(';').map{|s| s.split(' - ')}.flatten.map{|s| s.strip.split.first}.each{|s| airports << s if airports.last != s }
+    cities = airports.map{|a| Airport.find_by_iata(a).city.name}
+    cities.join(' → ')
   end
-  
+
   def profile_status
-    payment_status + '/' + ticket_status
+    payment_status + "\n" + ticket_status
   end
-  
+
   def profile_tickets
     rows = []
     if ticketed?
@@ -22,7 +26,8 @@ module ProfileOrder
         rows << {
           name: t.last_name + ' ' + t.first_name,
           status: t.status,
-          number: t.number
+          number: t.number,
+          carrier: t.carrier
         }
       end
     else
@@ -36,9 +41,9 @@ module ProfileOrder
     end
     rows
   end
-  
+
   def ticketed?
     tickets_count > 0
   end
-  
+
 end
