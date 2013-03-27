@@ -9,6 +9,7 @@ Eviterra::Application.routes.draw do
   # in development: use 'api.lvh.me:3000' or modify your /etc/hosts
   constraints subdomain: 'api' do
     root to: 'api_home#index'
+    match 'status' => 'home#status'
     match 'avia/v1/variants(.:format)' => 'pricer#api', :format => :xml
     match 'avia/v1/searches' => 'booking#api_redirect'
     match 'partner/v1/orders(.:format)' => 'api_order_stats#index', :format => :json
@@ -62,6 +63,7 @@ Eviterra::Application.routes.draw do
   match 'about/:action' => 'about', :as => :about
 
   match "whereami" => 'home#whereami', :as => :whereami
+  match 'status' => 'home#status'
   match "subscribe" => 'subscription#subscribe', :as => 'subscribe'
   match "unsubscribe" => 'subscription#unsubscribe', :as => 'unsubscribe'
   match "unsubscribe/:destination_id" => 'subscription#unsubscribe_by_destination', :as => 'unsubscribe_by_destination'
