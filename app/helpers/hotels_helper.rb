@@ -3,7 +3,7 @@ module HotelsHelper
 
   def ostrovok_uri order_form
     return unless uri_params = ostrovok_uri_params(order_form)
-    "http://ostrovok.ru/hotels/?partner_slug=eviterracom&#{uri_params.to_query}"
+    "http://ostrovok.ru/hotels/?utm_campaign=deeplink&utm_medium=partners&utm_source=eviterracom&partner_slug=eviterracom&#{uri_params.to_query}"
   end
 
   def ostrovok_uri_params order_form
