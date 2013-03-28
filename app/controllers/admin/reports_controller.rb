@@ -42,6 +42,7 @@ class Admin::ReportsController < Admin::BaseController
       data[:searches] = 0
       data[:eviterra_searches] = 0
       data[:enter] = 0
+      data[:enter_success] = 0
       data[:api_enter] = 0
       StatCounters.on_daterange(mongo_date_condition).each do |day_result|
         if day_result['search']
@@ -51,6 +52,7 @@ class Admin::ReportsController < Admin::BaseController
         end
         if day_result['enter']
           data[:enter] += day_result['enter']['preliminary_booking']['total'] if day_result['enter']['preliminary_booking']
+          data[:enter_success] += day_result['enter']['preliminary_booking']['success'] if day_result['enter']['preliminary_booking']
         end
 
         # Partners Counters
@@ -86,12 +88,13 @@ class Admin::ReportsController < Admin::BaseController
         partner[:income_total] = partner[:orders] && partner[:orders].income_total ? partner[:orders].income_total : 0
         partner[:income_share] = partner[:income_total] ? partner[:income_total].to_f / data[:orders].income_total.to_f * 100 : 0
         partner[:conv] = partner[:enter] && !partner[:enter].zero?  ? (partner[:order_count] / partner[:enter].to_f) * 100 : 0
-        partner[:searches_per_enter] = partner[:search] && !partner[:search].zero? && partner[:enter] ? (partner[:enter] / partner[:search].to_f) * 100 : 0
+        partner[:enteres_per_search] = partner[:search] && !partner[:search].zero? && partner[:enter] ? (partner[:enter] / partner[:search].to_f) * 100 : 0
         partner[:markup] = !partner[:order_total].zero? ? (partner[:income_total] / partner[:order_total]) * 100 : 0
       end
 
-      data[:searches_per_order] = !data[:searches].zero? ? data[:orders].order_count.to_f / data[:searches].to_f  * 100 : 0
-      data[:searches_per_enter] = !data[:searches].zero? ? data[:enter].to_f / data[:searches].to_f  * 100 : 0
+      data[:orders_per_search] = !data[:searches].zero? ? data[:orders].order_count.to_f / data[:searches].to_f  * 100 : 0
+      data[:enteres_per_search] = !data[:searches].zero? ? data[:enter].to_f / data[:searches].to_f  * 100 : 0
+      data[:successes_per_enter] = !data[:enter].zero? ? data[:enter_success].to_f / data[:enter].to_f  * 100 : 0
       data[:conv] = !data[:enter].zero? ? data[:orders].order_count.to_f / data[:enter].to_f  * 100 : 0
 
       @report << data
