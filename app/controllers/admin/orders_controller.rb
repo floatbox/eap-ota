@@ -3,7 +3,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
   include CustomCSV
   include Typus::Controller::Bulk
 
-  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel, :reload_tickets, :update, :pnr_raw, :void, :make_payable_by_card, :send_invoice, :ticket_in_ticketing_office, :manual_notice]
+  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :edit_ticketed, :ticket, :cancel, :reload_tickets, :update, :pnr_raw, :void, :make_payable_by_card, :send_invoice, :ticket_in_ticketing_office, :manual_notice]
 
   # def set_scope
   #   # добавлять фильтры лучше в def index и т.п., но так тоже работает (пока?)
@@ -45,6 +45,19 @@ class Admin::OrdersController < Admin::EviterraResourceController
       format.html # new.html.erb
       format.json { render :json => @item }
     end
+  end
+
+  def edit
+    if @item.has_data_in_tickets?
+      redirect_to :action => :edit_ticketed, :id => @item.id
+    else
+      super
+    end
+  end
+
+  def edit_ticketed
+    @item = @order
+    render :action => :edit
   end
 
   def show_versions

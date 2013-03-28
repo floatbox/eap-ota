@@ -119,7 +119,13 @@ class Order < ActiveRecord::Base
   def set_prices
     self.fee_scheme = Conf.site.fee_scheme if new_record? || fee_scheme.blank?
     self.price_acquiring_compensation = price_payment_commission if price_acquiring_compensation == 0
-    self.price_difference = price_with_payment_commission - price_real
+    unless has_data_in_tickets?
+      self.price_difference = fix_price? ? price_with_payment_commission - price_real : 0
+    end
+  end
+
+  def has_data_in_tickets?
+    sold_tickets.present? && sold_tickets.all?{|t| t.office_id != 'FLL1S212V'}
   end
 
   def display_fee_details
@@ -330,7 +336,7 @@ class Order < ActiveRecord::Base
   def update_prices_from_tickets
     tickets.reload
     # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
-    return if old_booking || @tickets_are_loading || sold_tickets.blank? || sold_tickets.any?{|t| t.office_id == 'FLL1S212V'}
+    return if old_booking || @tickets_are_loading || !has_data_in_tickets?
     price_total_old = self.price_total
 
     self.price_fare = sold_tickets.sum(:price_fare)
@@ -344,6 +350,7 @@ class Order < ActiveRecord::Base
     self.price_our_markup = sold_tickets.sum(:price_our_markup)
     self.price_operational_fee = sold_tickets.sum(:price_operational_fee)
     self.price_acquiring_compensation = sold_tickets.sum(:price_acquiring_compensation)
+    self.price_difference = sold_tickets.sum(:price_difference)
 
     first_ticket = tickets.where(:kind => 'ticket').first
     self.ticketed_date = first_ticket.ticketed_date if !ticketed_date && first_ticket # для тех случаев, когда билет переводят в состояние ticketed руками
