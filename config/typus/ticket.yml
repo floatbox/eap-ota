@@ -48,7 +48,6 @@ Ticket:
       - price_operational_fee
       - price_acquiring_compensation
       - price_difference
-      - fee_scheme
       - ticketed_date
       - comment
       - code
@@ -96,7 +95,6 @@ Ticket:
       - price_acquiring_compensation
       - price_difference
       - fee
-      - fee_scheme
       - price_with_payment_commission
       - office_id
       - validator
@@ -125,7 +123,6 @@ Ticket:
       - price_operational_fee
       - price_acquiring_compensation
       - price_difference
-      - fee_scheme
       - commission_consolidator
       - commission_blanks
       - commission_agent
@@ -163,7 +160,6 @@ Ticket:
       - price_with_payment_commission
       - price_acquiring_compensation
       - price_difference
-      - fee_scheme
       - pnr_number
       - validating_carrier
       - office_id
@@ -179,7 +175,7 @@ Ticket:
       - replacement_number_with_code
       - vat_status
     options:
-      selectors: status, source, office_id, validator, fee_scheme
+      selectors: status, source, office_id, validator
       date_formats:
         created_at: long
       booleans:

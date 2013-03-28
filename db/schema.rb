@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130321134854) do
+ActiveRecord::Schema.define(:version => 20130328171157) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -540,7 +540,6 @@ ActiveRecord::Schema.define(:version => 20130321134854) do
     t.string   "baggage_info"
     t.decimal  "price_operational_fee",        :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.decimal  "price_acquiring_compensation", :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.string   "fee_scheme",                                                 :default => ""
     t.decimal  "price_difference",             :precision => 9, :scale => 2, :default => 0.0,       :null => false
   end
 

@@ -41,6 +41,7 @@ class Ticket < ActiveRecord::Base
     :conditions => lambda {|_| ["tickets.id <> ?", id] }
 
   delegate :paid_by, :to => :order
+  delegate :fee_scheme, :to => :order
 
   delegate :commission_carrier, :to => :order, :allow_nil => true
 
@@ -74,7 +75,6 @@ class Ticket < ActiveRecord::Base
   before_save :set_prices
 
   def set_prices
-    self.fee_scheme = Conf.site.fee_scheme if fee_scheme.blank?
     self.price_acquiring_compensation = price_payment_commission if corrected_price && (price_acquiring_compensation == 0)
     self.price_difference = price_with_payment_commission - price_real
   end
@@ -130,10 +130,6 @@ class Ticket < ActiveRecord::Base
    # для всех айди в базе можно использовать: Ticket.uniq.pluck(:office_id).compact.sort
   def self.office_ids
     ['MOWR2233B', 'MOWR228FA', 'MOWR2219U', 'NYC1S21HX', 'FLL1S212V']
-  end
-
-  def self.fee_schemes
-    ['v1', 'v2']
   end
 
   def self.validating_carriers
