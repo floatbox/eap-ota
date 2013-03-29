@@ -47,7 +47,7 @@ set :normalize_asset_timestamps, false
 
 # нужен для нормального форвардинга ключей, соответствующая настройка
 # в пользовательском .ssh/config почему-то не читается
-# ssh_options[:forward_agent] = true
+ssh_options[:forward_agent] = true
 
 set :application, "eviterra"
 
