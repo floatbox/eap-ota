@@ -2945,34 +2945,46 @@ carrier "S7", "S7 AIRLINES"
 ########################################
 carrier_defaults :consolidator => 0, :ticketing_method => "direct"
 
-example 'svonoz'
-example 'svonoz/business nozsvo'
-example 'ovbhta'
-example 'ovbhta/business htaovb'
-example 'ovbuud'
-example 'ovbuud/business uudovb/business'
+#dtt
+expr_date "31.03.2013"
+agent ""
+subagent ""
+our_markup "400"
+ticketing_method "downtown"
+commission "0%/0%"
+
+# example 'svonoz'
+# example 'svonoz/business nozsvo'
+# example 'ovbhta'
+# example 'ovbhta/business htaovb'
+# example 'ovbuud'
+# example 'ovbuud/business uudovb/business'
+strt_date "01.04.2013"
 agent "По отдельным направлениям: MOW-NOZ (только PtP), OVB-HTA (только PtP), OVB-UUD (только PtP) 3%"
 subagent "3%"
 classes :economy, :business
 check { includes_only(city_iatas, 'MOW NOZ') or includes_only(city_iatas, 'OVB HTA') or includes_only(city_iatas, 'OVB UUD') }
-#discount "4.2%"
+# discount "4.2%"
 commission "3%/3%"
 
-example 'svocdg/w cdgsvo/w'
+# example 'svocdg/w cdgsvo/w'
+strt_date "01.04.2013"
 agent "При продаже перевозок по коду бронирования W, оформленных на ПД на рейсы Перевозчика, вознаграждение составляет 0,1%"
 subagent "0.1%"
 subclasses "W"
 commission "0.1%/0.1%"
 
-example 'svocdg cdgsvo'
-example 'svoled ledsvo'
+# example 'svocdg cdgsvo'
+# example 'svoled ledsvo'
+strt_date "01.04.2013"
 agent "При продаже перевозок на внутренние воздушные линии, оформленные на ПД на рейсы Перевозчика, вознаграждение составляет 5%"
 agent "При продаже перевозок на международные воздушные линии и при продаже комбинированной перевозки на внутренние воздушные линии и международные воздушные линии, на которой установлен единый сквозной тариф, оформленных на ПД на рейсы  Перевозчика, вознаграждение составляет"
 subagent "5%"
 discount "2%"
 commission "5%/5%"
 
-example 'svocdg/ab cdgsvo'
+# example 'svocdg/ab cdgsvo'
+strt_date "01.04.2013"
 agent "При продаже перевозок на рейсы других авиакомпаний, с которыми Перевозчик имеет Соглашение INTERLINE и по специальным прорейтовым тарифам на рейсы, включающие участки Перевозчика и других авиакомпаний, с которыми Перевозчик имеет Соглашение INTERLINE, оформленных на ПД, вознаграждение составляет 5%"
 subagent "5%"
 interline :yes
