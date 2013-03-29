@@ -70,8 +70,13 @@ class Admin::ReportsController < Admin::BaseController
           day_result['enter']['preliminary_booking'].each do |partner, value|
             if !partner.blank? && value.class == Hash
               data[:partners][partner] = {} if !data[:partners][partner]
+
               data[:partners][partner][:enter] = 0 if !data[:partners][partner][:enter]
               data[:partners][partner][:enter] += value['total'] if value['total']
+
+              data[:partners][partner][:enter_success] = 0 if !data[:partners][partner][:enter_success]
+              data[:partners][partner][:enter_success] += value['success'] if value['success']
+
               data[:api_enter] += value['total'] if value['total']
             end
           end
@@ -88,6 +93,8 @@ class Admin::ReportsController < Admin::BaseController
         partner[:income_total] = partner[:orders] && partner[:orders].income_total ? partner[:orders].income_total : 0
         partner[:income_share] = partner[:income_total] ? partner[:income_total].to_f / data[:orders].income_total.to_f * 100 : 0
         partner[:conv] = partner[:enter] && !partner[:enter].zero?  ? (partner[:order_count] / partner[:enter].to_f) * 100 : 0
+        partner[:conv_success] = partner[:enter_success] && !partner[:enter_success].zero?  ? (partner[:order_count] / partner[:enter_success].to_f) * 100 : 0
+        partner[:successes_per_enter] = partner[:enter] && !partner[:enter].zero?  ? (partner[:enter_success] / partner[:enter].to_f) * 100 : 0
         partner[:enters_per_search] = partner[:search] && !partner[:search].zero? && partner[:enter] ? (partner[:enter] / partner[:search].to_f) * 100 : 0
         partner[:markup] = !partner[:order_total].zero? ? (partner[:income_total] / partner[:order_total]) * 100 : 0
       end
