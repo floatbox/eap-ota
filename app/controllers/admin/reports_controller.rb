@@ -36,6 +36,7 @@ class Admin::ReportsController < Admin::BaseController
         data[:partners][tp.partner][:orders] = tp
         data[:partners][tp.partner][:search] = 0
         data[:partners][tp.partner][:enter] = 0
+        data[:partners][tp.partner][:enter_success] = 0
       end
 
       mongo_date_condition = StatCounters.build_datetime_conditions('_id', d)
