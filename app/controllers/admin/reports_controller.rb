@@ -45,6 +45,7 @@ class Admin::ReportsController < Admin::BaseController
       data[:enter] = 0
       data[:enter_success] = 0
       data[:api_enter] = 0
+      data[:api_enter_success] = 0
       StatCounters.on_daterange(mongo_date_condition).each do |day_result|
         if day_result['search']
           data[:searches] += day_result['search']['api']['total'] if day_result['search']['api']
@@ -79,6 +80,7 @@ class Admin::ReportsController < Admin::BaseController
               data[:partners][partner][:enter_success] += value['success'] if value['success']
 
               data[:api_enter] += value['total'] if value['total']
+              data[:api_enter_success] += value['success'] if value['success']
             end
           end
         end
@@ -87,6 +89,7 @@ class Admin::ReportsController < Admin::BaseController
 
       data[:partners]['eviterra'][:search] = data[:eviterra_searches] if data[:partners]['eviterra']
       data[:partners]['eviterra'][:enter] = data[:enter] - data[:api_enter] if data[:partners]['eviterra']
+      data[:partners]['eviterra'][:enter_success] = data[:enter_success] - data[:api_enter_success] if data[:partners]['eviterra']
       data[:partners].each do |name, partner|
         partner[:order_count] = partner[:orders] && partner[:orders].order_count ? partner[:orders].order_count : 0
         partner[:order_total] = partner[:orders] && partner[:orders].order_total ? partner[:orders].order_total : 0

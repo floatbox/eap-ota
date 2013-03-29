@@ -12,7 +12,7 @@
     <td><%= display_percent(partner[:successes_per_enter])%></td>
     <td><%= display_percent(partner[:enters_per_search])%></td>
     <td><%= display_numbers(partner[:order_count])%></td>
-    <td><%= display_percent(partner[:conv])%><%= display_percent(partner[:conv_success])%></td>
+    <td><%= display_percent(partner[:conv])%> / <%= display_percent(partner[:conv_success])%></td>
     <td><%= display_price(partner[:order_total])%></td>
     <td><%= display_percent(partner[:order_total_share])%></td>
     <td><%= display_price(partner[:income_total])%></td>
