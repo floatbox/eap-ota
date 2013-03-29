@@ -1,25 +1,4 @@
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 <link rel="icon" type="image/png" href="/favicon.png">
 <%= stylesheet_link_tag "common", "/ruble/arial.css" %>
-<%= javascript_include_tag "common/jquery-1.7.1.min", "common/common" %>
-
-<script type="text/javascript">
-var _gaq = _gaq || [];
-var _yam = {hit: function() {}};
-<% if Rails.env.production? %>
-_gaq.push(['_setAccount', 'UA-19832395-1']);
-<% else %>
-_gaq.push(['_setAccount', 'UA-19832395-2']);
-_gaq.push(['_setDomainName', '.team.eviterra.ru']);
-<% end %>
-var trackPage = function(url) {
-    _gaq.push(['_trackPageview', url]);
-    _yam.hit(url);
-    if (window.yaCounter5324671) {
-        window.yaCounter5324671.hit(url);
-    }
-};
-var trackEvent = function(category, action, label) {
-    _gaq.push(['_trackEvent', category, action, label]);
-};
-</script>
+<%= javascript_include_tag "common" %>

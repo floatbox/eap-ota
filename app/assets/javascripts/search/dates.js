@@ -372,6 +372,7 @@ dropDay: function() {
         this.selected.sort(Array.sortInt);
         this.showSelected();        
         this.backup = this.selected.concat();
+        search.process();
     }
     this.dayDragging = undefined;
     this.dragging.hide();

@@ -104,6 +104,14 @@ class Order < ActiveRecord::Base
     payments.to_a.select(&:is_charge?).last
   end
 
+  def parent_or_self
+    if parent_pnr_number.present?
+      self.class.find_by_pnr_number(parent_pnr_number)
+    else
+      self
+    end
+  end
+
   has_many :tickets
   has_many :order_comments
   has_many :notifications

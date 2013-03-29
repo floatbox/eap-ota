@@ -36,9 +36,9 @@ admin:
   Partner: create, read, update, delete, show_versions
 
   Payment: read, update, bulk, bulk_charge, show_versions, payment_raw, create, charge, block, cancel, sync_status
-  PayuCharge: create, read
+  PayuCharge: create, read, update
   PayuRefund: create, update, read
-  PaytureCharge: create, read
+  PaytureCharge: create, read, update
   PaytureRefund: create, update, read
   CashCharge: create, update, read
   CashRefund: create, update, read

@@ -32,6 +32,7 @@ class Ticket < ActiveRecord::Base
   has_many :children, :class_name => 'Ticket', :foreign_key => 'parent_id'
 
   has_and_belongs_to_many :stored_flights
+  has_and_belongs_to_many :imports
   serialize :baggage_info, JoinedArray.new
 
   # для отображения в админке билетов. Не очень понятно,

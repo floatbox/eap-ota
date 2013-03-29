@@ -9,11 +9,10 @@
     <%= stylesheet_link_tag 'variant' %>
     <%= javascript_include_tag 'variant' %>
     <script type="text/javascript">
-    if (window._gaq) {
-        _gaq.push(['_setAllowAnchor', true]);
-        _gaq.push(['_setCampMediumKey', 'type']);
-        _gaq.push(['_setCampSourceKey', 'partner']);
-    }
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAllowAnchor', true]);
+    _gaq.push(['_setCampMediumKey', 'type']);
+    _gaq.push(['_setCampSourceKey', 'partner']);
     </script>
 </head>
 <body>

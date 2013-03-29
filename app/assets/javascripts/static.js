@@ -1,5 +1,3 @@
-//= require i18n_init
-
 $(function() {
     var rhost = document.referrer && document.referrer.split('#')[0].replace(/https?:\/\/|\/$/g, ''); 
     var phost = document.location.host;
@@ -9,5 +7,5 @@ $(function() {
             window.history.back();
         });
     }
+    trackPage();
 });
-trackPage();

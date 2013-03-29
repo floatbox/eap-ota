@@ -22,8 +22,8 @@ parseVariants: function(selector) {
         that.variants[i] = {
             offer: that,
             price: prices['RUR'],
-            price_pure: prices['RUR_pure'],
-            price_raw: prices['RUR_raw'],
+            carrierPrice: prices['RUR_pure'],
+            visiblePrice: prices['RUR'], // RUR_raw, если нужна без эквайринга
             id: el.text(),
             duration: Number(el.attr('data-duration')),
             segments: el.attr('data-segments').split(' '),
@@ -46,20 +46,21 @@ addBook: function() {
     this.state = this.book.find('.ob-state');
 },
 updateBook: function() {
-    var p = this.selected.price_raw;
+    var vp = this.selected.visiblePrice;
+    var cp = this.selected.carrierPrice; 
     var ap = results.data.averagePrice;
-    var pp = this.selected.price_pure; 
     var state = [];
-    if (p < ap) {
-        var percents = Math.round((ap - p) / ap * 100) + '%';
-        if (percents) {
-            state.push(I18n.t('offer.price.average', {value: percents}));
+    if (vp < ap) {
+        var percents = (ap - vp) / ap * 100;
+        if (percents > 3) {
+            var value = percents > 20 ? Math.round(percents) : percents.toFixed(1).replace('.0', '');
+            state.push(I18n.t('offer.price.average', {value: value + '%'}));            
         }
     }
-    if (p < pp) {
-        state.push(I18n.t('offer.price.carrier', {value: pp - p}));
+    if (vp < cp) {
+        state.push(I18n.t('offer.price.carrier', {value: cp - vp}));
     }
-    var price = decoratePrice(I18n.t('currencies.RUR', {count: p}));    
+    var price = decoratePrice(I18n.t('currencies.RUR', {count: vp}));    
     this.btitle.html(results.priceTemplate.absorb(price));
     if (state.length) {
         this.state.html('<div class="obst-wrapper"><table class="obs-table"><tr><td>' + results.stateTemplate + '</td><td class="obs-profit">' +  state.join('<br>') + '</td></tr></table></div>');
@@ -192,7 +193,7 @@ countPrices: function() {
     var prices = {}, sample;
     for (var v = this.variants.length; v--;) {
         var variant = this.variants[v];
-        var price = variant.price_raw;
+        var price = variant.visiblePrice;
         for (var s = sl; s--;) {
             var flights = variant.segments[s];
             var range = prices[flights];
@@ -228,7 +229,7 @@ otherCarriers: function() {
 otherPrices: function() {
     var prices = this.prices;
     var ss = this.selected.segments
-    var sp = this.selected.price_raw;
+    var sp = this.selected.visiblePrice;
     this.el.find('.oss-price').remove();
     this.el.find('.oss-different').removeClass('oss-different');
     this.el.find('.o-segment').each(function(s) {
