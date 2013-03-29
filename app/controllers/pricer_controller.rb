@@ -128,8 +128,8 @@ class PricerController < ApplicationController
       render 'api/variants'
     else
       StatCounters.inc %W[search.api.invalid search.api.#{partner4stat}.invalid]
+      logger.info "Invalid API search with params #{pricer_form_hash} validation errors: #{@search.errors.full_messages}"
       @recommendations = []
-
       render 'api/variants'
     end
   rescue IataStash::NotFound => iata_error
