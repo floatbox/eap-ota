@@ -30,11 +30,11 @@
 <% if @prices.payment_type == 'delivery' %>
 <tr>
     <td><% unless @lang %>Доставка <span style="color: #C0C0C0;">/</span> <% end %>Delivery</td>
-    <td>400 RUB</td>
+    <td><%= Conf.payment.price_delivery %> RUB</td>
 </tr>
 <tr>
     <td><% unless @lang %>Итоговая стоимость <span style="color: #C0C0C0;">/</span> <% end %>Total price</td>
-    <td><%= exact_price(@prices.recalculated_price_with_payment_commission + 400) %> RUB</td>
+    <td><%= exact_price(@prices.recalculated_price_with_payment_commission + Conf.payment.price_delivery) %> RUB</td>
 </tr>
 <% else %>
 <tr>
