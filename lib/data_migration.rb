@@ -9,9 +9,9 @@ module DataMigration
   def self.set_price_acquiring_compensation_and_price_difference
     Order.where(fee_scheme: '').order('created_at DESC').map do |o|
       o.fee_scheme = Conf.site.fee_scheme
-      o.tickets_are_loading = true
-      o.tickets.every.save
-      o.tickets_are_loading = false
+      $tickets_are_loading = true
+      o.tickets.every.save!
+      $tickets_are_loading = false
       o.update_prices_from_tickets
     end
   end

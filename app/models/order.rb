@@ -11,9 +11,6 @@ class Order < ActiveRecord::Base
   scope :MOWR2219U, lambda { by_office_id 'MOWR2219U' }
   scope :FLL1S212V, lambda { by_office_id 'FLL1S212V' }
 
-  attr_writer :tickets_are_loading # нужен для DataMigrations
-
-
   def self.by_office_id office_id
     joins(:tickets).where('tickets.office_id' => office_id).uniq
   end
@@ -126,8 +123,8 @@ class Order < ActiveRecord::Base
 
   def set_prices
     self.fee_scheme = Conf.site.fee_scheme if new_record? || fee_scheme.blank?
-    self.price_acquiring_compensation = price_payment_commission if price_acquiring_compensation == 0
     unless has_data_in_tickets?
+      self.price_acquiring_compensation = price_payment_commission if price_acquiring_compensation == 0
       self.price_difference = fix_price? ? price_with_payment_commission - price_real : 0
     end
   end
@@ -344,7 +341,7 @@ class Order < ActiveRecord::Base
   def update_prices_from_tickets
     tickets.reload
     # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
-    return if old_booking || @tickets_are_loading || !has_data_in_tickets?
+    return if old_booking || @tickets_are_loading || $tickets_are_loading || !has_data_in_tickets?
     price_total_old = self.price_total
 
     self.price_fare = sold_tickets.sum(:price_fare)
