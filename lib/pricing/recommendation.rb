@@ -60,7 +60,7 @@ module Pricing
        #price_markup + price_payment - price_declared_discount
       if fee_scheme == 'v2'
         price_blanks + price_consolidator + price_our_markup + price_payment
-      elsif fee_scheme == 'v1'
+      elsif fee_scheme == 'v3'
         price_blanks + price_consolidator + price_our_markup + price_payment+ price_declared_discount
       else
         price_markup + price_payment - price_declared_discount

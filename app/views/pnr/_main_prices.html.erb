@@ -2,7 +2,7 @@
     <td width="340"><% unless @lang %>Тариф <span style="color: #C0C0C0;">/</span> <% end %>Fare</td>
     <td width="190"><%= exact_price(@prices.price_fare) %> RUB</td>
 </tr>
-<% if !@prices.price_declared_discount.zero? && @prices.fee_scheme != 'v1' %>
+<% if !@prices.price_declared_discount.zero? && @prices.fee_scheme != 'v3' %>
 <tr>
     <td><% unless @lang %>Компенсация от тарифа <span style="color: #C0C0C0;">/</span> <% end %>Discount</td>
     <td><%= exact_price(-@prices.price_declared_discount) %> RUB</td>
@@ -13,7 +13,7 @@
     <td><%= exact_price(@prices.price_tax) %> RUB</td>
 </tr>
 <tr>
-  <% if @prices.fee > 0 || @prices.fee_scheme != 'v1' %>
+  <% if @prices.fee > 0 || @prices.fee_scheme != 'v3' %>
       <td><% unless @lang %>Сервисный сбор <span style="color: #C0C0C0;">/</span> <% end %>Service fee</td>
       <td><%= exact_price(@prices.fee) %> RUB</td>
   <% else %>

@@ -37,10 +37,10 @@ describe Order do
   end
 
   it "should set fee_scheme from config" do
-    Conf.site.stub(:fee_scheme).and_return('v1')
+    Conf.site.stub(:fee_scheme).and_return('v3')
     order = build(:order)
     order.save
-    order.fee_scheme.should == 'v1'
+    order.fee_scheme.should == 'v3'
   end
 
   it "sets price_acquiring_compensation before create" do

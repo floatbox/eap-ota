@@ -3,10 +3,10 @@ require 'spec_helper'
 describe Ticket do
 
   it "should set fee_scheme from config" do
-    Conf.site.stub(:fee_scheme).and_return('v1')
+    Conf.site.stub(:fee_scheme).and_return('v3')
     ticket = build(:ticket)
     ticket.save
-    ticket.fee_scheme.should == 'v1'
+    ticket.fee_scheme.should == 'v3'
   end
 
   it 'sets price_difference before save' do

@@ -263,13 +263,13 @@
                 <ul class="bffp-details">
                     <li class="bffpd-item"><%= t 'booking.price.fare' %> — <%= short_price(price_fare) %></li>
                     <li class="bffpd-item"><%= t 'booking.price.taxes_and_fees' %> — <%= short_price(@order_form.recommendation.price_tax) %></li>
-                    <% if Conf.site.fee_scheme != 'v1' || @order_form.recommendation.fee > 0 %>
+                    <% if Conf.site.fee_scheme != 'v3' || @order_form.recommendation.fee > 0 %>
                       <li class="bffpd-item"><%= t 'booking.price.fee' %> — <%= short_price(@order_form.recommendation.fee) %></li>
                     <% elsif @order_form.recommendation.fee < 0 %>
                       <li class="bffpd-item"><%= t 'booking.price.discount' %> — <%= short_price(-@order_form.recommendation.fee) %></li>
                     <% end %>
                     <li class="bffpd-item bffp-wd"><%= t 'booking.price.delivery' %> — <%= short_price(400) %></li>
-                    <% if price_discount > 0 && Conf.site.fee_scheme != 'v1' %>
+                    <% if price_discount > 0 && Conf.site.fee_scheme != 'v3' %>
                         <li class="bffpd-item"><%= t 'booking.price.fare_compensation' %> — <%= short_price(price_discount) %></li>
                     <% end %>
                 </ul>

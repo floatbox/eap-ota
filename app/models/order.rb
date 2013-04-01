@@ -42,7 +42,7 @@ class Order < ActiveRecord::Base
   end
 
   def self.fee_schemes
-    ['v1', 'v2']
+    ['v2', 'v3']
   end
 
   def self.ticket_office_ids

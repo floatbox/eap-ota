@@ -17,7 +17,7 @@ module Pricing
 eos
       if fee_scheme == 'v2'
         result += "4. [ИТОГО: сервисный сбор/скидка #{fee.round(2)}] = [сбор за бланки #{price_blanks.round(2)}] + [сбор 1/2% АЦ/ДаунТаун #{price_consolidator.round(2)}] + [надбавка к тарифу #{(price_our_markup + price_difference).round(2)}] + [компенсация эквайринга #{price_acquiring_compensation.round(2)}] + [сбор за операцию #{price_operational_fee.round(2)}]"
-      elsif fee_scheme == 'v1'
+      elsif fee_scheme == 'v3'
         result += "4. [ИТОГО: сервисный сбор/скидка #{fee.round(2)}] = [сбор за бланки #{price_blanks.round(2)}] + [сбор 1/2% АЦ/ДаунТаун #{price_consolidator.round(2)}] + [компенсация от тарифа #{price_discount.round(2)}]+ [надбавка к тарифу #{(price_our_markup + price_difference).round(2)}] + [компенсация эквайринга #{price_acquiring_compensation.round(2)}] + [сбор за операцию #{price_operational_fee.round(2)}]"
       end
       result

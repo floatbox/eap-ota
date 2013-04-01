@@ -26,7 +26,7 @@ module Pricing
 
     # cash_payment_markup содержит доставку, и нигде потом не используется
     # price_acquiring_compensation - компенсация эквайринга, сохраняется в базе, по возможности пересчитывается из билетов
-    # fee_scheme - схема расчета поля (сервисный сбор/скидка) v2 - не учитывает price_discount, v1 - учитывает
+    # fee_scheme - схема расчета поля (сервисный сбор/скидка) v2 - не учитывает price_discount, v3 - учитывает
     # fee_calculation_details - динамическое поле, нужно исключительно для налоговой.
 
     # рассчет прибыли
@@ -75,7 +75,7 @@ module Pricing
         sold_tickets.to_a.sum(&:fee)
       elsif fee_scheme == 'v2'
         price_blanks + price_consolidator + price_our_markup + price_acquiring_compensation + price_operational_fee + price_difference
-      elsif fee_scheme == 'v1'
+      elsif fee_scheme == 'v3'
         price_blanks + price_consolidator + price_discount + price_our_markup + price_acquiring_compensation + price_operational_fee + price_difference
       else
         recalculated_price_with_payment_commission - price_tax - price_fare - price_declared_discount
