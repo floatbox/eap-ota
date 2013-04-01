@@ -24,10 +24,14 @@
 
         <tr valign="top"><td class="dataName">Поисков</td><td><%= display_numbers(report[:searches]) %></td></tr>
         <tr valign="top"><td class="dataName">Переходов</td><td><%= display_numbers(report[:enter]) %></td></tr>
+        <tr valign="top"><td class="dataName">Успешных переходов</td><td><%= display_numbers(report[:enter_success]) %></td></tr>
+        <tr><td colspan="2">&nbsp;</td></tr>
+
         <tr valign="top"><td class="dataName">Заказ/Поиск</td><td><%= number_to_percentage(report[:orders_per_search]) %></td></tr>
-        <tr valign="top"><td class="dataName">Переход/Поиск</td><td><%= number_to_percentage(report[:enteres_per_search]) %></td></tr>
+        <tr valign="top"><td class="dataName">Переход/Поиск</td><td><%= number_to_percentage(report[:enters_per_search]) %></td></tr>
         <tr valign="top"><td class="dataName">Успех/Переход</td><td><%= number_to_percentage(report[:successes_per_enter]) %></td></tr>
         <tr valign="top"><td class="dataName">Заказ/Переход</td><td><%= number_to_percentage(report[:conv]) %></td></tr>
+        <tr valign="top"><td class="dataName">Заказ/Успех</td><td><%= number_to_percentage(report[:conv_success]) %></td></tr>
       </table>
     </td>
     <td style="width: 60%; text-align: center;">

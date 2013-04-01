@@ -14,6 +14,8 @@ module Amadeus
           'NMC-RUSSIA'
         when 'NYC'
           'NMC-US'
+        when 'IEV'
+          'NMC-UKRAINE'
         else
           raise "Please define organization_id for office id #{office}"
         end
