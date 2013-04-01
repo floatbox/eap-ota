@@ -15,9 +15,29 @@ module Amadeus
         when 'NYC'
           'NMC-US'
         when 'IEV'
-          'NMC-UKRAINE'
+          'NMC-UKRAIN'
         else
           raise "Please define organization_id for office id #{office}"
+        end
+      end
+
+      # пока лишь бы работало
+      def password
+        case office
+        when 'IEVU228GZ'
+          'QU1BREVVUw=='
+        else
+          'TUk4Vlg4N00='
+        end
+      end
+
+      # TODO посчитать самим? видимо, длина после base64-декодирования
+      def password_length
+        case office
+        when 'IEVU228GZ'
+          7
+        else
+          8
         end
       end
 
