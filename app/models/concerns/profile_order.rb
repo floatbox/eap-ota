@@ -8,10 +8,33 @@ module ProfileOrder
   end
 
   def profile_route
+    route.blank? ? tickets.first.route.gsub(/ \([A-Z]{2}\)/, '') : route
+  end
+
+  def profile_route_smart
+    route_string = profile_route
+    rt = route_string.split(';').size.even?
     airports = []
-    route_string = route.blank? ? tickets.first.route : route
-    route_string.split(';').map{|s| s.split(' - ')}.flatten.map{|s| s.strip.split.first}.each{|s| airports << s if airports.last != s }
-    cities = airports.map{|a| Airport.find_by_iata(a).city.name}
+    cities = []
+    route_flights = route_string.gsub(/([A-Z]{3}); \1/, '\1').split('; ').map{|s| s.split(' - ')}
+    if rt && route_flights.size == 1 && route_flights.first == route_flights.first.reverse
+      rt_flight = [ route_flights.first.first, route_flights.first[route_flights.first.size / 2] ]
+      rt_flight.each do |iata|
+        cities << Airport[iata].city.name
+      end
+      cities.join(' ⇄  ')
+    else
+      route_flights.each do |fl|
+        cities << fl.map{|iata| Airport[iata].city.name}.join(' → ')
+      end
+      cities.join(', ')
+    end
+  end
+
+  def profile_route_decorated
+    airports = []
+    profile_route.split('; ').map{|s| s.split(' - ')}.flatten.map{|s| s.strip.split.first}.each{|s| airports << s if airports.last != s }
+    cities = airports.map{|iata| Airport[iata].city.name}
     cities.join(' → ')
   end
 
