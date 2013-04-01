@@ -49,6 +49,21 @@ class OrderForm
     return last_tkt_date.to_time
   end
 
+  # разрешает сделать бронирование с оплатой потом.
+  def enabled_delayed_payment?
+    (enabled_delivery? || enabled_cash?) && last_pay_time
+  end
+
+  # возможна доставка
+  def enabled_delivery?
+    ! Conf.site.forbidden_delivery
+  end
+
+  # возможна оплата наличными
+  def enabled_cash?
+    ! Conf.site.forbidden_cash
+  end
+
   def tk_xl
     dept_datetime_mow = Location.default.tz.utc_to_local(recommendation.journey.departure_datetime_utc) - 1.hour
     last_ticket_date = self.last_tkt_date || (Date.today + 2.days)
