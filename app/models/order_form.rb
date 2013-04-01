@@ -26,6 +26,8 @@ class OrderForm
   attr_accessor :sirena_lead_pass
   attr_accessor :order # то, что сохраняется в базу
   attr_accessor :variant_id #нужен при восстановлении формы по урлу
+  # Снимает ограничения на бронирование. Параметр не сохраняется в кэш.
+  attr_accessor :admin_user
   attr_reader :show_vat, :vat_included
 
   delegate :last_tkt_date, :to => :recommendation
@@ -51,7 +53,8 @@ class OrderForm
 
   # разрешает сделать бронирование с оплатой потом.
   def enabled_delayed_payment?
-    (enabled_delivery? || enabled_cash?) && last_pay_time
+    admin_user ||
+      (enabled_delivery? || enabled_cash?) && last_pay_time
   end
 
   # возможна доставка
@@ -61,7 +64,8 @@ class OrderForm
 
   # возможна оплата наличными
   def enabled_cash?
-    ! Conf.site.forbidden_cash
+    admin_user ||
+      ! Conf.site.forbidden_cash
   end
 
   def tk_xl

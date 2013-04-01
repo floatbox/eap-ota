@@ -86,6 +86,7 @@ class BookingController < ApplicationController
   def index
     @order_form = OrderForm.load_from_cache(params[:number])
     @order_form.init_people
+    @order_form.admin_user = admin_user
     @search = PricerForm.load_from_cache(@order_form.query_key)
 
     if params[:iphone]
