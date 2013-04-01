@@ -31,7 +31,7 @@
     <td><%= order.profile_route_smart %> <br><small><%= order.profile_route %></small></td>
     <td><%= l(order.departure_date, :format => :human_year) %></td>
     <td><%= order.profile_status %></td>
-    <td style="text-align: right;"><%= decorate_price short_price(order.price_with_payment_commission.round.to_i) %></td>
+    <td style="text-align: right;"><%= decorate_price short_price(order.profile_payment_price) %></td>
 </tr>
 <tr class="po-details pod-hidden">
     <td colspan="6" class="pod-cell">

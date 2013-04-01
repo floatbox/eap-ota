@@ -42,6 +42,15 @@ module ProfileOrder
     payment_status + "\n" + ticket_status
   end
 
+
+  def profile_payment_price
+    if payments.charges.secured.first
+      payments.charges.secured.first.price.round.to_i
+    else
+      price_with_payment_commission.round.to_i
+    end
+  end
+
   def profile_tickets
     rows = []
     if ticketed?
