@@ -169,8 +169,7 @@ set: function(title) {
 }
 };
 
-
-/* Errors */
+/* Errors 
 window.onerror = function(text) {
     var type;
     if (page.location.booking) {
@@ -181,4 +180,4 @@ window.onerror = function(text) {
         type = 'В форме поиска';
     }
     trackEvent('Ошибка JS', type, text);
-}
+}*/
