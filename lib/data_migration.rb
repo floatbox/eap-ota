@@ -4,9 +4,13 @@ require 'net/http'
 require 'uri'
 require 'csv'
 
+# народ, помечайте миграции в PaperTrail! однажды может здорово пригодиться.
+
 module DataMigration
 
-  def self.set_price_acquiring_compensation_and_price_difference
+  # set price acquiring compensation and price difference
+  def self.upgrade_to_fee_schemas
+    PaperTrail.controller_info = {:done => 'upgrade_to_fee_schemas'}
     Order.where(fee_scheme: '').order('created_at DESC').map do |o|
       o.fee_scheme = Conf.site.fee_scheme
       $tickets_are_loading = true

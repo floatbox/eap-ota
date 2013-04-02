@@ -163,10 +163,7 @@
         <h4 class="bfst-text"><%= @order_form.last_pay_time ? 'Оплата' : 'Оплата банковской картой' %></h4>
     </div>
 
-    <% enabled_cash = false %>
-    <%# enabled_cash = !(Conf.site.forbidden_delivery && Conf.site.forbidden_cash) && @order_form.last_pay_time %>
-
-    <% if enabled_cash %>
+    <% if false # @order_form.enabled_delayed_payment? %>
     <div class="bfp-type">
         <div class="bfpt-item bfpt-selected">
             <h5 class="bfpt-title"><label for="bfpt-card" class="bfpt-label"><%= t 'booking.payment.by_card.label' %></label></h5>
@@ -175,7 +172,7 @@
         </div>
         <div class="bfpt-item">
             <h5 class="bfpt-title"><label for="bfpt-cash" class="bfpt-label"><%= t 'booking.payment.by_cash.label' %></label></h5>
-            <p class="bfpt-tip"><label for="bfpt-cash"><% if Conf.site.forbidden_delivery %><%= raw t 'booking.payment.by_cash.office' %><% else %><%= raw t Conf.site.forbidden_cash ? 'delivery' : 'both', :scope => 'booking.payment.by_cash', :sum => human_price(Conf.payment.delivery_price) %><% end %></label></p>
+            <p class="bfpt-tip"><label for="bfpt-cash"><% if !@order_form.enabled_delivery? %><%= raw t 'booking.payment.by_cash.office' %><% else %><%= raw t Conf.site.enabled_cash? ? 'both' : 'delivery', :scope => 'booking.payment.by_cash', :sum => human_price(Conf.payment.delivery_price) %><% end %></label></p>
             <input type="radio" name="order[payment_type]" class="bfpt-radio" id="bfpt-cash" value="cash">
         </div>
     </div>
@@ -219,16 +216,16 @@
         </div>
     </div>
 
-    <% if enabled_cash %>
+    <% if false # @order_form.enabled_delayed_payment? %>
     <div class="bf-cash">
         <div class="bfc-deadline">Бронирование необходимо оплатить до&nbsp;<strong><%= I18n.l(@order_form.last_pay_time, :format => '%H:%M %e %B') %></strong>, иначе оно будет автоматически аннулировано.</div>
-        <div class="bfc-delivery"<% if Conf.site.forbidden_delivery || Conf.site.forbidden_cash %> style="display: none;"<% end %>>
+        <div class="bfc-delivery"<% unless @order_form.enabled_delivery? && @order_form.enabled_cash? %> style="display: none;"<% end %>>
             <div class="bfc-delivery-item">
-                <input type="radio" name="ptype" class="bfcd-radio" value="delivery" id="bfcd-yes"<% unless Conf.site.forbidden_delivery %> checked="checked"<% end %>>
+                <input type="radio" name="ptype" class="bfcd-radio" value="delivery" id="bfcd-yes"<% if @order_form.enabled_delivery? %> checked="checked"<% end %>>
                 <label for="bfcd-yes">Хочу оплатить курьеру при&nbsp;доставке (+<%= Conf.payment.price_delivery %>&nbsp;рублей)</label>
             </div>
             <div class="bfc-delivery-item">
-                <input type="radio" name="ptype" class="bfcd-radio" value="cash" id="bfcd-no"<% if Conf.site.forbidden_delivery %> checked="checked"<% end %>>
+                <input type="radio" name="ptype" class="bfcd-radio" value="cash" id="bfcd-no"<% unless @order_form.enabled_delivery? %> checked="checked"<% end %>>
                 <label for="bfcd-no">Хочу самостоятельно приехать в&nbsp;офис и&nbsp;оплатить</label>
             </div>
         </div>
