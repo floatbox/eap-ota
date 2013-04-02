@@ -10,8 +10,8 @@ carrier "SU", "Aeroflot"
 # будут действовать на все правила в авиакомпании.
 carrier_defaults :discount => 0
 
-example "svocdg"
-example "svocdg/business cdgsvo/economy"
+# example "svocdg"
+# example "svocdg/business cdgsvo/economy"
 agent "1.1.На рейсы под кодом «SU», включая рейсы по соглашению «Код-шеринг» (в том числе по тарифам ИАТА):"
 agent "- за продажу в Эконом классе 7 % от тарифа;"
 agent "..."
@@ -67,6 +67,14 @@ check {includes(city_iatas, 'SIP ODS')}
 interline :no, :yes, :absent
 important!
 no_commission "Катя просила выключить срочно от 14.06.12"
+
+example "svocdg/p"
+agent ""
+subagent ""
+subclasses "P"
+# закрыли субсидированные тарифы
+important!
+no_commission
 
 carrier "UN", "TRANSAERO"
 ########################################
