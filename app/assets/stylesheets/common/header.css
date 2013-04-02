@@ -96,27 +96,25 @@
     line-height: 15px;
 }
 
-/* Share icons */
-.ph-share {
-    display: none;
-    position: relative;
+/* Social icons */
+.ph-social {
     float: right;
-    width: 374px;
-    height: 30px;
+    margin: 9px 0 0 10px;
 }
-.phs-item {
-    position: absolute;
-    top: 7px;
+.phs-icon {
+    float: left;
+    width: 16px;
+    height: 16px;
+    margin-left: 10px;
+    background: url(/images/common/social-header.png) no-repeat;
+    text-decoration: none;
 }
-#phs-vk {
-    left: 15px;
-} 
-#phs-facebook {
-    left: 109px;
+.phs-facebook {
+    background-position: 0 -34px;
 }
-#phs-twitter {
-    left: 198px;
+.phs-twitter {
+    background-position: 0 -17px;
 }
-#phs-google {
-    left: 303px;
+.phs-google {
+    background-position: 0 -51px;
 }

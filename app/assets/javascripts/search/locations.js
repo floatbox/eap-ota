@@ -145,7 +145,6 @@ blur: function() {
 initDropdown: function() {
     this.dropdown = $('<div class="sl-dropdown"></div>').appendTo(this.el);
     this.ddlist = $('<ul class="sld-list"></ul>').appendTo(this.dropdown);
-    this.ddhint = $('<p class="sld-hint"></p>').appendTo(this.dropdown);
     var that = this;
     this.ddlist.delegate('.sld-item:not(.sld-preferred)', 'mousemove', function() {
 	    that.prefer(parseInt($(this).attr('data-index'), 10));
@@ -273,7 +272,6 @@ toggleVariants: function(stealth) {
 prefer: function(index, scroll) {
 	if (this.preferred) this.preferred.removeClass('sld-preferred');
    	this.preferred = this.items.eq(index).addClass('sld-preferred');
-   	this.ddhint.html(this.variants[index].hint);
    	if (scroll) {
         var st = this.ddlist.scrollTop();
         var ot = this.preferred.position().top + st;

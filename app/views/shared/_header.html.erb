@@ -83,18 +83,23 @@ I18n.locale = '<%= I18n.locale %>';
         </div>
         </div>
     </div>
+    <div class="ph-social">
+        <a target="_blank" class="phs-icon phs-facebook" title="Фейсбук" href="https://www.facebook.com/eviterra/">&nbsp;</a>
+        <a target="_blank" class="phs-icon phs-vkontakte" title="ВКонтакте" href="http://vk.com/eviterra">&nbsp;</a>
+        <a target="_blank" class="phs-icon phs-twitter" title="Твиттер" href="https://twitter.com/eviterra">&nbsp;</a>
+        <a target="_blank" class="phs-icon phs-google" title="Блог" href="https://plus.google.com/103322039453589743139">&nbsp;</a>    
+    </div>
     <% if admin_user %>
     <div class="ph-lang">
-        <span class="link"><%= I18n.locale == :en ? 'Русский' : 'English' %></span>
-    </div>
+    <% if I18n.locale == :en %>
+        <span class="link">RU</span>
+    <% else %>
+        <span class="link" data-locale="en">EN</span>
     <% end %>
-    <div class="ph-share" id="share-icons">
-        <div class="phs-item" id="phs-facebook"><div class="fb-like" data-href="http://facebook.com/eviterra" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-font="arial"></div></div>
-        <div class="phs-item" id="phs-twitter"><a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-url="https://eviterra.com" data-via="eviterra">Tweet</a></div>
-        <div class="phs-item" id="phs-google"><g:plusone size="medium" href="https://eviterra.com"></g:plusone></div>
-        <div class="phs-item" id="phs-vk"><div id="vk-like"></div></div>
     </div>
+    <% else %>
     <div class="ph-phone"><span class="code">+7 495</span> 660-35-20</div>
+    <% end %>
 </div>
 </div>
 <div class="ph-placeholder">

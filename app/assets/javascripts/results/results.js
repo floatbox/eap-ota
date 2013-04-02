@@ -109,6 +109,9 @@ load: function() {
     this.data.fresh = false;
     this.ready = false;
     this.message.toggle('loading');
+    if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.removeItem('personsAmount');
+    }    
 },
 updated: function() {
     var that = this;
