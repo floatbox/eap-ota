@@ -344,18 +344,18 @@ class Order < ActiveRecord::Base
     return if old_booking || @tickets_are_loading || $tickets_are_loading || !has_data_in_tickets?
     price_total_old = self.price_total
 
-    self.price_fare = sold_tickets.sum(:price_fare)
-    self.price_tax = sold_tickets.sum(:price_tax)
-
-    self.price_consolidator = sold_tickets.sum(:price_consolidator)
-    self.price_agent = sold_tickets.sum(:price_agent)
-    self.price_subagent = sold_tickets.sum(:price_subagent)
-    self.price_blanks = sold_tickets.sum(:price_blanks)
-    self.price_discount = sold_tickets.sum(:price_discount)
-    self.price_our_markup = sold_tickets.sum(:price_our_markup)
-    self.price_operational_fee = sold_tickets.sum(:price_operational_fee)
-    self.price_acquiring_compensation = sold_tickets.sum(:price_acquiring_compensation)
-    self.price_difference = sold_tickets.sum(:price_difference)
+    sum_and_copy_attrs sold_tickets, self,
+      :price_fare,
+      :price_tax,
+      :price_consolidator,
+      :price_agent,
+      :price_subagent,
+      :price_blanks,
+      :price_discount,
+      :price_our_markup,
+      :price_operational_fee,
+      :price_acquiring_compensation,
+      :price_difference
 
     first_ticket = tickets.where(:kind => 'ticket').first
     self.ticketed_date = first_ticket.ticketed_date if !ticketed_date && first_ticket # для тех случаев, когда билет переводят в состояние ticketed руками
