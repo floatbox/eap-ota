@@ -27,7 +27,7 @@
     <td><%= exact_price(@prices.vat) %> RUB</td>
 </tr>
 <% end %>
-<% if @prices.payment_type == 'delivery' %>
+<% if @prices.display_delivery? %>
 <tr>
     <td><% unless @lang %>Доставка <span style="color: #C0C0C0;">/</span> <% end %>Delivery</td>
     <td><%= Conf.payment.price_delivery %> RUB</td>

@@ -9,9 +9,9 @@ class Ticket < ActiveRecord::Base
     id && self.equal?( ActiveRecord::IdentityMap.get(self.class, id) )
   end
 
-  def payment_type
-    # заглушка для шаблона МК
-    'unknown'
+  # заглушка для шаблона МК
+  def display_delivery?
+    false
   end
 
   # FIXME сделать модуль или фикс для typus, этим оверрайдам место в typus/application.yml

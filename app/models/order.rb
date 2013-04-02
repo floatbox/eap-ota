@@ -137,6 +137,10 @@ class Order < ActiveRecord::Base
     fee_calculation_details.html_safe
   end
 
+  def display_delivery?
+    (payment_type == 'delivery') && !show_as_ticketed?
+  end
+
   def create_order_notice
     if !offline_booking && email_status == ''
       if ticket_status == 'booked' && (payment_status == 'blocked' || payment_status == 'pending')
