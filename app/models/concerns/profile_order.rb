@@ -63,7 +63,7 @@ module ProfileOrder
         }
       end
     else
-      infos = full_info.split
+      infos = full_info.split("\n")
       infos.each do |t|
         data = t.split('/')
         rows << {
