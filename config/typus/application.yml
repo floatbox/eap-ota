@@ -138,17 +138,6 @@ HotOffer:
   scopes: actual, cheaper20
   application: Hot Offers, 3
 
-Customer:
-  fields:
-    default: email, status, created_at
-    options:
-      date_formats:
-        created_at: long
-  order_by: -created_at
-  filters: created_at
-  search: email
-  application: Hot Offers, 3
-
 Region:
   fields:
     default: name_ru, name_en, country

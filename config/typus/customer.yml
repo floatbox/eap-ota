@@ -1,0 +1,10 @@
+Customer:
+  fields:
+    default: email, status, created_at, orders_count_link
+    options:
+      date_formats:
+        created_at: long
+  order_by: -created_at
+  filters: created_at
+  search: email
+  application: Orders, 1

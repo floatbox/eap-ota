@@ -1,5 +1,8 @@
 # encoding: utf-8
 class Customer < ActiveRecord::Base
+
+  include TypusCustomer
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable, :validatable
   devise :database_authenticatable, :registerable, :validatable,
