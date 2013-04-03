@@ -201,9 +201,15 @@ init: function() {
     booking.el.find('.bffd-farerules').click(function(event) {
         that.show();
     });
-    var translator = typeof google !== 'undefined' && google.translate && google.translate.SectionalElement && google.translate.SectionalElement.getInstance();
-    if (translator && translator.update) {
-        translator.update();
+    if (typeof google !== 'undefined' && google.translate) {
+        var instance = google.translate.SectionalElement.getInstance();
+        if (instance && instance.update) {
+            instance.update();
+        }
+    } else {
+        var gt = document.createElement('script'); gt.type = 'text/javascript'; gt.async = true;
+        gt.src = '//translate.google.com/translate_a/element.js?cb=googleSectionalElementInit&ug=section&hl=ru';
+        var st = document.getElementsByTagName('script')[0]; st.parentNode.insertBefore(gt, st);
     }
 },
 show: function() {

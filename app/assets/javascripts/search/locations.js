@@ -261,7 +261,7 @@ filter: function() {
     var sample = this.value.toLowerCase();
     for (var i = this.variants.length; i--;) {
         var variant = this.variants[i];
-        if (variant.sample.indexOf(sample) === -1) {
+        if (variant && variant.sample.indexOf(sample) === -1) {
             this.items.eq(i).addClass('sld-improper');
         }
     }
@@ -350,7 +350,7 @@ set: function(value) {
         this.field.val(value);
         this.select();
         this.change();
-    } else {    
+    } else if (value) {    
         if (!value.sample) value.sample = value.name.toLowerCase();
         this.variants = [value];
         this.select(value);
