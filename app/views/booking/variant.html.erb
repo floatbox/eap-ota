@@ -96,7 +96,8 @@
 
 <script type="text/javascript">
 $(function() {
-    trackPage();
+    _kmq.push(['record', 'Visited from metasearch']);    
+    _gaq.push(['_trackPageview']);    
     search.dates = {csnow: new Date('<%= Time.now.to_formatted_s(:rfc822) %>')};
     results.data = $.parseJSON('<%= raw @search.details.to_json %>');
     results.updateTitles();

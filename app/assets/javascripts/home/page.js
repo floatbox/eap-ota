@@ -21,7 +21,7 @@ init: function() {
         search.map.resize();
         this.reset();
         this.loadLocation();
-        trackPage();
+        _gaq.push(['_trackPageview']);
     }
     
     $(function() {
@@ -156,6 +156,9 @@ update: function() {
     window.location.hash = parts.join('/');    
     this.hash = window.location.hash;
     $w.scrollTop(st);
+},
+track: function() {
+    return '/#' + this.hash.replace('#', '');
 }
 };
 

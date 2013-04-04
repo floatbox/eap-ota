@@ -95,7 +95,11 @@ select: function(id) {
         results.fixed.update();
         page.location.set('offer', id);
         results.filters.toggleDisabled(id === 'matrix');
-        trackPage('/#' + page.location.hash.replace('#', ''));
+
+        _kmq.push(['record', id.capitalize() + ' tab selected']);
+        _gaq.push(['_trackPageview', page.location.track()]);
+        _yam.hit(page.location.track());
+        
     }, 20);
 },
 selectFirst: function() {

@@ -113,6 +113,7 @@ getConditions: function(except) {
         var jc = conditions.sort(function(a, b) {return a.length - b.length;}).join(' && ');
         check = new Function('f', 'return ' + jc + ';');
         check.hash = jc;
+        _kmq.push(['record', 'Filters selected']);
     }
     return check;
 },

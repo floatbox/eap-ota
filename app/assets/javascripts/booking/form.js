@@ -121,6 +121,9 @@ validate: function(forced) {
         delete this.back;
     }
     if (!this.sending) {
+        if (!disabled && this.button.hasClass('bfb-disabled')) {
+            _kmq.push(['record', 'Buy button enabled']);
+        }
         this.button.toggleClass('bfb-disabled', disabled);
         this.required.toggle(disabled);
     }
@@ -152,6 +155,7 @@ submit: function() {
             that.process('<div class="bf-result bfr-fail"><h5 class="bfr-title">Что-то пошло не так.</h5><p class="bfr-content">Возникла техническая проблема. Попробуйте нажать на кнопку «Купить» ещё раз или позвоните нам <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p><p class="bfr-content"><span class="link bfr-back">Попробовать ещё раз</span></p></div>');
         }
     });
+    _kmq.push(['record', 'Buy button pressed']);
 },
 showErrors: function(errors) {
     var wrong = [], cardused = false;
@@ -229,21 +233,28 @@ process: function(s) {
         }, 60000);
         break;
     case 'success':
-        trackPage('/booking/success');
+        _kmq.push(['record', 'Successful booking']);
+        _gaq.push(['_trackPageview', '/booking/success']);
+        _yam.hit('/booking/success');
         if (window._gaq) {
             var price = this.el.find('.bf-newprice').attr('data-price');
             _gaq.push(['_addTrans', this.result.find('.bfr-pnr').text(), '', price]);
             _gaq.push(['_trackTrans']);
         }
         this.result.find('.bfrs-insurance .bfrsa-link').click(function() {
-            trackEvent('Бронирование', 'Переход на страницу страховки');        
+            _kmq.push(['record', 'Insurance link pressed']);
+            _gaq.push(['_trackEvent', 'Бронирование', 'Переход на страницу страховки']);
         });
         this.result.find('.bfrs-hotels .bfrsa-link').click(function() {
-            trackEvent('Бронирование', 'Переход к отелям на Островке');
+            _kmq.push(['record', 'Hotels link pressed']);
+            _gaq.push(['_trackEvent', 'Бронирование', 'Переход к отелям на Островке']);
         });
         this.sending = true; // не даём отправить форму второй раз
         this.el.find('.bfp-add, .bfp-remove').css('visibility', 'hidden');
         this.el.find('input, textarea, select').prop('disabled', true);
+        break;
+    case 'fail':
+        _kmq.push(['record', 'Failed booking']);
         break;
     }
     var spos = $('#page-footer').offset().top - $w.height();

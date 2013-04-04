@@ -1,7 +1,9 @@
-var trackPage = function(url) {
-};
-var trackEvent = function(category, action, label) {
-};
+var trackPage = $.noop;
+var trackEvent = $.noop;
+
+var _kmq = [];
+var _gaq = [];
+var _yam = {hit: $.noop};
 
 /* Search */
 var search = {};
