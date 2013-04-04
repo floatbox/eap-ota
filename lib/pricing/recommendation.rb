@@ -11,9 +11,9 @@ module Pricing
     # FIXME работает для текущей схемы, считает что мы эквайринг не берем себе в общем случае
     def income
       @income if @income
-      discount_correction = [0, price_payment - price_discount].max
+      discount_correction = [0, price_payment + price_discount].max
       price_our_share = commission && commission.ticketing_method == 'direct' ? price_agent : price_subagent
-      @income = price_our_share * 100.0/118.0 - price_discount - discount_correction * 0.18
+      @income = price_our_share * 100.0/118.0 + price_discount - discount_correction * 0.18
     end
 
     # составные части стоимости
@@ -48,21 +48,32 @@ module Pricing
 
     # "налоги и сборы c комиссией" для отображения клиенту
     def price_tax_and_markup_and_payment
-      price_tax + price_markup + price_payment + price_declared_discount
+      price_tax + price_markup + price_payment - price_declared_discount
+    end
+
+    def fee_scheme
+      Conf.site.fee_scheme
     end
 
     # "сбор" для отображения клиенту
     def fee
-       price_markup + price_payment + price_declared_discount
-     end
+       #price_markup + price_payment - price_declared_discount
+      if fee_scheme == 'v2'
+        price_blanks + price_consolidator + price_our_markup + price_payment
+      elsif fee_scheme == 'v3'
+        price_blanks + price_consolidator + price_our_markup + price_payment+ price_declared_discount
+      else
+        price_markup + price_payment - price_declared_discount
+      end
+    end
 
     def fee_but_no_payment
-       price_markup + price_declared_discount
+       price_markup - price_declared_discount
     end
 
     # "налоги и сборы c комиссией" для отображения клиенту (без эквайринга)
     def price_tax_and_markup_but_no_payment
-      price_tax + price_markup + price_declared_discount
+      price_tax + price_markup - price_declared_discount
     end
 
     def price_agent
@@ -87,7 +98,7 @@ module Pricing
 
     def price_discount
       return 0 unless commission
-      commission_discount.call(price_fare, :multiplier => blank_count)
+      -commission_discount.call(price_fare, :multiplier => blank_count)
     end
 
     def price_our_markup
@@ -101,7 +112,7 @@ module Pricing
 
     # надбавка к цене амадеуса
     def price_markup
-      price_consolidator + price_blanks + price_our_markup - price_discount
+      price_consolidator + price_blanks + price_our_markup + price_discount
     end
 
     def commission

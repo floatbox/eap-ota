@@ -334,9 +334,10 @@ en:
       including_fee: "Including service fee"
       fare: "Fare"
       taxes_and_fees: "Taxes and fees"
-      fee: "Including service fee"
+      fee: "Service fee"
       delivery: "Delivery fee"
       discount: "Discount"
+      fare_compensation: "Discount"
     buy:
       button: "Buy"
       progress: "one moment please…"

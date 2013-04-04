@@ -64,8 +64,7 @@
             <div class="bfst-tip"><%= raw t 'booking.payment.PCI_DSS' %></div>
             <div class="bfst-line"></div>
         </div>
-        <% enabled_cash = !(Conf.site.forbidden_delivery && Conf.site.forbidden_cash) && @order_form.last_pay_time %>
-        <% if enabled_cash %>
+        <% if @order_form.enabled_delayed_payment? %>
         <div class="bfp-type clearfix">
             <div class="bfpt-item bfpt-selected">
                 <h5 class="bfpt-title"><label for="bfpt-card" class="bfpt-label"><%= t 'booking.payment.by_card.label' %></label></h5>
@@ -74,7 +73,7 @@
             </div>
             <div class="bfpt-item">
                 <h5 class="bfpt-title"><label for="bfpt-cash" class="bfpt-label"><%= t 'booking.payment.by_cash.label' %></label></h5>
-                <p class="bfpt-tip"><label for="bfpt-cash"><% if Conf.site.forbidden_delivery %><%= raw t 'booking.payment.by_cash.office' %><% else %><%= raw t Conf.site.forbidden_cash ? 'delivery' : 'both', :scope => 'booking.payment.by_cash', :sum => human_price(400) %><% end %></label></p>
+                <p class="bfpt-tip"><label for="bfpt-cash"><% if !@order_form.enabled_delivery? %><%= raw t 'booking.payment.by_cash.office' %><% else %><%= raw t @order_form.enabled_cash? ? 'both' : 'delivery', :scope => 'booking.payment.by_cash', :sum => human_price(Conf.payment.price_delivery) %><% end %></label></p>
                 <input type="radio" name="order[payment_type]" class="bfpt-radio" id="bfpt-cash" value="cash">
             </div>
         </div>
@@ -84,28 +83,33 @@
             <input type="hidden" name="order[payment_type]" value="card">
         </div>
         <% end %>
-        <%= render 'payment_cash_form' if enabled_cash %>
+        <%= render 'payment_cash_form' if @order_form.enabled_delayed_payment? %>
         <%= render 'payment_card_form', :f => f %>
     </div>
     
     <% price_fare = @order_form.recommendation.price_fare.round.to_i %>
     <% price_tax_and_markup = @order_form.recommendation.price_tax_and_markup.round.to_i %>
-    <% price_discount = @order_form.recommendation.price_discount.round.to_i %>
+    <% price_discount = -@order_form.recommendation.price_discount.round.to_i %>
     <div class="bf-footer">
         <div class="bff-left">
             <div class="bff-price">
                 <div class="bffp-content">
                     <p class="bffp-card"><%= t 'booking.price.total_card', :count => price_total %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>
                     <p class="bffp-nd"><%= t 'booking.price.total_cash' %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>
-                    <p class="bffp-wd"><%= t 'booking.price.total_cash' %><br><%= decorate_price human_price(price_total + 400), '<span class="bffp-sum">', '</span>' %></p>
+                    <p class="bffp-wd"><%= t 'booking.price.total_cash' %><br><%= decorate_price human_price(price_total + Conf.payment.price_delivery), '<span class="bffp-sum">', '</span>' %></p>
                     <p class="bffp-tip"><%= t('booking.price.for_all') if @order_form.people.many? %> <%= t('booking.price.including_fee') %></p>
                     <ul class="bffp-details">
                         <li class="bffpd-item"><%= t 'booking.price.fare' %> — <%= short_price(price_fare) %></li>
-                        <li class="bffpd-item"><%= t 'booking.price.taxes_and_fees' %> — <%= short_price(price_total - price_fare) %></li>
-                        <li class="bffpd-item"><%= t 'booking.price.fee' %> — <%= short_price(@order_form.recommendation.fee) %></li>
-                        <li class="bffpd-item bffp-wd"><%= t 'booking.price.delivery' %> — <%= short_price(400) %></li>
-                        <% if price_discount > 0 %>
-                            <li class="bffpd-item"><%= t 'booking.price.discount' %> — <%= short_price(price_discount) %></li>
+                        <li class="bffpd-item"><%= t 'booking.price.taxes_and_fees' %> — <%= short_price(@order_form.recommendation.price_tax) %></li>
+
+                        <% if Conf.site.fee_scheme != 'v3' || @order_form.recommendation.fee > 0 %>
+                          <li class="bffpd-item"><%= t 'booking.price.fee' %> — <%= short_price(@order_form.recommendation.fee) %></li>
+                        <% elsif @order_form.recommendation.fee < 0 %>
+                          <li class="bffpd-item"><%= t 'booking.price.discount' %> — <%= short_price(-@order_form.recommendation.fee) %></li>
+                        <% end %>
+                        <li class="bffpd-item bffp-wd"><%= t 'booking.price.delivery' %> — <%= short_price(Conf.payment.price_delivery) %></li>
+                        <% if price_discount > 0 && Conf.site.fee_scheme != 'v3'%>
+                            <li class="bffpd-item"><%= t 'booking.price.fare_compensation' %> — <%= short_price(price_discount) %></li>
                         <% end %>
                     </ul>
                 </div>

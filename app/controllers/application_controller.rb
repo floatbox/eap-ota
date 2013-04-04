@@ -11,6 +11,8 @@ class ApplicationController < ActionController::Base
   protected
 
   helper_method :admin_user
+  # показывает данные текущего пользователя тайпус в админке
+  alias_method :current_member, :admin_user
 
   def corporate_mode?
     session[:corporate_mode]

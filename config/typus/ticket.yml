@@ -46,6 +46,8 @@ Ticket:
       - price_our_markup
       - price_extra_penalty
       - price_operational_fee
+      - price_acquiring_compensation
+      - price_difference
       - ticketed_date
       - comment
       - code
@@ -61,7 +63,7 @@ Ticket:
       - commission_subagent
       - commission_discount
       - commission_our_markup
-      - stored_price_payment_commission
+      - price_acquiring_compensation
       - office_id
       - validator
       - mso_number
@@ -90,7 +92,9 @@ Ticket:
       - commission_our_markup
       - price_our_markup
       - price_payment_commission
-      - stored_price_payment_commission
+      - price_acquiring_compensation
+      - price_difference
+      - fee
       - price_with_payment_commission
       - office_id
       - validator
@@ -100,6 +104,7 @@ Ticket:
       - ticketed_date
       - itinerary_receipt
       - mso_number
+      - display_fee_details
     edit:
       - code
       - number
@@ -116,19 +121,21 @@ Ticket:
       - price_consolidator
       - price_discount
       - price_operational_fee
+      - price_acquiring_compensation
+      - price_difference
       - commission_consolidator
       - commission_blanks
       - commission_agent
       - commission_subagent
       - commission_discount
       - commission_our_markup
-      - stored_price_payment_commission
+      - price_acquiring_compensation
       - office_id
       - validator
       - mso_number
       - comment
       - corrected_price
-    new_refund: price_fare, price_tax, price_penalty, price_consolidator, price_discount, price_our_markup, price_extra_penalty, price_operational_fee, stored_price_payment_commission, route, comment
+    new_refund: price_fare, price_tax, price_penalty, price_consolidator, price_discount, price_our_markup, price_extra_penalty, price_operational_fee, price_acquiring_compensation, route, comment
     confirm_refund: ticketed_date, status
     csv:
       - source
@@ -151,8 +158,9 @@ Ticket:
       - commission_discount
       - price_subagent
       - price_with_payment_commission
+      - price_acquiring_compensation
+      - price_difference
       - pnr_number
-      - need_attention
       - validating_carrier
       - office_id
       - validator

@@ -145,7 +145,6 @@ blur: function() {
 initDropdown: function() {
     this.dropdown = $('<div class="sl-dropdown"></div>').appendTo(this.el);
     this.ddlist = $('<ul class="sld-list"></ul>').appendTo(this.dropdown);
-    this.ddhint = $('<p class="sld-hint"></p>').appendTo(this.dropdown);
     var that = this;
     this.ddlist.delegate('.sld-item:not(.sld-preferred)', 'mousemove', function() {
 	    that.prefer(parseInt($(this).attr('data-index'), 10));
@@ -262,7 +261,7 @@ filter: function() {
     var sample = this.value.toLowerCase();
     for (var i = this.variants.length; i--;) {
         var variant = this.variants[i];
-        if (variant.sample.indexOf(sample) === -1) {
+        if (variant && variant.sample.indexOf(sample) === -1) {
             this.items.eq(i).addClass('sld-improper');
         }
     }
@@ -273,7 +272,6 @@ toggleVariants: function(stealth) {
 prefer: function(index, scroll) {
 	if (this.preferred) this.preferred.removeClass('sld-preferred');
    	this.preferred = this.items.eq(index).addClass('sld-preferred');
-   	this.ddhint.html(this.variants[index].hint);
    	if (scroll) {
         var st = this.ddlist.scrollTop();
         var ot = this.preferred.position().top + st;
@@ -352,7 +350,7 @@ set: function(value) {
         this.field.val(value);
         this.select();
         this.change();
-    } else {    
+    } else if (value) {    
         if (!value.sample) value.sample = value.name.toLowerCase();
         this.variants = [value];
         this.select(value);

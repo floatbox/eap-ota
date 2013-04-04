@@ -12,7 +12,7 @@ I18n.pluralizationRules.ru = function (n) {
 
 $(function() {
     $('#page-header .ph-lang .link').on('click', function() {
-        Cookie('language', $(this).text() === 'English' ? 'en' : undefined, new Date(2015, 0, 1));
+        Cookie('language', $(this).attr('data-locale') || undefined, new Date(2015, 0, 1));
         window.location.reload(true);
     });
 });

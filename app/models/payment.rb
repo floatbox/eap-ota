@@ -57,6 +57,7 @@ class Payment < ActiveRecord::Base
   after_save :update_incomes_in_order
 
   belongs_to :order
+  delegate :pnr_number, :to => :order
   attr_accessor :custom_fields
   has_commission_columns :commission
 
@@ -69,6 +70,7 @@ class Payment < ActiveRecord::Base
   attr_protected :type
 
   validates :price, decimal: true
+  validate :check_pnr_number
 
   CHARGES = ['PayuCharge', 'PaytureCharge', 'CashCharge']
   REFUNDS = ['PayuRefund', 'PaytureRefund', 'CashRefund']
@@ -139,6 +141,19 @@ class Payment < ActiveRecord::Base
     ['payture', 'cash']
   end
 
+  def check_pnr_number
+    return true unless @pnr_number
+    errors.add(:pnr_number, 'Должен быть указан PNR существующего заказа') if Order.where(:pnr_number => @pnr_number).count != 1
+  end
+
+  def pnr_number=(number)
+    number.upcase!
+    @pnr_number = number
+    if number != pnr_number && (Order.where(:pnr_number => number).count == 1)
+      self.order = Order.find_by_pnr_number(number)
+    end
+  end
+
   # вызывается и после считывания из базы
   def set_initial_status
     self.status ||= 'blocked'
@@ -165,7 +180,7 @@ class Payment < ActiveRecord::Base
   end
 
   def recalculate_earnings
-    self.earnings = price - income_payment_gateways
+    self.earnings = (price - income_payment_gateways).round(2)
   end
 
 end

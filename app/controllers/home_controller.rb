@@ -11,6 +11,10 @@ class HomeController < ApplicationController
     render :json => {:city_name => nearest_city.name, :lat => loc[:latitude], :lng => loc[:longitude]}
   end
 
+  def status
+    render text: 'ok'
+  end
+
   protected
 
   # naive geolocation

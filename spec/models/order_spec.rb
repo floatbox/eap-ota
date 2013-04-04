@@ -8,6 +8,14 @@ describe Order do
     order.save!
   end
 
+  describe "#update_prices_from_tickets" do
+    it 'updates price_acquiring_compensation' do
+      order = create(:order)
+      ticket = create(:ticket, :corrected_price => (order.price_with_payment_commission * 2), :order => order)
+      order.price_acquiring_compensation.round(2).should == (ticket.price_acquiring_compensation).round(2)
+    end
+  end
+
   describe "#capitalize_pnr" do
     it "should strip spaces" do
       order = Order.new :pnr_number => '  БХЦ45 '
@@ -28,6 +36,23 @@ describe Order do
     end
   end
 
+  it "should set fee_scheme from config" do
+    Conf.site.stub(:fee_scheme).and_return('v3')
+    order = build(:order)
+    order.save
+    order.fee_scheme.should == 'v3'
+  end
+
+  it "sets price_acquiring_compensation before create" do
+    order = create(:order)
+    order.price_acquiring_compensation.round(2).should == order.price_payment_commission.round(2)
+  end
+
+  it 'set price_difference before save' do
+    order = create(:order)
+    order.price_difference.should == (order.price_with_payment_commission - order.price_real)
+  end
+
   describe "#create_cash_payment" do
 
     include Commission::Fx
@@ -35,6 +60,7 @@ describe Order do
     subject { order.payments.last }
     before(:each) do
       order.create_cash_payment
+      order.payments.reload
     end
 
     context "normal cash or payture order" do
@@ -125,8 +151,8 @@ describe Order do
     context 'of two tickets with zero price' do
       before(:all) do
         Conf.payture.stub(:commission).and_return('2.8%')
-        @order = create(:order, :price_fare => 20010, :price_tax => 10860, :price_with_payment_commission => BigDecimal('30729.94'), :source => 'amadeus', :price_discount => 1000.5, :fix_price => true)
-        @old_tickets = [1,2].map {|n| Ticket.new(:price_fare => 10005, :price_tax => 5430, :price_discount => 500.25, :kind => 'ticket', :status => 'ticketed', :code => '123', :number => "123456789#{n}", :order => @order)}
+        @order = create(:order, :price_fare => 20010, :price_tax => 10860, :price_with_payment_commission => BigDecimal('30729.94'), :source => 'amadeus', :price_discount => -1000.5, :fix_price => true)
+        @old_tickets = [1,2].map {|n| Ticket.new(:price_fare => 10005, :price_tax => 5430, :price_discount => -500.25, :kind => 'ticket', :status => 'ticketed', :code => '123', :number => "123456789#{n}", :order => @order)}
         @old_tickets.every.save
         @new_ticket_hashes = [
           {:number => '1234567871', :code => '123', :price_fare => 0, :price_tax => 0, :source => 'amadeus', :parent_id => @old_tickets[0].id, :status => 'ticketed'},

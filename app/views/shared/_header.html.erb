@@ -1,17 +1,13 @@
+<!-- Google Analytics -->
 <script type="text/javascript">
-(function(w, d) {
-    var https = d.location.protocol == 'https:', fs = d.getElementsByTagName('script')[0];
-    var createScript = function(src) {
-        var s = d.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = src;
-        fs.parentNode.insertBefore(s, fs);
-    };
-    /*var c = 'yandex_metrika_callbacks';
-    (w[c] = w[c] || []).push(function() {
-        try { _yam = w.yaCounter5324671 = new Ya.Metrika({id: 5324671, enableAll: true, ut: 'noindex', defer: true, trackHash: true, webvisor: true}); } catch(e) {}
-    });*/
-    createScript((https ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js');
-    //createScript((https ? 'https:' : 'http:') + '//mc.yandex.ru/metrika/watch.js');
-})(window, document);
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', '<%= Rails.env.production? ? 'UA-19832395-1' : 'UA-19832395-2' %>']);
+//_gaq.push(['_trackPageview']); не нужно, отслеживается функцией trackPage
+(function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
 </script>
 
 <!-- Yandex.Metrika counter -->
@@ -19,7 +15,7 @@
 (function (d, w, c) {
     (w[c] = w[c] || []).push(function() {
         try {
-            w.yaCounter5324671 = new Ya.Metrika({id:5324671, enableAll: true, trackHash:true, ut:"noindex", webvisor:true});
+            w.yaCounter5324671 = new Ya.Metrika({id:5324671, enableAll: true, trackHash:true, ut:"noindex", webvisor:false});
         } catch(e) { }
     });
     
@@ -57,6 +53,18 @@ _oms.push(["set_project_id", "<%= Conf.ohmystats.project_id %>"]);
 <% end %>
 
 <script type="text/javascript">
+var trackPage = function(url) {
+    _gaq.push(['_trackPageview', url]);
+    if (window.yaCounter5324671 && url !== undefined) {
+        window.yaCounter5324671.hit(url);
+    }
+};
+var trackEvent = function(category, action, label) {
+    _gaq.push(['_trackEvent', category, action, label]);
+};
+</script>
+
+<script type="text/javascript">
 I18n.locale = '<%= I18n.locale %>';
 </script>
 
@@ -65,30 +73,60 @@ I18n.locale = '<%= I18n.locale %>';
     <div class="ph-logo">
         <a href="/" title="Кликните, чтобы сбросить условия и результаты поиска"><img src="/images/common/eviterra-bg.png" alt="Eviterra"></a>
     </div>
-    <ul class="ph-tabs">
-        <li class="active"><span class="link" title="Простая покупка авиабилетов">Авиабилеты</span></li>
-        <li style="display: none;"><span class="link">Отели</span></li>
-        <li style="display: none;"><span class="link">Аренда авто</span></li>
-    </ul>
-    <div class="ph-phone"><span class="code">+7 495</span> 660-35-20</div>
-    
+    <div id="ph-teaser">
+        Авиабилеты дешевле, чем у авиакомпаний. <div class="pht-wrapper"><span class="link pht-why">Почему?</span>
+        <div class="pht-popup">
+            <div class="phtp-close">&times;</div>
+            <h6 class="phtp-title">Почему?</h6>
+            <p class="phtp-text">Условия нашего сотрудничества со&nbsp;многими авиакомпаниями позволяют нам предоставлять скидки от&nbsp;их&nbsp;официальных тарифов.</p>
+            <p class="phtp-text">Вот почему зачастую у&nbsp;нас дешевле.</p>
+        </div>
+        </div>
+    </div>
+
     <% if admin_user %>
-    <div class="ph-lang">
-        <span class="link"><%= I18n.locale == :en ? 'RU' : 'EN' %></span>
-    </div>
+        <% if I18n.locale == :en %>
+            <span class="link">RU</span>
+        <% else %>
+            <span class="link" data-locale="en">EN</span>
+        <% end %>    
     <% end %>
-    
-    <%= render "profile/shared/popup" %>
-    
-    <div class="ph-share" id="share-icons">
-        <div class="phs-item" id="phs-facebook"><div class="fb-like" data-href="http://facebook.com/eviterra" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-font="arial"></div></div>
-        <div class="phs-item" id="phs-twitter"><a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-url="https://eviterra.com" data-via="eviterra">Tweet</a></div>
-        <div class="phs-item" id="phs-google"><g:plusone size="medium" href="https://eviterra.com"></g:plusone></div>
-        <div class="phs-item" id="phs-vk"><div id="vk-like"></div></div>
+
+    <%= render "profile/popup" %>
+
+    <div class="ph-social">
+        <a target="_blank" class="phs-icon phs-facebook" title="Фейсбук" href="https://www.facebook.com/eviterra/">&nbsp;</a>
+        <a target="_blank" class="phs-icon phs-vkontakte" title="ВКонтакте" href="http://vk.com/eviterra">&nbsp;</a>
+        <a target="_blank" class="phs-icon phs-twitter" title="Твиттер" href="https://twitter.com/eviterra">&nbsp;</a>
+        <a target="_blank" class="phs-icon phs-google" title="Блог" href="https://plus.google.com/103322039453589743139">&nbsp;</a>    
     </div>
-    
+    <div class="ph-phone"><span class="code">+7 495</span> 660-35-20</div>
 </div>
 </div>
 <div class="ph-placeholder">
     <div id="fb-root"></div>
 </div>
+
+<script type="text/javascript">
+(function(){
+    var teaser = $('#ph-teaser');
+    var popup = teaser.find('.pht-popup').click(function(event) {
+        event.stopPropagation();
+    });
+    var hide = function(event) {
+        if (event.type == 'click' || event.which == 27) {
+            $('body').off('click keydown', hide);
+            popup.hide();
+        }
+    };
+    teaser.find('.pht-why').click(function() {
+        popup.show();
+        setTimeout(function() {
+            $('body').on('click keydown', hide);
+        }, 10);
+    });
+    teaser.find('.phtp-close').click(function(event) {
+        hide(event);
+    });
+})();
+</script>

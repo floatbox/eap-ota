@@ -178,7 +178,7 @@ hide: function() {
     results.header.edit.show();
     results.content.el.show();
     $w.scrollTop(this.offer.details.offset().top - offset);
-    $w.delay(300).smoothScrollTo(this.offer.el.offset().top - 36 - results.header.height - 30);
+    $w.delay(300).smoothScrollTo(Math.max(this.offer.el.offset().top - 36 - results.header.height - 90, 0));
     page.title.set(I18n.t('page.results', {title: results.data.titles.window}));
     page.location.set('booking');
     trackPage('/#' + page.location.hash.replace('#', ''));
@@ -201,9 +201,15 @@ init: function() {
     booking.el.find('.bffd-farerules').click(function(event) {
         that.show();
     });
-    var translator = typeof google !== 'undefined' && google.translate && google.translate.SectionalElement && google.translate.SectionalElement.getInstance();
-    if (translator && translator.update) {
-        translator.update();
+    if (typeof google !== 'undefined' && google.translate) {
+        var instance = google.translate.SectionalElement.getInstance();
+        if (instance && instance.update) {
+            instance.update();
+        }
+    } else {
+        var gt = document.createElement('script'); gt.type = 'text/javascript'; gt.async = true;
+        gt.src = '//translate.google.com/translate_a/element.js?cb=googleSectionalElementInit&ug=section&hl=ru';
+        var st = document.getElementsByTagName('script')[0]; st.parentNode.insertBefore(gt, st);
     }
 },
 show: function() {

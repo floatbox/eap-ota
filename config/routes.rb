@@ -34,6 +34,7 @@ Eviterra::Application.routes.draw do
   # in development: use 'api.lvh.me:3000' or modify your /etc/hosts
   constraints subdomain: 'api' do
     root to: 'api_home#index'
+    match 'status' => 'home#status'
     match 'avia/v1/variants(.:format)' => 'pricer#api', :format => :xml
     match 'avia/v1/searches' => 'booking#api_redirect'
     match 'partner/v1/orders(.:format)' => 'api_order_stats#index', :format => :json
@@ -87,6 +88,7 @@ Eviterra::Application.routes.draw do
   match 'about/:action' => 'about', :as => :about
 
   match "whereami" => 'home#whereami', :as => :whereami
+  match 'status' => 'home#status'
   match "subscribe" => 'subscription#subscribe', :as => 'subscribe'
   match "unsubscribe" => 'subscription#unsubscribe', :as => 'unsubscribe'
   match "unsubscribe/:destination_id" => 'subscription#unsubscribe_by_destination', :as => 'unsubscribe_by_destination'
@@ -96,7 +98,7 @@ Eviterra::Application.routes.draw do
   match "admin/commissions" => 'admin/commissions#index', :as => 'admin_commissions'
   match "admin/new_hot_offers" => 'admin/hot_offers#best_of_the_week', :as => 'show_best_offers'
   match 'admin/notifications/show_sent_notice/:id' => 'admin/notifications#show_sent_notice', :as => :show_sent_notice
-  match 'admin/reports/selling' => 'admin/reports#selling', :as => :admin_reports_selling
+  match 'admin/reports/sales' => 'admin/reports#sales', :as => :admin_reports_sales
 
   match 'profile' => 'profile#index', :as => :profile
 

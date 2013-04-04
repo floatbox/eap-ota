@@ -25,12 +25,16 @@ module Pricing
     # еще требует blank_count
 
     # cash_payment_markup содержит доставку, и нигде потом не используется
+    # price_acquiring_compensation - компенсация эквайринга, сохраняется в базе, по возможности пересчитывается из билетов
+    # fee_scheme - схема расчета поля (сервисный сбор/скидка) v2 - не учитывает price_discount, v3 - учитывает
+    # fee_calculation_details - динамическое поле, нужно исключительно для налоговой.
 
     # рассчет прибыли
     #####################################
 
     # FIXME аггрегировать в заказе price_penalty по возвратам тоже?
     include IncomeSuppliers
+    include FeeCalculationDetails
 
     def income
       income_earnings - income_suppliers
@@ -62,15 +66,19 @@ module Pricing
 
     # подгнанные "налоги и сборы c комиссией" для отображения клиенту
     def price_tax_and_markup_and_payment
-      recalculated_price_with_payment_commission - price_fare + price_declared_discount
+      recalculated_price_with_payment_commission - price_fare - price_declared_discount
     end
 
     # подгнанный "сбор" для отображения клиенту
     def fee
       if sold_tickets.present? && sold_tickets.all?{|ticket| ticket.price_tax >= 0 && ticket.office_id != 'FLL1S212V' } #мы ебанулись! иначе глючит с трансаэровскими отрицательными таксами
         sold_tickets.to_a.sum(&:fee)
+      elsif fee_scheme == 'v2'
+        price_blanks + price_consolidator + price_our_markup + price_acquiring_compensation + price_operational_fee + price_difference
+      elsif fee_scheme == 'v3'
+        price_blanks + price_consolidator + price_discount + price_our_markup + price_acquiring_compensation + price_operational_fee + price_difference
       else
-        recalculated_price_with_payment_commission - price_tax - price_fare + price_declared_discount
+        recalculated_price_with_payment_commission - price_tax - price_fare - price_declared_discount
       end
     end
 
@@ -82,12 +90,16 @@ module Pricing
       price_tax + price_markup
     end
 
+    def price_real# сумма всех компонентов цены кроме корректировки
+      price_total + price_acquiring_compensation
+    end
+
     def price_total
       price_fare + price_tax + price_markup
     end
 
     def price_markup
-      price_consolidator + price_blanks + price_our_markup - price_discount + price_operational_fee
+      price_consolidator + price_blanks + price_our_markup + price_discount + price_operational_fee
     end
 
     # FIXME сломается, если там не проценты!
@@ -97,16 +109,21 @@ module Pricing
 
     # FIXME отдать это на совесть подклассов Payment
     def acquiring_commission
-      commission =
-        if pricing_method =~ /corporate/
-          Conf.cash.corporate_commission
-        # делаю комиссию по наличке такой же как и глобальная
-        # elsif payment_type == 'cash'
-        #  Conf.cash.commission
-        else
-          Conf.payment.commission
-        end
-      Commission::Formula.new(commission)
+      if payments.to_a.blank?
+        commission =
+          if pricing_method =~ /corporate/
+            Conf.cash.corporate_commission
+          # делаю комиссию по наличке такой же как и глобальная
+          # elsif payment_type == 'cash'
+          #  Conf.cash.commission
+          else
+            Conf.payment.commission
+          end
+        Commission::Formula.new(commission)
+      else
+        #так сложно, чтобы не тормознуть генерацию csv
+        payments.to_a.select{|p| p.type.in? ['PaytureCharge', 'PayuCharge', 'CashCharge']}.sort_by{|p| p.created_at}.last.commission
+      end
     end
 
     # FIXME отдать это на совесть подклассов Payment
@@ -140,7 +157,7 @@ module Pricing
 
     # Касса: Режим 1 или 3  (скорректированная доля поставщика, для пробивания НДС в кассе)
     def price_original
-      price_tax + price_fare - price_discount
+      price_tax + price_fare + price_discount
     end
 
     # Касса: Режим 2 (не облагается НДС)
@@ -156,7 +173,7 @@ module Pricing
       self.price_subagent = commission_subagent.call(price_fare, :multiplier =>  blank_count)
       self.price_consolidator = commission_consolidator.call(price_fare, :multiplier => blank_count)
       self.price_blanks = commission_blanks.call(price_fare, :multiplier => blank_count)
-      self.price_discount = commission_discount.call(price_fare, :multiplier => blank_count)
+      self.price_discount = -commission_discount.call(price_fare, :multiplier => blank_count)
       self.price_our_markup = commission_our_markup.call(price_fare, :multiplier => blank_count)
     end
   end

@@ -2,6 +2,33 @@ require 'spec_helper'
 
 describe Ticket do
 
+  it "should set fee_scheme from config" do
+    Conf.site.stub(:fee_scheme).and_return('v3')
+    ticket = build(:ticket)
+    ticket.save
+    ticket.fee_scheme.should == 'v3'
+  end
+
+  it 'sets price_difference before save' do
+    ticket = create(:ticket, :corrected_price => 2000)
+    ticket.price_difference.should == (ticket.price_with_payment_commission - ticket.price_real)
+  end
+
+  describe 'price_acquiring_compensation' do
+    it 'is set after save if corrected_price is present' do
+      ticket = create(:ticket, :corrected_price => 1200)
+      ticket.price_acquiring_compensation.should == ticket.price_payment_commission.round(2)
+    end
+
+    it 'is not corrected if corrected_price changes' do
+
+      ticket = create(:ticket, :corrected_price => 1200)
+      ticket.update_attributes(:corrected_price => 1300)
+      ticket.price_acquiring_compensation.should_not == ticket.price_payment_commission.round(2)
+    end
+
+  end
+
   describe ".default_refund_fee" do
     before do
       Conf.payment.stub(:refund_fees).and_return(
@@ -205,7 +232,7 @@ describe Ticket do
       its(:price_subagent) {should == 4}
       its(:price_consolidator) {should == fare * 0.02 }
       its(:price_blanks ) {should == 50 }
-      its(:price_discount) {should == fare * 0.02 }
+      its(:price_discount) {should == -fare * 0.02 }
       its(:price_our_markup) {should == fare * 0.01 }
     end
 

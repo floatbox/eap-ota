@@ -235,8 +235,11 @@ process: function(s) {
             _gaq.push(['_addTrans', this.result.find('.bfr-pnr').text(), '', price]);
             _gaq.push(['_trackTrans']);
         }
-        this.result.find('.bfrsi-link').click(function() {
+        this.result.find('.bfrs-insurance .bfrsa-link').click(function() {
             trackEvent('Бронирование', 'Переход на страницу страховки');        
+        });
+        this.result.find('.bfrs-hotels .bfrsa-link').click(function() {
+            trackEvent('Бронирование', 'Переход к отелям на Островке');
         });
         this.sending = true; // не даём отправить форму второй раз
         this.el.find('.bfp-add, .bfp-remove').css('visibility', 'hidden');

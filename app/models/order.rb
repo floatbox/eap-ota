@@ -12,7 +12,6 @@ class Order < ActiveRecord::Base
   scope :MOWR2219U, lambda { by_office_id 'MOWR2219U' }
   scope :FLL1S212V, lambda { by_office_id 'FLL1S212V' }
 
-
   def self.by_office_id office_id
     joins(:tickets).where('tickets.office_id' => office_id).uniq
   end
@@ -41,6 +40,10 @@ class Order < ActiveRecord::Base
 
   def self.ticket_statuses
     [ 'booked', 'canceled', 'ticketed', 'processing_ticket', 'error_ticket']
+  end
+
+  def self.fee_schemes
+    ['v2', 'v3']
   end
 
   def self.ticket_office_ids
@@ -115,8 +118,29 @@ class Order < ActiveRecord::Base
 
   before_validation :capitalize_pnr
   before_save :calculate_price_with_payment_commission, :if => lambda { price_with_payment_commission.blank? || price_with_payment_commission.zero? || !fix_price? }
+  before_save :set_prices
   before_create :generate_code, :set_customer, :set_payment_status, :set_email_status
   after_save :create_order_notice
+
+  def set_prices
+    self.fee_scheme = Conf.site.fee_scheme if new_record? || fee_scheme.blank?
+    unless has_data_in_tickets?
+      self.price_acquiring_compensation = price_payment_commission if price_acquiring_compensation == 0
+      self.price_difference = fix_price? ? price_with_payment_commission - price_real : 0
+    end
+  end
+
+  def has_data_in_tickets?
+    sold_tickets.present? && sold_tickets.all?{|t| t.office_id != 'FLL1S212V'}
+  end
+
+  def display_fee_details
+    fee_calculation_details.html_safe
+  end
+
+  def display_delivery?
+    (payment_type == 'delivery') && !show_as_ticketed?
+  end
 
   def create_order_notice
     if !offline_booking && email_status == ''
@@ -199,10 +223,6 @@ class Order < ActiveRecord::Base
     tickets_office_ids_array.join('; ')
   end
 
-  def need_attention
-    1 if price_difference != 0
-  end
-
   def generate_code
     self.code = ShortUrl.random_hash
   end
@@ -259,7 +279,7 @@ class Order < ActiveRecord::Base
     self.departure_date = recommendation.journey.flights[0].dept_date
     # FIXME вынести рассчет доставки отсюда
     if order_form.payment_type != 'card'
-      self.cash_payment_markup = recommendation.price_payment + (order_form.payment_type == 'delivery' ? 400 : 0)
+      self.cash_payment_markup = recommendation.price_payment + (order_form.payment_type == 'delivery' ? Conf.payment.price_delivery : 0)
     end
     if recommendation.commission
       copy_attrs recommendation.commission, self, {:prefix => :commission},
@@ -326,21 +346,22 @@ class Order < ActiveRecord::Base
   def update_prices_from_tickets
     tickets.reload
     # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
-    return if old_booking || @tickets_are_loading || sold_tickets.blank? || sold_tickets.any?{|t| t.office_id == 'FLL1S212V'}
+    return if old_booking || @tickets_are_loading || $tickets_are_loading || !has_data_in_tickets?
     price_total_old = self.price_total
 
-    self.price_fare = sold_tickets.sum(:price_fare)
-    self.price_tax = sold_tickets.sum(:price_tax)
+    sum_and_copy_attrs sold_tickets, self,
+      :price_fare,
+      :price_tax,
+      :price_consolidator,
+      :price_agent,
+      :price_subagent,
+      :price_blanks,
+      :price_discount,
+      :price_our_markup,
+      :price_operational_fee,
+      :price_acquiring_compensation,
+      :price_difference
 
-    self.price_consolidator = sold_tickets.sum(:price_consolidator)
-    self.price_agent = sold_tickets.sum(:price_agent)
-    self.price_subagent = sold_tickets.sum(:price_subagent)
-    self.price_blanks = sold_tickets.sum(:price_blanks)
-    self.price_discount = sold_tickets.sum(:price_discount)
-    self.price_our_markup = sold_tickets.sum(:price_our_markup)
-    self.price_operational_fee = sold_tickets.sum(:price_operational_fee)
-
-    self.price_difference = price_total - price_total_old if price_difference == 0
     first_ticket = tickets.where(:kind => 'ticket').first
     self.ticketed_date = first_ticket.ticketed_date if !ticketed_date && first_ticket # для тех случаев, когда билет переводят в состояние ticketed руками
     update_incomes
@@ -463,8 +484,8 @@ class Order < ActiveRecord::Base
     return false unless ticket_status.in? 'booked', 'processing_ticket', 'error_ticket'
     return false unless load_tickets(true)
     update_attributes(:ticket_status => 'ticketed', :ticketed_date => Date.today)
-    update_prices_from_tickets
     update_price_with_payment_commission_in_tickets
+    update_prices_from_tickets
     create_ticket_notice
   end
 

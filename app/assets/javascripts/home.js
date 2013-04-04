@@ -1,7 +1,4 @@
-//= require i18n_init
-
 //= require common/hint
-//= require common/profile
 
 //= require home/page.js
 

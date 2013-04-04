@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 gem 'rails', '3.2.12'
 
 gem 'jquery-rails'
@@ -46,6 +46,8 @@ gem 'mysql2'
 gem 'paper_trail'
 gem 'geo_ip'
 gem 'airbrake'
+# поддержка асинхронных нотификаций в airbrake, пока выключил
+# gem 'girl_friday'
 gem 'newrelic_rpm'
 # gem 'rpm_contrib'
 gem 'mongoid'

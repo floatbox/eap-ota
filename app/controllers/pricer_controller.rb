@@ -94,6 +94,7 @@ class PricerController < ApplicationController
   # FIXME попытаться вынести общие методы или объединить с pricer/validate
   def api
     partner = params['partner'].to_s
+    partner4stat = partner.blank? ? 'anonymous' : partner
     if !Conf.api.enabled || !Partner[partner].enabled?
       render 'api/error', :status => 503, :locals => {:message => 'service disabled by administrator'}
       return
@@ -101,7 +102,7 @@ class PricerController < ApplicationController
     pricer_form_hash = params.dup.delete_if {|key, value| %W[controller action format].include?(key)}
     @search = PricerForm.simple(pricer_form_hash)
     
-    StatCounters.inc %W[search.api.total search.api.#{partner}.total]
+    StatCounters.inc %W[search.api.total search.api.#{partner4stat}.total]
     
     if @search.valid?
       @search.save_to_cache
@@ -117,18 +118,18 @@ class PricerController < ApplicationController
         @destination.move_average_price @search, @recommendations.first, @query_key
       end
       Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))
-      logger.info "Recommendations left after removing unprofitable(#{partner}): #{@recommendations.count}"
-      StatCounters.inc %W[search.api.success search.api.#{partner}.success]
-      logger.info "Increment counter search.api.success for partner #{partner}"
-      StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner}.total] if @destination
+      logger.info "Recommendations left after removing unprofitable(#{partner4stat}): #{@recommendations.count}"
+      StatCounters.inc %W[search.api.success search.api.#{partner4stat}.success]
+      logger.info "Increment counter search.api.success for partner #{partner4stat}"
+      StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner4stat}.total] if @destination
       # поправка на неопределенный @destination что бы сходились счетчики
-      StatCounters.inc %W[search.api.#{partner}.bad_destination] if !@destination
+      StatCounters.inc %W[search.api.#{partner4stat}.bad_destination] if !@destination
       @cheat_partner = Partner[partner] && Partner[partner].cheat
       render 'api/variants'
     else
-      StatCounters.inc %W[search.api.invalid search.api.#{partner}.invalid]
+      StatCounters.inc %W[search.api.invalid search.api.#{partner4stat}.invalid]
+      logger.info "Invalid API search with params #{pricer_form_hash} validation errors: #{@search.errors.full_messages}"
       @recommendations = []
-
       render 'api/variants'
     end
   rescue IataStash::NotFound => iata_error

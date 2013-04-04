@@ -36,7 +36,6 @@ Order:
       - price_tax
       - commission_consolidator
       - price_consolidator
-      - commission_blanks
       - price_blanks
       - commission_discount
       - price_discount
@@ -47,12 +46,16 @@ Order:
       - price_total
       - price_payment_commission
       - price_with_payment_commission
+      - price_acquiring_compensation
+      - fee
       - commission_agent
       - price_agent
       - commission_subagent
       - price_subagent
       - price_original
       - price_tax_extra
+      - price_difference
+      - fee_scheme
       - commission_carrier
       - commission_agent_comments
       - commission_subagent_comments
@@ -69,6 +72,7 @@ Order:
       - expected_income
       - balance
       - settled?
+      - display_fee_details
     form:
       - section_general_info
       - description
@@ -98,7 +102,35 @@ Order:
       - price_our_markup
       - price_operational_fee
       - pricing_method
+      - price_acquiring_compensation
       - price_with_payment_commission
+      - price_difference
+      - fee_scheme
+      - fix_price
+      - section_state_and_control
+      - ticket_status
+      - offline_booking
+      - last_pay_time
+      - needs_update_from_gds
+    edit_ticketed:
+      - section_general_info
+      - description
+      - has_refunds
+      - email
+      - phone
+      - source
+      - pnr_number
+      - parent_pnr_number
+      - sirena_lead_pass
+      - route
+      - payment_type
+      - section_recalculation
+      - recalculation_alert
+      - commission_ticketing_method
+      - blank_count
+      - pricing_method
+      - price_with_payment_commission
+      - fee_scheme
       - fix_price
       - section_state_and_control
       - ticket_status
@@ -126,8 +158,11 @@ Order:
       - commission_discount
       - price_subagent
       - price_discount
+      - price_acquiring_compensation
       - price_with_payment_commission
+      - price_difference
       - price_total
+      - fee_scheme
       - expected_income
       - stored_balance
       - price_our_markup
@@ -136,7 +171,7 @@ Order:
       - refund_date
       - partner
     options:
-      selectors: payment_type, source, ticket_status, pricing_method, commission_ticketing_method
+      selectors: payment_type, source, ticket_status, pricing_method, commission_ticketing_method, fee_scheme
       booleans:
         has_refunds: ['да', 'нет']
         offline_booking: ['ручной', 'автоматический']

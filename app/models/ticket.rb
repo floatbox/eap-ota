@@ -9,6 +9,11 @@ class Ticket < ActiveRecord::Base
     id && self.equal?( ActiveRecord::IdentityMap.get(self.class, id) )
   end
 
+  # заглушка для шаблона МК
+  def display_delivery?
+    false
+  end
+
   # FIXME сделать модуль или фикс для typus, этим оверрайдам место в typus/application.yml
   def self.model_fields
     super.merge(
@@ -36,11 +41,14 @@ class Ticket < ActiveRecord::Base
     :through => :order, :source => :tickets, :order => 'tickets.number asc',
     :conditions => lambda {|_| ["tickets.id <> ?", id] }
 
-  delegate :need_attention, :paid_by, :to => :order
+  delegate :paid_by, :to => :order
+  delegate :fee_scheme, :to => :order
 
   delegate :commission_carrier, :to => :order, :allow_nil => true
 
   delegate :old_booking, :to => :order, :allow_nil => true
+  delegate :commission_agent_comments, :to => :order, :allow_nil => true
+  delegate :commission_subagent_comments, :to => :order, :allow_nil => true
 
   # FIXME - временно, эквайринг должен браться из суммы пейментов
   delegate :acquiring_percentage, :to => :order
@@ -65,6 +73,16 @@ class Ticket < ActiveRecord::Base
   attr_accessor :parent_number, :parent_code
   attr_writer :price_fare_base, :flights
   before_validation :set_info_from_flights
+  before_save :set_prices
+
+  def set_prices
+    self.price_acquiring_compensation = price_payment_commission if corrected_price && (price_acquiring_compensation == 0)
+    self.price_difference = price_with_payment_commission - price_real
+  end
+
+  def display_fee_details
+    fee_calculation_details.html_safe
+  end
 
   def show_vat
     vat_status != 'unknown'
@@ -111,9 +129,9 @@ class Ticket < ActiveRecord::Base
 
    # whitelist офис-айди, имеющих к нам отношение. В брони иногда попадают "не наши" билеты
    # для всех айди в базе можно использовать: Ticket.uniq.pluck(:office_id).compact.sort
-   def self.office_ids
-     ['MOWR2233B', 'MOWR228FA', 'MOWR2219U', 'NYC1S21HX', 'FLL1S212V']
-   end
+  def self.office_ids
+    ['MOWR2233B', 'MOWR228FA', 'MOWR2219U', 'NYC1S21HX', 'FLL1S212V']
+  end
 
   def self.validating_carriers
     Carrier.uniq.pluck(:iata).sort
@@ -255,14 +273,14 @@ class Ticket < ActiveRecord::Base
       self.status = 'pending' if status.blank?
     end
     self.price_penalty *= -1 if price_penalty < 0
-    self.price_discount *= -1 if price_discount > 0
+    self.price_discount *= -1 if price_discount < 0
     self.price_our_markup *= -1 if price_our_markup > 0
     self.price_tax *= -1 if price_tax > 0
     self.price_fare *= -1 if price_fare > 0
     self.price_consolidator *= -1 if price_consolidator > 0
     self.commission_subagent = 0 if price_fare != -parent.price_fare && !parent.commission_subagent.percentage?
     self.commission_agent = 0 if price_fare != -parent.price_fare && !parent.commission_agent.percentage?
-    self.stored_price_payment_commission *= -1 if stored_price_payment_commission > 0
+    self.price_acquiring_compensation *= -1 if price_acquiring_compensation > 0
     self.corrected_price = price_with_payment_commission
   end
 
