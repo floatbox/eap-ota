@@ -226,6 +226,7 @@ class OrderForm
   validate :validate_card, :validate_dept_date, :validate_people
 
   def validate_dept_date
+    return if admin_user
     if recommendation.source == 'amadeus'
       errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell(recommendation.journey.departure_datetime_utc, recommendation.last_tkt_date)
     elsif recommendation.source == 'sirena'

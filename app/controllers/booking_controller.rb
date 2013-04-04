@@ -102,6 +102,7 @@ class BookingController < ApplicationController
   def recalculate_price
     @order_form = OrderForm.load_from_cache(params[:order][:number])
     @order_form.people_attributes = params[:person_attributes]
+    @order_form.admin_user = admin_user
     @order_form.valid?
     if @order_form.update_price_and_counts
       render :partial => 'newprice'
