@@ -26,21 +26,20 @@ class Completer
   end
 
   MARSHAL_FILE = 'tmp/completer.dat'
-  def dump
-    open(MARSHAL_FILE, 'w') do |f|
+  def dump(filepath=MARSHAL_FILE)
+    Rails.logger.debug "Completer: dumping to cache #{filepath}"
+    open(filepath, 'w') do |f|
       Marshal.dump(self, f)
     end
-    Rails.logger.debug "Completer: dumped to cache"
   end
 
   def self.regen
     new.dump
   end
 
-  def self.load
-    @completer = Marshal.load(open(MARSHAL_FILE))
-    Rails.logger.debug "Completer: loaded from cache"
-    @completer
+  def self.load(filepath=MARSHAL_FILE)
+    Rails.logger.debug "Completer: loading from cache #{filepath}"
+    Marshal.load(open(filepath))
   end
 
   class << self
