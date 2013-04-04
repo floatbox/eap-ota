@@ -467,6 +467,8 @@ class Order < ActiveRecord::Base
       self.payment_status = 'charged'
       create_cash_payment
       save
+      # UGLY. но last_payment иначе не работает, как надо
+      payments.reload
     end
   end
 
