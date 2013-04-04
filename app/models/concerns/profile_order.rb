@@ -53,7 +53,7 @@ module ProfileOrder
 
   def profile_tickets
     rows = []
-    if ticketed?
+    if profile_ticketed?
       tickets.each do |t|
         rows << {
           name: t.last_name + ' ' + t.first_name,
@@ -74,7 +74,7 @@ module ProfileOrder
     rows
   end
 
-  def ticketed?
+  def profile_ticketed?
     tickets_count > 0
   end
 
