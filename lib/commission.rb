@@ -742,15 +742,29 @@ commission "1%/0.05"
 carrier "DL", "DELTA AIRLINES"
 ########################################
 
-example 'svojfk/s'
-example 'svojfk/i jfksvo/s'
-agent "10%"
-subagent "8%"
+# example 'svojfk/s'
+# example 'zigjfk/i jfkzig/s'
+# example 'accjfk/k jfkacc/u'
+agent "5%"
+subagent "3%"
 subclasses "SIQKLUT"
-check { includes_only(country_iatas.first, 'RU') and includes_only(country_iatas, 'RU US') }
+check { includes_only(country_iatas.first, 'RU SN GH') and includes_only(country_iatas, 'US') and includes_only(operating_carrier_iatas, 'DL AZ') }
 ticketing_method "downtown"
-discount "6.5%"
-commission "10%/8%"
+discount "1.5%"
+disabled "на время отключил dtt"
+commission "5%/3%"
+
+# example 'svojfk/s'
+# example 'zigjfk/i jfkzig/s'
+# example 'accjfk/k jfkacc/u'
+agent "5%"
+subagent "3%"
+subclasses "SIQKLUT"
+check { includes_only(country_iatas.first, 'RU SN GH') and includes_only(country_iatas, 'US') and includes_only(operating_carrier_iatas, 'DL AZ') }
+ticketing_method "downtown"
+discount "1.5%"
+disabled "на время отключил dtt"
+commission "5%/3%"
 
 example 'okocdg cdgoko/ab'
 example 'cdgoko'
