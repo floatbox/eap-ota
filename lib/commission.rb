@@ -1471,6 +1471,7 @@ carrier "LO", "LOT"
 carrier_defaults :consolidator => 0
 
 example 'ledprg prgled'
+expr_date "30.06.2013"
 agent "1 euro с билета по опубл. тарифам на все остальные рейсы LO."
 subagent "5 рублей"
 interline :no, :yes
@@ -1893,16 +1894,16 @@ commission "5%/3.5%"
 example 'ledpek/economy pekled/economy'
 example 'ledpek/business pekled/economy'
 strt_date "01.04.2012"
-agent    "1 руб Эконом класса, а также при различной комбинации Бизнес/Эконом;" 
+agent    "1% Эконом класса, а также при различной комбинации Бизнес/Эконом;" 
 subagent "5 коп. с билета Эконом класса, а также при различной комбинации Бизнес/Эконом;"
-commission "1/0.05"
+commission "1%/0.05"
 
 example 'svocdg cdgsvo/ab'
 strt_date "01.04.2012"
-agent    "1 руб на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
+agent    "1% на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 subagent "5 коп . с билета на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 interline :first
-commission "1/0.05"
+commission "1%/0.05"
 
 example 'cdgsvo/ab svocdg'
 no_commission
