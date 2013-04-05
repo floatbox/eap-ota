@@ -2248,13 +2248,6 @@ carrier "VN", "VIETNAM AIRLINES"
 ########################################
 
 example 'svohan hansvo'
-expr_date "31.03.2013"
-agent "До 31.03.14г. 9% от конфиде. тарифов на рейсы VN;"
-subagent "До 31.03.2013г. 7% от конфиденциальных тарифов на рейсы VN;"
-discount "4.2%"
-commission "9%/7%"
-
-#example 'svohan hansvo'
 strt_date "01.04.2012"
 agent    "C 01.09.12г. 3% от опубл. тарифов на междунар.рейсах VN;"
 subagent "2% от опубл. тарифов на междунар.рейсах VN;"
@@ -2262,7 +2255,7 @@ international
 discount "1.5%"
 commission "3%/2%"
 
-#example 'hansgn'
+example 'hansgn'
 strt_date "01.04.2012"
 agent    "3% от опубликованных тарифов VN на всех внутренних рейсах VN во Вьетнаме;"
 subagent "2% от опубликованных тарифов VN на всех внутренних рейсах VN во Вьетнаме;"
