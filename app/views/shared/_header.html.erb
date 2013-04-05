@@ -37,18 +37,18 @@ var _yam = {hit: $.noop};
 
 <!-- KISSmetrics -->
 <script type="text/javascript">
-  var _kmq = _kmq || [];
-  var _kmk = _kmk || '15e16c21a89c70bd0b9a38130487e48511b4029d';
-  function _kms(u){
+var _kmq = _kmq || [];
+var _kmk = _kmk || '15e16c21a89c70bd0b9a38130487e48511b4029d';
+function _kms(u){
     setTimeout(function(){
-      var d = document, f = d.getElementsByTagName('script')[0],
-      s = d.createElement('script');
-      s.type = 'text/javascript'; s.async = true; s.src = u;
-      f.parentNode.insertBefore(s, f);
+        var d = document, f = d.getElementsByTagName('script')[0],
+        s = d.createElement('script');
+        s.type = 'text/javascript'; s.async = true; s.src = u;
+        f.parentNode.insertBefore(s, f);
     }, 1);
-  }
-  _kms('//i.kissmetrics.com/i.js');
-  _kms('//doug1izaerwt3.cloudfront.net/' + _kmk + '.1.js');
+}
+_kms('//i.kissmetrics.com/i.js');
+_kms('//doug1izaerwt3.cloudfront.net/' + _kmk + '.1.js');
 </script>
 
 <% if Conf.ohmystats.enabled %>
@@ -68,18 +68,6 @@ _oms.push(["set_project_id", "<%= Conf.ohmystats.project_id %>"]);
 //]]>
 </script>
 <% end %>
-
-<script type="text/javascript">
-var trackPage = function(url) {
-    _gaq.push(['_trackPageview', url]);
-    if (window.yaCounter5324671 && url !== undefined) {
-        window.yaCounter5324671.hit(url);
-    }
-};
-var trackEvent = function(category, action, label) {
-    _gaq.push(['_trackEvent', category, action, label]);
-};
-</script>
 
 <script type="text/javascript">
 I18n.locale = '<%= I18n.locale %>';

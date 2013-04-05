@@ -170,10 +170,10 @@ processCollections: function() {
                 that.slide();
             }
         }, 30);
-        _kmq.push(['record', 'Viewed search results']);
+        _kmq.push(['record', 'RESULTS: displayed']);
     } else {
         this.message.toggle('empty');
-        _kmq.push(['record', 'Nothing found']);
+        _kmq.push(['record', 'RESULTS: nothing found']);
         _gaq.push(['_trackPageview', '/search/empty']);        
     }
 },

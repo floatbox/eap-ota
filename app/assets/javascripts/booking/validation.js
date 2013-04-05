@@ -54,9 +54,7 @@ validate: function(forced) {
     this.toggle(this.wrong.length + this.empty.length === 0);
 },
 toggle: function(ready) {
-    if (ready && !this.el.hasClass('bfs-ready')) {
-        _kmq.push(['record', this.el.attr('data-type').capitalize() + ' section of booking form filled']);
-    }
+    if (ready && !this.el.hasClass('bfs-ready')) this.el.trigger('filled')
     this.el.toggleClass('bfs-ready', ready);
 },
 set: function(data) {

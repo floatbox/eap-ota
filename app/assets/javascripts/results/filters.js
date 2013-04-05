@@ -1,7 +1,7 @@
 /* Filters */
 results.filters = {
 init: function() {
-    var that = this;    
+    var that = this;
     this.el = $('#results-filters');
     this.groups = [];
     this.el.find('.rf-group').mousedown(function(event) {
@@ -29,7 +29,7 @@ init: function() {
         checkbox.init();
         checkbox.group = that.groups[3];
         checkbox.group.lists.push(checkbox);
-        that.lists.push(checkbox);    
+        that.lists.push(checkbox);
     };
 },
 show: function(smooth) {
@@ -94,7 +94,7 @@ update: function() {
     for (var i = this.groups.length; i--;) {
         var group = this.groups[i];
         group.update();
-        this.lists = this.lists.concat(group.lists);        
+        this.lists = this.lists.concat(group.lists);
     }
     this.getVariants();
 },
@@ -113,7 +113,6 @@ getConditions: function(except) {
         var jc = conditions.sort(function(a, b) {return a.length - b.length;}).join(' && ');
         check = new Function('f', 'return ' + jc + ';');
         check.hash = jc;
-        _kmq.push(['record', 'Filters selected']);
     }
     return check;
 },
@@ -278,13 +277,16 @@ apply: function() {
     this.counter.attr('title', counter ? I18n.t('filters.reset', {count: counter}) : '');
     this.counter.css('background-position', '0 ' + (-counter * 20) + 'px');
     this.counter.toggle(counter !== 0);
+    if (counter) {
+        _kmq.push(['record', 'RESULTS: filters applied']);
+    }
 },
 reset: function() {
     this.counter.hide();
     for (var i = this.lists.length; i--;) {
         this.lists[i].reset();
     }
-    results.filters.apply();      
+    results.filters.apply();
 }
 };
 
@@ -387,7 +389,7 @@ click: function(x) {
         s.max = value.constrain(Math.max(s.min, e.min) + 1, this.size);
     }
     this.show(s.min, s.max);
-    this.apply();    
+    this.apply();
 },
 drag: function(name, event) {
     this.dragging = {
@@ -412,7 +414,7 @@ move: function(x) {
         } else {
             d.value = (s.max + offset).constrain(Math.max(s.min, e.min) + 1, this.size);
             this.show(s.min, d.value);
-        }        
+        }
         d.offset = offset;
     }
 },
