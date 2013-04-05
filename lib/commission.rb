@@ -389,17 +389,35 @@ no_commission
 carrier "AC", "AIR CANADA (НЕ BSP!!!)"
 ########################################
 
-agent    "7% от опубл. тарифов на рейсы АС из России и Европы;"
-subagent "3.5% от опубл. тарифов на рейсы АС из России и Европы;"
-disabled "не BSP"
-not_implemented
-commission "7%/3.5%"
+# example 'svocdg/f'
+# example 'svocdg/a cdgsvo/z'
+agent    "по классам F, A,D, Z, P у них осталась комиссия 10 %"
+subagent "8%"
+subclasses "FADZP"
+ticketing_method "downtown"
+discount "6%"
+disabled "отдельно не продаем"
+commission "10%/8%"
 
-agent    "0% от опубл. тарифов на внутренние рейсы по Канаде, а также на международные рейсы из Канады и США"
-subagent "0% от опубл. тарифов на внутренние рейсы по Канаде, а также на международные рейсы из Канады и США"
-disabled "не BSP"
-not_implemented
-commission "0%/0%"
+# example 'svocdg/q'
+# example 'svocdg/q cdgsvo/k'
+agent "по классам Q, V, W, S, T, L, K у них комиссия 8%"
+subagent "6%"
+subclasses "QVWSTLK"
+ticketing_method "downtown"
+discount "4%"
+disabled "отдельно не продаем"
+commission "8%/6%"
+
+# example 'svocdg/y'
+# example 'svocdg/y cdgsvo/m'
+agent "по классам Y, B, M, U, H у них комиссия 5%"
+subagent "3%"
+subclasses "YBMUH"
+ticketing_method "downtown"
+discount "1.5%"
+disabled "отдельно не продаем"
+commission "5%/3%"
 
 carrier "AF", "AIR FRANCE"
 ########################################
