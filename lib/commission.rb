@@ -2171,11 +2171,10 @@ carrier "SW", "AIR NAMIBIA (АВИАРЕПС)"
 ########################################
 
 example 'svocdg'
-agent    "7% от опубл. тарифов на собств. рейсы SW (В договоре Interline отдельно не прописан.)"
-subagent "5% от опубл. тарифов на собств.рейсы SW"
+agent    "1% от опубл. тарифов на собств. рейсы SW (В договоре Interline отдельно не прописан.)"
+subagent "5руб от опубл. тарифов на собств.рейсы SW"
 interline :no, :unconfirmed
-discount "3%"
-commission "7%/5%"
+commission "1%/5"
 
 carrier "TG", "THAI AIRWAYS"
 ########################################
