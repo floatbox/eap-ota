@@ -19,6 +19,10 @@ class Notification < ActiveRecord::Base
     :method => 'email',
     :status => '')
 
+  scope :sent_pnr, where(:status => 'sent', :method => 'email', :attach_pnr => true)
+  scope :first_sent_order_pnr, where(:status => 'sent', :method => 'email', :attach_pnr => true, :format => ["order","booking"]).limit(1)
+  scope :last_sent_ticket_pnr, where(:status => 'sent', :method => 'email', :attach_pnr => true, :format => "ticket").order("created_at DESC").limit(1)
+
   alias_attribute :email, :destination
 
   def self.statuses; ["sent", "error", "delayed"] end

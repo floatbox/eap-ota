@@ -99,6 +99,8 @@ Eviterra::Application.routes.draw do
   match 'admin/reports/selling' => 'admin/reports#selling', :as => :admin_reports_selling
 
   match 'profile' => 'profile#index', :as => :profile
+  match 'profile/show_pnr/:id' => 'profile#show_pnr', :as => :profile_show_pnr
+  match 'profile/show_pnr/:id/ticket/:ticket_id' => 'profile#show_pnr_for_ticket', :as => :profile_show_pnr_for_ticket
 
   root :to => 'home#index'
 
