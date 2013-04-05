@@ -1504,29 +1504,6 @@ carrier "LO", "LOT"
 
 carrier_defaults :consolidator => 0
 
-example 'svocdg'
-agent    "5% от опубл.тарифов (на все классы бронирования, кроме промо и групповых: L, O, U, G) на собств. рейсы LO по всем направлениям за исключением прямых перелетов из Москвы и Санкт Петербурга в Варшаву и из Варшавы в Москву и Санкт Петербург."
-subagent "3% от опубл.тарифов (на все классы бронирования, кроме промо и групповых: L, O, U, G) на собств. рейсы LO по всем направлениям за исключением прямых перелетов из Москвы и Санкт Петербурга в Варшаву и из Варшавы в Москву и Санкт Петербург."
-check {
-  (not includes(city_iatas.first, 'MOW LED') and not includes(city_iatas.last, 'PRG')) or
-  (not includes(city_iatas.first, 'PRG') and not includes(city_iatas.last, 'MOW LED'))
-}
-#our_markup "20"
-discount "2.5%"
-commission "5%/3%"
-
-example "svxcdg cdgsvx/ab"
-agent "1% от опубл.тарифов на рейсы Interline (с обязат.наличием хотя бы одного сегмента  собств.рейса LO) по всем направлениям за исключением прямых перелетов из Москвы в Варшаву и из Варшавы в Москву.
-Вознаграждение предоставляется только на опубл. тарифы (на корпоратаивные, туроператорские, веб-тарифы и т.д. 1 евро)."
-subagent "5 руб. с билета по опубл. тарифам на рейсы Interline с участком LO."
-check {
-  (not includes(city_iatas.first, 'MOW LED') and not includes(city_iatas.last, 'PRG')) or
-  (not includes(city_iatas.first, 'PRG') and not includes(city_iatas.last, 'MOW LED'))
-}
-interline :yes
-our_markup "0.2%"
-commission "1%/5"
-
 example 'ledprg prgled'
 agent "1 euro с билета по опубл. тарифам на все остальные рейсы LO."
 subagent "5 рублей"
@@ -1801,24 +1778,6 @@ no_commission
 
 carrier "OK", "CZECH AIRLINES"
 ########################################
-
-example 'cdgsvo'
-agent    "1% от опубл. тарифов на собств.рейсы OK;"
-subagent "0,5% от опубл. тарифа на рейсы OK;"
-commission "1%/0.5%"
-
-example 'svocdg cdgsvo/ab'
-agent    "1% от опубл. тарифов на рейсы Interline, если один из сегментов выполнен под кодом OK."
-subagent "0,5% от опубл. тарифа на рейсы Interline, если один из сегментов выполнен под кодом OK."
-interline :yes
-commission "1%/0.5%"
-
-example 'cdgsvo/ab'
-no_commission
-
-carrier "OM", "MIAT-Монгольские Авиалинии"
-########################################
-
 example 'svocdg'
 example 'cdgsvo svocdg/ab'
 agent    "9% от всех опубл. тарифов на рейсы OM (В договоре Interline не прописан.)"
