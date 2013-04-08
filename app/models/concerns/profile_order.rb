@@ -1,10 +1,15 @@
 # encoding: utf-8
 module ProfileOrder
+  include Rails.application.routes.url_helpers
 
   extend ActiveSupport::Concern
 
   included do
     scope :profile_orders, where("pnr_number != ''").order("created_at DESC")
+  end
+
+  def can_use? current_customer
+    current_customer.id == customer.id
   end
 
   def profile_route
@@ -42,7 +47,6 @@ module ProfileOrder
     payment_status + "\n" + ticket_status
   end
 
-
   def profile_payment_price
     if payments.charges.secured.first
       payments.charges.secured.first.price.round.to_i
@@ -53,13 +57,15 @@ module ProfileOrder
 
   def profile_tickets
     rows = []
-    if ticketed?
+    if profile_ticketed?
       tickets.each do |t|
         rows << {
+          id: t.id,
           name: t.last_name + ' ' + t.first_name,
           status: t.status,
           number: t.number,
-          carrier: t.carrier
+          carrier: t.carrier,
+          stored_flight: t.flights.present?
         }
       end
     else
@@ -74,7 +80,7 @@ module ProfileOrder
     rows
   end
 
-  def ticketed?
+  def profile_ticketed?
     tickets_count > 0
   end
 

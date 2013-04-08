@@ -40,14 +40,18 @@
           <% order.profile_tickets.each do |ticket| %>
             <div class="pod-passenger">
                 <h6 class="pod-name"><%= ticket[:name] %></h6>
-                <% if order.ticketed? %>
+                <% if order.profile_ticketed? %>
                 <p class="pod-ticket">билет <%= ticket[:carrier]%> <%= ticket[:number] %></p>
-                <p class="pod-ticket">&nbsp;-&nbsp;</p> 
+                <p class="pod-ticket">&nbsp;-&nbsp;</p>
                 <p class="pod-ticket">статус <%= ticket[:status] %></p>
+                  <% if ticket[:stored_flight] %>
+                <p class="pod-ticket">&nbsp;-&nbsp;</p>
+                <p class="pod-ticket"><a href="<%= profile_show_pnr_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket[:id]) %>" target="_blank">билет</a></p>
+                  <% end %>
                 <% end %>
             </div>
           <% end %>
-          <div class="pod-pnr">Маршрут квитанция <a href="<%= show_notice_path(:id => order.pnr_number) %>">на русском</a> или <a href="<%= show_notice_path(:id => order.pnr_number, :lang=>'en') %>">на английском</a></div>
+          <div class="pod-pnr"><a href="<%= profile_show_pnr_path(:id => order.pnr_number) %>" target="_blank">Маршрут квитанция</a></div>
         </div>
     </div>    
     </td>
