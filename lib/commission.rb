@@ -1777,12 +1777,11 @@ carrier "OK", "CZECH AIRLINES"
 ########################################
 example 'svocdg'
 example 'cdgsvo svocdg/ab'
-agent    "9% от всех опубл. тарифов на рейсы OM (В договоре Interline не прописан.)"
-important!
-subagent "2,5% от опубл. тарифов на собств.рейсы OM"
-interline :no, :unconfirmed
-## discount "5%"
-commission "9%/2.5%"
+agent "1% от опубл. тарифов на собств.рейсы OK;"
+agent "1% от опубл. тарифов на рейсы Interline, если один из сегментов выполнен под кодом OK."
+subagent "уточнить"
+interline :no, :yes
+commission "1%/5"
 
 carrier "OS", "AUSTRIAN AIRLINES"
 ########################################
