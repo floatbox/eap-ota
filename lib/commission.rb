@@ -1781,7 +1781,7 @@ agent "1% от опубл. тарифов на собств.рейсы OK;"
 agent "1% от опубл. тарифов на рейсы Interline, если один из сегментов выполнен под кодом OK."
 subagent "уточнить"
 interline :no, :yes
-commission "1%/5"
+commission "1%/0.5%"
 
 carrier "OS", "AUSTRIAN AIRLINES"
 ########################################
