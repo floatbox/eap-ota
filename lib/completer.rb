@@ -3,18 +3,17 @@ require 'active_support'
 require 'active_support/core_ext/string/multibyte'
 require 'every'
 require 'russian'
+require 'completer/normalizer'
+require 'completer/qwerty'
 
 class Completer
   attr_reader :records, :index
 
-  module Normalizer
-    NONWORD = /[^[:alnum:]]+/
-    def normalize(word)
-      word.mb_chars.downcase.gsub(NONWORD, ' ').strip
-    end
-  end
-
   include Normalizer
+
+  def self.preload!
+    cached_or_new
+  end
 
   def self.cached_or_new
     @completer ||= Completer.load
@@ -245,23 +244,6 @@ class Completer
     end
   end
 
-  module Qwerty
-    QWERTY = ('qwertyuiop[]' + 'QWERTYUIOP{}' +
-      'asdfghjkl;\'' + 'ASDFGHJKL:"' +
-      'zxcvbnm,./' + 'ZXCVBNM<>?')
-    JCUKEN = ('йцукенгшщзхъ' + 'ЙЦУКЕНГШЩЗХЪ' +
-      'фывапролджэ' + 'ФЫВАПРОЛДЖЭ' +
-      'ячсмитьбю.' + 'ЯЧСМИТЬБЮ,').mb_chars
-    QJ_MAP = Hash[QWERTY.chars.zip(JCUKEN.chars)]
-
-
-    module_function
-
-    def jcuken(s)
-      s.mb_chars.chars.map {|c| QJ_MAP[c] || c }.join.mb_chars
-    end
-
-  end
 
 end
 

@@ -21,7 +21,7 @@ worker_processes (ENV['UNICORN_WORKERS'] || 1).to_i
 pid project_home + '/tmp/pids/unicorn.pid'
 
 before_fork do |server,worker|
-  Completer.cached_or_new rescue nil
+  Completer.preload!
   if defined?(ActiveRecord::Base)
     ActiveRecord::Base.connection.disconnect!
   end
