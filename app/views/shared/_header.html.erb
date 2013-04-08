@@ -12,10 +12,11 @@ _gaq.push(['_setAccount', '<%= Rails.env.production? ? 'UA-19832395-1' : 'UA-198
 
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
+var _yam = {hit: $.noop};
 (function (d, w, c) {
     (w[c] = w[c] || []).push(function() {
         try {
-            w.yaCounter5324671 = new Ya.Metrika({id:5324671, enableAll: true, trackHash:true, ut:"noindex", webvisor:false});
+            _yam = w.yaCounter5324671 = new Ya.Metrika({id:5324671, enableAll: true, trackHash:true, ut:"noindex", webvisor:false});
         } catch(e) { }
     });
     
@@ -34,6 +35,22 @@ _gaq.push(['_setAccount', '<%= Rails.env.production? ? 'UA-19832395-1' : 'UA-198
 <noscript><div><img src="//mc.yandex.ru/watch/5324671?ut=noindex" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 
+<!-- KISSmetrics -->
+<script type="text/javascript">
+var _kmq = _kmq || [];
+var _kmk = _kmk || '15e16c21a89c70bd0b9a38130487e48511b4029d';
+function _kms(u){
+    setTimeout(function(){
+        var d = document, f = d.getElementsByTagName('script')[0],
+        s = d.createElement('script');
+        s.type = 'text/javascript'; s.async = true; s.src = u;
+        f.parentNode.insertBefore(s, f);
+    }, 1);
+}
+_kms('//i.kissmetrics.com/i.js');
+_kms('//doug1izaerwt3.cloudfront.net/' + _kmk + '.1.js');
+</script>
+
 <% if Conf.ohmystats.enabled %>
 <!-- Oh My Stats tracker -->
 <script type="text/javascript">
@@ -51,18 +68,6 @@ _oms.push(["set_project_id", "<%= Conf.ohmystats.project_id %>"]);
 //]]>
 </script>
 <% end %>
-
-<script type="text/javascript">
-var trackPage = function(url) {
-    _gaq.push(['_trackPageview', url]);
-    if (window.yaCounter5324671 && url !== undefined) {
-        window.yaCounter5324671.hit(url);
-    }
-};
-var trackEvent = function(category, action, label) {
-    _gaq.push(['_trackEvent', category, action, label]);
-};
-</script>
 
 <script type="text/javascript">
 I18n.locale = '<%= I18n.locale %>';

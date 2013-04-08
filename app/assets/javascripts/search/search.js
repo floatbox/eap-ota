@@ -159,6 +159,9 @@ loadSummary: function(values, process) {
         success: function(data, status, request) {
             if (that.valid && data.valid) {
                 results.update(data);
+                if (!values.query_key) {
+                    _kmq.push(['record', 'SEARCH: button enabled']); // Для восстановления формы по урлу не считаем
+                }
             }
             if (values.query_key) {
                 that.restoreValues(data);

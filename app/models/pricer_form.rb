@@ -103,14 +103,7 @@ class PricerForm
     end
 
     def location_from_string name
-      record = Completer.record_from_string(name) rescue nil
-      if record
-        if record.code && (['country', 'city', 'airport'].include? record.type)
-          record.original_object
-        elsif record.type == 'region'
-          Region.first(:conditions => ['name_ru = ? OR name_en = ?', record.name, record.name])
-        end
-      end
+      Completer.object_from_string(name)
     end
 
     def from_country_or_region?

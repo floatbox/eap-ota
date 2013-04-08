@@ -7,5 +7,5 @@ $(function() {
             window.history.back();
         });
     }
-    trackPage();
+    _gaq.push(['_trackPageview']);
 });

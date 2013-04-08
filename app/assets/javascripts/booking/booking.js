@@ -57,9 +57,11 @@ prebook: function(offer) {
         offer.showDetails();
     }
     $w.smoothScrollTo(offer.details.offset().top - 52 - 36 - 92);
-    trackEvent('Бронирование', 'Выбор варианта');
     this.variant = offer.selected;
     this.offer = offer;
+    _kmq.push(['record', 'RESULTS: variant selected']);
+    _kmq.push(['record', 'RESULTS: ' + results.content.selected + ' variant selected']);
+    _gaq.push(['_trackEvent', 'Бронирование', 'Выбор варианта']);
 },
 process: function(result) {
     var that = this;
@@ -69,6 +71,7 @@ process: function(result) {
         this.ltimer = setTimeout(function() {
             that.load();
         }, 1000);
+        _kmq.push(['record', 'PRE-BOOKING: success']);
     } else {
         this.failed();
     }
@@ -80,7 +83,8 @@ failed: function() {
     this.offer.state.find('.obs-hint').click(function(event) {
         hint.show(event, tip);
     });
-    trackEvent('Бронирование', 'Невозможно выбрать вариант');
+    _kmq.push(['record', 'PRE-BOOKING: fail']);
+    _gaq.push(['_trackEvent', 'Бронирование', 'Невозможно выбрать вариант']);    
 },
 load: function() {
     var that = this;
@@ -101,7 +105,8 @@ load: function() {
             $('#bfp0-last-name').focus();
             next();
         });*/
-        trackPage('/booking');
+        _gaq.push(['_trackPageview', '/booking']);
+        _yam.hit('/booking');
     });
 },
 view: function(content) {
@@ -140,11 +145,12 @@ comparePrices: function() {
     var context = this.content.find('.bf-newprice');
     var dp = Number(context.attr('data-price')) - this.variant.price;
     if (dp !== 0) {
-        trackEvent('Бронирование', 'Изменилась цена', dp > 0 ? 'Стало дороже' : 'Стало дешевле');
         context.show();
         context.find('.bfnp-content .link').click(function() {
             that.cancel();
         });
+        _kmq.push(['record', 'PRE-BOOKING: price changed']);
+        _gaq.push(['_trackEvent', 'Бронирование', 'Изменилась цена', dp > 0 ? 'Стало дороже' : 'Стало дешевле']);            
     }
 },
 processPrice: function(context, dp) {
@@ -168,7 +174,7 @@ cancel: function() {
         results.show(true);
         results.load();
     }
-    trackEvent('Бронирование', 'Отмена бронирования');
+    _gaq.push(['_trackEvent', 'Бронирование', 'Отмена бронирования']);
 },
 hide: function() {
     var offset = this.content.find('.b-details').offset().top - $w.scrollTop();
@@ -181,7 +187,8 @@ hide: function() {
     $w.delay(300).smoothScrollTo(Math.max(this.offer.el.offset().top - 36 - results.header.height - 90, 0));
     page.title.set(I18n.t('page.results', {title: results.data.titles.window}));
     page.location.set('booking');
-    trackPage('/#' + page.location.hash.replace('#', ''));
+    _gaq.push(['_trackPageview', page.location.track()]);
+    _yam.hit(page.location.track());
     delete this.offer;
 }
 };
@@ -213,8 +220,9 @@ init: function() {
     }
 },
 show: function() {
-    trackEvent('Бронирование', 'Просмотр правил тарифа');
     this.el.slideDown(350);
+    _kmq.push(['record', 'BOOKING: fare rules displayed']);
+    _gaq.push(['_trackEvent', 'Бронирование', 'Просмотр правил тарифа']);  
 },
 hide: function() {
     this.el.slideUp(350);

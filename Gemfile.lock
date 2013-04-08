@@ -95,6 +95,8 @@ GEM
       execjs
     coffee-script-source (1.2.0)
     columnize (0.3.6)
+    commands (0.2.1)
+      rails (>= 3.2.0)
     crack (0.3.1)
     cucumber (1.1.8)
       builder (>= 2.1.2)
@@ -367,6 +369,7 @@ DEPENDENCIES
   capistrano_colors
   capybara
   coffee-rails
+  commands
   crack
   cucumber
   cucumber-rails

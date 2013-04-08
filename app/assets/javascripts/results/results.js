@@ -170,9 +170,11 @@ processCollections: function() {
                 that.slide();
             }
         }, 30);
+        _kmq.push(['record', 'RESULTS: displayed']);
     } else {
         this.message.toggle('empty');
-        trackPage('/search/empty');
+        _kmq.push(['record', 'RESULTS: nothing found']);
+        _gaq.push(['_trackPageview', '/search/empty']);        
     }
 },
 updateFeatured: function() {

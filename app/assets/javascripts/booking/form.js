@@ -9,6 +9,12 @@ init: function() {
         var options = booking[el.attr('data-type') + 'Options'];
         var section = new validator.Section(el, options);
         that.sections.push(section);
+    }).on('filled', function() {
+        var type = $(this).attr('data-type');
+        if (type === 'contacts') {
+            _kmq.push(['identify', $('#bfc-email').val()]);
+        }
+        _kmq.push(['record', 'BOOKING: ' + type + ' filled']);
     });
     this.el.on('submit', function(event) {
         event.preventDefault();
@@ -19,9 +25,9 @@ init: function() {
             if (that.button.hasClass('bfb-disabled')) {
                 var rtext = that.required.text();
                 if (rtext) {
-                    trackEvent('Бронирование', 'Нажатие заблокированной кнопки', rtext);
+                    _gaq.push(['_trackEvent', 'Бронирование', 'Нажатие заблокированной кнопки', rtext]);
                 } else {
-                    trackEvent('Бронирование', 'Заблокированная кнопка без ошибок', that.getValues());
+                    _gaq.push(['_trackEvent', 'Бронирование', 'Заблокированная кнопка без ошибок', that.getValues()]);
                 }
                 that.required.find('.bffr-link').eq(0).click();
             } else {
@@ -121,6 +127,9 @@ validate: function(forced) {
         delete this.back;
     }
     if (!this.sending) {
+        if (!disabled && this.button.hasClass('bfb-disabled')) {
+            _kmq.push(['record', 'BOOKING: button enabled']);
+        }
         this.button.toggleClass('bfb-disabled', disabled);
         this.required.toggle(disabled);
     }
@@ -152,6 +161,7 @@ submit: function() {
             that.process('<div class="bf-result bfr-fail"><h5 class="bfr-title">Что-то пошло не так.</h5><p class="bfr-content">Возникла техническая проблема. Попробуйте нажать на кнопку «Купить» ещё раз или позвоните нам <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p><p class="bfr-content"><span class="link bfr-back">Попробовать ещё раз</span></p></div>');
         }
     });
+    _kmq.push(['record', 'BOOKING: button pressed']);
 },
 showErrors: function(errors) {
     var wrong = [], cardused = false;
@@ -208,7 +218,7 @@ process: function(s) {
             return;
         } else {
             booking.processPrice(this.result, np - op);
-            trackEvent('Бронирование', 'Изменилась цена', np - op > 0 ? 'Стало дороже' : 'Стало дешевле');
+            _gaq.push(['_trackEvent', 'Бронирование', 'Изменилась цена', np - op > 0 ? 'Стало дороже' : 'Стало дешевле']);
             this.result.find('.obb-title').click(function() {
                 that.el.submit();
                 that.footer.show();
@@ -229,21 +239,28 @@ process: function(s) {
         }, 60000);
         break;
     case 'success':
-        trackPage('/booking/success');
+        _kmq.push(['record', 'BOOKING: SUCCESS']);
+        _gaq.push(['_trackPageview', '/booking/success']);
+        _yam.hit('/booking/success');
         if (window._gaq) {
             var price = this.el.find('.bf-newprice').attr('data-price');
             _gaq.push(['_addTrans', this.result.find('.bfr-pnr').text(), '', price]);
             _gaq.push(['_trackTrans']);
         }
         this.result.find('.bfrs-insurance .bfrsa-link').click(function() {
-            trackEvent('Бронирование', 'Переход на страницу страховки');        
+            _kmq.push(['record', 'BOOKING: insurance link pressed']);
+            _gaq.push(['_trackEvent', 'Бронирование', 'Переход на страницу страховки']);
         });
         this.result.find('.bfrs-hotels .bfrsa-link').click(function() {
-            trackEvent('Бронирование', 'Переход к отелям на Островке');
+            _kmq.push(['record', 'BOOKING: hotels link pressed']);
+            _gaq.push(['_trackEvent', 'Бронирование', 'Переход к отелям на Островке']);
         });
         this.sending = true; // не даём отправить форму второй раз
         this.el.find('.bfp-add, .bfp-remove').css('visibility', 'hidden');
         this.el.find('input, textarea, select').prop('disabled', true);
+        break;
+    case 'fail':
+        _kmq.push(['record', 'BOOKING: FAIL']);
         break;
     }
     var spos = $('#page-footer').offset().top - $w.height();

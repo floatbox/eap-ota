@@ -16,6 +16,8 @@ gem 'pry-doc', require: false
 # расцветка строки ввода. убрал, ибо глушат полезные хоткеи
 # gem 'pry-coolline' #, :git => 'https://github.com/pry/pry-coolline.git'
 gem 'pry-editline', require: false
+# для rake "db:migrate" и т.п. в rails console
+gem 'commands', group: [:development, :test]
 
 # Deploy with Capistrano
 group :deployment do

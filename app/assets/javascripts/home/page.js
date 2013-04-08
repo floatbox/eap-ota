@@ -21,7 +21,7 @@ init: function() {
         search.map.resize();
         this.reset();
         this.loadLocation();
-        trackPage();
+        _gaq.push(['_trackPageview']);
     }
     
     $(function() {
@@ -156,6 +156,9 @@ update: function() {
     window.location.hash = parts.join('/');    
     this.hash = window.location.hash;
     $w.scrollTop(st);
+},
+track: function() {
+    return '/#' + this.hash.replace('#', '');
 }
 };
 
@@ -179,5 +182,5 @@ window.onerror = function(text) {
     } else {
         type = 'В форме поиска';
     }
-    trackEvent('Ошибка JS', type, text);
+    _gaq.push(['_trackEvent', 'Ошибка JS', type, text]);
 }*/
