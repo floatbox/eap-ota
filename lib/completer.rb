@@ -5,6 +5,7 @@ require 'every'
 require 'russian'
 require 'completer/normalizer'
 require 'completer/qwerty'
+require 'completer/db_reader'
 
 class Completer
   attr_reader :records, :index
@@ -12,16 +13,15 @@ class Completer
   include Normalizer
 
   def self.preload!
-    cached_or_new
+    cached
   end
 
-  def self.cached_or_new
+  def self.cached
     @completer ||= Completer.load
   end
 
   def initialize
     clear
-    read_all
   end
 
   MARSHAL_FILE = 'tmp/completer.dat'
@@ -33,7 +33,7 @@ class Completer
   end
 
   def self.regen
-    new.dump
+    DbReaderRu.new(Completer.new).read.dump
   end
 
   def self.load(filepath=MARSHAL_FILE)
@@ -42,7 +42,7 @@ class Completer
   end
 
   class << self
-    delegate :complete, :dump, :object_from_string, :to => :cached_or_new
+    delegate :complete, :dump, :object_from_string, :to => :cached
   end
 
   def object_from_string(name)
@@ -61,10 +61,10 @@ class Completer
       hl = normalize(string).to_s
       data << {
         :insert => record.word,
-        :start => 0,
-        :end => position,
+#        :start => 0,
+#        :end => position,
         :name => record.name,
-        :hl => hl,
+#        :hl => hl,
         :entity => record.entity
       }
       break if data.size == limit
@@ -106,78 +106,6 @@ class Completer
     rec.to_match_index_letters.each {|letter| @index[letter] ||= []; @index[letter] << rec }
   end
 
-  def read_all
-    read_important_objects
-    read_countries
-    read_cities
-    read_airports
-  end
-
-  # dictionaries from database
-  def read_important_objects
-    ( Country.important.all +
-      City.important.with_country.all +
-      Airport.important.with_country.all
-    ).sort_by(&:importance).reverse.each do |c|
-      case c
-      when Country
-        add_country(c)
-      when City
-        add_city(c)
-      when Airport
-        add_airport(c)
-      end
-    end
-  end
-
-  def add_country(c)
-    synonyms = []
-    synonyms << c.name_en unless c.name_en == c.name
-    synonyms += c.synonyms
-    synonyms.delete_if &:blank?
-    add(:name => c.name, :type => 'country', :code => c.iata, :aliases => synonyms, :hint => c.continent_part_ru)
-    add(:name => c.case_to, :type => 'country', :code => c.iata, :hint => c.continent_part_ru)
-  end
-
-
-  def read_countries
-    Country.not_important.each do |c|
-      add_country(c)
-    end
-  end
-
-  def add_city(c)
-    synonyms = []
-    synonyms << c.name_en unless c.name_en == c.name
-    synonyms += c.synonyms
-    synonyms.delete_if &:blank?
-    add(:name => c.name, :type => 'city', :code => c.iata, :aliases => synonyms, :hint => c.country.name, :info => "Город #{c.name} #{c.country.case_in}")
-    add(:name => c.case_to, :type => 'city', :code => c.iata, :hint => c.country.name, :info => "Город #{c.name} #{c.country.case_in}")
-  end
-
-  def read_cities
-    City.not_important.with_country.each do |c|
-      add_city(c)
-    end
-  end
-
-  def add_airport(c)
-    unless c.equal_to_city
-      synonyms = []
-      synonyms << c.name_en unless c.name_en == c.name
-      synonyms += c.synonyms
-      synonyms.delete_if &:blank?
-      add(:name => c.name, :type => 'airport', :code => c.iata, :aliases => synonyms, :hint => c.city.name,  :info => "Аэропорт #{c.name} #{c.city.case_in}, #{c.city.country.name}")
-      add(:name => c.case_to, :type => 'airport', :code => c.iata, :hint => c.city.name,  :info => "Аэропорт #{c.name} #{c.city.case_in}, #{c.city.country.name}")
-    end
-  end
-
-  def read_airports
-    Airport.not_important.with_country.each do |c|
-      add_airport(c)
-    end
-  end
-
   class Record
 
     include Normalizer
@@ -195,7 +123,6 @@ class Completer
       @code = attrs[:code]
       @info = attrs[:info]
       @hint = attrs[:hint]
-      @hidden_info = attrs[:hidden_info]
       @code = nil if @code == ''
       @aliases = attrs[:aliases].presence || []
       @aliases = @aliases.split(':').every.strip if @aliases.is_a?(String)
@@ -203,10 +130,10 @@ class Completer
       update_to_match
     end
 
-    attr_accessor :word, :type, :name, :code, :aliases, :to_match, :info, :hint, :hidden_info
+    attr_accessor :word, :type, :name, :code, :aliases, :to_match, :info, :hint
 
     def entity
-      { :iata => code, :type => type, :name => name, :info => info, :hint => hint, :hidden_info => hidden_info }.delete_if {|key, value| value.nil? }
+      { :iata => code, :type => type, :name => name, :info => info, :hint => hint }.delete_if {|key, value| value.nil? }
     end
 
     def update_to_match
