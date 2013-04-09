@@ -56,6 +56,8 @@ task :staging do
   set :use_sudo, true
   set :rails_env, 'staging'
   role :app, 'vm1.eviterra.com', 'vm2.eviterra.com'
+  # кажется, если нет asset-ов на локальной машине, не работает javascript_include_tag и прочие
+  # добавляю обратно deck
   role :web, 'vm3.eviterra.com'
   role :daemons, 'vm2.eviterra.com'
   role :db, 'vm1.eviterra.com', :primary => true
@@ -72,7 +74,7 @@ task :eviterra do
   set :rails_env, 'production'
   set :rvm_type, :system
   role :app, 'flexo.eviterra.com', 'deck.eviterra.com', 'calculon.eviterra.com'
-  role :web, 'hermes.eviterra.com'
+  role :web, 'hermes.eviterra.com', 'deck.eviterra.com'
   role :db, 'deck.eviterra.com', :primary => true
   role :daemons, 'deck.eviterra.com'
 end
