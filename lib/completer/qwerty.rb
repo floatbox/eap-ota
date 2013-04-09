@@ -1,5 +1,5 @@
 # encoding: utf-8
-class Completer
+module Completer
   module Qwerty
     QWERTY = ('qwertyuiop[]' + 'QWERTYUIOP{}' +
       'asdfghjkl;\'' + 'ASDFGHJKL:"' +
