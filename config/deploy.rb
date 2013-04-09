@@ -34,7 +34,8 @@ task :localgit do
 end
 
 # для shared/* папочки для deploy:setup
-set :shared_children, %w(log pids system config initializers cache)
+# не работает, когда use_sudo true
+set :shared_children, %w(log pids system config initializers cache local)
 
 # для deploy:migrate
 set :rake, 'bundle exec rake'
@@ -88,8 +89,14 @@ namespace :deploy do
       run "ln -sf #{shared_path}/initializers/* #{latest_release}/config/initializers/; true"
   end
 
+  # по каким-то причинам assets:precompile все равно грохает его содержимое
+  # разобраться
   task :symlink_persistent_cache do
     run "ln -s #{shared_path}/cache #{latest_release}/tmp/cache"
+  end
+
+  task :symlink_db_local do
+    run "ln -sf #{shared_path}/local #{latest_release}/db/local"
   end
 
   desc <<-DESC
@@ -181,6 +188,7 @@ namespace :deploy do
 
   after "deploy:finalize_update", "deploy:symlink_shared_configs"
   after "deploy:finalize_update", "deploy:symlink_persistent_cache"
+  after "deploy:finalize_update", "deploy:symlink_db_local"
   after "deploy", "deploy:restart_services"
   # after "deploy:update_code", "deploy:check_for_pending_migrations"
   after "deploy:rollback", "deploy:restart_services"
