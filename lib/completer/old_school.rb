@@ -1,10 +1,7 @@
 # encoding: utf-8
 require 'active_support'
 require 'active_support/core_ext/string/multibyte'
-# FIXME russian и правда нужен?
-require 'russian'
 require 'completer/normalizer'
-require 'completer/qwerty'
 module Completer
   class OldSchool
 
@@ -38,14 +35,9 @@ module Completer
         data << record
         break if data.size == limit
       end
-
-      if data.blank? && (opts.delete(:jcuken) != false)
-        complete(Qwerty.jcuken(string), opts.merge(:jcuken => false))
-      else
-        # убираем "Москва, в Москву", потом убираем одноименные объекты,
-        # все равно только первый найдется
-        data.uniq_by(&:signature).uniq_by(&:name).map(&:entity)
-      end
+      # убираем "Москва, в Москву", потом убираем одноименные объекты,
+      # все равно только первый найдется object_from_string-ом
+      data.uniq_by(&:signature).uniq_by(&:name).map(&:entity)
     end
 
     def scan(prefix)

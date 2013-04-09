@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'completer/transliterating'
 require 'completer/old_school'
 require 'completer/db_reader'
 
@@ -11,9 +12,9 @@ module Completer
     @completer ||= Completer.load
   end
 
-  MARSHAL_FILE = 'tmp/completer_v1_ru.dat'
+  MARSHAL_FILE = 'tmp/completer_v2_ru.dat'
   def self.regen
-    DbReaderRu.new(Completer::OldSchool.new).read.dump(MARSHAL_FILE)
+    DbReaderRu.new(Completer::Transliterating.new).read.dump(MARSHAL_FILE)
   end
 
   # нет никаких гарантий, что в дампе именно комплитер!
