@@ -92,10 +92,6 @@ namespace :deploy do
     run "ln -s #{shared_path}/cache #{latest_release}/tmp/cache"
   end
 
-  task :symlink_completer do
-    run "ln -s #{shared_path}/completer.dat #{latest_release}/tmp/completer.dat || echo #{shared_path}/completer.dat does not exist"
-  end
-
   desc <<-DESC
     Checks if there're migrations pending. By default, it runs this in most recently \
     deployed version of the app. However, you can specify a different release \
@@ -125,6 +121,19 @@ namespace :deploy do
 
     puts "#{migrate_target} => #{directory}"
     run "cd #{directory}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} db:abort_if_pending_migrations || echo PLEASE DON\\\'T FORGET TO cap deploy:migrate!"
+  end
+
+  desc <<-DESC
+    Regenerates completer. If you need to create completer.dat on a new machine, \
+    you probably want to run
+
+      cap deploy:update_code deploy:completer
+  DESC
+  task :completer do
+    rake = fetch(:rake, "rake")
+    rails_env = fetch(:rails_env, "production")
+    directory = current_release
+    run "cd #{directory}; #{rake} RAILS_ENV=#{rails_env} completer:regen"
   end
 
   # daemons
@@ -172,7 +181,6 @@ namespace :deploy do
 
   after "deploy:finalize_update", "deploy:symlink_shared_configs"
   after "deploy:finalize_update", "deploy:symlink_persistent_cache"
-  after "deploy:finalize_update", "deploy:symlink_completer"
   after "deploy", "deploy:restart_services"
   # after "deploy:update_code", "deploy:check_for_pending_migrations"
   after "deploy:rollback", "deploy:restart_services"
