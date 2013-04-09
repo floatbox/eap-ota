@@ -7,7 +7,7 @@ module Completer
 
   class << self
 
-    MARSHAL_FILE = 'tmp/cache/completer_v3.dat'
+    MARSHAL_FILE = 'db/local/completer_v3.dat'
     def preload!
       @completers || load!
     end
