@@ -49,7 +49,7 @@ module Completer
   class DbReaderEn < DbReader
     def add_country(c)
       # TODO сделать континенты для английского комплитера
-      add(:name => c.name_en, :type => 'country', :code => c.iata) # :hint => c.continent_part_ru)
+      add(:name => c.name_en, :type => 'country', :code => c.iata, :hint => '') # :hint => c.continent_part_ru)
     end
 
     def add_city(c)

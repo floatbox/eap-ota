@@ -13,13 +13,6 @@ module Completer
       clear
     end
 
-    def dump(filepath)
-      Rails.logger.debug "Completer: dumping to cache #{filepath}"
-      open(filepath, 'w') do |f|
-        Marshal.dump(self, f)
-      end
-    end
-
     def object_from_string(name)
       scan_eq(name) do |record|
         return record.original_object
