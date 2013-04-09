@@ -3,7 +3,6 @@ require 'spec_helper'
 
 describe "home/index" do
   before(:each) do
-    view.stub(:nearest_city).and_return(Location.default)
     view.stub(:admin_user).and_return(false)
   end
 
