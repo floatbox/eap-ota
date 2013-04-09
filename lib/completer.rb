@@ -36,6 +36,7 @@ class Completer
     DbReaderRu.new(Completer.new).read.dump
   end
 
+  # нет никаких гарантий, что в дампе именно комплитер!
   def self.load(filepath=MARSHAL_FILE)
     Rails.logger.debug "Completer: loading from cache #{filepath}"
     Marshal.load(open(filepath))
@@ -52,30 +53,21 @@ class Completer
     nil
   end
 
-  def complete(string, position=nil, opts={})
+  def complete(string, opts={})
     data = []
     string = string.mb_chars
-    position = string.size
     limit = opts[:limit] && opts[:limit].to_i
     scan(string) do |record|
-      hl = normalize(string).to_s
-      data << {
-        :insert => record.word,
-#        :start => 0,
-#        :end => position,
-        :name => record.name,
-#        :hl => hl,
-        :entity => record.entity
-      }
+      data << record
       break if data.size == limit
     end
 
     if data.blank? && (opts.delete(:jcuken) != false)
-      complete(Qwerty.jcuken(string), position, opts.merge(:jcuken => false))
+      complete(Qwerty.jcuken(string), opts.merge(:jcuken => false))
     else
-      # вроде бы не очень эффективно выкидываем одинаковые объекты под разными названиями.
-      # а потом вроде бы выкидываем аэропорты, которые называются так же как города.
-      data.uniq_by {|e| e[:entity].except(:name) }.uniq_by {|e| e[:name]}
+      # убираем "Москва, в Москву", потом убираем одноименные объекты,
+      # все равно только первый найдется
+      data.uniq_by(&:signature).uniq_by(&:name).map(&:entity)
     end
   end
 
@@ -119,25 +111,36 @@ class Completer
         attrs = {:name => attrs}
       end
       @name = attrs[:name]
-      @word = attrs[:word] || @name
-      @code = attrs[:code]
-      @info = attrs[:info]
+      @code = attrs[:code].presence
+      @type = attrs[:type]
       @hint = attrs[:hint]
-      @code = nil if @code == ''
-      @aliases = attrs[:aliases].presence || []
-      @aliases = @aliases.split(':').every.strip if @aliases.is_a?(String)
-      @type = (attrs[:type] || 'city').to_s
-      update_to_match
+      update_to_match(attrs[:aliases])
     end
 
-    attr_accessor :word, :type, :name, :code, :aliases, :to_match, :info, :hint
+    attr_accessor :type, :name, :code, :to_match, :hint
 
     def entity
-      { :iata => code, :type => type, :name => name, :info => info, :hint => hint }.delete_if {|key, value| value.nil? }
+      {
+        code: code,
+        type: type,
+        name: name,
+        hint: hint,
+        # legacy
+        iata: code,
+        area: hint
+      }
     end
 
-    def update_to_match
-      @to_match = ([word] + aliases).compact.map {|word| normalize(word)}
+    def signature
+      {
+        type: type,
+        code: code
+      }
+    end
+
+    def update_to_match(aliases)
+      words = [name, aliases].flatten.delete_if(&:blank?).uniq
+      @to_match = words.map {|word| normalize(word)}
     end
 
     # normalized first letters (for now)
