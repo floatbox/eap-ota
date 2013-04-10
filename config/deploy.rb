@@ -96,6 +96,7 @@ namespace :deploy do
   end
 
   task :symlink_db_local do
+    run "rm -rf #{latest_release}/db/local"
     run "ln -sf #{shared_path}/local #{latest_release}/db/local"
   end
 
