@@ -389,34 +389,37 @@ no_commission
 carrier "AC", "AIR CANADA (НЕ BSP!!!)"
 ########################################
 
-# example 'svocdg/f'
-# example 'svocdg/a cdgsvo/z'
+# example 'svojfk/f'
+# example 'svojfk/a jfksvo/z'
 agent    "по классам F, A,D, Z, P у них осталась комиссия 10 %"
 subagent "8%"
 subclasses "FADZP"
+check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
 discount "6%"
-disabled "отдельно не продаем"
+disabled "на свои не продается"
 commission "10%/8%"
 
-# example 'svocdg/q'
-# example 'svocdg/q cdgsvo/k'
+# example 'svojfk/q'
+# example 'svojfk/q jfksvo/k'
 agent "по классам Q, V, W, S, T, L, K у них комиссия 8%"
 subagent "6%"
 subclasses "QVWSTLK"
+check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
 discount "4%"
-disabled "отдельно не продаем"
+disabled "на свои не продаем"
 commission "8%/6%"
 
-# example 'svocdg/y'
-# example 'svocdg/y cdgsvo/m'
+# example 'svojfk/y'
+# example 'svojfk/y jfksvo/m'
 agent "по классам Y, B, M, U, H у них комиссия 5%"
 subagent "3%"
 subclasses "YBMUH"
+check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
 discount "1.5%"
-disabled "отдельно не продаем"
+disabled "на свои не продаем"
 commission "5%/3%"
 
 carrier "AF", "AIR FRANCE"
@@ -742,33 +745,34 @@ commission "1%/0.05"
 carrier "DL", "DELTA AIRLINES"
 ########################################
 
-# example 'svojfk/s'
-# example 'zigjfk/i jfkzig/s'
-# example 'accjfk/k jfkacc/u'
+example 'svojfk/s'
+example 'zigjfk/i jfkzig/s'
+example 'accjfk/k jfkacc/u'
+expr_date "31.03.2014"
 agent "5%"
 subagent "3%"
 subclasses "SIQKLUT"
-check { includes_only(country_iatas.first, 'RU SN GH') and includes_only(country_iatas, 'US') and includes_only(operating_carrier_iatas, 'DL AZ') }
+check { includes_only(country_iatas.first, 'RU SN GH') and includes(country_iatas, 'US') }
 ticketing_method "downtown"
 discount "1.5%"
-disabled "на время отключил dtt"
 commission "5%/3%"
 
-# example 'svojfk/s'
-# example 'zigjfk/i jfkzig/s'
-# example 'accjfk/k jfkacc/u'
+example 'svojfk/d/az:dl'
+example 'zigjfk/i/az:dl jfkzig/s/az:dl'
+example 'accjfk/l/az:dl jfkacc/n/az:dl'
+expr_date "31.03.2014"
 agent "5%"
 subagent "3%"
-subclasses "SIQKLUT"
-check { includes_only(country_iatas.first, 'RU SN GH') and includes_only(country_iatas, 'US') and includes_only(operating_carrier_iatas, 'DL AZ') }
+subclasses "DIKVTNSL"
+check { includes_only(country_iatas.first, 'RU SN GH') and includes(country_iatas, 'US') and includes_only(operating_carrier_iatas, 'AZ') }
 ticketing_method "downtown"
+important!
 discount "1.5%"
-disabled "на время отключил dtt"
 commission "5%/3%"
 
-example 'okocdg cdgoko/ab'
-example 'cdgoko'
-example 'okomia'
+# example 'okocdg cdgoko/ab'
+# example 'cdgoko'
+# example 'okomia'
 #example 'jfkbwi' временно выключен
 agent    "1% от опубл. тарифа DL на трансатлантический перелет при перевозке, начинающейся в Европе, Азии или Африке;"
 agent    "1% от опубл. тарифа других авиакомпаний в комбинации с опубл. тарифом DL на трансатлант.перелет при перевозке, нач.в Европе, Азии или Африке;"
@@ -778,6 +782,7 @@ subagent "0,5% от опубл. тарифа других авиакомпани
 subagent "0,5% от опубл. тарифа DL при внутренних перелетах по США"
 interline :no, :yes
 check { includes(%W(europe asia africa), Country[country_iatas.first].continent ) }
+disabled "включил dtt"
 ## discount "0.3%"
 commission "1%/0.5%"
 
@@ -1421,28 +1426,34 @@ carrier "LH", "LUFTHANSA"
 
 carrier_defaults :consolidator => 0, :our_markup => '0.5%'
 
-example 'dmejfk/Q'
-example 'dmejfk/Q jfkdme/ua/Q'
-agent    "через DTT из России в США и наоборот - 10% (кроме участков US)"
-subagent "через DTT из России в США и наоборот - 8%"
-check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') and not includes(country_iatas, 'CA') and not includes(marketing_carrier_iatas, 'US')}
-subclasses "FADZPQVWSTLK"
-interline :no, :yes
-our_markup "0"
-discount '6.8%'
+example 'svojfk/f'
+example 'svojfk/a jfksvo/z'
+agent    "по классам F, A,D, Z, P у них осталась комиссия 10 %"
+subagent "8%"
+subclasses "FADZP"
+check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+discount "6%"
 commission "10%/8%"
 
-example 'dmejfk'
-example 'dmejfk jfkdme/ua/L'
-agent    "через DTT из России в США и наоборот - 5% (кроме участков US)"
-subagent "через DTT из России в США и наоборот - 3%"
-check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') and not includes(country_iatas, 'CA') and not includes(marketing_carrier_iatas, 'US')}
-#subclasses "YBMUH"
-interline :no, :yes
-our_markup "0"
-discount '2%'
+example 'svojfk/q'
+example 'svojfk/q jfksvo/k'
+agent "по классам Q, V, W, S, T, L, K у них комиссия 8%"
+subagent "6%"
+subclasses "QVWSTLK"
+check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+discount "4%"
+commission "8%/6%"
+
+example 'svojfk/y'
+example 'svojfk/y jfksvo/m'
+agent "по классам Y, B, M, U, H у них комиссия 5%"
+subagent "3%"
+subclasses "YBMUH"
+check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
+ticketing_method "downtown"
+discount "1.5%"
 commission "5%/3%"
 
 example 'dmebcn'
@@ -1497,28 +1508,34 @@ carrier "LX", "SWISS"
 
 carrier_defaults :consolidator => 0, :our_markup => '0.2%'
 
-example 'dmejfk/Q'
-example 'dmejfk/Q jfkdme/os/Q'
-agent    "через DTT из России в США и наоборот - 10%"
-subagent "через DTT из России в США и наоборот - 8%"
-check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') and not includes(country_iatas, 'CA') }
-subclasses "FADZPQVWSTLK"
-interline :no, :yes
-our_markup "0"
-discount '6.8%'
+example 'svojfk/f'
+example 'svojfk/a jfksvo/z'
+agent    "по классам F, A,D, Z, P у них осталась комиссия 10 %"
+subagent "8%"
+subclasses "FADZP"
+check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+discount "6%"
 commission "10%/8%"
 
-example 'dmejfk'
-example 'dmejfk jfkdme/os/L'
-agent    "через DTT из России в США и наоборот - 10%"
-subagent "через DTT из России в США и наоборот - 8%"
-check {includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') and not includes(country_iatas, 'CA') } 
-#subclasses "YBMUH"
-interline :no, :yes
-our_markup "0"
-discount '2%'
+example 'svojfk/q'
+example 'svojfk/q jfksvo/k'
+agent "по классам Q, V, W, S, T, L, K у них комиссия 8%"
+subagent "6%"
+subclasses "QVWSTLK"
+check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+discount "4%"
+commission "8%/6%"
+
+example 'svojfk/y'
+example 'svojfk/y jfksvo/m'
+agent "по классам Y, B, M, U, H у них комиссия 5%"
+subagent "3%"
+subclasses "YBMUH"
+check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
+ticketing_method "downtown"
+discount "1.5%"
 commission "5%/3%"
 
 example 'dmebcn'
@@ -1526,7 +1543,7 @@ example 'bcndme dmebcn/lh'
 agent    "1 руб. с билета по опубл. тарифам на собств. рейсы LX и рейсы Interline с уч. LX.
 (Билеты Interline под кодом LX могут быть выписаны только в случае существования опубл. тарифов и только при условии, что LX выполняет как минимум один рейс. В противном случае по билету должна быть сделана доплата до полного опублик. IATA тарифа)"
 subagent "5 коп. с билета по опубл. тарифам на собств.рейсы LX и рейсы Interline с уч. LX."
-check {includes(country_iatas, 'ES FR IT CZ PT NL CH') } #CHECKME wtf?
+check { includes(country_iatas, 'ES FR IT CZ PT NL CH') } 
 interline :no, :yes
 our_markup "20"
 ## discount '5%'
@@ -1537,7 +1554,6 @@ agent    "1 руб. с билета по опубл. тарифам на соб�
 (Билеты Interline под кодом LX могут быть выписаны только в случае существования опубл. тарифов и только при условии, что LX выполняет как минимум один рейс. В противном случае по билету должна быть сделана доплата до полного опублик. IATA тарифа)"
 subagent "5 коп. с билета по опубл. тарифам на собств.рейсы LX и рейсы Interline с уч. LX."
 interline :no, :yes
-#FIXME с этой странной доплатой выше - что?
 commission "1/0.05"
 
 carrier "LY", "EL AL ISRAEL AIRLINES"
@@ -1761,40 +1777,45 @@ carrier "OK", "CZECH AIRLINES"
 ########################################
 example 'svocdg'
 example 'cdgsvo svocdg/ab'
-agent    "9% от всех опубл. тарифов на рейсы OM (В договоре Interline не прописан.)"
-important!
-subagent "2,5% от опубл. тарифов на собств.рейсы OM"
-interline :no, :unconfirmed
-## discount "5%"
-commission "9%/2.5%"
+agent "1% от опубл. тарифов на собств.рейсы OK;"
+agent "1% от опубл. тарифов на рейсы Interline, если один из сегментов выполнен под кодом OK."
+subagent "уточнить"
+interline :no, :yes
+commission "1%/0.5%"
 
 carrier "OS", "AUSTRIAN AIRLINES"
 ########################################
 
 carrier_defaults :consolidator => 0, :our_markup => '0.2%'
 
-example 'dmejfk/Q'
-example 'dmejfk/Q jfkdme/lx/Q'
-agent    "через DTT из России в США и наоборот - 10%"
-subagent "через DTT из России в США и наоборот - 8%"
-check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') and not includes(country_iatas, 'CA') }
-subclasses "FADZPQVWSTLK"
-interline :no, :yes
-our_markup "0"
-discount '6.8%'
+example 'svojfk/f'
+example 'svojfk/a jfksvo/z'
+agent    "по классам F, A,D, Z, P у них осталась комиссия 10 %"
+subagent "8%"
+subclasses "FADZP"
+check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+discount "6%"
 commission "10%/8%"
 
-example 'dmejfk'
-example 'dmejfk jfkdme/lx/L'
-agent    "через DTT из России в США и наоборот - 10%"
-subagent "через DTT из России в США и наоборот - 8%"
-check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') and not includes(country_iatas, 'CA') }
-#subclasses "YBMUH"
-interline :no, :yes
-our_markup "0"
-discount '2%'
+example 'svojfk/q'
+example 'svojfk/q jfksvo/k'
+agent "по классам Q, V, W, S, T, L, K у них комиссия 8%"
+subagent "6%"
+subclasses "QVWSTLK"
+check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+discount "4%"
+commission "8%/6%"
+
+example 'svojfk/y'
+example 'svojfk/y jfksvo/m'
+agent "по классам Y, B, M, U, H у них комиссия 5%"
+subagent "3%"
+subclasses "YBMUH"
+check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
+ticketing_method "downtown"
+discount "1.5%"
 commission "5%/3%"
 
 example 'dmebcn'
@@ -2002,43 +2023,35 @@ carrier "SN", "BRUSSELS AIRLINES"
 
 carrier_defaults :consolidator => 0, :our_markup => '0.5%'
 
-example 'dmejfk/Q jfkdme/f'
-example 'dmejfk/Q jfkdme/lh/Q'
-agent    "через DTT из России в США и наоборот - 10%"
-subagent "через DTT из России в США и наоборот - 8%"
-check {
-  includes(country_iatas, 'RU UA PL RO') and includes_only(country_iatas.last, 'US') or
-  includes(country_iatas, 'US') and includes_only(country_iatas.last, 'RU UA PL RO')
-}
-subclasses "FADZPQVWSTLK"
-interline :no, :yes
-our_markup "0"
-discount '6.5%'
+example 'svojfk/f'
+example 'svojfk/a jfksvo/z'
+agent    "по классам F, A,D, Z, P у них осталась комиссия 10 %"
+subagent "8%"
+subclasses "FADZP"
+check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+discount "6%"
 commission "10%/8%"
 
-example 'dmejfk/y jfkdme/b'
-example 'dmejfk jfkdme/lh/b'
-agent    "через DTT из России в США и наоборот - 5%"
-subagent "через DTT из России в США и наоборот - 3%"
-check {
-  includes(country_iatas, 'RU UA PL RO') and includes_only(country_iatas.last, 'US') or
-  includes(country_iatas, 'US') and includes_only(country_iatas.last, 'RU UA PL RO')
-}
-subclasses "YBMUH"
-interline :no, :yes
-our_markup "0"
-discount '2%'
+example 'svojfk/q'
+example 'svojfk/q jfksvo/k'
+agent "по классам Q, V, W, S, T, L, K у них комиссия 8%"
+subagent "6%"
+subclasses "QVWSTLK"
+check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
-commission "5%/3%"
+discount "4%"
+commission "8%/6%"
 
-#example 'dmence'
-#agent    "через DTT - 5%"
-#subagent "через DTT - 3%"
-#interline :no
-#our_markup "0"
-#discount '1.5%'
-#commission "5%/3%"
+example 'svojfk/y'
+example 'svojfk/y jfksvo/m'
+agent "по классам Y, B, M, U, H у них комиссия 5%"
+subagent "3%"
+subclasses "YBMUH"
+check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
+ticketing_method "downtown"
+discount "1.5%"
+commission "5%/3%"
 
 example 'svocdg'
 example 'DMEBRU'
@@ -2179,28 +2192,34 @@ commission "1%/0.5%"
 carrier "UA", "UNITED AIRLINES (ГЛОНАСС)"
 ########################################
 
-example 'dmejfk/Q'
-example 'dmejfk/Q jfkdme/lh/Q'
-agent    "через DTT из России в США и наоборот - 10%"
-subagent "через DTT из России в США и наоборот - 8%"
-check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') and not includes(country_iatas, 'CA') }
-subclasses "FADZPQVWSTLK"
-interline :no, :yes
-our_markup "0"
-discount '6.9%'
+example 'svojfk/f'
+example 'svojfk/a jfksvo/z'
+agent    "по классам F, A,D, Z, P у них осталась комиссия 10 %"
+subagent "8%"
+subclasses "FADZP"
+check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+discount "6%"
 commission "10%/8%"
 
-example 'dmejfk'
-example 'dmejfk jfkdme/lh/L'
-agent    "через DTT из России в США и наоборот - 10%"
-subagent "через DTT из России в США и наоборот - 8%"
-check { includes(country_iatas, 'RU UA PL RO') and includes(country_iatas, 'US') and not includes(country_iatas, 'CA') }
-#subclasses "YBMUH"
-interline :no, :yes
-our_markup "0"
-discount '1.8%'
+example 'svojfk/q'
+example 'svojfk/q jfksvo/k'
+agent "по классам Q, V, W, S, T, L, K у них комиссия 8%"
+subagent "6%"
+subclasses "QVWSTLK"
+check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+discount "4%"
+commission "8%/6%"
+
+example 'svojfk/y'
+example 'svojfk/y jfksvo/m'
+agent "по классам Y, B, M, U, H у них комиссия 5%"
+subagent "3%"
+subclasses "YBMUH"
+check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
+ticketing_method "downtown"
+discount "1.5%"
 commission "5%/3%"
 
 carrier "UL", "SRI LANKAN AIRLINES"

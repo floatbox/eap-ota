@@ -84,7 +84,9 @@ select: function(id) {
     }
     var that = this;
     setTimeout(function() { // без таймаута в файрфоксе мигает заголовок
-        if (that.selected) {
+        if (id === this.selected) {
+            return;
+        } else if (that.selected) {
             var ot = results[that.selected];
             ot.control.removeClass('rt-selected');
             ot.content.hide();
@@ -96,10 +98,10 @@ select: function(id) {
         page.location.set('offer', id);
         results.filters.toggleDisabled(id === 'matrix');
 
-        _kmq.push(['record', id.capitalize() + ' tab selected']);
+        _kmq.push(['record', 'RESULTS: ' + id + ' tab selected']);
         _gaq.push(['_trackPageview', page.location.track()]);
         _yam.hit(page.location.track());
-        
+
     }, 20);
 },
 selectFirst: function() {

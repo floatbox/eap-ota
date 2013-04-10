@@ -182,5 +182,5 @@ window.onerror = function(text) {
     } else {
         type = 'В форме поиска';
     }
-    trackEvent('Ошибка JS', type, text);
+    _gaq.push(['_trackEvent', 'Ошибка JS', type, text]);
 }*/

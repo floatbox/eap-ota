@@ -160,7 +160,7 @@ loadSummary: function(values, process) {
             if (that.valid && data.valid) {
                 results.update(data);
                 if (!values.query_key) {
-                    _kmq.push(['record', 'Find button enabled']); // Для восстановления формы по урлу не считаем
+                    _kmq.push(['record', 'SEARCH: button enabled']); // Для восстановления формы по урлу не считаем
                 }
             }
             if (values.query_key) {

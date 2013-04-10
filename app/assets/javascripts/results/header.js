@@ -62,7 +62,7 @@ apply: function() {
         results.load();
         results.show();
         var query = '/search?query=' + data.titles.header.replace(/&nbsp;/g, ' ');
-        _kmq.push(['record', 'Find button pressed']);
+        _kmq.push(['record', 'SEARCH: button pressed']);
         _gaq.push(['_trackPageview', query]);
         _yam.hit(query);        
     }
