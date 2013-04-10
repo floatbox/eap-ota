@@ -103,7 +103,6 @@
     float: left;
     margin-left: 10px;
 }
-
 .phu-control {
     position: relative;
     padding: 10px 15px;
@@ -125,6 +124,7 @@
     z-index: -1;
 }
 
+/* Popup */
 .phu-popup {
     display: none;
     position: absolute;
@@ -137,8 +137,26 @@
     font-size: 12px;
     line-height: 14px;
 }
+.phu-stator {
+    width: 260px;
+    overflow: hidden;
+    border-bottom: 1px solid #ada977;
+}
+.phu-slider {
+    position: relative;
+    width: 520px;
+    overflow: hidden;
+}
 .phu-section {
     padding: 13px 15px 15px;
+}
+.phu-slider .phu-section {
+    float: left;
+    width: 230px;
+}
+.phu-signup,
+.phu-forgot {
+    display: none;
 }
 .phus-title {
     margin: 0 0 13px;
@@ -184,12 +202,17 @@
     font-size: 13px;
     line-height: 15px;    
 }
-.phu-forgot {
+.phu-forgot-link,
+.phu-remember-link {
     margin-top: 10px;
     float: right;
     color: #e0dfd3;
 }
-.phu-forgot:hover {
+.phu-forgot-link:hover,
+.phu-remember-link:hover {
+    color: #FFF;
+}
+.phu-signup-link:hover {
     color: #FFF;
 }
 .phu-active .phu-control {
@@ -201,6 +224,7 @@
     display: block;
 }
 
+/* User */
 .phu-link {
     padding: 10px 15px;
     font-size: 13px;
