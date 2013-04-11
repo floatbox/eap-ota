@@ -18,6 +18,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
 
   def index
     # так тоже можно. просто выставляет параметры обычных фильтров
+    add_predefined_filter 'Extra Pay', {:scope => 'extra_pay'}, 'extra_pay'
     add_predefined_filter 'Unticketed', Order.unticketed.scope_attributes, 'unticketed'
     add_predefined_filter 'Processing Ticket', Order.processing_ticket.scope_attributes, 'processing_ticket'
     add_predefined_filter 'Error Ticket', Order.error_ticket.scope_attributes, 'error_ticket'
