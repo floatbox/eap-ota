@@ -47,6 +47,26 @@ amadeus:
   cancel_stale: no
   ignored_carriers: []
   forbid_class_changing: no
+  default_office: MOWR228FA
+  offices:
+    MOWR228FA:
+      alias: booking
+      # alias: direct
+      organization: NMC-RUSSIA
+      password: MI8VX87M
+    MOWR2233B:
+      alias: ticketing
+      # alias: aviacenter
+      organization: NMC-RUSSIA
+      password: MI8VX87M
+    NYC1S21HX:
+      alias: downtown
+      organization: NMC-US
+      password: MI8VX87M
+    IEVU228GZ:
+      alias: zagorye
+      organization: NMC-UKRAIN
+      password: AMADEUS
 payment:
   # FIXME убить в локальных конфигах
   use_discount: no

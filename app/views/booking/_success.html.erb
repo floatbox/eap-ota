@@ -19,7 +19,7 @@
     <p class="bfrsm-pnr"><a target="_blank" href="<%= pnr_path %>">Распечатать подтверждение</a></p>
     <p class="bfrsm-text bfrsm-number"><%= raw t 'booking.success.pnr', :number => content_tag(:span, pnr_number, :class => 'bfr-pnr') %></p>
 </div>
-<% ostrovok_url = ostrovok_uri(@order_form) %>
+<% ostrovok_url = ostrovok_link(@order_form) %>
 <% insurance_url = sravnikupi_insurance_uri(@order_form) %>
 <% if ostrovok_url || insurance_url %>
 <div class="bfrs-addition">

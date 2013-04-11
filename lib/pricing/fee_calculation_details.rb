@@ -3,7 +3,7 @@ module Pricing
   module FeeCalculationDetails
     def fee_calculation_details
       result = <<eos
-        1. Дата и время вормирования заказа: #{created_at.strftime('%d.%m.%y %H:%M')}<br/>
+        1. Дата и время формирования заказа: #{created_at.strftime('%d.%m.%y %H:%M')}<br/>
         2. #{commission_carrier}:Агент #{commission_agent_comments}<br/>
             Субагент #{commission_subagent_comments}<br/>
         3. тариф: #{price_fare.round(2)}<br/>
