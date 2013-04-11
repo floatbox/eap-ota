@@ -19,10 +19,10 @@ module HotelsHelper
     return unless order_form
     return unless order_form.recommendation
     journey = order_form.recommendation.journey
-    start_date = journey.segments.first.dept_date
+    start_date = journey.segments.first.arrv_date
     end_date =
       if journey.segments.count > 1
-        journey.segments.last.arrv_date
+        journey.segments.last.dept_date
       else
         start_date + 3.days
       end
