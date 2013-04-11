@@ -2,43 +2,23 @@
 module Amadeus
   module Request
     class SecurityAuthenticate < Amadeus::Request::Base
-      attr_accessor :office
+      attr_accessor :office, :organization, :password
 
       def needs_session?
         false
       end
 
       def organization_id
-        case office[0,3]
-        when 'MOW'
-          'NMC-RUSSIA'
-        when 'NYC'
-          'NMC-US'
-        when 'IEV'
-          'NMC-UKRAIN'
-        else
-          raise "Please define organization_id for office id #{office}"
-        end
+        @organization || Conf.amadeus.offices[office]["organization"]
       end
 
-      # пока лишь бы работало
+      # Base64.decode64 от того, что в xml
       def password
-        case office
-        when 'IEVU228GZ'
-          'QU1BREVVUw=='
-        else
-          'TUk4Vlg4N00='
-        end
+        @password || Conf.amadeus.offices[office]["password"]
       end
 
-      # TODO посчитать самим? видимо, длина после base64-декодирования
-      def password_length
-        case office
-        when 'IEVU228GZ'
-          7
-        else
-          8
-        end
+      def password_b64
+        Base64.encode64(password).strip
       end
 
     end
