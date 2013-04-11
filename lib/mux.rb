@@ -100,7 +100,7 @@ class Mux
     reqs = (lite || !Conf.amadeus.nonstop_search) ? [request_ws] : [request_ns, request_ws]
     amadeus_driver = async_amadeus_driver
     reqs.each do |req|
-      session = Amadeus::Session.book
+      session = Amadeus::Session.book(Amadeus::Session::BOOKING)
       amadeus = Amadeus::Service.new(:session => session, :driver => amadeus_driver)
       amadeus.async_fare_master_pricer_travel_board_search(form, req) do |res|
         amadeus.release
