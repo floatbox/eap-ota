@@ -70,6 +70,9 @@ init: function() {
         }
         this.validate(true);        
     }
+    if (!this.iphoneLayout) {
+        booking.countdown.start();
+    }    
 },
 position: function() {
     return this.el.offset().top - 36 - results.header.height;
@@ -239,6 +242,7 @@ process: function(s) {
         }, 60000);
         break;
     case 'success':
+        booking.countdown.stop();
         _kmq.push(['record', 'BOOKING: SUCCESS']);
         _gaq.push(['_trackPageview', '/booking/success']);
         _yam.hit('/booking/success');

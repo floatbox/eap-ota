@@ -97,7 +97,7 @@
 .bf-placeholder {
     display: none;
     position: absolute;
-    margin: 7px 6px;
+    margin: 8px 7px;
     font-size: 12px;
     line-height: 16px;
     color: #B0B0B0;
@@ -297,6 +297,9 @@
 .bfp-date {
     float: left;
     border: 1px solid #ebe2b2;   
+}
+.bfpd-placeholder {
+    margin: 7px 6px;
 }
 .bfpd-item {
     float: left;

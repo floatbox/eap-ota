@@ -98,6 +98,40 @@
     background: #edede3;
 }
 
+/* Обртаный отсчёт */
+.bf-timer {
+    background: #FBF4CB;
+    padding: 18px 20px;
+}
+.bft-content {
+    overflow: hidden;
+    background: #FFF;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.2);
+}
+.bft-counter {
+    float: right;
+    width: 260px;
+    height: 73px;
+    background: #3581c0;
+    text-align: center;
+    color: #FFF;
+}
+.bft-expires {
+    background: #bf564d;
+}
+.bftc-title {
+    padding-top: 10px;
+}
+.bftc-value {
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 36px;
+}
+.bft-description {
+    margin: 0 274px 0 14px;
+    padding: 8px 0 0;
+}
+
 /* Нижняя часть */
 .bf-footer {
     margin: 0 20px;

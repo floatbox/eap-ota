@@ -159,6 +159,7 @@ processPrice: function(context, dp) {
     content.html(content.html().absorb(dp > 0 ? 'дороже' : 'дешевле', sum));
 },
 cancel: function() {
+    this.countdown.stop();
     results.filters.show(true);
     results.header.select.hide();
     if (results.ready) {
@@ -236,3 +237,35 @@ function googleSectionalElementInit() {
         background: 'transparent'
     }, 'google_sectional_element');
 }
+
+/* Countdown */
+booking.countdown = {
+start: function() {
+    var that = this;
+    var from = new Date().getTime();
+    this.el = booking.el.find('.bf-timer');
+    this.counter = this.el.find('.bft-counter');
+    this.value = this.el.find('.bftc-value');
+    this.timer = setInterval(function() {
+        var now = new Date().getTime();
+        var time = Math.max(0, 1200 - Math.round((now - from) / 1000));
+        that.show(time);
+        if (time === 0) {
+            that.stop();
+        }
+    }, 1000);
+    this.expires = false;
+},
+show: function(time) {
+    var m = Math.floor(time / 60);
+    var s = time % 60;
+    this.value.text((m < 10 ? '0:0' : '0:') + m + (s < 10 ? ':0' : ':') + s);
+    if (time < 300 && !this.expires) {
+        this.counter.addClass('bft-expires');
+        this.expires = true;
+    }
+},
+stop: function() {
+    clearInterval(this.timer);
+}
+};
