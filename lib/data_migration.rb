@@ -4,7 +4,50 @@ require 'net/http'
 require 'uri'
 require 'csv'
 
+# народ, помечайте миграции в PaperTrail! однажды может здорово пригодиться.
+
 module DataMigration
+
+  # set price acquiring compensation and price difference
+  def self.upgrade_to_fee_schemas
+    PaperTrail.controller_info = {:done => 'upgrade_to_fee_schemas'}
+    Order.where(fee_scheme: '').order('created_at DESC').map do |o|
+      o.fee_scheme = Conf.site.fee_scheme
+      $tickets_are_loading = true
+      o.tickets.every.save!
+      $tickets_are_loading = false
+      o.update_prices_from_tickets
+    end
+  end
+
+  def self.fill_in_parent_pnr_number
+    PaperTrail.controller_info = {:done => 'fill_in_parent_pnr_number'}
+    orders = Order.where('(pnr_number is null or pnr_number = "") and (parent_pnr_number is null or parent_pnr_number = "") and payment_type = "card" and payment_status = "charged"').includes(:order_comments)
+    orders.each do |o|
+      parent_pnr_from_desc = o.description.scan(/\b([A-ZА-Я\d]{6})\b/)
+      comment_text =  o.order_comments.every.text.join(' ')
+      parent_ids = comment_text.scan(/\/orders\/show\/(\d+)/)
+      raw_pnr_number = comment_text.scan(/\b([A-ZА-Я\d]{6})\b/)
+
+      parent_pnr = ''
+      if parent_pnr_from_desc.count == 1
+        parent_pnr = parent_pnr_from_desc[0][0]
+      elsif parent_ids.count == 1 && (parent = Order.find_by_id(parent_ids[0][0]))
+        parent_pnr = parent.pnr_number
+      elsif raw_pnr_number.count == 1
+        parent_pnr = raw_pnr_number[0][0]
+      end
+      if parent_pnr.present?
+        o.update_attributes(parent_pnr_number: parent_pnr)
+      else
+        print "** Got nothing #{o.id}: ", o.description, comment_text, "\n"
+      end
+    end
+  end
+
+  def self.set_price_with_payment_commission_in_tickets
+    Order.order('id DESC').every.update_price_with_payment_commission_in_tickets
+  end
 
   def self.set_status_in_refunds
     Ticket.update_all('status = "processed"', 'kind = "refund" AND processed = 1')

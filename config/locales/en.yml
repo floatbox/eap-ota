@@ -2,7 +2,12 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  i18n:
+    plural:
+      # FIXME Заглушка, чтобы russian не склонял по-русски английские слова
+      # в продакшне. Пока лень разбираться, почему он так делает.
+      # когда появятся другие локализации, разобраться все-таки придется.
+      rule: "simple rules"
   time:
     formats:
       long: "%d %b %Y, %H:%M"

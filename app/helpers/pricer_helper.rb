@@ -1,19 +1,13 @@
 # encoding: utf-8
 module PricerHelper
 
-  def nbsp(string)
-    html_escape(string).gsub(/ +/, '&nbsp;').html_safe
-  end
-
   def human_duration(duration)
     hours, minutes = duration.divmod(60)
     unless hours.zero?
-      human_hours =
-        "#{ hours }&nbsp;#{ Russian.pluralize(hours, 'час', 'часа', 'часов') }"
+      human_hours = t('time.hours', :count => hours)
     end
     unless minutes.zero?
-      human_minutes =
-        "#{ minutes }&nbsp;#{ Russian.pluralize(minutes, 'минута', 'минуты', 'минут') }"
+      human_minutes = t('time.minutes', :count => minutes)
     end
     [human_hours, human_minutes].compact.join(' ').html_safe
   end
@@ -37,12 +31,10 @@ module PricerHelper
   def short_human_duration duration
     hours, minutes = duration.divmod(60)
     unless hours.zero?
-      human_hours =
-        "#{ hours }&nbsp;ч"
+      human_hours = t('time.h', :h => hours)
     end
     unless minutes.zero?
-      human_minutes =
-        "#{ minutes }&nbsp;мин"
+      human_minutes =t('time.min', :m => minutes)
     end
     [human_hours, human_minutes].compact.join(' ').html_safe
   end  
@@ -56,16 +48,17 @@ module PricerHelper
   end
   
   def full_airport_and_term location, term
-    result = ["#{ location.name }"]
+    result = [dict(location)]
     if term
-      result << "терминал&nbsp;#{ term }"
+      result << t('offer.details.terminal', :term => term)
     end
     result.join(', ').html_safe
-  end    
-
+  end
+  
   def recommendation_prices r
     prices = {
       :RUR => r.price_with_payment_commission.round.to_i,
+      :RUR_raw => r.price_total.round.to_i,
       :RUR_pure => r.price_fare_and_tax.round.to_i
     }
     prices.to_json
@@ -165,10 +158,6 @@ module PricerHelper
     segment.flights.group_by(&:operating_carrier_name).max_by{|carrier, flights| flights.sum(&:duration) }[1].first.operating_carrier
   end
   
-  def segment_title segment
-    "Перелет #{ nbsp(segment.departure.city.case_from) } #{ nbsp(segment.arrival.city.case_to) }".html_safe
-  end
-
   # FIXME сломается, если делать мерж двух прайсеров с одинаковыми рекомендациями
   # пофиксить мерж?
   def segment_id segment
@@ -182,64 +171,43 @@ module PricerHelper
     for flight, layover in segment.flights.zip(segment.layover_durations)
       parts << {
         :type => 'flight',
-        :title => "Перелёт #{ flight.departure.city.case_from } #{ flight.arrival.city.case_to }, #{ human_duration(flight.duration) }",
+        :title => t('offer.summary.flight', :from => flight.departure.city.case_from, :to => flight.arrival.city.case_to, :duration => human_duration(flight.duration)),
         :duration => flight.duration
       }
       if layover
         parts << {
           :type => 'layover',
-          :title => "Пересадка #{ flight.arrival.city.case_in }, #{ human_duration(layover) }",
+          :title => t('offer.summary.layover', :city => flight.arrival.city.case_in, :duration => human_duration(layover)),
           :duration => layover
         }
       end
     end
     parts
   end  
-  
+
   def human_layovers_large segment
-    result = []
-    durations = segment.layover_durations
-    segment.layovers.each_with_index{|layover, i|
-      result << "#{ short_human_duration(durations[i]) } #{ layover.city.case_in }"
-    }
-    result.to_sentence
-  end  
+    segment.layovers.zip( segment.layover_durations ).map do |layover, duration|
+      "#{ short_human_duration(duration) } #{ dict(layover.city, :in) }"
+    end.to_sentence
+  end
 
   def human_layovers_medium segment
-    'через ' + segment.layovers.map{|layover| layover.city.case_to.gsub(/^\S+ /, '') }.to_sentence
+    t('offer.summary.through', :cities => segment.layovers.map{|layover| layover.city.case_to.gsub(/^\S+ /, '') }.to_sentence)
   end
 
   def with_layovers segment
-    counts = ['пересадкой', 'двумя пересадками', 'тремя пересадками']
-    layovers = segment.flights[0..-2].map {|flight| flight.arrival.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;')
-    "c #{ counts[segment.layover_count - 1] } #{ layovers }".html_safe
+    layovers = dict( segment.layovers.map(&:city), :in )
+    t('offer.details.layovers', :count => segment.layover_count, :cities => layovers).html_safe
   end
 
-  def with_technical_stops flight
-    prefix = flight.technical_stop_count == 1 ? 'промежуточной посадкой' : 'промежуточными посадками'
-    stops = flight.technical_stops.map {|tstop| tstop.airport.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;')
-    "c #{ prefix} #{ stops }".html_safe
+  def technical_stops flight
+    stops = dict( flight.technical_stops.map(&:city), :in )
+    t('offer.details.stopovers', :count => flight.technical_stop_count, :cities => stops).html_safe
   end
 
   def human_cabin_nom cabin
     titles = {'Y' => 'Эконом-класс', 'C' => 'Бизнес-класс', 'F' => 'Первый класс'}
     titles[cabin]
-  end
-
-  def human_cabin_ins cabin
-    titles = {'Y' => 'эконом-классом', 'C' => 'бизнес-классом', 'F' => 'первым классом'}
-    titles[cabin]
-  end    
-
-  # отжирало 15% cpu time! теперь не отжирает
-  def bar_options segment
-    dpt = time_in_minutes(segment.departure_time)
-    arv = time_in_minutes(segment.arrival_time)
-    {
-      :dpt => dpt, # местное время, минут
-      :arv => dpt + segment.total_duration, # местное время в точке вылета на момент прилета, минут
-      :shift => arv - (dpt + segment.total_duration) # для москвы-минска: -60
-    }
   end
 
   def fmt_departure flight
@@ -262,10 +230,17 @@ module PricerHelper
     Russian.pluralize(sum, 'рубль', 'рубля', 'рублей')
   end
 
-  def human_price price
-    rounded = price.round.to_i
-    "#{ rounded }&nbsp;#{ rubles(rounded) }".html_safe
+  def short_price price
+    t('currencies.RUR.sign', :value => price.round.to_i).html_safe
   end  
+
+  def human_price price
+    t('currencies.RUR', :count => price.round.to_i).html_safe
+  end  
+
+  def decorate_price price, before = '', after = ''
+    price.gsub(/(\d+)/){|sum| before + sum.gsub(/(\d+)(\d{3})/, '\1<span class="thousand">\2</span>') + after }.html_safe
+  end
 
   def human_date date
     I18n.l(Date.strptime(date, '%d%m%y'), :format => '%e %B').strip
@@ -273,8 +248,8 @@ module PricerHelper
 
   def date_with_dow dmy
     date = Date.strptime(dmy, '%d%m%y')
-    days = ['в понедельник', 'во вторник', 'в среду', 'в четверг', 'в пятницу', 'в субботу' , 'в воскресенье']
-    I18n.l(date, :format => '%e %B') + ', ' + days[date.days_to_week_start]
+    days = t('date.pre_day_names')
+    l(date, :format => :human) + ', ' + days[date.wday]
   end
 
   def human_layovers_count count
@@ -282,26 +257,18 @@ module PricerHelper
     count == 1 ? 'пересадкой' : (numbers[count - 1] + ' пересадками —')
   end
 
+  # FIXME not used anymore
   def layovers_in flights
-    flights.map {|flight| flight.arrival.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;').html_safe
+    dict( flights.map(&:arrival_city), :in )
   end
 
+  # FIXME not used anymore
   def technical_stops_in tstops
-    tstops.map {|tstop| tstop.airport.city.case_in }.to_sentence.gsub(/ (?!и )/, '&nbsp;').html_safe
+    dict( tstops.map(&:city), :in )
   end
 
   def segments_departure variant
     variant.segments.map {|segment| segment.departure_time }.join(' ')
-  end
-
-  def human_cabin_nom cabin
-    titles = {'Y' => 'Эконом-класс', 'C' => 'Бизнес-класс', 'F' => 'Первый класс'}
-    titles[cabin]
-  end
-
-  def human_cabin_ins cabin
-    titles = {'Y' => 'эконом-классом', 'C' => 'бизнес-классом', 'F' => 'первым классом'}
-    titles[cabin]
   end
 
   def segment_flight_numbers segment

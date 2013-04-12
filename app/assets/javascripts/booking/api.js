@@ -23,6 +23,7 @@ booking.prebook = function(query_key, hash, partner, marker) {
         url: '/booking/preliminary_booking?query_key=' + query_key + '&recommendation=' + hash + '&partner=' + partner + '&marker=' + marker + '&variant_id=1',
         success: function(result) {
             if (result && result.success) {
+                _kmq.push(['record', 'PRE-BOOKING: success']);
                 that.load(result.number, result.changed_booking_classes);
             } else {
                 that.failed();
@@ -41,10 +42,9 @@ booking.load = function(number, price_changed) {
     }, function(content) {
         window.location.hash = number;
         that.view(content);
-        var units = lang.currencies.RUR;
-        var price = Number(that.content.find('.bf-newprice').attr('data-price')).decline(units[0], units[1], units[2]);
+        var price = I18n.t('currencies.RUR', {count: Number(that.content.find('.bf-newprice').attr('data-price'))});
         var button = $('#obb-template');
-        button.find('.obb-title').html(lang.price.buy.absorb(price)).click(function() {
+        button.find('.obb-title').html(I18n.t('offer.price.buy').absorb(price)).click(function() {
             $w.smoothScrollTo(that.form.el.offset().top);
             $w.queue(function(next) {
                 $('#bfp0-last-name').focus();
@@ -59,26 +59,31 @@ booking.load = function(number, price_changed) {
                 that.cancel();
             });
             newprice.show();
-            trackPage('/booking/price_rising');
+            _kmq.push(['record', 'PRE-BOOKING: price changed']);
+            _gaq.push(['_trackPageview', '/booking/price_rising']);
         }
         that.content.find('.b-header').prepend(button);
         that.content.find('.bffc-link').html('выбрать другой вариант');
         that.content.delegate('.od-alliance', 'click', function(event) {
             var el = $(this);
             hint.show(event, 'В альянс ' + el.html() + ' входят авиакомпании: ' + el.attr('data-carriers') + '.');
-        });            
+        });
         results.subscription.init($('#booking-subscription'));
         $('#booking-disclaimer').prependTo(that.content).show();
     });
 };
 booking.failed = function() {
-    this.cancel();
+    _kmq.push(['record', 'PRE-BOOKING: fail']);
+    var that = this;
+    setTimeout(function() {
+        that.cancel();
+    }, 500);
 };
 booking.cancel = function() {
     window.location = '/#' + this.query_key;
 };
 
-/* Errors */
+/* Errors
 window.onerror = function(text) {
-    trackEvent('Ошибка JS', 'При переходе с метапоиска', text);
-}
+    _gaq.push(['_trackEvent', 'Ошибка JS', 'При переходе с метапоиска', text]);
+} */

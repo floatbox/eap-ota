@@ -8,7 +8,7 @@
 <div class="oss-carrier">
     <img class="ossc-icon" src="<%= carrier.icon_url %>">
     <div class="ossc-title">
-        <span class="ossct-text" title="<%= carrier.name %>"><%= carrier.name %></span>
+        <span class="ossct-text" title="<%= dict(carrier) %>"><%= dict(carrier) %></span>
         <span class="ossct-overlay"></span>
     </div>
 </div>
@@ -16,9 +16,9 @@
     <div class="oss-dpt">
         <h5 class="oss-time"><%= fmt_time(segment.departure_time) %></h5>
         <% if segment_country[:dpt] %>
-            <p class="oss-airport"><%= segment.departure.city.name %></p>
+            <p class="oss-airport"><%= dict(segment.departure.city) %></p>
         <% else %>
-            <p class="oss-airport"><%= segment.departure.name %><% if segment.departure_term %>&nbsp;<span class="ossa-term"><%= segment.departure_term %></span><% end %></p>
+            <p class="oss-airport"><%= dict(segment.departure) %><% if segment.departure_term %>&nbsp;<span class="ossa-term"><%= segment.departure_term %></span><% end %></p>
         <% end %>
     </div>
     <div class="oss-parts">
@@ -33,16 +33,16 @@
             <p class="ossi-l"><%= raw human_layovers_large(segment) %></p>
         <% else %>
             <% flight = segment.flights.first %>
-            <p class="ossi-m">прямой, <%= flight.equipment_type_name %></p>
-            <p class="ossi-l">прямой, <%= flight.marketing_carrier_iata %>&nbsp;<%= flight.flight_number %>, <%= flight.equipment_type_name %></p>
+            <p class="ossi-m">прямой, <%= dict(flight.equipment_type) %></p>
+            <p class="ossi-l">прямой, <%= flight.marketing_carrier_iata %>&nbsp;<%= flight.flight_number %>, <%= dict(flight.equipment_type) %></p>
         <% end %>
     </div>
     <div class="oss-arv">
         <h5 class="oss-time"><%= fmt_time(segment.arrival_time) %></h5>
         <% if segment_country[:arv] %>
-            <p class="oss-airport"><%= segment.arrival.city.name %></p>
+            <p class="oss-airport"><%= dict(segment.arrival.city) %></p>
         <% else %>
-            <p class="oss-airport"><%= segment.arrival.name %><% if segment.arrival_term %>&nbsp;<span class="ossa-term"><%= segment.arrival_term %></span><% end %></p>
+            <p class="oss-airport"><%= dict(segment.arrival) %><% if segment.arrival_term %>&nbsp;<span class="ossa-term"><%= segment.arrival_term %></span><% end %></p>
         <% end %>        
     </div>
 </div>

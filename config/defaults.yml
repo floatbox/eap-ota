@@ -6,6 +6,7 @@ site:
   forbidden_delivery: no
   store_flights: no
   host: 'http://localhost:3000'
+  fee_scheme: v2
   production:
     host: 'https://eviterra.com'
   staging:
@@ -46,6 +47,26 @@ amadeus:
   cancel_stale: no
   ignored_carriers: []
   forbid_class_changing: no
+  default_office: MOWR228FA
+  offices:
+    MOWR228FA:
+      alias: booking
+      # alias: direct
+      organization: NMC-RUSSIA
+      password: MI8VX87M
+    MOWR2233B:
+      alias: ticketing
+      # alias: aviacenter
+      organization: NMC-RUSSIA
+      password: MI8VX87M
+    NYC1S21HX:
+      alias: downtown
+      organization: NMC-US
+      password: MI8VX87M
+    IEVU228GZ:
+      alias: zagorye
+      organization: NMC-UKRAIN
+      password: AMADEUS
 payment:
   # FIXME убить в локальных конфигах
   use_discount: no
@@ -58,6 +79,14 @@ payment:
   # использую ее при корректировке цен
   commission: 2.85%
   test_multiplier: ~
+  # стоимость доставки
+  price_delivery: 400
+  # дефолтное значение штрафа за возврат
+  # писать хэшом вида
+  # refund_fees:
+  #   2013-02-12: 500
+  #   2013-03-05: 200
+  refund_fees: {}
   production:
     skip_checksum_validation: no
 cash:

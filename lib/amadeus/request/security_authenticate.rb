@@ -2,21 +2,23 @@
 module Amadeus
   module Request
     class SecurityAuthenticate < Amadeus::Request::Base
-      attr_accessor :office
+      attr_accessor :office, :organization, :password
 
       def needs_session?
         false
       end
 
       def organization_id
-        case office[0,3]
-        when 'MOW'
-          'NMC-RUSSIA'
-        when 'NYC'
-          'NMC-US'
-        else
-          raise "Please define organization_id for office id #{office}"
-        end
+        @organization || Conf.amadeus.offices[office]["organization"]
+      end
+
+      # Base64.decode64 от того, что в xml
+      def password
+        @password || Conf.amadeus.offices[office]["password"]
+      end
+
+      def password_b64
+        Base64.encode64(password).strip
       end
 
     end

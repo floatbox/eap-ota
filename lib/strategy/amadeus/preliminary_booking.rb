@@ -1,7 +1,8 @@
 # encoding: utf-8
 module Strategy::Amadeus::PreliminaryBooking
+  CABINS_MAPPING = {'M' => 'E', 'W' => 'E', 'Y' => 'E', 'C' => 'B', 'F' => 'F'}
 
-  def check_price_and_availability(forbid_class_changing= Conf.amadeus.forbid_class_changing)
+  def check_price_and_availability(forbid_class_changing = Conf.amadeus.forbid_class_changing)
     @forbid_class_changing = forbid_class_changing
     unless TimeChecker.ok_to_book(@rec.dept_date + 1.day)
       logger.error 'Strategy::Amadeus::Check: time criteria missed'
@@ -51,8 +52,9 @@ module Strategy::Amadeus::PreliminaryBooking
         logger.info "strategy::amadeus::best: best_informative_pricing updated after sale: (#{@rec.booking_classes.join(' ')}) " +
           "new prices: #{resp.recommendations.map{|rec| rec.price_fare+rec.price_tax}} (#{resp.recommendations.map{|rec| rec.booking_classes.join(' ')}.join(', ')})"
         new_rec = resp.recommendations[0]
-        return if new_rec.booking_classes == @rec.booking_classes || new_rec.booking_classes.count != @rec.booking_classes.count
+        return if new_rec.booking_classes == @rec.booking_classes || new_rec.booking_classes.count != @rec.booking_classes.count || cabin_changed?(@rec, new_rec)
         @rec.booking_classes = new_rec.booking_classes
+        @rec.cabins = new_rec.cabins
       else
         logger.error "strategy::amadeus::best: best_informative_pricing updated after sale error: #{resp.error_message}"
         return
@@ -105,6 +107,10 @@ module Strategy::Amadeus::PreliminaryBooking
       return
     end
     @rec
+  end
+
+  def cabin_changed?(rec1, rec2)
+    rec1.cabins.map{|c| CABINS_MAPPING[c]} != rec2.cabins.map{|c| CABINS_MAPPING[c]}
   end
 
 end

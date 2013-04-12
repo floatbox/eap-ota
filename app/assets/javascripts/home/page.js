@@ -5,7 +5,6 @@ init: function() {
     this.location.init();
     this.title.init();
 
-    Queries.init();
     search.init();
     results.init();
     booking.init();
@@ -13,7 +12,7 @@ init: function() {
     preloadImages('/images/search/dates.png');
     preloadImages('/images/results/progress.gif', '/images/results/fshadow.png', '/images/results/slider.png');
     preloadImages('/images/booking/progress-w.gif', '/images/booking/progress-b.gif');
-    
+
     if (this.location.booking) {
         this.restoreBooking(this.location.search, this.location.booking);
     } else if (this.location.search) {
@@ -22,7 +21,7 @@ init: function() {
         search.map.resize();
         this.reset();
         this.loadLocation();
-        trackPage();
+        _gaq.push(['_trackPageview']);
     }
     
     $(function() {
@@ -31,10 +30,10 @@ init: function() {
             search.map.load();
         }
     });
-
+    
 },
 innerHeight: function() {
-    return $w.height() - 36 - Queries.height;
+    return $w.height() - 36;
 },
 loadLocation: function() {
     $.get('/whereami', function(data) {
@@ -60,8 +59,6 @@ restoreBooking: function(rkey, bkey) {
     if (!browser.ios) {
         results.header.el.addClass('rh-fixed');
         page.header.addClass('fixed');    
-        Queries.live.active = false;
-        Queries.el.hide();
     }    
     results.header.button.hide();
     results.header.select.show();
@@ -82,11 +79,7 @@ reset: function() {
 },
 showData: function(data) {
     var that = this;
-    setTimeout(function() { // задержка, чтобы синхронизировать появление таба с прокруткой окна
-        Queries.history.add(data.query_key, data.short);
-        Queries.history.select(data.query_key);
-    }, 300);
-    this.title.set(lang.pageTitle.search.absorb(data.titles.window));
+    this.title.set(I18n.t('page.search', {title: data.titles.window}));
     if (this.location.search !== data.query_key) {
         this.location.set('search', data.query_key);
     }
@@ -163,6 +156,9 @@ update: function() {
     window.location.hash = parts.join('/');    
     this.hash = window.location.hash;
     $w.scrollTop(st);
+},
+track: function() {
+    return '/#' + this.hash.replace('#', '');
 }
 };
 
@@ -176,8 +172,7 @@ set: function(title) {
 }
 };
 
-
-/* Errors */
+/* Errors 
 window.onerror = function(text) {
     var type;
     if (page.location.booking) {
@@ -187,5 +182,5 @@ window.onerror = function(text) {
     } else {
         type = 'В форме поиска';
     }
-    trackEvent('Ошибка JS', type, text);
-}
+    _gaq.push(['_trackEvent', 'Ошибка JS', type, text]);
+}*/

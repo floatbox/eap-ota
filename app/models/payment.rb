@@ -1,31 +1,34 @@
 # encoding: utf-8
 class Payment < ActiveRecord::Base
 
+  include TypusPayment
+
   # дефолтные издержки на транзакцию
   def self.commission
     @commission ||= Commission::Formula.new(Conf.payment.commission)
   end
 
+  def self.select_class(gateway, kind=:charge)
+    case [gateway, kind]
+    when [:payture, :charge]; PaytureCharge
+    when [:payture, :refund]; PaytureRefund
+    when [:payu,    :charge]; PayuCharge
+    when [:payu,    :refund]; PayuRefund
+    when [:cash,    :charge]; CashCharge
+    when [:cash,    :refund]; CashRefund
+    else raise ArgumentError, "no subclass for gateway: #{gateway.inspect}, kind: #{kind.inspect}"
+    end
+  end
+
   # зачатки payment strategy
   # сейчас создает только кредитнокарточковые платежи
   def self.select_and_create(args)
-    processing_code = args.delete(:gateway).presence || Conf.payment.card_processing
+    gateway = args.delete(:gateway).presence || Conf.payment.card_processing.to_sym
 
-    klass =
-      case processing_code
-      when 'payture'
-        PaytureCharge
-      when 'payu'
-        PayuCharge
-      when false
-        nil
-      else
-        raise ArgumentError, "unknown payment.card_processing: #{processing_code}"
-      end
+    # можно false
+    return unless gateway
 
-    return unless klass
-
-    klass.create(args)
+    select_class(gateway).create(args)
   end
 
   # эвристика для поиска 3дсовых платежей в разных системах
@@ -54,17 +57,20 @@ class Payment < ActiveRecord::Base
   after_save :update_incomes_in_order
 
   belongs_to :order
+  delegate :pnr_number, :to => :order
   attr_accessor :custom_fields
   has_commission_columns :commission
 
   # для вьюшек тайпуса. оверрайдим в субклассах.
   belongs_to :charge, :class_name => 'Payment', :foreign_key => 'charge_id'
   has_many :refunds, :class_name => 'Payment', :foreign_key => 'charge_id'
+  has_and_belongs_to_many :imports
 
   # не секьюрити ради, а read_only тайпуса для
   attr_protected :type
 
   validates :price, decimal: true
+  validate :check_pnr_number
 
   CHARGES = ['PayuCharge', 'PaytureCharge', 'CashCharge']
   REFUNDS = ['PayuRefund', 'PaytureRefund', 'CashRefund']
@@ -124,17 +130,28 @@ class Payment < ActiveRecord::Base
 
   scope :processing_too_long, lambda { processing.where("updated_at < ?", 5.minutes.ago) }
 
+  # понимает маски для LIKE, но работает быстрее, когда не маска
+  scope :by_pan, lambda {|pan| (pan['%'] || pan['_']) ? where("pan like ?", pan) : where(pan: pan) }
+
   def self.[] id
     find id
   end
 
-  # для админки
-  def to_label
-    "#{I18n.t type} ##{id} #{'%.2f' % price} р. #{payment_status}"
-  end
-
   def self.systems
     ['payture', 'cash']
+  end
+
+  def check_pnr_number
+    return true unless @pnr_number
+    errors.add(:pnr_number, 'Должен быть указан PNR существующего заказа') if Order.where(:pnr_number => @pnr_number).count != 1
+  end
+
+  def pnr_number=(number)
+    number.upcase!
+    @pnr_number = number
+    if number != pnr_number && (Order.where(:pnr_number => number).count == 1)
+      self.order = Order.find_by_pnr_number(number)
+    end
   end
 
   # вызывается и после считывания из базы
@@ -149,6 +166,10 @@ class Payment < ActiveRecord::Base
     end
   end
 
+  def is_charge?
+    type.in? Payment::CHARGES
+  end
+
   # распределение дохода
   def set_defaults
     # to be overriden in subclasses
@@ -159,48 +180,7 @@ class Payment < ActiveRecord::Base
   end
 
   def recalculate_earnings
-    self.earnings = price - income_payment_gateways
-  end
-
-  # TODO override in subclasses
-  def payment_status_raw
-    "--"
-  end
-
-  def error_explanation
-  end
-
-  def show_link
-    title = "#{I18n.t type} ##{id}"
-    "<a href='/admin/payments/show/#{id}'>#{title}</a>".html_safe
-  end
-
-  # оверрайдить в субклассах-рефандах
-  def charge_link
-  end
-
-  def external_gateway_link
-  end
-
-  def payment_info
-    "#{pan_searchable} #{name_in_card}".html_safe if pan.present? || name_in_card.present?
-  end
-
-  def control_links
-    ''
-  end
-
-  def status_decorated
-    if secured?
-      "<span style='color:green; font-weight:bold'>#{status}</span>".html_safe
-    else
-      "<span style='color:gray;'>#{status}</span>".html_safe
-    end
-  end
-
-  # FIXME устранить XSS
-  def pan_searchable
-    "<a href='/admin/payments?search=#{pan}'>#{pan}</a>".html_safe
+    self.earnings = (price - income_payment_gateways).round(2)
   end
 
 end

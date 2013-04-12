@@ -166,7 +166,7 @@ updatePrices: function(segments) {
         var sd = search.dates;
         var dates = sd.monthes[sd.position].ptitle + '—' + sd.monthes[sd.position + 1].ptitle;
         this.prices.update({
-            title: lang.priceMap.link.absorb(segments[0].dpt.from.nowrap(), dates),
+            title: I18n.t('search.map.link', {from: segments[0].dpt.from.nowrap(), dates: dates}),
             from: segments[0].dpt.iata,
             date: sd.monthes[sd.position].el.find('.first').attr('data-dmy')
         });
@@ -202,10 +202,10 @@ showPrices: function(items) {
     var that = this;
     this.clean();
     if (items.length === 0) {
-        this.prices.link.html('<div class="smpl-content">Мы не смогли ничего найти</div>');
+        this.prices.link.html('<div class="smpl-content">' + I18n.t('search.map.empty') + '</div>');
         return;
     }
-    var template = '<p class="sml-city">{0}</p><p class="sml-price">{1}&nbsp;<span class="ruble">Р</span></p><p class="sml-dates">{2}</p>';
+    var template = '<a class="sml-link" href="#{3}"><span class="sml-city">{0}</span><span class="sml-price">{1}&nbsp;<span class="ruble">Р</span></span><span class="sml-dates">{2}</span></a>';
     var bounds = new google.maps.LatLngBounds();
     var pmin = items[0].price, pmax = items[0].price;
     for (var i = 0, im = items.length; i < im; i++) {
@@ -216,7 +216,7 @@ showPrices: function(items) {
             dates[1] = item.date2.substring(8, 10) + '.' + item.date2.substring(5, 7);
             indexes[1] = search.dates.dmyIndex[item.date2.substring(8, 10) + item.date2.substring(5, 7) + item.date2.substring(2, 4)];
         }
-        var content = template.absorb(item.to.name_ru, Math.round(item.price).separate(), dates.join('—'));
+        var content = template.absorb(item.to.name_ru, Math.round(item.price).separate(), dates.join('—'), item.code);
         var latlng = new google.maps.LatLng(item.to.lat, item.to.lng);
         var label = new mapLabel({
             position: latlng,
@@ -227,25 +227,36 @@ showPrices: function(items) {
         label.$el.addClass('sml-active');
         label.$el.data('city', {name: item.to.name_ru, iata: item.to.iata, type: 'city'});
         label.$el.data('dates', indexes);
-        label.$el.click(function() {
-            that.applyPrice($(this));
+        label.$el.click(function(event) {
+            if (!(event.metaKey || event.ctrlKey || event.altKey)) {
+                that.applyPrice($(this));
+            }
+        });
+        label.$el.find('.sml-link').click(function(event) {
+            if (!(event.metaKey || event.ctrlKey || event.altKey)) {
+                event.preventDefault();
+            }
         });
         bounds.extend(latlng);
         if (item.price < pmin) pmin = item.price;
         if (item.price > pmax) pmax = item.price;
         this.items.push(label);
     }
-    if (items.length > 1 && !this.pricesMode) {
-        this.bounds = bounds;
+    this.pricesOrigin = new google.maps.LatLng(items[0].from.lat, items[0].from.lng);
+    bounds.extend(this.pricesOrigin);
+    this.bounds = bounds;
+    if (!this.pricesMode) {
         this.fitBounds();
+    }
+    if (this.prices.el.find('.smp-progress').length && !search.dates.el.hasClass('sd-hidden')) {
+        setTimeout(function() {
+            that.slideDown();
+        }, 100);
     }
     if (items.length > 1 && pmin / pmax < 0.95) {
         this.prices.process(pmin, pmax);
     } else {
-        this.prices.link.html('Авиабилеты из Москвы');
-    }
-    if (this.prices.el.find('.smp-progress').length && !search.dates.el.hasClass('sd-hidden')) {
-        this.slideDown();
+        this.prices.link.html('<div class="smpl-content smp-simple">' + I18n.t('search.map.title', {min: Math.floor(pmin).separate()}) + '&nbsp;<span class=\"ruble\">Р</span></div>');
     }
     this.pricesMode = true;
 },
@@ -260,6 +271,7 @@ filterPrices: function(limit) {
             item.$el.show();
         }
     }
+    bounds.extend(this.pricesOrigin);
     this.bounds = bounds;
     this.fitBounds();
 },
@@ -346,13 +358,13 @@ init: function(context) {
     this.height = this.el.outerHeight();
 },
 showExpand: function() {
-    this.link.html('<div class="smpl-content smp-expand">Развернуть карту</div>').show();
+    this.link.html('<div class="smpl-content smp-expand">' + I18n.t('search.map.expand') + '</div>').show();
 },
 showCollapse: function() {
-    this.link.html('<div class="smpl-content smp-collapse">Свернуть карту</div>').show();
+    this.link.html('<div class="smpl-content smp-collapse">' + I18n.t('search.map.collapse') + '</div>').show();
 },
 showLoading: function() {
-    this.link.html('<div class="smpl-content"><span class="smp-progress">Ищем варианты</span></div>').show();
+    this.link.html('<div class="smpl-content"><span class="smp-progress">' + I18n.t('search.map.loading') + '</span></div>').show();
 },
 update: function(options) {
     this.slider.hide();
@@ -368,7 +380,7 @@ process: function(min, max) {
         max: max,
         range: max - min
     };
-    this.slider.find('.smps-title').html(lang.priceMap.title.absorb(Math.floor(min).separate()));
+    this.slider.find('.smps-title').html(I18n.t('search.map.title', {min: Math.floor(min).separate()}));
     this.width = this.slider.find('.smps-base').width() - 7;
     this.scales = [100, 100, 500, 1000];
     this.offset = this.width;
@@ -384,7 +396,7 @@ apply: function(offset, filter) {
     }
     this.control.css('left', offset);
     this.selected.css('width', offset);
-    this.value.html(lang.priceMap.limit.absorb(limit.separate()));
+    this.value.html(I18n.t('search.map.limit', {max: limit.separate()}));
     if (filter) {
         search.map.filterPrices(limit);
     }

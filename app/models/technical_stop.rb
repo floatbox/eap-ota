@@ -7,4 +7,8 @@ class TechnicalStop
     Airport[location_iata]
   end
 
+  def city
+    airport.city
+  end
+
 end

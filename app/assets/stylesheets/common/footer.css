@@ -62,22 +62,39 @@
     float: right;
     font-size: 11px;
 }
-
-.social-icons {
+.pfc-social {
+    margin: 10px 0 0;
+}
+.pfcs-icon {
     float: left;
     width: 24px;
     height: 24px;
     margin: 0 8px 0 0;
+    background: url(/images/common/social-icons.png) no-repeat;
+    text-decoration: none;
 }
-
-#fb { background: url(/images/common/social-icons.png); }
-#fb:hover { background: url(/images/common/social-icons.png) 0 -24px no-repeat; }
-#vk { background: url(/images/common/social-icons.png) -30px 0 no-repeat; }
-#vk:hover { background: url(/images/common/social-icons.png) -30px -24px no-repeat; }
-#tw { background: url(/images/common/social-icons.png) -60px 0 no-repeat; }
-#tw:hover { background: url(/images/common/social-icons.png) -60px -24px no-repeat; }
-#rss{ background: url(/images/common/social-icons.png) -90px 0 no-repeat; }
-#rss:hover { background: url(/images/common/social-icons.png) -90px -24px no-repeat; }
-
-
-.appstore { float: right; margin-right: 2px; }
+.pfcs-vkontakte {
+    background-position: -30px 0;
+}
+.pfcs-twitter {
+    background-position: -60px 0;
+}
+.pfcs-rss {
+    background-position: -90px 0;
+}
+.pfcs-facebook:hover {
+    background-position: 0 -24px;
+}
+.pfcs-vkontakte:hover {
+    background-position: -30px -24px;
+}
+.pfcs-twitter:hover {
+    background-position: -60px -24px;
+}
+.pfcs-rss:hover {
+    background-position: -90px -24px;
+}
+.appstore {
+    float: right;
+    margin-right: 2px;
+}

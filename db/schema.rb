@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130206143706) do
+ActiveRecord::Schema.define(:version => 20130404151642) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -28,6 +28,8 @@ ActiveRecord::Schema.define(:version => 20130206143706) do
     t.string   "engine_type", :default => "jet"
     t.string   "iata_ru"
   end
+
+  add_index "airplanes", ["iata"], :name => "index_airplanes_on_iata"
 
   create_table "airports", :force => true do |t|
     t.string   "icao"
@@ -92,6 +94,8 @@ ActiveRecord::Schema.define(:version => 20130206143706) do
     t.string   "code"
     t.string   "not_interlines"
   end
+
+  add_index "carriers", ["iata"], :name => "index_carriers_on_iata"
 
   create_table "cities", :force => true do |t|
     t.string   "iata"
@@ -239,6 +243,32 @@ ActiveRecord::Schema.define(:version => 20130206143706) do
   add_index "hot_offers", ["created_at"], :name => "index_hot_offers_on_created_at"
   add_index "hot_offers", ["destination_id"], :name => "index_hot_offers_on_destination_id"
 
+  create_table "imports", :force => true do |t|
+    t.string   "md5"
+    t.string   "kind"
+    t.integer  "pass"
+    t.string   "filename"
+    t.binary   "content"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "imports", ["md5"], :name => "index_imports_on_md5", :unique => true
+
+  create_table "imports_payments", :id => false, :force => true do |t|
+    t.integer "import_id"
+    t.integer "payment_id"
+  end
+
+  add_index "imports_payments", ["import_id", "payment_id"], :name => "index_imports_payments_on_import_id_and_payment_id"
+
+  create_table "imports_tickets", :id => false, :force => true do |t|
+    t.integer "import_id"
+    t.integer "ticket_id"
+  end
+
+  add_index "imports_tickets", ["import_id", "ticket_id"], :name => "index_imports_tickets_on_import_id_and_ticket_id"
+
   create_table "notifications", :force => true do |t|
     t.integer  "order_id"
     t.integer  "typus_user_id"
@@ -335,6 +365,8 @@ ActiveRecord::Schema.define(:version => 20130206143706) do
     t.decimal  "stored_balance",                :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.integer  "customer_id"
     t.decimal  "price_operational_fee",         :precision => 9, :scale => 2, :default => 0.0,      :null => false
+    t.string   "fee_scheme",                                                  :default => ""
+    t.decimal  "price_acquiring_compensation",  :precision => 9, :scale => 2, :default => 0.0,      :null => false
   end
 
   add_index "orders", ["customer_id"], :name => "index_orders_on_customer_id"
@@ -346,15 +378,17 @@ ActiveRecord::Schema.define(:version => 20130206143706) do
   add_index "orders", ["ticket_status"], :name => "index_orders_on_ticket_status"
 
   create_table "partners", :force => true do |t|
-    t.string   "token",               :null => false
-    t.string   "password",            :null => false
-    t.boolean  "enabled",             :null => false
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
-    t.boolean  "hide_income",         :null => false
+    t.string   "token",                                  :null => false
+    t.string   "password",                               :null => false
+    t.boolean  "enabled",                                :null => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+    t.boolean  "hide_income",                            :null => false
     t.integer  "cookies_expiry_time"
     t.integer  "income_at_least"
     t.integer  "suggested_limit"
+    t.boolean  "cheat",               :default => false
+    t.text     "notes"
   end
 
   add_index "partners", ["token"], :name => "index_partners_on_token"
@@ -388,6 +422,7 @@ ActiveRecord::Schema.define(:version => 20130206143706) do
   end
 
   add_index "payments", ["order_id"], :name => "index_payments_on_order_id"
+  add_index "payments", ["pan"], :name => "index_payments_on_pan"
   add_index "payments", ["status"], :name => "index_payments_on_status"
 
   create_table "promo_codes", :force => true do |t|
@@ -504,11 +539,13 @@ ActiveRecord::Schema.define(:version => 20130206143706) do
     t.date     "dept_date"
     t.decimal  "price_extra_penalty",                          :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "baggage_info"
+    t.decimal  "price_operational_fee",                        :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_acquiring_compensation",                 :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_difference",                             :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.integer  "original_price_fare_cents"
     t.string   "original_price_fare_currency",    :limit => 3
     t.integer  "original_price_tax_cents"
     t.string   "original_price_tax_currency",     :limit => 3
-    t.decimal  "price_operational_fee",                        :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.integer  "original_price_penalty_cents"
     t.string   "original_price_penalty_currency", :limit => 3
   end

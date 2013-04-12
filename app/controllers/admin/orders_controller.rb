@@ -3,7 +3,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
   include CustomCSV
   include Typus::Controller::Bulk
 
-  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :ticket, :cancel, :reload_tickets, :update, :pnr_raw, :void, :make_payable_by_card, :send_invoice, :ticket_in_ticketing_office, :manual_notice]
+  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :edit_ticketed, :ticket, :cancel, :reload_tickets, :update, :pnr_raw, :void, :make_payable_by_card, :send_invoice, :ticket_in_ticketing_office, :manual_notice]
 
   # def set_scope
   #   # добавлять фильтры лучше в def index и т.п., но так тоже работает (пока?)
@@ -31,6 +31,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
     # FIXME для наших дейт-фильтров нужен формат 2012/2/21 вместо 2012-02-21
     #add_predefined_filter 'Today', {:created_at => Date.today.to_s(:db)}
     #add_predefined_filter 'Yesterday', {:created_at => Date.yesterday.to_s(:db)}
+    params[:search] = params[:search].gsub(/\./, '_') if params[:search] && params[:search].include?('@')
     super
   end
 
@@ -45,6 +46,19 @@ class Admin::OrdersController < Admin::EviterraResourceController
       format.html # new.html.erb
       format.json { render :json => @item }
     end
+  end
+
+  def edit
+    if @item.has_data_in_tickets?
+      redirect_to :action => :edit_ticketed, :id => @item.id
+    else
+      super
+    end
+  end
+
+  def edit_ticketed
+    @item = @order
+    render :action => :edit
   end
 
   def show_versions
@@ -158,6 +172,11 @@ class Admin::OrdersController < Admin::EviterraResourceController
     ids.each { |id| @resource.find(id).charge! }
     notice = Typus::I18n.t("Tried to charge #{ids.count} entries. Probably successfully")
     redirect_to :back, :notice => notice
+  end
+
+  def set_eager_loading
+    super
+    @resource = @resource.includes(:tickets, :payments, :secured_payments)
   end
 
   def set_attributes_on_new

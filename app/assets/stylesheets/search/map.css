@@ -32,6 +32,9 @@
     padding-right: 24px;
     background: url(/images/booking/progress-g.gif) no-repeat 100% 0;
 }
+.smp-simple {
+    color: #333;
+}
 .smp-load,
 .smp-expand,
 .smp-collapse {
@@ -98,7 +101,14 @@
     box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);  
 }
 .sml-active {
+    padding: 0;
     cursor: pointer;
+}
+.sml-active .sml-link {
+    display: block;
+    padding: 3px 6px;
+    color: #333;
+    text-decoration: none;
 }
 .sml-arrow,
 .smla-shadow {
@@ -120,10 +130,12 @@
     border-top-color: rgba(0, 0, 0, 0.3);
 }
 .sml-city {
+    display: block;
     white-space: nowrap;
 }
 .sml-price,
 .sml-dates {
+    display: block;
     font-size: 10px;
     line-height: 12px;
     color: #777;

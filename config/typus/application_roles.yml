@@ -16,15 +16,16 @@ admin:
   Airplane: create, read, update, delete, decode_amadeus, decode_sirena, show_versions
   Airport: create, read, update, delete, update_completer, decode_amadeus, decode_sirena, show_versions
   City: create, read, update, delete, update_completer, decode_amadeus, decode_sirena, show_versions
-  Order: create, read, update, unblock, charge, ticket, reload_tickets, cancel, show_pnr, money_received, no_money_received, bulk_charge, bulk, pnr_raw, void, make_payable_by_card, show_versions, send_invoice, ticket_in_ticketing_office, manual_notice
+  Order: create, read, update, unblock, charge, ticket, reload_tickets, cancel, show_pnr, money_received, no_money_received, bulk_charge, bulk, pnr_raw, void, make_payable_by_card, show_versions, send_invoice, ticket_in_ticketing_office, manual_notice, edit_ticketed
   OrderComment: create, read, update, delete
   Notification: create, read, update, show_sent_notice
   Ticket: create, read, update, ticket_raw, bulk_set_ticketed_date, bulk, new_refund, confirm_refund, show_versions, change_vat, delete_refund
   Country: create, read, update, delete, show_versions
   GeoTag: create, read, update, delete
   Region: create, read, update, delete
-  #HotOffer: read, delete
+  HotOffer: read, delete
   Subscription: create, read, update, delete
+  Customer: read
   Destination: read, delete
   AirlineAlliance: create, read, update, delete
   Consolidator: create, read, update, delete
@@ -35,9 +36,9 @@ admin:
   Partner: create, read, update, delete, show_versions
 
   Payment: read, update, bulk, bulk_charge, show_versions, payment_raw, create, charge, block, cancel, sync_status
-  PayuCharge: create, read
+  PayuCharge: create, read, update
   PayuRefund: create, update, read
-  PaytureCharge: create, read
+  PaytureCharge: create, read, update
   PaytureRefund: create, update, read
   CashCharge: create, update, read
   CashRefund: create, update, read

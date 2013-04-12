@@ -30,4 +30,24 @@ class Partner < ActiveRecord::Base
   def self.authenticate id, pass
     self[id].password == pass if pass.present?
   end
+
+  def disable!
+    update_attributes enabled: false
+  end
+
+  def enable!
+    update_attributes enabled: true
+  end
+
+  def limit! limit=20
+    update_attributes suggested_limit: limit
+  end
+
+  def logo_url
+    "/images/metas/#{token}.png"
+  end
+
+  def logo_exist?
+    FileTest.exist?(Rails.root.join("public#{logo_url}").to_s)
+  end
 end

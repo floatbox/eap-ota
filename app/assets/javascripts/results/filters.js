@@ -1,7 +1,7 @@
 /* Filters */
 results.filters = {
 init: function() {
-    var that = this;    
+    var that = this;
     this.el = $('#results-filters');
     this.groups = [];
     this.el.find('.rf-group').mousedown(function(event) {
@@ -29,7 +29,7 @@ init: function() {
         checkbox.init();
         checkbox.group = that.groups[3];
         checkbox.group.lists.push(checkbox);
-        that.lists.push(checkbox);    
+        that.lists.push(checkbox);
     };
 },
 show: function(smooth) {
@@ -94,7 +94,7 @@ update: function() {
     for (var i = this.groups.length; i--;) {
         var group = this.groups[i];
         group.update();
-        this.lists = this.lists.concat(group.lists);        
+        this.lists = this.lists.concat(group.lists);
     }
     this.getVariants();
 },
@@ -274,16 +274,19 @@ apply: function() {
     for (var i = this.lists.length; i--;) {
         if (this.lists[i].conditions) counter++;
     }
-    this.counter.attr('title', counter ? lang.filters.reset.absorb(counter.declineArray(lang.filters.selected)) : '');
+    this.counter.attr('title', counter ? I18n.t('filters.reset', {count: counter}) : '');
     this.counter.css('background-position', '0 ' + (-counter * 20) + 'px');
     this.counter.toggle(counter !== 0);
+    if (counter) {
+        _kmq.push(['record', 'RESULTS: filters applied']);
+    }
 },
 reset: function() {
     this.counter.hide();
     for (var i = this.lists.length; i--;) {
         this.lists[i].reset();
     }
-    results.filters.apply();      
+    results.filters.apply();
 }
 };
 
@@ -386,7 +389,7 @@ click: function(x) {
         s.max = value.constrain(Math.max(s.min, e.min) + 1, this.size);
     }
     this.show(s.min, s.max);
-    this.apply();    
+    this.apply();
 },
 drag: function(name, event) {
     this.dragging = {
@@ -411,7 +414,7 @@ move: function(x) {
         } else {
             d.value = (s.max + offset).constrain(Math.max(s.min, e.min) + 1, this.size);
             this.show(s.min, d.value);
-        }        
+        }
         d.offset = offset;
     }
 },
@@ -459,13 +462,13 @@ human: function(d1, d2) {
     var max = this.from + d2;
     if (max - min < this.size) {
         if (max < 3) {
-            parts.push(lang.filters.short);
+            parts.push('короткие');
         } else if (min > 4) {
-            parts.push(lang.filters.long);
+            parts.push('длинные');
         }
-        parts.push(lamg.filters[min ? 'fromto' : 'less'].absorb(min, max.declineArray(lang.time.hours)));
+        parts.push((min ? 'от {0} до {1}' : 'меньше {1}').absorb(min, I18n.t('time.hours', {count: max})));
     } else {
-        parts.push(lang.filters.any);
+        parts.push('любая');
     }
     this.value.html(parts.join(', '));
 },

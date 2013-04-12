@@ -1,33 +1,59 @@
-<% paid = @order_form.payment_type == 'card' %>
 <div class="bf-result bfr-success wrap" data-type="success">
-<div class="bfrs-message">
-    <p class="bfrsm-text"><strong>Все отлично!</strong> <%= @order_form.people.one? ? "Ваш билет #{ paid ? 'оплачен' : 'забронирован' }" : "Ваши билеты #{ paid ? 'оплачены' : 'забронированы' }" %>. Подтверждение будет отправлено на ваш электронный адрес в течение десяти минут. <span class="link bf-hint bfrsm-hint" data-hint="bfh-mail">Что делать, если ничего не пришло?</span</p>
-    <p class="bfrsm-text bfrsm-number">Номер вашей брони — <span class="bfr-pnr"><%= pnr_number %></span></p>
-    <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Ffacebook.com%2Feviterra&amp;send=false&amp;layout=standard&amp;width=552&amp;show_faces=true&amp;action=recommend&amp;colorscheme=light&amp;font&amp;height=80&amp;appId=155739531227363" scrolling="no" frameborder="0" style="margin-top: 10px; border:none; overflow:hidden; width:552px; height:80px;" allowTransparency="true"></iframe>
+<div class="bfrs-social">
+<% tweet = order_tweet(@order_form) %>
+<% gevent = order_event(@order_form) %>
+<% if !tweet.empty? || !gevent.empty? %>
+    <ul class="bfrss-actions">
+    <% unless tweet.empty? %>
+        <li class="bfrss-action"><a href="http://twitter.com/?status=<%= tweet %>" target="_blank">Поделиться в Твиттере</a></li>
+    <% end %>
+    <% unless gevent.empty? %>
+        <li class="bfrss-action"><a href="http://www.google.com/calendar/event?action=TEMPLATE&<%= gevent %>" target="_blank">Добавить поездку в Гугл-календарь</a></li>
+    <% end %>
+    </ul>
+    <iframe src="//www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Feviterra&amp;width=287&amp;height=241&amp;show_faces=true&amp;colorscheme=light&amp;stream=false&amp;border_color&amp;header=false&amp;appId=429677207045748" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:287px; height:241px; background: #FFF;" allowTransparency="true"></iframe>
+<% end %>
 </div>
+<div class="bfrs-message">
+    <p class="bfrsm-text"><strong><%= t 'booking.success.allright' %></strong> <%= t @order_form.people.one? ? 'one' : 'few', :scope => [:booking, :success, @order_form.payment_type == 'card' ? 'card' : 'cash'] %> <%= t 'booking.success.confirmation' %>&nbsp; <span class="link bf-hint bfrsm-hint" data-hint="bfh-mail"><%= t 'booking.success.whattodo.link' %></span</p>
+    <p class="bfrsm-pnr"><a target="_blank" href="<%= pnr_path %>">Распечатать подтверждение</a></p>
+    <p class="bfrsm-text bfrsm-number"><%= raw t 'booking.success.pnr', :number => content_tag(:span, pnr_number, :class => 'bfr-pnr') %></p>
+</div>
+<% ostrovok_url = ostrovok_link(@order_form) %>
+<% insurance_url = sravnikupi_insurance_uri(@order_form) %>
+<% if ostrovok_url || insurance_url %>
 <div class="bfrs-addition">
-    <div class="bfrs-actions">
-        <h5 class="bfrs-title">Что ещё можно сделать</h5>
-        <p class="bfrsa-item"><a target="_blank" href="<%= pnr_path %>">Распечатать подтверждение</a></p>
-        <% tweet = order_tweet(@order_form) %>
-        <% unless tweet.empty? %>
-            <p class="bfrsa-item"><a href="http://twitter.com/?status=<%= tweet %>" target="_blank">Поделиться в Твиттере</a></p>
-        <% end %>
-        <% gevent = order_event(@order_form) %>
-        <% unless gevent.empty? %>        
-            <p class="bfrsa-item"><a href="http://www.google.com/calendar/event?action=TEMPLATE&<%= gevent %>" target="_blank">Добавить поездку в Гугл-календарь</a></p>
-        <% end %>
+    <% if ostrovok_url %>
+    <div class="bfrs-hotels">
+        <h5 class="bfrsa-title">Отели <%= ostrovok_city(@order_form) %></h5>
+        <ul class="bfrsa-features">
+            <li class="bfrsa-feature">Самые низкие цены</li>
+            <li class="bfrsa-feature">Большой выбор разных отелей</li>
+            <li class="bfrsa-feature">Мгновенная оплата</li>
+            <li class="bfrsa-feature">Моментальное подтверждение</li>
+        </ul>
+        <div class="bfrsa-bar">
+            <a class="bfrsa-link" href="<%= ostrovok_url %>" target="_blank">Выбрать и&nbsp;забронировать отель</a>
+        </div>
+        <div class="bfrsa-partner">Совместно с партнером Ostrovok.ru</div>
     </div>
-    <% if insurance_url = smart_insurance_uri(@order_form) %>
-    <div class="bfrs-insurance">    
-        <h5 class="bfrs-title">Туристическая страховка онлайн</h5>
-        <a class="bfrsi-link" href="<%= insurance_url %>" target="_blank">Узнать стоимость и&nbsp;купить</a>
-        <p class="bfrsi-item">Оплата картой</p>
-        <p class="bfrsi-item">Электронный полис</p>
-        <p class="bfrsi-item">Подходит для визы</p>
-        <p class="bfrsi-item">Страхование багажа</p>        
+    <% end %>
+    <% if insurance_url %>
+    <div class="bfrs-insurance">
+        <h5 class="bfrsa-title">Туристическая страховка</h5>
+        <ul class="bfrsa-features">
+            <li class="bfrsa-feature">Электронный полис</li>
+            <li class="bfrsa-feature">Оплата банковской картой</li>
+            <li class="bfrsa-feature">Страхование багажа</li>
+            <li class="bfrsa-feature">Подходит для шенгенской визы</li>
+        </ul>
+        <div class="bfrsa-bar">
+            <a class="bfrsa-link" href="<%= insurance_url %>" target="_blank">Выбрать и&nbsp;купить полис</a>
+        </div>
+        <div class="bfrsa-partner">Совместно с партнером Sravnikupi.ru</div>
     </div>
     <% end %>
 </div>
-<p class="latent" id="bfh-mail">Если вы&nbsp;не&nbsp;получили письмо с&nbsp;<% @order_form.payment_type == 'card' ? 'электронным билетом' : 'подтверждением бронирования' %> в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, то&nbsp;напишите нам (<a href="mailto:operator@eviterra.com">operator@eviterra.com</a>) или позвоните <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p>
-</div>    
+<% end %>
+<p class="latent" id="bfh-mail"><%= raw t 'booking.success.whattodo.hint' %></p>
+</div>

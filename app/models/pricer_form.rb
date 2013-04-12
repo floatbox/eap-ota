@@ -6,7 +6,6 @@ class PricerForm
   field :adults, :type => Integer, :default => 1
   field :children, :type => Integer, :default => 0
   field :infants, :type => Integer, :default => 0
-  field :complex_to
   field :cabin
   field :query_key
   field :partner
@@ -15,7 +14,6 @@ class PricerForm
   #has_one :rambler_cache
   accepts_nested_attributes_for :segments
   delegate :to, :from, :from_iata, :to_iata, :to => 'segments.first'
-  attr_reader :complex_to_parse_results
   validate :check_people_total
 
   # перенести в хелпер
@@ -83,7 +81,6 @@ class PricerForm
     field :to
     field :date
 
-    attr_reader :to_as_object, :from_as_object
     validates_presence_of :from_as_object, :to_as_object, :date, :date_as_date
     validate :check_date
 
@@ -106,14 +103,7 @@ class PricerForm
     end
 
     def location_from_string name
-      record = Completer.record_from_string(name) rescue nil
-      if record
-        if record.code && (['country', 'city', 'airport'].include? record.type)
-          record.original_object
-        elsif record.type == 'region'
-          Region.first(:conditions => ['name_ru = ? OR name_en = ?', record.name, record.name])
-        end
-      end
+      Completer.object_from_string(name)
     end
 
     def from_country_or_region?
@@ -259,7 +249,6 @@ class PricerForm
   end
 
   # в этом порядке!
-  before_validation :parse_complex_to
   before_validation :fix_segments
   validates_presence_of :segments
 
@@ -270,79 +259,6 @@ class PricerForm
         b.from = a.to
       end
     end
-  end
-
-  def parse_complex_to
-    return unless segments.present?
-    self.complex_to ||= segments[0].to.gsub(',', ' ')
-    res = {}
-    str = self.complex_to.mb_chars
-    not_finished = true
-    while !str.blank? && not_finished
-      day = 0
-      month_record = nil
-      word_part = ''
-      not_finished = false
-      if m = str.match(/(\S+)\s+(\d)+\s*$/)
-        word_part = m[0].mb_chars
-        month_record = Completer.record_from_string(m[1].mb_chars, ['date'])
-        day = m[2].to_i
-      elsif m = str.match(/(\d+)\s+(\S+)\s*$/)
-        word_part = m[0].mb_chars
-        month_record = Completer.record_from_string(m[2].mb_chars, ['date'])
-        day = m[1].to_i
-      end
-
-      if month_record && (day > 0) && (month_record.hidden_info.class == Fixnum)
-        res[:dates] =[{
-            :value => date_from_month_and_day(month_record.hidden_info, day),
-            :str => word_part.to_s,
-            :start => str.length - word_part.length,
-            :end => str.length-1}
-          ]
-        str = str[0...(str.length - word_part.length)]
-        not_finished = true
-      end
-
-      for word_beginning_pattern in [ /\S+\s+\S+\s+\S+\s*$/, /\S+\s+\S+\s*$/, /\S+\s*$/ ]
-        if (m = str.match(word_beginning_pattern)) && !not_finished
-          word_part = m[0].mb_chars
-
-          if r = Completer.record_from_string(word_part, ['date', 'airport', 'city', 'country', 'people'])
-            if r && r.type == 'date' && r.hidden_info.class == String
-              res[:dates] = [{
-                  :value => r.hidden_info,
-                  :str => word_part.to_s,
-                  :start => str.length - word_part.length,
-                  :end => str.length-1}
-                ]
-              str = str[0...(str.length - word_part.length)]
-              not_finished = true
-            elsif r && (['airport', 'city', 'country', 'region'].include? r.type)
-              segments[0].to = r.name rescue nil
-              res[:to] = {
-                :value => r.name,
-                :str => word_part.to_s,
-                :start => str.length - word_part.length,
-                :end => str.length-1
-              }
-              str = str[0...(str.length - word_part.length)]
-              not_finished = true
-            elsif r && r.type == 'people'
-              res[:people_count] = {
-                :value => r.hidden_info,
-                :str => word_part.to_s,
-                :start => str.length - word_part.length,
-                :end => str.length-1
-              }
-              str = str[0...(str.length - word_part.length)]
-              not_finished = true
-            end
-          end
-        end
-      end
-    end
-    @complex_to_parse_results = res
   end
 
   def date_from_month_and_day(month, day)

@@ -26,6 +26,7 @@ module Pricing
     # price_extra_penalty
 
     include IncomeSuppliers
+    include FeeCalculationDetails
     # есть ли расход-приход с поставщиком по билету?
     # используется для подведения счета с поставщиком
     def income_suppliers
@@ -33,7 +34,7 @@ module Pricing
     end
 
     def price_markup
-      price_consolidator + price_blanks - price_discount + price_operational_fee
+      price_consolidator + price_our_markup + price_blanks + price_discount + price_operational_fee
     end
 
     def price_total
@@ -52,9 +53,9 @@ module Pricing
     def price_payment_commission
       case kind
       when 'ticket'
-        price_with_payment_commission * acquiring_percentage
+        (price_with_payment_commission * acquiring_percentage).round(2)
       when 'refund'
-        0
+        price_acquiring_compensation
       end
     end
 
@@ -74,11 +75,22 @@ module Pricing
     end
 
     def price_tax_and_markup_and_payment
-      price_with_payment_commission - price_fare + price_declared_discount
-      end
+      price_with_payment_commission - price_fare - price_declared_discount
+    end
+
+
+    def price_real# сумма всех компонентов цены кроме корректировки
+      price_total + price_acquiring_compensation
+    end
 
     def fee
-      price_with_payment_commission - price_tax - price_fare + price_declared_discount
+      if fee_scheme == 'v2'
+        price_blanks + price_consolidator + price_our_markup + price_acquiring_compensation + price_operational_fee + price_difference
+      elsif fee_scheme == 'v3'
+        price_blanks + price_consolidator + price_discount + price_our_markup + price_acquiring_compensation + price_operational_fee + price_difference
+      else
+        price_with_payment_commission - price_tax - price_fare - price_declared_discount
+      end
     end
 
     def price_declared_discount
@@ -97,7 +109,7 @@ module Pricing
         self.price_subagent = commission_subagent.call(price_fare)
         self.price_consolidator = commission_consolidator.call(price_fare)
         self.price_blanks = commission_blanks.call(price_fare)
-        self.price_discount = commission_discount.call(price_fare)
+        self.price_discount = -commission_discount.call(price_fare)
         self.price_our_markup = commission_our_markup.call(price_fare)
       when 'refund'
         self.price_agent = commission_agent.percentage? ? commission_agent.call(price_fare) : -commission_agent.call(price_fare)

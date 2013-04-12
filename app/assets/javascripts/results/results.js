@@ -85,7 +85,7 @@ slide: function() {
     this.content.el.show();
     this.filters.el.show();
     this.fixed.update();
-    page.title.set(lang.pageTitle.results.absorb(this.data.titles.window));
+    page.title.set(I18n.t('page.results', {title: this.data.titles.window}));
 },
 update: function(data) {
     this.data = data;
@@ -93,7 +93,7 @@ update: function(data) {
     this.header.show(this.data.titles.header, data.valid);
     this.data.fresh = true;
     if (page.location.booking) {
-        page.title.set(lang.pageTitle.booking.absorb(results.data.titles.window));    
+        page.title.set(I18n.t('page.booking', {title: this.data.titles.window}));
     }
 },
 load: function() {
@@ -109,6 +109,9 @@ load: function() {
     this.data.fresh = false;
     this.ready = false;
     this.message.toggle('loading');
+    if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.removeItem('personsAmount');
+    }    
 },
 updated: function() {
     var that = this;
@@ -121,7 +124,7 @@ changeDates: function(dates) {
     this.updateTitles(dates);
     var titles = this.data.titles;
     this.header.summary.html(titles.header);
-    page.title.set(lang.pageTitle.results.absorb(titles.window));
+    page.title.set(I18n.t('page.results', {title: titles.window}));    
 },
 updateTitles: function(dates) {
     var wparts = [];
@@ -132,10 +135,9 @@ updateTitles: function(dates) {
         for (var i = 0, l = this.data.segments.length; i < l; i++) {
             var segment = this.data.segments[i];
             var date = Date.parseDMY(dates ? dates[i] : segment.date);
-            var title = segment.rt ? 'обратно' : segment.title;
-            var hdate = date.human(!yearUsed && date.getFullYear() !== year && (yearUsed = true));
-            hparts[i] = title.replace(/(^из| в) /g, '$1&nbsp;') + ' ' + hdate.nowrap();
-            wparts[i] = title + ' на ' + hdate;
+            var hdate = I18n.l((!yearUsed && date.getFullYear() !== year && (yearUsed = true)) ? 'date.formats.human_year' : 'date.formats.human', date);
+            hparts[i] = I18n.t(segment.rt ? 'return' : 'segment', {scope: 'results.header', cities: segment.title, date: hdate.nowrap()});
+            wparts[i] = I18n.t(segment.rt ? 'return' : 'segment', {scope: 'page', cities: segment.title, date: hdate.nowrap()});;
         }
         if (this.data.options.human) {
             hparts.push(this.data.options.human);
@@ -143,7 +145,7 @@ updateTitles: function(dates) {
     }
     this.data.titles = {
         header: hparts.join(', ').capitalize(),
-        window: wparts.join(', ')
+        window: wparts.join(', ').replace(/&nbsp;/g, ' ')
     };
 },
 processSubscription: function() {
@@ -168,9 +170,11 @@ processCollections: function() {
                 that.slide();
             }
         }, 30);
+        _kmq.push(['record', 'RESULTS: displayed']);
     } else {
         this.message.toggle('empty');
-        trackPage('/search/empty');
+        _kmq.push(['record', 'RESULTS: nothing found']);
+        _gaq.push(['_trackPageview', '/search/empty']);        
     }
 },
 updateFeatured: function() {
@@ -237,10 +241,12 @@ getFastDuration: function() {
     return fd;
 },
 getVariants: function(condition, limit) {
-    var result = [], index = {};
+    var result = [];
     var offers = this.all.offers;
     for (var i = 0, im = offers.length; i < im; i++) {
-        var offer = offers[i], variants = offer.variants;
+        var offer = offers[i];
+        var index = {};
+        var variants = offer.variants;
         for (var v = 0, vm = variants.length; v < vm; v++) {
             var variant = variants[v];
             if (!variant.improper && condition(variant)) {
@@ -262,17 +268,18 @@ extendData: function() {
     var segments = this.data.segments;
     if (!segments) return;
     var sl = segments.length;
-    var titles = [], os = lang.segment.incompatible;
+    var titles = [];
     for (var s = sl; s--;) {
         if (s === 0 && sl > 1 && segments[1].rt) {
-            titles[s] = os.rt;
+            titles[s] = I18n.t('offer.segment.incompatible.rt');
         } else {
             var mw = sl > 2;
             var parts = [];
             for (var i = 0; i < sl; i++) {
                 if (i !== s) parts.push(segments[i][mw ? 'arvto_short' : 'arvto']);
             }
-            titles[s] = os[mw ? 'many' : 'one'].absorb(parts.enumeration());
+            var direction = parts.enumeration(I18n.t('nbsp_and'));
+            titles[s] = I18n.t(mw ? 'few' : 'one', {scope: 'offer.segment.incompatible', direction: direction});
         }
     }
     this.data.ostitles = titles;
@@ -295,8 +302,8 @@ getOfferTemplate: function() {
     this.offerTemplate = offer;
 },
 getPriceTemplate: function() {
-    this.stateTemplate = lang.price[this.data.options.total !== 1 ? 'many' : 'one'];
-    this.priceTemplate = lang.price.buy;
+    this.stateTemplate = I18n.t(this.data.options.total !== 1 ? 'few_with_fee' : 'one_with_fee', {scope: 'offer.price'});
+    this.priceTemplate = I18n.t('offer.price.buy');
 },
 currencies: {
     RUR: '{0} <span class="ruble">Р</span>',
@@ -387,7 +394,7 @@ init: function() {
     this.count = function() {
         var offset = that.el.find('.o-details').offset().top;
         tedge = offset - 128 - 52;
-        bedge = offset - $w.height() + Queries.height;
+        bedge = offset - $w.height();
         that.toggle();
     };
     this.reset = function() {

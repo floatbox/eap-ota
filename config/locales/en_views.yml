@@ -1,0 +1,436 @@
+en:
+  support:
+    # Array#to_sentence
+    array:
+      # если слов два
+      two_words_connector: " and\_"
+      # если слов больше двух
+      words_connector: ", "
+      last_word_connector: ", and\_"
+  nbsp_and: " and\_"
+  timeout: "Server is unreachable. Check your internet connection."
+  currencies:
+    RUR:
+      one: "%{count}\_Ruble"
+      other: "%{count}\_Rubles"
+      sign: "%{value}\_<span class=\"ruble\">Р</span>"
+  date:
+    formats:
+      short: '%-d %b'
+      human: '%B %-d'
+      human_year: '%-d %B, %Y'
+      dow: '%A'
+    today: "today"
+    pre_day_names: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    nom_month_names: [~, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    pre_month_names: [~, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    abb: [~, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  time:
+    h: "%{h}\_h"
+    min: "%{m}\_min"
+    hours:
+      one: "%{count}\_hour"
+      other: "%{count}\_hours"
+    minutes:
+      one: "%{count}\_minute"
+      other: "%{count}\_minutes"
+  page:
+    search: "Search for airline tickets %{title}"
+    results: "Airline tickets %{title}"
+    booking: "Airline tickets booking %{title}"
+  search:
+    locations:
+      from: "From"
+      to: "To"
+      ow: "One-way"
+      rt: "Roundtrip"
+      mw: "Multi-destination"
+      add: "Add flight"
+      remove: "Remove flight"
+    map:
+      link: "Low-priced flights %{from} in\_%{dates}?"
+      title: "Price from %{min}"
+      limit: "up to %{max} <span class=\"ruble\">Р</span>"
+      expand: "Expand map"
+      collapse: "Collapse map"
+      loading: "Searching..."
+      empty: "Nothing found :-("
+    options:
+      adults:
+        title: "Adults"
+        hint: "age 12+"
+      children:
+        title: "Children"
+        hint: "under 12 years, seated"
+      infants:
+        title: "Infants"
+        hint: "under 2 years, unseated"
+      cabin:
+        title: "Class"
+        Y: "economy"
+        C: "business"
+        F: "first"
+    messages:
+      dpt: "Please enter departure city or airport %{segment}"
+      arv: "Please enter city or airport of destination %{segment}"
+      date: "Please select date of %{segment}"
+      persons: "Number of passengers should be eight or less"
+      infants: "Number of unseated infants snould not exceed number of adult passengers"
+      noadults: "Children must be accompanied by adults"
+      segments:
+        dpt: "departure"
+        rt: "return flight"
+        mw: "%{number} flight"
+        numbers: "first second third fourth fifth sixth"
+  results:
+    header:
+      find: "Find flights"
+      new: "New search"
+      all: "All flight options"
+      adults: ["two adults", "three adults", "four adults", "five adults", "six adults", "seven adults", "eight adults"]
+      children: ["one child", "two children", "three children", "four children", "five children", "six children", "seven children", "eight children"]
+      infants: ["one infant", "two infants", "three infants", "four infants", "five infants", "six infants", "seven infants", "eight infants"]
+      cabin:
+        Y: ""
+        C: "бизнес-классом"
+        F: "первым классом"
+    loading:
+      title: "Searching for best flight offers for you"
+      time: "Normally it takes 5—20 seconds"
+      carriers: "Choosing from 500 airlines flight offers"
+      average: "Average price for this destination is 14800 rubles for one passenger"
+      currency: "Prices will be displayed in Russian rubles"
+      payment: "Instant payment with Visa or MasterCard"
+    empty:
+      title: "Nothing found :-("
+      reasons: "Why this happened?"
+      dates: "No scheduled flights on chosen dates. Try other dates."
+      carriers: "We don't work with airlines which operate this destination. We constantly connect new airlines — maybe in near future we'll have what you need."
+      city: "No scheduled flights at all on this destination. Find another destination."
+    tabs:
+      cheap:
+        one: "Cheap"
+        many: "Cheap"
+      optimal:
+        one: "Optimal"
+        many: "Optimal"
+      nonstop:
+        one: "Direct"
+        many: "Direct"
+      cheapNonstop:
+        one: "Cheap direct"
+        many: "Cheap direct"
+      matrix:
+        one: "± 3 days"
+        many: "± 3 days"
+      from: "from %{value}"
+      some: "%{amount} of %{total}"
+      all: "All %{amount}"
+  filters:
+    dpt: "Departure %{from}"
+    arv: "Arrival %{to}"
+    and: " and "
+    time:
+      title: "Время вылета и прилета"
+      any: "anytime"
+      t0: "night"
+      t1: "morning"
+      t2: "noon"
+      t3: "evening"
+    cities:
+      title: "cities"
+      dpt: "from any city"
+      arv: "to any city"
+    airports:
+      title: "airports"
+      dpt: "from any airport"
+      arv: "to any airport"
+    carriers_and_planes: "Авиакомпании и самолеты"
+    alliance:
+      title: "Airline allince"
+      any: "any"
+    carrier:
+      title: "Airline"
+      any: "any"
+    aircraft:
+      title: "Plane type"
+      any: "any"
+    layovers: "Пересадки"
+    reset:
+      one: 'Сбросить %{count} выбранный фильтр'
+      other: 'Сбросить %{count} выбранных фильтров'
+  subscription:
+    title: "Subscribe for fare alert"
+    description: "If you don't care about the dates, we will notify via email you when cheap flights %{cities} will be available."
+    email: "Email address"
+    submit: "Want it!"
+    warning: "Please enter correct email address."
+    success: "You are now subscribed, thanks. You can always unsubscribe with the link in the email."
+    failed: "Something went wrong. Try once again."
+  offer:
+    columns:
+      dpt: "Departure"
+      arv: "Arrival"
+      duration: "Duration"
+    summary:
+      flight: "Flight %{from} %{to}, %{duration}"
+      layover: "Connection %{city}, %{duration}"
+      through: "via %{cities}"
+      duration:
+        hours: "%{h}\_h"
+        minutes: "%{m}\_min"
+    segment:
+      title: "Flight %{direction}"
+      direction:
+        there: "depart"
+        back: "return"
+      more: "and %{amount} more flight options %{direction}"
+      variants:
+        one: "%{count} option"
+        other: "%{count} options"
+      incompatible:
+        rt: "with another <span class=\"ossi-segment\">return</span>"
+        one: "with another <span class=\"ossi-segment\">flight %{direction}</span>"
+        many: "with anothe flights %{direction}"
+    price:
+      buy: "Buy for {0}"
+      one: "total price"
+      few: "total price for all passengers"
+      rise: "%{value} more expensive"
+      fall: "%{value} cheaper"
+      average: "<strong>%{value}</strong> cheaper then average"
+      carrier: "на <strong>%{value}</strong> <span class=\"ruble\">Р</span> дешевле, чем у самой авиакомпании"
+    details:
+      show: "Show flight details"
+      hide: "Hide flight details"
+      segment: "Flight %{from} %{to}"
+      segment_rt: "Return flight"
+      layovers:
+        one: "with connection %{cities}"
+        few: "with two connections\_– %{cities}"
+        many: "with three connections\_– %{cities}"
+      stopovers:
+        one: "Operated with technical landing %{cities}"
+        other: "Operated with technical landings %{cities}"
+      dpt: "Departure"
+      arv: "Arrival"
+      airport: "airport"
+      terminal: "terminal\_%{term}"
+      carrier: "airline"
+      flight: "flight"
+      aircraft: "plane"
+      duration: "duration"
+      between_flights: "between flights"
+      different_airports: "Different arrival and departure airports"
+      different_terminals: "Different arrival and departure terminals"
+    comments:
+      carrier: "Tickets are issued by %{carrier_name}."
+      alliance: "%{alliance_link} bonus programmes are applied."
+      time: "Local time is displayed everywhere."
+    availability:
+      text: "%{seats} available for this fare. Don't put off your booking."
+      one: "%{count} seat"
+      other: "%{count} seats"
+  prebooking:
+    progress: 'Проверяем доступность мест на вашем перелете'
+    available: 'Все отлично, места есть'
+  booking:
+    title: "Your flight"
+    passengers:
+      one: "Passenger details"
+      few: "Passengers details"
+      add: "Add passenger"
+      names:
+        first: "First name"
+        last: "Last name"
+        check: "Please check you've entered first and last name in correct fields."
+        controls: "%{swap} or %{leave} as is?"
+        swap: "Swap"
+        leave: "leave"
+        keyboard: "Please select Latin keyboard layout."
+        letters: "Only latin letters are required in first and last name. If the document doesn't contain latin spelling, use transliteration, e. g. JOHN SMITH."
+      gender:
+        label: "Gender"
+        m: "M"
+        f: "F"
+      birthdate: "Birthdate"
+      dates:
+        d: "dd"
+        m: "mm"
+        y: "yyyy"
+      nationality: "Nationality"
+      document:
+        label: "Document number"
+        hint: "What kind of documents are required?"
+        description: "National passport or external passport depending on destination. Birth certificate for infants and children (if applicable). Please note that visa is required for visiting several countries (detailed information on <a href=\"http://en.wikipedia.org/wiki/Visa_(document)#Visa_exemption_agreements\">Wikipedia</a> or in embassy/consulate.)"
+      expiration:
+        label: "Expiry date"
+        without: "no expiry"
+        hint: "Expiry date details"
+        description: "If the document has the expiry date, it should be provided. If not – check the \"no expiry\" checkbox."
+      bonus:
+        alliance: "Frequent flyer card of %{name}"
+        carrier: "Frequent flyer card of %{name}"
+        number: "Frequent flyer number"
+      with_seat:
+        label: "With seat"
+        description: "If you wish the infant to be seated, higher child fare will be applied. If the infant is unseated, please enter infant details after the details of adult passenger on who's hands the infant will fly."
+      order: "Please note that infant details should be entered after the details of adult passenger on who's hands the infant will fly."
+    update:
+      price: "Price changed"
+      progress: "Refreshing price"
+      required: "Fill in %{passengers},<br> to view the new price"
+      one: "passenger details"
+      few: "passengers details"
+    contacts:
+      title: "Customer details"
+      hint: "For us to know where to send the e-ticket and where to call in case of any changes"
+      email: "Email address"
+      phone: "Phone number"
+      with_code: "With country and city code"
+    payment:
+      card_cash: "Payment details"
+      only_card: "Bank card"
+      PCI_DSS: "Data transfer is protected by SSL certificate from DigiCert. The website is fully compliant with PCI DSS security standards."
+      by_card:
+        label: "With bank card"
+        ticket: "Ticket will be issued and sent to you via email"
+      by_cash:
+        label: "By cash in Moscow"
+        office: "At our office"
+        delivery: "On delivery (+%{sum})"
+        both: "At our office or on delivery (+%{sum})"
+    card:
+      safety: "Your bank card data is processed by PayU payment center and is protected with the 256-bit security key, provided by Digicert."
+      cvv_description: "CVV (or CVC) is the 3-digit code on the back side of the card. Normally it is located on the right of signature strip, after 4 digits of card number. If your card has no such code, it is not suitable for online payments."
+      or: "or"
+      number:
+        label: "Card number"
+        hint: "16\_digits"
+        last: "Last 4 digits of card number"
+      cvv_hint: "3\_digits"
+      expires: "Expiry date"
+      dates:
+        m: "MM"
+        y: "YY"
+      name: "Cardholder name"
+      keyboard: "Please select the Latin keyboard layout. Cardholder name should be in Latin letters"
+      currency: "If your bank account isn't in Russian rubles, conversion will be made according to your bank rates"
+    cash:
+      due_date: "Booking should be paid until <strong>%{date}</strong>, otherwise it will be cancelled."
+      delivery:
+        label: "On delivery (%{sum})"
+        address: "Address"
+        details: "please indicate any details"
+        description: "Preferable delivery time will help us to plan better. We deliver only on Mon–Fri from 10AM till 7PM."
+      office:
+        label: "At our office"
+        description: "You can visit us from 11AM to 7PM, Monday to Friday. Our office is in Moscow, Rochdelskaya street, 15. Please take any identity document and call +7 495 660-35-20 one hour before your visit so we could prepare everything necessary for you."
+        contacts: "Detailed contact information and map"
+    price:
+      total_card: "Total price —"
+      total_cash: "Total price —"
+      for_all: "For all passengers"
+      including_fee: "Including service fee"
+      fare: "Fare"
+      taxes_and_fees: "Taxes and fees"
+      fee: "Service fee"
+      delivery: "Delivery fee"
+      discount: "Discount"
+      fare_compensation: "Discount"
+    buy:
+      button: "Buy"
+      progress: "one moment please…"
+      card: "After you press the \"Buy\" button, passenger data will be transferred into the booking system, ticket will be issued and sent to you by email in 5–10 minutes."
+      cash: "After you press the \"Buy\" button, booking confirmation will be sent to you by email in 5–10 minutes. We will contact you to discuss delivery details."
+      agree: "When pressing the \"Buy\" button, you accept the <a href=\"/agreement/\" target=\"_blank\" class=\"bffd-link\">User Agreement</a>, <a href=\"/iata/\" target=\"_blank\" class=\"bffd-link\">IATA</a> rules and <span class=\"link bffd-link bffd-farerules\">refund and exchange rules</span>."
+    farerules:
+      title: "Fare application rules"
+      restrictions: "Attention! In case of passenger sickness, visa refusal or other circumstances, refund/exchange is impossible without penalties. Refund/exchange fees are calculated according to airline fare rules. When the ticket combines different fare classes, the most strict limitations are applied to the entire itinerary."
+      service: "При возврате в\_дополнение к\_возможным штрафным санкциям авиакомпании по\_правилам тарифа, взымается сервисный сбор — 600\_рублей за\_пассажира."
+      cancellation: "Tickets are non-transferable. In case of failure to appear on the flight, the airline can cancel all subsequent segments of the itinerary."
+      fare: "Fare"
+    validation:
+      empty:
+        left: "Fill in %{fields}."
+        one: "%{count} other field"
+        other: "%{count} other fields"
+      passengers:
+        sample: "passenger"
+        numbers: ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth"]
+      email:
+        empty: "{email address}"
+        wrong: "Incorrect {email address}."
+      phone:
+        empty: "{Phone number}"
+        letters: "{Phone number} must contain only numbers."
+        short: "Short {phone number}, enter country and area code."
+      fname:
+        empty: "{passenger first name}"
+        short: "{Passenger first name} should be entered completely."
+        letters: "{Passenger first name} should be entered by latin letters."
+      lname:
+        empty: "{passenger last name}"
+        short: "{Passenger last name} should be entered completely."
+        letters: "{Passenger last name} should be entered by latin letters."
+      gender:
+        empty: "{passenger gender}"
+      birthday:
+        empty: "passenger {birthdate}"
+        wrong: "Passenger {birthdate} doesn&#39;t exist."
+        letters: "Passenger {birthdate} should be entered in dd/mm/yyyy format."
+        improper: "Passenger {birthdate} should not be later than today."
+      passport:
+        empty: "passenger {document number}"
+        letters: "Passenger {document number} must contain only letters and numbers."
+      expiration:
+        empty: "Passenger {document expiry date}"
+        wrong: "Passenger {document expiry date} is incorrect."
+        letters: "Passenger {document expiry date} should be entered in dd/mm/yyyy format."
+        improper: "Passenger document is expired"
+      bonus:
+        empty: "{bonus card number}"
+        letters: "{Bonus card number} must contain only latin letters and numbers."
+      cardnumber:
+        empty: "{card number}"
+        letters: "{Card number} must contain only numbers."
+        wrong: "{Card number} is incorrect."
+      cvc:
+        empty: "{CVV/CVC code of bank card}"
+        letters: "{CVV/CVC code of bank card} must contain only numbers."
+      cardholder:
+        empty: "{Cardholder name}"
+        letters: "{Cardholder name} must contain only latin letters."
+      cardexp:
+        empty: "{card expiry date}"
+        letters: "{Card expiry date} should be in mm/yy format."
+        wrong: "The month of {card expiry date} should not be more than 12."
+        improper: "Bank card is expired."
+      address:
+        empty: "{delivery address}"
+    success:
+      allright: "Все отлично!"
+      card:
+        one: "Ваш билет оплачен."
+        few: "Ваши билеты оплачены."
+      cash:
+        one: "Ваш билет забронирован."
+        few: "Ваши билеты забронированы."
+      confirmation: "Подтверждение будет отправлено на\_ваш электронный адрес в\_течение десяти минут."
+      whattodo:
+        link: "Что делать, если ничего не пришло?"
+        hint: "Если вы&nbsp;не&nbsp;получили письмо с&nbsp;подтверждением бронирования в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, то&nbsp;напишите нам (<a href=\"mailto:operator@eviterra.com\">operator@eviterra.com</a>) или позвоните <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся."
+      pnr: "Номер вашей брони — %{number}"
+    failed_booking:
+      title: "Не удалось забронировать этот вариант"
+      description: "Так иногда бывает, потому что авиакомпания не&nbsp;может подтвердить наличие мест на&nbsp;этот рейс по&nbsp;этому тарифу. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Выберите %{other}."
+      other: "другой вариант"
+    failed_payment:
+      title: "Что-то пошло не так. Скорее всего, банк отклонил попытку платежа по вашей карте."
+      reasons: "<strong>Это могло произойти по одной из нескольких причин:</strong> вы неверно ввели данные карты, либо на счете карты нет достаточной суммы, либо банк запретил для вашей карты транзакции в интернете или установил лимит на такие транзакции."
+      whattodo: "<strong>Что можно сделать:</strong> еще раз проверить, правильно ли введены данные, использовать другую карту или связаться с банком, выдавшим карту (обычно телефон банка указан на карте и работает круглосуточно)."
+      support: "Если вы абсолютно уверены, что отказ произошел не по вышеуказнным причинам и это у нас что-то не работает, свяжитесь с нами по электронной почте <a href=\"mailto:support@eviterra.com\">support@eviterra.com</a>."
+      again: "Попробовать ещё раз"
+    forbidden:
+      title: "В связи с плановыми техническими работами мы не можем оформить вашу покупку прямо сейчас."
+      description: "Пожалуйста, не закрывайте страницу и нажмите на кнопку «Купить» через 10 минут. Приносим извинения за задержку."

@@ -59,9 +59,12 @@ apply: function() {
     var data = results.data;
     if (data && data.valid) {
         // if (data.fresh) { только для новых условий поиска }
-        trackPage('/search?query=' + data.titles.header.replace(/&nbsp;/g, ' '));
         results.load();
         results.show();
+        var query = '/search?query=' + data.titles.header.replace(/&nbsp;/g, ' ');
+        _kmq.push(['record', 'SEARCH: button pressed']);
+        _gaq.push(['_trackPageview', query]);
+        _yam.hit(query);        
     }
 },
 position: function() {

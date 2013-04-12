@@ -26,23 +26,22 @@ waitRequests: function() {
 },
 getValues: function() {
     var mode = this.mode.selected;
-    var lw = lang.searchRequests;
     var warnings = [];
     var segments = [];
     for (var i = 0; i < this.locations.used; i++) {
         var segment = this.locations.segments[i];
         var dpt = segment.dpt.selected;
         var arv = segment.arv.selected;
-        var title = mode === 'mw' ? lw.mwsegments[i] : '';
+        var title = mode === 'mw' ? I18n.t('search.messages.segments.mw', {number: I18n.t('search.messages.segments.numbers').split(' ')[i]}) : '';
         var s = {
             from: dpt ? dpt.name : '',
             to: arv ? arv.name : ''
         };
         if (!s.from) {
-            warnings.push(lw.dpt.absorb(title));
+            warnings.push(I18n.t('search.messages.dpt', {segment: title}));
         }
         if (!s.to) {
-            warnings.push(lw.arv.absorb(title));
+            warnings.push(I18n.t('search.messages.arv', {segment: title}));
         }
         segments[i] = s;
     }
@@ -51,8 +50,15 @@ getValues: function() {
     }
     for (var i = 0; i < segments.length; i++) {
         var sdate = this.dates.selected[i];
-        var title = lw[mode === 'mw' ? 'mwsegments' : 'rtsegments'][i];
-        if (sdate === undefined) warnings.push(lw.date.absorb(title));
+        if (sdate === undefined) {
+            var title;
+            if (mode === 'mw') {
+                title = I18n.t('search.messages.segments.mw', {number: I18n.t('search.messages.segments.numbers').split(' ')[i]});
+            } else {
+                title = I18n.t(i === 0 ? 'search.messages.segments.dpt' : 'search.messages.segments.rt');
+            }
+            warnings.push(I18n.t('search.messages.date', {segment: title}));
+        }
         segments[i].date = this.dates.getDate(sdate);
     }
     if (this.mode.values.is(':visible')) {
@@ -64,10 +70,10 @@ getValues: function() {
         infants: this.options.infants.selected || 0
     };
     if (persons.adults + persons.children + persons.infants > 8) {
-        warnings.push(lw.persons);
+        warnings.push(I18n.t('search.messages.persons'));
     }
     if (persons.infants > persons.adults) {
-        warnings.push(lw.infants);
+        warnings.push(I18n.t('search.messages.infants'));
     }
     return {
         warnings: warnings,
@@ -128,12 +134,8 @@ validate: function() {
     var values = this.getValues();
     // Сбрасываем текущий поиск
     if (page.location.search) {
-        Queries.history.select();
         page.location.set('search');
         page.title.set();
-        if (typeof sessionStorage !== 'undefined') {
-            sessionStorage.removeItem('personsAmount');
-        }
     }
     results.header.hide();
     this.valid = values.warnings.length === 0;
@@ -157,6 +159,9 @@ loadSummary: function(values, process) {
         success: function(data, status, request) {
             if (that.valid && data.valid) {
                 results.update(data);
+                if (!values.query_key) {
+                    _kmq.push(['record', 'SEARCH: button enabled']); // Для восстановления формы по урлу не считаем
+                }
             }
             if (values.query_key) {
                 that.restoreValues(data);
@@ -172,7 +177,7 @@ loadSummary: function(values, process) {
             }
         },
         error: function() {
-            results.header.show(lang.errors.timeout, false);
+            results.header.show(I18n.t('timeout'), false);
         },
         timeout: 15000
     });

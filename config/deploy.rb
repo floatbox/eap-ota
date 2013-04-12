@@ -34,7 +34,8 @@ task :localgit do
 end
 
 # для shared/* папочки для deploy:setup
-set :shared_children, %w(log pids system config initializers cache)
+# не работает, когда use_sudo true
+set :shared_children, %w(log pids system config initializers cache local)
 
 # для deploy:migrate
 set :rake, 'bundle exec rake'
@@ -47,14 +48,17 @@ set :normalize_asset_timestamps, false
 
 # нужен для нормального форвардинга ключей, соответствующая настройка
 # в пользовательском .ssh/config почему-то не читается
-# ssh_options[:forward_agent] = true
+ssh_options[:forward_agent] = true
 
 set :application, "eviterra"
 
 task :staging do
   load 'lib/recipes/unicorn'
+  set :use_sudo, true
   set :rails_env, 'staging'
   role :app, 'vm1.eviterra.com', 'vm2.eviterra.com'
+  # кажется, если нет asset-ов на локальной машине, не работает javascript_include_tag и прочие
+  # добавляю обратно deck
   role :web, 'vm3.eviterra.com'
   role :daemons, 'vm2.eviterra.com'
   role :db, 'vm1.eviterra.com', :primary => true
@@ -65,24 +69,15 @@ task :staging do
   set :branch, 'staging'
 end
 
-task :unicorn do
-  load 'lib/recipes/unicorn'
-  set :rails_env, 'production'
-  set :rvm_type, :user
-  role :app, 'flexo.eviterra.com', 'deck.eviterra.com'
-  role :web, 'hermes.eviterra.com'
-  role :db, 'flexo.eviterra.com', :primary => true
-  # role :daemons, 'flexo.eviterra.com'
-end
-
 task :eviterra do
-  load 'lib/recipes/passenger'
+  load 'lib/recipes/unicorn'
+  set :use_sudo, true
   set :rails_env, 'production'
   set :rvm_type, :system
-
-  server 'bender.eviterra.com', :app, :web
-  role :db, 'bender.eviterra.com', :primary => true
-  role :daemons, 'bender.eviterra.com'
+  role :app, 'flexo.eviterra.com', 'deck.eviterra.com', 'calculon.eviterra.com'
+  role :web, 'hermes.eviterra.com', 'deck.eviterra.com'
+  role :db, 'deck.eviterra.com', :primary => true
+  role :daemons, 'deck.eviterra.com'
 end
 
 set :deploy_to, "/home/#{user}/#{application}"
@@ -94,12 +89,15 @@ namespace :deploy do
       run "ln -sf #{shared_path}/initializers/* #{latest_release}/config/initializers/; true"
   end
 
+  # по каким-то причинам assets:precompile все равно грохает его содержимое
+  # разобраться
   task :symlink_persistent_cache do
     run "ln -s #{shared_path}/cache #{latest_release}/tmp/cache"
   end
 
-  task :symlink_completer do
-    run "ln -s #{shared_path}/completer.dat #{latest_release}/tmp/completer.dat || echo #{shared_path}/completer.dat does not exist"
+  task :symlink_db_local do
+    run "rm -rf #{latest_release}/db/local"
+    run "ln -sf #{shared_path}/local #{latest_release}/db/local"
   end
 
   desc <<-DESC
@@ -131,6 +129,19 @@ namespace :deploy do
 
     puts "#{migrate_target} => #{directory}"
     run "cd #{directory}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} db:abort_if_pending_migrations || echo PLEASE DON\\\'T FORGET TO cap deploy:migrate!"
+  end
+
+  desc <<-DESC
+    Regenerates completer. If you need to create completer.dat on a new machine, \
+    you probably want to run
+
+      cap deploy:update_code deploy:completer
+  DESC
+  task :completer do
+    rake = fetch(:rake, "rake")
+    rails_env = fetch(:rails_env, "production")
+    directory = current_release
+    run "cd #{directory}; #{rake} RAILS_ENV=#{rails_env} completer:regen"
   end
 
   # daemons
@@ -178,7 +189,7 @@ namespace :deploy do
 
   after "deploy:finalize_update", "deploy:symlink_shared_configs"
   after "deploy:finalize_update", "deploy:symlink_persistent_cache"
-  after "deploy:finalize_update", "deploy:symlink_completer"
+  after "deploy:finalize_update", "deploy:symlink_db_local"
   after "deploy", "deploy:restart_services"
   # after "deploy:update_code", "deploy:check_for_pending_migrations"
   after "deploy:rollback", "deploy:restart_services"

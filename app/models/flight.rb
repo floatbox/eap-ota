@@ -49,6 +49,9 @@ class Flight
   delegate :name, :prefix => true, :allow_nil => true, :to => :equipment_type
   delegate :name_en, :prefix => true, :allow_nil => true, :to => :equipment_type
 
+  delegate :city, :prefix => true, :allow_nil => true, :to => :departure
+  delegate :city, :prefix => true, :allow_nil => true, :to => :arrival
+
   def arrival_datetime_utc
     @arrival_datetime_utc ||=
       arrival.tz.local_to_utc(DateTime.strptime( arrival_date + arrival_time, '%d%m%y%H%M' )).to_time

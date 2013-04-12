@@ -9,6 +9,11 @@ class Ticket < ActiveRecord::Base
     id && self.equal?( ActiveRecord::IdentityMap.get(self.class, id) )
   end
 
+  # заглушка для шаблона МК
+  def display_delivery?
+    false
+  end
+
   # FIXME сделать модуль или фикс для typus, этим оверрайдам место в typus/application.yml
   def self.model_fields
     super.merge(
@@ -27,6 +32,7 @@ class Ticket < ActiveRecord::Base
   has_many :children, :class_name => 'Ticket', :foreign_key => 'parent_id'
 
   has_and_belongs_to_many :stored_flights
+  has_and_belongs_to_many :imports
   serialize :baggage_info, JoinedArray.new
 
   # для отображения в админке билетов. Не очень понятно,
@@ -35,11 +41,14 @@ class Ticket < ActiveRecord::Base
     :through => :order, :source => :tickets, :order => 'tickets.number asc',
     :conditions => lambda {|_| ["tickets.id <> ?", id] }
 
-  delegate :need_attention, :paid_by, :to => :order
+  delegate :paid_by, :to => :order
+  delegate :fee_scheme, :to => :order
 
   delegate :commission_carrier, :to => :order, :allow_nil => true
 
   delegate :old_booking, :to => :order, :allow_nil => true
+  delegate :commission_agent_comments, :to => :order, :allow_nil => true
+  delegate :commission_subagent_comments, :to => :order, :allow_nil => true
 
   # FIXME - временно, эквайринг должен браться из суммы пейментов
   delegate :acquiring_percentage, :to => :order
@@ -67,6 +76,16 @@ class Ticket < ActiveRecord::Base
   attr_accessor :parent_number, :parent_code, :original_price_total
   attr_writer :price_fare_base, :flights
   before_validation :set_info_from_flights
+  before_save :set_prices
+
+  def set_prices
+    self.price_acquiring_compensation = price_payment_commission if corrected_price && (price_acquiring_compensation == 0)
+    self.price_difference = price_with_payment_commission - price_real
+  end
+
+  def display_fee_details
+    fee_calculation_details.html_safe
+  end
 
   def show_vat
     vat_status != 'unknown'
@@ -103,7 +122,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def price_fare_base
-    @price_fare_base ||= if parent
+    @price_fare_base ||= if parent && parent.created_at && created_at  && parent.created_at < created_at
       original_price_fare + parent.price_fare_base
     else
       original_price_fare
@@ -114,12 +133,31 @@ class Ticket < ActiveRecord::Base
 
    # whitelist офис-айди, имеющих к нам отношение. В брони иногда попадают "не наши" билеты
    # для всех айди в базе можно использовать: Ticket.uniq.pluck(:office_id).compact.sort
-   def self.office_ids
-     ['MOWR2233B', 'MOWR228FA', 'MOWR2219U', 'NYC1S21HX', 'FLL1S212V']
-   end
+  def self.office_ids
+    ['MOWR2233B', 'MOWR228FA', 'MOWR2219U', 'NYC1S21HX', 'FLL1S212V']
+  end
 
   def self.validating_carriers
     Carrier.uniq.pluck(:iata).sort
+  end
+
+  def self.default_refund_fee(order_creation_date)
+    order_creation_date = order_creation_date.to_date
+    Conf.payment.refund_fees.sort_by {|date, value| date }.reverse.each do |date, value|
+      return value if date <= order_creation_date
+    end
+    return 0
+  end
+
+  def refund_payment_commission
+    #FIXME Пришлось захардкодить дату
+    if parent && parent.created_at < created_at
+      parent.refund_payment_commission
+    elsif created_at < Date.parse('2013-02-20')
+      0
+    else
+      -price_payment_commission
+    end
   end
 
   def baggage_array
@@ -143,7 +181,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def update_parent_status
-    parent.update_status
+    parent.update_status if parent.created_at && created_at && parent.created_at < created_at
   end
 
   def update_status
@@ -214,6 +252,10 @@ class Ticket < ActiveRecord::Base
     find_or_initialize_by_number number
   end
 
+  def ticketed?
+    status == 'ticketed'
+  end
+
   def update_data_in_order
     if order
       # FIXME убить или оставить только ради тестов?
@@ -241,13 +283,15 @@ class Ticket < ActiveRecord::Base
       self.status = 'pending' if status.blank?
     end
     self.original_price_penalty *= -1 if original_price_penalty && original_price_penalty.cents < 0
-    self.price_discount *= -1 if price_discount > 0
+    self.price_discount *= -1 if price_discount < 0
     self.price_our_markup *= -1 if price_our_markup > 0
     self.original_price_tax *= -1 if original_price_tax && original_price_tax.cents > 0
     self.original_price_fare *= -1 if original_price_fare && original_price_fare.cents > 0
     self.price_consolidator *= -1 if price_consolidator > 0
     self.commission_subagent = 0 if original_price_fare != -parent.original_price_fare && !parent.commission_subagent.percentage?
     self.commission_agent = 0 if original_price_fare != -parent.original_price_fare && !parent.commission_agent.percentage?
+    self.price_acquiring_compensation *= -1 if price_acquiring_compensation > 0
+    self.corrected_price = price_with_payment_commission
   end
 
   def copy_commissions_from_order
@@ -346,6 +390,10 @@ class Ticket < ActiveRecord::Base
       url = show_order_for_ticket_path(order.pnr_number, self)
       "<a href=#{url}>PNR</a><br/><br/><a href=#{url}?lang=EN>PNR EN</a>".html_safe
     end
+  end
+
+  def processed_refund?
+    kind == 'refund' && status == 'processed'
   end
 
   def raw

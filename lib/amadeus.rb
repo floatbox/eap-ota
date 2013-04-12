@@ -32,6 +32,10 @@ module Amadeus
     def downtown(&block)
       session(Amadeus::Session::DOWNTOWN, &block)
     end
+
+    def zagorye(&block)
+      session(Amadeus::Session::ZAGORYE, &block)
+    end
   end
 
   extend Shortcuts

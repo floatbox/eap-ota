@@ -89,6 +89,7 @@ Eviterra::Application.configure do
   config.assets.digest = true
 
   # Compress JavaScripts and CSS
+  # кажется, нельзя убрать при выключенном .debug. обобщенный файл все равно сжат
   config.assets.compress = true
 
   # Log the query plan for queries taking more than this (works

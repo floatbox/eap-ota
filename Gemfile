@@ -1,7 +1,8 @@
-source 'http://rubygems.org'
-gem 'rails', '3.2.11'
+source 'https://rubygems.org'
+gem 'rails', '3.2.12'
 
 gem 'jquery-rails'
+gem 'i18n-js', :git => 'https://github.com/fnando/i18n-js.git'
 group :assets do
   #gem 'therubyracer'
   gem "uglifier"
@@ -15,6 +16,8 @@ gem 'pry-doc', require: false
 # расцветка строки ввода. убрал, ибо глушат полезные хоткеи
 # gem 'pry-coolline' #, :git => 'https://github.com/pry/pry-coolline.git'
 gem 'pry-editline', require: false
+# для rake "db:migrate" и т.п. в rails console
+gem 'commands', group: [:development, :test]
 
 # Deploy with Capistrano
 group :deployment do
@@ -46,6 +49,8 @@ gem 'mysql2'
 gem 'paper_trail'
 gem 'geo_ip'
 gem 'airbrake'
+# поддержка асинхронных нотификаций в airbrake, пока выключил
+# gem 'girl_friday'
 gem 'newrelic_rpm'
 # gem 'rpm_contrib'
 gem 'mongoid'

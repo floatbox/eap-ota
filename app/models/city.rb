@@ -1,6 +1,7 @@
 # encoding: utf-8
 class City < ActiveRecord::Base
   include HasSynonyms
+  include Cases
   extend IataStash
 
   has_paper_trail
@@ -35,8 +36,6 @@ class City < ActiveRecord::Base
       .has_coords \
       .order("distance asc")
   }
-
-  has_cases_for :name
 
   def self.nearest_to lat, lng
     return unless lat.present? && lng.present?

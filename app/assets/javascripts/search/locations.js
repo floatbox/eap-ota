@@ -145,7 +145,6 @@ blur: function() {
 initDropdown: function() {
     this.dropdown = $('<div class="sl-dropdown"></div>').appendTo(this.el);
     this.ddlist = $('<ul class="sld-list"></ul>').appendTo(this.dropdown);
-    this.ddhint = $('<p class="sld-hint"></p>').appendTo(this.dropdown);
     var that = this;
     this.ddlist.delegate('.sld-item:not(.sld-preferred)', 'mousemove', function() {
 	    that.prefer(parseInt($(this).attr('data-index'), 10));
@@ -193,8 +192,7 @@ load: function() {
         method: 'GET',
         url: '/complete.json',
         data: {
-            val: this.value,
-            pos: this.value.length,
+            query: this.value,
             limit: 8
         },
         success: function(result) {
@@ -209,7 +207,7 @@ update: function(value, variants) {
     var template = '{0} <span class="larea">{1}</span>';
     for (var i = 0, im = variants.length; i < im; i++) {
         var v = variants[i];
-        var el = $('<li class="sld-item"></li>').html(template.absorb(v.name, v.area));
+        var el = $('<li class="sld-item"></li>').html(template.absorb(v.name, v.hint));
         var sign = this.getSign(v);
         if (sign) {
             el.append(sign);
@@ -248,11 +246,11 @@ restore: function(data, cached) {
 	}
 },
 getSign: function(variant) {
-    var flag = variant.type === 'country' ? search.flags[variant.iata] : undefined;
+    var flag = variant.type === 'country' ? search.flags[variant.code] : undefined;
     if (flag !== undefined) {
     	return '<span class="lflag" style="background-position: 0 -' + flag + 'px;"></span>';
-    } else if (variant.iata) {
-    	return '<span class="liata">' + variant.iata + '</span>';
+    } else if (variant.code) {
+    	return '<span class="liata">' + variant.code + '</span>';
     } else {
         return '';
     }
@@ -262,7 +260,7 @@ filter: function() {
     var sample = this.value.toLowerCase();
     for (var i = this.variants.length; i--;) {
         var variant = this.variants[i];
-        if (variant.sample.indexOf(sample) === -1) {
+        if (variant && variant.sample.indexOf(sample) === -1) {
             this.items.eq(i).addClass('sld-improper');
         }
     }
@@ -273,7 +271,6 @@ toggleVariants: function(stealth) {
 prefer: function(index, scroll) {
 	if (this.preferred) this.preferred.removeClass('sld-preferred');
    	this.preferred = this.items.eq(index).addClass('sld-preferred');
-   	this.ddhint.html(this.variants[index].hint);
    	if (scroll) {
         var st = this.ddlist.scrollTop();
         var ot = this.preferred.position().top + st;
@@ -352,7 +349,7 @@ set: function(value) {
         this.field.val(value);
         this.select();
         this.change();
-    } else {    
+    } else if (value) {    
         if (!value.sample) value.sample = value.name.toLowerCase();
         this.variants = [value];
         this.select(value);

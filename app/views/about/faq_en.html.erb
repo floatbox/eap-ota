@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html lang="ru-RU">
+<head>
+	<meta charset="utf-8">
+    <title>Eviterra — вопросы и ответы</title>
+    <meta name="description" content="Eviterra.com — простой, удобный и красивый способ найти и купить авиабилет. Поиск, выбор рейса и бронирование онлайн. Цены на авиабилеты. +7 495 660-35-20">
+    <meta name="keywords" content="авиабилет, авиакасса, авиабилеты купить, бронирование, выбрать рейс, авиарейс, перелет, дешевые авиабилеты, цены на билеты, онлайн бронирование, эвитерра, eviterra, спецпредложения, авиакомпании, расписание рейсов, маршрут, агентство, турагентство, путешествия">
+    <%= render 'shared/head' %>
+    <%= stylesheet_link_tag 'static/all', 'static/faq' %>
+    <%= javascript_include_tag 'static' %>
+</head>
+<body>
+<div class="page-wrapper">
+
+<%= render 'shared/header' %>
+<div id="back2search">
+    <div class="bs-content"><a class="bs-link" href="/">Search flights</a></div>
+</div>
+
+<div class="article faq">
+    <div class="faq-contents">
+        <div class="fc-fixed">
+        <ul>
+            <li><a href="#service">Site and service</a></li>
+            <li><a href="#booking">Booking and ticketing</a></li>
+            <li><a href="#payment">Payment</a></li>
+        </ul>
+        <p>It wasn't helpful? <a href="mailto:hello@eviterra.com">Write a line</a>.</p>
+        </div>
+    </div>
+
+<div class="asection" id="service">
+    <h2>Site and service</h2>
+    <dl>
+        <dt>Air tickets on your site are much cheeper than on air company site. Why? Is it ok?</dt>
+        <dd>It's ok. We do discounts from official airline fares in case of our partnership conditions. Not only that: we often have tickets with a special price which air companies don't show on their own.</dd>
+        <dt>But how do you make your money?</dt>
+        <dd>We don't charge users (for) any extra fares at all. Air companies pay us some bonuses for our work — depending on a number of tickets sold.</dd>
+        <dt>I have a frequent flyer bonus card. How do I make it count miles on your site?</dt>
+        <dd>Choose your program type and type down your bonus card number when entering passenger's id and other information.</dd>
+        <dt>I've found a ticket cheaper than yours on another site. Why?</dt>
+        <dd>Ticket availability is changing all the time. That's why for a certain moment of time you may not find a (specific) ticket (and it's a ultimate truth for all kind of air booking sites). Furthermore, meta-search systems like KAYAK often keep some information in their cache sometimes displaying irrelevant prices.</dd>
+        <dt>How to save some money when buying a ticket?</dt>
+        <dd>Here's some sort of a "main rule": book flight as soon as possible. When you purchase a ticket much earlier than a flight date a lot of low-price booking classes are available. Over time all the cheapest tickets get (got) bought and only expensive booking classes are left. However, expensive ticket is much more convenient than a cheap one in case of changing or returning a ticket. Cheap booking class flights aren't changeable or returnable in general.</dd>
+        <dt>How to book a hotel or a car on your site?</dt>
+        <dd>We plan to implement hotel booking and car renting just after air tickets. That means we are doing it right now.</dd>
+    	<dt>I couldn't find low-cost airlines on your site. Why?</dt>
+        <dd>These guys have just another business model and prefer to place flights on their own sites. But anyway, we are working on it, too.</dd>
+    </dl>
+</div>
+<div class="asection" id="booking">
+    <h2>Booking and ticketing</h2>
+    <dl>
+        <dt>How could I change a flight or (get my) money back?</dt>
+        <dd>This entirely depends on fare rules which you could see right before booking. Generally speaking, cheap flights nearly always are non-returnable but more expensive ones (and business class, of course) you can change or cancel almost without penalties. Fare rules are written mostly in english. If you don't sure you understand it right, please, feel free to call or write a line, we will do our best to help you.</dd>
+        <dt>I've mistyped my second name. Will I pass on a plane?</dt>
+        <dd>Try not to make a mistake in a name and surname fields. If you think you made a mistake when filling out (a) booking form, please, contact us for help.</dd>
+        <dt>Если на&nbsp;момент полета туда моему ребенку еще 11&nbsp;лет, а&nbsp;на&nbsp;момент обратного полета уже&nbsp;12, как забронировать билет?</dt>
+        <dt>How could I book a flight for my child, if he gets 12 during a trip?</dt>
+        <dd>Если на&nbsp;момент обратного полета ребенку будет 12&nbsp;лет, то&nbsp;он&nbsp;уже считается взрослым пассажиром.</dd>
+        <dd>If he will get 12 on the moment of return flight he's deemed as an adult passenger.</dd>
+    </dl>
+</div>
+<div class="asection" id="payment">
+    <h2>Payment</h2>
+    <dl>
+        <dt>How can I pay for a ticket?</dt>
+        <dd>The easiest way is to pay with a credit card on our site. If it's not comfortable you may order a delivery to pay with cash or you could visit our office (not available for all kind of flights). We plan to add paypal (or who knows, bitcoin?) as soon as possible.</dd>
+        <dt>Can I believe you? How can I be sure you will not do bad things with my card number?</dt>
+        <dd>We are (entity legal), Eviterra, LLC working under laws of Russian Federation (federal state Delawer? — полная неразбериха, Маша?). We have all necessary licenses and certificates. We just have no interest in making bad things. Credit card information you entering on this site is encrypted with SHA1 security key. In addition to that we transfer this information (encrypted of course) only to the bank and don't save it (for) later. (С имплементацией кабинета поменять). Your safety is validated with PCI DSS Compilance certificate (without this we could not charge cards (for money) at all).</dd>
+        <dt>What will happen right after buying a ticket on your site?</dt>
+        <dd>If you have enough amount of money on your card we will book a flight you have picked up and send a ticket on your mailbox right after you click "Buy ticket" button on a site. There will be all you need: departure/arrival times, flight number and passenger information. By the way, you don't need to print this: just show your passport when checking in an airport.</dd>
+        <!-- <dd>Очень редко, но&nbsp;бывает, что авиакомпания не&nbsp;может подтвердить возможность бронирования того или иного варианта перелета. В&nbsp;таком случае мы&nbsp;с&nbsp;вами свяжемся, извинимся, моментально вернем деньги и&nbsp;предложим другие варианты перелета.</dd> -->
+        <dt>I didn't receive a mail, what's up?</dt>
+        <dd>Check your spam folder just in case. Also make sure you've entered your e-mail address properly and you have enough space in your inbox to receive a mail (для запада неактуально ваще). If you haven't got a mail within 15-20 minutes, please, contact us, we will send (an) e-ticket once more on any e-mail you say.</dd>
+        <dt>When I book a flight on your site, it forwards me to "3DSecure". What is it?</dt>
+        <dd>This just means your card has an advanced security system preventing fraud transactions. In this case we forward you to a site of your bank, where you are up to enter one-time (однороазовый) password, which will be sent to you via SMS. If you haven't use such kind of protection you will pass simple registration on a site of your bank.</dd>
+        <dt>I want to pay like an LLC (юридичесоке лицо, Маша?). How can I do this?</dt>
+        <dd>Just contact us and we will send all necessary instructions.</dd>
+        <dt>Your site asks for CVC code during a payment. What is it? What if I have no CVC?</dt>
+        <dd>CVC is usually on a backside of your card (last three digits near to your signature). But if you have Visa Electron or Maestro card you have no CVC cause this type of credit cards are not able to pay on (in?) the internet.</dd>
+        <dt>I have enough money on my card, but payment just doesn't go through. What is going on?</dt>
+        <dd>It seems that your bank made a limit for payments on (in?) internet for your security or just blocked your card without any confirmation. You have to contact your bank and tell (prove) that you want to make a payment in the internet. Your bank service must help you.</dd>
+        <dt>I have no roubles on my credit card. What exchange rate will be applied within a transaction?</dt>
+        <dd>Your money will be converted in roubles up to your bank exchange rate.</dd>
+    </dl>
+</div>
+
+</div>
+<div class="page-buffer"></div>
+</div>
+<%= render 'shared/footer' %>
+<script type="text/javascript">
+$('.fc-fixed li a').click(function(event) {
+    var section = $($(this).attr('href'));
+    if (section) {
+        event.preventDefault();
+        $w.smoothScrollTo(section.find('h2').position().top - 130);
+    }
+});
+</script>
+</body>
+</html>

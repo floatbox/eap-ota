@@ -29,7 +29,7 @@
 Сбор за бланки: <%= @order.price_blanks %> р.
 
 Скидка от тарифа: <%= @order.commission_discount %>%
-Скидка от тарифа: <%= @order.price_discount %> р.
+Скидка от тарифа: <%= -@order.price_discount %> р.
 
 Надбавка к тарифу: <%= @order.commission_our_markup %>
 Надбавка к тарифу: <%= @order.price_our_markup %> р.
@@ -63,7 +63,7 @@ Cтоимость билета до эквайринга: <%= @order.price_total
   Сбор за бланки: <%= ticket.price_blanks %> р.
 
   Скидка от тарифа: <%= ticket.commission_discount %>%
-  Скидка от тарифа: <%= ticket.price_discount %> р.
+  Скидка от тарифа: <%= -ticket.price_discount %> р.
 
   Надбавка к тарифу: <%= ticket.commission_our_markup %>
   Надбавка к тарифу: <%= ticket.price_our_markup %> р.

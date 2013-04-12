@@ -3,14 +3,14 @@
     display: none;
 }
 .b-disclaimer {
-    margin: 0 14px 20px;
+    margin: 0 14px 20px 0;
     font-size: 13px;
     line-height: 17px;
 }
 .bd-column {
     position: relative;
     float: left;
-    width: 290px;
+    width: 210px;
     margin-right: 40px;
 }
 .bd-border {

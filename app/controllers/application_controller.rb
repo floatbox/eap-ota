@@ -11,6 +11,8 @@ class ApplicationController < ActionController::Base
   protected
 
   helper_method :admin_user
+  # показывает данные текущего пользователя тайпус в админке
+  alias_method :current_member, :admin_user
 
   def corporate_mode?
     session[:corporate_mode]
@@ -18,7 +20,7 @@ class ApplicationController < ActionController::Base
   helper_method :corporate_mode?
 
   def set_locale
-    I18n.locale = :ru
+    I18n.locale = cookies[:language].presence || :ru
   end
 
   def log_user_agent

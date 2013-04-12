@@ -163,25 +163,22 @@
         <h4 class="bfst-text"><%= @order_form.last_pay_time ? 'Оплата' : 'Оплата банковской картой' %></h4>
     </div>
 
-    <% enabled_cash = false %>
-    <%# enabled_cash = !(Conf.site.forbidden_delivery && Conf.site.forbidden_cash) && @order_form.last_pay_time %>
-
-    <% if enabled_cash %>
+    <% if false # @order_form.enabled_delayed_payment? %>
     <div class="bfp-type">
         <div class="bfpt-item bfpt-selected">
-            <h5 class="bfpt-title"><label for="bfpt-card" class="bfpt-label">Банковской картой</label></h5>
-            <p class="bfpt-tip"><label for="bfpt-card">Билет будет оформлен и&nbsp;выслан вам по&nbsp;электронной почте</label></p>
+            <h5 class="bfpt-title"><label for="bfpt-card" class="bfpt-label"><%= t 'booking.payment.by_card.label' %></label></h5>
+            <p class="bfpt-tip"><label for="bfpt-card"><%= raw t 'booking.payment.by_card.ticket' %></label></p>
             <input type="radio" name="order[payment_type]" class="bfpt-radio" id="bfpt-card" value="card" checked="checked">
         </div>
         <div class="bfpt-item">
-            <h5 class="bfpt-title"><label for="bfpt-cash" class="bfpt-label">Наличными в Москве</label></h5>
-            <p class="bfpt-tip"><label for="bfpt-cash"><% if Conf.site.forbidden_delivery %>У нас в офисе<% elsif Conf.site.forbidden_cash %>Курьеру при доставке (+400&nbsp;рублей)<% else %>У нас в офисе или курьеру при доставке (+400&nbsp;рублей)<% end %></label></p>
+            <h5 class="bfpt-title"><label for="bfpt-cash" class="bfpt-label"><%= t 'booking.payment.by_cash.label' %></label></h5>
+            <p class="bfpt-tip"><label for="bfpt-cash"><% if !@order_form.enabled_delivery? %><%= raw t 'booking.payment.by_cash.office' %><% else %><%= raw t Conf.site.enabled_cash? ? 'both' : 'delivery', :scope => 'booking.payment.by_cash', :sum => human_price(Conf.payment.delivery_price) %><% end %></label></p>
             <input type="radio" name="order[payment_type]" class="bfpt-radio" id="bfpt-cash" value="cash">
         </div>
     </div>
     <% else %>
     <div class="bfp-type">
-        <p>Билет будет оформлен<br>и&nbsp;выслан вам по&nbsp;электронной почте</p>
+        <p><%= raw t 'booking.payment.by_card.ticket' %></p>
         <input type="hidden" name="order[payment_type]" value="card">
     </div>
     <% end %>
@@ -215,20 +212,20 @@
             <div id="bfcn-sample" title="Последние четыре цифры номера карты"><span class="bfcn-empty">####</span></div>
         </div>
         <div class="bfc-hints">
-            <p class="bfch-item">Если счет вашей карты — не&nbsp;в&nbsp;рублях, то&nbsp;сумма будет списана в&nbsp;валюте вашего&nbsp;счета по&nbsp;внутреннему курсу банка, выпустившего вашу&nbsp;карту</p>
+            <p class="bfch-item"><%= raw t 'booking.card.currency' %></p>
         </div>
     </div>
 
-    <% if enabled_cash %>
+    <% if false # @order_form.enabled_delayed_payment? %>
     <div class="bf-cash">
         <div class="bfc-deadline">Бронирование необходимо оплатить до&nbsp;<strong><%= I18n.l(@order_form.last_pay_time, :format => '%H:%M %e %B') %></strong>, иначе оно будет автоматически аннулировано.</div>
-        <div class="bfc-delivery"<% if Conf.site.forbidden_delivery || Conf.site.forbidden_cash %> style="display: none;"<% end %>>
+        <div class="bfc-delivery"<% unless @order_form.enabled_delivery? && @order_form.enabled_cash? %> style="display: none;"<% end %>>
             <div class="bfc-delivery-item">
-                <input type="radio" name="ptype" class="bfcd-radio" value="delivery" id="bfcd-yes"<% unless Conf.site.forbidden_delivery %> checked="checked"<% end %>>
-                <label for="bfcd-yes">Хочу оплатить курьеру при&nbsp;доставке (+400&nbsp;рублей)</label>
+                <input type="radio" name="ptype" class="bfcd-radio" value="delivery" id="bfcd-yes"<% if @order_form.enabled_delivery? %> checked="checked"<% end %>>
+                <label for="bfcd-yes">Хочу оплатить курьеру при&nbsp;доставке (+<%= Conf.payment.price_delivery %>&nbsp;рублей)</label>
             </div>
             <div class="bfc-delivery-item">
-                <input type="radio" name="ptype" class="bfcd-radio" value="cash" id="bfcd-no"<% if Conf.site.forbidden_delivery %> checked="checked"<% end %>>
+                <input type="radio" name="ptype" class="bfcd-radio" value="cash" id="bfcd-no"<% unless @order_form.enabled_delivery? %> checked="checked"<% end %>>
                 <label for="bfcd-no">Хочу самостоятельно приехать в&nbsp;офис и&nbsp;оплатить</label>
             </div>
         </div>
@@ -251,39 +248,47 @@
 
 <% price_fare = @order_form.recommendation.price_fare.round.to_i %>
 <% price_tax_and_markup = @order_form.recommendation.price_tax_and_markup.round.to_i %>
-<% price_discount = @order_form.recommendation.price_discount.round.to_i %>
+<% price_discount = -@order_form.recommendation.price_discount.round.to_i %>
 <div class="bf-footer">
     <div class="bff-left">
         <div class="bff-price">
             <div class="bffp-content">
-                <p class="bffp-nd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total %></span>&nbsp;<%= rubles(price_total) %></p>
-                <p class="bffp-wd">Итоговая стоимость —<br><span class="bffp-sum"><%= price_total + 400 %></span>&nbsp;<%= rubles(price_total + 400) %></p>
+                <p class="bffp-card"><%= t 'booking.price.total_card', :count => price_total %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>
+                <p class="bffp-nd"><%= t 'booking.price.total_cash' %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>
+                <p class="bffp-wd"><%= t 'booking.price.total_cash' %><br><%= decorate_price human_price(price_total + Conf.payment.price_delivery), '<span class="bffp-sum">', '</span>' %></p>
                 <p class="bffp-tip"><%= 'за всех пассажиров' if @order_form.people.many? %></p>
                 <ul class="bffp-details">
-                    <li class="bffpd-item">Тариф — <%= price_fare %> <span class="ruble">Р</span></li>
-                    <li class="bffpd-item">Таксы и сборы — <%= price_total - price_fare %> <span class="ruble">Р</span></li>
-                    <li class="bffpd-item">В том числе сервисный сбор — <%= @order_form.recommendation.fee.round.to_i %> <span class="ruble">Р</span></li>
-                    <li class="bffpd-item bffp-wd">Доставка — 400 <span class="ruble">Р</span></li>
-                    <% if price_discount > 0 %>
-                        <li class="bffpd-item">Скидка — <%= price_discount %> <span class="ruble">Р</span></li>
+                    <li class="bffpd-item"><%= t 'booking.price.fare' %> — <%= short_price(price_fare) %></li>
+                    <li class="bffpd-item"><%= t 'booking.price.taxes_and_fees' %> — <%= short_price(@order_form.recommendation.price_tax) %></li>
+                    <% if Conf.site.fee_scheme != 'v3' || @order_form.recommendation.fee > 0 %>
+                      <li class="bffpd-item"><%= t 'booking.price.fee' %> — <%= short_price(@order_form.recommendation.fee) %></li>
+                    <% elsif @order_form.recommendation.fee < 0 %>
+                      <li class="bffpd-item"><%= t 'booking.price.discount' %> — <%= short_price(-@order_form.recommendation.fee) %></li>
+                    <% end %>
+                    <li class="bffpd-item bffp-wd"><%= t 'booking.price.delivery' %> — <%= short_price(Conf.payment.price_delivery) %></li>
+                    <% if price_discount > 0 && Conf.site.fee_scheme != 'v3' %>
+                        <li class="bffpd-item"><%= t 'booking.price.fare_compensation' %> — <%= short_price(price_discount) %></li>
                     <% end %>
                 </ul>
             </div>
         </div>
     </div>
     <div class="bff-right">
+        <div class="bff-agree">
+            <input type="checkbox" id="bffa-check" checked="checked">
+            <%= raw t 'booking.buy.agree' %>
+        </div>
         <div class="bff-submit">
             <div class="bf-button">
                 <div class="bfb-title">Купить</div>
                 <div class="bfb-side bfb-left"><div class="bfb-side bfb-right"></div></div>
             </div>
-            <!--<div class="bff-cancel">или <span class="link bffc-link">вернуться к выбору вариантов</span></div>-->
             <div class="bff-progress">секундочку...</div>
         </div>
         <div class="bff-required"></div>
         <div class="bff-disclaimer">
-            <p class="bffd-card">После нажатия кнопки «Купить» данные пассажиров попадут в&nbsp;систему бронирования, билет будет оформлен и&nbsp;выслан вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Нажимая «Купить», вы соглашаетесь с&nbsp;<a href="/agreement/" target="_blank" class="bffd-link">условиями использования</a>, <a href="/iata/" target="_blank" class="bffd-link">правилами IATA</a> и&nbsp;<span class="link bffd-link bffd-farerules">правилами тарифов</span>.</p>
-            <p class="bffd-cash latent">После нажатия кнопки «Купить» подтверждение бронирования будет выслано вам на&nbsp;указанный электронный адрес в&nbsp;течение нескольких минут. Мы свяжемся с&nbsp;вами по&nbsp;телефону для уточнения деталей доставки. Нажимая «Купить», вы соглашаетесь с&nbsp;<a class="bffd-link" href="/agreement/" target="_blank">условиями использования</a>, <a class="bffd-link" href="/iata/" target="_blank">правилами IATA</a> и&nbsp;<span class="link bffd-link bffd-farerules">правилами тарифов</span>.</p>
+            <p class="bffd-card"><%= raw t 'booking.buy.card' %></p>
+            <p class="bffd-cash latent"><%= raw t 'booking.buy.cash' %></p>
         </div>
     </div>
 </div>
@@ -293,16 +298,17 @@
 <div class="bf-farerules">
     <div class="bff-close"></div>
     <div class="bff-content">
-        <h3 class="bff-title">Правила тарифов</h3>
-        <p class="bff-text">Внимание! Возврат средств в&nbsp;случае отказа при получении визы, болезни и&nbsp;прочих обстоятельств без штрафных санкций невозможен. Возврат билета производится строго по&nbsp;правилам авиакомпании. В&nbsp;случае комбинации в&nbsp;билете тарифов с&nbsp;различными правилами, наиболее строгие ограничения применяются ко&nbsp;всему маршруту.</p>
-        <p class="bff-text">Билеты не&nbsp;передаваемые. В&nbsp;случае неявки на&nbsp;рейс, авиакомпания может аннулировать все&nbsp;последующие участки маршрута.</p>
+        <h3 class="bff-title"><%= t 'booking.farerules.title' %></h3>
+        <p class="bff-text"><%= raw t 'booking.farerules.restrictions' %></p>
+        <p class="bff-text"><%= raw t 'booking.farerules.service' %></p>
+        <p class="bff-text"><%= raw t 'booking.farerules.cancellation' %></p>
     </div>
     <% @order_form.recommendation.rules.each do |(airline, fare) ,rule| %>
     <div class="bff-group">
         <% if @order_form.recommendation.source != 'sirena' %>
             <div class="bffg-translate"></div>
         <% end %>
-        <h5 class="bffg-title">Тариф <%= fare %></h5>
+        <h5 class="bffg-title"><%= t 'booking.farerules.fare' %> <%= fare %></h5>
         <pre class="bffg-content"><%= raw(rule) %></pre>
     </div>
     <% end %>

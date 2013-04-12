@@ -93,9 +93,9 @@ filter: function(check) {
     }
     var title;
     if (amount !== this.length) {
-        title = lang.results.some.absorb(amount, this.length);
+        title = I18n.t('results.tabs.some', {amount: amount, total: this.length});
     } else {
-        title = lang.results.all.absorb(this.length);
+        title = I18n.t('results.tabs.all', {amount: this.length});
     }
     this.control.html(title);
     results.filters.proper = features.join(' ');
@@ -116,7 +116,7 @@ update: function(data) {
         results.filters.update();
     });
     results.queue.add(function() {
-        that.control.html(lang.results.all.absorb(that.length));
+        that.control.html(I18n.t('results.tabs.all', {amount: that.length}));
         if (that.offers.length !== 0) {
             results.extendData();
             results.getOfferTemplate();
@@ -229,7 +229,7 @@ showPrices: function() {
     this.content.find('.rmp-item').remove();
     var min, max, variants = this.offer.variants;
     for (var i = variants.length; i--;) {
-        var vp = variants[i].price;
+        var vp = variants[i].visiblePrice;
         if (!min || vp < min) min = vp;
         if (!max || vp > max) max = vp;
     }
@@ -238,21 +238,20 @@ showPrices: function() {
         var c = this.cols[variant.dates[0]];
         var r = this.rows[variant.dates[1] || 'middle'];
         var item = $('<div class="rmp-item"></div>').attr('data-index', i);
-        item.html('<h6 class="rmp-cost"><span class="rmp-sum">' + variant.price + '</span>&nbsp;<span class="ruble">Р</span></h6>');
+        item.html('<h6 class="rmp-cost"><span class="rmp-sum">' + variant.visiblePrice + '</span>&nbsp;<span class="ruble">Р</span></h6>');
         item.append(variant.el.find('.rmv-bars').clone());
-        if (variant.price - min < (max - min) / 5) {
+        if (variant.visiblePrice - min < (max - min) / 5) {
             item.addClass('rmp-cheap');
         }
         $(this.table.get(0).rows[r].cells[c]).append(item);
     }
-    this.updateLabel(lang.results.matrix);   
+    this.updateLabel(I18n.t('results.tabs.matrix'));   
 },
 humanDate: function(date, segment) {
-    var day = date.getDate();
-    var month = lang.monthes.gen[date.getMonth()];
-    var weekday = lang.days.week[(date.getDay() || 7) - 1];
-    var pattern = '<h6 class="rmp-date{0}">{1}&nbsp;{2}</h6><p class="rmp-weekday">{3}</p>';
-    return pattern.absorb(segment, day, month, weekday);
+    var d = I18n.l('date.formats.human', date);
+    var w = I18n.l('date.formats.dow', date);
+    var pattern = '<h6 class="rmp-date{0}">{1}</h6><p class="rmp-weekday">{2}</p>';
+    return pattern.absorb(segment, d, w);
 },
 selectDates: function(dates) {
     var c = this.cols[dates[0]];
@@ -274,7 +273,6 @@ merge: function(variants) {
     var sorting = function(a, b) {
         return a.dpt - b.dpt;
     };
-    var titles = ['туда', 'обратно'];
     offer.complex = true;    
     offer.variants = variants;
     offer.el.find('.o-segment').each(function(s) {
@@ -292,8 +290,11 @@ merge: function(variants) {
             }
         }
         items = items.sort(sorting);
-        var rt = results.data.segments.length === 2 && results.data.segments[1].rt;
-        var st = rt ? lang.segment.title.absorb(lang.segment.directions[s]) : results.data.segments[s].short
+        if (results.data.segments.length === 2 && results.data.segments[1].rt) {
+            var st = I18n.t('offer.segment.title', {direction: I18n.t(s === 0 ? 'there' : 'back', {scope: 'offer.segment.direction'}) });
+        } else {
+            var st = results.data.segments[s].short;
+        }
         segment.append($('#ost-template').html().absorb(st));
         if (results.data.segments.length === 1) {
             segment.find('.ostn-text').hide();
@@ -323,7 +324,7 @@ merge: function(variants) {
     this.offer = offer;
 },
 update: function(variants, lid) {
-    var labels = lang.results[lid || this.id];
+    var labels = I18n.t(lid || this.id, {scope: 'results.tabs'});
     if (variants && variants.length !== 0) {
         this.merge(variants);
         this.updateLabel(labels);
@@ -340,10 +341,10 @@ update: function(variants, lid) {
     }
 },
 updateLabel: function(labels) {
-    var minprice = this.offer.variants[0].price;
-    var maxprice = this.offer.variants.last().price;
+    var minprice = this.offer.variants[0].visiblePrice;
+    var maxprice = this.offer.variants.last().visiblePrice;
     var sum = results.currencies['RUR'].absorb('<span class="rt-sum">' + minprice.separate() + '</span>');
-    var price = minprice === maxprice ? sum : lang.price.from.absorb(sum);
+    var price = minprice === maxprice ? sum : I18n.t('results.tabs.from', {value: sum});
     var title = labels[this.offer.variants.length === 1 ? 'one' : 'many'];
     this.control.html('{0} <span class="rt-price">{1}</span>'.absorb(title, price));
     this.control.removeClass('rt-disabled');

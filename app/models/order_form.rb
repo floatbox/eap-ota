@@ -26,6 +26,8 @@ class OrderForm
   attr_accessor :sirena_lead_pass
   attr_accessor :order # то, что сохраняется в базу
   attr_accessor :variant_id #нужен при восстановлении формы по урлу
+  # Снимает ограничения на бронирование. Параметр не сохраняется в кэш.
+  attr_accessor :admin_user
   attr_reader :show_vat, :vat_included
 
   delegate :last_tkt_date, :to => :recommendation
@@ -47,6 +49,23 @@ class OrderForm
     return if last_tkt_date <= Date.today
     return Time.now + 24.hours - Time.now.min.minutes if last_tkt_date == Date.today + 1.day
     return last_tkt_date.to_time
+  end
+
+  # разрешает сделать бронирование с оплатой потом.
+  def enabled_delayed_payment?
+    admin_user ||
+      (enabled_delivery? || enabled_cash?) && last_pay_time
+  end
+
+  # возможна доставка
+  def enabled_delivery?
+    ! Conf.site.forbidden_delivery
+  end
+
+  # возможна оплата наличными
+  def enabled_cash?
+    admin_user ||
+      ! Conf.site.forbidden_cash
   end
 
   def tk_xl
@@ -207,6 +226,7 @@ class OrderForm
   validate :validate_card, :validate_dept_date, :validate_people
 
   def validate_dept_date
+    return if admin_user
     if recommendation.source == 'amadeus'
       errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell(recommendation.journey.departure_datetime_utc, recommendation.last_tkt_date)
     elsif recommendation.source == 'sirena'
