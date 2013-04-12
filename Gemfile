@@ -58,7 +58,7 @@ gem 'mobile-fu'
 
 #gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
 gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'
-# gem 'mongo-rails-instrumentation'
+gem 'moped-rails-instrumentation'
 
 gem 'haml'
 gem 'hpricot', require: false
