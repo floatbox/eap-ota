@@ -1,8 +1,8 @@
 GIT
-  remote: git://github.com/codesnik/eviterra-instrumentation.git
-  revision: 27dbe27b672596f9a89e71ff87ea2d9689a3231a
+  remote: git://github.com/Eviterra/mongo-rails-instrumentation.git
+  revision: 717a09219e10b41ed931496a38f4bf5d6a56265a
   specs:
-    eviterra-instrumentation (0.0.2)
+    mongo-rails-instrumentation (0.2.4)
 
 GIT
   remote: git://github.com/codesnik/handsoap.git
@@ -195,7 +195,6 @@ GEM
       origin (~> 1.0)
       tzinfo (~> 0.3.22)
     moped (1.3.2)
-    moped-rails-instrumentation (0.1)
     morpher_inflect (0.0.2)
       httparty
     multi_json (1.5.1)
@@ -372,7 +371,6 @@ DEPENDENCIES
   delayed_job_mongoid
   evergreen
   every
-  eviterra-instrumentation!
   factory_girl_rails
   flot-rails
   geo_ip
@@ -390,8 +388,8 @@ DEPENDENCIES
   memoize
   mobile-fu
   money
+  mongo-rails-instrumentation!
   mongoid
-  moped-rails-instrumentation
   morpher_inflect
   mysql2
   newrelic_rpm

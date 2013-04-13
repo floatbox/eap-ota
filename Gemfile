@@ -57,8 +57,8 @@ gem 'bson_ext'
 gem 'mobile-fu'
 
 #gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
-gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'
-gem 'moped-rails-instrumentation'
+#gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'
+gem 'mongo-rails-instrumentation', :git => 'git://github.com/Eviterra/mongo-rails-instrumentation.git'
 
 gem 'haml'
 gem 'hpricot', require: false
