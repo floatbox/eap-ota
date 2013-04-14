@@ -89,7 +89,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def set_info_from_flights
-    if @flights
+    if @flights.present?
       if [nil, '', 'unknown'].include? vat_status
         if @flights[0].departure.country.iata != 'RU' ||
             @flights.last.arrival.country.iata != 'RU' ||
