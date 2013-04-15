@@ -196,7 +196,7 @@ class Order < ActiveRecord::Base
   scope :processing_ticket, where(:ticket_status => 'processing_ticket')
   scope :error_ticket, where(:ticket_status => 'error_ticket')
   scope :ticketed, where(:payment_status => ['blocked', 'charged'], :ticket_status => 'ticketed')
-  scope :ticket_not_sent, where("pnr_number = '' AND email_status != 'ticket_sent' AND ticket_status = 'ticketed'").where("created_at > ?", 10.days.ago)
+  scope :ticket_not_sent, where("pnr_number != '' AND email_status != 'ticket_sent' AND ticket_status = 'ticketed'").where("created_at > ?", 10.days.ago)
   scope :sent_manual, where(:email_status => 'manual')
   scope :reported, where(:payment_status => ['blocked', 'charged'], :offline_booking => false).where("pnr_number != ''")
   scope :extra_pay, where("pnr_number = '' AND parent_pnr_number != ''")
