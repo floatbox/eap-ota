@@ -1,16 +1,24 @@
-<h2>Change your password</h2>
-
+<% content_for :title do %>Придумайте пароль<% end %>
+<div class="up-form">
+<div class="upf-header">
+    <h3 class="upf-title">Придумайте пароль</h3>
+</div>
 <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put }) do |f| %>
-  <%= devise_error_messages! %>
-  <%= f.hidden_field :reset_password_token %>
 
-  <div><%= f.label :password, "New password" %><br />
-  <%= f.password_field :password %></div>
+    <%= devise_error_messages! %>
+    <%= f.hidden_field :reset_password_token %>
 
-  <div><%= f.label :password_confirmation, "Confirm new password" %><br />
-  <%= f.password_field :password_confirmation %></div>
+    <div class="upf-field">
+        <h6 class="upff-label"><%= f.label :password, 'Ваш пароль' %></h6>
+        <%= f.email_field :password, :class => 'upff-input' %>
+    </div>
+    <div class="upf-field">
+        <h6 class="upff-label"><%= f.label :password_confirmation, 'Ещё разок пароль' %></h6>
+        <%= f.email_field :password_confirmation, :class => 'upff-input' %>
+    </div>
+    <div class="upf-submit">
+        <%= f.submit "Продолжить", :class => 'upf-button' %>
+    </div>
 
-  <div><%= f.submit "Change my password" %></div>
 <% end %>
-
-<%= render :partial => "profile/shared/links" %>
+</div>

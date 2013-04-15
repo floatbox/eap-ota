@@ -1,0 +1,62 @@
+.up-form {
+    width: 360px;
+    margin: 100px auto;
+    background: #EDEDE3;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+.upf-header {
+    margin: 0 20px 15px;
+    padding: 15px 0 0;
+}
+.upf-title {
+    margin: 0;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 22px;
+    letter-spacing: -0.03em;
+}
+.upf-description {
+    margin: 10px 0 0;
+    font-size: 13px;
+    line-height: 15px;
+    color: #777;
+}
+.upf-field {
+    margin: 0 20px 10px;
+}
+.upff-label {
+    margin: 0 0 3px;
+}
+.upff-input {
+    width: 302px;
+    height: 22px;
+    margin: 0;
+    border: 1px solid #B2B2B2;
+    font-size: 16px;
+    line-height: 22px;
+    padding: 3px 8px;
+}
+.upf-submit {
+    margin: 20px 20px 0;
+    padding-bottom: 20px;
+}
+.upf-button {
+    margin: 0;
+    padding: 6px 12px 5px;
+    border: none;
+    border-radius: 3px;
+    background: #D5D5D5;
+    background: -webkit-linear-gradient(top, #FFFFFF, #B0B0B0);
+    background: -moz-linear-gradient(top, #FFFFFF, #B0B0B0);
+    background: -ms-linear-gradient(top, #FFFFFF, #B0B0B0);
+    background: -o-linear-gradient(top, #FFFFFF, #B0B0B0);
+    background: linear-gradient(top, #FFFFFF, #B0B0B0);
+    box-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+    font-size: 16px;
+    line-height: 16px;
+    cursor: pointer;
+}
+.upfs-link {
+    float: right;
+    margin-top: 10px;
+}

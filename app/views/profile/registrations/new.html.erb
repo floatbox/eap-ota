@@ -1,13 +1,20 @@
 <% content_for :title do %>Регистрация<% end %>
-
-<h2 class="page-title">Регистрация</h2>
-<p>Регистрация нужна для того, чтобы хранить вашу историю заказов и данные пассажиров. После первого заказа у нас вы будете зарегистрированы автоматически.</p>
-
-<div class="wrap" style="margin-top: 20px;">
-<div style="background: #EDEDE3; padding: 16px 20px; float: left;">
-<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
-  <%= devise_error_messages! %>
-  <%= f.label :email, 'Электронный адрес' %><%= f.email_field :email, :style => 'margin-left: 10px; margin-right: 10px;' %><%= f.submit "Зарегистрироваться" %>
-<% end %>
+<div class="up-form">
+<div class="upf-header">
+    <h3 class="upf-title">Регистрация</h3>
+    <p class="upf-description">Регистрация нужна для того, чтобы хранить вашу историю заказов и данные пассажиров. После первого заказа у нас вы будете зарегистрированы автоматически.</p>
 </div>
+<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+
+    <%= devise_error_messages! %>
+
+    <div class="upf-field">
+        <h6 class="upff-label"><%= f.label :email, 'Электронный адрес' %></h6>
+        <%= f.email_field :email, :class => 'upff-input' %>
+    </div>
+    <div class="upf-submit">
+        <%= f.submit "Зарегистрироваться", :class => 'upf-button' %>
+    </div>
+
+<% end %>
 </div>
