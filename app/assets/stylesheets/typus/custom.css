@@ -55,6 +55,27 @@ dt small {font-size: 0.85em; font-weight: normal; margin: 0 0 0 0.5em;}
 	text-decoration: none;
 }
 
+#content #sidebar .predefined_filters {
+	border: 1px solid #D3D3D3;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	margin-top: 25px;
+	color: #444;
+}
+
+#content #sidebar .predefined_filters li {
+	display: block;
+	margin: 2px;
+	padding: 2px 0px;
+	font-size: 12px;
+	background-color: #F3F3F3;
+	border-bottom: 1px solid #fff;
+}
+
+#sidebar .predefined_filters li:hover { background: #E4E4E4 !important; }
+#sidebar .predefined_filters li a { padding-left: 20px; }
+#sidebar .predefined_filters li a:hover { color: red; }
+
 /* for reports */
 .legend table {width: 120px}
 .legendLabel {line-height: 1.4}
