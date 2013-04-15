@@ -244,6 +244,10 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def processing?
+    ticket_status == 'processing_ticket'
+  end
+
   def paid?
     payment_type == 'card'
   end
