@@ -6,7 +6,7 @@ module Amadeus
 
   def self.office_for_alias(al)
     Conf.amadeus.offices.each do |office, settings|
-      return office if settings["alias"] = al.to_s
+      return office if settings["alias"] == al.to_s
     end
     raise ArgumentError, "no office_id defined for alias #{al}"
   end
