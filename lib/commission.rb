@@ -2193,6 +2193,22 @@ commission "1%/0.5%"
 carrier "UA", "UNITED AIRLINES (ГЛОНАСС)"
 ########################################
 
+example 'jfklax'
+agent "0% от всех опубл. тарифов на собств.рейсы UA на внутренних маршрутах внутри Американского континента и международных маршрутах с началом путешествия в США или Канаде"
+subagent ""
+domestic
+commission "0%/0%"
+
+example 'jfksvo'
+example 'jfksvo svojfk'
+example 'yowjfk'
+example 'yowsvo'
+agent "0% от всех опубл. тарифов на собств.рейсы UA на внутренних маршрутах внутри Американского континента и международных маршрутах с началом путешествия в США или Канаде;"
+subagent ""
+check { includes_only(country_iatas.first, "US CA") }
+international
+commission "0%/0%"
+
 example 'svojfk/f'
 example 'svojfk/a jfksvo/z'
 agent    "по классам F, A,D, Z, P у них осталась комиссия 10 %"
@@ -2200,6 +2216,7 @@ subagent "8%"
 subclasses "FADZP"
 check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+international
 discount "6%"
 commission "10%/8%"
 
@@ -2210,6 +2227,7 @@ subagent "6%"
 subclasses "QVWSTLK"
 check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+international
 discount "4%"
 commission "8%/6%"
 
@@ -2220,6 +2238,7 @@ subagent "3%"
 subclasses "YBMUH"
 check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+international
 discount "1.5%"
 commission "5%/3%"
 
