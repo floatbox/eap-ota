@@ -27,7 +27,7 @@ show: function(instant) {
         context = search.el.hide();
         $w.scrollTop(0);
     } else if ($.support.fixedPosition && !browser.ios) {
-        that.fixed.preview();    
+        that.fixed.preview();
         context = $w.delay(300);
         context.smoothScrollTo(this.header.position(), 450);
         context.delay(100).queue(function(next) {
@@ -111,7 +111,7 @@ load: function() {
     this.message.toggle('loading');
     if (typeof sessionStorage !== 'undefined') {
         sessionStorage.removeItem('personsAmount');
-    }    
+    }
 },
 updated: function() {
     var that = this;
@@ -124,7 +124,7 @@ changeDates: function(dates) {
     this.updateTitles(dates);
     var titles = this.data.titles;
     this.header.summary.html(titles.header);
-    page.title.set(I18n.t('page.results', {title: titles.window}));    
+    page.title.set(I18n.t('page.results', {title: titles.window}));
 },
 updateTitles: function(dates) {
     var wparts = [];
@@ -174,7 +174,7 @@ processCollections: function() {
     } else {
         this.message.toggle('empty');
         _kmq.push(['record', 'RESULTS: nothing found']);
-        _gaq.push(['_trackPageview', '/search/empty']);        
+        _gaq.push(['_trackPageview', '/search/empty']);
     }
 },
 updateFeatured: function() {
@@ -191,7 +191,7 @@ updateFeatured: function() {
         this.cheap.update(cheap, 'cheapNonstop'); // Все дешевые оказались прямыми
         this.nonstop.control.addClass('rt-disabled').hide();
     } else {
-        this.cheap.update(cheap);    
+        this.cheap.update(cheap);
         this.nonstop.control.show();
         nonstop = this.getNonstop();
     }
@@ -254,7 +254,7 @@ getVariants: function(condition, limit) {
                 if (rn === undefined) {
                     index[dt] = result.push(variant) - 1;
                 } else if (variant.duration < result[rn].duration) {
-                    result[rn] = variant; // Если время вылета одинаковое, оставляем самый быстрый вариант 
+                    result[rn] = variant; // Если время вылета одинаковое, оставляем самый быстрый вариант
                 }
             }
         }
@@ -378,16 +378,19 @@ init: function() {
         return false;
     }
     this.toggle = function() {
-        var st = $w.scrollTop(), s = 1
+        var st = $w.scrollTop(), s = 2;
         if (st > tedge) {
-            s = 2;
+            s = 3; // кнопка за верхним краем
         } else if (st < bedge) {
-            s = 0;
+            s = 0; // кнопка за нижним краем
+        } else if (st < bedge + 40) {
+            s = 1; // видно кнопку, но не видно подробности
         }
         if (s !== state) {
-            that.el.toggleClass('ob-fixed', s !== 1);
-            that.el.toggleClass('ob-tfixed', s === 2);
+            that.el.toggleClass('ob-fixed', s === 0 || s === 3);
+            that.el.toggleClass('ob-tfixed', s === 3);
             that.el.toggleClass('ob-bfixed', s === 0);
+            that.el.toggleClass('ob-subfixed', s < 2);
             state = s;
         }
     };
@@ -412,7 +415,7 @@ bind: function() {
 },
 unbind: function() {
     $w.unbind('scroll', this.toggle).unbind('resize', this.count);
-    this.el.removeClass('ob-fixed ob-tfixed ob-bfixed');
+    this.el.removeClass('ob-fixed ob-tfixed ob-bfixed ob-subfixed');
     this.reset();
 },
 update: function() {
@@ -476,7 +479,7 @@ send: function() {
     }
     if (!this.like) {
         this.like = $('<div class="rs-like"></div>').hide().insertAfter(that.el);
-        this.like.html('<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Feviterra&amp;send=false&amp;layout=button_count&amp;width=400&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>');    
+        this.like.html('<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Feviterra&amp;send=false&amp;layout=button_count&amp;width=400&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>');
     }
     this.button.get(0).disabled = true;
     this.error.hide();

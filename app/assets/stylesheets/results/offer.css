@@ -158,7 +158,7 @@
 .o-complex .od-scroll {
     visibility: hidden;
 }
-.ob-bfixed .od-scroll {
+.ob-subfixed .od-scroll {
     visibility: inherit;
 }
 
