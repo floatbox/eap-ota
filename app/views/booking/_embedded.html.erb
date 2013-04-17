@@ -47,9 +47,7 @@
             <p class="bfp-hint" id="bfph-passport"><span class="bfph-link bf-hint" data-hint="bfh-passport"><%= raw t 'booking.passengers.document.hint' %></span></p>
             <p class="bfp-hint" id="bfph-expiration"><span class="bfph-link bf-hint" data-hint="bfh-expiration"><%= raw t 'booking.passengers.expiration.hint' %></span></p>                        
         </div>
-        <% if @order_form.infants.length > 0 && @order_form.adults.length > 1 %> 
-            <p class="bfp-order"><%= t 'booking.passengers.order' %></p>
-        <% end %>     
+        <p class="bfp-order" style="display: <%= @order_form.people_count[:infants] > 0 && @order_form.people_count[:adults] > 1 ? 'block' : 'none' %>;"><%= t 'booking.passengers.order' %></p>
 
         <%= render 'person_form' %>
 

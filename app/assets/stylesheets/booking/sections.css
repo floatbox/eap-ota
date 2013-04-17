@@ -171,10 +171,10 @@
     margin-right: 20px;
 }
 .bfp-order {
-    position: relative;
-    top: -5px;
-    width: 664px;
-    margin-bottom: 5px;
+    margin: 20px 20px 5px 0;
+    padding: 10px 15px;
+    border: 1px solid #debf14;      
+    background: #fdfbea;
     line-height: 16px;
 }
 .bfp-hint {
