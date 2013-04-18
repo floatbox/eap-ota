@@ -1940,6 +1940,7 @@ carrier "QR", "QATAR AIRWAYS"
 
 example 'ledpek/business pekled/business'
 strt_date "01.04.2012"
+expr_date "31.05.2013"
 agent    "от опубл. тарифов, а также от опубл. IT гросс тарифов (искл.групповые тарифы) на собств.рейсы QR: 5% Бизнес класс"
 subagent "3,5% от опубл. тарифов на собственные рейсы QR"
 classes :business
@@ -1949,18 +1950,42 @@ commission "5%/3.5%"
 example 'ledpek/economy pekled/economy'
 example 'ledpek/business pekled/economy'
 strt_date "01.04.2012"
+expr_date "31.05.2013"
 agent    "1% Эконом класса, а также при различной комбинации Бизнес/Эконом;" 
 subagent "5 коп. с билета Эконом класса, а также при различной комбинации Бизнес/Эконом;"
 commission "1%/0.05"
 
 example 'svocdg cdgsvo/ab'
-strt_date "01.04.2012"
+expr_date "31.05.2013"
 agent    "1% на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 subagent "5 коп . с билета на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 interline :first
 commission "1%/0.05"
 
-example 'cdgsvo/ab svocdg'
+# с 01.06
+# example 'ledpek/business pekled/business'
+strt_date "01.06.2013"
+agent    "от опубл. тарифов, а также от опубл. IT гросс тарифов (искл.групповые тарифы) на собств.рейсы QR: 5% Бизнес класс"
+subagent "3,5% от опубл. тарифов на собственные рейсы QR"
+classes :business
+discount "3%"
+commission "5%/3.5%"
+
+# example 'ledpek/economy pekled/economy'
+# example 'ledpek/business pekled/economy'
+strt_date "01.06.2013"
+agent    "0.1% Эконом класса, а также при различной комбинации Бизнес/Эконом;" 
+subagent "5 коп. с билета Эконом класса, а также при различной комбинации Бизнес/Эконом;"
+commission "0.1%/0.05"
+
+# example 'svocdg cdgsvo/ab'
+strt_date "01.06.2013"
+agent    "0.1% на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
+subagent "5 коп . с билета на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
+interline :first
+commission "0.1%/0.05"
+
+example 'cdgsvo/ab'
 no_commission
 
 carrier "RB", "SYRIAN ARAB AIRLINES"
