@@ -1505,7 +1505,22 @@ carrier "LO", "LOT"
 
 carrier_defaults :consolidator => 0
 
-example 'ledprg prgled'
+example 'ledprg prgwaw'
+example 'dmecdg cdgwaw'
+strt_date "01.04.2013"
+expr_date "30.06.2013"
+agent "Даты вылета: без ограничений
+5% от опубл.тарифов на собств. рейсы LO по направлениям с вылетом из России на все классы бронирования, кроме промо и групповых: L, O, U, G за исключением прямых перелетов из Москвы и Санкт Петербурга в Варшаву."
+subagent "3% от опубл.тарифов на собств. рейсы LO по направлениям с вылетом из России на все классы бронирования, кроме промо и групповых: L, O, U, G за исключением прямых перелетов из Москвы и Санкт Петербурга в Варшаву."
+check { includes(country_iatas.first, "RU") and not includes(booking_classes, "L O U G") and 
+  (
+    not includes_only(city_iatas, "MOW WAW") or
+    not includes_only(city_iatas, "LED WAW")
+  )
+}
+commission "5%/3%"
+
+example 'prgled ledcdg'
 expr_date "30.06.2013"
 agent "1 euro с билета по опубл. тарифам на все остальные рейсы LO."
 subagent "5 рублей"
