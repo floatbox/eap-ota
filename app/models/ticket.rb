@@ -106,7 +106,7 @@ class Ticket < ActiveRecord::Base
       self.dept_date = @flights.first.dept_date
 
       # и закидываем в базу
-      self.stored_flights = @flights.map {|fl| StoredFlight.from_flight(fl) } if Conf.site.store_flights
+      self.stored_flights = @flights.map {|fl| StoredFlight.from_flight(fl) } if Conf.site.store_flights if @flights.all? &:dept_date #костыль, для билетов с открытой датой
     end
   end
 

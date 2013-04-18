@@ -24,7 +24,7 @@ subagent "• на собственные рейсы (в т.ч. по согла�
 subagent "5 % от тарифов Эконом класса (в т.ч. при комбинации Эконом и Бизнес классов),   при переоформлении с доплатой по тарифам Эконом класса (в т.ч. при комбинации Эконом и Бизнес классов);"
 # применится только к этому правилу
 # ticketing_method "direct"
-discount "5.8%"
+discount "4.5%"
 ## our_markup 100
 commission "7%/6%"
 
@@ -46,7 +46,7 @@ agent "- при переоформлении авиабилета с допла�
 subagent "• на рейсы Interline в комбинации с рейсом под кодом «SU»:"
 subagent "(три) % от сквозных или участковых тарифов (в т.ч. при переоформлении авиабилета с       доплатой по тарифу)"
 interline :yes
-discount "2.8%"
+discount "2%"
 ## our_markup 100
 commission "5%/3%"
 
@@ -110,7 +110,7 @@ strt_date "01.04.2013"
 agent "9% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
 subagent "нет? ориентировочно 7"
 subclasses "FPRJCADSM"
-discount "6.8%"
+discount "5%"
 important!
 commission "9%/7%"
 
@@ -121,7 +121,7 @@ expr_date "20.04.2013"
 agent "На период с 21.02.13г. по 20.04.13г. 9% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K;"
 subagent "нет? ориентировочно 7"
 subclasses "YHQBK"
-discount "6.8%"
+discount "5.9%"
 # disabled "На DTT выгодней"
 commission "9%/7%"
 
@@ -132,7 +132,7 @@ expr_date "20.04.2013"
 agent "7% от тарифа на рейсы UN по тарифам класса: O;"
 subagent "5% от тарифа на рейсы Перевозчика по всем тарифам классов Y, H, Q, B, K, O;"
 subclasses "O"
-discount "4.8%"
+discount "4.2%"
 # disabled "На DTT выгодней"
 commission "7%/5%"
 
@@ -363,7 +363,7 @@ strt_date "01.03.2013"
 agent    "8% по всем направлениям через DTT"
 subagent "6% по всем направлениям через DTT"
 interline :no
-discount "5.8%"
+discount "4.8%"
 ticketing_method "downtown"
 commission "8%/6%"
  
@@ -686,14 +686,14 @@ carrier "CZ", "CHINA SOUTHERN"
 example 'svocdg'
 agent    "9% от тарифа на рейсы, полностью выполняемые CZ;"
 subagent "7% от тарифа на рейсы, полностью выполняемые CZ;"
-discount "6.8%"
+discount "5.8%"
 commission "9%/7%"
 
 example 'cdgsvo svocdg/ab'
 agent    "7% от тарифа на рейсы CZ с участием других перевозчиков;"
 subagent "5% от тарифа на рейсы CZ с участием других перевозчиков;"
 interline :yes
-discount "4.8%"
+discount "4%"
 commission "7%/5%"
 
 example 'cdgsvo/ab'
@@ -754,7 +754,7 @@ subagent "3%"
 subclasses "SIQKLUT"
 check { includes_only(country_iatas.first, 'RU SN GH') and includes(country_iatas, 'US') }
 ticketing_method "downtown"
-discount "2.7%"
+discount "1.5%"
 commission "5%/3%"
 
 example 'svojfk/d/az:dl'
@@ -767,7 +767,7 @@ subclasses "DIKVTNSL"
 check { includes_only(country_iatas.first, 'RU SN GH') and includes(country_iatas, 'US') and includes_only(operating_carrier_iatas, 'AZ') }
 ticketing_method "downtown"
 important!
-discount "2.7%"
+discount "1.5%"
 commission "5%/3%"
 
 # example 'okocdg cdgoko/ab'
@@ -953,11 +953,21 @@ carrier "FV", "RUSSIA"
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
+expr_date "31.05.2013"
 agent "7% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 subagent "5% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 interline :no, :yes
-discount "4.8%"
+discount "4%"
 commission '7%/5%'
+
+example 'svocdg'
+example 'svocdg cdgsvo/ab'
+strt_date "01.06.2013"
+agent "6% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
+subagent "4% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
+interline :no, :yes
+discount "3%"
+commission '6%/4%'
 
 example 'svocdg/ab'
 agent "1 euro с билета на рейсы Interline без участка FV."
@@ -1317,7 +1327,7 @@ carrier "JU", "JAT AIRWAYS"
 example 'svocdg'
 agent "С 15.02.2011г. 7% от опубл. тарифов на собств. рейсы JU"
 subagent "JU  С 21.02.2011г. 5% от опубл. тарифов на собств. рейсы JU"
-discount "4.8%"
+discount "4%"
 commission "7%/5%"
 
 example 'svocdg cdgsvo/ab'
@@ -1433,7 +1443,7 @@ subagent "8%"
 subclasses "FADZP"
 check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
-discount "7.5%"
+discount "6%"
 commission "10%/8%"
 
 example 'svojfk/q'
@@ -1443,7 +1453,7 @@ subagent "6%"
 subclasses "QVWSTLK"
 check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
-discount "5.5%"
+discount "4%"
 commission "8%/6%"
 
 example 'svojfk/y'
@@ -1495,7 +1505,22 @@ carrier "LO", "LOT"
 
 carrier_defaults :consolidator => 0
 
-example 'ledprg prgled'
+example 'ledprg prgwaw'
+example 'dmecdg cdgwaw'
+strt_date "01.04.2013"
+expr_date "30.06.2013"
+agent "Даты вылета: без ограничений
+5% от опубл.тарифов на собств. рейсы LO по направлениям с вылетом из России на все классы бронирования, кроме промо и групповых: L, O, U, G за исключением прямых перелетов из Москвы и Санкт Петербурга в Варшаву."
+subagent "3% от опубл.тарифов на собств. рейсы LO по направлениям с вылетом из России на все классы бронирования, кроме промо и групповых: L, O, U, G за исключением прямых перелетов из Москвы и Санкт Петербурга в Варшаву."
+check { includes(country_iatas.first, "RU") and not includes(booking_classes, "L O U G") and 
+  (
+    not includes_only(city_iatas, "MOW WAW") or
+    not includes_only(city_iatas, "LED WAW")
+  )
+}
+commission "5%/3%"
+
+example 'prgled ledcdg'
 expr_date "30.06.2013"
 agent "1 euro с билета по опубл. тарифам на все остальные рейсы LO."
 subagent "5 рублей"
@@ -1563,7 +1588,7 @@ example 'svocdg'
 agent    "5% от опубл. тарифов Эконом класса на рейсы LY"
 subagent "3,5% от опубл. тарифов Эконом класса на рейсы LY"
 classes :economy
-discount "3.2%"
+discount "2.8%"
 commission "5%/3.5%"
 
 example 'svocdg/j cdgsvo/j'
@@ -1930,6 +1955,7 @@ carrier "QR", "QATAR AIRWAYS"
 
 example 'ledpek/business pekled/business'
 strt_date "01.04.2012"
+expr_date "31.05.2013"
 agent    "от опубл. тарифов, а также от опубл. IT гросс тарифов (искл.групповые тарифы) на собств.рейсы QR: 5% Бизнес класс"
 subagent "3,5% от опубл. тарифов на собственные рейсы QR"
 classes :business
@@ -1939,18 +1965,42 @@ commission "5%/3.5%"
 example 'ledpek/economy pekled/economy'
 example 'ledpek/business pekled/economy'
 strt_date "01.04.2012"
+expr_date "31.05.2013"
 agent    "1% Эконом класса, а также при различной комбинации Бизнес/Эконом;" 
 subagent "5 коп. с билета Эконом класса, а также при различной комбинации Бизнес/Эконом;"
 commission "1%/0.05"
 
 example 'svocdg cdgsvo/ab'
-strt_date "01.04.2012"
+expr_date "31.05.2013"
 agent    "1% на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 subagent "5 коп . с билета на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 interline :first
 commission "1%/0.05"
 
-example 'cdgsvo/ab svocdg'
+# с 01.06
+# example 'ledpek/business pekled/business'
+strt_date "01.06.2013"
+agent    "от опубл. тарифов, а также от опубл. IT гросс тарифов (искл.групповые тарифы) на собств.рейсы QR: 5% Бизнес класс"
+subagent "3,5% от опубл. тарифов на собственные рейсы QR"
+classes :business
+discount "3%"
+commission "5%/3.5%"
+
+# example 'ledpek/economy pekled/economy'
+# example 'ledpek/business pekled/economy'
+strt_date "01.06.2013"
+agent    "0.1% Эконом класса, а также при различной комбинации Бизнес/Эконом;" 
+subagent "5 коп. с билета Эконом класса, а также при различной комбинации Бизнес/Эконом;"
+commission "0.1%/0.05"
+
+# example 'svocdg cdgsvo/ab'
+strt_date "01.06.2013"
+agent    "0.1% на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
+subagent "5 коп . с билета на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
+interline :first
+commission "0.1%/0.05"
+
+example 'cdgsvo/ab'
 no_commission
 
 carrier "RB", "SYRIAN ARAB AIRLINES"
@@ -2128,7 +2178,7 @@ example 'svobkk'
 agent "С 01.02.2011г. 5% от всех опубл.и конфиденциальных тарифов на международные рейсы TG"
 subagent "С 01.02.2011г. 3% от опубл. и конфиде.тарифов на международные рейсы TG"
 international
-discount "2.8%"
+discount "2.5%"
 commission "5%/3%"
 
 example 'bkkdmk'
@@ -2150,7 +2200,7 @@ example 'istsvo svoist'
 agent    "7% от полного опубл. тарифа IATA на рейсы TK;"
 agent    "+ 7% от тарифа Эконом класса на рейсы TK;"
 subagent "5% от тарифа экономического класса на рейсы TK;"
-discount "4.8%"
+discount "4%"
 commission "7%/5%"
 
 example "svoist/business"
@@ -2180,14 +2230,14 @@ subagent "3,5% от тарифа эконом и бизнес класса пр�
 important!
 domestic
 classes :business, :economy
-discount "3.2%"
+discount "2.5%"
 commission "5%/3.5%"
 
 example 'svoist istsvo/ab'
 agent    "Как обычная 7% (Билеты «Интерлайн» под кодом TK могут быть выписаны только в случае существования опубл. тарифов и только при условии, если TK выполняет первый рейс)"
 subagent "Как обычная 5%"
 interline :first
-discount "4.8%"
+discount "4%"
 commission "7%/5%"
 
 carrier "TP", "TAP PORTUGAL"
@@ -2444,7 +2494,7 @@ example 'cdgsvo svocdg/ab'
 agent    "8% от всех опубл. тарифов на рейсы YM (В договоре Interline не прописан.)"
 subagent "6% от всех опубл. тарифов на рейсы YM"
 interline :no, :unconfirmed
-discount "5.8%"
+discount "4.7%"
 commission "8%/6%"
 
 carrier "YO", "Heli air Monaco (РИНГ АВИА)"
@@ -2821,6 +2871,7 @@ carrier "U9", "Aircompany Tatarstan"
 ########################################
 
 example 'svocdg/business cdgsvo/business'
+expr_date "30.04.2013"
 agent "9% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
 subagent "7% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
 classes :business
@@ -2828,6 +2879,7 @@ discount "5.8%"
 commission "9%/7%"
 
 example 'svocdg/economy svocdg/economy'
+expr_date "30.04.2013"
 agent "7% от опубл. тарифов на собств. рейсы U9 Эконом класса;"
 subagent "5% от опубл. тарифов на собств. рейсы U9 Эконом класса"
 classes :economy
@@ -2835,12 +2887,41 @@ discount "4%"
 commission "7%/5%"
 
 example 'svocdg/ab cdgsvo'
+expr_date "30.04.2013"
 agent "2% от всех опубл. тарифов на рейсы Interline;"
 subagent "1% от всех опубл. тарифов на рейсы Interline."
 interline :yes
 commission "2%/1%"
 
 agent "3% от всех опубл. тарифов на рейсы code-share."
+expr_date "30.04.2013"
+subagent "1% от всех опубл. тарифов на рейсы code-share;"
+not_implemented "не умеем определять code-share"
+commission "3%/1%"
+
+# с 01.05
+# example 'svocdg/business cdgsvo/business'
+strt_date "01.05.2013"
+agent "4% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
+subagent "?"
+classes :business
+commission "4%/"
+
+# example 'svocdg/economy svocdg/economy'
+strt_date "01.05.2013"
+agent "3% от опубл. тарифов на собств. рейсы U9 Эконом класса;"
+subagent "?"
+classes :economy
+commission "3%/"
+
+# example 'svocdg/ab cdgsvo'
+strt_date "01.05.2013"
+agent "1% от всех опубл. тарифов на рейсы Interline;"
+subagent "?"
+interline :yes
+commission "1%/"
+
+agent "1% от всех опубл. тарифов на рейсы code-share."
 subagent "1% от всех опубл. тарифов на рейсы code-share;"
 not_implemented "не умеем определять code-share"
 commission "3%/1%"
@@ -2916,7 +2997,7 @@ carrier_defaults :consolidator => 0, :ticketing_method => "downtown"
 example 'svocdg cdgsvo'
 agent "5% DTT"
 subagent "3% DTT"
-discount "2.5%"
+discount "2%"
 commission "5%/3%"
 
 carrier "S7", "S7 AIRLINES"
@@ -2938,6 +3019,7 @@ strt_date "01.04.2013"
 agent "При продаже перевозок на рейсы других авиакомпаний, с которыми Перевозчик имеет Соглашение INTERLINE и по специальным прорейтовым тарифам на рейсы, включающие участки Перевозчика и других авиакомпаний, с которыми Перевозчик имеет Соглашение INTERLINE, оформленных на ПД, вознаграждение составляет 3%"
 subagent "3%"
 interline :yes
+discount "2%"
 commission "3%/3%"
 
 #w
@@ -3308,5 +3390,12 @@ strt_date "01.04.2013"
 agent "3% от всех опубликованных тарифов на собственные рейсы авиакомпании"
 subagent "Субагентская для MR будет 2%"
 commission "3%/2%"
+
+carrier "AH", "Air Algerie (АВИАРЕПС)"
+#######################################
+
+agent "5% от всех опубл. тарифов;"
+subagent "3% от всех опубл. тарифов"
+commission "5%/3%"
 
 end
