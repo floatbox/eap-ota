@@ -953,11 +953,21 @@ carrier "FV", "RUSSIA"
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
+expr_date "31.05.2013"
 agent "7% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 subagent "5% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 interline :no, :yes
 discount "4%"
 commission '7%/5%'
+
+example 'svocdg'
+example 'svocdg cdgsvo/ab'
+strt_date "01.06.2013"
+agent "6% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
+subagent "4% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
+interline :no, :yes
+discount "3%"
+commission '6%/4%'
 
 example 'svocdg/ab'
 agent "1 euro с билета на рейсы Interline без участка FV."
