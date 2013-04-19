@@ -53,6 +53,18 @@
         <div class="bfrsa-partner">Совместно с партнером Sravnikupi.ru</div>
     </div>
     <% end %>
+
+    <% weatlas_url = weatlas_link(@order_form) %>
+    <% if weatlas_url %>
+    <div class="bfrs-excursion">
+        <h5 class="bfrsa-title">Экскурсии <%= weatlas_city(@order_form) %></h5>
+
+        <div class="bfrsa-bar">
+            <a class="bfrsa-link" href="<%= weatlas_url %>" target="_blank">Выбрать и&nbsp;забронировать экскурсию</a>
+        </div>
+        <div class="bfrsa-partner">Совместно с партнером Weatlas.com</div>
+    </div>
+    <% end %>
 </div>
 <% end %>
 <p class="latent" id="bfh-mail"><%= raw t 'booking.success.whattodo.hint' %></p>
