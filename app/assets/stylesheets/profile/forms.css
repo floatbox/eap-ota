@@ -60,3 +60,8 @@
     float: right;
     margin-top: 10px;
 }
+.upf-errors {
+    margin: 0 20px;
+    padding-bottom: 16px;    
+    color: #bf2a1d;
+}

@@ -5,7 +5,6 @@
 </div>
 <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put }) do |f| %>
 
-    <%= devise_error_messages! %>
     <%= f.hidden_field :reset_password_token %>
 
     <div class="upf-field">
@@ -19,6 +18,15 @@
     <div class="upf-submit">
         <%= f.submit "Продолжить", :class => 'upf-button' %>
     </div>
+    
+    <% if !devise_error_messages!.empty? || !flash.empty? %>
+    <div class="upf-errors">
+        <%= devise_error_messages! %>
+        <% flash.each do |key, value| %>
+            <%= value %>
+        <% end %>
+    </div>
+    <% end %>     
 
 <% end %>
 </div>
