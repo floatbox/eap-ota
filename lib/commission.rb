@@ -1804,7 +1804,7 @@ example 'svocdg'
 example 'cdgsvo svocdg/ab'
 agent "1% от опубл. тарифов на собств.рейсы OK;"
 agent "1% от опубл. тарифов на рейсы Interline, если один из сегментов выполнен под кодом OK."
-subagent "уточнить"
+subagent "0.5%"
 interline :no, :yes
 commission "1%/0.5%"
 
@@ -3396,6 +3396,7 @@ carrier "AH", "Air Algerie (АВИАРЕПС)"
 
 agent "5% от всех опубл. тарифов;"
 subagent "3% от всех опубл. тарифов"
+disabled "PROHIBITED TICKETING CARRIER"
 commission "5%/3%"
 
 end
