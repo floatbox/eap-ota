@@ -16,7 +16,7 @@ module DataMigration
       $tickets_are_loading = true
       o.tickets.every.save!
       $tickets_are_loading = false
-      o.update_prices_from_tickets || save
+      o.update_prices_from_tickets || o.save
     end
   end
 
