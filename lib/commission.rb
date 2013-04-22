@@ -3399,4 +3399,11 @@ subagent "3% от всех опубл. тарифов"
 disabled "PROHIBITED TICKETING CARRIER"
 commission "5%/3%"
 
+carrier "W3", "ARIK AIR (АВИАРЕПС)"
+#######################################
+
+agent "1% от всех опубликованных тарифов"
+subagent "5 рублей с билета по опубликованным тарифам"
+commission "1%/5"
+
 end
