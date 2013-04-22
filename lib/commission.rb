@@ -100,7 +100,7 @@ strt_date "01.04.2013"
 agent "9% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
 subagent "нет? ориентировочно 7"
 subclasses "FPRJCADSM"
-discount "5.2%"
+discount "5%"
 important!
 commission "9%/7%"
 
@@ -108,7 +108,7 @@ commission "9%/7%"
 # example 'cdgsvo/o svocdg/y'
 strt_date "21.04.2013"
 agent "C 21.04.13г. 7% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
-subagent "нет? ориентировочно 5"
+subagent "5%"
 subclasses "YHQBKO"
 discount "3.5%"
 # disabled "На DTT выгодней"
@@ -2353,18 +2353,6 @@ check { includes(country_iatas.first, 'RU') and not includes(city_iatas.first, '
 discount "7%"
 no_commission "9%/8.5%"
 
-example 'ledkbp kbptlv'
-example 'ledkbp kbpcdg'
-example 'ledkbp kbptbs'
-strt_date "21.03.2012"
-expr_date "01.04.2013"
-agent "10% от тарифа при продаже перевозок с началом перевозки от Санкт-Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
-subagent "9,5% от тарифа при продаже перевозок с началом перевозки от Санкт- Петербурга до п.п. VV на территорию третьих стран трансфером через Киев;"
-check { includes(city_iatas.first, 'LED') and includes(city_iatas, 'IEV') and not includes(country_iatas.last, 'UA') and not includes(country_iatas.last, 'RU') }
-important!
-discount "8%"
-no_commission "10%/9.5%"
-
 example 'svokbp/business kbpsvo/business'
 strt_date "01.08.2012"
 agent "9% от тарифа при продаже перевозок на рейсы Москва-Киев (MOW-IEV), Москва-Киев-Москва (MOW -IEV- MOW);"
@@ -3366,5 +3354,12 @@ agent "5% от всех опубл. тарифов;"
 subagent "3% от всех опубл. тарифов"
 disabled "PROHIBITED TICKETING CARRIER"
 commission "5%/3%"
+
+carrier "W3", "ARIK AIR (АВИАРЕПС)"
+#######################################
+
+agent "1% от всех опубликованных тарифов"
+subagent "5 рублей с билета по опубликованным тарифам"
+commission "1%/5"
 
 end
