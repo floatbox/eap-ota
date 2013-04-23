@@ -1,12 +1,12 @@
 # encoding: utf-8
+
+# Делает класс читающим в себя комиссии.
+# Требует от класса только наличия метода register.
 module Commission::Reader
 
   extend ActiveSupport::Concern
 
   included do
-    cattr_accessor :commissions
-    self.commissions = {}
-
     cattr_accessor :opts
     cattr_accessor :default_opts
     cattr_accessor :carrier_default_opts
@@ -17,7 +17,6 @@ module Commission::Reader
   def correct!
     Commission::Correctors.apply(self, corrector)
   end
-
 
   module ClassMethods
 
@@ -55,6 +54,7 @@ module Commission::Reader
         raise ArgumentError, "strange commission: #{arg}"
       end
 
+      # FIXME заменить на Commission.new, сейчас тесты валятся
       commission = new({
         :carrier => @carrier,
         :agent => vals[0],
@@ -71,6 +71,7 @@ module Commission::Reader
     # заглушка для example который _не должны_ найти комиссию
     def no_commission(reason=true)
       # opts здесь по идее содержит только examples
+      # FIXME заменить на Commission.new, сейчас тесты валятся
       commission = new({
         :carrier => @carrier,
         :source => caller_address,
@@ -83,18 +84,6 @@ module Commission::Reader
 
       self.opts = {}
       register commission
-    end
-
-    def register commission
-      commissions[@carrier] ||= []
-      commission.number = @last_commission_number
-      @last_commission_number += 1
-      if commission.important
-        commissions[@carrier].unshift commission
-      else
-        commissions[@carrier].push commission
-      end
-      commission
     end
 
     # параметры конкретных правил
@@ -199,38 +188,6 @@ module Commission::Reader
       opts[:our_markup] = value
     end
 
-    # Inspection
-    ############
-
-    def all_for(recommendation)
-      for_carrier(recommendation.validating_carrier_iata) || []
-    end
-
-    def exists_for?(recommendation)
-      for_carrier(recommendation.validating_carrier_iata).present?
-    end
-
-    def for_carrier(validating_carrier_iata)
-      commissions[validating_carrier_iata]
-    end
-
-    def all
-      commissions.values.flatten.sort_by {|c| c.source.to_i }
-    end
-
-    def all_carriers
-      commissions.keys.uniq
-    end
-
-    def stats
-      puts "#{commissions.keys.size} carriers"
-      puts "#{commissions.values.sum(&:size)} rules total"
-      puts "#{commissions.values.every.select(&:disabled?).sum(&:size)} rules disabled"
-      puts "#{commissions.values.every.select(&:not_implemented).sum(&:size)} of which not implemented"
-      disabled, enabled = commissions.keys.partition {|iata| commissions[iata].all?(&:disabled?)}
-      puts "enabled #{enabled.size}: #{enabled.sort.join(' ')}"
-      puts "disabled #{disabled.size}: #{disabled.sort.join(' ')}"
-    end
 
   private
 

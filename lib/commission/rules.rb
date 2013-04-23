@@ -3,7 +3,10 @@ module Commission::Rules
 
   extend ActiveSupport::Concern
 
+  # касаются только класса
+  include Commission::DefaultBook
   include Commission::Reader
+
   include Commission::Finder
 
   include KeyValueInit
