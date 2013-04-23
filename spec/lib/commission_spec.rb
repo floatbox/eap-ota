@@ -47,6 +47,10 @@ describe Commission do
   end
 
 
+  # будет (и должно!) валиться,
+  # если в config/commissions.rb - синтаксическая ошибка.
+  Commission.reload!
+
   Commission.all.each do |commission|
 
 
