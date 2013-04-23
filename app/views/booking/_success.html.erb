@@ -19,9 +19,12 @@
     <p class="bfrsm-pnr"><a target="_blank" href="<%= pnr_path %>">Распечатать подтверждение</a></p>
     <p class="bfrsm-text bfrsm-number"><%= raw t 'booking.success.pnr', :number => content_tag(:span, pnr_number, :class => 'bfr-pnr') %></p>
 </div>
+
 <% ostrovok_url = ostrovok_link(@order_form) %>
 <% insurance_url = sravnikupi_insurance_uri(@order_form) %>
-<% if ostrovok_url || insurance_url %>
+<% weatlas_url = weatlas_link(@order_form) %>
+
+<% if ostrovok_url || insurance_url || weatlas_url %>
 <div class="bfrs-addition">
     <% if ostrovok_url %>
     <div class="bfrs-hotels">
@@ -53,12 +56,9 @@
         <div class="bfrsa-partner">Совместно с партнером Sravnikupi.ru</div>
     </div>
     <% end %>
-
-    <% weatlas_url = weatlas_link(@order_form) %>
     <% if weatlas_url %>
     <div class="bfrs-excursion">
         <h5 class="bfrsa-title">Экскурсии <%= weatlas_city(@order_form) %></h5>
-
         <div class="bfrsa-bar">
             <a class="bfrsa-link" href="<%= weatlas_url %>" target="_blank">Выбрать и&nbsp;забронировать экскурсию</a>
         </div>

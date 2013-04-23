@@ -367,15 +367,15 @@
 .bfrs-insurance,
 .bfrs-excursion {
     float: left;
-    width: 204px;
+    width: 197px;
     padding: 15px 0 12px;
     margin-left: 20px;
 }
 .bfrsa-title {
     margin: 0 0 8px;
     font-weight: bold;
-    font-size: 20px;
-    line-height: 23px;
+    font-size: 18px;
+    line-height: 20px;
     letter-spacing: -0.03em;        
 }
 .bfrsa-features {
@@ -392,9 +392,9 @@
 }
 .bfrsa-bar {
     background: #FFF;
-    padding: 14px 0;
+    padding: 12px 10px;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 17px;
     text-align: center;
 }
