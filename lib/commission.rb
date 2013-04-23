@@ -1921,52 +1921,35 @@ commission "7%/4.9%"
 carrier "QR", "QATAR AIRWAYS"
 ########################################
 
-example 'ledpek/business pekled/business'
+example 'cdgpek/business pekcdg/business'
 strt_date "01.04.2012"
-expr_date "31.05.2013"
 agent    "от опубл. тарифов, а также от опубл. IT гросс тарифов (искл.групповые тарифы) на собств.рейсы QR: 5% Бизнес класс"
 subagent "3,5% от опубл. тарифов на собственные рейсы QR"
 classes :business
 discount "3%"
 commission "5%/3.5%"
 
-example 'ledpek/economy pekled/economy'
-example 'ledpek/business pekled/economy'
+example 'jfksvo'
+example 'jfkled ledcdg'
+agent    "с сегодня на QR если в маршруте есть Россия (OW/RT, origin/destination) - агентская 5%"
+subagent "у нас 3%"
+check { includes(country_iatas, 'RU') }
+ticketing_method "downtown"
+commission "5%/3%"
+
+example 'cdgpek/economy pekcdg/economy'
+example 'cdgpek/business pekcdg/economy'
 strt_date "01.04.2012"
-expr_date "31.05.2013"
 agent    "1% Эконом класса, а также при различной комбинации Бизнес/Эконом;" 
 subagent "5 коп. с билета Эконом класса, а также при различной комбинации Бизнес/Эконом;"
 commission "1%/0.05"
 
 example 'svocdg cdgsvo/ab'
-expr_date "31.05.2013"
+strt_date "01.04.2012"
 agent    "1% на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 subagent "5 коп . с билета на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 interline :first
 commission "1%/0.05"
-
-# с 01.06
-# example 'ledpek/business pekled/business'
-strt_date "01.06.2013"
-agent    "от опубл. тарифов, а также от опубл. IT гросс тарифов (искл.групповые тарифы) на собств.рейсы QR: 5% Бизнес класс"
-subagent "3,5% от опубл. тарифов на собственные рейсы QR"
-classes :business
-discount "3%"
-commission "5%/3.5%"
-
-# example 'ledpek/economy pekled/economy'
-# example 'ledpek/business pekled/economy'
-strt_date "01.06.2013"
-agent    "0.1% Эконом класса, а также при различной комбинации Бизнес/Эконом;" 
-subagent "5 коп. с билета Эконом класса, а также при различной комбинации Бизнес/Эконом;"
-commission "0.1%/0.05"
-
-# example 'svocdg cdgsvo/ab'
-strt_date "01.06.2013"
-agent    "0.1% на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
-subagent "5 коп . с билета на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
-interline :first
-commission "0.1%/0.05"
 
 example 'cdgsvo/ab'
 no_commission
@@ -3190,8 +3173,9 @@ example 'svoled'
 example 'ledsvo'
 example 'svoled ledsvo'
 strt_date "01.05.2013"
-agent "договорился: с 1 мая S7 агентская - 5%"
+agent "договорился: с 1 мая через даунтаун S7 агентская - 5%"
 subagent "наша 4%"
+ticketing_method "downtown"
 commission "5%/4%"
 
 carrier "GA", "GARUDA INDONESIA"
