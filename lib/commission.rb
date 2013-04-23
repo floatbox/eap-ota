@@ -1,6 +1,9 @@
 # encoding: utf-8
-class Commission
-include Commission::DefaultBook
+module Commission
+  include Commission::DefaultBook
+end
+
+Commission::Reader.new(Commission.default_book).define do
 
 # применяется вообще ко всем правилам ниже
 defaults :system => :amadeus, :ticketing_method => "aviacenter", :consolidator => '2%', :blanks => 0, :discount => 0, :our_markup => 0, :corrector => :twopercent

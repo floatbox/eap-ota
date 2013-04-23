@@ -8,9 +8,7 @@ describe Commission::Reader do
 
   context "just one commission" do
     let :commission_class do
-      Class.new do
-        include Commission::DefaultBook
-
+      Commission::Reader.new.define do
         carrier 'FV'
         commission '2%/3'
       end
@@ -28,9 +26,7 @@ describe Commission::Reader do
 
   context "two carriers, three simple commissions" do
     let :commission_class do
-      Class.new do
-        include Commission::DefaultBook
-
+      Commission::Reader.new.define do
         carrier 'FV'
         commission '2%/3'
         commission '1%/0'
@@ -63,9 +59,7 @@ describe Commission::Reader do
 
   context "all the rules" do
     let :commission_class do
-      Class.new do
-        include Commission::DefaultBook
-
+      Commission::Reader.new.define do
         carrier 'FV'
         consolidator '1%'
         blanks 50
@@ -95,8 +89,7 @@ describe Commission::Reader do
   context "setting defaults" do
 
     let :commission_class do
-      Class.new do
-        include Commission::DefaultBook
+      Commission::Reader.new.define do
         defaults :system => :amadeus,
           :ticketing_method => :aviacenter,
           :consolidator => '2%',
@@ -134,8 +127,7 @@ describe Commission::Reader do
       context "called with wrong key" do
         it "should raise error" do
           expect {
-            Class.new do
-              include Commission::DefaultBook
+            Commission::Reader.new.define do
               defaults :wrongkey => :wrongvalue
             end
           }.to raise_error(ArgumentError)
@@ -158,8 +150,7 @@ describe Commission::Reader do
       context "called with wrong key" do
         it "should raise error" do
           expect {
-            Class.new do
-              include Commission::DefaultBook
+            Commission::Reader.new.define do
               carrier 'FV'
               carrier_defaults :wrongkey => :wrongvalue
             end
@@ -186,9 +177,7 @@ describe Commission::Reader do
   context "several commissions for a company" do
 
     let :commission_class do
-      Class.new do
-        include Commission::DefaultBook
-
+      Commission::Reader.new.define do
         carrier 'FV'
         commission '2%/3'
 
@@ -268,9 +257,7 @@ describe Commission::Reader do
   context "no_commission commissions for a company" do
 
     let :commission_class do
-      Class.new do
-        include Commission::DefaultBook
-
+      Commission::Reader.new.define do
         carrier 'AB'
 
         agent "first"
@@ -326,9 +313,7 @@ describe Commission::Reader do
   describe "commission definitions" do
     context "unknown agent commission" do
       let :commission_class do
-        Class.new do
-          include Commission::DefaultBook
-
+        Commission::Reader.new.define do
           carrier 'FV'
           commission '/2%'
         end
@@ -342,9 +327,7 @@ describe Commission::Reader do
 
     context "unknown subagent commission" do
       let :commission_class do
-        Class.new do
-          include Commission::DefaultBook
-
+        Commission::Reader.new.define do
           carrier 'FV'
           commission '2%/'
         end
@@ -387,8 +370,7 @@ describe Commission::Reader do
     # определяет класс комиссий с единственным правилом и возвращает это правило
     def commission(&block)
 
-      Class.new do
-        include Commission::DefaultBook
+      Commission::Reader.new.define do
         # FIXME дефолт для Recommendation.example
         carrier 'SU'
         # здесь как бы выполняется блок определения комиссии
