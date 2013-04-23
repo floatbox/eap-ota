@@ -49,7 +49,7 @@ prebook: function(offer) {
         error: function() {
             that.failed();
         },
-        timeout: 60000
+        timeout: 120000
     });
     offer.book.addClass('ob-disabled');
     offer.state.html('<span class="ob-progress">' + I18n.t('prebooking.progress') + '</span>');
@@ -91,7 +91,7 @@ load: function() {
     this.request = $.get('/booking/?number=' + this.key, function(content) {
         page.location.set('booking', that.key);
         if (results.data) {
-            page.title.set(I18n.t('page.booking', {title: results.data.titles.window}));
+            page.title.set(I18n.t('page.booking.few', {title: results.data.titles.window}));
         }
         results.header.edit.hide();
         results.header.select.show();
