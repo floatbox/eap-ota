@@ -1,6 +1,8 @@
 # encoding: utf-8
-# поиск комиссий для рекомендации
-module Commission::Finder
+#
+# методы для Commission::Rule, для проверки применимости
+# конкретного правила к конкретной рекомендации
+module Commission::Matching
 
   extend ActiveSupport::Concern
 
@@ -59,7 +61,7 @@ module Commission::Finder
 
   # надо использовать self.class.skip..., наверное
   def valid_interline? recommendation
-    Commission.skip_interline_validity_check || recommendation.valid_interline?
+    Commission::Rule.skip_interline_validity_check || recommendation.valid_interline?
   end
 
   CLASS_CABIN_MAPPING = {:economy => %w(M W Y), :business => %w(C), :first => %w(F)}

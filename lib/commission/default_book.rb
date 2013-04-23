@@ -11,6 +11,8 @@ module Commission::DefaultBook
     self.default_book = Commission::Book.new
   end
 
+  include Commission::Reader
+
   module ClassMethods
     delegate :commissions, to: :default_book
     delegate :register, to: :default_book

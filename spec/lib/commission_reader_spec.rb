@@ -2,14 +2,14 @@
 
 require 'spec_helper'
 
-describe Commission::Rules do
+describe Commission::Reader do
 
   include Commission::Fx
 
   context "just one commission" do
     let :commission_class do
       Class.new do
-        include Commission::Rules
+        include Commission::DefaultBook
 
         carrier 'FV'
         commission '2%/3'
@@ -22,14 +22,14 @@ describe Commission::Rules do
 
     it "should find a commission for correct recommendation" do
       recommendation = Recommendation.example('SVOCDG', :carrier => 'FV')
-      commission_class.find_for(recommendation).should be_a(commission_class)
+      commission_class.find_for(recommendation).should be_a(Commission::Rule)
     end
   end
 
   context "two carriers, three simple commissions" do
     let :commission_class do
       Class.new do
-        include Commission::Rules
+        include Commission::DefaultBook
 
         carrier 'FV'
         commission '2%/3'
@@ -64,7 +64,7 @@ describe Commission::Rules do
   context "all the rules" do
     let :commission_class do
       Class.new do
-        include Commission::Rules
+        include Commission::DefaultBook
 
         carrier 'FV'
         consolidator '1%'
@@ -96,7 +96,7 @@ describe Commission::Rules do
 
     let :commission_class do
       Class.new do
-        include Commission::Rules
+        include Commission::DefaultBook
         defaults :system => :amadeus,
           :ticketing_method => :aviacenter,
           :consolidator => '2%',
@@ -135,7 +135,7 @@ describe Commission::Rules do
         it "should raise error" do
           expect {
             Class.new do
-              include Commission::Rules
+              include Commission::DefaultBook
               defaults :wrongkey => :wrongvalue
             end
           }.to raise_error(ArgumentError)
@@ -159,7 +159,7 @@ describe Commission::Rules do
         it "should raise error" do
           expect {
             Class.new do
-              include Commission::Rules
+              include Commission::DefaultBook
               carrier 'FV'
               carrier_defaults :wrongkey => :wrongvalue
             end
@@ -172,14 +172,14 @@ describe Commission::Rules do
       subject { commission_class.for_carrier('AB') }
       it {should be_an(Array)}
       its(:size) { should == 2 }
-      its(:first) { should be_an(commission_class) }
+      its(:first) { should be_a(Commission::Rule) }
     end
 
     describe ".all" do
       subject { commission_class.all }
       it {should be_an(Array)}
       its(:size) { should == 3 }
-      its(:first) { should be_an(commission_class) }
+      its(:first) { should be_a(Commission::Rule) }
     end
   end
 
@@ -187,7 +187,7 @@ describe Commission::Rules do
 
     let :commission_class do
       Class.new do
-        include Commission::Rules
+        include Commission::DefaultBook
 
         carrier 'FV'
         commission '2%/3'
@@ -223,7 +223,7 @@ describe Commission::Rules do
     }
 
     specify {
-      commission_class.find_for(recommendation).should be_a(commission_class)
+      commission_class.find_for(recommendation).should be_a(Commission::Rule)
     }
 
     specify {
@@ -269,7 +269,7 @@ describe Commission::Rules do
 
     let :commission_class do
       Class.new do
-        include Commission::Rules
+        include Commission::DefaultBook
 
         carrier 'AB'
 
@@ -327,7 +327,7 @@ describe Commission::Rules do
     context "unknown agent commission" do
       let :commission_class do
         Class.new do
-          include Commission::Rules
+          include Commission::DefaultBook
 
           carrier 'FV'
           commission '/2%'
@@ -343,7 +343,7 @@ describe Commission::Rules do
     context "unknown subagent commission" do
       let :commission_class do
         Class.new do
-          include Commission::Rules
+          include Commission::DefaultBook
 
           carrier 'FV'
           commission '2%/'
@@ -363,10 +363,10 @@ describe Commission::Rules do
       match do |subject_commission|
         begin
           # FIXME сделать другой выключатель проверки интерлайнов
-          old, Commission.skip_interline_validity_check = Commission.skip_interline_validity_check, false
+          old, Commission::Rule.skip_interline_validity_check = Commission::Rule.skip_interline_validity_check, false
           @reason = subject_commission.turndown_reason(recommendation)
         ensure
-          Commission.skip_interline_validity_check = old
+          Commission::Rule.skip_interline_validity_check = old
         end
         ! @reason
       end
@@ -388,7 +388,7 @@ describe Commission::Rules do
     def commission(&block)
 
       Class.new do
-        include Commission::Rules
+        include Commission::DefaultBook
         # FIXME дефолт для Recommendation.example
         carrier 'SU'
         # здесь как бы выполняется блок определения комиссии

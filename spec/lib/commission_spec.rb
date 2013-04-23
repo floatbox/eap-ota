@@ -43,7 +43,7 @@ describe Commission do
   end
 
   before do
-    Commission.stub(:skip_interline_validity_check).and_return(true)
+    Commission::Rule.stub(:skip_interline_validity_check).and_return(true)
   end
 
 

@@ -14,10 +14,6 @@ module Commission::Reader
     self.carrier_default_opts = {}
   end
 
-  def correct!
-    Commission::Correctors.apply(self, corrector)
-  end
-
   module ClassMethods
 
     ALLOWED_KEYS_FOR_DEFS = %W[
@@ -54,8 +50,7 @@ module Commission::Reader
         raise ArgumentError, "strange commission: #{arg}"
       end
 
-      # FIXME заменить на Commission.new, сейчас тесты валятся
-      commission = new({
+      commission = Commission::Rule.new({
         :carrier => @carrier,
         :agent => vals[0],
         :subagent => vals[1],
@@ -71,8 +66,7 @@ module Commission::Reader
     # заглушка для example который _не должны_ найти комиссию
     def no_commission(reason=true)
       # opts здесь по идее содержит только examples
-      # FIXME заменить на Commission.new, сейчас тесты валятся
-      commission = new({
+      commission = Commission::Rule.new({
         :carrier => @carrier,
         :source => caller_address,
         :no_commission => reason

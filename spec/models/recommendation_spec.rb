@@ -97,7 +97,7 @@ describe Recommendation do
 
     context "with all the prices and direct commission" do
       let :commission do
-        Commission.new(
+        Commission::Rule.new(
           :agent => '4%',
           :subagent => '1%',
           :our_markup => '20',
@@ -112,7 +112,7 @@ describe Recommendation do
 
     context "with all the prices and aviacenter commission" do
       let :commission do
-        Commission.new(
+        Commission::Rule.new(
           :agent => '4%',
           :subagent => '1%',
           :our_markup => '20',
