@@ -105,7 +105,7 @@ important!
 commission "9%/7%"
 
 # базовое вознаграждение ац — мердж эконома с конца апреля 
-# example 'cdgsvo/o svocdg/y'
+example 'cdgsvo/o svocdg/y'
 strt_date "21.04.2013"
 agent "C 21.04.13г. 7% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
 subagent "5%"
@@ -114,14 +114,25 @@ discount "3.5%"
 # disabled "На DTT выгодней"
 commission "7%/5%"
 
-# базовое вознаграждение ац для говноклассов
+# dtt на говноклассы
 example 'cdgsvo/i svocdg/x'
+expr_date "30.04.2013"
 agent "5% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
-subagent "3% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
+subagent "4.5% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
 subclasses "LVXTNIGWU"
-discount "2%"
-# disabled "На DTT выгодней"
-commission "5%/3%"
+discount "3.5%"
+ticketing_method "downtown"
+commission "5%/4.5%"
+
+# прямая выписка на говноклассы
+example 'cdgsvo/i svocdg/x'
+strt_date "01.05.2013"
+agent "5% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
+subagent "5% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
+subclasses "LVXTNIGWU"
+discount "3.5%"
+ticketing_method "direct"
+commission "5%/5%"
 
 # интерлайн
 example 'aerdme dmeaer/ab'
@@ -1921,52 +1932,36 @@ commission "7%/4.9%"
 carrier "QR", "QATAR AIRWAYS"
 ########################################
 
-example 'ledpek/business pekled/business'
+example 'cdgpek/business pekcdg/business'
 strt_date "01.04.2012"
-expr_date "31.05.2013"
 agent    "от опубл. тарифов, а также от опубл. IT гросс тарифов (искл.групповые тарифы) на собств.рейсы QR: 5% Бизнес класс"
 subagent "3,5% от опубл. тарифов на собственные рейсы QR"
 classes :business
 discount "3%"
 commission "5%/3.5%"
 
-example 'ledpek/economy pekled/economy'
-example 'ledpek/business pekled/economy'
+example 'jfksvo'
+example 'jfkled ledcdg'
+agent    "с сегодня на QR если в маршруте есть Россия (OW/RT, origin/destination) - агентская 5%"
+subagent "у нас 3%"
+check { includes(country_iatas, 'RU') }
+ticketing_method "downtown"
+discount "2%"
+commission "5%/3%"
+
+example 'cdgpek/economy pekcdg/economy'
+example 'cdgpek/business pekcdg/economy'
 strt_date "01.04.2012"
-expr_date "31.05.2013"
 agent    "1% Эконом класса, а также при различной комбинации Бизнес/Эконом;" 
 subagent "5 коп. с билета Эконом класса, а также при различной комбинации Бизнес/Эконом;"
 commission "1%/0.05"
 
 example 'svocdg cdgsvo/ab'
-expr_date "31.05.2013"
+strt_date "01.04.2012"
 agent    "1% на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 subagent "5 коп . с билета на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 interline :first
 commission "1%/0.05"
-
-# с 01.06
-# example 'ledpek/business pekled/business'
-strt_date "01.06.2013"
-agent    "от опубл. тарифов, а также от опубл. IT гросс тарифов (искл.групповые тарифы) на собств.рейсы QR: 5% Бизнес класс"
-subagent "3,5% от опубл. тарифов на собственные рейсы QR"
-classes :business
-discount "3%"
-commission "5%/3.5%"
-
-# example 'ledpek/economy pekled/economy'
-# example 'ledpek/business pekled/economy'
-strt_date "01.06.2013"
-agent    "0.1% Эконом класса, а также при различной комбинации Бизнес/Эконом;" 
-subagent "5 коп. с билета Эконом класса, а также при различной комбинации Бизнес/Эконом;"
-commission "0.1%/0.05"
-
-# example 'svocdg cdgsvo/ab'
-strt_date "01.06.2013"
-agent    "0.1% на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
-subagent "5 коп . с билета на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
-interline :first
-commission "0.1%/0.05"
 
 example 'cdgsvo/ab'
 no_commission
@@ -3190,8 +3185,10 @@ example 'svoled'
 example 'ledsvo'
 example 'svoled ledsvo'
 strt_date "01.05.2013"
-agent "договорился: с 1 мая S7 агентская - 5%"
+agent "договорился: с 1 мая через даунтаун S7 агентская - 5%"
 subagent "наша 4%"
+ticketing_method "downtown"
+discount "3%"
 commission "5%/4%"
 
 carrier "GA", "GARUDA INDONESIA"
