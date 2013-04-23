@@ -93,7 +93,7 @@ update: function(data) {
     this.header.show(this.data.titles.header, data.valid);
     this.data.fresh = true;
     if (page.location.booking) {
-        page.title.set(I18n.t('page.booking', {title: this.data.titles.window}));
+        page.title.set(I18n.t('page.booking.few', {title: this.data.titles.window}));
     }
 },
 load: function() {
