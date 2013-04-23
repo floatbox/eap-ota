@@ -1625,7 +1625,7 @@ example 'svocai caisvo'
 agent    "9% от тарифа на рейсы MS из Москвы"
 subagent "7% от тарифа на рейсы MS из Москвы"
 check { includes(city_iatas.first, 'MOW') }
-discount "5.8%"
+discount "0%"
 commission "9%/7%"
 
 example 'caisvo svocai'
@@ -1633,7 +1633,7 @@ agent    "5% от тарифа на рейсы MS из Египта"
 subagent "3,5% от тарифа на рейсы MS из Египта"
 international
 check { includes(country_iatas.first, 'EG') }
-discount "2.8%"
+discount "0%"
 commission "5%/3.5%"
 
 example 'cdgcai'
@@ -1641,7 +1641,7 @@ example 'KULCAI'
 agent    "5% от тарифа для иных международных рейсов MS"
 subagent "3,5% от тарифа для иных международных рейсов MS"
 international
-discount "2%"
+discount "0%"
 commission "5%/3.5%"
 
 example 'caihrg'
@@ -2797,21 +2797,21 @@ carrier "A9", "GEORGIAN AIRWAYS"
 example 'tbsdme'
 agent "8 (восемь) % от опубл. тарифа на собств. рейсы авиакомпании А9;"
 subagent "6 % от опубл. тарифа на собств. рейсы А9;"
-discount "5%"
+discount "0%"
 commission "8%/6%"
 
 example 'tbsdme dmetbs/ab'
 agent "7 (семь)  % от опубл. тарифа по маршрутам со сквозными тарифами, включающими участок авиакомпании  А9 и авиакомпаний, с которыми А9 имеет Интерлайн-Соглашение;"
 subagent "5 % от опубл. тарифа по маршрутам со сквозными тарифами, включающими участок авиакомпании А9 и авиакомпаний, с которыми А9 имеет Интерлайн-Соглашение"
 interline :yes
-discount "4%"
+discount "0%"
 commission "7%/5%"
 
 example 'dmetbs/ab'
 agent "5 (пять)   % от опубл. тарифа на рейсы Interline без участка А9."
 subagent "3 % от опубл. тарифа на рейсы Interline без участка А9."
 interline :absent
-discount "2.5%"
+discount "0%"
 commission "5%/3%"
 
 carrier "5H", "Five Fourty Aviation Limited (Fly540)"
