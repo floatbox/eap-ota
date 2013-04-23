@@ -105,7 +105,7 @@ important!
 commission "9%/7%"
 
 # базовое вознаграждение ац — мердж эконома с конца апреля 
-# example 'cdgsvo/o svocdg/y'
+example 'cdgsvo/o svocdg/y'
 strt_date "21.04.2013"
 agent "C 21.04.13г. 7% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
 subagent "5%"
@@ -114,14 +114,25 @@ discount "3.5%"
 # disabled "На DTT выгодней"
 commission "7%/5%"
 
-# базовое вознаграждение ац для говноклассов
+# dtt на говноклассы
 example 'cdgsvo/i svocdg/x'
+expr_date "30.04.2013"
 agent "5% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
-subagent "3% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
+subagent "4.5% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
 subclasses "LVXTNIGWU"
-discount "2%"
-# disabled "На DTT выгодней"
-commission "5%/3%"
+discount "3.5%"
+ticketing_method "downtown"
+commission "5%/4.5%"
+
+# прямая выписка на говноклассы
+example 'cdgsvo/i svocdg/x'
+strt_date "01.05.2013"
+agent "5% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
+subagent "5% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
+subclasses "LVXTNIGWU"
+discount "3.5%"
+ticketing_method "direct"
+commission "5%/5%"
 
 # интерлайн
 example 'aerdme dmeaer/ab'
