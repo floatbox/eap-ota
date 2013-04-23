@@ -1946,6 +1946,7 @@ agent    "с сегодня на QR если в маршруте есть Рос
 subagent "у нас 3%"
 check { includes(country_iatas, 'RU') }
 ticketing_method "downtown"
+discount "2%"
 commission "5%/3%"
 
 example 'cdgpek/economy pekcdg/economy'
@@ -3187,6 +3188,7 @@ strt_date "01.05.2013"
 agent "договорился: с 1 мая через даунтаун S7 агентская - 5%"
 subagent "наша 4%"
 ticketing_method "downtown"
+discount "3%"
 commission "5%/4%"
 
 carrier "GA", "GARUDA INDONESIA"
