@@ -1,10 +1,3 @@
-# encoding: utf-8
-module Commission
-  include Commission::DefaultBook
-end
-
-Commission::Reader.new(Commission.default_book).define do
-
 # применяется вообще ко всем правилам ниже
 defaults :system => :amadeus, :ticketing_method => "aviacenter", :consolidator => '2%', :blanks => 0, :discount => 0, :our_markup => 0, :corrector => :twopercent
 
@@ -3370,5 +3363,3 @@ carrier "W3", "ARIK AIR (АВИАРЕПС)"
 agent "1% от всех опубликованных тарифов"
 subagent "5 рублей с билета по опубликованным тарифам"
 commission "1%/5"
-
-end

@@ -20,6 +20,12 @@ class Commission::Reader
     book
   end
 
+  # считывает определения из файла и возвращает готовую "книгу"
+  def read_file(filename)
+    instance_eval(File.read(filename), filename)
+    book
+  end
+
   ALLOWED_KEYS_FOR_DEFS = %W[
     system ticketing_method consolidator blanks discount our_markup
     corrector disabled not_implemented no_commission
