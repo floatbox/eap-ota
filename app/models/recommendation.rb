@@ -268,10 +268,9 @@ class Recommendation
     ( [ validating_carrier_iata ] +
       [ variant.flights, booking_classes, cabins].transpose.map { |fl, cl, cab|
         r = ["#{fl.departure_iata}#{fl.arrival_iata}"]
-        if fl.marketing_carrier_iata != fl.operating_carrier_iata
+        if validating_carrier_iata != fl.marketing_carrier_iata ||
+           validating_carrier_iata != fl.operating_carrier_iata
           r << fl.carrier_pair
-        elsif validating_carrier_iata != fl.marketing_carrier_iata
-          r << fl.marketing_carrier_iata
         end
         r << 'BUSINESS' if cab == 'C'
         r << 'FIRST' if cab == 'F'
