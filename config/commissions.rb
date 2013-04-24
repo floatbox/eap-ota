@@ -1,10 +1,10 @@
 # применяется вообще ко всем правилам ниже
-defaults :system => :amadeus, :ticketing_method => "aviacenter", :consolidator => '2%', :blanks => 0, :discount => 0, :our_markup => 0, :corrector => :twopercent
+defaults system: :amadeus, ticketing_method: "aviacenter", consolidator: '2%', blanks: 0, discount: 0, our_markup: 0, corrector: :twopercent
 
 carrier "SU", "Aeroflot"
 ########################################
 # будут действовать на все правила в авиакомпании.
-carrier_defaults :discount => 0
+carrier_defaults discount: 0
 
 # example "svocdg"
 # example "svocdg/business cdgsvo/economy"
@@ -399,7 +399,7 @@ commission "5%/3%"
 carrier "AF", "AIR FRANCE"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.2%'
+carrier_defaults consolidator: 0, our_markup: '0.2%'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -416,7 +416,7 @@ no_commission
 carrier "AM", "AEROMEXICO"
 ########################################
 
-carrier_defaults :discount => 0
+carrier_defaults discount: 0
 
 example "SVOCDG"
 agent    "9% от всех опубликованных тарифов"
@@ -441,7 +441,7 @@ no_commission
 
 carrier "AZ", "ALITALIA"
 ########################################
-carrier_defaults :consolidator => 0
+carrier_defaults consolidator: 0
 
 example 'svolin'
 example 'ledlin linled'
@@ -522,7 +522,7 @@ commission "0/0"
 carrier "BD", "BMI"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.2%', :disabled => 'вышли из BSP'
+carrier_defaults consolidator: 0, our_markup: '0.2%', disabled: 'вышли из BSP'
 
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
@@ -786,7 +786,7 @@ commission "0%/0%"
 carrier "EK", "EMIRATES"
 ########################################
 
-carrier_defaults :consolidator => 0
+carrier_defaults consolidator: 0
 
 example 'svocdg/first cdgsvo/business'
 example 'svocdg/first cdgsvo/first'
@@ -952,7 +952,7 @@ commission "1eur/1"
 
 carrier "GF", "GULF AIR (Глонасс) (НЕ BSP!!!)"
 #######################################
-carrier_defaults :disabled => 'не BSP'
+carrier_defaults disabled: 'не BSP'
 
 agent    "7% от тарифа на международные рейсы GF"
 subagent "5% от тарифа на международные рейсы GF"
@@ -980,7 +980,7 @@ commission "1%/0.5%"
 carrier "HR", "HAHN AIR  (Авиарепс)"
 ########################################
 
-carrier_defaults :ticketing_method => "direct"
+carrier_defaults ticketing_method: "direct"
 
 # включено с дополнительной проверкой
 agent    "1 руб. от тарифов, опубликованных в системе бронирования, для авиакомпании Hahn Air и интерлайн-партнеров Hahn Air, указанных на сайте www.HR-ticketing.com;"
@@ -1186,7 +1186,7 @@ commission "5%/3%"
 
 carrier "HY", "UZBEKISTAN AIRWAYS (Узбекистон Хаво Йуллари) (НЕ BSP!!!)"
 ########################################
-carrier_defaults :disabled => "не BSP"
+carrier_defaults disabled: "не BSP"
 
 example 'svocdg'
 agent    "7% от опубл. тарифов на собств. рейсы HY"
@@ -1203,7 +1203,7 @@ commission "0%/0%"
 carrier "IB", "IBERIA"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.2%'
+carrier_defaults consolidator: 0, our_markup: '0.2%'
 
 example 'svocdg cdgsvo'
 agent    "1 руб. с билета на рейсы IB. (Билеты Interline под кодом IB могут быть выписаны только в случае существования опубл. тарифов и только при условии, что IB выполняет первый рейс маршрута."
@@ -1364,7 +1364,7 @@ no_commission
 carrier "KL", "KLM"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.2%'
+carrier_defaults consolidator: 0, our_markup: '0.2%'
 
 example 'svocdg'
 agent    "1руб за билет, выписанный по опубл. тарифам, в случае перевозки с вылетом из стран СНГ; 1руб за билет, выписанный по опубл. тарифам,  в случае вылета вне стран СНГ;"
@@ -1408,7 +1408,7 @@ commission "1/0.05"
 carrier "LH", "LUFTHANSA"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.5%'
+carrier_defaults consolidator: 0, our_markup: '0.5%'
 
 example 'svojfk/f'
 example 'svojfk/a jfksvo/z'
@@ -1477,7 +1477,7 @@ no_commission
 carrier "LO", "LOT"
 ########################################
 
-carrier_defaults :consolidator => 0
+carrier_defaults consolidator: 0
 
 example 'ledprg prgwaw'
 example 'dmecdg cdgwaw'
@@ -1505,7 +1505,7 @@ commission "1eur/5"
 carrier "LX", "SWISS"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.2%'
+carrier_defaults consolidator: 0, our_markup: '0.2%'
 
 example 'svojfk/f'
 example 'svojfk/a jfksvo/z'
@@ -1587,7 +1587,7 @@ no_commission
 carrier "MA", "MALEV"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '1%'
+carrier_defaults consolidator: 0, our_markup: '1%'
 
 example "svobud/c budsvo/c"
 agent "12% от тарифа по классам J,C,D,I,Y,B;"
@@ -1785,7 +1785,7 @@ commission "1%/0.5%"
 carrier "OS", "AUSTRIAN AIRLINES"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.2%'
+carrier_defaults consolidator: 0, our_markup: '0.2%'
 
 example 'svojfk/f'
 example 'svojfk/a jfksvo/z'
@@ -1916,7 +1916,7 @@ commission "0%/0%"
 
 carrier "QF", "QANTAS AIRWAYS (не BSP!!!)"
 ########################################
-carrier_defaults :disabled => 'не bsp'
+carrier_defaults disabled: 'не bsp'
 
 example 'svocdg'
 agent    "7% от опубл. тарифов на рейсы QF (В договоре Interline не прописан.)"
@@ -2002,7 +2002,7 @@ commission "1%/0.5%"
 carrier "SK", "SAS"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.5%'
+carrier_defaults consolidator: 0, our_markup: '0.5%'
 
 example 'svojfk'
 example 'svojfk jfksvo/sk'
@@ -2039,7 +2039,7 @@ commission "1/0.5"
 carrier "SN", "BRUSSELS AIRLINES"
 ########################################
 
-carrier_defaults :consolidator => 0, :our_markup => '0.5%'
+carrier_defaults consolidator: 0, our_markup: '0.5%'
 
 example 'svojfk/f'
 example 'svojfk/a jfksvo/z'
@@ -2332,7 +2332,7 @@ no_commission
 carrier "VV", "AEROSVIT"
 ########################################
 
-carrier_defaults our_markup: 0, :disabled => "Going to bankrupt"
+carrier_defaults our_markup: 0, disabled: "Going to bankrupt"
 
 example 'leddok'
 example 'ledcdg'
@@ -2409,7 +2409,7 @@ commission "1%/0.5%"
 
 carrier "XW", "SkyExpress Limited"
 ########################################
-carrier_defaults :disabled => 'отозвали лицензию'
+carrier_defaults disabled: 'отозвали лицензию'
 
 example 'svocdg'
 strt_date "01.10.2011"
@@ -2487,7 +2487,7 @@ commission "0%/0%"
 
 carrier "J2", "Azerbaijan Hava Yollari"
 ########################################
-carrier_defaults :disabled => 'нет ETKT'
+carrier_defaults disabled: 'нет ETKT'
 
 example 'svocdg'
 agent    "1 рубль за 1 выписанный билет на стоке 771"
@@ -2622,7 +2622,7 @@ commission "0/0"
 
 carrier "GW", "AIR LINES OF KUBAN"
 ########################################
-carrier_defaults :disabled => "Банкрот"
+carrier_defaults disabled: "Банкрот"
 
 example 'svocdg'
 agent "5% от опубл. тарифов на собств. рейсы авиакомпании."
@@ -2748,7 +2748,7 @@ commission "1/0"
 carrier "BJ", "NOUVELAIR (Только с момента авторизации! ПРОВЕРЯТЬ!)"
 ########################################
 
-carrier_defaults :disabled => 'предательски отменяют сегменты'
+carrier_defaults disabled: 'предательски отменяют сегменты'
 
 agent "0% от всех опубл. тарифов на рейсы BJ"
 subagent "2% от всех опубликованных тарифов на рейсы BJ"
@@ -2938,7 +2938,7 @@ commission "1%/5"
 
 carrier "UT", "UTAIR"
 ########################################
-carrier_defaults :consolidator => 0, :ticketing_method => "downtown"
+carrier_defaults consolidator: 0, ticketing_method: "downtown"
 
 example 'svocdg cdgsvo'
 agent "5% DTT"
@@ -2948,7 +2948,7 @@ commission "5%/3%"
 
 carrier "S7", "S7 AIRLINES"
 ########################################
-carrier_defaults :consolidator => 0, :ticketing_method => "direct"
+carrier_defaults consolidator: 0, ticketing_method: "direct"
 
 #dtt
 expr_date "31.03.2013"
