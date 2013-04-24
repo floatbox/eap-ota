@@ -1,14 +1,13 @@
 # encoding: utf-8
-module Commission::Rules
+#
+# комиссионное правило. Просто тупой контейнер для параметров правила.
+class Commission::Rule
 
-  extend ActiveSupport::Concern
-
-  include Commission::Reader
-  include Commission::Finder
+  include Commission::Matching
 
   include KeyValueInit
-  include Commission::Fx
   extend Commission::Attrs
+
   has_commission_attrs :agent, :subagent, :consolidator, :blanks, :discount, :our_markup
 
   attr_accessor :carrier,
@@ -38,5 +37,9 @@ module Commission::Rules
     "<commission #{carrier}##{number} :#{source}>"
   end
 
-end
+  # FIXME документировать
+  def correct!
+    Commission::Correctors.apply(self, corrector)
+  end
 
+end

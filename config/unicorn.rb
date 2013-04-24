@@ -22,6 +22,7 @@ pid project_home + '/tmp/pids/unicorn.pid'
 
 before_fork do |server,worker|
   Completer.preload!
+  Commission.reload!
   if defined?(ActiveRecord::Base)
     ActiveRecord::Base.connection.disconnect!
   end

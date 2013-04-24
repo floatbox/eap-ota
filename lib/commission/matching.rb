@@ -1,6 +1,8 @@
 # encoding: utf-8
-# поиск комиссий для рекомендации
-module Commission::Finder
+#
+# методы для Commission::Rule, для проверки применимости
+# конкретного правила к конкретной рекомендации
+module Commission::Matching
 
   extend ActiveSupport::Concern
 
@@ -59,7 +61,7 @@ module Commission::Finder
 
   # надо использовать self.class.skip..., наверное
   def valid_interline? recommendation
-    Commission.skip_interline_validity_check || recommendation.valid_interline?
+    Commission::Rule.skip_interline_validity_check || recommendation.valid_interline?
   end
 
   CLASS_CABIN_MAPPING = {:economy => %w(M W Y), :business => %w(C), :first => %w(F)}
@@ -104,37 +106,6 @@ module Commission::Finder
   def future?
     return unless strt_date
     strt_date.to_date.future?
-  end
-
-
-  module ClassMethods
-
-    def find_for(recommendation)
-      commission = all_for(recommendation).find do |c|
-        c.applicable?(recommendation)
-      end
-      return unless commission
-      return if commission.disabled?
-      commission
-    end
-
-    def all_with_reasons_for(recommendation)
-      found = nil
-      all_for(recommendation).map do |c|
-        reason = c.turndown_reason(recommendation)
-        status =
-          if !found && reason
-            :fail
-          elsif !found && !reason
-            :success
-          else
-            :skipped
-          end
-        found = c unless reason
-        [c, status, reason]
-      end
-    end
-
   end
 
 end

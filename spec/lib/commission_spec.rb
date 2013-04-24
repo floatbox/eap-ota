@@ -43,9 +43,13 @@ describe Commission do
   end
 
   before do
-    Commission.stub(:skip_interline_validity_check).and_return(true)
+    Commission::Rule.stub(:skip_interline_validity_check).and_return(true)
   end
 
+
+  # будет (и должно!) валиться,
+  # если в config/commissions.rb - синтаксическая ошибка.
+  Commission.reload!
 
   Commission.all.each do |commission|
 
