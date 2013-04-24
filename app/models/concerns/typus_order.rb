@@ -85,4 +85,14 @@ module TypusOrder
     "<a href='/admin/orders?search=#{email}'>#{email}</a>".html_safe
   end
 
+  def parent_pnr_number_searchable
+    if !parent_pnr_number.blank?
+      "<a href='/admin/orders?search=#{parent_pnr_number}'>#{parent_pnr_number}</a>".html_safe
+    elsif !pnr_number.blank?
+      "<a href='/admin/orders?search=#{pnr_number}'>→ <small>найти pnr number</small></a>".html_safe
+    else
+      "—"
+    end
+  end
+
 end

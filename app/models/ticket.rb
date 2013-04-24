@@ -92,7 +92,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def set_info_from_flights
-    if @flights
+    if @flights.present?
       if [nil, '', 'unknown'].include? vat_status
         if @flights[0].departure.country.iata != 'RU' ||
             @flights.last.arrival.country.iata != 'RU' ||
@@ -109,7 +109,7 @@ class Ticket < ActiveRecord::Base
       self.dept_date = @flights.first.dept_date
 
       # и закидываем в базу
-      self.stored_flights = @flights.map {|fl| StoredFlight.from_flight(fl) } if Conf.site.store_flights
+      self.stored_flights = @flights.map {|fl| StoredFlight.from_flight(fl) } if Conf.site.store_flights if @flights.all? &:dept_date #костыль, для билетов с открытой датой
     end
   end
 

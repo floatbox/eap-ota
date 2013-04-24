@@ -75,7 +75,7 @@ task :eviterra do
   set :rails_env, 'production'
   set :rvm_type, :system
   role :app, 'flexo.eviterra.com', 'deck.eviterra.com', 'calculon.eviterra.com'
-  role :web, 'hermes.eviterra.com', 'deck.eviterra.com'
+  role :web, 'hermes.eviterra.com', 'deck.eviterra.com', 'calculon.eviterra.com', 'flexo.eviterra.com'
   role :db, 'deck.eviterra.com', :primary => true
   role :daemons, 'deck.eviterra.com'
 end

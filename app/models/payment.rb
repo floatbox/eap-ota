@@ -57,7 +57,8 @@ class Payment < ActiveRecord::Base
   after_save :update_incomes_in_order
 
   belongs_to :order
-  delegate :pnr_number, :to => :order
+  delegate :pnr_number, :to => :order, :allow_nil => true
+  delegate :email, :to => :order, :allow_nil => true
   attr_accessor :custom_fields
   has_commission_columns :commission
 

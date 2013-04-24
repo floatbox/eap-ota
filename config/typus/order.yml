@@ -19,7 +19,7 @@ Order:
       - has_refunds
       - source
       - pnr_number
-      - parent_pnr_number
+      - parent_pnr_number_searchable
       - offline_booking
       - description
       - route

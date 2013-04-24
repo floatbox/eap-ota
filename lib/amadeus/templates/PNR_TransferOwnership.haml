@@ -1,11 +1,20 @@
-%recordLocator
-  %reservation>
-    %controlNumber= number
-%propagatioAction
-  %actionRequestCode NPR
+- if number
+  %recordLocator
+    %reservation>
+      -# does not retrieve
+      %controlNumber= number
+-# do not transfer PNRs linked with AXR
+- if false
+  %propagatioAction
+    %actionRequestCode NPR
 %officeIdentification
   %officeDetail
     %originatorDetails
       %inHouseIdentification1= office_id
   %specificChanges
+    -# change queuing office
+    %actionRequestCode QO
+    -# change ticketing office
     %actionRequestCode TO
+    -# change the option queue element
+    %actionRequestCode OQ

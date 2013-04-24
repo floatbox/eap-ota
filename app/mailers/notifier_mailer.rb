@@ -3,6 +3,7 @@ class NotifierMailer < ActionMailer::Base
   helper :pricer
   helper :booking
   helper :baggage
+  helper :hotels
   layout 'pnr'
 
   add_template_helper(ApplicationHelper)

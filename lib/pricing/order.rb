@@ -152,7 +152,7 @@ module Pricing
 
     # реальная _ожидаемая_ комиссия на эквайринг (от объявленной суммы)
     def price_payment_commission
-      price_with_payment_commission * acquiring_percentage
+      (price_with_payment_commission * acquiring_percentage).round(2)
     end
 
     # Касса: Режим 1 или 3  (скорректированная доля поставщика, для пробивания НДС в кассе)

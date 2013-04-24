@@ -158,7 +158,7 @@
 .o-complex .od-scroll {
     visibility: hidden;
 }
-.ob-bfixed .od-scroll {
+.ob-subfixed .od-scroll {
     visibility: inherit;
 }
 
@@ -691,7 +691,7 @@
     top: -5px;
 }
 .osd-notice {
-    margin: 10px 0 0 128px; 
+    margin: 10px 0 0 132px; 
 }
 .osdn-item {
     margin-top: 6px;
@@ -699,7 +699,23 @@
 .osdn-hl {
     padding: 2px 4px;
     background: #e2ea5f;
-} 
+}
+.osdn-hll {
+    position: relative;
+    left: -4px;
+    padding: 2px 0;
+    background: #e2ea5f;
+}
+.osdn-hlr {
+    position: relative;
+    left: 8px;
+    padding: 2px 0;
+    background: #e2ea5f;
+}
+.osdn-hlc {
+    position: relative;
+    left: -4px;
+}
 
 /* Segment colors */
 .segment1 .osd-time,

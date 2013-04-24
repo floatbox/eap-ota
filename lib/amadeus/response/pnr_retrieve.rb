@@ -222,6 +222,11 @@ module Amadeus
           m[2] ? m[1] : m[1] + '%'
         end
       end
+
+      # результат PNR_TransferOwnership. Не проверяет queue office и прочее.
+      def responsibility_office
+        xpath('//r:securityInformation/r:responsibilityInformation/r:officeId').to_s
+      end
     end
   end
 end

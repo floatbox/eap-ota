@@ -35,9 +35,12 @@ en:
       one: "%{count}\_minute"
       other: "%{count}\_minutes"
   page:
+    home: "Eviterra — самые дешевые авиабилеты по всему миру онлайн. Все авиакомпании. Максимальные скидки."
     search: "Search for airline tickets %{title}"
     results: "Airline tickets %{title}"
     booking: "Airline tickets booking %{title}"
+    segment: "%{cities} on %{date}"
+    return: "back on %{date}"
   search:
     locations:
       from: "From"
@@ -94,6 +97,8 @@ en:
         Y: ""
         C: "бизнес-классом"
         F: "первым классом"
+      segment: "%{cities} on %{date}"
+      return: "and back on %{date}"
     loading:
       title: "Searching for best flight offers for you"
       time: "Normally it takes 5—20 seconds"
@@ -131,7 +136,7 @@ en:
     arv: "Arrival %{to}"
     and: " and "
     time:
-      title: "Время вылета и прилета"
+      title: "Departure and arrival time"
       any: "anytime"
       t0: "night"
       t1: "morning"
@@ -145,7 +150,7 @@ en:
       title: "airports"
       dpt: "from any airport"
       arv: "to any airport"
-    carriers_and_planes: "Авиакомпании и самолеты"
+    carriers_and_planes: "Airlines and planes"
     alliance:
       title: "Airline allince"
       any: "any"
@@ -155,10 +160,10 @@ en:
     aircraft:
       title: "Plane type"
       any: "any"
-    layovers: "Пересадки"
+    layovers: "Connections"
     reset:
-      one: 'Сбросить %{count} выбранный фильтр'
-      other: 'Сбросить %{count} выбранных фильтров'
+      one: 'Reset %{count} selected filter'
+      other: 'Сбросить %{count} selected filters'
   subscription:
     title: "Subscribe for fare alert"
     description: "If you don't care about the dates, we will notify via email you when cheap flights %{cities} will be available."
@@ -196,6 +201,8 @@ en:
       buy: "Buy for {0}"
       one: "total price"
       few: "total price for all passengers"
+      one_with_fee: "total price"
+      few_with_fee: "total price for all passengers"
       rise: "%{value} more expensive"
       fall: "%{value} cheaper"
       average: "<strong>%{value}</strong> cheaper then average"
@@ -261,12 +268,12 @@ en:
       nationality: "Nationality"
       document:
         label: "Document number"
-        hint: "What kind of documents are required?"
+        hint: "What kind of documents<br>are required?"
         description: "National passport or external passport depending on destination. Birth certificate for infants and children (if applicable). Please note that visa is required for visiting several countries (detailed information on <a href=\"http://en.wikipedia.org/wiki/Visa_(document)#Visa_exemption_agreements\">Wikipedia</a> or in embassy/consulate.)"
       expiration:
         label: "Expiry date"
         without: "no expiry"
-        hint: "Expiry date details"
+        hint: "Expiry date<br>details"
         description: "If the document has the expiry date, it should be provided. If not – check the \"no expiry\" checkbox."
       bonus:
         alliance: "Frequent flyer card of %{name}"
@@ -434,3 +441,10 @@ en:
     forbidden:
       title: "В связи с плановыми техническими работами мы не можем оформить вашу покупку прямо сейчас."
       description: "Пожалуйста, не закрывайте страницу и нажмите на кнопку «Купить» через 10 минут. Приносим извинения за задержку."
+  footer:
+    blog: "Блог"
+    about: "О проекте"
+    faq: "Вопросы и ответы"
+    agreement: "Условия использования"
+    contacts: "Контактная информация"
+    iata: "Аккредитованный агент IATA<br>c 2011 года"

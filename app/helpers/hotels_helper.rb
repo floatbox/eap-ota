@@ -19,10 +19,10 @@ module HotelsHelper
     return unless order_form
     return unless order_form.recommendation
     journey = order_form.recommendation.journey
-    start_date = journey.segments.first.dept_date
+    start_date = journey.segments.first.arrv_date
     end_date =
       if journey.segments.count > 1
-        journey.segments.last.arrv_date
+        journey.segments.last.dept_date
       else
         start_date + 3.days
       end
@@ -62,8 +62,9 @@ module HotelsHelper
 
   def destination flights
     point = {}
+    start_point_iata = flights.first.departure_iata
     flights.each do |fl|
-      if point[:iata] && fl.departure_datetime_utc - point[:at] > 12.hours
+      if point[:iata] && fl.departure_datetime_utc - point[:at] > 12.hours && fl.dept_date != point[:arrv_date]
         point[:dt] = fl.departure_datetime_utc
         point[:dept_date] = fl.dept_date
         return point
@@ -73,7 +74,8 @@ module HotelsHelper
       point[:arrv_date] = fl.arrv_date
       point[:at] = fl.arrival_datetime_utc
     end
-    false
+    point[:dept_date] = point[:arrv_date] + 3.days
+    return point if point[:iata] != start_point_iata
   end
 
 end

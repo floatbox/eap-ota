@@ -97,7 +97,7 @@
 .bf-placeholder {
     display: none;
     position: absolute;
-    margin: 7px 6px;
+    margin: 8px 7px;
     font-size: 12px;
     line-height: 16px;
     color: #B0B0B0;
@@ -171,10 +171,10 @@
     margin-right: 20px;
 }
 .bfp-order {
-    position: relative;
-    top: -5px;
-    width: 664px;
-    margin-bottom: 5px;
+    margin: 20px 20px 5px 0;
+    padding: 10px 15px;
+    border: 1px solid #debf14;      
+    background: #fdfbea;
     line-height: 16px;
 }
 .bfp-hint {
@@ -297,6 +297,9 @@
 .bfp-date {
     float: left;
     border: 1px solid #ebe2b2;   
+}
+.bfpd-placeholder {
+    margin: 7px 6px;
 }
 .bfpd-item {
     float: left;
