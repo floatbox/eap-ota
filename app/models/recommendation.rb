@@ -54,6 +54,16 @@ class Recommendation
     (marketing_carrier_iatas & validating_carrier.all_iatas).present?
   end
 
+  # FIXME вынести дублирование кода
+  # предполагается, что у всех вариантов одинаковый набор marketing carrier-ов
+  def validating_carrier_makes_less_than_half_of_itinerary?
+    validating, other =
+      variants.first.flights.every.marketing_carrier_iata.partition do |iata|
+        iata.in?  validating_carrier.all_iatas
+      end
+    validating.size < other.size
+  end
+
   # предполагается, что у всех вариантов одинаковый набор marketing carrier-ов
   def validating_carrier_makes_half_of_itinerary?
     validating, other =
