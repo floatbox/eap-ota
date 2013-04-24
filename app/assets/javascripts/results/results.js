@@ -279,7 +279,11 @@ extendData: function() {
                 if (i !== s) parts.push(segments[i][mw ? 'arvto_short' : 'arvto']);
             }
             var direction = parts.enumeration(I18n.t('nbsp_and'));
-            titles[s] = I18n.t(mw ? 'few' : 'one', {scope: 'offer.segment.incompatible', direction: direction});
+            if (mw) {
+                titles[s] = I18n.t('offer.segment.incompatible.few', {direction: '</p><p class="oss-incompatible">' + direction}).replace(' </p>', '&nbsp;</p>');
+            } else {
+                titles[s] = I18n.t('offer.segment.incompatible.one', {direction: direction});
+            }
         }
     }
     this.data.ostitles = titles;
