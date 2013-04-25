@@ -68,11 +68,11 @@ init: function() {
                 section.load();
             }
         }
-        this.validate(true);        
+        this.validate(true);
     }
     if (!this.iphoneLayout) {
         booking.countdown.start();
-    }    
+    }
 },
 position: function() {
     return this.el.offset().top - 36 - results.header.height;
@@ -259,9 +259,22 @@ process: function(s) {
             _kmq.push(['record', 'BOOKING: hotels link pressed']);
             _gaq.push(['_trackEvent', 'Бронирование', 'Переход к отелям на Островке']);
         });
-        this.sending = true; // не даём отправить форму второй раз
+
+        // не даём отправить форму второй раз
+        this.sending = true;
         this.el.find('.bfp-add, .bfp-remove').css('visibility', 'hidden');
         this.el.find('input, textarea, select').prop('disabled', true);
+
+        // добавляем ссылку на новый поиск
+        var brLink = this.result.find('.bfr-newsearch').click(function(event) {
+            event.preventDefault();
+            booking.newSearch();
+        });
+        var rhLink = $('<div/>').addClass('rh-newsearch').html(brLink.html()).click(function() {
+            booking.newSearch();
+        });
+        results.header.select.hide().after(rhLink);
+
         break;
     case 'fail':
         _kmq.push(['record', 'BOOKING: FAIL']);
@@ -375,7 +388,7 @@ initPhone: function() {
         var v = $.trim(value);
         v = v.replace(/[^+\d]/g, '');
         v = v.replace(/^8(\d+)/g, '+7$1');
-        v = v.replace(/^(\d)/g, '+$1');        
+        v = v.replace(/^(\d)/g, '+$1');
         return v;
     };
     this.controls.push(phone);
@@ -388,7 +401,7 @@ load: function() {
     this.set($.parseJSON(sessionStorage.getItem('contactsData')) || []);
     this.el.change(function() {
         that.save();
-    });    
+    });
 }
 };
 
@@ -430,7 +443,7 @@ init: function() {
     this.table.on('click', '.bfpr-link', function() {
         booking.form.wrongPrice = false;
         that.removeRow(Number($(this).closest('tbody').attr('data-index')));
-        booking.form.hidePrice();        
+        booking.form.hidePrice();
         that.validate(true);
         booking.form.validate();
     });
@@ -553,10 +566,10 @@ validate: function(forced) {
     clearTimeout(this.getPriceTimeout);
     var valid = wrong.length + empty.length === 0;
     if (valid && booking.form.wrongPrice) {
-        this.getPriceTimeout = setTimeout(function() { 
+        this.getPriceTimeout = setTimeout(function() {
             booking.form.getPrice();
         }, 100);
-    }    
+    }
     this.toggle(valid);
     this.wrong = wrong;
     this.empty = empty;
@@ -834,14 +847,14 @@ initCard: function() {
                 field.setSelectionRange(pos, pos);
             }, 0);
         }
-        sample.html((digits + '----------------').substring(12, 16).replace(/\D/g, '<span class="bfcn-empty">#</span>'));        
+        sample.html((digits + '----------------').substring(12, 16).replace(/\D/g, '<span class="bfcn-empty">#</span>'));
         toggleType(digits ? types[digits.charAt(0)] : undefined);
     });
     number.format = function(value) {
         var digits = $.trim(value).replace(/\D/g, '');
         return digits.replace(/(\d{4})(?=\d)/g, '$1  ');
-    };    
-    
+    };
+
     // CVV
     var cvv = new validator.Text($('#bc-cvv'), I18n.t('booking.validation.cvc'), function(value) {
         if (/\D/.test(value)) return 'letters';

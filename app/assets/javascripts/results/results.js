@@ -62,13 +62,13 @@ hide: function() {
     if ($.support.fixedPosition && !browser.ios) {
         search.el.show();
         search.map.resize();
-        search.map.load();
         context = $w.scrollTop(this.header.position());
         context.delay(100).smoothScrollTo(0, 450);
         this.header.el.removeClass('rh-fixed');
     } else {
         context = search.el.delay(100).slideDown(600);
     }
+    search.map.load();
     context.delay(100).queue(function(next) {
         page.header.removeClass('fixed');
         that.header.buttonEnabled.fadeIn(150);

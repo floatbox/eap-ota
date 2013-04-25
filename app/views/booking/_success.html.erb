@@ -1,9 +1,9 @@
 <div class="bf-result bfr-success wrap" data-type="success">
 <div class="bfrs-social">
-<% tweet = order_tweet(@order_form) %>
-<% gevent = order_event(@order_form) %>
-<% if !tweet.empty? || !gevent.empty? %>
     <ul class="bfrss-actions">
+        <li class="bfrss-action"><a href="/" class="bfr-newsearch">Купить <%= @order_form.recommendation.variants.first.segments.length == 1 ? 'билет обратно' : 'другой билет' %></a></li>
+    <% tweet = order_tweet(@order_form) %>
+    <% gevent = order_event(@order_form) %>
     <% unless tweet.empty? %>
         <li class="bfrss-action"><a href="http://twitter.com/?status=<%= tweet %>" target="_blank">Поделиться в Твиттере</a></li>
     <% end %>
@@ -12,7 +12,6 @@
     <% end %>
     </ul>
     <iframe src="//www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Feviterra&amp;width=287&amp;height=241&amp;show_faces=true&amp;colorscheme=light&amp;stream=false&amp;border_color&amp;header=false&amp;appId=429677207045748" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:287px; height:241px; background: #FFF;" allowTransparency="true"></iframe>
-<% end %>
 </div>
 <div class="bfrs-message">
     <p class="bfrsm-text"><strong><%= t 'booking.success.allright' %></strong> <%= t @order_form.people.one? ? 'one' : 'few', :scope => [:booking, :success, @order_form.payment_type == 'card' ? 'card' : 'cash'] %> <%= t 'booking.success.confirmation' %>&nbsp; <span class="link bf-hint bfrsm-hint" data-hint="bfh-mail"><%= t 'booking.success.whattodo.link' %></span</p>
