@@ -452,6 +452,18 @@ describe Commission::Reader do
       it {should_not match_recommendation( interline_absent ) }
     end
 
+    describe "interline :less_than_half" do
+      subject do
+        commission do
+          interline :less_than_half
+        end
+      end
+      it {should_not match_recommendation( no_interline ) }
+      it {should_not match_recommendation( interline_half ) }
+      it {should match_recommendation( validating_carrier_makes_more_than_half_of_itinerary ) }
+      it {should_not match_recommendation( interline_absent ) }
+    end
+
     describe "interline :absent" do
       subject do
         commission do

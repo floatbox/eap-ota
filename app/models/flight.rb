@@ -102,12 +102,9 @@ class Flight
     "#{carrier_pair}#{flight_number}"
   end
 
+  # "4U:LH" если оперирует 4U, просто "LH", если нет code share
   def carrier_pair
-    if operating_carrier_iata != marketing_carrier_iata
-      "#{operating_carrier_iata}:#{marketing_carrier_iata}"
-    else
-      marketing_carrier_iata
-    end
+    [operating_carrier_iata, marketing_carrier_iata].uniq.join(':')
   end
 
   def distance
