@@ -1,0 +1,16 @@
+<% content_for :main_grid do %>
+  <p>
+  <strong>example:</strong><br>
+    <%= link_to @recommendation.short, check_admin_commissions_url(:example => @recommendation.short, :carrier => @recommendation.validating_carrier_iata), target: '_blank' %><br>
+    </p>
+
+  <p>
+  <strong>полная сериализация:</strong><br>
+    <%= link_to @recommendation.serialize, check_admin_commissions_url(:code => @recommendation.serialize), target: '_blank' %><br>
+
+  </p>
+  <p>
+  <small>
+    Важно: из готового бронирования мы пока не умеем вытаскивать оперирующих перевозчиков и класс бронирования (бизнес, первый, эконом). Поэтому комиссия может не совпадать с первоначальной.</small>
+  </p>
+<% end %>

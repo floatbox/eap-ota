@@ -137,6 +137,9 @@ module Amadeus
             :amadeus_ref => ref
           }
           if fh[:marketing_carrier_iata] #для пустых перелетов (случай сложного маршрута)
+            # FIXME задаю оперирующего перевозчика, хотя это и неправильно.
+            # FIXME найти способ узнавать оперирующего первозчика!
+            fh[:operating_carrier_iata] = fh[:marketing_carrier_iata]
             res.merge({ref => fh})
           else
             res

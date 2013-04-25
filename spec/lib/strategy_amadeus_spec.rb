@@ -104,7 +104,7 @@ describe Strategy::Amadeus do
     its(:validating_carrier_iata) {should == "SU"}
     its(:price_fare) {should == 1400}
     its(:price_tax) {should == 1281}
-    its('flights.first.flight_code') {should == ':SU788MRVSVO080911'}
+    its('flights.first.flight_code') {should == 'SU788MRVSVO080911'}
 
   end
 
