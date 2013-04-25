@@ -42,8 +42,6 @@ Ticket:
       - price_fare
       - price_tax
       - price_penalty
-      - price_discount
-      - price_our_markup
       - price_extra_penalty
       - price_operational_fee
       - price_acquiring_compensation
@@ -118,8 +116,6 @@ Ticket:
       - price_tax
       - price_penalty
       - price_extra_penalty
-      - price_consolidator
-      - price_discount
       - price_operational_fee
       - price_acquiring_compensation
       - price_difference
