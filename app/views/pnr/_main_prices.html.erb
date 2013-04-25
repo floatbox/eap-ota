@@ -16,7 +16,7 @@
   <% if @prices.fee > 0 || @prices.fee_scheme != 'v3' %>
       <td><% unless @lang %>Сервисный сбор <span style="color: #C0C0C0;">/</span> <% end %>Service fee</td>
       <td><%= exact_price(@prices.fee) %> RUB</td>
-  <% else %>
+  <% elsif @prices.fee < 0 %>
     <td><% unless @lang %>Скидка <span style="color: #C0C0C0;">/</span> <% end %>Discount</td>
     <td><%= exact_price(-@prices.fee) %> RUB</td>
   <% end %>
