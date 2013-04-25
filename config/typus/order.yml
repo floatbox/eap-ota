@@ -97,9 +97,7 @@ Order:
       - price_consolidator
       - commission_blanks
       - commission_discount
-      - price_discount
       - commission_our_markup
-      - price_our_markup
       - price_operational_fee
       - pricing_method
       - price_acquiring_compensation
