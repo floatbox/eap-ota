@@ -2,7 +2,7 @@
 require "rvm/capistrano"
 require "capistrano_colors"
 
-set :rvm_type, :user
+set :rvm_type, :system
 # закрепил версию, чтобы не прыгала в продакшне
 #set :rvm_ruby_string, 'ruby-1.9.3-p327-falcon'
 
@@ -14,6 +14,7 @@ set :whenever_environment do rails_env end
 set :whenever_roles, :daemons
 require "whenever/capistrano"
 
+
 set :scm, :git
 
 set :user, "rack"
@@ -21,11 +22,6 @@ set :use_sudo, false
 
 set :deploy_via, :remote_cache
 set :copy_exclude, '.git/*'
-
-# если гитхаб ляжет
-# то выключить :remote_cache выше и сделать
-# set :repository,  "git@team.eviterra.ru:eviterra.git"
-
 set :repository,  "git@github.com:Eviterra/eviterra.git"
 # если репозиторий лежит на той же машине
 task :localgit do
@@ -53,27 +49,18 @@ ssh_options[:forward_agent] = true
 set :application, "eviterra"
 
 task :staging do
-  load 'lib/recipes/unicorn'
-  set :use_sudo, true
+load 'lib/recipes/unicorn'
   set :rails_env, 'staging'
   role :app, 'vm1.eviterra.com', 'vm2.eviterra.com'
-  # кажется, если нет asset-ов на локальной машине, не работает javascript_include_tag и прочие
-  # добавляю обратно deck
-  role :web, 'vm3.eviterra.com'
-  role :daemons, 'vm2.eviterra.com'
+  role :web, 'vm3.eviterra.com', 'vm1.eviterra.com', 'vm2.eviterra.com'
   role :db, 'vm1.eviterra.com', :primary => true
-
-  set :rvm_type, :user
-#  set :rvm_ruby_string, 'ruby-1.9.3-p327-falcon'
-
-  set :branch, 'staging'
+  role :daemons, 'vm2.eviterra.com'
+#  set :branch, 'staging'
 end
 
 task :eviterra do
-  load 'lib/recipes/unicorn'
-  set :use_sudo, true
+load 'lib/recipes/unicorn'
   set :rails_env, 'production'
-  set :rvm_type, :system
   role :app, 'flexo.eviterra.com', 'deck.eviterra.com', 'calculon.eviterra.com'
   role :web, 'hermes.eviterra.com', 'deck.eviterra.com', 'calculon.eviterra.com', 'flexo.eviterra.com'
   role :db, 'deck.eviterra.com', :primary => true
