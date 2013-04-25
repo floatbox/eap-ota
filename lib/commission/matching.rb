@@ -55,7 +55,7 @@ module Commission::Matching
         recommendation.validating_carrier_makes_half_of_itinerary?
       when :less_than_half
         recommendation.interline? and
-        recommendation.validating_carrier_makes_less_than_half_of_itinerary?
+        recommendation.validating_carrier_makes_more_than_half_of_itinerary?
       else
         raise ArgumentError, "неизвестный тип interline у #{carrier}: '#{interline}' (line #{source})"
       end
