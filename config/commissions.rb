@@ -820,11 +820,30 @@ subagent "С 01.01.13г. 5 коп. с билета по опубл.тарифа�
 check { not includes_only(country_iatas.first, 'RU') }
 commission "1/0.05"
 
-example 'svocdg cdgsvo/ab'
-example 'svocdg/business cdgsvo/ab/business'
-agent    "(Билеты «Интерлайн» могут быть выписаны, если на долю перевозчика приходится более 50% маршрута.)"
-subagent "???"
-interline :half
+example 'svocdg/business cdgsvo/ab/business svoled/business ledsvo/business'
+agent    "5% (Билеты «Интерлайн» могут быть выписаны, если на долю перевозчика приходится более 50% маршрута.)"
+subagent "3.5%"
+classes :first, :business
+interline :less_than_half
+check { includes_only(country_iatas.first, 'RU') }
+discount "2%"
+commission "5%/3.5%"
+
+# интерлайновые копии
+# example 'svocdg/first cdgsvo/ab/business svoled ledsvo'
+agent    "5% (Билеты «Интерлайн» могут быть выписаны, если на долю перевозчика приходится более 50% маршрута.)"
+subagent "3.5%"
+interline :less_than_half
+check { includes_only(country_iatas.first, 'RU') }
+discount "2%"
+disabled "Пока не разруливается с чистым экономом на уровне спеки: также как и с OW example в чистом правиле не сделать"
+commission "5%/3.5%"
+
+example 'svocdg cdgsvo/ab svoled ledsvo'
+agent    "1 рубль (Билеты «Интерлайн» могут быть выписаны, если на долю перевозчика приходится более 50% маршрута.)"
+subagent "5 коп"
+classes :economy
+interline :less_than_half
 check { includes_only(country_iatas.first, 'RU') }
 our_markup '20'
 commission "1/0.05"
