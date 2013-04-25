@@ -726,7 +726,7 @@ expr_date "31.03.2014"
 agent "5%"
 subagent "3%"
 subclasses "SIQKLUT"
-check { includes_only(country_iatas.first, 'RU SN GH') and includes(country_iatas, 'US') }
+check { includes_only(country_iatas.first, 'RU SN GH') and includes_only(country_iatas, 'US RU SN GH') }
 ticketing_method "downtown"
 discount "1.5%"
 commission "5%/3%"
@@ -738,7 +738,7 @@ expr_date "31.03.2014"
 agent "5%"
 subagent "3%"
 subclasses "DIKVTNSL"
-check { includes_only(country_iatas.first, 'RU SN GH') and includes(country_iatas, 'US') and includes_only(operating_carrier_iatas, 'AZ') }
+check { includes_only(country_iatas.first, 'RU SN GH') and includes_only(country_iatas, 'US RU SN GH') and includes_only(operating_carrier_iatas, 'AZ') }
 ticketing_method "downtown"
 important!
 discount "1.5%"
