@@ -61,7 +61,7 @@ class Recommendation
       variants.first.flights.every.marketing_carrier_iata.partition do |iata|
         iata.in?  validating_carrier.all_iatas
       end
-    validating.size < other.size
+    validating.size > other.size
   end
 
   # предполагается, что у всех вариантов одинаковый набор marketing carrier-ов
