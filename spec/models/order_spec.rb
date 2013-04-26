@@ -44,7 +44,9 @@ describe Order do
   end
 
   it "sets price_acquiring_compensation before create" do
-    order = create(:order)
+    order = build(:order)
+    order.fix_price = false
+    order.save
     order.price_acquiring_compensation.should == order.price_payment_commission
   end
 

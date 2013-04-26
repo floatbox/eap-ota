@@ -36,14 +36,13 @@ Ticket:
       - status
       - kind
       - ticketed_date
+      - dept_date
       - itinerary_receipt
       - parent
     new:
       - price_fare
       - price_tax
       - price_penalty
-      - price_discount
-      - price_our_markup
       - price_extra_penalty
       - price_operational_fee
       - price_acquiring_compensation
@@ -102,6 +101,7 @@ Ticket:
       - income_suppliers
       - status
       - ticketed_date
+      - dept_date
       - itinerary_receipt
       - mso_number
       - display_fee_details
@@ -118,8 +118,6 @@ Ticket:
       - price_tax
       - price_penalty
       - price_extra_penalty
-      - price_consolidator
-      - price_discount
       - price_operational_fee
       - price_acquiring_compensation
       - price_difference
@@ -167,6 +165,7 @@ Ticket:
       - income_suppliers
       - status
       - ticketed_date
+      - dept_date
       - kind
       - mso_number
       - last_name
@@ -188,7 +187,7 @@ Ticket:
   actions:
     edit: show
   order_by: -tickets.created_at
-  filters: ticketed_date, validating_carrier, source, validator, office_id, status, kind
+  filters: ticketed_date, dept_date, validating_carrier, source, validator, office_id, status, kind
   relationships: order, other_tickets
   application: Orders, 1
   scopes: uncomplete, sold

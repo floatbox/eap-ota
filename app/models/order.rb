@@ -124,7 +124,7 @@ class Order < ActiveRecord::Base
   def set_prices
     self.fee_scheme = Conf.site.fee_scheme if new_record? || fee_scheme.blank?
     unless has_data_in_tickets?
-      self.price_acquiring_compensation = price_payment_commission if price_acquiring_compensation == 0 || pricing_method == 'corporate_0001'
+      self.price_acquiring_compensation = price_payment_commission if !fix_price
       self.price_difference = fix_price? ? price_with_payment_commission - price_real : 0
     end
   end
