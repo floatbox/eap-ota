@@ -102,9 +102,10 @@ class Flight
     "#{carrier_pair}#{flight_number}"
   end
 
-  # "4U:LH" если оперирует 4U, просто "LH", если нет code share
+  # "4U:LH" если оперирует 4U, просто "LH", если нет code share.
+  # сейчас пытаюсь отображать и рекомендации с пустым operating_carrier
   def carrier_pair
-    [operating_carrier_iata, marketing_carrier_iata].uniq.join(':')
+    [operating_carrier_iata, marketing_carrier_iata].compact.uniq.join(':')
   end
 
   def distance

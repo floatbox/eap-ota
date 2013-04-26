@@ -387,7 +387,8 @@ describe Commission::Reader do
     let(:interline_but_first)      { Recommendation.example('SVOCDG CDGSVO/AB') }
     let(:interline_absent)         { Recommendation.example('SVOCDG/AB CDGSVO/AB') }
     let(:interline_half)           { Recommendation.example('SVOCDG/AB CDGSVO') }
-    let(:interline_less_than_half) { Recommendation.example('SVOCDG/AB CDGNCE NCESVO/AB') }
+    let(:interline_less_than_half) { Recommendation.example('SVOCDG CDGNCE NCESVO/AB') }
+    let(:interline_more_than_half) { Recommendation.example('SVOCDG/AB CDGNCE/AB NCESVO') }
 
     describe "no interline rules specified (defaults to no interline allowed)" do
       subject do
@@ -425,6 +426,7 @@ describe Commission::Reader do
       it {should match_recommendation( interline ) }
       it {should match_recommendation( interline_but_first ) }
       it {should match_recommendation( interline_half ) }
+      it {should match_recommendation( interline_more_than_half ) }
       it {should_not match_recommendation( interline_absent ) }
     end
 
@@ -448,7 +450,8 @@ describe Commission::Reader do
       end
       it {should_not match_recommendation( no_interline ) }
       it {should match_recommendation( interline_half ) }
-      it {should_not match_recommendation( interline_less_than_half ) }
+      it {should match_recommendation( interline_less_than_half ) }
+      it {should_not match_recommendation( interline_more_than_half ) }
       it {should_not match_recommendation( interline_absent ) }
     end
 
@@ -460,7 +463,8 @@ describe Commission::Reader do
       end
       it {should_not match_recommendation( no_interline ) }
       it {should_not match_recommendation( interline_half ) }
-      it {should match_recommendation( validating_carrier_makes_more_than_half_of_itinerary ) }
+      it {should match_recommendation( interline_less_than_half ) }
+      it {should_not match_recommendation( interline_more_than_half ) }
       it {should_not match_recommendation( interline_absent ) }
     end
 

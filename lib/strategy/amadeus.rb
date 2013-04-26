@@ -73,6 +73,8 @@ class Strategy::Amadeus < Strategy::Base
       amadeus.pnr_ignore
       rec_params = {
         :booking_classes => pnr_resp.booking_classes,
+        # FIXME не умеем определять класс обслуживания, хардкодим эконом
+        :cabins => pnr_resp.booking_classes.map {|x| 'Y' },
         :source => 'amadeus',
         :flights => pnr_resp.flights
         }
