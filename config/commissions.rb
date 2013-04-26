@@ -968,10 +968,10 @@ interline :absent
 ## discount '1'
 commission "1eur/1"
 
-example "svocdg/p"
+example "svocdg/r"
 agent ""
 subagent ""
-subclasses "P"
+subclasses "R"
 important!
 no_commission "закрыли субсидированные тарифы"
 
