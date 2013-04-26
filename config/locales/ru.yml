@@ -131,6 +131,7 @@ ru:
         comment: "Комментарий"
         price_penalty: "Штраф, р."
         itinerary_receipt: "Ссылка на квитанцию"
+        dept_date: "Дата вылета"
 
         <<: *PRICING_ATTRIBUTES
       payment:

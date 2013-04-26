@@ -36,6 +36,7 @@ Ticket:
       - status
       - kind
       - ticketed_date
+      - dept_date
       - itinerary_receipt
       - parent
     new:
@@ -100,6 +101,7 @@ Ticket:
       - income_suppliers
       - status
       - ticketed_date
+      - dept_date
       - itinerary_receipt
       - mso_number
       - display_fee_details
@@ -163,6 +165,7 @@ Ticket:
       - income_suppliers
       - status
       - ticketed_date
+      - dept_date
       - kind
       - mso_number
       - last_name
@@ -184,7 +187,7 @@ Ticket:
   actions:
     edit: show
   order_by: -tickets.created_at
-  filters: ticketed_date, validating_carrier, source, validator, office_id, status, kind
+  filters: ticketed_date, dept_date, validating_carrier, source, validator, office_id, status, kind
   relationships: order, other_tickets
   application: Orders, 1
   scopes: uncomplete, sold
