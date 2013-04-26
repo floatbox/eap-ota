@@ -327,9 +327,9 @@
 /* Time and airport */
 .oss-time {
     float: left;
-    padding: 4px 6px 0 0;    
+    padding: 5px 6px 0 0;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 17px;
     line-height: 19px;
 }
 .segment1 .oss-time {

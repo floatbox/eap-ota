@@ -243,14 +243,14 @@ process: function(s) {
         break;
     case 'success':
         booking.countdown.stop();
-        _kmq.push(['record', 'BOOKING: SUCCESS']);
+        
+        var price = this.el.find('.bf-newprice').attr('data-price');
+        _kmq.push(['record', 'BOOKING: SUCCESS', {'Amount': Number(price)}]);
         _gaq.push(['_trackPageview', '/booking/success']);
+        _gaq.push(['_addTrans', this.result.find('.bfr-pnr').text(), '', price]);
+        _gaq.push(['_trackTrans']);
         _yam.hit('/booking/success');
-        if (window._gaq) {
-            var price = this.el.find('.bf-newprice').attr('data-price');
-            _gaq.push(['_addTrans', this.result.find('.bfr-pnr').text(), '', price]);
-            _gaq.push(['_trackTrans']);
-        }
+        
         this.result.find('.bfrs-insurance .bfrsa-link').click(function() {
             _kmq.push(['record', 'BOOKING: insurance link pressed']);
             _gaq.push(['_trackEvent', 'Бронирование', 'Переход на страницу страховки']);
