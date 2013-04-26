@@ -502,9 +502,6 @@
 .os-summary:hover .ossc-icon {
     opacity: 0.6;
 }
-.no-touch .os-summary:hover .other-segments {
-    display: block;
-}
 .os-summary:hover .ossct-overlay {
     background-position: 0 -20px;
 }
@@ -553,11 +550,11 @@
     background: #C0C0C0;
     border-color: #D0D0D0;
 }
-.os-disabled:hover .ossi-m,
-.os-disabled:hover .ossi-l {
+.no-touch .os-disabled:hover .ossi-m,
+.no-touch .os-disabled:hover .ossi-l {
     display: none;
 }
-.os-disabled:hover .oss-incompatible {
+.no-touch .os-disabled:hover .oss-incompatible {
     display: block;
 }
 

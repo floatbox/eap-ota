@@ -54,6 +54,7 @@ show: function(instant) {
 hide: function() {
     booking.abort();
     var that = this, context;
+    this.content.stopExpiration();
     this.header.edit.hide();
     this.header.buttonEnabled.hide();
     this.header.button.show();
@@ -170,6 +171,7 @@ processCollections: function() {
                 that.slide();
             }
         }, 30);
+        that.content.startExpiration();
         _kmq.push(['record', 'RESULTS: displayed']);
     } else {
         this.message.toggle('empty');
