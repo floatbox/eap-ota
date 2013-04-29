@@ -2547,97 +2547,136 @@ commission "5%/3%"
 carrier "U6", "ОАО Авиакомпания  УРАЛЬСКИЕ  АВИАЛИНИИ"
 ########################################
 
-agent "7 (семь)%,  продажа международных перевозок по опуб.тар и продажа трансферных перевозок по сквозным тарифам и трансферных перевозок по сквозным тарифам, полученным путем end-on-end комбинации опубликованных тарифов перевозчиков;"
-subagent ""
-disabled
-commission "7%/0"
+example 'svocdg/business cdgsvo/business'
+agent "7% от суммы тарифов всех подклассов Бизнес класса обслуживания, полученной от продажи международных перевозок (дальнее зарубежье)"
+subagent "5% от суммы тарифов всех подклассов Бизнес класса обсл., полученной от продажи международных перевозок (дальнее зарубежье);"
+classes :business
+international
+commission "7%/5%"
 
-agent "в размере 6 (шести)%, продажа перевозок  по  СНГ и  продажа трансферных перевозок  по сквозным тарифам и трансферных перевозок  по сквозным тарифам, полученным путем end-on-end комбинации опубликованных тарифов перевозчиков"
-agent "Примечание: Если один из участков перевозки - дальнее зарубежье (или СНГ), то перевозка считается международной (или СНГ)."
-subagent ""
-disabled
-commission "6%/0"
+example 'svocdg cdgsvo'
+agent "5% от суммы тарифов всех подклассов Эконом класса обслуживания, полученной от продажи международных перевозок (дальнее зарубежье)"
+subagent "3% от суммы тарифов всех подклассов Эконом класса обсл., полученной от продажи международных перевозок (дальнее зарубежье)"
+international
+commission "5%/3%"
 
-agent "в размере 6 (шести)%, продажа перевозок  в эконом классе по России  и продажа перевозок  по   продаже трансферных перевозок  по сквозным тарифам и трансферных перевозок  по сквозным тарифам, полученным путем end-on-end комбинации опубликованных тарифов перевозчиков"
-subagent "4% от опубл. тарифов Эконом класса на собств. рейсы U6 по России;"
-disabled
-commission "6%/0"
-
-agent "∙ в размере 9 (девять)%, продажа перевозок  в бизнес класса по России и продажа перевозок  по   продаже трансферных перевозок  по сквозным тарифам и трансферных перевозок  по сквозным тарифам, полученным путем end-on-end комбинации опубликованных тарифов перевозчиков"
-subagent "7% от опубл. тарифов Бизнес класса на собств. рейсы U6 по России;"
-disabled
-commission "9%/0"
-
-example 'svxaer'
-example 'svxaer aersvx'
-agent    "15 руб. за сегмент по маршрутам:"
-agent    "Екатеринбург-Сочи; Сочи-Екатеринбург"
-agent    "Екатеринбург-Симферополь;  Симферополь-Екатеринбург;"
-agent    "Екатеринбург-Самара;  Самара-Екатеринбург;"
-agent    "Екатеринбург-Якутск; Якутск-Екатеринбург;"
-agent    "Екатеринбург-Норильск; Норильск-Екатеринбург;"
-agent    "Екатеринбург-Чита; Чита-Екатеринбург;"
-agent    "Екатеринбург-Анапа; Анапа-Екатеринбург"
-agent    "Екатеринбург-Уфа;  Уфа-Екатеринбург."
-agent    "Екатеринбург-Казань; Казань-Екатеринбург;"
-subagent "5 руб. за сегмент по маршрутам:"
-subagent "Екатеринбург-Сочи; Сочи-Екатеринбург"
-subagent "Екатеринбург-Симферополь; Симферополь-Екатеринбург;"
-subagent "Екатеринбург-Самара; Самара-Екатеринбург;"
-subagent "Екатеринбург-Якутск; Якутск-Екатеринбург;"
-subagent "Екатеринбург-Норильск; Норильск-Екатеринбург;"
-subagent "Екатеринбург-Чита; Чита-Екатеринбург;"
-subagent "Екатеринбург-Анапа; Анапа-Екатеринбург"
-subagent "Екатеринбург-Уфа; Уфа-Екатеринбург."
-subagent "Екатеринбург-Казань; Казань-Екатеринбург;"
+# Россия СНГ и Грузия
+example 'svotbs'
+example 'tbsiev'
+agent "5% от тарифов перевозок по России, СНГ и Грузии всех подклассов и классов обслуживания (за исключением маршрутов Групп А и Б)."
+subagent "4% от тарифов перевозок по СНГ и Грузии всех подклассов и классов обслуживания (за искл. маршрутов Групп А и Б)"
+check { includes_only(country_iatas, 'RU AZ AM BY KZ KG MD TJ TM UZ UA GE') }
 important!
-# копия для "туда обратно"
-routes %W(SVX-AER AER-SVX SVX-SIP SIP-SVX SVX-KUF KUF-SVX SVX-YKS YKS-SVX SVX-NSK NSK-SVX SVX-HTA HTA-SVX SVX-AAQ AAQ-SVX SVX-UFA UFA-SVX SVX-KZN KZN-SVX) +
-       %W(SVX-AER-SVX AER-SVX-AER SVX-SIP-SVX SIP-SVX-SIP SVX-KUF-SVX KUF-SVX-KUF SVX-YKS-SVX YKS-SVX-YKS SVX-NSK-SVX NSK-SVX-NSK SVX-HTA-SVX HTA-SVX-HTA SVX-AAQ-SVX AAQ-SVX-AAQ SVX-UFA-SVX UFA-SVX-UFA SVX-KZN-SVX KZN-SVX-KZN)
-commission '15/5'
+commission "5%/4%"
 
-agent "- за каждую багажную квитанцию, при оформлении перевозки сверхнормативного багажа;"
-agent "- за каждый оформленный МСО при оформлении возврата или обмена авиабилетов с взиманием штрафных санкций              !!!"
-agent "∙ 3 (три)%  от примененных тарифов на сегментах перевозки рейсов интерлайн-партнеров Авиакомпании ( наличие участка Авиакомпании в билете обязательно)  "
-subagent ""
-disabled
-commission "3%/0"
+# интерлайны
+example 'svocdg/ab cdgsvo'
+agent "3% от примененных тарифов на сегментах перевозки рейсов интерлайн-партнеров U6 ( наличие участка U6 в билете обязательно)"
+subagent "1% от примененных тарифов на рейсы интерлайн-партнеров U6 (наличие участка U6 в билете обязательно)"
+interline :yes
+commission "3%/1%"
 
-agent "∙ в размере 15 (пятнадцать) рублей за каждый выписанный авиабилет по конфиденциальным IT тарифам"
-subagent ""
-disabled
-commission "15/0"
-
-example 'dmepee/ab'
-agent    "1 руб.  от опубл. тарифов на рейсы Interline без участка U6;"
-subagent "5 коп. от опубл. тарифов на рейсы Interline без участка U6;"
+example 'svocdg/ab cdgsvo/ab'
+agent "1 (один) рубль продажа перевозок на рейсы интерлайн-партнеров U6 без участков U6"
+subagent "5 коп. продажа перевозок на рейсы интерлайн-партнеров U6 без участков U6"
 interline :absent
-disabled "субагентских нет"
-commission '1/0.05'
+commission "1/0.05"
 
-agent ""
-subagent "все субагентсткие"
-subagent "4% от опубл. тарифов Эконом класса на собств. рейсы U6 по России;"
-subagent "7% от опубл. тарифов Бизнес класса на собств. рейсы U6 по России;"
-subagent "5 (пять) рублей с билета по опубл. тарифам на собств. рейсы U6 по России по маршрутам Группы А:"
-subagent "Екатеринбург-Симферополь; Симферополь-Екатеринбург; Симферополь-Екатеринбург-Симферополь;"
-subagent "Екатеринбург-Симферополь-Екатеринбург;"
-subagent "Екатеринбург-Самара-Екатеринбург; Екатеринбург-Самара; Самара-Екатеринбург; Самара-"
-subagent "Екатеринбург-Самара;"
-subagent "Екатеринбург-Якутск-Екатеринбург; Екатеринбург-Якутск; Якутск-Екатеринбург; Якутск-Екатеринбург-Якутск"
-subagent "Екатеринбург-Норильск-Екатеринбург; Екатеринбург-Норильск; Норильск-Екатеринбург; Норильск- Екатеринбург-Норильск;"
-subagent "Екатеринбург-Чита-Екатеринбург; Екатеринбург-Чита; Чита-Екатеринбург; Чита-Екатеринбург-Чита;"
-subagent "Екатеринбург-Анапа-Екатеринбург; Екатеринбург-Анапа; Анапа-Екатеринбург; Анапа-Екатеринбург- Анапа;"
-subagent "Екатеринбург-Уфа-Екатеринбург; Екатеринбург-Уфа; Уфа-Екатеринбург; Уфа-Екатеринбург-Уфа;"
-subagent "Екатеринбург-Казань-Екатеринбург; Екатеринбург-Казань; Казань-Екатеринбург; Казань- Екатеринбург-Казань."
-subagent "4% от опубл. тарифов на собств. рейсы U6 по СНГ;"
-subagent "5% от опубл. тарифов на собств. международные рейсы U6;"
-subagent "4% от опубл. сквозных тарифов на собств. трансферные перевозки U6;"
-subagent "4% от опубл. сквозных тарифов на собств. трансферные перевозки U6 полученные путем end-on-end комбинации. Кроме маршрутов Группы А (см. комиссию Группы А);"
-subagent "1% от опубл. тарифов на рейсы Interline с участком U6;"
-subagent "5 коп. с билета по опубл. тарифам на рейсы Interline без участка U6."
-disabled "пиздец"
-commission "0/0"
+# загадочная хрень
+agent "1 (один) рубль за каждый выписанный авиабилет по конфиденциальным IT тарифам."
+subagent "5 (пять) руб. за каждый выписанный авиабилет по конфиденциальным IT тарифам."
+no_commission
+
+# группа А 
+example 'ledllk'
+example 'svokzn'
+example 'kuflbd'
+strt_date "01.04.2013"
+agent "ГРУППА А:"
+agent "в размере 0,1%:"
+agent "*от суммы тарифов (опубликованных в АСБ) по маршрутам:"
+agent "*за каждый взятый с пассажира штраф при оформлении возврата или обмена авиабилетов с взиманием штрафных санкций;"
+subagent "c 01.04.2013 г. 50 коп с билета по маршрутам:"
+check {
+  includes_only(city_iatas, 'MOW KGD') or
+  includes_only(city_iatas, 'MOW KZN') or
+  includes_only(city_iatas, 'MOW UFA') or
+  includes_only(city_iatas, 'MOW LED') or
+  includes_only(city_iatas, 'MOW KUF') or
+  includes_only(city_iatas, 'MOW GOJ') or
+  includes_only(city_iatas, 'MOW KRR') or
+  includes_only(city_iatas, 'MOW AER') or
+  includes_only(city_iatas, 'MOW AAQ') or
+  includes_only(city_iatas, 'MOW GBB') or
+  includes_only(city_iatas, 'MOW BAK') or
+  includes_only(city_iatas, 'MOW GDZ') or
+  includes_only(city_iatas, 'MOW KVD') or
+  includes_only(city_iatas, 'MOW LLK') or
+  includes_only(city_iatas, 'MOW SIP') or
+  includes_only(city_iatas, 'MOW MRV') or
+  includes_only(city_iatas, 'MOW TIV') or
+  
+  includes_only(city_iatas, 'SVX AER') or
+  includes_only(city_iatas, 'SVX KZN') or
+  includes_only(city_iatas, 'SVX SIP') or
+  includes_only(city_iatas, 'SVX KUF') or
+  includes_only(city_iatas, 'SVX YKS') or
+  includes_only(city_iatas, 'SVX HTA') or
+  includes_only(city_iatas, 'SVX AAQ') or
+  includes_only(city_iatas, 'SVX UFA') or
+  includes_only(city_iatas, 'SVX GDZ') or
+  includes_only(city_iatas, 'SVX EVN') or
+  includes_only(city_iatas, 'SVX KHV') or
+  includes_only(city_iatas, 'SVX VVO') or
+  includes_only(city_iatas, 'SVX KRR') or
+  includes_only(city_iatas, 'SVX KJA') or
+  includes_only(city_iatas, 'SVX PKC') or
+  includes_only(city_iatas, 'SVX BAK') or
+  includes_only(city_iatas, 'SVX TBS') or
+  
+  includes_only(city_iatas, 'LED LWN') or
+  includes_only(city_iatas, 'LED LLK') or
+  includes_only(city_iatas, 'LED VVO') or
+  includes_only(city_iatas, 'LED IKT') or
+  includes_only(city_iatas, 'LED KHV') or
+  includes_only(city_iatas, 'LED YKS') or
+
+  includes_only(city_iatas, 'KUF DYU') or
+  includes_only(city_iatas, 'KUF AAQ') or
+  includes_only(city_iatas, 'KUF AER') or
+  includes_only(city_iatas, 'KUF LBD') or
+  
+  includes_only(city_iatas, 'CEK GOJ') or
+  includes_only(city_iatas, 'CEK TAS') or
+  
+  includes_only(city_iatas, 'PEE DYU') or
+  includes_only(city_iatas, 'PEE LBD') or
+
+  includes_only(city_iatas, 'UFA LBD') or
+  includes_only(city_iatas, 'UFA DYU') or
+
+  includes_only(city_iatas, 'KJA IKT') or
+  includes_only(city_iatas, 'KJA MRV') or
+  includes_only(city_iatas, 'MRV AER') or
+  includes_only(city_iatas, 'SIP GOJ') or
+  includes_only(city_iatas, 'EVN GOJ') or
+  includes_only(city_iatas, 'EVN KUF') or
+  includes_only(city_iatas, 'KRR VVO') or
+  includes_only(city_iatas, 'GOJ TAS') or
+  includes_only(city_iatas, 'GOJ SIP') or
+  includes_only(city_iatas, 'GOJ NMA') or
+  includes_only(city_iatas, 'IKT PKC')
+}
+important!
+commission "0.1%/0.5"
+
+# группа Б SPECIAL FOR CHITA
+example 'svohta'
+agent "ГРУППА Б: 3 (три) % от тарифа по всем подклассам по маршрутам: Москва-Чита; Чита-Москва; Москва-Чита-Москва; Чита-Москва-Чита;"
+subagent "1 (Один) % от тарифа по всем подклассам по маршрутам: Москва-Чита; Чита-Москва; Москва-Чита-Москва; Чита-Москва-Чита;"
+check { includes_only(city_iatas, 'MOW HTA') }
+important!
+commission "3%/1%"
 
 carrier "GW", "AIR LINES OF KUBAN"
 ########################################
@@ -3380,4 +3419,4 @@ carrier "W3", "ARIK AIR (АВИАРЕПС)"
 
 agent "1% от всех опубликованных тарифов"
 subagent "5 рублей с билета по опубликованным тарифам"
-commission "1%/5"
+
