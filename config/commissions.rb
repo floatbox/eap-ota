@@ -67,9 +67,8 @@ example "svocdg/p"
 agent ""
 subagent ""
 subclasses "P"
-# закрыли субсидированные тарифы
 important!
-no_commission
+no_commission "закрыли субсидированные тарифы"
 
 carrier "UN", "TRANSAERO"
 ########################################
@@ -968,6 +967,13 @@ subagent "1 руб. с билета на рейсы Interline без участ�
 interline :absent
 ## discount '1'
 commission "1eur/1"
+
+example "svocdg/r"
+agent ""
+subagent ""
+subclasses "R"
+important!
+no_commission "закрыли субсидированные тарифы"
 
 carrier "GF", "GULF AIR (Глонасс) (НЕ BSP!!!)"
 #######################################
