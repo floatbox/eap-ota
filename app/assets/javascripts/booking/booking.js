@@ -46,8 +46,8 @@ prebook: function(offer) {
         success: function(data) {
             that.process(data);
         },
-        error: function() {
-            that.failed();
+        error: function(xhr, status) {
+            if (status !== 'abort') that.failed();
         },
         timeout: 120000
     });

@@ -74,9 +74,10 @@ select: function(index, smooth) {
     for (var i = variant.segments.length; i--;) {
         this.summaries[variant.segments[i]].addClass('os-selected');
     }
-    this.selected = variant;
+    var disabled = smooth && this.book.hasClass('ob-disabled'); // Если переключили во время проверки доступности, анимация не нужна
     this.book.removeClass('ob-disabled ob-failed');
-    if (smooth) {
+    this.selected = variant;
+    if (smooth && !disabled) {
         var that = this;
         var button = this.book.find('.ob-button');
         button.animate({opacity: 0}, 150);

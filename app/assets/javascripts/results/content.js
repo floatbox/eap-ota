@@ -71,7 +71,7 @@ initOffers: function() {
     });
     this.el.delegate('.o-book .obs-cancel', 'click', function() {
         var offset = $(this).closest('.offer').offset().top;
-        $w.smoothScrollTo(offset - 148);
+        $w.smoothScrollTo(Math.max(offset - 36 - results.header.height - 90, 0));
     });
 },
 getOffer: function(el) {
