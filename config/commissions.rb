@@ -1442,7 +1442,7 @@ subagent "8%"
 subclasses "FADZP"
 check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
-discount "6%"
+discount "7%"
 commission "10%/8%"
 
 example 'svojfk/q'
@@ -1452,7 +1452,7 @@ subagent "6%"
 subclasses "QVWSTLK"
 check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
-discount "4%"
+discount "5%"
 commission "8%/6%"
 
 example 'svojfk/y'
@@ -1462,7 +1462,7 @@ subagent "3%"
 subclasses "YBMUH"
 check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
-discount "1.5%"
+discount "2.5%"
 commission "5%/3%"
 
 example 'dmebcn'
@@ -1471,7 +1471,7 @@ agent    "1 руб. с билета по опубл. тарифам на соб�
 subagent "5 коп. с билета по опубл. тарифам на собственные рейсы LH и рейсы Interline с участком LH."
 check { includes(country_iatas, 'ES FR IT CZ PT NL CH') } 
 interline :no, :yes
-our_markup "120"
+our_markup "20"
 ## discount '5%'
 commission "1/0.05"
 
@@ -3243,6 +3243,7 @@ expr_date "30.04.2013"
 agent "При продаже перевозок на внутренние воздушные линии,  оформленных на ПД на рейсы Перевозчика,включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 3%"
 agent "При продаже перевозок на международные воздушные линии, включая комбинированную перевозку на внутренние воздушные линии и международные воздушные линии и комбинированную перевозку с несколькими участками международных воздушных линий, на которых установлен единый сквозной тариф (системный трансфер), оформленных на ПД на рейсы Перевозчика,включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 3%"
 subagent ""
+discount "2.5%"
 commission "3%/3%"
 
 example 'svoled'
