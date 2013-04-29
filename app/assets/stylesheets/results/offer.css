@@ -327,7 +327,7 @@
 /* Time and airport */
 .oss-time {
     float: left;
-    padding: 5px 6px 0 0;
+    padding: 4px 6px 0 0;
     font-weight: bold;
     font-size: 17px;
     line-height: 19px;
@@ -350,11 +350,9 @@
 .segment6 .oss-time {
     color: #9a5000;
 }
-.osst-date {
-    float: left;
-    margin: 8px 0 0 5px;
-    font-size: 11px;
-    line-height: 13px;
+.oss-date {
+    color: #777;
+    margin-right: 3px;
 }
 .oss-airport {
     float: left;
@@ -484,7 +482,8 @@
 .os-disabled:hover {
     color: #606060;
 }
-.os-disabled:hover .oss-time {
+.os-disabled:hover .oss-time,
+.os-disabled:hover .oss-date {
     color: #8A8A8A;
 }
 .os-summary:hover .ossp-rise {
@@ -543,7 +542,8 @@
 .os-disabled {
     color: #777;
 }
-.os-disabled .oss-time {
+.os-disabled .oss-time,
+.os-disabled .oss-date {
     color: #999;
 }
 .os-disabled .ossb-flight {
