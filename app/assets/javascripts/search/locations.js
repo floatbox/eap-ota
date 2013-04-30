@@ -260,7 +260,7 @@ filter: function() {
     var sample = this.value.toLowerCase();
     for (var i = this.variants.length; i--;) {
         var variant = this.variants[i];
-        if (variant && variant.sample.indexOf(sample) === -1) {
+        if (this.items && variant && variant.sample.indexOf(sample) === -1) {
             this.items.eq(i).addClass('sld-improper');
         }
     }
