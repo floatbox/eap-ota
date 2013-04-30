@@ -2914,32 +2914,34 @@ subagent "1% от всех опубл. тарифов на рейсы code-share
 not_implemented "не умеем определять code-share"
 commission "3%/1%"
 
-# с 01.05
+# с 01.05 Новые
 # example 'svocdg/business cdgsvo/business'
 strt_date "01.05.2013"
 agent "4% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
-subagent "?"
+subagent "3% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
 classes :business
-commission "4%/"
+discount "2%"
+commission "4%/3%"
 
 # example 'svocdg/economy svocdg/economy'
 strt_date "01.05.2013"
 agent "3% от опубл. тарифов на собств. рейсы U9 Эконом класса;"
-subagent "?"
+subagent "2% от опубл. тарифов на собств. рейсы U9 Эконом класса;"
+discount "1.3%"
 classes :economy
-commission "3%/"
+commission "3%/2%"
 
 # example 'svocdg/ab cdgsvo'
 strt_date "01.05.2013"
 agent "1% от всех опубл. тарифов на рейсы Interline;"
-subagent "?"
+subagent "5 руб от всех опубл. тарифов на рейсы Interline;"
 interline :yes
-commission "1%/"
+commission "1%/5"
 
 agent "1% от всех опубл. тарифов на рейсы code-share."
-subagent "1% от всех опубл. тарифов на рейсы code-share;"
+subagent "5 руб от всех опубл. тарифов на рейсы code-share;"
 not_implemented "не умеем определять code-share"
-commission "3%/1%"
+commission "1%/5"
 
 carrier "RJ", "Royal Jordanian Airline"
 ########################################
