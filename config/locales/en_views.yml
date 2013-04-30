@@ -340,7 +340,7 @@ en:
       for_all: "For all passengers"
       including_fee: "Including service fee"
       fare: "Fare"
-      taxes_and_fees: "Taxes and fees"
+      taxes: "Taxes"
       fee: "Service fee"
       delivery: "Delivery fee"
       discount: "Discount"

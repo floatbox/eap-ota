@@ -361,7 +361,7 @@ ru:
       for_all: "за всех пассажиров"
       including_fee: "с учетом сервисного сбора"
       fare: "Тариф"
-      taxes_and_fees: "Таксы и сборы"
+      taxes: "Таксы"
       fee: "Cервисный сбор"
       delivery: "Доставка"
       discount: "Скидка"
