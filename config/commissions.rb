@@ -448,23 +448,21 @@ example 'ievfco/r'
 example 'ievlin/p'
 example 'tbsfco fcotbs/r'
 example 'evnfco fcoevn'
-strt_date "01.02.2013"
-expr_date "30.04.2013"
-agent "10% на ЭКОНОМ /БИЗНЕС класс."
-subagent "8% от тарифа на все направления Alitalia (Эконом и Бизнес класса) с началом путешествия из Москвы и СанктPПетербурга, а также из Киева (из Киева Alitalia летает в Рим (AZ481) и Милан (AZ7469), Тбилиси (из Тбилиси Alitalia летает в Рим (AZ551), Еревана (из Еревана Alitalia летает в Рим (AZ557) (тарифы туда и обратно, а также тарифы в одну сторону, но с вылетом из Москвы или СанктPПетербурга, Киева, Тбилиси или Еревана). Повышенная комиссия не применяется, если начало путешествия не из этих городов. На рейсы code-share комиссия не применяется (за исключением code-share с AP/VE/XM/CT)"
-classes :economy, :business
+strt_date "01.05.2013"
+expr_date "31.05.2013"
+agent "9% на ЭКОНОМ /БИЗНЕС класс."
+subagent "7% от тарифа на все направления Alitalia (Эконом и Бизнес класса) с началом путешествия из Москвы и Санкт-Петербурга, а также из Киева (из Киева Alitalia летает в Рим (AZ481) и Милан (AZ7469), Тбилиси (из Тбилиси Alitalia летает в Рим (AZ551), Еревана (из Еревана Alitalia летает в Рим (AZ557) (тарифы туда и обратно, а также тарифы в одну сторону, но с вылетом из Москвы или Санкт-Петербурга, Киева, Тбилиси или Еревана). Повышенная комиссия не применяется, если начало путешествия не из этих городов. На рейсы code-share комиссия не применяется (за исключением code-share с AP/VE/XM/CT)"
+classes :business
 check {
   includes_only(operating_carrier_iatas, 'AZ AP VE XM CT') and
   ( includes(city_iatas.first, 'MOW LED') or
     (includes(city_iatas.first, 'IEV') and includes_only(city_iatas, 'IEV ROM MIL')) or
     (includes(city_iatas.first, 'TBS') and includes_only(city_iatas, 'TBS ROM')) or
     (includes(city_iatas.first, 'EVN') and includes_only(city_iatas, 'EVN ROM'))
-  ) and
-  flights.first.dept_date >= Date.parse('1st Feb 2013') and flights.last.dept_date <= Date.parse('30th Sep 2013')
-  # аццки захардкодил период перелета у авиакомпании
+  )
 }
-discount "8%"
-commission "10%/8%"
+discount "6%"
+commission "9%/7%"
 
 example 'mrucdg'
 example 'mrucdg cdgmru'
@@ -2914,32 +2912,34 @@ subagent "1% от всех опубл. тарифов на рейсы code-share
 not_implemented "не умеем определять code-share"
 commission "3%/1%"
 
-# с 01.05
+# с 01.05 Новые
 # example 'svocdg/business cdgsvo/business'
 strt_date "01.05.2013"
 agent "4% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
-subagent "?"
+subagent "3% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
 classes :business
-commission "4%/"
+discount "2%"
+commission "4%/3%"
 
 # example 'svocdg/economy svocdg/economy'
 strt_date "01.05.2013"
 agent "3% от опубл. тарифов на собств. рейсы U9 Эконом класса;"
-subagent "?"
+subagent "2% от опубл. тарифов на собств. рейсы U9 Эконом класса;"
+discount "1.3%"
 classes :economy
-commission "3%/"
+commission "3%/2%"
 
 # example 'svocdg/ab cdgsvo'
 strt_date "01.05.2013"
 agent "1% от всех опубл. тарифов на рейсы Interline;"
-subagent "?"
+subagent "5 руб от всех опубл. тарифов на рейсы Interline;"
 interline :yes
-commission "1%/"
+commission "1%/5"
 
 agent "1% от всех опубл. тарифов на рейсы code-share."
-subagent "1% от всех опубл. тарифов на рейсы code-share;"
+subagent "5 руб от всех опубл. тарифов на рейсы code-share;"
 not_implemented "не умеем определять code-share"
-commission "3%/1%"
+commission "1%/5"
 
 carrier "RJ", "Royal Jordanian Airline"
 ########################################
