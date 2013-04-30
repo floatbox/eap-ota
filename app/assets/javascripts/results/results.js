@@ -171,7 +171,13 @@ processCollections: function() {
                 that.slide();
             }
         }, 30);
-        that.content.startExpiration();
+        var human = this.content.el.find('.r-human').html();
+        if (human != this.data.options.human) {
+            this.data.options.human = human;
+            this.updateTitles();
+            this.header.summary.html(this.data.titles.header); // попытка починить баг с пропавшим первым классом
+        }
+        this.content.startExpiration();
         _kmq.push(['record', 'RESULTS: displayed']);
     } else {
         this.message.toggle('empty');
