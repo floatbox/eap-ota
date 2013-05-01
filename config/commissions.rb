@@ -452,7 +452,6 @@ strt_date "01.05.2013"
 expr_date "31.05.2013"
 agent "9% на ЭКОНОМ /БИЗНЕС класс."
 subagent "7% от тарифа на все направления Alitalia (Эконом и Бизнес класса) с началом путешествия из Москвы и Санкт-Петербурга, а также из Киева (из Киева Alitalia летает в Рим (AZ481) и Милан (AZ7469), Тбилиси (из Тбилиси Alitalia летает в Рим (AZ551), Еревана (из Еревана Alitalia летает в Рим (AZ557) (тарифы туда и обратно, а также тарифы в одну сторону, но с вылетом из Москвы или Санкт-Петербурга, Киева, Тбилиси или Еревана). Повышенная комиссия не применяется, если начало путешествия не из этих городов. На рейсы code-share комиссия не применяется (за исключением code-share с AP/VE/XM/CT)"
-classes :business
 check {
   includes_only(operating_carrier_iatas, 'AZ AP VE XM CT') and
   ( includes(city_iatas.first, 'MOW LED') or
@@ -1195,6 +1194,7 @@ example 'pekxmn xmnweh'
 strt_date "01.05.2013"
 agent "0% по опубл. тарифам отдельные перелеты с вылетами из Пекина по Китаю на собств. рейсы HU"
 subagent "0%"
+important!
 check { includes_only(city_iatas.first, 'BJS') and includes_only(country_iatas, 'CN') }
 commission "0%/0%"
 
