@@ -319,18 +319,6 @@ commission "0%/0%"
 carrier "AB", "AIR BERLIN"
 ########################################
 
-example 'cdgsvo/c svocdg/i'
-example 'cdgsvo/d svocdg/j'
-example 'cdgsvo/y svocdg/b'
-example 'cdgsvo/h svocdg/k'
-strt_date "01.02.2013"
-expr_date "30.04.2013"
-agent "С 01.02.13г.по 30.04.13г. 5% по опубл. тарифам по классам C, D, J, I  на рейсы AВ; + то же самое на YBHK "
-subagent "С 01.02.13г.по 30.04.13г. 3% по опубл. тарифам по классам C, D, J, I на рейсы AВ;"
-subclasses "CDJIYBHK"
-discount "3%"
-commission "5%/3%"
-
 example 'cdgfra/m fracdg/s'
 strt_date "01.03.2013"
 agent    "8% по всем направлениям через DTT"
@@ -348,7 +336,7 @@ agent    "1 руб с билета по опубл. тарифам на рейс
 subagent "5 коп с билета по опубл. тарифам на рейсы AB"
 interline :no, :unconfirmed
 our_markup "1%"
-# ticketing_method "direct"
+ticketing_method "direct"
 commission "1/0.05"
 
 example 'svocdg/s7'
