@@ -1892,10 +1892,10 @@ carrier "PS", "Ukraine International Airlines (ГЛОНАСС)"
 example 'svocdg'
 example 'svocdg cdgsvo'
 agent    "9% от опубл. тарифов на собств.рейсы PS"
-subagent "9% от опубл. тарифов на собств.рейсы PS"
+subagent "8.5% от опубл. тарифов на собств.рейсы PS"
 check { not includes(city_iatas.first, 'IEV') and not includes_only(city_iatas, 'MOW IEV') }
-discount "9%"
-commission "9%/9%"
+discount "8.5%"
+commission "9%/8.5%"
 
 example 'ievsvo'
 strt_date "10.04.2014"
