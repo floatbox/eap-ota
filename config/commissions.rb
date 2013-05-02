@@ -336,18 +336,13 @@ strt_date "01.03.2013"
 agent    "8% по всем направлениям через DTT"
 subagent "6% по всем направлениям через DTT"
 interline :no
+# только собственные рейсы AB и HG
+check { includes_only(operating_carrier_iatas, 'AB HG') }
 discount "6%"
 ticketing_method "downtown"
 commission "8%/6%"
- 
-# example 'cdgsvo svocdg'
-# example 'cdgsvo/HG svocdg/HG'
-strt_date "01.02.2012"
-agent "1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
-subagent "5 коп с билета по опубл. тарифам на рейсы AB"
-disabled "на dtt выгоднее"
-commission "1/0.05"
 
+example 'cdgfra/S7:AB'
 example 'cdgsvo svocdg/lh'
 agent    "1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
 subagent "5 коп с билета по опубл. тарифам на рейсы AB"
