@@ -236,6 +236,7 @@ Partner:
   options:
     action_after_save: show
     default_action_on_item: show
+  search: token, notes
   application: Misc, 2
 
 PromoCode:
