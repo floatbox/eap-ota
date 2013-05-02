@@ -2867,36 +2867,6 @@ carrier "U9", "Aircompany Tatarstan"
 ########################################
 
 example 'svocdg/business cdgsvo/business'
-expr_date "30.04.2013"
-agent "9% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
-subagent "7% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
-classes :business
-discount "5.8%"
-commission "9%/7%"
-
-example 'svocdg/economy svocdg/economy'
-expr_date "30.04.2013"
-agent "7% от опубл. тарифов на собств. рейсы U9 Эконом класса;"
-subagent "5% от опубл. тарифов на собств. рейсы U9 Эконом класса"
-classes :economy
-discount "4%"
-commission "7%/5%"
-
-example 'svocdg/ab cdgsvo'
-expr_date "30.04.2013"
-agent "2% от всех опубл. тарифов на рейсы Interline;"
-subagent "1% от всех опубл. тарифов на рейсы Interline."
-interline :yes
-commission "2%/1%"
-
-agent "3% от всех опубл. тарифов на рейсы code-share."
-expr_date "30.04.2013"
-subagent "1% от всех опубл. тарифов на рейсы code-share;"
-not_implemented "не умеем определять code-share"
-commission "3%/1%"
-
-# с 01.05 Новые
-# example 'svocdg/business cdgsvo/business'
 strt_date "01.05.2013"
 agent "4% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
 subagent "3% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
@@ -2904,7 +2874,7 @@ classes :business
 discount "2%"
 commission "4%/3%"
 
-# example 'svocdg/economy svocdg/economy'
+example 'svocdg/economy svocdg/economy'
 strt_date "01.05.2013"
 agent "3% от опубл. тарифов на собств. рейсы U9 Эконом класса;"
 subagent "2% от опубл. тарифов на собств. рейсы U9 Эконом класса;"
@@ -2912,7 +2882,7 @@ discount "1.3%"
 classes :economy
 commission "3%/2%"
 
-# example 'svocdg/ab cdgsvo'
+example 'svocdg/ab cdgsvo'
 strt_date "01.05.2013"
 agent "1% от всех опубл. тарифов на рейсы Interline;"
 subagent "5 руб от всех опубл. тарифов на рейсы Interline;"
