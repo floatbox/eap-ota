@@ -700,12 +700,12 @@ carrier "DL", "DELTA AIRLINES"
 
 example 'svojfk/s'
 example 'zigjfk/i jfkzig/s'
-example 'accjfk/k jfkacc/u'
+example 'svojfk/k/dl:dl jfksvo/k/dl:dl'
 expr_date "31.03.2014"
 agent "5%"
 subagent "3%"
 subclasses "SIQKLUT"
-check { includes_only(country_iatas.first, 'RU SN GH') and includes_only(country_iatas, 'US RU SN GH') }
+check { includes_only(country_iatas.first, 'RU SN GH') and includes_only(country_iatas, 'US RU SN GH') and includes_only(operating_carrier_iatas, 'DL') }
 ticketing_method "downtown"
 discount "1.5%"
 commission "5%/3%"
