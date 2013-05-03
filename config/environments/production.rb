@@ -1,7 +1,7 @@
 # encoding: utf-8
 Eviterra::Application.configure do
   #config.after_initialize do
-  file = File.open(Rails.root + "log/production.log", "a")
+  file = File.open(Rails.root + "log/#{Rails.env}.log", "a")
   file.sync = false
   config.logger = ActiveSupport::BufferedLogger.new(file, Logger::INFO)
 
