@@ -32,6 +32,22 @@ module FetchNested
     hash[target_key] = value
   end
 
+  # hash.each_nested.to_a
+  # => [["foo.bar", 3], ["test": "oink"]]
+  # hash.each_nested do |combined_key, value|
+  def each_nested(prefix=nil, &block)
+    return enum_for(:each_nested) unless block
+    each_pair do |key, value|
+      name = prefix ? "#{prefix}.#{key}" : key.to_s
+      case value
+      when Hash
+        value.each_nested(name, &block)
+      else
+        yield name, value
+      end
+    end
+  end
+
   class Proxy
     def initialize(hash)
       @hash = hash
