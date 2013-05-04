@@ -71,18 +71,24 @@ class Strategy::Amadeus < Strategy::Base
       pnr_resp = amadeus.pnr_retrieve(:number => @order.pnr_number)
       tst_resp = amadeus.ticket_display_tst
       amadeus.pnr_ignore
+      flights = pnr_resp.flights.map do |flight|
+        afi_result = amadeus.air_flight_info(flight: flight)
+        afi_result.success? ? afi_result.flight : flight
+      end
       rec_params = {
         :booking_classes => pnr_resp.booking_classes,
         # FIXME не умеем определять класс обслуживания, хардкодим эконом
         :cabins => pnr_resp.booking_classes.map {|x| 'Y' },
         :source => 'amadeus',
-        :flights => pnr_resp.flights
+        :flights => flights
         }
       rec_params.merge!(
         :price_fare => tst_resp.total_fare,
         :price_tax => tst_resp.total_tax,
         :validating_carrier_iata => tst_resp.validating_carrier_code
       ) if tst_resp.success?
+
+      # получаем operating carrier и техостановки
 
       Recommendation.new(rec_params)
     end
