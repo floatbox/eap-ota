@@ -6,7 +6,7 @@ module TypusPaytureCharge
   # FIXME надо бы убрать вызов gateway отсюда
   def payment_status_raw
     response = gateway.status(:our_ref => ref)
-    response.err_code || "#{response.status}: #{response.amount} (#{STATUS_MAPPING[response.status] || 'unknown'})"
+    response.err_code || "#{response.status}: #{response.amount} (#{PaytureCharge::STATUS_MAPPING[response.status] || 'unknown'})"
   rescue
     $!.message
   end
