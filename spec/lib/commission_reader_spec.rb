@@ -66,6 +66,8 @@ describe Commission::Reader do
         discount '2%'
         our_markup '1%'
         disabled "because of Caturday, that's why"
+        check { true }
+        tour_code "FOOBAR"
         commission '2%/3'
       end
     end
@@ -84,6 +86,8 @@ describe Commission::Reader do
     its(:discount) {should == Fx('2%')}
     its(:disabled) {should == "because of Caturday, that's why"}
     its(:disabled?) {should be_true}
+    its(:tour_code) {should == "FOOBAR"}
+    its(:check) {should be_an_instance_of(Proc)}
   end
 
   context "setting defaults" do
