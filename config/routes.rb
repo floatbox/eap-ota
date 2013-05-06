@@ -10,6 +10,7 @@ Eviterra::Application.routes.draw do
   constraints subdomain: /^api(?:\.staging)?$/ do
     root to: 'api_home#index'
     match 'status' => 'home#status'
+    match 'avia/form' => 'booking#api_form'
     match 'avia/v1/variants(.:format)' => 'pricer#api', :format => :xml
     match 'avia/v1/searches' => 'booking#api_redirect'
     match 'partner/v1/orders(.:format)' => 'api_order_stats#index', :format => :json
@@ -20,8 +21,9 @@ Eviterra::Application.routes.draw do
   match 'api/redirection(.:format)' => 'booking#api_redirect'
   match 'api/booking/:query_key(.:format)' => 'booking#api_booking', :via => :get
   match 'api/rambler_booking(.:format)' => 'booking#api_rambler_booking', :via => :get, :format => :xml, :as => :api_rambler_booking
-  match 'api/form' => 'booking#api_form'
   match 'api/order_stats' => 'api_order_stats#index'
+  match 'api/v1/preliminary_booking' => 'api_booking#preliminary_booking', :as => :api_preliminary_booking
+  post 'api/v1/pay' => 'api_booking#pay', :as => :api_booking_pay
 
   match 'booking' => 'booking#index', :as => :booking
   match 'hot_offers' => 'pricer#hot_offers', :as => :hot_offers
@@ -29,10 +31,8 @@ Eviterra::Application.routes.draw do
   match 'booking/form' => 'booking#form', :as => :booking_form
   post 'booking/recalculate_price' => 'booking#recalculate_price', :as => :booking_recalculate_price
   post 'booking/pay' => 'booking#pay', :as => :booking_pay
-  post 'api/pay' => 'api_booking#pay', :as => :api_booking_pay
   # FIXME сделать POST однажды
   match 'booking/preliminary_booking' => 'booking#preliminary_booking', :as => :preliminary_booking
-  match 'api/preliminary_booking' => 'api_booking#preliminary_booking', :as => :api_preliminary_booking
   post 'confirm_3ds' => 'booking#confirm_3ds', :as => :confirm_3ds
   match 'order/:id' => 'PNR#show', :as => :show_order
   match 'notice/:id' => 'PNR#show_notice', :as => :show_notice
