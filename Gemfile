@@ -32,6 +32,7 @@ gem 'evergreen', :require => 'evergreen/rails', :group => :development
 gem 'SyslogLogger'
 gem 'syslogger'
 gem 'lumberjack'
+gem 'lumberjack_syslog_device'
 # для импорта zip файлов
 gem 'zip'
 gem 'money'

@@ -178,6 +178,8 @@ GEM
     linecache19 (0.5.12)
       ruby_core_source (>= 0.1.4)
     lumberjack (1.0.3)
+    lumberjack_syslog_device (1.0.0)
+      lumberjack (~> 1.0)
     mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -391,6 +393,7 @@ DEPENDENCIES
   kaminari
   libnotify
   lumberjack
+  lumberjack_syslog_device
   memoize
   mobile-fu
   money
