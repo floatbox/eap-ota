@@ -38,5 +38,8 @@ l.info 'раз два три'
 msg 'testing multiline messages'
 l.info "first line\n   second line\n third line"
 
+msg 'testing weird symbols'
+l.info "percent: %s; escapes: \e[1mfoo\e[0mbar"
+
 msg 'testing very long messages'
 l.info (1..999).map {|i| "......%03d " % [i]}.join

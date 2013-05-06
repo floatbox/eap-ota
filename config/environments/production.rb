@@ -5,6 +5,11 @@ Eviterra::Application.configure do
   file.sync = false
   config.logger = ActiveSupport::BufferedLogger.new(file, Logger::INFO)
 
+  # require 'lumberjack'
+  # require 'lumberjack_syslog_device'
+  # device = Lumberjack::SyslogDevice.new
+  # config.logger = Lumberjack::Logger.new(device)
+
   # Settings specified here will take precedence over those in config/application.rb
 
   # здесь, а не в application.rb, для удобства дебага
