@@ -2961,14 +2961,6 @@ carrier "S7", "S7 AIRLINES"
 ########################################
 carrier_defaults consolidator: 0, ticketing_method: "direct"
 
-#dtt
-agent ""
-subagent ""
-our_markup "400"
-ticketing_method "downtown"
-disabled "с первого апреля прямая выписка"
-commission "0%/0%"
-
 #интерлайн
 example 'svocdg/ab cdgsvo'
 strt_date "01.04.2013"
@@ -3177,6 +3169,13 @@ subagent ""
 check { includes(city_iatas, 'OVB') and includes(city_iatas, 'BKK') }
 commission "0.1%/0.1%"
 
+# example 'svoled'
+agent ""
+subagent ""
+discount "4%"
+disabled "пока dtt"
+commission "5%/5%"
+
 example 'svoled'
 example 'ledsvo'
 example 'svoled ledsvo'
@@ -3185,7 +3184,7 @@ agent "договорился: с 1 мая через даунтаун S7 аге
 subagent "наша 4%"
 ticketing_method "downtown"
 discount "3%"
-commission "5%/4%"
+commission "5%/3.5%"
 
 carrier "GA", "GARUDA INDONESIA"
 ########################################
