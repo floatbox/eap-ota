@@ -28,6 +28,8 @@ end
 
 gem 'evergreen', :require => 'evergreen/rails', :group => :development
 
+# для импорта zip файлов
+gem 'zip'
 gem 'money'
 gem 'kaminari'
 gem 'daemons'
