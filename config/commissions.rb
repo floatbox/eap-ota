@@ -991,7 +991,7 @@ carrier "HU", "HAINAN AIRLINES"
 example 'svopek/c'
 example 'svopek/c/ab peksvo/c'
 strt_date "12.12.2011"
-expr_date "30.04.2013"
+expr_date "31.07.2013"
 agent "20% от опубл.тарифов по классу С на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subagent "18% от опубл.тарифов по классу С на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subclasses "C"
@@ -1004,7 +1004,7 @@ example 'svopek/d'
 example 'svopek/d/ab peksvo/d'
 example 'svopek/i/ab peksvo/i'
 strt_date "12.12.2011"
-expr_date "30.04.2013"
+expr_date "31.07.2013"
 agent "15% от опубл.тарифов по классу D на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subagent "13% от опубл.тарифов по классу D на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subclasses "DI"
@@ -1016,7 +1016,7 @@ commission "15%/13%"
 example 'svopek/z'
 example 'svopek/z/ab peksvo/z'
 strt_date "12.12.2011"
-expr_date "30.04.2013"
+expr_date "31.07.2013"
 agent "9% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subagent "7% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subclasses "Z" 
@@ -1030,7 +1030,7 @@ example 'svopek'
 example 'svopek/ab peksvo'
 example 'svopek/ab peksvo'
 strt_date "12.12.2011"
-expr_date "30.04.2013"
+expr_date "31.07.2013"
 agent "9% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subagent "7% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 interline :no, :yes
@@ -1044,7 +1044,7 @@ example 'ledpek/d/ab pekled/d'
 example 'ledpek/i/ab pekled/i'
 example 'ledpek/z/ab pekled/z'
 strt_date "12.12.2011"
-expr_date "30.04.2013"
+expr_date "31.07.2013"
 agent "15% от опубл.тарифов по классу С,D,I,Z на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
 subagent "13% от опубл.тарифов по классу С,D,I,Z на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
 subclasses "CDIZ"
@@ -1056,7 +1056,7 @@ commission "15%/13%"
 example 'ledpek pekled'
 example 'ledpek/ab pekled'
 strt_date "12.12.2011"
-expr_date "30.04.2013"
+expr_date "31.07.2013"
 agent "9% от на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
 subagent "7% на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
 interline :no, :yes
@@ -1069,7 +1069,7 @@ example 'kjapek/d'
 example 'iktpek/i pekikt/i/ab'
 example 'ovbpek/z pekovb/z/ab'
 strt_date "10.11.2011"
-expr_date "30.04.2013"
+expr_date "31.07.2013"
 agent "9% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Новосибирск-CHINA или  Новосибирск-CHINA-Новосибирск"
 agent "9% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Иркутск-CHINA или  Иркутск-CHINA-Иркутск"
 agent "9% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Красноярск-CHINA или Красноярск-CHINA-Красноярск"
@@ -1088,7 +1088,7 @@ example 'kjapek'
 example 'iktpek pekikt/ab'
 example 'ovbpek pekovb/ab'
 strt_date "10.11.2011"
-expr_date "30.04.2013"
+expr_date "31.07.2013"
 agent "9% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Новосибирск-CHINA или  Новосибирск-CHINA-Новосибирск"
 agent "9% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Иркутск-CHINA или  Иркутск-CHINA-Иркутск"
 agent "9% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Красноярск-CHINA или Красноярск-CHINA-Красноярск"
@@ -1105,7 +1105,7 @@ example 'alapek/d'
 example 'alapek/i pekala/i/ab'
 example 'alapek/z pekala/z/ab'
 strt_date "10.11.2011"
-expr_date "30.04.2013"
+expr_date "31.07.2013"
 agent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Алма-Ата-CHINA или Алма-Ата-CHINA-Алма-Ата"
 subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Алма-Ата-CHINA или Алма-Ата-CHINA-Алма-Ата"
 subclasses "CDIZ"
@@ -1120,7 +1120,7 @@ example 'alapek'
 example 'alapek pekala/ab'
 example 'alapek pekala/ab'
 strt_date "10.11.2011"
-expr_date "30.04.2013"
+expr_date "31.07.2013"
 agent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Алма-Ата-CHINA или Алма-Ата-CHINA-Алма-Ата"
 subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Алма-Ата-CHINA или Алма-Ата-CHINA-Алма-Ата"
 interline :no, :yes
@@ -1130,7 +1130,7 @@ commission "7%/7%"
 
 example 'pekweh'
 example 'nayweh wehnay'
-expr_date "30.04.2013"
+expr_date "31.07.2013"
 agent "0% по опубл. тарифам отдельные перелеты с вылетами из Пекина по Китаю на собств. рейсы HU"
 subagent "0% по опубл. тарифам отдельные перелеты с вылетами из Пекина по Китаю на собств. рейсы HU"
 check { includes_only(country_iatas, 'CN') and includes(city_iatas.first, 'BJS') }
@@ -1139,7 +1139,7 @@ commission "0%/0%"
 
 example 'peksvo/m'
 example 'peksvo/m svopek/c'
-expr_date "30.04.2013"
+expr_date "31.07.2013"
 agent "3% перелет/ all class of the flight CHINA - RUSSIA или CHINA - RUSSIA - CHINA"
 subagent "1% перелет all class of the flight CHINA- RUSSIA или CHINA- RUSSIA - CHINA"
 check { includes(country_iatas.first, 'CN') and includes_only(country_iatas, 'CN RU') }
@@ -1150,20 +1150,20 @@ commission "3%/1%"
 # в общем, просто широчайшее правило
 example 'miapek'
 example 'XMNPEK PEKHKT'
-expr_date "30.04.2013"
+expr_date "31.07.2013"
 agent "3% начало перелета из третьей страны в Китай на все классы"
 subagent "1% начало перелета из третьей страны в Китай на все классы"
 check { includes(country_iatas, 'CN') }
 commission "3%/1%"
 
-strt_date "01.05.2013"
+strt_date "01.08.2013"
 agent "9% от всех опубл. тарифов на рейсы HU (В договоре Interline не прописан.)"
 subagent "7% от опубл. тарифов на собств. рейсы HU"
 discount "5.7%"
 commission "9%/7%"
 
 example 'pekxmn xmnweh'
-strt_date "01.05.2013"
+strt_date "01.08.2013"
 agent "0% по опубл. тарифам отдельные перелеты с вылетами из Пекина по Китаю на собств. рейсы HU"
 subagent "0%"
 important!
