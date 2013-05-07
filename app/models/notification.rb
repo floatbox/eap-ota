@@ -49,6 +49,11 @@ class Notification < ActiveRecord::Base
     self.delay(queue: 'notification', run_at: 1.minutes.from_now, priority: 5).send_notice if status.blank?
   end
 
+  def retry_later delay=2
+    puts "Email pnr #{pnr_number} to #{destination} RETRY after #{delay} minutes"
+    self.delay(queue: 'notification', run_at: delay.minutes.from_now, priority: 5).send_notice
+  end
+
   def prepare_notice
     if format.blank?
       self.format = order.send_notice_as
@@ -69,6 +74,12 @@ class Notification < ActiveRecord::Base
   end
 
   def send_notice
+    if order.processing?
+      logger.info 'Notification: retry sending later'
+      retry_later
+      return
+    end
+
     I18n.locale = :ru
     prepare_notice
     logger.info 'Notification: sending email'

@@ -54,6 +54,16 @@ class Recommendation
     (marketing_carrier_iatas & validating_carrier.all_iatas).present?
   end
 
+  # FIXME вынести дублирование кода
+  # предполагается, что у всех вариантов одинаковый набор marketing carrier-ов
+  def validating_carrier_makes_more_than_half_of_itinerary?
+    validating, other =
+      variants.first.flights.every.marketing_carrier_iata.partition do |iata|
+        iata.in?  validating_carrier.all_iatas
+      end
+    validating.size > other.size
+  end
+
   # предполагается, что у всех вариантов одинаковый набор marketing carrier-ов
   def validating_carrier_makes_half_of_itinerary?
     validating, other =
@@ -258,10 +268,9 @@ class Recommendation
     ( [ validating_carrier_iata ] +
       [ variant.flights, booking_classes, cabins].transpose.map { |fl, cl, cab|
         r = ["#{fl.departure_iata}#{fl.arrival_iata}"]
-        if fl.marketing_carrier_iata != fl.operating_carrier_iata
+        if validating_carrier_iata != fl.marketing_carrier_iata ||
+           validating_carrier_iata != fl.operating_carrier_iata
           r << fl.carrier_pair
-        elsif validating_carrier_iata != fl.marketing_carrier_iata
-          r << fl.marketing_carrier_iata
         end
         r << 'BUSINESS' if cab == 'C'
         r << 'FIRST' if cab == 'F'

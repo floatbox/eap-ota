@@ -273,5 +273,10 @@ describe Amadeus::Response::PNRRetrieve do
     end
   end
 
+  describe "#responsibility_office" do
+    subject {amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml')}
+    its(:responsibility_office) {should == "MOWR2233B"}
+  end
+
 end
 

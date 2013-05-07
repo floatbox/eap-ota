@@ -137,6 +137,9 @@ module Amadeus
             :amadeus_ref => ref
           }
           if fh[:marketing_carrier_iata] #для пустых перелетов (случай сложного маршрута)
+            # FIXME задаю оперирующего перевозчика, хотя это и неправильно.
+            # FIXME найти способ узнавать оперирующего первозчика!
+            fh[:operating_carrier_iata] = fh[:marketing_carrier_iata]
             res.merge({ref => fh})
           else
             res
@@ -221,6 +224,11 @@ module Amadeus
         if m = fm.match(/(\d+)(A)?/)
           m[2] ? m[1] : m[1] + '%'
         end
+      end
+
+      # результат PNR_TransferOwnership. Не проверяет queue office и прочее.
+      def responsibility_office
+        xpath('//r:securityInformation/r:responsibilityInformation/r:officeId').to_s
       end
     end
   end

@@ -20,7 +20,8 @@ class StatCounters
   end
 
   def self.connection
-    Mongoid.default_session
+    # счетчикам можно простить незапись
+    Mongoid.default_session.with(safe: false)
   end
 
   def self.json_set keys

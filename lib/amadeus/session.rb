@@ -4,10 +4,18 @@ module Amadeus
   # обошелся без блокировки таблиц
   class Session
 
-  BOOKING = 'MOWR228FA'
-  TICKETING = 'MOWR2233B'
-  DOWNTOWN = 'NYC1S21HX'
-  ZAGORYE = 'IEVU228GZ'
+  def self.office_for_alias(al)
+    Conf.amadeus.offices.each do |office, settings|
+      return office if settings["alias"] == al.to_s
+    end
+    raise ArgumentError, "no office_id defined for alias #{al}"
+  end
+
+  # FIXME избавиться от констант
+  BOOKING = office_for_alias(:booking)
+  TICKETING = office_for_alias(:ticketing)
+  DOWNTOWN = office_for_alias(:downtown)
+  ZAGORYE = office_for_alias(:zagorye)
 
   cattr_accessor :logger do
     Rails.logger
@@ -19,7 +27,7 @@ module Amadeus
   end
 
   cattr_accessor :default_office do
-    BOOKING
+    Conf.amadeus.default_office
   end
 
   INACTIVITY_TIMEOUT = 10*60

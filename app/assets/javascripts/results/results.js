@@ -27,7 +27,7 @@ show: function(instant) {
         context = search.el.hide();
         $w.scrollTop(0);
     } else if ($.support.fixedPosition && !browser.ios) {
-        that.fixed.preview();    
+        that.fixed.preview();
         context = $w.delay(300);
         context.smoothScrollTo(this.header.position(), 450);
         context.delay(100).queue(function(next) {
@@ -54,6 +54,7 @@ show: function(instant) {
 hide: function() {
     booking.abort();
     var that = this, context;
+    this.content.stopExpiration();
     this.header.edit.hide();
     this.header.buttonEnabled.hide();
     this.header.button.show();
@@ -62,13 +63,13 @@ hide: function() {
     if ($.support.fixedPosition && !browser.ios) {
         search.el.show();
         search.map.resize();
-        search.map.load();
         context = $w.scrollTop(this.header.position());
         context.delay(100).smoothScrollTo(0, 450);
         this.header.el.removeClass('rh-fixed');
     } else {
         context = search.el.delay(100).slideDown(600);
     }
+    search.map.load();
     context.delay(100).queue(function(next) {
         page.header.removeClass('fixed');
         that.header.buttonEnabled.fadeIn(150);
@@ -93,7 +94,7 @@ update: function(data) {
     this.header.show(this.data.titles.header, data.valid);
     this.data.fresh = true;
     if (page.location.booking) {
-        page.title.set(I18n.t('page.booking', {title: this.data.titles.window}));
+        page.title.set(I18n.t('page.booking.few', {title: this.data.titles.window}));
     }
 },
 load: function() {
@@ -111,7 +112,7 @@ load: function() {
     this.message.toggle('loading');
     if (typeof sessionStorage !== 'undefined') {
         sessionStorage.removeItem('personsAmount');
-    }    
+    }
 },
 updated: function() {
     var that = this;
@@ -124,7 +125,7 @@ changeDates: function(dates) {
     this.updateTitles(dates);
     var titles = this.data.titles;
     this.header.summary.html(titles.header);
-    page.title.set(I18n.t('page.results', {title: titles.window}));    
+    page.title.set(I18n.t('page.results', {title: titles.window}));
 },
 updateTitles: function(dates) {
     var wparts = [];
@@ -170,11 +171,18 @@ processCollections: function() {
                 that.slide();
             }
         }, 30);
+        var human = this.content.el.find('.r-human').html();
+        if (human != this.data.options.human) {
+            this.data.options.human = human;
+            this.updateTitles();
+            this.header.summary.html(this.data.titles.header); // попытка починить баг с пропавшим первым классом
+        }
+        this.content.startExpiration();
         _kmq.push(['record', 'RESULTS: displayed']);
     } else {
         this.message.toggle('empty');
         _kmq.push(['record', 'RESULTS: nothing found']);
-        _gaq.push(['_trackPageview', '/search/empty']);        
+        _gaq.push(['_trackPageview', '/search/empty']);
     }
 },
 updateFeatured: function() {
@@ -191,7 +199,7 @@ updateFeatured: function() {
         this.cheap.update(cheap, 'cheapNonstop'); // Все дешевые оказались прямыми
         this.nonstop.control.addClass('rt-disabled').hide();
     } else {
-        this.cheap.update(cheap);    
+        this.cheap.update(cheap);
         this.nonstop.control.show();
         nonstop = this.getNonstop();
     }
@@ -254,7 +262,7 @@ getVariants: function(condition, limit) {
                 if (rn === undefined) {
                     index[dt] = result.push(variant) - 1;
                 } else if (variant.duration < result[rn].duration) {
-                    result[rn] = variant; // Если время вылета одинаковое, оставляем самый быстрый вариант 
+                    result[rn] = variant; // Если время вылета одинаковое, оставляем самый быстрый вариант
                 }
             }
         }
@@ -279,7 +287,11 @@ extendData: function() {
                 if (i !== s) parts.push(segments[i][mw ? 'arvto_short' : 'arvto']);
             }
             var direction = parts.enumeration(I18n.t('nbsp_and'));
-            titles[s] = I18n.t(mw ? 'few' : 'one', {scope: 'offer.segment.incompatible', direction: direction});
+            if (mw) {
+                titles[s] = I18n.t('offer.segment.incompatible.few', {direction: '</p><p class="oss-incompatible">' + direction}).replace(' </p>', '&nbsp;</p>');
+            } else {
+                titles[s] = I18n.t('offer.segment.incompatible.one', {direction: direction});
+            }
         }
     }
     this.data.ostitles = titles;
@@ -378,16 +390,19 @@ init: function() {
         return false;
     }
     this.toggle = function() {
-        var st = $w.scrollTop(), s = 1
+        var st = $w.scrollTop(), s = 2;
         if (st > tedge) {
-            s = 2;
+            s = 3; // кнопка за верхним краем
         } else if (st < bedge) {
-            s = 0;
+            s = 0; // кнопка за нижним краем
+        } else if (st < bedge + 40) {
+            s = 1; // видно кнопку, но не видно подробности
         }
         if (s !== state) {
-            that.el.toggleClass('ob-fixed', s !== 1);
-            that.el.toggleClass('ob-tfixed', s === 2);
+            that.el.toggleClass('ob-fixed', s === 0 || s === 3);
+            that.el.toggleClass('ob-tfixed', s === 3);
             that.el.toggleClass('ob-bfixed', s === 0);
+            that.el.toggleClass('ob-subfixed', s < 2);
             state = s;
         }
     };
@@ -412,7 +427,7 @@ bind: function() {
 },
 unbind: function() {
     $w.unbind('scroll', this.toggle).unbind('resize', this.count);
-    this.el.removeClass('ob-fixed ob-tfixed ob-bfixed');
+    this.el.removeClass('ob-fixed ob-tfixed ob-bfixed ob-subfixed');
     this.reset();
 },
 update: function() {
@@ -476,7 +491,7 @@ send: function() {
     }
     if (!this.like) {
         this.like = $('<div class="rs-like"></div>').hide().insertAfter(that.el);
-        this.like.html('<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Feviterra&amp;send=false&amp;layout=button_count&amp;width=400&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>');    
+        this.like.html('<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Feviterra&amp;send=false&amp;layout=button_count&amp;width=400&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>');
     }
     this.button.get(0).disabled = true;
     this.error.hide();

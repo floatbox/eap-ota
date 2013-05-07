@@ -132,6 +132,7 @@ ru:
         comment: "Комментарий"
         price_penalty: "Штраф, р."
         itinerary_receipt: "Ссылка на квитанцию"
+        dept_date: "Дата вылета"
 
         <<: *PRICING_ATTRIBUTES
       payment:
@@ -170,6 +171,7 @@ ru:
   Processing Ticket: Пишутся
   Error Ticket: Ошибка выписки
   Ticket Not Sent: Билет не отправлен
+  Extra Pay: Доплаты
   Sent Manual: Ручной режим
   Assigned To Me: Назначенo мне
 

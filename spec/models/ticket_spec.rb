@@ -17,14 +17,14 @@ describe Ticket do
   describe 'price_acquiring_compensation' do
     it 'is set after save if corrected_price is present' do
       ticket = create(:ticket, :corrected_price => 1200)
-      ticket.price_acquiring_compensation.should == ticket.price_payment_commission.round(2)
+      ticket.price_acquiring_compensation.should == ticket.price_payment_commission
     end
 
     it 'is not corrected if corrected_price changes' do
 
       ticket = create(:ticket, :corrected_price => 1200)
       ticket.update_attributes(:corrected_price => 1300)
-      ticket.price_acquiring_compensation.should_not == ticket.price_payment_commission.round(2)
+      ticket.price_acquiring_compensation.should_not == ticket.price_payment_commission
     end
 
   end

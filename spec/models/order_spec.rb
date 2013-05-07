@@ -12,7 +12,7 @@ describe Order do
     it 'updates price_acquiring_compensation' do
       order = create(:order)
       ticket = create(:ticket, :corrected_price => (order.price_with_payment_commission * 2), :order => order)
-      order.price_acquiring_compensation.round(2).should == (ticket.price_acquiring_compensation).round(2)
+      order.price_acquiring_compensation.should == ticket.price_acquiring_compensation
     end
   end
 
@@ -44,8 +44,10 @@ describe Order do
   end
 
   it "sets price_acquiring_compensation before create" do
-    order = create(:order)
-    order.price_acquiring_compensation.round(2).should == order.price_payment_commission.round(2)
+    order = build(:order)
+    order.fix_price = false
+    order.save
+    order.price_acquiring_compensation.should == order.price_payment_commission
   end
 
   it 'set price_difference before save' do

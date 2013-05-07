@@ -60,7 +60,7 @@ class PricerForm
     @to_as_object = Location[args[:to]]
     segments = {}
     segments["0"] = {:from => args[:from], :to => args[:to], :date => convert_api_date(args[:date1])}
-    if args[:date2]
+    if args[:date2].present?
       segments["1"] = {:from => args[:to], :to => args[:from], :date => convert_api_date(args[:date2])}
     end
     adults = (args[:adults] || 1).to_i

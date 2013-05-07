@@ -34,7 +34,7 @@
     <p class="latent" id="email-hint">Если вы&nbsp;не&nbsp;получили письмо с&nbsp;электронным билетом в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, то&nbsp;напишите нам (<a href="mailto:operator@eviterra.com">operator@eviterra.com</a>) или позвоните <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p>
 </div>
 <script type="text/javascript">
-    _kmq.push(['record', 'BOOKING: SUCCESS']);
+    _kmq.push(['record', 'BOOKING: SUCCESS', {'Amount': <%= @order.price_with_payment_commission.round.to_i %>}]);    
     _gaq.push(['_trackPageview', '/booking/success']);
     _gaq.push(['_addTrans', '<%= @order.pnr_number %>', '', '<%= @order.price_with_payment_commission.round.to_i %>']);
     _gaq.push(['_trackTrans']);

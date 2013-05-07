@@ -240,7 +240,7 @@ update: function() {
     if (label) {
         this.control.find('.rfg-label').html(label.capitalize());
     }
-    this.control.toggleClass('rfg-disabled', this.columns === 0);
+    this.control.toggleClass('rfg-disabled', this.columns === 0).toggle(this.columns !== 0);
     this.counter.hide();
     delete this.resized;
     source.remove();

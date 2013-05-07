@@ -15,10 +15,10 @@
 </tr>
 <tr>
     <td class="bfp-control">
-        <input type="text" size="30" name="person_attributes[$n][last_name]" id="bfp$n-last-name" class="bf-field bfp-lname">
+        <label class="bf-placeholder" for="bfp$n-last-name">латинскими буквами</label><input type="text" size="30" name="person_attributes[$n][last_name]" id="bfp$n-last-name" class="bf-field bfp-lname">
     </td>
     <td class="bfp-control">
-        <input type="text" size="30" name="person_attributes[$n][first_name]" id="bfp$n-first-name" class="bf-field bfp-fname">
+        <label class="bf-placeholder" for="bfp$n-first-name">латинскими буквами</label><input type="text" size="30" name="person_attributes[$n][first_name]" id="bfp$n-first-name" class="bf-field bfp-fname">
     </td>
     <td class="bfp-control">
         <div class="bfp-sex" id="bfp$n-sex">
@@ -28,9 +28,9 @@
     </td>
     <td class="bfp-control">
         <div class="bfp-date">
-            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-bday"><%= t 'booking.passengers.dates.d' %></label><input type="text" pattern="[0-9]*" class="bf-field bfpd-day" id="bfp$n-bday" name="person_attributes[$n][birthday(3i)]" maxlength="2"></div>
-            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-bmonth"><%= t 'booking.passengers.dates.m' %></label><input type="text" pattern="[0-9]*" class="bf-field bfpd-month" id="bfp$n-bmonth" name="person_attributes[$n][birthday(2i)]" maxlength="2"></div>
-            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-byear"><%= t 'booking.passengers.dates.y' %></label><input type="text" pattern="[0-9]*" class="bf-field bfpd-year" id="bfp$n-byear" name="person_attributes[$n][birthday(1i)]" maxlength="4" data-current="<%= Date.current.strftime('%Y') %>"></div>
+            <div class="bfpd-item"><label class="bf-placeholder bfpd-placeholder" for="bfp$n-bday"><%= t 'booking.passengers.dates.d' %></label><input type="text" pattern="[0-9]*" class="bf-field bfpd-day" id="bfp$n-bday" name="person_attributes[$n][birthday(3i)]" maxlength="2"></div>
+            <div class="bfpd-item"><label class="bf-placeholder bfpd-placeholder" for="bfp$n-bmonth"><%= t 'booking.passengers.dates.m' %></label><input type="text" pattern="[0-9]*" class="bf-field bfpd-month" id="bfp$n-bmonth" name="person_attributes[$n][birthday(2i)]" maxlength="2"></div>
+            <div class="bfpd-item"><label class="bf-placeholder bfpd-placeholder" for="bfp$n-byear"><%= t 'booking.passengers.dates.y' %></label><input type="text" pattern="[0-9]*" class="bf-field bfpd-year" id="bfp$n-byear" name="person_attributes[$n][birthday(1i)]" maxlength="4" data-current="<%= Date.current.strftime('%Y') %>"></div>
         </div>
     </td>
     <td class="bfp-control">
@@ -47,9 +47,9 @@
     </td>
     <td class="bfp-control">
         <div class="bfp-date">
-            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-day"><%= t 'booking.passengers.dates.d' %></label><input type="text" pattern="[0-9]*" class="bf-field bfpd-day" id="bfp$n-exp-day" name="person_attributes[$n][document_expiration_date(3i)]" maxlength="2"></div>
-            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-month"><%= t 'booking.passengers.dates.m' %></label><input type="text" pattern="[0-9]*" class="bf-field bfpd-month" id="bfp$n-exp-month" name="person_attributes[$n][document_expiration_date(2i)]" maxlength="2"></div>
-            <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-year"><%= t 'booking.passengers.dates.y' %></label><input type="text" pattern="[0-9]*" class="bf-field bfpd-year" id="bfp$n-exp-year" name="person_attributes[$n][document_expiration_date(1i)]" maxlength="4" data-current="<%= Date.current.strftime('%Y') %>"></div>
+            <div class="bfpd-item"><label class="bf-placeholder bfpd-placeholder" for="bfp$n-exp-day"><%= t 'booking.passengers.dates.d' %></label><input type="text" pattern="[0-9]*" class="bf-field bfpd-day" id="bfp$n-exp-day" name="person_attributes[$n][document_expiration_date(3i)]" maxlength="2"></div>
+            <div class="bfpd-item"><label class="bf-placeholder bfpd-placeholder" for="bfp$n-exp-month"><%= t 'booking.passengers.dates.m' %></label><input type="text" pattern="[0-9]*" class="bf-field bfpd-month" id="bfp$n-exp-month" name="person_attributes[$n][document_expiration_date(2i)]" maxlength="2"></div>
+            <div class="bfpd-item"><label class="bf-placeholder bfpd-placeholder" for="bfp$n-exp-year"><%= t 'booking.passengers.dates.y' %></label><input type="text" pattern="[0-9]*" class="bf-field bfpd-year" id="bfp$n-exp-year" name="person_attributes[$n][document_expiration_date(1i)]" maxlength="4" data-current="<%= Date.current.strftime('%Y') %>"></div>
         </div>
     </td>
     <td class="bfp-remove">

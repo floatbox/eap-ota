@@ -1,6 +1,8 @@
 # encoding: utf-8
 module TranslationHelper
 
+  private
+
   NBSP = "\u00a0"
   # меняет первый пробел на юникодный nbsp; для красоты предлогов
   def nbsp_first string

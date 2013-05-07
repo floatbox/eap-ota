@@ -46,10 +46,10 @@ prebook: function(offer) {
         success: function(data) {
             that.process(data);
         },
-        error: function() {
-            that.failed();
+        error: function(xhr, status) {
+            if (status !== 'abort') that.failed();
         },
-        timeout: 60000
+        timeout: 120000
     });
     offer.book.addClass('ob-disabled');
     offer.state.html('<span class="ob-progress">' + I18n.t('prebooking.progress') + '</span>');
@@ -84,14 +84,14 @@ failed: function() {
         hint.show(event, tip);
     });
     _kmq.push(['record', 'PRE-BOOKING: fail']);
-    _gaq.push(['_trackEvent', 'Бронирование', 'Невозможно выбрать вариант']);    
+    _gaq.push(['_trackEvent', 'Бронирование', 'Невозможно выбрать вариант']);
 },
 load: function() {
     var that = this;
     this.request = $.get('/booking/?number=' + this.key, function(content) {
         page.location.set('booking', that.key);
         if (results.data) {
-            page.title.set(I18n.t('page.booking', {title: results.data.titles.window}));
+            page.title.set(I18n.t('page.booking.few', {title: results.data.titles.window}));
         }
         results.header.edit.hide();
         results.header.select.show();
@@ -150,7 +150,7 @@ comparePrices: function() {
             that.cancel();
         });
         _kmq.push(['record', 'PRE-BOOKING: price changed']);
-        _gaq.push(['_trackEvent', 'Бронирование', 'Изменилась цена', dp > 0 ? 'Стало дороже' : 'Стало дешевле']);            
+        _gaq.push(['_trackEvent', 'Бронирование', 'Изменилась цена', dp > 0 ? 'Стало дороже' : 'Стало дешевле']);
     }
 },
 processPrice: function(context, dp) {
@@ -159,6 +159,7 @@ processPrice: function(context, dp) {
     content.html(content.html().absorb(dp > 0 ? 'дороже' : 'дешевле', sum));
 },
 cancel: function() {
+    this.countdown.stop();
     results.filters.show(true);
     results.header.select.hide();
     if (results.ready) {
@@ -190,6 +191,35 @@ hide: function() {
     _gaq.push(['_trackPageview', page.location.track()]);
     _yam.hit(page.location.track());
     delete this.offer;
+},
+newSearch: function() {
+    this.el.hide().removeClass('b-processing');
+    this.content.html('');
+
+    results.header.el.find('.rh-newsearch').remove();
+    results.header.buttonEnabled.hide();
+    results.header.button.show();
+    results.header.el.removeClass('rh-fixed');
+
+    search.locations.toggleSegments(1);
+    var segment = search.locations.segments[0];
+    if (search.mode.selected === 'ow') {
+        var dpt = segment.arv.selected || segment.arv.value;
+        var arv = segment.dpt.selected || segment.dpt.value;
+        segment.dpt.set(dpt);
+        segment.arv.set(arv);
+    } else {
+        segment.arv.set('');
+    }
+    search.dates.setSelected([]);
+    search.el.show();
+    search.map.resize();
+    search.map.load();
+    search.active = true;
+    search.validate();
+    search.locations.focusEmpty();
+
+    $w.scrollTop(0);
 }
 };
 
@@ -222,7 +252,7 @@ init: function() {
 show: function() {
     this.el.slideDown(350);
     _kmq.push(['record', 'BOOKING: fare rules displayed']);
-    _gaq.push(['_trackEvent', 'Бронирование', 'Просмотр правил тарифа']);  
+    _gaq.push(['_trackEvent', 'Бронирование', 'Просмотр правил тарифа']);
 },
 hide: function() {
     this.el.slideUp(350);
@@ -236,3 +266,35 @@ function googleSectionalElementInit() {
         background: 'transparent'
     }, 'google_sectional_element');
 }
+
+/* Countdown */
+booking.countdown = {
+start: function() {
+    var that = this;
+    var from = new Date().getTime();
+    this.el = booking.el.find('.bf-timer');
+    this.counter = this.el.find('.bft-counter');
+    this.value = this.el.find('.bftc-value');
+    this.timer = setInterval(function() {
+        var now = new Date().getTime();
+        var time = Math.max(0, 1200 - Math.round((now - from) / 1000));
+        that.show(time);
+        if (time === 0) {
+            that.stop();
+        }
+    }, 1000);
+    this.expires = false;
+},
+show: function(time) {
+    var m = Math.floor(time / 60);
+    var s = time % 60;
+    this.value.text((m < 10 ? '0:0' : '0:') + m + (s < 10 ? ':0' : ':') + s);
+    if (time < 300 && !this.expires) {
+        this.counter.addClass('bft-expires');
+        this.expires = true;
+    }
+},
+stop: function() {
+    clearInterval(this.timer);
+}
+};

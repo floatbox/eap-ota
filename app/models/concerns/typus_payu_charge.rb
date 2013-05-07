@@ -7,7 +7,7 @@ module TypusPayuCharge
 
   def payment_status_raw
     response = gateway.status(:our_ref => ref)
-    response.err_code || "#{response.status}: (#{STATUS_MAPPING[response.status] || 'unknown'})"
+    response.err_code || "#{response.status}: (#{PayuCharge::STATUS_MAPPING[response.status] || 'unknown'})"
   rescue
     $!.message
   end

@@ -125,7 +125,7 @@ class Order < ActiveRecord::Base
   def set_prices
     self.fee_scheme = Conf.site.fee_scheme if new_record? || fee_scheme.blank?
     unless has_data_in_tickets?
-      self.price_acquiring_compensation = price_payment_commission if price_acquiring_compensation == 0
+      self.price_acquiring_compensation = price_payment_commission if !fix_price
       self.price_difference = fix_price? ? price_with_payment_commission - price_real : 0
     end
   end
@@ -197,9 +197,10 @@ class Order < ActiveRecord::Base
   scope :processing_ticket, where(:ticket_status => 'processing_ticket')
   scope :error_ticket, where(:ticket_status => 'error_ticket')
   scope :ticketed, where(:payment_status => ['blocked', 'charged'], :ticket_status => 'ticketed')
-  scope :ticket_not_sent, where("email_status != 'ticket_sent' AND ticket_status = 'ticketed'")
+  scope :ticket_not_sent, where("pnr_number != '' AND email_status != 'ticket_sent' AND ticket_status = 'ticketed'").where("created_at > ?", 10.days.ago)
   scope :sent_manual, where(:email_status => 'manual')
   scope :reported, where(:payment_status => ['blocked', 'charged'], :offline_booking => false).where("pnr_number != ''")
+  scope :extra_pay, where("pnr_number = '' AND parent_pnr_number != ''")
 
 
   scope :stale, lambda {
@@ -242,6 +243,10 @@ class Order < ActiveRecord::Base
     else
       'booking'
     end
+  end
+
+  def processing?
+    ticket_status == 'processing_ticket'
   end
 
   def paid?
@@ -292,7 +297,8 @@ class Order < ActiveRecord::Base
         :discount,
         :our_markup,
         :agent_comments,
-        :subagent_comments
+        :subagent_comments,
+        :tour_code
 
       copy_attrs recommendation, self,
         :price_agent,

@@ -243,7 +243,11 @@ module PricerHelper
   end
 
   def human_date date
-    I18n.l(Date.strptime(date, '%d%m%y'), :format => '%e %B').strip
+    I18n.l(Date.strptime(date, '%d%m%y'), :format => :human)
+  end
+
+  def human_date_short date
+    I18n.l(Date.strptime(date, '%d%m%y'), :format => :short)
   end
 
   def date_with_dow dmy

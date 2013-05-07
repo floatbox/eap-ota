@@ -8,15 +8,42 @@ require 'csv'
 
 module DataMigration
 
+  def self.update_payment_statuses
+    PaperTrail.controller_info = {:done => 'Payu status sync'}
+    d = Date.parse('2012-12-01')
+    res = {}
+    payu = Payu.new
+    while d < Date.today do
+      payu.get_stats(d, d + 1.month)["data"].each do |p|
+      ref = p["External Reference No"]
+        if ref.present? && (payment = Payment.find_by_ref(ref))
+          puts p["Order status"]
+          puts p["External Reference No"]
+          external_status = PayuCharge::STATUS_MAPPING[p["Order status"]]
+          begin
+            external_charged_on = Time.parse(p['Order Finish Date']).to_date
+          rescue
+            external_charged_on = nil
+          end
+          if payment && (external_status != payment.status || (external_status == 'charged' && external_charged_on != payment.charged_on))
+            res[payment.id] = {:charged_on => payment.charged_on, :external_charged_on => external_charged_on, :status => payment.status, :external_status => external_status, :external_status_raw => p["Order status"]}
+          end
+        end
+      end
+      d += 1.month
+    end
+    res
+  end
+
   # set price acquiring compensation and price difference
   def self.upgrade_to_fee_schemas
-    PaperTrail.controller_info = {:done => 'upgrade_to_fee_schemas'}
+    PaperTrail.controller_info = {:done => 'upgrade_to_fee_schemas second run'}
     Order.where(fee_scheme: '').order('created_at DESC').map do |o|
       o.fee_scheme = Conf.site.fee_scheme
       $tickets_are_loading = true
       o.tickets.every.save!
       $tickets_are_loading = false
-      o.update_prices_from_tickets
+      o.update_prices_from_tickets || o.save
     end
   end
 

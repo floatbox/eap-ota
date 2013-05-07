@@ -158,7 +158,7 @@
 .o-complex .od-scroll {
     visibility: hidden;
 }
-.ob-bfixed .od-scroll {
+.ob-subfixed .od-scroll {
     visibility: inherit;
 }
 
@@ -327,9 +327,9 @@
 /* Time and airport */
 .oss-time {
     float: left;
-    padding: 4px 6px 0 0;    
+    padding: 4px 6px 0 0;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 17px;
     line-height: 19px;
 }
 .segment1 .oss-time {
@@ -350,11 +350,9 @@
 .segment6 .oss-time {
     color: #9a5000;
 }
-.osst-date {
-    float: left;
-    margin: 8px 0 0 5px;
-    font-size: 11px;
-    line-height: 13px;
+.oss-date {
+    color: #777;
+    margin-right: 3px;
 }
 .oss-airport {
     float: left;
@@ -468,7 +466,7 @@
     display: none;
     float: left;
     color: #777;
-    margin-right: -150px;
+    margin-bottom: 5px;
 }
 .segment1 .ossi-segment {
     color: #db7100;
@@ -484,7 +482,8 @@
 .os-disabled:hover {
     color: #606060;
 }
-.os-disabled:hover .oss-time {
+.os-disabled:hover .oss-time,
+.os-disabled:hover .oss-date {
     color: #8A8A8A;
 }
 .os-summary:hover .ossp-rise {
@@ -501,9 +500,6 @@
 }
 .os-summary:hover .ossc-icon {
     opacity: 0.6;
-}
-.no-touch .os-summary:hover .other-segments {
-    display: block;
 }
 .os-summary:hover .ossct-overlay {
     background-position: 0 -20px;
@@ -546,18 +542,19 @@
 .os-disabled {
     color: #777;
 }
-.os-disabled .oss-time {
+.os-disabled .oss-time,
+.os-disabled .oss-date {
     color: #999;
 }
 .os-disabled .ossb-flight {
     background: #C0C0C0;
     border-color: #D0D0D0;
 }
-.os-disabled:hover .ossi-m,
-.os-disabled:hover .ossi-l {
+.no-touch .os-disabled:hover .ossi-m,
+.no-touch .os-disabled:hover .ossi-l {
     display: none;
 }
-.os-disabled:hover .oss-incompatible {
+.no-touch .os-disabled:hover .oss-incompatible {
     display: block;
 }
 
@@ -691,7 +688,7 @@
     top: -5px;
 }
 .osd-notice {
-    margin: 10px 0 0 128px; 
+    margin: 10px 0 0 132px; 
 }
 .osdn-item {
     margin-top: 6px;
@@ -699,7 +696,23 @@
 .osdn-hl {
     padding: 2px 4px;
     background: #e2ea5f;
-} 
+}
+.osdn-hll {
+    position: relative;
+    left: -4px;
+    padding: 2px 0;
+    background: #e2ea5f;
+}
+.osdn-hlr {
+    position: relative;
+    left: 8px;
+    padding: 2px 0;
+    background: #e2ea5f;
+}
+.osdn-hlc {
+    position: relative;
+    left: -4px;
+}
 
 /* Segment colors */
 .segment1 .osd-time,

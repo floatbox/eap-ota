@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+
+# проверка работоспособности текущего логгера
+
+def msg msg
+  Rails.logger.fatal msg
+  puts msg
+end
+
+require File.expand_path('../../config/environment',  __FILE__)
+l = Rails.logger
+
+msg 'testing log levels:'
+l.debug 'DEBUG'
+l.info  'INFO'
+l.warn  'WARN'
+l.error 'ERROR'
+l.fatal 'FATAL'
+
+msg 'lazy evaluation:'
+l.debug {
+  puts "вы не должны увидеть это сообщение на экране, если логлевел выше debug"
+  "you should see that message in log if level > DEBUG"
+}
+
+
+msg 'testing pids:'
+l.info 'master process'
+fork do
+  l.info 'child process'
+end
+Process.wait
+
+msg 'testing unicode'
+l.info 'раз два три'
+
+msg 'testing multiline messages'
+l.info "first line\n   second line\n third line"
+
+msg 'testing weird symbols'
+l.info "percent: %s; escapes: \e[1mfoo\e[0mbar"
+
+msg 'testing very long messages'
+l.info (1..999).map {|i| "......%03d " % [i]}.join

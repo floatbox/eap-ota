@@ -68,7 +68,10 @@ init: function() {
                 section.load();
             }
         }
-        this.validate(true);        
+        this.validate(true);
+    }
+    if (!this.iphoneLayout) {
+        booking.countdown.start();
     }
 },
 position: function() {
@@ -239,14 +242,15 @@ process: function(s) {
         }, 60000);
         break;
     case 'success':
-        _kmq.push(['record', 'BOOKING: SUCCESS']);
+        booking.countdown.stop();
+        
+        var price = this.el.find('.bf-newprice').attr('data-price');
+        _kmq.push(['record', 'BOOKING: SUCCESS', {'Amount': Number(price)}]);
         _gaq.push(['_trackPageview', '/booking/success']);
+        _gaq.push(['_addTrans', this.result.find('.bfr-pnr').text(), '', price]);
+        _gaq.push(['_trackTrans']);
         _yam.hit('/booking/success');
-        if (window._gaq) {
-            var price = this.el.find('.bf-newprice').attr('data-price');
-            _gaq.push(['_addTrans', this.result.find('.bfr-pnr').text(), '', price]);
-            _gaq.push(['_trackTrans']);
-        }
+        
         this.result.find('.bfrs-insurance .bfrsa-link').click(function() {
             _kmq.push(['record', 'BOOKING: insurance link pressed']);
             _gaq.push(['_trackEvent', 'Бронирование', 'Переход на страницу страховки']);
@@ -255,9 +259,22 @@ process: function(s) {
             _kmq.push(['record', 'BOOKING: hotels link pressed']);
             _gaq.push(['_trackEvent', 'Бронирование', 'Переход к отелям на Островке']);
         });
-        this.sending = true; // не даём отправить форму второй раз
+
+        // не даём отправить форму второй раз
+        this.sending = true;
         this.el.find('.bfp-add, .bfp-remove').css('visibility', 'hidden');
         this.el.find('input, textarea, select').prop('disabled', true);
+
+        // добавляем ссылку на новый поиск
+        var brLink = this.result.find('.bfr-newsearch').click(function(event) {
+            event.preventDefault();
+            booking.newSearch();
+        });
+        var rhLink = $('<div/>').addClass('rh-newsearch').html(brLink.html()).click(function() {
+            booking.newSearch();
+        });
+        results.header.select.hide().after(rhLink);
+
         break;
     case 'fail':
         _kmq.push(['record', 'BOOKING: FAIL']);
@@ -371,7 +388,7 @@ initPhone: function() {
         var v = $.trim(value);
         v = v.replace(/[^+\d]/g, '');
         v = v.replace(/^8(\d+)/g, '+7$1');
-        v = v.replace(/^(\d)/g, '+$1');        
+        v = v.replace(/^(\d)/g, '+$1');
         return v;
     };
     this.controls.push(phone);
@@ -384,7 +401,7 @@ load: function() {
     this.set($.parseJSON(sessionStorage.getItem('contactsData')) || []);
     this.el.change(function() {
         that.save();
-    });    
+    });
 }
 };
 
@@ -416,6 +433,9 @@ init: function() {
         if (data) {
             row.set(data);
         }
+        if (that.rows.length > 2) {
+            that.el.find('.bfp-order').show();
+        }
         booking.form.hidePrice();
         that.validate(true);
         booking.form.validate();
@@ -423,7 +443,7 @@ init: function() {
     this.table.on('click', '.bfpr-link', function() {
         booking.form.wrongPrice = false;
         that.removeRow(Number($(this).closest('tbody').attr('data-index')));
-        booking.form.hidePrice();        
+        booking.form.hidePrice();
         that.validate(true);
         booking.form.validate();
     });
@@ -506,6 +526,9 @@ applyRows: function() {
     var n = this.rows.length, key = n === 1 ? 'one' : 'few';
     this.add.toggle(n < this.rowsLimit);
     this.title.attr('data-amount', key).html(I18n.t(key, {scope: 'booking.passengers'}));
+    if (n < 3) {
+        this.el.find('.bfp-order').hide();
+    }
 },
 validate: function(forced) {
     var wrong = [], empty = [], people = {a: 0, c: 0, i: 0, is: 0};
@@ -537,15 +560,16 @@ validate: function(forced) {
         if (merged !== this.cachedPeople) {
             booking.form.hidePrice();
             this.cachedPeople = merged;
+            this.el.find('.bfp-order').toggle(Boolean(people.a > 1 && people.i));
         }
     }
     clearTimeout(this.getPriceTimeout);
     var valid = wrong.length + empty.length === 0;
     if (valid && booking.form.wrongPrice) {
-        this.getPriceTimeout = setTimeout(function() { 
+        this.getPriceTimeout = setTimeout(function() {
             booking.form.getPrice();
         }, 100);
-    }    
+    }
     this.toggle(valid);
     this.wrong = wrong;
     this.empty = empty;
@@ -823,14 +847,14 @@ initCard: function() {
                 field.setSelectionRange(pos, pos);
             }, 0);
         }
-        sample.html((digits + '----------------').substring(12, 16).replace(/\D/g, '<span class="bfcn-empty">#</span>'));        
+        sample.html((digits + '----------------').substring(12, 16).replace(/\D/g, '<span class="bfcn-empty">#</span>'));
         toggleType(digits ? types[digits.charAt(0)] : undefined);
     });
     number.format = function(value) {
         var digits = $.trim(value).replace(/\D/g, '');
         return digits.replace(/(\d{4})(?=\d)/g, '$1  ');
-    };    
-    
+    };
+
     // CVV
     var cvv = new validator.Text($('#bc-cvv'), I18n.t('booking.validation.cvc'), function(value) {
         if (/\D/.test(value)) return 'letters';

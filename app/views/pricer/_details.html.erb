@@ -40,14 +40,14 @@
         </dl>
         <ul class="osd-notice">
             <% unless flight.technical_stop_count.zero? %>
-                <li class="osdn-item"><span class="osdn-hl"><%= technical_stops(flight) %></span></li>
+                <li class="osdn-item"><span class="osdn-hll"><span class="osdn-hlr"><span class="osdn-hlc"><%= technical_stops(flight) %></span></span></span></li>
             <% end %>
             <% if layover %>
                 <% next_flight = segment.flights[fcounter + 1] %>
                 <% if next_flight.departure_name != flight.arrival_name %>
-                    <li class="osdn-item"><span class="osdn-hl"><%= t 'offer.details.different_airports' %></span></li>
+                    <li class="osdn-item"><span class="osdn-hll"><span class="osdn-hlr"><span class="osdn-hlc"><%= t 'offer.details.different_airports' %></span></span></span></li>
                 <% elsif next_flight.departure_term != flight.arrival_term %>
-                    <li class="osdn-item"><span class="osdn-hl"><%= t 'offer.details.different_terminals' %></span></li>
+                    <li class="osdn-item"><span class="osdn-hll"><span class="osdn-hlr"><span class="osdn-hlc"><%= t 'offer.details.different_terminals' %></span></span></span></li>
                 <% end %>
             <% end %>
         </ul>

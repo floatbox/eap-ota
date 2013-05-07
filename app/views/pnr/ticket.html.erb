@@ -84,10 +84,17 @@
         <div style="font-size: 10px; line-height: 10px;"><br></div>
         <div style="font-size: 13px; line-height: 18px;">
         <% if @pnr.email %>
-          <a href="mailto:<%= @pnr.email %>" target="_blank" style="color: #333333; text-decoration: none;"><%= @pnr.email %></a><br>
+          <a href="mailto:<%= @pnr.email %>" target="_blank" style="color: #333333; text-decoration: none;"><%= @pnr.email %></a><% end %><% if @pnr.phone %>, <%= @pnr.phone %>
         <% end %>
-        <%= @pnr.phone %>
         </div>
+      <% unless @lang %>
+        <% ostrovok_url = pnr_ostrovok_link(@flights, @passengers) %>
+        <% if ostrovok_url %>
+        <div class="noprint" style="background: #FBF4CB; padding: 10px 15px; margin: 15px 0; font-size: 150%; line-height: 1.2em;">
+            <a href="<%= ostrovok_url %>" target="_blank" style="color: #F90A6F;">Забронировать отель <%= pnr_ostrovok_city(@flights) %> по низкой цене</a>
+        </div>
+        <% end %>
+      <% end %>
     </td>
 </tr>
 <tr valign="bottom">

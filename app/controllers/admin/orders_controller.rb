@@ -3,7 +3,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
   include CustomCSV
   include Typus::Controller::Bulk
 
-  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :edit_ticketed, :ticket, :cancel, :reload_tickets, :update, :pnr_raw, :void, :make_payable_by_card, :send_invoice, :ticket_in_ticketing_office, :manual_notice]
+  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :edit_ticketed, :ticket, :cancel, :reload_tickets, :update, :pnr_raw, :void, :make_payable_by_card, :send_invoice, :ticket_in_ticketing_office, :manual_notice, :show_commission]
 
   # def set_scope
   #   # добавлять фильтры лучше в def index и т.п., но так тоже работает (пока?)
@@ -18,6 +18,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
 
   def index
     # так тоже можно. просто выставляет параметры обычных фильтров
+    add_predefined_filter 'Extra Pay', {:scope => 'extra_pay'}, 'extra_pay'
     add_predefined_filter 'Unticketed', Order.unticketed.scope_attributes, 'unticketed'
     add_predefined_filter 'Processing Ticket', Order.processing_ticket.scope_attributes, 'processing_ticket'
     add_predefined_filter 'Error Ticket', Order.error_ticket.scope_attributes, 'error_ticket'
@@ -75,6 +76,19 @@ class Admin::OrdersController < Admin::EviterraResourceController
 
   def pnr_raw
     render :text => @order.raw
+  end
+
+  # отрисовывает дебажные данные для отладки комиссий по данному заказу
+  # FIXME перенести куда-то логику.
+  def show_commission
+    unless @order.source == 'amadeus' && @order.pnr_number
+      render :text => 'incomplete order'
+    else
+      @recommendation = Strategy::Amadeus.new(order: @order).recommendation_from_booking
+      render
+    end
+  #rescue
+  #  render :text => $!.message
   end
 
   def send_invoice

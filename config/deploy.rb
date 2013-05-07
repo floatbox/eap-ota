@@ -2,7 +2,7 @@
 require "rvm/capistrano"
 require "capistrano_colors"
 
-set :rvm_type, :user
+set :rvm_type, :system
 # закрепил версию, чтобы не прыгала в продакшне
 #set :rvm_ruby_string, 'ruby-1.9.3-p327-falcon'
 
@@ -14,6 +14,7 @@ set :whenever_environment do rails_env end
 set :whenever_roles, :daemons
 require "whenever/capistrano"
 
+
 set :scm, :git
 
 set :user, "rack"
@@ -21,11 +22,6 @@ set :use_sudo, false
 
 set :deploy_via, :remote_cache
 set :copy_exclude, '.git/*'
-
-# если гитхаб ляжет
-# то выключить :remote_cache выше и сделать
-# set :repository,  "git@team.eviterra.ru:eviterra.git"
-
 set :repository,  "git@github.com:Eviterra/eviterra.git"
 # если репозиторий лежит на той же машине
 task :localgit do
@@ -34,7 +30,8 @@ task :localgit do
 end
 
 # для shared/* папочки для deploy:setup
-set :shared_children, %w(log pids system config initializers cache)
+# не работает, когда use_sudo true
+set :shared_children, %w(log pids system config initializers cache local)
 
 # для deploy:migrate
 set :rake, 'bundle exec rake'
@@ -52,27 +49,20 @@ ssh_options[:forward_agent] = true
 set :application, "eviterra"
 
 task :staging do
-  load 'lib/recipes/unicorn'
-  set :use_sudo, true
+load 'lib/recipes/unicorn'
   set :rails_env, 'staging'
   role :app, 'vm1.eviterra.com', 'vm2.eviterra.com'
-  role :web, 'vm3.eviterra.com'
-  role :daemons, 'vm2.eviterra.com'
+  role :web, 'vm3.eviterra.com', 'vm1.eviterra.com', 'vm2.eviterra.com'
   role :db, 'vm1.eviterra.com', :primary => true
-
-  set :rvm_type, :user
-#  set :rvm_ruby_string, 'ruby-1.9.3-p327-falcon'
-
-  set :branch, 'staging'
+  role :daemons, 'vm2.eviterra.com'
+#  set :branch, 'staging'
 end
 
 task :eviterra do
-  load 'lib/recipes/unicorn'
-  set :use_sudo, true
+load 'lib/recipes/unicorn'
   set :rails_env, 'production'
-  set :rvm_type, :system
-  role :app, 'flexo.eviterra.com', 'deck.eviterra.com'
-  role :web, 'hermes.eviterra.com'
+  role :app, 'flexo.eviterra.com', 'deck.eviterra.com', 'calculon.eviterra.com'
+  role :web, 'hermes.eviterra.com', 'deck.eviterra.com', 'calculon.eviterra.com', 'flexo.eviterra.com'
   role :db, 'deck.eviterra.com', :primary => true
   role :daemons, 'deck.eviterra.com'
 end
@@ -86,12 +76,15 @@ namespace :deploy do
       run "ln -sf #{shared_path}/initializers/* #{latest_release}/config/initializers/; true"
   end
 
+  # по каким-то причинам assets:precompile все равно грохает его содержимое
+  # разобраться
   task :symlink_persistent_cache do
     run "ln -s #{shared_path}/cache #{latest_release}/tmp/cache"
   end
 
-  task :symlink_completer do
-    run "ln -s #{shared_path}/completer.dat #{latest_release}/tmp/completer.dat || echo #{shared_path}/completer.dat does not exist"
+  task :symlink_db_local do
+    run "rm -rf #{latest_release}/db/local"
+    run "ln -sf #{shared_path}/local #{latest_release}/db/local"
   end
 
   desc <<-DESC
@@ -123,6 +116,19 @@ namespace :deploy do
 
     puts "#{migrate_target} => #{directory}"
     run "cd #{directory}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} db:abort_if_pending_migrations || echo PLEASE DON\\\'T FORGET TO cap deploy:migrate!"
+  end
+
+  desc <<-DESC
+    Regenerates completer. If you need to create completer.dat on a new machine, \
+    you probably want to run
+
+      cap deploy:update_code deploy:completer
+  DESC
+  task :completer do
+    rake = fetch(:rake, "rake")
+    rails_env = fetch(:rails_env, "production")
+    directory = current_release
+    run "cd #{directory}; #{rake} RAILS_ENV=#{rails_env} completer:regen"
   end
 
   # daemons
@@ -170,7 +176,7 @@ namespace :deploy do
 
   after "deploy:finalize_update", "deploy:symlink_shared_configs"
   after "deploy:finalize_update", "deploy:symlink_persistent_cache"
-  after "deploy:finalize_update", "deploy:symlink_completer"
+  after "deploy:finalize_update", "deploy:symlink_db_local"
   after "deploy", "deploy:restart_services"
   # after "deploy:update_code", "deploy:check_for_pending_migrations"
   after "deploy:rollback", "deploy:restart_services"

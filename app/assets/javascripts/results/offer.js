@@ -47,20 +47,20 @@ addBook: function() {
 },
 updateBook: function() {
     var vp = this.selected.visiblePrice;
-    var cp = this.selected.carrierPrice; 
+    var cp = this.selected.carrierPrice;
     var ap = results.data.averagePrice;
     var state = [];
     if (vp < ap) {
         var percents = (ap - vp) / ap * 100;
         if (percents > 3) {
             var value = percents > 20 ? Math.round(percents) : percents.toFixed(1).replace('.0', '');
-            state.push(I18n.t('offer.price.average', {value: value + '%'}));            
+            state.push(I18n.t('offer.price.average', {value: value + '%'}));
         }
     }
     if (vp < cp) {
         state.push(I18n.t('offer.price.carrier', {value: cp - vp}));
     }
-    var price = decoratePrice(I18n.t('currencies.RUR', {count: vp}));    
+    var price = decoratePrice(I18n.t('currencies.RUR', {count: vp}));
     this.btitle.html(results.priceTemplate.absorb(price));
     if (state.length) {
         this.state.html('<div class="obst-wrapper"><table class="obs-table"><tr><td>' + results.stateTemplate + '</td><td class="obs-profit">' +  state.join('<br>') + '</td></tr></table></div>');
@@ -74,9 +74,10 @@ select: function(index, smooth) {
     for (var i = variant.segments.length; i--;) {
         this.summaries[variant.segments[i]].addClass('os-selected');
     }
-    this.selected = variant;
+    var disabled = smooth && this.book.hasClass('ob-disabled'); // Если переключили во время проверки доступности, анимация не нужна
     this.book.removeClass('ob-disabled ob-failed');
-    if (smooth) {
+    this.selected = variant;
+    if (smooth && !disabled) {
         var that = this;
         var button = this.book.find('.ob-button');
         button.animate({opacity: 0}, 150);
@@ -84,7 +85,7 @@ select: function(index, smooth) {
             that.updateBook();
             next();
         });
-        button.delay(100).animate({opacity: 1}, 150);    
+        button.delay(100).animate({opacity: 1}, 150);
     } else {
         this.updateBook();
     }

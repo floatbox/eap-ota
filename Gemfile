@@ -28,6 +28,13 @@ end
 
 gem 'evergreen', :require => 'evergreen/rails', :group => :development
 
+# логгеры. выберу только один
+gem 'SyslogLogger'
+gem 'syslogger'
+gem 'lumberjack'
+gem 'lumberjack_syslog_device'
+# для импорта zip файлов
+gem 'zip'
 gem 'money'
 gem 'kaminari'
 gem 'daemons'
@@ -58,8 +65,8 @@ gem 'mobile-fu'
 gem "devise", "~> 2.2.3"
 
 #gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
-gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'
-# gem 'mongo-rails-instrumentation'
+#gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'
+gem 'mongo-rails-instrumentation', :git => 'git://github.com/Eviterra/mongo-rails-instrumentation.git'
 
 gem 'haml'
 gem 'hpricot', require: false

@@ -179,7 +179,7 @@ loadSummary: function(values, process) {
         error: function() {
             results.header.show(I18n.t('timeout'), false);
         },
-        timeout: 15000
+        timeout: 30000
     });
 },
 restoreValues: function(data) {
