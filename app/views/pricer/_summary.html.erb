@@ -3,6 +3,7 @@
     data-carrier="<%= carrier.iata %>"
     data-flights="<%= segment_id(segment) %>"
     data-dpt="<%= time_in_minutes(segment.departure_time) %>"
+    data-arv="<%= time_in_minutes(segment.arrival_time) %>"
     data-duration="<%= segment.total_duration %>"
 >
 <div class="oss-carrier">

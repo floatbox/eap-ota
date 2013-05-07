@@ -73,6 +73,15 @@ initOffers: function() {
         var offset = $(this).closest('.offer').offset().top;
         $w.smoothScrollTo(Math.max(offset - 36 - results.header.height - 90, 0));
     });
+    this.el.on('click', '.ost-sort', function() {
+        var el = $(this);
+        var segment = el.closest('.o-segment');
+        var reverse = el.hasClass('ost-ascendant');
+        that.getOffer(el).sortSummaries(segment, 'data-' + el.attr('data-key'), reverse);
+        segment.find('.ost-descendant').removeClass('ost-descendant');
+        segment.find('.ost-ascendant').removeClass('ost-ascendant');
+        el.addClass(reverse ? 'ost-descendant' : 'ost-ascendant');
+    });
 },
 getOffer: function(el) {
     return el.closest('.offer').data('offer');
