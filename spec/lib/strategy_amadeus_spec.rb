@@ -88,11 +88,14 @@ describe Strategy::Amadeus do
   describe "#recommendation_from_booking" do
 
     before(:each) do
+      # лень сооружать подходящий flight_info
+      air_flight_info_result = mock(:air_flight_info_result, success?: false),
       amadeus.stub(
         pnr_retrieve:
           amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml'),
         ticket_display_tst:
           amadeus_response('spec/amadeus/xml/Ticket_DisplayTST_with_ticket.xml'),
+        air_flight_info: air_flight_info_result,
         pnr_ignore: nil
       )
     end

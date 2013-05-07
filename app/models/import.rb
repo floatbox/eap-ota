@@ -1,18 +1,44 @@
 # encoding: utf-8
 require 'digest/md5'
 require 'pathname'
+require 'zip'
+require 'tempfile'
 class Import < ActiveRecord::Base
 
-  def self.from_file(kind, filepath, basedir=nil)
+  # Dir[base + '/**/*'].each do |path|
+  #   next if File.directory? path
+  #   Import.from_file('air', path, basedir: base)
+  # end
+
+  def self.from_file(kind, filepath, opts={})
+    return from_zipfile(kind, filepath) if filepath =~ /.zip$/
+    basedir = opts[:basedir]
     filename =
       if basedir
         Pathname(filepath).relative_path_from( Pathname(basedir) ).to_s
       else
         File.basename(filepath)
       end
-    content = File.open(filepath, 'r:binary') { |f| f.read }
+    created_at = File.ctime(filepath)
+    content = File.read(filepath, encoding: 'binary')
+    find_or_create_by_content(content, kind: kind, filename: filename, created_at: created_at)
+  end
+
+  def self.from_zipfile(kind, filepath)
+    basename = File.basename(filepath)
+    Zip::ZipFile.open(filepath) do |zip_file|
+      zip_file.each do |f|
+        content = zip_file.read(f)
+        filename = basename + '/' + f.name
+        find_or_create_by_content(content, kind: kind, filename: f.name, created_at: f.time)
+      end
+    end
+  end
+
+  # оверрайд активрекордного метода, для скорости
+  def self.find_or_create_by_content(content, attrs)
     md5 = Digest::MD5.hexdigest(content)
-    find_or_create_by_md5(md5, kind: kind, content: content, filename: filename)
+    find_or_create_by_md5(md5, attrs.merge(content: content))
   end
 
   has_and_belongs_to_many :tickets

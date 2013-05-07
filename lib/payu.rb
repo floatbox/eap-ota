@@ -314,10 +314,10 @@ class Payu
   end
 
 
-  def get_stats
+  def get_stats(start_date, end_date)
     req = {}
-    req['startDate'] = (Date.today - 10.days).strftime("%Y-%m-%d")
-    req['endDate'] = (Date.today).strftime("%Y-%m-%d")
+    req['startDate'] = start_date.strftime("%Y-%m-%d")
+    req['endDate'] = end_date.strftime("%Y-%m-%d")
     req['merchant'] = @merchant
     req['timeStamp'] = Time.now.to_i.to_s
     req['signature'] = hash_string(

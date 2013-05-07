@@ -296,7 +296,8 @@ class Order < ActiveRecord::Base
         :discount,
         :our_markup,
         :agent_comments,
-        :subagent_comments
+        :subagent_comments,
+        :tour_code
 
       copy_attrs recommendation, self,
         :price_agent,

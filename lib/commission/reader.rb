@@ -123,6 +123,11 @@ class Commission::Reader
     opts[:subagent_comments] += line + "\n"
   end
 
+  # туркод, используется при выписке в downtown
+  def tour_code tour_code
+    opts[:tour_code] = tour_code
+  end
+
   # внутренние авиалинии
   def domestic
     opts[:domestic] = true

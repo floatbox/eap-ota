@@ -79,6 +79,7 @@ class BookingController < ApplicationController
     StatCounters.inc %W[enter.api_redirect.total]
   end
 
+  # дебажная формочка для API
   def api_form
     render 'api/form'
   end

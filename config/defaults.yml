@@ -20,14 +20,6 @@ api:
   rambler_url: 'http://in.avia.rambler.ru/eviterra/'
   send_to_rambler: no
   rambler_hash_size: 30
-  partners:
-   - yandex
-   - volmy
-   - momondo
-   - buruki
-   - airego
-   - aviasales
-   - globalet
   passwords: {}
   test:
     passwords:
@@ -68,10 +60,6 @@ amadeus:
       organization: NMC-UKRAIN
       password: AMADEUS
 payment:
-  # FIXME убить в локальных конфигах
-  use_discount: no
-  # FIXME убить в локальных конфигах
-  order_id_prefix: o
   skip_checksum_validation: yes
   # payture, payu, or no
   card_processing: payture
@@ -94,10 +82,7 @@ cash:
   corporate_commission: 0
 payture:
   commission: 2.85%
-  enabled: yes
   ref_prefix: o
-  # FIXME убить в локальных конфигах
-  order_id_prefix: o
   key: MerchantETerra
   host: sandbox.payture.com
   ssl: no
@@ -114,8 +99,6 @@ payture:
 payu:
   commission: 2.85%
   ref_prefix: payu_
-  # FIXME переключатель пока не используется
-  enabled: yes
   seller_key: 'w7I2R8~V7=dm5H7[r1k5'
   host: sandbox8ru.epayment.ro
   merchant: EVITERRA
@@ -138,15 +121,12 @@ sirena:
   timeout_full: 50
   host: localhost
   port: 8888
-  path: /
 geolocation:
   enabled: no
   production:
     enabled: yes
 mail:
   ticket_cc: ~
-  ticket_relpy_to: operator@eviterra.com
-  subscription_from: subscription@eviterra.com
   subscription_reply_to: operator@eviterra.com
   subscription_cc: subscription@eviterra.com
   invoice_to: bills@eviterra.com
