@@ -25,7 +25,9 @@ init: function() {
     }
     
     $(function() {
-        $w.scrollTop(0);
+        if (browser.platform !== 'iphone') {
+            $w.scrollTop(0);
+        }
         if (search.map.el.is(':visible')) {
             search.map.load();
         }
