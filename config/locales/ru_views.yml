@@ -362,7 +362,7 @@ ru:
       including_fee: "с учетом сервисного сбора"
       fare: "Тариф"
       taxes: "Таксы"
-      fee: "Cервисный сбор"
+      fee: "Сбор"
       delivery: "Доставка"
       discount: "Скидка"
       fare_compensation: 'Компенсация от тарифа'
