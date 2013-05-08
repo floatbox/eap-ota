@@ -9,11 +9,11 @@
 
     <div class="upf-field">
         <h6 class="upff-label"><%= f.label :password, 'Ваш пароль' %></h6>
-        <%= f.email_field :password, :class => 'upff-input' %>
+        <%= f.password_field :password, :class => 'upff-input' %>
     </div>
     <div class="upf-field">
         <h6 class="upff-label"><%= f.label :password_confirmation, 'Ещё разок пароль' %></h6>
-        <%= f.email_field :password_confirmation, :class => 'upff-input' %>
+        <%= f.password_field :password_confirmation, :class => 'upff-input' %>
     </div>
     <div class="upf-submit">
         <%= f.submit "Продолжить", :class => 'upf-button' %>
