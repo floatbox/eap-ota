@@ -108,15 +108,14 @@ discount "4%"
 # disabled "На DTT выгодней"
 commission "7%/5%"
 
-# прямая выписка на говноклассы
+# прямая выписка на говноклассы upd: с 9.05 авиацентр 5%/3%/2.5%
 example 'cdgsvo/i svocdg/x'
 strt_date "01.05.2013"
 agent "5% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
-subagent "5% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
+subagent "3% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
 subclasses "LVXTNIGWU"
-discount "4%"
-ticketing_method "direct"
-commission "5%/5%"
+discount "2.5%"
+commission "5%/3%"
 
 # интерлайн
 example 'aerdme dmeaer/ab'
