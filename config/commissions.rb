@@ -91,6 +91,7 @@ commission "12%/10.5%"
 # базовое вознаграждение ац для высоких c 01.04
 example 'cdgsvo/r svocdg/f'
 strt_date "01.04.2013"
+expr_date "20.05.2013"
 agent "9% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
 subagent "нет? ориентировочно 7"
 subclasses "FPRJCADSM"
@@ -98,9 +99,31 @@ discount "6%"
 important!
 commission "9%/7%"
 
-# базовое вознаграждение ац — мердж эконома с конца апреля 
+# базовое вознаграждение ац для высоких c 21.05
+example 'cdgsvo/r svocdg/f'
+strt_date "21.05.2013"
+expr_date "20.06.2013"
+agent "8% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
+subagent "6%"
+subclasses "FPRJCADSM"
+discount "4.5%"
+important!
+commission "8%/6%"
+
+# базовое вознаграждение ац для высоких c 21.06
+example 'cdgsvo/r svocdg/f'
+strt_date "21.06.2013"
+agent "7% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
+subagent "5%"
+subclasses "FPRJCADSM"
+discount "3.5%"
+important!
+commission "7%/5%"
+
+# базовое вознаграждение ац
 example 'cdgsvo/o svocdg/y'
 strt_date "21.04.2013"
+expr_date "20.05.2013"
 agent "C 21.04.13г. 7% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
 subagent "5%"
 subclasses "YHQBKO"
@@ -108,16 +131,56 @@ discount "4%"
 # disabled "На DTT выгодней"
 commission "7%/5%"
 
-# прямая выписка на говноклассы upd: с 9.05 авиацентр 5%/3%/2.5%
+# базовое вознаграждение ац c 21.05.2013 
+example 'cdgsvo/o svocdg/y'
+strt_date "21.05.2013"
+expr_date "20.06.2013"
+agent "C 21.05.13г. 6% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
+subagent "4%"
+subclasses "YHQBKO"
+discount "3%"
+# disabled "На DTT выгодней"
+commission "6%/4%"
+
+# базовое вознаграждение ац c 21.06.2013 
+example 'cdgsvo/o svocdg/y'
+strt_date "21.06.2013"
+agent "C 21.06.13г. 5% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
+subagent "3%"
+subclasses "YHQBKO"
+discount "2%"
+# disabled "На DTT выгодней"
+commission "6%/4%"
+
+# говноклассы с 9.05
 example 'cdgsvo/i svocdg/x'
-strt_date "01.05.2013"
+strt_date "09.05.2013"
+expr_date "20.05.2013"
 agent "5% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
 subagent "3% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
 subclasses "LVXTNIGWU"
 discount "2.5%"
 commission "5%/3%"
 
-# интерлайн
+# говноклассы с 21.05 
+example 'cdgsvo/i svocdg/x'
+strt_date "21.05.2013"
+expr_date "20.06.2013"
+agent "4% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
+subagent "2% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
+subclasses "LVXTNIGWU"
+discount "1%"
+commission "4%/2%"
+
+# говноклассы с 21.06 
+example 'cdgsvo/i svocdg/x'
+strt_date "21.06.2013"
+agent "3% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
+subagent "1% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
+subclasses "LVXTNIGWU"
+commission "3%/1%"
+
+# интерлайн c 21.05.2013 (не меняется)
 example 'aerdme dmeaer/ab'
 agent "5% Interline с участком Трансаэро. Без участка UN запрещено."
 subagent "3% от тарифа на рейсы Interline c участком UN. Запрещена продажа на рейсы interline без
