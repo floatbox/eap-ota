@@ -57,6 +57,11 @@ class Order < ActiveRecord::Base
     sold_tickets.present? && sold_tickets.all?(&:show_vat) && sold_tickets.every.office_id.uniq != ['FLL1S212V']
   end
 
+  def calculated_payment_status
+    return 'charged' if payments.any?{|p| p.class.in?([PaytureCharge, PayuCharge]) && p.status == 'charged'}
+    return 'blocked' if payments.last.class.in?([PaytureCharge, PayuCharge]) && payments.last.status == 'blocked'
+  end
+
   def self.sources
     [ 'amadeus', 'sirena', 'other']
   end
