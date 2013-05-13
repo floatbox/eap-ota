@@ -3016,7 +3016,6 @@ example 'svocdg cdgsvo'
 agent "5% DTT"
 subagent "3% DTT"
 discount "2%"
-disabled "12.05.2013 перестал выписываться в downtown"
 commission "5%/3%"
 
 carrier "S7", "S7 AIRLINES"
