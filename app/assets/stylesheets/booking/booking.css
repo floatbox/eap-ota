@@ -111,7 +111,8 @@
 .bft-counter {
     float: right;
     width: 260px;
-    height: 73px;
+    height: 137px;
+    margin-bottom: -30px;
     background: #3581c0;
     text-align: center;
     color: #FFF;
@@ -120,16 +121,21 @@
     background: #bf564d;
 }
 .bftc-title {
-    padding-top: 10px;
+    padding-top: 27px;
 }
 .bftc-value {
     font-weight: bold;
     font-size: 28px;
     line-height: 36px;
 }
+.bft-title {
+    font-size: 21px;
+    margin: 0 274px 5px 14px;
+    padding-top: 8px;
+}
 .bft-description {
     margin: 0 274px 0 14px;
-    padding: 8px 0 0;
+    padding-bottom: 8px;
 }
 
 /* Нижняя часть */
