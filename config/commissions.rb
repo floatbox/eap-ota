@@ -3368,3 +3368,10 @@ carrier "PK", "Pakistan International Airlines"
 agent "1 руб от всех опубл тарифов на собств рейсы PK"
 subagent "0,05 руб от всех опубл тарифов на собств рейсы PK"
 commission "1/0.05"
+
+carrier "BV", "BLUE PANORAMA AIRLINES S.P.A. (АВИАРЕПС)"
+#######################################
+
+agent "1EURO (5 РУБ) с билета на рейсы BV +2% сбор АЦ"
+subagent "5 руб"
+commission "1eur/5"
