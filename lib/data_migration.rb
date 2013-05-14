@@ -8,31 +8,94 @@ require 'csv'
 
 module DataMigration
 
-  def self.update_payment_statuses
+  def self.create_payments_csv
     PaperTrail.controller_info = {:done => 'Payu status sync'}
     d = Date.parse('2012-12-01')
-    res = {}
+    res = []
     payu = Payu.new
     while d < Date.today do
-      payu.get_stats(d, d + 1.month)["data"].each do |p|
-      ref = p["External Reference No"]
-        if ref.present? && (payment = Payment.find_by_ref(ref))
-          puts p["Order status"]
-          puts p["External Reference No"]
-          external_status = PayuCharge::STATUS_MAPPING[p["Order status"]]
-          begin
-            external_charged_on = Time.parse(p['Order Finish Date']).to_date
-          rescue
-            external_charged_on = nil
-          end
-          if payment && (external_status != payment.status || (external_status == 'charged' && external_charged_on != payment.charged_on))
-            res[payment.id] = {:charged_on => payment.charged_on, :external_charged_on => external_charged_on, :status => payment.status, :external_status => external_status, :external_status_raw => p["Order status"]}
-          end
-        end
-      end
+      res += payu.get_stats(d, d + 1.month)["data"].map{|r| {:status => r["Order status"], :ref => r['External Reference No'], :date => r['Order Finish Date']}}
       d += 1.month
     end
-    res
+    res.uniq!
+    CSV.open('payments.csv'  ,'w') do |csv|
+      csv << %W[id charged_on status ref external_charged_on external_status external_status_raw]
+      payment = nil
+      res.each do |r|
+        payment = if r[:status] == 'REFUND'
+          PayuRefund.find_by_ref(r[:ref])
+        else
+          PayuCharge.find_by_ref(r[:ref])
+        end
+        external_status = PayuCharge::STATUS_MAPPING[r[:status]]
+        begin
+          external_charged_on = Time.parse(r[:date]).to_date
+        rescue
+          external_charged_on = nil
+        end
+        charged_on = payment && payment.charged_on
+        status = payment && payment.status
+        p_id = payment && payment.id
+        if !payment || (external_status != status && !(r[:status] == 'PENDING' && ['threeds', 'rejected'].include?(payment.status))) || (external_status == 'charged' && external_charged_on != charged_on)
+          csv <<  [p_id, charged_on, status, r[:ref],  external_charged_on, external_status, r[:status]]
+        end
+      end
+    end
+  end
+
+  def self.sync_order_status_from_payments
+    res = {}
+    Order.where('created_at > ?', 7.month.ago).includes(:payments).map do |o|
+     if o.calculated_payment_status && o.calculated_payment_status != o.payment_status
+       res[o.id] = [o.calculated_payment_status, o.payment_status]
+      end
+    end
+  end
+
+  def self.sync_payments_with_payu
+    PaperTrail.controller_info = {:done => 'Payu status sync'}
+    d = Date.parse('2012-11-01')
+    res = []
+    payu = Payu.new
+    while d < Date.today do
+      res += payu.get_stats(d, d + 1.month)["data"].map{|r| {:status => r["Order status"], :ref => r['External Reference No'], :date => r['Order Finish Date'], :cr_date => r['Order Date'], :price => r['Total Price']}}
+      d += 1.month
+    end
+    res.uniq!
+    report = ''
+    res.each do |r|
+      payment = if r[:status] == 'REFUND'
+        PayuRefund.find_by_ref_and_price(r[:ref], r[:price])
+      else
+        PayuCharge.find_by_ref(r[:ref])
+      end
+      external_status = PayuCharge::STATUS_MAPPING[r[:status]]
+      begin
+        external_charged_on = Time.parse(r[:date]).to_date
+      rescue
+        external_charged_on = nil
+      end
+      charged_on = payment && payment.charged_on
+      status = payment && payment.status
+      p_id = payment && payment.id
+      if payment && status =~ /processing/ && external_status
+        #report << "#{payment.id} #{status} -> #{external_status}\n"
+        #payment.status = external_status
+        if external_status == 'charged' && external_charged_on
+          #report << "#{payment.id} #{charged_on} -> #{external_charged_on} (#{r[:cr_date]})\n"
+          #payment.charged_on = external_charged_on
+        end
+        #payment.save
+      elsif payment && r[:status] == 'REFUND' && external_charged_on && external_charged_on != charged_on
+        #report << "refund #{payment.id} #{status} -> #{external_status}\n"
+        #report << "refund #{payment.id} #{charged_on} -> #{external_charged_on} (#{r[:cr_date]})\n"
+        #payment.charged_on = external_charged_on
+        #payment.status = external_status
+        #payment.save
+      elsif payment && external_status != status && [external_status, status].include?('charged') && !(status == 'canceled' && external_status == 'charged') && external_charged_on < 15.days.ago.to_date
+        report << "#{payment.id}(#{status} should be #{external_status})\n"
+      end
+    end
   end
 
   # set price acquiring compensation and price difference
