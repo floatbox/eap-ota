@@ -81,6 +81,10 @@ class Recommendation
     @interline ||= other_marketing_carrier_iatas.any?
   end
 
+  def code_share?
+    flights.any?(&:code_share?)
+  end
+
   def international?
     country_iatas.uniq.size > 1
   end

@@ -3274,7 +3274,7 @@ example 'svocdg/ab:s7 cdgsvo'
 example 'DMEVIE/HG:S7/O'
 agent ""
 subagent ""
-check { not includes_only(operating_carrier_iatas, 'S7') }
+check { code_share? }
 our_markup "400"
 important!
 commission "0%/0%"
