@@ -763,26 +763,42 @@ commission "1%/0.05"
 carrier "DL", "DELTA AIRLINES"
 ########################################
 
-example 'svojfk/s'
+example 'svojfk/d jfksvo/m'
+example 'jfksvo/x'
+strt_date "15.05.2013"
+agent "1232 DL/AFKL/AZ US-EMEAI Consolidator Commission Program Amendment #1"
+agent "Если, кратко, то C,D,Z,I Y,B,M,S,H,Q W,K,L,U,T,X,V"
+agent "Только перелеты в Америку из России и наоборот (RT и OW), только СОБСТВЕННЫЕ рейсы ( никаких код-шерингов), авиакомпании могут комбинироваться в одном бронировании. Их комиссия 8%, наша 6%, никаких особенностей в выписке"
+subagent "6%"
+subclasses "CDZIYBMSHQWKLUTXV"
+check {
+  includes(country_iatas.first, 'RU') and includes_only(country_iatas, 'US RU') or
+  includes(country_iatas.first, 'US') and includes_only(country_iatas, 'US RU')
+}
+ticketing_method "downtown"
+discount "5%"
+commission "8%/6%"
+
+example 'accjfk/s'
 example 'zigjfk/i jfkzig/s'
-example 'svojfk/k/dl:dl jfksvo/k/dl:dl'
+example 'accjfk/k/dl:dl jfkacc/k/dl:dl'
 expr_date "31.03.2014"
 agent "5%"
 subagent "3%"
 subclasses "SIQKLUT"
-check { includes_only(country_iatas.first, 'RU SN GH') and includes_only(country_iatas, 'US RU SN GH') and includes_only(operating_carrier_iatas, 'DL') }
+check { includes_only(country_iatas.first, 'SN GH') and includes_only(country_iatas, 'US SN GH') and includes_only(operating_carrier_iatas, 'DL') }
 ticketing_method "downtown"
 discount "1.5%"
 commission "5%/3%"
 
-example 'svojfk/d/az:dl'
+example 'accjfk/d/az:dl'
 example 'zigjfk/i/az:dl jfkzig/s/az:dl'
 example 'accjfk/l/az:dl jfkacc/n/az:dl'
 expr_date "31.03.2014"
 agent "5%"
 subagent "3%"
 subclasses "DIKVTNSL"
-check { includes_only(country_iatas.first, 'RU SN GH') and includes_only(country_iatas, 'US RU SN GH') and includes_only(operating_carrier_iatas, 'AZ') }
+check { includes_only(country_iatas.first, 'SN GH') and includes_only(country_iatas, 'US SN GH') and includes_only(operating_carrier_iatas, 'AZ') }
 ticketing_method "downtown"
 important!
 discount "1.5%"
@@ -810,6 +826,7 @@ agent    "1% от опубл. тарифа DL при внутренних пер
 subagent "0,5% от опубл. тарифа DL при внутренних перелетах по США"
 interline :no, :yes
 domestic
+important!
 ## discount "0.3%"
 commission "1%/0.5%"
 
