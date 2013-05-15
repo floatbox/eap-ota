@@ -5,7 +5,7 @@ module ProfileOrder
   extend ActiveSupport::Concern
 
   included do
-    scope :profile_orders, where("pnr_number != ''").order("created_at DESC")
+    scope :profile_orders, where("pnr_number != ''").where(:ticket_status => ['booked', 'ticketed']).order("created_at DESC")
   end
 
   def can_use? current_customer
