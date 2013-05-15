@@ -53,7 +53,14 @@
           <% end %>
           <div class="pod-pnr"><a href="<%= profile_show_pnr_path(:id => order.pnr_number) %>" target="_blank">Маршрут квитанция</a></div>
         </div>
-    </div>    
+    </div>
+
+    <% if admin_user %>
+    <div class="po-debug">
+        статус <%= order.profile_status %>
+    </div>
+    <% end %>
+
     </td>
 </tr>
 </tbody>
