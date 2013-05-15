@@ -60,6 +60,11 @@ class Order < ActiveRecord::Base
     sold_tickets.present? && sold_tickets.all?(&:show_vat) && sold_tickets.every.office_id.uniq != ['FLL1S212V']
   end
 
+  def calculated_payment_status
+    return 'charged' if payments.any?{|p| p.class.in?([PaytureCharge, PayuCharge]) && p.status == 'charged'}
+    return 'blocked' if payments.last.class.in?([PaytureCharge, PayuCharge]) && payments.last.status == 'blocked'
+  end
+
   def self.sources
     [ 'amadeus', 'sirena', 'other']
   end
@@ -127,7 +132,7 @@ class Order < ActiveRecord::Base
   def set_prices
     self.fee_scheme = Conf.site.fee_scheme if new_record? || fee_scheme.blank?
     unless has_data_in_tickets?
-      self.price_acquiring_compensation = price_payment_commission if price_acquiring_compensation == 0 || pricing_method == 'corporate_0001'
+      self.price_acquiring_compensation = price_payment_commission if !fix_price
       self.price_difference = fix_price? ? price_with_payment_commission - price_real : 0
     end
   end
@@ -299,7 +304,8 @@ class Order < ActiveRecord::Base
         :discount,
         :our_markup,
         :agent_comments,
-        :subagent_comments
+        :subagent_comments,
+        :tour_code
 
       copy_attrs recommendation, self,
         :price_agent,

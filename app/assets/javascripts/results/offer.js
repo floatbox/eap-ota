@@ -74,9 +74,10 @@ select: function(index, smooth) {
     for (var i = variant.segments.length; i--;) {
         this.summaries[variant.segments[i]].addClass('os-selected');
     }
-    this.selected = variant;
+    var disabled = smooth && this.book.hasClass('ob-disabled'); // Если переключили во время проверки доступности, анимация не нужна
     this.book.removeClass('ob-disabled ob-failed');
-    if (smooth) {
+    this.selected = variant;
+    if (smooth && !disabled) {
         var that = this;
         var button = this.book.find('.ob-button');
         button.animate({opacity: 0}, 150);
@@ -155,28 +156,6 @@ showCompatible: function() {
     this.summaries.all.each(function() {
         var el = $(this);
         el.toggleClass('os-disabled', !compatible[el.attr('data-flights')]);
-    });
-    //this.sortSegments();
-},
-sortSegments: function() {
-    this.el.find('.o-segment').each(function() {
-        var segment = $(this), items = [];
-        var sorting = function(a, b) {
-            return (b.selected - a.selected) || (a.disabled - b.disabled) || (a.dpt - b.dpt);
-        };
-        segment.find('.os-summary').each(function(i) {
-            var el = $(this);
-            items[i] = {
-                el: el,
-                selected: el.hasClass('os-selected') ? 1 : 0,
-                disabled: el.hasClass('os-disabled') ? 1 : 0,
-                dpt: Number(el.attr('data-dpt'))
-            };
-        });
-        items = items.sort(sorting);
-        for (var i = items.length; i--;) {
-            items[i].el.prependTo(segment);
-        }
     });
 },
 otherSegments: function() {
@@ -258,6 +237,25 @@ otherPrices: function() {
             }
         });
     });
+},
+sortSummaries: function(segment, key, reverse) {
+    var items = [];
+    var order = reverse ? 1 : -1;
+    segment.find('.os-summary').each(function(i) {
+        var el = $(this);
+        items[i] = {
+            el: el,
+            value: Number(el.attr(key)),
+            index: i
+        };
+    });
+    items = items.sort(function(a, b) {
+        return (b.value - a.value) * order || a.index - b.index;
+    });
+    for (var i = 0, l = items.length; i < l; i++) {
+        segment.append(items[i].el);
+    }
+    segment.find('.os-more').appendTo(segment);
 },
 hideExcess: function(limit) {
     var that = this;

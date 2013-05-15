@@ -313,6 +313,22 @@ class Payu
     StateResponse.new( response.parsed_response )
   end
 
+
+  def get_stats(start_date, end_date)
+    req = {}
+    req['startDate'] = start_date.strftime("%Y-%m-%d")
+    req['endDate'] = end_date.strftime("%Y-%m-%d")
+    req['merchant'] = @merchant
+    req['timeStamp'] = Time.now.to_i.to_s
+    req['signature'] = hash_string(
+       @seller_key, req,
+       %W[ merchant startDate endDate timeStamp ]
+    )
+
+    #HTTParty.get("https://secure.payu.ru/reports/orders", :query => req)
+    HTTParty.get("https://secure.payu.ru/reports/orders?merchant=#{req['merchant']}&startDate=#{req['startDate']}&endDate=#{req['endDate']}&timeStamp=#{req['timeStamp']}&signature=#{req['signature']}")
+  end
+
   private
   def validate! opts, *required_keys
     unless (required_keys & opts.keys) == required_keys

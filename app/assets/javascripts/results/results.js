@@ -54,6 +54,7 @@ show: function(instant) {
 hide: function() {
     booking.abort();
     var that = this, context;
+    this.content.stopExpiration();
     this.header.edit.hide();
     this.header.buttonEnabled.hide();
     this.header.button.show();
@@ -62,13 +63,13 @@ hide: function() {
     if ($.support.fixedPosition && !browser.ios) {
         search.el.show();
         search.map.resize();
-        search.map.load();
         context = $w.scrollTop(this.header.position());
         context.delay(100).smoothScrollTo(0, 450);
         this.header.el.removeClass('rh-fixed');
     } else {
         context = search.el.delay(100).slideDown(600);
     }
+    search.map.load();
     context.delay(100).queue(function(next) {
         page.header.removeClass('fixed');
         that.header.buttonEnabled.fadeIn(150);
@@ -170,6 +171,13 @@ processCollections: function() {
                 that.slide();
             }
         }, 30);
+        var human = this.content.el.find('.r-human').html();
+        if (human != this.data.options.human) {
+            this.data.options.human = human;
+            this.updateTitles();
+            this.header.summary.html(this.data.titles.header); // попытка починить баг с пропавшим первым классом
+        }
+        this.content.startExpiration();
         _kmq.push(['record', 'RESULTS: displayed']);
     } else {
         this.message.toggle('empty');
@@ -279,7 +287,11 @@ extendData: function() {
                 if (i !== s) parts.push(segments[i][mw ? 'arvto_short' : 'arvto']);
             }
             var direction = parts.enumeration(I18n.t('nbsp_and'));
-            titles[s] = I18n.t(mw ? 'few' : 'one', {scope: 'offer.segment.incompatible', direction: direction});
+            if (mw) {
+                titles[s] = I18n.t('offer.segment.incompatible.few', {direction: '</p><p class="oss-incompatible">' + direction}).replace(' </p>', '&nbsp;</p>');
+            } else {
+                titles[s] = I18n.t('offer.segment.incompatible.one', {direction: direction});
+            }
         }
     }
     this.data.ostitles = titles;

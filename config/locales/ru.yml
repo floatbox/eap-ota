@@ -138,6 +138,7 @@ ru:
         original_price_tax_as_string: "Таксы в валюте офиса выписки"
         original_price_penalty_as_string: "Штраф в валюте офиса выписки"
         rate: "Курс исходной валюты на момент выписки"
+        dept_date: "Дата вылета"
 
         <<: *PRICING_ATTRIBUTES
       payment:

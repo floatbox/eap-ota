@@ -3,6 +3,7 @@
     data-carrier="<%= carrier.iata %>"
     data-flights="<%= segment_id(segment) %>"
     data-dpt="<%= time_in_minutes(segment.departure_time) %>"
+    data-arv="<%= time_in_minutes(segment.arrival_time) %>"
     data-duration="<%= segment.total_duration %>"
 >
 <div class="oss-carrier">
@@ -39,11 +40,16 @@
     </div>
     <div class="oss-arv">
         <h5 class="oss-time"><%= fmt_time(segment.arrival_time) %></h5>
+        <p class="oss-airport">
+        <% if segment.arrival_date != segment.departure_date %>
+            <span class="oss-date"><%= human_date_short(segment.arrival_date) %></span>
+        <% end %>
         <% if segment_country[:arv] %>
-            <p class="oss-airport"><%= dict(segment.arrival.city) %></p>
+            <%= dict(segment.arrival.city) %>
         <% else %>
-            <p class="oss-airport"><%= dict(segment.arrival) %><% if segment.arrival_term %>&nbsp;<span class="ossa-term"><%= segment.arrival_term %></span><% end %></p>
-        <% end %>        
+            <%= dict(segment.arrival) %><% if segment.arrival_term %>&nbsp;<span class="ossa-term"><%= segment.arrival_term %></span><% end %>
+        <% end %>
+        </p>
     </div>
 </div>
 <div class="oss-line"></div>

@@ -71,7 +71,16 @@ initOffers: function() {
     });
     this.el.delegate('.o-book .obs-cancel', 'click', function() {
         var offset = $(this).closest('.offer').offset().top;
-        $w.smoothScrollTo(offset - 148);
+        $w.smoothScrollTo(Math.max(offset - 36 - results.header.height - 90, 0));
+    });
+    this.el.on('click', '.ost-sort', function() {
+        var el = $(this);
+        var segment = el.closest('.o-segment');
+        var reverse = el.hasClass('ost-ascendant');
+        that.getOffer(el).sortSummaries(segment, 'data-' + el.attr('data-key'), reverse);
+        segment.find('.ost-descendant').removeClass('ost-descendant');
+        segment.find('.ost-ascendant').removeClass('ost-ascendant');
+        el.addClass(reverse ? 'ost-descendant' : 'ost-ascendant');
     });
 },
 getOffer: function(el) {
@@ -106,5 +115,23 @@ select: function(id) {
 },
 selectFirst: function() {
     this.select(this.tabs.find('.rt-item:not(.rt-disabled)').attr('data-tab'));
+},
+startExpiration: function() {
+    var that = this;
+    this.stopExpiration();
+    this.expTimer = setTimeout(function() {
+        var el = $('<div/>').addClass('results-expired').html('С момента поиска результаты могли устареть. <span class="link rexp-link">Обновите поиск</span>');
+        el.find('.rexp-link').on('click', function() {
+            results.load();
+            results.content.el.hide();
+            results.filters.el.hide();
+            results.message.el.show();
+        });
+        el.appendTo(that.el).fadeIn(250);
+    }, 1800000);
+},
+stopExpiration: function() {
+    clearTimeout(this.expTimer);
+    this.el.find('.results-expired').remove();
 }
 };

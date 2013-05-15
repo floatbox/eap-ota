@@ -60,6 +60,7 @@ module BookingEssentials
     @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
 
     if @order_form.counts_contradiction
+      StatCounters.inc %W[pay.errors.counts_contradiction]
       if @order_form.update_price_and_counts
         return :new_price
       else

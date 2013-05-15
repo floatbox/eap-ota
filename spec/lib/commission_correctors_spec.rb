@@ -6,8 +6,7 @@ describe Commission::Correctors do
 
   describe ":twopercent" do
     let :commission_class do
-      Class.new do
-        include Commission::Rules
+      Commission::Reader.new.define do
         defaults :corrector => :twopercent, :consolidator => '2%'
 
         # авиацентр не берет доп комиссию

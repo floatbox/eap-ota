@@ -39,10 +39,16 @@ class Carrier < ActiveRecord::Base
     end
   end
 
+  # используется в календаре. выглядит криво
   # FIXME грохнуть
+  # FIXME нарушена логика? ищем что-то прямо противоположное названию?
   def self.non_commissioned_iatas
-    (where('consolidator_id is NULL AND iata != ""').find_all{|a| Commission.commissions[a.iata]}).to_a[0..98].collect(&:iata)
-    end
+    iatas = commissioned_iatas
+    where('consolidator_id is NULL AND iata != ""')
+      .pluck(:iata)
+      .select{|a| iatas.include?(a) }
+      .first(99)
+  end
 
   def self.commissioned_iatas
     Commission.all_carriers

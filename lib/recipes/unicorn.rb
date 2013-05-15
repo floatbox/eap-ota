@@ -9,19 +9,19 @@ namespace :deploy do
   end
 
   task :stop, :roles => :app, :except => { :no_release => true } do
-    run "#{try_sudo} kill `cat #{unicorn_pid}`"
+    run "kill `cat #{unicorn_pid}`"
   end
 
   task :graceful_stop, :roles => :app, :except => { :no_release => true } do
-    run "#{try_sudo} kill -s QUIT `cat #{unicorn_pid}`"
+    run "kill -s QUIT `cat #{unicorn_pid}`"
   end
 
   task :reload, :roles => :app, :except => { :no_release => true } do
-    run "#{try_sudo} kill -s USR2 `cat #{unicorn_pid}`"
+    run "kill -s USR2 `cat #{unicorn_pid}`"
   end
 
   task :restart, :roles => :app, :except => { :no_release => true } do
-    run "cd #{current_path} && #{try_sudo} /usr/bin/sv restart /etc/service/unicorn_eviterra"
+    run "sudo /usr/bin/sv restart /etc/service/unicorn_eviterra"
   end
 
 end

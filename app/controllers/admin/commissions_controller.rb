@@ -1,11 +1,11 @@
 # encoding: utf-8
 class Admin::CommissionsController < Admin::BaseController
   def index
-    @commissions = Commission.all
+    @commissions = book.all
   end
 
   def table
-    @commissions = Commission.all
+    @commissions = book.all
     @as_table = true
     render :index
   end
@@ -20,7 +20,14 @@ class Admin::CommissionsController < Admin::BaseController
       # elsif params[:terminal].present?
       #
       end
-    @commissions_with_reasons = Commission.all_with_reasons_for(@recommendation)
+    @commissions_with_reasons = book.all_with_reasons_for(@recommendation)
+  end
+
+  private
+
+  # TODO задел на работу с несколькими коллекциями
+  def book
+    Commission.default_book
   end
 
 end

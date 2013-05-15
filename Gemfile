@@ -28,6 +28,13 @@ end
 
 gem 'evergreen', :require => 'evergreen/rails', :group => :development
 
+# логгеры. выберу только один
+gem 'SyslogLogger'
+gem 'syslogger'
+gem 'lumberjack'
+gem 'lumberjack_syslog_device'
+# для импорта zip файлов
+gem 'zip'
 gem 'money'
 gem 'central_bank_of_russia'
 gem 'kaminari'

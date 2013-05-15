@@ -68,7 +68,7 @@ module Eviterra
     config.assets.version = '1.0'
 
     # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-    config.assets.precompile += %w( home.js home.css typus/application.css typus/application.js )
+    config.assets.precompile += %w( home.js home.css common.js common.css typus/application.css typus/application.js )
 
     # Не знаю, как это вопхать в инициализатор
     console do

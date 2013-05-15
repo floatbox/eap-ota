@@ -25,12 +25,13 @@
 #results-tabs {
     margin-bottom: 20px;
     padding-top: 22px;
-    background: url(/images/common/dark.jpg) #373941;    
+    background: url(/images/common/dark.jpg) #373941;
     font-weight: bold;
     font-size: 18px;
     line-height: 20px;
     letter-spacing: -0.03em;
     color: #FFF;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 #results-tabs .wrap {
     width: 988px;
@@ -40,7 +41,7 @@
     float: left;
     height: 20px;
     margin-bottom: -1px;
-    padding: 12px 14px 13px;    
+    padding: 12px 14px 13px;
     cursor: pointer;
 }
 .rt-selected {
@@ -65,7 +66,7 @@
 .r-subscription {
     margin: 20px 0 10px 16px;
     padding: 16px 20px;
-    background: #EDEDE3;   
+    background: #EDEDE3;
 }
 .rs-title {
     margin: 0 0 5px;
@@ -94,4 +95,22 @@
 .rs-like {
     margin: 10px 0 0;
     height: 21px;
+}
+
+/* Expired */
+.results-expired {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 20;
+    width: 600px;
+    margin-left: -320px;
+    padding: 18px 20px;
+    border: 1px solid #debf14;
+    background: #fdfbea;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.35);
+    font-size: 20px;
+    line-height: 22px;
+    text-align: center;
 }

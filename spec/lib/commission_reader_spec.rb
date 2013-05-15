@@ -2,15 +2,13 @@
 
 require 'spec_helper'
 
-describe Commission::Rules do
+describe Commission::Reader do
 
   include Commission::Fx
 
   context "just one commission" do
     let :commission_class do
-      Class.new do
-        include Commission::Rules
-
+      Commission::Reader.new.define do
         carrier 'FV'
         commission '2%/3'
       end
@@ -22,15 +20,13 @@ describe Commission::Rules do
 
     it "should find a commission for correct recommendation" do
       recommendation = Recommendation.example('SVOCDG', :carrier => 'FV')
-      commission_class.find_for(recommendation).should be_a(commission_class)
+      commission_class.find_for(recommendation).should be_a(Commission::Rule)
     end
   end
 
   context "two carriers, three simple commissions" do
     let :commission_class do
-      Class.new do
-        include Commission::Rules
-
+      Commission::Reader.new.define do
         carrier 'FV'
         commission '2%/3'
         commission '1%/0'
@@ -63,15 +59,15 @@ describe Commission::Rules do
 
   context "all the rules" do
     let :commission_class do
-      Class.new do
-        include Commission::Rules
-
+      Commission::Reader.new.define do
         carrier 'FV'
         consolidator '1%'
         blanks 50
         discount '2%'
         our_markup '1%'
         disabled "because of Caturday, that's why"
+        check { true }
+        tour_code "FOOBAR"
         commission '2%/3'
       end
     end
@@ -90,13 +86,14 @@ describe Commission::Rules do
     its(:discount) {should == Fx('2%')}
     its(:disabled) {should == "because of Caturday, that's why"}
     its(:disabled?) {should be_true}
+    its(:tour_code) {should == "FOOBAR"}
+    its(:check) {should be_an_instance_of(Proc)}
   end
 
   context "setting defaults" do
 
     let :commission_class do
-      Class.new do
-        include Commission::Rules
+      Commission::Reader.new.define do
         defaults :system => :amadeus,
           :ticketing_method => :aviacenter,
           :consolidator => '2%',
@@ -134,8 +131,7 @@ describe Commission::Rules do
       context "called with wrong key" do
         it "should raise error" do
           expect {
-            Class.new do
-              include Commission::Rules
+            Commission::Reader.new.define do
               defaults :wrongkey => :wrongvalue
             end
           }.to raise_error(ArgumentError)
@@ -158,8 +154,7 @@ describe Commission::Rules do
       context "called with wrong key" do
         it "should raise error" do
           expect {
-            Class.new do
-              include Commission::Rules
+            Commission::Reader.new.define do
               carrier 'FV'
               carrier_defaults :wrongkey => :wrongvalue
             end
@@ -172,23 +167,21 @@ describe Commission::Rules do
       subject { commission_class.for_carrier('AB') }
       it {should be_an(Array)}
       its(:size) { should == 2 }
-      its(:first) { should be_an(commission_class) }
+      its(:first) { should be_a(Commission::Rule) }
     end
 
     describe ".all" do
       subject { commission_class.all }
       it {should be_an(Array)}
       its(:size) { should == 3 }
-      its(:first) { should be_an(commission_class) }
+      its(:first) { should be_a(Commission::Rule) }
     end
   end
 
   context "several commissions for a company" do
 
     let :commission_class do
-      Class.new do
-        include Commission::Rules
-
+      Commission::Reader.new.define do
         carrier 'FV'
         commission '2%/3'
 
@@ -223,7 +216,7 @@ describe Commission::Rules do
     }
 
     specify {
-      commission_class.find_for(recommendation).should be_a(commission_class)
+      commission_class.find_for(recommendation).should be_a(Commission::Rule)
     }
 
     specify {
@@ -268,9 +261,7 @@ describe Commission::Rules do
   context "no_commission commissions for a company" do
 
     let :commission_class do
-      Class.new do
-        include Commission::Rules
-
+      Commission::Reader.new.define do
         carrier 'AB'
 
         agent "first"
@@ -326,9 +317,7 @@ describe Commission::Rules do
   describe "commission definitions" do
     context "unknown agent commission" do
       let :commission_class do
-        Class.new do
-          include Commission::Rules
-
+        Commission::Reader.new.define do
           carrier 'FV'
           commission '/2%'
         end
@@ -342,9 +331,7 @@ describe Commission::Rules do
 
     context "unknown subagent commission" do
       let :commission_class do
-        Class.new do
-          include Commission::Rules
-
+        Commission::Reader.new.define do
           carrier 'FV'
           commission '2%/'
         end
@@ -363,10 +350,10 @@ describe Commission::Rules do
       match do |subject_commission|
         begin
           # FIXME сделать другой выключатель проверки интерлайнов
-          old, Commission.skip_interline_validity_check = Commission.skip_interline_validity_check, false
+          old, Commission::Rule.skip_interline_validity_check = Commission::Rule.skip_interline_validity_check, false
           @reason = subject_commission.turndown_reason(recommendation)
         ensure
-          Commission.skip_interline_validity_check = old
+          Commission::Rule.skip_interline_validity_check = old
         end
         ! @reason
       end
@@ -387,8 +374,7 @@ describe Commission::Rules do
     # определяет класс комиссий с единственным правилом и возвращает это правило
     def commission(&block)
 
-      Class.new do
-        include Commission::Rules
+      Commission::Reader.new.define do
         # FIXME дефолт для Recommendation.example
         carrier 'SU'
         # здесь как бы выполняется блок определения комиссии
@@ -405,7 +391,8 @@ describe Commission::Rules do
     let(:interline_but_first)      { Recommendation.example('SVOCDG CDGSVO/AB') }
     let(:interline_absent)         { Recommendation.example('SVOCDG/AB CDGSVO/AB') }
     let(:interline_half)           { Recommendation.example('SVOCDG/AB CDGSVO') }
-    let(:interline_less_than_half) { Recommendation.example('SVOCDG/AB CDGNCE NCESVO/AB') }
+    let(:interline_less_than_half) { Recommendation.example('SVOCDG CDGNCE NCESVO/AB') }
+    let(:interline_more_than_half) { Recommendation.example('SVOCDG/AB CDGNCE/AB NCESVO') }
 
     describe "no interline rules specified (defaults to no interline allowed)" do
       subject do
@@ -443,6 +430,7 @@ describe Commission::Rules do
       it {should match_recommendation( interline ) }
       it {should match_recommendation( interline_but_first ) }
       it {should match_recommendation( interline_half ) }
+      it {should match_recommendation( interline_more_than_half ) }
       it {should_not match_recommendation( interline_absent ) }
     end
 
@@ -466,7 +454,21 @@ describe Commission::Rules do
       end
       it {should_not match_recommendation( no_interline ) }
       it {should match_recommendation( interline_half ) }
-      it {should_not match_recommendation( interline_less_than_half ) }
+      it {should match_recommendation( interline_less_than_half ) }
+      it {should_not match_recommendation( interline_more_than_half ) }
+      it {should_not match_recommendation( interline_absent ) }
+    end
+
+    describe "interline :less_than_half" do
+      subject do
+        commission do
+          interline :less_than_half
+        end
+      end
+      it {should_not match_recommendation( no_interline ) }
+      it {should_not match_recommendation( interline_half ) }
+      it {should match_recommendation( interline_less_than_half ) }
+      it {should_not match_recommendation( interline_more_than_half ) }
       it {should_not match_recommendation( interline_absent ) }
     end
 
