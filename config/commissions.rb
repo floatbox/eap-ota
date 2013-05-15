@@ -508,8 +508,8 @@ check {
     (includes(city_iatas.first, 'EVN') and includes_only(city_iatas, 'EVN ROM'))
   )
 }
-discount "6%"
-commission "9%/7%"
+discount "6.7%"
+commission "9%/8%"
 
 example 'mrucdg'
 example 'mrucdg cdgmru'
