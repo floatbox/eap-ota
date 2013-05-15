@@ -17,7 +17,7 @@ class ProfileController < ApplicationController
         redirect_to show_notice_path(:id => @order.pnr_number)
       end
     else
-      if !@order.notifications.first_sent_order_pnr.empty?
+      if !@order.notifications.last_sent_ticket_pnr.empty?
         notice = @order.notifications.last_sent_ticket_pnr.first
         render :text => notice.rendered_message
       else
