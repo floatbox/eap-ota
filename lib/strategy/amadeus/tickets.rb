@@ -31,7 +31,8 @@ module Strategy::Amadeus::Tickets
         tickets << ticket_hash.merge({
           :source => 'amadeus',
           :baggage_info => baggage_info,
-          :pnr_number => @order.pnr_number
+          :pnr_number => @order.pnr_number,
+          :original_price_penalty => "0 RUB"
         })
       end
     end
