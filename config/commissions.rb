@@ -1024,11 +1024,20 @@ discount "3%"
 commission '6%/4%'
 
 example 'svocdg/ab'
+expr_date "31.05.2013"
 agent "1 euro с билета на рейсы Interline без участка FV."
 subagent "1 руб. с билета на рейсы Interline без участка FV."
 interline :absent
 ## discount '1'
 commission "1eur/1"
+
+example 'svocdg/ab'
+strt_date "01.06.2013"
+agent "1 euro с билета на рейсы Interline без участка FV."
+subagent "5 руб. с билета на рейсы Interline без участка FV."
+interline :absent
+## discount '1'
+commission "1eur/5"
 
 example "svocdg/r"
 agent ""
