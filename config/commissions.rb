@@ -2016,10 +2016,19 @@ carrier "QR", "QATAR AIRWAYS"
 
 example 'cdgpek/business pekcdg/business'
 strt_date "01.04.2012"
+expr_date "31.05.2013"
 agent    "от опубл. тарифов, а также от опубл. IT гросс тарифов (искл.групповые тарифы) на собств.рейсы QR: 5% Бизнес класс"
 subagent "3,5% от опубл. тарифов на собственные рейсы QR"
 classes :business
 discount "3%"
+commission "5%/3.5%"
+
+example 'cdgpek/business pekcdg/business'
+strt_date "01.06.2013"
+agent    "от опубл. тарифов, а также от опубл. IT гросс тарифов (искл.групповые тарифы) на собств.рейсы QR: 5% Бизнес класс"
+subagent "3,5% от опубл. тарифов на собственные рейсы QR"
+classes :first, :business
+discount "2.7%"
 commission "5%/3.5%"
 
 example 'jfksvo'
@@ -2034,16 +2043,32 @@ commission "5%/3%"
 example 'cdgpek/economy pekcdg/economy'
 example 'cdgpek/business pekcdg/economy'
 strt_date "01.04.2012"
+expr_date "31.05.2013"
 agent    "1% Эконом класса, а также при различной комбинации Бизнес/Эконом;" 
 subagent "5 коп. с билета Эконом класса, а также при различной комбинации Бизнес/Эконом;"
 commission "1%/0.05"
 
+example 'cdgpek/economy pekcdg/economy'
+example 'cdgpek/business pekcdg/economy'
+strt_date "01.06.2013"
+agent    "0.1% Эконом класса, а также при различной комбинации Бизнес/Эконом"
+subagent "5 коп. с билета Эконом класса, а также при различной комбинации Бизнес/Эконом;"
+commission "0.1%/0.05"
+
 example 'svocdg cdgsvo/ab'
 strt_date "01.04.2012"
+strt_date "31.05.2013"
 agent    "1% на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 subagent "5 коп . с билета на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 interline :first
 commission "1%/0.05"
+
+example 'svocdg cdgsvo/ab'
+strt_date "01.06.2013"
+agent    "0.1% на опубл. гросс тарифы в случае комбинации с другими авиакомпаниями (вознаграждение выплачивается лишь в случаях, когда хотя бы один полетный сегмент забронирован под кодом QR и весь маршрут выписан одним билетом). +сбор АЦ 2% от тарифа Интерлайн без участия перевозчика –  запрещен  !!!"
+subagent "5 коп на опубл. гросс тарифы в случае комбинации с другими авиакомпаниями (вознаграждение выплачивается лишь в случаях, когда хотя бы один полетный сегмент забронирован под кодом QR и весь маршрут выписан одним билетом). +сбор АЦ 2% от тарифа Интерлайн без участия перевозчика –  запрещен  !!!"
+interline :yes
+commission "0.1%/0.05"
 
 example 'cdgsvo/ab'
 no_commission
