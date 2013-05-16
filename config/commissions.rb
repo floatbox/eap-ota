@@ -2634,11 +2634,11 @@ commission "5%/3%"
 example 'svotbs'
 example 'tbsiev'
 agent "5% от тарифов перевозок по России, СНГ и Грузии всех подклассов и классов обслуживания (за исключением маршрутов Групп А и Б)."
-subagent "4% от тарифов перевозок по СНГ и Грузии всех подклассов и классов обслуживания (за искл. маршрутов Групп А и Б)"
+subagent "3% от тарифов перевозок по СНГ и Грузии всех подклассов и классов обслуживания (за искл. маршрутов Групп А и Б)"
 check { includes_only(country_iatas, 'RU AZ AM BY KZ KG MD TJ TM UZ UA GE') }
 important!
-discount "3.5%"
-commission "5%/4%"
+discount "2%"
+commission "5%/3%"
 
 # интерлайны
 example 'svocdg/ab cdgsvo'
