@@ -69,6 +69,7 @@ restoreBooking: function(rkey, bkey) {
     booking.loading.show();
     booking.el.addClass('b-processing').show();
     booking.load();
+    _kmq.push(['record', 'VISIT: variant']);
 },
 reset: function() {
     search.setValues(search.defaultValues);
