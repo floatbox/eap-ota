@@ -3280,24 +3280,26 @@ discount "3.6%"
 commission "1%/3.5%"
 
 #dtt interline
-example 'dmeled/ab leddme'
+# example 'dmeled/ab leddme'
 agent ""
 subagent ""
 interline :yes
 ticketing_method "downtown"
 our_markup "400"
 discount "2.6%"
+disabled "Не можем пока продавать с нулевыми процентами"
 commission "0%/0%"
 
 #dtt codeshare
-example 'svocdg/ab:s7 cdgsvo'
-example 'DMEVIE/HG:S7/O'
+# example 'svocdg/ab:s7 cdgsvo'
+# example 'DMEVIE/HG:S7/O'
 agent ""
 subagent ""
 check { code_share? }
 ticketing_method "downtown"
 our_markup "400"
 important!
+disabled "Не можем пока продавать с нулевыми процентами"
 commission "0%/0%"
 
 carrier "GA", "GARUDA INDONESIA"
