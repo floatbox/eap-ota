@@ -3284,6 +3284,7 @@ example 'dmeled/ab leddme'
 agent ""
 subagent ""
 interline :yes
+ticketing_method "downtown"
 our_markup "400"
 discount "2.6%"
 commission "0%/0%"
@@ -3294,6 +3295,7 @@ example 'DMEVIE/HG:S7/O'
 agent ""
 subagent ""
 check { code_share? }
+ticketing_method "downtown"
 our_markup "400"
 important!
 commission "0%/0%"
