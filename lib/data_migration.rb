@@ -173,8 +173,9 @@ module DataMigration
     Ticket.update_all "original_price_fare_cents = (price_fare * 100),
                        original_price_fare_currency = 'RUB',
                        original_price_tax_cents = (price_tax * 100),
-                       original_price_tax_currency = 'RUB'", "office_id != 'FLL1S212V'"
-
+                       original_price_tax_currency = 'RUB'", "office_id != 'FLL1S212V' or kind = 'refund'"
+    Ticket.update_all "original_price_penalty_cents = (price_penalty * 100),
+                       original_price_penalty_currency = 'RUB'"
   end
 
   def self.load_ticket_prices_form_csv
