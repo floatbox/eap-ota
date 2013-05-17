@@ -771,10 +771,7 @@ agent "Если, кратко, то C,D,Z,I Y,B,M,S,H,Q W,K,L,U,T,X,V"
 agent "Только перелеты в Америку из России и наоборот (RT и OW), только СОБСТВЕННЫЕ рейсы ( никаких код-шерингов), авиакомпании могут комбинироваться в одном бронировании. Их комиссия 8%, наша 6%, никаких особенностей в выписке"
 subagent "6%"
 subclasses "CDZIYBMSHQWKLUTXV"
-check {
-  includes(country_iatas.first, 'RU') and includes_only(country_iatas, 'US RU') or
-  includes(country_iatas.first, 'US') and includes_only(country_iatas, 'US RU')
-}
+check { includes(country_iatas, 'RU') and includes(country_iatas, 'US') and includes_only(country_iatas, 'US RU') }
 ticketing_method "downtown"
 discount "5%"
 commission "8%/6%"
