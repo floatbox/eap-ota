@@ -489,6 +489,19 @@ carrier "AZ", "ALITALIA"
 ########################################
 carrier_defaults consolidator: 0
 
+example 'svojfk/v jfksvo/m'
+example 'jfksvo/o'
+strt_date "15.05.2013"
+agent "1232 DL/AFKL/AZ US-EMEAI Consolidator Commission Program Amendment #1"
+agent "Если, кратко, то J,E,D,I P,Y,B,M,H,K A,V,T,N,S,L,O"
+agent "Только перелеты в Америку из России и наоборот (RT и OW), только СОБСТВЕННЫЕ рейсы ( никаких код-шерингов), авиакомпании могут комбинироваться в одном бронировании. Их комиссия 8%, наша 6%, никаких особенностей в выписке"
+subagent "6%"
+subclasses "JEDIPYBMHKAVTNSLO"
+check { includes(country_iatas, 'RU') and includes(country_iatas, 'US') and includes_only(country_iatas, 'US RU') }
+ticketing_method "downtown"
+discount "5%"
+commission "8%/6%"
+
 example 'svolin/business'
 example 'ledlin/business linled/business'
 example 'ievfco/business'
