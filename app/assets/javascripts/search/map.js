@@ -164,7 +164,7 @@ showSegments: function(segments) {
 updatePrices: function(segments) {
     if (segments[0] && segments[0].dpt && !segments[0].arv && search.mode.selected !== 'mw') {
         var sd = search.dates;
-        var dates = sd.monthes[sd.position].ptitle + '—' + sd.monthes[sd.position + 1].ptitle;
+        var dates = sd.monthes[sd.position].ptitle + ' — ' + sd.monthes[sd.position + 1].ptitle;
         this.prices.update({
             title: I18n.t('search.map.link', {from: segments[0].dpt.from.nowrap(), dates: dates}),
             from: segments[0].dpt.iata,
