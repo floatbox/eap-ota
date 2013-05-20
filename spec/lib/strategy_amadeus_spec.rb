@@ -87,12 +87,10 @@ describe Strategy::Amadeus do
 
   describe "#recommendation_from_booking" do
 
-    let(:flight_code) { 'SU788MRVSVO080911' }
-    let(:recommendation_flight_code) { recommendation.flights.first.flight_code }
-
     before(:each) do
-      # лень сооружать подходящий flight_info
-      air_flight_info_result = mock(:air_flight_info_result, success?: false, flight_code: flight_code)
+      # лень сооружать подходящий flight_info, делаем вид,
+      # что амадеус про конкретный вылет все забыл
+      air_flight_info_result = mock(:air_flight_info_result, success?: false)
       amadeus.stub(
         pnr_retrieve:
           amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml'),
@@ -124,7 +122,7 @@ describe Strategy::Amadeus do
     end
 
     it 'got a valid values of flight codes' do
-      expect(recommendation_flight_code).to eq flight_code
+      expect( recommendation.flights.first.flight_code ).to eq 'SU788MRVSVO080911'
     end
 
   end
