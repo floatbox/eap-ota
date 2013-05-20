@@ -3346,7 +3346,7 @@ strt_date "01.05.2013"
 agent "В ответ на вопросcommissions to claim from airline введите 1Р, а в ответ на вопрос commissions to pay to agent 3.5Р"
 subagent "3.5%"
 ticketing_method "downtown"
-discount "3.6%"
+discount "2.6%"
 commission "1%/3.5%"
 
 #dtt interline
