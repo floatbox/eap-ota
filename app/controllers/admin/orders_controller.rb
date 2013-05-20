@@ -3,7 +3,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
   include CustomCSV
   include Typus::Controller::Bulk
 
-  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :edit_ticketed, :ticket, :cancel, :reload_tickets, :update, :pnr_raw, :void, :make_payable_by_card, :send_invoice, :ticket_in_ticketing_office, :manual_notice, :show_commission, :recalculate_all_prices]
+  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :edit_ticketed, :ticket, :cancel, :reload_tickets, :update, :pnr_raw, :void, :make_payable_by_card, :send_invoice, :ticket_in_ticketing_office, :manual_notice, :show_commission, :recalculate_prices]
 
   # def set_scope
   #   # добавлять фильтры лучше в def index и т.п., но так тоже работает (пока?)
@@ -137,8 +137,8 @@ class Admin::OrdersController < Admin::EviterraResourceController
     redirect_to :action => :show, :id => @order.id
   end
 
-  def recalculate_all_prices
-    flash[:alert] = 'Ошибка при пересчете цен' unless @order.recalculate_all_prices
+  def recalculate_prices
+    flash[:alert] = 'Ошибка при пересчете цен' unless @order.recalculate_prices
     redirect_to :action => :show, :id => @order.id
   end
 

@@ -74,6 +74,6 @@ URL для оплаты: <%= link_to edit_payment_url(:code => @item.code), edit
   <td><%= button_to 'Обновить билеты', {:action => 'reload_tickets', :id => @item.id} %></td>
 <% end %>
 <% if !@item.fix_price? && @item.sold_tickets.present? %>
-  <td><%= button_to 'Пересчитать цены', {:action => 'recalculate_all_prices', :id => @item.id} %></td>
+  <td><%= button_to 'Пересчитать цены', {:action => 'recalculate_prices', :id => @item.id} %></td>
 <% end %>
 </tr> </table>
