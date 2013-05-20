@@ -81,7 +81,7 @@ class Order < ActiveRecord::Base
   # фейковый текст для маршрут-квитанций. может быть, вынести в хелпер?
   PAID_BY = {'card' => 'Invoice', 'delivery' => 'Cash', 'cash' => 'Cash', 'invoice' => 'Invoice'}
 
-  attr_writer :itinerary_receipt_view
+  attr_writer :itinerary_receipt_view, :tickets_are_loading
 
   extend Commission::Columns
   has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount, :commission_our_markup
@@ -132,6 +132,26 @@ class Order < ActiveRecord::Base
       self.price_acquiring_compensation = price_payment_commission if !fix_price
       self.price_difference = fix_price? ? price_with_payment_commission - price_real : 0
     end
+  end
+
+  def recalculate_all_prices
+    #считаем, что в данном случае не бывает обменов/возвратов, иначе с ценами будет полная жопа
+    return if fix_price? || tickets.blank?
+    sum_and_copy_attrs sold_tickets, self,
+      :price_fare,
+      :price_tax
+    self.price_difference = 0
+    calculate_price_with_payment_commission
+    save
+    @tickets_are_loading = true
+    tickets.each do |t|
+      t.order.tickets_are_loading = true
+      t.corrected_price = t.calculated_price_with_payment_commission
+      t.price_acquiring_compensation = t.price_payment_commission
+      t.save
+    end
+    @tickets_are_loading = false
+    update_prices_from_tickets
   end
 
   def has_data_in_tickets?
