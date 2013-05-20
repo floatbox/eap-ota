@@ -3361,16 +3361,15 @@ disabled "Не можем пока продавать с нулевыми про
 commission "0%/0%"
 
 #dtt codeshare
-# example 'svocdg/ab:s7 cdgsvo'
-# example 'DMEVIE/HG:S7/O'
+example 'svocdg/ab:s7 cdgsvo'
+example 'DMEVIE/HG:S7/O'
 agent ""
 subagent ""
 check { code_share? }
 ticketing_method "downtown"
 our_markup "400"
 important!
-disabled "Не можем пока продавать с нулевыми процентами"
-commission "0%/0%"
+no_commission "Не можем пока продавать с нулевыми процентами"
 
 carrier "GA", "GARUDA INDONESIA"
 ########################################
