@@ -225,7 +225,7 @@ Partner:
     default: token, password, enabled, hide_income, cookies_expiry_time, income_at_least
     list: token, password, enabled, hide_income, cookies_expiry_time, income_at_least, cheat
     form: token, password, enabled, hide_income, cookies_expiry_time, income_at_least, cheat, notes
-    show: token, password, enabled, hide_income, cookies_expiry_time, income_at_least, cheat, notes
+    show: token, password, enabled, hide_income, cookies_expiry_time, income_at_least, cheat, sample_api_url, notes
     options:
       booleans:
         enabled: ["да", "нет"]
