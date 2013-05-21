@@ -132,7 +132,7 @@ discount "3.7%"
 commission "7%/5%"
 
 # базовое вознаграждение ац c 21.05.2013 
-example 'cdgsvo/o svocdg/y'
+example 'cdgsvo/q svocdg/y'
 strt_date "21.05.2013"
 expr_date "20.06.2013"
 agent "C 21.05.13г. 6% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K;"
