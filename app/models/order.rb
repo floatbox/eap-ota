@@ -158,7 +158,7 @@ class Order < ActiveRecord::Base
   end
 
   def has_data_in_tickets?
-    sold_tickets.present? && sold_tickets.all?{|t| t.office_id != 'FLL1S212V'}
+    sold_tickets.present?
   end
 
   def display_fee_details

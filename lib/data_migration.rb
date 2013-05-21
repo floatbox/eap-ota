@@ -184,6 +184,22 @@ module DataMigration
     end
   end
 
+  def self.set_corrected_price_in_downtown_tickets
+    PaperTrail.controller_info = {:done => 'filling in corrected_price in downtown tickets'}
+    Order.FLL1S212V.where(ticket_status: 'ticketed').each do |order|
+      o = Order.find_by_id order.id
+      if o.tickets.present? && o.tickets.all?{|t| t.kind == 'ticket' && t.status == 'ticketed' && t.original_price_fare_currency.present?}
+        o.tickets.each do |t|
+          t.order.tickets_are_loading = true
+          t.corrected_price = t.calculated_price_with_payment_commission
+          t.save
+        end
+        o.tickets_are_loading = false
+        o.update_prices_from_tickets
+      end
+    end
+  end
+
   def self.create_price_migration_csv
     ticket_hashes = Order.by_office_id('FLL1S212V').where(:ticket_status => 'ticketed').where('orders.created_at >= ?', Date.today - 11.month).inject([]) do |memo ,o|
       print o.id
