@@ -1040,11 +1040,21 @@ commission '7%/5%'
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
 strt_date "01.06.2013"
+expr_date "20.06.2013"
 agent "6% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 subagent "4% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 interline :no, :yes
 discount "3%"
 commission '6%/4%'
+
+example 'svocdg'
+example 'svocdg cdgsvo/ab'
+strt_date "21.06.2013"
+agent "4% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
+subagent "2% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
+interline :no, :yes
+discount "1.5%"
+commission '4%/2%'
 
 example 'svocdg/ab'
 expr_date "31.05.2013"
