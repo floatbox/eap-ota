@@ -221,15 +221,15 @@ class Order < ActiveRecord::Base
   scope :processing_ticket, where(:ticket_status => 'processing_ticket')
   scope :error_ticket, where(:ticket_status => 'error_ticket')
   scope :ticketed, where(:payment_status => ['blocked', 'charged'], :ticket_status => 'ticketed')
-  scope :ticket_not_sent, where("pnr_number != '' AND email_status != 'ticket_sent' AND ticket_status = 'ticketed'").where("created_at > ?", 10.days.ago)
+  scope :ticket_not_sent, where("orders.pnr_number != '' AND email_status != 'ticket_sent' AND ticket_status = 'ticketed'").where("orders.created_at > ?", 10.days.ago)
   scope :sent_manual, where(:email_status => 'manual')
-  scope :reported, where(:payment_status => ['blocked', 'charged'], :offline_booking => false).where("pnr_number != ''")
-  scope :extra_pay, where("pnr_number = '' AND parent_pnr_number != ''")
+  scope :reported, where(:payment_status => ['blocked', 'charged'], :offline_booking => false).where("orders.pnr_number != ''")
+  scope :extra_pay, where("orders.pnr_number = '' AND parent_pnr_number != ''")
 
 
   scope :stale, lambda {
     where(:payment_status => 'not blocked', :ticket_status => 'booked', :offline_booking => false, :source => 'amadeus')\
-      .where("created_at < ?", 30.minutes.ago)
+      .where("orders.created_at < ?", 30.minutes.ago)
   }
 
   def tickets_count
