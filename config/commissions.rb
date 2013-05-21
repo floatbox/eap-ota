@@ -1034,7 +1034,7 @@ expr_date "31.05.2013"
 agent "7% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 subagent "5% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 interline :no, :yes
-discount "3.7%"
+discount "4%"
 commission '7%/5%'
 
 example 'svocdg'
