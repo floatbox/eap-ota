@@ -50,4 +50,15 @@ class Partner < ActiveRecord::Base
   def logo_exist?
     FileTest.exist?(Rails.root.join("public#{logo_url}").to_s)
   end
+
+  # для отображения в админке, чтобы копипастить в письма с просьбой о доступе
+  def sample_api_url
+    if password.present?
+      "http://#{token}:#{password}@api.eviterra.com/partner/v1/orders.json" +
+        "?date_start=#{ Date.today.at_beginning_of_month.strftime('%Y/%m/%d')}" +
+        "&date_end=#{ Date.today.at_end_of_month.strftime('%Y/%m/%d')}"
+    else
+      "задайте пароль"
+    end
+  end
 end

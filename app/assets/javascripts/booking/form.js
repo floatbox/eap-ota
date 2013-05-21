@@ -433,9 +433,6 @@ init: function() {
         if (data) {
             row.set(data);
         }
-        if (that.rows.length > 2) {
-            that.el.find('.bfp-order').show();
-        }
         booking.form.hidePrice();
         that.validate(true);
         booking.form.validate();
@@ -526,9 +523,6 @@ applyRows: function() {
     var n = this.rows.length, key = n === 1 ? 'one' : 'few';
     this.add.toggle(n < this.rowsLimit);
     this.title.attr('data-amount', key).html(I18n.t(key, {scope: 'booking.passengers'}));
-    if (n < 3) {
-        this.el.find('.bfp-order').hide();
-    }
 },
 validate: function(forced) {
     var wrong = [], empty = [], people = {a: 0, c: 0, i: 0, is: 0};
@@ -552,6 +546,9 @@ validate: function(forced) {
             }
         }
     }
+    if (people.i && this.rows.length > 2) {
+        this.el.find('.bfp-order').show();
+    }
     if (people.a + people.c + people.i === this.rows.length) {
         if (people.a === 0 && people.c + people.i > 0) {
             wrong.push(I18n.t('search.messages.noadults') + '.');
@@ -560,7 +557,6 @@ validate: function(forced) {
         if (merged !== this.cachedPeople) {
             booking.form.hidePrice();
             this.cachedPeople = merged;
-            this.el.find('.bfp-order').toggle(Boolean(people.a > 1 && people.i));
         }
     }
     clearTimeout(this.getPriceTimeout);
