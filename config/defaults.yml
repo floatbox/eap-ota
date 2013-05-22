@@ -130,6 +130,8 @@ mail:
   subscription_reply_to: operator@eviterra.com
   subscription_cc: subscription@eviterra.com
   invoice_to: bills@eviterra.com
+  profile_reply_to: profile@eviterra.com
+  profile_cc: profile@eviterra.com
 ohmystats:
   enabled: yes
   project_id: tyjrlhjuionhuxvojzbravinzfejcnsdgcoyjsks
