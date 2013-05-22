@@ -1,5 +1,16 @@
-<p>Welcome to Eviterra <%= @resource.email %>!</p>
+<p>Добро пожаловать на Эвитерру!</p>
 
-<p>You can confirm your account through the link below:</p>
+<p>Чтобы завершить регистрацию аккаунта <%= @resource.email %>, перейдите по ссылке ниже.</p>
 
-<p><%= link_to 'Confirm my account', confirmation_url(@resource, :confirmation_token => @resource.confirmation_token) %></p>
+<p><%= link_to 'Подтвердить регистрацию', confirmation_url(@resource, :confirmation_token => @resource.confirmation_token) %></p>
+
+<p>Если вы не регистрировались на сайте _eviterra.com_, просто проигнорируйте это письмо.</p>
+
+<p>-- </p>
+<p>Спасибо что вы с нами,<br>
+Команда Eviterra.com</p>
+
+<p><%= link_to 'facebook.com/eviterra', 'http://facebook.com/eviterra' %></p>
+<p><%= link_to 'twitter.com/eviterra', 'http://twitter.com/eviterra' %></p>
+<p><%= link_to 'vkontakte.ru/eviterra', 'http://vkontakte.ru/eviterra' %></p>
+
