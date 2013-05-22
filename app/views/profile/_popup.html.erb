@@ -12,7 +12,7 @@
         <div class="phu-stator">
         <div class="phu-slider">
             <%= form_for("customer", :url => customer_session_path, :html => {:class => 'phu-section'}) do |f| %>
-                <h6 class="phus-title">Вход с паролем</h6>
+                <h6 class="phus-title"><span class="phust-link phu-signin-link">Вход с паролем</span></h6>
                 <div class="phu-field">
                     <label for="signin-email" class="phuf-placeholder">электронный адрес</label>                
                     <%= f.email_field :email, :class => 'phuf-input', :id => 'signin-email' %>
@@ -41,7 +41,7 @@
         </div>
         </div>
         <div class="phu-section">
-            <h6 class="phus-title" style="margin-bottom: 5px;"><%= link_to "Регистрация", new_customer_registration_path, :class => 'phust-link phu-signup-link' %></h6>
+            <h6 class="phus-title" style="margin-bottom: 5px;"><span class="phust-link phu-signup-link">Регистрация</span></h6>
             <p>Нужна для того, чтобы хранить вашу историю заказов и данные пассажиров. После первого заказа у нас вы будете зарегистрированы автоматически.</p>
             <%= form_for("customer", :url => customer_registration_path, :html => {:class => 'phu-signup'}) do |f| %>
             <div style="padding-top: 10px;">

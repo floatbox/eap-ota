@@ -168,6 +168,8 @@
 }
 .phust-link {
     color: #FFF;
+    text-decoration: underline;
+    cursor: pointer;
 }
 .phu-field {
     margin: 0 0 10px;

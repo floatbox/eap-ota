@@ -12,12 +12,11 @@ init: function() {
 },
 initPopup: function() {
     var that = this;
-    this.el.find('.phuf-input').on('input keyup propertychange paste', function() {
-        var empty = this.value === '';
-        if (empty !== this.empty) {
-            $(this).prev('label').toggle(this.empty = empty);
-        }
-    }).trigger('input');
+    this.el.find('.phuf-input').on('focus', function() {
+        $(this).prev('label').hide();
+    }).on('blur', function() {
+        $(this).prev('label').toggle(this.value === '');
+    }).trigger('blur');
     this.el.on('click', function(event) {
         event.stopPropagation();
     });
@@ -25,32 +24,48 @@ initPopup: function() {
         that[that.el.hasClass('phu-active') ? 'hide' : 'show']();
     });
     this._hide = function(event) {
-        if (event.type == 'click' || event.which == 27) that.hide();
+        if (event.type == 'click' && !event.button || event.which == 27) that.hide();
     };
     this.slider = this.el.find('.phu-slider');
     this.el.find('.phu-forgot-link').on('click', function(event) {
         event.preventDefault();
         var le = $('#signin-email');
         var re = $('#forgot-email');
-        re.val(le.val()).trigger('input');
+        re.val(le.val()).trigger('blur');
         that.el.find('.phu-forgot').show();
-        that.slider.animate({left: -260}, 200, function() {
-            re.focus();
-        });
+        that.slider.animate({left: -260}, 200);
     });
     this.el.find('.phu-remember-link').on('click', function(event) {
         event.preventDefault();
-        var password = $('#customer_password').val('').trigger('input');
         that.slider.animate({left: 0}, 200, function() {
-            password.focus();
             that.el.find('.phu-forgot').hide();
         });
     });
+    this.el.find('.phu-signin-link').on('click', function(event) {
+        var elem = $(this);
+        if (elem.hasClass('phust-link')) {
+            $('#signin-email').val($('#signup-email').val()).trigger('blur');
+            elem.removeClass('phust-link');
+            that.el.find('.phu-signup').slideUp(150);
+            that.el.find('.phu-stator').animate({
+                height: that.el.find('.phu-slider').height()
+            }, 150, function() {
+                that.el.find('.phu-signup-link').addClass('phust-link');
+                $(this).height('');
+            });
+        }
+    });
     this.el.find('.phu-signup-link').on('click', function(event) {
-        event.preventDefault();
-        that.el.find('.phu-signup').slideDown(100, function() {
-            $('#signup-email').focus();
-        });
+        var elem = $(this);
+        if (elem.hasClass('phust-link')) {
+            $('#signup-email').val($('#signin-email').val()).trigger('blur');
+            elem.removeClass('phust-link');
+            that.el.find('.phu-signup').slideDown(150);
+            that.el.find('.phu-stator').animate({height: 41}, 150, function() {
+                that.el.find('.phu-signin-link').addClass('phust-link');
+                that.el.find('.phu-slider').css('left', 0);
+            });
+        }
     });
 },
 show: function() {
