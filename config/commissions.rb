@@ -74,30 +74,16 @@ carrier "UN", "TRANSAERO"
 ########################################
 
 #dtt
-# example 'AERDME/W DMEAER/W'
-# example 'AERDME/Y DMEAER/L'
-# example 'AERDME/Y DMEAER/L'
-# example 'AERDME/W DMEAER/I'
-# example 'AERDME/N DMEAER/T'
-# example 'AERDME/W DMEAER/W'
-agent "12% американский office-id"
-subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
-subclasses "FPRJCADSMLVXTNIGWUYHQBKOE"
+example 'AERDME/W DMEAER/W'
+example 'AERDME/W DMEAER/I'
+example 'AERDME/N DMEAER/T'
+example 'AERDME/W DMEAER/W'
+agent "5% американский office-id"
+subagent "4% от тарифа на рейсы Перевозчика по всем тарифам классов L,V,X,T,N,I,W."
+subclasses "LVXTNIW"
 ticketing_method "downtown"
-disabled "срочно вырубаем DTT"
-discount "8.8%"
-commission "12%/10.5%"
-
-# базовое вознаграждение ац для высоких c 01.04
-example 'cdgsvo/r svocdg/f'
-strt_date "01.04.2013"
-expr_date "20.05.2013"
-agent "9% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
-subagent "нет? ориентировочно 7"
-subclasses "FPRJCADSM"
-discount "5.2%"
-important!
-commission "9%/7%"
+discount "3%"
+commission "5%/4%"
 
 # базовое вознаграждение ац для высоких c 21.05
 example 'cdgsvo/r svocdg/f'
@@ -118,17 +104,6 @@ subagent "5%"
 subclasses "FPRJCADSM"
 discount "3.7%"
 important!
-commission "7%/5%"
-
-# базовое вознаграждение ац
-example 'cdgsvo/b svocdg/y'
-strt_date "21.04.2013"
-expr_date "20.05.2013"
-agent "C 21.04.13г. 7% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K;"
-subagent "5%"
-subclasses "YHQBK"
-discount "3.7%"
-# disabled "На DTT выгодней"
 commission "7%/5%"
 
 # базовое вознаграждение ац c 21.05.2013 
@@ -152,23 +127,13 @@ discount "3%"
 # disabled "На DTT выгодней"
 commission "6%/4%"
 
-# говноклассы с 9.05
-example 'cdgsvo/i svocdg/x'
-strt_date "09.05.2013"
-expr_date "20.05.2013"
-agent "5% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
-subagent "3% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
-subclasses "LVXTNIGWU"
-discount "2.25%"
-commission "5%/3%"
-
 # говноклассы с 21.05 
-example 'cdgsvo/i svocdg/x'
+example 'cdgsvo/g svocdg/u'
 strt_date "21.05.2013"
 expr_date "20.06.2013"
 agent "4% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
-subagent "2% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
-subclasses "LVXTNIGWU"
+subagent "2% от тарифа на рейсы Перевозчика по всем тарифам классов G, U;"
+subclasses "GU"
 discount "1.35%"
 commission "4%/2%"
 
@@ -177,7 +142,7 @@ example 'cdgsvo/i svocdg/x'
 strt_date "21.06.2013"
 agent "3% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
 subagent "1% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
-subclasses "LVXTNIGWU"
+subclasses "GU"
 commission "3%/1%"
 
 # интерлайн c 21.05.2013 (не меняется)
@@ -220,11 +185,11 @@ example 'kbpsvo svojfk'
 example 'tsedme dmejfk jfkdme dmetse'
 agent "12% до особых указаний от всех опубл. тарифов (OW/RT) на собств. ПРЯМЫЕ рейсы UN между Москвой и городами:Нью-Йорк/ Майами/ Лос-Анджелес/ Пекин;"
 agent "12% Oт всех применяемых опубликованных тарифов на собственные  регулярные рейсы между Москвой и Пекином/Майами/Нью-Йорком (OW,RT)  и на сквозные перевозки между пунктами полетов АК  «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW,RT)."
-subagent "10% до особых указаний от всех опубл. тарифов (OW/RT) на собств. ПРЯМЫЕ рейсы UN между Москвой и городами:Нью-Йорк/ Майами/ Лос-Анджелес/ Пекин;"
-subagent "10% от всех применяемых опубликованных тарифов между Москвой и Пекином/Майами/Нью-Йорком (OW.RT) и на сквозные перевозки между пунктами полетов АК «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW.RT). (Через АСБ «GABRIEL»: установлен специальный «Код тура» NEWDE10 при продаже перевозок с полетными сегментами между Москвой-Майами/Нью-Йорком (OW/RT). СУБАГЕНТ обязан внести «Код тура» NEWDE10 для автоматического начисления комиссии.)"
+subagent "11% до особых указаний от всех опубл. тарифов (OW/RT) на собств. ПРЯМЫЕ рейсы UN между Москвой и городами:Нью-Йорк/ Майами/ Лос-Анджелес/ Пекин;"
+subagent "11% от всех применяемых опубликованных тарифов между Москвой и Пекином/Майами/Нью-Йорком (OW.RT) и на сквозные перевозки между пунктами полетов АК «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW.RT). (Через АСБ «GABRIEL»: установлен специальный «Код тура» NEWDE10 при продаже перевозок с полетными сегментами между Москвой-Майами/Нью-Йорком (OW/RT). СУБАГЕНТ обязан внести «Код тура» NEWDE10 для автоматического начисления комиссии.)"
 check { includes(city_iatas, %W(NYC MIA LAX)) and includes(city_iatas, 'MOW') and includes(country_iatas, %W(RU UA KZ UZ AM)) }
 # FIX кривой и не полный чек
-discount "7.5%"
+discount "9%"
 important! # ац вперед! 
 ticketing_method "downtown"
 # disabled "dtt рулит"
