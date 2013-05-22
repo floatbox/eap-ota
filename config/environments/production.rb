@@ -1,9 +1,8 @@
 # encoding: utf-8
 Eviterra::Application.configure do
-  #config.after_initialize do
-  file = File.open(Rails.root + "log/#{Rails.env}.log", "a")
-  file.sync = false
-  config.logger = ActiveSupport::BufferedLogger.new(file, Logger::INFO)
+
+  # новая фича TaggedLogger в rails 3.2. Возможные варианты - :uuid, :subdomain, :pid
+  config.log_tags = [:uuid]
 
   # require 'lumberjack'
   # require 'lumberjack_syslog_device'
