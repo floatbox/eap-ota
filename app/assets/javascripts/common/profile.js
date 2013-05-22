@@ -77,7 +77,6 @@ show: function() {
 },
 hide: function() {
     this.el.removeClass('phu-active');
-    this.el.find('.phu-signup').hide();
     $w.off('click keydown', this._hide);
 }
 };
