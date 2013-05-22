@@ -49,15 +49,10 @@
       %currency RUB
 
 %travelFlightInfo
-  -if cabin
+  - if cabin
     %cabinId
       %cabinQualifier MC
       %cabin= cabin
-  %companyIdentity
-    %carrierQualifier W
-    -# FIXME нужно нормально получать список подходящих авиакомпаний в модели
-    - Carrier.non_commissioned_iatas.each do |iata|
-      %carrierId= iata
   - if nonstop
     %flightDetail
       %flightType N
