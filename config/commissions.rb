@@ -1112,7 +1112,7 @@ example 'svopek/d/ab peksvo/d'
 example 'svopek/i/ab peksvo/i'
 strt_date "12.12.2011"
 expr_date "31.07.2013"
-agent "15% от опубл.тарифов по классу D на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
+agent "15% от опубл.тарифов по классу D, I на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subagent "13% от опубл.тарифов по классу D на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subclasses "DI"
 interline :no, :yes
@@ -1124,8 +1124,8 @@ example 'svopek/z'
 example 'svopek/z/ab peksvo/z'
 strt_date "12.12.2011"
 expr_date "31.07.2013"
-agent "9% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
-subagent "7% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
+agent "9% от опубл.тарифов по классам Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
+subagent "7% от опубл.тарифов по классам Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subclasses "Z" 
 interline :no, :yes
 check { includes(city_iatas.first, 'MOW') and includes_only(country_iatas, 'RU CN') }
@@ -1138,8 +1138,8 @@ example 'svopek/ab peksvo'
 example 'svopek/ab peksvo'
 strt_date "12.12.2011"
 expr_date "31.07.2013"
-agent "9% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
-subagent "7% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
+agent "9% от опубл.тарифов по классам Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
+subagent "7% от опубл.тарифов по классам Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 interline :no, :yes
 check { includes(city_iatas.first, 'MOW') and includes_only(country_iatas, 'RU CN') }
 discount "5.7%"
@@ -1148,20 +1148,31 @@ commission "9%/7%"
 example 'ledpek/c pekled/c'
 example 'ledpek/c/ab pekled/c'
 example 'ledpek/d/ab pekled/d'
-example 'ledpek/i/ab pekled/i'
-example 'ledpek/z/ab pekled/z'
 strt_date "12.12.2011"
 expr_date "31.07.2013"
-agent "15% от опубл.тарифов по классу С,D,I,Z на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
-subagent "13% от опубл.тарифов по классу С,D,I,Z на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
-subclasses "CDIZ"
+agent "15% от опубл.тарифов по классу С,D на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
+subagent "13% от опубл.тарифов по классу С,D на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
+subclasses "CD"
 interline :no, :yes
 check { includes(city_iatas.first, 'LED') and includes_only(country_iatas, 'RU CN') }
 discount "10%"
 commission "15%/13%"
 
-example 'ledpek pekled'
-example 'ledpek/ab pekled'
+example 'ledpek/i/ab pekled/i'
+example 'ledpek/z/ab pekled/z'
+strt_date "12.12.2011"
+expr_date "31.07.2013"
+agent "9% от опубликованных на I, Z, а также на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
+subagent "7% от опубликованных на I, Z, а также на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
+subclasses "IZ"
+interline :no, :yes
+check { includes(city_iatas.first, 'LED') and includes_only(country_iatas, 'RU CN') }
+discount "5.7%"
+commission "9%/7%"
+
+# копия для эконом-класса
+example 'ledpek/economy/ab pekled/economy'
+example 'ledpek/economy/ab pekled/economy'
 strt_date "12.12.2011"
 expr_date "31.07.2013"
 agent "9% от на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
@@ -1275,6 +1286,18 @@ agent "0% по опубл. тарифам отдельные перелеты с
 subagent "0%"
 important!
 check { includes_only(city_iatas.first, 'BJS') and includes_only(country_iatas, 'CN') }
+commission "0%/0%"
+
+# example 'peksvo svopek'
+strt_date "01.08.2013"
+agent "9% (7%) от всех опубл. тарифов на рейсы HU (В договоре Interline не прописан.)"
+subagent "7% от всех опубл. тарифов на рейсы HU (В договоре Interline не прописан.)"
+commission "9%/7%"
+
+# example 'pekxmn xmnweh'
+strt_date "01.08.2013"
+agent "0% по опубл. тарифам отдельные перелеты с вылетами из Пекина по Китаю на собств. рейсы HU +2% сбор АЦ"
+subagent "0% по опубл. тарифам отдельные перелеты с вылетами из Пекина по Китаю на собств. рейсы HU +2% сбор АЦ"
 commission "0%/0%"
 
 carrier "HX", "Hong Kong Airlines"
