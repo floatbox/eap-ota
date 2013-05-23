@@ -44,7 +44,11 @@ module ProfileOrder
   end
 
   def profile_status
-    payment_status + "\n" + ticket_status
+    return 'денежные средства заблокированы на карте' if payment_type == 'card' && payment_status == 'blocked'
+    return 'денежные средства списаны с карты' if payment_type == 'card' && payment_status == 'charged'
+    return 'оплачен' if ['cash','invoice'].include?(payment_type) && payment_status == 'charged'
+    return 'ожидает оплаты' if payment_status == 'pending'
+    return 'ожидает оплаты'
   end
 
   def profile_payment_price

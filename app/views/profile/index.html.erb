@@ -64,7 +64,7 @@
 
     <% if admin_user %>
     <div class="po-debug">
-        статус <%= order.profile_status %>
+      <%= order.payment_type %> / <%= order.payment_status %> / <%= order.ticket_status %>
     </div>
     <% end %>
 
