@@ -33,6 +33,7 @@ gem 'SyslogLogger'
 gem 'syslogger'
 gem 'lumberjack'
 gem 'lumberjack_syslog_device'
+gem 'riemann-client', require: false
 # для импорта zip файлов
 gem 'zip'
 gem 'money'
