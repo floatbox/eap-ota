@@ -59,7 +59,8 @@ module ProfileOrder
     full_info.split("\n").collect do |t|
       data = t.split('/')
       {
-        name: data[1] + ' ' + data[0]
+        name: data[1] + ' ' + data[0],
+        status: ['blocked','charged'].include?(payment_status) ? 'оформляется' : 'забронирован' 
       }
     end
   end
