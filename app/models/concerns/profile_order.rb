@@ -55,29 +55,13 @@ module ProfileOrder
     end
   end
 
-  def profile_tickets
-    rows = []
-    if profile_ticketed?
-      tickets.each do |t|
-        rows << {
-          id: t.id,
-          name: t.last_name + ' ' + t.first_name,
-          status: t.status,
-          number: t.number,
-          carrier: t.carrier,
-          stored_flight: t.flights.present?
-        }
-      end
-    else
-      infos = full_info.split("\n")
-      infos.each do |t|
-        data = t.split('/')
-        rows << {
-          name: data[1] + ' ' + data[0]
-        }
-      end
+  def profile_people
+    full_info.split("\n").collect do |t|
+      data = t.split('/')
+      {
+        name: data[1] + ' ' + data[0]
+      }
     end
-    rows
   end
 
   def profile_ticketed?
