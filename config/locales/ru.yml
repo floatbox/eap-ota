@@ -136,7 +136,7 @@ ru:
         dept_date: "Дата вылета"
 
         <<: *PRICING_ATTRIBUTES
-      payment
+      payment:
         show_link: "Платеж"
         status_decorated: "Состояние"
         price: "Сумма, р."
