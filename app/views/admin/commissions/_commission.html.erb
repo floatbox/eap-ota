@@ -47,6 +47,14 @@
             <li style="color:red">продажа отключена <%= reason_of_disability(commission) %> </li>
           <% end %>
           <li> выписка <strong><%= commission.ticketing_method %></strong> (<%= commission.system %>) </li>
+
+          <% if commission.tour_code %>
+            <li> tour code: <%= commission.tour_code %></li>
+          <% end %>
+          <% if commission.designator %>
+            <li> designator: <%= commission.designator %></li>
+          <% end %>
+
           <% unless commission.consolidator.try(:zero?) %>
             <li> авиацентр <strong><%= commission.consolidator %></strong> </li>
           <% end %>
