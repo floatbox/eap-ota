@@ -11,67 +11,90 @@
     float: left;
 }
 
-/* Table */
-#personal-orders {
-    margin-left: -14px;
+/* Order */
+.order {
+    margin: 0 -14px 15px;
+    background: #FFF;
 }
 
-/* Table head */
-.po-header th {
-    text-align: left;
+/* Summary */
+.order-summary {
+    width: 100%;
+}
+.order-summary th {
+    padding: 10px 0 0 14px;
+    font-size: 11px;
+    line-height: 13px;
     color: #777;
-    padding: 0 10px 14px 14px;
-    font-size: 12px;
+    text-transform: uppercase;
 }
-.po-row td {
-    padding: 10px 14px;
-    vertical-align: top;
+.order-summary td {
+    padding: 6px 0 0 14px;
+    line-height: 16px;
 }
-.po-row {
-    cursor: pointer;
+.order-summary .ors-right {
+    padding-right: 14px;
+    text-align: right;
 }
-.po-row:hover {
-    background: #e9eaec;
-}
-.po-previous {
-    background: #e9eaec;
-}
-.po-selected {
-    background: #FFF !important;
-    cursor: default;
+.ors-route-raw {
+    margin-top: 5px;
+    font-size: 11px;
+    line-height: 13px;
 }
 
-
-/* Details */
-.pod-hidden {
-    display: none;
-}
-.po-details .pod-cell {
-    padding: 0;
-}
-.pod-wrapper {
-    display: none;
-}
-.pod-content {
-    border-top: 1px dashed #CCC;
-    padding: 10px 14px;
-}
-.pod-passenger {
-    margin: 0 0 5px;
+/* Controls */
+.order-controls {
+    margin: 14px 14px 0;
+    padding-bottom: 10px;
     overflow: hidden;
+    font-size: 12px;
+    line-height: 14px;
 }
-.pod-name {
-    margin-right: 14px;
+.orc-show {
     float: left;
-    font-weight: bold;
+    margin-right: 25px;
+    color: #777;
+    text-decoration: underline;
 }
-.pod-ticket {
-    float: left;
-}
-.pod-pnr {
-    margin: 10px 0 0;
+.orc-pnr a {
+    color: #777;
 }
 
+/* Passengers */
+.ord-passengers {
+    border-top: 1px solid #CCC;
+    padding: 6px 0 14px;
+}
+.ord-passengers th {
+    padding: 10px 0 0 14px;
+    font-size: 11px;
+    line-height: 13px;
+    color: #777;
+    text-transform: uppercase;
+}
+.ord-passengers td {
+    padding: 6px 0 0 14px;
+    line-height: 16px;
+}
+
+/* Flights */
+.ord-flights {
+    border-top: 1px solid #CCC;
+    padding: 6px 0 14px;
+}
+.ord-flights th {
+    padding: 10px 0 0 14px;
+    font-size: 11px;
+    line-height: 13px;
+    color: #777;
+    text-transform: uppercase;
+}
+.ord-flights td {
+    padding: 6px 0 0 14px;
+    line-height: 16px;
+}
+
+/* Debug */
 .po-debug {
     background: #454752;
     color: #d9d9d9;

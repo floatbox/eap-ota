@@ -12,67 +12,117 @@
 
 <%#= debug @orders.first %>
 
-<table id="personal-orders">
-<thead class="po-header">
-<tr>
-    <th>номер</th>
-    <th>дата</th>
-    <th>маршрут</th>
-    <th>вылет</th>
-    <th>статус</th>
-    <th style="text-align: right;">стоимость</th>
-</tr>
-</thead>
 <% @orders.each do |order| %>
-<tbody class="po-row">
-<tr>
-    <td><%= order.pnr_number %></td>
-    <td><%= l(order.created_at, :format => :human_year) %></td>
-    <td><%= order.profile_route_smart %> <br><small><%= order.profile_route %></small></td>
-    <td><%= l(order.departure_date, :format => :human_year) %></td>
-    <td><%= order.profile_status %></td>
-    <td style="text-align: right;"><%= decorate_price short_price(order.profile_payment_price) %></td>
-</tr>
-<tr class="po-details pod-hidden">
-    <td colspan="6" class="pod-cell">
-    <div class="pod-wrapper">
-        <div class="pod-content">
-        <% if order.profile_ticketed? %>
-          <% order.tickets.each do |ticket| %>
-            <div class="pod-passenger">
-              <h6 class="pod-name"><%= ticket.profile_name %></h6>
-              <p class="pod-ticket">билет <%= ticket.carrier %> <%= ticket.number %></p>
-              <p class="pod-ticket">&nbsp;-&nbsp;</p>
-              <p class="pod-ticket"><%= ticket.profile_status %></p>
-              <% if ticket.flights.present? %>
+<div class="order">
+<table class="order-summary">
+    <tr>
+        <th style="width: 120px;">Дата заказа</th>
+        <th style="width: 240px;">Маршрут</th>
+        <th style="width: 120px;">Дата вылета</th>
+        <th>Номер&nbsp;брони</th>
+        <th>Номер&nbsp;подтверждения</th>
+        <th>Статус оплаты</th>
+        <th class="ors-right">Стоимость</th>
+    </tr>
+    <tr>
+        <td><%= l(order.created_at, :format => :human_year) %></td>
+        <td>
+            <p class="ors-route"><%= order.profile_route_smart %></p>
+            <p class="ors-route-raw"><%= order.profile_route %></p>
+        </td>
+        <td><%= l(order.departure_date, :format => :human_year) %></td>
+        <td><%= order.pnr_number %></td>
+        <td></td>
+        <td><%= order.profile_status %></td>
+        <td class="ors-right"><%= decorate_price short_price(order.profile_payment_price) %></td>
+    </tr>
+</table>
+<div class="order-controls">
+    <div class="orc-show">Показать детали</div>
+    <div class="orc-pnr"><a href="<%= profile_show_pnr_path(:id => order.pnr_number) %>" target="_blank">Маршрут квитанция</a></div>
+</div>
+<div class="order-details">
+
+<div class="ord-passengers">
+<% if order.profile_ticketed? %>
+    <table class="ordp-table">
+    <tr>
+        <th>Пассажир</th>
+        <th>Номер билета</th>
+        <th>Статус билета</th>
+        <th>Распечатать</th>
+    </tr>
+    <% order.tickets.each do |ticket| %>
+        <tr>
+            <td><%= ticket.profile_name %></td>
+            <td>билет <%= ticket.carrier %> <%= ticket.number %></td>
+            <td><%= ticket.profile_status %></td>
+            <td>
+            <% if ticket.flights.present? %>
                 <p class="pod-ticket">&nbsp;-&nbsp;</p>
                 <p class="pod-ticket"><a href="<%= profile_show_pnr_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id) %>" target="_blank">билет</a></p>
-              <% end %>
-              </div>
-          <% end %>
-        <% else %>
-          <% order.profile_people.each do |person| %>
-            <div class="pod-passenger">
-              <h6 class="pod-name"><%= person[:name] %></h6>
-              <p class="pod-ticket"><%= person[:status] %></p>
-            </div>
-          <% end %>
-        <% end %>
-          <div class="pod-pnr"><a href="<%= profile_show_pnr_path(:id => order.pnr_number) %>" target="_blank">Маршрут квитанция</a></div>
-        </div>
-    </div>
-
-    <% if admin_user %>
-    <div class="po-debug">
-      <%= order.payment_type %> / <%= order.payment_status %> / <%= order.ticket_status %>
-    </div>
+            <% end %>                
+            </td>
+        </tr>
     <% end %>
+    </table>
+<% else %>
+    <table class="ordp-table">
+    <tr>
+        <th>Пассажир</th>
+        <th>Статус билета</th>
+    </tr>
+    <% order.profile_people.each do |person| %>
+        <tr>
+            <td><%= person[:name] %></td>
+            <td><%= person[:status] %></td>
+        </tr>
+    <% end %>
+    </table>
+<% end %>
+</div>
 
+<div class="ord-flights">
+<table class="ordf-table">
+<tr>
+    <th>Маршрут</th>
+    <th>Отправление</th>
+    <th>Прибытие</th>
+    <th>Класс обслуживания и багаж</th>
+</tr>
+<tr>
+    <td>
+        Москва &mdash; Дюссельдорф
+        Люфтганза
+        Рейс LH&nbsp;2991
+    </td>
+    <td>
+        22 июня 2013 суббота
+        12:45
+        Внуково, терминал A
+    </td>
+    <td>
+        22 июня суббота
+        14:05
+        Дюссельдорф
+    </td>
+    <td>
+        E (HK)<br>
+        1&nbsp;место на&nbsp;пассажира
     </td>
 </tr>
-</tbody>
-<% end %>
 </table>
+</div>
+
+</div>
+<% if admin_user %>
+<div class="po-debug">
+    <%= order.payment_type %> / <%= order.payment_status %> / <%= order.ticket_status %>
+</div>
+<% end %>
+</div>
+<% end %>
+
 <script type="text/javascript">
 var ordersTable = {
 init: function() {
@@ -99,5 +149,5 @@ hide: function(row) {
     });
 }
 };
-ordersTable.init();
+//ordersTable.init();
 </script>
