@@ -136,3 +136,7 @@ ohmystats:
   production:
     enabled: yes
     project_id: qsxfvashjzioiwazcryxlgysgjuitwyfaasjvkiv
+riemann:
+  host: riemann.eviterra.com
+  test:
+    host: localhost

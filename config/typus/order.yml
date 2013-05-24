@@ -61,6 +61,7 @@ Order:
       - commission_carrier
       - commission_agent_comments
       - commission_subagent_comments
+      - commission_designator
       - commission_tour_code
       - created_at
       - updated_at
@@ -106,6 +107,7 @@ Order:
       - price_acquiring_compensation
       - price_with_payment_commission
       - price_difference
+      - commission_designator
       - commission_tour_code
       - fee_scheme
       - fix_price

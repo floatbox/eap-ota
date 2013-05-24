@@ -1,14 +1,29 @@
 # encoding: utf-8
 Eviterra::Application.configure do
-  #config.after_initialize do
-  file = File.open(Rails.root + "log/#{Rails.env}.log", "a")
-  file.sync = false
-  config.logger = ActiveSupport::BufferedLogger.new(file, Logger::INFO)
 
-  # require 'lumberjack'
-  # require 'lumberjack_syslog_device'
-  # device = Lumberjack::SyslogDevice.new
-  # config.logger = Lumberjack::Logger.new(device)
+  template = lambda do |entry| 
+    # насильно проставляем progname = 'eviterra' в Lumberjack::LogEntry
+    entry.progname = 'eviterra'
+    # тут же можно выставить severity или другие аттрибуты
+    # не меняем формат лога
+    "#{entry.message}"
+  end
+
+  # композитный девайс для Lumberjack
+  devices = [
+    Lumberjack::SyslogDevice.new(:template => template),
+    Lumberjack::Device::LogFile.new(Rails.root + "log/#{Rails.env}.log",
+      template: template)
+  ]
+  multi_device = Lumberjack::MultiDevice.new(devices)
+
+  config.logger = ActiveSupport::TaggedLogging.new(
+    Lumberjack::Logger.new(multi_device)
+  )
+
+  # новая фича в rails 3.2. Возможные варианты - :uuid, :subdomain, :pid, :remote_ip
+  # добавляет в лог указанные аттрибуты для каждого запроса
+  config.log_tags = [:uuid]
 
   # Settings specified here will take precedence over those in config/application.rb
 

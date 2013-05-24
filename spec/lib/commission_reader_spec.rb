@@ -68,6 +68,7 @@ describe Commission::Reader do
         disabled "because of Caturday, that's why"
         check { true }
         tour_code "FOOBAR"
+        designator "PP10"
         commission '2%/3'
       end
     end
@@ -87,6 +88,7 @@ describe Commission::Reader do
     its(:disabled) {should == "because of Caturday, that's why"}
     its(:disabled?) {should be_true}
     its(:tour_code) {should == "FOOBAR"}
+    its(:designator) {should == "PP10"}
     its(:check) {should be_an_instance_of(Proc)}
   end
 

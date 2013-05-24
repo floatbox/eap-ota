@@ -125,12 +125,11 @@ module Strategy::Amadeus::Tickets
       # если нужно не брать комиссию с детей или младенцев (зачем?)
       # RMCOM*** CLAIM 12P X/INF, CHD
 
-      # вот эти ремарки могут понадобиться, но пока непонятно, в каких ситуациях
       ## TKT DESIGNATOR IF REQUIRED
-      # RM COM*** TKT DSGN ...
+      amadeus.cmd("RMCOM*** TKT DSGN #{ @order.commission_designator }") if @order.commission_designator.present?
       ## TOUR CODE IF REQUIRED
       amadeus.cmd("RMCOM*** FT #{ @order.commission_tour_code }") if @order.commission_tour_code.present?
-      ## ENDORSEMENT IF ANY END IS REQUIRED
+      ## ENDORSEMENT IF ANY END IS REQUIRED (пока ни разу не понадобился)
       # RM COM*** END ...
 
       # для некомиссионных билетов( agent_commission.zero? ):

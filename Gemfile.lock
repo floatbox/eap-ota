@@ -30,7 +30,6 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    SyslogLogger (2.0)
     actionmailer (3.2.12)
       actionpack (= 3.2.12)
       mail (~> 2.4.4)
@@ -66,6 +65,7 @@ GEM
     archive-tar-minitar (0.5.2)
     arel (3.0.2)
     bcrypt-ruby (3.0.1)
+    beefcake (0.3.7)
     bson (1.5.2)
     bson_ext (1.5.2)
       bson (= 1.5.2)
@@ -181,6 +181,8 @@ GEM
     linecache19 (0.5.12)
       ruby_core_source (>= 0.1.4)
     lumberjack (1.0.3)
+    lumberjack_multi-device (0.2.0)
+      lumberjack
     lumberjack_syslog_device (1.0.0)
       lumberjack (~> 1.0)
     mail (2.4.4)
@@ -204,6 +206,7 @@ GEM
     moped (1.3.2)
     morpher_inflect (0.0.2)
       httparty
+    mtrc (0.0.4)
     multi_json (1.5.1)
     multi_xml (0.4.1)
     mysql2 (0.3.11)
@@ -272,6 +275,10 @@ GEM
       json (~> 1.4)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    riemann-client (0.2.1)
+      beefcake (>= 0.3.5)
+      mtrc (>= 0.0.4)
+      trollop (>= 1.16.2)
     rspec (2.11.0)
       rspec-core (~> 2.11.0)
       rspec-expectations (~> 2.11.0)
@@ -322,7 +329,6 @@ GEM
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    syslogger (1.5.0)
     term-ansicolor (1.0.7)
     thin (1.3.1)
       daemons (>= 1.0.9)
@@ -333,6 +339,7 @@ GEM
     treetop (1.4.12)
       polyglot
       polyglot (>= 0.3.1)
+    trollop (2.0)
     typhoeus (0.3.3)
       mime-types
     tzinfo (0.3.35)
@@ -364,7 +371,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  SyslogLogger
   airbrake
   bson_ext
   capistrano
@@ -397,6 +403,7 @@ DEPENDENCIES
   kaminari
   libnotify
   lumberjack
+  lumberjack_multi-device
   lumberjack_syslog_device
   memoize
   mobile-fu
@@ -416,6 +423,7 @@ DEPENDENCIES
   rb-fchange
   rb-fsevent
   rb-inotify
+  riemann-client
   rspec-rails
   ruby-debug19
   ruby-prof
@@ -423,7 +431,6 @@ DEPENDENCIES
   rvm-capistrano
   sass-rails
   spork
-  syslogger
   thin
   typhoeus
   typus!

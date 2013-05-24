@@ -80,6 +80,8 @@ ru:
       order:
         commission_agent_comments: "Текст договора по агентской комиссии"
         commission_subagent_comments: "Текст договора по субагентской комиссии"
+        commission_designator: "Ticket designator (для выписки в downtown)"
+        commission_tour_code: "Туркод (для выписки в downtown)"
         blank_count: "Количество бланков"
         has_refunds: "Были возвраты"
         charged_on: "Дата получения платежа"
