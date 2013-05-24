@@ -134,26 +134,6 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def recalculate_prices
-    #считаем, что в данном случае не бывает обменов/возвратов, иначе с ценами будет полная жопа
-    return if fix_price? || tickets.blank?
-    sum_and_copy_attrs sold_tickets, self,
-      :price_fare,
-      :price_tax
-    self.price_difference = 0
-    calculate_price_with_payment_commission
-    save
-    @tickets_are_loading = true
-    tickets.each do |t|
-      t.order.tickets_are_loading = true
-      t.corrected_price = t.calculated_price_with_payment_commission
-      t.price_acquiring_compensation = t.price_payment_commission
-      t.save
-    end
-    @tickets_are_loading = false
-    update_prices_from_tickets
-  end
-
   def has_data_in_tickets?
     sold_tickets.present? && sold_tickets.all?{|t| t.office_id != 'FLL1S212V'}
   end
@@ -372,6 +352,28 @@ class Order < ActiveRecord::Base
     tickets.where(:status => 'ticketed')
   end
 
+  def recalculate_prices
+    #считаем, что в данном случае не бывает обменов/возвратов, иначе с ценами будет полная жопа
+    if tickets.present? && tickets.all?{|t| t.kind == 'ticket' && t.status == 'ticketed'}
+      if fix_price?
+        tickets.every.save
+      else
+        sum_and_copy_attrs sold_tickets, self,
+          :price_fare,
+          :price_tax
+        self.price_difference = 0
+        calculate_price_with_payment_commission
+        save
+        tickets.each do |t|
+          t.corrected_price = t.calculated_price_with_payment_commission
+          t.price_acquiring_compensation = t.price_payment_commission
+          t.save
+        end
+      end
+    end
+    update_prices_from_tickets
+  end
+
   # возвращает boolean
   def update_prices_from_tickets
     tickets.reload
@@ -396,6 +398,7 @@ class Order < ActiveRecord::Base
     self.ticketed_date = first_ticket.ticketed_date if !ticketed_date && first_ticket # для тех случаев, когда билет переводят в состояние ticketed руками
     update_incomes
     save
+    update_has_refunds
   end
 
   def update_has_refunds
