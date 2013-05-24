@@ -322,6 +322,7 @@ class Order < ActiveRecord::Base
         :our_markup,
         :agent_comments,
         :subagent_comments,
+        :designator,
         :tour_code
 
       copy_attrs recommendation, self,

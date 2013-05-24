@@ -123,6 +123,11 @@ class Commission::Reader
     opts[:subagent_comments] += line + "\n"
   end
 
+  # tkt designator, используется при выписке в downtown
+  def designator designator
+    opts[:designator] = designator
+  end
+
   # туркод, используется при выписке в downtown
   def tour_code tour_code
     opts[:tour_code] = tour_code

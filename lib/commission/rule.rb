@@ -15,7 +15,7 @@ class Commission::Rule
     :interline, :domestic, :international, :classes, :subclasses,
     :routes,
     :departure, :departure_country, :important,
-    :check, :agent_comments, :subagent_comments, :tour_code, :source,
+    :check, :agent_comments, :subagent_comments, :designator, :tour_code, :source,
     :expr_date, :strt_date,
     :system, :ticketing_method, :corrector, :number
 
