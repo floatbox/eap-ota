@@ -1,0 +1,68 @@
+<%# FIXME ugly shit. избавиться от обоих %>
+<table cellspacing="0" cellpadding="0" width="916" style="font-size: 14px; line-height: 17px; font-family: Arial, sans-serif; color: #333333;">
+<thead valign="bottom" style="font-size: 13px;">
+<tr>
+    <td width="320" style="font-weight: bold; font-size: 18px; line-height: 21px;"><% unless @lang %>Маршрут<br><% end %>Itinerary</td>
+    <td width="20"><br></td>
+    <td width="190"><% unless @lang %>Отправление<br><% end %>Departure</td>
+    <td width="20"><br></td>
+    <td width="190"><% unless @lang %>Прибытие<br><% end %>Arrival</td>
+    <td width="20"><br></td>
+    <td width="156"><% unless @lang %>Класс тарифа и багаж<br><% end %>Fare class and luggage</td>
+</tr>
+<tr>
+    <td colspan="7" style="font-size: 12px; line-height: 12px;"><div style="border-bottom: 1px solid #d6d6d6;"><br></div></td>
+</tr>
+</thead>
+<tbody valign="top">
+<% for flight, booking_class, baggage_limitations in order.profile_flights.zip( order.profile_booking_classes, order.profile_baggage_array) %>
+<tr>
+    <td colspan="7" style="font-size: 12px; line-height: 12px;"><br></td>
+</tr>
+<tr>
+    <td>
+        <div style="font-weight: bold; font-size: 16px; line-height: 19px; margin-bottom: 5px;"><%= flight.departure.city.name %> — <%= flight.arrival.city.name %></div>
+        <%= flight.operating_carrier_name || flight.marketing_carrier_name %><br>
+        Рейс <strong style="font-weight: bold;"><%= flight.marketing_carrier_iata %>&nbsp;<%= flight.flight_number %></strong><br>
+        Самолет <%= flight.equipment_type_name %><br>
+        <% if flight.warning %>
+            <%= flight.warning %><br>
+        <% end %>
+    </td>
+    <td><br></td>
+    <td>
+        <div style="font-weight: bold;"><%= full_human_date( flight.departure_date ) %><br><%= human_week_day( flight.departure_date ) %></div>
+        <div style="font-weight: bold; font-size: 18px; line-height: 24px;"><%= fmt_time(flight.departure_time) %></div>
+        <%= flight.departure_name %>&nbsp;<span style="color: #777777; font-size: 11px; line-height: 11px;"><%= flight.departure_iata %></span><br>
+        <% if flight.departure_term %>
+            Терминал&nbsp;<%= flight.departure_term %><br>
+        <% end %>
+    </td>
+    <td><br></td>
+    <td>
+        <div style="font-weight: bold;"><%= human_date( flight.arrival_date ) %><br><%= human_week_day( flight.arrival_date ) %></div>
+        <div style="font-weight: bold; font-size: 18px; line-height: 24px;"><%= fmt_time(flight.arrival_time) %></div>
+        <%= flight.arrival_name %>&nbsp;<span style="color: #777777; font-size: 11px; line-height: 11px;"><%= flight.arrival_iata %></span><br>
+        <% if flight.arrival_term %>
+            Терминал&nbsp;<%= flight.arrival_term %><br>
+        <% end %>
+    </td>
+    <td><br></td>
+    <td>
+        <%= booking_class %> (HK)<br>
+        <div style="margin-top: 5px; font-size: 13px; line-height: 16px;">
+            <% if baggage_limitations %>
+                <%= baggage_summary(baggage_limitations) %>
+            <% elsif flight.baggage_limit_for_adult %>
+                <%= baggage_html_simple(flight.baggage_limit_for_adult) %>
+            <% end %>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td colspan="7" style="font-size: 12px; line-height: 12px;"><div style="border-bottom: 1px solid #d6d6d6;"><br></div></td>
+</tr>
+<% end %>
+</tbody>
+</table>
+

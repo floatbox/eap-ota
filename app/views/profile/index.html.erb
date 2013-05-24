@@ -59,6 +59,9 @@
           <% end %>
         <% end %>
           <div class="pod-pnr"><a href="<%= profile_show_pnr_path(:id => order.pnr_number) %>" target="_blank">Маршрут квитанция</a></div>
+        <% if order.profile_ticketed? && order.profile_flights %>
+          <%= render :partial => 'flights', :locals => { :order => order } %>
+        <% end %>
         </div>
     </div>
 
