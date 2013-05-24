@@ -800,6 +800,15 @@ important!
 discount "1.5%"
 commission "5%/3%"
 
+example 'accjfk/su:dl'
+example 'zigjfk/su:dl jfkzig/su:dl'
+example 'accjfk/su:dl jfkacc/su:dl'
+expr_date "31.03.2014"
+agent "1%"
+subagent "0.5%"
+check { code_share? }
+commission "1%/0.5%"
+
 # example 'okocdg cdgoko/ab'
 # example 'cdgoko'
 # example 'okomia'
