@@ -29,10 +29,9 @@ end
 gem 'evergreen', :require => 'evergreen/rails', :group => :development
 
 # логгеры. выберу только один
-gem 'SyslogLogger'
-gem 'syslogger'
 gem 'lumberjack'
 gem 'lumberjack_syslog_device'
+gem 'lumberjack_multi-device'
 gem 'riemann-client', require: false
 # для импорта zip файлов
 gem 'zip'
