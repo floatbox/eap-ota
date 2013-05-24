@@ -72,9 +72,10 @@ module Pricing
 
     def calculated_price_with_payment_commission
       all_tickets = order.tickets.where('kind = "ticket" AND status != "voided"')
-      corrected_total = all_tickets.sum(:price_fare) + all_tickets.sum(:price_tax)
+      prices = [:price_fare, :price_tax, :price_consolidator, :price_blanks, :price_discount, :price_our_markup]
+      corrected_total = prices.map{|p| all_tickets.sum(p)}.sum
       return 0 if corrected_total == 0
-      k = (price_tax + price_fare).to_f / corrected_total
+      k = prices.map{|p| send(p)}.sum.to_f / corrected_total
       (order.price_with_payment_commission * k).round(2)
     end
 
