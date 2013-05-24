@@ -12,6 +12,7 @@ describe Order do
     it 'updates price_acquiring_compensation' do
       order = create(:order)
       ticket = create(:ticket, :corrected_price => (order.price_with_payment_commission * 2), :order => order)
+      order.update_prices_from_tickets
       order.price_acquiring_compensation.should == ticket.price_acquiring_compensation
     end
   end
@@ -398,6 +399,7 @@ describe Order do
       t1 = create(:ticket, :order => order)
       t2 = create(:ticket, :order => order)
       t3 = create(:refund, :order => order, :parent => t2)
+      order.update_prices_from_tickets
       order
     end
 
