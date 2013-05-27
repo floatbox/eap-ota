@@ -90,11 +90,13 @@ I18n.locale = '<%= I18n.locale %>';
     </div>
 
     <% if admin_user %>
+    <div class="ph-lang">
         <% if I18n.locale == :en %>
             <span class="link">RU</span>
         <% else %>
             <span class="link" data-locale="en">EN</span>
         <% end %>    
+    </div>
     <% end %>
 
     <%= render "profile/popup" %>
