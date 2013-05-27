@@ -69,6 +69,18 @@ module ProfileOrder
     end
   end
 
+  def profile_flights
+    tickets.first.flights.presence
+  end
+
+  def profile_booking_classes
+    tickets.first.booking_classes  
+  end
+
+  def profile_baggage_array
+    tickets.first.baggage_array  
+  end
+
   def profile_ticketed?
     tickets_count > 0
   end

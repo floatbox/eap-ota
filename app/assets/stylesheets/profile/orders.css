@@ -50,19 +50,33 @@
     font-size: 12px;
     line-height: 14px;
 }
-.orc-show {
+.orc-show,
+.orc-hide {
     float: left;
     margin-right: 25px;
     color: #777;
     text-decoration: underline;
+    cursor: pointer;
+}
+.orc-hide {
+    display: none;
 }
 .orc-pnr a {
     color: #777;
 }
+.orc-link {
+    margin: 0 -6px;
+    padding: 4px 6px;
+}
+
+/* Details */
+.order-details {
+    display: none;
+}
 
 /* Passengers */
 .ord-passengers {
-    border-top: 1px solid #CCC;
+    border-top: 1px solid #DDD;
     padding: 6px 0 14px;
 }
 .ord-passengers th {
@@ -79,8 +93,11 @@
 
 /* Flights */
 .ord-flights {
-    border-top: 1px solid #CCC;
-    padding: 6px 0 14px;
+    border-top: 1px solid #DDD;
+    padding: 6px 0 20px;
+}
+.ord-flights table {
+    width: 100%;
 }
 .ord-flights th {
     padding: 10px 0 0 14px;
@@ -90,16 +107,33 @@
     text-transform: uppercase;
 }
 .ord-flights td {
-    padding: 6px 0 0 14px;
+    padding: 14px 0 0 14px;
+    font-size: 13px;
     line-height: 16px;
+}
+.ordf-route {
+    margin: 0 0 2px;
+    font-weight: bold;
+    font-size: 14px;    
+}
+.ordf-date {
+    margin: 0 0 2px;
+    font-weight: bold;
+    font-size: 14px;
+}
+.ordf-time {
+    margin: 2px 0;
+    font-weight: bold;
+    font-size: 16px;
+}
+.ordf-fare {
+    margin: 0 0 2px;
+    font-size: 14px;
 }
 
 /* Debug */
-.po-debug {
+.order-debug {
     background: #454752;
     color: #d9d9d9;
-    font-size: smaller;
-    border-radius: 10px;
-    padding: 10px;
-    margin: 5px;
+    padding: 8px 14px;
 }

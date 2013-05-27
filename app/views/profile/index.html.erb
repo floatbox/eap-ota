@@ -11,6 +11,7 @@
 </ul>
 
 <%#= debug @orders.first %>
+<div id="orders">
 
 <% @orders.each do |order| %>
 <div class="order">
@@ -39,17 +40,20 @@
 </table>
 <div class="order-controls">
     <div class="orc-show">Показать детали</div>
-    <div class="orc-pnr"><a href="<%= profile_show_pnr_path(:id => order.pnr_number) %>" target="_blank">Маршрут квитанция</a></div>
+    <div class="orc-hide">Скрыть детали</div>    
+    <div class="orc-pnr">
+        <span class="orc-link"><a href="<%= profile_show_pnr_path(:id => order.pnr_number) %>" target="_blank">Маршрут квитанция</a></span>
+    </div>
 </div>
 <div class="order-details">
 
 <div class="ord-passengers">
 <% if order.profile_ticketed? %>
-    <table class="ordp-table">
+    <table>
     <tr>
-        <th>Пассажир</th>
-        <th>Номер билета</th>
-        <th>Статус билета</th>
+        <th style="width: 294px;">Пассажир</th>
+        <th style="width: 200px;">Номер билета</th>
+        <th style="width: 200px;">Статус билета</th>
         <th>Распечатать</th>
     </tr>
     <% order.tickets.each do |ticket| %>
@@ -69,7 +73,7 @@
 <% else %>
     <table class="ordp-table">
     <tr>
-        <th>Пассажир</th>
+        <th style="width: 294px;">Пассажир</th>
         <th>Статус билета</th>
     </tr>
     <% order.profile_people.each do |person| %>
@@ -82,72 +86,48 @@
 <% end %>
 </div>
 
-<div class="ord-flights">
-<table class="ordf-table">
-<tr>
-    <th>Маршрут</th>
-    <th>Отправление</th>
-    <th>Прибытие</th>
-    <th>Класс обслуживания и багаж</th>
-</tr>
-<tr>
-    <td>
-        Москва &mdash; Дюссельдорф
-        Люфтганза
-        Рейс LH&nbsp;2991
-    </td>
-    <td>
-        22 июня 2013 суббота
-        12:45
-        Внуково, терминал A
-    </td>
-    <td>
-        22 июня суббота
-        14:05
-        Дюссельдорф
-    </td>
-    <td>
-        E (HK)<br>
-        1&nbsp;место на&nbsp;пассажира
-    </td>
-</tr>
-</table>
-</div>
+<% if order.profile_ticketed? && order.profile_flights %>
+    <%= render :partial => 'flights', :locals => { :order => order } %>
+<% end %>
 
 </div>
 <% if admin_user %>
-<div class="po-debug">
+<div class="order-debug">
     <%= order.payment_type %> / <%= order.payment_status %> / <%= order.ticket_status %>
 </div>
 <% end %>
 </div>
+
 <% end %>
+</div>
 
 <script type="text/javascript">
 var ordersTable = {
 init: function() {
     var that = this;
-    this.el = $('#personal-orders');
-    this.el.on('click', '.po-row:not(.po-selected)', function() {
-        var selected = that.el.find('.po-selected');
-        if (selected.length) {
-            that.hide(selected);
+    var context = $('#orders');
+    context.on('click', '.order-summary, .order-controls', function() {
+        var elem = $(this).closest('.order');
+        if (elem.find('.order-details').is(':visible')) {
+            that.hide(elem);
+        } else {
+            that.show(elem);
         }
-        that.show($(this));
+    });
+    context.find('.orc-link').on('click', function(event) {
+        event.stopPropagation();
     });
 },
-show: function(row) {
-    row.addClass('po-selected');
-    row.find('.po-details').removeClass('pod-hidden');
-    row.find('.pod-wrapper').slideDown(150);
+show: function(elem) {
+    elem.find('.orc-show').hide();
+    elem.find('.orc-hide').show();        
+    elem.find('.order-details').slideDown(250);
 },
-hide: function(row) {
-    row.removeClass('po-selected').addClass('po-previous');
-    row.find('.pod-wrapper').slideUp(150, function() {
-        row.find('.po-details').addClass('pod-hidden');
-        row.removeClass('po-previous');
-    });
+hide: function(elem) {
+    elem.find('.orc-hide').hide();
+    elem.find('.orc-show').show();
+    elem.find('.order-details').slideUp(250);
 }
 };
-//ordersTable.init();
+ordersTable.init();
 </script>
