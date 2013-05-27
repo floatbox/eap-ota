@@ -75,7 +75,7 @@ class Ticket < ActiveRecord::Base
   before_save :set_prices
 
   def set_prices
-    self.price_acquiring_compensation = price_payment_commission if corrected_price
+    self.price_acquiring_compensation = price_payment_commission if corrected_price && kind == 'ticket'
     self.price_difference = price_with_payment_commission - price_real
   end
 
