@@ -54,7 +54,7 @@
         <th style="width: 294px;">Пассажир</th>
         <th style="width: 200px;">Номер билета</th>
         <th style="width: 200px;">Статус билета</th>
-        <th>Распечатать</th>
+        <th><!--Распечатать--></th>
     </tr>
     <% order.tickets.each do |ticket| %>
         <tr>
@@ -63,8 +63,7 @@
             <td><%= ticket.profile_status %></td>
             <td>
             <% if ticket.flights.present? %>
-                <p class="pod-ticket">&nbsp;-&nbsp;</p>
-                <p class="pod-ticket"><a href="<%= profile_show_pnr_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id) %>" target="_blank">билет</a></p>
+                <a class="ordp-ticket" href="<%= profile_show_pnr_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id) %>" target="_blank">распечатать</a>
             <% end %>                
             </td>
         </tr>
