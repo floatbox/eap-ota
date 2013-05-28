@@ -243,14 +243,14 @@ process: function(s) {
         break;
     case 'success':
         booking.countdown.stop();
-        
+
         var price = this.el.find('.bf-newprice').attr('data-price');
         _kmq.push(['record', 'BOOKING: SUCCESS', {'Amount': Number(price)}]);
         _gaq.push(['_trackPageview', '/booking/success']);
         _gaq.push(['_addTrans', this.result.find('.bfr-pnr').text(), '', price]);
         _gaq.push(['_trackTrans']);
         _yam.hit('/booking/success');
-        
+
         this.result.find('.bfrs-insurance .bfrsa-link').click(function() {
             _kmq.push(['record', 'BOOKING: insurance link pressed']);
             _gaq.push(['_trackEvent', 'Бронирование', 'Переход на страницу страховки']);
@@ -258,6 +258,10 @@ process: function(s) {
         this.result.find('.bfrs-hotels .bfrsa-link').click(function() {
             _kmq.push(['record', 'BOOKING: hotels link pressed']);
             _gaq.push(['_trackEvent', 'Бронирование', 'Переход к отелям на Островке']);
+        });
+        this.result.find('.bfrs-excursion .bfrsa-link').click(function() {
+            _kmq.push(['record', 'BOOKING: excursions link pressed']);
+            _gaq.push(['_trackEvent', 'Бронирование', 'Переход к экскурсиям на Weatlas']);
         });
 
         // не даём отправить форму второй раз

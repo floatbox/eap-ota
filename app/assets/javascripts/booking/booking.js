@@ -273,25 +273,29 @@ start: function() {
     var that = this;
     var from = new Date().getTime();
     this.el = booking.el.find('.bf-timer');
+    this.title = this.el.find('.bft-title');
     this.counter = this.el.find('.bft-counter');
-    this.value = this.el.find('.bftc-value');
     this.timer = setInterval(function() {
         var now = new Date().getTime();
         var time = Math.max(0, 1200 - Math.round((now - from) / 1000));
-        that.show(time);
         if (time === 0) {
+            that.title.html(I18n.t('booking.countdown.expired'));
             that.stop();
+        } else {
+            that.show(time);
         }
-    }, 1000);
-    this.expires = false;
+    }, 5000);
+    this.minutes = undefined;
+    this.show(1200);
 },
 show: function(time) {
-    var m = Math.floor(time / 60);
-    var s = time % 60;
-    this.value.text((m < 10 ? '0:0' : '0:') + m + (s < 10 ? ':0' : ':') + s);
-    if (time < 300 && !this.expires) {
-        this.counter.addClass('bft-expires');
-        this.expires = true;
+    var minutes = Math.ceil(time / 60);
+    if (minutes !== this.minutes) {
+        this.minutes = minutes;
+        this.counter.html(I18n.t('time.minutes', {count: minutes}));
+        if (minutes === 5) {
+            this.counter.addClass('bft-expires');
+        }
     }
 },
 stop: function() {

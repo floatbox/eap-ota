@@ -2,6 +2,8 @@
 
 class StatCounters
 
+  include Monitoring
+
   DATE_FORMAT = '%Y/%m/%d'
   DATE_HOUR_FORMAT = '%Y/%m/%d %H'
 
@@ -29,6 +31,17 @@ class StatCounters
   end
 
   def self.inc keys
+    # riemann
+    # до лучших времен отсылаем все ключи, потом следует уменьшить до одного
+    keys.map{|k| k.gsub(/\./, ' ')}.each do |key|
+      event = {
+        service: key,
+        tags: %W|graph meter|,
+        metric: 1.0,
+      }
+      RiemannConnection.send_event event
+    end
+    # mongo
     connection['counters_daily'].find(date_key).upsert('$inc' => json_set(keys))
     connection['counters_hourly'].find(hour_key).upsert('$inc' => json_set(keys))
   end
