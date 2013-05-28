@@ -2819,8 +2819,6 @@ check {
   includes_only(city_iatas, 'MOW LLK') or
   includes_only(city_iatas, 'MOW SIP') or
   includes_only(city_iatas, 'MOW MRV') or
-  includes_only(city_iatas, 'MOW TIV') or
-  
   includes_only(city_iatas, 'SVX AER') or
   includes_only(city_iatas, 'SVX KZN') or
   includes_only(city_iatas, 'SVX SIP') or
@@ -2872,6 +2870,15 @@ check {
   includes_only(city_iatas, 'GOJ NMA') or
   includes_only(city_iatas, 'IKT PKC')
 }
+important!
+commission "0.1%/0.5"
+
+example "svotiv/U63171"
+example "tivsvo/U63172"
+example "svotiv/U63171 tivsvo/U63172"
+agent "0.1% Москва-Тиват; Тиват-Москва; Москва-Тиват-Москва; Тиват-Москва-Тиват (только на рейсы U6 3171/3172);"
+subagent "0.5 Москва-Тиват; Тиват-Москва; Москва-Тиват-Москва; Тиват-Москва-Тиват (только на рейсы U6 3171/3172);"
+check {  includes_only(city_iatas, 'MOW TIV') and includes_only(flights.every.full_flight_number, %W(U63171 U63172)) }
 important!
 commission "0.1%/0.5"
 
