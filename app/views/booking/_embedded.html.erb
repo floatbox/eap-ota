@@ -32,12 +32,8 @@
 
     <div class="bf-timer">
     <div class="bft-content">
-        <div class="bft-counter">
-            <div class="bftc-title">Осталось</div>
-            <div class="bftc-value">0:20:00</div>
-        </div>
-        <h6 class="bft-title">Ваши билеты зарезервированы</h6>
-        <p class="bft-description">Введите данные <%= @order_form.people.one? ? 'пассажира' : 'пассажиров' %>, контактные данные покупателя и&nbsp;данные для оплаты. <strong>Покупку нужно завершить в&nbsp;течение 20&nbsp;минут</strong> — в&nbsp;противном случае авиакомпания не&nbsp;гарантирует наличие мест по&nbsp;этому тарифу.</p>
+        <h6 class="bft-title"><%= raw t 'booking.countdown.title', :counter => '<span class="bft-counter"></span>' %></h6>
+        <p class="bft-description"><%= t 'booking.countdown.description', :passengers => t(@order_form.people.one? ? 'one' : 'few', :scope => 'booking.countdown.passengers') %></p>
     </div>
     </div>
       
