@@ -1054,6 +1054,23 @@ interline :absent
 ## discount '1'
 commission "1eur/5"
 
+example 'ledpes'
+example 'ledpes pesled/ab'
+strt_date "01.06.2013"
+expr_date "30.06.2013"
+agent "9% от тарифа на собств.рейсы FV (исключая code-share) в классах Эконом и Бизнес по маршруту Санкт-Петербург-Петрозаводск или обратно."
+subagent "7% от тарифа на собств.рейсы FV (исключая code-share) в классах Эконом и Бизнес по маршруту Санкт-Петербург-Петрозаводск или обратно."
+interline :no
+check { includes_only(country_iatas, 'LED PES') and not code_share? }
+discount "5.3%"
+commission '9%/7%'
+
+agent "4% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
+subagent "2% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
+interline :no, :yes
+discount "1.5%"
+commission '4%/2%'
+
 example "svocdg/r"
 agent ""
 subagent ""
