@@ -14,6 +14,7 @@ module Monitoring
     # @param event_hash [Hash] хеш со значениями ивента
     # @return [Hash] возвращает отправленный event_hash
     def self.send_event(event_hash, protocol=:udp)
+      return unless Conf.riemann.enabled
       @@connection ||= Riemann::Client.new(host: Conf.riemann.host)
       event_hash = fix_env_tag event_hash
       # отсылаем ивент в риманн
