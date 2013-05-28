@@ -12,7 +12,9 @@
 
 <%#= debug @orders.first %>
 <div id="orders">
-
+<% if @orders.empty? %>
+    <p class="orders-empty">Вы еще ничего не заказывали. Хотите <a href="/">купить билет</a>?</p>
+<% else %>
 <% @orders.each do |order| %>
 <div class="order">
 <table class="order-summary">
@@ -97,6 +99,7 @@
 <% end %>
 </div>
 
+<% end %>
 <% end %>
 </div>
 

@@ -11,6 +11,18 @@
     float: left;
 }
 
+/* No orders */
+.orders-empty {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    margin: -20px 0 0 -300px;
+    font-size: 20px;
+    line-height: 22px;
+    text-align: center;
+}
+
 /* Order */
 .order {
     margin: 0 -14px 15px;
