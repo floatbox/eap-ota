@@ -1564,6 +1564,8 @@ subagent "8%"
 subclasses "FADZP"
 check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP10"
 discount "6%"
 commission "10%/8%"
 
@@ -1574,6 +1576,8 @@ subagent "6%"
 subclasses "QVWSTLK"
 check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP8"
 discount "4.6%"
 commission "8%/6%"
 
@@ -1584,6 +1588,8 @@ subagent "3%"
 subclasses "YBMUH"
 check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP5"
 discount "2.25%"
 commission "5%/3%"
 
@@ -1661,6 +1667,8 @@ subagent "8%"
 subclasses "FADZP"
 check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP10"
 discount "6%"
 commission "10%/8%"
 
@@ -1671,6 +1679,8 @@ subagent "6%"
 subclasses "QVWSTLK"
 check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP8"
 discount "4%"
 commission "8%/6%"
 
@@ -1681,6 +1691,8 @@ subagent "3%"
 subclasses "YBMUH"
 check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP5"
 discount "1.5%"
 commission "5%/3%"
 
@@ -1941,6 +1953,8 @@ subagent "8%"
 subclasses "FADZP"
 check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP10"
 discount "6%"
 commission "10%/8%"
 
@@ -1951,6 +1965,8 @@ subagent "6%"
 subclasses "QVWSTLK"
 check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP8"
 discount "4%"
 commission "8%/6%"
 
@@ -1961,6 +1977,8 @@ subagent "3%"
 subclasses "YBMUH"
 check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP5"
 discount "1.5%"
 commission "5%/3%"
 
@@ -2080,6 +2098,7 @@ expr_date "31.05.2013"
 agent    "от опубл. тарифов, а также от опубл. IT гросс тарифов (искл.групповые тарифы) на собств.рейсы QR: 5% Бизнес класс"
 subagent "3,5% от опубл. тарифов на собственные рейсы QR"
 classes :business
+tour_code "USAN002"
 discount "3%"
 commission "5%/3.5%"
 
@@ -2220,6 +2239,8 @@ subagent "8%"
 subclasses "FADZP"
 check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP10"
 discount "6%"
 commission "10%/8%"
 
@@ -2230,6 +2251,8 @@ subagent "6%"
 subclasses "QVWSTLK"
 check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP8"
 discount "4%"
 commission "8%/6%"
 
@@ -2240,6 +2263,8 @@ subagent "3%"
 subclasses "YBMUH"
 check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP5"
 discount "1.5%"
 commission "5%/3%"
 
@@ -2407,6 +2432,8 @@ subclasses "FADZP"
 check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
 international
+tour_code "815ZU"
+designator "PP10"
 discount "6%"
 commission "10%/8%"
 
@@ -2418,6 +2445,8 @@ subclasses "QVWSTLK"
 check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
 international
+tour_code "815ZU"
+designator "PP8"
 discount "4%"
 commission "8%/6%"
 
@@ -2429,6 +2458,8 @@ subclasses "YBMUH"
 check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
 international
+tour_code "815ZU"
+designator "PP5"
 discount "1.5%"
 commission "5%/3%"
 
