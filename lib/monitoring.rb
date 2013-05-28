@@ -18,6 +18,7 @@ module Monitoring
       event_hash = fix_env_tag event_hash
       # отсылаем ивент в риманн
       _send_event(event_hash, protocol)
+      Rails.logger.info("RIEMANN: event #{ event_hash } sent to #{ Conf.riemann.host }")
       event_hash
     end
 
