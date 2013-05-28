@@ -60,7 +60,7 @@
     <% order.tickets.each do |ticket| %>
         <tr>
             <td><%= ticket.profile_name %></td>
-            <td>билет <%= ticket.carrier %> <%= ticket.number %></td>
+            <td><%= ticket.number_with_code %></td>
             <td><%= ticket.profile_status %></td>
             <td>
             <% if ticket.flights.present? %>
