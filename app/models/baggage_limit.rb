@@ -12,16 +12,13 @@ class BaggageLimit
   end
 
   def quantity_code= code
-    if code == 'N'
+    case code
+    when 'N'
       @baggage_type = 'N'
-    elsif code == '700'
-      @baggage_type = 'W'
-      @measure_unit = 'K'
-    elsif code == '701'
+    when '700', '701'
       @baggage_type = 'W'
       @measure_unit = 'K'
     end
-
   end
 
   def no_baggage?
