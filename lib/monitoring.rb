@@ -46,6 +46,17 @@ module Monitoring
       event_hash
     end
 
+    # подписываемся на событие request_performance
+    ActiveSupport::Notifications.subscribe /request_performance/ do |name, start, finish, id, payload|
+      event = {
+        service: payload[:key],
+        tags: [],
+        metric: (payload[:value].to_f || 1.0 )
+      }
+      event[:tags] << payload[:graph_type] if payload[:graph_type]
+      send_event event
+    end
+
     private_class_method :_send_event, :fix_env_tag
   end
 

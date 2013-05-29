@@ -36,7 +36,7 @@ class StatCounters
     keys.map{|k| k.gsub(/\./, ' ')}.each do |key|
       event = {
         service: key,
-        tags: %W|graph meter|,
+        tags: %W|meter|,
         metric: 1.0,
       }
       RiemannConnection.send_event event
