@@ -7,6 +7,23 @@ class BaggageLimit
     !@baggage_quantity && !@baggage_weight
   end
 
+  def free_allowance= fa
+    @baggage_quantity = @baggage_weight = fa
+  end
+
+  def quantity_code= code
+    if code == 'N'
+      @baggage_type = 'N'
+    elsif code == '700'
+      @baggage_type = 'W'
+      @measure_unit = 'K'
+    elsif code == '701'
+      @baggage_type = 'W'
+      @measure_unit = 'K'
+    end
+
+  end
+
   def no_baggage?
     @baggage_quantity == 0 || @baggage_weight == 0
   end

@@ -16,6 +16,8 @@ describe Amadeus::Response::FareInformativePricingWithoutPNR do
 
     specify {response.recommendations(recommendation).first.price_fare.should == 99640}
     specify {response.recommendations(recommendation).first.price_tax.should == 18086}
+
+    its('recommendations.first.baggage_array') {should ==  [[BaggageLimit.new(baggage_quantity: 1, baggage_type: 'N')] * 3]*4}
   end
 
   describe 'how we do change things for the better. 1 adult, 1 child, 4 sets of recommendations per person' do
@@ -40,6 +42,8 @@ describe Amadeus::Response::FareInformativePricingWithoutPNR do
 
     specify {response.recommendations(recommendation).first.price_fare.should == 29600.0}
     specify {response.recommendations(recommendation).first.price_tax.should == 492.0}
+
+    its('recommendations.first.baggage_array') {should ==  [[BaggageLimit.new(baggage_weight: 20, baggage_type: 'W', measure_unit: 'K')] * 4 + [BaggageLimit.new(baggage_weight: 10, baggage_type: 'W', measure_unit: 'K')]]}
   end
 
   describe 'when children priced as adults' do
