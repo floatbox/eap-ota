@@ -777,15 +777,26 @@ commission "8%/6%"
 
 example 'accjfk/s'
 example 'zigjfk/i jfkzig/s'
-example 'accjfk/k/dl:dl jfkacc/k/dl:dl'
+example 'accjfk/k jfkacc/k'
 expr_date "31.03.2014"
 agent "5%"
 subagent "3%"
 subclasses "SIQKLUT"
-check { includes_only(country_iatas.first, 'SN GH') and includes_only(country_iatas, 'US SN GH') and includes_only(operating_carrier_iatas, 'DL') }
+check { includes_only(country_iatas.first, 'SN GH') and includes_only(country_iatas, 'US SN GH') }
 ticketing_method "downtown"
 discount "1.5%"
 commission "5%/3%"
+
+example 'accjfk/su:dl'
+example 'zigjfk/su:dl jfkzig/su:dl'
+example 'accjfk/su:dl jfkacc/su:dl'
+example 'jfksvo/x/su:dl' 
+expr_date "31.03.2014"
+agent "1%"
+subagent "0.5%"
+check { code_share? }
+important!
+commission "1%/0.5%"
 
 example 'accjfk/d/az:dl'
 example 'zigjfk/i/az:dl jfkzig/s/az:dl'
@@ -799,15 +810,6 @@ ticketing_method "downtown"
 important!
 discount "1.5%"
 commission "5%/3%"
-
-example 'accjfk/su:dl'
-example 'zigjfk/su:dl jfkzig/su:dl'
-example 'accjfk/su:dl jfkacc/su:dl'
-expr_date "31.03.2014"
-agent "1%"
-subagent "0.5%"
-check { code_share? }
-commission "1%/0.5%"
 
 # example 'okocdg cdgoko/ab'
 # example 'cdgoko'
