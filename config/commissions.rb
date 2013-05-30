@@ -3376,7 +3376,7 @@ check {
   includes(city_iatas, 'MOW') && includes(city_iatas, 'SIP') ||
   includes(city_iatas, 'MOW') && includes(city_iatas, 'AER') ||
   includes(city_iatas, 'MOW') && includes(city_iatas, 'AER') ||
-  includes(city_iatas, 'MOW') && includes(city_iatas, 'AAQ')
+  includes(city_iatas, 'MOW') && includes(city_iatas, 'AAQ') ||
 }
 subagent ""
 ticketing_method "direct"
@@ -3406,6 +3406,7 @@ agent "3% все направления и классы бронирования
 subagent "3%"
 check { code_share? }
 ticketing_method "direct"
+important!
 discount "2%"
 commission "3%/3%"
 
