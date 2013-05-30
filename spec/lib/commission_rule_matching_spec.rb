@@ -46,6 +46,7 @@ describe Commission::Rule::Matching do
     end
 
     let(:no_interline)             { Recommendation.example('SVOCDG CDGSVO') }
+    let(:codeshare)                { Recommendation.example('SVOCDG CDGSVO/AB:SU') }
     let(:interline)                { Recommendation.example('SVOCDG/AB CDGSVO') }
     let(:interline_first)          { Recommendation.example('SVOCDG/AB CDGSVO') }
     let(:interline_but_first)      { Recommendation.example('SVOCDG CDGSVO/AB') }
@@ -60,6 +61,7 @@ describe Commission::Rule::Matching do
           # nothing here
         end
       end
+      it {should match_recommendation( codeshare ) }
       it {should match_recommendation( no_interline ) }
       it {should_not match_recommendation( interline ) }
       it {should_not match_recommendation( interline_but_first ) }
@@ -73,6 +75,21 @@ describe Commission::Rule::Matching do
           interline :no
         end
       end
+      it {should match_recommendation( codeshare ) }
+      it {should match_recommendation( no_interline ) }
+      it {should_not match_recommendation( interline ) }
+      it {should_not match_recommendation( interline_but_first ) }
+      it {should_not match_recommendation( interline_half ) }
+      it {should_not match_recommendation( interline_absent ) }
+    end
+
+    describe "interline :no_codeshare" do
+      subject do
+        commission do
+          interline :no_codeshare
+        end
+      end
+      it {should_not match_recommendation( codeshare ) }
       it {should match_recommendation( no_interline ) }
       it {should_not match_recommendation( interline ) }
       it {should_not match_recommendation( interline_but_first ) }
@@ -86,6 +103,7 @@ describe Commission::Rule::Matching do
           interline :yes
         end
       end
+      it {should_not match_recommendation( codeshare ) }
       it {should_not match_recommendation( no_interline ) }
       it {should match_recommendation( interline ) }
       it {should match_recommendation( interline_but_first ) }
@@ -138,6 +156,7 @@ describe Commission::Rule::Matching do
           interline :absent
         end
       end
+      it {should_not match_recommendation( codeshare ) }
       it {should_not match_recommendation( no_interline ) }
       it {should_not match_recommendation( interline ) }
       it {should match_recommendation( interline_absent ) }

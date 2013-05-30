@@ -41,6 +41,9 @@ module Commission::Rule::Matching
       case definition
       when :no
         not recommendation.interline?
+      when :no_codeshare
+        not recommendation.interline? and
+        not recommendation.codeshare?
       when :yes, :unconfirmed
         recommendation.interline? and
         recommendation.validating_carrier_participates?
