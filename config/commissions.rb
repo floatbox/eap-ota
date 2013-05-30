@@ -3376,7 +3376,7 @@ check {
   includes(city_iatas, 'MOW') && includes(city_iatas, 'SIP') ||
   includes(city_iatas, 'MOW') && includes(city_iatas, 'AER') ||
   includes(city_iatas, 'MOW') && includes(city_iatas, 'AER') ||
-  includes(city_iatas, 'MOW') && includes(city_iatas, 'AAQ') ||
+  includes(city_iatas, 'MOW') && includes(city_iatas, 'AAQ') 
 }
 subagent ""
 ticketing_method "direct"
