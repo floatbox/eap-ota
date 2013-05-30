@@ -144,7 +144,6 @@ GEM
       rest-client (~> 1.6.1)
     gherkin (2.8.0)
       json (>= 1.4.6)
-    growl (1.0.3)
     guard (1.0.0)
       ffi (>= 0.5.0)
       thor (~> 0.14.6)
@@ -387,7 +386,6 @@ DEPENDENCIES
   factory_girl_rails
   flot-rails
   geo_ip
-  growl
   guard
   guard-rspec
   guard-spork
