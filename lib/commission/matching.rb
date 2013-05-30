@@ -103,12 +103,12 @@ module Commission::Matching
 
   def expired?
     return unless expr_date
-    expr_date.to_date.past?
+    expr_date.past?
   end
 
   def future?
     return unless strt_date
-    strt_date.to_date.future?
+    strt_date.future?
   end
 
 end

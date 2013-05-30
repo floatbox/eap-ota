@@ -170,11 +170,11 @@ class Commission::Reader
   end
 
   def expr_date date
-    opts[:expr_date] = date
+    opts[:expr_date] = date.to_date
   end
 
   def strt_date date
-    opts[:strt_date] = date
+    opts[:strt_date] = date.to_date
   end
 
   # дополнительные опции, пока без обработки

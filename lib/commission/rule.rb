@@ -61,13 +61,11 @@ class Commission::Rule
   attr_accessor :routes
 
   # дата начала действия правила
-  # @note FIXME переделать в Date или DateTime
-  # @return [String]
+  # @return [Date]
   attr_accessor :expr_date
 
   # дата окончания действия правила
-  # @note FIXME переделать в Date или DateTime
-  # @return [String]
+  # @return [Date]
   attr_accessor :strt_date
 
   # последнее средство сравнения - блок на руби.
