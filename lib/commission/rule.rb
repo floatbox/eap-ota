@@ -3,7 +3,7 @@
 # комиссионное правило. Просто тупой контейнер для параметров правила.
 class Commission::Rule
 
-  include Commission::Matching
+  include Commission::Rule::Matching
   include KeyValueInit
   extend Commission::Attrs
 

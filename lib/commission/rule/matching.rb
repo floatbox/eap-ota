@@ -2,7 +2,7 @@
 #
 # методы для Commission::Rule, для проверки применимости
 # конкретного правила к конкретной рекомендации
-module Commission::Matching
+module Commission::Rule::Matching
 
   extend ActiveSupport::Concern
 
