@@ -139,6 +139,10 @@ ohmystats:
 riemann:
   enabled: yes
   host: riemann.eviterra.com
+  benchmarking: no
   test:
     enabled: no
+    benchmarking: no
     host: localhost
+  production:
+    benchmarking: yes
