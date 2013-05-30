@@ -2777,13 +2777,23 @@ discount "2%"
 commission "5%/3%"
 
 # интерлайны
+
 example 'svocdg/ab cdgsvo'
 agent "3% от примененных тарифов на сегментах перевозки рейсов интерлайн-партнеров U6 ( наличие участка U6 в билете обязательно)"
 subagent "1% от примененных тарифов на рейсы интерлайн-партнеров U6 (наличие участка U6 в билете обязательно)"
 interline :yes
+check { not includes(operating_carrier_iatas, 'NN S7') }
 discount "0.5%"
 commission "3%/1%"
 
+example 'svocdg/s7 cdgsvo'
+agent "10 рублей за каждый участок перевозки, если в перевозке участвуют S7 и NN."
+subagent "10 рублей за каждый участок перевозки, если в перевозке участвуют S7 и NN."
+interline :yes
+check { includes(operating_carrier_iatas, 'NN S7') }
+commission "10/10"
+
+# пункт 3
 example 'svocdg/ab cdgsvo/ab'
 agent "1 (один) рубль продажа перевозок на рейсы интерлайн-партнеров U6 без участков U6"
 subagent "5 коп. продажа перевозок на рейсы интерлайн-партнеров U6 без участков U6"
