@@ -120,7 +120,7 @@ startExpiration: function() {
     var that = this;
     this.stopExpiration();
     this.expTimer = setTimeout(function() {
-        var el = $('<div/>').addClass('results-expired').html('С момента поиска результаты могли устареть. <span class="link rexp-link">Обновите поиск</span>');
+        var el = $('<div/>').addClass('results-expired').html(I18n.t('results.expired.text', {update: '<span class="link rexp-link">' + I18n.t('results.expired.update') + '</span>'}));
         el.find('.rexp-link').on('click', function() {
             results.load();
             results.content.el.hide();
