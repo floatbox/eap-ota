@@ -133,7 +133,7 @@ en:
       all: "All %{amount}"
     expired:
       text: "С момента поиска результаты могли устареть. %{update}"
-      update: "Обновите поиск"      
+      update: "Обновите поиск"
   filters:
     dpt: "Departure %{from}"
     arv: "Arrival %{to}"
@@ -266,7 +266,14 @@ en:
       description: "Введите %{passengers}, контактные данные покупателя и\_данные для оплаты. По истечении 20\_минут резерв будет снят, и\_авиакомпания не\_сможет гарантировать наличие мест по\_этому тарифу."
       passengers:
         one: "данные пассажира"
-        few: "данные пассажиров"    
+        few: "данные пассажиров"
+    newprice:
+      title: "Места по этой стоимости уже закончились. Остались места за %{price}"
+      description: "Вы можете купить %{tickets} по новой стоимости или выбрать %{other}"
+      tickets:
+        one: "билет"
+        few: "билеты"
+      other: "другой вариант"
     passengers:
       one: "Passenger details"
       few: "Passengers details"
