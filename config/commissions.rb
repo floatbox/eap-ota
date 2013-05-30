@@ -523,15 +523,15 @@ carrier "B2", "Belavia"
 ########################################
 
 example 'svocdg'
-strt_date "01.05.13"
-expr_date "31.07.13"
+strt_date "01.05.2013"
+expr_date "31.07.2013"
 agent    "5% от всех опубл. тарифов на собств. рейсы B2;"
 subagent "3,5% от всех опубл. тарифов на собств. рейсы B2;"
 discount "2.5%"
 commission "5%/3.5%"
 
 example 'svocdg'
-strt_date "01.08.13"
+strt_date "01.08.2013"
 agent    "4% от всех опубл. тарифов на собств. рейсы B2;"
 subagent "2,5% от всех опубл. тарифов на собств. рейсы B2;"
 discount "1.5%"
