@@ -106,8 +106,6 @@ class Commission::Reader
 
   # правило интерлайна
   def interline *values
-    # шорткат для interline без параметров
-    values = [:yes] if values.empty?
     opts[:interline] = values
   end
 
@@ -170,11 +168,11 @@ class Commission::Reader
   end
 
   def expr_date date
-    opts[:expr_date] = date
+    opts[:expr_date] = date.to_date
   end
 
   def strt_date date
-    opts[:strt_date] = date
+    opts[:strt_date] = date.to_date
   end
 
   # дополнительные опции, пока без обработки

@@ -89,7 +89,7 @@ group :test do
   gem 'rb-inotify', :require => false
   gem 'rb-fsevent', :require => false
   gem 'rb-fchange', :require => false
-  gem 'growl' # for OSX
+  # gem 'growl' # for OSX
   # for linux
   gem 'libnotify', :require => false
   gem 'guard-spork'
