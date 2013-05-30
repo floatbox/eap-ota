@@ -7,7 +7,7 @@ class Mux
   cattr_accessor :short_logger do ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_short.log') end
   cattr_accessor :logger do Rails.logger end
 
-  include ActiveSupport::Benchmarkable
+  include Monitoring::Benchmarkable
 
   include KeyValueInit
   attr_accessor :suggested_limit, :lite, :admin_user
