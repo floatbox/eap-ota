@@ -1005,7 +1005,6 @@ example 'cdgsvo svocdg/ab'
 agent "1% от опубл. тарифов на рейсы Interline с обязательным участием FI."
 subagent "0,5% от опубл. тарифов на рейсы Interline с обязательным участием FI."
 interline :yes
-check { includes(marketing_carrier_iatas, 'FI') }
 commission "1%/0.5%"
 
 carrier "FV", "RUSSIA"
@@ -1069,6 +1068,8 @@ commission '9%/7%'
 
 example 'ledpes pesled/ab'
 example 'ledpes pesled/ab:fv'
+strt_date "01.06.2013"
+expr_date "30.06.2013"
 agent "4% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 subagent "2% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 interline :no, :yes
