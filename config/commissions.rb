@@ -3357,38 +3357,11 @@ agent "При продаже перевозок между г. Москва и �
 agent "При продаже перевозок между г. Москва и г. Анапа,г. Анапа и
 г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
 check {
-  includes(city_iatas, 'MOW') && includes(city_iatas, 'RGK') ||
-  includes(city_iatas, 'OVB') && includes(city_iatas, 'HTA') ||
-  includes(city_iatas, 'OVB') && includes(city_iatas, 'AAQ') ||
-  includes(city_iatas, 'MOW') && includes(city_iatas, 'VAR') ||
-  includes(city_iatas, 'OVB') && includes(city_iatas, 'UUD') ||
-  includes(city_iatas, 'OVB') && includes(city_iatas, 'UUS') ||
-  includes(city_iatas, 'OVB') && includes(city_iatas, 'BJS') ||
-  includes(city_iatas, 'OVB') && includes(city_iatas, 'HKG') ||
-  includes(city_iatas, 'OVB') && includes(city_iatas, 'ALA') ||
-  includes(city_iatas, 'MOW') && includes(city_iatas, 'BTK') ||
-  includes(city_iatas, 'IKT') && includes(city_iatas, 'GDX') ||
-  includes(city_iatas, 'IKT') && includes(city_iatas, 'OVB') ||
-  includes(city_iatas, 'OMS') && includes(city_iatas, 'BJS') ||
-  includes(city_iatas, 'UUD') && includes(city_iatas, 'BJS') ||
-  includes(city_iatas, 'IKT') && includes(city_iatas, 'BJS') ||
-  includes(city_iatas, 'MOW') && includes(city_iatas, 'BOJ') ||
-  includes(city_iatas, 'MOW') && includes(city_iatas, 'ALC') ||
-  includes(city_iatas, 'MOW') && includes(city_iatas, 'PMI') ||
-  includes(city_iatas, 'MOW') && includes(city_iatas, 'HTA') ||
-  includes(city_iatas, 'SIP') && includes(city_iatas, 'OVB') ||
-  includes(city_iatas, 'MOW') && includes(city_iatas, 'SPU') ||
-  includes(city_iatas, 'MOW') && includes(city_iatas, 'PUY') ||
-  includes(city_iatas, 'OVB') && includes(city_iatas, 'BKK') ||
-  includes(city_iatas, 'OVB') && includes(city_iatas, 'HKT') ||
-  includes(city_iatas, 'IKT') && includes(city_iatas, 'BKK') ||
-  includes(city_iatas, 'KJA') && includes(city_iatas, 'BKK') ||
-  includes(city_iatas, 'KHV') && includes(city_iatas, 'BKK') ||
-  includes(city_iatas, 'MOW') && includes(city_iatas, 'TIV') ||
-  includes(city_iatas, 'MOW') && includes(city_iatas, 'SIP') ||
-  includes(city_iatas, 'MOW') && includes(city_iatas, 'AER') ||
-  includes(city_iatas, 'MOW') && includes(city_iatas, 'AER') ||
-  includes(city_iatas, 'MOW') && includes(city_iatas, 'AAQ') 
+  (includes(city_iatas, 'MOW') and includes(city_iatas, 'RGK VAR BTK BOJ SPU PUY TIV SIP AER AER AAQ ALC PMI HTA')) or
+  (includes(city_iatas, 'OVB') and includes(city_iatas, 'HTA AAQ UUD UUS BJS HKG ALA BKK HKT SIP')) or
+  (includes(city_iatas, 'IKT') and includes(city_iatas, 'GDX OVB BJS BKK')) or
+  (includes(city_iatas, 'OMS UUD') and includes(city_iatas, 'BJS')) or
+  (includes(city_iatas, 'KJA KHV') and includes(city_iatas, 'BKK'))
 }
 subagent ""
 ticketing_method "direct"
