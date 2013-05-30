@@ -106,8 +106,6 @@ class Commission::Reader
 
   # правило интерлайна
   def interline *values
-    # шорткат для interline без параметров
-    values = [:yes] if values.empty?
     opts[:interline] = values
   end
 

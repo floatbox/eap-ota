@@ -37,7 +37,7 @@ class Commission::Rule
 
   # тип интерлайна
   # @return [Array<Symbol>] :no, :yes, :half, :less_than_half, :absent, :unconfirmed
-  attr_writer :interline
+  attr_accessor :interline
 
   # перелеты только внутри одной страны
   # @return [Boolean]
@@ -126,10 +126,10 @@ class Commission::Rule
 
   # @!endgroup
 
-  # чуточку расширенный аксессор
-  # FIXME заменить дефолтами в initialize(*)
-  def interline
-    @interline.presence || [:no]
+  def initialize(*)
+    # дефолты
+    @interline = [:no]
+    super
   end
 
   def examples=(example_array)
