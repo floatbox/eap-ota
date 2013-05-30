@@ -4,40 +4,39 @@
 class Commission::Rule
 
   include Commission::Matching
-
   include KeyValueInit
   extend Commission::Attrs
 
-  ## общие для блока комиссий свойства
+  # @!group Общие для блока комиссий свойства.
 
   # IATA перевозчика
   # @return [String]
   attr_accessor :carrier
 
-  # GDS: :amadeus или :sirena. сейчас не используется
-  # @return [Symbol]
+  # GDS
+  # @note сейчас нигде не используется
+  # @return [Symbol] :amadeus, :sirena
   attr_accessor :system
 
-  ## тип комиссионного правила
-
+  # @!group Тип комиссионного правила.
   # FIXME документировать разницу
 
   # причина отключения продаж по этому правилу
-  # @return [Boolean|String]
+  # @return [Boolean, String]
   attr_accessor :disabled
 
   # проблема, не дающая закончить правило
-  # @return [Boolean|String]
+  # @return [Boolean, String]
   attr_accessor :not_implemented
 
   # заглушка для экзамплов, которые не должны сработать
-  # @return [Boolean|String]
+  # @return [Boolean, String]
   attr_accessor :no_commission
 
-  ## предикаты. определяют применимость правила внутри блока.
+  # @!group Предикаты. Определяют применимость правила внутри блока.
 
-  # массив из :no, :yes, :half, :less_than_half, :absent, :unconfirmed
-  # @return [Array<Symbol>]
+  # тип интерлайна
+  # @return [Array<Symbol>] :no, :yes, :half, :less_than_half, :absent, :unconfirmed
   attr_writer :interline
 
   # перелеты только внутри одной страны
@@ -65,6 +64,7 @@ class Commission::Rule
   # @note FIXME переделать в Date или DateTime
   # @return [String]
   attr_accessor :expr_date
+
   # дата окончания действия правила
   # @note FIXME переделать в Date или DateTime
   # @return [String]
@@ -80,15 +80,14 @@ class Commission::Rule
   # @return [Boolean]
   attr_accessor :important
 
-  ## полезная нагрузка найденной комиссии
+  # @!group Полезная нагрузка найденной комиссии.
 
   # Формулы
   # @return [Commission::Formula]
   has_commission_attrs :agent, :subagent, :consolidator, :blanks, :discount, :our_markup
 
   # рекомендуемый метод выписки.
-  # :aviacenter, :downtown, :direct
-  # @return [Symbol]
+  # @return [Symbol] :aviacenter, :downtown, :direct
   attr_accessor :ticketing_method
 
   # текст правила из агентского договора
@@ -102,19 +101,23 @@ class Commission::Rule
   # ремарка для выписки некоторых авиакомпаний в downtown
   # @return [String]
   attr_accessor :designator
-  # @return [String]
+
   # ремарка для выписки некоторых авиакомпаний в downtown
+  # @return [String]
   attr_accessor :tour_code
+
+  # @!group Дебажная информация
 
   # место (сейчас - номер строки в файле комиссиий) где было определено правило
   # @return [String]
   attr_accessor :source
+
   # порядковый номер комиссии в блоке
   # @return [Fixnum]
   attr_accessor :number
 
   # поправляет комиссию в соответствии с вычисленными дефолтами.
-  # см. Commission::Correctors.
+  # @see Commission::Correctors
   # @note TODO попробовать избавиться.
   # @return [Symbol]
   attr_accessor :corrector
@@ -122,6 +125,8 @@ class Commission::Rule
   # массив примеров рекомендаций, которые должны получить именно эту комиссию.
   # @return [Array<Commission::Example>]
   attr_reader :examples
+
+  # @!endgroup
 
   # чуточку расширенный аксессор
   # FIXME заменить дефолтами в initialize(*)
