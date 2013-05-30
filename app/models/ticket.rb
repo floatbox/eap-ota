@@ -76,7 +76,11 @@ class Ticket < ActiveRecord::Base
 
   def set_prices
     self.price_acquiring_compensation = price_payment_commission if corrected_price && kind == 'ticket'
-    self.price_difference = price_with_payment_commission - price_real
+    if order && order.fix_price
+      self.price_difference = price_with_payment_commission - price_real
+    else
+      self.price_difference = 0
+    end
   end
 
   def display_fee_details

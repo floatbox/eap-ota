@@ -81,7 +81,7 @@ class Order < ActiveRecord::Base
   # фейковый текст для маршрут-квитанций. может быть, вынести в хелпер?
   PAID_BY = {'card' => 'Invoice', 'delivery' => 'Cash', 'cash' => 'Cash', 'invoice' => 'Invoice'}
 
-  attr_writer :itinerary_receipt_view, :tickets_are_loading
+  attr_writer :itinerary_receipt_view
 
   extend Commission::Columns
   has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount, :commission_our_markup
@@ -330,7 +330,6 @@ class Order < ActiveRecord::Base
   def load_tickets(check_count = false)
     ticket_hashes = strategy.get_tickets
     if !check_count || !blank_count || ticket_hashes.length >= blank_count
-      @tickets_are_loading = true
       ticket_hashes.each do |th|
         if (th[:office_id].blank? || Ticket.office_ids.include?(th[:office_id])) &&
             !tickets.find_by_number(th[:number])
@@ -340,7 +339,6 @@ class Order < ActiveRecord::Base
 
       #Необходимо, тк t.update_attributes глючит при создании билетов (не обновляет self.tickets)
       tickets.reload
-      @tickets_are_loading = false
       true
     else
       false
@@ -354,6 +352,7 @@ class Order < ActiveRecord::Base
 
   def recalculate_prices
     #считаем, что в данном случае не бывает обменов/возвратов, иначе с ценами будет полная жопа
+    return if old_booking || !has_data_in_tickets?
     if tickets.present? && tickets.all?{|t| t.kind == 'ticket' && t.status == 'ticketed'}
       if fix_price?
         tickets.every.save
@@ -378,7 +377,7 @@ class Order < ActiveRecord::Base
   def update_prices_from_tickets
     tickets.reload
     # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
-    return if old_booking || @tickets_are_loading || $tickets_are_loading || !has_data_in_tickets?
+    return if old_booking || !has_data_in_tickets?
     price_total_old = self.price_total
 
     sum_and_copy_attrs sold_tickets, self,
@@ -525,9 +524,7 @@ class Order < ActiveRecord::Base
   end
 
   def update_price_with_payment_commission_in_tickets
-    @tickets_are_loading = true
     tickets.map{|t| t.update_attributes(corrected_price: t.price_with_payment_commission) unless t.corrected_price}
-    @tickets_are_loading = false
   end
 
   def reload_tickets
