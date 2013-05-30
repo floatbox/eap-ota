@@ -795,7 +795,7 @@ example 'jfksvo/x/su:dl'
 expr_date "31.03.2014"
 agent "1%"
 subagent "0.5%"
-check { code_share? }
+check { codeshare? }
 important!
 commission "1%/0.5%"
 
@@ -1064,7 +1064,7 @@ expr_date "30.06.2013"
 agent "9% от тарифа на собств.рейсы FV (исключая code-share) в классах Эконом и Бизнес по маршруту Санкт-Петербург-Петрозаводск или обратно."
 subagent "7% от тарифа на собств.рейсы FV (исключая code-share) в классах Эконом и Бизнес по маршруту Санкт-Петербург-Петрозаводск или обратно."
 interline :no
-check { includes_only(country_iatas, 'LED PES') and not code_share? }
+check { includes_only(country_iatas, 'LED PES') and not codeshare? }
 discount "5.3%"
 commission '9%/7%'
 
@@ -3395,7 +3395,7 @@ commission "0.1%/0.1%"
 example 'svojfk'
 agent "5% dtt"
 subagent "3.5% dtt"
-check { not code_share? }
+check { not codeshare? }
 ticketing_method "downtown"
 commission "5%/3.5%"
 
@@ -3414,7 +3414,7 @@ example 'ledcdg/fv:s7 cdgled'
 strt_date "01.04.2013"
 agent "3% все направления и классы бронирования на собственные рейсы и рейс код-шеринга (либо интерлайна) выписываем напрямую"
 subagent "3%"
-check { code_share? }
+check { codeshare? }
 ticketing_method "direct"
 important!
 discount "2%"
