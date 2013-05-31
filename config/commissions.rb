@@ -2120,7 +2120,6 @@ expr_date "31.05.2013"
 agent    "от опубл. тарифов, а также от опубл. IT гросс тарифов (искл.групповые тарифы) на собств.рейсы QR: 5% Бизнес класс"
 subagent "3,5% от опубл. тарифов на собственные рейсы QR"
 classes :business
-tour_code "USAN002"
 discount "3%"
 commission "5%/3.5%"
 
@@ -2138,6 +2137,7 @@ agent    "с сегодня на QR если в маршруте есть Рос
 subagent "у нас 3%"
 check { includes(country_iatas, 'RU') }
 ticketing_method "downtown"
+tour_code "USAN002"
 discount "2%"
 commission "5%/3%"
 
