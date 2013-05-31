@@ -18,6 +18,9 @@ module CurlHelper
       easy.uploaded_bytes / 1000,
       easy.upload_speed / 1000
     ] unless easy.uploaded_bytes == 0
+    # TODO: сделать это нормально
+    Monitoring.meter service: 'benchmark.curlhelper',
+                     metric: easy.total_time
     msg
   end
 
