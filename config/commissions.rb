@@ -118,14 +118,14 @@ discount "3%"
 commission "6%/4%"
 
 # базовое вознаграждение ац c 21.06.2013 
-example 'cdgsvo/o svocdg/y'
+example 'cdgsvo/h svocdg/y'
 strt_date "21.06.2013"
 agent "C 21.06.13г. 5% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K;"
 subagent "3%"
 subclasses "YHQBK"
 discount "3%"
 # disabled "На DTT выгодней"
-commission "6%/4%"
+commission "5%/3%"
 
 # говноклассы с 21.05 
 example 'cdgsvo/g svocdg/u'
@@ -2158,7 +2158,7 @@ commission "0.1%/0.05"
 
 example 'svocdg cdgsvo/ab'
 strt_date "01.04.2012"
-strt_date "31.05.2013"
+expr_date "31.05.2013"
 agent    "1% на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 subagent "5 коп . с билета на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 interline :first
