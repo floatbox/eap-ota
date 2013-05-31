@@ -138,7 +138,7 @@ discount "1.35%"
 commission "4%/2%"
 
 # говноклассы с 21.06 
-example 'cdgsvo/i svocdg/x'
+example 'cdgsvo/g svocdg/u'
 strt_date "21.06.2013"
 agent "3% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
 subagent "1% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
