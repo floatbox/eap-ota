@@ -163,8 +163,17 @@ class Commission::Reader
     opts[:examples] << [str, caller_address]
   end
 
-  def check &block
-    opts[:check] = block
+  def check(check_text=nil, &block)
+    # TODO включить после перехода
+    # raise ArgumentError, "check block should be given as String" unless check_text
+    block_text =
+      "lambda do |recommendation|
+        #{ check_text }
+      end"
+    # сдвиг (- 5) подобран руками для тестов. но в комиссиях срабатывает - 1. почему?
+    block = eval(block_text, nil, caller_file, caller_line - 1) if check_text
+    opts[:check] = check_text || '# COMPILED'
+    opts[:check_proc] = block
   end
 
   def expr_date date
@@ -206,6 +215,14 @@ class Commission::Reader
   def caller_address level=1
     caller[level] =~ /:(\d+)/
     $1 || 'unknown'
+  end
+
+  def caller_file level=1
+    caller[level].split(':')[0]
+  end
+
+  def caller_line level=1
+    caller[level].split(':')[1].to_i
   end
 
 end

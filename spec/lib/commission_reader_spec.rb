@@ -89,7 +89,79 @@ describe Commission::Reader do
     its(:disabled?) {should be_true}
     its(:tour_code) {should == "FOOBAR"}
     its(:designator) {should == "PP10"}
-    its(:check) {should be_an_instance_of(Proc)}
+    its(:check_proc) {should be_an_instance_of(Proc)}
+  end
+
+  describe "#check" do
+    describe "given as code (DEPRECATED)" do
+      let :commission_class do
+        Commission::Reader.new.define do
+          carrier 'SU'
+          check {true}
+          commission '0/0'
+        end
+      end
+
+      subject :commission do
+        commission_class.all.first
+      end
+
+      its(:check) {should eq("# COMPILED")}
+      its(:check_proc) {should be_an_instance_of(Proc)}
+    end
+
+    describe "given as text" do
+      let :commission_class do
+        Commission::Reader.new.define do
+          carrier 'SU'
+          check "true"
+          commission '0/0'
+        end
+      end
+
+      subject :commission do
+        commission_class.all.first
+      end
+
+      its(:check) {should eq("true")}
+      its(:check_proc) {should be_an_instance_of(Proc)}
+
+      it "should return currect value on custom_check" do
+        commission.applicable_custom_check?(stub(:recommendation)).should == true
+      end
+    end
+
+    describe "given syntax error" do
+
+      let(:expected_error_source) { "#{__FILE__}:#{__LINE__ + 7}" }
+
+      let :commission_class do
+        Commission::Reader.new.define do
+          carrier 'SU'
+          check %[
+            false
+            1here_should_be_error
+            true
+          ]
+          commission '0/0'
+        end
+      end
+
+      it "should raise it while reading" do
+        expect {commission_class}.to raise_error(SyntaxError)
+      end
+
+      it "should raise error with correct_file and line" do
+        message = 'nothing raised?'
+        begin
+          commission_class
+        rescue SyntaxError => e
+          message = e.message
+        end
+        message.should include(expected_error_source)
+      end
+    end
+
   end
 
   context "setting defaults" do

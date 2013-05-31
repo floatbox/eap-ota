@@ -85,8 +85,8 @@ module Commission::Rule::Matching
   end
 
   def applicable_custom_check? recommendation
-    return true unless check
-    recommendation.instance_eval &check
+    return true unless check_proc
+    recommendation.instance_eval &check_proc
   end
 
   def applicable_geo? recommendation

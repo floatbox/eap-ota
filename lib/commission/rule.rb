@@ -68,10 +68,15 @@ class Commission::Rule
   # @return [Date]
   attr_accessor :strt_date
 
-  # последнее средство сравнения - блок на руби.
-  # должен вернуть true для подходящей рекомендации.
-  # @return [Proc]
+  # последнее средство сравнения - текст блока на ruby.
+  # будет выполнен в контексте рекомендации.
+  # должен вернуть true, если рекомендация подходит.
+  # @return [String]
   attr_accessor :check
+
+  # скомпилированный и закэшированный check
+  # @return [Proc]
+  attr_accessor :check_proc
 
   # правило проверяется выносится в начало цепочки проверок, даже если определено
   # последним.
@@ -85,7 +90,7 @@ class Commission::Rule
   has_commission_attrs :agent, :subagent, :consolidator, :blanks, :discount, :our_markup
 
   # рекомендуемый метод выписки.
-  # @return [Symbol] :aviacenter, :downtown, :direct
+  # @return [String] "aviacenter", "downtown", "direct"
   attr_accessor :ticketing_method
 
   # текст правила из агентского договора
