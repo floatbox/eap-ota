@@ -4,7 +4,7 @@ module Monitoring
   
   class << self
     def riemann
-      @riemann ||= Monitoring::RiemannConnection::Client.new(Conf.riemann.host)
+      @riemann ||= Monitoring::RiemannConnection::Client.new
     end
 
     delegate :meter,

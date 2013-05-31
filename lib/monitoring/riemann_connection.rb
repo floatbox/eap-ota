@@ -7,7 +7,7 @@ module Monitoring
     class Client
       # смотреть графики на graphite.eviterra.com
 
-      def initialize host
+      def initialize
         return unless Conf.riemann.enabled
         @connection = Riemann::Client.new(host: Conf.riemann.host)
       end
