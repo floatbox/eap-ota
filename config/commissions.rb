@@ -486,6 +486,28 @@ example 'ievfco/business'
 example 'ievlin/business'
 example 'tbsfco/business fcotbs/business'
 example 'evnfco/business fcoevn/business'
+strt_date "01.06.2013"
+expr_date "30.06.2013"
+agent "5% на БИЗНЕС класс."
+subagent "3% от тарифа на все направления Alitalia (Эконом и Бизнес класса) с началом путешествия из Москвы и Санкт-Петербурга, а также из Киева (из Киева Alitalia летает в Рим (AZ481) и Милан (AZ7469), Тбилиси (из Тбилиси Alitalia летает в Рим (AZ551), Еревана (из Еревана Alitalia летает в Рим (AZ557) (тарифы туда и обратно, а также тарифы в одну сторону, но с вылетом из Москвы или Санкт-Петербурга, Киева, Тбилиси или Еревана). Повышенная комиссия не применяется, если начало путешествия не из этих городов. На рейсы code-share комиссия не применяется (за исключением code-share с AP/VE/XM/CT)"
+classes :business
+check {
+  includes_only(operating_carrier_iatas, 'AZ VE XM CT') and
+  ( includes(city_iatas.first, 'MOW LED SVX') or
+    (includes(city_iatas.first, 'IEV') and includes_only(city_iatas, 'IEV ROM MIL')) or
+    (includes(city_iatas.first, 'TBS') and includes_only(city_iatas, 'TBS ROM')) or
+    (includes(city_iatas.first, 'EVN') and includes_only(city_iatas, 'EVN ROM'))
+  )
+}
+discount "2%"
+commission "5%/3%"
+
+example 'svolin/business'
+example 'ledlin/business linled/business'
+example 'ievfco/business'
+example 'ievlin/business'
+example 'tbsfco/business fcotbs/business'
+example 'evnfco/business fcoevn/business'
 strt_date "01.05.2013"
 expr_date "31.05.2013"
 agent "9% на БИЗНЕС класс."
@@ -501,6 +523,18 @@ check {
 }
 discount "6.7%"
 commission "9%/8%"
+
+example 'svolin/az565 linsvo/AZ560'
+example 'svolin/az565 linsvo/AZ560 svocdg'
+example 'svolin/az565 linsvo/AZ564'
+strt_date "01.06.2013"
+agent "4% от тарифа ЭКОНОМ КЛАССА на ВСЕ НАПРАВЛЕНИЯ ALITALIA с вылетом из Москвы"
+agent "с обязательным наличием в маршруте рейса Москва-Милан AZ565 или AZ56 и обязательным наличием в маршруте рейса Милан-Москва AZ560 и AZ564."
+subagent "2% от тарифа ЭКОНОМ КЛАССА на ВСЕ НАПРАВЛЕНИЯ ALITALIA с вылетом из Москвы"
+classes :economy
+check { includes(flights.every.full_flight_number, %W(AZ565 AZ56)) and includes(flights.every.full_flight_number, %W(AZ560 AZ564)) }
+discount "1%"
+commission "4%/2%"
 
 example 'mrucdg'
 example 'mrucdg cdgmru'
