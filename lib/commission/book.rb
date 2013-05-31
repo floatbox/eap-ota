@@ -35,6 +35,13 @@ class Commission::Book
     commissions[validating_carrier_iata]
   end
 
+  # Временный метод для получения диапазонов действия комиссий
+  def start_dates_for_carrier(validating_carrier_iata)
+    ( for_carrier(validating_carrier_iata).map {|c| c.strt_date }.compact +
+      for_carrier(validating_carrier_iata).map {|c| c.expr_date }.compact.map(&:tomorrow)
+    ).sort.uniq
+  end
+
   def all
     commissions.values.flatten.sort_by {|c| c.source.to_i }
   end

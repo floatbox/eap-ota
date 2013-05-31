@@ -101,6 +101,8 @@ group :test do
 
   gem 'vcr'
   gem 'webmock'
+  # тестирование завтрашних комиссий
+  gem 'timecop'
 end
 
 group :debug do
