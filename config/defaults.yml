@@ -140,9 +140,10 @@ riemann:
   enabled: yes
   host: riemann.eviterra.com
   benchmarking: no
+  request_performance: no
+  stat_counters: no
   test:
-    enabled: no
-    benchmarking: no
     host: localhost
   production:
     benchmarking: yes
+    request_performance: yes
