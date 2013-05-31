@@ -29,6 +29,9 @@ class StatCounters
   end
 
   def self.inc keys
+    # mongo
+    connection['counters_daily'].find(date_key).upsert('$inc' => json_set(keys))
+    connection['counters_hourly'].find(hour_key).upsert('$inc' => json_set(keys))
     # riemann
     # до лучших времен отсылаем все ключи, потом следует уменьшить до одного
     keys.each do |key|
@@ -37,9 +40,6 @@ class StatCounters
         metric: 1.0
       )
     end
-    # mongo
-    connection['counters_daily'].find(date_key).upsert('$inc' => json_set(keys))
-    connection['counters_hourly'].find(hour_key).upsert('$inc' => json_set(keys))
   end
 
   def self.d_inc destination, keys
