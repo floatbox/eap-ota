@@ -3244,8 +3244,8 @@ carrier_defaults consolidator: 0, ticketing_method: "downtown"
 example 'svocdg cdgsvo'
 agent "5% DTT"
 subagent "3% DTT"
-discount "2.25%"
-commission "5%/3%"
+discount "2.8%"
+commission "5%/4%"
 
 carrier "S7", "S7 AIRLINES"
 ########################################
