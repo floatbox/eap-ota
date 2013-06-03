@@ -23,7 +23,7 @@ module Sirena
     # raises Curl::Err::*
     def send_request(*args)
       req = make_request(*args)
-      ActiveSupport::Notifications.instrument 'request.curl', easy: req do
+      ActiveSupport::Notifications.instrument 'request.curl', curl: req do
         req.perform
       end
       # WTF it isn't automatic?
@@ -36,11 +36,11 @@ module Sirena
     def send_request_async(*args, &block)
       req = make_request(*args)
       req.on_failure do |klass, msg|
-        ActiveSupport::Notifications.instrument 'request.curl', easy: req
+        ActiveSupport::Notifications.instrument 'request.curl', curl: req
         logger.error "#{self.class.name}: #{klass}: #{msg}"
       end
       req.on_success do |response|
-        ActiveSupport::Notifications.instrument 'request.curl', easy: req
+        ActiveSupport::Notifications.instrument 'request.curl', curl: req
         fix_encoding!(req.body_str)
         block.call req.body_str
       end
