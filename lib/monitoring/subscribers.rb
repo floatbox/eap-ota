@@ -1,4 +1,7 @@
 #encoding: utf-8
+require_relative 'subscribers/benchmarking.rb'
+require_relative 'subscribers/request_performance.rb'
+require_relative 'subscribers/stat_counters.rb'
 
 module Monitoring
   module Subscribers
