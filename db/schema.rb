@@ -337,8 +337,8 @@ ActiveRecord::Schema.define(:version => 20130718131818) do
     t.decimal  "price_consolidator_markup",     :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.string   "name_in_card"
     t.string   "last_digits_in_card"
-    t.text     "commission_agent_comments",                                                         :null => false
-    t.text     "commission_subagent_comments",                                                      :null => false
+    t.string   "commission_agent_comments",                                   :default => ""
+    t.string   "commission_subagent_comments",                                :default => ""
     t.string   "source",                                                      :default => "other"
     t.string   "sirena_lead_pass"
     t.string   "code"
