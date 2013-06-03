@@ -1058,34 +1058,16 @@ carrier "FV", "RUSSIA"
 
 ## carrier_defaults our_markup: 30
 
-# до 31.05
-example 'svocdg'
-example 'svocdg cdgsvo/ab'
-expr_date "31.05.2013"
-agent "7% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
-subagent "5% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
-interline :no, :yes
-discount "4%"
-commission '7%/5%'
-
-example 'svocdg/ab'
-expr_date "31.05.2013"
-agent "1 euro с билета на рейсы Interline без участка FV."
-subagent "1 руб. с билета на рейсы Interline без участка FV."
-interline :absent
-## discount '1'
-commission "1eur/1"
-
 # c 01.06
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
 strt_date "01.06.2013"
 expr_date "20.06.2013"
-agent "6% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
-subagent "4% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
+agent "7% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
+subagent "6% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 interline :no, :yes
-discount "3%"
-commission '6%/4%'
+discount "4.5%"
+commission '7%/6%'
 
 example 'svocdg/ab'
 strt_date "01.06.2013"
@@ -1103,7 +1085,7 @@ strt_date "21.06.2013"
 agent "4% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 subagent "2% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 interline :no, :yes
-discount "1.5%"
+discount "1.5%" # Скидка под вопросом!!!
 commission '4%/2%'
 
 example 'svocdg/ab'
@@ -1116,7 +1098,7 @@ commission "1eur/5"
 
 example 'ledpes'
 example 'ledpes/business pesled/business'
-strt_date "21.06.2013"
+strt_date "01.06.2013"
 expr_date "30.06.2013"
 agent "9% от тарифа на собств.рейсы FV (исключая code-share) в классах Эконом и Бизнес по маршруту Санкт-Петербург-Петрозаводск или обратно."
 subagent "7% от тарифа на собств.рейсы FV (исключая code-share) в классах Эконом и Бизнес по маршруту Санкт-Петербург-Петрозаводск или обратно."
