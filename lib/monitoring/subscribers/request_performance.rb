@@ -11,6 +11,7 @@ module Monitoring
         format = event.payload[:format] || "all"
         format = "all" if format == "*/*"
         status = event.payload[:status]
+        mongo_time = event.payload[:mongo_runtime]
         key_base = "request_performance.#{controller}.#{action}.#{format}"
 
         ## отсылка метрик в graphite
@@ -34,18 +35,29 @@ module Monitoring
           metric: event.payload[:db_runtime]
         )
 
+        # mongo time
+        Monitoring.gauge(
+          service: "#{key_base}.mongo_time",
+          metric: event.payload[:mongo_runtime]
+        )
+        Monitoring.histogram(
+          service: "#{key_base}.hist.mongo_time",
+          metric: event.payload[:mongo_runtime]
+        )
+
         # view time
         Monitoring.gauge(
           service: "#{key_base}.view_time",
           metric: event.payload[:view_runtime]
         )
         Monitoring.histogram(
-          service: "#{key_base}.view_time",
+          service: "#{key_base}.hist.view_time",
           metric: event.payload[:view_runtime]
         )
 
-        Monitoring::meter(service: "#{key_base}.status.#{status}")
+        Monitoring.meter(service: "#{key_base}.status.#{status}")
       end
     end
   end
 end
+

@@ -142,8 +142,10 @@ riemann:
   benchmarking: no
   request_performance: no
   stat_counters: no
+  curl_helper: no
   test:
     host: localhost
   production:
     benchmarking: yes
     request_performance: yes
+    stat_counters: yes

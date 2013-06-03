@@ -34,12 +34,7 @@ class StatCounters
     connection['counters_hourly'].find(hour_key).upsert('$inc' => json_set(keys))
     # riemann
     # до лучших времен отсылаем все ключи, потом следует уменьшить до одного
-    keys.each do |key|
-      Monitoring.meter(
-        service: key,
-        metric: 1.0
-      )
-    end
+    ActiveSupport::Notifications.instrument 'stat_counter', keys: keys
   end
 
   def self.d_inc destination, keys
