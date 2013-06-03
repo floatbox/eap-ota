@@ -187,6 +187,12 @@ describe Commission::Reader do
           :our_markup => '1%'
         commission '1%/1%'
         commission '2%/2%'
+
+        carrier 'UN', "Transaero", expr_date: "31.1.2013"
+        commission '2%/2%'
+
+        carrier 'UN', strt_date: "1.2.2013"
+        commission '1%/1%'
       end
     end
 
@@ -237,6 +243,30 @@ describe Commission::Reader do
       end
     end
 
+    describe ".carrier defaults on repetitive blocks" do
+      context "should set defaults correctly" do
+        subject :commission do
+          commission_class.for_carrier('UN').first
+        end
+
+        its(:expr_date) { should eq(Date.new(2013,1,31))}
+        its(:strt_date) { should be_nil}
+      end
+
+      context "should set defaults for second occurence" do
+        subject :commission do
+          commission_class.for_carrier('UN').last
+        end
+
+        its(:strt_date) { should eq(Date.new(2013,2,1))}
+        its(:expr_date) { should be_nil}
+        it "should have single per carrier numeration, for now" do
+          commission.number.should eq(2)
+        end
+      end
+    end
+
+
     describe ".for_carrier" do
       subject { commission_class.for_carrier('AB') }
       it {should be_an(Array)}
@@ -247,7 +277,7 @@ describe Commission::Reader do
     describe ".all" do
       subject { commission_class.all }
       it {should be_an(Array)}
-      its(:size) { should == 3 }
+      its(:size) { should == 5 }
       its(:first) { should be_a(Commission::Rule) }
     end
   end
