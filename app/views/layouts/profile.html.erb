@@ -12,9 +12,14 @@
 <body>
 <div class="page-wrapper">
 <%= render 'shared/header' %>
-<div id="back2search">
-    <div class="bs-content"><a class="bs-link" href="/">Поиск авиабилетов</a></div>
+<div id="profile-header">
+    <div class="prh-content">
+        <a class="prh-search" class="bs-link" href="/">Поиск авиабилетов</a>
+        <h3 class="prh-name"><%= yield(:title) or 'Личный кабинет' %></h3>
+    </div>
+    <div class="prh-shadow"></div>
 </div>
+<%= yield(:tabs) %>
 <div class="page-content">
 
 <%= yield %>

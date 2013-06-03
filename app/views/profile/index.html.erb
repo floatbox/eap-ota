@@ -1,16 +1,18 @@
-<% content_for :title do %>Личный кабинет<% end %>
+<% content_for :title do %>Личный кабинет <%= current_customer.email.downcase %><% end %>
 
-<h2 class="page-title"><%= current_customer.email %><%#= current_customer.confirmed? %></h2>
+<% content_for :tabs do %>
+<div id="profile-tabs">
+<ul class="pt-content wrap">
+    <li class="pt-item pt-selected">Заказы</li>
+    <li class="pt-item">Пассажиры</li>
+    <li class="pt-item">Подписки</li>
+</ul>
+</div>
+<% end %>
 
 <%#= link_to "Change your password", edit_customer_registration_path %>
-
-<ul class="profile-menu">
-    <li class="pm-item">Заказы</li>
-    <li class="pm-item">Пассажиры</li>
-    <li class="pm-item">Подписки</li>
-</ul>
-
 <%#= debug @orders.first %>
+
 <div id="orders">
 <% if @orders.empty? %>
     <p class="orders-empty">Вы еще ничего не заказывали. Хотите <a href="/">купить билет</a>?</p>
@@ -43,7 +45,7 @@
     <div class="orc-show">Показать детали</div>
     <div class="orc-hide">Скрыть детали</div>    
     <div class="orc-pnr">
-        <span class="orc-link"><a href="<%= profile_show_pnr_path(:id => order.pnr_number) %>" target="_blank">Маршрут квитанция</a></span>
+        <span class="orc-links">Маршрутная квитанция: <a class="orc-link" href="<%= profile_show_pnr_path(:id => order.pnr_number) %>" target="_blank">на русском</a> <a class="orc-link" href="<%= profile_show_pnr_path(:id => order.pnr_number) %>?lang=en" target="_blank">in English</a></span>
     </div>
 </div>
 <div class="order-details">
@@ -55,7 +57,7 @@
         <th style="width: 294px;">Пассажир</th>
         <th style="width: 200px;">Номер билета</th>
         <th style="width: 200px;">Статус билета</th>
-        <th><!--Распечатать--></th>
+        <th>Распечатать</th>
     </tr>
     <% order.tickets.each do |ticket| %>
         <tr>
@@ -64,7 +66,7 @@
             <td><%= ticket.profile_status %></td>
             <td>
             <% if ticket.flights.present? %>
-                <a class="ordp-ticket" href="<%= profile_show_pnr_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id) %>" target="_blank">распечатать</a>
+                <a class="ordp-ticket" href="<%= profile_show_pnr_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id) %>" target="_blank">на русском</a> <a class="ordp-ticket" href="<%= profile_show_pnr_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id) %>?lang=en" target="_blank">in English</a>
             <% end %>                
             </td>
         </tr>

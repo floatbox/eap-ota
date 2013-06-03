@@ -1,15 +1,83 @@
-/* Menu */
-.profile-menu {
-    margin: 20px 0 30px;
-    overflow: hidden;
+/* Header */
+#profile-header {
+    position: relative;
+    background: url(/images/common/dark.jpg) #373941;
+}
+.prh-content {
+    width: 960px;
+    margin: 0 auto;
+    padding: 24px 0;
+    height: 22px;
+}
+.prh-search {
+    margin-top: 2px;
+    float: right;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 18px;
+    color: #CECBA1;
+    text-decoration: none;
+}
+.prh-name {
+    font-weight: bold;
+    font-size: 22px;
+    letter-spacing: -0.03em;
+    line-height: 22px;
+    color: #FFF;
+}
+.prh-shadow {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: url(/images/results/fshadow.png) repeat-x;
+}
+
+/* Tabs */
+#profile-tabs {
+    margin-bottom: 20px;
+    /*background: url(/images/common/dark.jpg) #373941;*/
     font-weight: bold;
     font-size: 18px;
     line-height: 20px;
+    letter-spacing: -0.03em;
+    color: #FFF;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
-.pm-item {
-    margin-right: 30px;
+#profile-tabs .wrap {
+    width: 988px;
+    margin: 0 auto;
+}
+.pt-item {
     float: left;
+    height: 20px;
+    margin-bottom: -1px;
+    padding: 12px 14px 13px;
+    cursor: pointer;
 }
+.pt-selected {
+    background: url(/images/common/dgrey.png) #bfc4c8;
+    color: #333;
+    cursor: default;
+}
+
+/* Временно, пока нет других табов */
+#profile-tabs {
+    margin: 5px 0 -20px;
+}
+.pt-item {
+    display: none;
+}
+.pt-selected {
+    display: block;
+    height: 30px;    
+    font-size: 26px;
+    line-height: 30px;
+}
+
+
+
 
 /* No orders */
 .orders-empty {
@@ -72,12 +140,14 @@
 .orc-hide {
     display: none;
 }
-.orc-pnr a {
+.orc-links {
+    margin: 0 -6px;
+    padding: 4px 6px;
     color: #777;
 }
 .orc-link {
-    margin: 0 -6px;
-    padding: 4px 6px;
+    margin-left: 5px;
+    color: #777;
 }
 
 /* Details */
@@ -102,6 +172,7 @@
     line-height: 16px;
 }
 .ordp-ticket {
+    margin-right: 5px;
     color: #777;
 }
 
