@@ -3243,19 +3243,20 @@ commission "5%/4%"
 
 carrier "S7", "S7 AIRLINES"
 ########################################
-carrier_defaults consolidator: 0
+carrier_defaults consolidator: 0, ticketing_method: "downtown"
 
 # dtt по невыгодным условиям прямой выписки
 # w
-example 'svocdg/w cdgsvo/w'
-strt_date "01.04.2013"
-agent "При продаже перевозок по коду бронирования W, оформленных на ПД на рейсы Перевозчика, вознаграждение составляет 0,1%"
-subagent "0.1%"
-subclasses "W"
-interline :no_codeshare
-ticketing_method "downtown"
-commission '5%/3.5%'
+#example 'svocdg/w cdgsvo/w'
+#strt_date "01.04.2013"
+#agent "При продаже перевозок по коду бронирования W, оформленных на ПД на рейсы Перевозчика, вознаграждение составляет 0,1%"
+#subagent "0.1%"
+#subclasses "W"
+#interline :no_codeshare
+#ticketing_method "downtown"
+#commission '5%/3.5%'
 
+=begin
 example 'svorgk'
 example 'rgksvo'
 example 'svorgk rgksvo'
@@ -3406,16 +3407,18 @@ subagent ""
 interline :no_codeshare
 ticketing_method "downtown"
 commission "5%/3.5%"
+=end
 
 # w
-example 'svocdg/w/ab:s7 cdgsvo/w'
-strt_date "01.04.2013"
-agent "При продаже перевозок по коду бронирования W, оформленных на ПД на рейсы Перевозчика, вознаграждение составляет 0,1%"
-subagent "0.1%"
-subclasses "W"
-ticketing_method "direct"
-commission '0.1%/0.1%'
+#example 'svocdg/w/ab:s7 cdgsvo/w'
+#strt_date "01.04.2013"
+#agent "При продаже перевозок по коду бронирования W, оформленных на ПД на рейсы Перевозчика, вознаграждение составляет 0,1%"
+#subagent "0.1%"
+#subclasses "W"
+#ticketing_method "downtown"
+#commission '0.1%/0.1%'
 
+=begin
 example 'svorgk/ab:s7'
 example 'rgksvo/ab:s7'
 example 'svorgk/ab:s7 rgksvo'
@@ -3563,26 +3566,39 @@ check {
   (includes(city_iatas, 'KJA KHV') and includes(city_iatas, 'BKK'))
 }
 subagent ""
-ticketing_method "direct"
+ticketing_method "downtown"
 commission "0.1%/0.1%"
-
-# general dtt для горячей замены
-# example 'svojfk'
-# agent "5% dtt"
-# subagent "3.5% dtt"
-# interline :no_codeshare
-# ticketing_method "downtown"
-# commission "5%/3.5%"
+=end
 
 example 'svocdg/ab cdgsvo'
 example 'ledcdg/fv:s7 cdgled'
-strt_date "01.04.2013"
-agent "3% все направления и классы бронирования на собственные рейсы и рейс код-шеринга (либо интерлайна) выписываем напрямую"
-subagent "3%"
+strt_date "04.06.2013"
+agent "рейсы код-шеринг и интерлайн без комиссии c дополнительным сбором 400 руб за билет"
+subagent "рейсы код-шеринг и интерлайн без комиссии c дополнительным сбором 400 руб за билет"
 interline :no, :yes
-ticketing_method "direct"
-discount "2%"
-commission "3%/3%"
+ticketing_method "downtown"
+our_markup 400
+#discount "2%"
+no_commission "нет комисссии"
+
+# general dtt для горячей замены
+example 'svojfk jfksvo'
+agent "5% dtt"
+subagent "3.5% dtt"
+interline :no_codeshare
+ticketing_method "downtown"
+important!
+commission "5%/3.5%"
+
+#example 'svocdg/ab cdgsvo'
+#example 'ledcdg/fv:s7 cdgled'
+#strt_date "01.04.2013"
+#agent "3% все направления и классы бронирования на собственные рейсы и рейс код-шеринга (либо интерлайна) выписываем напрямую"
+#subagent "3%"
+#interline :no, :yes
+#ticketing_method "downtown"
+#discount "2%"
+#commission "3%/3%"
 
 carrier "GA", "GARUDA INDONESIA"
 ########################################
