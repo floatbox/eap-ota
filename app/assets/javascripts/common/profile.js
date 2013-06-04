@@ -8,13 +8,14 @@ init: function() {
         });
     } else {
         this.initPopup();
+        this.initForms();
     }
 },
 initPopup: function() {
     var that = this;
     this.el.find('.phuf-input').on('focus', function() {
         $(this).prev('label').hide();
-    }).on('blur', function() {
+    }).on('blur input', function() {
         $(this).prev('label').toggle(this.value === '');
     }).trigger('blur');
     this.el.on('click', function(event) {
@@ -78,6 +79,86 @@ show: function() {
 hide: function() {
     this.el.removeClass('phu-active');
     $w.off('click keydown', this._hide);
+},
+initForms: function() {
+
+    var checkEmail = function(value) {
+        if (!value) return undefined;
+        //if (!value) return 'Введите адрес электронной почты.';
+        if (/[а-яА-Я]/.test(value)) return 'Переключите раскладку и введите корректный адрес электронной почты.';
+        if (!/[@.]/.test(value)) return 'Введите корректный адрес электронной почты.';
+    };
+
+    var signIn = new profileForm(this.el.find('.phu-signin'));
+    signIn.add('#signin-email', checkEmail);
+    signIn.add('#signin-password', function(value) {
+        if (!value) return 'Введите пароль.';
+    });
+
+    var signUp = new profileForm(this.el.find('.phu-signup'));
+    signUp.add('#signup-email', checkEmail);
+    
+}
+};
+
+var profileForm = function(elem) {
+    var that = this;
+    this.elem = elem;
+    this.elem.on('submit', function(event) {
+        event.preventDefault();
+        if (that.validate()) {
+            that.send();
+        }
+    });
+    this.fields = [];
+};
+profileForm.prototype = {
+validate: function() {
+    var error;
+    for (var i = 0, l = this.fields.length; i < l; i++) {
+        this.fields[i].validate();
+        if (!error) error = this.fields[i].error;
+    }
+    if (error) {
+        this.elem.find('.phu-error').html(error).show();
+        return false;
+    } else {
+        this.elem.find('.phu-error').hide();
+        return true;
+    }
+},
+send: function() {
+    var that = this;
+    $.ajax(this.elem.attr('action'), {
+        type: 'POST',
+        data: this.elem.serialize()
+    }).done(function(result) {
+        console.log(result);
+    }).fail(function(jqXHR, status, message) {
+        that.elem.find('.phu-error').html(jqXHR.responseText).show();    
+    });
+},
+add: function(selector, check) {
+    this.fields.push(new profileField(selector, check));
+}
+};
+
+var profileField = function(selector, check) {
+    var that = this;
+    this.elem = $(selector);
+    this.elem.on('focus change', function() {
+        that.elem.removeClass('phuf-error');
+    });
+    this.check = check;
+};
+profileField.prototype = {
+validate: function() {
+    var value = this.elem.val();
+    if (this.error = this.check(value)) {
+        this.elem.addClass('phuf-error');
+    } else {
+        this.elem.removeClass('phuf-error');
+    }
 }
 };
 

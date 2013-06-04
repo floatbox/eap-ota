@@ -11,47 +11,50 @@
     <div class="phu-popup">
         <div class="phu-stator">
         <div class="phu-slider">
-            <%= form_for("customer", :url => customer_session_path, :html => {:class => 'phu-section'}) do |f| %>
-                <h6 class="phus-title"><span class="phust-link phu-signin-link">Вход с паролем</span></h6>
+            <%= form_for("customer", :url => customer_session_path, :html => {:class => 'phu-section phu-signin', :novalidate => 'novalidate'}) do |f| %>
+                <h6 class="phus-title"><span class="phu-signin-link">Вход с паролем</span></h6>
                 <div class="phu-field">
-                    <label for="signin-email" class="phuf-placeholder">электронный адрес</label>                
+                    <label for="signin-email" class="phuf-placeholder">электронная почта</label>                
                     <%= f.email_field :email, :class => 'phuf-input', :id => 'signin-email' %>
                 </div>
                 <div class="phu-field">
-                    <%= f.label :password, 'пароль', :class => 'phuf-placeholder' %>
-                    <%= f.password_field :password, :class => 'phuf-input' %>
+                    <label for="signin-password" class="phuf-placeholder">пароль</label>
+                    <%= f.password_field :password, :class => 'phuf-input', :id => 'signin-password' %>
                 </div>
                 <div class="phu-submit">
                     <%= link_to "Забыли пароль?", new_customer_password_path, :class => 'phu-forgot-link' %>
                     <%= f.submit "Войти", :class => 'phu-button' %>
                 </div>
+                <div class="phu-error"></div>
             <% end %>
-            <%= form_for("customer", :url => customer_password_path, :html => {:class => 'phu-section phu-forgot'}) do |f| %>
+            <%= form_for("customer", :url => customer_password_path, :html => {:class => 'phu-section phu-forgot', :novalidate => 'novalidate'}) do |f| %>
                 <h6 class="phus-title">Сброс пароля</h6>
                 <p style="margin: 0 0 10px;">Мы пришлём на почту ссылку для получения нового пароля.</p>
                 <div class="phu-field">
-                    <label for="forgot-email" class="phuf-placeholder">электронный адрес</label>
+                    <label for="forgot-email" class="phuf-placeholder">электронная почта</label>
                     <%= f.email_field :email, :class => 'phuf-input', :id => 'forgot-email' %>
                 </div>            
                 <div class="phu-submit">
                     <%= link_to "Вспомнили?", new_customer_session_path, :class => 'phu-remember-link' %>
                     <%= f.submit "Сбросить пароль", :class => 'phu-button' %>
                 </div>
+                <div class="phu-error"></div>
             <% end %>            
         </div>
         </div>
         <div class="phu-section">
             <h6 class="phus-title" style="margin-bottom: 5px;"><span class="phust-link phu-signup-link">Регистрация</span></h6>
             <p>Нужна для того, чтобы хранить вашу историю заказов и данные пассажиров. После первого заказа у нас вы будете зарегистрированы автоматически.</p>
-            <%= form_for("customer", :url => customer_registration_path, :html => {:class => 'phu-signup'}) do |f| %>
+            <%= form_for("customer", :url => customer_registration_path, :html => {:class => 'phu-signup', :novalidate => 'novalidate'}) do |f| %>
             <div style="padding-top: 10px;">
                 <div class="phu-field">
-                    <label for="signup-email" class="phuf-placeholder">электронный адрес</label>
+                    <label for="signup-email" class="phuf-placeholder">электронная почта</label>
                     <%= f.email_field :email, :class => 'phuf-input', :id => 'signup-email' %>
                 </div>            
                 <div class="phu-submit">
                     <%= f.submit "Зарегистрироваться", :class => 'phu-button' %>
                 </div>
+                <div class="phu-error"></div>                
             </div>
             <% end %>
         </div>
