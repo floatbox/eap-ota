@@ -1085,7 +1085,7 @@ strt_date "21.06.2013"
 agent "4% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 subagent "2% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 interline :no, :yes
-discount "1.5%" # Скидка под вопросом!!!
+# discount "1.5%"
 commission '4%/2%'
 
 example 'svocdg/ab'
