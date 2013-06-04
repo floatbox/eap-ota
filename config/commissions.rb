@@ -1146,7 +1146,7 @@ commission "1%/0.5%"
 carrier "HR", "HAHN AIR  (Авиарепс)"
 ########################################
 
-carrier_defaults ticketing_method: "direct"
+carrier_defaults our_markup: 20
 
 # включено с дополнительной проверкой
 agent    "1 руб. от тарифов, опубликованных в системе бронирования, для авиакомпании Hahn Air и интерлайн-партнеров Hahn Air, указанных на сайте www.HR-ticketing.com;"
