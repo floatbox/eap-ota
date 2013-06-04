@@ -217,6 +217,16 @@
 .phu-button:active {
     box-shadow: 0 1px 0 rgba(0,0,0,0.15);
 }
+.phu-button:disabled {
+    box-shadow: 0 1px 0 rgba(0,0,0,0.15);
+    color: #777;
+}
+.phu-error {
+    display: none;
+    margin: 10px 0 0;
+    color: #BF2A1D;
+}
+
 .phu-forgot-link,
 .phu-remember-link {
     margin-top: 8px;
@@ -234,13 +244,16 @@
 .phu-active .phu-popup {
     display: block;
 }
-.phu-error {
-    display: none;
-    margin: 10px 0 0;
-    color: #BF2A1D;
+
+.phu-signup-fields {
+    padding-top: 10px;
 }
-
-
+.phu-signup-result {
+    display: none;
+}
+.phu-signup-result p {
+    padding-top: 10px;
+}
 
 /* User */
 .phu-link {

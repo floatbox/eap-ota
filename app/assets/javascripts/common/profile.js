@@ -82,9 +82,9 @@ hide: function() {
 },
 initForms: function() {
 
+    var that = this;
     var checkEmail = function(value) {
-        if (!value) return undefined;
-        //if (!value) return 'Введите адрес электронной почты.';
+        if (!value) return 'Введите адрес электронной почты.';
         if (/[а-яА-Я]/.test(value)) return 'Переключите раскладку и введите корректный адрес электронной почты.';
         if (!/[@.]/.test(value)) return 'Введите корректный адрес электронной почты.';
     };
@@ -94,9 +94,19 @@ initForms: function() {
     signIn.add('#signin-password', function(value) {
         if (!value) return 'Введите пароль.';
     });
+    signIn.process = function(result) {
+        window.location = result.location;
+    };
 
     var signUp = new profileForm(this.el.find('.phu-signup'));
     signUp.add('#signup-email', checkEmail);
+    signUp.process = function(result) {
+        that.el.find('.phu-signup-fields').hide();
+        that.el.find('.phu-signup-result').show();        
+    };    
+    
+    var forgot = new profileForm(this.el.find('.phu-forgot'));
+    signUp.add('#forgot-email', checkEmail);
     
 }
 };
@@ -110,6 +120,7 @@ var profileForm = function(elem) {
             that.send();
         }
     });
+    this.process = $.noop;
     this.fields = [];
 };
 profileForm.prototype = {
@@ -129,17 +140,29 @@ validate: function() {
 },
 send: function() {
     var that = this;
-    $.ajax(this.elem.attr('action'), {
-        type: 'POST',
-        data: this.elem.serialize()
-    }).done(function(result) {
-        console.log(result);
-    }).fail(function(jqXHR, status, message) {
-        that.elem.find('.phu-error').html(jqXHR.responseText).show();    
-    });
+    var button = this.elem.find('.phu-submit .phu-button');
+    if (!button.prop('disabled')) {
+        $.ajax(this.elem.attr('action'), {
+            type: 'POST',
+            data: this.elem.serialize()
+        }).done(function(result) {
+            if (result.success) {
+                that.process(result);
+            } else if (result.errors && result.errors.length) {
+                that.error(result.errors[0]);
+            }
+        }).fail(function(jqXHR, status, message) {
+            that.error(jqXHR.responseText);
+        });
+        button.prop('disabled', true);
+    }
 },
 add: function(selector, check) {
     this.fields.push(new profileField(selector, check));
+},
+error: function(message) {
+    this.elem.find('.phu-error').html(message).show();
+    this.elem.find('.phu-submit .phu-button').prop('disabled', false);    
 }
 };
 
