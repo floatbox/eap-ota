@@ -87,7 +87,7 @@ initForms: function() {
     var checkEmail = function(value) {
         if (!value) return 'Введите адрес электронной почты.';
         if (/[а-яА-Я]/.test(value)) return 'Переключите раскладку и введите корректный адрес электронной почты.';
-        if (!/[@.]/.test(value)) return 'Введите корректный адрес электронной почты.';
+        if (!/@\S+\.\w+/.test(value)) return 'Введите корректный адрес электронной почты.';
     };
 
     var signIn = new profileForm(this.el.find('.phu-signin'));
