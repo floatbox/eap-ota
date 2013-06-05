@@ -45,7 +45,9 @@
     <div class="orc-show">Показать детали</div>
     <div class="orc-hide">Скрыть детали</div>    
     <div class="orc-pnr">
-        <span class="orc-links">Маршрутная квитанция: <a class="orc-link" href="<%= profile_show_pnr_path(:id => order.pnr_number) %>" target="_blank">на русском</a> <a class="orc-link" href="<%= profile_show_pnr_path(:id => order.pnr_number) %>?lang=en" target="_blank">in English</a></span>
+        <span class="orc-links">Маршрутная квитанция: <a class="orc-link" href="<%= profile_show_pnr_path(:id => order.pnr_number) %>" target="_blank">на русском</a>
+          <!-- <a class="orc-link" href="<%= profile_show_pnr_path(:id => order.pnr_number) %>?lang=en" target="_blank">in English</a> -->
+        </span>
     </div>
 </div>
 <div class="order-details">
