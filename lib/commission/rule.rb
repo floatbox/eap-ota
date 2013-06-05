@@ -85,9 +85,30 @@ class Commission::Rule
 
   # @!group Полезная нагрузка найденной комиссии.
 
-  # Формулы
+  # формула для расчета суммы, которую берет агент
   # @return [Commission::Formula]
-  has_commission_attrs :agent, :subagent, :consolidator, :blanks, :discount, :our_markup
+  has_commission_attrs :agent
+
+  # формула для расчета суммы, которую берет посредник между агентом и нами
+  # @return [Commission::Formula]
+  has_commission_attrs :subagent
+
+  # формула для расчета коммиссии консолидатора - посредника между нами и авиакомпанией
+  # aviacenter и downtown - консолидаторы
+  # @return [Commission::Formula]
+  has_commission_attrs :consolidator
+
+  # формула для расчета скидки, считается на основе тарифа
+  # @return [Commission::Formula]
+  has_commission_attrs :discount
+
+  # формула для расчета нашей надбавки к стоимости
+  # @return [Commission::Formula]
+  has_commission_attrs :our_markup
+
+  # формула для расчета сбора за бланки, используется для сирены
+  # @return [Commission::Formula]
+  has_commission_attrs :blanks
 
   # рекомендуемый метод выписки.
   # @return [String] "aviacenter", "downtown", "direct"

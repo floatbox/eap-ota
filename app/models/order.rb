@@ -38,6 +38,11 @@ class Order < ActiveRecord::Base
     ['not blocked', 'blocked', 'charged', 'new', 'pending', 'unblocked']
   end
 
+  # booked - создана бронь, билеты еще не выписаны
+  # canceled - отмена брони без билетов
+  # processing_ticket - билеты отправлены на выписку, но еще не выписаны
+  # error_ticket - билеты были отправлены на выписку, но не были выписаны до таймаута
+  # ticketed - билеты были выписаны
   def self.ticket_statuses
     [ 'booked', 'canceled', 'ticketed', 'processing_ticket', 'error_ticket']
   end
@@ -282,6 +287,8 @@ class Order < ActiveRecord::Base
     PAID_BY[payment_type]
   end
 
+  # FIXME ни разу не очевидно
+  # генерит Order из OrderForm
   def order_form= order_form
     recommendation = order_form.recommendation
     copy_attrs order_form, self,
