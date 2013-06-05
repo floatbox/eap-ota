@@ -361,15 +361,16 @@ carrier "AB", "AIR BERLIN"
 ########################################
 
 example 'cdgfra/m fracdg/s'
-strt_date "01.03.2013"
-agent    "8% по всем направлениям через DTT"
-subagent "6% по всем направлениям через DTT"
+strt_date "05.06.2013"
+expr_date "30.06.2013"
+agent    "5% по всем направлениям через DTT"
+subagent "3% по всем направлениям через DTT"
 interline :no
 # только собственные рейсы AB и HG
-check { includes_only(operating_carrier_iatas, 'AB HG') }
-discount "4.6%"
+check { includes_only(operating_carrier_iatas, 'AB HG 4T') }
+discount "2%"
 ticketing_method "downtown"
-commission "8%/6%"
+commission "5%/3%"
 
 example 'cdgfra/S7:AB'
 example 'cdgsvo svocdg/lh'
