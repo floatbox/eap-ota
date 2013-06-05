@@ -68,6 +68,7 @@ initPopup: function() {
             });
         }
     });
+    this.el.find('.phu-button').prop('disabled', false);
 },
 show: function() {
     var that = this;
@@ -101,12 +102,12 @@ initForms: function() {
     var signUp = new profileForm(this.el.find('.phu-signup'));
     signUp.add('#signup-email', checkEmail);
     signUp.process = function(result) {
-        that.el.find('.phu-signup-fields').hide();
+        that.el.find('.phu-signup').closest('.phu-section').hide();
         that.el.find('.phu-signup-result').show();        
     };    
     
-    var forgot = new profileForm(this.el.find('.phu-forgot'));
-    signUp.add('#forgot-email', checkEmail);
+    /*var forgot = new profileForm(this.el.find('.phu-forgot'));
+    forgot.add('#forgot-email', checkEmail);*/
     
 }
 };

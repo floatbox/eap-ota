@@ -46,7 +46,7 @@
             <h6 class="phus-title" style="margin-bottom: 5px;"><span class="phust-link phu-signup-link">Регистрация</span></h6>
             <p>Нужна для того, чтобы хранить вашу историю заказов и данные пассажиров. После первого заказа у нас вы будете зарегистрированы автоматически.</p>
             <%= form_for("customer", :url => customer_registration_path, :html => {:class => 'phu-signup', :novalidate => 'novalidate'}) do |f| %>
-            <div class="phu-signup-fields" style="padding-top: 10px;">
+            <div class="phu-signup-fields">
                 <div class="phu-field">
                     <label for="signup-email" class="phuf-placeholder">электронная почта</label>
                     <%= f.email_field :email, :class => 'phuf-input', :id => 'signup-email' %>
@@ -56,11 +56,12 @@
                 </div>
                 <div class="phu-error"></div>
             </div>
-            <div class="phu-signup-result">
-                <p>На ваш электронный адрес отправлено письмо-подтверждение. Для&nbsp;завершения регистрации перейдите по&nbsp;ссылке в&nbsp;письме.</p>
-                <p><%= link_to "Что делать, если ничего не пришло?", new_customer_confirmation_path %></p>
-            </div>
             <% end %>
+        </div>
+        <div class="phu-section phu-signup-result">
+            <h6 class="phus-title" style="margin: 0 0 5px;">Аккаунт создан</h6>
+            <p style="margin: 0 0 10px;">На ваш электронный адрес отправлено письмо-подтверждение. Для&nbsp;завершения регистрации перейдите по&nbsp;ссылке в&nbsp;письме.</p>
+            <p><%= link_to "Что делать, если ничего не пришло?", new_customer_confirmation_path %></p>
         </div>
     </div>
 <% end %>
