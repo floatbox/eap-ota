@@ -3583,12 +3583,12 @@ no_commission "нет комисссии"
 
 # general dtt для горячей замены
 example 'svojfk jfksvo'
-agent "5% dtt"
+agent "1% dtt"
 subagent "3.5% dtt"
 interline :no_codeshare
 ticketing_method "downtown"
 important!
-commission "5%/3.5%"
+commission "1%/3.5%"
 
 #example 'svocdg/ab cdgsvo'
 #example 'ledcdg/fv:s7 cdgled'
