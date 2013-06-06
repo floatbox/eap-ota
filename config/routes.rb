@@ -61,7 +61,7 @@ Eviterra::Application.routes.draw do
   post 'confirm_3ds' => 'booking#confirm_3ds', :as => :confirm_3ds
   match 'order/:id' => 'PNR#show', :as => :show_order
   match 'notice/:id' => 'PNR#show_notice', :as => :show_notice
-  match 'order_stored/:id' => 'PNR#show_stored', :as => :show_stored
+  match 'order_stored/:id' => 'PNR#show_stored', :as => :show_order_stored
   match 'order/:id/booked' => 'PNR#show_as_booked', :as => :show_booked_order
   match 'order/:id/order' => 'PNR#show_as_order', :as => :show_order_order
   match 'order/:id/ticketed' => 'PNR#show_as_ticketed', :as => :show_ticketed_order
@@ -103,9 +103,8 @@ Eviterra::Application.routes.draw do
   match 'admin/reports/sales' => 'admin/reports#sales', :as => :admin_reports_sales
 
   match 'profile' => 'profile#index', :as => :profile
-  match 'profile/show_pnr/:id' => 'profile#show_pnr', :as => :profile_show_pnr
-  match 'profile/show_stored_pnr/:id' => 'profile#show_stored_pnr', :as => :profile_show_stored_pnr
-  match 'profile/show_pnr/:id/ticket/:ticket_id' => 'profile#show_pnr_for_ticket', :as => :profile_show_pnr_for_ticket
+  match 'profile/itinerary/:id' => 'PNR#show_stored', :as => :profile_itinerary
+  match 'profile/itinerary/:id/ticket/:ticket_id' => 'PNR#show_for_ticket', :as => :profile_itinerary_for_ticket
 
   root :to => 'home#index'
 

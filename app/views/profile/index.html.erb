@@ -46,8 +46,8 @@
     <div class="orc-hide">Скрыть детали</div>
     <% if order.profile_stored? %>
     <div class="orc-pnr">
-        <span class="orc-links">Маршрутная квитанция: <a class="orc-link" href="<%= profile_show_stored_pnr_path(:id => order.pnr_number) %>" target="_blank">на русском</a>
-          <!-- <a class="orc-link" href="<%= profile_show_pnr_path(:id => order.pnr_number) %>?lang=en" target="_blank">in English</a> -->
+        <span class="orc-links">Маршрутная квитанция: <a class="orc-link" href="<%= profile_itinerary_path(:id => order.pnr_number) %>" target="_blank">на русском</a>
+        <a class="orc-link" href="<%= profile_itinerary_path(:id => order.pnr_number, :lang =>'en') %>" target="_blank">in English</a>
         </span>
     </div>
     <% end %>
@@ -74,7 +74,8 @@
             </td>
             <td>
             <% if ticket.flights.present? %>
-                <a class="ordp-ticket" href="<%= profile_show_pnr_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id) %>" target="_blank">на русском</a> <a class="ordp-ticket" href="<%= profile_show_pnr_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id) %>?lang=en" target="_blank">in English</a>
+                <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id) %>" target="_blank">на русском</a>
+                <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id, :lang=> 'en') %>" target="_blank">in English</a>
             <% end %>                
             </td>
         </tr>
