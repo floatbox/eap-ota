@@ -12,7 +12,7 @@ module ProfileTicket
   end
 
   def profile_alive?
-    kind ='ticket' || kind = 'exchanged'
+    kind ='ticket' && ['ticketed', 'exchanged'].include?(status)
   end
 
 end

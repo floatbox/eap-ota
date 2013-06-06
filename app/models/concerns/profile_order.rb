@@ -44,6 +44,7 @@ module ProfileOrder
   end
 
   def profile_status
+    # FIXME некрасиво, переписать надо
     return 'денежные средства заблокированы на карте' if payment_type == 'card' && payment_status == 'blocked'
     return 'денежные средства списаны с карты' if payment_type == 'card' && payment_status == 'charged'
     return 'оплачен' if ['cash','invoice'].include?(payment_type) && payment_status == 'charged'
