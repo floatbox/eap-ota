@@ -29,10 +29,9 @@ end
 gem 'evergreen', :require => 'evergreen/rails', :group => :development
 
 # логгеры. выберу только один
-gem 'SyslogLogger'
-gem 'syslogger'
 gem 'lumberjack'
 gem 'lumberjack_syslog_device'
+gem 'lumberjack_multi-device'
 gem 'riemann-client', require: false
 # для импорта zip файлов
 gem 'zip'
@@ -90,7 +89,7 @@ group :test do
   gem 'rb-inotify', :require => false
   gem 'rb-fsevent', :require => false
   gem 'rb-fchange', :require => false
-  gem 'growl' # for OSX
+  # gem 'growl' # for OSX
   # for linux
   gem 'libnotify', :require => false
   gem 'guard-spork'
@@ -102,6 +101,8 @@ group :test do
 
   gem 'vcr'
   gem 'webmock'
+  # тестирование завтрашних комиссий
+  gem 'timecop'
 end
 
 group :debug do

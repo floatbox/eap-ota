@@ -7,10 +7,11 @@ class HahnAir
   base_uri 'ticketing.hahnair.travel'
 
   # sample response
-  # [{"code":"EK","name":"Emirates","gdses":["ama","gal","sab"],"remarks":""},
-  # {"code":"LH","name":"Lufthansa","gdses":["ama","gal","sab"],"remarks":""},
-  # {"answer":"YES"},
-  # {"matching":["ama","gal","sab"]}]
+  # @example
+  #   [{"code":"EK","name":"Emirates","gdses":["ama","gal","sab"],"remarks":""},
+  #    {"code":"LH","name":"Lufthansa","gdses":["ama","gal","sab"],"remarks":""},
+  #    {"answer":"YES"},
+  #    {"matching":["ama","gal","sab"]}]
 
   def self.allows? carriers
     carriers = Array(carriers)

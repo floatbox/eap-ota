@@ -462,13 +462,17 @@ human: function(d1, d2) {
     var max = this.from + d2;
     if (max - min < this.size) {
         if (max < 3) {
-            parts.push('короткие');
+            parts.push(I18n.t('filters.layovers.duration.short'));
         } else if (min > 4) {
-            parts.push('длинные');
+            parts.push(I18n.t('filters.layovers.duration.long'));
         }
-        parts.push((min ? 'от {0} до {1}' : 'меньше {1}').absorb(min, I18n.t('time.hours', {count: max})));
+        parts.push(I18n.t(min ? 'range' : 'less', {
+            scope: 'filters.layovers.duration',
+            min: min,
+            max: I18n.t('time.hours', {count: max})
+        }));
     } else {
-        parts.push('любая');
+        parts.push(I18n.t('filters.layovers.duration.any'));
     }
     this.value.html(parts.join(', '));
 },

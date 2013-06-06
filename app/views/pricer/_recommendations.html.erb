@@ -159,14 +159,14 @@
 <div class="rfg-column">
 <div class="rf-list">
 <% if data[:few_layovers] %>
-    <h6 class="rfgc-title">Количество</h6>
+    <h6 class="rfgc-title"><%= t 'filters.layovers.amount.title' %></h6>
     <div class="rf-lcount">
         <input type="checkbox" id="rf-onestop">
-        <label for="rf-onestop">Максимум одна пересадка</label>
+        <label for="rf-onestop"><%= t 'filters.layovers.amount.one' %></label>
     </div>
 <% end %>
 <% if data[:min_layover_duration] != data[:max_layover_duration] %>
-    <h6 class="rfgc-title">Длительность</h6>
+    <h6 class="rfgc-title"><%= t 'filters.layovers.duration.title' %></h6>
     <div class="rf-duration" data-min="<%= data[:min_layover_duration] %>" data-max="<%= data[:max_layover_duration] %>">
         <div class="rfd-control">
             <div class="rfd-selected"></div>
@@ -186,9 +186,9 @@
 <% if data[:layover_cities].length > 0 %>
 <div class="rfg-column">
 <div class="rf-list" data-key="lcity">
-    <h6 class="rfgc-title">Город пересадки</h6>
+    <h6 class="rfgc-title"><%= t 'filters.layovers.city.title' %></h6>
     <ul class="rf-values">
-    <li class="rfv-empty rfv-selected">любой</li>    
+    <li class="rfv-empty rfv-selected"><%= t 'filters.layovers.city.any' %></li>    
     <% data[:layover_cities].each do |city| %>
         <li class="rfv-item" data-value="<%= city.iata %>"><%= dict(city) %></li>
     <% end %>

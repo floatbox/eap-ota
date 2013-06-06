@@ -51,42 +51,52 @@ describe Commission do
   # если в config/commissions.rb - синтаксическая ошибка.
   Commission.reload!
 
-  Commission.all.each do |commission|
+  book = Commission.default_book
+  carriers = book.all_carriers
+  carriers.each do |carrier|
+    # проверка всех диапазонов дат для авиакомпании
+    start_dates = ( book.start_dates_for_carrier(carrier) + [Date.today] ).reject(&:past?).uniq
+    # start_dates = [Date.today]
 
+    commissions = book.for_carrier(carrier)
 
-    describe commission.inspect do
+    start_dates.each do |start_date|
+      describe "#{carrier} on #{start_date}" do
 
-      if commission.expired?
+        before do
+          Timecop.freeze(start_date)
+        end
 
-        specify {
-          pending "expired on #{commission.expr_date}."
-        }
+        after do
+          Timecop.return
+        end
 
-      elsif commission.future?
+        commissions.each do |commission|
 
-        specify {
-          pending "will apply only starting #{commission.strt_date}."
-        }
+          describe commission.inspect do
 
-      else
+            if Timecop.freeze(start_date) { commission.applicable_date? }
 
-        next if commission.examples.blank?
-        commission.examples.each do |example|
+              next if commission.examples.blank?
+              commission.examples.each do |example|
 
-          context example.inspect do
+                context example.inspect do
 
-            subject {example}
+                  subject {example}
 
-            if commission.disabled?
-              it {
-                should_not match_commission
-              }
-            else
-              it {
-                should match_commission(commission)
-              }
+                  if commission.disabled?
+                    it {
+                      should_not match_commission
+                    }
+                  else
+                    it {
+                      should match_commission(commission)
+                    }
+                  end
+
+                end
+              end
             end
-
           end
         end
       end

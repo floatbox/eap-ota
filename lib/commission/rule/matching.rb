@@ -2,7 +2,7 @@
 #
 # методы для Commission::Rule, для проверки применимости
 # конкретного правила к конкретной рекомендации
-module Commission::Matching
+module Commission::Rule::Matching
 
   extend ActiveSupport::Concern
 
@@ -41,6 +41,9 @@ module Commission::Matching
       case definition
       when :no
         not recommendation.interline?
+      when :no_codeshare
+        not recommendation.interline? and
+        not recommendation.codeshare?
       when :yes, :unconfirmed
         recommendation.interline? and
         recommendation.validating_carrier_participates?
@@ -82,8 +85,8 @@ module Commission::Matching
   end
 
   def applicable_custom_check? recommendation
-    return true unless check
-    recommendation.instance_eval &check
+    return true unless check_proc
+    recommendation.instance_eval &check_proc
   end
 
   def applicable_geo? recommendation
@@ -103,12 +106,12 @@ module Commission::Matching
 
   def expired?
     return unless expr_date
-    expr_date.to_date.past?
+    expr_date.past?
   end
 
   def future?
     return unless strt_date
-    strt_date.to_date.future?
+    strt_date.future?
   end
 
 end

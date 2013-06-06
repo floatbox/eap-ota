@@ -108,8 +108,11 @@ class Flight
     [operating_carrier_iata, marketing_carrier_iata].compact.uniq.join(':')
   end
 
-  def code_share?
-    operating_carrier_iata && (operating_carrier_iata != marketing_carrier_iata)
+  def codeshare?
+    operating_carrier_iata &&
+      (operating_carrier_iata != marketing_carrier_iata) &&
+      operating_carrier.not_interlines.exclude?(marketing_carrier_iata) &&
+      marketing_carrier.not_interlines.exclude?(operating_carrier_iata)
   end
 
   def distance

@@ -157,7 +157,7 @@ describe Recommendation do
     let :interline do
       Recommendation.example('SVOCDG/LH CDGSVO/LH', :carrier => 'AB')
     end
-    let :code_share do
+    let :codeshare do
       Recommendation.example('SVOCDG/AB:LH CDGSVO/LH', :carrier => 'AB')
     end
 
@@ -201,9 +201,9 @@ describe Recommendation do
       interline.interline?.should be_true
     end
 
-    it "#code_share?" do
-      not_interline.code_share?.should be_false
-      code_share.code_share?.should be_true
+    it "#codeshare?" do
+      not_interline.codeshare?.should be_false
+      codeshare.codeshare?.should be_true
     end
 
   end

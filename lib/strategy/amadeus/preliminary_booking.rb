@@ -93,11 +93,12 @@ module Strategy::Amadeus::PreliminaryBooking
 
 
   def get_price_and_rules(amadeus)
-    @rec.price_fare, @rec.price_tax =
-      amadeus.fare_informative_pricing_without_pnr(
+    info_resp = amadeus.fare_informative_pricing_without_pnr(
         :recommendation => @rec,
         :people_count => @search.real_people_count
-      ).prices
+      )
+    @rec.price_fare, @rec.price_tax = info_resp.prices
+    @rec.baggage_array = info_resp.baggage
 
     @rec.rules = amadeus.fare_check_rules.rules
 
