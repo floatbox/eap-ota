@@ -87,6 +87,7 @@ Eviterra::Application.routes.draw do
   match 'agreement/old' => 'about#agreement_old', :as => :about
   match 'contacts' => 'about#contacts', :as => :about
   match 'about/:action' => 'about', :as => :about
+  match 'partners' => 'about#partners', :as => :about
 
   match "whereami" => 'home#whereami', :as => :whereami
   match 'status' => 'home#status'

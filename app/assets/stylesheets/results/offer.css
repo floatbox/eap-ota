@@ -227,7 +227,23 @@
 }
 .ost-duration {
     width: 366px;
-    padding: 0 14px 4px;
+    padding: 2px 14px;
+}
+.ost-sort {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.ost-ascendant:after {
+    content: '\2193';
+    position: absolute;
+    margin-left: 5px;
+    text-decoration: none;
+}
+.ost-descendant:after {
+    content: '\2191';
+    position: absolute;
+    margin-left: 5px;
+    text-decoration: none;
 }
 .ostn-text {
     padding: 2px 14px;

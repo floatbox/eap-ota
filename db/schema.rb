@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130503232929) do
+ActiveRecord::Schema.define(:version => 20130524114650) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -382,6 +382,7 @@ ActiveRecord::Schema.define(:version => 20130503232929) do
     t.string   "fee_scheme",                                                  :default => ""
     t.decimal  "price_acquiring_compensation",  :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.string   "commission_tour_code"
+    t.string   "commission_designator"
   end
 
   add_index "orders", ["customer_id"], :name => "index_orders_on_customer_id"

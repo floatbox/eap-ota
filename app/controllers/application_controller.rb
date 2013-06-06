@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   include Typus::Authentication::Session, PartnerTracking
   has_mobile_fu false
 
+  before_filter :log_remote_ip
   before_filter :set_locale
   after_filter :log_partner
 
@@ -33,6 +34,10 @@ class ApplicationController < ActionController::Base
 
   def after_sign_out_path_for(resource_or_scope)
     root_path
+  end
+
+  def log_remote_ip
+    logger.info "  Remote IP: #{request.remote_ip}"
   end
 
   ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|

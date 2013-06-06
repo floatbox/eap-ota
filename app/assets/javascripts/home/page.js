@@ -25,7 +25,9 @@ init: function() {
     }
     
     $(function() {
-        $w.scrollTop(0);
+        if (browser.platform !== 'iphone') {
+            $w.scrollTop(0);
+        }
         if (search.map.el.is(':visible')) {
             search.map.load();
         }
@@ -67,6 +69,7 @@ restoreBooking: function(rkey, bkey) {
     booking.loading.show();
     booking.el.addClass('b-processing').show();
     booking.load();
+    _kmq.push(['record', 'VISIT: variant']);
 },
 reset: function() {
     search.setValues(search.defaultValues);

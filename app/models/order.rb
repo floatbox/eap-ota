@@ -1,10 +1,10 @@
 # encoding: utf-8
 class Order < ActiveRecord::Base
-
   include CopyAttrs
   include Pricing::Order
   include TypusOrder
   include ProfileOrder
+  include OrderAttrs
 
   scope :MOWR228FA, lambda { by_office_id 'MOWR228FA' }
   scope :MOWR2233B, lambda { by_office_id 'MOWR2233B' }
@@ -38,6 +38,11 @@ class Order < ActiveRecord::Base
     ['not blocked', 'blocked', 'charged', 'new', 'pending', 'unblocked']
   end
 
+  # booked - создана бронь, билеты еще не выписаны
+  # canceled - отмена брони без билетов
+  # processing_ticket - билеты отправлены на выписку, но еще не выписаны
+  # error_ticket - билеты были отправлены на выписку, но не были выписаны до таймаута
+  # ticketed - билеты были выписаны
   def self.ticket_statuses
     [ 'booked', 'canceled', 'ticketed', 'processing_ticket', 'error_ticket']
   end
@@ -56,6 +61,11 @@ class Order < ActiveRecord::Base
 
   def show_vat
     sold_tickets.present? && sold_tickets.all?(&:show_vat) && sold_tickets.every.office_id.uniq != ['FLL1S212V']
+  end
+
+  def calculated_payment_status
+    return 'charged' if payments.any?{|p| p.class.in?([PaytureCharge, PayuCharge]) && p.status == 'charged'}
+    return 'blocked' if payments.last.class.in?([PaytureCharge, PayuCharge]) && payments.last.status == 'blocked'
   end
 
   def self.sources
@@ -77,7 +87,7 @@ class Order < ActiveRecord::Base
   # фейковый текст для маршрут-квитанций. может быть, вынести в хелпер?
   PAID_BY = {'card' => 'Invoice', 'delivery' => 'Cash', 'cash' => 'Cash', 'invoice' => 'Invoice'}
 
-  attr_writer :itinerary_receipt_view
+  attr_writer :itinerary_receipt_view, :tickets_are_loading
 
   extend Commission::Columns
   has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount, :commission_our_markup
@@ -128,6 +138,26 @@ class Order < ActiveRecord::Base
       self.price_acquiring_compensation = price_payment_commission if !fix_price
       self.price_difference = fix_price? ? price_with_payment_commission - price_real : 0
     end
+  end
+
+  def recalculate_prices
+    #считаем, что в данном случае не бывает обменов/возвратов, иначе с ценами будет полная жопа
+    return if fix_price? || tickets.blank?
+    sum_and_copy_attrs sold_tickets, self,
+      :price_fare,
+      :price_tax
+    self.price_difference = 0
+    calculate_price_with_payment_commission
+    save
+    @tickets_are_loading = true
+    tickets.each do |t|
+      t.order.tickets_are_loading = true
+      t.corrected_price = t.calculated_price_with_payment_commission
+      t.price_acquiring_compensation = t.price_payment_commission
+      t.save
+    end
+    @tickets_are_loading = false
+    update_prices_from_tickets
   end
 
   def has_data_in_tickets?
@@ -197,15 +227,15 @@ class Order < ActiveRecord::Base
   scope :processing_ticket, where(:ticket_status => 'processing_ticket')
   scope :error_ticket, where(:ticket_status => 'error_ticket')
   scope :ticketed, where(:payment_status => ['blocked', 'charged'], :ticket_status => 'ticketed')
-  scope :ticket_not_sent, where("pnr_number != '' AND email_status != 'ticket_sent' AND ticket_status = 'ticketed'").where("created_at > ?", 10.days.ago)
+  scope :ticket_not_sent, where("orders.pnr_number != '' AND email_status != 'ticket_sent' AND ticket_status = 'ticketed'").where("orders.created_at > ?", 10.days.ago)
   scope :sent_manual, where(:email_status => 'manual')
-  scope :reported, where(:payment_status => ['blocked', 'charged'], :offline_booking => false).where("pnr_number != ''")
-  scope :extra_pay, where("pnr_number = '' AND parent_pnr_number != ''")
+  scope :reported, where(:payment_status => ['blocked', 'charged'], :offline_booking => false).where("orders.pnr_number != ''")
+  scope :extra_pay, where("orders.pnr_number = '' AND parent_pnr_number != ''")
 
 
   scope :stale, lambda {
     where(:payment_status => 'not blocked', :ticket_status => 'booked', :offline_booking => false, :source => 'amadeus')\
-      .where("created_at < ?", 30.minutes.ago)
+      .where("orders.created_at < ?", 30.minutes.ago)
   }
 
   def tickets_count
@@ -257,6 +287,8 @@ class Order < ActiveRecord::Base
     PAID_BY[payment_type]
   end
 
+  # FIXME ни разу не очевидно
+  # генерит Order из OrderForm
   def order_form= order_form
     recommendation = order_form.recommendation
     copy_attrs order_form, self,
@@ -298,6 +330,7 @@ class Order < ActiveRecord::Base
         :our_markup,
         :agent_comments,
         :subagent_comments,
+        :designator,
         :tour_code
 
       copy_attrs recommendation, self,

@@ -157,6 +157,9 @@ describe Recommendation do
     let :interline do
       Recommendation.example('SVOCDG/LH CDGSVO/LH', :carrier => 'AB')
     end
+    let :codeshare do
+      Recommendation.example('SVOCDG/AB:LH CDGSVO/LH', :carrier => 'AB')
+    end
 
     # ugly
     it "#validating_carrier_participates?" do
@@ -196,6 +199,11 @@ describe Recommendation do
       partner_half_interline.interline?.should be_true
       interline_but_first.interline?.should be_true
       interline.interline?.should be_true
+    end
+
+    it "#codeshare?" do
+      not_interline.codeshare?.should be_false
+      codeshare.codeshare?.should be_true
     end
 
   end

@@ -4,7 +4,7 @@ class Recommendation
   include KeyValueInit
 
   attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
-    :suggested_marketing_carrier_iatas, :availabilities, :upts, :last_tkt_date, :declared_price
+    :suggested_marketing_carrier_iatas, :availabilities, :upts, :last_tkt_date, :declared_price, :baggage_array
 
   delegate :marketing_carriers, :marketing_carrier_iatas,
     :operating_carriers, :operating_carrier_iatas,
@@ -25,7 +25,7 @@ class Recommendation
 
   def self.from_yml str
     #триггеринг автолоад
-    Recommendation; Variant; Flight; Segment; TechnicalStop
+    Recommendation; Variant; Flight; Segment; TechnicalStop; BaggageLimit
     YAML.load(str)
   end
 
@@ -79,6 +79,10 @@ class Recommendation
 
   def interline?
     @interline ||= other_marketing_carrier_iatas.any?
+  end
+
+  def codeshare?
+    flights.any?(&:codeshare?)
   end
 
   def international?

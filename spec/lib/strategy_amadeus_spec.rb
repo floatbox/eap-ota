@@ -88,8 +88,9 @@ describe Strategy::Amadeus do
   describe "#recommendation_from_booking" do
 
     before(:each) do
-      # лень сооружать подходящий flight_info
-      air_flight_info_result = mock(:air_flight_info_result, success?: false),
+      # лень сооружать подходящий flight_info, делаем вид,
+      # что амадеус про конкретный вылет все забыл
+      air_flight_info_result = mock(:air_flight_info_result, success?: false)
       amadeus.stub(
         pnr_retrieve:
           amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml'),
@@ -100,14 +101,29 @@ describe Strategy::Amadeus do
       )
     end
 
-    subject do
+    subject :recommendation do
       Strategy::Amadeus.new(:order => build(:order)).recommendation_from_booking
     end
 
-    its(:validating_carrier_iata) {should == "SU"}
-    its(:price_fare) {should == 1400}
-    its(:price_tax) {should == 1281}
-    its('flights.first.flight_code') {should == 'SU788MRVSVO080911'}
+    it 'is not nil' do
+      expect(recommendation).to_not be_nil
+    end
+
+    it 'got a valid value of validating_carrier_iata' do
+      expect(recommendation.validating_carrier_iata).to eq 'SU'
+    end
+
+    it 'got a valid value of price_fare' do
+      expect(recommendation.price_fare).to eq 1400
+    end
+
+    it 'got a valid value of price_tax' do
+      expect(recommendation.price_tax).to eq 1281
+    end
+
+    it 'got a valid values of flight codes' do
+      expect( recommendation.flights.first.flight_code ).to eq 'SU788MRVSVO080911'
+    end
 
   end
 

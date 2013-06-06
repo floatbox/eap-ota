@@ -6,6 +6,8 @@ carrier "SU", "Aeroflot"
 # будут действовать на все правила в авиакомпании.
 carrier_defaults discount: 0
 
+=begin
+# Правила устарели с 01.06.2013
 # example "svocdg"
 # example "svocdg/business cdgsvo/economy"
 agent "1.1.На рейсы под кодом «SU», включая рейсы по соглашению «Код-шеринг» (в том числе по тарифам ИАТА):"
@@ -20,7 +22,7 @@ subagent "• на собственные рейсы (в т.ч. по согла�
 subagent "5 % от тарифов Эконом класса (в т.ч. при комбинации Эконом и Бизнес классов),   при переоформлении с доплатой по тарифам Эконом класса (в т.ч. при комбинации Эконом и Бизнес классов);"
 # применится только к этому правилу
 # ticketing_method "direct"
-discount "5%"
+discount "4.6%"
 ## our_markup 100
 commission "7%/6%"
 
@@ -30,7 +32,7 @@ important!
 agent "- за продажу в Бизнес классе  9 % от тарифа;"
 subagent "8 % от тарифов Бизнес класса, при переоформлении с доплатой по тарифам Бизнес класса;"
 classes :business
-discount "7%"
+discount "6%"
 ## our_markup 0
 commission "9%/8%"
 
@@ -41,9 +43,19 @@ agent "- при переоформлении авиабилета с допла�
 subagent "• на рейсы Interline в комбинации с рейсом под кодом «SU»:"
 subagent "(три) % от сквозных или участковых тарифов (в т.ч. при переоформлении авиабилета с       доплатой по тарифу)"
 interline :yes
-discount "2%"
+discount "2.25%"
 ## our_markup 100
-commission "5%/3%"
+commission "4%/3%"
+=end
+
+example "svocdg"
+example "svocdg cdgsvo"
+example "svocdg/su cdgsvo/ab"
+agent "4% от тарифа на собств. рейсы SU, вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам;"
+subagent "3% от тарифа на собств. рейсы SU, вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам;"
+interline :no, :yes
+discount "2.25%"
+commission "4%/3%"
 
 example "cdgsvo/ab"
 agent "1.3. На рейсы других авиакомпаний по соглашениям «Интерлайн» при продаже перевозок без комбинации с рейсом под кодом «SU»:"
@@ -74,57 +86,84 @@ carrier "UN", "TRANSAERO"
 ########################################
 
 #dtt
-# example 'AERDME/W DMEAER/W'
-# example 'AERDME/Y DMEAER/L'
-# example 'AERDME/Y DMEAER/L'
-# example 'AERDME/W DMEAER/I'
-# example 'AERDME/N DMEAER/T'
-# example 'AERDME/W DMEAER/W'
-agent "12% американский office-id"
-subagent "10% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U."
-subclasses "FPRJCADSMLVXTNIGWUYHQBKOE"
+example 'AERDME/W DMEAER/W'
+example 'AERDME/W DMEAER/I'
+example 'AERDME/N DMEAER/T'
+example 'AERDME/W DMEAER/W'
+agent "5% американский office-id"
+subagent "4% от тарифа на рейсы Перевозчика по всем тарифам классов L,V,X,T,N,I,W."
+subclasses "LVXTNIW"
 ticketing_method "downtown"
-disabled "срочно вырубаем DTT"
-discount "8.8%"
-commission "12%/10.5%"
+discount "3%"
+commission "5%/4%"
 
-# базовое вознаграждение ац для высоких c 01.04
+# базовое вознаграждение ац для высоких c 21.05
 example 'cdgsvo/r svocdg/f'
-strt_date "01.04.2013"
-agent "9% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
-subagent "нет? ориентировочно 7"
+strt_date "21.05.2013"
+expr_date "20.06.2013"
+agent "8% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
+subagent "6%"
 subclasses "FPRJCADSM"
-discount "6%"
+discount "4.6%"
 important!
-commission "9%/7%"
+commission "8%/6%"
 
-# базовое вознаграждение ац — мердж эконома с конца апреля 
-example 'cdgsvo/o svocdg/y'
-strt_date "21.04.2013"
-agent "C 21.04.13г. 7% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K, O;"
+# базовое вознаграждение ац для высоких c 21.06
+example 'cdgsvo/r svocdg/f'
+strt_date "21.06.2013"
+agent "7% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
 subagent "5%"
-subclasses "YHQBKO"
-discount "4%"
-# disabled "На DTT выгодней"
+subclasses "FPRJCADSM"
+discount "3.7%"
+important!
 commission "7%/5%"
 
-# прямая выписка на говноклассы
-example 'cdgsvo/i svocdg/x'
-strt_date "01.05.2013"
-agent "5% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
-subagent "5% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
-subclasses "LVXTNIGWU"
-discount "4%"
-ticketing_method "direct"
-commission "5%/5%"
+# базовое вознаграждение ац c 21.05.2013 
+example 'cdgsvo/q svocdg/y'
+strt_date "21.05.2013"
+expr_date "20.06.2013"
+agent "C 21.05.13г. 6% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K;"
+subagent "4%"
+subclasses "YHQBK"
+discount "3%"
+# disabled "На DTT выгодней"
+commission "6%/4%"
 
-# интерлайн
+# базовое вознаграждение ац c 21.06.2013 
+example 'cdgsvo/h svocdg/y'
+strt_date "21.06.2013"
+agent "C 21.06.13г. 5% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K;"
+subagent "3%"
+subclasses "YHQBK"
+discount "3%"
+# disabled "На DTT выгодней"
+commission "5%/3%"
+
+# говноклассы с 21.05 
+example 'cdgsvo/g svocdg/u'
+strt_date "21.05.2013"
+expr_date "20.06.2013"
+agent "4% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
+subagent "2% от тарифа на рейсы Перевозчика по всем тарифам классов G, U;"
+subclasses "GU"
+discount "1.35%"
+commission "4%/2%"
+
+# говноклассы с 21.06 
+example 'cdgsvo/g svocdg/u'
+strt_date "21.06.2013"
+agent "3% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
+subagent "1% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
+subclasses "GU"
+commission "3%/1%"
+
+# интерлайн c 21.05.2013 (не меняется)
 example 'aerdme dmeaer/ab'
 agent "5% Interline с участком Трансаэро. Без участка UN запрещено."
 subagent "3% от тарифа на рейсы Interline c участком UN. Запрещена продажа на рейсы interline без
 участка UN"
 interline :yes
-discount "2%"
+discount "2.25%"
 commission "5%/3%"
 
 # дополнительно:
@@ -138,20 +177,33 @@ subagent "до особых указаний 7% от опубл. тарифов 
 important!
 check { includes(city_iatas, 'HOU SIN') and includes(city_iatas, 'MOW') and includes(country_iatas, 'RU') }
 # disabled "На DTT выгодней"
-discount "6%"
+discount "5.2%"
 commission "9%/7%"
 
-# Пекин/Майами/Нью-Йорк прямые из Москвы и сквозные через Москву из RU UA KZ UZ AM
-example 'kbpsvo svojfk'
-example 'tsedme dmejfk jfkdme dmetse'
+# Пекин прямые из Москвы и сквозные через Москву из RU UA KZ UZ AM — через dtt
+example 'kbpsvo svopek'
+example 'tsedme dmepek pekdme dmetse'
 agent "12% до особых указаний от всех опубл. тарифов (OW/RT) на собств. ПРЯМЫЕ рейсы UN между Москвой и городами:Нью-Йорк/ Майами/ Лос-Анджелес/ Пекин;"
 agent "12% Oт всех применяемых опубликованных тарифов на собственные  регулярные рейсы между Москвой и Пекином/Майами/Нью-Йорком (OW,RT)  и на сквозные перевозки между пунктами полетов АК  «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW,RT)."
 subagent "10% до особых указаний от всех опубл. тарифов (OW/RT) на собств. ПРЯМЫЕ рейсы UN между Москвой и городами:Нью-Йорк/ Майами/ Лос-Анджелес/ Пекин;"
 subagent "10% от всех применяемых опубликованных тарифов между Москвой и Пекином/Майами/Нью-Йорком (OW.RT) и на сквозные перевозки между пунктами полетов АК «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW.RT). (Через АСБ «GABRIEL»: установлен специальный «Код тура» NEWDE10 при продаже перевозок с полетными сегментами между Москвой-Майами/Нью-Йорком (OW/RT). СУБАГЕНТ обязан внести «Код тура» NEWDE10 для автоматического начисления комиссии.)"
-check { includes(city_iatas, %W(NYC MIA BJS LAX)) and includes(city_iatas, 'MOW') and includes(country_iatas, %W(RU UA KZ UZ AM)) }
-# FIX кривой и не полный чек
-discount "10%"
+check { includes(city_iatas, 'BJS') and includes(city_iatas, 'MOW') and includes(country_iatas, %W(RU UA KZ UZ AM)) }
+discount "7.5%"
 important! # ац вперед! 
+commission "12%/10%"
+
+# Майами/Нью-Йорк прямые из Москвы и сквозные через Москву из RU UA KZ UZ AM — через dtt
+example 'kbpsvo svojfk'
+example 'tsedme dmejfk jfkdme dmetse'
+agent "12% до особых указаний от всех опубл. тарифов (OW/RT) на собств. ПРЯМЫЕ рейсы UN между Москвой и городами:Нью-Йорк/ Майами/ Лос-Анджелес/ Пекин;"
+agent "12% Oт всех применяемых опубликованных тарифов на собственные  регулярные рейсы между Москвой и Пекином/Майами/Нью-Йорком (OW,RT)  и на сквозные перевозки между пунктами полетов АК  «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW,RT)."
+subagent "11% до особых указаний от всех опубл. тарифов (OW/RT) на собств. ПРЯМЫЕ рейсы UN между Москвой и городами:Нью-Йорк/ Майами/ Лос-Анджелес/ Пекин;"
+subagent "11% от всех применяемых опубликованных тарифов между Москвой и Пекином/Майами/Нью-Йорком (OW.RT) и на сквозные перевозки между пунктами полетов АК «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW.RT). (Через АСБ «GABRIEL»: установлен специальный «Код тура» NEWDE10 при продаже перевозок с полетными сегментами между Москвой-Майами/Нью-Йорком (OW/RT). СУБАГЕНТ обязан внести «Код тура» NEWDE10 для автоматического начисления комиссии.)"
+check { includes(city_iatas, %W(NYC MIA LAX)) and includes(city_iatas, 'MOW') and includes(country_iatas, %W(RU UA KZ UZ AM)) }
+# FIX кривой и не полный чек
+discount "9%"
+important! # ац вперед! 
+ticketing_method "downtown"
 # disabled "dtt рулит"
 commission "12%/11%"
 
@@ -309,15 +361,16 @@ carrier "AB", "AIR BERLIN"
 ########################################
 
 example 'cdgfra/m fracdg/s'
-strt_date "01.03.2013"
-agent    "8% по всем направлениям через DTT"
-subagent "6% по всем направлениям через DTT"
+strt_date "05.06.2013"
+expr_date "30.06.2013"
+agent    "5% по всем направлениям через DTT"
+subagent "3% по всем направлениям через DTT"
 interline :no
 # только собственные рейсы AB и HG
-check { includes_only(operating_carrier_iatas, 'AB HG') }
-discount "6%"
-ticketing_method "downtown"
-commission "8%/6%"
+check { includes_only(operating_carrier_iatas, 'AB HG 4T') }
+discount "2%"
+ticketing_method "aviacenter"
+commission "5%/3%"
 
 example 'cdgfra/S7:AB'
 example 'cdgsvo svocdg/lh'
@@ -372,6 +425,19 @@ carrier "AF", "AIR FRANCE"
 
 carrier_defaults consolidator: 0, our_markup: '0.2%'
 
+example 'jfksvo/c svojfk/n'
+example 'jfksvo/v'
+strt_date "15.05.2013"
+agent "1232 DL/AFKL/AZ US-EMEAI Consolidator Commission Program Amendment #1"
+agent "Если, кратко, то C,D,Z,I W,S,Y,M,U,K,H A,L,Q,T,N,R,V"
+agent "Только перелеты в Америку из России и наоборот (RT и OW), только СОБСТВЕННЫЕ рейсы ( никаких код-шерингов), авиакомпании могут комбинироваться в одном бронировании. Их комиссия 8%, наша 6%, никаких особенностей в выписке"
+subagent "6%"
+subclasses "CDZIWSYMUKHALQTNRV"
+check { includes(country_iatas, 'RU') and includes(country_iatas.first, 'US') and includes_only(country_iatas, 'US RU') }
+ticketing_method "downtown"
+discount "5%"
+commission "8%/6%"
+
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
 strt_date "01.07.2012"
@@ -414,26 +480,74 @@ carrier "AZ", "ALITALIA"
 ########################################
 carrier_defaults consolidator: 0
 
-example 'svolin'
-example 'ledlin linled'
-example 'ievfco/r'
-example 'ievlin/p'
-example 'tbsfco fcotbs/r'
-example 'evnfco fcoevn'
-strt_date "01.05.2013"
-expr_date "31.05.2013"
-agent "9% на ЭКОНОМ /БИЗНЕС класс."
-subagent "7% от тарифа на все направления Alitalia (Эконом и Бизнес класса) с началом путешествия из Москвы и Санкт-Петербурга, а также из Киева (из Киева Alitalia летает в Рим (AZ481) и Милан (AZ7469), Тбилиси (из Тбилиси Alitalia летает в Рим (AZ551), Еревана (из Еревана Alitalia летает в Рим (AZ557) (тарифы туда и обратно, а также тарифы в одну сторону, но с вылетом из Москвы или Санкт-Петербурга, Киева, Тбилиси или Еревана). Повышенная комиссия не применяется, если начало путешествия не из этих городов. На рейсы code-share комиссия не применяется (за исключением code-share с AP/VE/XM/CT)"
+example 'svojfk/v jfksvo/m'
+example 'jfksvo/o'
+strt_date "15.05.2013"
+agent "1232 DL/AFKL/AZ US-EMEAI Consolidator Commission Program Amendment #1"
+agent "Если, кратко, то J,E,D,I P,Y,B,M,H,K A,V,T,N,S,L,O"
+agent "Только перелеты в Америку из России и наоборот (RT и OW), только СОБСТВЕННЫЕ рейсы ( никаких код-шерингов), авиакомпании могут комбинироваться в одном бронировании. Их комиссия 8%, наша 6%, никаких особенностей в выписке"
+subagent "6%"
+subclasses "JEDIPYBMHKAVTNSLO"
+check { includes(country_iatas, 'RU') and includes(country_iatas, 'US') and includes_only(country_iatas, 'US RU') }
+ticketing_method "downtown"
+discount "5%"
+commission "8%/6%"
+
+example 'svolin/business'
+example 'ledlin/business linled/business'
+example 'ievfco/business'
+example 'ievlin/business'
+example 'tbsfco/business fcotbs/business'
+example 'evnfco/business fcoevn/business'
+strt_date "01.06.2013"
+expr_date "30.06.2013"
+agent "5% на БИЗНЕС класс."
+subagent "3% от тарифа на все направления Alitalia (Эконом и Бизнес класса) с началом путешествия из Москвы и Санкт-Петербурга, а также из Киева (из Киева Alitalia летает в Рим (AZ481) и Милан (AZ7469), Тбилиси (из Тбилиси Alitalia летает в Рим (AZ551), Еревана (из Еревана Alitalia летает в Рим (AZ557) (тарифы туда и обратно, а также тарифы в одну сторону, но с вылетом из Москвы или Санкт-Петербурга, Киева, Тбилиси или Еревана). Повышенная комиссия не применяется, если начало путешествия не из этих городов. На рейсы code-share комиссия не применяется (за исключением code-share с AP/VE/XM/CT)"
+classes :business
 check {
-  includes_only(operating_carrier_iatas, 'AZ AP VE XM CT') and
-  ( includes(city_iatas.first, 'MOW LED') or
+  includes_only(operating_carrier_iatas, 'AZ VE XM CT') and
+  ( includes(city_iatas.first, 'MOW LED SVX') or
     (includes(city_iatas.first, 'IEV') and includes_only(city_iatas, 'IEV ROM MIL')) or
     (includes(city_iatas.first, 'TBS') and includes_only(city_iatas, 'TBS ROM')) or
     (includes(city_iatas.first, 'EVN') and includes_only(city_iatas, 'EVN ROM'))
   )
 }
-discount "6%"
-commission "9%/7%"
+discount "2%"
+commission "5%/3%"
+
+example 'svolin/business'
+example 'ledlin/business linled/business'
+example 'ievfco/business'
+example 'ievlin/business'
+example 'tbsfco/business fcotbs/business'
+example 'evnfco/business fcoevn/business'
+strt_date "01.05.2013"
+expr_date "31.05.2013"
+agent "9% на БИЗНЕС класс."
+subagent "7% от тарифа на все направления Alitalia (Эконом и Бизнес класса) с началом путешествия из Москвы и Санкт-Петербурга, а также из Киева (из Киева Alitalia летает в Рим (AZ481) и Милан (AZ7469), Тбилиси (из Тбилиси Alitalia летает в Рим (AZ551), Еревана (из Еревана Alitalia летает в Рим (AZ557) (тарифы туда и обратно, а также тарифы в одну сторону, но с вылетом из Москвы или Санкт-Петербурга, Киева, Тбилиси или Еревана). Повышенная комиссия не применяется, если начало путешествия не из этих городов. На рейсы code-share комиссия не применяется (за исключением code-share с AP/VE/XM/CT)"
+classes :business
+check {
+  includes_only(operating_carrier_iatas, 'AZ VE XM CT') and
+  ( includes(city_iatas.first, 'MOW LED SVX') or
+    (includes(city_iatas.first, 'IEV') and includes_only(city_iatas, 'IEV ROM MIL')) or
+    (includes(city_iatas.first, 'TBS') and includes_only(city_iatas, 'TBS ROM')) or
+    (includes(city_iatas.first, 'EVN') and includes_only(city_iatas, 'EVN ROM'))
+  )
+}
+discount "6.7%"
+commission "9%/8%"
+
+example 'svolin/az565 linsvo/AZ560'
+example 'svolin/az565 linsvo/AZ560 svocdg'
+example 'svolin/az565 linsvo/AZ564'
+strt_date "01.06.2013"
+agent "4% от тарифа ЭКОНОМ КЛАССА на ВСЕ НАПРАВЛЕНИЯ ALITALIA с вылетом из Москвы"
+agent "с обязательным наличием в маршруте рейса Москва-Милан AZ565 или AZ56 и обязательным наличием в маршруте рейса Милан-Москва AZ560 и AZ564."
+subagent "2% от тарифа ЭКОНОМ КЛАССА на ВСЕ НАПРАВЛЕНИЯ ALITALIA с вылетом из Москвы"
+classes :economy
+check { includes(flights.every.full_flight_number, %W(AZ565 AZ56)) and includes(flights.every.full_flight_number, %W(AZ560 AZ564)) }
+discount "1%"
+commission "4%/2%"
 
 example 'mrucdg'
 example 'mrucdg cdgmru'
@@ -456,10 +570,19 @@ carrier "B2", "Belavia"
 ########################################
 
 example 'svocdg'
+strt_date "01.05.2013"
+expr_date "31.07.2013"
 agent    "5% от всех опубл. тарифов на собств. рейсы B2;"
 subagent "3,5% от всех опубл. тарифов на собств. рейсы B2;"
-discount "2.8%"
+discount "2.5%"
 commission "5%/3.5%"
+
+example 'svocdg'
+strt_date "01.08.2013"
+agent    "4% от всех опубл. тарифов на собств. рейсы B2;"
+subagent "2,5% от всех опубл. тарифов на собств. рейсы B2;"
+discount "1.5%"
+commission "4%/2.5%"
 
 carrier "BA", "BRITISH AIRWAYS (См. в конце таблицы продолжение в 4-х частях)"
 ########################################
@@ -687,26 +810,50 @@ commission "1%/0.05"
 carrier "DL", "DELTA AIRLINES"
 ########################################
 
-example 'svojfk/s'
+example 'svojfk/d jfksvo/m'
+example 'jfksvo/x'
+strt_date "15.05.2013"
+agent "1232 DL/AFKL/AZ US-EMEAI Consolidator Commission Program Amendment #1"
+agent "Если, кратко, то C,D,Z,I Y,B,M,S,H,Q W,K,L,U,T,X,V"
+agent "Только перелеты в Америку из России и наоборот (RT и OW), только СОБСТВЕННЫЕ рейсы ( никаких код-шерингов), авиакомпании могут комбинироваться в одном бронировании. Их комиссия 8%, наша 6%, никаких особенностей в выписке"
+subagent "6%"
+subclasses "CDZIYBMSHQWKLUTXV"
+check { includes(country_iatas, 'RU') and includes(country_iatas, 'US') and includes_only(country_iatas, 'US RU') }
+ticketing_method "downtown"
+discount "5%"
+commission "8%/6%"
+
+example 'accjfk/s'
 example 'zigjfk/i jfkzig/s'
-example 'svojfk/k/dl:dl jfksvo/k/dl:dl'
+example 'accjfk/k jfkacc/k'
 expr_date "31.03.2014"
 agent "5%"
 subagent "3%"
 subclasses "SIQKLUT"
-check { includes_only(country_iatas.first, 'RU SN GH') and includes_only(country_iatas, 'US RU SN GH') and includes_only(operating_carrier_iatas, 'DL') }
+check { includes_only(country_iatas.first, 'SN GH') and includes_only(country_iatas, 'US SN GH') }
 ticketing_method "downtown"
 discount "1.5%"
 commission "5%/3%"
 
-example 'svojfk/d/az:dl'
+example 'accjfk/su:dl'
+example 'zigjfk/su:dl jfkzig/su:dl'
+example 'accjfk/su:dl jfkacc/su:dl'
+example 'jfksvo/x/su:dl' 
+expr_date "31.03.2014"
+agent "1%"
+subagent "0.5%"
+check { codeshare? }
+important!
+commission "1%/0.5%"
+
+example 'accjfk/d/az:dl'
 example 'zigjfk/i/az:dl jfkzig/s/az:dl'
 example 'accjfk/l/az:dl jfkacc/n/az:dl'
 expr_date "31.03.2014"
 agent "5%"
 subagent "3%"
 subclasses "DIKVTNSL"
-check { includes_only(country_iatas.first, 'RU SN GH') and includes_only(country_iatas, 'US RU SN GH') and includes_only(operating_carrier_iatas, 'AZ') }
+check { includes_only(country_iatas.first, 'SN GH') and includes_only(country_iatas, 'US SN GH') and includes_only(operating_carrier_iatas, 'AZ') }
 ticketing_method "downtown"
 important!
 discount "1.5%"
@@ -734,6 +881,7 @@ agent    "1% от опубл. тарифа DL при внутренних пер
 subagent "0,5% от опубл. тарифа DL при внутренних перелетах по США"
 interline :no, :yes
 domestic
+important!
 ## discount "0.3%"
 commission "1%/0.5%"
 
@@ -904,7 +1052,6 @@ example 'cdgsvo svocdg/ab'
 agent "1% от опубл. тарифов на рейсы Interline с обязательным участием FI."
 subagent "0,5% от опубл. тарифов на рейсы Interline с обязательным участием FI."
 interline :yes
-check { includes(marketing_carrier_iatas, 'FI') }
 commission "1%/0.5%"
 
 carrier "FV", "RUSSIA"
@@ -912,30 +1059,56 @@ carrier "FV", "RUSSIA"
 
 ## carrier_defaults our_markup: 30
 
-example 'svocdg'
-example 'svocdg cdgsvo/ab'
-expr_date "31.05.2013"
-agent "7% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
-subagent "5% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
-interline :no, :yes
-discount "4%"
-commission '7%/5%'
-
+# c 01.06
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
 strt_date "01.06.2013"
-agent "6% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
-subagent "4% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
+expr_date "20.06.2013"
+agent "7% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
+subagent "6% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 interline :no, :yes
-discount "3%"
-commission '6%/4%'
+discount "4.5%"
+commission '7%/6%'
 
 example 'svocdg/ab'
+strt_date "01.06.2013"
+expr_date "20.06.2013"
 agent "1 euro с билета на рейсы Interline без участка FV."
-subagent "1 руб. с билета на рейсы Interline без участка FV."
+subagent "5 руб. с билета на рейсы Interline без участка FV."
 interline :absent
 ## discount '1'
-commission "1eur/1"
+commission "1eur/5"
+
+# c 21.06
+example 'svocdg'
+example 'svocdg cdgsvo/ab'
+strt_date "21.06.2013"
+agent "4% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
+subagent "2% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
+interline :no, :yes
+# discount "1.5%"
+commission '4%/2%'
+
+example 'svocdg/ab'
+strt_date "21.06.2013"
+agent "1 euro с билета на рейсы Interline без участка FV."
+subagent "5 руб. с билета на рейсы Interline без участка FV."
+interline :absent
+## discount '1'
+commission "1eur/5"
+
+example 'ledpes'
+example 'ledpes/business pesled/business'
+strt_date "01.06.2013"
+expr_date "30.06.2013"
+agent "9% от тарифа на собств.рейсы FV (исключая code-share) в классах Эконом и Бизнес по маршруту Санкт-Петербург-Петрозаводск или обратно."
+subagent "7% от тарифа на собств.рейсы FV (исключая code-share) в классах Эконом и Бизнес по маршруту Санкт-Петербург-Петрозаводск или обратно."
+classes :economy, :business
+interline :no_codeshare
+check { includes_only(city_iatas, 'LED PES') }
+important!
+discount "5.3%"
+commission '9%/7%'
 
 example "svocdg/r"
 agent ""
@@ -974,7 +1147,7 @@ commission "1%/0.5%"
 carrier "HR", "HAHN AIR  (Авиарепс)"
 ########################################
 
-carrier_defaults ticketing_method: "direct"
+carrier_defaults our_markup: 20
 
 # включено с дополнительной проверкой
 agent    "1 руб. от тарифов, опубликованных в системе бронирования, для авиакомпании Hahn Air и интерлайн-партнеров Hahn Air, указанных на сайте www.HR-ticketing.com;"
@@ -982,7 +1155,6 @@ agent    "1 руб. от тарифов Allairpass, расчитываемых �
 agent    "Проверять интерлайн при бронировании и выписке через сайт www.hr-ticketing.com"
 subagent "5 коп. с билета по опубл. тарифам HR"
 interline :absent
-our_markup "30"
 commission "1/0.05"
 
 carrier "HU", "HAINAN AIRLINES"
@@ -1005,7 +1177,7 @@ example 'svopek/d/ab peksvo/d'
 example 'svopek/i/ab peksvo/i'
 strt_date "12.12.2011"
 expr_date "31.07.2013"
-agent "15% от опубл.тарифов по классу D на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
+agent "15% от опубл.тарифов по классу D, I на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subagent "13% от опубл.тарифов по классу D на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subclasses "DI"
 interline :no, :yes
@@ -1017,8 +1189,8 @@ example 'svopek/z'
 example 'svopek/z/ab peksvo/z'
 strt_date "12.12.2011"
 expr_date "31.07.2013"
-agent "9% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
-subagent "7% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
+agent "9% от опубл.тарифов по классам Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
+subagent "7% от опубл.тарифов по классам Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subclasses "Z" 
 interline :no, :yes
 check { includes(city_iatas.first, 'MOW') and includes_only(country_iatas, 'RU CN') }
@@ -1031,8 +1203,8 @@ example 'svopek/ab peksvo'
 example 'svopek/ab peksvo'
 strt_date "12.12.2011"
 expr_date "31.07.2013"
-agent "9% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
-subagent "7% от опубл.тарифов по классам I,Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
+agent "9% от опубл.тарифов по классам Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
+subagent "7% от опубл.тарифов по классам Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 interline :no, :yes
 check { includes(city_iatas.first, 'MOW') and includes_only(country_iatas, 'RU CN') }
 discount "5.7%"
@@ -1041,20 +1213,31 @@ commission "9%/7%"
 example 'ledpek/c pekled/c'
 example 'ledpek/c/ab pekled/c'
 example 'ledpek/d/ab pekled/d'
-example 'ledpek/i/ab pekled/i'
-example 'ledpek/z/ab pekled/z'
 strt_date "12.12.2011"
 expr_date "31.07.2013"
-agent "15% от опубл.тарифов по классу С,D,I,Z на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
-subagent "13% от опубл.тарифов по классу С,D,I,Z на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
-subclasses "CDIZ"
+agent "15% от опубл.тарифов по классу С,D на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
+subagent "13% от опубл.тарифов по классу С,D на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
+subclasses "CD"
 interline :no, :yes
 check { includes(city_iatas.first, 'LED') and includes_only(country_iatas, 'RU CN') }
 discount "10%"
 commission "15%/13%"
 
-example 'ledpek pekled'
-example 'ledpek/ab pekled'
+example 'ledpek/i/ab pekled/i'
+example 'ledpek/z/ab pekled/z'
+strt_date "12.12.2011"
+expr_date "31.07.2013"
+agent "9% от опубликованных на I, Z, а также на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
+subagent "7% от опубликованных на I, Z, а также на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
+subclasses "IZ"
+interline :no, :yes
+check { includes(city_iatas.first, 'LED') and includes_only(country_iatas, 'RU CN') }
+discount "5.7%"
+commission "9%/7%"
+
+# копия для эконом-класса
+example 'ledpek/economy/ab pekled/economy'
+example 'ledpek/economy/ab pekled/economy'
 strt_date "12.12.2011"
 expr_date "31.07.2013"
 agent "9% от на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
@@ -1168,6 +1351,18 @@ agent "0% по опубл. тарифам отдельные перелеты с
 subagent "0%"
 important!
 check { includes_only(city_iatas.first, 'BJS') and includes_only(country_iatas, 'CN') }
+commission "0%/0%"
+
+# example 'peksvo svopek'
+strt_date "01.08.2013"
+agent "9% (7%) от всех опубл. тарифов на рейсы HU (В договоре Interline не прописан.)"
+subagent "7% от всех опубл. тарифов на рейсы HU (В договоре Interline не прописан.)"
+commission "9%/7%"
+
+# example 'pekxmn xmnweh'
+strt_date "01.08.2013"
+agent "0% по опубл. тарифам отдельные перелеты с вылетами из Пекина по Китаю на собств. рейсы HU +2% сбор АЦ"
+subagent "0% по опубл. тарифам отдельные перелеты с вылетами из Пекина по Китаю на собств. рейсы HU +2% сбор АЦ"
 commission "0%/0%"
 
 carrier "HX", "Hong Kong Airlines"
@@ -1361,6 +1556,19 @@ carrier "KL", "KLM"
 
 carrier_defaults consolidator: 0, our_markup: '0.2%'
 
+example 'jfksvo/c svojfk/n'
+example 'jfksvo/v'
+strt_date "15.05.2013"
+agent "1232 DL/AFKL/AZ US-EMEAI Consolidator Commission Program Amendment #1"
+agent "Если, кратко, то C,D,Z,I W,S,Y,M,U,K,H A,L,Q,T,N,R,V"
+agent "Только перелеты в Америку из России и наоборот (RT и OW), только СОБСТВЕННЫЕ рейсы ( никаких код-шерингов), авиакомпании могут комбинироваться в одном бронировании. Их комиссия 8%, наша 6%, никаких особенностей в выписке"
+subagent "6%"
+subclasses "CDZIWSYMUKHALQTNRV"
+check { includes(country_iatas, 'RU') and includes(country_iatas.first, 'US') and includes_only(country_iatas, 'US RU') }
+ticketing_method "downtown"
+discount "5%"
+commission "8%/6%"
+
 example 'svocdg'
 agent    "1руб за билет, выписанный по опубл. тарифам, в случае перевозки с вылетом из стран СНГ; 1руб за билет, выписанный по опубл. тарифам,  в случае вылета вне стран СНГ;"
 subagent "5 коп. за билет, выписанный по опубл. тарифам, в случае перевозки с вылетом из стран СНГ; 5 коп. за билет, выписанный по опубл. тарифам, в случае вылета вне стран СНГ;"
@@ -1412,7 +1620,9 @@ subagent "8%"
 subclasses "FADZP"
 check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
-discount "7%"
+tour_code "815ZU"
+designator "PP10"
+discount "6%"
 commission "10%/8%"
 
 example 'svojfk/q'
@@ -1422,7 +1632,9 @@ subagent "6%"
 subclasses "QVWSTLK"
 check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
-discount "5%"
+tour_code "815ZU"
+designator "PP8"
+discount "4.6%"
 commission "8%/6%"
 
 example 'svojfk/y'
@@ -1432,7 +1644,9 @@ subagent "3%"
 subclasses "YBMUH"
 check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
-discount "2.5%"
+tour_code "815ZU"
+designator "PP5"
+discount "2.25%"
 commission "5%/3%"
 
 example 'dmebcn'
@@ -1509,6 +1723,8 @@ subagent "8%"
 subclasses "FADZP"
 check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP10"
 discount "6%"
 commission "10%/8%"
 
@@ -1519,6 +1735,8 @@ subagent "6%"
 subclasses "QVWSTLK"
 check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP8"
 discount "4%"
 commission "8%/6%"
 
@@ -1529,6 +1747,8 @@ subagent "3%"
 subclasses "YBMUH"
 check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP5"
 discount "1.5%"
 commission "5%/3%"
 
@@ -1789,6 +2009,8 @@ subagent "8%"
 subclasses "FADZP"
 check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP10"
 discount "6%"
 commission "10%/8%"
 
@@ -1799,6 +2021,8 @@ subagent "6%"
 subclasses "QVWSTLK"
 check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP8"
 discount "4%"
 commission "8%/6%"
 
@@ -1809,6 +2033,8 @@ subagent "3%"
 subclasses "YBMUH"
 check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP5"
 discount "1.5%"
 commission "5%/3%"
 
@@ -1883,7 +2109,7 @@ example 'svocdg cdgsvo'
 agent    "9% от опубл. тарифов на собств.рейсы PS"
 subagent "8.5% от опубл. тарифов на собств.рейсы PS"
 check { not includes(city_iatas.first, 'IEV') and not includes_only(city_iatas, 'MOW IEV') }
-discount "8.5%"
+discount "6.4%"
 commission "9%/8.5%"
 
 example 'ievsvo'
@@ -1891,7 +2117,7 @@ strt_date "10.04.2014"
 agent "5 % (3%) для перевозок по маршруту Киев-Москва;"
 subagent "5 % (3%) для перевозок по маршруту Киев-Москва;"
 check { includes(city_iatas.first, 'IEV') and includes_only(city_iatas, 'MOW IEV') }
-discount "3%"
+discount "2.25%"
 commission "5%/3%"
 
 example 'cdgsvo svocdg/ab'
@@ -1899,7 +2125,7 @@ strt_date "10.04.2014"
 agent "5% от опубл. тарифов на рейсы Interline c обязательным участком PS"
 subagent "3% от опубл. тарифов на рейсы Interline c обязательным участком PS"
 interline :yes
-discount "3%"
+discount "2.25%"
 commission "5%/3%"
 
 example 'cdgsvo/ab'
@@ -1922,36 +2148,66 @@ commission "7%/4.9%"
 carrier "QR", "QATAR AIRWAYS"
 ########################################
 
+# до 31 мая
 example 'cdgpek/business pekcdg/business'
 strt_date "01.04.2012"
+expr_date "31.05.2013"
 agent    "от опубл. тарифов, а также от опубл. IT гросс тарифов (искл.групповые тарифы) на собств.рейсы QR: 5% Бизнес класс"
 subagent "3,5% от опубл. тарифов на собственные рейсы QR"
 classes :business
 discount "3%"
 commission "5%/3.5%"
 
-example 'jfksvo'
-example 'jfkled ledcdg'
-agent    "с сегодня на QR если в маршруте есть Россия (OW/RT, origin/destination) - агентская 5%"
-subagent "у нас 3%"
-check { includes(country_iatas, 'RU') }
-ticketing_method "downtown"
-discount "2%"
-commission "5%/3%"
-
 example 'cdgpek/economy pekcdg/economy'
 example 'cdgpek/business pekcdg/economy'
 strt_date "01.04.2012"
+expr_date "31.05.2013"
 agent    "1% Эконом класса, а также при различной комбинации Бизнес/Эконом;" 
 subagent "5 коп. с билета Эконом класса, а также при различной комбинации Бизнес/Эконом;"
 commission "1%/0.05"
 
 example 'svocdg cdgsvo/ab'
 strt_date "01.04.2012"
+expr_date "31.05.2013"
 agent    "1% на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 subagent "5 коп . с билета на рейсы Interline (только при обязат. пролете первого сектора на рейсах QR)."
 interline :first
 commission "1%/0.05"
+
+# c 01.06
+example 'cdgpek/business pekcdg/business'
+strt_date "01.06.2013"
+agent    "от опубл. тарифов, а также от опубл. IT гросс тарифов (искл.групповые тарифы) на собств.рейсы QR: 5% Бизнес класс"
+subagent "3,5% от опубл. тарифов на собственные рейсы QR"
+classes :first, :business
+discount "2.7%"
+commission "5%/3.5%"
+
+example 'cdgpek/economy pekcdg/economy'
+example 'cdgpek/business pekcdg/economy'
+strt_date "01.06.2013"
+agent    "0.1% Эконом класса, а также при различной комбинации Бизнес/Эконом"
+subagent "5 коп. с билета Эконом класса, а также при различной комбинации Бизнес/Эконом;"
+commission "0.1%/0.05"
+
+# dtt
+example 'jfksvo'
+example 'jfkled ledcdg'
+agent    "с сегодня на QR если в маршруте есть Россия (OW/RT, origin/destination) - агентская 5%"
+subagent "у нас 3%"
+check { includes(country_iatas, 'RU') }
+ticketing_method "downtown"
+tour_code "USAN002"
+important!
+discount "2%"
+commission "5%/3%"
+
+example 'svocdg cdgsvo/ab'
+strt_date "01.06.2013"
+agent    "0.1% на опубл. гросс тарифы в случае комбинации с другими авиакомпаниями (вознаграждение выплачивается лишь в случаях, когда хотя бы один полетный сегмент забронирован под кодом QR и весь маршрут выписан одним билетом). +сбор АЦ 2% от тарифа Интерлайн без участия перевозчика –  запрещен  !!!"
+subagent "5 коп на опубл. гросс тарифы в случае комбинации с другими авиакомпаниями (вознаграждение выплачивается лишь в случаях, когда хотя бы один полетный сегмент забронирован под кодом QR и весь маршрут выписан одним билетом). +сбор АЦ 2% от тарифа Интерлайн без участия перевозчика –  запрещен  !!!"
+interline :yes
+commission "0.1%/0.05"
 
 example 'cdgsvo/ab'
 no_commission
@@ -2043,6 +2299,8 @@ subagent "8%"
 subclasses "FADZP"
 check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP10"
 discount "6%"
 commission "10%/8%"
 
@@ -2053,6 +2311,8 @@ subagent "6%"
 subclasses "QVWSTLK"
 check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP8"
 discount "4%"
 commission "8%/6%"
 
@@ -2063,6 +2323,8 @@ subagent "3%"
 subclasses "YBMUH"
 check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
+tour_code "815ZU"
+designator "PP5"
 discount "1.5%"
 commission "5%/3%"
 
@@ -2230,6 +2492,8 @@ subclasses "FADZP"
 check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
 international
+tour_code "815ZU"
+designator "PP10"
 discount "6%"
 commission "10%/8%"
 
@@ -2241,6 +2505,8 @@ subclasses "QVWSTLK"
 check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
 international
+tour_code "815ZU"
+designator "PP8"
 discount "4%"
 commission "8%/6%"
 
@@ -2252,6 +2518,8 @@ subclasses "YBMUH"
 check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
 ticketing_method "downtown"
 international
+tour_code "815ZU"
+designator "PP5"
 discount "1.5%"
 commission "5%/3%"
 
@@ -2542,20 +2810,30 @@ commission "5%/3%"
 example 'svotbs'
 example 'tbsiev'
 agent "5% от тарифов перевозок по России, СНГ и Грузии всех подклассов и классов обслуживания (за исключением маршрутов Групп А и Б)."
-subagent "4% от тарифов перевозок по СНГ и Грузии всех подклассов и классов обслуживания (за искл. маршрутов Групп А и Б)"
+subagent "3% от тарифов перевозок по СНГ и Грузии всех подклассов и классов обслуживания (за искл. маршрутов Групп А и Б)"
 check { includes_only(country_iatas, 'RU AZ AM BY KZ KG MD TJ TM UZ UA GE') }
 important!
-discount "3.5%"
-commission "5%/4%"
+discount "2%"
+commission "5%/3%"
 
 # интерлайны
+
 example 'svocdg/ab cdgsvo'
 agent "3% от примененных тарифов на сегментах перевозки рейсов интерлайн-партнеров U6 ( наличие участка U6 в билете обязательно)"
 subagent "1% от примененных тарифов на рейсы интерлайн-партнеров U6 (наличие участка U6 в билете обязательно)"
 interline :yes
+check { not includes(operating_carrier_iatas, 'NN S7') }
 discount "0.5%"
 commission "3%/1%"
 
+example 'svocdg/s7 cdgsvo'
+agent "10 рублей за каждый участок перевозки, если в перевозке участвуют S7 и NN."
+subagent "10 рублей за каждый участок перевозки, если в перевозке участвуют S7 и NN."
+interline :yes
+check { includes(operating_carrier_iatas, 'NN S7') }
+commission "10/10"
+
+# пункт 3
 example 'svocdg/ab cdgsvo/ab'
 agent "1 (один) рубль продажа перевозок на рейсы интерлайн-партнеров U6 без участков U6"
 subagent "5 коп. продажа перевозок на рейсы интерлайн-партнеров U6 без участков U6"
@@ -2594,8 +2872,6 @@ check {
   includes_only(city_iatas, 'MOW LLK') or
   includes_only(city_iatas, 'MOW SIP') or
   includes_only(city_iatas, 'MOW MRV') or
-  includes_only(city_iatas, 'MOW TIV') or
-  
   includes_only(city_iatas, 'SVX AER') or
   includes_only(city_iatas, 'SVX KZN') or
   includes_only(city_iatas, 'SVX SIP') or
@@ -2647,6 +2923,15 @@ check {
   includes_only(city_iatas, 'GOJ NMA') or
   includes_only(city_iatas, 'IKT PKC')
 }
+important!
+commission "0.1%/0.5"
+
+example "svotiv/U63171"
+example "tivsvo/U63172"
+example "svotiv/U63171 tivsvo/U63172"
+agent "0.1% Москва-Тиват; Тиват-Москва; Москва-Тиват-Москва; Тиват-Москва-Тиват (только на рейсы U6 3171/3172);"
+subagent "0.5 Москва-Тиват; Тиват-Москва; Москва-Тиват-Москва; Тиват-Москва-Тиват (только на рейсы U6 3171/3172);"
+check {  includes_only(city_iatas, 'MOW TIV') and includes_only(flights.every.full_flight_number, %W(U63171 U63172)) }
 important!
 commission "0.1%/0.5"
 
@@ -2826,21 +3111,21 @@ carrier "A9", "GEORGIAN AIRWAYS"
 example 'tbsdme'
 agent "8 (восемь) % от опубл. тарифа на собств. рейсы авиакомпании А9;"
 subagent "6 % от опубл. тарифа на собств. рейсы А9;"
-discount "6%"
+discount "4.6%"
 commission "8%/6%"
 
 example 'tbsdme dmetbs/ab'
 agent "7 (семь)  % от опубл. тарифа по маршрутам со сквозными тарифами, включающими участок авиакомпании  А9 и авиакомпаний, с которыми А9 имеет Интерлайн-Соглашение;"
 subagent "5 % от опубл. тарифа по маршрутам со сквозными тарифами, включающими участок авиакомпании А9 и авиакомпаний, с которыми А9 имеет Интерлайн-Соглашение"
 interline :yes
-discount "5%"
+discount "3.7%"
 commission "7%/5%"
 
 example 'dmetbs/ab'
 agent "5 (пять)   % от опубл. тарифа на рейсы Interline без участка А9."
 subagent "3 % от опубл. тарифа на рейсы Interline без участка А9."
 interline :absent
-discount "3%"
+discount "2.25%"
 commission "5%/3%"
 
 carrier "5H", "Five Fourty Aviation Limited (Fly540)"
@@ -2954,237 +3239,367 @@ carrier_defaults consolidator: 0, ticketing_method: "downtown"
 example 'svocdg cdgsvo'
 agent "5% DTT"
 subagent "3% DTT"
-discount "2%"
-commission "5%/3%"
+discount "2.8%"
+commission "5%/4%"
 
 carrier "S7", "S7 AIRLINES"
 ########################################
-carrier_defaults consolidator: 0, ticketing_method: "direct"
+carrier_defaults consolidator: 0, ticketing_method: "downtown"
 
-#интерлайн
-example 'svocdg/ab cdgsvo'
-strt_date "01.04.2013"
-agent "При продаже перевозок на рейсы других авиакомпаний, с которыми Перевозчик имеет Соглашение INTERLINE и по специальным прорейтовым тарифам на рейсы, включающие участки Перевозчика и других авиакомпаний, с которыми Перевозчик имеет Соглашение INTERLINE, оформленных на ПД, вознаграждение составляет 3%"
-subagent "3%"
-interline :yes
-discount "2%"
-commission "3%/3%"
+# dtt по невыгодным условиям прямой выписки
+# w
+#example 'svocdg/w cdgsvo/w'
+#strt_date "01.04.2013"
+#agent "При продаже перевозок по коду бронирования W, оформленных на ПД на рейсы Перевозчика, вознаграждение составляет 0,1%"
+#subagent "0.1%"
+#subclasses "W"
+#interline :no_codeshare
+#ticketing_method "downtown"
+#commission '5%/3.5%'
 
-#w
-example 'svocdg/w cdgsvo/w'
-strt_date "01.04.2013"
-agent "При продаже перевозок по коду бронирования W, оформленных на ПД на рейсы Перевозчика, вознаграждение составляет 0,1%"
-subagent "0.1%"
-subclasses "W"
-commission "0.1%/0.1%"
-
+=begin
 example 'svorgk'
+example 'rgksvo'
 example 'svorgk rgksvo'
 example 'ovbsvo svorgk'
-strt_date "01.04.2013"
-agent "При продаже перевозок между г. Москва и г. Горно-Алтайск,г. Горно-Алтайск и
-г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-check { includes(city_iatas, 'MOW') and includes(city_iatas, 'RGK') }
-subagent ""
-commission "0.1%/0.1%"
-
 example 'ovbhta'
 example 'htaovb'
 example 'svoovb ovbhta'
-agent "При продаже перевозок между г. Новосибирск и г. Чита,г. Чита и г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'OVB') and includes(city_iatas, 'HTA') }
-commission "0.1%/0.1%"
-
 example 'ovbaaq'
 example 'aaqovb'
 example 'svoaaq aaqovb'
-agent "При продаже перевозок между г. Новосибирск и г. Анапа,г. Анапа и г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'OVB') and includes(city_iatas, 'AAQ') }
-commission "0.1%/0.1%"
-
+example 'svovar'
+example 'varsvo'
+example 'svovar varsvo'
 example 'ovbuud'
 example 'uudovb'
 example 'svouud uudovb'
-agent "При продаже перевозок между г. Новосибирск и г. Улан-Удэ,г. Улан-Удэ и
-г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'OVB') and includes(city_iatas, 'UUD') }
-commission "0.1%/0.1%"
-
 example 'ovbuus'
 example 'uusovb'
 example 'svouus uusovb'
-agent "При продаже перевозок между г. Новосибирск и г. Южно-Сахалинск,г. Южно-Сахалинск и г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'OVB') and includes(city_iatas, 'UUS') }
-commission "0.1%/0.1%"
-
 example 'ovbpek'
 example 'pekovb'
 example 'svopek pekovb'
-agent "При продаже перевозок между г. Новосибирск и г. Пекин,г. Пекин и г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'OVB') and includes(city_iatas, 'BJS') }
-commission "0.1%/0.1%"
-
 example 'ovbhkg'
 example 'hkgovb'
 example 'svohkg hkgovb'
-agent "При продаже перевозок между г. Новосибирск и г. Пекин,г. Пекин и г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'OVB') and includes(city_iatas, 'HKG') }
-commission "0.1%/0.1%"
-
 example 'ovbala'
 example 'alaovb'
 example 'svoala alaovb'
-agent "При продаже перевозок между г. Новосибирск и г. Алматы,г. Алматы и
-г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'OVB') and includes(city_iatas, 'ALA') }
-commission "0.1%/0.1%"
-
-example 'ovbbtk'
-example 'btkovb'
-example 'svobtk btkovb'
-agent "При продаже перевозок между г. Москва и г. Братск,г. Братск и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'OVB') and includes(city_iatas, 'BTK') }
-commission "0.1%/0.1%"
-
 example 'svobtk'
 example 'btksvo'
 example 'ledbtk btksvo'
-agent "При продаже перевозок между г. Москва и г. Братск,г. Братск и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'MOW') and includes(city_iatas, 'BTK') }
-commission "0.1%/0.1%"
-
 example 'iktgdx'
 example 'gdxikt'
 example 'ledikt iktgdx'
-agent "При продаже перевозок между г. Иркутск и г. Магадан,г. Магадан и г. Иркутск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'IKT') and includes(city_iatas, 'GDX') }
-commission "0.1%/0.1%"
-
 example 'ovbikt'
 example 'iktovb'
 example 'ledikt iktovb'
-agent "При продаже перевозок между г. Новосибирск и г. Иркутск,г. Иркутск и
-г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'IKT') and includes(city_iatas, 'OVB') }
-commission "0.1%/0.1%"
-
 example 'omspek'
 example 'pekoms'
 example 'ledoms omspek'
-agent "При продаже перевозок между г. Омск и г. Пекин,г. Пекин и г. Омск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'OMS') and includes(city_iatas, 'BJS') }
-commission "0.1%/0.1%"
-
 example 'uudpek'
 example 'pekuud'
 example 'leduud uudpek'
-agent "При продаже перевозок между г. Улан-Удэ и г. Пекин,г. Пекин и г. Улан-Удэ, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'UUD') and includes(city_iatas, 'BJS') }
-commission "0.1%/0.1%"
-
 example 'iktpek'
 example 'pekikt'
 example 'ledikt iktpek'
-agent "При продаже перевозок между г. Иркутск и г. Пекин,г. Пекин и г. Иркутск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'IKT') and includes(city_iatas, 'BJS') }
-commission "0.1%/0.1%"
-
 example 'svoboj'
 example 'bojsvo'
 example 'ledsvo svoboj'
-agent "При продаже перевозок между г. Москва и г. Бургас,г. Бургас и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'MOW') and includes(city_iatas, 'BOJ') }
-commission "0.1%/0.1%"
-
 example 'svoalc'
 example 'alcsvo'
 example 'ledsvo svoalc'
-agent "При продаже перевозок между г. Москва и г. Аликанте,г. Аликанте и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'MOW') and includes(city_iatas, 'ALC') }
-commission "0.1%/0.1%"
-
 example 'svopmi'
 example 'pmisvo'
 example 'ledsvo svopmi'
-agent "При продаже перевозок между г. Москва и г. Пальма-де-Мальорка ,г. Пальма-де-Мальорка  и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'MOW') and includes(city_iatas, 'PMI') }
-commission "0.1%/0.1%"
-
 example 'svohta'
 example 'htasvo'
 example 'ledsvo svohta'
-agent "При продаже перевозок между г. Москва и г. Чита,г. Чита и г. Москва (C7-117/118), включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'MOW') and includes(city_iatas, 'HTA') }
-commission "0.1%/0.1%"
-
 example 'sipovb'
 example 'ovbsip'
 example 'ledsip sipovb'
-agent "При продаже перевозок между г. Новосибирск и г. Симферополь,г. Симферополь и
-г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'SIP') and includes(city_iatas, 'OVB') }
-commission "0.1%/0.1%"
-
 example 'svospu'
 example 'spusvo'
 example 'ledsvo svospu'
-agent "При продаже перевозок между г. Москва и г. Сплит,г. Сплит и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'MOW') and includes(city_iatas, 'SPU') }
-commission "0.1%/0.1%"
-
 example 'svopuy'
 example 'puysvo'
 example 'ledsvo svopuy'
-agent "При продаже перевозок между г. Москва и г. Пула,г. Пула и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-subagent ""
-check { includes(city_iatas, 'MOW') and includes(city_iatas, 'PUY') }
-commission "0.1%/0.1%"
-
 example 'ovbbkk'
 example 'bkkovb'
-example 'ledovb ovbbkk'
+example 'ovbbkk ovbbkk'
+example 'ovbhkt'
+example 'hktovb'
+example 'ovbhkt ovbhkt'
+example 'ovbbkk'
+example 'bkkovb'
+example 'ovbbkk bkkovb'
+example 'kjabkk'
+example 'bkkkja'
+example 'kjabkk bkkkja'
+example 'khvbkk'
+example 'bkkkhv'
+example 'khvbkk bkkkhv'
+example 'svotiv'
+example 'tivsvo'
+example 'svotiv tivsvo'
+example 'svosip'
+example 'sipsvo'
+example 'svosip sipsvo'
+example 'svoaer'
+example 'aersvo'
+example 'svoaer aersvo'
+example 'svoaaq'
+example 'aaqsvo'
+example 'svoaaq aaqsvo'
+strt_date "01.04.2013"
+agent "При продаже перевозок между г. Москва и г. Горно-Алтайск,г. Горно-Алтайск и
+г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Варна,г. Варна и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Чита,г. Чита и г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Анапа,г. Анапа и г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Улан-Удэ,г. Улан-Удэ и
+г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Южно-Сахалинск,г. Южно-Сахалинск и г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Пекин,г. Пекин и г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Алматы,г. Алматы и
+г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Братск,г. Братск и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Иркутск и г. Магадан,г. Магадан и г. Иркутск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Иркутск,г. Иркутск и
+г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Омск и г. Пекин,г. Пекин и г. Омск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Улан-Удэ и г. Пекин,г. Пекин и г. Улан-Удэ, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Иркутск и г. Пекин,г. Пекин и г. Иркутск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Бургас,г. Бургас и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Аликанте,г. Аликанте и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Пальма-де-Мальорка ,г. Пальма-де-Мальорка  и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Чита,г. Чита и г. Москва (C7-117/118), включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Симферополь,г. Симферополь и
+г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Сплит,г. Сплит и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Пула,г. Пула и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
 agent "При продаже перевозок между г. Новосибирск и г. Бангкок,г. Бангкок и
 г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Пхукет,г. Пхукет и
+г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Иркутск и г. Банкок,г. Банкок и
+г. Иркутск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Красноярск и г. Банкок,г. Банкок и
+г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Хабаровск и г. Банкок,г. Банкок и
+г. Хабаровск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Тиват,г. Тиват и
+г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Симферополь,г. Симферополь и
+г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Сочи,г. Сочи и
+г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Анапа,г. Анапа и
+г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+check {
+  (includes(city_iatas, 'MOW') and includes(city_iatas, 'RGK VAR BTK BOJ SPU PUY TIV SIP AER AER AAQ ALC PMI HTA')) or
+  (includes(city_iatas, 'OVB') and includes(city_iatas, 'HTA AAQ UUD UUS BJS HKG ALA BKK HKT SIP')) or
+  (includes(city_iatas, 'IKT') and includes(city_iatas, 'GDX OVB BJS BKK')) or
+  (includes(city_iatas, 'OMS UUD') and includes(city_iatas, 'BJS')) or
+  (includes(city_iatas, 'KJA KHV') and includes(city_iatas, 'BKK'))
+}
 subagent ""
-check { includes(city_iatas, 'OVB') and includes(city_iatas, 'BKK') }
-commission "0.1%/0.1%"
-
-# example 'svoled'
-agent ""
-subagent ""
-discount "4%"
-disabled "пока dtt"
-commission "5%/5%"
-
-example 'svoled'
-example 'ledsvo'
-example 'svoled ledsvo'
-strt_date "01.05.2013"
-agent "договорился: с 1 мая через даунтаун S7 агентская - 5%"
-subagent "наша 4%"
+interline :no_codeshare
 ticketing_method "downtown"
-discount "3%"
 commission "5%/3.5%"
+=end
+
+# w
+#example 'svocdg/w/ab:s7 cdgsvo/w'
+#strt_date "01.04.2013"
+#agent "При продаже перевозок по коду бронирования W, оформленных на ПД на рейсы Перевозчика, вознаграждение составляет 0,1%"
+#subagent "0.1%"
+#subclasses "W"
+#ticketing_method "downtown"
+#commission '0.1%/0.1%'
+
+=begin
+example 'svorgk/ab:s7'
+example 'rgksvo/ab:s7'
+example 'svorgk/ab:s7 rgksvo'
+example 'ovbsvo svorgk/ab:s7'
+example 'ovbhta/ab:s7'
+example 'htaovb/ab:s7'
+example 'svoovb/ab:s7 ovbhta'
+example 'ovbaaq/ab:s7'
+example 'aaqovb/ab:s7'
+example 'svoaaq aaqovb/ab:s7'
+example 'svovar/ab:s7'
+example 'varsvo/ab:s7'
+example 'svovar varsvo/ab:s7'
+example 'ovbuud/ab:s7'
+example 'uudovb/ab:s7'
+example 'svouud/ab:s7 uudovb'
+example 'ovbuus/ab:s7'
+example 'uusovb/ab:s7'
+example 'svouus uusovb/ab:s7'
+example 'ovbpek/ab:s7'
+example 'pekovb/ab:s7'
+example 'svopek pekovb/ab:s7'
+example 'ovbhkg/ab:s7'
+example 'hkgovb/ab:s7'
+example 'svohkg hkgovb/ab:s7'
+example 'ovbala/ab:s7'
+example 'alaovb/ab:s7'
+example 'svoala alaovb/ab:s7'
+example 'svobtk/ab:s7'
+example 'btksvo/ab:s7'
+example 'ledbtk btksvo/ab:s7'
+example 'iktgdx/ab:s7'
+example 'gdxikt/ab:s7'
+example 'ledikt iktgdx/ab:s7'
+example 'ovbikt/ab:s7'
+example 'iktovb/ab:s7'
+example 'ledikt iktovb/ab:s7'
+example 'omspek/ab:s7'
+example 'pekoms/ab:s7'
+example 'ledoms omspek/ab:s7'
+example 'uudpek/ab:s7'
+example 'pekuud/ab:s7'
+example 'leduud uudpek/ab:s7'
+example 'iktpek/ab:s7'
+example 'pekikt/ab:s7'
+example 'ledikt iktpek/ab:s7'
+example 'svoboj/ab:s7'
+example 'bojsvo/ab:s7'
+example 'ledsvo svoboj/ab:s7'
+example 'svoalc/ab:s7'
+example 'alcsvo/ab:s7'
+example 'ledsvo/ab:s7 svoalc'
+example 'svopmi/ab:s7'
+example 'pmisvo/ab:s7'
+example 'ledsvo svopmi/ab:s7'
+example 'svohta/ab:s7'
+example 'htasvo/ab:s7'
+example 'ledsvo svohta/ab:s7'
+example 'sipovb/ab:s7'
+example 'ovbsip/ab:s7'
+example 'ledsip sipovb/ab:s7'
+example 'svospu/ab:s7'
+example 'spusvo/ab:s7'
+example 'ledsvo svospu/ab:s7'
+example 'svopuy/ab:s7'
+example 'puysvo/ab:s7'
+example 'ledsvo svopuy/ab:s7'
+example 'ovbbkk/ab:s7'
+example 'bkkovb/ab:s7'
+example 'ovbbkk ovbbkk/ab:s7'
+example 'ovbhkt/ab:s7'
+example 'hktovb/ab:s7'
+example 'ovbhkt ovbhkt/ab:s7'
+example 'ovbbkk/ab:s7'
+example 'bkkovb/ab:s7'
+example 'ovbbkk bkkovb/ab:s7'
+example 'kjabkk/ab:s7'
+example 'bkkkja/ab:s7'
+example 'kjabkk/ab:s7 bkkkja'
+example 'khvbkk/ab:s7'
+example 'bkkkhv/ab:s7'
+example 'khvbkk bkkkhv/ab:s7'
+example 'svotiv/ab:s7'
+example 'tivsvo/ab:s7'
+example 'svotiv tivsvo/ab:s7'
+example 'svosip/ab:s7'
+example 'sipsvo/ab:s7'
+example 'svosip sipsvo/ab:s7'
+example 'svoaer/ab:s7'
+example 'aersvo/ab:s7'
+example 'svoaer aersvo/ab:s7'
+example 'svoaaq/ab:s7'
+example 'aaqsvo/ab:s7'
+example 'svoaaq aaqsvo/ab:s7'
+strt_date "01.04.2013"
+agent "При продаже перевозок между г. Москва и г. Горно-Алтайск,г. Горно-Алтайск и
+г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Варна,г. Варна и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Чита,г. Чита и г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Анапа,г. Анапа и г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Улан-Удэ,г. Улан-Удэ и
+г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Южно-Сахалинск,г. Южно-Сахалинск и г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Пекин,г. Пекин и г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Алматы,г. Алматы и
+г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Братск,г. Братск и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Иркутск и г. Магадан,г. Магадан и г. Иркутск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Иркутск,г. Иркутск и
+г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Омск и г. Пекин,г. Пекин и г. Омск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Улан-Удэ и г. Пекин,г. Пекин и г. Улан-Удэ, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Иркутск и г. Пекин,г. Пекин и г. Иркутск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Бургас,г. Бургас и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Аликанте,г. Аликанте и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Пальма-де-Мальорка ,г. Пальма-де-Мальорка  и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Чита,г. Чита и г. Москва (C7-117/118), включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Симферополь,г. Симферополь и
+г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Сплит,г. Сплит и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Пула,г. Пула и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Бангкок,г. Бангкок и
+г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Новосибирск и г. Пхукет,г. Пхукет и
+г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Иркутск и г. Банкок,г. Банкок и
+г. Иркутск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Красноярск и г. Банкок,г. Банкок и
+г. Новосибирск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Хабаровск и г. Банкок,г. Банкок и
+г. Хабаровск, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Тиват,г. Тиват и
+г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Симферополь,г. Симферополь и
+г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Сочи,г. Сочи и
+г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+agent "При продаже перевозок между г. Москва и г. Анапа,г. Анапа и
+г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
+check {
+  (includes(city_iatas, 'MOW') and includes(city_iatas, 'RGK VAR BTK BOJ SPU PUY TIV SIP AER AER AAQ ALC PMI HTA')) or
+  (includes(city_iatas, 'OVB') and includes(city_iatas, 'HTA AAQ UUD UUS BJS HKG ALA BKK HKT SIP')) or
+  (includes(city_iatas, 'IKT') and includes(city_iatas, 'GDX OVB BJS BKK')) or
+  (includes(city_iatas, 'OMS UUD') and includes(city_iatas, 'BJS')) or
+  (includes(city_iatas, 'KJA KHV') and includes(city_iatas, 'BKK'))
+}
+subagent ""
+ticketing_method "downtown"
+commission "0.1%/0.1%"
+=end
+
+example 'svocdg/ab cdgsvo'
+example 'ledcdg/fv:s7 cdgled'
+strt_date "04.06.2013"
+agent "рейсы код-шеринг и интерлайн без комиссии c дополнительным сбором 400 руб за билет"
+subagent "рейсы код-шеринг и интерлайн без комиссии c дополнительным сбором 400 руб за билет"
+interline :no, :yes
+ticketing_method "downtown"
+our_markup 400
+#discount "2%"
+no_commission "нет комисссии"
+
+# general dtt для горячей замены
+example 'svojfk jfksvo'
+agent "1% dtt"
+subagent "3.5% dtt"
+interline :no_codeshare
+ticketing_method "downtown"
+important!
+commission "1%/3.5%"
+
+#example 'svocdg/ab cdgsvo'
+#example 'ledcdg/fv:s7 cdgled'
+#strt_date "01.04.2013"
+#agent "3% все направления и классы бронирования на собственные рейсы и рейс код-шеринга (либо интерлайна) выписываем напрямую"
+#subagent "3%"
+#interline :no, :yes
+#ticketing_method "downtown"
+#discount "2%"
+#commission "3%/3%"
 
 carrier "GA", "GARUDA INDONESIA"
 ########################################
@@ -3276,9 +3691,9 @@ carrier "W2", "FLEXFLIGHT"
 ########################################
 
 example 'svocdg cdgsvo'
-agent "1% от всех опубл. Тарифов"
-subagent "5 руб. с билета от всех опубл. тарифов"
-commission "1%/5"
+agent "1 руб. от всех опубл. Тарифов"
+subagent "0.05 руб. с билета от всех опубл. тарифов"
+commission "1/0.05"
 
 carrier "AR", "AEROLINEAS ARGENTINAS (АВИАРЕПС)"
 ########################################
@@ -3368,3 +3783,10 @@ carrier "PK", "Pakistan International Airlines"
 agent "1 руб от всех опубл тарифов на собств рейсы PK"
 subagent "0,05 руб от всех опубл тарифов на собств рейсы PK"
 commission "1/0.05"
+
+carrier "BV", "BLUE PANORAMA AIRLINES S.P.A. (АВИАРЕПС)"
+#######################################
+
+agent "1EURO (5 РУБ) с билета на рейсы BV +2% сбор АЦ"
+subagent "5 руб"
+commission "1eur/5"

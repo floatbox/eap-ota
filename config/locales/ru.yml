@@ -79,12 +79,14 @@ ru:
       order:
         commission_agent_comments: "Текст договора по агентской комиссии"
         commission_subagent_comments: "Текст договора по субагентской комиссии"
+        commission_designator: "Ticket designator (для выписки в downtown)"
+        commission_tour_code: "Туркод (для выписки в downtown)"
         blank_count: "Количество бланков"
         has_refunds: "Были возвраты"
         charged_on: "Дата получения платежа"
         needs_update_from_gds: "Получить данные бронирования из GDS (экспериментально)"
         offline_booking: "Ручная обработка бронирования"
-        pricing_method: 'Рассчет итоговой цены'
+        pricing_method: 'Расчет итоговой цены'
         order: "Идентификатор платежа"
         source: "GDS"
         description: "Комментарий к форме оплаты, для клиента"
@@ -112,9 +114,9 @@ ru:
         'settled?': "Показывать партнерам прибыль"
         income_suppliers: 'Ожидаемый доход поставщика, р.'
         aggregated_income_suppliers: 'Доход поставщика, сумма по билетам р.'
-        recalculation_alert: "Подсказка к перерассчету комиссий, сборов и цен"
+        recalculation_alert: "Подсказка к перерасчету комиссий, сборов и цен"
         section_general_info: "Информация о заказе"
-        section_recalculation: "Рассчет цены"
+        section_recalculation: "Расчет цены"
         section_state_and_control: "Состояние и управление заказом"
         <<: *PRICING_ATTRIBUTES
       ticket:

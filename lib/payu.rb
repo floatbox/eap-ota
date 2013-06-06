@@ -5,7 +5,7 @@ require 'active_support/all'
 
 class Payu
 
-  include ActiveSupport::Benchmarkable
+  include Monitoring::Benchmarkable
 
   cattr_accessor :logger do
     Rails.logger

@@ -27,7 +27,7 @@
             <div class="rfg-content"></div>
         </div>
         <div class="rf-group" data-id="layovers">
-            <div class="rfg-control"><span class="rfg-label"><%= t 'filters.layovers' %></span><span class="rfg-counter"></span></div>
+            <div class="rfg-control"><span class="rfg-label"><%= t 'filters.layovers.title' %></span><span class="rfg-counter"></span></div>
             <div class="rfg-content"></div>
         </div>                        
     </div>
@@ -90,9 +90,9 @@
     <div id="ost-template">
     <ul class="os-title wrap">
         <li class="ost-item ost-name"><span class="ostn-text">{0}</span></li>
-        <li class="ost-item ost-dpt"><%= t 'offer.columns.dpt' %></li>
-        <li class="ost-item ost-duration"><%= t 'offer.columns.duration' %></li>
-        <li class="ost-item ost-arv"><%= t 'offer.columns.arv' %></li>
+        <li class="ost-item ost-dpt"><span class="ost-sort ost-ascendant" data-key="dpt"><%= t 'offer.columns.dpt' %></span></li>
+        <li class="ost-item ost-duration"><span class="ost-sort" data-key="duration"><%= t 'offer.columns.duration' %></span></li>
+        <li class="ost-item ost-arv"><span class="ost-sort" data-key="arv"><%= t 'offer.columns.arv' %></span></li>
     </ul>
     </div>
     

@@ -29,8 +29,12 @@ class StatCounters
   end
 
   def self.inc keys
+    # mongo
     connection['counters_daily'].find(date_key).upsert('$inc' => json_set(keys))
     connection['counters_hourly'].find(hour_key).upsert('$inc' => json_set(keys))
+    # riemann
+    # до лучших времен отсылаем все ключи, потом следует уменьшить до одного
+    ActiveSupport::Notifications.instrument 'stat_counter', keys: keys
   end
 
   def self.d_inc destination, keys

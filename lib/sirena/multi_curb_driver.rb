@@ -7,7 +7,6 @@ module Sirena
       Rails.logger
     end
 
-    include CurlHelper
     include KeyValueInit
 
     attr_accessor :host, :port, :multi, :timeout, :connect_timeout
@@ -24,24 +23,24 @@ module Sirena
     # raises Curl::Err::*
     def send_request(*args)
       req = make_request(*args)
-      req.perform
+      ActiveSupport::Notifications.instrument 'request.curl', curl: req do
+        req.perform
+      end
       # WTF it isn't automatic?
       raise Curl::Err::HTTPError, req.response_code unless (200..299) === req.response_code
 
       fix_encoding!(req.body_str)
       req.body_str
-    ensure
-      logger.info "#{self.class.name}: " + debug_easy(req)
     end
 
     def send_request_async(*args, &block)
       req = make_request(*args)
       req.on_failure do |klass, msg|
-        logger.info "#{self.class.name}: " + debug_easy(req)
+        ActiveSupport::Notifications.instrument 'request.curl', curl: req
         logger.error "#{self.class.name}: #{klass}: #{msg}"
       end
       req.on_success do |response|
-        logger.info "#{self.class.name}: " + debug_easy(req)
+        ActiveSupport::Notifications.instrument 'request.curl', curl: req
         fix_encoding!(req.body_str)
         block.call req.body_str
       end

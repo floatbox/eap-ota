@@ -1,6 +1,10 @@
 #!/usr/bin/env ruby
 
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
+
+# префикс [delayed_job] в логах
+Rails.logger.push_tags %W[delayed_job]
+
 require 'delayed/command'
 
 # вынуждены манкипатчить Worker, чтобы переоткрывать соединение с mysql

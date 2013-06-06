@@ -108,28 +108,20 @@
     background: #FFF;
     box-shadow: 0 1px 8px rgba(0,0,0,0.2);
 }
+.bft-title {
+    font-size: 21px;
+    margin: 0 14px 5px;
+    padding-top: 8px;
+}
 .bft-counter {
-    float: right;
-    width: 260px;
-    height: 73px;
-    background: #3581c0;
-    text-align: center;
-    color: #FFF;
+    font-weight: bold;
 }
 .bft-expires {
-    background: #bf564d;
-}
-.bftc-title {
-    padding-top: 10px;
-}
-.bftc-value {
-    font-weight: bold;
-    font-size: 28px;
-    line-height: 36px;
+    color: #bf564d;
 }
 .bft-description {
-    margin: 0 274px 0 14px;
-    padding: 8px 0 0;
+    margin: 0 14px;
+    padding-bottom: 8px;
 }
 
 /* Нижняя часть */

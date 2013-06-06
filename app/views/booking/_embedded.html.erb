@@ -26,17 +26,14 @@
 <%= form_for @order_form.card, :as => :card, :url => booking_pay_path, :html => { :id => 'booking-form', :autocomplete => 'off', :novalidate => 'novalidate' } do |f| %>
 
     <div class="bf-newprice" data-price="<%= price_total %>">
-        <h5 class="bfnp-title">Места по этой стоимости уже закончились. Остались места за <%= human_price(price_total) %></h5>
-        <h6 class="bfnp-content">Вы можете купить <%= @order_form.people.one? ? 'билет' : 'билеты' %> по новой стоимости или выбрать <span class="link">другой вариант</span></h6>
+        <h5 class="bfnp-title"><%= raw t 'booking.newprice.title', :price => human_price(price_total) %></h5>
+        <h6 class="bfnp-content"><%= raw t 'booking.newprice.description', :tickets => t(@order_form.people.one? ? 'one' : 'few', :scope => 'booking.newprice.tickets'), :other => content_tag('span', t('booking.newprice.other'), :class => 'link') %></h6>
     </div>
 
     <div class="bf-timer">
     <div class="bft-content">
-        <div class="bft-counter">
-            <div class="bftc-title">Осталось</div>
-            <div class="bftc-value">0:20:00</div>
-        </div>
-        <p class="bft-description">Введите данные <%= @order_form.people.one? ? 'пассажира' : 'пассажиров' %>, контактные данные покупателя и&nbsp;данные для оплаты. <strong>Покупку нужно завершить в&nbsp;течение 20&nbsp;минут</strong> — в&nbsp;противном случае авиакомпания не&nbsp;гарантирует наличие мест по&nbsp;этому тарифу.</p>
+        <h6 class="bft-title"><%= raw t 'booking.countdown.title', :counter => '<span class="bft-counter"></span>' %></h6>
+        <p class="bft-description"><%= t 'booking.countdown.description', :passengers => t(@order_form.people.one? ? 'one' : 'few', :scope => 'booking.countdown.passengers') %></p>
     </div>
     </div>
       
