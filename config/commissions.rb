@@ -3691,9 +3691,9 @@ carrier "W2", "FLEXFLIGHT"
 ########################################
 
 example 'svocdg cdgsvo'
-agent "1% от всех опубл. Тарифов"
-subagent "5 руб. с билета от всех опубл. тарифов"
-commission "1%/5"
+agent "1 руб. от всех опубл. Тарифов"
+subagent "0.05 руб. с билета от всех опубл. тарифов"
+commission "1/0.05"
 
 carrier "AR", "AEROLINEAS ARGENTINAS (АВИАРЕПС)"
 ########################################
