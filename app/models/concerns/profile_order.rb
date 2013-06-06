@@ -85,6 +85,10 @@ module ProfileOrder
     tickets_count > 0
   end
 
+  def profile_stored?
+    tickets_count > 0 && tickets.first.flights.present?
+  end
+
   def profile_alive_tickets_exists?
     tickets.each do |t|
       return true if t.profile_alive?

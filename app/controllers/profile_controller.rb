@@ -26,6 +26,12 @@ class ProfileController < ApplicationController
     end
   end
 
+  def show_stored_pnr
+    if @order.profile_stored?
+        redirect_to show_order_stored_path(:id => @order.pnr_number)
+    end
+  end
+
   def show_pnr_for_ticket
     order = Order[params[:id]] or raise ActiveRecord::RecordNotFound
     ticket = order.tickets.find(params[:ticket_id])
