@@ -369,7 +369,7 @@ interline :no
 # только собственные рейсы AB и HG
 check { includes_only(operating_carrier_iatas, 'AB HG 4T') }
 discount "2%"
-ticketing_method "downtown"
+ticketing_method "aviacenter"
 commission "5%/3%"
 
 example 'cdgfra/S7:AB'
