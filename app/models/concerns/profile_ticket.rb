@@ -11,4 +11,8 @@ module ProfileTicket
     'оформлен'
   end
 
+  def profile_alive?
+    kind ='ticket' || kind = 'exchanged'
+  end
+
 end

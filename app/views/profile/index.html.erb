@@ -65,7 +65,11 @@
         <tr>
             <td><%= ticket.profile_name %></td>
             <td><%= ticket.number_with_code %></td>
-            <td><%= ticket.profile_status %></td>
+            <td><%= ticket.profile_status %>
+              <% if admin_user %>
+              <span class="order-debug-info">[<%= ticket.kind %>: <%= ticket.status %>]
+              <% end %>
+            </td>
             <td>
             <% if ticket.flights.present? %>
                 <a class="ordp-ticket" href="<%= profile_show_pnr_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id) %>" target="_blank">на русском</a> <a class="ordp-ticket" href="<%= profile_show_pnr_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id) %>?lang=en" target="_blank">in English</a>
@@ -97,8 +101,13 @@
 </div>
 <% if admin_user %>
 <div class="order-debug">
-  <p class="ors-route-raw"><%= order.profile_route %></p>
-    <%= order.payment_type %> / <%= order.payment_status %> / <%= order.ticket_status %>
+  <p class="ors-route-raw"><% if order.profile_alive_tickets_exists? %> Живой!
+    <% else %> Мертвый! <% end %></p>
+  <p class="ors-route-raw">Route: <%= order.profile_route %></p>
+  <p class="ors-route-raw">Статусы заказа: <%= order.payment_type %> / <%= order.payment_status %> / <%= order.ticket_status %></p>
+  <% if order.profile_ticketed? %>
+  <p class="ors-route-raw">Статусы билетов: <% order.tickets.each do |t| %> <%= t.kind %>: <%= t.status %> / <% end %></p>
+  <% end %>
 </div>
 <% end %>
 </div>
