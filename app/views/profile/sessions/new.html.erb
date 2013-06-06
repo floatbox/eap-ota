@@ -3,7 +3,7 @@
 <div class="upf-header">
     <h3 class="upf-title">Вход с паролем</h3>
 </div>
-<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+<%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {:id => 'profile-signin', :novalidate => 'novalidate'}) do |f| %>
     
     <div class="upf-field">
         <h6 class="upff-label"><%= f.label :email, 'Электронный адрес' %></h6>
@@ -25,6 +25,8 @@
             <%= value %>
         <% end %>
     </div>
+    <% else %>
+    <div class="upf-errors" style="display: none;"></div>
     <% end %>
 
     <% if false && devise_mapping.rememberable? -%>
@@ -32,4 +34,24 @@
     <% end -%>
 
 <% end %>
+<script>
+(function() {
+    var form = new profileForm($('#profile-signin'));
+    form.add('#customer_email', function(value) {
+        if (!value) return 'Введите адрес электронной почты.';
+        if (/[а-яА-Я]/.test(value)) return 'Переключите раскладку и введите корректный адрес электронной почты.';
+        if (!/@\S+\.\w+/.test(value)) return 'Введите корректный адрес электронной почты.';
+    });
+    form.add('#customer_password', function(value) {
+        if (!value) return 'Введите пароль.';
+    });
+    form.button = form.elem.find('.upf-button').prop('disabled', false);
+    form.process = function(result) {
+        window.location = result.location;
+    };
+    form.error = function(message) {
+        this.elem.find('.upf-errors').html(message || '').toggle(Boolean(message));
+    };
+})();
+</script>
 </div>

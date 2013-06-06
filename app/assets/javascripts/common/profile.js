@@ -106,8 +106,8 @@ initForms: function() {
         that.el.find('.phu-signup-result').show();        
     };    
     
-    /*var forgot = new profileForm(this.el.find('.phu-forgot'));
-    forgot.add('#forgot-email', checkEmail);*/
+    var forgot = new profileForm(this.el.find('.phu-forgot'));
+    forgot.add('#forgot-email', checkEmail);
     
 }
 };
@@ -122,6 +122,7 @@ var profileForm = function(elem) {
         }
     });
     this.process = $.noop;
+    this.button = this.elem.find('.phu-submit .phu-button');
     this.fields = [];
 };
 profileForm.prototype = {
@@ -131,18 +132,12 @@ validate: function() {
         this.fields[i].validate();
         if (!error) error = this.fields[i].error;
     }
-    if (error) {
-        this.elem.find('.phu-error').html(error).show();
-        return false;
-    } else {
-        this.elem.find('.phu-error').hide();
-        return true;
-    }
+    this.error(error);
+    return !Boolean(error);
 },
 send: function() {
     var that = this;
-    var button = this.elem.find('.phu-submit .phu-button');
-    if (!button.prop('disabled')) {
+    if (!this.button.prop('disabled')) {
         $.ajax(this.elem.attr('action'), {
             type: 'POST',
             data: this.elem.serialize()
@@ -150,20 +145,21 @@ send: function() {
             if (result.success) {
                 that.process(result);
             } else if (result.errors && result.errors.length) {
+                that.button.prop('disabled', false);
                 that.error(result.errors[0]);
             }
         }).fail(function(jqXHR, status, message) {
+            that.button.prop('disabled', false);
             that.error(jqXHR.responseText);
         });
-        button.prop('disabled', true);
+        this.button.prop('disabled', true);
     }
 },
 add: function(selector, check) {
     this.fields.push(new profileField(selector, check));
 },
 error: function(message) {
-    this.elem.find('.phu-error').html(message).show();
-    this.elem.find('.phu-submit .phu-button').prop('disabled', false);    
+    this.elem.find('.phu-error').html(message || '').toggle(Boolean(message));
 }
 };
 
