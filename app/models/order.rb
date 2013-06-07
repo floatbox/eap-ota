@@ -4,7 +4,6 @@ class Order < ActiveRecord::Base
   include CopyAttrs
   include Pricing::Order
   include TypusOrder
-  include OrderAttrs
 
   scope :MOWR228FA, lambda { by_office_id 'MOWR228FA' }
   scope :MOWR2233B, lambda { by_office_id 'MOWR2233B' }

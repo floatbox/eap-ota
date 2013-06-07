@@ -83,6 +83,8 @@ class Payment < ActiveRecord::Base
   PAYTURE = ['PaytureCharge', 'PaytureRefund']
   CASH =    ['CashCharge', 'CashRefund']
   CARDS =   PAYU + PAYTURE
+  # для документации, сюда указывает yard'овский @see-тег
+  ALLTYPES = CHARGES + REFUNDS
 
   scope :payu, where(:type => PAYU)
   scope :payture, where(:type => PAYTURE)

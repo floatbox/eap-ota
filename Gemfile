@@ -79,6 +79,11 @@ gem 'thin', :require => false
 gem 'passenger', :require => false
 gem 'unicorn', :require => false
 
+group :development do
+  gem 'yard'
+  gem 'yard-activerecord'
+end
+
 group :test do
   gem 'rspec-rails'
   gem 'cucumber-rails', :require => false
