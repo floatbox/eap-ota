@@ -71,15 +71,15 @@ module ProfileOrder
   end
 
   def profile_flights
-    tickets.first.flights.presence
+    sold_tickets.first.flights.presence
   end
 
   def profile_booking_classes
-    tickets.first.booking_classes  
+    sold_tickets.first.booking_classes
   end
 
   def profile_baggage_array
-    tickets.first.baggage_array  
+    sold_tickets.first.baggage_array
   end
 
   def profile_ticketed?
