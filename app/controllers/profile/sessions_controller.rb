@@ -5,11 +5,11 @@ class Profile::SessionsController < Devise::SessionsController
   def create
     hash ||= params[resource_name] || {}
     resource = resource_class.find_by_email(hash[:email])
-    if resource.nil? ## кастомера нет в таблице
+    if resource.nil?    ## кастомера нет в таблице
       not_found
-    elsif resource.not_registred?  ## кастомер есть но не создавал ЛК
+    elsif resource.not_registred?   ## кастомер есть но не создавал ЛК
       not_found
-    elsif resource.pending_confirmation?
+    elsif resource.pending_confirmation?    ## кастомер зарегистрировался но не конфермил ЛК по ссылке
       not_confirmed
     elsif
       resource = warden.authenticate!(:scope => resource_name, :recall => "#{controller_path}#failure")
