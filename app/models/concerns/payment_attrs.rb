@@ -62,6 +62,7 @@ module PaymentAttrs
   # @return [string]
 
   # !attribute charge_id
+  # существует для вьюшек тайпуса, оверрайдится в подклассах Payment
   # @return [integer]
 
   # !attribute status
@@ -100,11 +101,11 @@ module PaymentAttrs
   # @return [datetime]
 
   # !attribute threeds_key
-  # 
+  # Временный токен для завершения 3ds авторизации
   # @return [string]
 
   # !attribute charged_on
-  #
+  # Время списания денежных средств с карты, отличается от времени блокировки. Время получения денег нами.
   # @return [date]
 end
 
