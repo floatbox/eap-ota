@@ -104,6 +104,7 @@ Eviterra::Application.routes.draw do
 
   match 'profile' => 'profile#index', :as => :profile
   match 'profile/itinerary/:id' => 'PNR#show_stored', :as => :profile_itinerary
+  match 'profile/spyglass/:id' => 'profile#spyglass', :as => :profile_spyglass
   match 'profile/itinerary/:id/ticket/:ticket_id' => 'PNR#show_for_ticket', :as => :profile_itinerary_for_ticket
 
   root :to => 'home#index'

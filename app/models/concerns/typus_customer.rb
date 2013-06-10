@@ -3,6 +3,9 @@ module TypusCustomer
 
   extend ActiveSupport::Concern
 
+  def spyglass_link
+    "<a href='/profile/spyglass/#{id}' target='_blank'>Шпионить</a>".html_safe
+  end
 
   def orders_count_link
     "<a href='/admin/orders?customer_id=#{id}'>Заказов: #{orders.size}</a>".html_safe
