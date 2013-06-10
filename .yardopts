@@ -1,1 +1,5 @@
 --default-return=''
+# https://github.com/theodorton/yard-activerecord#attributes 
+'app/**/*.rb'
+'db/schema.rb'
+
