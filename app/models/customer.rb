@@ -20,6 +20,10 @@ class Customer < ActiveRecord::Base
     super if confirmed?
   end
 
+  def not_registred?
+    !confirmation_sent_at
+  end
+
   # TODO этот метод надо будет убрать при запуске ЛК
   # он отключает отсылку приглашения при создании кастомера
   def confirmation_required?
@@ -29,6 +33,10 @@ class Customer < ActiveRecord::Base
   # https://github.com/plataformatec/devise/commit/72cfaad6185332857cb5860a1d812f573efadaf7
   def skip_confirmation_notification!
     @skip_confirmation_notification = true
+  end
+
+  def pending_confirmation?
+    confirmation_token.present?
   end
 
   def password_match?
