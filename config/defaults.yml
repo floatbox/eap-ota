@@ -138,7 +138,8 @@ ohmystats:
     project_id: qsxfvashjzioiwazcryxlgysgjuitwyfaasjvkiv
 riemann:
   enabled: yes
-  host: riemann.eviterra.com
+  #host: riemann.eviterra.com
+  host: 198.199.124.27
   benchmarking: no
   request_performance: no
   stat_counters: no
