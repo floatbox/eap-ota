@@ -42,31 +42,11 @@ initPopup: function() {
             that.el.find('.phu-forgot').hide();
         });
     });
-    this.el.find('.phu-signin-link').on('click', function(event) {
-        var elem = $(this);
-        if (elem.hasClass('phust-link')) {
-            $('#signin-email').val($('#signup-email').val()).trigger('blur');
-            elem.removeClass('phust-link');
-            that.el.find('.phu-signup').slideUp(150);
-            that.el.find('.phu-stator').animate({
-                height: that.el.find('.phu-slider').height()
-            }, 150, function() {
-                that.el.find('.phu-signup-link').addClass('phust-link');
-                $(this).height('');
-            });
-        }
+    this.el.on('click', '.phu-signin-link', function(event) {
+        if ($(this).hasClass('phust-link')) that.openSignIn();
     });
-    this.el.find('.phu-signup-link').on('click', function(event) {
-        var elem = $(this);
-        if (elem.hasClass('phust-link')) {
-            $('#signup-email').val($('#signin-email').val()).trigger('blur');
-            elem.removeClass('phust-link');
-            that.el.find('.phu-signup').slideDown(150);
-            that.el.find('.phu-stator').animate({height: 41}, 150, function() {
-                that.el.find('.phu-signin-link').addClass('phust-link');
-                that.el.find('.phu-slider').css('left', 0);
-            });
-        }
+    this.el.on('click', '.phu-signup-link', function(event) {
+        if ($(this).hasClass('phust-link')) that.openSignUp();
     });
     this.el.find('.phu-button').prop('disabled', false);
 },
@@ -80,6 +60,28 @@ show: function() {
 hide: function() {
     this.el.removeClass('phu-active');
     $w.off('click keydown', this._hide);
+},
+openSignIn: function() {
+    var elem = this.el;
+    $('#signin-email').val($('#signup-email').val()).trigger('blur');
+    elem.find('.phus-title .phu-signin-link').removeClass('phust-link');
+    elem.find('.phu-signup').slideUp(150);
+    elem.find('.phu-stator').animate({
+        height: elem.find('.phu-slider').height()
+    }, 150, function() {
+        elem.find('.phus-title .phu-signup-link').addClass('phust-link');
+        $(this).height('');
+    });
+},
+openSignUp: function() {
+    var elem = this.el;
+    $('#signup-email').val($('#signin-email').val()).trigger('blur');
+    elem.find('.phus-title .phu-signup-link').removeClass('phust-link');
+    elem.find('.phu-signup').slideDown(150);
+    elem.find('.phu-stator').animate({height: 41}, 150, function() {
+        elem.find('.phus-title .phu-signin-link').addClass('phust-link');
+        elem.find('.phu-slider').css('left', 0);
+    });
 },
 initForms: function() {
 
@@ -98,6 +100,13 @@ initForms: function() {
     signIn.process = function(result) {
         window.location = result.location;
     };
+    signIn.errors['not_confirmed'] = '<p>Вы не завершили регистрацию. Для завершения регистрации перейдите по&nbsp;ссылке из&nbsp;письма-подтверждения.</p><p><a href="/profile/verification/new">Что делать, если ничего не&nbsp;пришло?</a></p>';
+    signIn.errors['not_found'] = '<p>Пользователь с таким адресом не найден.</p><p><span class="phu-signup-link phust-link">Зарегистрироваться</span></p>';
+    signIn.errors['failed'] = function() {
+        var value = $('#signin-password').val();
+        var check = value === value.toUpperCase() ? 'Проверьте, не&nbsp;нажата&nbsp;ли клавиша Caps Lock,' : 'Проверьте раскладку клавиатуры'
+        return 'Неправильный пароль. ' + check +  ' и&nbsp;повторите попытку.';
+    };
 
     var signUp = new profileForm(this.el.find('.phu-signup'));
     signUp.add('#signup-email', checkEmail);
@@ -112,6 +121,7 @@ initForms: function() {
 }
 };
 
+/* Form with ajax */
 var profileForm = function(elem) {
     var that = this;
     this.elem = elem;
@@ -124,6 +134,7 @@ var profileForm = function(elem) {
     this.process = $.noop;
     this.button = this.elem.find('.phu-submit .phu-button');
     this.fields = [];
+    this.errors = {};
 };
 profileForm.prototype = {
 validate: function() {
@@ -159,7 +170,12 @@ add: function(selector, check) {
     this.fields.push(new profileField(selector, check));
 },
 error: function(message) {
-    this.elem.find('.phu-error').html(message || '').toggle(Boolean(message));
+    if (message) {
+        var custom = this.errors[message];
+        this.elem.find('.phu-error').html(typeof custom === 'function' ? custom() : (custom || message)).show();    
+    } else {
+        this.elem.find('.phu-error').hide();
+    }
 }
 };
 

@@ -226,6 +226,15 @@
     margin: 10px 0 0;
     color: #BF2A1D;
 }
+.phu-error p {
+    margin-top: 5px;
+}
+.phu-error .phust-link {
+    color: #3270A6;
+}
+.phu-error .phust-link:hover {
+    color: #F90A6F;
+}
 
 .phu-forgot-link,
 .phu-remember-link {
