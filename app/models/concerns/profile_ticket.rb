@@ -8,11 +8,13 @@ module ProfileTicket
   end
 
   def profile_status
-    'оформлен'
+    return 'оформлен' if status == 'ticketed'
+    return 'обменян' if status == 'exchanged'
+    return 'возвращен' if status == 'returned'
   end
 
   def profile_alive?
-    kind ='ticket' && ['ticketed', 'exchanged'].include?(status)
+    kind == 'ticket' && ['ticketed', 'exchanged'].include?(status)
   end
 
 end

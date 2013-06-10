@@ -18,7 +18,7 @@
     <p class="orders-empty">Вы еще ничего не заказывали. Хотите <a href="/">купить билет</a>?</p>
 <% else %>
 <% @orders.each do |order| %>
-<div class="order">
+<div class="order" <% if order.profile_ticketed? && !order.profile_alive_tickets_exists? %>style='background-color: transparent; border: 1px dotted #454752'<% end %>>
 <table class="order-summary">
     <tr>
         <th style="width: 120px;">Дата заказа</th>
@@ -42,6 +42,7 @@
     </tr>
 </table>
 <div class="order-controls">
+  <% if order.profile_alive_tickets_exists? || !order.profile_ticketed? %>
     <div class="orc-show">Показать детали</div>
     <div class="orc-hide">Скрыть детали</div>
     <% if order.profile_stored? %>
@@ -51,11 +52,15 @@
         </span>
     </div>
     <% end %>
+  <% end %>
 </div>
+
+<% if order.profile_ticketed? %>
+
+<% if order.profile_alive_tickets_exists?%>
 <div class="order-details">
 
-<div class="ord-passengers">
-<% if order.profile_ticketed? %>
+  <div class="ord-passengers">
     <table>
     <tr>
         <th style="width: 294px;">Пассажир</th>
@@ -63,7 +68,7 @@
         <th style="width: 200px;">Статус билета</th>
         <th>Распечатать</th>
     </tr>
-    <% order.tickets.each do |ticket| %>
+    <% order.profile_tickets.each do |ticket| %>
         <tr>
             <td><%= ticket.profile_name %></td>
             <td><%= ticket.number_with_code %></td>
@@ -73,7 +78,7 @@
               <% end %>
             </td>
             <td>
-            <% if ticket.flights.present? %>
+            <% if ticket.status == 'ticketed' && ticket.flights.present? %>
                 <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id) %>" target="_blank">на русском</a>
                 <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id, :lang=> 'en') %>" target="_blank">in English</a>
             <% end %>                
@@ -81,27 +86,37 @@
         </tr>
     <% end %>
     </table>
-<% else %>
-    <table class="ordp-table">
-    <tr>
-        <th style="width: 294px;">Пассажир</th>
-        <th>Статус билета</th>
-    </tr>
-    <% order.profile_people.each do |person| %>
-        <tr>
-            <td><%= person[:name] %></td>
-            <td><%= person[:status] %></td>
-        </tr>
-    <% end %>
-    </table>
-<% end %>
-</div>
+  </div>
 
 <% if order.profile_stored? %>
     <%= render :partial => 'flights', :locals => { :order => order } %>
 <% end %>
 
 </div>
+<% end %>
+
+<% else %>
+
+<div class="order-details">
+  <div class="ord-passengers">
+    <table class="ordp-table">
+      <tr>
+        <th style="width: 294px;">Пассажир</th>
+        <th>Статус билета</th>
+      </tr>
+    <% order.profile_people.each do |person| %>
+      <tr>
+        <td><%= person[:name] %></td>
+        <td><%= person[:status] %></td>
+      </tr>
+    <% end %>
+    </table>
+  </div>
+</div>
+
+<% end %>
+
+
 <% if admin_user %>
 <div class="order-debug">
   <p class="ors-route-raw"><% if order.profile_alive_tickets_exists? %> Живой!

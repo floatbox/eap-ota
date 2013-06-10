@@ -18,6 +18,8 @@ class ProfileController < ApplicationController
     end
   end
 
+  # TODO сделать метод itinerary для показа маршрутки через этот контроллер
+
   def check_order_permission
     @order = Order[params[:id]] or raise ActiveRecord::RecordNotFound
     @order.can_use? current_customer
