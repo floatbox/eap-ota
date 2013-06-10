@@ -18,6 +18,7 @@
     <p class="orders-empty">Вы еще ничего не заказывали. Хотите <a href="/">купить билет</a>?</p>
 <% else %>
 <% @orders.each do |order| %>
+<% if order.profile_alive_tickets_exists? || admin_user%>
 <div class="order" <% if order.profile_ticketed? && !order.profile_alive_tickets_exists? %>style='background-color: transparent; border: 1px dotted #454752'<% end %>>
 <table class="order-summary">
     <tr>
@@ -42,9 +43,9 @@
     </tr>
 </table>
 <div class="order-controls">
+  <div class="orc-show">Показать детали</div>
+  <div class="orc-hide">Скрыть детали</div>
   <% if order.profile_alive_tickets_exists? || !order.profile_ticketed? %>
-    <div class="orc-show">Показать детали</div>
-    <div class="orc-hide">Скрыть детали</div>
     <% if order.profile_stored? %>
     <div class="orc-pnr">
         <span class="orc-links">Маршрутная квитанция: <a class="orc-link" href="<%= profile_itinerary_path(:id => order.pnr_number) %>" target="_blank">на русском</a>
@@ -57,7 +58,7 @@
 
 <% if order.profile_ticketed? %>
 
-<% if order.profile_alive_tickets_exists?%>
+<% if order.profile_alive_tickets_exists? || admin_user%>
 <div class="order-details">
 
   <div class="ord-passengers">
@@ -88,7 +89,7 @@
     </table>
   </div>
 
-<% if order.profile_stored? %>
+<% if order.profile_stored? && order.profile_alive_tickets_exists? %>
     <%= render :partial => 'flights', :locals => { :order => order } %>
 <% end %>
 
@@ -130,6 +131,7 @@
 <% end %>
 </div>
 
+<% end %>
 <% end %>
 <% end %>
 </div>
