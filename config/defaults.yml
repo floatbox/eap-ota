@@ -13,6 +13,12 @@ site:
     host: 'https://staging.eviterra.com'
   test:
     host: 'http://localhost:3000'
+  auto_ticketing:
+    enabled: no
+    exclude_list:
+      aviacenter: []
+      downtown: []
+      direct: []
 api:
   enabled: yes
   store_rambler_cache: no
