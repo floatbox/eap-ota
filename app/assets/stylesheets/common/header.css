@@ -237,7 +237,7 @@
 }
 
 .phu-forgot-link,
-.phu-remember-link {
+.phu-forgot-fields .phu-remember-link {
     margin-top: 8px;
     float: right;
     color: #777;
@@ -257,8 +257,15 @@
 .phu-signup-fields {
     padding-top: 10px;
 }
-.phu-signup-result {
+.phu-signup-result,
+.phu-forgot-result {
     display: none;
+}
+.phu-forgot-result .phust-link {
+    color: #3270A6;
+}
+.phu-forgot-result .phust-link:hover {
+    color: #F90A6F;
 }
 
 /* User */

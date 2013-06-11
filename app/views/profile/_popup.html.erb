@@ -29,16 +29,22 @@
             <% end %>
             <%= form_for("customer", :url => customer_password_path, :html => {:class => 'phu-section phu-forgot', :novalidate => 'novalidate'}) do |f| %>
                 <h6 class="phus-title">Сброс пароля</h6>
-                <p style="margin: 0 0 10px;">Мы пришлём на почту ссылку для получения нового пароля.</p>
-                <div class="phu-field">
-                    <label for="forgot-email" class="phuf-placeholder">электронная почта</label>
-                    <%= f.email_field :email, :class => 'phuf-input', :id => 'forgot-email' %>
-                </div>            
-                <div class="phu-submit">
-                    <%= link_to "Вспомнили?", new_customer_session_path, :class => 'phu-remember-link' %>
-                    <%= f.submit "Сбросить пароль", :class => 'phu-button' %>
+                <div class="phu-forgot-fields">
+                    <p style="margin: 0 0 10px;">Мы пришлём на почту ссылку для получения нового пароля.</p>
+                    <div class="phu-field">
+                        <label for="forgot-email" class="phuf-placeholder">электронная почта</label>
+                        <%= f.email_field :email, :class => 'phuf-input', :id => 'forgot-email' %>
+                    </div>            
+                    <div class="phu-submit">
+                        <%= link_to "Вспомнили?", new_customer_session_path, :class => 'phu-remember-link' %>
+                        <%= f.submit "Сбросить пароль", :class => 'phu-button' %>
+                    </div>
+                    <div class="phu-error"></div>
                 </div>
-                <div class="phu-error"></div>
+                <div class="phu-forgot-result">
+                    <p style="margin: 0 0 5px;">На ваш электронный адрес отправлено письмо. Для&nbsp;завершения сброса пароля перейдите по&nbsp;ссылке в&nbsp;письме.</p>
+                    <p><%= link_to "Что делать, если ничего не пришло?", new_customer_password_path %></p>
+                </div>
             <% end %>            
         </div>
         </div>

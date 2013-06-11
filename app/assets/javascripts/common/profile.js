@@ -42,10 +42,11 @@ initPopup: function() {
             that.el.find('.phu-forgot').hide();
         });
     });
-    this.el.on('click', '.phu-signin-link', function(event) {
+    this.el.on('click', '.phu-signin-link', function() {
+        console.log($(this));
         if ($(this).hasClass('phust-link')) that.openSignIn();
     });
-    this.el.on('click', '.phu-signup-link', function(event) {
+    this.el.on('click', '.phu-signup-link', function() {
         if ($(this).hasClass('phust-link')) that.openSignUp();
     });
     this.el.find('.phu-button').prop('disabled', false);
@@ -112,14 +113,18 @@ initForms: function() {
     signUp.add('#signup-email', checkEmail);
     signUp.process = function(result) {
         that.el.find('.phu-signup').closest('.phu-section').hide();
-        that.el.find('.phu-signup-result').show();        
+        that.el.find('.phu-signup-result').show();
     };    
     signUp.errors['exist'] = '<p>Пользователь с таким адресом уже зарегистрирован.</p><p><span class="phu-signin-link phust-link">Войти</span></p>';
     signIn.errors['not_confirmed'] = '<p>Вы не завершили регистрацию. Для завершения регистрации перейдите по&nbsp;ссылке из&nbsp;письма-подтверждения.</p><p><a href="/profile/verification/new">Что делать, если ничего не&nbsp;пришло?</a></p>';
     
     var forgot = new profileForm(this.el.find('.phu-forgot'));
     forgot.add('#forgot-email', checkEmail);
-    
+    forgot.process = function() {
+        that.el.find('.phu-forgot-fields').hide();
+        that.el.find('.phu-forgot-result').show();
+    };
+    forgot.errors['not_found'] = '<p>Нет зарегистрированных пользователей с таким адресом.</p><p><span class="phu-signup-link phust-link">Зарегистрироваться</span></p>';    
 }
 };
 
