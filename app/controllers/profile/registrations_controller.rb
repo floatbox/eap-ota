@@ -4,10 +4,10 @@ class Profile::RegistrationsController < Devise::RegistrationsController
 
   def create
     hash ||= params[resource_name] || {}
-    resource = resource_class.find_by_email(hash[:email])
-    if resource.nil? ## такого кастомера нет в базе
-      build_resource
+    exist_resource = resource_class.find_by_email(hash[:email])
+    if exist_resource.nil? ## такого кастомера нет в базе
 
+      build_resource
       if resource.save
         if resource.active_for_authentication?
           set_flash_message :notice, :signed_up if is_navigational_format?
@@ -22,10 +22,11 @@ class Profile::RegistrationsController < Devise::RegistrationsController
         clean_up_passwords resource
         return render :json => {:success => false, :errors => ["save_error"]}
       end
-    elsif resource.not_registred?   ## кастомер есть но не создавал ЛК
-      resource.send_confirmation_instructions
+
+    elsif exist_resource.not_registred?   ## кастомер есть но не создавал ЛК
+      exist_resource.send_confirmation_instructions
       success
-    elsif resource.pending_confirmation?    ## кастомер зарегистрировался но не конфермил ЛК по ссылке
+    elsif exist_resource.pending_confirmation?    ## кастомер зарегистрировался но не конфермил ЛК по ссылке
       not_confirmed
     else
       exist_failure
