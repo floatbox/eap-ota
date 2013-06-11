@@ -73,7 +73,6 @@ module OrderAttrs
   # @see Commission::Rule#blanks
   # @return [String]
 
-
   # @!attribute price_share
   # @deprecated сейчас не используется судя по всему
 
@@ -90,7 +89,7 @@ module OrderAttrs
   # @return [BigDecimal]   :default => 0.0,      :null => false
 
   # @!attribute price_consolidator_markup
-  # @deprecated
+  # @deprecated ?
   # @return [BigDecimal]   :default => 0.0,      :null => false
 
   # @!attribute price_difference
