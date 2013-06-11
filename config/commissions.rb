@@ -1147,7 +1147,7 @@ commission "1%/0.5%"
 carrier "HR", "HAHN AIR  (Авиарепс)"
 ########################################
 
-carrier_defaults our_markup: 20
+carrier_defaults our_markup: 20, ticketing_method: "direct"
 
 # включено с дополнительной проверкой
 agent    "1 руб. от тарифов, опубликованных в системе бронирования, для авиакомпании Hahn Air и интерлайн-партнеров Hahn Air, указанных на сайте www.HR-ticketing.com;"
@@ -3573,14 +3573,15 @@ commission "0.1%/0.1%"
 
 example 'svocdg/ab cdgsvo'
 example 'ledcdg/fv:s7 cdgled'
-strt_date "04.06.2013"
-agent "рейсы код-шеринг и интерлайн без комиссии c дополнительным сбором 400 руб за билет"
-subagent "рейсы код-шеринг и интерлайн без комиссии c дополнительным сбором 400 руб за билет"
+strt_date "11.06.2013"
+agent "Открыть выписку S7 на билеты код-шеринг и интерлайн в офисе MOWR228FA."
+agent "Агентская комиссия 3%"
+subagent "Субагентская комиссия 3%"
 interline :no, :yes
-ticketing_method "downtown"
-our_markup 400
-#discount "2%"
-no_commission "нет комисссии"
+ticketing_method "direct"
+#our_markup 400
+discount "2%"
+commission "3%/3%"
 
 # general dtt для горячей замены
 example 'svojfk jfksvo'
