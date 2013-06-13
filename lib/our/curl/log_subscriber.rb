@@ -22,7 +22,7 @@ module Our
           curl.upload_speed / 1000
         ] unless curl.uploaded_bytes == 0
 
-        debug(msg)
+        info(msg)
       end
 
       attach_to :curl
