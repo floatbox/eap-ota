@@ -3830,3 +3830,12 @@ carrier "BV", "BLUE PANORAMA AIRLINES S.P.A. (АВИАРЕПС)"
 agent "1EURO (5 РУБ) с билета на рейсы BV +2% сбор АЦ"
 subagent "5 руб"
 commission "1eur/5"
+
+carrier "SZ", "AIR COMPANY SOMON AIR LLC"
+#######################################
+
+agent "5% от всех опубл. тарифов на собств. рейсы “AIR COMPANY SOMON AIR LLC” (SZ/413)."
+agent "Продажа на рейсы интерлайн-партнёров на бланке “AIR COMPANY SOMON AIR LLC” (SZ/413) запрещена."
+subagent "3% от всех опубл. тарифов на собств. рейсы “AIR COMPANY SOMON AIR LLC” (SZ/413)."
+subagent "Продажа на рейсы интерлайн-партнёров на бланке “AIR COMPANY SOMON AIR LLC” (SZ/413) запрещена."
+commission "5%/3%"
