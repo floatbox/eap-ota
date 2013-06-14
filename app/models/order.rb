@@ -143,7 +143,7 @@ class Order < ActiveRecord::Base
 
   def ok_to_auto_ticket?
     auto_ticket && ticket_status == 'booked' &&
-      ['blocked', 'charged'].include?(order.payment_status) &&
+      ['blocked', 'charged'].include?(payment_status) &&
       Conf.site.auto_ticketing['enabled']
   end
 
