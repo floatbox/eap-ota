@@ -4,7 +4,6 @@ class Order < ActiveRecord::Base
   include CopyAttrs
   include Pricing::Order
   include TypusOrder
-  include AutoTicketStuff
 
   scope :MOWR228FA, lambda { by_office_id 'MOWR228FA' }
   scope :MOWR2233B, lambda { by_office_id 'MOWR2233B' }
@@ -134,13 +133,18 @@ class Order < ActiveRecord::Base
   before_save :set_prices
   before_create :generate_code, :set_customer, :set_payment_status, :set_email_status
   after_save :create_order_notice
-  after_create :create_auto_ticket_job
   def set_prices
     self.fee_scheme = Conf.site.fee_scheme if new_record? || fee_scheme.blank?
     unless has_data_in_tickets?
       self.price_acquiring_compensation = price_payment_commission if !fix_price
       self.price_difference = fix_price? ? price_with_payment_commission - price_real : 0
     end
+  end
+
+  def ok_to_auto_ticket?
+    auto_ticket && ticket_status == 'booked' &&
+      ['blocked', 'charged'].include?(order.payment_status) &&
+      Conf.site.auto_ticketing['enabled']
   end
 
   def recalculate_prices
@@ -347,7 +351,6 @@ class Order < ActiveRecord::Base
     self.ticket_status = 'booked'
     self.name_in_card = order_form.card.name
     self.pan = order_form.card.pan
-    self.auto_ticket = calculated_auto_ticket
   end
 
   def strategy

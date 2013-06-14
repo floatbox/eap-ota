@@ -207,6 +207,12 @@ class OrderForm
   def save_to_order
     self.order ||= Order.create(:order_form => self)
     order.save
+    # Выставляем флаг автовыписки
+    auto_ticket_stuff = AutoTicketStuff.new(order: order, people: people, recommendation: recommendation)
+    if auto_ticket_stuff.auto_ticket
+      order.update_attributes(auto_ticket: true)
+      auto_ticket_stuff.create_auto_ticket_job
+    end
   end
 
   def variant

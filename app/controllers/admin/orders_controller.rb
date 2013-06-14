@@ -119,7 +119,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
   end
 
   def cancel_auto_ticketing
-    if @order.auto_ticket? && @order.calculated_auto_ticket
+    if @order.ok_to_auto_ticket?
       @order.update_attributes(auto_ticket: false)
     else
       flash[:alert] = "Произошла ошибка"

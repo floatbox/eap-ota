@@ -7,7 +7,14 @@ class AutoTicketJob
 
   def perform
     order = Order.find(@order_id)
-    order.do_auto_ticketing
+    if order.ok_to_auto_ticket?
+      order.strategy.ticket
+      order.ticket! || LoadTicketsJob.new(:order_id => order.id).delay
+    else
+      order.update_attributes(auto_ticket: false)
+    end
+  rescue
+    order.update_attributes(auto_ticket: false)
   end
 
   def max_attempts
