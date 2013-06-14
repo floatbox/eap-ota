@@ -866,7 +866,7 @@ subagent "3%"
 subclasses "SIQKLUT"
 check { includes_only(country_iatas.first, 'SN GH') and includes_only(country_iatas, 'US SN GH') }
 ticketing_method "downtown"
-discount "2%"
+discount "2.3%"
 commission "5%/3%"
 
 example 'accjfk/su:dl'
@@ -1751,7 +1751,7 @@ commission "1eur/5"
 carrier "LX", "SWISS"
 ########################################
 
-carrier_defaults consolidator: 0, our_markup: '0.2%'
+carrier_defaults consolidator: 0 #, our_markup: '0.2%'
 
 example 'svojfk/f'
 example 'svojfk/a jfksvo/z'
