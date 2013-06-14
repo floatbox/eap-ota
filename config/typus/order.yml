@@ -75,6 +75,7 @@ Order:
       - balance
       - settled?
       - display_fee_details
+      - auto_ticket
     form:
       - section_general_info
       - description
