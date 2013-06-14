@@ -29,7 +29,7 @@ class AutoTicketStuff
     people.all?{|p| ['RU', 'UA'].include?(p.nationality.alpha2)} or return 'есть пассажиры, не являющиеся гражданами РФ и Украины'
     !order.email['hotmail']  or return 'название почтового ящика содержит hotmail'
     !order.email['yahoo']  or return 'название почтового ящика содержит yahoo'
-    Order.where(email: order.email, payment_status: 'not blocked').where('created_at > ?', Time.now - 6.hours).count > 2 or return 'пользователь совершил две или больше неуспешных попытки заказа'#текущий заказ уже попадает в count
+    (Order.where(email: order.email, payment_status: 'not blocked').where('created_at > ?', Time.now - 6.hours).count > 2) or return 'пользователь совершил две или больше неуспешных попытки заказа'#текущий заказ уже попадает в count
     nil
   end
 
