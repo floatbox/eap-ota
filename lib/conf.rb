@@ -1,6 +1,12 @@
 # encoding: utf-8
 require 'yaml'
 
+# TODO
+# * перенести в базу
+# * документировать
+# * сделать вебморду
+# * попробовать заменить на https://github.com/dhh/custom_configuration
+# * или вообще на ActiveSupport::InheritableOptions / ActiveSupport::Configurable
 module Conf
 
   class SyntaxError < RuntimeError; end
