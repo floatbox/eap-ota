@@ -13,8 +13,6 @@ class AutoTicketJob
     else
       order.update_attributes(auto_ticket: false)
     end
-  rescue
-    order.update_attributes(auto_ticket: false)
   end
 
   def max_attempts
