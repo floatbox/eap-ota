@@ -10,8 +10,6 @@ class AutoTicketJob
     if order.ok_to_auto_ticket?
       order.strategy.ticket
       order.ticket! || LoadTicketsJob.new(:order_id => order.id).delay
-    else
-      order.update_attributes(auto_ticket: false)
     end
   end
 
