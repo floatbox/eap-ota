@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130607150650) do
+ActiveRecord::Schema.define(:version => 20130617140934) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -370,6 +370,7 @@ ActiveRecord::Schema.define(:version => 20130607150650) do
     t.string   "commission_tour_code"
     t.string   "commission_designator"
     t.boolean  "auto_ticket",                                                 :default => false
+    t.string   "no_auto_ticket_reason",                                       :default => ""
   end
 
   add_index "orders", ["customer_id"], :name => "index_orders_on_customer_id"

@@ -76,6 +76,7 @@ Order:
       - settled?
       - display_fee_details
       - auto_ticket
+      - no_auto_ticket_reason
     form:
       - section_general_info
       - description

@@ -212,6 +212,8 @@ class OrderForm
     if auto_ticket_stuff.auto_ticket
       order.update_attributes(auto_ticket: true)
       auto_ticket_stuff.create_auto_ticket_job
+    else
+      order.update_attributes(no_auto_ticket_reason: auto_ticket_stuff.turndown_reason)
     end
   end
 
