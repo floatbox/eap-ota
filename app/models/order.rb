@@ -239,7 +239,7 @@ class Order < ActiveRecord::Base
   scope :ticket_not_sent, where("orders.pnr_number != '' AND email_status != 'ticket_sent' AND ticket_status = 'ticketed'").where("orders.created_at > ?", 10.days.ago)
   scope :sent_manual, where(:email_status => 'manual')
   scope :reported, where(:payment_status => ['blocked', 'charged'], :offline_booking => false).where("orders.pnr_number != ''")
-  scope :extra_pay, where("orders.pnr_number = '' AND parent_pnr_number != ''")
+  scope :extra_pay, where("orders.pnr_number = '' AND parent_pnr_number != '' AND payment_status = 'blocked'")
 
 
   scope :stale, lambda {
