@@ -2,6 +2,7 @@
 class Payment < ActiveRecord::Base
 
   include TypusPayment
+  include PaymentAttrs
 
   # дефолтные издержки на транзакцию
   def self.commission

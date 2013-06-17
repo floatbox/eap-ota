@@ -3,6 +3,7 @@ class Ticket < ActiveRecord::Base
 
   include Rails.application.routes.url_helpers
   include CopyAttrs
+  include TicketAttrs
   has_paper_trail
 
   # FIXME вынести в ActiveRecord::Base

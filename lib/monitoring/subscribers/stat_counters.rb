@@ -9,7 +9,7 @@ module Monitoring
 
         keys = event.payload[:keys] || []
         keys.each do |key|
-          Monitoring.meter(
+          ::Monitoring.meter(
             service: "stat_counters.#{key}",
             metric: 1.0
           )

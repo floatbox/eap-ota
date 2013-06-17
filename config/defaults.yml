@@ -143,15 +143,16 @@ ohmystats:
     enabled: yes
     project_id: qsxfvashjzioiwazcryxlgysgjuitwyfaasjvkiv
 riemann:
-  enabled: yes
-  host: riemann.eviterra.com
+  enabled: no
+  #host: riemann.eviterra.com
+  host: 198.199.124.27
   benchmarking: no
   request_performance: no
   stat_counters: no
-  curl_helper: no
   test:
     host: localhost
   production:
+    enabled: yes
     benchmarking: yes
     request_performance: yes
     stat_counters: yes

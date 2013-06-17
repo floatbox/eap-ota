@@ -99,14 +99,9 @@
 }
 
 /* Обртаный отсчёт */
-.bf-timer {
-    background: #FBF4CB;
-    padding: 18px 20px;
-}
 .bft-content {
     overflow: hidden;
     background: #FFF;
-    box-shadow: 0 1px 8px rgba(0,0,0,0.2);
 }
 .bft-title {
     font-size: 21px;

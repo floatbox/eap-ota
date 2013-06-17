@@ -1,4 +1,10 @@
 <% recommendation = @order_form.recommendation %>
+<div class="bf-timer">
+<div class="bft-content">
+    <h6 class="bft-title"><%= raw t 'booking.countdown.title', :counter => '<span class="bft-counter"></span>' %></h6>
+    <p class="bft-description"><%= t 'booking.countdown.description', :passengers => t(@order_form.people.one? ? 'one' : 'few', :scope => 'booking.countdown.passengers') %></p>
+</div>
+</div>
 <div class="b-header"><h3 class="bh-text"><%= t 'booking.title' %></h3></div>
 <div class="b-details">
 <div class="od-segments">
@@ -30,13 +36,6 @@
         <h6 class="bfnp-content"><%= raw t 'booking.newprice.description', :tickets => t(@order_form.people.one? ? 'one' : 'few', :scope => 'booking.newprice.tickets'), :other => content_tag('span', t('booking.newprice.other'), :class => 'link') %></h6>
     </div>
 
-    <div class="bf-timer">
-    <div class="bft-content">
-        <h6 class="bft-title"><%= raw t 'booking.countdown.title', :counter => '<span class="bft-counter"></span>' %></h6>
-        <p class="bft-description"><%= t 'booking.countdown.description', :passengers => t(@order_form.people.one? ? 'one' : 'few', :scope => 'booking.countdown.passengers') %></p>
-    </div>
-    </div>
-      
     <div class="bf-section bf-persons" data-type="persons">
         <div class="bfs-title">
             <h4 class="bfst-text"><%= t @order_form.people.one? ? 'one' : 'few', :scope => 'booking.passengers' %></h4>
