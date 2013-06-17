@@ -12,7 +12,8 @@ class Order < ActiveRecord::Base
   scope :MOWR2219U, lambda { by_office_id 'MOWR2219U' }
   scope :FLL1S212V, lambda { by_office_id 'FLL1S212V' }
   scope :for_manual_ticketing, lambda { where("payment_status IN ('blocked', 'charged') AND
-    ticket_status IN ('booked', 'processing_ticket', 'error_ticket') AND
+    ticket_status IN ('booked', 'processing_ticket') AND
+    pnr_number != '' AND
     (NOT auto_ticket OR created_at < ?)", Time.now - 40.minutes ) }
 
   def self.by_office_id office_id
