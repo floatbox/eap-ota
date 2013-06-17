@@ -115,6 +115,7 @@ Order:
       - offline_booking
       - last_pay_time
       - needs_update_from_gds
+      - auto_ticket
     edit_ticketed:
       - section_general_info
       - description
