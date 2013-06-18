@@ -149,6 +149,7 @@ riemann:
   benchmarking: no
   request_performance: no
   stat_counters: no
+  meter: no
   test:
     host: localhost
   production:
@@ -156,3 +157,4 @@ riemann:
     benchmarking: yes
     request_performance: yes
     stat_counters: yes
+    meter: yes
