@@ -315,7 +315,7 @@ getOfferTemplate: function() {
 },
 getPriceTemplate: function() {
     this.stateTemplate = I18n.t(this.data.options.total !== 1 ? 'few_with_fee' : 'one_with_fee', {scope: 'offer.price'});
-    this.priceTemplate = I18n.t('offer.price.buy');
+    this.priceTemplate = '<div class="obbt-sum">{0}</div><div class="obbt-buy">' + I18n.t('offer.price.buy') + '</div>';
 },
 currencies: {
     RUR: '{0} <span class="ruble">Р</span>',
@@ -408,7 +408,7 @@ init: function() {
     };
     this.count = function() {
         var offset = that.el.find('.o-details').offset().top;
-        tedge = offset - 128 - 52;
+        tedge = offset - 128 - 53;
         bedge = offset - $w.height();
         that.toggle();
     };

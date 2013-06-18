@@ -215,7 +215,8 @@ en:
         one: "with another <span class=\"ossi-segment\">flight %{direction}</span>"
         many: "with another flights %{direction}"
     price:
-      buy: "Buy for {0}"
+      buy: "Buy"
+      buy_for: "Buy for {0}"
       one: "total price"
       few: "total price for all passengers"
       one_with_fee: "total price"

@@ -50,8 +50,8 @@ init: function() {
         that.el.submit();
     });
     if (!this.iphoneLayout) {
-        var offset = 325 + 7 - Math.round(btitle.width() / 2);
-        this.footer.find('.bff-left').width(offset - 40);
+        var offset = 325 + 7 - Math.round(btitle.outerWidth() / 2) + 1;
+        this.footer.find('.bff-left').width(offset - 30);
         this.footer.find('.bff-right').css('margin-left', offset);
     }
     this.required = this.el.find('.bff-required');
