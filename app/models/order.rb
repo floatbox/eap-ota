@@ -11,6 +11,10 @@ class Order < ActiveRecord::Base
   scope :MOWR221F9, lambda { by_office_id 'MOWR221F9' }
   scope :MOWR2219U, lambda { by_office_id 'MOWR2219U' }
   scope :FLL1S212V, lambda { by_office_id 'FLL1S212V' }
+  scope :for_manual_ticketing, lambda { where("payment_status IN ('blocked', 'charged') AND
+    ticket_status IN ('booked', 'processing_ticket') AND
+    pnr_number != '' AND
+    (NOT auto_ticket OR created_at < ?)", Time.now - 40.minutes ) }
 
   def self.by_office_id office_id
     joins(:tickets).where('tickets.office_id' => office_id).uniq
@@ -131,13 +135,18 @@ class Order < ActiveRecord::Base
   before_save :set_prices
   before_create :generate_code, :set_customer, :set_payment_status, :set_email_status
   after_save :create_order_notice
-
   def set_prices
     self.fee_scheme = Conf.site.fee_scheme if new_record? || fee_scheme.blank?
     unless has_data_in_tickets?
       self.price_acquiring_compensation = price_payment_commission if !fix_price
       self.price_difference = fix_price? ? price_with_payment_commission - price_real : 0
     end
+  end
+
+  def ok_to_auto_ticket?
+    auto_ticket && ticket_status == 'booked' &&
+      ['blocked', 'charged'].include?(payment_status) &&
+      Conf.site.auto_ticketing['enabled']
   end
 
   def recalculate_prices
@@ -230,7 +239,7 @@ class Order < ActiveRecord::Base
   scope :ticket_not_sent, where("orders.pnr_number != '' AND email_status != 'ticket_sent' AND ticket_status = 'ticketed'").where("orders.created_at > ?", 10.days.ago)
   scope :sent_manual, where(:email_status => 'manual')
   scope :reported, where(:payment_status => ['blocked', 'charged'], :offline_booking => false).where("orders.pnr_number != ''")
-  scope :extra_pay, where("orders.pnr_number = '' AND parent_pnr_number != ''")
+  scope :extra_pay, where("orders.pnr_number = '' AND parent_pnr_number != '' AND payment_status = 'blocked'")
 
 
   scope :stale, lambda {
@@ -496,9 +505,7 @@ class Order < ActiveRecord::Base
   end
 
   def money_blocked!
-    update_attribute(:fix_price, true)
-    update_attribute(:payment_status, 'blocked')
-    self.fix_price = true
+    update_attributes(fix_price: true, payment_status: 'blocked')
   end
 
   def money_received!
