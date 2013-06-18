@@ -2,6 +2,7 @@
 class Payment < ActiveRecord::Base
 
   include TypusPayment
+  include PaymentAttrs
 
   # дефолтные издержки на транзакцию
   def self.commission
@@ -83,6 +84,8 @@ class Payment < ActiveRecord::Base
   PAYTURE = ['PaytureCharge', 'PaytureRefund']
   CASH =    ['CashCharge', 'CashRefund']
   CARDS =   PAYU + PAYTURE
+  # для документации, сюда указывает yard'овский @see-тег
+  ALLTYPES = CHARGES + REFUNDS
 
   scope :payu, where(:type => PAYU)
   scope :payture, where(:type => PAYTURE)

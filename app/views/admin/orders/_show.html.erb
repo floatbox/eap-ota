@@ -73,4 +73,7 @@ URL для оплаты: <%= link_to edit_payment_url(:code => @item.code), edit
 <% if @item.ticket_status == 'ticketed' %>
   <td><%= button_to 'Обновить билеты', {:action => 'reload_tickets', :id => @item.id} %></td>
 <% end %>
+<% if @item.ok_to_auto_ticket? %>
+  <td><%= button_to 'Отменить автоматическую выписку', {:action => 'cancel_auto_ticketing', :id => @item.id} %></td>
+<% end %>
 </tr> </table>

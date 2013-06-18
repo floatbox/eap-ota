@@ -223,7 +223,8 @@ ru:
         one: "с другим <span class=\"ossi-segment\">перелётом %{direction}</span>"
         few: "с другими перелётами %{direction}"
     price:
-      buy: "Купить за {0}"
+      buy: "Купить"
+      buy_for: "Купить за {0}"      
       one: ""
       few: "цена за всех пассажиров"
       one_with_fee: "итоговая цена<br>со всеми сборами"

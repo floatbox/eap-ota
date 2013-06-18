@@ -1,5 +1,6 @@
 # encoding: utf-8
 class Ticket < ActiveRecord::Base
+
   include Rails.application.routes.url_helpers
   include CopyAttrs
   include TicketAttrs

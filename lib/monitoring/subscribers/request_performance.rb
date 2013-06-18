@@ -16,46 +16,46 @@ module Monitoring
 
         ## отсылка метрик в graphite
         # total
-        Monitoring.gauge(
+        ::Monitoring.gauge(
           service: "#{key_base}.total_duration",
           metric: event.duration
         )
-        Monitoring.histogram(
+        ::Monitoring.histogram(
           service: "#{key_base}.hist.total_duration",
           metric: event.duration
         )
 
         # db time
-        Monitoring.gauge(
+        ::Monitoring.gauge(
           service: "#{key_base}.db_time",
           metric: event.payload[:db_runtime]
         )
-        Monitoring.histogram(
+        ::Monitoring.histogram(
           service: "#{key_base}.hist.db_time",
           metric: event.payload[:db_runtime]
         )
 
         # mongo time
-        Monitoring.gauge(
+        ::Monitoring.gauge(
           service: "#{key_base}.mongo_time",
           metric: event.payload[:mongo_runtime]
         )
-        Monitoring.histogram(
+        ::Monitoring.histogram(
           service: "#{key_base}.hist.mongo_time",
           metric: event.payload[:mongo_runtime]
         )
 
         # view time
-        Monitoring.gauge(
+        ::Monitoring.gauge(
           service: "#{key_base}.view_time",
           metric: event.payload[:view_runtime]
         )
-        Monitoring.histogram(
+        ::Monitoring.histogram(
           service: "#{key_base}.hist.view_time",
           metric: event.payload[:view_runtime]
         )
 
-        Monitoring.meter(service: "#{key_base}.status.#{status}")
+        ::Monitoring.meter(service: "#{key_base}.status.#{status}")
       end
     end
   end

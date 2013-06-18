@@ -42,9 +42,10 @@ booking.load = function(number, price_changed) {
     }, function(content) {
         window.location.hash = number;
         that.view(content);
-        var price = I18n.t('currencies.RUR', {count: Number(that.content.find('.bf-newprice').attr('data-price'))});
+        var price = decoratePrice(I18n.t('currencies.RUR', {count: Number(that.content.find('.bf-newprice').attr('data-price'))}));
         var button = $('#obb-template');
-        button.find('.obb-title').html(I18n.t('offer.price.buy').absorb(price)).click(function() {
+        var priceTemplate = '<div class="obbt-sum">{0}</div><div class="obbt-buy">' + I18n.t('offer.price.buy') + '</div>';
+        button.find('.obb-title').html(priceTemplate.absorb(price)).click(function() {
             $w.smoothScrollTo(that.form.el.offset().top);
             $w.queue(function(next) {
                 $('#bfp0-last-name').focus();

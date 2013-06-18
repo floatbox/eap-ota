@@ -56,7 +56,7 @@ prebook: function(offer) {
     if (!offer.details || offer.details.is(':hidden')) {
         offer.showDetails();
     }
-    $w.smoothScrollTo(offer.details.offset().top - 52 - 36 - 92);
+    $w.smoothScrollTo(offer.details.offset().top - 52 - 36 - 92 - 88); // 88 таймер в форме 
     this.variant = offer.selected;
     this.offer = offer;
     _kmq.push(['record', 'RESULTS: variant selected']);

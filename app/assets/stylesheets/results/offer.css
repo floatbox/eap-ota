@@ -24,35 +24,42 @@
     letter-spacing: -0.03em;
 }
 .obb-side {
-    height: 42px;
+    height: 39px;
     background: url(/images/results/book.png) no-repeat;
 }
 .obb-left {
     position: absolute;
-    top: -2px;
-    left: -2px;
+    top: -1px;
+    left: -1px;
     width: 100%;
-    padding-right: 6px;
+    padding-right: 2px;
     background-position: 100% 0;    
 }
 .obb-right {
-    margin-right: 19px;
+    margin-right: 18px;
 }
 .obb-title {
     position: relative;
     z-index: 1;
-    padding: 8px 17px 8px 18px;
-    border-radius: 18px;
+    border-radius: 5px;
     font-weight: bold;
     color: #FFF;
-    text-shadow: rgba(0, 0, 0, 0.3) 1px 1px 0;    
+    text-shadow: rgba(0, 0, 0, 0.3) -1px -1px 0;    
     cursor: pointer;
+}
+.obbt-sum,
+.obbt-buy {
+    float: left;
+    padding: 8px 17px 9px 18px;
+}
+.obbt-buy {
+    background: url(/images/results/book.png) no-repeat -350px -1px;
 }
 .ob-state {
     margin-right: 190px;
     padding: 8px 0;
     font-size: 13px;
-    height: 20px;
+    height: 21px;
 }
 .obst-wrapper {
     float: left;
@@ -93,7 +100,7 @@
 /* Fixed price */
 .ob-placeholder {
     position: relative;
-    height: 52px;
+    height: 53px;
     margin-left: 16px;
     background: #F8F8F6;
 }
@@ -168,15 +175,18 @@
     background: url(/images/booking/progress-w.gif) no-repeat 100% 0;
 }
 .ob-disabled .obb-left {
-    background-position: 100% -45px;
+    background-position: 100% -40px;
 }
 .ob-disabled .obb-right {
-    background-position: 0 -45px;
+    background-position: 0 -40px;
 }
 .ob-disabled .obb-title {
     color: #b8b8b8;
     text-shadow: none;
     cursor: default;
+}
+.ob-disabled .obbt-buy {
+    background-position: -350px -41px;
 }
 
 /* Failed booking */

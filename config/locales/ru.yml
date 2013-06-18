@@ -117,6 +117,7 @@ ru:
         section_general_info: "Информация о заказе"
         section_recalculation: "Расчет цены"
         section_state_and_control: "Состояние и управление заказом"
+        no_auto_ticket_reason: "Причина отключения автоматического тикетирования"
         <<: *PRICING_ATTRIBUTES
       ticket:
         code: "Серия"
@@ -175,6 +176,7 @@ ru:
   Extra Pay: Доплаты
   Sent Manual: Ручной режим
   Assigned To Me: Назначенo мне
+  For manual ticketing: Требует ручной выписки
 
   Uncomplete: Неполные данные
 

@@ -2,60 +2,63 @@
 module Amadeus
   module Response
     class FareMasterPricerTravelBoardSearch < Amadeus::Response::Base
+      include Monitoring::Benchmarkable
 
       def recommendations
-        xpath("//r:recommendation").map do |rec|
-          price_total, price_tax =
-            rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").every.to_f
-          price_fare = price_total - price_tax
-          blank_count = rec.xpath(".//r:traveller").count
-          cabins =
-            rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:cabin").every.to_s
-          booking_classes =
-            rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:rbd").every.to_s
-          availabilities =
-            rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:avlStatus").every.to_s
+        benchmark 'search recommendations' do
+          xpath("//r:recommendation").map do |rec|
+            price_total, price_tax =
+              rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").every.to_f
+            price_fare = price_total - price_tax
+            blank_count = rec.xpath(".//r:traveller").count
+            cabins =
+              rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:cabin").every.to_s
+            booking_classes =
+              rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:rbd").every.to_s
+            availabilities =
+              rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:avlStatus").every.to_s
 
-          validating_carrier_iata =
-            rec.xpath("r:paxFareProduct/r:paxFareDetail/r:codeShareDetails[r:transportStageQualifier='V']/r:company").to_s
+            validating_carrier_iata =
+              rec.xpath("r:paxFareProduct/r:paxFareDetail/r:codeShareDetails[r:transportStageQualifier='V']/r:company").to_s
 
-          # иногда не все. возможно, только основного перевозчика на маршруте
-          marketing_carrier_iatas =
-            rec.xpath("r:paxFareProduct/r:paxFareDetail/r:codeShareDetails/r:company").every.to_s
-          last_tkt_date =
-            rec.xpath("r:paxFareProduct/r:fare/r:pricingMessage[r:freeTextQualification/r:textSubjectQualifier = 'LTD']/r:description").every.to_s.find{|str| str.scan(/\d/).present?}
-          last_tkt_date = Date.parse(last_tkt_date) if last_tkt_date
+            # иногда не все. возможно, только основного перевозчика на маршруте
+            marketing_carrier_iatas =
+              rec.xpath("r:paxFareProduct/r:paxFareDetail/r:codeShareDetails/r:company").every.to_s
+            last_tkt_date =
+              rec.xpath("r:paxFareProduct/r:fare/r:pricingMessage[r:freeTextQualification/r:textSubjectQualifier = 'LTD']/r:description").every.to_s.find{|str| str.scan(/\d/).present?}
+            last_tkt_date = Date.parse(last_tkt_date) if last_tkt_date
 
-          variants = rec.xpath("r:segmentFlightRef").map {|sf|
-            segments = sf.xpath("r:referencingDetail[r:refQualifier='S']").each_with_index.collect { |rd, i|
-              flight_indexes[i][ rd.xpath("r:refNumber").to_i - 1 ]
+            variants = rec.xpath("r:segmentFlightRef").map {|sf|
+              segments = sf.xpath("r:referencingDetail[r:refQualifier='S']").each_with_index.collect { |rd, i|
+                flight_indexes[i][ rd.xpath("r:refNumber").to_i - 1 ]
+              }
+              Variant.new( :segments => segments )
             }
-            Variant.new( :segments => segments )
-          }
 
-          additional_info =
-            rec.xpath('.//r:fare').map {|f|
-              f.xpath('.//r:description|.//r:textSubjectQualifier').every.to_s.join("\n")
-            }.join("\n\n") +
-            "\n\nfareBasis: " +
-            rec.xpath('.//r:fareBasis').to_s
+            additional_info =
+              rec.xpath('.//r:fare').map {|f|
+                f.xpath('.//r:description|.//r:textSubjectQualifier').every.to_s.join("\n")
+              }.join("\n\n") +
+              "\n\nfareBasis: " +
+              rec.xpath('.//r:fareBasis').to_s
 
-          #cabins остаются только у recommendation и не назначаются flight-ам,
-          # тк на один и тот же flight продаются билеты разных классов
-          Recommendation.new(
-            :source => 'amadeus',
-            :blank_count => blank_count,
-            :price_fare => price_fare,
-            :price_tax => price_tax,
-            :variants => variants,
-            :validating_carrier_iata => validating_carrier_iata,
-            :suggested_marketing_carrier_iatas => marketing_carrier_iatas,
-            :additional_info => additional_info,
-            :cabins => cabins,
-            :booking_classes => booking_classes,
-            :availabilities => availabilities,
-            :last_tkt_date => last_tkt_date
-          )
+            #cabins остаются только у recommendation и не назначаются flight-ам,
+            # тк на один и тот же flight продаются билеты разных классов
+            Recommendation.new(
+              :source => 'amadeus',
+              :blank_count => blank_count,
+              :price_fare => price_fare,
+              :price_tax => price_tax,
+              :variants => variants,
+              :validating_carrier_iata => validating_carrier_iata,
+              :suggested_marketing_carrier_iatas => marketing_carrier_iatas,
+              :additional_info => additional_info,
+              :cabins => cabins,
+              :booking_classes => booking_classes,
+              :availabilities => availabilities,
+              :last_tkt_date => last_tkt_date
+            )
+          end
         end
       end
 
