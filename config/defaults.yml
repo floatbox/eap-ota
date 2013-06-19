@@ -13,6 +13,12 @@ site:
     host: 'https://staging.eviterra.com'
   test:
     host: 'http://localhost:3000'
+  auto_ticketing:
+    enabled: no
+    exclude_list:
+      aviacenter: []
+      downtown: []
+      direct: []
 api:
   enabled: yes
   store_rambler_cache: no
@@ -137,6 +143,18 @@ ohmystats:
     enabled: yes
     project_id: qsxfvashjzioiwazcryxlgysgjuitwyfaasjvkiv
 riemann:
-  host: riemann.eviterra.com
+  enabled: no
+  #host: riemann.eviterra.com
+  host: 198.199.124.27
+  benchmarking: no
+  request_performance: no
+  stat_counters: no
+  meter: no
   test:
     host: localhost
+  production:
+    enabled: yes
+    benchmarking: yes
+    request_performance: yes
+    stat_counters: yes
+    meter: yes

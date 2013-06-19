@@ -80,6 +80,11 @@ gem 'thin', :require => false
 gem 'passenger', :require => false
 gem 'unicorn', :require => false
 
+group :development do
+  gem 'yard'
+  gem 'yard-activerecord'
+end
+
 group :test do
   gem 'rspec-rails'
   gem 'cucumber-rails', :require => false
@@ -90,7 +95,7 @@ group :test do
   gem 'rb-inotify', :require => false
   gem 'rb-fsevent', :require => false
   gem 'rb-fchange', :require => false
-  gem 'growl' # for OSX
+  # gem 'growl' # for OSX
   # for linux
   gem 'libnotify', :require => false
   gem 'guard-spork'
@@ -102,6 +107,8 @@ group :test do
 
   gem 'vcr'
   gem 'webmock'
+  # тестирование завтрашних комиссий
+  gem 'timecop'
 end
 
 group :debug do

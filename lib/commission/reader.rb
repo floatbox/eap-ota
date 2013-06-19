@@ -41,13 +41,17 @@ class Commission::Reader
     self.carrier_default_opts = def_opts
   end
 
-  def carrier carrier, carrier_name=nil
+  # Открывает блок правил по конкретной авиакомпании
+  # @param carrier [String] IATA код авиакомпании
+  # @param carrier_name [String] вторым аргументом может быть название авиакомпании. Это просто комментарий сейчас.
+  #   Выкидываем.
+  # @param opts [Hash] carrier_defaults
+  def carrier carrier, *opts
+    opts.shift if opts.first.is_a? String
     if carrier =~ /\A..\Z/
       @carrier = carrier
-      @carrier_name = carrier_name
       self.opts={}
-      self.carrier_default_opts={}
-      @last_commission_number = 1
+      self.carrier_default_opts = opts.last || {}
     else
       raise ArgumentError, "strange carrier: #{carrier}"
     end
@@ -60,35 +64,40 @@ class Commission::Reader
       raise ArgumentError, "strange commission: #{arg}"
     end
 
-    commission = Commission::Rule.new({
+    make_commission(
       :carrier => @carrier,
       :agent => vals[0],
       :subagent => vals[1],
       :source => caller_address
-    }.merge(opts).reverse_merge(carrier_default_opts).reverse_merge(default_opts))
-
-    commission.correct!
-
-    self.opts = {}
-    book.register commission
+    )
   end
 
   # заглушка для example который _не должны_ найти комиссию
   def no_commission(reason=true)
     # opts здесь по идее содержит только examples
-    commission = Commission::Rule.new({
+    make_commission(
       :carrier => @carrier,
       :source => caller_address,
       :no_commission => reason
-    }.merge(opts).reverse_merge(carrier_default_opts).reverse_merge(default_opts))
+    )
+  end
 
-    # FIXME временно выключаю, потому что корректоры у нас пока работают только с числами
-    # а их тут нет.
-    # commission.correct!
+  def make_commission(attrs)
+    attrs = attrs.merge(opts).reverse_merge(carrier_default_opts).reverse_merge(default_opts)
+    cast_attrs! attrs
+    commission = Commission::Rule.new(attrs)
+    commission.correct!
 
     self.opts = {}
     book.register commission
   end
+  private :make_commission
+
+  def cast_attrs!(attrs)
+    attrs[:strt_date] &&= attrs[:strt_date].to_date
+    attrs[:expr_date] &&= attrs[:expr_date].to_date
+  end
+  private :cast_attrs!
 
   # параметры конкретных правил
   # задаются после carrier,
@@ -106,8 +115,6 @@ class Commission::Reader
 
   # правило интерлайна
   def interline *values
-    # шорткат для interline без параметров
-    values = [:yes] if values.empty?
     opts[:interline] = values
   end
 
@@ -165,16 +172,25 @@ class Commission::Reader
     opts[:examples] << [str, caller_address]
   end
 
-  def check &block
-    opts[:check] = block
+  def check(check_text=nil, &block)
+    # TODO включить после перехода
+    # raise ArgumentError, "check block should be given as String" unless check_text
+    block_text =
+      "lambda do |recommendation|
+        #{ check_text }
+      end"
+    # сдвиг (- 5) подобран руками для тестов. но в комиссиях срабатывает - 1. почему?
+    block = eval(block_text, nil, caller_file, caller_line - 1) if check_text
+    opts[:check] = check_text || '# COMPILED'
+    opts[:check_proc] = block
   end
 
   def expr_date date
-    opts[:expr_date] = date
+    opts[:expr_date] = date.to_date
   end
 
   def strt_date date
-    opts[:strt_date] = date
+    opts[:strt_date] = date.to_date
   end
 
   # дополнительные опции, пока без обработки
@@ -208,6 +224,14 @@ class Commission::Reader
   def caller_address level=1
     caller[level] =~ /:(\d+)/
     $1 || 'unknown'
+  end
+
+  def caller_file level=1
+    caller[level].split(':')[0]
+  end
+
+  def caller_line level=1
+    caller[level].split(':')[1].to_i
   end
 
 end

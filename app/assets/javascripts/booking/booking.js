@@ -56,7 +56,7 @@ prebook: function(offer) {
     if (!offer.details || offer.details.is(':hidden')) {
         offer.showDetails();
     }
-    $w.smoothScrollTo(offer.details.offset().top - 52 - 36 - 92);
+    $w.smoothScrollTo(offer.details.offset().top - 52 - 36 - 92 - 88); // 88 таймер в форме 
     this.variant = offer.selected;
     this.offer = offer;
     _kmq.push(['record', 'RESULTS: variant selected']);
@@ -274,25 +274,32 @@ start: function() {
     var from = new Date().getTime();
     this.el = booking.el.find('.bf-timer');
     this.counter = this.el.find('.bft-counter');
-    this.value = this.el.find('.bftc-value');
     this.timer = setInterval(function() {
         var now = new Date().getTime();
         var time = Math.max(0, 1200 - Math.round((now - from) / 1000));
-        that.show(time);
         if (time === 0) {
+            that.expire();
             that.stop();
+        } else {
+            that.show(time);
         }
-    }, 1000);
-    this.expires = false;
+    }, 5000);
+    this.minutes = undefined;
+    this.show(1200);
 },
 show: function(time) {
-    var m = Math.floor(time / 60);
-    var s = time % 60;
-    this.value.text((m < 10 ? '0:0' : '0:') + m + (s < 10 ? ':0' : ':') + s);
-    if (time < 300 && !this.expires) {
-        this.counter.addClass('bft-expires');
-        this.expires = true;
+    var minutes = Math.ceil(time / 60);
+    if (minutes !== this.minutes) {
+        this.minutes = minutes;
+        this.counter.html(I18n.t('time.minutes', {count: minutes}));
+        if (minutes === 5) {
+            this.counter.addClass('bft-expires');
+        }
     }
+},
+expire: function() {
+    this.el.find('.bft-title').html(I18n.t('booking.countdown.expired.title'));
+    this.el.find('.bft-description').html(I18n.t('booking.countdown.expired.description'));
 },
 stop: function() {
     clearInterval(this.timer);

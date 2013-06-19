@@ -5,12 +5,17 @@ class Order < ActiveRecord::Base
   include Pricing::Order
   extend MoneyColumns
   include TypusOrder
+  include OrderAttrs
 
   scope :MOWR228FA, lambda { by_office_id 'MOWR228FA' }
   scope :MOWR2233B, lambda { by_office_id 'MOWR2233B' }
   scope :MOWR221F9, lambda { by_office_id 'MOWR221F9' }
   scope :MOWR2219U, lambda { by_office_id 'MOWR2219U' }
   scope :FLL1S212V, lambda { by_office_id 'FLL1S212V' }
+  scope :for_manual_ticketing, lambda { where("payment_status IN ('blocked', 'charged') AND
+    ticket_status IN ('booked', 'processing_ticket') AND
+    pnr_number != '' AND
+    (NOT auto_ticket OR created_at < ?)", Time.now - 40.minutes ) }
 
   has_money_helpers :original_price_fare, :original_price_tax
 
@@ -40,6 +45,11 @@ class Order < ActiveRecord::Base
     ['not blocked', 'blocked', 'charged', 'new', 'pending', 'unblocked']
   end
 
+  # booked - создана бронь, билеты еще не выписаны
+  # canceled - отмена брони без билетов
+  # processing_ticket - билеты отправлены на выписку, но еще не выписаны
+  # error_ticket - билеты были отправлены на выписку, но не были выписаны до таймаута
+  # ticketed - билеты были выписаны
   def self.ticket_statuses
     [ 'booked', 'canceled', 'ticketed', 'processing_ticket', 'error_ticket']
   end
@@ -84,7 +94,7 @@ class Order < ActiveRecord::Base
   # фейковый текст для маршрут-квитанций. может быть, вынести в хелпер?
   PAID_BY = {'card' => 'Invoice', 'delivery' => 'Cash', 'cash' => 'Cash', 'invoice' => 'Invoice'}
 
-  attr_writer :itinerary_receipt_view, :tickets_are_loading
+  attr_writer :itinerary_receipt_view
 
   extend Commission::Columns
   has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount, :commission_our_markup
@@ -135,6 +145,12 @@ class Order < ActiveRecord::Base
       self.price_acquiring_compensation = price_payment_commission if !fix_price
       self.price_difference = fix_price? ? price_with_payment_commission - price_real : 0
     end
+  end
+
+  def ok_to_auto_ticket?
+    auto_ticket && ticket_status == 'booked' &&
+      ['blocked', 'charged'].include?(payment_status) &&
+      Conf.site.auto_ticketing['enabled']
   end
 
   def has_data_in_tickets?
@@ -207,7 +223,7 @@ class Order < ActiveRecord::Base
   scope :ticket_not_sent, where("orders.pnr_number != '' AND email_status != 'ticket_sent' AND ticket_status = 'ticketed'").where("orders.created_at > ?", 10.days.ago)
   scope :sent_manual, where(:email_status => 'manual')
   scope :reported, where(:payment_status => ['blocked', 'charged'], :offline_booking => false).where("orders.pnr_number != ''")
-  scope :extra_pay, where("orders.pnr_number = '' AND parent_pnr_number != ''")
+  scope :extra_pay, where("orders.pnr_number = '' AND parent_pnr_number != '' AND payment_status = 'blocked'")
 
 
   scope :stale, lambda {
@@ -264,6 +280,8 @@ class Order < ActiveRecord::Base
     PAID_BY[payment_type]
   end
 
+  # FIXME ни разу не очевидно
+  # генерит Order из OrderForm
   def order_form= order_form
     recommendation = order_form.recommendation
     copy_attrs order_form, self,
@@ -334,7 +352,6 @@ class Order < ActiveRecord::Base
   def load_tickets(check_count = false)
     ticket_hashes = strategy.get_tickets
     if !check_count || !blank_count || ticket_hashes.length >= blank_count
-      @tickets_are_loading = true
       ticket_hashes.each do |th|
         if (th[:office_id].blank? || Ticket.office_ids.include?(th[:office_id])) &&
             !tickets.find_by_number(th[:number])
@@ -344,7 +361,6 @@ class Order < ActiveRecord::Base
 
       #Необходимо, тк t.update_attributes глючит при создании билетов (не обновляет self.tickets)
       tickets.reload
-      @tickets_are_loading = false
       true
     else
       false
@@ -358,13 +374,19 @@ class Order < ActiveRecord::Base
 
   def recalculate_prices
     #считаем, что в данном случае не бывает обменов/возвратов, иначе с ценами будет полная жопа
+    return if old_booking || !has_data_in_tickets?
     if tickets.present? && tickets.all?{|t| t.kind == 'ticket' && t.status == 'ticketed'}
       if fix_price?
         tickets.every.save
       else
         sum_and_copy_attrs sold_tickets, self,
           :price_fare,
-          :price_tax
+          :price_tax,
+          :price_consolidator,
+          :price_blanks,
+          :price_discount,
+          :price_our_markup,
+          :price_operational_fee
         self.price_difference = 0
         calculate_price_with_payment_commission
         save
@@ -382,7 +404,7 @@ class Order < ActiveRecord::Base
   def update_prices_from_tickets
     tickets.reload
     # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
-    return if old_booking || @tickets_are_loading || $tickets_are_loading || !has_data_in_tickets?
+    return if old_booking || !has_data_in_tickets?
     price_total_old = self.price_total
 
     sum_and_copy_attrs sold_tickets, self,
@@ -514,9 +536,7 @@ class Order < ActiveRecord::Base
   end
 
   def money_blocked!
-    update_attribute(:fix_price, true)
-    update_attribute(:payment_status, 'blocked')
-    self.fix_price = true
+    update_attributes(fix_price: true, payment_status: 'blocked')
   end
 
   def money_received!
@@ -549,9 +569,7 @@ class Order < ActiveRecord::Base
   end
 
   def update_price_with_payment_commission_in_tickets
-    @tickets_are_loading = true
     tickets.map{|t| t.update_attributes(corrected_price: t.price_with_payment_commission) unless t.corrected_price}
-    @tickets_are_loading = false
   end
 
   def reload_tickets

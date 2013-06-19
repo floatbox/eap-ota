@@ -5,7 +5,7 @@ class Airplane < ActiveRecord::Base
   has_paper_trail
 
   def self.engine_types
-    { 'Реактивный' => 'jet','Турбовинтовой' => 'prop', 'Поезд' => 'train', 'Автобус' => 'bus' }
+    { 'Реактивный' => 'jet','Турбовинтовой' => 'prop', 'Поезд' => 'train', 'Автобус' => 'bus', 'Вертолет' => 'heli' }
   end
 
   validates_inclusion_of :engine_type, :in => engine_types.values

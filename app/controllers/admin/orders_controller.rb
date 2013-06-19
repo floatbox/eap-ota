@@ -3,7 +3,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
   include CustomCSV
   include Typus::Controller::Bulk
 
-  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :edit_ticketed, :ticket, :cancel, :reload_tickets, :update, :pnr_raw, :void, :make_payable_by_card, :send_invoice, :ticket_in_ticketing_office, :manual_notice, :show_commission, :recalculate_prices]
+  before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :edit_ticketed, :ticket, :cancel, :reload_tickets, :update, :pnr_raw, :void, :make_payable_by_card, :send_invoice, :ticket_in_ticketing_office, :manual_notice, :show_commission, :recalculate_prices, :cancel_auto_ticketing]
 
   # def set_scope
   #   # добавлять фильтры лучше в def index и т.п., но так тоже работает (пока?)
@@ -29,6 +29,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
     add_predefined_filter 'MOWR221F9', {:scope => 'MOWR221F9'}
     add_predefined_filter 'MOWR2219U', {:scope => 'MOWR2219U'}
     add_predefined_filter 'FLL1S212V', {:scope => 'FLL1S212V'}
+    add_predefined_filter 'For manual ticketing', {:scope => 'for_manual_ticketing'}, 'for_manual_ticketing'
     # FIXME для наших дейт-фильтров нужен формат 2012/2/21 вместо 2012-02-21
     #add_predefined_filter 'Today', {:created_at => Date.today.to_s(:db)}
     #add_predefined_filter 'Yesterday', {:created_at => Date.yesterday.to_s(:db)}
@@ -121,6 +122,15 @@ class Admin::OrdersController < Admin::EviterraResourceController
   def charge
     if @order.charge!
       flash[:notice] = 'Деньги списаны с карты'
+    else
+      flash[:alert] = "Произошла ошибка"
+    end
+    redirect_to :action => :show, :id => @order.id
+  end
+
+  def cancel_auto_ticketing
+    if @order.ok_to_auto_ticket?
+      @order.update_attributes(auto_ticket: false)
     else
       flash[:alert] = "Произошла ошибка"
     end

@@ -12,7 +12,6 @@ module Handsoap
       Rails.logger
     end
 
-    include CurlHelper
     include KeyValueInit
 
     attr_accessor :enable_cookies, :multi, :timeout, :connect_timeout, :follow_redirects
@@ -28,10 +27,10 @@ module Handsoap
     # raises Curl::Err::*
     def send_http_request(request)
       req = curl_request(request)
-      req.perform
+      ActiveSupport::Notifications.instrument 'request.curl', curl: req do
+        req.perform
+      end
       parse_http_part(req.header_str.gsub(/^HTTP.*\r\n/, ""), req.body_str, req.response_code, req.content_type)
-    ensure
-      logger.info "#{self.class.name}: " + debug_easy(req)
     end
 
     def send_http_request_async(request)
@@ -39,11 +38,11 @@ module Handsoap
       deferred = Handsoap::Deferred.new
       # returns Curl::Err::* and message
       req.on_failure do |klass, msg|
-        logger.info "#{self.class.name}: " + debug_easy(req)
+        ActiveSupport::Notifications.instrument 'request.curl', curl: req
         deferred.trigger_errback [klass, msg]
       end
       req.on_success do
-        logger.info "#{self.class.name}: " + debug_easy(req)
+        ActiveSupport::Notifications.instrument 'request.curl', curl: req
         http_response = parse_http_part(req.header_str.gsub(/^HTTP.*\r\n/, ""), req.body_str, req.response_code, req.content_type)
         deferred.trigger_callback http_response
       end

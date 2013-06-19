@@ -32,9 +32,10 @@
 #results-button {
     float: right;
     position: relative;
+    top: -1px;
     font-weight: bold;
-    font-size: 20px;
-    line-height: 36px;
+    font-size: 19px;
+    line-height: 37px;
     letter-spacing: -0.03em;
     cursor: default;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -48,7 +49,7 @@
     color: #73757A;
 }
 .rb-disabled .rb-side {
-    height: 36px;
+    height: 37px;
     margin-right: 20px;
     padding: 0 15px 0 35px;
     background-position: 0 -45px;
@@ -68,11 +69,11 @@
 .rb-active {
     position: absolute;
     left: 1px; top: 1px;
-    height: 36px;
+    height: 37px;
     padding: 0 35px;
-    border-radius: 18px;
+    border-radius: 5px;
     color: #FFF;
-    text-shadow: rgba(0, 0, 0, 0.3) 1px 1px 0;
+    text-shadow: rgba(0, 0, 0, 0.3) -1px -1px 0;
     cursor: pointer;
 }
 
