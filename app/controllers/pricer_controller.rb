@@ -118,7 +118,15 @@ class PricerController < ApplicationController
         @destination.move_average_price @search, @recommendations.first, @query_key
       end
       Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))
-      logger.info "Recommendations left after removing unprofitable(#{partner4stat}): #{@recommendations.count}"
+
+      recommendations_total = @recommendations.count
+
+      # recommendations monitoring
+      ActiveSupport::Notifications.instrument :meter,
+        value: recommendations_total,
+        key: "meter.api_total_recommendations"
+
+      logger.info "Recommendations left after removing unprofitable(#{partner4stat}): #{recommendations_total}"
       StatCounters.inc %W[search.api.success search.api.#{partner4stat}.success]
       logger.info "Increment counter search.api.success for partner #{partner4stat}"
       StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner4stat}.total] if @destination
