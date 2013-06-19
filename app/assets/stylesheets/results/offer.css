@@ -25,7 +25,7 @@
 }
 .obb-side {
     height: 39px;
-    background: url(/images/results/book.png) no-repeat;
+    background: url(/images/results/book.png?2) no-repeat;
 }
 .obb-left {
     position: absolute;
@@ -53,7 +53,7 @@
     padding: 8px 17px 9px 18px;
 }
 .obbt-buy {
-    background: url(/images/results/book.png) no-repeat -350px -1px;
+    background: url(/images/results/book.png?2) no-repeat -350px -1px;
 }
 .ob-state {
     margin-right: 190px;
