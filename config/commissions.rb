@@ -2131,33 +2131,75 @@ carrier "PS", "Ukraine International Airlines (ГЛОНАСС)"
 
 example 'svocdg'
 example 'svocdg cdgsvo'
-agent    "9% от опубл. тарифов на собств.рейсы PS"
-subagent "8.5% от опубл. тарифов на собств.рейсы PS"
-check { not includes(city_iatas.first, 'IEV') and not includes_only(city_iatas, 'MOW IEV') }
+strt_date "20.06.2013"
+agent "Для перевозок, содержащих участок в/из пунктов РФ:
+5% (3%) (3%) от тарифа Эконом класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) при наличии участков из/в Москвы;"
+subagent ""
+check { includes(country_iatas, 'RU') and includes(city_iatas, 'MOW') }
+discount "3%"
+commission "5%/3%"
+
+example 'ledcdg'
+example 'ledcdg cdgled'
+strt_date "20.06.2013"
+agent "7% (5%) (5%) от тарифа Эконом класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) при наличии участков из/в пунктов в РФ, кроме Москвы;"
+subagent ""
+check { includes(country_iatas, 'RU') and not includes(city_iatas, 'MOW') }
+discount "5%"
+commission "7%/5%"
+
+example 'svocdg/business'
+example 'svocdg/business cdgsvo/business'
+strt_date "20.06.2013"
+agent    "9% (7%) (7%) от тарифа Бизнес класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) из/в пунктов в РФ;"
+subagent ""
+classes :business
+check { includes(country_iatas, 'RU') }
+important!
 discount "7.2%"
 commission "9%/8.5%"
 
-example 'ievsvo'
-strt_date "10.04.2014"
-agent "5 % (3%) для перевозок по маршруту Киев-Москва;"
-subagent "5 % (3%) для перевозок по маршруту Киев-Москва;"
-check { includes(city_iatas.first, 'IEV') and includes_only(city_iatas, 'MOW IEV') }
-discount "2%"
-commission "5%/3%"
-
 example 'cdgsvo svocdg/ab'
-strt_date "10.04.2014"
+strt_date "20.06.2013"
 agent "5% от опубл. тарифов на рейсы Interline c обязательным участком PS"
 subagent "3% от опубл. тарифов на рейсы Interline c обязательным участком PS"
 interline :yes
-discount "2%"
+check { includes(country_iatas, 'RU') }
+discount "3%"
 commission "5%/3%"
 
 example 'cdgsvo/ab'
-strt_date "12.10.2012"
+strt_date "20.06.2013"
 agent "0% от опубл. тарифов на рейсы Interline без участка PS"
 subagent "0% от опубл. тарифов на рейсы Interline без участка PS"
 interline :absent
+check { includes(country_iatas, 'RU') }
+commission "0%/0%"
+
+# для несодержащих РФ перевозок
+
+example 'ievcdg'
+strt_date "20.06.2013"
+agent "1% (5 руб+2%сбор АЦ) (скидки нет) от тарифа на собственных и совместных рейсах Авиакомпании под кодом PS (566)"
+subagent "5 р"
+check { not includes(country_iatas, 'RU') }
+commission "1%/5"
+
+example 'cdgiev ievcdg/ab'
+strt_date "20.06.2013"
+agent "1% (5 руб+2%сбор АЦ) (скидки нет) от тарифа на рейсы Interline с участком PS;"
+subagent "5р + 2% сбор ац"
+interline :yes
+check { not includes(country_iatas, 'RU') }
+discount "3%"
+commission "5%/3%"
+
+example 'cdgiev/ab'
+strt_date "20.06.2013"
+agent "0% от опубл. тарифов на рейсы Interline без участка PS"
+subagent "0% от опубл. тарифов на рейсы Interline без участка PS"
+interline :absent
+check { not includes(country_iatas, 'RU') }
 commission "0%/0%"
 
 carrier "QF", "QANTAS AIRWAYS (не BSP!!!)"
