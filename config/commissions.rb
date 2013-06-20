@@ -27,7 +27,6 @@ ticketing_method "aviacenter"
 ## our_markup 100
 consolidator "2%"
 check { not includes_only(country_iatas.first, 'RU') }
-consolidator "2%"
 commission "1eur/5"
 
 example "cdgsvo/ab"
@@ -39,7 +38,6 @@ ticketing_method "aviacenter"
 consolidator "2%"
 #discount '5'
 ## our_markup 100
-consolidator "2%"
 commission "1eur/5"
 
 example "svocdg"
@@ -64,7 +62,6 @@ interline :absent
 ticketing_method "aviacenter"
 #discount '5'
 ## our_markup 100
-consolidator "2%"
 consolidator "2%"
 commission "1eur/5"
 
@@ -129,7 +126,6 @@ expr_date "20.06.2013"
 agent "C 21.05.13г. 6% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K;"
 subagent "4%"
 subclasses "YHQBK"
-ticketing_method "aviacenter"
 ticketing_method "aviacenter"
 discount "3.3%"
 # disabled "На DTT выгодней"
@@ -211,7 +207,6 @@ agent "12% до особых указаний от всех опубл. тари
 agent "12% Oт всех применяемых опубликованных тарифов на собственные  регулярные рейсы между Москвой и Пекином/Майами/Нью-Йорком (OW,RT)  и на сквозные перевозки между пунктами полетов АК  «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW,RT)."
 subagent "11% до особых указаний от всех опубл. тарифов (OW/RT) на собств. ПРЯМЫЕ рейсы UN между Москвой и городами:Нью-Йорк/ Майами/ Лос-Анджелес/ Пекин;"
 subagent "11% от всех применяемых опубликованных тарифов между Москвой и Пекином/Майами/Нью-Йорком (OW.RT) и на сквозные перевозки между пунктами полетов АК «ТРАНСАЭРО» на территориях России, Украины, Казахстана, Узбекистана и Пекином/Майами/Нью-Йорком (OW.RT). (Через АСБ «GABRIEL»: установлен специальный «Код тура» NEWDE10 при продаже перевозок с полетными сегментами между Москвой-Майами/Нью-Йорком (OW/RT). СУБАГЕНТ обязан внести «Код тура» NEWDE10 для автоматического начисления комиссии.)"
-ticketing_method "aviacenter"
 check { includes(city_iatas, %W(NYC MIA LAX)) and includes(city_iatas, 'MOW') and includes(country_iatas, %W(RU UA KZ UZ AM)) }
 # FIX кривой и не полный чек
 discount "9%"
@@ -276,7 +271,6 @@ agent "1р Interline не прописан"
 subagent "0р Interline не прописан"
 ticketing_method "aviacenter"
 interline :unconfirmed
-consolidator "2%"
 consolidator "2%"
 commission "1/0"
 
@@ -414,7 +408,6 @@ subagent "5 коп с билета по опубл. тарифам на рейс
 interline :no, :unconfirmed
 our_markup "1%"
 ticketing_method "direct"
-consolidator "2%"
 consolidator "2%"
 commission "1/0.05"
 
@@ -1183,6 +1176,7 @@ subagent "5 руб. с билета на рейсы Interline без участ�
 interline :absent
 ticketing_method "aviacenter"
 ## discount '1'
+consolidator "2%"
 commission "1eur/5"
 
 example 'ledpes'
@@ -2101,6 +2095,7 @@ example 'svomfm/ab mfmsvo'
 agent "MU междунар или регион-ные* рейсы + рейсы Других авиакомпаний на одном бланке – 5%"
 subagent "MU междунар или регион-ные* рейсы + рейсы Других авиакомпаний на одном бланке – 3%"
 interline :yes
+ticketing_method "aviacenter"
 discount "2.5%"
 commission "5%/3%"
 
@@ -2360,8 +2355,8 @@ subagent "0% от опубл. тарифов на рейсы Interline без у
 interline :absent
 check { includes(country_iatas, 'RU') }
 ticketing_method "aviacenter"
-commission "0%/0%"
 consolidator "2%"
+commission "0%/0%"
 
 # для несодержащих РФ перевозок
 
@@ -2371,6 +2366,7 @@ agent "1% (5 руб+2%сбор АЦ) (скидки нет) от тарифа н�
 subagent "5 р"
 check { not includes(country_iatas, 'RU') }
 ticketing_method "aviacenter"
+consolidator "2%"
 commission "1%/5"
 
 example 'cdgiev ievcdg/ab'
@@ -2390,6 +2386,7 @@ subagent "0% от опубл. тарифов на рейсы Interline без у
 interline :absent
 check { not includes(country_iatas, 'RU') }
 ticketing_method "aviacenter"
+consolidator "2%"
 commission "0%/0%"
 
 carrier "QF", "QANTAS AIRWAYS (не BSP!!!)"
@@ -2536,7 +2533,6 @@ ticketing_method "aviacenter"
 our_markup "0"
 discount '8.5%'
 ticketing_method "downtown"
-our_markup "0.5%"
 commission "12%/10%"
 
 example 'svojfk/Q'
@@ -2550,7 +2546,6 @@ ticketing_method "aviacenter"
 our_markup "0"
 discount '4.3%'
 ticketing_method "downtown"
-our_markup "0.5%"
 commission "8%/6%"
 
 example 'svocdg'
@@ -2789,7 +2784,6 @@ ticketing_method "downtown"
 international
 tour_code "815ZU"
 designator "PP10"
-ticketing_method "aviacenter"
 discount "6%"
 commission "10%/8%"
 
@@ -3273,6 +3267,7 @@ check {
 }
 important!
 ticketing_method "aviacenter"
+consolidator "2%"
 commission "0.1%/0.5"
 
 example "svotiv/U63171"
@@ -4211,6 +4206,7 @@ carrier "PK", "Pakistan International Airlines"
 agent "1 руб от всех опубл тарифов на собств рейсы PK"
 subagent "0,05 руб от всех опубл тарифов на собств рейсы PK"
 ticketing_method "aviacenter"
+consolidator "2%"
 commission "1/0.05"
 
 carrier "BV", "BLUE PANORAMA AIRLINES S.P.A. (АВИАРЕПС)"
