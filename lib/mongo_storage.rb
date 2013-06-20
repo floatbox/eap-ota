@@ -53,13 +53,13 @@ class << self
   def read(key, options = nil)
     options = {} unless options
     entry = read_entry(key, options)
-    entry["value"]
+    entry["value"] if entry
   end
 
   def set_at(key, options = nil)
     options = {} unless options
     entry = read_entry(key, options)
-    entry["set_at"]
+    entry["set_at"] if entry
   end
 
   def exist?(key, options = nil)
