@@ -3826,7 +3826,7 @@ agent "5% от всех опубл. тарифов на собств. рейсы
 agent "Продажа на рейсы интерлайн-партнёров на бланке “AIR COMPANY SOMON AIR LLC” (SZ/413) запрещена."
 subagent "3% от всех опубл. тарифов на собств. рейсы “AIR COMPANY SOMON AIR LLC” (SZ/413)."
 subagent "Продажа на рейсы интерлайн-партнёров на бланке “AIR COMPANY SOMON AIR LLC” (SZ/413) запрещена."
-discount "2.25"
+discount "2.25%"
 commission "5%/3%"
 
 carrier "EB", "PULLMANTUR AIR (РИНГ АВИА)"
