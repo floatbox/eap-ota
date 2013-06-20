@@ -1,23 +1,17 @@
 # encoding: utf-8
+#
+# сборник комиссионных правил
+# умеют подбирать комиссию по рекомендации
 class Commission::Book
-  # объекты-контейнеры для набора комиссий,
-  # умеют подбирать комиссию по рекомендации
-  attr_accessor :commissions
 
   def initialize
-    @commissions = {}
+    @index = {}
   end
 
+  # Добавляет комиссию в соответствующую книгу. Создает новую книгу, если надо.
   def register commission
-    carrier = commission.carrier
-    commissions[carrier] ||= []
-    commission.number = commissions[carrier].size + 1
-    if commission.important
-      commissions[carrier].unshift commission
-    else
-      commissions[carrier].push commission
-    end
-    commission
+    page = find_or_create_page commission
+    page.register commission
   end
 
   # Inspection
@@ -32,7 +26,8 @@ class Commission::Book
   end
 
   def for_carrier(validating_carrier_iata)
-    commissions[validating_carrier_iata]
+    page = @index[validating_carrier_iata] or return
+    page.commissions
   end
 
   # Временный метод для получения диапазонов действия комиссий
@@ -43,49 +38,50 @@ class Commission::Book
   end
 
   def all
-    commissions.values.flatten.sort_by {|c| c.source.to_i }
+    pages.map(&:all).flatten.sort_by {|c| c.source.to_i }
   end
 
   def all_carriers
-    commissions.keys.uniq
+    @index.keys
   end
 
-  def stats
-    puts "#{commissions.keys.size} carriers"
-    puts "#{commissions.values.sum(&:size)} rules total"
-    puts "#{commissions.values.every.select(&:disabled?).sum(&:size)} rules disabled"
-    puts "#{commissions.values.every.select(&:not_implemented).sum(&:size)} of which not implemented"
-    disabled, enabled = commissions.keys.partition {|iata| commissions[iata].all?(&:disabled?)}
-    puts "enabled #{enabled.size}: #{enabled.sort.join(' ')}"
-    puts "disabled #{disabled.size}: #{disabled.sort.join(' ')}"
+  def pages
+    @index.values
   end
 
   # Recommendation finders
   ########################
 
   def find_for(recommendation)
-    commission = all_for(recommendation).find do |c|
-      c.applicable?(recommendation)
-    end
-    return unless commission
-    return if commission.disabled?
-    commission
+    page = find_page(recommendation) or return
+    page.find_commission(recommendation)
+  end
+
+  def find_page(recommendation)
+    @index[recommendation.validating_carrier_iata]
+  end
+
+  def find_page_for_commission(commission)
+    @index[commission.carrier]
+  end
+
+  # создает и вносит в индекс страницу, подходящую для переданной комиссии
+  def create_page(commission)
+    page = Commission::Page.new carrier: commission.carrier
+    register_page page
+  end
+
+  # вносит в индекс страницу
+  def register_page(page)
+    @index[page.carrier] = page
+  end
+
+  def find_or_create_page(commission)
+    find_page_for_commission(commission) || create_page(commission)
   end
 
   def all_with_reasons_for(recommendation)
-    found = nil
-    all_for(recommendation).map do |c|
-      reason = c.turndown_reason(recommendation)
-      status =
-        if !found && reason
-          :fail
-        elsif !found && !reason
-          :success
-        else
-          :skipped
-        end
-      found = c unless reason
-      [c, status, reason]
-    end
+    page = find_page(recommendation) or return []
+    page.all_with_reasons_for(recommendation)
   end
 end
