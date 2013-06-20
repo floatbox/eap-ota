@@ -7,6 +7,7 @@ module ExcursionsHelper
   end
 
   def tripster_link order_form
+    return unless MongoStorage.read('cities',:namespace=>'tripster')
     return unless MongoStorage.read('cities',:namespace=>'tripster').include?(order_form.recommendation.journey.segments.first.arrival.city.iata)
     return unless uri_params = tripster_uri_params(order_form)
     tripster_uri uri_params
