@@ -177,6 +177,7 @@ module DataMigration
   end
 
   def self.load_ticket_prices_form_csv
+    PaperTrail.controller_info = {:done => 'filling in prices in downtown tickets'}
     CSV.foreach('tickets.csv') do |id, fare, total|
       Ticket.find(id).update_attributes(:original_price_total => total.to_money, :original_price_fare => fare.to_money)
     end
@@ -188,11 +189,9 @@ module DataMigration
       o = Order.find_by_id order.id
       if o.tickets.present? && o.tickets.all?{|t| t.kind == 'ticket' && t.status == 'ticketed' && t.original_price_fare_currency.present?}
         o.tickets.each do |t|
-          t.order.tickets_are_loading = true
           t.corrected_price = t.calculated_price_with_payment_commission
           t.save
         end
-        o.tickets_are_loading = false
         o.update_prices_from_tickets
       end
     end
