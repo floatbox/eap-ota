@@ -44,12 +44,12 @@ class << self
     key = document_key(key, options)
     collection.find(key).upsert('$set' =>{:value => value, :set_at => Time.now})
   end
-  
+
   def read_entry(key, options)
     key = document_key(key, options)
     collection.find(key).one
   end
-  
+
   def read(key, options = nil)
     options = {} unless options
     entry = read_entry(key, options)
