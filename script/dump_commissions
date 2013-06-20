@@ -2,6 +2,9 @@
 
 # выгружает текущие комиссии в yaml. для массового сравнения.
 
+# чтобы убрать адреса и мусор, для сравнения после апдейта:
+#   perl -lpe 's/[&*]\d+//' | grep -v corrector | grep -v 'source' > commissions.yml
+
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
 
 # патчим to_yaml, чтобы атрибуты объектов сортировались
