@@ -1,11 +1,11 @@
 # encoding: utf-8
 class Admin::CommissionsController < Admin::BaseController
   def index
-    @commissions = book.all
+    @book = book
   end
 
   def table
-    @commissions = book.all
+    @book = book
     @as_table = true
     render :index
   end
