@@ -2916,6 +2916,7 @@ no_commission
 example 'ledllk'
 example 'svokzn'
 example 'kuflbd'
+example 'krrovb'
 strt_date "01.04.2013"
 agent "ГРУППА А:"
 agent "в размере 0,1%:"
@@ -2985,6 +2986,7 @@ check {
   includes_only(city_iatas, 'EVN GOJ') or
   includes_only(city_iatas, 'EVN KUF') or
   includes_only(city_iatas, 'KRR VVO') or
+  includes_only(city_iatas, 'KRR OVB') or
   includes_only(city_iatas, 'GOJ TAS') or
   includes_only(city_iatas, 'GOJ SIP') or
   includes_only(city_iatas, 'GOJ NMA') or
