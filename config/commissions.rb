@@ -223,7 +223,7 @@ subagent "10% от всех применяемых опубликованных 
 check { includes(city_iatas, 'BJS') and includes(city_iatas, 'MOW') and includes(country_iatas, %W(RU UA KZ UZ AM)) }
 discount "8.3%"
 important! # ац вперед! 
-commission "12%/10%"
+no_commission "12%/10%"
 
 # Майами/Нью-Йорк прямые из Москвы и сквозные через Москву из RU UA KZ UZ AM — через dtt
 example 'kbpsvo svojfk'
