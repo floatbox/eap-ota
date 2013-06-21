@@ -121,6 +121,6 @@ Eviterra::Application.configure do
   # автоматически включает мониторинг GC в newrelic, когда включен GC::Profiler
   # ручку в конфиге не делал
   # закомментить, чтобы выключить
-  GC::Profiler.enable
+  #GC::Profiler.enable
 end
 
