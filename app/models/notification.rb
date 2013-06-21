@@ -31,7 +31,7 @@ class Notification < ActiveRecord::Base
     self.status = 'delayed'
     if save
       order.queued_email!
-      self.delay(queue: 'notification', run_at: delay.minutes.from_now, priority: 5).send_notice
+      self.delay(queue: 'notification', run_at: delay.minutes.from_now, priority: 2).send_notice
     end
   end
 
@@ -42,12 +42,12 @@ class Notification < ActiveRecord::Base
 
   def delayed_send
     order.queued_email!
-    self.delay(queue: 'notification', run_at: 1.minutes.from_now, priority: 5).send_notice if status.blank?
+    self.delay(queue: 'notification', run_at: 1.minutes.from_now, priority: 2).send_notice if status.blank?
   end
 
   def retry_later delay=2
     puts "Email pnr #{pnr_number} to #{destination} RETRY after #{delay} minutes"
-    self.delay(queue: 'notification', run_at: delay.minutes.from_now, priority: 5).send_notice
+    self.delay(queue: 'notification', run_at: delay.minutes.from_now, priority: 2).send_notice
   end
 
   def prepare_notice
