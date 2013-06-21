@@ -236,7 +236,7 @@ module OrderAttrs
   # @return [Boolean]         :default => false,    :null => false
 
   # @!attribute old_booking
-  # @deprecated непохоже чтобы где-то использовался
+  # флаг, позволяющий запретить пересчет, используется в update_prices_from_tickets
   # @return [Boolean]         :default => false,    :null => false
 
   # @!attribute pan
