@@ -241,6 +241,7 @@
     margin-top: 8px;
     float: right;
     color: #777;
+    line-height: 15px;
 }
 .phu-forgot-link:hover,
 .phu-remember-link:hover {
@@ -266,6 +267,11 @@
 }
 .phu-forgot-result .phust-link:hover {
     color: #F90A6F;
+}
+
+.phusur-what,
+.phufr-what {
+    display: none;
 }
 
 /* User */

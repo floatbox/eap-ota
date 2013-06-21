@@ -13,11 +13,6 @@ init: function() {
 },
 initPopup: function() {
     var that = this;
-    this.el.find('.phuf-input').on('focus', function() {
-        $(this).prev('label').hide();
-    }).on('blur input', function() {
-        $(this).prev('label').toggle(this.value === '');
-    }).trigger('blur');
     this.el.on('click', function(event) {
         event.stopPropagation();
     });
@@ -28,6 +23,8 @@ initPopup: function() {
         if (event.type == 'click' && !event.button || event.which == 27) that.hide();
     };
     this.slider = this.el.find('.phu-slider');
+    
+    /* Form switchers */
     this.el.find('.phu-forgot-link').on('click', function(event) {
         event.preventDefault();
         var le = $('#signin-email');
@@ -43,17 +40,29 @@ initPopup: function() {
         });
     });
     this.el.on('click', '.phu-signin-link', function() {
-        console.log($(this));
         if ($(this).hasClass('phust-link')) that.openSignIn();
     });
     this.el.on('click', '.phu-signup-link', function() {
         if ($(this).hasClass('phust-link')) that.openSignUp();
     });
+    
     this.el.find('.phu-button').prop('disabled', false);
+    this.initPlaceholders();    
+},
+initPlaceholders: function() {
+    var fields = this.el.find('.phuf-input');
+    if (!('placeholder' in fields.get(0))) {
+        this.el.find('.phuf-input').on('focus', function() {
+            $(this).prev('label').hide();
+        }).on('blur change', function() {
+            $(this).prev('label').toggle(this.value === '');
+        }).trigger('change');
+    }
 },
 show: function() {
     var that = this;
     this.el.addClass('phu-active');
+    this.el.find('.phuf-input').trigger('change');    
     setTimeout(function() {
         $w.on('click keydown', that._hide);
     }, 10);
@@ -108,7 +117,7 @@ initForms: function() {
         var check = value === value.toUpperCase() ? 'Проверьте, не&nbsp;нажата&nbsp;ли клавиша Caps Lock,' : 'Проверьте раскладку клавиатуры'
         return 'Неправильный пароль. ' + check +  ' и&nbsp;повторите попытку.';
     };
-
+    
     var signUp = new profileForm(this.el.find('.phu-signup'));
     signUp.add('#signup-email', checkEmail);
     signUp.process = function(result) {
@@ -116,8 +125,20 @@ initForms: function() {
         that.el.find('.phu-signup-result').show();
     };    
     signUp.errors['exist'] = '<p>Пользователь с таким адресом уже зарегистрирован.</p><p><span class="phu-signin-link phust-link">Войти</span></p>';
-    signIn.errors['not_confirmed'] = '<p>Вы не завершили регистрацию. Для завершения регистрации перейдите по&nbsp;ссылке из&nbsp;письма-подтверждения.</p><p><a href="/profile/verification/new">Что делать, если ничего не&nbsp;пришло?</a></p>';
-    
+    signUp.errors['not_confirmed'] = '<p>Вы не завершили регистрацию. Для завершения регистрации перейдите по&nbsp;ссылке из&nbsp;письма-подтверждения.</p><p><a href="/profile/verification/new">Что делать, если ничего не&nbsp;пришло?</a></p>';
+
+    this.el.find('.phusur-what-link .link').on('click', function() {
+        that.el.find('.phusur-what-link').hide();
+        that.el.find('.phusur-what').show();
+    });
+    this.el.find('.phusur-what .link').on('click', function() {
+        that.el.find('.phu-signup-result').hide();
+        that.el.find('.phusur-what-link').show();
+        that.el.find('.phusur-what').hide();
+        that.el.find('.phu-signup').closest('.phu-section').show();
+        signUp.button.prop('disabled', false);        
+    });
+
     var forgot = new profileForm(this.el.find('.phu-forgot'));
     forgot.add('#forgot-email', checkEmail);
     forgot.process = function() {
@@ -125,6 +146,23 @@ initForms: function() {
         that.el.find('.phu-forgot-result').show();
     };
     forgot.errors['not_found'] = '<p>Нет зарегистрированных пользователей с таким адресом.</p><p><span class="phu-signup-link phust-link">Зарегистрироваться</span></p>';    
+
+    this.el.find('.phufr-what-link .link').on('click', function() {
+        that.el.find('.phufr-what-link').hide();
+        that.el.find('.phufr-what').show();
+    });
+    this.el.find('.phufr-what .link').on('click', function() {
+        that.el.find('.phu-forgot-result').hide();
+        that.el.find('.phufr-what-link').show();
+        that.el.find('.phufr-what').hide();
+        that.el.find('.phu-forgot-fields').show();
+        forgot.button.prop('disabled', false);
+    });
+    
+    $('#signin-email, #signup-email, #forgot-email').on('correct', function() {
+        if (this.value && /[а-яА-Я]/.test(this.value)) $(this).val('');
+    });    
+
 }
 };
 
@@ -137,6 +175,9 @@ var profileForm = function(elem) {
         if (that.validate()) {
             that.send();
         }
+    });
+    this.elem.on('correct', function() {
+        that.error();
     });
     this.process = $.noop;
     this.button = this.elem.find('.phu-submit .phu-button');
@@ -190,7 +231,11 @@ var profileField = function(selector, check) {
     var that = this;
     this.elem = $(selector);
     this.elem.on('focus change', function() {
-        that.elem.removeClass('phuf-error');
+        if (that.error) {
+            that.elem.removeClass('phuf-error').trigger('correct');
+            that.elem.closest('form').trigger('correct');
+            that.error = undefined;
+        }
     });
     this.check = check;
 };

@@ -15,14 +15,14 @@
                 <h6 class="phus-title"><span class="phu-signin-link">Вход с паролем</span></h6>
                 <div class="phu-field">
                     <label for="signin-email" class="phuf-placeholder">электронная почта</label>                
-                    <%= f.email_field :email, :class => 'phuf-input', :id => 'signin-email' %>
+                    <%= f.email_field :email, :class => 'phuf-input', :id => 'signin-email', :placeholder => 'электронная почта' %>
                 </div>
                 <div class="phu-field">
                     <label for="signin-password" class="phuf-placeholder">пароль</label>
-                    <%= f.password_field :password, :class => 'phuf-input', :id => 'signin-password' %>
+                    <%= f.password_field :password, :class => 'phuf-input', :id => 'signin-password', :placeholder => 'пароль' %>
                 </div>
                 <div class="phu-submit">
-                    <%= link_to "Забыли пароль?", new_customer_password_path, :class => 'phu-forgot-link' %>
+                    <span class="link phu-forgot-link">Забыли пароль?</span>
                     <%= f.submit "Войти", :class => 'phu-button' %>
                 </div>
                 <div class="phu-error"></div>
@@ -33,17 +33,18 @@
                     <p style="margin: 0 0 10px;">Мы пришлём на почту ссылку для получения нового пароля.</p>
                     <div class="phu-field">
                         <label for="forgot-email" class="phuf-placeholder">электронная почта</label>
-                        <%= f.email_field :email, :class => 'phuf-input', :id => 'forgot-email' %>
+                        <%= f.email_field :email, :class => 'phuf-input', :id => 'forgot-email', :placeholder => 'электронная почта' %>
                     </div>            
                     <div class="phu-submit">
-                        <%= link_to "Вспомнили?", new_customer_session_path, :class => 'phu-remember-link' %>
+                        <span class="link phu-remember-link">Вспомнили?</span>
                         <%= f.submit "Сбросить пароль", :class => 'phu-button' %>
                     </div>
                     <div class="phu-error"></div>
                 </div>
                 <div class="phu-forgot-result">
                     <p style="margin: 0 0 5px;">На ваш электронный адрес отправлено письмо. Для&nbsp;завершения сброса пароля перейдите по&nbsp;ссылке в&nbsp;письме.</p>
-                    <p><%= link_to "Что делать, если ничего не пришло?", new_customer_password_path %></p>
+                    <p class="phufr-what-link"><span class="link">Что делать, если ничего не пришло?</span></p>
+                    <p class="phufr-what">Если вы&nbsp;не&nbsp;получили письмо в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, мы можем выслать письмо для сброса пароля <span class="link">ещё раз</span>.</p>
                 </div>
             <% end %>            
         </div>
@@ -55,7 +56,7 @@
             <div class="phu-signup-fields">
                 <div class="phu-field">
                     <label for="signup-email" class="phuf-placeholder">электронная почта</label>
-                    <%= f.email_field :email, :class => 'phuf-input', :id => 'signup-email' %>
+                    <%= f.email_field :email, :class => 'phuf-input', :id => 'signup-email', :placeholder => 'электронная почта' %>
                 </div>            
                 <div class="phu-submit">
                     <%= f.submit "Зарегистрироваться", :class => 'phu-button' %>
@@ -67,7 +68,8 @@
         <div class="phu-section phu-signup-result">
             <h6 class="phus-title" style="margin: 0 0 5px;">Аккаунт создан</h6>
             <p style="margin: 0 0 10px;">На ваш электронный адрес отправлено письмо-подтверждение. Для&nbsp;завершения регистрации перейдите по&nbsp;ссылке в&nbsp;письме.</p>
-            <p><%= link_to "Что делать, если ничего не пришло?", new_customer_confirmation_path %></p>
+            <p class="phusur-what-link"><span class="link">Что делать, если ничего не пришло?</span></p>
+            <p class="phusur-what">Если вы&nbsp;не&nbsp;получили письмо в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, мы можем выслать письмо <span class="link">ещё раз</span>.</p>           
         </div>
     </div>
 <% end %>
