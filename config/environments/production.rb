@@ -118,4 +118,9 @@ Eviterra::Application.configure do
   # with SQLite, MySQL, and PostgreSQL)
   config.active_record.auto_explain_threshold_in_seconds = 0.5
 
+  # автоматически включает мониторинг GC в newrelic, когда включен GC::Profiler
+  # ручку в конфиге не делал
+  # закомментить, чтобы выключить
+  GC::Profiler.enable
 end
+
