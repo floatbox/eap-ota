@@ -4237,3 +4237,13 @@ subagent "0.05 руб от всех опубл. тарифов на собств
 ticketing_method "aviacenter"
 consolidator "2%"
 commission "1/0.05"
+
+carrier "OZ", "ASIANA AIRLINES"
+#######################################
+
+expr_date "31.12.2013"
+agent "агентская комиссия - по 31.12.2013г. 5% от всех опубл.тарифов"
+subagent "субагентская комиссия - по 31.12.2013г. 3% от всех опубл.тарифов"
+ticketing_method "aviacenter"
+discount "2.5%"
+commission "5%/3%"
