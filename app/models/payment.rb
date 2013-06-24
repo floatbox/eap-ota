@@ -25,6 +25,9 @@ class Payment < ActiveRecord::Base
   # сейчас создает только кредитнокарточковые платежи
   def self.select_and_create(args)
     gateway = args.delete(:gateway).presence || Conf.payment.card_processing.to_sym
+    if !args[:endpoint_name] && Conf.payment.members.include?(:endpoint_name)
+      args[:endpoint_name] = Conf.payment.endpoint_name
+    end
 
     # можно false
     return unless gateway
