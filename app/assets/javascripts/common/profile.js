@@ -8,22 +8,59 @@ init: function() {
         });
     } else {
         this.initPopup();
-        this.initForms();
+        this.authorization.init();
+        this.password.init();
+        this.initPlaceholders();
     }
 },
 initPopup: function() {
     var that = this;
-    this.el.on('click', function(event) {
+    this.el.find('.phu-popup').on('click', function(event) {
         event.stopPropagation();
     });
-    this.el.find('.phu-control').on('click', function() {
+    this.el.find('.phu-control').on('click', function(event) {
+        event.stopPropagation();
         that[that.el.hasClass('phu-active') ? 'hide' : 'show']();
     });
     this._hide = function(event) {
         if (event.type == 'click' && !event.button || event.which == 27) that.hide();
     };
+},
+initPlaceholders: function() {
+    var fields = this.el.find('.phuf-input');
+    if (!('placeholder' in fields.get(0))) {
+        this.el.find('.phuf-input').on('focus', function() {
+            $(this).prev('label').hide();
+        }).on('blur change', function() {
+            $(this).prev('label').toggle(this.value === '');
+        }).trigger('change');
+    }
+},
+show: function(id) {
+    var that = this;
+    this.el.addClass('phu-active');
+    this.opened = this[id || 'authorization'].el.show();
+    this.opened.find('.phuf-input').trigger('change');    
+    setTimeout(function() {
+        $w.on('click keydown', that._hide);
+    }, 10);
+},
+hide: function() {
+    this.el.removeClass('phu-active');
+    this.opened.hide();
+    $w.off('click keydown', this._hide);
+},
+};
+
+/* Authorization popup */
+User.authorization = {
+init: function() {
+
+    var that = this;
+
+    this.el = $('#phup-authorization');
     this.slider = this.el.find('.phu-slider');
-    
+
     /* Form switchers */
     this.el.find('.phu-forgot-link').on('click', function(event) {
         event.preventDefault();
@@ -46,30 +83,8 @@ initPopup: function() {
         if ($(this).hasClass('phust-link')) that.openSignUp();
     });
     
-    this.el.find('.phu-button').prop('disabled', false);
-    this.initPlaceholders();    
-},
-initPlaceholders: function() {
-    var fields = this.el.find('.phuf-input');
-    if (!('placeholder' in fields.get(0))) {
-        this.el.find('.phuf-input').on('focus', function() {
-            $(this).prev('label').hide();
-        }).on('blur change', function() {
-            $(this).prev('label').toggle(this.value === '');
-        }).trigger('change');
-    }
-},
-show: function() {
-    var that = this;
-    this.el.addClass('phu-active');
-    this.el.find('.phuf-input').trigger('change');    
-    setTimeout(function() {
-        $w.on('click keydown', that._hide);
-    }, 10);
-},
-hide: function() {
-    this.el.removeClass('phu-active');
-    $w.off('click keydown', this._hide);
+    this.initForms();    
+    
 },
 openSignIn: function() {
     var elem = this.el;
@@ -166,6 +181,48 @@ initForms: function() {
 }
 };
 
+/* Password popup */
+User.password = {
+init: function() {
+    
+    this.el = $('#phup-password');
+    
+    var compare = function() {
+        var p1 = $('#new-password-1').val();
+        var p2 = $('#new-password-2').val();
+        if (p1 && p2 && p1 != p2) {
+            return 'Введенные пароли не совпадают, вы ошиблись при наборе. Повторите попытку.';
+        }
+    };
+
+    var form = new profileForm(this.el.find('form'));
+    form.add('#new-password-1', function(value) {
+        if (!value) return 'Введите пароль.';
+        return compare();
+    });
+    form.add('#new-password-2', function(value) {
+        if (!value) return 'Введите пароль ещё раз.';
+        return compare();
+    });
+    
+    $('#new-password-1, #new-password-2').on('correct', function() {
+        var p1 = $('#new-password-1');
+        var p2 = $('#new-password-2');
+        if (p1.val() && p2.val()) {
+            p1.val('').removeClass('phuf-error');
+            p2.val('').removeClass('phuf-error');
+        };
+    });  
+    
+}
+
+
+
+};
+
+
+
+
 /* Form with ajax */
 var profileForm = function(elem) {
     var that = this;
@@ -180,7 +237,7 @@ var profileForm = function(elem) {
         that.error();
     });
     this.process = $.noop;
-    this.button = this.elem.find('.phu-submit .phu-button');
+    this.button = this.elem.find('.phu-submit .phu-button').prop('disabled', false);
     this.fields = [];
     this.errors = {};
 };
@@ -252,4 +309,5 @@ validate: function() {
 
 $(function() {
     User.init();
+    //User.show('password');
 });

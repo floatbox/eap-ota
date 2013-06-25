@@ -7,8 +7,9 @@
         <%= button_to('Выйти', destroy_customer_session_path, :method => :delete) %>    
     </div>
 <% else %>
+<div class="phu-wrapper">
     <div class="phu-control">Личный кабинет<span class="phuc-bar"></span></div>
-    <div class="phu-popup">
+    <div class="phu-popup" id="phup-authorization">
         <div class="phu-stator">
         <div class="phu-slider">
             <%= form_for("customer", :url => customer_session_path, :html => {:class => 'phu-section phu-signin', :novalidate => 'novalidate'}) do |f| %>
@@ -72,5 +73,26 @@
             <p class="phusur-what">Если вы&nbsp;не&nbsp;получили письмо в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, мы можем выслать письмо <span class="link">ещё раз</span>.</p>           
         </div>
     </div>
+    <div class="phu-popup" id="phup-password">
+        <div class="phu-section">
+            <h6 class="phus-title">Придумайте пароль</h6>
+            <%= form_for("customer", :url => customer_confirm_path, :html => {:novalidate => 'novalidate'}) do |f| %>
+            <div class="phu-field">
+                <label for="new-password-1" class="phuf-placeholder">пароль</label>
+                <%= f.password_field :password, :class => 'phuf-input', :id => 'new-password-1', :placeholder => 'пароль' %>
+            </div>
+            <div class="phu-field">
+                <label for="new-password-2" class="phuf-placeholder">ещё разок пароль</label>
+                <%= f.password_field :password_confirmation, :class => 'phuf-input', :id => 'new-password-2', :placeholder => 'ещё разок пароль' %>
+            </div>
+            <div class="phu-submit">
+                <%= f.submit "Продолжить", :class => 'phu-button' %>
+            </div>
+            <div class="phu-error"></div>
+            <% end %>
+        </div>
+    </div>
+</div>
+<div class="phu-fade"></div>
 <% end %>
 </div>

@@ -101,9 +101,12 @@
 
 /* User */
 .ph-user {
-    position: relative;
     float: left;
     margin-left: 10px;
+}
+.phu-wrapper {
+    position: relative;
+    z-index: 10;
 }
 .phu-control {
     position: relative;
@@ -124,6 +127,25 @@
     clip: rect(10px 160px 46px -10px);
     box-shadow: 0 0 10px rgba(0,0,0,0.35);
     z-index: -1;
+}
+.phu-fade {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin-bottom: -1px;
+    background: #666;
+    opacity: 0.5;
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=50);
+}
+.phu-active .phu-control {
+    text-decoration: none;
+}
+.phu-active .phuc-bar,
+.phu-active .phu-fade {
+    display: block;
 }
 
 /* Popup */
@@ -246,13 +268,6 @@
 .phu-forgot-link:hover,
 .phu-remember-link:hover {
     color: #F90A6F;
-}
-.phu-active .phu-control {
-    text-decoration: none;
-}
-.phu-active .phuc-bar,
-.phu-active .phu-popup {
-    display: block;
 }
 
 .phu-signup-fields {
