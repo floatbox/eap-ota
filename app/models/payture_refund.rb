@@ -16,6 +16,7 @@ class PaytureRefund < Payment
     self.order_id = charge.order_id
     self.name_in_card = charge.name_in_card
     self.pan = charge.pan
+    self.endpoint_name = charge.endpoint_name
   end
 
   def fix_price_sign
@@ -54,7 +55,7 @@ class PaytureRefund < Payment
   end
 
   def gateway
-    Payture.new
+    Payture.new(endpoint_name: endpoint_name)
   end
 
   # для админки

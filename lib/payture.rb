@@ -79,11 +79,16 @@ class Payture
   end
 
   def initialize(opts={})
-    @key = opts[:key] || Conf.payture.key
-    @host = opts[:host] || Conf.payture.host
+    if opts[:endpoint_name].present?
+      conf = Conf.send(opts[:endpoint_name])
+    else
+      conf = Conf.payture
+    end
+    @key = opts[:key] || conf.key
+    @host = opts[:host] || conf.host
     @ssl = opts[:ssl]
-    @ssl = Conf.payture.ssl if @ssl.nil?
-    @public = OpenSSL::PKey::RSA.new(opts[:pem] || Conf.payture.pem)
+    @ssl = conf.ssl if @ssl.nil?
+    @public = OpenSSL::PKey::RSA.new(opts[:pem] || conf.pem)
   end
 
   def pay amount, card, opts={}

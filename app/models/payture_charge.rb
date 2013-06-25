@@ -17,7 +17,7 @@ class PaytureCharge < Payment
   end
 
   def set_ref
-    update_attributes(:ref => Conf.payture.ref_prefix + id.to_s)
+    update_attributes(:ref => conf.ref_prefix + id.to_s)
   end
 
   def card= card
@@ -90,7 +90,7 @@ class PaytureCharge < Payment
   end
 
   def gateway
-    Payture.new
+    Payture.new(endpoint_name: endpoint_name)
   end
 
   def gateway_status
@@ -120,9 +120,18 @@ class PaytureCharge < Payment
     update_attributes :status => status
   end
 
+  # выбираем конфиг в зависимости от endpoint_name
+  def conf
+    if endpoint_name.present?
+      Conf.send(endpoint_name)
+    else
+      Conf.payture
+    end
+  end
+
   # распределение дохода
   def set_defaults
-    self.commission = Conf.payture.commission if commission.blank?
+    self.commission = conf.commission if commission.blank?
   end
 
   def income_payment_gateways
