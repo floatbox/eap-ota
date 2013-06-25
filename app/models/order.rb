@@ -154,7 +154,7 @@ class Order < ActiveRecord::Base
   end
 
   def has_data_in_tickets?
-    sold_tickets.present?
+    !old_booking && !old_downtown_booking && sold_tickets.present?
   end
 
   def display_fee_details
@@ -374,7 +374,7 @@ class Order < ActiveRecord::Base
 
   def recalculate_prices
     #считаем, что в данном случае не бывает обменов/возвратов, иначе с ценами будет полная жопа
-    return if old_booking || !has_data_in_tickets?
+    return if !has_data_in_tickets?
     if tickets.present? && tickets.all?{|t| t.kind == 'ticket' && t.status == 'ticketed'}
       if fix_price?
         tickets.every.save
@@ -404,7 +404,7 @@ class Order < ActiveRecord::Base
   def update_prices_from_tickets
     tickets.reload
     # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
-    return if old_booking || !has_data_in_tickets?
+    return if !has_data_in_tickets?
     price_total_old = self.price_total
 
     sum_and_copy_attrs sold_tickets, self,
