@@ -15,7 +15,7 @@ describe Commission::Reader do
     end
 
     it "should have one commission" do
-      commission_class.commissions.size.should == 1
+      commission_class.all.should have(1).item
     end
 
     it "should find a commission for correct recommendation" do
@@ -37,12 +37,10 @@ describe Commission::Reader do
     end
 
     it "should have two airlines" do
-      # FIXME вынести подсчет количества комиссий в хелпер
-      commission_class.commissions.should have(2).keys
+      commission_class.all_carriers.should have(2).items
     end
 
     it "should have registered three commissions" do
-      # FIXME вынести подсчет количества комиссий в хелпер
       commission_class.all.should have(3).items
     end
 

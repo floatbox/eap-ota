@@ -172,7 +172,6 @@ class Commission::Rule
   def correct!
     # FIXME временно выключаю, потому что корректоры у нас пока работают только с числами
     # а их тут нет.
-    return if no_commission
     Commission::Correctors.apply(self, corrector)
   end
 

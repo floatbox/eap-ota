@@ -22,7 +22,7 @@ class Commission::Correctors
   # отменяем ее, если субагентская достаточно велика, или если она выражена в процентах
 
   def twopercent
-    if (rule.subagent.percentage? && !rule.subagent.zero?) || rule.subagent.rate > 5
+    if rule.no_commission || (rule.subagent.percentage? && !rule.subagent.zero?) || rule.subagent.rate > 5
       rule.consolidator = 0
     end
   end

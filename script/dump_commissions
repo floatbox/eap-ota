@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+# выгружает текущие комиссии в yaml. для массового сравнения.
+
+# чтобы убрать адреса и мусор, для сравнения после апдейта:
+#   perl -lpe 's/[&*]\d+//' | grep -v corrector | grep -v 'source' > commissions.yml
+
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
+
+# патчим to_yaml, чтобы атрибуты объектов сортировались
+class Psych::Visitors::YAMLTree
+  def dump_ivars target
+     ivars = find_ivars target
+
+     ivars.sort_by(&:to_s).each do |iv|
+       @emitter.scalar("#{iv.to_s.sub(/^@/, '')}", nil, nil, true, false, Psych::Nodes::Scalar::ANY)
+       accept target.instance_variable_get(iv)
+     end
+  end
+end
+
+puts Commission.default_book.to_yaml

@@ -61,6 +61,7 @@ module Amadeus
 
   # вынесены во внешний модуль, чтобы методы можно было оверрайдить
   include Amadeus::Macros
+  include Monitoring::Benchmarkable
 
   def on_response_document(doc)
     doc.add_namespace 'header', 'http://webservices.amadeus.com/definitions'
@@ -70,9 +71,11 @@ module Amadeus
   end
 
   def invoke(*)
-    debug '==============='
-    debug "unixtime: #{Time.now.to_i}"
-    super
+    benchmark 'invoke request' do
+      debug '==============='
+      debug "unixtime: #{Time.now.to_i}"
+      super
+    end
   end
 
   def invoke_request request

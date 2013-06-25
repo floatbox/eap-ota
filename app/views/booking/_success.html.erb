@@ -21,7 +21,8 @@
 
 <% ostrovok_url = ostrovok_link(@order_form) %>
 <% insurance_url = sravnikupi_insurance_uri(@order_form) %>
-<% weatlas_url = weatlas_link(@order_form) %>
+<% tripster_url = tripster_link(@order_form) %>
+<% weatlas_url = weatlas_link(@order_form) unless tripster_url %>
 
 <% if ostrovok_url || insurance_url || weatlas_url %>
 <div class="bfrs-addition">
@@ -55,9 +56,23 @@
         <div class="bfrsa-partner">Совместно с партнером Sravnikupi.ru</div>
     </div>
     <% end %>
-    <% if weatlas_url %>
+    <% if tripster_url %>
     <div class="bfrs-excursion">
-        <h5 class="bfrsa-title">Чем заняться<br><%= weatlas_city(@order_form) %></h5>
+        <h5 class="bfrsa-title">Чем заняться<br><%= city_case_in(@order_form) %></h5>
+        <ul class="bfrsa-features">
+            <li class="bfrsa-feature">Экскурсии от местных жителей</li>
+            <li class="bfrsa-feature">Все самое интересное в городе</li>
+            <li class="bfrsa-feature">Индивидуальные программы</li>
+            <li class="bfrsa-feature">Онлайн-бронирование</li>
+        </ul>
+        <div class="bfrsa-bar">
+            <a class="bfrsa-link" href="<%= tripster_url %>" target="_blank">Выбрать и&nbsp;забронировать</a>
+        </div>
+        <div class="bfrsa-partner">Совместно с Tripster</div>
+    </div>
+    <% elsif weatlas_url %>
+    <div class="bfrs-excursion">
+        <h5 class="bfrsa-title">Чем заняться<br><%= city_case_in(@order_form) %></h5>
         <ul class="bfrsa-features">
             <li class="bfrsa-feature">Индивидуальные экскурсии</li>
             <li class="bfrsa-feature">Персональные гиды</li>

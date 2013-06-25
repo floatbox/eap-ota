@@ -4,7 +4,7 @@
 <%= link_to_unless_current 'кратко', table_admin_commissions_url %>
 </p>
 <p>
-<% @commissions.every.carrier.uniq.sort.each do |carrier_code| %>
+<% @book.all_carriers.sort.each do |carrier_code| %>
   <a href="#<%= carrier_code %>"><%= carrier_code %></a>
 <% end %>
 </p>
@@ -12,10 +12,12 @@
 
 <%= render 'form' %>
 
-<% @commissions.group_by(&:carrier).each do |carrier_code, commissions| %>
+<% @book.pages.group_by(&:carrier).each do |carrier_code, pages| %>
   <h2 id="<%= carrier_code %>"><%= "(#{carrier_code})" %> <%= Carrier[carrier_code].name  rescue '' %></h2>
-  <% commissions.each do |commission| %>
-    <%= render 'commission', :commission => commission, :as_table => @as_table %>
-  <% end %>
+  <% pages.each do |page| %>
+    <% page.all.each do |commission| %>
+      <%= render 'commission', :commission => commission, :as_table => @as_table %>
+    <% end %>
   <hr>
+  <% end %>
 <% end %>

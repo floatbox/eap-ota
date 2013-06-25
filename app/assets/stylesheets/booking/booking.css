@@ -188,7 +188,7 @@
 }
 .bfb-side {
     height: 52px;
-    background: url(/images/booking/submit.png) no-repeat;
+    background: url(/images/booking/submit.png?2) no-repeat;
 }
 .bfb-left {
     position: absolute;

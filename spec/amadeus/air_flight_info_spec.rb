@@ -14,7 +14,7 @@ describe Amadeus::Response::AirFlightInfo do
     its(:operating_carrier_iata) { should == 'SU' }
     its(:departure_term) { should == 'F' }
     its(:arrival_term) { should == '3' }
-    its(:flight_number) { should == '6002' }
+    its(:flight_number) { should == '602' }
     its(:arrival_date) { should == '020911' }
     its(:arrival_time) { should == '1425' }
     its(:departure_date) { should == '010911' }

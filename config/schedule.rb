@@ -33,6 +33,10 @@ every :day, :at => '2:00 am' do
   runner 'script/sync_canceled_pnrs'
 end
 
+every :day, :at => '5:00 am' do
+  runner 'Tripster.load_cities'
+end
+
 ### FILL CUSTOMERS Table From ORDERS
 #every 5.minutes do
 #  runner 'DataMigration.fill_customers_for_orders'
