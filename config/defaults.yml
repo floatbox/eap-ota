@@ -69,6 +69,7 @@ payment:
   skip_checksum_validation: yes
   # payture, payu, or no
   card_processing: payture
+  endpoint_name: ~
   # глобальная комиссия для некорпоратов
   # использую ее при корректировке цен
   commission: 2.85%
@@ -104,7 +105,7 @@ payture:
     -----END PUBLIC KEY-----
 payture_psb:
   commission: 1.7%
-  ref_prefix: psb
+  ref_prefix: psb_
   key: MerchantEviterra2
   host: sandbox.payture.com
   ssl: no
