@@ -184,7 +184,7 @@ class PricerForm
 
   def save_to_cache
     self.query_key ||= ShortUrl.random_hash
-    save
+    with(safe: true).save
   end
 
   class << self
