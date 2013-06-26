@@ -8,6 +8,6 @@ namespace :conf do
     puts "sirena enabled:  #{Conf.sirena.enabled}"
     puts "sirena host:     #{Conf.sirena.host}"
     puts "sirena port:     #{Conf.sirena.port}"
-    puts "payture host:    #{Conf.payture.host}"
+    puts "payture host:    #{Conf.payture_alfa.host}"
   end
 end

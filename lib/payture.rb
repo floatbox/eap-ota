@@ -79,11 +79,7 @@ class Payture
   end
 
   def initialize(opts={})
-    if opts[:endpoint_name].present?
-      conf = Conf.send(opts[:endpoint_name])
-    else
-      conf = Conf.payture
-    end
+    conf = Conf.send(opts[:endpoint_name])
     @key = opts[:key] || conf.key
     @host = opts[:host] || conf.host
     @ssl = opts[:ssl]

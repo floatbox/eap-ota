@@ -122,11 +122,7 @@ class PaytureCharge < Payment
 
   # выбираем конфиг в зависимости от endpoint_name
   def conf
-    if endpoint_name.present?
-      Conf.send(endpoint_name)
-    else
-      Conf.payture
-    end
+    Conf.send(endpoint_name)
   end
 
   # распределение дохода

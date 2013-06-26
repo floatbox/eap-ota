@@ -4,7 +4,7 @@ require 'spec_helper'
 describe PaytureCharge do
 
   before do
-    Conf.payture.stub(:commission).and_return('2.85%')
+    Conf.payture_alfa.stub(:commission).and_return('2.85%')
   end
 
   describe "factories" do
@@ -18,14 +18,14 @@ describe PaytureCharge do
     include Commission::Fx
 
     it 'should recalculate earnings on save' do
-      p = PaytureCharge.create! :commission => '1.23%', :price => 1000
+      p = PaytureCharge.create! :commission => '1.23%', :price => 1000, :endpoint_name => 'payture_alfa'
       p.commission.should == Fx('1.23%')
       p.earnings.should == 1000 - 12.3
     end
 
     it 'probably should get commission from Conf, if unset' do
-      Conf.payture.stub(:commission).and_return('3.45%')
-      p = PaytureCharge.create! :price => 1000
+      Conf.payture_alfa.stub(:commission).and_return('3.45%')
+      p = PaytureCharge.create! :price => 1000, :endpoint_name => 'payture_alfa'
       p.commission.should == Fx('3.45%')
       p.earnings.should == 1000 - 34.5
     end
@@ -44,7 +44,7 @@ describe PaytureCharge do
   end
 
   describe "state" do
-    subject {PaytureCharge.new(:status => current_state)}
+    subject {PaytureCharge.new(:status => current_state, :endpoint_name => 'payture_alfa' )}
 
     context "pending" do
       let(:current_state) { 'pending' }

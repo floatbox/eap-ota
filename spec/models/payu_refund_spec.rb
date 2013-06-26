@@ -4,7 +4,7 @@ require 'spec_helper'
 describe PayuRefund do
 
   before do
-    Conf.payture.stub(:commission).and_return('2.85%')
+    Conf.payture_alfa.stub(:commission).and_return('2.85%')
   end
 
   it "should copy attrs from payu_charge" do

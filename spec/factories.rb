@@ -87,10 +87,12 @@ FactoryGirl.define do
 
   factory :payture_charge do
     order
+    endpoint_name 'payture_alfa'
   end
 
   factory :payture_refund do
     association :charge, factory: [:payture_charge, :charged]
+    endpoint_name 'payture_alfa'
   end
 
   factory :cash_charge do
