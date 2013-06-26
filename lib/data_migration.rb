@@ -195,7 +195,7 @@ module DataMigration
     PaperTrail.controller_info = {:done => 'filling in corrected_price in downtown tickets'}
     Order.FLL1S212V.where(ticket_status: 'ticketed').each do |order|
       o = Order.find_by_id order.id
-      if o.tickets.present? && o.tickets.all?{|t| t.kind == 'ticket' && t.status == 'ticketed' && t.original_price_fare_currency.present?}
+      if o.tickets.present? && o.tickets.all?{|t| t.kind == 'ticket' && t.status == 'ticketed' && t.original_price_fare_currency.present? && t.corrected_price == 0}
         o.tickets.each do |t|
           t.corrected_price = t.calculated_price_with_payment_commission
           t.save
