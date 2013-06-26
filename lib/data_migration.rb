@@ -179,7 +179,7 @@ module DataMigration
   def self.downtown_prices_migration
     price_migration_for_russian_offices
     Order.update_all('old_downtown_booking = 1', 'commission_ticketing_method = "downtown" and payment_type != "card"')
-    Order.update_all('fee_scheme = v3', 'commission_ticketing_method = "downtown" and payment_type = "card"')
+    Order.update_all('fee_scheme = "v3"', 'commission_ticketing_method = "downtown" and payment_type = "card"')
     load_ticket_prices_from_csv #Предполагаем, что в tickets.csv лежат цены всех билетов
     set_corrected_price_in_downtown_tickets
   end
