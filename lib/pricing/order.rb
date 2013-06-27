@@ -135,7 +135,7 @@ module Pricing
     private :acquiring_compensation
 
     def vat
-      if sold_tickets.present?
+      if has_data_in_tickets?
         sold_tickets.every.vat.sum
       end
     end

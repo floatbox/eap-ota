@@ -67,7 +67,7 @@ class Order < ActiveRecord::Base
   end
 
   def show_vat
-    sold_tickets.present? && sold_tickets.all?(&:show_vat) && sold_tickets.every.office_id.uniq != ['FLL1S212V']
+    has_data_in_tickets? && sold_tickets.all?(&:show_vat)
   end
 
   def calculated_payment_status
@@ -508,7 +508,7 @@ class Order < ActiveRecord::Base
   end
 
   def recalculated_price_with_payment_commission
-    if tickets.present? && sold_tickets.every.office_id.uniq != ['FLL1S212V']
+    if has_data_in_tickets?
       sold_tickets.every.price_with_payment_commission.sum
     else
       price_with_payment_commission
