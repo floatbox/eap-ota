@@ -205,6 +205,9 @@ init: function() {
         if (!value) return 'Введите пароль ещё раз.';
         return compare();
     });
+    form.process = function(result) {
+        window.location = result.location;
+    };    
     
     $('#new-password-1, #new-password-2').on('correct', function() {
         var p1 = $('#new-password-1');
