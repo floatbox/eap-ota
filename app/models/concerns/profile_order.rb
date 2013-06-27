@@ -94,6 +94,14 @@ module ProfileOrder
     tickets.where(:kind=>'ticket')
   end
 
+  def profile_arrival_date
+    profile_flights.last.arrv_date if profile_flights.present?
+  end
+
+  def profile_arrival_in_future?
+    profile_arrival_date && profile_arrival_date > DateTime.now
+  end
+
   def profile_alive_tickets_exists?
     tickets.each do |t|
       return true if t.profile_alive?
