@@ -140,12 +140,6 @@ class Commission::Rule
   # @return [Fixnum]
   attr_accessor :number
 
-  # поправляет комиссию в соответствии с вычисленными дефолтами.
-  # @see Commission::Correctors
-  # @note TODO попробовать избавиться.
-  # @return [Symbol]
-  attr_accessor :corrector
-
   # массив примеров рекомендаций, которые должны получить именно эту комиссию.
   # @return [Array<Commission::Example>]
   attr_reader :examples
@@ -166,13 +160,6 @@ class Commission::Rule
 
   def inspect
     "<commission #{carrier}##{number} :#{source}>"
-  end
-
-  # @note FIXME документировать
-  def correct!
-    # FIXME временно выключаю, потому что корректоры у нас пока работают только с числами
-    # а их тут нет.
-    Commission::Correctors.apply(self, corrector)
   end
 
 end

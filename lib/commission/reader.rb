@@ -28,7 +28,7 @@ class Commission::Reader
 
   ALLOWED_KEYS_FOR_DEFS = %W[
     system ticketing_method consolidator blanks discount our_markup
-    corrector disabled not_implemented no_commission
+    disabled not_implemented no_commission
   ].map(&:to_sym)
 
   def defaults def_opts={}
@@ -86,7 +86,6 @@ class Commission::Reader
     attrs = attrs.merge(opts).reverse_merge(carrier_default_opts).reverse_merge(default_opts)
     cast_attrs! attrs
     commission = Commission::Rule.new(attrs)
-    commission.correct!
 
     self.opts = {}
     book.register commission
