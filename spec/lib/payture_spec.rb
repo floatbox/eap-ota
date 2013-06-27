@@ -2,6 +2,7 @@
 require 'spec_helper'
 
 describe Payture do
+  subject { Payture.new(endpoint_name: 'payture_alfa') }
 
   context "faking connection" do
     use_vcr_cassette 'payture', :record => :none

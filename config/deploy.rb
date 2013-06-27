@@ -61,8 +61,8 @@ end
 task :eviterra do
 load 'lib/recipes/unicorn'
   set :rails_env, 'production'
-  role :app, 'flexo.eviterra.com', 'deck.eviterra.com', 'calculon.eviterra.com'
-  role :web, 'hermes.eviterra.com', 'deck.eviterra.com', 'calculon.eviterra.com', 'flexo.eviterra.com'
+  role :app, 'flexo.eviterra.com', 'bender.eviterra.com', 'deck.eviterra.com', 'calculon.eviterra.com'
+  role :web, 'hermes.eviterra.com', 'deck.eviterra.com', 'calculon.eviterra.com', 'flexo.eviterra.com', 'bender.eviterra.com'
   role :db, 'deck.eviterra.com', :primary => true
   role :daemons, 'deck.eviterra.com'
 end

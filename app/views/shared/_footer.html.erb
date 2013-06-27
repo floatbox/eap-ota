@@ -9,12 +9,11 @@
         <li class="pfl-item"><a href="http://blog.eviterra.com/"><%= t 'footer.blog' %></a></li>
         <li class="pfl-item"><a href="/about/"><%= t 'footer.about' %></a></li>
         <li class="pfl-item"><a href="/faq/"><%= t 'footer.faq' %></a></li>
-        <li class="pfl-item" style="display: none;"><a href="/corporate/">Корпоративным клиентам</a></li>
         <li class="pfl-item"><a href="/agreement/"><%= t 'footer.agreement' %></a></li>
         <li class="pfl-item"><a href="/partners/"><%= t 'footer.partners' %></a></li>
     </ul>
     <div class="pf-partners">
-        <p class="appstore"><a target="_blank" href="https://itunes.apple.com/ru/app/eviterra/id569307779?mt=8&uo=4"><img alt="Available in App Store" src="/images/common/appstore-available.png"></a></p>
+        <p class="appstore"><a target="_blank" href="https://itunes.apple.com/ru/app/eviterra/id569307779?mt=8&uo=4"><img alt="<%= t 'appstore' %>" src="/images/common/appstore-<%= I18n.locale.to_s || 'ru' %>.png"></a></p>
         <p class="pfp-iata"><%= raw t 'footer.iata' %></p>
         <p class="pfp-other"><br></p>
     </div>

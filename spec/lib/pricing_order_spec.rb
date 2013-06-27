@@ -63,7 +63,7 @@ describe Pricing::Order do
       }
     end
     let :payments do
-      [ PaytureCharge.new(:status => 'blocked', :price => 30000, :commission => '2.85%') ]
+      [ PaytureCharge.new(:status => 'blocked', :price => 30000, :commission => '2.85%', :endpoint_name => 'payture_alfa') ]
     end
     its(:income) {should == 8695 }
     its(:income_earnings) {should == 29145}
@@ -78,7 +78,7 @@ describe Pricing::Order do
       }
     end
     let :payments do
-      [ PaytureCharge.new(:status => 'blocked', :price => 30000, :commission => '2.85%') ]
+      [ PaytureCharge.new(:status => 'blocked', :price => 30000, :commission => '2.85%', :endpoint_name => 'payture_alfa') ]
     end
     its(:income) {should == 10545}
     its(:income_earnings) {should == 29145}
