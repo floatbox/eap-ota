@@ -12,6 +12,7 @@ init: function() {
         this.password.init();
         this.initPlaceholders();
     }
+    this.init = $.noop;
 },
 initPopup: function() {
     var that = this;
@@ -214,14 +215,13 @@ init: function() {
         };
     });  
     
+    this.form = form;
+    
+},
+use: function(token) {
+    this.form.elem.get(0)['authenticity_token'].value = token;
 }
-
-
-
 };
-
-
-
 
 /* Form with ajax */
 var profileForm = function(elem) {
@@ -309,5 +309,4 @@ validate: function() {
 
 $(function() {
     User.init();
-    //User.show('password');
 });
