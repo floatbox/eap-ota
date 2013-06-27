@@ -8,9 +8,20 @@ class Commission::Reader
   attr_accessor :carrier_default_opts
   attr_accessor :book
 
+  # FIXME interline не клонируется с помощью .dup
+  # в рельсах 4.0 будет .deep_dup
+  READER_DEFAULTS = {
+    interline: [:no],
+    system: :amadeus,
+    consolidator: 0,
+    blanks: 0,
+    discount: 0,
+    our_markup: 0
+  }
+
   def initialize(book = Commission::Book.new)
     self.book = book
-    self.default_opts = {}
+    self.default_opts = READER_DEFAULTS.dup
     self.carrier_default_opts = {}
   end
 
@@ -24,21 +35,6 @@ class Commission::Reader
   def read_file(filename)
     instance_eval(File.read(filename), filename)
     book
-  end
-
-  ALLOWED_KEYS_FOR_DEFS = %W[
-    system ticketing_method consolidator blanks discount our_markup
-    disabled not_implemented no_commission
-  ].map(&:to_sym)
-
-  def defaults def_opts={}
-    def_opts.to_options!.assert_valid_keys(ALLOWED_KEYS_FOR_DEFS)
-    self.default_opts = def_opts
-  end
-
-  def carrier_defaults def_opts={}
-    def_opts.to_options!.assert_valid_keys(ALLOWED_KEYS_FOR_DEFS)
-    self.carrier_default_opts = def_opts
   end
 
   # Открывает блок правил по конкретной авиакомпании

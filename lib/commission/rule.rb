@@ -146,12 +146,6 @@ class Commission::Rule
 
   # @!endgroup
 
-  def initialize(*)
-    # дефолты
-    @interline = [:no]
-    super
-  end
-
   def examples=(example_array)
     @examples = example_array.collect do |code, source|
       Commission::Example.new( code: code, source: source, commission: self )

@@ -161,29 +161,12 @@ describe Commission::Reader do
 
   end
 
-  context "setting defaults" do
+  context "reader defaults" do
 
     let :book do
       Commission::Reader.new.define do
-        defaults :system => :amadeus,
-          :ticketing_method => :aviacenter,
-          :consolidator => '2%',
-          :blanks => 23,
-          :discount => '5%',
-          :our_markup => 0
-
         carrier 'FV'
         commission '2%/3'
-
-        carrier 'AB'
-        carrier_defaults :system => :sirena,
-          :ticketing_method => :direct,
-          :consolidator => '1%',
-          :blanks => 0,
-          :discount => '1%',
-          :our_markup => '1%'
-        commission '1%/1%'
-        commission '2%/2%'
 
         carrier 'UN', "Transaero", expr_date: "31.1.2013"
         commission '2%/2%'
@@ -198,46 +181,13 @@ describe Commission::Reader do
         subject { book.for_carrier('FV').first }
 
         its(:system) { should eq(:amadeus) }
-        its(:ticketing_method) { should eq(:aviacenter) }
-        its(:consolidator) { should eq(Fx('2%')) }
-        its(:blanks) { should eq(Fx(23)) }
-        its(:discount) { should eq(Fx('5%')) }
-        its(:our_markup) { should eq(Fx('0')) }
-      end
-
-      context "called with wrong key" do
-        it "should raise error" do
-          expect {
-            Commission::Reader.new.define do
-              defaults :wrongkey => :wrongvalue
-            end
-          }.to raise_error(ArgumentError)
-        end
-      end
-    end
-
-    describe ".carrier_defaults" do
-      context "called correctly" do
-        subject { book.for_carrier('AB').last }
-
-        its(:system) { should eq(:sirena) }
-        its(:ticketing_method) { should eq(:direct) }
-        its(:consolidator) { should eq(Fx('1%')) }
+        its(:consolidator) { should eq(Fx(0)) }
         its(:blanks) { should eq(Fx(0)) }
-        its(:discount) { should eq(Fx('1%')) }
-        its(:our_markup) { should eq(Fx('1%')) }
+        its(:discount) { should eq(Fx(0)) }
+        its(:our_markup) { should eq(Fx('0')) }
+        its(:interline) { should eq([:no]) }
       end
 
-      context "called with wrong key" do
-        it "should raise error" do
-          expect {
-            Commission::Reader.new.define do
-              carrier 'FV'
-              carrier_defaults :wrongkey => :wrongvalue
-            end
-          }.to raise_error(ArgumentError)
-        end
-      end
     end
 
     describe ".carrier defaults on repetitive blocks" do
@@ -263,18 +213,10 @@ describe Commission::Reader do
       end
     end
 
-
-    describe ".for_carrier" do
-      subject { book.for_carrier('AB') }
-      it {should be_an(Array)}
-      its(:size) { should == 2 }
-      its(:first) { should be_a(Commission::Rule) }
-    end
-
     describe ".all" do
       subject { book.all }
       it {should be_an(Array)}
-      its(:size) { should == 5 }
+      its(:size) { should == 3 }
       its(:first) { should be_a(Commission::Rule) }
     end
   end
