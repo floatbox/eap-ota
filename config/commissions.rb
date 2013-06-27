@@ -1233,19 +1233,50 @@ interline :unconfirmed
 ticketing_method "aviacenter"
 commission "1%/0.5%"
 
-carrier "HR", "HAHN AIR  (Авиарепс)"
+carrier "HR", "HAHN AIR  (Авиарепс)", strt_date: "2013-06-27", expr_date: "2013-07-09"
 ########################################
 
 # включено с дополнительной проверкой
+example 'svocdg'
+example "svocdg/qr"
 agent    "1 руб. от тарифов, опубликованных в системе бронирования, для авиакомпании Hahn Air и интерлайн-партнеров Hahn Air, указанных на сайте www.HR-ticketing.com;"
 agent    "1 руб. от тарифов Allairpass, расчитываемых на сайте www.allairpass.com, для авиакомпании Hahn Air и интерлайн-партнеров Hahn Air, указанных на сайте www.HR-ticketing.com"
 agent    "Проверять интерлайн при бронировании и выписке через сайт www.hr-ticketing.com"
 subagent "5 коп. с билета по опубл. тарифам HR"
-interline :absent
+interline :no, :absent
 ticketing_method "direct"
 our_markup "20"
 consolidator "2%"
 commission "1/0.05"
+
+carrier "HR", "HAHN AIR (Авиарепс)", strt_date: "2013-07-10"
+########################################
+
+# включено с дополнительной проверкой
+example 'svocdg'
+example 'svocdg/qr'
+agent    "1 руб. от тарифов, опубликованных в системе бронирования, для авиакомпании Hahn Air и интерлайн-партнеров Hahn Air, указанных на сайте www.HR-ticketing.com;"
+agent    "1 руб. от тарифов Allairpass, расчитываемых на сайте www.allairpass.com, для авиакомпании Hahn Air и интерлайн-партнеров Hahn Air, указанных на сайте www.HR-ticketing.com"
+agent    "Проверять интерлайн при бронировании и выписке через сайт www.hr-ticketing.com"
+subagent "5 коп. с билета по опубл. тарифам HR"
+interline :no, :absent
+ticketing_method "direct"
+our_markup "20"
+consolidator "2%"
+commission "1/0.05"
+
+example 'svocdg/ab'
+example 'svocdg/hg'
+example 'svocdg/ab cdgsvo'
+example 'svocdg/hg cdgsvo'
+agent "Настоящим сообщаю вам, что Интерлайн-соглашение между airberlin и Hahn Air прекращает свое действие 9 июля 2013 г.
+Рейсы AB/HG нельзя будет выписывать на бланках HR/169, начиная с 10 июля 2013 г."
+subagent ""
+interline :yes, :absent
+check { includes(operating_carrier_iatas, 'AB HG') }
+ticketing_method "direct"
+important!
+no_commission
 
 carrier "HU", "HAINAN AIRLINES"
 ########################################
