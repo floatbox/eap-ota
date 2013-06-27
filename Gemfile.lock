@@ -27,6 +27,13 @@ GIT
     i18n-js (2.1.2)
       i18n
 
+GIT
+  remote: https://github.com/gregwebs/sax-machine.git
+  revision: 2891845660c6ed3f8fb91e2b2563429f3e3d3a69
+  specs:
+    sax-machine (0.0.16)
+      nokogiri (> 0.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -427,6 +434,7 @@ DEPENDENCIES
   russian
   rvm-capistrano
   sass-rails
+  sax-machine!
   spork
   thin
   timecop
