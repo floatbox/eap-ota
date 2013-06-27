@@ -1244,7 +1244,7 @@ agent    "1 руб. от тарифов Allairpass, расчитываемых �
 agent    "Проверять интерлайн при бронировании и выписке через сайт www.hr-ticketing.com"
 subagent "5 коп. с билета по опубл. тарифам HR"
 interline :no, :absent
-ticketing_method "direct"
+ticketing_method "aviacenter"
 our_markup "20"
 consolidator "2%"
 commission "1/0.05"
@@ -1260,7 +1260,7 @@ agent    "1 руб. от тарифов Allairpass, расчитываемых �
 agent    "Проверять интерлайн при бронировании и выписке через сайт www.hr-ticketing.com"
 subagent "5 коп. с билета по опубл. тарифам HR"
 interline :no, :absent
-ticketing_method "direct"
+ticketing_method "aviacenter"
 our_markup "20"
 consolidator "2%"
 commission "1/0.05"
@@ -1274,7 +1274,7 @@ agent "Настоящим сообщаю вам, что Интерлайн-со�
 subagent ""
 interline :yes, :absent
 check { includes(operating_carrier_iatas, 'AB HG') }
-ticketing_method "direct"
+ticketing_method "aviacenter"
 important!
 no_commission
 
@@ -3988,17 +3988,17 @@ ticketing_method "downtown"
 commission "0.1%/0.1%"
 =end
 
-example 'svocdg/ab cdgsvo'
-example 'ledcdg/fv:s7 cdgled'
-strt_date "11.06.2013"
-agent "Открыть выписку S7 на билеты код-шеринг и интерлайн в офисе MOWR228FA."
-agent "Агентская комиссия 3%"
-subagent "Субагентская комиссия 3%"
-interline :no, :yes
-ticketing_method "direct"
-#our_markup 400
-discount "2.5%"
-commission "3%/3%"
+# example 'svocdg/ab cdgsvo'
+# example 'ledcdg/fv:s7 cdgled'
+# strt_date "11.06.2013"
+# agent "Открыть выписку S7 на билеты код-шеринг и интерлайн в офисе MOWR228FA."
+# agent "Агентская комиссия 3%"
+# subagent "Субагентская комиссия 3%"
+# interline :no, :yes
+# ticketing_method "direct"
+# our_markup 400
+# discount "2.5%"
+# commission "3%/3%"
 
 # general dtt для горячей замены
 example 'svojfk jfksvo'
@@ -4010,15 +4010,14 @@ important!
 discount "2.25%"
 commission "1%/3.5%"
 
-#example 'svocdg/ab cdgsvo'
-#example 'ledcdg/fv:s7 cdgled'
-#strt_date "01.04.2013"
-#agent "3% все направления и классы бронирования на собственные рейсы и рейс код-шеринга (либо интерлайна) выписываем напрямую"
-#subagent "3%"
-#interline :no, :yes
-#ticketing_method "downtown"
-#discount "2%"
-#commission "3%/3%"
+example 'svocdg/ab cdgsvo'
+example 'ledcdg/fv:s7 cdgled'
+agent "рейсы код-шеринг и интерлайн без комиссии c дополнительным сбором 400 руб за билет"
+subagent "0%"
+interline :no, :yes
+ticketing_method "downtown"
+our_markup "400"
+commission "0%/0%"
 
 carrier "GA", "GARUDA INDONESIA"
 ########################################
