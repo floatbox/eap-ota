@@ -12,6 +12,6 @@ module TypusCustomer
   end
   
   def confirm_link
-    "<a href='/profile/verification?confirmation_token=#{confirmation_token}'>#{confirmation_token}</a>".html_safe if !confirmation_token.blank?
+    "<a href='/#confirmation_token=#{confirmation_token}'>#{confirmation_token}</a>".html_safe if !confirmation_token.blank?
   end
 end

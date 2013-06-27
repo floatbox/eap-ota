@@ -15,11 +15,15 @@ module ApplicationHelper
     return "#{number}й" unless (1..9) === number.to_i
     %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}[number - 1]
   end
-  
+
   def nbsp string
     html_escape(string).gsub(/ +/, '&nbsp;').html_safe
   end
-  
+
+  def profile_confirm_url(options = nil)
+    root_url(:anchor => options.to_query)
+  end
+
   #для тайпуса
   def display_date item, attribute
     item.send(attribute).strftime("%d %b %Y")
