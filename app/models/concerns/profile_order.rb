@@ -86,6 +86,10 @@ module ProfileOrder
     tickets_count > 0
   end
 
+  def profile_sold_tickets_count
+    sold_tickets.count
+  end
+
   def profile_stored?
     tickets_count > 0 && tickets.first.flights.present?
   end
