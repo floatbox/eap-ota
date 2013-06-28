@@ -39,6 +39,7 @@ gem 'money'
 gem 'kaminari'
 gem 'daemons'
 gem 'nokogiri'
+gem 'sax-machine', :git => 'https://github.com/gregwebs/sax-machine.git'
 gem 'yajl-ruby'
 gem 'whenever', :require => false
 gem 'cucumber'
