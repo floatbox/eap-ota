@@ -115,8 +115,8 @@ initForms: function() {
     var that = this;
     var checkEmail = function(value) {
         if (!value) return 'Введите адрес электронной почты.';
-        if (/[а-яА-Я]/.test(value)) return 'Переключите раскладку и введите корректный адрес электронной почты.';
-        if (!/@\S+\.\w+/.test(value)) return 'Введите корректный адрес электронной почты.';
+        if (/[а-яА-Я]/.test(value)) return 'Адрес электронной почты может содержать только латинские символы.';
+        if (!/@\S+\.\w+/.test(value)) return 'Недействительный адрес электронной почты. Введите корректный адрес.';
     };
 
     var signIn = new profileForm(this.el.find('.phu-signin'));
@@ -128,11 +128,11 @@ initForms: function() {
         window.location = result.location;
     };
     signIn.errors['not_confirmed'] = '<p>Вы не завершили регистрацию. Для завершения регистрации перейдите по&nbsp;ссылке из&nbsp;письма-подтверждения.</p><p><a href="/profile/verification/new">Что делать, если ничего не&nbsp;пришло?</a></p>';
-    signIn.errors['not_found'] = '<p>Пользователь с таким адресом не найден.</p><p><span class="phu-signup-link phust-link">Зарегистрироваться</span></p>';
+    signIn.errors['not_found'] = '<p>Пользователь с&nbsp;таким адресом не&nbsp;зарегистрирован.</p><p><span class="phu-signup-link phust-link">Зарегистрироваться</span></p>';
     signIn.errors['failed'] = function() {
         var value = $('#signin-password').val();
-        var check = value === value.toUpperCase() ? 'Проверьте, не&nbsp;нажата&nbsp;ли клавиша Caps Lock,' : 'Проверьте раскладку клавиатуры'
-        return 'Неправильный пароль. ' + check +  ' и&nbsp;повторите попытку.';
+        var again = value === value.toUpperCase() ? 'Проверьте, не&nbsp;нажата&nbsp;ли клавиша Caps&nbsp;Lock, и&nbsp;попробуйте ещё раз.' : 'Попробуйте еще раз.';
+        return 'Неправильная пара логин-пароль. ' + again;
     };
     
     var signUp = new profileForm(this.el.find('.phu-signup'));
@@ -162,7 +162,7 @@ initForms: function() {
         that.el.find('.phu-forgot-fields').hide();
         that.el.find('.phu-forgot-result').show();
     };
-    forgot.errors['not_found'] = '<p>Нет зарегистрированных пользователей с таким адресом.</p><p><span class="phu-signup-link phust-link">Зарегистрироваться</span></p>';    
+    forgot.errors['not_found'] = '<p>Пользователь с&nbsp;таким адресом не&nbsp;зарегистрирован.</p><p><span class="phu-signup-link phust-link">Зарегистрироваться</span></p>';    
 
     this.el.find('.phufr-what-link .link').on('click', function() {
         that.el.find('.phufr-what-link').hide();
