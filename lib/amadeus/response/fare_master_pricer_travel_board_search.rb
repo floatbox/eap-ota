@@ -18,23 +18,21 @@ module Amadeus
         elements :refQualifier, :as => :ref_qualifiers
         elements :refNumber, :as => :ref_numbers
       end
-
       # ======
 
-      class StopDetails
+      class TStopDetails
         include SAXMachine
 
+        element :locationId, :as => :location_iata
         element :firstTime, :as => :departure_time
         element :date, :as => :departure_date
+        element :dateQualifier, :as => :qualifier
       end
 
       class TStop
         include SAXMachine
 
-        elements :stopDetails, :as => :details, :class => StopDetails
-        elements :dateQualifier, :as => :qualifiers
-
-        element :locationId, :as => :location_iata
+        elements :stopDetails, :as => :details, :class => TStopDetails
       end
       
       class FlightInformation
@@ -60,20 +58,24 @@ module Amadeus
         element :unitQualifier
       end
 
+      class FlightDetails
+        include SAXMachine
+
+        element :flightInformation, :as => :flight_information, :class => FlightInformation
+        elements :technicalStop, :as => :technical_stops, :class => TStop
+      end
+
       class GroupOfFlights
         include SAXMachine
 
         elements :flightProposal, :as => :flight_proposals, :class => FlightProposal
-        elements :flightInformation, :as => :flight_information, :class => FlightInformation
-        elements :technicalStop, :as => :technical_stops, :class => TStop
+        elements :flightDetails, :as => :flight_details, :class => FlightDetails
       end
 
       class FlightIndex
         include SAXMachine
 
         elements :groupOfFlights, :as => :groups, :class => GroupOfFlights
-        # по ходу действительно не надо сюда даже смотреть
-        #element :segRef, :as => :segment_ref
       end
 
       # =====
@@ -126,9 +128,6 @@ module Amadeus
           price_total = recommendation.amounts.first.to_f
           price_tax = recommendation.amounts.second.to_f
           price_fare = price_total - price_tax
-          #cabins = recommendation.cabins
-          #booking_classes = recommendation.booking_classes
-          #availabilities = recommendation.availabilities
           cabins = cabins_sax(recommendation)
           booking_classes = booking_classes_sax(recommendation)
           availabilities = availabilities_sax(recommendation)
@@ -136,16 +135,14 @@ module Amadeus
           last_tkt_date = last_tkt_date_sax(recommendation)
           additional_info = additional_info_sax(recommendation)
 
-          #Rails.logger.info "FIC: #{flight_indexes_cache}"
           variants = variants_sax(recommendation, flight_indexes_cache)
-          #Rails.logger.info "VARIANTS[1]: #{variants[1]}"
 
           Recommendation.new(
             source: 'amadeus',
             blank_count: recommendation.travellers.count,
             price_fare: price_fare,
             price_tax: price_tax,
-            variants: variants, # not complete
+            variants: variants,
             validating_carrier_iata: validating_carrier_iata,
             suggested_marketing_carrier_iatas: marketing_carrier_iatas,
             additional_info: additional_info,
@@ -158,15 +155,7 @@ module Amadeus
       end
 
       def variants_sax(recommendation, flight_indexes_cache)
-        # fucked up
         variants = []
-        #Rails.logger.info "seg count: #{recommendation.segment_flight_refs.count}"
-
-        #flight_indexes_cache.keys.each do |x|
-          #flight_indexes_cache[x].keys.each do |y|
-            #puts "#{x}, #{y}"
-          #end
-        #end
 
         recommendation.segment_flight_refs.map do |segment|
           rnumbers = segment.ref_qualifiers.zip(segment.ref_numbers).select{ |qualifier, number| qualifier == 'S' }.transpose.last.map(&:to_i)
@@ -174,21 +163,8 @@ module Amadeus
           segments = []
 
           rnumbers.each_with_index do |number, index|
-            #puts "number, index: #{number}, #{index}"
-            # segRef is 1-based, so we should add one to index
-            #Rails.logger.info "number: #{number}"
-
-            # check if i'm fucking myself up here
-            # yeah, i'm sucking a bag of dicks
-            ## ok, let me summarize:
-            # index is segment
-            # number is refNumber
-            #puts "fic[number]: #{flight_indexes_cache[number]}"
             segments << flight_indexes_cache[number - 1][index]
           end
-          #puts "segments: #{segments}"
-          #Rails.logger.info "segments: #{segments}"
-          #Rails.logger.info "======"
           variants << Variant.new(segments: segments)# if segments.compact.present?
         end
         variants
@@ -196,34 +172,35 @@ module Amadeus
 
       def flight_indexes_sax
         # cache[номер рекомендации][номер сегмента]
-        cache = {}
+        result = {}
 
         parsed.flight_indexes.each_with_index do |flight_index, segment_index|
           flight_index.groups.each_with_index do |group, rec_index|
-            info = group.flight_information
-            proposals = group.flight_proposals
-            tstops = group.technical_stops
-            estimated_flight_times = []
 
-            #puts "info len: #{info.count}"
-            #puts "tstops len: #{tstops.count}: #{tstops}"
+            proposals = group.flight_proposals
 
             ref, p_eft, dontcare = proposals
             eft_raw = p_eft.ref.to_i
             eft = (eft_raw / 100 * 60 + eft_raw % 100)
 
-            flights = info.map { |inf| parse_flights_sax(inf, tstops) }
-            #puts "flights len: #{flights.size}"
+            flights = []
 
-            cache[rec_index] ||= {}
-            cache[rec_index][segment_index] = Segment.new(
+            group.flight_details.each do |details|
+              info = details.flight_information
+              technical_stops = details.technical_stops
+
+              tstops = technical_stops.map { |ts| technical_stop_sax(ts) }
+              flights << parse_flights_sax(info, tstops)
+            end
+
+            result[rec_index] ||= {}
+            result[rec_index][segment_index] = Segment.new(
               total_duration: eft,
               flights: flights
             )
           end
-          
         end
-        cache
+        result
       end
 
       def parse_flights_sax(info, tech_stops)
@@ -240,37 +217,33 @@ module Amadeus
           departure_date: info.departure_date,
           departure_time: info.departure_time,
           equipment_type_iata: info.equipment_type,
-          technical_stops: technical_stop_sax(tech_stops)
+          technical_stops: tech_stops
         )
       end
 
       def technical_stop_sax(stop)
-        return
-        #Rails.logger.debug "STOP: #{stop}"
-        puts "stop: #{stop}"
-        if stop.present?
-          dates = {}
-          stop.details.zip(stop.qualifiers).each do |d|
-            case d.qualifier
-            when 'AD'
-              dates[:departure_time] = d.details.departure_time
-              dates[:departure_date] = d.details.departure_date
-            when 'AA'
-              dates[:arrival_time] = d.details.departure_time
-              dates[:arrival_date] = d.details.departure_date
-            end
+        details = stop.details
+
+        info = {}
+
+        details.each do |d|
+          case d.qualifier
+          when 'AD'
+            info[:departure_time] = d.departure_time
+            info[:departure_date] = d.departure_date
+          when 'AA'
+            info[:arrival_time] = d.departure_time
+            info[:arrival_date] = d.departure_date
+            info[:location_iata] = d.location_iata
           end
-          #Rails.logger.info "dates: #{dates}"
-          TechnicalStop.new(
-            departure_date: dates[:departure_date],
-            departure_time: dates[:departure_time],
-            arrival_date: dates[:arrival_date],
-            arrival_time: dates[:arrival_time],
-            location_iata: stop.location_iata
-          )
-        else
-          []
         end
+        TechnicalStop.new(
+          departure_date: info[:departure_date],
+          departure_time: info[:departure_time],
+          arrival_date: info[:arrival_date],
+          arrival_time: info[:arrival_time],
+          location_iata: info[:location_iata]
+        )
       end
 
       def adult_indexes(recommendation)
@@ -281,22 +254,18 @@ module Amadeus
         from...to
       end
 
-
       # FIXME? объединить методы с похожей логикой
       def cabins_sax(recommendation)
-        # нас интересует только первая треть, где ptc = 'ADT'
         cabins = recommendation.cabins
         cabins[adult_indexes(recommendation)]
       end
 
       def booking_classes_sax(recommendation)
-        # нас интересует только первая треть, где ptc = 'ADT'
         booking_classes = recommendation.booking_classes
         booking_classes[adult_indexes(recommendation)]
       end
 
       def availabilities_sax(recommendation)
-        # нас интересует только первая треть, где ptc = 'ADT'
         availabilities = recommendation.availabilities
         availabilities[adult_indexes(recommendation)]
       end
@@ -427,7 +396,6 @@ module Amadeus
             )
           end
         end
-        #puts "REC: #{recommendations}"
         recommendations
       end
 
