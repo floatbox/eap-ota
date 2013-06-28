@@ -46,7 +46,7 @@ amadeus:
   ignored_carriers: []
   forbid_class_changing: no
   default_office: MOWR228FA
-  search_sax: yes
+  search_sax: no
   offices:
     MOWR228FA:
       alias: booking
