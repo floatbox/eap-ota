@@ -6,6 +6,7 @@ init: function() {
         this.el.find('.phul-logout').on('click', function() {
             logout.submit();
         });
+        this.show = $.noop;
     } else {
         this.initPopup();
         this.authorization.init();
@@ -218,11 +219,9 @@ init: function() {
         };
     });  
     
-    this.form = form;
-    
 },
 use: function(token) {
-    this.form.elem.get(0)['authenticity_token'].value = token;
+    $('#customer_confirmation_token').val(token);
 }
 };
 
@@ -269,7 +268,7 @@ send: function() {
             }
         }).fail(function(jqXHR, status, message) {
             that.button.prop('disabled', false);
-            that.error(jqXHR.responseText);
+            that.error(jqXHR.statusText);
         });
         this.button.prop('disabled', true);
     }

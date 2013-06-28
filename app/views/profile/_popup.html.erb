@@ -77,6 +77,7 @@
         <div class="phu-section">
             <h6 class="phus-title">Придумайте пароль</h6>
             <%= form_for("customer", :url => customer_confirm_path, :html => {:method => :put, :novalidate => 'novalidate'}) do |f| %>
+            <%= f.hidden_field :confirmation_token %>
             <div class="phu-field">
                 <label for="new-password-1" class="phuf-placeholder">пароль</label>
                 <%= f.password_field :password, :class => 'phuf-input', :id => 'new-password-1', :placeholder => 'пароль' %>
