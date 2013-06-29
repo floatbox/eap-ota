@@ -4,7 +4,7 @@
 <%= link_to_unless_current 'кратко', table_admin_commissions_url %>
 </p>
 <p>
-<% @book.all_carriers.sort.each do |carrier_code| %>
+<% @book.carriers.sort.each do |carrier_code| %>
   <a href="#<%= carrier_code %>"><%= carrier_code %></a>
 <% end %>
 </p>

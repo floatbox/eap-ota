@@ -40,7 +40,7 @@ class Carrier < ActiveRecord::Base
   end
 
   def self.commissioned_iatas
-    Commission.all_carriers
+    Commission.carriers
   end
 
   def icon_url

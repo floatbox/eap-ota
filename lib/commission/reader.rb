@@ -37,23 +37,24 @@ class Commission::Reader
     book
   end
 
-  # Открывает блок правил по конкретной авиакомпании
+  # Открывает страницу правил по конкретной авиакомпании/периоду времени
   # @param carrier [String] IATA код авиакомпании
   # @param carrier_name [String] вторым аргументом может быть название авиакомпании. Это просто комментарий сейчас.
   #   Выкидываем.
-  # @param opts [Hash] carrier_defaults
-  def carrier carrier, *opts
-    opts.shift if opts.first.is_a? String
-    if carrier =~ /\A..\Z/
-      @carrier = carrier
-      self.opts={}
-      self.carrier_default_opts = opts.last || {}
-    else
-      raise ArgumentError, "strange carrier: #{carrier}"
-    end
+  # @param page_opts [Hash]
+  def carrier carrier, *possible_page_opts
+    raise ArgumentError, "strange carrier: #{carrier}" unless carrier =~ /\A..\Z/
+    possible_page_opts.shift if possible_page_opts.first.is_a? String
+    @carrier = carrier
+    page_opts = possible_page_opts.last || {}
+    cast_attrs! page_opts
+    @page = @book.create_page( page_opts.merge(carrier: carrier) )
+    self.opts={}
+    # временное решение?
+    self.carrier_default_opts = page_opts
   end
 
-  # один аргумент, разделенный пробелами или /; или два аргумента
+  # один аргумент, разделенный пробелами или /
   def commission arg
     vals = arg.strip.split(/[ \/]+/, -1)
     if vals.size != 2
@@ -81,10 +82,8 @@ class Commission::Reader
   def make_commission(attrs)
     attrs = attrs.merge(opts).reverse_merge(carrier_default_opts).reverse_merge(default_opts)
     cast_attrs! attrs
-    commission = Commission::Rule.new(attrs)
-
     self.opts = {}
-    book.register commission
+    @page.create_rule(attrs)
   end
   private :make_commission
 

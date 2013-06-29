@@ -9,7 +9,7 @@ module Commission
       :exists_for?,
       :find_for,
       :all,
-      :all_carriers,
+      :carriers,
         to: :default_book
 
     # lazy считывание дефолтных комиссий

@@ -14,11 +14,23 @@ class Commission::Page
   # @return String IATA код перевозчика
   attr_accessor :carrier
 
+  # @return Date дата начала действия комиссии
+  attr_accessor :strt_date
+  # @return Date дата окончания действия комиссии
+  attr_accessor :expr_date
+
   def initialize(*)
     @commissions = []
     super
   end
 
+  # создает и вносит в книгу комиссию
+  def create_rule(attrs)
+    commission = Commission::Rule.new(attrs)
+    register commission
+  end
+
+  # вносит в книгу готовую комиссию
   def register commission
     commission.number = commissions.size + 1
     if commission.important
