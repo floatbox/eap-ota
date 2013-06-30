@@ -49,6 +49,15 @@ class Commission::Page
     commissions.sort_by {|c| c.source.to_i }
   end
 
+  # @return Boolean есть ли хоть одна (включенная) комиссия?
+  def empty?
+    commissions.all?(&:disabled?)
+  end
+
+  def ticketing_methods
+    commissions.reject(&:disabled?).collect(&:ticketing_method).uniq.sort
+  end
+
   # Recommendation finders
   ########################
 
