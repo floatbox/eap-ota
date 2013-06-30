@@ -85,12 +85,6 @@
           <% if commission.international %>
             <li> только международные авиаперевозки </li>
           <% end %>
-          <% if commission.strt_date %>
-            <li> работает c <%= commission.strt_date %></li>
-          <% end %>
-          <% if commission.expr_date %>
-            <li> работает по <%= commission.expr_date %></li>
-          <% end %>
           <% if commission.check %>
             <li>дополнительная сложная проверка предложения</li>
           <% end %>

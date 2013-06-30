@@ -5,7 +5,6 @@ class Commission::Reader
 
   attr_accessor :opts
   attr_accessor :default_opts
-  attr_accessor :carrier_default_opts
   attr_accessor :book
 
   # FIXME interline не клонируется с помощью .dup
@@ -22,7 +21,6 @@ class Commission::Reader
   def initialize(book = Commission::Book.new)
     self.book = book
     self.default_opts = READER_DEFAULTS.dup
-    self.carrier_default_opts = {}
   end
 
   # выполняет определения в блоке и возвращает готовую "книгу"
@@ -50,8 +48,6 @@ class Commission::Reader
     cast_attrs! page_opts
     @page = @book.create_page( page_opts.merge(carrier: carrier) )
     self.opts={}
-    # временное решение?
-    self.carrier_default_opts = page_opts
   end
 
   # один аргумент, разделенный пробелами или /
@@ -80,8 +76,7 @@ class Commission::Reader
   end
 
   def make_commission(attrs)
-    attrs = attrs.merge(opts).reverse_merge(carrier_default_opts).reverse_merge(default_opts)
-    cast_attrs! attrs
+    attrs = attrs.merge(opts).reverse_merge(default_opts)
     self.opts = {}
     @page.create_rule(attrs)
   end
@@ -177,14 +172,6 @@ class Commission::Reader
     block = eval(block_text, nil, caller_file, caller_line - 1) if check_text
     opts[:check] = check_text || '# COMPILED'
     opts[:check_proc] = block
-  end
-
-  def expr_date date
-    opts[:expr_date] = date.to_date
-  end
-
-  def strt_date date
-    opts[:strt_date] = date.to_date
   end
 
   # дополнительные опции, пока без обработки

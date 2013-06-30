@@ -232,23 +232,22 @@ describe Commission::Reader do
 
     describe "carrier defaults on repetitive blocks" do
       context "should set defaults correctly" do
-        subject :commission do
-          book.pages_for(carrier: 'UN').first.all.first
+        subject :page do
+          book.pages_for(carrier: 'UN').first
         end
 
         its(:expr_date) { should eq(Date.new(2013,1,31))}
-        its(:strt_date) { should be_nil}
       end
 
       context "should set defaults for second occurence" do
-        subject :commission do
-          book.pages_for(carrier: 'UN').last.all.first
+        subject :page do
+          book.pages_for(carrier: 'UN').last
         end
 
         its(:strt_date) { should eq(Date.new(2013,2,1))}
         its(:expr_date) { should be_nil}
         it "should have per page numeration" do
-          commission.number.should eq(1)
+          page.all.first.number.should eq(1)
         end
       end
     end

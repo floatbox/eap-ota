@@ -60,14 +60,6 @@ class Commission::Rule
   # @return [Array<String>]
   attr_accessor :routes
 
-  # дата начала действия правила
-  # @return [Date]
-  attr_accessor :expr_date
-
-  # дата окончания действия правила
-  # @return [Date]
-  attr_accessor :strt_date
-
   # последнее средство сравнения - текст блока на ruby.
   # будет выполнен в контексте рекомендации.
   # должен вернуть true, если рекомендация подходит.
