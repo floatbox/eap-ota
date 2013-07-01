@@ -3,6 +3,26 @@
 require 'spec_helper'
 
 describe Commission::Book do
+  describe "#find_for" do
+    subject :book do
+      Commission::Book.new
+    end
+    before do
+      book.create_page carrier: 'AB'
+    end
+
+    it "should return nil when no page for carrier present" do
+      book.find_for(Recommendation.new(validating_carrier_iata: 'ZZ')).should be_nil
+    end
+
+    it "should return nil when no findable commissions on page present" do
+      book.find_for(Recommendation.new(validating_carrier_iata: 'AB')).should be_nil
+    end
+
+    pending "test normal matching"
+
+  end
+
   describe "#find_page" do
 
     context "1 page" do
