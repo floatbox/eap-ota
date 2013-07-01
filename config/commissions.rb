@@ -400,8 +400,6 @@ carrier "AB", "AIR BERLIN", strt_date: "2013-06-05", expr_date: "2013-06-30"
 ########################################
 
 example 'cdgfra/m fracdg/s'
-strt_date "05.06.2013"
-expr_date "30.06.2013"
 agent    "8% по всем направлениям через DTT"
 subagent "6% по всем направлениям через DTT"
 interline :no
@@ -426,6 +424,28 @@ no_commission
 
 carrier "AB", "AIR BERLIN", strt_date: "2013-07-01"
 ########################################
+
+example 'cdgfra/m fracdg/s'
+agent    "8% по всем направлениям через DTT"
+subagent "6% по всем направлениям через DTT"
+interline :no
+# только собственные рейсы AB и HG
+check { includes_only(operating_carrier_iatas, 'AB HG 4T') }
+discount "5.5%"
+ticketing_method "downtown"
+commission "8%/6%"
+
+# example 'cdgfra/m fracdg/s'
+agent "5% (3%) (3%) за все опубл. тарифы, включая групповые (комиссия не распространяется на:топливный сбор, сбор за безопасность и все остальные сборы, а также на дополнительные услуги)."
+agent "Период бронирования и выписки: С 5 по 31.07.2013г (включительно)."
+agent "Период путешествия: Любые даты, начиная с 5 июня 2013 г."
+agent "Применяется только к рейсам, выполняемым airberlin group (AB/HG/4T). Билеты должны быть выписаны на бланках AB/745."
+check { includes_only(operating_carrier_iatas, 'AB HG 4T') }
+ticketing_method "aviacenter"
+consolidator "2%"
+discount "3%"
+disabled "пока dtt?"
+commission "5%/3%"
 
 example 'cdgfra/S7:AB'
 example 'cdgsvo svocdg/lh'
@@ -604,8 +624,8 @@ no_commission
 carrier "AZ", "ALITALIA", strt_date: "2013-07-01"
 ########################################
 
-example 'svojfk/v jfksvo/m'
-example 'jfksvo/o'
+# example 'svojfk/v jfksvo/m'
+# example 'jfksvo/o'
 agent "1232 DL/AFKL/AZ US-EMEAI Consolidator Commission Program Amendment #1"
 agent "Если, кратко, то J,E,D,I P,Y,B,M,H,K A,V,T,N,S,L,O"
 agent "Только перелеты в Америку из России и наоборот (RT и OW), только СОБСТВЕННЫЕ рейсы ( никаких код-шерингов), авиакомпании могут комбинироваться в одном бронировании. Их комиссия 8%, наша 6%, никаких особенностей в выписке"
@@ -614,11 +634,12 @@ subclasses "JEDIPYBMHKAVTNSLO"
 check { includes(country_iatas, 'RU') and includes(country_iatas, 'US') and includes_only(country_iatas, 'US RU') }
 ticketing_method "downtown"
 discount "5%"
+disabled "отмена повышенной! мега срочно"
 commission "8%/6%"
 
-example 'svolin/az565 linsvo/AZ560'
-example 'svolin/az565 linsvo/AZ560 svocdg'
-example 'svolin/az565 linsvo/AZ564'
+# example 'svolin/az565 linsvo/AZ560'
+# example 'svolin/az565 linsvo/AZ560 svocdg'
+# example 'svolin/az565 linsvo/AZ564'
 agent "4% от тарифа ЭКОНОМ КЛАССА на ВСЕ НАПРАВЛЕНИЯ ALITALIA с вылетом из Москвы"
 agent "с обязательным наличием в маршруте рейса Москва-Милан AZ565 или AZ56 и обязательным наличием в маршруте рейса Милан-Москва AZ560 и AZ564."
 subagent "2% от тарифа ЭКОНОМ КЛАССА на ВСЕ НАПРАВЛЕНИЯ ALITALIA с вылетом из Москвы"
@@ -626,6 +647,7 @@ classes :economy
 check { includes(flights.every.full_flight_number, %W(AZ565 AZ56)) and includes(flights.every.full_flight_number, %W(AZ560 AZ564)) }
 ticketing_method "aviacenter"
 discount "1%"
+disabled "отмена повышенной! мега срочно"
 commission "4%/2%"
 
 example 'mrucdg'
@@ -1012,6 +1034,17 @@ check { includes(country_iatas, 'RU') and includes(country_iatas, 'US') and incl
 ticketing_method "downtown"
 discount "5%"
 commission "8%/6%"
+
+# example 'svojfk/f'
+# example 'svojfk/c jfksvo/d'
+agent "4% (2%) (2%) от опубл. тарифа Бизнес класса (J,C,D,Z,I) на собств.рейсы DL с вылетами из МОСКВЫ;"
+subagent "4% (2%) (2%) от опубл. тарифа Бизнес класса (J,C,D,Z,I) на собств.рейсы DL с вылетами из МОСКВЫ;"
+subclasses "JCDZI"
+check { includes(city_iatas.first, 'MOW') }
+ticketing_method "aviacenter"
+discount "2%"
+disabled "продаем по dtt"
+commission "4%/2%"
 
 # example 'okocdg cdgoko/ab'
 # example 'cdgoko'
@@ -2829,9 +2862,10 @@ ticketing_method "aviacenter"
 # discount "0.5%"
 commission "1%/0.5%"
 
-carrier "UA", "UNITED AIRLINES (ГЛОНАСС)"
+carrier "UA", "UNITED AIRLINES (ГЛОНАСС)", strt_date: "2013-06-20", expr_date: "2013-12-31"
 ########################################
 
+# внутренние
 example 'jfklax'
 agent "0% от всех опубл. тарифов на собств.рейсы UA на внутренних маршрутах внутри Американского континента и международных маршрутах с началом путешествия в США или Канаде"
 subagent ""
@@ -2840,6 +2874,95 @@ ticketing_method "aviacenter"
 consolidator "2%"
 commission "0%/0%"
 
+# Сша/Канада, Американский континент
+example 'jfksvo'
+example 'jfksvo svojfk'
+example 'yowjfk'
+example 'yowsvo'
+agent "0% от всех опубл. тарифов на собств.рейсы UA на внутренних маршрутах внутри Американского континента и международных маршрутах с началом путешествия в США или Канаде;"
+subagent ""
+check { includes_only(country_iatas.first, "US CA") }
+international
+ticketing_method "aviacenter"
+consolidator "2%"
+commission "0%/0%"
+
+example 'svocdg/lh cdgjfk jfkcdg/lx cdgsvo'
+agent "5% (3%) (3%) на все опубл. тарифы Эконом класса во всех подклассах бронирования из России в США, Канаду и Латинскую Америку с перелетом из России в Европейские города авиакомпаниями, входящими в LH Group ( LH,LX,SN) , и трансатлантическим перелетом авиакомпанией United под кодом UA. Обратный перелет также должен быть строго в этой комбинации. (0% если начало путешествия на UA будет из Европы)."
+agent "Проездной документ должен быть оформлен единым билетом на стоке 016."
+subagent "3%"
+classes :economy
+check { includes_only(operating_carrier_iatas.first, 'LH LX SN') and includes(operating_carrier_iatas.second, 'UA') and includes(country_iatas.first, 'RU') } # вроде так проверяем трансатлантику у VS, например
+ticketing_method "aviacenter"
+consolidator "2%"
+discount "3%"
+disabled "ведь по dtt продаем же"
+commission "5%/3%"
+
+example 'svocdg/lh/f cdgjfk/a jfkcdg/lx/c cdgsvo/z'
+agent "7% (5%) (5%) в следующих подклассах бронирования: F/A/J/C/D/Z на все опубл. тарифы из России в США, Канаду и Латинскую Америку с перелетом из России в Европейские города авиакомпаниями, входящими в LH Group (LH,LX,SN) , и трансатлантическим перелетом авиакомпанией United под кодом UA. Обратный перелет также должен быть строго в этой комбинации. (0% если начало путешествия на UA будет из Европы)."
+agent "Проездной документ должен быть оформлен единым билетом на стоке 016."
+subagent "5%"
+subclasses "FAJCDZ"
+check { includes_only(operating_carrier_iatas.first, 'LH LX SN') and includes(operating_carrier_iatas.second, 'UA') and includes(country_iatas.first, 'RU') } # вроде так проверяем трансатлантику у VS, например
+ticketing_method "aviacenter"
+consolidator "2%"
+discount "5%"
+disabled "ведь по dtt продаем же"
+commission "7%/5%"
+
+example 'svojfk/f'
+example 'svojfk/a jfksvo/z'
+agent    "по классам F, A,D, Z, P у них осталась комиссия 10 %"
+subagent "8%"
+subclasses "FADZP"
+check { includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
+ticketing_method "downtown"
+international
+tour_code "815ZU"
+designator "PP10"
+discount "6%"
+commission "10%/8%"
+
+example 'svojfk/q'
+example 'svojfk/q jfksvo/k'
+agent "по классам Q, V, W, S, T, L, K у них комиссия 8%"
+subagent "6%"
+subclasses "QVWSTLK"
+check { includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
+ticketing_method "downtown"
+international
+tour_code "815ZU"
+designator "PP8"
+discount "4%"
+commission "8%/6%"
+
+example 'svojfk/y'
+example 'svojfk/y jfksvo/m'
+agent "по классам Y, B, M, U, H у них комиссия 5%"
+subagent "3%"
+subclasses "YBMUH"
+check { includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ XU AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SS ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
+ticketing_method "downtown"
+international
+tour_code "815ZU"
+designator "PP5"
+discount "1.5%"
+commission "5%/3%"
+
+carrier "UA", "UNITED AIRLINES (ГЛОНАСС)", strt_date: "2014-01-01"
+########################################
+
+# внутренние
+example 'jfklax'
+agent "0% от всех опубл. тарифов на собств.рейсы UA на внутренних маршрутах внутри Американского континента и международных маршрутах с началом путешествия в США или Канаде"
+subagent ""
+domestic
+ticketing_method "aviacenter"
+consolidator "2%"
+commission "0%/0%"
+
+# Сша/Канада, Американский континент
 example 'jfksvo'
 example 'jfksvo svojfk'
 example 'yowjfk'
