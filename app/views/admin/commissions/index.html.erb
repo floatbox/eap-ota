@@ -12,7 +12,7 @@
 
 <%= render 'form' %>
 
-<% @book.pages.group_by(&:carrier).each do |carrier_code, pages| %>
+<% @book.current_pages.group_by(&:carrier).each do |carrier_code, pages| %>
   <h2 id="<%= carrier_code %>"><%= "(#{carrier_code})" %> <%= Carrier[carrier_code].name  rescue '' %></h2>
   <% pages.reverse.each do |page| %>
     <h3>с <% if page.strt_date %> <%= l page.strt_date %><% else %> незапамятных времен<% end %>,

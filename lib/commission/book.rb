@@ -32,6 +32,13 @@ class Commission::Book
     @index[carrier]
   end
 
+  # временный метод, отображающий только активные страницы
+  def current_pages
+    carriers.map do |carrier|
+      find_page(carrier: carrier)
+    end
+  end
+
   # Recommendation finders
   ########################
 
