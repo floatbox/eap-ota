@@ -54,7 +54,7 @@ describe Commission do
   book = Commission.default_book
   book.pages.each do |page|
 
-    describe "#{page.carrier} on #{page.strt_date || 'beginning of time'}" do
+    describe "#{page.carrier} on #{page.start_date || 'beginning of time'}" do
       page.commissions.each do |commission|
 
         describe commission.inspect do

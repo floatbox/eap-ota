@@ -15,9 +15,7 @@ class Commission::Page
   attr_accessor :carrier
 
   # @return Date дата начала действия комиссии
-  attr_accessor :strt_date
-  # @return Date дата окончания действия комиссии
-  attr_accessor :expr_date
+  attr_accessor :start_date
 
   def initialize(*)
     @commissions = []

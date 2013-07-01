@@ -58,14 +58,14 @@ describe Commission::Reader do
   context "two carriers, four pages" do
     let :book do
       Commission::Reader.new.define do
-        carrier 'FV', expr_date: '2013-04-30'
+        carrier 'FV'
         commission '2%/3'
         commission '1%/0'
 
-        carrier 'FV', strt_date: '2013-05-01', expr_date: '2013-07-31'
+        carrier 'FV', start_date: '2013-05-01'
         commission '4%/3'
 
-        carrier 'FV', strt_date: '2013-08-01'
+        carrier 'FV', start_date: '2013-08-01'
 
         carrier 'AB'
         commission '0/0'
@@ -212,10 +212,10 @@ describe Commission::Reader do
         carrier 'FV'
         commission '2%/3'
 
-        carrier 'UN', strt_date: "1.2.2013"
+        carrier 'UN', start_date: "1.2.2013"
         commission '1%/1%'
 
-        carrier 'UN', "Transaero", expr_date: "31.1.2013"
+        carrier 'UN', "Transaero"
         commission '2%/2%'
       end
     end
@@ -236,7 +236,7 @@ describe Commission::Reader do
           book.pages_for(carrier: 'UN').last
         end
 
-        its(:expr_date) { should eq(Date.new(2013,1,31))}
+        its(:start_date) { should be_nil }
       end
 
       context "should set defaults for second occurence" do
@@ -244,8 +244,7 @@ describe Commission::Reader do
           book.pages_for(carrier: 'UN').first
         end
 
-        its(:strt_date) { should eq(Date.new(2013,2,1))}
-        its(:expr_date) { should be_nil}
+        its(:start_date) { should eq(Date.new(2013,2,1))}
         it "should have per page numeration" do
           page.all.first.number.should eq(1)
         end

@@ -1,4 +1,4 @@
-carrier "SU", "Aeroflot", strt_date: "2013-06-01", expr_date: "2013-06-30"
+carrier "SU", "Aeroflot", start_date: "2013-06-01"
 ########################################
 
 example "svocdg"
@@ -40,7 +40,7 @@ ticketing_method "aviacenter"
 important!
 no_commission "закрыли субсидированные тарифы"
 
-carrier "SU", "Aeroflot", strt_date: "2013-07-01"
+carrier "SU", "Aeroflot", start_date: "2013-07-01"
 ########################################
 
 example "svocdg"
@@ -91,7 +91,7 @@ ticketing_method "aviacenter"
 important!
 no_commission "закрыли субсидированные тарифы"
 
-carrier "UN", "TRANSAERO", strt_date: "21.06.2013"
+carrier "UN", "TRANSAERO", start_date: "21.06.2013"
 ########################################
 
 #dtt
@@ -207,7 +207,7 @@ ticketing_method "aviacenter"
 interline :unconfirmed
 commission "5%/3.5%"
 
-carrier "5N", "Нордавиа-РА", strt_date: "01.12.2012"
+carrier "5N", "Нордавиа-РА", start_date: "01.12.2012"
 ########################################
 
 example 'svocdg'
@@ -226,7 +226,7 @@ discount "5%"
 # our_markup 120
 commission "7%/5%"
 
-carrier "6H", "ISRAIR AIRLINE", strt_date: "01.07.2011"
+carrier "6H", "ISRAIR AIRLINE", start_date: "01.07.2011"
 ########################################
 
 example 'svocdg'
@@ -266,7 +266,7 @@ commission "3%/2%"
 example 'svocdg/ab'
 no_commission
 
-carrier "7D", "DONBASSAERO", strt_date: "11.04.2011"
+carrier "7D", "DONBASSAERO", start_date: "11.04.2011"
 ########################################
 
 #example 'svocdg'
@@ -354,7 +354,7 @@ disabled "ни разу не попадались"
 consolidator "2%"
 commission "0%/0%"
 
-carrier "AB", "AIR BERLIN", strt_date: "2013-06-05", expr_date: "2013-06-30"
+carrier "AB", "AIR BERLIN", start_date: "2013-06-05"
 ########################################
 
 example 'cdgfra/m fracdg/s'
@@ -380,7 +380,7 @@ commission "1/0.05"
 example 'svocdg/s7'
 no_commission
 
-carrier "AB", "AIR BERLIN", strt_date: "2013-07-01"
+carrier "AB", "AIR BERLIN", start_date: "2013-07-01"
 ########################################
 
 example 'cdgfra/m fracdg/s'
@@ -454,7 +454,7 @@ discount "1.5%"
 disabled "на свои не продаем"
 commission "5%/3%"
 
-carrier "AF", "AIR FRANCE", strt_date: "15.05.2013"
+carrier "AF", "AIR FRANCE", start_date: "15.05.2013"
 ########################################
 
 example 'jfksvo/c svojfk/n'
@@ -469,7 +469,7 @@ ticketing_method "downtown"
 discount "5%"
 commission "8%/6%"
 
-#strt_date "01.07.2012"
+#start_date "01.07.2012"
 example 'svocdg'
 example 'svocdg cdgsvo/ab'
 agent    "1 руб. за билет, выписанный по опубл. тарифам, в случае перевозки с вылетом из стран СНГ;"
@@ -511,7 +511,7 @@ commission "1/0.5"
 example 'cdgsvo/ab'
 no_commission
 
-carrier "AZ", "ALITALIA", strt_date: "2013-06-01", expr_date: "2013-06-30"
+carrier "AZ", "ALITALIA", start_date: "2013-06-01"
 ########################################
 
 example 'svojfk/v jfksvo/m'
@@ -578,7 +578,7 @@ commission "1eur/5"
 example 'svocdg/ab cdgsvo'
 no_commission
 
-carrier "AZ", "ALITALIA", strt_date: "2013-07-01"
+carrier "AZ", "ALITALIA", start_date: "2013-07-01"
 ########################################
 
 # example 'svojfk/v jfksvo/m'
@@ -626,7 +626,7 @@ commission "1eur/5"
 example 'svocdg/ab cdgsvo'
 no_commission
 
-carrier "B2", "Belavia", strt_date: "2013-05-01", expr_date: "2013-07-31"
+carrier "B2", "Belavia", start_date: "2013-05-01"
 ########################################
 
 example 'svocdg'
@@ -636,7 +636,7 @@ ticketing_method "aviacenter"
 discount "3.5%"
 commission "5%/3.5%"
 
-carrier "B2", "Belavia", strt_date: "2013-08-01"
+carrier "B2", "Belavia", start_date: "2013-08-01"
 ########################################
 
 example 'svocdg'
@@ -646,7 +646,7 @@ ticketing_method "aviacenter"
 discount "2.5%"
 commission "4%/2.5%"
 
-carrier "BA", "BRITISH AIRWAYS (См. в конце таблицы продолжение в 4-х частях)", strt_date: "01.01.2013"
+carrier "BA", "BRITISH AIRWAYS (См. в конце таблицы продолжение в 4-х частях)", start_date: "01.01.2013"
 ########################################
 
 example 'svocdg'
@@ -862,7 +862,7 @@ ticketing_method "aviacenter"
 discount "1%"
 commission "2%/1.4%"
 
-carrier "DE", "Condor Flugdienst (Авиарепс)", strt_date: "01.10.2011"
+carrier "DE", "Condor Flugdienst (Авиарепс)", start_date: "01.10.2011"
 ########################################
 
 example 'svocdg'
@@ -880,7 +880,7 @@ ticketing_method "aviacenter"
 consolidator "2%"
 commission "1%/0.05"
 
-carrier "DL", "DELTA AIRLINES", strt_date: "2013-05-15", expr_date: "2014-03-31"
+carrier "DL", "DELTA AIRLINES", start_date: "2013-05-15"
 ########################################
 
 example 'svojfk/d jfksvo/m'
@@ -974,7 +974,7 @@ ticketing_method "aviacenter"
 consolidator "2%"
 commission "0%/0%"
 
-carrier "DL", "DELTA AIRLINES", strt_date: "2014-04-01"
+carrier "DL", "DELTA AIRLINES", start_date: "2014-04-01"
 ########################################
 
 example 'svojfk/d jfksvo/m'
@@ -1222,7 +1222,7 @@ interline :yes
 ticketing_method "aviacenter"
 commission "1%/0.5%"
 
-carrier "FV", "RUSSIA", strt_date: "2013-06-21", expr_date: "2013-06-30"
+carrier "FV", "RUSSIA", start_date: "2013-06-21"
 ########################################
 
 example 'svocdg'
@@ -1263,7 +1263,7 @@ important!
 ticketing_method "aviacenter"
 no_commission "закрыли субсидированные тарифы"
 
-carrier "FV", "RUSSIA", strt_date: "2013-07-01"
+carrier "FV", "RUSSIA", start_date: "2013-07-01"
 ########################################
 
 example 'svocdg'
@@ -1324,7 +1324,7 @@ interline :unconfirmed
 ticketing_method "aviacenter"
 commission "1%/0.5%"
 
-carrier "HR", "HAHN AIR  (Авиарепс)", strt_date: "2013-06-27", expr_date: "2013-07-09"
+carrier "HR", "HAHN AIR  (Авиарепс)", start_date: "2013-06-27"
 ########################################
 
 # включено с дополнительной проверкой
@@ -1340,7 +1340,7 @@ our_markup "20"
 consolidator "2%"
 commission "1/0.05"
 
-carrier "HR", "HAHN AIR (Авиарепс)", strt_date: "2013-07-10"
+carrier "HR", "HAHN AIR (Авиарепс)", start_date: "2013-07-10"
 ########################################
 
 # включено с дополнительной проверкой
@@ -1369,7 +1369,7 @@ ticketing_method "aviacenter"
 important!
 no_commission
 
-carrier "HU", "HAINAN AIRLINES", strt_date: "2011-12-12", expr_date: "2013-07-31"
+carrier "HU", "HAINAN AIRLINES", start_date: "2011-12-12"
 ########################################
 
 example 'svopek/c'
@@ -1541,7 +1541,7 @@ check { includes(country_iatas, 'CN') }
 ticketing_method "aviacenter"
 commission "3%/1%"
 
-carrier "HU", "HAINAN AIRLINES", strt_date: "2013-08-01"
+carrier "HU", "HAINAN AIRLINES", start_date: "2013-08-01"
 ########################################
 
 example 'pekxmn xmnweh'
@@ -1719,7 +1719,7 @@ ticketing_method "aviacenter"
 consolidator "2%"
 commission "0%/0%"
 
-carrier "KC", "Air Astana", strt_date: "11.06.2012"
+carrier "KC", "Air Astana", start_date: "11.06.2012"
 ########################################
 
 example 'tsekgf'
@@ -1776,7 +1776,7 @@ commission "0%/0%"
 example 'svoicn icnsvo/ab'
 no_commission
 
-carrier "KL", "KLM", strt_date: "15.05.2013"
+carrier "KL", "KLM", start_date: "15.05.2013"
 ########################################
 
 example 'jfksvo/c svojfk/n'
@@ -1917,7 +1917,7 @@ commission "1/0.05"
 example 'svocdg/ab'
 no_commission
 
-carrier "LO", "LOT", strt_date: "2013-04-01", expr_date: "2013-06-30"
+carrier "LO", "LOT", start_date: "2013-04-01"
 ########################################
 
 example 'ledprg prgwaw'
@@ -1943,7 +1943,7 @@ ticketing_method "aviacenter"
 our_markup "0.1%"
 commission "1eur/5"
 
-carrier "LO", "LOT", strt_date: "2013-07-01"
+carrier "LO", "LOT", start_date: "2013-07-01"
 ########################################
 
 example 'ledprg prgwaw'
@@ -2138,7 +2138,7 @@ ticketing_method "aviacenter"
 consolidator "2%"
 commission "0%/0%"
 
-carrier "MU", "CHINA EASTERN", strt_date: "15.09.2011"
+carrier "MU", "CHINA EASTERN", start_date: "15.09.2011"
 ########################################
 
 example 'svohkg/business'
@@ -2386,7 +2386,7 @@ ticketing_method "aviacenter"
 discount "4%"
 commission "5%/3.5%"
 
-carrier "PS", "Ukraine International Airlines (ГЛОНАСС)", strt_date: "20.06.2013"
+carrier "PS", "Ukraine International Airlines (ГЛОНАСС)", start_date: "20.06.2013"
 ########################################
 
 example 'svocdg'
@@ -2476,7 +2476,7 @@ ticketing_method "aviacenter"
 disabled "not bsp"
 commission "7%/4.9%"
 
-carrier "QR", "QATAR AIRWAYS", strt_date: "01.06.2013"
+carrier "QR", "QATAR AIRWAYS", start_date: "01.06.2013"
 ########################################
 
 example 'cdgpek/business pekcdg/business'
@@ -2729,7 +2729,7 @@ ticketing_method "aviacenter"
 consolidator "2%"
 commission "0%/0%"
 
-carrier "TK", "TURKISH AIRLINES", strt_date: '17.03.2013'
+carrier "TK", "TURKISH AIRLINES", start_date: '17.03.2013'
 ########################################
 
 example 'istsvo svoist'
@@ -2790,7 +2790,7 @@ ticketing_method "aviacenter"
 # discount "0.5%"
 commission "1%/0.5%"
 
-carrier "UA", "UNITED AIRLINES (ГЛОНАСС)", strt_date: "2013-06-20", expr_date: "2013-12-31"
+carrier "UA", "UNITED AIRLINES (ГЛОНАСС)", start_date: "2013-06-20"
 ########################################
 
 # внутренние
@@ -2878,7 +2878,7 @@ designator "PP5"
 discount "1.5%"
 commission "5%/3%"
 
-carrier "UA", "UNITED AIRLINES (ГЛОНАСС)", strt_date: "2014-01-01"
+carrier "UA", "UNITED AIRLINES (ГЛОНАСС)", start_date: "2014-01-01"
 ########################################
 
 # внутренние
@@ -2966,7 +2966,7 @@ ticketing_method "aviacenter"
 # discount "3.5%"
 commission "5%/3.5%"
 
-carrier "VN", "VIETNAM AIRLINES", strt_date: "01.09.2012"
+carrier "VN", "VIETNAM AIRLINES", start_date: "01.09.2012"
 ########################################
 
 example 'svohan hansvo'
@@ -3016,7 +3016,7 @@ commission "7%/5%"
 example 'svocdg cdgsvo/ab'
 no_commission
 
-carrier "VV", "AEROSVIT", strt_date: "01.08.2012"
+carrier "VV", "AEROSVIT", start_date: "01.08.2012"
 ########################################
 
 example 'leddok'
@@ -3103,7 +3103,7 @@ interline :unconfirmed
 ticketing_method "aviacenter"
 commission "1%/0.5%"
 
-carrier "XW", "SkyExpress Limited", strt_date: "01.10.2011"
+carrier "XW", "SkyExpress Limited", start_date: "01.10.2011"
 ########################################
 
 example 'svocdg'
@@ -3239,7 +3239,7 @@ ticketing_method "aviacenter"
 discount "3%"
 commission "5%/3%"
 
-carrier "U6", "ОАО Авиакомпания  УРАЛЬСКИЕ  АВИАЛИНИИ", strt_date: "01.04.2013"
+carrier "U6", "ОАО Авиакомпания  УРАЛЬСКИЕ  АВИАЛИНИИ", start_date: "01.04.2013"
 ########################################
 
 example 'svocdg/business cdgsvo/business'
@@ -3626,7 +3626,7 @@ ticketing_method "aviacenter"
 ## discount "2.5%"
 commission "5%/3%"
 
-carrier "U9", "Aircompany Tatarstan", strt_date: "01.05.2013"
+carrier "U9", "Aircompany Tatarstan", start_date: "01.05.2013"
 ########################################
 
 example 'svocdg/business cdgsvo/business'
@@ -3750,7 +3750,7 @@ carrier "S7", "S7 AIRLINES"
 # dtt по невыгодным условиям прямой выписки
 # w
 #example 'svocdg/w cdgsvo/w'
-#strt_date "01.04.2013"
+#start_date "01.04.2013"
 #agent "При продаже перевозок по коду бронирования W, оформленных на ПД на рейсы Перевозчика, вознаграждение составляет 0,1%"
 #subagent "0.1%"
 #subclasses "W"
@@ -3853,7 +3853,7 @@ example 'svoaer aersvo'
 example 'svoaaq'
 example 'aaqsvo'
 example 'svoaaq aaqsvo'
-strt_date "01.04.2013"
+start_date "01.04.2013"
 agent "При продаже перевозок между г. Москва и г. Горно-Алтайск,г. Горно-Алтайск и
 г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
 agent "При продаже перевозок между г. Москва и г. Варна,г. Варна и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
@@ -3913,7 +3913,7 @@ commission "5%/3.5%"
 
 # w
 #example 'svocdg/w/ab:s7 cdgsvo/w'
-#strt_date "01.04.2013"
+#start_date "01.04.2013"
 #agent "При продаже перевозок по коду бронирования W, оформленных на ПД на рейсы Перевозчика, вознаграждение составляет 0,1%"
 #subagent "0.1%"
 #subclasses "W"
@@ -4015,7 +4015,7 @@ example 'svoaer aersvo/ab:s7'
 example 'svoaaq/ab:s7'
 example 'aaqsvo/ab:s7'
 example 'svoaaq aaqsvo/ab:s7'
-strt_date "01.04.2013"
+start_date "01.04.2013"
 agent "При продаже перевозок между г. Москва и г. Горно-Алтайск,г. Горно-Алтайск и
 г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
 agent "При продаже перевозок между г. Москва и г. Варна,г. Варна и г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
@@ -4074,7 +4074,7 @@ commission "0.1%/0.1%"
 
 # example 'svocdg/ab cdgsvo'
 # example 'ledcdg/fv:s7 cdgled'
-# strt_date "11.06.2013"
+# start_date "11.06.2013"
 # agent "Открыть выписку S7 на билеты код-шеринг и интерлайн в офисе MOWR228FA."
 # agent "Агентская комиссия 3%"
 # subagent "Субагентская комиссия 3%"
@@ -4288,7 +4288,7 @@ ticketing_method "aviacenter"
 discount "6%"
 commission "8%/6%"
 
-carrier "MR", "HUNNU AIR (MR/861)", strt_date: "01.04.2013"
+carrier "MR", "HUNNU AIR (MR/861)", start_date: "01.04.2013"
 #######################################
 
 agent "3% от всех опубликованных тарифов на собственные рейсы авиакомпании"
@@ -4352,7 +4352,7 @@ ticketing_method "aviacenter"
 consolidator "2%"
 commission "1/0.05"
 
-carrier "OZ", "ASIANA AIRLINES", strt_date: "2013-06-01", expr_date: "2031-12-31"
+carrier "OZ", "ASIANA AIRLINES", start_date: "2013-06-01"
 #######################################
 
 agent "агентская комиссия - по 31.12.2013г. 5% от всех опубл.тарифов"
@@ -4361,6 +4361,6 @@ ticketing_method "aviacenter"
 discount "2.5%"
 commission "5%/3%"
 
-carrier "OZ", "ASIANA AIRLINES", strt_date: "2014-01-01"
+carrier "OZ", "ASIANA AIRLINES", start_date: "2014-01-01"
 #######################################
 

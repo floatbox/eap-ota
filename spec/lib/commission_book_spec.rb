@@ -49,9 +49,9 @@ describe Commission::Book do
       end
 
       before do
-        @page2 = book.create_page carrier: 'AB', strt_date: Date.today, expr_date: 5.days.from_now.to_date
-        @page1 = book.create_page carrier: 'AB', expr_date: 1.days.ago.to_date
-        @page3 = book.create_page carrier: 'AB', strt_date: 6.days.from_now.to_date
+        @page2 = book.create_page carrier: 'AB', start_date: Date.today
+        @page1 = book.create_page carrier: 'AB'
+        @page3 = book.create_page carrier: 'AB', start_date: 6.days.from_now.to_date
       end
 
       it "should find correct page for past" do
@@ -75,7 +75,7 @@ describe Commission::Book do
       end
     end
 
-    specify "should raise exception if entered several pages with identical strt_date" do
+    specify "should raise exception if entered several pages with identical start_date" do
       expect {
         book = Commission::Book.new
         book.create_page carrier: 'AB'

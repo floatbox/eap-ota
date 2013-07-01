@@ -83,8 +83,7 @@ class Commission::Reader
   private :make_commission
 
   def cast_attrs!(attrs)
-    attrs[:strt_date] &&= attrs[:strt_date].to_date
-    attrs[:expr_date] &&= attrs[:expr_date].to_date
+    attrs[:start_date] &&= attrs[:start_date].to_date
   end
   private :cast_attrs!
 

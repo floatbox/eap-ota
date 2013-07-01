@@ -51,7 +51,7 @@ class Commission::Book
   # FIXME выбирает активну
   def find_page(opts)
     pages = pages_for(opts) or return
-    page = pages.find {|p| p.strt_date.nil? || p.strt_date <= Date.today }
+    page = pages.find {|p| p.start_date.nil? || p.start_date <= Date.today }
   end
 
   # создает и вносит в индекс страницу
@@ -68,10 +68,10 @@ class Commission::Book
   def register_page(page)
     pages = @index[page.carrier] || []
     pages += [page]
-    pages.sort_by! {|p| p.strt_date || LONG_TIME_AGO }
+    pages.sort_by! {|p| p.start_date || LONG_TIME_AGO }
     pages.reverse!
-    if pages.map(&:strt_date).uniq.size != pages.size
-      raise ArgumentError, "#{page} with #{page.strt_date} already registered in book"
+    if pages.map(&:start_date).uniq.size != pages.size
+      raise ArgumentError, "#{page} with #{page.start_date} already registered in book"
     end
     @index[page.carrier] = pages
     page
