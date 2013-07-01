@@ -42,5 +42,9 @@ class Airport < ActiveRecord::Base
     [self]
   end
 
+  def inspect
+    "#<#{self.class}:#{id||new}:(#{iata})>"
+  end
+
 end
 

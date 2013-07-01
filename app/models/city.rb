@@ -65,5 +65,9 @@ class City < ActiveRecord::Base
     (time - tz.local_to_utc(time)).to_i
   end
 
+  def inspect
+    "#<#{self.class}:#{id||new}:(#{iata})>"
+  end
+
 end
 
