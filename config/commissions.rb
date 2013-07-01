@@ -1798,7 +1798,6 @@ subagent "5 коп. за билет, выписанный по опубл. та�
 interline :no, :yes
 ticketing_method "aviacenter"
 # discount "2%"
-our_markup "0.1%"
 commission "1/0.05"
 
 carrier "KM", "AIR MALTA  (Авиарепс)"
@@ -1887,7 +1886,7 @@ check { includes(country_iatas, 'ES FR IT CZ PT NL CH') }
 interline :no, :yes
 ticketing_method "aviacenter"
 our_markup "0"
-# discount "1.5%"
+discount "0.5%"
 commission "1/0.05"
 
 example 'svooko'
@@ -1897,9 +1896,8 @@ agent    "1 руб. с билета по опубл. тарифам на соб�
 subagent "5 коп. с билета по опубл. тарифам на собственные рейсы LH и рейсы Interline с участком LH."
 interline :no, :yes
 ticketing_method "aviacenter"
-## discount '0.05'
 our_markup "0"
-# discount "1.5%"
+discount "0.5%"
 commission "1/0.05"
 
 example 'svocdg/LX'
@@ -1913,7 +1911,7 @@ interline :absent
 check { includes_only(marketing_carrier_iatas, %W[LX EW CL IQ C3]) }
 ticketing_method "aviacenter"
 our_markup "0%"
-# discount "1.5%"
+discount "0.5%"
 commission "1/0.05"
 
 example 'svocdg/ab'
@@ -3743,7 +3741,7 @@ example 'svocdg cdgsvo'
 agent "5% DTT"
 subagent "3% DTT"
 ticketing_method "downtown"
-discount "2.8%"
+discount "1%"
 commission "5%/4%"
 
 carrier "S7", "S7 AIRLINES"
@@ -4093,7 +4091,7 @@ subagent "3.5% dtt"
 interline :no_codeshare
 ticketing_method "downtown"
 important!
-discount "3.5%"
+discount "2%"
 commission "1%/3.5%"
 
 example 'svocdg/ab cdgsvo'
