@@ -43,7 +43,7 @@ class Commission::Book
   ########################
 
   def find_for(recommendation)
-    page = find_page(carrier: recommendation.validating_carrier_iata) or return []
+    page = find_page(carrier: recommendation.validating_carrier_iata) or return
     page.find_commission(recommendation)
   end
 
