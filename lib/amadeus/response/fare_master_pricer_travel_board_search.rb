@@ -294,15 +294,15 @@ module Amadeus
 
       def last_tkt_date_sax(recommendation)
         messages = recommendation.fares
-        catch(:date) do
-          messages.map(&:descriptions).zip(messages.map(&:qualifiers)).flatten(1).each_slice(2) do |descriptions, qualifier|
-            descriptions.each do |description|
-              if description =~ /\d+\w{3}\d+/
-                throw :date, Date.parse(description)
-              end
+        messages.map(&:descriptions).zip(messages.map(&:qualifiers)) do |descriptions, qualifier|
+          descriptions.each do |description|
+            if description =~ /\d+\w{3}\d+/
+              return Date.parse(description)
             end
           end
         end
+
+        return
       end
 
       def error_message_sax
