@@ -883,6 +883,58 @@ commission "1%/0.05"
 carrier "DL", "DELTA AIRLINES", start_date: "2013-05-15"
 ########################################
 
+example 'svoadz/j adzsvo/c'
+agent "5% (3%) (3%) от опубл. тарифа Бизнес класса (J,C,D,Z,I) на собств.рейсы DL с вылетами из МОСКВЫ (до South America Tour Code RULAPREM); "
+subagent "3%"
+subclasses "JCDZI"
+check { includes(city_iatas.first, 'MOW') and includes_only(country_iatas, 'RU AR BO BR VE GY CO PY PE SR UY FK GF CL EC') } # FIXME добавить сендвичевы острова и южную георгию
+ticketing_method "downtown"
+tour_code "RULAPREM"
+discount "3%"
+commission "5%/3%"
+
+#exapmle ''
+agent "5% (3%) (3%) от опубл. тарифа Бизнес класса (J,C,D,Z,I) на собств.рейсы DL с вылетами из МОСКВЫ (до Caribbean Central Tour Code RUCBPREM); "
+subagent "3%"
+subclasses "JCDZI"
+check { includes(city_iatas.first, "MOW") and includes_only(country_iatas, 'RU MX') }
+ticketing_method "downtown"
+tour_code "RUMCBREM"
+discount "3%"
+disabled "Caribbean Central?"
+commission "5%/3%"
+
+example 'svotam/j tamsvo/z'
+agent "5% (3%) (3%) от опубл. тарифа Бизнес класса (J,C,D,Z,I) на собств.рейсы DL с вылетами из МОСКВЫ (до Mexico Tour Code RUMXPREM ); "
+subagent "3%"
+subclasses "JCDZI"
+check { includes(city_iatas.first, "MOW") and includes_only(country_iatas, 'RU MX') }
+ticketing_method "downtown"
+tour_code "RUMXPREM"
+discount "3%"
+commission "5%/3%"
+
+#example 'svojfk/d jfksvo/i'
+agent "5% (3%) (3%) от опубл. тарифа Бизнес класса (J,C,D,Z,I) на собств.рейсы DL с вылетами из МОСКВЫ (до NYC Tour Code RUNYPREM);"
+subagent "3%"
+subclasses "JCDZI"
+check { includes(city_iatas.first, "MOW") and includes_only(city_iatas, 'MOW NYC') }
+ticketing_method "downtown"
+tour_code "RUNYPREM"
+discount "3%"
+disabled "DL/AFKL/AZ Comission programm"
+commission "5%/3%"
+
+example 'svoyyz/c yyzsvo/i'
+agent "5% (3%) (3%) от опубл. тарифа Бизнес класса (J,C,D,Z,I) на собств.рейсы DL с вылетами из МОСКВЫ (до USA/CANADA Tour Code RUUSPREM);"
+subagent "3%"
+subclasses "JCDZI"
+check { includes(city_iatas.first, "MOW") and includes_only(country_iatas, 'RU US CA') }
+ticketing_method "downtown"
+tour_code "RUUSPREM"
+discount "3%"
+commission "5%/3%"
+
 example 'svojfk/d jfksvo/m'
 example 'jfksvo/x'
 agent "1232 DL/AFKL/AZ US-EMEAI Consolidator Commission Program Amendment #1"
@@ -893,6 +945,7 @@ subclasses "CDZIYBMSHQWKLUTXV"
 check { includes(country_iatas, 'RU') and includes(country_iatas, 'US') and includes_only(country_iatas, 'US RU') }
 ticketing_method "downtown"
 discount "5%"
+important!
 commission "8%/6%"
 
 example 'accjfk/s'
