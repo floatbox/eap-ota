@@ -37,7 +37,7 @@ describe Commission::Reader do
     end
 
     it "should have two airlines" do
-      book.all_carriers.should have(2).items
+      book.carriers.should == ['FV', 'AB']
     end
 
     it "should have registered three commissions" do
@@ -47,6 +47,50 @@ describe Commission::Reader do
     describe "#exists_for?" do
       specify do
         book.exists_for?(Recommendation.new(:validating_carrier_iata => 'AB')).should be_true
+      end
+
+      specify do
+        book.exists_for?(Recommendation.new(:validating_carrier_iata => 'S7')).should be_false
+      end
+    end
+  end
+
+  context "two carriers, four pages" do
+    let :book do
+      Commission::Reader.new.define do
+        carrier 'FV', expr_date: '2013-04-30'
+        commission '2%/3'
+        commission '1%/0'
+
+        carrier 'FV', strt_date: '2013-05-01', expr_date: '2013-07-31'
+        commission '4%/3'
+
+        carrier 'FV', strt_date: '2013-08-01'
+
+        carrier 'AB'
+        commission '0/0'
+      end
+    end
+
+    it "should have two airlines" do
+      book.carriers.should == ['FV', 'AB']
+    end
+
+    it "should have registered four commissions" do
+      book.all.should have(4).items
+    end
+
+    it "should define four pages" do
+      book.should have(4).pages
+    end
+
+    describe "active_pages" do
+      pending
+    end
+
+    describe "#exists_for?" do
+      specify do
+        book.exists_for?(Recommendation.new(:validating_carrier_iata => 'FV')).should be_true
       end
 
       specify do
@@ -176,39 +220,34 @@ describe Commission::Reader do
       end
     end
 
-    describe ".defaults" do
-      context "called correctly" do
-        subject { book.for_carrier('FV').first }
+    subject { book.pages_for(carrier: 'FV').first.all.first }
 
-        its(:system) { should eq(:amadeus) }
-        its(:consolidator) { should eq(Fx(0)) }
-        its(:blanks) { should eq(Fx(0)) }
-        its(:discount) { should eq(Fx(0)) }
-        its(:our_markup) { should eq(Fx('0')) }
-        its(:interline) { should eq([:no]) }
-      end
+    its(:system) { should eq(:amadeus) }
+    its(:consolidator) { should eq(Fx(0)) }
+    its(:blanks) { should eq(Fx(0)) }
+    its(:discount) { should eq(Fx(0)) }
+    its(:our_markup) { should eq(Fx('0')) }
+    its(:interline) { should eq([:no]) }
 
-    end
 
-    describe ".carrier defaults on repetitive blocks" do
+    describe "carrier defaults on repetitive blocks" do
       context "should set defaults correctly" do
-        subject :commission do
-          book.for_carrier('UN').first
+        subject :page do
+          book.pages_for(carrier: 'UN').first
         end
 
         its(:expr_date) { should eq(Date.new(2013,1,31))}
-        its(:strt_date) { should be_nil}
       end
 
       context "should set defaults for second occurence" do
-        subject :commission do
-          book.for_carrier('UN').last
+        subject :page do
+          book.pages_for(carrier: 'UN').last
         end
 
         its(:strt_date) { should eq(Date.new(2013,2,1))}
         its(:expr_date) { should be_nil}
-        it "should have single per carrier numeration, for now" do
-          commission.number.should eq(2)
+        it "should have per page numeration" do
+          page.all.first.number.should eq(1)
         end
       end
     end
@@ -263,7 +302,7 @@ describe Commission::Reader do
     }
 
     specify {
-      book.all_for(recommendation).should have(4).items
+      book.pages_for(carrier: 'AB').first.should have(4).commissions
     }
 
     describe ".all_with_reasons_for" do
@@ -334,7 +373,7 @@ describe Commission::Reader do
     end
 
     specify {
-      book.all_for(recommendation).should have(3).items
+      book.pages_for(carrier: 'AB').first.should have(3).commissions
     }
 
     describe ".all_with_reasons_for" do

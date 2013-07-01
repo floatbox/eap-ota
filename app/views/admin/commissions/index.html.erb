@@ -4,7 +4,7 @@
 <%= link_to_unless_current 'кратко', table_admin_commissions_url %>
 </p>
 <p>
-<% @book.all_carriers.sort.each do |carrier_code| %>
+<% @book.carriers.sort.each do |carrier_code| %>
   <a href="#<%= carrier_code %>"><%= carrier_code %></a>
 <% end %>
 </p>
@@ -14,7 +14,10 @@
 
 <% @book.pages.group_by(&:carrier).each do |carrier_code, pages| %>
   <h2 id="<%= carrier_code %>"><%= "(#{carrier_code})" %> <%= Carrier[carrier_code].name  rescue '' %></h2>
-  <% pages.each do |page| %>
+  <% pages.reverse.each do |page| %>
+    <h3>с <% if page.strt_date %> <%= l page.strt_date %><% else %> незапамятных времен<% end %>,
+        выписка <%= page.ticketing_methods.to_sentence.presence || 'отключена' %>
+    </h3>
     <% page.all.each do |commission| %>
       <%= render 'commission', :commission => commission, :as_table => @as_table %>
     <% end %>

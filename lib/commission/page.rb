@@ -14,11 +14,23 @@ class Commission::Page
   # @return String IATA код перевозчика
   attr_accessor :carrier
 
+  # @return Date дата начала действия комиссии
+  attr_accessor :strt_date
+  # @return Date дата окончания действия комиссии
+  attr_accessor :expr_date
+
   def initialize(*)
     @commissions = []
     super
   end
 
+  # создает и вносит в книгу комиссию
+  def create_rule(attrs)
+    commission = Commission::Rule.new(attrs)
+    register commission
+  end
+
+  # вносит в книгу готовую комиссию
   def register commission
     commission.number = commissions.size + 1
     if commission.important
@@ -35,6 +47,15 @@ class Commission::Page
   # @return Array<Commission::Rule> список правил (в порядке ввода/документа)
   def all
     commissions.sort_by {|c| c.source.to_i }
+  end
+
+  # @return Boolean есть ли хоть одна (включенная) комиссия?
+  def empty?
+    commissions.all?(&:disabled?)
+  end
+
+  def ticketing_methods
+    commissions.reject(&:disabled?).collect(&:ticketing_method).uniq.sort
   end
 
   # Recommendation finders

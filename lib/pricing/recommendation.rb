@@ -116,12 +116,7 @@ module Pricing
     end
 
     def commission
-      @commission ||=
-        if source == 'sirena'
-          Sirena::Commission.find_for(self)
-        else
-          Commission.find_for(self)
-        end
+      @commission ||= Commission.find_for(self)
     end
 
     # пытаемся избежать сохранения формул в order_forms_cache
