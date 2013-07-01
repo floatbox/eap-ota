@@ -1266,6 +1266,24 @@ no_commission "закрыли субсидированные тарифы"
 carrier "FV", "RUSSIA", strt_date: "2013-07-01"
 ########################################
 
+example 'svocdg'
+example 'svocdg cdgsvo/ab'
+agent "4% (2%) (2%) от опубл. тарифов на собств. (включая code-share) рейсы FV и рейсы Interline c участком FV"
+subagent "2% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
+interline :no, :yes
+ticketing_method "aviacenter"
+discount "2%"
+commission '4%/2%'
+
+example 'svocdg/ab'
+example 'svocdg/ab cdgsvo/ab'
+agent "1 euro  (5 руб+2% сбор АЦ) (0%) с билета на рейсы Interline без участка FV."
+subagent "5 рублей"
+interline :absent
+ticketing_method "aviacenter"
+discount "2%"
+commission '1eur/5'
+
 example "svocdg/r"
 agent ""
 subagent ""
@@ -1929,6 +1947,15 @@ commission "1eur/5"
 
 carrier "LO", "LOT", strt_date: "2013-07-01"
 ########################################
+
+example 'ledprg prgwaw'
+example 'dmecdg cdgwaw'
+agent "1 евро (5 руб) (0%) на все опубл. тарифы (включая корпоративные, туроператорские, веб-тарифы и т.д. )."
+subagent "5 руб"
+ticketing_method "aviacenter"
+consolidator "2%"
+discount "0%"
+commission "1eur/5"
 
 carrier "LX", "SWISS"
 ########################################
