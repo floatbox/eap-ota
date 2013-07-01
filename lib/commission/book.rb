@@ -51,7 +51,7 @@ class Commission::Book
   # FIXME выбирает активну
   def find_page(opts)
     pages = pages_for(opts) or return
-    page = pages.reverse.find {|p| p.strt_date.nil? || p.strt_date <= Date.today }
+    page = pages.find {|p| p.strt_date.nil? || p.strt_date <= Date.today }
   end
 
   # создает и вносит в индекс страницу
@@ -61,12 +61,19 @@ class Commission::Book
     register_page page
   end
 
+  LONG_TIME_AGO = Date.new(2000,1,1)
   # вносит в индекс страницу
-  # TODO должно орать громким голосом, если две страницы имеют одну и ту же дату
+  # TODO ugly and untested
   # @return Commission::Page
   def register_page(page)
-    @index[page.carrier] ||= []
-    @index[page.carrier] << page
+    pages = @index[page.carrier] || []
+    pages += [page]
+    pages.sort_by! {|p| p.strt_date || LONG_TIME_AGO }
+    pages.reverse!
+    if pages.map(&:strt_date).uniq.size != pages.size
+      raise ArgumentError, "#{page} with #{page.strt_date} already registered in book"
+    end
+    @index[page.carrier] = pages
     page
   end
 

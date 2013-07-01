@@ -29,8 +29,8 @@ describe Commission::Book do
       end
 
       before do
-        @page1 = book.create_page carrier: 'AB', expr_date: 1.days.ago.to_date
         @page2 = book.create_page carrier: 'AB', strt_date: Date.today, expr_date: 5.days.from_now.to_date
+        @page1 = book.create_page carrier: 'AB', expr_date: 1.days.ago.to_date
         @page3 = book.create_page carrier: 'AB', strt_date: 6.days.from_now.to_date
       end
 
@@ -49,10 +49,19 @@ describe Commission::Book do
           book.find_page(carrier: 'AB').should == @page3
         end
       end
+
+      it "should reorder pages if added in wrong order" do
+        book.pages_for(carrier: 'AB').should == [@page3, @page2, @page1]
+      end
     end
 
-    pending "should reorder pages if added in wrong order"
-    pending "should raise exception if entered several pages"
+    specify "should raise exception if entered several pages with identical strt_date" do
+      expect {
+        book = Commission::Book.new
+        book.create_page carrier: 'AB'
+        book.create_page carrier: 'AB'
+      }.to raise_error(ArgumentError)
+    end
 
   end
 end

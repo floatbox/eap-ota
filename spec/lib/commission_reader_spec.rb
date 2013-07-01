@@ -212,11 +212,11 @@ describe Commission::Reader do
         carrier 'FV'
         commission '2%/3'
 
-        carrier 'UN', "Transaero", expr_date: "31.1.2013"
-        commission '2%/2%'
-
         carrier 'UN', strt_date: "1.2.2013"
         commission '1%/1%'
+
+        carrier 'UN', "Transaero", expr_date: "31.1.2013"
+        commission '2%/2%'
       end
     end
 
@@ -233,7 +233,7 @@ describe Commission::Reader do
     describe "carrier defaults on repetitive blocks" do
       context "should set defaults correctly" do
         subject :page do
-          book.pages_for(carrier: 'UN').first
+          book.pages_for(carrier: 'UN').last
         end
 
         its(:expr_date) { should eq(Date.new(2013,1,31))}
@@ -241,7 +241,7 @@ describe Commission::Reader do
 
       context "should set defaults for second occurence" do
         subject :page do
-          book.pages_for(carrier: 'UN').last
+          book.pages_for(carrier: 'UN').first
         end
 
         its(:strt_date) { should eq(Date.new(2013,2,1))}
