@@ -78,6 +78,14 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
               its(:duration) { should == 180 }
             end
 
+            describe 'second flight' do
+              let_once!(:flight) { segment.flights.second }
+              subject { flight }
+
+              its(:arrival_term) { should == '1' }
+              its(:departure_term) { should be_nil }
+            end
+
             describe 'last flight' do
               let_once!(:flight) { segment.flights.last }
               subject { flight }

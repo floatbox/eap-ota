@@ -34,6 +34,13 @@ module Amadeus
 
         elements :stopDetails, :as => :details, :class => TStopDetails
       end
+
+      class EndpointsInfo
+        include SAXMachine
+
+        element :locationId, :as => :location_id
+        element :terminal, :as => :terminal
+      end
       
       class FlightInformation
         include SAXMachine
@@ -48,8 +55,7 @@ module Amadeus
         element :timeOfDeparture, :as => :departure_time
         element :equipmentType, :as => :equipment_type
 
-        elements :locationId, :as => :location_ids
-        elements :terminal, :as => :terminals
+        elements :location, :as => :endpoints_info, :class => EndpointsInfo
       end
 
       class FlightProposal
@@ -207,10 +213,10 @@ module Amadeus
         Flight.new(
           operating_carrier_iata: info.operating_carrier,
           marketing_carrier_iata: info.marketing_carrier,
-          departure_iata: info.location_ids.first,
-          departure_term: info.terminals.first,
-          arrival_iata: info.location_ids.last,
-          arrival_term: info.terminals.last,
+          departure_iata: info.endpoints_info.first.location_id,
+          departure_term: info.endpoints_info.first.terminal,
+          arrival_iata: info.endpoints_info.second.location_id,
+          arrival_term: info.endpoints_info.second.terminal,
           flight_number: info.flight_number,
           arrival_date: info.arrival_date,
           arrival_time: info.arrival_time,
