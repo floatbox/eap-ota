@@ -295,7 +295,7 @@ module Amadeus
             break
           end
         end
-        [validating_carrier_iata, marketing_carrier_iatas]
+        [validating_carrier_iata, marketing_carrier_iatas.flatten(1)]
       end
 
       def last_tkt_date_sax(recommendation)
