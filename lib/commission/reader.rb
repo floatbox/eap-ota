@@ -29,6 +29,12 @@ class Commission::Reader
     book
   end
 
+  # считывает определения из строки и возвращает готовую "книгу"
+  def read(book_string)
+    instance_eval(book_string)
+    book
+  end
+
   # считывает определения из файла и возвращает готовую "книгу"
   def read_file(filename)
     instance_eval(File.read(filename), filename)
