@@ -154,7 +154,13 @@ class Order < ActiveRecord::Base
     return if fix_price? || tickets.blank?
     sum_and_copy_attrs sold_tickets, self,
       :price_fare,
-      :price_tax
+      :price_tax,
+      :price_consolidator,
+      :price_blanks,
+      :price_discount,
+      :price_our_markup,
+      :price_operational_fee
+
     self.price_difference = 0
     calculate_price_with_payment_commission
     save
