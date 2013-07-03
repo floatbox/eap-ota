@@ -538,8 +538,7 @@ class Order < ActiveRecord::Base
     return false unless ticket_status.in? 'booked', 'processing_ticket', 'error_ticket'
     return false unless load_tickets(true)
     update_attributes(:ticket_status => 'ticketed', :ticketed_date => Date.today)
-    update_price_with_payment_commission_in_tickets
-    update_prices_from_tickets
+    recalculate_prices
     create_ticket_notice
   end
 
