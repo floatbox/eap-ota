@@ -4,6 +4,8 @@ class PricerController < ApplicationController
 
   before_filter :load_form_from_cache, :only => [:pricer, :calendar]
 
+  include Monitoring::Benchmarkable
+
   def pricer
     if @search.valid?
       @destination = Destination.get_by_search @search
@@ -112,19 +114,22 @@ class PricerController < ApplicationController
         Partner.anonymous.suggested_limit ||
         Conf.amadeus.recommendations_lite
       logger.info "Suggested limit: #{suggested_limit}"
-      @recommendations = Mux.new(:lite => true, :suggested_limit => suggested_limit).pricer(@search)
+
+        @recommendations = Mux.new(:lite => true, :suggested_limit => suggested_limit).pricer(@search)
+
+      # измеряем рекомендации до фильтрации
+      meter :api_total_unfiltered_recommendations, @recommendations.size
+
       @query_key = @search.query_key
       if (@destination && @recommendations.present? && !admin_user && !corporate_mode?)
         @destination.move_average_price @search, @recommendations.first, @query_key
       end
+
       Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))
 
       recommendations_total = @recommendations.count
-
-      # recommendations monitoring
-      ActiveSupport::Notifications.instrument :meter,
-        value: recommendations_total,
-        key: "meter.api_total_recommendations"
+      # измеряем после фильтрации
+      meter :api_total_recommendations, recommendations_total
 
       logger.info "Recommendations left after removing unprofitable(#{partner4stat}): #{recommendations_total}"
       StatCounters.inc %W[search.api.success search.api.#{partner4stat}.success]
