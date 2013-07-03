@@ -263,6 +263,6 @@ Version:
        default_action_on_item: show
        date_formats:
          created_at: long
-  order_by: -created_at
+  order_by: -id
   filters: created_at, item_type, event, whodunnit
   application: Misc, 2
