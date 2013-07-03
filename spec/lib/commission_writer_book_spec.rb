@@ -21,7 +21,13 @@ describe Commission::Writer::Book do
       agent "продолжается и здесь"
       subagent "* Какой-то текст со странными правками"
       subagent "продолжается и здесь"
+      consolidator "2%"
+      blanks "50"
+      discount "4%"
+      our_markup "1eur"
       ticketing_method "aviacenter"
+      tour_code "FOOBAR"
+      designator "123"
       check %{
         includes_only(operating_carrier_iatas.first, 'AB HG') and
           includes(city_iatas, 'MOW NYC')

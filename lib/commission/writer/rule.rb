@@ -57,6 +57,14 @@ class Commission::Writer::Rule
       str << %[ticketing_method #{@rule.ticketing_method.inspect}\n]
     end
 
+    if @rule.tour_code
+      str << %[tour_code #{@rule.tour_code.inspect}\n]
+    end
+
+    if @rule.designator
+      str << %[designator #{@rule.designator.inspect}\n]
+    end
+
     if @rule.check
       if @rule.check['\\']
         raise ArgumentError, "check in #{@rule.inspect} contains backslashes"
