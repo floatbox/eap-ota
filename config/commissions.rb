@@ -893,15 +893,14 @@ tour_code "RULAPREM"
 discount "3%"
 commission "5%/3%"
 
-#exapmle ''
+example 'svotab/j tabsvo/z'
 agent "5% (3%) (3%) от опубл. тарифа Бизнес класса (J,C,D,Z,I) на собств.рейсы DL с вылетами из МОСКВЫ (до Caribbean Central Tour Code RUCBPREM); "
 subagent "3%"
 subclasses "JCDZI"
-check { includes(city_iatas.first, "MOW") and includes_only(country_iatas, 'RU MX') }
+check { includes(city_iatas.first, "MOW") and includes_only(country_iatas, 'RU GY BB JM TT') }
 ticketing_method "downtown"
 tour_code "RUMCBREM"
 discount "3%"
-disabled "Caribbean Central?"
 commission "5%/3%"
 
 example 'svotam/j tamsvo/z'
