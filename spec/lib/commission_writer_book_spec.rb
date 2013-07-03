@@ -20,10 +20,10 @@ describe Commission::Writer::Book do
       subagent "* Какой-то текст со странными правками"
       subagent "продолжается и здесь"
       ticketing_method "aviacenter"
-      check %[
+      check %{
         includes_only(operating_carrier_iatas.first, 'AB HG') and
           includes(city_iatas, 'MOW NYC')
-      ]
+      }
       commission "2%/0.05"
 
       example "SVOLED/AB"
