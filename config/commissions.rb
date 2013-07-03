@@ -722,6 +722,13 @@ ticketing_method "aviacenter"
 consolidator "2%"
 commission "1/0.5"
 
+example 'svorix/v'
+example 'svorix/v rixsvo/v'
+subclasses "V"
+check { includes(city_iatas, 'RIX') }
+important!
+no_commission "Катя просила выключить"
+
 carrier "CA", "AIR CHINA"
 ########################################
 
