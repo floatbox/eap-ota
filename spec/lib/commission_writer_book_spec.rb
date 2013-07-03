@@ -15,6 +15,8 @@ describe Commission::Writer::Book do
 
       example "SVOCDG/AB"
       example "SVOCDG CDGSVO/AB"
+      comment "есть проблемы"
+      comment "и не одна"
       agent "* Какой-то текст"
       agent "продолжается и здесь"
       subagent "* Какой-то текст со странными правками"

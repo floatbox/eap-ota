@@ -14,6 +14,10 @@ class Commission::Writer::Rule
       str << %[example #{ex.to_s.inspect}\n]
     end if @rule.examples.present?
 
+    @rule.comments.split("\n").each do |line|
+      str << %[comment #{line.inspect}\n]
+    end if @rule.comments
+
     @rule.agent_comments.split("\n").each do |line|
       str << %[agent #{line.inspect}\n]
     end if @rule.agent_comments

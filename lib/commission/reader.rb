@@ -124,6 +124,12 @@ class Commission::Reader
     opts[:subagent_comments] += line + "\n"
   end
 
+  # произвольные комментарии к правилу
+  def comment line
+    opts[:comments] ||= ""
+    opts[:comments] += line + "\n"
+  end
+
   # tkt designator, используется при выписке в downtown
   def designator designator
     opts[:designator] = designator
