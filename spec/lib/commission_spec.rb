@@ -59,6 +59,11 @@ describe Commission do
 
         describe commission.inspect do
 
+          if commission.skipped?
+            specify { pending "disabled or not implemented, skipping examples" }
+            next
+          end
+
           if commission.examples.blank?
             specify { pending "no examples" }
             next

@@ -289,7 +289,7 @@ module Amadeus
         marketing_carrier_iatas = carrier_iatas.map(&:companies)
         # validating_carrier_iata
         validating_carrier_iata = nil
-        carrier_iatas.map(&:qualifiers).zip(marketing_carrier_iatas).flatten.each_slice(2) do |qualifier, company|
+        carrier_iatas.map(&:qualifiers).zip(marketing_carrier_iatas) do |qualifier, company|
           if qualifier == 'V'
             validating_carrier_iata = company
             break

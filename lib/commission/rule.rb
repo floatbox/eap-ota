@@ -114,6 +114,10 @@ class Commission::Rule
   # @return [String]
   attr_accessor :subagent_comments
 
+  # текст наших комментариев, для внутреннего пользования
+  # @return [String]
+  attr_accessor :comments
+
   # ремарка для выписки некоторых авиакомпаний в downtown
   # @return [String]
   attr_accessor :designator
