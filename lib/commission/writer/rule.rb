@@ -58,7 +58,7 @@ class Commission::Writer::Rule
         raise ArgumentError, "check in #{@rule.inspect} contains backslashes"
       end
       # FIXME проверить еще на парность скобок
-      str << %[check %[#{@rule.check}]\n]
+      str << %[check %{#{@rule.check}}\n]
     end
 
     str << bool_or_reason("disabled", @rule.disabled)
