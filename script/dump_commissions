@@ -1,22 +1,51 @@
 #!/usr/bin/env ruby
 
+require 'optparse'
+
+# defaults
+$opts = {
+  in: "config/commissions.rb"
+}
+
+def setopt(attr)
+  proc {|value| $opts[attr] = value}
+end
+
+OptionParser.new do |opts|
+  opts.banner = "#{$0} [options] reads and dumps again commissions"
+  opts.on "-i", "--in FILENAME", "commission file to read (config/commissions.rb by default)", &setopt(:in)
+  opts.on "-o", "--out FILENAME", "commission file to write (STDOUT by default)", &setopt(:out)
+  opts.on "-y", "--yaml", "write in YAML format", &setopt(:yaml)
+  opts.on_tail("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+end.parse!
+
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
+# loading
+
+book = Commission::Reader.new.read_file($opts[:in])
+
 # выгружает текущие комиссии в yaml. для массового сравнения.
 
 # чтобы убрать адреса и мусор, для сравнения после апдейта:
 #   perl -lpe 's/[&*]\d+//' | grep -v 'source' > commissions.yml
 
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
+if $opts[:yaml]
+  # патчим to_yaml, чтобы атрибуты объектов сортировались
+  class Psych::Visitors::YAMLTree
+    def dump_ivars target
+       ivars = find_ivars target
 
-# патчим to_yaml, чтобы атрибуты объектов сортировались
-class Psych::Visitors::YAMLTree
-  def dump_ivars target
-     ivars = find_ivars target
-
-     ivars.sort_by(&:to_s).each do |iv|
-       @emitter.scalar("#{iv.to_s.sub(/^@/, '')}", nil, nil, true, false, Psych::Nodes::Scalar::ANY)
-       accept target.instance_variable_get(iv)
-     end
+       ivars.sort_by(&:to_s).each do |iv|
+         @emitter.scalar("#{iv.to_s.sub(/^@/, '')}", nil, nil, true, false, Psych::Nodes::Scalar::ANY)
+         accept target.instance_variable_get(iv)
+       end
+    end
   end
-end
 
-puts Commission.default_book.to_yaml
+  puts book.to_yaml
+else
+  puts Commission::Writer::Book.new(book).write
+end
