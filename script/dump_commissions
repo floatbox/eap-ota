@@ -1,22 +1,87 @@
 #!/usr/bin/env ruby
 
+require 'optparse'
+
+# defaults
+$opts = {
+  in: "config/commissions.rb"
+}
+
+def setopt(attr)
+  proc {|value| $opts[attr] = value}
+end
+
+OptionParser.new do |opts|
+  opts.banner = "#{$0} [options] reads and dumps again commissions"
+  opts.on "-i", "--in FILENAME", "commission file to read (config/commissions.rb by default)", &setopt(:in)
+  opts.on "-o", "--out FILENAME", "commission file to write (STDOUT by default)", &setopt(:out)
+  opts.on "-d", "--dir DIRNAME", "write commissions to directory", &setopt(:dir)
+  opts.on "-y", "--yaml", "write in YAML format", &setopt(:yaml)
+  opts.on_tail("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+end.parse!
+
+# loading
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
+
+unless $opts[:out]
+  puts "working..."
+end
+
+if test ?d, $opts[:in]
+  book = Commission::Book.new
+  reader = Commission::Reader.new(book)
+  puts "reading files from #{$opts[:in]}"
+  Dir["#{$opts[:in]}/*.rb"].each do |file|
+    reader.read_file(file)
+  end
+else
+  book = Commission::Reader.new.read_file($opts[:in])
+end
+
 # выгружает текущие комиссии в yaml. для массового сравнения.
 
 # чтобы убрать адреса и мусор, для сравнения после апдейта:
 #   perl -lpe 's/[&*]\d+//' | grep -v 'source' > commissions.yml
 
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
-
-# патчим to_yaml, чтобы атрибуты объектов сортировались
-class Psych::Visitors::YAMLTree
-  def dump_ivars target
-     ivars = find_ivars target
-
-     ivars.sort_by(&:to_s).each do |iv|
-       @emitter.scalar("#{iv.to_s.sub(/^@/, '')}", nil, nil, true, false, Psych::Nodes::Scalar::ANY)
-       accept target.instance_variable_get(iv)
-     end
-  end
+if $opts[:out]
+  outfh = File.open('w', outfile)
+else
+  outfh = STDOUT
 end
 
-puts Commission.default_book.to_yaml
+
+if $opts[:yaml]
+  # патчим to_yaml, чтобы атрибуты объектов сортировались
+  class Psych::Visitors::YAMLTree
+    def dump_ivars target
+       ivars = find_ivars target
+
+       ivars.sort_by(&:to_s).each do |iv|
+         @emitter.scalar("#{iv.to_s.sub(/^@/, '')}", nil, nil, true, false, Psych::Nodes::Scalar::ANY)
+         accept target.instance_variable_get(iv)
+       end
+    end
+  end
+
+  outfh << book.to_yaml
+else
+  if $opts[:dir]
+
+    FileUtils.mkdir_p($opts[:dir])
+    book.pages.each do |page|
+      filename = page.carrier
+      filename += '-' + page.start_date.to_s if page.start_date
+      filename += '.rb'
+      filename = File.join($opts[:dir], filename)
+      File.open(filename, 'w') do |fh|
+        fh << Commission::Writer::Page.new(page).write
+      end
+    end
+
+  else
+    outfh << Commission::Writer::Book.new(book).write
+  end
+end

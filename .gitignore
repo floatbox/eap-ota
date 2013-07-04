@@ -1,4 +1,6 @@
-doc/**/*.html
+doc
+!doc/*.txt
+.yardoc
 config/database.yml
 config/mongoid.yml
 log/*
