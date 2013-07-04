@@ -220,7 +220,7 @@ class Commission::Reader
   private
 
   def caller_address level=1
-    caller[level] =~ /:(\d+)/
+    caller[level] =~ /^(.*?:\d+)/
     # по каким-то причинам тут приходит US-ASCII
     # конвертирую для yaml
     ($1 || 'unknown').encode('UTF-8')

@@ -128,7 +128,7 @@ class Commission::Rule
 
   # @!group Дебажная информация
 
-  # место (сейчас - номер строки в файле комиссиий) где было определено правило
+  # место (сейчас - имя файла и строка комиссиий) где было определено правило
   # @return [String]
   attr_accessor :source
 
@@ -149,7 +149,7 @@ class Commission::Rule
   end
 
   def inspect
-    "<commission #{carrier}##{number} :#{source}>"
+    "<commission #{carrier}##{number} at #{source}>"
   end
 
 end

@@ -44,7 +44,7 @@ class Commission::Page
 
   # @return Array<Commission::Rule> список правил (в порядке ввода/документа)
   def all
-    commissions.sort_by {|c| c.source.to_i }
+    commissions.sort_by(&:number)
   end
 
   # @return Boolean есть ли хоть одна (включенная) комиссия?
