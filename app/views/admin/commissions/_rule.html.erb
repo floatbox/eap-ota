@@ -73,8 +73,8 @@
           <% if rule.subclasses %>
             <li> подклассы <%= rule.subclasses.join(' ') %> </li>
           <% end %>
-          <% if rule.interline && !rule.interline == :no %>
-            <li> интерлайн: <%= rule.interline.inspect %></li>
+          <% if rule.interline && rule.interline != [:no] %>
+            <li> интерлайн: <%= rule.interline.every.to_s.to_sentence %></li>
           <% end %>
           <% if rule.routes.present? %>
             <li> маршруты <%= rule.routes.join(' ') %> </li>
