@@ -30,16 +30,7 @@ unless $opts[:out]
   puts "working..."
 end
 
-if test ?d, $opts[:in]
-  book = Commission::Book.new
-  reader = Commission::Reader.new(book)
-  puts "reading files from #{$opts[:in]}"
-  Dir["#{$opts[:in]}/*.rb"].each do |file|
-    reader.read_file(file)
-  end
-else
-  book = Commission::Reader.new.read_file($opts[:in])
-end
+book = Commission::Reader.new.read_file($opts[:in])
 
 # выгружает текущие комиссии в yaml. для массового сравнения.
 

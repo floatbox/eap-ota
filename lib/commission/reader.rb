@@ -35,9 +35,15 @@ class Commission::Reader
     book
   end
 
-  # считывает определения из файла и возвращает готовую "книгу"
+  # считывает определения из файла (или каталога) и возвращает готовую "книгу"
   def read_file(filename)
-    instance_eval(File.read(filename), filename)
+    if test ?d, filename
+      Dir["#{filename}/**/*.rb"].each do |file|
+        read_file(file)
+      end
+    else
+      instance_eval(File.read(filename), filename)
+    end
     book
   end
 
