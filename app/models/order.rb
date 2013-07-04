@@ -151,7 +151,7 @@ class Order < ActiveRecord::Base
 
   def recalculate_prices
     #считаем, что в данном случае не бывает обменов/возвратов, иначе с ценами будет полная жопа
-    return if fix_price? || tickets.blank?
+    return if fix_price? || !has_data_in_tickets?
     sum_and_copy_attrs sold_tickets, self,
       :price_fare,
       :price_tax,
