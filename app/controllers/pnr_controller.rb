@@ -32,7 +32,7 @@ class PNRController < ApplicationController
 
   def show_stored
     order = Order[params[:id]] or raise ActiveRecord::RecordNotFound
-    tickets = order.tickets
+    tickets = order.sold_tickets
     ticket = tickets.first
     @last_pay_time = order.last_pay_time
     @pnr = PNR.new(:email => order.email, :phone => order.phone, :number => order.pnr_number, :booking_classes => ticket.booking_classes)
