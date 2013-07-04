@@ -1976,14 +1976,14 @@ commission "1/0.05"
 example 'svocdg/ab'
 no_commission
 
-carrier "LO", "LOT", start_date: "2013-04-01"
+carrier "LO", "LOT", start_date: "2013-07-03"
 ########################################
 
-example 'ledprg prgwaw'
-example 'dmecdg cdgwaw'
-agent "Даты вылета: без ограничений
-5% от опубл.тарифов на собств. рейсы LO по направлениям с вылетом из России на все классы бронирования, кроме промо и групповых: L, O, U, G за исключением прямых перелетов из Москвы и Санкт Петербурга в Варшаву."
-subagent "3% от опубл.тарифов на собств. рейсы LO по направлениям с вылетом из России на все классы бронирования, кроме промо и групповых: L, O, U, G за исключением прямых перелетов из Москвы и Санкт Петербурга в Варшаву."
+example 'svowaw/economy wawsvo/business'
+example 'ledwaw/business wawbcn/business'
+agent "5%(3%)(3%) с вылетом из России от опубликованных прямых и трансферных тарифов Эконом и Бизнес класса на собств. рейсы LO (кроме прямых перелетов из Санкт-Петербурга в Варшаву и из Варшавы в Санкт-Петербург), и кроме тарифов: промо и групповых: L, O, U, G; (Например: 5% от трансферного тарифа Санкт-Петербург-Варшава-Барселона);"
+subagent "3%"
+classes :economy, :business
 check %{ includes(country_iatas.first, "RU") and not includes(booking_classes, "L O U G") and 
   (
     not includes_only(city_iatas, "MOW WAW") or
@@ -1994,24 +1994,41 @@ ticketing_method "aviacenter"
 discount "3%"
 commission "5%/3%"
 
-example 'prgled ledcdg'
-agent "1 euro с билета по опубл. тарифам на все остальные рейсы LO."
-subagent "5 рублей"
-interline :no, :yes
+example 'ledwaw/economy wawled/business'
+example 'ledwaw/business wawled/business'
+agent "1 евро (5 руб)(0%) для прямых перелетов из Санкт-Петербурга в Варшаву и из Варшавы в Санкт-Петербург Эконом и Бизнес класса; "
+subagent "5р"
+classes :economy, :business
+check %{ includes_only(city_iatas, 'LED WAW') }
+important!
 ticketing_method "aviacenter"
-our_markup "0.1%"
+consolidator "2%"
 commission "1eur/5"
 
-carrier "LO", "LOT", start_date: "2013-07-01"
-########################################
+example 'svojfk/z jfksvo/su/c'
+example 'svobkk/p bkksvo/su/a'
+agent "7%(5%)(5%) с вылетом из России только на дальне-магистральные маршруты Бизнес класса (Z/C/D) и Премиум эконом (A/P) (собств. рейсы LO  и совм. рейсы с а/к  SU); "
+subagent "5%"
+subclasses "ZCDAP"
+interline :no, :yes
+check %{ includes(country_iatas.first, 'RU') and includes_only(operating_carrier_iatas, 'LO SU') }
+ticketing_method "aviacenter"
+discount "5%"
+commission "7%/5%"
 
-example 'ledprg prgwaw'
-example 'dmecdg cdgwaw'
-agent "1 евро (5 руб) (0%) на все опубл. тарифы (включая корпоративные, туроператорские, веб-тарифы и т.д. )."
+example 'svocdg/ab cdgsvo'
+agent "1%(0,5%)(0%) с вылетом из России на рейсы Interline, условии наличия в билете хотя бы одного сегмента собств.рейса LO; "
+subagent "0.5%"
+interline :yes
+check %{ includes(country_iatas.first, 'RU') }
+ticketing_method "aviacenter"
+commission "1%/0.5%"
+
+example 'svoprg/l prgwaw/u'
+agent "1 евро(5 руб)(0%) на вылеты из других стран, а также на промо, групповые (L,O,U,G), корпоративные, туроператорские, веб-тарифы и т.д."
 subagent "5 руб"
 ticketing_method "aviacenter"
 consolidator "2%"
-discount "0%"
 commission "1eur/5"
 
 carrier "LX", "SWISS"
@@ -4414,10 +4431,19 @@ commission "1/0.05"
 carrier "OZ", "ASIANA AIRLINES", start_date: "2013-06-01"
 #######################################
 
-agent "агентская комиссия - по 31.12.2013г. 5% от всех опубл.тарифов"
-subagent "субагентская комиссия - по 31.12.2013г. 3% от всех опубл.тарифов"
+example 'svocdg'
+agent "5% (3%)(3%) от опубл.тарифов на собств.рейсы OZ; "
+subagent "3%"
 ticketing_method "aviacenter"
-discount "2.5%"
+discount "3%"
+commission "5%/3%"
+
+example 'svocdg cdgsvo/ab'
+agent "5% (3%)(3%) от опубл.тарифов на рейсы Interline с обязательным собств. сегментом OZ;"
+subagent "3%"
+interline :yes
+ticketing_method "aviacenter"
+discount "3%"
 commission "5%/3%"
 
 carrier "OZ", "ASIANA AIRLINES", start_date: "2014-01-01"
